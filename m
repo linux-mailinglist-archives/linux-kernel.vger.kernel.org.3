@@ -2,89 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2187F4F91EA
+	by mail.lfdr.de (Postfix) with ESMTP id DEBE84F91EC
 	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 11:19:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232698AbiDHJU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 05:20:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42484 "EHLO
+        id S233178AbiDHJUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 05:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233209AbiDHJOj (ORCPT
+        with ESMTP id S233243AbiDHJQv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 05:14:39 -0400
-Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9AE812B75B
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 02:11:47 -0700 (PDT)
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1nckeN-000Szc-Vn; Fri, 08 Apr 2022 19:11:29 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 08 Apr 2022 17:11:28 +0800
-Date:   Fri, 8 Apr 2022 17:11:28 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, Will Deacon <will@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of
- ARCH_KMALLOC_MINALIGN
-Message-ID: <Yk/8QExHlggU8KgC@gondor.apana.org.au>
-References: <20220405135758.774016-8-catalin.marinas@arm.com>
- <YkzJP6zmkAhc6CI9@gondor.apana.org.au>
- <CAMj1kXEXhFmGc4VTTcJU1YFsHJhZN44OdJ5Suf2ONG5=LR29HQ@mail.gmail.com>
- <Yk1UJs6eZMoIp3Eh@arm.com>
- <Yk5o/lNTyiJWD4Ae@gondor.apana.org.au>
- <Yk7EbvYhwnQy+pAf@arm.com>
- <Yk7Ny/iFi0NrMXTg@gondor.apana.org.au>
- <Yk8RGvF6ik34C6BO@arm.com>
- <Yk+rKWEcc9rO+A25@gondor.apana.org.au>
- <Yk/6ts5sVDMDpKj3@arm.com>
+        Fri, 8 Apr 2022 05:16:51 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17CD92128CA
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 02:12:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649409133; x=1680945133;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=kTnNSyd2KSejwef/fzCMx5wyaT0+JL9g6RKbnrj0wq4=;
+  b=S2cPLYfRTZSShf6MfjY4KDVdr5HQfH9HU/6WIUiHLvugBXnBA2IU7CdZ
+   jTOKVzjU+TjOKx25m5g/em1/wHVWbRZjCqWfuQ0oga1yL3xzFP1XbjBvm
+   BPvW8IDmtrgd/I9EsoLoFTjUcG0kbp5wHruA4sB/10MGh7HnqSOU2CVkI
+   tGwy+iN9UmbT5RicxOIVXtSPHBHNHsSg/EH9PSoLaN3GMJSxLxGAA6Yad
+   OOcwchT8xR3PcoMTcvx6dNyAQ6kS5UallM72AwuO52vWWng4udrVqVBNa
+   UWF0f60sSRs8l/iEzjfCC3nn9AzVbs8UmgourSte7XBx+95ENw4h1lF9z
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="242145909"
+X-IronPort-AV: E=Sophos;i="5.90,244,1643702400"; 
+   d="scan'208";a="242145909"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 02:12:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,244,1643702400"; 
+   d="scan'208";a="659419507"
+Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 08 Apr 2022 02:12:11 -0700
+Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nckf4-00006b-P4;
+        Fri, 08 Apr 2022 09:12:10 +0000
+Date:   Fri, 8 Apr 2022 17:11:38 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     popcornmix <popcornmix@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [l1k:smsc95xx_5.17 279/887] drivers/char/broadcom/rpivid-mem.c:52:
+ warning: expecting prototype for rpivid(). Prototype was for DRIVER_NAME()
+ instead
+Message-ID: <202204081732.FRe9Lg4m-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yk/6ts5sVDMDpKj3@arm.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 10:04:54AM +0100, Catalin Marinas wrote:
->
-> My point is that if the crypto code kmallocs a size aligned to
-> crypto_tfm_ctx_alignment() (and CRYPTO_MINALIGN), the slab allocator
-> will return memory aligned to CRYPTO_MINALIGN even if
-> ARCH_KMALLOC_MINALIGN is smaller.
+Hi popcornmix,
 
-No we don't align the size to CRYPTO_MINALIGN at all.  We simply
-assume that this is the alignment returned by kmalloc.
+First bad commit (maybe != root cause):
 
-> Would the crypto code, say, do a kmalloc(64) and expect a 128 byte
-> alignment (when CRYPTO_MINALIGN == 128)? Or does it align the size to
-> CRYPTO_MINALIGN and do a kmalloc(128) directly? If it's the latter, I
-> don't think there's a problem.
+tree:   https://github.com/l1k/linux smsc95xx_5.17
+head:   05d68ced287b30f62f18f95b5476135ef669804a
+commit: 369c3a505f84640f4c10f4caf67c22bf5f9b1d56 [279/887] char: Add broadcom char drivers back to build files
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220408/202204081732.FRe9Lg4m-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/l1k/linux/commit/369c3a505f84640f4c10f4caf67c22bf5f9b1d56
+        git remote add l1k https://github.com/l1k/linux
+        git fetch --no-tags l1k smsc95xx_5.17
+        git checkout 369c3a505f84640f4c10f4caf67c22bf5f9b1d56
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/char/broadcom/ drivers/gpu/drm/panel/
 
-It's the former.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-I think you can still make the change you want, but first you need
-to modify the affected drivers to specify their actual alignment
-requirement explicitly through cra_alignmask and then use the
-correct methods to access the context pointer.
+All warnings (new ones prefixed by >>):
 
-Basically these drivers have been broken from day one, but their
-brokenness has been hidden by the extra-large KMALLOC_MINALIGN
-value on arm.  So to reduce the KMALLOC_MINALIGN value, you have
-to modify the drivers and set the cra_alignmask value.
+>> drivers/char/broadcom/rpivid-mem.c:52: warning: expecting prototype for rpivid(). Prototype was for DRIVER_NAME() instead
+--
+>> drivers/char/broadcom/bcm2835-gpiomem.c:2: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * GPIO memory device driver
 
-Cheers,
+
+vim +52 drivers/char/broadcom/rpivid-mem.c
+
+8900af03fcebd0 Jonathan Bell 2019-05-09  51  
+8900af03fcebd0 Jonathan Bell 2019-05-09 @52  #define DRIVER_NAME "rpivid-mem"
+8900af03fcebd0 Jonathan Bell 2019-05-09  53  #define DEVICE_MINOR 0
+8900af03fcebd0 Jonathan Bell 2019-05-09  54  
+
+:::::: The code at line 52 was first introduced by commit
+:::::: 8900af03fcebd0065244b505c394ce12164624d8 drivers: char: add chardev for mmap'ing the RPiVid control registers
+
+:::::: TO: Jonathan Bell <jonathan@raspberrypi.org>
+:::::: CC: Dom Cobley <popcornmix@gmail.com>
+
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,175 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A6764F9070
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 10:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 307494F9073
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 10:12:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231180AbiDHINq convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 8 Apr 2022 04:13:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44274 "EHLO
+        id S231206AbiDHIOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 04:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbiDHINn (ORCPT
+        with ESMTP id S230391AbiDHIOT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 04:13:43 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF4913BA51
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 01:11:39 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-148-Svnn6zolP_-zt7pXcvy9uw-1; Fri, 08 Apr 2022 09:11:37 +0100
-X-MC-Unique: Svnn6zolP_-zt7pXcvy9uw-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Fri, 8 Apr 2022 09:11:35 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Fri, 8 Apr 2022 09:11:35 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     "'Jason A. Donenfeld'" <Jason@zx2c4.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>
-CC:     "tytso@mit.edu" <tytso@mit.edu>,
-        "sultan@kerneltoast.com" <sultan@kerneltoast.com>,
-        Jann Horn <jannh@google.com>
-Subject: RE: [PATCH v2] random: allow partial reads if later user copies fail
-Thread-Topic: [PATCH v2] random: allow partial reads if later user copies fail
-Thread-Index: AQHYStia62LV1RpflEWlDISfQ8tDQqzlqpzQ
-Date:   Fri, 8 Apr 2022 08:11:35 +0000
-Message-ID: <8d652dac67754a308b270c453b3032d2@AcuMS.aculab.com>
-References: <20220407193433.523299-1-Jason@zx2c4.com>
- <20220407233558.3369-1-Jason@zx2c4.com>
-In-Reply-To: <20220407233558.3369-1-Jason@zx2c4.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 8 Apr 2022 04:14:19 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D514AE0D;
+        Fri,  8 Apr 2022 01:12:15 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id s7so10080555qtk.6;
+        Fri, 08 Apr 2022 01:12:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jw/XuL4gze/EjFGmPl0tsO01dQMr5OjXvuq1Bzbys1Q=;
+        b=irp/7ScHoeQsUxSmCUbAbcmEFlRuyij8MQCMERCJiRm+THOMIlWJki09aJB2hid65U
+         /rxDnCPH03txnpSNWJhtBWWKthYSeN6w/nrPv+kdpTz6CEmReXQ4MahGS54VstfzT5Al
+         rPQTvbtnpJxfnd0KeUL8Lb9A7ZOW7X6KiYmJ3fJNWVo4iruVR9PZHeFI9HidNJIKaVHx
+         P763oWiScRxs52CJGi4NKf76AQtHbmvfn11sQOXX6d9vL+VLFslPM7ZJFo4XbrVW9Nv4
+         2ELk8SSeH+VGzRRDmktslJHWAWJah9gyiMjr5MQuntfw9Em06dAfHeoqBsKJccm8oJWh
+         wigQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jw/XuL4gze/EjFGmPl0tsO01dQMr5OjXvuq1Bzbys1Q=;
+        b=Pap+e8iU6HKO8xVz/EspvjG0cAFxpNlCkmdKwXuoD2ipapxvYOPeheJELVfNVT2hyD
+         IIvhn2BsDWvFBr+eu1EH3umi5p4JWQ/so1sPwxxwTXw/IRjhxmc38fG60tsiX1Y21EHy
+         aVMwPmMsw4Lc2ZDwmTrOoPaL0Gyctp3MfUBRpK7Q81h1hEmvbL6VDvb6s017rcLsa+PD
+         /TfBYO6sGrBtoYrkjf2GFHksma001AmqYOf5dzqTb/tkEYQx7KReY9It76tp63CziRb0
+         5R5d80WTFM2DsGMr4jXx6HfgPCIXXeINBeUt11fcyOcGlYhCjmBCPBBmBwCkx8yYQQFP
+         v/mw==
+X-Gm-Message-State: AOAM530Bi89mUN8jVTt/7lfOz68E3gQEgdy955Z8sadvrNLwWihmbbM2
+        xIX+Gbk/gtAbD/MiI7N1pdI=
+X-Google-Smtp-Source: ABdhPJx3epWw8SnQaL8w47Y6EpL+Nxb2TfF2wFBPcUkPnpy1geqdfdb4Fr2esV6hzF8GexBy05uDgw==
+X-Received: by 2002:ac8:5895:0:b0:2e1:c997:a629 with SMTP id t21-20020ac85895000000b002e1c997a629mr14991481qta.124.1649405534737;
+        Fri, 08 Apr 2022 01:12:14 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id m6-20020a05622a118600b002ebb68c31d5sm10487776qtk.45.2022.04.08.01.12.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 01:12:14 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     kvalo@kernel.org
+Cc:     davem@davemloft.net, kuba@kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] wlcore: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
+Date:   Fri,  8 Apr 2022 08:12:05 +0000
+Message-Id: <20220408081205.2494512-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason A. Donenfeld
-> Sent: 08 April 2022 00:36
-> 
-> Rather than failing entirely if a copy_to_user() fails at some point,
-> instead we should return a partial read for the amount that succeeded
-> prior, unless none succeeded at all, in which case we return -EFAULT as
-> before.
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-I think you now return -EFAULT for a zero length read.
+Using pm_runtime_resume_and_get is more appropriate
+for simplifing code
 
-	David
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+ drivers/net/wireless/ti/wlcore/debugfs.c | 52 ++++++++----------------
+ 1 file changed, 17 insertions(+), 35 deletions(-)
 
-> 
-> This makes it consistent with other reader interfaces. For example, the
-> following snippet for /dev/zero outputs "4" followed by "1":
-> 
->   int fd;
->   void *x = mmap(NULL, 4096, PROT_WRITE, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
->   assert(x != MAP_FAILED);
->   fd = open("/dev/zero", O_RDONLY);
->   assert(fd >= 0);
->   printf("%zd\n", read(fd, x, 4));
->   printf("%zd\n", read(fd, x + 4095, 4));
->   close(fd);
-> 
-> This brings that same standard behavior to the various RNG reader
-> interfaces.
-> 
-> While we're at it, we can streamline the loop logic a little bit.
-> 
-> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-> Cc: Jann Horn <jannh@google.com>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
-> Changes v1->v2:
-> - Do partial copies within individual blocks, not just per-block, also
->   following how /dev/zero and ordinary filesystem files work.
-> 
->  drivers/char/random.c | 22 ++++++++++++----------
->  1 file changed, 12 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/char/random.c b/drivers/char/random.c
-> index e15063d61460..df43c5060f00 100644
-> --- a/drivers/char/random.c
-> +++ b/drivers/char/random.c
-> @@ -523,8 +523,7 @@ EXPORT_SYMBOL(get_random_bytes);
-> 
->  static ssize_t get_random_bytes_user(void __user *buf, size_t nbytes)
->  {
-> -	ssize_t ret = 0;
-> -	size_t len;
-> +	size_t len, left, ret = 0;
->  	u32 chacha_state[CHACHA_STATE_WORDS];
->  	u8 output[CHACHA_BLOCK_SIZE];
-> 
-> @@ -543,37 +542,40 @@ static ssize_t get_random_bytes_user(void __user *buf, size_t nbytes)
->  	 * the user directly.
->  	 */
->  	if (nbytes <= CHACHA_KEY_SIZE) {
-> -		ret = copy_to_user(buf, &chacha_state[4], nbytes) ? -EFAULT : nbytes;
-> +		ret = nbytes - copy_to_user(buf, &chacha_state[4], nbytes);
->  		goto out_zero_chacha;
->  	}
-> 
-> -	do {
-> +	for (;;) {
->  		chacha20_block(chacha_state, output);
->  		if (unlikely(chacha_state[12] == 0))
->  			++chacha_state[13];
-> 
->  		len = min_t(size_t, nbytes, CHACHA_BLOCK_SIZE);
-> -		if (copy_to_user(buf, output, len)) {
-> -			ret = -EFAULT;
-> +		left = copy_to_user(buf, output, len);
-> +		if (left) {
-> +			ret += len - left;
->  			break;
->  		}
-> 
-> -		nbytes -= len;
->  		buf += len;
->  		ret += len;
-> +		nbytes -= len;
-> +		if (!nbytes)
-> +			break;
-> 
->  		BUILD_BUG_ON(PAGE_SIZE % CHACHA_BLOCK_SIZE != 0);
-> -		if (!(ret % PAGE_SIZE) && nbytes) {
-> +		if (ret % PAGE_SIZE == 0) {
->  			if (signal_pending(current))
->  				break;
->  			cond_resched();
->  		}
-> -	} while (nbytes);
-> +	}
-> 
->  	memzero_explicit(output, sizeof(output));
->  out_zero_chacha:
->  	memzero_explicit(chacha_state, sizeof(chacha_state));
-> -	return ret;
-> +	return ret ? ret : -EFAULT;
->  }
-> 
->  /*
-> --
-> 2.35.1
-
+diff --git a/drivers/net/wireless/ti/wlcore/debugfs.c b/drivers/net/wireless/ti/wlcore/debugfs.c
+index cce8d75d8b81..eb3d3f0e0b4d 100644
+--- a/drivers/net/wireless/ti/wlcore/debugfs.c
++++ b/drivers/net/wireless/ti/wlcore/debugfs.c
+@@ -52,11 +52,9 @@ void wl1271_debugfs_update_stats(struct wl1271 *wl)
+ 	if (unlikely(wl->state != WLCORE_STATE_ON))
+ 		goto out;
+ 
+-	ret = pm_runtime_get_sync(wl->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(wl->dev);
++	ret = pm_runtime_resume_and_get(wl->dev);
++	if (ret < 0)
+ 		goto out;
+-	}
+ 
+ 	if (!wl->plt &&
+ 	    time_after(jiffies, wl->stats.fw_stats_update +
+@@ -108,12 +106,9 @@ static void chip_op_handler(struct wl1271 *wl, unsigned long value,
+ 		return;
+ 	}
+ 
+-	ret = pm_runtime_get_sync(wl->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(wl->dev);
 -
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
++	ret = pm_runtime_resume_and_get(wl->dev);
++	if (ret < 0)
+ 		return;
+-	}
+ 
+ 	chip_op = arg;
+ 	chip_op(wl);
+@@ -279,11 +274,9 @@ static ssize_t dynamic_ps_timeout_write(struct file *file,
+ 	if (unlikely(wl->state != WLCORE_STATE_ON))
+ 		goto out;
+ 
+-	ret = pm_runtime_get_sync(wl->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(wl->dev);
++	ret = pm_runtime_resume_and_get(wl->dev);
++	if (ret < 0)
+ 		goto out;
+-	}
+ 
+ 	/* In case we're already in PSM, trigger it again to set new timeout
+ 	 * immediately without waiting for re-association
+@@ -349,11 +342,9 @@ static ssize_t forced_ps_write(struct file *file,
+ 	if (unlikely(wl->state != WLCORE_STATE_ON))
+ 		goto out;
+ 
+-	ret = pm_runtime_get_sync(wl->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(wl->dev);
++	ret = pm_runtime_resume_and_get(wl->dev);
++	if (ret < 0)
+ 		goto out;
+-	}
+ 
+ 	/* In case we're already in PSM, trigger it again to switch mode
+ 	 * immediately without waiting for re-association
+@@ -831,11 +822,9 @@ static ssize_t rx_streaming_interval_write(struct file *file,
+ 
+ 	wl->conf.rx_streaming.interval = value;
+ 
+-	ret = pm_runtime_get_sync(wl->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(wl->dev);
++	ret = pm_runtime_resume_and_get(wl->dev);
++	if (ret < 0)
+ 		goto out;
+-	}
+ 
+ 	wl12xx_for_each_wlvif_sta(wl, wlvif) {
+ 		wl1271_recalc_rx_streaming(wl, wlvif);
+@@ -889,11 +878,9 @@ static ssize_t rx_streaming_always_write(struct file *file,
+ 
+ 	wl->conf.rx_streaming.always = value;
+ 
+-	ret = pm_runtime_get_sync(wl->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(wl->dev);
++	ret = pm_runtime_resume_and_get(wl->dev);
++	if (ret < 0)
+ 		goto out;
+-	}
+ 
+ 	wl12xx_for_each_wlvif_sta(wl, wlvif) {
+ 		wl1271_recalc_rx_streaming(wl, wlvif);
+@@ -939,11 +926,9 @@ static ssize_t beacon_filtering_write(struct file *file,
+ 
+ 	mutex_lock(&wl->mutex);
+ 
+-	ret = pm_runtime_get_sync(wl->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(wl->dev);
++	ret = pm_runtime_resume_and_get(wl->dev);
++	if (ret < 0)
+ 		goto out;
+-	}
+ 
+ 	wl12xx_for_each_wlvif(wl, wlvif) {
+ 		ret = wl1271_acx_beacon_filter_opt(wl, wlvif, !!value);
+@@ -1021,11 +1006,9 @@ static ssize_t sleep_auth_write(struct file *file,
+ 		goto out;
+ 	}
+ 
+-	ret = pm_runtime_get_sync(wl->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(wl->dev);
++	ret = pm_runtime_resume_and_get(wl->dev);
++	if (ret < 0)
+ 		goto out;
+-	}
+ 
+ 	ret = wl1271_acx_sleep_auth(wl, value);
+ 	if (ret < 0)
+@@ -1254,9 +1237,8 @@ static ssize_t fw_logger_write(struct file *file,
+ 	}
+ 
+ 	mutex_lock(&wl->mutex);
+-	ret = pm_runtime_get_sync(wl->dev);
++	ret = pm_runtime_resume_and_get(wl->dev);
+ 	if (ret < 0) {
+-		pm_runtime_put_noidle(wl->dev);
+ 		count = ret;
+ 		goto out;
+ 	}
+-- 
+2.25.1
 

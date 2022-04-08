@@ -2,112 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A0A14F98A3
+	by mail.lfdr.de (Postfix) with ESMTP id 71EC54F98A4
 	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:53:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237321AbiDHOxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 10:53:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43446 "EHLO
+        id S237219AbiDHOyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 10:54:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230376AbiDHOxr (ORCPT
+        with ESMTP id S233516AbiDHOyi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 10:53:47 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE1910DA73
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 07:51:43 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id e8-20020a17090a118800b001cb13402ea2so5426305pja.0
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 07:51:43 -0700 (PDT)
+        Fri, 8 Apr 2022 10:54:38 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B52116B79
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 07:52:34 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id e22so10837726ioe.11
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 07:52:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=oKpHuTCTVX/9mlJ3fOMLkg+SOJ3B85mD/CGTLhqUYcY=;
-        b=IRlMOocycUdo2ggd59+k/x0mi14OomgysGOMJMR0BXqq9t+rkqur9z6Fm3wtr/nQ1h
-         UJGYtVaU5HtC6Hnr/bQvw8KCOJYNkLEb9wuZ+F9dURfGH7nTatt44rzV3sz2ydGDQboY
-         7csWkDkyZ1RHkYa1vSy1WrAOdBYgArlPOfSFIWy3EItX6vCGFcQckni5n8yqA/lDrvJj
-         QZfsH19T9beBeIjf250Iry5yuLygxD80YH6Qmg8w8Zp2LuPKe4qFxvNUGCNAUEEhYAE/
-         sHuPXER3Jn+RbPRFan5nnWHce+ZcgbBbTjCZYW96a1YIKzML+y2dfBbNCyUhlcuvxVsY
-         plXA==
+        d=joelfernandes.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8VRYQ19FRWWgFB7eclpNXP2B+Re0MnAnD9mT5UitObs=;
+        b=K1wi6jy6dYdW+QpMSK3lfRGk4zGJJ8ogB8ZcDlfiGH3GEEOszOV9MxSDftrmkKhTz3
+         szCu7VsuIjubs5IEfqfb/bfE8LOTX934fRkIGREGB0ChGz9X8hy5IXOCfkarC2fUJRVw
+         Hu8rHgf0l2L0a8T1HtK35w2olAaeJfU7uETgM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oKpHuTCTVX/9mlJ3fOMLkg+SOJ3B85mD/CGTLhqUYcY=;
-        b=iwtQHBA7zUck9bCusHfa/CYreXzsdJw8tGujvi3BVRbxXC/eIiJTB207eDC7uq8GC8
-         ghjzIkV5xe38QwgcDWJ3h1Ojn/q9eFB9O7xRn+feGBCsqGnFeaKvsRLQIK2Eze9jPr/K
-         njY38UCGRNfG40xFMDEQXoji1ELM2BzAVxNE2mjz1Ux8obSLc/xpPyplIrxCf/uBYUU6
-         ySBs9QMjZn5DltbaH11TP68M/tcs8NME/NaoS7PJ/36bv5NmCQc7jqS260Xh1aCIontP
-         WDQDCqkqyiINrBGUEHvUv3OdXHJQa/t2OzGUF2+XGat+IWYkuhv7OpMewqhnRJ1p1EVR
-         CzGA==
-X-Gm-Message-State: AOAM53116upevcCjKYM7dlv0ChUhYTxxr/ZPmrX0XvWmsqoKt3RQsyiX
-        t/9YnZaxSKkLP20sRR0b6PIdUw==
-X-Google-Smtp-Source: ABdhPJwK5E91BkazzZhqdilh1wfA2ctl2VJDZBvxKXgErNvw3ypqz09c901AZEW9sa1HYrXRoCPYbg==
-X-Received: by 2002:a17:902:d507:b0:157:1e3b:ee76 with SMTP id b7-20020a170902d50700b001571e3bee76mr5302286plg.67.1649429503155;
-        Fri, 08 Apr 2022 07:51:43 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id h20-20020a056a001a5400b004fb1b4b010asm26840043pfv.162.2022.04.08.07.51.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 07:51:42 -0700 (PDT)
-Date:   Fri, 8 Apr 2022 14:51:39 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Isaku Yamahata <isaku.yamahata@gmail.com>,
-        isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>
-Subject: Re: [RFC PATCH v5 092/104] KVM: TDX: Handle TDX PV HLT hypercall
-Message-ID: <YlBL+0mDzuTMYGV9@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <6da55adb2ddb6f287ebd46aad02cfaaac2088415.1646422845.git.isaku.yamahata@intel.com>
- <282d4cd1-d1f7-663c-a965-af587f77ee5a@redhat.com>
- <Yk79A4EdiZoVQMsV@google.com>
- <8e0280ab-c7aa-5d01-a36f-93d0d0d79e25@redhat.com>
- <20220408045842.GI2864606@ls.amr.corp.intel.com>
- <27a59f1a-ea74-2d75-0739-5521e7638c68@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8VRYQ19FRWWgFB7eclpNXP2B+Re0MnAnD9mT5UitObs=;
+        b=28YrwvojKSIcVx5PrTjIMksihtNeiPOl1h2FXG5BRJ93k7P7gQAQKBc4nEIFbQpeWX
+         DC2sKoSjzRzYvMLymR+mgzhPy0RJCy1ZmJko2ZLu8/f0ooGhN40vyv+9ECcIYZ25KFI7
+         x5Hz/X/jLZLp0xdpZ1yEYUOf9IVKxy/hWmM1I2W7+FnepIoGSYCJa823uWhY0Y+3XHeg
+         gn1os6npIC3+7LVVn/RMGiKS4gGPGAUGX8xMBiOMZhH/kufzE2p1W67VeIsBHVYNBR9l
+         EPDiciKBxdFRvHUgdTuMjbBn6ywJON81MJGBZ8YbIeVgomtZ5U5OpTEzoifh0/Sl0sAv
+         MoOA==
+X-Gm-Message-State: AOAM530q55DVmw5bSAypowOsuVRKFKIFTZJ0N7GDX9/W+ZME08H9V+ED
+        RlwI8mtxwA2FFTLSYToxkR+s5yufomBtu/MEXEeBbQ==
+X-Google-Smtp-Source: ABdhPJz1dIbPRtI2UatBy2KD/GE6d9cFkS0wAFaLtoor9dgLbnw2qoyzh4xp7F/X2+FFjvYqH9TMgWjgexBcH1bqCCM=
+X-Received: by 2002:a5e:8d15:0:b0:645:c856:e84a with SMTP id
+ m21-20020a5e8d15000000b00645c856e84amr8616203ioj.84.1649429554195; Fri, 08
+ Apr 2022 07:52:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <27a59f1a-ea74-2d75-0739-5521e7638c68@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+References: <20220407210734.2548973-1-joel@joelfernandes.org> <20220408142232.GA4285@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20220408142232.GA4285@paulmck-ThinkPad-P17-Gen-1>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Fri, 8 Apr 2022 10:52:21 -0400
+Message-ID: <CAEXW_YQWeqfcKdAKmCn4fFGyWXjOGd=29wvi6bL3k7s2bGkDJw@mail.gmail.com>
+Subject: Re: [PATCH RFC] rcu/nocb: Provide default all-CPUs mask for RCU_NOCB_CPU=y
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        rcu <rcu@vger.kernel.org>, Steven Rostedt <rostedt@goodmis.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022, Paolo Bonzini wrote:
-> On 4/8/22 06:58, Isaku Yamahata wrote:
-> > On Thu, Apr 07, 2022 at 05:56:05PM +0200,
-> > Paolo Bonzini <pbonzini@redhat.com> wrote:
-> > 
-> > > You didn't answer the other question, which is "Where is R12 documented for
-> > > TDG.VP.VMCALL<Instruction.HLT>?" though...  Should I be worried? :)
-> > 
-> > It's publicly documented.
-> > 
-> > Guest-Host-Communication Interface(GHCI) spec, 344426-003US Feburary 2022.
-> > 3.8 TDG.VP.VMCALL<Instruction.HLT>
-> > R12 Interrupt Blocked Flag.
-> >      The TD is expected to clear this flag iff RFLAGS.IF == 1 or the TDCALL instruction
-> >      (that invoked TDG.VP.TDVMCALL(Instruction.HLT)) immediately follows an STI
-> >      instruction, otherwise this flag should be set.
-> 
-> Oh, Google doesn't know about this version of the spec...  It can be
-> downloaded from https://www.intel.com/content/www/us/en/developer/articles/technical/intel-trust-domain-extensions.html
-> though.
-> 
-> I also found VCPU_STATE_DETAILS in https://www.intel.com/content/dam/develop/external/us/en/documents/tdx-module-1.0-public-spec-v0.931.pdf:
-> 
->   Bit 0: VMXIP, indicates that a virtual interrupt is pending
->   delivery, i.e. VMCS.RVI[7:4] > TDVPS.VAPIC.VPPR[7:4]
-> 
-> It also documents how it has to be used.  So this looks more or less okay,
-> just rename "vmxip" to "interrupt_pending_delivery".
+On Fri, Apr 8, 2022 at 10:22 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+>
+> On Thu, Apr 07, 2022 at 09:07:33PM +0000, Joel Fernandes wrote:
+> > On systems with CONFIG_RCU_NOCB_CPU=y, there is no default mask provided
+> > which ends up not offloading any CPU. This patch removes yet another
+> > dependency from the bootloader having to know about RCU, about how many
+> > CPUs the system has, and about how to provide the mask. Basically, I
+> > think we should stop pretending that the user knows what they are doing :).
+> > In other words, if NO_CB_CPU is enabled, lets make use of it.
+> >
+> > My goal is to make RCU as zero-config as possible with sane defaults. If
+> > user wants to provide rcu_nocbs= or nohz_full= options, then those will
+> > take precedence and this patch will have no effect.
+> >
+> > I tested providing rcu_nocbs= option, ensuring that is preferred over this.
+>
+> Unless something has changed, this would change behavior relied upon
+> the enterprise distros.  Last I checked, they want to supply a single
+> binary, as evidenced by the recent CONFIG_PREEMPT_DYNAMIC Kconfig option,
+> and they also want the default to be non-offloaded.  That is, given a
+> kernel built with CONFIG_RCU_NOCB_CPU=y and without either a nohz_full
+> or a nocbs_cpu boot parameter, all of the CPUs must be non-offloaded.
 
-If we're keeping the call back into SEAM, then this belongs in the path of
-apic_has_interrupt_for_ppr(), not in the HLT-exit path.  To avoid multiple SEAMCALLS
-in a single exit, VCPU_EXREG_RVI can be added.
+Just curious, do you have information (like data, experiment results)
+on why they want default non-offloaded? Or maybe they haven't tried
+the recent work done in NOCB code?
+
+Another option I think is to make it enforce NOCB if NR_CPUS <= 32 if
+that makes sense.
+
+> So for me to push this to mainline, I need an ack from someone from each
+> of the enterprise distros, and each of those someones needs to understand
+> the single-binary strategy used by the corresponding distro.
+
+Ok.
+
+> And is it really all -that- hard to specify an additional boot parameter
+> across ChromeOS devices?  Android seems to manage it.  ;-)
+
+That's not the hard part I think. The hard part is to make sure a
+future Linux user who is not an RCU expert does not forget to turn it
+on. ChromeOS is not the only OS that I've seen someone forget to do it
+;-D. AFAIR, there were Android devices too in the past where I saw
+this forgotten. I don't think we should rely on the users doing the
+right thing (as much as possible).
+
+The single kernel binary point makes sense but in this case, I think
+the bigger question that I'd have is what is the default behavior and
+what do *most* users of RCU want. So we can keep sane defaults for the
+majority and reduce human errors related to configuration.
+
+thanks,
+
+-Joel

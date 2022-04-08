@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFAB54F9DF9
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 22:06:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01DD84F9DFB
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 22:06:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239364AbiDHUII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 16:08:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38394 "EHLO
+        id S239375AbiDHUIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 16:08:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239371AbiDHUIC (ORCPT
+        with ESMTP id S232637AbiDHUI0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 16:08:02 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF34353A99
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 13:05:55 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id t190-20020a25c3c7000000b006410799ab3dso2067616ybf.21
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 13:05:55 -0700 (PDT)
+        Fri, 8 Apr 2022 16:08:26 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A23350498
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 13:06:21 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id b16-20020a253410000000b006410e827132so1589251yba.23
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 13:06:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:cc;
-        bh=pAGqEnG2raRkXveZrBOcJyHPFm0QVTMkhlJQFJA6T34=;
-        b=fkf7yOt+xD7tPoLc32dR2/1ousTpprVrbdor4w8WJ28DKGW7L4u8ZSraUcycc4uKIx
-         qIhFw4XjsCzjNrsqJZ7FDiR7kbhNdo9HlrECBWIGZQYEgklkOp6x/7lnhjh2nr7AkBsn
-         C9IsV/kKQ4A+DEBXdbfdSnSJyDQG963lgzXVwwu0RFUrvvAINdb93EZG4Rz+364uJ/kC
-         ffGjkLkbzJNk2CmRiYuzdfRe8LxLAzd8qX96szw4FY/GsE2/kqQg4DTyfouy123yi6Fo
-         3nuCQkMf/4aVhDA2jSGy/I52QR0VqL1WXxHhBpkGiKplOyrniE2sXUjiMpHULw7lt5t0
-         KcEA==
+        bh=x93NDMtIcx2idQMr+unDlcAPSW8WF5PhRWgttKX+iKU=;
+        b=lkbCS6nMzD5l/NcfUbqdzOcFcXYuIbONUYKihkgTAKdwgS6qEgzrB//n/sVPVjQVBN
+         4TuMybTXOq6SdpwsF6dxtvqZOYY7VvHb9RTVpMl14NmmXLDuS9Dy8/EpGpgazblTzo5Z
+         iQ+S2yTm9lt6slO4knFUusXLB7ckzd1OY/0OGn5uGk9NNTCRe156PiP5ijiUOlzaZ5hQ
+         nyY+d8/52jbYZdGa6mc7lFI2yrIVD7FeRIerU6SyqoC6BJPdBNgLEHi8rjdHRnAaOGfD
+         LGxR5ljbg2jbzimVVHo0ksIW0CZd/TUsw3MA82vloWJI8+3bX3PFOJFnr0lYDtKXywhm
+         Horg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:cc;
-        bh=pAGqEnG2raRkXveZrBOcJyHPFm0QVTMkhlJQFJA6T34=;
-        b=x/0lZraI2AMGNwNJVVKGXv1N9s76Eraihw2Dz34XsXWlApiAy7EhzW8S3FgCLgTnXK
-         9cOKiNazHFKQza19boo8sladrg8HeOfufvc5tK7/cp/82hz03GwYGGxQY9Ot1n2idBAE
-         erKVR+EDYTCMXZJq+zoyE7NVh9+vsJqOGmRUvsCEFfUsaMQX689qdg4PtRmSRKIRJSgB
-         DSwCqAsTae6iu/vnwJSxzB92xN4QRJ5nTwrvtlsltcModiTf3noxB/MEk6xkk9E4eK10
-         MEecBCrtkSpIdLoUlPhYj6OfeTRsFVvXsLHkYsIXQvEX8FS+UUVtEb0Z2fWrMYixGz/Q
-         t9+g==
-X-Gm-Message-State: AOAM531ijS3igHlo8rhYq1g+7KhekPZyumGUFE6U3k7qJEEfvsOz5ED6
-        SEWsAaXiWOXZA5fA0Bah5BBV/FdT2YguvD6mtQ==
-X-Google-Smtp-Source: ABdhPJw+e7eRfTOjt8ij1JblVkRTOiDGCo90TudLPv3hs+v+1VcmuHXfi9c5ryQLjBORNvuZhqGkr3+gBULrWSkxcA==
+        bh=x93NDMtIcx2idQMr+unDlcAPSW8WF5PhRWgttKX+iKU=;
+        b=XM9JfeXVyR/6mXm9KEHMohUWViG9FWkT9EqlnHTzRntp2kXzmY7A7qL9XPtk5rxD5Q
+         xRLjt4dJ/O+UGWsVOYFItrevZk5vFpL4guoCQL1gdhfvpoiUADZeXtGfySZjrSQx7X6C
+         sp1xIc+arskw8Cmg3rE6Dbh2RGhZ9RFlY/IpSjRxRw/Uz95TbpOCTtfqe8zmoeaAU5I7
+         C9QlBp2ITZCPDtJ0cSsHC0oXQt98AxWm3uql9ikOcOrLP7cU0f3BXB5ufzq8VEMJqjEc
+         U+cCQ+XxVxVcd2q9a5FJ0lTt+dLLamdfEDZk3nBdYLN8TZMfejOhiBEG0Io0HK5hrxTZ
+         T5MQ==
+X-Gm-Message-State: AOAM530+rfbMj55EXcAuyAjNi9VFSa6zn1P6NQy4FDSYz0bNALKwuRsd
+        PhhwNpk27D6Zps1T875vsbg6rQwBpSasRgskOQ==
+X-Google-Smtp-Source: ABdhPJznbHjSSh4+bEaUognEJWHkByuTOiqR2U6CXPMcOP7Ibq65oUjuo1XwZfsOSWyX8z1IEKsec19wpvjz1Bp34A==
 X-Received: from kaleshsingh.mtv.corp.google.com ([2620:15c:211:200:f0ed:c8a:dab7:ecc2])
- (user=kaleshsingh job=sendgmr) by 2002:a25:ae1c:0:b0:63d:4d85:acdc with SMTP
- id a28-20020a25ae1c000000b0063d4d85acdcmr15047111ybj.435.1649448355076; Fri,
- 08 Apr 2022 13:05:55 -0700 (PDT)
-Date:   Fri,  8 Apr 2022 13:03:27 -0700
+ (user=kaleshsingh job=sendgmr) by 2002:a5b:982:0:b0:63e:7d7e:e2f2 with SMTP
+ id c2-20020a5b0982000000b0063e7d7ee2f2mr5160129ybq.549.1649448380890; Fri, 08
+ Apr 2022 13:06:20 -0700 (PDT)
+Date:   Fri,  8 Apr 2022 13:03:28 -0700
 In-Reply-To: <20220408200349.1529080-1-kaleshsingh@google.com>
-Message-Id: <20220408200349.1529080-5-kaleshsingh@google.com>
+Message-Id: <20220408200349.1529080-6-kaleshsingh@google.com>
 Mime-Version: 1.0
 References: <20220408200349.1529080-1-kaleshsingh@google.com>
 X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
-Subject: [PATCH v7 4/6] KVM: arm64: Add guard pages for pKVM (protected nVHE)
- hypervisor stack
+Subject: [PATCH v7 5/6] KVM: arm64: Detect and handle hypervisor stack overflows
 From:   Kalesh Singh <kaleshsingh@google.com>
 Cc:     will@kernel.org, maz@kernel.org, qperret@google.com,
         tabba@google.com, surenb@google.com, kernel-team@android.com,
@@ -64,10 +63,11 @@ Cc:     will@kernel.org, maz@kernel.org, qperret@google.com,
         Andrew Walbran <qwandor@google.com>,
         Mark Rutland <mark.rutland@arm.com>,
         Ard Biesheuvel <ardb@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Andrew Jones <drjones@redhat.com>,
         Changbin Du <changbin.du@intel.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
         linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
@@ -82,10 +82,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Map the stack pages in the flexible private VA range and allocate
-guard pages below the stack as unbacked VA space. The stack is aligned
-so that any valid stack address has PAGE_SHIFT bit as 1 - this is used
-for overflow detection (implemented in a subsequent patch in the series)
+The hypervisor stacks (for both nVHE Hyp mode and nVHE protected mode)
+are aligned such  that any valid stack address has PAGE_SHIFT bit as 1.
+This allows us to conveniently check for overflow in the exception entry
+without corrupting any GPRs. We won't recover from a stack overflow so
+panic the hypervisor.
 
 Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
 Tested-by: Fuad Tabba <tabba@google.com>
@@ -95,75 +96,85 @@ Reviewed-by: Fuad Tabba <tabba@google.com>
 Changes in v7:
   - Add Fuad's Reviewed-by and Tested-by tags.
 
-Changes in v6:
-  - Update call to pkvm_alloc_private_va_range() (return val and params)
-
 Changes in v5:
-  - Use a single allocation for stack and guard pages to ensure they
-    are contiguous, per Marc
-
-Changes in v4:
-  - Replace IS_ERR_OR_NULL check with IS_ERR check now that
-    pkvm_alloc_private_va_range() returns an error for null
-    pointer, per Fuad
+  - Valid stack addresses now have PAGE_SHIFT bit as 1 instead of 0
 
 Changes in v3:
-  - Handle null ptr in IS_ERR_OR_NULL checks, per Mark
+  - Remove test_sp_overflow macro, per Mark
+  - Add asmlinkage attribute for hyp_panic, hyp_panic_bad_stack, per Ard
 
 
- arch/arm64/kvm/hyp/nvhe/setup.c | 31 ++++++++++++++++++++++++++++---
- 1 file changed, 28 insertions(+), 3 deletions(-)
+ arch/arm64/kvm/hyp/nvhe/host.S   | 24 ++++++++++++++++++++++++
+ arch/arm64/kvm/hyp/nvhe/switch.c |  7 ++++++-
+ 2 files changed, 30 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/kvm/hyp/nvhe/setup.c b/arch/arm64/kvm/hyp/nvhe/setup.c
-index 27af337f9fea..e8d4ea2fcfa0 100644
---- a/arch/arm64/kvm/hyp/nvhe/setup.c
-+++ b/arch/arm64/kvm/hyp/nvhe/setup.c
-@@ -99,17 +99,42 @@ static int recreate_hyp_mappings(phys_addr_t phys, unsigned long size,
- 		return ret;
+diff --git a/arch/arm64/kvm/hyp/nvhe/host.S b/arch/arm64/kvm/hyp/nvhe/host.S
+index 3d613e721a75..be6d844279b1 100644
+--- a/arch/arm64/kvm/hyp/nvhe/host.S
++++ b/arch/arm64/kvm/hyp/nvhe/host.S
+@@ -153,6 +153,18 @@ SYM_FUNC_END(__host_hvc)
  
- 	for (i = 0; i < hyp_nr_cpus; i++) {
-+		struct kvm_nvhe_init_params *params = per_cpu_ptr(&kvm_init_params, i);
-+		unsigned long hyp_addr;
+ .macro invalid_host_el2_vect
+ 	.align 7
 +
- 		start = (void *)kern_hyp_va(per_cpu_base[i]);
- 		end = start + PAGE_ALIGN(hyp_percpu_size);
- 		ret = pkvm_create_mappings(start, end, PAGE_HYP);
- 		if (ret)
- 			return ret;
++	/*
++	 * Test whether the SP has overflowed, without corrupting a GPR.
++	 * nVHE hypervisor stacks are aligned so that the PAGE_SHIFT bit
++	 * of SP should always be 1.
++	 */
++	add	sp, sp, x0			// sp' = sp + x0
++	sub	x0, sp, x0			// x0' = sp' - x0 = (sp + x0) - x0 = sp
++	tbz	x0, #PAGE_SHIFT, .L__hyp_sp_overflow\@
++	sub	x0, sp, x0			// x0'' = sp' - x0' = (sp + x0) - sp = x0
++	sub	sp, sp, x0			// sp'' = sp' - x0 = (sp + x0) - x0 = sp
++
+ 	/* If a guest is loaded, panic out of it. */
+ 	stp	x0, x1, [sp, #-16]!
+ 	get_loaded_vcpu x0, x1
+@@ -165,6 +177,18 @@ SYM_FUNC_END(__host_hvc)
+ 	 * been partially clobbered by __host_enter.
+ 	 */
+ 	b	hyp_panic
++
++.L__hyp_sp_overflow\@:
++	/*
++	 * Reset SP to the top of the stack, to allow handling the hyp_panic.
++	 * This corrupts the stack but is ok, since we won't be attempting
++	 * any unwinding here.
++	 */
++	ldr_this_cpu	x0, kvm_init_params + NVHE_INIT_STACK_HYP_VA, x1
++	mov	sp, x0
++
++	bl	hyp_panic_bad_stack
++	ASM_BUG()
+ .endm
  
--		end = (void *)per_cpu_ptr(&kvm_init_params, i)->stack_hyp_va;
--		start = end - PAGE_SIZE;
--		ret = pkvm_create_mappings(start, end, PAGE_HYP);
-+		/*
-+		 * Allocate a contiguous HYP private VA range for the stack
-+		 * and guard page. The allocation is also aligned based on
-+		 * the order of its size.
-+		 */
-+		ret = pkvm_alloc_private_va_range(PAGE_SIZE * 2, &hyp_addr);
-+		if (ret)
-+			return ret;
-+
-+		/*
-+		 * Since the stack grows downwards, map the stack to the page
-+		 * at the higher address and leave the lower guard page
-+		 * unbacked.
-+		 *
-+		 * Any valid stack address now has the PAGE_SHIFT bit as 1
-+		 * and addresses corresponding to the guard page have the
-+		 * PAGE_SHIFT bit as 0 - this is used for overflow detection.
-+		 */
-+		hyp_spin_lock(&pkvm_pgd_lock);
-+		ret = kvm_pgtable_hyp_map(&pkvm_pgtable, hyp_addr + PAGE_SIZE,
-+					PAGE_SIZE, params->stack_pa, PAGE_HYP);
-+		hyp_spin_unlock(&pkvm_pgd_lock);
- 		if (ret)
- 			return ret;
-+
-+		/* Update stack_hyp_va to end of the stack's private VA range */
-+		params->stack_hyp_va = hyp_addr + (2 * PAGE_SIZE);
- 	}
+ .macro invalid_host_el1_vect
+diff --git a/arch/arm64/kvm/hyp/nvhe/switch.c b/arch/arm64/kvm/hyp/nvhe/switch.c
+index 6410d21d8695..703a5d3f611b 100644
+--- a/arch/arm64/kvm/hyp/nvhe/switch.c
++++ b/arch/arm64/kvm/hyp/nvhe/switch.c
+@@ -347,7 +347,7 @@ int __kvm_vcpu_run(struct kvm_vcpu *vcpu)
+ 	return exit_code;
+ }
  
- 	/*
+-void __noreturn hyp_panic(void)
++asmlinkage void __noreturn hyp_panic(void)
+ {
+ 	u64 spsr = read_sysreg_el2(SYS_SPSR);
+ 	u64 elr = read_sysreg_el2(SYS_ELR);
+@@ -369,6 +369,11 @@ void __noreturn hyp_panic(void)
+ 	unreachable();
+ }
+ 
++asmlinkage void __noreturn hyp_panic_bad_stack(void)
++{
++	hyp_panic();
++}
++
+ asmlinkage void kvm_unexpected_el2_exception(void)
+ {
+ 	return __kvm_unexpected_el2_exception();
 -- 
 2.35.1.1178.g4f1659d476-goog
 

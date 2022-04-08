@@ -2,151 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76AAA4F8FA7
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:31:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BDB44F8FAA
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbiDHHdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 03:33:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53444 "EHLO
+        id S229699AbiDHHgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 03:36:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiDHHde (ORCPT
+        with ESMTP id S229437AbiDHHgi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 03:33:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 54A111D0F9
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 00:31:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649403088;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AJie/UdH9Mqf7tAIiWd8hXnktBcEVlo+NQRFJbbT0jQ=;
-        b=JwIiK0CVfCp3wjMb+11ryweoEmeU2F/gEDNqymOcXgWbO+HQ6e/Ba9P/K5Pnu6OjBQsmBa
-        bpNWaASmlUw5gVXyvG/ekBcjWV/IthUgSxLs43T1jltG0MDID7DxjbTxzgXjAKodLN6FHf
-        cx8kTCOg6vRTz841qAQAV9ozIzrBGaE=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-608-WpvjlPijNHa5anCtP-Xsjw-1; Fri, 08 Apr 2022 03:31:26 -0400
-X-MC-Unique: WpvjlPijNHa5anCtP-Xsjw-1
-Received: by mail-wr1-f72.google.com with SMTP id z16-20020adff1d0000000b001ef7dc78b23so1959505wro.12
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 00:31:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=AJie/UdH9Mqf7tAIiWd8hXnktBcEVlo+NQRFJbbT0jQ=;
-        b=1r3m3gYCijvdeY6xAJ1ZEh/jzTXb+7ul5C0XIZQG0baw/zkNL3wgzg6XwiaZTxSMI1
-         CdCYA+zQIo51sgwbra5eIgPuZGnj4EgvllqsBzTvHla3wbTc/p9or/8t8KJ4/iDu1Rag
-         22DGhiolk5ONb3y/ZCihrkAQ6o/WiLSkAtwD2ZJV31zY230ByQeoCuLDSih0nOGxtl95
-         OvJuzpXTemnThVgMUKwXToLAPRhveQKstObsl3uGdhFfDfcr8lJm5VJBTnnwXFCvyGt0
-         lyPdxunrmO2w3N25BbrJtRLctjjRRWF8vnVskY88Cc62304e1+jhc5JGUb0O+zRDu3F9
-         pkdw==
-X-Gm-Message-State: AOAM532kB5+SaMSEt5E9cjGfJqVEzZGMg5cr7NqW1thFq0PKYLB1HAoq
-        RpMB0erMS+XS5KeDW3N5ggn4VIn048kQ8tNLog+rlC33w1qWqWopfXrT1vObZIq5e99U/6pYGmP
-        208sOgAJxKhBc3FlV5c5rvrZg
-X-Received: by 2002:a1c:7517:0:b0:38c:8722:9bc6 with SMTP id o23-20020a1c7517000000b0038c87229bc6mr15680350wmc.2.1649403085212;
-        Fri, 08 Apr 2022 00:31:25 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw3TTJ46O1ZC2FKUoNgMnaa7amF/PK4+JqHt94o201sprDkj+NNKAsFzvfC8rddbjp5DCgwYA==
-X-Received: by 2002:a1c:7517:0:b0:38c:8722:9bc6 with SMTP id o23-20020a1c7517000000b0038c87229bc6mr15680330wmc.2.1649403084913;
-        Fri, 08 Apr 2022 00:31:24 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c704:fd00:612:f12b:a4a2:26b0? (p200300cbc704fd000612f12ba4a226b0.dip0.t-ipconnect.de. [2003:cb:c704:fd00:612:f12b:a4a2:26b0])
-        by smtp.gmail.com with ESMTPSA id i14-20020a0560001ace00b00203da1fa749sm28007860wry.72.2022.04.08.00.31.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Apr 2022 00:31:24 -0700 (PDT)
-Message-ID: <a6ce4cd3-dfbc-134c-88a0-40fefa8094f6@redhat.com>
-Date:   Fri, 8 Apr 2022 09:31:23 +0200
+        Fri, 8 Apr 2022 03:36:38 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5564517DC8C;
+        Fri,  8 Apr 2022 00:34:33 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2387YLf3112553;
+        Fri, 8 Apr 2022 02:34:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1649403261;
+        bh=utB+5AJ0MG+aUScpIOnzQKbcaFxDRZbL4sQdqSpNBT0=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=XyMHiYNPIR0MA1iQ7sXFITOkjxzyj1z8YkGf7pMZBMmeHlBldxDA81+L40N3W/pjv
+         2iPicZJv3YjpFjK/7TXBod7ZYF1yHGj3o99nfJkqdRbEF30VNi3dtWQLP+ImyMHQW6
+         Y0OOCNiZBffl7F7Xs/PiEvjNhZT3BpdLSeL4H2Cs=
+Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2387YLxQ030868
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 8 Apr 2022 02:34:21 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 8
+ Apr 2022 02:34:18 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 8 Apr 2022 02:34:18 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2387YIpj073598;
+        Fri, 8 Apr 2022 02:34:18 -0500
+Date:   Fri, 8 Apr 2022 02:34:18 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Tony Lindgren <tony@atomide.com>
+CC:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        <linux-kernel@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, Keerthy <j-keerthy@ti.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Subject: Re: [PATCH 1/4] dt-bindings: timer: Add am6 compatible for ti-timer
+Message-ID: <20220408073418.4yjs3ykt34fhqjco@boondocks>
+References: <20220407071006.37031-1-tony@atomide.com>
+ <20220407133344.v2x2b6rkmskatips@handled>
+ <Yk+8P5EdsdZR5h1Z@atomide.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH] delayacct: track delays from COW
-Content-Language: en-US
-To:     CGEL <cgel.zte@gmail.com>
-Cc:     akpm@linux-foundation.org, bsingharora@gmail.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Yang Yang <yang.yang29@zte.com.cn>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>
-References: <20220322110444.2340748-1-yang.yang29@zte.com.cn>
- <9f9ddbf7-797a-58d8-2903-beacb2698329@redhat.com>
- <624d434a.1c69fb81.11e99.b2b8@mx.google.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <624d434a.1c69fb81.11e99.b2b8@mx.google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Yk+8P5EdsdZR5h1Z@atomide.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06.04.22 09:37, CGEL wrote:
-> On Wed, Mar 23, 2022 at 09:49:46AM +0100, David Hildenbrand wrote:
->> On 22.03.22 12:04, cgel.zte@gmail.com wrote:
->>> From: Yang Yang <yang.yang29@zte.com.cn>
->>>
->>> Delay accounting does not track the delay of COW. When tasks trigger
->>> much COW, it may spend a amount of time waiting for it. To get the
->>> impact of tasks in COW, measure the delay when it happens. This
->>> could help users to do tunnings, such as decide whether to use
->>> ksm or not.
->>>
->>> Also update tools/accounting/getdelays.c:
->>>
->>>     / # ./getdelays -dl -p 231
->>>     print delayacct stats ON
->>>     listen forever
->>>     PID     231
->>>
->>>     CPU             count     real total  virtual total    delay total  delay average
->>>                      6247     1859000000     2154070021     1674255063          0.268ms
->>>     IO              count    delay total  delay average
->>>                         0              0              0ms
->>>     SWAP            count    delay total  delay average
->>>                         0              0              0ms
->>>     RECLAIM         count    delay total  delay average
->>>                         0              0              0ms
->>>     THRASHING       count    delay total  delay average
->>>                         0              0              0ms
->>>     COMPACT         count    delay total  delay average
->>>                         3          72758              0ms
->>>     COW             count    delay total  delay average
->>>                      3635      271567604              0ms
->>
->> You should also update Documentation/accounting/delay-accounting.rst
->> most probably.
->>
->> Overall LGTM and this might be of value not only for KSM but for anybody
->> using fork(). There will be collisions with [1], especially [2], which I
->> want to get in -next early after we have v5.18-rc1 (after rebasing [1]
->> on top of this).
->>
->> We'll have to decide if we want to also account hugetlb wp code
->> (hugetlb_cow), and if we want to account "unsharing" here as well under
->> cow (I tend to say that we want to for simplicity). For THP, we only
->> split and don't copy, so there isn't anything to account.
->>
-> As for simplicity, what about account "PAGECOPY" instead of "COW"?
-> "PAGECOPY" include COW and unsharing. And we may also account hugetlb
-> wp in follow-up patches, based on this patch is sufficient reviewed.
+On 07:38-20220408, Tony Lindgren wrote:
+> Hi,
+> 
+> * Nishanth Menon <nm@ti.com> [220407 13:31]:
+> > On 10:10-20220407, Tony Lindgren wrote:
+> > > diff --git a/Documentation/devicetree/bindings/timer/ti,timer.txt b/Documentation/devicetree/bindings/timer/ti,timer.txt
+> > > --- a/Documentation/devicetree/bindings/timer/ti,timer.txt
+> > > +++ b/Documentation/devicetree/bindings/timer/ti,timer.txt
+> > > @@ -14,6 +14,7 @@ Required properties:
+> > >  			ti,omap5430-timer (applicable to OMAP543x devices)
+> > >  			ti,am335x-timer	(applicable to AM335x devices)
+> > >  			ti,am335x-timer-1ms (applicable to AM335x devices)
+> > > +			ti,am6-timer (applicable to AM6 devices)
+> > 
+> > Suggestion:
+> > 
+> > Could we call this ti,am65-timer instead? AM6 is a bit nuanced and spans
+> > a couple of sub SoC architectures.
+> 
+> I think the timer hardware is the same across am64, am65 and j7. So we
+> should pick something to represent the am6 timers as it would allow using
+> shared dtsi files for the 16 - 30 timers there are.
+> 
+> Using shared timer dtsi files should work as long as the clocks are
+> defined in include/dt-bindings/clock for each SoC, and assuming we can use
+> the same compatible property for the timers.
 
-PAGECOPY might be too generic. You actually want to express "potentially
-shared page was copied by the write-fault handler while it was write
-protected".
+Compatible should work fine, Though I doubt clock and other indices
+(base address etc will scale appropriately), but we could give it a
+shot, but we can discuss that in the context of the dts patches.
 
-do_wp_page()->wp_page_copy()
+> 
+> Of course if the timers are really different across am64, am65 and j72
+> then multiple compatible properties are neeeded.
+> 
+> If the timer hardware is the same, then I guess we should just pick the
+> earliest version, so how about using ti,am64-timer?
 
-Maybe simply "WP_COPY" as a prefix ("Write-protect copy") ?
+yep - the oldest version will be ti,am654-timer ( AM65 was the first
+K3 device. Unfortunately, the numbering does'nt follow a chronological
+order)
 
 -- 
-Thanks,
-
-David / dhildenb
-
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D

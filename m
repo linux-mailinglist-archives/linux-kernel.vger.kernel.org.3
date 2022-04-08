@@ -2,89 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADB204F9F55
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 23:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B47C04F9F58
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 23:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239920AbiDHVsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 17:48:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52106 "EHLO
+        id S232920AbiDHVtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 17:49:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239908AbiDHVso (ORCPT
+        with ESMTP id S233463AbiDHVtt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 17:48:44 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99BF160C37
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 14:46:37 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649454395;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4jv1XCzAA0sQnRATbKYwT40mQz2UjI4mAAOrGkzxjJ0=;
-        b=oN4OzZ98SJpzhn99fiyr2x/tQm0k3Xg6UFZEviT7uYkq4Anlr1oPBg5AY5R6t0QqJDo89d
-        /0eu8omXgmv2bJqj7eAs8rmTJA6PeWsdJ+WduCat+c7av47GH+DuSb6n5hehD7C4VXyM/1
-        Kpw3DXP6iLFNwNzS7xoeBDDip3STref5cHm7n5du2fU6hWEagdtkzjWF4xnYsXBcwAhufq
-        yUiv8/K7PspftKjQTy97FedXolVMkucDAuUjvqyiSyozSn9lsQ46aAa7c10NaP1ik5QDeE
-        Mam29PAXKZjER0BWs+lNN+jlXUGSKzy/1ylU+/ZIHR/SY1yfWLKuhQRdXGegaA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649454395;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4jv1XCzAA0sQnRATbKYwT40mQz2UjI4mAAOrGkzxjJ0=;
-        b=z4nQH3vI3VTtHrctAJwIeHhOG7tShlqCZwY4sb/sWZjZhPcyXv+lhQxxudhDbgVpwEwBaj
-        CHtnMcm1CuJTOdDw==
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>, jstultz@google.com,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [RFC][PATCH] timers: Add del_time_free() to be called before
- freeing timers
-In-Reply-To: <20220408165827.42475fb2@gandalf.local.home>
-References: <20220407161745.7d6754b3@gandalf.local.home>
- <87pmlrkgi3.ffs@tglx>
- <CAHk-=whbsLXy85XpKRQmBXr=GqWbMoi+wVjFY_V22=BOE=dHog@mail.gmail.com>
- <87v8vjiaih.ffs@tglx> <20220408165827.42475fb2@gandalf.local.home>
-Date:   Fri, 08 Apr 2022 23:46:34 +0200
-Message-ID: <87pmlri6yt.ffs@tglx>
+        Fri, 8 Apr 2022 17:49:49 -0400
+Received: from mta-out-04.alice.it (mta-out-04.alice.it [217.169.118.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EDEF61C2D9F
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 14:47:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alice.it; s=20211207; t=1649454464; 
+        bh=aYnN2M2/J7LiDks3GtVfK/dknBgrlIPDu1xhTIZ5SQ0=;
+        h=Message-ID:Content-Type:MIME-Version:Content-Transfer-Encoding:Content-Description:Subject:To:From:Date:Reply-To;
+        b=v4fArT8fjCZMZJWk1ep5S1lGGSc93QLzyEgJYzaSKAy282iNgGlc5PGSn5c7BDPDVXCQxSvQ6Jc+wDohq0pZXnrBoTPBqZsqShPiyPCqQ6qQsxhCMM8lu3n4lLhpgQmXZnCYAyFRbUY6teKD95oQgEaIFDVBEOLIzcsldvZmWUd81eBcM+dl2XDsDtMZoDwSPnTPYoNNAS0zE6lJ1pKugTahwsmrTTsJBfiw03bycdPNws9FYqp/ZBXO68KN1IMUKh6v62E9l0M6iZOzaYinj27C4DeGSr4Zp+4cNvBtd6VODBbzrFI4h2QLqf0yMk3gaR5sRP/AFnBcTrJaxr345A==
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedvvddrudektddgudeigecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfvgffngfevqffokffvtefnkfetpdfqfgfvnecuuegrihhlohhuthemuceftddunecunecujfgurheptggggffuvffhffhrsehtqhdttddttddunecuhfhrohhmpedfofgrthhthhgrihhsucfoihgthhgrvghlfdeofhhilhhiphhpohdrfeefleekkedvudeghedusegrlhhitggvrdhitheqnecuggftrfgrthhtvghrnhepleeikeegveeliefghfegfeeuleektdejtdetkeevhfeileeigedtjeegkefhudegnecukfhppedukeehrdelfedrudekfedrvdehnecuvehluhhsthgvrhfuihiivgepvdekkeenucfrrghrrghmpehhvghloheplgduledvrdduieekrdegfedruddvvdgnpdhinhgvthepudekhedrleefrddukeefrddvhedpmhgrihhlfhhrohhmpehfihhlihhpphhordeffeelkeekvddugeehudesrghlihgtvgdrihhtpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from [192.168.43.122] (185.93.183.25) by mta-out-04.alice.it (5.8.807.04) (authenticated as filippo.3398821451@alice.it)
+        id 624F44B1003BFDA4 for linux-kernel@vger.kernel.org; Fri, 8 Apr 2022 23:47:40 +0200
+Message-ID: <624F44B1003BFDA4@mta-out-04.alice.it> (added by
+            postmaster@alice.it)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Compliment
+To:     linux-kernel@vger.kernel.org
+From:   "Matthais Michael" <filippo.3398821451@alice.it>
+Date:   Fri, 08 Apr 2022 22:47:35 +0100
+Reply-To: matthais.michael@cheapnet.it
+Sensitivity: Personal
+X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_MISSP_FREEMAIL,LOTS_OF_MONEY,MONEY_FROM_MISSP,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L4,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08 2022 at 16:58, Steven Rostedt wrote:
+My n a m e is Matthais Michael, the Director of Financial Security and Trus=
+t F u n d Builders, our company was contracted to release your Covid-19 Com=
+pensation p a y m e n t to you on behalf of the UNITED NATION (UN). Your pa=
+yment R e l e a s e Code is: CNG/3480/04/00. The Total amount payable to yo=
+u is US$7.5 Million.
 
-> On Fri, 08 Apr 2022 22:29:58 +0200
-> Thomas Gleixner <tglx@linutronix.de> wrote:
->
->> What a shutdown function would prevent here is UAF, but I'm not entirely
->> sure whether it will simplify coordinated shutdown and remove the
->> requirement of a priv->shutdown flag all over the place. It might make
->> some of the driver muck just get stuck in the shutdown, but that's
->> definitely an improvement over a potential UAF which happens every blue
->> moons.
->
-> Note, it is the cause of a large percentage of crash reports reported by
-> ChromeOS.
->
-> And we do not even know if it was this bluetooth issue that caused them.
-> There's evidence they are mostly caused by the wifi code. I only used the
-> bluetooth issue because it was the first one we found that looked obviously
-> wrong.
+You are to reconfirm the following information to enable us determine that =
+we are dealing with the right b e n e f i c i a r y, also the receipt of yo=
+ur information  will facilitate the processing of your payment:
 
-I'm sure that there are hundres more...
+1 F u l l Name:
+2 Residential address:
+3 A g e:
+4 Occupation:
+5 D i r e c t telephone n u m b e r s:
+
+After verification of your Information, you will be contacted with detailed=
+ i n f o r m a t i o n of procedures for the immediate release of your paym=
+ent to y o u without any hitch whatsoever.
+
+Send the requested information so we can proceed accordingly.
+
+Regards
+
+Mr. Matthais Michael

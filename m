@@ -2,84 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 851434F9143
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 11:00:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92EEB4F914B
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 11:03:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232500AbiDHJCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 05:02:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34144 "EHLO
+        id S231579AbiDHJFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 05:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbiDHJCG (ORCPT
+        with ESMTP id S229437AbiDHJFd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 05:02:06 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC46BFFF9F;
-        Fri,  8 Apr 2022 02:00:03 -0700 (PDT)
-Received: from zn.tnic (p200300ea971561a9329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9715:61a9:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 449621EC0494;
-        Fri,  8 Apr 2022 10:59:58 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1649408398;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=b4fNiNEwz7DtWWeA5HYkgByr+NGOkAtmuLSwF4XS2Do=;
-        b=U6qiue3iJxkix6Fl6xYq+9YZRkBU4ktyROnc5Auy8ISzWECqA7+KouJ+HQESMlr7vg5j0w
-        9K4KhZ/wfQIbTk6fwHD20EUVQPX7IVFu+sHqOLBi0/6EgNuv5F5LZFE+bM22OgeWfPpx9L
-        ekbrTlYMRuZs/Hh0ZsmJbdn6LJO7Ua8=
-Date:   Fri, 8 Apr 2022 11:00:00 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Babu Moger <babu.moger@amd.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
-        hpa@zytor.com, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, joro@8bytes.org,
-        wanpengli@tencent.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH 1/2] x86/cpufeatures: Add virtual TSC_AUX feature bit
-Message-ID: <Yk/5kIlcAuW/RuDj@zn.tnic>
-References: <164937947020.1047063.14919887750944564032.stgit@bmoger-ubuntu>
+        Fri, 8 Apr 2022 05:05:33 -0400
+Received: from nbd.name (nbd.name [IPv6:2a01:4f8:221:3d45::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F91B31;
+        Fri,  8 Apr 2022 02:03:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
+         s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=3rpjg5Y91rJlgDeWKeNVL63VHsFaTGQWttlj6s5sV2o=; b=ZsyVXJW+qTz67jq5E82oaR2nXo
+        br8DmLPxSWOXp1ShbvI27ilcs3GA+JvX9nwaCn8CJDYZPGQ89l6WuepFWpVhgbEXqEF4a/RAKA5iM
+        AO7Q+q5Siwb2UJWR3JINtlxjWqZ0BcJEYhvOcTqD0XloVc/cZYtZyl2FYkb9+KBwAwhY=;
+Received: from p200300daa70ef200411eb61494300c34.dip0.t-ipconnect.de ([2003:da:a70e:f200:411e:b614:9430:c34] helo=nf.local)
+        by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <nbd@nbd.name>)
+        id 1nckWR-0004kO-B0; Fri, 08 Apr 2022 11:03:15 +0200
+Message-ID: <96bdfd6b-4c22-9a32-48b4-1d2cc8a16119@nbd.name>
+Date:   Fri, 8 Apr 2022 11:03:14 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <164937947020.1047063.14919887750944564032.stgit@bmoger-ubuntu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: [PATCH v2 05/14] dt-bindings: arm: mediatek: document the pcie
+ mirror node on MT7622
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     netdev@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220405195755.10817-1-nbd@nbd.name>
+ <20220405195755.10817-6-nbd@nbd.name> <Yk8dHLDG8EHKtl54@robh.at.kernel.org>
+From:   Felix Fietkau <nbd@nbd.name>
+In-Reply-To: <Yk8dHLDG8EHKtl54@robh.at.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 07:57:50PM -0500, Babu Moger wrote:
-> The TSC_AUX Virtualization feature allows AMD SEV-ES guests to securely use
-> TSC_AUX (auxiliary time stamp counter data) MSR in RDTSCP and RDPID
-> instructions.
+On 07.04.22 19:19, Rob Herring wrote:
+> On Tue, Apr 05, 2022 at 09:57:46PM +0200, Felix Fietkau wrote:
+>> From: Lorenzo Bianconi <lorenzo@kernel.org>
+>> 
+>> This patch adds the pcie mirror document bindings for MT7622 SoC.
+>> The feature is used for intercepting PCIe MMIO access for the WED core
+>> Add related info in mediatek-net bindings.
+>> 
+>> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+>> Signed-off-by: Felix Fietkau <nbd@nbd.name>
+>> ---
+>>  .../mediatek/mediatek,mt7622-pcie-mirror.yaml | 42 +++++++++++++++++++
+>>  .../devicetree/bindings/net/mediatek-net.txt  |  2 +
+>>  2 files changed, 44 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,mt7622-pcie-mirror.yaml
+>> 
+>> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt7622-pcie-mirror.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt7622-pcie-mirror.yaml
+>> new file mode 100644
+>> index 000000000000..9fbeb626ab23
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mt7622-pcie-mirror.yaml
+>> @@ -0,0 +1,42 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: "http://devicetree.org/schemas/arm/mediatek/mediatek,mt7622-pcie-mirror.yaml#"
+>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+>> +
+>> +title: MediaTek PCIE Mirror Controller for MT7622
+>> +
+>> +maintainers:
+>> +  - Lorenzo Bianconi <lorenzo@kernel.org>
+>> +  - Felix Fietkau <nbd@nbd.name>
+>> +
+>> +description:
+>> +  The mediatek PCIE mirror provides a configuration interface for PCIE
+>> +  controller on MT7622 soc.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    items:
+>> +      - enum:
+>> +          - mediatek,mt7622-pcie-mirror
+>> +      - const: syscon
 > 
-> The TSC_AUX MSR is typically initialized to APIC ID or another unique
-> identifier so that software can quickly associate returned TSC value
-> with the logical processor.
-> 
-> Adds the feature bit and also include it in the kvm for detection.
+> This doesn't sound like a syscon to me. Are there multiple clients or
+> functions in this block? A 'syscon' property is not the only way to
+> create a regmap if that's what you need.
+It's used only by the WED code in the ethernet driver, but there are 
+multiple WED instances and only a single pcie-mirror block containing 
+configuration for them.
 
-s/Adds/Add/
-
-> 
-> Signed-off-by: Babu Moger <babu.moger@amd.com>
-> ---
->  arch/x86/include/asm/cpufeatures.h |    1 +
->  arch/x86/kvm/cpuid.c               |    2 +-
->  2 files changed, 2 insertions(+), 1 deletion(-)
-
-With that fixed:
-
-Acked-by: Borislav Petkov <bp@suse.de>
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+- Felix

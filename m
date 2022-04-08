@@ -2,106 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 727214F981D
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:33:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBC344F9820
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:34:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236946AbiDHOem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 10:34:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55640 "EHLO
+        id S236956AbiDHOgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 10:36:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231733AbiDHOek (ORCPT
+        with ESMTP id S229828AbiDHOgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 10:34:40 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA6E3A52F8;
-        Fri,  8 Apr 2022 07:32:37 -0700 (PDT)
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 238BsItx011875;
-        Fri, 8 Apr 2022 14:32:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=Yyoh96ToAORcDBu7MBR2eTzEMFQp2ULLdGv1Qt3neVA=;
- b=EhocSSuyXbQPZyAsXGpyknsngeNux10yYqhXqTrIyPXOKvuhqfQP9cD5QBn5yLRiIe6C
- Cko6vYrOfeTIoJbBIngc5CE6SGxcOXkNfCA5pgFAZqj5MRjZwi8tmX2F2fVexvZVVmOg
- 5doc3mwNIfOvbGWOC2/lHw8IQiRelqPDmXdrVoLM60zhIRxsgayx+V7bnQ9tDPOZjuve
- f6y0WzpE1rigzXNL0o2tYfxnwMl5gXV9QcSTykMavN8tpobRb2C2zK2fkBhIMlzBgifh
- Md3wO/ppRw/YzEtWoSXySMjuRZ6A0qT9mqTaPpNYgd3W6ZuwX2UFDMFJl65uAlljLi8A VA== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3faesst5vd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 08 Apr 2022 14:32:29 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 238EDMR7009660;
-        Fri, 8 Apr 2022 14:32:27 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3f6drhuxg3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 08 Apr 2022 14:32:26 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 238EWVm343581912
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 8 Apr 2022 14:32:31 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A6AE811C052;
-        Fri,  8 Apr 2022 14:32:23 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 452DA11C04C;
-        Fri,  8 Apr 2022 14:32:23 +0000 (GMT)
-Received: from osiris (unknown [9.145.55.81])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Fri,  8 Apr 2022 14:32:23 +0000 (GMT)
-Date:   Fri, 8 Apr 2022 16:32:21 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Peter Oberparleiter <oberpar@linux.ibm.com>
-Cc:     Haowen Bai <baihaowen@meizu.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V3] s390: Simplify the calculation of variables
-Message-ID: <YlBHdey48aFxBoFg@osiris>
-References: <6208840a-bb97-6b45-7b8e-80ad79849129@linux.ibm.com>
- <1649297808-5048-1-git-send-email-baihaowen@meizu.com>
- <c4c5ae75-29e0-c2f0-045c-1911d0f28067@linux.ibm.com>
+        Fri, 8 Apr 2022 10:36:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E0B531CC400
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 07:34:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649428471;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=P7Egd3v0QGZRIC382enFxAdFYzTUSG9bvqRfc1sQGc4=;
+        b=Hga7U7LlWr28+vl4bGth55GwRzZCO1YOOcTeY/YCP0d9azRSteLk3Hk28drmUmv30LITaq
+        2gkKg4fdU68q/BhHPQy/q0Y0l2vCc5/oVqjbpM+6a4MGjY6/6GiQL8ECY27hdJifCPygUI
+        YAkO24WvJsX8Wt7LecoIFnRinhGbdb4=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-115-fr_tK0BwPqGPE6QS-cPrgA-1; Fri, 08 Apr 2022 10:34:29 -0400
+X-MC-Unique: fr_tK0BwPqGPE6QS-cPrgA-1
+Received: by mail-qt1-f200.google.com with SMTP id j6-20020ac85c46000000b002ed0be14d3aso917392qtj.16
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 07:34:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=P7Egd3v0QGZRIC382enFxAdFYzTUSG9bvqRfc1sQGc4=;
+        b=vClssjdDkmPJ9dYSHfKil2jynNh2aA60GenbQ52qHvvNePxsEAUqfYQCaKqjxc32eH
+         a4+tQmrA3CSE8Hyu1HDX05JeuZdi+MELjHpzTogbTuFgP0qUPG9B1mll5VV/Z0Iy0QHF
+         uUwTxUmRz/2VVyQrFvgK0JpTpl3E1vRLvSTXx7jTbeDDnj2z7tbJe+6V6CMRwFM74WS+
+         ufvvf1wy4O+VVtMDj8jBqYUxCCidssDc2QxcEj5NFXMpPm3OH/dLiX2asAN68Jyk3tqU
+         C2rUV/V5bVrGfRrzdTVFRGfhlqpsxPZ2oDBubxmo/dQsryB/Z1Kl97PaoCTf+qlVEagV
+         CUeQ==
+X-Gm-Message-State: AOAM533QYfauwmigbOyhgLYiKtl0v5DeS0QMdyL6d8FhxBxqjXZclwxz
+        Np89j2kRESZRZcquiaxyprVNgHe6aHp5mhs5xOuwl4IKbkRUsPuA93OFURPwuWNMJ9U7fwflzT7
+        H2ERetuBWihlHCXbdJTnJ541r
+X-Received: by 2002:a05:6214:2684:b0:443:ce3d:5295 with SMTP id gm4-20020a056214268400b00443ce3d5295mr16444353qvb.57.1649428469348;
+        Fri, 08 Apr 2022 07:34:29 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxKRnK9m8ieH98Tqid9txPJskujy0WAzGUcIuDCsqcanpH5Ldlx9htehVTz0Pa2DWTYmypCmA==
+X-Received: by 2002:a05:6214:2684:b0:443:ce3d:5295 with SMTP id gm4-20020a056214268400b00443ce3d5295mr16444336qvb.57.1649428469151;
+        Fri, 08 Apr 2022 07:34:29 -0700 (PDT)
+Received: from treble ([2600:1700:6e32:6c00::15])
+        by smtp.gmail.com with ESMTPSA id c11-20020a05620a134b00b006809a92a94fsm13166046qkl.79.2022.04.08.07.34.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 07:34:28 -0700 (PDT)
+Date:   Fri, 8 Apr 2022 07:34:25 -0700
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     madvenka@linux.microsoft.com, mark.rutland@arm.com,
+        broonie@kernel.org, ardb@kernel.org, nobuta.keiya@fujitsu.com,
+        sjitindarsingh@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        jmorris@namei.org, linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v1 0/9] arm64: livepatch: Use DWARF Call Frame
+ Information for frame pointer validation
+Message-ID: <20220408143425.iovzmmdxxh77rjtz@treble>
+References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
+ <20220407202518.19780-1-madvenka@linux.microsoft.com>
+ <YlAUj6w6fePEo7v+@hirez.programming.kicks-ass.net>
+ <YlAidG0qYe+yh/vg@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <c4c5ae75-29e0-c2f0-045c-1911d0f28067@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: ybeoSkcRxCShtnhPC1K_PYCw3vqD5lN3
-X-Proofpoint-GUID: ybeoSkcRxCShtnhPC1K_PYCw3vqD5lN3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-08_05,2022-04-08_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- mlxlogscore=850 bulkscore=0 spamscore=0 malwarescore=0 impostorscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 priorityscore=1501
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204080071
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YlAidG0qYe+yh/vg@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 02:53:02PM +0200, Peter Oberparleiter wrote:
-> On 07.04.2022 04:16, Haowen Bai wrote:
-> > Fix the following coccicheck warnings:
-> > ./arch/s390/include/asm/scsw.h:695:47-49: WARNING
-> >  !A || A && B is equivalent to !A || B
+On Fri, Apr 08, 2022 at 01:54:28PM +0200, Peter Zijlstra wrote:
+> On Fri, Apr 08, 2022 at 12:55:11PM +0200, Peter Zijlstra wrote:
+> > On Thu, Apr 07, 2022 at 03:25:09PM -0500, madvenka@linux.microsoft.com wrote:
 > > 
-> > I apply a readable version just to get rid of a warning.
+> > > [-- application/octet-stream is unsupported (use 'v' to view this part) --]
 > > 
-> > Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+> > Your emails are unreadable :-(
 > 
-> A definitive improvement over the current version. Thanks!
-> 
-> Reviewed-by: Peter Oberparleiter <oberpar@linux.ibm.com>
+> List copy is OK, so perhaps it's due to how Josh bounced them..
 
-Applied, thanks!
+Corporate email Mimecast fail when I bounced them, sorry :-/
+
+-- 
+Josh
+

@@ -2,94 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E51984F9C10
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 19:54:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B5E54F9C17
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 19:57:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238395AbiDHR4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 13:56:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49734 "EHLO
+        id S238402AbiDHR7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 13:59:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238389AbiDHR4e (ORCPT
+        with ESMTP id S232431AbiDHR7H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 13:56:34 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5729AF1E1;
-        Fri,  8 Apr 2022 10:54:29 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id e8-20020a17090a118800b001cb13402ea2so5916390pja.0;
-        Fri, 08 Apr 2022 10:54:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4Ro5wZmz5/qjQoMRhhyRUYMmqQbliREDVqsZ81z5Kko=;
-        b=XtxAWitQSB4YBg/9d5jI5GEOZ55aoUF9Ezg/KdD/yMNC9r0yJU7zSrbgzPwx18YsZx
-         O7EST5Hup1HYNHyOuU4Gn9xc8kgTc50AWCNDyWpH96BU/O0M7IZLyXntwdM83AvkGJx0
-         9PBjLSKeeTk3O17dhV6Cbu6xFO80FcqAIZl0Bxf4Gb+VmR1lg8G6R2ByX7tqfRsZwi2X
-         cz34XrBlVXwdt9kcfWX9nfoM9MHeJNJ2omo4yRRqk1a4fZVRvx+lsDRFjzMYYuIxYhB3
-         vEP/YhRJE9996VGhwLWbVyM+6pqzFpowHBWHijc3tlSK37o4UU2aJAnzuMENi0Bp3wyd
-         WH8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=4Ro5wZmz5/qjQoMRhhyRUYMmqQbliREDVqsZ81z5Kko=;
-        b=XNsIxQag5iSsj/7+1FIh0mWJg4vGbk/wjdXWckm2mvLvx505KSQsXx90RiuurGgRRT
-         FnFWY5ThzhCQkxLPXfQnO1oy7PYQVaZ61vEeUJT7Jpm88i0yLuhUOdazfcEVR9C5yuO7
-         rZ2hKsrWxIvuj0+tT4etx3Xe2mDQWwMrJvPw8iKE4jVQfy0RxFDLw9n6dR4WQ503jiEz
-         vvhd2ztsrl4rHlBhAYgNFRbngOseSyadhfwKk/eIt2iZFmaKn14EldAVyCBxM1B7BfUA
-         OlS5QYhylTY+RbIfDBlBinsv0xO38UePSkND6dg7/fGzhnkwr6ufzZfP+wpt2+rjA9NF
-         LE8Q==
-X-Gm-Message-State: AOAM531QHKMuXkKB3QP6k2pHdiDsFqNfYtl9rBlaqkNQgJoLeCiG6DYt
-        ErIFqX5eI1ROnb9TpCfCtTnal2xgq1Q0dw==
-X-Google-Smtp-Source: ABdhPJzpOVsiqjyFzsypMF/T5dtprIvNQ1QMuoaYPyf6lVh5hncelAnwYlN6Sr471+vxfXLYhNOvsw==
-X-Received: by 2002:a17:90a:cf94:b0:1ca:7ff9:73eb with SMTP id i20-20020a17090acf9400b001ca7ff973ebmr23206297pju.173.1649440469108;
-        Fri, 08 Apr 2022 10:54:29 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:ab2a])
-        by smtp.gmail.com with ESMTPSA id q203-20020a632ad4000000b003987c421eb2sm22884266pgq.34.2022.04.08.10.54.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 10:54:28 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 8 Apr 2022 07:54:26 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        ke.wang@unisoc.com
-Subject: Re: [PATCH] cgroup: fix attach task fail when subtree_control
- configured
-Message-ID: <YlB20sw1e998Dant@slm.duckdns.org>
-References: <1649413394-17501-1-git-send-email-zhaoyang.huang@unisoc.com>
+        Fri, 8 Apr 2022 13:59:07 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F41110FAD2
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 10:57:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649440621; x=1680976621;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=T0bWQ5abTairCRnQxQX6+JL8QxYCGJDKinCflGG4JXE=;
+  b=bODbdUjHoNsj22UVUdpgzLB6DEUuTpouEF7GmklqA7RIE260GzWRXw/Y
+   yc7f0WGDHGZEsyJZTrAzu8lkMqLN6kqe0LdLDKTWREdVXICGMiaEHIidD
+   MggAoDSvdnH4UTYapQm2yF5Z5uw9iYWsCEzN3vihoJY/IurYSZUQwX3hZ
+   9Y4uj4fhvTciDdwoqYrn9TdnZ9hv5JZxi5lY/fWMT+SFBzsoMbNEN7nCP
+   0iKWe9S/14hOHnWdzamC1J00tYzHQPtM91N+lA6uaVYUkbwQYkV3Xx9wC
+   PbCElOigH/HTbFdpMZcG6aqHYEaq4ILa1qJ1cVU2chZ0lAEP2AyB2O0ah
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="261644540"
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="261644540"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 10:57:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="723476017"
+Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 08 Apr 2022 10:56:59 -0700
+Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ncsqw-0000WH-Ka;
+        Fri, 08 Apr 2022 17:56:58 +0000
+Date:   Sat, 9 Apr 2022 01:56:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Ingo Molnar <mingo@kernel.org>
+Subject: drivers/firmware/efi/capsule-loader.c:84:12: warning: no previous
+ declaration for 'efi_capsule_setup_info'
+Message-ID: <202204090125.wgI0L7F3-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1649413394-17501-1-git-send-email-zhaoyang.huang@unisoc.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 06:23:14PM +0800, zhaoyang.huang wrote:
-> From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> 
-> It is found that task attach to a vacant cgroup will fail when its
-> subtree_control has been configured. Fix it by judging if there is no chrildren
-> existed.
-> 
-> Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+Hi Ard,
 
-If I'm not misunderstanding, that's the intended behavior. Can you please
-take a look at Documentation/admin-guide/cgroup-v2.rst and confirm what
-you're trying to do?
+FYI, the error/warning still remains.
 
-Thanks.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   1831fed559732b132aef0ea8261ac77e73f7eadf
+commit: 3fabd628d5ea24b02ddb1230ffca1df0f779f84e efi/capsule-loader: Redirect calls to efi_capsule_setup_info() via weak alias
+date:   4 years, 10 months ago
+config: i386-randconfig-a005 (https://download.01.org/0day-ci/archive/20220409/202204090125.wgI0L7F3-lkp@intel.com/config)
+compiler: gcc-7 (Ubuntu 7.5.0-6ubuntu2) 7.5.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3fabd628d5ea24b02ddb1230ffca1df0f779f84e
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 3fabd628d5ea24b02ddb1230ffca1df0f779f84e
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/platform/efi/ drivers/firmware/efi/ drivers/net/dsa/ fs/f2fs/ fs/xfs/ net/sunrpc/xprtrdma/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/firmware/efi/capsule-loader.c:84:12: warning: no previous declaration for 'efi_capsule_setup_info' [-Wmissing-declarations]
+    int __weak efi_capsule_setup_info(struct capsule_info *cap_info, void *kbuff,
+               ^~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/efi_capsule_setup_info +84 drivers/firmware/efi/capsule-loader.c
+
+    72	
+    73	/**
+    74	 * efi_capsule_setup_info - obtain the efi capsule header in the binary and
+    75	 *			    setup capsule_info structure
+    76	 * @cap_info: pointer to current instance of capsule_info structure
+    77	 * @kbuff: a mapped first page buffer pointer
+    78	 * @hdr_bytes: the total received number of bytes for efi header
+    79	 *
+    80	 * Platforms with non-standard capsule update mechanisms can override
+    81	 * this __weak function so they can perform any required capsule
+    82	 * image munging. See quark_quirk_function() for an example.
+    83	 **/
+  > 84	int __weak efi_capsule_setup_info(struct capsule_info *cap_info, void *kbuff,
+    85					  size_t hdr_bytes)
+    86	{
+    87		/* Only process data block that is larger than efi header size */
+    88		if (hdr_bytes < sizeof(efi_capsule_header_t))
+    89			return 0;
+    90	
+    91		memcpy(&cap_info->header, kbuff, sizeof(cap_info->header));
+    92		cap_info->total_size = cap_info->header.imagesize;
+    93	
+    94		return __efi_capsule_setup_info(cap_info);
+    95	}
+    96	
 
 -- 
-tejun
+0-DAY CI Kernel Test Service
+https://01.org/lkp

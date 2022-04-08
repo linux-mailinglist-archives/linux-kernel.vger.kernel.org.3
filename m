@@ -2,323 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B3614F8C66
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0850B4F8C8F
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233421AbiDHBaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 21:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43130 "EHLO
+        id S233436AbiDHBcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 21:32:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233384AbiDHBaU (ORCPT
+        with ESMTP id S232119AbiDHBcO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 21:30:20 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2EF116AA64;
-        Thu,  7 Apr 2022 18:28:13 -0700 (PDT)
-X-UUID: b923c1f18c9e42a49e9ebade0122da11-20220408
-X-UUID: b923c1f18c9e42a49e9ebade0122da11-20220408
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1942514810; Fri, 08 Apr 2022 09:28:07 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 8 Apr 2022 09:28:05 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 8 Apr 2022 09:28:05 +0800
-Message-ID: <1f1692b6d14280fed40e53f464145ed70b67135f.camel@mediatek.com>
-Subject: Re: [RESEND v17 3/7] soc: mediatek: add mtk-mmsys support for
- mt8195 vdosys0
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Jason-JH Lin <jason-jh.lin@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Chun-Kuang Hu" <chunkuang.hu@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     David Airlie <airlied@linux.ie>, <singo.chang@mediatek.com>,
-        "Alexandre Torgue" <alexandre.torgue@foss.st.com>,
-        <postmaster@vger.kernel.org>,
-        "Fabien Parent" <fparent@baylibre.com>,
-        John 'Warthog9' Hawley <warthog9@eaglescrag.net>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <roy-cw.yeh@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        <devicetree@vger.kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
-        <nancy.lin@mediatek.com>, <linux-mediatek@lists.infradead.org>,
-        <hsinyi@chromium.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <moudy.ho@mediatek.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Date:   Fri, 8 Apr 2022 09:28:05 +0800
-In-Reply-To: <d8711b8e4d233240eda73db54a625e88b9b3970b.camel@mediatek.com>
-References: <20220407030409.9664-1-jason-jh.lin@mediatek.com>
-         <20220407030409.9664-4-jason-jh.lin@mediatek.com>
-         <67b3e42d6a094108f724ed9b8c73f5cd6b2ce219.camel@mediatek.com>
-         <d8711b8e4d233240eda73db54a625e88b9b3970b.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 7 Apr 2022 21:32:14 -0400
+Received: from mail.meizu.com (edge05.meizu.com [157.122.146.251])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2452706C6;
+        Thu,  7 Apr 2022 18:30:11 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail12.meizu.com
+ (172.16.1.108) with Microsoft SMTP Server (TLS) id 14.3.487.0; Fri, 8 Apr
+ 2022 09:30:09 +0800
+Received: from [172.16.137.70] (172.16.137.70) by IT-EXMB-1-125.meizu.com
+ (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Fri, 8 Apr
+ 2022 09:30:08 +0800
+Message-ID: <2c29b3cd-ec23-f9c8-ae9f-d713ce3dd4f0@meizu.com>
+Date:   Fri, 8 Apr 2022 09:30:07 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] libbpf: potential NULL dereference in
+ usdt_manager_attach_usdt()
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <1649299098-2069-1-git-send-email-baihaowen@meizu.com>
+ <CAEf4BzbByQ8OUuACyLEHewPsFjfUpH8Yr1x2+Db5xtGgnPXhrQ@mail.gmail.com>
+From:   baihaowen <baihaowen@meizu.com>
+In-Reply-To: <CAEf4BzbByQ8OUuACyLEHewPsFjfUpH8Yr1x2+Db5xtGgnPXhrQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [172.16.137.70]
+X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
+ IT-EXMB-1-125.meizu.com (172.16.1.125)
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Jason:
+在 4/8/22 3:04 AM, Andrii Nakryiko 写道:
+> On Wed, Apr 6, 2022 at 7:38 PM Haowen Bai <baihaowen@meizu.com> wrote:
+>> link could be null but still dereference bpf_link__destroy(&link->link)
+>> and it will lead to a null pointer access.
+>>
+>> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+>> ---
+>>  tools/lib/bpf/usdt.c | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
+>> index 1bce2eab5e89..b02ebc4ba57c 100644
+>> --- a/tools/lib/bpf/usdt.c
+>> +++ b/tools/lib/bpf/usdt.c
+>> @@ -996,7 +996,7 @@ struct bpf_link *usdt_manager_attach_usdt(struct usdt_manager *man, const struct
+>>         link = calloc(1, sizeof(*link));
+>>         if (!link) {
+>>                 err = -ENOMEM;
+>> -               goto err_out;
+>> +               goto link_err;
+> this is not a complete fix because there are two more similar goto
+> err_out; above which you didn't fix. I think better fix is to just add
+> if (link) check before bpf_link__destroy(), which is what I did
+> locally when applying.
+>
+>
+>>         }
+>>
+>>         link->usdt_man = man;
+>> @@ -1072,7 +1072,7 @@ struct bpf_link *usdt_manager_attach_usdt(struct usdt_manager *man, const struct
+>>
+>>  err_out:
+>>         bpf_link__destroy(&link->link);
+>> -
+>> +link_err:
+>>         free(targets);
+>>         hashmap__free(specs_hash);
+>>         if (elf)
+>> --
+>> 2.7.4
+>>
+Thank you for your kindness help. :)
 
-On Thu, 2022-04-07 at 14:27 +0800, Jason-JH Lin wrote:
-> Hi CK,
-> 
-> Thanks for the reviews.
-> 
-> On Thu, 2022-04-07 at 13:45 +0800, CK Hu wrote:
-> > Hi, Jason:
-> > 
-> > On Thu, 2022-04-07 at 11:04 +0800, jason-jh.lin wrote:
-> > > 1. Add mt8195 mmsys compatible for vdosys0.
-> > > 2. Add mt8195 routing table settings and fix build fail.
-> > > 3. Add clock name, clock driver name and routing table into the
-> > > driver data
-> > >    of mt8195 vdosys0.
-> > > 4. Add get match data by clock name function and clock platform
-> > > labels
-> > >    to identify which mmsys node is corresponding to vdosys0.
-> > > 
-> > > Signed-off-by: jason-jh.lin <jason-jh.lin@mediatek.com>
-> > > ---
-> > >  drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c |   2 +-
-> > >  drivers/gpu/drm/mediatek/mtk_drm_drv.c      |   6 +-
-> > >  drivers/soc/mediatek/mt8167-mmsys.h         |   2 +-
-> > >  drivers/soc/mediatek/mt8183-mmsys.h         |   2 +-
-> > >  drivers/soc/mediatek/mt8186-mmsys.h         |   4 +-
-> > >  drivers/soc/mediatek/mt8192-mmsys.h         |   4 +-
-> > >  drivers/soc/mediatek/mt8195-mmsys.h         | 370
-> > > ++++++++++++++++++++
-> > >  drivers/soc/mediatek/mt8365-mmsys.h         |   4 +-
-> > >  drivers/soc/mediatek/mtk-mmsys.c            |  62 ++++
-> > >  drivers/soc/mediatek/mtk-mmsys.h            |   1 +
-> > >  drivers/soc/mediatek/mtk-mutex.c            |   8 +-
-> > >  include/linux/soc/mediatek/mtk-mmsys.h      |  13 +-
-> > >  12 files changed, 461 insertions(+), 17 deletions(-)
-> > >  create mode 100644 drivers/soc/mediatek/mt8195-mmsys.h
-> > > 
-> > 
-> > [snip]
-> > 
-> > > diff --git a/drivers/soc/mediatek/mtk-mmsys.c
-> > > b/drivers/soc/mediatek/mtk-mmsys.c
-> > > index 4fc4c2c9ea20..b2fa239c5f5f 100644
-> > > --- a/drivers/soc/mediatek/mtk-mmsys.c
-> > > +++ b/drivers/soc/mediatek/mtk-mmsys.c
-> > > @@ -4,6 +4,8 @@
-> > >   * Author: James Liao <jamesjj.liao@mediatek.com>
-> > >   */
-> > >  
-> > > +#include <linux/clk.h>
-> > > +#include <linux/clk-provider.h>
-> > >  #include <linux/delay.h>
-> > >  #include <linux/device.h>
-> > >  #include <linux/io.h>
-> > > @@ -17,6 +19,7 @@
-> > >  #include "mt8183-mmsys.h"
-> > >  #include "mt8186-mmsys.h"
-> > >  #include "mt8192-mmsys.h"
-> > > +#include "mt8195-mmsys.h"
-> > >  #include "mt8365-mmsys.h"
-> > >  
-> > >  static const struct mtk_mmsys_driver_data
-> > > mt2701_mmsys_driver_data
-> > > =
-> > > {
-> > > @@ -72,12 +75,24 @@ static const struct mtk_mmsys_driver_data
-> > > mt8192_mmsys_driver_data = {
-> > >  	.num_routes = ARRAY_SIZE(mmsys_mt8192_routing_table),
-> > >  };
-> > >  
-> > > +static const struct mtk_mmsys_driver_data
-> > > mt8195_vdosys0_driver_data
-> > > = {
-> > > +	.clk_name = "cfg_vdo0",
-> > > +	.clk_driver = "clk-mt8195-vdo0",
-> > > +	.routes = mmsys_mt8195_routing_table,
-> > > +	.num_routes = ARRAY_SIZE(mmsys_mt8195_routing_table),
-> > > +};
-> > > +
-> > >  static const struct mtk_mmsys_driver_data
-> > > mt8365_mmsys_driver_data
-> > > =
-> > > {
-> > >  	.clk_driver = "clk-mt8365-mm",
-> > >  	.routes = mt8365_mmsys_routing_table,
-> > >  	.num_routes = ARRAY_SIZE(mt8365_mmsys_routing_table),
-> > >  };
-> > >  
-> > > +static const struct of_device_id mtk_clk_platform_labels[] = {
-> > > +	{ .compatible = "mediatek,mt8195-mmsys",
-> > > +	  .data = (void *)"clk-mt8195"},
-> > > +};
-> > > +
-> > >  struct mtk_mmsys {
-> > >  	void __iomem *regs;
-> > >  	const struct mtk_mmsys_driver_data *data;
-> > > @@ -85,6 +100,45 @@ struct mtk_mmsys {
-> > >  	struct reset_controller_dev rcdev;
-> > >  };
-> > >  
-> > > +static int mtk_mmsys_get_match_data_by_clk_name(const struct
-> > > mtk_mmsys_driver_data **data,
-> > > +						struct device *dev)
-> > > +{
-> > > +	int i;
-> > > +	struct clk *clk;
-> > > +	const char *clk_name;
-> > > +	const struct of_device_id *of_id =
-> > > of_match_node(mtk_clk_platform_labels,
-> > > +							 dev->of_node);
-> > > +	const struct mtk_mmsys_driver_data *drvdata[] = {
-> > > +		&mt8195_vdosys0_driver_data,
-> > > +	};
-> > > +
-> > > +	if (!of_id || !of_id->data) {
-> > > +		dev_err(dev, "Can't find match clk platform labels\n");
-> > > +		return -EINVAL;
-> > > +	}
-> > > +
-> > > +	clk = devm_clk_get(dev, NULL);
-> > > +	if (IS_ERR(clk)) {
-> > > +		dev_err(dev, "failed to get mmsys clk\n");
-> > > +		return PTR_ERR(clk);
-> > > +	}
-> > > +
-> > > +	clk_name = __clk_get_name(clk);
-> > > +	if (!clk_name) {
-> > > +		dev_err(dev, "invalid mmsys clk name\n");
-> > > +		return -EINVAL;
-> > > +	}
-> > > +
-> > > +	for (i = 0; i < ARRAY_SIZE(drvdata); i++)
-> > > +		if (strncmp(drvdata[i]->clk_name, clk_name,
-> > > strlen(clk_name)) == 0 &&
-> > > +		    strncmp(drvdata[i]->clk_driver, of_id->data,
-> > > strlen(of_id->data)) == 0) {
-> > 
-> > I think clk_name is enough to identify the mmsys, why do you need
-> > clk_driver?
-> 
-> I think there might be another chip that needs to get driver data by
-> clk_name .
-> So I use "clk-mt8195" in clk_driver to identify the corresponding
-> platform whose clk_name of mmsys is also "cfg_vod0".
-
-We usually don't care the future because the future may not happen. If
-it's sure that would happen, I think clk_driver is not a good choice.
-For now, the clk_driver name is different for each SoC, but it could be
-the same for each SoC because only one clock driver would be compiled.
-I think "compatible" would be different for each SoC.
-
-Regards,
-CK
-
-> 
-> > > +			*data = drvdata[i];
-> > > +			return 0;
-> > > +		}
-> > > +
-> > > +	return -EINVAL;
-> > > +}
-> > > +
-> > >  void mtk_mmsys_ddp_connect(struct device *dev,
-> > >  			   enum mtk_ddp_comp_id cur,
-> > >  			   enum mtk_ddp_comp_id next)
-> > > @@ -206,6 +260,11 @@ static int mtk_mmsys_probe(struct
-> > > platform_device *pdev)
-> > >  	}
-> > >  
-> > >  	mmsys->data = of_device_get_match_data(&pdev->dev);
-> > > +	if (!mmsys->data &&
-> > > mtk_mmsys_get_match_data_by_clk_name(&mmsys->data, dev) < 0) {
-> > > +		dev_err(dev, "Couldn't get match driver data\n");
-> > > +		return -EINVAL;
-> > > +	}
-> > > +
-> > >  	platform_set_drvdata(pdev, mmsys);
-> > >  
-> > >  	clks = platform_device_register_data(&pdev->dev, mmsys->data-
-> > > > clk_driver,
-> > > 
-> > > @@ -260,6 +319,9 @@ static const struct of_device_id
-> > > of_match_mtk_mmsys[] = {
-> > >  		.compatible = "mediatek,mt8192-mmsys",
-> > >  		.data = &mt8192_mmsys_driver_data,
-> > >  	},
-> > > +	{
-> > > +		.compatible = "mediatek,mt8195-mmsys",
-> > > +	},
-> > >  	{
-> > >  		.compatible = "mediatek,mt8365-mmsys",
-> > >  		.data = &mt8365_mmsys_driver_data,
-> > > 
-> > 
-> > [snip]
-> > 
-> > > b/include/linux/soc/mediatek/mtk-mmsys.h
-> > > index 4bba275e235a..fb719fd1281c 100644
-> > > --- a/include/linux/soc/mediatek/mtk-mmsys.h
-> > > +++ b/include/linux/soc/mediatek/mtk-mmsys.h
-> > > @@ -16,14 +16,25 @@ enum mtk_ddp_comp_id {
-> > >  	DDP_COMPONENT_CCORR,
-> > >  	DDP_COMPONENT_COLOR0,
-> > >  	DDP_COMPONENT_COLOR1,
-> > > -	DDP_COMPONENT_DITHER,
-> > > +	DDP_COMPONENT_DITHER0,
-> > 
-> > I would like soc and drm modification to go through different tree,
-> > so
-> > this setting would not modify drm driver in this patch.
-> > 
-> > DDP_COMPONENT_DITHER0 = DDP_COMPONENT_DITHER,
-> > 
-> > Then modify drm driver after this patch.
-> > 
-> > Regards,
-> > CK
-> 
-> OK, I will use this modification at the next version.
-> Thanks!
-> 
-> Regards,
-> Jason-JH.Lin
-> 
-> > 
-> > > +	DDP_COMPONENT_DITHER1,
-> > > +	DDP_COMPONENT_DP_INTF0,
-> > > +	DDP_COMPONENT_DP_INTF1,
-> > >  	DDP_COMPONENT_DPI0,
-> > >  	DDP_COMPONENT_DPI1,
-> > > +	DDP_COMPONENT_DSC0,
-> > > +	DDP_COMPONENT_DSC1,
-> > >  	DDP_COMPONENT_DSI0,
-> > >  	DDP_COMPONENT_DSI1,
-> > >  	DDP_COMPONENT_DSI2,
-> > >  	DDP_COMPONENT_DSI3,
-> > >  	DDP_COMPONENT_GAMMA,
-> > > +	DDP_COMPONENT_MERGE0,
-> > > +	DDP_COMPONENT_MERGE1,
-> > > +	DDP_COMPONENT_MERGE2,
-> > > +	DDP_COMPONENT_MERGE3,
-> > > +	DDP_COMPONENT_MERGE4,
-> > > +	DDP_COMPONENT_MERGE5,
-> > >  	DDP_COMPONENT_OD0,
-> > >  	DDP_COMPONENT_OD1,
-> > >  	DDP_COMPONENT_OVL0,
-> > 
-> > 
+-- 
+Haowen Bai
 

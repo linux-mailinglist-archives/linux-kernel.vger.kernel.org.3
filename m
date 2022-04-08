@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9508B4F919D
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 11:12:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2497E4F9173
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 11:12:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233126AbiDHJMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 05:12:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34870 "EHLO
+        id S232997AbiDHJL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 05:11:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232750AbiDHJKy (ORCPT
+        with ESMTP id S232540AbiDHJKy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 8 Apr 2022 05:10:54 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB9811F7B5;
-        Fri,  8 Apr 2022 02:08:49 -0700 (PDT)
-Date:   Fri, 08 Apr 2022 09:08:46 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD15123BEB;
+        Fri,  8 Apr 2022 02:08:50 -0700 (PDT)
+Date:   Fri, 08 Apr 2022 09:08:47 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649408927;
+        s=2020; t=1649408928;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=jQvFuxtBRASTBdvgHBEuGAFkdZphwrpbJMRYKR4aUVE=;
-        b=0ieIiyGkbNDdYKk2uy1FiadUqBs9a8tq4IrRVed/pAi7aH38K9eDogOmanzwmEAhaFxy+w
-        bzLk+xxS1PkqBGHUyXhuozj2nxI+RzdT1rOR92fTy3/SjYjf3oUPnlJBAXR+aekA3iyUXg
-        siFi1tsHpqswrpee+2ihPC86b1knhQTMYegMEnGC6kddFKtwWpuTVt2eSULOu6sLNga//0
-        h0IVtucT/Es19cworEskii2RzLAe9jFgFVNvRkGFKI/di4gTGciW7h/+ff3uWpGfaBtmmm
-        uMtSMA/rRk9QxppVFx9YevikjlGmSdt1l7kT2DziATU3GSYsSZhBe9T9mu9cgA==
+        bh=vwmM2GFhtX5LuaZ9z49MypOVsy29dos9fkZjxTEQk9U=;
+        b=vFSabevBB5q5kSGDOtiIgZmpmcT7PNgPtt67w14EhU0o4htudVYM0NcMR7ZIrCChuZhjLF
+        UR8rrmZ/kt5zk/UBOxJY0l/R8wYt57+5Kd4eT4lq0G/mdR59S1L+0j8Mg7MeG1NFZTESb7
+        4WB7hco/K7SLD/6vxfuZGWLwfFrntOTi/m8buxLR07SyBjTNP2MMmREnnOZUorMLV50771
+        IaJ6l3FsPAkz7u/MuYRcrfip3p7osKq1iZYGjrn2uAIPgmFjPXbgN2MT3y6MDWgjrOdWkx
+        V+tmTctITWiNBAiA93OFDbIx2w3oHJmz79mZA5kE0BL6yNEYAkgwCL1PwcwZDg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649408927;
+        s=2020e; t=1649408928;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=jQvFuxtBRASTBdvgHBEuGAFkdZphwrpbJMRYKR4aUVE=;
-        b=gCHJgEfkd+xZMfWjGXlbd3mqdddSysRk5BSMgU3ygL+ZxAvZQNQqf9WBkKFIwW/hXmHPEv
-        CMFH8hyH55bVccDA==
+        bh=vwmM2GFhtX5LuaZ9z49MypOVsy29dos9fkZjxTEQk9U=;
+        b=Ck58+7afpNVxWzTm8kB8BKMiTH9KxoWIlSL6RlnMKf+X8Pu/KvxB+o5tFA411Gfd1uFXzi
+        nJTHfPN4r5SSL5DA==
 From:   "tip-bot2 for Michael Roth" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/sev] x86/compressed: Export and rename add_identity_map()
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>,
+Subject: [tip: x86/sev] x86/compressed: Use firmware-validated CPUID leaves
+ for SEV-SNP guests
+Cc:     Michael Roth <michael.roth@amd.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
         Borislav Petkov <bp@suse.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220307213356.2797205-37-brijesh.singh@amd.com>
-References: <20220307213356.2797205-37-brijesh.singh@amd.com>
+In-Reply-To: <20220307213356.2797205-36-brijesh.singh@amd.com>
+References: <20220307213356.2797205-36-brijesh.singh@amd.com>
 MIME-Version: 1.0
-Message-ID: <164940892680.389.5129551490474108839.tip-bot2@tip-bot2>
+Message-ID: <164940892782.389.1861030996608550580.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,95 +69,96 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/sev branch of tip:
 
-Commit-ID:     a9ee679b1f8c3803490ed2eeffb688aaee56583f
-Gitweb:        https://git.kernel.org/tip/a9ee679b1f8c3803490ed2eeffb688aaee56583f
+Commit-ID:     5f211f4fc49622473667e6983bb57beab755f6f6
+Gitweb:        https://git.kernel.org/tip/5f211f4fc49622473667e6983bb57beab755f6f6
 Author:        Michael Roth <michael.roth@amd.com>
-AuthorDate:    Thu, 24 Feb 2022 10:56:16 -06:00
+AuthorDate:    Thu, 24 Feb 2022 10:56:15 -06:00
 Committer:     Borislav Petkov <bp@suse.de>
 CommitterDate: Thu, 07 Apr 2022 16:47:11 +02:00
 
-x86/compressed: Export and rename add_identity_map()
+x86/compressed: Use firmware-validated CPUID leaves for SEV-SNP guests
 
-SEV-specific code will need to add some additional mappings, but doing
-this within ident_map_64.c requires some SEV-specific helpers to be
-exported and some SEV-specific struct definitions to be pulled into
-ident_map_64.c. Instead, export add_identity_map() so SEV-specific (and
-other subsystem-specific) code can be better contained outside of
-ident_map_64.c.
+SEV-SNP guests will be provided the location of special 'secrets'
+'CPUID' pages via the Confidential Computing blob. This blob is
+provided to the boot kernel either through an EFI config table entry,
+or via a setup_data structure as defined by the Linux Boot Protocol.
 
-While at it, rename the function to kernel_add_identity_map(), similar
-to the kernel_ident_mapping_init() function it relies upon.
+Locate the Confidential Computing from these sources and, if found,
+use the provided CPUID page/table address to create a copy that the
+boot kernel will use when servicing CPUID instructions via a #VC CPUID
+handler.
 
-No functional changes.
+  [ bp: s/cpuid/CPUID/ ]
 
-Suggested-by: Borislav Petkov <bp@alien8.de>
 Signed-off-by: Michael Roth <michael.roth@amd.com>
+Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20220307213356.2797205-37-brijesh.singh@amd.com
+Link: https://lore.kernel.org/r/20220307213356.2797205-36-brijesh.singh@amd.com
 ---
- arch/x86/boot/compressed/ident_map_64.c | 18 +++++++++---------
- arch/x86/boot/compressed/misc.h         |  1 +
- 2 files changed, 10 insertions(+), 9 deletions(-)
+ arch/x86/boot/compressed/sev.c | 46 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 46 insertions(+)
 
-diff --git a/arch/x86/boot/compressed/ident_map_64.c b/arch/x86/boot/compressed/ident_map_64.c
-index 613367e..99348ee 100644
---- a/arch/x86/boot/compressed/ident_map_64.c
-+++ b/arch/x86/boot/compressed/ident_map_64.c
-@@ -90,7 +90,7 @@ static struct x86_mapping_info mapping_info;
- /*
-  * Adds the specified range to the identity mappings.
-  */
--static void add_identity_map(unsigned long start, unsigned long end)
-+void kernel_add_identity_map(unsigned long start, unsigned long end)
- {
- 	int ret;
- 
-@@ -157,11 +157,11 @@ void initialize_identity_maps(void *rmode)
- 	 * explicitly here in case the compressed kernel does not touch them,
- 	 * or does not touch all the pages covering them.
- 	 */
--	add_identity_map((unsigned long)_head, (unsigned long)_end);
-+	kernel_add_identity_map((unsigned long)_head, (unsigned long)_end);
- 	boot_params = rmode;
--	add_identity_map((unsigned long)boot_params, (unsigned long)(boot_params + 1));
-+	kernel_add_identity_map((unsigned long)boot_params, (unsigned long)(boot_params + 1));
- 	cmdline = get_cmd_line_ptr();
--	add_identity_map(cmdline, cmdline + COMMAND_LINE_SIZE);
-+	kernel_add_identity_map(cmdline, cmdline + COMMAND_LINE_SIZE);
- 
- 	/* Load the new page-table. */
- 	sev_verify_cbit(top_level_pgt);
-@@ -246,10 +246,10 @@ static int set_clr_page_flags(struct x86_mapping_info *info,
- 	 * It should already exist, but keep things generic.
- 	 *
- 	 * To map the page just read from it and fault it in if there is no
--	 * mapping yet. add_identity_map() can't be called here because that
--	 * would unconditionally map the address on PMD level, destroying any
--	 * PTE-level mappings that might already exist. Use assembly here so
--	 * the access won't be optimized away.
-+	 * mapping yet. kernel_add_identity_map() can't be called here because
-+	 * that would unconditionally map the address on PMD level, destroying
-+	 * any PTE-level mappings that might already exist. Use assembly here
-+	 * so the access won't be optimized away.
- 	 */
- 	asm volatile("mov %[address], %%r9"
- 		     :: [address] "g" (*(unsigned long *)address)
-@@ -363,5 +363,5 @@ void do_boot_page_fault(struct pt_regs *regs, unsigned long error_code)
- 	 * Error code is sane - now identity map the 2M region around
- 	 * the faulting address.
- 	 */
--	add_identity_map(address, end);
-+	kernel_add_identity_map(address, end);
+diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
+index 2a94bb7..dd3cf55 100644
+--- a/arch/x86/boot/compressed/sev.c
++++ b/arch/x86/boot/compressed/sev.c
+@@ -409,6 +409,43 @@ found_cc_info:
  }
-diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/misc.h
-index ba538af..aae2722 100644
---- a/arch/x86/boot/compressed/misc.h
-+++ b/arch/x86/boot/compressed/misc.h
-@@ -156,6 +156,7 @@ static inline int count_immovable_mem_regions(void) { return 0; }
- #ifdef CONFIG_X86_5LEVEL
- extern unsigned int __pgtable_l5_enabled, pgdir_shift, ptrs_per_p4d;
- #endif
-+extern void kernel_add_identity_map(unsigned long start, unsigned long end);
  
- /* Used by PAGE_KERN* macros: */
- extern pteval_t __default_kernel_pte_mask;
+ /*
++ * Initialize the kernel's copy of the SNP CPUID table, and set up the
++ * pointer that will be used to access it.
++ *
++ * Maintaining a direct mapping of the SNP CPUID table used by firmware would
++ * be possible as an alternative, but the approach is brittle since the
++ * mapping needs to be updated in sync with all the changes to virtual memory
++ * layout and related mapping facilities throughout the boot process.
++ */
++static void setup_cpuid_table(const struct cc_blob_sev_info *cc_info)
++{
++	const struct snp_cpuid_table *cpuid_table_fw, *cpuid_table;
++	int i;
++
++	if (!cc_info || !cc_info->cpuid_phys || cc_info->cpuid_len < PAGE_SIZE)
++		sev_es_terminate(SEV_TERM_SET_LINUX, GHCB_TERM_CPUID);
++
++	cpuid_table_fw = (const struct snp_cpuid_table *)cc_info->cpuid_phys;
++	if (!cpuid_table_fw->count || cpuid_table_fw->count > SNP_CPUID_COUNT_MAX)
++		sev_es_terminate(SEV_TERM_SET_LINUX, GHCB_TERM_CPUID);
++
++	cpuid_table = snp_cpuid_get_table();
++	memcpy((void *)cpuid_table, cpuid_table_fw, sizeof(*cpuid_table));
++
++	/* Initialize CPUID ranges for range-checking. */
++	for (i = 0; i < cpuid_table->count; i++) {
++		const struct snp_cpuid_fn *fn = &cpuid_table->fn[i];
++
++		if (fn->eax_in == 0x0)
++			cpuid_std_range_max = fn->eax;
++		else if (fn->eax_in == 0x40000000)
++			cpuid_hyp_range_max = fn->eax;
++		else if (fn->eax_in == 0x80000000)
++			cpuid_ext_range_max = fn->eax;
++	}
++}
++
++/*
+  * Indicate SNP based on presence of SNP-specific CC blob. Subsequent checks
+  * will verify the SNP CPUID/MSR bits.
+  */
+@@ -424,6 +461,15 @@ bool snp_init(struct boot_params *bp)
+ 		return false;
+ 
+ 	/*
++	 * If a SNP-specific Confidential Computing blob is present, then
++	 * firmware/bootloader have indicated SNP support. Verifying this
++	 * involves CPUID checks which will be more reliable if the SNP
++	 * CPUID table is used. See comments over snp_setup_cpuid_table() for
++	 * more details.
++	 */
++	setup_cpuid_table(cc_info);
++
++	/*
+ 	 * Pass run-time kernel a pointer to CC info via boot_params so EFI
+ 	 * config table doesn't need to be searched again during early startup
+ 	 * phase.

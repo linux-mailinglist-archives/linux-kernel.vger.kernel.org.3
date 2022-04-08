@@ -2,71 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D86C24F9E58
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 22:49:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D070B4F9E68
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 22:52:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237221AbiDHUuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 16:50:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58020 "EHLO
+        id S238784AbiDHUxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 16:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiDHUum (ORCPT
+        with ESMTP id S239544AbiDHUx2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 16:50:42 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734281DE6D0
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 13:48:38 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-df22f50e0cso10995452fac.3
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 13:48:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=E+nJ+IeQiG4mgvH4yV2XbF3SFHYdv7cMYexwmastyTY=;
-        b=UWj9T0SgeOOrrMmgaYoiY5YEbtQ8lCvdCT1Zd/qLCvtxBpRlVuy0ODEQr6LU82RUx+
-         wluGV7lYtv10KzBMhz5JCRgWTfRYVMkQCFecNeJvaCrFgnzHLcZtCJtWRp+Xv964J9R0
-         YzZ/7shXdsoyiF/TSSXygZWWgFV+n6eoOycubsbu05zVCPVBIjG89VKFmykHzHmm8ifN
-         1wKjUtsIYPQY+gWuBHhBGkCuKyzhpGXkfA0l7d1MJcrhinlCWa90UD/gysKZAB2Gu5LI
-         ib4+VX0E8IX2dacXcBrPyRd3hD6M9KGcvo/lq2Q29shlbJZ910amW/jtqzZ//qiJd/rE
-         y0Lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=E+nJ+IeQiG4mgvH4yV2XbF3SFHYdv7cMYexwmastyTY=;
-        b=JVJ7ZCFQ7cO9yhIpxkJIwbQ8ljXfO0RJGwiwEYtiru9+nBEkOiGDNg8EARzQQVDxeh
-         JLlyyatYlKL5drI1qwI/8dhPnKn30mQNQdzErU2Xs3qt5QsjbQFRrer1sl/IAl+feMvd
-         6Akjoe+5uf80rhRS3t5xNHws7cI00LNQ6jEQNnFP6FCInJCh+rqpzRBak7DEpgnfKJD7
-         CRnKzjfKGGY7rep9M76Q++zM08SuEZqbP3H8YrqDB9Hn9vh5HD8IV1rSOXxOmwW6xGjJ
-         7WNhugZG5V68zSLH/DLAn3by20pccxRbK6dEKqaTBJTRV5syxOdWbWXWJMYqroWm7EaU
-         Hx/Q==
-X-Gm-Message-State: AOAM530nAgaaxp+0r3h8EBm6AqMcgAOqM64xs15OnW5RcEankrhRzlge
-        l17SiWk4h5eoyR6IXG9Jq4Qw++HsEA4Cv4pRoKI=
-X-Google-Smtp-Source: ABdhPJzADDrRgHZh+f5rLZNA7S5V+9Fw+9Ir2J07PL7HHDvDsX2UEx0lC2Ep81o0W4CBSPK3+syb59fvi83xxvw/4Gg=
-X-Received: by 2002:a05:6870:311d:b0:de:9b6c:362b with SMTP id
- v29-20020a056870311d00b000de9b6c362bmr8928237oaa.200.1649450917768; Fri, 08
- Apr 2022 13:48:37 -0700 (PDT)
+        Fri, 8 Apr 2022 16:53:28 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1ED52EF172
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 13:51:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649451083; x=1680987083;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=I/DHdp9xZEEBb2Xk0bi5vzCAGsazyUmposPGXbwPmyw=;
+  b=U7pama++2vP0wVIsd134MfXQG8ynpLdxAZBWGTH+bs5pUs1sEH4wLBRD
+   B7P+wqE5P/0n6IQk+PlXqfn+0Q0OXnMcaovOYy9MQxIQ7Tw2nPdoZcwnT
+   5UIVqFo4FiZOOURZ5/6Q/eCmvm4U8XPb03EBdG/RtHR0LxFiyA2L9IXNi
+   B7R6+0zSSVemxvJWHWWBU8ccobCGk3ldC0pT9uKkEia1y6ErMJmpMac5r
+   H+FNLFyGOwIjGVWaM1otoT7tW6kVohVWZlH+UKUTvX0HaRsyYt2ioi7HQ
+   gHWQ3zVvRuwMRz30pMz2z3zQiYyAWZCwI6wH2IfuRKIdnEdzB5qAinfAE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="261674633"
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="261674633"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 13:51:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="659620660"
+Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 08 Apr 2022 13:51:19 -0700
+Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ncvZe-0000dE-Gi;
+        Fri, 08 Apr 2022 20:51:18 +0000
+Date:   Sat, 9 Apr 2022 04:50:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     popcornmix <popcornmix@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Kari Suvanto <karis79@gmail.com>,
+        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
+        Phil Elwell <phil@raspberrypi.org>,
+        Malik Olivier Boussejra <malik@boussejra.com>,
+        Paul Zimmerman <paulz@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lukas Wunner <lukas@wunner.de>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.org>,
+        Michael Zoran <mzoran@crowfest.net>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <marek.behun@nic.cz>,
+        Jonathan Bell <jonathan@raspberrypi.org>,
+        Hui Wang <hui.wang@canonical.com>,
+        Zixuan Wang <wangzixuan@sjtu.edu.cn>
+Subject: [l1k:smsc95xx_5.17 56/887]
+ drivers/usb/host/dwc_otg/dwc_otg_hcd_linux.c:423:13: warning: no previous
+ prototype for 'fiq_irq_handler'
+Message-ID: <202204090452.Pg7hes1b-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220407214659.2519967-1-trix@redhat.com>
-In-Reply-To: <20220407214659.2519967-1-trix@redhat.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 8 Apr 2022 16:48:26 -0400
-Message-ID: <CADnq5_MSrNYWJE0krKTs4SkOqsNtrVyM0PyQanO-YQYV+jSV4g@mail.gmail.com>
-Subject: Re: [PATCH] drm/radeon: change cayman_default_state table from global
- to static
-To:     Tom Rix <trix@redhat.com>
-Cc:     "Deucher, Alexander" <alexander.deucher@amd.com>,
-        Christian Koenig <christian.koenig@amd.com>,
-        xinhui pan <Xinhui.Pan@amd.com>,
-        Dave Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,22 +77,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 7, 2022 at 5:47 PM Tom Rix <trix@redhat.com> wrote:
->
-> cayman_default_state and cayman_default_size are only
-> used in ni.c.  Single file symbols should be static.
-> So move their definitions to cayman_blit_shaders.h
-> and change their storage-class-specifier to static.
->
-> Remove unneeded cayman_blit_shader.c
->
-> cayman_ps/vs definitions were removed with
-> commit 4f8629675800 ("drm/radeon/kms: remove r6xx+ blit copy routines")
-> So their declarations in cayman_blit_shader.h
-> are not needed, so remove them.
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
+tree:   https://github.com/l1k/linux smsc95xx_5.17
+head:   05d68ced287b30f62f18f95b5476135ef669804a
+commit: a8197852bb8f1f6804cff9442d426888e97aaed3 [56/887] Add dwc_otg driver
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220409/202204090452.Pg7hes1b-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/l1k/linux/commit/a8197852bb8f1f6804cff9442d426888e97aaed3
+        git remote add l1k https://github.com/l1k/linux
+        git fetch --no-tags l1k smsc95xx_5.17
+        git checkout a8197852bb8f1f6804cff9442d426888e97aaed3
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/usb/host/dwc_otg/
 
-Applied.  Thanks!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Alex
+All warnings (new ones prefixed by >>):
+
+>> drivers/usb/host/dwc_otg/dwc_otg_hcd_linux.c:423:13: warning: no previous prototype for 'fiq_irq_handler' [-Wmissing-prototypes]
+     423 | irqreturn_t fiq_irq_handler(int irq, void *dev_id)
+         |             ^~~~~~~~~~~~~~~
+   drivers/usb/host/dwc_otg/dwc_otg_hcd_linux.c:552:5: warning: no previous prototype for 'hcd_init' [-Wmissing-prototypes]
+     552 | int hcd_init(dwc_bus_dev_t *_dev)
+         |     ^~~~~~~~
+   drivers/usb/host/dwc_otg/dwc_otg_hcd_linux.c:662:6: warning: no previous prototype for 'hcd_remove' [-Wmissing-prototypes]
+     662 | void hcd_remove(dwc_bus_dev_t *_dev)
+         |      ^~~~~~~~~~
+
+
+vim +/fiq_irq_handler +423 drivers/usb/host/dwc_otg/dwc_otg_hcd_linux.c
+
+   422	
+ > 423	irqreturn_t fiq_irq_handler(int irq, void *dev_id)
+   424	{
+   425		dwc_otg_hcd_t *dwc_otg_hcd = (dwc_otg_hcd_t *)dev_id;
+   426	
+   427		if (fiq_fsm_enable)
+   428			dwc_otg_fiq_fsm(dwc_otg_hcd->fiq_state, dwc_otg_hcd->core_if->core_params->host_channels);
+   429		else
+   430			dwc_otg_fiq_nop(dwc_otg_hcd->fiq_state);
+   431	
+   432		return IRQ_HANDLED;
+   433	}
+   434	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

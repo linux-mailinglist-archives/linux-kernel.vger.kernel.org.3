@@ -2,214 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EF274F9ADA
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 18:41:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E25D74F9AE2
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 18:45:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232808AbiDHQn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 12:43:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55128 "EHLO
+        id S231655AbiDHQrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 12:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230014AbiDHQnX (ORCPT
+        with ESMTP id S229668AbiDHQrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 12:43:23 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B652A10E9;
-        Fri,  8 Apr 2022 09:41:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649436079; x=1680972079;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=aAbi/qmKq+r/hL4lQDiEEDWm+BnU3Db3wanrG3/Vskg=;
-  b=RjnOTixhwA9lwoKCBk2+xaerM8hMPcB47cZjmyeOTLzJCbS2JSxn0LBD
-   taT1hPg2zYxrZUo5uddpjvwlZT+fvhzQIEuQeRztUqxT+2kJRsSG6sStz
-   oWUeZzW6Lv95vmEJlLUrBSvCflKl07AKzA5IB6UFhJVrUnhNvNnQUIN9K
-   kVn20bf5SYiMVKl5YHwbtJ7bIk8FWezleaM21bejZDqj6ggzf8gu5S4tQ
-   5CbsM82QnMtWxc+XtatlzH0elCB+rrx5JxERE8l1YEQ7iYEpcVkHzM7eb
-   SGGaifQVyR2UriXi9Kjo9T2BgH+pODCU0ulORxV/FU1hL/sBpQeqXzH2/
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="243768602"
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="243768602"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 09:41:19 -0700
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="571547038"
-Received: from zengguan-mobl1.ccr.corp.intel.com (HELO [10.254.213.22]) ([10.254.213.22])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 09:41:14 -0700
-Message-ID: <b8f753b0-1b57-3e42-3516-27cc0359c584@intel.com>
-Date:   Sat, 9 Apr 2022 00:41:03 +0800
+        Fri, 8 Apr 2022 12:47:43 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8820A10E9
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 09:45:39 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id r64so5901644wmr.4
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 09:45:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hsR6O4eaICB82MEVDSEX7922LD8DveH/xZVqwX1N9p0=;
+        b=FNc8Ik0xlX5AtoqvO7t5QzfYSYm1tFKhUPWfqGcvpLN+Iyb4AuBPU8dKAKeuMDmvNK
+         E4soatlGoTsa9KvwA9Pqf45pnAjIn3y8YY1lYMlcgPxjoPwolUV5Q4BUovjz8R2l6KbT
+         AvR1xvgJSMujYhLH0ymY6iyI6rb9NPFeZLvVvv0PV66LEgNOKH9XHwdU3GIyJKsOxHt/
+         AQ/mZb1a1PnEBNSVf2bi5y9fzro7k26lx6uqUlnT0PgXN5hsuK0M4A31BM4dBXAzcM7T
+         XLdLn2BnVzj0+R8iMjaRntnmYFqEViBr1x+Q547ktC3WXzpdGmFVKLU67VHn6BUIGN+5
+         /l3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hsR6O4eaICB82MEVDSEX7922LD8DveH/xZVqwX1N9p0=;
+        b=yLhuYpidv0rsGH/m47wWdFjAx93T7i936VusKd97eZUvvK0g0XvFNKXkBglRMysTla
+         se3oajeJXg3E/JGbhEZuUP00xaoQjYgLq7R7KS4IEmqjNW9C+XQon5eaZYPBWNfTGiCw
+         /UrBoCy7YahCLCS0hpC59jC+OVT6LYpvpXPQAHA1LxqJXJGmu4+DtcSKcl0rcb2P61PT
+         N5FeOnU5OdUVPajs01JoYjMInzJEH1mXWmmfeC6f7ogFXd4fkGcII09zUMYdS92+lGly
+         ft4clSfBhm+pguEFwBFxtrRhEpLAKMiVY6ik3L9f0SJNnSGlixMJDx803rzpS5sxFo6s
+         68NQ==
+X-Gm-Message-State: AOAM531P1nbfkPulbMHKHW2sihnvneRDojzThVGW9ZSC7R5T3GYnIpvX
+        HMPaiMPk5i1HdAkM9KKUtyeFLdstWrrXQZmaCGGO2g==
+X-Google-Smtp-Source: ABdhPJzglzfwkwV1bsPSu0gplUQ3D3k4WOJBKUIVsafnJiQlstnKUiizZCpvp5Vh3HAPd9PWbPlDHgYSbikkg2K1eSc=
+X-Received: by 2002:a05:600c:1d04:b0:38c:ba2f:88ba with SMTP id
+ l4-20020a05600c1d0400b0038cba2f88bamr17835133wms.137.1649436337643; Fri, 08
+ Apr 2022 09:45:37 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v7 8/8] KVM: VMX: enable IPI virtualization
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hu, Robert" <robert.hu@intel.com>,
-        "Gao, Chao" <chao.gao@intel.com>
-References: <20220304080725.18135-1-guang.zeng@intel.com>
- <20220304080725.18135-9-guang.zeng@intel.com> <YkZlhI7nAAqDhT0D@google.com>
- <54df6da8-ad68-cc75-48db-d18fc87430e9@intel.com>
- <YksxiAnNmdR2q65S@google.com>
-From:   Zeng Guang <guang.zeng@intel.com>
-In-Reply-To: <YksxiAnNmdR2q65S@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <mhng-9cbb2a46-8bcb-4bfe-b927-0ed469dbd3a6@palmer-mbp2014>
+ <cd8d6641-4a29-7deb-49ae-a80baab0344f@canonical.com> <CAK9=C2Xh_DQ3ybj7nAE-LNrSc9sPy0H8jq_FU09io+wE_yypRg@mail.gmail.com>
+ <b907f6c8-968b-7e1e-bc83-1d54c7e0b448@canonical.com>
+In-Reply-To: <b907f6c8-968b-7e1e-bc83-1d54c7e0b448@canonical.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Fri, 8 Apr 2022 22:15:25 +0530
+Message-ID: <CAAhSdy1ovEziSSu6x2kESYTbimDLXCHmmOqMLyGKzsj1DHLrLg@mail.gmail.com>
+Subject: Re: [PATCH v2] RISC-V: Increase range and default value of NR_CPUS
+To:     Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+Cc:     Anup Patel <apatel@ventanamicro.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Apr 8, 2022 at 10:08 PM Heinrich Schuchardt
+<heinrich.schuchardt@canonical.com> wrote:
+>
+> On 4/6/22 12:10, Anup Patel wrote:
+> > On Wed, Apr 6, 2022 at 3:25 PM Heinrich Schuchardt
+> > <heinrich.schuchardt@canonical.com> wrote:
+> >>
+> >> On 3/31/22 21:42, Palmer Dabbelt wrote:
+> >>> On Sat, 19 Mar 2022 05:12:06 PDT (-0700), apatel@ventanamicro.com wrote:
+> >>>> Currently, the range and default value of NR_CPUS is too restrictive
+> >>>> for high-end RISC-V systems with large number of HARTs. The latest
+> >>>> QEMU virt machine supports upto 512 CPUs so the current NR_CPUS is
+> >>>> restrictive for QEMU as well. Other major architectures (such as
+> >>>> ARM64, x86_64, MIPS, etc) have a much higher range and default
+> >>>> value of NR_CPUS.
+> >>>>
+> >>>> This patch increases NR_CPUS range to 2-512 and default value to
+> >>>> XLEN (i.e. 32 for RV32 and 64 for RV64).
+> >>>>
+> >>>> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> >>>> ---
+> >>>> Changes since v1:
+> >>>>   - Updated NR_CPUS range to 2-512 which reflects maximum number of
+> >>>>     CPUs supported by QEMU virt machine.
+> >>>> ---
+> >>>>   arch/riscv/Kconfig | 7 ++++---
+> >>>>   1 file changed, 4 insertions(+), 3 deletions(-)
+> >>>>
+> >>>> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> >>>> index 5adcbd9b5e88..423ac17f598c 100644
+> >>>> --- a/arch/riscv/Kconfig
+> >>>> +++ b/arch/riscv/Kconfig
+> >>>> @@ -274,10 +274,11 @@ config SMP
+> >>>>         If you don't know what to do here, say N.
+> >>>>
+> >>>>   config NR_CPUS
+> >>>> -    int "Maximum number of CPUs (2-32)"
+> >>>> -    range 2 32
+> >>>> +    int "Maximum number of CPUs (2-512)"
+> >>>> +    range 2 512
+> >>
+> >> For SBI_V01=y there seems to be a hard constraint to XLEN bits.
+> >> See __sbi_v01_cpumask_to_hartmask() in rch/riscv/kernel/sbi.c.
+> >>
+> >> So shouldn't this be something like:
+> >>
+> >> range 2 512 !SBI_V01
+> >> range 2 32 SBI_V01 && 32BIT
+> >> range 2 64 SBI_V01 && 64BIT
+> >
+> > This is just making it unnecessarily complicated for supporting
+> > SBI v0.1
+> >
+> > How about removing SBI v0.1 support and the spin-wait CPU
+> > operations from arch/riscv ?
+>
+> The SBI v0.1 specification was only a draft. Only the v1.0 version has
+> ever been ratified.
+>
+> It would be good to remove this legacy code from Linux and U-Boot.
+>
+> By the way, why does upstream OpenSBI claim to be conformant to SBI v0.3
+> and not to v1.0?
 
-On 4/5/2022 1:57 AM, Sean Christopherson wrote:
-> On Sun, Apr 03, 2022, Zeng Guang wrote:
->> On 4/1/2022 10:37 AM, Sean Christopherson wrote:
->>>> @@ -4219,14 +4226,21 @@ static void vmx_refresh_apicv_exec_ctrl(struct kvm_vcpu *vcpu)
->>>>    	pin_controls_set(vmx, vmx_pin_based_exec_ctrl(vmx));
->>>>    	if (cpu_has_secondary_exec_ctrls()) {
->>>> -		if (kvm_vcpu_apicv_active(vcpu))
->>>> +		if (kvm_vcpu_apicv_active(vcpu)) {
->>>>    			secondary_exec_controls_setbit(vmx,
->>>>    				      SECONDARY_EXEC_APIC_REGISTER_VIRT |
->>>>    				      SECONDARY_EXEC_VIRTUAL_INTR_DELIVERY);
->>>> -		else
->>>> +			if (enable_ipiv)
->>>> +				tertiary_exec_controls_setbit(vmx,
->>>> +						TERTIARY_EXEC_IPI_VIRT);
->>>> +		} else {
->>>>    			secondary_exec_controls_clearbit(vmx,
->>>>    					SECONDARY_EXEC_APIC_REGISTER_VIRT |
->>>>    					SECONDARY_EXEC_VIRTUAL_INTR_DELIVERY);
->>>> +			if (enable_ipiv)
->>>> +				tertiary_exec_controls_clearbit(vmx,
->>>> +						TERTIARY_EXEC_IPI_VIRT);
->>> Oof.  The existing code is kludgy.  We should never reach this point without
->>> enable_apicv=true, and enable_apicv should be forced off if APICv isn't supported,
->>> let alone seconary exec being support.
->>>
->>> Unless I'm missing something, throw a prep patch earlier in the series to drop
->>> the cpu_has_secondary_exec_ctrls() check, that will clean this code up a smidge.
->> cpu_has_secondary_exec_ctrls() check can avoid wrong vmcs write in case mistaken
->> invocation.
-> KVM has far bigger problems on buggy invocation, and in that case the resulting
-> printk + WARN from the failed VMWRITE is a good thing.
+The ratification process for SBI v1.0 was in early stages when OpenSBI v1.0
+was being released so we decided to keep the SBI v0.3 spec version. The
+next OpenSBI v1.1 release (due in June 2022) will change to SBI v1.0
 
-
-SDM doesn't define VMWRITE failure for such case. But it says the logical
-processor operates as if all the secondary processor-based VM-execution
-controls were 0 if "activate secondary controls" primary processor-based
-VM-execution control is 0. So we may add WARN() to detect this kind of
-buggy invocation instead.
-
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 61e075e16c19..6c370b507b45 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -4200,22 +4200,22 @@ static void vmx_refresh_apicv_exec_ctrl(struct 
-kvm_vcpu *vcpu)
-         struct vcpu_vmx *vmx = to_vmx(vcpu);
-
-         pin_controls_set(vmx, vmx_pin_based_exec_ctrl(vmx));
--       if (cpu_has_secondary_exec_ctrls()) {
--               if (kvm_vcpu_apicv_active(vcpu)) {
--                       secondary_exec_controls_setbit(vmx,
-- SECONDARY_EXEC_APIC_REGISTER_VIRT |
-- SECONDARY_EXEC_VIRTUAL_INTR_DELIVERY);
--                       if (enable_ipiv)
--                               tertiary_exec_controls_setbit(vmx,
-- TERTIARY_EXEC_IPI_VIRT);
--               } else {
--                       secondary_exec_controls_clearbit(vmx,
-- SECONDARY_EXEC_APIC_REGISTER_VIRT |
-- SECONDARY_EXEC_VIRTUAL_INTR_DELIVERY);
--                       if (enable_ipiv)
-- tertiary_exec_controls_clearbit(vmx,
-- TERTIARY_EXEC_IPI_VIRT);
--               }
-+
-+       WARN(!cpu_has_secondary_exec_ctrls(),
-+                    "VMX: unexpected vmwrite with inactive secondary 
-exec controls");
-+
-+       if (kvm_vcpu_apicv_active(vcpu)) {
-+               secondary_exec_controls_setbit(vmx,
-+                             SECONDARY_EXEC_APIC_REGISTER_VIRT |
-+ SECONDARY_EXEC_VIRTUAL_INTR_DELIVERY);
-+               if (enable_ipiv)
-+                       tertiary_exec_controls_setbit(vmx, 
-TERTIARY_EXEC_IPI_VIRT);
-+       } else {
-+               secondary_exec_controls_clearbit(vmx,
-+                             SECONDARY_EXEC_APIC_REGISTER_VIRT |
-+ SECONDARY_EXEC_VIRTUAL_INTR_DELIVERY);
-+               if (enable_ipiv)
-+                       tertiary_exec_controls_clearbit(vmx, 
-TERTIARY_EXEC_IPI_VIRT);
-         }
-
-         vmx_update_msr_bitmap_x2apic(vcpu);
+Regards,
+Anup
 
 >
->>>> +	 */
->>>> +	if (vmx_can_use_ipiv(vcpu->kvm)) {
->>>> +		struct kvm_vmx *kvm_vmx = to_kvm_vmx(vcpu->kvm);
->>>> +
->>>> +		mutex_lock(&vcpu->kvm->lock);
->>>> +		err = vmx_alloc_pid_table(kvm_vmx);
->>>> +		mutex_unlock(&vcpu->kvm->lock);
->>> This belongs in vmx_vm_init(), doing it in vCPU creation is a remnant of the
->>> dynamic resize approach that's no longer needed.
->> We cannot allocate pid table in vmx_vm_init() as userspace has no chance to
->> set max_vcpu_ids at this stage. That's the reason we do it in vCPU creation
->> instead.
-> Ah, right.  Hrm.  And that's going to be a recurring problem if we try to use the
-> dynamic kvm->max_vcpu_ids to reduce other kernel allocations.
+> include/sbi/sbi_ecall.h:16:
 >
-> Argh, and even kvm_arch_vcpu_precreate() isn't protected by kvm->lock.
+> #define SBI_ECALL_VERSION_MAJOR 0
+> #define SBI_ECALL_VERSION_MINOR 3
 >
-> Taking kvm->lock isn't problematic per se, I just hate doing it so deep in a
-> per-vCPU flow like this.
+> Best regards
 >
-> A really gross hack/idea would be to make this 64-bit only and steal the upper
-> 32 bits of @type in kvm_create_vm() for the max ID.
+> Heinrich
 >
-> I think my first choice would be to move kvm_arch_vcpu_precreate() under kvm->lock.
-> None of the architectures that have a non-nop implemenation (s390, arm64 and x86)
-> do significant work, so holding kvm->lock shouldn't harm performance.  s390 has to
-> acquire kvm->lock in its implementation, so we could drop that.  And looking at
-> arm64, I believe its logic should also be done under kvm->lock.
->
-> It'll mean adding yet another kvm_x86_ops, but I like that more than burying the
-> code deep in vCPU creation.
->
-> Paolo, any thoughts on this?
-
-Sounds reasonable. I will prepare patch to refactor the 
-kvm_arch_vcpu_precreate()
-and make pid table allocation done there.
-
-Thanks.
-
+> >
+> >>
+> >>>>       depends on SMP
+> >>>> -    default "8"
+> >>>> +    default "32" if 32BIT
+> >>>> +    default "64" if 64BIT
+> >>>>
+> >>>>   config HOTPLUG_CPU
+> >>>>       bool "Support for hot-pluggable CPUs"
+> >>>
+> >>> I'm getting all sorts of boot issues with more than 32 CPUs, even on the
+> >>> latest QEMU master.  I'm not opposed to increasing the CPU count in
+> >>> theory, but if we're going to have a setting that goes up to a huge
+> >>> number it needs to at least boot.  I've got 64 host threads, so it
+> >>> shouldn't just be a scheduling thing.
+> >>
+> >> Currently high performing hardware for RISC-V is missing. So it makes
+> >> sense to build software via QEMU on x86_64 or arm64 with as many
+> >> hardware threads as available (128 is not uncommon).
+> >>
+> >> OpenSBI currently is limited to 128 threads:
+> >> include/sbi/sbi_hartmask.h:22:
+> >> #define SBI_HARTMASK_MAX_BITS 128
+> >> This is just an arbitrary value we can be modified.
+> >
+> > Yes, this limit will be gradually increased with some improvements
+> > to optimize runtime memory used by OpenSBI.
+> >
+> >>
+> >> U-Boot v2022.04 qemu-riscv64_smode_defconfig has a value of
+> >> CONFIG_SYS_MALLOC_F_LEN that is to low. This leads to a boot failure for
+> >> more than 16 harts. A patch to correct this is pending:
+> >> [PATCH v2 1/1] riscv: alloc space exhausted
+> >> https://lore.kernel.org/u-boot/CAN5B=eKt=tFLZ2z3aNHJqsnJzpdA0oikcrC2i1_=ZDD=f+M0jA@mail.gmail.com/T/#t
+> >>
+> >> With QEMU 7.0 and the U-Boot fix booting into a 5.17 defconfig kernel
+> >> with 64 virtual cores worked fine for me.
+> >
+> > Thanks for trying this patch.
+> >
+> > Regards,
+> > Anup
+> >
+> >>
+> >> Best regards
+> >>
+> >> Heinrich
+> >>
+> >>>
+> >>> If there was some hardware that actually boots on these I'd be happy to
+> >>> take it, but given that it's just QEMU I'd prefer to sort out the bugs
+> >>> first.  It's probably just latent bugs somewhere, but allowing users to
+> >>> turn on configs we know don't work just seems like the wrong way to go.
+> >>>

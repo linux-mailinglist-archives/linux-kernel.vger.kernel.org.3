@@ -2,95 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA0094F9214
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 11:33:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84BE54F921D
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 11:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231939AbiDHJfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 05:35:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34766 "EHLO
+        id S233207AbiDHJg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 05:36:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiDHJfG (ORCPT
+        with ESMTP id S231565AbiDHJg0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 05:35:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E1B5212152D
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 02:33:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649410381;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=e8zy54DaIAQWiqPv3lC1ZWYH7iRSoNT36sbtgj7D0MA=;
-        b=cUzmBaCRgCcqPwfI3Vg/hTL2T0VPnxmOq80EHNo3r2Fx6etDnBsBeW3pU2rZZGacHBCSJM
-        Z8zy9sBXDwU03Pz04HmfE4TC8w6vNwZ52x1eaGub5HvUQK0gYH9iHTsmy6TCMrO1TpQN9E
-        MRk3x3bBeOLxUrtZi/MaFNutUABt2dE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-562-h8-zO9aANJqOx1GbW8pX1A-1; Fri, 08 Apr 2022 05:32:57 -0400
-X-MC-Unique: h8-zO9aANJqOx1GbW8pX1A-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 8 Apr 2022 05:36:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B00BD37BC5;
+        Fri,  8 Apr 2022 02:34:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D577A811E78;
-        Fri,  8 Apr 2022 09:32:56 +0000 (UTC)
-Received: from localhost (ovpn-12-202.pek2.redhat.com [10.72.12.202])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id BE8B91402427;
-        Fri,  8 Apr 2022 09:32:55 +0000 (UTC)
-Date:   Fri, 8 Apr 2022 17:32:52 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        linux-kernel@vger.kernel.org, Dave Young <dyoung@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CCFA61DAF;
+        Fri,  8 Apr 2022 09:34:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E113C385A3;
+        Fri,  8 Apr 2022 09:34:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649410462;
+        bh=dkChLmZ2U6SrY+w/IpSt6wIwgxrmR0TxbU9q/QExDMQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=c4vF7qEbi2YzOfQ6VvUOsxEKrY7PsCc18mKFzr640NTlOw3U0/GIdtTqiNKd7Yv8T
+         Tv+GepSTDxEo+H2Vf1Z9S8BjhJPFm69MhOFpJZFK+3Me1PSXW7QXOYMZMg2SDX+DCV
+         4QNJnhQKc/1lQl9vNFzbbyX4c0TwEt496AKPHSNdyWXPWOwSwVWRID62U5J1n0jU0/
+         uprVJx07FJQRac/uuZ05cqvENdQM4UXQMbVCLeDtVRu6IrP9C3rwV0WZNaIZPC+ROw
+         NHh2aMHS5z1wX3w/eUqTmmy4DC2OkNAMHoROc7f69n4TdcnGaRzKau61UZL9sVvORo
+         Ob7q2YJUe4heQ==
+Date:   Fri, 8 Apr 2022 11:34:18 +0200
+From:   Lorenzo Bianconi <lorenzo@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Felix Fietkau <nbd@nbd.name>, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        John Donnelly <John.p.donnelly@oracle.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>
-Subject: Re: [PATCH v21 0/5] support reserving crashkernel above 4G on arm64
- kdump
-Message-ID: <YlABRPBEaTldZwuL@MiWiFi-R3L-srv>
-References: <20220227030717.1464-1-thunder.leizhen@huawei.com>
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v2 01/14] dt-bindings: net: mediatek: add optional
+ properties for the SoC ethernet core
+Message-ID: <YlABmtzBDVRehh5u@lore-desk>
+References: <20220405195755.10817-1-nbd@nbd.name>
+ <20220405195755.10817-2-nbd@nbd.name>
+ <Yk8ddwmSiFg3pslA@robh.at.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jTDiGlGeTX59jyR9"
 Content-Disposition: inline
-In-Reply-To: <20220227030717.1464-1-thunder.leizhen@huawei.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Yk8ddwmSiFg3pslA@robh.at.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Lei
 
-On 02/27/22 at 11:07am, Zhen Lei wrote:
-> Changes since [v20]:
-> 1. Check whether crashkernel=Y,low is incorrectly configured or not configured. Do different processing.
-> 2. Share the existing description of x86. The configuration of arm64 is the same as that of x86.
-> 3. Define the value of macro CRASH_ADDR_HIGH_MAX as memblock.current_limit, instead of MEMBLOCK_ALLOC_ACCESSIBLE.
-> 4. To improve readability, some lightweight code adjustments have been made to reserve_craskernel(), including comments.
-> 5. The defined value of DEFAULT_CRASH_KERNEL_LOW_SIZE reconsiders swiotlb, just like x86, to share documents.
+--jTDiGlGeTX59jyR9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-5.18 rc1 is already done, do you have plan to post a new version for
-reviewing?
+> On Tue, Apr 05, 2022 at 09:57:42PM +0200, Felix Fietkau wrote:
+> > From: Lorenzo Bianconi <lorenzo@kernel.org>
+> >=20
+> > Introduce dma-coherent, cci-control and hifsys optional properties to
+> > the mediatek ethernet controller bindings
+> >=20
+> > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> > Signed-off-by: Felix Fietkau <nbd@nbd.name>
+> > ---
+> >  Documentation/devicetree/bindings/net/mediatek-net.txt | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/net/mediatek-net.txt b/D=
+ocumentation/devicetree/bindings/net/mediatek-net.txt
+> > index 72d03e07cf7c..13cb12ee4ed6 100644
+> > --- a/Documentation/devicetree/bindings/net/mediatek-net.txt
+> > +++ b/Documentation/devicetree/bindings/net/mediatek-net.txt
+> > @@ -41,6 +41,12 @@ Required properties:
+> >  - mediatek,pctl: phandle to the syscon node that handles the ports sle=
+w rate
+> >  	and driver current: only for MT2701 and MT7623 SoC
+> > =20
+> > +Optional properties:
+> > +- dma-coherent: present if dma operations are coherent
+> > +- mediatek,cci-control: phandle to the cache coherent interconnect node
+>=20
+> There's a common property for this already. See CCI-400 binding.
+>=20
+> > +- mediatek,hifsys: phandle to the mediatek hifsys controller used to p=
+rovide
+> > +	various clocks and reset to the system.
+> > +
+>=20
+> This series is adding a handful of new properties. Please convert the=20
+> binding to DT schema first.
 
-Thanks
-Baoquan
+ack, I will converti this file to yaml format.
 
+Regards,
+Lorenzo
+
+>=20
+> Rob
+
+--jTDiGlGeTX59jyR9
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCYlABmgAKCRA6cBh0uS2t
+rCHGAQCQmaNe46BtAnnaU0XjfU5usUblA/08rL3VkR0T5cktfAD/RcsMuvT+pISo
+W0sCkOXhxLB2IBuyswPUVSZCO0JShQE=
+=mbp4
+-----END PGP SIGNATURE-----
+
+--jTDiGlGeTX59jyR9--

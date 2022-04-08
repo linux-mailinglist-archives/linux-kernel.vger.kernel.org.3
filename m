@@ -2,165 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A91D84F9E2E
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 22:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2623E4F9E35
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 22:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238147AbiDHUcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 16:32:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45436 "EHLO
+        id S239504AbiDHUdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 16:33:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233536AbiDHUcG (ORCPT
+        with ESMTP id S229481AbiDHUdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 16:32:06 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9381CFFF
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 13:30:00 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649449798;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FSsp/Ai8IS4EMVPoIXL9eSaIoSuhbUgToxXTX7vK4OY=;
-        b=UTZd9YbwMzUJ3IqOsUVxkkT7n3UzC52oqPZTdeDkrSzaaVV4YfV+WAqZjJMxreXkgtXqac
-        e9e0/79aGg8lRZfrAg/aoirhY3c0kEOctMdjmGqfAY6ixd5Be8rc5zDOTnS3g0MR+qZR48
-        loBkaoA0J5tuHayrK6diiH9KBIB7IEm6RPjulESkuAoBu2RzJw+nW3w3PvJoN1H2b8IPW4
-        swQ+p7XGbTVvvqqa/cuTrv193yhCtC5foCF7e7LgueX2IldeEWvPse2ieFbVXWIkPaDttL
-        sFFrrJrF7Cn+IZwD2hVCnpCmjIhANaYH33in7jKl3yhJPPJ7NOJ9GBIJOTYQiA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649449798;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FSsp/Ai8IS4EMVPoIXL9eSaIoSuhbUgToxXTX7vK4OY=;
-        b=INhSwqUtz7+ishyg4N8A/OJryHCUym4jPD4rff7MXIaQGVhrfCHBXyK6LW0DOmGdbwK1ZG
-        J0IkO094CrmRUFCQ==
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>, jstultz@google.com,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [RFC][PATCH] timers: Add del_time_free() to be called before
- freeing timers
-In-Reply-To: <CAHk-=whbsLXy85XpKRQmBXr=GqWbMoi+wVjFY_V22=BOE=dHog@mail.gmail.com>
-References: <20220407161745.7d6754b3@gandalf.local.home>
- <87pmlrkgi3.ffs@tglx>
- <CAHk-=whbsLXy85XpKRQmBXr=GqWbMoi+wVjFY_V22=BOE=dHog@mail.gmail.com>
-Date:   Fri, 08 Apr 2022 22:29:58 +0200
-Message-ID: <87v8vjiaih.ffs@tglx>
+        Fri, 8 Apr 2022 16:33:19 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979EE2E684
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 13:31:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649449874; x=1680985874;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=i6C1YHz4CoMucEU8uKLQckY9GDlu3SWjU153tDHE6bs=;
+  b=PZC2nQr/F8xVDvREJsnWyrWXe8dJlZ18WpSnsE2KBA/5C/R97Zhsx5Sv
+   F28Fn5T4PrebIahbgKTvqn80l8uNUthzqelNe4mMMDwutCezAPztSZadO
+   x88qPTX0HuJL1ijV1PKOTTt6R5eT4nXHbEByW0yRgKyGiuSGCv/UGMdvU
+   9WFA8jTqyCNEQOOZe5FqOuwKs0ibg/P3yT4YW+30vLNo9z9wgwJ27Zrpf
+   AYH1bbi26VG3oPkOyysyJ4AjXG3PUWMYP0olNS0M+Taq4sIeweGKM70V2
+   +vxifLmewrlYMRvVnz8KssTggLRhUwmzWnMbMdJcXMCvvZLctcFzjuaV+
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="348117040"
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="348117040"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 13:31:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="659615368"
+Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 08 Apr 2022 13:31:13 -0700
+Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ncvGC-0000c9-Bb;
+        Fri, 08 Apr 2022 20:31:12 +0000
+Date:   Sat, 9 Apr 2022 04:30:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [l1k:smsc95xx_5.17 118/201]
+ drivers/gpu/drm/i915/display/intel_fbdev.c:109:23: error: initialized field
+ overwritten
+Message-ID: <202204090433.lPMYm4fL-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08 2022 at 07:33, Linus Torvalds wrote:
-> On Fri, Apr 8, 2022 at 12:37 AM Thomas Gleixner <tglx@linutronix.de> wrote:
->>
->> So this would become:
->>
->> -       BUG_ON(!timer->function);
->> +       if (WARN_ON(!timer->function))
->> +               return -EBROKEN;
->
-> Yes. But please make it a WARN_ON_ONCE(), just on basic principles. I
-> can't imagine this happening a lot, but at the same time I don't think
-> there's any reason _not_ to just always use WARN_ON_ONCE() for these
-> kinds of "serious bug, but should never happen" situations.
->
-> Because we don't want some "user can trigger this and spam the logs"
-> situation either.
+tree:   https://github.com/l1k/linux smsc95xx_5.17
+head:   240f56c27361c195cd502d95aba51c6b8e5b808c
+commit: 326d4dbb40e05881260d64be29e4cca96443ef1a [118/201] kbuild: Cross-compile binaries to build modules on target
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220409/202204090433.lPMYm4fL-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/l1k/linux/commit/326d4dbb40e05881260d64be29e4cca96443ef1a
+        git remote add l1k https://github.com/l1k/linux
+        git fetch --no-tags l1k smsc95xx_5.17
+        git checkout 326d4dbb40e05881260d64be29e4cca96443ef1a
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Fair enough.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> That said, I would actually prefer a name-change: instead of making
-> this about "del_timer_free()", can we please just make this about it
-> being "final". Or maybe "del_timer_cancel()" or something like that?
+All errors (new ones prefixed by >>):
 
-I was anyway thinking to use the timer_* namespace if we want to go for
-this.
-
-timer_shutdown() perhaps?
-
-> Because the actual _freeing_ will obviously happen later, and the
-> function does nothing of the sort. In fact, there may be situations
-> where you don't free it at all, but just want to be in the situation
-> where you want to make sure there are no pending timers until after
-> you explicitly re-arm it, even if the timer would otherwise be
-> self-arming.
-> 
-> (That use-case would actually mean removing the WARN_ON_ONCE(), but I
-> think that would be a "future use" issue, I'm *not* suggesting it not
-> be done initially).
-
-Well, you'd have to reinitialize it first before the explicit rearm
-because the shutdown cleared the function pointer or if we use a flag
-then the flag would prevent arming it again.
-
-> I also suspect that 99% of all del_timer_sync() users actually want
-> that kind of explicit "del_timer_final()" behavior. Some may not
-> _need_ it (because their re-arming already checks for "have I shut
-> down?"), but I have this suspicion that we could convert a lot - maybe
-> all - of the current del_timer_sync() users to this and try to see if
-> we could just make it the rule.
-
-Hmm. That would mean, that we still check the function pointer for NULL
-without warning and just return. That would indeed be a good argument
-for not having the warning at all.
-
-But, there is a twist. While most callsites ignore the return value of
-mod_timer() there are 39 (about 2%) which actually care. So that needs
-some thought. Though code which cares about these details is mostly
-networking core code and not the random driver thing. Though there are a
-few suspects in drivers too including bluetooth, but the latter is what
-started this whole discussion. See below.
-
-> And then we could actually maybe start removing the explicit "shut
-> down timer" code. See for example "work->canceling" logic for
-> kthreads, which now does double duty (it disables re-arming the timer,
-> _and_ it does some "double cancel work avoidance")
-
-This serializes the cancel against _any_ queuing of that work including
-the queueing from an already running timer callback which is blocked on
-the worker lock. The shutdown thing wont help there I think.
-
-The problem where it could help is shutdown code for timers plus other
-entities with circular dependencies. The problem which started this was
-some bluetooth thing which has two timers and a workqueue. The timers
-can queue work and the workqueue can arm timers....
-
-So well written drivers have a priv->shutdown flag which makes timer
-callbacks and workqueue functions aware that a shutdown is in progress
-so they can take appropriate action. That's not necessarily trivial and
-I've decoded my share of subtle problems in that realm over the years.
-
-The bluetooth thing in question does not fall into that category, it
-even just used del_timer() before destroying the work queue.
-
-What a shutdown function would prevent here is UAF, but I'm not entirely
-sure whether it will simplify coordinated shutdown and remove the
-requirement of a priv->shutdown flag all over the place. It might make
-some of the driver muck just get stuck in the shutdown, but that's
-definitely an improvement over a potential UAF which happens every blue
-moons.
-
-Thanks,
-
-        tglx
+>> drivers/gpu/drm/i915/display/intel_fbdev.c:109:23: error: initialized field overwritten [-Werror=override-init]
+     109 |         .fb_set_par = intel_fbdev_set_par,
+         |                       ^~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/display/intel_fbdev.c:109:23: note: (near initialization for 'intelfb_ops.fb_set_par')
+   drivers/gpu/drm/i915/display/intel_fbdev.c:113:27: error: initialized field overwritten [-Werror=override-init]
+     113 |         .fb_pan_display = intel_fbdev_pan_display,
+         |                           ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/display/intel_fbdev.c:113:27: note: (near initialization for 'intelfb_ops.fb_pan_display')
+   drivers/gpu/drm/i915/display/intel_fbdev.c:114:21: error: initialized field overwritten [-Werror=override-init]
+     114 |         .fb_blank = intel_fbdev_blank,
+         |                     ^~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/i915/display/intel_fbdev.c:114:21: note: (near initialization for 'intelfb_ops.fb_blank')
+   cc1: all warnings being treated as errors
 
 
+vim +109 drivers/gpu/drm/i915/display/intel_fbdev.c
 
+d9a946b52350bb drivers/gpu/drm/i915/intel_fbdev.c         Rodrigo Vivi  2015-05-28  105  
+b6ff753a0ca0d2 drivers/gpu/drm/i915/display/intel_fbdev.c Jani Nikula   2019-12-03  106  static const struct fb_ops intelfb_ops = {
+79e539453b34e3 drivers/gpu/drm/i915/intel_fb.c            Jesse Barnes  2008-11-07  107  	.owner = THIS_MODULE,
+a36384dd941b48 drivers/gpu/drm/i915/intel_fbdev.c         Stefan Christ 2016-11-14  108  	DRM_FB_HELPER_DEFAULT_OPS,
+e991077ec67e08 drivers/gpu/drm/i915/intel_fbdev.c         Daniel Vetter 2014-06-18 @109  	.fb_set_par = intel_fbdev_set_par,
+21cff14847421f drivers/gpu/drm/i915/intel_fbdev.c         Archit Taneja 2015-07-31  110  	.fb_fillrect = drm_fb_helper_cfb_fillrect,
+21cff14847421f drivers/gpu/drm/i915/intel_fbdev.c         Archit Taneja 2015-07-31  111  	.fb_copyarea = drm_fb_helper_cfb_copyarea,
+21cff14847421f drivers/gpu/drm/i915/intel_fbdev.c         Archit Taneja 2015-07-31  112  	.fb_imageblit = drm_fb_helper_cfb_imageblit,
+d9a946b52350bb drivers/gpu/drm/i915/intel_fbdev.c         Rodrigo Vivi  2015-05-28  113  	.fb_pan_display = intel_fbdev_pan_display,
+03e515f7f8949c drivers/gpu/drm/i915/intel_fbdev.c         Rodrigo Vivi  2015-03-09  114  	.fb_blank = intel_fbdev_blank,
+785b93ef8c3097 drivers/gpu/drm/i915/intel_fb.c            Dave Airlie   2009-08-28  115  };
+785b93ef8c3097 drivers/gpu/drm/i915/intel_fb.c            Dave Airlie   2009-08-28  116  
 
+:::::: The code at line 109 was first introduced by commit
+:::::: e991077ec67e08bd345fcee4f810e59740359da5 drm/i915: Properly track domain of the fbcon fb
 
+:::::: TO: Daniel Vetter <daniel.vetter@ffwll.ch>
+:::::: CC: Daniel Vetter <daniel.vetter@ffwll.ch>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

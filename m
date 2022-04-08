@@ -2,110 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8E014F9D22
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 20:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E3124F9D0B
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 20:39:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239074AbiDHSnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 14:43:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55720 "EHLO
+        id S238947AbiDHSl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 14:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239175AbiDHSnr (ORCPT
+        with ESMTP id S238830AbiDHSkc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 14:43:47 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221AF1C7BB7;
-        Fri,  8 Apr 2022 11:41:38 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 6F8BF21602;
-        Fri,  8 Apr 2022 18:41:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1649443297;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iaTTqD9aZUtboVELKSbI3z4DsVuFax6sbvMw2Vl1jzk=;
-        b=zoKdisOrhI+T9DmqblVP1a5mV5GlaCa97QaymbCbk0SxOUtBkkZkgbQNTZvoAn5REHH0zR
-        sVMSvpNjNG7YZ+SHWyV27kFZxWslckB8u7U0vY2nvU/tTg6+d34lpuEQSLvzxJgKrXP2wO
-        D4fpVHbAnxos4R3RWymmEV9jroAdHwg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1649443297;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iaTTqD9aZUtboVELKSbI3z4DsVuFax6sbvMw2Vl1jzk=;
-        b=Ai73YkpRKt9BkmpXSthGZNAfFpTUvUu4/ymvjQGmegsBCMHWKJbboWfjLSC9FehgzuYjPn
-        asLjwY329KVC+FAA==
-Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
-        by relay2.suse.de (Postfix) with ESMTP id 373F1A3B96;
-        Fri,  8 Apr 2022 18:41:37 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-        id 366ADDA832; Fri,  8 Apr 2022 20:37:34 +0200 (CEST)
-Date:   Fri, 8 Apr 2022 20:37:33 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
-Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-kernel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, kernel-team@fb.com,
-        Omar Sandoval <osandov@osandov.com>,
-        Naohiro Aota <naohiro.aota@wdc.com>
-Subject: Re: [PATCH] btrfs: restore inode creation before xattr setting
-Message-ID: <20220408183733.GA15609@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz,
-        Sweet Tea Dorminy <sweettea-kernel@dorminy.me>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-kernel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, kernel-team@fb.com,
-        Omar Sandoval <osandov@osandov.com>,
-        Naohiro Aota <naohiro.aota@wdc.com>
-References: <8a60e54c02d8951cf5650cc8452ae583c130bbf7.1649437335.git.sweettea-kernel@dorminy.me>
+        Fri, 8 Apr 2022 14:40:32 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D661D26118;
+        Fri,  8 Apr 2022 11:38:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1649443082;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=x0kzI/Isg/dHTuXL9pr/4hUBYIzgC3UJIabNTaOuy8o=;
+    b=TGSShNyKbNY3TnGA6u08YYHcc5Lb1TgNndcEpvxBpkjJqKzhlzKEsjYbHmNAzK7sUh
+    tlH4RfMg/KoU8vSpndg5YejlRRRWGsVIxn8wIlLWPCoIgXQptlCkurhQV29LPurk4IRC
+    VnN2erl1zNRk+VPGKLyVWtgY5MhGRWt7/5c1FW/Ym3Its6qutnpe7z4K86R76y0BPRFX
+    mhYHBVVdjke/FKn0ztkSLB6S7rlx37q8GlXHUIYY6bjP2pNtXRD/iJvT7IX13o3OmmHl
+    ULQH1sthDx6b3SbJQFzMKRRixb23S8Rw6P15eBdZ21H+W9VeWyjKHiVzF/Tk2WGVdUqn
+    O7fw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1OAA2UMf2MwPVbgdr/a"
+X-RZG-CLASS-ID: mo00
+Received: from iMac.fritz.box
+    by smtp.strato.de (RZmta 47.42.2 DYNA|AUTH)
+    with ESMTPSA id k708cfy38Ic2snr
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Fri, 8 Apr 2022 20:38:02 +0200 (CEST)
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, letux-kernel@openphoenux.org,
+        "H. Nikolaus Schaller" <hns@goldelico.com>
+Subject: [PATCH 00/18] MIPS: DTS: fix some findings by "make ci20_defconfig dt_binding_check dtbs_check"
+Date:   Fri,  8 Apr 2022 20:37:43 +0200
+Message-Id: <cover.1649443080.git.hns@goldelico.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8a60e54c02d8951cf5650cc8452ae583c130bbf7.1649437335.git.sweettea-kernel@dorminy.me>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 01:15:07PM -0400, Sweet Tea Dorminy wrote:
-> According to the tree checker, "all xattrs with a given objectid follow
-> the inode with that objectid in the tree" is an invariant. This was
-> broken by the recent change "btrfs: move common inode creation code into
-> btrfs_create_new_inode()", which moved acl creation and property
-> inheritance (stored in xattrs) to before inode insertion into the tree.
-> As a result, under certain timings, the xattrs could be written to the
-> tree before the inode, causing the tree checker to report violation of
-> the invariant.
-> 
-> Move property inheritance and acl creation back to their old ordering
-> after the inode insertion.
-> 
-> Suggested-by: Omar Sandoval <osandov@osandov.com>
-> Reported-by: Naohiro Aota <naohiro.aota@wdc.com>
-> Signed-off-by: Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
-> ---
-> This should apply on top of osandov's patch at
->  https://lore.kernel.org/linux-btrfs/da6cfa1b8e42db5c8954680cac1ca322d463b880.1647306546.git.osandov@fb.com/
-> 
-> It's survived a good dose of fstests, and several iterations of specific
-> tests that were failing, e.g. generic/650.
+PATCH V1 2022-04-08 20:38:00:
+This series fixes many (not all) warnings from dt_binding_check/dtbs_check for the jz4780 based Imagination CI20 board.
 
-Thanks.
 
-> David: I don't know if you'd rather roll this into osandov's original
-> patch, or whether you'd like me or osandov to resend the patch linked
-> above with this addition rolled into it, or whether you'd like to apply
-> it separately.
+H. Nikolaus Schaller (18):
+  MIPS: DTS: jz4780: remove cpu clock-names as reported by dtbscheck
+  MIPS: DTS: jz4780: fix cgu as reported by dtbscheck
+  MIPS: DTS: jz4780: fix tcu timer as reported by dtbscheck
+  MIPS: DTS: jz4780: fix ost timer as reported by dtbscheck
+  MIPS: DTS: jz4780: fix pinctrl as reported by dtbscheck
+  MIPS: DTS: jz4780: fix rtc node as reported by dtbscheck
+  MIPS: DTS: jz4780: fix otg node as reported by dtbscheck
+  MIPS: DTS: jz4780: fix lcd controllers as reported by dtbscheck
+  MIPS: DTS: jz4780: fix dma-controller as reported by dtbscheck
+  MIPS: DTS: jz4780: fix uart dmas as reported by dtbscheck
+  MIPS: DTS: jz4780: fix i2c dmas as reported by dtbscheck
+  MIPS: DTS: jz4780: fix nemc memory controller as reported by dtbscheck
+  dt-bindings: fix jz4780-nemc issue as reported by dtbscheck
+  MIPS: DTS: CI20: add missing model as reported by dtbscheck
+  MIPS: DTS: CI20: fix fixed regulators as reported by dtbscheck
+  MIPS: DTS: CI20: fix /memory as reported by dtbscheck
+  MIPS: DTS: CI20: fix wifi as reported by dtbscheck
+  MIPS: DTS: CI20: fix bluetooth as reported by dtbscheck
 
-For simple fixups sent as replies I can apply it manually but sometimes
-it's better for me to do the review instead of trying to figure out what
-was the real intention.
+ .../memory-controllers/ingenic,nemc.yaml      |  2 +-
+ arch/mips/boot/dts/ingenic/ci20.dts           | 14 ++--
+ arch/mips/boot/dts/ingenic/jz4780.dtsi        | 71 ++++++++++++++-----
+ 3 files changed, 64 insertions(+), 23 deletions(-)
 
-So patch applied cleanly and now pushed to misc-next, thanks.
+-- 
+2.33.0
+

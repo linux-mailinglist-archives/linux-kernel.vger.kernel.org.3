@@ -2,57 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42C894F8ED3
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:27:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3700A4F8D9D
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:25:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235166AbiDHGIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 02:08:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43664 "EHLO
+        id S235115AbiDHGII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 02:08:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235122AbiDHGIK (ORCPT
+        with ESMTP id S235102AbiDHGIG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 02:08:10 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 198668C7D3;
-        Thu,  7 Apr 2022 23:06:04 -0700 (PDT)
-X-UUID: 0355e8d64c1c4371ae8907707ce275af-20220408
-X-UUID: 0355e8d64c1c4371ae8907707ce275af-20220408
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <jiaxin.yu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1557240117; Fri, 08 Apr 2022 14:06:00 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 8 Apr 2022 14:05:59 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 8 Apr 2022 14:05:58 +0800
-From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
-To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
-        <nfraprado@collabora.com>, <tzungbi@google.com>
-CC:     <angelogioacchino.delregno@collabora.com>, <aaronyu@google.com>,
-        <matthias.bgg@gmail.com>, <trevor.wu@mediatek.com>,
-        <linmq006@gmail.com>, <alsa-devel@alsa-project.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>,
-        Tzung-Bi Shih <tzungbi@kernel.org>
-Subject: [v10 4/4] ASoC: mediatek: mt8192: support rt1015p_rt5682s
-Date:   Fri, 8 Apr 2022 14:05:52 +0800
-Message-ID: <20220408060552.26607-5-jiaxin.yu@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220408060552.26607-1-jiaxin.yu@mediatek.com>
-References: <20220408060552.26607-1-jiaxin.yu@mediatek.com>
+        Fri, 8 Apr 2022 02:08:06 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328648BE0F;
+        Thu,  7 Apr 2022 23:06:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=A6b+cX8hCB8oB11lm2BdzaQ+eWpWdm8tA3u4Ttvi6EI=; b=lr3uug1E9ClqhmRQnJUM6m4zvu
+        H+QXpYVrltMP/5D4gXQTqD3G1Z076X+3471FD4Q1s6yc2pfwcSG51hiBuSrey1sUZP0iSCVEKH0Fl
+        lsNknnudbq+Ga6SkkBuJ/d5hW9A1cQhtNUs2LKsyCymwKPczcAUhDzWvNMBmeO4CCBoW+MyQ6MNrJ
+        3iFN4lRmkm8q0zv7eU+kH9R0XII2PasECvlKNYoBbRfHnLzDrl5RvMz2GrSQJemjR09kJpetHDJSh
+        nzjCyWMVizGvs3kHid/EhnRxerV9emGCvMb073htfeYGzKnRT7LmWsvVvV1EG9pTNpMgkw3N3z9Xz
+        tqDr+eVA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nchkw-00FEDs-QY; Fri, 08 Apr 2022 06:06:02 +0000
+Date:   Thu, 7 Apr 2022 23:06:02 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Logan Gunthorpe <logang@deltatee.com>
+Cc:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
+        Song Liu <song@kernel.org>,
+        Guoqing Jiang <guoqing.jiang@linux.dev>
+Subject: Re: [PATCH v1 1/7] md/raid5: Cleanup setup_conf() error returns
+Message-ID: <Yk/Qyo/tAb0Q9xur@infradead.org>
+References: <20220407165713.9243-1-logang@deltatee.com>
+ <20220407165713.9243-2-logang@deltatee.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220407165713.9243-2-logang@deltatee.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,189 +52,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for using the rt5682s codec together with rt1015p on
-mt8192-mt6359 machines. All configurations are shared with the rt5682
-codec variant, so simply select the SND_SOC_RT5682S config to ensure the
-codec is present and set the correct card name. The codec will be linked
-to by pointing to it in the headset-codec property in the devicetree.
+On Thu, Apr 07, 2022 at 10:57:07AM -0600, Logan Gunthorpe wrote:
+> Be more careful about the error returns. Most errors in this function
+> are actually ENOMEM, but it forcibly returns EIO if conf has been
+> allocated.
+> 
+> Instead return ret and ensure it is set appropriately before each goto
+> abort.
+> 
+> Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
 
-While at it, also create macros for the names of the different codec
-variants supported by this driver, as well as rename occurrences of
-rt1015p_rt5682 to rt1015p_rt5682x, since they are shared between rt5682
-and rt5682s.
+Looks good:
 
-Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
-Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
-Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
----
- sound/soc/mediatek/Kconfig                    |  1 +
- .../mt8192/mt8192-mt6359-rt1015-rt5682.c      | 61 ++++++++++++-------
- 2 files changed, 40 insertions(+), 22 deletions(-)
-
-diff --git a/sound/soc/mediatek/Kconfig b/sound/soc/mediatek/Kconfig
-index ae838bbc7933..9e5ce1a82639 100644
---- a/sound/soc/mediatek/Kconfig
-+++ b/sound/soc/mediatek/Kconfig
-@@ -179,6 +179,7 @@ config SND_SOC_MT8192_MT6359_RT1015_RT5682
- 	select SND_SOC_RT1015
- 	select SND_SOC_RT1015P
- 	select SND_SOC_RT5682_I2C
-+	select SND_SOC_RT5682S
- 	select SND_SOC_DMIC
- 	help
- 	  This adds ASoC driver for Mediatek MT8192 boards
-diff --git a/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c b/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
-index 4a11f687d416..2c71bd8a2db8 100644
---- a/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
-+++ b/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
-@@ -28,6 +28,14 @@
- #define RT1015_DEV0_NAME	"rt1015.1-0028"
- #define RT1015_DEV1_NAME	"rt1015.1-0029"
- 
-+#define RT1015_RT5682_CARD_NAME "mt8192_mt6359_rt1015_rt5682"
-+#define RT1015P_RT5682_CARD_NAME "mt8192_mt6359_rt1015p_rt5682"
-+#define RT1015P_RT5682S_CARD_NAME "mt8192_mt6359_rt1015p_rt5682s"
-+
-+#define RT1015_RT5682_OF_NAME "mediatek,mt8192_mt6359_rt1015_rt5682"
-+#define RT1015P_RT5682_OF_NAME "mediatek,mt8192_mt6359_rt1015p_rt5682"
-+#define RT1015P_RT5682S_OF_NAME "mediatek,mt8192_mt6359_rt1015p_rt5682s"
-+
- struct mt8192_mt6359_priv {
- 	struct snd_soc_jack headset_jack;
- 	struct snd_soc_jack hdmi_jack;
-@@ -68,8 +76,8 @@ static int mt8192_rt1015_i2s_hw_params(struct snd_pcm_substream *substream,
- 	return snd_soc_dai_set_sysclk(cpu_dai, 0, mclk_fs, SND_SOC_CLOCK_OUT);
- }
- 
--static int mt8192_rt5682_i2s_hw_params(struct snd_pcm_substream *substream,
--				       struct snd_pcm_hw_params *params)
-+static int mt8192_rt5682x_i2s_hw_params(struct snd_pcm_substream *substream,
-+					struct snd_pcm_hw_params *params)
- {
- 	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
- 	struct snd_soc_card *card = rtd->card;
-@@ -118,8 +126,8 @@ static const struct snd_soc_ops mt8192_rt1015_i2s_ops = {
- 	.hw_params = mt8192_rt1015_i2s_hw_params,
- };
- 
--static const struct snd_soc_ops mt8192_rt5682_i2s_ops = {
--	.hw_params = mt8192_rt5682_i2s_hw_params,
-+static const struct snd_soc_ops mt8192_rt5682x_i2s_ops = {
-+	.hw_params = mt8192_rt5682x_i2s_hw_params,
- };
- 
- static int mt8192_mt6359_mtkaif_calibration(struct snd_soc_pcm_runtime *rtd)
-@@ -950,7 +958,7 @@ static struct snd_soc_dai_link mt8192_mt6359_dai_links[] = {
- 		.init = mt8192_rt5682_init,
- 		.be_hw_params_fixup = mt8192_i2s_hw_params_fixup,
- 		SND_SOC_DAILINK_REG(i2s8),
--		.ops = &mt8192_rt5682_i2s_ops,
-+		.ops = &mt8192_rt5682x_i2s_ops,
- 	},
- 	{
- 		.name = "I2S9",
-@@ -959,7 +967,7 @@ static struct snd_soc_dai_link mt8192_mt6359_dai_links[] = {
- 		.ignore_suspend = 1,
- 		.be_hw_params_fixup = mt8192_i2s_hw_params_fixup,
- 		SND_SOC_DAILINK_REG(i2s9),
--		.ops = &mt8192_rt5682_i2s_ops,
-+		.ops = &mt8192_rt5682x_i2s_ops,
- 	},
- 	{
- 		.name = "CONNSYS_I2S",
-@@ -1039,7 +1047,7 @@ static struct snd_soc_codec_conf rt1015_amp_conf[] = {
- };
- 
- static struct snd_soc_card mt8192_mt6359_rt1015_rt5682_card = {
--	.name = "mt8192_mt6359_rt1015_rt5682",
-+	.name = RT1015_RT5682_CARD_NAME,
- 	.owner = THIS_MODULE,
- 	.dai_link = mt8192_mt6359_dai_links,
- 	.num_links = ARRAY_SIZE(mt8192_mt6359_dai_links),
-@@ -1053,14 +1061,13 @@ static struct snd_soc_card mt8192_mt6359_rt1015_rt5682_card = {
- 	.num_configs = ARRAY_SIZE(rt1015_amp_conf),
- };
- 
--static const struct snd_soc_dapm_widget
--mt8192_mt6359_rt1015p_rt5682_widgets[] = {
-+static const struct snd_soc_dapm_widget mt8192_mt6359_rt1015p_rt5682x_widgets[] = {
- 	SND_SOC_DAPM_SPK("Speakers", NULL),
- 	SND_SOC_DAPM_HP("Headphone Jack", NULL),
- 	SND_SOC_DAPM_MIC("Headset Mic", NULL),
- };
- 
--static const struct snd_soc_dapm_route mt8192_mt6359_rt1015p_rt5682_routes[] = {
-+static const struct snd_soc_dapm_route mt8192_mt6359_rt1015p_rt5682x_routes[] = {
- 	/* speaker */
- 	{ "Speakers", NULL, "Speaker" },
- 	/* headset */
-@@ -1069,23 +1076,22 @@ static const struct snd_soc_dapm_route mt8192_mt6359_rt1015p_rt5682_routes[] = {
- 	{ "IN1P", NULL, "Headset Mic" },
- };
- 
--static const struct snd_kcontrol_new mt8192_mt6359_rt1015p_rt5682_controls[] = {
-+static const struct snd_kcontrol_new mt8192_mt6359_rt1015p_rt5682x_controls[] = {
- 	SOC_DAPM_PIN_SWITCH("Speakers"),
- 	SOC_DAPM_PIN_SWITCH("Headphone Jack"),
- 	SOC_DAPM_PIN_SWITCH("Headset Mic"),
- };
- 
--static struct snd_soc_card mt8192_mt6359_rt1015p_rt5682_card = {
--	.name = "mt8192_mt6359_rt1015p_rt5682",
-+static struct snd_soc_card mt8192_mt6359_rt1015p_rt5682x_card = {
- 	.owner = THIS_MODULE,
- 	.dai_link = mt8192_mt6359_dai_links,
- 	.num_links = ARRAY_SIZE(mt8192_mt6359_dai_links),
--	.controls = mt8192_mt6359_rt1015p_rt5682_controls,
--	.num_controls = ARRAY_SIZE(mt8192_mt6359_rt1015p_rt5682_controls),
--	.dapm_widgets = mt8192_mt6359_rt1015p_rt5682_widgets,
--	.num_dapm_widgets = ARRAY_SIZE(mt8192_mt6359_rt1015p_rt5682_widgets),
--	.dapm_routes = mt8192_mt6359_rt1015p_rt5682_routes,
--	.num_dapm_routes = ARRAY_SIZE(mt8192_mt6359_rt1015p_rt5682_routes),
-+	.controls = mt8192_mt6359_rt1015p_rt5682x_controls,
-+	.num_controls = ARRAY_SIZE(mt8192_mt6359_rt1015p_rt5682x_controls),
-+	.dapm_widgets = mt8192_mt6359_rt1015p_rt5682x_widgets,
-+	.num_dapm_widgets = ARRAY_SIZE(mt8192_mt6359_rt1015p_rt5682x_widgets),
-+	.dapm_routes = mt8192_mt6359_rt1015p_rt5682x_routes,
-+	.num_dapm_routes = ARRAY_SIZE(mt8192_mt6359_rt1015p_rt5682x_routes),
- };
- 
- static int mt8192_mt6359_card_set_be_link(struct snd_soc_card *card,
-@@ -1119,6 +1125,13 @@ static int mt8192_mt6359_dev_probe(struct platform_device *pdev)
- 		return -EINVAL;
- 	card->dev = &pdev->dev;
- 
-+	if (of_device_is_compatible(pdev->dev.of_node, RT1015P_RT5682_OF_NAME))
-+		card->name = RT1015P_RT5682_CARD_NAME;
-+	else if (of_device_is_compatible(pdev->dev.of_node, RT1015P_RT5682S_OF_NAME))
-+		card->name = RT1015P_RT5682S_CARD_NAME;
-+	else
-+		dev_dbg(&pdev->dev, "No need to set card name\n");
-+
- 	hdmi_codec = of_parse_phandle(pdev->dev.of_node, "mediatek,hdmi-codec", 0);
- 	if (!hdmi_codec)
- 		dev_dbg(&pdev->dev, "The machine has no hdmi-codec\n");
-@@ -1209,12 +1222,16 @@ static int mt8192_mt6359_dev_probe(struct platform_device *pdev)
- #ifdef CONFIG_OF
- static const struct of_device_id mt8192_mt6359_dt_match[] = {
- 	{
--		.compatible = "mediatek,mt8192_mt6359_rt1015_rt5682",
-+		.compatible = RT1015_RT5682_OF_NAME,
- 		.data = &mt8192_mt6359_rt1015_rt5682_card,
- 	},
- 	{
--		.compatible = "mediatek,mt8192_mt6359_rt1015p_rt5682",
--		.data = &mt8192_mt6359_rt1015p_rt5682_card,
-+		.compatible = RT1015P_RT5682_OF_NAME,
-+		.data = &mt8192_mt6359_rt1015p_rt5682x_card,
-+	},
-+	{
-+		.compatible = RT1015P_RT5682S_OF_NAME,
-+		.data = &mt8192_mt6359_rt1015p_rt5682x_card,
- 	},
- 	{}
- };
--- 
-2.25.1
-
+Reviewed-by: Christoph Hellwig <hch@lst.de>

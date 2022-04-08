@@ -2,179 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 339BD4F8C86
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F6E04F8C1C
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:26:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233529AbiDHBoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 21:44:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39126 "EHLO
+        id S233418AbiDHBoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 21:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233418AbiDHBoQ (ORCPT
+        with ESMTP id S233532AbiDHBoU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 21:44:16 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00B6D12F166
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 18:42:13 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id f18so8435545edc.5
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 18:42:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=xCv5DXX9ijy/PE+Fv/yKOblKDG06N2ROExnKPiddkiU=;
-        b=xHLU3VTS2ptDA+EsiDb9d9GAPmO0xeEyazs1bLbJ/QVB1T+jdO4hti7wvExaysx1NL
-         PoGR5EswnEEgQpsHXqcpfB85DFTiQZtd7CvTzp7uWaKp5nQCHJ3l8X9oAPUCtimQHu3B
-         AZGE59pcru7eafp+3nm5XPQEaX+9Xw03eyr1oylhuISY7jlV+ju4dh9i/JcZFQPOK3eL
-         eVH7g+HkVs0mEGJt9BKjzqCJwjMFrVDrG0/W8Ut9g0YWnbZRAbaBzHXIA9SRbV7DQX1l
-         irC4aEnS+ULqzznFCktV2CDAgS/sEUiWKedCnKSN5FBv5ztl4OmIUA07SK0fdLxONCZk
-         OjWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=xCv5DXX9ijy/PE+Fv/yKOblKDG06N2ROExnKPiddkiU=;
-        b=bws50SHaMcI/m7z4DKWcXFgykiqtptaNC7NwTEgPD9GOuue/qx3JWReJd40YFBmICR
-         1qxQhwsAVvK2ima5B8Vq2Vss7z1Soy41yg+0at/zGUpp47CqWoB4Pshz0+H1DwVkEs4k
-         JNhQjHI5ssMIUqHBnV+45RmGMnAAKxURYdLAEe8nYefbCP42ENDOnCa0wo/LY/z3mvMw
-         Dfr/QtwNeaTT9OMjSxJqdnZ1zY+krWuXFD3aAxPI+0fEnuaKdL+m06UXDCX6tpttRxSU
-         a9euzgdCRFRu4FwFPsnEXyCK3T9+cNVMMjLOsxjM25KG2zS3pSI3zZ2C06v2+LOl/Eh9
-         04UA==
-X-Gm-Message-State: AOAM5330qMw+XG+unQRNBuOdwZbNAK2uVJgg/1IzoduFwiY9FligorM4
-        EWCpopMX5JiU+s3ehHPK0fJcxGUVdiTfWe0ISTAV
-X-Google-Smtp-Source: ABdhPJxO+N6oGriDELXQ6Ik1rLFnHwovOpG6Sz/8grFw7AbhwJUqwHvTAcztCZnXDsMAvXbi8gwPJkt7rR9hql0VoiI=
-X-Received: by 2002:a05:6402:35c9:b0:41d:1447:5f9f with SMTP id
- z9-20020a05640235c900b0041d14475f9fmr3711479edc.343.1649382132419; Thu, 07
- Apr 2022 18:42:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220329125117.1393824-1-mic@digikod.net> <20220329125117.1393824-8-mic@digikod.net>
-In-Reply-To: <20220329125117.1393824-8-mic@digikod.net>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 7 Apr 2022 21:42:01 -0400
-Message-ID: <CAHC9VhQpZ12Chgd+xMibUxgvcPjTn9FMnCdMGYbLcWG3eTqDQg@mail.gmail.com>
-Subject: Re: [PATCH v2 07/12] landlock: Add support for file reparenting with LANDLOCK_ACCESS_FS_REFER
-To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Jann Horn <jannh@google.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>
+        Thu, 7 Apr 2022 21:44:20 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A8C12F16E;
+        Thu,  7 Apr 2022 18:42:17 -0700 (PDT)
+X-UUID: 860e54d77ec040c5a98a4ae2c7253c72-20220408
+X-UUID: 860e54d77ec040c5a98a4ae2c7253c72-20220408
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <jason-jh.lin@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 972807619; Fri, 08 Apr 2022 09:42:11 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 8 Apr 2022 09:42:10 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 8 Apr 2022 09:42:10 +0800
+Message-ID: <429d177cf655c82fbe37e93b3cb452bd08ab3b5e.camel@mediatek.com>
+Subject: Re: [RESEND v17 3/7] soc: mediatek: add mtk-mmsys support for
+ mt8195 vdosys0
+From:   Jason-JH Lin <jason-jh.lin@mediatek.com>
+To:     CK Hu <ck.hu@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+CC:     David Airlie <airlied@linux.ie>, <singo.chang@mediatek.com>,
+        "Alexandre Torgue" <alexandre.torgue@foss.st.com>,
+        <postmaster@vger.kernel.org>,
+        "Fabien Parent" <fparent@baylibre.com>,
+        John 'Warthog9' Hawley <warthog9@eaglescrag.net>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <roy-cw.yeh@mediatek.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        <devicetree@vger.kernel.org>, Daniel Vetter <daniel@ffwll.ch>,
+        <nancy.lin@mediatek.com>, <linux-mediatek@lists.infradead.org>,
+        <hsinyi@chromium.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <moudy.ho@mediatek.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Date:   Fri, 8 Apr 2022 09:42:10 +0800
+In-Reply-To: <f04154f2908d3420bc48ed35273a1d4866bd40af.camel@mediatek.com>
+References: <20220407030409.9664-1-jason-jh.lin@mediatek.com>
+         <20220407030409.9664-4-jason-jh.lin@mediatek.com>
+         <f04154f2908d3420bc48ed35273a1d4866bd40af.camel@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 8:51 AM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
-wrote:
->
-> From: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
->
-> Add a new LANDLOCK_ACCESS_FS_REFER access right to enable policy writers
-> to allow sandboxed processes to link and rename files from and to a
-> specific set of file hierarchies.  This access right should be composed
-> with LANDLOCK_ACCESS_FS_MAKE_* for the destination of a link or rename,
-> and with LANDLOCK_ACCESS_FS_REMOVE_* for a source of a rename.  This
-> lift a Landlock limitation that always denied changing the parent of an
-> inode.
->
-> Renaming or linking to the same directory is still always allowed,
-> whatever LANDLOCK_ACCESS_FS_REFER is used or not, because it is not
-> considered a threat to user data.
->
-> However, creating multiple links or renaming to a different parent
-> directory may lead to privilege escalations if not handled properly.
-> Indeed, we must be sure that the source doesn't gain more privileges by
-> being accessible from the destination.  This is handled by making sure
-> that the source hierarchy (including the referenced file or directory
-> itself) restricts at least as much the destination hierarchy.  If it is
-> not the case, an EXDEV error is returned, making it potentially possible
-> for user space to copy the file hierarchy instead of moving or linking
-> it.
->
-> Instead of creating different access rights for the source and the
-> destination, we choose to make it simple and consistent for users.
-> Indeed, considering the previous constraint, it would be weird to
-> require such destination access right to be also granted to the source
-> (to make it a superset).  Moreover, RENAME_EXCHANGE would also add to
-> the confusion because of paths being both a source and a destination.
->
-> See the provided documentation for additional details.
->
-> New tests are provided with a following commit.
->
-> Cc: Paul Moore <paul@paul-moore.com>
-> Signed-off-by: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
-> Link: https://lore.kernel.org/r/20220329125117.1393824-8-mic@digikod.net
-> ---
->
-> Changes since v1:
-> * Update current_check_access_path() to efficiently handle
->   RENAME_EXCHANGE thanks to the updated LSM hook (see previous patch).
->   Only one path walk is performed per rename arguments until their
->   common mount point is reached.  Superset of access rights is correctly
->   checked, including when exchanging a file with a directory.  This
->   requires to store another matrix of layer masks.
-> * Reorder and rename check_access_path_dual() arguments in a more
->   generic way: switch from src/dst to 1/2.  This makes it easier to
->   understand the RENAME_EXCHANGE cases alongs with the others.  Update
->   and improve check_access_path_dual() documentation accordingly.
-> * Clean up the check_access_path_dual() loop: set both allowed_parent*
->   when reaching internal filesystems and remove a useless one.  This
->   allows potential renames in internal filesystems (like for other
->   operations).
-> * Move the function arguments checks from BUILD_BUG_ON() to
->   WARN_ON_ONCE() to avoid clang build error.
-> * Rename is_superset() to no_more_access() and make it handle superset
->   checks of source and destination for simple and exchange cases.
-> * Move the layer_masks_child* creation from current_check_refer_path()
->   to check_access_path_dual(): this is simpler and less error-prone,
->   especially with RENAME_EXCHANGE.
-> * Remove one optimization in current_check_refer_path() to make the code
->   simpler, especially with the RENAME_EXCHANGE handling.
-> * Remove overzealous WARN_ON_ONCE() for !access_request check in
->   init_layer_masks().
-> ---
->  include/uapi/linux/landlock.h                |  27 +-
->  security/landlock/fs.c                       | 607 ++++++++++++++++---
->  security/landlock/limits.h                   |   2 +-
->  security/landlock/syscalls.c                 |   2 +-
->  tools/testing/selftests/landlock/base_test.c |   2 +-
->  tools/testing/selftests/landlock/fs_test.c   |   3 +-
->  6 files changed, 566 insertions(+), 77 deletions(-)
+Hi CK,
 
-I'm still not going to claim that I'm a Landlock expert, but this
-looks sane to me.
+Thanks for the reviews.
 
-Reviewed-by: Paul Moore <paul@paul-moore.com>
+On Thu, 2022-04-07 at 13:58 +0800, CK Hu wrote:
+> Hi, Jason:
+> 
+> On Thu, 2022-04-07 at 11:04 +0800, jason-jh.lin wrote:
+> > 1. Add mt8195 mmsys compatible for vdosys0.
+> > 2. Add mt8195 routing table settings and fix build fail.
+> > 3. Add clock name, clock driver name and routing table into the
+> > driver data
+> >    of mt8195 vdosys0.
+> > 4. Add get match data by clock name function and clock platform
+> > labels
+> >    to identify which mmsys node is corresponding to vdosys0.
+> > 
+> > Signed-off-by: jason-jh.lin <jason-jh.lin@mediatek.com>
+> > 
+> 
+> [snip]
+> 
+> >  
+> > +static const struct mtk_mmsys_driver_data
+> > mt8195_vdosys0_driver_data
+> > = {
+> > +	.clk_name = "cfg_vdo0",
+> > +	.clk_driver = "clk-mt8195-vdo0",
+> > +	.routes = mmsys_mt8195_routing_table,
+> > +	.num_routes = ARRAY_SIZE(mmsys_mt8195_routing_table),
+> > +};
+> > +
+> > 
+> 
+> [snip]
+> 
+> >  
+> > +static int mtk_mmsys_get_match_data_by_clk_name(const struct
+> > mtk_mmsys_driver_data **data,
+> > +						struct device *dev)
+> > +{
+> > +	int i;
+> > +	struct clk *clk;
+> > +	const char *clk_name;
+> > +	const struct of_device_id *of_id =
+> > of_match_node(mtk_clk_platform_labels,
+> > +							 dev->of_node);
+> > +	const struct mtk_mmsys_driver_data *drvdata[] = {
+> > +		&mt8195_vdosys0_driver_data,
+> > +	};
+> > +
+> > +	if (!of_id || !of_id->data) {
+> > +		dev_err(dev, "Can't find match clk platform labels\n");
+> > +		return -EINVAL;
+> > +	}
+> > +
+> > +	clk = devm_clk_get(dev, NULL);
+> > +	if (IS_ERR(clk)) {
+> > +		dev_err(dev, "failed to get mmsys clk\n");
+> > +		return PTR_ERR(clk);
+> > +	}
+> > +
+> > +	clk_name = __clk_get_name(clk);
+> > +	if (!clk_name) {
+> > +		dev_err(dev, "invalid mmsys clk name\n");
+> > +		return -EINVAL;
+> > +	}
+> > +
+> > +	for (i = 0; i < ARRAY_SIZE(drvdata); i++)
+> > +		if (strncmp(drvdata[i]->clk_name, clk_name,
+> > strlen(clk_name)) == 0 &&
+> 
+> Why not
+> 
+> strcmp(drvdata[i]->clk_name, clk_name) == 0
+> 
+> Regards,
+> CK
+> 
 
-> +static inline access_mask_t init_layer_masks(
-> +               const struct landlock_ruleset *const domain,
-> +               const access_mask_t access_request,
-> +               layer_mask_t (*const layer_masks)[LANDLOCK_NUM_ACCESS_FS]=
-)
-> +{
-> +       access_mask_t handled_accesses =3D 0;
-> +       size_t layer_level;
-> +
-> +       memset(layer_masks, 0, sizeof(*layer_masks));
-> +       /* An empty access request can happen because of O_WRONLY | O_RDW=
-R. */
+I would like to block strings without '\0', but it doesn't seem
+necessary. So I will change to strcmp at the next version.
 
- ;)
+Regards,
+Jason-JH.Lin
 
---=20
-paul-moore.com
+> > +		    strncmp(drvdata[i]->clk_driver, of_id->data,
+> > strlen(of_id->data)) == 0) {
+> > +			*data = drvdata[i];
+> > +			return 0;
+> > +		}
+> > +
+> > +	return -EINVAL;
+> > +}
+> > +
+> >  
+> 
+> 
+> _______________________________________________
+> Linux-mediatek mailing list
+> Linux-mediatek@lists.infradead.org
+> 
+https://urldefense.com/v3/__http://lists.infradead.org/mailman/listinfo/linux-mediatek__;!!CTRNKA9wMg0ARbw!0MJsfiFOYUann5GooGDcIv4Lgm1FaCXDl8dDFCwiONgD0zJn0PQwJuV05-tZNZwVBxVS$
+>  
+-- 
+Jason-JH Lin <jason-jh.lin@mediatek.com>
+

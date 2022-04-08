@@ -2,140 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45A6E4F8F43
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:11:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA7534F8F46
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:12:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbiDHHNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 03:13:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57814 "EHLO
+        id S229618AbiDHHO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 03:14:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiDHHN0 (ORCPT
+        with ESMTP id S229513AbiDHHOu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 03:13:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BD35B209A72
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 00:11:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649401881;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EIdT20lZyuxUif4lmdeJV2YtVVAT8aoGpkU+KSrIRGM=;
-        b=aDxf4f0l4kagvWAtoOvj6R5Pwu21cI2UVD/PGyX6UPhfOAPcZ2vA7eyQocMK2fM6rhF6ph
-        p5+ZgxJaKu2VdrayS+eYNbCl6GXvwlZfNuoGmxuLpigKII09PgcMe1PJfQJBI0ZoOzkQi8
-        9UIxVwCgY0BpkMiGSidgzaOWK7K/5Y0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-571-3p8lm4GcNhaDsIB05JZDhg-1; Fri, 08 Apr 2022 03:11:18 -0400
-X-MC-Unique: 3p8lm4GcNhaDsIB05JZDhg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 44251805F68;
-        Fri,  8 Apr 2022 07:11:17 +0000 (UTC)
-Received: from localhost (ovpn-12-202.pek2.redhat.com [10.72.12.202])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 00E57403179;
-        Fri,  8 Apr 2022 07:11:16 +0000 (UTC)
-Date:   Fri, 8 Apr 2022 15:11:08 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Michal Suchanek <msuchanek@suse.de>, Coiby Xu <coxu@redhat.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Philipp Rudo <prudo@redhat.com>,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        AKASHI Takahiro <takahiro.akashi@linaro.org>,
-        James Morse <james.morse@arm.com>,
-        Dave Young <dyoung@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, kexec@lists.infradead.org,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        stable@kernel.org
-Subject: Re: [PATCH 1/4] Fix arm64 kexec forbidding kernels signed with keys
- in the secondary keyring to boot
-Message-ID: <Yk/eFBCqBTu4eZf2@MiWiFi-R3L-srv>
-References: <cover.1644953683.git.msuchanek@suse.de>
- <83b3583f35c50c609739a8d857d14e8410293373.1644953683.git.msuchanek@suse.de>
+        Fri, 8 Apr 2022 03:14:50 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A6420A395
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 00:12:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649401966; x=1680937966;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=p9Vyinh/bxnpuA3ME5EXESNvBi6g7SL/nHb8H8N/Zz8=;
+  b=ePexQnROL3G4KQQ3B15Ff9kELllKmc28Ipba+tahoGmZ0xwrfFsrzZ+Z
+   Lq08Zsb5rs8P7xVLW5ogTM6xZ9U5uQ55lMRv0ygiDTcjFptdZZ7Mt1FAp
+   FdDI+Zbe5WdoKwv73K4r/lONH4JW4AxBg8nYT1Uw6ybw66yZGiHRaqEui
+   UkQYmWh/DKfeQSH3kkTITQlpRX5o0urNb9LBNLQqP9O7BNh1v3qpvgZRE
+   InDnq+3lJjgqmOMlX9wzRU1+M4ZybA9MEXEAnvvHro96nYxwICTe6CmGr
+   2NXZf5ZWNoZWYSyfMiy/k4IgXHm2PVGTaYjCGGcGLaobNkQZhg9c02dKz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="261524670"
+X-IronPort-AV: E=Sophos;i="5.90,244,1643702400"; 
+   d="scan'208";a="261524670"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 00:12:46 -0700
+X-IronPort-AV: E=Sophos;i="5.90,244,1643702400"; 
+   d="scan'208";a="550403934"
+Received: from fangyaxu-mobl.ccr.corp.intel.com (HELO yhuang6-mobl1.ccr.corp.intel.com) ([10.254.214.217])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 00:12:42 -0700
+From:   Huang Ying <ying.huang@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Huang Ying <ying.huang@intel.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Rik van Riel <riel@surriel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Yang Shi <shy828301@gmail.com>, Zi Yan <ziy@nvidia.com>,
+        Wei Xu <weixugc@google.com>, osalvador <osalvador@suse.de>,
+        Shakeel Butt <shakeelb@google.com>,
+        Zhong Jiang <zhongjiang-ali@linux.alibaba.com>
+Subject: [PATCH 0/3] memory tiering: hot page selection
+Date:   Fri,  8 Apr 2022 15:12:19 +0800
+Message-Id: <20220408071222.219689-1-ying.huang@intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <83b3583f35c50c609739a8d857d14e8410293373.1644953683.git.msuchanek@suse.de>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+To optimize page placement in a memory tiering system with NUMA
+balancing, the hot pages in the slow memory node need to be
+identified.  Essentially, the original NUMA balancing implementation
+selects and promote the mostly recently accessed (MRU) pages.  But the
+recently accessed pages may be cold.  So in this patchset, we
+implement a new hot page identification algorithm based on the latency
+between NUMA balancing page table scanning and hint page fault.
 
-On 02/15/22 at 08:39pm, Michal Suchanek wrote:
-> commit d3bfe84129f6 ("certs: Add a secondary system keyring that can be added to dynamically")
-> split of .system_keyring into .builtin_trusted_keys and
-> .secondary_trusted_keys broke kexec, thereby preventing kernels signed by
-> keys which are now in the secondary keyring from being kexec'd.
-> 
-> Fix this by passing VERIFY_USE_SECONDARY_KEYRING to
-> verify_pefile_signature().
-> 
-> Cherry-picked from
-> commit ea93102f3224 ("Fix kexec forbidding kernels signed with keys in the secondary keyring to boot")
+And the hot page promotion can incur some overhead in the system.  To
+control the overhead a simple promotion rate limit mechanism is
+implemented.
 
-This line may need a line feed?
+The hot threshold used to identify the hot pages is workload dependent
+usually.  So we also implemented a hot threshold automatic adjustment
+algorithm.  The basic idea is to increase/decrease the hot threshold
+to make the number of pages that pass the hot threshold (promote
+candidate) near the rate limit.
 
-The patch 1~3 looks good to me. Coiby encountered the same issue
-on arm64, and has posted a patch series to fix that and there's clean up
-and code adjustment.
+We used the pmbench memory accessing benchmark tested the patchset on
+a 2-socket server system with DRAM and PMEM installed.  The test
+results are as follows,
 
-https://lore.kernel.org/all/20220401013118.348084-1-coxu@redhat.com/T/#u
+		pmbench score		promote rate
+		 (accesses/s)			MB/s
+		-------------		------------
+base		  146887704.1		       725.6
+hot selection     165695601.2		       544.0
+rate limit	  162814569.8		       165.2
+auto adjustment	  170495294.0                  136.9
 
-Hi Coiby,
+From the results above,
 
-Maybe you can check this patchset, and consider how to integrate your
-patches based on this patch 1~/3?
+With hot page selection patch [1/3], the pmbench score increases about
+12.8%, and promote rate (overhead) decreases about 25.0%, compared with
+base kernel.
 
-For this patch itself, ack.
+With rate limit patch [2/3], pmbench score decreases about 1.7%, and
+promote rate decreases about 69.6%, compared with hot page selection
+patch.
 
-Acked-by: Baoquan He <bhe@redhat.com>
+With threshold auto adjustment patch [3/3], pmbench score increases
+about 4.7%, and promote rate decrease about 17.1%, compared with rate
+limit patch.
 
-> 
-> Fixes: 732b7b93d849 ("arm64: kexec_file: add kernel signature verification support")
-> Cc: kexec@lists.infradead.org
-> Cc: keyrings@vger.kernel.org
-> Cc: linux-security-module@vger.kernel.org
-> Cc: stable@kernel.org
-> Signed-off-by: Michal Suchanek <msuchanek@suse.de>
-> ---
->  arch/arm64/kernel/kexec_image.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/kernel/kexec_image.c b/arch/arm64/kernel/kexec_image.c
-> index 9ec34690e255..1fbf2ee7c005 100644
-> --- a/arch/arm64/kernel/kexec_image.c
-> +++ b/arch/arm64/kernel/kexec_image.c
-> @@ -133,7 +133,8 @@ static void *image_load(struct kimage *image,
->  #ifdef CONFIG_KEXEC_IMAGE_VERIFY_SIG
->  static int image_verify_sig(const char *kernel, unsigned long kernel_len)
->  {
-> -	return verify_pefile_signature(kernel, kernel_len, NULL,
-> +	return verify_pefile_signature(kernel, kernel_len,
-> +				       VERIFY_USE_SECONDARY_KEYRING,
->  				       VERIFYING_KEXEC_PE_SIGNATURE);
->  }
->  #endif
-> -- 
-> 2.31.1
-> 
-
+Best Regards,
+Huang, Ying

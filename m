@@ -2,74 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65BAB4F8FBB
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:42:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F2C44F8FBD
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:43:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbiDHHon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 03:44:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41462 "EHLO
+        id S229840AbiDHHpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 03:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiDHHoj (ORCPT
+        with ESMTP id S229636AbiDHHpF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 03:44:39 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5EE1B60C5
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 00:42:35 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id l9-20020a05600c4f0900b0038ccd1b8642so5540064wmq.0
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 00:42:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=mHMATotH/7GH36y4JV3UnVZN/1YVFDx1H+DptS3+PWc=;
-        b=mu/sVZgEh6+wr0/vA8nHityCIOLvTeBafSpMxYQg0Ho/GexTByIYESg54GUWecIReL
-         Y5sFAnvh5Q3VphOaUxz5yeVAuVd8RjGVzh/WundduB03NIeJATZ/Ev+TguQMVev7rt0r
-         XAINJGkAohkGxKSwgUuPPcd0urmt1yqaw047ssYtI8GaW0Nuo9azgC7MUM/XlDZdZJBF
-         5Od84ntYjv3Rhvpn6BLuJb6zxuk+v6YsXIFoQWDXRIbLjoXAHSQ/9f+DWyifn0xA7PiG
-         qg6ieRl9nCgahuy8ePNmpLqFzahtcBr4rApLtfKP8svON0SgHt8iptL0upMYU46x5Z1N
-         NAEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=mHMATotH/7GH36y4JV3UnVZN/1YVFDx1H+DptS3+PWc=;
-        b=7pc4Wa/eBYDaVddDeLSJcigGN0iwuBbRAZd53v0nZRz3/GmYbpZoNnDFRWCoKnMApz
-         64gbrJ9RN572gle9NrtX7kdGyw32+1AIMKMSUATSDDMOcGeg/n3Yk3cYk36o6aDrRj3U
-         QYZyytPxWHb0vgFRMI5D27giL3a4N61pBzB3ypyxfhmF/2XVsSV5AbAN4JffVN1dgZq6
-         UsWbJPJWueRdjmOzi4ELxyHzPQQCx+qaulwZDCvFrJnd+308tRxIvbLj+jLl9nuhfAYA
-         Nfa65vrwMPfaJcgvcT/E+1pvyZPualo6PYmdy5QjbD1y7G7/IPSGBsOAMpWpb1yWBt3J
-         7q4A==
-X-Gm-Message-State: AOAM533sMIcyneLMeWlD+KpYgqtlzPQ8W4Hm6h5XeJ/zpCX/czNeiMgR
-        1IpoQYfYvJqIQKIvaVwVZRnx2g==
-X-Google-Smtp-Source: ABdhPJxvN2y8IaSXW8095VaZadvE9+99TAQdw3rmhA3hdG8AgGca4W0iH4zucfGoysujnM+oIij5eg==
-X-Received: by 2002:a05:600c:3d0e:b0:38c:9b5e:52c0 with SMTP id bh14-20020a05600c3d0e00b0038c9b5e52c0mr15289652wmb.3.1649403753807;
-        Fri, 08 Apr 2022 00:42:33 -0700 (PDT)
-Received: from localhost.localdomain ([2001:861:44c0:66c0:eacd:ce6:e294:acd1])
-        by smtp.gmail.com with ESMTPSA id m4-20020a7bcb84000000b00389efb7a5b4sm9241164wmi.17.2022.04.08.00.42.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 00:42:33 -0700 (PDT)
-From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     Jerome Brunet <jbrunet@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-amlogic@lists.infradead.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     Neil Armstrong <narmstrong@baylibre.com>
-Subject: Re: [PATCH 1/2] ARM: dts: meson: align SPI NOR node name with dtschema
-Date:   Fri,  8 Apr 2022 09:42:32 +0200
-Message-Id: <164940374766.3650310.16771762331635334011.b4-ty@baylibre.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220407142159.293836-1-krzysztof.kozlowski@linaro.org>
-References: <20220407142159.293836-1-krzysztof.kozlowski@linaro.org>
+        Fri, 8 Apr 2022 03:45:05 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2125.outbound.protection.outlook.com [40.107.255.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E081B9331
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 00:43:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KN8G1YvyxGRkePV7Vl+6of/nmY6laAQi2m+hRrY/BbTmYvPX2KnjBScrtRLCoS6BsRqLnNMPBVMgWcgaXiTPRT5YZWMHxQ/Olfv59WnDq7A4/UhXNxpWxA6cD355VPCfpqTxvA5SoI11UqMyxK2qNkkDVWHhztTq/u6TUq9IFch9+Ir50Ach0tLDsDMQtoNPZSRihsj58Y885vT+T5eAxrHE7KnY2H381HbkRZiMZEtK/Ck62lXj8PJDlW5oWCgY+eoKJAjUgGclxsh2InTmXV/VWQwD4cJUEF968h7Y7HXjnc7wq9k3BUfPsdvYrrwEafiWV5s7BJ6PpSVVGMzKGQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1lxONMgke88UwmZW/Zle7cJHpoh/OU7NuGDyJ2ekzU4=;
+ b=aRBJ42+MCE0njjYypfci9uvou7s3eeXaEku0idU848gQfLfNhedGHtXTq6XNNMQZ1jE32gJ2WOhqGUG0oZXVXRnZukIWU+j82einHSsgoha6Mjc8zK7D7PTMB2zpho9iuasQtIEMLNaFW91xnOe3GR7x8Y1m4uC1dqZQy16BVo5fI4LCIfyRCNzm6Gq4GmSQ7Hl6BdfiIcFxtwrotphUqZZpVXTkfyyznVINswaxkTFWfhe4xW5Vxy08Gcgui1LLsogShdLALDWdilBpBtJ2hD5gzqGbsBeFwj9OjKU+TNCO5b0u2BCg7sJFj6jlegv2a6z2xXfJ9ImTZve3ABCmMw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1lxONMgke88UwmZW/Zle7cJHpoh/OU7NuGDyJ2ekzU4=;
+ b=o3fPJ/Q2lA/xofh29WzCH84JfBANUDU3Yw8TLVzwm4S7xxqSrqByc4O+wq4r77j61xYjGk4uZltowRJtsztfL1EAEmk6BeMed7zVVbosINAuzltGimJF/8jCFbokLpWhYx337m7XIt+id7Cbb9AN3FpdCNX4TWwm38qh8uapNPU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com (2603:1096:400:26::14)
+ by KL1PR0601MB4243.apcprd06.prod.outlook.com (2603:1096:820:7c::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.22; Fri, 8 Apr
+ 2022 07:42:59 +0000
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::2813:af2f:32d0:7be]) by TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::2813:af2f:32d0:7be%9]) with mapi id 15.20.5144.022; Fri, 8 Apr 2022
+ 07:42:58 +0000
+From:   Yihao Han <hanyihao@vivo.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Fabio Aiuto <fabioaiuto83@gmail.com>,
+        Yihao Han <hanyihao@vivo.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Xiangyang Zhang <xyz.sun.ok@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bryan Brattlof <hello@bryanbrattlof.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc:     kernel@vivo.com
+Subject: [PATCH] staging: rtl8723bs: simplify if-if to if-else
+Date:   Fri,  8 Apr 2022 00:42:40 -0700
+Message-Id: <20220408074245.13694-1-hanyihao@vivo.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: HK0PR03CA0102.apcprd03.prod.outlook.com
+ (2603:1096:203:b0::18) To TYZPR06MB4173.apcprd06.prod.outlook.com
+ (2603:1096:400:26::14)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 522463ea-301c-4612-6644-08da193366ed
+X-MS-TrafficTypeDiagnostic: KL1PR0601MB4243:EE_
+X-Microsoft-Antispam-PRVS: <KL1PR0601MB4243F0AECD7D13007B1B8D86A2E99@KL1PR0601MB4243.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KnuJx1bZxFMdCYhpXQwXj0hf4IQoSj/yWI1sdF4LeY6eHXurYah0MW4RukMVzN94esDmP9gsMH6n2M7PijpmrFFfTxo+goAuqy4SsTjKRaj+yBPv4U6q6ARO1L2xbZsjRy+KQXaCZ8vE84hrCYzhxu93V2fpunFhXRZB2pdlTOZGl5EbPttPsHOf3s7UP2Mn7FFdoz+dMOTvQWrOsiqHzZeo9rIOBsUxjNQs+2Hdk/9PTIJAfAvq9L3grcAmyOuqq2rw1XbobtzPRdDumLOgUGLueI/GTmYgwaGt14nP3uY/dBcdvlbz1w4cswU4ndjsauco2RH+8iVIYTiqadwftzpNcKEHqWu/fGhNTWc11kGnmFLHSRDk9iqRnXZOM9j0XbzbnVp11dGyPom3A/soqhb0mLSfzCKI1OXKzqBWML1+ntXSwMpMKoFahdUVoFRPg2tuM6qVCByIFQV+juU3YWLoaPyE9xF73QjDR0o2CNy9hFMv3BkUFjJmXl3efX1GySmaDiwsaSl7j5jQbukIWigpFBRfMOgpYY2tRXGqOk0+KcQsrnpmT7oV0KLxm7PjmnMA+1a0vtR3/dQbIGNAiATt5DfBdLcW729TYibEo/LafX34J/NNUOc8UfxkWpYE9Auc2hxJDhamXSDY33IDwUldM5QzWVXwgoeB282sUDhCov1wcQMsuU+KJMF15UOcqFqzEq07SsZusJFwIO+g+5fGn5vJQJPdZXpeuZQEhvlBqiFE9pAF2UuYvkfd2RxxDBXBZTbPycMDLD8fBLF6I8QnI2d/EPu7p+kUooVbC9MC6C7BgElNQjOp6rQKAMyg
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB4173.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(966005)(36756003)(26005)(186003)(2616005)(107886003)(6666004)(66556008)(83380400001)(508600001)(110136005)(6506007)(1076003)(6512007)(52116002)(6486002)(316002)(8936002)(38100700002)(2906002)(38350700002)(921005)(8676002)(4326008)(66476007)(66946007)(86362001)(5660300002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mritXBV7TuqW7AI1sxzWU2U2xC/1RifxrNZFPmgP5uPWh4f9Jl+84H/HrBM9?=
+ =?us-ascii?Q?Vt8h/v9jK7AUUMaR+PV1OIigE51VC2lyNLlB8/ELTqeKXHHGUr+yZGa06Cx2?=
+ =?us-ascii?Q?TKCyvHBESZK6i1hVUxNP5Pnv/BDF1s6m3t5zb0Ha9y2dbdYMIxBmQq8EPovS?=
+ =?us-ascii?Q?651vlaWGN0cKDV9fU1m10Tt5lz3udfO02py7mcufltix4TuvHAaoWw+9n3Xz?=
+ =?us-ascii?Q?eMPZ5VPLDINPj5OA07QkvsmMJBSgjgrCAN88m5T+ArhCcxuhbrJ0FTNQ8rP1?=
+ =?us-ascii?Q?mPfNyGIsKeieb1V9I67/CUSEnrpOiIuILSrr6dOlOkK15h43UFbBnXS4vp2H?=
+ =?us-ascii?Q?f/DNw0VG+Eax1FIqdMu3JvtqZTFpkFtNKQsxKT2ARI1f9GWF2kQU4B1tOeAh?=
+ =?us-ascii?Q?XVp4HwqpJmLzQvCPGENon6p8d4NIs/vsPQIgA0RTnzZc7/JKI3o1sRrmI8Ts?=
+ =?us-ascii?Q?60T/zLmdzl7F2Ypqi1slgJtbA4jdp3VXi6YQ9uvrq26bjtXenQdN8HMfQmFt?=
+ =?us-ascii?Q?aKlakWF6xZaGpe8L/yEUqW9owFqOTVYHmwBDzozxKXViYHsWQ6L+Vx+srXhg?=
+ =?us-ascii?Q?2WGv9xSOBr9Cb5dPOxqOmWqxBFyx1AFmwu0s1YGisYjLHYW8tZIXNj1tw4M+?=
+ =?us-ascii?Q?FDWCOEjBPP5vk38U6HB+/img3fuwuC3zd7h/sNBZMj6C3+FEZfR8qxBLBIyC?=
+ =?us-ascii?Q?4zL4HVRwVKrbykuBdfcZvkwShQAFigS09m8UK6Lfv3uu9/6e+jB4TIQhjP95?=
+ =?us-ascii?Q?6L4c6MEl6+SjcnEsN4wOb+LKdyyCNOvr7JJc3ZLQCB2WIVWX9Yj4QPeEZjDq?=
+ =?us-ascii?Q?Qe5Qat2QEdZbNgZpTiotPcZX73jWLeHtRR7MCx4fxsKSiLers0JUb56CInXL?=
+ =?us-ascii?Q?j0lfmKlxGq3MPxGRSLgs0FYxin9W/GNDbMVx7nCyU9Yc7MdfMu3EQPp28RJw?=
+ =?us-ascii?Q?z+4e3dp+y7aTaUrdYD5vVSE9t9U8DbntB7W/c/to2UAbJQCOjiPJRJFU/3oU?=
+ =?us-ascii?Q?9fFyn/WN7qhGrO2EpCM8D5M/A64QmDjSRENAmSjrOEUJYoH1p6gN9TOWjjda?=
+ =?us-ascii?Q?1zzpT5d9McWumgdtD/Sy8BCxdwpbbNzdl8zNvrw7YesF9TPZP/g9ANJSht5R?=
+ =?us-ascii?Q?1BTJsV2xJcLGkXApVO6mjR3LYHPoBRhfWsCkzM2QfiaDbaEyK4XS1bhor+AQ?=
+ =?us-ascii?Q?rKquUvPaDIBY+VBHqGagk8l5KXm4T1EYANXRKxX8QD7gzR3K04eMoWU2GC2I?=
+ =?us-ascii?Q?7WA2ubpV+ksNSOuoqRwo0euffUsGfP6iQL/IPGN3vrrnzo6NJs/CCh4HSYJK?=
+ =?us-ascii?Q?TvCiHTh0rMSOzh2QQYDJEPJa1oRnLnXHxjeqmSW4FMspVLunVUfSSUTbIfJ6?=
+ =?us-ascii?Q?o2uejNxfvdGeK+aUxe/TvVGD8Pb8z2A8by1NQDO5F1upCp/y/42kF4pzVA/H?=
+ =?us-ascii?Q?RKNTrXTfDV9fEEBKKj1lTBXb/6wKZ4NRe8jyqlYsr2C4e5U+NAhgaMkMokkW?=
+ =?us-ascii?Q?yHjZHd1v0m0VvjpONomjaO5ZUpDNVWYOHsZmhLJh5zj+9LyuxSPGZkWAzaJq?=
+ =?us-ascii?Q?Q/DJIQoN3meFPi1+Wf0W2Qj1rJDfp8mWDzN/qsKgfsSlsJuCs5OPIbFo+cux?=
+ =?us-ascii?Q?DsIfwcCEstwgQ7FgRflZe2pxp2cROtPzjCR1bh67P8ceum3X2/LHdk6e+p/G?=
+ =?us-ascii?Q?w71AyZWF8+i0Ia5QSVEWNAGjmRPs5fR3kZaYjD47enKHE43f/n0vcbcrlHjQ?=
+ =?us-ascii?Q?TUZbuQbrwQ=3D=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 522463ea-301c-4612-6644-08da193366ed
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB4173.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Apr 2022 07:42:58.8769
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: t6XmIZN8JbGe3dSyDYWUOyJRq6KG8ez23xfcK+TeeS6OzH2l+i9SdoKw1NgjkoIlKii85JMaF+GMqTeirq0M3Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB4243
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,19 +121,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Replace `if (!recvbuf->pskb)` with `else` for simplification and add curly
+brackets according to the kernel coding style:
 
-On Thu, 7 Apr 2022 16:21:58 +0200, Krzysztof Kozlowski wrote:
-> The node names should be generic and SPI NOR dtschema expects "flash".
-> 
-> 
+"Do not unnecessarily use braces where a single statement will do."
 
-Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v5.19/dt64)
+...
 
-[1/2] ARM: dts: meson: align SPI NOR node name with dtschema
-      (no commit info)
-[2/2] arm64: dts: meson: align SPI NOR node name with dtschema
-      https://git.kernel.org/amlogic/c/8771ce5eadb5b73daab190c2451172e43e16ae41
+"This does not apply if only one branch of a conditional statement is
+a single statement; in the latter case use braces in both branches"
 
+Please refer to:
+https://www.kernel.org/doc/html/v5.17-rc8/process/coding-style.html
+
+Signed-off-by: Yihao Han <hanyihao@vivo.com>
+---
+ drivers/staging/rtl8723bs/hal/sdio_ops.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/staging/rtl8723bs/hal/sdio_ops.c b/drivers/staging/rtl8723bs/hal/sdio_ops.c
+index a545832a468e..739fea437f69 100644
+--- a/drivers/staging/rtl8723bs/hal/sdio_ops.c
++++ b/drivers/staging/rtl8723bs/hal/sdio_ops.c
+@@ -818,10 +818,9 @@ static struct recv_buf *sd_recv_rxfifo(struct adapter *adapter, u32 size)
+ 			tmpaddr = (SIZE_PTR)recvbuf->pskb->data;
+ 			alignment = tmpaddr & (RECVBUFF_ALIGN_SZ - 1);
+ 			skb_reserve(recvbuf->pskb, (RECVBUFF_ALIGN_SZ - alignment));
+-		}
+-
+-		if (!recvbuf->pskb)
++		} else {
+ 			return NULL;
++		}
+ 	}
+ 
+ 	/* 3 3. read data from rxfifo */
 -- 
-Neil
+2.17.1
+

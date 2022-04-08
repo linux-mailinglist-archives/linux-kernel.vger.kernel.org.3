@@ -2,66 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD3004F8AD9
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 02:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABBF74F8B70
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 02:56:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232921AbiDHAi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 20:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47166 "EHLO
+        id S232934AbiDHAjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 20:39:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232896AbiDHAiy (ORCPT
+        with ESMTP id S232896AbiDHAjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 20:38:54 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F384310660A
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 17:36:52 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id x21so12455162ybd.6
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 17:36:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=1HcF8x3UIKiVVn/nUxJJBAAmWRasyyi8SHqMPG/VXOo=;
-        b=oaMxNPsncnAcpTqjMOuO0KwQi4OT0SDBn7pfXGEpdMPaPrLYwKpBZBUYODAZSozbUB
-         sxIKaUFbuU33BA2dzhhpejRMykt1RzGUGClcE2msSrrs2Jki6k7MAWCstFYW9FRlFpSv
-         1Gq2pVdVXJ4AymSvGzwloiIO/8VW8a1mq9mA78pY6rWIw7DMc2pw6FhKoiGhrOD8k1DN
-         owUWeoI1ArpIpiam8YpGd6rPRmQDd2Z6rM7ta/RnQsNhVcBNNohjucbWEzl3+vxsBsP6
-         qpVwRmC1W97xbVHWYTEVYQceRg0jt0Y9/gqetveqpSbGOyckPoUOcQ/gS0TFX1dGhx01
-         colQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=1HcF8x3UIKiVVn/nUxJJBAAmWRasyyi8SHqMPG/VXOo=;
-        b=uRXBu7FYjJZDLMNtqk9k+BCMV0EDFIL+ZIlIAgu7V/+i8OUuoTS0f6g4wG34Lh+kBX
-         8VzEhuQI1L1dqfpOO4f8kXqONOJN6GF/3sl24LQOcr0bqsOvnsuNLesPrmhgFXYSdTGi
-         tdvZtd6eq3S3yvpblM0PxIRNVY6rtOpU/Ky3XEwN5K6Rs5O3vHCPc9SN7XhPTeT6wSIy
-         LILfYUxM0Wl2BUrerupKbaDRZQA3499OXvrxINFEGO0Lrzh/7vgn7aXeVYG32+pSyAcp
-         uPFV1twADoXlBso7f7o8fhcKe03k7oxRa7T7K0bs5zL7Q7B8jGYYEaOg+s3XEZ8IrfOU
-         RYAg==
-X-Gm-Message-State: AOAM531hVS+OxCTedbnD8Y7iuifO+sLziSo8aQeL/NR0mV+TqV43TTjr
-        qJ93OMXNCFTOfrXJrYxcQfsiTJz8iaUc3DiYRrC2xQ==
-X-Google-Smtp-Source: ABdhPJzWsXMCj1cr1xBJojZihq5vS7dfcZikd6HI1JCDrpJQ8DPYyVnw3ZmLS5hYc+g9AjciEhkP1I+4TC/Qu7iRa8o=
-X-Received: by 2002:a25:b991:0:b0:610:bf4e:1b33 with SMTP id
- r17-20020a25b991000000b00610bf4e1b33mr12978643ybg.352.1649378212045; Thu, 07
- Apr 2022 17:36:52 -0700 (PDT)
+        Thu, 7 Apr 2022 20:39:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5D3108195;
+        Thu,  7 Apr 2022 17:37:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E526F61877;
+        Fri,  8 Apr 2022 00:37:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CC5FC385A9;
+        Fri,  8 Apr 2022 00:37:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649378222;
+        bh=i2XZq/Xu6H3REApuY9LUTcK2PgJHPjIMKr2oGYUJS+w=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=GyQOwOUtHJkHjJBvAbOA3vKcRaXiuGK57yvu8DZxwmGJcODd46H+mDgSPxPys/heZ
+         YIA0G9VUuHm1uD7T4wTIltvaCJC33lHy63MYlQk8SGTNJbRU8tEOeOnljBjOCAT9CK
+         0pkORZXXiztnnyvnEXxA6umz/fDxUB8+ygVGJRN67+GDyOPju3k4NkWVDQXfZIVnqt
+         t43io2YNgWVMMQqRfrSSujgXIMWNxjVIRB51B9IoXYbRRSAevcZ2H1AYAxR2kaIBai
+         y1XQmbuyJeV+kNq4WV35tfhDfL6qmQb5NcSx5aeFl/QeMCYlZ2rtFMzsrRnwiDQA1X
+         u5B355z4sgGyw==
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2db2add4516so80278687b3.1;
+        Thu, 07 Apr 2022 17:37:02 -0700 (PDT)
+X-Gm-Message-State: AOAM532eJRsVSTymVVl59Nmc+EmZUe0oS5fRw26vU0I81AOraahNo+0o
+        EdAaFSUZsSDH382pYfH6bYywxXjziBW+Mim3vAs=
+X-Google-Smtp-Source: ABdhPJwvzDb1VlAhZdTtbxJtXVdfI6VVJsSdq+zEc/GLZ2R9uDVGKWfT7S5dkfsKzl9zBEZRMG+1axuvTWqaaMPQYDU=
+X-Received: by 2002:a0d:f6c6:0:b0:2e5:bf17:4dce with SMTP id
+ g189-20020a0df6c6000000b002e5bf174dcemr14410627ywf.130.1649378221272; Thu, 07
+ Apr 2022 17:37:01 -0700 (PDT)
 MIME-Version: 1.0
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Thu, 7 Apr 2022 17:36:16 -0700
-Message-ID: <CAGETcx-tH0+WoqH6s=Zw6VSaHwFcBhvaJKLJRLHGtUEs+skCvQ@mail.gmail.com>
-Subject: Re: [PATCH v2] printk: ringbuffer: Improve prb_next_seq() performance
-To:     pmladek@suse.com
-Cc:     Chunlei.wang@mediatek.com, john.ogness@linutronix.de,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>, senozhatsky@chromium.org,
-        Android Kernel Team <kernel-team@android.com>
+References: <20220328081127.26148-1-xiam0nd.tong@gmail.com>
+In-Reply-To: <20220328081127.26148-1-xiam0nd.tong@gmail.com>
+From:   Song Liu <song@kernel.org>
+Date:   Thu, 7 Apr 2022 17:36:48 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW6S=PJsgVR=OkObMvs9uJ2QA3LFe+ZH8XtEyKRFh7XxHA@mail.gmail.com>
+Message-ID: <CAPhsuW6S=PJsgVR=OkObMvs9uJ2QA3LFe+ZH8XtEyKRFh7XxHA@mail.gmail.com>
+Subject: Re: [PATCH v2] md: fix an incorrect NULL check in sync_sbs
+To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Cc:     rgoldwyn@suse.com, Guoqing Jiang <guoqing.jiang@linux.dev>,
+        linux-raid <linux-raid@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,42 +64,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> --- a/kernel/printk/printk_ringbuffer.h
-> +++ b/kernel/printk/printk_ringbuffer.h
-> @@ -75,6 +75,7 @@ struct prb_desc_ring {
->  struct printk_info *infos;
->  atomic_long_t head_id;
->  atomic_long_t tail_id;
-> + atomic_long_t last_finalized_id;
-
-I really know nothing about this code, but while looking around
-kernel/printk/ I noticed kernel/printk/printk.c has these lines in
-log_buf_vmcoreinfo_setup().
-
-        VMCOREINFO_STRUCT_SIZE(prb_desc_ring);
-        VMCOREINFO_OFFSET(prb_desc_ring, count_bits);
-        VMCOREINFO_OFFSET(prb_desc_ring, descs);
-        VMCOREINFO_OFFSET(prb_desc_ring, infos);
-        VMCOREINFO_OFFSET(prb_desc_ring, head_id);
-        VMCOREINFO_OFFSET(prb_desc_ring, tail_id);
-
-Would this header file change also require a change to that location?
-Something like
-
-        VMCOREINFO_OFFSET(prb_desc_ring, head_id);
-        VMCOREINFO_OFFSET(prb_desc_ring, tail_id);
-+        VMCOREINFO_OFFSET(prb_desc_ring, last_finalized_id);
-
--Saravana
-
-> };
+On Mon, Mar 28, 2022 at 1:11 AM Xiaomeng Tong <xiam0nd.tong@gmail.com> wrote:
 >
-> /*
-> @@ -258,6 +259,7 @@ static struct printk_ringbuffer name = { \
->  .infos = &_##name##_infos[0], \
->  .head_id = ATOMIC_INIT(DESC0_ID(descbits)), \
->  .tail_id = ATOMIC_INIT(DESC0_ID(descbits)), \
-> + .last_finalized_id = ATOMIC_INIT(DESC0_ID(descbits)), \
->  }, \
->  .text_data_ring = { \
->  .size_bits = (avgtextbits) + (descbits), \
+> The bug is here:
+>         if (!rdev)
+>
+> The list iterator value 'rdev' will *always* be set and non-NULL
+> by rdev_for_each(), so it is incorrect to assume that the iterator
+> value will be NULL if the list is empty or no element found.
+> Otherwise it will bypass the NULL check and lead to invalid memory
+> access passing the check.
+>
+> To fix the bug, use a new variable 'iter' as the list iterator,
+> while using the original variable 'pdev' as a dedicated pointer to
+
+s/pdev/rdev/
+
+> point to the found element.
+>
+> Cc: stable@vger.kernel.org
+> Fixes: 2aa82191ac36c ("md-cluster: Perform a lazy update")
+
+"Fixes" should use a hash of 12 characters (13 given here). Did
+checkpatch.pl complain about it?
+
+> Acked-by: Guoqing Jiang <guoqing.jiang@linux.dev>
+> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+> ---
+>
+> changes since v1:
+>  - rephrase the subject (Guoqing Jiang)
+>  - add Acked-by: for Guoqing Jiang
+> v1:https://lore.kernel.org/lkml/20220327080002.11923-1-xiam0nd.tong@gmail.com/
+>
+> ---
+>  drivers/md/md.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/md/md.c b/drivers/md/md.c
+> index 4d38bd7dadd6..7476fc204172 100644
+> --- a/drivers/md/md.c
+> +++ b/drivers/md/md.c
+> @@ -2629,14 +2629,16 @@ static void sync_sbs(struct mddev *mddev, int nospares)
+>
+>  static bool does_sb_need_changing(struct mddev *mddev)
+>  {
+> -       struct md_rdev *rdev;
+> +       struct md_rdev *rdev = NULL, *iter;
+>         struct mdp_superblock_1 *sb;
+>         int role;
+>
+>         /* Find a good rdev */
+> -       rdev_for_each(rdev, mddev)
+> -               if ((rdev->raid_disk >= 0) && !test_bit(Faulty, &rdev->flags))
+> +       rdev_for_each(iter, mddev)
+> +               if ((iter->raid_disk >= 0) && !test_bit(Faulty, &iter->flags)) {
+> +                       rdev = iter;
+>                         break;
+> +               }
+>
+>         /* No good device found. */
+>         if (!rdev)
+> --
+> 2.17.1
+>

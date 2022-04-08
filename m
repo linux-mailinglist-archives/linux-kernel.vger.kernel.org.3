@@ -2,128 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54EC94F8B28
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 02:56:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DBF64F8AC1
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 02:55:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232986AbiDHAkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 20:40:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53002 "EHLO
+        id S233010AbiDHAlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 20:41:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232174AbiDHAkN (ORCPT
+        with ESMTP id S232174AbiDHAls (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 20:40:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3EF16F6FF;
-        Thu,  7 Apr 2022 17:38:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A0CA2B829B3;
-        Fri,  8 Apr 2022 00:38:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3463EC385A5;
-        Fri,  8 Apr 2022 00:38:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649378289;
-        bh=CVHEzTa06w9IXQftEgZii1PHojo5m4h3tRQOFvFM99s=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pDZeBdKpytYf/RpT1wvDDi+93EZlNj/SQN1mhUKsjCetKqxsE6F3pgzwpBfPDQ4fZ
-         FDAD/ljw+OPvXlLbCvfQe2svXgSycFXKpYYoJGp6rRxieZiVYeHpGCmUAoDCCYtbH8
-         W0I7eNZQyi5sGKmBCFfHHlnjslk1VjRGX4MgsJIG25DPlKKkCEzt6tC+wrqhv541qD
-         KcvHrx1Imk/jfBC24wbY57AvDUSKiSYtmLuBDiwoz+VEmkkC3QUCfdFDn4R5qxpKdk
-         RWivXlbHO75PU/0wbwV8D3L2WTTXoFKGTqcxs4lIMSLbDNu+PUM0Jb/NB8Dy4v6GLr
-         4OesR0MEr+z9g==
-Received: by mail-yb1-f169.google.com with SMTP id r5so2738659ybd.8;
-        Thu, 07 Apr 2022 17:38:09 -0700 (PDT)
-X-Gm-Message-State: AOAM533OExlC8UVxblCgT71lQitsvmTOOnRLDx7GDxhtF9DtK4ztokLu
-        2QAymecNd5vFiuZulMpO3wN83pej61ButXrhYHI=
-X-Google-Smtp-Source: ABdhPJxZSEJvXnOSEuuJQrEwsomQA54vyst5hwzUzcTr7GcAKkuWwIWw4Yq8ZGv7YBWuDHCKqqxUUcRUzkhhmnK8mdE=
-X-Received: by 2002:a25:8b81:0:b0:629:17d5:68c1 with SMTP id
- j1-20020a258b81000000b0062917d568c1mr11288152ybl.449.1649378288275; Thu, 07
- Apr 2022 17:38:08 -0700 (PDT)
+        Thu, 7 Apr 2022 20:41:48 -0400
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13002200
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 17:39:47 -0700 (PDT)
+Received: by mail-pg1-f178.google.com with SMTP id 125so6374464pgc.11
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 17:39:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0Xk1+fs4EReZHznvydunkPsq1TyAFPHWXf8m9Tth19E=;
+        b=fI5tUm7ynALpjJ8wDQj5vFRDAYLzHnU5gAS4asSzYXKeN+XyPXfKmi0RYelE/q26jB
+         EkU4Y/N0mLVwh80d7bDmgjTPdfkCB6q55thNrgVNZYe/ubEKN9eBDHUZMwNGQgvhx5eu
+         0UG2Dy4QaAqaFvqlBjKnppf2blRCdWXSdMZY8MLQPQzEKTLpdzg5EKZ/N8L+Y9oncsp4
+         rqogK0z8jTcHm6dwUhecbFJ5wHUvhizjH0Di0Ru/hg4/RtTSYBIYiE9IUtobsAbiq1NW
+         5gXORgUybpWIntDpO3ArreFtf/aylajof6TO1Zla5t0WTgNSOkxTKU1XYhCk4z7iAUNA
+         teCw==
+X-Gm-Message-State: AOAM5314Kfd+gpY0j07BgpnAtjaE3BxfP4rtVD+O0H34/hMQ/vouDQgB
+        qJKKMt45d8OE28gffKsC9Ys=
+X-Google-Smtp-Source: ABdhPJztJZ7L+/5PHv3zgM7cX3sQyQR4/FykBiwQshDvB8dL1MiwJOzEg2s1fSMTGpxDxXJwpGGhvg==
+X-Received: by 2002:a05:6a00:3018:b0:4fa:d533:45e5 with SMTP id ay24-20020a056a00301800b004fad53345e5mr16703828pfb.13.1649378386475;
+        Thu, 07 Apr 2022 17:39:46 -0700 (PDT)
+Received: from fedora (136-24-99-118.cab.webpass.net. [136.24.99.118])
+        by smtp.gmail.com with ESMTPSA id k11-20020a056a00168b00b004f7e1555538sm23597254pfc.190.2022.04.07.17.39.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 17:39:46 -0700 (PDT)
+Date:   Thu, 7 Apr 2022 17:39:43 -0700
+From:   Dennis Zhou <dennis@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Qi Zheng <zhengqi.arch@bytedance.com>, tj@kernel.org, cl@linux.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        zhouchengming@bytedance.com, songmuchun@bytedance.com,
+        Ming Lei <ming.lei@redhat.com>
+Subject: Re: [PATCH] percpu_ref: call wake_up_all() after percpu_ref_put()
+ completes
+Message-ID: <Yk+ETwQ2aQmCgrfk@fedora>
+References: <20220407103335.36885-1-zhengqi.arch@bytedance.com>
+ <20220407155752.769632b737f79b038cf83742@linux-foundation.org>
 MIME-Version: 1.0
-References: <20220328080559.25984-1-xiam0nd.tong@gmail.com>
-In-Reply-To: <20220328080559.25984-1-xiam0nd.tong@gmail.com>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 7 Apr 2022 17:37:55 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW6AJAo_k1a5-EiUp-Qx9Rp=jkON155AtOMRO2JmhBVFjw@mail.gmail.com>
-Message-ID: <CAPhsuW6AJAo_k1a5-EiUp-Qx9Rp=jkON155AtOMRO2JmhBVFjw@mail.gmail.com>
-Subject: Re: [PATCH] md: fix an incorrect NULL check in md_reload_sb
-To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Cc:     rgoldwyn@suse.com, Guoqing Jiang <guoqing.jiang@linux.dev>,
-        linux-raid <linux-raid@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220407155752.769632b737f79b038cf83742@linux-foundation.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 1:06 AM Xiaomeng Tong <xiam0nd.tong@gmail.com> wrote:
->
-> The bug is here:
->         if (!rdev || rdev->desc_nr != nr) {
->
-> The list iterator value 'rdev' will *always* be set and non-NULL
-> by rdev_for_each_rcu(), so it is incorrect to assume that the
-> iterator value will be NULL if the list is empty or no element
-> found (In fact, it will be a bogus pointer to an invalid struct
-> object containing the HEAD). Otherwise it will bypass the check
-> and lead to invalid memory access passing the check.
->
-> To fix the bug, use a new variable 'iter' as the list iterator,
-> while using the original variable 'pdev' as a dedicated pointer to
-> point to the found element.
->
-> Cc: stable@vger.kernel.org
-> Fixes: 70bcecdb1534 ("amd-cluster: Improve md_reload_sb to be less error prone")
+Hello,
 
-s/amd-cluster/md-cluster/
+On Thu, Apr 07, 2022 at 03:57:52PM -0700, Andrew Morton wrote:
+> (cc Ming Lei)
+> 
+> On Thu,  7 Apr 2022 18:33:35 +0800 Qi Zheng <zhengqi.arch@bytedance.com> wrote:
+> 
+> > In the percpu_ref_call_confirm_rcu(), we call the wake_up_all()
+> > before calling percpu_ref_put(), which will cause the value of
+> > percpu_ref to be unstable when percpu_ref_switch_to_atomic_sync()
+> > returns.
+> > 
+> > 	CPU0				CPU1
+> > 
+> > percpu_ref_switch_to_atomic_sync(&ref)
+> > --> percpu_ref_switch_to_atomic(&ref)
+> >     --> percpu_ref_get(ref);	/* put after confirmation */
+> > 	call_rcu(&ref->data->rcu, percpu_ref_switch_to_atomic_rcu);
+> > 
+> > 					percpu_ref_switch_to_atomic_rcu
+> > 					--> percpu_ref_call_confirm_rcu
+> > 					    --> data->confirm_switch = NULL;
+> > 						wake_up_all(&percpu_ref_switch_waitq);
+> > 
+> >     /* here waiting to wake up */
+> >     wait_event(percpu_ref_switch_waitq, !ref->data->confirm_switch);
+> > 						(A)percpu_ref_put(ref);
+> > /* The value of &ref is unstable! */
+> > percpu_ref_is_zero(&ref)
+> > 						(B)percpu_ref_put(ref);
+> > 
+> > As shown above, assuming that the counts on each cpu add up to 0 before
+> > calling percpu_ref_switch_to_atomic_sync(), we expect that after switching
+> > to atomic mode, percpu_ref_is_zero() can return true. But actually it will
+> > return different values in the two cases of A and B, which is not what
+> > we expected.
+> > 
+> > Maybe the original purpose of percpu_ref_switch_to_atomic_sync() is
+> > just to ensure that the conversion to atomic mode is completed, but it
+> > should not return with an extra reference count.
+> > 
+> > Calling wake_up_all() after percpu_ref_put() ensures that the value of
+> > percpu_ref is stable after percpu_ref_switch_to_atomic_sync() returns.
+> > So just do it.
+> 
+> Thanks.  I'll grab this, but shall await input from others before doing
+> anything else with it.
+> 
 
-> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-> ---
->
-> changes from v1:
->  - rephrase the subject (Guoqing Jiang)
->
-> v1:https://lore.kernel.org/lkml/20220327080111.12028-1-xiam0nd.tong@gmail.com/
->
-> ---
->  drivers/md/md.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/md/md.c b/drivers/md/md.c
-> index 7476fc204172..f156678c08bc 100644
-> --- a/drivers/md/md.c
-> +++ b/drivers/md/md.c
-> @@ -9794,16 +9794,18 @@ static int read_rdev(struct mddev *mddev, struct md_rdev *rdev)
->
->  void md_reload_sb(struct mddev *mddev, int nr)
->  {
-> -       struct md_rdev *rdev;
-> +       struct md_rdev *rdev = NULL, *iter;
->         int err;
->
->         /* Find the rdev */
-> -       rdev_for_each_rcu(rdev, mddev) {
-> -               if (rdev->desc_nr == nr)
-> +       rdev_for_each_rcu(iter, mddev) {
-> +               if (iter->desc_nr == nr) {
-> +                       rdev = iter;
->                         break;
-> +               }
->         }
->
-> -       if (!rdev || rdev->desc_nr != nr) {
-> +       if (!rdev) {
->                 pr_warn("%s: %d Could not find rdev with nr %d\n", __func__, __LINE__, nr);
->                 return;
->         }
-> --
-> 2.17.1
->
+Seems right to me. The percpu_ref protects the __percpu_ref_exit(), not
+the waiters.
+
+Acked-by: Dennis Zhou <dennis@kernel.org>
+
+Thanks,
+Dennis
+
+> > Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+> > +++ b/lib/percpu-refcount.c
+> > @@ -154,13 +154,14 @@ static void percpu_ref_call_confirm_rcu(struct rcu_head *rcu)
+> >  
+> >  	data->confirm_switch(ref);
+> >  	data->confirm_switch = NULL;
+> > -	wake_up_all(&percpu_ref_switch_waitq);
+> >  
+> >  	if (!data->allow_reinit)
+> >  		__percpu_ref_exit(ref);
+> >  
+> >  	/* drop ref from percpu_ref_switch_to_atomic() */
+> >  	percpu_ref_put(ref);
+> > +
+> > +	wake_up_all(&percpu_ref_switch_waitq);
+> >  }
+> >  
+> >  static void percpu_ref_switch_to_atomic_rcu(struct rcu_head *rcu)
+> 

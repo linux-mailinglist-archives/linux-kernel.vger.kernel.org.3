@@ -2,114 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAA7D4F8F0F
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:07:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FFF24F8F12
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:07:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229539AbiDHG73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 02:59:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35556 "EHLO
+        id S229462AbiDHHAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 03:00:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiDHG72 (ORCPT
+        with ESMTP id S229453AbiDHHAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 02:59:28 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 614031C1ED0
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 23:57:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649401046; x=1680937046;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Vv9NH8J3xtabiSJIAMlMbK85qkhOBLaU6uB5sigmv8s=;
-  b=eP0fzWOUiczmy4RRNAYpTts0AHgTBiFBPlxEhqwI7kN0hdXM62BDl6L3
-   nJrDITl48bMZDUWYxsMkY8ElfaStelZm5HQAEtj1/qHSqQBZJF71HhPle
-   n0UwPjlGs84Ff/d60XmgBEYSh9iBKAw/4H4UD5dgpItmFWA2aUKOPNbC6
-   Tq6uFEj8r2we4ItYR9yoMk70UJ/c2fI9ONkW8nqlww55btBdNvl4sLALI
-   UWI6H6WWstByZSbGExwa4saJOMTzr3mZ8otfQ+DKjjpLtZKO4SOHBI+uo
-   iIMLuiBGyQ9E4XocnIu9jZZnOtMfKkvyu8yBZadG1avLnuLQuX7Blm2AX
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="261520470"
-X-IronPort-AV: E=Sophos;i="5.90,244,1643702400"; 
-   d="scan'208";a="261520470"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 23:57:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,244,1643702400"; 
-   d="scan'208";a="698082569"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 07 Apr 2022 23:57:24 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nciYd-000695-TS;
-        Fri, 08 Apr 2022 06:57:23 +0000
-Date:   Fri, 8 Apr 2022 14:57:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Phil Elwell <phil@raspberrypi.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Dom Cobley <popcornmix@gmail.com>
-Subject: [l1k:smsc95xx_5.17 276/886]
- drivers/staging/fbtft/fb_st7735r.c:189:5: warning: no previous prototype for
- 'variant_adafruit18'
-Message-ID: <202204081457.WVlGdoRe-lkp@intel.com>
+        Fri, 8 Apr 2022 03:00:11 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB7B1D4C35;
+        Thu,  7 Apr 2022 23:58:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1649401086;
+  x=1680937086;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XDveWXVaLR/QYk55Nt6b8wyjKKxTT08U/ZfdajNs92I=;
+  b=m+GsHMMDFbt6rdZYMVYyo+r8WvfifKqt1In/oS6q0VT54PN6nFdQCSuU
+   5I/uSfO91FJnDsPjvgimZaZFnWnEtzqWgszkKm2uwY1UF9U1JsBWqMrm1
+   O05WVnxtmPSdhdASZN6ud9zO4E110rvsbK7mgS+Nyfg5U/LPsPgKdsxOa
+   T1geEhnpLTZZ4QFrPOoizODmskrD9xGRcFw7mJoiga4sDf27ssHUZUjAs
+   IreA6cyLJl9gX1NvxQMvF4pba3P9bE1CNLvcbMwT+Wm0bqwDGgzSDgMTD
+   s1S+kL/+SSkll6KfVIKP1SsM/s3jgzWB2NzCao23zwKFhoJ6LbATt1H7h
+   A==;
+Date:   Fri, 8 Apr 2022 08:58:03 +0200
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     "krzk@kernel.org" <krzk@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        kernel <kernel@axis.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v3 1/4] dt-bindings: timer: exynos4210-mct: Add ARTPEC-8
+ MCT support
+Message-ID: <20220408065803.GA31189@axis.com>
+References: <20220407074432.424578-1-vincent.whitchurch@axis.com>
+ <20220407074432.424578-2-vincent.whitchurch@axis.com>
+ <Yk79acnuZE1Wj/3s@robh.at.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
+In-Reply-To: <Yk79acnuZE1Wj/3s@robh.at.kernel.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/l1k/linux smsc95xx_5.17
-head:   05d68ced287b30f62f18f95b5476135ef669804a
-commit: a6418ad0878bd7646203a3b02164c20a162a8110 [276/886] staging/fbtft: Add support for display variants
-config: xtensa-randconfig-r033-20220408 (https://download.01.org/0day-ci/archive/20220408/202204081457.WVlGdoRe-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/l1k/linux/commit/a6418ad0878bd7646203a3b02164c20a162a8110
-        git remote add l1k https://github.com/l1k/linux
-        git fetch --no-tags l1k smsc95xx_5.17
-        git checkout a6418ad0878bd7646203a3b02164c20a162a8110
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=xtensa SHELL=/bin/bash drivers/staging/fbtft/
+On Thu, Apr 07, 2022 at 05:04:09PM +0200, Rob Herring wrote:
+> On Thu, Apr 07, 2022 at 09:44:29AM +0200, Vincent Whitchurch wrote:
+> >  .../timer/samsung,exynos4210-mct.yaml         | 26 +++++++++++++++++++
+> >  1 file changed, 26 insertions(+)
+> 
+> What's this based on? Doesn't apply on v5.18-rc1.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This series is still based on Krzysztof's "dt-bindings: timer:
+exynos4210-mct: describe known hardware and its interrupts".  The cover
+letter mentions this but not very prominently, sorry.
 
-All warnings (new ones prefixed by >>):
+That patch was reviewed a while ago but doesn't seem to have made it to
+v5.18-rc1, but I see that Krzysztof reposted it yesterday: 
 
->> drivers/staging/fbtft/fb_st7735r.c:189:5: warning: no previous prototype for 'variant_adafruit18' [-Wmissing-prototypes]
-     189 | int variant_adafruit18(struct fbtft_display *display)
-         |     ^~~~~~~~~~~~~~~~~~
->> drivers/staging/fbtft/fb_st7735r.c:195:5: warning: no previous prototype for 'variant_adafruit18_green' [-Wmissing-prototypes]
-     195 | int variant_adafruit18_green(struct fbtft_display *display)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/variant_adafruit18 +189 drivers/staging/fbtft/fb_st7735r.c
-
-   188	
- > 189	int variant_adafruit18(struct fbtft_display *display)
-   190	{
-   191		display->gamma = ADAFRUIT18_GAMMA;
-   192		return 0;
-   193	}
-   194	
- > 195	int variant_adafruit18_green(struct fbtft_display *display)
-   196	{
-   197		display->gamma = ADAFRUIT18_GAMMA;
-   198		display->fbtftops.set_addr_win = adafruit18_green_tab_set_addr_win;
-   199		return 0;
-   200	}
-   201	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+ https://lore.kernel.org/lkml/20220407194127.19004-1-krzysztof.kozlowski@linaro.org/

@@ -2,71 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 203C04F9681
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 15:14:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD8164F9689
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 15:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236039AbiDHNQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 09:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42824 "EHLO
+        id S236189AbiDHNUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 09:20:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232740AbiDHNQA (ORCPT
+        with ESMTP id S236149AbiDHNUc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 09:16:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1A7EA356;
-        Fri,  8 Apr 2022 06:13:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 69CFC60FA7;
-        Fri,  8 Apr 2022 13:13:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2550C385A3;
-        Fri,  8 Apr 2022 13:13:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649423635;
-        bh=I/sH4Z0xGBHI7ug7PEjQLDL6PwxzNs+O40t2lamCdAg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=paAnEef7FXGw6SkN1DeZazjXUrTrWnlbuIJA94cEwMqCo1IXh+54ziV2wF9jVRxkh
-         2rtH68RCh5WkgigE98L/t4ZJkq84YuezuRojX3GjZzmehMFAcbTmN2mdVhKZwF9Os9
-         NI2WOlC5G0TEEzbflWsHJTOUqXReVfLCHZAzrmSwBzdpiQP4d72gD+3phSXPOnRjfU
-         HrbYWXk/ZxNoD1MyIuRfJztA5O9b5uijKt4qrLAb1Q5AiGEvy/CAiE021Xd5D6+tva
-         gZqPI2C763XA9HDx7EqiIlFTD0nReUXKhM7znAtF9MyX/BAxZajj5cmDGBPoBiNuJ2
-         9pJ1Pl73QIyzw==
-Date:   Fri, 8 Apr 2022 18:43:51 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Zong Li <zong.li@sifive.com>
-Cc:     robh+dt@kernel.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, krzysztof.kozlowski@canonical.com,
-        conor.dooley@microchip.com, geert@linux-m68k.org,
-        bin.meng@windriver.com, green.wan@sifive.com,
-        dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v8 0/4] Determine the number of DMA channels by
- 'dma-channels' property
-Message-ID: <YlA1DwdIMoQ1dXZS@matsya>
-References: <cover.1648461096.git.zong.li@sifive.com>
+        Fri, 8 Apr 2022 09:20:32 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5855ECC5E;
+        Fri,  8 Apr 2022 06:18:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649423908; x=1680959908;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=v11wVOUBXjF91c7/a49xOWZxnE+WntSYIN4gsgCmFPE=;
+  b=SahQEznnpXn7SU6+7w5Gl25KsiyCrJSaNLPpch0lbrD1gcXH0I9Y5rTN
+   rWzYIesX0S/nHAuSCQ6bCgTV+nl22zFP/rpzPHq2+S9E7KSoqBl/F3o6T
+   ttdYrmaubql3eyubVMTfZFVtCGqUmOoV2j+xHiIp9ZOoUXhllN6AKvyh0
+   tOWZxMyLsZ2kx2OqGjaYqQDDsTPqxaDmWzwu0gJO12Pp0x60Zj0zsLRGW
+   Pc2S4yOUJeARXp1tCOYf3r7d6VAOtIlmJ5Ky/qLmE+jJwt4Y9a3fc9W9T
+   k6fTz5V89oVySBwB70G+zWNuoWNYyHb4MiPmXV+p5HtXV3MqmQGbshjfI
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="286578786"
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="286578786"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 06:18:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="795089080"
+Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 08 Apr 2022 06:18:25 -0700
+Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ncoVN-0000Hk-2Q;
+        Fri, 08 Apr 2022 13:18:25 +0000
+Date:   Fri, 8 Apr 2022 21:17:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Baoquan He <bhe@redhat.com>, akpm@linux-foundation.org,
+        willy@infradead.org
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        kexec@lists.infradead.org, hch@lst.de, yangtiezhu@loongson.cn,
+        amit.kachhap@arm.com, linux-fsdevel@vger.kernel.org,
+        viro@zeniv.linux.org.uk, bhe@redhat.com
+Subject: Re: [PATCH v5 RESEND 1/3] vmcore: Convert copy_oldmem_page() to take
+ an iov_iter
+Message-ID: <202204082128.JKXXDGpa-lkp@intel.com>
+References: <20220408090636.560886-2-bhe@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1648461096.git.zong.li@sifive.com>
+In-Reply-To: <20220408090636.560886-2-bhe@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28-03-22, 17:52, Zong Li wrote:
-> The PDMA driver currently assumes there are four channels by default, it
-> might cause the error if there is actually less than four channels.
-> Change that by getting number of channel dynamically from device tree.
-> For backwards-compatible, it uses the default value (i.e. 4) when there
-> is no 'dma-channels' information in dts.
+Hi Baoquan,
 
-Applied patch 1 & 4 to dmaengine-next, thanks
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on powerpc/next]
+[also build test WARNING on s390/features linus/master v5.18-rc1 next-20220408]
+[cannot apply to tip/x86/core hnaz-mm/master arm64/for-next/core]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/Convert-vmcore-to-use-an-iov_iter/20220408-170846
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
+config: sh-randconfig-s032-20220408 (https://download.01.org/0day-ci/archive/20220408/202204082128.JKXXDGpa-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/a5e42962f5c0bea73aa382a2415094b4bd6c6c73
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Baoquan-He/Convert-vmcore-to-use-an-iov_iter/20220408-170846
+        git checkout a5e42962f5c0bea73aa382a2415094b4bd6c6c73
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sh SHELL=/bin/bash arch/sh/kernel/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+>> arch/sh/kernel/crash_dump.c:23:36: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const *addr @@     got void [noderef] __iomem * @@
+   arch/sh/kernel/crash_dump.c:23:36: sparse:     expected void const *addr
+   arch/sh/kernel/crash_dump.c:23:36: sparse:     got void [noderef] __iomem *
+
+vim +23 arch/sh/kernel/crash_dump.c
+
+    13	
+    14	ssize_t copy_oldmem_page(struct iov_iter *iter, unsigned long pfn,
+    15				 size_t csize, unsigned long offset)
+    16	{
+    17		void  __iomem *vaddr;
+    18	
+    19		if (!csize)
+    20			return 0;
+    21	
+    22		vaddr = ioremap(pfn << PAGE_SHIFT, PAGE_SIZE);
+  > 23		csize = copy_to_iter(vaddr + offset, csize, iter);
 
 -- 
-~Vinod
+0-DAY CI Kernel Test Service
+https://01.org/lkp

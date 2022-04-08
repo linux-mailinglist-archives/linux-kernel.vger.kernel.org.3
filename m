@@ -2,71 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 313D64F96B1
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 15:30:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DAD44F96BA
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 15:33:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236280AbiDHNcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 09:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45618 "EHLO
+        id S236287AbiDHNe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 09:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232120AbiDHNb7 (ORCPT
+        with ESMTP id S232120AbiDHNex (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 09:31:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C233ADD60;
-        Fri,  8 Apr 2022 06:29:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C3D26B829D8;
-        Fri,  8 Apr 2022 13:29:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D2C3C385A1;
-        Fri,  8 Apr 2022 13:29:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649424592;
-        bh=ZYBCD+SPuaGoxrvq8XHNiTRw9xSpDQGJOvCPXfOLPQQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=N1lQ5PFIN1NRAsqYA4S6/bjVaNjL4bLs1G19GAvsgRWJL8/UjLVc7xD/rpTa2ysZC
-         DyEhFeJYZshOf/8vVNnZN15nT7yWHYTgUAwbdWyAqbRzREeO3FGea9v0A/FwzJWJXk
-         Fxbyz/Uoal++MJCQx04x+damhnPtRzgHUpQUi7dmbutgq+ZzFrol6Df5WE08Fyf3ZZ
-         t3ceR3WHO6Ugksnyt5nMaiCiglr2fvREbh8dXI6EARox6Dx0aQdxQEQQqdft0XAG46
-         0Up7E87EknJBEpyjXc+gOGxU91HuyJiF9Hdmpotj/fZ60rU34/eXAPdRERvMvfc5/g
-         rGapS3feISiCQ==
-Date:   Fri, 8 Apr 2022 18:59:41 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     Sricharan Ramabadhran <sricharan@codeaurora.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        pragalla@codeaurora.org, ~postmarketos/upstreaming@lists.sr.ht,
-        martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mdalam@codeaurora.org,
-        bbhatt@codeaurora.org, hemantk@codeaurora.org
-Subject: Re: [PATCH] mtd: nand: raw: qcom_nandc: Don't clear_bam_transaction
- on READID
-Message-ID: <20220408132941.GA12635@thinkpad>
-References: <0a8d6550-aa19-0af1-abae-66bf34c91ea8@somainline.org>
- <be779ed9-bd80-8f01-fe7f-d3c07d3d85aa@codeaurora.org>
- <12cad24a-fa2f-9a82-cf43-241a0a6fe4f6@somainline.org>
- <20220201145204.54646475@xps13>
- <d79bf21d-5a90-0074-cef6-896f66e80d28@somainline.org>
- <c63d5410-7f08-80fe-28ac-f4867038ff30@codeaurora.org>
- <cc1302f4-9150-0145-421c-bf2b7a7bf258@codeaurora.org>
- <6b839237-74f0-7270-2f33-f5c17e6b59de@somainline.org>
- <2fb9d943-d6c8-06b1-08cc-b0c3a8256082@codeaurora.org>
- <b428593e-a4db-984b-df7f-7cd14795d5e2@somainline.org>
+        Fri, 8 Apr 2022 09:34:53 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B91E1E814D
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 06:32:50 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id m41-20020a05600c3b2900b0038eab72923aso333684wms.0
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 06:32:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pDC9L0lcr1QHf8qfh13ooZQp7CHb5z3+opmiIbCpO5g=;
+        b=jmrr9ES2B8XWO03NQZzQI4F2KKQwsDwVsKRsbWp63khlAKSkmi9C+eilQOfzSCKath
+         b3no7GA5N4PEoy7SBC5oRO6EjCTlned/SX99tuyEsBpExUCpvQy48bLQ5u/Ei8+f7+70
+         JjoSwIq3ChdypUMSjHJMZXtPDo6LBN4VWGLzEibGOseVKZTsmd8rOjKDQID9fcDLqQLJ
+         NDZUZYPMPUPPbnyc0e1+Kc+f3IMnC7PXOXkmbrtOHF4HITAHh0MbxX93nNvzfRQLYfBj
+         JRUU1LkEyrPi6gVeOgj1vX501pObHoK8SRG8vDH2evWMkgLQFKGNabXNKtnXXbfryVtb
+         7B1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pDC9L0lcr1QHf8qfh13ooZQp7CHb5z3+opmiIbCpO5g=;
+        b=i2CJOED3d9oFbJqSSo2oPfpgstlJ4VrQeu96xl58xh41f2VLk7isOyi+xzXLnv3ZlF
+         N4rizCozUzRQxr4bh36LuESKhjamrebLKQIuuTedYv7n7jXI+XI6E9HWvYn+r6mM3OF2
+         ZE1wf/VTTGTOuuDYZIEuU//aEMHM9fGbvSode5q1AAbPF17xn0EVwTX4vjQOx4a8v3T3
+         8FPjMYXRZmsCB30EhYOyIlxCB1CGpyYyrVQ5YpEbbtLkqwBI7V9VwUrQcDz6XOsxW4pI
+         ULAF9HK7pVKk5rLRDERxYmZjF2RgXuN55uBQ7u8qGG+XhOpNLkX0/kmb2VVd9ACfJCHx
+         QgIQ==
+X-Gm-Message-State: AOAM531IYz6TzFwZxjgrKOfE5GE6LJgBhfoRddv2fyECCpAxtqAGjc7a
+        sE2CkfCYvgPmbGAQPBcunT8Gww==
+X-Google-Smtp-Source: ABdhPJyeiw4bwAQfXU133L8POlyN9oSdy3Td0K/5lQO2DSbqQQ73iq/K4PM/64Hhgx/RD0NCcuI3hQ==
+X-Received: by 2002:a05:600c:34c5:b0:38c:30e3:1e6c with SMTP id d5-20020a05600c34c500b0038c30e31e6cmr17255479wmq.144.1649424768622;
+        Fri, 08 Apr 2022 06:32:48 -0700 (PDT)
+Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
+        by smtp.gmail.com with ESMTPSA id v26-20020a1cf71a000000b0038ea373273bsm1707695wmh.47.2022.04.08.06.32.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 06:32:48 -0700 (PDT)
+Date:   Fri, 8 Apr 2022 14:32:46 +0100
+From:   Daniel Thompson <daniel.thompson@linaro.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        SoC Team <soc@kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Olof Johansson <olof@lixom.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kgdb-bugreport@lists.sourceforge.net,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mike Travis <mike.travis@hpe.com>
+Subject: Re: [PATCH v3 1/1] soc: fujitsu: Add A64FX diagnostic interrupt
+ driver
+Message-ID: <20220408133246.fyw5554lgli4olvg@maple.lan>
+References: <20220331092235.3000787-1-hasegawa-hitomi@fujitsu.com>
+ <20220331092235.3000787-2-hasegawa-hitomi@fujitsu.com>
+ <YkWVTEG5oFO82GPL@kroah.com>
+ <CAK8P3a0jnzse4sG58taO5+Yd5vCgh1uddqbtAuim_z9r15Q3BA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b428593e-a4db-984b-df7f-7cd14795d5e2@somainline.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <CAK8P3a0jnzse4sG58taO5+Yd5vCgh1uddqbtAuim_z9r15Q3BA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,38 +88,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Mar 31, 2022 at 05:44:55PM +0200, Arnd Bergmann wrote:
+> On Thu, Mar 31, 2022 at 1:49 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > > +
+> > > +static irqreturn_t a64fx_diag_handler(int irq, void *dev_id)
+> > > +{
+> > > +     handle_sysrq('c');
+> >
+> >
+> > Why is this calling this sysrq call?  From an interrupt?  Why?
+> >
+> > And you are hard-coding "c", are you sure?
+> 
+> This is an actual sysrq driver in the traditional sense, where you can send
+> a single interrupt to the machine from the outside over a side channel.
+> 
+> I suggested sysrq instead of just panic() to make it a bit more flexible.
+> Unfortunately there is no additional data, so it comes down to always
+> sending the same character.
+> 
+> It would be possible to make that character configurable with a module
+> parameter or something like that, but I'm not sure that is an improvement.
+> Maybe you have another idea for this.
 
-On Fri, Mar 11, 2022 at 10:22:51PM +0100, Konrad Dybcio wrote:
-> 
->
+Given the interrupt can be dismissed then offering non-fatal actions in
+response the chassis command seems reasonable.
 
-[...]
- 
-> I have 3 logs for you:
-> 
-> [1] is KASAN=y, with this patch
-> [2] is KASAN=y, WITHOUT this patch (should die, but doesn't - does KASAN prevent it from doing something stupid?)
-> [3] is KASAN=n, WITHOUT this patch (dies as expected)
-> 
+There is some prior art for this sort of feature. AFAICT SGI UV has a
+similar mechanism that can send an NMI-with-no-side-channel to the
+kernel. The corresponding driver offers a range of actions using a
+module parameter:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/platform/uv/uv_nmi.c#n180
 
-We reproduced the same issue on SDX65-MTP board and your hack worked :)
-Since this board is available inside Qcom, now Sadre and Sricharan should be
-able to investigate it properly.
+I don't think a hardcoded 'c' makes any sense. With a hardcoded argument
+it is just obfuscation. However it is certainly seems attractive to be
+able to reuse handle_sysrq() to provide a more powerful set of actions.
 
-Thanks,
-Mani
 
-> Looks like there's a lot happening..
-> 
-> 
-> Konrad
-> > 
-> > Regards,
-> >   Sricharan
-> > 
-> > 
-> 
-> [1] https://paste.debian.net/1233873/
-> [2] https://paste.debian.net/1233874/
-> [3] https://paste.debian.net/1233878/
+Daniel.

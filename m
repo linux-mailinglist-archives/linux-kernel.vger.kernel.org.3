@@ -2,170 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D79D84F9B24
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 18:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13A4D4F9B26
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 18:57:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235329AbiDHQ6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 12:58:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58084 "EHLO
+        id S234408AbiDHQ70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 12:59:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234507AbiDHQ6o (ORCPT
+        with ESMTP id S233578AbiDHQ7W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 12:58:44 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2151E255152;
-        Fri,  8 Apr 2022 09:56:39 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E5A1D1042;
-        Fri,  8 Apr 2022 09:56:38 -0700 (PDT)
-Received: from [10.1.196.218] (eglon.cambridge.arm.com [10.1.196.218])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 76B343F5A1;
-        Fri,  8 Apr 2022 09:56:38 -0700 (PDT)
-Subject: Re: [stable:PATCH v4.9.309 40/43] arm64: Mitigate spectre style
- branch history side channels
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Catalin Marinas <catalin.marinas@arm.com>
-References: <0220406164217.1888053-1-james.morse@arm.com>
- <20220406164546.1888528-1-james.morse@arm.com>
- <20220406164546.1888528-40-james.morse@arm.com>
-From:   James Morse <james.morse@arm.com>
-Message-ID: <82b7cb2e-825a-0efc-daae-98aa556c5086@arm.com>
-Date:   Fri, 8 Apr 2022 17:56:34 +0100
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Fri, 8 Apr 2022 12:59:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1A182B4B1B
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 09:57:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649437037;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Amg0xvXpuwMEuLnGP1PQePHLAINBX6RYSENvzAUWj5o=;
+        b=ifWEK4ooZ0M39zmyxSXGHW4GZwPQZ/vy4md9xfxKcVrNBK+U4lPgFy6WusLu5kODvbaszV
+        oNwxa1+/NNbZOqX0b4iMN/k64Y71H0oyHi/9marGmWFFEYmW75LVt0maeibsRexwnhFJS9
+        AJ+7zI8xQQdsgjqL7zwah5Kvfwcmcy0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-201-t770FnMfNQa3ZRNimpXjNA-1; Fri, 08 Apr 2022 12:57:16 -0400
+X-MC-Unique: t770FnMfNQa3ZRNimpXjNA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3C8AD3822207;
+        Fri,  8 Apr 2022 16:57:16 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D701A42D3A6;
+        Fri,  8 Apr 2022 16:57:15 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     Peter Gonda <pgonda@google.com>
+Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4.1] KVM, SEV: Add KVM_EXIT_SHUTDOWN metadata for SEV-ES
+Date:   Fri,  8 Apr 2022 12:56:42 -0400
+Message-Id: <20220408165641.469961-1-pbonzini@redhat.com>
+In-Reply-To: <20220407210233.782250-1-pgonda@google.com>
+References: 
 MIME-Version: 1.0
-In-Reply-To: <20220406164546.1888528-40-james.morse@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+Queued, thanks.  But documentation was missing:
 
-On 06/04/2022 17:45, James Morse wrote:
-> commit 558c303c9734af5a813739cd284879227f7297d2 upstream.
-> 
-> Speculation attacks against some high-performance processors can
-> make use of branch history to influence future speculation.
-> When taking an exception from user-space, a sequence of branches
-> or a firmware call overwrites or invalidates the branch history.
-> 
-> The sequence of branches is added to the vectors, and should appear
-> before the first indirect branch. For systems using KPTI the sequence
-> is added to the kpti trampoline where it has a free register as the exit
-> from the trampoline is via a 'ret'. For systems not using KPTI, the same
-> register tricks are used to free up a register in the vectors.
-> 
-> For the firmware call, arch-workaround-3 clobbers 4 registers, so
-> there is no choice but to save them to the EL1 stack. This only happens
-> for entry from EL0, so if we take an exception due to the stack access,
-> it will not become re-entrant.
-> 
-> For KVM, the existing branch-predictor-hardening vectors are used.
-> When a spectre version of these vectors is in use, the firmware call
-> is sufficient to mitigate against Spectre-BHB. For the non-spectre
-> versions, the sequence of branches is added to the indirect vector.
+diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+index e7a0dfdc0178..72183ae628f7 100644
+--- a/Documentation/virt/kvm/api.rst
++++ b/Documentation/virt/kvm/api.rst
+@@ -6088,8 +6088,12 @@ should put the acknowledged interrupt vector into the 'epr' field.
+   #define KVM_SYSTEM_EVENT_SHUTDOWN       1
+   #define KVM_SYSTEM_EVENT_RESET          2
+   #define KVM_SYSTEM_EVENT_CRASH          3
++  #define KVM_SYSTEM_EVENT_SEV_TERM       4
++  #define KVM_SYSTEM_EVENT_NDATA_VALID    (1u << 31)
+ 			__u32 type;
++                        __u32 ndata;
+ 			__u64 flags;
++                        __u64 data[16];
+ 		} system_event;
 
+ If exit_reason is KVM_EXIT_SYSTEM_EVENT then the vcpu has triggered
+@@ -6099,7 +6103,7 @@ HVC instruction based PSCI call from the vcpu. The 'type' field describes
+ the system-level event type. The 'flags' field describes architecture
+ specific flags for the system-level event.
 
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 42719bd58046..6d12c3b78777 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -799,6 +799,16 @@ config ARM64_SSBD
->  
->  	  If unsure, say Y.
->  
-> +config MITIGATE_SPECTRE_BRANCH_HISTORY
-> +	bool "Mitigate Spectre style attacks against branch history" if EXPERT
-> +	default y
-> +	depends on HARDEN_BRANCH_PREDICTOR || !KVM
-> +	help
-> +	  Speculation attacks against some high-performance processors can
-> +	  make use of branch history to influence future speculation.
-> +	  When taking an exception from user-space, a sequence of branches
-> +	  or a firmware call overwrites the branch history.
+-Valid values for 'type' are:
++Valid values for bits 30:0 of 'type' are:
 
-The build problem reported here[]0 is due to enabling CONFIG_EXPERT, and disabling
-CONFIG_HARDEN_BRANCH_PREDICTOR and CONFIG_MITIGATE_SPECTRE_BRANCH_HISTORY: The harden_bp
-stuff uses #ifdef all over the place, whereas the BHB bits use IS_ENABLED(). As there are
-dependencies between the two, mixing them doesn't go well.
+  - KVM_SYSTEM_EVENT_SHUTDOWN -- the guest has requested a shutdown of the
+    VM. Userspace is not obliged to honour this, and if it does honour
+@@ -6112,12 +6116,18 @@ Valid values for 'type' are:
+    has requested a crash condition maintenance. Userspace can choose
+    to ignore the request, or to gather VM memory core dump and/or
+    reset/shutdown of the VM.
++ - KVM_SYSTEM_EVENT_SEV_TERM -- an AMD SEV guest requested termination.
++   The guest physical address of the guest's GHCB is stored in `data[0]`.
 
-The fix is a little noisy. The reason is the 'matches' support ought to be kept even if
-the feature is disabled so that the sysfs files still report Vulnerable on affected
-hardware, regardless of the Kconfig.
+ Valid flags are:
 
------------------------->%------------------------
-diff --git a/arch/arm64/kernel/cpu_errata.c b/arch/arm64/kernel/cpu_errata.c
-index d6bc44a7d471..ae364d6b37ac 100644
---- a/arch/arm64/kernel/cpu_errata.c
-+++ b/arch/arm64/kernel/cpu_errata.c
-@@ -561,7 +561,9 @@ const struct arm64_cpu_capabilities arm64_errata[] = {
-                .type = ARM64_CPUCAP_LOCAL_CPU_ERRATUM,
-                .capability = ARM64_SPECTRE_BHB,
-                .matches = is_spectre_bhb_affected,
-+#ifdef CONFIG_MITIGATE_SPECTRE_BRANCH_HISTORY
-                .cpu_enable = spectre_bhb_enable_mitigation,
-+#endif
-        },
-        {
-        }
-@@ -571,8 +573,8 @@ const struct arm64_cpu_capabilities arm64_errata[] = {
-  * We try to ensure that the mitigation state can never change as the result of
-  * onlining a late CPU.
-  */
--static void update_mitigation_state(enum mitigation_state *oldp,
--                                   enum mitigation_state new)
-+static void __maybe_unused update_mitigation_state(enum mitigation_state *oldp,
-+                                                  enum mitigation_state new)
- {
-        enum mitigation_state state;
+  - KVM_SYSTEM_EVENT_RESET_FLAG_PSCI_RESET2 (arm64 only) -- the guest issued
+    a SYSTEM_RESET2 call according to v1.1 of the PSCI specification.
 
-@@ -708,7 +710,7 @@ static bool is_spectre_bhb_fw_affected(int scope)
-        return false;
- }
++Extra data for this event is stored in the `data[]` array, up to index
++`ndata-1` included, if bit 31 is set in `type`.  The data depends on the
++`type` field.  There is no extra data if bit 31 is clear or `ndata` is zero.
++
+ ::
 
--static bool supports_ecbhb(int scope)
-+static bool __maybe_unused supports_ecbhb(int scope)
- {
-        u64 mmfr1;
-
-@@ -738,6 +740,7 @@ bool is_spectre_bhb_affected(const struct arm64_cpu_capabilities *entry,
-        return false;
- }
-
-+#ifdef CONFIG_HARDEN_BRANCH_PREDICTOR
- static void this_cpu_set_vectors(enum arm64_bp_harden_el1_vectors slot)
- {
-        const char *v = arm64_get_bp_hardening_vector(slot);
-@@ -812,7 +815,7 @@ static void kvm_setup_bhb_slot(const char *hyp_vecs_start)
- #define __spectre_bhb_loop_k32_start NULL
-
- static void kvm_setup_bhb_slot(const char *hyp_vecs_start) { };
--#endif
-+#endif /* CONFIG_KVM */
-
- static bool is_spectrev2_safe(void)
- {
-@@ -891,3 +894,4 @@ void __init spectre_bhb_patch_loop_iter(struct alt_instr *alt,
-                                         AARCH64_INSN_MOVEWIDE_ZERO);
-        *updptr++ = cpu_to_le32(insn);
- }
-+#endif /* CONFIG_HARDEN_BRANCH_PREDICTOR */
------------------------->%------------------------
+ 		/* KVM_EXIT_IOAPIC_EOI */
 
 
-This version of the backport isn't affected by Will's report here:
-https://lore.kernel.org/linux-arm-kernel/20220408120041.GB27685@willie-the-truck/
-as Kconfig describes that dependency as it was too hard to unpick with the helpers v4.9 has.
+Paolo
 
 
-Thanks,
-
-James

@@ -2,146 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C5434F8CDF
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 740C04F8C67
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233613AbiDHCLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 22:11:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54662 "EHLO
+        id S233642AbiDHCMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 22:12:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiDHCLv (ORCPT
+        with ESMTP id S229788AbiDHCMf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 22:11:51 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9A780158781;
-        Thu,  7 Apr 2022 19:09:45 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.31:60826.1597264051
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
-        by 189.cn (HERMES) with SMTP id 53D81100238;
-        Fri,  8 Apr 2022 10:09:36 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-b7fbf7d79-bwdqx with ESMTP id 9a6d2578ad0843f1b537747d9ceb5895 for robh@kernel.org;
-        Fri, 08 Apr 2022 10:09:44 CST
-X-Transaction-ID: 9a6d2578ad0843f1b537747d9ceb5895
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <3e0287d1-b6e4-b3f3-3ede-2c2243101790@189.cn>
-Date:   Fri, 8 Apr 2022 10:09:33 +0800
+        Thu, 7 Apr 2022 22:12:35 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38CE214D00E
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 19:10:32 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id q10so2443008ilt.9
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 19:10:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3zLo2uZAPFPb1a10/oiW+kNzLrd/tjhqt8zswWgEmmM=;
+        b=RYo/qKEMhFXkj4EEEZGvJ6VFDZ+tSforE2IzUpicHlQ/MFAhXALefpKrPRB75mPtt+
+         LwAN/p4WQS8oGGtRmuO+G5WEcMOa1EAvFqiDhlC7lh1l4ndUmWgIpMSACdklWU7vHuJ3
+         bW+C65ucZLINuYcSBx07IA/fu5Txan3nuxAWjN+WLEs28JeBv3l7zgkDIyJWAHW6KN0i
+         sdNZlbScPlrCV3G2u6yxXSZIi76DYmQM/NS2jmaCbCW5Q3K6BeBfnbtcU4hPI8vJzo/J
+         R7jTf4zbZywtg+3GWrThOvSHBeJS30G1EO4VjtBChGE0fe2KHRnkUlzLjc/IABN0jZxt
+         6xOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3zLo2uZAPFPb1a10/oiW+kNzLrd/tjhqt8zswWgEmmM=;
+        b=wmcatanp0KBavc01RZzRjzAc6auf+Y7T0PZKtt0v8OrGt3sulWCDNNiz7/VTlkisLW
+         XjEKPYJNH5AM+sRUte20LmgVxZ+TYtMxON8VLpqRKMbtFl2xdeO6bihUBrTVAxUCTfv3
+         Fcy9Jlgued017pMZIqA9GGHuuji6V89+2hp5sdkdzy13eWO3FYk/nSaWvKPRbzFf05HJ
+         NUitEbPzfqsFJjr4ZfKs6tr+bmI4ZZeZKUrzCu7TAGhTVG5FrVoSLhG6Zv8J5xcEbMli
+         kMww+ayEmu+d4TErYRjlSmcwpQ8XBHHa2MdRSIfhEB6JY24UiB66ZUXAFgskpZKNrgC8
+         v2XA==
+X-Gm-Message-State: AOAM533mbyr1ZfSOm6+Pyxou41Jribe2IYxcqI0x/1QTVdAKZW7SsKbm
+        ethD18lYyfs+q8+2TBAFllgItRhqlM5UCkspeHa2fQ==
+X-Google-Smtp-Source: ABdhPJzywFSFz4PYO+zLQREwaiNdmfPXBeHr0ksmWhzLo32ltQANJedCo3Fi6YRF+TuO6wKPeYFJE6Q3/rK52iGg5U8=
+X-Received: by 2002:a92:ca45:0:b0:2ca:810e:7855 with SMTP id
+ q5-20020a92ca45000000b002ca810e7855mr1672675ilo.303.1649383831471; Thu, 07
+ Apr 2022 19:10:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v11 7/7] drm/lsdc: add drm driver for loongson display
- controller
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Roland Scheidegger <sroland@vmware.com>,
-        Zack Rusin <zackr@vmware.com>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Ilia Mirkin <imirkin@alum.mit.edu>,
-        suijingfeng <suijingfeng@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        kernel test robot <lkp@intel.com>
-References: <20220321162916.1116541-1-15330273260@189.cn>
- <20220321162916.1116541-8-15330273260@189.cn>
- <Yjo2R5LQrRICr7dC@robh.at.kernel.org>
- <9ea4d326-ad5f-4f2c-1609-4ca772699d1b@189.cn>
- <YjsclWsqGX3JrknM@robh.at.kernel.org>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <YjsclWsqGX3JrknM@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220331084151.2600229-1-yosryahmed@google.com>
+ <YkcEMdsi9G5y8mX4@dhcp22.suse.cz> <CAAPL-u_i-Mp-Bo7LtP_4aJscY=1JHG_y1H_-A7N_HRAgtz+arg@mail.gmail.com>
+ <87y20nzyw4.fsf@yhuang6-desk2.ccr.corp.intel.com> <CAAPL-u8wjtBRE7KZyZjoQ0eTJecnW35uEXAE3KU0M+AvL=5-ug@mail.gmail.com>
+ <87o81fujdc.fsf@yhuang6-desk2.ccr.corp.intel.com> <CAAPL-u_6XqQYtLAMNFvEo+0XU2VR=XYm0T9btL=g6rVVW2h93w@mail.gmail.com>
+ <87bkxfudrk.fsf@yhuang6-desk2.ccr.corp.intel.com> <215bd7332aee0ed1092bad4d826a42854ebfd04a.camel@linux.intel.com>
+ <CAAPL-u_aAbDOmATSA8ZvjnfBk_7EoXvLoh0etM0fB0aY1845VQ@mail.gmail.com> <df6110a09cacc80ee1cbe905a71273a5f3953e16.camel@linux.intel.com>
+In-Reply-To: <df6110a09cacc80ee1cbe905a71273a5f3953e16.camel@linux.intel.com>
+From:   Wei Xu <weixugc@google.com>
+Date:   Thu, 7 Apr 2022 19:10:20 -0700
+Message-ID: <CAAPL-u-oF5HQ26w1czNCmA5VadXOfC54GbGpSppva86YEkefyA@mail.gmail.com>
+Subject: Re: [PATCH resend] memcg: introduce per-memcg reclaim interface
+To:     Tim Chen <tim.c.chen@linux.intel.com>
+Cc:     "Huang, Ying" <ying.huang@intel.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Cgroups <cgroups@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Jonathan Corbet <corbet@lwn.net>, Yu Zhao <yuzhao@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Greg Thelen <gthelen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 2022/3/23 21:11, Rob Herring wrote:
-> On Wed, Mar 23, 2022 at 12:12:43PM +0800, Sui Jingfeng wrote:
->> On 2022/3/23 04:49, Rob Herring wrote:
->>>> +/*
->>>> + * mainly for dc in ls7a1000 which have builtin gpio emulated i2c
->>>> + *
->>>> + * @index : output channel index, 0 for DVO0, 1 for DVO1
->>>> + */
->>>> +struct lsdc_i2c *lsdc_create_i2c_chan(struct device *dev, void *base, unsigned int index)
->>>> +{
->>>> +	char compat[32] = {0};
->>>> +	unsigned int udelay = 5;
->>>> +	unsigned int timeout = 2200;
->>>> +	int nr = -1;
->>>> +	struct i2c_adapter *adapter;
->>>> +	struct lsdc_i2c *li2c;
->>>> +	struct device_node *i2c_np;
->>>> +	int ret;
->>>> +
->>>> +	li2c = devm_kzalloc(dev, sizeof(*li2c), GFP_KERNEL);
->>>> +	if (!li2c)
->>>> +		return ERR_PTR(-ENOMEM);
->>>> +
->>>> +	li2c->index = index;
->>>> +	li2c->dev = dev;
->>>> +
->>>> +	if (index == 0) {
->>>> +		li2c->sda = 0x01;
->>>> +		li2c->scl = 0x02;
->>>> +	} else if (index == 1) {
->>>> +		li2c->sda = 0x04;
->>>> +		li2c->scl = 0x08;
->>> Just require this to be in DT rather than having some default.
->>>
->> By design,  I am try very hard to let the code NOT fully  DT dependent. DT is nice , easy to learn and use.
->> But kernel side developer plan to follow UEFI + ACPI Specification on LS3A5000 + LS7A1000 platform. See [1]
->> There will no DT support then, provide a convention support  make the driver more flexible. I want the
->> driver works with minimal requirement. The driver just works on simple boards by put the following dc device
->> node in arch/mips/dts/loongson/loongson64g_4core_ls7a.dts,
-> Pick DT or ACPI for the platform, not both. We don't need to have both
-> in the kernel to support.
+On Thu, Apr 7, 2022 at 4:11 PM Tim Chen <tim.c.chen@linux.intel.com> wrote:
 >
-> Rob
+> On Thu, 2022-04-07 at 15:12 -0700, Wei Xu wrote:
+>
+> >
+> > (resending in plain-text, sorry).
+> >
+> > memory.demote can work with any level of memory tiers if a nodemask
+> > argument (or a tier argument if there is a more-explicitly defined,
+> > userspace visible tiering representation) is provided.  The semantics
+> > can be to demote X bytes from these nodes to their next tier.
+> >
+>
+> We do need some kind of userspace visible tiering representation.
+> Will be nice if I can tell the memory type, nodemask of nodes in tier Y with
+>
+> cat memory.tier_Y
+>
+>
+> > memory_dram/memory_pmem assumes the hardware for a particular memory
+> > tier, which is undesirable.  For example, it is entirely possible that
+> > a slow memory tier is implemented by a lower-cost/lower-performance
+> > DDR device connected via CXL.mem, not by PMEM.  It is better for this
+> > interface to speak in either the NUMA node abstraction or a new tier
+> > abstraction.
+>
+> Just from the perspective of memory.reclaim and memory.demote, I think
+> they could work with nodemask.  For ease of management,
+> some kind of abstraction of tier information like nodemask, memory type
+> and expected performance should be readily accessible by user space.
+>
 
-Hi, everybody
+I agree.  The tier information should be provided at the system level.
+One suggestion is to have a new directory "/sys/devices/system/tier/"
+for tiers, e.g.:
 
-I have send new version of my patch,  there may still have flaws though.
+/sys/devices/system/tier/tier0/memlist: all memory nodes in tier 0.
+/sys/devices/system/tier/tier1/memlist: all memory nodes in tier 1.
 
-Would you like to help to review it again?
+We can discuss this tier representation in a new thread.
 
-https://patchwork.freedesktop.org/series/102104/
-
-@Rob @Maxime  @Krzysztof
-
-I have  correct many issues as you guys mentioned  before,
-
-if something get ignored and I may miss the point,  would like to 
-mention it again
-
-on my new patches?  because mails received previously got lost(flushed 
-by new mails).
-
-I can only reply to new reviews.
-
-Thanks for your time.
-
+> Tim
+>
+> >
+> > It is also desirable to make this interface stateless, i.e. not to
+> > require the setting of memory_dram.reclaim_policy.  Any policy can be
+> > specified as arguments to the request itself and should only affect
+> > that particular request.
+> >
+> > Wei
+>

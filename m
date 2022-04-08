@@ -2,111 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 292394F8E67
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:26:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1524A4F8ECF
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235002AbiDHFnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 01:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43238 "EHLO
+        id S234963AbiDHFpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 01:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234980AbiDHFnL (ORCPT
+        with ESMTP id S234938AbiDHFpB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 01:43:11 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB34ED90E;
-        Thu,  7 Apr 2022 22:41:07 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KZRrj3W20zgYQf;
-        Fri,  8 Apr 2022 13:39:17 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 8 Apr 2022 13:41:03 +0800
-Received: from [10.174.178.208] (10.174.178.208) by
- kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 8 Apr 2022 13:41:02 +0800
-Subject: Re: [PATCH 5.10 000/597] 5.10.110-rc3 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <stable@vger.kernel.org>, <torvalds@linux-foundation.org>,
-        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
-        <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <slade@sladewatkins.com>
-References: <20220407183749.142181327@linuxfoundation.org>
-From:   Samuel Zou <zou_wei@huawei.com>
-Message-ID: <54e63db8-8652-83a0-a445-3d0c715fddca@huawei.com>
-Date:   Fri, 8 Apr 2022 13:41:01 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Fri, 8 Apr 2022 01:45:01 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80CA1198507
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 22:42:57 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id bx37so10106668ljb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 22:42:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=R+HXRFmonCLAOKu7Tx1l0IgtdhflHf7kEkD9u893yPQ=;
+        b=gVIdhhP4ICXLdTOfdrNFbOA+Jr/YPS4zvSK1bSFU5CR6vxifk/0LBMAXt4iCloTQVH
+         0sGrq4tKJ5z2d/0OqWbmPvp1I4RhBoWno9HgRgIYg/PFnPfeUuUI5XJd53FSZPqVMA0x
+         A+3kUSdSMSVb1XBETA29zYZxNikCFwkKpRWM8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=R+HXRFmonCLAOKu7Tx1l0IgtdhflHf7kEkD9u893yPQ=;
+        b=htcgvmn4RIGcxcrHD7Wv3rD1jBMtvnmLXDvgYdSk24rdJ/7q4KQOd0ZKp0J2cvaTZ6
+         6Yi0Kwam94SuAkPZjET5vC/ND9uvS6jtv+b7QnrudNjMHP77PRUg7YbPe1T6lUN3lqma
+         y6LEvDzAvzkGqzItkwHnqwL6XNkpQ5qLdxkzUTbAfzHVxyfbd9+gZZfVpmaQDxuWMS37
+         hRElEscmOsTEhvpPihevSP+iqBEFvUF4ymVOqTBSKAnq5ktPJlQDl7hw96fvRbQIEW7U
+         NCGJS6tNzdqLvDEBJzZBrhw3QNPZjQew2iyGeYsqlgadqFVEO7vW7uCVaktC5YrPnaSR
+         73Gg==
+X-Gm-Message-State: AOAM533ocS0ix/Iyq8I0Oai/3v5lER6IdDbyt81R3In27TR/DwMe1LW+
+        uyPwgppy+JhgvoJLzr6nhKM+An7nlVi/jnnv
+X-Google-Smtp-Source: ABdhPJzcgcAXTU3Y5OLvrcQPUdUphPY6ezUuNsHrivhXZBs2N05Z3g2CxAB1RcyS3bCWuO3cEeA6ng==
+X-Received: by 2002:a2e:b008:0:b0:24b:4ff2:5e09 with SMTP id y8-20020a2eb008000000b0024b4ff25e09mr963927ljk.28.1649396575570;
+        Thu, 07 Apr 2022 22:42:55 -0700 (PDT)
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com. [209.85.208.176])
+        by smtp.gmail.com with ESMTPSA id t2-20020a2e2d02000000b00244dc8ba5absm2140973ljt.117.2022.04.07.22.42.54
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 22:42:54 -0700 (PDT)
+Received: by mail-lj1-f176.google.com with SMTP id bx37so10106598ljb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 22:42:54 -0700 (PDT)
+X-Received: by 2002:a05:651c:b07:b0:24b:4af9:828 with SMTP id
+ b7-20020a05651c0b0700b0024b4af90828mr2474847ljr.506.1649396573727; Thu, 07
+ Apr 2022 22:42:53 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220407183749.142181327@linuxfoundation.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.208]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CAPM=9tx5F2iOY6S4o2Rjk3uZG_M5Tso+=j3_gyQk-p3vj8tqew@mail.gmail.com>
+In-Reply-To: <CAPM=9tx5F2iOY6S4o2Rjk3uZG_M5Tso+=j3_gyQk-p3vj8tqew@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 7 Apr 2022 19:42:37 -1000
+X-Gmail-Original-Message-ID: <CAHk-=wj_=LwGgPVfnOdEJF5O2rt2NEXCK5155v88eDHdGkWOWg@mail.gmail.com>
+Message-ID: <CAHk-=wj_=LwGgPVfnOdEJF5O2rt2NEXCK5155v88eDHdGkWOWg@mail.gmail.com>
+Subject: Re: [git pull] drm fixes for 5.18-rc2
+To:     Dave Airlie <airlied@gmail.com>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Apr 7, 2022 at 2:20 PM Dave Airlie <airlied@gmail.com> wrote:
+>
+> I think this should fix the amdgpu splat you have been seeing since rc1.
 
+Not the machine I'm currently traveling with, but I'll double-check
+when I'm back home.
 
-On 2022/4/8 2:45, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.110 release.
-> There are 597 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sat, 09 Apr 2022 18:35:00 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.110-rc3.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
-
-Tested on arm64 and x86 for 5.10.110-rc3,
-
-Kernel repo:
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-Branch: linux-5.10.y
-Version: 5.10.110-rc3
-Commit: 32dde4a44c8d6f6dd9cda13300bfda1468e13ec6
-Compiler: gcc version 7.3.0 (GCC)
-
-arm64:
---------------------------------------------------------------------
-Testcase Result Summary:
-total: 9031
-passed: 9031
-failed: 0
-timeout: 0
---------------------------------------------------------------------
-
-x86:
---------------------------------------------------------------------
-Testcase Result Summary:
-total: 9031
-passed: 9031
-failed: 0
-timeout: 0
---------------------------------------------------------------------
-
-Tested-by: Hulk Robot <hulkrobot@huawei.com>
+Thanks,
+                Linus

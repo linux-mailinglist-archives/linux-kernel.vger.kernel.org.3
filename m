@@ -2,88 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D0344F9ED8
+	by mail.lfdr.de (Postfix) with ESMTP id 04F6D4F9ED7
 	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 23:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239760AbiDHVLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 17:11:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52894 "EHLO
+        id S239660AbiDHVMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 17:12:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235231AbiDHVLo (ORCPT
+        with ESMTP id S239762AbiDHVL5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 17:11:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF7ED112E;
-        Fri,  8 Apr 2022 14:09:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9614B61F4E;
-        Fri,  8 Apr 2022 21:09:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E91BAC385A9;
-        Fri,  8 Apr 2022 21:09:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649452179;
-        bh=ctz8WQ3vKMre+QNyDwXcKe5E06K2scqAFaURoxJnheQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=caqIH1P3c550eqqFd4LTN05WxLA1HMrfcEDTrB3uk4gxgnD/agcVpAl1ju0V8zjYh
-         QrkOAjIU985pu/vpxGUw1dfZeacNwp+y7GaE69mRuy5PodiIiqMCqmxTBQPbXXrYXZ
-         AzicUplt2F4ikDo1aItoAc23nbJKm1FDZZAwBf3AfcrymvkCMPb/hjhGTDrE4TndSA
-         DJEXCePFvE8FTdFzK9CQaRW3vWVnbUZl522hzuCBjikiVW33fg2Mek4eD1QHVUezXm
-         dXZk7wGgtbAahYoTpmTvPElxVKTc0Y0wuXOEWJMzsI9w+mbVLKipg4izncPPAO5sHa
-         yNvGFL6MTCPVQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D4686E85B76;
-        Fri,  8 Apr 2022 21:09:38 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 8 Apr 2022 17:11:57 -0400
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE05160FC6;
+        Fri,  8 Apr 2022 14:09:52 -0700 (PDT)
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so11000945fac.7;
+        Fri, 08 Apr 2022 14:09:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xL4MCXB2ByKjAaLbtkoyBFo7i1uAlHJGlFCnrKvTWm0=;
+        b=l7sHR2ON5r3wuz5J6PgF5TLzmoVP60btoJbFekJHd9mNZYMBB2W15wZ5fgXbxRa5Gi
+         EchFQd1Aa5HwoomYnFjjPT5Vgk54uxQFLYmGDSp/2hl2iC3CNqdHOk2kmAwMP4B8Ec7O
+         EPjpgqYiynxaQq9WGwdqHLKM8BdD53jz1blg0wyLGbNECz7+MNBSWJqqx+oN7QbGK6bS
+         7uBCGg+a50hsPr+mGYlCgf1vWvORhjO12S1rvWMTqMkKaSVDRWzXCh9ygjoIh5kZb/dD
+         sinQJPJs99LwFNLZycHWDDgFaaXpDZWv+k/tkjSFMrdLwDL57Ds7QR/w6x9j+7dYN7py
+         4QLQ==
+X-Gm-Message-State: AOAM53246+EeZunO/orQ3HDpz2YS0CwfPaZFfzKYEuyq/GwWu+8ehzxi
+        9lYbyuIiU9yGZ5PeT/N4iQ==
+X-Google-Smtp-Source: ABdhPJx6BXvBCFsDpk9BZCUFQ3NiDr3r4r6Gg1a75DYg+JwWmRpPW8LBfw4gcGR3LPw2N5nUl4AGdg==
+X-Received: by 2002:a05:6870:b39c:b0:d1:4a9f:35f9 with SMTP id w28-20020a056870b39c00b000d14a9f35f9mr8945896oap.119.1649452192165;
+        Fri, 08 Apr 2022 14:09:52 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id q83-20020aca5c56000000b002f94910a053sm9080130oib.56.2022.04.08.14.09.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 14:09:51 -0700 (PDT)
+Received: (nullmailer pid 4071047 invoked by uid 1000);
+        Fri, 08 Apr 2022 21:09:51 -0000
+Date:   Fri, 8 Apr 2022 16:09:51 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH 08/14] dt-bindings: reset: snps,axs10x-reset: Convert to
+ yaml
+Message-ID: <YlCkn7GaFI0wpoFc@robh.at.kernel.org>
+References: <20220407154338.4190674-1-p.zabel@pengutronix.de>
+ <20220407154338.4190674-8-p.zabel@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Fix return value checks in
- perf_event_stackmap.c
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164945217886.693.13574650471014956022.git-patchwork-notify@kernel.org>
-Date:   Fri, 08 Apr 2022 21:09:38 +0000
-References: <20220408041452.933944-1-ytcoode@gmail.com>
-In-Reply-To: <20220408041452.933944-1-ytcoode@gmail.com>
-To:     Yuntao Wang <ytcoode@gmail.com>
-Cc:     skhan@linuxfoundation.org, andrii@kernel.org, ast@kernel.org,
-        bpf@vger.kernel.org, daniel@iogearbox.net, hengqi.chen@gmail.com,
-        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, shuah@kernel.org, songliubraving@fb.com,
-        yhs@fb.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220407154338.4190674-8-p.zabel@pengutronix.de>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
-
-On Fri,  8 Apr 2022 12:14:52 +0800 you wrote:
-> The bpf_get_stackid() function may also return 0 on success.
+On Thu, 07 Apr 2022 17:43:32 +0200, Philipp Zabel wrote:
+> Convert the device tree bindings for the AXS10x reset controller to YAML
+> schema to allow participating in DT validation.
 > 
-> Correct checks from 'val > 0' to 'val >= 0' to ensure that they cover all
-> possible success return values.
+> Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>
+> ---
+>  .../bindings/reset/snps,axs10x-reset.txt      | 33 -------------
+>  .../bindings/reset/snps,axs10x-reset.yaml     | 48 +++++++++++++++++++
+>  2 files changed, 48 insertions(+), 33 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/reset/snps,axs10x-reset.txt
+>  create mode 100644 Documentation/devicetree/bindings/reset/snps,axs10x-reset.yaml
 > 
-> Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
-> 
-> [...]
 
-Here is the summary with links:
-  - [bpf-next,v2] selftests/bpf: Fix return value checks in perf_event_stackmap.c
-    https://git.kernel.org/bpf/bpf-next/c/658d87687cd5
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Reviewed-by: Rob Herring <robh@kernel.org>

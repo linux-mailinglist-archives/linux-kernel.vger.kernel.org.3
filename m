@@ -2,59 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABA8A4F8C32
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:26:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC4074F8C68
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233483AbiDHBjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 21:39:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50038 "EHLO
+        id S233499AbiDHBkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 21:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233418AbiDHBjl (ORCPT
+        with ESMTP id S233462AbiDHBkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 21:39:41 -0400
-Received: from out203-205-221-155.mail.qq.com (out203-205-221-155.mail.qq.com [203.205.221.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85431403DB
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 18:37:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1649381852;
-        bh=AGpgReuc8vUqZuul0VY4Gnt/NTcYGzZUFJEPxGHjf6g=;
-        h=From:To:Cc:Subject:Date;
-        b=Wx3ainhsRe1F0qit34WgopLVnqyGVS7lv0i5yhPdlPQfrMi+VoS1f2TtbcAuK8zwW
-         JWxPADLGfJcVkItK5yjosu0paer8Z63r6GCcdQFRagQLUnJG2MvtqU0Q+uYNBe+GoC
-         aILLzxcjG2rpO6QQtloGjdy+6Qw3Tb0RG9/SsS+o=
-Received: from localhost.localdomain ([218.197.153.188])
-        by newxmesmtplogicsvrszc8.qq.com (NewEsmtp) with SMTP
-        id 959184B6; Fri, 08 Apr 2022 09:37:25 +0800
-X-QQ-mid: xmsmtpt1649381845t2pbyfq9s
-Message-ID: <tencent_06FCFF1B2086CCD7B9C51C7C1490E1D64A08@qq.com>
-X-QQ-XMAILINFO: MYvQTNt/YNi0Ht22sifMJZkDJEOTdZIkWvUEKnmsmcd2NKjpw0fqa/FI4yhq4H
-         V72SOGMMMrh5aPyK7YASGZPHMyBBuqUxxsV/xgReH+dnfG08tsolvXutT+2ADisXvwfCdCpSOHeu
-         RBBKl3ABpVkugU8s6MTYd5VQ2wnFOSNDKsJK/t6eE9A6rSOabWGtuoo4rg7xfPsmBgoDmOnjEDZw
-         LASiW6pLiHvvAJHdSvaal4rtrQJCuReqDYzwupgfOUESHf6eKVUv+DaRqJiWybYjKgi1ou2j9TKA
-         9ImC56nnCmWvyRrAGw/ZL2mna5S0g83HVcHMMRawCQuSVuA8ge0jarzybp87deJxxBg3jeqnDLfy
-         F8oePinmw1/vDf3Ok3P1H6JhWKlR0b6Gk46BBlGHHpEd3iOhI+2k715BGf2bltQhGgSg4yI3Sn2S
-         ziCeikjyOmpFmCZfgU8sO3JQzpBRDXvkv6icVwOvZTurpFsbhF18XkCGtbaB6lOAltxUoAcKxrrY
-         mG+z1BMZ/yOWUubYtGr8yMJTNloTB6NMrpZCAm9bYABeqaHelWoBoRhzalVhH06G+/CLQd5QYfPq
-         IfHucj2T6gFTRdHbnofK4E2XLFBuVH8fyjrkJiTUMbX0pTgXTm9sgTuhaKyeq9d7vWkhqaDRkcUe
-         2x3bwrcoVdn9JTQvf2hCTuiulN0UJuKLv99AGEqXYL4RJcxyvNuXM57yCh2wxg9DEbKvFrPt/9yC
-         fCy38Unt12qt5k0qAjmgWf6mGo3aynMaAwXxuaZ1+NVIcshVN6r2AtlqnJp2ZpKx+3TRc6wKdVdE
-         nJYXV0wHBLA9GhwXKwAas3WxRwdfBBvnJWHwqAZuMUMKj75HSD03j+Yje/9+EYEtHxAAf3r1NvMO
-         jKDoMXT2JIL4pqmoqFB0jXbFALo2XZ4sX0IYHloYUxssBZOWITAfpwAVq40VBGN+Q2H0k6vW2p
-From:   xkernel.wang@foxmail.com
-To:     gregkh@linuxfoundation.org, paskripkin@gmail.com
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Xiaoke Wang <xkernel.wang@foxmail.com>
-Subject: [PATCH v3 1/2] staging: r8188eu: fix potential memory leak in _rtw_init_xmit_priv()
-Date:   Fri,  8 Apr 2022 09:37:10 +0800
-X-OQ-MSGID: <20220408013710.15055-1-xkernel.wang@foxmail.com>
+        Thu, 7 Apr 2022 21:40:19 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ACFA140DF2
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 18:38:17 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id kr12-20020a17090b490c00b001cb3ee2e4c1so478900pjb.5
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 18:38:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Z4sY0ayTp/vh055DIkYLp+6K53mUbW2MVU3JridHXEo=;
+        b=GlkX8JS2+O2TND3PKWQRDu67IA5ihu3sqlHNXgHStSouS+fez9JOmMeuT9dhVf1iGZ
+         g6mZz/zyRTmvU7YTfzySSjqlcX3DTBxOhNqssrme6HaxS5QnfPtKZhRdDlda5PVj6EZi
+         kPnjnXx5jLHB+y9POYhyeGdbfeH0nExOGtt9GIdXbRm1+79UNNu+fcUn4ku5Kn2jnjiJ
+         tTpx9F3Y95JVfxGKUoV3/GHj+zoDWeeCp/0K5p62cCQ/CJvNHYE5MHGQUkgc4RQ4SkCl
+         7DLYmY+fTpC/vro+F82G7ueaAzJZNGy2Xa4Me8xo3DWRFX1KY3TXazMpb9dODLBCmd9B
+         NEKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Z4sY0ayTp/vh055DIkYLp+6K53mUbW2MVU3JridHXEo=;
+        b=DQeuy9oT3wCudBZhcwQ5NV+qFygBS4bI9S6XVDycyocKJ3CpbOided2cojAaynriVb
+         AgGX5boE9tUEmUmd+siphJgDPv+kFadLBqh5xb+z5jcfAAOx3OpMgdG63r6baJYWfe6Z
+         e/ColcHoTGmscrQKxcdES+JhYn7ihLAdQqv4IZpO/trJQeI5+8Y8tMbonjlI5ow2Rwf+
+         UG4MvOjK3O/nBtZuCeOVZgNxQOsCyuGik6DT1mYQIl0ETYO5EVtGnYGS5MmFK2DS1Qlt
+         aOXZ5b87mcvISlQhU/R4wmVb5DU6Oai0aV2gh6gnpROFiRgD11Rsl55vp0JoKvgDxpPw
+         7nmg==
+X-Gm-Message-State: AOAM533Y2OTQB2k5i88xAw39A5yKrwhfRDOAFT3FL1dCHbJiB/Mf/yZd
+        DuiGImAyC1Pm1yRjIeBu+M8r8rzbZsuo5sqGV5HBDA==
+X-Google-Smtp-Source: ABdhPJztLyXTASXggdUkSdPlx1wfhE5SGsYlFzDlQBIc8mWNp6TBFUqkzdGikFL17eKHOyVYX4Tzu3OXN0IKEKAhhQg=
+X-Received: by 2002:a17:90a:ca:b0:1ca:5253:b625 with SMTP id
+ v10-20020a17090a00ca00b001ca5253b625mr19017847pjd.220.1649381896572; Thu, 07
+ Apr 2022 18:38:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+References: <CAPcyv4jAqV7dZdmGcKrG=f8sYmUXaL7YCQtME6GANywncwd+zg@mail.gmail.com>
+ <4fd95f0b-106f-6933-7bc6-9f0890012b53@fujitsu.com> <YkPtptNljNcJc1g/@infradead.org>
+ <15a635d6-2069-2af5-15f8-1c0513487a2f@fujitsu.com> <YkQtOO/Z3SZ2Pksg@infradead.org>
+ <4ed8baf7-7eb9-71e5-58ea-7c73b7e5bb73@fujitsu.com> <YkR8CUdkScEjMte2@infradead.org>
+ <20220330161812.GA27649@magnolia> <fd37cde6-318a-9faf-9bff-70bb8e5d3241@oracle.com>
+ <CAPcyv4gqBmGCQM_u40cR6GVror6NjhxV5Xd7pdHedE2kHwueoQ@mail.gmail.com> <20220406203900.GR27690@magnolia>
+In-Reply-To: <20220406203900.GR27690@magnolia>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Thu, 7 Apr 2022 18:38:05 -0700
+Message-ID: <CAPcyv4g9m13VGq9mFHHhd301jZk-OQC47MGpB9nU=erA0i2ZCg@mail.gmail.com>
+Subject: Re: [PATCH v11 1/8] dax: Introduce holder for dax_device
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     Jane Chu <jane.chu@oracle.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Shiyang Ruan <ruansy.fnst@fujitsu.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux MM <linux-mm@kvack.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        david <david@fromorbit.com>, "Luck, Tony" <tony.luck@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,96 +79,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+[ add Mauro and Tony for RAS discussion ]
 
-In _rtw_init_xmit_priv(), there are several error paths for allocation
-failures just jump to the `exit` section. However, there is no action
-will be performed, so the allocated resources are not properly released,
-which leads to various memory leaks.
+On Wed, Apr 6, 2022 at 1:39 PM Darrick J. Wong <djwong@kernel.org> wrote:
+>
+> On Tue, Apr 05, 2022 at 06:22:48PM -0700, Dan Williams wrote:
+> > On Tue, Apr 5, 2022 at 5:55 PM Jane Chu <jane.chu@oracle.com> wrote:
+> > >
+> > > On 3/30/2022 9:18 AM, Darrick J. Wong wrote:
+> > > > On Wed, Mar 30, 2022 at 08:49:29AM -0700, Christoph Hellwig wrote:
+> > > >> On Wed, Mar 30, 2022 at 06:58:21PM +0800, Shiyang Ruan wrote:
+> > > >>> As the code I pasted before, pmem driver will subtract its ->data_offset,
+> > > >>> which is byte-based. And the filesystem who implements ->notify_failure()
+> > > >>> will calculate the offset in unit of byte again.
+> > > >>>
+> > > >>> So, leave its function signature byte-based, to avoid repeated conversions.
+> > > >>
+> > > >> I'm actually fine either way, so I'll wait for Dan to comment.
+> > > >
+> > > > FWIW I'd convinced myself that the reason for using byte units is to
+> > > > make it possible to reduce the pmem failure blast radius to subpage
+> > > > units... but then I've also been distracted for months. :/
+> > > >
+> > >
+> > > Yes, thanks Darrick!  I recall that.
+> > > Maybe just add a comment about why byte unit is used?
+> >
+> > I think we start with page failure notification and then figure out
+> > how to get finer grained through the dax interface in follow-on
+> > changes. Otherwise, for finer grained error handling support,
+> > memory_failure() would also need to be converted to stop upcasting
+> > cache-line granularity to page granularity failures. The native MCE
+> > notification communicates a 'struct mce' that can be in terms of
+> > sub-page bytes, but the memory management implications are all page
+> > based. I assume the FS implications are all FS-block-size based?
+>
+> I wouldn't necessarily make that assumption -- for regular files, the
+> user program is in a better position to figure out how to reset the file
+> contents.
+>
+> For fs metadata, it really depends.  In principle, if (say) we could get
+> byte granularity poison info, we could look up the space usage within
+> the block to decide if the poisoned part was actually free space, in
+> which case we can correct the problem by (re)zeroing the affected bytes
+> to clear the poison.
+>
+> Obviously, if the blast radius hits the internal space info or something
+> that was storing useful data, then you'd have to rebuild the whole block
+> (or the whole data structure), but that's not necessarily a given.
 
-To properly release them, this patch unifies the error handling code and
-several error handling paths are added.
-According to the allocation sequence, if the validation fails, it will
-jump to its corresponding error tag to release the resources.
+tl;dr: dax_holder_notify_failure() != fs->notify_failure()
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
----
-ChangeLog:
-v1->v2 update the description and adjust the sequence of patches.
-v2->v3 None to this patch, but some to another pathch in this series.
- drivers/staging/r8188eu/core/rtw_xmit.c | 32 ++++++++++++++++++-------
- 1 file changed, 24 insertions(+), 8 deletions(-)
+So I think I see some confusion between what DAX->notify_failure()
+needs, memory_failure() needs, the raw information provided by the
+hardware, and the failure granularity the filesystem can make use of.
 
-diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
-index aede8ef..865b2fc 100644
---- a/drivers/staging/r8188eu/core/rtw_xmit.c
-+++ b/drivers/staging/r8188eu/core/rtw_xmit.c
-@@ -112,7 +112,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
- 
- 	if (!pxmitpriv->pallocated_xmitbuf) {
- 		res = _FAIL;
--		goto exit;
-+		goto free_frame_buf;
- 	}
- 
- 	pxmitpriv->pxmitbuf = (u8 *)N_BYTE_ALIGMENT((size_t)(pxmitpriv->pallocated_xmitbuf), 4);
-@@ -134,7 +134,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
- 			msleep(10);
- 			res = rtw_os_xmit_resource_alloc(padapter, pxmitbuf, (MAX_XMITBUF_SZ + XMITBUF_ALIGN_SZ));
- 			if (res == _FAIL)
--				goto exit;
-+				goto free_xmitbuf;
- 		}
- 
- 		pxmitbuf->flags = XMIT_VO_QUEUE;
-@@ -152,7 +152,7 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
- 
- 	if (!pxmitpriv->pallocated_xmit_extbuf) {
- 		res = _FAIL;
--		goto exit;
-+		goto free_xmitbuf;
- 	}
- 
- 	pxmitpriv->pxmit_extbuf = (u8 *)N_BYTE_ALIGMENT((size_t)(pxmitpriv->pallocated_xmit_extbuf), 4);
-@@ -167,10 +167,8 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
- 		pxmitbuf->ext_tag = true;
- 
- 		res = rtw_os_xmit_resource_alloc(padapter, pxmitbuf, max_xmit_extbuf_size + XMITBUF_ALIGN_SZ);
--		if (res == _FAIL) {
--			res = _FAIL;
--			goto exit;
--		}
-+		if (res == _FAIL)
-+			goto free_xmit_extbuf;
- 
- 		list_add_tail(&pxmitbuf->list, &pxmitpriv->free_xmit_extbuf_queue.queue);
- 		pxmitbuf++;
-@@ -200,8 +198,26 @@ s32	_rtw_init_xmit_priv(struct xmit_priv *pxmitpriv, struct adapter *padapter)
- 
- 	rtl8188eu_init_xmit_priv(padapter);
- 
--exit:
-+	return _SUCCESS;
- 
-+free_xmit_extbuf:
-+	pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmit_extbuf;
-+	while (i-- > 0) {
-+		rtw_os_xmit_resource_free(padapter, pxmitbuf, (max_xmit_extbuf_size + XMITBUF_ALIGN_SZ));
-+		pxmitbuf++;
-+	}
-+	vfree(pxmitpriv->pallocated_xmit_extbuf);
-+	i = NR_XMITBUFF;
-+free_xmitbuf:
-+	pxmitbuf = (struct xmit_buf *)pxmitpriv->pxmitbuf;
-+	while (i-- > 0) {
-+		rtw_os_xmit_resource_free(padapter, pxmitbuf, (MAX_XMITBUF_SZ + XMITBUF_ALIGN_SZ));
-+		pxmitbuf++;
-+	}
-+	vfree(pxmitpriv->pallocated_xmitbuf);
-+free_frame_buf:
-+	vfree(pxmitpriv->pallocated_frame_buf);
-+exit:
- 	return res;
- }
- 
--- 
+DAX and memory_failure() need to make immediate page granularity
+decisions. They both need to map out whole pages (in the direct map
+and userspace respectively) to prevent future poison consumption, at
+least until the poison is repaired.
+
+The event that leads to a page being failed can be triggered by a
+hardware error as small as an individual cacheline. While that is
+interesting to a filesystem it isn't information that memory_failure()
+and DAX can utilize.
+
+The reason DAX needs to have a callback into filesystem code is to map
+the page failure back to all the processes that might have that page
+mapped because reflink means that page->mapping is not sufficient to
+find all the affected 'struct address_space' instances. So it's more
+of an address-translation / "help me kill processes" service than a
+general failure notification service.
+
+Currently when raw hardware event happens there are mechanisms like
+arch-specific notifier chains, like powerpc::mce_register_notifier()
+and x86::mce_register_decode_chain(), or other platform firmware code
+like ghes_edac_report_mem_error() that uplevel the error to a coarse
+page granularity failure, while emitting the fine granularity error
+event to userspace.
+
+All of this to say that the interface to ask the fs to do the bottom
+half of memory_failure() (walking affected 'struct address_space'
+instances and killing processes (mf_dax_kill_procs())) is different
+than the general interface to tell the filesystem that memory has gone
+bad relative to a device. So if the only caller of
+fs->notify_failure() handler is this code:
+
++       if (pgmap->ops->memory_failure) {
++               rc = pgmap->ops->memory_failure(pgmap, PFN_PHYS(pfn), PAGE_SIZE,
++                               flags);
+
+...then you'll never get fine-grained reports. So, I still think the
+DAX, pgmap and memory_failure() interface should be pfn based. The
+interface to the *filesystem* ->notify_failure() can still be
+byte-based, but the trigger for that byte based interface will likely
+need to be something driven by another agent. Perhaps like rasdaemon
+in userspace translating all the arch specific physical address events
+back into device-relative offsets and then calling a new ABI that is
+serviced by fs->notify_failure() on the backend.

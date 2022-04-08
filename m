@@ -2,70 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA8114F907B
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 10:13:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06B234F9083
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 10:14:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231256AbiDHIPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 04:15:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49732 "EHLO
+        id S231300AbiDHIQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 04:16:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231266AbiDHIPC (ORCPT
+        with ESMTP id S230159AbiDHIQF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 04:15:02 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C404B57B0D;
-        Fri,  8 Apr 2022 01:12:58 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id j6so4212687qkp.9;
-        Fri, 08 Apr 2022 01:12:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=A1kYgClPNkXttcnpJuxPc0b6ZRe4IN7sg6hgxvxZY2I=;
-        b=kyEjHYb+mQEqY7tdjXMs0+hof/gNfwAwz9dja0FAcYnl7Kn2yZMySrQKi8P9cC9n1c
-         CrtjN1tyIdNUF+51+SrlLfuU7ya2y0WJG246oGGjod0iZExbZVBbxz+lGF1Db4h/s2qA
-         i6Id7+u85d6f6SJ9fRU8zrC9Iy8Rw9JXIieXMCRdohRYua+ZYihU6UkNdqGlGYDPoQ8u
-         5r+d1x+aw1ZgnjTyjkG17EDh5N7rJJ8+Of6ms6W/m0OflU8zKwhmz2dJXJXf4PQjJZIr
-         ASahsPzrYQ3mTyOjiwbFaQSNl8+tdhB1PhF7L3BP8uSvcE5CKutKj9nyn8Gv569dZdOJ
-         ICEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=A1kYgClPNkXttcnpJuxPc0b6ZRe4IN7sg6hgxvxZY2I=;
-        b=w0UE7Uwx5KM0P6teHFMe/RkzEZJRDDvCRAQApPft5ov+eJ59uWPkTOjfdiQ7omjTPo
-         lySpc0cDkUEUbwQbBxbBsGmCOCFpd4oiIeaZM8TmP5g8kUGiKekURtsXWEqA3AbYv5f6
-         TAbznEuU4g5lM9F6Qmh6NQKX2+ts6iLG76Tff/dqTI2eR1y3IOnjzvV0KqV9DKSBC353
-         RtT/Gyv9gDW/R3YEay+F9Z64ppETppLsk6QgAbDA3JTVJjxx1gHE+9BuWn/fhJFSEP3l
-         9fLFs20Wr99JrOWz4rTqyPx9eSdWlo9Q5H+GQ+VI09fmdqIAH0dlvgmb9hiKeuS114p2
-         6HsA==
-X-Gm-Message-State: AOAM532sIIrjJb8c3r6bpGLg1mzRc42oTv0emySLeBhnmm0ty7Kkbtq2
-        /LsRpNjZxHSk8dFSh0Cw68M=
-X-Google-Smtp-Source: ABdhPJxW/8z2WJJs+ZAhz+Xmzvh9kcBG41vVI4/HDjmZkkMAhj9pbXxrlb1zk92Dm7AY+6aJROjPYA==
-X-Received: by 2002:a37:787:0:b0:69a:854:caae with SMTP id 129-20020a370787000000b0069a0854caaemr4189817qkh.20.1649405578000;
-        Fri, 08 Apr 2022 01:12:58 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id h11-20020a05622a170b00b002ebc9d47207sm4985436qtk.91.2022.04.08.01.12.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 01:12:57 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     peppe.cavallaro@st.com
-Cc:     alexandre.torgue@foss.st.com, joabreu@synopsys.com,
-        davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] net: stmmac: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-Date:   Fri,  8 Apr 2022 08:12:50 +0000
-Message-Id: <20220408081250.2494588-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Fri, 8 Apr 2022 04:16:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DCA5AEC1
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 01:14:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 570C061272
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 08:14:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FB26C385A1;
+        Fri,  8 Apr 2022 08:14:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649405641;
+        bh=XDlebbqKT3weA3tUvZioQrpxHAe1YfgeHmh4ZAqmS7s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=X771eGmwW1BYwZByt5brTrTHkhtD3qJ95KfehH5uHrE3yUNFpnqJK8Zr24reL1Qjs
+         TFYkmQBveyH5adrH3iv6ejpW3bjUpDjUBOmV1zrIzgdHSREyH1YySuAwPgSgYmApcJ
+         AXMDaKpwy3bzNPwNJ/mxH/wgLCEqCb+qUb/VX5cw=
+Date:   Fri, 8 Apr 2022 10:13:58 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Artur Bujdoso <artur.bujdoso@gmail.com>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: octeon-usb: remove unnecessary parentheses
+Message-ID: <Yk/uxoi4VUaR9OpO@kroah.com>
+References: <Yk/knRtaujd/PzK7@crux>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yk/knRtaujd/PzK7@crux>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,77 +50,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+On Fri, Apr 08, 2022 at 09:30:37AM +0200, Artur Bujdoso wrote:
+> Adhere to Linux kernel coding style.
+> 
+> Reported by checkpatch:
+> 
+> CHECK:UNNECESSARY_PARENTHESES: Unnecessary parentheses
+> 
+> Signed-off-by: Artur Bujdoso <artur.bujdoso@gmail.com>
+> ---
+>  drivers/staging/octeon-usb/octeon-hcd.c | 62 ++++++++++++-------------
+>  1 file changed, 31 insertions(+), 31 deletions(-)
+> 
+> diff --git a/drivers/staging/octeon-usb/octeon-hcd.c b/drivers/staging/octeon-usb/octeon-hcd.c
+> index a1cd81d4a114..32bcd6c582f5 100644
+> --- a/drivers/staging/octeon-usb/octeon-hcd.c
+> +++ b/drivers/staging/octeon-usb/octeon-hcd.c
+> @@ -1101,9 +1101,9 @@ static struct cvmx_usb_pipe *cvmx_usb_open_pipe(struct octeon_hcd *usb,
+>  	pipe = kzalloc(sizeof(*pipe), GFP_ATOMIC);
+>  	if (!pipe)
+>  		return NULL;
+> -	if ((device_speed == CVMX_USB_SPEED_HIGH) &&
+> -	    (transfer_dir == CVMX_USB_DIRECTION_OUT) &&
+> -	    (transfer_type == CVMX_USB_TRANSFER_BULK))
+> +	if (device_speed == CVMX_USB_SPEED_HIGH &&
+> +	    transfer_dir == CVMX_USB_DIRECTION_OUT &&
+> +	    transfer_type == CVMX_USB_TRANSFER_BULK)
+>  		pipe->flags |= CVMX_USB_PIPE_FLAGS_NEED_PING;
 
-Using pm_runtime_resume_and_get is more appropriate
-for simplifing code
+Nah, the original is fine, no need to change this.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
----
- .../net/ethernet/stmicro/stmmac/stmmac_mdio.c | 24 +++++++------------
- 1 file changed, 8 insertions(+), 16 deletions(-)
+Unless, do you have this hardware?  If so, getting this out of staging
+would be nice to have happen one day.
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
-index a5d150c5f3d8..9bc625fccca0 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
-@@ -88,11 +88,9 @@ static int stmmac_xgmac2_mdio_read(struct mii_bus *bus, int phyaddr, int phyreg)
- 	u32 tmp, addr, value = MII_XGMAC_BUSY;
- 	int ret;
- 
--	ret = pm_runtime_get_sync(priv->device);
--	if (ret < 0) {
--		pm_runtime_put_noidle(priv->device);
-+	ret = pm_runtime_resume_and_get(priv->device);
-+	if (ret < 0)
- 		return ret;
--	}
- 
- 	/* Wait until any existing MII operation is complete */
- 	if (readl_poll_timeout(priv->ioaddr + mii_data, tmp,
-@@ -156,11 +154,9 @@ static int stmmac_xgmac2_mdio_write(struct mii_bus *bus, int phyaddr,
- 	u32 addr, tmp, value = MII_XGMAC_BUSY;
- 	int ret;
- 
--	ret = pm_runtime_get_sync(priv->device);
--	if (ret < 0) {
--		pm_runtime_put_noidle(priv->device);
-+	ret = pm_runtime_resume_and_get(priv->device);
-+	if (ret < 0)
- 		return ret;
--	}
- 
- 	/* Wait until any existing MII operation is complete */
- 	if (readl_poll_timeout(priv->ioaddr + mii_data, tmp,
-@@ -229,11 +225,9 @@ static int stmmac_mdio_read(struct mii_bus *bus, int phyaddr, int phyreg)
- 	int data = 0;
- 	u32 v;
- 
--	data = pm_runtime_get_sync(priv->device);
--	if (data < 0) {
--		pm_runtime_put_noidle(priv->device);
-+	data = pm_runtime_resume_and_get(priv->device);
-+	if (data < 0)
- 		return data;
--	}
- 
- 	value |= (phyaddr << priv->hw->mii.addr_shift)
- 		& priv->hw->mii.addr_mask;
-@@ -297,11 +291,9 @@ static int stmmac_mdio_write(struct mii_bus *bus, int phyaddr, int phyreg,
- 	u32 value = MII_BUSY;
- 	u32 v;
- 
--	ret = pm_runtime_get_sync(priv->device);
--	if (ret < 0) {
--		pm_runtime_put_noidle(priv->device);
-+	ret = pm_runtime_resume_and_get(priv->device);
-+	if (ret < 0)
- 		return ret;
--	}
- 
- 	value |= (phyaddr << priv->hw->mii.addr_shift)
- 		& priv->hw->mii.addr_mask;
--- 
-2.25.1
+thanks,
 
+greg k-h

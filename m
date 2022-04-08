@@ -2,219 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 068084F90BF
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 10:27:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7181D4F90C7
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 10:29:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231732AbiDHI3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 04:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52586 "EHLO
+        id S231785AbiDHIbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 04:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230126AbiDHI3r (ORCPT
+        with ESMTP id S231731AbiDHIbn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 04:29:47 -0400
-Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B68F024F8B1;
-        Fri,  8 Apr 2022 01:27:43 -0700 (PDT)
-HMM_SOURCE_IP: 172.18.0.48:49474.967726217
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-202.80.192.39 (unknown [172.18.0.48])
-        by chinatelecom.cn (HERMES) with SMTP id 9E0302800F9;
-        Fri,  8 Apr 2022 16:27:21 +0800 (CST)
-X-189-SAVE-TO-SEND: +liuxp11@chinatelecom.cn
-Received: from  ([172.18.0.48])
-        by app0024 with ESMTP id 7ad1d1860fd746e492a0b7b9acd2ba5b for rafael@kernel.org;
-        Fri, 08 Apr 2022 16:27:42 CST
-X-Transaction-ID: 7ad1d1860fd746e492a0b7b9acd2ba5b
-X-Real-From: liuxp11@chinatelecom.cn
-X-Receive-IP: 172.18.0.48
-X-MEDUSA-Status: 0
-Sender: liuxp11@chinatelecom.cn
-From:   Liu Xinpeng <liuxp11@chinatelecom.cn>
-To:     rafael@kernel.org, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, keescook@chromium.org, anton@enomsg.org,
-        ccross@android.com, robert.moore@intel.com, tony.luck@intel.com,
-        lenb@kernel.org, james.morse@arm.com, bp@alien8.de,
-        tglx@linutronix.de, mingo@redhat.com, ying.huang@intel.com,
-        gong.chen@linux.intel.com
-Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Liu Xinpeng <liuxp11@chinatelecom.cn>
-Subject: [PATCH v4] ACPI: APEI: fix missing erst record id
-Date:   Fri,  8 Apr 2022 16:27:07 +0800
-Message-Id: <1649406427-9357-1-git-send-email-liuxp11@chinatelecom.cn>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 8 Apr 2022 04:31:43 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915D82FDCBF;
+        Fri,  8 Apr 2022 01:29:40 -0700 (PDT)
+Received: from [10.10.2.52] (unknown [10.10.2.52])
+        by mail.ispras.ru (Postfix) with ESMTPSA id A57AE40D403D;
+        Fri,  8 Apr 2022 08:29:33 +0000 (UTC)
+From:   Alexey Khoroshilov <khoroshilov@ispras.ru>
+Subject: Re: Stable release process proposal (Was: Linux 5.10.109)
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org, lwn@lwn.net,
+        jslaby@suse.cz
+References: <164845571613863@kroah.com>
+ <44e28591-873a-d873-e04a-78dda900a5de@ispras.ru> <YkPeTkf0sG/ns+L4@kroah.com>
+Autocrypt: addr=khoroshilov@ispras.ru; prefer-encrypt=mutual; keydata=
+ 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
+ kK2E04Fb+Zk1eJvHYRc=
+Message-ID: <cf4f2100-0518-56eb-29c8-393e2b49dc71@ispras.ru>
+Date:   Fri, 8 Apr 2022 11:29:33 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <YkPeTkf0sG/ns+L4@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Read a record is cleared by others, but the deleted record cache entry is
-still created by erst_get_record_id_next. When next enumerate the records,
-get the cached deleted record, then erst_read return -ENOENT and try to
-get next record, loop back to first ID will return 0 in function
-__erst_record_id_cache_add_one and then set record_id as
-APEI_ERST_INVALID_RECORD_ID, finished this time read operation.
-It will result in read the records just in the cache hereafter.
+On 30.03.2022 07:36, Greg Kroah-Hartman wrote:
+> On Wed, Mar 30, 2022 at 02:49:00AM +0300, Alexey Khoroshilov wrote:
+>> Dear Greg,
+>>
+>> First of all, thank you very much for keeping stable maintenance so well.
+>>
+>> We (Linux Verification Center of ISPRAS (linuxtesting.org)) are going to
+>> join a team of regular testers for releases in 5.10 stable branch (and
+>> other branches later). We are deploying some test automation for that
+>> and have met an oddity that would to discuss.
+>>
+>> Sometimes, like in 5.10.109 release, we have a situation when a
+>> released version (5.10.109) differs from the release candidate
+>> (5.10.109-rс1). In this case there was a patch "llc: only change
+>> llc->dev when bind()succeeds" added to fix a bug in another llc fix.
+>> Unfortunately, as Pavel noted, this patch does not fix a bug, but
+>> introduces a new one, because another commit b37a46683739 ("netdevice:
+>> add the case if dev is NULL") was missed in 5.10 branch.
+> This happens quite frequently due to issues found in testing.  It's not
+> a new thing.
+>
+>> The problem will be fixed in 5.10.110, but we still have a couple oddities:
+>> - we have a release that should not be recommended for use
+>> - we have a commit message misleading users when says:
+>>
+>>     Tested-by: Pavel Machek (CIP) <pavel@denx.de>
+>>     Tested-by: Fox Chen <foxhlchen@gmail.com>
+>>     Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+>>     Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+>>     Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+>>     Tested-by: Salvatore Bonaccorso <carnil@debian.org>
+>>     Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>>     Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+>>     Tested-by: Guenter Roeck <linux@roeck-us.net>
+>>
+>> but actually nobody tested that version.
+>>
+>> There are potential modifications in stable release process that can
+>> prevent such problems:
+>>
+>> (1) to always release rс2 when there are changes in rc1 introduced
+>>
+>> (2) to avoid Tested-by: section from release commits in such situations.
+>>
+>> Or may be it is overkill and it too complicates maintenance work to be
+>> worth. What do you think?
+> I think it's not worth the extra work on my side for this given the
+> already large workload.  What would benifit from this to justify it?
+I see, thank you.
 
-This patch cleared the deleted record cache, fix the issue that
-"./erst-inject -p" shows record counts not equal to "./erst-inject -n".
+I believed the goal is to provide some minimal quality guarantees for a
+particular version of the code. But if the process of updates is quite
+intensive, it may make sense to transfer responsibility for particular
+release verification downstream.
 
-A reproducer of the problem(retry many times):
-
-[root@localhost erst-inject]# ./erst-inject -c 0xaaaaa00011
-[root@localhost erst-inject]# ./erst-inject -p
-rc: 273
-rcd sig: CPER
-rcd id: 0xaaaaa00012
-rc: 273
-rcd sig: CPER
-rcd id: 0xaaaaa00013
-rc: 273
-rcd sig: CPER
-rcd id: 0xaaaaa00014
-[root@localhost erst-inject]# ./erst-inject -i 0xaaaaa000006
-[root@localhost erst-inject]# ./erst-inject -i 0xaaaaa000007
-[root@localhost erst-inject]# ./erst-inject -i 0xaaaaa000008
-[root@localhost erst-inject]# ./erst-inject -p
-rc: 273
-rcd sig: CPER
-rcd id: 0xaaaaa00012
-rc: 273
-rcd sig: CPER
-rcd id: 0xaaaaa00013
-rc: 273
-rcd sig: CPER
-rcd id: 0xaaaaa00014
-[root@localhost erst-inject]# ./erst-inject -n
-total error record count: 6
-
-v1->v2  fix style problems
-v2->v3  fix apei_read_mce called erst_get_record_id_next and modify
-the commit message.
-v3->v4  add erst_clear_cache in another retry.
-
-Signed-off-by: Liu Xinpeng <liuxp11@chinatelecom.cn>
----
- arch/x86/kernel/cpu/mce/apei.c |  9 ++++++---
- drivers/acpi/apei/erst-dbg.c   |  4 +++-
- drivers/acpi/apei/erst.c       | 34 +++++++++++++++++++++++++++++++---
- include/acpi/apei.h            |  1 +
- 4 files changed, 41 insertions(+), 7 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/mce/apei.c b/arch/x86/kernel/cpu/mce/apei.c
-index 0e3ae64d3b76..d77de72a91d2 100644
---- a/arch/x86/kernel/cpu/mce/apei.c
-+++ b/arch/x86/kernel/cpu/mce/apei.c
-@@ -179,14 +179,17 @@ ssize_t apei_read_mce(struct mce *m, u64 *record_id)
- 		goto out;
- 	rc = erst_read(*record_id, &rcd.hdr, sizeof(rcd));
- 	/* someone else has cleared the record, try next one */
--	if (rc == -ENOENT)
-+	if (rc == -ENOENT) {
-+		erst_clear_cache(*record_id);
- 		goto retry;
--	else if (rc < 0)
-+	} else if (rc < 0)
- 		goto out;
- 	/* try to skip other type records in storage */
- 	else if (rc != sizeof(rcd) ||
--		 !guid_equal(&rcd.hdr.creator_id, &CPER_CREATOR_MCE))
-+		 !guid_equal(&rcd.hdr.creator_id, &CPER_CREATOR_MCE)) {
-+		erst_clear_cache(*record_id);
- 		goto retry;
-+	}
- 	memcpy(m, &rcd.mce, sizeof(*m));
- 	rc = sizeof(*m);
- out:
-diff --git a/drivers/acpi/apei/erst-dbg.c b/drivers/acpi/apei/erst-dbg.c
-index c740f0faad39..5b8164280a17 100644
---- a/drivers/acpi/apei/erst-dbg.c
-+++ b/drivers/acpi/apei/erst-dbg.c
-@@ -113,8 +113,10 @@ static ssize_t erst_dbg_read(struct file *filp, char __user *ubuf,
- retry:
- 	rc = len = erst_read(id, erst_dbg_buf, erst_dbg_buf_len);
- 	/* The record may be cleared by others, try read next record */
--	if (rc == -ENOENT)
-+	if (rc == -ENOENT) {
-+		erst_clear_cache(id);
- 		goto retry_next;
-+	}
- 	if (rc < 0)
- 		goto out;
- 	if (len > ERST_DBG_RECORD_LEN_MAX) {
-diff --git a/drivers/acpi/apei/erst.c b/drivers/acpi/apei/erst.c
-index 698d67cee052..07d69dc7fd62 100644
---- a/drivers/acpi/apei/erst.c
-+++ b/drivers/acpi/apei/erst.c
-@@ -856,6 +856,31 @@ ssize_t erst_read(u64 record_id, struct cper_record_header *record,
- }
- EXPORT_SYMBOL_GPL(erst_read);
- 
-+int erst_clear_cache(u64 record_id)
-+{
-+	int rc, i;
-+	u64 *entries;
-+
-+	if (erst_disable)
-+		return -ENODEV;
-+
-+	rc = mutex_lock_interruptible(&erst_record_id_cache.lock);
-+	if (rc)
-+		return rc;
-+
-+	entries = erst_record_id_cache.entries;
-+	for (i = 0; i < erst_record_id_cache.len; i++) {
-+		if (entries[i] == record_id)
-+			entries[i] = APEI_ERST_INVALID_RECORD_ID;
-+	}
-+	__erst_record_id_cache_compact();
-+
-+	mutex_unlock(&erst_record_id_cache.lock);
-+
-+	return rc;
-+}
-+EXPORT_SYMBOL_GPL(erst_clear_cache);
-+
- int erst_clear(u64 record_id)
- {
- 	int rc, i;
-@@ -998,14 +1023,17 @@ static ssize_t erst_reader(struct pstore_record *record)
- 
- 	len = erst_read(record_id, &rcd->hdr, rcd_len);
- 	/* The record may be cleared by others, try read next record */
--	if (len == -ENOENT)
-+	if (len == -ENOENT) {
-+		erst_clear_cache(record_id);
- 		goto skip;
--	else if (len < 0 || len < sizeof(*rcd)) {
-+	} else if (len < 0 || len < sizeof(*rcd)) {
- 		rc = -EIO;
- 		goto out;
- 	}
--	if (!guid_equal(&rcd->hdr.creator_id, &CPER_CREATOR_PSTORE))
-+	if (!guid_equal(&rcd->hdr.creator_id, &CPER_CREATOR_PSTORE)) {
-+		erst_clear_cache(record_id);
- 		goto skip;
-+	}
- 
- 	record->buf = kmalloc(len, GFP_KERNEL);
- 	if (record->buf == NULL) {
-diff --git a/include/acpi/apei.h b/include/acpi/apei.h
-index afaca3a075e8..f8c11ff4115a 100644
---- a/include/acpi/apei.h
-+++ b/include/acpi/apei.h
-@@ -47,6 +47,7 @@ void erst_get_record_id_end(void);
- ssize_t erst_read(u64 record_id, struct cper_record_header *record,
- 		  size_t buflen);
- int erst_clear(u64 record_id);
-+int erst_clear_cache(u64 record_id);
- 
- int arch_apei_enable_cmcff(struct acpi_hest_header *hest_hdr, void *data);
- void arch_apei_report_mem_error(int sev, struct cper_sec_mem_err *mem_err);
--- 
-2.23.0
+Best regards,
+Alexey
 

@@ -2,177 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA7FA4F9924
+	by mail.lfdr.de (Postfix) with ESMTP id F34044F9925
 	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 17:13:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237469AbiDHPPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 11:15:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35584 "EHLO
+        id S237449AbiDHPPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 11:15:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237437AbiDHPOx (ORCPT
+        with ESMTP id S237417AbiDHPOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 11:14:53 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7601510242B;
-        Fri,  8 Apr 2022 08:12:47 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id 75so2197473qkk.8;
-        Fri, 08 Apr 2022 08:12:47 -0700 (PDT)
+        Fri, 8 Apr 2022 11:14:47 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C5E100A79
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 08:12:43 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id q26so10399357edc.7
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 08:12:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=OHIHH7LBjO7n3w0TkyTvZ+CHhZPHMYRUZ96K/VbT0E0=;
-        b=MMMg/MMY5cbKMYBNeQ+Fkz+rHwKfKIaAdKf+u/3iJedRJdm+2+1Y2/eIatpIU5jSpO
-         yFY33ZFWVtvkFiIHZbCtBhakZXh9JVNEwcBWEJ9R/MUrqgKe8HMMcQHfoFPhoMzrcF5W
-         wSPCdZ0Ia95qDsVnWzNn1nWZ+wfI5iCZbOMIRag/vacyytKiioYxsmodBfdMXfpF85aL
-         N2RiwEVwdFjQxUn/q8R8ToAt4Uet4AfobcdWwx0qEVdjrm1sAeXFg/gLFE1K/oh71MNq
-         MyQtne9Bw8jrJxkfCcF8SkUwpWLQdnsvhK/ZA9FWh9BMcRPta1P22DrV6yMG5TufN5MZ
-         c3vA==
+        bh=XX2KXCol/cB+F9F2M6wlzFqK3IJlqDqtRBrRFqCr29Y=;
+        b=xmZp2V8/SWQoUosFHxYo5+Zv/mSOMGKBwKZmvMSMHnsAA6Lzmak2UdaU2ffkf0qICk
+         CdtxzrJa64VXnINoRbhednGfkz1nzzejp09cDA/CuPQPIDKKjv7vQAWa4Q7WuALe+WcE
+         8p8ICxJ+91iX59qks9YZvD97YYWeOiUKFOJ0+5xDRZdLs+bQfbK29uo+UnGnTjQxdfV3
+         qoYR4R0XPvi2KM7FmnS5BAtuwYiPIEsVzGxgShawQv7p78jGuvy/dayt2hHFeHxZV3hG
+         OqC0G+BBI3ZmiAP06mS1eAI2qKgC2rFABCwbJJtedNvj16SY/cXqhVZHXXJi1sBZLmbD
+         +5lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=OHIHH7LBjO7n3w0TkyTvZ+CHhZPHMYRUZ96K/VbT0E0=;
-        b=UzE1nDmCPf0pTz7xkm+hPj9pnW4ZeAzW9kWeyMFPFbwDGtNmTY7+1oHJBoTEOxuqdx
-         nuntti5gb3ZeXVQu2z0FL6hNaGJiDYobejGG+C2sGrdfyAdceBRQgzW+v4jn7mlRsgun
-         6kl/o8kiW2cD9SGpI9jE+v7yFkxxR83cf9PLcodh9cNd4iyMoHGx/hx0YyYTk5viz35s
-         kkUnYxiub+fqIDK1mHUzC9fvt5e0U1bt7p3YAbuPFnGThv9zdgnOFspE6QenDGNmbJ+S
-         maiouIMoLBoo4TTsb8SPGRpixH4bitxwVxQbneuchozEcpjMUtc2NRJZK6coJ7G3v6K+
-         bn4Q==
-X-Gm-Message-State: AOAM532T1Szy6A90AhW9Ewo9NIb11Hyqp5FQrkj63ZwftlScEoHUC9oP
-        weDlnGCfyv4h9vHA5uf3qgwig7j9fTTiqb6a
-X-Google-Smtp-Source: ABdhPJxTudTqPR/+KoxaJhqcjN0s/VoySgsi3tEWDwUorfhaM8rB6bSIoVnz/XkHzepwTkSL6CzaFg==
-X-Received: by 2002:a37:67c5:0:b0:69b:ed21:e345 with SMTP id b188-20020a3767c5000000b0069bed21e345mr1074947qkc.732.1649430766325;
-        Fri, 08 Apr 2022 08:12:46 -0700 (PDT)
-Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
-        by smtp.gmail.com with ESMTPSA id 191-20020a3707c8000000b0069a13545fcfsm2266052qkh.123.2022.04.08.08.12.45
+        bh=XX2KXCol/cB+F9F2M6wlzFqK3IJlqDqtRBrRFqCr29Y=;
+        b=CM8pljjO+n3e8AH8LQCpSOvVnfCZycxrp0wOls1eX6zEUl8Cgew0nzRKbyi9QyOoP/
+         9hVrjj2pS+UdVYHS64FLAZUatavyaqOne4ft7Cv68j48ogafUKexD4lRFInVBA/NjIqD
+         C3AjqED9wj+nyfr78JhwIoBzF81O8P7SDRk5NDpDBliKL4rNN5z1N6j9y1yPMdqoqSUS
+         ypVoNhne/tLsvkQoOXs0NsOOp/RglJqZltWL1LzoOhymEM/1J/wcceMf0ddcl/y9bExu
+         8+y/+a0f4nHL1xar6F6pGJuoUnnpidzOByILdfQiHtOaARPsVnhnlq74H04N/nAiGTBQ
+         uKBw==
+X-Gm-Message-State: AOAM5316wY1g1B579AA7teAHm2E8igKKJwaGdumDDbsYMbIb2WPrYRRW
+        lX6M8VZIiC7RjW7Le4hJ7alHBg==
+X-Google-Smtp-Source: ABdhPJyyk6UanMuslV4A5Fs+9kw8DBweVAWH39SlZJfK/DvSvceiUMZFRxlsbK/sPjGHa4B4qMXAYg==
+X-Received: by 2002:a05:6402:3693:b0:41c:dd5a:e8ca with SMTP id ej19-20020a056402369300b0041cdd5ae8camr19645323edb.225.1649430762007;
+        Fri, 08 Apr 2022 08:12:42 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id b20-20020a1709063f9400b006e12836e07fsm8774030ejj.154.2022.04.08.08.12.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 08:12:46 -0700 (PDT)
-From:   Peter Geis <pgwipeout@gmail.com>
+        Fri, 08 Apr 2022 08:12:41 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     linux-rockchip@lists.infradead.org,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 5/5] arm64: dts: rockchip: add usb3 support to rk3568-evb1-v10
-Date:   Fri,  8 Apr 2022 11:12:37 -0400
-Message-Id: <20220408151237.3165046-6-pgwipeout@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220408151237.3165046-1-pgwipeout@gmail.com>
-References: <20220408151237.3165046-1-pgwipeout@gmail.com>
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: memory: renesas,rpc-if: Document R-Car H3/M3/E3 support
+Date:   Fri,  8 Apr 2022 17:12:37 +0200
+Message-Id: <164943075366.672946.10621467910167215562.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <3784b6cb76a008fb56d6cb4ba228d78c77e710fa.1648546583.git.geert+renesas@glider.be>
+References: <3784b6cb76a008fb56d6cb4ba228d78c77e710fa.1648546583.git.geert+renesas@glider.be>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Riesch <michael.riesch@wolfvision.net>
+On Tue, 29 Mar 2022 11:38:03 +0200, Geert Uytterhoeven wrote:
+> Document support for the SPI Multi I/O Bus Controller (RPC-IF) in the
+> R-Car H3, M3-W, M3-W+, M3-N, and E3 SoCs.
+> 
+> 
 
-The Rockchip RK3568 EVB1 features one USB 3.0 device-only
-(USB 2.0 OTG) port and one USB 3.0 host-only port.
-Activate the USB 3.0 controller nodes and phy nodes in the
-device tree.
+Applied, thanks!
 
-Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
----
- .../boot/dts/rockchip/rk3568-evb1-v10.dts     | 46 +++++++++++++++++++
- 1 file changed, 46 insertions(+)
+[1/1] dt-bindings: memory: renesas,rpc-if: Document R-Car H3/M3/E3 support
+      commit: 8f0e3af81711bf72b9c6138b0138bdc330d8c388
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts b/arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts
-index a794a0ea5c70..622be8be9813 100644
---- a/arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3568-evb1-v10.dts
-@@ -103,6 +103,18 @@ vcc5v0_usb_host: vcc5v0-usb-host {
- 		vin-supply = <&vcc5v0_usb>;
- 	};
- 
-+	vcc5v0_usb_otg: vcc5v0-usb-otg {
-+		compatible = "regulator-fixed";
-+		enable-active-high;
-+		gpio = <&gpio0 RK_PA5 GPIO_ACTIVE_HIGH>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&vcc5v0_usb_otg_en>;
-+		regulator-name = "vcc5v0_usb_otg";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		vin-supply = <&vcc5v0_usb>;
-+	};
-+
- 	vcc3v3_lcd0_n: vcc3v3-lcd0-n {
- 		compatible = "regulator-fixed";
- 		regulator-name = "vcc3v3_lcd0_n";
-@@ -136,6 +148,14 @@ regulator-state-mem {
- 	};
- };
- 
-+&combphy0 {
-+	status = "okay";
-+};
-+
-+&combphy1 {
-+	status = "okay";
-+};
-+
- &cpu0 {
- 	cpu-supply = <&vdd_cpu>;
- };
-@@ -507,6 +527,9 @@ usb {
- 		vcc5v0_usb_host_en: vcc5v0_usb_host_en {
- 			rockchip,pins = <0 RK_PA6 RK_FUNC_GPIO &pcfg_pull_none>;
- 		};
-+		vcc5v0_usb_otg_en: vcc5v0_usb_otg_en {
-+			rockchip,pins = <0 RK_PA5 RK_FUNC_GPIO &pcfg_pull_none>;
-+		};
- 	};
- };
- 
-@@ -568,6 +591,11 @@ &usb_host0_ohci {
- 	status = "okay";
- };
- 
-+&usb_host0_xhci {
-+	extcon = <&usb2phy0>;
-+	status = "okay";
-+};
-+
- &usb_host1_ehci {
- 	status = "okay";
- };
-@@ -576,6 +604,24 @@ &usb_host1_ohci {
- 	status = "okay";
- };
- 
-+&usb_host1_xhci {
-+	status = "okay";
-+};
-+
-+&usb2phy0 {
-+	status = "okay";
-+};
-+
-+&usb2phy0_host {
-+	phy-supply = <&vcc5v0_usb_host>;
-+	status = "okay";
-+};
-+
-+&usb2phy0_otg {
-+	vbus-supply = <&vcc5v0_usb_otg>;
-+	status = "okay";
-+};
-+
- &usb2phy1 {
- 	status = "okay";
- };
+Best regards,
 -- 
-2.25.1
-
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>

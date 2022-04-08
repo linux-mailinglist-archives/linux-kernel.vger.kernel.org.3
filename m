@@ -2,325 +2,379 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A55514F95C9
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:29:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE264F95C4
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:29:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235707AbiDHMaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 08:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54402 "EHLO
+        id S235734AbiDHMaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 08:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232535AbiDHM3m (ORCPT
+        with ESMTP id S232535AbiDHMaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 08:29:42 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0501E33DCB3
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 05:27:38 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id k21so14803895lfe.4
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 05:27:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=K0ZCLZVZHjdQHjkYjq3C12VlmjiKcOqPn8qAHZEMDHQ=;
-        b=le54dYxu8FyFjTVPe2rw9al+gUfpK8XpisfSSexN51FHGO0IKgVuuQYfFkdi5dN9+v
-         bnHH8KuPRCenyHJ+fX9a7adPG7owTMYVXSBstsfTNPfGD6kf0GgzaV69JnJzzFORMNBl
-         MP3OX4iPLVYpIVgd8ys8J0+Rufm7V6kjcNdAqk9klTGQ7mDW2X+tlWu5bnz2ysSqexaO
-         h9zdGqcdVHN8zOXaVb1FvnkhS+hvzg38XYBByoMH2DQz/u75Bsvck7a6cdQMZD8ozrcC
-         zQBE5XnYneJWrxEv/ZXzIiTP0nMGlNvHsQZPb809zW+BAcLt7UJdg6O7Qq5LMTe6fSTn
-         kkaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=K0ZCLZVZHjdQHjkYjq3C12VlmjiKcOqPn8qAHZEMDHQ=;
-        b=f1IRe4PMbnelhtLUSh1WadJqprsCrP1hHppumbu+JeEKXUiMD4vpU0gljX1/vdM3Cv
-         RBVShMFlF4nEU0LhM4clmyJg2wziC/ICPkatXD/DIwYbpmpvAI1VuLCTA1Sry2PlK+vU
-         ch9EO/sntnkcptgrklwPwC8udN6DKExEtlX3CsNdz6Mr4X+sa+9MvLQ1Oa04bxibOj+6
-         QgPgjHWvsCqDN5mwNJ5ZGOKgsT5edqxzc7VTpA1gfKwDyhiq5qc6Fx3uXR4UvlaluK8+
-         o9LuKsbfblVegJ8prPRJwTmiqKTbK/kXqtIhk4vY/MjRMr21L2PInPsb+/ngDi+0UmbL
-         kB4w==
-X-Gm-Message-State: AOAM530mzQqnr/qE61iswphkZFTEhFu0kRJ/wYyt4bCSIo30TSJxjJfo
-        3WjOUH0feusjvQcdRQZzTLesxA==
-X-Google-Smtp-Source: ABdhPJzBSUDRvdN9JvvkhYDhLk+irBa4u3Y8M14DyV37zV5TOvxgfbqWJ42CgbTKxCHU5yPrW8KMxw==
-X-Received: by 2002:a05:6512:3a89:b0:44a:796c:8db0 with SMTP id q9-20020a0565123a8900b0044a796c8db0mr12343651lfu.123.1649420857060;
-        Fri, 08 Apr 2022 05:27:37 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id k1-20020a2ea281000000b0024b54446beesm50453lja.107.2022.04.08.05.27.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Apr 2022 05:27:36 -0700 (PDT)
-Message-ID: <625ce8a0-4e25-5513-5599-c1cdebf5a3a5@linaro.org>
-Date:   Fri, 8 Apr 2022 15:27:35 +0300
+        Fri, 8 Apr 2022 08:30:07 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9841E33DCA7;
+        Fri,  8 Apr 2022 05:28:03 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 238CIqi2020806;
+        Fri, 8 Apr 2022 12:27:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : reply-to : references : mime-version : content-type
+ : in-reply-to; s=pp1; bh=HU+8+zh9GUF93NeGHHtWuqd7tZIaGNgNVe0X/9nToYc=;
+ b=UdAcjE4cIXBxmZz5ArcUuTEExs8f0VESYqFw3nJ/QzEo1zHaexHsb/7AihUG+Njh1T89
+ 0J9HgDxTfYMkcwfMYQY8PuIO8J8I+LfUm+ns6IWJ6O9C9YcfWIHMYAj13DdM/0ccn1Xy
+ XRVi2HLqGT0Qw4GS10fBDn246cCNIq09JDNE5IzMotgM+y9WLfhr+59ZV8T3Vx8KjKn8
+ U8Im/MwlFVcLzzlppkMPSofk9GVEkawaYav4JPgPF4fp3Xes0YvdTp3eS0b7QOn1ylZW
+ EcrELozeCuLUyYcb3xSsNMDg7wEjqgfXQVYaSxoUBmMx/j2gyHKK15wS2jwKqyBdhuyY LQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3faeqq7d6n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 08 Apr 2022 12:27:54 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 238Bks2M034821;
+        Fri, 8 Apr 2022 12:27:53 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3faeqq7d65-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 08 Apr 2022 12:27:53 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 238CDZ8t003675;
+        Fri, 8 Apr 2022 12:27:51 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 3f6e493req-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 08 Apr 2022 12:27:51 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 238CRuDo46989570
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 8 Apr 2022 12:27:56 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D043BAE051;
+        Fri,  8 Apr 2022 12:27:48 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CD28EAE045;
+        Fri,  8 Apr 2022 12:27:46 +0000 (GMT)
+Received: from linux.vnet.ibm.com (unknown [9.40.195.195])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Fri,  8 Apr 2022 12:27:46 +0000 (GMT)
+Date:   Fri, 8 Apr 2022 17:57:46 +0530
+From:   Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+To:     Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+Cc:     acme@kernel.org, jolsa@kernel.org, disgoel@linux.vnet.ibm.com,
+        mpe@ellerman.id.au, linux-perf-users@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, maddy@linux.vnet.ibm.com,
+        rnsastry@linux.ibm.com, kjain@linux.ibm.com,
+        linux-kernel@vger.kernel.org, irogers@google.com
+Subject: Re: [PATCH v2 1/4] tools/perf: Fix perf bench futex to correct usage
+ of affinity for machines with #CPUs > 1K
+Message-ID: <20220408122746.GF568950@linux.vnet.ibm.com>
+Reply-To: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+References: <20220406175113.87881-1-atrajeev@linux.vnet.ibm.com>
+ <20220406175113.87881-2-atrajeev@linux.vnet.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2] drm/msm/dp: enhance both connect and disconnect
- pending_timeout handle
-Content-Language: en-GB
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, vkoul@kernel.org,
-        daniel@ffwll.ch, airlied@linux.ie, agross@kernel.org,
-        bjorn.andersson@linaro.org
-Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
-        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1649280493-4393-1-git-send-email-quic_khsieh@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <1649280493-4393-1-git-send-email-quic_khsieh@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <20220406175113.87881-2-atrajeev@linux.vnet.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 5hrw8F5CNYz9fR6rIWH7nJ3V0hdhlQCp
+X-Proofpoint-ORIG-GUID: oM7ZKeYnD71NvGL7PjesL8HrBrBKKXES
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-08_04,2022-04-08_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 adultscore=0 spamscore=0 bulkscore=0
+ impostorscore=0 mlxlogscore=999 priorityscore=1501 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204080062
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/04/2022 00:28, Kuogee Hsieh wrote:
-> dp_hpd_plug_handle() is responsible for setting up main link and send
-> uevent to notify user space framework to start video stream. Similarly,
-> dp_hdp_unplug_handle is responsible to send uevent to notify user space
-> framework to stop video stream and then tear down main link.
-> However there are rare cases, such as in the middle of system suspending,
-> that uevent could not be delivered to user space framework. Therefore
-> some kind of recover mechanism armed by timer need to be in place in the
-> case of user space framework does not respond to uevent.
+* Athira Rajeev <atrajeev@linux.vnet.ibm.com> [2022-04-06 23:21:10]:
 
-Hmm, how does userpsace 'respond' to the uevent? The driver should send 
-hotplug notifications to userspace, but it must not expect any 
-particular reaction. The userspace might be as simple, as fbdev 
-emulation, but the driver still should function correctly.
+> perf bench futex testcase fails on systems with CPU's
+> more than 1K.
+> 
+> Testcase: perf bench futex all
+> Failure snippet:
+> <<>>Running futex/hash benchmark...
+> 
+> perf: pthread_create: No such file or directory
+> <<>>
+> 
+> All the futex benchmarks ( ie hash, lock-api, requeue, wake,
+> wake-parallel ), pthread_create is invoked in respective bench_futex_*
+> function. Though the logs shows direct failure from pthread_create,
+> strace logs showed that actual failure is from  "sched_setaffinity"
+> returning EINVAL (invalid argument). This happens because the default
+> mask size in glibc is 1024. To overcome this 1024 CPUs mask size
+> limitation of cpu_set_t, change the mask size using the CPU_*_S macros.
+> 
+> Patch addresses this by fixing all the futex benchmarks to use
+> CPU_ALLOC to allocate cpumask, CPU_ALLOC_SIZE for size, and
+> CPU_SET_S to set the mask.
+> 
+> Tested-by: Disha Goel <disgoel@linux.vnet.ibm.com>
+> Signed-off-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+> Reported-by: Disha Goel <disgoel@linux.vnet.ibm.com>
 
-> This patch have both dp_conenct_pending_timeout and
-> dp_disconnect_pending_timeout are used to stop video stream and tear down
-> main link and eventually restore DP driver state to known default
-> DISCONNECTED state in the case of timer fired due to framework does not
-> respond to uevent so that DP driver can recover itself gracefully at next
-> dongle unplug followed by plugin event.
-> 
-> Changes in v2:
-> -- replace dp_display_usbpd_disconnect_cb with dp_display_notify_disconnect
-> 
-> Fixes: 8ede2ecc3e5e ("drm/msm/dp: Add DP compliance tests on Snapdragon Chipsets")
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+Looks good to me
+Reviewed-by: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+
+
 > ---
->   drivers/gpu/drm/msm/dp/dp_ctrl.c    | 36 ++++++++++++++++++++-----
->   drivers/gpu/drm/msm/dp/dp_ctrl.h    |  1 +
->   drivers/gpu/drm/msm/dp/dp_display.c | 54 ++++++++++++++++++++++++++++---------
->   3 files changed, 72 insertions(+), 19 deletions(-)
+>  tools/perf/bench/futex-hash.c          | 26 +++++++++++++++++++-------
+>  tools/perf/bench/futex-lock-pi.c       | 21 ++++++++++++++++-----
+>  tools/perf/bench/futex-requeue.c       | 21 ++++++++++++++++-----
+>  tools/perf/bench/futex-wake-parallel.c | 21 ++++++++++++++++-----
+>  tools/perf/bench/futex-wake.c          | 22 ++++++++++++++++------
+>  5 files changed, 83 insertions(+), 28 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-> index dcd0126..48990fb 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-> @@ -1910,15 +1910,12 @@ int dp_ctrl_off_link_stream(struct dp_ctrl *dp_ctrl)
->   	return ret;
->   }
->   
-> -int dp_ctrl_off(struct dp_ctrl *dp_ctrl)
-> +int dp_ctrl_off_link(struct dp_ctrl *dp_ctrl)
->   {
->   	struct dp_ctrl_private *ctrl;
->   	struct dp_io *dp_io;
->   	struct phy *phy;
-> -	int ret = 0;
+> diff --git a/tools/perf/bench/futex-hash.c b/tools/perf/bench/futex-hash.c
+> index 9627b6ab8670..dfce64e551e2 100644
+> --- a/tools/perf/bench/futex-hash.c
+> +++ b/tools/perf/bench/futex-hash.c
+> @@ -122,12 +122,14 @@ static void print_summary(void)
+>  int bench_futex_hash(int argc, const char **argv)
+>  {
+>  	int ret = 0;
+> -	cpu_set_t cpuset;
+> +	cpu_set_t *cpuset;
+>  	struct sigaction act;
+>  	unsigned int i;
+>  	pthread_attr_t thread_attr;
+>  	struct worker *worker = NULL;
+>  	struct perf_cpu_map *cpu;
+> +	int nrcpus;
+> +	size_t size;
+> 
+>  	argc = parse_options(argc, argv, options, bench_futex_hash_usage, 0);
+>  	if (argc) {
+> @@ -170,25 +172,35 @@ int bench_futex_hash(int argc, const char **argv)
+>  	threads_starting = params.nthreads;
+>  	pthread_attr_init(&thread_attr);
+>  	gettimeofday(&bench__start, NULL);
+> +
+> +	nrcpus = perf_cpu_map__nr(cpu);
+> +	cpuset = CPU_ALLOC(nrcpus);
+> +	BUG_ON(!cpuset);
+> +	size = CPU_ALLOC_SIZE(nrcpus);
+> +
+>  	for (i = 0; i < params.nthreads; i++) {
+>  		worker[i].tid = i;
+>  		worker[i].futex = calloc(params.nfutexes, sizeof(*worker[i].futex));
+>  		if (!worker[i].futex)
+>  			goto errmem;
+> 
+> -		CPU_ZERO(&cpuset);
+> -		CPU_SET(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, &cpuset);
+> +		CPU_ZERO_S(size, cpuset);
+> 
+> -		ret = pthread_attr_setaffinity_np(&thread_attr, sizeof(cpu_set_t), &cpuset);
+> -		if (ret)
+> +		CPU_SET_S(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, size, cpuset);
+> +		ret = pthread_attr_setaffinity_np(&thread_attr, size, cpuset);
+> +		if (ret) {
+> +			CPU_FREE(cpuset);
+>  			err(EXIT_FAILURE, "pthread_attr_setaffinity_np");
 > -
-> -	if (!dp_ctrl)
-> -		return -EINVAL;
-> +	int ret;
->   
->   	ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
->   	dp_io = &ctrl->parser->io;
-> @@ -1926,7 +1923,34 @@ int dp_ctrl_off(struct dp_ctrl *dp_ctrl)
->   
->   	dp_catalog_ctrl_mainlink_ctrl(ctrl->catalog, false);
->   
-> -	dp_catalog_ctrl_reset(ctrl->catalog);
-> +	ret = dp_power_clk_enable(ctrl->power, DP_CTRL_PM, false);
-> +	if (ret) {
-> +		DRM_ERROR("Failed to disable link clocks. ret=%d\n", ret);
-> +	}
+> +		}
+>  		ret = pthread_create(&worker[i].thread, &thread_attr, workerfn,
+>  				     (void *)(struct worker *) &worker[i]);
+> -		if (ret)
+> +		if (ret) {
+> +			CPU_FREE(cpuset);
+>  			err(EXIT_FAILURE, "pthread_create");
+> +		}
+> 
+>  	}
+> +	CPU_FREE(cpuset);
+>  	pthread_attr_destroy(&thread_attr);
+> 
+>  	pthread_mutex_lock(&thread_lock);
+> diff --git a/tools/perf/bench/futex-lock-pi.c b/tools/perf/bench/futex-lock-pi.c
+> index a512a320df74..61c3bb80d4cf 100644
+> --- a/tools/perf/bench/futex-lock-pi.c
+> +++ b/tools/perf/bench/futex-lock-pi.c
+> @@ -120,11 +120,17 @@ static void *workerfn(void *arg)
+>  static void create_threads(struct worker *w, pthread_attr_t thread_attr,
+>  			   struct perf_cpu_map *cpu)
+>  {
+> -	cpu_set_t cpuset;
+> +	cpu_set_t *cpuset;
+>  	unsigned int i;
+> +	int nrcpus =  perf_cpu_map__nr(cpu);
+> +	size_t size;
+> 
+>  	threads_starting = params.nthreads;
+> 
+> +	cpuset = CPU_ALLOC(nrcpus);
+> +	BUG_ON(!cpuset);
+> +	size = CPU_ALLOC_SIZE(nrcpus);
 > +
-> +	DRM_DEBUG_DP("Before, phy=%p init_count=%d power_on=%d\n",
-> +		phy, phy->init_count, phy->power_count);
+>  	for (i = 0; i < params.nthreads; i++) {
+>  		worker[i].tid = i;
+> 
+> @@ -135,15 +141,20 @@ static void create_threads(struct worker *w, pthread_attr_t thread_attr,
+>  		} else
+>  			worker[i].futex = &global_futex;
+> 
+> -		CPU_ZERO(&cpuset);
+> -		CPU_SET(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, &cpuset);
+> +		CPU_ZERO_S(size, cpuset);
+> +		CPU_SET_S(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, size, cpuset);
+> 
+> -		if (pthread_attr_setaffinity_np(&thread_attr, sizeof(cpu_set_t), &cpuset))
+> +		if (pthread_attr_setaffinity_np(&thread_attr, size, cpuset)) {
+> +			CPU_FREE(cpuset);
+>  			err(EXIT_FAILURE, "pthread_attr_setaffinity_np");
+> +		}
+> 
+> -		if (pthread_create(&w[i].thread, &thread_attr, workerfn, &worker[i]))
+> +		if (pthread_create(&w[i].thread, &thread_attr, workerfn, &worker[i])) {
+> +			CPU_FREE(cpuset);
+>  			err(EXIT_FAILURE, "pthread_create");
+> +		}
+>  	}
+> +	CPU_FREE(cpuset);
+>  }
+> 
+>  int bench_futex_lock_pi(int argc, const char **argv)
+> diff --git a/tools/perf/bench/futex-requeue.c b/tools/perf/bench/futex-requeue.c
+> index aca47ce8b1e7..2cb013f7ffe5 100644
+> --- a/tools/perf/bench/futex-requeue.c
+> +++ b/tools/perf/bench/futex-requeue.c
+> @@ -123,22 +123,33 @@ static void *workerfn(void *arg __maybe_unused)
+>  static void block_threads(pthread_t *w,
+>  			  pthread_attr_t thread_attr, struct perf_cpu_map *cpu)
+>  {
+> -	cpu_set_t cpuset;
+> +	cpu_set_t *cpuset;
+>  	unsigned int i;
+> +	int nrcpus = perf_cpu_map__nr(cpu);
+> +	size_t size;
+> 
+>  	threads_starting = params.nthreads;
+> 
+> +	cpuset = CPU_ALLOC(nrcpus);
+> +	BUG_ON(!cpuset);
+> +	size = CPU_ALLOC_SIZE(nrcpus);
 > +
-> +	phy_power_off(phy);
+>  	/* create and block all threads */
+>  	for (i = 0; i < params.nthreads; i++) {
+> -		CPU_ZERO(&cpuset);
+> -		CPU_SET(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, &cpuset);
+> +		CPU_ZERO_S(size, cpuset);
+> +		CPU_SET_S(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, size, cpuset);
+> 
+> -		if (pthread_attr_setaffinity_np(&thread_attr, sizeof(cpu_set_t), &cpuset))
+> +		if (pthread_attr_setaffinity_np(&thread_attr, size, cpuset)) {
+> +			CPU_FREE(cpuset);
+>  			err(EXIT_FAILURE, "pthread_attr_setaffinity_np");
+> +		}
+> 
+> -		if (pthread_create(&w[i], &thread_attr, workerfn, NULL))
+> +		if (pthread_create(&w[i], &thread_attr, workerfn, NULL)) {
+> +			CPU_FREE(cpuset);
+>  			err(EXIT_FAILURE, "pthread_create");
+> +		}
+>  	}
+> +	CPU_FREE(cpuset);
+>  }
+> 
+>  static void toggle_done(int sig __maybe_unused,
+> diff --git a/tools/perf/bench/futex-wake-parallel.c b/tools/perf/bench/futex-wake-parallel.c
+> index 888ee6037945..efa5070a5eb3 100644
+> --- a/tools/perf/bench/futex-wake-parallel.c
+> +++ b/tools/perf/bench/futex-wake-parallel.c
+> @@ -144,22 +144,33 @@ static void *blocked_workerfn(void *arg __maybe_unused)
+>  static void block_threads(pthread_t *w, pthread_attr_t thread_attr,
+>  			  struct perf_cpu_map *cpu)
+>  {
+> -	cpu_set_t cpuset;
+> +	cpu_set_t *cpuset;
+>  	unsigned int i;
+> +	int nrcpus = perf_cpu_map__nr(cpu);
+> +	size_t size;
+> 
+>  	threads_starting = params.nthreads;
+> 
+> +	cpuset = CPU_ALLOC(nrcpus);
+> +	BUG_ON(!cpuset);
+> +	size = CPU_ALLOC_SIZE(nrcpus);
 > +
-> +	DRM_DEBUG_DP("After, phy=%p init_count=%d power_on=%d\n",
-> +		phy, phy->init_count, phy->power_count);
-> +
-> +	return ret;
-> +}
-> +
-> +int dp_ctrl_off(struct dp_ctrl *dp_ctrl)
-> +{
-> +	struct dp_ctrl_private *ctrl;
-> +	struct dp_io *dp_io;
-> +	struct phy *phy;
-> +	int ret;
-> +
-> +	ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
-> +	dp_io = &ctrl->parser->io;
-> +	phy = dp_io->phy;
-> +
-> +	dp_catalog_ctrl_mainlink_ctrl(ctrl->catalog, false);
->   
->   	ret = dp_power_clk_enable(ctrl->power, DP_STREAM_PM, false);
->   	if (ret)
-> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.h b/drivers/gpu/drm/msm/dp/dp_ctrl.h
-> index 2433edb..ffafe17 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.h
-> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.h
-> @@ -22,6 +22,7 @@ struct dp_ctrl {
->   int dp_ctrl_on_link(struct dp_ctrl *dp_ctrl);
->   int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl);
->   int dp_ctrl_off_link_stream(struct dp_ctrl *dp_ctrl);
-> +int dp_ctrl_off_link(struct dp_ctrl *dp_ctrl);
->   int dp_ctrl_off(struct dp_ctrl *dp_ctrl);
->   void dp_ctrl_push_idle(struct dp_ctrl *dp_ctrl);
->   void dp_ctrl_isr(struct dp_ctrl *dp_ctrl);
-> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-> index 178b774..a6200a5 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-> @@ -451,11 +451,14 @@ static int dp_display_usbpd_configure_cb(struct device *dev)
->   
->   static int dp_display_usbpd_disconnect_cb(struct device *dev)
->   {
-> +	return 0;
-> +}
-> +
-> +static void dp_display_notify_disconnect(struct device *dev)
-> +{
->   	struct dp_display_private *dp = dev_get_dp_display_private(dev);
->   
->   	dp_add_event(dp, EV_USER_NOTIFICATION, false, 0);
+>  	/* create and block all threads */
+>  	for (i = 0; i < params.nthreads; i++) {
+> -		CPU_ZERO(&cpuset);
+> -		CPU_SET(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, &cpuset);
+> +		CPU_ZERO_S(size, cpuset);
+> +		CPU_SET_S(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, size, cpuset);
+> 
+> -		if (pthread_attr_setaffinity_np(&thread_attr, sizeof(cpu_set_t), &cpuset))
+> +		if (pthread_attr_setaffinity_np(&thread_attr, size, cpuset)) {
+> +			CPU_FREE(cpuset);
+>  			err(EXIT_FAILURE, "pthread_attr_setaffinity_np");
+> +		}
+> 
+> -		if (pthread_create(&w[i], &thread_attr, blocked_workerfn, NULL))
+> +		if (pthread_create(&w[i], &thread_attr, blocked_workerfn, NULL)) {
+> +			CPU_FREE(cpuset);
+>  			err(EXIT_FAILURE, "pthread_create");
+> +		}
+>  	}
+> +	CPU_FREE(cpuset);
+>  }
+> 
+>  static void print_run(struct thread_data *waking_worker, unsigned int run_num)
+> diff --git a/tools/perf/bench/futex-wake.c b/tools/perf/bench/futex-wake.c
+> index aa82db51c0ab..3a10f54900c1 100644
+> --- a/tools/perf/bench/futex-wake.c
+> +++ b/tools/perf/bench/futex-wake.c
+> @@ -97,22 +97,32 @@ static void print_summary(void)
+>  static void block_threads(pthread_t *w,
+>  			  pthread_attr_t thread_attr, struct perf_cpu_map *cpu)
+>  {
+> -	cpu_set_t cpuset;
+> +	cpu_set_t *cpuset;
+>  	unsigned int i;
 > -
-> -	return 0;
->   }
->   
->   static void dp_display_handle_video_request(struct dp_display_private *dp)
-> @@ -593,10 +596,16 @@ static int dp_connect_pending_timeout(struct dp_display_private *dp, u32 data)
->   
->   	mutex_lock(&dp->event_mutex);
->   
-> +	/*
-> +	 * main link had been setup but video is not ready yet
-> +	 * only tear down main link
-> +	 */
->   	state = dp->hpd_state;
->   	if (state == ST_CONNECT_PENDING) {
-> -		dp->hpd_state = ST_CONNECTED;
->   		DRM_DEBUG_DP("type=%d\n", dp->dp_display.connector_type);
-> +		dp_ctrl_off_link(dp->ctrl);
-> +		dp_display_host_phy_exit(dp);
-> +		dp->hpd_state = ST_DISCONNECTED;
->   	}
->   
->   	mutex_unlock(&dp->event_mutex);
-> @@ -645,6 +654,7 @@ static int dp_hpd_unplug_handle(struct dp_display_private *dp, u32 data)
->   		if (dp->link->sink_count == 0) {
->   			dp_display_host_phy_exit(dp);
->   		}
-> +		dp_display_notify_disconnect(&dp->pdev->dev);
->   		mutex_unlock(&dp->event_mutex);
->   		return 0;
->   	}
-> @@ -661,19 +671,22 @@ static int dp_hpd_unplug_handle(struct dp_display_private *dp, u32 data)
->   		return 0;
->   	}
->   
-> -	dp->hpd_state = ST_DISCONNECT_PENDING;
-> -
->   	/* disable HPD plug interrupts */
->   	dp_catalog_hpd_config_intr(dp->catalog, DP_DP_HPD_PLUG_INT_MASK, false);
->   
->   	/*
->   	 * We don't need separate work for disconnect as
->   	 * connect/attention interrupts are disabled
-> -	 */
-> -	dp_display_usbpd_disconnect_cb(&dp->pdev->dev);
-> +	*/
-> +	dp_display_notify_disconnect(&dp->pdev->dev);
->   
-> -	/* start sentinel checking in case of missing uevent */
-> -	dp_add_event(dp, EV_DISCONNECT_PENDING_TIMEOUT, 0, DP_TIMEOUT_5_SECOND);
-> +	if (state == ST_DISPLAY_OFF) {
-> +		dp->hpd_state = ST_DISCONNECTED;
-> +	} else {
-> +		/* start sentinel checking in case of missing uevent */
-> +		dp_add_event(dp, EV_DISCONNECT_PENDING_TIMEOUT, 0, DP_TIMEOUT_5_SECOND);
-> +		dp->hpd_state = ST_DISCONNECT_PENDING;
-> +	}
->   
->   	/* signal the disconnect event early to ensure proper teardown */
->   	dp_display_handle_plugged_change(&dp->dp_display, false);
-> @@ -695,10 +708,16 @@ static int dp_disconnect_pending_timeout(struct dp_display_private *dp, u32 data
->   
->   	mutex_lock(&dp->event_mutex);
->   
-> +	/*
-> +	 * main link had been set up and video is ready
-> +	 * tear down main link, video stream and phy
-> +	 */
->   	state =  dp->hpd_state;
->   	if (state == ST_DISCONNECT_PENDING) {
-> -		dp->hpd_state = ST_DISCONNECTED;
->   		DRM_DEBUG_DP("type=%d\n", dp->dp_display.connector_type);
-> +		dp_ctrl_off(dp->ctrl);
-> +		dp_display_host_phy_exit(dp);
-> +		dp->hpd_state = ST_DISCONNECTED;
->   	}
->   
->   	mutex_unlock(&dp->event_mutex);
-> @@ -1571,6 +1590,12 @@ int msm_dp_display_enable(struct msm_dp *dp, struct drm_encoder *encoder)
->   
->   	mutex_lock(&dp_display->event_mutex);
->   
-> +	state = dp_display->hpd_state;
-> +	if (state == ST_DISCONNECTED) {
-> +		mutex_unlock(&dp_display->event_mutex);
-> +		return rc;
-> +	}
+> +	size_t size;
+> +	int nrcpus = perf_cpu_map__nr(cpu);
+>  	threads_starting = params.nthreads;
+> 
+> +	cpuset = CPU_ALLOC(nrcpus);
+> +	BUG_ON(!cpuset);
+> +	size = CPU_ALLOC_SIZE(nrcpus);
 > +
->   	/* stop sentinel checking */
->   	dp_del_event(dp_display, EV_CONNECT_PENDING_TIMEOUT);
->   
-> @@ -1588,8 +1613,6 @@ int msm_dp_display_enable(struct msm_dp *dp, struct drm_encoder *encoder)
->   		return rc;
->   	}
->   
-> -	state =  dp_display->hpd_state;
-> -
->   	if (state == ST_DISPLAY_OFF)
->   		dp_display_host_phy_init(dp_display);
->   
-> @@ -1638,13 +1661,18 @@ int msm_dp_display_disable(struct msm_dp *dp, struct drm_encoder *encoder)
->   	/* stop sentinel checking */
->   	dp_del_event(dp_display, EV_DISCONNECT_PENDING_TIMEOUT);
->   
-> +	state = dp_display->hpd_state;
-> +	if (state == ST_DISCONNECTED || state == ST_DISPLAY_OFF) {
-> +		mutex_unlock(&dp_display->event_mutex);
-> +		return rc;
-> +	}
-> +
->   	dp_display_disable(dp_display, 0);
->   
->   	rc = dp_display_unprepare(dp);
->   	if (rc)
->   		DRM_ERROR("DP display unprepare failed, rc=%d\n", rc);
->   
-> -	state =  dp_display->hpd_state;
->   	if (state == ST_DISCONNECT_PENDING) {
->   		/* completed disconnection */
->   		dp_display->hpd_state = ST_DISCONNECTED;
-
-
--- 
-With best wishes
-Dmitry
+>  	/* create and block all threads */
+>  	for (i = 0; i < params.nthreads; i++) {
+> -		CPU_ZERO(&cpuset);
+> -		CPU_SET(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, &cpuset);
+> +		CPU_ZERO_S(size, cpuset);
+> +		CPU_SET_S(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, size, cpuset);
+> 
+> -		if (pthread_attr_setaffinity_np(&thread_attr, sizeof(cpu_set_t), &cpuset))
+> +		if (pthread_attr_setaffinity_np(&thread_attr, size, cpuset)) {
+> +			CPU_FREE(cpuset);
+>  			err(EXIT_FAILURE, "pthread_attr_setaffinity_np");
+> +		}
+> 
+> -		if (pthread_create(&w[i], &thread_attr, workerfn, NULL))
+> +		if (pthread_create(&w[i], &thread_attr, workerfn, NULL)) {
+> +			CPU_FREE(cpuset);
+>  			err(EXIT_FAILURE, "pthread_create");
+> +		}
+>  	}
+> +	CPU_FREE(cpuset);
+>  }
+> 
+>  static void toggle_done(int sig __maybe_unused,
+> -- 
+> 2.35.1
+> 

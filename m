@@ -2,199 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 215A84F8C7C
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 959184F8CC6
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233144AbiDHA7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 20:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42942 "EHLO
+        id S233165AbiDHBAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 21:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233115AbiDHA7K (ORCPT
+        with ESMTP id S229603AbiDHA75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 20:59:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E79C21A0C5;
-        Thu,  7 Apr 2022 17:57:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B26546191A;
-        Fri,  8 Apr 2022 00:57:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15C8EC385A0;
-        Fri,  8 Apr 2022 00:57:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649379427;
-        bh=Zb8Ic9D/QGxYAR4I8vqLiookiKbN5j2NfKA35yV3Y4g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=bR3dbSBunB2p3hCsRHMiS+KD/yImN50pTPIlRWD7cGnLF4JMZm2tE4qOQPAEdj8Lt
-         49W4CwsvIftzvfWF8cux5e38yanGKWkAZXAq6JE6qYQYb5a6tkwgp8AfE+4+/+DRur
-         CVh8hx4XzPj2wJqtIMKePNs+dkQNdr/JVlw6bgkknX+0IZ69Qnp4vvHPTQvAJMS4uS
-         0KrcVKZJdADIc0RQ7zAddqsDlKrYM2SRKclPc4YAGb8kWKQQm9N6+SeXokyHlIhC4c
-         AvtMxJ54VVHZNnk6I3wkug/Yos+9HA4e1Scg7PcdbY6cmLCd3OIwxmMDlmQWRMNv0z
-         Z4iaym/DSKMZw==
-Date:   Fri, 8 Apr 2022 09:57:01 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>
-Subject: Re: [RFC bpf-next 1/4] kallsyms: Add kallsyms_lookup_names function
-Message-Id: <20220408095701.54aea15c3cafcf66dd628a95@kernel.org>
-In-Reply-To: <20220407125224.310255-2-jolsa@kernel.org>
-References: <20220407125224.310255-1-jolsa@kernel.org>
-        <20220407125224.310255-2-jolsa@kernel.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 7 Apr 2022 20:59:57 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2047.outbound.protection.outlook.com [40.107.93.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54FF53024F2;
+        Thu,  7 Apr 2022 17:57:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Q/w50OgND1hfjpzXSppcRnh3HpnkU3n7we6teSeDatWeqDBm67tloiAASMtc1uldn4fWn5EviPWweURmlX82cQXtl3ubJCsft6LcEP2bB+KxOq+9CMMqj9LB0H0DvS2D8sRlnzjxLYKCDLlbVKywk0jW/uu9pyStYwa9pXGXa1T+zkRlkHl4M9TQjdPRG2saL3U9LB25KLV+iXqlkzEl7dFLyQ1MWHDbbvz2yxKQbN/FmosrNo3HEr+weNpPkCPDnVi5MHmexiQ/ZvndaPlJJGPE3NwMwGLdL/0Tlf/zt/Nze5kaeLTNGLpDLu9q4d7xTek39IcF78zuctZrxjIHhA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6gl3/+Ur8bi6XeKv4AMOY8Eoo43SLooo6EIRFD6MUQk=;
+ b=Y/X+P/GpC+XoL+b8WXtS5SrlPTLpAibmuNj9XWdup4IxoAyqHTBEpXz0i9tPL+JeCOpc6wgTjnParkqOePZmFlp534SiJG/LtqHKsjHH6vuP1tU3MEYL0em1dU205wU1JYR7t6ifHh5DaTRUISu+luLIYBW9tm+uvmVCrivnoY9ivWSHjmpoaUM5ZSHJ73OJGWXeNhsTYR4kkssOowfAj6kcS6EU7r+pUFKA2lnhEz0ghelIHEasDCqB1HF0RvbzGjC+INT6ed7Vn3nmVZJFloN3xgTUZCvzfEP1Imo5RCCZk4BjMVldBrzQTL6A/zNYS8idc7t52LI0iKBNf0f4/w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=zytor.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6gl3/+Ur8bi6XeKv4AMOY8Eoo43SLooo6EIRFD6MUQk=;
+ b=yXyUOJepNcCtjhx5TJKlICvBa89rvOFPUKhvtO+WQDi11T7/YBbSCKxHTTUuae9oY3tzR/9YL1DpY4pjW/1zPpe37/3gH+3sJWRtx5bmzoZ1U7VJ5MOD3LWf1SYP7M0d4vjQChWrBcIqk8I3ziZ9BAVS74aL5/RyXh/86XihUJc=
+Received: from BN6PR17CA0058.namprd17.prod.outlook.com (2603:10b6:405:75::47)
+ by BYAPR12MB2630.namprd12.prod.outlook.com (2603:10b6:a03:67::27) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.22; Fri, 8 Apr
+ 2022 00:57:53 +0000
+Received: from BN8NAM11FT003.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:405:75:cafe::91) by BN6PR17CA0058.outlook.office365.com
+ (2603:10b6:405:75::47) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.21 via Frontend
+ Transport; Fri, 8 Apr 2022 00:57:53 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT003.mail.protection.outlook.com (10.13.177.90) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5144.20 via Frontend Transport; Fri, 8 Apr 2022 00:57:53 +0000
+Received: from [127.0.1.1] (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 7 Apr
+ 2022 19:57:51 -0500
+Subject: [PATCH 1/2] x86/cpufeatures: Add virtual TSC_AUX feature bit
+From:   Babu Moger <babu.moger@amd.com>
+To:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <hpa@zytor.com>,
+        <pbonzini@redhat.com>, <seanjc@google.com>
+CC:     <vkuznets@redhat.com>, <jmattson@google.com>, <joro@8bytes.org>,
+        <wanpengli@tencent.com>, <joro@8bytes.org>, <babu.moger@amd.com>,
+        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+        <x86@kernel.org>
+Date:   Thu, 7 Apr 2022 19:57:50 -0500
+Message-ID: <164937947020.1047063.14919887750944564032.stgit@bmoger-ubuntu>
+User-Agent: StGit/1.1.dev103+g5369f4c
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 56eb1209-17fb-4e0f-9730-08da18facfca
+X-MS-TrafficTypeDiagnostic: BYAPR12MB2630:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR12MB26309FBC262BF7EF5A6FD23495E99@BYAPR12MB2630.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: b931W7yx4Ot4eclmGsOc4lcxwaq0zg8z6PB97lFLl7rAecdyvwb2i4paht5KTtIiSF84iADY5xuNb+JP5dOO6FGNTryRUbW+H0iLEs3TJSOw7hifpxBi9tI/yc8WKXzjrmgoRUCcaVk0Dk5Sxl0ccTHPqXmWAm53lbvmlVqSxwYy3blg7Mmi3ewBIhP4QiS9fOvj3kGwEtZ/Vfk78xfOZg2ozwn+cYGMdvrEATWq6603WUJgH7Tcdo8YwedrACGEgVvY5N5zMG1Yr285QCWGXUWHJntCa2qFu0JGc73X7jwCNkmb6xzCs1nk/+WL90X3jso8vYjRhzmE0yGTMxOot7RHI4apKlQ/MhldTbEnSQQxtJFn/JQagmSRpzISUVa2eIIRxnC0+fCIZYDAg2pBNLDh+HbjJ4ZQJ1rQQs4HrHqKnf+LimORd4q95gBvY51KLCwyloRnQYmn+sbEMNuK6ki3Tuu+80dr1Ja/ZjQs/AFe6JUfUHVYSxsk8WB+bF4EAexrMGjeD1gwrUYkcYi9zgX1sTHT0uNa5C1GAEvPr2GJO2v3w+qTbLY2y5T9R7U4OM2qMsDdI85X9B0j/56WSwiwZcEj5CZ1LhTiF4L9KnqEFM0VeVdEaX9GVUU415AZ+I0vzuLqX9T4kN0JTiBJLNmHw97b9WQsvBfmwRhKLUbKoQUIALXCsPiZWwYq5zP03Og5VskdQCT4m+zviPgjNkffhzo4VR0j9ZzqNhOhnJo=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(7916004)(4636009)(36840700001)(40470700004)(46966006)(16526019)(336012)(33716001)(81166007)(26005)(186003)(44832011)(47076005)(70586007)(82310400005)(316002)(70206006)(8676002)(4326008)(83380400001)(54906003)(16576012)(110136005)(9686003)(426003)(7416002)(5660300002)(508600001)(103116003)(36860700001)(356005)(2906002)(40460700003)(8936002)(86362001)(71626007)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Apr 2022 00:57:53.2772
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 56eb1209-17fb-4e0f-9730-08da18facfca
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT003.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2630
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu,  7 Apr 2022 14:52:21 +0200
-Jiri Olsa <jolsa@kernel.org> wrote:
+The TSC_AUX Virtualization feature allows AMD SEV-ES guests to securely use=
+=0A=
+TSC_AUX (auxiliary time stamp counter data) MSR in RDTSCP and RDPID=0A=
+instructions.=0A=
+=0A=
+The TSC_AUX MSR is typically initialized to APIC ID or another unique=0A=
+identifier so that software can quickly associate returned TSC value=0A=
+with the logical processor.=0A=
+=0A=
+Adds the feature bit and also include it in the kvm for detection.=0A=
+=0A=
+Signed-off-by: Babu Moger <babu.moger@amd.com>=0A=
+---=0A=
+ arch/x86/include/asm/cpufeatures.h |    1 +=0A=
+ arch/x86/kvm/cpuid.c               |    2 +-=0A=
+ 2 files changed, 2 insertions(+), 1 deletion(-)=0A=
+=0A=
+diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpuf=
+eatures.h=0A=
+index 73e643ae94b6..1bc66a17a95a 100644=0A=
+--- a/arch/x86/include/asm/cpufeatures.h=0A=
++++ b/arch/x86/include/asm/cpufeatures.h=0A=
+@@ -405,6 +405,7 @@=0A=
+ #define X86_FEATURE_SEV			(19*32+ 1) /* AMD Secure Encrypted Virtualizatio=
+n */=0A=
+ #define X86_FEATURE_VM_PAGE_FLUSH	(19*32+ 2) /* "" VM Page Flush MSR is su=
+pported */=0A=
+ #define X86_FEATURE_SEV_ES		(19*32+ 3) /* AMD Secure Encrypted Virtualizat=
+ion - Encrypted State */=0A=
++#define X86_FEATURE_V_TSC_AUX		(19*32+ 9) /* Virtual TSC_AUX */=0A=
+ #define X86_FEATURE_SME_COHERENT	(19*32+10) /* "" AMD hardware-enforced ca=
+che coherency */=0A=
+ =0A=
+ /*=0A=
+diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c=0A=
+index b24ca7f4ed7c..99a4c078b397 100644=0A=
+--- a/arch/x86/kvm/cpuid.c=0A=
++++ b/arch/x86/kvm/cpuid.c=0A=
+@@ -674,7 +674,7 @@ void kvm_set_cpu_caps(void)=0A=
+ =0A=
+ 	kvm_cpu_cap_mask(CPUID_8000_001F_EAX,=0A=
+ 		0 /* SME */ | F(SEV) | 0 /* VM_PAGE_FLUSH */ | F(SEV_ES) |=0A=
+-		F(SME_COHERENT));=0A=
++		F(V_TSC_AUX) | F(SME_COHERENT));=0A=
+ =0A=
+ 	kvm_cpu_cap_mask(CPUID_C000_0001_EDX,=0A=
+ 		F(XSTORE) | F(XSTORE_EN) | F(XCRYPT) | F(XCRYPT_EN) |=0A=
+=0A=
 
-> Adding kallsyms_lookup_names function that resolves array of symbols
-> with single pass over kallsyms.
-> 
-> The user provides array of string pointers with count and pointer to
-> allocated array for resolved values.
-> 
->   int kallsyms_lookup_names(const char **syms, u32 cnt,
->                             unsigned long *addrs)
-> 
-> Before we iterate kallsyms we sort user provided symbols by name and
-> then use that in kalsyms iteration to find each kallsyms symbol in
-> user provided symbols.
-> 
-> We also check each symbol to pass ftrace_location, because this API
-> will be used for fprobe symbols resolving. This can be optional in
-> future if there's a need.
-
-I like this idea very much :-)
-
-> 
-> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  include/linux/kallsyms.h |  6 +++++
->  kernel/kallsyms.c        | 48 ++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 54 insertions(+)
-> 
-> diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
-> index ce1bd2fbf23e..5320a5e77f61 100644
-> --- a/include/linux/kallsyms.h
-> +++ b/include/linux/kallsyms.h
-> @@ -72,6 +72,7 @@ int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
->  #ifdef CONFIG_KALLSYMS
->  /* Lookup the address for a symbol. Returns 0 if not found. */
->  unsigned long kallsyms_lookup_name(const char *name);
-> +int kallsyms_lookup_names(const char **syms, u32 cnt, unsigned long *addrs);
->  
->  extern int kallsyms_lookup_size_offset(unsigned long addr,
->  				  unsigned long *symbolsize,
-> @@ -103,6 +104,11 @@ static inline unsigned long kallsyms_lookup_name(const char *name)
->  	return 0;
->  }
->  
-> +int kallsyms_lookup_names(const char **syms, u32 cnt, unsigned long *addrs)
-> +{
-> +	return -ERANGE;
-> +}
-> +
->  static inline int kallsyms_lookup_size_offset(unsigned long addr,
->  					      unsigned long *symbolsize,
->  					      unsigned long *offset)
-> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-> index 79f2eb617a62..a3738ddf9e87 100644
-> --- a/kernel/kallsyms.c
-> +++ b/kernel/kallsyms.c
-> @@ -29,6 +29,8 @@
->  #include <linux/compiler.h>
->  #include <linux/module.h>
->  #include <linux/kernel.h>
-> +#include <linux/bsearch.h>
-> +#include <linux/sort.h>
->  
->  /*
->   * These will be re-linked against their real values
-> @@ -572,6 +574,52 @@ int sprint_backtrace_build_id(char *buffer, unsigned long address)
->  	return __sprint_symbol(buffer, address, -1, 1, 1);
->  }
->  
-> +static int symbols_cmp(const void *a, const void *b)
-> +{
-> +	const char **str_a = (const char **) a;
-> +	const char **str_b = (const char **) b;
-> +
-> +	return strcmp(*str_a, *str_b);
-> +}
-> +
-> +struct kallsyms_data {
-> +	unsigned long *addrs;
-> +	const char **syms;
-> +	u32 cnt;
-> +	u32 found;
-
-BTW, why do you use 'u32' for this arch independent code?
-I think 'size_t' will make its role clearer.
-
-> +};
-> +
-> +static int kallsyms_callback(void *data, const char *name,
-> +			     struct module *mod, unsigned long addr)
-> +{
-> +	struct kallsyms_data *args = data;
-> +
-> +	if (!bsearch(&name, args->syms, args->cnt, sizeof(*args->syms), symbols_cmp))
-> +		return 0;
-> +
-> +	addr = ftrace_location(addr);
-> +	if (!addr)
-> +		return 0;
-> +
-> +	args->addrs[args->found++] = addr;
-> +	return args->found == args->cnt ? 1 : 0;
-> +}
-> +
-> +int kallsyms_lookup_names(const char **syms, u32 cnt, unsigned long *addrs)
-
-Ditto. I think 'size_t cnt' is better. 
-
-Thank you,
-
-> +{
-> +	struct kallsyms_data args;
-> +
-> +	sort(syms, cnt, sizeof(*syms), symbols_cmp, NULL);
-> +
-> +	args.addrs = addrs;
-> +	args.syms = syms;
-> +	args.cnt = cnt;
-> +	args.found = 0;
-> +	kallsyms_on_each_symbol(kallsyms_callback, &args);
-> +
-> +	return args.found == args.cnt ? 0 : -EINVAL;
-> +}
-> +
->  /* To avoid using get_symbol_offset for every symbol, we carry prefix along. */
->  struct kallsym_iter {
->  	loff_t pos;
-> -- 
-> 2.35.1
-> 
-
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>

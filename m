@@ -2,49 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D24BD4F8C55
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A55614F8CA8
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233180AbiDHBDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 21:03:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58248 "EHLO
+        id S233213AbiDHBE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 21:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230169AbiDHBDO (ORCPT
+        with ESMTP id S230169AbiDHBEY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 21:03:14 -0400
-Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5AE262028B9;
-        Thu,  7 Apr 2022 18:01:11 -0700 (PDT)
-Received: from ubuntu.localdomain (unknown [10.15.192.164])
-        by mail-app4 (Coremail) with SMTP id cS_KCgCXDaVPiU9imQ7qAA--.29743S2;
-        Fri, 08 Apr 2022 09:01:08 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-rdma@vger.kernel.org, jgg@ziepe.ca, shiraz.saleem@intel.com,
-        mustafa.ismail@intel.com, dan.carpenter@oracle.com,
-        Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH V3 09/11] drivers: infiniband: hw: Fix deadlock in irdma_cleanup_cm_core()
-Date:   Fri,  8 Apr 2022 09:01:02 +0800
-Message-Id: <20220408010102.32180-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cS_KCgCXDaVPiU9imQ7qAA--.29743S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCw13Zr1DtryDZw43Kr48WFg_yoW5Grykpr
-        WDWw4fCryq9r4jkw40v3WDAF9xXw4kJFWjvr1vy395ZFs7Xry5AFy3Awn0qFZrJF9Fgr4f
-        uF1Fvr15u3sIyr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkI1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWl84ACjcxK6I8E
-        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
-        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_
-        JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
-        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxF
-        aVAv8VW8uw4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
-        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxG
-        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
-        CI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
-        z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU1a9aPUUUUU==
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgwOAVZdtZFM2wAFs8
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        Thu, 7 Apr 2022 21:04:24 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A671E219AD0
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 18:02:21 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KZKg52BYSzgYVD;
+        Fri,  8 Apr 2022 09:00:33 +0800 (CST)
+Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Fri, 8 Apr 2022 09:02:18 +0800
+Received: from [10.174.179.5] (10.174.179.5) by dggpemm500002.china.huawei.com
+ (7.185.36.229) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 8 Apr
+ 2022 09:02:18 +0800
+Subject: Re: [PATCH v3 0/3] genirq: Managed affinity fixes
+To:     John Garry <john.garry@huawei.com>, Marc Zyngier <maz@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        David Decotigny <ddecotig@google.com>
+References: <20220405185040.206297-1-maz@kernel.org>
+ <b14b61cc-ab47-e90d-7f81-f05197645dc6@huawei.com>
+From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Message-ID: <c3f3a519-b81b-abe1-b6ea-599561478abf@huawei.com>
+Date:   Fri, 8 Apr 2022 09:02:17 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <b14b61cc-ab47-e90d-7f81-f05197645dc6@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.5]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500002.china.huawei.com (7.185.36.229)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,75 +56,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a deadlock in irdma_cleanup_cm_core(), which is shown
-below:
+Hi,
 
-   (Thread 1)              |      (Thread 2)
-                           | irdma_schedule_cm_timer()
-irdma_cleanup_cm_core()    |  add_timer()
- spin_lock_irqsave() //(1) |  (wait a time)
- ...                       | irdma_cm_timer_tick()
- del_timer_sync()          |  spin_lock_irqsave() //(2)
- (wait timer to stop)      |  ...
+On 2022/4/8 1:29, John Garry wrote:
+> On 05/04/2022 19:50, Marc Zyngier wrote:
+>> John (and later on David) reported[1] a while ago that booting with
+>> maxcpus=1, managed affinity devices would fail to get the interrupts
+>> that were associated with offlined CPUs.
+>>
+>> Similarly, Xiongfeng reported[2] that the GICv3 ITS would sometime use
+>> non-housekeeping CPUs instead of the affinity that was passed down as
+>> a parameter.
+>>
+>> [1] can be fixed by not trying to activate these interrupts if no CPU
+>> that can satisfy the affinity is present (a patch addressing this was
+>> already posted[3])
+>>
+>> [2] is a consequence of affinities containing non-online CPUs being
+>> passed down to the interrupt controller driver and the ITS driver
+>> trying to paper over that by ignoring the affinity parameter and doing
+>> its own (stupid) thing. It would be better to (a) get the core code to
+>> remove the offline CPUs from the affinity mask at all times, and (b)
+>> fix the drivers so that they can trust the core code not to trip them.
+>>
+>> This small series, based on 5.18-rc1, addresses the above.
+> 
+> Hi Marc,
+> 
+> Please let me know if you require anything more from me on this one. I was
+> hoping that Xiongfeng would verify that his "housekeeping" issues were fixed.
 
-We hold cm_core->ht_lock in position (1) of thread 1 and
-use del_timer_sync() to wait timer to stop, but timer handler
-also need cm_core->ht_lock in position (2) of thread 2.
-As a result, irdma_cleanup_cm_core() will block forever.
+I have tested the V2 version. It works well and fixed both issues, the
+'maxcpus=1' issue and 'housekeeping' issue. Let me know if you need me test this
+V3 version. I am not seeing much change, only context change.
 
-This patch removes the check of timer_pending() in
-irdma_cleanup_cm_core(), because the del_timer_sync()
-function will just return directly if there isn't a
-pending timer. As a result, the lock is redundant,
-because there is no resource it could protect.
+Thanks,
+Xiongfeng
 
-What`s more, we change the check of timer_pending()
-in order to guarantee the add_timer() in
-irdma_schedule_cm_timer() and irdma_cm_timer_tick()
-could be executed.
-
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
-Changes in V3:
-  - Change the check of timer_pending().
-
- drivers/infiniband/hw/irdma/cm.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/infiniband/hw/irdma/cm.c b/drivers/infiniband/hw/irdma/cm.c
-index dedb3b7edd8..1901792fd73 100644
---- a/drivers/infiniband/hw/irdma/cm.c
-+++ b/drivers/infiniband/hw/irdma/cm.c
-@@ -1181,7 +1181,7 @@ int irdma_schedule_cm_timer(struct irdma_cm_node *cm_node,
- 	spin_lock_irqsave(&cm_core->ht_lock, flags);
- 	was_timer_set = timer_pending(&cm_core->tcp_timer);
- 
--	if (!was_timer_set) {
-+	if (was_timer_set) {
- 		cm_core->tcp_timer.expires = new_send->timetosend;
- 		add_timer(&cm_core->tcp_timer);
- 	}
-@@ -1364,7 +1364,7 @@ static void irdma_cm_timer_tick(struct timer_list *t)
- 
- 	if (settimer) {
- 		spin_lock_irqsave(&cm_core->ht_lock, flags);
--		if (!timer_pending(&cm_core->tcp_timer)) {
-+		if (timer_pending(&cm_core->tcp_timer)) {
- 			cm_core->tcp_timer.expires = nexttimeout;
- 			add_timer(&cm_core->tcp_timer);
- 		}
-@@ -3251,10 +3251,7 @@ void irdma_cleanup_cm_core(struct irdma_cm_core *cm_core)
- 	if (!cm_core)
- 		return;
- 
--	spin_lock_irqsave(&cm_core->ht_lock, flags);
--	if (timer_pending(&cm_core->tcp_timer))
--		del_timer_sync(&cm_core->tcp_timer);
--	spin_unlock_irqrestore(&cm_core->ht_lock, flags);
-+	del_timer_sync(&cm_core->tcp_timer);
- 
- 	destroy_workqueue(cm_core->event_wq);
- 	cm_core->dev->ws_reset(&cm_core->iwdev->vsi);
--- 
-2.17.1
-
+> 
+> Cheers
+> 
+>>
+>> Thanks,
+>>
+>>     M.
+>>
+>>> From v2 [4]:
+>>    - Rebased on 5.18-rc1
+>>
+>> [1] https://lore.kernel.org/r/78615d08-1764-c895-f3b7-bfddfbcbdfb9@huawei.com
+>> [2] https://lore.kernel.org/r/20220124073440.88598-1-wangxiongfeng2@huawei.com
+>> [3] https://lore.kernel.org/r/20220307190625.254426-1-maz@kernel.org
+>> [4] https://lore.kernel.org/r/20220321193608.975495-1-maz@kernel.org
+>>
+>> Marc Zyngier (3):
+>>    genirq/msi: Shutdown managed interrupts with unsatifiable affinities
+>>    genirq: Always limit the affinity to online CPUs
+>>    irqchip/gic-v3: Always trust the managed affinity provided by the core
+>>      code
+>>
+>>   drivers/irqchip/irq-gic-v3-its.c |  2 +-
+>>   kernel/irq/manage.c              | 25 +++++++++++++++++--------
+>>   kernel/irq/msi.c                 | 15 +++++++++++++++
+>>   3 files changed, 33 insertions(+), 9 deletions(-)
+>>
+> 
+> .

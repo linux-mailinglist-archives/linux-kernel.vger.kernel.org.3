@@ -2,61 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F30F04F8FD2
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:50:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39A8B4F8FD7
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbiDHHwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 03:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42724 "EHLO
+        id S230034AbiDHHw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 03:52:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiDHHwL (ORCPT
+        with ESMTP id S229471AbiDHHwY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 03:52:11 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F431E3E07
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 00:50:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649404209; x=1680940209;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JBQAEVa/AnHJozcy/j95b+u+r1Jbyr0Ue7e1qlYEap4=;
-  b=RYIwnCSu+0uEo6WY0XBA1uZpGgCSkbowBThos9nfTHuqeJWtbyv90zNG
-   TY2jLNMCtiJ0o6vr6DWczqcDu3ktcz7eg5crvmRqlzQ9C+YI6i5KYMoOT
-   aS4IN2hP6fWrjjO00Xj6zJL5/u6UZUUOseOBo1JINHmYFWBcBG3K/pZw/
-   y85jluKdNnZqXi2GlVQnYVLZwnVRq3yaz/ERjkQEZ8+u8YEN8SmbThCE8
-   lYvvuZfXOPAf9d69FtnIzAf0YlaaRs8qPmUzqDDtA+482+eC0hm5/G5am
-   GQZ2VBEkjBJa3DiYJsGxEWC3YfLl57dorUCsSB0sil9/CUh0vCUChvJTl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="261714605"
-X-IronPort-AV: E=Sophos;i="5.90,244,1643702400"; 
-   d="scan'208";a="261714605"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 00:50:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,244,1643702400"; 
-   d="scan'208";a="659398766"
-Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 08 Apr 2022 00:50:07 -0700
-Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ncjNe-00001F-Rt;
-        Fri, 08 Apr 2022 07:50:06 +0000
-Date:   Fri, 8 Apr 2022 15:49:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Phil Elwell <phil@raspberrypi.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Dom Cobley <popcornmix@gmail.com>
-Subject: [l1k:smsc95xx_5.17 344/887]
- drivers/staging/fbtft/fb_st7789v.c:418:5: warning: no previous prototype for
- 'variant_minipitft13'
-Message-ID: <202204081548.vMqZ6gXI-lkp@intel.com>
+        Fri, 8 Apr 2022 03:52:24 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E3A1E3E23;
+        Fri,  8 Apr 2022 00:50:21 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id bk12so4175855qkb.7;
+        Fri, 08 Apr 2022 00:50:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gd03FWWEZ6z3R9zHdDhplmx+tKByFE9yM+qWp1XkieA=;
+        b=GSCMFVnVaT8jJ12K90kWhi04C6d7kzAY9GLudaNvYwE1aM3WniSwE1EDlSIDYmXNcS
+         ZoskDnyt3oQ5cAYCeF2S04eLs3rPOCoRhu9JBt9sUaSEjVpc5tuHd1ujmf5O49UFC7JX
+         0gjbhcWIZOP2mzeshdWpef7I2g5vOMS9fT/+N+9SBLJuv7SKLAd3y0crQl/DKb4n2aF1
+         pIujdgV/QwGfUY/OzDEsNFv8V6xe0L/k1y/ouzPodjVnx8HbDqJ6hLss0MHdvuc2r4pb
+         BDP9O88Sz3kXLSluV7pm13h4ni2njDLD6wsg4D+ggcP3oMhRbVnX8LLCI2qIyPMddecN
+         7jsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gd03FWWEZ6z3R9zHdDhplmx+tKByFE9yM+qWp1XkieA=;
+        b=D8bGhL2dl84DvWX9Xi8+g0NooU7HkErALWFgCAA02axyig066Kz5DQXqu37JEPS9H5
+         KwhkrjPH7DG913WTl/JCnVbYnyLRs61nmMd1CMx/M6pEZM9ij7TNDGeK+kAcWtW2bRKp
+         Kj5vJ0BMuuQcFYhC/Xk3qQ79zOuxbYsPutZfEX66V+mT2HQ+fxPKXOcJ3Uuxz7UWb0zt
+         gYPQ/InmmVoDFclSqjGmG8ntSo+FAwWRvws9v2nhFdJ9PSICxjz7N4X/KYqL82alj+H6
+         tU++5KUEkhUtWhQOTSBkpz4aGiQHvdE44FAPA9iRcU4UPaTGiNU1SwVmxMgCGPYasM1O
+         KkKA==
+X-Gm-Message-State: AOAM533ZAsSuPPcEl9BGxYslAywSYZdw3ysS1a9Vt7hXPTOnAKj6WN0U
+        ujoEElMb8AMVmVbOKSStAvnTW8a2BtKLPM5gte0=
+X-Google-Smtp-Source: ABdhPJyVf/N0dZeSbLVCmVj1wUMk/MGaGOBT/OOoQXowI5Wkqped1Hq4ptNsGPdoDFZWsarHlb93LyG4RVHhq4yF5HY=
+X-Received: by 2002:a37:8d44:0:b0:69a:224a:dc27 with SMTP id
+ p65-20020a378d44000000b0069a224adc27mr2598220qkd.563.1649404220992; Fri, 08
+ Apr 2022 00:50:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20220407143328.295762-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220407143328.295762-1-krzysztof.kozlowski@linaro.org>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Fri, 8 Apr 2022 09:50:10 +0200
+Message-ID: <CAMhs-H8Z=Q3vm6psjp4iqu7z4N4eUKokeJ8VM+_wCscypP1TLQ@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: dts: align SPI NOR node name with dtschema
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,42 +78,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/l1k/linux smsc95xx_5.17
-head:   05d68ced287b30f62f18f95b5476135ef669804a
-commit: 7997fb3ca8c6a8db601b0352840394c046bb179b [344/887] staging: fbtft: Add minipitft13 variant
-config: xtensa-randconfig-r033-20220408 (https://download.01.org/0day-ci/archive/20220408/202204081548.vMqZ6gXI-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/l1k/linux/commit/7997fb3ca8c6a8db601b0352840394c046bb179b
-        git remote add l1k https://github.com/l1k/linux
-        git fetch --no-tags l1k smsc95xx_5.17
-        git checkout 7997fb3ca8c6a8db601b0352840394c046bb179b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=xtensa SHELL=/bin/bash drivers/staging/fbtft/
+On Thu, Apr 7, 2022 at 4:33 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> The node names should be generic and SPI NOR dtschema expects "flash".
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+>  arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc1.dts         | 2 +-
+>  arch/mips/boot/dts/ralink/mt7621-gnubee-gb-pc2.dts         | 2 +-
+>  6 files changed, 6 insertions(+), 6 deletions(-)
 
-All warnings (new ones prefixed by >>):
+Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 
->> drivers/staging/fbtft/fb_st7789v.c:418:5: warning: no previous prototype for 'variant_minipitft13' [-Wmissing-prototypes]
-     418 | int variant_minipitft13(struct fbtft_display *display)
-         |     ^~~~~~~~~~~~~~~~~~~
-
-
-vim +/variant_minipitft13 +418 drivers/staging/fbtft/fb_st7789v.c
-
-   417	
- > 418	int variant_minipitft13(struct fbtft_display *display)
-   419	{
-   420		display->fbtftops.set_addr_win = minipitft13_set_addr_win;
-   421		return 0;
-   422	}
-   423	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+    Sergio Paracuellos

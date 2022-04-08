@@ -2,155 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 818F24F9B61
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 19:13:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F1EC4F9B6B
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 19:14:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238032AbiDHRPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 13:15:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60992 "EHLO
+        id S238042AbiDHRQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 13:16:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231322AbiDHRPA (ORCPT
+        with ESMTP id S231315AbiDHRQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 13:15:00 -0400
-Received: from esa.hc3962-90.iphmx.com (esa.hc3962-90.iphmx.com [216.71.142.165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41DF13DE4;
-        Fri,  8 Apr 2022 10:12:54 -0700 (PDT)
+        Fri, 8 Apr 2022 13:16:17 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5F226AF2
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 10:14:12 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id bg10so18633929ejb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 10:14:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=qti.qualcomm.com; i=@qti.qualcomm.com; q=dns/txt;
-  s=qccesdkim1; t=1649437974; x=1650042774;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=leFdFo5LapAeT/iEoi3m8H/vxb43JSie8IGgsx0zhNA=;
-  b=WYbXYRl0nPYWkduTSZg8oQDRZK96y+Cx9ZgQKc7sJTC3h7kIJgJvd9OQ
-   dhm99C+2QM4WcPCyIe6Jd+q8K1fxgHHJjxmvJd5nUH1AqcGs1GO5t85lm
-   tJYBXdfFWCKkqHZlnE1pOcwMmx6AGEPxuJ1oco9Wnyda76hltzmJ5iP5C
-   U=;
-Received: from mail-bn8nam11lp2169.outbound.protection.outlook.com (HELO NAM11-BN8-obe.outbound.protection.outlook.com) ([104.47.58.169])
-  by ob1.hc3962-90.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 17:12:52 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=K9Ia5noWK8mGLoYWud9+W8sNn94UvTAjQfcEFZ3NTNGaW7RzyFpQJATnqNYOdWVjn+nYQCnyYLgr1asWE3tpLqJDR0LmAUUr/6p+jEJ0baMO4+oWOdHoHefJXDgPjzyq3BfbhF5GgCfMxkKfpU4S6SqHWNpejkDOG9jpns2ANi+1hWAgAp0+dGjvIbxAlubkwv1x684UEKh8Lwv/CBRR73L4nfNZ2JY+ucQEvr/IQazY/S5/JU7Qa7lIO/3DgGAwzQ5Swwki7+0TkFeM0k1HHTvp46o59EN/WrOFOjDDeaLqnUhlTbIki1rPvOec9bGbUjOgjHKVPGVO+4/Y6OYicw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=leFdFo5LapAeT/iEoi3m8H/vxb43JSie8IGgsx0zhNA=;
- b=IEr4o7AI5jf9SS39mUh31/7w7TCe+w3R4KBR1aBFOcZ5gB3oUqgUP3p29wRsksThlqUuSbci1QUMcyOxSiPU48aT4QX0G72GRVi4jo6Y1SPpXFSyQp5azXR71FdVumdfSiRQ8De+RByncijr7u4BVjdXeWmSEjx03+59U9XbzoUKnYFE7J6Q5O6QH2pC8K7FhIggNGjZON1gXiU99/oo+FkRmjhRWcxWAzlC2mkONCiCDFqKEAjO4vyXXbLPoDETDmexwhNvYJJp7yLexCIKewYMbWQLogesBoe7FtYcAEwVygZ3KC3vzSPOOhA4yTz19aRriQM43Ivq6s8sABMVCw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=qti.qualcomm.com; dmarc=pass action=none
- header.from=qti.qualcomm.com; dkim=pass header.d=qti.qualcomm.com; arc=none
-Received: from MW4PR02MB7186.namprd02.prod.outlook.com (2603:10b6:303:73::6)
- by DM6PR02MB5786.namprd02.prod.outlook.com (2603:10b6:5:17d::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.22; Fri, 8 Apr
- 2022 17:12:49 +0000
-Received: from MW4PR02MB7186.namprd02.prod.outlook.com
- ([fe80::9485:c59c:6877:f492]) by MW4PR02MB7186.namprd02.prod.outlook.com
- ([fe80::9485:c59c:6877:f492%7]) with mapi id 15.20.5144.022; Fri, 8 Apr 2022
- 17:12:49 +0000
-From:   Sankeerth Billakanti <sbillaka@qti.qualcomm.com>
-To:     "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
-        Doug Anderson <dianders@chromium.org>,
-        "Sankeerth Billakanti (QUIC)" <quic_sbillaka@quicinc.com>
-CC:     dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <seanpaul@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        quic_kalyant <quic_kalyant@quicinc.com>,
-        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
-        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        quic_vproddut <quic_vproddut@quicinc.com>,
-        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>
-Subject: RE: [PATCH v6 5/8] drm/msm/dp: prevent multiple votes for dp
- resources
-Thread-Topic: [PATCH v6 5/8] drm/msm/dp: prevent multiple votes for dp
- resources
-Thread-Index: AQHYRE/GcQocYa4qfUa1ywd1Z9u6yKzaI+yAgAwbAgCAAA2g8A==
-Date:   Fri, 8 Apr 2022 17:12:49 +0000
-Message-ID: <MW4PR02MB7186B3A2F8EDF388CA521498E1E99@MW4PR02MB7186.namprd02.prod.outlook.com>
-References: <1648656179-10347-1-git-send-email-quic_sbillaka@quicinc.com>
- <1648656179-10347-6-git-send-email-quic_sbillaka@quicinc.com>
- <CAD=FV=Wn-XypjRcw-D0VtBHZbuTz=RHiMq6RCHCa=CWmZM42nQ@mail.gmail.com>
- <94da2c97-2ad2-4575-bd73-d66ad989e17b@linaro.org>
-In-Reply-To: <94da2c97-2ad2-4575-bd73-d66ad989e17b@linaro.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=qti.qualcomm.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 7b7dc4f4-105f-44f9-2acc-08da19830237
-x-ms-traffictypediagnostic: DM6PR02MB5786:EE_
-x-ld-processed: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d,ExtAddr
-x-microsoft-antispam-prvs: <DM6PR02MB5786A3821A327BDEAAA84B3FE1E99@DM6PR02MB5786.namprd02.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: WCiZFg/SqOAtZ4f2hLqD+N2eWHCy1W3OphEFEaA19g9jlj06t12P9wefMJmrEuwgX77mUyX5zXLzIBaAPbCzm+mC7VQznD3ku8itftMg5L2fFIkg38J+560mOclyYhkOdULgHSnhLZPzTyitlfi3DM9zkWCZE0M66Y/hgSCCOeheHOaHXRSoHdM04gvwgrUwnOnkA8i5k5SablQHP16rAdXOT4nN2a9FpnMZQw04JehaUp+DgU2i2SFQaMThOzdrIZN3FM7U6j10KBE1zGRxQxto9SCSmW9/ZDs5Y50QuAuLsOsCnY7pZb7m6cKJ2j5Lc9e5wXflNnTlxNP+MNXCdLIrbo1a5ItuSkyGFcX3Gadksq40PpzL7exBJB+hUuRGBj9thdOHzhFI4xcyQKN6450HYCp3S2fXb5bacYi5AzXK2jrg/86drJb7miPhzkskqdnlgMRxnVTS1cub1JTD3o3aGKkzTSp/4vyp3PNZHsja1ZwU1QTjFJX5etaxbCg/XRx9c1MualdCtiuXBGh1kQ11FLlzzDeK/90YVp3hcKpJre9GqDaqsHjwgnO5LWlHII3iQcd19KX9qg/JqMNVjblEjHfhhlj0j6LbglGupyBwCVHi7IiXpFvWvFb81s32lUYgRyH9B4aHXLlw94nFJv2ZwT7tFu4LLdqW7EhkDaxd5nI6scI37g/CngcuwwFFgkJwzaQRai9/ojzyfTNjrQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR02MB7186.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(7696005)(4326008)(8676002)(76116006)(38070700005)(66946007)(66556008)(66476007)(66446008)(508600001)(186003)(38100700002)(26005)(64756008)(110136005)(71200400001)(122000001)(53546011)(9686003)(6506007)(33656002)(55016003)(2906002)(5660300002)(7416002)(54906003)(86362001)(107886003)(52536014)(8936002)(316002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?R1lHZXI4N3c5NFlybUJlZytaYXZBOS9LQkJPODJpaXdnY2M3bzBGSFV5YnZB?=
- =?utf-8?B?eFl0cmh6Y1dwRWxtSHJOR2dpZnpKaHFjR08ySjFETnJaL2h2WExYU1BpcDB6?=
- =?utf-8?B?VkJnKzNhK3Q1cmdDZThRTlVTRkFkRDhMRFJ4WG9OWFg4MHBISGhnVHEwdnNz?=
- =?utf-8?B?WXBveUJ4K0ljU04xQk56dkNNMUFlQkNkY3FSYk1iWS9WdnFtdlppdzFwTWlt?=
- =?utf-8?B?N3dqNEtrMDlCV0FPM2xZWm15by9adzRHVFZuSURkOVNRdVBGeG42dFN4SmYz?=
- =?utf-8?B?Ky85SmhNbm9Bcjc4WGM1SzVTMEN3MTRZYm5Bd1o2Mk5xbFcwc0ZLK1I3bkZI?=
- =?utf-8?B?ekVGN0xvU0cyTEVLMlRXTEh0ZXNnaUp2VWpxRTZSOW5VZHQ5a1FINnZ1TmtV?=
- =?utf-8?B?eDNNR3hPdVBKTGRueHdybWxvSzZIazVlcFZZa3BhbVhTV2tZRFNEVXJPU0Zl?=
- =?utf-8?B?MDVkclpoUEVicDhhNDhQRml2SFQ1WDhvYmZIUVFFM2ZjWFlLaXlqT09XODdp?=
- =?utf-8?B?U08zeDNpOW8zWTRwbFBNZ3c1a3lwa0taQjg4emwvV3lwNTl1TDNUWGpNeG53?=
- =?utf-8?B?S2hwMFUzaHRDdjAvT3JlVzltOXpUUE5VdkZmQTlER3hZd3ZhM1pXNkNLT0Jw?=
- =?utf-8?B?M2tvRGxjZHEycEJScGhIWlRMa0F4cTJmY3pJQzkxR2JZRDJyZitFR3EyK2pT?=
- =?utf-8?B?UEFweVZDZ3pCRVJLNUEwWlFNa3czZFZUc0pTMGl0U1FzOHlQa1V2VnRFNTJC?=
- =?utf-8?B?dlBUU2V4QkQvZ3BHTDZhU09oeVRlRHdwSXlCQk1ZekUxbjRxM1RUcDR5aXlO?=
- =?utf-8?B?SGpxeElvVFF0ZmZKVDJFR1Mxckx5dVVkaXJvRURkQXhFVkVaYXgxN1hoNm1o?=
- =?utf-8?B?NktNQTZQT2pKak52bHZoaWZ0b05NWVhCUkpNRTJhZ3ZVN1pBS1k4ZFNDQXNL?=
- =?utf-8?B?UDFSUDR2NTBqZGt1OWpHNnd1UmluUVFka29WRlJZNkgzazc1NXNDWVFKcmJ1?=
- =?utf-8?B?S1dWY2VLeGN6MEF2b1dSUjhmZ3p1a3BNZGpYWDhiZ0dGQ2YxeTZMMWVrSUxK?=
- =?utf-8?B?U0RjcWRsbjc4OWFHQWlPQ2lzdXBWUEdMQVVoTkxSMFFGdGlaZ2haVHJYYTNu?=
- =?utf-8?B?N2R1eGxJajJuZkhUczI5ZGpNaG1lUzhLSWFnemdmeFBDSHVYTHJ6b2x1c2FO?=
- =?utf-8?B?TUpzUUh3SHJSYXZsTjIrN1RhcHA2SlRjTHpveFdKdmdQdU1zVngwN3lOV1I4?=
- =?utf-8?B?dkFlZ2pxdDhBaXNKNjU1enRndlplMlhYWGRPTWQxNzlPUTl4a3R0TlZpTnJw?=
- =?utf-8?B?UWtvdnk0YzNhYlpLMVR1Ukh3Rmpkb3lGSDVKSmd0Y2ZBdERxVFFZS1JZSDNE?=
- =?utf-8?B?ZWM1OXlON1laRjU5RENEMXdZTUQycGl5MWI2MnVpSVN0ZitQT0lIemdZYjZ2?=
- =?utf-8?B?aXBWMGZXRFZaWURDMm8zWU12VUg0VmJIOUZvZ0N5QVRpUWdaazVXdWtaYkNO?=
- =?utf-8?B?OGdtR3BzN3orS1NqeHd6SmVvakEvUldNTTRTdjFRM1NPcGpJQlNrNDlpWHJL?=
- =?utf-8?B?TktIczJPbkt1QTkxYXJ1RVBzMkgxRXVERFE1YlhFSTFLcDE0Nkl2bVlNYmR2?=
- =?utf-8?B?ZG1NK1pLRHl3QjBHeUhKNWlOY0I0WDJsbTd6T29aNUsyTkVuQkRsKzUxTEd2?=
- =?utf-8?B?Q3NEMmVNY2lHd0FJVnFwQ2k1RSs4L2REc1FBaStHVDFVSDFUOTcrVXViVU1O?=
- =?utf-8?B?QitNT2FqWW16UEJxREU5Ry8rVkRSRG01UWdZK05TeW9xSkI3ZnlPalBjL2R5?=
- =?utf-8?B?NFJGK21YK0ZsNi9WS1FWZVV2aEdjTW1XWjFLK0tqdzBQdE1TUkpOR20zUXZI?=
- =?utf-8?B?RUJkYkFWbTJaL2t5bnB3WHRZdTBJb2didmxYbCtGTGVQSTdwT05CZmpybmpQ?=
- =?utf-8?B?QmxodnNkTGFxTEI3WmdTWHZ1bEZJazljTmgvenJzRkkrdUdCUTVBZmxVVE9D?=
- =?utf-8?B?VVBLWENNRzQ5L1VRelN3Y0JYVDVYNERxZmptRWFIMEk4RnZPRmZzNXFKYW5L?=
- =?utf-8?B?TG5Uc2FtdXdSelZFYmljNDhaSTlMcjRoNGlaR1NLbFl5S0VuL1h4K0pvSDRG?=
- =?utf-8?B?dW1IU1BaUVczTGdMbHdkN1kvVWkrcllqUWtGaHpoL1o4UkhUZCtlUFZmdW56?=
- =?utf-8?B?QmpkR1lLRW1UUzhtYkY3TElNeEtoclk3Q1ZqMWRuZExXeXdGWllSM2hNTk1a?=
- =?utf-8?B?WkUrL0FMbTZVdDNVUFdrdzg0d09HdkszUUt5L3MwNEFHRzIzNE1kakxQc2JH?=
- =?utf-8?B?YU9EZDFtc05hZlI5WTNTTVN3TzFGMmhRdHNOVWJKSURjYkRqS3JWclVPQndC?=
- =?utf-8?Q?2ZXse5PVnTs4WFLs=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=0o/SUj9l7QxccG0h5Jo/GmbooXfRNd11V119ZFnMckU=;
+        b=Bcop1hZHOgBQuDGa7QitchzS0rKGKo3Ujzo71w/Wg7uqUxCVHUVlo92yaoWsUMrhRj
+         ESWDeJ108bo2TC+NhPefjFOhaRDCLsElwntWQdZsiIRsMFV+a5N26gAoJHqQ0NaNmC5N
+         2j8VZstcNjF4gMMxOfs4qJxHsBKOOT+pM2XOXa5hn9gDbXYa/Q3BtQtEvlQ9AeoLxidO
+         GjZSsNlAk/Y9LFNVvuDWh0aLFlTNhOXx8qHdOtx7pxqnWiEY05W9UsL2en5nX+x3eScQ
+         Umlu4wdPONyvMdVp+Da+0cCRIW3ekitvW5oEav/ZqeLXGawpVHbb8fcdR5wvvBQ3NPeF
+         cMkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=0o/SUj9l7QxccG0h5Jo/GmbooXfRNd11V119ZFnMckU=;
+        b=pwK0KKQCYT3G8psi1q+knMeZvrgIsr7jVeP5xNljLalOJ0VkAPUBzpdj5mmyQ1cfWb
+         xG2TXqWaBAbCcyqFQiAHONd7nf8IdJ3CD19z+5JsFV7vXQONvkyGxsk7/KU3cZR5vbUI
+         NzzUQ/MAMfSzfx2Md2ji21iWUb1Atq1XbrWxbTVBZDiRAp9w3hWyhF71VYkGbCD83+F0
+         yXXclZBHb7tSryxT1a7386FPAVLkmFgzMM6vmW/dTJykmbn/fn2X/oR0AuEby7X4ZWEt
+         CsZ126LL1GLcb1Kmxkncm9CaBzoPmTS0H5J4s3xJHaaW/Ojpk99bBYee1Vepx6Ac371k
+         anDQ==
+X-Gm-Message-State: AOAM533UBu9Gtmi8F5QtqNMSYSX6yepGZkfQ3kwz/eurAgIn18TlZIlo
+        PrXbDSb2hfwL6nTKgPPWRt+1LCT5QWUuJ88aNyaE
+X-Google-Smtp-Source: ABdhPJw4m50Heq+ZwCYADtd52nzp0qTl5o19w463Q1Ul92xNBNhrSzqy+I1ZLWln2A2dGR15BjDtzskUMutG3LrWeoU=
+X-Received: by 2002:a17:907:216f:b0:6ce:d85f:35cf with SMTP id
+ rl15-20020a170907216f00b006ced85f35cfmr20127403ejb.517.1649438050929; Fri, 08
+ Apr 2022 10:14:10 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: qti.qualcomm.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR02MB7186.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7b7dc4f4-105f-44f9-2acc-08da19830237
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Apr 2022 17:12:49.3208
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: XxwQuYpeyJVpwz+W5D8G0q4QwZEKuedBlfTtw+AnGNFoDUwkxbxucgPb79ruwbqiJJKY+qNt8tU+wBaUyqEtvNIyWKzY9P3lzWC9zA2dP8U=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB5786
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+References: <20220329125117.1393824-1-mic@digikod.net> <20220329125117.1393824-8-mic@digikod.net>
+ <CAHC9VhQpZ12Chgd+xMibUxgvcPjTn9FMnCdMGYbLcWG3eTqDQg@mail.gmail.com> <3a5495b8-5d69-e327-1dfc-7a99257269ae@digikod.net>
+In-Reply-To: <3a5495b8-5d69-e327-1dfc-7a99257269ae@digikod.net>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 8 Apr 2022 13:13:59 -0400
+Message-ID: <CAHC9VhS0bYe9wOxuXoC2mw_K2g=Fw=LXiV+A_Z1vH_KqH-TBFA@mail.gmail.com>
+Subject: Re: [PATCH v2 07/12] landlock: Add support for file reparenting with LANDLOCK_ACCESS_FS_REFER
+To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Jann Horn <jannh@google.com>,
+        John Johansen <john.johansen@canonical.com>,
+        Kees Cook <keescook@chromium.org>,
+        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -159,34 +79,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiA+IE9uIFdlZCwgTWFyIDMwLCAyMDIyIGF0IDk6MDQgQU0gU2Fua2VlcnRoIEJpbGxha2FudGkN
-Cj4gPiA8cXVpY19zYmlsbGFrYUBxdWljaW5jLmNvbT4gd3JvdGU6DQo+ID4+DQo+ID4+IFRoZSBh
-dXhfYnVzIHN1cHBvcnQgd2l0aCB0aGUgZHBfZGlzcGxheSBkcml2ZXIgd2lsbCBlbmFibGUgdGhl
-IGRwDQo+ID4+IHJlc291cmNlcyBkdXJpbmcgbXNtX2RwX21vZGVzZXRfaW5pdC4gVGhlIGhvc3Rf
-aW5pdCBoYXMgdG8gcmV0dXJuDQo+ID4+IGVhcmx5IGlmIHRoZSBjb3JlIGlzIGFscmVhZHkgaW5p
-dGlhbGl6ZWQgdG8gcHJldmVudCBwdXR0aW5nIGFuDQo+ID4+IGFkZGl0aW9uYWwgdm90ZSBmb3Ig
-dGhlIGRwIGNvbnRyb2xsZXIgcmVzb3VyY2VzLg0KPiA+Pg0KPiA+PiBTaWduZWQtb2ZmLWJ5OiBT
-YW5rZWVydGggQmlsbGFrYW50aSA8cXVpY19zYmlsbGFrYUBxdWljaW5jLmNvbT4NCj4gPj4gLS0t
-DQo+ID4+ICAgZHJpdmVycy9ncHUvZHJtL21zbS9kcC9kcF9kaXNwbGF5LmMgfCAxMCArKysrKysr
-KysrDQo+ID4+ICAgMSBmaWxlIGNoYW5nZWQsIDEwIGluc2VydGlvbnMoKykNCj4gPg0KPiA+IEkn
-bSBub3QgYSBodWdlIGZhbiBvZiB0aGlzIGJ1dCBJJ2xsIGxlYXZlIGl0IHVwIHRvIERtaXRyeS4g
-SW4gZ2VuZXJhbA0KPiA+IGl0IGZlZWxzIGxpa2UgdGhlcmUgc2hvdWxkIGJlIF9hXyBwbGFjZSB0
-aGF0IGVuYWJsZXMgdGhlc2UgcmVzb3VyY2VzLg0KPiA+IENoZWNrcyBsaWtlIHRoaXMgbWFrZSBp
-dCBmZWVsIGxpa2Ugd2UganVzdCBzY2F0dGVyc2hvdCBlbmFibGluZw0KPiA+IHJlc291cmNlcyBp
-biBhIGJ1bmNoIG9mIHJhbmRvbSBwbGFjZXMgaW5zdGVhZCBvZiBjb21pbmcgdXAgd2l0aCB0aGUN
-Cj4gPiBkZXNpZ24gZm9yIGVuYWJsaW5nIHRoZW0gaW4gdGhlIHJpZ2h0IHBsYWNlLg0KPiANCj4g
-SSdkIHByZWZlciB0byBzZWUgYSBjaGVjayBmb3IgZURQIGluIGRwX2Rpc3BsYXlfY29uZmlnX2hw
-ZCgpLiBPciBldmVuIGJldHRlcg0KPiB0byBzZWUgdGhhdCB0aGlzIGZ1bmN0aW9uIGlzbid0IGNh
-bGxlZCBmb3IgZURQIGF0IGFsbC4NCj4NCg0KVGhpcyBuZWVkcyB0byBiZSBjYWxsZWQgd2hlbiBl
-RFAgaXMgbm90IHVzaW5nIHRoZSBhdXhfYnVzIHBhdGguIElmIHRoZSBlRFAgcGFuZWwgaXMNCmdp
-dmVuIGFzIGEgc2VwYXJhdGUgcGFuZWwgZHJpdmVyLCB0aGVuIHRoZSByZXNvdXJjZXMgbmVlZCB0
-byBiZSBlbmFibGVkIGhlcmUuDQoNCklmIHdlIGRvbid0IHdhbnQgdG8gc3VwcG9ydCBlRFAgd2l0
-aG91dCBhdXhfYnVzLCB0aGVuIHdlIGNhbiBza2lwIHRoaXMgZnVuY3Rpb24uDQogDQo+ID4NCj4g
-PiBJbiBhbnkgY2FzZSwgaWYgd2UgZG8gZW5kIHVwIGxhbmRpbmcgdGhpcyBwYXRjaCwgaXQgc3Vy
-ZSBmZWVscyBsaWtlIGl0DQo+ID4gbmVlZHMgdG8gbW92ZSBlYXJsaWVyIGluIHRoZSBwYXRjaCBz
-ZXJpZXMsIHJpZ2h0PyBUaGlzIHBhdGNoIHNob3VsZG4ndA0KPiA+IGh1cnQgZXZlbiB3aXRob3V0
-IHRoZSBvdGhlciBwYXRjaGVzIGluIHRoZSBzZXJpZXMgYnV0IGlmIHlvdSBhcHBseSB0aGUNCj4g
-PiBlYXJsaWVyIHBhdGNoZXMgaW4gdGhlIHNlcmllcyB3aXRob3V0IHRoaXMgb25lIHRoZW4geW91
-J2xsIGhhdmUgYSBidWcsDQo+ID4gcmlnaHQ/IFRoYXQgbWVhbnMgdGhpcyBuZWVkcyB0byBjb21l
-IGVhcmxpZXIuDQo+ID4NCj4gPiAtRG91Zw0KPiANCj4gDQo+IC0tDQo+IFdpdGggYmVzdCB3aXNo
-ZXMNCj4gRG1pdHJ5DQoNClRoYW5rIHlvdSwNClNhbmtlZXJ0aA0K
+On Fri, Apr 8, 2022 at 12:07 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
+wrote:
+> On 08/04/2022 03:42, Paul Moore wrote:
+> > On Tue, Mar 29, 2022 at 8:51 AM Micka=C3=ABl Sala=C3=BCn <mic@digikod.n=
+et> wrote:
+> >>
+> >> From: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
+> >>
+> >> Add a new LANDLOCK_ACCESS_FS_REFER access right to enable policy write=
+rs
+> >> to allow sandboxed processes to link and rename files from and to a
+> >> specific set of file hierarchies.  This access right should be compose=
+d
+> >> with LANDLOCK_ACCESS_FS_MAKE_* for the destination of a link or rename=
+,
+> >> and with LANDLOCK_ACCESS_FS_REMOVE_* for a source of a rename.  This
+> >> lift a Landlock limitation that always denied changing the parent of a=
+n
+> >> inode.
+> >>
+> >> Renaming or linking to the same directory is still always allowed,
+> >> whatever LANDLOCK_ACCESS_FS_REFER is used or not, because it is not
+> >> considered a threat to user data.
+> >>
+> >> However, creating multiple links or renaming to a different parent
+> >> directory may lead to privilege escalations if not handled properly.
+> >> Indeed, we must be sure that the source doesn't gain more privileges b=
+y
+> >> being accessible from the destination.  This is handled by making sure
+> >> that the source hierarchy (including the referenced file or directory
+> >> itself) restricts at least as much the destination hierarchy.  If it i=
+s
+> >> not the case, an EXDEV error is returned, making it potentially possib=
+le
+> >> for user space to copy the file hierarchy instead of moving or linking
+> >> it.
+> >>
+> >> Instead of creating different access rights for the source and the
+> >> destination, we choose to make it simple and consistent for users.
+> >> Indeed, considering the previous constraint, it would be weird to
+> >> require such destination access right to be also granted to the source
+> >> (to make it a superset).  Moreover, RENAME_EXCHANGE would also add to
+> >> the confusion because of paths being both a source and a destination.
+> >>
+> >> See the provided documentation for additional details.
+> >>
+> >> New tests are provided with a following commit.
+> >>
+> >> Cc: Paul Moore <paul@paul-moore.com>
+> >> Signed-off-by: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
+> >> Link: https://lore.kernel.org/r/20220329125117.1393824-8-mic@digikod.n=
+et
+> >> ---
+> >>
+> >> Changes since v1:
+> >> * Update current_check_access_path() to efficiently handle
+> >>    RENAME_EXCHANGE thanks to the updated LSM hook (see previous patch)=
+.
+> >>    Only one path walk is performed per rename arguments until their
+> >>    common mount point is reached.  Superset of access rights is correc=
+tly
+> >>    checked, including when exchanging a file with a directory.  This
+> >>    requires to store another matrix of layer masks.
+> >> * Reorder and rename check_access_path_dual() arguments in a more
+> >>    generic way: switch from src/dst to 1/2.  This makes it easier to
+> >>    understand the RENAME_EXCHANGE cases alongs with the others.  Updat=
+e
+> >>    and improve check_access_path_dual() documentation accordingly.
+> >> * Clean up the check_access_path_dual() loop: set both allowed_parent*
+> >>    when reaching internal filesystems and remove a useless one.  This
+> >>    allows potential renames in internal filesystems (like for other
+> >>    operations).
+> >> * Move the function arguments checks from BUILD_BUG_ON() to
+> >>    WARN_ON_ONCE() to avoid clang build error.
+> >> * Rename is_superset() to no_more_access() and make it handle superset
+> >>    checks of source and destination for simple and exchange cases.
+> >> * Move the layer_masks_child* creation from current_check_refer_path()
+> >>    to check_access_path_dual(): this is simpler and less error-prone,
+> >>    especially with RENAME_EXCHANGE.
+> >> * Remove one optimization in current_check_refer_path() to make the co=
+de
+> >>    simpler, especially with the RENAME_EXCHANGE handling.
+> >> * Remove overzealous WARN_ON_ONCE() for !access_request check in
+> >>    init_layer_masks().
+> >> ---
+> >>   include/uapi/linux/landlock.h                |  27 +-
+> >>   security/landlock/fs.c                       | 607 ++++++++++++++++-=
+--
+> >>   security/landlock/limits.h                   |   2 +-
+> >>   security/landlock/syscalls.c                 |   2 +-
+> >>   tools/testing/selftests/landlock/base_test.c |   2 +-
+> >>   tools/testing/selftests/landlock/fs_test.c   |   3 +-
+> >>   6 files changed, 566 insertions(+), 77 deletions(-)
+> >
+> > I'm still not going to claim that I'm a Landlock expert, but this
+> > looks sane to me.
+> >
+> > Reviewed-by: Paul Moore <paul@paul-moore.com>
+>
+> Thanks Paul! I'll send a small update shortly, with some typo fixes,
+> some unlikely() calls, and rebased on the other Landlock patch series.
+
+Since it sounds like those are all pretty minor changes, feel free to
+preserve my 'Reviewed-by' on the respun patch.
+
+--=20
+paul-moore.com

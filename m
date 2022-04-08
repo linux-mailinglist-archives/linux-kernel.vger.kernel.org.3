@@ -2,99 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C8E14F8FC1
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:43:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC41A4F8FC3
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:44:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbiDHHp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 03:45:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44880 "EHLO
+        id S229921AbiDHHq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 03:46:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbiDHHp0 (ORCPT
+        with ESMTP id S229803AbiDHHqZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 03:45:26 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B84DC1C025F;
-        Fri,  8 Apr 2022 00:43:23 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 0A62A807E;
-        Fri,  8 Apr 2022 07:40:58 +0000 (UTC)
-Date:   Fri, 8 Apr 2022 10:43:21 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Nishanth Menon <nm@ti.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Keerthy <j-keerthy@ti.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Subject: Re: [PATCH 1/4] dt-bindings: timer: Add am6 compatible for ti-timer
-Message-ID: <Yk/nmTNL4tm0sd1X@atomide.com>
-References: <20220407071006.37031-1-tony@atomide.com>
- <20220407133344.v2x2b6rkmskatips@handled>
- <Yk+8P5EdsdZR5h1Z@atomide.com>
- <20220408073418.4yjs3ykt34fhqjco@boondocks>
+        Fri, 8 Apr 2022 03:46:25 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62469133643;
+        Fri,  8 Apr 2022 00:44:23 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id f23so13688539ybj.7;
+        Fri, 08 Apr 2022 00:44:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aYBkptFuu1L6fJBG8uYww/w9jLfAXvEZhU9BF3IYbwI=;
+        b=HKeDspxMULemfn4t1aitwEvaiWMdbhpXh/45Y8asfvK3UjwqUW59sBrUXIHcMhjIgz
+         WmgtAOXjlUsRjZ81/bWmD7dQuBDGb7c7V+C5iXGtIkO6I+uYTvno2gkFhW5xcgyjj8Kb
+         GhD68ShqNFGkDlBvPwooQYegP4m6Cgxstps4HQTIMqSetEkbHkhofNsZldtuwC17w9pR
+         qkbqn6qcBqbSKqnsqGg//IS58YIQPtfzBJ8leshVpCPJ1h+iFR19Y1c7/Qj1K8m1Mch1
+         X/1eT/JGCoYZzBU9vRjQGJBWjk3Y5Xg3JN2ZrJ/SAMQqcE/8BTYuULtIJPDyTivyGgLB
+         jtGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aYBkptFuu1L6fJBG8uYww/w9jLfAXvEZhU9BF3IYbwI=;
+        b=1QJSBY0QHPxH5Tj4CSmSfSMOc8+rnWdEpa+T+Fvwz2QmK2JqT3Ef1hsZz9rJPlPqBj
+         sgTlSP6fga5g/c8pJOb28T30phZ4jVZe+o/7kccKL2rEBGyKtXIy6QwfuPNO1xgLYJVx
+         YEuCtVHIdOgdqYg0zj4znPktf1ZnW5p9Nn+Qp9zxNvIlbHIN/1b+s/IdjT3WaHBiyt8P
+         1m0qAOBX5qIVo6qFj7MXcSjCS0QTtGDul57Kq44a3jtf9Kl4pcoWRqhamnTFS+ZW8P7D
+         +Du4eTXagbbMx02lAh+uHX/gzwpSs2PJrfE7iYQ2Rl7Qhg4Rv8UTPR9KumKzrTFlqhRW
+         i8uA==
+X-Gm-Message-State: AOAM530e3I1zAdnrHC2XXKvisJg/2uUyDnvpYc/PXjNqydZ955js8Otg
+        aTF458HXCaE0MwXPvtPI7bURFF5UI4a+jLE/4zov+lQr
+X-Google-Smtp-Source: ABdhPJx+RtkKNEaXE2TP5P6sQYsNmhufvjTOchmLl/QqIeKsHK8iv2GzLbYQsuwnTv95dG7FPIZFfP7yIyYQa5tnomk=
+X-Received: by 2002:a5b:dcc:0:b0:628:d6d9:d4bc with SMTP id
+ t12-20020a5b0dcc000000b00628d6d9d4bcmr12508904ybr.178.1649403862664; Fri, 08
+ Apr 2022 00:44:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220408073418.4yjs3ykt34fhqjco@boondocks>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <1646727529-11774-1-git-send-email-wanpengli@tencent.com>
+In-Reply-To: <1646727529-11774-1-git-send-email-wanpengli@tencent.com>
+From:   Wanpeng Li <kernellwp@gmail.com>
+Date:   Fri, 8 Apr 2022 15:44:11 +0800
+Message-ID: <CANRm+Czsj0WiQ5GoQ4gZgBZFPpnOC6or_kULhcz7GQ2vhzpNSQ@mail.gmail.com>
+Subject: Re: [PATCH] x86/kvm: Don't waste kvmclock memory if there is nopv parameter
+To:     LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Nishanth Menon <nm@ti.com> [220408 07:31]:
-> On 07:38-20220408, Tony Lindgren wrote:
-> > Hi,
-> > 
-> > * Nishanth Menon <nm@ti.com> [220407 13:31]:
-> > > On 10:10-20220407, Tony Lindgren wrote:
-> > > > diff --git a/Documentation/devicetree/bindings/timer/ti,timer.txt b/Documentation/devicetree/bindings/timer/ti,timer.txt
-> > > > --- a/Documentation/devicetree/bindings/timer/ti,timer.txt
-> > > > +++ b/Documentation/devicetree/bindings/timer/ti,timer.txt
-> > > > @@ -14,6 +14,7 @@ Required properties:
-> > > >  			ti,omap5430-timer (applicable to OMAP543x devices)
-> > > >  			ti,am335x-timer	(applicable to AM335x devices)
-> > > >  			ti,am335x-timer-1ms (applicable to AM335x devices)
-> > > > +			ti,am6-timer (applicable to AM6 devices)
-> > > 
-> > > Suggestion:
-> > > 
-> > > Could we call this ti,am65-timer instead? AM6 is a bit nuanced and spans
-> > > a couple of sub SoC architectures.
-> > 
-> > I think the timer hardware is the same across am64, am65 and j7. So we
-> > should pick something to represent the am6 timers as it would allow using
-> > shared dtsi files for the 16 - 30 timers there are.
-> > 
-> > Using shared timer dtsi files should work as long as the clocks are
-> > defined in include/dt-bindings/clock for each SoC, and assuming we can use
-> > the same compatible property for the timers.
-> 
-> Compatible should work fine, Though I doubt clock and other indices
-> (base address etc will scale appropriately), but we could give it a
-> shot, but we can discuss that in the context of the dts patches.
-
-Yeah that's a separate series for sure and can be done later on after we
-have am6 timers working first.
-
-> > Of course if the timers are really different across am64, am65 and j72
-> > then multiple compatible properties are neeeded.
-> > 
-> > If the timer hardware is the same, then I guess we should just pick the
-> > earliest version, so how about using ti,am64-timer?
-> 
-> yep - the oldest version will be ti,am654-timer ( AM65 was the first
-> K3 device. Unfortunately, the numbering does'nt follow a chronological
-> order)
-
-OK great, I will use ti,am654-timer then.
-
-Regards,
-
-Tony
+ping,
+On Tue, 8 Mar 2022 at 16:19, Wanpeng Li <kernellwp@gmail.com> wrote:
+>
+> From: Wanpeng Li <wanpengli@tencent.com>
+>
+> When the "nopv" command line parameter is used, it should not waste
+> memory for kvmclock.
+>
+> Signed-off-by: Wanpeng Li <wanpengli@tencent.com>
+> ---
+>  arch/x86/kernel/kvmclock.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/x86/kernel/kvmclock.c b/arch/x86/kernel/kvmclock.c
+> index c5caa73..16333ba 100644
+> --- a/arch/x86/kernel/kvmclock.c
+> +++ b/arch/x86/kernel/kvmclock.c
+> @@ -239,7 +239,7 @@ static void __init kvmclock_init_mem(void)
+>
+>  static int __init kvm_setup_vsyscall_timeinfo(void)
+>  {
+> -       if (!kvm_para_available() || !kvmclock)
+> +       if (!kvm_para_available() || !kvmclock || nopv)
+>                 return 0;
+>
+>         kvmclock_init_mem();
+> --
+> 2.7.4
+>

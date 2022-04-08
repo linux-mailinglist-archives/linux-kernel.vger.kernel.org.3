@@ -2,101 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0155E4F9286
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 12:05:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97D634F928D
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 12:08:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234389AbiDHKGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 06:06:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60122 "EHLO
+        id S229871AbiDHKKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 06:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234513AbiDHKG1 (ORCPT
+        with ESMTP id S229565AbiDHKJ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 06:06:27 -0400
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 118C3ABF54
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 03:04:12 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id t9so3077687qvd.3
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 03:04:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uDYIyqRKa4ljv3bdWbjMFdUVSWTyxOVGEtnHDdVjPis=;
-        b=Kv7OjmJfTmHInHTCBgArEwZ05WO0BHqMZbTJ16WdCcgLTs8sNa71jRfD3FNs5gf84f
-         IjU9LT7x3tsnc1sRz9WpGb7WrZtGHXEePmkxNnbK/zAIohoeTWZVN0dBH5zohot6CCde
-         jTy3asZu1tIavz9LbzJxMjfB1gGqYoU9TDaKWFtSHD+Ox/sM6iL0cGU6aDHVcTGFKTr4
-         /gciXK589BI6L2cajYsDEHSBhsiGf1tIqGVkoJRRxxnrnTP+QTYK+zm4jN0ASnocq9kP
-         62V/7didh05neKxyyfxiFiWTVcOVqTrYvzw+huWvWGa/MQTETHxAJ0xCc+dVRhOrp7C1
-         xBMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uDYIyqRKa4ljv3bdWbjMFdUVSWTyxOVGEtnHDdVjPis=;
-        b=KGSYPLiHgGVQGyMhv73gAPfWnL26IJyMFatRy2KY94JrI5ZLfCOZ1aYxCmYkTeNqCx
-         kAqdKrpt7bspgynLK+iGirTbCSaAfNL9eIMIcWxFGk1q8+FhHgWWzV1eCYWF1PsQSHz3
-         yIDcCgqUTP4dSdjZ0cbFAlTAFHHhAewer/Tt3huPU+2Er9N+PwRJKSw77Gtu7zdivn9f
-         2yXLuzq/Mi6gIZAwaNi9sJa9g4t3qRCvdsTeYrEXu0qiRwGHx9tB+2vbzcrV9zUdQLul
-         unXBpfY4svewIKO0EvdVw+Yl4uyv/JyKqRJgJerzoNV1CqbCqy/j9Nao+AmVinaC6u6i
-         HH1A==
-X-Gm-Message-State: AOAM531nNnHZ9GK+AZee0cKcjZwEgjQ5YZb6jw97rPB5ZyhoRTshRA3u
-        7yQk80QJPJQalJ/TTJHD+gg=
-X-Google-Smtp-Source: ABdhPJypq+E+nDV6hH6cRkMj7BSxYRwSwDfj38mgPVU5agSVzunZiQfgbqQYq/YmTbKwuKiQD3NkAg==
-X-Received: by 2002:a05:6214:d41:b0:442:19b7:62e6 with SMTP id 1-20020a0562140d4100b0044219b762e6mr14990676qvr.17.1649412250156;
-        Fri, 08 Apr 2022 03:04:10 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id d3-20020a05622a15c300b002eb9af4c945sm19621632qty.3.2022.04.08.03.04.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 03:04:09 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: lv.ruyi@zte.com.cn
-To:     andrzej.hajda@intel.com, narmstrong@baylibre.com,
-        robert.foss@linaro.org
-Cc:     Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
-        xji@analogixsemi.com, hsinyi@chromium.org, sam@ravnborg.org,
-        tzungbi@google.com, pihsun@chromium.org, maxime@cerno.tech,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] drm/bridge: anx7625: remove unnecessary flush_workqueue()
-Date:   Fri,  8 Apr 2022 10:04:00 +0000
-Message-Id: <20220408100401.2495529-1-lv.ruyi@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Fri, 8 Apr 2022 06:09:57 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B32235DEC
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 03:07:52 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nclWo-0001D7-OD; Fri, 08 Apr 2022 12:07:42 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nclWo-001mY5-FE; Fri, 08 Apr 2022 12:07:41 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1nclWl-001wSJ-UN; Fri, 08 Apr 2022 12:07:39 +0200
+Date:   Fri, 8 Apr 2022 12:07:21 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Wan Jiabing <wanjiabing@vivo.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] pwm: sifive: simplify if-if to if-else
+Message-ID: <20220408100721.rinvvgard3nr5wff@pengutronix.de>
+References: <20220408083007.41538-1-wanjiabing@vivo.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5hmg2yezfbimyu7f"
+Content-Disposition: inline
+In-Reply-To: <20220408083007.41538-1-wanjiabing@vivo.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-All work currently pending will be done by calling destroy_workqueue,
-so there is unnecessary to flush it explicitly.
+--5hmg2yezfbimyu7f
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
----
- drivers/gpu/drm/bridge/analogix/anx7625.c | 1 -
- 1 file changed, 1 deletion(-)
+On Fri, Apr 08, 2022 at 04:30:07PM +0800, Wan Jiabing wrote:
+> use if and else instead of if(A) and if (!A).
+>=20
+> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+> ---
+>  drivers/pwm/pwm-sifive.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/pwm/pwm-sifive.c b/drivers/pwm/pwm-sifive.c
+> index 253c4a17d255..e6d05a329002 100644
+> --- a/drivers/pwm/pwm-sifive.c
+> +++ b/drivers/pwm/pwm-sifive.c
+> @@ -138,10 +138,9 @@ static int pwm_sifive_enable(struct pwm_chip *chip, =
+bool enable)
+>  			dev_err(ddata->chip.dev, "Enable clk failed\n");
+>  			return ret;
+>  		}
+> -	}
+> -
+> -	if (!enable)
+> +	} else {
+>  		clk_disable(ddata->clk);
+> +	}
+> =20
+>  	return 0;
+>  }
 
-diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-index 6516f9570b86..65632f584179 100644
---- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-+++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-@@ -2744,7 +2744,6 @@ static int anx7625_i2c_remove(struct i2c_client *client)
- 
- 	if (platform->hdcp_workqueue) {
- 		cancel_delayed_work(&platform->hdcp_work);
--		flush_workqueue(platform->hdcp_workqueue);
- 		destroy_workqueue(platform->hdcp_workqueue);
- 	}
- 
--- 
-2.25.1
+The patch looks fine. I wonder if it would be sensible to clean up even
+more: pwm_sifive_apply() is only a single caller of
+pwm_sifive_enable(). If this is optimized to skip the duty_cycle and
+period calculation for the state->enabled =3D false case and just disables
+the clock this should still work.
 
+Also I wonder if there is a clk mismatch issue in this driver: .probe
+enables the clk and if the PWM is off (i.e. .get_state diagnoses that)
+the clock will never be disabled while the driver is bound, will it?
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--5hmg2yezfbimyu7f
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmJQCVcACgkQwfwUeK3K
+7Al38Af7BAOq90kL/kjCqKlWjXccUKG6Dj3BDwGcg5UfGg/JRiJmYayalIAR2LIn
+mKa9mxv/NmCLa9jl5uPCJ5WqvJnmYcdz4rL11wXGwlEY93YYn56FOG0U7MBo1ij9
+NUdVK8np9+RnN2HYy3YWeiIwGnHFu4xoU9Iv1ahdfPGw+UAPiH2VSYCUkQguXjZ5
+0Lf49mFIHiOBjyiWCHO2pV1k7JWAXLlbPbSthFLufhdQORrYkfqb6K+o8/LfgPtL
+VswPzS7Hd/LNUzP3pHKF1tig1XNRMaTq1E+vkG4x680WLeVgCzWxeIjqeB+wZFar
+8g21tTWYs3nI8bfyBzbE27vAwKI58w==
+=xpSm
+-----END PGP SIGNATURE-----
+
+--5hmg2yezfbimyu7f--

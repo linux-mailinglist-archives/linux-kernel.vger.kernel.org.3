@@ -2,72 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D19F44FA010
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 01:20:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E13464FA012
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 01:21:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236442AbiDHXVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 19:21:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52506 "EHLO
+        id S236174AbiDHXXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 19:23:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiDHXVf (ORCPT
+        with ESMTP id S229609AbiDHXXh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 19:21:35 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70DB037A0E;
-        Fri,  8 Apr 2022 16:19:29 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id ms15-20020a17090b234f00b001cb61350f05so568318pjb.5;
-        Fri, 08 Apr 2022 16:19:29 -0700 (PDT)
+        Fri, 8 Apr 2022 19:23:37 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 917BC37A84;
+        Fri,  8 Apr 2022 16:21:31 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id u15so1443530ejf.11;
+        Fri, 08 Apr 2022 16:21:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=bn4eTHEMHtj+XhCx+YKWl3KyotHUmULIJ5IozL6BDc0=;
-        b=XrBwF/tXyxn5krStMXb3rr6ZppPn5hvUHjtlGYo8tLTCcm434GrOf37ubiJDEVrPlJ
-         Fzkk2V0lx77EyggUC3a9StadWj5EZypHttK2Mh6jMC6jCWWkW66RRGYt9yQnu0JP+1E3
-         h7wQVOaDT6wTtu8IKPjLqqykSWDrr2IMZZzrWF4JKUfmSmGHaYIkpyae//TCaCb2g99z
-         I6+MIrCP2mhcvQjZRDHPFncABb5Nt6Zs4PckGk94kDKbjO1C072hQU206k4sJr5U7Th5
-         8yHCDVsN2/Rh7WktfddlxY9rW4fz+7k60wWjm2O4+t6Gc/P/bU6JkeSTD8lL1HEBtllT
-         SVKg==
+        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=VeBo5MNmcNP8GgrnYnuxwD9C21s9NCSI0hQmRgeVZ2c=;
+        b=SwUdCASoZsLrVzHwYE9Q2w7j8anHVyABwID7GJeaxGfrbLM5k0Ll9QikJqmhJzldK2
+         DEhbbyAiFI6iSlauWF8t+jKysCy4/ituH373bOQYneDjgtlRMT6MU1S3YxRPtJMX4oX1
+         xiqUnHmj8t0fgyqR+02CHlzq+jgHtUhjPECIh0Ks3TbRC2E9CvqftD/OWYrUdEqNpZjp
+         3glxzcacU6WGhpBVaEXzCQ0oxQ8tSiZTZ4JCiNXATn1QSgRsiUvuhHZik+iIDX+IIXcf
+         8J9iJvcV6FOxsjwd8QIAaWSAR31c/r5e3ajAJURaZ6AV3A29bWAbfjYHTsvDoGioJU0U
+         luDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bn4eTHEMHtj+XhCx+YKWl3KyotHUmULIJ5IozL6BDc0=;
-        b=dcaD7O5gey8yeHB6xc1smnyU/5WU3sZWfFsIPBcJdgtbZ/UtMJgGFSsw6PoofHzU57
-         gQoMbn4H24Ec0yjdF6sqWKB1CVQtJz+qZcV4YbkZWkatCe7eOYsp8BoiPZnG60Mbz2Be
-         j8vxKqbPRbHlJwjwl+8c/hToArNO/YE5KF3imw/KScLrjWuKbBc2OyYHuYdW0x4u7gRQ
-         T5mFw1mi7c9fDzyRO2BSp/Xcc3ruGdPtmkbwUodPYpbH7cm/O2vbiejdVGrMiYFgZRq/
-         1ubMWv4t8h9qEx1C4wDD4ZtMCe/7C1tkWJw/AoicFSvduBKjOzB1Xca/PUF6IIPIWXyL
-         itvA==
-X-Gm-Message-State: AOAM530NW8MJpjuXUFE8nKkbRcE/hDVu2fGOGwYWpvP74v0AxAYoKUKQ
-        HRwV4u1Lwl0y3JHqiNjadYQ=
-X-Google-Smtp-Source: ABdhPJzAUEPXmEU9O0yKWWJTpAUKbUc3W7L2TVYZyoVitvzGDX9oVKBIKitTnmBFGLqn0u875IwR0w==
-X-Received: by 2002:a17:90b:1b0f:b0:1c6:ed78:67ad with SMTP id nu15-20020a17090b1b0f00b001c6ed7867admr24292074pjb.41.1649459968805;
-        Fri, 08 Apr 2022 16:19:28 -0700 (PDT)
-Received: from MBP-98dd607d3435.dhcp.thefacebook.com ([2620:10d:c090:400::5:4c4c])
-        by smtp.gmail.com with ESMTPSA id d18-20020a056a0010d200b004fa2e13ce80sm28196885pfu.76.2022.04.08.16.19.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 16:19:28 -0700 (PDT)
-Date:   Fri, 8 Apr 2022 16:19:25 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>
-Subject: Re: [RFC bpf-next 1/4] kallsyms: Add kallsyms_lookup_names function
-Message-ID: <20220408231925.uc2cfeev7p6nzfww@MBP-98dd607d3435.dhcp.thefacebook.com>
-References: <20220407125224.310255-1-jolsa@kernel.org>
- <20220407125224.310255-2-jolsa@kernel.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=VeBo5MNmcNP8GgrnYnuxwD9C21s9NCSI0hQmRgeVZ2c=;
+        b=LocO8QQASOg/2MlVENXwqXvko7M0Gyh1Q8rw2t21ZC8WE+asDd5XUA6w5btY24tQOW
+         excSungF3YW5SezEbbHfUlM6dqw6vbYNaiJit95QMI42ByKlqkJ7C8ymVpKQ6gfHRIlR
+         S2zAW4LCEEnZv18Bl0RHB/q4LiM0YgLjTHt3NlczevGIlJGp2EZdCHn0YFCrJsXIobK0
+         NxT9pecLK5WzOQGeNnfrCPp+e2jwe93aL4YVOROaBjkVxxn6YiliQyZLBxuXvUXqona6
+         RdoMIhFJVdbG+S+jGdCREHzkolyTWSVYs9HfwvOTn/9IZrUny+LxgJHb6Wtso5NabfoU
+         +j4A==
+X-Gm-Message-State: AOAM530fAMLsHsPbWJRGFrCsp+sHs7SrKst/uUNw7i/gkXChuGoX8575
+        MWblsKqZkcqUZUiSu5cE+c0=
+X-Google-Smtp-Source: ABdhPJw0QRTK6Xo+GwWqeZ539WFr3ViLkQZwB5m+GvauaxNMLcPszYUGFgrOGSqHLo80QDJyI0Moiw==
+X-Received: by 2002:a17:907:7da8:b0:6e0:5b94:5ed8 with SMTP id oz40-20020a1709077da800b006e05b945ed8mr19652474ejc.312.1649460090158;
+        Fri, 08 Apr 2022 16:21:30 -0700 (PDT)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id v8-20020a50d848000000b0041cb912717asm8936807edj.91.2022.04.08.16.21.29
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 08 Apr 2022 16:21:29 -0700 (PDT)
+Date:   Fri, 8 Apr 2022 23:21:29 +0000
+From:   Wei Yang <richard.weiyang@gmail.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Juergen Gross <jgross@suse.com>, xen-devel@lists.xenproject.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        stable@vger.kernel.org,
+        Marek Marczykowski-G??recki <marmarek@invisiblethingslab.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Wei Yang <richard.weiyang@gmail.com>
+Subject: Re: [PATCH] mm, page_alloc: fix build_zonerefs_node()
+Message-ID: <20220408232129.caboqxtw6s4nmgde@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <20220407093221.1090-1-jgross@suse.com>
+ <1028ca3c-5b6c-d95e-9372-ae64b1fcbc82@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220407125224.310255-2-jolsa@kernel.org>
+In-Reply-To: <1028ca3c-5b6c-d95e-9372-ae64b1fcbc82@redhat.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -78,129 +78,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 02:52:21PM +0200, Jiri Olsa wrote:
-> Adding kallsyms_lookup_names function that resolves array of symbols
-> with single pass over kallsyms.
-> 
-> The user provides array of string pointers with count and pointer to
-> allocated array for resolved values.
-> 
->   int kallsyms_lookup_names(const char **syms, u32 cnt,
->                             unsigned long *addrs)
-> 
-> Before we iterate kallsyms we sort user provided symbols by name and
-> then use that in kalsyms iteration to find each kallsyms symbol in
-> user provided symbols.
-> 
-> We also check each symbol to pass ftrace_location, because this API
-> will be used for fprobe symbols resolving. This can be optional in
-> future if there's a need.
-> 
-> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  include/linux/kallsyms.h |  6 +++++
->  kernel/kallsyms.c        | 48 ++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 54 insertions(+)
-> 
-> diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
-> index ce1bd2fbf23e..5320a5e77f61 100644
-> --- a/include/linux/kallsyms.h
-> +++ b/include/linux/kallsyms.h
-> @@ -72,6 +72,7 @@ int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
->  #ifdef CONFIG_KALLSYMS
->  /* Lookup the address for a symbol. Returns 0 if not found. */
->  unsigned long kallsyms_lookup_name(const char *name);
-> +int kallsyms_lookup_names(const char **syms, u32 cnt, unsigned long *addrs);
->  
->  extern int kallsyms_lookup_size_offset(unsigned long addr,
->  				  unsigned long *symbolsize,
-> @@ -103,6 +104,11 @@ static inline unsigned long kallsyms_lookup_name(const char *name)
->  	return 0;
->  }
->  
-> +int kallsyms_lookup_names(const char **syms, u32 cnt, unsigned long *addrs)
-> +{
-> +	return -ERANGE;
-> +}
-> +
->  static inline int kallsyms_lookup_size_offset(unsigned long addr,
->  					      unsigned long *symbolsize,
->  					      unsigned long *offset)
-> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-> index 79f2eb617a62..a3738ddf9e87 100644
-> --- a/kernel/kallsyms.c
-> +++ b/kernel/kallsyms.c
-> @@ -29,6 +29,8 @@
->  #include <linux/compiler.h>
->  #include <linux/module.h>
->  #include <linux/kernel.h>
-> +#include <linux/bsearch.h>
-> +#include <linux/sort.h>
->  
->  /*
->   * These will be re-linked against their real values
-> @@ -572,6 +574,52 @@ int sprint_backtrace_build_id(char *buffer, unsigned long address)
->  	return __sprint_symbol(buffer, address, -1, 1, 1);
->  }
->  
-> +static int symbols_cmp(const void *a, const void *b)
-> +{
-> +	const char **str_a = (const char **) a;
-> +	const char **str_b = (const char **) b;
-> +
-> +	return strcmp(*str_a, *str_b);
-> +}
-> +
-> +struct kallsyms_data {
-> +	unsigned long *addrs;
-> +	const char **syms;
-> +	u32 cnt;
-> +	u32 found;
-> +};
-> +
-> +static int kallsyms_callback(void *data, const char *name,
-> +			     struct module *mod, unsigned long addr)
-> +{
-> +	struct kallsyms_data *args = data;
-> +
-> +	if (!bsearch(&name, args->syms, args->cnt, sizeof(*args->syms), symbols_cmp))
-> +		return 0;
-> +
-> +	addr = ftrace_location(addr);
-> +	if (!addr)
-> +		return 0;
-> +
-> +	args->addrs[args->found++] = addr;
-> +	return args->found == args->cnt ? 1 : 0;
-> +}
-> +
-> +int kallsyms_lookup_names(const char **syms, u32 cnt, unsigned long *addrs)
-> +{
-> +	struct kallsyms_data args;
-> +
-> +	sort(syms, cnt, sizeof(*syms), symbols_cmp, NULL);
+On Thu, Apr 07, 2022 at 11:46:13AM +0200, David Hildenbrand wrote:
+>On 07.04.22 11:32, Juergen Gross wrote:
+>> Since commit 9d3be21bf9c0 ("mm, page_alloc: simplify zonelist
+>> initialization") only zones with free memory are included in a built
+>> zonelist. This is problematic when e.g. all memory of a zone has been
+>> ballooned out.
+>> 
+>> Use populated_zone() when building a zonelist as it has been done
+>> before that commit.
+>> 
+>> Cc: stable@vger.kernel.org
+>> Fixes: 9d3be21bf9c0 ("mm, page_alloc: simplify zonelist initialization")
+>> Reported-by: Marek Marczykowski-G??recki <marmarek@invisiblethingslab.com>
+>> Signed-off-by: Juergen Gross <jgross@suse.com>
+>> ---
+>>  mm/page_alloc.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>> 
+>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+>> index bdc8f60ae462..3d0662af3289 100644
+>> --- a/mm/page_alloc.c
+>> +++ b/mm/page_alloc.c
+>> @@ -6128,7 +6128,7 @@ static int build_zonerefs_node(pg_data_t *pgdat, struct zoneref *zonerefs)
+>>  	do {
+>>  		zone_type--;
+>>  		zone = pgdat->node_zones + zone_type;
+>> -		if (managed_zone(zone)) {
+>> +		if (populated_zone(zone)) {
+>>  			zoneref_set_zone(zone, &zonerefs[nr_zones++]);
+>>  			check_highest_zone(zone_type);
+>>  		}
+>
+>Let's see if we have to find another way to properly handle fadump.
+>
+>Acked-by: David Hildenbrand <david@redhat.com>
 
-It's nice to share symbols_cmp for sort and bsearch,
-but messing technically input argument 'syms' like this will cause
-issues sooner or later.
-Lets make caller do the sort.
-Unordered input will cause issue with bsearch, of course,
-but it's a lesser evil. imo.
+Ok, I see the point.
 
-> +
-> +	args.addrs = addrs;
-> +	args.syms = syms;
-> +	args.cnt = cnt;
-> +	args.found = 0;
-> +	kallsyms_on_each_symbol(kallsyms_callback, &args);
-> +
-> +	return args.found == args.cnt ? 0 : -EINVAL;
-> +}
-> +
->  /* To avoid using get_symbol_offset for every symbol, we carry prefix along. */
->  struct kallsym_iter {
->  	loff_t pos;
-> -- 
-> 2.35.1
-> 
+Reviewed-by: Wei Yang <richard.weiyang@gmail.com>
+
+>
+>-- 
+>Thanks,
+>
+>David / dhildenb
+
+-- 
+Wei Yang
+Help you, Help me

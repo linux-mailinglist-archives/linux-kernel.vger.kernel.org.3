@@ -2,187 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F1EC4F9B6B
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 19:14:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A95B4F9B70
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 19:15:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238042AbiDHRQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 13:16:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37652 "EHLO
+        id S238049AbiDHRQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 13:16:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231315AbiDHRQR (ORCPT
+        with ESMTP id S234995AbiDHRQx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 13:16:17 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5F226AF2
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 10:14:12 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id bg10so18633929ejb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 10:14:12 -0700 (PDT)
+        Fri, 8 Apr 2022 13:16:53 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B673C737
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 10:14:48 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id k25so11368576iok.8
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 10:14:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        d=joelfernandes.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=0o/SUj9l7QxccG0h5Jo/GmbooXfRNd11V119ZFnMckU=;
-        b=Bcop1hZHOgBQuDGa7QitchzS0rKGKo3Ujzo71w/Wg7uqUxCVHUVlo92yaoWsUMrhRj
-         ESWDeJ108bo2TC+NhPefjFOhaRDCLsElwntWQdZsiIRsMFV+a5N26gAoJHqQ0NaNmC5N
-         2j8VZstcNjF4gMMxOfs4qJxHsBKOOT+pM2XOXa5hn9gDbXYa/Q3BtQtEvlQ9AeoLxidO
-         GjZSsNlAk/Y9LFNVvuDWh0aLFlTNhOXx8qHdOtx7pxqnWiEY05W9UsL2en5nX+x3eScQ
-         Umlu4wdPONyvMdVp+Da+0cCRIW3ekitvW5oEav/ZqeLXGawpVHbb8fcdR5wvvBQ3NPeF
-         cMkQ==
+         :cc;
+        bh=7R4f+94qI2K6ExVGY0p3omvs96ezNwS+NBDPlgD2fHw=;
+        b=x7VZ4v6GavJUvP98gYT0IO36JWQHaZDKGngI52NebyKbuqK1pSLvcTw9VmD10ofbT2
+         UUqEY7AwTmD5wYhvsg1tBmxANERQwy4l2DC4yKxpmdgLiYK6e7hUGs/bKF/j3zuFEJnX
+         hNbki2Le1C2/sceqwksGM2w1gCbZ0sbRHsdNU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=0o/SUj9l7QxccG0h5Jo/GmbooXfRNd11V119ZFnMckU=;
-        b=pwK0KKQCYT3G8psi1q+knMeZvrgIsr7jVeP5xNljLalOJ0VkAPUBzpdj5mmyQ1cfWb
-         xG2TXqWaBAbCcyqFQiAHONd7nf8IdJ3CD19z+5JsFV7vXQONvkyGxsk7/KU3cZR5vbUI
-         NzzUQ/MAMfSzfx2Md2ji21iWUb1Atq1XbrWxbTVBZDiRAp9w3hWyhF71VYkGbCD83+F0
-         yXXclZBHb7tSryxT1a7386FPAVLkmFgzMM6vmW/dTJykmbn/fn2X/oR0AuEby7X4ZWEt
-         CsZ126LL1GLcb1Kmxkncm9CaBzoPmTS0H5J4s3xJHaaW/Ojpk99bBYee1Vepx6Ac371k
-         anDQ==
-X-Gm-Message-State: AOAM533UBu9Gtmi8F5QtqNMSYSX6yepGZkfQ3kwz/eurAgIn18TlZIlo
-        PrXbDSb2hfwL6nTKgPPWRt+1LCT5QWUuJ88aNyaE
-X-Google-Smtp-Source: ABdhPJw4m50Heq+ZwCYADtd52nzp0qTl5o19w463Q1Ul92xNBNhrSzqy+I1ZLWln2A2dGR15BjDtzskUMutG3LrWeoU=
-X-Received: by 2002:a17:907:216f:b0:6ce:d85f:35cf with SMTP id
- rl15-20020a170907216f00b006ced85f35cfmr20127403ejb.517.1649438050929; Fri, 08
- Apr 2022 10:14:10 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=7R4f+94qI2K6ExVGY0p3omvs96ezNwS+NBDPlgD2fHw=;
+        b=A9OIYEBXBDn47xLDMb6DwXl08si6NbpRbjTuJ/87Q+HnXBX2VUajSqUpfjiCmOYRnW
+         m2re9OxDaI6jhnrNMmaWcg2xTmG3p8pBlyB2KJUZJhc7WwEke4R2sYPlaW32Q3XGhzxs
+         uBWfdRCwmcNlVjIRJVangg2XogiaWPoJetv2RqUqMP0EosCGfjYLQjtW2k/eA/7/WNOT
+         b9N8a3K5cZzn5+4OSOFp1mStKkW3PD8aVExEp0W32O5XaYNjCXPrD2TliW+YYCVLQKX/
+         Zi7VHeII1usqnh2xCajq0H5x25KrErg/Fu+jkR9fdRO2r9q1JX0wX9qCfuH/ODJOX8jP
+         yKHQ==
+X-Gm-Message-State: AOAM533mtwgLIOTmXTPgBAzc6fmwAckqwYoYyS2cAaOSr9vOxvqhvbMP
+        T0w+B3lmdGbzJDFpKR/G8VQ0iKxLnomXd09sWnQ12g==
+X-Google-Smtp-Source: ABdhPJwodPR0Ms5rL/IPObV1MciwN2GKTSLms5DXA4ge0kHspY7LbH6tZPyh4NeU9b7ai5sRsjAiGZP96oCCaiFyuGA=
+X-Received: by 2002:a05:6638:737:b0:317:d5e0:2b3a with SMTP id
+ j23-20020a056638073700b00317d5e02b3amr9614023jad.52.1649438087384; Fri, 08
+ Apr 2022 10:14:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220329125117.1393824-1-mic@digikod.net> <20220329125117.1393824-8-mic@digikod.net>
- <CAHC9VhQpZ12Chgd+xMibUxgvcPjTn9FMnCdMGYbLcWG3eTqDQg@mail.gmail.com> <3a5495b8-5d69-e327-1dfc-7a99257269ae@digikod.net>
-In-Reply-To: <3a5495b8-5d69-e327-1dfc-7a99257269ae@digikod.net>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 8 Apr 2022 13:13:59 -0400
-Message-ID: <CAHC9VhS0bYe9wOxuXoC2mw_K2g=Fw=LXiV+A_Z1vH_KqH-TBFA@mail.gmail.com>
-Subject: Re: [PATCH v2 07/12] landlock: Add support for file reparenting with LANDLOCK_ACCESS_FS_REFER
-To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Jann Horn <jannh@google.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>
+References: <20220408045734.1158817-1-kaleshsingh@google.com>
+ <CAEXW_YQ6_VpneJnBfhTOMr6DwJhNmvMAKDRMnpr8LxB9Gtt=Xg@mail.gmail.com>
+ <20220408143444.GC4285@paulmck-ThinkPad-P17-Gen-1> <CAEXW_YSrGKXh5DiJyrNvmbssSXbWBkA-XUjGRdS8HtGvW1r6hw@mail.gmail.com>
+ <20220408153447.GE4285@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20220408153447.GE4285@paulmck-ThinkPad-P17-Gen-1>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Fri, 8 Apr 2022 13:14:35 -0400
+Message-ID: <CAEXW_YT-vJmXgWPQ_1J34iTb+ZhrAgN7c-HPz7kW17HmvKzJ3A@mail.gmail.com>
+Subject: Re: [PATCH v2] EXP rcu: Move expedited grace period (GP) work to RT kthread_worker
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Kalesh Singh <kaleshsingh@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        kernel-team <kernel-team@android.com>, Tejun Heo <tj@kernel.org>,
+        Tim Murray <timmurray@google.com>, Wei Wang <wvw@google.com>,
+        Kyle Lin <kylelin@google.com>,
+        Chunwei Lu <chunweilu@google.com>,
+        Lulu Wang <luluw@google.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        rcu <rcu@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 8, 2022 at 12:07 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
-wrote:
-> On 08/04/2022 03:42, Paul Moore wrote:
-> > On Tue, Mar 29, 2022 at 8:51 AM Micka=C3=ABl Sala=C3=BCn <mic@digikod.n=
-et> wrote:
-> >>
-> >> From: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
-> >>
-> >> Add a new LANDLOCK_ACCESS_FS_REFER access right to enable policy write=
-rs
-> >> to allow sandboxed processes to link and rename files from and to a
-> >> specific set of file hierarchies.  This access right should be compose=
-d
-> >> with LANDLOCK_ACCESS_FS_MAKE_* for the destination of a link or rename=
-,
-> >> and with LANDLOCK_ACCESS_FS_REMOVE_* for a source of a rename.  This
-> >> lift a Landlock limitation that always denied changing the parent of a=
-n
-> >> inode.
-> >>
-> >> Renaming or linking to the same directory is still always allowed,
-> >> whatever LANDLOCK_ACCESS_FS_REFER is used or not, because it is not
-> >> considered a threat to user data.
-> >>
-> >> However, creating multiple links or renaming to a different parent
-> >> directory may lead to privilege escalations if not handled properly.
-> >> Indeed, we must be sure that the source doesn't gain more privileges b=
-y
-> >> being accessible from the destination.  This is handled by making sure
-> >> that the source hierarchy (including the referenced file or directory
-> >> itself) restricts at least as much the destination hierarchy.  If it i=
-s
-> >> not the case, an EXDEV error is returned, making it potentially possib=
-le
-> >> for user space to copy the file hierarchy instead of moving or linking
-> >> it.
-> >>
-> >> Instead of creating different access rights for the source and the
-> >> destination, we choose to make it simple and consistent for users.
-> >> Indeed, considering the previous constraint, it would be weird to
-> >> require such destination access right to be also granted to the source
-> >> (to make it a superset).  Moreover, RENAME_EXCHANGE would also add to
-> >> the confusion because of paths being both a source and a destination.
-> >>
-> >> See the provided documentation for additional details.
-> >>
-> >> New tests are provided with a following commit.
-> >>
-> >> Cc: Paul Moore <paul@paul-moore.com>
-> >> Signed-off-by: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
-> >> Link: https://lore.kernel.org/r/20220329125117.1393824-8-mic@digikod.n=
-et
-> >> ---
-> >>
-> >> Changes since v1:
-> >> * Update current_check_access_path() to efficiently handle
-> >>    RENAME_EXCHANGE thanks to the updated LSM hook (see previous patch)=
-.
-> >>    Only one path walk is performed per rename arguments until their
-> >>    common mount point is reached.  Superset of access rights is correc=
-tly
-> >>    checked, including when exchanging a file with a directory.  This
-> >>    requires to store another matrix of layer masks.
-> >> * Reorder and rename check_access_path_dual() arguments in a more
-> >>    generic way: switch from src/dst to 1/2.  This makes it easier to
-> >>    understand the RENAME_EXCHANGE cases alongs with the others.  Updat=
-e
-> >>    and improve check_access_path_dual() documentation accordingly.
-> >> * Clean up the check_access_path_dual() loop: set both allowed_parent*
-> >>    when reaching internal filesystems and remove a useless one.  This
-> >>    allows potential renames in internal filesystems (like for other
-> >>    operations).
-> >> * Move the function arguments checks from BUILD_BUG_ON() to
-> >>    WARN_ON_ONCE() to avoid clang build error.
-> >> * Rename is_superset() to no_more_access() and make it handle superset
-> >>    checks of source and destination for simple and exchange cases.
-> >> * Move the layer_masks_child* creation from current_check_refer_path()
-> >>    to check_access_path_dual(): this is simpler and less error-prone,
-> >>    especially with RENAME_EXCHANGE.
-> >> * Remove one optimization in current_check_refer_path() to make the co=
-de
-> >>    simpler, especially with the RENAME_EXCHANGE handling.
-> >> * Remove overzealous WARN_ON_ONCE() for !access_request check in
-> >>    init_layer_masks().
-> >> ---
-> >>   include/uapi/linux/landlock.h                |  27 +-
-> >>   security/landlock/fs.c                       | 607 ++++++++++++++++-=
---
-> >>   security/landlock/limits.h                   |   2 +-
-> >>   security/landlock/syscalls.c                 |   2 +-
-> >>   tools/testing/selftests/landlock/base_test.c |   2 +-
-> >>   tools/testing/selftests/landlock/fs_test.c   |   3 +-
-> >>   6 files changed, 566 insertions(+), 77 deletions(-)
-> >
-> > I'm still not going to claim that I'm a Landlock expert, but this
-> > looks sane to me.
-> >
-> > Reviewed-by: Paul Moore <paul@paul-moore.com>
+On Fri, Apr 8, 2022 at 11:34 AM Paul E. McKenney <paulmck@kernel.org> wrote:
 >
-> Thanks Paul! I'll send a small update shortly, with some typo fixes,
-> some unlikely() calls, and rebased on the other Landlock patch series.
+> On Fri, Apr 08, 2022 at 10:41:26AM -0400, Joel Fernandes wrote:
+> > On Fri, Apr 8, 2022 at 10:34 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+> > >
+> > > On Fri, Apr 08, 2022 at 06:42:42AM -0400, Joel Fernandes wrote:
+> > > > On Fri, Apr 8, 2022 at 12:57 AM Kalesh Singh <kaleshsingh@google.com> wrote:
+> > > > >
+> > > > [...]
+> > > > > @@ -334,15 +334,13 @@ static bool exp_funnel_lock(unsigned long s)
+> > > > >   * Select the CPUs within the specified rcu_node that the upcoming
+> > > > >   * expedited grace period needs to wait for.
+> > > > >   */
+> > > > > -static void sync_rcu_exp_select_node_cpus(struct work_struct *wp)
+> > > > > +static void __sync_rcu_exp_select_node_cpus(struct rcu_exp_work *rewp)
+> > > > >  {
+> > > > >         int cpu;
+> > > > >         unsigned long flags;
+> > > > >         unsigned long mask_ofl_test;
+> > > > >         unsigned long mask_ofl_ipi;
+> > > > >         int ret;
+> > > > > -       struct rcu_exp_work *rewp =
+> > > > > -               container_of(wp, struct rcu_exp_work, rew_work);
+> > > > >         struct rcu_node *rnp = container_of(rewp, struct rcu_node, rew);
+> > > > >
+> > > > >         raw_spin_lock_irqsave_rcu_node(rnp, flags);
+> > > > > @@ -417,13 +415,119 @@ static void sync_rcu_exp_select_node_cpus(struct work_struct *wp)
+> > > > >                 rcu_report_exp_cpu_mult(rnp, mask_ofl_test, false);
+> > > > >  }
+> > > > >
+> > > > > +static void rcu_exp_sel_wait_wake(unsigned long s);
+> > > > > +
+> > > > > +#ifdef CONFIG_RCU_EXP_KTHREAD
+> > > >
+> > > > Just my 2c:
+> > > >
+> > > > Honestly, I am not sure if the benefits of duplicating the code to use
+> > > > normal workqueues outweighs the drawbacks (namely code complexity,
+> > > > code duplication - which can in turn cause more bugs and maintenance
+> > > > headaches down the line). The code is harder to read and adding more
+> > > > 30 character function names does not help.
+> > > >
+> > > > For something as important as expedited GPs, I can't imagine a
+> > > > scenario where an RT kthread worker would cause "issues". If it does
+> > > > cause issues, that's what the -rc cycles and the stable releases are
+> > > > for. I prefer to trust the process than take a one-foot-in-the-door
+> > > > approach.
+> > > >
+> > > > So please, can we just keep it simple?
+> > >
+> > > Yes and no.
+> > >
+> > > This is a bug fix, but only for those systems that are expecting real-time
+> > > response from synchronize_rcu_expedited().  As far as I know, this is only
+> > > Android.  The rest of the systems are just fine with the current behavior.
+> >
+> > As far as you know, but are you sure?
+>
+> None of us are sure.  We are balancing risks and potential benefits.
 
-Since it sounds like those are all pretty minor changes, feel free to
-preserve my 'Reviewed-by' on the respun patch.
+Right.
 
---=20
-paul-moore.com
+> > > In addition, this bug fix introduces significant risks, especially in
+> > > terms of performance for throughput-oriented workloads.
+> >
+> > Could you explain what the risk is? That's the part I did not follow.
+> > How can making synchronize_rcu_expedited() work getting priority
+> > introduce throughput issues?
+>
+> Status quo has synchronize_rcu_expedited() workqueues running as
+> SCHED_OTHER.
+
+Yeah, so if we go by this, you are saying RCU_BOOST likely does not
+work correctly on status quo right? I do not see what in the commit
+message indicates that this is an Android-only issue, let me know what
+I am missing.
+
+The users affected by this will instead have these running
+> as SCHED_FIFO.  That changes scheduling.  For users not explicitly
+> needing low-latency synchronize_rcu_expedited(), this change is very
+> unlikely to be for the better.  And historically, unnecessarily running
+> portions of RCU at real-time priorities has been a change for the worse.
+> As in greatly increased context-switch rates and consequently degraded
+> performance.  Please note that this is not a theoretical statement:  Real
+> users have really been burned by too much SCHED_FIFO in RCU kthreads in
+> the past.
+
+Android also has suffered from too much SCHED_FIFO in the past. I
+remember the display thread called 'surfaceflinger' had to be dropped
+from RT privilege at one point.
+
+> > > So yes, let's do this bug fix (with appropriate adjustment), but let's
+> > > also avoid exposing the non-Android workloads to risks from the inevitable
+> > > unintended consequences.  ;-)
+> >
+> > I would argue the risk is also adding code complexity and more bugs
+> > without clear rationale for why it is being done. There's always risk
+> > with any change, but that's the -rc cycles and stable kernels help
+> > catch those. I think we should not add more code complexity if it is a
+> > theoretical concern.
+> >
+> > There's also another possible risk - there is a possible hidden
+> > problem here that probably the non-Android folks haven't noticed or
+> > been able to debug. I would rather just do the right thing.
+> >
+> > Just my 2c,
+>
+> Sorry, but my answer is still "no".
+>
+> Your suggested change risks visiting unacceptable performance
+> degradation on a very large number of innocent users for whom current
+> synchronize_rcu_expedited() latency is plenty good enough.
+
+I believe the process will catch any such risk, but it is your call! ;-)
+
+Thanks,
+
+- Joel

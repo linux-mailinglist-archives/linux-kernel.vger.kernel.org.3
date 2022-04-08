@@ -2,69 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2CA64F9DCA
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 21:50:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5783F4F9DCD
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 21:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239272AbiDHTwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 15:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35962 "EHLO
+        id S239282AbiDHTyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 15:54:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233000AbiDHTwN (ORCPT
+        with ESMTP id S233000AbiDHTyB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 15:52:13 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB82CE7;
-        Fri,  8 Apr 2022 12:50:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649447409; x=1680983409;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NFsxnCy8jPc0T8qrhjEMXjZ/Yl35VCVnze/5CyH4DhI=;
-  b=eAp+xma37z+Q90McpeCvtk05+uxrQhk/YUfTYBZuqwPRLWInwmLkRRVE
-   tGaMMUTqg7gpCCAe/FUMc8U1ZOP7ZwlhR1QUJoXRoqu1iaYqJJJp0/Fs+
-   0PU9crgLQ68sOiIK8QNf7ucLMwxSC2ji99S/le3iSqYO79kktypmQTcLy
-   +/19acWkD/godtNk9aAtcXCCARz3+q0AN15eDSI00wQnMondHb0N25fLy
-   5M3Aku2Pzbw7RHGZrhArSQBpubcXnGEE7y+jWiJHwTDNQuBizq/4LmchN
-   zFM1NOfpGBB00/fX763o+G9cnGsy5JWLJrjsgjJBuNzD4r1+2T6oDr45M
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="260515949"
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="260515949"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 12:50:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="524897967"
-Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 08 Apr 2022 12:50:05 -0700
-Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ncucO-0000aT-JY;
-        Fri, 08 Apr 2022 19:50:04 +0000
-Date:   Sat, 9 Apr 2022 03:49:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Luca Weiss <luca.weiss@fairphone.com>, linux-input@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, ~postmarketos/upstreaming@lists.sr.ht,
-        phone-devel@vger.kernel.org, Luca Weiss <luca.weiss@fairphone.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: sm7225-fairphone-fp4: Add AW8695
- haptics
-Message-ID: <202204090333.QZXMI2tu-lkp@intel.com>
-References: <20220408115311.237039-3-luca.weiss@fairphone.com>
+        Fri, 8 Apr 2022 15:54:01 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B7D1403F2
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 12:51:57 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 66so8614621pga.12
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 12:51:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+/pEd7g9sc537JcQUHMmtOGN8bVdoYIMIdp7gL4NXVE=;
+        b=PeCCA4cXlctPtn0PwT8WPNO9iuN3Zx2eqNN7U28qU+csc6ly0jDQLJM9RWc2E2KVbJ
+         AcUypMp0H+iw53GHXK5RvKZcP8/rkjWgfvdTjfeEnY9JIOitfRbYudZTS3OeAJfIKjxM
+         uWwxNEXp7qaVn1XNTPUK6KRKStSZpigRp6RLbV/f7qCFJudh74rd+5+3/mBsCYKpDhQr
+         b6MnEYR99I50+9xerR2G3OP8EPzSUpe/XS9ar0zUiH6TJmrdQO8VtaU0clsWQ4qTVfyQ
+         Q7y9WQwRPVDbDiMvzFb+XVfc+9H/+wBfMYeWNQwluw8HVgoUp5aKu0AkxkABo0QFHfkt
+         Lq0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+/pEd7g9sc537JcQUHMmtOGN8bVdoYIMIdp7gL4NXVE=;
+        b=1/zHHFTVuaN8cM1R+pjeVS2GwzPaobgZDVKSJoILvStBwmv/vHNgn6/5nDcXOhweAj
+         V1oFwJTGO+grI4buWRYjH94M3SzvKF8aqwd1ym4gZvG3EbekE7fvtJQNEmSFl+V/+Szv
+         s0AgrJ+J3b1UZzGQge2o5ymmE6TP/Z9cyTM3PGz4jG7TQ/B6z7KdP8HDKhCiGNZM7pLq
+         nuoDPlE2enfgQ6D/wIkSqTRd+Yy0Lz07gZ+WmhW6IdchT5QuQbJc5/65pTFZW6Z7HsdB
+         Nd4UU7AZdilkt/k4TTXW3mpOMV3DiTeEQdUQ3Oc5TQ8/NdJGFFJE7gyUQ9zQPrCwT3qS
+         5WmA==
+X-Gm-Message-State: AOAM533k6xqCJATEA0NXRcL8YbJfZf77tCbgDlMfknDJuTM4lrDuCLFn
+        Z8ZE/5r/fA4aMdvHfykq9wF5Sw==
+X-Google-Smtp-Source: ABdhPJwPpu43BljXU9K8AZZjz8TjJeuS+SQLKh0qH/CIk0qQsuh7ASoLZtzI2XHsdurOpzw4rkCUUQ==
+X-Received: by 2002:a63:4642:0:b0:398:b6b9:5f45 with SMTP id v2-20020a634642000000b00398b6b95f45mr17104239pgk.518.1649447516713;
+        Fri, 08 Apr 2022 12:51:56 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id k13-20020aa7820d000000b004fa72a52040sm26955599pfi.172.2022.04.08.12.51.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 12:51:55 -0700 (PDT)
+Date:   Fri, 8 Apr 2022 19:51:52 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>
+Subject: Re: [PATCH v3 02/11] KVM: selftests: Dump VM stats in binary stats
+ test
+Message-ID: <YlCSWH4pob00vZq3@google.com>
+References: <20220330174621.1567317-1-bgardon@google.com>
+ <20220330174621.1567317-3-bgardon@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220408115311.237039-3-luca.weiss@fairphone.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+In-Reply-To: <20220330174621.1567317-3-bgardon@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,39 +79,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luca,
+On Wed, Mar 30, 2022, Ben Gardon wrote:
+> Add kvm_util library functions to read KVM stats through the binary
+> stats interface and then dump them to stdout when running the binary
+> stats test. Subsequent commits will extend the kvm_util code and use it
+> to make assertions in a test for NX hugepages.
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on dtor-input/next]
-[also build test ERROR on hid/for-next robh/for-next v5.18-rc1 next-20220408]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Luca-Weiss/dt-bindings-input-Add-bindings-for-Awinic-AW8695-haptics/20220408-195432
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git next
-config: arm64-randconfig-r015-20220408 (https://download.01.org/0day-ci/archive/20220409/202204090333.QZXMI2tu-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/3f233916afe417b8d4b9100f560892dff2c93f0c
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Luca-Weiss/dt-bindings-input-Add-bindings-for-Awinic-AW8695-haptics/20220408-195432
-        git checkout 3f233916afe417b8d4b9100f560892dff2c93f0c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> Error: arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts:298.1-7 Label or path i2c10 not found
-   FATAL ERROR: Syntax error parsing input tree
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Why?  Spamming my console with info that has zero meaning to me and is useless
+when the test passes is not helpful.  Even on failure, I don't see what the user
+is going to do with this information, all of the asserts are completly unrelated
+to the stats themselves.

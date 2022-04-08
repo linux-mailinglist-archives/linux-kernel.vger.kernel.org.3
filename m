@@ -2,126 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 187274F9156
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 11:06:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C5CE4F915B
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 11:07:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232626AbiDHJIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 05:08:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56466 "EHLO
+        id S232647AbiDHJJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 05:09:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232251AbiDHJIi (ORCPT
+        with ESMTP id S232251AbiDHJIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 05:08:38 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02DE10077F
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 02:06:33 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id x17so4817606lfa.10
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 02:06:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZTgTrO8kYm9f4pu/QJrfNd/0CjpbX6Q1P+5MHmfotqk=;
-        b=i2envguo4E6b4pLxv4XJXo+T/VB92G0yxDyRf6C4Zynw809rRjG4TPgiKQW4iUdAv3
-         0tw/FwIqX9NFRcxNywh1A2CkXqBeDO3z4zaJ1HWc81YOpnbcYUz2HphICFC28YyT8dRd
-         rnL5rspaX1Anjxgpb5DF1oPVz0MJGGmd0zEMMkm7FLJmnWzCBJfKcnhRsqBP3rZAGVnH
-         UJIRsQeHZCYIOFRUoxrDZxh0DeotCHIgMIdzstU0UQd+Nxv5L1bQcdKzr7r++SlNCXpe
-         QgXC9KKAMxXCuoM3kGDuy6rRVjV0ECnVx9rKx3YmL5/KKn+bFgar4zwneztVZ0fKeyNS
-         qQJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZTgTrO8kYm9f4pu/QJrfNd/0CjpbX6Q1P+5MHmfotqk=;
-        b=qH/QxWPg55LvDQUW6/SGdcGnnW9gstI2SfE//7p9SxfR9ietaJ32gYWqx/nyxRi6c9
-         gTaMg8aX2UcMeDOfD7nCg+gireRazeLum5SblrHV9Xm7n+cN4fidDxOr+05o4ghnpAzm
-         LRYCim9bccdkOQ68qUi8UBYzydXMJa/2OR0iYZECV76Jnb9XYWBRIypdOMvn4eE3YqK+
-         hL8RyHpe+F4bIq+5AmvFxECJnH5z5NTBGU4oIapgtjoGVBtSp4lZsAdirSyItkO95ARe
-         tPGMILykQLF0quiCTbaEKXoRJctJPiwzMkjKupzC3H4PTMPQrdS08wKLkUv9HLOh8TUB
-         xsHQ==
-X-Gm-Message-State: AOAM530yX3KoNajclZubQyvXfI/aKBBFu4O0GD5yI8dQzGjo7c+VW5sS
-        dy0QJ08w8rLe0UuSEgMi86fPrBYDeIVQMatgEZrJlw==
-X-Google-Smtp-Source: ABdhPJxJkWFAtOiYY7lH9mD1xE8veW54kPfgnqaEUsfjr6zNHODKBpmFl1OMxUDn+3CZnMq6R8G5Xp9HAI1SN+XENZ8=
-X-Received: by 2002:a05:6512:2627:b0:44a:f55c:ded9 with SMTP id
- bt39-20020a056512262700b0044af55cded9mr12460116lfb.373.1649408791888; Fri, 08
- Apr 2022 02:06:31 -0700 (PDT)
+        Fri, 8 Apr 2022 05:08:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CAEB2100753
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 02:06:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649408806;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=UIJ8W4kbN7C/kjzP9MVB+P9ZEFTMhxLK2LQH7IyF0lI=;
+        b=hwCVqEvyL5vzevtJk4TTxqUYDVOp1vSkqDZ79F+DuMckc+jnIiSyX125C89CVjmbSl+UTP
+        s3q7aQM0/+/bIISkgd1t8A9eSwhKSWKrXaHtiV2av7tX5/2oxqbGGKhczIiWTTNXytqOHk
+        ofLkk5ftVmA9+kuvmn8lBYBTlPLBa60=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-170-4iiUBieZMQ2BkXETTv797A-1; Fri, 08 Apr 2022 05:06:45 -0400
+X-MC-Unique: 4iiUBieZMQ2BkXETTv797A-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A6539811E75;
+        Fri,  8 Apr 2022 09:06:44 +0000 (UTC)
+Received: from MiWiFi-R3L-srv.redhat.com (ovpn-12-202.pek2.redhat.com [10.72.12.202])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E945640E80E0;
+        Fri,  8 Apr 2022 09:06:39 +0000 (UTC)
+From:   Baoquan He <bhe@redhat.com>
+To:     akpm@linux-foundation.org, willy@infradead.org
+Cc:     linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
+        hch@lst.de, yangtiezhu@loongson.cn, amit.kachhap@arm.com,
+        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk,
+        bhe@redhat.com
+Subject: [PATCH v5 RESEND 0/3] Convert vmcore to use an iov_iter
+Date:   Fri,  8 Apr 2022 17:06:33 +0800
+Message-Id: <20220408090636.560886-1-bhe@redhat.com>
 MIME-Version: 1.0
-References: <20220408080045.6497-1-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20220408080045.6497-1-wsa+renesas@sang-engineering.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 8 Apr 2022 11:05:55 +0200
-Message-ID: <CAPDyKFpaMy7ATDm6PCnYBxS_6-TZ-TF+gfHbp_o0nTo-6RaGdQ@mail.gmail.com>
-Subject: Re: [PATCH 0/3] mmc: improve API to make clear {h|s}w_reset is for cards
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-mmc@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        ath10k@lists.infradead.org, bcm-kernel-feedback-list@broadcom.com,
-        brcm80211-dev-list.pdl@broadcom.com,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        SHA-cyfmac-dev-list@infineon.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 8 Apr 2022 at 10:01, Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
->
-> As discussed in 2020 [1], Ulf and I agreed that it would be easier to
-> understand the {h|s}w_reset mechanisms if it was clear that they are for
-> cards. This series implements that by changing the parameter to mmc_card
-> where apropriate. Also, the callback into host drivers has been renamed
-> to 'card_hw_reset' to make it obvious what exactly the driver is
-> expected to reset.
->
-> I tested it with my Renesas boards, so far no regressions. Buildbots are
-> currently checking the series.
->
-> This series is based on mmc/next as of yesterday. A branch is here:
->
-> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git renesas/mmc/reset-api-v2
->
-> Looking forward to comments. Happy hacking,
->
->    Wolfram
->
-> [1] https://lore.kernel.org/all/20200916090121.2350-1-wsa+renesas@sang-engineering.com/
->
-> Wolfram Sang (3):
->   mmc: core: improve API to make clear mmc_hw_reset is for cards
->   mmc: core: improve API to make clear that mmc_sw_reset is for cards
->   mmc: improve API to make clear hw_reset callback is for cards
->
->  drivers/mmc/core/block.c                             |  2 +-
->  drivers/mmc/core/core.c                              | 12 +++++++-----
->  drivers/mmc/core/mmc.c                               |  4 ++--
->  drivers/mmc/core/mmc_test.c                          |  3 +--
->  drivers/mmc/host/bcm2835.c                           |  2 +-
->  drivers/mmc/host/dw_mmc.c                            |  2 +-
->  drivers/mmc/host/meson-mx-sdhc-mmc.c                 |  2 +-
->  drivers/mmc/host/mtk-sd.c                            |  2 +-
->  drivers/mmc/host/sdhci.c                             |  2 +-
->  drivers/mmc/host/sunxi-mmc.c                         |  2 +-
->  drivers/mmc/host/uniphier-sd.c                       |  2 +-
->  drivers/net/wireless/ath/ath10k/sdio.c               |  2 +-
->  .../net/wireless/broadcom/brcm80211/brcmfmac/sdio.c  |  2 +-
->  drivers/net/wireless/marvell/mwifiex/sdio.c          |  2 +-
->  drivers/net/wireless/ti/wlcore/sdio.c                |  2 +-
->  include/linux/mmc/core.h                             |  4 ++--
->  include/linux/mmc/host.h                             |  2 +-
->  17 files changed, 25 insertions(+), 24 deletions(-)
->
+Copy the description of v3 cover letter from Willy:
+===
+For some reason several people have been sending bad patches to fix
+compiler warnings in vmcore recently.  Here's how it should be done.
+Compile-tested only on x86.  As noted in the first patch, s390 should
+take this conversion a bit further, but I'm not inclined to do that
+work myself.
 
-Patch 1 applied for fixes and the two others for next, thanks!
+V4:
+[PATCH v4 0/3] Convert vmcore to use an iov_iter
+https://lore.kernel.org/all/20220318093706.161534-1-bhe@redhat.com/T/#u
 
-Kind regards
-Uffe
+v3:
+[PATCH v3 0/3] Convert vmcore to use an iov_iter
+https://lore.kernel.org/all/20211213143927.3069508-1-willy@infradead.org/T/#u
+
+
+Changelog:
+===
+v5 RESEND:
+ - Add my own Signed-off-by, no code or log change related in this round.
+
+v5:
+ - Rebased on Linus's latest master branch.
+ - Merge the patch 4 of v4 into patch 2.
+v4:
+ - Append one patch to replace the open code with iov_iter_count().
+   This is suggested by Al.
+ - Fix a indentation error by replacing space with tab in
+   arch/sh/kernel/crash_dump.c of patch 1 reported by checkpatch. The
+   rest of patch 1~3 are untouched.
+ - Add Christopy's Reviewed-by and my Acked-by for patch 1~3.
+v3:
+ - Send the correct patches this time
+v2:
+ - Removed unnecessary kernel-doc
+ - Included uio.h to fix compilation problems
+ - Made read_from_oldmem_iter static to avoid compile warnings during the
+   conversion
+ - Use iov_iter_truncate() (Christoph)
+
+
+Matthew Wilcox (Oracle) (3):
+  vmcore: Convert copy_oldmem_page() to take an iov_iter
+  vmcore: Convert __read_vmcore to use an iov_iter
+  vmcore: Convert read_from_oldmem() to take an iov_iter
+
+ arch/arm/kernel/crash_dump.c     |  27 +------
+ arch/arm64/kernel/crash_dump.c   |  29 +------
+ arch/ia64/kernel/crash_dump.c    |  32 +-------
+ arch/mips/kernel/crash_dump.c    |  27 +------
+ arch/powerpc/kernel/crash_dump.c |  35 ++-------
+ arch/riscv/kernel/crash_dump.c   |  26 +------
+ arch/s390/kernel/crash_dump.c    |  13 ++--
+ arch/sh/kernel/crash_dump.c      |  29 ++-----
+ arch/x86/kernel/crash_dump_32.c  |  29 +------
+ arch/x86/kernel/crash_dump_64.c  |  48 ++++--------
+ fs/proc/vmcore.c                 | 130 +++++++++++++------------------
+ include/linux/crash_dump.h       |  19 ++---
+ 12 files changed, 123 insertions(+), 321 deletions(-)
+
+-- 
+2.34.1
+

@@ -2,187 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D96B64F9863
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:41:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 405254F9866
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:42:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237131AbiDHOnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 10:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33062 "EHLO
+        id S237150AbiDHOoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 10:44:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237120AbiDHOnl (ORCPT
+        with ESMTP id S233339AbiDHOny (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 10:43:41 -0400
-Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203A5ED9F6
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 07:41:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649428897; x=1680964897;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gKPuDMxPwwImVaSWhf/GrWbTRZ/GhJoq+Oz10aC1ezE=;
-  b=IEBaeNDD4Xcd9x3UM2UOYZGjNtkWZUsvqRdDtMl8UOLlHiaGPorf9G+C
-   /vYMChWd3JhL2oYypBXD3r7Xxrubk/IsvwRUTmjlgAgL/qr94SdMM0FKu
-   TwfdsfxPqiSBvRZxpDiiHIAuD+SsGHyVOQQb9yQQ10MoJT7lFyzMvX0A3
-   V1VxjQkW6mpBNaH1FbJIEtWauwfMnPe3ahyne40+/jPFi8otMofSwaMjr
-   APcFEgaX0SIIyw9w2/Sgdm0tCjQkiw2fI53vXEPbCBBXYkgR1ajE7FI9D
-   /mH7xI3RCu02zkCiM++OM4dfg5NmS9DQyTYvWt4U4qLADmxkq0M/iAV4C
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="322295527"
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="322295527"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 07:41:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="653285516"
-Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 08 Apr 2022 07:41:32 -0700
-Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ncpnn-0000MI-Eq;
-        Fri, 08 Apr 2022 14:41:31 +0000
-Date:   Fri, 8 Apr 2022 22:41:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nico Pache <npache@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Rafael Aquini <aquini@redhat.com>,
-        Waiman Long <longman@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Christoph von Recklinghausen <crecklin@redhat.com>,
-        Don Dutile <ddutile@redhat.com>,
-        "Herton R . Krzesinski" <herton@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Joel Savitz <jsavitz@redhat.com>,
-        Darren Hart <dvhart@infradead.org>, stable@kernel.org
-Subject: Re: [PATCH v8] oom_kill.c: futex: Don't OOM reap the VMA containing
- the robust_list_head
-Message-ID: <202204082258.E7EPbAYz-lkp@intel.com>
-References: <20220408032809.3696798-1-npache@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220408032809.3696798-1-npache@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 8 Apr 2022 10:43:54 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0E7EEA5B;
+        Fri,  8 Apr 2022 07:41:51 -0700 (PDT)
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 238CKHmV010098;
+        Fri, 8 Apr 2022 14:41:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=LKTCnfd0xdy6aUmMv3T2P48F4pb9yvlREuWs2k+iw1k=;
+ b=AF95kqREk6r3rk/f3rCAAEPoCWmIyH6VkY6HKWYchgGodOZ22LQoi4DnrF2coGshn32Y
+ Z+vPYtQCYOqJ89PvFFt57hpnM8nMWvUaenak5rTVK06abHQMpEta8IN8rdSN+BqprZWy
+ RQXNw3F/DT6GEt+XOiwBVgRzlpX8tZDySKYS2DBvUs9aopHvUFxXF+9jaxFBHA1igVYP
+ GT1eoaMLGSMFxGoJy7Tb2hqhywnHZ1KMzL+pvlibKh1vBrddlFbqh3TNy+dqDexwnQH1
+ dvjjN7Irez8rU5Glf4a5xbKTNP3B7EWL74MDDJpHA0J4qcgfNfcRM7MQI3oLy8tCVOv+ 0w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fa8mwgfpk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 08 Apr 2022 14:41:34 +0000
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 238DlTKH030829;
+        Fri, 8 Apr 2022 14:41:33 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fa8mwgfnq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 08 Apr 2022 14:41:33 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 238EbEss014316;
+        Fri, 8 Apr 2022 14:41:31 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma04ams.nl.ibm.com with ESMTP id 3f6e493yts-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 08 Apr 2022 14:41:30 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 238ET8uj38863198
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 8 Apr 2022 14:29:08 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9CE275205A;
+        Fri,  8 Apr 2022 14:41:28 +0000 (GMT)
+Received: from sig-9-65-90-167.ibm.com (unknown [9.65.90.167])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id AC48452050;
+        Fri,  8 Apr 2022 14:41:26 +0000 (GMT)
+Message-ID: <fd5e88eb66db909ddc9f2fe6d788465a51a979b4.camel@linux.ibm.com>
+Subject: Re: [PATCH 0/7] Add CA enforcement keyring restrictions
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Snowberg <eric.snowberg@oracle.com>
+Cc:     David Howells <dhowells@redhat.com>,
+        "dwmw2@infradead.org" <dwmw2@infradead.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "roberto.sassu@huawei.com" <roberto.sassu@huawei.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        "pvorel@suse.cz" <pvorel@suse.cz>, "tiwai@suse.de" <tiwai@suse.de>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Date:   Fri, 08 Apr 2022 10:41:26 -0400
+In-Reply-To: <8ECDC8D2-433B-4F7E-9EEC-BB85C75ED198@oracle.com>
+References: <20220406015337.4000739-1-eric.snowberg@oracle.com>
+         <6bfe3fe98eb7c11520264503fd10da478d6a3fd3.camel@linux.ibm.com>
+         <8ECDC8D2-433B-4F7E-9EEC-BB85C75ED198@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 8_3-dRJnYlkU-lia-ZcSZ5-MRuMhyLt0
+X-Proofpoint-GUID: aX1itNTZAWSDZxHj7uUhB3ii07gWC1-x
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-08_05,2022-04-08_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
+ adultscore=0 mlxlogscore=965 impostorscore=0 malwarescore=0 bulkscore=0
+ priorityscore=1501 clxscore=1015 suspectscore=0 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204080071
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nico,
+On Wed, 2022-04-06 at 22:53 +0000, Eric Snowberg wrote:
+> 
+> > On Apr 6, 2022, at 2:45 PM, Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > 
+> > Hi Eric,
+> > 
+> > On Tue, 2022-04-05 at 21:53 -0400, Eric Snowberg wrote:
+> >> A key added to the ima keyring must be signed by a key contained within 
+> >> either the builtin trusted or secondary trusted keyrings. Currently, there are 
+> >> CA restrictions described in IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY,
+> >> but these restrictions are not enforced within code. Therefore, keys within 
+> >> either the builtin or secondary may not be a CA and could be used to
+> >> vouch for an ima key.
+> >> 
+> >> The machine keyring can not be used as another trust anchor for adding keys 
+> >> to the ima keyring, since CA enforcement does not currently exist [1]. This 
+> >> would expand the current integrity gap.
+> >> 
+> >> Introduce a new root of trust key flag to close this integrity gap for
+> >> all keyrings.  The first key type to use this is X.509.  When a X.509 
+> >> certificate is self signed, contains kernCertSign Key Usage and contains 
+> >> the CA bit, the new flag is set.  Introduce new keyring restrictions 
+> >> that not only validates a key is signed by a key contained within the 
+> >> keyring, but also validates the key has the new root of trust key flag 
+> >> set.  Use this new restriction for keys added to the ima keyring.  Now 
+> >> that we have CA enforcement, allow the machine keyring to be used as another 
+> >> trust anchor for the ima keyring.
+> >> 
+> >> To recap, all keys that previously loaded into the builtin, secondary or
+> >> machine keyring will still load after applying this series.  Keys
+> >> contained within these keyrings may carry the root of trust flag. The
+> >> ima keyring will use the new root of trust restriction to validate
+> >> CA enforcement. Other keyrings that require a root of trust could also 
+> >> use this in the future.
+> > 
+> > Your initial patch set indicated that you were addressing Linus'
+> > request to allow end-users the ability "to add their own keys and sign
+> > modules they trust".  However, from the design of the previous patch
+> > set and now this one, everything indicates a lot more is going on than
+> > just allowing end-users to add their own keys.  There would be no
+> > reason for loading all the MOK keys, rather than just the CA keys, onto
+> > the "machine" keyring.  Please provide the motivation for this design.
+> 
+> The motivation is to satisfy both Linus and your requests. Linus requested 
+> the ability to allow users to add their own keys and sign modules they trust.  
+> A code signing CA certificate does not require kernCertSign in the usage. Adding 
+> this as a requirement for kernel modules would be a regression (or a bug).
 
-Thank you for the patch! Perhaps something to improve:
+Of course a code signing CA certificate should not also be a
+certificate signing key (keyCertSign).  Remember the
+"builtin_trusted_keys" and "secondary_trusted_keys" keyrings are
+special.  Their root of trust is based on a secure boot signature chain
+of trust up to and including a signed kernel image.  The "machine"
+keyring is totally different in this regard.  Establishing a new root
+of trust is really difficult.  Requiring a root-CA to have key
+certifcate signing usage is a level of indirection, which I would
+consider a small price to pay for being able to establish a, hopefully
+safe or at least safer, new root of trust for trusting "end-user" keys.
 
-[auto build test WARNING on hnaz-mm/master]
-[also build test WARNING on linus/master v5.18-rc1 next-20220408]
-[cannot apply to linux/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> 
+> This series addresses your request to only trust validly signed CA certs. 
+> As you pointed out in the Kconfig help for 
+> IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY:
+> 
+> help
+>   Keys may be added to the IMA or IMA blacklist keyrings, if the
+>   key is validly signed by a CA cert in the system built-in or
+>   secondary trusted keyrings.
+> 
+>   Intermediate keys between those the kernel has compiled in and the 
+>   IMA keys to be added may be added to the system secondary keyring,
+>   provided they are validly signed by a key already resident in the
+>   built-in or secondary trusted keyrings.
+> 
+> requires keys to be “validly” signed by a CA cert. Later the definition of a 
+> validly signed CA cert was defined as: self signed, contains kernCertSign 
+> key usage and contains the CA bit. While this help file states the CA restriction, 
+> nothing in code enforces it.  One can place any type of self signed cert in either 
+> keyring and ima will use it.  The motivation is for all keys added to the ima 
+> keyring to abide by the restriction defined in the Kconfig help.  With this series 
+> this can be accomplished without introducing a regression on keys placed in 
+> any of the system keyrings.
+> 
+> > Please note that Patch 6/7 permits intermediary CA keys, without any
+> > mention of it in the cover letter.  Please include this in the
+> > motivation for this design.
+> 
+> Ok, I’ll add that in the next round.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nico-Pache/oom_kill-c-futex-Don-t-OOM-reap-the-VMA-containing-the-robust_list_head/20220408-112952
-base:   https://github.com/hnaz/linux-mm master
-config: x86_64-randconfig-s022 (https://download.01.org/0day-ci/archive/20220408/202204082258.E7EPbAYz-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/70c1e2a404ac47b7c9b8bd1e9c4d3e72f19e6c62
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Nico-Pache/oom_kill-c-futex-Don-t-OOM-reap-the-VMA-containing-the-robust_list_head/20220408-112952
-        git checkout 70c1e2a404ac47b7c9b8bd1e9c4d3e72f19e6c62
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Your cover letter should say that this patch series enables
+verification of 3rd party modules.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+thanks,
 
+Mimi
 
-sparse warnings: (new ones prefixed by >>)
->> mm/oom_kill.c:606:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *robust_list @@     got struct robust_list_head [noderef] __user *robust_list @@
-   mm/oom_kill.c:606:21: sparse:     expected void *robust_list
-   mm/oom_kill.c:606:21: sparse:     got struct robust_list_head [noderef] __user *robust_list
-   mm/oom_kill.c: note: in included file (through include/linux/rculist.h, include/linux/sched/signal.h, include/linux/oom.h):
-   include/linux/rcupdate.h:726:9: sparse: sparse: context imbalance in 'find_lock_task_mm' - wrong count at exit
-   mm/oom_kill.c:222:28: sparse: sparse: context imbalance in 'oom_badness' - unexpected unlock
-   include/linux/rcupdate.h:726:9: sparse: sparse: context imbalance in 'dump_task' - unexpected unlock
-   include/linux/rcupdate.h:726:9: sparse: sparse: context imbalance in '__oom_kill_process' - unexpected unlock
-   mm/oom_kill.c:1243:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *robust_list @@     got struct robust_list_head [noderef] __user *robust_list @@
-   mm/oom_kill.c:1243:21: sparse:     expected void *robust_list
-   mm/oom_kill.c:1243:21: sparse:     got struct robust_list_head [noderef] __user *robust_list
-   mm/oom_kill.c:1232:20: sparse: sparse: context imbalance in '__se_sys_process_mrelease' - unexpected unlock
---
->> mm/mmap.c:3138:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *robust_list @@     got struct robust_list_head [noderef] __user *robust_list @@
-   mm/mmap.c:3138:21: sparse:     expected void *robust_list
-   mm/mmap.c:3138:21: sparse:     got struct robust_list_head [noderef] __user *robust_list
-
-vim +606 mm/oom_kill.c
-
-   575	
-   576	/*
-   577	 * Reaps the address space of the give task.
-   578	 *
-   579	 * Returns true on success and false if none or part of the address space
-   580	 * has been reclaimed and the caller should retry later.
-   581	 */
-   582	static bool oom_reap_task_mm(struct task_struct *tsk, struct mm_struct *mm)
-   583	{
-   584		bool ret = true;
-   585		void *robust_list = NULL;
-   586	
-   587		if (!mmap_read_trylock(mm)) {
-   588			trace_skip_task_reaping(tsk->pid);
-   589			return false;
-   590		}
-   591	
-   592		/*
-   593		 * MMF_OOM_SKIP is set by exit_mmap when the OOM reaper can't
-   594		 * work on the mm anymore. The check for MMF_OOM_SKIP must run
-   595		 * under mmap_lock for reading because it serializes against the
-   596		 * mmap_write_lock();mmap_write_unlock() cycle in exit_mmap().
-   597		 */
-   598		if (test_bit(MMF_OOM_SKIP, &mm->flags)) {
-   599			trace_skip_task_reaping(tsk->pid);
-   600			goto out_unlock;
-   601		}
-   602	
-   603		trace_start_task_reaping(tsk->pid);
-   604	
-   605	#ifdef CONFIG_FUTEX
- > 606		robust_list = tsk->robust_list;
-   607	#endif
-   608		/* failed to reap part of the address space. Try again later */
-   609		ret = __oom_reap_task_mm(mm, robust_list);
-   610		if (!ret)
-   611			goto out_finish;
-   612	
-   613		pr_info("oom_reaper: reaped process %d (%s), now anon-rss:%lukB, file-rss:%lukB, shmem-rss:%lukB\n",
-   614				task_pid_nr(tsk), tsk->comm,
-   615				K(get_mm_counter(mm, MM_ANONPAGES)),
-   616				K(get_mm_counter(mm, MM_FILEPAGES)),
-   617				K(get_mm_counter(mm, MM_SHMEMPAGES)));
-   618	out_finish:
-   619		trace_finish_task_reaping(tsk->pid);
-   620	out_unlock:
-   621		mmap_read_unlock(mm);
-   622	
-   623		return ret;
-   624	}
-   625	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

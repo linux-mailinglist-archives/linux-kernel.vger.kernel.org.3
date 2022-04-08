@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49A224F9447
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 13:38:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E8F74F944B
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 13:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234878AbiDHLkR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 07:40:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50982 "EHLO
+        id S234882AbiDHLlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 07:41:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230312AbiDHLkP (ORCPT
+        with ESMTP id S230312AbiDHLlj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 07:40:15 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093FB3EF0F;
-        Fri,  8 Apr 2022 04:38:12 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id i27so16726876ejd.9;
-        Fri, 08 Apr 2022 04:38:11 -0700 (PDT)
+        Fri, 8 Apr 2022 07:41:39 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 578D631900;
+        Fri,  8 Apr 2022 04:39:36 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id r13so16778019ejd.5;
+        Fri, 08 Apr 2022 04:39:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=aQTMkqSfFhl91Cc0GUZ1r40OnFQa6gJ5Xa9eGXPe3QY=;
-        b=ay22Mzf7xEG4Xo6lXaOF5bzT6fbmSM7LljcZeltTGhjVGqTp0+GhNQBQWNiOksmy1Z
-         0dECOKMK53lDKH4LXjY8F2YWN1YPml4hzRccRepsMw0FZkypuf/vBfwiH1hd/Ncw7bHN
-         rYNw9plPjJhn2AIHbxARkkXQP5f7ux+pm2bQjGq4g7KyNUabsvLnOQa85Ksn3L2nFxC8
-         eToU8uqYqBecK99X32eGYvcmBe42Kk6VtDHXnLZojqYRYj6198nODbWbSunP5PBlZKPu
-         j1pyYi6hJWlnlBcDcQnxzkxOkrzz0I4OjshpGH1WVtaAjrhBDVn2bnS1WTNkIjY8fe04
-         pJ+g==
+        bh=18wquxzAz+n1ScgoEWY4/IKvflx8A2Z+AYoS3QqfJ8Q=;
+        b=VEQC5+bvls2vZOkiJIYl1IXx7Thh7i+nLcFJJZwKWxidPwY8EbyKVR/mOthKGWGe80
+         jFMYCChnOfbFTpejdBW83KuqPnKFZvKeJWAkbcooEJQO4I7IHnD96PA5thg7oV+j3lW1
+         zd54tBmUVKPot/mup6F9Ct9yjhHmzzexQPpIEkgI24xK6E14j63g8tdk1lrg9nVN99FG
+         cHt1wCk6iqvcdSmDnYcDBFzMz/U919wDrm7AMw0VIQXEpaEoeWbxTd1HIt/+vQXtgwMq
+         c1uyvfez63x9v1YV6jXX0jMW1DcXN6QK7oz/8pv5A/4qbbnupiAvxQ42YLAJ9zvzYIVh
+         mGSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=aQTMkqSfFhl91Cc0GUZ1r40OnFQa6gJ5Xa9eGXPe3QY=;
-        b=HrDCYUYZenl3XNlQBPMtd75LEaK84tmaCR7Rb9w6jI7zmW4AGPxoewydQCol9r+UqV
-         rB4vHPpTEgvNy1nkWwDyJ5Uc+ETxwzxvLhDv6ImOh6KplTi/OZ2pmIsrGlVc/e7hzT0c
-         n5BIfE2msQ+eII28XnRpUvWWGElCoTA4Y9ZKW/Kr0dSdW2uyraRTsBuigKytTA5Jy9Sq
-         GMfYvkz7qGUPTAOIv4gWfPLMk4dIPQ72YqJXgnT1eTe6GDS6iPSMNkcAcNiIt5jX4pMs
-         83E8vgtaruKbaiKY01hWyItDZwIgAshCuRROzOxZmkFanf5IAmmE3kZfC4FGtH7Re5ut
-         fY6Q==
-X-Gm-Message-State: AOAM531s0HLADWz5eRuebI/axcdjDIIOHPr73XpPNeytPeRWhWw2YWWD
-        PXmiC2JBOT/ZUXhwey+WHW1ZyDcuhMc0qcVKSH0=
-X-Google-Smtp-Source: ABdhPJzfswmEDudd532KIvJjC3KNAd22CqiWCt9MqgTK7JU06acMZpBdYDNh1a6YlRxJJaqA4bX5LVjm6tPgCUOuB2I=
-X-Received: by 2002:a17:907:a411:b0:6e1:2084:99d2 with SMTP id
- sg17-20020a170907a41100b006e1208499d2mr1045774ejc.639.1649417890559; Fri, 08
- Apr 2022 04:38:10 -0700 (PDT)
+        bh=18wquxzAz+n1ScgoEWY4/IKvflx8A2Z+AYoS3QqfJ8Q=;
+        b=ePNMih11DzExwjhqvFrCOpnRYTC4MIUteDJ/fU69PQlHqhqqvT/MheJCXhqg/GRn0R
+         nQb4YFlWIwKE+qdkKjyI5DT7esryUoY3ZkXKDh+BZ8H/CsvQBVe7AP6D7x3luHN2DGRM
+         jYEzGFPSFK20wa/RCITZrdRvh5vSQ2PpxeSdcDdGJVI9bOwQ6oIxz+SDgx17tZqitLw8
+         lLR+4t7JQZaBc8yvWksQ4MOc6Rk6fASIaul0G75ZmXMVRY6jOP7d+8O4zvGCRmTfby/d
+         GqQLswuKkk7VpWgWzVBtdHtNEAOllGrM5het9P/QxKSZDbqI7SHiVoFgfX9PYV9YPqhi
+         qkLg==
+X-Gm-Message-State: AOAM530/Yh73IaT+D2i7KGPqNIJ6f/mV0cGaPs/Hyrg42pCyVd77qdpz
+        7Ch5hi/4pJhGiSFu/eUl7O/hjVPf8dPUM1ry+ng=
+X-Google-Smtp-Source: ABdhPJyx4Hwm0L/rT6G2qrVhVrJfK29yddhRF03FHn7KTlBGfpFZBD/fguFHm5wVg0Jk1STV60qEKREpFAs0jgVsJjY=
+X-Received: by 2002:a17:907:968e:b0:6db:aed5:43c8 with SMTP id
+ hd14-20020a170907968e00b006dbaed543c8mr17992154ejc.636.1649417974738; Fri, 08
+ Apr 2022 04:39:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220405135444.199295-1-maz@kernel.org> <20220405135444.199295-11-maz@kernel.org>
-In-Reply-To: <20220405135444.199295-11-maz@kernel.org>
+References: <20220405135444.199295-1-maz@kernel.org>
+In-Reply-To: <20220405135444.199295-1-maz@kernel.org>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 8 Apr 2022 14:33:56 +0300
-Message-ID: <CAHp75Ve5tMyUdj-cYV0pzL4zvVitTwC_gGv50-ZHTETiiQSbeA@mail.gmail.com>
-Subject: Re: [PATCH v2 10/10] Documentation: Update the recommended pattern
- for GPIO irqchips
+Date:   Fri, 8 Apr 2022 14:35:20 +0300
+Message-ID: <CAHp75VfxBWw307nxz8mpZHrvD6dFis8XPD0qO0gzWq5q_dL7hg@mail.gmail.com>
+Subject: Re: [PATCH v2 00/10] gpiolib: Handle immutable irq_chip structures
 To:     Marc Zyngier <maz@kernel.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
@@ -85,120 +84,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 6, 2022 at 1:57 PM Marc Zyngier <maz@kernel.org> wrote:
+On Wed, Apr 6, 2022 at 2:06 PM Marc Zyngier <maz@kernel.org> wrote:
 >
-> Update the documentation to get rid of the per-gpio_irq_chip
-> irq_chip structure, and give examples of the new pattern.
+> This is a followup from [1].
+>
+> I recently realised that the gpiolib play ugly tricks on the
+> unsuspecting irq_chip structures by patching the callbacks.
+>
+> Not only this breaks when an irq_chip structure is made const (which
+> really should be the default case), but it also forces this structure
+> to be copied at nauseam for each instance of the GPIO block, which is
+> a waste of memory.
+>
+> My current approach is to add a new irq_chip flag (IRQCHIP_IMMUTABLE)
+> which does what it says on the tin: don't you dare writing to them.
+> Gpiolib is further updated not to install its own callbacks, and it
+> becomes the responsibility of the driver to call into the gpiolib when
+> required. This is similar to what we do for other subsystems such as
+> PCI-MSI.
+>
+> 5 drivers are updated to this new model: M1, QC, Tegra, pl061 and AMD
+> (as I actively use them) keeping a single irq_chip structure, marking
+> it const, and exposing the new flag.
+>
+> Nothing breaks, the volume of change is small, the memory usage goes
+> down and we have fewer callbacks that can be used as attack vectors.
+> What's not to love?
 
-...
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+for the patches 1-3,9 and 10 after clarifying one example case.
 
-> +  static void my_gpio_mask_irq(struct irq_data *d)
-> +  {
-> +      struct gpio_chip *gc = irq_desc_get_handler_data(d);
-> +
-> +      /*
-> +       * Perform any necessary action to mask the interrupt,
-> +       * and then call into the core code to synchronise the
-> +       * state.
-> +       */
-> +
-> +      gpiochip_disable_irq(gc, d->hwirq);
+> * From v1 [1]:
+>   - pl061 and AMD drivers converted
+>   - New helpers to keep the changes small
+>   - New warning for non-converted drivers
+>   - Documentation and TODO updates
+>
+> [1] https://lore.kernel.org/r/20220223154405.54912-1-maz@kernel.org
+>
+> Marc Zyngier (10):
+>   gpio: Don't fiddle with irqchips marked as immutable
+>   gpio: Expose the gpiochip_irq_re[ql]res helpers
+>   gpio: Add helpers to ease the transition towards immutable irq_chip
+>   gpio: tegra186: Make the irqchip immutable
+>   gpio: pl061: Make the irqchip immutable
+>   pinctrl: apple-gpio: Make the irqchip immutable
+>   pinctrl: msmgpio: Make the irqchip immutable
+>   pinctrl: amd: Make the irqchip immutable
+>   gpio: Update TODO to mention immutable irq_chip structures
+>   Documentation: Update the recommended pattern for GPIO irqchips
+>
+>  Documentation/driver-api/gpio/driver.rst | 175 ++++++++++++++++++-----
+>  drivers/gpio/TODO                        |  19 +++
+>  drivers/gpio/gpio-pl061.c                |  32 +++--
+>  drivers/gpio/gpio-tegra186.c             |  32 +++--
+>  drivers/gpio/gpiolib.c                   |  13 +-
+>  drivers/pinctrl/pinctrl-amd.c            |  11 +-
+>  drivers/pinctrl/pinctrl-apple-gpio.c     |  29 ++--
+>  drivers/pinctrl/qcom/pinctrl-msm.c       |  53 ++++---
+>  include/linux/gpio/driver.h              |  16 +++
+>  include/linux/irq.h                      |   2 +
+>  kernel/irq/debugfs.c                     |   1 +
+>  11 files changed, 293 insertions(+), 90 deletions(-)
+>
+> --
+> 2.34.1
+>
 
-(1)
 
-> +  }
-> +
-> +  static void my_gpio_unmask_irq(struct irq_data *d)
-> +  {
-> +      struct gpio_chip *gc = irq_desc_get_handler_data(d);
-
-> +      gpiochip_disable_irq(gc, d->hwirq);
-
-(2)
-
-> +      /*
-> +       * Perform any necessary action to unmask the interrupt,
-> +       * after having called into the core code to synchronise
-> +       * the state.
-> +       */
-> +  }
-
-If (1) and (2) being the same is not a mistake (typo) it probably
-needs additional explanation.
-
-...
-
-> +  static void my_gpio_mask_irq(struct irq_data *d)
-> +  {
-> +      struct gpio_chip *gc = irq_desc_get_handler_data(d);
-> +
-> +      /*
-> +       * Perform any necessary action to mask the interrupt,
-> +       * and then call into the core code to synchronise the
-> +       * state.
-> +       */
-
-> +      gpiochip_disable_irq(gc, d->hwirq);
-
-(3)
-
-> +  }
-> +
-> +  static void my_gpio_unmask_irq(struct irq_data *d)
-> +  {
-> +      struct gpio_chip *gc = irq_desc_get_handler_data(d);
-
-> +      gpiochip_disable_irq(gc, d->hwirq);
-
-(4)
-
-> +      /*
-> +       * Perform any necessary action to unmask the interrupt,
-> +       * after having called into the core code to synchronise
-> +       * the state.
-> +       */
-> +  }
-
-Ditto for (3) & (4).
-
-...
-
-> +  static void my_gpio_mask_irq(struct irq_data *d)
-> +  {
-> +      struct gpio_chip *gc = irq_desc_get_handler_data(d);
-> +
-> +      /*
-> +       * Perform any necessary action to mask the interrupt,
-> +       * and then call into the core code to synchronise the
-> +       * state.
-> +       */
-> +
-> +      gpiochip_disable_irq(gc, d->hwirq);
-
-(5)
-
-> +      irq_mask_mask_parent(d);
-> +  }
-> +
-> +  static void my_gpio_unmask_irq(struct irq_data *d)
-> +  {
-> +      struct gpio_chip *gc = irq_desc_get_handler_data(d);
-
-> +      gpiochip_disable_irq(gc, d->hwirq);
-
-(6)
-
-> +      /*
-> +       * Perform any necessary action to unmask the interrupt,
-> +       * after having called into the core code to synchronise
-> +       * the state.
-> +       */
-> +
-> +      irq_mask_unmask_parent(d);
-> +  }
-
-Ditto for (5) & (6).
-
---
+-- 
 With Best Regards,
 Andy Shevchenko

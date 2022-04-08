@@ -2,203 +2,361 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 405254F9866
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:42:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E4CC4F9864
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:41:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237150AbiDHOoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 10:44:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34030 "EHLO
+        id S237136AbiDHOnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 10:43:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233339AbiDHOny (ORCPT
+        with ESMTP id S233339AbiDHOnn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 10:43:54 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0E7EEA5B;
-        Fri,  8 Apr 2022 07:41:51 -0700 (PDT)
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 238CKHmV010098;
-        Fri, 8 Apr 2022 14:41:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=LKTCnfd0xdy6aUmMv3T2P48F4pb9yvlREuWs2k+iw1k=;
- b=AF95kqREk6r3rk/f3rCAAEPoCWmIyH6VkY6HKWYchgGodOZ22LQoi4DnrF2coGshn32Y
- Z+vPYtQCYOqJ89PvFFt57hpnM8nMWvUaenak5rTVK06abHQMpEta8IN8rdSN+BqprZWy
- RQXNw3F/DT6GEt+XOiwBVgRzlpX8tZDySKYS2DBvUs9aopHvUFxXF+9jaxFBHA1igVYP
- GT1eoaMLGSMFxGoJy7Tb2hqhywnHZ1KMzL+pvlibKh1vBrddlFbqh3TNy+dqDexwnQH1
- dvjjN7Irez8rU5Glf4a5xbKTNP3B7EWL74MDDJpHA0J4qcgfNfcRM7MQI3oLy8tCVOv+ 0w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fa8mwgfpk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 08 Apr 2022 14:41:34 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 238DlTKH030829;
-        Fri, 8 Apr 2022 14:41:33 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fa8mwgfnq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 08 Apr 2022 14:41:33 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 238EbEss014316;
-        Fri, 8 Apr 2022 14:41:31 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04ams.nl.ibm.com with ESMTP id 3f6e493yts-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 08 Apr 2022 14:41:30 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 238ET8uj38863198
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 8 Apr 2022 14:29:08 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9CE275205A;
-        Fri,  8 Apr 2022 14:41:28 +0000 (GMT)
-Received: from sig-9-65-90-167.ibm.com (unknown [9.65.90.167])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id AC48452050;
-        Fri,  8 Apr 2022 14:41:26 +0000 (GMT)
-Message-ID: <fd5e88eb66db909ddc9f2fe6d788465a51a979b4.camel@linux.ibm.com>
-Subject: Re: [PATCH 0/7] Add CA enforcement keyring restrictions
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     David Howells <dhowells@redhat.com>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "roberto.sassu@huawei.com" <roberto.sassu@huawei.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        "pvorel@suse.cz" <pvorel@suse.cz>, "tiwai@suse.de" <tiwai@suse.de>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-Date:   Fri, 08 Apr 2022 10:41:26 -0400
-In-Reply-To: <8ECDC8D2-433B-4F7E-9EEC-BB85C75ED198@oracle.com>
-References: <20220406015337.4000739-1-eric.snowberg@oracle.com>
-         <6bfe3fe98eb7c11520264503fd10da478d6a3fd3.camel@linux.ibm.com>
-         <8ECDC8D2-433B-4F7E-9EEC-BB85C75ED198@oracle.com>
+        Fri, 8 Apr 2022 10:43:43 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EFDEF1E9E
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 07:41:39 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id g21so10788381iom.13
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 07:41:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OQ3yXPs/ePkmyqPbhNIG1CvTCw2rw1NphQOx38b16uI=;
+        b=cuJUaTKW54ST5EiyzqertJtD6UBOB75Rl7LRp5oTlOLilLM1b5cNmhXmelDcK8pxff
+         o609683EyCDOtYG5OMxQ1qC9F3WRVoYqS/L4d4piVvR77abxl3PmjhKc7gXn0k6KyOe5
+         P3sSPvO2afz1ae/Jhl3lPQXf0fKINpu3z4wJc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OQ3yXPs/ePkmyqPbhNIG1CvTCw2rw1NphQOx38b16uI=;
+        b=VMh0HK2ynA5FFTwNXOYVAh3mGIy5E1yA9GCnYfvKKy3ecw3ywDq/6mneKp28e61K9h
+         O1XTRqRWFXFRb2mvtpS644wL732McbkEFkgdsoZC86UfmheCJgMJSSsUKXyd4i9nFkNi
+         mNVZc6SwFcEgUAsd4gFHqPUghwTSGYTUoVfrffzmgblqOCC1pQIm73QFiiNg6Yfmw3mb
+         QQRXeFrAisYw1e1zifIJHe2hREh0j5F16pVuK0UywZTfCPYsKqeqe2KYold7uBnrb75B
+         ZsniM+GQqkb78I5PouV5Aaiy1o3e0W9b1lfzI0hLZfuUM5BB1hYgHhK5zya+3/+r0qyN
+         o7eA==
+X-Gm-Message-State: AOAM5327fK5GFcPHK7Js2HiXVW88ETaVvcqTZzf6AylkC5cIJFA9lGlM
+        0paV0Mx5PEQLNAkV0dxNCmgrL+W+3m8xCqwz0+Dqxg==
+X-Google-Smtp-Source: ABdhPJxvU3IVVe50ePmySFKNUEu7iHmHKf/skHVJ7dDB1DN4PpZOWIBMP4sEbtOIlyCZSWShHMothIPOw6rDFr9bJTc=
+X-Received: by 2002:a5d:8450:0:b0:64c:cc87:c5fc with SMTP id
+ w16-20020a5d8450000000b0064ccc87c5fcmr8326802ior.190.1649428898763; Fri, 08
+ Apr 2022 07:41:38 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220408045734.1158817-1-kaleshsingh@google.com>
+ <CAEXW_YQ6_VpneJnBfhTOMr6DwJhNmvMAKDRMnpr8LxB9Gtt=Xg@mail.gmail.com> <20220408143444.GC4285@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20220408143444.GC4285@paulmck-ThinkPad-P17-Gen-1>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Fri, 8 Apr 2022 10:41:26 -0400
+Message-ID: <CAEXW_YSrGKXh5DiJyrNvmbssSXbWBkA-XUjGRdS8HtGvW1r6hw@mail.gmail.com>
+Subject: Re: [PATCH v2] EXP rcu: Move expedited grace period (GP) work to RT kthread_worker
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Kalesh Singh <kaleshsingh@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        kernel-team <kernel-team@android.com>, Tejun Heo <tj@kernel.org>,
+        Tim Murray <timmurray@google.com>, Wei Wang <wvw@google.com>,
+        Kyle Lin <kylelin@google.com>,
+        Chunwei Lu <chunweilu@google.com>,
+        Lulu Wang <luluw@google.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        rcu <rcu@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 8_3-dRJnYlkU-lia-ZcSZ5-MRuMhyLt0
-X-Proofpoint-GUID: aX1itNTZAWSDZxHj7uUhB3ii07gWC1-x
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-08_05,2022-04-08_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
- adultscore=0 mlxlogscore=965 impostorscore=0 malwarescore=0 bulkscore=0
- priorityscore=1501 clxscore=1015 suspectscore=0 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204080071
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-04-06 at 22:53 +0000, Eric Snowberg wrote:
-> 
-> > On Apr 6, 2022, at 2:45 PM, Mimi Zohar <zohar@linux.ibm.com> wrote:
-> > 
-> > Hi Eric,
-> > 
-> > On Tue, 2022-04-05 at 21:53 -0400, Eric Snowberg wrote:
-> >> A key added to the ima keyring must be signed by a key contained within 
-> >> either the builtin trusted or secondary trusted keyrings. Currently, there are 
-> >> CA restrictions described in IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY,
-> >> but these restrictions are not enforced within code. Therefore, keys within 
-> >> either the builtin or secondary may not be a CA and could be used to
-> >> vouch for an ima key.
-> >> 
-> >> The machine keyring can not be used as another trust anchor for adding keys 
-> >> to the ima keyring, since CA enforcement does not currently exist [1]. This 
-> >> would expand the current integrity gap.
-> >> 
-> >> Introduce a new root of trust key flag to close this integrity gap for
-> >> all keyrings.  The first key type to use this is X.509.  When a X.509 
-> >> certificate is self signed, contains kernCertSign Key Usage and contains 
-> >> the CA bit, the new flag is set.  Introduce new keyring restrictions 
-> >> that not only validates a key is signed by a key contained within the 
-> >> keyring, but also validates the key has the new root of trust key flag 
-> >> set.  Use this new restriction for keys added to the ima keyring.  Now 
-> >> that we have CA enforcement, allow the machine keyring to be used as another 
-> >> trust anchor for the ima keyring.
-> >> 
-> >> To recap, all keys that previously loaded into the builtin, secondary or
-> >> machine keyring will still load after applying this series.  Keys
-> >> contained within these keyrings may carry the root of trust flag. The
-> >> ima keyring will use the new root of trust restriction to validate
-> >> CA enforcement. Other keyrings that require a root of trust could also 
-> >> use this in the future.
-> > 
-> > Your initial patch set indicated that you were addressing Linus'
-> > request to allow end-users the ability "to add their own keys and sign
-> > modules they trust".  However, from the design of the previous patch
-> > set and now this one, everything indicates a lot more is going on than
-> > just allowing end-users to add their own keys.  There would be no
-> > reason for loading all the MOK keys, rather than just the CA keys, onto
-> > the "machine" keyring.  Please provide the motivation for this design.
-> 
-> The motivation is to satisfy both Linus and your requests. Linus requested 
-> the ability to allow users to add their own keys and sign modules they trust.  
-> A code signing CA certificate does not require kernCertSign in the usage. Adding 
-> this as a requirement for kernel modules would be a regression (or a bug).
+On Fri, Apr 8, 2022 at 10:34 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+>
+> On Fri, Apr 08, 2022 at 06:42:42AM -0400, Joel Fernandes wrote:
+> > On Fri, Apr 8, 2022 at 12:57 AM Kalesh Singh <kaleshsingh@google.com> wrote:
+> > >
+> > [...]
+> > > @@ -334,15 +334,13 @@ static bool exp_funnel_lock(unsigned long s)
+> > >   * Select the CPUs within the specified rcu_node that the upcoming
+> > >   * expedited grace period needs to wait for.
+> > >   */
+> > > -static void sync_rcu_exp_select_node_cpus(struct work_struct *wp)
+> > > +static void __sync_rcu_exp_select_node_cpus(struct rcu_exp_work *rewp)
+> > >  {
+> > >         int cpu;
+> > >         unsigned long flags;
+> > >         unsigned long mask_ofl_test;
+> > >         unsigned long mask_ofl_ipi;
+> > >         int ret;
+> > > -       struct rcu_exp_work *rewp =
+> > > -               container_of(wp, struct rcu_exp_work, rew_work);
+> > >         struct rcu_node *rnp = container_of(rewp, struct rcu_node, rew);
+> > >
+> > >         raw_spin_lock_irqsave_rcu_node(rnp, flags);
+> > > @@ -417,13 +415,119 @@ static void sync_rcu_exp_select_node_cpus(struct work_struct *wp)
+> > >                 rcu_report_exp_cpu_mult(rnp, mask_ofl_test, false);
+> > >  }
+> > >
+> > > +static void rcu_exp_sel_wait_wake(unsigned long s);
+> > > +
+> > > +#ifdef CONFIG_RCU_EXP_KTHREAD
+> >
+> > Just my 2c:
+> >
+> > Honestly, I am not sure if the benefits of duplicating the code to use
+> > normal workqueues outweighs the drawbacks (namely code complexity,
+> > code duplication - which can in turn cause more bugs and maintenance
+> > headaches down the line). The code is harder to read and adding more
+> > 30 character function names does not help.
+> >
+> > For something as important as expedited GPs, I can't imagine a
+> > scenario where an RT kthread worker would cause "issues". If it does
+> > cause issues, that's what the -rc cycles and the stable releases are
+> > for. I prefer to trust the process than take a one-foot-in-the-door
+> > approach.
+> >
+> > So please, can we just keep it simple?
+>
+> Yes and no.
+>
+> This is a bug fix, but only for those systems that are expecting real-time
+> response from synchronize_rcu_expedited().  As far as I know, this is only
+> Android.  The rest of the systems are just fine with the current behavior.
 
-Of course a code signing CA certificate should not also be a
-certificate signing key (keyCertSign).  Remember the
-"builtin_trusted_keys" and "secondary_trusted_keys" keyrings are
-special.  Their root of trust is based on a secure boot signature chain
-of trust up to and including a signed kernel image.  The "machine"
-keyring is totally different in this regard.  Establishing a new root
-of trust is really difficult.  Requiring a root-CA to have key
-certifcate signing usage is a level of indirection, which I would
-consider a small price to pay for being able to establish a, hopefully
-safe or at least safer, new root of trust for trusting "end-user" keys.
+As far as you know, but are you sure?
 
-> 
-> This series addresses your request to only trust validly signed CA certs. 
-> As you pointed out in the Kconfig help for 
-> IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY:
-> 
-> help
->   Keys may be added to the IMA or IMA blacklist keyrings, if the
->   key is validly signed by a CA cert in the system built-in or
->   secondary trusted keyrings.
-> 
->   Intermediate keys between those the kernel has compiled in and the 
->   IMA keys to be added may be added to the system secondary keyring,
->   provided they are validly signed by a key already resident in the
->   built-in or secondary trusted keyrings.
-> 
-> requires keys to be “validly” signed by a CA cert. Later the definition of a 
-> validly signed CA cert was defined as: self signed, contains kernCertSign 
-> key usage and contains the CA bit. While this help file states the CA restriction, 
-> nothing in code enforces it.  One can place any type of self signed cert in either 
-> keyring and ima will use it.  The motivation is for all keys added to the ima 
-> keyring to abide by the restriction defined in the Kconfig help.  With this series 
-> this can be accomplished without introducing a regression on keys placed in 
-> any of the system keyrings.
-> 
-> > Please note that Patch 6/7 permits intermediary CA keys, without any
-> > mention of it in the cover letter.  Please include this in the
-> > motivation for this design.
-> 
-> Ok, I’ll add that in the next round.
+> In addition, this bug fix introduces significant risks, especially in
+> terms of performance for throughput-oriented workloads.
 
-Your cover letter should say that this patch series enables
-verification of 3rd party modules.
+Could you explain what the risk is? That's the part I did not follow.
+How can making synchronize_rcu_expedited() work getting priority
+introduce throughput issues?
 
-thanks,
+> So yes, let's do this bug fix (with appropriate adjustment), but let's
+> also avoid exposing the non-Android workloads to risks from the inevitable
+> unintended consequences.  ;-)
 
-Mimi
+I would argue the risk is also adding code complexity and more bugs
+without clear rationale for why it is being done. There's always risk
+with any change, but that's the -rc cycles and stable kernels help
+catch those. I think we should not add more code complexity if it is a
+theoretical concern.
 
+There's also another possible risk - there is a possible hidden
+problem here that probably the non-Android folks haven't noticed or
+been able to debug. I would rather just do the right thing.
+
+Just my 2c,
+
+- Joel
+
+
+>
+>                                                         Thanx, Paul
+>
+> > Thanks,
+> >
+> >  - Joel
+> >
+> >
+> > > +static void sync_rcu_exp_select_node_cpus(struct kthread_work *wp)
+> > > +{
+> > > +       struct rcu_exp_work *rewp =
+> > > +               container_of(wp, struct rcu_exp_work, rew_work);
+> > > +
+> > > +       __sync_rcu_exp_select_node_cpus(rewp);
+> > > +}
+> > > +
+> > > +static inline bool rcu_gp_par_worker_started(void)
+> > > +{
+> > > +       return !!READ_ONCE(rcu_exp_par_gp_kworker);
+> > > +}
+> > > +
+> > > +static inline void sync_rcu_exp_select_cpus_queue_work(struct rcu_node *rnp)
+> > > +{
+> > > +       kthread_init_work(&rnp->rew.rew_work, sync_rcu_exp_select_node_cpus);
+> > > +       /*
+> > > +        * Use rcu_exp_par_gp_kworker, because flushing a work item from
+> > > +        * another work item on the same kthread worker can result in
+> > > +        * deadlock.
+> > > +        */
+> > > +       kthread_queue_work(rcu_exp_par_gp_kworker, &rnp->rew.rew_work);
+> > > +}
+> > > +
+> > > +static inline void sync_rcu_exp_select_cpus_flush_work(struct rcu_node *rnp)
+> > > +{
+> > > +       kthread_flush_work(&rnp->rew.rew_work);
+> > > +}
+> > > +
+> > > +/*
+> > > + * Work-queue handler to drive an expedited grace period forward.
+> > > + */
+> > > +static void wait_rcu_exp_gp(struct kthread_work *wp)
+> > > +{
+> > > +       struct rcu_exp_work *rewp;
+> > > +
+> > > +       rewp = container_of(wp, struct rcu_exp_work, rew_work);
+> > > +       rcu_exp_sel_wait_wake(rewp->rew_s);
+> > > +}
+> > > +
+> > > +static inline void synchronize_rcu_expedited_queue_work(struct rcu_exp_work *rew)
+> > > +{
+> > > +       kthread_init_work(&rew->rew_work, wait_rcu_exp_gp);
+> > > +       kthread_queue_work(rcu_exp_gp_kworker, &rew->rew_work);
+> > > +}
+> > > +
+> > > +static inline void synchronize_rcu_expedited_destroy_work(struct rcu_exp_work *rew)
+> > > +{
+> > > +}
+> > > +#else /* !CONFIG_RCU_EXP_KTHREAD */
+> > > +static void sync_rcu_exp_select_node_cpus(struct work_struct *wp)
+> > > +{
+> > > +       struct rcu_exp_work *rewp =
+> > > +               container_of(wp, struct rcu_exp_work, rew_work);
+> > > +
+> > > +       __sync_rcu_exp_select_node_cpus(rewp);
+> > > +}
+> > > +
+> > > +static inline bool rcu_gp_par_worker_started(void)
+> > > +{
+> > > +       return !!READ_ONCE(rcu_par_gp_wq);
+> > > +}
+> > > +
+> > > +static inline void sync_rcu_exp_select_cpus_queue_work(struct rcu_node *rnp)
+> > > +{
+> > > +       int cpu = find_next_bit(&rnp->ffmask, BITS_PER_LONG, -1);
+> > > +
+> > > +       INIT_WORK(&rnp->rew.rew_work, sync_rcu_exp_select_node_cpus);
+> > > +       /* If all offline, queue the work on an unbound CPU. */
+> > > +       if (unlikely(cpu > rnp->grphi - rnp->grplo))
+> > > +               cpu = WORK_CPU_UNBOUND;
+> > > +       else
+> > > +               cpu += rnp->grplo;
+> > > +       queue_work_on(cpu, rcu_par_gp_wq, &rnp->rew.rew_work);
+> > > +}
+> > > +
+> > > +static inline void sync_rcu_exp_select_cpus_flush_work(struct rcu_node *rnp)
+> > > +{
+> > > +       flush_work(&rnp->rew.rew_work);
+> > > +}
+> > > +
+> > > +/*
+> > > + * Work-queue handler to drive an expedited grace period forward.
+> > > + */
+> > > +static void wait_rcu_exp_gp(struct work_struct *wp)
+> > > +{
+> > > +       struct rcu_exp_work *rewp;
+> > > +
+> > > +       rewp = container_of(wp, struct rcu_exp_work, rew_work);
+> > > +       rcu_exp_sel_wait_wake(rewp->rew_s);
+> > > +}
+> > > +
+> > > +static inline void synchronize_rcu_expedited_queue_work(struct rcu_exp_work *rew)
+> > > +{
+> > > +       INIT_WORK_ONSTACK(&rew->rew_work, wait_rcu_exp_gp);
+> > > +       queue_work(rcu_gp_wq, &rew->rew_work);
+> > > +}
+> > > +
+> > > +static inline void synchronize_rcu_expedited_destroy_work(struct rcu_exp_work *rew)
+> > > +{
+> > > +       destroy_work_on_stack(&rew->rew_work);
+> > > +}
+> > > +#endif /* CONFIG_RCU_EXP_KTHREAD */
+> > > +
+> > >  /*
+> > >   * Select the nodes that the upcoming expedited grace period needs
+> > >   * to wait for.
+> > >   */
+> > >  static void sync_rcu_exp_select_cpus(void)
+> > >  {
+> > > -       int cpu;
+> > >         struct rcu_node *rnp;
+> > >
+> > >         trace_rcu_exp_grace_period(rcu_state.name, rcu_exp_gp_seq_endval(), TPS("reset"));
+> > > @@ -435,28 +539,21 @@ static void sync_rcu_exp_select_cpus(void)
+> > >                 rnp->exp_need_flush = false;
+> > >                 if (!READ_ONCE(rnp->expmask))
+> > >                         continue; /* Avoid early boot non-existent wq. */
+> > > -               if (!READ_ONCE(rcu_par_gp_wq) ||
+> > > +               if (!rcu_gp_par_worker_started() ||
+> > >                     rcu_scheduler_active != RCU_SCHEDULER_RUNNING ||
+> > >                     rcu_is_last_leaf_node(rnp)) {
+> > > -                       /* No workqueues yet or last leaf, do direct call. */
+> > > +                       /* No worker started yet or last leaf, do direct call. */
+> > >                         sync_rcu_exp_select_node_cpus(&rnp->rew.rew_work);
+> > >                         continue;
+> > >                 }
+> > > -               INIT_WORK(&rnp->rew.rew_work, sync_rcu_exp_select_node_cpus);
+> > > -               cpu = find_next_bit(&rnp->ffmask, BITS_PER_LONG, -1);
+> > > -               /* If all offline, queue the work on an unbound CPU. */
+> > > -               if (unlikely(cpu > rnp->grphi - rnp->grplo))
+> > > -                       cpu = WORK_CPU_UNBOUND;
+> > > -               else
+> > > -                       cpu += rnp->grplo;
+> > > -               queue_work_on(cpu, rcu_par_gp_wq, &rnp->rew.rew_work);
+> > > +               sync_rcu_exp_select_cpus_queue_work(rnp);
+> > >                 rnp->exp_need_flush = true;
+> > >         }
+> > >
+> > > -       /* Wait for workqueue jobs (if any) to complete. */
+> > > +       /* Wait for jobs (if any) to complete. */
+> > >         rcu_for_each_leaf_node(rnp)
+> > >                 if (rnp->exp_need_flush)
+> > > -                       flush_work(&rnp->rew.rew_work);
+> > > +                       sync_rcu_exp_select_cpus_flush_work(rnp);
+> > >  }
+> > >
+> > >  /*
+> > > @@ -622,17 +719,6 @@ static void rcu_exp_sel_wait_wake(unsigned long s)
+> > >         rcu_exp_wait_wake(s);
+> > >  }
+> > >
+> > > -/*
+> > > - * Work-queue handler to drive an expedited grace period forward.
+> > > - */
+> > > -static void wait_rcu_exp_gp(struct work_struct *wp)
+> > > -{
+> > > -       struct rcu_exp_work *rewp;
+> > > -
+> > > -       rewp = container_of(wp, struct rcu_exp_work, rew_work);
+> > > -       rcu_exp_sel_wait_wake(rewp->rew_s);
+> > > -}
+> > > -
+> > >  #ifdef CONFIG_PREEMPT_RCU
+> > >
+> > >  /*
+> > > @@ -848,20 +934,19 @@ void synchronize_rcu_expedited(void)
+> > >         } else {
+> > >                 /* Marshall arguments & schedule the expedited grace period. */
+> > >                 rew.rew_s = s;
+> > > -               INIT_WORK_ONSTACK(&rew.rew_work, wait_rcu_exp_gp);
+> > > -               queue_work(rcu_gp_wq, &rew.rew_work);
+> > > +               synchronize_rcu_expedited_queue_work(&rew);
+> > >         }
+> > >
+> > >         /* Wait for expedited grace period to complete. */
+> > >         rnp = rcu_get_root();
+> > >         wait_event(rnp->exp_wq[rcu_seq_ctr(s) & 0x3],
+> > >                    sync_exp_work_done(s));
+> > > -       smp_mb(); /* Workqueue actions happen before return. */
+> > > +       smp_mb(); /* Work actions happen before return. */
+> > >
+> > >         /* Let the next expedited grace period start. */
+> > >         mutex_unlock(&rcu_state.exp_mutex);
+> > >
+> > >         if (likely(!boottime))
+> > > -               destroy_work_on_stack(&rew.rew_work);
+> > > +               synchronize_rcu_expedited_destroy_work(&rew);
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(synchronize_rcu_expedited);
+> > >
+> > > base-commit: 42e7a03d3badebd4e70aea5362d6914dfc7c220b
+> > > --
+> > > 2.35.1.1178.g4f1659d476-goog
+> > >

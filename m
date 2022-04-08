@@ -2,105 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B80F84F8DCE
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 345474F8D60
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233960AbiDHDpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 23:45:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43630 "EHLO
+        id S233972AbiDHDq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 23:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232750AbiDHDpM (ORCPT
+        with ESMTP id S229532AbiDHDqY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 23:45:12 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F108B6C1;
-        Thu,  7 Apr 2022 20:43:10 -0700 (PDT)
-X-UUID: e904f502777a4528b0b966f05d543c3c-20220408
-X-UUID: e904f502777a4528b0b966f05d543c3c-20220408
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <jiaxin.yu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1523501793; Fri, 08 Apr 2022 11:43:04 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 8 Apr 2022 11:43:02 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 8 Apr 2022 11:43:01 +0800
-Message-ID: <505ab354843d9360887e8052a3dbf6712317c6fd.camel@mediatek.com>
-Subject: Re: [v9 2/4] ASoC: mediatek: mt8192: refactor for I2S3 DAI link of
- speaker
-From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
-To:     "=?ISO-8859-1?Q?N=EDcolas?= F. R. A. Prado" <nfraprado@collabora.com>
-CC:     <broonie@kernel.org>, <robh+dt@kernel.org>, <tzungbi@google.com>,
-        <angelogioacchino.delregno@collabora.com>, <aaronyu@google.com>,
-        <matthias.bgg@gmail.com>, <trevor.wu@mediatek.com>,
-        <linmq006@gmail.com>, <alsa-devel@alsa-project.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Fri, 8 Apr 2022 11:43:01 +0800
-In-Reply-To: <20220407212420.tncc576jo5iwaqk7@notapiano>
-References: <20220406100514.11269-1-jiaxin.yu@mediatek.com>
-         <20220406100514.11269-3-jiaxin.yu@mediatek.com>
-         <20220407212420.tncc576jo5iwaqk7@notapiano>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 7 Apr 2022 23:46:24 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83B4AC92E;
+        Thu,  7 Apr 2022 20:44:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649389461; x=1680925461;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IM4iBK3U8QJywOCMgFROUzizS6PUIpTFKrPyenWYVU4=;
+  b=ZCT1fU56zzoMZ/WgIkmgZ2KVEw/4dCbnC0zw6Lw53/Psr3k8rMJdin3G
+   FnbglK9YcxzAWb7Y7BaACy+c/StkMTZxCrDX3fhdcE5M+75RbieNcZXCI
+   sEKQxnOsBcYUmO8A1nmHtiVTz51CBH7uyts3yYwBpMdO8Y+4kEiKKGXjd
+   Uj1Lp7wYJAZFhI6lh7tExMuUMbkctAvxpVXafHROxXTpTL7z63QzmNtBi
+   AK5LJbtACkFx+pSOAMEHaNiUPpaXcwe4IB/C3OyylbbRIouLP5YCM1niy
+   vtGJm05B/mfYCVZJonDR0hcbNV/U72+IvEjmMw61+mIbRBm2eXsh/NrIb
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="260335403"
+X-IronPort-AV: E=Sophos;i="5.90,243,1643702400"; 
+   d="scan'208";a="260335403"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 20:44:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,243,1643702400"; 
+   d="scan'208";a="851925493"
+Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 07 Apr 2022 20:44:17 -0700
+Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ncfXl-00060p-6Z;
+        Fri, 08 Apr 2022 03:44:17 +0000
+Date:   Fri, 8 Apr 2022 11:43:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        casey.schaufler@intel.com, jmorris@namei.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, casey@schaufler-ca.com,
+        linux-audit@redhat.com, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        paul@paul-moore.com, stephen.smalley.work@gmail.com,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v34 11/29] LSM: Use lsmblob in security_current_getsecid
+Message-ID: <202204081146.DPLvGqQ7-lkp@intel.com>
+References: <20220407212230.12893-12-casey@schaufler-ca.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220407212230.12893-12-casey@schaufler-ca.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-04-07 at 17:24 -0400, Nícolas F. R. A. Prado wrote:
-> Hi Jiaxin,
-> 
-> On Wed, Apr 06, 2022 at 06:05:12PM +0800, Jiaxin Yu wrote:
-> > MT8192 platform will use rt1015 or rt1015p codec, so through the
-> > snd_soc_of_get_dai_link_codecs() to complete the configuration
-> > of dai_link's codecs.
-> 
-> Suggestion for the commit message:
-> 
-> As part of the refactoring to allow the same machine driver to be
-> used for the
-> rt1015(p) and rt5682(s) codecs on the MT8192 platform, parse the
-> rt1015(p)
-> codecs from the speaker-codecs property in the devicetree and wire
-> them to the
-> I2S3 backend, instead of hardcoding the links and selecting through
-> the
-> compatible.
-> 
-Hi Nícolas,
+Hi Casey,
 
-I will update the commit message according to the rule of one row per
-75 columns. I will also refer to your suggestions to modify the rest of
-the series. Thanks for your review.
+I love your patch! Perhaps something to improve:
 
-Jiaxin.Yu
-Thanks.
+[auto build test WARNING on pcmoore-selinux/next]
+[also build test WARNING on linus/master v5.18-rc1 next-20220407]
+[cannot apply to pcmoore-audit/next jmorris-security/next-testing]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> > 
-> > Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
-> 
-> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> 
-> - Tested on mt8192-asurada-spherion (rt1015p and rt5682). All audio
-> paths still
->   work as previous to this refactor. And it's still possible to omit
->   mediatek,hdmi-codec.
-> 
-> Thanks,
-> Nícolas
+url:    https://github.com/intel-lab-lkp/linux/commits/Casey-Schaufler/integrity-disassociate-ima_filter_rule-from-security_audit_rule/20220408-062243
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git next
+config: arm-randconfig-c002-20220408 (https://download.01.org/0day-ci/archive/20220408/202204081146.DPLvGqQ7-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/0d4df6ae86e123057cb18eeb5ba1b1eff2641fe4
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Casey-Schaufler/integrity-disassociate-ima_filter_rule-from-security_audit_rule/20220408-062243
+        git checkout 0d4df6ae86e123057cb18eeb5ba1b1eff2641fe4
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash security/integrity/ima/
 
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   security/integrity/ima/ima_appraise.c: In function 'ima_must_appraise':
+>> security/integrity/ima/ima_appraise.c:81:16: warning: array subscript 0 is outside array bounds of 'u32[0]' {aka 'unsigned int[]'} [-Warray-bounds]
+      81 |         return ima_match_policy(mnt_userns, inode, current_cred(),
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      82 |                                 blob.secid[0], func, mask,
+         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+      83 |                                 IMA_APPRAISE | IMA_HASH, NULL, NULL, NULL,
+         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      84 |                                 NULL);
+         |                                 ~~~~~
+   In file included from include/linux/ima.h:12,
+                    from security/integrity/ima/ima_appraise.c:14:
+   include/linux/security.h:150:17: note: while referencing 'secid'
+     150 |         u32     secid[LSMBLOB_ENTRIES];
+         |                 ^~~~~
+   security/integrity/ima/ima_appraise.c:74:24: note: defined here 'blob'
+      74 |         struct lsmblob blob;
+         |                        ^~~~
+
+
+vim +81 security/integrity/ima/ima_appraise.c
+
+    65	
+    66	/*
+    67	 * ima_must_appraise - set appraise flag
+    68	 *
+    69	 * Return 1 to appraise or hash
+    70	 */
+    71	int ima_must_appraise(struct user_namespace *mnt_userns, struct inode *inode,
+    72			      int mask, enum ima_hooks func)
+    73	{
+    74		struct lsmblob blob;
+    75	
+    76		if (!ima_appraise)
+    77			return 0;
+    78	
+    79		security_current_getsecid_subj(&blob);
+    80		/* scaffolding the .secid[0] */
+  > 81		return ima_match_policy(mnt_userns, inode, current_cred(),
+    82					blob.secid[0], func, mask,
+    83					IMA_APPRAISE | IMA_HASH, NULL, NULL, NULL,
+    84					NULL);
+    85	}
+    86	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

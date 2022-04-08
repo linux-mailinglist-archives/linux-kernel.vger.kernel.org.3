@@ -2,52 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DAA44F8E6A
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:26:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64EDB4F8E18
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:26:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234195AbiDHEMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 00:12:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49080 "EHLO
+        id S234180AbiDHEMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 00:12:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbiDHEMP (ORCPT
+        with ESMTP id S232390AbiDHEMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 00:12:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4B41EA5E7;
-        Thu,  7 Apr 2022 21:10:13 -0700 (PDT)
+        Fri, 8 Apr 2022 00:12:17 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751781EB805;
+        Thu,  7 Apr 2022 21:10:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DABCD61E16;
-        Fri,  8 Apr 2022 04:10:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 346FDC385A6;
+        by sin.source.kernel.org (Postfix) with ESMTPS id E472DCE29FF;
+        Fri,  8 Apr 2022 04:10:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 450C4C385A3;
         Fri,  8 Apr 2022 04:10:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1649391012;
-        bh=s5hllkVWyKG3dwiRu2x53s6FttJzBDWJDsJdzlkdWME=;
+        bh=/ocmwyPmcxJaE7A3jgFW3oPLW1FUfozUVp4GcoMvkoE=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=tQtUUgGg5F+MPr7OtlF15gjaq27E6Zt5oTtYbUl2IgZ5J+XKJdW2J79ZC2vsqr9X8
-         p5JAhzAbMHSWGHfcw0v21guqZ1gk6W3U7dFZkvfvQtwhChgngCotkIyRL4Nq5+sSLA
-         JG6oK/EWssmOZutGwnPZqTkXnK+7VIBV3gpyXO/aFgZKu0Hxfv/78DHusX3UE4C/BU
-         h2BzgHPPyJQ9gh9+tHFcN9gwCKrDl49Xzngz5iaaa85nADt0A2xfWQ1ePEQJ7IW2Zu
-         3/Fq6VK2PgEtF/YA3GIGhKjTGakuFDnemmdHxcGcaz6wZ5adJrKQQm/a3wiFRM1Fiv
-         2q/eZALTS+MmQ==
+        b=SU50/V/1U1F4SxYfBIQWfbo0x2uJIoLXzsSxn2er9wPOXoHmtlBSuG5CIrrohjVTb
+         nNg9fEtBcYEMA9yFHB33kFDTr1uKGWwVTcUqvHW38MnmsXHOBQinc6bGlar7TYBpst
+         NPG8GubMiAxfSQQUoMX6MxeKQYUQHHwbzRvZz4i2NmjLG5L0IHOGxpZ98gmC743coz
+         o1gV3lGBsKH1np/fryx2V6nRC3KtwEJ+yjt0DUzZciS1Nmak3kEg2r41Bc/13SIobC
+         7XvUq0Ggf4JUvRSDa2EHhww0FP7BtMsq57lFBgD1C7Im3Md4qveOx/FzyzySfXmZTC
+         cMpeY/dYt35kw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 18876E8DBDD;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 22C9BE85BCB;
         Fri,  8 Apr 2022 04:10:12 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] sfc: Stop using iommu_present()
+Subject: Re: [PATCH v2] qed: remove an unneed NULL check on list iterator
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <164939101209.29309.3949750124677153031.git-patchwork-notify@kernel.org>
+Message-Id: <164939101213.29309.15840560082982456814.git-patchwork-notify@kernel.org>
 Date:   Fri, 08 Apr 2022 04:10:12 +0000
-References: <7350f957944ecfce6cce90f422e3992a1f428775.1649166055.git.robin.murphy@arm.com>
-In-Reply-To: <7350f957944ecfce6cce90f422e3992a1f428775.1649166055.git.robin.murphy@arm.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     ecree.xilinx@gmail.com, habetsm.xilinx@gmail.com,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, iommu@lists.linux-foundation.org,
+References: <20220406015921.29267-1-xiam0nd.tong@gmail.com>
+In-Reply-To: <20220406015921.29267-1-xiam0nd.tong@gmail.com>
+To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Cc:     aelior@marvell.com, manishc@marvell.com, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -64,20 +63,19 @@ Hello:
 This patch was applied to netdev/net-next.git (master)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Tue,  5 Apr 2022 14:40:55 +0100 you wrote:
-> Even if an IOMMU might be present for some PCI segment in the system,
-> that doesn't necessarily mean it provides translation for the device
-> we care about. It appears that what we care about here is specifically
-> whether DMA mapping ops involve any IOMMU overhead or not, so check for
-> translation actually being active for our device.
+On Wed,  6 Apr 2022 09:59:21 +0800 you wrote:
+> The define for_each_pci_dev(d) is:
+>  while ((d = pci_get_device(PCI_ANY_ID, PCI_ANY_ID, d)) != NULL)
 > 
-> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+> Thus, the list iterator 'd' is always non-NULL so it doesn't need to
+> be checked. So just remove the unnecessary NULL check. Also remove the
+> unnecessary initializer because the list iterator is always initialized.
 > 
 > [...]
 
 Here is the summary with links:
-  - [net-next] sfc: Stop using iommu_present()
-    https://git.kernel.org/netdev/net-next/c/6a62924c0a81
+  - [v2] qed: remove an unneed NULL check on list iterator
+    https://git.kernel.org/netdev/net-next/c/4daf5f195630
 
 You are awesome, thank you!
 -- 

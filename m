@@ -2,72 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DB504F9F9F
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 00:31:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E3C4F9FA0
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 00:34:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239395AbiDHWdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 18:33:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47464 "EHLO
+        id S234678AbiDHWf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 18:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234528AbiDHWdk (ORCPT
+        with ESMTP id S229609AbiDHWf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 18:33:40 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269971B7B0;
-        Fri,  8 Apr 2022 15:31:36 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id l26so19974713ejx.1;
-        Fri, 08 Apr 2022 15:31:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MIEuyIQOzr7GBajh+n+UsyE5Wi+bFa0QsRrOoLXPvQs=;
-        b=oHP7fYwJCiexaqI8I+it/ifNdESNBhEUa2a5EkkGsFvbgoDOGdrPlE92AvQHwRpIDd
-         /2zBlS69RK/2kPbk2Z1sP2bWuSWKvAozNmBOfX2WC0UxKS12GpP+PTgWuSNmznBMVCgh
-         BTcggNlDq4v3L46zaP5NHvj7lpIIc7+FtoLFHX0+hfpcXogu6CwiWqwje49BvnLpMw49
-         mrFS7+KNGpdlw6+9eibEvPSalKElKm5HsN1HkC8TVP1/E0kk7d0sc7fjwN0gWKvIiCIz
-         cE7ktDUlnYWlsC9Bq54WCoZ/tskD+JFwd0njFZzQvQYrwD+R6pTKWEXHZX9SoloMJQMU
-         i7TA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MIEuyIQOzr7GBajh+n+UsyE5Wi+bFa0QsRrOoLXPvQs=;
-        b=LDJzUa/OHTSmlXrZZwvXs5qMjD9ypeRSuxgRMmm8bo7nDRZKxPuBtCXnUy6Ksa6I4E
-         UJr4UGox6hgk5gEYSeT0JZxAMdxDDCQw5WqRhdV6yhRSXAFIfzOmDjGgPG0qvbeIwvzC
-         Ef/Mm+MuD/l9uIhF4Y+Gni8+u3r75DcC4s+WJ8DCBNSQV80QyyUz289k+b9iYFNss78V
-         JbYVoCfOpmKKq7DA0C8l8JP1CGNMdn+17GGY11aNJ0p46jyqkA0+UKfVSzMIfZ1mSQAV
-         jCMfa2hpt6WuFxSCLbTtOy9BsqsfFA+51+pFfgR++41F8e9PT8r3j6pQ0RkPriJeIwBX
-         f9ug==
-X-Gm-Message-State: AOAM530IJclH4wpjuzPdfmR/OOvkNYJefKQCYolM5pu+KhEcp0DfPVDN
-        5XQrGXkJ1MBTNcaa8ENyqqM=
-X-Google-Smtp-Source: ABdhPJwZHXUsf05CmofYgOWQixJUrHdRv1lrpE/Q183lJUyfC1JgwjV4k3etYG6TKy/yNZO0btD4Sw==
-X-Received: by 2002:a17:907:7f8d:b0:6da:b3d6:a427 with SMTP id qk13-20020a1709077f8d00b006dab3d6a427mr19782384ejc.509.1649457094569;
-        Fri, 08 Apr 2022 15:31:34 -0700 (PDT)
-Received: from localhost.localdomain (host-87-4-4-217.retail.telecomitalia.it. [87.4.4.217])
-        by smtp.gmail.com with ESMTPSA id m14-20020a056402510e00b0041d0c0942adsm2277425edd.52.2022.04.08.15.31.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 15:31:33 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        Martiros Shakhzadyan <vrzh@vrzh.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Subject: [PATCH] staging: media: atomisp: Convert kmap() to kmap_local_page()
-Date:   Sat,  9 Apr 2022 00:31:29 +0200
-Message-Id: <20220408223129.3844-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 8 Apr 2022 18:35:56 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1906B29A
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 15:33:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649457231; x=1680993231;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Eyr3rnHZFWM8Kq5tlkOFbVPOWSflB44fUC999WLRy6w=;
+  b=EB/FbOI/OqbVCDQLImUe+DTbHErrXd+vMfHP60Z2EMkGlD1SkzFydEDN
+   9MoJ+F1g4Qw1hJAZreFp8lnmxwvC7GOrCOBZMflEz7Xp2t51vY7rlssHn
+   qE5fTCNZWK5bGpOvxB2RdUBziR6KEERqRHKJ/4gBdY19uEhyGGp22yQpP
+   fZcM6mMWEDH5jfX9EtF6m7WpGla2wjzjQI4gNhKhfdyLK0qPsxd6TJFbw
+   sTWXOKZysHRrSnbFHzegsTBOjo1EM0ixrhQhs12dS69pselIr7iYs2i6e
+   Tu18sozvCayNQaUgZogaYpR/kbigXBgyktVCBR4owusW1MAsCrbsCflXy
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="259307176"
+X-IronPort-AV: E=Sophos;i="5.90,246,1643702400"; 
+   d="scan'208";a="259307176"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 15:33:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,246,1643702400"; 
+   d="scan'208";a="621815434"
+Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 08 Apr 2022 15:33:49 -0700
+Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ncxAq-0000gb-Rf;
+        Fri, 08 Apr 2022 22:33:48 +0000
+Date:   Sat, 9 Apr 2022 06:32:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jonathan Bell <jonathan@raspberrypi.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Dom Cobley <popcornmix@gmail.com>
+Subject: [l1k:smsc95xx_5.17 140/888] drivers/usb/host/xhci.c:1689:29: sparse:
+ sparse: incorrect type in assignment (different base types)
+Message-ID: <202204090637.J4hjtLu2-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,42 +63,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The use of kmap() is being deprecated in favor of kmap_local_page() where
-it is feasible. With kmap_local_page(), the mapping is per thread, CPU
-local and not globally visible.
+tree:   https://github.com/l1k/linux smsc95xx_5.17
+head:   240f56c27361c195cd502d95aba51c6b8e5b808c
+commit: 18a0d6abec9adca77be3ce06941448e33250e4ed [140/888] xhci: implement xhci_fixup_endpoint for interval adjustments
+config: nios2-randconfig-s032-20220408 (https://download.01.org/0day-ci/archive/20220409/202204090637.J4hjtLu2-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/l1k/linux/commit/18a0d6abec9adca77be3ce06941448e33250e4ed
+        git remote add l1k https://github.com/l1k/linux
+        git fetch --no-tags l1k smsc95xx_5.17
+        git checkout 18a0d6abec9adca77be3ce06941448e33250e4ed
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=nios2 SHELL=/bin/bash
 
-load_and_flush_by_kmap() is a function where the use of kmap_local_page()
-in place of kmap() is correctly suited.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Convert load_and_flush_by_kmap() from kmap() to kmap_local_page().
 
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
- drivers/staging/media/atomisp/pci/hmm/hmm.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+sparse warnings: (new ones prefixed by >>)
+>> drivers/usb/host/xhci.c:1689:29: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 [usertype] add_flags @@     got unsigned int @@
+   drivers/usb/host/xhci.c:1689:29: sparse:     expected restricted __le32 [usertype] add_flags
+   drivers/usb/host/xhci.c:1689:29: sparse:     got unsigned int
 
-diff --git a/drivers/staging/media/atomisp/pci/hmm/hmm.c b/drivers/staging/media/atomisp/pci/hmm/hmm.c
-index c1cda16f2dc0..6394385b6637 100644
---- a/drivers/staging/media/atomisp/pci/hmm/hmm.c
-+++ b/drivers/staging/media/atomisp/pci/hmm/hmm.c
-@@ -350,7 +350,7 @@ static int load_and_flush_by_kmap(ia_css_ptr virt, void *data,
- 		idx = (virt - bo->start) >> PAGE_SHIFT;
- 		offset = (virt - bo->start) - (idx << PAGE_SHIFT);
- 
--		src = (char *)kmap(bo->page_obj[idx].page) + offset;
-+		src = (char *)kmap_local_page(bo->page_obj[idx].page) + offset;
- 
- 		if ((bytes + offset) >= PAGE_SIZE) {
- 			len = PAGE_SIZE - offset;
-@@ -369,7 +369,7 @@ static int load_and_flush_by_kmap(ia_css_ptr virt, void *data,
- 
- 		clflush_cache_range(src, len);
- 
--		kunmap(bo->page_obj[idx].page);
-+		kunmap_local(src);
- 	}
- 
- 	return 0;
+vim +1689 drivers/usb/host/xhci.c
+
+  1612	
+  1613	static void xhci_fixup_endpoint(struct usb_hcd *hcd, struct usb_device *udev,
+  1614					struct usb_host_endpoint *ep, int interval)
+  1615	{
+  1616		struct xhci_hcd *xhci;
+  1617		struct xhci_ep_ctx *ep_ctx_out, *ep_ctx_in;
+  1618		struct xhci_command *command;
+  1619		struct xhci_input_control_ctx *ctrl_ctx;
+  1620		struct xhci_virt_device *vdev;
+  1621		int xhci_interval;
+  1622		int ret;
+  1623		int ep_index;
+  1624		unsigned long flags;
+  1625		u32 ep_info_tmp;
+  1626	
+  1627		xhci = hcd_to_xhci(hcd);
+  1628		ep_index = xhci_get_endpoint_index(&ep->desc);
+  1629	
+  1630		/* FS/LS interval translations */
+  1631		if ((udev->speed == USB_SPEED_FULL ||
+  1632		     udev->speed == USB_SPEED_LOW))
+  1633			interval *= 8;
+  1634	
+  1635		mutex_lock(&xhci->mutex);
+  1636	
+  1637		spin_lock_irqsave(&xhci->lock, flags);
+  1638	
+  1639		vdev = xhci->devs[udev->slot_id];
+  1640		/* Get context-derived endpoint interval */
+  1641		ep_ctx_out = xhci_get_ep_ctx(xhci, vdev->out_ctx, ep_index);
+  1642		ep_ctx_in = xhci_get_ep_ctx(xhci, vdev->in_ctx, ep_index);
+  1643		xhci_interval = EP_INTERVAL_TO_UFRAMES(le32_to_cpu(ep_ctx_out->ep_info));
+  1644	
+  1645		if (interval == xhci_interval) {
+  1646			spin_unlock_irqrestore(&xhci->lock, flags);
+  1647			mutex_unlock(&xhci->mutex);
+  1648			return;
+  1649		}
+  1650	
+  1651		xhci_dbg(xhci, "Fixup interval=%d xhci_interval=%d\n",
+  1652			 interval, xhci_interval);
+  1653		command = xhci_alloc_command_with_ctx(xhci, true, GFP_ATOMIC);
+  1654		if (!command) {
+  1655			/* Failure here is benign, poll at the original rate */
+  1656			spin_unlock_irqrestore(&xhci->lock, flags);
+  1657			mutex_unlock(&xhci->mutex);
+  1658			return;
+  1659		}
+  1660	
+  1661		/* xHCI uses exponents for intervals... */
+  1662		xhci_interval = fls(interval) - 1;
+  1663		xhci_interval = clamp_val(xhci_interval, 3, 10);
+  1664		ep_info_tmp = le32_to_cpu(ep_ctx_out->ep_info);
+  1665		ep_info_tmp &= ~EP_INTERVAL(255);
+  1666		ep_info_tmp |= EP_INTERVAL(xhci_interval);
+  1667	
+  1668		/* Keep the endpoint context up-to-date while issuing the command. */
+  1669		xhci_endpoint_copy(xhci, vdev->in_ctx,
+  1670				   vdev->out_ctx, ep_index);
+  1671		ep_ctx_in->ep_info = cpu_to_le32(ep_info_tmp);
+  1672	
+  1673		/*
+  1674		 * We need to drop the lock, so take an explicit copy
+  1675		 * of the ep context.
+  1676		 */
+  1677		xhci_endpoint_copy(xhci, command->in_ctx, vdev->in_ctx, ep_index);
+  1678	
+  1679		ctrl_ctx = xhci_get_input_control_ctx(command->in_ctx);
+  1680		if (!ctrl_ctx) {
+  1681			xhci_warn(xhci,
+  1682				  "%s: Could not get input context, bad type.\n",
+  1683				  __func__);
+  1684			spin_unlock_irqrestore(&xhci->lock, flags);
+  1685			xhci_free_command(xhci, command);
+  1686			mutex_unlock(&xhci->mutex);
+  1687			return;
+  1688		}
+> 1689		ctrl_ctx->add_flags = xhci_get_endpoint_flag_from_index(ep_index);
+  1690		ctrl_ctx->drop_flags = 0;
+  1691	
+  1692		spin_unlock_irqrestore(&xhci->lock, flags);
+  1693	
+  1694		ret = xhci_configure_endpoint(xhci, udev, command,
+  1695					      false, false);
+  1696		if (ret)
+  1697			xhci_warn(xhci, "%s: Configure endpoint failed: %d\n",
+  1698				  __func__, ret);
+  1699		xhci_free_command(xhci, command);
+  1700		mutex_unlock(&xhci->mutex);
+  1701	}
+  1702	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

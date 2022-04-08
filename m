@@ -2,103 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D69354F9691
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 15:21:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC2144F9695
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 15:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236209AbiDHNXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 09:23:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41066 "EHLO
+        id S236236AbiDHNXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 09:23:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235323AbiDHNXL (ORCPT
+        with ESMTP id S235323AbiDHNX3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 09:23:11 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB312625
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 06:21:08 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id i27so17297353ejd.9
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 06:21:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=YPyUmvWPJhClpiPWaffqsk3VwK+C7LO2AiimuAuL1Ro=;
-        b=aEjngbWMuGEjH4EmejJTL8nfW0MPlu5EnEsysirIWeHL6wcIbqM/rsJpoG6/zo3m2C
-         KNjMkZlpU+uOua8w7roVr1e7kiu2wEe60HwJD3IJuXNbsg5kY5wrqOi1uFQj6bjhmAQU
-         H5Od0tMND3SzzYECenAG+5rIcMxRtG9HF1bpWrabqGSeA/T0jholG7YCwSYzokS+szVA
-         Us9sBu+b33kGR5i63A2vc3u7BrE0+o9V8+Tf0PhtmpFIGUnL9VlR175cPjKTAJxClp3F
-         CspHFKflvB2bdfOJJe73Rx1J1kBFRMxr7WQjFQCj4Aj295d1LL7Z12/4gzpG8DXxzcp7
-         Lx5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=YPyUmvWPJhClpiPWaffqsk3VwK+C7LO2AiimuAuL1Ro=;
-        b=xpidVxnColnuiHx8Rxp2cj3raLpkENcPW23S3C7qdlcS4Nt1VrY+GsLNA4+fiQpeqW
-         18x2PKc4b4aBJfoZh9HAYvVVUNaAO8gnhcXMpNLVUrHCi7/M850gOzylpSb3ixmEcwV/
-         BHYPvftlkjLvldFwjfSQcwx4+Xkx4QKvM35WpHcuJvfRyT9sAqb5MB5JcZwZ24oz6+Je
-         XdzCV116T7ZRlKihdNSJeNZ0U53WOD/rDreTcOrizA3elqASKs/9xN64LVRRTv3onFFL
-         Ql9paBbNWBhZf0fNLlcKQFF3PanZ30XqGWgmIxdC6kAKRHtVSlLdFxcE7EDoynAyI8Q4
-         lIzA==
-X-Gm-Message-State: AOAM5306VsYlvLM8tDXUdZQ4zuWhX/P1k/qtHmiIeHyvKqDAuq2hiSJo
-        hliQoD4jAsOgwSTQp9rRHx7SfCYfJS8rW707baM=
-X-Google-Smtp-Source: ABdhPJz5+siwf2gqw3X2rRzoJIanYM41NMCYQCryCJRCwC2NONx2btw2hzLJPUuBprtMbGxfMaoG02PJ8uEuLtKbtJ0=
-X-Received: by 2002:a17:907:9485:b0:6db:331:591e with SMTP id
- dm5-20020a170907948500b006db0331591emr18204422ejc.478.1649424066578; Fri, 08
- Apr 2022 06:21:06 -0700 (PDT)
+        Fri, 8 Apr 2022 09:23:29 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8542625;
+        Fri,  8 Apr 2022 06:21:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649424085; x=1680960085;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=yJ+a09qZfU8xn/sBjF/pizQ4GwvK+1hMB8dFu0xFHhY=;
+  b=dks3rhWdqhN/8km+lLvg+eDM2BEZZbK2H3s8q69OoCP/q4UV0f+eQPOZ
+   Km6RYRfbgCVECMao6ld7j5xW8JgV4XnWNJBux8jvNV5eadub/IbKKbt8S
+   jJmKbZIY3yhs28LczHnujpMIyJA3QXJi4zDBJotXcmRx8rJGukYRZ0tkJ
+   +VIYmbrYNj7wPbCWYDGQS1q9/x3rOt2iCVpJv8Zp0y9htysN22sieR6IK
+   ndCd5euthEGR8dMpHCxOHuk/dLwEtT8ltxzWspjIunKla607T2WQWVjYn
+   yWTLuZw1WdZ6CVvrfe8x+D/Vcr17yN+afyO3kAAmd028abI3x/H97Hd6R
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="261582622"
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="261582622"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 06:21:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="571485977"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
+  by orsmga008.jf.intel.com with ESMTP; 08 Apr 2022 06:21:16 -0700
+Date:   Fri, 8 Apr 2022 21:21:05 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com
+Subject: Re: [PATCH v5 05/13] KVM: Extend the memslot to support fd-based
+ private memory
+Message-ID: <20220408132105.GC57095@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
+ <20220310140911.50924-6-chao.p.peng@linux.intel.com>
+ <YkIoRDNbwJH/IDeC@google.com>
 MIME-Version: 1.0
-References: <20220408092803.3188-1-h0tc0d3@gmail.com> <4o2YD5id7zhK5g__CUK3Yf-6Dj459XQ0qsydW6wKHdco3YYtl78BqGUfXvQ9UO0AZoAsMPfhFB0jw1BFldiFDcbZXmGgsobuAoTMWmoDqmE=@emersion.fr>
- <CAP+8YyED70CSqVRaB7JgrAtK-yvBx5EsvrrdR7EpvOG2AVhskQ@mail.gmail.com> <QfKpxmkE_cy9wt5VJruw_TSdnl5KceKM8BxJGmZSBs-KiaRwIYfgc8h_-5h7Wmj6G-NtUJ3A88V5pzPvZuLlpkK-oRO5pSjeTxwHcZWlogs=@emersion.fr>
-In-Reply-To: <QfKpxmkE_cy9wt5VJruw_TSdnl5KceKM8BxJGmZSBs-KiaRwIYfgc8h_-5h7Wmj6G-NtUJ3A88V5pzPvZuLlpkK-oRO5pSjeTxwHcZWlogs=@emersion.fr>
-From:   Grigory Vasilyev <h0tc0d3@gmail.com>
-Date:   Fri, 8 Apr 2022 16:21:04 +0300
-Message-ID: <CAD5ugGD6QzCUqk7_EVwH9Cc6PQtx_VfjVRWzzP9uKR5tkGh1RQ@mail.gmail.com>
-Subject: Re: [PATCH] drm/amdgpu: Fix NULL pointer dereference
-To:     Simon Ser <contact@emersion.fr>
-Cc:     Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Melissa Wen <mwen@igalia.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?Q?Michel_D=C3=A4nzer?= <mdaenzer@redhat.com>,
-        Evan Quan <evan.quan@amd.com>,
-        Sean Paul <seanpaul@chromium.org>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
-        ML dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YkIoRDNbwJH/IDeC@google.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simon Ser and Bas Nieuwenhuizen, do you understand that you are
-proposing to make the code less safe in the future? In the future,
-someone might rewrite the code and we'll get an error.
+On Mon, Mar 28, 2022 at 09:27:32PM +0000, Sean Christopherson wrote:
+> On Thu, Mar 10, 2022, Chao Peng wrote:
+> > Extend the memslot definition to provide fd-based private memory support
+> > by adding two new fields (private_fd/private_offset). The memslot then
+> > can maintain memory for both shared pages and private pages in a single
+> > memslot. Shared pages are provided by existing userspace_addr(hva) field
+> > and private pages are provided through the new private_fd/private_offset
+> > fields.
+> > 
+> > Since there is no 'hva' concept anymore for private memory so we cannot
+> > rely on get_user_pages() to get a pfn, instead we use the newly added
+> > memfile_notifier to complete the same job.
+> > 
+> > This new extension is indicated by a new flag KVM_MEM_PRIVATE.
+> > 
+> > Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+> 
+> Needs a Co-developed-by: for Yu, or a From: if Yu is the sole author.
 
-=D0=BF=D1=82, 8 =D0=B0=D0=BF=D1=80. 2022 =D0=B3. =D0=B2 14:48, Simon Ser <c=
-ontact@emersion.fr>:
->
-> On Friday, April 8th, 2022 at 13:28, Bas Nieuwenhuizen <bas@basnieuwenhui=
-zen.nl> wrote:
->
-> > On Fri, Apr 8, 2022 at 12:01 PM Simon Ser contact@emersion.fr wrote:
-> >
-> > > Is amdgpu_display_get_fb_info ever called with NULL tiling_flags/tmz_=
-surface?
-> > > If not, there's no point in adding NULL checks.
-> >
-> > It isn't called with NULL anywhere, the NULL checks that already exist
-> > seem redundant.
->
-> Grigory, would be be willing to submit a v2 which removes the unnecessary
-> NULL checks?
+Yes a Co-developed-by for Yu is needed, for all the patches throught the series.
+
+> 
+> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> > ---
+> >  Documentation/virt/kvm/api.rst | 37 +++++++++++++++++++++++++++-------
+> >  include/linux/kvm_host.h       |  7 +++++++
+> >  include/uapi/linux/kvm.h       |  8 ++++++++
+> >  3 files changed, 45 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> > index 3acbf4d263a5..f76ac598606c 100644
+> > --- a/Documentation/virt/kvm/api.rst
+> > +++ b/Documentation/virt/kvm/api.rst
+> > @@ -1307,7 +1307,7 @@ yet and must be cleared on entry.
+> >  :Capability: KVM_CAP_USER_MEMORY
+> >  :Architectures: all
+> >  :Type: vm ioctl
+> > -:Parameters: struct kvm_userspace_memory_region (in)
+> > +:Parameters: struct kvm_userspace_memory_region(_ext) (in)
+> >  :Returns: 0 on success, -1 on error
+> >  
+> >  ::
+> > @@ -1320,9 +1320,17 @@ yet and must be cleared on entry.
+> >  	__u64 userspace_addr; /* start of the userspace allocated memory */
+> >    };
+> >  
+> > +  struct kvm_userspace_memory_region_ext {
+> > +	struct kvm_userspace_memory_region region;
+> > +	__u64 private_offset;
+> > +	__u32 private_fd;
+> > +	__u32 padding[5];
+> 
+> Uber nit, I'd prefer we pad u32 for private_fd separate from padding the size of
+> the structure for future expansion.
+> 
+> Regarding future expansion, any reason not to go crazy and pad like 128+ bytes?
+> It'd be rather embarassing if the next memslot extension needs 3 u64s and we end
+> up with region_ext2 :-)
+
+OK, so maybe:
+	__u64 private_offset;
+	__u32 private_fd;
+	__u32 pad1;
+	__u32 pad2[28];
+> 
+> > +};
+> > +
+> >    /* for kvm_memory_region::flags */
+> >    #define KVM_MEM_LOG_DIRTY_PAGES	(1UL << 0)
+> >    #define KVM_MEM_READONLY	(1UL << 1)
+> > +  #define KVM_MEM_PRIVATE		(1UL << 2)
+> >  
+> >  This ioctl allows the user to create, modify or delete a guest physical
+> >  memory slot.  Bits 0-15 of "slot" specify the slot id and this value
+> 
+> ...
+> 
+> > +static inline bool kvm_slot_is_private(const struct kvm_memory_slot *slot)
+> 
+> I 100% think we should usurp the name "private" for these memslots, but as prep
+> work this series should first rename KVM_PRIVATE_MEM_SLOTS to avoid confusion.
+> Maybe KVM_INTERNAL_MEM_SLOTS?
+
+Oh, I didn't realized 'PRIVATE' is already taken.  KVM_INTERNAL_MEM_SLOTS
+sounds good.
+
+Thanks,
+Chao

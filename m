@@ -2,90 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5783F4F9DCD
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 21:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00B954F9DD6
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 21:54:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239282AbiDHTyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 15:54:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42638 "EHLO
+        id S239311AbiDHT4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 15:56:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233000AbiDHTyB (ORCPT
+        with ESMTP id S239294AbiDHT4J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 15:54:01 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B7D1403F2
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 12:51:57 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id 66so8614621pga.12
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 12:51:57 -0700 (PDT)
+        Fri, 8 Apr 2022 15:56:09 -0400
+Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C2361A5D73;
+        Fri,  8 Apr 2022 12:54:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+/pEd7g9sc537JcQUHMmtOGN8bVdoYIMIdp7gL4NXVE=;
-        b=PeCCA4cXlctPtn0PwT8WPNO9iuN3Zx2eqNN7U28qU+csc6ly0jDQLJM9RWc2E2KVbJ
-         AcUypMp0H+iw53GHXK5RvKZcP8/rkjWgfvdTjfeEnY9JIOitfRbYudZTS3OeAJfIKjxM
-         uWwxNEXp7qaVn1XNTPUK6KRKStSZpigRp6RLbV/f7qCFJudh74rd+5+3/mBsCYKpDhQr
-         b6MnEYR99I50+9xerR2G3OP8EPzSUpe/XS9ar0zUiH6TJmrdQO8VtaU0clsWQ4qTVfyQ
-         Q7y9WQwRPVDbDiMvzFb+XVfc+9H/+wBfMYeWNQwluw8HVgoUp5aKu0AkxkABo0QFHfkt
-         Lq0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+/pEd7g9sc537JcQUHMmtOGN8bVdoYIMIdp7gL4NXVE=;
-        b=1/zHHFTVuaN8cM1R+pjeVS2GwzPaobgZDVKSJoILvStBwmv/vHNgn6/5nDcXOhweAj
-         V1oFwJTGO+grI4buWRYjH94M3SzvKF8aqwd1ym4gZvG3EbekE7fvtJQNEmSFl+V/+Szv
-         s0AgrJ+J3b1UZzGQge2o5ymmE6TP/Z9cyTM3PGz4jG7TQ/B6z7KdP8HDKhCiGNZM7pLq
-         nuoDPlE2enfgQ6D/wIkSqTRd+Yy0Lz07gZ+WmhW6IdchT5QuQbJc5/65pTFZW6Z7HsdB
-         Nd4UU7AZdilkt/k4TTXW3mpOMV3DiTeEQdUQ3Oc5TQ8/NdJGFFJE7gyUQ9zQPrCwT3qS
-         5WmA==
-X-Gm-Message-State: AOAM533k6xqCJATEA0NXRcL8YbJfZf77tCbgDlMfknDJuTM4lrDuCLFn
-        Z8ZE/5r/fA4aMdvHfykq9wF5Sw==
-X-Google-Smtp-Source: ABdhPJwPpu43BljXU9K8AZZjz8TjJeuS+SQLKh0qH/CIk0qQsuh7ASoLZtzI2XHsdurOpzw4rkCUUQ==
-X-Received: by 2002:a63:4642:0:b0:398:b6b9:5f45 with SMTP id v2-20020a634642000000b00398b6b95f45mr17104239pgk.518.1649447516713;
-        Fri, 08 Apr 2022 12:51:56 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id k13-20020aa7820d000000b004fa72a52040sm26955599pfi.172.2022.04.08.12.51.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 12:51:55 -0700 (PDT)
-Date:   Fri, 8 Apr 2022 19:51:52 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        David Dunn <daviddunn@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Junaid Shahid <junaids@google.com>
-Subject: Re: [PATCH v3 02/11] KVM: selftests: Dump VM stats in binary stats
- test
-Message-ID: <YlCSWH4pob00vZq3@google.com>
-References: <20220330174621.1567317-1-bgardon@google.com>
- <20220330174621.1567317-3-bgardon@google.com>
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1649447645; x=1680983645;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=XbbHkB6cXBfuE9MzIxi7zYV+cwhUy0oQcVZcvwc+AYE=;
+  b=nrK58xvMTu8Crm4UtGJFvWa8UXY3mOFYa1/nsicU8HwuEdxmQXUgKzHY
+   J2mlAI/e1xInAqpejldb3Ye1SyI3F0lH507eNDPlWr0pCKc1Mj33V1ENi
+   wZ56gVu+YaI1xf+XVpWwvcgLdhJhTYNBZrkhh4cZtK2djQmYIzFm/Bde7
+   A=;
+X-IronPort-AV: E=Sophos;i="5.90,245,1643673600"; 
+   d="scan'208";a="187479247"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-iad-1d-10222bbc.us-east-1.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-33001.sea14.amazon.com with ESMTP; 08 Apr 2022 19:54:03 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1d-10222bbc.us-east-1.amazon.com (Postfix) with ESMTPS id AD86E1A0BFE;
+        Fri,  8 Apr 2022 19:53:57 +0000 (UTC)
+Received: from EX13D02UWB002.ant.amazon.com (10.43.161.160) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Fri, 8 Apr 2022 19:53:56 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
+ EX13D02UWB002.ant.amazon.com (10.43.161.160) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Fri, 8 Apr 2022 19:53:56 +0000
+Received: from dev-dsk-alisaidi-1d-b9a0e636.us-east-1.amazon.com
+ (172.19.181.128) by mail-relay.amazon.com (10.43.161.249) with Microsoft SMTP
+ Server id 15.0.1497.32 via Frontend Transport; Fri, 8 Apr 2022 19:53:56 +0000
+Received: by dev-dsk-alisaidi-1d-b9a0e636.us-east-1.amazon.com (Postfix, from userid 5131138)
+        id 71D592C3F; Fri,  8 Apr 2022 19:53:55 +0000 (UTC)
+From:   Ali Saidi <alisaidi@amazon.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <german.gomez@arm.com>,
+        <leo.yan@linaro.org>, <acme@kernel.org>
+CC:     <alisaidi@amazon.com>, <benh@kernel.crashing.org>,
+        <Nick.Forrington@arm.com>, <alexander.shishkin@linux.intel.com>,
+        <andrew.kilroy@arm.com>, <james.clark@arm.com>,
+        <john.garry@huawei.com>, <jolsa@kernel.org>, <kjain@linux.ibm.com>,
+        <lihuafei1@huawei.com>, <mark.rutland@arm.com>,
+        <mathieu.poirier@linaro.org>, <mingo@redhat.com>,
+        <namhyung@kernel.org>, <peterz@infradead.org>, <will@kernel.org>
+Subject: [PATCH v4 0/4] perf: arm-spe: Decode SPE source and use for perf c2c
+Date:   Fri, 8 Apr 2022 19:53:39 +0000
+Message-ID: <20220408195344.32764-1-alisaidi@amazon.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220330174621.1567317-3-bgardon@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022, Ben Gardon wrote:
-> Add kvm_util library functions to read KVM stats through the binary
-> stats interface and then dump them to stdout when running the binary
-> stats test. Subsequent commits will extend the kvm_util code and use it
-> to make assertions in a test for NX hugepages.
+When synthesizing data from SPE, augment the type with source information
+for Arm Neoverse cores so we can detect situtions like cache line
+contention and transfers on Arm platforms. 
 
-Why?  Spamming my console with info that has zero meaning to me and is useless
-when the test passes is not helpful.  Even on failure, I don't see what the user
-is going to do with this information, all of the asserts are completly unrelated
-to the stats themselves.
+This changes enables the expected behavior of perf c2c on a system with
+SPE where lines that are shared among multiple cores show up in perf c2c
+output. 
+
+These changes switch to use mem_lvl_num to encode the level information
+instead of mem_lvl which is being deprecated, but I haven't found other
+users of mem_lvl_num. 
+
+Changes in v5:
+  * Add a new snooping type to disambiguate cache-to-cache transfers where
+    we don't know if the data is clean or dirty.
+  * Set snoop flags on all the data-source cases
+  * Special case stores as we have no information on them
+
+Changes in v4:
+  * Bring-in the kernel's arch/arm64/include/asm/cputype.h into tools/ 
+  * Add neoverse-v1 to the neoverse cores list
+
+Ali Saidi (4):
+  tools: arm64: Import cputype.h
+  perf arm-spe: Use SPE data source for neoverse cores
+  perf mem: Support mem_lvl_num in c2c command
+  perf mem: Support HITM for when mem_lvl_num is any
+
+ tools/arch/arm64/include/asm/cputype.h        | 258 ++++++++++++++++++
+ .../util/arm-spe-decoder/arm-spe-decoder.c    |   1 +
+ .../util/arm-spe-decoder/arm-spe-decoder.h    |  12 +
+ tools/perf/util/arm-spe.c                     | 110 +++++++-
+ tools/perf/util/mem-events.c                  |  20 +-
+ 5 files changed, 383 insertions(+), 18 deletions(-)
+ create mode 100644 tools/arch/arm64/include/asm/cputype.h
+
+-- 
+2.32.0
+

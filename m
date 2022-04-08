@@ -2,168 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46E974F8C8D
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C4B14F8C87
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233349AbiDHBRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 21:17:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51184 "EHLO
+        id S233428AbiDHBYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 21:24:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230169AbiDHBRH (ORCPT
+        with ESMTP id S233385AbiDHBYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 21:17:07 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A3927147;
-        Thu,  7 Apr 2022 18:15:06 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id a16-20020a17090a6d9000b001c7d6c1bb13so8162795pjk.4;
-        Thu, 07 Apr 2022 18:15:06 -0700 (PDT)
+        Thu, 7 Apr 2022 21:24:17 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5426445
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 18:22:15 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id i10-20020a17090a2aca00b001ca56c9ab16so7244154pjg.1
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 18:22:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Idjn34kuNBBfLlmwcM6XkwnNJSjd6HgvJJshg4x6j34=;
-        b=SiN06LPFjNlk0fqA/8xabk/HLDehtoLlkMWHLQZ4sGuFgvMH8Pr8eGl6cS0w3RVL1q
-         7LHZBJ5UcWX0gil6p3MzSW31TLOepSndhqSGv654TqM8YEsQeLX9nvjfJogAepQ9DSlc
-         +XtxjqzcZ6HeqYifVin5lBPuSXMa29v4OO1wsqIuBQjs8jFbdHUE69pAXK5w9gubegFL
-         2Q+Kjcm9UrvbGbn0tiffkVUH3sO3TqukQ17SKwjMMNWIpb6N79CXMoTzZm0E0375tF4d
-         FFHLKML5X+2xhyB0hS9KcthjKBzxMfc2FKSTKOTWRgagz6P+QzqPjD4AX++VqXQ/jwAZ
-         L58w==
+        bh=A6OclNo6fSItQpTxQTpaUCER7lHP82G03LIl77so8jw=;
+        b=zSb4agSs6+sEx1Gos/tvaPy9cnZsjfM6UBsveMu1xbXuLiS2sYW5lZu5i5fVIaC2Uc
+         TnBbYZzHnB6Lfdx4TY/UdQbAZQm0p/8+FUrOEYttBaMsqVgEBTaUxbv+MIbOmKf1hN88
+         1y4BpCaILLtwuVHG+12DtsYjcMbWUaz489ALsW7l/a5CmmDrI9GkoUMUsMAHHsHqgUIR
+         cUhDqIqhiUxL0nDHDJZH1iJxSzUbp8LKnCIWFtXLBPm4+qRPAFgIPzoYgLs9WNl8bhb/
+         DmpmuQnOVqtw5NH7a1ZqG/NN+gIQwyGPCj3MT0Tfd3rP2jBe0g2HTC+b4Y0LjmweN30a
+         Agvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=Idjn34kuNBBfLlmwcM6XkwnNJSjd6HgvJJshg4x6j34=;
-        b=2Gypk81W6lPN3zgsQOMzFpPkz3Mn9MrWPfsWrdDLMlrtlUud1CdeLMQjS7QWYOCrmr
-         OCmrccyeAFKDXd2WAehTS9i383rQxdkfzEHIn5eXkk8hha2W4vn+KrPmLsRLlb2/89fv
-         Ee8uUsqMregZ8XmVNL7/BcDDEiU5JZMpEYN6d9NKttDFYITz5gsgI9Fe27nT1QluCuH7
-         3iGFJpwDG02BU2RUJwbWBxEn40juza+H1zJ88lkcq5V1DVCcuhn11b7R9UAbvyDmp917
-         VxVO2hO8bSZ1JutO45kZLQURZzuCvSrIhrc+nqhG47kCL0RMiPBsndUZMLNt2tDyv6E/
-         TQGg==
-X-Gm-Message-State: AOAM532N4pagUYdI9zi4JsZDxKjPkAxZedc46fY0iFyXP6RH/jK1lN3D
-        yw3BCXeZGKsSI+ql3wbArx7SbQt7PleecZkX
-X-Google-Smtp-Source: ABdhPJyCX3ztY5bfjruQrRVJxAW56nV269fJn/l3lQt8OkK1msBDS+Hq505xUIIgXdyRwAR2RGdKIA==
-X-Received: by 2002:a17:90b:224f:b0:1c9:949e:2202 with SMTP id hk15-20020a17090b224f00b001c9949e2202mr18808604pjb.56.1649380505412;
-        Thu, 07 Apr 2022 18:15:05 -0700 (PDT)
-Received: from [192.168.1.5] ([110.78.142.75])
-        by smtp.googlemail.com with ESMTPSA id m21-20020a17090a7f9500b001c97c6bcaf4sm10270319pjl.39.2022.04.07.18.15.03
+        bh=A6OclNo6fSItQpTxQTpaUCER7lHP82G03LIl77so8jw=;
+        b=MSnbrUhX9XrjObesaMxUk/bckFktVMV8Kh/5SPwrWa83re90OVd2kMP6WQGtVVVzLz
+         Qbp2VZ8FPlfw9CpPKs3N+SILhguhZLYuKG0/ZM4QwX5T2KnQvuCyG6hleeBYh24Rbj0K
+         Ox1winFm+xY8c0zg6P4Kxqv4BndZgHPXPA6ZjpMSfOEofzcFQXXyvJAQjUHrlEZSTXf/
+         pZyn4SrfsCmNj1KbyKlSjWpuxQxBlZcITI3YBRzD5oJnap6q9vY8cZqf/RveY+4Fv1nh
+         cIuikObARay9wY1dpT0S6ur9SS8881NggPCqnNwMNfT8JIzTFVg7HOfb3E7URskFRvPB
+         GMRQ==
+X-Gm-Message-State: AOAM532xvrOORw5KKGDbawurehYX6jefBb+LAismpI3XeiwJA1kFMCjS
+        jciijdBiYmAI0TN0QTt5oRlHwg==
+X-Google-Smtp-Source: ABdhPJwhsbSFMkUvU8wzdDL8blnk++f7WzgqCYdkmeqpKagtwMsEnmQtneoW8sDRmpOVWWTI40PeuA==
+X-Received: by 2002:a17:90a:bf12:b0:1ca:69bd:9a10 with SMTP id c18-20020a17090abf1200b001ca69bd9a10mr18877946pjs.92.1649380934743;
+        Thu, 07 Apr 2022 18:22:14 -0700 (PDT)
+Received: from [10.76.15.169] ([61.120.150.76])
+        by smtp.gmail.com with ESMTPSA id q28-20020a656a9c000000b00372f7ecfcecsm21038355pgu.37.2022.04.07.18.20.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 18:15:05 -0700 (PDT)
-Message-ID: <3b8a8497-df41-8bf4-6816-f4419cb7f950@gmail.com>
-Date:   Fri, 8 Apr 2022 08:15:00 +0700
+        Thu, 07 Apr 2022 18:21:10 -0700 (PDT)
+Message-ID: <e77ae1d9-49f3-97e8-f88f-a8518ff0573b@bytedance.com>
+Date:   Fri, 8 Apr 2022 09:17:10 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v1 2/2] net: usb: cdc_ether: Add Fibocom MA510 modem
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: Re: [PATCH] mm: fix kernel NULL pointer dereference in
+ page_vma_mapped_walk
 Content-Language: en-US
-To:     sven@svenschwermer.de, linux-usb@vger.kernel.org
-Cc:     Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
-        linux-kernel@vger.kernel.org, oliver@neukum.org
-References: <20220407074745.74195-1-sven@svenschwermer.de>
- <20220407074745.74195-2-sven@svenschwermer.de>
-From:   Lars Melin <larsm17@gmail.com>
-In-Reply-To: <20220407074745.74195-2-sven@svenschwermer.de>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220407064008.71869-1-pizhenwei@bytedance.com>
+ <Yk7tIi4UKjiqQyoF@casper.infradead.org>
+ <Yk7yd5ho2a7jWNfS@casper.infradead.org>
+From:   zhenwei pi <pizhenwei@bytedance.com>
+In-Reply-To: <Yk7yd5ho2a7jWNfS@casper.infradead.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SCC_BODY_URI_ONLY,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/7/2022 14:47, sven@svenschwermer.de wrote:
-> From: Sven Schwermer <sven.schwermer@disruptive-technologies.com>
+On 4/7/22 22:17, Matthew Wilcox wrote:
+> On Thu, Apr 07, 2022 at 02:54:42PM +0100, Matthew Wilcox wrote:
+>> On Thu, Apr 07, 2022 at 02:40:08PM +0800, zhenwei pi wrote:
+>>> size_to_hstate(4K) returns NULL pointer, this leads kernel BUG in
+>>> function page_vma_mapped_walk.
+>>
+>> Yes, I think this is the right fix.  It's not immediately obvious from
+>> the bug and the patch, but what's going on is:
+>>
+>> page_mapped_in_vma() sets nr_pages to 1.  This is correct because we
+>> usually only want to know about the precise page, and not about the
+>> folio containing it.  But hugetlbfs is special (... in so many ways ...)
+>> and actually wants to work on the entire folio.  We could set nr_pages
+>> specially for hugetlb pages, but it's better to ignore it in
+>> page_vma_mapped_walk() for the hugetlb case.
+>>
+>> I'll fix up the changelog and add it to my pile of fixes that I'm
+>> sending tomorrow.
+>> https://git.infradead.org/users/willy/pagecache.git/shortlog/refs/heads/for-next
 > 
-> +GTUSBMODE: 31
-> --------------
-> T:  Bus=03 Lev=01 Prnt=01 Port=06 Cnt=04 Dev#= 99 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-> P:  Vendor=2cb7 ProdID=0106 Rev= 0.00
-> S:  Manufacturer=Fibocom MA510 Modem
-> S:  Product=Fibocom MA510 Modem
-> S:  SerialNumber=55e2695b
-> C:* #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
-> A:  FirstIf#= 3 IfCount= 2 Cls=02(comm.) Sub=00 Prot=00
-> I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> E:  Ad=82(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
-> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=fe Prot=ff Driver=option
-> E:  Ad=84(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
-> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 3 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=cdc_ether
-> E:  Ad=86(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
-> I:  If#= 4 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-> I:* If#= 4 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-> E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I looked over the patch in context, and realised we now don't need to
+> call size_to_hstate since we're getting the hstate from the VMA.
 > 
-> +GTUSBMODE: 32
-> --------------
-> T:  Bus=03 Lev=01 Prnt=01 Port=06 Cnt=04 Dev#=100 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-> P:  Vendor=2cb7 ProdID=010a Rev= 0.00
-> S:  Manufacturer=Fibocom MA510 Modem
-> S:  Product=Fibocom MA510 Modem
-> S:  SerialNumber=55e2695b
-> C:* #Ifs= 4 Cfg#= 1 Atr=e0 MxPwr=500mA
-> A:  FirstIf#= 2 IfCount= 2 Cls=02(comm.) Sub=00 Prot=00
-> I:* If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> E:  Ad=81(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
-> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=fe Prot=ff Driver=option
-> E:  Ad=83(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
-> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 2 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=cdc_ether
-> E:  Ad=85(I) Atr=03(Int.) MxPS=  64 Ivl=2ms
-> I:  If#= 3 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-> I:* If#= 3 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> https://git.infradead.org/users/willy/pagecache.git/commitdiff/98ea02597b9967c0817d29fee2f96d21b9e59ca5
 > 
-> Signed-off-by: Sven Schwermer <sven.schwermer@disruptive-technologies.com>
-> ---
->   drivers/net/usb/cdc_ether.c | 12 ++++++++++++
->   1 file changed, 12 insertions(+)
-> 
-> diff --git a/drivers/net/usb/cdc_ether.c b/drivers/net/usb/cdc_ether.c
-> index b09b5567aea2..c9367587698e 100644
-> --- a/drivers/net/usb/cdc_ether.c
-> +++ b/drivers/net/usb/cdc_ether.c
-> @@ -1005,6 +1005,18 @@ static const struct usb_device_id	products[] = {
->   				      USB_CDC_SUBCLASS_ETHERNET,
->   				      USB_CDC_PROTO_NONE),
->   	.driver_info = (unsigned long)&wwan_info,
-> +}, {
-> +	/* Fibocom MA510 (+GTUSBMODE=31) */
-> +	USB_DEVICE_AND_INTERFACE_INFO(0x2cb7, 0x0106, USB_CLASS_COMM,
-> +				      USB_CDC_SUBCLASS_ETHERNET,
-> +				      USB_CDC_PROTO_NONE),
-> +	.driver_info = (unsigned long)&wwan_info,
-> +}, {
-> +	/* Fibocom MA510 (+GTUSBMODE=32) */
-> +	USB_DEVICE_AND_INTERFACE_INFO(0x2cb7, 0x010a, USB_CLASS_COMM,
-> +				      USB_CDC_SUBCLASS_ETHERNET,
-> +				      USB_CDC_PROTO_NONE),
-> +	.driver_info = (unsigned long)&wwan_info,
->   }, {
->   	USB_INTERFACE_INFO(USB_CLASS_COMM, USB_CDC_SUBCLASS_ETHERNET,
->   			USB_CDC_PROTO_NONE),
-
-Why do you add this modem to the whitelist?
-The net interface has the correct cdc_ether attributes so the cdc_ether 
-driver should bind automagically without any need for the modem to be in 
-the whitelist.
-
-thanks
-Lars
+Thanks!
+-- 
+zhenwei pi

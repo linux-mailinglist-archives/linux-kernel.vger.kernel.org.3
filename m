@@ -2,64 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B37464F9927
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 17:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07D694F9928
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 17:13:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237383AbiDHPPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 11:15:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35426 "EHLO
+        id S237462AbiDHPPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 11:15:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237429AbiDHPOu (ORCPT
+        with ESMTP id S237431AbiDHPOu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 8 Apr 2022 11:14:50 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E705100A7C;
-        Fri,  8 Apr 2022 08:12:45 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id p25so5023926qkj.10;
-        Fri, 08 Apr 2022 08:12:45 -0700 (PDT)
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55FBE1017DF;
+        Fri,  8 Apr 2022 08:12:46 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id z15so1667132qtj.13;
+        Fri, 08 Apr 2022 08:12:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=2ngfqMIQoUkQPRqBnCocvDrgeBW0jFMhaTUtWSPOPLY=;
-        b=kiw9CG89THUfnzEHwzhLHUR3UdI9TOyeIZ1yrPpBzQoS4MOpFIHzZZ42lVw7RGOvYg
-         lUC7yXs1SI/quGj7NDyMQOk3/UaEfSvqrUnlNWBXZ9KaoYWqAsgPpcC0TWd3eBaBBF3j
-         6DaM+Fjs5WuLODp9yBLld7vJaFGAbIuSTp/e844mrwAdgQAl8tvQ++TuAxgpGfRMzo1a
-         sOgwzxrX6Ov2bR9l8ds3/TTIyX8JAWQ253vAD5ouINhnYptbvhl5rgQxtk0iTzk293jP
-         eVaYlGbKnTU+zOzsqzkL4KXWWbRPas4xvSsoH4b3YAN3E/lYKSw9tMok8Z9t6b81Kk1f
-         S+Yg==
+        bh=BiTCbZuuiqDpXPtBKnm7lrk6/Udlslh2uUBYoU46tJs=;
+        b=mbS4q19oIqjAQ62E/SZBSAS+VQIoZvxk+Lvp/grvWdLSp1HSOjFEPHff+FMIPeer47
+         ZTtnIRo7fEiU88/vZmzjyRJGJAnUet7X+rkS/8K3MzFektq6sA8aK2HLGW3AOHFZZVOm
+         1tbnwiFwgBiEyC0e0JUnY1SF+1lHuSD2IioJQccwK5XE24rU0dTV3NawdCQD3o0Vkl3Y
+         Pv1F9cPRFLNNWorCW6K8QglPWTwwGNXyGuKMT8Gdd+0aW0EROo5D5gyZzSvueyD9IEUA
+         pv2KqNKRfPWeQaxsgaIkCbpSKmXxwRHN1G+aFCGb/IMkNTtPOBcwwtneyAOwMSUdjB/Y
+         JhPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=2ngfqMIQoUkQPRqBnCocvDrgeBW0jFMhaTUtWSPOPLY=;
-        b=ClOLli4vPjItwSNYxUG9Z2GH72pmvirp49b9CB7sC3xp92sxcfs5ERlPPED4vONtDx
-         BFoyDScYWJ6ltuLBXJmAlZTdpVFu9PCOaTPMGoAGrlq2spbbzicJaTm5yDBoET+JQ4HA
-         3pbo316uBsDcl/fD4AAs7POpspAnl2HMXcEJh3ZfeDXHkXxUtK7ERW3jeQAEDyDgvKxi
-         Dq8F3RkARNs6Cs6dLgB/WVYW9PUUIpaIxVtftt2M7Ncu8PoAdvcPSYzLVb0XKu9VwXEa
-         dTEyi/VlvRFYaU31/AdTiOv1BBzevTHiq8s99OeQ3TxVI/s1tF0Un37/rJ82Gvoh4YBC
-         OTeA==
-X-Gm-Message-State: AOAM533kkscQORq7EpoSb/TN3dDuGmiENGrJnkJTbYKMM84LNTUp7OrU
-        8MqvMqpxNhsxTQ08ErA9Qxo=
-X-Google-Smtp-Source: ABdhPJz7bFQqZuA9wcm0DEORDOBbZ5fxtus4DNzFYcEaNKr+TcVpVrRGEHmCKPF/l6GF4vnOPVUjfA==
-X-Received: by 2002:ae9:e202:0:b0:699:c67a:395d with SMTP id c2-20020ae9e202000000b00699c67a395dmr13813107qkc.24.1649430764498;
-        Fri, 08 Apr 2022 08:12:44 -0700 (PDT)
+        bh=BiTCbZuuiqDpXPtBKnm7lrk6/Udlslh2uUBYoU46tJs=;
+        b=eZHx4RdKulj1I3zSjYdV1iY5FqB46J5+ZhYcYB94oY3/xOS0kqa5E0xOJMcmLQpztK
+         4V4qKNTYpYe8s+OL99ndW3RGxKUqhewsaV1c3qZASyO2WVSM/Lhbvxo7aMgrcS3BfTB+
+         m0qNGe1c+XMx8+BZStMMscUPc9bqPin6Mkzshid/7Z3sHF8LRZmTxn7S+GlILIsqEPgk
+         LNWxqsXH9YwzuTvEFg91udEE9yoz3cGDc8O6LsjMOW2/QY7opfn2WeBa0PyWyBgeICwK
+         t0ujriFM7PDeOav8YD2+mUlzwCTrVrZrn0KZfMMg1Lu4z5hSig4O6k54cPMSOVw4zZMF
+         uQdQ==
+X-Gm-Message-State: AOAM532XsNMzHB5qDUe0XzswXcpV7Kx2QwylUA7xH4SHzLYH21o60XVJ
+        CgguQEBLw2DhDVx9qHlzQmc=
+X-Google-Smtp-Source: ABdhPJxfCAacR/8MMW94Q5F36iZ+s7P9L3sPX/KHUxhf9Szg+AfYfAADj3i67pPKqBOD9hxbtum3Kw==
+X-Received: by 2002:a05:622a:1894:b0:2e1:cbdb:8b74 with SMTP id v20-20020a05622a189400b002e1cbdb8b74mr15793603qtc.643.1649430765418;
+        Fri, 08 Apr 2022 08:12:45 -0700 (PDT)
 Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
         by smtp.gmail.com with ESMTPSA id 191-20020a3707c8000000b0069a13545fcfsm2266052qkh.123.2022.04.08.08.12.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 08:12:44 -0700 (PDT)
+        Fri, 08 Apr 2022 08:12:45 -0700 (PDT)
 From:   Peter Geis <pgwipeout@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Heiko Stuebner <heiko@sntech.de>
 Cc:     linux-rockchip@lists.infradead.org,
-        Peter Geis <pgwipeout@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 3/5] arm64: dts: rockchip: add rk356x dwc3 usb3 nodes
-Date:   Fri,  8 Apr 2022 11:12:35 -0400
-Message-Id: <20220408151237.3165046-4-pgwipeout@gmail.com>
+        Peter Geis <pgwipeout@gmail.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v5 4/5] arm64: dts: rockchip: enable dwc3 on quartz64-a
+Date:   Fri,  8 Apr 2022 11:12:36 -0400
+Message-Id: <20220408151237.3165046-5-pgwipeout@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220408151237.3165046-1-pgwipeout@gmail.com>
 References: <20220408151237.3165046-1-pgwipeout@gmail.com>
@@ -75,123 +73,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the dwc3 device nodes to the rk356x device trees.
-The rk3566 has one usb2 capable dwc3 otg controller and one usb3 capable
-dwc3 host controller.
-The rk3568 has one usb3 capable dwc3 otg controller and one usb3 capable
-dwc3 host controller.
+The quartz64 model a has support for both the dwc3 otg port and the dwc3
+host port. Add the otg power supply and dwc3 nodes to the device tree to
+enable support for these.
 
 Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-Tested-by: Frank Wunderlich <frank-w@public-files.de>
 ---
- arch/arm64/boot/dts/rockchip/rk3566.dtsi | 11 ++++++++
- arch/arm64/boot/dts/rockchip/rk3568.dtsi |  9 ++++++
- arch/arm64/boot/dts/rockchip/rk356x.dtsi | 35 +++++++++++++++++++++++-
- 3 files changed, 54 insertions(+), 1 deletion(-)
+ .../boot/dts/rockchip/rk3566-quartz64-a.dts   | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3566.dtsi b/arch/arm64/boot/dts/rockchip/rk3566.dtsi
-index 3839eef5e4f7..0b957068ff89 100644
---- a/arch/arm64/boot/dts/rockchip/rk3566.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3566.dtsi
-@@ -6,6 +6,10 @@ / {
- 	compatible = "rockchip,rk3566";
- };
- 
-+&pipegrf {
-+	compatible = "rockchip,rk3566-pipe-grf", "syscon";
-+};
-+
- &power {
- 	power-domain@RK3568_PD_PIPE {
- 		reg = <RK3568_PD_PIPE>;
-@@ -18,3 +22,10 @@ power-domain@RK3568_PD_PIPE {
- 		#power-domain-cells = <0>;
- 	};
- };
-+
-+&usb_host0_xhci {
-+	phys = <&usb2phy0_otg>;
-+	phy-names = "usb2-phy";
-+	extcon = <&usb2phy0>;
-+	maximum-speed = "high-speed";
-+};
-diff --git a/arch/arm64/boot/dts/rockchip/rk3568.dtsi b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
-index 5b0f528d6818..8ba9334f9753 100644
---- a/arch/arm64/boot/dts/rockchip/rk3568.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3568.dtsi
-@@ -99,6 +99,10 @@ opp-1992000000 {
- 	};
- };
- 
-+&pipegrf {
-+	compatible = "rockchip,rk3568-pipe-grf", "syscon";
-+};
-+
- &power {
- 	power-domain@RK3568_PD_PIPE {
- 		reg = <RK3568_PD_PIPE>;
-@@ -114,3 +118,8 @@ power-domain@RK3568_PD_PIPE {
- 		#power-domain-cells = <0>;
- 	};
- };
-+
-+&usb_host0_xhci {
-+	phys = <&usb2phy0_otg>, <&combphy0 PHY_TYPE_USB3>;
-+	phy-names = "usb2-phy", "usb3-phy";
-+};
-diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-index 7cdef800cb3c..ca20d7b91fe5 100644
---- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-@@ -230,6 +230,40 @@ scmi_shmem: sram@0 {
- 		};
+diff --git a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
+index dd7f4b9b686b..141a433429b5 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3566-quartz64-a.dts
+@@ -151,6 +151,16 @@ vcc5v0_usb20_host: vcc5v0_usb20_host {
+ 		vin-supply = <&vcc5v0_usb>;
  	};
  
-+	usb_host0_xhci: usb@fcc00000 {
-+		compatible = "rockchip,rk3568-dwc3", "snps,dwc3";
-+		reg = <0x0 0xfcc00000 0x0 0x400000>;
-+		interrupts = <GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&cru CLK_USB3OTG0_REF>, <&cru CLK_USB3OTG0_SUSPEND>,
-+			 <&cru ACLK_USB3OTG0>;
-+		clock-names = "ref_clk", "suspend_clk",
-+			      "bus_clk";
-+		dr_mode = "host";
-+		phy_type = "utmi_wide";
-+		power-domains = <&power RK3568_PD_PIPE>;
-+		resets = <&cru SRST_USB3OTG0>;
-+		snps,dis_u2_susphy_quirk;
-+		status = "disabled";
++	vcc5v0_usb20_otg: vcc5v0_usb20_otg {
++		compatible = "regulator-fixed";
++		enable-active-high;
++		gpio = <&gpio4 RK_PB5 GPIO_ACTIVE_HIGH>;
++		regulator-name = "vcc5v0_usb20_otg";
++		regulator-min-microvolt = <5000000>;
++		regulator-max-microvolt = <5000000>;
++		vin-supply = <&dcdc_boost>;
 +	};
 +
-+	usb_host1_xhci: usb@fd000000 {
-+		compatible = "rockchip,rk3568-dwc3", "snps,dwc3";
-+		reg = <0x0 0xfd000000 0x0 0x400000>;
-+		interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&cru CLK_USB3OTG1_REF>, <&cru CLK_USB3OTG1_SUSPEND>,
-+			 <&cru ACLK_USB3OTG1>;
-+		clock-names = "ref_clk", "suspend_clk",
-+			      "bus_clk";
-+		dr_mode = "host";
-+		phys = <&usb2phy0_host>, <&combphy1 PHY_TYPE_USB3>;
-+		phy-names = "usb2-phy", "usb3-phy";
-+		phy_type = "utmi_wide";
-+		power-domains = <&power RK3568_PD_PIPE>;
-+		resets = <&cru SRST_USB3OTG1>;
-+		snps,dis_u2_susphy_quirk;
-+		status = "disabled";
-+	};
+ 	vcc3v3_sd: vcc3v3_sd {
+ 		compatible = "regulator-fixed";
+ 		enable-active-low;
+@@ -187,6 +197,10 @@ vcc_wl: vcc_wl {
+ 	};
+ };
+ 
++&combphy1 {
++	status = "okay";
++};
 +
- 	gic: interrupt-controller@fd400000 {
- 		compatible = "arm,gic-v3";
- 		reg = <0x0 0xfd400000 0 0x10000>, /* GICD */
-@@ -297,7 +331,6 @@ pmu_io_domains: io-domains {
- 	};
+ &cpu0 {
+ 	cpu-supply = <&vdd_cpu>;
+ };
+@@ -672,6 +686,29 @@ &usb_host1_ohci {
+ 	status = "okay";
+ };
  
- 	pipegrf: syscon@fdc50000 {
--		compatible = "rockchip,rk3568-pipe-grf", "syscon";
- 		reg = <0x0 0xfdc50000 0x0 0x1000>;
- 	};
- 
++&usb_host0_xhci {
++	status = "okay";
++};
++
++/* usb3 controller is muxed with sata1 */
++&usb_host1_xhci {
++	status = "okay";
++};
++
++&usb2phy0 {
++	status = "okay";
++};
++
++&usb2phy0_host {
++	phy-supply = <&vcc5v0_usb20_host>;
++	status = "okay";
++};
++
++&usb2phy0_otg {
++	phy-supply = <&vcc5v0_usb20_otg>;
++	status = "okay";
++};
++
+ &usb2phy1 {
+ 	status = "okay";
+ };
 -- 
 2.25.1
 

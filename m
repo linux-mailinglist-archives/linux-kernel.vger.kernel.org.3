@@ -2,141 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A781E4F9285
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 12:05:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0155E4F9286
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 12:05:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234569AbiDHKG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 06:06:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58690 "EHLO
+        id S234389AbiDHKGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 06:06:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234401AbiDHKGj (ORCPT
+        with ESMTP id S234513AbiDHKG1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 06:06:39 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18B2ADB2E7
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 03:04:24 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AEA2F139F;
-        Fri,  8 Apr 2022 03:04:01 -0700 (PDT)
-Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4002A3F73B;
-        Fri,  8 Apr 2022 03:04:00 -0700 (PDT)
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com
-Cc:     vincenzo.frascino@arm.com,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Subject: [PATCH] kasan: Fix hw tags enablement when KUNIT tests are disabled
-Date:   Fri,  8 Apr 2022 11:03:40 +0100
-Message-Id: <20220408100340.43620-1-vincenzo.frascino@arm.com>
-X-Mailer: git-send-email 2.35.1
+        Fri, 8 Apr 2022 06:06:27 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 118C3ABF54
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 03:04:12 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id t9so3077687qvd.3
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 03:04:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uDYIyqRKa4ljv3bdWbjMFdUVSWTyxOVGEtnHDdVjPis=;
+        b=Kv7OjmJfTmHInHTCBgArEwZ05WO0BHqMZbTJ16WdCcgLTs8sNa71jRfD3FNs5gf84f
+         IjU9LT7x3tsnc1sRz9WpGb7WrZtGHXEePmkxNnbK/zAIohoeTWZVN0dBH5zohot6CCde
+         jTy3asZu1tIavz9LbzJxMjfB1gGqYoU9TDaKWFtSHD+Ox/sM6iL0cGU6aDHVcTGFKTr4
+         /gciXK589BI6L2cajYsDEHSBhsiGf1tIqGVkoJRRxxnrnTP+QTYK+zm4jN0ASnocq9kP
+         62V/7didh05neKxyyfxiFiWTVcOVqTrYvzw+huWvWGa/MQTETHxAJ0xCc+dVRhOrp7C1
+         xBMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uDYIyqRKa4ljv3bdWbjMFdUVSWTyxOVGEtnHDdVjPis=;
+        b=KGSYPLiHgGVQGyMhv73gAPfWnL26IJyMFatRy2KY94JrI5ZLfCOZ1aYxCmYkTeNqCx
+         kAqdKrpt7bspgynLK+iGirTbCSaAfNL9eIMIcWxFGk1q8+FhHgWWzV1eCYWF1PsQSHz3
+         yIDcCgqUTP4dSdjZ0cbFAlTAFHHhAewer/Tt3huPU+2Er9N+PwRJKSw77Gtu7zdivn9f
+         2yXLuzq/Mi6gIZAwaNi9sJa9g4t3qRCvdsTeYrEXu0qiRwGHx9tB+2vbzcrV9zUdQLul
+         unXBpfY4svewIKO0EvdVw+Yl4uyv/JyKqRJgJerzoNV1CqbCqy/j9Nao+AmVinaC6u6i
+         HH1A==
+X-Gm-Message-State: AOAM531nNnHZ9GK+AZee0cKcjZwEgjQ5YZb6jw97rPB5ZyhoRTshRA3u
+        7yQk80QJPJQalJ/TTJHD+gg=
+X-Google-Smtp-Source: ABdhPJypq+E+nDV6hH6cRkMj7BSxYRwSwDfj38mgPVU5agSVzunZiQfgbqQYq/YmTbKwuKiQD3NkAg==
+X-Received: by 2002:a05:6214:d41:b0:442:19b7:62e6 with SMTP id 1-20020a0562140d4100b0044219b762e6mr14990676qvr.17.1649412250156;
+        Fri, 08 Apr 2022 03:04:10 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id d3-20020a05622a15c300b002eb9af4c945sm19621632qty.3.2022.04.08.03.04.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 03:04:09 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: lv.ruyi@zte.com.cn
+To:     andrzej.hajda@intel.com, narmstrong@baylibre.com,
+        robert.foss@linaro.org
+Cc:     Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
+        xji@analogixsemi.com, hsinyi@chromium.org, sam@ravnborg.org,
+        tzungbi@google.com, pihsun@chromium.org, maxime@cerno.tech,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] drm/bridge: anx7625: remove unnecessary flush_workqueue()
+Date:   Fri,  8 Apr 2022 10:04:00 +0000
+Message-Id: <20220408100401.2495529-1-lv.ruyi@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kasan enables hw tags via kasan_enable_tagging() which based on the mode
-passed via kernel command line selects the correct hw backend.
-kasan_enable_tagging() is meant to be invoked indirectly via the cpu features
-framework of the architectures that support these backends.
-Currently the invocation of this function is guarded by CONFIG_KASAN_KUNIT_TEST
-which allows the enablement of the correct backend only when KUNIT tests are
-enabled in the kernel.
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-This inconsistency was introduced in commit:
+All work currently pending will be done by calling destroy_workqueue,
+so there is unnecessary to flush it explicitly.
 
-  f05842cfb9ae2 ("kasan, arm64: allow using KUnit tests with HW_TAGS mode")
-
-... and prevents to enable MTE on arm64 when KUNIT tests for kasan hw_tags are
-disabled.
-
-Fix the issue making sure that the CONFIG_KASAN_KUNIT_TEST guard does not
-prevent the correct invocation of kasan_enable_tagging().
-
-Fixes: f05842cfb9ae2 ("kasan, arm64: allow using KUnit tests with HW_TAGS mode")
-Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-Cc: Alexander Potapenko <glider@google.com>
-Cc: Andrey Konovalov <andreyknvl@gmail.com>
-Cc: Dmitry Vyukov <dvyukov@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
 ---
- mm/kasan/hw_tags.c |  4 ++--
- mm/kasan/kasan.h   | 10 ++++++----
- 2 files changed, 8 insertions(+), 6 deletions(-)
+ drivers/gpu/drm/bridge/analogix/anx7625.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/mm/kasan/hw_tags.c b/mm/kasan/hw_tags.c
-index 07a76c46daa5..e2677501c36e 100644
---- a/mm/kasan/hw_tags.c
-+++ b/mm/kasan/hw_tags.c
-@@ -336,8 +336,6 @@ void __kasan_poison_vmalloc(const void *start, unsigned long size)
+diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+index 6516f9570b86..65632f584179 100644
+--- a/drivers/gpu/drm/bridge/analogix/anx7625.c
++++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+@@ -2744,7 +2744,6 @@ static int anx7625_i2c_remove(struct i2c_client *client)
  
- #endif
+ 	if (platform->hdcp_workqueue) {
+ 		cancel_delayed_work(&platform->hdcp_work);
+-		flush_workqueue(platform->hdcp_workqueue);
+ 		destroy_workqueue(platform->hdcp_workqueue);
+ 	}
  
--#if IS_ENABLED(CONFIG_KASAN_KUNIT_TEST)
--
- void kasan_enable_tagging(void)
- {
- 	if (kasan_arg_mode == KASAN_ARG_MODE_ASYNC)
-@@ -349,6 +347,8 @@ void kasan_enable_tagging(void)
- }
- EXPORT_SYMBOL_GPL(kasan_enable_tagging);
- 
-+#if IS_ENABLED(CONFIG_KASAN_KUNIT_TEST)
-+
- void kasan_force_async_fault(void)
- {
- 	hw_force_async_tag_fault();
-diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
-index d79b83d673b1..b01b4bbe0409 100644
---- a/mm/kasan/kasan.h
-+++ b/mm/kasan/kasan.h
-@@ -355,25 +355,27 @@ static inline const void *arch_kasan_set_tag(const void *addr, u8 tag)
- #define hw_set_mem_tag_range(addr, size, tag, init) \
- 			arch_set_mem_tag_range((addr), (size), (tag), (init))
- 
-+void kasan_enable_tagging(void);
-+
- #else /* CONFIG_KASAN_HW_TAGS */
- 
- #define hw_enable_tagging_sync()
- #define hw_enable_tagging_async()
- #define hw_enable_tagging_asymm()
- 
-+static inline void kasan_enable_tagging(void) { }
-+
- #endif /* CONFIG_KASAN_HW_TAGS */
- 
- #if defined(CONFIG_KASAN_HW_TAGS) && IS_ENABLED(CONFIG_KASAN_KUNIT_TEST)
- 
--void kasan_enable_tagging(void);
- void kasan_force_async_fault(void);
- 
--#else /* CONFIG_KASAN_HW_TAGS || CONFIG_KASAN_KUNIT_TEST */
-+#else /* CONFIG_KASAN_HW_TAGS && CONFIG_KASAN_KUNIT_TEST */
- 
--static inline void kasan_enable_tagging(void) { }
- static inline void kasan_force_async_fault(void) { }
- 
--#endif /* CONFIG_KASAN_HW_TAGS || CONFIG_KASAN_KUNIT_TEST */
-+#endif /* CONFIG_KASAN_HW_TAGS && CONFIG_KASAN_KUNIT_TEST */
- 
- #ifdef CONFIG_KASAN_SW_TAGS
- u8 kasan_random_tag(void);
 -- 
-2.35.1
+2.25.1
 

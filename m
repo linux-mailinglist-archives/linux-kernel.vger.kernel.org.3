@@ -2,138 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D2ED4F97A2
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:07:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 839A84F97AC
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232769AbiDHOJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 10:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45312 "EHLO
+        id S235165AbiDHOJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 10:09:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiDHOJB (ORCPT
+        with ESMTP id S232875AbiDHOJj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 10:09:01 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA541B9FD7
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 07:06:58 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id p10so15215901lfa.12
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 07:06:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+OPCNdj76CLB8yCZDySaFYBOtiA1oqmhgvF6bYV33T4=;
-        b=eGgzR9tgn20HubUZlwVH67m6Sh8oBEaYCT2E92s9GLs0a+qnh9IHnfAxaU87LABPSF
-         913vKcPPeV3k70GpkCZzgduVa5avEFOZr9vag66FiCjJlQkneGN/MYUu4Os62wq28euA
-         yGEdSOyi02YLpGDQqfeD4kFM0vJK7kjyrK7vJfwJLc62wQsKwA0RcEgsoe1zBRV7mdv0
-         7ORH+PZibwY178UGEV5kVVTzE8RLDfNJ0s6WnKxVRFUbBl9tohTvrdo++Tu54KeAbwYX
-         Msum6/t54O9KC1RniyZrqdgNtTlbUWmz1+MOs/1nC2I4F/5dOJfpPsopg53DxvtKJc+x
-         ISDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+OPCNdj76CLB8yCZDySaFYBOtiA1oqmhgvF6bYV33T4=;
-        b=ZNTAMRDku3KuwA6uSx715MiCR6R3Hoi1wnlvTlaVCx13DLpHlbmITWoSUAmPdrtjgh
-         1f5Ht5+7gAaOZZMmmK1jC0YSZk5yE7ILu6RBHcvHe3Vgf8iyYZXTFRLzPvAAVEomeLWc
-         bqPs2JkbSLtye0DN315nBxrWrFsXDrCIfD8b5uXc5XlXGqFloVR9GqJsMlhSvHh1BWDe
-         b8ee95t27pkjsElvdAnJRsTXY5d4xe7+cvoJe1iSFTQ1iQJzsUqDnOVX7C20/A08+4sL
-         wC2D7ZbWTDsnZhW1/KrMTgO1CXrFH8oTz6TjsVQFE20PGOKNxMtdxBZfpwDUFNPWV2do
-         mMWg==
-X-Gm-Message-State: AOAM533xZMsZTBcs2Kq+mQeKUVjz7P3T7OypHJsx/Dr0GYhQKS88kddw
-        Rf2/NvOalGZMnHZhrQfHb+zFaA==
-X-Google-Smtp-Source: ABdhPJxxjdm8Unb7Z85232DOvXznn4/LVOW3mRPCJIyG+WlAoPxNTEek0ab2h6HrYgkiKGYlEBKZMw==
-X-Received: by 2002:a05:6512:322f:b0:44a:57a0:6950 with SMTP id f15-20020a056512322f00b0044a57a06950mr12603033lfe.74.1649426816249;
-        Fri, 08 Apr 2022 07:06:56 -0700 (PDT)
-Received: from localhost.localdomain (h-98-128-181-154.NA.cust.bahnhof.se. [98.128.181.154])
-        by smtp.gmail.com with ESMTPSA id f5-20020a05651201c500b0046b890cb0a4sm144781lfp.98.2022.04.08.07.06.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 07:06:55 -0700 (PDT)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     Linus <torvalds@linux-foundation.org>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [GIT PULL] MMC fixes for v5.18-rc2
-Date:   Fri,  8 Apr 2022 16:06:54 +0200
-Message-Id: <20220408140654.119255-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Fri, 8 Apr 2022 10:09:39 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F9B2359C8;
+        Fri,  8 Apr 2022 07:07:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649426855; x=1680962855;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=eDkQXvXOF7yKn1iuVU45nfja4Im2dxSC1xviYqR0nWQ=;
+  b=ICiKASg3rkBRceREPDm4MiYaX73yeThwuA5l6JPgLhYBYwq++0vArNfv
+   RsvxmS5ZIIs2AL1GUBbCIR9F+f90JSMvY022SOJVVUb3SfMWB1dUF3T6i
+   REd+RSKyve//qaPIgD3vLX7NILGUScXrfFiP5olfODN24CHJtyhQ9bEGW
+   uO3ZQbHfslw3tA1dI2s2afgvKGEmF2OjQ6HywGOV9BSrvP4DV2YsLYRpl
+   T1yn1Z5KPot0HaRey2YvfH1jLtVc2zZIluyL1hh6LOEEdL//YzwePvL+b
+   64u09CWZKdHse32di7wOF/kWnceH2Fepjrb9pvETbsZR/w4MYidqL6jN8
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="260436696"
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="260436696"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 07:07:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="571498592"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
+  by orsmga008.jf.intel.com with ESMTP; 08 Apr 2022 07:07:18 -0700
+Date:   Fri, 8 Apr 2022 22:07:07 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com
+Subject: Re: [PATCH v5 08/13] KVM: Use memfile_pfn_ops to obtain pfn for
+ private pages
+Message-ID: <20220408140707.GG57095@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
+ <20220310140911.50924-9-chao.p.peng@linux.intel.com>
+ <YkJLFu98hZOvTSrL@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YkJLFu98hZOvTSrL@google.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Mon, Mar 28, 2022 at 11:56:06PM +0000, Sean Christopherson wrote:
+> On Thu, Mar 10, 2022, Chao Peng wrote:
+> > @@ -2217,4 +2220,34 @@ static inline void kvm_handle_signal_exit(struct kvm_vcpu *vcpu)
+> >  /* Max number of entries allowed for each kvm dirty ring */
+> >  #define  KVM_DIRTY_RING_MAX_ENTRIES  65536
+> >  
+> > +#ifdef CONFIG_MEMFILE_NOTIFIER
+> > +static inline long kvm_memfile_get_pfn(struct kvm_memory_slot *slot, gfn_t gfn,
+> > +				       int *order)
+> > +{
+> > +	pgoff_t index = gfn - slot->base_gfn +
+> > +			(slot->private_offset >> PAGE_SHIFT);
+> 
+> This is broken for 32-bit kernels, where gfn_t is a 64-bit value but pgoff_t is a
+> 32-bit value.  There's no reason to support this for 32-bit kernels, so...
+> 
+> The easiest fix, and likely most maintainable for other code too, would be to
+> add a dedicated CONFIG for private memory, and then have KVM check that for all
+> the memfile stuff.  x86 can then select it only for 64-bit kernels, and in turn
+> select MEMFILE_NOTIFIER iff private memory is supported.
 
-Here's a PR with a couple of MMC fixes intended for v5.18-rc2. Details about the
-highlights are as usual found in the signed tag.
+Looks good.
 
-Note that, this time I have also folded in a patch that isn't a fix. The reason
-is that it's cross-subsystem change and I wanted to avoid us from sharing an
-immutable branch.
+> 
+> diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
+> index ca7b2a6a452a..ee9c8c155300 100644
+> --- a/arch/x86/kvm/Kconfig
+> +++ b/arch/x86/kvm/Kconfig
+> @@ -48,7 +48,9 @@ config KVM
+>         select SRCU
+>         select INTERVAL_TREE
+>         select HAVE_KVM_PM_NOTIFIER if PM
+> -       select MEMFILE_NOTIFIER
+> +       select HAVE_KVM_PRIVATE_MEM if X86_64
+> +       select MEMFILE_NOTIFIER if HAVE_KVM_PRIVATE_MEM
+> +
+>         help
+>           Support hosting fully virtualized guest machines using hardware
+>           virtualization extensions.  You will need a fairly recent
+> 
+> And in addition to replacing checks on CONFIG_MEMFILE_NOTIFIER, the probing of
+> whether or not KVM_MEM_PRIVATE is allowed can be:
+> 
+> @@ -1499,23 +1499,19 @@ static void kvm_replace_memslot(struct kvm *kvm,
+>         }
+>  }
+> 
+> -bool __weak kvm_arch_private_memory_supported(struct kvm *kvm)
+> -{
+> -       return false;
+> -}
+> -
+>  static int check_memory_region_flags(struct kvm *kvm,
+>                                 const struct kvm_userspace_memory_region *mem)
+>  {
+>         u32 valid_flags = KVM_MEM_LOG_DIRTY_PAGES;
+> 
+> -       if (kvm_arch_private_memory_supported(kvm))
+> -               valid_flags |= KVM_MEM_PRIVATE;
+> -
+>  #ifdef __KVM_HAVE_READONLY_MEM
+>         valid_flags |= KVM_MEM_READONLY;
+>  #endif
+> 
+> +#ifdef CONFIG_KVM_HAVE_PRIVATE_MEM
+> +       valid_flags |= KVM_MEM_PRIVATE;
+> +#endif
+> +
+>         if (mem->flags & ~valid_flags)
+>                 return -EINVAL;
+> 
+> > +
+> > +	return slot->pfn_ops->get_lock_pfn(file_inode(slot->private_file),
+> > +					   index, order);
+> 
+> In a similar vein, get_locK_pfn() shouldn't return a "long".  KVM likely won't use
+> these APIs on 32-bit kernels, but that may not hold true for other subsystems, and
+> this code is confusing and technically wrong.  The pfns for struct page squeeze
+> into an unsigned long because PAE support is capped at 64gb, but casting to a
+> signed long could result in a pfn with bit 31 set being misinterpreted as an error.
+> 
+> Even returning an "unsigned long" for the pfn is wrong.  It "works" for the shmem
+> code because shmem deals only with struct page, but it's technically wrong, especially
+> since one of the selling points of this approach is that it can work without struct
+> page.
 
-Please pull this in!
+Hmmm, that's correct.
 
-Kind regards
-Ulf Hansson
+> 
+> OUT params suck, but I don't see a better option than having the return value be
+> 0/-errno, with "pfn_t *pfn" for the resolved pfn.
+> 
+> > +}
+> > +
+> > +static inline void kvm_memfile_put_pfn(struct kvm_memory_slot *slot,
+> > +				       kvm_pfn_t pfn)
+> > +{
+> > +	slot->pfn_ops->put_unlock_pfn(pfn);
+> > +}
+> > +
+> > +#else
+> > +static inline long kvm_memfile_get_pfn(struct kvm_memory_slot *slot, gfn_t gfn,
+> > +				       int *order)
+> > +{
+> 
+> This should be a WARN_ON() as its usage should be guarded by a KVM_PRIVATE_MEM
+> check, and private memslots should be disallowed in this case.
+> 
+> Alternatively, it might be a good idea to #ifdef these out entirely and not provide
+> stubs.  That'd likely require a stub or two in arch code, but overall it might be
+> less painful in the long run, e.g. would force us to more carefully consider the
+> touch points for private memory.  Definitely not a requirement, just an idea.
 
+Make sense, let me try.
 
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
-
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git tags/mmc-v5.18-rc1
-
-for you to fetch changes up to b71597edfaade119157ded98991bac7160be80c2:
-
-  mmc: core: improve API to make clear mmc_hw_reset is for cards (2022-04-08 11:00:08 +0200)
-
-----------------------------------------------------------------
-MMC core:
- - Improve API to make it clear that mmc_hw_reset() is for cards
- - Fixup support for writeback-cache for eMMC and SD
- - Check for errors after writes on SPI
-
-MMC host:
- - renesas_sdhi: A couple of fixes of TAP settings for eMMC HS400 mode
- - mmci_stm32: Fixup check of all elements in sg list
- - sdhci-xenon: Revert unnecessary fix for annoying 1.8V regulator warning
-
-----------------------------------------------------------------
-Christian Löhle (1):
-      mmc: block: Check for errors after write on SPI
-
-Michael Wu (1):
-      mmc: core: Fixup support for writeback-cache for eMMC and SD
-
-Pali Rohár (1):
-      Revert "mmc: sdhci-xenon: fix annoying 1.8V regulator warning"
-
-Wolfram Sang (3):
-      mmc: renesas_sdhi: special 4tap settings only apply to HS400
-      mmc: renesas_sdhi: don't overwrite TAP settings when HS400 tuning is complete
-      mmc: core: improve API to make clear mmc_hw_reset is for cards
-
-Yann Gautier (1):
-      mmc: mmci: stm32: correctly check all elements of sg list
-
- drivers/mmc/core/block.c                           | 48 +++++++++++++++++++---
- drivers/mmc/core/core.c                            |  5 ++-
- drivers/mmc/core/mmc_test.c                        |  3 +-
- drivers/mmc/host/mmci_stm32_sdmmc.c                |  6 +--
- drivers/mmc/host/renesas_sdhi_core.c               |  8 ++--
- drivers/mmc/host/sdhci-xenon.c                     | 10 -----
- drivers/net/wireless/ath/ath10k/sdio.c             |  2 +-
- .../wireless/broadcom/brcm80211/brcmfmac/sdio.c    |  2 +-
- drivers/net/wireless/marvell/mwifiex/sdio.c        |  2 +-
- drivers/net/wireless/ti/wlcore/sdio.c              |  2 +-
- include/linux/mmc/core.h                           |  2 +-
- 11 files changed, 59 insertions(+), 31 deletions(-)
+Thanks,
+Chao

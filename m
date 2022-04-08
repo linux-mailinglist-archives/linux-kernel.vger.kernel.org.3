@@ -2,153 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCF464F9BDB
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 19:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C30D94F9BDF
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 19:41:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238252AbiDHRl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 13:41:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48440 "EHLO
+        id S234851AbiDHRnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 13:43:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238241AbiDHRlX (ORCPT
+        with ESMTP id S238372AbiDHRnC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 13:41:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3ACB7DE22;
-        Fri,  8 Apr 2022 10:39:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 50A70621AF;
-        Fri,  8 Apr 2022 17:39:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3EC5C385A3;
-        Fri,  8 Apr 2022 17:39:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649439558;
-        bh=fjDvDzKQXH+2sFBYV36rZ198m6vn8t2q+ypSTCZ4aME=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JvU4Z2WMU3WoPbly6wMJrkt5PXY/SJ+eZIPSfgdrwg4qTAediv2I9luAlRDxhNIcv
-         jv0LPCiKKQ+/17WNyoyioViRu36JIF+yOCN4tch7QW1u+OztYBF28hgjClKUFgwtPZ
-         9KsvkE9Gu9rBQHTvLrOs2MU4QzKF8EBh7aAyFjK1rKAVudvDiYgHi78P1RT2BkFBlq
-         1rfq/yD/hwiaJZ1qbcm54CL+Ui8I8WJYG/NcHZgnWbOp3peJ7M7NFp3Yd3yQZmEGFA
-         y0dHFQG+tdwxf2ZvTZ0YJo0wjC5iPmGeWO02uS5JrpA5kt4i1Bj9h0pW1tI5hPlLpG
-         2+DQvByP+Sa4g==
-Date:   Fri, 8 Apr 2022 23:09:14 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Kevin Groeneveld <kgroeneveld@lenbrook.com>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Robin Gong <yibin.gong@nxp.com>, dmaengine@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dmaengine: imx-sdma: fix regression with uart scripts
-Message-ID: <YlBzQpWEqMHz/HsU@matsya>
-References: <20220406224809.29197-1-kgroeneveld@lenbrook.com>
+        Fri, 8 Apr 2022 13:43:02 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7941690FC3;
+        Fri,  8 Apr 2022 10:40:58 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id b19so5390228qkk.12;
+        Fri, 08 Apr 2022 10:40:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=aEGMMSoqzQV29Yb3vuyxXwWYzXUyMcWqjEt/8PwjhP4=;
+        b=f5+kjuwksQh4ROVlTCgr6Bmrfuh7tv7d2sKBntQaNA9RkEEG/8YHNYJS8Lm3GaAKLY
+         6wiVB3nqxEc8RbW6j+ID+7Yg3t/yvgZSEZ4R3D8Bt7rlKw6khDqNF62CGtWSYv3EsoZ5
+         3JTkkN1Nil0CUHRORoOWuBcWsowiQTlEiM18fOEOvijFXgSVbAnQVgny63DENrr8gyic
+         LZhYITb1UhHZsijwT+h8De5Ur9GSKjlTeynpZdblz186EU5fDuv+IHnfXHyTrtg0m9Rt
+         NhgW4DzGPdP5EEStA/ZyOVWilT+cYDIGy96rU4Yq7PY4AJ72cI9ZwohsK4kgn6s4wkVs
+         GKNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=aEGMMSoqzQV29Yb3vuyxXwWYzXUyMcWqjEt/8PwjhP4=;
+        b=vU2s3vgiveMFdxRRoajOMel5tmtox9AjEi0prK+pL38f6DcTWlRxXj5fp1zQ8iOSec
+         B0i2IOadn/r1Eg+DvxRz/Tl6FY8NUuC6BL8fwbQaUr/ssl6Pll4L3ECX9zKVATS/cb5n
+         La7nxEPBxPJ3CNkTr2kR4Qv0KIA9cY5NE1Cwzo176Yot3xDGzZ+aEnSzOFrSfyJrvTDh
+         jANlpV9IaTjQDWgGvpm7lxn8Xd6OFrgfcseIZCGlIC1wF1Mm4TZUVgMm/wf8zBnru1EW
+         1TTJqFGaYZa0jGs7Uq5sCrXrYekBJZav2aBwFSyC3KOqxpGwSSNbQTd/iMOsZkDk+6cY
+         r+KQ==
+X-Gm-Message-State: AOAM530+PWfllESFvAz7ne7JrOw8l3b4y+muR0UVaMmDwykxLLaQWrGF
+        iuoGYUS/xJMhT7LGm1PJDqu8a9vAbDY=
+X-Google-Smtp-Source: ABdhPJyGWb1/E9mWepAzuuHv95UgS5bl6t4bSWTiiNmVXIifF60fF07UXLQHxTRzwcOEoHEyfASS3Q==
+X-Received: by 2002:a37:554:0:b0:69b:ef36:cd6f with SMTP id 81-20020a370554000000b0069bef36cd6fmr1454823qkf.129.1649439657667;
+        Fri, 08 Apr 2022 10:40:57 -0700 (PDT)
+Received: from ?IPV6:2600:1700:2442:6db0:6d2d:3351:3e49:3378? ([2600:1700:2442:6db0:6d2d:3351:3e49:3378])
+        by smtp.gmail.com with ESMTPSA id h186-20020a376cc3000000b00699c789a757sm9336207qkc.132.2022.04.08.10.40.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Apr 2022 10:40:57 -0700 (PDT)
+Message-ID: <1ed7ea01-b515-7c0b-4b3e-547d19717deb@gmail.com>
+Date:   Fri, 8 Apr 2022 12:40:56 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220406224809.29197-1-kgroeneveld@lenbrook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH 1/1] of: overlay: of_overlay_apply() kfree() errors
+Content-Language: en-US
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Pantelis Antoniou <pantelis.antoniou@konsulko.com>,
+        Slawomir Stepien <slawomir.stepien@nokia.com>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Slawomir Stepien <sst@poczta.fm>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Alan Tull <atull@kernel.org>
+References: <20220408172103.371637-1-frowand.list@gmail.com>
+ <CAL_JsqJC6pKxEmwMeirVLwJEbOH0WD+01VEfFXC257a+ZDRtsw@mail.gmail.com>
+From:   Frank Rowand <frowand.list@gmail.com>
+In-Reply-To: <CAL_JsqJC6pKxEmwMeirVLwJEbOH0WD+01VEfFXC257a+ZDRtsw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06-04-22, 18:48, Kevin Groeneveld wrote:
-> Commit b98ce2f4e32b ("dmaengine: imx-sdma: add uart rom script") broke
-> uart rx on imx5 when using sdma firmware from older Freescale 2.6.35
-> kernel. In this case reading addr->uartXX_2_mcu_addr was going out of
-> bounds of the firmware memory and corrupting the uart script addresses.
+On 4/8/22 12:34, Rob Herring wrote:
+> On Fri, Apr 8, 2022 at 12:21 PM <frowand.list@gmail.com> wrote:
+>>
+>> From: Frank Rowand <frank.rowand@sony.com>
 > 
-> Simply adding a bounds check before accessing addr->uartXX_2_mcu_addr
-> does not work as the uartXX_2_mcu_addr members are now beyond the size
-> of the older firmware and the uart addresses would never be populated
-> in that case. There are other ways to fix this but overall the logic
-> seems clearer to me to revert the uartXX_2_mcu_ram_addr structure
-> entries back to uartXX_2_mcu_addr, change the newer entries to
-> uartXX_2_mcu_rom_addr and update the logic accordingly.
-
-1. Patch title should reflect the change introduced, so the title is not
-apt, pls revise
-2. Is this in response to rmk's report, if so, please add reported-by
-3. Lastly, I would like to see some tested by for this patch..
-
+> The subject needs a verb.
 > 
-> Fixes: b98ce2f4e32b ("dmaengine: imx-sdma: add uart rom script")
-
-cc: stable ?
-
-> Signed-off-by: Kevin Groeneveld <kgroeneveld@lenbrook.com>
-> ---
->  drivers/dma/imx-sdma.c | 28 ++++++++++++++--------------
->  1 file changed, 14 insertions(+), 14 deletions(-)
+>>
+>> Fix various kfree() issues related to of_overlay_apply().
+>>   - Double kfree() of fdt and tree when init_overlay_changeset()
+>>     returns an error.
+>>   - free_overlay_changeset() free of the root of the unflattened
+>>     overlay (variable tree) instead of the memory that contains
+>>     the unflattened overlay.
+>>   - Move similar kfree()s from multiple error locations to a
+>>     common error path (err_free_tree_unlocked:).
 > 
-> diff --git a/drivers/dma/imx-sdma.c b/drivers/dma/imx-sdma.c
-> index 70c0aa931ddf..b708d029b6e9 100644
-> --- a/drivers/dma/imx-sdma.c
-> +++ b/drivers/dma/imx-sdma.c
-> @@ -198,12 +198,12 @@ struct sdma_script_start_addrs {
->  	s32 per_2_firi_addr;
->  	s32 mcu_2_firi_addr;
->  	s32 uart_2_per_addr;
-> -	s32 uart_2_mcu_ram_addr;
-> +	s32 uart_2_mcu_addr;
->  	s32 per_2_app_addr;
->  	s32 mcu_2_app_addr;
->  	s32 per_2_per_addr;
->  	s32 uartsh_2_per_addr;
-> -	s32 uartsh_2_mcu_ram_addr;
-> +	s32 uartsh_2_mcu_addr;
->  	s32 per_2_shp_addr;
->  	s32 mcu_2_shp_addr;
->  	s32 ata_2_mcu_addr;
-> @@ -232,8 +232,8 @@ struct sdma_script_start_addrs {
->  	s32 mcu_2_ecspi_addr;
->  	s32 mcu_2_sai_addr;
->  	s32 sai_2_mcu_addr;
-> -	s32 uart_2_mcu_addr;
-> -	s32 uartsh_2_mcu_addr;
-> +	s32 uart_2_mcu_rom_addr;
-> +	s32 uartsh_2_mcu_rom_addr;
->  	/* End of v3 array */
->  	s32 mcu_2_zqspi_addr;
->  	/* End of v4 array */
-> @@ -1796,17 +1796,17 @@ static void sdma_add_scripts(struct sdma_engine *sdma,
->  			saddr_arr[i] = addr_arr[i];
->  
->  	/*
-> -	 * get uart_2_mcu_addr/uartsh_2_mcu_addr rom script specially because
-> -	 * they are now replaced by uart_2_mcu_ram_addr/uartsh_2_mcu_ram_addr
-> -	 * to be compatible with legacy freescale/nxp sdma firmware, and they
-> -	 * are located in the bottom part of sdma_script_start_addrs which are
-> -	 * beyond the SDMA_SCRIPT_ADDRS_ARRAY_SIZE_V1.
-> +	 * For compatibility with NXP internal legacy kernel before 4.19 which
-> +	 * is based on uart ram script and mainline kernel based on uart rom
-> +	 * script, both uart ram/rom scripts are present in newer sdma
-> +	 * firmware. Use the rom versions if they are present (V3 or newer).
->  	 */
-> -	if (addr->uart_2_mcu_addr)
-> -		sdma->script_addrs->uart_2_mcu_addr = addr->uart_2_mcu_addr;
-> -	if (addr->uartsh_2_mcu_addr)
-> -		sdma->script_addrs->uartsh_2_mcu_addr = addr->uartsh_2_mcu_addr;
-> -
-> +	if (sdma->script_number >= SDMA_SCRIPT_ADDRS_ARRAY_SIZE_V3) {
-> +		if (addr->uart_2_mcu_rom_addr)
-> +			sdma->script_addrs->uart_2_mcu_addr = addr->uart_2_mcu_rom_addr;
-> +		if (addr->uartsh_2_mcu_rom_addr)
-> +			sdma->script_addrs->uartsh_2_mcu_addr = addr->uartsh_2_mcu_rom_addr;
-> +	}
->  }
->  
->  static void sdma_load_firmware(const struct firmware *fw, void *context)
-> -- 
-> 2.17.1
+> What about my question/suggestion on the original patch from Slawomir?
+> 
 
--- 
-~Vinod
+I lost track of your email while investigating the problem.  I'll go
+back and look at your suggestion and question.
+
+-Frank

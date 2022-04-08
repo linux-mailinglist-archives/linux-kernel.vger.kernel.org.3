@@ -2,142 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F6724F8CB4
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B5774F8C13
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:26:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233338AbiDHBVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 21:21:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37488 "EHLO
+        id S233368AbiDHBVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 21:21:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbiDHBVD (ORCPT
+        with ESMTP id S233320AbiDHBVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 21:21:03 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E9013F75
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 18:19:01 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id bg10so14343209ejb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 18:19:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=ZBbnVt+YQv3guhlNFNXJxYGqdHwC1mgzxEzBpvoB+SY=;
-        b=w0q8eVRm7h8rkmWA6aK++gCu1l3MsYOxmQ4NRzxqJmQPLXXIlRpBBIDfMzmDHECr7t
-         TtW7WfmaPG3TgJXIbeOvoAEpjAFJfTf6e8jkEM8/qC4/WqEzi5oVjtegKjbhJjdwaqfv
-         MQkSGt/u4A3k8V1cQDTccN7ypBxGvfg1BimSUF69kO0VkckMQJ2M37o6hp56SSyC8jmD
-         ublaU+qy3+GSGXDg6f9rWwoI4T46vRUMl5F46DQYG8RajzVrYxiQJsnil81wzJXoRYJh
-         K+w0IVmThRPv22Egt4dhG8A8BhD5shYjWWXo3tbE7zDIykX+0j47Ah+yAMNIerVOUfI/
-         3l+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=ZBbnVt+YQv3guhlNFNXJxYGqdHwC1mgzxEzBpvoB+SY=;
-        b=PoA+9oxm0gu4QaVJlYB4UpCABHpI+RbH7xmUlTgqN2//8bjDc9JgrxfujgpQ+tle6G
-         UcJ67o6AyHRWkiJHmFSg+v+16NkQlUCs7uMa3u9MhtiGcY3qFZDSKwaHdMlUD0GJjiEW
-         Js0cVZGaHaNzPbwGtxT0Wm+YGId26LCOgR37OFkp+16hGVailWA/1IR/dF0gVG/4fwI9
-         ZHgPOcssWMhvEsZbPCGnZ1kxffRcxFkcPDGiQZQlMrIpOPvfl5fbSfxMmJJhKtARhW+e
-         POyFk7CrsgPv4T95k/2+1ijkFLQh3dtsWc4bWqqwti4/m2K1Q/GDmYEKBISf9Qv8xGPt
-         VG1Q==
-X-Gm-Message-State: AOAM532vxNqV7o8fFwVMT/3fh5XRThf9vhiMONtsuvdaGDTyhBrZ/1if
-        yQIjtP6E5Wb03kK4+uZmp3K13A==
-X-Google-Smtp-Source: ABdhPJwjkYqFIWmuU4xWDx/TspNGWQHzwEtaxjVLRLgAWrEaj1cS5hqzQdLBd4FyyYZWUiMFo0jjAA==
-X-Received: by 2002:a17:907:c21:b0:6e6:f1f3:ba77 with SMTP id ga33-20020a1709070c2100b006e6f1f3ba77mr16565078ejc.686.1649380740204;
-        Thu, 07 Apr 2022 18:19:00 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s ([104.245.96.34])
-        by smtp.gmail.com with ESMTPSA id n6-20020aa7c786000000b00410d2403ccfsm9807040eds.21.2022.04.07.18.18.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 18:18:59 -0700 (PDT)
-Date:   Fri, 8 Apr 2022 09:18:52 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     German Gomez <german.gomez@arm.com>
-Cc:     Ali Saidi <alisaidi@amazon.com>, Nick.Forrington@arm.com,
-        acme@kernel.org, alexander.shishkin@linux.intel.com,
-        andrew.kilroy@arm.com, benh@kernel.crashing.org,
-        james.clark@arm.com, john.garry@huawei.com, jolsa@kernel.org,
-        kjain@linux.ibm.com, lihuafei1@huawei.com,
+        Thu, 7 Apr 2022 21:21:15 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8B234BB7
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 18:19:13 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id 8FD2F1F46B10
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649380752;
+        bh=DRF0VVql1NDF1AFBXdreQkrM736cxZe8TLofRJp+rIE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=CzKotq9B/GtJeR8NyobQE7fpb4jsG3di7QvNmI8YKfpttbMaevDT9Uf0OdhsDS3Wq
+         kW0OUMPFd8j73Nlc3Lx7iohdfUWUeC1u6t+C0BUkKMEfMlejJb/BOwbGK3j4oiaQzl
+         zV1wC6Be1FGMR6a/4BlZpDjMns3t8ZmMr6qU8M/9H3+myE196Vsk92YjgRydOUwQhB
+         F1h6D4bzcLn4Cau+hHx5IL9LmniCCecJfT4lHOneb0gonTu8akKH5rN3Lxdb82jKcK
+         rYHceKabJgfRjDlxubAvqcymueNkYSqbcd2MEn7p1ifNkTqfkboJOVEsqsCUZcY+/0
+         Qj2e/jOnJFqkA==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        dri-devel@lists.freedesktop.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
-        mathieu.poirier@linaro.org, mingo@redhat.com, namhyung@kernel.org,
-        peterz@infradead.org, will@kernel.org
-Subject: Re: [PATCH v4 2/4] perf arm-spe: Use SPE data source for neoverse
- cores
-Message-ID: <20220408011852.GB973239@leoy-ThinkPad-X240s>
-References: <20220328130547.GA360814@leoy-ThinkPad-X240s>
- <20220329143214.12707-1-alisaidi@amazon.com>
- <4710b4b2-5dcd-00a4-3976-1bd5340f401d@arm.com>
- <20220331124425.GB1704284@leoy-ThinkPad-X240s>
- <da902ef2-df87-ed71-275b-f7b41d1afc9a@arm.com>
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH] drm/mediatek: dpi: Use mt8183 output formats for mt8192
+Date:   Thu,  7 Apr 2022 21:19:07 -0400
+Message-Id: <20220408011907.672120-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <da902ef2-df87-ed71-275b-f7b41d1afc9a@arm.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 04:24:35PM +0100, German Gomez wrote:
-> Hi,
-> 
-> On 31/03/2022 13:44, Leo Yan wrote:
-> > [...]
-> >>> I'd like to do this in a separate patch, but I have one other proposal. The
-> >>> Neoverse cores L2 is strictly inclusive of the L1, so even if it's in the L1,
-> >>> it's also in the L2. Given that the Graviton systems and afaik the Ampere
-> >>> systems don't have any cache between the L2 and the SLC, thus anything from
-> >>> PEER_CORE, LCL_CLSTR, or PEER_CLSTR would hit in the L2, perhaps we
-> >>> should just set L2 for these cases? German, are you good with this for now? 
-> >> Sorry for the delay. I'd like to also check this with someone. I'll try
-> >> to get back asap. In the meantime, if this approach is also OK with Leo,
-> >> I think it would be fine by me.
-> 
-> Sorry for the delay. Yeah setting it to L2 indeed looks reasonable for
-> now. Somebody brought up the case of running SPE in a heterogeneous 
-> system, but also we think might be beyond the scope of this change.
-> 
-> One very minor nit though. Would you be ok with renaming LCL to LOCAL 
-> and CLSTR to CLUSTER? I sometimes mistead the former as "LLC".
+The configuration for mt8192 was incorrectly using the output formats
+from mt8173. Since the output formats for mt8192 are instead the same
+ones as for mt8183, which require two bus samples per pixel, the
+pixelclock and DDR edge setting were misconfigured. This made external
+displays unable to show the image.
 
-Ali's suggestion is to use the format: highest_cache_level | MEM_SNOOP_PEER.
+Fix the issue by correcting the output format for mt8192 to be the same
+as for mt8183, fixing the usage of external displays for mt8192.
 
-Simply to say, the highest cache level is where we snoop the cache
-data with the highest cache level.  And we use an extra snoop op
-MEM_SNOOP_PEER as the flag to indicate a peer snooping from the local
-cluster or peer cluster.
+Signed-off-by: NÃ­colas F. R. A. Prado <nfraprado@collabora.com>
 
-Please review the more detailed discussion in another email.
+---
 
-> > Thanks for the checking internally.  Let me just bring up my another
-> > thinking (sorry that my suggestion is float): another choice is we set
-> > ANY_CACHE as cache level if we are not certain the cache level, and
-> > extend snoop field to indicate the snooping logics, like:
-> >
-> >   PERF_MEM_SNOOP_PEER_CORE
-> >   PERF_MEM_SNOOP_LCL_CLSTR
-> >   PERF_MEM_SNOOP_PEER_CLSTR
-> >
-> > Seems to me, we doing this is not only for cache level, it's more
-> > important for users to know the variant cost for involving different
-> > snooping logics.
-> >
-> I see there's been some more messages I need to catch up with. Is the 
-> intention to extend the PERF_MEM_* flags for this cset, or will it be
-> left for a later change?
+ drivers/gpu/drm/mediatek/mtk_dpi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-The plan is to extend the PERF_MEM_* flags in this patch set.
+diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
+index 4554e2de1430..e61cd67b978f 100644
+--- a/drivers/gpu/drm/mediatek/mtk_dpi.c
++++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+@@ -819,8 +819,8 @@ static const struct mtk_dpi_conf mt8192_conf = {
+ 	.cal_factor = mt8183_calculate_factor,
+ 	.reg_h_fre_con = 0xe0,
+ 	.max_clock_khz = 150000,
+-	.output_fmts = mt8173_output_fmts,
+-	.num_output_fmts = ARRAY_SIZE(mt8173_output_fmts),
++	.output_fmts = mt8183_output_fmts,
++	.num_output_fmts = ARRAY_SIZE(mt8183_output_fmts),
+ };
+ 
+ static int mtk_dpi_probe(struct platform_device *pdev)
+-- 
+2.35.1
 
-> In any case, I'd be keen to take another look at it and try to bring
-> some more eyes into this.
-
-Sure.  Please check at your side and thanks for confirmation.
-
-Thanks,
-Leo

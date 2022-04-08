@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F1E14F8EE0
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:27:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5388A4F8EE3
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:27:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232864AbiDHG10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 02:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33256 "EHLO
+        id S235213AbiDHG2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 02:28:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232371AbiDHG1X (ORCPT
+        with ESMTP id S232627AbiDHG2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 02:27:23 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2AB616CE6F
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 23:25:17 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id l9so636874plg.9
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 23:25:17 -0700 (PDT)
+        Fri, 8 Apr 2022 02:28:22 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46393198534
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 23:26:19 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id h5so6014706pgc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 23:26:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=intel-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gpTt04knjFi7/r4rdhBFpeWlnWTTiUe1d93mQq2Do3I=;
-        b=MAz6RPib3bcwbnw7VOzDKsX4M+0+QU+QgCQSRlXjmf8Y1j5E82C3MrTGAgpPQP7x2/
-         7b9XV/2KcaXsvw+GrapP/fImELYl5GNzN9cbv9exuPksDfOeysAV7CzrjAFcCFLdpyD4
-         cv20aVQbMuVGhrrBsMZl3Y8jzXtJorYiwaZ6s95JJpE0/CNVsbKtdGQ2lozCaCX2Z2jj
-         aCCws8x6/Q4nlxvNHMQu8EzHC848KqfeK37XWl/JO83aKLXIaLW6At4fR5a2AYuvw90o
-         YBWxQySI3dDSIpAkhSAUDAIqcG8Am5xjHEv3dQvB8v6T2tmLMTp34RjSYln0W0Mrb2aR
-         fI4Q==
+         :cc:content-transfer-encoding;
+        bh=g35dmgX32k/R7TxnuKRf02cyb1nmI23wQu6jsuLVbVU=;
+        b=wlSIBbbSFHb+JhPPPwZhYXbD7WTAYzJ9ooeCOJ4TJorGTR9S6YbwY6kt+RuyigO524
+         kMvXQrASEbH6rcmScjaHvcogjfqkb8NJlfaBW2HLpnN56HWsI5uwggQ+dYV/aoIepw/E
+         nURCc8MnNjmA0kvJ5xVOTCAndDTK2kjR54OW2WJBfuINbnBPEn1OXIKcmO1sLyaob2Ed
+         9WV7jQkkHpFjZGrAf5cVdT00/H55NyENNDR9ohZpO6Hq09QYEVUxnOtII9fZ0Q0VRD+x
+         sv0Gji5mFmzwSVQRwIxHosZoXz1DCVg7lzTFeipG8MZ1kmYnGngZUkUnKri1pi1o27UQ
+         FLEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gpTt04knjFi7/r4rdhBFpeWlnWTTiUe1d93mQq2Do3I=;
-        b=gKPU7ZXNlRHTmI2jEHXksNIpXcx4hBRx0rYyHLWUgQqRizKyOmnOVhuUlEw4ETnBo4
-         V3RPST2/JBrbpYirbFoQWd7nfW0hxwce4jxnugSuc1khC9s/95UiqRw97pfzASfXI/da
-         avjrjoglIvrkGli3o7UL7l8GpjBFsAB0BVlci6pVVa/H2gq8Acv+sobiKJS+9DWE0Hvo
-         TM96HmAhMHiuywfdM0P1bnvrJMxDVRaA5VVEn/eJgX7f3i00Y0aE64Q4dUrJcMDX4hh8
-         1KGnV7md/102q9C7h9eCLcQNcdJclPyeOo9I6mzWftonrOPfcem4QIIy2kFXDRjtbpfC
-         qdQQ==
-X-Gm-Message-State: AOAM531abSNFrmX1qsl6O9REAJLuQMVjiZjsKCeW5oe33Y4SPMCXtD3h
-        vrzD+anPFVKmP3vbhggv0QV0MiHlatInyjudGCrm/Q==
-X-Google-Smtp-Source: ABdhPJzID/VraWAFCvRtOjZrpYKIIRqJ1ed+REfBAOD4Tjags0hA+q9Oe2WNNyfILt9xFCTGNazEpbsu/uJg2gJ2j9Y=
-X-Received: by 2002:a17:90a:c083:b0:1c6:a164:fd5d with SMTP id
- o3-20020a17090ac08300b001c6a164fd5dmr20043007pjs.8.1649399116938; Thu, 07 Apr
- 2022 23:25:16 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=g35dmgX32k/R7TxnuKRf02cyb1nmI23wQu6jsuLVbVU=;
+        b=A3YQofI2npV2IgWpi5v2KG3eBmP3VFWM0sjWw3hwhzH787dJdYh8mwjiXXGhuL/Lnj
+         FBXsIjm4Vq+g5mUEO+59D8cuFChg6rMde4K2fYRozw+Zl33wlpvsDDPtWu2R9DD7K3l7
+         U8M+MCLa1s5FP8OxIXefPj495b7QduOr9rXDs+jYLBaVNLz7b1mVtB65/uEplcXo7JCV
+         z0c2I6CVko/EMLvpVUxuGvKEUDs45hEcuJ4z0XMxZZT5XW9at9Z0mtwhXTy5bQwVUmno
+         Arb7x83vVFtVP3gOZrJbXWl2UvrDDdYgCe8ruQ3INIt7+0spMSstcaaAPFaFrmwANIro
+         iSZA==
+X-Gm-Message-State: AOAM530bIUlkR1Jbv/Pj42cMCce/o/H8lnbyfNfTju4/BVDPJY93mU04
+        DCybg3n2gw4uCbpa1oTri3lpZD7PVVveWRjly2Hvcw==
+X-Google-Smtp-Source: ABdhPJwZpPAQGEBsOe2H4Ew1tYOWqLCmIf5LQhtcpsvQh/Ztm9JTK+n38+TDSeB0NMkBLck/NVWRLJvt/A/qt2vd7YI=
+X-Received: by 2002:a05:6a00:8c5:b0:4fe:134d:30d3 with SMTP id
+ s5-20020a056a0008c500b004fe134d30d3mr18016783pfu.3.1649399178836; Thu, 07 Apr
+ 2022 23:26:18 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220227120747.711169-1-ruansy.fnst@fujitsu.com>
  <20220227120747.711169-8-ruansy.fnst@fujitsu.com> <YkPyBQer+KRiregd@infradead.org>
-In-Reply-To: <YkPyBQer+KRiregd@infradead.org>
+ <8f1931d2-b224-de98-4593-df136f397eb4@fujitsu.com>
+In-Reply-To: <8f1931d2-b224-de98-4593-df136f397eb4@fujitsu.com>
 From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Thu, 7 Apr 2022 23:25:06 -0700
-Message-ID: <CAPcyv4g5V-0bUXQEJjqxLg=Q-t4jzgx5XNO--iRuHiLkUvgcBQ@mail.gmail.com>
+Date:   Thu, 7 Apr 2022 23:26:08 -0700
+Message-ID: <CAPcyv4jO+-JkRcwZk0ZuYaGy0NDx2iZg-GjnDLWqVFYvciFF4g@mail.gmail.com>
 Subject: Re: [PATCH v11 7/8] xfs: Implement ->notify_failure() for XFS
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Shiyang Ruan <ruansy.fnst@fujitsu.com>,
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-xfs <linux-xfs@vger.kernel.org>,
         Linux NVDIMM <nvdimm@lists.linux.dev>,
@@ -63,83 +64,63 @@ Cc:     Shiyang Ruan <ruansy.fnst@fujitsu.com>,
         "Darrick J. Wong" <djwong@kernel.org>, david <david@fromorbit.com>,
         Jane Chu <jane.chu@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 11:01 PM Christoph Hellwig <hch@infradead.org> wrote:
+On Thu, Apr 7, 2022 at 11:05 PM Shiyang Ruan <ruansy.fnst@fujitsu.com> wrot=
+e:
 >
-> > @@ -1892,6 +1893,8 @@ xfs_free_buftarg(
-> >       list_lru_destroy(&btp->bt_lru);
+>
+>
+> =E5=9C=A8 2022/3/30 14:00, Christoph Hellwig =E5=86=99=E9=81=93:
+> >> @@ -1892,6 +1893,8 @@ xfs_free_buftarg(
+> >>      list_lru_destroy(&btp->bt_lru);
+> >>
+> >>      blkdev_issue_flush(btp->bt_bdev);
+> >> +    if (btp->bt_daxdev)
+> >> +            dax_unregister_holder(btp->bt_daxdev, btp->bt_mount);
+> >>      fs_put_dax(btp->bt_daxdev);
+> >>
+> >>      kmem_free(btp);
+> >> @@ -1939,6 +1942,7 @@ xfs_alloc_buftarg(
+> >>      struct block_device     *bdev)
+> >>   {
+> >>      xfs_buftarg_t           *btp;
+> >> +    int                     error;
+> >>
+> >>      btp =3D kmem_zalloc(sizeof(*btp), KM_NOFS);
+> >>
+> >> @@ -1946,6 +1950,14 @@ xfs_alloc_buftarg(
+> >>      btp->bt_dev =3D  bdev->bd_dev;
+> >>      btp->bt_bdev =3D bdev;
+> >>      btp->bt_daxdev =3D fs_dax_get_by_bdev(bdev, &btp->bt_dax_part_off=
+);
+> >> +    if (btp->bt_daxdev) {
+> >> +            error =3D dax_register_holder(btp->bt_daxdev, mp,
+> >> +                            &xfs_dax_holder_operations);
+> >> +            if (error) {
+> >> +                    xfs_err(mp, "DAX device already in use?!");
+> >> +                    goto error_free;
+> >> +            }
+> >> +    }
 > >
-> >       blkdev_issue_flush(btp->bt_bdev);
-> > +     if (btp->bt_daxdev)
-> > +             dax_unregister_holder(btp->bt_daxdev, btp->bt_mount);
-> >       fs_put_dax(btp->bt_daxdev);
+> > It seems to me that just passing the holder and holder ops to
+> > fs_dax_get_by_bdev and the holder to dax_unregister_holder would
+> > significantly simply the interface here.
 > >
-> >       kmem_free(btp);
-> > @@ -1939,6 +1942,7 @@ xfs_alloc_buftarg(
-> >       struct block_device     *bdev)
-> >  {
-> >       xfs_buftarg_t           *btp;
-> > +     int                     error;
-> >
-> >       btp = kmem_zalloc(sizeof(*btp), KM_NOFS);
-> >
-> > @@ -1946,6 +1950,14 @@ xfs_alloc_buftarg(
-> >       btp->bt_dev =  bdev->bd_dev;
-> >       btp->bt_bdev = bdev;
-> >       btp->bt_daxdev = fs_dax_get_by_bdev(bdev, &btp->bt_dax_part_off);
-> > +     if (btp->bt_daxdev) {
-> > +             error = dax_register_holder(btp->bt_daxdev, mp,
-> > +                             &xfs_dax_holder_operations);
-> > +             if (error) {
-> > +                     xfs_err(mp, "DAX device already in use?!");
-> > +                     goto error_free;
-> > +             }
-> > +     }
+> > Dan, what do you think?
 >
-> It seems to me that just passing the holder and holder ops to
-> fs_dax_get_by_bdev and the holder to dax_unregister_holder would
-> significantly simply the interface here.
+> Hi Dan,
 >
-> Dan, what do you think?
+> Could you give some advise on this API?  Is it needed to move
+> dax_register_holder's job into fs_dax_get_by_bdev()?
 
-Yes, makes sense, just like the optional holder arguments to blkdev_get_by_*().
 
->
-> > +#if IS_ENABLED(CONFIG_MEMORY_FAILURE) && IS_ENABLED(CONFIG_FS_DAX)
->
-> No real need for the IS_ENABLED.  Also any reason to even build this
-> file if the options are not set?  It seems like
-> xfs_dax_holder_operations should just be defined to NULL and the
-> whole file not supported if we can't support the functionality.
->
-> Dan: not for this series, but is there any reason not to require
-> MEMORY_FAILURE for DAX to start with?
-
-Given that DAX ties some storage semantics to memory and storage
-supports EIO I can see an argument to require memory_failure() for
-DAX, and especially for DAX on CXL where hotplug is supported it will
-be necessary. Linux currently has no facility to consult PCI drivers
-about removal actions, so the only recourse for a force removed CXL
-device is mass memory_failure().
-
->
-> > +
-> > +     ddev_start = mp->m_ddev_targp->bt_dax_part_off;
-> > +     ddev_end = ddev_start +
-> > +             (mp->m_ddev_targp->bt_bdev->bd_nr_sectors << SECTOR_SHIFT) - 1;
->
-> This should use bdev_nr_bytes.
->
-> But didn't we say we don't want to support notifications on partitioned
-> devices and thus don't actually need all this?
-
-Right.
+Yes, works for me to just add them as optional arguments.

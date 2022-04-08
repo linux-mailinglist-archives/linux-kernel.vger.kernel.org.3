@@ -2,137 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 992C54F9EF9
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 23:12:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D12EF4F9EF2
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 23:12:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239788AbiDHVNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 17:13:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60908 "EHLO
+        id S239809AbiDHVOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 17:14:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239129AbiDHVNr (ORCPT
+        with ESMTP id S239129AbiDHVOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 17:13:47 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7272184B66;
-        Fri,  8 Apr 2022 14:11:42 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id k13so3752420plk.12;
-        Fri, 08 Apr 2022 14:11:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=foN+znjNsM8Dv5GG5QumEF5L4dA6jEDJmOc3EsCSs7A=;
-        b=Fg6djJJF1vpX9BIUkzLnoEQyMYbzsC2lKM2Gvzu/xJypypof1mfAGQBnWxylv9TMOe
-         SsBI8YmWTpxsbSfZAcKaPeJ0Nqg2OKwbXgQ1JGt4t67/egLcz07MS3TVumiHfrjaBAFI
-         Y0eDPHPPV+uI49yyRV2CAZfw7Jxg6phzu27n7sJ25la1WA4+qbXxsjfJAD5YisB3rYvV
-         jkSR484ou09PQqMfXlayOZ6VDFqPjeVnkoR1/SLwkoyezIy3r4hQAo1kyaalmr+xxLkt
-         yihtS6Bq4e7poWs39oZ0IvZacvaXSBhX/a21Eg6AZ1eeFZ6aP55A1jeyPGeO5H0WYOEX
-         /Tgg==
+        Fri, 8 Apr 2022 17:14:14 -0400
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0372B187B92;
+        Fri,  8 Apr 2022 14:12:10 -0700 (PDT)
+Received: by mail-oi1-f177.google.com with SMTP id r8so10099752oib.5;
+        Fri, 08 Apr 2022 14:12:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=foN+znjNsM8Dv5GG5QumEF5L4dA6jEDJmOc3EsCSs7A=;
-        b=abgimLwY+fc37BCQgDksRzRG+X7pFBK5Mebv7zXyLaRz/TXnAx3RdpQZgcpueO/ZJu
-         i7VFQ2V7l9yzKIqlMItl/3unyL3qfrx9BCj9SLH8vRALmZiFS/kJtfJ6Hl7DGYJjmWxZ
-         TnFxGTdzEewoz9izB6uy4KCvmVz7/GVpzOLEwlQzUVlZtvbJps01SVRGVWtQuDM53HiF
-         F5d0QE19qBNvVozjPmorqTCw5HryBTAzRCqWEUNnoaYvR7CF6bUAeKSLyqGzCAAunqVe
-         IgmHT0I73uW9SJWSr3VmD36jVMKnjQd1dwhf8oaQOfg6O36digFFKUH8yATGS6Wk6M+H
-         SU5Q==
-X-Gm-Message-State: AOAM531iVgiCU9nMtOhy70hm38zJMZU4VlmJKSMoksU5TeGanYsLbEjW
-        oJh4ol/7+roSyQlAIcOx29U=
-X-Google-Smtp-Source: ABdhPJwuyKDp8x2YcNc2jp/QykaM+ri2Vg9UJJEGuE+XzAzacSJY8FSl4T7gxhghAcyG1UuNGduAyw==
-X-Received: by 2002:a17:903:281:b0:14c:f3b3:209b with SMTP id j1-20020a170903028100b0014cf3b3209bmr21223265plr.87.1649452302275;
-        Fri, 08 Apr 2022 14:11:42 -0700 (PDT)
-Received: from localhost ([192.55.54.52])
-        by smtp.gmail.com with ESMTPSA id u9-20020a056a00158900b004faad3ae570sm27996158pfk.189.2022.04.08.14.11.41
+        bh=cQV88Wncy+sFJVshappGK0lQZjUfJDBJIGxPr0CLJDM=;
+        b=EvzNumx+2+ci8gPLHLmrfusRorbNEvY9m/vi4bIvrHfqN6dVU9YYnXRk+gf5Zmc5pA
+         mkAdtKChnTBzVuGxJpz53nKZVaub24VdEuiYz6vHEZw/orkYW/3ViTlhh84/cgDQfyho
+         x3P7W9mc9BHjhmEvA8DgtFqd3xVbAVt8PgXmPd6CArz3oYn6Lk2xQTNm2RxRCwl1szbH
+         6qgcb4AhqU2/sqE1i0iVe7RGhPSvSw3gVMThktA9zndfps2YPM/LZMoMWuCx86J2YGhg
+         y8ylvnCqrCkl3/nYHm6EZobJAndx+yke0RPUKUWj/IQPd5AMAUxu0x0LJctyPwIx5tkY
+         TM7Q==
+X-Gm-Message-State: AOAM5322xy0z0ttlKvpxXphqKr07TVpnbEjjaquxYRztWnmh94Ip3Zhs
+        6BiMjzPZWLv0O2L5fYmZ8Tj/pugw6A==
+X-Google-Smtp-Source: ABdhPJwgayvKCJkT67GWWcOJ8t7e7vNECjz++q6KwPK6vYwLsJuYnrkPQrsymj/1ROQAtop7cTV/zQ==
+X-Received: by 2002:a05:6808:1281:b0:2ec:eac7:1d0d with SMTP id a1-20020a056808128100b002eceac71d0dmr781840oiw.169.1649452329113;
+        Fri, 08 Apr 2022 14:12:09 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id j145-20020acaeb97000000b002d9f37166c1sm8991041oih.17.2022.04.08.14.12.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 14:11:41 -0700 (PDT)
-Date:   Fri, 8 Apr 2022 14:11:40 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     SU Hang <darcy.sh@antgroup.com>
-Cc:     seanjc@google.com, kvm@vger.kernel.org,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Radim Kr???m?????? <rkrcmar@redhat.com>,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com
-Subject: Re: [PATCH v2 2/2] KVM: x86/mmu: Derive EPT violation RWX bits from
- EPTE RWX bits
-Message-ID: <20220408211140.GE857847@ls.amr.corp.intel.com>
-References: <20220329030108.97341-1-darcy.sh@antgroup.com>
- <20220329030108.97341-3-darcy.sh@antgroup.com>
+        Fri, 08 Apr 2022 14:12:08 -0700 (PDT)
+Received: (nullmailer pid 4074368 invoked by uid 1000);
+        Fri, 08 Apr 2022 21:12:08 -0000
+Date:   Fri, 8 Apr 2022 16:12:08 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-kernel@vger.kernel.org,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>
+Subject: Re: [PATCH 10/14] dt-bindings: reset: snps,hsdk-reset: Convert to
+ yaml
+Message-ID: <YlClKKHnTwsNUayj@robh.at.kernel.org>
+References: <20220407154338.4190674-1-p.zabel@pengutronix.de>
+ <20220407154338.4190674-10-p.zabel@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220329030108.97341-3-darcy.sh@antgroup.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220407154338.4190674-10-p.zabel@pengutronix.de>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 11:01:07AM +0800,
-SU Hang <darcy.sh@antgroup.com> wrote:
-
-> From: Sean Christopherson <seanjc@google.com>
+On Thu, Apr 07, 2022 at 05:43:34PM +0200, Philipp Zabel wrote:
+> Convert the device tree bindings for the Synopsys HSDK reset controller
+> to YAML schema to allow participating in DT validation.
 > 
-> Derive the mask of RWX bits reported on EPT violations from the mask of
-> RWX bits that are shoved into EPT entries; the layout is the same, the
-> EPT violation bits are simply shifted by three.  Use the new shift and a
-> slight copy-paste of the mask derivation instead of completely open
-> coding the same to convert between the EPT entry bits and the exit
-> qualification when synthesizing a nested EPT Violation.
-> 
-> No functional change intended.
-> 
-> Cc: SU Hang <darcy.sh@antgroup.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>
 > ---
->  arch/x86/include/asm/vmx.h     | 7 +------
->  arch/x86/kvm/mmu/paging_tmpl.h | 8 +++++++-
->  arch/x86/kvm/vmx/vmx.c         | 4 +---
->  3 files changed, 9 insertions(+), 10 deletions(-)
+>  .../bindings/reset/snps,hsdk-reset.txt        | 28 -----------
+>  .../bindings/reset/snps,hsdk-reset.yaml       | 47 +++++++++++++++++++
+>  2 files changed, 47 insertions(+), 28 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/reset/snps,hsdk-reset.txt
+>  create mode 100644 Documentation/devicetree/bindings/reset/snps,hsdk-reset.yaml
 > 
-> diff --git a/arch/x86/include/asm/vmx.h b/arch/x86/include/asm/vmx.h
-> index 3586d4aeaac7..46bc7072f6a2 100644
-> --- a/arch/x86/include/asm/vmx.h
-> +++ b/arch/x86/include/asm/vmx.h
-> @@ -543,17 +543,12 @@ enum vm_entry_failure_code {
->  #define EPT_VIOLATION_ACC_READ_BIT	0
->  #define EPT_VIOLATION_ACC_WRITE_BIT	1
->  #define EPT_VIOLATION_ACC_INSTR_BIT	2
-> -#define EPT_VIOLATION_READABLE_BIT	3
-> -#define EPT_VIOLATION_WRITABLE_BIT	4
-> -#define EPT_VIOLATION_EXECUTABLE_BIT	5
->  #define EPT_VIOLATION_GVA_IS_VALID_BIT	7
->  #define EPT_VIOLATION_GVA_TRANSLATED_BIT 8
->  #define EPT_VIOLATION_ACC_READ		(1 << EPT_VIOLATION_ACC_READ_BIT)
->  #define EPT_VIOLATION_ACC_WRITE		(1 << EPT_VIOLATION_ACC_WRITE_BIT)
->  #define EPT_VIOLATION_ACC_INSTR		(1 << EPT_VIOLATION_ACC_INSTR_BIT)
-> -#define EPT_VIOLATION_READABLE		(1 << EPT_VIOLATION_READABLE_BIT)
-> -#define EPT_VIOLATION_WRITABLE		(1 << EPT_VIOLATION_WRITABLE_BIT)
-> -#define EPT_VIOLATION_EXECUTABLE	(1 << EPT_VIOLATION_EXECUTABLE_BIT)
-> +#define EPT_VIOLATION_RWX_MASK		(VMX_EPT_RWX_MASK << EPT_VIOLATION_RWX_SHIFT)
+> diff --git a/Documentation/devicetree/bindings/reset/snps,hsdk-reset.txt b/Documentation/devicetree/bindings/reset/snps,hsdk-reset.txt
+> deleted file mode 100644
+> index 830069b1c37c..000000000000
+> --- a/Documentation/devicetree/bindings/reset/snps,hsdk-reset.txt
+> +++ /dev/null
+> @@ -1,28 +0,0 @@
+> -Binding for the Synopsys HSDK reset controller
+> -
+> -This binding uses the common reset binding[1].
+> -
+> -[1] Documentation/devicetree/bindings/reset/reset.txt
+> -
+> -Required properties:
+> -- compatible: should be "snps,hsdk-reset".
+> -- reg: should always contain 2 pairs address - length: first for reset
+> -  configuration register and second for corresponding SW reset and status bits
+> -  register.
+> -- #reset-cells: from common reset binding; Should always be set to 1.
+> -
+> -Example:
+> -	reset: reset@880 {
+> -		compatible = "snps,hsdk-reset";
+> -		#reset-cells = <1>;
+> -		reg = <0x8A0 0x4>, <0xFF0 0x4>;
+> -	};
+> -
+> -Specifying reset lines connected to IP modules:
+> -	ethernet@.... {
+> -		....
+> -		resets = <&reset HSDK_V1_ETH_RESET>;
+> -		....
+> -	};
+> -
+> -The index could be found in <dt-bindings/reset/snps,hsdk-reset.h>
+> diff --git a/Documentation/devicetree/bindings/reset/snps,hsdk-reset.yaml b/Documentation/devicetree/bindings/reset/snps,hsdk-reset.yaml
+> new file mode 100644
+> index 000000000000..a7cb5580c070
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/reset/snps,hsdk-reset.yaml
+> @@ -0,0 +1,47 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/reset/snps,hsdk-reset.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Synopsys HSDK reset controller
+> +
+> +maintainers:
+> +  - Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: snps,hsdk-reset
+> +
+> +  reg:
+> +    minItems: 2
+> +    maxItems: 2
+> +    description: |
+> +      Should always contain 2 pairs address - length: first for reset
+> +      configuration register and second for corresponding SW reset and status
+> +      bits register.
+
+items:
+  - description: reset configuration register
+  - description: corresponding SW reset and status bits register
 
 
-"#define EPT_VIOLATION_RWX_SHIFT 3" is missing.
-It fails to compile.
+> +
+> +  '#reset-cells':
+> +    const: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - '#reset-cells'
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/reset/snps,hsdk-reset.h>
+> +
+> +    reset: reset@880 {
+> +        compatible = "snps,hsdk-reset";
+> +        #reset-cells = <1>;
+> +        reg = <0x8A0 0x4>, <0xFF0 0x4>;
+> +    };
+> +
+> +    // Specifying reset lines connected to IP modules:
+> +    ethernet {
+> +        resets = <&reset HSDK_ETH_RESET>;
+> +    };
 
-  CC [M]  arch/x86/kvm/vmx/vmx.o
-In file included from linux/arch/x86/include/asm/virtext.h:18,
-                 from /linux/arch/x86/kvm/vmx/vmx.c:49:
-/linux/arch/x86/kvm/vmx/vmx.c: In function 'handle_ept_violation':
-/linux/arch/x86/include/asm/vmx.h:551:54: error: 'EPT_VIOLATION_RWX_SHIFT' undeclared (first use in this function); did you mean 'EPT_VIOLATION_RWX_MASK'?
-  551 | #define EPT_VIOLATION_RWX_MASK  (VMX_EPT_RWX_MASK << EPT_VIOLATION_RWX_SHIFT)
-      |                                                      ^~~~~~~~~~~~~~~~~~~~~~~
+No need to show the consumer side in every provider. Please drop.
 
-Thanks,
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Rob

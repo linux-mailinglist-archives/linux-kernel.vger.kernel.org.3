@@ -2,139 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD10B4F956D
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B94424F956F
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235288AbiDHMP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 08:15:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55946 "EHLO
+        id S235383AbiDHMQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 08:16:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232561AbiDHMP5 (ORCPT
+        with ESMTP id S231381AbiDHMQV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 08:15:57 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D625B140DDA
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 05:13:49 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id g11so3499724qke.1
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 05:13:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Arewm4aQpx1cT2q4dPKQ3HPLjp07y7cA6oxjb8oJlW8=;
-        b=VKgfA8yrFSFOJIddQ/PpANf1sfzrMGxijHDMvjVQx4hjCnWb9Ld4jB4oBtszl+ppQT
-         QYqjR2pAjQju6o1gswuZmtFffh2m4gDg/g16gDI+t1OhuEOIvoR9X4CvOMXB03B1FASM
-         UtA6slUL9gNiySX82qtdqEwk9fNSNbOwmJeHY+IH3ONgTmjvpefoY4AlpYQ8VbmzYTgz
-         pRB/MDy1V90CpF9Xeqjio2ZJF3pCZizbOj1GV7RevgZeGXOMK5u8QiV4UT+lFefIaOEf
-         6MEnDSJ3e8W26O2U3AmmuG7Kwb65WaDd9Qx2NiLTzNuzfk9Q4I9LOyONhNZ3T+hXIP+z
-         xpEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Arewm4aQpx1cT2q4dPKQ3HPLjp07y7cA6oxjb8oJlW8=;
-        b=qsXe6G0YDRHKNtN5FzqK4fxBRL4evp/CxJDB6Vt9VALdPQXDeY61Dt6mRusa0S1LW+
-         0bi+XsDeb4AhG8SzxHG/7fdXHcROIEXek2ecrOrMvbNwA3UmEf+dgxHvkKt6xofTlEQ+
-         UUJa5XM+9GN+68WxmWtrwNXnJNpJaYSfLs9sy6ak+c9VCDxDnn1ux0XKlO3gSutH8Ts8
-         eOE9LIYL0faxdYVG40M4sCjdFsR32P0xaTJ8YKrmKu7cBPk1tBtlcdZ3ybs6lYqmr/pJ
-         kPSosITvk5jjjLBRoomioyvWpp8NVtT7RyE6/G62dIHJOVPxnjmNfj00nIVHQHmCPL1U
-         JPUA==
-X-Gm-Message-State: AOAM532BXJU4br36nJ1++f5lKqCD2yAhIoyF1+01ou9wR17C1aBFucgz
-        H/BEb1z4So4uk5B2rC8tnERXnoe37gSWVgePcftCFQ==
-X-Google-Smtp-Source: ABdhPJy5P9+4bfSCbB1onvnvwIp8rhXMjt0EzyPw6aJVpgHebQZIks1AUDZz/i0HFQXxvuXWYClnpcoYSSCUg+3xJqA=
-X-Received: by 2002:a05:620a:28c7:b0:67d:6d4e:16ee with SMTP id
- l7-20020a05620a28c700b0067d6d4e16eemr12338727qkp.59.1649420028771; Fri, 08
- Apr 2022 05:13:48 -0700 (PDT)
+        Fri, 8 Apr 2022 08:16:21 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3368914B000;
+        Fri,  8 Apr 2022 05:14:15 -0700 (PDT)
+Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KZcXs0PFVz67cQ8;
+        Fri,  8 Apr 2022 20:11:09 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 8 Apr 2022 14:14:12 +0200
+Received: from [10.47.91.39] (10.47.91.39) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 8 Apr
+ 2022 13:14:11 +0100
+Message-ID: <2a88a992-641a-b3ff-fe39-7a61fff87cb6@huawei.com>
+Date:   Fri, 8 Apr 2022 13:14:08 +0100
 MIME-Version: 1.0
-References: <1648656179-10347-1-git-send-email-quic_sbillaka@quicinc.com>
- <1648656179-10347-2-git-send-email-quic_sbillaka@quicinc.com>
- <CAD=FV=X+QvjwoT2zGP82KW4kD0oMUY6ZgCizSikNX_Uj8dNDqA@mail.gmail.com>
- <392b933f-760c-3c81-1040-c514045df3da@linaro.org> <CAD=FV=W4PYK-t607yjRbfjDjjEZX0KdgHDRukw_vSH8E8EDH6w@mail.gmail.com>
- <CAA8EJppt9XONbgtKfmHmN+==QNqiVJeb8GKJFdZm=yyY-tgmHQ@mail.gmail.com>
- <CAD=FV=U5-sTDLYdkeJWLAOG-0wgxR49VxtwUyUO7z2PuibLGsg@mail.gmail.com>
- <CAA8EJppgfYgQjG8A4LsR-1wmBj3Ku3eO8cKfAYhxjWXL7e3eHg@mail.gmail.com>
- <CAD=FV=V=a1CnT8fqTJR40WoS3BaDQ3xZ=HnHVHqZh=MEmVUZBA@mail.gmail.com>
- <3e5fa57f-d636-879a-b98f-77323d07c156@linaro.org> <CAD=FV=Uibu-kZyix7K4_WVc-+C8xpzTqU4WFy7O=6sukMZrX5g@mail.gmail.com>
- <MW4PR02MB7186245772DAC3E04FA8D1C0E1E69@MW4PR02MB7186.namprd02.prod.outlook.com>
- <CAD=FV=Wk3U7_bVdiCPp8iQ4bcCA_Botemu4pwHeRtgBa3Xk6KQ@mail.gmail.com>
- <c4f086ce-c56f-f7c9-4092-7f2432330d50@quicinc.com> <CAA8EJprdV64jOexEF-XqbkwsNDWBNRRndOAas-QqMHaL=zp9rw@mail.gmail.com>
- <CAD=FV=XdRKWFQnJx9AKYmB2p26sXmhjqxLzz+LYyCt7rg+zF6w@mail.gmail.com>
-In-Reply-To: <CAD=FV=XdRKWFQnJx9AKYmB2p26sXmhjqxLzz+LYyCt7rg+zF6w@mail.gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Fri, 8 Apr 2022 15:13:38 +0300
-Message-ID: <CAA8EJprvSy1PuYCXMr-TxBF1XwcAZaErSmzH2Tw5-NAovxHY7A@mail.gmail.com>
-Subject: Re: [PATCH v6 1/8] drm/msm/dp: Add eDP support via aux_bus
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        "Sankeerth Billakanti (QUIC)" <quic_sbillaka@quicinc.com>,
-        quic_kalyant <quic_kalyant@quicinc.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        quic_vproddut <quic_vproddut@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        Sean Paul <seanpaul@chromium.org>,
-        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Sean Paul <sean@poorly.run>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 1/4] scsi: core: constify pointer to scsi_host_template
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "Avri Altman" <avri.altman@wdc.com>,
+        Doug Gilbert <dgilbert@interlog.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220408103027.311624-1-krzysztof.kozlowski@linaro.org>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <20220408103027.311624-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.47.91.39]
+X-ClientProxiedBy: lhreml718-chm.china.huawei.com (10.201.108.69) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 8 Apr 2022 at 03:28, Doug Anderson <dianders@chromium.org> wrote:
->
-> Hi,
->
-> On Thu, Apr 7, 2022 at 4:36 PM Dmitry Baryshkov
-> <dmitry.baryshkov@linaro.org> wrote:
-> >
-> > The ps8640 driver looks 'working by coincidence'. It calls
-> > dp_aux_populate, then immediately after the function returns it checks
-> > for the panel. If panel-edp is built as a module, the probe might fail
-> > easily.
-> > The anx7625 driver has the same kind of issue. The DP AUX bus is
-> > populated from the probe() and after some additional work the panel is
-> > being checked.
-> > This design is fragile and from my quick glance it can break (or be
-> > broken) too easy. It reminds me of our drm msm 'probe' loops
-> > preventing the device to boot completely if the dsi bridge/panel could
-> > not be probed in time.
->
-> I did spend some time thinking about this, at least for ps8640. I
-> believe that as long as the panel's probe isn't asynchronous.
+On 08/04/2022 11:30, Krzysztof Kozlowski wrote:
+> Several pointers to 'struct scsi_host_template' do not modify it, so
+> made them const for safety.
+> 
 
-By panel probe (as a probe of any device) is potentially asynchronous.
-As in your example, the PWM might not be present, the regulator probe
-might have been delayed, the panel-edp might be built as a module,
-which is not present for some reason.
+Is this standard practice? What is so special here?
 
-> Basically if the panel isn't ready then ps8640 should return and we'll
-> retry later. I do remember the probe loops that we used to have with
-> msm and I don't _think_ this would trigger it.
+Thanks,
+john
 
-I don't have proof here. But as I wrote, this thing might break at some point.
 
-> That being said, if we need to separate out the AUX bus into a
-> sub-device like we did in sn65dsi86 we certainly could.
-
-Ideally we should separate the "bridge" subdevice, like it was done in
-sn65dsi86.
-So that the aux host probes, registers the EP device, then the bridge
-device can not be probed (and thus the drm_bridge is not created)
-until the next  bridge becomes available.
-
--- 
-With best wishes
-Dmitry
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>   drivers/scsi/hosts.c      |  2 +-
+>   drivers/scsi/scsi_error.c | 17 +++++++++--------
+>   drivers/scsi/scsi_proc.c  |  2 +-
+>   drivers/scsi/scsi_sysfs.c |  6 +++---
+>   4 files changed, 14 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/scsi/hosts.c b/drivers/scsi/hosts.c
+> index f69b77cbf538..65616a01761a 100644
+> --- a/drivers/scsi/hosts.c
+> +++ b/drivers/scsi/hosts.c
+> @@ -209,7 +209,7 @@ EXPORT_SYMBOL(scsi_remove_host);
+>   int scsi_add_host_with_dma(struct Scsi_Host *shost, struct device *dev,
+>   			   struct device *dma_dev)
+>   {
+> -	struct scsi_host_template *sht = shost->hostt;
+> +	const struct scsi_host_template *sht = shost->hostt;
+>   	int error = -EINVAL;
+>   
+>   	shost_printk(KERN_INFO, shost, "%s\n",
+> diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c

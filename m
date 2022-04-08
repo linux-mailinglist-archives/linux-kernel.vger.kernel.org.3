@@ -2,123 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CA354F9E4F
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 22:43:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C4764F9E55
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 22:48:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234211AbiDHUpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 16:45:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37100 "EHLO
+        id S234570AbiDHUuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 16:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231882AbiDHUpI (ORCPT
+        with ESMTP id S229607AbiDHUuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 16:45:08 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C751435AB0
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 13:43:03 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id p10so16915588lfa.12
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 13:43:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Da2qAwNbvrZU08VFGRkDL3N3/jfO2QzNiebireMf8MI=;
-        b=cIx42nsSypnh3n2cMIa/b98xMgO9TRkrVcj1t+o7OB+VEP4rDNCnCUZoM01F2Nid6i
-         EZpvarMfGLwtINPcThfgNdRlGWhe8v/G7tXyWSs9c5Nu3iEDOMEMTaT3gKa599m/aJ20
-         dZt2soOKlT83ReS7Bsq86K7nO/lELkTjFWeYh/L8yIBRR4ef4eOF4WveeD40O31hdvX7
-         phLyrpYqrMWiKPpusSkxjkp4pRSf3eE7zbfetlM5tXWkvovq1s7RIs5XlaK6YX+a2DSG
-         jR8bU8/HMHmtOxfB4cZHtKWbjRqGqpXyaZ6IjI+lbrLIoiaUAPyDKSzzRfoEwzu3Xjhs
-         7ESA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Da2qAwNbvrZU08VFGRkDL3N3/jfO2QzNiebireMf8MI=;
-        b=i2frTgj2SvNZiGndr0Uhi3Gmn59m9YkXoDDe9alr4zySH+qsxlscwojdf3/2Rj3SZG
-         EsUJEHEibi4SJRRxLe3h85MVoOplzvYvS3tG7LqyuPwC3VqnXgdCJfi3ZxchGgVz5cHI
-         hrg2s9g5nhfvVqn6a2rtg+/J7TzUEj6OwAGfNHWu5BRVrQP6Ha+tg8enBpW9rEe+Z4PE
-         xFyE9mxEO6i56LDzqcgZ61eQYlnpL1ChQtpFGTP6KWF5i7iQvmQg4EgdH74kdMk2wZxg
-         vdC1UDTLA+S0RDtrTvqkQ0e4WbMxX21YxRpMTKqvSOwd7xh2gDzJ9qq9Pa1aXWS9nOCe
-         CH5A==
-X-Gm-Message-State: AOAM533JUB0jh5vz1HLk/xu26i9LhCap4PbgEAt0El4AUl6BwsJ5KnJY
-        ZekKEWsHxbEFA/RD9yirUEOoeP4GG2yNnzDB4Vj+kw==
-X-Google-Smtp-Source: ABdhPJyBwA8BhmkEKHcEPRpWRBKh48D8fuSPYzorAnnFv5jxS0dZqPWX+zA3z0NcoxQHW0ZPQEkaQu5rZIFMN3wIHss=
-X-Received: by 2002:a05:6512:3da1:b0:44a:2aeb:28e4 with SMTP id
- k33-20020a0565123da100b0044a2aeb28e4mr13385275lfv.579.1649450581749; Fri, 08
- Apr 2022 13:43:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220406153023.500847-1-masahiroy@kernel.org> <20220406153023.500847-6-masahiroy@kernel.org>
- <CAKwvOdnHneCy6YeanmvDrabYMWysfQ=WMopsT_gRyrruT8=1Dw@mail.gmail.com> <CAK7LNATUv2YqGLGMTjzoCWf2tVkeYe6O9xa==wdDr0pgvSnnLQ@mail.gmail.com>
-In-Reply-To: <CAK7LNATUv2YqGLGMTjzoCWf2tVkeYe6O9xa==wdDr0pgvSnnLQ@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 8 Apr 2022 13:42:50 -0700
-Message-ID: <CAKwvOdnj77+8OHGZcJ-pAMcFW1FzjhkPsvs90PPD+L64t0+Mpw@mail.gmail.com>
-Subject: Re: [PATCH 5/7] kbuild: get rid of duplication in *.mod files
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Fri, 8 Apr 2022 16:50:19 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904CF1C1EFA;
+        Fri,  8 Apr 2022 13:48:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=jSNlhgteFciJhaFanIIz/zy2rD53IRDwcvBetwHtIQM=; b=mrD47God47Rhpq962QoM1VVzjc
+        KK1mF/026DuTnYfWGFDoh8xKdgVe+vat38s8Er328ZS/B05WjMfK2e92WBGLhb18E4XTOsJFBMrUI
+        UXBo2/PkRE5hYxAIAt/ItIzbc4tdO/SxYZr9h2RE5soayULihO0SX45nD5fDpMSDOH0z0HIar86MP
+        QGAgCGSvWKHsG4U6srhbhIrgFndKJ6u6aGaubWc5qcBEX8k9owEXsFhNHTOwoUPjynY5oOTRVuLtu
+        T+i+6/2Bvvv0BoHez5tjKBebyWJ0sf9HQcs8jELGAugpOIAzTpgqLMyVAwchJcXXyQwJjtq+63uan
+        4gYttRPg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ncvWY-00A98f-1r; Fri, 08 Apr 2022 20:48:06 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8E8FC3000E6;
+        Fri,  8 Apr 2022 22:48:05 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6D07432233317; Fri,  8 Apr 2022 22:48:05 +0200 (CEST)
+Date:   Fri, 8 Apr 2022 22:48:05 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Michal Marek <michal.lkml@markovi.net>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>, X86 ML <x86@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Changbin Du <changbin.du@gmail.com>,
+        linux-toolchains@vger.kernel.org,
+        clang-built-linux <llvm@lists.linux.dev>
+Subject: Re: [PATCH] kbuild: Remove CONFIG_DEBUG_SECTION_MISMATCH
+Message-ID: <YlCfhUkOXTvqCfjT@hirez.programming.kicks-ass.net>
+References: <7fad83ecde03540e65677959034315f8fbb3755e.1649434832.git.jpoimboe@redhat.com>
+ <CAK7LNARvFcQgEB1b0L6giwx0vD7wU9L-OZ5jvm1c5+StLjeOYQ@mail.gmail.com>
+ <YlCJm8iQBPSOWIT5@hirez.programming.kicks-ass.net>
+ <CAKwvOd=2xeZOg+0HosLPgCegKZxe7F-Cprw0MjOiWf2q=AbNDQ@mail.gmail.com>
+ <YlCb3L7ByWwszbaA@hirez.programming.kicks-ass.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YlCb3L7ByWwszbaA@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 7, 2022 at 5:08 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> On Fri, Apr 8, 2022 at 2:55 AM Nick Desaulniers <ndesaulniers@google.com> wrote:
-> >
-> > On Wed, Apr 6, 2022 at 8:31 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > >
-> > > diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-> > > index 6ae92d119dfa..f7a30f378e20 100644
-> > > --- a/scripts/Makefile.build
-> > > +++ b/scripts/Makefile.build
-> > > @@ -303,7 +303,8 @@ $(obj)/%.prelink.o: $(obj)/%.o FORCE
-> > >         $(call if_changed,cc_prelink_modules)
-> > >  endif
-> > >
-> > > -cmd_mod = echo $(addprefix $(obj)/, $(call real-search, $*.o, .o, -objs -y -m)) > $@
-> > > +cmd_mod = echo $(addprefix $(obj)/, $(call real-search, $*.o, .o, -objs -y -m)) | \
-> > > +       $(AWK) -v RS='( |\n)' '!x[$$0]++' > $@
-> >
-> > God AWK is unreadable. Any reason we can't use GNU make's sort builtin?
-> > https://www.gnu.org/software/make/manual/html_node/Text-Functions.html
->
->
-> I did that in the previous submission.
-> https://lore.kernel.org/lkml/20220405113359.2880241-8-masahiroy@kernel.org/
->
->
-> After some thoughts, I decided to drop duplicates without sorting.
->
-> If I alphabetically sorted the object list,
-> 7/7 of this series would be impossible.
->
->
-> I am not a big fan of AWK, but I do not know a cleaner way.
-> If you know a better idea, please tell me.
+On Fri, Apr 08, 2022 at 10:32:28PM +0200, Peter Zijlstra wrote:
 
-```
-# stable_dedup.py
-from sys import argv
+> > > This weird option is having us upgrade quite a few 'inline' to
+> > > '__always_inline'.
+> > 
+> > As is, the assumption that __init functions only call other __init
+> > functions or __always_inline is a brittle house of cards that leads to
+> > a "what color is your function" [0] scenario, and leads to code that
+> > happens to not emit warnings for compiler X (or compiler X version Y).
+> > There's also curious exceptions in modpost that look like memory leaks
+> > to me.
 
-wordset = set()
-argv.pop(0)
-for word in argv: wordset.add(word)
-for word in wordset: print(word)
-```
-If that ever shows up in a profile of a kernel build, <set> in C++
-looks pretty similar.  Then that script can be reused in a couple of
-other places, and has a more descriptive name that hints at what it
-does.
+So I don't see __always_inline that way (also I'm in the 'inline' should
+be '__always_inline' camp).
 
-Compare that with `$(AWK) -v RS='( |\n)' '!x[$$0]++'`.
--- 
-Thanks,
-~Nick Desaulniers
+To me inline is more like: 'instantiate that pattern *here*'. It's like
+CPP macros, only less horrible. You get the code generated according to
+the local rules (instrumentation yes/no, section, and whatever other
+function attributes we have that affect code-gen).
+
+So with inline we can get the same pattern instantiated a number of
+different times, leading to different actual code, without having to
+type the whole thing multiple times (which would be terrible for
+maintenance) etc..
+
+Combine __always_inline with constant propagation of inline function
+'pointers' and you get do beautiful things ;-) /me runs

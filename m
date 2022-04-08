@@ -2,157 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE22C4F9DFD
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 22:06:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C24FE4F9DFE
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 22:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239373AbiDHUIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 16:08:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41364 "EHLO
+        id S239383AbiDHUJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 16:09:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232479AbiDHUIv (ORCPT
+        with ESMTP id S232479AbiDHUJA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 16:08:51 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6825353A99
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 13:06:46 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id e4-20020a056902034400b00633691534d5so7521590ybs.7
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 13:06:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:cc;
-        bh=YMe3PswfejdLgJcOM+IwePz8bwgUsFhWIzC+X7TRk74=;
-        b=SDDZXBLIrGsW+et2Gk7b5lo7cEr1tJz/aR/cf3Ij4+ew35M0VT5KBR5KSGpmpjWNs0
-         t//I6PG91dmLQ0L+GdOs4DwU1OMe/Yx/qSbV1k+7vZXFzx0QN0lXXF/ixYjhR6PWOIQr
-         TC/ECs0qk7HJ+kjf1KaePs3tnhpyqqwGpVGAOFK7RDKhHd//d00+yQtTVz+GbcUMjapS
-         AEH8oI4W4DR8MfAuz6MzB3DsLtsTCcGT4X1Nv3ztd4QU1eun1xaJ2Oc64ok+h3V7kGye
-         tN1MF+NuBtLwdfT4tEm/Hj+1ZFpWvjHUKG96fLQaAeenDWrFjcYU8knrJIHYkDWJf2H9
-         ufVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:cc;
-        bh=YMe3PswfejdLgJcOM+IwePz8bwgUsFhWIzC+X7TRk74=;
-        b=NO4KxP5gMFjPgZdC8sstjlfmbecFmRzoQwJs7H0nmoUzrg5hHYR1y8vxzTDgkmae4V
-         MmPxvYCXIZg/Jhv++6ATIrdkrNq6MHrNK9uNzUbKnEIXWBryHrl5fmkWv2UjWU7MMIyt
-         FWw8q7rsjFQN3SFB63hkW/tvl5O13gc6CQxtNTE+ZZTisHg/njeiCADHiwZbRGjUB0av
-         GQSwTA3Bcj2qtAM+Gb96aVKpSSjbaEc9jL6yGS4atQuD9hsFldjXglDEmnuOlL9VnN13
-         La8YytHg/J6wE5gFSiCT2glAnTuqZLdSgZcHr7VGUC39bM5yP17n2LQQ8T+TbW4DL5HL
-         vG0w==
-X-Gm-Message-State: AOAM531hATgxFSD39kglQxADwcZ8eUavlWHZZXhAJI8ydfXZTkUPW1wc
-        qg5v7b+dOZQNG1NeJQ7U6/hINPSBofxYQHuSNg==
-X-Google-Smtp-Source: ABdhPJz7Xbg+YMlZC29IRqjeFluZOMCZUAs3P4FohGI67MZiTVA+Oxev9PNRndMoOAcC1cQHGV4y5em9Xs6NahFteg==
-X-Received: from kaleshsingh.mtv.corp.google.com ([2620:15c:211:200:f0ed:c8a:dab7:ecc2])
- (user=kaleshsingh job=sendgmr) by 2002:a25:9845:0:b0:628:99a6:55ed with SMTP
- id k5-20020a259845000000b0062899a655edmr15089978ybo.221.1649448406098; Fri,
- 08 Apr 2022 13:06:46 -0700 (PDT)
-Date:   Fri,  8 Apr 2022 13:03:29 -0700
-In-Reply-To: <20220408200349.1529080-1-kaleshsingh@google.com>
-Message-Id: <20220408200349.1529080-7-kaleshsingh@google.com>
-Mime-Version: 1.0
-References: <20220408200349.1529080-1-kaleshsingh@google.com>
-X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
-Subject: [PATCH v7 6/6] KVM: arm64: Symbolize the nVHE HYP addresses
-From:   Kalesh Singh <kaleshsingh@google.com>
-Cc:     will@kernel.org, maz@kernel.org, qperret@google.com,
-        tabba@google.com, surenb@google.com, kernel-team@android.com,
-        Kalesh Singh <kaleshsingh@google.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Andrew Walbran <qwandor@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andrew Jones <drjones@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Changbin Du <changbin.du@intel.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.6
+        Fri, 8 Apr 2022 16:09:00 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF45353AAA
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 13:06:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=j9g5EHdwCeCGiDH+OptcbmwwyDPvJqZc+LesmTwslqM=; b=l7nnbBb2JXVJWhFHQb+EsAebGP
+        x47Ze152fGhFOpyWK4R5wqh8jhw0hHFtRGIWwUcO4il6F7S+6O+9KdyGrlQ+MH0qUQ+1aGTMB8R7/
+        5l9rnIsilGJTCn37OedWb1vPTs3WQ6Axn4BcNnHe7N437jh9nTFlKItKUapqNI8BhDYLN40HesuwU
+        9IIT0hrshy605QKPJ22XfUxprlkRGMDVIJkQ4Fq7xoqZHdnGgCfZBqdiWlZf76QuQCdndE+VsHq/g
+        koGtGFvOwcu3vitJM4HfLFWAGso32D+v9lTGK2URm++MgDxuJs2rKPGFueXPW4xQyxHw6dfKPHi4k
+        klkzmFwA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ncusL-00333H-81; Fri, 08 Apr 2022 20:06:33 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A8BA23000E6;
+        Fri,  8 Apr 2022 22:06:30 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 61A1D3223116A; Fri,  8 Apr 2022 22:06:30 +0200 (CEST)
+Date:   Fri, 8 Apr 2022 22:06:30 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Oleg Nesterov <oleg@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-kernel@vger.kernel.org, Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: Re: [PATCH v2] ptrace: fix ptrace vs tasklist_lock race on
+ PREEMPT_RT.
+Message-ID: <YlCVxlTVL1pyBF08@hirez.programming.kicks-ass.net>
+References: <YjBO8yzxdmjTGNiy@linutronix.de>
+ <20220315142944.GA22670@redhat.com>
+ <YkW55u6u2fo5QmV7@linutronix.de>
+ <20220405101026.GB34954@worktop.programming.kicks-ass.net>
+ <20220405102849.GA2708@redhat.com>
+ <Ykwn0MpcrZ/N+LOG@hirez.programming.kicks-ass.net>
+ <20220407121340.GA2762@worktop.programming.kicks-ass.net>
+ <87v8vk8q4g.fsf@email.froward.int.ebiederm.org>
+ <20220408090908.GO2731@worktop.programming.kicks-ass.net>
+ <874k332wjp.fsf@email.froward.int.ebiederm.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <874k332wjp.fsf@email.froward.int.ebiederm.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reintroduce the __kvm_nvhe_ symbols in kallsyms, ignoring the local
-symbols in this namespace. The local symbols are not informative and
-can cause aliasing issues when symbolizing the addresses.
+On Fri, Apr 08, 2022 at 02:40:42PM -0500, Eric W. Biederman wrote:
+> Peter Zijlstra <peterz@infradead.org> writes:
+> 
+> > On Thu, Apr 07, 2022 at 05:50:39PM -0500, Eric W. Biederman wrote:
+> 
+> >> Given that fundamentally TASK_WAKEKILL must be added in ptrace_stop and
+> >> removed in ptrace_attach I don't see your proposed usage of jobctl helps
+> >> anything fundamental.
+> >> 
+> >> I suspect somewhere there is a deep trade-off between complicating
+> >> the scheduler to have a very special case for what is now
+> >> TASK_RTLOCK_WAIT, and complicating the rest of the code with having
+> >> TASK_RTLOCK_WAIT in __state and the values that should be in state
+> >> stored somewhere else.
+> >
+> > The thing is; ptrace is a special case. I feel very strongly we should
+> > not complicate the scheduler/wakeup path for something that 'never'
+> > happens.
+> 
+> I was going to comment that I could not understand how the saved_state
+> mechanism under PREEMPT_RT works.  Then I realized that wake_up_process
+> and wake_up_state call try_to_wake_up which calls ttwu_state_match which
+> modifies saved_state.
 
-With the necessary symbols now in kallsyms we can symbolize nVHE
-addresses using the %p print format specifier:
+Correct.
 
-[   98.916444][  T426] kvm [426]: nVHE hyp panic at: [<ffffffc0096156fc>] __kvm_nvhe_overflow_stack+0x8/0x34!
+> The options appear to be that either ptrace_freeze_traced modifies
+> __state/state to remove TASK_KILLABLE.  Or that something clever happens
+> in ptrace_freeze_traced that guarantees the task does not wake
+> up.  Something living in kernel/sched/* like wait_task_inactive.
 
-Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
-Tested-by: Fuad Tabba <tabba@google.com>
-Reviewed-by: Fuad Tabba <tabba@google.com>
----
+The code I posted in the parent will attempt to strip (and re-instate)
+WAKEKILL from __state and then saved_state, all under pi_lock.
 
-Changes in v6:
-  - Add Fuad's Reviewed-by and Tested-by tags.
-  
-Changes in v2:
-  - Fix printk warnings - %p expects (void *)
+I think that preserves the current constraints.
 
+> I can imagine adding add a loop around freezable_schedule in
+> ptrace_stop.  That does something like:
+> 
+> 	do {
+>         	freezable_schedule();
+>         } while (current->jobctl & JOBCTL_PTRACE_FREEZE);
 
- arch/arm64/kvm/handle_exit.c | 13 +++++--------
- scripts/kallsyms.c           |  2 +-
- 2 files changed, 6 insertions(+), 9 deletions(-)
+I'm not entirely sure where you're headin with this; but my goal is to
+get rid of freezable_*() everything.
 
-diff --git a/arch/arm64/kvm/handle_exit.c b/arch/arm64/kvm/handle_exit.c
-index 97fe14aab1a3..a377b871bf58 100644
---- a/arch/arm64/kvm/handle_exit.c
-+++ b/arch/arm64/kvm/handle_exit.c
-@@ -295,13 +295,8 @@ void __noreturn __cold nvhe_hyp_panic_handler(u64 esr, u64 spsr,
- 	u64 elr_in_kimg = __phys_to_kimg(elr_phys);
- 	u64 hyp_offset = elr_in_kimg - kaslr_offset() - elr_virt;
- 	u64 mode = spsr & PSR_MODE_MASK;
-+	u64 panic_addr = elr_virt + hyp_offset;
- 
--	/*
--	 * The nVHE hyp symbols are not included by kallsyms to avoid issues
--	 * with aliasing. That means that the symbols cannot be printed with the
--	 * "%pS" format specifier, so fall back to the vmlinux address if
--	 * there's no better option.
--	 */
- 	if (mode != PSR_MODE_EL2t && mode != PSR_MODE_EL2h) {
- 		kvm_err("Invalid host exception to nVHE hyp!\n");
- 	} else if (ESR_ELx_EC(esr) == ESR_ELx_EC_BRK64 &&
-@@ -321,9 +316,11 @@ void __noreturn __cold nvhe_hyp_panic_handler(u64 esr, u64 spsr,
- 		if (file)
- 			kvm_err("nVHE hyp BUG at: %s:%u!\n", file, line);
- 		else
--			kvm_err("nVHE hyp BUG at: %016llx!\n", elr_virt + hyp_offset);
-+			kvm_err("nVHE hyp BUG at: [<%016llx>] %pB!\n", panic_addr,
-+					(void *)panic_addr);
- 	} else {
--		kvm_err("nVHE hyp panic at: %016llx!\n", elr_virt + hyp_offset);
-+		kvm_err("nVHE hyp panic at: [<%016llx>] %pB!\n", panic_addr,
-+				(void *)panic_addr);
- 	}
- 
- 	/*
-diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-index 8caabddf817c..ad2c93640a92 100644
---- a/scripts/kallsyms.c
-+++ b/scripts/kallsyms.c
-@@ -111,7 +111,7 @@ static bool is_ignored_symbol(const char *name, char type)
- 		".L",			/* local labels, .LBB,.Ltmpxxx,.L__unnamed_xx,.LASANPC, etc. */
- 		"__crc_",		/* modversions */
- 		"__efistub_",		/* arm64 EFI stub namespace */
--		"__kvm_nvhe_",		/* arm64 non-VHE KVM namespace */
-+		"__kvm_nvhe_$",		/* arm64 local symbols in non-VHE KVM namespace */
- 		"__AArch64ADRPThunk_",	/* arm64 lld */
- 		"__ARMV5PILongThunk_",	/* arm lld */
- 		"__ARMV7PILongThunk_",
--- 
-2.35.1.1178.g4f1659d476-goog
+I'll ponder if wait_task_inactive() can simplify things..
 
+> What ptrace_freeze_traced and ptrace_unfreeze_traced fundamentally need
+> is that the process to not do anything interesting, so that the tracer
+> process can modify the process and it's task_struct.
+
+Agreed, I understand this need. I think I've done this, but I'll
+centrainly look hard at it again Monday -- the weekend hopefully
+clearing my brain of preconceptions enough so that I can see my own code
+a-fresh.
+
+Anyway, my current set lives here:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/log/?h=sched/wip.freezer
+
+I meant to post earlier today, but stuff got in between and I've not
+even done build-tests yet :/

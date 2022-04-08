@@ -2,108 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CCF84F9E18
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 22:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BCAE4F9E1A
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 22:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233243AbiDHUSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 16:18:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51312 "EHLO
+        id S239455AbiDHUT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 16:19:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232779AbiDHUSx (ORCPT
+        with ESMTP id S233412AbiDHUTY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 16:18:53 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60AD83852D5
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 13:16:48 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id a30so12820191ljq.13
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 13:16:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hi6N/3Gfly/aeQxX3MNYeA6tcKASZ5qO4cZ7KqJIS/I=;
-        b=V0ukmsZGOjGOJiK2b7BnIWsCcnQz90DZY0k0Ghi1mnlZjFg4vYu+WVtOBKplk0aPNb
-         xSGPQdBQhqDhDebvMNWrLmYSy5rpw3uCbI5QPDvDX6Kow7dr5eZIKOjXuM7UbjVGt0Zx
-         S2Zw9t/zTMIieUJbua+eXbgDDgUvbjFuvCWzHSdSLGQTZq8lwr1unU2LghD0WiCIDEnI
-         rJE0PEDvgKb597saf9fl2Xaws1w8ty1pn1TNAPpD0e7tYwekQWJy3BhEwXX+KpOqonaz
-         dlsyTLjJFzKuzHKY5eCC7Q6KTahmxRskQHmglGk/DuHMe2vlLsvZpXe0eb5vq74jj6W4
-         ZhAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hi6N/3Gfly/aeQxX3MNYeA6tcKASZ5qO4cZ7KqJIS/I=;
-        b=qvsX6UusFeBXXdxOAg+/3gMxLxRlSflViUGZhPQXI5I6A1aCXCjLZcLFOk8NL09uhb
-         hlj/oxKjRG9yVgWhROZtyFYgCR12ljWW3JF3a1ZSMMBXYHr/KqANHxxWmOIMWENe4rWn
-         Mn4tGuscIjlzub5b++FVdGnCD2a+V/RKFTvfI7vkQ3PoDOrBNYeDjA47k5n83fJUvLFO
-         MVtTt9IF0uyB0At+rzbFbvHMWljP3dN3zymO6+fkgvi+TSA+bDg4FF/TbLML+cmKgMKu
-         gmuTwMDYvNLqXvA3j0DetbCQZzVDC/1nIjTCaQ3/pHqcHNZA1TtNaatw1G0lVu8ydbVc
-         wTSQ==
-X-Gm-Message-State: AOAM531p0B6GMC+jNKOg/PMEWRfiVQK9KwFW25TieoN+ESlzLLwaAPaU
-        JJghKTISe/DOOtcZGlbMnLBq+67BU1tT0Kfm5wj7ow==
-X-Google-Smtp-Source: ABdhPJxXE2J6V1LtwHStnWObudn7sZJkA3RyGvTh47b5fBJtNaOCCD2wLzJjsH7fCMEEf13m5ow672e7a9MeMnNyfTQ=
-X-Received: by 2002:a05:651c:555:b0:24b:15b7:74ad with SMTP id
- q21-20020a05651c055500b0024b15b774admr12420671ljp.239.1649449006497; Fri, 08
- Apr 2022 13:16:46 -0700 (PDT)
+        Fri, 8 Apr 2022 16:19:24 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5C9396ACD
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 13:17:17 -0700 (PDT)
+From:   John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649449035;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JGg8/jzR3j1pSFzQLp7EyCYOhVTf4KBViZSPhpRv2hk=;
+        b=gTY3S4WlnWga9zg0uZUcqdJT344QnlycpzWQOaoqi8xPLUHCcEfCrDmeixI6gDBEN/mPkh
+        /7a649Sqq7itQJzSKTOQeo0V9aCImWsCizGcojZg3ZsN812XzWVVPnYJi2a0YpVMDA4FjQ
+        /qDhtdDktzj4C80eE+oQyytm8OH7nNYrHBYWw4GZc/zhEJ5jVq4BdCpRq7dQ5Hx4414N0O
+        fqjQZ/Nbtt2r0S0MgDxjNzCYWsTkEbgOCKAluEj83XgySKkErzUtyqlQttqnoY9arlilsi
+        cQbYuOwu/9C2/KQOln1pUJO4x0cgMp7qz763Tkyn6o3PclkYiYnm+O5y/hswXg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649449035;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JGg8/jzR3j1pSFzQLp7EyCYOhVTf4KBViZSPhpRv2hk=;
+        b=Y7KfsHDfSOYGjKiqDueArCa+bc9iMpwP6E4HpSv9LIPEbW/56ouENzOxv6E/a5r7TmZA1Z
+        qWl4bZMKtwpaTAAQ==
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: guarantee forward progress: was: Re: [PATCH printk v2 11/12]
+ printk: extend console_lock for proper kthread support
+In-Reply-To: <YlA8jpuziDrD27A2@alley>
+References: <20220405132535.649171-1-john.ogness@linutronix.de>
+ <20220405132535.649171-12-john.ogness@linutronix.de>
+ <YlA8jpuziDrD27A2@alley>
+Date:   Fri, 08 Apr 2022 22:23:15 +0206
+Message-ID: <87v8vjnxdg.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-References: <7fad83ecde03540e65677959034315f8fbb3755e.1649434832.git.jpoimboe@redhat.com>
- <CAK7LNARvFcQgEB1b0L6giwx0vD7wU9L-OZ5jvm1c5+StLjeOYQ@mail.gmail.com>
- <YlCJm8iQBPSOWIT5@hirez.programming.kicks-ass.net> <CAKwvOd=2xeZOg+0HosLPgCegKZxe7F-Cprw0MjOiWf2q=AbNDQ@mail.gmail.com>
-In-Reply-To: <CAKwvOd=2xeZOg+0HosLPgCegKZxe7F-Cprw0MjOiWf2q=AbNDQ@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 8 Apr 2022 13:16:35 -0700
-Message-ID: <CAKwvOdkKx2vjJc5zxBicYSvSgKKFdpd_HsS-2k9Vwfpni_WNvA@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: Remove CONFIG_DEBUG_SECTION_MISMATCH
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     Michal Marek <michal.lkml@markovi.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>, X86 ML <x86@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Changbin Du <changbin.du@gmail.com>,
-        linux-toolchains@vger.kernel.org,
-        clang-built-linux <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 8, 2022 at 1:08 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
+On 2022-04-08, Petr Mladek <pmladek@suse.com> wrote:
+> I played a lot with it and it is really hard because:
 >
-> Lore thread start for newly cc'ed ML readers:
-> https://lore.kernel.org/lkml/7fad83ecde03540e65677959034315f8fbb3755e.1649434832.git.jpoimboe@redhat.com/
->
-> On Fri, Apr 8, 2022 at 12:14 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > This weird option is having us upgrade quite a few 'inline' to
-> > '__always_inline'.
->
-> As is, the assumption that __init functions only call other __init
-> functions or __always_inline is a brittle house of cards that leads to
-> a "what color is your function" [0] scenario, and leads to code that
-> happens to not emit warnings for compiler X (or compiler X version Y).
-> There's also curious exceptions in modpost that look like memory leaks
-> to me.
+>    + new messages can appear anytime
+>    + direct mode might get requested anytime
+>    + only the direct mode knows whether all messages were flushed
+>      on all consoles
 
-These assumptions perhaps made more sense in a world prior to
-commit 889b3c1245de ("compiler: remove CONFIG_OPTIMIZE_INLINING entirely")
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=889b3c1245de48ed0cacf7aebb25c489d3e4a3e9
+Yes, and this is why v1 dramatically simplified the picture by making
+kthreads not care about direct mode. In v1 the kthread logic is very
+simple: If there are messages to print, try to print them no matter
+what. We didn't need to worry if someone was printing, because we knew
+that at least the kthread was always printing.
 
-(I view 889b3c1245de favorably; perhaps this whole thread is just
-fallout from that change though.  It's also interesting to note that
-CONFIG_OPTIMIZE_INLINING was enabled in the i386 and x86_64
-defconfigs. That might color some folk's experience with the use of
-`inline` in the kernel sources and whether "inline means
-__attribute__((always_inline))").
--- 
-Thanks,
-~Nick Desaulniers
+This meant that there would be times when direct mode is active but the
+kthreads are doing the printing. But in my experimenting, that tends to
+be the case anyway, even with this more complex v2 approach. The reason
+is that if some code does:
+
+printk_prefer_direct_enter();
+(100 lines of printk calls)
+printk_prefer_direct_exit();
+
+And directly before that printk_prefer_direct_enter() _any_ kthread was
+already inside call_console_driver(), then _all_ the console_trylock()
+calls of the above 100 printk's will fail. Inserting messages into the
+ringbuffer is fast and any active printer will not have finished
+printing its message before the above code snippet is done.
+
+In fact, the above snippet will only do direct printing if there were
+previously no unflushed messages. That is true for v1 (by design) and v2
+(by misfortune, because ringbuffer insertion is much faster than a
+single call_console_driver() call).
+
+This new idea (v2) of trying to stop kthreads in order to "step aside"
+for direct printing is really just adding a lot of complexity, a lot of
+irqwork calls, and a lot of races. And with my experimenting I am not
+seeing any gain, except for new risks of nobody printing.
+
+I understand that when we say printk_prefer_direct_enter() that we
+_really_ want to do direct printing. But we cannot force it if any
+printer is already inside call_console_driver(). In that case, direct
+printing simply will not and cannot happen.
+
+For v3 I recommend going back to the v1 model, where kthreads do not
+care if direct mode is preferred. I claim that v2 does yield any more
+actual direct printing than v1 did.
+
+However, I would keep the v2 change that kthreads go into their
+wait_event check after every message. That at least provides earlier
+responses for kthreads to stop themselves if they are disabled.
+
+Once we have atomic consoles, things will look different. Then we
+perform true synchronous direct printing. But without them, the "prefer"
+in printk_prefer_direct_enter() is only a preference that can only be
+satisfied under ideal situations (i.e. no kthread is inside
+call_console_driver()).
+
+John

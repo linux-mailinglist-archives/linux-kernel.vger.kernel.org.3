@@ -2,55 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60A6A4F8D80
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:25:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F277B4F8DBF
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:25:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234216AbiDHEMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 00:12:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50222 "EHLO
+        id S234213AbiDHEMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 00:12:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234193AbiDHEMe (ORCPT
+        with ESMTP id S234207AbiDHEMs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 00:12:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE191CFC2
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 21:10:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E4ECDB827AF
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 04:10:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FB25C385A1;
-        Fri,  8 Apr 2022 04:10:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1649391019;
-        bh=a5MW3Y7fTlcWfiSqExChn/gvYPyz15/eSD1A/kNQLm0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=jnPukCRDuNYENUubVhda6jWGi7qBKt0mxnQsXPSIMC+ZMY06KlwQ589fj7QryLIqK
-         ATQuvXlavifEXziVeRPHpx4/0N4I4TXp3iamCj8HM+zjmRP8crl90cZyPC4s0RSFW9
-         OmkHz4Z/CkX5ZT64tB/BJb7ngw5LfOcXxP4wpTcU=
-Date:   Thu, 7 Apr 2022 21:10:18 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Qi Zheng <zhengqi.arch@bytedance.com>
-Cc:     Muchun Song <songmuchun@bytedance.com>, dennis@kernel.org,
-        tj@kernel.org, cl@linux.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, zhouchengming@bytedance.com
-Subject: Re: [PATCH] percpu_ref: call wake_up_all() after percpu_ref_put()
- completes
-Message-Id: <20220407211018.875696691e4411a7b5c8f63f@linux-foundation.org>
-In-Reply-To: <35195a61-d531-aeb2-5565-146e345f8bf6@bytedance.com>
-References: <20220407103335.36885-1-zhengqi.arch@bytedance.com>
-        <Yk+kAUwxZx1JhxIu@FVFYT0MHHV2J.usts.net>
-        <cffbad48-db3b-e99b-11b3-7956ed460fb2@bytedance.com>
-        <20220407205419.f656419a8f4665a2dc781133@linux-foundation.org>
-        <35195a61-d531-aeb2-5565-146e345f8bf6@bytedance.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        Fri, 8 Apr 2022 00:12:48 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0711FF436
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 21:10:45 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id p21so9309202ioj.4
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 21:10:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kLJsh09usQM6KN7slbu+hDyAz10KLaAr5TuAGBF1ET8=;
+        b=gBo+/HbruUwOBKndO6LMcDu/iJv+/tOrAmtZhCfGRubv6KuCygoW0XzqGPxgTnIjUE
+         YsTDHr2rrSBBP4YfBA072r25eyCoMDp623Z9qh4T2KJ/8B9Rst7np2vKyRSlZ6aWzWJ9
+         ZrVqZ0kipXK2bXR/XkFovvZKgn4UZJfIehQfiXfSUyIkHnZs4TO8t80L0fJfGBfxdQ0e
+         Ks3hUVwCWQARQLa89WDBX16qmbJeFLC3C+MqOnQu4ghjjxCkOQcnGZUWk62YF7TAP13I
+         8FRV6jbqN0tq1xYnyrUCZVi227qm1C7BkKEQywopeprRzWbJ2f0+P4RyC2+AILgu8SD8
+         MUKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kLJsh09usQM6KN7slbu+hDyAz10KLaAr5TuAGBF1ET8=;
+        b=jJ/OwBKl0igF8J2GllTGzr9OyDrOutb7mLdh4NJEarxnSOwwtmHjMvgW4vyDQhfIDs
+         yUaCC5HbDcayooS3kZeckCimWfuTfoRDjNmE/q0gsEoQQT7QsssWhVNzrzkl1joYB1EC
+         UxXYkbViRoiDlEbRZLsfSQHHTFe4Mv2xSipYhyjVWadX2EInTC/m6a/87oEqSoFt0fcq
+         z5RhraTWGTYj/CWGS5y864x4+f5fuQlJQ4dYFEh9fVNt0Jfk3Ku4FKgVi3QIxWfczC47
+         MbueQGTl5M0ITDvBpypF3svoKZOt0CwrK6YElnIPo5Arygld8Xj4U21EmGW0PaEUJJqt
+         Y3Ng==
+X-Gm-Message-State: AOAM530wPMWA2zA0zAwucvqaPZyqrG02rXPIbAdA0Wt6+zT8mBrjOk9r
+        cAKZUjbgRlVs+K/z1vCOtZg32Zz9MijjKqsdDe7zlQ==
+X-Google-Smtp-Source: ABdhPJzsHGDQGCBMIEMjZZ+ZfDHTSSvZY148evFFWftTD2yA+ROjdj/6Mou/Sxg7Iwz3kSErR9RaYM0kkHP9g4gRVLk=
+X-Received: by 2002:a5e:dc4c:0:b0:64c:ceff:8916 with SMTP id
+ s12-20020a5edc4c000000b0064cceff8916mr7651721iop.117.1649391044303; Thu, 07
+ Apr 2022 21:10:44 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220331084151.2600229-1-yosryahmed@google.com>
+ <YkcEMdsi9G5y8mX4@dhcp22.suse.cz> <CAAPL-u_i-Mp-Bo7LtP_4aJscY=1JHG_y1H_-A7N_HRAgtz+arg@mail.gmail.com>
+ <87y20nzyw4.fsf@yhuang6-desk2.ccr.corp.intel.com> <CAAPL-u8wjtBRE7KZyZjoQ0eTJecnW35uEXAE3KU0M+AvL=5-ug@mail.gmail.com>
+ <87o81fujdc.fsf@yhuang6-desk2.ccr.corp.intel.com> <CAAPL-u_6XqQYtLAMNFvEo+0XU2VR=XYm0T9btL=g6rVVW2h93w@mail.gmail.com>
+ <87bkxfudrk.fsf@yhuang6-desk2.ccr.corp.intel.com> <215bd7332aee0ed1092bad4d826a42854ebfd04a.camel@linux.intel.com>
+ <CAAPL-u_aAbDOmATSA8ZvjnfBk_7EoXvLoh0etM0fB0aY1845VQ@mail.gmail.com>
+ <df6110a09cacc80ee1cbe905a71273a5f3953e16.camel@linux.intel.com>
+ <CAAPL-u-oF5HQ26w1czNCmA5VadXOfC54GbGpSppva86YEkefyA@mail.gmail.com> <87y20gtgpf.fsf@yhuang6-desk2.ccr.corp.intel.com>
+In-Reply-To: <87y20gtgpf.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Wei Xu <weixugc@google.com>
+Date:   Thu, 7 Apr 2022 21:10:33 -0700
+Message-ID: <CAAPL-u9hVKx=tgSK7DWLxcbpjJ6oRLyyS=3gqXV9VfKcFmELUQ@mail.gmail.com>
+Subject: Re: [PATCH resend] memcg: introduce per-memcg reclaim interface
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     Tim Chen <tim.c.chen@linux.intel.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Cgroups <cgroups@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>,
+        Jonathan Corbet <corbet@lwn.net>, Yu Zhao <yuzhao@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Greg Thelen <gthelen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,41 +88,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 8 Apr 2022 12:06:20 +0800 Qi Zheng <zhengqi.arch@bytedance.com> wrote:
-
-> 
-> 
-> >>>> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
-> >>>
-> >>> Are any users affected by this?  If so, I think a Fixes tag
-> >>> is necessary.
+On Thu, Apr 7, 2022 at 8:08 PM Huang, Ying <ying.huang@intel.com> wrote:
+>
+> Wei Xu <weixugc@google.com> writes:
+>
+> > On Thu, Apr 7, 2022 at 4:11 PM Tim Chen <tim.c.chen@linux.intel.com> wrote:
 > >>
-> >> Looks all current users(blk_pre_runtime_suspend() and set_in_sync()) are
-> >> affected by this.
+> >> On Thu, 2022-04-07 at 15:12 -0700, Wei Xu wrote:
 > >>
-> >> I see that this patch has been merged into the mm tree, can Andrew help
-> >> me add the following Fixes tag?
-> > 
-> > Andrew is helpful ;)
-> > 
-> > Do you see reasons why we should backport this into -stable trees?
-> > It's 8 years old, so my uninformed guess is "no"?
-> 
-> Hmm, although the commit 490c79a65708 add wake_up_all(), it is no
-> problem for the usage at that time, maybe the correct Fixes tag is the
-> following:
-> 
-> Fixes: 210f7cdcf088 ("percpu-refcount: support synchronous switch to 
-> atomic mode.")
-> 
-> But in fact, there is no problem with it, but all current users expect
-> the refcount is stable after percpu_ref_switch_to_atomic_sync() returns.
-> 
-> I have no idea as which Fixes tag to add.
+> >> >
+> >> > (resending in plain-text, sorry).
+> >> >
+> >> > memory.demote can work with any level of memory tiers if a nodemask
+> >> > argument (or a tier argument if there is a more-explicitly defined,
+> >> > userspace visible tiering representation) is provided.  The semantics
+> >> > can be to demote X bytes from these nodes to their next tier.
+> >> >
+> >>
+> >> We do need some kind of userspace visible tiering representation.
+> >> Will be nice if I can tell the memory type, nodemask of nodes in tier Y with
+> >>
+> >> cat memory.tier_Y
+> >>
+> >>
+> >> > memory_dram/memory_pmem assumes the hardware for a particular memory
+> >> > tier, which is undesirable.  For example, it is entirely possible that
+> >> > a slow memory tier is implemented by a lower-cost/lower-performance
+> >> > DDR device connected via CXL.mem, not by PMEM.  It is better for this
+> >> > interface to speak in either the NUMA node abstraction or a new tier
+> >> > abstraction.
+> >>
+> >> Just from the perspective of memory.reclaim and memory.demote, I think
+> >> they could work with nodemask.  For ease of management,
+> >> some kind of abstraction of tier information like nodemask, memory type
+> >> and expected performance should be readily accessible by user space.
+> >>
+> >
+> > I agree.  The tier information should be provided at the system level.
+> > One suggestion is to have a new directory "/sys/devices/system/tier/"
+> > for tiers, e.g.:
+> >
+> > /sys/devices/system/tier/tier0/memlist: all memory nodes in tier 0.
+> > /sys/devices/system/tier/tier1/memlist: all memory nodes in tier 1.
+>
+> I think that it may be sufficient to make tier an attribute of "node".
+> Some thing like,
+>
+> /sys/devices/system/node/nodeX/memory_tier
+>
 
-Well the solution to that problem is to add cc:stable and let Greg
-figure it out ;)
+This works. If we want additional information about each tier, we can
+then add a tier-specific subtree.
 
-The more serious question is "should we backport this".  What is the
-end-user-visible impact of the bug?  Do our users need the fix or not?
+In addition, it would be good to also expose the demotion target nodes
+(node_demotion[]) via sysfs, e.g.:
 
+/sys/devices/system/node/nodeX/demotion_path
+
+which returns node_demotion[X].
+
+> Best Regards,
+> Huang, Ying
+>
+> > We can discuss this tier representation in a new thread.
+> >
+> >> Tim
+> >>
+> >> >
+> >> > It is also desirable to make this interface stateless, i.e. not to
+> >> > require the setting of memory_dram.reclaim_policy.  Any policy can be
+> >> > specified as arguments to the request itself and should only affect
+> >> > that particular request.
+> >> >
+> >> > Wei
+> >>
+>

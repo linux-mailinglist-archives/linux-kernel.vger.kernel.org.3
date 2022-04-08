@@ -2,155 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CFCF4F9A63
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 18:21:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F28704F9A7E
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 18:23:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbiDHQXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 12:23:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39180 "EHLO
+        id S230288AbiDHQZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 12:25:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbiDHQXu (ORCPT
+        with ESMTP id S230251AbiDHQZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 12:23:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67249DF2E
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 09:21:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F3F40620A6
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 16:21:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E86FDC385A1;
-        Fri,  8 Apr 2022 16:21:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649434905;
-        bh=sp8YSgjJ9qp4rTSo+9/IQUyqWZQ2MCM4EJ7wecIecVc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WohqsiUtwM3ulQrXXgDuUJAdWWe4VpJB0EAV+ON4okCh67hN1k5Gt/NZOAapG+/hK
-         ObiO6p9lzJryOZmLbqL2+aHuWPxi5CikQaeeBIOFGJEDbBVyLCD8QriP7bsSRqXeO8
-         oaivFrKMARXOfe5da+6mpO8Y1FyzuR5eSBxQQP204hVHMYwBfH32bn33NGQwkh5nQ2
-         z1g4K+YyE4ev8xKvhDa5xj3OUH6UDjlFyxmKDlN2zt5rAAW1k5NOc/TVx9wkxFgH+p
-         TrHbiflPwHAxNLq0ybWzLOiPVEn0vjolmGKK5cHADdEGFUPMEq0HamDiDs7bgkNmUd
-         3xClnzPS5667w==
-Date:   Fri, 8 Apr 2022 17:21:40 +0100
-From:   Will Deacon <will@kernel.org>
-To:     James Morse <james.morse@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org, maz@kernel.org,
-        catalin.marinas@arm.com, mark.rutland@arm.com
-Subject: Re: arm64 spectre-bhb backports break boot on stable kernels <= v5.4
-Message-ID: <20220408162139.GB28108@willie-the-truck>
-References: <20220408120041.GB27685@willie-the-truck>
- <1a44f42c-0391-7428-ac85-1e27aaf0be14@arm.com>
+        Fri, 8 Apr 2022 12:25:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C916F10C515
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 09:23:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649434984;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ofocLwjgfrlRUiguKE9lsikbmfnw6N1ZVOog+yoEC3o=;
+        b=hKx3YFDPrboIbZ9mstbsG6o/SIO+YXrMTtgo0ZUZ/k3LNcpYTLMkqJKau9f5SME5q2utI9
+        G4jwC9nTirQD9UgCS9s8KiR7gFPVoa4gn+a3OKNDIpme8xV93729pxuLxIzXAfGEk305qm
+        k7MsOQCO/BqKB7wquKnAVtMEaxWK5Xc=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-10-JH2oBAntP3iehww6ZgiXhQ-1; Fri, 08 Apr 2022 12:23:01 -0400
+X-MC-Unique: JH2oBAntP3iehww6ZgiXhQ-1
+Received: by mail-qt1-f200.google.com with SMTP id g22-20020ac870d6000000b002e20a1508ecso8060352qtp.19
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 09:23:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ofocLwjgfrlRUiguKE9lsikbmfnw6N1ZVOog+yoEC3o=;
+        b=1KqTmKtXJniyAH3o7reCUsMSVXVV6IrOVhTvPvVMiYdkqzxrEmXNw5pWlRLV7PAP8l
+         Df3zYS64biEK7MiYK0oCxVWdLrBjteC76hXlfEzc4/qS3G1McRreemr8DY+4J9prYQ2x
+         sF6yCdGteSpxI7Xrw5I4ej54Y/Y5w7a8LNt2607yUEdkWMTpXkrgdvERChmUmEKqaBcp
+         E/a/49484heepWbDMe7fVM+792EQkKyQ7mC3ZrjCoZnWshPGxmTWCx7CE+u+N/nzxEw0
+         CYFmObH1n+FZXSkUjg5iRRHOzX41bd8l6iKngeGOCbL1AZzm7rJaBHPuxLKN38Ydh091
+         /e8A==
+X-Gm-Message-State: AOAM532R1HWo+5VS7NzHZL4+zhL/52TxY0V9XQKmtOFwbsLxTE95aGxq
+        qq3YWaSTED/IJX0UkiAQU/SK1DHwXWFHtqV5HZnmFOGA5XbXIK8B4Rpbx/Ao/e/t/MWCCSDi0eH
+        QWtZL5MstaQJqFXZJfL66o7cF
+X-Received: by 2002:a05:6214:2622:b0:444:1b35:b6a5 with SMTP id gv2-20020a056214262200b004441b35b6a5mr4717034qvb.102.1649434981140;
+        Fri, 08 Apr 2022 09:23:01 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxIM9ayM7bF8aYO2zn3Ghsa6P4/1Q2tP2xWbGcFH5vNeM8F875g1oDKNWu3MONplVRltPS00g==
+X-Received: by 2002:a05:6214:2622:b0:444:1b35:b6a5 with SMTP id gv2-20020a056214262200b004441b35b6a5mr4717017qvb.102.1649434980810;
+        Fri, 08 Apr 2022 09:23:00 -0700 (PDT)
+Received: from treble.attlocal.net ([2600:1700:6e32:6c00::15])
+        by smtp.gmail.com with ESMTPSA id v7-20020ac85787000000b002e1c8376517sm17629692qta.22.2022.04.08.09.22.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 09:23:00 -0700 (PDT)
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sam Ravnborg <sam@ravnborg.org>, x86@kernel.org
+Subject: [PATCH] kbuild: Remove CONFIG_DEBUG_SECTION_MISMATCH
+Date:   Fri,  8 Apr 2022 09:21:56 -0700
+Message-Id: <7fad83ecde03540e65677959034315f8fbb3755e.1649434832.git.jpoimboe@redhat.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1a44f42c-0391-7428-ac85-1e27aaf0be14@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi James,
+Modpost's section mismatch detection warns when a non-init function
+references an __init function or __initdata.  Those warnings are very
+useful, because __init memory is freed during boot, so the non-init
+function might end up referencing or calling into some random memory.
 
-On Fri, Apr 08, 2022 at 05:08:00PM +0100, James Morse wrote:
-> On 08/04/2022 13:00, Will Deacon wrote:
-> > Booting stable kernels <= v5.4 on arm64 with CONFIG_HARDEN_BRANCH_PREDICTOR=n
-> > results in a NULL pointer dereference during boot due to kvm_get_hyp_vector()
-> > dereferencing a NULL pointer from arm64_get_bp_hardening_data():
-> > 
-> > [    2.384444] Internal error: Oops: 96000004 [#1] PREEMPT SMP
-> > [    2.384461] pstate: 20400085 (nzCv daIf +PAN -UAO)
-> > [    2.384472] pc : cpu_hyp_reinit+0x114/0x30c
-> > [    2.384476] lr : cpu_hyp_reinit+0x80/0x30c
-> > [    2.384477] sp : ffff800010013e20
-> > [    2.384479] x29: ffff800010013e20 x28: ffff0000df033f00
-> > [    2.384484] x27: ffff800011caa000 x26: ffff0000de58e000
-> > [    2.384487] x25: ffff800011e57000 x24: ffff800011caad90
-> > [    2.384490] x23: ffff800011c778e0 x22: ffff800011a56000
-> > [    2.384494] x21: ffff800011a56000 x20: 0000b471121a6000
-> > [    2.384497] x19: 00000000de588000 x18: 0000000000000000
-> > [    2.384500] x17: 0000000000000000 x16: 0000000000000400
-> > [    2.384503] x15: 0000000000001000 x14: 00000000000007f2
-> > [    2.384507] x13: 0000000000000004 x12: 0000000000000002
-> > [    2.384510] x11: 0000000000000000 x10: 00000000121a6000
-> > [    2.384513] x9 : ffff800011c77fd8 x8 : 0000000000000010
-> > [    2.384516] x7 : 4f422effff306b64 x6 : 0000008080000000
-> > [    2.384519] x5 : 0000008080000000 x4 : ffff800011fabc94
-> > [    2.384522] x3 : ffff800011f5bde0 x2 : 0000000000000001
-> > [    2.384526] x1 : 00000000121a0000 x0 : ffff8000118f962d
-> > [    2.384529] Call trace:
-> > [    2.384533]  cpu_hyp_reinit+0x114/0x30c
-> > [    2.384537]  _kvm_arch_hardware_enable+0x30/0x54
-> > [    2.384541]  flush_smp_call_function_queue+0xe4/0x154
-> > [    2.384544]  generic_smp_call_function_single_interrupt+0x10/0x18
-> > [    2.384549]  ipi_handler+0x170/0x2b0
-> > [    2.384555]  handle_percpu_devid_fasteoi_ipi+0x120/0x1cc
-> > [    2.384560]  __handle_domain_irq+0x9c/0xf4
-> > [    2.384563]  gic_handle_irq+0x6c/0xe4
-> > [    2.384566]  el1_irq+0xf0/0x1c0
-> > [    2.384570]  arch_cpu_idle+0x28/0x44
-> > [    2.384574]  do_idle+0x100/0x2a8
-> > [    2.384577]  cpu_startup_entry+0x20/0x24
-> > [    2.384581]  secondary_start_kernel+0x1b0/0x1cc
-> > [    2.384589] Code: b9469d08 7100011f 540003ad 52800208 (f9400108)
-> > [    2.384600] ---[ end trace 266d08dbf96ff143 ]---
-> > [    2.385171] Kernel panic - not syncing: Fatal exception in interrupt
-> 
-> Yikes!
-> 
-> Interesting to know that stuff behind CONFIG_EXPERT has someone who cares about it.
-> (I was going to propose dropping the Kconfig option after a while).
+CONFIG_DEBUG_SECTION_MISMATCH is intended to root out even more of these
+issues by adding the -fno-inline-functions-called-once compiler flag,
+which forces once-called static functions to not be inlined.  As
+described in the option's help description:
 
-Yup! FWIW, the hardening options are enabled in Android (GKI), but this was
-reported to us externally by somebody using a custom config.
+  - Add the option -fno-inline-functions-called-once to gcc commands.
+    When inlining a function annotated with __init in a non-init
+    function, we would lose the section information and thus
+    the analysis would not catch the illegal reference.
+    This option tells gcc to inline less (but it does result in
+    a larger kernel).
 
-> > I can bodge this as below (untested), but it's pretty grotty.
-> 
-> I wanted to keep the detection code even if the feature is disabled so the sysfs reporting
-> is always correct.
+So it's basically a debug (non-production) option, which has the goal of
+rooting out potential issues which might exist on *other* configs which
+might somehow trigger different inlining decisions, without having to
+build all those other configs to see the warnings directly.
 
-Makes sense. Another option is to check for ARM64_HARDEN_BRANCH_PREDICTOR in
-spectre_bhb_enable_mitigation(), but then I think the KVM code would need
-to query the mitigation state rather than just the cap.
+But with -O2, once-called static functions are almost always inlined, so
+its usefulness for rooting out mismatch warnings on other configs is
+somewhere between extremely limited and non-existent.  And nowadays we
+have build bots everywhere doing randconfigs continuously, which are
+great for rooting out such edge cases.
 
-> > Please can you take a look?
-> 
-> Ugh, arm64_get_bp_hardening_data() returns NULL with that Kconfig setup.
-> 
-> 
-> For v5.4, this fixes it for me:
-> --------------------%<--------------------
-> diff --git a/arch/arm64/include/asm/kvm_mmu.h b/arch/arm64/include/asm/kvm_mmu.h
-> index 78d110667c0c..ffe0aad96b17 100644
-> --- a/arch/arm64/include/asm/kvm_mmu.h
-> +++ b/arch/arm64/include/asm/kvm_mmu.h
-> @@ -479,7 +479,8 @@ static inline void *kvm_get_hyp_vector(void)
->         int slot = -1;
-> 
->         if ((cpus_have_const_cap(ARM64_HARDEN_BRANCH_PREDICTOR) ||
-> -            cpus_have_const_cap(ARM64_SPECTRE_BHB)) && data->template_start) {
-> +            cpus_have_const_cap(ARM64_SPECTRE_BHB)) &&
-> +           data && data->template_start) {
->                 vect = kern_hyp_va(kvm_ksym_ref(__bp_harden_hyp_vecs_start));
->                 slot = data->hyp_vectors_slot;
->         }
+Somewhat ironically, the existence of those build bots means we get a
+lot of unrealistic objtool warnings being reported, due to unrealistic
+inlines caused by CONFIG_DEBUG_SECTION_MISMATCH, where the only way to
+silence the warnings is to force a single-called function to be inlined
+with '__always_inline'.
 
-That'll work, but will sysfs report that BHB is mitigated even if
-!ARM64_HARDEN_BRANCH_PREDICTOR?
+So the limited, hypothetical benefit of "rooting out configs with
+section mismatches" is outweighed by the very real downside of "adding
+lots of unnecessary '__always_inline' annotations".
 
-> --------------------%<--------------------
-> 
-> I'll check the other versions and post patches to the stable list. Earlier stable
-> backports grew a dependency between these features as it wasn't possible to unpick the
-> dependencies.
+In fact I suspect this option has been responsible for dozens of
+"convert inline to __always_inline" patches over the years.  Such
+patches usually complain about the compiler's inlining decisions being
+unpredictable.  It turns out this config option is the main culprit.
 
-Cheers. I know 4.19 is busted too, but I didn't check 4.14.
+So considering the drawbacks of this option significantly outweigh the
+benefits, especially now in the age of randconfig build bots, remove it.
 
-Will
+Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
+---
+ .../media/maintainer-entry-profile.rst        |  2 +-
+ Makefile                                      |  5 -----
+ arch/arc/configs/tb10x_defconfig              |  1 -
+ arch/s390/configs/debug_defconfig             |  1 -
+ arch/s390/configs/defconfig                   |  1 -
+ kernel/configs/debug.config                   |  1 -
+ lib/Kconfig.debug                             | 22 -------------------
+ .../selftests/wireguard/qemu/debug.config     |  1 -
+ 8 files changed, 1 insertion(+), 33 deletions(-)
+
+diff --git a/Documentation/driver-api/media/maintainer-entry-profile.rst b/Documentation/driver-api/media/maintainer-entry-profile.rst
+index ffc712a5f632..06106d7e7fae 100644
+--- a/Documentation/driver-api/media/maintainer-entry-profile.rst
++++ b/Documentation/driver-api/media/maintainer-entry-profile.rst
+@@ -123,7 +123,7 @@ Those tests need to pass before the patches go upstream.
+ 
+ Also, please notice that we build the Kernel with::
+ 
+-	make CF=-D__CHECK_ENDIAN__ CONFIG_DEBUG_SECTION_MISMATCH=y C=1 W=1 CHECK=check_script
++	make CF=-D__CHECK_ENDIAN__ C=1 W=1 CHECK=check_script
+ 
+ Where the check script is::
+ 
+diff --git a/Makefile b/Makefile
+index 8c7de9a72ea2..3d7ea1a23558 100644
+--- a/Makefile
++++ b/Makefile
+@@ -871,11 +871,6 @@ KBUILD_CFLAGS	+= $(CC_FLAGS_FTRACE) $(CC_FLAGS_USING)
+ KBUILD_AFLAGS	+= $(CC_FLAGS_USING)
+ endif
+ 
+-# We trigger additional mismatches with less inlining
+-ifdef CONFIG_DEBUG_SECTION_MISMATCH
+-KBUILD_CFLAGS += -fno-inline-functions-called-once
+-endif
+-
+ ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
+ KBUILD_CFLAGS_KERNEL += -ffunction-sections -fdata-sections
+ LDFLAGS_vmlinux += --gc-sections
+diff --git a/arch/arc/configs/tb10x_defconfig b/arch/arc/configs/tb10x_defconfig
+index a12656ec0072..5acf8cc3e7b0 100644
+--- a/arch/arc/configs/tb10x_defconfig
++++ b/arch/arc/configs/tb10x_defconfig
+@@ -96,7 +96,6 @@ CONFIG_STRIP_ASM_SYMS=y
+ CONFIG_DEBUG_FS=y
+ CONFIG_HEADERS_INSTALL=y
+ CONFIG_HEADERS_CHECK=y
+-CONFIG_DEBUG_SECTION_MISMATCH=y
+ CONFIG_MAGIC_SYSRQ=y
+ CONFIG_DEBUG_MEMORY_INIT=y
+ CONFIG_DEBUG_STACKOVERFLOW=y
+diff --git a/arch/s390/configs/debug_defconfig b/arch/s390/configs/debug_defconfig
+index 498bed9b261b..66a4c65a4bd8 100644
+--- a/arch/s390/configs/debug_defconfig
++++ b/arch/s390/configs/debug_defconfig
+@@ -791,7 +791,6 @@ CONFIG_DEBUG_INFO_DWARF4=y
+ CONFIG_DEBUG_INFO_BTF=y
+ CONFIG_GDB_SCRIPTS=y
+ CONFIG_HEADERS_INSTALL=y
+-CONFIG_DEBUG_SECTION_MISMATCH=y
+ CONFIG_MAGIC_SYSRQ=y
+ CONFIG_DEBUG_PAGEALLOC=y
+ CONFIG_PAGE_OWNER=y
+diff --git a/arch/s390/configs/defconfig b/arch/s390/configs/defconfig
+index 61e36b999f67..0e6ae36cf401 100644
+--- a/arch/s390/configs/defconfig
++++ b/arch/s390/configs/defconfig
+@@ -776,7 +776,6 @@ CONFIG_DEBUG_INFO=y
+ CONFIG_DEBUG_INFO_DWARF4=y
+ CONFIG_DEBUG_INFO_BTF=y
+ CONFIG_GDB_SCRIPTS=y
+-CONFIG_DEBUG_SECTION_MISMATCH=y
+ CONFIG_MAGIC_SYSRQ=y
+ CONFIG_DEBUG_WX=y
+ CONFIG_PTDUMP_DEBUGFS=y
+diff --git a/kernel/configs/debug.config b/kernel/configs/debug.config
+index e8db8d938661..0c1a5d64febb 100644
+--- a/kernel/configs/debug.config
++++ b/kernel/configs/debug.config
+@@ -18,7 +18,6 @@ CONFIG_SYMBOLIC_ERRNAME=y
+ #
+ CONFIG_DEBUG_INFO=y
+ CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+-CONFIG_DEBUG_SECTION_MISMATCH=y
+ CONFIG_FRAME_WARN=2048
+ CONFIG_SECTION_MISMATCH_WARN_ONLY=y
+ #
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 075cd25363ac..e52f851e9e3b 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -425,28 +425,6 @@ config HEADERS_INSTALL
+ 	  user-space program samples. It is also needed by some features such
+ 	  as uapi header sanity checks.
+ 
+-config DEBUG_SECTION_MISMATCH
+-	bool "Enable full Section mismatch analysis"
+-	depends on CC_IS_GCC
+-	help
+-	  The section mismatch analysis checks if there are illegal
+-	  references from one section to another section.
+-	  During linktime or runtime, some sections are dropped;
+-	  any use of code/data previously in these sections would
+-	  most likely result in an oops.
+-	  In the code, functions and variables are annotated with
+-	  __init,, etc. (see the full list in include/linux/init.h),
+-	  which results in the code/data being placed in specific sections.
+-	  The section mismatch analysis is always performed after a full
+-	  kernel build, and enabling this option causes the following
+-	  additional step to occur:
+-	  - Add the option -fno-inline-functions-called-once to gcc commands.
+-	    When inlining a function annotated with __init in a non-init
+-	    function, we would lose the section information and thus
+-	    the analysis would not catch the illegal reference.
+-	    This option tells gcc to inline less (but it does result in
+-	    a larger kernel).
+-
+ config SECTION_MISMATCH_WARN_ONLY
+ 	bool "Make section mismatch errors non-fatal"
+ 	default y
+diff --git a/tools/testing/selftests/wireguard/qemu/debug.config b/tools/testing/selftests/wireguard/qemu/debug.config
+index 2b321b8a96cf..e737ce3b324e 100644
+--- a/tools/testing/selftests/wireguard/qemu/debug.config
++++ b/tools/testing/selftests/wireguard/qemu/debug.config
+@@ -57,7 +57,6 @@ CONFIG_USER_STACKTRACE_SUPPORT=y
+ CONFIG_DEBUG_SG=y
+ CONFIG_DEBUG_NOTIFIERS=y
+ CONFIG_X86_DEBUG_FPU=y
+-CONFIG_DEBUG_SECTION_MISMATCH=y
+ CONFIG_DEBUG_PAGEALLOC=y
+ CONFIG_DEBUG_PAGEALLOC_ENABLE_DEFAULT=y
+ CONFIG_DEBUG_WW_MUTEX_SLOWPATH=y
+-- 
+2.34.1
+

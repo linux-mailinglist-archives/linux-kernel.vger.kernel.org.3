@@ -2,62 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 669134F91D0
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 11:15:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18A484F91E9
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 11:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233690AbiDHJQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 05:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36966 "EHLO
+        id S234191AbiDHJSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 05:18:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233076AbiDHJMF (ORCPT
+        with ESMTP id S233576AbiDHJMs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 05:12:05 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E591E95E1;
-        Fri,  8 Apr 2022 02:09:11 -0700 (PDT)
-Date:   Fri, 08 Apr 2022 09:09:08 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649408950;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=U6BbRaW/uSvLscYBsOnZuEO87siDzNKmlEzTIZmqJXk=;
-        b=C77iKNgEWIBmGP2Qx1Cme761D4rdwcTDm79cPSqFOfi4lRNuJSOiQamUWgTNDjIDVyq5A5
-        UGdOnJOC0s8RNZaP+14Y66lvhAEdghgcf5bT69gZ6TeBLRDfKhHIm15pmN/uKuk9fuQ5hV
-        e1wArbXTBw/wEDt+SoGhC5Jhf4C3D7q15XcHKi8fNyWqff2ZRWUvhMT4Dj+KxtZxgYWSW9
-        ZbVGzrctzPs22Gjnr+KjaRnMk3GTbJAnScSi7wbgBVKr9s71EoBy70AyBEf9JwKb89OmoP
-        h5hKeSlncabFtxlLB+3QO5Jyk9OQOuoKnin9zp/PpOmeBKQfUc06GYfwR+f0Mg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649408950;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=U6BbRaW/uSvLscYBsOnZuEO87siDzNKmlEzTIZmqJXk=;
-        b=2L7j8e47EQcbmC5/1k6m+tZP0zm+lPpiXin3V7Uji8A/t0s07KkMkkFczozgi0iMms3FGB
-        m0rQCteqoFnKtZAw==
-From:   "tip-bot2 for Brijesh Singh" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/sev] x86/sev: Check SEV-SNP features support
-Cc:     Brijesh Singh <brijesh.singh@amd.com>,
-        Borislav Petkov <bp@suse.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220307213356.2797205-13-brijesh.singh@amd.com>
-References: <20220307213356.2797205-13-brijesh.singh@amd.com>
+        Fri, 8 Apr 2022 05:12:48 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58BC224E27C
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 02:09:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=VjUH0pYzMdFii4c6pMc1pUqcDA517z1/pp9WOhE6teA=; b=gkj2jFtNecjnBH2NZx8bYdxmwx
+        EqvrA1LivuRsg2F16Kd3LpEzlc6tX52iGKdfJiNn4sAnMpa+iIfwPrtDFLJG27pFoB8MBtroRfEGQ
+        1Zerb0TAa+eZEiJJoDJaRmF+vqTob8Yr6UIxcPRHQ5QuKwloXVWNNF0PL6a5gh8x5X2+gDGwIps8A
+        O6geVUi14Kw83ubrwvRS28wDmnNggM+wleMorbunPFnGSCPdWnCXIMITXYPueU+DW6P3RX3Gu+7xW
+        wWgQZqJNxZCjwHxH0G8z4WUsiGouWo7PTD7k/wajERrG/aL8dWyVhRCYJBP3J7Xfz+a6ohdkagbrG
+        +nNwpOtw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nckcA-002r42-BO; Fri, 08 Apr 2022 09:09:11 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 386729862CF; Fri,  8 Apr 2022 11:09:08 +0200 (CEST)
+Date:   Fri, 8 Apr 2022 11:09:08 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Oleg Nesterov <oleg@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-kernel@vger.kernel.org, Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: Re: [PATCH v2] ptrace: fix ptrace vs tasklist_lock race on
+ PREEMPT_RT.
+Message-ID: <20220408090908.GO2731@worktop.programming.kicks-ass.net>
+References: <Yh/b19JikC+Vnm8i@linutronix.de>
+ <20220314185429.GA30364@redhat.com>
+ <YjBO8yzxdmjTGNiy@linutronix.de>
+ <20220315142944.GA22670@redhat.com>
+ <YkW55u6u2fo5QmV7@linutronix.de>
+ <20220405101026.GB34954@worktop.programming.kicks-ass.net>
+ <20220405102849.GA2708@redhat.com>
+ <Ykwn0MpcrZ/N+LOG@hirez.programming.kicks-ass.net>
+ <20220407121340.GA2762@worktop.programming.kicks-ass.net>
+ <87v8vk8q4g.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-Message-ID: <164940894898.389.17627611818379551536.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87v8vk8q4g.fsf@email.froward.int.ebiederm.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,243 +71,302 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/sev branch of tip:
+On Thu, Apr 07, 2022 at 05:50:39PM -0500, Eric W. Biederman wrote:
+> Peter Zijlstra <peterz@infradead.org> writes:
+> 
+> > On Tue, Apr 05, 2022 at 01:28:16PM +0200, Peter Zijlstra wrote:
+> >> On Tue, Apr 05, 2022 at 12:29:03PM +0200, Oleg Nesterov wrote:
+> >> > On 04/05, Peter Zijlstra wrote:
+> >> > >
+> >> > > As is, I think we can write task_is_stopped() like:
+> >> > >
+> >> > > #define task_is_stopped(task)	((task)->jobctl & JOBCTL_STOP_PENDING)
+> >> > >
+> >> > > Because jobctl is in fact the canonical state.
+> >> > 
+> >> > Not really. JOBCTL_STOP_PENDING means that the task should stop.
+> >> > 
+> >> > And this flag is cleared right before set_special_state(TASK_STOPPED)
+> >> > in do_signal_stop(), see task_participate_group_stop().
+> >> 
+> >> Argh! More work then :-( Still, I really want to not have p->__state be
+> >> actual unique state.
+> >
+> > How insane is this?
+> >
+> > In addition to solving the whole saved_state issue, it also allows my
+> > freezer rewrite to reconstruct __state. If you don't find the below
+> > fundamentally broken I can respin that freezer rewrite on top of it.
+> 
+> Let me see if I can describe what is going on.  Commit 5f220be21418
+> ("sched/wakeup: Prepare for RT sleeping spin/rwlocks") is buggy because
+> it fundamentally depends upon the assumption that only the current
+> process will change task->state.  That assumption breaks ptrace_attach.
 
-Commit-ID:     cbd3d4f7c4e5a93edae68e5142a269368fde77d6
-Gitweb:        https://git.kernel.org/tip/cbd3d4f7c4e5a93edae68e5142a269368fde77d6
-Author:        Brijesh Singh <brijesh.singh@amd.com>
-AuthorDate:    Wed, 09 Feb 2022 12:10:06 -06:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Wed, 06 Apr 2022 13:10:23 +02:00
+Right -- although I'll be arguing ptrace does some rather dodgy things
+:-)
 
-x86/sev: Check SEV-SNP features support
+> Given that wake_up_state and wake_up_process fundamentally violate that
+> assumption I am not at all certain it makes sense to try and fix the
+> broken commit.  I think the assumption is that it is fine to ignore
+> wake_up_state and wake_up_process and their wake_ups because the process
+> will wake up eventually.
+> 
+> Is it possible to simply take pi_lock around what ptrace does and fix
+> ptrace that way?
 
-Version 2 of the GHCB specification added the advertisement of features
-that are supported by the hypervisor. If the hypervisor supports SEV-SNP
-then it must set the SEV-SNP features bit to indicate that the base
-functionality is supported.
+Sorta, see below, but there's an additional problem where I want to
+rewrite the freezer to be a special task state. That is, replace:
 
-Check that feature bit while establishing the GHCB; if failed, terminate
-the guest.
+	freezer_do_not_count();
+	for (;;) {
+		set_current_state(state);
+		if (cond)
+			break;
+		schedule();
+	}
+	__set_current_state(RUNNING);
+	freezer_count();
 
-Version 2 of the GHCB specification adds several new Non-Automatic Exits
-(NAEs), most of them are optional except the hypervisor feature. Now
-that the hypervisor feature NAE is implemented, bump the GHCB maximum
-supported protocol version.
+with:
 
-While at it, move the GHCB protocol negotiation check from the #VC
-exception handler to sev_enable() so that all feature detection happens
-before the first #VC exception.
+	for (;;) {
+		set_current_state(state|TASK_FREEZABLE);
+		if (cond)
+			break;
+		schedule()
+	}
+	__set_current_state(RUNNING);
 
-While at it, document why the GHCB page cannot be setup from
-load_stage2_idt().
+And have the freezer do (with pi_lock held):
 
-  [ bp: Massage commit message. ]
-
-Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20220307213356.2797205-13-brijesh.singh@amd.com
----
- arch/x86/boot/compressed/idt_64.c | 18 +++++++++++++++++-
- arch/x86/boot/compressed/sev.c    | 20 +++++++++++++++-----
- arch/x86/include/asm/sev-common.h |  6 ++++++
- arch/x86/include/asm/sev.h        |  2 +-
- arch/x86/include/uapi/asm/svm.h   |  2 ++
- arch/x86/kernel/sev-shared.c      | 20 ++++++++++++++++++++
- arch/x86/kernel/sev.c             | 14 ++++++++++++++
- 7 files changed, 75 insertions(+), 7 deletions(-)
-
-diff --git a/arch/x86/boot/compressed/idt_64.c b/arch/x86/boot/compressed/idt_64.c
-index 9b93567..6debb81 100644
---- a/arch/x86/boot/compressed/idt_64.c
-+++ b/arch/x86/boot/compressed/idt_64.c
-@@ -39,7 +39,23 @@ void load_stage1_idt(void)
- 	load_boot_idt(&boot_idt_desc);
- }
- 
--/* Setup IDT after kernel jumping to  .Lrelocated */
-+/*
-+ * Setup IDT after kernel jumping to  .Lrelocated.
-+ *
-+ * initialize_identity_maps() needs a #PF handler to be setup
-+ * in order to be able to fault-in identity mapping ranges; see
-+ * do_boot_page_fault().
-+ *
-+ * This #PF handler setup needs to happen in load_stage2_idt() where the
-+ * IDT is loaded and there the #VC IDT entry gets setup too.
-+ *
-+ * In order to be able to handle #VCs, one needs a GHCB which
-+ * gets setup with an already set up pagetable, which is done in
-+ * initialize_identity_maps(). And there's the catch 22: the boot #VC
-+ * handler do_boot_stage2_vc() needs to call early_setup_ghcb() itself
-+ * (and, especially set_page_decrypted()) because the SEV-ES setup code
-+ * cannot initialize a GHCB as there's no #PF handler yet...
-+ */
- void load_stage2_idt(void)
- {
- 	boot_idt_desc.address = (unsigned long)boot_idt;
-diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
-index 56e941d..5b38931 100644
---- a/arch/x86/boot/compressed/sev.c
-+++ b/arch/x86/boot/compressed/sev.c
-@@ -116,11 +116,8 @@ static enum es_result vc_read_mem(struct es_em_ctxt *ctxt,
- /* Include code for early handlers */
- #include "../../kernel/sev-shared.c"
- 
--static bool early_setup_sev_es(void)
-+static bool early_setup_ghcb(void)
- {
--	if (!sev_es_negotiate_protocol())
--		sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SEV_ES_PROT_UNSUPPORTED);
--
- 	if (set_page_decrypted((unsigned long)&boot_ghcb_page))
- 		return false;
- 
-@@ -171,7 +168,7 @@ void do_boot_stage2_vc(struct pt_regs *regs, unsigned long exit_code)
- 	struct es_em_ctxt ctxt;
- 	enum es_result result;
- 
--	if (!boot_ghcb && !early_setup_sev_es())
-+	if (!boot_ghcb && !early_setup_ghcb())
- 		sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SEV_ES_GEN_REQ);
- 
- 	vc_ghcb_invalidate(boot_ghcb);
-@@ -235,5 +232,18 @@ void sev_enable(struct boot_params *bp)
- 	if (!(sev_status & MSR_AMD64_SEV_ENABLED))
- 		return;
- 
-+	/* Negotiate the GHCB protocol version. */
-+	if (sev_status & MSR_AMD64_SEV_ES_ENABLED) {
-+		if (!sev_es_negotiate_protocol())
-+			sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SEV_ES_PROT_UNSUPPORTED);
-+	}
++static int __set_task_frozen(struct task_struct *p, void *arg)
++{
++	unsigned int state = READ_ONCE(p->__state);
++
++	if (!(state & (TASK_FREEZABLE | __TASK_STOPPED | __TASK_TRACED)))
++		return 0;
 +
 +	/*
-+	 * SNP is supported in v2 of the GHCB spec which mandates support for HV
-+	 * features.
++	 * Only TASK_NORMAL can be augmented with TASK_FREEZABLE, since they
++	 * can suffer spurious wakeups.
 +	 */
-+	if (sev_status & MSR_AMD64_SEV_SNP_ENABLED && !(get_hv_features() & GHCB_HV_FT_SNP))
-+		sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SNP_UNSUPPORTED);
++	if (state & TASK_FREEZABLE)
++		WARN_ON_ONCE(!(state & TASK_NORMAL));
 +
- 	sme_me_mask = BIT_ULL(ebx & 0x3f);
- }
-diff --git a/arch/x86/include/asm/sev-common.h b/arch/x86/include/asm/sev-common.h
-index 94f0ea5..6f037c2 100644
---- a/arch/x86/include/asm/sev-common.h
-+++ b/arch/x86/include/asm/sev-common.h
-@@ -60,6 +60,11 @@
- /* GHCB Hypervisor Feature Request/Response */
- #define GHCB_MSR_HV_FT_REQ		0x080
- #define GHCB_MSR_HV_FT_RESP		0x081
-+#define GHCB_MSR_HV_FT_RESP_VAL(v)			\
-+	/* GHCBData[63:12] */				\
-+	(((u64)(v) & GENMASK_ULL(63, 12)) >> 12)
++#ifdef CONFIG_LOCKDEP
++	/*
++	 * It's dangerous to freeze with locks held; there be dragons there.
++	 */
++	if (!(state & __TASK_FREEZABLE_UNSAFE))
++		WARN_ON_ONCE(debug_locks && p->lockdep_depth);
++#endif
 +
-+#define GHCB_HV_FT_SNP			BIT_ULL(0)
- 
- #define GHCB_MSR_TERM_REQ		0x100
- #define GHCB_MSR_TERM_REASON_SET_POS	12
-@@ -77,6 +82,7 @@
- #define SEV_TERM_SET_GEN		0
- #define GHCB_SEV_ES_GEN_REQ		0
- #define GHCB_SEV_ES_PROT_UNSUPPORTED	1
-+#define GHCB_SNP_UNSUPPORTED		2
- 
- /* Linux-specific reason codes (used with reason set 1) */
- #define SEV_TERM_SET_LINUX		1
-diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-index 9b9c190..17b75f6 100644
---- a/arch/x86/include/asm/sev.h
-+++ b/arch/x86/include/asm/sev.h
-@@ -13,7 +13,7 @@
- #include <asm/sev-common.h>
- 
- #define GHCB_PROTOCOL_MIN	1ULL
--#define GHCB_PROTOCOL_MAX	1ULL
-+#define GHCB_PROTOCOL_MAX	2ULL
- #define GHCB_DEFAULT_USAGE	0ULL
- 
- #define	VMGEXIT()			{ asm volatile("rep; vmmcall\n\r"); }
-diff --git a/arch/x86/include/uapi/asm/svm.h b/arch/x86/include/uapi/asm/svm.h
-index efa9693..b0ad00f 100644
---- a/arch/x86/include/uapi/asm/svm.h
-+++ b/arch/x86/include/uapi/asm/svm.h
-@@ -108,6 +108,7 @@
- #define SVM_VMGEXIT_AP_JUMP_TABLE		0x80000005
- #define SVM_VMGEXIT_SET_AP_JUMP_TABLE		0
- #define SVM_VMGEXIT_GET_AP_JUMP_TABLE		1
-+#define SVM_VMGEXIT_HV_FEATURES			0x8000fffd
- #define SVM_VMGEXIT_UNSUPPORTED_EVENT		0x8000ffff
- 
- /* Exit code reserved for hypervisor/software use */
-@@ -218,6 +219,7 @@
- 	{ SVM_VMGEXIT_NMI_COMPLETE,	"vmgexit_nmi_complete" }, \
- 	{ SVM_VMGEXIT_AP_HLT_LOOP,	"vmgexit_ap_hlt_loop" }, \
- 	{ SVM_VMGEXIT_AP_JUMP_TABLE,	"vmgexit_ap_jump_table" }, \
-+	{ SVM_VMGEXIT_HV_FEATURES,	"vmgexit_hypervisor_feature" }, \
- 	{ SVM_EXIT_ERR,         "invalid_guest_state" }
- 
- 
-diff --git a/arch/x86/kernel/sev-shared.c b/arch/x86/kernel/sev-shared.c
-index 91105f5..4a876e6 100644
---- a/arch/x86/kernel/sev-shared.c
-+++ b/arch/x86/kernel/sev-shared.c
-@@ -48,6 +48,26 @@ static void __noreturn sev_es_terminate(unsigned int set, unsigned int reason)
- 		asm volatile("hlt\n" : : : "memory");
- }
- 
++	WRITE_ONCE(p->__state, TASK_FROZEN);
++	return TASK_FROZEN;
++}
+
+That is, for anything FREEZABLE, STOPPED or TRACED set FROZEN.
+
+The reason is that currently there's all sorts of races between the
+whole freezer_do_not_count(); schedule(); freezer_count(); and thawing
+which allows a task to thaw before it really is time.
+
+By moving all that to a special block state, all that insanity goes
+away.
+
+*HOWEVER* per the above STOPPED,TRACED->FROZEN transition, that state is
+lost. Thawing needs to somehow recover that state if needed. With the
+proposed patch, I can write (this time with sighand *and* pi_lock held):
+
 +/*
-+ * The hypervisor features are available from GHCB version 2 onward.
++ * The special task states (TASK_STOPPED, TASK_TRACED) keep their canonical
++ * state in p->jobctl. If either of them got a wakeup that was missed because
++ * TASK_FROZEN, then their canonical state reflects that and the below will
++ * refuse to restore the special state and instead issue the wakeup.
 + */
-+static u64 get_hv_features(void)
++static int __set_task_special(struct task_struct *p, void *arg)
 +{
-+	u64 val;
++	unsigned int state = 0;
 +
-+	if (ghcb_version < 2)
-+		return 0;
++	if (p->jobctl & JOBCTL_TRACED) {
++		state = __TASK_TRACED;
 +
-+	sev_es_wr_ghcb_msr(GHCB_MSR_HV_FT_REQ);
-+	VMGEXIT();
++		if (!(p->jobctl & JOBCTL_TRACED_FROZEN)) {
++			state |= TASK_WAKEKILL;
++			if (__fatal_signal_pending(p))
++				state = 0;
++		}
 +
-+	val = sev_es_rd_ghcb_msr();
-+	if (GHCB_RESP_CODE(val) != GHCB_MSR_HV_FT_RESP)
-+		return 0;
++	} else if ((p->jobctl & JOBCTL_STOPPED) &&
++		   !__fatal_signal_pending(p)) {
 +
-+	return GHCB_MSR_HV_FT_RESP_VAL(val);
++		state = TASK_STOPPED;
++	}
++
++	if (state)
++		WRITE_ONCE(p->__state, state);
++
++	return state;
++}
+
+So recover the special states and not have them experience spurious
+wakeups.
+
+So the proposed change moves the state into jobctl, such that:
+
+ - task_is_{stopped,traced}() can look at jobctl and not need to worry
+   about ->__state / ->saved_state etc.
+
+ - task->__state can be recovered, it no longer contains unique state.
+
+> Hmmm.
+> 
+> Your ptrace_stop does:
+> 
+> > +	current->jobctl |= JOBCTL_TRACED;
+> >  	set_special_state(TASK_TRACED);
+> 
+> Your ptrace_freeze_traced does:
+> >  	    !__fatal_signal_pending(task)) {
+> > +		task->jobctl |= JOBCTL_TRACED_FROZEN;
+> >  		WRITE_ONCE(task->__state, __TASK_TRACED);
+> >  		ret = true;
+> 
+> At which point I say bleep!
+> 
+> Unless I am misreading something if ptrace_freeze_traced happens
+> during read_lock(&tasklist_lock) task->__state will be changed
+> from TASK_RTLOCK_WAIT to __TASK_TRACED.   Then when
+> read_lock(&tasklist_lock) is acquired task->__state will be changed
+> from __TASK_TRACED to TASK_TRACED.  Making it possible to send
+> SIGKILL to a process that is being ptraced.  Introducing all kinds
+> of unexpected races.
+
+Correct, I 'forgot' about that part but have the below patch on top to
+cure that. Mind you, it's not something I'm proud of, but it should
+work.
+
+> Given that fundamentally TASK_WAKEKILL must be added in ptrace_stop and
+> removed in ptrace_attach I don't see your proposed usage of jobctl helps
+> anything fundamental.
+> 
+> I suspect somewhere there is a deep trade-off between complicating
+> the scheduler to have a very special case for what is now
+> TASK_RTLOCK_WAIT, and complicating the rest of the code with having
+> TASK_RTLOCK_WAIT in __state and the values that should be in state
+> stored somewhere else.
+
+The thing is; ptrace is a special case. I feel very strongly we should
+not complicate the scheduler/wakeup path for something that 'never'
+happens.
+
+> Perhaps we should just remove task->saved_state and start all over from a
+> clean drawing sheet?
+
+We've not managed to come up with an alternative scheme for allowing
+sleeping spinlocks and not wrecking many other things.
+
+
+Anyway, let me finish this freezer rewrite thing and write more coherent
+Changelogs on that :-)
+
+~ Peter
+
+---
+
+Subject: sched,ptrace: Fix PREEMPT_RT vs TASK_TRACED
+From: Peter Zijlstra <peterz@infradead.org>
+Date: Thu Apr 7 16:38:16 CEST 2022
+
+ptrace_{,un}freeze_traced() attempts a compare-and-change pattern on
+a remote task->__state. The correctness of this scheme relies on
+__TASK_TRACED being a special state and those having stability
+guarantees.
+
+Except... PREEMPT_RT has task->saved_state which 'temporarily' holds
+the real task->__state while a spinlock_rt does TASK_RTLOCK_WAIT.
+
+This means the remote compare-and-change pattern is busted in the face
+of PREEMPT_RT.
+
+Rework it so it is atomic vs state changes and takes task->saved_state
+into account.
+
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+ kernel/ptrace.c |   37 ++++++++++++++++++++++++++++++++-----
+ 1 file changed, 32 insertions(+), 5 deletions(-)
+
+--- a/kernel/ptrace.c
++++ b/kernel/ptrace.c
+@@ -185,6 +185,29 @@ static bool looks_like_a_spurious_pid(st
+ 	return true;
+ }
+ 
++static inline bool __set_if(unsigned int *state, unsigned int mask, unsigned int new)
++{
++	if (*state & mask) {
++		WRITE_ONCE(*state, new);
++		return 1;
++	}
++
++	return 0;
 +}
 +
- static bool sev_es_negotiate_protocol(void)
++static int __set_if_traced(struct task_struct *task, void *arg)
++{
++	unsigned int *state = arg;
++
++	__set_if(&task->__state, __TASK_TRACED, *state)
++#ifdef CONFIG_PREEMPT_RT
++		|| __set_if(&task->saved_state, __TASK_TRACED, *state)
++#endif
++		;
++
++	return 0;
++}
++
+ /*
+  * Ensure that nothing can wake it up, even SIGKILL
+  *
+@@ -202,8 +225,10 @@ static bool ptrace_freeze_traced(struct
+ 	spin_lock_irq(&task->sighand->siglock);
+ 	if (task_is_traced(task) && !looks_like_a_spurious_pid(task) &&
+ 	    !__fatal_signal_pending(task)) {
++		unsigned int state = __TASK_TRACED;
++
+ 		task->jobctl |= JOBCTL_TRACED_FROZEN;
+-		WRITE_ONCE(task->__state, __TASK_TRACED);
++		task_call_func(task, __set_if_traced, &state);
+ 		ret = true;
+ 	}
+ 	spin_unlock_irq(&task->sighand->siglock);
+@@ -213,7 +238,7 @@ static bool ptrace_freeze_traced(struct
+ 
+ static void ptrace_unfreeze_traced(struct task_struct *task)
  {
- 	u64 val;
-diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index 19ad097..cb20fb0 100644
---- a/arch/x86/kernel/sev.c
-+++ b/arch/x86/kernel/sev.c
-@@ -43,6 +43,9 @@ static struct ghcb boot_ghcb_page __bss_decrypted __aligned(PAGE_SIZE);
-  */
- static struct ghcb __initdata *boot_ghcb;
+-	if (READ_ONCE(task->__state) != __TASK_TRACED)
++	if (!task_is_traced(task))
+ 		return;
  
-+/* Bitmap of SEV features supported by the hypervisor */
-+static u64 sev_hv_features __ro_after_init;
-+
- /* #VC handler runtime per-CPU data */
- struct sev_es_runtime_data {
- 	struct ghcb ghcb_page;
-@@ -766,6 +769,17 @@ void __init sev_es_init_vc_handling(void)
- 	if (!sev_es_check_cpu_features())
- 		panic("SEV-ES CPU Features missing");
- 
-+	/*
-+	 * SNP is supported in v2 of the GHCB spec which mandates support for HV
-+	 * features.
-+	 */
-+	if (cc_platform_has(CC_ATTR_GUEST_SEV_SNP)) {
-+		sev_hv_features = get_hv_features();
-+
-+		if (!(sev_hv_features & GHCB_HV_FT_SNP))
-+			sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SNP_UNSUPPORTED);
-+	}
-+
- 	/* Enable SEV-ES special handling */
- 	static_branch_enable(&sev_es_enable_key);
- 
+ 	WARN_ON(!task->ptrace || task->parent != current);
+@@ -223,13 +248,15 @@ static void ptrace_unfreeze_traced(struc
+ 	 * Recheck state under the lock to close this race.
+ 	 */
+ 	spin_lock_irq(&task->sighand->siglock);
+-	if (READ_ONCE(task->__state) == __TASK_TRACED) {
++	if (task->jobctl & JOBCTL_TRACED_FROZEN) {
+ 		task->jobctl &= ~JOBCTL_TRACED_FROZEN;
+ 		if (__fatal_signal_pending(task)) {
+ 			task->jobctl &= ~JOBCTL_TRACED;
+ 			wake_up_state(task, __TASK_TRACED);
+-		} else
+-			WRITE_ONCE(task->__state, TASK_TRACED);
++		} else {
++			unsigned int state = TASK_TRACED;
++			task_call_func(task, __set_if_traced, &state);
++		}
+ 	}
+ 	spin_unlock_irq(&task->sighand->siglock);
+ }

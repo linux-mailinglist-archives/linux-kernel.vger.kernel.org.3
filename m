@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BCCA4F979E
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:05:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D2ED4F97A2
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:07:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231563AbiDHOH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 10:07:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39094 "EHLO
+        id S232769AbiDHOJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 10:09:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbiDHOHX (ORCPT
+        with ESMTP id S229497AbiDHOJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 10:07:23 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E6117C43B
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 07:05:19 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id p15so15260334lfk.8
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 07:05:18 -0700 (PDT)
+        Fri, 8 Apr 2022 10:09:01 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA541B9FD7
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 07:06:58 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id p10so15215901lfa.12
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 07:06:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=veQUvkDdzWhR8nicSgShJIzbzfet3GlWn/x9JD2dO50=;
-        b=aRhq899TwsyNIUbE9EOcdEH8JKGgrvMMUkBisv/L4hk8U0NwLT6ab+jGnruJ8rfPkI
-         464VZzLA+PcfQ9oCIFTylRZN1dC/ChrQ+np48nzoay705WLA05KfJxeiACgCTM0/BAbJ
-         z2SpZWEuHq4lgRa7cDyPp0voG6v+og2blf5JacRDdB5aSnXV7eetVO7N3Y+Z0OqsPBFG
-         5SgTJjdC65h7fKIzu579v72bBkVw+nIksf4hpuYmO7paVBboQx2Nx4/xjN89aLVndNEG
-         s3biwn1bNMTaOHcPTigJ6PU1gSaMIcVrUBmMuzhf1TFT++gSwAGk/V1e4cJr8xP41DlG
-         6Ecw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+OPCNdj76CLB8yCZDySaFYBOtiA1oqmhgvF6bYV33T4=;
+        b=eGgzR9tgn20HubUZlwVH67m6Sh8oBEaYCT2E92s9GLs0a+qnh9IHnfAxaU87LABPSF
+         913vKcPPeV3k70GpkCZzgduVa5avEFOZr9vag66FiCjJlQkneGN/MYUu4Os62wq28euA
+         yGEdSOyi02YLpGDQqfeD4kFM0vJK7kjyrK7vJfwJLc62wQsKwA0RcEgsoe1zBRV7mdv0
+         7ORH+PZibwY178UGEV5kVVTzE8RLDfNJ0s6WnKxVRFUbBl9tohTvrdo++Tu54KeAbwYX
+         Msum6/t54O9KC1RniyZrqdgNtTlbUWmz1+MOs/1nC2I4F/5dOJfpPsopg53DxvtKJc+x
+         ISDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=veQUvkDdzWhR8nicSgShJIzbzfet3GlWn/x9JD2dO50=;
-        b=yK27mfsd27zg072ubtu/crjqxeBZLfA25mS4uhwt5GmZLwgXauF8SU4+kJI8x/IQ1Z
-         w6RCcXxRP2R5fLYoIkZnjMHGRtQx7hgz+AYQsp8aAlM8SIYjnCZ8pMfmItkBJ81AZMyg
-         b1vadnIgKXWRfeMhgah+LRcSVcbbPOEovBtd5eAyNv1/pYhMMzTf1xYFU6afv+m5ahqp
-         PbIg6PbjRbAjaQu4G6jlX8xi4P7KBNF2LZuhRMNHm8drvj7/n2l9ua+X9w+EIo+NC4Ak
-         457VaIUHFoFSoKfj6xpu4A064qqUsfm/t7mHMhzx+Ws2+UsQrgAvhfdQFncUwZa28dvX
-         XZig==
-X-Gm-Message-State: AOAM532FntSoBESjdjmNqgaJjO6wmglnoiaaoEZB12Kq489zmE1sEe4B
-        wlnUzEx1WivNFtVWuFbokK9Y94OQUTZI2ZELxLn+8BwljAwkSw==
-X-Google-Smtp-Source: ABdhPJzA2ibYfqWpb3xN2DuDt2LnVxoBWJn6QzJJ3Q+P15fDe8e3G6g0Ok0a2NR4jxmTWyPi7y3cC+TVoPmlWSp4BTA=
-X-Received: by 2002:ac2:47e9:0:b0:46a:38a2:b0f4 with SMTP id
- b9-20020ac247e9000000b0046a38a2b0f4mr3523940lfp.71.1649426717296; Fri, 08 Apr
- 2022 07:05:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <1836398.tdWV9SEqCh@kreacher>
-In-Reply-To: <1836398.tdWV9SEqCh@kreacher>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+OPCNdj76CLB8yCZDySaFYBOtiA1oqmhgvF6bYV33T4=;
+        b=ZNTAMRDku3KuwA6uSx715MiCR6R3Hoi1wnlvTlaVCx13DLpHlbmITWoSUAmPdrtjgh
+         1f5Ht5+7gAaOZZMmmK1jC0YSZk5yE7ILu6RBHcvHe3Vgf8iyYZXTFRLzPvAAVEomeLWc
+         bqPs2JkbSLtye0DN315nBxrWrFsXDrCIfD8b5uXc5XlXGqFloVR9GqJsMlhSvHh1BWDe
+         b8ee95t27pkjsElvdAnJRsTXY5d4xe7+cvoJe1iSFTQ1iQJzsUqDnOVX7C20/A08+4sL
+         wC2D7ZbWTDsnZhW1/KrMTgO1CXrFH8oTz6TjsVQFE20PGOKNxMtdxBZfpwDUFNPWV2do
+         mMWg==
+X-Gm-Message-State: AOAM533xZMsZTBcs2Kq+mQeKUVjz7P3T7OypHJsx/Dr0GYhQKS88kddw
+        Rf2/NvOalGZMnHZhrQfHb+zFaA==
+X-Google-Smtp-Source: ABdhPJxxjdm8Unb7Z85232DOvXznn4/LVOW3mRPCJIyG+WlAoPxNTEek0ab2h6HrYgkiKGYlEBKZMw==
+X-Received: by 2002:a05:6512:322f:b0:44a:57a0:6950 with SMTP id f15-20020a056512322f00b0044a57a06950mr12603033lfe.74.1649426816249;
+        Fri, 08 Apr 2022 07:06:56 -0700 (PDT)
+Received: from localhost.localdomain (h-98-128-181-154.NA.cust.bahnhof.se. [98.128.181.154])
+        by smtp.gmail.com with ESMTPSA id f5-20020a05651201c500b0046b890cb0a4sm144781lfp.98.2022.04.08.07.06.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 07:06:55 -0700 (PDT)
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 8 Apr 2022 16:04:41 +0200
-Message-ID: <CAPDyKFoop_mtWV0i+fH8GSmaxbPCyCPmOeNi6GuK5Qrj7ZVo1g@mail.gmail.com>
-Subject: Re: [PATCH v1] PM: runtime: Avoid device usage count underflows
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Content-Type: text/plain; charset="UTF-8"
+To:     Linus <torvalds@linux-foundation.org>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [GIT PULL] MMC fixes for v5.18-rc2
+Date:   Fri,  8 Apr 2022 16:06:54 +0200
+Message-Id: <20220408140654.119255-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -67,73 +69,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 6 Apr 2022 at 21:03, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
->
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> A PM-runtime device usage count underflow is potentially critical,
-> because it may cause a device to be suspended when it is expected to
-> be operational.
+Hi Linus,
 
-I get the point. Although, perhaps we should also state that it's a
-programming problem that we would like to catch and warn about?
+Here's a PR with a couple of MMC fixes intended for v5.18-rc2. Details about the
+highlights are as usual found in the signed tag.
 
->
-> For this reason, (1) make rpm_check_suspend_allowed() return an error
-> when the device usage count is negative to prevent devices from being
-> suspended in that case, (2) introduce rpm_drop_usage_count() that will
-> detect device usage count underflows, warn about them and fix them up,
-> and (3) use it to drop the usage count in a few places instead of
-> atomic_dec_and_test().
->
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  drivers/base/power/runtime.c |   44 ++++++++++++++++++++++++++++++++++++-------
->  1 file changed, 37 insertions(+), 7 deletions(-)
->
-> Index: linux-pm/drivers/base/power/runtime.c
-> ===================================================================
-> --- linux-pm.orig/drivers/base/power/runtime.c
-> +++ linux-pm/drivers/base/power/runtime.c
-> @@ -263,7 +263,7 @@ static int rpm_check_suspend_allowed(str
->                 retval = -EINVAL;
->         else if (dev->power.disable_depth > 0)
->                 retval = -EACCES;
-> -       else if (atomic_read(&dev->power.usage_count) > 0)
-> +       else if (atomic_read(&dev->power.usage_count))
->                 retval = -EAGAIN;
->         else if (!dev->power.ignore_children &&
->                         atomic_read(&dev->power.child_count))
-> @@ -1039,13 +1039,33 @@ int pm_schedule_suspend(struct device *d
->  }
->  EXPORT_SYMBOL_GPL(pm_schedule_suspend);
->
-> +static int rpm_drop_usage_count(struct device *dev)
-> +{
-> +       int ret;
-> +
-> +       ret = atomic_sub_return(1, &dev->power.usage_count);
-> +       if (ret >= 0)
-> +               return ret;
-> +
-> +       /*
-> +        * Because rpm_resume() does not check the usage counter, it will resume
-> +        * the device even if the usage counter is 0 or negative, so it is
-> +        * sufficient to increment the usage counter here to reverse the change
-> +        * made above.
-> +        */
-> +       atomic_inc(&dev->power.usage_count);
+Note that, this time I have also folded in a patch that isn't a fix. The reason
+is that it's cross-subsystem change and I wanted to avoid us from sharing an
+immutable branch.
 
-Rather than this two-step process, couldn't we just do an
-"atomic_add_unless(&dev->power.usage_count, -1, 0)" - and check the
-return value?
-
-> +       dev_warn(dev, "Runtime PM usage count underflow!\n");
-> +       return -EINVAL;
-> +}
-> +
-
-[...]
+Please pull this in!
 
 Kind regards
-Uffe
+Ulf Hansson
+
+
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git tags/mmc-v5.18-rc1
+
+for you to fetch changes up to b71597edfaade119157ded98991bac7160be80c2:
+
+  mmc: core: improve API to make clear mmc_hw_reset is for cards (2022-04-08 11:00:08 +0200)
+
+----------------------------------------------------------------
+MMC core:
+ - Improve API to make it clear that mmc_hw_reset() is for cards
+ - Fixup support for writeback-cache for eMMC and SD
+ - Check for errors after writes on SPI
+
+MMC host:
+ - renesas_sdhi: A couple of fixes of TAP settings for eMMC HS400 mode
+ - mmci_stm32: Fixup check of all elements in sg list
+ - sdhci-xenon: Revert unnecessary fix for annoying 1.8V regulator warning
+
+----------------------------------------------------------------
+Christian Löhle (1):
+      mmc: block: Check for errors after write on SPI
+
+Michael Wu (1):
+      mmc: core: Fixup support for writeback-cache for eMMC and SD
+
+Pali Rohár (1):
+      Revert "mmc: sdhci-xenon: fix annoying 1.8V regulator warning"
+
+Wolfram Sang (3):
+      mmc: renesas_sdhi: special 4tap settings only apply to HS400
+      mmc: renesas_sdhi: don't overwrite TAP settings when HS400 tuning is complete
+      mmc: core: improve API to make clear mmc_hw_reset is for cards
+
+Yann Gautier (1):
+      mmc: mmci: stm32: correctly check all elements of sg list
+
+ drivers/mmc/core/block.c                           | 48 +++++++++++++++++++---
+ drivers/mmc/core/core.c                            |  5 ++-
+ drivers/mmc/core/mmc_test.c                        |  3 +-
+ drivers/mmc/host/mmci_stm32_sdmmc.c                |  6 +--
+ drivers/mmc/host/renesas_sdhi_core.c               |  8 ++--
+ drivers/mmc/host/sdhci-xenon.c                     | 10 -----
+ drivers/net/wireless/ath/ath10k/sdio.c             |  2 +-
+ .../wireless/broadcom/brcm80211/brcmfmac/sdio.c    |  2 +-
+ drivers/net/wireless/marvell/mwifiex/sdio.c        |  2 +-
+ drivers/net/wireless/ti/wlcore/sdio.c              |  2 +-
+ include/linux/mmc/core.h                           |  2 +-
+ 11 files changed, 59 insertions(+), 31 deletions(-)

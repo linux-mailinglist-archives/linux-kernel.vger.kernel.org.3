@@ -2,122 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C0044F8E8B
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:27:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBC6E4F8E0A
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:26:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234017AbiDHD4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 23:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52598 "EHLO
+        id S234028AbiDHD5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 23:57:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234010AbiDHD4f (ORCPT
+        with ESMTP id S234018AbiDHD5D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 23:56:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3050CBE4C;
-        Thu,  7 Apr 2022 20:54:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 15B80B829AE;
-        Fri,  8 Apr 2022 03:54:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FD55C385A1;
-        Fri,  8 Apr 2022 03:54:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649390068;
-        bh=XvrZjZaX5Rsi5fiZFoDR7A0z44p/01oSQz1BX2ODyvU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=avEXtVrk7mOyW8zohyzfG6CeVAW9WHmglJH2zFNO6BqivVAiwRFXM5FysYbfpSW4R
-         e5ioNTKU9dR9CdSfVo/qzoEX+KFzJXpGKeUC7RYWphXdJ9lD7QEgvw1cEHhAK3riim
-         SfLqUUEiyZ6Fo9fMpvbleZcmaOnWtrU+CsAVL3b/ftZoe3QS1owYNeov9z652aNwns
-         +dhbMjxfJFqASqlpcBfHfh/dNAHNoXw1FYbDqttp1G+Tba1An+xtmjAldSlNV81Un0
-         hXlyPc0jm4HYBSy2zICqZdHsaMx79AWrW1iGEJpX+m85MDo32q6JDwBzIWVYqdGVM3
-         4k9iubEHtRGQg==
-Date:   Thu, 7 Apr 2022 20:54:26 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        UNGLinuxDriver@microchip.com, Ariel Elior <aelior@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Casper Andersson <casper.casan@gmail.com>,
-        Bjarni Jonasson <bjarni.jonasson@microchip.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Michael Walle <michael@walle.cc>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Eric Dumazet <edumazet@google.com>,
-        Di Zhu <zhudi21@huawei.com>, Xu Wang <vulab@iscas.ac.cn>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, Mike Rapoport <rppt@kernel.org>,
-        "Brian Johannesmeyer" <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: Re: [PATCH net-next 02/15] net: dsa: sja1105: Remove usage of
- iterator for list_add() after loop
-Message-ID: <20220407205426.6a31e4b2@kernel.org>
-In-Reply-To: <20220407102900.3086255-3-jakobkoschel@gmail.com>
-References: <20220407102900.3086255-1-jakobkoschel@gmail.com>
-        <20220407102900.3086255-3-jakobkoschel@gmail.com>
+        Thu, 7 Apr 2022 23:57:03 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11BDD555C
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 20:54:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649390098; x=1680926098;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=cgaS9ZvpFeSv+RbYtEAFTm8IymBUs7K6+jgyHaDx9hI=;
+  b=ILQhtt8bF3nCaGH5vZZNZn8foMTqra8dnZQy3SI4X39ddEflQzFENPfK
+   Mxp3d2JOyr+O9LlEgbO020LPBalMp1+rhPmsA7RsKFojpKP/vKTqatRth
+   sr2Dar9o6bOdWmpEEzebMZJC/RfSt5s0hpxO1mErJwKqT3zAvXc3YxWZ9
+   wKTiTkMqwTJWsQpl3IRkZC7ePG29YQg1t8MKdrHdWHjUifZkHn17lRbcU
+   Ppd0iu6jk8P1xMP190sHLxQp0eN2LlVckL3J/5Rfxs77ehpNmShWZxBEi
+   ka0Y220cuZBKgCdv0IdOCCmxSUT2XPmhkquDPl9K+WndHFCsACFl61K9c
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="241435240"
+X-IronPort-AV: E=Sophos;i="5.90,243,1643702400"; 
+   d="scan'208";a="241435240"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 20:54:58 -0700
+X-IronPort-AV: E=Sophos;i="5.90,243,1643702400"; 
+   d="scan'208";a="571337373"
+Received: from vjcarmax-mobl.amr.corp.intel.com (HELO [10.252.140.177]) ([10.252.140.177])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 20:54:57 -0700
+Message-ID: <8d6789ba-85d3-3482-4bbb-3693073bea06@linux.intel.com>
+Date:   Thu, 7 Apr 2022 20:54:56 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [PATCH v2] x86/apic: Do apic driver probe for "nosmp" use case
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>
+Cc:     linux-kernel@vger.kernel.org,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Tony Luck <tony.luck@intel.com>
+References: <20220406185430.552016-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <87mtgxzuzz.ffs@tglx>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <87mtgxzuzz.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu,  7 Apr 2022 12:28:47 +0200 Jakob Koschel wrote:
-> diff --git a/drivers/net/dsa/sja1105/sja1105_vl.c b/drivers/net/dsa/sja1105/sja1105_vl.c
-> index b7e95d60a6e4..cfcae4d19eef 100644
-> --- a/drivers/net/dsa/sja1105/sja1105_vl.c
-> +++ b/drivers/net/dsa/sja1105/sja1105_vl.c
-> @@ -27,20 +27,24 @@ static int sja1105_insert_gate_entry(struct sja1105_gating_config *gating_cfg,
->  	if (list_empty(&gating_cfg->entries)) {
->  		list_add(&e->list, &gating_cfg->entries);
->  	} else {
-> -		struct sja1105_gate_entry *p;
-> +		struct sja1105_gate_entry *p = NULL, *iter;
->  
-> -		list_for_each_entry(p, &gating_cfg->entries, list) {
-> -			if (p->interval == e->interval) {
-> +		list_for_each_entry(iter, &gating_cfg->entries, list) {
-> +			if (iter->interval == e->interval) {
->  				NL_SET_ERR_MSG_MOD(extack,
->  						   "Gate conflict");
->  				rc = -EBUSY;
->  				goto err;
->  			}
->  
-> -			if (e->interval < p->interval)
-> +			if (e->interval < iter->interval) {
-> +				p = iter;
-> +				list_add(&e->list, iter->list.prev);
->  				break;
-> +			}
->  		}
-> -		list_add(&e->list, p->list.prev);
-> +		if (!p)
-> +			list_add(&e->list, gating_cfg->entries.prev);
 
-This turns a pretty slick piece of code into something ugly :(
-I'd rather you open coded the iteration here than make it more 
-complex to satisfy "safe coding guidelines".
 
-Also the list_add() could be converted to list_add_tail().
+On 4/6/22 3:50 PM, Thomas Gleixner wrote:
+> On Wed, Apr 06 2022 at 18:54, Kuppuswamy Sathyanarayanan wrote:
+>> diff --git a/arch/x86/kernel/apic/apic.c b/arch/x86/kernel/apic/apic.c
+>> index b70344bf6600..79b8b521981c 100644
+>> --- a/arch/x86/kernel/apic/apic.c
+>> +++ b/arch/x86/kernel/apic/apic.c
+>> @@ -1419,22 +1419,22 @@ void __init apic_intr_mode_init(void)
+>>   		return;
+>>   	case APIC_VIRTUAL_WIRE:
+>>   		pr_info("APIC: Switch to virtual wire mode setup\n");
+>> -		default_setup_apic_routing();
+>>   		break;
+>>   	case APIC_VIRTUAL_WIRE_NO_CONFIG:
+>>   		pr_info("APIC: Switch to virtual wire mode setup with no configuration\n");
+>>   		upmode = true;
+>> -		default_setup_apic_routing();
+>>   		break;
+>>   	case APIC_SYMMETRIC_IO:
+>>   		pr_info("APIC: Switch to symmetric I/O mode setup\n");
+>> -		default_setup_apic_routing();
+>>   		break;
+>>   	case APIC_SYMMETRIC_IO_NO_ROUTING:
+>>   		pr_info("APIC: Switch to symmetric I/O mode setup in no SMP routine\n");
+>> +		upmode = true;
+> 
+> Why? The changelog tells nothing about this change.
+> 
+> And it's not correct because the APIC configuration is there, otherwise
+> __apic_intr_mode_select() would have returned APIC_VIRTUAL_WIRE_NO_CONFIG.
+
+Makes sense. I initially thought since APIC_SYMMETRIC_IO_NO_ROUTING is
+only used in non-smp case (setup_max_cpus == 0), we can force
+uniprocessor mode. But checking again, my assumption is incorrect. It
+will only be used in non MADT/MP case. I will remove the upmode change 
+in next version.
+
+> 
+> Thanks,
+> 
+>          tglx
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

@@ -2,96 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40B884F9DA8
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 21:29:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A5F34F9DB2
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 21:32:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239232AbiDHTbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 15:31:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41704 "EHLO
+        id S239267AbiDHTeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 15:34:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiDHTbc (ORCPT
+        with ESMTP id S229457AbiDHTeF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 15:31:32 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F7843EF2;
-        Fri,  8 Apr 2022 12:29:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649446167; x=1680982167;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IeX+LwFKu9WkBhOrMB4NDU8d3pZ1SH+32hd88PLD2W4=;
-  b=ITpHK21TcM1iohOJaQFnvsqt5KgQStAd9Ha5zDcniRDcvV6j2EnmbjaN
-   SdNfKGAdVDH+w3JyiDShiN0CnvldhCTrEZ3Y3UxSLDT1KxUY3eMZyJkTw
-   CbpJH2MR/SdFV1ot2KvVSzWBiQb1MiMLWc8NrLPHCkO5wjniWWM8jCFLu
-   v6IAIQZGudoYqacst+ngr7AE0I1lb0SEx/K/mSTtZ+WaV+1h+zdBj8Hg6
-   T8kKj3KfTku7oIbPO+UF1FCffEqNHJX+wuFTrHLqzUJjpHpiGsdeDS/3q
-   Wu5/Wzo/MxMMmT+Wq/wonQZWtPnJm/AzxT+oXiBwuRkxuAFesngYmXWnJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="249199123"
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="249199123"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 12:29:26 -0700
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="506670178"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 12:29:26 -0700
-Date:   Fri, 8 Apr 2022 12:29:24 -0700
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     "Koralahalli Channabasappa, Smita" <skoralah@amd.com>
-Cc:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: Re: [RFC PATCH 5/5] x86/mce: Handle AMD threshold interrupt storms
-Message-ID: <YlCNFCZgV0tOk4LI@agluck-desk3.sc.intel.com>
-References: <20220406063542.183946-1-Smita.KoralahalliChannabasappa@amd.com>
- <20220406063542.183946-6-Smita.KoralahalliChannabasappa@amd.com>
- <b140590dadea411ca3641b0537bfcd9f@intel.com>
- <30c01863-85ef-4cd4-9e73-340e2d98b9bf@amd.com>
+        Fri, 8 Apr 2022 15:34:05 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7086582E
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 12:31:59 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 17so12764533lji.1
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 12:31:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GSWnDwy5GUt+/a1J0rUjaMHTPO1fZjePnYOnz6ECODs=;
+        b=J6rvlAz9Cp2QJU3tbf7mrKqVNZevpebfjuzhj0pqCUB0Tmk3hHxua8Tdy+DWDAeXI8
+         /DelK0hyCzlNgGxefMxcPQM6gz/ybu3fFgH2UaRHk1dhHGheMGNbQNCgBamTehsvHw+R
+         7ndDmkMsdiavJjLfWlBHgoxCmXQcWDnhrysc7Bcc+V/zcET1BdEFF2qINQmU146jKxwG
+         OOtEXpDFZXusiU1TBivQDJf62aX9yIemLwtVeqRFt7I3vpIt+EyP571k3ueSj5P7lm89
+         gvXO24Z+gZDe6jU+LJHEcj4xCwT2oCf+KRacp+Bm2XThH9+cvZYViXcg082Raxc4jguA
+         vmgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GSWnDwy5GUt+/a1J0rUjaMHTPO1fZjePnYOnz6ECODs=;
+        b=MS01w6XmXV/Uu1WzW5yDgpAaVWqmsuNUuPu2IuMh1E/z6kGXZvqOmXMCHWkOkSYHmK
+         Juzxhtjlr4AX0YsRryBGvPyl1wnjsGSc5OG2BuNWDpToR4QKWMVHABKoVU9ZhtFJ75dB
+         sYSNhipR14Wr1B+HaJvtNBdOTY4FhW3W78OJRqMf1WFxXzvmmGQtbqUkeh/97I4zuQjD
+         ZDoEXfiL10p9MjiMKJe7fI4Pp3KD0d1C4NncINBzJkP+S99WcJR9F67GZD8cXRU2nMtC
+         BiZnAfPaLwA+7iFvRsv5KpPpCm85HGLzX68UEz/rP3aQDUs45kipUAwHvwE1Q8WG+X8o
+         vEUw==
+X-Gm-Message-State: AOAM5318fUTCD/glMi9LqDc8d9ih1VgjDdw4J2u+zg9V3wWVNXQliCTa
+        lLUkTjdww5wr5f/VzOS8ZJcSDLyWzLi/X4YhS6Bvgw==
+X-Google-Smtp-Source: ABdhPJzsUYXxD/Pf/ZTVjarORMIi/VmYEjOnj9R5+hRboeJTgfHXR94L/O5B/aaXwBqY8p+XumxLGjlznhO42PwsLLw=
+X-Received: by 2002:a2e:875a:0:b0:249:829a:d5f7 with SMTP id
+ q26-20020a2e875a000000b00249829ad5f7mr12515935ljj.173.1649446317358; Fri, 08
+ Apr 2022 12:31:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <30c01863-85ef-4cd4-9e73-340e2d98b9bf@amd.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220325233125.413634-1-vipinsh@google.com> <CALzav=e6W2VSp=btmqTpQJ=3bH+Bw3D8sLApkTTvMMKAnw_LAw@mail.gmail.com>
+ <CAHVum0dOfJ5HuscNq0tA6BnUJK34v4CPCTkD4piHc7FObZOsng@mail.gmail.com> <b754fa0a-4f9e-1ea5-6c77-f2410b7f8456@redhat.com>
+In-Reply-To: <b754fa0a-4f9e-1ea5-6c77-f2410b7f8456@redhat.com>
+From:   Vipin Sharma <vipinsh@google.com>
+Date:   Fri, 8 Apr 2022 12:31:21 -0700
+Message-ID: <CAHVum0d=WoqxZ4vUYY37jeQL1yLdiwbYjPSPFAa1meM5LUBDQQ@mail.gmail.com>
+Subject: Re: [PATCH] KVM: x86/mmu: Speed up slot_rmap_walk_next for sparsely
+ populated rmaps
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     David Matlack <dmatlack@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 02:48:47AM -0500, Koralahalli Channabasappa, Smita wrote:
-> Hi,
-> 
-> On 4/6/22 5:44 PM, Luck, Tony wrote:
-> 
-> > +		/* Return early on an interrupt storm */
-> > +		if (this_cpu_read(bank_storm[bank]))
-> > +			return;
-> > 
-> > Is you reasoning for early return that you already have plenty of
-> > logged errors from this bank, so OK to skip additional processing
-> > of this one?
-> 
-> The idea behind this was: Once, the interrupts are turned off by
-> track_cmci_storm() on a storm, (which is called before this "if
-> statement") logging and handling of subsequent corrected errors
-> will be taken care by machine_check_poll(). Hence, no need to
-> redo this again in the handler....
-> 
-> Let me know what are your thoughts on this?
+On Sun, Mar 27, 2022 at 3:41 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+>
+> On 3/26/22 01:31, Vipin Sharma wrote:
+> >>> -static void slot_rmap_walk_next(struct slot_rmap_walk_iterator *iterator)
+> >>> +static noinline void
+> >>
+> >> What is the reason to add noinline?
+> >
+> > My understanding is that since this method is called from
+> > __always_inline methods, noinline will avoid gcc inlining the
+> > slot_rmap_walk_next in those functions and generate smaller code.
+> >
+>
+> Iterators are written in such a way that it's way more beneficial to
+> inline them.  After inlining, compilers replace the aggregates (in this
+> case, struct slot_rmap_walk_iterator) with one variable per field and
+> that in turn enables a lot of optimizations, so the iterators should
+> actually be always_inline if anything.
+>
+> For the same reason I'd guess the effect on the generated code should be
+> small (next time please include the output of "size mmu.o"), but should
+> still be there.  I'll do a quick check of the generated code and apply
+> the patch.
+>
+> Paolo
+>
 
-Makes sense. There's a storm, so picking up this error now,
-or waiting for machine_check_poll() to get it makes little
-difference.
+Let me know if you are still planning to modify the current patch by
+removing "noinline" and merge or if you prefer a v2 without noinline.
 
--Tony
+Thanks
+Vipin

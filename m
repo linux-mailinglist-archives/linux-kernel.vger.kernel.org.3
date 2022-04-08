@@ -2,247 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B22914F929F
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 12:11:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2514F92A0
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 12:11:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234254AbiDHKM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 06:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58302 "EHLO
+        id S234323AbiDHKNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 06:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233823AbiDHKMP (ORCPT
+        with ESMTP id S234498AbiDHKMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 06:12:15 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66BC3A997B
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 03:10:11 -0700 (PDT)
-Received: from kwepemi500014.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KZYqC59v2zgYXp;
-        Fri,  8 Apr 2022 18:08:23 +0800 (CST)
-Received: from huawei.com (10.67.174.157) by kwepemi500014.china.huawei.com
- (7.221.188.232) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 8 Apr
- 2022 18:10:08 +0800
-From:   Li Zhengyu <lizhengyu3@huawei.com>
-To:     <palmer@dabbelt.com>, <liaochang1@huawei.com>
-CC:     <alex@ghiti.fr>, <aou@eecs.berkeley.edu>, <bjorn.topel@gmail.com>,
-        <ebiederm@xmission.com>, <guoren@linux.alibaba.com>,
-        <jszhang@kernel.org>, <kexec@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        <mick@ics.forth.gr>, <paul.walmsley@sifive.com>,
-        <penberg@kernel.org>, <sunnanyong@huawei.com>,
-        <wangkefeng.wang@huawei.com>
-Subject: [PATCH v3 -next 6/6] RISC-V: Load purgatory in kexec_file
-Date:   Fri, 8 Apr 2022 18:09:14 +0800
-Message-ID: <20220408100914.150110-7-lizhengyu3@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220408100914.150110-1-lizhengyu3@huawei.com>
-References: <20220408100914.150110-1-lizhengyu3@huawei.com>
+        Fri, 8 Apr 2022 06:12:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA7339F3A1
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 03:10:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649412637;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dDv/rk0p/ym3Otaap0CgRvB/aOstceiT80X2oN268IM=;
+        b=IAoQCqkIzlu+4Hk7fyAfvYV5vd07ulJ6K3CdCRJllErxiRIKYejYIKptisVgshDP9ih2Rd
+        NzGeYq+1PBlNzHphpti8OXkJ0M0iXKLzDoZg2PgZiwTVHqskJVRz+XIEsjQLpfh2Ii6vYK
+        jbmsbdpM8fl3/ndnDq+5Ves0/4lH0w0=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-208-EyQbJNhMMbCV_gLwVWvWUg-1; Fri, 08 Apr 2022 06:10:36 -0400
+X-MC-Unique: EyQbJNhMMbCV_gLwVWvWUg-1
+Received: by mail-wm1-f71.google.com with SMTP id i6-20020a05600c354600b0038be262d9d9so5747589wmq.8
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 03:10:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=dDv/rk0p/ym3Otaap0CgRvB/aOstceiT80X2oN268IM=;
+        b=CPNVYDN2tUbgcqjm0rfNg3AoSbTNnwm/qm7Lmq1d3tG9vWjP54xFiHAVos9onnZt2O
+         yRhN+DwDFs6D9+sOOtCqQnUeBgILyipWotKvb8ZRYkQ98gCUX+zxXWfihrVOLgoGGPSK
+         f+1473Xr2lmrQoLHOG1hVw3A+vGsz15FI58fdyALZD76IQZVBKNtC4ksS/v3d2KSOyQI
+         tUcYnWS87q/SdEm+IpM/yPJOsFurE5pVhiu3nONDQFmtbS3Oi9fGn4jMKeWcgQ+CaRu5
+         YrzO/QIpG1S9lyVBUwk70wLkYGJD85nQx9RUGkIyo/BQSXbyGVmWHn3mg6eabNvcQDYE
+         xYtw==
+X-Gm-Message-State: AOAM533kYkJ4XYd7b1XBF2uqQr3sNV4+muhOFf6wrG/vgIEXPiPdOEJY
+        xUdGyr/ebeT4P27ugqbMbrqgB68qRc3Cxj4N/chTAzxXKkpymUEcCuTbEMTBM85/JAaF+i5FDbp
+        w9stVwfRmVe6qyiXM3Q4ZhvrG
+X-Received: by 2002:a5d:4712:0:b0:206:120d:b038 with SMTP id y18-20020a5d4712000000b00206120db038mr14696767wrq.542.1649412635424;
+        Fri, 08 Apr 2022 03:10:35 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz1beWVQuoGGl5w6Zz3Zazu8hP0ijuNjw/pQk7dZcuH0wdWMvMcyHhbw6FqT4wuqPomqK5XFw==
+X-Received: by 2002:a5d:4712:0:b0:206:120d:b038 with SMTP id y18-20020a5d4712000000b00206120db038mr14696747wrq.542.1649412635207;
+        Fri, 08 Apr 2022 03:10:35 -0700 (PDT)
+Received: from [10.32.181.87] (nat-pool-mxp-t.redhat.com. [149.6.153.186])
+        by smtp.googlemail.com with ESMTPSA id n65-20020a1c2744000000b003862bfb509bsm9776282wmn.46.2022.04.08.03.10.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Apr 2022 03:10:34 -0700 (PDT)
+Message-ID: <c31a5f84-6da2-c6a0-c0cd-9f6802c39fc3@redhat.com>
+Date:   Fri, 8 Apr 2022 12:10:33 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.157]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemi500014.china.huawei.com (7.221.188.232)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] KVM: x86/mmu: remove unnecessary
+ kvm_shadow_root_allocated() check
+Content-Language: en-US
+To:     luofei <luofei@unicloud.com>, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org
+Cc:     seanjc@google.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org, hpa@zytor.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220407014016.1266469-1-luofei@unicloud.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220407014016.1266469-1-luofei@unicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch supports kexec_file to load and relocate purgatory.
-It works well on riscv64 QEMU, being tested with devmem.
+On 4/7/22 03:40, luofei wrote:
+> When we reach here, the return value of kvm_shadow_root_allocated()
+> has already been checked to false under kvm->slots_arch_lock.
+> So remove the unnecessary recheck.
 
-Signed-off-by: Li Zhengyu <lizhengyu3@huawei.com>
----
- arch/riscv/kernel/elf_kexec.c | 151 ++++++++++++++++++++++++++++++++++
- 1 file changed, 151 insertions(+)
+It's a little less clear t check !is_tdp_mmu_enabled().
 
-diff --git a/arch/riscv/kernel/elf_kexec.c b/arch/riscv/kernel/elf_kexec.c
-index 911d65d5a123..9cb85095fd45 100644
---- a/arch/riscv/kernel/elf_kexec.c
-+++ b/arch/riscv/kernel/elf_kexec.c
-@@ -182,6 +182,7 @@ static void *elf_kexec_load(struct kimage *image, char *kernel_buf,
- 	unsigned long new_kernel_pbase = 0UL;
- 	unsigned long initrd_pbase = 0UL;
- 	unsigned long headers_sz;
-+	unsigned long kernel_start;
- 	void *fdt, *headers;
- 	struct elfhdr ehdr;
- 	struct kexec_buf kbuf;
-@@ -196,6 +197,7 @@ static void *elf_kexec_load(struct kimage *image, char *kernel_buf,
- 			     &old_kernel_pbase, &new_kernel_pbase);
- 	if (ret)
- 		goto out;
-+	kernel_start = image->start;
- 	pr_notice("The entry point of kernel at 0x%lx\n", image->start);
- 
- 	/* Add the kernel binary to the image */
-@@ -246,6 +248,22 @@ static void *elf_kexec_load(struct kimage *image, char *kernel_buf,
- 		cmdline = modified_cmdline;
- 	}
- 
-+#ifdef CONFIG_ARCH_HAS_KEXEC_PURGATORY
-+	/* Add purgatory to the image */
-+	kbuf.top_down = true;
-+	kbuf.mem = KEXEC_BUF_MEM_UNKNOWN;
-+	ret = kexec_load_purgatory(image, &kbuf);
-+	if (ret) {
-+		pr_err("Error loading purgatory ret=%d\n", ret);
-+		goto out;
-+	}
-+	ret = kexec_purgatory_get_set_symbol(image, "riscv_kernel_entry",
-+					     &kernel_start,
-+					     sizeof(kernel_start), 0);
-+	if (ret)
-+		pr_err("Error update purgatory ret=%d\n", ret);
-+#endif /* CONFIG_ARCH_HAS_KEXEC_PURGATORY */
-+
- 	/* Add the initrd to the image */
- 	if (initrd != NULL) {
- 		kbuf.buffer = initrd;
-@@ -291,6 +309,139 @@ static void *elf_kexec_load(struct kimage *image, char *kernel_buf,
- 	return ret ? ERR_PTR(ret) : NULL;
- }
- 
-+#define RV_X(x, s, n)  (((x) >> (s)) & ((1 << (n)) - 1))
-+#define RISCV_IMM_BITS 12
-+#define RISCV_IMM_REACH (1LL << RISCV_IMM_BITS)
-+#define RISCV_CONST_HIGH_PART(x) \
-+	(((x) + (RISCV_IMM_REACH >> 1)) & ~(RISCV_IMM_REACH - 1))
-+#define RISCV_CONST_LOW_PART(x) ((x) - RISCV_CONST_HIGH_PART(x))
-+
-+#define ENCODE_ITYPE_IMM(x) \
-+	(RV_X(x, 0, 12) << 20)
-+#define ENCODE_BTYPE_IMM(x) \
-+	((RV_X(x, 1, 4) << 8) | (RV_X(x, 5, 6) << 25) | \
-+	(RV_X(x, 11, 1) << 7) | (RV_X(x, 12, 1) << 31))
-+#define ENCODE_UTYPE_IMM(x) \
-+	(RV_X(x, 12, 20) << 12)
-+#define ENCODE_JTYPE_IMM(x) \
-+	((RV_X(x, 1, 10) << 21) | (RV_X(x, 11, 1) << 20) | \
-+	(RV_X(x, 12, 8) << 12) | (RV_X(x, 20, 1) << 31))
-+#define ENCODE_CBTYPE_IMM(x) \
-+	((RV_X(x, 1, 2) << 3) | (RV_X(x, 3, 2) << 10) | (RV_X(x, 5, 1) << 2) | \
-+	(RV_X(x, 6, 2) << 5) | (RV_X(x, 8, 1) << 12))
-+#define ENCODE_CJTYPE_IMM(x) \
-+	((RV_X(x, 1, 3) << 3) | (RV_X(x, 4, 1) << 11) | (RV_X(x, 5, 1) << 2) | \
-+	(RV_X(x, 6, 1) << 7) | (RV_X(x, 7, 1) << 6) | (RV_X(x, 8, 2) << 9) | \
-+	(RV_X(x, 10, 1) << 8) | (RV_X(x, 11, 1) << 12))
-+#define ENCODE_UJTYPE_IMM(x) \
-+	(ENCODE_UTYPE_IMM(RISCV_CONST_HIGH_PART(x)) | \
-+	(ENCODE_ITYPE_IMM(RISCV_CONST_LOW_PART(x)) << 32))
-+#define ENCODE_UITYPE_IMM(x) \
-+	(ENCODE_UTYPE_IMM(x) | (ENCODE_ITYPE_IMM(x) << 32))
-+
-+#define CLEAN_IMM(type, x) \
-+	((~ENCODE_##type##_IMM((uint64_t)(-1))) & (x))
-+
-+int arch_kexec_apply_relocations_add(struct purgatory_info *pi,
-+				     Elf_Shdr *section,
-+				     const Elf_Shdr *relsec,
-+				     const Elf_Shdr *symtab)
-+{
-+	const char *strtab, *name, *shstrtab;
-+	const Elf_Shdr *sechdrs;
-+	Elf_Rela *relas;
-+	int i, r_type;
-+
-+	/* String & section header string table */
-+	sechdrs = (void *)pi->ehdr + pi->ehdr->e_shoff;
-+	strtab = (char *)pi->ehdr + sechdrs[symtab->sh_link].sh_offset;
-+	shstrtab = (char *)pi->ehdr + sechdrs[pi->ehdr->e_shstrndx].sh_offset;
-+
-+	relas = (void *)pi->ehdr + relsec->sh_offset;
-+
-+	for (i = 0; i < relsec->sh_size / sizeof(*relas); i++) {
-+		const Elf_Sym *sym;	/* symbol to relocate */
-+		unsigned long addr;	/* final location after relocation */
-+		unsigned long val;	/* relocated symbol value */
-+		unsigned long sec_base;	/* relocated symbol value */
-+		void *loc;		/* tmp location to modify */
-+
-+		sym = (void *)pi->ehdr + symtab->sh_offset;
-+		sym += ELF64_R_SYM(relas[i].r_info);
-+
-+		if (sym->st_name)
-+			name = strtab + sym->st_name;
-+		else
-+			name = shstrtab + sechdrs[sym->st_shndx].sh_name;
-+
-+		loc = pi->purgatory_buf;
-+		loc += section->sh_offset;
-+		loc += relas[i].r_offset;
-+
-+		if (sym->st_shndx == SHN_ABS)
-+			sec_base = 0;
-+		else if (sym->st_shndx >= pi->ehdr->e_shnum) {
-+			pr_err("Invalid section %d for symbol %s\n",
-+			       sym->st_shndx, name);
-+			return -ENOEXEC;
-+		} else
-+			sec_base = pi->sechdrs[sym->st_shndx].sh_addr;
-+
-+		val = sym->st_value;
-+		val += sec_base;
-+		val += relas[i].r_addend;
-+
-+		addr = section->sh_addr + relas[i].r_offset;
-+
-+		r_type = ELF64_R_TYPE(relas[i].r_info);
-+
-+		switch (r_type) {
-+		case R_RISCV_BRANCH:
-+			*(u32 *)loc = CLEAN_IMM(BTYPE, *(u32 *)loc) |
-+				 ENCODE_BTYPE_IMM(val - addr);
-+			break;
-+		case R_RISCV_JAL:
-+			*(u32 *)loc = CLEAN_IMM(JTYPE, *(u32 *)loc) |
-+				 ENCODE_JTYPE_IMM(val - addr);
-+			break;
-+		/*
-+		 * With no R_RISCV_PCREL_LO12_S, R_RISCV_PCREL_LO12_I
-+		 * sym is expected to be next to R_RISCV_PCREL_HI20
-+		 * in purgatory relsec. Handle it like R_RISCV_CALL
-+		 * sym, instead of searching the whole relsec.
-+		 */
-+		case R_RISCV_PCREL_HI20:
-+		case R_RISCV_CALL:
-+			*(u64 *)loc = CLEAN_IMM(UITYPE, *(u64 *)loc) |
-+				 ENCODE_UJTYPE_IMM(val - addr);
-+			break;
-+		case R_RISCV_RVC_BRANCH:
-+			*(u32 *)loc = CLEAN_IMM(CBTYPE, *(u32 *)loc) |
-+				 ENCODE_CBTYPE_IMM(val - addr);
-+			break;
-+		case R_RISCV_RVC_JUMP:
-+			*(u32 *)loc = CLEAN_IMM(CJTYPE, *(u32 *)loc) |
-+				 ENCODE_CJTYPE_IMM(val - addr);
-+			break;
-+		case R_RISCV_ADD32:
-+			*(u32 *)loc += val;
-+			break;
-+		case R_RISCV_SUB32:
-+			*(u32 *)loc -= val;
-+			break;
-+		/* It has been applied by R_RISCV_PCREL_HI20 sym */
-+		case R_RISCV_PCREL_LO12_I:
-+		case R_RISCV_ALIGN:
-+		case R_RISCV_RELAX:
-+			break;
-+		default:
-+			pr_err("Unknown rela relocation: %d\n", r_type);
-+			return -ENOEXEC;
-+		}
-+	}
-+	return 0;
-+}
-+
- const struct kexec_file_ops elf_kexec_ops = {
- 	.probe = kexec_elf_probe,
- 	.load  = elf_kexec_load,
--- 
-2.17.1
+That said, this is only done once, so perhaps it's better/easier to just 
+remove the if completely.
+
+Paolo
+
+
+> Signed-off-by: luofei <luofei@unicloud.com>
+> ---
+>   arch/x86/kvm/mmu/mmu.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 8f19ea752704..1978ee527298 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -3394,7 +3394,7 @@ static int mmu_first_shadow_root_alloc(struct kvm *kvm)
+>   	 * Check if anything actually needs to be allocated, e.g. all metadata
+>   	 * will be allocated upfront if TDP is disabled.
+>   	 */
+> -	if (kvm_memslots_have_rmaps(kvm) &&
+> +	if (!is_tdp_mmu_enabled(kvm) &&
+>   	    kvm_page_track_write_tracking_enabled(kvm))
+>   		goto out_success;
+>   
 

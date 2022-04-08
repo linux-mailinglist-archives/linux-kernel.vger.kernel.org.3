@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9751E4F9CF2
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 20:39:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07D894F9D0A
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 20:39:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238833AbiDHSlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 14:41:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42262 "EHLO
+        id S236432AbiDHSlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 14:41:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238810AbiDHSkZ (ORCPT
+        with ESMTP id S238809AbiDHSkZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 8 Apr 2022 14:40:25 -0400
 Received: from mo4-p03-ob.smtp.rzone.de (mo4-p03-ob.smtp.rzone.de [81.169.146.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B77D37A02;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1916177;
         Fri,  8 Apr 2022 11:38:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1649443087;
     s=strato-dkim-0002; d=goldelico.com;
     h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=ETNE/MKzh6NgI9nMo4TPL/Mpswq36h3lQFrpbRqGpA8=;
-    b=nBfInLmJfWD0q0dyPG1nlJ4AfRr9tmR7DNBuTHR6s22q0TLXUnQWRW/MKJgPGNTwVa
-    swcxOgQ+FtdRIWMm8X3QZ4BWy9fg7CQC9ZOp00mnAW0Bk/USwfLhlX31PQJ2Ja6ObMTQ
-    7MOG8r3Pz6oSuXVKHayZeZuvO3bfkkuUwbfG04R3HVXEsWy9QtGrh4g4uV0lvgBxM4eM
-    xMbPbeMNCl5eBmcKcZ/ePOvRVaOFpvGhFa+QKiKeDTQVnfe8c0oZMaBSnyJO15Vu75Ie
-    MrOdvpdx2PJYKQ7iuK15I9Drg2Bhe/yUr9z3flE4MNz/wvgIse8AWbG3trVKlGAcDHBb
-    ++uw==
+    bh=HfyKIvQvUXQtvsFLPqc151vqol/YcRoKi2SxWsPrSm4=;
+    b=fs/I/Jg7IC7qCkLFx2M3Bn4fAs6nvfmOGab5D03qoPv9p68Z2OQJYxu+qmONLKymXR
+    hXJlbPryp4zOmn2+OpcNukI2TEey7Z3FI9yrq8ocx3mODzpWNnX/QEPdSpSK2geLrcMi
+    LRZgyRzWqcOnqMosm0R/LbwlCq6VNt2kzntaQBCksEDDPzq5PKIOvValY3DJ44qAo/7R
+    N+9S+lW29S/1bbXJ6pbt0pj6IE0ryEO0ed09rpmgNj1SCMoYFurAOWkzSTQ3VZle4Y9r
+    HoT4luX1PYvs7LLzn5FnYnqTej6+P+AoQrMppPVftHwe+n5sIUw6UP0J4iyMUhcLKVt5
+    PT/g==
 Authentication-Results: strato.com;
     dkim=none
 X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1OAA2UMf2MwPVbgdr/a"
 X-RZG-CLASS-ID: mo00
 Received: from iMac.fritz.box
     by smtp.strato.de (RZmta 47.42.2 DYNA|AUTH)
-    with ESMTPSA id k708cfy38Ic6so7
+    with ESMTPSA id k708cfy38Ic7so8
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-    Fri, 8 Apr 2022 20:38:06 +0200 (CEST)
+    Fri, 8 Apr 2022 20:38:07 +0200 (CEST)
 From:   "H. Nikolaus Schaller" <hns@goldelico.com>
 To:     Krzysztof Kozlowski <krzk@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -44,9 +44,9 @@ To:     Krzysztof Kozlowski <krzk@kernel.org>,
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mips@vger.kernel.org, letux-kernel@openphoenux.org,
         "H. Nikolaus Schaller" <hns@goldelico.com>
-Subject: [PATCH 16/18] MIPS: DTS: CI20: fix /memory as reported by dtbscheck
-Date:   Fri,  8 Apr 2022 20:37:59 +0200
-Message-Id: <47ec9070f9bb5f525017668e8659e3fb0d592d0a.1649443080.git.hns@goldelico.com>
+Subject: [PATCH 17/18] MIPS: DTS: CI20: fix wifi as reported by dtbscheck
+Date:   Fri,  8 Apr 2022 20:38:00 +0200
+Message-Id: <e96fc7f98ef3ef0d16ff9272a6835df4e376a497.1649443080.git.hns@goldelico.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <cover.1649443080.git.hns@goldelico.com>
 References: <cover.1649443080.git.hns@goldelico.com>
@@ -63,8 +63,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-arch/mips/boot/dts/ingenic/ci20.dtb: /: memory: False schema does not allow {device_type: [memory], reg: [[0, 268435456], [805306368, 805306368]]}
-	From schema: python/site-packages/dtschema/schemas/root-node.yaml
+arch/mips/boot/dts/ingenic/ci20.dtb: wifi@1: compatible: oneOf conditional failed, one must be fixed:
+	[brcm,bcm4330-fmac] is too short
+	brcm,bcm4329-fmac was expected
+	From schema: Documentation/devicetree/bindings/net/wireless/brcm,bcm4329-fmac.yaml
 
 Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
 ---
@@ -72,18 +74,18 @@ Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
-index c045c4f75895e..98f0a5ccbb4da 100644
+index 98f0a5ccbb4da..dc587b4b36009 100644
 --- a/arch/mips/boot/dts/ingenic/ci20.dts
 +++ b/arch/mips/boot/dts/ingenic/ci20.dts
-@@ -24,7 +24,7 @@ chosen {
- 		stdout-path = &uart4;
- 	};
+@@ -176,7 +176,7 @@ &mmc1 {
  
--	memory {
-+	memory@0 {
- 		device_type = "memory";
- 		reg = <0x0 0x10000000
- 		       0x30000000 0x30000000>;
+ 	brcmf: wifi@1 {
+ /*		reg = <4>;*/
+-		compatible = "brcm,bcm4330-fmac";
++		compatible = "brcm,bcm4330-fmac", "brcm,bcm4329-fmac";
+ 		vcc-supply = <&wlan0_power>;
+ 		device-wakeup-gpios = <&gpd 9 GPIO_ACTIVE_HIGH>;
+ 		shutdown-gpios = <&gpf 7 GPIO_ACTIVE_LOW>;
 -- 
 2.33.0
 

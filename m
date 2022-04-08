@@ -2,64 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 554214F8DEA
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:26:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D9934F8DDC
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:26:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234082AbiDHEBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 00:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44394 "EHLO
+        id S234051AbiDHEBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 00:01:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233695AbiDHEB2 (ORCPT
+        with ESMTP id S234083AbiDHEBn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 00:01:28 -0400
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F79611DD01;
-        Thu,  7 Apr 2022 20:59:26 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id p8so6620903qvv.5;
-        Thu, 07 Apr 2022 20:59:26 -0700 (PDT)
+        Fri, 8 Apr 2022 00:01:43 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7787911BE51
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 20:59:40 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id p15so14790473ejc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 20:59:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=LH7BSmcw66GeM+EmzxlBarmKYsAdtHEk0ooqfqKL/mM=;
-        b=bWEhQ0kAlrWqks42MLZazJH5TjXVGo+CStcukV2r1bXxuC6Cv3l7MXVj+ODkdZgyAf
-         fOMp/spx6HB50Uf5fF7Pnl5Ui7NIjxbRve0c/SjcP1J6Zd+eWdaq6SKUCyvm8M1Nz3VT
-         fhXEbwngwfkothEOeX5XNuZHvl18NoLVEq+SiV1m3lcS+qEBkdufOSgIhFRNZ0b0xPQz
-         Y6kO17xvN3s/oGhSwQQ4k2GhudESgt8TqRyHjb+0PhjiHR2nsQ5oKXxlEYzvqDcN0xm9
-         QQgp74Pn5Mvy32eaO3i02hkGtiNmWjf/lgH6Wtig5KwYyNY4Eqmn0zKfUyrj9haafMX3
-         aV/Q==
+        bh=d8V8QdLVMJ6wCY1wCleLijgS/+KIcQIqn2ncvH/Fzoc=;
+        b=V3AdMUChmj+dq2IGkLCjFYgGy3bkWj9uSfQgL1SidJI6/teu6A6qituRa5QfLB7ZAu
+         XqtFcrNuZr9QfMvYYQEK1maBU1xC8xf8lsiZN9r7Xe4KDyPG/bpocEqXgIX+VuRmGpLf
+         /4HUz+1zTOuC7neGjoHQpEoVJer9oGk4KX123fYwHmy5HLTD/UoJrMyXkFlfaBDtwe0E
+         0w/ZV0AGD6PjdoqkbLj8Wjuf2nA36+Z+fs0eZOxc63NDtJDvrV9LG5bz2UCYTBVmJvgp
+         ge6O4PSyyZmlnTpdCCiPbuI4RUVNFiZoLs62z723LxZoHAEQFnV6jQQ45tvpqAbevbWM
+         HJnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=LH7BSmcw66GeM+EmzxlBarmKYsAdtHEk0ooqfqKL/mM=;
-        b=Sh1N6L6qaWMu7JuAV11ArXfJgX28+RBvPeiz2TO3JruX+3Ksj0WkiAWW34UQjZWWeA
-         SYOR4lu/2IgXlf01yuFED5x5gF3n0XP3cQannSnVh/Ow1kUvQ3C6FfV+hWWdP6YdXLcY
-         5kLxlNiLWYlbRegNIKKdcialeLA0qgIrZYRbCptWhVWZ2Vxdo0LPxJx/BMu0SJSO9PTn
-         3gFn3fTPrMYcTYcG51D7IyzRceHSkB98/NX6NyhJEiW+Wp6FekKmqU7b3g1YdEGV5yHS
-         NFnSAdhd4m7RB4kDzLaTiH2mpr+SHb0FII0Hg+Rq1qrUpU+wDUNUZNLr9s5daC777GnK
-         y1QQ==
-X-Gm-Message-State: AOAM533yByLA6A+p7BskktOenj2ip+vjzxkJea0TjMg9Dvc4jGdA6kDs
-        XWJlDP8bP1SxKz9NF1xlXiE0g+XXzcmOvOARz9dBa06Y
-X-Google-Smtp-Source: ABdhPJxN4XFE24e6MURxbFEIrINg1xg82tRehgTuR2/WA/T3kAlKtfe7uX4E/0G16i8B4yF4fxRJZFGCHDXdME4ua8Q=
-X-Received: by 2002:a0c:d845:0:b0:42c:33e4:e491 with SMTP id
- i5-20020a0cd845000000b0042c33e4e491mr14587659qvj.100.1649390365515; Thu, 07
- Apr 2022 20:59:25 -0700 (PDT)
+        bh=d8V8QdLVMJ6wCY1wCleLijgS/+KIcQIqn2ncvH/Fzoc=;
+        b=icrI9NAH/o7/EVw1IlUS9pI95F8v28UwUPEemtw7HiNbgsxyKF8Yq3sJJDkHInsAJb
+         +cDTQV/I2tZy0PzvCCeI9Cv9+ErFFb/UHRjTnWyJC2GxQggtWOLKsEbPl5IIcJHqvDtY
+         YmFOpk92UyOKFCyHmIZhOWfL9gaNueNaS7/+pOP6Tw9T2IUJyyjWA8H/ivADl2vp8iRp
+         5o8h+OTdbQNdlvpUw1n8sF1KYE6NDUrTVQ8KoHYyUfWieBzpRq47gtjqiRAw9+1IrIU3
+         y+73EmWhAiLtx1EIPvsuV257z/vjEnA0rteEgUZjm0OqKU4nL5gvLR6JUsSNkZdXuwHw
+         njYQ==
+X-Gm-Message-State: AOAM5332sv1GysuUSV/iYFwqJ23uAUiCreue/nbbUZ3jHp+Mw/jWEB6D
+        cbS123BHNjFYdxRhWoj/NSdZW7O8bymNffz2r392/BOj6ke7DA==
+X-Google-Smtp-Source: ABdhPJwIdn5HLwoVIc7NHpk2ZNf+qVauWTjSovr4cql3RkyDYXF98CBPpym1pAxa6d6HoGiHoqBLeSpRw9onl6ZmvCA=
+X-Received: by 2002:a17:906:a2c2:b0:6e7:efc2:17f2 with SMTP id
+ by2-20020a170906a2c200b006e7efc217f2mr15654230ejb.542.1649390378795; Thu, 07
+ Apr 2022 20:59:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220217040205.1898644-1-bjorn.andersson@linaro.org>
-In-Reply-To: <20220217040205.1898644-1-bjorn.andersson@linaro.org>
-From:   Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
-Date:   Thu, 7 Apr 2022 21:59:14 -0600
-Message-ID: <CAOCk7NrPGCFk9zmLFfuBGHAjujm75L2BzeegAxF3Mwz36dpTzw@mail.gmail.com>
-Subject: Re: [PATCH] arm64: defconfig: Enable Qualcomm PCIe Gen2 PHY
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     MSM <linux-arm-msm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        lkml <linux-kernel@vger.kernel.org>
+References: <20220407223019.2066361-1-dlatypov@google.com> <20220408034848.2081355-1-davidgow@google.com>
+In-Reply-To: <20220408034848.2081355-1-davidgow@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Thu, 7 Apr 2022 22:59:27 -0500
+Message-ID: <CAGS_qxrNOPq+akyt2Ee4NXySP+Zxqis2H5CwKs_kNWNvJ+bo5A@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: Print a total count of tests.
+To:     David Gow <davidgow@google.com>
+Cc:     brendanhiggins@google.com, skhan@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,12 +68,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 17, 2022 at 4:41 AM Bjorn Andersson
-<bjorn.andersson@linaro.org> wrote:
+On Thu, Apr 7, 2022 at 10:48 PM 'David Gow' via KUnit Development
+<kunit-dev@googlegroups.com> wrote:
 >
-> The Qualcomm QCS404 platform uses the PCIe Gen2 PHY, enable the driver
-> for this to ensure that PCIe is functional.
+> Add a count of the total number of tests run (including skipped tests,
+> which do run a little bit until they decide to skip themselves) to the
+> summary line.
 >
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: David Gow <davidgow@google.com>
+> ---
+>
+> This patch depends on:
+> https://lore.kernel.org/linux-kselftest/20220407223019.2066361-1-dlatypov@google.com/
+>
+>  tools/testing/kunit/kunit_parser.py | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+> index 957907105429..da01998d29b1 100644
+> --- a/tools/testing/kunit/kunit_parser.py
+> +++ b/tools/testing/kunit/kunit_parser.py
+> @@ -96,7 +96,7 @@ class TestCounts:
+>                 """
+>                 statuses = [('Passed', self.passed), ('Failed', self.failed),
+>                         ('Crashed', self.crashed), ('Skipped', self.skipped),
+> -                       ('Errors', self.errors)]
+> +                       ('Errors', self.errors), ('Total', self.total())]
 
-Reviewed-by: Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
+Hmm, I've never really felt the need for a total to be printed out.
+We've had few enough tests and different statuses that the mental
+addition is easy enough.
+
+Bikeshedding:
+This current output of
+  Passed: 40, Skipped: 2, Total: 42
+feels a bit awkward to me.
+If we did print one out, I think it should probably go first, e.g.
+  Ran 42 tests: 40 passed, 2 skipped.
+
+Wdyt?
+
+>                 return ', '.join('{}: {}'.format(s, n) for s, n in statuses if n > 0)

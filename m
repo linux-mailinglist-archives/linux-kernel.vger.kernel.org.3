@@ -2,140 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 993A64F8C26
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:26:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 339BD4F8C86
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233525AbiDHBnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 21:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34856 "EHLO
+        id S233529AbiDHBoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 21:44:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbiDHBnI (ORCPT
+        with ESMTP id S233418AbiDHBoQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 21:43:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 23BE0AA027
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 18:41:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649382065;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=t9gnNFA0wDN5XfoET2ND9SZc9CvlqYkCyfw7UidpYlY=;
-        b=iNXDe2IYu4o4WQeYiffu7DMFZMk/9xuEBlGzjOqKxSALGqI1kA1C0pOV5twEQ4Yi3z0Sum
-        bhOLoznT2R4LbWHMvm+0ah4Jq2xU/9U4RffDRzkevvc3dpdHl0hLsU6rSHHrIucfY8Q1H1
-        iNQj+RP5iaFJ7BWR7CjTzp3nRoJhK7Q=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-490-HIssGxB6OIm6H1aChm_HDA-1; Thu, 07 Apr 2022 21:41:02 -0400
-X-MC-Unique: HIssGxB6OIm6H1aChm_HDA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A12ED3C01C15;
-        Fri,  8 Apr 2022 01:41:01 +0000 (UTC)
-Received: from T590 (ovpn-8-29.pek2.redhat.com [10.72.8.29])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A31DE1415136;
-        Fri,  8 Apr 2022 01:40:54 +0000 (UTC)
-Date:   Fri, 8 Apr 2022 09:40:49 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Qi Zheng <zhengqi.arch@bytedance.com>, dennis@kernel.org,
-        tj@kernel.org, cl@linux.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, zhouchengming@bytedance.com,
-        songmuchun@bytedance.com
-Subject: Re: [PATCH] percpu_ref: call wake_up_all() after percpu_ref_put()
- completes
-Message-ID: <Yk+SoZrwUGnQ3cI4@T590>
-References: <20220407103335.36885-1-zhengqi.arch@bytedance.com>
- <20220407155752.769632b737f79b038cf83742@linux-foundation.org>
+        Thu, 7 Apr 2022 21:44:16 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00B6D12F166
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 18:42:13 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id f18so8435545edc.5
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 18:42:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=xCv5DXX9ijy/PE+Fv/yKOblKDG06N2ROExnKPiddkiU=;
+        b=xHLU3VTS2ptDA+EsiDb9d9GAPmO0xeEyazs1bLbJ/QVB1T+jdO4hti7wvExaysx1NL
+         PoGR5EswnEEgQpsHXqcpfB85DFTiQZtd7CvTzp7uWaKp5nQCHJ3l8X9oAPUCtimQHu3B
+         AZGE59pcru7eafp+3nm5XPQEaX+9Xw03eyr1oylhuISY7jlV+ju4dh9i/JcZFQPOK3eL
+         eVH7g+HkVs0mEGJt9BKjzqCJwjMFrVDrG0/W8Ut9g0YWnbZRAbaBzHXIA9SRbV7DQX1l
+         irC4aEnS+ULqzznFCktV2CDAgS/sEUiWKedCnKSN5FBv5ztl4OmIUA07SK0fdLxONCZk
+         OjWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=xCv5DXX9ijy/PE+Fv/yKOblKDG06N2ROExnKPiddkiU=;
+        b=bws50SHaMcI/m7z4DKWcXFgykiqtptaNC7NwTEgPD9GOuue/qx3JWReJd40YFBmICR
+         1qxQhwsAVvK2ima5B8Vq2Vss7z1Soy41yg+0at/zGUpp47CqWoB4Pshz0+H1DwVkEs4k
+         JNhQjHI5ssMIUqHBnV+45RmGMnAAKxURYdLAEe8nYefbCP42ENDOnCa0wo/LY/z3mvMw
+         Dfr/QtwNeaTT9OMjSxJqdnZ1zY+krWuXFD3aAxPI+0fEnuaKdL+m06UXDCX6tpttRxSU
+         a9euzgdCRFRu4FwFPsnEXyCK3T9+cNVMMjLOsxjM25KG2zS3pSI3zZ2C06v2+LOl/Eh9
+         04UA==
+X-Gm-Message-State: AOAM5330qMw+XG+unQRNBuOdwZbNAK2uVJgg/1IzoduFwiY9FligorM4
+        EWCpopMX5JiU+s3ehHPK0fJcxGUVdiTfWe0ISTAV
+X-Google-Smtp-Source: ABdhPJxO+N6oGriDELXQ6Ik1rLFnHwovOpG6Sz/8grFw7AbhwJUqwHvTAcztCZnXDsMAvXbi8gwPJkt7rR9hql0VoiI=
+X-Received: by 2002:a05:6402:35c9:b0:41d:1447:5f9f with SMTP id
+ z9-20020a05640235c900b0041d14475f9fmr3711479edc.343.1649382132419; Thu, 07
+ Apr 2022 18:42:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220407155752.769632b737f79b038cf83742@linux-foundation.org>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220329125117.1393824-1-mic@digikod.net> <20220329125117.1393824-8-mic@digikod.net>
+In-Reply-To: <20220329125117.1393824-8-mic@digikod.net>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 7 Apr 2022 21:42:01 -0400
+Message-ID: <CAHC9VhQpZ12Chgd+xMibUxgvcPjTn9FMnCdMGYbLcWG3eTqDQg@mail.gmail.com>
+Subject: Re: [PATCH v2 07/12] landlock: Add support for file reparenting with LANDLOCK_ACCESS_FS_REFER
+To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Jann Horn <jannh@google.com>,
+        John Johansen <john.johansen@canonical.com>,
+        Kees Cook <keescook@chromium.org>,
+        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 03:57:52PM -0700, Andrew Morton wrote:
-> (cc Ming Lei)
-> 
-> On Thu,  7 Apr 2022 18:33:35 +0800 Qi Zheng <zhengqi.arch@bytedance.com> wrote:
-> 
-> > In the percpu_ref_call_confirm_rcu(), we call the wake_up_all()
-> > before calling percpu_ref_put(), which will cause the value of
-> > percpu_ref to be unstable when percpu_ref_switch_to_atomic_sync()
-> > returns.
-> > 
-> > 	CPU0				CPU1
-> > 
-> > percpu_ref_switch_to_atomic_sync(&ref)
-> > --> percpu_ref_switch_to_atomic(&ref)
-> >     --> percpu_ref_get(ref);	/* put after confirmation */
-> > 	call_rcu(&ref->data->rcu, percpu_ref_switch_to_atomic_rcu);
-> > 
-> > 					percpu_ref_switch_to_atomic_rcu
-> > 					--> percpu_ref_call_confirm_rcu
-> > 					    --> data->confirm_switch = NULL;
-> > 						wake_up_all(&percpu_ref_switch_waitq);
-> > 
-> >     /* here waiting to wake up */
-> >     wait_event(percpu_ref_switch_waitq, !ref->data->confirm_switch);
-> > 						(A)percpu_ref_put(ref);
-> > /* The value of &ref is unstable! */
-> > percpu_ref_is_zero(&ref)
-> > 						(B)percpu_ref_put(ref);
-> > 
-> > As shown above, assuming that the counts on each cpu add up to 0 before
-> > calling percpu_ref_switch_to_atomic_sync(), we expect that after switching
-> > to atomic mode, percpu_ref_is_zero() can return true. But actually it will
+On Tue, Mar 29, 2022 at 8:51 AM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
+wrote:
+>
+> From: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
+>
+> Add a new LANDLOCK_ACCESS_FS_REFER access right to enable policy writers
+> to allow sandboxed processes to link and rename files from and to a
+> specific set of file hierarchies.  This access right should be composed
+> with LANDLOCK_ACCESS_FS_MAKE_* for the destination of a link or rename,
+> and with LANDLOCK_ACCESS_FS_REMOVE_* for a source of a rename.  This
+> lift a Landlock limitation that always denied changing the parent of an
+> inode.
+>
+> Renaming or linking to the same directory is still always allowed,
+> whatever LANDLOCK_ACCESS_FS_REFER is used or not, because it is not
+> considered a threat to user data.
+>
+> However, creating multiple links or renaming to a different parent
+> directory may lead to privilege escalations if not handled properly.
+> Indeed, we must be sure that the source doesn't gain more privileges by
+> being accessible from the destination.  This is handled by making sure
+> that the source hierarchy (including the referenced file or directory
+> itself) restricts at least as much the destination hierarchy.  If it is
+> not the case, an EXDEV error is returned, making it potentially possible
+> for user space to copy the file hierarchy instead of moving or linking
+> it.
+>
+> Instead of creating different access rights for the source and the
+> destination, we choose to make it simple and consistent for users.
+> Indeed, considering the previous constraint, it would be weird to
+> require such destination access right to be also granted to the source
+> (to make it a superset).  Moreover, RENAME_EXCHANGE would also add to
+> the confusion because of paths being both a source and a destination.
+>
+> See the provided documentation for additional details.
+>
+> New tests are provided with a following commit.
+>
+> Cc: Paul Moore <paul@paul-moore.com>
+> Signed-off-by: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
+> Link: https://lore.kernel.org/r/20220329125117.1393824-8-mic@digikod.net
+> ---
+>
+> Changes since v1:
+> * Update current_check_access_path() to efficiently handle
+>   RENAME_EXCHANGE thanks to the updated LSM hook (see previous patch).
+>   Only one path walk is performed per rename arguments until their
+>   common mount point is reached.  Superset of access rights is correctly
+>   checked, including when exchanging a file with a directory.  This
+>   requires to store another matrix of layer masks.
+> * Reorder and rename check_access_path_dual() arguments in a more
+>   generic way: switch from src/dst to 1/2.  This makes it easier to
+>   understand the RENAME_EXCHANGE cases alongs with the others.  Update
+>   and improve check_access_path_dual() documentation accordingly.
+> * Clean up the check_access_path_dual() loop: set both allowed_parent*
+>   when reaching internal filesystems and remove a useless one.  This
+>   allows potential renames in internal filesystems (like for other
+>   operations).
+> * Move the function arguments checks from BUILD_BUG_ON() to
+>   WARN_ON_ONCE() to avoid clang build error.
+> * Rename is_superset() to no_more_access() and make it handle superset
+>   checks of source and destination for simple and exchange cases.
+> * Move the layer_masks_child* creation from current_check_refer_path()
+>   to check_access_path_dual(): this is simpler and less error-prone,
+>   especially with RENAME_EXCHANGE.
+> * Remove one optimization in current_check_refer_path() to make the code
+>   simpler, especially with the RENAME_EXCHANGE handling.
+> * Remove overzealous WARN_ON_ONCE() for !access_request check in
+>   init_layer_masks().
+> ---
+>  include/uapi/linux/landlock.h                |  27 +-
+>  security/landlock/fs.c                       | 607 ++++++++++++++++---
+>  security/landlock/limits.h                   |   2 +-
+>  security/landlock/syscalls.c                 |   2 +-
+>  tools/testing/selftests/landlock/base_test.c |   2 +-
+>  tools/testing/selftests/landlock/fs_test.c   |   3 +-
+>  6 files changed, 566 insertions(+), 77 deletions(-)
 
-Looks all current users expect the refcount is stable after percpu_ref_switch_to_atomic_sync
-returns, even though the API itself doesn't mention the point explicitly.
+I'm still not going to claim that I'm a Landlock expert, but this
+looks sane to me.
 
-> > return different values in the two cases of A and B, which is not what
-> > we expected.
-> > 
-> > Maybe the original purpose of percpu_ref_switch_to_atomic_sync() is
-> > just to ensure that the conversion to atomic mode is completed, but it
-> > should not return with an extra reference count.
-> > 
-> > Calling wake_up_all() after percpu_ref_put() ensures that the value of
-> > percpu_ref is stable after percpu_ref_switch_to_atomic_sync() returns.
-> > So just do it.
-> 
-> Thanks.  I'll grab this, but shall await input from others before doing
-> anything else with it.
-> 
-> > Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
-> > +++ b/lib/percpu-refcount.c
-> > @@ -154,13 +154,14 @@ static void percpu_ref_call_confirm_rcu(struct rcu_head *rcu)
-> >  
-> >  	data->confirm_switch(ref);
-> >  	data->confirm_switch = NULL;
-> > -	wake_up_all(&percpu_ref_switch_waitq);
-> >  
-> >  	if (!data->allow_reinit)
-> >  		__percpu_ref_exit(ref);
-> >  
-> >  	/* drop ref from percpu_ref_switch_to_atomic() */
-> >  	percpu_ref_put(ref);
-> > +
-> > +	wake_up_all(&percpu_ref_switch_waitq);
-> >  }
+Reviewed-by: Paul Moore <paul@paul-moore.com>
 
-Looks fine:
+> +static inline access_mask_t init_layer_masks(
+> +               const struct landlock_ruleset *const domain,
+> +               const access_mask_t access_request,
+> +               layer_mask_t (*const layer_masks)[LANDLOCK_NUM_ACCESS_FS]=
+)
+> +{
+> +       access_mask_t handled_accesses =3D 0;
+> +       size_t layer_level;
+> +
+> +       memset(layer_masks, 0, sizeof(*layer_masks));
+> +       /* An empty access request can happen because of O_WRONLY | O_RDW=
+R. */
 
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
+ ;)
 
-
-Thanks,
-Ming
-
+--=20
+paul-moore.com

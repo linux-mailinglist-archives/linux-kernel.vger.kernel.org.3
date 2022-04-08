@@ -2,74 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C4B14F8C87
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F6724F8CB4
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233428AbiDHBYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 21:24:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49168 "EHLO
+        id S233338AbiDHBVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 21:21:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233385AbiDHBYR (ORCPT
+        with ESMTP id S230147AbiDHBVD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 21:24:17 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5426445
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 18:22:15 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id i10-20020a17090a2aca00b001ca56c9ab16so7244154pjg.1
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 18:22:15 -0700 (PDT)
+        Thu, 7 Apr 2022 21:21:03 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E9013F75
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 18:19:01 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id bg10so14343209ejb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 18:19:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=A6OclNo6fSItQpTxQTpaUCER7lHP82G03LIl77so8jw=;
-        b=zSb4agSs6+sEx1Gos/tvaPy9cnZsjfM6UBsveMu1xbXuLiS2sYW5lZu5i5fVIaC2Uc
-         TnBbYZzHnB6Lfdx4TY/UdQbAZQm0p/8+FUrOEYttBaMsqVgEBTaUxbv+MIbOmKf1hN88
-         1y4BpCaILLtwuVHG+12DtsYjcMbWUaz489ALsW7l/a5CmmDrI9GkoUMUsMAHHsHqgUIR
-         cUhDqIqhiUxL0nDHDJZH1iJxSzUbp8LKnCIWFtXLBPm4+qRPAFgIPzoYgLs9WNl8bhb/
-         DmpmuQnOVqtw5NH7a1ZqG/NN+gIQwyGPCj3MT0Tfd3rP2jBe0g2HTC+b4Y0LjmweN30a
-         Agvw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=ZBbnVt+YQv3guhlNFNXJxYGqdHwC1mgzxEzBpvoB+SY=;
+        b=w0q8eVRm7h8rkmWA6aK++gCu1l3MsYOxmQ4NRzxqJmQPLXXIlRpBBIDfMzmDHECr7t
+         TtW7WfmaPG3TgJXIbeOvoAEpjAFJfTf6e8jkEM8/qC4/WqEzi5oVjtegKjbhJjdwaqfv
+         MQkSGt/u4A3k8V1cQDTccN7ypBxGvfg1BimSUF69kO0VkckMQJ2M37o6hp56SSyC8jmD
+         ublaU+qy3+GSGXDg6f9rWwoI4T46vRUMl5F46DQYG8RajzVrYxiQJsnil81wzJXoRYJh
+         K+w0IVmThRPv22Egt4dhG8A8BhD5shYjWWXo3tbE7zDIykX+0j47Ah+yAMNIerVOUfI/
+         3l+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=A6OclNo6fSItQpTxQTpaUCER7lHP82G03LIl77so8jw=;
-        b=MSnbrUhX9XrjObesaMxUk/bckFktVMV8Kh/5SPwrWa83re90OVd2kMP6WQGtVVVzLz
-         Qbp2VZ8FPlfw9CpPKs3N+SILhguhZLYuKG0/ZM4QwX5T2KnQvuCyG6hleeBYh24Rbj0K
-         Ox1winFm+xY8c0zg6P4Kxqv4BndZgHPXPA6ZjpMSfOEofzcFQXXyvJAQjUHrlEZSTXf/
-         pZyn4SrfsCmNj1KbyKlSjWpuxQxBlZcITI3YBRzD5oJnap6q9vY8cZqf/RveY+4Fv1nh
-         cIuikObARay9wY1dpT0S6ur9SS8881NggPCqnNwMNfT8JIzTFVg7HOfb3E7URskFRvPB
-         GMRQ==
-X-Gm-Message-State: AOAM532xvrOORw5KKGDbawurehYX6jefBb+LAismpI3XeiwJA1kFMCjS
-        jciijdBiYmAI0TN0QTt5oRlHwg==
-X-Google-Smtp-Source: ABdhPJwhsbSFMkUvU8wzdDL8blnk++f7WzgqCYdkmeqpKagtwMsEnmQtneoW8sDRmpOVWWTI40PeuA==
-X-Received: by 2002:a17:90a:bf12:b0:1ca:69bd:9a10 with SMTP id c18-20020a17090abf1200b001ca69bd9a10mr18877946pjs.92.1649380934743;
-        Thu, 07 Apr 2022 18:22:14 -0700 (PDT)
-Received: from [10.76.15.169] ([61.120.150.76])
-        by smtp.gmail.com with ESMTPSA id q28-20020a656a9c000000b00372f7ecfcecsm21038355pgu.37.2022.04.07.18.20.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Apr 2022 18:21:10 -0700 (PDT)
-Message-ID: <e77ae1d9-49f3-97e8-f88f-a8518ff0573b@bytedance.com>
-Date:   Fri, 8 Apr 2022 09:17:10 +0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=ZBbnVt+YQv3guhlNFNXJxYGqdHwC1mgzxEzBpvoB+SY=;
+        b=PoA+9oxm0gu4QaVJlYB4UpCABHpI+RbH7xmUlTgqN2//8bjDc9JgrxfujgpQ+tle6G
+         UcJ67o6AyHRWkiJHmFSg+v+16NkQlUCs7uMa3u9MhtiGcY3qFZDSKwaHdMlUD0GJjiEW
+         Js0cVZGaHaNzPbwGtxT0Wm+YGId26LCOgR37OFkp+16hGVailWA/1IR/dF0gVG/4fwI9
+         ZHgPOcssWMhvEsZbPCGnZ1kxffRcxFkcPDGiQZQlMrIpOPvfl5fbSfxMmJJhKtARhW+e
+         POyFk7CrsgPv4T95k/2+1ijkFLQh3dtsWc4bWqqwti4/m2K1Q/GDmYEKBISf9Qv8xGPt
+         VG1Q==
+X-Gm-Message-State: AOAM532vxNqV7o8fFwVMT/3fh5XRThf9vhiMONtsuvdaGDTyhBrZ/1if
+        yQIjtP6E5Wb03kK4+uZmp3K13A==
+X-Google-Smtp-Source: ABdhPJwjkYqFIWmuU4xWDx/TspNGWQHzwEtaxjVLRLgAWrEaj1cS5hqzQdLBd4FyyYZWUiMFo0jjAA==
+X-Received: by 2002:a17:907:c21:b0:6e6:f1f3:ba77 with SMTP id ga33-20020a1709070c2100b006e6f1f3ba77mr16565078ejc.686.1649380740204;
+        Thu, 07 Apr 2022 18:19:00 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s ([104.245.96.34])
+        by smtp.gmail.com with ESMTPSA id n6-20020aa7c786000000b00410d2403ccfsm9807040eds.21.2022.04.07.18.18.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 18:18:59 -0700 (PDT)
+Date:   Fri, 8 Apr 2022 09:18:52 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     German Gomez <german.gomez@arm.com>
+Cc:     Ali Saidi <alisaidi@amazon.com>, Nick.Forrington@arm.com,
+        acme@kernel.org, alexander.shishkin@linux.intel.com,
+        andrew.kilroy@arm.com, benh@kernel.crashing.org,
+        james.clark@arm.com, john.garry@huawei.com, jolsa@kernel.org,
+        kjain@linux.ibm.com, lihuafei1@huawei.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
+        mathieu.poirier@linaro.org, mingo@redhat.com, namhyung@kernel.org,
+        peterz@infradead.org, will@kernel.org
+Subject: Re: [PATCH v4 2/4] perf arm-spe: Use SPE data source for neoverse
+ cores
+Message-ID: <20220408011852.GB973239@leoy-ThinkPad-X240s>
+References: <20220328130547.GA360814@leoy-ThinkPad-X240s>
+ <20220329143214.12707-1-alisaidi@amazon.com>
+ <4710b4b2-5dcd-00a4-3976-1bd5340f401d@arm.com>
+ <20220331124425.GB1704284@leoy-ThinkPad-X240s>
+ <da902ef2-df87-ed71-275b-f7b41d1afc9a@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: Re: [PATCH] mm: fix kernel NULL pointer dereference in
- page_vma_mapped_walk
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220407064008.71869-1-pizhenwei@bytedance.com>
- <Yk7tIi4UKjiqQyoF@casper.infradead.org>
- <Yk7yd5ho2a7jWNfS@casper.infradead.org>
-From:   zhenwei pi <pizhenwei@bytedance.com>
-In-Reply-To: <Yk7yd5ho2a7jWNfS@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SCC_BODY_URI_ONLY,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <da902ef2-df87-ed71-275b-f7b41d1afc9a@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,31 +84,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/7/22 22:17, Matthew Wilcox wrote:
-> On Thu, Apr 07, 2022 at 02:54:42PM +0100, Matthew Wilcox wrote:
->> On Thu, Apr 07, 2022 at 02:40:08PM +0800, zhenwei pi wrote:
->>> size_to_hstate(4K) returns NULL pointer, this leads kernel BUG in
->>> function page_vma_mapped_walk.
->>
->> Yes, I think this is the right fix.  It's not immediately obvious from
->> the bug and the patch, but what's going on is:
->>
->> page_mapped_in_vma() sets nr_pages to 1.  This is correct because we
->> usually only want to know about the precise page, and not about the
->> folio containing it.  But hugetlbfs is special (... in so many ways ...)
->> and actually wants to work on the entire folio.  We could set nr_pages
->> specially for hugetlb pages, but it's better to ignore it in
->> page_vma_mapped_walk() for the hugetlb case.
->>
->> I'll fix up the changelog and add it to my pile of fixes that I'm
->> sending tomorrow.
->> https://git.infradead.org/users/willy/pagecache.git/shortlog/refs/heads/for-next
+On Thu, Apr 07, 2022 at 04:24:35PM +0100, German Gomez wrote:
+> Hi,
 > 
-> I looked over the patch in context, and realised we now don't need to
-> call size_to_hstate since we're getting the hstate from the VMA.
+> On 31/03/2022 13:44, Leo Yan wrote:
+> > [...]
+> >>> I'd like to do this in a separate patch, but I have one other proposal. The
+> >>> Neoverse cores L2 is strictly inclusive of the L1, so even if it's in the L1,
+> >>> it's also in the L2. Given that the Graviton systems and afaik the Ampere
+> >>> systems don't have any cache between the L2 and the SLC, thus anything from
+> >>> PEER_CORE, LCL_CLSTR, or PEER_CLSTR would hit in the L2, perhaps we
+> >>> should just set L2 for these cases? German, are you good with this for now? 
+> >> Sorry for the delay. I'd like to also check this with someone. I'll try
+> >> to get back asap. In the meantime, if this approach is also OK with Leo,
+> >> I think it would be fine by me.
 > 
-> https://git.infradead.org/users/willy/pagecache.git/commitdiff/98ea02597b9967c0817d29fee2f96d21b9e59ca5
+> Sorry for the delay. Yeah setting it to L2 indeed looks reasonable for
+> now. Somebody brought up the case of running SPE in a heterogeneous 
+> system, but also we think might be beyond the scope of this change.
 > 
-Thanks!
--- 
-zhenwei pi
+> One very minor nit though. Would you be ok with renaming LCL to LOCAL 
+> and CLSTR to CLUSTER? I sometimes mistead the former as "LLC".
+
+Ali's suggestion is to use the format: highest_cache_level | MEM_SNOOP_PEER.
+
+Simply to say, the highest cache level is where we snoop the cache
+data with the highest cache level.  And we use an extra snoop op
+MEM_SNOOP_PEER as the flag to indicate a peer snooping from the local
+cluster or peer cluster.
+
+Please review the more detailed discussion in another email.
+
+> > Thanks for the checking internally.  Let me just bring up my another
+> > thinking (sorry that my suggestion is float): another choice is we set
+> > ANY_CACHE as cache level if we are not certain the cache level, and
+> > extend snoop field to indicate the snooping logics, like:
+> >
+> >   PERF_MEM_SNOOP_PEER_CORE
+> >   PERF_MEM_SNOOP_LCL_CLSTR
+> >   PERF_MEM_SNOOP_PEER_CLSTR
+> >
+> > Seems to me, we doing this is not only for cache level, it's more
+> > important for users to know the variant cost for involving different
+> > snooping logics.
+> >
+> I see there's been some more messages I need to catch up with. Is the 
+> intention to extend the PERF_MEM_* flags for this cset, or will it be
+> left for a later change?
+
+The plan is to extend the PERF_MEM_* flags in this patch set.
+
+> In any case, I'd be keen to take another look at it and try to bring
+> some more eyes into this.
+
+Sure.  Please check at your side and thanks for confirmation.
+
+Thanks,
+Leo

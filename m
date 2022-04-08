@@ -2,65 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 656304F95F9
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C0B04F95FC
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233459AbiDHMpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 08:45:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34796 "EHLO
+        id S235458AbiDHMpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 08:45:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232498AbiDHMp2 (ORCPT
+        with ESMTP id S235117AbiDHMph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 08:45:28 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA9B329AF;
-        Fri,  8 Apr 2022 05:43:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649421804; x=1680957804;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=shRsTxOu6z1fDTWKAhDb9aMsN+c5kKMrzbCJid69zTk=;
-  b=Udwj9oiZf10ZVTP7hjVPkBB7s5gb9I5Ol5/MwZqVsfhmod5axAXNogWf
-   35cmTD2/jVx8oqTXrCNW7xBBzCuACQDZna0RaPUW0aWMfvVJfChCHl8ma
-   BAWj/y0wjMYOyhyeUsFIe2hBoxMR4Y5od23CD+DgpXKA2jqExxUV3IL9I
-   yBFTb2tpC5T8Pkp3dlqdinYgZTtM5mX/Yo/zDokhScyzRxC0Q+PAr6QKQ
-   RxMxwZpo4pzusfNZtztE2hH8egT/2UKHdSa45rQsFBk7uqUJ5ToMAlusd
-   hN++pSLaNNjc7Qy8+73m1axWC2Y7iS6FHLJyOXrDxshIhIHPO/BJrLQws
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="260417696"
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="260417696"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 05:43:24 -0700
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="550489494"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 05:43:21 -0700
-Received: by lahna (sSMTP sendmail emulation); Fri, 08 Apr 2022 15:43:18 +0300
-Date:   Fri, 8 Apr 2022 15:43:18 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Subject: Re: [PATCH v1 1/2] PCI: PM: Avoid leaving devices in
- D0-uninitialized in pci_power_up()
-Message-ID: <YlAt5he5B1SlORMh@lahna>
-References: <4198163.ejJDZkT8p0@kreacher>
- <3623886.MHq7AAxBmi@kreacher>
- <YkwRjI0KvpmiJjvK@lahna>
- <CAJZ5v0go9hLqv6Mcc5Ko770AU7sTYJQvgyjhGJ36AO1kURUnYA@mail.gmail.com>
+        Fri, 8 Apr 2022 08:45:37 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 851B73585F
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 05:43:33 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 117BB113E;
+        Fri,  8 Apr 2022 05:43:33 -0700 (PDT)
+Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9C4E73F5A1;
+        Fri,  8 Apr 2022 05:43:31 -0700 (PDT)
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com
+Cc:     vincenzo.frascino@arm.com,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Subject: [PATCH v2] kasan: Fix hw tags enablement when KUNIT tests are disabled
+Date:   Fri,  8 Apr 2022 13:43:23 +0100
+Message-Id: <20220408124323.10028-1-vincenzo.frascino@arm.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0go9hLqv6Mcc5Ko770AU7sTYJQvgyjhGJ36AO1kURUnYA@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,65 +47,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rafael,
+Kasan enables hw tags via kasan_enable_tagging() which based on the mode
+passed via kernel command line selects the correct hw backend.
+kasan_enable_tagging() is meant to be invoked indirectly via the cpu features
+framework of the architectures that support these backends.
+Currently the invocation of this function is guarded by CONFIG_KASAN_KUNIT_TEST
+which allows the enablement of the correct backend only when KUNIT tests are
+enabled in the kernel.
 
-On Thu, Apr 07, 2022 at 09:01:59PM +0200, Rafael J. Wysocki wrote:
-> On Tue, Apr 5, 2022 at 1:45 PM Mika Westerberg
-> <mika.westerberg@linux.intel.com> wrote:
-> >
-> > On Mon, Apr 04, 2022 at 05:41:13PM +0200, Rafael J. Wysocki wrote:
-> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >
-> > > In theory, pci_power_up() may leave a device in D0-uninitialized
-> > > during a transition from D3cold to D0.
-> > >
-> > > Say, a PCIe device depending on some ACPI power resources is put into
-> > > D3cold, so the power resources in question are all turned off.  Then,
-> > > pci_power_up() is called to put it into D0.
-> > >
-> > > It first calls pci_platform_power_transition() which invokes
-> > > platform_pci_set_power_state() to turn on the ACPI power resources
-> > > depended on by the device and, if that is successful, it calls
-> > > pci_update_current_state() to update the current_state field of
-> > > the PCI device object.  If the device's configuration space is
-> > > accessible at this point, which is the case if
-> > > platform_pci_set_power_state() leaves it in D0-uninitialized (and
-> > > there's nothing to prevent it from doing so), current_state will be
-> > > set to PCI_D0 and the pci_raw_set_power_state() called subsequently
-> > > will notice that the device is in D0 already and do nothing.
-> > > However, that is not correct, because it may be still necessary to
-> > > restore the device's BARs at this point.
-> > >
-> > > To address this issue, set current_state temporarily to PCI_D3hot
-> > > in the cases in which pci_raw_set_power_state() may need to do more
-> > > than just changing the power state of the device.
-> > >
-> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> 
-> Thanks, but on second thought, I'm not sure if this is the best way to
-> address the issue.
-> 
-> Basically, pci_power_up() is called in two places, in
-> pci_set_power_state() (for the transitions to D0) and in
-> pci_pm_default_resume_early().  In the latter case,
-> pci_restore_state() is called right after it and that covers BARs
-> restoration, so nothing more needs to be done in that case.
+This inconsistency was introduced in commit:
 
-I see.
+  ed6d74446cbf ("kasan: test: support async (again) and asymm modes for HW_TAGS")
 
-> This means that pci_set_power_state() is the only place needing to
-> restore the BARs when going into D0 from D3hot or deeper and it is
-> better to move BARs restoration directly into it.  I'll update the
-> series accordingly and resend.
+... and prevents to enable MTE on arm64 when KUNIT tests for kasan hw_tags are
+disabled.
 
-Okay sounds good.
+Fix the issue making sure that the CONFIG_KASAN_KUNIT_TEST guard does not
+prevent the correct invocation of kasan_enable_tagging().
 
-> I also think that the mandatory delay is not needed at all when
-> pci_raw_set_power_state() is called for transitions D3cold -> D0,
-> because in that case either the device has been powered up via
-> platform_pci_set_power_state(), or via the bridge resume which takes
-> the delay into account.
+Fixes: ed6d74446cbf ("kasan: test: support async (again) and asymm modes for HW_TAGS")
+Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+Cc: Alexander Potapenko <glider@google.com>
+Cc: Andrey Konovalov <andreyknvl@gmail.com>
+Cc: Dmitry Vyukov <dvyukov@google.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+---
+ mm/kasan/hw_tags.c |  5 +++--
+ mm/kasan/kasan.h   | 10 ++++++----
+ 2 files changed, 9 insertions(+), 6 deletions(-)
 
-I agree.
+diff --git a/mm/kasan/hw_tags.c b/mm/kasan/hw_tags.c
+index 07a76c46daa5..9e1b6544bfa8 100644
+--- a/mm/kasan/hw_tags.c
++++ b/mm/kasan/hw_tags.c
+@@ -336,8 +336,6 @@ void __kasan_poison_vmalloc(const void *start, unsigned long size)
+ 
+ #endif
+ 
+-#if IS_ENABLED(CONFIG_KASAN_KUNIT_TEST)
+-
+ void kasan_enable_tagging(void)
+ {
+ 	if (kasan_arg_mode == KASAN_ARG_MODE_ASYNC)
+@@ -347,6 +345,9 @@ void kasan_enable_tagging(void)
+ 	else
+ 		hw_enable_tagging_sync();
+ }
++
++#if IS_ENABLED(CONFIG_KASAN_KUNIT_TEST)
++
+ EXPORT_SYMBOL_GPL(kasan_enable_tagging);
+ 
+ void kasan_force_async_fault(void)
+diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
+index d79b83d673b1..b01b4bbe0409 100644
+--- a/mm/kasan/kasan.h
++++ b/mm/kasan/kasan.h
+@@ -355,25 +355,27 @@ static inline const void *arch_kasan_set_tag(const void *addr, u8 tag)
+ #define hw_set_mem_tag_range(addr, size, tag, init) \
+ 			arch_set_mem_tag_range((addr), (size), (tag), (init))
+ 
++void kasan_enable_tagging(void);
++
+ #else /* CONFIG_KASAN_HW_TAGS */
+ 
+ #define hw_enable_tagging_sync()
+ #define hw_enable_tagging_async()
+ #define hw_enable_tagging_asymm()
+ 
++static inline void kasan_enable_tagging(void) { }
++
+ #endif /* CONFIG_KASAN_HW_TAGS */
+ 
+ #if defined(CONFIG_KASAN_HW_TAGS) && IS_ENABLED(CONFIG_KASAN_KUNIT_TEST)
+ 
+-void kasan_enable_tagging(void);
+ void kasan_force_async_fault(void);
+ 
+-#else /* CONFIG_KASAN_HW_TAGS || CONFIG_KASAN_KUNIT_TEST */
++#else /* CONFIG_KASAN_HW_TAGS && CONFIG_KASAN_KUNIT_TEST */
+ 
+-static inline void kasan_enable_tagging(void) { }
+ static inline void kasan_force_async_fault(void) { }
+ 
+-#endif /* CONFIG_KASAN_HW_TAGS || CONFIG_KASAN_KUNIT_TEST */
++#endif /* CONFIG_KASAN_HW_TAGS && CONFIG_KASAN_KUNIT_TEST */
+ 
+ #ifdef CONFIG_KASAN_SW_TAGS
+ u8 kasan_random_tag(void);
+-- 
+2.35.1
+

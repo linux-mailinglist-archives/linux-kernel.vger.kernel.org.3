@@ -2,66 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E110B4F97EC
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:22:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D44F4F97EE
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:22:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236843AbiDHOYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 10:24:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46342 "EHLO
+        id S236852AbiDHOYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 10:24:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235567AbiDHOYf (ORCPT
+        with ESMTP id S236841AbiDHOYj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 10:24:35 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F7692311;
-        Fri,  8 Apr 2022 07:22:31 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id CA7AE1F85F;
-        Fri,  8 Apr 2022 14:22:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1649427749; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TQuvLLv/oeqhE1CFTiwRDAEpyUiaiX3r+MFr/YL55+k=;
-        b=HjF+Xs/zPrhU4cNitPg5DsPChj7UhJDLgQj/IgT1KdVHo6AJjfKFcYvIcOW7NzfzzJHIqn
-        RHCFRlBS6cjDb4Dl7VHQ7a4rsN6PNbXXEKoFOPWlUmhhlcP9Y71BxP+eVL2DdtSoW5cexU
-        UaIvZDkxm00yjMnXmqJTnmuY/X/os0A=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1649427749;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TQuvLLv/oeqhE1CFTiwRDAEpyUiaiX3r+MFr/YL55+k=;
-        b=lox00S8KJWJgx+0pGdbpMnk7zIC2Qob68THbWF7T/MPGQiT545T6NmhJdOCKAtCiQkJaql
-        MsIbB7O9JbAv5oDg==
-Received: from [10.163.29.78] (unknown [10.163.29.78])
-        by relay2.suse.de (Postfix) with ESMTP id 98B36A3B94;
-        Fri,  8 Apr 2022 14:22:29 +0000 (UTC)
-Message-ID: <36982e082159a77154cfc8a78039e4ce9e3b4770.camel@suse.cz>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Handle no_turbo in frequency
- invariance
-From:   Giovanni Gherdovich <ggherdovich@suse.cz>
-To:     Chen Yu <yu.c.chen@intel.com>, linux-pm@vger.kernel.org
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Len Brown <len.brown@intel.com>,
-        Tim Chen <tim.c.chen@intel.com>,
-        Chen Yu <yu.chen.surf@gmail.com>, linux-kernel@vger.kernel.org,
-        Zhang Rui <rui.zhang@intel.com>
-Date:   Fri, 08 Apr 2022 16:22:28 +0200
-In-Reply-To: <20220407234258.569681-1-yu.c.chen@intel.com>
-References: <20220407234258.569681-1-yu.c.chen@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        Fri, 8 Apr 2022 10:24:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4365AE52;
+        Fri,  8 Apr 2022 07:22:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8DEECB82B33;
+        Fri,  8 Apr 2022 14:22:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3651C385A8;
+        Fri,  8 Apr 2022 14:22:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649427753;
+        bh=wqwNWjFCQv2uKOQH0N9XEjIi+ply5xjP2/rcog9fdME=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=eG4BUp59OLKBuhz3H+N8kfCu/EmsQlar6kqueci+Ww+6bDJsP0SSzaq4WmeVa9uq8
+         fnB0bQFU5jBI0XPB2u3Xop3cc7RtgGjoil7vfoPq7yl4WdRe5lkUVp8wr79o7PCWIN
+         aA6tTZEJ97WAMUDnnFwfwPWv1pFECiurciLaRDkKxX5J1DsGVgzPEszugxXfXD9yA0
+         E/aRwMvvi8Q8pF1267tvEnZevVpFH4/XKmftRcbW2HPE74zAhip/Qud5awS93yTaKH
+         oSYlML4oCy5t4FF7WDm263UnAiT6v+77aMj2Z6F90wkJjYZ62ZkIqTHy0kg6xoOxzv
+         +V/0AX9zEJw5g==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 862DC5C0176; Fri,  8 Apr 2022 07:22:32 -0700 (PDT)
+Date:   Fri, 8 Apr 2022 07:22:32 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        rcu@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH RFC] rcu/nocb: Provide default all-CPUs mask for
+ RCU_NOCB_CPU=y
+Message-ID: <20220408142232.GA4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220407210734.2548973-1-joel@joelfernandes.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220407210734.2548973-1-joel@joelfernandes.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,116 +61,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-08 at 07:42 +0800, Chen Yu wrote:
-> Problem statement:
-> Once the user has disabled turbo frequency by
-> echo 1 > /sys/devices/system/cpu/intel_pstate/no_turbo,
-> the cfs_rq's util_avg becomes quite small when compared with
-> CPU capacity.
+On Thu, Apr 07, 2022 at 09:07:33PM +0000, Joel Fernandes wrote:
+> On systems with CONFIG_RCU_NOCB_CPU=y, there is no default mask provided
+> which ends up not offloading any CPU. This patch removes yet another
+> dependency from the bootloader having to know about RCU, about how many
+> CPUs the system has, and about how to provide the mask. Basically, I
+> think we should stop pretending that the user knows what they are doing :).
+> In other words, if NO_CB_CPU is enabled, lets make use of it.
 > 
-> Step to reproduce:
+> My goal is to make RCU as zero-config as possible with sane defaults. If
+> user wants to provide rcu_nocbs= or nohz_full= options, then those will
+> take precedence and this patch will have no effect.
 > 
-> echo 1 > /sys/devices/system/cpu/intel_pstate/no_turbo
-> 
-> ./x86_cpuload --count 1 --start 3 --timeout 100 --busy 99
-> would launch 1 thread and bind it to CPU3, lasting for 100 seconds,
-> with a CPU utilization of 99%. [1]
-> 
-> top result:
-> %Cpu3  : 98.4 us,  0.0 sy,  0.0 ni,  1.6 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
-> 
-> check util_avg:
-> cat /sys/kernel/debug/sched/debug | grep "cfs_rq\[3\]" -A 20 | grep util_avg
->   .util_avg                      : 611
-> 
-> So the util_avg/cpu capacity is 611/1024, which is much smaller than
-> 98.4% shown in the top result.
-> 
-> This might impact some logic in the scheduler. For example, group_is_overloaded()
-> would compare the group_capacity and group_util in the sched group, to
-> check if this sched group is overloaded or not. With this gap, even
-> when there is a nearly 100% workload, the sched group will not be regarded
-> as overloaded. Besides group_is_overloaded(), there are also other victims.
-> There is a ongoing work that aims to optimize the task wakeup in a LLC domain.
-> The main idea is to stop searching idle CPUs if the sched domain is overloaded[2].
-> This proposal also relies on the util_avg/CPU capacity to decide whether the LLC
-> domain is overloaded.
-> 
-> Analysis:
-> CPU frequency invariance has caused this difference. In summary,
-> the util_sum of cfs rq would decay quite fast when the CPU is in
-> idle, when the CPU frequency invariance is enabled.
-> 
-> The detail is as followed:
-> 
-> As depicted in update_rq_clock_pelt(), when the frequency invariance
-> is enabled, there would be two clock variables on each rq, clock_task
-> and clock_pelt:
-> 
->    The clock_pelt scales the time to reflect the effective amount of
->    computation done during the running delta time but then syncs back to
->    clock_task when rq is idle.
-> 
->    absolute time    | 1| 2| 3| 4| 5| 6| 7| 8| 9|10|11|12|13|14|15|16
->    @ max frequency  ------******---------------******---------------
->    @ half frequency ------************---------************---------
->    clock pelt       | 1| 2|    3|    4| 7| 8| 9|   10|   11|14|15|16
-> 
-> The fast decay of util_sum during idle is due to:
-> 1. rq->clock_pelt is always behind rq->clock_task
-> 2. rq->last_update is updated to rq->clock_pelt' after invoking ___update_load_sum()
-> 3. Then the CPU becomes idle, the rq->clock_pelt' would be suddenly increased
->    a lot to rq->clock_task
-> 4. Enters ___update_load_sum() again, the idle period is calculated by
->    rq->clock_task - rq->last_update, AKA, rq->clock_task - rq->clock_pelt'.
->    The lower the CPU frequency is, the larger the delta =
->    rq->clock_task - rq->clock_pelt' will be. Since the idle period will be
->    used to decay the util_sum only, the util_sum drops significantly during
->    idle period.
-> 
-> Proposal:
-> This symptom is not only caused by disabling turbo frequency, but it
-> would also appear if the user limits the max frequency at runtime. Because
-> if the frequency is always lower than the max frequency,
-> CPU frequency invariance would decay the util_sum quite fast during idle.
-> 
-> As some end users would disable turbo after boot up, this patch aims to
-> present this symptom and deals with turbo scenarios for now. It might
-> be ideal if CPU frequency invariance is aware of the max CPU frequency
-> (user specified) at runtime in the future.
-> 
-> [Previous patch seems to be lost on LKML, this is a resend, sorry for any
-> inconvenience]
-> 
-> Link: https://github.com/yu-chen-surf/x86_cpuload.git #1
-> Link: https://lore.kernel.org/lkml/20220310005228.11737-1-yu.c.chen@intel.com/ #2
-> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+> I tested providing rcu_nocbs= option, ensuring that is preferred over this.
 
-Reviewed-by: Giovanni Gherdovich <ggherdovich@suse.cz>
+Unless something has changed, this would change behavior relied upon
+the enterprise distros.  Last I checked, they want to supply a single
+binary, as evidenced by the recent CONFIG_PREEMPT_DYNAMIC Kconfig option,
+and they also want the default to be non-offloaded.  That is, given a
+kernel built with CONFIG_RCU_NOCB_CPU=y and without either a nohz_full
+or a nocbs_cpu boot parameter, all of the CPUs must be non-offloaded.
 
-You're right, when turbo is disabled, the frequency invariance code needs to
-know about it; it calculates freq_curr/freq_max and thinks that freq_max is
-some turbo level. For example commit 918229cdd5ab ("x86/intel_pstate: Handle
-runtime turbo disablement/enablement in frequency invariance") takes care of
-this when global.turbo_disabled changes, but before your patch nothing checks
-if the user disabled turbo from sysfs. Thanks for the fix!
+So for me to push this to mainline, I need an ack from someone from each
+of the enterprise distros, and each of those someones needs to understand
+the single-binary strategy used by the corresponding distro.
 
-Giovanni
+And is it really all -that- hard to specify an additional boot parameter
+across ChromeOS devices?  Android seems to manage it.  ;-)
 
+							Thanx, Paul
+
+> Signed-off-by: Joel Fernandes <joel@joelfernandes.org>
 > ---
->  drivers/cpufreq/intel_pstate.c | 1 +
->  1 file changed, 1 insertion(+)
+>  kernel/rcu/tree_nocb.h | 20 ++++++++++++++++++--
+>  1 file changed, 18 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> index 846bb3a78788..2216b24b6f84 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -1322,6 +1322,7 @@ static ssize_t store_no_turbo(struct kobject *a, struct kobj_attribute *b,
->  	mutex_unlock(&intel_pstate_limits_lock);
+> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+> index eeafb546a7a0..607fbf843467 100644
+> --- a/kernel/rcu/tree_nocb.h
+> +++ b/kernel/rcu/tree_nocb.h
+> @@ -1165,12 +1165,25 @@ EXPORT_SYMBOL_GPL(rcu_nocb_cpu_offload);
+>  void __init rcu_init_nohz(void)
+>  {
+>  	int cpu;
+> -	bool need_rcu_nocb_mask = false;
+> +	bool need_rcu_nocb_mask = false, set_nocb_mask_all = false;
+>  	struct rcu_data *rdp;
 >  
->  	intel_pstate_update_policies();
-> +	arch_set_max_freq_ratio(global.no_turbo);
+> +	/*
+> +	 * In case rcu_nocbs= was not passed on the kernel command line,
+> +	 * provide a sane default by offloading all CPUs. This provides a
+> +	 * sane default for rcu_nocbs and prevents users overlooking these
+> +	 * details.
+> +	 */
+> +	if (!rcu_nocb_is_setup) {
+> +		need_rcu_nocb_mask = true;
+> +		set_nocb_mask_all = true;
+> +	}
+> +
+>  #if defined(CONFIG_NO_HZ_FULL)
+> -	if (tick_nohz_full_running && cpumask_weight(tick_nohz_full_mask))
+> +	if (tick_nohz_full_running && cpumask_weight(tick_nohz_full_mask)) {
+>  		need_rcu_nocb_mask = true;
+> +		set_nocb_mask_all = false; /* NO_HZ_FULL provides its own mask. */
+> +	}
+>  #endif /* #if defined(CONFIG_NO_HZ_FULL) */
 >  
->  	mutex_unlock(&intel_pstate_driver_lock);
+>  	if (need_rcu_nocb_mask) {
+> @@ -1191,6 +1204,9 @@ void __init rcu_init_nohz(void)
+>  		cpumask_or(rcu_nocb_mask, rcu_nocb_mask, tick_nohz_full_mask);
+>  #endif /* #if defined(CONFIG_NO_HZ_FULL) */
 >  
-
+> +	if (set_nocb_mask_all)
+> +		cpumask_setall(rcu_nocb_mask);
+> +
+>  	if (!cpumask_subset(rcu_nocb_mask, cpu_possible_mask)) {
+>  		pr_info("\tNote: kernel parameter 'rcu_nocbs=', 'nohz_full', or 'isolcpus=' contains nonexistent CPUs.\n");
+>  		cpumask_and(rcu_nocb_mask, cpu_possible_mask,
+> -- 
+> 2.35.1.1178.g4f1659d476-goog
+> 

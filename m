@@ -2,55 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 598CA4F9734
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 15:46:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E814F973C
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 15:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236522AbiDHNsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 09:48:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50014 "EHLO
+        id S236497AbiDHNtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 09:49:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236515AbiDHNsA (ORCPT
+        with ESMTP id S235681AbiDHNtG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 09:48:00 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C3978BF4F
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 06:45:55 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 6EED11F85F;
-        Fri,  8 Apr 2022 13:45:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1649425554; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2/pyto4pumlbKOERRI/sbNmVs+jgtuPMB8KKfgBINDk=;
-        b=e6h1eGlnBt25PWGTV/BfxFdkI6en50CD0NdfhPAxE+Z6Ph8qJRcf9xSohNtwguFqE5JdDi
-        kwUAbQdIHJzGd6ML04jQau9q9xp4af7PlOfCqlUOsKor9ZLWM/Zs1O2DY5nMSS0FBJLhRq
-        R2sZpzx9ErHB5EnLlHel4miv1x9TFBU=
-Received: from suse.cz (unknown [10.100.216.66])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 1C51DA3B89;
-        Fri,  8 Apr 2022 13:45:54 +0000 (UTC)
-Date:   Fri, 8 Apr 2022 15:45:50 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
+        Fri, 8 Apr 2022 09:49:06 -0400
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B6EECDB2;
+        Fri,  8 Apr 2022 06:47:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649425621; x=1680961621;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=Z2KoO20U5Gou3STOQQVbT5tvwIoJoZ5aoHHnzZT/K3Y=;
+  b=lnGV7cx3CcSc5Tu8yNYSycT8snaDKM1NRA++nIJD8GQdPQSjWmBPG/Lk
+   sa5pO9+DQybtJj9KxYhuuS62+mC96IZcFH3PG2pnJJsg+IytU+J4IgyGY
+   wWygylp9bfl+0zqlGF36Qr3gPvY7TsNRWORWNJ3ddkPwpD4QRdltfRYJd
+   3S2IApXEtDGitCaVKu9qZWOQCjMbGaPN+YGkuaqb3kEdMQPftx6Xe+1q+
+   7Gjz6rKYuWdD4t4uCTfSNaBKYXsPgxpWwpWSujld66RZS3QeqvJFE7M6b
+   vKegfmJA2YfYOSWwiLgsWVl4U7KKsm1sCUZC4Oy0b8OXuizPZajsm+iv4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="322283260"
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="322283260"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 06:47:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="698187600"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
+  by fmsmga001.fm.intel.com with ESMTP; 08 Apr 2022 06:46:52 -0700
+Date:   Fri, 8 Apr 2022 21:46:41 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: guarantee forward progress: was: Re: [PATCH printk v2 11/12] printk:
- extend console_lock for proper kthread support
-Message-ID: <YlA8jpuziDrD27A2@alley>
-References: <20220405132535.649171-1-john.ogness@linutronix.de>
- <20220405132535.649171-12-john.ogness@linutronix.de>
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com
+Subject: Re: [PATCH v5 05/13] KVM: Extend the memslot to support fd-based
+ private memory
+Message-ID: <20220408134641.GD57095@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
+ <20220310140911.50924-6-chao.p.peng@linux.intel.com>
+ <YkIvEeC3/lgKTLPt@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220405132535.649171-12-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+In-Reply-To: <YkIvEeC3/lgKTLPt@google.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,356 +88,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2022-04-05 15:31:34, John Ogness wrote:
-> Currently threaded console printers synchronize against each
-> other using console_lock(). However, different console drivers
-> are unrelated and do not require any synchronization between
-> each other. Removing the synchronization between the threaded
-> console printers will allow each console to print at its own
-> speed.
+On Mon, Mar 28, 2022 at 09:56:33PM +0000, Sean Christopherson wrote:
+> On Thu, Mar 10, 2022, Chao Peng wrote:
+> > Extend the memslot definition to provide fd-based private memory support
+> > by adding two new fields (private_fd/private_offset). The memslot then
+> > can maintain memory for both shared pages and private pages in a single
+> > memslot. Shared pages are provided by existing userspace_addr(hva) field
+> > and private pages are provided through the new private_fd/private_offset
+> > fields.
+> > 
+> > Since there is no 'hva' concept anymore for private memory so we cannot
+> > rely on get_user_pages() to get a pfn, instead we use the newly added
+> > memfile_notifier to complete the same job.
+> > 
+> > This new extension is indicated by a new flag KVM_MEM_PRIVATE.
+> > 
+> > Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> > ---
+> >  Documentation/virt/kvm/api.rst | 37 +++++++++++++++++++++++++++-------
+> >  include/linux/kvm_host.h       |  7 +++++++
+> >  include/uapi/linux/kvm.h       |  8 ++++++++
+> >  3 files changed, 45 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> > index 3acbf4d263a5..f76ac598606c 100644
+> > --- a/Documentation/virt/kvm/api.rst
+> > +++ b/Documentation/virt/kvm/api.rst
+> > @@ -1307,7 +1307,7 @@ yet and must be cleared on entry.
+> >  :Capability: KVM_CAP_USER_MEMORY
+> >  :Architectures: all
+> >  :Type: vm ioctl
+> > -:Parameters: struct kvm_userspace_memory_region (in)
+> > +:Parameters: struct kvm_userspace_memory_region(_ext) (in)
+> >  :Returns: 0 on success, -1 on error
+> >  
+> >  ::
+> > @@ -1320,9 +1320,17 @@ yet and must be cleared on entry.
+> >  	__u64 userspace_addr; /* start of the userspace allocated memory */
+> >    };
+> >  
+> > +  struct kvm_userspace_memory_region_ext {
+> > +	struct kvm_userspace_memory_region region;
 > 
-> But the threaded consoles printers do still need to synchronize
-> against console_lock() callers. Introduce a per-console mutex
-> and a new console flag CON_THD_BLOCKED to provide this
-> synchronization.
+> Peeking ahead, the partial switch to the _ext variant is rather gross.  I would
+> prefer that KVM use an entirely different, but binary compatible, struct internally.
+> And once the kernel supports C11[*], I'm pretty sure we can make the "region" in
+> _ext an anonymous struct, and make KVM's internal struct a #define of _ext.  That
+> should minimize the churn (no need to get the embedded "region" field), reduce
+> line lengths, and avoid confusion due to some flows taking the _ext but others
+> dealing with only the "base" struct.
+
+Will try that.
+
 > 
-> --- a/kernel/printk/printk.c
-> +++ b/kernel/printk/printk.c
-> @@ -2691,6 +2760,22 @@ static inline bool console_is_usable(struct console *con)
->  static void __console_unlock(void)
->  {
->  	console_locked = 0;
-> +
-> +	/*
-> +	 * Depending on whether console_lock() or console_trylock() was used,
-> +	 * appropriately allow the kthread printers to continue.
-> +	 */
-> +	if (console_kthreads_blocked)
-> +		console_kthreads_unblock();
-> +	else
-> +		console_kthreads_atomic_unblock();
-> +
-> +	/*
-> +	 * New records may have arrived while the console was locked.
-> +	 * Wake the kthread printers to print them.
-> +	 */
-> +	wake_up_klogd();
-
-Thinking loudly:
-
-Strictly speaking, this is needed only when kthreads are allowed. It
-might make sense to do:
-
-	if (!allow_direct_printing())
-		wake_up_klogd();
-
-On the other hand, the check is racy. So it might be better to always
-call wake_up_klogd() and do not worry about it. The optimization
-probably is not worth it.
-
-But this brings the question. How do we actually ensure that either
-kthreads or direct printk will handle pending messages.
-
-vprintk_emit() or defer_console_output() make sure that either
-direct printkg is used or kthreads are waken. It makes the decision
-via the current state of allow_direct_printing(). But it might
-change in the meantime.
-
-allow_direct_printing() might change in both directions:
-
-1. printk trigger direct -> kthreads enabled when in direct mode.
-
-   This switch might be handled by the above wake_up_klogd().
-
-   If it is non-conditional, it might handle  also racy
-   mutiple direct -> kthread -> direct mode swtiches.
-
-
-2. printk wakes kthreads -> direct mode allowed when there
-   are still pending messages.
-
-   I am afraid that we do not have this path well covered.
-
-   It probably worked "better" in v1 where the kthreads continued
-   handling the messages until all were flushed. But I guess that
-   there were still races when new messages appeared after some
-   kthreads finished the job.
-
-   Hmm, it actually is not enough to call defer_console_output()
-   in printk_prefer_direct_enter(). It is because
-   wake_up_klogd_work_func() does console_trylock(). It might
-   still be blocked by an active kthread. But the other kthreads
-   might already sleep.
-
-   I think that we actually need to call defer_console_output()
-   after kthread() unblocks console_trylock() and
-   the direct mode is preferred(). I mean something like:
-
-static int printk_kthread_func(void *data)
-{
-[...]
-	for (;;) {
-[...]
-		console_emit_next_record(con, text, ext_text, dropped_text);
-		seq = con->seq;
-
-		console_kthread_printing_exit();
-
-+		/*
-+		 * This thread does not longer block console_trylock(). Make
-+		 * sure that someone will try to flush pending
-+		 * messages in the direct mode when it has got preferred
-+		 * in the meantime.
-+		 */
-+		if (allow_direct_printing())
-+			deffer_console_output();
-+
-		mutex_unlock(&con->lock);
-	}
-[...]
-}
-
-Hmm, it is still not enough. We should do it also in printer_should_wake().
-It will be needed when the original printk() woke kthreads and
-the direct mode got preferred before the kthread started printing.
-In this case, the kthreads will do nothing and nobody will handle
-the pending messages.
-
-I played a lot with it and it is really hard because:
-
-   + new messages can appear anytime
-   + direct mode might get requested anytime
-   + only the direct mode knows whether all messages were flushed
-     on all consoles
-
-IMHO, ideal logic would be:
-
-   + new messages will always trigger direct printing or wake
-     kthreads, newer both
-
-   + direct mode will wake kthreads when kthreads are allowed
-     and there are penging messages.
-
-   + (the last) kthread will wake_up direct mode when it is requested
-     and there are pending messages.
-
-We could use the trick that the direct mode never gives up when there
-are pending messages.
-
-It requires moving printk kthreads into a separate waitqueue:
-
-DECLARE_WAIT_QUEUE_HEAD(printk_kthread_wait);
-
-I suggest to rename the flags in the wake_up_klogd() API
-
-/*
- * Delayed printk version, for scheduler-internal messages:
- */
-
-#define PRINTK_WAKE_UP_LOG		0x01
-#define PRINTK_WAKE_UP_KTHREADS		0x02
-#define PRINTK_PENDING_DIRECT_OUTPUT	0x04
-
-static DEFINE_PER_CPU(int, printk_pending);
-
-static void wake_up_klogd_work_func(struct irq_work *irq_work)
-{
-	int pending = this_cpu_xchg(printk_pending, 0);
-
-	if (pending & PRINTK_PENDING_DIRECT_OUTPUT) {
-		printk_prefer_direct_enter();
-
-		/* If trylock fails, someone else is doing the printing */
-		if (console_trylock())
-			console_unlock();
-
-		printk_prefer_direct_exit();
-	}
-
-	if (pending & PRINTK_WAKEUP_LOG)
-		wake_up_interruptible_all(&log_wait);
-
-	if (pending & PRINTK_WAKEUP_KTHREADS)
-		wake_up_interruptible_all(&printk_kthread_wait);
-}
-
-static DEFINE_PER_CPU(struct irq_work, printk_wake_up_work) =
-	IRQ_WORK_INIT_LAZY(wake_up_klogd_work_func);
-
-static void __printk_wake_up(int val)
-{
-	if (!printk_percpu_data_ready())
-		return;
-
-	preempt_disable();
-	/*
-	 * Guarantee any new records can be seen by printing threads before
-	 * checking if the wait queue is empty.
-	 *
-	 * The full memory barrier within wq_has_sleeper() pairs with the full
-	 * memory barrier within set_current_state() of
-	 * prepare_to_wait_event(), which is called after ___wait_event() adds
-	 * the waiter but before it has checked the wait condition.
-	 *
-	 * See printk_kthread_func:A for the pairing memory barrier.
-	 */
-	 if (wq_has_sleeper(&log_wait) || /* LMM(__printk_wake_up:A) */
-	     wq_has_sleeper(&printk_kthread_wait) || /* LMM(__printk_wake_up:B) */
-	     (val & PRINTK_PENDING_DIRECT_OUTPUT)) {
-		this_cpu_or(printk_pending, val);
-		irq_work_queue(this_cpu_ptr(&printk_wake_up_work));
-	}
-	preempt_enable();
-}
-
-void printk_wake_up_klogd(void)
-{
-	__wake_up_klogd(PRINTK_WAKE_UP_LOG);
-}
-
-void printk_wake_up_all(void)
-{
-	__wake_up_klogd(PRINTK_WAKE_UP_LOG || PRITNK_WAKE_UP_KTHREADS);
-}
-
-void defer_console_output(void)
-{
-	int val = PRINTK_WAKE_UP_LOG;
-
-	/*
-	 * If console deferring was called with preferred direct printing,
-	 * make the irqwork perform the direct printing.
-	 */
-	if (atomic_read(&printk_prefer_direct))
-		val |= PRINTK_PENDING_DIRECT_OUTPUT;
-	else
-		val |= PRINTK_WAKE_UP_KTHREADS;
-
-	__wake_up_klogd(val);
-}
-
-
-And do
-
-asmlinkage int vprintk_emit(int facility, int level,
-			    const struct dev_printk_info *dev_info,
-			    const char *fmt, va_list args)
-{
-[...]
-	/* If called from the scheduler, we can not call up(). */
-	if (!in_sched && allow_direct_printing()) {
-		preempt_disable();
-		if (console_trylock_spinning())
-			console_unlock();
-		preempt_enable();
-		printk_wake_up_klogd();
-	} else {
-		printk_wake_up_all();
-	}
-
-	return printed_len;
-}
-
-static bool printer_should_wake(struct console *con, u64 seq)
-{
-[...]
-	if (__allow_direct_printing()) {
-		/* Make sure that someone does the direct printing. */
-		if (rb_read_valid(prb, next_seq, NULL))
-			defer_console_output();
-
-		return false;
-	}
-[...]
-}
-
-void console_unlock(void)
-{
-	bool do_cond_resched;
-	bool handover;
-	bool flushed;
-	u64 next_seq;
-
-	if (console_suspended) {
-		up_console_sem();
-		return;
-	}
-
-	/*
-	 * Console drivers are called with interrupts disabled, so
-	 * @console_may_schedule should be cleared before; however, we may
-	 * end up dumping a lot of lines, for example, if called from
-	 * console registration path, and should invoke cond_resched()
-	 * between lines if allowable.  Not doing so can cause a very long
-	 * scheduling stall on a slow console leading to RCU stall and
-	 * softlockup warnings which exacerbate the issue with more
-	 * messages practically incapacitating the system. Therefore, create
-	 * a local to use for the printing loop.
-	 */
-	do_cond_resched = console_may_schedule;
-
-	do {
-		console_may_schedule = 0;
-
-		if (!any_usable_console()) {
-			__console_unlock();
-			break;
-		}
-
-		flushed = console_flush_all(do_cond_resched, &next_seq, &handover);
-		if (handover)
-			return;
-
-		__console_unlock();
-
-		/* Any pending messages? */
-		if (!prb_read_valid(prb, next_seq, NULL))
-			break ;
-
-		if (!allow_direct_printing()) {
-			/*
-			 * Make sure that kthreads take over handling
-			 * the pending messages.
-			 */
-			printk_wake_up_kthreads();
-			break;
-		}
-
-		/* Only panic CPU should handle consoles. */
-		if (abandon_console_lock_in_panic())
-			break;
-
-		WARN_ONCE(!flushed,
-			  "The consoles were not flused in the direct more from unknown reasons\n");
-
-		/*
-		 * Try to continue with direct printing. If the trylock fails,
-		 * another context is already handling the printing. It is
-		 * responsible for flushing everything.
-		 */
-	} while console_trylock();
-}
-
-Note that I have added back any_usable_console(). console_flush_all()
-might fail from different reasons. Each reason needs its own handling.
-And we need to know that we handled all and use WARN_ONCE().
-
-
-Uff, I have spent few hours thinking about it and reworked it several
-times. The above is the best solution that I was able to come up with.
-
-I send what I have now because I feel tired and do not want to sit
-on it. But it is possible that I just have got lost and will see it
-on Monday.
-
->  	up_console_sem();
->  }
->  
-
-Alternative solution would be to go back to v1 and allow kthreads
-handling the messages even when direct more is preferred. The direct
-mode would be used only when console_trylock() succeeds or when
-some code calls console_lock().
-
-Best Regards,
-Petr
+> Maybe kvm_user_memory_region or kvm_user_mem_region?  Though it's tempting to be
+> evil and usurp the old kvm_memory_region :-)
+> 
+> E.g. pre-C11 do
+> 
+> struct kvm_userspace_memory_region_ext {
+> 	struct kvm_userspace_memory_region region;
+> 	__u64 private_offset;
+> 	__u32 private_fd;
+> 	__u32 padding[5];
+> };
+> 
+> #ifdef __KERNEL__
+> struct kvm_user_mem_region {
+> 	__u32 slot;
+> 	__u32 flags;
+> 	__u64 guest_phys_addr;
+> 	__u64 memory_size; /* bytes */
+> 	__u64 userspace_addr; /* start of the userspace allocated memory */
+> 	__u64 private_offset;
+> 	__u32 private_fd;
+> 	__u32 padding[5];
+> };
+> #endif
+> 
+> and then post-C11 do
+> 
+> struct kvm_userspace_memory_region_ext {
+> #ifdef __KERNEL__
+
+Is this #ifndef? As I think anonymous struct is only for kernel?
+
+Thanks,
+Chao
+
+> 	struct kvm_userspace_memory_region region;
+> #else
+> 	struct kvm_userspace_memory_region;
+> #endif
+> 	__u64 private_offset;
+> 	__u32 private_fd;
+> 	__u32 padding[5];
+> };
+> 
+> #ifdef __KERNEL__
+> #define kvm_user_mem_region kvm_userspace_memory_region_ext
+> #endif
+> 
+> [*] https://lore.kernel.org/all/20220301145233.3689119-1-arnd@kernel.org
+> 
+> > +	__u64 private_offset;
+> > +	__u32 private_fd;
+> > +	__u32 padding[5];
+> > +};

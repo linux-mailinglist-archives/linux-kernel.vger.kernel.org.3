@@ -2,136 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD85F4F93A4
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 13:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 416A04F93A6
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 13:20:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233038AbiDHLVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 07:21:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36228 "EHLO
+        id S229942AbiDHLWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 07:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiDHLVP (ORCPT
+        with ESMTP id S233182AbiDHLWT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 07:21:15 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 146DA255C1F;
-        Fri,  8 Apr 2022 04:19:13 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CF61911FB;
-        Fri,  8 Apr 2022 04:19:12 -0700 (PDT)
-Received: from [10.163.33.132] (unknown [10.163.33.132])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2237A3F73B;
-        Fri,  8 Apr 2022 04:19:06 -0700 (PDT)
-Message-ID: <dcd6ffe0-9ee2-a862-4ed7-5d04505e6144@arm.com>
-Date:   Fri, 8 Apr 2022 16:49:36 +0530
+        Fri, 8 Apr 2022 07:22:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11452BF336;
+        Fri,  8 Apr 2022 04:20:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C648EB82A26;
+        Fri,  8 Apr 2022 11:20:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 719E2C385A8;
+        Fri,  8 Apr 2022 11:20:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649416813;
+        bh=VMfqz1PI0SlcPX2wiDSaLUmAvkMioh7K9Yq27Leg+sE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=MgEnG/Cn96SvSFO1guc8A4d4YbO6kixpsT/ilSbSsI0h73GNOZO31GKJ3vrs5Fctj
+         +ItSr6PDgy83SJ0TzJD7KLrcWFnErwqRWQDyZHBmXXTaMrnuqCRugqp9khoPpvBMqR
+         oqoNg7r68U7356Ay8WvUnb6ALrSxf69YBBigwB0xyx2OTjqc1G5fQuLCPnG11GygU3
+         pzzZM1TlmPvNTbdQT7pQTQAj5thC1R/goqv0DotrodXtVXCLRzK4VlHFmbsO30Mxjb
+         qHaz+ZoThQbullol8Xw1CfzeB7Kx0ZwXnIx/AB+TH+4VkvXQtLoJWZoWl/XrBUVTp1
+         HLTsxGSHquVow==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 30DDBE6D402;
+        Fri,  8 Apr 2022 11:20:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH V4 3/7] arm64/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Content-Language: en-US
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        Christoph Hellwig <hch@infradead.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Will Deacon <will@kernel.org>
-References: <20220407103251.1209606-1-anshuman.khandual@arm.com>
- <20220407103251.1209606-4-anshuman.khandual@arm.com>
- <YlAOO2H/Ay/y9HOv@arm.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <YlAOO2H/Ay/y9HOv@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] bonding: Update layer2 and layer2+3 hash formula
+ documentation
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164941681319.25766.222385477532550731.git-patchwork-notify@kernel.org>
+Date:   Fri, 08 Apr 2022 11:20:13 +0000
+References: <20220406135420.21682-1-gal@nvidia.com>
+In-Reply-To: <20220406135420.21682-1-gal@nvidia.com>
+To:     Gal Pressman <gal@nvidia.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        corbet@lwn.net, j.vosburgh@gmail.com, vfalico@gmail.com,
+        andy@greyhouse.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
+
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Wed, 6 Apr 2022 16:54:20 +0300 you wrote:
+> When using layer2 or layer2+3 hash, only the 5th byte of the MAC
+> addresses is used.
+> 
+> Signed-off-by: Gal Pressman <gal@nvidia.com>
+> ---
+>  Documentation/networking/bonding.rst | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+
+Here is the summary with links:
+  - bonding: Update layer2 and layer2+3 hash formula documentation
+    https://git.kernel.org/netdev/net/c/2cd1881b9821
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-On 4/8/22 15:58, Catalin Marinas wrote:
-> On Thu, Apr 07, 2022 at 04:02:47PM +0530, Anshuman Khandual wrote:
->> diff --git a/arch/arm64/mm/mmap.c b/arch/arm64/mm/mmap.c
->> index 77ada00280d9..307534fcec00 100644
->> --- a/arch/arm64/mm/mmap.c
->> +++ b/arch/arm64/mm/mmap.c
->> @@ -55,3 +55,36 @@ static int __init adjust_protection_map(void)
->>  	return 0;
->>  }
->>  arch_initcall(adjust_protection_map);
->> +
->> +static pgprot_t arm64_arch_vm_get_page_prot(unsigned long vm_flags)
->> +{
->> +	pteval_t prot = 0;
->> +
->> +	if (vm_flags & VM_ARM64_BTI)
->> +		prot |= PTE_GP;
->> +
->> +	/*
->> +	 * There are two conditions required for returning a Normal Tagged
->> +	 * memory type: (1) the user requested it via PROT_MTE passed to
->> +	 * mmap() or mprotect() and (2) the corresponding vma supports MTE. We
->> +	 * register (1) as VM_MTE in the vma->vm_flags and (2) as
->> +	 * VM_MTE_ALLOWED. Note that the latter can only be set during the
->> +	 * mmap() call since mprotect() does not accept MAP_* flags.
->> +	 * Checking for VM_MTE only is sufficient since arch_validate_flags()
->> +	 * does not permit (VM_MTE & !VM_MTE_ALLOWED).
->> +	 */
->> +	if (vm_flags & VM_MTE)
->> +		prot |= PTE_ATTRINDX(MT_NORMAL_TAGGED);
->> +
->> +	return __pgprot(prot);
->> +}
->> +
->> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
->> +{
->> +	pgprot_t ret = __pgprot(pgprot_val(protection_map[vm_flags &
->> +				(VM_READ|VM_WRITE|VM_EXEC|VM_SHARED)]) |
->> +				pgprot_val(arm64_arch_vm_get_page_prot(vm_flags)));
->> +
->> +	return ret;
->> +}
->> +EXPORT_SYMBOL(vm_get_page_prot);
-> 
-> Could you write all this in a single function? I think I mentioned it in
-> a previous series (untested):
-
-Right, missed that.
-
-> 
-> pgprot_t vm_get_page_prot(unsigned long vm_flags)
-> {
-> 	pteval_t prot = pgprot_val(protection_map[vm_flags &
-> 				   (VM_READ|VM_WRITE|VM_EXEC|VM_SHARED)]);
-> 
-> 	if (vm_flags & VM_ARM64_BTI)
-> 		prot |= PTE_GP;
-> 
-> 	/*
-> 	 * There are two conditions required for returning a Normal Tagged
-> 	 * memory type: (1) the user requested it via PROT_MTE passed to
-> 	 * mmap() or mprotect() and (2) the corresponding vma supports MTE. We
-> 	 * register (1) as VM_MTE in the vma->vm_flags and (2) as
-> 	 * VM_MTE_ALLOWED. Note that the latter can only be set during the
-> 	 * mmap() call since mprotect() does not accept MAP_* flags.
-> 	 * Checking for VM_MTE only is sufficient since arch_validate_flags()
-> 	 * does not permit (VM_MTE & !VM_MTE_ALLOWED).
-> 	 */
-> 	if (vm_flags & VM_MTE)
-> 		prot |= PTE_ATTRINDX(MT_NORMAL_TAGGED);
-> 
-> 	return __pgprot(prot);
-> }
-> EXPORT_SYMBOL(vm_get_page_prot);
-> 
-> With that:
-
-Sure, will change them into a single function.
-
-> 
-> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-> 

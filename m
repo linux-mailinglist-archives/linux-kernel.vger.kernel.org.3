@@ -2,175 +2,605 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 714D74F9625
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:51:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDE284F962C
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:51:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235947AbiDHMwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 08:52:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36034 "EHLO
+        id S235965AbiDHMxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 08:53:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbiDHMwN (ORCPT
+        with ESMTP id S234192AbiDHMxq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 08:52:13 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D05159A64
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 05:50:10 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id h63so10387386iof.12
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 05:50:10 -0700 (PDT)
+        Fri, 8 Apr 2022 08:53:46 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8203213F46
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 05:51:40 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id d3so12686795wrb.7
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 05:51:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gWnxP81Krl1/ek3smnFr/1fIQ4FLd2YLVlnmdEEfWNY=;
-        b=qpY9QBJF9tmKjitl46Z5T+orRb9634UQpMZOb4n219nmn3FiakgsDIkqjDAiWqitn/
-         9YD9Wdxei9le2dgeXk/xmaCfI3W+YaddTAWyNShSpFB/fkXMRtZm79jDd6GlXtJJuk8t
-         abOs2R4wLAGiMT5O8VfIQeaRntSLQmT87LhADlaVTGLt1DMR2cCthjwqyV3K6Jitn3CY
-         ZXe428mTWq76ki3zT8K2Q8uR7h9GqmB57i8lqXWk3vFYe5Ezg8s1yWvwebKkbCpuh2ak
-         /zzCMuwahIWpNm86bi2EkZTLw3QD0Zh89X/18OdKMgzpwNJ5TYKpJjcFH8x0ufBblXiO
-         0HMw==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=+ushdaDT6R8wAElXurx/D1QE7Pm5eUQe5DHgDL3fi+8=;
+        b=FIu9/QBAVcEIQ/LqX3IZdth3rIPMzbla0uHY5a2s316qONaU92Coe0On1anqH/aTqQ
+         9wiFnGrs4h0mV+3V6H2buZzdOI4/EScAp9gpSyXuVdbOn6DM9xZKeSbSyqWRIReDSdYg
+         V+VPH7u42Re38bWQSGEv2ucL6o3l0Els7eOYFWEIvQThEbu0kttZRUlbPOSlEnhx3sbs
+         cUPK8czixrU+tndEaaP02bA4cdqBl0vz3stQHdsD6rkNB7AoMAywaPjg/qUFt1ZFwokf
+         FaoO07CfqEARHnuetIuaAG6YOcAO0xW7cJ3ycHoHgFM0w197fka51jWo+8zvHOwFspQd
+         48nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gWnxP81Krl1/ek3smnFr/1fIQ4FLd2YLVlnmdEEfWNY=;
-        b=8Bxz9P9vGYgxOrYxhHek0bL1YjV8vqvmNMWZXeL0vCrfazStqC7QXH60ebW3GjYRrj
-         hEO0PeNbhutC4jcV/Th0DkYSiB3AHk7chi8aRfQYxzQlIsdvf4dtM7mMBo1bjfdzIh7C
-         2Q1NWdUsR7dBnJGauLnccQ5RttT/Pv5wKT+GX1j/gzxgB46QsSxJ64cjx9rKNvR2IgwT
-         5RmIodCdKfugQOYky/BEZa8Bb6RwkL/5ZPGgxBkdpTopgZw5mQtxgz1u9OgYk3kFO7uh
-         xczV0GUBz5bUoKu3oJeps19xkX3UQRhrCU3E4sk71+q3qSpQ1axtkl0mUdwOzb9mX4nO
-         jjDw==
-X-Gm-Message-State: AOAM5324Dg3FzIvfQvRQgXVz8nnxTnLrD4uZbkKE8HguE6mnxJsMtYzP
-        UagMKQ/oR0om17YlnZYteZmUsHmxtqRVUj1gusI=
-X-Google-Smtp-Source: ABdhPJykcIMT6OeBz6l6xE4bKmhe0btxTcTx2lyApwjPiUsc/xUtP6p3XpX/0v0qM9QXOGF76Pt09JnNGaSQWrBl/5A=
-X-Received: by 2002:a05:6638:cd3:b0:325:ff7a:4f79 with SMTP id
- e19-20020a0566380cd300b00325ff7a4f79mr874384jak.22.1649422209917; Fri, 08 Apr
- 2022 05:50:09 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=+ushdaDT6R8wAElXurx/D1QE7Pm5eUQe5DHgDL3fi+8=;
+        b=AOiQaBf8SOW8OucYn2ncjrVUNJZsuMtf90aSh9vf0ULzJVBobfMAJRfHiXo9AGsv70
+         uatI+RbeZq3vpNBT/tXpT06fC5KZRqa2u1uG+OivUyBwKI71KkCnUKhMTuVQM+94/X40
+         VWK4MVaxZY15cDwHsjZE5U1wD1KkJDex7uhkYRqpP51Zn1Z8G2ThGBrQ73Wh3rf4UmhI
+         jjMeNe/k0cM8IkiHMRWLuWQLba6IbK3oESQidQpz8O+/l5LtdLCsB1FNpONo5kkyJbNS
+         DxxdZJgPpF0buw11LmLDI5Qe3HePjtwNILGQQXBFXtLbwvsgMcPkXOGgqiKORytq/snS
+         CSRw==
+X-Gm-Message-State: AOAM533bOr+zX1RakwcUBL3kYnagdWy06B0gW/3PVM34qNYOZrfnJoc5
+        Map4wLePBVzBk9GUe4qU+YM1bQ==
+X-Google-Smtp-Source: ABdhPJxkiBpHeoonQ7ZyGOYqMbuNC43PmMtBuCXRD9ZP2VUfxD/JLS3x3L5yqkmOwOQdGwL0KvXIkQ==
+X-Received: by 2002:adf:a482:0:b0:1e3:3e5f:496c with SMTP id g2-20020adfa482000000b001e33e5f496cmr14648947wrb.606.1649422298785;
+        Fri, 08 Apr 2022 05:51:38 -0700 (PDT)
+Received: from ?IPV6:2001:861:44c0:66c0:eacd:ce6:e294:acd1? ([2001:861:44c0:66c0:eacd:ce6:e294:acd1])
+        by smtp.gmail.com with ESMTPSA id v18-20020a5d5912000000b00205a7d0c6a3sm18924568wrd.69.2022.04.08.05.51.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Apr 2022 05:51:38 -0700 (PDT)
+Message-ID: <49f4f0db-be20-a435-1a21-20df81888eb9@baylibre.com>
+Date:   Fri, 8 Apr 2022 14:51:37 +0200
 MIME-Version: 1.0
-References: <20220408124323.10028-1-vincenzo.frascino@arm.com>
-In-Reply-To: <20220408124323.10028-1-vincenzo.frascino@arm.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Fri, 8 Apr 2022 14:49:59 +0200
-Message-ID: <CA+fCnZczFuOo0sxcrvihzJY_j0JQmH26J=4uMaz7-bsqnhakzg@mail.gmail.com>
-Subject: Re: [PATCH v2] kasan: Fix hw tags enablement when KUNIT tests are disabled
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 5/5] drm: bridge: dw_hdmi: Audio: Add General Parallel
+ Audio (GPA) driver
+Content-Language: en-US
+To:     Sandor Yu <Sandor.yu@nxp.com>, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, andrzej.hajda@intel.com,
+        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, hverkuil-cisco@xs4all.nl
+Cc:     shengjiu.wang@nxp.com, cai.huoqing@linux.dev, maxime@cerno.tech,
+        harry.wentland@amd.com
+References: <cover.1649412256.git.Sandor.yu@nxp.com>
+ <2ab98e4cf8fccc56dbb69b6d5248bb244f0c2a61.1649412256.git.Sandor.yu@nxp.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+In-Reply-To: <2ab98e4cf8fccc56dbb69b6d5248bb244f0c2a61.1649412256.git.Sandor.yu@nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 8, 2022 at 2:43 PM Vincenzo Frascino
-<vincenzo.frascino@arm.com> wrote:
->
-> Kasan enables hw tags via kasan_enable_tagging() which based on the mode
-> passed via kernel command line selects the correct hw backend.
-> kasan_enable_tagging() is meant to be invoked indirectly via the cpu features
-> framework of the architectures that support these backends.
-> Currently the invocation of this function is guarded by CONFIG_KASAN_KUNIT_TEST
-> which allows the enablement of the correct backend only when KUNIT tests are
-> enabled in the kernel.
->
-> This inconsistency was introduced in commit:
->
->   ed6d74446cbf ("kasan: test: support async (again) and asymm modes for HW_TAGS")
->
-> ... and prevents to enable MTE on arm64 when KUNIT tests for kasan hw_tags are
-> disabled.
->
-> Fix the issue making sure that the CONFIG_KASAN_KUNIT_TEST guard does not
-> prevent the correct invocation of kasan_enable_tagging().
->
-> Fixes: ed6d74446cbf ("kasan: test: support async (again) and asymm modes for HW_TAGS")
-> Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-> Cc: Alexander Potapenko <glider@google.com>
-> Cc: Andrey Konovalov <andreyknvl@gmail.com>
-> Cc: Dmitry Vyukov <dvyukov@google.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+On 08/04/2022 12:32, Sandor Yu wrote:
+> General Parallel Audio (GPA) interface is one of the supported
+> audio interface for synopsys HDMI module, which has verified for
+> i.MX8MPlus platform.
+> This is initial version for GPA.
+> 
+> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+> Signed-off-by: Sandor Yu <Sandor.yu@nxp.com>
 > ---
->  mm/kasan/hw_tags.c |  5 +++--
->  mm/kasan/kasan.h   | 10 ++++++----
->  2 files changed, 9 insertions(+), 6 deletions(-)
->
-> diff --git a/mm/kasan/hw_tags.c b/mm/kasan/hw_tags.c
-> index 07a76c46daa5..9e1b6544bfa8 100644
-> --- a/mm/kasan/hw_tags.c
-> +++ b/mm/kasan/hw_tags.c
-> @@ -336,8 +336,6 @@ void __kasan_poison_vmalloc(const void *start, unsigned long size)
->
->  #endif
->
-> -#if IS_ENABLED(CONFIG_KASAN_KUNIT_TEST)
-> -
->  void kasan_enable_tagging(void)
->  {
->         if (kasan_arg_mode == KASAN_ARG_MODE_ASYNC)
-> @@ -347,6 +345,9 @@ void kasan_enable_tagging(void)
->         else
->                 hw_enable_tagging_sync();
->  }
+>   drivers/gpu/drm/bridge/synopsys/Kconfig       |  10 +
+>   drivers/gpu/drm/bridge/synopsys/Makefile      |   1 +
+>   .../drm/bridge/synopsys/dw-hdmi-gp-audio.c    | 199 ++++++++++++++++++
+>   drivers/gpu/drm/bridge/synopsys/dw-hdmi.c     | 128 ++++++++++-
+>   drivers/gpu/drm/bridge/synopsys/dw-hdmi.h     |  13 +-
+>   include/drm/bridge/dw_hdmi.h                  |   5 +
+>   6 files changed, 353 insertions(+), 3 deletions(-)
+>   create mode 100644 drivers/gpu/drm/bridge/synopsys/dw-hdmi-gp-audio.c
+> 
+> diff --git a/drivers/gpu/drm/bridge/synopsys/Kconfig b/drivers/gpu/drm/bridge/synopsys/Kconfig
+> index 21a1be3ced0f..a4a31b669b65 100644
+> --- a/drivers/gpu/drm/bridge/synopsys/Kconfig
+> +++ b/drivers/gpu/drm/bridge/synopsys/Kconfig
+> @@ -25,6 +25,16 @@ config DRM_DW_HDMI_I2S_AUDIO
+>   	  Support the I2S Audio interface which is part of the Synopsys
+>   	  Designware HDMI block.
+>   
+> +config DRM_DW_HDMI_GP_AUDIO
+> +	tristate "Synopsys Designware GP Audio interface"
+> +	depends on DRM_DW_HDMI && SND
+> +	select SND_PCM
+> +	select SND_PCM_ELD
+> +	select SND_PCM_IEC958
+> +	help
+> +	  Support the GP Audio interface which is part of the Synopsys
+> +	  Designware HDMI block.
 > +
-> +#if IS_ENABLED(CONFIG_KASAN_KUNIT_TEST)
+>   config DRM_DW_HDMI_CEC
+>   	tristate "Synopsis Designware CEC interface"
+>   	depends on DRM_DW_HDMI
+> diff --git a/drivers/gpu/drm/bridge/synopsys/Makefile b/drivers/gpu/drm/bridge/synopsys/Makefile
+> index 91d746ad5de1..ce715562e9e5 100644
+> --- a/drivers/gpu/drm/bridge/synopsys/Makefile
+> +++ b/drivers/gpu/drm/bridge/synopsys/Makefile
+> @@ -1,6 +1,7 @@
+>   # SPDX-License-Identifier: GPL-2.0-only
+>   obj-$(CONFIG_DRM_DW_HDMI) += dw-hdmi.o
+>   obj-$(CONFIG_DRM_DW_HDMI_AHB_AUDIO) += dw-hdmi-ahb-audio.o
+> +obj-$(CONFIG_DRM_DW_HDMI_GP_AUDIO) += dw-hdmi-gp-audio.o
+>   obj-$(CONFIG_DRM_DW_HDMI_I2S_AUDIO) += dw-hdmi-i2s-audio.o
+>   obj-$(CONFIG_DRM_DW_HDMI_CEC) += dw-hdmi-cec.o
+>   
+> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi-gp-audio.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi-gp-audio.c
+> new file mode 100644
+> index 000000000000..10a957c85a83
+> --- /dev/null
+> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi-gp-audio.c
+> @@ -0,0 +1,199 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * dw-hdmi-gp-audio.c
+> + *
+> + * Copyright 2020-2022 NXP
+> + */
+> +#include <linux/io.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/dmaengine.h>
+> +#include <linux/dma-mapping.h>
+> +#include <drm/bridge/dw_hdmi.h>
+> +#include <drm/drm_edid.h>
+> +#include <drm/drm_connector.h>
 > +
->  EXPORT_SYMBOL_GPL(kasan_enable_tagging);
->
->  void kasan_force_async_fault(void)
-> diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
-> index d79b83d673b1..b01b4bbe0409 100644
-> --- a/mm/kasan/kasan.h
-> +++ b/mm/kasan/kasan.h
-> @@ -355,25 +355,27 @@ static inline const void *arch_kasan_set_tag(const void *addr, u8 tag)
->  #define hw_set_mem_tag_range(addr, size, tag, init) \
->                         arch_set_mem_tag_range((addr), (size), (tag), (init))
->
-> +void kasan_enable_tagging(void);
+> +#include <sound/hdmi-codec.h>
+> +#include <sound/asoundef.h>
+> +#include <sound/core.h>
+> +#include <sound/initval.h>
+> +#include <sound/pcm.h>
+> +#include <sound/pcm_drm_eld.h>
+> +#include <sound/pcm_iec958.h>
+> +#include <sound/dmaengine_pcm.h>
 > +
->  #else /* CONFIG_KASAN_HW_TAGS */
->
->  #define hw_enable_tagging_sync()
->  #define hw_enable_tagging_async()
->  #define hw_enable_tagging_asymm()
->
-> +static inline void kasan_enable_tagging(void) { }
+> +#include "dw-hdmi-audio.h"
 > +
->  #endif /* CONFIG_KASAN_HW_TAGS */
->
->  #if defined(CONFIG_KASAN_HW_TAGS) && IS_ENABLED(CONFIG_KASAN_KUNIT_TEST)
->
-> -void kasan_enable_tagging(void);
->  void kasan_force_async_fault(void);
->
-> -#else /* CONFIG_KASAN_HW_TAGS || CONFIG_KASAN_KUNIT_TEST */
-> +#else /* CONFIG_KASAN_HW_TAGS && CONFIG_KASAN_KUNIT_TEST */
->
-> -static inline void kasan_enable_tagging(void) { }
->  static inline void kasan_force_async_fault(void) { }
->
-> -#endif /* CONFIG_KASAN_HW_TAGS || CONFIG_KASAN_KUNIT_TEST */
-> +#endif /* CONFIG_KASAN_HW_TAGS && CONFIG_KASAN_KUNIT_TEST */
->
->  #ifdef CONFIG_KASAN_SW_TAGS
->  u8 kasan_random_tag(void);
-> --
-> 2.35.1
->
+> +#define DRIVER_NAME "dw-hdmi-gp-audio"
+> +#define DRV_NAME    "hdmi-gp-audio"
+> +
+> +struct snd_dw_hdmi {
+> +	struct dw_hdmi_audio_data data;
+> +	struct platform_device  *audio_pdev;
+> +	unsigned int pos;
+> +};
+> +
+> +struct dw_hdmi_channel_conf {
+> +	u8 conf1;
+> +	u8 ca;
+> +};
+> +
+> +/*
+> + * The default mapping of ALSA channels to HDMI channels and speaker
+> + * allocation bits.  Note that we can't do channel remapping here -
+> + * channels must be in the same order.
+> + *
+> + * Mappings for alsa-lib pcm/surround*.conf files:
+> + *
+> + *		Front	Sur4.0	Sur4.1	Sur5.0	Sur5.1	Sur7.1
+> + * Channels	2	4	6	6	6	8
+> + *
+> + * Our mapping from ALSA channel to CEA686D speaker name and HDMI channel:
+> + *
+> + *				Number of ALSA channels
+> + * ALSA Channel	2	3	4	5	6	7	8
+> + * 0		FL:0	=	=	=	=	=	=
+> + * 1		FR:1	=	=	=	=	=	=
+> + * 2			FC:3	RL:4	LFE:2	=	=	=
+> + * 3				RR:5	RL:4	FC:3	=	=
+> + * 4					RR:5	RL:4	=	=
+> + * 5						RR:5	=	=
+> + * 6							RC:6	=
+> + * 7							RLC/FRC	RLC/FRC
+> + */
+> +static struct dw_hdmi_channel_conf default_hdmi_channel_config[7] = {
+> +	{ 0x03, 0x00 },	/* FL,FR */
+> +	{ 0x0b, 0x02 },	/* FL,FR,FC */
+> +	{ 0x33, 0x08 },	/* FL,FR,RL,RR */
+> +	{ 0x37, 0x09 },	/* FL,FR,LFE,RL,RR */
+> +	{ 0x3f, 0x0b },	/* FL,FR,LFE,FC,RL,RR */
+> +	{ 0x7f, 0x0f },	/* FL,FR,LFE,FC,RL,RR,RC */
+> +	{ 0xff, 0x13 },	/* FL,FR,LFE,FC,RL,RR,[FR]RC,[FR]LC */
+> +};
+> +
+> +static int audio_hw_params(struct device *dev,  void *data,
+> +			   struct hdmi_codec_daifmt *daifmt,
+> +			   struct hdmi_codec_params *params)
+> +{
+> +	struct snd_dw_hdmi *dw = dev_get_drvdata(dev);
+> +	int ret = 0;
+> +	u8 ca;
+> +
+> +	dw_hdmi_set_sample_rate(dw->data.hdmi, params->sample_rate);
+> +
+> +	ca = default_hdmi_channel_config[params->channels - 2].ca;
+> +
+> +	dw_hdmi_set_channel_count(dw->data.hdmi, params->channels);
+> +	dw_hdmi_set_channel_allocation(dw->data.hdmi, ca);
+> +
+> +	dw_hdmi_set_sample_non_pcm(dw->data.hdmi,
+> +				   params->iec.status[0] & IEC958_AES0_NONAUDIO);
+> +	dw_hdmi_set_sample_width(dw->data.hdmi, params->sample_width);
+> +
+> +	return ret;
+> +}
+> +
+> +static void audio_shutdown(struct device *dev, void *data)
+> +{
+> +}
+> +
+> +static int audio_mute_stream(struct device *dev, void *data,
+> +			      bool enable, int direction)
+> +{
+> +	struct snd_dw_hdmi *dw = dev_get_drvdata(dev);
+> +	int ret = 0;
+> +
+> +	if (!enable)
+> +		dw_hdmi_audio_enable(dw->data.hdmi);
+> +	else
+> +		dw_hdmi_audio_disable(dw->data.hdmi);
+> +
+> +	return ret;
+> +}
+> +
+> +static int audio_get_eld(struct device *dev, void *data,
+> +			 u8 *buf, size_t len)
+> +{
+> +	struct dw_hdmi_audio_data *audio = data;
+> +	u8 *eld;
+> +
+> +	eld = audio->get_eld(audio->hdmi);
+> +	if (eld)
+> +		memcpy(buf, eld, min_t(size_t, MAX_ELD_BYTES, len));
+> +	else
+> +		/* Pass en empty ELD if connector not available */
+> +		memset(buf, 0, len);
+> +
+> +	return 0;
+> +}
+> +
+> +static int audio_hook_plugged_cb(struct device *dev, void *data,
+> +				 hdmi_codec_plugged_cb fn,
+> +				 struct device *codec_dev)
+> +{
+> +	struct snd_dw_hdmi *dw = dev_get_drvdata(dev);
+> +
+> +	return dw_hdmi_set_plugged_cb(dw->data.hdmi, fn, codec_dev);
+> +}
+> +
+> +static const struct hdmi_codec_ops audio_codec_ops = {
+> +	.hw_params = audio_hw_params,
+> +	.audio_shutdown = audio_shutdown,
+> +	.mute_stream = audio_mute_stream,
+> +	.get_eld = audio_get_eld,
+> +	.hook_plugged_cb = audio_hook_plugged_cb,
+> +};
+> +
+> +static int snd_dw_hdmi_probe(struct platform_device *pdev)
+> +{
+> +	struct dw_hdmi_audio_data *data = pdev->dev.platform_data;
+> +	struct snd_dw_hdmi *dw;
+> +
+> +	const struct hdmi_codec_pdata codec_data = {
+> +		.i2s = 1,
+> +		.spdif = 0,
+> +		.ops = &audio_codec_ops,
+> +		.max_i2s_channels = 8,
+> +		.data = data,
+> +	};
+> +
+> +	dw = devm_kzalloc(&pdev->dev, sizeof(*dw), GFP_KERNEL);
+> +	if (!dw)
+> +		return -ENOMEM;
+> +
+> +	dw->data = *data;
+> +
+> +	platform_set_drvdata(pdev, dw);
+> +
+> +	dw->audio_pdev = platform_device_register_data(&pdev->dev,
+> +						       HDMI_CODEC_DRV_NAME, 1,
+> +						       &codec_data,
+> +						       sizeof(codec_data));
+> +
+> +	return PTR_ERR_OR_ZERO(dw->audio_pdev);
+> +}
+> +
+> +static int snd_dw_hdmi_remove(struct platform_device *pdev)
+> +{
+> +	struct snd_dw_hdmi *dw = platform_get_drvdata(pdev);
+> +
+> +	platform_device_unregister(dw->audio_pdev);
+> +
+> +	return 0;
+> +}
+> +
+> +static struct platform_driver snd_dw_hdmi_driver = {
+> +	.probe	= snd_dw_hdmi_probe,
+> +	.remove	= snd_dw_hdmi_remove,
+> +	.driver	= {
+> +		.name = DRIVER_NAME,
+> +	},
+> +};
+> +
+> +module_platform_driver(snd_dw_hdmi_driver);
+> +
+> +MODULE_AUTHOR("Shengjiu Wang <shengjiu.wang@nxp.com>");
+> +MODULE_DESCRIPTION("Synopsis Designware HDMI GPA ALSA interface");
 
-Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
+Should be Synopsys
 
-Thanks!
+> +MODULE_LICENSE("GPL");
+> +MODULE_ALIAS("platform:" DRIVER_NAME);
+> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> index 13270d96e5be..2ebbe9fc5d7f 100644
+> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> @@ -191,7 +191,10 @@ struct dw_hdmi {
+>   
+>   	spinlock_t audio_lock;
+>   	struct mutex audio_mutex;
+> +	unsigned int sample_non_pcm;
+> +	unsigned int sample_width;
+>   	unsigned int sample_rate;
+> +	unsigned int channels;
+>   	unsigned int audio_cts;
+>   	unsigned int audio_n;
+>   	bool audio_enable;
+> @@ -589,6 +592,8 @@ static unsigned int hdmi_compute_n(unsigned int freq, unsigned long pixel_clk)
+>   			n = 4096;
+>   		else if (pixel_clk == 74176000 || pixel_clk == 148352000)
+>   			n = 11648;
+> +		else if (pixel_clk == 297000000)
+> +			n = 3072;
+>   		else
+>   			n = 4096;
+>   		n *= mult;
+> @@ -601,6 +606,8 @@ static unsigned int hdmi_compute_n(unsigned int freq, unsigned long pixel_clk)
+>   			n = 17836;
+>   		else if (pixel_clk == 148352000)
+>   			n = 8918;
+> +		else if (pixel_clk == 297000000)
+> +			n = 4704;
+>   		else
+>   			n = 6272;
+>   		n *= mult;
+> @@ -615,6 +622,8 @@ static unsigned int hdmi_compute_n(unsigned int freq, unsigned long pixel_clk)
+>   			n = 11648;
+>   		else if (pixel_clk == 148352000)
+>   			n = 5824;
+> +		else if (pixel_clk == 297000000)
+> +			n = 5120;
+>   		else
+>   			n = 6144;
+>   		n *= mult;
+> @@ -660,7 +669,7 @@ static void hdmi_set_clk_regenerator(struct dw_hdmi *hdmi,
+>   	config3 = hdmi_readb(hdmi, HDMI_CONFIG3_ID);
+>   
+>   	/* Only compute CTS when using internal AHB audio */
+
+Please update the comment to include GPAUD as I requested on V1.
+
+> -	if (config3 & HDMI_CONFIG3_AHBAUDDMA) {
+> +	if ((config3 & HDMI_CONFIG3_AHBAUDDMA) || (config3 & HDMI_CONFIG3_GPAUD)) {
+>   		/*
+>   		 * Compute the CTS value from the N value.  Note that CTS and N
+>   		 * can be up to 20 bits in total, so we need 64-bit math.  Also
+> @@ -702,6 +711,22 @@ static void hdmi_clk_regenerator_update_pixel_clock(struct dw_hdmi *hdmi)
+>   	mutex_unlock(&hdmi->audio_mutex);
+>   }
+>   
+> +void dw_hdmi_set_sample_width(struct dw_hdmi *hdmi, unsigned int width)
+> +{
+> +	mutex_lock(&hdmi->audio_mutex);
+> +	hdmi->sample_width = width;
+> +	mutex_unlock(&hdmi->audio_mutex);
+> +}
+> +EXPORT_SYMBOL_GPL(dw_hdmi_set_sample_width);
+> +
+> +void dw_hdmi_set_sample_non_pcm(struct dw_hdmi *hdmi, unsigned int non_pcm)
+> +{
+> +	mutex_lock(&hdmi->audio_mutex);
+> +	hdmi->sample_non_pcm = non_pcm;
+> +	mutex_unlock(&hdmi->audio_mutex);
+> +}
+> +EXPORT_SYMBOL_GPL(dw_hdmi_set_sample_non_pcm);
+> +
+>   void dw_hdmi_set_sample_rate(struct dw_hdmi *hdmi, unsigned int rate)
+>   {
+>   	mutex_lock(&hdmi->audio_mutex);
+> @@ -717,6 +742,7 @@ void dw_hdmi_set_channel_count(struct dw_hdmi *hdmi, unsigned int cnt)
+>   	u8 layout;
+>   
+>   	mutex_lock(&hdmi->audio_mutex);
+> +	hdmi->channels = cnt;
+>   
+>   	/*
+>   	 * For >2 channel PCM audio, we need to select layout 1
+> @@ -765,6 +791,87 @@ static u8 *hdmi_audio_get_eld(struct dw_hdmi *hdmi)
+>   	return hdmi->curr_conn->eld;
+>   }
+>   
+> +static void dw_hdmi_gp_audio_enable(struct dw_hdmi *hdmi)
+> +{
+> +	int sample_freq = 0x2, org_sample_freq = 0xD;
+> +	int ch_mask = BIT(hdmi->channels) - 1;
+> +
+> +	switch (hdmi->sample_rate) {
+> +	case 32000:
+> +		sample_freq = 0x03;
+> +		org_sample_freq = 0x0C;
+> +		break;
+> +	case 44100:
+> +		sample_freq = 0x00;
+> +		org_sample_freq = 0x0F;
+> +		break;
+> +	case 48000:
+> +		sample_freq = 0x02;
+> +		org_sample_freq = 0x0D;
+> +		break;
+> +	case 88200:
+> +		sample_freq = 0x08;
+> +		org_sample_freq = 0x07;
+> +		break;
+> +	case 96000:
+> +		sample_freq = 0x0A;
+> +		org_sample_freq = 0x05;
+> +		break;
+> +	case 176400:
+> +		sample_freq = 0x0C;
+> +		org_sample_freq = 0x03;
+> +		break;
+> +	case 192000:
+> +		sample_freq = 0x0E;
+> +		org_sample_freq = 0x01;
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	hdmi_set_cts_n(hdmi, hdmi->audio_cts, hdmi->audio_n);
+> +	hdmi_enable_audio_clk(hdmi, true);
+> +
+> +	hdmi_writeb(hdmi, 0x1, HDMI_FC_AUDSCHNLS0);
+> +	hdmi_writeb(hdmi, hdmi->channels, HDMI_FC_AUDSCHNLS2);
+> +	hdmi_writeb(hdmi, 0x22, HDMI_FC_AUDSCHNLS3);
+> +	hdmi_writeb(hdmi, 0x22, HDMI_FC_AUDSCHNLS4);
+> +	hdmi_writeb(hdmi, 0x11, HDMI_FC_AUDSCHNLS5);
+> +	hdmi_writeb(hdmi, 0x11, HDMI_FC_AUDSCHNLS6);
+> +	hdmi_writeb(hdmi, (0x3 << 4) | sample_freq, HDMI_FC_AUDSCHNLS7);
+> +	hdmi_writeb(hdmi, (org_sample_freq << 4) | 0xb, HDMI_FC_AUDSCHNLS8);
+> +
+> +	hdmi_writeb(hdmi, ch_mask, HDMI_GP_CONF1);
+> +	hdmi_writeb(hdmi, 0x02, HDMI_GP_CONF2);
+> +	hdmi_writeb(hdmi, 0x01, HDMI_GP_CONF0);
+> +
+> +	hdmi_modb(hdmi,  0x3, 0x3, HDMI_FC_DATAUTO3);
+> +
+> +	/* hbr */
+> +	if (hdmi->sample_rate == 192000 && hdmi->channels == 8 &&
+> +	    hdmi->sample_width == 32 && hdmi->sample_non_pcm) {
+> +		hdmi_modb(hdmi, 0x01, 0x01, HDMI_GP_CONF2);
+> +	}
+
+You can drop the brackets here
+
+> +
+> +	if (hdmi->phy.ops->enable_audio)
+> +		hdmi->phy.ops->enable_audio(hdmi, hdmi->phy.data,
+> +					    hdmi->channels,
+> +					    hdmi->sample_width,
+> +					    hdmi->sample_rate,
+> +					    hdmi->sample_non_pcm);
+
+Are this really PHY ops ? or glue ops ? it looks like it's the later.
+
+Those should eventually go in dw_hdmi_plat_data.
+
+Can you elaborate what is done in those callbacks ? can't you use alsa codecs events instead ?
+
+> +}
+> +
+> +static void dw_hdmi_gp_audio_disable(struct dw_hdmi *hdmi)
+> +{
+> +	hdmi_set_cts_n(hdmi, hdmi->audio_cts, 0);
+> +
+> +	hdmi_modb(hdmi,  0, 0x3, HDMI_FC_DATAUTO3);
+> +	if (hdmi->phy.ops->disable_audio)
+> +		hdmi->phy.ops->disable_audio(hdmi, hdmi->phy.data);
+> +
+> +	hdmi_enable_audio_clk(hdmi, false);
+> +}
+> +
+>   static void dw_hdmi_ahb_audio_enable(struct dw_hdmi *hdmi)
+>   {
+>   	hdmi_set_cts_n(hdmi, hdmi->audio_cts, hdmi->audio_n);
+> @@ -3253,6 +3360,7 @@ struct dw_hdmi *dw_hdmi_probe(struct platform_device *pdev,
+>   	hdmi->plat_data = plat_data;
+>   	hdmi->dev = dev;
+>   	hdmi->sample_rate = 48000;
+> +	hdmi->channels = 2;
+>   	hdmi->disabled = true;
+>   	hdmi->rxsense = true;
+>   	hdmi->phy_mask = (u8)~(HDMI_PHY_HPD | HDMI_PHY_RX_SENSE);
+> @@ -3476,6 +3584,24 @@ struct dw_hdmi *dw_hdmi_probe(struct platform_device *pdev,
+>   		pdevinfo.size_data = sizeof(audio);
+>   		pdevinfo.dma_mask = DMA_BIT_MASK(32);
+>   		hdmi->audio = platform_device_register_full(&pdevinfo);
+> +	} else if (iores && config3 & HDMI_CONFIG3_GPAUD) {
+> +		struct dw_hdmi_audio_data audio;
+> +
+> +		audio.phys = iores->start;
+> +		audio.base = hdmi->regs;
+> +		audio.irq = irq;
+> +		audio.hdmi = hdmi;
+> +		audio.get_eld = hdmi_audio_get_eld;
+> +
+> +		hdmi->enable_audio = dw_hdmi_gp_audio_enable;
+> +		hdmi->disable_audio = dw_hdmi_gp_audio_disable;
+> +
+> +		pdevinfo.name = "dw-hdmi-gp-audio";
+> +		pdevinfo.id = PLATFORM_DEVID_NONE;
+> +		pdevinfo.data = &audio;
+> +		pdevinfo.size_data = sizeof(audio);
+> +		pdevinfo.dma_mask = DMA_BIT_MASK(32);
+> +		hdmi->audio = platform_device_register_full(&pdevinfo);
+>   	}
+>   
+>   	if (!plat_data->disable_cec && (config0 & HDMI_CONFIG0_CEC)) {
+> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.h b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.h
+> index 1999db05bc3b..99aa1c03343b 100644
+> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.h
+> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.h
+> @@ -158,8 +158,17 @@
+>   #define HDMI_FC_SPDDEVICEINF                    0x1062
+>   #define HDMI_FC_AUDSCONF                        0x1063
+>   #define HDMI_FC_AUDSSTAT                        0x1064
+> -#define HDMI_FC_AUDSCHNLS7                      0x106e
+> -#define HDMI_FC_AUDSCHNLS8                      0x106f
+> +#define HDMI_FC_AUDSV                           0x1065
+> +#define HDMI_FC_AUDSU                           0x1066
+> +#define HDMI_FC_AUDSCHNLS0                       0x1067
+> +#define HDMI_FC_AUDSCHNLS1                       0x1068
+> +#define HDMI_FC_AUDSCHNLS2                       0x1069
+> +#define HDMI_FC_AUDSCHNLS3                       0x106A
+> +#define HDMI_FC_AUDSCHNLS4                       0x106B
+> +#define HDMI_FC_AUDSCHNLS5                       0x106C
+> +#define HDMI_FC_AUDSCHNLS6                       0x106D
+> +#define HDMI_FC_AUDSCHNLS7                       0x106E
+> +#define HDMI_FC_AUDSCHNLS8                       0x106F
+>   #define HDMI_FC_DATACH0FILL                     0x1070
+>   #define HDMI_FC_DATACH1FILL                     0x1071
+>   #define HDMI_FC_DATACH2FILL                     0x1072
+> diff --git a/include/drm/bridge/dw_hdmi.h b/include/drm/bridge/dw_hdmi.h
+> index 70082f80a8c8..7f73c3398a54 100644
+> --- a/include/drm/bridge/dw_hdmi.h
+> +++ b/include/drm/bridge/dw_hdmi.h
+> @@ -121,6 +121,9 @@ struct dw_hdmi_phy_ops {
+>   	void (*update_hpd)(struct dw_hdmi *hdmi, void *data,
+>   			   bool force, bool disabled, bool rxsense);
+>   	void (*setup_hpd)(struct dw_hdmi *hdmi, void *data);
+> +	void (*enable_audio)(struct dw_hdmi *hdmi, void *data, int channel,
+> +			     int width, int rate, int non_pcm);
+> +	void (*disable_audio)(struct dw_hdmi *hdmi, void *data);
+>   };
+>   
+>   struct dw_hdmi_plat_data {
+> @@ -173,6 +176,8 @@ void dw_hdmi_setup_rx_sense(struct dw_hdmi *hdmi, bool hpd, bool rx_sense);
+>   
+>   int dw_hdmi_set_plugged_cb(struct dw_hdmi *hdmi, hdmi_codec_plugged_cb fn,
+>   			   struct device *codec_dev);
+> +void dw_hdmi_set_sample_non_pcm(struct dw_hdmi *hdmi, unsigned int non_pcm);
+> +void dw_hdmi_set_sample_width(struct dw_hdmi *hdmi, unsigned int width);
+>   void dw_hdmi_set_sample_rate(struct dw_hdmi *hdmi, unsigned int rate);
+>   void dw_hdmi_set_channel_count(struct dw_hdmi *hdmi, unsigned int cnt);
+>   void dw_hdmi_set_channel_status(struct dw_hdmi *hdmi, u8 *channel_status);
+

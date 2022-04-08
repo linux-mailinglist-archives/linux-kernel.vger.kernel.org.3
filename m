@@ -2,163 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC354F9E12
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 22:10:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C6D04F9E14
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 22:13:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239442AbiDHUMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 16:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55770 "EHLO
+        id S233940AbiDHUPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 16:15:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239486AbiDHUMf (ORCPT
+        with ESMTP id S231805AbiDHUPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 16:12:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43367E0A4
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 13:10:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6EDFAB82B9B
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 20:10:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D69CEC385A3;
-        Fri,  8 Apr 2022 20:10:26 +0000 (UTC)
-Date:   Fri, 8 Apr 2022 16:10:25 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>, jstultz@google.com,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [RFC][PATCH] timers: Add del_time_free() to be called before
- freeing timers
-Message-ID: <20220408161025.5842a663@gandalf.local.home>
-In-Reply-To: <CAHk-=whbsLXy85XpKRQmBXr=GqWbMoi+wVjFY_V22=BOE=dHog@mail.gmail.com>
-References: <20220407161745.7d6754b3@gandalf.local.home>
-        <87pmlrkgi3.ffs@tglx>
-        <CAHk-=whbsLXy85XpKRQmBXr=GqWbMoi+wVjFY_V22=BOE=dHog@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 8 Apr 2022 16:15:03 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E703542AC
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 13:12:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649448778; x=1680984778;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=vmQiNW54rZS2Zv3iTVjzQEeCKYMBTIT3uJw3ckMo2Gk=;
+  b=YmSKkmR1jSP3OIBjt5D2uvjhY1Mtqd8E9LSwTn+e2ygZS8zKLrrwp7y8
+   3JUQkULOTbo0UJelOlRGZWr6Mi3si9bSB9G7GRjoBrCSImhDY88GThQNb
+   lE2itRy+tHIBjSzpXLdktwnAdy1JQD7NO29M4JDPOKGIUfnMkNHfVQAZz
+   yypXjrBqmLvnVUCztjHaD4G5r0mRGZqmki5UsjzFnO8W+SVjB4OdJPeqh
+   fjx0r3lriAO9ULTk0JXH5zE9JDlOu2aXkhhJp/jNvRFIixEuOYl9CekLw
+   ZpYuY++013wI+mheu/cImL3zKBaIArha8ex62E6esBkZP6BRhyB9he7Fd
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="260519279"
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="260519279"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 13:12:43 -0700
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="525509993"
+Received: from tsungtae-mobl.amr.corp.intel.com (HELO [10.134.43.198]) ([10.134.43.198])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 13:12:41 -0700
+Message-ID: <416590b1-5164-3c77-f617-b52eb8459318@intel.com>
+Date:   Fri, 8 Apr 2022 13:12:45 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        bp@alien8.de
+Cc:     aarcange@redhat.com, ak@linux.intel.com, brijesh.singh@amd.com,
+        dan.j.williams@intel.com, dave.hansen@linux.intel.com,
+        david@redhat.com, hpa@zytor.com, jgross@suse.com,
+        jmattson@google.com, joro@8bytes.org, jpoimboe@redhat.com,
+        knsathya@kernel.org, linux-kernel@vger.kernel.org, luto@kernel.org,
+        mingo@redhat.com, pbonzini@redhat.com, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, sdeep@vmware.com,
+        seanjc@google.com, tglx@linutronix.de, thomas.lendacky@amd.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org
+References: <YjXtK4awY6utz3wE@zn.tnic>
+ <20220321160245.42886-1-kirill.shutemov@linux.intel.com>
+ <9f8f57fdbbf76e70471541dc42b04f8a89be4a56.camel@intel.com>
+ <dd5c52ad-9c61-54c3-6654-7a30c56b1917@intel.com>
+ <2fcd12bb42c7d30f0e7bd09a7f66d76122493b32.camel@intel.com>
+ <5263978a-19ef-fff3-cc61-b272a833171f@intel.com>
+ <a3d68966dbabc800adabef96b9a7e5d325d5b5f7.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCHv7.1 02/30] x86/tdx: Provide common base for SEAMCALL and
+ TDCALL C wrappers
+In-Reply-To: <a3d68966dbabc800adabef96b9a7e5d325d5b5f7.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 8 Apr 2022 07:33:53 -1000
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
-
-
-> That said, I would actually prefer a name-change: instead of making
-> this about "del_timer_free()", can we please just make this about it
-> being "final". Or maybe "del_timer_cancel()" or something like that?
+On 4/4/22 17:23, Kai Huang wrote:
+>> The vague "some reserved bits" magic works for exactly *one* error code.
+>>  If you ever want to make it two, then you subject some some poor future
+>> dope to a trip to TDX documentation purgatory.
+>>
+>> All I'm asking is that this code stand on its own.  Just declare what
+>> the *ACTUAL* reserved bits are.  Not some vague reference to "some
+>> bits".  There are *REAL* documented bits.  Use them, please.
+> OK.  How about below:
 > 
-> Because the actual _freeing_ will obviously happen later, and the
-> function does nothing of the sort. In fact, there may be situations
+> 	/*
+> 	 * VMfailInvalid happens before any actual internal logic of the
+> 	 * P-SEAMLDR and the TDX module is reached.  Use a unique value which
+> 	 * will never conflict with any actual error code returned by both the
+> 	 * P-SEAMLDR and the TDX module to represent this case.
+> 	 *
+> 	 * Both error code definitions of the P-SEAMLDR and the TDX module have
+> 	 * some reserved bits (bits 61:48 for the TDX module and bits 62:32 for
+> 	 * the P-SEAMLDR) which will never be set to 1.  Choose -1ULL as it
+> will
+> 	 * never be returned as error code by both of them.
+> 	 */
+> 	#define TDX_SEAMCALL_VMFAILINVALID	GENMASK_ULL(63, 0)
 
-I was originally thinking of calling it "del_timer_prepare_free()"
+Kai, I think I've failed horribly in explaining myself.
 
-> where you don't free it at all, but just want to be in the situation
-> where you want to make sure there are no pending timers until after
-> you explicitly re-arm it, even if the timer would otherwise be
-> self-arming.
+Here's what I want:
 
-We have that already, it's called "del_timer_sync()". And that's not used
-when it should be, and does not catch the case of the timer being rearmed.
+#define TDX_ERROR_RSVD_P_SEAMLDR	GENMASK_ULL(62, 32)
+#define TDX_ERROR_RSVD_MODULE		GENMASK_ULL(61, 48)
 
-The idea of "del_timer_free()" or perhaps "del_timer_sync_terminate()?" is
-that once called you will NEVER arm it again. And if you do, it's a bug.
+The P-SEAMLDR and the TDX module itself each define reserved bits in
+their error codes.  These bits will never be set after a SEAMCALL to
+those two entities.  Define a error code which can be returned by
+software which uses those reserved bits and can be used for either the
+P-SEAMLDR or the TDX module:
 
-> 
-> (That use-case would actually mean removing the WARN_ON_ONCE(), but I
-> think that would be a "future use" issue, I'm *not* suggesting it not
-> be done initially).
+#define	TDX_SEAMCALL_VMFAILINVALID	(TDX_ERROR_RSVD_P_SEAMLDR &
+					 TDX_ERROR_RSVD_MODULE)
 
-The point of this call is to be used when and only when the timer is about
-to be freed. Not to just say "wait till it's done". Because we are hitting
-a lot of bugs where the system crashes in the timer code while walking
-through the link list of timers where one of the pending timers has been
-freed, and we have no idea what timer that was.
+See what that does?  It does what you said in english, but does it in
+code.  Take two things from the specs (the reserved masks), and find a
+value that satisfies both entities.
 
-Once this API is added, I would go around and add it to all locations that
-del_timer(_sync) just before freeing it and call this instead. We already
-found a few cases that there's a race after the del_timer_sync() that could
-actually rearm the timer before it gets freed. This function would trigger
-the WARN_ON(_ONCE).
-
-> 
-> I also suspect that 99% of all del_timer_sync() users actually want
-> that kind of explicit "del_timer_final()" behavior. Some may not
-> _need_ it (because their re-arming already checks for "have I shut
-> down?"), but I have this suspicion that we could convert a lot - maybe
-> all - of the current del_timer_sync() users to this and try to see if
-> we could just make it the rule.
-
-We did find places that use del_timer_sync() that would later legitimately
-rearm it. But I agree. Most would be del_timer_final() (or whatever).
-
-> 
-> And then we could actually maybe start removing the explicit "shut
-> down timer" code. See for example "work->canceling" logic for
-> kthreads, which now does double duty (it disables re-arming the timer,
-> _and_ it does some "double cancel work avoidance")
-
-Yeah, that's the case we have with the hci_qca.c code that we have right
-now. It has a timer where it can be rearmed in the work queue, and the
-timer can wake the workqueue. This requires one of those dances to be able
-to stop both and prevent one from enabling the other.
-
-Hmm, I guess if we do remove the WARN_ON_ONCE(), and just not enable it
-after del_timer_terminate/final() is called then it would remove this race.
-You could terminate the timers and then destroy the work queue, and if
-there's a pending work happening, you do not have to worry about it
-rearming the timers, because they would be shut off, and the mod_timer()
-would just return without issue.
-
-Maybe add an API to allow both? One that will cause the warn on, as in (if
-anything calls this again, warn about it), and the other that has it not
-warn, but just be ignored.
-
-We could differentiate between the two by making a stub function for the
-ignore one.
-
-On the warn case:
-
-	timer->fn = NULL;
-
-for the non warn case:
-
- 	timer->fn = timer_null();
-
-and have:
-
-	if (WARN_ON_ONCE(!timer->fn) || unlikely(timer->fn == timer_null))
-		return;
-
-del_timer_final();	// warn
-del_timer_final_sync(); // no warn
-
-  or
-
-del_timer_sync_final(); // warn
-del_timer_sync_final_nowarn(); // no warn
-
-??
-
-[ Let the bike-shedding begin! ]
-
-
--- Steve
-
-
--- Steve
+Now, I'm not sure why you *need* TDX_SEAMCALL_VMFAILINVALID, but this is
+how I'd like it to be defined.  Sure, -1 *works*, but it's basically an
+opaque value.  It's also not *obviously* correct.

@@ -2,133 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A314F9573
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:16:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ADE14F957C
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231712AbiDHMSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 08:18:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37638 "EHLO
+        id S233641AbiDHMVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 08:21:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbiDHMS3 (ORCPT
+        with ESMTP id S229550AbiDHMVh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 08:18:29 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF1C387B2;
-        Fri,  8 Apr 2022 05:16:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649420186; x=1680956186;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=87eTft+Sz6HSGuTjM5rCbkbXzq5J5qvbYbVHefQuSh8=;
-  b=hopl63wquftlW/mSaMB/NgCQt/23VzAxrJ8LLKpyRDHW+EgxxtrWg6pB
-   f9GSz2B3Q8uJ1IrdioHgUw4gYM9nq4ILbUH/oHicZYdjogaj1me7oCVGV
-   PXYeuAiQvnwxbB0hOzCKCrhiSaeTpRA5Ugu+dDGVuMhi6co03h9xwxiMN
-   a8XbLR04pnFSZgpMJg9pkPqgGBvQnbkjRbVkEWUqv+I0DyC8M5N7lM1eN
-   BVuqWArQfydqZIoGu1PJcPV4fwHTxylDQzprbmcYKtAFKs++oUDOZXXCB
-   Ey+bY7EucBApUEVXrh1UAX6NiFMTnMGdmIFapDkkNe8sqcYD/pqcbZEGh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="241513046"
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="241513046"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 05:16:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="506538079"
-Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 08 Apr 2022 05:16:23 -0700
-Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ncnXK-0000FP-Na;
-        Fri, 08 Apr 2022 12:16:22 +0000
-Date:   Fri, 8 Apr 2022 20:15:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Luke Wren <wren6991@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Dom Cobley <popcornmix@gmail.com>,
-        Martin Sperl <kernel@martin.sperl.org>,
-        linux-doc@vger.kernel.org
-Subject: [l1k:smsc95xx_5.17 66/887] drivers/misc/bcm2835_smi.c:2: warning:
- This comment starts with '/**', but isn't a kernel-doc comment. Refer
- Documentation/doc-guide/kernel-doc.rst
-Message-ID: <202204082010.UUsMvtdZ-lkp@intel.com>
+        Fri, 8 Apr 2022 08:21:37 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F192D32F086
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 05:19:33 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id b15so8236508pfm.5
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 05:19:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+8uoGZ/zdKm46FPD8jLlw4/DdbIugQvQ3ge6j/WFY9I=;
+        b=r9alONQrNmBKLORSXwRuoMc4FLWhD2ZEW1S4Sx08BDjBZhe3fkGDMOhwey34pOLBo9
+         w5vnOiOY9Q0OZI2q476bg4QNmkjDYrSXUILeG7MXYmG7TFdYNuMzGtGudz0MIDDxH3x0
+         eCxWsTvEXO6bBw+mTwzRUFkUdI8MpQbLkBUo6WLOfjILXCxEM2zl8iJjVCHIIHzEuCIW
+         ZZeBO5o702zlvcd/6pZ0ndx7N2nYMnTMRol9lNpAw+0d6zSLBrtBd8KwjhzF0rxKBfaA
+         rWDDy1eC1o0jKhswzYr++cjOD9Dcw5u0716tX8Tsf/u+qMjhKpy1OfrbkgaVgo49BEMU
+         D9AA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+8uoGZ/zdKm46FPD8jLlw4/DdbIugQvQ3ge6j/WFY9I=;
+        b=n/+4t4hO3YufvwSAWrV0Z/aJSjyPDfV+sPIBv0lDc07czsZ5WT1hKJtl7ndsYoudZ9
+         mglCYkiV5ouTwok+pMSQwTqLqAKNJ2fG5FBRhhnu1NCsHxuom1qWlP20s9+aUAWRngBY
+         35xB4BmF2OZWvGzaWxfltIOV3uGQksY0FlE8HTPr+1x8voa4rOpp7RYZFjP9OL06VOmu
+         hf0on1g3qOTlQ29EBoSQnPcsieRcassdp4GiI++sFrT+NLluTQrCvy/trwEwf7BEza1Y
+         gyAXg1uFr4VtXcoG2nVPTMueal1c7OoK8SqoK3k+rpnZ7+ueBfoqcDm08rLO6GGu8j3k
+         yVgA==
+X-Gm-Message-State: AOAM5319pbGYpbwaL+imuoNDOwGK6QCLSR+Bp8GjsbZUUkzxYk/vtI/5
+        8Iwy1y7b9JSrVH/zQ6T9+QwIYg==
+X-Google-Smtp-Source: ABdhPJwB4KK92tFeRfcNQEfhh/5Cd25Z2vJ0y/DcPl7CAKdFpzx+NrRlyFuJcEfg4SBBO24NMGMACA==
+X-Received: by 2002:a05:6a00:1152:b0:4be:ab79:fcfa with SMTP id b18-20020a056a00115200b004beab79fcfamr19511592pfm.3.1649420373481;
+        Fri, 08 Apr 2022 05:19:33 -0700 (PDT)
+Received: from localhost.localdomain ([2409:8a28:e6c:f010:a5e3:608e:7730:5b8e])
+        by smtp.gmail.com with ESMTPSA id oo16-20020a17090b1c9000b001b89e05e2b2sm13438465pjb.34.2022.04.08.05.19.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 05:19:33 -0700 (PDT)
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+To:     corbet@lwn.net, hannes@cmpxchg.org, surenb@google.com,
+        mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, ebiggers@google.com,
+        zhouchengming@bytedance.com, songmuchun@bytedance.com
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        duanxiongchun@bytedance.com,
+        Martin Steigerwald <Martin.Steigerwald@proact.de>
+Subject: [PATCH RESEND v2] sched/psi: report zeroes for CPU full at the system level
+Date:   Fri,  8 Apr 2022 20:19:14 +0800
+Message-Id: <20220408121914.82855-1-zhouchengming@bytedance.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/l1k/linux smsc95xx_5.17
-head:   05d68ced287b30f62f18f95b5476135ef669804a
-commit: 205736282d70963710608138c17b64717470161c [66/887] Add SMI driver
-config: arm-multi_v7_defconfig (https://download.01.org/0day-ci/archive/20220408/202204082010.UUsMvtdZ-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/l1k/linux/commit/205736282d70963710608138c17b64717470161c
-        git remote add l1k https://github.com/l1k/linux
-        git fetch --no-tags l1k smsc95xx_5.17
-        git checkout 205736282d70963710608138c17b64717470161c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/dma/ drivers/misc/
+Martin find it confusing when look at the /proc/pressure/cpu output,
+and found no hint about that CPU "full" line in psi Documentation.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+% cat /proc/pressure/cpu
+some avg10=0.92 avg60=0.91 avg300=0.73 total=933490489
+full avg10=0.22 avg60=0.23 avg300=0.16 total=358783277
 
-All warnings (new ones prefixed by >>):
+The PSI_CPU_FULL state is introduced by commit e7fcd7622823
+("psi: Add PSI_CPU_FULL state"), which mainly for cgroup level,
+but also counted at the system level as a side effect.
 
->> drivers/misc/bcm2835_smi.c:2: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Broadcom Secondary Memory Interface driver
+Naturally, the FULL state doesn't exist for the CPU resource at
+the system level. These "full" numbers can come from CPU idle
+schedule latency. For example, t1 is the time when task wakeup
+on an idle CPU, t2 is the time when CPU pick and switch to it.
+The delta of (t2 - t1) will be in CPU_FULL state.
 
+Another case all processes can be stalled is when all cgroups
+have been throttled at the same time, which unlikely to happen.
 
-vim +2 drivers/misc/bcm2835_smi.c
+Anyway, CPU_FULL metric is meaningless and confusing at the
+system level. So this patch will report zeroes for CPU full
+at the system level, and update psi Documentation accordingly.
 
-   > 2	 * Broadcom Secondary Memory Interface driver
-     3	 *
-     4	 * Written by Luke Wren <luke@raspberrypi.org>
-     5	 * Copyright (c) 2015, Raspberry Pi (Trading) Ltd.
-     6	 *
-     7	 * Redistribution and use in source and binary forms, with or without
-     8	 * modification, are permitted provided that the following conditions
-     9	 * are met:
-    10	 * 1. Redistributions of source code must retain the above copyright
-    11	 *    notice, this list of conditions, and the following disclaimer,
-    12	 *    without modification.
-    13	 * 2. Redistributions in binary form must reproduce the above copyright
-    14	 *    notice, this list of conditions and the following disclaimer in the
-    15	 *    documentation and/or other materials provided with the distribution.
-    16	 * 3. The names of the above-listed copyright holders may not be used
-    17	 *    to endorse or promote products derived from this software without
-    18	 *    specific prior written permission.
-    19	 *
-    20	 * ALTERNATIVELY, this software may be distributed under the terms of the
-    21	 * GNU General Public License ("GPL") version 2, as published by the Free
-    22	 * Software Foundation.
-    23	 *
-    24	 * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
-    25	 * IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-    26	 * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-    27	 * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
-    28	 * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-    29	 * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-    30	 * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-    31	 * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-    32	 * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-    33	 * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-    34	 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-    35	 */
-    36	
+Fixes: e7fcd7622823 ("psi: Add PSI_CPU_FULL state")
+Reported-by: Martin Steigerwald <Martin.Steigerwald@proact.de>
+Suggested-by: Johannes Weiner <hannes@cmpxchg.org>
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+---
+v2:
+ - report zeroes for CPU full at the system level, suggested
+   by Johannes.
+ - update doc about the zeroes in CPU full at the system level.
+---
+ Documentation/accounting/psi.rst |  9 ++++-----
+ kernel/sched/psi.c               | 15 +++++++++------
+ 2 files changed, 13 insertions(+), 11 deletions(-)
 
+diff --git a/Documentation/accounting/psi.rst b/Documentation/accounting/psi.rst
+index 860fe651d645..5e40b3f437f9 100644
+--- a/Documentation/accounting/psi.rst
++++ b/Documentation/accounting/psi.rst
+@@ -37,11 +37,7 @@ Pressure interface
+ Pressure information for each resource is exported through the
+ respective file in /proc/pressure/ -- cpu, memory, and io.
+ 
+-The format for CPU is as such::
+-
+-	some avg10=0.00 avg60=0.00 avg300=0.00 total=0
+-
+-and for memory and IO::
++The format is as such::
+ 
+ 	some avg10=0.00 avg60=0.00 avg300=0.00 total=0
+ 	full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+@@ -58,6 +54,9 @@ situation from a state where some tasks are stalled but the CPU is
+ still doing productive work. As such, time spent in this subset of the
+ stall state is tracked separately and exported in the "full" averages.
+ 
++CPU full is undefined at the system level, but has been reported
++since 5.13, so it is set to zero for backward compatibility.
++
+ The ratios (in %) are tracked as recent trends over ten, sixty, and
+ three hundred second windows, which gives insight into short term events
+ as well as medium and long term trends. The total absolute stall time
+diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+index a4fa3aadfcba..ed9fb557dadd 100644
+--- a/kernel/sched/psi.c
++++ b/kernel/sched/psi.c
+@@ -1060,14 +1060,17 @@ int psi_show(struct seq_file *m, struct psi_group *group, enum psi_res res)
+ 	mutex_unlock(&group->avgs_lock);
+ 
+ 	for (full = 0; full < 2; full++) {
+-		unsigned long avg[3];
+-		u64 total;
++		unsigned long avg[3] = { 0, };
++		u64 total = 0;
+ 		int w;
+ 
+-		for (w = 0; w < 3; w++)
+-			avg[w] = group->avg[res * 2 + full][w];
+-		total = div_u64(group->total[PSI_AVGS][res * 2 + full],
+-				NSEC_PER_USEC);
++		/* CPU FULL is undefined at the system level */
++		if (!(group == &psi_system && res == PSI_CPU && full)) {
++			for (w = 0; w < 3; w++)
++				avg[w] = group->avg[res * 2 + full][w];
++			total = div_u64(group->total[PSI_AVGS][res * 2 + full],
++					NSEC_PER_USEC);
++		}
+ 
+ 		seq_printf(m, "%s avg10=%lu.%02lu avg60=%lu.%02lu avg300=%lu.%02lu total=%llu\n",
+ 			   full ? "full" : "some",
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+

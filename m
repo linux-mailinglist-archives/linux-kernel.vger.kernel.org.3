@@ -2,101 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41EC74F9D75
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 21:05:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4AB44F9D79
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 21:06:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239170AbiDHTHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 15:07:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37734 "EHLO
+        id S239133AbiDHTH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 15:07:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239160AbiDHTH0 (ORCPT
+        with ESMTP id S239137AbiDHTH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 15:07:26 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43DF9FC8BB;
-        Fri,  8 Apr 2022 12:05:21 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id w134so16685533ybe.10;
-        Fri, 08 Apr 2022 12:05:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZEcUtO2v/WlLzjxpQ7XpDI1V7ziKO5fo7ZWmNgWyPtE=;
-        b=PmwYKhlSZA/KBCRPNtd2dgeerhXTTV4HcPhWCqhmVQW8rqtZ3ySJOyOZFE6SFTuT2/
-         6LHy2CXzw3E3h7dMJu6eUYQG+i59cBdqrD1F64GyYqj97zF/tUFotVrnMMF08n2cnHvH
-         oUxSxlpOBnwNQ6UWf+BF+tExLLL+eygA9CCm7LrNOWEiFv+75805wT9u0r7YFVk2YwB+
-         zpf/6e1qHwN/SEq3cWF+GsxgUC50vvLutdnY0J/5lmjS0g+s4NqmAu2V0f6i+41WGaZe
-         S7C+IKMWEeVKIGgmqB4ySdzYdCp9/gzS9/RdP/hmxfnxM3df2yXJ3dP4qGVaDnTTycz4
-         +K6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZEcUtO2v/WlLzjxpQ7XpDI1V7ziKO5fo7ZWmNgWyPtE=;
-        b=ma0th36dWyAlDZLbNl4VIyHfox9l05lngm1xHxbMASoAeYMqgG/6W0ae7LJIZDIPMw
-         GQfJ46gpx5JWqrTHLjCIJHkxfyLmM7sFSh+jr2IKawgajNtqlepr4ZXN6sBXEyg5eeN8
-         Idmz5D0LvmdVfLmSXbeQgXWzaQXmjYzhqGXa924pUXrqdgwbA1SxuT4vu2PIUSIyj2oB
-         o6MFNSuMfBgvWHEC+WeiprsVRTxC0bEs5zd2zVbDA4rjaILJ9xsT3VFjddtXDqy7Bw39
-         ZPWTG1ROd5KIlLxHtFSyyg7GNnJLi5bmfaoYkZ+XmIGkrB33OU0dBxfbouT+8pUnYvGq
-         3xFw==
-X-Gm-Message-State: AOAM530GFtHoolX1ir9pHFQikP+bVQYMB+snNszeRN9gFgETWAOlxnKW
-        isGCw7didbcDwjYehacDh94cuTtyJBG6hICIEI+8z4PH1cseGGUk
-X-Google-Smtp-Source: ABdhPJz+8CCXiO27jq0dSiJ6LlWduDnYBfFknVvzuuyWJRga0JVZZhWwKMlh3h+sIxMLVSFCj5zFUulBf8L6BaQRT9A=
-X-Received: by 2002:a05:6902:1083:b0:63e:5325:d6b0 with SMTP id
- v3-20020a056902108300b0063e5325d6b0mr7319082ybu.431.1649444720478; Fri, 08
- Apr 2022 12:05:20 -0700 (PDT)
+        Fri, 8 Apr 2022 15:07:58 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2063.outbound.protection.outlook.com [40.107.236.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55AA5FD6FC
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 12:05:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eJZQ8qvkExmyyo0H8WyLVMexYi1VfgVsebPbufFRr73PLVMTtuImqnMVeGG/rO5QsjakN6au7vIibHaCklfIE04nwaLbLbtMtLI8VzjEoFpdN4Lsl1lLfvVLvcDkQkwS7W7R1pD8t8iRfc+5zkZ9qzrrIHvWeBc0bZ1hxwtvi0XOfF5ewqciH1fYAocHWznfD40bY9qOKOSK1/18dqjxMELLXQgd9WqgwkhQEv43IMJJdcJLa7IXMA0XQ8dA2c4EdGhaUqZ6W0+1JdkCGV6d/Y+Pn+314Vv7U0c+pJfdcXhkaJ7wDYiAQVQJ9fLSvhfiP2M+wkhdVRKr9rc4kZPHOQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yc28WTVKa0nPvsiwTTTPmv/PGDpongF9qQZVZ1DNIGY=;
+ b=Ve7h15MDStKVzCXcabkhVjLQvkdRjzxLI//UqR9yUIzdmHxYLX/cu9y3S7tbBkO2s41X71d/sCq0HL41bX/1fwpUpOGqDXLpJWyHeMwfKQIZB8G4GeB70k2jagxtAkKYxfDhEDvbhnBUorxhU+FmIumVXyiXujAYk7lFEtfm9MfpYt8MIqpHYnQc0tQfPhZXI9XAtaCNlYfQXn1l1xusoR4cbNI54JpKgnu8AwR0jjsWVRsp+dprUtUDmq4beetPlg4LNEyoHUK957dYSncGLNllldCUzprEzSTV/L9LQiuUmiwof37jN6Vj81Okv1VeeloGjIu6nGQ/99z5vGUo0w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linux.ie smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yc28WTVKa0nPvsiwTTTPmv/PGDpongF9qQZVZ1DNIGY=;
+ b=oTzQJSAQ6BSNycCur1yWnEc95g07Pbe0xS2QIGe24jG4/4M53O4uktFK1MPysayxL6bcpK53Zpz5F3lklq3JhIi+CkRTtp0l+YZiw0JQNKEEFsUVmneLVWLD+G1rU1f54/UW0Mkc8qj+40emRW2UjeAxVzIjh7fywi5/tx2zqqA=
+Received: from BN6PR17CA0029.namprd17.prod.outlook.com (2603:10b6:405:75::18)
+ by LV2PR12MB5798.namprd12.prod.outlook.com (2603:10b6:408:17a::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.30; Fri, 8 Apr
+ 2022 19:05:51 +0000
+Received: from BN8NAM11FT062.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:405:75:cafe::97) by BN6PR17CA0029.outlook.office365.com
+ (2603:10b6:405:75::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.23 via Frontend
+ Transport; Fri, 8 Apr 2022 19:05:51 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT062.mail.protection.outlook.com (10.13.177.34) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5144.20 via Frontend Transport; Fri, 8 Apr 2022 19:05:51 +0000
+Received: from doryam3r2rack03-34.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 8 Apr 2022 14:05:50 -0500
+From:   Richard Gong <richard.gong@amd.com>
+To:     <alexander.deucher@amd.com>, <christian.koenig@amd.com>,
+        <xinhui.pan@amd.com>, <airlied@linux.ie>, <daniel@ffwll.ch>
+CC:     <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
+        <linux-kernel@vger.kernel.org>, <mario.limonciello@amd.com>,
+        <richard.gong@amd.com>
+Subject: [PATCHv2] drm/amdgpu: disable ASPM on Intel AlderLake based systems
+Date:   Fri, 8 Apr 2022 14:05:02 -0500
+Message-ID: <20220408190502.4103670-1-richard.gong@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220404155557.27316-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CA+V-a8tM3EiZkNSCG+CtrOnfGBc5WSaac__FBsRn72zrsjQ2ew@mail.gmail.com> <YlB07XRDWPHF7VaI@matsya>
-In-Reply-To: <YlB07XRDWPHF7VaI@matsya>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Fri, 8 Apr 2022 20:04:54 +0100
-Message-ID: <CA+V-a8uJPk48p4sE6eLTdaGyE5FwuLYD3oke5GPqf05ocHFESw@mail.gmail.com>
-Subject: Re: [PATCH v3 0/3] dmaengine: Use platform_get_irq*() variants to
- fetch IRQ's
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        dmaengine <dmaengine@vger.kernel.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7ee0132f-f0f9-4b2e-57c0-08da1992cc8b
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5798:EE_
+X-Microsoft-Antispam-PRVS: <LV2PR12MB5798D37965E23EC2FE88358595E99@LV2PR12MB5798.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fJzlQ13W5KG1EOabGsmfalD0d8bVsueNSDWqQNemfdvltM7Mku8If8GqQCvdxdSNWhDm3VQWyxwwEq936NZvdTyxxdiLyMyfkdURJN5aKVJCF9/tW1PDxlRB/Rocja6FP/NJVi2rPHqlQrFsToFNUiWcpMMIo9NvcKXyvYOpfrUpqLa8JIbS1HhcwLnraDdNFAial4Ce1qzVuivVIiqB09YG0Ugv+GDkx271SFpMzFozwvYH9gpCAZyLpEKZq/WZDhcHLqXWNICelCpByIXNXuIG5i+zdaT8eMLXRoiq6Tr3a8LNGqAMKYupFPidwWn8oDyDwKU4zKvC2GAPSDMqteSrY/vN7MywtOT73M3JGBIZDPMtlG1c9UC7mLr0L5zrULtkQaND2OK+cLC8DcugUEmh2SP9uZgxwdECSCegJIcYlkwwMXAWW90dIFJcHWfYSofgefK2MHM8CK+p8omkqplfolKWTHj1H58KSvERvIOufgd9QgvtWWVOgGSkzDkNPE3NaR6J8cYyiP3TfPsLUkE+s2GLTCWuXLzVxAEB2iqGioiVpSdG40HZ+nmnO+Sn3P/DdpIEVfOF/P8Sazrf/KpF45UifhgODfZMDRF/qjbxT3z6QvQTRZIINpJ3WYCMLDgr8nmGNx4nY8rZwM/Wb6AkFn9E+nVD4cxtQP7Rq9/V3UceMiU3yUojc/dBnbMYJXaN37DgOtdeCbgRkUJzjw==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(356005)(8676002)(4326008)(81166007)(966005)(54906003)(8936002)(86362001)(426003)(26005)(508600001)(6666004)(83380400001)(2906002)(70586007)(336012)(110136005)(70206006)(82310400005)(1076003)(44832011)(2616005)(316002)(7696005)(16526019)(186003)(5660300002)(40460700003)(36860700001)(36756003)(47076005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Apr 2022 19:05:51.3168
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7ee0132f-f0f9-4b2e-57c0-08da1992cc8b
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT062.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5798
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vinod,
+Active State Power Management (ASPM) feature is enabled since kernel 5.14.
+There are some AMD GFX cards (such as WX3200 and RX640) that cannot be
+used with Intel AlderLake based systems to enable ASPM. Using these GFX
+cards as video/display output, Intel Alder Lake based systems will hang
+during suspend/resume.
 
-On Fri, Apr 8, 2022 at 6:46 PM Vinod Koul <vkoul@kernel.org> wrote:
->
-> On 07-04-22, 03:52, Lad, Prabhakar wrote:
-> > Hi Vinod,
-> >
-> > On Mon, Apr 4, 2022 at 4:56 PM Lad Prabhakar
-> > <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> > >
-> > > Hi All,
-> > >
-> > > This patch series aims to drop using platform_get_resource() for IRQ types
-> > > in preparation for removal of static setup of IRQ resource from DT core
-> > > code.
-> > >
-> > Fyi.. the OF core changes have landed into -next [0].
-> >
-> > [0] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=next-20220406&id=a1a2b7125e1079cfcc13a116aa3af3df2f9e002b
->
-> Is this series dependent on this?
->
-Yes, if this series doesn't hit soon this will break the drivers.
+Add extra check to disable ASPM on Intel AlderLake based systems.
 
-Cheers,
-Prabhakar
+Fixes: 0064b0ce85bb ("drm/amd/pm: enable ASPM by default")
+Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1885
+Signed-off-by: Richard Gong <richard.gong@amd.com>
+---
+v2: correct commit description
+    move the check from chip family to problematic platform
+---
+ drivers/gpu/drm/amd/amdgpu/vi.c | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/amd/amdgpu/vi.c b/drivers/gpu/drm/amd/amdgpu/vi.c
+index 039b90cdc3bc..8b4eaf54b23e 100644
+--- a/drivers/gpu/drm/amd/amdgpu/vi.c
++++ b/drivers/gpu/drm/amd/amdgpu/vi.c
+@@ -81,6 +81,10 @@
+ #include "mxgpu_vi.h"
+ #include "amdgpu_dm.h"
+ 
++#if IS_ENABLED(CONFIG_X86_64)
++#include <asm/intel-family.h>
++#endif
++
+ #define ixPCIE_LC_L1_PM_SUBSTATE	0x100100C6
+ #define PCIE_LC_L1_PM_SUBSTATE__LC_L1_SUBSTATES_OVERRIDE_EN_MASK	0x00000001L
+ #define PCIE_LC_L1_PM_SUBSTATE__LC_PCI_PM_L1_2_OVERRIDE_MASK	0x00000002L
+@@ -1134,13 +1138,24 @@ static void vi_enable_aspm(struct amdgpu_device *adev)
+ 		WREG32_PCIE(ixPCIE_LC_CNTL, data);
+ }
+ 
++static bool intel_core_apsm_chk(void)
++{
++#if IS_ENABLED(CONFIG_X86_64)
++	struct cpuinfo_x86 *c = &cpu_data(0);
++
++	return (c->x86 == 6 && c->x86_model == INTEL_FAM6_ALDERLAKE);
++#else
++	return false;
++#endif
++}
++
+ static void vi_program_aspm(struct amdgpu_device *adev)
+ {
+ 	u32 data, data1, orig;
+ 	bool bL1SS = false;
+ 	bool bClkReqSupport = true;
+ 
+-	if (!amdgpu_device_should_use_aspm(adev))
++	if (!amdgpu_device_should_use_aspm(adev) || intel_core_apsm_chk())
+ 		return;
+ 
+ 	if (adev->flags & AMD_IS_APU ||
+-- 
+2.25.1
+

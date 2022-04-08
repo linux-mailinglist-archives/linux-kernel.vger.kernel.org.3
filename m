@@ -2,97 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B9184F9267
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 11:59:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD3AF4F926B
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 12:00:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234037AbiDHKBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 06:01:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43626 "EHLO
+        id S234058AbiDHKCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 06:02:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231820AbiDHKBa (ORCPT
+        with ESMTP id S231820AbiDHKCJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 06:01:30 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EFF7280
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 02:59:27 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id B55C01F861;
-        Fri,  8 Apr 2022 09:59:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1649411965; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=y0PsAMl4/noPyoCGgn90zWHMgOGH/EHQX9wluEN2ZzE=;
-        b=qvI+nJfthhLgm4/0Bg/SPiYcBdNPjZoWaTOy7+IuAL+tqk+N4AJf3/eggurasamK3fRgH3
-        PdtmguuffZ/riaOvGEqgmhSQnzGF1/c36IlZ+YqfZxtAG8yDZWdH30qTm68LzpNkwdbK9l
-        hB2XMMR1OSUE8fYBtEO5ZWN8HxR90Y0=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 5B2E5A3B96;
-        Fri,  8 Apr 2022 09:59:25 +0000 (UTC)
-Date:   Fri, 8 Apr 2022 11:59:25 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Nico Pache <npache@redhat.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Rafael Aquini <aquini@redhat.com>,
-        Waiman Long <longman@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Christoph von Recklinghausen <crecklin@redhat.com>,
-        Don Dutile <ddutile@redhat.com>,
-        "Herton R . Krzesinski" <herton@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Joel Savitz <jsavitz@redhat.com>,
-        Darren Hart <dvhart@infradead.org>, stable@kernel.org
-Subject: Re: [PATCH v8] oom_kill.c: futex: Don't OOM reap the VMA containing
- the robust_list_head
-Message-ID: <YlAHfU7VEI0wYAb/@dhcp22.suse.cz>
-References: <20220408032809.3696798-1-npache@redhat.com>
- <20220408081549.GM2731@worktop.programming.kicks-ass.net>
- <87tub4j7hg.ffs@tglx>
- <ddf1755e-fe69-b60e-ee07-e78d663b11b2@redhat.com>
- <YlACJMp7AFaVa/Gt@dhcp22.suse.cz>
- <676fb197-d045-c537-c1f7-e18320a6d15f@redhat.com>
+        Fri, 8 Apr 2022 06:02:09 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E1A7E081;
+        Fri,  8 Apr 2022 03:00:04 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2389xqt7094973;
+        Fri, 8 Apr 2022 04:59:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1649411992;
+        bh=Qxh9h/7hom6A7f6DA/CW/UTXGlQ1UMPgyD6L7Vo46R4=;
+        h=Date:Subject:To:References:CC:From:In-Reply-To;
+        b=Ynn4T485V4AZSozgKLZEuOkCcIWIAhst9eYt+nM0CahSte/Vv3utbcZes+U++fDm3
+         X0YiMXj6z6Erh6KKUdTM5zVFj8LaY/Q1XGx43LnoCWlVlO/rC2k1VX/cYN9iNSnpVS
+         f7DqB5x4cAmA/ukgtsB9T1fT6ePh9ZyxSdSXDDz0=
+Received: from DLEE101.ent.ti.com (dlee101.ent.ti.com [157.170.170.31])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2389xqxb072682
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 8 Apr 2022 04:59:52 -0500
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 8
+ Apr 2022 04:59:51 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 8 Apr 2022 04:59:51 -0500
+Received: from [10.250.100.73] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2389xnw9014761;
+        Fri, 8 Apr 2022 04:59:50 -0500
+Message-ID: <0a6007fe-aa5e-fc2e-bf3a-fd877deebee3@ti.com>
+Date:   Fri, 8 Apr 2022 12:59:49 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <676fb197-d045-c537-c1f7-e18320a6d15f@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/2] ARM: dts: keystone: align SPI NOR node name with
+ dtschema
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220407143140.295092-1-krzysztof.kozlowski@linaro.org>
+CC:     Roger Quadros <rogerq@kernel.org>
+From:   Grygorii Strashko <grygorii.strashko@ti.com>
+In-Reply-To: <20220407143140.295092-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 08-04-22 05:40:09, Nico Pache wrote:
-> 
-> 
-> On 4/8/22 05:36, Michal Hocko wrote:
-> > On Fri 08-04-22 04:52:33, Nico Pache wrote:
-> > [...]
-> >> In a heavily contended CPU with high memory pressure the delay may also
-> >> lead to other processes unnecessarily OOMing.
-> > 
-> > Let me just comment on this part because there is likely a confusion
-> > inlved. Delaying the oom_reaper _cannot_ lead to additional OOM killing
-> > because the the oom killing is throttled by existence of a preexisting
-> > OOM victim. In other words as long as there is an alive victim no
-> > further victims are not selected and the oom killer backs off. The
-> > oom_repaer will hide the alive oom victim after it is processed.
-> > The longer the delay will be the longer an oom victim can block a
-> > further progress but it cannot really cause unnecessary OOMing.
-> Is it not the case that if we delay an OOM, the amount of available memory stays
-> limited and other processes that are allocating memory can become OOM candidates?
 
-No. Have a look at oom_evaluate_task (tsk_is_oom_victim check).
+
+On 07/04/2022 17:31, Krzysztof Kozlowski wrote:
+> The node names should be generic and SPI NOR dtschema expects "flash".
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>   arch/arm/boot/dts/keystone-k2e-evm.dts  | 2 +-
+>   arch/arm/boot/dts/keystone-k2g-evm.dts  | 2 +-
+>   arch/arm/boot/dts/keystone-k2g-ice.dts  | 2 +-
+>   arch/arm/boot/dts/keystone-k2hk-evm.dts | 2 +-
+>   arch/arm/boot/dts/keystone-k2l-evm.dts  | 2 +-
+>   5 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/keystone-k2e-evm.dts b/arch/arm/boot/dts/keystone-k2e-evm.dts
+> index 66fec5f5d081..8f49883a675e 100644
+> --- a/arch/arm/boot/dts/keystone-k2e-evm.dts
+> +++ b/arch/arm/boot/dts/keystone-k2e-evm.dts
+> @@ -137,7 +137,7 @@ partition@180000 {
+>   };
+>   
+>   &spi0 {
+> -	nor_flash: n25q128a11@0 {
+> +	nor_flash: flash@0 {
+>   		#address-cells = <1>;
+>   		#size-cells = <1>;
+>   		compatible = "Micron,n25q128a11";
+> diff --git a/arch/arm/boot/dts/keystone-k2g-evm.dts b/arch/arm/boot/dts/keystone-k2g-evm.dts
+> index d800f26b6275..88be868cf71e 100644
+> --- a/arch/arm/boot/dts/keystone-k2g-evm.dts
+> +++ b/arch/arm/boot/dts/keystone-k2g-evm.dts
+> @@ -392,7 +392,7 @@ &qspi {
+>   	pinctrl-0 = <&qspi_pins>;
+>   	cdns,rclk-en;
+>   
+> -	flash0: m25p80@0 {
+> +	flash0: flash@0 {
+>   		compatible = "s25fl512s", "jedec,spi-nor";
+>   		reg = <0>;
+>   		spi-tx-bus-width = <1>;
+> diff --git a/arch/arm/boot/dts/keystone-k2g-ice.dts b/arch/arm/boot/dts/keystone-k2g-ice.dts
+> index 2a2d38cf0fff..bd84d7f0f2fe 100644
+> --- a/arch/arm/boot/dts/keystone-k2g-ice.dts
+> +++ b/arch/arm/boot/dts/keystone-k2g-ice.dts
+> @@ -325,7 +325,7 @@ &qspi {
+>   	cdns,rclk-en;
+>   	status = "okay";
+>   
+> -	flash0: m25p80@0 {
+> +	flash0: flash@0 {
+>   		compatible = "s25fl256s1", "jedec,spi-nor";
+>   		reg = <0>;
+>   		spi-tx-bus-width = <1>;
+> diff --git a/arch/arm/boot/dts/keystone-k2hk-evm.dts b/arch/arm/boot/dts/keystone-k2hk-evm.dts
+> index ad4e22afe133..f968af0bfad3 100644
+> --- a/arch/arm/boot/dts/keystone-k2hk-evm.dts
+> +++ b/arch/arm/boot/dts/keystone-k2hk-evm.dts
+> @@ -161,7 +161,7 @@ dtt@50 {
+>   };
+>   
+>   &spi0 {
+> -	nor_flash: n25q128a11@0 {
+> +	nor_flash: flash@0 {
+>   		#address-cells = <1>;
+>   		#size-cells = <1>;
+>   		compatible = "Micron,n25q128a11";
+> diff --git a/arch/arm/boot/dts/keystone-k2l-evm.dts b/arch/arm/boot/dts/keystone-k2l-evm.dts
+> index e200533d26a4..32619b3c5804 100644
+> --- a/arch/arm/boot/dts/keystone-k2l-evm.dts
+> +++ b/arch/arm/boot/dts/keystone-k2l-evm.dts
+> @@ -110,7 +110,7 @@ partition@180000 {
+>   };
+>   
+>   &spi0 {
+> -	nor_flash: n25q128a11@0 {
+> +	nor_flash: flash@0 {
+>   		#address-cells = <1>;
+>   		#size-cells = <1>;
+>   		compatible = "Micron,n25q128a11";
+
+Thank you
+Reviewed-by: Grygorii Strashko <grygorii.strashko@ti.com>
+
 
 -- 
-Michal Hocko
-SUSE Labs
+Best regards,
+Grygorii, Ukraine

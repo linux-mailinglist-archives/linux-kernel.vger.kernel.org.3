@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D75634F988B
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:47:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C765A4F9884
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237161AbiDHOtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 10:49:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54360 "EHLO
+        id S236014AbiDHOt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 10:49:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237085AbiDHOtO (ORCPT
+        with ESMTP id S234867AbiDHOtR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 10:49:14 -0400
+        Fri, 8 Apr 2022 10:49:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F393C38D84;
-        Fri,  8 Apr 2022 07:47:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC1438D84;
+        Fri,  8 Apr 2022 07:47:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 53E1E61E16;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9537B61E83;
+        Fri,  8 Apr 2022 14:47:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37655C385A8;
         Fri,  8 Apr 2022 14:47:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E70E6C385A3;
-        Fri,  8 Apr 2022 14:47:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649429229;
-        bh=IwyesdrCp1niEjDWDNUAqbKnkJMKAvXX2yXj5TkCb5U=;
+        s=k20201202; t=1649429233;
+        bh=6UAy6vwa9qNgF6GIFreKzgcGTOebGNa25UsFFF9iOHw=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=jBhtWnLcFL+4IX3ZZTGAVNw1bNVCXHpqkx6yx54N4/PRy24zrnvvbtaiJbmRqfxXa
-         RrmrOFf1HgmW1oWzxDGiGNyvp4W7TUH/DThIJOPV6uPcW7Y67gGHD9HokjcTn7Yqod
-         s8oFqNiED6ufEOrvibZQYUTjooA/b178HSY/a0/r8pZrtrIzGrdLHB79Aivi59oJvh
-         FPggIXpKFyvbzBE9aZb15rxhtzRqDgZuBJ61X50Ifl7/ZG2qRJgxbcymOp+bZH1pox
-         iCgKBNgJ2dWymFacuT6u1MrWyYfb7/Y6UAJYdiDFSkxHuOrl9LRBJmxUAcptd3Dmfb
-         TC9nJg6Unh+Ig==
+        b=GNsF6pDXrgnU84AB89bG6z8gC2Cqfueje8sDfg6VZIHVELT3aZpBrW83/h+TzNRU1
+         +HOib9Djh1UWy1FXxcf5vlKMCBr0Y984nAVX2Zid9VcnGjvf9jXakgXlFBjP/HbUPC
+         6rbsYHQj+Qg1I9ZpcSMPbhB4o7+GFfUqAQxFwof0Yn++oNdsESMKYhEPsCpEiIRaOs
+         Nf4VcYQBlrYkKneakat1KYW2nRSLACsX5fR6i7Ll6PcQlQAcJEQg4XHcDvUntKAp4Y
+         TmIJd349vXbssjDOJfkK6OVy05oRsf9kfkafxCi9CDcY/aaj7Dv30U4B/PSjlVSP7G
+         rsGHas/pYKhKA==
 From:   Mark Brown <broonie@kernel.org>
 To:     tzungbi@google.com, robh+dt@kernel.org, jiaxin.yu@mediatek.com,
         nfraprado@collabora.com
@@ -42,11 +42,11 @@ Cc:     trevor.wu@mediatek.com, linux-arm-kernel@lists.infradead.org,
         linmq006@gmail.com,
         Project_Global_Chrome_Upstream_Group@mediatek.com,
         angelogioacchino.delregno@collabora.com
-In-Reply-To: <20220406100514.11269-1-jiaxin.yu@mediatek.com>
-References: <20220406100514.11269-1-jiaxin.yu@mediatek.com>
-Subject: Re: [v9 0/4] ASoC: mediatek: mt8192: support rt1015p_rt5682s
-Message-Id: <164942922666.1424253.184773384356622992.b4-ty@kernel.org>
-Date:   Fri, 08 Apr 2022 15:47:06 +0100
+In-Reply-To: <20220408060552.26607-1-jiaxin.yu@mediatek.com>
+References: <20220408060552.26607-1-jiaxin.yu@mediatek.com>
+Subject: Re: [v10 0/4] ASoC: mediatek: mt8192: support rt1015p_rt5682s
+Message-Id: <164942922994.1424253.17635473999849755848.b4-ty@kernel.org>
+Date:   Fri, 08 Apr 2022 15:47:09 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -60,16 +60,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 6 Apr 2022 18:05:10 +0800, Jiaxin Yu wrote:
+On Fri, 8 Apr 2022 14:05:48 +0800, Jiaxin Yu wrote:
 > The series reuses mt8192-mt6359-rt1015-rt5682.c for supporting machine
 > driver with rt1015p speaker amplifier and rt5682s headset codec.
 > 
+> Changes from v9:
+>   - Modify the commit messages to make them more clear.
+> 
 > Changes from v8:
 >   - fix typos.
-> 
-> Changes from v7:
->   - "mediatek,hdmi-codec" is an optional property, the code and the
->     binding document should match.
 > 
 > [...]
 

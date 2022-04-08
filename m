@@ -2,171 +2,302 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BC1E4F9356
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 12:53:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F034F935E
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 12:55:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234778AbiDHKzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 06:55:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56716 "EHLO
+        id S234789AbiDHK5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 06:57:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231958AbiDHKz3 (ORCPT
+        with ESMTP id S234800AbiDHK5b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 06:55:29 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0229449276;
-        Fri,  8 Apr 2022 03:53:24 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2388jbpS006378;
-        Fri, 8 Apr 2022 10:53:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=SsFg1aMqug3Zz5afyaZwovmNDm/UMD3lncaJ/AaX4Lc=;
- b=yEtu/7/sFLL8dlYMJpYSdY4iGlyMcbislezGqCgVW16VHRfuYb5Tzl2yIwgHgryPVg63
- D1n2P1hwcJ+II/ksnsqzpKXnDATgvotC3ZeFeJRn17G0PWnBW7RC90QsGxIiFjhzL+gC
- X9EaqXK/z8ex59hc8ZuzwZp47FZOyjOhLWU/8okHFcI8+ZXylN8EEKwX8qZIpihF+JDy
- 5iiiUA95cNaB36Aqi2PKYxNkPiGPMbGqKxn2hbRZAmeboVtumKLxJbVKKBB0X7OBnDgo
- YUEcFZ1uiiU84Z9AAKsr0wMHQq+xMkbOvr1AzhZ4tX+2FW1Qyno8gdaCyKRnGKwy0Sge JA== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3f6d31pusn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 08 Apr 2022 10:53:11 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 238ApKNT036088;
-        Fri, 8 Apr 2022 10:53:09 GMT
-Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam08lp2172.outbound.protection.outlook.com [104.47.73.172])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3f974f621f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 08 Apr 2022 10:53:09 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ecaAN7AU0f6I41daFgGu0GnoPcef86KPF3JyKvNv/CASLMEJ4ooOGf+hRBTlheSZ9cLUPHuP72WkaLHgxayS7toCJRCHQyRPwmC0dXMJIR7fafvUSq4bZoiga/KCLB3/kHVvm0/NtUHOt9AzAkOocue42EY0nUB6Q+Iuq+dfSCd69xCIlLgsXcN29W/gdhMw8p6SZhDLUyWEvWft64G68BFgWqEl7zIvwe1+SfggF8IWjj5RIzl+P99ou2wSz1mmtwUN7ngRnTCR4zUUgYsu2BlNXaKQqux/yFr5tZ4ztZs8AcMjKv1IaWocEaqEHY7c2RkaueiyUMwLg6rKRa+dfw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SsFg1aMqug3Zz5afyaZwovmNDm/UMD3lncaJ/AaX4Lc=;
- b=R5PokbjM6MM2DLPGo2PxM6bDX5sMQQUIMKJx8RGxCjKNalGAXQ7d98LpXWlZ26hZydwFuUzbv+ShH793XaJgTn4sY9uwsMwshP/NRKkqLpT94QewN5O38g2wV1nV02vzZSsPg9VUoV+NJe8gaVbsyid+bzvguqEQIFDAG5XbOot6LawRlaGxAXZdp1TdoeFyLoqXDn6j7SeztSyMXJtD48zcLiRzBxqpV/PmvHFpAbtFxaE+M8k0M6wUad8oLbBqQoukE69mHPagwo1RsDLiH/R0OGrQdO8XJTYQgmHsJN2oyNHJpcn/pS1SZ93FB4waQMcEz5eH4kghKuTP1oZQ6w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Fri, 8 Apr 2022 06:57:31 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE9B62A3A
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 03:55:27 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id s11so10345152qtc.3
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 03:55:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SsFg1aMqug3Zz5afyaZwovmNDm/UMD3lncaJ/AaX4Lc=;
- b=nhTuK8ITb8svDrbDQu0BEImcHdRNLAY9bOgRi/OCVINXSf06xC91avjZ9/s4YX8PCF1tlAiIRT+7+VxHOwjiKBhRBPl71dB8iejJPF9S4sqnLcs1kUjuPTfflwNVO34dY4fHdgXGCQvoSPj7DxpiP4DKH+AoTQ+gkcOq2QvFMiI=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by SA1PR10MB5710.namprd10.prod.outlook.com
- (2603:10b6:806:23f::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5123.31; Fri, 8 Apr
- 2022 10:53:07 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::b5d5:7b39:ca2d:1b87]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::b5d5:7b39:ca2d:1b87%5]) with mapi id 15.20.5144.022; Fri, 8 Apr 2022
- 10:53:07 +0000
-Date:   Fri, 8 Apr 2022 13:52:42 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Kate Hsuan <hpa@redhat.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Bingbu Cao <bingbu.cao@intel.com>,
-        Tianshu Qiu <tian.shu.qiu@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, hdegoede@redhat.com
-Subject: Re: [PATCH v3] staging: media: ipu3: Fix AWB x_start position when
- rightmost stripe is used
-Message-ID: <20220408105242.GT3293@kadam>
-References: <20220408104222.13893-1-hpa@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220408104222.13893-1-hpa@redhat.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: JNXP275CA0043.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:18::31)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wQ32oIqx14rnvXLxjvE2i+RnWC98UtztZC7z3pVQWG0=;
+        b=AbFjIX8hslk9QQUB7VIg/V2V9rNvdg+6M+CE8a3dm7OqpujpJZgeWTTERV3NVZMCC3
+         JgtmGdfdY7epLJRAqh70xZxPIL//GGVMhn8Rx7sVDtBPl/KS+rUKXdPG3W1a7CWlTho4
+         QbZA3oN8ua1KAeSACKN7V1zUDC0cDHbTWe3W4MGYWaxScO1Bhl1DlU0mYo0v6CiBz/+r
+         kqH9q640xPC3VWzF4Gk7PDTHxwxhYkLBEfIBz1xv49ZsmsjxHPrAjwRN3cRIiT7K7Kwe
+         th54qu+Wfdzv7o//SgeK3weD25KwAUJzSJVr8Oeo3zy+Z76swvOkwMTjnFo4eROTsiXn
+         i81A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wQ32oIqx14rnvXLxjvE2i+RnWC98UtztZC7z3pVQWG0=;
+        b=chfAMO/WXOKkMtxrvxAc+fV9yMe48lUP6ApAIGs2lt1sT/RWvE4ZkbVu4N/I+/c4uZ
+         BcAxijnRgI+T587s/W1wKTAdcHUeLTl8UzA7nhb1mINVaKEdtXBCy36JPRO0SPebbvKR
+         zD9VcR7UHFJNXXMM3l6u3DkSHHE/oWM9bIWrSt0EnCxa6Ps3zukVdC9rY/pn2yUn6tMg
+         1HNb/M6cGGDYjCVnnQD/ZDODYTD9KNfJVhySVlWYuxCIsX7UEmxhvdAsCl/Q3SIew885
+         RfpgrLSvNeUqZaAT/RnQUIeJ8IbSywq+pQjwXqbRR/pWMKOC7QOKL+t2H+KXykfCtvby
+         8sUg==
+X-Gm-Message-State: AOAM531ppIygJUyWF4dCUTfmFRNTu6Rc8VSQum3asoedlifHQcBkKsyk
+        qIou+xO6haU/c4OP/g0Pdc5aWh87b9nC4DdLwsY=
+X-Google-Smtp-Source: ABdhPJyaiRvfgYRF9CoMFqwxjGaJDeGsG49Gi4e7xvTsu5N7+X67dShYbbu0xD/8083QSSIXdcWN3A74eUDymH0nVzc=
+X-Received: by 2002:ac8:588c:0:b0:2e1:ee12:3473 with SMTP id
+ t12-20020ac8588c000000b002e1ee123473mr15545900qta.455.1649415326229; Fri, 08
+ Apr 2022 03:55:26 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1cd1dd23-bc64-4f13-a547-08da194df67e
-X-MS-TrafficTypeDiagnostic: SA1PR10MB5710:EE_
-X-Microsoft-Antispam-PRVS: <SA1PR10MB57109868FCBF48CE437F259C8EE99@SA1PR10MB5710.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mKYIoq6/2oENRsECT09iO0NZQfJt0v+UHEjrx0vCV26WkcZXXCTKQH36NghSB2fUv1o6lLNTltDtQZYlm4lZw9FrEVIOWXM5rmQSufQc+U41LZ/SXEvdt20zcFprALVf2llbncdFczJgvhGggJHfAXxcBFLa09PcHZcLqcXVil+As92R7wLuxYOoex7OORwOFBq1olypS3hWFRrytyx9GotfGX6igVby+/IGzLdCnfiFYDUYBOx4ownMv0MtlzmUu3ZaOT9U1U8Z6BzsXK7Y9xYTCl3kPnwU5rWdo+pRO3zOyBk4NWlNYmBfTVi3FqzzzWJBHoETBqj4/bA4Prm7xEgPONrN9dgDzs9Qmg/pcWJV4V/6aTq2Sil5ZmFyHFtCphX1WTP5iJI44hg4Qvngqsqg1g9T6ykZde0fVYAalarGe/cRLGRlQsvzRgksSHJeWYvfas2ngg9HkBQ7j9MRejQafFKGDU1zsqPV1kz7e5942Xne8jNBS2EhEw6yg5a2BDF+5888nciHna3Tk40l3HiHuymKa3hNVImZuQw7WVPqcHJ/+ftFt1o/f3PDkbp02e7iRGVnGFjjsKU/gbnoR9oLdz3rwKfxcawYT7JvKNg2Dl0JMV6fOw8/6lONJPy5Dl4BVS8YZLZBQXNqI6adZgM9pOR+G4lvT7q88KSLeWEIuiAv/baVoIaOXr4nXRDx4bI3p2PBRXPAy+MAUZlVOA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(6666004)(2906002)(66556008)(38350700002)(26005)(5660300002)(6506007)(33716001)(8676002)(4326008)(186003)(44832011)(66476007)(52116002)(4744005)(66946007)(6486002)(6916009)(8936002)(316002)(38100700002)(9686003)(86362001)(33656002)(508600001)(54906003)(1076003)(7416002)(6512007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?a7KXMyP5vnsBiSK69ImUuz/VUIyVyuI4WyIsGgRoxp8q4fU5Rvv+lwRUbpEA?=
- =?us-ascii?Q?VxWx5EypNHIPWKDWcGeDIzFTgmTtLGgyPXk46Q0ZMklEQRiQIDdvPOnu9J1s?=
- =?us-ascii?Q?cfIWYAtxAeOdSZ3mb2j1ls3s3i26ICm2KGtCynNtDWu738Hub7rtyoApW3YV?=
- =?us-ascii?Q?+kvI/JFA2Oe0ofXFWCzWPvoiWSO8wex+p1mfX6obSONGY81xOMXMxTk6JBAc?=
- =?us-ascii?Q?iqCDSorStU8Br8tesXzMfJiDxYfy0aZdzl3P84A6m9nJsrbc403A1dIHDrn7?=
- =?us-ascii?Q?dgBfC2NfdfmfjoNddj+qmCkGTNCuDyGCNQeP9pZ94G6BiXpEKl9arfhyAyg6?=
- =?us-ascii?Q?B19B/pTWiz22K5cYQioH82j2IZ8CTM9HXVknq+29Pk0yR4/Y6FkLC23tMYEY?=
- =?us-ascii?Q?AxeVfVqn9uiBkSLzBkS01ie9Ext9qhrd8D8rGWEmFtttoD61BaxNDzQNXMt7?=
- =?us-ascii?Q?/87NcTiEkVb/SPMhHglyJe1SlVZ5b3jwZ265zoYl9DqOwGY4wh5vBtZlyVWk?=
- =?us-ascii?Q?vk/egbpuEiB4/vLfvTvwa8nYcFi872A/G340QpWHwWQyFJSzaNIvK7Z2Dr22?=
- =?us-ascii?Q?9ANXy0Y09uRxiR9Hjib0cMjbszOB6gqWrRi1IRK4DJ5HJv2fBBn0phSPm8nw?=
- =?us-ascii?Q?oLR1YqaPsTH7Ulqa6F381L4XSAYQSXd+hg0ZCg9tQI8n0HWGE1N6j1hT4w4s?=
- =?us-ascii?Q?39OMJ+C3YcOBujTVZrudoDUfoeH+7kQCJbkvjWW/ipH7LLH6boAf8z3zYlQE?=
- =?us-ascii?Q?T4mHleBIgfXcZjSgTwCd9RZiiTxshf2NeW+m/x3jzmS4bMUO5gt+sj4VIi7W?=
- =?us-ascii?Q?PaXKb/ZhlZ8SvYE+bRcRESZPEXciR+bk7VaJ79qsnXS7P3sacvOcMKHe+Y82?=
- =?us-ascii?Q?9AfosTxrMiILcQjuz9pkIcTY8NRK8cpd9PcCle3qgOPpJhqwJEOU2ykJYTw2?=
- =?us-ascii?Q?VhYL+bkD5cpf9gDXAR3Z7nvkjEsirCQBQjl1jP+Lw3ab7uxKxN12tFTiIm+o?=
- =?us-ascii?Q?V98x97OugF/74ofXn6lwaCxn06MxfzwIPC/tcEBxKarPvYHYyBItym0IWPTG?=
- =?us-ascii?Q?ydcPPn3UjXNv/MOGPliUb0hzenIEfl3yF16IkAkFE+FZo5xyD/04Z2vFyoul?=
- =?us-ascii?Q?HHwzmwABwcdqxXKMEZyqz0vldkB0Y9MxNFa23HnORDeonvS+KkoF+Cw0RINq?=
- =?us-ascii?Q?+Qe/27Bh4hd43rwaTD+PyCeYg+cB+QiJnWsQCLYBdgtyGf/UrTnLjmWx5d1B?=
- =?us-ascii?Q?pOtwj5XWCaSLkMn+FQD5AxlYIpiE9BoVb+hAmJAHza0BwgT/nFAK6xYhMe6N?=
- =?us-ascii?Q?G73/8jz1kNaRLugEpdc0EixdFjbJ9FupSO1CAyGJ3GbQ3y4cOHrW99CFrtNP?=
- =?us-ascii?Q?lXTqh66SyObJBzN5g5xCrhE5IQxvY6wuxHod3dHpBpf1Osk0t7NPzkwb8x+g?=
- =?us-ascii?Q?xcQiMxAShEb3b0ic7CZRod1nqtIv7xjTu0eeAnwotCRqJcqvT5NvwVVxuigx?=
- =?us-ascii?Q?trHvDo/7LHf3ym1TRFfTrbKDojd3BtGcEtU9dYQOfwYz6BoK8pG7ioHhn0N6?=
- =?us-ascii?Q?uWY0SCStHHhIoYNPW5hwrmfMIT9y/yTub4LVBdiVIoeB4bG9GUdMBTqVzJxM?=
- =?us-ascii?Q?7Pr92OREkbVQ4xzMpDsMEg5JhHiUM3c4q2ob1Xm8aRWlYzvqKD4vtP7k84QK?=
- =?us-ascii?Q?W6fIk8L+pPwvQ6nNCBNe9Kicfq/xnpAJYNmZeqAekp/3iKKNqsCqmfLkdlL/?=
- =?us-ascii?Q?/i4ep6t9PPkYZ0BU20J45SsjzA1T5j4=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1cd1dd23-bc64-4f13-a547-08da194df67e
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Apr 2022 10:53:06.9548
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: X9ywNHKi5jwuMIaYAlcoYhxbmHzOq7we00asg7XV0poR85diuDrfYYTJThJnL2aGU6XP8/UNhuSfquSDcfbLtsP1+B+RyvDNm6SHEfDMMmY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB5710
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.858
- definitions=2022-04-08_03:2022-04-08,2022-04-08 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 malwarescore=0
- mlxlogscore=999 suspectscore=0 adultscore=0 bulkscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204080055
-X-Proofpoint-GUID: 4Pe5eyE5vMw9C2Bez06wjiXpZDZ21c85
-X-Proofpoint-ORIG-GUID: 4Pe5eyE5vMw9C2Bez06wjiXpZDZ21c85
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220407125839.1479249-1-alexander.usyskin@intel.com> <20220407125839.1479249-21-alexander.usyskin@intel.com>
+In-Reply-To: <20220407125839.1479249-21-alexander.usyskin@intel.com>
+From:   Matthew Auld <matthew.william.auld@gmail.com>
+Date:   Fri, 8 Apr 2022 11:54:59 +0100
+Message-ID: <CAM0jSHPHBeABjJucfeBhd5g-VUrw0r_wBW2OVzXqJRNfEQsmOg@mail.gmail.com>
+Subject: Re: [Intel-gfx] [PATCH 20/20] drm/i915/gsc: allocate extended
+ operational memory in LMEM
+To:     Alexander Usyskin <alexander.usyskin@intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Alan Previn <alan.previn.teres.alexis@intel.com>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Vitaly Lubart <vitaly.lubart@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 06:42:22PM +0800, Kate Hsuan wrote:
-> An not calibrated x_start setting would result in an incorrect AWB grid
-> configuration on a sensor when only the rightmost stripe is used.
-> 
-> If the AWB grid coordinate is set to the rightmost stripe, for example,
-> x_start is greater than 640, the AWB grid will be at the rightmost edge of
-> the sensor. The AWB statistic will be fetched from the wrong place of the
-> sensor and results in an incorrect AWB estimation result. Therefore,
-> stripe offset should subtract from x_start to have a correct grid
-> configuration for the rightmost stripe.
-> 
+On Thu, 7 Apr 2022 at 14:00, Alexander Usyskin
+<alexander.usyskin@intel.com> wrote:
+>
+> From: Tomas Winkler <tomas.winkler@intel.com>
+>
+> GSC requires more operational memory than available on chip.
+> Reserve 4M of LMEM for GSC operation. The memory is provided to the
+> GSC as struct resource to the auxiliary data of the child device.
+>
+> Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
+> Signed-off-by: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
+> Cc: Alan Previn <alan.previn.teres.alexis@intel.com>
+> ---
+>  drivers/gpu/drm/i915/gt/intel_gsc.c | 92 ++++++++++++++++++++++++++---
+>  drivers/gpu/drm/i915/gt/intel_gsc.h |  3 +
+>  2 files changed, 88 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/i915/gt/intel_gsc.c b/drivers/gpu/drm/i915/gt/intel_gsc.c
+> index bfc307e49bf9..4d87519d5773 100644
+> --- a/drivers/gpu/drm/i915/gt/intel_gsc.c
+> +++ b/drivers/gpu/drm/i915/gt/intel_gsc.c
+> @@ -7,6 +7,7 @@
+>  #include <linux/mei_aux.h>
+>  #include "i915_drv.h"
+>  #include "i915_reg.h"
+> +#include "gem/i915_gem_region.h"
+>  #include "gt/intel_gsc.h"
+>  #include "gt/intel_gt.h"
+>
+> @@ -36,12 +37,68 @@ static int gsc_irq_init(int irq)
+>         return irq_set_chip_data(irq, NULL);
+>  }
+>
+> +static int
+> +gsc_ext_om_alloc(struct intel_gsc *gsc, struct intel_gsc_intf *intf, size_t size)
+> +{
+> +       struct intel_gt *gt = gsc_to_gt(gsc);
+> +       struct drm_i915_gem_object *obj;
+> +       void *vaddr;
+> +       int err;
+> +
+> +       obj = i915_gem_object_create_lmem(gt->i915, size, I915_BO_ALLOC_CONTIGUOUS);
+> +       if (IS_ERR(obj)) {
+> +               drm_err(&gt->i915->drm, "Failed to allocate gsc memory\n");
+> +               return PTR_ERR(obj);
+> +       }
+> +
+> +       err = i915_gem_object_pin_pages_unlocked(obj);
+> +       if (err) {
+> +               drm_err(&gt->i915->drm, "Failed to pin pages for gsc memory\n");
+> +               goto out_put;
+> +       }
+> +
+> +       vaddr = i915_gem_object_pin_map_unlocked(obj, i915_coherent_map_type(gt->i915, obj, true));
+> +       if (IS_ERR(vaddr)) {
+> +               err = PTR_ERR(vaddr);
+> +               drm_err(&gt->i915->drm, "Failed to map gsc memory\n");
+> +               goto out_unpin;
+> +       }
+> +
+> +       memset(vaddr, 0, obj->base.size);
 
-Thank you!
+We should be able to pass I915_BO_ALLOC_CPU_CLEAR to create_lmem,
+which should do something like this for us, when later calling
+pin_pages or similar.
 
-regards,
-dan carpenter
-
+> +
+> +       i915_gem_object_unpin_map(obj);
+> +
+> +       intf->gem_obj = obj;
+> +
+> +       return 0;
+> +
+> +out_unpin:
+> +       i915_gem_object_unpin_pages(obj);
+> +out_put:
+> +       i915_gem_object_put(obj);
+> +       return err;
+> +}
+> +
+> +static void gsc_ext_om_destroy(struct intel_gsc_intf *intf)
+> +{
+> +       struct drm_i915_gem_object *obj = fetch_and_zero(&intf->gem_obj);
+> +
+> +       if (!obj)
+> +               return;
+> +
+> +       if (i915_gem_object_has_pinned_pages(obj))
+> +               i915_gem_object_unpin_pages(obj);
+> +
+> +       i915_gem_object_put(obj);
+> +}
+> +
+>  struct gsc_def {
+>         const char *name;
+>         unsigned long bar;
+>         size_t bar_size;
+>         bool use_polling;
+>         bool slow_fw;
+> +       size_t lmem_size;
+>  };
+>
+>  /* gsc resources and definitions (HECI1 and HECI2) */
+> @@ -74,6 +131,7 @@ static const struct gsc_def gsc_def_dg2[] = {
+>                 .name = "mei-gsc",
+>                 .bar = DG2_GSC_HECI1_BASE,
+>                 .bar_size = GSC_BAR_LENGTH,
+> +               .lmem_size = SZ_4M,
+>         },
+>         {
+>                 .name = "mei-gscfi",
+> @@ -90,26 +148,33 @@ static void gsc_release_dev(struct device *dev)
+>         kfree(adev);
+>  }
+>
+> -static void gsc_destroy_one(struct intel_gsc_intf *intf)
+> +static void gsc_destroy_one(struct drm_i915_private *i915,
+> +                                 struct intel_gsc *gsc, unsigned int intf_id)
+>  {
+> +       struct intel_gsc_intf *intf = &gsc->intf[intf_id];
+> +
+>         if (intf->adev) {
+>                 auxiliary_device_delete(&intf->adev->aux_dev);
+>                 auxiliary_device_uninit(&intf->adev->aux_dev);
+>                 intf->adev = NULL;
+>         }
+> +
+>         if (intf->irq >= 0)
+>                 irq_free_desc(intf->irq);
+>         intf->irq = -1;
+> +
+> +       gsc_ext_om_destroy(intf);
+>  }
+>
+>  static void gsc_init_one(struct drm_i915_private *i915,
+> -                        struct intel_gsc_intf *intf,
+> -                        unsigned int intf_id)
+> +                              struct intel_gsc *gsc,
+> +                              unsigned int intf_id)
+>  {
+>         struct pci_dev *pdev = to_pci_dev(i915->drm.dev);
+>         struct mei_aux_device *adev;
+>         struct auxiliary_device *aux_dev;
+>         const struct gsc_def *def;
+> +       struct intel_gsc_intf *intf = &gsc->intf[intf_id];
+>         int ret;
+>
+>         intf->irq = -1;
+> @@ -141,7 +206,7 @@ static void gsc_init_one(struct drm_i915_private *i915,
+>         intf->irq = irq_alloc_desc(0);
+>         if (intf->irq < 0) {
+>                 drm_err(&i915->drm, "gsc irq error %d\n", intf->irq);
+> -               return;
+> +               goto fail;
+>         }
+>
+>         ret = gsc_irq_init(intf->irq);
+> @@ -155,6 +220,19 @@ static void gsc_init_one(struct drm_i915_private *i915,
+>         if (!adev)
+>                 goto fail;
+>
+> +       if (def->lmem_size) {
+> +               dev_dbg(&pdev->dev, "setting up GSC lmem\n");
+> +
+> +               if (gsc_ext_om_alloc(gsc, intf, def->lmem_size)) {
+> +                       dev_err(&pdev->dev, "setting up gsc extended operational memory failed\n");
+> +                       kfree(adev);
+> +                       goto fail;
+> +               }
+> +
+> +               adev->ext_op_mem.start = i915_gem_object_get_dma_address(intf->gem_obj, 0);
+> +               adev->ext_op_mem.end = adev->ext_op_mem.start + def->lmem_size;
+> +       }
+> +
+>         adev->irq = intf->irq;
+>         adev->bar.parent = &pdev->resource[0];
+>         adev->bar.start = def->bar + pdev->resource[0].start;
+> @@ -188,7 +266,7 @@ static void gsc_init_one(struct drm_i915_private *i915,
+>
+>         return;
+>  fail:
+> -       gsc_destroy_one(intf);
+> +       gsc_destroy_one(i915, gsc, intf->id);
+>  }
+>
+>  static void gsc_irq_handler(struct intel_gt *gt, unsigned int intf_id)
+> @@ -229,7 +307,7 @@ void intel_gsc_init(struct intel_gsc *gsc, struct drm_i915_private *i915)
+>                 return;
+>
+>         for (i = 0; i < INTEL_GSC_NUM_INTERFACES; i++)
+> -               gsc_init_one(i915, &gsc->intf[i], i);
+> +               gsc_init_one(i915, gsc, i);
+>  }
+>
+>  void intel_gsc_fini(struct intel_gsc *gsc)
+> @@ -241,5 +319,5 @@ void intel_gsc_fini(struct intel_gsc *gsc)
+>                 return;
+>
+>         for (i = 0; i < INTEL_GSC_NUM_INTERFACES; i++)
+> -               gsc_destroy_one(&gsc->intf[i]);
+> +               gsc_destroy_one(gt->i915, gsc, i);
+>  }
+> diff --git a/drivers/gpu/drm/i915/gt/intel_gsc.h b/drivers/gpu/drm/i915/gt/intel_gsc.h
+> index 68582f912b21..fcac1775e9c3 100644
+> --- a/drivers/gpu/drm/i915/gt/intel_gsc.h
+> +++ b/drivers/gpu/drm/i915/gt/intel_gsc.h
+> @@ -20,11 +20,14 @@ struct mei_aux_device;
+>
+>  /**
+>   * struct intel_gsc - graphics security controller
+> + *
+> + * @gem_obj: scratch memory GSC operations
+>   * @intf : gsc interface
+>   */
+>  struct intel_gsc {
+>         struct intel_gsc_intf {
+>                 struct mei_aux_device *adev;
+> +               struct drm_i915_gem_object *gem_obj;
+>                 int irq;
+>                 unsigned int id;
+>         } intf[INTEL_GSC_NUM_INTERFACES];
+> --
+> 2.32.0
+>

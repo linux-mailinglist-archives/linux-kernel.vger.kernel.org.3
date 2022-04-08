@@ -2,89 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 128A84F984D
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:39:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95B984F9854
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:40:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237015AbiDHOlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 10:41:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52198 "EHLO
+        id S237026AbiDHOmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 10:42:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233877AbiDHOlW (ORCPT
+        with ESMTP id S237018AbiDHOmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 10:41:22 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ACECECB2B;
-        Fri,  8 Apr 2022 07:39:18 -0700 (PDT)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 238DXrgB004524;
-        Fri, 8 Apr 2022 07:39:04 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pfpt0220;
- bh=Cu2apFYpM5bPz1vZIij3a91tdWX8TyF7yQXIxmBRn8A=;
- b=JkqIg8J7iTWfWkKknajNn9WQ7LBxrJY2LmdOM+MxRgI2aq0DUHOJTxE3whhaKVuVy7HX
- 6Nqlgnirns41njwbzwHIunCtXRcSMwMWUHRArGT+1fkE8/+1VkfWdo1ZEbQFFrUI7E6R
- mHuZLExck1iwKbNKY+9aDXSeGo/s3YoUESws2jiyH8M4Z0a+DxhWX6rKqb8mWyCS3Xfy
- TtHAxWhgeOd08izksdleIx9+tFsvXA+wOi+vGeofCtxcOuOz3B3bNItiKyoWjH4BF8rV
- vMrfgmS/6nEGkQsSbQ1BcWqyEBqUYs4t+2ADLcgBe5q+Yan2Xx5PB0ZQ0YtDjmmK510E Zg== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3f9r7erhnu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Fri, 08 Apr 2022 07:39:03 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Fri, 8 Apr
- 2022 07:39:01 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Fri, 8 Apr 2022 07:39:01 -0700
-Received: from [10.193.34.141] (unknown [10.193.34.141])
-        by maili.marvell.com (Postfix) with ESMTP id 9A67D3F704C;
-        Fri,  8 Apr 2022 07:38:59 -0700 (PDT)
-Message-ID: <bc8d25ed-e65f-83b9-e21c-25150f9b8884@marvell.com>
-Date:   Fri, 8 Apr 2022 16:38:58 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:98.0) Gecko/20100101
- Thunderbird/98.0
-Subject: Re: [EXT] [PATCH v2] net: atlantic: Avoid out-of-bounds indexing
-Content-Language: en-US
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>, <davem@davemloft.net>,
-        <kuba@kernel.org>
-CC:     Mario Limonciello <mario.limonciello@amd.com>,
-        Paolo Abeni <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220408022204.16815-1-kai.heng.feng@canonical.com>
-From:   Igor Russkikh <irusskikh@marvell.com>
-In-Reply-To: <20220408022204.16815-1-kai.heng.feng@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
+        Fri, 8 Apr 2022 10:42:13 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F220EDF3A;
+        Fri,  8 Apr 2022 07:40:10 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 238CdSGD014989;
+        Fri, 8 Apr 2022 14:39:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=XFkL8cQvSYvUcpOEfCXPe12HKR8iBPHrQbnrpfQWjC0=;
+ b=g4U7cBLoLPGHbXBOqk9l26ROGil4abM9xP/Wn9F7FtavnQ1LtZ235EK0ZBis9Id6gAQL
+ S548VI3cfxgPrzlHySNtWc/NBxge8wvIk+UKcO8oto++7j69Ab2lE3niJOTbAfp3dEDd
+ trqIUZeJGVYlxYUGRVrE+fJOExi5zaK557yCcuj/ScP+L2PrhwFCGpU/sjGdJRFa29nw
+ K0zFqisuL6oIHF+zNSmEeTRWRBzkvZSj30wOCg9dF3HDRzpQPcsuKPzGShqmFT8ZMGTw
+ Bzj0dATouwuStchWo0a/NIpmrqEzQR3EwpODlpUMm8ufx3yuNtMCZJ+79SIfQzYUctLL 9g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fac23n6fc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 08 Apr 2022 14:39:34 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 238EKeiD019963;
+        Fri, 8 Apr 2022 14:39:33 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fac23n6en-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 08 Apr 2022 14:39:33 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 238EbCGe032743;
+        Fri, 8 Apr 2022 14:39:31 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma06ams.nl.ibm.com with ESMTP id 3f6drhuyk1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 08 Apr 2022 14:39:30 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 238EdSdK49217800
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 8 Apr 2022 14:39:28 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9DD474C046;
+        Fri,  8 Apr 2022 14:39:28 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7A2CD4C044;
+        Fri,  8 Apr 2022 14:39:26 +0000 (GMT)
+Received: from sig-9-65-90-167.ibm.com (unknown [9.65.90.167])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  8 Apr 2022 14:39:26 +0000 (GMT)
+Message-ID: <b28ea211d88e968a5487b20477236e9b507755f4.camel@linux.ibm.com>
+Subject: Re: [PATCH 2/7] KEYS: X.509: Parse Basic Constraints for CA
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Snowberg <eric.snowberg@oracle.com>, dhowells@redhat.com,
+        dwmw2@infradead.org, jarkko@kernel.org,
+        linux-integrity@vger.kernel.org
+Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
+        dmitry.kasatkin@gmail.com, jmorris@namei.org, serge@hallyn.com,
+        roberto.sassu@huawei.com, nramas@linux.microsoft.com,
+        pvorel@suse.cz, tiwai@suse.de, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Date:   Fri, 08 Apr 2022 10:39:25 -0400
+In-Reply-To: <20220406015337.4000739-3-eric.snowberg@oracle.com>
+References: <20220406015337.4000739-1-eric.snowberg@oracle.com>
+         <20220406015337.4000739-3-eric.snowberg@oracle.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: mfWi2QzyKu_I-GBIafCg-kQQTJG2eqDb
-X-Proofpoint-ORIG-GUID: mfWi2QzyKu_I-GBIafCg-kQQTJG2eqDb
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: jMHn25ub1MQrcehXfpQCUpPiLWReHYqc
+X-Proofpoint-ORIG-GUID: mmpsduc6xbiX_CRWDs2sqDmNMf1PYHOY
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.425,FMLib:17.11.64.514
  definitions=2022-04-08_05,2022-04-08_01,2022-02-23_01
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 clxscore=1015 malwarescore=0 lowpriorityscore=0 bulkscore=0
+ mlxlogscore=999 mlxscore=0 spamscore=0 suspectscore=0 impostorscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204080071
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-> UBSAN warnings are observed on atlantic driver:
-> [ 294.432996] UBSAN: array-index-out-of-bounds in
-> /build/linux-Qow4fL/linux-5.15.0/drivers/net/ethernet/aquantia/atlantic/aq
-> _nic.c:484:48
-> [ 294.433695] index 8 is out of range for type 'aq_vec_s *[8]'
+On Tue, 2022-04-05 at 21:53 -0400, Eric Snowberg wrote:
+> Parse the X.509 Basic Constraints.  The basic constraints extension
+> identifies whether the subject of the certificate is a CA.
 > 
-> The ring is dereferenced right before breaking out the loop, to prevent
-> that from happening, only use the index in the loop to fix the issue.
+> BasicConstraints ::= SEQUENCE {
+>         cA                      BOOLEAN DEFAULT FALSE,
+>         pathLenConstraint       INTEGER (0..MAX) OPTIONAL }
+> 
+> If the CA is true, store it in the x509_certificate.  This will be used
+> in a follow on patch that requires knowing if the public key is a CA.
+> 
+> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+> ---
+>  crypto/asymmetric_keys/x509_cert_parser.c | 9 +++++++++
+>  crypto/asymmetric_keys/x509_parser.h      | 1 +
+>  2 files changed, 10 insertions(+)
+> 
+> diff --git a/crypto/asymmetric_keys/x509_cert_parser.c b/crypto/asymmetric_keys/x509_cert_parser.c
+> index 2899ed80bb18..30f7374ea9c0 100644
+> --- a/crypto/asymmetric_keys/x509_cert_parser.c
+> +++ b/crypto/asymmetric_keys/x509_cert_parser.c
+> @@ -583,6 +583,15 @@ int x509_process_extension(void *context, size_t hdrlen,
+>  		return 0;
+>  	}
+>  
+> +	if (ctx->last_oid == OID_basicConstraints) {
+> +		if (vlen < 2 || v[0] != (ASN1_CONS_BIT | ASN1_SEQ))
+> +			return -EBADMSG;
+> +		if (v[1] != vlen - 2)
+> +			return -EBADMSG;
+> +		if (vlen >= 4 && v[1] != 0 && v[2] == ASN1_BOOL && v[3] == 1)
+> +			ctx->cert->is_root_ca = true;
+> +	}
+> +
+>  	return 0;
+>  }
+>  
+> diff --git a/crypto/asymmetric_keys/x509_parser.h b/crypto/asymmetric_keys/x509_parser.h
+> index 97a886cbe01c..dc45df9f6594 100644
+> --- a/crypto/asymmetric_keys/x509_parser.h
+> +++ b/crypto/asymmetric_keys/x509_parser.h
+> @@ -38,6 +38,7 @@ struct x509_certificate {
+>  	bool		self_signed;		/* T if self-signed (check unsupported_sig too) */
+>  	bool		unsupported_sig;	/* T if signature uses unsupported crypto */
+>  	bool		blacklisted;
+> +	bool		is_root_ca;		/* T if basic constraints CA is set */
 
-Thanks,
+There's no need to prefix variables with "is_".  Similar to the
+variable "self_signed" simply name this variable "root_ca".
 
-Reviewed-by: Igor Russkikh <irusskikh@marvell.com>
+thanks,
 
-Igor
+Mimi
+
+
+>  };
+>  
+>  /*
+
+

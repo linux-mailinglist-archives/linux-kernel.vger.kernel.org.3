@@ -2,306 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E62B4F9A8F
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 18:24:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24AD74F9A98
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 18:29:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231332AbiDHQ0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 12:26:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49238 "EHLO
+        id S231439AbiDHQbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 12:31:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231324AbiDHQ0f (ORCPT
+        with ESMTP id S229865AbiDHQbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 12:26:35 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD2C5357704
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 09:24:30 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id o5-20020a17090ad20500b001ca8a1dc47aso12362383pju.1
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 09:24:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rYnVVxyhKumfFmwnr0WfWEMxVmAFk7TEKHdgXJGr0Iw=;
-        b=Lb2aSr9fQtfGaUkxcjA8LrMiDQ95u/NfYqsd5OezZarMi1g23OrRGVPCN6PdH2bl9b
-         rP+lYwEMkV9iJnDH/WiRpuYrIVd3vInYuQVsCMp2oInnFfobiPvpNnox73+oiXC3Ia0f
-         EBbbfleWVGgWQnwDOF9NufVSz4lBUmByAVceXh/wpELX3+0IjhF80aFs2c/f1aodiyCB
-         p/0FPzp3IWxSChkyw3vkaCGG/o2z+pfx0tIWXX37MQ2nBp6O2FDLRo1xIK/iKooHSD0v
-         m+X+qs6R0kro0/yplqemrBpcWUfyCMghQII4Q5MOPLN7l59EuKK3SgPHfMjZs9PUjBUZ
-         RyXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rYnVVxyhKumfFmwnr0WfWEMxVmAFk7TEKHdgXJGr0Iw=;
-        b=EA9Z9B+srqRnnQikWEPbntiAxbFnm0GSrorrCaUzWj+rfOiJBoJVbd+Fue6EZz4krq
-         /GaQhjAYWhSTMMZLuZW9C1INiWOT52KDomxSV/7hH0xIZfrwST17V+7gLIpHeqRC5JkE
-         HHFvHjmYwV1X/+KRzBtuylMK+YJrxa3KArIR3kDZSsI7EA6aJzCEmPTb6glTnYDemHwG
-         eSDZDIRHFt3L6Isq2BaBUI4ClF2bMyOfxBqkhfBoodgjuHg8806WKzxGslzirpv5Iv1a
-         0KNrQ27+t2RWwmm+L8Ns3Dkv73YLcfODNeI0qnfeZxzPL6rWi1zFWzfBnnK5kd4I7lw8
-         XTZA==
-X-Gm-Message-State: AOAM53332eIZBZuP+zLHs1i6M7p1soPyhyT2/laj60OKWcBXYiShjprv
-        QCV9EHQsxws8+SK5Dj5AMepLmg==
-X-Google-Smtp-Source: ABdhPJyGUdSrugbndouHNjsZJUNAPPhiNS0lNKzUZWJGcnxfpVvlxYLjM1wO+Tx9kg3/QQbrtoxJSw==
-X-Received: by 2002:a17:902:7c0a:b0:156:87e0:846 with SMTP id x10-20020a1709027c0a00b0015687e00846mr19983597pll.8.1649435070040;
-        Fri, 08 Apr 2022 09:24:30 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id q18-20020aa78432000000b004fb0a5aa2c7sm28007919pfn.183.2022.04.08.09.24.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 09:24:29 -0700 (PDT)
-Date:   Fri, 8 Apr 2022 16:24:25 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     isaku.yamahata@intel.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>
-Subject: Re: [RFC PATCH v5 075/104] KVM: x86: Check for pending APICv
- interrupt in kvm_vcpu_has_events()
-Message-ID: <YlBhuWElVRwYrrS+@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <d28f3b27c281e0c6a8f93c01bb4da78980d654c8.1646422845.git.isaku.yamahata@intel.com>
+        Fri, 8 Apr 2022 12:31:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E881A3A105A
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 09:29:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 76B71B82C01
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 16:29:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04095C385A3;
+        Fri,  8 Apr 2022 16:29:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649435346;
+        bh=x4dhjkETefwHzF0BSywC1YGUzOvL3hMJFwITeWy3G/I=;
+        h=Date:From:To:Cc:Subject:From;
+        b=fMawvy6u03JUiIIegIcQuh61EsdNHKerclvCiSe4VNxU7Z8tU4NKLVCTGes24sPJu
+         tvh6bPCkeykF0E5GmzsGuWWLLi6R1Ue5Olu70wQ63ptqh4td7LHJgV1M2uS7op66Xw
+         7WUApIV1uYAJRBJ9QZ7hNdo5dO22jY3f3nkQCzk2MqBl5XeVi1tY+CSVrkA5Fiyj47
+         ZEHizvy5/FxX9Df4lmhFhBKuQpXORmX0ODJpDyrqJP5no21ceBnE2DRh31Sm+g7jCx
+         qoIqXg5fmkhL4SlK/xG5O5gfPPxcpt2cGSObToVDVC/h0S7cdt+iw6NrO0q4If6wLh
+         NSvmxliWVXadw==
+Date:   Fri, 8 Apr 2022 17:29:00 +0100
+From:   Will Deacon <will@kernel.org>
+To:     torvalds@linux-foundation.org
+Cc:     catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com
+Subject: [GIT PULL] arm64 fixes for -rc2
+Message-ID: <20220408162900.GC28108@willie-the-truck>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d28f3b27c281e0c6a8f93c01bb4da78980d654c8.1646422845.git.isaku.yamahata@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 04, 2022, isaku.yamahata@intel.com wrote:
-> From: Sean Christopherson <sean.j.christopherson@intel.com>
-> 
-> Return true for kvm_vcpu_has_events() if the vCPU has a pending APICv
-> interrupt to support TDX's usage of APICv.  Unlike VMX, TDX doesn't have
-> access to vmcs.GUEST_INTR_STATUS and so can't emulate posted interrupts,
+Hi Linus,
 
-Based on the discussion in the HLT patch, this is no longer true.
+Please pull these arm64 fixes for -rc2. The usual summary is in the tag,
+but the two main things to note are:
 
-> i.e. needs to generate a posted interrupt and more importantly can't
-> manually move requested interrupts into the vIRR (which it also doesn't
-> have access to).
-> 
-> Because pi_has_pending_interrupt() is heavy operation which uses two atomic
-> test bit operations and one atomic 256 bit bitmap check, introduce new
-> callback for this check instead of reusing dy_apicv_has_pending_interrupt()
-> callback to avoid affecting the exiting code.
+  (1) The bulk of the diffstat is us reverting a horrible bodge we had
+      in place to ease the merging of maple tree during the merge window
+      (which turned out not to be needed, but anyway)
 
-...
+  (2) The TLB invalidation fix is done in core code, as suggested by
+      (and Acked-by) Peter.
 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 89d04cd64cd0..314ae43e07bf 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -12111,7 +12111,10 @@ static inline bool kvm_vcpu_has_events(struct kvm_vcpu *vcpu)
->  
->  	if (kvm_arch_interrupt_allowed(vcpu) &&
->  	    (kvm_cpu_has_interrupt(vcpu) ||
-> -	    kvm_guest_apic_has_interrupt(vcpu)))
-> +	     kvm_guest_apic_has_interrupt(vcpu) ||
-> +	     (vcpu->arch.apicv_active &&
-> +	      kvm_x86_ops.apicv_has_pending_interrupt &&
-> +	      kvm_x86_ops.apicv_has_pending_interrupt(vcpu))))
+Cheers,
 
-This is pretty gross (fully realizing that I wrote this patch).  It's also arguably
-wrong as it really should be called from apic_has_interrupt_for_ppr().
+Will
 
-  1. The hook implies it is valid for APICv in general, which is misleading.
+--->8
 
-  2. It's wasted effort for VMX.
- 
-  3. It does a poor job of conveying _why_ TDX is different.
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
-  4. KVM is unnecessarily processing its useless "copy" of the PPR/IRR for TDX
-     vCPUs.  It's functionally not an issue unless userspace stuffs garbage into
-     KVM's vAPIC, but it's unnecessary work.
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
 
-Rather than hook this path, I would rather we tag kvm_apic has having some of its
-state protected.  Then kvm_cpu_has_interrupt() can invoke the alternative,
-protected-apic-only hook when appropriate, and kvm_apic_has_interrupt() can bail
-immediately instead of doing useless processing of stale vAPIC state.
+are available in the Git repository at:
 
-Note, the below moves the !apic check from tdx_vcpu_reset() to tdx_vcpu_create().
-That part should be hoisted earlier in the series, there's no reason to wait until
-RESET to perform the check, and I suspect the WARN_ON() can be triggered by userespace.
+  git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git tags/arm64-fixes
 
-Compile tested only...
+for you to fetch changes up to d02b4dd84e1a90f7f1444d027c0289bf355b0d5a:
 
-From: Sean Christopherson <seanjc@google.com>
-Date: Fri, 8 Apr 2022 08:56:27 -0700
-Subject: [PATCH] KVM: TDX: Add support for find pending IRQ in a protected
- local APIC
+  perf/imx_ddr: Fix undefined behavior due to shift overflowing the constant (2022-04-08 14:17:57 +0100)
 
-Add flag and hook to KVM's local APIC management to support determining
-whether or not a TDX guest as a pending IRQ.  For TDX vCPUs, the virtual
-APIC page is owned by the TDX module and cannot be accessed by KVM.  As a
-result, registers that are virtualized by the CPU, e.g. PPR, cannot be
-read or written by KVM.  To deliver interrupts for TDX guests, KVM must
-send an IRQ to the CPU on the posted interrupt notification vector.  And
-to determine if TDX vCPU has a pending interrupt, KVM must check if there
-is an outstanding notification.
+----------------------------------------------------------------
+arm64 fixes for -rc2
 
-Return "no interrupt" in kvm_apic_has_interrupt() if the guest APIC is
-protected to short-circuit the various other flows that try to pull an
-IRQ out of the vAPIC, the only valid operation is querying _if_ an IRQ is
-pending, KVM can't do anything based on _which_ IRQ is pending.
+- Revert temporary bodge in MTE coredumping to ease maple tree integration
 
-Intentionally omit sanity checks from other flows, e.g. PPR update, so as
-not to degrade non-TDX guests with unecessary checks.  A well-behaved KVM
-and userspace will never reach those flows for TDX guests, but reaching
-them is not fatal if something does go awry.
+- Fix stack frame size warning reported with 64k pages
 
-Note, this doesn't handle interrupts that have been delivered to the vCPU
-but not yet recognized by the core, i.e. interrupts that are sitting in
-vmcs.GUEST_INTR_STATUS.  Querying that state requires a SEAMCALL and will
-be supported in a future patch.
+- Fix stop_machine() race with instruction text patching
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/include/asm/kvm-x86-ops.h |  1 +
- arch/x86/include/asm/kvm_host.h    |  1 +
- arch/x86/kvm/irq.c                 |  3 +++
- arch/x86/kvm/lapic.c               |  3 +++
- arch/x86/kvm/lapic.h               |  2 ++
- arch/x86/kvm/vmx/main.c            | 11 +++++++++++
- arch/x86/kvm/vmx/tdx.c             |  9 ++++++---
- 7 files changed, 27 insertions(+), 3 deletions(-)
+- Ensure alternatives patching routines are not instrumented
 
-diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-index 7e27b73d839f..ce705d0c6241 100644
---- a/arch/x86/include/asm/kvm-x86-ops.h
-+++ b/arch/x86/include/asm/kvm-x86-ops.h
-@@ -110,6 +110,7 @@ KVM_X86_OP_NULL(update_pi_irte)
- KVM_X86_OP_NULL(start_assignment)
- KVM_X86_OP_NULL(apicv_post_state_restore)
- KVM_X86_OP_NULL(dy_apicv_has_pending_interrupt)
-+KVM_X86_OP_NULL(protected_apic_has_interrupt)
- KVM_X86_OP_NULL(set_hv_timer)
- KVM_X86_OP_NULL(cancel_hv_timer)
- KVM_X86_OP(setup_mce)
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 489374a57b66..b3dcc0814461 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1491,6 +1491,7 @@ struct kvm_x86_ops {
- 	void (*start_assignment)(struct kvm *kvm);
- 	void (*apicv_post_state_restore)(struct kvm_vcpu *vcpu);
- 	bool (*dy_apicv_has_pending_interrupt)(struct kvm_vcpu *vcpu);
-+	bool (*protected_apic_has_interrupt)(struct kvm_vcpu *vcpu);
+- Enable Spectre-BHB mitigation for Cortex-A78AE
 
- 	int (*set_hv_timer)(struct kvm_vcpu *vcpu, u64 guest_deadline_tsc,
- 			    bool *expired);
-diff --git a/arch/x86/kvm/irq.c b/arch/x86/kvm/irq.c
-index 172b05343cfd..24f180c538b0 100644
---- a/arch/x86/kvm/irq.c
-+++ b/arch/x86/kvm/irq.c
-@@ -96,6 +96,9 @@ int kvm_cpu_has_interrupt(struct kvm_vcpu *v)
- 	if (kvm_cpu_has_extint(v))
- 		return 1;
+- Fix hugetlb TLB invalidation when contiguous hint is used
 
-+	if (lapic_in_kernel(v) && v->arch.apic->guest_apic_protected)
-+		return static_call(kvm_x86_protected_apic_has_interrupt)(v);
-+
- 	return kvm_apic_has_interrupt(v) != -1;	/* LAPIC */
- }
- EXPORT_SYMBOL_GPL(kvm_cpu_has_interrupt);
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index 9322e6340a74..50a483abc0fe 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -2503,6 +2503,9 @@ int kvm_apic_has_interrupt(struct kvm_vcpu *vcpu)
- 	if (!kvm_apic_present(vcpu))
- 		return -1;
+- Minor perf driver fixes
 
-+	if (apic->guest_apic_protected)
-+		return -1;
-+
- 	__apic_update_ppr(apic, &ppr);
- 	return apic_has_interrupt_for_ppr(apic, ppr);
- }
-diff --git a/arch/x86/kvm/lapic.h b/arch/x86/kvm/lapic.h
-index 2b44e533fc8d..7b62f1889a98 100644
---- a/arch/x86/kvm/lapic.h
-+++ b/arch/x86/kvm/lapic.h
-@@ -52,6 +52,8 @@ struct kvm_lapic {
- 	bool sw_enabled;
- 	bool irr_pending;
- 	bool lvt0_in_nmi_mode;
-+	/* Select registers in the vAPIC cannot be read/written. */
-+	bool guest_apic_protected;
- 	/* Number of bits set in ISR. */
- 	s16 isr_count;
- 	/* The highest vector set in ISR; if -1 - invalid, must scan ISR. */
-diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
-index 882358ac270b..31aab8add010 100644
---- a/arch/x86/kvm/vmx/main.c
-+++ b/arch/x86/kvm/vmx/main.c
-@@ -42,6 +42,9 @@ static __init int vt_hardware_setup(void)
+- Fix some typos
 
- 	tdx_hardware_setup(&vt_x86_ops);
+----------------------------------------------------------------
+Borislav Petkov (1):
+      perf/imx_ddr: Fix undefined behavior due to shift overflowing the constant
 
-+	if (!enable_tdx)
-+		vt_x86_ops.protected_apic_has_interrupt = NULL;
-+
- 	if (enable_ept) {
- 		const u64 init_value = enable_tdx ? VMX_EPT_SUPPRESS_VE_BIT : 0ull;
- 		kvm_mmu_set_ept_masks(enable_ept_ad_bits,
-@@ -148,6 +151,13 @@ static void vt_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
- 	return vmx_vcpu_load(vcpu, cpu);
- }
+Catalin Marinas (1):
+      arm64: mte: Fix the stack frame size warning in mte_dump_tag_range()
 
-+static bool vt_protected_apic_has_interrupt(struct kvm_vcpu *vcpu)
-+{
-+	KVM_BUG_ON(!is_td_vcpu(vcpu), vcpu->kvm);
-+
-+	return pi_has_pending_interrupt(vcpu);
-+}
-+
- static void vt_flush_tlb_all(struct kvm_vcpu *vcpu)
- {
- 	if (is_td_vcpu(vcpu))
-@@ -297,6 +307,7 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
- 	.sync_pir_to_irr = vmx_sync_pir_to_irr,
- 	.deliver_interrupt = vmx_deliver_interrupt,
- 	.dy_apicv_has_pending_interrupt = pi_has_pending_interrupt,
-+	.protected_apic_has_interrupt = vt_protected_apic_has_interrupt,
+Chanho Park (1):
+      arm64: Add part number for Arm Cortex-A78AE
 
- 	.set_tss_addr = vmx_set_tss_addr,
- 	.set_identity_map_addr = vmx_set_identity_map_addr,
-diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-index 3a0e826fbe0c..7b9370384ce4 100644
---- a/arch/x86/kvm/vmx/tdx.c
-+++ b/arch/x86/kvm/vmx/tdx.c
-@@ -467,6 +467,12 @@ int tdx_vcpu_create(struct kvm_vcpu *vcpu)
- 	struct vcpu_tdx *tdx = to_tdx(vcpu);
- 	int ret, i;
+Geert Uytterhoeven (1):
+      perf: MARVELL_CN10K_DDR_PMU should depend on ARCH_THUNDER
 
-+	/* TDX only supports x2APIC, which requires an in-kernel local APIC. */
-+	if (!vcpu->arch.apic)
-+		return -EINVAL;
-+
-+	vcpu->arch.apic->guest_apic_protected = true;
-+
- 	ret = tdx_alloc_td_page(&tdx->tdvpr);
- 	if (ret)
- 		return ret;
-@@ -602,9 +608,6 @@ void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
- 	/* TDX doesn't support INIT event. */
- 	if (WARN_ON(init_event))
- 		goto td_bugged;
--	/* TDX supports only X2APIC enabled. */
--	if (WARN_ON(!vcpu->arch.apic))
--		goto td_bugged;
- 	if (WARN_ON(is_td_vcpu_created(tdx)))
- 		goto td_bugged;
+Guo Ren (1):
+      arm64: patch_text: Fixup last cpu should be master
 
+Joey Gouly (1):
+      arm64: alternatives: mark patch_alternative() as `noinstr`
 
-base-commit: f88e9fa63cbd87cda9352ee9a86a6f815744be33
---
+Julia Lawall (1):
+      arm64: fix typos in comments
 
+Phil Auld (1):
+      arch/arm64: Fix topology initialization for core scheduling
+
+Steve Capper (1):
+      tlb: hugetlb: Add more sizes to tlb_remove_huge_tlb_entry
+
+Will Deacon (1):
+      Revert "arm64: Change elfcore for_each_mte_vma() to use VMA iterator"
+
+Xiaomeng Tong (1):
+      perf: qcom_l2_pmu: fix an incorrect NULL check on list iterator
+
+Zhiyuan Dai (1):
+      arm64: Fix comments in macro __init_el2_gicv3
+
+ arch/arm64/include/asm/cputype.h   |  2 ++
+ arch/arm64/include/asm/el2_setup.h |  2 +-
+ arch/arm64/kernel/alternative.c    |  6 ++---
+ arch/arm64/kernel/elfcore.c        | 47 +++++++++++++++++++++-----------------
+ arch/arm64/kernel/hw_breakpoint.c  |  2 +-
+ arch/arm64/kernel/module-plts.c    |  2 +-
+ arch/arm64/kernel/patching.c       |  4 ++--
+ arch/arm64/kernel/proton-pack.c    |  1 +
+ arch/arm64/kernel/smp.c            |  2 +-
+ arch/arm64/kernel/suspend.c        |  2 +-
+ arch/arm64/mm/init.c               |  4 ++--
+ drivers/perf/Kconfig               |  2 +-
+ drivers/perf/fsl_imx8_ddr_perf.c   |  2 +-
+ drivers/perf/qcom_l2_pmu.c         |  6 ++---
+ include/asm-generic/tlb.h          | 10 +++++---
+ 15 files changed, 53 insertions(+), 41 deletions(-)

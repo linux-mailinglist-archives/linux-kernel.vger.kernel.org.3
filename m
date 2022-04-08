@@ -2,234 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED4EE4F8B09
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 02:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABECF4F8AB1
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 02:55:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232931AbiDHAjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 20:39:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50160 "EHLO
+        id S233006AbiDHAlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 20:41:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232174AbiDHAjc (ORCPT
+        with ESMTP id S232174AbiDHAk5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 20:39:32 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE78108BED;
-        Thu,  7 Apr 2022 17:37:28 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649378246;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=v8wAVqTjtr3S+yNv24Qoju4enrtKRg9Vl4AVQdzomKw=;
-        b=EMhH88jCeXdBb1SKvMaZwP6woFbq2hzV0FAO3tm1K9W1Upm0GFyR+9p7LY0jhTcEra8UlP
-        Z8rAb+JxBHZpZBq7+l3VMyr84gBs4Khq/9tCFMsboYlFJp9d8MmEoyv5XW31TpnbsnUOkt
-        3CkV014aq4TYNi8CFJB4XyTdQZrIadAGOo7Zx8nB/yUvxgHNOrC9ffZgHug/ZZV0LVJ/Do
-        dT/gys9+jRQiQTki4Q31k/Ye/f2xWLRFbZLlSXkJL7oWca/RItkDw5TriDM4sLOUb0M/rH
-        41UbjLf2EaC2yQDiCv+mzWhZL3erlEdwl9dcaenFxtO1nG8dwiyDhlnTrudrTw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649378246;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=v8wAVqTjtr3S+yNv24Qoju4enrtKRg9Vl4AVQdzomKw=;
-        b=l+aIohejJ8RgDSgG7Yq473re5HP4cGl8sszvF4o4IpgtFIq89KPjotDtzACMNeGJIJH38R
-        pUUKwix4YDTBIGDg==
-To:     Artem Savkov <asavkov@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        netdev@vger.kernel.org
-Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        linux-kernel@vger.kernel.org, Artem Savkov <asavkov@redhat.com>
-Subject: Re: [PATCH v4 1/2] timer: add a function to adjust timeouts to be
- upper bound
-In-Reply-To: <20220407075242.118253-2-asavkov@redhat.com>
-Date:   Fri, 08 Apr 2022 02:37:25 +0200
-Message-ID: <87zgkwjtq2.ffs@tglx>
+        Thu, 7 Apr 2022 20:40:57 -0400
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C0A173366;
+        Thu,  7 Apr 2022 17:38:55 -0700 (PDT)
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id 2380cT7T020101;
+        Fri, 8 Apr 2022 09:38:29 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 2380cT7T020101
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1649378309;
+        bh=cNjeDzN9weH69RQ1VnbqR1X2JYg4D1jJ+YXitrVGUX0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=cg42i28bG+Ep5ujIFOo+HQxtafDM12rF0Hl0eDCFDbaadSlcSUvjDdGlRsDXtecGP
+         zPieKsxZdn2ZWOs7k8cbK1tW9SubohjUJIkOHpdgZegAs4XEAl2Ww2ArW8/mgcyIVw
+         3r3E8x2kNx8sxMvqMgRjcD8woYLReg86i+IAOn0akOzIOIqWg8t49iUFRVbDf37cuZ
+         BrL5rAd/l48P4VIFh1ts0rZGyi3ySwNO5UqOxP409gizRxtzeB7MfslhYubIeayrD6
+         dCmQUicolzwXlgXX+0987LGxquV1uU28Ng8uctqBO6nut8hI2DMY5/uht7NjzIIsqq
+         JqPu4iFsqqOxQ==
+X-Nifty-SrcIP: [209.85.216.45]
+Received: by mail-pj1-f45.google.com with SMTP id a16-20020a17090a6d9000b001c7d6c1bb13so8097598pjk.4;
+        Thu, 07 Apr 2022 17:38:29 -0700 (PDT)
+X-Gm-Message-State: AOAM530G33byvCygNBqTmoVw18TpJYKZ2y2puqkp90MQnG0iWvra3Pr3
+        +BC9WRFlS3ejud7NlHn4dJW/14Wqz6gMkvcEMkw=
+X-Google-Smtp-Source: ABdhPJw6lsS62tcWGGnhg03UEj21K0wbz57Z3DNmjww+2jiFGcHutlaNy92LYhxGd5kYikUskHoUuCIkgyBAGn3lzxM=
+X-Received: by 2002:a17:902:b183:b0:14f:c266:20d5 with SMTP id
+ s3-20020a170902b18300b0014fc26620d5mr16718530plr.136.1649378308545; Thu, 07
+ Apr 2022 17:38:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220406153023.500847-1-masahiroy@kernel.org> <20220406153023.500847-7-masahiroy@kernel.org>
+ <CAKwvOdm7NBPj43sRw-_dtjzgpHeOHnQ9uB3rSg3rYhUu0_PN7A@mail.gmail.com> <eedd7486cd484c359be90e6138b0b2be@AcuMS.aculab.com>
+In-Reply-To: <eedd7486cd484c359be90e6138b0b2be@AcuMS.aculab.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Fri, 8 Apr 2022 09:37:37 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASJKMqfaifGA9r_cYqgkVgL6OPCfjFZCGN4mZwxW_rZvw@mail.gmail.com>
+Message-ID: <CAK7LNASJKMqfaifGA9r_cYqgkVgL6OPCfjFZCGN4mZwxW_rZvw@mail.gmail.com>
+Subject: Re: [PATCH 6/7] kbuild: make *.mod not depend on *.o
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07 2022 at 09:52, Artem Savkov wrote:
-> Current timer wheel implementation is optimized for performance and
-> energy usage but lacks in precision. This, normally, is not a problem as
-> most timers that use timer wheel are used for timeouts and thus rarely
-> expire, instead they often get canceled or modified before expiration.
-> Even when they don't, expiring a bit late is not an issue for timeout
-> timers.
+On Fri, Apr 8, 2022 at 6:39 AM David Laight <David.Laight@aculab.com> wrote:
 >
-> TCP keepalive timer is a special case, it's aim is to prevent timeouts,
-> so triggering earlier rather than later is desired behavior. In a
-> reported case the user had a 3600s keepalive timer for preventing firewall
-> disconnects (on a 3650s interval). They observed keepalive timers coming
-> in up to four minutes late, causing unexpected disconnects.
+> From: Nick Desaulniers
+> > Sent: 07 April 2022 18:59
+> >
+> > On Wed, Apr 6, 2022 at 8:31 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> > >
+> > > The dependency
+> > >
+> > >     $(obj)/%.mod: $(obj)/%$(mod-prelink-ext).o
+> > >
+> > > ... exists because *.mod files previously contained undefined symbols,
+> > > which are computed from *.o files when CONFIG_TRIM_UNUSED_KSYMS=y.
+> > >
+> > > Now that the undefined symbols are put into separate *.usyms files,
+> > > there is no reason to make *.mod depend on *.o files.
+> > >
+> > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > > ---
+> > >
+> > >  Makefile               | 3 ++-
+> > >  scripts/Makefile.build | 5 ++---
+> > >  2 files changed, 4 insertions(+), 4 deletions(-)
+> > >
+> > > diff --git a/Makefile b/Makefile
+> > > index 82ee893909e9..e915aacd02b0 100644
+> > > --- a/Makefile
+> > > +++ b/Makefile
+> > > @@ -1792,7 +1792,8 @@ ifdef single-build
+> > >
+> > >  # .ko is special because modpost is needed
+> > >  single-ko := $(sort $(filter %.ko, $(MAKECMDGOALS)))
+> > > -single-no-ko := $(sort $(patsubst %.ko,%.mod, $(MAKECMDGOALS)))
+> > > +single-no-ko := $(filter-out $(single-ko), $(MAKECMDGOALS)) \
+> > > +               $(foreach x, o mod, $(patsubst %.ko, %.$x, $(single-ko)))
+> >
+> > I'm on board with this patch, and the overall goal with the series. My
+> > brain is having a hard time parsing `o mod` though. Can you walk me
+> > through that? Are those targets for .o and .mod files, respectively?
+
+
+Yes.
+
+Kbuild can build a module individually.
+
+    make  foo/bar/baz.ko
+
+(but modpost check does not work well)
+
+To do this, Kbuild needs to descend to
+the directory and generate
+foo/bar/baz.o  and  foo/bar/baz.mod.
+
+Previously, foo/bar/baz.o was generated as a
+prerequisite of foo/bar/baz.mod, but now we
+need to request Kbuild to generate both of them.
+
+
+
+
+
+> I think I'd do:
+> single-no-ko := $(filter-out $(single-ko), $(MAKECMDGOALS))
+> single-no-ko += $(patsubst %.ko, %.o, $(single-ko))
+> single-no-ko += $(patsubst %.ko, %.mod, $(single-ko))
 >
-> This commit adds upper_bound_timeout() function that takes a relative
+> Although you can use the simpler SYSV make suffix substitution syntax:
+> single-no-ko += $(single-ko:.ko=.o) $(single-ko:.ko=.mod)
 
-s/This commit adds/Add a new function to ..../
 
-See Documentation/process/*
+Right.   I tend to use $(patsubst ), but
+in some places, shorter SYSV syntax is used.
+I admit inconsistency.
 
-> timeout and adjusts it based on timer wheel granularity so that supplied
-> value effectively becomes an upper bound for the timer.
->  
-> -static int calc_wheel_index(unsigned long expires, unsigned long clk,
-> -			    unsigned long *bucket_expiry)
-> +static inline int get_wheel_lvl(unsigned long delta)
->  {
-> -	unsigned long delta = expires - clk;
-> -	unsigned int idx;
+
+
+
+
+>
+>         David
+>
 > -
->  	if (delta < LVL_START(1)) {
-> -		idx = calc_index(expires, 0, bucket_expiry);
-> +		return 0;
->  	} else if (delta < LVL_START(2)) {
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
 
-Can you please get rid of all those brackets?
 
-> +	return -1;
-> +}
-> +
-> +static int calc_wheel_index(unsigned long expires, unsigned long clk,
-> +			    unsigned long *bucket_expiry)
-> +{
-> +	unsigned long delta = expires - clk;
-> +	unsigned int idx;
-> +	int lvl = get_wheel_lvl(delta);
-> +
-> +	if (lvl >= 0) {
-> +		idx = calc_index(expires, lvl, bucket_expiry);
->  	} else if ((long) delta < 0) {
->  		idx = clk & LVL_MASK;
->  		*bucket_expiry = clk;
-> @@ -545,6 +555,38 @@ static int calc_wheel_index(unsigned long expires, unsigned long clk,
->  	return idx;
->  }
 
-This generates horrible code on various compilers. I ran that through a
-couple of perf test scenarios and came up with the following, which
-still is a tad slower for the level 0 case depending on the branch
-predictor state. But it at least prevents the compilers from doing
-stupid things and on average it's on par.
-
-Though the level 0 case matters because of *drumroll* networking.
-
-static int calc_wheel_index(unsigned long expires, unsigned long clk,
-			    unsigned long *bucket_expiry)
-{
-	unsigned long delta = expires - clk;
-	int lvl = get_wheel_lvl(delta);
-
-	if (likely(lvl) >= 0)
-		return __calc_index(expires, lvl, bucket_expiry);
-
-	if ((long) delta < 0) {
-		*bucket_expiry = clk;
-		return clk & LVL_MASK;
-	}
-
-	/*
-	 * Force expire obscene large timeouts to expire at the capacity
-	 * limit of the wheel.
-	 */
-	if (delta >= WHEEL_TIMEOUT_CUTOFF)
-		expires = clk + WHEEL_TIMEOUT_MAX;
-
-	return __calc_index(expires, LVL_DEPTH - 1, bucket_expiry);
-}
-
-Just for the record. I told you last time that your patch creates a
-measurable overhead and I explained you in depth why the performance of
-this stupid thing matters. So why are you not providing a proper
-analysis for that?
-
-> +/**
-> + * upper_bound_timeout - return granularity-adjusted timeout
-> + * @timeout: timeout value in jiffies
-> + *
-> + * This function return supplied timeout adjusted based on timer wheel
-> + * granularity effectively making supplied value an upper bound at which the
-> + * timer will expire. Due to the way timer wheel works timeouts smaller than
-> + * LVL_GRAN on their respecrive levels will be _at least_
-> + * LVL_GRAN(lvl) - LVL_GRAN(lvl -1)) jiffies early.
-
-Contrary to the simple "timeout - timeout/8" this gives better accuracy
-as it does not converge to the early side for long timeouts.
-
-With the quirk that this cuts timeout=1 to 0, which means it expires
-immediately. The wonders of integer math avoid that with the simple
-timeout -= timeout >> 3 approach for timeouts up to 8 ticks. :)
-
-But that want's to be properly documented.
-
-> +unsigned long upper_bound_timeout(unsigned long timeout)
-> +{
-> +	int lvl = get_wheel_lvl(timeout);
-
-which is equivalent to:
-
-         lvl = calc_wheel_index(timeout, 0, &dummy) >> LVL_BITS;
-
-Sorry, could not resist. :)
-
-The more interesting question is, how frequently this upper bounds
-function is used. It's definitely not something which you want to
-inflict onto a high frequency (re)arming timer.
-
-Did you analyse that? And if so, then why is that analysis missing from
-the change log of the keepalive timer patch?
-
-Aside of that it clearly lacks any argument why the simple, stupid, but
-fast approach of shortening the timeout by 12.5% is not good enough and
-why we need yet another function which is just going to be another
-source of 'optimizations' for the wrong reasons.
-
-Seriously, I apprecitate that you want to make this 'perfect', but it's
-never going to be perfect and the real question is whether there is any
-reasonable difference between 'good' and almost 'perfect'.
-
-And this clearly resonates in your changelog of the network patch:
-
- "Make sure TCP keepalive timer does not expire late. Switching to upper
-  bound timers means it can fire off early but in case of keepalive
-  tcp_keepalive_timer() handler checks elapsed time and resets the timer
-  if it was triggered early. This results in timer "cascading" to a
-  higher precision and being just a couple of milliseconds off it's
-  original mark."
-
-Which reinvents the cascading effect of the original timer wheel just
-with more overhead. Where is the justification for this?
-
-Is this really true for all the reasons where the keep alive timers are
-armed? I seriously doubt that. Why?
-
-On the end which waits for the keep alive packet to arrive in time it
-does not matter at all, whether the cutoff is a bit later than defined.
-
-     So why do you want to let the timer fire early just to rearm it? 
-
-But it matters a lot on the sender side. If that is late and the other
-end is strict about the timeout then you lost. But does it matter
-whether you send the packet too early? No, it does not matter at all
-because the important point is that you send it _before_ the other side
-decides to give up.
-
-     So why do you want to let the timer fire precise?
-
-You are solving the sender side problem by introducing a receiver side
-problem and both suffer from the overhead for no reason.
-
-Aside of the theoerical issue why this matters at all I have yet ot see
-a reasonable argument what the practical problen is. If this would be a
-real problem in the wild then why haven't we ssen a reassonable bug
-report within 6 years?
-
-Thanks,
-
-        tglx
+-- 
+Best Regards
+Masahiro Yamada

@@ -2,88 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC6E14F914C
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 11:05:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 187274F9156
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 11:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232489AbiDHJHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 05:07:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50614 "EHLO
+        id S232626AbiDHJIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 05:08:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231255AbiDHJHF (ORCPT
+        with ESMTP id S232251AbiDHJIi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 05:07:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C2FA80213
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 02:05:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1136C61C4A
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 09:05:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AEE8C385A3;
-        Fri,  8 Apr 2022 09:04:58 +0000 (UTC)
-Date:   Fri, 8 Apr 2022 10:04:54 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, Will Deacon <will@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of
- ARCH_KMALLOC_MINALIGN
-Message-ID: <Yk/6ts5sVDMDpKj3@arm.com>
-References: <20220405135758.774016-1-catalin.marinas@arm.com>
- <20220405135758.774016-8-catalin.marinas@arm.com>
- <YkzJP6zmkAhc6CI9@gondor.apana.org.au>
- <CAMj1kXEXhFmGc4VTTcJU1YFsHJhZN44OdJ5Suf2ONG5=LR29HQ@mail.gmail.com>
- <Yk1UJs6eZMoIp3Eh@arm.com>
- <Yk5o/lNTyiJWD4Ae@gondor.apana.org.au>
- <Yk7EbvYhwnQy+pAf@arm.com>
- <Yk7Ny/iFi0NrMXTg@gondor.apana.org.au>
- <Yk8RGvF6ik34C6BO@arm.com>
- <Yk+rKWEcc9rO+A25@gondor.apana.org.au>
+        Fri, 8 Apr 2022 05:08:38 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02DE10077F
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 02:06:33 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id x17so4817606lfa.10
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 02:06:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZTgTrO8kYm9f4pu/QJrfNd/0CjpbX6Q1P+5MHmfotqk=;
+        b=i2envguo4E6b4pLxv4XJXo+T/VB92G0yxDyRf6C4Zynw809rRjG4TPgiKQW4iUdAv3
+         0tw/FwIqX9NFRcxNywh1A2CkXqBeDO3z4zaJ1HWc81YOpnbcYUz2HphICFC28YyT8dRd
+         rnL5rspaX1Anjxgpb5DF1oPVz0MJGGmd0zEMMkm7FLJmnWzCBJfKcnhRsqBP3rZAGVnH
+         UJIRsQeHZCYIOFRUoxrDZxh0DeotCHIgMIdzstU0UQd+Nxv5L1bQcdKzr7r++SlNCXpe
+         QgXC9KKAMxXCuoM3kGDuy6rRVjV0ECnVx9rKx3YmL5/KKn+bFgar4zwneztVZ0fKeyNS
+         qQJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZTgTrO8kYm9f4pu/QJrfNd/0CjpbX6Q1P+5MHmfotqk=;
+        b=qH/QxWPg55LvDQUW6/SGdcGnnW9gstI2SfE//7p9SxfR9ietaJ32gYWqx/nyxRi6c9
+         gTaMg8aX2UcMeDOfD7nCg+gireRazeLum5SblrHV9Xm7n+cN4fidDxOr+05o4ghnpAzm
+         LRYCim9bccdkOQ68qUi8UBYzydXMJa/2OR0iYZECV76Jnb9XYWBRIypdOMvn4eE3YqK+
+         hL8RyHpe+F4bIq+5AmvFxECJnH5z5NTBGU4oIapgtjoGVBtSp4lZsAdirSyItkO95ARe
+         tPGMILykQLF0quiCTbaEKXoRJctJPiwzMkjKupzC3H4PTMPQrdS08wKLkUv9HLOh8TUB
+         xsHQ==
+X-Gm-Message-State: AOAM530yX3KoNajclZubQyvXfI/aKBBFu4O0GD5yI8dQzGjo7c+VW5sS
+        dy0QJ08w8rLe0UuSEgMi86fPrBYDeIVQMatgEZrJlw==
+X-Google-Smtp-Source: ABdhPJxJkWFAtOiYY7lH9mD1xE8veW54kPfgnqaEUsfjr6zNHODKBpmFl1OMxUDn+3CZnMq6R8G5Xp9HAI1SN+XENZ8=
+X-Received: by 2002:a05:6512:2627:b0:44a:f55c:ded9 with SMTP id
+ bt39-20020a056512262700b0044af55cded9mr12460116lfb.373.1649408791888; Fri, 08
+ Apr 2022 02:06:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yk+rKWEcc9rO+A25@gondor.apana.org.au>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220408080045.6497-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20220408080045.6497-1-wsa+renesas@sang-engineering.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 8 Apr 2022 11:05:55 +0200
+Message-ID: <CAPDyKFpaMy7ATDm6PCnYBxS_6-TZ-TF+gfHbp_o0nTo-6RaGdQ@mail.gmail.com>
+Subject: Re: [PATCH 0/3] mmc: improve API to make clear {h|s}w_reset is for cards
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-mmc@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        ath10k@lists.infradead.org, bcm-kernel-feedback-list@broadcom.com,
+        brcm80211-dev-list.pdl@broadcom.com,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        SHA-cyfmac-dev-list@infineon.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 11:25:29AM +0800, Herbert Xu wrote:
-> On Thu, Apr 07, 2022 at 05:28:10PM +0100, Catalin Marinas wrote:
-> > I can see in many cases that the kmalloc() caller aligns the requested
-> > size to something like crypto_tfm_ctx_alignment(). So this would
-> > guarantee a kmalloc() object aligned to CRYPTO_MINALIGN.
-> 
-> crypto_tfm_ctx_alignment is basically the same as CRYPTO_MINALIGN.
-> We assume any kmalloced pointers to be aligned to that.
-> 
-> Specific algorithms may ask for an alignment greater than that
-> and we will use the knowledge that kmalloc is aligned to
-> CRYPTO_MINALIGN to derive the extra memory we need to get.
-> 
-> So if kmalloc no longer returns memory aligned to MINALIGN then
-> we'll get memory overruns.
+On Fri, 8 Apr 2022 at 10:01, Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+>
+> As discussed in 2020 [1], Ulf and I agreed that it would be easier to
+> understand the {h|s}w_reset mechanisms if it was clear that they are for
+> cards. This series implements that by changing the parameter to mmc_card
+> where apropriate. Also, the callback into host drivers has been renamed
+> to 'card_hw_reset' to make it obvious what exactly the driver is
+> expected to reset.
+>
+> I tested it with my Renesas boards, so far no regressions. Buildbots are
+> currently checking the series.
+>
+> This series is based on mmc/next as of yesterday. A branch is here:
+>
+> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git renesas/mmc/reset-api-v2
+>
+> Looking forward to comments. Happy hacking,
+>
+>    Wolfram
+>
+> [1] https://lore.kernel.org/all/20200916090121.2350-1-wsa+renesas@sang-engineering.com/
+>
+> Wolfram Sang (3):
+>   mmc: core: improve API to make clear mmc_hw_reset is for cards
+>   mmc: core: improve API to make clear that mmc_sw_reset is for cards
+>   mmc: improve API to make clear hw_reset callback is for cards
+>
+>  drivers/mmc/core/block.c                             |  2 +-
+>  drivers/mmc/core/core.c                              | 12 +++++++-----
+>  drivers/mmc/core/mmc.c                               |  4 ++--
+>  drivers/mmc/core/mmc_test.c                          |  3 +--
+>  drivers/mmc/host/bcm2835.c                           |  2 +-
+>  drivers/mmc/host/dw_mmc.c                            |  2 +-
+>  drivers/mmc/host/meson-mx-sdhc-mmc.c                 |  2 +-
+>  drivers/mmc/host/mtk-sd.c                            |  2 +-
+>  drivers/mmc/host/sdhci.c                             |  2 +-
+>  drivers/mmc/host/sunxi-mmc.c                         |  2 +-
+>  drivers/mmc/host/uniphier-sd.c                       |  2 +-
+>  drivers/net/wireless/ath/ath10k/sdio.c               |  2 +-
+>  .../net/wireless/broadcom/brcm80211/brcmfmac/sdio.c  |  2 +-
+>  drivers/net/wireless/marvell/mwifiex/sdio.c          |  2 +-
+>  drivers/net/wireless/ti/wlcore/sdio.c                |  2 +-
+>  include/linux/mmc/core.h                             |  4 ++--
+>  include/linux/mmc/host.h                             |  2 +-
+>  17 files changed, 25 insertions(+), 24 deletions(-)
+>
 
-My point is that if the crypto code kmallocs a size aligned to
-crypto_tfm_ctx_alignment() (and CRYPTO_MINALIGN), the slab allocator
-will return memory aligned to CRYPTO_MINALIGN even if
-ARCH_KMALLOC_MINALIGN is smaller.
+Patch 1 applied for fixes and the two others for next, thanks!
 
-Would the crypto code, say, do a kmalloc(64) and expect a 128 byte
-alignment (when CRYPTO_MINALIGN == 128)? Or does it align the size to
-CRYPTO_MINALIGN and do a kmalloc(128) directly? If it's the latter, I
-don't think there's a problem.
-
--- 
-Catalin
+Kind regards
+Uffe

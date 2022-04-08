@@ -2,146 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7181D4F90C7
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 10:29:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC61B4F90CB
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 10:30:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231785AbiDHIbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 04:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60536 "EHLO
+        id S231966AbiDHIcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 04:32:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231731AbiDHIbn (ORCPT
+        with ESMTP id S231937AbiDHIcn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 04:31:43 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915D82FDCBF;
-        Fri,  8 Apr 2022 01:29:40 -0700 (PDT)
-Received: from [10.10.2.52] (unknown [10.10.2.52])
-        by mail.ispras.ru (Postfix) with ESMTPSA id A57AE40D403D;
-        Fri,  8 Apr 2022 08:29:33 +0000 (UTC)
-From:   Alexey Khoroshilov <khoroshilov@ispras.ru>
-Subject: Re: Stable release process proposal (Was: Linux 5.10.109)
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, stable@vger.kernel.org, lwn@lwn.net,
-        jslaby@suse.cz
-References: <164845571613863@kroah.com>
- <44e28591-873a-d873-e04a-78dda900a5de@ispras.ru> <YkPeTkf0sG/ns+L4@kroah.com>
-Autocrypt: addr=khoroshilov@ispras.ru; prefer-encrypt=mutual; keydata=
- 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
- kK2E04Fb+Zk1eJvHYRc=
-Message-ID: <cf4f2100-0518-56eb-29c8-393e2b49dc71@ispras.ru>
-Date:   Fri, 8 Apr 2022 11:29:33 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <YkPeTkf0sG/ns+L4@kroah.com>
-Content-Type: text/plain; charset=utf-8
+        Fri, 8 Apr 2022 04:32:43 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2133.outbound.protection.outlook.com [40.107.215.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3C82FF507;
+        Fri,  8 Apr 2022 01:30:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SC9FW1Jblr27ZuUkylE6a8znNe43PQfQ2cAf/UVRHnGxrwqqZttcXZDTQ7LuZVVEJq0UXu6fgvSsoDH+H7WRn6q39AFHoZBWtz/9Duj3aVRKhudsqAeLF7u78r4ABIKJlEXwUAZsqLJZ8GqjsEgIs07hQFtlOteNb4G4WJq4WjJ//rDB1pv/aR+LkWXay99pHerba7CFKwOTKmb1s3u9kT1ky/Mv7UwIX/dP9X0ZH4XD8sEGwnAxTlVMK4jo+pSsRtPGIcRf4YCXihZTOr6PidIRF9+/Q+Lll0V3jjP0l9yTdht8/g0g7ZdkhWOXOdCjoTlXya8bMEGVqb3spWQIiA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EMqtZfCNaXj9pgBly/AccvT6sl6GXJl/C3HVADh6MRo=;
+ b=T45AUm5TJTm3hhxq7CtJ/IW1vwAYWI6o+bNm1FHqjroI+Z/WVSmLIcIl+jNx1MjagWkT/itAT9cHVuMw0T3lGhru+XWBnmqV5em77azW0mopTwyMLZQIWIkrVuEt1XUsJQNbRGUr29vIxDzDGkN719uG4mMsrg2iTvZsvvjd6U5w9n8qWxjz2CA8rtSjUKk/zM+E4QCM0q1mvsRa8wpGAli+o32L5Pe1uXU3um1e0RDZghyQCeI+ijPd1vmwRv1eMOt/Q6D5Po062l28yYjWWWLKypWNtdrW+fbX+tYDGgIB4jWVXnfbycRcSP3j3pGJ+cIzde16sLRCksIqtVaHfA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EMqtZfCNaXj9pgBly/AccvT6sl6GXJl/C3HVADh6MRo=;
+ b=ITRMbLObvAKbAK6imT4MEzqvkKKaCyRMiJfpTER4jFhggYVBpaNsJiqCZ0DMCZ5u2kjjWj+j4jDTTtX0xwQYugl3ajoy7GJmr5jXZ1bfN1jTeVPJe+f1Ggv5qhreuwBBZGQTIDkMVYVP6IJB3zBLx3ojzwywXhOtDNWpreQorVk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com (2603:1096:4:78::19) by
+ KL1PR0601MB4966.apcprd06.prod.outlook.com (2603:1096:820:95::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.22; Fri, 8 Apr
+ 2022 08:30:37 +0000
+Received: from SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::74ea:8357:f542:4881]) by SG2PR06MB3367.apcprd06.prod.outlook.com
+ ([fe80::74ea:8357:f542:4881%4]) with mapi id 15.20.5144.022; Fri, 8 Apr 2022
+ 08:30:37 +0000
+From:   Wan Jiabing <wanjiabing@vivo.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Wan Jiabing <wanjiabing@vivo.com>
+Subject: [PATCH] pwm: sifive: simplify if-if to if-else
+Date:   Fri,  8 Apr 2022 16:30:07 +0800
+Message-Id: <20220408083007.41538-1-wanjiabing@vivo.com>
+X-Mailer: git-send-email 2.35.1
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: HKAPR04CA0015.apcprd04.prod.outlook.com
+ (2603:1096:203:d0::25) To SG2PR06MB3367.apcprd06.prod.outlook.com
+ (2603:1096:4:78::19)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 49a604e0-245c-4632-d783-08da193a0e39
+X-MS-TrafficTypeDiagnostic: KL1PR0601MB4966:EE_
+X-Microsoft-Antispam-PRVS: <KL1PR0601MB49664CED1C8F21BA1C26BB79ABE99@KL1PR0601MB4966.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5LxpflR5H6YAwOQgTrWzY39SbRhDh4DO4jzZRyiWCCAiOGnKDVWAALy3GfXVisQkB3hc9ou087dnPQlFD502RQ5qqj11hueMQh5MLCRXuhCNq0+eF9Na57s8mKhU0vT0ijrJTlfySbRIzgfIndLlx7rUQSccXpixkcxohENNbFryM3Mh9IPTkj/ffctZ/SXFDkhm7DBHtgP+rLJ2CO4C0rRyW6bZWuDCPhLn8amaoWlbwXgF5QBBf5aeG0yrIDPF4YX073Sp3u9VdQqQ9L0Krm7fGO8b8hudrgYsIc6DSrppVIkofGYINyGmuJKm0cfUm3H+dH0CC1B0vgoBRwoxH+kcqFYjJc1vLGjVCuDXpGQ/2/c3FGMCB4MDD/aUk58vfl7f7CQpPuzNQVDqyYY4z9TaOrszgVmWpeFe6qc9UoRhG50yiETC6ygbXedPKb15fp3wInBl2n+CfslblDJhrhdbh863qt2ftrp/MOeCotXbyIlzX4gfmpomycKpPUgNXvaJXNGLh0zrq5A2iD4XeyF49TE44qgtfCjeY0lwFkSeRq48BojqKW+KmKL900YnGB3YDibBWtjH6V70uOAqqxAGxNP05EOmfDElPQIvsCVxCwY+hfFybeqOcqLoDXPBJka/rH6IWB4z4eoGSV+NPMUG6qqt+FcFG7w6nDtgQBGjg/zgV7H9qof6wVdHUmwVLXIIw0ihKXdG2V6CuAfE6Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR06MB3367.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(5660300002)(6506007)(186003)(38350700002)(36756003)(52116002)(6512007)(316002)(4744005)(38100700002)(107886003)(26005)(8936002)(86362001)(8676002)(4326008)(66946007)(83380400001)(66556008)(1076003)(66476007)(110136005)(6666004)(6486002)(508600001)(2616005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9bP6K7fbbJ8DkBRkqrR+UjkKFPW/NI7TH5YU08C7fIX2c7VRO+Lq6tj1fLsS?=
+ =?us-ascii?Q?5AP2uhFbZ4dH97HQs2YFj949mFmmfKAVnX1DT0TyFvPhiLkke5PuQJzyEEbv?=
+ =?us-ascii?Q?+EXjl3R1ur5K0XaJ5RjvnoelaXs2cdxIDOpG31qKlZlinGLWb7G4msv833x7?=
+ =?us-ascii?Q?bzK6W6pbXASUW7FEoew46UD1S5RHxMhKkPN8aBUEQoE085Sg3waFa/zCSK+K?=
+ =?us-ascii?Q?G4kvGN9srvt059j8jWrJjHxrL1fytSGZKh5Nn6TVzC/F7fk0ENC45OgvRdww?=
+ =?us-ascii?Q?AGzPpJIpEwRAwkDDi0aSnBFya4YT/eliet3zAFA1dI4D/Pi0Fu02kfJjVmC1?=
+ =?us-ascii?Q?xYsgQHNzhVx0NZAOqqZJg6eMSGnCKiicshVTQU+BD5W8hESFczLceAQbxgn7?=
+ =?us-ascii?Q?OLfSPRte0M1kc1DF4TN58TMU5odNQlqTlqp2KdoZ+k8deFeCiID5dmTG3khw?=
+ =?us-ascii?Q?h6HdDrS2qSUvCc/o6euSUq4TkQeCUuuA+gMgl31q45fgo2DHsOdFE0WuwSGl?=
+ =?us-ascii?Q?VR4kFSvlpnB2D1OlAM+3XtjuHoBTMeXjGL7/jbnGwg1mipQOvvBDj59UJh+c?=
+ =?us-ascii?Q?eZm/xiQmi+yB1fBHj66N69t62ODqxqf5YvBRlG+vC/+DMwmXh83+ggwar2if?=
+ =?us-ascii?Q?0TPZERZTRaQHWz7+9ul88TyfFS6pT5kHzK63WmtmUNt723Bu6MWq2ul2eilh?=
+ =?us-ascii?Q?3hYa4fJiSZxLPeheEadbrQoKlUoffrG8WJyD4tNdKKm7zVqm8NfdFUESlOsE?=
+ =?us-ascii?Q?An2Eff1u1nIr5W62cbQc1evE/dHy+ebQxoAZVS1Sd+G03xW6IJlOZZhdNr+G?=
+ =?us-ascii?Q?ZTHSsnHvflhR74XrFdUCiU6wEbn6t5KhrHkF0YCm6EjISbxgEFXWZBGVEF7e?=
+ =?us-ascii?Q?y35SiLRJXaQbAQt5VM8diOjElsB6fXuarGYh0iItyUOL/6cQLCWpPlcV9Qc/?=
+ =?us-ascii?Q?V9ANjKsWATojIO78H+QG4drND/XqRG00IDoPXvc5THMsYK/CSVtvg3XUkRcm?=
+ =?us-ascii?Q?0k+RImSR8vzFkGtKacz3HTs+mnUFJN3Wz07UMNQtAR3T3WhND8WJoZEmqJTo?=
+ =?us-ascii?Q?FlubqKHJgaZNgEZpGtYNlK8ubHklUnOKEeE4moxtAM1vr4n8e4GkhtRZ8TAO?=
+ =?us-ascii?Q?GlCYzG+HhUAViPiehG4Qd/k89xrgZAhGw8Xcns9z7ZmJLcBOxPmf+xs0+SIw?=
+ =?us-ascii?Q?Hn+Pc9XDliRYxSe/v5zTB0YmnEj6ZiyS+xhwk1oUW7IRUAJ/GU5K4TqIDRJ0?=
+ =?us-ascii?Q?btGgKxbx3cUJulVkJyvQ5rxH/5nCbhAwfr0SBmkOyYrgr74yM0HBFZezpxnP?=
+ =?us-ascii?Q?6g4Ja19IDZBPd4gWdQkw/okrqFDVJqPZz0PQgbi12jqg8zdx7egqz9gFZzA9?=
+ =?us-ascii?Q?3zZDWE9ZXh+/qboSCwX38Ikbk6uo8dBS/8wEdBjhfzmpEKQQcTeu258YiYZ/?=
+ =?us-ascii?Q?VCHQMeF+9h/SfwhLgUjgymd+zDB5b/FVKV2u0LdxVHBkodLX/sQnicOT+wN6?=
+ =?us-ascii?Q?dhGlPJT+c7S+8Pb9sfX7GI2E53BOzWV+ffuYP+84NiY7cXC6Zzm44Nr9gT99?=
+ =?us-ascii?Q?a6jEuFwT7EfP4qKVnVh7MtLZSPl7UiF8A6DgLXDoXSHFX/WPqrNcwKkzKJQN?=
+ =?us-ascii?Q?5yDBe1YTtFvgu2lTA61zzWhUIp25Oq2KlcIzuPT5VLmzkcaEt4GJeCKoYyn9?=
+ =?us-ascii?Q?VOYuynudgmKM11yJW8sum/uHVRWwpjHCv5hbrEcPSlacyImdEGdPfs6Yj3Wk?=
+ =?us-ascii?Q?u0cm+ABn5A=3D=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 49a604e0-245c-4632-d783-08da193a0e39
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR06MB3367.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Apr 2022 08:30:36.7878
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0fzTMbEZ9sZ+1bDofz7Cj+SsapSYRGG6Sn5hOV9vgtNRVFiPWkmnGJau9LcLzgQhO/nl7c3iTEiQ6CnfQkXcGg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB4966
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.03.2022 07:36, Greg Kroah-Hartman wrote:
-> On Wed, Mar 30, 2022 at 02:49:00AM +0300, Alexey Khoroshilov wrote:
->> Dear Greg,
->>
->> First of all, thank you very much for keeping stable maintenance so well.
->>
->> We (Linux Verification Center of ISPRAS (linuxtesting.org)) are going to
->> join a team of regular testers for releases in 5.10 stable branch (and
->> other branches later). We are deploying some test automation for that
->> and have met an oddity that would to discuss.
->>
->> Sometimes, like in 5.10.109 release, we have a situation when a
->> released version (5.10.109) differs from the release candidate
->> (5.10.109-rс1). In this case there was a patch "llc: only change
->> llc->dev when bind()succeeds" added to fix a bug in another llc fix.
->> Unfortunately, as Pavel noted, this patch does not fix a bug, but
->> introduces a new one, because another commit b37a46683739 ("netdevice:
->> add the case if dev is NULL") was missed in 5.10 branch.
-> This happens quite frequently due to issues found in testing.  It's not
-> a new thing.
->
->> The problem will be fixed in 5.10.110, but we still have a couple oddities:
->> - we have a release that should not be recommended for use
->> - we have a commit message misleading users when says:
->>
->>     Tested-by: Pavel Machek (CIP) <pavel@denx.de>
->>     Tested-by: Fox Chen <foxhlchen@gmail.com>
->>     Tested-by: Florian Fainelli <f.fainelli@gmail.com>
->>     Tested-by: Shuah Khan <skhan@linuxfoundation.org>
->>     Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
->>     Tested-by: Salvatore Bonaccorso <carnil@debian.org>
->>     Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
->>     Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
->>     Tested-by: Guenter Roeck <linux@roeck-us.net>
->>
->> but actually nobody tested that version.
->>
->> There are potential modifications in stable release process that can
->> prevent such problems:
->>
->> (1) to always release rс2 when there are changes in rc1 introduced
->>
->> (2) to avoid Tested-by: section from release commits in such situations.
->>
->> Or may be it is overkill and it too complicates maintenance work to be
->> worth. What do you think?
-> I think it's not worth the extra work on my side for this given the
-> already large workload.  What would benifit from this to justify it?
-I see, thank you.
+use if and else instead of if(A) and if (!A).
 
-I believed the goal is to provide some minimal quality guarantees for a
-particular version of the code. But if the process of updates is quite
-intensive, it may make sense to transfer responsibility for particular
-release verification downstream.
+Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+---
+ drivers/pwm/pwm-sifive.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Best regards,
-Alexey
+diff --git a/drivers/pwm/pwm-sifive.c b/drivers/pwm/pwm-sifive.c
+index 253c4a17d255..e6d05a329002 100644
+--- a/drivers/pwm/pwm-sifive.c
++++ b/drivers/pwm/pwm-sifive.c
+@@ -138,10 +138,9 @@ static int pwm_sifive_enable(struct pwm_chip *chip, bool enable)
+ 			dev_err(ddata->chip.dev, "Enable clk failed\n");
+ 			return ret;
+ 		}
+-	}
+-
+-	if (!enable)
++	} else {
+ 		clk_disable(ddata->clk);
++	}
+ 
+ 	return 0;
+ }
+-- 
+2.35.1
 

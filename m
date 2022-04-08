@@ -2,145 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEDF94F9055
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 10:04:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4FFA4F9060
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 10:07:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230082AbiDHIFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 04:05:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40632 "EHLO
+        id S230424AbiDHIJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 04:09:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbiDHIFh (ORCPT
+        with ESMTP id S230062AbiDHIJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 04:05:37 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888821AF37
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 01:03:34 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id bu29so13810107lfb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 01:03:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=J1QVpP3nerTWKa1cyXGMgzBZ9LJVJEdqC7pjfww4Eh0=;
-        b=IeHertmL2Qe+vuZ8bL1egILsY7UVK9i7WmMVBevq7VhIsjazs1pJ+Ube2AyCXTxyLx
-         kPIMhbh0ndj9+nSc9CyU7BM9LpmGocVAs1rADnKyDy8c6JuYZ+cKpmbwwLq3sIQjW4xG
-         2WqhW5ZdCysAjQZtB6lo1phb0nqgzgv6uVjFnREhiOttLuIKWNk1mSvSPx061KIJJgVQ
-         9JDvEoyEJV5+YdTQPoficS4rT+6Rsd9Llr2uKJ7lwes/Nir2gNcr5XPsU8rc94bWOCHQ
-         4NSR1q6+Tenym6U0iGBZigdZPrnYdalm9sEJUnagjyHXi+oocrTVrRqx3TRq2Gkq/bSZ
-         gEuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=J1QVpP3nerTWKa1cyXGMgzBZ9LJVJEdqC7pjfww4Eh0=;
-        b=Q/x1vwKRGe0vFAGuFWPd5WXHgEojhZb/REANMPdEa+6oDY6IsS69TtRwxzcmydCEYF
-         7k9Lk9OrRrMdI5BDRBH6vICnKDRCZegb8RMk4FFAIPBS7S3CpUSv853PmZkQ0jiSs1R9
-         Tjv2ogJt2VZQW9U9mMS+ThYsKAzlmXnnvequI0Xm/2Lqc9mmhsdRGM2v+ayqPCRYxYnY
-         SzwXRv8zc2EIN6izCrwP3T6TGhajucF0WD1rWzTRmIPV6HoXJOWOepTkNTESqN2F7BSx
-         +DZBqAjj+fhmyt7rdt/YdaeMKR99irlDrVMEa8Fu8W7jjx8pCUKV6Om8ZoVOrcXgZvnU
-         sKjw==
-X-Gm-Message-State: AOAM530VHjvd15gUErJqc9ojJZ6O22ZkCk7wrwxIHCDxpfRNLkkxvmqI
-        XDZD/jneDcWe2bw7hd1MRHaTySRT4TJctotgJc0W/w==
-X-Google-Smtp-Source: ABdhPJytOGV4FV7cxGl9JWBImAtlMB4k8mvHiIAddgBXq11/Fmeb9upmp/zsxOMs5V3rbsnaBv4P8xhZXt/X//ewaMk=
-X-Received: by 2002:ac2:4834:0:b0:45d:519d:933 with SMTP id
- 20-20020ac24834000000b0045d519d0933mr12035301lft.5.1649405012705; Fri, 08 Apr
- 2022 01:03:32 -0700 (PDT)
+        Fri, 8 Apr 2022 04:09:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CAD7F2DA9C
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 01:07:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649405242;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=t9bfIQkql2j9TcUCqmraCaFGU4s4Y5bRorgJzCIZGMc=;
+        b=G41w+SAn+EmYpaAkEM3ESi8qEDTz5kUe7GcL0ngxfDWPiAg/+YmcAiZ8S5Xd8eR3Kdnhhj
+        qP/NDZg4yci0K/BcDPUAk9wNL1ijasnm33j5oVSu2q69I0hxcPUsXionaOHgwkGTtYkFRT
+        f+HcUE+cBpFvapFzzyk7qJdmPtXk8S4=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-563-jFMIjZk2O0CNauJWX87WiA-1; Fri, 08 Apr 2022 04:07:19 -0400
+X-MC-Unique: jFMIjZk2O0CNauJWX87WiA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C20123C11CE0;
+        Fri,  8 Apr 2022 08:07:18 +0000 (UTC)
+Received: from localhost (ovpn-12-202.pek2.redhat.com [10.72.12.202])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7D18B54ACB0;
+        Fri,  8 Apr 2022 08:07:17 +0000 (UTC)
+Date:   Fri, 8 Apr 2022 16:07:14 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Eric DeVolder <eric.devolder@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com,
+        akpm@linux-foundation.org
+Subject: Re: [PATCH v6 2/8] x86/crash: Introduce new options to support cpu
+ and memory hotplug
+Message-ID: <Yk/tMnoYN/p6vxxT@MiWiFi-R3L-srv>
+References: <20220401183040.1624-1-eric.devolder@oracle.com>
+ <20220401183040.1624-3-eric.devolder@oracle.com>
 MIME-Version: 1.0
-References: <cover.1648461096.git.zong.li@sifive.com> <mhng-6ddf988e-9f86-4f3e-8b6a-6be65f384829@palmer-ri-x1c9>
- <YkU6dPFNPkD0Jay+@matsya>
-In-Reply-To: <YkU6dPFNPkD0Jay+@matsya>
-From:   Zong Li <zong.li@sifive.com>
-Date:   Fri, 8 Apr 2022 16:03:22 +0800
-Message-ID: <CANXhq0oz_zNHJEaWxk9QFy=sDf1cKmrJROn3pEfQWo0AF2Cetw@mail.gmail.com>
-Subject: Re: [PATCH v8 0/4] Determine the number of DMA channels by
- 'dma-channels' property
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Bin Meng <bin.meng@windriver.com>,
-        Green Wan <green.wan@sifive.com>,
-        dmaengine <dmaengine@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220401183040.1624-3-eric.devolder@oracle.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 1:22 PM Vinod Koul <vkoul@kernel.org> wrote:
->
-> On 30-03-22, 20:15, Palmer Dabbelt wrote:
-> > On Mon, 28 Mar 2022 02:52:21 PDT (-0700), zong.li@sifive.com wrote:
-> > > The PDMA driver currently assumes there are four channels by default, it
-> > > might cause the error if there is actually less than four channels.
-> > > Change that by getting number of channel dynamically from device tree.
-> > > For backwards-compatible, it uses the default value (i.e. 4) when there
-> > > is no 'dma-channels' information in dts.
-> > >
-> > > This patch set contains the dts and dt-bindings change.
-> > >
-> > > Changed in v8:
-> > >  - Rebase on master
-> > >  - Remove modification of microchip-mpfs.dtsi
-> > >  - Rename DMA node name of fu540-c000.dtsi
-> > >
-> > > Changed in v7:
-> > >  - Rebase on tag v5.17-rc7
-> > >  - Modify the subject of patch
-> > >
-> > > Changed in v6:
-> > >  - Rebase on tag v5.17-rc6
-> > >  - Change sf_pdma.chans[] to a flexible array member.
-> > >
-> > > Changed in v5:
-> > >  - Rebase on tag v5.17-rc3
-> > >  - Fix typo in dt-bindings and commit message
-> > >  - Add PDMA versioning scheme for compatible
-> > >
-> > > Changed in v4:
-> > >  - Remove cflags of debug use reported-by: kernel test robot <lkp@intel.com>
-> > >
-> > > Changed in v3:
-> > >  - Fix allocating wrong size
-> > >  - Return error if 'dma-channels' is larger than maximum
-> > >
-> > > Changed in v2:
-> > >  - Rebase on tag v5.16
-> > >  - Use 4 as default value of dma-channels
-> > >
-> > > Zong Li (4):
-> > >   dt-bindings: dma-engine: sifive,fu540: Add dma-channels property and
-> > >     modify compatible
-> > >   riscv: dts: Add dma-channels property and modify compatible
-> > >   riscv: dts: rename the node name of dma
-> > >   dmaengine: sf-pdma: Get number of channel by device tree
-> > >
-> > >  .../bindings/dma/sifive,fu540-c000-pdma.yaml  | 19 +++++++++++++--
-> > >  arch/riscv/boot/dts/sifive/fu540-c000.dtsi    |  5 ++--
-> > >  drivers/dma/sf-pdma/sf-pdma.c                 | 24 ++++++++++++-------
-> > >  drivers/dma/sf-pdma/sf-pdma.h                 |  8 ++-----
-> > >  4 files changed, 38 insertions(+), 18 deletions(-)
-> >
-> > Thanks, these are on for-next.
->
-> The drivers/dma/ should go thru dmaengine tree. During merge window I
-> dont apply the patches
->
-> --
-> ~Vinod
+On 04/01/22 at 02:30pm, Eric DeVolder wrote:
+> CRASH_HOTPLUG is to enable cpu and memory hotplug support of crash.
+> 
+> CRASH_HOTPLUG_ELFCOREHDR_SZ is used to specify the maximum size of
+> the elfcorehdr buffer/segment.
+> 
+> This is a preparation for later usage.
+> 
+> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
 
-Hi Vinod,
-Many thanks for considering this patchset :)  Could I know if there is
-an opportunity to pick this into the following few -rc kernels?
+LGTM,
+
+Acked-by: Baoquan He <bhe@redhat.com>
+
+> ---
+>  arch/x86/Kconfig | 26 ++++++++++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+> 
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 7340d9f01b62..8b51d3196b82 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -2072,6 +2072,32 @@ config CRASH_DUMP
+>  	  (CONFIG_RELOCATABLE=y).
+>  	  For more details see Documentation/admin-guide/kdump/kdump.rst
+>  
+> +config CRASH_HOTPLUG
+> +	bool "kernel updates of crash elfcorehdr"
+> +	depends on CRASH_DUMP && (HOTPLUG_CPU || MEMORY_HOTPLUG) && KEXEC_FILE
+> +	help
+> +	  Enable the kernel to update the crash elfcorehdr (which contains
+> +	  the list of CPUs and memory regions) directly when hot plug/unplug
+> +	  of CPUs or memory. Otherwise userspace must monitor these hot
+> +	  plug/unplug change notifications via udev in order to
+> +	  unload-then-reload the crash kernel so that the list of CPUs and
+> +	  memory regions is kept up-to-date. Note that the udev CPU and
+> +	  memory change notifications still occur (however, userspace is not
+> +	  required to monitor for crash dump purposes).
+> +
+> +config CRASH_HOTPLUG_ELFCOREHDR_SZ
+> +	depends on CRASH_HOTPLUG
+> +	int
+> +	default 131072
+> +	help
+> +	  Specify the maximum size of the elfcorehdr buffer/segment.
+> +	  The 128KiB default is sized so that it can accommodate 2048
+> +	  Elf64_Phdr, where each Phdr represents either a CPU or a
+> +	  region of memory.
+> +	  For example, this size can accommodate a machine with up to 1024
+> +	  CPUs and up to 1024 memory regions, eg. as represented by the
+> +	  'System RAM' entries in /proc/iomem.
+> +
+>  config KEXEC_JUMP
+>  	bool "kexec jump"
+>  	depends on KEXEC && HIBERNATION
+> -- 
+> 2.27.0
+> 
+

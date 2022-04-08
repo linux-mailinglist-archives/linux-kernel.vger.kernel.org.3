@@ -2,86 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 612EF4F8F2B
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:07:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43A8C4F8F07
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:07:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235092AbiDHGag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 02:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
+        id S235101AbiDHGay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 02:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232627AbiDHGad (ORCPT
+        with ESMTP id S235074AbiDHGau (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 02:30:33 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20EA22560F7
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 23:28:31 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KZSwv3b7gz1HBdw;
-        Fri,  8 Apr 2022 14:27:59 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 8 Apr 2022 14:28:28 +0800
-Subject: Re: [PATCH v7] mm/hwpoison: fix race between hugetlb free/demotion
- and memory_failure_hugetlb()
-To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
-        <naoya.horiguchi@nec.com>
-CC:     Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-References: <20220407112929.1344748-1-naoya.horiguchi@linux.dev>
- <4b5ad6c3-99a0-b04f-21ad-8ade46984c76@huawei.com>
- <20220408015610.GA3061012@hori.linux.bs1.fc.nec.co.jp>
- <e928b6a2-2bb4-82dc-1508-5b293ecb7539@huawei.com>
- <20220408050753.GA3069452@hori.linux.bs1.fc.nec.co.jp>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <a57bc3e5-6342-9be3-7c6d-a2d66c37efc3@huawei.com>
-Date:   Fri, 8 Apr 2022 14:28:27 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Fri, 8 Apr 2022 02:30:50 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC28654A
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 23:28:47 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id fu5so7773727pjb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 23:28:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Br5LmK6nq3U1CMGhLvbfnGvSCpmEH6bnjhJxgA+ANDc=;
+        b=XRQxVTp0UjrQE+0dxzV3BWqyhAfGjYNmCmAfXmihCUoizoYiv6esmwTl2zufz8w2uP
+         kLj3HlRnWG7m5O6kNpESs121XW5IY/kW+hdpgzcdzLAb1/czspF9wCBPnYcx+rgxe46f
+         GbSQefCvNrszqOdMEfmu/i0Zjk1m+oC/zwjPybp710dYlPWZOQKTy66OW71m3+/vpjl2
+         E3r+vR8mx+4Le0EtD5aCcXD8ytwUV4SM5SgNZe2JWmmrbiLYu5InJrt+IucLBR4mXYA6
+         DLfIRloquRFlSwexHgXvx9m1N4j89PJamBhtXmIIbTo/pAWp3xuIcUwqgywSaN2K/T43
+         ciWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Br5LmK6nq3U1CMGhLvbfnGvSCpmEH6bnjhJxgA+ANDc=;
+        b=Wyt03Zfx/fjf5AmsfIZW2/SWZG3pPZ+8hqB9QFHI2AL0H24CDe6h25C46MGS6GsjPC
+         tP8QSw+qjqB1HnxMn0rjkOKt2BZ1loHbUZIQH8UEr7g5Nhtd4lESR4Le4ozemdvqSJvL
+         97R0tkH1MMsznjXBUc4+SI+uAjNRCnmDEUfFi7Z+wW236rjXx/UkIXjD8cRU7Rz47lzv
+         VjwucBJ25W//NPgivxVNzw+bJV0nHo59g+WT5xQf5j2b5Y5tYGSVUqj2/Z9niYexJ+Sn
+         MTKMPBngV2RkOe804/pq2WbwhwJLPZPbityDIpjeetw3KUP8YI8/PkXZ8WKPxLb3uZRs
+         IbDA==
+X-Gm-Message-State: AOAM531skNhsTGnpyE9ZFhKCb9B9hT0gKjcDPkKEbyan8/b0KSnRKS1+
+        btD2bzX53urVA4zPy13jtMOyug==
+X-Google-Smtp-Source: ABdhPJwfPZEsuTJTC4HDVf3PL7Z0TonE+kb/GGzgZsL3jkkNuuCHjBjoBMEuLKkbX8IlVFZ730jUZw==
+X-Received: by 2002:a17:903:2302:b0:157:1c5f:14f0 with SMTP id d2-20020a170903230200b001571c5f14f0mr3711035plh.138.1649399327236;
+        Thu, 07 Apr 2022 23:28:47 -0700 (PDT)
+Received: from [10.255.182.146] ([139.177.225.255])
+        by smtp.gmail.com with ESMTPSA id s10-20020a63a30a000000b003987eaef296sm20747184pge.44.2022.04.07.23.28.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 23:28:46 -0700 (PDT)
+Message-ID: <aad36908-3e95-a8c9-533d-2a39ea76cd3a@bytedance.com>
+Date:   Fri, 8 Apr 2022 14:28:41 +0800
 MIME-Version: 1.0
-In-Reply-To: <20220408050753.GA3069452@hori.linux.bs1.fc.nec.co.jp>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: [PATCH] percpu_ref: call wake_up_all() after percpu_ref_put()
+ completes
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     Dennis Zhou <dennis@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Muchun Song <songmuchun@bytedance.com>, tj@kernel.org,
+        cl@linux.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        zhouchengming@bytedance.com
+References: <20220407103335.36885-1-zhengqi.arch@bytedance.com>
+ <Yk+kAUwxZx1JhxIu@FVFYT0MHHV2J.usts.net>
+ <cffbad48-db3b-e99b-11b3-7956ed460fb2@bytedance.com>
+ <20220407205419.f656419a8f4665a2dc781133@linux-foundation.org>
+ <35195a61-d531-aeb2-5565-146e345f8bf6@bytedance.com>
+ <20220407211018.875696691e4411a7b5c8f63f@linux-foundation.org>
+ <d546cbce-b1d6-9499-3093-796cad7be9aa@bytedance.com>
+ <Yk/OtIKckFprZrGx@fedora>
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <Yk/OtIKckFprZrGx@fedora>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/8 13:07, HORIGUCHI NAOYA(堀口 直也) wrote:
-> 
->>>> Without this patch, page refcnt is not decremented if MF_COUNT_INCREASED is set in flags
->>>> when PageHWPoison is already set. So I think this patch also fixes that issue. Thanks!
->>>
->>> Good point, I even didn't notice that. And the issue still seems to exist
->>> for normal page's cases.  Maybe encountering "already hwpoisoned" case from
->>> madvise_inject_error() is rare but could happen when the first call failed
->>> to contain the error (which is still accessible from the calling process).
+
+
+On 2022/4/8 1:57 PM, Dennis Zhou wrote:
+> On Fri, Apr 08, 2022 at 12:14:54PM +0800, Qi Zheng wrote:
 >>
->> Oh, I missed normal page's issue. :) Will you fix this issue kindly or am I supposed
->> to fix it?
+>>
+>> On 2022/4/8 12:10 PM, Andrew Morton wrote:
+>>> On Fri, 8 Apr 2022 12:06:20 +0800 Qi Zheng <zhengqi.arch@bytedance.com> wrote:
+>>>
+>>>>
+>>>>
+>>>>>>>> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+>>>>>>>
+>>>>>>> Are any users affected by this?  If so, I think a Fixes tag
+>>>>>>> is necessary.
+>>>>>>
+>>>>>> Looks all current users(blk_pre_runtime_suspend() and set_in_sync()) are
+>>>>>> affected by this.
+>>>>>>
+>>>>>> I see that this patch has been merged into the mm tree, can Andrew help
+>>>>>> me add the following Fixes tag?
+>>>>>
+>>>>> Andrew is helpful ;)
+>>>>>
+>>>>> Do you see reasons why we should backport this into -stable trees?
+>>>>> It's 8 years old, so my uninformed guess is "no"?
+>>>>
+>>>> Hmm, although the commit 490c79a65708 add wake_up_all(), it is no
+>>>> problem for the usage at that time, maybe the correct Fixes tag is the
+>>>> following:
+>>>>
+>>>> Fixes: 210f7cdcf088 ("percpu-refcount: support synchronous switch to
+>>>> atomic mode.")
+>>>>
+>>>> But in fact, there is no problem with it, but all current users expect
+>>>> the refcount is stable after percpu_ref_switch_to_atomic_sync() returns.
+>>>>
+>>>> I have no idea as which Fixes tag to add.
+>>>
+>>> Well the solution to that problem is to add cc:stable and let Greg
+>>> figure it out ;)
+>>>
+>>> The more serious question is "should we backport this".  What is the
+>>> end-user-visible impact of the bug?  Do our users need the fix or not?
+>>
+>> The impact on the current user is that it is possible to miss an opportunity
+>> to reach 0 due to the case B in the commit message:
+>>
 > 
-> I'll try it too, ;)
+> Did you find this bug through code inspection or was the finding
+> motivated by a production incident?
+
+I find this bug through code inspection, because I want to use
+percpu_ref_switch_to_atomic_sync()+percpu_ref_is_zero() to do something
+similar.
+
 > 
+> The usage in block/blk-pm.c looks problematic, but I'm guessing this is
+> a really, really hard bug to trigger. You need to have the wake up be
 
-That's very kind of you. ;)
-Thanks.
+Agree, I manually added the delay in wake_up_all() and percpu_ref_put()
+to trigger the case B.
 
+> faster than an atomic decrement. The q_usage_counter allows reinit so it
+> skips the __percpu_ref_exit() call.
+> 
 > Thanks,
-> Naoya Horiguchi
-> 
+> Dennis
 
+-- 
+Thanks,
+Qi

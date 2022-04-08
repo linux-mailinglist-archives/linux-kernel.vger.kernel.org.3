@@ -2,105 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18CBE4F9374
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 13:02:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97DCD4F936F
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 13:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230495AbiDHLEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 07:04:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34498 "EHLO
+        id S229657AbiDHLDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 07:03:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230513AbiDHLEk (ORCPT
+        with ESMTP id S229472AbiDHLDh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 07:04:40 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBD9AA03A
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 04:02:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649415757; x=1680951757;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tFxNXrQEPQt/s5mWa74/q1vXf4oIJJXO5fak1yrXHUc=;
-  b=irgEN+FSmVLmLR2zDO7F8KYbx/l0mUbgirMry3mCEJwhdHQKVohB3OjY
-   QWm63vhKOu8pIk/liBE1QwBbtvBZsn/tepgQ9I0Sv00+LHperf3bVQ6fw
-   X4H/1hMlseyuZtqAZ1igwr16mcBix07yDERaVylTrNBhG0cNU7peFKGBH
-   tXn5lWrqjx7jErANJitTpkHG+TdzSXXbXrBsKYBXdR9BOy1J+T11Rws4v
-   yJjI2xpAObM/zAwL6AgpFEVpza1QRRhGHao0aj5lekDK2Q5OwxDLompeq
-   6PaxIuqJkmOGJ/j5UEcshVlUxJ+fy6pY2XclwsFVv6tkmNGEhpCCbVwkB
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="241500691"
-X-IronPort-AV: E=Sophos;i="5.90,244,1643702400"; 
-   d="scan'208";a="241500691"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 04:02:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,244,1643702400"; 
-   d="scan'208";a="589184437"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 08 Apr 2022 04:02:30 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 57B5C132; Fri,  8 Apr 2022 14:01:16 +0300 (EEST)
-Date:   Fri, 8 Apr 2022 14:01:16 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, luto@kernel.org,
-        peterz@infradead.org, sathyanarayanan.kuppuswamy@linux.intel.com,
-        aarcange@redhat.com, ak@linux.intel.com, dan.j.williams@intel.com,
-        david@redhat.com, hpa@zytor.com, jgross@suse.com,
-        jmattson@google.com, joro@8bytes.org, jpoimboe@redhat.com,
-        knsathya@kernel.org, pbonzini@redhat.com, sdeep@vmware.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv8 00/30] TDX Guest: TDX core support
-Message-ID: <20220408110116.bog3cdtig6entvjh@black.fi.intel.com>
-References: <20220405232939.73860-1-kirill.shutemov@linux.intel.com>
- <b43720c6-0763-f4bb-64a0-7745c6ad920a@intel.com>
- <Yk8WZn+etpj/o0OM@google.com>
- <20220407174744.cskt3rg63io4lkug@black.fi.intel.com>
- <Yk8zEN9bZKiQltcL@google.com>
+        Fri, 8 Apr 2022 07:03:37 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5A212AA8
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 04:01:33 -0700 (PDT)
+Received: from zn.tnic (p200300ea971561a9329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9715:61a9:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 14D4F1EC0528;
+        Fri,  8 Apr 2022 13:01:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1649415692;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=0twYPvAbU3EQQV90bdC9MeTmssNOjIsgXlwghQ9IMhQ=;
+        b=mXXZTEsCZzRzxCwwF0vFXTgAC8GGvwYQSaJig1C/LGy1TtVAo/cz6WcN1ft8cHvq/eZxD7
+        jMv4DT0DxnOPqHngvGa0ioCqWn3uG6W9I093fLQ/k3Gx+UYaKVnDCvAdZ9bUXT814J5FBv
+        q4nFc6ZjSoqb8JB1HVaVGaRfjSLkFHw=
+Date:   Fri, 8 Apr 2022 13:01:31 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Will Deacon <will@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, Frank Li <Frank.li@nxp.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 09/11] perf/imx_ddr: Fix undefined behavior due to shift
+ overflowing the constant
+Message-ID: <YlAWC+kzv2kpCUsq@zn.tnic>
+References: <20220405151517.29753-1-bp@alien8.de>
+ <20220405151517.29753-10-bp@alien8.de>
+ <20220408104739.GA27564@willie-the-truck>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Yk8zEN9bZKiQltcL@google.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220408104739.GA27564@willie-the-truck>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 06:53:04PM +0000, Sean Christopherson wrote:
-> On Thu, Apr 07, 2022, Kirill A. Shutemov wrote:
-> > On Thu, Apr 07, 2022 at 04:50:46PM +0000, Sean Christopherson wrote:
-> > > On Thu, Apr 07, 2022, Dave Hansen wrote:
-> > > > It would also be really nice to get some SEV folks on the list as
-> > > > well.  I suspect the coco/ directory will grow more common SEV/TDX
-> > > > code over time.
-> > > > 
-> > > > X86 CONFIDENTIAL COMPUTING
-> > > > M:      x86@kernel.org
-> > > > R:	Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> > > > ...
-> > > > S:      Supported
-> > > > F:      arch/x86/coco/
-> > > > ...
-> > > 
-> > > And/or a dedicated vger list?
-> > 
-> > We already have linux-coco@lists.linux.dev. Although, it is not
-> > x86-specific.
-> 
-> Is it ok to spam that list with TDX/SNP stuff, or would it be better to create
-> something x86-specific?
+On Fri, Apr 08, 2022 at 11:47:40AM +0100, Will Deacon wrote:
+> (let me know if you'd prefer for me to queue this directly)
 
-In this case the existing coco mailing list will have little to none use
-as most of coco traffic is x86-specific at the moment. We can split off
-x86-specific later if needed.
+Yes please.
+
+Thx.
 
 -- 
- Kirill A. Shutemov
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

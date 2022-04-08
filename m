@@ -2,75 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39C884F8F52
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:16:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC3484F8F56
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:17:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229526AbiDHHSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 03:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50408 "EHLO
+        id S229494AbiDHHTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 03:19:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiDHHSm (ORCPT
+        with ESMTP id S229452AbiDHHTN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 03:18:42 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2A21E6FA3
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 00:16:39 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id bg10so15521371ejb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 00:16:39 -0700 (PDT)
+        Fri, 8 Apr 2022 03:19:13 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC823B030
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 00:17:10 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2e5e9025c20so86129877b3.7
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 00:17:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ieIB5YqKCN+PKXGT2YPOFVPgHW/BR3G7k5u78AwWmig=;
-        b=GcgJvyKPOGEwA1acdO+/0TE7/6G823io8jdY0AOuSRmGqbqrioIZUnDMq8g4JIoaER
-         KwVlPY86OcLfbvqvHXq2jqy71sShCcBthzAmNCZOXq8PT7804u5TSAach/lu3Q9GxXT+
-         Y16TKLuKtjy+WksAlSEbML5TJzj6WrRXV5YUAvaRJadV6K+F7t9iZra3KYbodEBQae2B
-         nfT4RKsFeRDp6OIVkSGRFsku5AMdL9AuS0VmDqaZLsNxbXpVfwn9OtLH5NJsPaTsn6IF
-         Z21YdpKH1H2+eKO0fFXhn2efRdGZGSitICMgvTHRYNYYqxj2/IzBvBvzMFaW+J2w4yP2
-         56kQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WnXHR5gRI6b51YG8ylhL5jPW3yJr07fqNZU/XZSig0k=;
+        b=AAcufFck/yBeQrNDVHVsf6MMXMwxY/5jmF3Dbk5qpkEevFCsvQ0Rnx1Na0EgbHbSUc
+         JkF3Kuxtsyw7el5+5FmrRG8MRzoOQRIgXOkIX9wbfxwldbd5/fofZ3qJOtq5Bvf+rUcj
+         pyA9S1Uwz8r+Xs2IrAbQTlRWIKm48N30FEYHDVr0Ffi1tAW6OCZI0VmKNV+kVIbltH+v
+         N9jNUtwFkn5P+f9YbgUH6LAeJ9R+UqzccxI9r97GuomTEMkbEzUqODWr9IzqaoWRpShG
+         JhLiSh9CLZ2lJAKWYhN+sBzvoQt+KqDIgBpNoh+qenG9R5TKfzfy/QB6LfyTjxrKTFIf
+         OlGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ieIB5YqKCN+PKXGT2YPOFVPgHW/BR3G7k5u78AwWmig=;
-        b=45YMlNPNtrcEI07Is/9hKP0/bGn+RX4/2AQGmZlA4DGSG42qfBVSdW3DURoEfU+mXu
-         GLB+0Yw6ZCRhkMmYZK4927VmXeDSSapyQaUNUJbB5Qh3kfqWcm7iSP+B8Ons81D8kKJB
-         SxBWs8hW3zvLY/AfT6KR3ceywU54xDYKUWkmqj5BpvmhD6XJrxG2UXEvs8h0/ISf5c9V
-         qYIMCvfL71+WvxaZicTqXcHKsj77c0CprtjUkEpFRLxWA98/eDwh+1dd27L66SO2ZfD9
-         ZZhbv/NRpfauvZFwPRb04v6IgBuyjmlr2J8iByRZSjTn5s+WfbcT4uXmbqNm+ZRtE5hF
-         Cjeg==
-X-Gm-Message-State: AOAM530hTxqnmR4m/sO0TKe5av/nS63e9zgyIlcxSYy7RJr+8VvLr6lI
-        CwMr44dK3HKXTosHyj2PKz0wPQ==
-X-Google-Smtp-Source: ABdhPJwzgDoQ0K2hEotiMSP4godR914nen/RCVo6vbJ+AvYQCq2Vhtw0UBtd9Jl/fMpd3FmrhXEVaQ==
-X-Received: by 2002:a17:907:8a02:b0:6e7:18b9:5f43 with SMTP id sc2-20020a1709078a0200b006e718b95f43mr17251110ejc.148.1649402198311;
-        Fri, 08 Apr 2022 00:16:38 -0700 (PDT)
-Received: from [192.168.0.187] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id c3-20020a17090654c300b006e4e1a3e9d5sm7963714ejp.144.2022.04.08.00.16.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Apr 2022 00:16:37 -0700 (PDT)
-Message-ID: <f56df7f8-9ec5-efe4-df36-c3e2151b1cf0@linaro.org>
-Date:   Fri, 8 Apr 2022 09:16:37 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WnXHR5gRI6b51YG8ylhL5jPW3yJr07fqNZU/XZSig0k=;
+        b=pYr2jcqHEzY78NGit1VN0Qs3jlHMeGP8B986ch1GBnsB+7WNbY7MDVgw9xgT83RmYV
+         xFkJ4Ijv7baWTvC2Ydy0JNvXNx9n2Jtw7F65xXfiVItcrc0zpupV61JnWhpTanjA6WDS
+         xD7aDXsbw2RBp04VbZH5ESPrSxCycpbN3U04C3ecesaZA1p68hGjHZ+5LVB9fh41j4+Q
+         eeHnms7O15qIcIk4JkUHRcN73Az5tcfUrqstcVQuhtJCeSk5OoEVH3i/b1U7gbyAYl/d
+         0BdpKIIKrU2Hid/wVcLZpbb1GZfzWgTRtV7jrlDvpSTHFJouvUuEQgNHfrq/BFCuy2az
+         wyiQ==
+X-Gm-Message-State: AOAM531418ies+ldYhxVm1qNRsdbryc0DRdo+4VINlyGD325QTckzSS8
+        jH6Bt4+BwNc4P4R8nLcgva5ZXvaZwau4bATq4MNn4A==
+X-Google-Smtp-Source: ABdhPJzz9u/go6IjZ0evDmj7LCqhKD7NZ4HenDRPbw4CEb7Ac7TRuTiUprMq4ljNG0b2p23ib9BBLjHhTrrJ56L/X80=
+X-Received: by 2002:a81:1985:0:b0:2eb:6021:12c4 with SMTP id
+ 127-20020a811985000000b002eb602112c4mr14872505ywz.248.1649402229982; Fri, 08
+ Apr 2022 00:17:09 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 1/4] dt-bindings: timer: exynos4210-mct: Add ARTPEC-8
- MCT support
-Content-Language: en-US
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        tglx@linutronix.de, daniel.lezcano@linaro.org
-Cc:     kernel@axis.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, alim.akhtar@samsung.com,
-        devicetree@vger.kernel.org, robh+dt@kernel.org
-References: <20220407074432.424578-1-vincent.whitchurch@axis.com>
- <20220407074432.424578-2-vincent.whitchurch@axis.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220407074432.424578-2-vincent.whitchurch@axis.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20220407021729.16655-1-zhouchengming@bytedance.com>
+ <20220407021729.16655-2-zhouchengming@bytedance.com> <xm26pmlsvcah.fsf@bsegall-linux.svl.corp.google.com>
+In-Reply-To: <xm26pmlsvcah.fsf@bsegall-linux.svl.corp.google.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Fri, 8 Apr 2022 09:16:58 +0200
+Message-ID: <CAKfTPtAYR-G2X2RnCJKLqS6J-Kn-tZTp9JyzxR3j9jsFbmwZwA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] sched/fair: Delete useless condition in tg_unthrottle_up()
+To:     Benjamin Segall <bsegall@google.com>
+Cc:     Chengming Zhou <zhouchengming@bytedance.com>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org,
+        duanxiongchun@bytedance.com, songmuchun@bytedance.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,40 +70,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/04/2022 09:44, Vincent Whitchurch wrote:
-> The ARTPEC-8 has an MCT with 4 global and 8 local timer interrupts.
-> 
-> The SoC has a quad-core Cortex-A53 and a single-core Cortex-A5 which
-> share one MCT with one global and eight local timers.  The Cortex-A53
-> and Cortex-A5 do not have cache-coherency between them, and therefore
-> run two separate kernels.
-> 
-> The Cortex-A53 boots first and starts the global free-running counter
-> and also registers a clock events device using the global timer.  (This
-> global timer clock events is usually replaced by arch timer clock events
-> for each of the cores.)
-> 
-> When the A5 boots (via the A53), it should not use the global timer
-> interrupts or write to the global timer registers.  This is because even
-> if there are four global comparators, the control bits for all four are
-> in the same registers, and we would need to synchronize between the
-> cpus.  Instead, the global timer FRC (already started by the A53) should
-> be used as the clock source, and one of the local timers which are not
-> used by the A53 can be used for clock events on the A5.
-> 
-> To support this hardware, add a compatible for the MCT as well as two
-> new properties to describe the hardware-mandated sharing of the FRC and
-> dedicating local timers to specific processors.
-> 
-> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
-> ---
-> 
+On Thu, 7 Apr 2022 at 23:00, Benjamin Segall <bsegall@google.com> wrote:
+>
+> Chengming Zhou <zhouchengming@bytedance.com> writes:
+>
+> > Fully decayed cfs_rq is impossible to have queued entities,
+> > the first condition "!cfs_rq_is_decayed(cfs_rq)" is enough
+> > to cover.
+>
+> In particular, cfs_rq->load.weight is part of cfs_rq_is_decayed.
 
-This is rebased on my patch:
-https://lore.kernel.org/lkml/20220407194127.19004-1-krzysztof.kozlowski@linaro.org/
+Testing cfs_rq->load.weight is the key point because nothing prevent
+to add a task with null load
 
+Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
+>
+> Reviewed-by: Ben Segall <bsegall@google.com>
+>
+> >
+> > Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+> > ---
+> >  kernel/sched/fair.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > index e6fa5d1141b4..17c13c38b1c2 100644
+> > --- a/kernel/sched/fair.c
+> > +++ b/kernel/sched/fair.c
+> > @@ -4850,7 +4850,7 @@ static int tg_unthrottle_up(struct task_group *tg, void *data)
+> >                                            cfs_rq->throttled_clock_task;
+> >
+> >               /* Add cfs_rq with load or one or more already running entities to the list */
+> > -             if (!cfs_rq_is_decayed(cfs_rq) || cfs_rq->nr_running)
+> > +             if (!cfs_rq_is_decayed(cfs_rq))
+> >                       list_add_leaf_cfs_rq(cfs_rq);
+> >       }

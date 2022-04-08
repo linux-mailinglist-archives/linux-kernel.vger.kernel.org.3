@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 541A84F91D3
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 11:15:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E83F94F91D8
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 11:15:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233719AbiDHJQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 05:16:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38260 "EHLO
+        id S233042AbiDHJQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 05:16:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233082AbiDHJMF (ORCPT
+        with ESMTP id S233085AbiDHJMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 8 Apr 2022 05:12:05 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B42B11E95E9;
-        Fri,  8 Apr 2022 02:09:13 -0700 (PDT)
-Date:   Fri, 08 Apr 2022 09:09:10 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B8F1E9616;
+        Fri,  8 Apr 2022 02:09:14 -0700 (PDT)
+Date:   Fri, 08 Apr 2022 09:09:11 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649408951;
+        s=2020; t=1649408952;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=iJBANRXPRVZPm5lVGyJv8/rMfmj8BkXuXOlVD2KZ+SE=;
-        b=dmyKhUU05DBRAkB2is7WR5bwM/SaHDCYKgJLwDXbvUDGIAXofAKDqPYDsbwifVCItF3V/S
-        rA5fajiNkqrAZje+Bd4pQ768roFNFy+ds8eOL3LQUe3fkrnOTkjLywPg9bWvU4jYayrAIe
-        enKZ7MBWUAqggcgjBsLcTGo+T+Jt31rD3KQZSchBtJT5xZ+Q09TuN7Mtqz+QavegLLKdqE
-        rtWs3PY/kEoBQcSLxQG9PVkcyCRoz45RXD1XnyWq+HjY/41o8l7puIkbpjyOAGn9dqoHsQ
-        +IIMcbCXcAx18szbisC+pZxIy6PZBJBMSOpfE8Uz9U57Uraa+EkDMU7rTZhb4Q==
+        bh=XZfOORXOceXGeCyxCEY73gG4PbmKJjXmHrYNPDbmj5k=;
+        b=OwS5Wj/PvIU76x9zV5D/uSVNoydHVXiTzm88Igw7xdGcBD/hr4hztn1JaJTKRufIkagykE
+        45sLtp/Ur1mP/jFUVLGIpz8hbHoKUMskYtnAOK1sBvjSIi4sCmzlzd7Kust5/R2Trxk8qp
+        XZw/Phz2o/O0mF7tzG8nu4EjQj9++EWQuk+ryHoMEEGoxby11Kth5MSHdVGQrs+XB/TS5u
+        NjKlCCmn+aceYamx8UAdt5/xRZmvOmJYEfC0zBY1ZWcA5tEzdEhZ5j7d8o7bWNH2NA8sUo
+        YkE6Cbi03PjX3fIHmJhS8f3U99tu8KHZhlLNts350po53jmEkDYzp0LRUH7Z9A==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649408951;
+        s=2020e; t=1649408952;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=iJBANRXPRVZPm5lVGyJv8/rMfmj8BkXuXOlVD2KZ+SE=;
-        b=IBrwsa/SLpndSExD/vaneSD8har12RKb7Bf9a/v1ntIGlJwDuQO0PqQNmcS/937pnPxiTA
-        tWbd0alBllvYcZAg==
+        bh=XZfOORXOceXGeCyxCEY73gG4PbmKJjXmHrYNPDbmj5k=;
+        b=55quWZZT1JIN5qUFBfnOfXXFJt8iOybJou4eaJOBOsOj+RtkVunHwUnjkdDmM8XuNYVFyT
+        YY7M7q3rXoLhVbDw==
 From:   "tip-bot2 for Brijesh Singh" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/sev] x86/sev: Define the Linux-specific guest termination reasons
+Subject: [tip: x86/sev] x86/mm: Extend cc_attr to include AMD SEV-SNP
 Cc:     Brijesh Singh <brijesh.singh@amd.com>,
-        Borislav Petkov <bp@suse.de>,
-        Venu Busireddy <venu.busireddy@oracle.com>, x86@kernel.org,
+        Borislav Petkov <bp@suse.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220307213356.2797205-11-brijesh.singh@amd.com>
-References: <20220307213356.2797205-11-brijesh.singh@amd.com>
+In-Reply-To: <20220307213356.2797205-10-brijesh.singh@amd.com>
+References: <20220307213356.2797205-10-brijesh.singh@amd.com>
 MIME-Version: 1.0
-Message-ID: <164940895068.389.15789670965915429783.tip-bot2@tip-bot2>
+Message-ID: <164940895162.389.18126300040300189146.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,143 +67,88 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/sev branch of tip:
 
-Commit-ID:     6c0f74d678c94060932683738b3e227995b363d3
-Gitweb:        https://git.kernel.org/tip/6c0f74d678c94060932683738b3e227995b363d3
+Commit-ID:     f742b90e61bb53b27771f64bdae05db03a6ab1f2
+Gitweb:        https://git.kernel.org/tip/f742b90e61bb53b27771f64bdae05db03a6ab1f2
 Author:        Brijesh Singh <brijesh.singh@amd.com>
-AuthorDate:    Wed, 09 Feb 2022 12:10:04 -06:00
+AuthorDate:    Thu, 24 Feb 2022 10:55:49 -06:00
 Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Wed, 06 Apr 2022 13:02:41 +02:00
+CommitterDate: Wed, 06 Apr 2022 13:02:34 +02:00
 
-x86/sev: Define the Linux-specific guest termination reasons
+x86/mm: Extend cc_attr to include AMD SEV-SNP
 
-The GHCB specification defines the reason code for reason set 0. The
-reason codes defined in the set 0 do not cover all possible causes for a
-guest to request termination.
-
-The reason sets 1 to 255 are reserved for the vendor-specific codes.
-Reserve the reason set 1 for the Linux guest. Define the error codes for
-reason set 1 so that one can have meaningful termination reasons and thus
-better guest failure diagnosis.
-
-While at it, change sev_es_terminate() to accept a reason set parameter.
-
-  [ bp: Massage commit message. ]
+The CC_ATTR_GUEST_SEV_SNP can be used by the guest to query whether the
+SNP (Secure Nested Paging) feature is active.
 
 Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Reviewed-by: Venu Busireddy <venu.busireddy@oracle.com>
-Link: https://lore.kernel.org/r/20220307213356.2797205-11-brijesh.singh@amd.com
+Link: https://lore.kernel.org/r/20220307213356.2797205-10-brijesh.singh@amd.com
 ---
- arch/x86/boot/compressed/sev.c    |  6 +++---
- arch/x86/include/asm/sev-common.h |  8 ++++++++
- arch/x86/kernel/sev-shared.c      | 11 ++++-------
- arch/x86/kernel/sev.c             |  4 ++--
- 4 files changed, 17 insertions(+), 12 deletions(-)
+ arch/x86/coco/core.c             | 3 +++
+ arch/x86/include/asm/msr-index.h | 2 ++
+ arch/x86/mm/mem_encrypt.c        | 4 ++++
+ include/linux/cc_platform.h      | 8 ++++++++
+ 4 files changed, 17 insertions(+)
 
-diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
-index 27ccd5a..56e941d 100644
---- a/arch/x86/boot/compressed/sev.c
-+++ b/arch/x86/boot/compressed/sev.c
-@@ -119,7 +119,7 @@ static enum es_result vc_read_mem(struct es_em_ctxt *ctxt,
- static bool early_setup_sev_es(void)
- {
- 	if (!sev_es_negotiate_protocol())
--		sev_es_terminate(GHCB_SEV_ES_PROT_UNSUPPORTED);
-+		sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SEV_ES_PROT_UNSUPPORTED);
+diff --git a/arch/x86/coco/core.c b/arch/x86/coco/core.c
+index fc1365d..dafd488 100644
+--- a/arch/x86/coco/core.c
++++ b/arch/x86/coco/core.c
+@@ -57,6 +57,9 @@ static bool amd_cc_platform_has(enum cc_attr attr)
+ 		return (sev_status & MSR_AMD64_SEV_ENABLED) &&
+ 			!(sev_status & MSR_AMD64_SEV_ES_ENABLED);
  
- 	if (set_page_decrypted((unsigned long)&boot_ghcb_page))
- 		return false;
-@@ -172,7 +172,7 @@ void do_boot_stage2_vc(struct pt_regs *regs, unsigned long exit_code)
- 	enum es_result result;
- 
- 	if (!boot_ghcb && !early_setup_sev_es())
--		sev_es_terminate(GHCB_SEV_ES_GEN_REQ);
-+		sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SEV_ES_GEN_REQ);
- 
- 	vc_ghcb_invalidate(boot_ghcb);
- 	result = vc_init_em_ctxt(&ctxt, regs, exit_code);
-@@ -199,7 +199,7 @@ finish:
- 	if (result == ES_OK)
- 		vc_finish_insn(&ctxt);
- 	else if (result != ES_RETRY)
--		sev_es_terminate(GHCB_SEV_ES_GEN_REQ);
-+		sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SEV_ES_GEN_REQ);
- }
- 
- void sev_enable(struct boot_params *bp)
-diff --git a/arch/x86/include/asm/sev-common.h b/arch/x86/include/asm/sev-common.h
-index 1b2fd32..94f0ea5 100644
---- a/arch/x86/include/asm/sev-common.h
-+++ b/arch/x86/include/asm/sev-common.h
-@@ -73,9 +73,17 @@
- 	 /* GHCBData[23:16] */				\
- 	((((u64)reason_val) & 0xff) << 16))
- 
-+/* Error codes from reason set 0 */
-+#define SEV_TERM_SET_GEN		0
- #define GHCB_SEV_ES_GEN_REQ		0
- #define GHCB_SEV_ES_PROT_UNSUPPORTED	1
- 
-+/* Linux-specific reason codes (used with reason set 1) */
-+#define SEV_TERM_SET_LINUX		1
-+#define GHCB_TERM_REGISTER		0	/* GHCB GPA registration failure */
-+#define GHCB_TERM_PSC			1	/* Page State Change failure */
-+#define GHCB_TERM_PVALIDATE		2	/* Pvalidate failure */
++	case CC_ATTR_GUEST_SEV_SNP:
++		return sev_status & MSR_AMD64_SEV_SNP_ENABLED;
 +
- #define GHCB_RESP_CODE(v)		((v) & GHCB_MSR_INFO_MASK)
+ 	default:
+ 		return false;
+ 	}
+diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+index 0eb90d2..ef96f16 100644
+--- a/arch/x86/include/asm/msr-index.h
++++ b/arch/x86/include/asm/msr-index.h
+@@ -502,8 +502,10 @@
+ #define MSR_AMD64_SEV			0xc0010131
+ #define MSR_AMD64_SEV_ENABLED_BIT	0
+ #define MSR_AMD64_SEV_ES_ENABLED_BIT	1
++#define MSR_AMD64_SEV_SNP_ENABLED_BIT	2
+ #define MSR_AMD64_SEV_ENABLED		BIT_ULL(MSR_AMD64_SEV_ENABLED_BIT)
+ #define MSR_AMD64_SEV_ES_ENABLED	BIT_ULL(MSR_AMD64_SEV_ES_ENABLED_BIT)
++#define MSR_AMD64_SEV_SNP_ENABLED	BIT_ULL(MSR_AMD64_SEV_SNP_ENABLED_BIT)
  
- /*
-diff --git a/arch/x86/kernel/sev-shared.c b/arch/x86/kernel/sev-shared.c
-index ce98768..2abf8a7 100644
---- a/arch/x86/kernel/sev-shared.c
-+++ b/arch/x86/kernel/sev-shared.c
-@@ -24,15 +24,12 @@ static bool __init sev_es_check_cpu_features(void)
- 	return true;
+ #define MSR_AMD64_VIRT_SPEC_CTRL	0xc001011f
+ 
+diff --git a/arch/x86/mm/mem_encrypt.c b/arch/x86/mm/mem_encrypt.c
+index 50d2099..f85868c 100644
+--- a/arch/x86/mm/mem_encrypt.c
++++ b/arch/x86/mm/mem_encrypt.c
+@@ -62,6 +62,10 @@ static void print_mem_encrypt_feature_info(void)
+ 	if (cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT))
+ 		pr_cont(" SEV-ES");
+ 
++	/* Secure Nested Paging */
++	if (cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
++		pr_cont(" SEV-SNP");
++
+ 	pr_cont("\n");
  }
  
--static void __noreturn sev_es_terminate(unsigned int reason)
-+static void __noreturn sev_es_terminate(unsigned int set, unsigned int reason)
- {
- 	u64 val = GHCB_MSR_TERM_REQ;
+diff --git a/include/linux/cc_platform.h b/include/linux/cc_platform.h
+index efd8205..d08dd65 100644
+--- a/include/linux/cc_platform.h
++++ b/include/linux/cc_platform.h
+@@ -72,6 +72,14 @@ enum cc_attr {
+ 	 * Examples include TDX guest & SEV.
+ 	 */
+ 	CC_ATTR_GUEST_UNROLL_STRING_IO,
++
++	/**
++	 * @CC_ATTR_SEV_SNP: Guest SNP is active.
++	 *
++	 * The platform/OS is running as a guest/virtual machine and actively
++	 * using AMD SEV-SNP features.
++	 */
++	CC_ATTR_GUEST_SEV_SNP,
+ };
  
--	/*
--	 * Tell the hypervisor what went wrong - only reason-set 0 is
--	 * currently supported.
--	 */
--	val |= GHCB_SEV_TERM_REASON(0, reason);
-+	/* Tell the hypervisor what went wrong. */
-+	val |= GHCB_SEV_TERM_REASON(set, reason);
- 
- 	/* Request Guest Termination from Hypvervisor */
- 	sev_es_wr_ghcb_msr(val);
-@@ -221,7 +218,7 @@ void __init do_vc_no_ghcb(struct pt_regs *regs, unsigned long exit_code)
- 
- fail:
- 	/* Terminate the guest */
--	sev_es_terminate(GHCB_SEV_ES_GEN_REQ);
-+	sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SEV_ES_GEN_REQ);
- }
- 
- static enum es_result vc_insn_string_read(struct es_em_ctxt *ctxt,
-diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index e6d316a..19ad097 100644
---- a/arch/x86/kernel/sev.c
-+++ b/arch/x86/kernel/sev.c
-@@ -1337,7 +1337,7 @@ DEFINE_IDTENTRY_VC_KERNEL(exc_vmm_communication)
- 		show_regs(regs);
- 
- 		/* Ask hypervisor to sev_es_terminate */
--		sev_es_terminate(GHCB_SEV_ES_GEN_REQ);
-+		sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SEV_ES_GEN_REQ);
- 
- 		/* If that fails and we get here - just panic */
- 		panic("Returned from Terminate-Request to Hypervisor\n");
-@@ -1385,7 +1385,7 @@ bool __init handle_vc_boot_ghcb(struct pt_regs *regs)
- 
- 	/* Do initial setup or terminate the guest */
- 	if (unlikely(boot_ghcb == NULL && !sev_es_setup_ghcb()))
--		sev_es_terminate(GHCB_SEV_ES_GEN_REQ);
-+		sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SEV_ES_GEN_REQ);
- 
- 	vc_ghcb_invalidate(boot_ghcb);
- 
+ #ifdef CONFIG_ARCH_HAS_CC_PLATFORM

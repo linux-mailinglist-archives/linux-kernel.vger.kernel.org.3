@@ -2,152 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 615954F9764
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 15:55:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9ED04F9763
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 15:55:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236586AbiDHN40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 09:56:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54928 "EHLO
+        id S236609AbiDHN5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 09:57:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231990AbiDHN4X (ORCPT
+        with ESMTP id S236602AbiDHN47 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 09:56:23 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B27B7C46
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 06:54:17 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 1DB1032022DC;
-        Fri,  8 Apr 2022 09:54:16 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Fri, 08 Apr 2022 09:54:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; bh=8+GWNPlu+xtHevq89dUyEvFQikVJFhZl72wH8k
-        /wFqI=; b=XVBCU/18JAJw3KeTXOMYhe0DMRBrktc+jhuNaHW86/kTqa41qoYw9m
-        Esx8w8G1Sj7L0ymeEK2seWPJcSKzGOfzHj0kAIOOZ/Y+ejE6zDTuWxQC+6sOyuXF
-        M2FOhbBwu3UMfZuIvDHptJSUAvDhcWserDuVOwhBSL3vznXdQywmgRqRM70DJ28t
-        XhdmgYAUJUabA5xKFcBffhqRL243b5AfzplOixSFIc9fNdYCHZmXD5gJRTJbVxBs
-        Y0Ber6rflN+XZt5cAgU0SNe/Bxr9+s9SJrxhUtnWYxdRkyod/HNPHY2NRjFojX4i
-        KOEyxEYVdOXSPoQZ1cqz2oc7QyONfhLw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=8+GWNPlu+xtHevq89
-        dUyEvFQikVJFhZl72wH8k/wFqI=; b=Dsdq3J9TZefrOZPuCbSyxE9JCkZEEAN3V
-        hGpcq3ShN1HjDV5h9XYKcWCyJ8QzGEQYZD0V26Z3KtgvYygfVGlHfgolJrtc23Ys
-        5pz+U59I2yY1rFBrSU99lC8YL06Yk6ishDJwPMrwtvgzGBxyKGl4uquzeS3M5B3M
-        JUSY/JXRKUrZuwm1imgx9kRtOV5yfadQwUuCOa/9y70ozlVLUw1AtHR85FkVe4JR
-        V2kPvLdEb2gMxw2SUV+zHuW/yV/aBUarsa+HzcYIjzFn/Kos8h4A9h1JkrRvnaj3
-        PBCpMTp40qgreQ3hVS6HBcPP8TvajDEWQKn+xt+aPCl0p/DOtc6aQ==
-X-ME-Sender: <xms:hz5QYt3tV5_thf3ZYdFRm0UHeJxbAQVtt_qvvmnbI4rwgRa1b-5JTA>
-    <xme:hz5QYkHx1g1OG39Kjge9IGWVzUKXxTVGgENGkyECXGhe3McnYR1Dkp8UpDvx0lyy6
-    y5GD93ASEz63kBcY-g>
-X-ME-Received: <xmr:hz5QYt52kb51oJNuEedM3AKYvM0muxrXp2KDKZvvuGQFw0Ozu7Elo1JjKsxiv6eX5_-JP8i1rAMwqcXMdXkEXADX_gy2BDJkW3fQYvg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudektddgieekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepjeduvdfhkeekhfdtgeeihfeluddtvedthfektdelfeejgfeludfhteduveej
-    hefhnecuffhomhgrihhnpehfrhgvvgguvghskhhtohhprdhorhhgnecuvehluhhsthgvrh
-    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhho
-    rdhtvggthh
-X-ME-Proxy: <xmx:hz5QYq18RjKAOJNo1Vgdi-o6szEuSYumPNiQ1cYFzCwr8Rdox2ILlw>
-    <xmx:hz5QYgFIxu2XwBbCtPnmvurz5Xv5sG-kNfM2QTWmVb3Vz1DqnoFDmw>
-    <xmx:hz5QYr8q8CGRyjEqb232wXmnA5mE5yrlyZFcPq45ZU8iCNxq3Qfr0Q>
-    <xmx:hz5QYubSI9qfZXwe4Mp5pwsDpUaITnD_DakBat6oumNZ3AgvVrtCNQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 8 Apr 2022 09:54:14 -0400 (EDT)
-Date:   Fri, 8 Apr 2022 15:54:13 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/5] drm: Fix monochrome conversion for sdd130x
-Message-ID: <20220408135413.2vwp4oyzdlu7iczs@houat>
-References: <20220317081830.1211400-1-geert@linux-m68k.org>
- <f94c0f44-36f1-e1a9-5963-5da0bafb8c90@redhat.com>
- <YjSMWDFxTeJZZ/CB@smile.fi.intel.com>
- <20220318142145.kwq46bf6exgce6wu@houat>
- <YjSYL5oPaDuCXOJQ@smile.fi.intel.com>
+        Fri, 8 Apr 2022 09:56:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2F516103B9E
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 06:54:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649426095;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=F5sD64Phf4jmlSsRv9AVRFCmgTMkGKZ3Wla+3d8FT/4=;
+        b=hq0PWQpgcS671/n8FE+ddYQOirCpBGeYRLUgOSkS+e92h3Df+wfJsY3mR2sL+0v3nG1gIJ
+        Js8d2tpiba2NjybCP0wbL0+i+ISkk+tkYkGrSV+aL80uys1RjdnxqYneBIhZgkGygWXAzL
+        SzMnYx8CLS0j6y1QpHf0OFtmAdugLkg=
+Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com
+ [209.85.219.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-400-HVQN8e_AOuWyNlqxFcWlvg-1; Fri, 08 Apr 2022 09:54:54 -0400
+X-MC-Unique: HVQN8e_AOuWyNlqxFcWlvg-1
+Received: by mail-yb1-f198.google.com with SMTP id x9-20020a5b0809000000b00631d9edfb96so6673558ybp.22
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 06:54:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=F5sD64Phf4jmlSsRv9AVRFCmgTMkGKZ3Wla+3d8FT/4=;
+        b=xujiY79VGUV/ngov8b6L9BH+Qn1fJUnplNiVwFutkl2lDcxxLgCJvNEvBH4yL+JBzf
+         VK1AcoTE2MIFsqZbPFYJC7cryk+kJgXixwJNj+3yETWZVyGV7SdBcEOI1AANEEm417jj
+         5lOg2mklpUdJfVNZOOV4v2p8DLGWGNvm5mbha1OSlNqo+X78QFZ2OtXwz4E87ei+f9qn
+         gWJfS9EVHox9DYkP5zeToNl1OiXpaN3+eFbg+8LvBRZ7wa6J0y0QWPlL6Pki2HQkF2+i
+         Wt0Uwx5fnIy+R93TFWw8uksekkQjcVdTJi7tIujJhxR8Rs5bT8mVmUfidFsoUeWqz3Kk
+         spHw==
+X-Gm-Message-State: AOAM530wbF7C/cHBVQgVreRw1t18YPHjNVqaVzBzm3G2K/QtyWLJYu9F
+        rYpxUw2jwqyTEwRBmF0FkqVvnhVYzP4tITdRFAJ7sIO2Yn4PrEOShqeRUdhgid3f5xu4sK1XzSN
+        L3TqkBMwzK5rKXGvjK9POuCZtPRc4QXY+KkFJgifu
+X-Received: by 2002:a81:1592:0:b0:2eb:5472:c681 with SMTP id 140-20020a811592000000b002eb5472c681mr15950764ywv.10.1649426093615;
+        Fri, 08 Apr 2022 06:54:53 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzTXEngUHw92cMsf+0F9pm0X5XaJw9xfqRkKaZ44wHd20q0vawVBEKrFIMJMvcAduOirlI4ThcUFntR6NFVc0E=
+X-Received: by 2002:a81:1592:0:b0:2eb:5472:c681 with SMTP id
+ 140-20020a811592000000b002eb5472c681mr15950749ywv.10.1649426093406; Fri, 08
+ Apr 2022 06:54:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fpokwbkqxdym2r3r"
-Content-Disposition: inline
-In-Reply-To: <YjSYL5oPaDuCXOJQ@smile.fi.intel.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220407105120.1280-1-lorenzo.pieralisi@arm.com>
+In-Reply-To: <20220407105120.1280-1-lorenzo.pieralisi@arm.com>
+From:   Veronika Kabatova <vkabatov@redhat.com>
+Date:   Fri, 8 Apr 2022 15:54:17 +0200
+Message-ID: <CA+tGwnmjv0nj11zRtcu8ZLCng9d94E1rVn71dfopHK16WiuMUQ@mail.gmail.com>
+Subject: Re: [PATCH] ACPI: osl: Fix BERT error region memory mapping
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Aristeu Rozanski <aris@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Apr 7, 2022 at 12:51 PM Lorenzo Pieralisi
+<lorenzo.pieralisi@arm.com> wrote:
+>
+> Currently the sysfs interface maps the BERT error region as "memory"
+> (through acpi_os_map_memory()) in order to copy the error records into
+> memory buffers through memory operations (eg memory_read_from_buffer()).
+>
+> The OS system cannot detect whether the BERT error region is part of
+> system RAM or it is "device memory" (eg BMC memory) and therefore it
+> cannot detect which memory attributes the bus to memory support (and
+> corresponding kernel mapping, unless firmware provides the required
+> information).
+>
+> The acpi_os_map_memory() arch backend implementation determines the
+> mapping attributes. On arm64, if the BERT error region is not present in
+> the EFI memory map, the error region is mapped as device-nGnRnE; this
+> triggers alignment faults since memcpy unaligned accesses are not
+> allowed in device-nGnRnE regions.
+>
+> The ACPI sysfs code cannot therefore map by default the BERT error
+> region with memory semantics but should use a safer default.
+>
+> Change the sysfs code to map the BERT error region as MMIO (through
+> acpi_os_map_iomem()) and use the memcpy_fromio() interface to read the
+> error region into the kernel buffer.
+>
 
---fpokwbkqxdym2r3r
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-On Fri, Mar 18, 2022 at 04:33:19PM +0200, Andy Shevchenko wrote:
-> On Fri, Mar 18, 2022 at 03:21:45PM +0100, Maxime Ripard wrote:
-> > On Fri, Mar 18, 2022 at 03:42:48PM +0200, Andy Shevchenko wrote:
-> > > On Thu, Mar 17, 2022 at 12:39:57PM +0100, Javier Martinez Canillas wr=
-ote:
-> > > > On 3/17/22 09:18, Geert Uytterhoeven wrote:
-> > >=20
-> > > > By the way, you should probably request commit access to the drm-mi=
-sc tree:
-> > > >=20
-> > > > https://drm.pages.freedesktop.org/maintainer-tools/commit-access.ht=
-ml
-> > >=20
-> > > Does it really work? I tried and no one replied to request.
-> > > Keeping silent is a bad service. If people don't want a person
-> > > to have such access it should be well communicated.
-> >=20
-> > I don't see any issue on Gitlab to request commit access, so I'm not
-> > sure what you did exactly but it's not surprising you didn't get any
-> > answer.
->=20
-> https://gitlab.freedesktop.org/freedesktop/freedesktop/-/issues/311
+I tested this patch on top of the arm tree for-kernelci branch (a2c0b0fbe014).
+I wasn't able to trigger the original problem on the same HW, and the patch
+didn't introduce any new issues on these runs, nor on other randomly
+chosen aarch64 machines.
 
-Indeed, I wasn't expecting it to be that old.
+Tested-by: Veronika Kabatova <vkabatov@redhat.com>
 
-I'm not sure why it fell through the cracks, sorry for that.
 
-That being said, the criteria for requesting drm-misc commit access are
-listed here:
-https://drm.pages.freedesktop.org/maintainer-tools/commit-access.html#drm-m=
-isc
+> Link: https://lore.kernel.org/linux-arm-kernel/31ffe8fc-f5ee-2858-26c5-0fd8bdd68702@arm.com
+> Link: https://lore.kernel.org/linux-acpi/CAJZ5v0g+OVbhuUUDrLUCfX_mVqY_e8ubgLTU98=jfjTeb4t+Pw@mail.gmail.com
+> Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> Cc: Ard Biesheuvel <ardb@kernel.org>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Hanjun Guo <guohanjun@huawei.com>
+> Cc: Sudeep Holla <sudeep.holla@arm.com>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> ---
+>  drivers/acpi/sysfs.c | 25 ++++++++++++++++++-------
+>  1 file changed, 18 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/acpi/sysfs.c b/drivers/acpi/sysfs.c
+> index a4b638bea6f1..cc2fe0618178 100644
+> --- a/drivers/acpi/sysfs.c
+> +++ b/drivers/acpi/sysfs.c
+> @@ -415,19 +415,30 @@ static ssize_t acpi_data_show(struct file *filp, struct kobject *kobj,
+>                               loff_t offset, size_t count)
+>  {
+>         struct acpi_data_attr *data_attr;
+> -       void *base;
+> -       ssize_t rc;
+> +       void __iomem *base;
+> +       ssize_t size;
+>
+>         data_attr = container_of(bin_attr, struct acpi_data_attr, attr);
+> +       size = data_attr->attr.size;
+> +
+> +       if (offset < 0)
+> +               return -EINVAL;
+> +
+> +       if (offset >= size)
+> +               return 0;
+>
+> -       base = acpi_os_map_memory(data_attr->addr, data_attr->attr.size);
+> +       if (count > size - offset)
+> +               count = size - offset;
+> +
+> +       base = acpi_os_map_iomem(data_attr->addr, size);
+>         if (!base)
+>                 return -ENOMEM;
+> -       rc = memory_read_from_buffer(buf, count, &offset, base,
+> -                                    data_attr->attr.size);
+> -       acpi_os_unmap_memory(base, data_attr->attr.size);
+>
+> -       return rc;
+> +       memcpy_fromio(buf, base + offset, count);
+> +
+> +       acpi_os_unmap_iomem(base, size);
+> +
+> +       return count;
+>  }
+>
+>  static int acpi_bert_data_init(void *th, struct acpi_data_attr *data_attr)
+> --
+> 2.31.0
+>
 
-And looking at your commit history so far, I'm not sure you qualifies
-yet for the first criteria. All your patches to drivers/gpu/drm, while
-definitely useful, only seem to be conversions to helpers and general
-best practices changes, which could be classified as trivial.
-
-Maxime
-
---fpokwbkqxdym2r3r
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYlA+hQAKCRDj7w1vZxhR
-xQvdAQDsOhYAmhiCB4lkgsiPHP0a5xUK6B4s8GfY8/JUQqUTwAD+IzpK4e2WvPe1
-uTbv8hsn0TYWT/tJwgrscSRWOMsCVwI=
-=0hrM
------END PGP SIGNATURE-----
-
---fpokwbkqxdym2r3r--

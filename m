@@ -2,173 +2,381 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52A984F9CAF
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 20:26:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E78D4F9CB2
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 20:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238686AbiDHS1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 14:27:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52814 "EHLO
+        id S238699AbiDHSag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 14:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230085AbiDHS1k (ORCPT
+        with ESMTP id S229740AbiDHSad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 14:27:40 -0400
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE36B195338;
-        Fri,  8 Apr 2022 11:25:35 -0700 (PDT)
-Received: by mail-oi1-f172.google.com with SMTP id r8so9673806oib.5;
-        Fri, 08 Apr 2022 11:25:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vQfJAKUgvClkkyeIs6rV92XnnDXDzlXjyxiEcCWwtPU=;
-        b=JCOKm2epdNbLbzOfOW7NJN9KKvwqsWZZsu7qLW7p8f4aTU3Bp9Fh1FKhc3jJopzbcr
-         IngDn/os6nhGWfKL4KINWjLHHHjeDhPOg8Pbo5DOghmezeS54X4Wl/ruAZ8q3Hb5tyZY
-         Rply5WtKgCI6EBMEgRnD9oAWJPZalkadlyWU5TMLETd/2feGwpQWBUitM3plq8HylWKy
-         JRprlYuLL3TuLDscHjEhtqXZ/1nUINCheB2Y8lwJfXyI+BLgUIm/cr0lUdBEWXmsll8M
-         trMGcGExgyS0UzVQK/7UOYg0kpJ+AsiUQ8b/gbrgA84Kn9mmulQOYOaA5s2jeXFHplvw
-         /WuQ==
-X-Gm-Message-State: AOAM530LQlmLT6b+s2ZTdrEifvBzLK15lXFapp79JQHzdHzTaikEFkrl
-        oHZGpVyXICcShS8alb52zQ==
-X-Google-Smtp-Source: ABdhPJzlQwv14QkshbNP1Oi/GdkIrCLDU8BlOxyh9LjdZe+xlONWhQsKwHIiwkgNu3FuyPLiAB6bsA==
-X-Received: by 2002:a05:6808:18a4:b0:2da:5b12:840a with SMTP id bi36-20020a05680818a400b002da5b12840amr511330oib.241.1649442335043;
-        Fri, 08 Apr 2022 11:25:35 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 12-20020a05687012cc00b000de97cc1beesm9285382oam.43.2022.04.08.11.25.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 11:25:34 -0700 (PDT)
-Received: (nullmailer pid 3815891 invoked by uid 1000);
-        Fri, 08 Apr 2022 18:25:33 -0000
-Date:   Fri, 8 Apr 2022 13:25:33 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-kernel@vger.kernel.org,
-        Luis Oliveira <Luis.Oliveira@synopsys.com>
-Subject: Re: [PATCH 09/14] dt-bindings: reset: snps,dw-reset: Convert to yaml
-Message-ID: <YlB+Hd6IGdM8SD8X@robh.at.kernel.org>
-References: <20220407154338.4190674-1-p.zabel@pengutronix.de>
- <20220407154338.4190674-9-p.zabel@pengutronix.de>
+        Fri, 8 Apr 2022 14:30:33 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A871102427;
+        Fri,  8 Apr 2022 11:28:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649442508; x=1680978508;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=MKvwCaA6SimRTFhHge/2AB0twtlCpITErS3yVnsdKdc=;
+  b=NnNP+Bm3m1jrT8cgnYaBVYoKMsCkzpWpoJ6i8i9grjTovdeV46xv3QFw
+   oa2bfGLk/1pr0ErgzuSUXrrwU/Dm0z8RRQeVMIeAVxAD+9NYuIPARyqLm
+   gXDkB+/7ZGelim+EOUtqPbs36sDBfuZDW8nQWhawX2FT7/S1C2eTD7Qzt
+   /6bU91ja9X5838VPJtEVub46R8Z0/Lx5rAApd9vyqDe807uilYH0xjM4n
+   LQr6EmXWGY70CHf/JnkOGFKEh5YlCaab66Z57wvIeOy/EGTcrUm+oPc/X
+   7cfgUmcehHWJVakcBoWbzeglGiKV6V0BOmqHZqv3VeaOui22oV6BdScYW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="242255505"
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="242255505"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 11:28:27 -0700
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="525480901"
+Received: from tsungtae-mobl.amr.corp.intel.com (HELO [10.134.43.198]) ([10.134.43.198])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 11:28:26 -0700
+Message-ID: <69dedc57-b4cf-b0b2-99a5-46c87e99fd9a@intel.com>
+Date:   Fri, 8 Apr 2022 11:28:30 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220407154338.4190674-9-p.zabel@pengutronix.de>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
+ <20220405234343.74045-8-kirill.shutemov@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCHv4 7/8] x86/tdx: Unaccepted memory support
+In-Reply-To: <20220405234343.74045-8-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 05:43:33PM +0200, Philipp Zabel wrote:
-> Convert the device tree bindings for the Synopsys DesignWare reset
-> controller to YAML schema to allow participating in DT validation.
+On 4/5/22 16:43, Kirill A. Shutemov wrote:
+> All preparations are complete. Hookup TDX-specific code to accept memory.
 > 
-> Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
-> Cc: Luis Oliveira <Luis.Oliveira@synopsys.com>
-> ---
->  .../bindings/reset/snps,dw-reset.txt          | 30 -------------
->  .../bindings/reset/snps,dw-reset.yaml         | 44 +++++++++++++++++++
->  2 files changed, 44 insertions(+), 30 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/reset/snps,dw-reset.txt
->  create mode 100644 Documentation/devicetree/bindings/reset/snps,dw-reset.yaml
+> There are two tdx_accept_memory() implementations: one in main kernel
+> and one in the decompresser.
 > 
-> diff --git a/Documentation/devicetree/bindings/reset/snps,dw-reset.txt b/Documentation/devicetree/bindings/reset/snps,dw-reset.txt
-> deleted file mode 100644
-> index 0c241d4aae76..000000000000
-> --- a/Documentation/devicetree/bindings/reset/snps,dw-reset.txt
-> +++ /dev/null
-> @@ -1,30 +0,0 @@
-> -Synopsys DesignWare Reset controller
-> -=======================================
-> -
-> -Please also refer to reset.txt in this directory for common reset
-> -controller binding usage.
-> -
-> -Required properties:
-> -
-> -- compatible: should be one of the following.
-> -	"snps,dw-high-reset" - for active high configuration
-> -	"snps,dw-low-reset" - for active low configuration
-> -
-> -- reg: physical base address of the controller and length of memory mapped
-> -	region.
-> -
-> -- #reset-cells: must be 1.
-> -
-> -example:
-> -
-> -	dw_rst_1: reset-controller@0000 {
-> -		compatible = "snps,dw-high-reset";
-> -		reg = <0x0000 0x4>;
-> -		#reset-cells = <1>;
-> -	};
-> -
-> -	dw_rst_2: reset-controller@1000 {
-> -		compatible = "snps,dw-low-reset";
-> -		reg = <0x1000 0x8>;
-> -		#reset-cells = <1>;
-> -	};
-> diff --git a/Documentation/devicetree/bindings/reset/snps,dw-reset.yaml b/Documentation/devicetree/bindings/reset/snps,dw-reset.yaml
-> new file mode 100644
-> index 000000000000..f9b36ddc0ea1
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/reset/snps,dw-reset.yaml
-> @@ -0,0 +1,44 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/reset/snps,dw-reset.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Synopsys DesignWare Reset controller
-> +
-> +maintainers:
-> +  - Luis Oliveira <Luis.Oliveira@synopsys.com>
+> The implementation in core kernel uses tdx_enc_status_changed().
+> The helper is not available in the decompresser, self-contained
+> implementation added there instead.
 
-Mail bounces, needs a new one.
+Why isn't it available?
 
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 7021ec725dd3..e4c31dbea6d7 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -885,6 +885,7 @@ config INTEL_TDX_GUEST
+>  	select ARCH_HAS_CC_PLATFORM
+>  	select X86_MEM_ENCRYPT
+>  	select X86_MCE
+> +	select UNACCEPTED_MEMORY
+>  	help
+>  	  Support running as a guest under Intel TDX.  Without this support,
+>  	  the guest kernel can not boot or run under TDX.
+
+Ahh, there we go.  Nice.
+
+> diff --git a/arch/x86/boot/compressed/tdx.c b/arch/x86/boot/compressed/tdx.c
+> index 918a7606f53c..a0bd1426d235 100644
+> --- a/arch/x86/boot/compressed/tdx.c
+> +++ b/arch/x86/boot/compressed/tdx.c
+> @@ -9,6 +9,7 @@
+>  #include <uapi/asm/vmx.h>
+>  
+>  #include <asm/shared/tdx.h>
+> +#include <asm/page_types.h>
+>  
+>  /* Called from __tdx_hypercall() for unrecoverable failure */
+>  void __tdx_hypercall_failed(void)
+> @@ -75,3 +76,43 @@ void early_tdx_detect(void)
+>  	pio_ops.f_outb = tdx_outb;
+>  	pio_ops.f_outw = tdx_outw;
+>  }
 > +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - snps,dw-high-reset # for active high configuration
-> +      - snps,dw-low-reset  # for active low configuration
+> +#define TDACCEPTPAGE		6
+> +#define TDVMCALL_MAP_GPA	0x10001
+
+That seems like unnecessary duplication.  Can't a #define be trivially
+shared?
+
+> +/*
+> + * Wrapper for standard use of __tdx_hypercall with no output aside from
+> + * return code.
+> + */
+> +static inline u64 _tdx_hypercall(u64 fn, u64 r12, u64 r13, u64 r14, u64 r15)
+> +{
+> +	struct tdx_hypercall_args args = {
+> +		.r10 = TDX_HYPERCALL_STANDARD,
+> +		.r11 = fn,
+> +		.r12 = r12,
+> +		.r13 = r13,
+> +		.r14 = r14,
+> +		.r15 = r15,
+> +	};
 > +
-> +  reg:
-> +    maxItems: 1
+> +	return __tdx_hypercall(&args, 0);
+> +}
+
+Ditto on the sharing.
+
+> +void tdx_accept_memory(phys_addr_t start, phys_addr_t end)
+> +{
+> +	int i;
 > +
-> +  '#reset-cells':
-> +    const: 1
+> +	if (_tdx_hypercall(TDVMCALL_MAP_GPA, start, end - start, 0, 0))
+> +		error("Cannot accept memory: MapGPA failed\n");
 > +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - '#reset-cells'
+> +	/*
+> +	 * For shared->private conversion, accept the page using TDACCEPTPAGE
+> +	 * TDX module call.
+> +	 */
+
+What does the shared->private conversion have to do with this?  I feel
+like I'm missing something.  Is unaccepted memory shared initially?
+
+> +	for (i = 0; i < (end - start) / PAGE_SIZE; i++) {
+> +		if (__tdx_module_call(TDACCEPTPAGE, start + i * PAGE_SIZE,
+> +				      0, 0, 0, NULL)) {
+> +			error("Cannot accept memory: page accept failed\n");
+> +		}
+> +	}
+> +}
+> diff --git a/arch/x86/boot/compressed/unaccepted_memory.c b/arch/x86/boot/compressed/unaccepted_memory.c
+> index 3ebab63789bb..662ec32e3c42 100644
+> --- a/arch/x86/boot/compressed/unaccepted_memory.c
+> +++ b/arch/x86/boot/compressed/unaccepted_memory.c
+> @@ -1,12 +1,33 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  
+> +#include <asm/shared/tdx.h>
+>  #include "error.h"
+>  #include "misc.h"
+> +#include "tdx.h"
 > +
-> +additionalProperties: false
+> +static bool is_tdx_guest(void)
+> +{
+> +	static bool once;
+> +	static bool is_tdx;
 > +
-> +examples:
-> +  - |
-> +    dw_rst_1: reset-controller@0000 {
-> +        compatible = "snps,dw-high-reset";
-> +        reg = <0x0000 0x4>;
-> +        #reset-cells = <1>;
-> +    };
+> +	if (!once) {
+> +		u32 eax, sig[3];
 > +
-> +    dw_rst_2: reset-controller@1000 {
-> +        compatible = "snps,dw-low-reset";
-> +        reg = <0x1000 0x8>;
-> +        #reset-cells = <1>;
-> +    };
+> +		cpuid_count(TDX_CPUID_LEAF_ID, 0, &eax,
+> +			    &sig[0], &sig[2],  &sig[1]);
+> +		is_tdx = !memcmp(TDX_IDENT, sig, sizeof(sig));
+> +	}
 > +
-> -- 
-> 2.30.2
-> 
-> 
+> +	return is_tdx;
+> +}
+
+Do you need to set 'once'?
+
+>  static inline void __accept_memory(phys_addr_t start, phys_addr_t end)
+>  {
+>  	/* Platform-specific memory-acceptance call goes here */
+> -	error("Cannot accept memory");
+> +	if (is_tdx_guest())
+> +		tdx_accept_memory(start, end);
+> +	else
+> +		error("Cannot accept memory");
+>  }
+
+Should those is_tdx_guest() checks be a new CC_ attribute, say:
+
+	cc_guest_has(CC_UNACCEPTED_MEMORY)
+
+and then have a:
+
+	cc_accept_memory(start, end);
+
+?
+
+Or is that overkill when we only have TDX?
+
+>  void mark_unaccepted(struct boot_params *params, u64 start, u64 end)
+> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+> index 03deb4d6920d..0fcb54e07797 100644
+> --- a/arch/x86/coco/tdx/tdx.c
+> +++ b/arch/x86/coco/tdx/tdx.c
+> @@ -606,16 +606,8 @@ static bool try_accept_one(phys_addr_t *start, unsigned long len,
+>  	return true;
+>  }
+>  
+> -/*
+> - * Inform the VMM of the guest's intent for this physical page: shared with
+> - * the VMM or private to the guest.  The VMM is expected to change its mapping
+> - * of the page in response.
+> - */
+> -static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
+> +static bool __tdx_enc_status_changed(phys_addr_t start, phys_addr_t end, bool enc)
+>  {
+> -	phys_addr_t start = __pa(vaddr);
+> -	phys_addr_t end   = __pa(vaddr + numpages * PAGE_SIZE);
+> -
+>  	if (!enc) {
+>  		/* Set the shared (decrypted) bits: */
+>  		start |= cc_mkdec(0);
+> @@ -660,6 +652,25 @@ static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
+>  	return true;
+>  }
+>  
+> +void tdx_accept_memory(phys_addr_t start, phys_addr_t end)
+> +{
+> +	if (!__tdx_enc_status_changed(start, end, true))
+> +		panic("Accepting memory failed\n");
+> +}
+
+Could we make a bit better use of our naming bytes?  "__" tells us
+nothing.  What if we had:
+
+	tdx_enc_status_changed_phys()
+
+we could call the other one _virt() or leave it alone too.
+
+> +/*
+> + * Inform the VMM of the guest's intent for this physical page: shared with
+> + * the VMM or private to the guest.  The VMM is expected to change its mapping
+> + * of the page in response.
+> + */
+> +static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
+> +{
+> +	phys_addr_t start = __pa(vaddr);
+> +	phys_addr_t end = __pa(vaddr + numpages * PAGE_SIZE);
+> +
+> +	return __tdx_enc_status_changed(start, end, enc);
+> +}
+> +
+>  void __init tdx_early_init(void)
+>  {
+>  	u64 cc_mask;
+> diff --git a/arch/x86/include/asm/shared/tdx.h b/arch/x86/include/asm/shared/tdx.h
+> index e53f26228fbb..4eca6492b108 100644
+> --- a/arch/x86/include/asm/shared/tdx.h
+> +++ b/arch/x86/include/asm/shared/tdx.h
+> @@ -36,5 +36,25 @@ u64 __tdx_hypercall(struct tdx_hypercall_args *args, unsigned long flags);
+>  /* Called from __tdx_hypercall() for unrecoverable failure */
+>  void __tdx_hypercall_failed(void);
+>  
+> +/*
+> + * Used in __tdx_module_call() to gather the output registers' values of the
+> + * TDCALL instruction when requesting services from the TDX module. This is a
+> + * software only structure and not part of the TDX module/VMM ABI
+> + */
+> +struct tdx_module_output {
+> +	u64 rcx;
+> +	u64 rdx;
+> +	u64 r8;
+> +	u64 r9;
+> +	u64 r10;
+> +	u64 r11;
+> +};
+
+Is this the first module call with an output?
+
+> +/* Used to communicate with the TDX module */
+> +u64 __tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
+> +		      struct tdx_module_output *out);
+> +
+> +void tdx_accept_memory(phys_addr_t start, phys_addr_t end);
+> +
+>  #endif /* !__ASSEMBLY__ */
+>  #endif /* _ASM_X86_SHARED_TDX_H */
+> diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
+> index 020c81a7c729..d9106d3e89f8 100644
+> --- a/arch/x86/include/asm/tdx.h
+> +++ b/arch/x86/include/asm/tdx.h
+> @@ -20,21 +20,6 @@
+>  
+>  #ifndef __ASSEMBLY__
+>  
+> -/*
+> - * Used to gather the output registers values of the TDCALL and SEAMCALL
+> - * instructions when requesting services from the TDX module.
+> - *
+> - * This is a software only structure and not part of the TDX module/VMM ABI.
+> - */
+> -struct tdx_module_output {
+> -	u64 rcx;
+> -	u64 rdx;
+> -	u64 r8;
+> -	u64 r9;
+> -	u64 r10;
+> -	u64 r11;
+> -};
+> -
+>  /*
+>   * Used by the #VE exception handler to gather the #VE exception
+>   * info from the TDX module. This is a software only structure
+> @@ -55,10 +40,6 @@ struct ve_info {
+>  
+>  void __init tdx_early_init(void);
+>  
+> -/* Used to communicate with the TDX module */
+> -u64 __tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
+> -		      struct tdx_module_output *out);
+> -
+>  void tdx_get_ve_info(struct ve_info *ve);
+
+There's enough TDX helper munging going on here that I'd probably break
+this out into a separate patch.
+
+> diff --git a/arch/x86/mm/unaccepted_memory.c b/arch/x86/mm/unaccepted_memory.c
+> index 3588a7cb954c..2f1c3c0375cd 100644
+> --- a/arch/x86/mm/unaccepted_memory.c
+> +++ b/arch/x86/mm/unaccepted_memory.c
+> @@ -6,6 +6,7 @@
+>  
+>  #include <asm/io.h>
+>  #include <asm/setup.h>
+> +#include <asm/shared/tdx.h>
+>  #include <asm/unaccepted_memory.h>
+>  
+>  static DEFINE_SPINLOCK(unaccepted_memory_lock);
+> @@ -26,7 +27,10 @@ void accept_memory(phys_addr_t start, phys_addr_t end)
+>  	for_each_set_bitrange_from(rs, re, unaccepted_memory,
+>  				   DIV_ROUND_UP(end, PMD_SIZE)) {
+>  		/* Platform-specific memory-acceptance call goes here */
+> -		panic("Cannot accept memory");
+> +		if (cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
+> +			tdx_accept_memory(rs * PMD_SIZE, re * PMD_SIZE);
+> +		else
+> +			panic("Cannot accept memory");
+>  		bitmap_clear(unaccepted_memory, rs, re - rs);
+>  	}
+>  	spin_unlock_irqrestore(&unaccepted_memory_lock, flags);
+

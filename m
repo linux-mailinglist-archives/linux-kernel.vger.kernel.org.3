@@ -2,140 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 185EE4F9AA8
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 18:31:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87AC54F9AB2
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 18:34:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231776AbiDHQdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 12:33:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47032 "EHLO
+        id S232079AbiDHQgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 12:36:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231689AbiDHQdh (ORCPT
+        with ESMTP id S231303AbiDHQgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 12:33:37 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08on2054.outbound.protection.outlook.com [40.107.100.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905741DEC0A;
-        Fri,  8 Apr 2022 09:31:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WfVHXqeSF2GFIxM/d+PyxCCrcIY8BudShVAW4uZFOAfPDsmNOfvRXrJuGybUO8LRjWN9Rwgf2bwzlY8JyLeJGL9jgS04qnakejmpOGBqZ9iNdewrbOJPeesvT+OtcGNLoNc0rRorHuHEF7wci79sC+1RxTruWVaLsiBr82YORXxQLq69yah0Lu+U4noIhnBMVY0jz/8QBPr6Oo26PlJYVOW4UV8gohnHLzyxJNgZcx4X/N8PFn0rcqJOmmDM+k/QvzSowJ1jg8CavClafziK2fktWiwGdeEfhhIovj01hXiNYQbcpOgrBZMY7KUDTa/sqQufEGtFxGdNNa9leFBgQw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=H57VerlsJscYWoksEzSWMWx3rPmbSRzu+IDZKBL9Di8=;
- b=PZ1DKLqgZZ6YvXTIhPh31m+bxloIpjtliJNOdvVd4pWDQaWhPBy3WO7Qz82H17ri/xvLd2a2eRvdzrI2Y/aU3PNC47uYT9VvVYwuFq4up706Nkv1+Wp1iB2E3m6ldm6Fg7T8VmIEKajpb1aoHDhbjz3R1+k89hXf2J/BnIje9aWdkq7zHYbmvTZw5d+bqRP8aMDL3QsnNDvUdE6/ynWPvc8wb4KZUV9QxcQ7djp2FNrD2OZkGqbxPka+TmiNTH4hA2uP69Fjph1jG+hUsn15OF2Znt0JItt2R1uYbdnwu1bPYZ79pfGceWGqvqpaf4n4CPXXJvey9qn08nxJhvryKw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=H57VerlsJscYWoksEzSWMWx3rPmbSRzu+IDZKBL9Di8=;
- b=qeIo5rwmjKf0AVdbgSN+7j1xlibQ/JuUjxTbEyGHUJBbz81YcxcCmWgmNic4X3VAN1ODkTMfvvxSfUvHGtrcIbvFtx91C0jtUpizAIdIAP/mEg8K22kGg3PCdffXbyPWOcIIdenRj/I0v5Y3QRyeq5pVsgki5PUBZhonludfUokhU3rDt992QxkcN5LHA3gYTaarfHdTbSES7CNqZARWZCyMqisA+4j+p503ENAn0bZVlpYE2w6Z2UkKfO3HOzbHrdHFHSVgoRwRm6u0oyBE8ks58reL0T0FWBerFEn1+Nly9RKK5ftPks4FVfil2yVFOOlqDWjKsjRllbaTt3h3Fg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by BN9PR12MB5355.namprd12.prod.outlook.com (2603:10b6:408:104::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.26; Fri, 8 Apr
- 2022 16:31:31 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::cdfb:f88e:410b:9374]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::cdfb:f88e:410b:9374%6]) with mapi id 15.20.5144.026; Fri, 8 Apr 2022
- 16:31:31 +0000
-Date:   Fri, 8 Apr 2022 13:31:30 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Niels Dossche <dossche.niels@gmail.com>
-Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
-Subject: Re: [PATCH] IB/rdmavt: add missing locks in rvt_ruc_loopback
-Message-ID: <20220408163130.GA3612543@nvidia.com>
-References: <20220228195144.71946-1-dossche.niels@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220228195144.71946-1-dossche.niels@gmail.com>
-X-ClientProxiedBy: MN2PR08CA0026.namprd08.prod.outlook.com
- (2603:10b6:208:239::31) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Fri, 8 Apr 2022 12:36:09 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C849724959;
+        Fri,  8 Apr 2022 09:34:04 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id bu29so16107601lfb.0;
+        Fri, 08 Apr 2022 09:34:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Pz40nRgvhtcOeXUbzgyo9Hq14GrnezoaHqBr+KLvPIo=;
+        b=NOIUQsr6XphXreR0Ws3aESzt6zh125cSmmUwY+ZOQLs8O6OUb4qHsG8YTp+btiQw3S
+         v6ceYcQ66PpxMlfOA9B1O3YEAvx8LqrXvjN6NrTmrWZwhU/1a2ZrvKyW7SUbW0yDURXY
+         HnF7XNSUNEoPdwlHmVcIvjfGHoiTLwUppVoAIF8JJ/m1m5OTGpCjJ2+vbmLVB4Oo7j0T
+         CmqtGgqhDvLlsNNyJ2k1kc1CDRGTIG3z+BoLPnXJlrcyUGEQ8sy09gkm+XObgLA6h5Bm
+         5gU11d3p60aUF4HiOnVZ/Nc7BXIppHqC8hp5HLQZ9cavka/bgFdYIjMsmLV/5lhvSmKN
+         e11w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Pz40nRgvhtcOeXUbzgyo9Hq14GrnezoaHqBr+KLvPIo=;
+        b=n9WpLAR2eWd5ryIVGxKrH35c3/SDmCQoaB2ndBl/OOYJxOB1IvDtTTqhaMzUqHzRNW
+         0woyDHxcVw7MQ8+AW5Zpa74vTNmV+gONdu79pxTAvkjIA6m1AVOQHxBZyrzwLQ2B5f69
+         CkkdbXMCkBaDwsury9VJbQa38EVbMmyr7aR9nZngfUsnZMxsXhAS22n1iWuzdXwHLKUO
+         020Vb2Wtri4x35iOnViirzURmmwb1+5h7nxTd1KXHVgM5XPegHX9orpfdMdsp2DBk2wz
+         ldalk0CEfpuVlwygPfJJSnjuG3WkHo2vCGfw+brI0VmftYUwbrpgFKCy0D2pSeuS2uDO
+         F0sQ==
+X-Gm-Message-State: AOAM533+GINLp6m4eAHjrnFfoYlRN0gTsGH9Y/WuRMn8hNNAOoTaA9/2
+        eMpPse70oZWrEfmC2HLqzdC+4yu1wFs=
+X-Google-Smtp-Source: ABdhPJxq6jWHs4Q8uMOLnsxSSSKI55rbTZr/y0gclVa6MyldkPT7fEd3IQU521XN1VdJl8L7ZCJOIg==
+X-Received: by 2002:a05:6512:4002:b0:46b:8490:2ba3 with SMTP id br2-20020a056512400200b0046b84902ba3mr2565733lfb.632.1649435642808;
+        Fri, 08 Apr 2022 09:34:02 -0700 (PDT)
+Received: from nergzd-desktop.localdomain ([194.39.226.133])
+        by smtp.gmail.com with ESMTPSA id q4-20020a0565123a8400b0044a27a8c63asm2495403lfu.80.2022.04.08.09.34.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 09:34:02 -0700 (PDT)
+From:   Markuss Broks <markuss.broks@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Markuss Broks <markuss.broks@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH v4 0/2] Make AUX gpio pin optional for ktd2692
+Date:   Fri,  8 Apr 2022 19:33:26 +0300
+Message-Id: <20220408163330.200898-1-markuss.broks@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3cad2559-9b74-4c8e-8541-08da197d3d51
-X-MS-TrafficTypeDiagnostic: BN9PR12MB5355:EE_
-X-Microsoft-Antispam-PRVS: <BN9PR12MB53559271B982A9F7AF961ED0C2E99@BN9PR12MB5355.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 52Qi99LbZfDUlzZvtwyz/GcsfM3DWzEaEtbjyFfAiEL2fTmU0PN42EBaTN0inDtVNfx8LaTvIQdXGmqxyx7PEEUFkDJ2qn0Dsf+brIzF5hsUk0UqJPtUV0ZPKKhmYGqX/I4x0YK/iPMZXexGIR0D3q2D8kdOUU7ayWQxZVOIq26bjR1ZWPmd5ScZRrg+E4CBy1lVT0YF6byLhTOS8xFyn91FSOLAKRgRrnD0jr8I1hfwcFEz1fFZ7j+9GtojanJIkXn6BDMB1xSGeRaKtQUBht23GWatCiGSbEPmpTfSBFZEPW60IpRkFSXTln/JISNqq2L4NwDJ5NtNhQgzQzgAPiw6xYCuvfNZdIBAxtEZme6qH+KilSrCLG5dSi791+8pTHPxbhdS8expTVtntbrhJNurW7zN9EOy3C37FBvKMIANVjT8rEweqj89gwD8I6vj45sC7jxR4cSSqHGUMK4WsWh4lNBB0TgFa7pE89HWTs8efqvBQX+dTsFGiXUp3f1msSq/PffMiP5xpdc34YzrDYaRhDiKeg2GPPe14xgZd1giyAIzz/HV/3rda1TZzpRj8KV+iXblbU29z3DSH+PTAKNJy7wDb09l6is99RNkHd2/uA7oic51p9uxvU1cxRJ8
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(83380400001)(1076003)(38100700002)(26005)(2616005)(186003)(8936002)(36756003)(4744005)(33656002)(5660300002)(316002)(2906002)(6506007)(4326008)(66946007)(66556008)(66476007)(508600001)(6512007)(8676002)(6916009)(86362001)(6486002)(54906003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?oRs9r19hLuCOUF+tkTO9V5aTSOywk9ka+37NFwK27jwWcwJNftWKk8y8XICQ?=
- =?us-ascii?Q?OaVb+lTeooeyriwWy/gl6ltyBFNPzItZkv5szmqV8FMa6Tdwk9evTYjV9njx?=
- =?us-ascii?Q?YuWodkNMRJY43Rrx93KFxzMU3/zY/bELduUV9usseSNZlxDvf+/1H/7rejFH?=
- =?us-ascii?Q?YOU5/VYMZJYh+CUXImGDAT+SrKKMvWf/ixmUbefrjvxQ8+mRu2umAoW+JSM4?=
- =?us-ascii?Q?NQKF6afnOjNCKY0Xgi/SCcL9xp8t+Py3W3U0f7HK0itE2CegG2w4a2ZHQJw4?=
- =?us-ascii?Q?gqHTwXk1i7LLu1/yWbH+A443zy3T22ssp9zVbSudoggIo08jXCV5qWcfnJ1T?=
- =?us-ascii?Q?tDMCEOyrbsiItTAU1LmIvwJnaOMB38JFubiRkES9ZtxB8QCRATNd7QNp8bGD?=
- =?us-ascii?Q?PEP/AVB5vxJrrO/Eiyo3hncBw3fKOhggyK85kAvKyKo5wGdeegoZaDU+Ad7K?=
- =?us-ascii?Q?T4MYIOgJYuh9bJ0TP3GAa70naJ6OLEqJJuhS5TMRoQ0GjrECfoSKdWuk1xv2?=
- =?us-ascii?Q?70bcGWYT16UddHbPIFOn7ukrUlJLbYrRpi5fpgrqov51tflt9cEpp32D5rt7?=
- =?us-ascii?Q?j1Ubl8IxRrOM2U5f4OXaMa8TbWyorSo8vmzBHXLcZlTm2aXaVhT9GXOkSjaq?=
- =?us-ascii?Q?J41fXcfHj8VXgWZVnjQZfvsTjRa/Chg02nOqjRij3Jp7WiV+mwV1aflgXF6k?=
- =?us-ascii?Q?7UYqZE5ds62xw1isiyo8X5o8zwdTzX/C4t2UwbpX/gp3x/VxW8oX046AAIww?=
- =?us-ascii?Q?KgG/CL2AlQ4HM8surBNlbhWHztLtu5na64BAxHDJQI1yXtzD9/N/pRwX6xCk?=
- =?us-ascii?Q?RY9g/xKfx1T++VSV7F1peyI9n1sXzA/FblWsGqNM4/KCQmxs53A8Zy9MyC5D?=
- =?us-ascii?Q?JlhuLD25FPwfBIL5F0JKgttUi7jdx4NFLd5mRMsdFlrzeVznj0lRRZEoiTG1?=
- =?us-ascii?Q?+k3jqG4lFDz6I1B/WMjiTvF1D7AtJoLRIt0k/9FjEBAvxaLTh/5LFG/Whk/3?=
- =?us-ascii?Q?ch1PreIDGvGhC4KlfL4NJpHJni2SGOHk2VwfKAJw7CKjygXzRM3lE/RpQpen?=
- =?us-ascii?Q?flsLFVR3XnduCBVeyLXKl5q3CY2v7Pz0+N73C+RH3pH7VkKNpbcFOH+FtfIS?=
- =?us-ascii?Q?KJH9Dif9ctKDg4feKqW8KokDLau5UkmULqSVfNCY9uZbKcZQoNeFMHtD6DxL?=
- =?us-ascii?Q?nUx+9on4YT44jv4aRABWFJtEI/WwPP3zX3leeSeTGaL09rsALLh9hi0k6Dcp?=
- =?us-ascii?Q?tx+50h8gv/ynmUd7sVjc92ARXpnkd5wf4nuVovjOqAHrotyueaMETQ3L16wF?=
- =?us-ascii?Q?8AtrwbJMqRHCVHrkLjsER0MBTvx/DEjW7n/fKFP0Mxc45p3KPJnqdDXGXJY1?=
- =?us-ascii?Q?yKN6Q3iJ1r6iPIy2xW0DrUGQrUM02KGaZiKHlLrY+FxvzK0FYUkRjr91CM18?=
- =?us-ascii?Q?vWvCWbfIcP2bY1Yqf5jjhGr2cl2W/WOVXR8XJP4ZqyQGvpiMVznBkXy3JLCh?=
- =?us-ascii?Q?FlsuoTaS0ZVpysDFuC4eKVWSiS9Y+dYtzPagKTGiA1b3JZ6gzNtCHgqptkUB?=
- =?us-ascii?Q?Gz6CWi2L9373Tw0T93TjdzUuiQj9035I5R3vuuIGcM+3/l4CExqvfAXvF9hp?=
- =?us-ascii?Q?edsVelC4aoIeCFrFbUOsUgrkyPtXFb6mNIDj7mmaHnPXQF8WocxtbAi4lW9e?=
- =?us-ascii?Q?BGakMPcjcnR6kJPIvkll0v2unXAmtLhfKs5jpQIf45MZsVwN7o+mJl0Lsudi?=
- =?us-ascii?Q?5zub8hnUPg=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3cad2559-9b74-4c8e-8541-08da197d3d51
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Apr 2022 16:31:31.8424
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HiZwP1OLUAnbKVYcZiBjSTPSiDLfkvdlTD1gPi17R3Oyjq1KTOBZYrjHjy7WYPDW
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5355
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 08:51:44PM +0100, Niels Dossche wrote:
-> The documentation of the function rvt_error_qp says both r_lock and
-> s_lock need to be held when calling that function.
-> It also asserts using lockdep that both of those locks are held.
-> rvt_error_qp is called form rvt_send_cq, which is called from
-> rvt_qp_complete_swqe, which is called from rvt_send_complete, which is
-> called from rvt_ruc_loopback in two places. Both of these places do not
-> hold r_lock. Fix this by acquiring a spin_lock of r_lock in both of
-> these places.
-> The r_lock acquiring cannot be added in rvt_qp_complete_swqe because
-> some of its other callers already have r_lock acquired.
-> 
-> Signed-off-by: Niels Dossche <dossche.niels@gmail.com>
-> ---
->  drivers/infiniband/sw/rdmavt/qp.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+Some appliances of ktd2692 don't have the AUX pin connected to
+a GPIO. Specifically, Samsung Galaxy J5 (2015), which uses ktd2692
+for driving the front flash LED, has the pin not connected anywhere on
+schematics. Make specifying the AUX pin optional, since it is additional
+functionality and only affects amount of current going through the LED.
 
-Applied to for-next, thanks
+Also convert the txt device-tree bindings to yaml and pick up maintenance
+over the yaml binding and the driver itself.
 
-Jason
+v2:
+- fix the dt_binding_check
+v3:
+- set the aux_gpio to NULL to avoid passing ERR_PTR as a gpio
+v4:
+- maintainership -> maintenance (description)
+- remove the if (led->aux_gpio)
+- use devm_gpiod_get_optional for aux gpio
+
+Markuss Broks (2):
+  dt-bindings: leds: convert ktd2692 bindings to yaml
+  leds: ktd2692: Make aux-gpios optional
+
+ .../bindings/leds/kinetic,ktd2692.yaml        | 87 +++++++++++++++++++
+ .../devicetree/bindings/leds/leds-ktd2692.txt | 50 -----------
+ MAINTAINERS                                   |  6 ++
+ drivers/leds/flash/leds-ktd2692.c             | 18 ++--
+ 4 files changed, 103 insertions(+), 58 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/leds/kinetic,ktd2692.yaml
+ delete mode 100644 Documentation/devicetree/bindings/leds/leds-ktd2692.txt
+
+-- 
+2.35.1
+

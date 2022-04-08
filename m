@@ -2,121 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BCAE4F9E1A
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 22:17:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA044F9E1C
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 22:20:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239455AbiDHUT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 16:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53538 "EHLO
+        id S233412AbiDHUWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 16:22:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233412AbiDHUTY (ORCPT
+        with ESMTP id S230027AbiDHUWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 16:19:24 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5C9396ACD
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 13:17:17 -0700 (PDT)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649449035;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JGg8/jzR3j1pSFzQLp7EyCYOhVTf4KBViZSPhpRv2hk=;
-        b=gTY3S4WlnWga9zg0uZUcqdJT344QnlycpzWQOaoqi8xPLUHCcEfCrDmeixI6gDBEN/mPkh
-        /7a649Sqq7itQJzSKTOQeo0V9aCImWsCizGcojZg3ZsN812XzWVVPnYJi2a0YpVMDA4FjQ
-        /qDhtdDktzj4C80eE+oQyytm8OH7nNYrHBYWw4GZc/zhEJ5jVq4BdCpRq7dQ5Hx4414N0O
-        fqjQZ/Nbtt2r0S0MgDxjNzCYWsTkEbgOCKAluEj83XgySKkErzUtyqlQttqnoY9arlilsi
-        cQbYuOwu/9C2/KQOln1pUJO4x0cgMp7qz763Tkyn6o3PclkYiYnm+O5y/hswXg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649449035;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JGg8/jzR3j1pSFzQLp7EyCYOhVTf4KBViZSPhpRv2hk=;
-        b=Y7KfsHDfSOYGjKiqDueArCa+bc9iMpwP6E4HpSv9LIPEbW/56ouENzOxv6E/a5r7TmZA1Z
-        qWl4bZMKtwpaTAAQ==
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: guarantee forward progress: was: Re: [PATCH printk v2 11/12]
- printk: extend console_lock for proper kthread support
-In-Reply-To: <YlA8jpuziDrD27A2@alley>
-References: <20220405132535.649171-1-john.ogness@linutronix.de>
- <20220405132535.649171-12-john.ogness@linutronix.de>
- <YlA8jpuziDrD27A2@alley>
-Date:   Fri, 08 Apr 2022 22:23:15 +0206
-Message-ID: <87v8vjnxdg.fsf@jogness.linutronix.de>
+        Fri, 8 Apr 2022 16:22:12 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC91236B82
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 13:20:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649449208; x=1680985208;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=HfbxLTRX6HCcEpWm09lQvPYQKeTAhMCo8cKJT3OJ9BY=;
+  b=EpR+GX0gpzV8FZP57JGzy6S3KTCFyDsjaL8MnFQGuOfqbHeN5a10gfxS
+   6ssIIQofBT/f2z9z6yIRf6vVDufmcQ6wY42EmrmmUP2xzp3mNBB/gRXI1
+   udbugoISMAsbYNj2hBPk1CDe+UMgVvbRM0+1kYSHqnDHdLS2qIMgTbTMR
+   JXFOucp1g1JQkfpqrOjTi5ZWWYThIZRJib1XS/DfPX9wcG1yb4Ks6840T
+   uUUgivnBpjtPoGiYKQzz/1GB8EGl3bvfVxUn+lUfind7jSvv1Wws6rN7w
+   psXeH3DMUZXeEqyzZuU6bS/WF393Ppvn5JZn1VHKBW6om5HjndJ2Cx8yv
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="249206805"
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="249206805"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 13:20:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="723514634"
+Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 08 Apr 2022 13:20:06 -0700
+Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ncv5R-0000bl-Tw;
+        Fri, 08 Apr 2022 20:20:05 +0000
+Date:   Sat, 9 Apr 2022 04:20:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     popcornmix <popcornmix@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [l1k:smsc95xx_5.17 279/888] include/linux/broadcom/vc_mem.h:36:63:
+ error: 'compat_ulong_t' undeclared
+Message-ID: <202204090406.QmmRJunU-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-04-08, Petr Mladek <pmladek@suse.com> wrote:
-> I played a lot with it and it is really hard because:
->
->    + new messages can appear anytime
->    + direct mode might get requested anytime
->    + only the direct mode knows whether all messages were flushed
->      on all consoles
+tree:   https://github.com/l1k/linux smsc95xx_5.17
+head:   240f56c27361c195cd502d95aba51c6b8e5b808c
+commit: 369c3a505f84640f4c10f4caf67c22bf5f9b1d56 [279/888] char: Add broadcom char drivers back to build files
+config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20220409/202204090406.QmmRJunU-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/l1k/linux/commit/369c3a505f84640f4c10f4caf67c22bf5f9b1d56
+        git remote add l1k https://github.com/l1k/linux
+        git fetch --no-tags l1k smsc95xx_5.17
+        git checkout 369c3a505f84640f4c10f4caf67c22bf5f9b1d56
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sparc SHELL=/bin/bash
 
-Yes, and this is why v1 dramatically simplified the picture by making
-kthreads not care about direct mode. In v1 the kthread logic is very
-simple: If there are messages to print, try to print them no matter
-what. We didn't need to worry if someone was printing, because we knew
-that at least the kthread was always printing.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-This meant that there would be times when direct mode is active but the
-kthreads are doing the printing. But in my experimenting, that tends to
-be the case anyway, even with this more complex v2 approach. The reason
-is that if some code does:
+All errors (new ones prefixed by >>):
 
-printk_prefer_direct_enter();
-(100 lines of printk calls)
-printk_prefer_direct_exit();
+   In file included from include/uapi/linux/ioctl.h:5,
+                    from include/uapi/linux/fs.h:14,
+                    from include/linux/fs.h:47,
+                    from drivers/char/broadcom/vc_mem.c:17:
+   drivers/char/broadcom/vc_mem.c: In function 'vc_mem_compat_ioctl':
+>> include/linux/broadcom/vc_mem.h:36:63: error: 'compat_ulong_t' undeclared (first use in this function)
+      36 | #define VC_MEM_IOC_MEM_PHYS_ADDR32  _IOR(VC_MEM_IOC_MAGIC, 0, compat_ulong_t)
+         |                                                               ^~~~~~~~~~~~~~
+   arch/sparc/include/uapi/asm/ioctl.h:43:12: note: in definition of macro '_IOC'
+      43 |          ((size) << _IOC_SIZESHIFT))
+         |            ^~~~
+   include/linux/broadcom/vc_mem.h:36:37: note: in expansion of macro '_IOR'
+      36 | #define VC_MEM_IOC_MEM_PHYS_ADDR32  _IOR(VC_MEM_IOC_MAGIC, 0, compat_ulong_t)
+         |                                     ^~~~
+   drivers/char/broadcom/vc_mem.c:183:14: note: in expansion of macro 'VC_MEM_IOC_MEM_PHYS_ADDR32'
+     183 |         case VC_MEM_IOC_MEM_PHYS_ADDR32:
+         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/broadcom/vc_mem.h:36:63: note: each undeclared identifier is reported only once for each function it appears in
+      36 | #define VC_MEM_IOC_MEM_PHYS_ADDR32  _IOR(VC_MEM_IOC_MAGIC, 0, compat_ulong_t)
+         |                                                               ^~~~~~~~~~~~~~
+   arch/sparc/include/uapi/asm/ioctl.h:43:12: note: in definition of macro '_IOC'
+      43 |          ((size) << _IOC_SIZESHIFT))
+         |            ^~~~
+   include/linux/broadcom/vc_mem.h:36:37: note: in expansion of macro '_IOR'
+      36 | #define VC_MEM_IOC_MEM_PHYS_ADDR32  _IOR(VC_MEM_IOC_MAGIC, 0, compat_ulong_t)
+         |                                     ^~~~
+   drivers/char/broadcom/vc_mem.c:183:14: note: in expansion of macro 'VC_MEM_IOC_MEM_PHYS_ADDR32'
+     183 |         case VC_MEM_IOC_MEM_PHYS_ADDR32:
+         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~
 
-And directly before that printk_prefer_direct_enter() _any_ kthread was
-already inside call_console_driver(), then _all_ the console_trylock()
-calls of the above 100 printk's will fail. Inserting messages into the
-ringbuffer is fast and any active printer will not have finished
-printing its message before the above code snippet is done.
 
-In fact, the above snippet will only do direct printing if there were
-previously no unflushed messages. That is true for v1 (by design) and v2
-(by misfortune, because ringbuffer insertion is much faster than a
-single call_console_driver() call).
+vim +/compat_ulong_t +36 include/linux/broadcom/vc_mem.h
 
-This new idea (v2) of trying to stop kthreads in order to "step aside"
-for direct printing is really just adding a lot of complexity, a lot of
-irqwork calls, and a lot of races. And with my experimenting I am not
-seeing any gain, except for new risks of nobody printing.
+bc341020f52eeb popcornmix 2016-10-28  34  
+bc341020f52eeb popcornmix 2016-10-28  35  #ifdef CONFIG_COMPAT
+bc341020f52eeb popcornmix 2016-10-28 @36  #define VC_MEM_IOC_MEM_PHYS_ADDR32  _IOR(VC_MEM_IOC_MAGIC, 0, compat_ulong_t)
+bc341020f52eeb popcornmix 2016-10-28  37  #endif
+bc341020f52eeb popcornmix 2016-10-28  38  
 
-I understand that when we say printk_prefer_direct_enter() that we
-_really_ want to do direct printing. But we cannot force it if any
-printer is already inside call_console_driver(). In that case, direct
-printing simply will not and cannot happen.
+:::::: The code at line 36 was first introduced by commit
+:::::: bc341020f52eeb5c8b0def11a65bfb79ac6d1e74 vc_mem: Add vc_mem driver for querying firmware memory addresses
 
-For v3 I recommend going back to the v1 model, where kthreads do not
-care if direct mode is preferred. I claim that v2 does yield any more
-actual direct printing than v1 did.
+:::::: TO: popcornmix <popcornmix@gmail.com>
+:::::: CC: Dom Cobley <popcornmix@gmail.com>
 
-However, I would keep the v2 change that kthreads go into their
-wait_event check after every message. That at least provides earlier
-responses for kthreads to stop themselves if they are disabled.
-
-Once we have atomic consoles, things will look different. Then we
-perform true synchronous direct printing. But without them, the "prefer"
-in printk_prefer_direct_enter() is only a preference that can only be
-satisfied under ideal situations (i.e. no kthread is inside
-call_console_driver()).
-
-John
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,120 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F249E4F98E6
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 17:02:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99AB04F98BC
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:57:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235223AbiDHPC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 11:02:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47492 "EHLO
+        id S237243AbiDHO7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 10:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235739AbiDHPCY (ORCPT
+        with ESMTP id S234894AbiDHO7B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 11:02:24 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2D62DE17D
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 08:00:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649430020; x=1680966020;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Fvu7Xj2KZeoBoWYVxKXIZ/ZE9uRhVfjO5sJnAbr0H6g=;
-  b=dtaTR0NviXRXhKqbUh8siFEKalrVdmtKVmGsD0B9pMuP/lMO1JyxGXMo
-   3sC5JeJ/3Z5g2v/mau2xqxfUBYkiNOuCcB+AdTVq0iF1OuDzCKqONgmv9
-   e75u2NLm0j71c7IFKx1TWnvFqjWzOznriehjXK2/AwUD8G5IUBSxJXFUW
-   74u3HzLbSc5v5+8zqM19oogkO0PR5uszdPHxC1d4XaoUdqvqxcO3dasAg
-   500Z5LwzAgusAeDjzcJXZcIw2vOcXblSipR0SGQ+00XeyQEJKXStKf7na
-   VPOLXphjMTCh61y+2wWh/zcOOPcEpzdqzavaBNfa8r/u8MsSinqMoezGs
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="261300824"
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="261300824"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 08:00:19 -0700
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="524802808"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 08:00:17 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ncq2N-000Kqr-9K;
-        Fri, 08 Apr 2022 17:56:35 +0300
-Date:   Fri, 8 Apr 2022 17:56:35 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/5] drm: Fix monochrome conversion for sdd130x
-Message-ID: <YlBNIyimU0DGpWK3@smile.fi.intel.com>
-References: <20220317081830.1211400-1-geert@linux-m68k.org>
- <f94c0f44-36f1-e1a9-5963-5da0bafb8c90@redhat.com>
- <YjSMWDFxTeJZZ/CB@smile.fi.intel.com>
- <20220318142145.kwq46bf6exgce6wu@houat>
- <YjSYL5oPaDuCXOJQ@smile.fi.intel.com>
- <20220408135413.2vwp4oyzdlu7iczs@houat>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220408135413.2vwp4oyzdlu7iczs@houat>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 8 Apr 2022 10:59:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC07E116B58
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 07:56:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 617FC61DAD
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 14:56:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A774C385A1;
+        Fri,  8 Apr 2022 14:56:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649429816;
+        bh=4dtkFE7DVojKCW9V0wSKn9hPjn6qHArtBjFqFArK9l4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jpHR26KhCRtslnq+IT3+Qj2wU1XWTwBNQyJw+WUwvL92uwp8nD0wpUDvtoZljSYp9
+         XbYaBt/vO2NicYOUfIxBQjCfBLfCmE1KP+6HGlDyKDGlYXjQK/xvVgc+GWseVh9vtm
+         uzeaPa1XRymTZ/E0Q0qzMivlcSi96Xm8SCzng7onk3iaIDEJLKK3el3Jr4v9OWAcD9
+         1om7ax+xDxP4Mlb6PEJbuTorOgfy6L2ZCcw/XYUfPW9RqNKYUld0KlQnF6cCbh5VIH
+         g9e1yaevgoTCHCcCJLu06GPFeB+WkL2a56XVdUiZ5VXc2aqJF+6R1b8XNxHhSPTsOF
+         zlYEtkwT12VIQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] regulator fixes for v5.18-rc1
+Date:   Fri, 08 Apr 2022 15:56:49 +0100
+Message-Id: <20220408145656.4A774C385A1@smtp.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 03:54:13PM +0200, Maxime Ripard wrote:
-> On Fri, Mar 18, 2022 at 04:33:19PM +0200, Andy Shevchenko wrote:
-> > On Fri, Mar 18, 2022 at 03:21:45PM +0100, Maxime Ripard wrote:
-> > > On Fri, Mar 18, 2022 at 03:42:48PM +0200, Andy Shevchenko wrote:
-> > > > On Thu, Mar 17, 2022 at 12:39:57PM +0100, Javier Martinez Canillas wrote:
-> > > > > On 3/17/22 09:18, Geert Uytterhoeven wrote:
-> > > > 
-> > > > > By the way, you should probably request commit access to the drm-misc tree:
-> > > > > 
-> > > > > https://drm.pages.freedesktop.org/maintainer-tools/commit-access.html
-> > > > 
-> > > > Does it really work? I tried and no one replied to request.
-> > > > Keeping silent is a bad service. If people don't want a person
-> > > > to have such access it should be well communicated.
-> > > 
-> > > I don't see any issue on Gitlab to request commit access, so I'm not
-> > > sure what you did exactly but it's not surprising you didn't get any
-> > > answer.
-> > 
-> > https://gitlab.freedesktop.org/freedesktop/freedesktop/-/issues/311
-> 
-> Indeed, I wasn't expecting it to be that old.
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
-That's part of "non-working" process.
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
 
-> I'm not sure why it fell through the cracks, sorry for that.
-> 
-> That being said, the criteria for requesting drm-misc commit access are
-> listed here:
-> https://drm.pages.freedesktop.org/maintainer-tools/commit-access.html#drm-misc
-> 
-> And looking at your commit history so far, I'm not sure you qualifies
-> yet for the first criteria. All your patches to drivers/gpu/drm, while
-> definitely useful, only seem to be conversions to helpers and general
-> best practices changes, which could be classified as trivial.
+are available in the Git repository at:
 
-Can you, please, comment it there then and close the request?
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git tags/regulator-fix-v5.18-rc1
 
--- 
-With Best Regards,
-Andy Shevchenko
+for you to fetch changes up to 908b768f9a8ffca2ef69f3145e23a6a259f99ac3:
 
+  MAINTAINERS: Fix reviewer info for a few ROHM ICs (2022-04-08 12:09:45 +0100)
 
+----------------------------------------------------------------
+regulator: Fixes for v5.18
+
+A few small driver specific fixes for v5.18, plus an update to the
+MAINTAINERS file.
+
+----------------------------------------------------------------
+Axel Lin (2):
+      regulator: rtq2134: Fix missing active_discharge_on setting
+      regulator: atc260x: Fix missing active_discharge_on setting
+
+Jonathan Bakker (1):
+      regulator: wm8994: Add an off-on delay for WM8994 variant
+
+Matti Vaittinen (1):
+      MAINTAINERS: Fix reviewer info for a few ROHM ICs
+
+ MAINTAINERS                           | 12 +++++-----
+ drivers/regulator/atc260x-regulator.c |  1 +
+ drivers/regulator/rtq2134-regulator.c |  1 +
+ drivers/regulator/wm8994-regulator.c  | 42 ++++++++++++++++++++++++++++++++---
+ 4 files changed, 46 insertions(+), 10 deletions(-)

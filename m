@@ -2,95 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61C4B4F8DBD
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:25:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 554214F8DEA
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:26:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234170AbiDHD7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 23:59:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33446 "EHLO
+        id S234082AbiDHEBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 00:01:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234082AbiDHD6l (ORCPT
+        with ESMTP id S233695AbiDHEB2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 23:58:41 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E6BE7283
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 20:56:34 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id y193-20020a25dcca000000b00636d788e549so5768080ybe.5
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 20:56:34 -0700 (PDT)
+        Fri, 8 Apr 2022 00:01:28 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F79611DD01;
+        Thu,  7 Apr 2022 20:59:26 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id p8so6620903qvv.5;
+        Thu, 07 Apr 2022 20:59:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=xZ10IcINVF8NaTdbFdZL+w7KjQhTRKJQcz6epMPOOOM=;
-        b=J4qvkXu5Auw7V3C2S/vvXFegiHFo9mQHd6ao3pTChQVYX52sQr8dniWFYnHQm0j3st
-         bEHb9vfsR+oLWFuAcQDlvK2q3VkZl8tQz1YYKUO4LP7/LugavDcnOzpgkv3zYe6dVZWU
-         2gila+WXN4yuqAs0Y/8n5CcZVof5ozNa+BQYvOMd9I5gede5kj5HR53kdkNQRgAduvi9
-         GK/7tWnOc6YXNAc8OtiGBNX4Dx9baemHfXsWm3UpV3cEKIbPRr1uTbrXOndoU8gLi5HL
-         +EQ8BatF2gFnpVHfijt7yca9E1HUzPitJL5yYGKSHLpDVuWJuUNgZs4nUsNKC2CAMt0X
-         qV2Q==
+        bh=LH7BSmcw66GeM+EmzxlBarmKYsAdtHEk0ooqfqKL/mM=;
+        b=bWEhQ0kAlrWqks42MLZazJH5TjXVGo+CStcukV2r1bXxuC6Cv3l7MXVj+ODkdZgyAf
+         fOMp/spx6HB50Uf5fF7Pnl5Ui7NIjxbRve0c/SjcP1J6Zd+eWdaq6SKUCyvm8M1Nz3VT
+         fhXEbwngwfkothEOeX5XNuZHvl18NoLVEq+SiV1m3lcS+qEBkdufOSgIhFRNZ0b0xPQz
+         Y6kO17xvN3s/oGhSwQQ4k2GhudESgt8TqRyHjb+0PhjiHR2nsQ5oKXxlEYzvqDcN0xm9
+         QQgp74Pn5Mvy32eaO3i02hkGtiNmWjf/lgH6Wtig5KwYyNY4Eqmn0zKfUyrj9haafMX3
+         aV/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=xZ10IcINVF8NaTdbFdZL+w7KjQhTRKJQcz6epMPOOOM=;
-        b=bB6p+rtQEZH11w2oN1TA5KiLCxdaMf4hrh5Jn3isB20mHS/k+5sFESEBtmIOTl7zNt
-         4/FMuGyaI3nL7w/XB0b5GeZ+71porUcTtL1irZuM9w7oCHCayyco6yiu/5kUKb2oeUCf
-         dfcOlD74TrKw/k+ZGZIByNORvEelncK8NFOfy0AGHxagKWC94neGmZa79NzG5jpGoCTj
-         UYiTayUokE+BICm/vjvwJtzzYnEZvaabg5UAXf45fDkHjATi0lWiQYy9JAJmR0Dht1zS
-         Pozb21vpPZN3GfjWcR0KrsrhOkmeb9WxL3cl1Ya5nDv9Np4yE4RgLM5BLmeaCUiCd/uG
-         RVjw==
-X-Gm-Message-State: AOAM533CI4ywNJedtzJRbzI/cRnh2vLavoGI60AaaqBBDk3j4BYkMuuq
-        QQ4ZyesLdHhin3RKZ2T6U/Mv3C0cOwJb
-X-Google-Smtp-Source: ABdhPJy+FeSzHm3EOgknn5QLY35sfKLCgJaxnhbi0GFsA4RgFhAgYugNlhNtSIbfmK85JSq7ivRl2ioHGYzK
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:560:aa27:649e:a07d])
- (user=irogers job=sendgmr) by 2002:a25:8546:0:b0:61e:1d34:ec71 with SMTP id
- f6-20020a258546000000b0061e1d34ec71mr11434496ybn.259.1649390193853; Thu, 07
- Apr 2022 20:56:33 -0700 (PDT)
-Date:   Thu,  7 Apr 2022 20:56:16 -0700
-In-Reply-To: <20220408035616.1356953-1-irogers@google.com>
-Message-Id: <20220408035616.1356953-6-irogers@google.com>
-Mime-Version: 1.0
-References: <20220408035616.1356953-1-irogers@google.com>
-X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
-Subject: [PATCH v3 5/5] perf test: Combine cpu map tests into 1 suite
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        German Gomez <german.gomez@arm.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Alexander Antonov <alexander.antonov@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LH7BSmcw66GeM+EmzxlBarmKYsAdtHEk0ooqfqKL/mM=;
+        b=Sh1N6L6qaWMu7JuAV11ArXfJgX28+RBvPeiz2TO3JruX+3Ksj0WkiAWW34UQjZWWeA
+         SYOR4lu/2IgXlf01yuFED5x5gF3n0XP3cQannSnVh/Ow1kUvQ3C6FfV+hWWdP6YdXLcY
+         5kLxlNiLWYlbRegNIKKdcialeLA0qgIrZYRbCptWhVWZ2Vxdo0LPxJx/BMu0SJSO9PTn
+         3gFn3fTPrMYcTYcG51D7IyzRceHSkB98/NX6NyhJEiW+Wp6FekKmqU7b3g1YdEGV5yHS
+         NFnSAdhd4m7RB4kDzLaTiH2mpr+SHb0FII0Hg+Rq1qrUpU+wDUNUZNLr9s5daC777GnK
+         y1QQ==
+X-Gm-Message-State: AOAM533yByLA6A+p7BskktOenj2ip+vjzxkJea0TjMg9Dvc4jGdA6kDs
+        XWJlDP8bP1SxKz9NF1xlXiE0g+XXzcmOvOARz9dBa06Y
+X-Google-Smtp-Source: ABdhPJxN4XFE24e6MURxbFEIrINg1xg82tRehgTuR2/WA/T3kAlKtfe7uX4E/0G16i8B4yF4fxRJZFGCHDXdME4ua8Q=
+X-Received: by 2002:a0c:d845:0:b0:42c:33e4:e491 with SMTP id
+ i5-20020a0cd845000000b0042c33e4e491mr14587659qvj.100.1649390365515; Thu, 07
+ Apr 2022 20:59:25 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220217040205.1898644-1-bjorn.andersson@linaro.org>
+In-Reply-To: <20220217040205.1898644-1-bjorn.andersson@linaro.org>
+From:   Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
+Date:   Thu, 7 Apr 2022 21:59:14 -0600
+Message-ID: <CAOCk7NrPGCFk9zmLFfuBGHAjujm75L2BzeegAxF3Mwz36dpTzw@mail.gmail.com>
+Subject: Re: [PATCH] arm64: defconfig: Enable Qualcomm PCIe Gen2 PHY
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     MSM <linux-arm-msm@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        lkml <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,83 +67,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Combine related CPU map tests into 1 suite reducing global state.
+On Thu, Feb 17, 2022 at 4:41 AM Bjorn Andersson
+<bjorn.andersson@linaro.org> wrote:
+>
+> The Qualcomm QCS404 platform uses the PCIe Gen2 PHY, enable the driver
+> for this to ensure that PCIe is functional.
+>
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/tests/builtin-test.c |  5 +----
- tools/perf/tests/cpumap.c       | 16 ++++++++++++----
- tools/perf/tests/tests.h        |  5 +----
- 3 files changed, 14 insertions(+), 12 deletions(-)
-
-diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
-index dffa41e7ee20..1941ae52e8b6 100644
---- a/tools/perf/tests/builtin-test.c
-+++ b/tools/perf/tests/builtin-test.c
-@@ -79,16 +79,13 @@ static struct test_suite *generic_tests[] = {
- 	&suite__bpf,
- 	&suite__thread_map_synthesize,
- 	&suite__thread_map_remove,
--	&suite__cpu_map_synthesize,
-+	&suite__cpu_map,
- 	&suite__synthesize_stat_config,
- 	&suite__synthesize_stat,
- 	&suite__synthesize_stat_round,
- 	&suite__event_update,
- 	&suite__event_times,
- 	&suite__backward_ring_buffer,
--	&suite__cpu_map_print,
--	&suite__cpu_map_merge,
--	&suite__cpu_map_intersect,
- 	&suite__sdt_event,
- 	&suite__is_printable_array,
- 	&suite__bitmap_print,
-diff --git a/tools/perf/tests/cpumap.c b/tools/perf/tests/cpumap.c
-index 112331829414..fc124757a082 100644
---- a/tools/perf/tests/cpumap.c
-+++ b/tools/perf/tests/cpumap.c
-@@ -187,7 +187,15 @@ static int test__cpu_map_intersect(struct test_suite *test __maybe_unused, int s
- 	return ret;
- }
- 
--DEFINE_SUITE("Synthesize cpu map", cpu_map_synthesize);
--DEFINE_SUITE("Print cpu map", cpu_map_print);
--DEFINE_SUITE("Merge cpu map", cpu_map_merge);
--DEFINE_SUITE("Intersect cpu map", cpu_map_intersect);
-+static struct test_case cpu_map_tests[] = {
-+	TEST_CASE("Synthesize cpu map", cpu_map_synthesize),
-+	TEST_CASE("Print cpu map", cpu_map_print),
-+	TEST_CASE("Merge cpu map", cpu_map_merge),
-+	TEST_CASE("Intersect cpu map", cpu_map_intersect),
-+	{ .name = NULL, }
-+};
-+
-+struct test_suite suite__cpu_map = {
-+	.desc = "CPU map",
-+	.test_cases = cpu_map_tests,
-+};
-diff --git a/tools/perf/tests/tests.h b/tools/perf/tests/tests.h
-index f2823c4859b8..895803fdedc4 100644
---- a/tools/perf/tests/tests.h
-+++ b/tools/perf/tests/tests.h
-@@ -118,16 +118,13 @@ DECLARE_SUITE(bpf);
- DECLARE_SUITE(session_topology);
- DECLARE_SUITE(thread_map_synthesize);
- DECLARE_SUITE(thread_map_remove);
--DECLARE_SUITE(cpu_map_synthesize);
-+DECLARE_SUITE(cpu_map);
- DECLARE_SUITE(synthesize_stat_config);
- DECLARE_SUITE(synthesize_stat);
- DECLARE_SUITE(synthesize_stat_round);
- DECLARE_SUITE(event_update);
- DECLARE_SUITE(event_times);
- DECLARE_SUITE(backward_ring_buffer);
--DECLARE_SUITE(cpu_map_print);
--DECLARE_SUITE(cpu_map_merge);
--DECLARE_SUITE(cpu_map_intersect);
- DECLARE_SUITE(sdt_event);
- DECLARE_SUITE(is_printable_array);
- DECLARE_SUITE(bitmap_print);
--- 
-2.35.1.1178.g4f1659d476-goog
-
+Reviewed-by: Jeffrey Hugo <jeffrey.l.hugo@gmail.com>

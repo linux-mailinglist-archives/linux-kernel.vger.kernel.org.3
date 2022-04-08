@@ -2,75 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6C154F92CD
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 12:20:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1825F4F92CF
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 12:21:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231515AbiDHKWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 06:22:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44250 "EHLO
+        id S231876AbiDHKXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 06:23:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbiDHKWN (ORCPT
+        with ESMTP id S229511AbiDHKXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 06:22:13 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD91B09
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 03:20:10 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id r13so12109469wrr.9
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 03:20:10 -0700 (PDT)
+        Fri, 8 Apr 2022 06:23:17 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A97140DC5
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 03:21:14 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id z7so10089822iom.1
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 03:21:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=2yfd+GIvbnmbmGFC5BWUDblHytx97qylz5/YCX2I91k=;
-        b=oYHo65iLPSC3y7IHrPaqaKOA5+doEwBr+aacx3K1hQh8mHkRMVhEmhbPSuSpVX2wJn
-         5j9etU8E5JWTO4uU9mGABX/gWLpumCND1fg4lQ0P8dFaExVOw6YdrgH53e34sLFX2xIH
-         Uf5ryWQjTk7ppBSe78BgYgrDcT3Ub8hc0mnqk7Mi6lb4HkcZ4ZLCFcinOL4HS4mX8c7I
-         0tGbofCVbIws2NQwbOUEkNJNDrDiBnPF0JU6/2d8srKp73HFelN7V6bYCX/LwbheA9CT
-         36l27IvkwMfLh2OrNvMc5AKjZL3ZgFkkmqgq0tYn2vqMW7fmPAqAshuoA1DV5j03rjjh
-         Jczg==
+        d=joelfernandes.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EiDN7k6aC8ZwYDiFSJSV9wrBF+tzi9VGwTXl8N4IGsA=;
+        b=xe6Sx6YnpT8qRY77m0yznqYAK7saEHhq+hJLli+HkXPONxuO4flT1bUYpsx0oSPEVg
+         XWWoaTTaK7OmZUyXdVqg6bVaddQpNTFyYu+wYlfYEml4uytnsN5qXispMHUC/vqynwKa
+         bW6YQcY8XUnsrva+TGmfOW9o/Gm1IYjw9ZdqA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2yfd+GIvbnmbmGFC5BWUDblHytx97qylz5/YCX2I91k=;
-        b=TcRjgpqlfVMEeronKI+NufVfWrVhEsPYgW9YiK6TvBfFRGWil3n3wkJJi5oVfxOJEe
-         SvNhruffjfBaPKaOkEde06YXBhG8VaQpT2Z/3ZXY9Vhc9qPymiyWDMuYsmJ+4hb5ftUc
-         EmGMIUsfdmd4eE9qFLt6noPqXZLOYMTx673tefBMx4xweW61uhyakn/k9l6Rcf2uc0in
-         eysKb/QBlB04lVBv1QoE7CVa//qf5bHBujhgAyRIngMOSIfH3hN+Mmi+WGaaFCcPAAw2
-         1K5GV/TuwaQkezKZ1C+GJbkAcadyhssqRPhvFBFRPTQZcgKZ6mr7ECsw1K9GToFopWQS
-         kAhA==
-X-Gm-Message-State: AOAM532HUZzWS+z2Pe/MLEwnYZ/GAEkHDWwFzBSLFq3PJgJWuvOUFkoq
-        R82K8x9BQodHoc0eH8tZj7Z8tA==
-X-Google-Smtp-Source: ABdhPJx4oE0+v9HkiYvlHpoFSouxE4OF9MxigavzUV6WLXDnmwJVA7++sPHfrFGiq/gkvSne+coPZQ==
-X-Received: by 2002:a5d:452c:0:b0:207:9915:60b9 with SMTP id j12-20020a5d452c000000b00207991560b9mr1428427wra.379.1649413208638;
-        Fri, 08 Apr 2022 03:20:08 -0700 (PDT)
-Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id r15-20020a5d6c6f000000b002040552e88esm22842290wrz.29.2022.04.08.03.20.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Apr 2022 03:20:08 -0700 (PDT)
-Message-ID: <a4ef3498-9f05-8bce-309c-de9d3965020d@linaro.org>
-Date:   Fri, 8 Apr 2022 11:20:06 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EiDN7k6aC8ZwYDiFSJSV9wrBF+tzi9VGwTXl8N4IGsA=;
+        b=hxlAzehSuQcX/DY1zBWR78QaOFtXeNy8nIwcq9ZSDfHpdMgpTbS4TQJh4il7whqPj2
+         VwmH2r7lL/iTANpsMvI0JIcmzfmXFP0TYbJfzblkwl6r8Gcu3J/14fClwkVoKp1tUPGA
+         Ve8jsBK3i85HUcXmtcfhYhuJnuYaAc9MEdYQ81PLEEmPKVCtw5QjoebWAVF63pbgagCX
+         QzBmnd5GmK0URplxIme8n2cARsX8W5QNYu1iKPdKjVYoFooigXew1syo7an/gdsZ2KcW
+         39MgztZQZ+Nu6TEsMpE8DtX5aTeQCPNhN/VgyOyoSVa8b0Ru57tBrbokgpCJmVJf0L5y
+         o1EA==
+X-Gm-Message-State: AOAM533Ilt56L/9R4giQt9wYQR3EqzvR9z2Ux5WwyAJzJkpkT+TKCssT
+        6oo9Ig8e6DEbo8C1mbXr5kxqHgEY/TZ3RiAzdJUYHA==
+X-Google-Smtp-Source: ABdhPJzCKUtlciLHhXB49c82badUbJaguTQiw22dcg/5qKqwQVnRmiOYZEtGtZ0v0BQCKXuRFjjhOxRw4N9RZ0lonGQ=
+X-Received: by 2002:a05:6638:130d:b0:323:8fba:8a15 with SMTP id
+ r13-20020a056638130d00b003238fba8a15mr9476118jad.270.1649413274312; Fri, 08
+ Apr 2022 03:21:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/2] nvmem: core: support passing DT node in cell info
-Content-Language: en-US
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-References: <20220228093351.28162-1-zajec5@gmail.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20220228093351.28162-1-zajec5@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20220408045734.1158817-1-kaleshsingh@google.com>
+In-Reply-To: <20220408045734.1158817-1-kaleshsingh@google.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Fri, 8 Apr 2022 06:21:03 -0400
+Message-ID: <CAEXW_YSqY2nFZrn4AjpUzJ+dwZc7jaVMG9RG5gvTyb3zFYWtQA@mail.gmail.com>
+Subject: Re: [PATCH v2] EXP rcu: Move expedited grace period (GP) work to RT kthread_worker
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     Suren Baghdasaryan <surenb@google.com>,
+        kernel-team <kernel-team@android.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Tim Murray <timmurray@google.com>, Wei Wang <wvw@google.com>,
+        Kyle Lin <kylelin@google.com>,
+        Chunwei Lu <chunweilu@google.com>,
+        Lulu Wang <luluw@google.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        rcu <rcu@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,46 +75,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Apr 8, 2022 at 12:57 AM Kalesh Singh <kaleshsingh@google.com> wrote:
+[..]
+> +config RCU_EXP_KTHREAD
+> +       bool "Perform RCU expedited work in a real-time kthread"
+> +       depends on RCU_BOOST && RCU_EXPERT
 
+Doesn't this disable the fix if a system is not RCU_EXPERT ?  Please
+see the definition of RCU_EXPERT:
+"This option needs to be enabled if you wish to make expert-level
+adjustments to RCU configuration."
 
-On 28/02/2022 09:33, Rafał Miłecki wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
-> 
-> Some hardware may have NVMEM cells described in Device Tree using
-> individual nodes. Let drivers pass such nodes to the NVMEM subsystem so
-> they can be later used by NVMEM consumers.
-> 
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-> ---
+I don't think a bug fix counts as an expert-level adjustment.
 
-Applied both, thanks,
+> +       default !PREEMPT_RT && NR_CPUS <= 32
 
---srini
->   drivers/nvmem/core.c           | 1 +
->   include/linux/nvmem-consumer.h | 1 +
->   2 files changed, 2 insertions(+)
-> 
-> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
-> index 6d5702e715d6..5fcf2793b599 100644
-> --- a/drivers/nvmem/core.c
-> +++ b/drivers/nvmem/core.c
-> @@ -467,6 +467,7 @@ static int nvmem_cell_info_to_nvmem_cell_entry_nodup(struct nvmem_device *nvmem,
->   
->   	cell->bit_offset = info->bit_offset;
->   	cell->nbits = info->nbits;
-> +	cell->np = info->np;
->   
->   	if (cell->nbits)
->   		cell->bytes = DIV_ROUND_UP(cell->nbits + cell->bit_offset,
-> diff --git a/include/linux/nvmem-consumer.h b/include/linux/nvmem-consumer.h
-> index c0c0cefc3b92..980f9c9ac0bc 100644
-> --- a/include/linux/nvmem-consumer.h
-> +++ b/include/linux/nvmem-consumer.h
-> @@ -25,6 +25,7 @@ struct nvmem_cell_info {
->   	unsigned int		bytes;
->   	unsigned int		bit_offset;
->   	unsigned int		nbits;
-> +	struct device_node	*np;
->   };
->   
->   /**
+What is the benefit of turning it off on PREEMPT_RT, even if
+PREEMPT_RT does not use expedited GPs much post-boot? I would think in
+the future if PREEMPT_RT ever uses expedited GPs, they would want this
+feature even more. I'd rather be future-proof now as I don't see any
+advantages of disabling it on !PREEMPT_RT (And a drawback that the fix
+won't apply to those systems). Also will keep the config simple.
+
+> +       help
+> +         Use this option to further reduce the latencies of expedited
+> +         grace periods at the expense of being more disruptive.
+> +
+> +         Accept the default if unsure.
+> +
+>  config RCU_NOCB_CPU
+>         bool "Offload RCU callback processing from boot-selected CPUs"
+>         depends on TREE_RCU
+[...]
+
+Thanks,
+
+ - Joel

@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 854454F8F8A
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:25:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9097A4F8F8B
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:25:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbiDHH1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 03:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54424 "EHLO
+        id S230074AbiDHH1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 03:27:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbiDHH0q (ORCPT
+        with ESMTP id S229862AbiDHH0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 8 Apr 2022 03:26:46 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C72369E34;
-        Fri,  8 Apr 2022 00:24:42 -0700 (PDT)
-Received: from kwepemi100006.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KZV8H1G1yzgYXx;
-        Fri,  8 Apr 2022 15:22:55 +0800 (CST)
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5301D36A451;
+        Fri,  8 Apr 2022 00:24:43 -0700 (PDT)
+Received: from kwepemi100003.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KZV9m2SBdzdZgB;
+        Fri,  8 Apr 2022 15:24:12 +0800 (CST)
 Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100006.china.huawei.com (7.221.188.165) with Microsoft SMTP Server
+ kwepemi100003.china.huawei.com (7.221.188.122) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 8 Apr 2022 15:24:40 +0800
+ 15.1.2375.24; Fri, 8 Apr 2022 15:24:41 +0800
 Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
  (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.21; Fri, 8 Apr
@@ -32,9 +32,9 @@ To:     <axboe@kernel.dk>, <yukuai3@huawei.com>,
         <ming.lei@redhat.com>
 CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <yi.zhang@huawei.com>
-Subject: [PATCH -next RFC v2 5/8] sbitmap: force tag preemption if free tags are sufficient
-Date:   Fri, 8 Apr 2022 15:39:13 +0800
-Message-ID: <20220408073916.1428590-6-yukuai3@huawei.com>
+Subject: [PATCH -next RFC v2 6/8] blk-mq: force tag preemption for split bios
+Date:   Fri, 8 Apr 2022 15:39:14 +0800
+Message-ID: <20220408073916.1428590-7-yukuai3@huawei.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20220408073916.1428590-1-yukuai3@huawei.com>
 References: <20220408073916.1428590-1-yukuai3@huawei.com>
@@ -54,84 +54,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that tag preemption is disabled, if wakers doesn't use up
-'wake_batch' tags while preemption is still disabled, io concurrency
-will be declined.
+For HDD, sequential io is much faster than random io, thus it's better
+to issue split io continuously. However, this is broken when tag preemption
+is disabled, because wakers can only get one tag each time.
 
-To fix the problem, add a detection before wake up, and force tag
-preemption is free tags are sufficient, so that the extra tags can be
-used by new io.
+Thus tag preemption should be disabled for split bios, specifically the
+first bio won't preempt tag, and following split bios will preempt tag.
 
 Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 ---
- block/blk-mq-tag.c      |  3 ++-
- include/linux/sbitmap.h |  2 ++
- lib/sbitmap.c           | 11 +++++++++++
- 3 files changed, 15 insertions(+), 1 deletion(-)
+ block/blk-merge.c         | 9 ++++++++-
+ block/blk-mq.c            | 1 +
+ include/linux/blk_types.h | 4 ++++
+ 3 files changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/block/blk-mq-tag.c b/block/blk-mq-tag.c
-index be2d49e6d69e..dfbb06edfbc3 100644
---- a/block/blk-mq-tag.c
-+++ b/block/blk-mq-tag.c
-@@ -131,7 +131,8 @@ static inline bool preempt_tag(struct blk_mq_alloc_data *data,
- 			       struct sbitmap_queue *bt)
- {
- 	return data->preemption ||
--	       atomic_read(&bt->ws_active) <= SBQ_WAIT_QUEUES;
-+	       atomic_read(&bt->ws_active) <= SBQ_WAIT_QUEUES ||
-+	       bt->force_tag_preemption;
+diff --git a/block/blk-merge.c b/block/blk-merge.c
+index 7771dacc99cb..cab6ca681513 100644
+--- a/block/blk-merge.c
++++ b/block/blk-merge.c
+@@ -343,12 +343,19 @@ void __blk_queue_split(struct request_queue *q, struct bio **bio,
+ 
+ 	if (split) {
+ 		/* there isn't chance to merge the splitted bio */
+-		split->bi_opf |= REQ_NOMERGE;
++		split->bi_opf |= (REQ_NOMERGE | REQ_SPLIT);
++		if ((*bio)->bi_opf & REQ_SPLIT)
++			split->bi_opf |= REQ_PREEMPT;
++		else
++			(*bio)->bi_opf |= REQ_SPLIT;
+ 
+ 		bio_chain(split, *bio);
+ 		trace_block_split(split, (*bio)->bi_iter.bi_sector);
+ 		submit_bio_noacct(*bio);
+ 		*bio = split;
++	} else {
++		if ((*bio)->bi_opf & REQ_SPLIT)
++			(*bio)->bi_opf |= REQ_PREEMPT;
+ 	}
  }
  
- unsigned int blk_mq_get_tag(struct blk_mq_alloc_data *data)
-diff --git a/include/linux/sbitmap.h b/include/linux/sbitmap.h
-index 8a64271d0696..ca00ccb6af48 100644
---- a/include/linux/sbitmap.h
-+++ b/include/linux/sbitmap.h
-@@ -143,6 +143,8 @@ struct sbitmap_queue {
- 	 * sbitmap_queue_get_shallow()
- 	 */
- 	unsigned int min_shallow_depth;
-+
-+	bool force_tag_preemption;
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index ed3ed86f7dd2..909420c5186c 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -2737,6 +2737,7 @@ static struct request *blk_mq_get_new_requests(struct request_queue *q,
+ 		.q		= q,
+ 		.nr_tags	= 1,
+ 		.cmd_flags	= bio->bi_opf,
++		.preemption	= (bio->bi_opf & REQ_PREEMPT),
+ 	};
+ 	struct request *rq;
+ 
+diff --git a/include/linux/blk_types.h b/include/linux/blk_types.h
+index c62274466e72..6b56e271f926 100644
+--- a/include/linux/blk_types.h
++++ b/include/linux/blk_types.h
+@@ -418,6 +418,8 @@ enum req_flag_bits {
+ 	/* for driver use */
+ 	__REQ_DRV,
+ 	__REQ_SWAP,		/* swapping request. */
++	__REQ_SPLIT,
++	__REQ_PREEMPT,
+ 	__REQ_NR_BITS,		/* stops here */
  };
  
- /**
-diff --git a/lib/sbitmap.c b/lib/sbitmap.c
-index 176fba0252d7..8d01e02ea4b1 100644
---- a/lib/sbitmap.c
-+++ b/lib/sbitmap.c
-@@ -434,6 +434,7 @@ int sbitmap_queue_init_node(struct sbitmap_queue *sbq, unsigned int depth,
- 	sbq->wake_batch = sbq_calc_wake_batch(sbq, depth);
- 	atomic_set(&sbq->wake_index, 0);
- 	atomic_set(&sbq->ws_active, 0);
-+	sbq->force_tag_preemption = true;
+@@ -443,6 +445,8 @@ enum req_flag_bits {
  
- 	sbq->ws = kzalloc_node(SBQ_WAIT_QUEUES * sizeof(*sbq->ws), flags, node);
- 	if (!sbq->ws) {
-@@ -604,6 +605,15 @@ static void sbq_update_wake_index(struct sbitmap_queue *sbq,
- 		atomic_cmpxchg(&sbq->wake_index, old_wake_index, index);
- }
+ #define REQ_DRV			(1ULL << __REQ_DRV)
+ #define REQ_SWAP		(1ULL << __REQ_SWAP)
++#define REQ_SPLIT		(1ULL << __REQ_SPLIT)
++#define REQ_PREEMPT		(1ULL << __REQ_PREEMPT)
  
-+static inline void sbq_update_preemption(struct sbitmap_queue *sbq,
-+					 unsigned int wake_batch)
-+{
-+	bool force = (sbq->sb.depth - sbitmap_weight(&sbq->sb)) >=
-+		     wake_batch << 1;
-+
-+	WRITE_ONCE(sbq->force_tag_preemption, force);
-+}
-+
- static bool __sbq_wake_up(struct sbitmap_queue *sbq)
- {
- 	struct sbq_wait_state *ws;
-@@ -637,6 +647,7 @@ static bool __sbq_wake_up(struct sbitmap_queue *sbq)
- 	 */
- 	smp_mb__before_atomic();
- 	atomic_set(&ws->wait_cnt, wake_batch);
-+	sbq_update_preemption(sbq, wake_batch);
- 	wake_up_nr(&ws->wait, wake_batch);
- 
- 	return true;
+ #define REQ_FAILFAST_MASK \
+ 	(REQ_FAILFAST_DEV | REQ_FAILFAST_TRANSPORT | REQ_FAILFAST_DRIVER)
 -- 
 2.31.1
 

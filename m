@@ -2,95 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F59B4F9EDF
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 23:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA67A4F9EDB
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 23:10:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239645AbiDHVKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 17:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48692 "EHLO
+        id S239658AbiDHVKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 17:10:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238798AbiDHVKo (ORCPT
+        with ESMTP id S239640AbiDHVKp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 17:10:44 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03B814D795
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 14:08:37 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id q142so8752683pgq.9
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 14:08:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=HoLWT/EythxVH1YT+vEjLN2TXDPwfF5xPPqMajsg97o=;
-        b=6DqRW4gK+PKLqJfJdAd0TGTO95Ya7KDB3mBZJjKMlL0nxZLtgxfpl+75BDL9PpUtD/
-         D8sxCCmecY9A1jNHsGn59jfaYAYVcw0MXiJZsMdhW9Hgaj2eegEWYZqhsHZZ8RViFFh8
-         g/mUJ5pRz/mDzFZbqiAMFiy2sA1QwSdm7uJ+N0EWGsnS9ZjEVfmjTnqFmuhMnW10Edv7
-         uODRBJwh1af7cUiTZDMOJnhCYENwjfab4lz7/KYYJOcswfmpJxqrQ5/bp0tB9mIV7ZMt
-         Kceie9MXCbkN4vkioRj3xK49n2u3J7v+iyzNlDM+Hsx6W8Dz7u6YcGhollnP1Te9u94x
-         iUtQ==
+        Fri, 8 Apr 2022 17:10:45 -0400
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E16633A5F5;
+        Fri,  8 Apr 2022 14:08:40 -0700 (PDT)
+Received: by mail-oi1-f179.google.com with SMTP id e4so10112145oif.2;
+        Fri, 08 Apr 2022 14:08:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=HoLWT/EythxVH1YT+vEjLN2TXDPwfF5xPPqMajsg97o=;
-        b=mv/36JgYyMM+tISbjkleyB55KpQZYLlk6S4s0t2FVmM5oAtQsKUcilZdEa0B16s4xq
-         tA7Lm9vKRhfA07JxfmlaLLqwdfv5P5wl5f2MTle+kxCZm1LONovkrgtnBUGH0fpHDyBw
-         ZHn3IDzShENrq8tAt+L2C1htEgU+p7+ZdtkOQcKnHDXhgTx6gfVJFj0aaQkXqDYwsiE0
-         cxtig6llf7RMmbpDzV8miNa4T9jlqOjBXQyKb/Qz5EpedtsZz6Ufu6mq4G/+rbMkwgZm
-         veHdYqp6TMD8SnfQa5yazPQsKfDCLGTP+kiy55WUW9RQGwiZ4hkDKLqRCzd82zUobwiF
-         hd6w==
-X-Gm-Message-State: AOAM531jfYHhmOpiKFIKtxdfS62JUS2JYT3D/WdEqD7CjE1npVw2o0L6
-        VL9bnCuQqOrBTi6Gz8Z3CpTtFQ==
-X-Google-Smtp-Source: ABdhPJyvhkTmr6m8xOSTjNCBilnTlNxx+TZTy+ro007JGG5u+GpijdOFdlxjLZjwIoz7WZTYTZhnOg==
-X-Received: by 2002:a63:c015:0:b0:385:fe06:eb86 with SMTP id h21-20020a63c015000000b00385fe06eb86mr16908387pgg.132.1649452117075;
-        Fri, 08 Apr 2022 14:08:37 -0700 (PDT)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id s10-20020a63924a000000b00399571b2f99sm12120792pgn.57.2022.04.08.14.08.36
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KtNOffG7+AZH7DNsHcVDZKDFT7CQVQsPJnnJzJzy/B0=;
+        b=PkOtfByCiR5jmrQVboZSq1+farrnY73UKhnjyNAriJA8/QIvu5WXdoekRwSVRzL2lL
+         z5YTYwtnHFAcvsVmqR6+a5Ndfycp22Sx/xdspMLwCvvKuV3TqY86ln8j01PThbfIey0g
+         xAM1e6fLldnImYN3l3pkgwXoSmRSVGhAYlC7p0L6A+Xdb7R0z+FCMEzlUBJC1prQf5DJ
+         eJQqgIbC2bUqCbhIhZ71slBS1XbCvn/Cb7YLnUOjEQ+Kz5t6nn1Lck1rE0TdwxJmJ2dU
+         CqtFowSm2WGPvrfAM1P+d2dauUSQ4Egi6d9FZohIegKqHi9+WPbAH3gjobzeaiQCm+Sc
+         X57A==
+X-Gm-Message-State: AOAM530sptv08/X6xOETWY6KUGY8RxcHprfmDb8URWdKYm61R1yH9CaH
+        gm1/6Ey8FHrgU5mLYjzfbQ==
+X-Google-Smtp-Source: ABdhPJw4LuNsnZe554pFV/CHUCpgFp+l2b3pXHMu9DJaVTyLpiAabIqOXNn8Rz4CzPeqD4iJjWSqww==
+X-Received: by 2002:a05:6808:1893:b0:2f7:5d31:7768 with SMTP id bi19-20020a056808189300b002f75d317768mr818802oib.122.1649452119930;
+        Fri, 08 Apr 2022 14:08:39 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id s26-20020a4ac81a000000b00322a2b5d943sm8839792ooq.37.2022.04.08.14.08.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 14:08:36 -0700 (PDT)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org
-Cc:     matthias.bgg@gmail.com, jia-wei.chang@mediatek.com,
-        roger.lu@mediatek.com, hsinyi@google.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH V2 11/15] cpufreq: mediatek: Update logic of
- voltage_tracking()
-In-Reply-To: <20220408045908.21671-12-rex-bc.chen@mediatek.com>
-References: <20220408045908.21671-1-rex-bc.chen@mediatek.com>
- <20220408045908.21671-12-rex-bc.chen@mediatek.com>
-Date:   Fri, 08 Apr 2022 14:08:36 -0700
-Message-ID: <7hczhr5lm3.fsf@baylibre.com>
+        Fri, 08 Apr 2022 14:08:39 -0700 (PDT)
+Received: (nullmailer pid 4069325 invoked by uid 1000);
+        Fri, 08 Apr 2022 21:08:38 -0000
+Date:   Fri, 8 Apr 2022 16:08:38 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     Avi Fishman <avifishman70@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Tali Perry <tali.perry1@gmail.com>, devicetree@vger.kernel.org,
+        Benjamin Fair <benjaminfair@google.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Patrick Venture <venture@google.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Nancy Yuen <yuenn@google.com>
+Subject: Re: [PATCH 06/14] dt-bindings: reset: nuvoton,npcm-reset: Convert to
+ yaml
+Message-ID: <YlCkVo2rJiRKNl/x@robh.at.kernel.org>
+References: <20220407154338.4190674-1-p.zabel@pengutronix.de>
+ <20220407154338.4190674-6-p.zabel@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220407154338.4190674-6-p.zabel@pengutronix.de>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
+On Thu, 07 Apr 2022 17:43:30 +0200, Philipp Zabel wrote:
+> Convert the device tree bindings for the Nuvoton NPCM reset controller
+> to YAML schema to allow participating in DT validation.
+> 
+> Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: Avi Fishman <avifishman70@gmail.com>
+> Cc: Tomer Maimon <tmaimon77@gmail.com>
+> Cc: Tali Perry <tali.perry1@gmail.com>
+> Cc: Patrick Venture <venture@google.com>
+> Cc: Nancy Yuen <yuenn@google.com>
+> Cc: Benjamin Fair <benjaminfair@google.com>
+> ---
+>  .../bindings/reset/nuvoton,npcm-reset.txt     | 32 ------------
+>  .../bindings/reset/nuvoton,npcm750-reset.yaml | 50 +++++++++++++++++++
+>  2 files changed, 50 insertions(+), 32 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/reset/nuvoton,npcm-reset.txt
+>  create mode 100644 Documentation/devicetree/bindings/reset/nuvoton,npcm750-reset.yaml
+> 
 
-> From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
->
-> - Remove VOLT_TOL because CCI may share the same sram and vproc
->   regulators with CPU. Therefore, set the max voltage in
->   regulator_set_voltage() to the proc{sram}_max_volt.
-
-This could you a bit more detailed explanation.  Why does VOLT_TOL get
-in the way when regulators are shared between CPU & CCI?
-
-> - Move comparison of new and old voltages to
->   mtk_cpufreq_voltage_tracking().
-
-Why?  And how is this related to the above change?  Seems to me that it
-belongs in a separate patch.
-
-Kevin
+Reviewed-by: Rob Herring <robh@kernel.org>

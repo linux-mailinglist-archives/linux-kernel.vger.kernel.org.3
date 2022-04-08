@@ -2,60 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 628EB4F9360
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 12:55:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79DAE4F936C
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 13:00:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234800AbiDHK5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 06:57:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36546 "EHLO
+        id S230217AbiDHLCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 07:02:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234812AbiDHK5d (ORCPT
+        with ESMTP id S229646AbiDHLCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 06:57:33 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E28A367D3B;
-        Fri,  8 Apr 2022 03:55:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=V7XARVkxVEpP6+e9b+MZ/qn1EGzHHLuhmqLrgehi0U0=; b=SAZDKQlqH2h7qnCCjba0ThjGt2
-        0GyQ7vgQvYLBz9FkHZi1EfqKcl/gAgnzxEqJCy5zXBlOlphJQ1vb3a7Oxx8MBsCBNSS6jflXU9EaW
-        AVxR6YUUYOX5Yhnl9CLnW0NYX//mycjfSz4zO0EgOX8Zj2SKc3pdvUjISyxKtu6nCYvWxql2y7Qc1
-        HJtXJLnps6uaR7nmmLhwHnFNleqvkEvTPOqb56R2zp42VUj7T4pogYx2xHV+IJIKjXPqAE+Vn2ZBb
-        VtL9H5h0AP6X46y0670doRl8Wnwv09z+QeSzJaO168PVWw0net0z8Y9LpfbtngCtP2kChPE+OS4u0
-        CH5p/fHg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ncmGo-002sZ3-G1; Fri, 08 Apr 2022 10:55:15 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D2ED3300212;
-        Fri,  8 Apr 2022 12:55:11 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id AD86E2B552B8F; Fri,  8 Apr 2022 12:55:11 +0200 (CEST)
-Date:   Fri, 8 Apr 2022 12:55:11 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     madvenka@linux.microsoft.com
-Cc:     mark.rutland@arm.com, broonie@kernel.org, jpoimboe@redhat.com,
-        ardb@kernel.org, nobuta.keiya@fujitsu.com,
-        sjitindarsingh@gmail.com, catalin.marinas@arm.com, will@kernel.org,
-        jmorris@namei.org, linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v1 0/9] arm64: livepatch: Use DWARF Call Frame
- Information for frame pointer validation
-Message-ID: <YlAUj6w6fePEo7v+@hirez.programming.kicks-ass.net>
-References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
- <20220407202518.19780-1-madvenka@linux.microsoft.com>
+        Fri, 8 Apr 2022 07:02:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3E8F844A;
+        Fri,  8 Apr 2022 04:00:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 37E1461F7B;
+        Fri,  8 Apr 2022 11:00:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7A487C385A5;
+        Fri,  8 Apr 2022 11:00:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649415612;
+        bh=5V2H/avkRnqCfDyYcArGASEXAebwxezA5cdgwAkbkHI=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=rDkl40MVK8pe0VFWRR+6nkvzyT8uxD7gqyNEq6nLX7cNyonuS6XKIZQ9+Sdw9q1oi
+         2gkhd7ZuLjbvHS+FlNl5/Mna5HY0xAgX4gMIhkVStolfeoaZuwPSji0RVoK620422q
+         bB4i+JbOL4SZ4y/hmQ7bBz1cOHWH5b6WZPMnx/ATdi6fGK85PlhV0iJjizgeanZGcD
+         PSfHWSUPl030QriC+JMppr/QJ0zEtzdzW9NCJcobJTUCItdexnCa+M9MfIns5sw+PS
+         /APGeG0sGjmSIeJUM0ZVieKu+LnZDR5blGorGSpr4qHKyGNOFn88oOadakj3Fx2CCd
+         AZwiOM55NIAgA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5B765E85BCB;
+        Fri,  8 Apr 2022 11:00:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220407202518.19780-1-madvenka@linux.microsoft.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 0/2] dt-bindings: net: Fix ave descriptions
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164941561236.15361.17486184547256592773.git-patchwork-notify@kernel.org>
+Date:   Fri, 08 Apr 2022 11:00:12 +0000
+References: <1649145181-30001-1-git-send-email-hayashi.kunihiko@socionext.com>
+In-Reply-To: <1649145181-30001-1-git-send-email-hayashi.kunihiko@socionext.com>
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        robh+dt@kernel.org, krzk+dt@kernel.org, mhiramat@kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,8 +59,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 03:25:09PM -0500, madvenka@linux.microsoft.com wrote:
+Hello:
 
-> [-- application/octet-stream is unsupported (use 'v' to view this part) --]
+This series was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-Your emails are unreadable :-(
+On Tue,  5 Apr 2022 16:52:59 +0900 you wrote:
+> This series fixes dt-schema descriptions for ave4 controller.
+> 
+> Kunihiko Hayashi (2):
+>   dt-bindings: net: ave: Clean up clocks, resets, and their names using
+>     compatible string
+>   dt-bindings: net: ave: Use unevaluatedProperties
+> 
+> [...]
+
+Here is the summary with links:
+  - [1/2] dt-bindings: net: ave: Clean up clocks, resets, and their names using compatible string
+    https://git.kernel.org/netdev/net/c/2610bd72efe4
+  - [2/2] dt-bindings: net: ave: Use unevaluatedProperties
+    https://git.kernel.org/netdev/net/c/5a80059d8804
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

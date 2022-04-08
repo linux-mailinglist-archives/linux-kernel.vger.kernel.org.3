@@ -2,209 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E25D74F9AE2
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 18:45:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 692E44F9AE9
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 18:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231655AbiDHQrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 12:47:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42750 "EHLO
+        id S233592AbiDHQsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 12:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbiDHQrn (ORCPT
+        with ESMTP id S233541AbiDHQsO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 12:47:43 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8820A10E9
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 09:45:39 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id r64so5901644wmr.4
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 09:45:39 -0700 (PDT)
+        Fri, 8 Apr 2022 12:48:14 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B20D26124
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 09:46:10 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id y6so8385158plg.2
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 09:46:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hsR6O4eaICB82MEVDSEX7922LD8DveH/xZVqwX1N9p0=;
-        b=FNc8Ik0xlX5AtoqvO7t5QzfYSYm1tFKhUPWfqGcvpLN+Iyb4AuBPU8dKAKeuMDmvNK
-         E4soatlGoTsa9KvwA9Pqf45pnAjIn3y8YY1lYMlcgPxjoPwolUV5Q4BUovjz8R2l6KbT
-         AvR1xvgJSMujYhLH0ymY6iyI6rb9NPFeZLvVvv0PV66LEgNOKH9XHwdU3GIyJKsOxHt/
-         AQ/mZb1a1PnEBNSVf2bi5y9fzro7k26lx6uqUlnT0PgXN5hsuK0M4A31BM4dBXAzcM7T
-         XLdLn2BnVzj0+R8iMjaRntnmYFqEViBr1x+Q547ktC3WXzpdGmFVKLU67VHn6BUIGN+5
-         /l3Q==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=KjGzlPUuopnzOxDb70wPeYUUzIj9x1BrlBL7vAL3tEU=;
+        b=nMUAsD6DVHxasPy+bHqB5yAyTxDamuiDmy7FuYy+5YCzQjXg5KrVCglUnu2RwZ7wDO
+         VgUgFHdgmXbomd+tDzupYzwVUMcDOVfbohBWX9cbf33EaAI/OEasRPiFIV29b9A/408p
+         2jRsSnMB7pf4mlzcGNKqGnI3PhClL5e7SL0+4o1nYt+weKwj+NG7sKlMDs81oppC4S/E
+         k0camdZClD+mxlZhX4kfxSCiK2oUXQjXyYylESC/QLV8+g+NBBGzKbRkl11spdr/Vv6s
+         DQuKmHtidbNWwSr/KLU7DGMxB64gp1TbS36mA++3AuZGeCdYhVDfkX7yS5eSKLmWgwbG
+         spmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hsR6O4eaICB82MEVDSEX7922LD8DveH/xZVqwX1N9p0=;
-        b=yLhuYpidv0rsGH/m47wWdFjAx93T7i936VusKd97eZUvvK0g0XvFNKXkBglRMysTla
-         se3oajeJXg3E/JGbhEZuUP00xaoQjYgLq7R7KS4IEmqjNW9C+XQon5eaZYPBWNfTGiCw
-         /UrBoCy7YahCLCS0hpC59jC+OVT6LYpvpXPQAHA1LxqJXJGmu4+DtcSKcl0rcb2P61PT
-         N5FeOnU5OdUVPajs01JoYjMInzJEH1mXWmmfeC6f7ogFXd4fkGcII09zUMYdS92+lGly
-         ft4clSfBhm+pguEFwBFxtrRhEpLAKMiVY6ik3L9f0SJNnSGlixMJDx803rzpS5sxFo6s
-         68NQ==
-X-Gm-Message-State: AOAM531P1nbfkPulbMHKHW2sihnvneRDojzThVGW9ZSC7R5T3GYnIpvX
-        HMPaiMPk5i1HdAkM9KKUtyeFLdstWrrXQZmaCGGO2g==
-X-Google-Smtp-Source: ABdhPJzglzfwkwV1bsPSu0gplUQ3D3k4WOJBKUIVsafnJiQlstnKUiizZCpvp5Vh3HAPd9PWbPlDHgYSbikkg2K1eSc=
-X-Received: by 2002:a05:600c:1d04:b0:38c:ba2f:88ba with SMTP id
- l4-20020a05600c1d0400b0038cba2f88bamr17835133wms.137.1649436337643; Fri, 08
- Apr 2022 09:45:37 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KjGzlPUuopnzOxDb70wPeYUUzIj9x1BrlBL7vAL3tEU=;
+        b=aXrx+naE6I9oy9XvY9vpDkcodZHWhjqnpy+z5zn0ETvAfepJCMU4/8exQ9ftGCkPyg
+         Ybo6RkAopC9s5Iu93JowNlkIb4MknF8Ri60fPSy2x9EvKVUV2TxCVq4aYwljEMtGx6PE
+         ISkjicF+77efXUyZNyeYCxpaxwgVjIhEpsjC+HlrP2EiNntsgzsL+CBsDC60jhK8kBJD
+         BS1f0ykiMm3WXOB7mZk+3Fy4S/j/bLjKNNmtLTSWsl9JOYN99IWqIMLIl1DHQWUIH1cu
+         A/M4+CkXQWWGj0YH6Ugvs6GAIlNEM7WP4Z6X/KCNYfvVI/nvYO8EHCVto8tVZWOcr2Nk
+         qTCw==
+X-Gm-Message-State: AOAM531xizahrpM+LOykKKfTe2zzTAjbBTHHOPsTbe/JhhK6UVVZbS27
+        p5nHHCaETKAHQd3dd/9QiQ2nbw==
+X-Google-Smtp-Source: ABdhPJz0iwytqOS32LIa00b7FHRew+z1BX9zsSQNqylpLVDQVJoWyNnMedQm0cD5GiqNLfHfoAXT5Q==
+X-Received: by 2002:a17:902:f649:b0:156:1609:79e9 with SMTP id m9-20020a170902f64900b00156160979e9mr20434203plg.69.1649436369344;
+        Fri, 08 Apr 2022 09:46:09 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id d16-20020a056a00245000b004f771b48736sm28031213pfj.194.2022.04.08.09.46.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 09:46:08 -0700 (PDT)
+Date:   Fri, 8 Apr 2022 16:46:04 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     isaku.yamahata@intel.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>
+Subject: Re: [RFC PATCH v5 003/104] KVM: TDX: Detect CPU feature on kernel
+ module initialization
+Message-ID: <YlBmzDcYdahXzSue@google.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <70201fd686c6cc6e03f5af8a9f59af67bdc81194.1646422845.git.isaku.yamahata@intel.com>
 MIME-Version: 1.0
-References: <mhng-9cbb2a46-8bcb-4bfe-b927-0ed469dbd3a6@palmer-mbp2014>
- <cd8d6641-4a29-7deb-49ae-a80baab0344f@canonical.com> <CAK9=C2Xh_DQ3ybj7nAE-LNrSc9sPy0H8jq_FU09io+wE_yypRg@mail.gmail.com>
- <b907f6c8-968b-7e1e-bc83-1d54c7e0b448@canonical.com>
-In-Reply-To: <b907f6c8-968b-7e1e-bc83-1d54c7e0b448@canonical.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Fri, 8 Apr 2022 22:15:25 +0530
-Message-ID: <CAAhSdy1ovEziSSu6x2kESYTbimDLXCHmmOqMLyGKzsj1DHLrLg@mail.gmail.com>
-Subject: Re: [PATCH v2] RISC-V: Increase range and default value of NR_CPUS
-To:     Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-Cc:     Anup Patel <apatel@ventanamicro.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <70201fd686c6cc6e03f5af8a9f59af67bdc81194.1646422845.git.isaku.yamahata@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 8, 2022 at 10:08 PM Heinrich Schuchardt
-<heinrich.schuchardt@canonical.com> wrote:
->
-> On 4/6/22 12:10, Anup Patel wrote:
-> > On Wed, Apr 6, 2022 at 3:25 PM Heinrich Schuchardt
-> > <heinrich.schuchardt@canonical.com> wrote:
-> >>
-> >> On 3/31/22 21:42, Palmer Dabbelt wrote:
-> >>> On Sat, 19 Mar 2022 05:12:06 PDT (-0700), apatel@ventanamicro.com wrote:
-> >>>> Currently, the range and default value of NR_CPUS is too restrictive
-> >>>> for high-end RISC-V systems with large number of HARTs. The latest
-> >>>> QEMU virt machine supports upto 512 CPUs so the current NR_CPUS is
-> >>>> restrictive for QEMU as well. Other major architectures (such as
-> >>>> ARM64, x86_64, MIPS, etc) have a much higher range and default
-> >>>> value of NR_CPUS.
-> >>>>
-> >>>> This patch increases NR_CPUS range to 2-512 and default value to
-> >>>> XLEN (i.e. 32 for RV32 and 64 for RV64).
-> >>>>
-> >>>> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> >>>> ---
-> >>>> Changes since v1:
-> >>>>   - Updated NR_CPUS range to 2-512 which reflects maximum number of
-> >>>>     CPUs supported by QEMU virt machine.
-> >>>> ---
-> >>>>   arch/riscv/Kconfig | 7 ++++---
-> >>>>   1 file changed, 4 insertions(+), 3 deletions(-)
-> >>>>
-> >>>> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> >>>> index 5adcbd9b5e88..423ac17f598c 100644
-> >>>> --- a/arch/riscv/Kconfig
-> >>>> +++ b/arch/riscv/Kconfig
-> >>>> @@ -274,10 +274,11 @@ config SMP
-> >>>>         If you don't know what to do here, say N.
-> >>>>
-> >>>>   config NR_CPUS
-> >>>> -    int "Maximum number of CPUs (2-32)"
-> >>>> -    range 2 32
-> >>>> +    int "Maximum number of CPUs (2-512)"
-> >>>> +    range 2 512
-> >>
-> >> For SBI_V01=y there seems to be a hard constraint to XLEN bits.
-> >> See __sbi_v01_cpumask_to_hartmask() in rch/riscv/kernel/sbi.c.
-> >>
-> >> So shouldn't this be something like:
-> >>
-> >> range 2 512 !SBI_V01
-> >> range 2 32 SBI_V01 && 32BIT
-> >> range 2 64 SBI_V01 && 64BIT
-> >
-> > This is just making it unnecessarily complicated for supporting
-> > SBI v0.1
-> >
-> > How about removing SBI v0.1 support and the spin-wait CPU
-> > operations from arch/riscv ?
->
-> The SBI v0.1 specification was only a draft. Only the v1.0 version has
-> ever been ratified.
->
-> It would be good to remove this legacy code from Linux and U-Boot.
->
-> By the way, why does upstream OpenSBI claim to be conformant to SBI v0.3
-> and not to v1.0?
+On Fri, Mar 04, 2022, isaku.yamahata@intel.com wrote:
+> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> new file mode 100644
+> index 000000000000..1acf08c310c4
+> --- /dev/null
+> +++ b/arch/x86/kvm/vmx/tdx.c
+> @@ -0,0 +1,53 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <linux/cpu.h>
+> +
+> +#include <asm/tdx.h>
+> +
+> +#include "capabilities.h"
+> +#include "x86_ops.h"
+> +
+> +#undef pr_fmt
+> +#define pr_fmt(fmt) "tdx: " fmt
+> +
+> +static bool __read_mostly enable_tdx = true;
+> +module_param_named(tdx, enable_tdx, bool, 0644);
 
-The ratification process for SBI v1.0 was in early stages when OpenSBI v1.0
-was being released so we decided to keep the SBI v0.3 spec version. The
-next OpenSBI v1.1 release (due in June 2022) will change to SBI v1.0
+This is comically unsafe, userspace must not be allowed to toggle enable_tdx
+after KVM is loaded.
 
-Regards,
-Anup
+> +static u64 hkid_mask __ro_after_init;
+> +static u8 hkid_start_pos __ro_after_init;
+> +
+> +static int __init __tdx_hardware_setup(struct kvm_x86_ops *x86_ops)
+> +{
+> +	u32 max_pa;
+> +
+> +	if (!enable_ept) {
+> +		pr_warn("Cannot enable TDX with EPT disabled\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (!platform_has_tdx()) {
+> +		pr_warn("Cannot enable TDX with SEAMRR disabled\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	if (WARN_ON_ONCE(x86_ops->tlb_remote_flush))
+> +		return -EIO;
+> +
+> +	max_pa = cpuid_eax(0x80000008) & 0xff;
+> +	hkid_start_pos = boot_cpu_data.x86_phys_bits;
+> +	hkid_mask = GENMASK_ULL(max_pa - 1, hkid_start_pos);
+> +
+> +	return 0;
+> +}
+> +
+> +void __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops)
+> +{
+> +	/*
+> +	 * This function is called at the initialization.  No need to protect
+> +	 * enable_tdx.
+> +	 */
+> +	if (!enable_tdx)
+> +		return;
+> +
+> +	if (__tdx_hardware_setup(&vt_x86_ops))
+> +		enable_tdx = false;
 
->
-> include/sbi/sbi_ecall.h:16:
->
-> #define SBI_ECALL_VERSION_MAJOR 0
-> #define SBI_ECALL_VERSION_MINOR 3
->
-> Best regards
->
-> Heinrich
->
-> >
-> >>
-> >>>>       depends on SMP
-> >>>> -    default "8"
-> >>>> +    default "32" if 32BIT
-> >>>> +    default "64" if 64BIT
-> >>>>
-> >>>>   config HOTPLUG_CPU
-> >>>>       bool "Support for hot-pluggable CPUs"
-> >>>
-> >>> I'm getting all sorts of boot issues with more than 32 CPUs, even on the
-> >>> latest QEMU master.  I'm not opposed to increasing the CPU count in
-> >>> theory, but if we're going to have a setting that goes up to a huge
-> >>> number it needs to at least boot.  I've got 64 host threads, so it
-> >>> shouldn't just be a scheduling thing.
-> >>
-> >> Currently high performing hardware for RISC-V is missing. So it makes
-> >> sense to build software via QEMU on x86_64 or arm64 with as many
-> >> hardware threads as available (128 is not uncommon).
-> >>
-> >> OpenSBI currently is limited to 128 threads:
-> >> include/sbi/sbi_hartmask.h:22:
-> >> #define SBI_HARTMASK_MAX_BITS 128
-> >> This is just an arbitrary value we can be modified.
-> >
-> > Yes, this limit will be gradually increased with some improvements
-> > to optimize runtime memory used by OpenSBI.
-> >
-> >>
-> >> U-Boot v2022.04 qemu-riscv64_smode_defconfig has a value of
-> >> CONFIG_SYS_MALLOC_F_LEN that is to low. This leads to a boot failure for
-> >> more than 16 harts. A patch to correct this is pending:
-> >> [PATCH v2 1/1] riscv: alloc space exhausted
-> >> https://lore.kernel.org/u-boot/CAN5B=eKt=tFLZ2z3aNHJqsnJzpdA0oikcrC2i1_=ZDD=f+M0jA@mail.gmail.com/T/#t
-> >>
-> >> With QEMU 7.0 and the U-Boot fix booting into a 5.17 defconfig kernel
-> >> with 64 virtual cores worked fine for me.
-> >
-> > Thanks for trying this patch.
-> >
-> > Regards,
-> > Anup
-> >
-> >>
-> >> Best regards
-> >>
-> >> Heinrich
-> >>
-> >>>
-> >>> If there was some hardware that actually boots on these I'd be happy to
-> >>> take it, but given that it's just QEMU I'd prefer to sort out the bugs
-> >>> first.  It's probably just latent bugs somewhere, but allowing users to
-> >>> turn on configs we know don't work just seems like the wrong way to go.
-> >>>
+Clearing enable_tdx here unnecessarily risks introducing bugs in the caller,
+e.g. acting on enable_tdx before tdx_hardware_setup() is invoked.  I'm guessing
+this was the result of trying to defer module load until VM creation.  With that
+gone, the flag can be moved to vmx/main.c, as there should be zero reason for
+tdx.c to check/modify enable_tdx, i.e. functions in tdx.c should never be called
+if enabled_tdx = false.
+
+An alteranative to 
+
+	if (enable_tdx && tdx_hardware_setup(&vt_x86_ops))
+		enable_tdx = false;
+
+would be
+
+	enable_tdx = enable_tdx && !tdx_hardware_setup(&vt_x86_ops);
+
+I actually prefer the latter (no "if"), but I already generated and wiped the below
+diff before thinking of that.
+
+diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
+index b79fcc8d81dd..43e13c2a804e 100644
+--- a/arch/x86/kvm/vmx/main.c
++++ b/arch/x86/kvm/vmx/main.c
+@@ -6,6 +6,9 @@
+ #include "nested.h"
+ #include "pmu.h"
+
++static bool __read_mostly enable_tdx = IS_ENABLED(CONFIG_INTEL_TDX_HOST);
++module_param_named(tdx, enable_tdx, bool, 0644);
++
+ static __init int vt_hardware_setup(void)
+ {
+        int ret;
+@@ -14,7 +17,8 @@ static __init int vt_hardware_setup(void)
+        if (ret)
+                return ret;
+
+-       tdx_hardware_setup(&vt_x86_ops);
++       if (enable_tdx && tdx_hardware_setup(&vt_x86_ops))
++               enable_tdx = false;
+
+        return 0;
+ }
+diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+index 1acf08c310c4..3f660f323426 100644
+--- a/arch/x86/kvm/vmx/tdx.c
++++ b/arch/x86/kvm/vmx/tdx.c
+@@ -9,13 +9,10 @@
+ #undef pr_fmt
+ #define pr_fmt(fmt) "tdx: " fmt
+
+-static bool __read_mostly enable_tdx = true;
+-module_param_named(tdx, enable_tdx, bool, 0644);
+-
+ static u64 hkid_mask __ro_after_init;
+ static u8 hkid_start_pos __ro_after_init;
+
+-static int __init __tdx_hardware_setup(struct kvm_x86_ops *x86_ops)
++static int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops)
+ {
+        u32 max_pa;
+
+@@ -38,16 +35,3 @@ static int __init __tdx_hardware_setup(struct kvm_x86_ops *x86_ops)
+
+        return 0;
+ }
+-
+-void __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops)
+-{
+-       /*
+-        * This function is called at the initialization.  No need to protect
+-        * enable_tdx.
+-        */
+-       if (!enable_tdx)
+-               return;
+-
+-       if (__tdx_hardware_setup(&vt_x86_ops))
+-               enable_tdx = false;
+-}
+diff --git a/arch/x86/kvm/vmx/x86_ops.h b/arch/x86/kvm/vmx/x86_ops.h
+index ccf98e79d8c3..fd60128eb10a 100644
+--- a/arch/x86/kvm/vmx/x86_ops.h
++++ b/arch/x86/kvm/vmx/x86_ops.h
+@@ -124,9 +124,9 @@ void vmx_cancel_hv_timer(struct kvm_vcpu *vcpu);
+ void vmx_setup_mce(struct kvm_vcpu *vcpu);
+
+ #ifdef CONFIG_INTEL_TDX_HOST
+-void __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops);
++int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops);
+ #else
+-static inline void tdx_hardware_setup(struct kvm_x86_ops *x86_ops) {}
++static inline int void tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return 0; }
+ #endif
+
+ #endif /* __KVM_X86_VMX_X86_OPS_H */
+

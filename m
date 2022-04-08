@@ -2,54 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F189A4F9EC2
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 23:06:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 550594F9ECA
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 23:06:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239672AbiDHVIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 17:08:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37406 "EHLO
+        id S239710AbiDHVIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 17:08:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239652AbiDHVH5 (ORCPT
+        with ESMTP id S239685AbiDHVH7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 17:07:57 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A9813C70A
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 14:05:52 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id y23-20020a62b517000000b004fd8affa86aso4911778pfe.12
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 14:05:52 -0700 (PDT)
+        Fri, 8 Apr 2022 17:07:59 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D561404CA
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 14:05:55 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id om8-20020a17090b3a8800b001c68e7ccd5fso8405892pjb.9
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 14:05:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=S51j5oo3opJvsRJNXI1+hkL5LxbcnR2OyLq+qXnMqiY=;
-        b=anWu23sq3AlcbJM+bTrIjG/wtoRFd3im82SYu+mFMpJO9qZuudYLBDNN7pinnQ0PSM
-         N70BfaXZ7yjraCCJFd3QJHbK39N9+lmHR6ezQmQ1F4Riv33qjWe6OHKqLLAWZw3oMHKH
-         s9WGoYCmw40XXp3mJebllnw05X6UnAxaxnwWp1yPYcREpvz1KMzCw8LAT2VOxfhGeCN9
-         PY6vNazZ+C8SM7L+ti/3Od7XldQy/EuDkvYk+DIwmiQO/2vQMxGDW30RR7icLRa9D/5M
-         L8n7bIJsu/fNBVucA9SQDP/t38M1riWt89Z6R0ZKrRESJyh84SJciIYTc+axtElSX5EW
-         eDBA==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=rlJkFcNcYd6mPNnge4ujHl+5hUg478jozPBxCeiplcU=;
+        b=kD8vKqNMy0pBGS7eymZaRDQYbCNZT+UEHGxZV9YZX4Xm8SiuB0c/ypoS9pSwv0tLYB
+         HpcVD4HioKpNuQKaD3c4terg5FTGEDvP/LrN0nbTKAdGOUmsHVYS8Ei92SqUAd/2Ye6+
+         Ic+jODJNU3xgl9cTfgGDuAalpa70HzKMZ+mmGOu+SHcXOO3ONMt6qujDh28WdL0wn89X
+         HgUxOQHBTtaDJ+Skf4i3LxR2zpMF3o/infccnKr16BKp1eI81jsXJLeFnnKMa8VRDD5C
+         2RiTV0MygW7LyqGZ+RxlAnFjspv1Jm/3O9QZCKEvxpdvVG2CujC8yCUJy8+HeeE3Lf/L
+         4/Rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=S51j5oo3opJvsRJNXI1+hkL5LxbcnR2OyLq+qXnMqiY=;
-        b=vyA+MkdxuVE8t7M7ciA1PbmCh3261bB1RZe6xTFgcHolnKt29zJNA7QNfk9Pz7sDs9
-         dbCiawRU6rIpZ+1PleIlJiTwOzsjqS7f22zpYjwHvLcBby/ToUZW+7cWjLHlXcL+kb6j
-         vTYyYjLpqFiDYM4Cq4a5jm6Yp5U8k3qFkWm955F0f+bf2UT+m9Z8wAQknO00liY+EKHC
-         EfhJGlQbocN9AKGNYhizQAXiIrcivRfxpu0I1qL4EBE1mLcxPNAfQpQOvyDuWPE6K75/
-         SUL4suDRrNDhkYlNXkQHbW9cLkKTi8ZIqu9gtjBsPbGt0XH/f2CfBTCvNEYHDeQU0r8O
-         w7Kg==
-X-Gm-Message-State: AOAM531/JOBPvZgUq3K7RMP1j+5tCqM7Sh9Ycn0tuh68HqhcW3gnsG5W
-        dX4MZeyw2rFvj+cvUbzhBzVxx8ZWL9SaPtAS
-X-Google-Smtp-Source: ABdhPJwBI62+i1Cn7AwOjIj/QaMxxnX07OYtWyneOi+VOeF3IfJ16nT4vhAOtlvrCVnJcwMsb1ROmtAAUBhAthta
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=rlJkFcNcYd6mPNnge4ujHl+5hUg478jozPBxCeiplcU=;
+        b=ZKJIVQP9Dr3Kai9jSxKTKLecI3G3gXX5qdOKrrYE7Qwes/Wpg/97yYnHFGpB7h35K3
+         +epVtMe1Ep/+ORr2Sv6f8P40ycJL9oQuVvhdqjEc/W/oQqJ5nqHwcusaPiXwVi/uSYaM
+         MgaaTxz7pgSZHJneUlKJrzY4/IpYgUTRxw04m1nFazlSy+AJ42VyYaCSiARKiy0E7t+y
+         YyBfJkjdhiGQbUa1U7JRRUilYfE7t1EmKJ7JlQY/Z5JaFGYC+C/QKwY0a+AB/JJpN1l6
+         UAExWkdI+LhcvuZwlJRsIa2IcdSlukm6Fa4eVRFIHvzttUSitjjXiaj16VLgTf2wLwvU
+         Lp2g==
+X-Gm-Message-State: AOAM532hAviy2FQZWnebdUKUQiTJbT58lR04LZoLrqNqmm5ugZoFUFY8
+        gP01OgjuxFnBuAICx7SurycyhK0KYQItDPil
+X-Google-Smtp-Source: ABdhPJxlvfncBAZX5WHOx5BNkCJlbFqniaKc+b2JesTBq+VaT+G3FdaPBqWx9JKhyKVqo/FZpF/gO6FixnKe/EqS
 X-Received: from vannapurve2.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:41f8])
- (user=vannapurve job=sendgmr) by 2002:a17:902:e889:b0:157:dd6:4621 with SMTP
- id w9-20020a170902e88900b001570dd64621mr9269146plg.17.1649451952012; Fri, 08
- Apr 2022 14:05:52 -0700 (PDT)
-Date:   Fri,  8 Apr 2022 21:05:40 +0000
-Message-Id: <20220408210545.3915712-1-vannapurve@google.com>
+ (user=vannapurve job=sendgmr) by 2002:a17:90b:2384:b0:1cb:5223:9dc4 with SMTP
+ id mr4-20020a17090b238400b001cb52239dc4mr313643pjb.1.1649451954536; Fri, 08
+ Apr 2022 14:05:54 -0700 (PDT)
+Date:   Fri,  8 Apr 2022 21:05:41 +0000
+In-Reply-To: <20220408210545.3915712-1-vannapurve@google.com>
+Message-Id: <20220408210545.3915712-2-vannapurve@google.com>
 Mime-Version: 1.0
+References: <20220408210545.3915712-1-vannapurve@google.com>
 X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
-Subject: [RFC V1 PATCH 0/5] selftests: KVM: selftests for fd-based approach of
- supporting private memory
+Subject: [RFC V1 PATCH 1/5] x86: kvm: HACK: Allow testing of priv memfd approach
 From:   Vishal Annapurve <vannapurve@google.com>
 To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
@@ -79,61 +82,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series implements selftests targeting the feature floated by Chao
-via:
+Add plumbing in KVM logic to allow private memfd series:
 https://lore.kernel.org/linux-mm/20220310140911.50924-1-chao.p.peng@linux.intel.com/
+to be tested with non-confidential VMs.
 
-Below changes aim to test the fd based approach for guest private memory
-in context of normal (non-confidential) VMs executing on non-confidential
-platforms.
+1) Existing hypercall KVM_HC_MAP_GPA_RANGE is modified to support
+marking pages of the guest memory as privately accessed or
+accessed in a shared fashion.
 
-Confidential platforms along with the confidentiality aware software
-stack support a notion of private/shared accesses from the confidential
-VMs.
-Generally, a bit in the GPA conveys the shared/private-ness of the
-access. Non-confidential platforms don't have a notion of private or
-shared accesses from the guest VMs. To support this notion,
-KVM_HC_MAP_GPA_RANGE
-is modified to allow marking an access from a VM within a GPA range as
-always shared or private. Any suggestions regarding implementing this ioctl
-alternatively/cleanly are appreciated.
+2) kvm_vcpu_is_private_gfn is defined to allow guest accesses to
+be categorized as shared or private based on the values set by
+KVM_HC_MAP_GPA_RANGE hypercall.
 
-priv_memfd_test.c file adds a suite of two basic selftests to access private
-memory from the guest via private/shared access and checking if the contents
-can be leaked to/accessed by vmm via shared memory view.
+3) KVM_MEM_PRIVATE flag for memslots is marked as always supported.
 
-Test results:
-1) PMPAT - PrivateMemoryPrivateAccess test passes
-2) PMSAT - PrivateMemorySharedAccess test fails currently and needs more
-analysis to understand the reason of failure.
+Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+---
+ arch/x86/include/uapi/asm/kvm_para.h |  1 +
+ arch/x86/kvm/mmu/mmu.c               |  9 +++++----
+ arch/x86/kvm/x86.c                   | 16 ++++++++++++++--
+ include/linux/kvm_host.h             |  3 +++
+ virt/kvm/kvm_main.c                  |  2 +-
+ 5 files changed, 24 insertions(+), 7 deletions(-)
 
-Important - Below patch is needed to ensure host kernel crash is avoided while
-running these tests:
-https://github.com/vishals4gh/linux/commit/b9adedf777ad84af39042e9c19899600a4add68a
-
-Github link for the patches posted as part of this series:
-https://github.com/vishals4gh/linux/commits/priv_memfd_selftests_v1
-Note that this series is dependent on Chao's v5 patches mentioned above
-applied on top of 5.17.
-
-Vishal Annapurve (5):
-  x86: kvm: HACK: Allow testing of priv memfd approach
-  selftests: kvm: Fix inline assembly for hypercall
-  selftests: kvm: Add a basic selftest test priv memfd
-  selftests: kvm: priv_memfd_test: Add support for memory conversion
-  selftests: kvm: priv_memfd_test: Add shared access test
-
- arch/x86/include/uapi/asm/kvm_para.h          |   1 +
- arch/x86/kvm/mmu/mmu.c                        |   9 +-
- arch/x86/kvm/x86.c                            |  16 +-
- include/linux/kvm_host.h                      |   3 +
- tools/testing/selftests/kvm/Makefile          |   1 +
- .../selftests/kvm/lib/x86_64/processor.c      |   2 +-
- tools/testing/selftests/kvm/priv_memfd_test.c | 410 ++++++++++++++++++
- virt/kvm/kvm_main.c                           |   2 +-
- 8 files changed, 436 insertions(+), 8 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/priv_memfd_test.c
-
+diff --git a/arch/x86/include/uapi/asm/kvm_para.h b/arch/x86/include/uapi/asm/kvm_para.h
+index 6e64b27b2c1e..3bc9add4095d 100644
+--- a/arch/x86/include/uapi/asm/kvm_para.h
++++ b/arch/x86/include/uapi/asm/kvm_para.h
+@@ -102,6 +102,7 @@ struct kvm_clock_pairing {
+ #define KVM_MAP_GPA_RANGE_PAGE_SZ_2M	(1 << 0)
+ #define KVM_MAP_GPA_RANGE_PAGE_SZ_1G	(1 << 1)
+ #define KVM_MAP_GPA_RANGE_ENC_STAT(n)	(n << 4)
++#define KVM_MARK_GPA_RANGE_ENC_ACCESS	(1 << 8)
+ #define KVM_MAP_GPA_RANGE_ENCRYPTED	KVM_MAP_GPA_RANGE_ENC_STAT(1)
+ #define KVM_MAP_GPA_RANGE_DECRYPTED	KVM_MAP_GPA_RANGE_ENC_STAT(0)
+ 
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index b1a30a751db0..ee9bc36011de 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -3895,10 +3895,11 @@ static bool kvm_arch_setup_async_pf(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+ 
+ static bool kvm_vcpu_is_private_gfn(struct kvm_vcpu *vcpu, gfn_t gfn)
+ {
+-	/*
+-	 * At this time private gfn has not been supported yet. Other patch
+-	 * that enables it should change this.
+-	 */
++	gpa_t priv_gfn_end = vcpu->priv_gfn + vcpu->priv_pages;
++
++	if ((gfn >= vcpu->priv_gfn) && (gfn < priv_gfn_end))
++		return true;
++
+ 	return false;
+ }
+ 
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 11a949928a85..3b17fa7f2192 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -9186,8 +9186,20 @@ int kvm_emulate_hypercall(struct kvm_vcpu *vcpu)
+ 		if (!(vcpu->kvm->arch.hypercall_exit_enabled & (1 << KVM_HC_MAP_GPA_RANGE)))
+ 			break;
+ 
+-		if (!PAGE_ALIGNED(gpa) || !npages ||
+-		    gpa_to_gfn(gpa) + npages <= gpa_to_gfn(gpa)) {
++		if (!PAGE_ALIGNED(gpa) ||
++			gpa_to_gfn(gpa) + npages < gpa_to_gfn(gpa)) {
++			ret = -KVM_EINVAL;
++			break;
++		}
++
++		if (attrs & KVM_MARK_GPA_RANGE_ENC_ACCESS) {
++			vcpu->priv_gfn = gpa_to_gfn(gpa);
++			vcpu->priv_pages = npages;
++			ret = 0;
++			break;
++		}
++
++		if (!npages) {
+ 			ret = -KVM_EINVAL;
+ 			break;
+ 		}
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index 0150e952a131..7c12a0bdb495 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -311,6 +311,9 @@ struct kvm_vcpu {
+ 	u64 requests;
+ 	unsigned long guest_debug;
+ 
++	uint64_t priv_gfn;
++	uint64_t priv_pages;
++
+ 	struct mutex mutex;
+ 	struct kvm_run *run;
+ 
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index df5311755a40..a31a58aa1b79 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -1487,7 +1487,7 @@ static void kvm_replace_memslot(struct kvm *kvm,
+ 
+ bool __weak kvm_arch_private_memory_supported(struct kvm *kvm)
+ {
+-	return false;
++	return true;
+ }
+ 
+ static int check_memory_region_flags(struct kvm *kvm,
 -- 
 2.35.1.1178.g4f1659d476-goog
 

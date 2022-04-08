@@ -2,65 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CE514F8FB8
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:41:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65BAB4F8FBB
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbiDHHnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 03:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37818 "EHLO
+        id S229820AbiDHHon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 03:44:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbiDHHnn (ORCPT
+        with ESMTP id S229765AbiDHHoj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 03:43:43 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B901AF50E
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 00:41:40 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id k124-20020a1ca182000000b0038c9cf6e2a6so5022155wme.0
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 00:41:40 -0700 (PDT)
+        Fri, 8 Apr 2022 03:44:39 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5EE1B60C5
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 00:42:35 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id l9-20020a05600c4f0900b0038ccd1b8642so5540064wmq.0
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 00:42:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=qoPzgwCZVz+2LKUZVk8VaJ97LNpuXNUCKEzLwfvX/Zs=;
-        b=vlKCcWfQTZaMrcyeYxoOCOY6TXXsu+qwQrEq7qk51SBgnnEVkDbtgKaVDqNSFdiD8l
-         Ftkm7NLTV4iZ/cp7EfmDlDHgPX6rKUDNz7xBd+0hO9j1uhc3lylzLWz89V9lw1xmmXDx
-         HxSGY19iCzpy9hq65yDrWd7ycKD6XpFDWuR1lWSjy5VneKRF58+UHQnFpcyzSKfX+hFf
-         i0jdA2hb1rhpmOlLh3i4ZI3HzkI8CSFYyRGtBhHb9MJCslKgyXFclXwsKZV5QPBFQbmL
-         qJMmiuBe/3Rw089sYDNgpiFr2L9BcXyOSPDRpivX9LKtFO/hZUOot7AL4p8iZzpzemAA
-         Jc3A==
+        bh=mHMATotH/7GH36y4JV3UnVZN/1YVFDx1H+DptS3+PWc=;
+        b=mu/sVZgEh6+wr0/vA8nHityCIOLvTeBafSpMxYQg0Ho/GexTByIYESg54GUWecIReL
+         Y5sFAnvh5Q3VphOaUxz5yeVAuVd8RjGVzh/WundduB03NIeJATZ/Ev+TguQMVev7rt0r
+         XAINJGkAohkGxKSwgUuPPcd0urmt1yqaw047ssYtI8GaW0Nuo9azgC7MUM/XlDZdZJBF
+         5Od84ntYjv3Rhvpn6BLuJb6zxuk+v6YsXIFoQWDXRIbLjoXAHSQ/9f+DWyifn0xA7PiG
+         qg6ieRl9nCgahuy8ePNmpLqFzahtcBr4rApLtfKP8svON0SgHt8iptL0upMYU46x5Z1N
+         NAEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=qoPzgwCZVz+2LKUZVk8VaJ97LNpuXNUCKEzLwfvX/Zs=;
-        b=rdyVrJ2UcknRl2v1/yQ7BG2tVBnxWm6WEUuES2J9IvkUyWrLWP8zpwa7yu2RVMusDg
-         N6sp3qeck2syN1QFeiPseoSPcdR4yul/b99gg3ydD6SdTKEQdN3+tDXlXNV4A0IzQdBQ
-         QPac2Q3yNCQ+Lr3hWEjRe6dq2rAgOzKmpV94BRadaxjsu+OIRYEf/6kaCMhQJg/mgAKm
-         /KR0F8wWW0slaNcxYbgj18r82yly7ZuuOOYCvPRbkkhPfNuGopmYk40pJjaUADYVpXk6
-         hM9W7HiRoMLbN6DhrdvSnbLxcQDlfQgwNfLWeTIW2x0gHwVjzc9WCzm+LvmyDKMe322B
-         GsMw==
-X-Gm-Message-State: AOAM532INU2qVEpgKsKLzHLsnLQC5jfNqvr4HVAMEKRY+OX5kgf0BqJC
-        qdiUOPr0e993p0UZ1sHFrLP6Og==
-X-Google-Smtp-Source: ABdhPJzRCiav6MWIkNLMa3QPaqs79EK0a2VND7pVXpHUhajmSBRORWzCxAN6YlQhwrfcO/nqZqgn8w==
-X-Received: by 2002:a7b:cb46:0:b0:37b:dd79:e1c4 with SMTP id v6-20020a7bcb46000000b0037bdd79e1c4mr15472282wmj.39.1649403699091;
-        Fri, 08 Apr 2022 00:41:39 -0700 (PDT)
+        bh=mHMATotH/7GH36y4JV3UnVZN/1YVFDx1H+DptS3+PWc=;
+        b=7pc4Wa/eBYDaVddDeLSJcigGN0iwuBbRAZd53v0nZRz3/GmYbpZoNnDFRWCoKnMApz
+         64gbrJ9RN572gle9NrtX7kdGyw32+1AIMKMSUATSDDMOcGeg/n3Yk3cYk36o6aDrRj3U
+         QYZyytPxWHb0vgFRMI5D27giL3a4N61pBzB3ypyxfhmF/2XVsSV5AbAN4JffVN1dgZq6
+         UsWbJPJWueRdjmOzi4ELxyHzPQQCx+qaulwZDCvFrJnd+308tRxIvbLj+jLl9nuhfAYA
+         Nfa65vrwMPfaJcgvcT/E+1pvyZPualo6PYmdy5QjbD1y7G7/IPSGBsOAMpWpb1yWBt3J
+         7q4A==
+X-Gm-Message-State: AOAM533sMIcyneLMeWlD+KpYgqtlzPQ8W4Hm6h5XeJ/zpCX/czNeiMgR
+        1IpoQYfYvJqIQKIvaVwVZRnx2g==
+X-Google-Smtp-Source: ABdhPJxvN2y8IaSXW8095VaZadvE9+99TAQdw3rmhA3hdG8AgGca4W0iH4zucfGoysujnM+oIij5eg==
+X-Received: by 2002:a05:600c:3d0e:b0:38c:9b5e:52c0 with SMTP id bh14-20020a05600c3d0e00b0038c9b5e52c0mr15289652wmb.3.1649403753807;
+        Fri, 08 Apr 2022 00:42:33 -0700 (PDT)
 Received: from localhost.localdomain ([2001:861:44c0:66c0:eacd:ce6:e294:acd1])
-        by smtp.gmail.com with ESMTPSA id w8-20020a1cf608000000b0038c8fdc93d6sm8890630wmc.28.2022.04.08.00.41.38
+        by smtp.gmail.com with ESMTPSA id m4-20020a7bcb84000000b00389efb7a5b4sm9241164wmi.17.2022.04.08.00.42.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 00:41:38 -0700 (PDT)
+        Fri, 08 Apr 2022 00:42:33 -0700 (PDT)
 From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+To:     Jerome Brunet <jbrunet@baylibre.com>,
         linux-arm-kernel@lists.infradead.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-amlogic@lists.infradead.org,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        devicetree@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>
+        Kevin Hilman <khilman@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
 Cc:     Neil Armstrong <narmstrong@baylibre.com>
 Subject: Re: [PATCH 1/2] ARM: dts: meson: align SPI NOR node name with dtschema
-Date:   Fri,  8 Apr 2022 09:41:36 +0200
-Message-Id: <164940368411.3649905.11710562197285417365.b4-ty@baylibre.com>
+Date:   Fri,  8 Apr 2022 09:42:32 +0200
+Message-Id: <164940374766.3650310.16771762331635334011.b4-ty@baylibre.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220407142159.293836-1-krzysztof.kozlowski@linaro.org>
 References: <20220407142159.293836-1-krzysztof.kozlowski@linaro.org>
@@ -83,12 +84,12 @@ On Thu, 7 Apr 2022 16:21:58 +0200, Krzysztof Kozlowski wrote:
 > 
 > 
 
-Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v5.19/dt)
+Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v5.19/dt64)
 
 [1/2] ARM: dts: meson: align SPI NOR node name with dtschema
-      https://git.kernel.org/amlogic/c/e8662d0832431a069f0138da72c638cb6a377bdd
-[2/2] arm64: dts: meson: align SPI NOR node name with dtschema
       (no commit info)
+[2/2] arm64: dts: meson: align SPI NOR node name with dtschema
+      https://git.kernel.org/amlogic/c/8771ce5eadb5b73daab190c2451172e43e16ae41
 
 -- 
 Neil

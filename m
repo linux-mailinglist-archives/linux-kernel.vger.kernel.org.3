@@ -2,157 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 493384F95D9
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B3D64F95D2
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:32:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235778AbiDHMf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 08:35:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48634 "EHLO
+        id S230527AbiDHMeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 08:34:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232409AbiDHMf0 (ORCPT
+        with ESMTP id S233463AbiDHMeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 08:35:26 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC063408B1;
-        Fri,  8 Apr 2022 05:33:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649421202; x=1680957202;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=XRRTHcC3vib6U8pYsXScDVRRZguO7b/FSE9Su8vSm/M=;
-  b=bWzSEBFm26TNweia8ol7JU5R0vs//P7U0Ap5x+LqkBGETB03c6wTAg4d
-   Jz/jKRJHCTAJY+y2cayWfqTGyFYUdODGPExoIt9jZRWFbkQLoq3qNKLz8
-   pvud4cYBzxBseWZf2V3Gigr1Lznlqmw92LNrWvL0lYyAT0sOZ96fEraR8
-   xjPDCsMSl05HHgtH0os1N1iZy12mQUlcQirNXSXzAsgGKUAoPjqMS9VBh
-   oLeyC33IRYS6U8qW7Fa0y39/GsZs0aPh9bo6FpBhZargfh5zWHWHhKUcf
-   hxM2f6+etlIGLq5zGcaj++7Yro1Nk2eNeZKAOEU4cXqEVtE7Zu9rbUNXk
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="249111951"
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="249111951"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 05:33:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="525361097"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga006.jf.intel.com with ESMTP; 08 Apr 2022 05:33:19 -0700
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 238CXHcv017340;
-        Fri, 8 Apr 2022 13:33:17 +0100
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Tony Nguyen <anthony.l.nguyen@intel.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Madhu Chittim <madhu.chittim@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Brett Creeley <brett@pensando.io>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ivan Vecera <ivecera@redhat.com>
-Subject: Re: [PATCH v2 net] ice: arfs: fix use-after-free when freeing @rx_cpu_rmap
-Date:   Fri,  8 Apr 2022 14:31:20 +0200
-Message-Id: <20220408123120.1829671-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220404161509.3489310-1-alexandr.lobakin@intel.com>
-References: <20220404161509.3489310-1-alexandr.lobakin@intel.com>
+        Fri, 8 Apr 2022 08:34:07 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FED9FFFA9
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 05:32:04 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id r3so343821edi.8
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 05:32:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=k7TsspIZEQrKfrjQp/PsXSdv2fK0xhZqE0qfyZ1vZ1o=;
+        b=cA+TOrmettMYXWjrYcnbtKZSir/JysRf50k7uqD/8l34NpO3JbGwtFXkSmPl3yVMLl
+         ZRU6IaWLzuX7nQjZ4up+obPW5EGoddG54YpIK3mIw9Ih4/GiDaHg242YwbQIoy2aU6pG
+         dD9cK3Qe5qOp0SYhxAQ2MvEUaujlm9K2GWPMS9bihYr1RedzTLbRsjrjZO1pK0uKMewV
+         4Zywb9Ex7gpUfwwqoLGoJA7MyKTjGBTeFWPJl0mUuVVl0mw/UvZBbWLQ+tJVFkynymSx
+         RnhmKkbeEHEGYjBY4XyV3s4DRoSyfoVZJRmpqk2iuGxjSh6FsiCdLvYitOBW65MnXwFh
+         8ALw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=k7TsspIZEQrKfrjQp/PsXSdv2fK0xhZqE0qfyZ1vZ1o=;
+        b=H0BjrXU9Jzk6V9hlpc/zylm/BELvEc9WPtRmnnwLuHFxKfrApNyD+EF6aG8YkAJl+L
+         dxI2KolBvwvF8hLxWGq5R1HrPhX3a0jyGJJ3DuiTYmPbzASLJUD8weUFzJSdB2V74GZc
+         gs4BcVclgcv7BKWSElRACfS08/ILyCGn9S0ZN5a8LheUho4U13+HBNbvN0KIzY5LWssO
+         3DB0Zoaox5WUriUXXAKKWh0UU3pD8GEOWnBSCoj+UHttgXdzVFATYXI/zkToZDEic4FE
+         GfnjANTit+IQ9XOyT0x0AI1rIeyanWaP7RNexvs5XukLvGFR1rpJk3wZK2piHVT9yakg
+         ozGA==
+X-Gm-Message-State: AOAM532LVcTaVXWvEOJ2qSG6V3IEftA4cvi5DCvamcGqPq9iL5FoV3BK
+        V0hmM8ViDWgMdXRaGl+Mg4jxFA==
+X-Google-Smtp-Source: ABdhPJwiFak3etcetlhA6GgJU4bpRv7f/dGZM4e8WQjkOh2bQqKR3k6v8cJK9q0/ARV3sgpJpjVpmQ==
+X-Received: by 2002:a05:6402:350d:b0:419:5099:1f10 with SMTP id b13-20020a056402350d00b0041950991f10mr19311410edd.144.1649421122660;
+        Fri, 08 Apr 2022 05:32:02 -0700 (PDT)
+Received: from [192.168.0.188] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id s11-20020a1709066c8b00b006e7ca6f0401sm6182318ejr.136.2022.04.08.05.32.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Apr 2022 05:32:02 -0700 (PDT)
+Message-ID: <4c3be5b6-50ef-9e9a-6cee-9642df943342@linaro.org>
+Date:   Fri, 8 Apr 2022 14:32:01 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/4] scsi: core: constify pointer to scsi_host_template
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Doug Gilbert <dgilbert@interlog.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220408103027.311624-1-krzysztof.kozlowski@linaro.org>
+ <2a88a992-641a-b3ff-fe39-7a61fff87cb6@huawei.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <2a88a992-641a-b3ff-fe39-7a61fff87cb6@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Lobakin <alexandr.lobakin@intel.com>
-Date: Mon, 4 Apr 2022 18:15:09 +0200
-
-> The CI testing bots triggered the following splat:
+On 08/04/2022 14:14, John Garry wrote:
+> On 08/04/2022 11:30, Krzysztof Kozlowski wrote:
+>> Several pointers to 'struct scsi_host_template' do not modify it, so
+>> made them const for safety.
+>>
 > 
-> [  718.203054] BUG: KASAN: use-after-free in free_irq_cpu_rmap+0x53/0x80
-> [  718.206349] Read of size 4 at addr ffff8881bd127e00 by task sh/20834
-> [  718.212852] CPU: 28 PID: 20834 Comm: sh Kdump: loaded Tainted: G S      W IOE     5.17.0-rc8_nextqueue-devqueue-02643-g23f3121aca93 #1
-> [  718.219695] Hardware name: Intel Corporation S2600WFT/S2600WFT, BIOS SE5C620.86B.02.01.0012.070720200218 07/07/2020
-> [  718.223418] Call Trace:
-> [  718.227139]
-> [  718.230783]  dump_stack_lvl+0x33/0x42
-> [  718.234431]  print_address_description.constprop.9+0x21/0x170
-> [  718.238177]  ? free_irq_cpu_rmap+0x53/0x80
-> [  718.241885]  ? free_irq_cpu_rmap+0x53/0x80
-> [  718.245539]  kasan_report.cold.18+0x7f/0x11b
-> [  718.249197]  ? free_irq_cpu_rmap+0x53/0x80
-> [  718.252852]  free_irq_cpu_rmap+0x53/0x80
-> [  718.256471]  ice_free_cpu_rx_rmap.part.11+0x37/0x50 [ice]
-> [  718.260174]  ice_remove_arfs+0x5f/0x70 [ice]
-> [  718.263810]  ice_rebuild_arfs+0x3b/0x70 [ice]
-> [  718.267419]  ice_rebuild+0x39c/0xb60 [ice]
-> [  718.270974]  ? asm_sysvec_apic_timer_interrupt+0x12/0x20
-> [  718.274472]  ? ice_init_phy_user_cfg+0x360/0x360 [ice]
-> [  718.278033]  ? delay_tsc+0x4a/0xb0
-> [  718.281513]  ? preempt_count_sub+0x14/0xc0
-> [  718.284984]  ? delay_tsc+0x8f/0xb0
-> [  718.288463]  ice_do_reset+0x92/0xf0 [ice]
-> [  718.292014]  ice_pci_err_resume+0x91/0xf0 [ice]
-> [  718.295561]  pci_reset_function+0x53/0x80
-> <...>
-> [  718.393035] Allocated by task 690:
-> [  718.433497] Freed by task 20834:
-> [  718.495688] Last potentially related work creation:
-> [  718.568966] The buggy address belongs to the object at ffff8881bd127e00
->                 which belongs to the cache kmalloc-96 of size 96
-> [  718.574085] The buggy address is located 0 bytes inside of
->                 96-byte region [ffff8881bd127e00, ffff8881bd127e60)
-> [  718.579265] The buggy address belongs to the page:
-> [  718.598905] Memory state around the buggy address:
-> [  718.601809]  ffff8881bd127d00: fa fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
-> [  718.604796]  ffff8881bd127d80: 00 00 00 00 00 00 00 00 00 00 fc fc fc fc fc fc
-> [  718.607794] >ffff8881bd127e00: fa fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
-> [  718.610811]                    ^
-> [  718.613819]  ffff8881bd127e80: 00 00 00 00 00 00 00 00 00 00 00 00 fc fc fc fc
-> [  718.617107]  ffff8881bd127f00: fa fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
-> 
-> This is due to that free_irq_cpu_rmap() is always being called
-> *after* (devm_)free_irq() and thus it tries to work with IRQ descs
-> already freed. For example, on device reset the driver frees the
-> rmap right before allocating a new one (the splat above).
-> Make rmap creation and freeing function symmetrical with
-> {request,free}_irq() calls i.e. do that on ifup/ifdown instead
-> of device probe/remove/resume. These operations can be performed
-> independently from the actual device aRFS configuration.
-> Also, make sure ice_vsi_free_irq() clears IRQ affinity notifiers
-> only when aRFS is disabled -- otherwise, CPU rmap sets and clears
-> its own and they must not be touched manually.
-> 
-> Fixes: 28bf26724fdb0 ("ice: Implement aRFS")
-> Co-developed-by: Ivan Vecera <ivecera@redhat.com>
-> Signed-off-by: Ivan Vecera <ivecera@redhat.com>
-> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> Is this standard practice? What is so special here?
 
-Bah, forgot to mention in v2 that it's an urgent fix. Tony, are you
-okay with posting it to netdev or allowing it to go directly to
--net? It's been tested by Ivan already (I had also asked Konrad, but
-he hasn't replied yet).
+This is standard practice and there is nothing special here. Pointers to
+const are preferred because:
+1. They add safety if data is actually const. This is not yet the case,
+but scsi_host_template allocation could be made const with some effort.
+2. The more const variables, the easier function contents and its impact
+is to understand. This is actually the biggest benefit when dealing with
+code touching different structures.
 
-> ---
-> From v1[0]:
->  - remove the obsolete `!vsi->arfs_fltr_list` check from
->    ice_free_cpu_rx_rmap() leading to a leak and trace (Ivan).
-> 
-> [0] https://lore.kernel.org/netdev/20220404132832.1936529-1-alexandr.lobakin@intel.com
-> ---
+In general, constifying is a common practice everywhere in the kernel.
 
---- 8< ---
-
-> -- 
-> 2.35.1
-
-Thanks,
-Al
+Best regards,
+Krzysztof

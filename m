@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BD7E4F8CA2
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 553664F8C5A
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233336AbiDHBO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 21:14:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42398 "EHLO
+        id S233354AbiDHBPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 21:15:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233268AbiDHBO5 (ORCPT
+        with ESMTP id S233268AbiDHBPE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 21:14:57 -0400
-Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FE0B12BFA5
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 18:12:56 -0700 (PDT)
-Received: by mail-ot1-x344.google.com with SMTP id a17-20020a9d3e11000000b005cb483c500dso5112947otd.6
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 18:12:56 -0700 (PDT)
+        Thu, 7 Apr 2022 21:15:04 -0400
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472D212C269
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 18:13:00 -0700 (PDT)
+Received: by mail-ot1-x343.google.com with SMTP id e25-20020a0568301e5900b005b236d5d74fso5154868otj.0
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 18:13:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=e5T80dpqvmJyYNxCZPNBDf8/a2ZuY3TCPiPd35SWGCc=;
-        b=E7OoQvNxDDe09i6QR9xdARsM79ePm/M/GnhEUuka5ePvPKmxSzVeCIx+NOUan7gbw2
-         hMmdroWzjdnnUoL5vl3SlKGQdmfvw3WdfpaepUJDo4sqOjA4eRXh4JTCoA09a+sE/qsT
-         CgoOQ1qVoshjmzOnAv/Pml3JdvMwX/O4IH5Z7aBAKVtA2iS/EAcdXfyzCGRZB8dcKaey
-         OxKq8aOE4x8UQe2KPOep/afFdjryf7N8sOLfozrnDfirinDtqBvZvFES4+LkdfM+wRrd
-         ZosfM1M8JCbtiWobaI5NYqCK2opbrLQunPVUWQi0xBUzYHypkKtzRukNwQqSG+F8QYLe
-         B1Lg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=V186V90RiRmSVhYLVlMF6iiT3ecZIT/E9eNPXMmo4Eo=;
+        b=KzqZ51TorGTr+EP4j1Irc0/l1JWL3v0ZeQeQ16VJYgSDkRq+sNxnwTlNRZVV0IWojs
+         WQQVEYmPDmqd5F7C9pZsNAS84Ou89Bqhf5YQlEGOd2t6PWoUMk2GSVWugUns2w909MMV
+         ERfuSP04FvFVGkG2W0L2aeh/Sp//gHF3AirJpN1DTp3JD6Osdoh2Syb7MQfU3ZMoIVgw
+         6pRwPqDD5wu3HAcXMUNJ7jB614ZHPLlFGLl44NsADqzMYEOtr/LHZeM+FE8ukEo23+Kd
+         jhdu5qIvBIUaKhV758KOxoiaTL68RIkDct02h70SB6xFg9SKlEeWDN2x4MbgeoEO9Rsn
+         5hAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=e5T80dpqvmJyYNxCZPNBDf8/a2ZuY3TCPiPd35SWGCc=;
-        b=5QgDbp9eLbg1jhvs2oPf3p2DsdvPlbbzulJ6aHo2i8nhHZ5abkLBWPQbkfh9IfCJ+J
-         me43hNrI0z/X5pdavjB6T1mgt3zz+T8GNugHbyr9ruWO4sg4e780Wqc1MJSwjaKUEGyi
-         b3pJ71Xj91i7xuVnoFdnsVp+jVZ1puybJ+4PQrnktUTOiwfd4GPS/l8Mux6o7oTi9Nzp
-         C8F00iY3V1y43Ddki3EZNHGI1ZJrpL6+ekj8ZUq7oE9hZe13V2APm3oZ9IPLIidETJYk
-         9GDpvgGfaqw18+W2NC5uZMNqaftFml6bGnG+SyGXtKj3L0gbOLHwouOiRmfem5JCZzS6
-         dR4Q==
-X-Gm-Message-State: AOAM533jX0QUoglGBEriBCcwSw+VtyuJF1RE1nRmVg5xU8pQy3SOmNG6
-        31yz877cxfdjXfMHuDSRi/c=
-X-Google-Smtp-Source: ABdhPJzWZsVb+0FBT/UfuuBz57l2HrHGbM/x5tYjidzAbn3d6nHElcTM6GoDapqOrADJyP07SvO7WA==
-X-Received: by 2002:a05:6830:4cb:b0:5ce:889:bc4e with SMTP id s11-20020a05683004cb00b005ce0889bc4emr5848652otd.87.1649380375606;
-        Thu, 07 Apr 2022 18:12:55 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=V186V90RiRmSVhYLVlMF6iiT3ecZIT/E9eNPXMmo4Eo=;
+        b=W1mopnITYPDmG2HD7B2VZ8ka5ZEY5qPRc90HPD4QBMRQSOm15kcYHhxgobTVXzjm1i
+         8QfrIR/PfOMO8uIG+X4wqTktrjl0aephFR41qDhx3/JDOF/12E+z0YewMD0IEPBv/xtH
+         ywX+A4nPxoh1ItYnLBU5Z8a/n/5oRR6F5kPWFDqD1eFtVuOeKGgDD6Cq9zJ6GUc1Veei
+         XpTopw7g87uGGOkTqDJJezzWpUOS1IyfGcd82s7XwAFlXXUEv1o562d1Gs7O4zJWQ/U8
+         qJoJKRwOaE4dAeVZ9CgPyN4CAsj+0av/UiaKQt0AH1eWwzGhJyU2FmpxE9uxZNSEFXy3
+         WQEg==
+X-Gm-Message-State: AOAM533zT70+Ws/tGL4w4Lb7klTwRDFURMW+qZCt4wiwHX4aNoNqHmKg
+        2vHSzzQYxdnbwRLhk/AIKH8VX31jVyEbVw==
+X-Google-Smtp-Source: ABdhPJzZKHIkem/74LcdemHmPZpBbGzGk5KDr+8SEfEHP2t0L22fTvCTXMa5FPyf+5uOklWnehas5A==
+X-Received: by 2002:a9d:ed7:0:b0:5b2:236c:b6cd with SMTP id 81-20020a9d0ed7000000b005b2236cb6cdmr5878979otj.31.1649380379842;
+        Thu, 07 Apr 2022 18:12:59 -0700 (PDT)
 Received: from bertie (072-190-140-117.res.spectrum.com. [72.190.140.117])
-        by smtp.gmail.com with ESMTPSA id 190-20020a4a0dc7000000b003244ae0bbd5sm7795463oob.7.2022.04.07.18.12.55
+        by smtp.gmail.com with ESMTPSA id h59-20020a9d2f41000000b005e6bbde77a8sm602544otb.76.2022.04.07.18.12.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 18:12:55 -0700 (PDT)
+        Thu, 07 Apr 2022 18:12:59 -0700 (PDT)
 From:   Rebecca Mckeever <remckee0@gmail.com>
 To:     outreachy@lists.linux.dev
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Rebecca Mckeever <remckee0@gmail.com>
-Subject: [PATCH v2 0/2] staging: rtl8192u: cleanup of ternary and if else statements
-Date:   Thu,  7 Apr 2022 20:12:49 -0500
-Message-Id: <cover.1649378587.git.remckee0@gmail.com>
+Subject: [PATCH v2 1/2] staging: rtl8192u: replace ternary statement with if and assignment
+Date:   Thu,  7 Apr 2022 20:12:50 -0500
+Message-Id: <36059ec66a2f3d58a8e339aa4f262772eabd3ef0.1649378587.git.remckee0@gmail.com>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <cover.1649378587.git.remckee0@gmail.com>
+References: <cover.1649378587.git.remckee0@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,28 +71,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These patches replace ternary and if else statements with
-more readable statements. Found with minmax coccinelle script.
+Replace ternary statement with an if statement followed by an assignment
+to increase readability and make error handling more obvious.
+Found with minmax coccinelle script.
 
+Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
 ---
-v1 -> v2:
-* Patch 1: "staging: rtl8192u: replace ternary statement with if and
-* assignment"
-  * replaced max macro with an if statement followed by an assignment
+ drivers/staging/rtl8192u/ieee80211/ieee80211_wx.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-* Patch 2: "staging: rtl8192u: use min_t/max_t macros instead of if
-* else"
-  * changed the type argument in min_t and max_t from u8 to u32
----
-
-Rebecca Mckeever (2):
-  staging: rtl8192u: replace ternary statement with if and assignment
-  staging: rtl8192u: use min_t/max_t macros instead of if else
-
- drivers/staging/rtl8192u/ieee80211/ieee80211_wx.c   |  4 +++-
- drivers/staging/rtl8192u/ieee80211/rtl819x_HTProc.c | 13 +++++--------
- 2 files changed, 8 insertions(+), 9 deletions(-)
-
+diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211_wx.c b/drivers/staging/rtl8192u/ieee80211/ieee80211_wx.c
+index 78cc8f357bbc..9885917b9199 100644
+--- a/drivers/staging/rtl8192u/ieee80211/ieee80211_wx.c
++++ b/drivers/staging/rtl8192u/ieee80211/ieee80211_wx.c
+@@ -470,7 +470,9 @@ int ieee80211_wx_get_encode(struct ieee80211_device *ieee,
+ 		return 0;
+ 	}
+ 	len = crypt->ops->get_key(keybuf, SCM_KEY_LEN, NULL, crypt->priv);
+-	erq->length = (len >= 0 ? len : 0);
++	if (len < 0)
++		len = 0;
++	erq->length = len;
+ 
+ 	erq->flags |= IW_ENCODE_ENABLED;
+ 
 -- 
 2.32.0
 

@@ -2,175 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27B504F9E4B
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 22:39:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CA354F9E4F
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 22:43:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239540AbiDHUlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 16:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50632 "EHLO
+        id S234211AbiDHUpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 16:45:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233905AbiDHUlA (ORCPT
+        with ESMTP id S231882AbiDHUpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 16:41:00 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A0614014
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 13:38:55 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id g11so4693338qke.1
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 13:38:55 -0700 (PDT)
+        Fri, 8 Apr 2022 16:45:08 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C751435AB0
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 13:43:03 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id p10so16915588lfa.12
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 13:43:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version;
-        bh=9HwDppLqHaQcBs/UBe2aw4cxWmdlTn3unTRBCytLFO0=;
-        b=kDWT7DbLIXeryuqgzJKXPRooe+DFb5VrAV9s8VQQh3/+L/jkAAOBZkzbwMa9Y+oos5
-         xnxE+TBlfk7ynX1+gqkkuP3JzEVI8mo5QCIzJjw4NrdeaKKiBsjlQPa32LF4zQlR8CMo
-         qxfJz6xxrivp2BwcN71Gyk/3z0QMnL9Gmeu3Da1e3QfE4v/4pQSGcCwMiLyOcku5wgHf
-         CZfBgZObe0vK4UJoPcPOS8TbVZaWAoObLYWjFjYFc3HV77ztvqr9DZRoGtYuTW224KS0
-         nv+SXeVtLimXZK1E6e75cZMoMhsooPeZNKUKc0CnODdMdlAwq5ZZ3HIupplfob3LOqv4
-         T//g==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Da2qAwNbvrZU08VFGRkDL3N3/jfO2QzNiebireMf8MI=;
+        b=cIx42nsSypnh3n2cMIa/b98xMgO9TRkrVcj1t+o7OB+VEP4rDNCnCUZoM01F2Nid6i
+         EZpvarMfGLwtINPcThfgNdRlGWhe8v/G7tXyWSs9c5Nu3iEDOMEMTaT3gKa599m/aJ20
+         dZt2soOKlT83ReS7Bsq86K7nO/lELkTjFWeYh/L8yIBRR4ef4eOF4WveeD40O31hdvX7
+         phLyrpYqrMWiKPpusSkxjkp4pRSf3eE7zbfetlM5tXWkvovq1s7RIs5XlaK6YX+a2DSG
+         jR8bU8/HMHmtOxfB4cZHtKWbjRqGqpXyaZ6IjI+lbrLIoiaUAPyDKSzzRfoEwzu3Xjhs
+         7ESA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version;
-        bh=9HwDppLqHaQcBs/UBe2aw4cxWmdlTn3unTRBCytLFO0=;
-        b=ZSiKJBHuuyLkR1QxH/9KmvC1VuS/xqeVn1+L+d3cWDl+jlH1ImSkGo25Rn7RpR3N/8
-         Yg/RS8UcX7ZosutzAhpisibBwEwhrUk2U/pnk6FlOdT09Idg+voEEBwJHaEaDs1QCyu4
-         lQfKpo0dnlQg+Ykf8YEB3cbBbgJ+CEpwZ/rUlYZhGDy+w3gg4KmvSa4cqmqaE8ifMgWM
-         cFoGp2wG/hTLZWF15ZKo987C5YmtDsLNvM+xecZyubY5ENz8c8EwjgsUlWmo2WpJJgRp
-         iv2G25wO/DOLZi6De4rGLWOBeGqm4AwY9gOxzkSJ6+EAvUjp5KXTlQbOqHvA8STSp6P5
-         uD/A==
-X-Gm-Message-State: AOAM5338cXTSFsTuMQ0A6g0aUh8n+KnqU4F21y9iYoLPstg4AWmh3GGx
-        vdg7uiAqQdjRK5bbf/javSEBKQ==
-X-Google-Smtp-Source: ABdhPJxNNfuUtbU+jVA4OD408wRYRnD+uHeEDWk6oAgIVTm4FABTOcVGdZuqmIMJ8LrzmwY67c43ig==
-X-Received: by 2002:a37:b983:0:b0:67e:c0d2:c3ca with SMTP id j125-20020a37b983000000b0067ec0d2c3camr13883611qkf.749.1649450334495;
-        Fri, 08 Apr 2022 13:38:54 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id k2-20020a37ba02000000b0067dc1b0104asm13964961qkf.124.2022.04.08.13.38.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 13:38:53 -0700 (PDT)
-Date:   Fri, 8 Apr 2022 13:38:41 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Hugh Dickins <hughd@google.com>,
-        Chuck Lever III <chuck.lever@oracle.com>,
-        Mark Hemment <markhemm@googlemail.com>,
-        Patrice CHOTARD <patrice.chotard@foss.st.com>,
-        Mikulas Patocka <mpatocka@redhat.com>,
-        Lukas Czerner <lczerner@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "Darrick J. Wong" <djwong@kernel.org>, linux-mm@kvack.org,
-        linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: [PATCH] tmpfs: fix regressions from wider use of ZERO_PAGE
-Message-ID: <9a978571-8648-e830-5735-1f4748ce2e30@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Da2qAwNbvrZU08VFGRkDL3N3/jfO2QzNiebireMf8MI=;
+        b=i2frTgj2SvNZiGndr0Uhi3Gmn59m9YkXoDDe9alr4zySH+qsxlscwojdf3/2Rj3SZG
+         EsUJEHEibi4SJRRxLe3h85MVoOplzvYvS3tG7LqyuPwC3VqnXgdCJfi3ZxchGgVz5cHI
+         hrg2s9g5nhfvVqn6a2rtg+/J7TzUEj6OwAGfNHWu5BRVrQP6Ha+tg8enBpW9rEe+Z4PE
+         xFyE9mxEO6i56LDzqcgZ61eQYlnpL1ChQtpFGTP6KWF5i7iQvmQg4EgdH74kdMk2wZxg
+         vdC1UDTLA+S0RDtrTvqkQ0e4WbMxX21YxRpMTKqvSOwd7xh2gDzJ9qq9Pa1aXWS9nOCe
+         CH5A==
+X-Gm-Message-State: AOAM533JUB0jh5vz1HLk/xu26i9LhCap4PbgEAt0El4AUl6BwsJ5KnJY
+        ZekKEWsHxbEFA/RD9yirUEOoeP4GG2yNnzDB4Vj+kw==
+X-Google-Smtp-Source: ABdhPJyBwA8BhmkEKHcEPRpWRBKh48D8fuSPYzorAnnFv5jxS0dZqPWX+zA3z0NcoxQHW0ZPQEkaQu5rZIFMN3wIHss=
+X-Received: by 2002:a05:6512:3da1:b0:44a:2aeb:28e4 with SMTP id
+ k33-20020a0565123da100b0044a2aeb28e4mr13385275lfv.579.1649450581749; Fri, 08
+ Apr 2022 13:43:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20220406153023.500847-1-masahiroy@kernel.org> <20220406153023.500847-6-masahiroy@kernel.org>
+ <CAKwvOdnHneCy6YeanmvDrabYMWysfQ=WMopsT_gRyrruT8=1Dw@mail.gmail.com> <CAK7LNATUv2YqGLGMTjzoCWf2tVkeYe6O9xa==wdDr0pgvSnnLQ@mail.gmail.com>
+In-Reply-To: <CAK7LNATUv2YqGLGMTjzoCWf2tVkeYe6O9xa==wdDr0pgvSnnLQ@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 8 Apr 2022 13:42:50 -0700
+Message-ID: <CAKwvOdnj77+8OHGZcJ-pAMcFW1FzjhkPsvs90PPD+L64t0+Mpw@mail.gmail.com>
+Subject: Re: [PATCH 5/7] kbuild: get rid of duplication in *.mod files
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Chuck Lever reported fsx-based xfstests generic 075 091 112 127 failing
-when 5.18-rc1 NFS server exports tmpfs: bisected to recent tmpfs change.
+On Thu, Apr 7, 2022 at 5:08 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
+>
+> On Fri, Apr 8, 2022 at 2:55 AM Nick Desaulniers <ndesaulniers@google.com> wrote:
+> >
+> > On Wed, Apr 6, 2022 at 8:31 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
+> > >
+> > > diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+> > > index 6ae92d119dfa..f7a30f378e20 100644
+> > > --- a/scripts/Makefile.build
+> > > +++ b/scripts/Makefile.build
+> > > @@ -303,7 +303,8 @@ $(obj)/%.prelink.o: $(obj)/%.o FORCE
+> > >         $(call if_changed,cc_prelink_modules)
+> > >  endif
+> > >
+> > > -cmd_mod = echo $(addprefix $(obj)/, $(call real-search, $*.o, .o, -objs -y -m)) > $@
+> > > +cmd_mod = echo $(addprefix $(obj)/, $(call real-search, $*.o, .o, -objs -y -m)) | \
+> > > +       $(AWK) -v RS='( |\n)' '!x[$$0]++' > $@
+> >
+> > God AWK is unreadable. Any reason we can't use GNU make's sort builtin?
+> > https://www.gnu.org/software/make/manual/html_node/Text-Functions.html
+>
+>
+> I did that in the previous submission.
+> https://lore.kernel.org/lkml/20220405113359.2880241-8-masahiroy@kernel.org/
+>
+>
+> After some thoughts, I decided to drop duplicates without sorting.
+>
+> If I alphabetically sorted the object list,
+> 7/7 of this series would be impossible.
+>
+>
+> I am not a big fan of AWK, but I do not know a cleaner way.
+> If you know a better idea, please tell me.
 
-Whilst nfsd_splice_action() does contain some questionable handling of
-repeated pages, and Chuck was able to work around there, history from
-Mark Hemment makes clear that there might be similar dangers elsewhere:
-it was not a good idea for me to pass ZERO_PAGE down to unknown actors.
+```
+# stable_dedup.py
+from sys import argv
 
-Revert shmem_file_read_iter() to using ZERO_PAGE for holes only when
-iter_is_iovec(); in other cases, use the more natural iov_iter_zero()
-instead of copy_page_to_iter().  We would use iov_iter_zero() throughout,
-but the x86 clear_user() is not nearly so well optimized as copy to user
-(dd of 1T sparse tmpfs file takes 57 seconds rather than 44 seconds).
+wordset = set()
+argv.pop(0)
+for word in argv: wordset.add(word)
+for word in wordset: print(word)
+```
+If that ever shows up in a profile of a kernel build, <set> in C++
+looks pretty similar.  Then that script can be reused in a couple of
+other places, and has a more descriptive name that hints at what it
+does.
 
-And now pagecache_init() does not need to SetPageUptodate(ZERO_PAGE(0)):
-which had caused boot failure on arm noMMU STM32F7 and STM32H7 boards
-Reported-by: Patrice CHOTARD <patrice.chotard@foss.st.com>
-
-Reported-by: Chuck Lever III <chuck.lever@oracle.com>
-Fixes: 56a8c8eb1eaf ("tmpfs: do not allocate pages on read")
-Signed-off-by: Hugh Dickins <hughd@google.com>
-Tested-by: Chuck Lever III <chuck.lever@oracle.com>
----
-
- mm/filemap.c |    6 ------
- mm/shmem.c   |   31 ++++++++++++++++++++-----------
- 2 files changed, 20 insertions(+), 17 deletions(-)
-
---- 5.18-rc1/mm/filemap.c
-+++ linux/mm/filemap.c
-@@ -1063,12 +1063,6 @@ void __init pagecache_init(void)
- 		init_waitqueue_head(&folio_wait_table[i]);
- 
- 	page_writeback_init();
--
--	/*
--	 * tmpfs uses the ZERO_PAGE for reading holes: it is up-to-date,
--	 * and splice's page_cache_pipe_buf_confirm() needs to see that.
--	 */
--	SetPageUptodate(ZERO_PAGE(0));
- }
- 
- /*
---- 5.18-rc1/mm/shmem.c
-+++ linux/mm/shmem.c
-@@ -2513,7 +2513,6 @@ static ssize_t shmem_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
- 		pgoff_t end_index;
- 		unsigned long nr, ret;
- 		loff_t i_size = i_size_read(inode);
--		bool got_page;
- 
- 		end_index = i_size >> PAGE_SHIFT;
- 		if (index > end_index)
-@@ -2570,24 +2569,34 @@ static ssize_t shmem_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
- 			 */
- 			if (!offset)
- 				mark_page_accessed(page);
--			got_page = true;
-+			/*
-+			 * Ok, we have the page, and it's up-to-date, so
-+			 * now we can copy it to user space...
-+			 */
-+			ret = copy_page_to_iter(page, offset, nr, to);
-+			put_page(page);
-+
-+		} else if (iter_is_iovec(to)) {
-+			/*
-+			 * Copy to user tends to be so well optimized, but
-+			 * clear_user() not so much, that it is noticeably
-+			 * faster to copy the zero page instead of clearing.
-+			 */
-+			ret = copy_page_to_iter(ZERO_PAGE(0), offset, nr, to);
- 		} else {
--			page = ZERO_PAGE(0);
--			got_page = false;
-+			/*
-+			 * But submitting the same page twice in a row to
-+			 * splice() - or others? - can result in confusion:
-+			 * so don't attempt that optimization on pipes etc.
-+			 */
-+			ret = iov_iter_zero(nr, to);
- 		}
- 
--		/*
--		 * Ok, we have the page, and it's up-to-date, so
--		 * now we can copy it to user space...
--		 */
--		ret = copy_page_to_iter(page, offset, nr, to);
- 		retval += ret;
- 		offset += ret;
- 		index += offset >> PAGE_SHIFT;
- 		offset &= ~PAGE_MASK;
- 
--		if (got_page)
--			put_page(page);
- 		if (!iov_iter_count(to))
- 			break;
- 		if (ret < nr) {
+Compare that with `$(AWK) -v RS='( |\n)' '!x[$$0]++'`.
+-- 
+Thanks,
+~Nick Desaulniers

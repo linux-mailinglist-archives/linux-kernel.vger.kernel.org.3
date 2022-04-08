@@ -2,160 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F13E94F9495
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 13:54:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7293D4F948F
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 13:53:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235246AbiDHL4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 07:56:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57930 "EHLO
+        id S235218AbiDHLzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 07:55:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235249AbiDHLzt (ORCPT
+        with ESMTP id S235208AbiDHLzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 07:55:49 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780B2E5E34
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 04:53:45 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id s2so8180006pfh.6
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 04:53:45 -0700 (PDT)
+        Fri, 8 Apr 2022 07:55:41 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B2970852
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 04:53:36 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id x20so9740728edi.12
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 04:53:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        d=fairphone.com; s=fair;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Kdl4QXqXhnKygshp8ZcUE319jCG3NXsTZBDr9jERR9M=;
-        b=SzLJjl7CWZJKh77B4MWkO9JqtpYiZRO4PQDZSk/42JdjzBus23rlMvSSyusmidzbQE
-         YJBdwgFIFxyGb0h/GeUqN59CsK6zAVttFmCCgMp6yv5ncBJ+dcExF9O3qP6lp8BVNeR8
-         rZ1VfdWmD62lAPM+l+5qaIrXPbGERiU5E4rRQCoNQthB+CMiVFl+Vh/GbWbn8VaYxwUX
-         Fg4MupROcMUU2YzwgwGqI4Eo/cAOXCteHhcfxt7RjjizZH+LUonka1Bh759HY6DLnAMQ
-         0YX+6hR6tSdlhN9Z3ODerobpJi5NaF5EIVban7JVyWqSPE1+CrWqJsVX+Qob4Py8Yw7t
-         tiBg==
+        bh=OA9i/F0Q7gGy6vw+8jnVyUvqFaSzdMTuMr4fiGshsOc=;
+        b=cdT1slNFAvXFtO/Y5oAMec1XE5W9VQ16Hq2VcxUwjVvQcH+F83dVgf+JenniHFRpjt
+         y50HrMWV33q+EUZrhjVZfbL4BxfK7nQqCeguIIalPfBBAwl2AgfgfpK7CNSY9/nOJdMx
+         vfO2o3rv31YA76DIKZHADIckPsToQORS6+HqWnSuwKA/fnUjQgi/cfvmiYhH/hgesNel
+         CIbIWNP+7JsqcI0l2UkWO/aIbADVFl8jz04a0KQy45RLJjlOOWloD7787fuRi3HXvbw3
+         NTQpl9LKzDiz69gjGDOSvIA7LpVopSXEGz4tTBLiDkxmkG06Mq4lNw4nCWMkzy/XuVJ/
+         B6PA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Kdl4QXqXhnKygshp8ZcUE319jCG3NXsTZBDr9jERR9M=;
-        b=oA0hBa0TNEw0owFMVI6p+RiE6CO5bafEvaO8zrWcBGNTxIw15VSwiKwKYWe1FrfHZF
-         1LjqK7KJ//P0CFU1KtCorRBQ2MKZLv0950yyU6RFCT8dpP3fKpisnpUnfXREb/0p4p2v
-         xhKHwldLVrcO5E8rlb8BSB7hXalaRRy4p8uFXqCJjdxqwudnr/PiZZhLgp2UZEtYD/55
-         AL52vWc0KP8nZcbHnNN84mZx/P7jndxmURo0NQYWhO6M7oITkT2QVfNYubncTds+NpAh
-         2cSxYEsHwaTFagnDS3ZOPaI3jbRZPfHW8lnl38sXQO3DAqIgxj7PLIPliyOOqhZtVK1x
-         FroA==
-X-Gm-Message-State: AOAM533Qf3TxtSWbJ27fzSxoxM7va8rXOMob/2zm4hT1U7X4VW60Kfpa
-        CttB1u0D+YNeUmK1m6znl7fAiQ==
-X-Google-Smtp-Source: ABdhPJxH5pgFUBr+wY6Kh7RiSYy24mTAYqFOK+oI+et1czR31xb/93dTYm/4RKc/ZgpxlrKRFzUVOQ==
-X-Received: by 2002:a05:6a00:e14:b0:4fe:3cdb:23f with SMTP id bq20-20020a056a000e1400b004fe3cdb023fmr19371062pfb.86.1649418824808;
-        Fri, 08 Apr 2022 04:53:44 -0700 (PDT)
-Received: from localhost.localdomain ([2409:8a28:e6c:f010:a5e3:608e:7730:5b8e])
-        by smtp.gmail.com with ESMTPSA id w123-20020a623081000000b005056a4d71e3sm5185409pfw.77.2022.04.08.04.53.37
+        bh=OA9i/F0Q7gGy6vw+8jnVyUvqFaSzdMTuMr4fiGshsOc=;
+        b=a7RDy9RH14iR/nmmj7HouNEVz+oLE9XIrJtGZWWFLlUkjLDMMc/D4cjIV1C904VK7I
+         016SvCg3MGgNAu5gdhv3SJW5XdFwvI3P77k91sxQiIwT9RmUZUxG/GEMoAbwDjXRsDG7
+         izFL4gBJL29VJzuii2Z4JK4fh4D+yHkYlTAiUOhI417pplgaDsV1fReR3nM2B+zL12Fw
+         o5dwhhsODkEYtuR1YOKZU1OdcKDAl8OsVzhOAOaQTMBNCNh1zkQU/bCrOyeusbZQ6DR3
+         ghF6VLE8R5OX8lgRpQOLTIrb5ATi3OB9I+txS5rd8KQtRlRtYg/Zu7qYiK8uWYoIXWVE
+         qP3w==
+X-Gm-Message-State: AOAM532E4QG1UDvrq7FCSCKnvgMpW/HEJ1BmRU4FfuRjnqdiFoSEvXyK
+        ujD2OgEdi1DDPRk9DeJNggrVqA==
+X-Google-Smtp-Source: ABdhPJxadi9ASalxmUdAyobBgUBlVo0Duu8xhPyv+ELTnJjcIfzBRWcwHvQuE6G+lfW3km7c5/E0Cw==
+X-Received: by 2002:a05:6402:2809:b0:41d:124e:4292 with SMTP id h9-20020a056402280900b0041d124e4292mr6103371ede.263.1649418815208;
+        Fri, 08 Apr 2022 04:53:35 -0700 (PDT)
+Received: from otso.. (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id r29-20020a50c01d000000b00415fb0dc793sm10470899edb.47.2022.04.08.04.53.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 04:53:43 -0700 (PDT)
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com
-Cc:     linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
-        songmuchun@bytedance.com,
-        Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH v2 1/2] sched/fair: Fix cfs_rq_clock_pelt() for throttled cfs_rq
-Date:   Fri,  8 Apr 2022 19:53:08 +0800
-Message-Id: <20220408115309.81603-1-zhouchengming@bytedance.com>
+        Fri, 08 Apr 2022 04:53:34 -0700 (PDT)
+From:   Luca Weiss <luca.weiss@fairphone.com>
+To:     linux-input@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] dt-bindings: input: Add bindings for Awinic AW8695 haptics
+Date:   Fri,  8 Apr 2022 13:53:08 +0200
+Message-Id: <20220408115311.237039-1-luca.weiss@fairphone.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 23127296889f ("sched/fair: Update scale invariance of PELT")
-change to use rq_clock_pelt() instead of rq_clock_task(), we should also
-use rq_clock_pelt() for throttled_clock_task_time and throttled_clock_task
-accounting to get correct cfs_rq_clock_pelt() of throttled cfs_rq. And
-rename throttled_clock_task(_time) to be clock_pelt rather than clock_task.
+Add a document describing the bindings for the AW8695 LRA Haptic Driver.
 
-Fixes: 23127296889f ("sched/fair: Update scale invariance of PELT")
-Reviewed-by: Ben Segall <bsegall@google.com>
-Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 ---
-v2:
- - rename throttled_clock_task(_time) to be clock_pelt rather than
-   clock_task, thanks Ben.
- - add Reviewed-by tags.
----
- kernel/sched/fair.c  | 8 ++++----
- kernel/sched/pelt.h  | 4 ++--
- kernel/sched/sched.h | 4 ++--
- 3 files changed, 8 insertions(+), 8 deletions(-)
+ .../bindings/input/awinic,aw8695-haptics.yaml | 133 ++++++++++++++++++
+ 1 file changed, 133 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/input/awinic,aw8695-haptics.yaml
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index d4bd299d67ab..dc73c3b500a5 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -4846,8 +4846,8 @@ static int tg_unthrottle_up(struct task_group *tg, void *data)
- 
- 	cfs_rq->throttle_count--;
- 	if (!cfs_rq->throttle_count) {
--		cfs_rq->throttled_clock_task_time += rq_clock_task(rq) -
--					     cfs_rq->throttled_clock_task;
-+		cfs_rq->throttled_clock_pelt_time += rq_clock_pelt(rq) -
-+					     cfs_rq->throttled_clock_pelt;
- 
- 		/* Add cfs_rq with load or one or more already running entities to the list */
- 		if (!cfs_rq_is_decayed(cfs_rq) || cfs_rq->nr_running)
-@@ -4864,7 +4864,7 @@ static int tg_throttle_down(struct task_group *tg, void *data)
- 
- 	/* group is entering throttled state, stop time */
- 	if (!cfs_rq->throttle_count) {
--		cfs_rq->throttled_clock_task = rq_clock_task(rq);
-+		cfs_rq->throttled_clock_pelt = rq_clock_pelt(rq);
- 		list_del_leaf_cfs_rq(cfs_rq);
- 	}
- 	cfs_rq->throttle_count++;
-@@ -5308,7 +5308,7 @@ static void sync_throttle(struct task_group *tg, int cpu)
- 	pcfs_rq = tg->parent->cfs_rq[cpu];
- 
- 	cfs_rq->throttle_count = pcfs_rq->throttle_count;
--	cfs_rq->throttled_clock_task = rq_clock_task(cpu_rq(cpu));
-+	cfs_rq->throttled_clock_pelt = rq_clock_pelt(cpu_rq(cpu));
- }
- 
- /* conditionally throttle active cfs_rq's from put_prev_entity() */
-diff --git a/kernel/sched/pelt.h b/kernel/sched/pelt.h
-index c336f5f481bc..4ff2ed4f8fa1 100644
---- a/kernel/sched/pelt.h
-+++ b/kernel/sched/pelt.h
-@@ -145,9 +145,9 @@ static inline u64 rq_clock_pelt(struct rq *rq)
- static inline u64 cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)
- {
- 	if (unlikely(cfs_rq->throttle_count))
--		return cfs_rq->throttled_clock_task - cfs_rq->throttled_clock_task_time;
-+		return cfs_rq->throttled_clock_pelt - cfs_rq->throttled_clock_pelt_time;
- 
--	return rq_clock_pelt(rq_of(cfs_rq)) - cfs_rq->throttled_clock_task_time;
-+	return rq_clock_pelt(rq_of(cfs_rq)) - cfs_rq->throttled_clock_pelt_time;
- }
- #else
- static inline u64 cfs_rq_clock_pelt(struct cfs_rq *cfs_rq)
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 58263f90c559..762be73972bd 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -603,8 +603,8 @@ struct cfs_rq {
- 	s64			runtime_remaining;
- 
- 	u64			throttled_clock;
--	u64			throttled_clock_task;
--	u64			throttled_clock_task_time;
-+	u64			throttled_clock_pelt;
-+	u64			throttled_clock_pelt_time;
- 	int			throttled;
- 	int			throttle_count;
- 	struct list_head	throttled_list;
+diff --git a/Documentation/devicetree/bindings/input/awinic,aw8695-haptics.yaml b/Documentation/devicetree/bindings/input/awinic,aw8695-haptics.yaml
+new file mode 100644
+index 000000000000..9f573daaba0e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/input/awinic,aw8695-haptics.yaml
+@@ -0,0 +1,133 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/input/awinic,aw8695-haptics.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Awinic AW8695 LRA Haptic Driver
++
++maintainers:
++  - Luca Weiss <luca.weiss@fairphone.com>
++
++properties:
++  compatible:
++    const: awinic,aw8695
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++    description: GPIO connected to INTN pin (edge falling)
++
++  reset-gpios:
++    maxItems: 1
++    description: GPIO connected to RSTN pin (active high)
++
++  awinic,f0-preset:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: Default value for the f0 of LRA
++
++  awinic,f0-coefficient:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: Coefficient between actual f0 and the value in the registers
++
++  awinic,f0-calibration-percent:
++    maxItems: 1
++    description: Limit of f0 deviation from awinic,f0-preset
++
++  awinic,drive-level:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: Level of drive waveform in normal driving
++
++  awinic,f0-detection-play-time:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: Drive waveform play times in the first period in the f0 detection
++
++  awinic,f0-detection-wait-time:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: Waveform wait times in the f0 detection
++
++  awinic,f0-detection-repeat:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: Repeat times in the f0 detection
++
++  awinic,f0-detection-trace:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: Drive waveform play times in the second period and later in the f0 detection
++
++  awinic,boost-debug:
++    $ref: /schemas/types.yaml#/definitions/uint8-array
++    minItems: 3
++    maxItems: 3
++    description: Values for BSTDBG1-3 registers
++
++  awinic,tset:
++    $ref: /schemas/types.yaml#/definitions/uint8
++    description: Value for TSET register
++
++  awinic,r-spare:
++    $ref: /schemas/types.yaml#/definitions/uint8
++    description: Value for R_SPARE register
++
++  awinic,bemf-upper-threshold:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: Back EMF (electromotive force) upper threshold
++
++  awinic,bemf-lower-threshold:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: Back EMF (electromotive force) lower threshold
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - reset-gpios
++  - awinic,f0-preset
++  - awinic,f0-coefficient
++  - awinic,f0-calibration-percent
++  - awinic,drive-level
++  - awinic,f0-detection-play-time
++  - awinic,f0-detection-wait-time
++  - awinic,f0-detection-repeat
++  - awinic,f0-detection-trace
++  - awinic,boost-debug
++  - awinic,tset
++  - awinic,r-spare
++  - awinic,bemf-upper-threshold
++  - awinic,bemf-lower-threshold
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        haptics@5a {
++            compatible = "awinic,aw8695";
++            reg = <0x5a>;
++            interrupts-extended = <&tlmm 85 IRQ_TYPE_EDGE_FALLING>;
++            reset-gpios = <&tlmm 90 GPIO_ACTIVE_HIGH>;
++
++            awinic,f0-preset = <2350>;
++            awinic,f0-coefficient = <260>;
++            awinic,f0-calibration-percent = <7>;
++            awinic,drive-level = <125>;
++
++            awinic,f0-detection-play-time = <5>;
++            awinic,f0-detection-wait-time = <3>;
++            awinic,f0-detection-repeat = <2>;
++            awinic,f0-detection-trace = <15>;
++
++            awinic,boost-debug = /bits/ 8 <0x30 0xeb 0xd4>;
++            awinic,tset = /bits/ 8 <0x12>;
++            awinic,r-spare = /bits/ 8 <0x68>;
++
++            awinic,bemf-upper-threshold = <4104>;
++            awinic,bemf-lower-threshold = <1016>;
++        };
++    };
 -- 
 2.35.1
 

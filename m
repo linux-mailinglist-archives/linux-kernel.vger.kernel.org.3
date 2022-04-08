@@ -2,101 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A5DE4F9101
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 10:40:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A284F9108
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 10:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232148AbiDHImE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 04:42:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45538 "EHLO
+        id S232195AbiDHInn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 04:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232127AbiDHImA (ORCPT
+        with ESMTP id S232127AbiDHIng (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 04:42:00 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EFDC25286;
-        Fri,  8 Apr 2022 01:39:57 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id b15so7818667pfm.5;
-        Fri, 08 Apr 2022 01:39:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=V5DMYegRGGGrvLJGYRIFDIFxu5W5SILxKBy8IdkRB5k=;
-        b=SOXNIESiSn8Wqd0OO6NKECbj+4aLsDWb0E+y9eEd7QeXMM1vlCT6/8XVhxRZ3KdFi3
-         Rhhdf2yTt9ZumuCi5qw9C2Rdro3XEwFXjqapofkfCg42mLM9I41I0mmV/7lRvV/C6wah
-         ElGR6fwiUYeYEz6KmurzyKzdGTVDxkox69zSCDzGRlvFIf/m0lWwbgn5vafm7A6Ha85f
-         jSvS4QnjQugsZ47R7GyaLRtDOM0WK9MNKctiYL0fx3442wExMQfClwn5EI/8k7uyK60D
-         9GA31uSNh4aP2VZO721+lDV4/pGykHJ+ZqbVpOA/qEswvUd4xumGZ3q5U0BPoIGlyLYg
-         Aldg==
+        Fri, 8 Apr 2022 04:43:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F2CE589CC8
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 01:41:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649407291;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hfm3ta5VF34jEcNTC76QZOHm3mie3+2AwQoQ84bW2eg=;
+        b=HHXMPnKCSvldf1yi1T2MuLN/5kkXpvjYxI2TMrOVw/AAaqdJ76LVRbGkR/LO46wbKhHihS
+        OXAlvRddOniUZu7t6Yxt8N1a06ln1cTEtBEHTDRNrGTrbkEOWTWqNsqnZOxBZa4pCVp82X
+        048QavF6oxN953AADhYTDfRep849EvM=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-646-0yhlYKHQORucY4P2Oel2LQ-1; Fri, 08 Apr 2022 04:41:30 -0400
+X-MC-Unique: 0yhlYKHQORucY4P2Oel2LQ-1
+Received: by mail-qv1-f71.google.com with SMTP id p3-20020a05621421e300b0044427d0ab90so556840qvj.17
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 01:41:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=V5DMYegRGGGrvLJGYRIFDIFxu5W5SILxKBy8IdkRB5k=;
-        b=K82Ymq/PsF7zDW5sCsfSe9fdRrNWOoJqh6M6PM2Ha7+xT96XSMuGP4Q9ybQZ0VP9hB
-         MrAweQrbeXzLQdDIwG0VjFTMnuNhIV/D/CdfK7tfNjXLicSsAoCnVYfI/IvzVyTKnkkw
-         JT09qnRfXOIoUgpfbqNHift7zPwS9G19XfZq2bbTdsvQtpQycDuPbaQVVZ8jTUwU6/XZ
-         Gq6BgqCwwZy6uXXnMU/lEPjxBo6M+ZLueBll48y5u8CbFmaSt4GIz1SYCj2c4tjG56PU
-         zhpx8xT7MQTmIywbsXBYg7bRDoWM7axSvaYgHLXqNB1nxKsbg5Jghz46DB+8En1GSnjT
-         A9Lg==
-X-Gm-Message-State: AOAM530hCVaaFpfnY34rHu5kxlpp1qyw4yrpsMMjglhWoOv6YGjgVGWy
-        x2jPfU2x3Y7lnkIYKuo6UxM=
-X-Google-Smtp-Source: ABdhPJyZpiVlMXwaGsnFkhtFrFHk0tDhdJ24lU257KGluptksTLUp9MbtVxnzCsz78sn5CD/MsGPOA==
-X-Received: by 2002:a63:9d8f:0:b0:398:dad:c3d8 with SMTP id i137-20020a639d8f000000b003980dadc3d8mr14822781pgd.228.1649407196938;
-        Fri, 08 Apr 2022 01:39:56 -0700 (PDT)
-Received: from localhost.localdomain ([119.3.119.18])
-        by smtp.gmail.com with ESMTPSA id s16-20020a056a001c5000b00505688553e1sm4631722pfw.57.2022.04.08.01.39.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 01:39:56 -0700 (PDT)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     song@kernel.org
-Cc:     guoqing.jiang@linux.dev, linux-kernel@vger.kernel.org,
-        linux-raid@vger.kernel.org, rgoldwyn@suse.com,
-        stable@vger.kernel.org, xiam0nd.tong@gmail.com
-Subject: Re: [PATCH v2] md: fix an incorrect NULL check in sync_sbs
-Date:   Fri,  8 Apr 2022 16:39:35 +0800
-Message-Id: <20220408083935.25816-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <CAPhsuW6S=PJsgVR=OkObMvs9uJ2QA3LFe+ZH8XtEyKRFh7XxHA@mail.gmail.com>
-References: <CAPhsuW6S=PJsgVR=OkObMvs9uJ2QA3LFe+ZH8XtEyKRFh7XxHA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=hfm3ta5VF34jEcNTC76QZOHm3mie3+2AwQoQ84bW2eg=;
+        b=e6ghWTnEXyBg5FdiAuTc2UYj2nGXrYqGhwjMzRWibhcuCWOxbPf2in+oYHdY1MhA9Y
+         OE034VwdujkMHqAJRcxn7a+LPMiuYH4tSSnq9q70HNKfNTbVt9UbjIkrTgKCoBea0ilQ
+         SaPAf/RnKpVnATBgz945P7j9162AJU5N/0i0SyvmZt/YCxbcP4u3f9R0Jxme8YGUjLQv
+         Qji1EyRTDHY8NAzzEdLuvr97/jhdMunquEhVKczmd7j/ozWNll14entGfHnU6m4cfBJF
+         X9JO1hLyXSyNSb8Kb3cTuMyKfyHbb2RsPdmMNTGtnMJWxbvh7V6nFapwFxTyUBVBlvJX
+         x4BQ==
+X-Gm-Message-State: AOAM532lEacoJkc6yAmQKDI+0H/3qD4jOZR6RtVv7DiX9Xnny7t2wmc5
+        R5GmNiZolArH6ioBUp3v4ZuyqOyY8Ecrh0yp4qoR1ShoIAfYV6uGiw+YrdVKKpI7t4japmx84sy
+        K5CC/sSA5y3Glit3kxppveISj
+X-Received: by 2002:ad4:5ba2:0:b0:441:402c:2534 with SMTP id 2-20020ad45ba2000000b00441402c2534mr14981910qvq.75.1649407289635;
+        Fri, 08 Apr 2022 01:41:29 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw3NYk1umtpKK/Yl6GxoWxDcDTzzxyZCQ9JzpN5/chhlU6uzvzsQ5/3if7JRUo2FsPUePWm5w==
+X-Received: by 2002:ad4:5ba2:0:b0:441:402c:2534 with SMTP id 2-20020ad45ba2000000b00441402c2534mr14981891qvq.75.1649407289457;
+        Fri, 08 Apr 2022 01:41:29 -0700 (PDT)
+Received: from [192.168.0.188] ([24.48.139.231])
+        by smtp.gmail.com with ESMTPSA id t19-20020ac85893000000b002e1afa26591sm19538890qta.52.2022.04.08.01.41.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Apr 2022 01:41:29 -0700 (PDT)
+Message-ID: <ee07a31c-c514-4a88-599f-14a30e93f32e@redhat.com>
+Date:   Fri, 8 Apr 2022 04:41:27 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v8] oom_kill.c: futex: Don't OOM reap the VMA containing
+ the robust_list_head
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Rafael Aquini <aquini@redhat.com>,
+        Waiman Long <longman@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Christoph von Recklinghausen <crecklin@redhat.com>,
+        Don Dutile <ddutile@redhat.com>,
+        "Herton R . Krzesinski" <herton@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Joel Savitz <jsavitz@redhat.com>,
+        Darren Hart <dvhart@infradead.org>, stable@kernel.org
+References: <20220408032809.3696798-1-npache@redhat.com>
+ <20220408081549.GM2731@worktop.programming.kicks-ass.net>
+From:   Nico Pache <npache@redhat.com>
+In-Reply-To: <20220408081549.GM2731@worktop.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 7 Apr 2022 17:36:48 -0700, Song Liu wrote:
-> On Mon, Mar 28, 2022 at 1:11 AM Xiaomeng Tong <xiam0nd.tong@gmail.com> wrote:
-> >
-> > The bug is here:
-> >         if (!rdev)
-> >
-> > The list iterator value 'rdev' will *always* be set and non-NULL
-> > by rdev_for_each(), so it is incorrect to assume that the iterator
-> > value will be NULL if the list is empty or no element found.
-> > Otherwise it will bypass the NULL check and lead to invalid memory
-> > access passing the check.
-> >
-> > To fix the bug, use a new variable 'iter' as the list iterator,
-> > while using the original variable 'pdev' as a dedicated pointer to
-> 
-> s/pdev/rdev/
->
-Have fixed it in PATCH v3, please check it. Thank you.
 
-> 
-> > point to the found element.
-> >
-> > Cc: stable@vger.kernel.org
-> > Fixes: 2aa82191ac36c ("md-cluster: Perform a lazy update")
-> 
-> "Fixes" should use a hash of 12 characters (13 given here). Did
-> checkpatch.pl complain about it?
 
-Have fixed it in PATCH v3, please check it. Thank you.
+On 4/8/22 04:15, Peter Zijlstra wrote:
+> On Thu, Apr 07, 2022 at 11:28:09PM -0400, Nico Pache wrote:
+>> The pthread struct is allocated on PRIVATE|ANONYMOUS memory [1] which can
+>> be targeted by the oom reaper. This mapping is used to store the futex
+>> robust list head; the kernel does not keep a copy of the robust list and
+>> instead references a userspace address to maintain the robustness during
+>> a process death. A race can occur between exit_mm and the oom reaper that
+>> allows the oom reaper to free the memory of the futex robust list before
+>> the exit path has handled the futex death:
+>>
+>>     CPU1                               CPU2
+>> ------------------------------------------------------------------------
+>>     page_fault
+>>     do_exit "signal"
+>>     wake_oom_reaper
+>>                                         oom_reaper
+>>                                         oom_reap_task_mm (invalidates mm)
+>>     exit_mm
+>>     exit_mm_release
+>>     futex_exit_release
+>>     futex_cleanup
+>>     exit_robust_list
+>>     get_user (EFAULT- can't access memory)
+>>
+>> If the get_user EFAULT's, the kernel will be unable to recover the
+>> waiters on the robust_list, leaving userspace mutexes hung indefinitely.
+>>
+>> Use the robust_list address stored in the kernel to skip the VMA that holds
+>> it, allowing a successful futex_cleanup.
+>>
+>> Theoretically a failure can still occur if there are locks mapped as
+>> PRIVATE|ANON; however, the robust futexes are a best-effort approach.
+>> This patch only strengthens that best-effort.
+>>
+>> The following case can still fail:
+>> robust head (skipped) -> private lock (reaped) -> shared lock (skipped)
+> 
+> This is still all sorts of confused.. it's a list head, the entries can
+> be in any random other VMA. You must not remove *any* user memory before
+> doing the robust thing. Not removing the VMA that contains the head is
+> pointless in the extreme.
+Not sure how its pointless if it fixes all the different reproducers we've
+written for it. As for the private lock case we stated here, we havent been able
+to reproduce it, but I could see how it can be a potential issue (which is why
+its noted).
+> 
+> Did you not read the previous discussion?
 
---
-Xiaomeng Tong
+I did... Thats why I added the blurb about best-effort and the case that can
+theoretically still fail.
+
+The oom reaper doesn't reap shared memory but WITHOUT this change it was reaping
+the head (PRIVATE|ANON) which is needed to get to those shared mappings; so
+shared locks are safe with this added change.
+
+If a user implements private locks they can only be used within that process. If
+that process is OOMing then it doesnt really matter what happens to the
+futexes... all of those threads running under that process will terminate anyways.
+
+Perhaps I'm misunderstanding you.
+
+-- Nico
+

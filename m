@@ -2,97 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AACE94F8D7A
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:25:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA0B34F8EA0
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234030AbiDHD5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 23:57:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55718 "EHLO
+        id S234059AbiDHD6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 23:58:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234060AbiDHD5Q (ORCPT
+        with ESMTP id S234008AbiDHD6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 23:57:16 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 588ABCEE30;
-        Thu,  7 Apr 2022 20:55:10 -0700 (PDT)
-X-UUID: 262dc70b01fc411286516e30d5904859-20220408
-X-UUID: 262dc70b01fc411286516e30d5904859-20220408
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1024826225; Fri, 08 Apr 2022 11:55:05 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 8 Apr 2022 11:55:04 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 8 Apr
- 2022 11:55:03 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 8 Apr 2022 11:55:03 +0800
-Message-ID: <a48c74e447c233799a497702fe90cfa126eb952a.camel@mediatek.com>
-Subject: Re: [PATCH 0/4] cpufreq: mediatek: introduce mtk cpufreq
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Tim Chang <jia-wei.chang@mediatek.com>
-CC:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <fan.chen@mediatek.com>,
-        <louis.yu@mediatek.com>, <roger.lu@mediatek.com>,
-        <Allen-yy.Lin@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <hsinyi@google.com>
-Date:   Fri, 8 Apr 2022 11:55:03 +0800
-In-Reply-To: <20220308043615.uamxqylo3mvw4rhs@vireshk-i7>
-References: <20220307122151.11666-1-jia-wei.chang@mediatek.com>
-         <20220308043615.uamxqylo3mvw4rhs@vireshk-i7>
+        Thu, 7 Apr 2022 23:58:24 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE9DDE91B
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 20:56:22 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2d7eaa730d9so65943417b3.13
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 20:56:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=HxFczrqsspWyPdqTCif/D0IhzdUHRDLBzRRwTlKUif4=;
+        b=OpAiXGIhVTB/vTq+PHCL6R254gERCairQa9Ci41IeF1qLemf8XiEknJyK9Qj6Xs1GW
+         K7WpgXr2EA17KLl/s4ujXAp5fKXj6Xw078lOQwj1Q/BY5uq1kQT3b5ejYkJ5qqHiW0yK
+         aDjMN+hXma8v/A4lyggTad1UeC6FgVVVHzWbdfdzsvOb6vgvpXjsWygNGHBdBmop+AaA
+         o6CBjt20f1W7sJ77QjxsdVH8SloKdX922qn7sb64nBoukV1FFCcXuLm3tuKG+CljIAAM
+         mrt8cwt9D7X4gb1te5BnaS2qFjU3ZU6zqtUtJ3ij0eCLxZzpHO3OZoc+19JMxnnvTBOG
+         EHcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=HxFczrqsspWyPdqTCif/D0IhzdUHRDLBzRRwTlKUif4=;
+        b=sdJl5itvYX+UIe/5GhkaEmlENgs7kewRoXceQ+gr8/u04zBZJe5QLtkgz5jG6cH35X
+         8CZc32Exfx94ogUErhlgUH4Wsug3L+cDPtMhY02/M4ST9u4dUYDwuc2moJXdkzFq2WFI
+         pGB5Wciubyz19GKT1AorifYTY/yveczMJJNVlJ9R65fk+/MmCBY3FoGR5urtvX3FKrDV
+         XM9Vbof9E2/zMKWBFouCqB6C5Rdvfm0yuCPUptt9rUZiDV1ar3h+8EbTl/dLHDHY5mP8
+         QPytrlu/sss6Q0N7l4KEz2ctXagpCG0ouY6jFmnxB+IYSOB7llvn8LKc/BWb2hKaCdPy
+         XiCg==
+X-Gm-Message-State: AOAM531FicgMACIapogdEoZmM7BPCLamfnN+Wr8u2Frb0jyCTw3ThTB6
+        6SMn8PlcJR6IKl/gGy0Z/2KGunb+RuhD
+X-Google-Smtp-Source: ABdhPJxGss2gEVXU1qEfZ8LDHdcCgN0sHB3FaIVikPe2VRhZW0mD6pgY0SGsZRVMI8prYHhp9fSSBvfka1ac
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:560:aa27:649e:a07d])
+ (user=irogers job=sendgmr) by 2002:a25:dad1:0:b0:634:63aa:6ec2 with SMTP id
+ n200-20020a25dad1000000b0063463aa6ec2mr12250168ybf.159.1649390181920; Thu, 07
+ Apr 2022 20:56:21 -0700 (PDT)
+Date:   Thu,  7 Apr 2022 20:56:11 -0700
+Message-Id: <20220408035616.1356953-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
+Subject: [PATCH v3 0/5] Make evlist CPUs more accurate
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        German Gomez <german.gomez@arm.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Alexander Antonov <alexander.antonov@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-03-08 at 10:06 +0530, Viresh Kumar wrote:
-> On 07-03-22, 20:21, Tim Chang wrote:
-> > CPUFREQ is DVFS driver used for power saving by scaling clock
-> > frequency
-> > and supply voltage of CPUs. This module cooperates with CCI DEVFREQ
-> > for
-> > certain Mediatek SoCs.
-> 
-> Both subject and this log talks as if you are adding a new cpufreq
-> driver, while what you are doing is just cleanup mostly. This isn't
-> how it should be done.
-> 
-> You need to be very explicit with what you are doing and make that
-> change in a separate patch. The cover letter should tell what you are
-> doing and why.
-> 
+evlist has all_cpus, computed to be the merge of all evsel CPU maps,
+and cpus. cpus may contain more CPUs than all_cpus, as by default cpus
+holds all online CPUs whilst all_cpus holds the merge/union from
+evsels. For an uncore event there may just be 1 CPU per socket, which
+will be a far smaller CPU map than all online CPUs.
 
-Hello Viresh,
+The v1 patches changed cpus to be called user_requested_cpus, to
+reflect their potential user specified nature. The user_requested_cpus
+are set to be the current value intersected with all_cpus, so that
+user_requested_cpus is always a subset of all_cpus. This fixes
+printing code for metrics so that unnecessary blank lines aren't
+printed.
 
-Thanks for your suggestion.
-Indeed, the subject is not proper for this series.
-I will help to upstream next version and fix the issue because of
-resource issues.
+To make the intersect function perform well, a perf_cpu_map__is_subset
+function is added. While adding this function, the v2 patches also
+used it in perf_cpu_map__merge to avoid creating a new CPU map for
+some currently missed patterns. The reference counts for these
+functions is simplified as discussed here:
+https://lore.kernel.org/lkml/YkdOpJDnknrOPq2t@kernel.org/ but this
+means users of perf_cpu_map__merge must now do a put on the 1st
+argument.
 
-Thanks.
+v2. Reorders the "Avoid segv" patch and makes other adjustments
+    suggested by Arnaldo Carvalho de Melo <acme@kernel.org>.
+v3. Modify reference count behaviour for merge and intersect. Add
+    intersect tests and tidy thee cpu map tests suite.
 
-BRs,
-Rex
+Ian Rogers (5):
+  perf cpumap: Don't decrement refcnt on args to merge
+  perf tests: Additional cpumap merge tests
+  perf cpumap: Add intersect function.
+  perf evlist: Respect all_cpus when setting user_requested_cpus
+  perf test: Combine cpu map tests into 1 suite
+
+ tools/lib/perf/cpumap.c              | 46 ++++++++++++++---
+ tools/lib/perf/evlist.c              |  6 ++-
+ tools/lib/perf/include/perf/cpumap.h |  2 +
+ tools/perf/tests/builtin-test.c      |  4 +-
+ tools/perf/tests/cpumap.c            | 74 +++++++++++++++++++++++++---
+ tools/perf/tests/tests.h             |  4 +-
+ tools/perf/util/evlist.c             |  7 +++
+ 7 files changed, 120 insertions(+), 23 deletions(-)
+
+-- 
+2.35.1.1178.g4f1659d476-goog
 

@@ -2,65 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4FFA4F9060
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 10:07:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF4E64F9064
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 10:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230424AbiDHIJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 04:09:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55304 "EHLO
+        id S230448AbiDHIKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 04:10:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbiDHIJ0 (ORCPT
+        with ESMTP id S229520AbiDHIKE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 04:09:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CAD7F2DA9C
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 01:07:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649405242;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=t9bfIQkql2j9TcUCqmraCaFGU4s4Y5bRorgJzCIZGMc=;
-        b=G41w+SAn+EmYpaAkEM3ESi8qEDTz5kUe7GcL0ngxfDWPiAg/+YmcAiZ8S5Xd8eR3Kdnhhj
-        qP/NDZg4yci0K/BcDPUAk9wNL1ijasnm33j5oVSu2q69I0hxcPUsXionaOHgwkGTtYkFRT
-        f+HcUE+cBpFvapFzzyk7qJdmPtXk8S4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-563-jFMIjZk2O0CNauJWX87WiA-1; Fri, 08 Apr 2022 04:07:19 -0400
-X-MC-Unique: jFMIjZk2O0CNauJWX87WiA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C20123C11CE0;
-        Fri,  8 Apr 2022 08:07:18 +0000 (UTC)
-Received: from localhost (ovpn-12-202.pek2.redhat.com [10.72.12.202])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7D18B54ACB0;
-        Fri,  8 Apr 2022 08:07:17 +0000 (UTC)
-Date:   Fri, 8 Apr 2022 16:07:14 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Eric DeVolder <eric.devolder@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com,
-        akpm@linux-foundation.org
-Subject: Re: [PATCH v6 2/8] x86/crash: Introduce new options to support cpu
- and memory hotplug
-Message-ID: <Yk/tMnoYN/p6vxxT@MiWiFi-R3L-srv>
-References: <20220401183040.1624-1-eric.devolder@oracle.com>
- <20220401183040.1624-3-eric.devolder@oracle.com>
+        Fri, 8 Apr 2022 04:10:04 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42022ED46;
+        Fri,  8 Apr 2022 01:07:59 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id m16so7246740plx.3;
+        Fri, 08 Apr 2022 01:07:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=B+JiRYo7agfKbKwTwituM6LMKiUxBumes3CKn2uzgf0=;
+        b=JJJTySUjRqBxzXWshidv8Dq5SyZUleW8gXMDV+vAfOOGz1TgbhjhtGHmPtzMO47Qpt
+         D17EodugP0xjW+fDLUTeAqNIh7wxWrkJk9tnTtoku4CdksjcFGiFtl6/vFpPv4SLsRCQ
+         XwLPwJjhPygOMhL10asvUVQrA08+Ws9G2hMOSZVWz1CGJasgAbq3BZLlfOkJd+6dmszK
+         GzenXbEwwAPgCrKyLvzWpXbA8tQl0FJCuWj+kh0YHFpqlCsGOqPIRROK+P9L7Pl1vqFx
+         UJiwD/g17eywATi1MbpKpmQX0AzJm4SrHOMXmnl6ZSbyB/5T3qC2RoiAeZ/tHinsEALE
+         LQKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=B+JiRYo7agfKbKwTwituM6LMKiUxBumes3CKn2uzgf0=;
+        b=HKbMJIlBvChywdq0GJuwnR/QNTorp7zcRtfZZEwNj357rqJeVUEGjwwNOAxfAPZpup
+         rAM6lJqS5EaJwNEOIAdIxkjdLedkt/PR0QNM9bsRFoE6kQ20nEgXfRC/+TytTS76Vjet
+         rq1SLO9X1I7yAdGgxZ3hdVvsfgl64S4NnPni/eOtGYqihDn6iDX8wXvD2spVWbp4JTuZ
+         B89Ezbg6NMUSxOLLHtQF4HYFYTVmvAjDJGgwdjrABlYCW81nLBSyf8H9DgQmhP6NAFGw
+         FjVYawmbnQU46ICc6s4x5uwM/yP7OelfayExiWLRHwEjW7f6aXzY933FhQRvlOddoXUA
+         IVGg==
+X-Gm-Message-State: AOAM530ovevkrXGr6LCOL4rNbKKtF2F7epqbSe2tdqU3vK8VC/0QgLJw
+        yyUYtNeeAUEELvf8G0kSQZs=
+X-Google-Smtp-Source: ABdhPJwIjs98+5uVAX+yPTUno0WmRkBvkNTKFkKcwI6jy/kJk6HmmnH8qAo29RwLToJ11X0msq374w==
+X-Received: by 2002:a17:90b:2242:b0:1c6:80e3:71b6 with SMTP id hk2-20020a17090b224200b001c680e371b6mr20340979pjb.152.1649405279225;
+        Fri, 08 Apr 2022 01:07:59 -0700 (PDT)
+Received: from [192.168.43.80] (subs03-180-214-233-82.three.co.id. [180.214.233.82])
+        by smtp.gmail.com with ESMTPSA id 204-20020a6302d5000000b00385f29b02b2sm21412168pgc.50.2022.04.08.01.07.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Apr 2022 01:07:58 -0700 (PDT)
+Message-ID: <374de447-0d28-6b85-6abc-687d9a444b66@gmail.com>
+Date:   Fri, 8 Apr 2022 15:07:50 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220401183040.1624-3-eric.devolder@oracle.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 5.17 0000/1123] 5.17.2-rc2 review
+Content-Language: en-US
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220406133122.897434068@linuxfoundation.org>
+ <d12e1f2e-bcad-e7d5-5d14-e435340ffc2c@gmail.com>
+In-Reply-To: <d12e1f2e-bcad-e7d5-5d14-e435340ffc2c@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,62 +79,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/01/22 at 02:30pm, Eric DeVolder wrote:
-> CRASH_HOTPLUG is to enable cpu and memory hotplug support of crash.
+On 07/04/22 18.45, Bagas Sanjaya wrote:
+> Successfully cross-compiled for arm64 (bcm2711_defconfig, gcc 10.2.0).
 > 
-> CRASH_HOTPLUG_ELFCOREHDR_SZ is used to specify the maximum size of
-> the elfcorehdr buffer/segment.
+> Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 > 
-> This is a preparation for later usage.
+> powerpc build (ps3_defconfig, gcc 11.2.0) returned error:
 > 
-> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
-
-LGTM,
-
-Acked-by: Baoquan He <bhe@redhat.com>
-
-> ---
->  arch/x86/Kconfig | 26 ++++++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
+>    CC [M]  arch/powerpc/kvm/book3s_hv.o
+>    CC      kernel/kexec_file.o
+> Cannot find symbol for section 11: .text.unlikely.
+> kernel/kexec_file.o: failed
+> make[1]: *** [scripts/Makefile.build:288: kernel/kexec_file.o] Error 1
+> make[1]: *** Deleting file 'kernel/kexec_file.o'
+> make: *** [Makefile:1831: kernel] Error 2
 > 
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 7340d9f01b62..8b51d3196b82 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -2072,6 +2072,32 @@ config CRASH_DUMP
->  	  (CONFIG_RELOCATABLE=y).
->  	  For more details see Documentation/admin-guide/kdump/kdump.rst
->  
-> +config CRASH_HOTPLUG
-> +	bool "kernel updates of crash elfcorehdr"
-> +	depends on CRASH_DUMP && (HOTPLUG_CPU || MEMORY_HOTPLUG) && KEXEC_FILE
-> +	help
-> +	  Enable the kernel to update the crash elfcorehdr (which contains
-> +	  the list of CPUs and memory regions) directly when hot plug/unplug
-> +	  of CPUs or memory. Otherwise userspace must monitor these hot
-> +	  plug/unplug change notifications via udev in order to
-> +	  unload-then-reload the crash kernel so that the list of CPUs and
-> +	  memory regions is kept up-to-date. Note that the udev CPU and
-> +	  memory change notifications still occur (however, userspace is not
-> +	  required to monitor for crash dump purposes).
-> +
-> +config CRASH_HOTPLUG_ELFCOREHDR_SZ
-> +	depends on CRASH_HOTPLUG
-> +	int
-> +	default 131072
-> +	help
-> +	  Specify the maximum size of the elfcorehdr buffer/segment.
-> +	  The 128KiB default is sized so that it can accommodate 2048
-> +	  Elf64_Phdr, where each Phdr represents either a CPU or a
-> +	  region of memory.
-> +	  For example, this size can accommodate a machine with up to 1024
-> +	  CPUs and up to 1024 memory regions, eg. as represented by the
-> +	  'System RAM' entries in /proc/iomem.
-> +
->  config KEXEC_JUMP
->  	bool "kexec jump"
->  	depends on KEXEC && HIBERNATION
-> -- 
-> 2.27.0
+> Reported-by: Bagas Sanjaya <bagasdotme@gmail.com>
 > 
 
+Oops, I didn't do make mrproper before powerpc build.
+
+Now the powerpc build runs successfully.
+
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+-- 
+An old man doll... just what I always wanted! - Clara

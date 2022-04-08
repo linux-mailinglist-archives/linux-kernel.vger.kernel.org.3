@@ -2,198 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B33064F97D8
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:19:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AB8B4F97E5
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:21:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236809AbiDHOUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 10:20:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59892 "EHLO
+        id S235641AbiDHOWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 10:22:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236814AbiDHOUt (ORCPT
+        with ESMTP id S236893AbiDHOWr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 10:20:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 87F32350E45
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 07:18:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649427523;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Dqj6F//n2GaeDZEKW0iyCYuUnbyXalGGnl0TwpnivlQ=;
-        b=XCtCiPHZinodqQDy3glyAcnrm+++dbxcTH+mU5brYb5JOzws2dPPM1Y1fOxebmqFMF/aT3
-        I3Y0cPWTTt0aChnC5Rar+KD4xnVAyrXPcW6qUaH2paRHeTnUQ0jgykIs75uDgAiBRylpQ0
-        nSnPq7k9w9Yit6EIeyIr4Ib25g4zogQ=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-519-GiST4J9iN1WRO9KcvNeQow-1; Fri, 08 Apr 2022 10:18:42 -0400
-X-MC-Unique: GiST4J9iN1WRO9KcvNeQow-1
-Received: by mail-ej1-f69.google.com with SMTP id sb14-20020a1709076d8e00b006e7eb9719b9so4958945ejc.21
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 07:18:41 -0700 (PDT)
+        Fri, 8 Apr 2022 10:22:47 -0400
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D088352757;
+        Fri,  8 Apr 2022 07:20:44 -0700 (PDT)
+Received: by mail-pf1-f181.google.com with SMTP id h19so8524357pfv.1;
+        Fri, 08 Apr 2022 07:20:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Dqj6F//n2GaeDZEKW0iyCYuUnbyXalGGnl0TwpnivlQ=;
-        b=dC78z+H2evjbkFUBUDoVKLqwkCnfdjyYWl07sIWvjAyLbB3Oqsw3XUO8C5puPdDlLh
-         zg9jMXMfQdVm8BZogfqzBFTOW0MJ7pBIwiNNVXgznPKQ7fRWuWVt31JlV0EhRv9GpJDK
-         YU0iwxufqitjTB0Rj0y797Ds6NHmPzVfiGHg0KN8nnULD8N3Cd0aiWYX5MWI16q5XLVq
-         Yw6ZSzk3DmoNv+W3MnSaudQ7KpsvCtnUscGatVw8wuq/hZmZyYqtJVPc3IqiBDzS9ONb
-         9sNOWETiGYj5bXfn+3dqJyGl4IWI0KIXEd48UoXu0dBoS+7vzyN7Pi03OFPXKJjtTAo8
-         3b+A==
-X-Gm-Message-State: AOAM531hhsqfZkqiDnrVt9KI50QWg7k/S+a0zPpQDPLjIGkFXH9zMsf5
-        d9GSGLn0cwKapvygHviviIKBBz9VtkpTBLIaMbYkPosbwC6piY0M0B67oWptLnFDIpR7lDzcEpq
-        zL/R886X23edQ49hVfIPh5WKu
-X-Received: by 2002:a17:906:4e5a:b0:6e8:4f14:dcc6 with SMTP id g26-20020a1709064e5a00b006e84f14dcc6mr3274007ejw.378.1649427520529;
-        Fri, 08 Apr 2022 07:18:40 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyOCOFvHo61foMzX7A4+BKy2YI1Wcfu8ng+vn/PmyPdBWgShP60HLzT+87KhD1FkgqVFyBShw==
-X-Received: by 2002:a17:906:4e5a:b0:6e8:4f14:dcc6 with SMTP id g26-20020a1709064e5a00b006e84f14dcc6mr3273945ejw.378.1649427519739;
-        Fri, 08 Apr 2022 07:18:39 -0700 (PDT)
-Received: from [10.39.195.79] (5920ab7b.static.cust.trined.nl. [89.32.171.123])
-        by smtp.gmail.com with ESMTPSA id a8-20020a170906244800b006e859d92386sm436960ejb.104.2022.04.08.07.18.38
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 08 Apr 2022 07:18:38 -0700 (PDT)
-From:   Eelco Chaudron <echaudro@redhat.com>
-To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@redhat.com, namhyung@kernel.org
-Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] perf scripting python: expose symbol offset and source
- information
-Date:   Fri, 08 Apr 2022 16:18:38 +0200
-X-Mailer: MailMate (1.14r5883)
-Message-ID: <A0B24D47-90A5-41FC-8D24-8C1D3491CB71@redhat.com>
-In-Reply-To: <164554263724.752731.14651017093796049736.stgit@wsfd-netdev64.ntdv.lab.eng.bos.redhat.com>
-References: <164554263724.752731.14651017093796049736.stgit@wsfd-netdev64.ntdv.lab.eng.bos.redhat.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=59y8Knnm/vo+DF9GRlYZP2tt3eWm5aI01xbVEtK4FKw=;
+        b=6bqLueH0uxAM7KlwXt3UeA751KjQ+UUZr06bWXVhKl/hCbPhqHEtpzA9zD8woGG1ey
+         FwVquK7UtD/8UfiE0IQzskso5t/EMZ6OTW8mh2fbOrmTTIQk1bzu0rWKvdVCtQHo2VPT
+         hlfaSSZ3yDuCrWgqbeXWUAQFkq1E+JZeUoK3ckEgGrtagMHnAic3yA73ks8lY0bVP6N2
+         fJy2tzZwn2FJJjlXfQwuMaQ3WCxx4HEaSRNASc9fJtUgXcb7HH033NZIJErr14IWAnJ6
+         srcCxzDMYhc3e+dGKptlQilmbTxm6q1gKTAAxvSYIM2Uu6qpV46AfNFwp+eVeJdBXuz1
+         AtaQ==
+X-Gm-Message-State: AOAM5317bZODh+aE/bs2KuL91fpcuO/0iguo0tcDDlJcPLjfvNfk3PSE
+        eEkTHGyZ8ZtmXw+k7R/JAlM=
+X-Google-Smtp-Source: ABdhPJzZWMfIG402lALbShGS99uGAKZUQfqRqgaqZx31QtK9Qd/ymxMpyxANbS/x5lnbUscHq5QN2A==
+X-Received: by 2002:a05:6a00:8c9:b0:4fe:ecc:9bcd with SMTP id s9-20020a056a0008c900b004fe0ecc9bcdmr19787517pfu.34.1649427643485;
+        Fri, 08 Apr 2022 07:20:43 -0700 (PDT)
+Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
+        by smtp.gmail.com with ESMTPSA id l22-20020a17090aaa9600b001ca7a005620sm11567002pjq.49.2022.04.08.07.20.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Apr 2022 07:20:42 -0700 (PDT)
+Message-ID: <f6bcc53d-1419-7190-fd9a-8c5fa7178fe1@acm.org>
+Date:   Fri, 8 Apr 2022 07:20:41 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH -next RFC v2 2/8] blk-mq: call 'bt_wait_ptr()' later in
+ blk_mq_get_tag()
+Content-Language: en-US
+To:     Yu Kuai <yukuai3@huawei.com>, axboe@kernel.dk,
+        andriy.shevchenko@linux.intel.com, john.garry@huawei.com,
+        ming.lei@redhat.com
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+References: <20220408073916.1428590-1-yukuai3@huawei.com>
+ <20220408073916.1428590-3-yukuai3@huawei.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220408073916.1428590-3-yukuai3@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 22 Feb 2022, at 16:11, Eelco Chaudron wrote:
-
-> This change adds the symbol offset to the data exported for each
-> call-chain entry. This can not be calculated from the script and
-> only the ip value, and no related mmap information.
->
-> In addition, also export the source file and line information, if
-> available, to avoid an external lookup if this information is needed.
->
-> Signed-off-by: Eelco Chaudron <echaudro@redhat.com>
-
-Hi All, was wondering if this patch got lost?
-
+On 4/8/22 00:39, Yu Kuai wrote:
+> bt_wait_ptr() will increase 'wait_index', however, if blk_mq_get_tag()
+> get a tag successfully after bt_wait_ptr() is called and before
+> sbitmap_prepare_to_wait() is called, then the 'ws' is skipped. This
+> behavior might cause 8 waitqueues to be unbalanced.
+> 
+> Move bt_wait_ptr() later should reduce the problem when the disk is
+> under high io preesure.
+> 
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 > ---
-> v2:
->  - Fixed small code nit
->  - Included new features in auto generated scripts
->
->  .../util/scripting-engines/trace-event-python.c    |   49 ++++++++++++=
-+++-----
->  1 file changed, 36 insertions(+), 13 deletions(-)
->
-> diff --git a/tools/perf/util/scripting-engines/trace-event-python.c b/t=
-ools/perf/util/scripting-engines/trace-event-python.c
-> index e752e1f4a5f0..86a9c8614231 100644
-> --- a/tools/perf/util/scripting-engines/trace-event-python.c
-> +++ b/tools/perf/util/scripting-engines/trace-event-python.c
-> @@ -392,6 +392,18 @@ static const char *get_dsoname(struct map *map)
->  	return dsoname;
->  }
->
-> +static unsigned long get_offset(struct symbol *sym, struct addr_locati=
-on *al)
-> +{
-> +	unsigned long offset;
-> +
-> +	if (al->addr < sym->end)
-> +		offset =3D al->addr - sym->start;
-> +	else
-> +		offset =3D al->addr - al->map->start - sym->start;
-> +
-> +	return offset;
-> +}
-> +
->  static PyObject *python_process_callchain(struct perf_sample *sample,
->  					 struct evsel *evsel,
->  					 struct addr_location *al)
-> @@ -443,6 +455,25 @@ static PyObject *python_process_callchain(struct p=
-erf_sample *sample,
->  					_PyUnicode_FromStringAndSize(node->ms.sym->name,
->  							node->ms.sym->namelen));
->  			pydict_set_item_string_decref(pyelem, "sym", pysym);
-> +
-> +			if (node->ms.map) {
-> +				struct map *map =3D node->ms.map;
-> +				struct addr_location node_al;
-> +				unsigned long offset;
-> +
-> +				node_al.addr =3D map->map_ip(map, node->ip);
-> +				node_al.map  =3D map;
-> +				offset =3D get_offset(node->ms.sym, &node_al);
-> +
-> +				pydict_set_item_string_decref(
-> +					pyelem, "sym_off",
-> +					PyLong_FromUnsignedLongLong(offset));
-> +			}
-> +			if (node->srcline && strcmp(":0", node->srcline)) {
-> +				pydict_set_item_string_decref(
-> +					pyelem, "sym_srcline",
-> +					_PyUnicode_FromString(node->srcline));
-> +			}
->  		}
->
->  		if (node->ms.map) {
-> @@ -520,18 +551,6 @@ static PyObject *python_process_brstack(struct per=
-f_sample *sample,
->  	return pylist;
->  }
->
-> -static unsigned long get_offset(struct symbol *sym, struct addr_locati=
-on *al)
-> -{
-> -	unsigned long offset;
+>   block/blk-mq-tag.c | 4 +---
+>   1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/block/blk-mq-tag.c b/block/blk-mq-tag.c
+> index 68ac23d0b640..228a0001694f 100644
+> --- a/block/blk-mq-tag.c
+> +++ b/block/blk-mq-tag.c
+> @@ -155,7 +155,6 @@ unsigned int blk_mq_get_tag(struct blk_mq_alloc_data *data)
+>   	if (data->flags & BLK_MQ_REQ_NOWAIT)
+>   		return BLK_MQ_NO_TAG;
+>   
+> -	ws = bt_wait_ptr(bt, data->hctx);
+>   	do {
+>   		struct sbitmap_queue *bt_prev;
+>   
+> @@ -174,6 +173,7 @@ unsigned int blk_mq_get_tag(struct blk_mq_alloc_data *data)
+>   		if (tag != BLK_MQ_NO_TAG)
+>   			break;
+>   
+> +		ws = bt_wait_ptr(bt, data->hctx);
+>   		sbitmap_prepare_to_wait(bt, ws, &wait, TASK_UNINTERRUPTIBLE);
+>   
+>   		tag = __blk_mq_get_tag(data, bt);
+> @@ -201,8 +201,6 @@ unsigned int blk_mq_get_tag(struct blk_mq_alloc_data *data)
+>   		 */
+>   		if (bt != bt_prev)
+>   			sbitmap_queue_wake_up(bt_prev);
 > -
-> -	if (al->addr < sym->end)
-> -		offset =3D al->addr - sym->start;
-> -	else
-> -		offset =3D al->addr - al->map->start - sym->start;
-> -
-> -	return offset;
-> -}
-> -
->  static int get_symoff(struct symbol *sym, struct addr_location *al,
->  		      bool print_off, char *bf, int size)
->  {
-> @@ -2073,7 +2092,11 @@ static int python_generate_script(struct tep_han=
-dle *pevent, const char *outfile
->
->  		fprintf(ofp, "\t\tfor node in common_callchain:");
->  		fprintf(ofp, "\n\t\t\tif 'sym' in node:");
-> -		fprintf(ofp, "\n\t\t\t\tprint(\"\\t[%%x] %%s\" %% (node['ip'], node[=
-'sym']['name']))");
-> +		fprintf(ofp, "\n\t\t\t\tprint(\"\t[%%x] %%s%%s%%s%%s\" %% (");
-> +		fprintf(ofp, "\n\t\t\t\t\tnode['ip'], node['sym']['name'],");
-> +		fprintf(ofp, "\n\t\t\t\t\t\"+0x{:x}\".format(node['sym_off']) if 'sy=
-m_off' in node else \"\",");
-> +		fprintf(ofp, "\n\t\t\t\t\t\" ({})\".format(node['dso'])  if 'dso' in=
- node else \"\",");
-> +		fprintf(ofp, "\n\t\t\t\t\t\" \" + node['sym_srcline'] if 'sym_srclin=
-e' in node else \"\"))");
->  		fprintf(ofp, "\n\t\t\telse:");
->  		fprintf(ofp, "\n\t\t\t\tprint(\"\t[%%x]\" %% (node['ip']))\n\n");
->  		fprintf(ofp, "\t\tprint()\n\n");
+> -		ws = bt_wait_ptr(bt, data->hctx);
+>   	} while (1);
 
+Is it necessary to call bt_wait_ptr() during every loop iteration or 
+only if bt != bt_prev? Would calling bt_wait_ptr() only if bt != bt_prev 
+help to reduce unfairness further?
+
+Thanks,
+
+Bart.

@@ -2,53 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60CD74F9DD3
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 21:53:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39DD24F9DD5
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 21:54:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239284AbiDHTzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 15:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49454 "EHLO
+        id S239303AbiDHT4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 15:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231140AbiDHTzu (ORCPT
+        with ESMTP id S239286AbiDHT4J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 15:55:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF738194A8D;
-        Fri,  8 Apr 2022 12:53:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A00061295;
-        Fri,  8 Apr 2022 19:53:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 784A8C385A3;
-        Fri,  8 Apr 2022 19:53:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649447624;
-        bh=EO6y/2Vxfwx/PPY6ps/w8g8ppeuV134S5BhypszPVmM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=NLTvKltG8EiziSelx3ZHmUIAtdqz+Z7UQ1XGAWrJUXy8RrE3rKrpGstycYTeONBqk
-         mE7CnK62NvcctuMVC41g3oPMYTVVdGsRBaQUoqwruVEn59NO1N0Qx/RcGl3I/bTk6B
-         2FFe6B/o+DEIrYDd817Y4imaACqjsLLB/UYlyRtQFB+FjIz400DDtuS8neo2etXtDq
-         8Vm9J3AOx1SW23Io8fjYX1Zezm9hh5ByScec1Zlttj33v5su1Yw5ctskjuBx0S/8aF
-         lQEfhv/wZQA06c4ekrHhyLX4fVBNmvT2o9fMRHCoKnsAnrlgVy86cJSBqndb2//dRd
-         W0WWKM1VPAPYw==
-Date:   Fri, 8 Apr 2022 14:53:42 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PCI <linux-pci@vger.kernel.org>,
-        Stefan Gottwald <gottwald@igel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] PCI: PM: Quirk bridge D3 on Elo i2
-Message-ID: <20220408195342.GA339430@bhelgaas>
+        Fri, 8 Apr 2022 15:56:09 -0400
+Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092ED1A5D4E;
+        Fri,  8 Apr 2022 12:54:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1649447646; x=1680983646;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=cQvZbOGfRySa1kgB4u+TLmXxiPqef8NnczamZP/eew8=;
+  b=Vxbpbf35ZZx9hgdkkXc7OQVsQr1dUH4zIsgi8gxvK/ptpQFRtPFSmoab
+   SwZYOwrwONivtbFF1uGDsmotA8kA6t6X/kePmFEpwT4GcBIHamlyskPav
+   8603jvo07B3Mr2vwGY4UG6UzlxhLUpZX4sTKxRTk2DsMnNqMOEsLSVHcM
+   g=;
+X-IronPort-AV: E=Sophos;i="5.90,245,1643673600"; 
+   d="scan'208";a="209212596"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-6435a935.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9102.sea19.amazon.com with ESMTP; 08 Apr 2022 19:54:04 +0000
+Received: from EX13MTAUWC002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2a-6435a935.us-west-2.amazon.com (Postfix) with ESMTPS id 6C47A417C3;
+        Fri,  8 Apr 2022 19:53:58 +0000 (UTC)
+Received: from EX13D02UWC003.ant.amazon.com (10.43.162.199) by
+ EX13MTAUWC002.ant.amazon.com (10.43.162.240) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Fri, 8 Apr 2022 19:53:56 +0000
+Received: from EX13MTAUWC001.ant.amazon.com (10.43.162.135) by
+ EX13D02UWC003.ant.amazon.com (10.43.162.199) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.32; Fri, 8 Apr 2022 19:53:56 +0000
+Received: from dev-dsk-alisaidi-1d-b9a0e636.us-east-1.amazon.com
+ (172.19.181.128) by mail-relay.amazon.com (10.43.162.232) with Microsoft SMTP
+ Server id 15.0.1497.32 via Frontend Transport; Fri, 8 Apr 2022 19:53:56 +0000
+Received: by dev-dsk-alisaidi-1d-b9a0e636.us-east-1.amazon.com (Postfix, from userid 5131138)
+        id 750242577; Fri,  8 Apr 2022 19:53:55 +0000 (UTC)
+From:   Ali Saidi <alisaidi@amazon.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <german.gomez@arm.com>,
+        <leo.yan@linaro.org>, <acme@kernel.org>
+CC:     <alisaidi@amazon.com>, <benh@kernel.crashing.org>,
+        <Nick.Forrington@arm.com>, <alexander.shishkin@linux.intel.com>,
+        <andrew.kilroy@arm.com>, <james.clark@arm.com>,
+        <john.garry@huawei.com>, <jolsa@kernel.org>, <kjain@linux.ibm.com>,
+        <lihuafei1@huawei.com>, <mark.rutland@arm.com>,
+        <mathieu.poirier@linaro.org>, <mingo@redhat.com>,
+        <namhyung@kernel.org>, <peterz@infradead.org>, <will@kernel.org>
+Subject: [PATCH v5 3/5] perf tools: sync addition of PERF_MEM_SNOOPX_PEER
+Date:   Fri, 8 Apr 2022 19:53:42 +0000
+Message-ID: <20220408195344.32764-4-alisaidi@amazon.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220408195344.32764-1-alisaidi@amazon.com>
+References: <20220408195344.32764-1-alisaidi@amazon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0g9cg=nJ0yr5-a_phNnJLiU74KrfsULsAEsWBKeRr7HCQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-14.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,132 +74,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 04:46:14PM +0200, Rafael J. Wysocki wrote:
-> On Fri, Apr 1, 2022 at 1:34 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > On Thu, Mar 31, 2022 at 11:57 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > On Thu, Mar 31, 2022 at 07:38:51PM +0200, Rafael J. Wysocki wrote:
-> > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > >
-> > > > If one of the PCIe root ports on Elo i2 is put into D3cold and then
-> > > > back into D0, the downstream device becomes permanently inaccessible,
-> > > > so add a bridge D3 DMI quirk for that system.
-> > > >
-> > > > This was exposed by commit 14858dcc3b35 ("PCI: Use
-> > > > pci_update_current_state() in pci_enable_device_flags()"), but before
-> > > > that commit the root port in question had never been put into D3cold
-> > > > for real due to a mismatch between its power state retrieved from the
-> > > > PCI_PM_CTRL register (which was accessible even though the platform
-> > > > firmware indicated that the port was in D3cold) and the state of an
-> > > > ACPI power resource involved in its power management.
-> > >
-> > > In the bug report you suspect a firmware issue.  Any idea what that
-> > > might be?  It looks like a Gemini Lake Root Port, so I wouldn't think
-> > > it would be a hardware issue.
-> >
-> > The _ON method of the ACPI power resource associated with the root
-> > port doesn't work correctly.
-> >
-> > > Weird how things come in clumps.  Was just looking at Mario's patch,
-> > > which also has to do with bridges and D3.
-> > >
-> > > Do we need a Fixes line?  E.g.,
-> > >
-> > >   Fixes: 14858dcc3b35 ("PCI: Use pci_update_current_state() in pci_enable_device_flags()")
-> >
-> > Strictly speaking, it is not a fix for the above commit.
-> >
-> > It is a workaround for a firmware issue uncovered by it which wasn't
-> > visible, because power management was not used correctly on the
-> > affected system because of another firmware problem addressed by
-> > 14858dcc3b35.  It wouldn't have worked anyway had it been attempted
-> > AFAICS.
-> >
-> > I was thinking about CCing this change to -stable instead.
+Add a flag to the perf mem data struct to signal that a request caused a
+cache-to-cache transfer of a line from a peer of the requestor and
+wasn't sourced from a lower cache level.  The line being moved from one
+peer cache to another has latency and performance implications. On Arm64
+Neoverse systems the data source can indicate a cache-to-cache transfer
+but not if the line is dirty or clean, so instead of overloading HITM
+define a new flag that indicates this type of transfer.
 
-Makes sense, thanks.
+Signed-off-by: Ali Saidi <alisaidi@amazon.com>
+---
+ tools/include/uapi/linux/perf_event.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > > > BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215715
-> > > > Reported-by: Stefan Gottwald <gottwald@igel.com>
-> > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > ---
-> > > >  drivers/pci/pci.c |   10 ++++++++++
-> > > >  1 file changed, 10 insertions(+)
-> > > >
-> > > > Index: linux-pm/drivers/pci/pci.c
-> > > > ===================================================================
-> > > > --- linux-pm.orig/drivers/pci/pci.c
-> > > > +++ linux-pm/drivers/pci/pci.c
-> > > > @@ -2920,6 +2920,16 @@ static const struct dmi_system_id bridge
-> > > >                       DMI_MATCH(DMI_BOARD_VENDOR, "Gigabyte Technology Co., Ltd."),
-> > > >                       DMI_MATCH(DMI_BOARD_NAME, "X299 DESIGNARE EX-CF"),
-> > > >               },
-> > > > +             /*
-> > > > +              * Downstream device is not accessible after putting a root port
-> > > > +              * into D3cold and back into D0 on Elo i2.
-> > > > +              */
-> > > > +             .ident = "Elo i2",
-> > > > +             .matches = {
-> > > > +                     DMI_MATCH(DMI_SYS_VENDOR, "Elo Touch Solutions"),
-> > > > +                     DMI_MATCH(DMI_PRODUCT_NAME, "Elo i2"),
-> > > > +                     DMI_MATCH(DMI_PRODUCT_VERSION, "RevB"),
-> > > > +             },
-> > >
-> > > Is this bridge_d3_blacklist[] similar to the PCI_DEV_FLAGS_NO_D3 bit?
-> >
-> > Not really.  The former applies to the entire platform and not to an
-> > individual device.
-> >
-> > > Could they be folded together?  We have a lot of bits that seem
-> > > similar but maybe not exactly the same (dev->bridge_d3,
-> > > dev->no_d3cold, dev->d3cold_allowed, dev->runtime_d3cold,
-> > > PCI_DEV_FLAGS_NO_D3, pci_bridge_d3_force, etc.)  Ugh.
-> >
-> > Yes, I agree that this needs to be cleaned up.
-> >
-> > > bridge_d3_blacklist[] itself was added by 85b0cae89d52 ("PCI:
-> > > Blacklist power management of Gigabyte X299 DESIGNARE EX PCIe ports"),
-> > > which honestly looks kind of random, i.e., it doesn't seem to be
-> > > working around a hardware or even a firmware defect.
-> > >
-> > > Apparently the X299 issue is that 00:1c.4 is connected to a
-> > > Thunderbolt controller, and the BIOS keeps the Thunderbolt controller
-> > > powered off unless something is attached to it?  At least, 00:1c.4
-> > > leads to bus 05, and in the dmesg log attached to [1] shows no devices
-> > > on bus 05.
-> > >
-> > > It also says the platform doesn't support PCIe native hotplug, which
-> > > matches what Mika said about it using ACPI hotplug.  If a system is
-> > > using ACPI hotplug, it seems like maybe *that* should prevent us from
-> > > putting things in D3cold?  How can we know whether ACPI hotplug
-> > > depends on a certain power state?
-> >
-> > We have this check in pci_bridge_d3_possible():
-> >
-> > if (bridge->is_hotplug_bridge && !pciehp_is_native(bridge))
-> >             return false;
-> >
-> > but this only applies to the case when the particular bridge itself is
-> > a hotplug one using ACPI hotplug.
-> >
-> > If ACPI hotplug is used, it generally is unsafe to put PCIe ports into
-> > D3cold, because in that case it is unclear what the platform
-> > firmware's assumptions regarding control of the config space are.
-> >
-> > However, I'm not sure how this is related to the patch at hand.
-> 
-> So I'm not sure how you want to proceed here.
-> 
-> The platform is quirky, so the quirk for it will need to be added this
-> way or another.  The $subject patch adds it using the existing
-> mechanism, which is the least intrusive way.
-> 
-> You seem to be thinking that the existing mechanism may not be
-> adequate, but I'm not sure for what reason and anyway I think that it
-> can be adjusted after adding the quirk.
-> 
-> Please let me know what you think.
+diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
+index 82858b697c05..c9e58c79f3e5 100644
+--- a/tools/include/uapi/linux/perf_event.h
++++ b/tools/include/uapi/linux/perf_event.h
+@@ -1308,7 +1308,7 @@ union perf_mem_data_src {
+ #define PERF_MEM_SNOOP_SHIFT	19
+ 
+ #define PERF_MEM_SNOOPX_FWD	0x01 /* forward */
+-/* 1 free */
++#define PERF_MEM_SNOOPX_PEER	0x02 /* xfer from peer */
+ #define PERF_MEM_SNOOPX_SHIFT  38
+ 
+ /* locked instruction */
+-- 
+2.32.0
 
-I don't understand all that's going on here, but I applied it to
-pci/pm for v5.19, thanks!
-
-Bjorn

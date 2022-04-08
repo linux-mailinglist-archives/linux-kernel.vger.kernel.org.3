@@ -2,264 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFAC24F8C1A
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:26:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 634D74F8C31
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233921AbiDHDQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 23:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38086 "EHLO
+        id S233949AbiDHDTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 23:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233907AbiDHDQq (ORCPT
+        with ESMTP id S233933AbiDHDTP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 23:16:46 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4330B185459;
-        Thu,  7 Apr 2022 20:14:41 -0700 (PDT)
-X-UUID: 8eb52f8929ae4418ac0f0202cfdff902-20220408
-X-UUID: 8eb52f8929ae4418ac0f0202cfdff902-20220408
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 491764811; Fri, 08 Apr 2022 11:14:34 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 8 Apr 2022 11:14:33 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 8 Apr 2022 11:14:33 +0800
-Message-ID: <ec790d2324f1bd53c4a53b58ad29040725d580f5.camel@mediatek.com>
-Subject: Re: [PATCH 1/4] dt-bindings: cpufreq: mediatek: transform
- cpufreq-mediatek into yaml
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Jia-Wei Chang <jia-wei.chang@mediatek.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <fan.chen@mediatek.com>,
-        <louis.yu@mediatek.com>, <roger.lu@mediatek.com>,
-        <Allen-yy.Lin@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <hsinyi@google.com>,
-        Jia-Wei Chang <jia-wei.chang@mediatek.corp-partner.google.com>
-Date:   Fri, 8 Apr 2022 11:14:33 +0800
-In-Reply-To: <56c5870e-bc41-39be-6b53-785396d8812b@linaro.org>
-References: <20220307122151.11666-1-jia-wei.chang@mediatek.com>
-         <20220307122151.11666-2-jia-wei.chang@mediatek.com>
-         <ee98d248-b2cd-e975-84df-448917a79287@canonical.com>
-         <2cf526d400c011b5172ba4fc2c3f03b4a4f371dc.camel@mediatek.com>
-         <96a823a2-f3b6-9fb7-c9d6-f1315f6056fd@kernel.org>
-         <de1751bb13fb14b591fbe046ff274530ad62162e.camel@mediatek.com>
-         <56c5870e-bc41-39be-6b53-785396d8812b@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 7 Apr 2022 23:19:15 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07333147ACF
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 20:17:10 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id a2so1639305wrh.5
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 20:17:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wgf4acvi/Fu9XD9s+6RSDDIAYNvp3TV3xYDZvoRiizI=;
+        b=mThG2uh+y9NDaZQDzAG5owkYCagP9uLPIfSPzXCp+nKbUmTaX55IXCNvcV0ynpXMD5
+         pAHWlaRqJt6OxSIyvTHWkVMPY6Hr+7lve1L85FRbXefX7geoX83QKFiTNC48/tlkcxMN
+         yYExjDmMj+njeiqBmaVadv4cWM2OPTvR2WvG4aO2yj8inDpaIiTq5pH5zsy0gGJ1T5Et
+         9591C/IN+bNUR10WjLg3/HvXQOh4RHqFTYg0TZb9UH0DLhC+cIhzXAj90eRjJ8hVNlbK
+         uIkcjlkCQca837SQ2J/0VvFd/9tTO/dlcyL4jPxbK58UlPFDd4zrEei3WcSiNQacHRvA
+         y27Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wgf4acvi/Fu9XD9s+6RSDDIAYNvp3TV3xYDZvoRiizI=;
+        b=nqsZMEYo2Jj7SXXSFPCJyiKR/puhdrLzparPT74QBG58z5ASsNw+n+up/L0nO83lUO
+         Srmo8vRMq3wh4CcByF3fncrLOJrcM1aaozJTOTJunBzXdxffEFVb/WlpAM1ywuMdUJXM
+         RcmbdhOlzNPCApVR8I2xUaGKjJKue5k1VF79mzA+HYsFkAmCC/LnzRMIofs5tKcAjvIj
+         sHZXcg4yJd+wBjcpIZEYWC0vcq7nm+z5iN6m9qBPkGX3fcyGgQ51Wpa9cyy5F8dOJPZ5
+         gCEAjEmiVZfTwNirgkbE7t2JV8iTGK18bo7yBlQPsJLdHV+7Ob4iS58x67M2KulL+k2h
+         HRWA==
+X-Gm-Message-State: AOAM532HiBcf9eTrdZBO8RiAM1RYOst57lDDq+54XHp0giw4v0WqEQlb
+        EgHCknosYw6bBshnBjwSY4aSbsWq77mcvttExc00rq/VBFjouA==
+X-Google-Smtp-Source: ABdhPJxznHvZLDULU3/WobBuRLKXZlgy2+OHkripz1WPu9KDNZRf6hiw54kNxuN7jCreRq0CUXQmdUwbTDEM0xgjwv8=
+X-Received: by 2002:adf:ed09:0:b0:206:81c:1eda with SMTP id
+ a9-20020adfed09000000b00206081c1edamr13735754wro.430.1649387828414; Thu, 07
+ Apr 2022 20:17:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220407193902.1981605-1-dlatypov@google.com>
+In-Reply-To: <20220407193902.1981605-1-dlatypov@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 8 Apr 2022 11:16:57 +0800
+Message-ID: <CABVgOSm-sDx8G0iphFXEgnsF-c9eu++bxtXjhOM_WHx-mkRiTA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: cosmetic: don't specify duplicate kunit_shutdown's
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-01 at 18:32 +0200, Krzysztof Kozlowski wrote:
-> On 01/04/2022 15:26, Jia-Wei Chang wrote:
-> > On Thu, 2022-03-24 at 11:33 +0100, Krzysztof Kozlowski wrote:
-> > > On 24/03/2022 10:38, Jia-Wei Chang wrote:
-> > > > > 
-> > > > > > 
-> > > > > > diff --git
-> > > > > > a/Documentation/devicetree/bindings/cpufreq/cpufreq-
-> > > > > > mediatek.yaml
-> > > > > > b/Documentation/devicetree/bindings/cpufreq/cpufreq-
-> > > > > > mediatek.yaml
-> > > > > > new file mode 100644
-> > > > > > index 000000000000..584946eb3790
-> > > > > > --- /dev/null
-> > > > > > +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-
-> > > > > > mediatek.yaml
-> > > > > > @@ -0,0 +1,131 @@
-> > > > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > > > > +%YAML 1.2
-> > > > > > +---
-> > > > > > +$id: 
-> > > > > > 
-> > 
-> > 
-https://urldefense.com/v3/__http://devicetree.org/schemas/cpufreq/cpufreq-mediatek.yaml*__;Iw!!CTRNKA9wMg0ARbw!xbKG4TgD0MRpMLyGJVBZEGpZFrNOclrcxOCx_APKo5Nmg8nF2x5PcBdE0unvL2NdpChkMA$
-> > > > > >  
-> > > > > > +$schema: 
-> > > > > > 
-> > 
-> > 
-https://urldefense.com/v3/__http://devicetree.org/meta-schemas/core.yaml*__;Iw!!CTRNKA9wMg0ARbw!xbKG4TgD0MRpMLyGJVBZEGpZFrNOclrcxOCx_APKo5Nmg8nF2x5PcBdE0unvL2O8T_oxCQ$
-> > > > > >  
-> > > > > > +
-> > > > > > +title: Mediatek CPUFREQ driver Device Tree Bindings
-> > > > > 
-> > > > > Please remove "driver Device Tree Bindings" because the title
-> > > > > should
-> > > > > describe the hardware. Therefore it could be something like
-> > > > > "Mediatek
-> > > > > SoC CPU frequency and voltage scaling".
-> > > > 
-> > > > Thanks for your suggestion of title.
-> > > > Or should I use the origin title "Binding for MediaTek's
-> > > > CPUFreq
-> > > > driver"?
-> > > 
-> > > Mediatek CPUFREQ
-> > > or
-> > > Mediatek CPU frequency scaling
-> > 
-> > Ok, I will choose one of it.
-> > 
-> > > 
-> > > > 
-> > > > > 
-> > > > > How is it related to cpufreq-mediatek-hw.yaml? The
-> > > > > names/title
-> > > > > look
-> > > > > unfortunately too similar.
-> > > > 
-> > > > No, mediatek-cpufreq is performing in kernel driver rather than
-> > > > on
-> > > > hardware.
-> > > > On the other hand, mediatek-cpufreq-hw is performing on
-> > > > hardware.
-> > > > That's why "hw" is present in its name.
-> > > 
-> > > Unfortunately, I do not get it. The bindings are only about
-> > > hardware,
-> > > so
-> > > how bindings could be about CPU frequency scaling not in
-> > > hardware?
-> > 
-> > Sorry, let me correct my statements.
-> > 
-> > For mediatek-cpufreq here, the required hardware are clock and
-> > regulator which have to be under control of mediatek-cpufreq.
-> > That's
-> > the reason why it needs bindings.
-> > 
-> > mediatek-cpufreq scales up and down voltage and frequency via
-> > kernel
-> > framework of clock and regulator, however, mediatek-cpufreq-hw
-> > delegate
-> > the voltage and frequency control to a hardware agent instead.
-> 
-> OK, that makes sense, thanks for explanation.
-> 
-> > 
-> > > 
-> > > > 
-> > > > > 
-> > > > > In general this does not look like proper bindings (see also
-> > > > > below
-> > > > > lack
-> > > > > of compatible). Bindings describe the hardware, so what is
-> > > > > exactly
-> > > > > the
-> > > > > hardware here?
-> > > > 
-> > > > Except for SoC, there's no requirement of hardware binding for
-> > > > mediatek-cpufreq.
-> > > > mediatek-cpufreq recognizes the compatible of Mediatek SoC
-> > > > while
-> > > > probing.
-> > > 
-> > > What is the hardware here? If there is no requirement for
-> > > bindings
-> > > for
-> > > mediate-cpufreq, why do we have this patch here?
-> > 
-> > Sorry, that's my mistake.
-> > Clock and regulator are required hardware for mediatek-cpufreq.
-> > 
-> > > 
-> > > > 
-> > > > > 
-> > > > > > +
-> > > > > > +maintainers:
-> > > > > > +  - Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> > > > > > +
-> > > > > > +description: |
-> > > > > > +  CPUFREQ is used for scaling clock frequency of CPUs.
-> > > > > > +  The module cooperates with CCI DEVFREQ to manage
-> > > > > > frequency
-> > > > > > for
-> > > > > > some Mediatek
-> > > > > > +  SoCs.
-> > > > > > +
-> > > > > > +properties:
-> > > > > 
-> > > > > How is this schema going to be applied? I don't see here
-> > > > > select
-> > > > > neither
-> > > > > compatible.
-> > > > 
-> > > > As mentioned above, only compatible of SoC is required for
-> > > > mediatek-
-> > > > cpufreq.
-> > > 
-> > > It does not answer my questions. How the schema is going to be
-> > > applied?
-> > 
-> > Currently, we do use compatible of SoC to probe mediatek-cpufreq.
-> 
-> Probing and binding to compatible is correct, but there is no
-> compatible
-> here, so the schema is a no-op. Does nothing.
-> 
-> > If the better way is using clock and regulator opp, do you have a
-> > suggestion to approach that?
-> > I mean I can't find a good example from other vendors trying to do
-> > that
-> > way. Or maybe I miss something?
-> 
-> One other way (proper) is to use cpufreq-dt and existing bindings. I
-> understand that maybe you need some specific bindings here, but I
-> fail
-> to see how they would work. IOW, you don't have the compatible, no
-> select, so nothing can use these bindings. Also bindings do not refer
-> to
-> any specific hardware, like SoC model.
-> 
-> It's good that you try to convert existing bindings to DT schema, but
-> with that they should be probably fixed/updated to match proper
-> bindings.
-> 
-> Best regards,
-> Krzysztof
-> 
+On Fri, Apr 8, 2022 at 3:39 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> Context:
+> When using a non-UML arch, kunit.py will boot the test kernel with these
+> options by default:
+> > mem=1G console=tty kunit_shutdown=halt console=ttyS0 kunit_shutdown=reboot
+>
+> For QEMU, we need to use 'reboot', and for UML we need to use 'halt'.
+> If you switch them, kunit.py will hang until the --timeout expires.
+>
+> So the code currently unconditionally adds 'kunit_shutdown=halt' but
+> then appends 'reboot' when using QEMU (which overwrites it).
+>
+> This patch:
+> Having these duplicate options is a bit noisy.
+> Switch so we only add 'halt' for UML.
+>
+> I.e. we now get
+> UML: 'mem=1G console=tty console=ttyS0 kunit_shutdown=halt'
+> QEMU: 'mem=1G console=tty console=ttyS0 kunit_shutdown=reboot'
+>
+> Side effect: you can't overwrite kunit_shutdown on UML w/ --kernel_arg.
+> But you already couldn't for QEMU, and why would you want to?
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> ---
 
-Hello Krzysztof,
+Thanks so much for fixing this: it had been quietly bugging me for a while.
 
-Thanks for your suggestion.
-I have discussed with Jia-wei internally.
-We want to push next version because we finish to prepare the driver
-parts.
+This looks pretty good as is, but I have a few suggestions for
+extending it which could be nice to have. I've put them inline below.
 
-For binding part, we want to cancel the transformation to yaml first
-and only add the mediatek cci property for cpufreq series in next
-version.
+Either way,
+Reviewed-by: David Gow <davidgow@google.com>
 
-I will help Jia-wei to push next version.
-If you have any suggestion, we can discuss in the next version (v2) of
-this series.
+>  tools/testing/kunit/kunit_kernel.py | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+> index 483f78e15ce9..9731ceb7ad92 100644
+> --- a/tools/testing/kunit/kunit_kernel.py
+> +++ b/tools/testing/kunit/kunit_kernel.py
+> @@ -158,7 +158,7 @@ class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
+>         def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
+>                 """Runs the Linux UML binary. Must be named 'linux'."""
+>                 linux_bin = os.path.join(build_dir, 'linux')
+> -               return subprocess.Popen([linux_bin] + params,
+> +               return subprocess.Popen([linux_bin] + params + ['kunit_shutdown=halt'],
 
-Thanks for your big support!
+I'd slightly prefer it if we assigned these extra parameters to a
+separate variable, rather than including them directly in the
+subprocess.Popen call.
 
-BRs,
-Rex
+(One thing I'd like to do is to print out the command we're running,
+which we do for Qemu, and having it in a variable that's passed in
+would be convenient. I don't expect this patch to do that, but having
+these parameters separate would make that future diff a little
+smaller.)
 
+>                                            stdin=subprocess.PIPE,
+>                                            stdout=subprocess.PIPE,
+>                                            stderr=subprocess.STDOUT,
+> @@ -332,7 +332,7 @@ class LinuxSourceTree(object):
+>         def run_kernel(self, args=None, build_dir='', filter_glob='', timeout=None) -> Iterator[str]:
+>                 if not args:
+>                         args = []
+> -               args.extend(['mem=1G', 'console=tty', 'kunit_shutdown=halt'])
+> +               args.extend(['mem=1G', 'console=tty'])
+
+Does it make sense to also make these options UML only.
+
+Under Qemu, the amount of memory is already passed separately to qemu,
+so adding another limit here seems counterproductive. If an
+architecture particularly needs it, we can add it to the
+per-architecture config.
+
+And console=tty is overridden by console=ttyS0 on x86_64 anyway, so
+that also seems like it should be taken out. I tried commenting this
+line out entirely, and at least x86_64 still worked.
+
+
+
+>                 if filter_glob:
+>                         args.append('kunit.filter_glob='+filter_glob)
+>
+>
+> base-commit: b04d1a8dc7e7ff7ca91a20bef053bcc04265d83a
+> --
+> 2.35.1.1178.g4f1659d476-goog
+>

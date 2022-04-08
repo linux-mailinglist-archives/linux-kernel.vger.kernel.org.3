@@ -2,344 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BC654F9FB2
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 00:44:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62AAB4F9FC1
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 00:48:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240009AbiDHWqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 18:46:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36934 "EHLO
+        id S235754AbiDHWu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 18:50:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239976AbiDHWp5 (ORCPT
+        with ESMTP id S234965AbiDHWuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 18:45:57 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8953B39689
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 15:43:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649457831; x=1680993831;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=BSRE43UznrvHyqy7V4uvX4L2v07Twg1CVAkkE2JpXVA=;
-  b=mANc6Nu0pivzAbYXJ+CXa7iRGoxpHiXNDLJRlPs3AgrfKN0oIIdmy6he
-   tofB1+NNDOWRG2SpW4YrN6lcG5Oj7l2ZpByvczfnKdcsDzbtXeAd66ZgY
-   B2PkhGJTyCXeaYcJw3xD4B6lDbc2lUsYYEcDB7YRXM7ttkl5fDoLn1KRe
-   8573u6TWSqtUXAmABvoQOImNHdzuNKm+bSNmG6r9SjsfQrDsBUh8EIy3H
-   1Th00OcAgEiM5cFz3oeB8hXXlW0CxqHrVqlW9oMcKSyiUaEZO2AtXhd+F
-   AOcm33kJJlMP+LO5pcf5BXuEI9dPf+SpgjPmSf7vEvxPSq84hBwelkLAl
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="259309391"
-X-IronPort-AV: E=Sophos;i="5.90,246,1643702400"; 
-   d="scan'208";a="259309391"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 15:43:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,246,1643702400"; 
-   d="scan'208";a="609937654"
-Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 08 Apr 2022 15:43:49 -0700
-Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ncxKX-0000gp-0K;
-        Fri, 08 Apr 2022 22:43:49 +0000
-Date:   Sat, 9 Apr 2022 06:43:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Zhi Wang <zhi.a.wang@intel.com>
-Cc:     kbuild-all@lists.01.org, zhenyu.z.wang@intel.com,
-        terrence.xu@intel.com, intel-gvt-dev@lists.freedesktop.org,
+        Fri, 8 Apr 2022 18:50:23 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71CA9E33A1
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 15:48:18 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id e189so10276899oia.8
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 15:48:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=A6IvRUnp3o4+L39LVGXulx8aoh2j7iEyNQukDOsUs5E=;
+        b=ZtUtLpB4VxJiVAWssifXbZbYwsIRAopp47nwktbjPJUBmJs/TuMWLJepqhLaWuf3oK
+         fEtt6RCZVFKt5h9vWfdDFWJQlXdvZQekcIQLLnor/W43N8vP67sYEHzyoAmaBLb85zWB
+         6bhT2Eg0vSb9OP+Pg+BCoLHyBjIIGHnt8V6Ddh6GlrN1/TrQ7OgKKW+LlRmZ5QFBxrYp
+         KvY68W6HXZMuzESgXKjuaASeMfFKGsDbkkq+Ey7ZwfZsoiEgUUGtwLos0XbGNnO8nff9
+         VVT4KKmH6DMNasJabVXYY9euQPXwZU4KtjbAtBrsHz2spsuYFoL2vaVG2dXws98vnXg0
+         Ddag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=A6IvRUnp3o4+L39LVGXulx8aoh2j7iEyNQukDOsUs5E=;
+        b=JhQRKcNV8wcCiRre04NXr0fQAxUPqIoEyZgdQGdCq3PL4bbTQiD5mBAJM4YGjdlzpH
+         balfUHjnFjwMvkwe464/z3dSXIr/6t42LGe50s9oCemfbO0r8c2cy1jLgCyoHO/xNbkk
+         FW0AP451X/SVfZHjw530D4SRjsROYoOgBPMG86mMeoL2le9tPrMHfLtAhMUjuMzkwKPk
+         80iKuSGQ9zXeJy0TQfDoMEtJkOr6+MGrUMFqZXImppoTKsxQgej+lYd7hBEMFcW6IAcG
+         eFpuJP1/8Qy1PsGujqRMrgym/JZv3W3Sxs1Y73ACp2R3NT5rtBx5nnvAKR7xrtMtKoXz
+         nplA==
+X-Gm-Message-State: AOAM530yJzQ5RlhCG+HNrz6Psq3wPJiVWzxxAa0bMlryj3vug8euZM6x
+        m4Q+k9K/ch1qwuc1tA0TKCtEhQ==
+X-Google-Smtp-Source: ABdhPJxHhaai30aG1N9gFqyLv4OH8ZkEt+JMJx8PzvkSsQVRq1uKPDv3zyDue9xHeyWfANXvVjrFXw==
+X-Received: by 2002:a05:6808:1303:b0:2d9:d72c:dfef with SMTP id y3-20020a056808130300b002d9d72cdfefmr939161oiv.29.1649458097816;
+        Fri, 08 Apr 2022 15:48:17 -0700 (PDT)
+Received: from ripper.. ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id 64-20020aca0643000000b002f9b8a6ca98sm1920175oig.4.2022.04.08.15.48.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 15:48:17 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [intel-gvt:gvt-staging 2/3]
- drivers/gpu/drm/i915/intel_gvt_mmio_table.c:1021:16: error: 'DMC_SSP_BASE'
- undeclared
-Message-ID: <202204090611.WX3Wi3np-lkp@intel.com>
+Subject: [PATCH] dt-bindings: thermal: tsens: Add sc8280xp compatible
+Date:   Fri,  8 Apr 2022 15:50:37 -0700
+Message-Id: <20220408225037.627432-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/gvt-linux.git gvt-staging
-head:   d7b5d2c7c69602d92c926075fb8191a7d6df2c08
-commit: 94b8f98a1026f9b304417f8152b99993f24baf13 [2/3] Merge remote-tracking branch 'origin/gvt-next' into gvt-staging
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220409/202204090611.WX3Wi3np-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel/gvt-linux/commit/94b8f98a1026f9b304417f8152b99993f24baf13
-        git remote add intel-gvt https://github.com/intel/gvt-linux.git
-        git fetch --no-tags intel-gvt gvt-staging
-        git checkout 94b8f98a1026f9b304417f8152b99993f24baf13
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+The Qualcomm SC8280XP platform has three instances of the tsens block, add a
+compatible for these instances.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+---
+ Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-All errors (new ones prefixed by >>):
-
-   drivers/gpu/drm/i915/intel_gvt_mmio_table.c: In function 'iterate_skl_plus_mmio':
->> drivers/gpu/drm/i915/intel_gvt_mmio_table.c:1021:16: error: 'DMC_SSP_BASE' undeclared (first use in this function)
-    1021 |         MMIO_D(DMC_SSP_BASE);
-         |                ^~~~~~~~~~~~
-   drivers/gpu/drm/i915/intel_gvt_mmio_table.c:17:63: note: in definition of macro 'MMIO_F'
-      17 |         ret = iter->handle_mmio_cb(iter, i915_mmio_reg_offset(reg), s); \
-         |                                                               ^~~
-   drivers/gpu/drm/i915/intel_gvt_mmio_table.c:1021:9: note: in expansion of macro 'MMIO_D'
-    1021 |         MMIO_D(DMC_SSP_BASE);
-         |         ^~~~~~
-   drivers/gpu/drm/i915/intel_gvt_mmio_table.c:1021:16: note: each undeclared identifier is reported only once for each function it appears in
-    1021 |         MMIO_D(DMC_SSP_BASE);
-         |                ^~~~~~~~~~~~
-   drivers/gpu/drm/i915/intel_gvt_mmio_table.c:17:63: note: in definition of macro 'MMIO_F'
-      17 |         ret = iter->handle_mmio_cb(iter, i915_mmio_reg_offset(reg), s); \
-         |                                                               ^~~
-   drivers/gpu/drm/i915/intel_gvt_mmio_table.c:1021:9: note: in expansion of macro 'MMIO_D'
-    1021 |         MMIO_D(DMC_SSP_BASE);
-         |         ^~~~~~
->> drivers/gpu/drm/i915/intel_gvt_mmio_table.c:1022:16: error: 'DMC_HTP_SKL' undeclared (first use in this function)
-    1022 |         MMIO_D(DMC_HTP_SKL);
-         |                ^~~~~~~~~~~
-   drivers/gpu/drm/i915/intel_gvt_mmio_table.c:17:63: note: in definition of macro 'MMIO_F'
-      17 |         ret = iter->handle_mmio_cb(iter, i915_mmio_reg_offset(reg), s); \
-         |                                                               ^~~
-   drivers/gpu/drm/i915/intel_gvt_mmio_table.c:1022:9: note: in expansion of macro 'MMIO_D'
-    1022 |         MMIO_D(DMC_HTP_SKL);
-         |         ^~~~~~
->> drivers/gpu/drm/i915/intel_gvt_mmio_table.c:1023:16: error: 'DMC_LAST_WRITE' undeclared (first use in this function)
-    1023 |         MMIO_D(DMC_LAST_WRITE);
-         |                ^~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/intel_gvt_mmio_table.c:17:63: note: in definition of macro 'MMIO_F'
-      17 |         ret = iter->handle_mmio_cb(iter, i915_mmio_reg_offset(reg), s); \
-         |                                                               ^~~
-   drivers/gpu/drm/i915/intel_gvt_mmio_table.c:1023:9: note: in expansion of macro 'MMIO_D'
-    1023 |         MMIO_D(DMC_LAST_WRITE);
-         |         ^~~~~~
->> drivers/gpu/drm/i915/intel_gvt_mmio_table.c:1080:22: error: 'DMC_MMIO_START_RANGE' undeclared (first use in this function)
-    1080 |         MMIO_F(_MMIO(DMC_MMIO_START_RANGE), 0x3000);
-         |                      ^~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/i915/intel_gvt_mmio_table.c:17:63: note: in definition of macro 'MMIO_F'
-      17 |         ret = iter->handle_mmio_cb(iter, i915_mmio_reg_offset(reg), s); \
-         |                                                               ^~~
-   drivers/gpu/drm/i915/intel_gvt_mmio_table.c:1080:16: note: in expansion of macro '_MMIO'
-    1080 |         MMIO_F(_MMIO(DMC_MMIO_START_RANGE), 0x3000);
-         |                ^~~~~
-
-
-vim +/DMC_SSP_BASE +1021 drivers/gpu/drm/i915/intel_gvt_mmio_table.c
-
-e870ce1791520c Zhi Wang 2022-04-07   885  
-e870ce1791520c Zhi Wang 2022-04-07   886  static int iterate_skl_plus_mmio(struct intel_gvt_mmio_table_iter *iter)
-e870ce1791520c Zhi Wang 2022-04-07   887  {
-e870ce1791520c Zhi Wang 2022-04-07   888  	struct drm_i915_private *dev_priv = iter->i915;
-e870ce1791520c Zhi Wang 2022-04-07   889  
-e870ce1791520c Zhi Wang 2022-04-07   890  	MMIO_D(FORCEWAKE_RENDER_GEN9);
-e870ce1791520c Zhi Wang 2022-04-07   891  	MMIO_D(FORCEWAKE_ACK_RENDER_GEN9);
-e870ce1791520c Zhi Wang 2022-04-07   892  	MMIO_D(FORCEWAKE_GT_GEN9);
-e870ce1791520c Zhi Wang 2022-04-07   893  	MMIO_D(FORCEWAKE_ACK_GT_GEN9);
-e870ce1791520c Zhi Wang 2022-04-07   894  	MMIO_D(FORCEWAKE_MEDIA_GEN9);
-e870ce1791520c Zhi Wang 2022-04-07   895  	MMIO_D(FORCEWAKE_ACK_MEDIA_GEN9);
-e870ce1791520c Zhi Wang 2022-04-07   896  	MMIO_F(DP_AUX_CH_CTL(AUX_CH_B), 6 * 4);
-e870ce1791520c Zhi Wang 2022-04-07   897  	MMIO_F(DP_AUX_CH_CTL(AUX_CH_C), 6 * 4);
-e870ce1791520c Zhi Wang 2022-04-07   898  	MMIO_F(DP_AUX_CH_CTL(AUX_CH_D), 6 * 4);
-e870ce1791520c Zhi Wang 2022-04-07   899  	MMIO_D(HSW_PWR_WELL_CTL1);
-e870ce1791520c Zhi Wang 2022-04-07   900  	MMIO_D(HSW_PWR_WELL_CTL2);
-e870ce1791520c Zhi Wang 2022-04-07   901  	MMIO_D(DBUF_CTL_S(0));
-e870ce1791520c Zhi Wang 2022-04-07   902  	MMIO_D(GEN9_PG_ENABLE);
-e870ce1791520c Zhi Wang 2022-04-07   903  	MMIO_D(GEN9_MEDIA_PG_IDLE_HYSTERESIS);
-e870ce1791520c Zhi Wang 2022-04-07   904  	MMIO_D(GEN9_RENDER_PG_IDLE_HYSTERESIS);
-e870ce1791520c Zhi Wang 2022-04-07   905  	MMIO_D(GEN9_GAMT_ECO_REG_RW_IA);
-e870ce1791520c Zhi Wang 2022-04-07   906  	MMIO_D(MMCD_MISC_CTRL);
-e870ce1791520c Zhi Wang 2022-04-07   907  	MMIO_D(CHICKEN_PAR1_1);
-e870ce1791520c Zhi Wang 2022-04-07   908  	MMIO_D(DC_STATE_EN);
-e870ce1791520c Zhi Wang 2022-04-07   909  	MMIO_D(DC_STATE_DEBUG);
-e870ce1791520c Zhi Wang 2022-04-07   910  	MMIO_D(CDCLK_CTL);
-e870ce1791520c Zhi Wang 2022-04-07   911  	MMIO_D(LCPLL1_CTL);
-e870ce1791520c Zhi Wang 2022-04-07   912  	MMIO_D(LCPLL2_CTL);
-e870ce1791520c Zhi Wang 2022-04-07   913  	MMIO_D(_MMIO(_DPLL1_CFGCR1));
-e870ce1791520c Zhi Wang 2022-04-07   914  	MMIO_D(_MMIO(_DPLL2_CFGCR1));
-e870ce1791520c Zhi Wang 2022-04-07   915  	MMIO_D(_MMIO(_DPLL3_CFGCR1));
-e870ce1791520c Zhi Wang 2022-04-07   916  	MMIO_D(_MMIO(_DPLL1_CFGCR2));
-e870ce1791520c Zhi Wang 2022-04-07   917  	MMIO_D(_MMIO(_DPLL2_CFGCR2));
-e870ce1791520c Zhi Wang 2022-04-07   918  	MMIO_D(_MMIO(_DPLL3_CFGCR2));
-e870ce1791520c Zhi Wang 2022-04-07   919  	MMIO_D(DPLL_CTRL1);
-e870ce1791520c Zhi Wang 2022-04-07   920  	MMIO_D(DPLL_CTRL2);
-e870ce1791520c Zhi Wang 2022-04-07   921  	MMIO_D(DPLL_STATUS);
-e870ce1791520c Zhi Wang 2022-04-07   922  	MMIO_D(SKL_PS_WIN_POS(PIPE_A, 0));
-e870ce1791520c Zhi Wang 2022-04-07   923  	MMIO_D(SKL_PS_WIN_POS(PIPE_A, 1));
-e870ce1791520c Zhi Wang 2022-04-07   924  	MMIO_D(SKL_PS_WIN_POS(PIPE_B, 0));
-e870ce1791520c Zhi Wang 2022-04-07   925  	MMIO_D(SKL_PS_WIN_POS(PIPE_B, 1));
-e870ce1791520c Zhi Wang 2022-04-07   926  	MMIO_D(SKL_PS_WIN_POS(PIPE_C, 0));
-e870ce1791520c Zhi Wang 2022-04-07   927  	MMIO_D(SKL_PS_WIN_POS(PIPE_C, 1));
-e870ce1791520c Zhi Wang 2022-04-07   928  	MMIO_D(SKL_PS_WIN_SZ(PIPE_A, 0));
-e870ce1791520c Zhi Wang 2022-04-07   929  	MMIO_D(SKL_PS_WIN_SZ(PIPE_A, 1));
-e870ce1791520c Zhi Wang 2022-04-07   930  	MMIO_D(SKL_PS_WIN_SZ(PIPE_B, 0));
-e870ce1791520c Zhi Wang 2022-04-07   931  	MMIO_D(SKL_PS_WIN_SZ(PIPE_B, 1));
-e870ce1791520c Zhi Wang 2022-04-07   932  	MMIO_D(SKL_PS_WIN_SZ(PIPE_C, 0));
-e870ce1791520c Zhi Wang 2022-04-07   933  	MMIO_D(SKL_PS_WIN_SZ(PIPE_C, 1));
-e870ce1791520c Zhi Wang 2022-04-07   934  	MMIO_D(SKL_PS_CTRL(PIPE_A, 0));
-e870ce1791520c Zhi Wang 2022-04-07   935  	MMIO_D(SKL_PS_CTRL(PIPE_A, 1));
-e870ce1791520c Zhi Wang 2022-04-07   936  	MMIO_D(SKL_PS_CTRL(PIPE_B, 0));
-e870ce1791520c Zhi Wang 2022-04-07   937  	MMIO_D(SKL_PS_CTRL(PIPE_B, 1));
-e870ce1791520c Zhi Wang 2022-04-07   938  	MMIO_D(SKL_PS_CTRL(PIPE_C, 0));
-e870ce1791520c Zhi Wang 2022-04-07   939  	MMIO_D(SKL_PS_CTRL(PIPE_C, 1));
-e870ce1791520c Zhi Wang 2022-04-07   940  	MMIO_D(PLANE_BUF_CFG(PIPE_A, 0));
-e870ce1791520c Zhi Wang 2022-04-07   941  	MMIO_D(PLANE_BUF_CFG(PIPE_A, 1));
-e870ce1791520c Zhi Wang 2022-04-07   942  	MMIO_D(PLANE_BUF_CFG(PIPE_A, 2));
-e870ce1791520c Zhi Wang 2022-04-07   943  	MMIO_D(PLANE_BUF_CFG(PIPE_A, 3));
-e870ce1791520c Zhi Wang 2022-04-07   944  	MMIO_D(PLANE_BUF_CFG(PIPE_B, 0));
-e870ce1791520c Zhi Wang 2022-04-07   945  	MMIO_D(PLANE_BUF_CFG(PIPE_B, 1));
-e870ce1791520c Zhi Wang 2022-04-07   946  	MMIO_D(PLANE_BUF_CFG(PIPE_B, 2));
-e870ce1791520c Zhi Wang 2022-04-07   947  	MMIO_D(PLANE_BUF_CFG(PIPE_B, 3));
-e870ce1791520c Zhi Wang 2022-04-07   948  	MMIO_D(PLANE_BUF_CFG(PIPE_C, 0));
-e870ce1791520c Zhi Wang 2022-04-07   949  	MMIO_D(PLANE_BUF_CFG(PIPE_C, 1));
-e870ce1791520c Zhi Wang 2022-04-07   950  	MMIO_D(PLANE_BUF_CFG(PIPE_C, 2));
-e870ce1791520c Zhi Wang 2022-04-07   951  	MMIO_D(PLANE_BUF_CFG(PIPE_C, 3));
-e870ce1791520c Zhi Wang 2022-04-07   952  	MMIO_D(CUR_BUF_CFG(PIPE_A));
-e870ce1791520c Zhi Wang 2022-04-07   953  	MMIO_D(CUR_BUF_CFG(PIPE_B));
-e870ce1791520c Zhi Wang 2022-04-07   954  	MMIO_D(CUR_BUF_CFG(PIPE_C));
-e870ce1791520c Zhi Wang 2022-04-07   955  	MMIO_F(PLANE_WM(PIPE_A, 0, 0), 4 * 8);
-e870ce1791520c Zhi Wang 2022-04-07   956  	MMIO_F(PLANE_WM(PIPE_A, 1, 0), 4 * 8);
-e870ce1791520c Zhi Wang 2022-04-07   957  	MMIO_F(PLANE_WM(PIPE_A, 2, 0), 4 * 8);
-e870ce1791520c Zhi Wang 2022-04-07   958  	MMIO_F(PLANE_WM(PIPE_B, 0, 0), 4 * 8);
-e870ce1791520c Zhi Wang 2022-04-07   959  	MMIO_F(PLANE_WM(PIPE_B, 1, 0), 4 * 8);
-e870ce1791520c Zhi Wang 2022-04-07   960  	MMIO_F(PLANE_WM(PIPE_B, 2, 0), 4 * 8);
-e870ce1791520c Zhi Wang 2022-04-07   961  	MMIO_F(PLANE_WM(PIPE_C, 0, 0), 4 * 8);
-e870ce1791520c Zhi Wang 2022-04-07   962  	MMIO_F(PLANE_WM(PIPE_C, 1, 0), 4 * 8);
-e870ce1791520c Zhi Wang 2022-04-07   963  	MMIO_F(PLANE_WM(PIPE_C, 2, 0), 4 * 8);
-e870ce1791520c Zhi Wang 2022-04-07   964  	MMIO_F(CUR_WM(PIPE_A, 0), 4 * 8);
-e870ce1791520c Zhi Wang 2022-04-07   965  	MMIO_F(CUR_WM(PIPE_B, 0), 4 * 8);
-e870ce1791520c Zhi Wang 2022-04-07   966  	MMIO_F(CUR_WM(PIPE_C, 0), 4 * 8);
-e870ce1791520c Zhi Wang 2022-04-07   967  	MMIO_D(PLANE_WM_TRANS(PIPE_A, 0));
-e870ce1791520c Zhi Wang 2022-04-07   968  	MMIO_D(PLANE_WM_TRANS(PIPE_A, 1));
-e870ce1791520c Zhi Wang 2022-04-07   969  	MMIO_D(PLANE_WM_TRANS(PIPE_A, 2));
-e870ce1791520c Zhi Wang 2022-04-07   970  	MMIO_D(PLANE_WM_TRANS(PIPE_B, 0));
-e870ce1791520c Zhi Wang 2022-04-07   971  	MMIO_D(PLANE_WM_TRANS(PIPE_B, 1));
-e870ce1791520c Zhi Wang 2022-04-07   972  	MMIO_D(PLANE_WM_TRANS(PIPE_B, 2));
-e870ce1791520c Zhi Wang 2022-04-07   973  	MMIO_D(PLANE_WM_TRANS(PIPE_C, 0));
-e870ce1791520c Zhi Wang 2022-04-07   974  	MMIO_D(PLANE_WM_TRANS(PIPE_C, 1));
-e870ce1791520c Zhi Wang 2022-04-07   975  	MMIO_D(PLANE_WM_TRANS(PIPE_C, 2));
-e870ce1791520c Zhi Wang 2022-04-07   976  	MMIO_D(CUR_WM_TRANS(PIPE_A));
-e870ce1791520c Zhi Wang 2022-04-07   977  	MMIO_D(CUR_WM_TRANS(PIPE_B));
-e870ce1791520c Zhi Wang 2022-04-07   978  	MMIO_D(CUR_WM_TRANS(PIPE_C));
-e870ce1791520c Zhi Wang 2022-04-07   979  	MMIO_D(PLANE_NV12_BUF_CFG(PIPE_A, 0));
-e870ce1791520c Zhi Wang 2022-04-07   980  	MMIO_D(PLANE_NV12_BUF_CFG(PIPE_A, 1));
-e870ce1791520c Zhi Wang 2022-04-07   981  	MMIO_D(PLANE_NV12_BUF_CFG(PIPE_A, 2));
-e870ce1791520c Zhi Wang 2022-04-07   982  	MMIO_D(PLANE_NV12_BUF_CFG(PIPE_A, 3));
-e870ce1791520c Zhi Wang 2022-04-07   983  	MMIO_D(PLANE_NV12_BUF_CFG(PIPE_B, 0));
-e870ce1791520c Zhi Wang 2022-04-07   984  	MMIO_D(PLANE_NV12_BUF_CFG(PIPE_B, 1));
-e870ce1791520c Zhi Wang 2022-04-07   985  	MMIO_D(PLANE_NV12_BUF_CFG(PIPE_B, 2));
-e870ce1791520c Zhi Wang 2022-04-07   986  	MMIO_D(PLANE_NV12_BUF_CFG(PIPE_B, 3));
-e870ce1791520c Zhi Wang 2022-04-07   987  	MMIO_D(PLANE_NV12_BUF_CFG(PIPE_C, 0));
-e870ce1791520c Zhi Wang 2022-04-07   988  	MMIO_D(PLANE_NV12_BUF_CFG(PIPE_C, 1));
-e870ce1791520c Zhi Wang 2022-04-07   989  	MMIO_D(PLANE_NV12_BUF_CFG(PIPE_C, 2));
-e870ce1791520c Zhi Wang 2022-04-07   990  	MMIO_D(PLANE_NV12_BUF_CFG(PIPE_C, 3));
-e870ce1791520c Zhi Wang 2022-04-07   991  	MMIO_D(_MMIO(_REG_701C0(PIPE_A, 1)));
-e870ce1791520c Zhi Wang 2022-04-07   992  	MMIO_D(_MMIO(_REG_701C0(PIPE_A, 2)));
-e870ce1791520c Zhi Wang 2022-04-07   993  	MMIO_D(_MMIO(_REG_701C0(PIPE_A, 3)));
-e870ce1791520c Zhi Wang 2022-04-07   994  	MMIO_D(_MMIO(_REG_701C0(PIPE_A, 4)));
-e870ce1791520c Zhi Wang 2022-04-07   995  	MMIO_D(_MMIO(_REG_701C0(PIPE_B, 1)));
-e870ce1791520c Zhi Wang 2022-04-07   996  	MMIO_D(_MMIO(_REG_701C0(PIPE_B, 2)));
-e870ce1791520c Zhi Wang 2022-04-07   997  	MMIO_D(_MMIO(_REG_701C0(PIPE_B, 3)));
-e870ce1791520c Zhi Wang 2022-04-07   998  	MMIO_D(_MMIO(_REG_701C0(PIPE_B, 4)));
-e870ce1791520c Zhi Wang 2022-04-07   999  	MMIO_D(_MMIO(_REG_701C0(PIPE_C, 1)));
-e870ce1791520c Zhi Wang 2022-04-07  1000  	MMIO_D(_MMIO(_REG_701C0(PIPE_C, 2)));
-e870ce1791520c Zhi Wang 2022-04-07  1001  	MMIO_D(_MMIO(_REG_701C0(PIPE_C, 3)));
-e870ce1791520c Zhi Wang 2022-04-07  1002  	MMIO_D(_MMIO(_REG_701C0(PIPE_C, 4)));
-e870ce1791520c Zhi Wang 2022-04-07  1003  	MMIO_D(_MMIO(_REG_701C4(PIPE_A, 1)));
-e870ce1791520c Zhi Wang 2022-04-07  1004  	MMIO_D(_MMIO(_REG_701C4(PIPE_A, 2)));
-e870ce1791520c Zhi Wang 2022-04-07  1005  	MMIO_D(_MMIO(_REG_701C4(PIPE_A, 3)));
-e870ce1791520c Zhi Wang 2022-04-07  1006  	MMIO_D(_MMIO(_REG_701C4(PIPE_A, 4)));
-e870ce1791520c Zhi Wang 2022-04-07  1007  	MMIO_D(_MMIO(_REG_701C4(PIPE_B, 1)));
-e870ce1791520c Zhi Wang 2022-04-07  1008  	MMIO_D(_MMIO(_REG_701C4(PIPE_B, 2)));
-e870ce1791520c Zhi Wang 2022-04-07  1009  	MMIO_D(_MMIO(_REG_701C4(PIPE_B, 3)));
-e870ce1791520c Zhi Wang 2022-04-07  1010  	MMIO_D(_MMIO(_REG_701C4(PIPE_B, 4)));
-e870ce1791520c Zhi Wang 2022-04-07  1011  	MMIO_D(_MMIO(_REG_701C4(PIPE_C, 1)));
-e870ce1791520c Zhi Wang 2022-04-07  1012  	MMIO_D(_MMIO(_REG_701C4(PIPE_C, 2)));
-e870ce1791520c Zhi Wang 2022-04-07  1013  	MMIO_D(_MMIO(_REG_701C4(PIPE_C, 3)));
-e870ce1791520c Zhi Wang 2022-04-07  1014  	MMIO_D(_MMIO(_REG_701C4(PIPE_C, 4)));
-e870ce1791520c Zhi Wang 2022-04-07  1015  	MMIO_D(_MMIO(_PLANE_CTL_3_A));
-e870ce1791520c Zhi Wang 2022-04-07  1016  	MMIO_D(_MMIO(_PLANE_CTL_3_B));
-e870ce1791520c Zhi Wang 2022-04-07  1017  	MMIO_D(_MMIO(0x72380));
-e870ce1791520c Zhi Wang 2022-04-07  1018  	MMIO_D(_MMIO(0x7239c));
-e870ce1791520c Zhi Wang 2022-04-07  1019  	MMIO_D(_MMIO(_PLANE_SURF_3_A));
-e870ce1791520c Zhi Wang 2022-04-07  1020  	MMIO_D(_MMIO(_PLANE_SURF_3_B));
-e870ce1791520c Zhi Wang 2022-04-07 @1021  	MMIO_D(DMC_SSP_BASE);
-e870ce1791520c Zhi Wang 2022-04-07 @1022  	MMIO_D(DMC_HTP_SKL);
-e870ce1791520c Zhi Wang 2022-04-07 @1023  	MMIO_D(DMC_LAST_WRITE);
-e870ce1791520c Zhi Wang 2022-04-07  1024  	MMIO_D(BDW_SCRATCH1);
-e870ce1791520c Zhi Wang 2022-04-07  1025  	MMIO_D(SKL_DFSM);
-e870ce1791520c Zhi Wang 2022-04-07  1026  	MMIO_D(DISPIO_CR_TX_BMU_CR0);
-e870ce1791520c Zhi Wang 2022-04-07  1027  	MMIO_F(GEN9_GFX_MOCS(0), 0x7f8);
-e870ce1791520c Zhi Wang 2022-04-07  1028  	MMIO_F(GEN7_L3CNTLREG2, 0x80);
-e870ce1791520c Zhi Wang 2022-04-07  1029  	MMIO_D(RPM_CONFIG0);
-e870ce1791520c Zhi Wang 2022-04-07  1030  	MMIO_D(_MMIO(0xd08));
-e870ce1791520c Zhi Wang 2022-04-07  1031  	MMIO_D(RC6_LOCATION);
-e870ce1791520c Zhi Wang 2022-04-07  1032  	MMIO_D(GEN7_FF_SLICE_CS_CHICKEN1);
-e870ce1791520c Zhi Wang 2022-04-07  1033  	MMIO_D(GEN9_CS_DEBUG_MODE1);
-e870ce1791520c Zhi Wang 2022-04-07  1034  	/* TRTT */
-e870ce1791520c Zhi Wang 2022-04-07  1035  	MMIO_D(TRVATTL3PTRDW(0));
-e870ce1791520c Zhi Wang 2022-04-07  1036  	MMIO_D(TRVATTL3PTRDW(1));
-e870ce1791520c Zhi Wang 2022-04-07  1037  	MMIO_D(TRVATTL3PTRDW(2));
-e870ce1791520c Zhi Wang 2022-04-07  1038  	MMIO_D(TRVATTL3PTRDW(3));
-e870ce1791520c Zhi Wang 2022-04-07  1039  	MMIO_D(TRVADR);
-e870ce1791520c Zhi Wang 2022-04-07  1040  	MMIO_D(TRTTE);
-e870ce1791520c Zhi Wang 2022-04-07  1041  	MMIO_D(_MMIO(0x4dfc));
-e870ce1791520c Zhi Wang 2022-04-07  1042  	MMIO_D(_MMIO(0x46430));
-e870ce1791520c Zhi Wang 2022-04-07  1043  	MMIO_D(_MMIO(0x46520));
-e870ce1791520c Zhi Wang 2022-04-07  1044  	MMIO_D(_MMIO(0xc403c));
-e870ce1791520c Zhi Wang 2022-04-07  1045  	MMIO_D(GEN8_GARBCNTL);
-e870ce1791520c Zhi Wang 2022-04-07  1046  	MMIO_D(DMA_CTRL);
-e870ce1791520c Zhi Wang 2022-04-07  1047  	MMIO_D(_MMIO(0x65900));
-e870ce1791520c Zhi Wang 2022-04-07  1048  	MMIO_D(GEN6_STOLEN_RESERVED);
-e870ce1791520c Zhi Wang 2022-04-07  1049  	MMIO_D(_MMIO(0x4068));
-e870ce1791520c Zhi Wang 2022-04-07  1050  	MMIO_D(_MMIO(0x67054));
-e870ce1791520c Zhi Wang 2022-04-07  1051  	MMIO_D(_MMIO(0x6e560));
-e870ce1791520c Zhi Wang 2022-04-07  1052  	MMIO_D(_MMIO(0x6e554));
-e870ce1791520c Zhi Wang 2022-04-07  1053  	MMIO_D(_MMIO(0x2b20));
-e870ce1791520c Zhi Wang 2022-04-07  1054  	MMIO_D(_MMIO(0x65f00));
-e870ce1791520c Zhi Wang 2022-04-07  1055  	MMIO_D(_MMIO(0x65f08));
-e870ce1791520c Zhi Wang 2022-04-07  1056  	MMIO_D(_MMIO(0x320f0));
-e870ce1791520c Zhi Wang 2022-04-07  1057  	MMIO_D(_MMIO(0x70034));
-e870ce1791520c Zhi Wang 2022-04-07  1058  	MMIO_D(_MMIO(0x71034));
-e870ce1791520c Zhi Wang 2022-04-07  1059  	MMIO_D(_MMIO(0x72034));
-e870ce1791520c Zhi Wang 2022-04-07  1060  	MMIO_D(_MMIO(_PLANE_KEYVAL_1(PIPE_A)));
-e870ce1791520c Zhi Wang 2022-04-07  1061  	MMIO_D(_MMIO(_PLANE_KEYVAL_1(PIPE_B)));
-e870ce1791520c Zhi Wang 2022-04-07  1062  	MMIO_D(_MMIO(_PLANE_KEYVAL_1(PIPE_C)));
-e870ce1791520c Zhi Wang 2022-04-07  1063  	MMIO_D(_MMIO(_PLANE_KEYMAX_1(PIPE_A)));
-e870ce1791520c Zhi Wang 2022-04-07  1064  	MMIO_D(_MMIO(_PLANE_KEYMAX_1(PIPE_B)));
-e870ce1791520c Zhi Wang 2022-04-07  1065  	MMIO_D(_MMIO(_PLANE_KEYMAX_1(PIPE_C)));
-e870ce1791520c Zhi Wang 2022-04-07  1066  	MMIO_D(_MMIO(_PLANE_KEYMSK_1(PIPE_A)));
-e870ce1791520c Zhi Wang 2022-04-07  1067  	MMIO_D(_MMIO(_PLANE_KEYMSK_1(PIPE_B)));
-e870ce1791520c Zhi Wang 2022-04-07  1068  	MMIO_D(_MMIO(_PLANE_KEYMSK_1(PIPE_C)));
-e870ce1791520c Zhi Wang 2022-04-07  1069  	MMIO_D(_MMIO(0x44500));
-e870ce1791520c Zhi Wang 2022-04-07  1070  #define CSFE_CHICKEN1_REG(base) _MMIO((base) + 0xD4)
-e870ce1791520c Zhi Wang 2022-04-07  1071  	MMIO_RING_D(CSFE_CHICKEN1_REG);
-e870ce1791520c Zhi Wang 2022-04-07  1072  #undef CSFE_CHICKEN1_REG
-e870ce1791520c Zhi Wang 2022-04-07  1073  	MMIO_D(GEN8_HDC_CHICKEN1);
-e870ce1791520c Zhi Wang 2022-04-07  1074  	MMIO_D(GEN9_WM_CHICKEN3);
-e870ce1791520c Zhi Wang 2022-04-07  1075  
-e870ce1791520c Zhi Wang 2022-04-07  1076  	if (IS_KABYLAKE(dev_priv) || IS_COFFEELAKE(dev_priv))
-e870ce1791520c Zhi Wang 2022-04-07  1077  		MMIO_D(GAMT_CHKN_BIT_REG);
-e870ce1791520c Zhi Wang 2022-04-07  1078  	if (!IS_BROXTON(dev_priv))
-e870ce1791520c Zhi Wang 2022-04-07  1079  		MMIO_D(GEN9_CTX_PREEMPT_REG);
-e870ce1791520c Zhi Wang 2022-04-07 @1080  	MMIO_F(_MMIO(DMC_MMIO_START_RANGE), 0x3000);
-e870ce1791520c Zhi Wang 2022-04-07  1081  	return 0;
-e870ce1791520c Zhi Wang 2022-04-07  1082  }
-e870ce1791520c Zhi Wang 2022-04-07  1083  
-
-:::::: The code at line 1021 was first introduced by commit
-:::::: e870ce1791520cd03f67c5a16f309d94e4aede85 i915/gvt: Separate the MMIO tracking table from GVT-g
-
-:::::: TO: Zhi Wang <zhi.a.wang@intel.com>
-:::::: CC: Zhi Wang <zhi.a.wang@intel.com>
-
+diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+index b6406bcc683f..8ba8a3e14acc 100644
+--- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
++++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+@@ -49,6 +49,7 @@ properties:
+               - qcom,sc7180-tsens
+               - qcom,sc7280-tsens
+               - qcom,sc8180x-tsens
++              - qcom,sc8180xp-tsens
+               - qcom,sdm630-tsens
+               - qcom,sdm845-tsens
+               - qcom,sm8150-tsens
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+

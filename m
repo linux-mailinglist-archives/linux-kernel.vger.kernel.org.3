@@ -2,108 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA4B04F9F62
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 23:54:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E936E4F9F64
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 23:56:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239917AbiDHV4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 17:56:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53060 "EHLO
+        id S237446AbiDHV56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 17:57:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231643AbiDHV4o (ORCPT
+        with ESMTP id S229517AbiDHV5y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 17:56:44 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B12CFD08
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 14:54:39 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id k23so19811559ejd.3
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 14:54:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jSIQ80W+dMFDXZQJvG8kW782kcJcBLa6c9nm/vAjIzg=;
-        b=U3TitJwE6bSTIGiHXM6skTGJVfHEbE0d2Gp4Cr4l9lZXA0K34kvevVx5b1QDwnvBX2
-         DMNmIlsRud/rGl6uWt0grg3KSoVySB5+wpH/VT638qCPvkJUTOyHeicJ6UdWQv7wEGDj
-         jwrTuZE/dGzmWn/diVAFZwuANGnsAY4oo6iht6IHwvyrdn4zNYGZw31fjpDw9TN0GIG0
-         7YwbkXbnzVCDsBRhc5+GKt8/oG7myuUGcWcszKj+aPkMDKn0m75ZFrGgR875yiT6+ODu
-         XiZBlka4SZq9Cr4qiE11j9xu3+/guhGCdmCPs04gGk9Uw5uULeMLzXuiXhj9fyXywvB6
-         6SWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jSIQ80W+dMFDXZQJvG8kW782kcJcBLa6c9nm/vAjIzg=;
-        b=pHuFbaPJOt4+fafs2sHlqVYhUmJOylvZIW75rntkuTie6AEIPpSpzVMiYGrurgryzv
-         kW4njR1aN07mlMp18XExZD9+ApSbzoRnFaX4Vva/VCFmhE1Q89JA2Sxz9ZaKPc3cC9i9
-         DzYGpw7VPPLxwpQ/jhLWj/7sSQCzRovfZoGF6z/pCBQhB/f8CS+eUsIEJxIyHCeVvCTC
-         4UJVvLHSqFvYpALNEAqS4cKcLxfEClBSkm9rtjFv/cMOgfHQw6R/fAv8pIItQ9oP12Yu
-         6oasLeXkA0fxKOwSlsDuS5Db1AKkeIIVGZdi/DABBvlYgylduZsXelnljW5NkQKYIo2r
-         F3Iw==
-X-Gm-Message-State: AOAM532GSzXnDBrqx6LcC2hNRrq9TjLzhnN+6BOoCvjiwy+aqihbAHF7
-        U2Tk2/laOpm8QsUOLS7qitzwbkihQ70tx6BkZk435A==
-X-Google-Smtp-Source: ABdhPJwqYFMFb1OvkyoDQSpvZlblhJVC9NNC7aOaRCcpMbaIqwtn65VoAP3qHd0qzKvkCeg2qOqodlB9n+UgjOS4YL0=
-X-Received: by 2002:a17:907:1c06:b0:6df:b257:cbb3 with SMTP id
- nc6-20020a1709071c0600b006dfb257cbb3mr19966811ejc.631.1649454877941; Fri, 08
- Apr 2022 14:54:37 -0700 (PDT)
+        Fri, 8 Apr 2022 17:57:54 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BE2238BF6;
+        Fri,  8 Apr 2022 14:55:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 79F7ECE2BE0;
+        Fri,  8 Apr 2022 21:55:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F73CC385A1;
+        Fri,  8 Apr 2022 21:55:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649454945;
+        bh=25vW1EczToy4G4r4R/eA4RyVfrlTEyY2y4C5EOTRlZs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=TUSjt2Ebn5pR/zhdkpfF+t+eKiABz0vq+AmZWdWsQEHGvN/W/x5eu4vQmpIzrqFks
+         pBsubIwvf/hW+mPV26XlTinTR7QR/xpjA+cEpHkuO72WZK230Xni/4TP2pgB6VPESP
+         KgwXYpr+bUco+yOn3Z6uukac5Ad1xDI0ICLNFKccnfH1lTHTCC8/UCg4TtvPafv2lh
+         jDfBYePRT+m2wTLCDXN68AxBcGEG4PhRHqj4A0V52xcHQAVwgrTvUlxAFlRF0yzRQE
+         NSnyn/jPKUXPMvVoNz4ZSttjTMW6i11fdpe+S4PgnrnJtiD2rEFbqnJofYF4HABJJR
+         1iCkgxezu5nSw==
+Date:   Fri, 8 Apr 2022 14:55:44 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Guangbin Huang <huangguangbin2@huawei.com>
+Cc:     <davem@davemloft.net>, <pabeni@redhat.com>, <mkubecek@suse.cz>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <lipeng321@huawei.com>, <chenhao288@hisilicon.com>,
+        <wangjie125@huawei.com>
+Subject: Re: [PATCH net-next 1/3] net: ethtool: extend ringparam set/get
+ APIs for tx_push
+Message-ID: <20220408145544.141c0799@kernel.org>
+In-Reply-To: <20220408071245.40554-2-huangguangbin2@huawei.com>
+References: <20220408071245.40554-1-huangguangbin2@huawei.com>
+        <20220408071245.40554-2-huangguangbin2@huawei.com>
 MIME-Version: 1.0
-References: <20220407223019.2066361-1-dlatypov@google.com> <20220408034848.2081355-1-davidgow@google.com>
- <CAGS_qxrNOPq+akyt2Ee4NXySP+Zxqis2H5CwKs_kNWNvJ+bo5A@mail.gmail.com>
- <CABVgOSkKuHCkfpQhzNmzufaVw_6qO-Ve_t5oTub1JeweTiC9RQ@mail.gmail.com> <CAGS_qxqmbgy6KOp1bPF4Pk5SZT+r8L7ASqEyNWF9BtCS2JgXaw@mail.gmail.com>
-In-Reply-To: <CAGS_qxqmbgy6KOp1bPF4Pk5SZT+r8L7ASqEyNWF9BtCS2JgXaw@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Fri, 8 Apr 2022 16:54:26 -0500
-Message-ID: <CAGS_qxqR_WQ4mn20_bMnWi-F969B5BxrvXr8QiQzufGAs+bHnA@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: Print a total count of tests.
-To:     David Gow <davidgow@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 8, 2022 at 2:04 PM Daniel Latypov <dlatypov@google.com> wrote:
-<snip>
+On Fri, 8 Apr 2022 15:12:43 +0800 Guangbin Huang wrote:
+> From: Jie Wang <wangjie125@huawei.com>
+> 
+> Currently tx push is a standard driver feature which controls use of a fast
+> path descriptor push. So this patch extends the ringparam APIs and data
+> structures to support set/get tx push by ethtool -G/g.
+> 
+> Signed-off-by: Jie Wang <wangjie125@huawei.com>
+> Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
 
-> E.g. I get this output
-> Ran 173 tests: passed: 137, skipped: 36
->
-> with a new combined patch of
->
-> diff --git a/tools/testing/kunit/kunit_parser.py
-> b/tools/testing/kunit/kunit_parser.py
-> index 807ed2bd6832..de1c0b7e14ed 100644
-> --- a/tools/testing/kunit/kunit_parser.py
-> +++ b/tools/testing/kunit/kunit_parser.py
-> @@ -94,11 +94,11 @@ class TestCounts:
->         def __str__(self) -> str:
->                 """Returns the string representation of a TestCounts object.
->                 """
-> -               return ('Passed: ' + str(self.passed) +
-> -                       ', Failed: ' + str(self.failed) +
-> -                       ', Crashed: ' + str(self.crashed) +
-> -                       ', Skipped: ' + str(self.skipped) +
-> -                       ', Errors: ' + str(self.errors))
-> +               statuses = [('passed', self.passed), ('failed', self.failed),
-> +                       ('crashed', self.crashed), ('skipped', self.skipped),
-> +                       ('errors', self.errors)]
-> +               return f'Ran {self.total()} tests: ' + \
-> +                       ', '.join(f'{s}: {n}' for s, n in statuses if n > 0)
->
->         def total(self) -> int:
->                 """Returns the total number of test cases within a test
->
+> +``ETHTOOL_A_RINGS_TX_PUSH`` flag is used to choose the ordinary path or the fast
+> +path to send packets. In ordinary path, driver fills BDs to DDR memory and
+> +notifies NIC hardware. In fast path, driver pushes BDs to the device memory
+> +directly and thus reducing the sending latencies. Setting tx push attribute "on"
+> +will enable tx push mode and send packets in fast path if packet size matches.
+> +For those not supported hardwares, this attributes is "off" by default settings.
 
-Sent this patch out as a v2,
-https://lore.kernel.org/linux-kselftest/20220408215105.2332902-1-dlatypov@google.com/
+Since you need to respin to fix the kdoc warning - could you also add 
+a mention that enabling this feature may increase CPU cost? Unless it's
+not the case for your implementation, I thought it usually is..
+
+>  RINGS_SET
+>  =========
+> @@ -887,6 +894,7 @@ Request contents:
+>    ``ETHTOOL_A_RINGS_TX``                u32     size of TX ring
+>    ``ETHTOOL_A_RINGS_RX_BUF_LEN``        u32     size of buffers on the ring
+>    ``ETHTOOL_A_RINGS_CQE_SIZE``          u32     Size of TX/RX CQE
+> +  ``ETHTOOL_A_RINGS_TX_PUSH``           u8      flag of TX Push mode
+>    ====================================  ======  ===========================
+>  
+>  Kernel checks that requested ring sizes do not exceed limits reported by
+> diff --git a/include/linux/ethtool.h b/include/linux/ethtool.h
+> index 4af58459a1e7..ede4f9154cd2 100644
+> --- a/include/linux/ethtool.h
+> +++ b/include/linux/ethtool.h
+> @@ -71,11 +71,13 @@ enum {
+>   * struct kernel_ethtool_ringparam - RX/TX ring configuration
+>   * @rx_buf_len: Current length of buffers on the rx ring.
+>   * @tcp_data_split: Scatter packet headers and data to separate buffers
+> + * @tx_push: The flag of tx push mode
+>   * @cqe_size: Size of TX/RX completion queue event
+>   */
+>  struct kernel_ethtool_ringparam {
+>  	u32	rx_buf_len;
+>  	u8	tcp_data_split;
+> +	u8	tx_push;
+>  	u32	cqe_size;
+>  };
+>  
+> @@ -87,6 +89,7 @@ struct kernel_ethtool_ringparam {
+>  enum ethtool_supported_ring_param {
+>  	ETHTOOL_RING_USE_RX_BUF_LEN = BIT(0),
+>  	ETHTOOL_RING_USE_CQE_SIZE   = BIT(1),
+> +	ETHTOOL_RING_USE_TX_PUSH    = BIT(2),
+
+include/linux/ethtool.h:94: warning: Enum value 'ETHTOOL_RING_USE_TX_PUSH' not described in enum 'ethtool_supported_ring_param'
+

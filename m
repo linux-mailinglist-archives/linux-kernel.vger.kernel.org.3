@@ -2,71 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D3DD4F99DF
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 17:50:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EAD74F99DD
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 17:50:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237805AbiDHPwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 11:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33400 "EHLO
+        id S237798AbiDHPwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 11:52:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237793AbiDHPwS (ORCPT
+        with ESMTP id S237793AbiDHPwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 11:52:18 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D3CFCA6FB;
-        Fri,  8 Apr 2022 08:50:12 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id EB2ECC0003;
-        Fri,  8 Apr 2022 15:50:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1649433011;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rAt83kGtVYJZF3EBEbN5MMvf2qH0ArJM1Y4wwCRzF+U=;
-        b=goYCf35UiOfKb4ovjeqCSFHPqjUX3tM40fxE3XD+Wq4RyPbPohztgA71H3Yi9bpVbBXBi5
-        gMskv8UFPDa90U/jaP3a/s6KsVrUrCb2wUT7rwKTCVgWAeX/xraUBK5dF4+7kGeJJYQpC2
-        aezVXmlE4tN8MSGGIu6pSlC1vTGmxM+M7H/n/cxYXjO4q3OKklOvPMscUXsybbIFmaad04
-        gFm+Jb0iPYEL6s6Tt8wIYS5tJljiUduDVbo5TtJ3WAloASa/kYC87so4fltXcq2Z2Ii79R
-        B35n6YO3fyqhB4hJ/WzTI6ZbTe+wkldCQMwNqt+o7Mf86A0AKrmqqSTo/j+6OQ==
-Date:   Fri, 8 Apr 2022 17:48:41 +0200
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Lizhi Hou <lizhi.hou@xilinx.com>,
-        Sonal Santan <sonal.santan@xilinx.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Allan Nielsen <allan.nielsen@microchip.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v2 0/3] add fwnode support to reset subsystem
-Message-ID: <20220408174841.34458529@fixe.home>
-In-Reply-To: <Yk2TVAfPVh9a1tUR@robh.at.kernel.org>
-References: <20220324141237.297207-1-clement.leger@bootlin.com>
-        <Ykst0Vb4fk+iALzc@robh.at.kernel.org>
-        <20220405092434.6e424ed4@fixe.home>
-        <YkxWeMNw9Ba0KjHM@robh.at.kernel.org>
-        <20220405175120.23fc6b2a@fixe.home>
-        <CAL_JsqLdBcAw1KPnrATHqEngRWkx6moxDODH1xV67EKAufc6_w@mail.gmail.com>
-        <20220406094019.670a2956@fixe.home>
-        <Yk2TVAfPVh9a1tUR@robh.at.kernel.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Fri, 8 Apr 2022 11:52:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB20BF977;
+        Fri,  8 Apr 2022 08:50:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B84A96203A;
+        Fri,  8 Apr 2022 15:50:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21F22C385A1;
+        Fri,  8 Apr 2022 15:50:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649433003;
+        bh=kBmTJCLbW+s+x6LAS7oTt0/tmQ0W6s9Ng/wKteoUYNs=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=qB4BxEoM2FCXFMhOCbAeD+c/kdum0N5FQNtWab0Zu24WOy+sAE07ikjdQJGzt/hWP
+         ncjSKel0UbEQ3lR89Jt/kVIf6zgkWFQDtrEO04gLvknveWFrh/deJqfJ4iki64m9a6
+         SyCufW/KtmxHrQdxdfB0d8LRuK+pY65C52YMWQKXTbxPly7GOpzOpGlgiL5MM0I2N5
+         3CISACp21l2pD/inWa6pvK4XXzkMZlS+dJdSLWVi0jw3qaXel6rTf6zHRWvc82ojpr
+         j2Mhm6KHKfoeAqql7LsPiW68aOy1Pjrmxu1//RsEZ7+U0SiLj1wOIyBwidpB5C/1Vo
+         PP9FTgFCy9xEA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id AA8345C0176; Fri,  8 Apr 2022 08:50:02 -0700 (PDT)
+Date:   Fri, 8 Apr 2022 08:50:02 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        rcu <rcu@vger.kernel.org>, Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH RFC] rcu/nocb: Provide default all-CPUs mask for
+ RCU_NOCB_CPU=y
+Message-ID: <20220408155002.GF4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220407210734.2548973-1-joel@joelfernandes.org>
+ <20220408142232.GA4285@paulmck-ThinkPad-P17-Gen-1>
+ <CAEXW_YQWeqfcKdAKmCn4fFGyWXjOGd=29wvi6bL3k7s2bGkDJw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEXW_YQWeqfcKdAKmCn4fFGyWXjOGd=29wvi6bL3k7s2bGkDJw@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,101 +63,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Wed, 6 Apr 2022 08:19:16 -0500,
-Rob Herring <robh@kernel.org> a =C3=A9crit :
+On Fri, Apr 08, 2022 at 10:52:21AM -0400, Joel Fernandes wrote:
+> On Fri, Apr 8, 2022 at 10:22 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > On Thu, Apr 07, 2022 at 09:07:33PM +0000, Joel Fernandes wrote:
+> > > On systems with CONFIG_RCU_NOCB_CPU=y, there is no default mask provided
+> > > which ends up not offloading any CPU. This patch removes yet another
+> > > dependency from the bootloader having to know about RCU, about how many
+> > > CPUs the system has, and about how to provide the mask. Basically, I
+> > > think we should stop pretending that the user knows what they are doing :).
+> > > In other words, if NO_CB_CPU is enabled, lets make use of it.
+> > >
+> > > My goal is to make RCU as zero-config as possible with sane defaults. If
+> > > user wants to provide rcu_nocbs= or nohz_full= options, then those will
+> > > take precedence and this patch will have no effect.
+> > >
+> > > I tested providing rcu_nocbs= option, ensuring that is preferred over this.
+> >
+> > Unless something has changed, this would change behavior relied upon
+> > the enterprise distros.  Last I checked, they want to supply a single
+> > binary, as evidenced by the recent CONFIG_PREEMPT_DYNAMIC Kconfig option,
+> > and they also want the default to be non-offloaded.  That is, given a
+> > kernel built with CONFIG_RCU_NOCB_CPU=y and without either a nohz_full
+> > or a nocbs_cpu boot parameter, all of the CPUs must be non-offloaded.
+> 
+> Just curious, do you have information (like data, experiment results)
+> on why they want default non-offloaded? Or maybe they haven't tried
+> the recent work done in NOCB code?
 
-> >  =20
-> > >=20
-> > >  =20
-> > > > > I've told the Xilinx folks the same thing, but I would separate t=
-his
-> > > > > into 2 parts. First is just h/w work in a DT based system. Second=
- is
-> > > > > creating a base tree an overlay can be applied to. The first part=
- should
-> > > > > be pretty straightforward. We already have PCI bus bindings. The =
-only
-> > > > > tricky part is getting address translation working from leaf devi=
-ce thru
-> > > > > the PCI bus to host bus, but support for that should all be in pl=
-ace
-> > > > > (given we support ISA buses off of PCI bus). The second part will
-> > > > > require generating PCI DT nodes at runtime. That may be needed fo=
-r both
-> > > > > DT and ACPI systems as we don't always describe all the PCI hiera=
-rchy
-> > > > > in DT.   =20
-> > > >
-> > > > But then, if the driver generate the nodes, it will most probably
-> > > > have to describe the nodes by hardcoding them right ?   =20
-> > >=20
-> > > No, the kernel already maintains its own tree of devices. You just
-> > > need to use that to generate the tree. That's really not much more
-> > > than nodes with a 'reg' property encoding the device and function
-> > > numbers. =20
-> >=20
-> > Just to clarified a point, my PCI device exposes multiple peripherals
-> > behind one single PCI function. =20
->=20
-> Right. I would expect your PCI device DT node to have a 'simple-bus'=20
-> child node with all those peripherals. And maybe there's other nodes=20
-> like fixed-clocks, etc.
->=20
-> > To be sure I understood what you are suggesting, you propose to create
-> > a DT node from the PCI driver that has been probed dynamically
-> > matching this same PCI device with a 'reg' property. I also think
-> > this would requires to generate some 'pci-ranges' to remap the
-> > downstream devices that are described in the DTBO, finally, load the
-> > overlay to be apply under this newly created node. Is that right ? =20
->=20
-> Right. You'll need to take the BAR address(es) for the device and stick=20
-> those into 'ranges' to translate offsets to BAR+offset.
+I most definitely do.  When I first introduced callback offloading, I
+made it completely replace softirq callback invocation.  There were some
+important throughput-oriented workloads that got hit with significant
+performance degradation due to this change.  Enterprise Java workloads
+were the worst hit.
 
-Hi Rob,
+Android does not run these workloads, and I am not aware of ChromeOS
+running them, either.
 
-I got something working (address translation, probing and so on) using
-what you started. I switch to using changeset however, I'm not sure that
-it make sense for property creation since the node has not yet been
-added to the tree. Attaching the node with changeset however seems
-to make sense. But I'm no expert here, so any advise is welcome.
+> Another option I think is to make it enforce NOCB if NR_CPUS <= 32 if
+> that makes sense.
 
-Based on what we said, I created a PCI driver which uses a builtin
-overlay. In order to be able to apply the overlay on the correct PCI
-node -the one on which the card was plugged) and thus be totally plug
-and play, the 'target-path' property is patched using direct fdt
-function and replaced the target with the PCI device node path.
-I don't see any other way to do that before applying the overlay since
-of_overlay_fdt_apply() takes a fdt blob as input.
+That would avoid hurting RHEL and SLES users, so this would be better
+than making the change unconditionally.  But there are a lot of distros
+out there.
 
-The driver also insert correct ranges into the PCI device in order to
-translate the downstream node addresses to BAR addresses. It seems
-reasonnable to assume that this depends on the driver and thus should
-not be done by the PCI of core at all.
+I have to ask...  Isn't there already a way of specifying a set of kernel
+boot parameters that are required for ChromeOS?  If so, add rcu_nocbs=0-N
+to that list and be happy.
 
-Finally, the driver probes the newly added childs using
-of_platform_populate(). With all of that, the address translation
-and the probing works correctly and the platform devices are created.
-There is still a few things to fix such as the following:
+> > So for me to push this to mainline, I need an ack from someone from each
+> > of the enterprise distros, and each of those someones needs to understand
+> > the single-binary strategy used by the corresponding distro.
+> 
+> Ok.
+> 
+> > And is it really all -that- hard to specify an additional boot parameter
+> > across ChromeOS devices?  Android seems to manage it.  ;-)
+> 
+> That's not the hard part I think. The hard part is to make sure a
+> future Linux user who is not an RCU expert does not forget to turn it
+> on. ChromeOS is not the only OS that I've seen someone forget to do it
+> ;-D. AFAIR, there were Android devices too in the past where I saw
+> this forgotten. I don't think we should rely on the users doing the
+> right thing (as much as possible).
+> 
+> The single kernel binary point makes sense but in this case, I think
+> the bigger question that I'd have is what is the default behavior and
+> what do *most* users of RCU want. So we can keep sane defaults for the
+> majority and reduce human errors related to configuration.
 
-[ 2830.324773] OF: overlay: WARNING: memory leak will occur if overlay
-removed, property: /pci/pci@2,6/dev@0,0/compatible
+If both the ChromeOS and Android guys need it, I could reinstate the
+old RCU_NOCB_CPU_ALL Kconfig option.  This was removed due to complaints
+about RCU Kconfig complexity, but I believe that Reviewed-by from ChromeOS
+and Android movers and shakers would overcome lingering objections.
 
-But it seems like this is something that works and would allow to
-support various use cases. From what I see, it should also work on
-other platforms. Major advantage of that over fwnode is that the
-changes are pretty small and relatively contained.
+Would that help?
 
-However, one point that might be a bit of a problem is enabling
-CONFIG_OF on x86 for instance. While it seems to work, is there any
-potential concerns about this ? Moreover, ideally, I would want the
-driver to "select OF" since without that, the driver won't be visible.
-Or should it "depends on OF" but thus, it would be almost mandatory to
-enable CONFIG_OF on x86 kernels if we want to support this driver
-without the need to recompile a kernel.
-
-Thanks,
-
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+							Thanx, Paul

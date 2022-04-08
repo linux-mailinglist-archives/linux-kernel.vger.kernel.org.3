@@ -2,143 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FA244F8C8E
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 692584F8CCC
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233855AbiDHDJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 23:09:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38216 "EHLO
+        id S233865AbiDHDJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 23:09:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233835AbiDHDI6 (ORCPT
+        with ESMTP id S232790AbiDHDJU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 23:08:58 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C4112E76E
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 20:06:54 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id f10so6757131plr.6
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 20:06:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=EC5S9HeeAeWu2eNBsyivixNrTA70JdgMnP+Pf2/O2qg=;
-        b=EpAjw7jw4WWVD+pRhIzuMb0FhqzyaNBFP80LNXjV0r/rD1/RB0ZkW8mCtl8L5gOm9V
-         vYcU6A29g2I+ODCG7pJZTrN48/CYZYH2lv+cQ1Lf7e6rqqAWkC4Zg44oVvO2qbceqxRo
-         2qLu9D+9FYKb3NJMrbsxNA0m6heqbgDkSiRLDlvDb1HeKTXTSt9G9kajaf7pzoL45aP7
-         er0hjWFfhWotgPNcWgxfJDyv1MZZNuzL3s89S1dWzCczh9jGeW2xgklsEbgMgjSxgw6R
-         x4FhGo9SSJMZy48OO8AsLDL/iCZU9HnFQ24dhJNIik7tEolbvUEEVC685pqbjr5/nDw0
-         ND+w==
+        Thu, 7 Apr 2022 23:09:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 97E2716F6CE
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 20:07:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649387237;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0mJcdW33+4gW1LiIaHWfczE7pJzHwlPUBk+4IAUF7M4=;
+        b=gqHpKxRwq6UtNddJ06/44SwEKfh0B+TVU6300XcPF6W4i9kkbzRN9OfHQWkJUEIXwX6Em+
+        74gOqgpeBzYcqr72TX+5yqpRC2XinL9ckQ3h+7kgnKLDf49xT0TyhyweDA9jrtbno9gMnN
+        jMrpi01htjSbTqHETgn+MHsOGDdw2c0=
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
+ [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-440-HKd9LzoOO8WTxtthrmgnrw-1; Thu, 07 Apr 2022 23:07:16 -0400
+X-MC-Unique: HKd9LzoOO8WTxtthrmgnrw-1
+Received: by mail-lf1-f70.google.com with SMTP id g6-20020a19ac06000000b00464f8022af9so1217327lfc.9
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 20:07:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EC5S9HeeAeWu2eNBsyivixNrTA70JdgMnP+Pf2/O2qg=;
-        b=62bB5Z+StbNUivOetlSsNpsNdBti+zyCyx0/oiS+q8mTOSsMDpVbBPG5Y/8qGI0B0d
-         jJMjYj720NdJkTwFxgjs/RgXet+RrmF4Q0HKSIvac89ORcs27W8SzemoaRihRWdxEY0Q
-         7VTPt9KYFAg0wgKEKk1bGZoq0xsBSwcSjhwoyd439SJooYeo/dvwTOjW3TkYcL51QLut
-         t68CuivT4uBlbr0l83nzublLkl9IHValZ6vPMlCXgfD38pGGDom2qSGitPHcur5T9WFu
-         +hhMMOzijPs9KOm9dLo+Yk1l00tI6lZDdqAhG39CwNGIC7kzeEkkY9vBU85bKUaQT9Fw
-         utqg==
-X-Gm-Message-State: AOAM531YIf35gXNZW7CZep2SaohoHcc3K7cJMgV01WeOEBNycPzOcROU
-        xbkuLmwZTPIo1lAIDj/kURRyPR5+x2kK9g==
-X-Google-Smtp-Source: ABdhPJxAdWyP+XVhR9LTj3ckSl+Vd8CbfsIFM48H3Oti2JTQQI09MpZlrgO3+njMgmysdIXAz/Vv0Q==
-X-Received: by 2002:a17:90a:d354:b0:1ca:a0aa:bc23 with SMTP id i20-20020a17090ad35400b001caa0aabc23mr19424438pjx.142.1649387213690;
-        Thu, 07 Apr 2022 20:06:53 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id u6-20020a17090a3fc600b001ca88b0bdfesm10338286pjm.13.2022.04.07.20.06.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 20:06:52 -0700 (PDT)
-Date:   Fri, 8 Apr 2022 03:06:49 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com
-Subject: Re: [PATCH v5 11/13] KVM: Zap existing KVM mappings when pages
- changed in the private fd
-Message-ID: <Yk+myTh1rMfeWOt3@google.com>
-References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
- <20220310140911.50924-12-chao.p.peng@linux.intel.com>
- <20220405234535.ijctzcbxkat2o5ij@amd.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0mJcdW33+4gW1LiIaHWfczE7pJzHwlPUBk+4IAUF7M4=;
+        b=NALQ4XjfVCPoAvGLOgzGB2xMdPwXo4fkGezDl0difSr9m6PesrZb7BGPmDwBWkTc/t
+         TiAjFvMZPHjFgicd05l8UPfoZE9GCW9S5VnLiDeXYWv7bdA9F9I062z/Ifa2laQ+hSRx
+         uACMl6DxvcsY55KEHEBlC0HIobUOUv379VndHshoRpci1xox3uBrwhgFLqsZuc0aMTzL
+         02sUTEv96QfDryrq5YOacWWP242OpXisjXLxEIowRkgLilX8mSW/Wzj4AB2KXkHcusSq
+         tOlDSTQpVvNuzmeh741X0DaS7G93YDqUxMi02ULuX5eGWa+K03sddN5UK3xxHiIeTlvY
+         0L3Q==
+X-Gm-Message-State: AOAM531+Pbr02OLphYBasAhlmEYzsqf3lquDhO2J3M72IYcKdS1s14EF
+        /GLO/Nkvqmih/m9CHtNjldhCj8g8mnpkjYEHWDGUhJ4BP2V9Xii7dYBccyWtpbf4dQy5lHl39RL
+        7jNy6GcvU4cjVrmU9WzN3siuxPEoW7p4ZvjmvHGJU
+X-Received: by 2002:a05:6512:2586:b0:464:f75d:cfa with SMTP id bf6-20020a056512258600b00464f75d0cfamr3611241lfb.238.1649387234430;
+        Thu, 07 Apr 2022 20:07:14 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzgWwR3JIJz3D/8EgFkxuxkKo6iHijAl6dM7d1piH5tYY9YCkT5VihT277zbKJtx38DQE/DkghzZddgd4OX378=
+X-Received: by 2002:a05:6512:2586:b0:464:f75d:cfa with SMTP id
+ bf6-20020a056512258600b00464f75d0cfamr3611224lfb.238.1649387234117; Thu, 07
+ Apr 2022 20:07:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220405234535.ijctzcbxkat2o5ij@amd.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220407105724.308930-1-hpa@redhat.com> <20220407115133.GL3293@kadam>
+ <CAEth8oG_GAuammtSqKzyj+Vq6ZsQJJOEeFhgxYhxXHViDYvkow@mail.gmail.com> <20220407132609.GN3293@kadam>
+In-Reply-To: <20220407132609.GN3293@kadam>
+From:   Kate Hsuan <hpa@redhat.com>
+Date:   Fri, 8 Apr 2022 11:07:03 +0800
+Message-ID: <CAEth8oHqqipXNR6QPgm_YNGPVBSZLm3EEg0k0M9tivFCwE5_2Q@mail.gmail.com>
+Subject: Re: [PATCH v2] staging: media: ipu3: Fix AWB x_start position when
+ rightmost stripe is used
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jean-Michel Hautbois <jeanmichel.hautbois@ideasonboard.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Hans De Goede <hdegoede@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022, Michael Roth wrote:
-> On Thu, Mar 10, 2022 at 10:09:09PM +0800, Chao Peng wrote:
-> >  static inline bool kvm_slot_is_private(const struct kvm_memory_slot *slot)
-> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> > index 67349421eae3..52319f49d58a 100644
-> > --- a/virt/kvm/kvm_main.c
-> > +++ b/virt/kvm/kvm_main.c
-> > @@ -841,8 +841,43 @@ static int kvm_init_mmu_notifier(struct kvm *kvm)
-> >  #endif /* CONFIG_MMU_NOTIFIER && KVM_ARCH_WANT_MMU_NOTIFIER */
-> >  
-> >  #ifdef CONFIG_MEMFILE_NOTIFIER
-> > +static void kvm_memfile_notifier_handler(struct memfile_notifier *notifier,
-> > +					 pgoff_t start, pgoff_t end)
-> > +{
-> > +	int idx;
-> > +	struct kvm_memory_slot *slot = container_of(notifier,
-> > +						    struct kvm_memory_slot,
-> > +						    notifier);
-> > +	struct kvm_gfn_range gfn_range = {
-> > +		.slot		= slot,
-> > +		.start		= start - (slot->private_offset >> PAGE_SHIFT),
-> > +		.end		= end - (slot->private_offset >> PAGE_SHIFT),
-> > +		.may_block 	= true,
-> > +	};
-> > +	struct kvm *kvm = slot->kvm;
-> > +
-> > +	gfn_range.start = max(gfn_range.start, slot->base_gfn);
-> > +	gfn_range.end = min(gfn_range.end, slot->base_gfn + slot->npages);
-> > +
-> > +	if (gfn_range.start >= gfn_range.end)
-> > +		return;
-> > +
-> > +	idx = srcu_read_lock(&kvm->srcu);
-> > +	KVM_MMU_LOCK(kvm);
-> > +	kvm_unmap_gfn_range(kvm, &gfn_range);
-> > +	kvm_flush_remote_tlbs(kvm);
-> > +	KVM_MMU_UNLOCK(kvm);
-> > +	srcu_read_unlock(&kvm->srcu, idx);
-> 
-> Should this also invalidate gfn_to_pfn_cache mappings? Otherwise it seems
-> possible the kernel might end up inadvertantly writing to now-private guest
-> memory via a now-stale gfn_to_pfn_cache entry.
+Hi Dan,
 
-Yes.  Ideally we'd get these flows to share common code and avoid these goofs.
-I tried very briefly but they're just different enough to make it ugly.
+On Thu, Apr 7, 2022 at 9:27 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+>
+> On Thu, Apr 07, 2022 at 09:17:38PM +0800, Kate Hsuan wrote:
+> > Hi Dan,
+> >
+> > On Thu, Apr 7, 2022 at 7:52 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+> > >
+> > > On Thu, Apr 07, 2022 at 06:57:24PM +0800, Kate Hsuan wrote:
+> > > > A not calibrated x_start setting would result in an incorrect AWB location
+> > > > configuration on a sensor when only the rightmost stripe is used. x_start
+> > > > should be calibrated by subtracting the stripe offset to set the coordinate
+> > > > to the correct position on the second stripe.
+> > > >
+> >
+> > >
+> > > I wish the commit description said more about what the bug looks like to
+> > > the user.  This is the front facing camera, right?  Is part of the video
+> > > blank or what's the deal?
+> >
+> > This is IPU3 image processor. I tried to fix the configuration issues
+> > on stripe 1 coordinate settings.
+> >
+>
+> So in terms of users, if you configure it in a certain way then it
+> crashes?  What happens in terms of what the ordinary user sees?
+>
+
+It will not crash. Currently, application, such as libcamara only uses
+stripe 0 to estimate 3A (AE AWB AF). The grid coordinate can be used
+to determine the area on a sensor where we use this area to determine
+the 3A status. If we start to move the grid and it crosses the stripe
+1 offset. The grid will be at the rightmost edge of the sensor. The
+user may only feel the location of AF, AWB, AE of the image is not the
+user's expectation.
+
+I'll update them in the v3 patch.
+
+> regards,
+> dan carpenter
+>
+
+
+-- 
+BR,
+Kate
+

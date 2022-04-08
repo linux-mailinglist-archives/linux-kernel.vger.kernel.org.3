@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D8104F91C4
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 11:14:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 669134F91D0
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 11:15:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233624AbiDHJPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 05:15:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42454 "EHLO
+        id S233690AbiDHJQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 05:16:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232892AbiDHJMD (ORCPT
+        with ESMTP id S233076AbiDHJMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 05:12:03 -0400
+        Fri, 8 Apr 2022 05:12:05 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF361E86BE;
-        Fri,  8 Apr 2022 02:09:09 -0700 (PDT)
-Date:   Fri, 08 Apr 2022 09:09:07 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E591E95E1;
+        Fri,  8 Apr 2022 02:09:11 -0700 (PDT)
+Date:   Fri, 08 Apr 2022 09:09:08 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649408948;
+        s=2020; t=1649408950;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7zVJxZmTkeFBH8xY0eIsdhqZxrT9IdulUaaEJaYUEDg=;
-        b=2bvgesqa0+GDb31z3s0KT4zVKyPobnJwMOXZGPAOq/m9XahnazPkk/ObHpLZ0/NWnA/ZOW
-        0uVpmcwZlUXn1bjr0R4DU5svK/Ub9y/0OaA6OpbJ4iYlkXtbft1E+58xJso7Wio7zl6Ym1
-        Cyam9yqJDyAjclF12om2bPepYAlbVEW9eC6JEL/wBeGK2YuEKIW3Unkc8PHOmWrl3Ywfdn
-        RdIF1iU97XoxQlkwrK51Nc4TAImZpezZGHHFOOUhok9zT87nD7A0XEaA6JCIefctd4M/bl
-        jHmbDWVLr93WiqEfChZY8wfat9JPR5oH5vdty9jOCCIiZv2d64DUWzNG3XJY2Q==
+        bh=U6BbRaW/uSvLscYBsOnZuEO87siDzNKmlEzTIZmqJXk=;
+        b=C77iKNgEWIBmGP2Qx1Cme761D4rdwcTDm79cPSqFOfi4lRNuJSOiQamUWgTNDjIDVyq5A5
+        UGdOnJOC0s8RNZaP+14Y66lvhAEdghgcf5bT69gZ6TeBLRDfKhHIm15pmN/uKuk9fuQ5hV
+        e1wArbXTBw/wEDt+SoGhC5Jhf4C3D7q15XcHKi8fNyWqff2ZRWUvhMT4Dj+KxtZxgYWSW9
+        ZbVGzrctzPs22Gjnr+KjaRnMk3GTbJAnScSi7wbgBVKr9s71EoBy70AyBEf9JwKb89OmoP
+        h5hKeSlncabFtxlLB+3QO5Jyk9OQOuoKnin9zp/PpOmeBKQfUc06GYfwR+f0Mg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649408948;
+        s=2020e; t=1649408950;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7zVJxZmTkeFBH8xY0eIsdhqZxrT9IdulUaaEJaYUEDg=;
-        b=SJ8mrd+eptObALeWz1ajDTVfURlCvge22L66KlT+d4N2uc8a1NTWB19/jkK2gwBSa16Bud
-        tFgfRMmpuK4s+IBA==
+        bh=U6BbRaW/uSvLscYBsOnZuEO87siDzNKmlEzTIZmqJXk=;
+        b=2L7j8e47EQcbmC5/1k6m+tZP0zm+lPpiXin3V7Uji8A/t0s07KkMkkFczozgi0iMms3FGB
+        m0rQCteqoFnKtZAw==
 From:   "tip-bot2 for Brijesh Singh" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/sev] x86/sev: Check the VMPL level
+Subject: [tip: x86/sev] x86/sev: Check SEV-SNP features support
 Cc:     Brijesh Singh <brijesh.singh@amd.com>,
         Borislav Petkov <bp@suse.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220307213356.2797205-15-brijesh.singh@amd.com>
-References: <20220307213356.2797205-15-brijesh.singh@amd.com>
+In-Reply-To: <20220307213356.2797205-13-brijesh.singh@amd.com>
+References: <20220307213356.2797205-13-brijesh.singh@amd.com>
 MIME-Version: 1.0
-Message-ID: <164940894730.389.11280397008447131834.tip-bot2@tip-bot2>
+Message-ID: <164940894898.389.17627611818379551536.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,138 +67,241 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/sev branch of tip:
 
-Commit-ID:     81cc3df9a90e7817494421ecc48ede6bd5e8132b
-Gitweb:        https://git.kernel.org/tip/81cc3df9a90e7817494421ecc48ede6bd5e8132b
+Commit-ID:     cbd3d4f7c4e5a93edae68e5142a269368fde77d6
+Gitweb:        https://git.kernel.org/tip/cbd3d4f7c4e5a93edae68e5142a269368fde77d6
 Author:        Brijesh Singh <brijesh.singh@amd.com>
-AuthorDate:    Wed, 09 Feb 2022 12:10:08 -06:00
+AuthorDate:    Wed, 09 Feb 2022 12:10:06 -06:00
 Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Wed, 06 Apr 2022 13:10:34 +02:00
+CommitterDate: Wed, 06 Apr 2022 13:10:23 +02:00
 
-x86/sev: Check the VMPL level
+x86/sev: Check SEV-SNP features support
 
-The Virtual Machine Privilege Level (VMPL) feature in the SEV-SNP
-architecture allows a guest VM to divide its address space into four
-levels. The level can be used to provide hardware isolated abstraction
-layers within a VM. VMPL0 is the highest privilege level, and VMPL3 is
-the least privilege level. Certain operations must be done by the VMPL0
-software, such as:
+Version 2 of the GHCB specification added the advertisement of features
+that are supported by the hypervisor. If the hypervisor supports SEV-SNP
+then it must set the SEV-SNP features bit to indicate that the base
+functionality is supported.
 
-* Validate or invalidate memory range (PVALIDATE instruction)
-* Allocate VMSA page (RMPADJUST instruction when VMSA=1)
+Check that feature bit while establishing the GHCB; if failed, terminate
+the guest.
 
-The initial SNP support requires that the guest kernel is running at
-VMPL0. Add such a check to verify the guest is running at level 0 before
-continuing the boot. There is no easy method to query the current VMPL
-level, so use the RMPADJUST instruction to determine whether the guest
-is running at the VMPL0.
+Version 2 of the GHCB specification adds several new Non-Automatic Exits
+(NAEs), most of them are optional except the hypervisor feature. Now
+that the hypervisor feature NAE is implemented, bump the GHCB maximum
+supported protocol version.
+
+While at it, move the GHCB protocol negotiation check from the #VC
+exception handler to sev_enable() so that all feature detection happens
+before the first #VC exception.
+
+While at it, document why the GHCB page cannot be setup from
+load_stage2_idt().
 
   [ bp: Massage commit message. ]
 
 Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20220307213356.2797205-15-brijesh.singh@amd.com
+Link: https://lore.kernel.org/r/20220307213356.2797205-13-brijesh.singh@amd.com
 ---
- arch/x86/boot/compressed/sev.c    | 28 ++++++++++++++++++++++++++--
- arch/x86/include/asm/sev-common.h |  1 +
- arch/x86/include/asm/sev.h        | 16 ++++++++++++++++
- 3 files changed, 43 insertions(+), 2 deletions(-)
+ arch/x86/boot/compressed/idt_64.c | 18 +++++++++++++++++-
+ arch/x86/boot/compressed/sev.c    | 20 +++++++++++++++-----
+ arch/x86/include/asm/sev-common.h |  6 ++++++
+ arch/x86/include/asm/sev.h        |  2 +-
+ arch/x86/include/uapi/asm/svm.h   |  2 ++
+ arch/x86/kernel/sev-shared.c      | 20 ++++++++++++++++++++
+ arch/x86/kernel/sev.c             | 14 ++++++++++++++
+ 7 files changed, 75 insertions(+), 7 deletions(-)
 
-diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
-index 5b38931..eb42178 100644
---- a/arch/x86/boot/compressed/sev.c
-+++ b/arch/x86/boot/compressed/sev.c
-@@ -199,6 +199,26 @@ finish:
- 		sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SEV_ES_GEN_REQ);
+diff --git a/arch/x86/boot/compressed/idt_64.c b/arch/x86/boot/compressed/idt_64.c
+index 9b93567..6debb81 100644
+--- a/arch/x86/boot/compressed/idt_64.c
++++ b/arch/x86/boot/compressed/idt_64.c
+@@ -39,7 +39,23 @@ void load_stage1_idt(void)
+ 	load_boot_idt(&boot_idt_desc);
  }
  
-+static void enforce_vmpl0(void)
-+{
-+	u64 attrs;
-+	int err;
+-/* Setup IDT after kernel jumping to  .Lrelocated */
++/*
++ * Setup IDT after kernel jumping to  .Lrelocated.
++ *
++ * initialize_identity_maps() needs a #PF handler to be setup
++ * in order to be able to fault-in identity mapping ranges; see
++ * do_boot_page_fault().
++ *
++ * This #PF handler setup needs to happen in load_stage2_idt() where the
++ * IDT is loaded and there the #VC IDT entry gets setup too.
++ *
++ * In order to be able to handle #VCs, one needs a GHCB which
++ * gets setup with an already set up pagetable, which is done in
++ * initialize_identity_maps(). And there's the catch 22: the boot #VC
++ * handler do_boot_stage2_vc() needs to call early_setup_ghcb() itself
++ * (and, especially set_page_decrypted()) because the SEV-ES setup code
++ * cannot initialize a GHCB as there's no #PF handler yet...
++ */
+ void load_stage2_idt(void)
+ {
+ 	boot_idt_desc.address = (unsigned long)boot_idt;
+diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
+index 56e941d..5b38931 100644
+--- a/arch/x86/boot/compressed/sev.c
++++ b/arch/x86/boot/compressed/sev.c
+@@ -116,11 +116,8 @@ static enum es_result vc_read_mem(struct es_em_ctxt *ctxt,
+ /* Include code for early handlers */
+ #include "../../kernel/sev-shared.c"
+ 
+-static bool early_setup_sev_es(void)
++static bool early_setup_ghcb(void)
+ {
+-	if (!sev_es_negotiate_protocol())
+-		sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SEV_ES_PROT_UNSUPPORTED);
+-
+ 	if (set_page_decrypted((unsigned long)&boot_ghcb_page))
+ 		return false;
+ 
+@@ -171,7 +168,7 @@ void do_boot_stage2_vc(struct pt_regs *regs, unsigned long exit_code)
+ 	struct es_em_ctxt ctxt;
+ 	enum es_result result;
+ 
+-	if (!boot_ghcb && !early_setup_sev_es())
++	if (!boot_ghcb && !early_setup_ghcb())
+ 		sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SEV_ES_GEN_REQ);
+ 
+ 	vc_ghcb_invalidate(boot_ghcb);
+@@ -235,5 +232,18 @@ void sev_enable(struct boot_params *bp)
+ 	if (!(sev_status & MSR_AMD64_SEV_ENABLED))
+ 		return;
+ 
++	/* Negotiate the GHCB protocol version. */
++	if (sev_status & MSR_AMD64_SEV_ES_ENABLED) {
++		if (!sev_es_negotiate_protocol())
++			sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SEV_ES_PROT_UNSUPPORTED);
++	}
 +
 +	/*
-+	 * RMPADJUST modifies RMP permissions of a lesser-privileged (numerically
-+	 * higher) privilege level. Here, clear the VMPL1 permission mask of the
-+	 * GHCB page. If the guest is not running at VMPL0, this will fail.
-+	 *
-+	 * If the guest is running at VMPL0, it will succeed. Even if that operation
-+	 * modifies permission bits, it is still ok to do so currently because Linux
-+	 * SNP guests are supported only on VMPL0 so VMPL1 or higher permission masks
-+	 * changing is a don't-care.
++	 * SNP is supported in v2 of the GHCB spec which mandates support for HV
++	 * features.
 +	 */
-+	attrs = 1;
-+	if (rmpadjust((unsigned long)&boot_ghcb_page, RMP_PG_SIZE_4K, attrs))
-+		sev_es_terminate(SEV_TERM_SET_LINUX, GHCB_TERM_NOT_VMPL0);
-+}
++	if (sev_status & MSR_AMD64_SEV_SNP_ENABLED && !(get_hv_features() & GHCB_HV_FT_SNP))
++		sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SNP_UNSUPPORTED);
 +
- void sev_enable(struct boot_params *bp)
- {
- 	unsigned int eax, ebx, ecx, edx;
-@@ -242,8 +262,12 @@ void sev_enable(struct boot_params *bp)
- 	 * SNP is supported in v2 of the GHCB spec which mandates support for HV
- 	 * features.
- 	 */
--	if (sev_status & MSR_AMD64_SEV_SNP_ENABLED && !(get_hv_features() & GHCB_HV_FT_SNP))
--		sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SNP_UNSUPPORTED);
-+	if (sev_status & MSR_AMD64_SEV_SNP_ENABLED) {
-+		if (!(get_hv_features() & GHCB_HV_FT_SNP))
-+			sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SNP_UNSUPPORTED);
-+
-+		enforce_vmpl0();
-+	}
- 
  	sme_me_mask = BIT_ULL(ebx & 0x3f);
  }
 diff --git a/arch/x86/include/asm/sev-common.h b/arch/x86/include/asm/sev-common.h
-index 6f037c2..7ac5842 100644
+index 94f0ea5..6f037c2 100644
 --- a/arch/x86/include/asm/sev-common.h
 +++ b/arch/x86/include/asm/sev-common.h
-@@ -89,6 +89,7 @@
- #define GHCB_TERM_REGISTER		0	/* GHCB GPA registration failure */
- #define GHCB_TERM_PSC			1	/* Page State Change failure */
- #define GHCB_TERM_PVALIDATE		2	/* Pvalidate failure */
-+#define GHCB_TERM_NOT_VMPL0		3	/* SNP guest is not running at VMPL-0 */
+@@ -60,6 +60,11 @@
+ /* GHCB Hypervisor Feature Request/Response */
+ #define GHCB_MSR_HV_FT_REQ		0x080
+ #define GHCB_MSR_HV_FT_RESP		0x081
++#define GHCB_MSR_HV_FT_RESP_VAL(v)			\
++	/* GHCBData[63:12] */				\
++	(((u64)(v) & GENMASK_ULL(63, 12)) >> 12)
++
++#define GHCB_HV_FT_SNP			BIT_ULL(0)
  
- #define GHCB_RESP_CODE(v)		((v) & GHCB_MSR_INFO_MASK)
+ #define GHCB_MSR_TERM_REQ		0x100
+ #define GHCB_MSR_TERM_REASON_SET_POS	12
+@@ -77,6 +82,7 @@
+ #define SEV_TERM_SET_GEN		0
+ #define GHCB_SEV_ES_GEN_REQ		0
+ #define GHCB_SEV_ES_PROT_UNSUPPORTED	1
++#define GHCB_SNP_UNSUPPORTED		2
  
+ /* Linux-specific reason codes (used with reason set 1) */
+ #define SEV_TERM_SET_LINUX		1
 diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-index 4ee9897..e374518 100644
+index 9b9c190..17b75f6 100644
 --- a/arch/x86/include/asm/sev.h
 +++ b/arch/x86/include/asm/sev.h
-@@ -63,6 +63,9 @@ extern bool handle_vc_boot_ghcb(struct pt_regs *regs);
- /* Software defined (when rFlags.CF = 1) */
- #define PVALIDATE_FAIL_NOUPDATE		255
+@@ -13,7 +13,7 @@
+ #include <asm/sev-common.h>
  
-+/* RMP page size */
-+#define RMP_PG_SIZE_4K			0
-+
- #ifdef CONFIG_AMD_MEM_ENCRYPT
- extern struct static_key_false sev_es_enable_key;
- extern void __sev_es_ist_enter(struct pt_regs *regs);
-@@ -90,6 +93,18 @@ extern enum es_result sev_es_ghcb_hv_call(struct ghcb *ghcb,
- 					  struct es_em_ctxt *ctxt,
- 					  u64 exit_code, u64 exit_info_1,
- 					  u64 exit_info_2);
-+static inline int rmpadjust(unsigned long vaddr, bool rmp_psize, unsigned long attrs)
+ #define GHCB_PROTOCOL_MIN	1ULL
+-#define GHCB_PROTOCOL_MAX	1ULL
++#define GHCB_PROTOCOL_MAX	2ULL
+ #define GHCB_DEFAULT_USAGE	0ULL
+ 
+ #define	VMGEXIT()			{ asm volatile("rep; vmmcall\n\r"); }
+diff --git a/arch/x86/include/uapi/asm/svm.h b/arch/x86/include/uapi/asm/svm.h
+index efa9693..b0ad00f 100644
+--- a/arch/x86/include/uapi/asm/svm.h
++++ b/arch/x86/include/uapi/asm/svm.h
+@@ -108,6 +108,7 @@
+ #define SVM_VMGEXIT_AP_JUMP_TABLE		0x80000005
+ #define SVM_VMGEXIT_SET_AP_JUMP_TABLE		0
+ #define SVM_VMGEXIT_GET_AP_JUMP_TABLE		1
++#define SVM_VMGEXIT_HV_FEATURES			0x8000fffd
+ #define SVM_VMGEXIT_UNSUPPORTED_EVENT		0x8000ffff
+ 
+ /* Exit code reserved for hypervisor/software use */
+@@ -218,6 +219,7 @@
+ 	{ SVM_VMGEXIT_NMI_COMPLETE,	"vmgexit_nmi_complete" }, \
+ 	{ SVM_VMGEXIT_AP_HLT_LOOP,	"vmgexit_ap_hlt_loop" }, \
+ 	{ SVM_VMGEXIT_AP_JUMP_TABLE,	"vmgexit_ap_jump_table" }, \
++	{ SVM_VMGEXIT_HV_FEATURES,	"vmgexit_hypervisor_feature" }, \
+ 	{ SVM_EXIT_ERR,         "invalid_guest_state" }
+ 
+ 
+diff --git a/arch/x86/kernel/sev-shared.c b/arch/x86/kernel/sev-shared.c
+index 91105f5..4a876e6 100644
+--- a/arch/x86/kernel/sev-shared.c
++++ b/arch/x86/kernel/sev-shared.c
+@@ -48,6 +48,26 @@ static void __noreturn sev_es_terminate(unsigned int set, unsigned int reason)
+ 		asm volatile("hlt\n" : : : "memory");
+ }
+ 
++/*
++ * The hypervisor features are available from GHCB version 2 onward.
++ */
++static u64 get_hv_features(void)
 +{
-+	int rc;
++	u64 val;
 +
-+	/* "rmpadjust" mnemonic support in binutils 2.36 and newer */
-+	asm volatile(".byte 0xF3,0x0F,0x01,0xFE\n\t"
-+		     : "=a"(rc)
-+		     : "a"(vaddr), "c"(rmp_psize), "d"(attrs)
-+		     : "memory", "cc");
++	if (ghcb_version < 2)
++		return 0;
 +
-+	return rc;
++	sev_es_wr_ghcb_msr(GHCB_MSR_HV_FT_REQ);
++	VMGEXIT();
++
++	val = sev_es_rd_ghcb_msr();
++	if (GHCB_RESP_CODE(val) != GHCB_MSR_HV_FT_RESP)
++		return 0;
++
++	return GHCB_MSR_HV_FT_RESP_VAL(val);
 +}
- static inline int pvalidate(unsigned long vaddr, bool rmp_psize, bool validate)
++
+ static bool sev_es_negotiate_protocol(void)
  {
- 	bool no_rmpupdate;
-@@ -114,6 +129,7 @@ static inline int sev_es_setup_ap_jump_table(struct real_mode_header *rmh) { ret
- static inline void sev_es_nmi_complete(void) { }
- static inline int sev_es_efi_map_ghcbs(pgd_t *pgd) { return 0; }
- static inline int pvalidate(unsigned long vaddr, bool rmp_psize, bool validate) { return 0; }
-+static inline int rmpadjust(unsigned long vaddr, bool rmp_psize, unsigned long attrs) { return 0; }
- #endif
+ 	u64 val;
+diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+index 19ad097..cb20fb0 100644
+--- a/arch/x86/kernel/sev.c
++++ b/arch/x86/kernel/sev.c
+@@ -43,6 +43,9 @@ static struct ghcb boot_ghcb_page __bss_decrypted __aligned(PAGE_SIZE);
+  */
+ static struct ghcb __initdata *boot_ghcb;
  
- #endif
++/* Bitmap of SEV features supported by the hypervisor */
++static u64 sev_hv_features __ro_after_init;
++
+ /* #VC handler runtime per-CPU data */
+ struct sev_es_runtime_data {
+ 	struct ghcb ghcb_page;
+@@ -766,6 +769,17 @@ void __init sev_es_init_vc_handling(void)
+ 	if (!sev_es_check_cpu_features())
+ 		panic("SEV-ES CPU Features missing");
+ 
++	/*
++	 * SNP is supported in v2 of the GHCB spec which mandates support for HV
++	 * features.
++	 */
++	if (cc_platform_has(CC_ATTR_GUEST_SEV_SNP)) {
++		sev_hv_features = get_hv_features();
++
++		if (!(sev_hv_features & GHCB_HV_FT_SNP))
++			sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SNP_UNSUPPORTED);
++	}
++
+ 	/* Enable SEV-ES special handling */
+ 	static_branch_enable(&sev_es_enable_key);
+ 

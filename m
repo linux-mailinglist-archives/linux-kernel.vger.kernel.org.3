@@ -2,150 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43AD24F9D5F
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 20:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBFFC4F9D62
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 20:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239093AbiDHS6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 14:58:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59956 "EHLO
+        id S237633AbiDHS6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 14:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230478AbiDHS6E (ORCPT
+        with ESMTP id S233067AbiDHS6g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 14:58:04 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CCCF1E7460
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 11:56:00 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id t4so7055665ilo.12
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 11:56:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=to:cc:from:subject:message-id:date:user-agent:mime-version
-         :content-language;
-        bh=MtJXp4ifWK+ROOILZQ4cWtnaJgVJwVY9PT7bb9unDw8=;
-        b=Y66OvL6qaiH5FrXOVeKqKjxG/ToD4rFZCGY/x6xYGqneFSiJzIIpNUCPsal26yDIFO
-         Ct3F+no+VMujDfkGDUs/dhO7npqPP6aDt6wrwhBRECM9OBRyjtxUbSkcAsqfiKyuSiLP
-         9ElZogAfwJybCN9v7/eNkRYHtXDWfMXbpe29A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
-         :mime-version:content-language;
-        bh=MtJXp4ifWK+ROOILZQ4cWtnaJgVJwVY9PT7bb9unDw8=;
-        b=UFCXXAvV9u5qlWh2MeN2iNpJh5HLEeyQqCRGvQH+TGQff3spSz6ctP59ILtOBcIMJm
-         /9zIuFSpTLnULUwdBTr7jLQVmxjIcxKnPv/Rc9Hr7pWv+O4NgQ+p+oMmEvkQC3WYO5BB
-         Ljx3qQ9VpK7NQSuZqiUbxcIjjnUnd6qCjkpNyu3PSyv3ipzvR+p/qeUiKqAwdpw0RXBj
-         9O1MJYwshIy+LoGzUUyjAXXloiz6I+9x2G8bimyRMY36U05yystnzMdXZVIJYavsmbCV
-         YC68lpw9IjyVHJu+4yfL0pvELdrLXUJZulyhbvirvQfj6EcPtMA5wWSYFjgQp/E0soyy
-         Wdfw==
-X-Gm-Message-State: AOAM53128Y3JySt/s/8xYO+9rygveV57KKKeJRB0p/suJPIpNabeuYc3
-        DOUpYjTwDlx/VN196Vjxv2fGFg==
-X-Google-Smtp-Source: ABdhPJwmk9A0NNb9BOzV41cZdJOCwaiG/uQdtvC4TrjEXbXQGfb4WWIjHQOAVT/53rQzycPwg8eahQ==
-X-Received: by 2002:a92:1303:0:b0:2c5:f030:3074 with SMTP id 3-20020a921303000000b002c5f0303074mr9514081ilt.134.1649444159561;
-        Fri, 08 Apr 2022 11:55:59 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id g14-20020a92c7ce000000b002ca47b75772sm8643336ilk.44.2022.04.08.11.55.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Apr 2022 11:55:59 -0700 (PDT)
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shuah@kernel.org
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Subject: [GIT PULL] KUnit update for Linux 5.18-rc2
-Message-ID: <f8e5687f-958b-c97b-4ddb-7bbfbdfa036f@linuxfoundation.org>
-Date:   Fri, 8 Apr 2022 12:55:58 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Fri, 8 Apr 2022 14:58:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5313A209A50;
+        Fri,  8 Apr 2022 11:56:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E38A261545;
+        Fri,  8 Apr 2022 18:56:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4972CC385A1;
+        Fri,  8 Apr 2022 18:56:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649444191;
+        bh=nIAQQiM25OUwJCglLgOqN04FfV2hY/JrotWsrqPqsPs=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=PL0p03H2RZ4zrIHtNHXATSJ3k3akFyjyrULUbduj2T8cHrs+mrZAetrUj0jB9qpkR
+         tIjGHo2c2KQZY6EsO21t+TT6G03NltB9Kelpcjyu3XTtqvIXt4v3vAIF1dL3o5I2Fe
+         imzc7Qt64iVcFCJ/GclFSrWXMQBl471JnnLJl5JiPAiKWcxLmvFo9pcSRlumehztUv
+         xaFhVs0xhI+A+xetEEyimj1gARyBick7ly/TYvgTxWqOd9JrHD/MkXMXi2GoNNikQf
+         P9bEentAIdovHsZXwX9vLqs0eyrTrVxgrsvUzVRWRlfZpnW6oRhcTK2fdEHcv0r5q4
+         P/i3vFaMBzeuA==
+From:   Mark Brown <broonie@kernel.org>
+To:     quic_srivasam@quicinc.com, perex@perex.cz,
+        quic_potturu@quicinc.com, christophe.jaillet@wanadoo.fr,
+        srinivas.kandagatla@linaro.org, tiwai@suse.com, lgirdwood@gmail.com
+Cc:     alsa-devel@alsa-project.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <5b5a015a9b1dc8011c6a4053fa49da1f2531e47c.1648969065.git.christophe.jaillet@wanadoo.fr>
+References: <5b5a015a9b1dc8011c6a4053fa49da1f2531e47c.1648969065.git.christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH v2] ASoC: codecs: Fix an error handling path in (rx|tx|va)_macro_probe()
+Message-Id: <164944418901.1442858.13330584837821971131.b4-ty@kernel.org>
+Date:   Fri, 08 Apr 2022 19:56:29 +0100
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="------------85C0ADF20CB817C0B440F2DF"
-Content-Language: en-US
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------85C0ADF20CB817C0B440F2DF
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On Sun, 3 Apr 2022 08:58:27 +0200, Christophe JAILLET wrote:
+> After a successful lpass_macro_pds_init() call, lpass_macro_pds_exit() must
+> be called.
+> 
+> Add the missing call in the error handling path of the probe function and
+> use it.
+> 
+> 
+> [...]
 
-Hi Linus,
+Applied to
 
-Please pull the following KUnit fixes update for Linux 5.18-rc2.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-This KUnit update for Linux 5.18-rc2 consists of a single documentation
-fix to incorrect and outdated usage information.
+Thanks!
 
-diff is attached.
+[1/1] ASoC: codecs: Fix an error handling path in (rx|tx|va)_macro_probe()
+      commit: ddfd534528146660de75ee84d6db10f10e778f95
 
-thanks,
--- Shuah
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-----------------------------------------------------------------
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-   Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-are available in the Git repository at:
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-fixes-5.18-rc2
-
-for you to fetch changes up to 02c7efa43627163e489a8db87882445a0ff381f7:
-
-   Documentation: kunit: fix path to .kunitconfig in start.rst (2022-04-04 12:02:44 -0600)
-
-----------------------------------------------------------------
-linux-kselftest-kunit-fixes-5.18-rc2
-
-This KUnit update for Linux 5.18-rc2 consists of a single documentation
-fix to incorrect and outdated usage information.
-
-----------------------------------------------------------------
-Daniel Latypov (1):
-       Documentation: kunit: fix path to .kunitconfig in start.rst
-
-  Documentation/dev-tools/kunit/start.rst | 11 ++++++++---
-  1 file changed, 8 insertions(+), 3 deletions(-)
-----------------------------------------------------------------
-
---------------85C0ADF20CB817C0B440F2DF
-Content-Type: text/x-patch; charset=UTF-8;
- name="linux-kselftest-kunit-fixes-5.18-rc2.diff"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="linux-kselftest-kunit-fixes-5.18-rc2.diff"
-
-diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-index ad168d16968f..867a4bba6bf6 100644
---- a/Documentation/dev-tools/kunit/start.rst
-+++ b/Documentation/dev-tools/kunit/start.rst
-@@ -41,13 +41,18 @@ or ``VFAT_FS``. To run ``FAT_KUNIT_TEST``, the ``.kunitconfig`` has:
- 	CONFIG_MSDOS_FS=y
- 	CONFIG_FAT_KUNIT_TEST=y
- 
--1. A good starting point for the ``.kunitconfig``, is the KUnit default
--   config. Run the command:
-+1. A good starting point for the ``.kunitconfig`` is the KUnit default config.
-+   You can generate it by running:
- 
- .. code-block:: bash
- 
- 	cd $PATH_TO_LINUX_REPO
--	cp tools/testing/kunit/configs/default.config .kunitconfig
-+	tools/testing/kunit/kunit.py config
-+	cat .kunit/.kunitconfig
-+
-+.. note ::
-+   ``.kunitconfig`` lives in the ``--build_dir`` used by kunit.py, which is
-+   ``.kunit`` by default.
- 
- .. note ::
-    You may want to remove CONFIG_KUNIT_ALL_TESTS from the ``.kunitconfig`` as
-
---------------85C0ADF20CB817C0B440F2DF--
+Thanks,
+Mark

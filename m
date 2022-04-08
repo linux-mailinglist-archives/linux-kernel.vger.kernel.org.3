@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38E084F91BA
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 11:14:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E65C44F91C8
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 11:14:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233315AbiDHJOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 05:14:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41282 "EHLO
+        id S231731AbiDHJPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 05:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232965AbiDHJLt (ORCPT
+        with ESMTP id S232940AbiDHJLk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 05:11:49 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A73B1BB830;
+        Fri, 8 Apr 2022 05:11:40 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7361DEC2B;
         Fri,  8 Apr 2022 02:09:03 -0700 (PDT)
-Date:   Fri, 08 Apr 2022 09:09:00 -0000
+Date:   Fri, 08 Apr 2022 09:09:01 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649408941;
+        s=2020; t=1649408942;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=+BMYM664e5WUWwfhSn6BWyrA4zpsuYRZ7AQzv6u6sRo=;
-        b=Yo+FGYgMbl7ycuaIPiBGVitkl32+Y899KxjUN9JKCO+VgeBOlVRbpGcw/2A9vXSLhaLz5J
-        pNlixojcdE4tkxsN0RAHsxWJLa/aE9+MtV72bAsFU8jcJC3UdAKIWfQv7nlOEkwXv5u8JB
-        SFpQWS8kXpHSNATNaHhKo95eplpqSvJSR/dPoBjxp6XQMXWXANXqPvhmhaGHWamRsLmLXc
-        /4RIRFKJEewySXudcm0MbYUdnyXNEA5OeYNsPz1eUvDN8CBdbm7zEJX4QfoYL7RiHROSG9
-        E9/tVxVSXIrMR/WNNddhDnEbb6CVS1hGQiG55eBj9UYzWA/nPs/7p7OzBs5UQQ==
+        bh=TbwyUBSGTkTLuVmgciHcKtfgJ2EruDXTtvNGtdKZLGU=;
+        b=pGQZTadJ/v2bmn1iVmgL0RizNzxZrKSN52uJt0lStuDgC/jk+0mrpYnptnY12cQAH8ogFy
+        xsarO4Q1W/rttNEc14cCQ6D6aAbb4gkDhMS+j1kKRubrgUFBtKQQarcQ7MQ0nqA5q2uSRj
+        nCL3btOrPPiXWfX5nxoCbWQ8L28u/YiAW2tlE5Jbc+AStyWha4mi2bvsBIT1XVQVc1HOwf
+        uuvDayIwEU7qmnZpeLavD0XpJXH9D8gH/vqlseE0s2XARfg+S0yxzynHdj+39vlE4DL2Vj
+        XJbI2QsJ+8JAlQJlr/Xk39XSot9j6CVO2pY6bbRzatZ3Di4Dz9jagNwkh+5iOw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649408941;
+        s=2020e; t=1649408942;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=+BMYM664e5WUWwfhSn6BWyrA4zpsuYRZ7AQzv6u6sRo=;
-        b=mtccUqiO/M4lDgOrj0Jm3ebSd+JrqHhWSmh7V2uxO9wfruXfRZVL42pfynmTR+tumsCAhF
-        pKHWt2RTFdUxKnCA==
-From:   "tip-bot2 for Tom Lendacky" <tip-bot2@linutronix.de>
+        bh=TbwyUBSGTkTLuVmgciHcKtfgJ2EruDXTtvNGtdKZLGU=;
+        b=JD7tt1y93L8svU01SHggZrhuFwp8ZA/XxtpDl6VtOQksnkZ+m2Mv6LT4tcj49SUCIVtlY+
+        JsZqLKBv7FuWUiBQ==
+From:   "tip-bot2 for Brijesh Singh" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/sev] x86/sev: Use SEV-SNP AP creation to start secondary CPUs
-Cc:     Tom Lendacky <thomas.lendacky@amd.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
+Subject: [tip: x86/sev] x86/mm: Validate memory when changing the C-bit
+Cc:     Brijesh Singh <brijesh.singh@amd.com>,
         Borislav Petkov <bp@suse.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220307213356.2797205-23-brijesh.singh@amd.com>
-References: <20220307213356.2797205-23-brijesh.singh@amd.com>
+In-Reply-To: <20220307213356.2797205-22-brijesh.singh@amd.com>
+References: <20220307213356.2797205-22-brijesh.singh@amd.com>
 MIME-Version: 1.0
-Message-ID: <164940894048.389.4048882648177694646.tip-bot2@tip-bot2>
+Message-ID: <164940894130.389.8294333825544329374.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,401 +67,310 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/sev branch of tip:
 
-Commit-ID:     0afb6b660a6b58cb336d1175ed687bf9525849a4
-Gitweb:        https://git.kernel.org/tip/0afb6b660a6b58cb336d1175ed687bf9525849a4
-Author:        Tom Lendacky <thomas.lendacky@amd.com>
-AuthorDate:    Mon, 07 Mar 2022 15:33:32 -06:00
+Commit-ID:     dc3f3d2474b80eaee8be89f4c5eb344f10648f42
+Gitweb:        https://git.kernel.org/tip/dc3f3d2474b80eaee8be89f4c5eb344f10648f42
+Author:        Brijesh Singh <brijesh.singh@amd.com>
+AuthorDate:    Thu, 24 Feb 2022 10:56:01 -06:00
 Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Wed, 06 Apr 2022 17:06:49 +02:00
+CommitterDate: Wed, 06 Apr 2022 13:24:53 +02:00
 
-x86/sev: Use SEV-SNP AP creation to start secondary CPUs
+x86/mm: Validate memory when changing the C-bit
 
-To provide a more secure way to start APs under SEV-SNP, use the SEV-SNP
-AP Creation NAE event. This allows for guest control over the AP register
-state rather than trusting the hypervisor with the SEV-ES Jump Table
-address.
+Add the needed functionality to change pages state from shared
+to private and vice-versa using the Page State Change VMGEXIT as
+documented in the GHCB spec.
 
-During native_smp_prepare_cpus(), invoke an SEV-SNP function that, if
-SEV-SNP is active, will set/override apic->wakeup_secondary_cpu. This
-will allow the SEV-SNP AP Creation NAE event method to be used to boot
-the APs. As a result of installing the override when SEV-SNP is active,
-this method of starting the APs becomes the required method. The override
-function will fail to start the AP if the hypervisor does not have
-support for AP creation.
-
-  [ bp: Work in forgotten review comments. ]
-
-Signed-off-by: Tom Lendacky <thomas.lendacky@amd.com>
 Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20220307213356.2797205-23-brijesh.singh@amd.com
+Link: https://lore.kernel.org/r/20220307213356.2797205-22-brijesh.singh@amd.com
 ---
- arch/x86/include/asm/sev-common.h |   1 +-
+ arch/x86/include/asm/sev-common.h |  22 ++++-
  arch/x86/include/asm/sev.h        |   4 +-
- arch/x86/include/uapi/asm/svm.h   |   5 +-
- arch/x86/kernel/sev.c             | 242 +++++++++++++++++++++++++++++-
- arch/x86/kernel/smpboot.c         |   3 +-
- 5 files changed, 255 insertions(+)
+ arch/x86/include/uapi/asm/svm.h   |   2 +-
+ arch/x86/kernel/sev.c             | 168 +++++++++++++++++++++++++++++-
+ arch/x86/mm/mem_encrypt_amd.c     |  13 ++-
+ 5 files changed, 209 insertions(+)
 
 diff --git a/arch/x86/include/asm/sev-common.h b/arch/x86/include/asm/sev-common.h
-index 1aa72b5..e9b6815 100644
+index f077a6c..1aa72b5 100644
 --- a/arch/x86/include/asm/sev-common.h
 +++ b/arch/x86/include/asm/sev-common.h
-@@ -104,6 +104,7 @@ enum psc_op {
- 	(((u64)(v) & GENMASK_ULL(63, 12)) >> 12)
+@@ -105,6 +105,28 @@ enum psc_op {
  
  #define GHCB_HV_FT_SNP			BIT_ULL(0)
-+#define GHCB_HV_FT_SNP_AP_CREATION	BIT_ULL(1)
  
- /* SNP Page State Change NAE event */
- #define VMGEXIT_PSC_MAX_ENTRY		253
++/* SNP Page State Change NAE event */
++#define VMGEXIT_PSC_MAX_ENTRY		253
++
++struct psc_hdr {
++	u16 cur_entry;
++	u16 end_entry;
++	u32 reserved;
++} __packed;
++
++struct psc_entry {
++	u64	cur_page	: 12,
++		gfn		: 40,
++		operation	: 4,
++		pagesize	: 1,
++		reserved	: 7;
++} __packed;
++
++struct snp_psc_desc {
++	struct psc_hdr hdr;
++	struct psc_entry entries[VMGEXIT_PSC_MAX_ENTRY];
++} __packed;
++
+ #define GHCB_MSR_TERM_REQ		0x100
+ #define GHCB_MSR_TERM_REASON_SET_POS	12
+ #define GHCB_MSR_TERM_REASON_SET_MASK	0xf
 diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-index feeb93e..a3203b2 100644
+index f65d257..feeb93e 100644
 --- a/arch/x86/include/asm/sev.h
 +++ b/arch/x86/include/asm/sev.h
-@@ -66,6 +66,8 @@ extern bool handle_vc_boot_ghcb(struct pt_regs *regs);
- /* RMP page size */
- #define RMP_PG_SIZE_4K			0
- 
-+#define RMPADJUST_VMSA_PAGE_BIT		BIT(16)
-+
- #ifdef CONFIG_AMD_MEM_ENCRYPT
- extern struct static_key_false sev_es_enable_key;
- extern void __sev_es_ist_enter(struct pt_regs *regs);
-@@ -130,6 +132,7 @@ void __init early_snp_set_memory_shared(unsigned long vaddr, unsigned long paddr
+@@ -128,6 +128,8 @@ void __init early_snp_set_memory_private(unsigned long vaddr, unsigned long padd
+ void __init early_snp_set_memory_shared(unsigned long vaddr, unsigned long paddr,
+ 					unsigned int npages);
  void __init snp_prep_memory(unsigned long paddr, unsigned int sz, enum psc_op op);
- void snp_set_memory_shared(unsigned long vaddr, unsigned int npages);
- void snp_set_memory_private(unsigned long vaddr, unsigned int npages);
-+void snp_set_wakeup_secondary_cpu(void);
++void snp_set_memory_shared(unsigned long vaddr, unsigned int npages);
++void snp_set_memory_private(unsigned long vaddr, unsigned int npages);
  #else
  static inline void sev_es_ist_enter(struct pt_regs *regs) { }
  static inline void sev_es_ist_exit(void) { }
-@@ -146,6 +149,7 @@ early_snp_set_memory_shared(unsigned long vaddr, unsigned long paddr, unsigned i
+@@ -142,6 +144,8 @@ early_snp_set_memory_private(unsigned long vaddr, unsigned long paddr, unsigned 
+ static inline void __init
+ early_snp_set_memory_shared(unsigned long vaddr, unsigned long paddr, unsigned int npages) { }
  static inline void __init snp_prep_memory(unsigned long paddr, unsigned int sz, enum psc_op op) { }
- static inline void snp_set_memory_shared(unsigned long vaddr, unsigned int npages) { }
- static inline void snp_set_memory_private(unsigned long vaddr, unsigned int npages) { }
-+static inline void snp_set_wakeup_secondary_cpu(void) { }
++static inline void snp_set_memory_shared(unsigned long vaddr, unsigned int npages) { }
++static inline void snp_set_memory_private(unsigned long vaddr, unsigned int npages) { }
  #endif
  
  #endif
 diff --git a/arch/x86/include/uapi/asm/svm.h b/arch/x86/include/uapi/asm/svm.h
-index 64404b4..cfea5e8 100644
+index b0ad00f..64404b4 100644
 --- a/arch/x86/include/uapi/asm/svm.h
 +++ b/arch/x86/include/uapi/asm/svm.h
-@@ -109,6 +109,10 @@
+@@ -108,6 +108,7 @@
+ #define SVM_VMGEXIT_AP_JUMP_TABLE		0x80000005
  #define SVM_VMGEXIT_SET_AP_JUMP_TABLE		0
  #define SVM_VMGEXIT_GET_AP_JUMP_TABLE		1
- #define SVM_VMGEXIT_PSC				0x80000010
-+#define SVM_VMGEXIT_AP_CREATION			0x80000013
-+#define SVM_VMGEXIT_AP_CREATE_ON_INIT		0
-+#define SVM_VMGEXIT_AP_CREATE			1
-+#define SVM_VMGEXIT_AP_DESTROY			2
++#define SVM_VMGEXIT_PSC				0x80000010
  #define SVM_VMGEXIT_HV_FEATURES			0x8000fffd
  #define SVM_VMGEXIT_UNSUPPORTED_EVENT		0x8000ffff
  
-@@ -221,6 +225,7 @@
+@@ -219,6 +220,7 @@
+ 	{ SVM_VMGEXIT_NMI_COMPLETE,	"vmgexit_nmi_complete" }, \
  	{ SVM_VMGEXIT_AP_HLT_LOOP,	"vmgexit_ap_hlt_loop" }, \
  	{ SVM_VMGEXIT_AP_JUMP_TABLE,	"vmgexit_ap_jump_table" }, \
- 	{ SVM_VMGEXIT_PSC,		"vmgexit_page_state_change" }, \
-+	{ SVM_VMGEXIT_AP_CREATION,	"vmgexit_ap_creation" }, \
++	{ SVM_VMGEXIT_PSC,		"vmgexit_page_state_change" }, \
  	{ SVM_VMGEXIT_HV_FEATURES,	"vmgexit_hypervisor_feature" }, \
  	{ SVM_EXIT_ERR,         "invalid_guest_state" }
  
 diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index bf4b578..d7915ae 100644
+index e3fca86..bf4b578 100644
 --- a/arch/x86/kernel/sev.c
 +++ b/arch/x86/kernel/sev.c
-@@ -18,6 +18,7 @@
- #include <linux/memblock.h>
- #include <linux/kernel.h>
- #include <linux/mm.h>
-+#include <linux/cpumask.h>
- 
- #include <asm/cpu_entry_area.h>
- #include <asm/stacktrace.h>
-@@ -31,9 +32,26 @@
- #include <asm/svm.h>
- #include <asm/smp.h>
- #include <asm/cpu.h>
-+#include <asm/apic.h>
- 
- #define DR7_RESET_VALUE        0x400
- 
-+/* AP INIT values as documented in the APM2  section "Processor Initialization State" */
-+#define AP_INIT_CS_LIMIT		0xffff
-+#define AP_INIT_DS_LIMIT		0xffff
-+#define AP_INIT_LDTR_LIMIT		0xffff
-+#define AP_INIT_GDTR_LIMIT		0xffff
-+#define AP_INIT_IDTR_LIMIT		0xffff
-+#define AP_INIT_TR_LIMIT		0xffff
-+#define AP_INIT_RFLAGS_DEFAULT		0x2
-+#define AP_INIT_DR6_DEFAULT		0xffff0ff0
-+#define AP_INIT_GPAT_DEFAULT		0x0007040600070406ULL
-+#define AP_INIT_XCR0_DEFAULT		0x1
-+#define AP_INIT_X87_FTW_DEFAULT		0x5555
-+#define AP_INIT_X87_FCW_DEFAULT		0x0040
-+#define AP_INIT_CR0_DEFAULT		0x60000010
-+#define AP_INIT_MXCSR_DEFAULT		0x1f80
-+
- /* For early boot hypervisor communication in SEV-ES enabled guests */
- static struct ghcb boot_ghcb_page __bss_decrypted __aligned(PAGE_SIZE);
- 
-@@ -90,6 +108,8 @@ struct ghcb_state {
- static DEFINE_PER_CPU(struct sev_es_runtime_data*, runtime_data);
- DEFINE_STATIC_KEY_FALSE(sev_es_enable_key);
- 
-+static DEFINE_PER_CPU(struct sev_es_save_area *, sev_vmsa);
-+
- static __always_inline bool on_vc_stack(struct pt_regs *regs)
- {
- 	unsigned long sp = regs->sp;
-@@ -823,6 +843,228 @@ void snp_set_memory_private(unsigned long vaddr, unsigned int npages)
- 	pvalidate_pages(vaddr, npages, true);
+@@ -655,6 +655,174 @@ void __init snp_prep_memory(unsigned long paddr, unsigned int sz, enum psc_op op
+ 		WARN(1, "invalid memory op %d\n", op);
  }
  
-+static int snp_set_vmsa(void *va, bool vmsa)
++static int vmgexit_psc(struct snp_psc_desc *desc)
 +{
-+	u64 attrs;
-+
-+	/*
-+	 * Running at VMPL0 allows the kernel to change the VMSA bit for a page
-+	 * using the RMPADJUST instruction. However, for the instruction to
-+	 * succeed it must target the permissions of a lesser privileged
-+	 * (higher numbered) VMPL level, so use VMPL1 (refer to the RMPADJUST
-+	 * instruction in the AMD64 APM Volume 3).
-+	 */
-+	attrs = 1;
-+	if (vmsa)
-+		attrs |= RMPADJUST_VMSA_PAGE_BIT;
-+
-+	return rmpadjust((unsigned long)va, RMP_PG_SIZE_4K, attrs);
-+}
-+
-+#define __ATTR_BASE		(SVM_SELECTOR_P_MASK | SVM_SELECTOR_S_MASK)
-+#define INIT_CS_ATTRIBS		(__ATTR_BASE | SVM_SELECTOR_READ_MASK | SVM_SELECTOR_CODE_MASK)
-+#define INIT_DS_ATTRIBS		(__ATTR_BASE | SVM_SELECTOR_WRITE_MASK)
-+
-+#define INIT_LDTR_ATTRIBS	(SVM_SELECTOR_P_MASK | 2)
-+#define INIT_TR_ATTRIBS		(SVM_SELECTOR_P_MASK | 3)
-+
-+static void *snp_alloc_vmsa_page(void)
-+{
-+	struct page *p;
-+
-+	/*
-+	 * Allocate VMSA page to work around the SNP erratum where the CPU will
-+	 * incorrectly signal an RMP violation #PF if a large page (2MB or 1GB)
-+	 * collides with the RMP entry of VMSA page. The recommended workaround
-+	 * is to not use a large page.
-+	 *
-+	 * Allocate an 8k page which is also 8k-aligned.
-+	 */
-+	p = alloc_pages(GFP_KERNEL_ACCOUNT | __GFP_ZERO, 1);
-+	if (!p)
-+		return NULL;
-+
-+	split_page(p, 1);
-+
-+	/* Free the first 4k. This page may be 2M/1G aligned and cannot be used. */
-+	__free_page(p);
-+
-+	return page_address(p + 1);
-+}
-+
-+static void snp_cleanup_vmsa(struct sev_es_save_area *vmsa)
-+{
-+	int err;
-+
-+	err = snp_set_vmsa(vmsa, false);
-+	if (err)
-+		pr_err("clear VMSA page failed (%u), leaking page\n", err);
-+	else
-+		free_page((unsigned long)vmsa);
-+}
-+
-+static int wakeup_cpu_via_vmgexit(int apic_id, unsigned long start_ip)
-+{
-+	struct sev_es_save_area *cur_vmsa, *vmsa;
++	int cur_entry, end_entry, ret = 0;
++	struct snp_psc_desc *data;
 +	struct ghcb_state state;
++	struct es_em_ctxt ctxt;
 +	unsigned long flags;
 +	struct ghcb *ghcb;
-+	u8 sipi_vector;
-+	int cpu, ret;
-+	u64 cr4;
 +
 +	/*
-+	 * The hypervisor SNP feature support check has happened earlier, just check
-+	 * the AP_CREATION one here.
++	 * __sev_get_ghcb() needs to run with IRQs disabled because it is using
++	 * a per-CPU GHCB.
 +	 */
-+	if (!(sev_hv_features & GHCB_HV_FT_SNP_AP_CREATION))
-+		return -EOPNOTSUPP;
-+
-+	/*
-+	 * Verify the desired start IP against the known trampoline start IP
-+	 * to catch any future new trampolines that may be introduced that
-+	 * would require a new protected guest entry point.
-+	 */
-+	if (WARN_ONCE(start_ip != real_mode_header->trampoline_start,
-+		      "Unsupported SNP start_ip: %lx\n", start_ip))
-+		return -EINVAL;
-+
-+	/* Override start_ip with known protected guest start IP */
-+	start_ip = real_mode_header->sev_es_trampoline_start;
-+
-+	/* Find the logical CPU for the APIC ID */
-+	for_each_present_cpu(cpu) {
-+		if (arch_match_cpu_phys_id(cpu, apic_id))
-+			break;
-+	}
-+	if (cpu >= nr_cpu_ids)
-+		return -EINVAL;
-+
-+	cur_vmsa = per_cpu(sev_vmsa, cpu);
-+
-+	/*
-+	 * A new VMSA is created each time because there is no guarantee that
-+	 * the current VMSA is the kernels or that the vCPU is not running. If
-+	 * an attempt was done to use the current VMSA with a running vCPU, a
-+	 * #VMEXIT of that vCPU would wipe out all of the settings being done
-+	 * here.
-+	 */
-+	vmsa = (struct sev_es_save_area *)snp_alloc_vmsa_page();
-+	if (!vmsa)
-+		return -ENOMEM;
-+
-+	/* CR4 should maintain the MCE value */
-+	cr4 = native_read_cr4() & X86_CR4_MCE;
-+
-+	/* Set the CS value based on the start_ip converted to a SIPI vector */
-+	sipi_vector		= (start_ip >> 12);
-+	vmsa->cs.base		= sipi_vector << 12;
-+	vmsa->cs.limit		= AP_INIT_CS_LIMIT;
-+	vmsa->cs.attrib		= INIT_CS_ATTRIBS;
-+	vmsa->cs.selector	= sipi_vector << 8;
-+
-+	/* Set the RIP value based on start_ip */
-+	vmsa->rip		= start_ip & 0xfff;
-+
-+	/* Set AP INIT defaults as documented in the APM */
-+	vmsa->ds.limit		= AP_INIT_DS_LIMIT;
-+	vmsa->ds.attrib		= INIT_DS_ATTRIBS;
-+	vmsa->es		= vmsa->ds;
-+	vmsa->fs		= vmsa->ds;
-+	vmsa->gs		= vmsa->ds;
-+	vmsa->ss		= vmsa->ds;
-+
-+	vmsa->gdtr.limit	= AP_INIT_GDTR_LIMIT;
-+	vmsa->ldtr.limit	= AP_INIT_LDTR_LIMIT;
-+	vmsa->ldtr.attrib	= INIT_LDTR_ATTRIBS;
-+	vmsa->idtr.limit	= AP_INIT_IDTR_LIMIT;
-+	vmsa->tr.limit		= AP_INIT_TR_LIMIT;
-+	vmsa->tr.attrib		= INIT_TR_ATTRIBS;
-+
-+	vmsa->cr4		= cr4;
-+	vmsa->cr0		= AP_INIT_CR0_DEFAULT;
-+	vmsa->dr7		= DR7_RESET_VALUE;
-+	vmsa->dr6		= AP_INIT_DR6_DEFAULT;
-+	vmsa->rflags		= AP_INIT_RFLAGS_DEFAULT;
-+	vmsa->g_pat		= AP_INIT_GPAT_DEFAULT;
-+	vmsa->xcr0		= AP_INIT_XCR0_DEFAULT;
-+	vmsa->mxcsr		= AP_INIT_MXCSR_DEFAULT;
-+	vmsa->x87_ftw		= AP_INIT_X87_FTW_DEFAULT;
-+	vmsa->x87_fcw		= AP_INIT_X87_FCW_DEFAULT;
-+
-+	/* SVME must be set. */
-+	vmsa->efer		= EFER_SVME;
-+
-+	/*
-+	 * Set the SNP-specific fields for this VMSA:
-+	 *   VMPL level
-+	 *   SEV_FEATURES (matches the SEV STATUS MSR right shifted 2 bits)
-+	 */
-+	vmsa->vmpl		= 0;
-+	vmsa->sev_features	= sev_status >> 2;
-+
-+	/* Switch the page over to a VMSA page now that it is initialized */
-+	ret = snp_set_vmsa(vmsa, true);
-+	if (ret) {
-+		pr_err("set VMSA page failed (%u)\n", ret);
-+		free_page((unsigned long)vmsa);
-+
-+		return -EINVAL;
-+	}
-+
-+	/* Issue VMGEXIT AP Creation NAE event */
 +	local_irq_save(flags);
 +
 +	ghcb = __sev_get_ghcb(&state);
-+
-+	vc_ghcb_invalidate(ghcb);
-+	ghcb_set_rax(ghcb, vmsa->sev_features);
-+	ghcb_set_sw_exit_code(ghcb, SVM_VMGEXIT_AP_CREATION);
-+	ghcb_set_sw_exit_info_1(ghcb, ((u64)apic_id << 32) | SVM_VMGEXIT_AP_CREATE);
-+	ghcb_set_sw_exit_info_2(ghcb, __pa(vmsa));
-+
-+	sev_es_wr_ghcb_msr(__pa(ghcb));
-+	VMGEXIT();
-+
-+	if (!ghcb_sw_exit_info_1_is_valid(ghcb) ||
-+	    lower_32_bits(ghcb->save.sw_exit_info_1)) {
-+		pr_err("SNP AP Creation error\n");
-+		ret = -EINVAL;
++	if (!ghcb) {
++		ret = 1;
++		goto out_unlock;
 +	}
 +
++	/* Copy the input desc into GHCB shared buffer */
++	data = (struct snp_psc_desc *)ghcb->shared_buffer;
++	memcpy(ghcb->shared_buffer, desc, min_t(int, GHCB_SHARED_BUF_SIZE, sizeof(*desc)));
++
++	/*
++	 * As per the GHCB specification, the hypervisor can resume the guest
++	 * before processing all the entries. Check whether all the entries
++	 * are processed. If not, then keep retrying. Note, the hypervisor
++	 * will update the data memory directly to indicate the status, so
++	 * reference the data->hdr everywhere.
++	 *
++	 * The strategy here is to wait for the hypervisor to change the page
++	 * state in the RMP table before guest accesses the memory pages. If the
++	 * page state change was not successful, then later memory access will
++	 * result in a crash.
++	 */
++	cur_entry = data->hdr.cur_entry;
++	end_entry = data->hdr.end_entry;
++
++	while (data->hdr.cur_entry <= data->hdr.end_entry) {
++		ghcb_set_sw_scratch(ghcb, (u64)__pa(data));
++
++		/* This will advance the shared buffer data points to. */
++		ret = sev_es_ghcb_hv_call(ghcb, true, &ctxt, SVM_VMGEXIT_PSC, 0, 0);
++
++		/*
++		 * Page State Change VMGEXIT can pass error code through
++		 * exit_info_2.
++		 */
++		if (WARN(ret || ghcb->save.sw_exit_info_2,
++			 "SNP: PSC failed ret=%d exit_info_2=%llx\n",
++			 ret, ghcb->save.sw_exit_info_2)) {
++			ret = 1;
++			goto out;
++		}
++
++		/* Verify that reserved bit is not set */
++		if (WARN(data->hdr.reserved, "Reserved bit is set in the PSC header\n")) {
++			ret = 1;
++			goto out;
++		}
++
++		/*
++		 * Sanity check that entry processing is not going backwards.
++		 * This will happen only if hypervisor is tricking us.
++		 */
++		if (WARN(data->hdr.end_entry > end_entry || cur_entry > data->hdr.cur_entry,
++"SNP: PSC processing going backward, end_entry %d (got %d) cur_entry %d (got %d)\n",
++			 end_entry, data->hdr.end_entry, cur_entry, data->hdr.cur_entry)) {
++			ret = 1;
++			goto out;
++		}
++	}
++
++out:
 +	__sev_put_ghcb(&state);
 +
++out_unlock:
 +	local_irq_restore(flags);
-+
-+	/* Perform cleanup if there was an error */
-+	if (ret) {
-+		snp_cleanup_vmsa(vmsa);
-+		vmsa = NULL;
-+	}
-+
-+	/* Free up any previous VMSA page */
-+	if (cur_vmsa)
-+		snp_cleanup_vmsa(cur_vmsa);
-+
-+	/* Record the current VMSA page */
-+	per_cpu(sev_vmsa, cpu) = vmsa;
 +
 +	return ret;
 +}
 +
-+void snp_set_wakeup_secondary_cpu(void)
++static void __set_pages_state(struct snp_psc_desc *data, unsigned long vaddr,
++			      unsigned long vaddr_end, int op)
++{
++	struct psc_hdr *hdr;
++	struct psc_entry *e;
++	unsigned long pfn;
++	int i;
++
++	hdr = &data->hdr;
++	e = data->entries;
++
++	memset(data, 0, sizeof(*data));
++	i = 0;
++
++	while (vaddr < vaddr_end) {
++		if (is_vmalloc_addr((void *)vaddr))
++			pfn = vmalloc_to_pfn((void *)vaddr);
++		else
++			pfn = __pa(vaddr) >> PAGE_SHIFT;
++
++		e->gfn = pfn;
++		e->operation = op;
++		hdr->end_entry = i;
++
++		/*
++		 * Current SNP implementation doesn't keep track of the RMP page
++		 * size so use 4K for simplicity.
++		 */
++		e->pagesize = RMP_PG_SIZE_4K;
++
++		vaddr = vaddr + PAGE_SIZE;
++		e++;
++		i++;
++	}
++
++	if (vmgexit_psc(data))
++		sev_es_terminate(SEV_TERM_SET_LINUX, GHCB_TERM_PSC);
++}
++
++static void set_pages_state(unsigned long vaddr, unsigned int npages, int op)
++{
++	unsigned long vaddr_end, next_vaddr;
++	struct snp_psc_desc *desc;
++
++	desc = kmalloc(sizeof(*desc), GFP_KERNEL_ACCOUNT);
++	if (!desc)
++		panic("SNP: failed to allocate memory for PSC descriptor\n");
++
++	vaddr = vaddr & PAGE_MASK;
++	vaddr_end = vaddr + (npages << PAGE_SHIFT);
++
++	while (vaddr < vaddr_end) {
++		/* Calculate the last vaddr that fits in one struct snp_psc_desc. */
++		next_vaddr = min_t(unsigned long, vaddr_end,
++				   (VMGEXIT_PSC_MAX_ENTRY * PAGE_SIZE) + vaddr);
++
++		__set_pages_state(desc, vaddr, next_vaddr, op);
++
++		vaddr = next_vaddr;
++	}
++
++	kfree(desc);
++}
++
++void snp_set_memory_shared(unsigned long vaddr, unsigned int npages)
 +{
 +	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
 +		return;
 +
-+	/*
-+	 * Always set this override if SNP is enabled. This makes it the
-+	 * required method to start APs under SNP. If the hypervisor does
-+	 * not support AP creation, then no APs will be started.
-+	 */
-+	apic->wakeup_secondary_cpu = wakeup_cpu_via_vmgexit;
++	pvalidate_pages(vaddr, npages, false);
++
++	set_pages_state(vaddr, npages, SNP_PAGE_STATE_SHARED);
++}
++
++void snp_set_memory_private(unsigned long vaddr, unsigned int npages)
++{
++	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
++		return;
++
++	set_pages_state(vaddr, npages, SNP_PAGE_STATE_PRIVATE);
++
++	pvalidate_pages(vaddr, npages, true);
 +}
 +
  int sev_es_setup_ap_jump_table(struct real_mode_header *rmh)
  {
  	u16 startup_cs, startup_ip;
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 2ef1477..85d7b1c 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -82,6 +82,7 @@
- #include <asm/spec-ctrl.h>
- #include <asm/hw_irq.h>
- #include <asm/stackprotector.h>
-+#include <asm/sev.h>
+diff --git a/arch/x86/mm/mem_encrypt_amd.c b/arch/x86/mm/mem_encrypt_amd.c
+index 8539dd6..d3c88d9 100644
+--- a/arch/x86/mm/mem_encrypt_amd.c
++++ b/arch/x86/mm/mem_encrypt_amd.c
+@@ -316,11 +316,24 @@ static void enc_dec_hypercall(unsigned long vaddr, int npages, bool enc)
  
- /* representing HT siblings of each logical CPU */
- DEFINE_PER_CPU_READ_MOSTLY(cpumask_var_t, cpu_sibling_map);
-@@ -1430,6 +1431,8 @@ void __init native_smp_prepare_cpus(unsigned int max_cpus)
- 	smp_quirk_init_udelay();
- 
- 	speculative_store_bypass_ht_init();
-+
-+	snp_set_wakeup_secondary_cpu();
+ static void amd_enc_status_change_prepare(unsigned long vaddr, int npages, bool enc)
+ {
++	/*
++	 * To maintain the security guarantees of SEV-SNP guests, make sure
++	 * to invalidate the memory before encryption attribute is cleared.
++	 */
++	if (cc_platform_has(CC_ATTR_GUEST_SEV_SNP) && !enc)
++		snp_set_memory_shared(vaddr, npages);
  }
  
- void arch_thaw_secondary_cpus_begin(void)
+ /* Return true unconditionally: return value doesn't matter for the SEV side */
+ static bool amd_enc_status_change_finish(unsigned long vaddr, int npages, bool enc)
+ {
++	/*
++	 * After memory is mapped encrypted in the page table, validate it
++	 * so that it is consistent with the page table updates.
++	 */
++	if (cc_platform_has(CC_ATTR_GUEST_SEV_SNP) && enc)
++		snp_set_memory_private(vaddr, npages);
++
+ 	if (!cc_platform_has(CC_ATTR_HOST_MEM_ENCRYPT))
+ 		enc_dec_hypercall(vaddr, npages, enc);
+ 

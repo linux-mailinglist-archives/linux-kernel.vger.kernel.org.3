@@ -2,263 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F28704F9A7E
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 18:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF80F4F9A8D
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 18:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbiDHQZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 12:25:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44190 "EHLO
+        id S230470AbiDHQZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 12:25:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230251AbiDHQZI (ORCPT
+        with ESMTP id S230476AbiDHQZj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 12:25:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C916F10C515
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 09:23:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649434984;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ofocLwjgfrlRUiguKE9lsikbmfnw6N1ZVOog+yoEC3o=;
-        b=hKx3YFDPrboIbZ9mstbsG6o/SIO+YXrMTtgo0ZUZ/k3LNcpYTLMkqJKau9f5SME5q2utI9
-        G4jwC9nTirQD9UgCS9s8KiR7gFPVoa4gn+a3OKNDIpme8xV93729pxuLxIzXAfGEk305qm
-        k7MsOQCO/BqKB7wquKnAVtMEaxWK5Xc=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-10-JH2oBAntP3iehww6ZgiXhQ-1; Fri, 08 Apr 2022 12:23:01 -0400
-X-MC-Unique: JH2oBAntP3iehww6ZgiXhQ-1
-Received: by mail-qt1-f200.google.com with SMTP id g22-20020ac870d6000000b002e20a1508ecso8060352qtp.19
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 09:23:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ofocLwjgfrlRUiguKE9lsikbmfnw6N1ZVOog+yoEC3o=;
-        b=1KqTmKtXJniyAH3o7reCUsMSVXVV6IrOVhTvPvVMiYdkqzxrEmXNw5pWlRLV7PAP8l
-         Df3zYS64biEK7MiYK0oCxVWdLrBjteC76hXlfEzc4/qS3G1McRreemr8DY+4J9prYQ2x
-         sF6yCdGteSpxI7Xrw5I4ej54Y/Y5w7a8LNt2607yUEdkWMTpXkrgdvERChmUmEKqaBcp
-         E/a/49484heepWbDMe7fVM+792EQkKyQ7mC3ZrjCoZnWshPGxmTWCx7CE+u+N/nzxEw0
-         CYFmObH1n+FZXSkUjg5iRRHOzX41bd8l6iKngeGOCbL1AZzm7rJaBHPuxLKN38Ydh091
-         /e8A==
-X-Gm-Message-State: AOAM532R1HWo+5VS7NzHZL4+zhL/52TxY0V9XQKmtOFwbsLxTE95aGxq
-        qq3YWaSTED/IJX0UkiAQU/SK1DHwXWFHtqV5HZnmFOGA5XbXIK8B4Rpbx/Ao/e/t/MWCCSDi0eH
-        QWtZL5MstaQJqFXZJfL66o7cF
-X-Received: by 2002:a05:6214:2622:b0:444:1b35:b6a5 with SMTP id gv2-20020a056214262200b004441b35b6a5mr4717034qvb.102.1649434981140;
-        Fri, 08 Apr 2022 09:23:01 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxIM9ayM7bF8aYO2zn3Ghsa6P4/1Q2tP2xWbGcFH5vNeM8F875g1oDKNWu3MONplVRltPS00g==
-X-Received: by 2002:a05:6214:2622:b0:444:1b35:b6a5 with SMTP id gv2-20020a056214262200b004441b35b6a5mr4717017qvb.102.1649434980810;
-        Fri, 08 Apr 2022 09:23:00 -0700 (PDT)
-Received: from treble.attlocal.net ([2600:1700:6e32:6c00::15])
-        by smtp.gmail.com with ESMTPSA id v7-20020ac85787000000b002e1c8376517sm17629692qta.22.2022.04.08.09.22.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 09:23:00 -0700 (PDT)
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sam Ravnborg <sam@ravnborg.org>, x86@kernel.org
-Subject: [PATCH] kbuild: Remove CONFIG_DEBUG_SECTION_MISMATCH
-Date:   Fri,  8 Apr 2022 09:21:56 -0700
-Message-Id: <7fad83ecde03540e65677959034315f8fbb3755e.1649434832.git.jpoimboe@redhat.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 8 Apr 2022 12:25:39 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2085.outbound.protection.outlook.com [40.107.223.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3F11753A8
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 09:23:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XctnETpUpoE2Qta9e5hqtutvQ4mYdfNl4CSlrU+JFkXAC6e0aBqtYb2BLi/WV1L/LLk/kfxmTRDK0NMrp7Zue84bnBq/SYdrazlEcW3uFxr/d8lKOv8oQFAdnUKag6NbD5QhsOk/kXJ+C+y39KLqsNlWGTewA+FfV0BgEb78+L+Su09VoVtUfjDYHtSrUHM8sL5CRfepk+D1a/xT+uKv1XC+51lQ45rOjHwAtOAMaxx7vgbsnRxJOs+dzi8baLS07waTEZihxrZzHZDfHsWtvgBBsfp2vCabvfMer5rkQ2k4pILOD7Y06Dz5mo7JxGCqdgarJmlD3//MWbv/HFTvNA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0bqr3nPo/EdHsvqGv8sqjeBdZaX7WAJdXkI4b8JLkb4=;
+ b=jVAXh8GKDUfoxUBl7W2lxzKTeAzEU3k8cVhYEMXkiboOr2LdlHzArTDGyRxc8ECXA7t9vwjgLGTuMcPNVthwEU6aDq0x4HTsOG+dAOUVKFKF1tcN1yRKsksO3iDNcZdlY0/t+DsFiG3uT7u3G1aSuOfUyMDcg0wrdX82UHEyPCK2bDmUdEQRKf3DGDbo3OChFLt0j02gALPOxoyQtSrp8PjPkLXZ38+ogevfkA9Jau/yB23XGD8tLqfDUtW52Jzgx+BASCDW9BG8VRxuMCwIdsaCOzvofgcFvMNXwx7AivYVNkPaBL3TBTPo1Bce+FoUVZZpJbMNbcNtFJKx2ybauw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0bqr3nPo/EdHsvqGv8sqjeBdZaX7WAJdXkI4b8JLkb4=;
+ b=THQCCzGeqL8cObxvoMVBaZggXjEoNgNADr6AS/JPjfgYBGp/crvCS4jvM/Kbow+DWExERAFhzchL8AlUExo91pVy9D8Z6ZOJu3noCkt5zPy/8SLFMsO77RBm6UV2PTzqa82prYjzjAJiQwQqeb778MGBX2XP0I7hI7nyTRt0D5g=
+Received: from BL1PR12MB5157.namprd12.prod.outlook.com (2603:10b6:208:308::15)
+ by BYAPR12MB3256.namprd12.prod.outlook.com (2603:10b6:a03:135::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.22; Fri, 8 Apr
+ 2022 16:23:30 +0000
+Received: from BL1PR12MB5157.namprd12.prod.outlook.com
+ ([fe80::70d6:f6dd:3e14:3c2d]) by BL1PR12MB5157.namprd12.prod.outlook.com
+ ([fe80::70d6:f6dd:3e14:3c2d%5]) with mapi id 15.20.5144.025; Fri, 8 Apr 2022
+ 16:23:30 +0000
+From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
+To:     "Gong, Richard" <Richard.Gong@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        "airlied@linux.ie" <airlied@linux.ie>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>
+CC:     "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] drm/amdgpu: disable ASPM for legacy products that don't
+ support ASPM
+Thread-Topic: [PATCH] drm/amdgpu: disable ASPM for legacy products that don't
+ support ASPM
+Thread-Index: AQHYS1+vbeZYg8F3L0aXkBYKsAfwnazmKNIAgAAJZACAAACksA==
+Date:   Fri, 8 Apr 2022 16:23:30 +0000
+Message-ID: <BL1PR12MB5157099D1DE3F8B3AC4F59FCE2E99@BL1PR12MB5157.namprd12.prod.outlook.com>
+References: <20220408154447.3519453-1-richard.gong@amd.com>
+ <BL1PR12MB51576654D3EEB10F5DF862A7E2E99@BL1PR12MB5157.namprd12.prod.outlook.com>
+ <768e8812-ecbf-93e7-ffad-feec1b36d924@amd.com>
+In-Reply-To: <768e8812-ecbf-93e7-ffad-feec1b36d924@amd.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2022-04-08T16:23:26Z;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP 2.0;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=b89953b9-3b4a-43cf-98ae-41ef61289b46;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=1
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_enabled: true
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_setdate: 2022-04-08T16:23:28Z
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_method: Privileged
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_name: Public-AIP 2.0
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_actionid: 70c15800-2c47-432f-ae89-2743b4122ff5
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_contentbits: 0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 987aa9e0-73d4-4928-5df6-08da197c1e84
+x-ms-traffictypediagnostic: BYAPR12MB3256:EE_
+x-microsoft-antispam-prvs: <BYAPR12MB3256691A75944F99932E3BD6E2E99@BYAPR12MB3256.namprd12.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: IUKK74Ns7O5UZPIMW/eokltkk5WrOSCbjxsDKoYJ26pXfU0pySTAOLWDc51zWZeNTSzy0Mf585AK83buh0ks8DpiOTs4zR4Quqv03M/a9AQUdkTK9OVrcu00yDHGTf15fAM/B5LvBO/F6r+9GkPN9ChXlwvyUXzx0t5V36mSEgCkHXJl3O+ml3i5p+5LlyZ+VfFootLxPQHDnBPyunZwvBcUkueCKIFyBNNzbBA8livsg6KAQnxvY4gR3l35eEP4QGOPzUhDRxO8mRuRhC8EBIPfTLQP6lNZTIADkUUgAGsIZnyy44bvC655SwBjSpm7a2e+UY08RWuAsSdFpqO9XpZdYKFq75CjFVl+VaIZpR8dW0gfr05qoO5U0MIGf6JOhd096rMH4x14UuTE45v5GTSNJDd1JrL36lwDhnlnGecSSu9PtLFEWj4PnHWIoK54Nng55wrUFy96PK2BSO4XwhezYGskL+MS6UoaLy1nb4ifLwTtL+saowGDothcDGo8XLAtDrP3MViefar8nNV9MNIHUFglYeU1IADm1L6OZk6xig5nuK09MGb8/hEcDUkZtKc/5VCq509eY/8wgMJqWgPySXvlgUXbODR2K1stJm/eMaY/NZDH+tj05RwHUwY366WYABiWYgfNzoA0uqNat3giaqx4E0+98cRf/mthO0AopWusw6IEfVIM2va6B2/PmCHe4XqM6LZfYTe67fgfBu/q8NL5n9JljJ3raJ2CjPc=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5157.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(9686003)(52536014)(508600001)(66446008)(6506007)(8936002)(86362001)(7696005)(2906002)(122000001)(921005)(38100700002)(55016003)(53546011)(186003)(966005)(33656002)(5660300002)(71200400001)(66556008)(83380400001)(66946007)(110136005)(38070700005)(54906003)(8676002)(66476007)(4326008)(64756008)(76116006)(316002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 2
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TDBtRVlrd0t6WU1NMTl0eVV0RHpkQWN1OWpuNnVIdDlIZXNHZFdrbmdkZkJ1?=
+ =?utf-8?B?bFhYeTZDNmRMZm9JYVR3MjB0TWVzclBRVFpJOHhCTzZmZXlPZE5DZkF2TytR?=
+ =?utf-8?B?ZFhBOTZ3WU9VOFBIOU0vZHlvRE5sU2lyT2l1R2NsalJkTXlWdldIalJMbFFS?=
+ =?utf-8?B?QWtYcDhZcGlVYk9XcnBkaGpyMExIMW9kU0IzSTVSNGlqN0c1OHJUVDQ2WDBK?=
+ =?utf-8?B?Y3FoUkZabXBkR0xpMnRZemNtSFUrNEI5MXN4bGljekluQjZRdVVKSmxTWmFr?=
+ =?utf-8?B?Z2FJdUEyclhFSm1VeWNZTGhJb0IxQVBoVlV0MWZ6djJKWnR5STRNTktBdTRl?=
+ =?utf-8?B?ZldvWjUwQVBpa1h5bEZzSVk1cUY2QXZybWNqZnNGS0E4MTZLL2hGRU54TlJk?=
+ =?utf-8?B?Y0FNQ01WYmZPNkljd3Jhb0Z5MGNuTitJYjNCR1VDWWRDN25uMVVCenYwbVZa?=
+ =?utf-8?B?UHhseDhZVzBZajR4ZEl1UUlXNEFrYkE5S3FrUUdZVzE1WWM3UVpTRHlWWXli?=
+ =?utf-8?B?T2o2V1haTXVpZjBPMnVGOXpxNVFpWjI4ZVRwbEdOZ3hseUxLbG1Xc3ZuanRn?=
+ =?utf-8?B?aXBFc3Z0OVh0TDRONWlWTUMrTzFUZzJpVVkyVVR6Ri9wM1RJWUhoZHdsVWRj?=
+ =?utf-8?B?LzRZRlhuMmg4U1JaMVp1RWFvRkowbVZyeHZKd25MN3FmcjZ2VHNDSnRnbEx4?=
+ =?utf-8?B?a0Z0bDc0bDhQeXJ5SEhrV1BOWnJpMHBHVm9EOE8xaEVKOHE1YkY2YVlGTExZ?=
+ =?utf-8?B?MWd3OWwra0FGR0k2NTVieERXeVNod3J0UXk0QnorNjg4L3lQWWxJMkxoNWtn?=
+ =?utf-8?B?K3IyNkJpanprTEV5QmU0czNJVDJ4Smo5NHpBMjVuZzFLMkNSTWN5TGtrRUdx?=
+ =?utf-8?B?VE1qUjR2eXJZZkxrdWxSRk5TOGpGeTd1RDJEQUVzQnNXWU84bC9QdCttTHBj?=
+ =?utf-8?B?U0VFQzZsTUREZzZqUjNweGs4OHk1bFRrWHJ3dE84U1lNRkhuSmtQNEdjbHQ5?=
+ =?utf-8?B?cDhZOHRGOG13MmhST0VacDMvMmFvQ1NQNXZJUHRVL2NQYVF3b2VsZHNEQ3pN?=
+ =?utf-8?B?cnR1RzU0R01qZkY0SHJsMXUvUHRwTFJ6MEgwUlMvcmhFUWdudmY1eWltVGk2?=
+ =?utf-8?B?OXA5dTUreExqLzJaT3NyR05LZXdGWjhnYWFqT09Qb1UxMnJpQ2p5amF3L2hM?=
+ =?utf-8?B?NzBQSGpOUFRwZWdwcldkT1F2ZkxoemtKUWcxUk00R1R3WXN4NG5vOFVIdFhm?=
+ =?utf-8?B?bnJIbkRVek9sMHk4OXB1V1pzZjBVc0pwRm9JamtyaWRhS2wzeXhJRFdXaHU3?=
+ =?utf-8?B?ZUpSOGt5S05jejFpUG1hcGVTMkhWTHhnRDh6RWMvdGowUmp0RiszYnpIWFRm?=
+ =?utf-8?B?SER1L3plSVlHVUxRaUpNaFE3blZVV1FSb2o5OG5GL2VubWFJbjhGRmlFcmpP?=
+ =?utf-8?B?cWFVdlc3WkN2dVVCMk80WGR5NHQ5WXpIV1ZyRUZSejZHdjBnV3F6YWc1eXc5?=
+ =?utf-8?B?ZGI2aXNuVmFqck4vTjh4VzlMSmFFY1crWm1ta3JPTkwwaUczMW11SE15ZnZs?=
+ =?utf-8?B?RmFZSStFZVBKdzJhYW9MWHp2MHdqZTdjbTR1TmlCd1BUZUZkdDNBcy81aGpo?=
+ =?utf-8?B?R1pEMG5yUU1kQSt2NHhOc2lpRnZPNk5ueDc0eC9aMUd5RUgvZXNJbzF6VUc2?=
+ =?utf-8?B?Q00yYmxGajdLT0M2WHhoanVBY0hrMXkwNm9PRmZTWHNmb2oydllYTk5tR0JZ?=
+ =?utf-8?B?eVFhYjd1Rm9zbk9BNFA4andLdDZSdHlvbUVOd0x1dUZtcHFFNk1zZlBuK0JE?=
+ =?utf-8?B?SVZKUFI1Y2xvKzJPaDNpb21zZDVodXJaa3ZlTEFNMXEzK0thNG1helZNOXdM?=
+ =?utf-8?B?RkFBVCtJSW1Hayt6VmpRNSsyQTBGamtEbTliOWNnc2x3YlZlMVdCK0dGMy9G?=
+ =?utf-8?B?QTRYdzl5RnVIWHdiTWoxdDAyK0ZybC9oQkIzNi9JVjN1T0k1S0lUblBsejE0?=
+ =?utf-8?B?Ky85OXl3aWZac3lrc0tkdlZzOHV1ajBHWmVTL05QWVRHNElGblZFR0hZM1By?=
+ =?utf-8?B?ek9laFE0TEV0aTdTSExRTVVpTHpHazgrMmNvK2o5SFlxYmE2ZG1YYklLMENx?=
+ =?utf-8?B?VDRkRjVJNVMycE03RHZ6cS9HUGFHUkNwMkFnM0lnZnBIZ1cwUHAvejVIZWV6?=
+ =?utf-8?B?OHlBN21NR0llWXpRTytPbkxmYVpMcHNHMXBNbUtENDZraHlvWVlvUzRCQlQx?=
+ =?utf-8?B?SllSQmo4d0QyYUh5ZnJIRDZJemp6R2hTckxDbXR0QVdSVnRwZklQSEVXelZC?=
+ =?utf-8?B?Q2E1TG1jVnRlZGZSRzBFell6QzF1L1FRZHo3NmhYcFhIdk5HYzZpaGZFV041?=
+ =?utf-8?Q?TPjosZdONKCatLEGYJGkadf+k/BcfKLPCJuVUhLUJvO0K?=
+x-ms-exchange-antispam-messagedata-1: eXFaFAD+vqbaLw==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5157.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 987aa9e0-73d4-4928-5df6-08da197c1e84
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Apr 2022 16:23:30.3258
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: gNRdWmv3ng8kiehM7C4lBZl79wuOPBqPLjyKueAedCXlzn1ZX1hsjF2QjpbDo2dKgNQIYketfxq3OzGW4vJlnA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3256
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Modpost's section mismatch detection warns when a non-init function
-references an __init function or __initdata.  Those warnings are very
-useful, because __init memory is freed during boot, so the non-init
-function might end up referencing or calling into some random memory.
-
-CONFIG_DEBUG_SECTION_MISMATCH is intended to root out even more of these
-issues by adding the -fno-inline-functions-called-once compiler flag,
-which forces once-called static functions to not be inlined.  As
-described in the option's help description:
-
-  - Add the option -fno-inline-functions-called-once to gcc commands.
-    When inlining a function annotated with __init in a non-init
-    function, we would lose the section information and thus
-    the analysis would not catch the illegal reference.
-    This option tells gcc to inline less (but it does result in
-    a larger kernel).
-
-So it's basically a debug (non-production) option, which has the goal of
-rooting out potential issues which might exist on *other* configs which
-might somehow trigger different inlining decisions, without having to
-build all those other configs to see the warnings directly.
-
-But with -O2, once-called static functions are almost always inlined, so
-its usefulness for rooting out mismatch warnings on other configs is
-somewhere between extremely limited and non-existent.  And nowadays we
-have build bots everywhere doing randconfigs continuously, which are
-great for rooting out such edge cases.
-
-Somewhat ironically, the existence of those build bots means we get a
-lot of unrealistic objtool warnings being reported, due to unrealistic
-inlines caused by CONFIG_DEBUG_SECTION_MISMATCH, where the only way to
-silence the warnings is to force a single-called function to be inlined
-with '__always_inline'.
-
-So the limited, hypothetical benefit of "rooting out configs with
-section mismatches" is outweighed by the very real downside of "adding
-lots of unnecessary '__always_inline' annotations".
-
-In fact I suspect this option has been responsible for dozens of
-"convert inline to __always_inline" patches over the years.  Such
-patches usually complain about the compiler's inlining decisions being
-unpredictable.  It turns out this config option is the main culprit.
-
-So considering the drawbacks of this option significantly outweigh the
-benefits, especially now in the age of randconfig build bots, remove it.
-
-Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
----
- .../media/maintainer-entry-profile.rst        |  2 +-
- Makefile                                      |  5 -----
- arch/arc/configs/tb10x_defconfig              |  1 -
- arch/s390/configs/debug_defconfig             |  1 -
- arch/s390/configs/defconfig                   |  1 -
- kernel/configs/debug.config                   |  1 -
- lib/Kconfig.debug                             | 22 -------------------
- .../selftests/wireguard/qemu/debug.config     |  1 -
- 8 files changed, 1 insertion(+), 33 deletions(-)
-
-diff --git a/Documentation/driver-api/media/maintainer-entry-profile.rst b/Documentation/driver-api/media/maintainer-entry-profile.rst
-index ffc712a5f632..06106d7e7fae 100644
---- a/Documentation/driver-api/media/maintainer-entry-profile.rst
-+++ b/Documentation/driver-api/media/maintainer-entry-profile.rst
-@@ -123,7 +123,7 @@ Those tests need to pass before the patches go upstream.
- 
- Also, please notice that we build the Kernel with::
- 
--	make CF=-D__CHECK_ENDIAN__ CONFIG_DEBUG_SECTION_MISMATCH=y C=1 W=1 CHECK=check_script
-+	make CF=-D__CHECK_ENDIAN__ C=1 W=1 CHECK=check_script
- 
- Where the check script is::
- 
-diff --git a/Makefile b/Makefile
-index 8c7de9a72ea2..3d7ea1a23558 100644
---- a/Makefile
-+++ b/Makefile
-@@ -871,11 +871,6 @@ KBUILD_CFLAGS	+= $(CC_FLAGS_FTRACE) $(CC_FLAGS_USING)
- KBUILD_AFLAGS	+= $(CC_FLAGS_USING)
- endif
- 
--# We trigger additional mismatches with less inlining
--ifdef CONFIG_DEBUG_SECTION_MISMATCH
--KBUILD_CFLAGS += -fno-inline-functions-called-once
--endif
--
- ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
- KBUILD_CFLAGS_KERNEL += -ffunction-sections -fdata-sections
- LDFLAGS_vmlinux += --gc-sections
-diff --git a/arch/arc/configs/tb10x_defconfig b/arch/arc/configs/tb10x_defconfig
-index a12656ec0072..5acf8cc3e7b0 100644
---- a/arch/arc/configs/tb10x_defconfig
-+++ b/arch/arc/configs/tb10x_defconfig
-@@ -96,7 +96,6 @@ CONFIG_STRIP_ASM_SYMS=y
- CONFIG_DEBUG_FS=y
- CONFIG_HEADERS_INSTALL=y
- CONFIG_HEADERS_CHECK=y
--CONFIG_DEBUG_SECTION_MISMATCH=y
- CONFIG_MAGIC_SYSRQ=y
- CONFIG_DEBUG_MEMORY_INIT=y
- CONFIG_DEBUG_STACKOVERFLOW=y
-diff --git a/arch/s390/configs/debug_defconfig b/arch/s390/configs/debug_defconfig
-index 498bed9b261b..66a4c65a4bd8 100644
---- a/arch/s390/configs/debug_defconfig
-+++ b/arch/s390/configs/debug_defconfig
-@@ -791,7 +791,6 @@ CONFIG_DEBUG_INFO_DWARF4=y
- CONFIG_DEBUG_INFO_BTF=y
- CONFIG_GDB_SCRIPTS=y
- CONFIG_HEADERS_INSTALL=y
--CONFIG_DEBUG_SECTION_MISMATCH=y
- CONFIG_MAGIC_SYSRQ=y
- CONFIG_DEBUG_PAGEALLOC=y
- CONFIG_PAGE_OWNER=y
-diff --git a/arch/s390/configs/defconfig b/arch/s390/configs/defconfig
-index 61e36b999f67..0e6ae36cf401 100644
---- a/arch/s390/configs/defconfig
-+++ b/arch/s390/configs/defconfig
-@@ -776,7 +776,6 @@ CONFIG_DEBUG_INFO=y
- CONFIG_DEBUG_INFO_DWARF4=y
- CONFIG_DEBUG_INFO_BTF=y
- CONFIG_GDB_SCRIPTS=y
--CONFIG_DEBUG_SECTION_MISMATCH=y
- CONFIG_MAGIC_SYSRQ=y
- CONFIG_DEBUG_WX=y
- CONFIG_PTDUMP_DEBUGFS=y
-diff --git a/kernel/configs/debug.config b/kernel/configs/debug.config
-index e8db8d938661..0c1a5d64febb 100644
---- a/kernel/configs/debug.config
-+++ b/kernel/configs/debug.config
-@@ -18,7 +18,6 @@ CONFIG_SYMBOLIC_ERRNAME=y
- #
- CONFIG_DEBUG_INFO=y
- CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
--CONFIG_DEBUG_SECTION_MISMATCH=y
- CONFIG_FRAME_WARN=2048
- CONFIG_SECTION_MISMATCH_WARN_ONLY=y
- #
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 075cd25363ac..e52f851e9e3b 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -425,28 +425,6 @@ config HEADERS_INSTALL
- 	  user-space program samples. It is also needed by some features such
- 	  as uapi header sanity checks.
- 
--config DEBUG_SECTION_MISMATCH
--	bool "Enable full Section mismatch analysis"
--	depends on CC_IS_GCC
--	help
--	  The section mismatch analysis checks if there are illegal
--	  references from one section to another section.
--	  During linktime or runtime, some sections are dropped;
--	  any use of code/data previously in these sections would
--	  most likely result in an oops.
--	  In the code, functions and variables are annotated with
--	  __init,, etc. (see the full list in include/linux/init.h),
--	  which results in the code/data being placed in specific sections.
--	  The section mismatch analysis is always performed after a full
--	  kernel build, and enabling this option causes the following
--	  additional step to occur:
--	  - Add the option -fno-inline-functions-called-once to gcc commands.
--	    When inlining a function annotated with __init in a non-init
--	    function, we would lose the section information and thus
--	    the analysis would not catch the illegal reference.
--	    This option tells gcc to inline less (but it does result in
--	    a larger kernel).
--
- config SECTION_MISMATCH_WARN_ONLY
- 	bool "Make section mismatch errors non-fatal"
- 	default y
-diff --git a/tools/testing/selftests/wireguard/qemu/debug.config b/tools/testing/selftests/wireguard/qemu/debug.config
-index 2b321b8a96cf..e737ce3b324e 100644
---- a/tools/testing/selftests/wireguard/qemu/debug.config
-+++ b/tools/testing/selftests/wireguard/qemu/debug.config
-@@ -57,7 +57,6 @@ CONFIG_USER_STACKTRACE_SUPPORT=y
- CONFIG_DEBUG_SG=y
- CONFIG_DEBUG_NOTIFIERS=y
- CONFIG_X86_DEBUG_FPU=y
--CONFIG_DEBUG_SECTION_MISMATCH=y
- CONFIG_DEBUG_PAGEALLOC=y
- CONFIG_DEBUG_PAGEALLOC_ENABLE_DEFAULT=y
- CONFIG_DEBUG_WW_MUTEX_SLOWPATH=y
--- 
-2.34.1
-
+W1B1YmxpY10NCg0KDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogR29u
+ZywgUmljaGFyZCA8UmljaGFyZC5Hb25nQGFtZC5jb20+DQo+IFNlbnQ6IEZyaWRheSwgQXByaWwg
+OCwgMjAyMiAxMToyMA0KPiBUbzogTGltb25jaWVsbG8sIE1hcmlvIDxNYXJpby5MaW1vbmNpZWxs
+b0BhbWQuY29tPjsgRGV1Y2hlciwgQWxleGFuZGVyDQo+IDxBbGV4YW5kZXIuRGV1Y2hlckBhbWQu
+Y29tPjsgS29lbmlnLCBDaHJpc3RpYW4NCj4gPENocmlzdGlhbi5Lb2VuaWdAYW1kLmNvbT47IFBh
+biwgWGluaHVpIDxYaW5odWkuUGFuQGFtZC5jb20+Ow0KPiBhaXJsaWVkQGxpbnV4LmllOyBkYW5p
+ZWxAZmZ3bGwuY2gNCj4gQ2M6IGFtZC1nZnhAbGlzdHMuZnJlZWRlc2t0b3Aub3JnOyBkcmktZGV2
+ZWxAbGlzdHMuZnJlZWRlc2t0b3Aub3JnOyBsaW51eC0NCj4ga2VybmVsQHZnZXIua2VybmVsLm9y
+Zw0KPiBTdWJqZWN0OiBSZTogW1BBVENIXSBkcm0vYW1kZ3B1OiBkaXNhYmxlIEFTUE0gZm9yIGxl
+Z2FjeSBwcm9kdWN0cyB0aGF0DQo+IGRvbid0IHN1cHBvcnQgQVNQTQ0KPiANCj4gDQo+IE9uIDQv
+OC8yMDIyIDEwOjQ3IEFNLCBMaW1vbmNpZWxsbywgTWFyaW8gd3JvdGU6DQo+ID4gW1B1YmxpY10N
+Cj4gPg0KPiA+DQo+ID4NCj4gPj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gPj4gRnJv
+bTogR29uZywgUmljaGFyZCA8UmljaGFyZC5Hb25nQGFtZC5jb20+DQo+ID4+IFNlbnQ6IEZyaWRh
+eSwgQXByaWwgOCwgMjAyMiAxMDo0NQ0KPiA+PiBUbzogRGV1Y2hlciwgQWxleGFuZGVyIDxBbGV4
+YW5kZXIuRGV1Y2hlckBhbWQuY29tPjsgS29lbmlnLA0KPiBDaHJpc3RpYW4NCj4gPj4gPENocmlz
+dGlhbi5Lb2VuaWdAYW1kLmNvbT47IFBhbiwgWGluaHVpIDxYaW5odWkuUGFuQGFtZC5jb20+Ow0K
+PiA+PiBhaXJsaWVkQGxpbnV4LmllOyBkYW5pZWxAZmZ3bGwuY2gNCj4gPj4gQ2M6IGFtZC1nZnhA
+bGlzdHMuZnJlZWRlc2t0b3Aub3JnOyBkcmktZGV2ZWxAbGlzdHMuZnJlZWRlc2t0b3Aub3JnOw0K
+PiBsaW51eC0NCj4gPj4ga2VybmVsQHZnZXIua2VybmVsLm9yZzsgTGltb25jaWVsbG8sIE1hcmlv
+DQo+IDxNYXJpby5MaW1vbmNpZWxsb0BhbWQuY29tPjsNCj4gPj4gR29uZywgUmljaGFyZCA8Umlj
+aGFyZC5Hb25nQGFtZC5jb20+DQo+ID4+IFN1YmplY3Q6IFtQQVRDSF0gZHJtL2FtZGdwdTogZGlz
+YWJsZSBBU1BNIGZvciBsZWdhY3kgcHJvZHVjdHMgdGhhdA0KPiBkb24ndA0KPiA+PiBzdXBwb3J0
+IEFTUE0NCj4gPj4NCj4gPj4gQWN0aXZlIFN0YXRlIFBvd2VyIE1hbmFnZW1lbnQgKEFTUE0pIGZl
+YXR1cmUgaXMgZW5hYmxlZCBzaW5jZSBrZXJuZWwNCj4gPj4gNS4xNC4NCj4gPj4gSG93ZXZlciB0
+aGVyZSBhcmUgc29tZSBsZWdhY3kgcHJvZHVjdHMgKFdYMzIwMCBhbmQgUlg2NDAgYXJlDQo+IGV4
+YW1wbGVzKQ0KPiA+PiB0aGF0DQo+ID4+IGRvIG5vdCBzdXBwb3J0IEFTUE0uIFVzZSB0aGVtIGFz
+IHZpZGVvL2Rpc3BsYXkgb3V0cHV0IGFuZCBzeXN0ZW0NCj4gd291bGQNCj4gPj4gaGFuZw0KPiA+
+PiBkdXJpbmcgc3VzcGVuZC9yZXN1bWUuDQo+ID4+DQo+ID4+IEFkZCBleHRyYSBjaGVjayB0byBk
+aXNhYmxlIEFTUE0gZm9yIG9sZCBwcm9kdWN0cyB0aGF0IGRvbid0IGhhdmUNCj4gPj4gQVNQTSBz
+dXBwb3J0Lg0KPiA+Pg0KPiA+PiBTaWduZWQtb2ZmLWJ5OiBSaWNoYXJkIEdvbmcgPHJpY2hhcmQu
+Z29uZ0BhbWQuY29tPg0KPiA+PiBMaW5rOiBodHRwczovL2dpdGxhYi5mcmVlZGVza3RvcC5vcmcv
+ZHJtL2FtZC8tL2lzc3Vlcy8xODg1DQo+ID4+IC0tLQ0KPiA+PiAgIGRyaXZlcnMvZ3B1L2RybS9h
+bWQvYW1kZ3B1L2FtZGdwdV9kcnYuYyB8IDQgKysrKw0KPiA+PiAgIDEgZmlsZSBjaGFuZ2VkLCA0
+IGluc2VydGlvbnMoKykNCj4gPj4NCj4gPj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9h
+bWQvYW1kZ3B1L2FtZGdwdV9kcnYuYw0KPiA+PiBiL2RyaXZlcnMvZ3B1L2RybS9hbWQvYW1kZ3B1
+L2FtZGdwdV9kcnYuYw0KPiA+PiBpbmRleCBiYjFjMDI1ZDkwMDEuLjg5ODcxMDdmNDFlZSAxMDA2
+NDQNCj4gPj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL2FtZC9hbWRncHUvYW1kZ3B1X2Rydi5jDQo+
+ID4+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS9hbWQvYW1kZ3B1L2FtZGdwdV9kcnYuYw0KPiA+PiBA
+QCAtMjAxMiw2ICsyMDEyLDEwIEBAIHN0YXRpYyBpbnQgYW1kZ3B1X3BjaV9wcm9iZShzdHJ1Y3Qg
+cGNpX2Rldg0KPiA+PiAqcGRldiwNCj4gPj4gICAJaWYgKGFtZGdwdV9hc3BtID09IC0xICYmICFw
+Y2llX2FzcG1fZW5hYmxlZChwZGV2KSkNCj4gPj4gICAJCWFtZGdwdV9hc3BtID0gMDsNCj4gPj4N
+Cj4gPj4gKwkvKiBkaXNhYmxlIEFTUE0gZm9yIHRoZSBsZWdhY3kgcHJvZHVjdHMgdGhhdCBkb24n
+dCBzdXBwb3J0IEFTUE0gKi8NCj4gPj4gKwlpZiAoKGZsYWdzICYgQU1EX0FTSUNfTUFTSykgPT0g
+Q0hJUF9QT0xBUklTMTIpDQo+ID4+ICsJCWFtZGdwdV9hc3BtID0gMDsNCj4gPj4gKw0KPiA+IEkg
+dGhpbmsgaXQncyBwcm9ibGVtYXRpYyB0byBkaXNhYmxlIGl0IGZvciB0aGUgZW50aXJlIGRyaXZl
+ci4gIFRoZXJlIG1pZ2h0IGJlDQo+IG11bHRpcGxlDQo+ID4gQU1ER1BVcyBpbiB0aGUgc3lzdGVt
+LCBhbmQgb3RoZXJzIG1heSBzdXBwb3J0IEFTUE0uDQo+IA0KPiBUaGUgInByb2JsZW0iIGFyZSBX
+WDMyMDAgYW5kIFJYNjQwLCBib3RoIGFyZSBmcm9tIHRoZSBzYW1lIFBPTEFSSVMxMg0KPiBmYW1p
+bHkuDQo+IA0KDQpSaWdodCBidXQgd2hhdCBpZiBzb21lIG90aGVyICJ3b3JraW5nIiBjYXJkcyBh
+cmUgaW5jbHVkZWQgaW4gdGhlIHN5c3RlbSB0b28/DQpUaGVuIEFTUE0gZ2V0cyBkaXNhYmxlZCBm
+b3IgdGhlbSB0b28uICBJdCBzaG91bGQgb25seSBiZSBkaXNhYmxlZCBmb3IgdGhlIHBjaV9kZXYN
+CmNvcnJlc3BvbmRpbmcgdG8gcHJvYmxlbWF0aWMgR1BVcyBpbiBwcm9ibGVtYXRpYyBzaXR1YXRp
+b25zLg0KDQo+ID4gQ2FuIGl0IGJlIGRvbmUganVzdCBhcyBwYXJ0IG9mIHByb2JlIGZvciBQb2xh
+cmlzPw0KPiA+DQo+ID4+ICAgCWlmIChhbWRncHVfdmlydHVhbF9kaXNwbGF5IHx8DQo+ID4+ICAg
+CSAgICBhbWRncHVfZGV2aWNlX2FzaWNfaGFzX2RjX3N1cHBvcnQoZmxhZ3MgJiBBTURfQVNJQ19N
+QVNLKSkNCj4gPj4gICAJCXN1cHBvcnRzX2F0b21pYyA9IHRydWU7DQo+ID4+IC0tDQo+ID4+IDIu
+MjUuMQ0K

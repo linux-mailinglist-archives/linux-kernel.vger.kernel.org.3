@@ -2,163 +2,310 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED174F9C19
+	by mail.lfdr.de (Postfix) with ESMTP id 667D54F9C1A
 	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 19:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238411AbiDHR7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 13:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59002 "EHLO
+        id S238415AbiDHR71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 13:59:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232577AbiDHR7H (ORCPT
+        with ESMTP id S238432AbiDHR7Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 13:59:07 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D221210F6E9
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 10:57:00 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id c23so8591552plo.0
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 10:57:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=IudNh/HynxxH+tLoweLS06+fVTpNQOOa59eg8I3l6dE=;
-        b=U2/eA7V9kOv67ug/CEAAH5jJ3bDdjcuxlz1/CKBkgdCZNj0JT/9J3pCPxI/ctDFSbM
-         qK1+Sr9mcyKaUr/H66Pv9yktEidb3BhejDS+0/amDof+SQfyaKA08TzT03iiUsMWJJ3J
-         1MOBs6THAm4fpRtqfO8Z5nRoWMFj9z3GkfuNpKxv/p7ca1UQgBQvuQUPEasblyTQ9RrO
-         yn1hcR+9v3A8/OJPimHYWYuYVMj6vFYN+ei68jGp8D7XrjHDIdyTkfs0MDCZSOMFvB64
-         yHKUCeuwajm7ozlzkxvbDs/GO8MPtR8QBXSY2YgA4lYkeM/deK+/SqRK5LFaoYUgODz1
-         i3nA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=IudNh/HynxxH+tLoweLS06+fVTpNQOOa59eg8I3l6dE=;
-        b=bIVHbYPGygZ2RmbA/n2vXV/4LTPLo32xatYHL+EHo+K3OfxgXCtkrFfUjb7lGve/q+
-         XLOmlA9CXMuY+9PN3Hl+JYhpANN0oFFglWU2uJZ73deVKKkN+GALImcnDy19eUmAJuWi
-         tq2Wm+F27HlvT5jcppD0KrvzqzXQyeqBBtGfSt+vSNaTs6FDG9fGFEobgQslhbBGj3bn
-         BtMS0bB5LtDXFfiH96gOrX1Y2iTiuEIL+1YMgravtBjN0foBg5Yz6ZlXK3sJ7TNHwEUu
-         1Xnw0ltqpqoJNkeC60VbZYo8MWaD2ds3370InZNgA3QeRNqtvlt3fIN/f8LWAPJOGuZR
-         OTAQ==
-X-Gm-Message-State: AOAM5337v6mwK+26JKlZ8L+sfpCGoXjMNXczlMwTEuiJXnH4aQ/5Hp9Y
-        9xHPRrA/qipzdDbzSsAdvqy76g==
-X-Google-Smtp-Source: ABdhPJzyqykFhKSNRm78BrrnsD1mOVmGCPlJulii4V8oRfU//P/WLig+dmASk3SzvKPSoD3usOwcWw==
-X-Received: by 2002:a17:903:2346:b0:156:9956:f437 with SMTP id c6-20020a170903234600b001569956f437mr20871133plh.123.1649440620128;
-        Fri, 08 Apr 2022 10:57:00 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id w123-20020a623081000000b005056a4d71e3sm6021624pfw.77.2022.04.08.10.56.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 10:56:59 -0700 (PDT)
-Date:   Fri, 8 Apr 2022 17:56:55 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>,
-        kvm list <kvm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "Nakajima, Jun" <jun.nakajima@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH v5 04/13] mm/shmem: Restrict MFD_INACCESSIBLE memory
- against RLIMIT_MEMLOCK
-Message-ID: <YlB3Z8fqJ+67a2Ck@google.com>
-References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
- <20220310140911.50924-5-chao.p.peng@linux.intel.com>
- <Yk8L0CwKpTrv3Rg3@google.com>
- <02e18c90-196e-409e-b2ac-822aceea8891@www.fastmail.com>
+        Fri, 8 Apr 2022 13:59:24 -0400
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD621129E8A;
+        Fri,  8 Apr 2022 10:57:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649440637; x=1680976637;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=Sa1lBchyw7MHkscyUsu6fFCzNv4L8BJYNiORojwsd0c=;
+  b=QCVUfnnseXs5RsSCUm4AXxyZ2D4SYtBJgfThQayToQkUXwtzo4+VFgLq
+   lDjyLvdsoF7WdIz7ObivS6W/YWy6j8OZvNeXNENsD0c32TRDAX7mZT2Py
+   A44ikzJeTzo0k2EJkgxrLL7ISjoQHnC7uFUaSu/Ulb6ZZx9tuTsAhCJDU
+   lnmjKXFjIMtTfkPMkEQ8Rxw1m6LEiOBbp+dryU2TyLlVxrx9+WnmeiR5z
+   oGDALaEwL+qn1+gJShI7JpaJXimyaXF8zPb1Rhy5PqgCYzbexKUpJEtik
+   ltx76FXmVXLQUoLM/PvxVXZGQMrNnJCdI0YcT3u0AaHP/6YZkMQKrhCqy
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="322345534"
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="322345534"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 10:57:15 -0700
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="525469365"
+Received: from tsungtae-mobl.amr.corp.intel.com (HELO [10.134.43.198]) ([10.134.43.198])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 10:57:14 -0700
+Message-ID: <043469ae-427c-b2bb-89ff-db8975894266@intel.com>
+Date:   Fri, 8 Apr 2022 10:57:17 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <02e18c90-196e-409e-b2ac-822aceea8891@www.fastmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
+ <20220405234343.74045-5-kirill.shutemov@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCHv4 4/8] x86/boot/compressed: Handle unaccepted memory
+In-Reply-To: <20220405234343.74045-5-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022, Andy Lutomirski wrote:
-> 
-> On Thu, Apr 7, 2022, at 9:05 AM, Sean Christopherson wrote:
-> > On Thu, Mar 10, 2022, Chao Peng wrote:
-> >> Since page migration / swapping is not supported yet, MFD_INACCESSIBLE
-> >> memory behave like longterm pinned pages and thus should be accounted to
-> >> mm->pinned_vm and be restricted by RLIMIT_MEMLOCK.
-> >> 
-> >> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> >> ---
-> >>  mm/shmem.c | 25 ++++++++++++++++++++++++-
-> >>  1 file changed, 24 insertions(+), 1 deletion(-)
-> >> 
-> >> diff --git a/mm/shmem.c b/mm/shmem.c
-> >> index 7b43e274c9a2..ae46fb96494b 100644
-> >> --- a/mm/shmem.c
-> >> +++ b/mm/shmem.c
-> >> @@ -915,14 +915,17 @@ static void notify_fallocate(struct inode *inode, pgoff_t start, pgoff_t end)
-> >>  static void notify_invalidate_page(struct inode *inode, struct folio *folio,
-> >>  				   pgoff_t start, pgoff_t end)
-> >>  {
-> >> -#ifdef CONFIG_MEMFILE_NOTIFIER
-> >>  	struct shmem_inode_info *info = SHMEM_I(inode);
-> >>  
-> >> +#ifdef CONFIG_MEMFILE_NOTIFIER
-> >>  	start = max(start, folio->index);
-> >>  	end = min(end, folio->index + folio_nr_pages(folio));
-> >>  
-> >>  	memfile_notifier_invalidate(&info->memfile_notifiers, start, end);
-> >>  #endif
-> >> +
-> >> +	if (info->xflags & SHM_F_INACCESSIBLE)
-> >> +		atomic64_sub(end - start, &current->mm->pinned_vm);
-> >
-> > As Vishal's to-be-posted selftest discovered, this is broken as current->mm
-> > may be NULL.  Or it may be a completely different mm, e.g. AFAICT there's
-> > nothing that prevents a different process from punching hole in the shmem
-> > backing.
-> >
-> 
-> How about just not charging the mm in the first place?  There’s precedent:
-> ramfs and hugetlbfs (at least sometimes — I’ve lost track of the current
-> status).
-> 
-> In any case, for an administrator to try to assemble the various rlimits into
-> a coherent policy is, and always has been, quite messy. ISTM cgroup limits,
-> which can actually add across processes usefully, are much better.
-> 
-> So, aside from the fact that these fds aren’t in a filesystem and are thus
-> available by default, I’m not convinced that this accounting is useful or
-> necessary.
-> 
-> Maybe we could just have some switch require to enable creation of private
-> memory in the first place, and anyone who flips that switch without
-> configuring cgroups is subject to DoS.
+On 4/5/22 16:43, Kirill A. Shutemov wrote:
+> Firmware is responsible for accepting memory where compressed kernel
+> image and initrd land. But kernel has to accept memory for decompression
+> buffer: accept memory just before decompression starts.
 
-I personally have no objection to that, and I'm 99% certain Google doesn't rely
-on RLIMIT_MEMLOCK.
+I think I'd appreciate a sentence or two more about what's going on.
+How about something like this?
+
+The firmware starts the kernel by booting into the "compressed" kernel
+stub.  That stub's job is to decompress the full kernel image and then
+jump to it.
+
+The firmware will pre-accept the memory used to run the stub.  But, the
+stub is responsible for accepting the memory into which it decompresses
+the main kernel.  Accept memory just before decompression starts.
+
+The stub is also responsible for choosing a physical address in which to
+place the decompressed kernel image.  The KASLR mechanism will randomize
+this physical address.  Since the unaccepted memory region is relatively
+small, KASLR would be quite ineffective if it only used the pre-accepted
+area (EFI_CONVENTIONAL_MEMORY).  Ensure that KASLR randomizes among the
+entire physical address space by also including EFI_UNACCEPTED_MEMORY.
+
+
+> diff --git a/arch/x86/boot/compressed/bitmap.c b/arch/x86/boot/compressed/bitmap.c
+> index bf58b259380a..ba2de61c0823 100644
+> --- a/arch/x86/boot/compressed/bitmap.c
+> +++ b/arch/x86/boot/compressed/bitmap.c
+> @@ -2,6 +2,48 @@
+>  /* Taken from lib/string.c */
+>  
+>  #include <linux/bitmap.h>
+> +#include <linux/math.h>
+> +#include <linux/minmax.h>
+> +
+> +unsigned long _find_next_bit(const unsigned long *addr1,
+> +		const unsigned long *addr2, unsigned long nbits,
+> +		unsigned long start, unsigned long invert, unsigned long le)
+> +{
+> +	unsigned long tmp, mask;
+> +
+> +	if (unlikely(start >= nbits))
+> +		return nbits;
+> +
+> +	tmp = addr1[start / BITS_PER_LONG];
+> +	if (addr2)
+> +		tmp &= addr2[start / BITS_PER_LONG];
+> +	tmp ^= invert;
+> +
+> +	/* Handle 1st word. */
+> +	mask = BITMAP_FIRST_WORD_MASK(start);
+> +	if (le)
+> +		mask = swab(mask);
+> +
+> +	tmp &= mask;
+> +
+> +	start = round_down(start, BITS_PER_LONG);
+> +
+> +	while (!tmp) {
+> +		start += BITS_PER_LONG;
+> +		if (start >= nbits)
+> +			return nbits;
+> +
+> +		tmp = addr1[start / BITS_PER_LONG];
+> +		if (addr2)
+> +			tmp &= addr2[start / BITS_PER_LONG];
+> +		tmp ^= invert;
+> +	}
+> +
+> +	if (le)
+> +		tmp = swab(tmp);
+> +
+> +	return min(start + __ffs(tmp), nbits);
+> +}
+>  
+>  void __bitmap_set(unsigned long *map, unsigned int start, int len)
+>  {
+> @@ -22,3 +64,23 @@ void __bitmap_set(unsigned long *map, unsigned int start, int len)
+>  		*p |= mask_to_set;
+>  	}
+>  }
+> +
+> +void __bitmap_clear(unsigned long *map, unsigned int start, int len)
+> +{
+> +	unsigned long *p = map + BIT_WORD(start);
+> +	const unsigned int size = start + len;
+> +	int bits_to_clear = BITS_PER_LONG - (start % BITS_PER_LONG);
+> +	unsigned long mask_to_clear = BITMAP_FIRST_WORD_MASK(start);
+> +
+> +	while (len - bits_to_clear >= 0) {
+> +		*p &= ~mask_to_clear;
+> +		len -= bits_to_clear;
+> +		bits_to_clear = BITS_PER_LONG;
+> +		mask_to_clear = ~0UL;
+> +		p++;
+> +	}
+> +	if (len) {
+> +		mask_to_clear &= BITMAP_LAST_WORD_MASK(size);
+> +		*p &= ~mask_to_clear;
+> +	}
+> +}
+
+It's a real shame that we have to duplicate this code.  Is there
+anything crazy we could do here like
+
+#include "../../../lib/find_bit.c"
+
+?
+
+> diff --git a/arch/x86/boot/compressed/kaslr.c b/arch/x86/boot/compressed/kaslr.c
+> index 411b268bc0a2..59db90626042 100644
+> --- a/arch/x86/boot/compressed/kaslr.c
+> +++ b/arch/x86/boot/compressed/kaslr.c
+> @@ -725,10 +725,20 @@ process_efi_entries(unsigned long minimum, unsigned long image_size)
+>  		 * but in practice there's firmware where using that memory leads
+>  		 * to crashes.
+>  		 *
+> -		 * Only EFI_CONVENTIONAL_MEMORY is guaranteed to be free.
+> +		 * Only EFI_CONVENTIONAL_MEMORY and EFI_UNACCEPTED_MEMORY (if
+> +		 * supported) are guaranteed to be free.
+>  		 */
+> -		if (md->type != EFI_CONVENTIONAL_MEMORY)
+> +
+> +		switch (md->type) {
+> +		case EFI_CONVENTIONAL_MEMORY:
+> +			break;
+> +		case EFI_UNACCEPTED_MEMORY:
+> +			if (IS_ENABLED(CONFIG_UNACCEPTED_MEMORY))
+> +				break;
+>  			continue;
+> +		default:
+> +			continue;
+> +		}
+>  
+>  		if (efi_soft_reserve_enabled() &&
+>  		    (md->attribute & EFI_MEMORY_SP))
+> diff --git a/arch/x86/boot/compressed/misc.c b/arch/x86/boot/compressed/misc.c
+> index fa8969fad011..c1d9d71a6615 100644
+> --- a/arch/x86/boot/compressed/misc.c
+> +++ b/arch/x86/boot/compressed/misc.c
+> @@ -18,6 +18,7 @@
+>  #include "../string.h"
+>  #include "../voffset.h"
+>  #include <asm/bootparam_utils.h>
+> +#include <asm/unaccepted_memory.h>
+>  
+>  /*
+>   * WARNING!!
+> @@ -43,6 +44,9 @@
+>  void *memmove(void *dest, const void *src, size_t n);
+>  #endif
+>  
+> +#undef __pa
+> +#define __pa(x)	((unsigned long)(x))
+
+Those #undef's always worry me.  Why is this one needed?
+
+>  /*
+>   * This is set up by the setup-routine at boot-time
+>   */
+> @@ -451,6 +455,13 @@ asmlinkage __visible void *extract_kernel(void *rmode, memptr heap,
+>  #endif
+>  
+>  	debug_putstr("\nDecompressing Linux... ");
+> +
+> +	if (IS_ENABLED(CONFIG_UNACCEPTED_MEMORY) &&
+> +	    boot_params->unaccepted_memory) {
+> +		debug_putstr("Accepting memory... ");
+> +		accept_memory(__pa(output), __pa(output) + needed_size);
+> +	}
+> +
+>  	__decompress(input_data, input_len, NULL, NULL, output, output_len,
+>  			NULL, error);
+>  	parse_elf(output);
+> diff --git a/arch/x86/boot/compressed/unaccepted_memory.c b/arch/x86/boot/compressed/unaccepted_memory.c
+> index d363acf59c08..3ebab63789bb 100644
+> --- a/arch/x86/boot/compressed/unaccepted_memory.c
+> +++ b/arch/x86/boot/compressed/unaccepted_memory.c
+> @@ -51,3 +51,17 @@ void mark_unaccepted(struct boot_params *params, u64 start, u64 end)
+>  	bitmap_set((unsigned long *)params->unaccepted_memory,
+>  		   start / PMD_SIZE, (end - start) / PMD_SIZE);
+>  }
+> +
+> +void accept_memory(phys_addr_t start, phys_addr_t end)
+> +{
+> +	unsigned long *unaccepted_memory;
+> +	unsigned int rs, re;
+> +
+> +	unaccepted_memory = (unsigned long *)boot_params->unaccepted_memory;
+> +	rs = start / PMD_SIZE;
+
+OK, so start is a physical address, PMD_SIZE is 2^21, and 'rs' is an
+unsigned int.  That means 'rs' can, at most, represent a physical
+address at 2^(21+32), or 2^53.  That's cutting it a *bit* close, don't
+you think?
+
+Could we please just give 'rs' and 're' real names and make them
+'unsigned long's, please?  It will surely save at least one other person
+from doing math.  The find_next_bit() functions seem to take ulongs anyway.
+
+> +	for_each_set_bitrange_from(rs, re, unaccepted_memory,
+> +				   DIV_ROUND_UP(end, PMD_SIZE)) {
+> +		__accept_memory(rs * PMD_SIZE, re * PMD_SIZE);
+> +		bitmap_clear(unaccepted_memory, rs, re - rs);
+> +	}
+> +}
+
+Could we please introduce some intermediate variable?  For instance:
+
+	unsigned long bitmap_size = DIV_ROUND_UP(end, PMD_SIZE);
+
+That will make this all a lot easier to read.
+
+> diff --git a/arch/x86/include/asm/unaccepted_memory.h b/arch/x86/include/asm/unaccepted_memory.h
+> index cbc24040b853..f1f835d3cd78 100644
+> --- a/arch/x86/include/asm/unaccepted_memory.h
+> +++ b/arch/x86/include/asm/unaccepted_memory.h
+> @@ -9,4 +9,6 @@ struct boot_params;
+>  
+>  void mark_unaccepted(struct boot_params *params, u64 start, u64 num);
+>  
+> +void accept_memory(phys_addr_t start, phys_addr_t end);
+> +
+>  #endif
+

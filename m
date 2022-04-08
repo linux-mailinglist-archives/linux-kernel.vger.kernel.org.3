@@ -2,64 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD9B94F8DFE
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:26:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 997EA4F8D77
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:25:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234291AbiDHEga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 00:36:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42572 "EHLO
+        id S234308AbiDHEjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 00:39:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231458AbiDHEgZ (ORCPT
+        with ESMTP id S234287AbiDHEji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 00:36:25 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D352EE72A6;
-        Thu,  7 Apr 2022 21:34:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649392462; x=1680928462;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5tej6b9o6dwvek3pEU2iipjiMORsaX8hNr5dSwFtXG4=;
-  b=SQZjcsHeyhvWO/UmrGJHi6SromN6k1zz8OiSec1R2DKNoTLsRmGOpGcH
-   CwdYb9z0C999ODNw7VzsOf9e7T2rtj50sIuPYfSlVWUmKiGFpi0iGqooc
-   2xrNBJFf53ovLIL6mRJPcQYWWaKIzzU5sEMSBDLuTUxuQS6Pdm0wLrrJ3
-   HFb7rU6ANA2YY0Kn5QvwCuaKt1ChRiivb+yKCTtZ3RyCw5/2n+Og4608e
-   UtSpCPkU4y7Umegik9/EHomkLNPvlTz/jdbTc5uqL/jb9+6BGgKovY3t3
-   z6THG6lJbrJS96NCd0LYboBuQTwb//rMetAAbXdnumjGenbgc1eK8M1QG
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="347947537"
-X-IronPort-AV: E=Sophos;i="5.90,244,1643702400"; 
-   d="scan'208";a="347947537"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 21:34:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,244,1643702400"; 
-   d="scan'208";a="506424579"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 07 Apr 2022 21:34:20 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ncgKB-00062B-9B;
-        Fri, 08 Apr 2022 04:34:19 +0000
-Date:   Fri, 8 Apr 2022 12:34:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Peter Gonda <pgonda@google.com>, kvm@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Peter Gonda <pgonda@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4.1] KVM, SEV: Add KVM_EXIT_SHUTDOWN metadata for SEV-ES
-Message-ID: <202204081255.SUNyj4S3-lkp@intel.com>
-References: <20220407210233.782250-1-pgonda@google.com>
+        Fri, 8 Apr 2022 00:39:38 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948292F3D08
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 21:37:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=VMFaadv7ujq2jUeu1wP3w1khQ+Jtg60cfctxO+6olWg=; b=CY8ir/U7WvFg8b0jLYtNELcwqj
+        CTt4QnTQiCObdGXKrs+7JipEyonsu0At5ngasmvTf9gSeHC/iRpvT7qidmfoMRamBeElOAigkZXnj
+        FzfaAE58OReHWHeCZ74srmqlNK+KcIHmFy8ckliCe3wRCKbZ2INzAuqBqFPVPJ4NwwBZme/XHA9Km
+        0E9eyKm95pbzQwLeaqOxQqrIlxCEbe4aYmzUEyV0CCpmBwjIEMiOL1LSJv/hNYWhBpmo4L9iIswUQ
+        N/wDwuRklsiIX0qYMxVDRDCbEqt23QLUaCeWQJv62tp/6srk3yt6PSRQyNZvuHvfXIzwoZFxZeuBt
+        46nYtxzw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ncgN8-002mWF-0U; Fri, 08 Apr 2022 04:37:22 +0000
+Message-ID: <a44ce850-09fa-31dd-6c75-09e52e630cc6@infradead.org>
+Date:   Thu, 7 Apr 2022 21:37:16 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220407210233.782250-1-pgonda@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [kbuild-all] Re: drivers/cxl/pci.c:439:7: warning: Local variable
+ 'rc' shadows outer variable [shadowVariable]
+Content-Language: en-US
+To:     "Chen, Rong A" <rong.a.chen@intel.com>,
+        kernel test robot <lkp@intel.com>,
+        Ben Widawsky <ben.widawsky@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+References: <202204021950.bTbpM2Gy-lkp@intel.com>
+ <e4d381f0-bafc-771b-7298-cfc6685776f0@infradead.org>
+ <810c4865-45c1-ec93-4f72-2086461756c3@intel.com>
+ <caf97bb9-78b2-1656-fb7d-96cb783e5662@infradead.org>
+ <634e887e-4d22-ea90-0ea3-14b9cad9396b@intel.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <634e887e-4d22-ea90-0ea3-14b9cad9396b@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,73 +61,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on kvm/master]
-[also build test ERROR on v5.18-rc1 next-20220407]
-[cannot apply to v4.1]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Gonda/KVM-SEV-Add-KVM_EXIT_SHUTDOWN-metadata-for-SEV-ES/20220408-050628
-base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git master
-config: arm64-randconfig-r035-20220408 (https://download.01.org/0day-ci/archive/20220408/202204081255.SUNyj4S3-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c29a51b3a257908aebc01cd7c4655665db317d66)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/3b310e5891d172b59042783c128f6efcf5bf6198
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Peter-Gonda/KVM-SEV-Add-KVM_EXIT_SHUTDOWN-metadata-for-SEV-ES/20220408-050628
-        git checkout 3b310e5891d172b59042783c128f6efcf5bf6198
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> arch/arm64/kvm/psci.c:184:26: error: no member named 'flags' in 'struct kvm_run::(unnamed at include/uapi/linux/kvm.h:443:3)'
-           vcpu->run->system_event.flags = flags;
-           ~~~~~~~~~~~~~~~~~~~~~~~ ^
-   1 error generated.
 
 
-vim +184 arch/arm64/kvm/psci.c
+On 4/7/22 20:34, Chen, Rong A wrote:
+> 
+> 
+> On 4/7/2022 8:11 AM, Randy Dunlap wrote:
+>>
+>>
+>> On 4/6/22 04:17, Chen, Rong A wrote:
+>>>
+>>>
+>>> On 4/4/2022 3:29 AM, Randy Dunlap wrote:
+>>>> Hi lkp/ktr,
+>>>>
+>>>> On 4/2/22 04:26, kernel test robot wrote:
+>>>>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+>>>>> head:   88e6c0207623874922712e162e25d9dafd39661e
+>>>>> commit: 523e594d9cc03db962c741ce02c8a58aab58a123 cxl/pci: Implement wait for media active
+>>>>> date:   7 weeks ago
+>>>>> compiler: alpha-linux-gcc (GCC) 11.2.0
+>>>>>
+>>>>> If you fix the issue, kindly add following tag as appropriate
+>>>>> Reported-by: kernel test robot <lkp@intel.com>
+>>>>>
+>>>>>
+>>>>> cppcheck warnings: (new ones prefixed by >>)
+>>>>>>> drivers/cxl/pci.c:439:7: warning: Local variable 'rc' shadows outer variable [shadowVariable]
+>>>>>        int rc;
+>>>>>            ^
+>>>>>      drivers/cxl/pci.c:431:6: note: Shadowed declaration
+>>>>>       int rc, i;
+>>>>>           ^
+>>>>>      drivers/cxl/pci.c:439:7: note: Shadow variable
+>>>>>        int rc;
+>>>>>            ^
+>>>>>
+>>>>> cppcheck possible warnings: (new ones prefixed by >>, may not real problems)
+>>>>>
+>>>>>>> drivers/cxl/port.c:63:1: warning: There is an unknown macro here somewhere. Configuration is required. If __stringify is a macro then please configure it. [unknownMacro]
+>>>>>      MODULE_ALIAS_CXL(CXL_DEVICE_PORT);
+>>>>>      ^
+>>>>> -- 
+>>>>
+>>>> Can you provide a cppcheck config file and command line
+>>>> for this, please?
+>>>
+>>> Hi Randy,
+>>>
+>>> The below command can show the warning:
+>>> $ cppcheck --quiet --enable=style,performance,portability --template=gcc drivers/cxl/port.c
+>>> drivers/cxl/port.c:63:1: warning: There is an unknown macro here somewhere. Configuration is required. If __stringify is a macro then please configure it. [unknownMacro]
+>>> MODULE_ALIAS_CXL(CXL_DEVICE_PORT);
+>>> ^
+>>
+>> Hm, that still shows me nothing. There must be something else.
+>> Maybe it's version-related?  I have:
+> 
+> Hi Randy,
+> 
+> I'm using version 2.3:
+> 
+> $ cppcheck --version
+> Cppcheck 2.3
+> 
+> and I can't see the warning too if using Cppcheck 1.86.
+> 
+> Best Regards,
+> Rong Chen
 
-e6bc13c8a70eab arch/arm/kvm/psci.c   Anup Patel       2014-04-29  163  
-34739fd95fab3a arch/arm64/kvm/psci.c Will Deacon      2022-02-21  164  static void kvm_prepare_system_event(struct kvm_vcpu *vcpu, u32 type, u64 flags)
-4b1238269ed340 arch/arm/kvm/psci.c   Anup Patel       2014-04-29  165  {
-46808a4cb89708 arch/arm64/kvm/psci.c Marc Zyngier     2021-11-16  166  	unsigned long i;
-cf5d318865e25f arch/arm/kvm/psci.c   Christoffer Dall 2014-10-16  167  	struct kvm_vcpu *tmp;
-cf5d318865e25f arch/arm/kvm/psci.c   Christoffer Dall 2014-10-16  168  
-cf5d318865e25f arch/arm/kvm/psci.c   Christoffer Dall 2014-10-16  169  	/*
-cf5d318865e25f arch/arm/kvm/psci.c   Christoffer Dall 2014-10-16  170  	 * The KVM ABI specifies that a system event exit may call KVM_RUN
-cf5d318865e25f arch/arm/kvm/psci.c   Christoffer Dall 2014-10-16  171  	 * again and may perform shutdown/reboot at a later time that when the
-cf5d318865e25f arch/arm/kvm/psci.c   Christoffer Dall 2014-10-16  172  	 * actual request is made.  Since we are implementing PSCI and a
-cf5d318865e25f arch/arm/kvm/psci.c   Christoffer Dall 2014-10-16  173  	 * caller of PSCI reboot and shutdown expects that the system shuts
-cf5d318865e25f arch/arm/kvm/psci.c   Christoffer Dall 2014-10-16  174  	 * down or reboots immediately, let's make sure that VCPUs are not run
-cf5d318865e25f arch/arm/kvm/psci.c   Christoffer Dall 2014-10-16  175  	 * after this call is handled and before the VCPUs have been
-cf5d318865e25f arch/arm/kvm/psci.c   Christoffer Dall 2014-10-16  176  	 * re-initialized.
-cf5d318865e25f arch/arm/kvm/psci.c   Christoffer Dall 2014-10-16  177  	 */
-cc9b43f99d5ff4 virt/kvm/arm/psci.c   Andrew Jones     2017-06-04  178  	kvm_for_each_vcpu(i, tmp, vcpu->kvm)
-3781528e3045e7 arch/arm/kvm/psci.c   Eric Auger       2015-09-25  179  		tmp->arch.power_off = true;
-7b244e2be654d9 virt/kvm/arm/psci.c   Andrew Jones     2017-06-04  180  	kvm_make_all_cpus_request(vcpu->kvm, KVM_REQ_SLEEP);
-cf5d318865e25f arch/arm/kvm/psci.c   Christoffer Dall 2014-10-16  181  
-4b1238269ed340 arch/arm/kvm/psci.c   Anup Patel       2014-04-29  182  	memset(&vcpu->run->system_event, 0, sizeof(vcpu->run->system_event));
-4b1238269ed340 arch/arm/kvm/psci.c   Anup Patel       2014-04-29  183  	vcpu->run->system_event.type = type;
-34739fd95fab3a arch/arm64/kvm/psci.c Will Deacon      2022-02-21 @184  	vcpu->run->system_event.flags = flags;
-4b1238269ed340 arch/arm/kvm/psci.c   Anup Patel       2014-04-29  185  	vcpu->run->exit_reason = KVM_EXIT_SYSTEM_EVENT;
-4b1238269ed340 arch/arm/kvm/psci.c   Anup Patel       2014-04-29  186  }
-4b1238269ed340 arch/arm/kvm/psci.c   Anup Patel       2014-04-29  187  
+Hi Rong,
+
+I downloaded version  2.7 and I can see the warnings now.
+
+Thanks!
+
+>>
+>> $ cppcheck --version
+>> Cppcheck 1.82
+>>
+>>>
+>>> Best Regards,
+>>> Rong Chen
+>>>
+>>>>
+>>>> My naive testing does not see any of these warnings --
+>>>> although I can easily spot the problems in the source file.
+>>>>
+>>>> thanks.
+>>
+>> thanks.
+>>
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+~Randy

@@ -2,168 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55BCF4FA056
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 01:58:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B65F4FA05D
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 01:59:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240110AbiDIAAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 20:00:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54140 "EHLO
+        id S240113AbiDIABl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 20:01:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232464AbiDIAAi (ORCPT
+        with ESMTP id S232464AbiDIABi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 20:00:38 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0B413CEA;
-        Fri,  8 Apr 2022 16:58:32 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id h16so6507266wmd.0;
-        Fri, 08 Apr 2022 16:58:32 -0700 (PDT)
+        Fri, 8 Apr 2022 20:01:38 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF21B335645
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 16:59:33 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id c199so4391094qkg.4
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 16:59:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=qd3xc3Ra5RdXly3fLoBNbPp+Yte3DEybTK7LULZsV3k=;
-        b=UTGVqcy3UNBHn4SjP055yjMHx25cx36ejPBp1IwM+TK42xPMJWggb62u36PjAn6CNs
-         erjoHyHU8VCNFk6fyYMl9z5v01Gp4wFgd/YNtvHzVZoUNO1l1su4dzjYvBw8kUi9XQGT
-         Dqx4LfV7Q3W3Q2ELUZ+IriwQLR2xNOatUWwcD4gCTCxw1L69vExXISL5tvGEhODxE6Rx
-         NyTL6VCNOxreRWn96Q5S2m2f20ESHMigOHCRieFZbYkKlad5VdovjvaPkuSuw/BSGDvW
-         pPhBauUCmlFtTa8H2+PKUY86AjdMN4Ej5kEfWhaBYJ/9ht3pshbQ+wwXawCFIYrMD9Xn
-         BSxg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ep4HFxZGemluJutovsTbozz4aCXR3Ya1T5frn7xqC+A=;
+        b=W1MkNAp8xV5HT+QqAx4kLm0SNYJQBh84WYuvZfZmLltO29+iMFuxhXu/9iPkvvyghd
+         evMPG3QDhUti9BYqPcLkpVCb1PNebe36yhEAlsoPSXsm3ZX1Vdjytwd28ik26yCTeZwo
+         8ssm5qZ2k165XPYHn58Y0MR0QZWeokpgdMBw3N386WqBL6BOOU30pUPL/lORltzQpyTH
+         fZQwOHaCVMxUgS8CNdYui496fBoMJXXkV5Jw1OyddA+IJeRUUkw8w5mANj0JWfU8wwEK
+         8W0sKFHiwwsInstAxplk6zqDrVbY6DTjdc+00p/zKab3JIGMD0QrQkir+tnW0GGs9w0e
+         ReAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=qd3xc3Ra5RdXly3fLoBNbPp+Yte3DEybTK7LULZsV3k=;
-        b=6oRi3thfDtbwwtR2I3gPr4GK4ehkqhYhMDKTCmZqtpkKIOEv4zqhaKDP86wBmtj8Ab
-         8n3lpv74wzCmRCLPy/WBeyQeWKkQ065VoiRED5VmOjMYgoAzh5rNrP2udW/xmdri4CUB
-         41E6W9fXS67ipT9aqZIURPeygc8cXRS8BRGLDFb60/rUAvmdD+H5rWdMHddNM65eFcg9
-         NLbqPzmZTWQ2F6w4+kRf2aXmm8uHmQD+D2IkAtRnwODM9xIAseK580dvTfSN4pwugyqb
-         gkBZ0CAc6isN4XyTJTiNJAs/64Lqgep+Dk4kY8P9OEHtbKrvFe4OTjFwa18lbNUvswIN
-         iVDg==
-X-Gm-Message-State: AOAM533KxwKt62gUXK2SRYst5YDdN9AISA/7Rw/L3TfUAETRBLJVXJlm
-        RhDrBEIWbLyMM+Cl9DLH/ug=
-X-Google-Smtp-Source: ABdhPJwvJD+Cmd/2tHHonwkEVj4aZLwFznxjwZ531F0NRT9DZUNezEkyG1rHEVZvGmv1umZ1GStMeg==
-X-Received: by 2002:a7b:c844:0:b0:38e:7c92:a9e3 with SMTP id c4-20020a7bc844000000b0038e7c92a9e3mr18808150wml.140.1649462311057;
-        Fri, 08 Apr 2022 16:58:31 -0700 (PDT)
-Received: from smtpclient.apple ([185.238.38.242])
-        by smtp.gmail.com with ESMTPSA id o17-20020a05600c4fd100b0038cd5074c83sm12043743wmq.34.2022.04.08.16.58.29
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 08 Apr 2022 16:58:30 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [PATCH net-next 02/15] net: dsa: sja1105: Remove usage of
- iterator for list_add() after loop
-From:   Jakob Koschel <jakobkoschel@gmail.com>
-In-Reply-To: <20220407205426.6a31e4b2@kernel.org>
-Date:   Sat, 9 Apr 2022 01:58:29 +0200
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        UNGLinuxDriver@microchip.com, Ariel Elior <aelior@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Casper Andersson <casper.casan@gmail.com>,
-        Bjarni Jonasson <bjarni.jonasson@microchip.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Michael Walle <michael@walle.cc>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Eric Dumazet <edumazet@google.com>,
-        Di Zhu <zhudi21@huawei.com>, Xu Wang <vulab@iscas.ac.cn>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, Mike Rapoport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <AAB64C72-5B45-4BA1-BB48-106F08BDFF1B@gmail.com>
-References: <20220407102900.3086255-1-jakobkoschel@gmail.com>
- <20220407102900.3086255-3-jakobkoschel@gmail.com>
- <20220407205426.6a31e4b2@kernel.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-X-Mailer: Apple Mail (2.3696.80.82.1.1)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ep4HFxZGemluJutovsTbozz4aCXR3Ya1T5frn7xqC+A=;
+        b=FEhPhLAkzCO37KGGoj0mI6QrSH/cE5kByuvBy/NgWZUjz07DGxzy3XpYTxPvOsfwxS
+         Jeng1V/yKI+AW/w2vzHZpq4XYIgv6qAVSngkcBoq+vlX96w9jwtNAkqZLE7dDNlC8igV
+         ET9qBsYaNd4u4c4O/ITY6nlvZ6FbkSfNYu5D9iPi3/NCLHV+SVhTntuzomAd9fPpkoG2
+         Ou3slYxBota3M8+isJkDh3sIkBm4iM6hsEZgnL3fY89pHIe5S/5FPlDU5kJS7E0OTsaJ
+         osuUyEVAZ1bKekyxg00ZSLgtB2LivfKvAKDHSw3fdXOGe1et7f7WLy9aQ/YUTWcUCwrS
+         MHcQ==
+X-Gm-Message-State: AOAM531NR98HC0xuCAJpQhCfEzAubEIk4b5ye/SYlTSIiAuPwIUa2IMJ
+        F/Zg/GmOUxMeQL/+fG9Qb072zcu7eRwpwc8tT1IHXg==
+X-Google-Smtp-Source: ABdhPJybXQIl400imv5u+eLq4wIpQrgRiwQ4eURC/e6m01mzUErigFhQXkQJfEw+aw8JJtTDDj1iqa8rcBKROaoImMU=
+X-Received: by 2002:a05:620a:2449:b0:69a:4ae:85e5 with SMTP id
+ h9-20020a05620a244900b0069a04ae85e5mr7089008qkn.30.1649462372909; Fri, 08 Apr
+ 2022 16:59:32 -0700 (PDT)
+MIME-Version: 1.0
+References: <1649280493-4393-1-git-send-email-quic_khsieh@quicinc.com>
+ <625ce8a0-4e25-5513-5599-c1cdebf5a3a5@linaro.org> <09fd563f-4a2c-f670-51c2-0e5ff023816d@quicinc.com>
+In-Reply-To: <09fd563f-4a2c-f670-51c2-0e5ff023816d@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Sat, 9 Apr 2022 02:59:21 +0300
+Message-ID: <CAA8EJpqzucFGf8ndDi2LZqtKiOt_w=_h1oPAUNVCdmUyh_3+zA@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/msm/dp: enhance both connect and disconnect
+ pending_timeout handle
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     robdclark@gmail.com, sean@poorly.run, swboyd@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Jakub,
+On Fri, 8 Apr 2022 at 23:30, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
+>
+>
+> On 4/8/2022 5:27 AM, Dmitry Baryshkov wrote:
+> > On 07/04/2022 00:28, Kuogee Hsieh wrote:
+> >> dp_hpd_plug_handle() is responsible for setting up main link and send
+> >> uevent to notify user space framework to start video stream. Similarly,
+> >> dp_hdp_unplug_handle is responsible to send uevent to notify user space
+> >> framework to stop video stream and then tear down main link.
+> >> However there are rare cases, such as in the middle of system
+> >> suspending,
+> >> that uevent could not be delivered to user space framework. Therefore
+> >> some kind of recover mechanism armed by timer need to be in place in the
+> >> case of user space framework does not respond to uevent.
+> >
+> > Hmm, how does userpsace 'respond' to the uevent? The driver should
+> > send hotplug notifications to userspace, but it must not expect any
+> > particular reaction. The userspace might be as simple, as fbdev
+> > emulation, but the driver still should function correctly.
+>
+> yes, driver is function correctly by setting up main link. but it does
+> not know which resolution to display.
+>
+> It send hotplug notification through uevent to framework after main link
+> is ready.
+>
+> Framework  is responsible to set up MDP timing engine to start video stream.
+>
+>
+> However it does not know which
 
-> On 8. Apr 2022, at 05:54, Jakub Kicinski <kuba@kernel.org> wrote:
->=20
-> On Thu,  7 Apr 2022 12:28:47 +0200 Jakob Koschel wrote:
->> diff --git a/drivers/net/dsa/sja1105/sja1105_vl.c =
-b/drivers/net/dsa/sja1105/sja1105_vl.c
->> index b7e95d60a6e4..cfcae4d19eef 100644
->> --- a/drivers/net/dsa/sja1105/sja1105_vl.c
->> +++ b/drivers/net/dsa/sja1105/sja1105_vl.c
->> @@ -27,20 +27,24 @@ static int sja1105_insert_gate_entry(struct =
-sja1105_gating_config *gating_cfg,
->> 	if (list_empty(&gating_cfg->entries)) {
->> 		list_add(&e->list, &gating_cfg->entries);
->> 	} else {
->> -		struct sja1105_gate_entry *p;
->> +		struct sja1105_gate_entry *p =3D NULL, *iter;
->>=20
->> -		list_for_each_entry(p, &gating_cfg->entries, list) {
->> -			if (p->interval =3D=3D e->interval) {
->> +		list_for_each_entry(iter, &gating_cfg->entries, list) {
->> +			if (iter->interval =3D=3D e->interval) {
->> 				NL_SET_ERR_MSG_MOD(extack,
->> 						   "Gate conflict");
->> 				rc =3D -EBUSY;
->> 				goto err;
->> 			}
->>=20
->> -			if (e->interval < p->interval)
->> +			if (e->interval < iter->interval) {
->> +				p =3D iter;
->> +				list_add(&e->list, iter->list.prev);
->> 				break;
->> +			}
->> 		}
->> -		list_add(&e->list, p->list.prev);
->> +		if (!p)
->> +			list_add(&e->list, gating_cfg->entries.prev);
->=20
-> This turns a pretty slick piece of code into something ugly :(
-> I'd rather you open coded the iteration here than make it more=20
-> complex to satisfy "safe coding guidelines".
+It's of no concern to the driver. It is completely the userspace
+problem. After resuming, it should reread available video output
+properties. The display could have been changed while the system is
+suspended.
+From your description I still do not understand why you need the
+'recovery' mechanism.
 
-I'm not entirely sure I understand what you mean with=20
-"open coded the iteration". But maybe the solution proposed by Vladimir =
-[1]
-works for you? I'm planning to rewrite the cases in that way for the =
-relevant
-ones.
-
->=20
-> Also the list_add() could be converted to list_add_tail().
-
-Good point, I wasn't sure if that's considered as something that should =
-be
-done as a separate change. I'm happy to include it in v2.
-
-Thanks for the input.
-
-	Jakob
-
-[1] =
-https://lore.kernel.org/linux-kernel/20220408114120.tvf2lxvhfqbnrlml@skbuf=
-/
-
+-- 
+With best wishes
+Dmitry

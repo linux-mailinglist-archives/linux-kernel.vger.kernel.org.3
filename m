@@ -2,162 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 634D74F8C31
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:26:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA73A4F8CDA
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233949AbiDHDTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 23:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47238 "EHLO
+        id S233938AbiDHDVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 23:21:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233933AbiDHDTP (ORCPT
+        with ESMTP id S233907AbiDHDVE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 23:19:15 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07333147ACF
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 20:17:10 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id a2so1639305wrh.5
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 20:17:09 -0700 (PDT)
+        Thu, 7 Apr 2022 23:21:04 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911D5125CA1
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 20:19:02 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id a16-20020a17090a6d9000b001c7d6c1bb13so8383738pjk.4
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 20:19:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wgf4acvi/Fu9XD9s+6RSDDIAYNvp3TV3xYDZvoRiizI=;
-        b=mThG2uh+y9NDaZQDzAG5owkYCagP9uLPIfSPzXCp+nKbUmTaX55IXCNvcV0ynpXMD5
-         pAHWlaRqJt6OxSIyvTHWkVMPY6Hr+7lve1L85FRbXefX7geoX83QKFiTNC48/tlkcxMN
-         yYExjDmMj+njeiqBmaVadv4cWM2OPTvR2WvG4aO2yj8inDpaIiTq5pH5zsy0gGJ1T5Et
-         9591C/IN+bNUR10WjLg3/HvXQOh4RHqFTYg0TZb9UH0DLhC+cIhzXAj90eRjJ8hVNlbK
-         uIkcjlkCQca837SQ2J/0VvFd/9tTO/dlcyL4jPxbK58UlPFDd4zrEei3WcSiNQacHRvA
-         y27Q==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ihxscLrTzBaV4WXnBb9vogkk+ykI6foxyFnwvSuHsqQ=;
+        b=LGJeLq+k6yjpt4t2UidZZNUQcAJ5PdedMv3QqHOd+DeOC6NHOYRfHyRVAfPKTiPXKW
+         9+pkELk5Z8E9s9qBpYK2HdEpdQ3/wsu1JXPoraqSX4C8XRtJRCEnWECQKOExHZfV7lP3
+         GrdLXP8YUuZ4FoB8iXJkJ02NHAev/P17TsKBArjrzh267F9wa8PJGW1Sl8hxNVqFJTq0
+         urTkWzttjbCvrlHF2TTDCeNqmYRt4xO5p6HK8Djn4PlSzc0Uo3MutJO+G0mr5oOb8muX
+         ZBTzuVfW2z2oqFM5hFgCtPegbv8Q58wTYCm2bHBwn0QBoixdbpaUe7m9uYW3NZfiBz51
+         s9oA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wgf4acvi/Fu9XD9s+6RSDDIAYNvp3TV3xYDZvoRiizI=;
-        b=nqsZMEYo2Jj7SXXSFPCJyiKR/puhdrLzparPT74QBG58z5ASsNw+n+up/L0nO83lUO
-         Srmo8vRMq3wh4CcByF3fncrLOJrcM1aaozJTOTJunBzXdxffEFVb/WlpAM1ywuMdUJXM
-         RcmbdhOlzNPCApVR8I2xUaGKjJKue5k1VF79mzA+HYsFkAmCC/LnzRMIofs5tKcAjvIj
-         sHZXcg4yJd+wBjcpIZEYWC0vcq7nm+z5iN6m9qBPkGX3fcyGgQ51Wpa9cyy5F8dOJPZ5
-         gCEAjEmiVZfTwNirgkbE7t2JV8iTGK18bo7yBlQPsJLdHV+7Ob4iS58x67M2KulL+k2h
-         HRWA==
-X-Gm-Message-State: AOAM532HiBcf9eTrdZBO8RiAM1RYOst57lDDq+54XHp0giw4v0WqEQlb
-        EgHCknosYw6bBshnBjwSY4aSbsWq77mcvttExc00rq/VBFjouA==
-X-Google-Smtp-Source: ABdhPJxznHvZLDULU3/WobBuRLKXZlgy2+OHkripz1WPu9KDNZRf6hiw54kNxuN7jCreRq0CUXQmdUwbTDEM0xgjwv8=
-X-Received: by 2002:adf:ed09:0:b0:206:81c:1eda with SMTP id
- a9-20020adfed09000000b00206081c1edamr13735754wro.430.1649387828414; Thu, 07
- Apr 2022 20:17:08 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ihxscLrTzBaV4WXnBb9vogkk+ykI6foxyFnwvSuHsqQ=;
+        b=Cvs3Vku5l4MXXsvisGb/8ypa7rCiF5TG7FjZ/bSK2ID3WbzaTyRF3slqp5ydYPfQeH
+         ZW8jsZu75KaDPue6+cwJeL+enE+omgpI58odxILHUmV+6/rclZXyR6sh2VUJM719VFnX
+         t5mUUDV48ensthg9wgBzPJjdhiTJ5htuq20MOOgUuVZHwJ6YwmxpLj+Ajjan2xDiM3ta
+         egjWvmItf12Ozk5KTSbIhtbCPx7jmGadHDlYOOqx835ONMgHT+DFwJAeM1M6NHANBEAc
+         dDZNbqIEhCL7MzfwGtybiXInKyqZ5/btVuEZpZR68NI5LFqDBPqnksthkLULDTV4MTh0
+         2wOw==
+X-Gm-Message-State: AOAM532t7vM+pWpZnOcQdgh/OMRsQ+K12kPIo2Hpc2puuSrFp0Ax7CdB
+        L91PU3DmkocsF4X/thD8S/lAkYopTxpSFtE=
+X-Google-Smtp-Source: ABdhPJxdiXy3ky2yOREMCaRx2wuVo4Zwz2uMCCEvyntuafgZXVQKiUwuOSTZFh0j1tLm/x7LXPSV+Q==
+X-Received: by 2002:a17:902:f112:b0:156:9aec:b05d with SMTP id e18-20020a170902f11200b001569aecb05dmr16934210plb.92.1649387942056;
+        Thu, 07 Apr 2022 20:19:02 -0700 (PDT)
+Received: from localhost.localdomain ([144.202.91.207])
+        by smtp.gmail.com with ESMTPSA id ca16-20020a056a00419000b004fdf8a00b64sm15248436pfb.176.2022.04.07.20.19.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 20:19:01 -0700 (PDT)
+From:   Zheyu Ma <zheyuma97@gmail.com>
+To:     zbr@ioremap.net
+Cc:     linux-kernel@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>
+Subject: [PATCH] w1: Fix warning on module removal
+Date:   Fri,  8 Apr 2022 11:18:49 +0800
+Message-Id: <20220408031849.897248-1-zheyuma97@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220407193902.1981605-1-dlatypov@google.com>
-In-Reply-To: <20220407193902.1981605-1-dlatypov@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Fri, 8 Apr 2022 11:16:57 +0800
-Message-ID: <CABVgOSm-sDx8G0iphFXEgnsF-c9eu++bxtXjhOM_WHx-mkRiTA@mail.gmail.com>
-Subject: Re: [PATCH] kunit: tool: cosmetic: don't specify duplicate kunit_shutdown's
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 8, 2022 at 3:39 AM Daniel Latypov <dlatypov@google.com> wrote:
->
-> Context:
-> When using a non-UML arch, kunit.py will boot the test kernel with these
-> options by default:
-> > mem=1G console=tty kunit_shutdown=halt console=ttyS0 kunit_shutdown=reboot
->
-> For QEMU, we need to use 'reboot', and for UML we need to use 'halt'.
-> If you switch them, kunit.py will hang until the --timeout expires.
->
-> So the code currently unconditionally adds 'kunit_shutdown=halt' but
-> then appends 'reboot' when using QEMU (which overwrites it).
->
-> This patch:
-> Having these duplicate options is a bit noisy.
-> Switch so we only add 'halt' for UML.
->
-> I.e. we now get
-> UML: 'mem=1G console=tty console=ttyS0 kunit_shutdown=halt'
-> QEMU: 'mem=1G console=tty console=ttyS0 kunit_shutdown=reboot'
->
-> Side effect: you can't overwrite kunit_shutdown on UML w/ --kernel_arg.
-> But you already couldn't for QEMU, and why would you want to?
->
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> ---
+This happens because w1_process() can leave the kthread in
+TASK_INTERRUPTIBLE state when the kthread is being stopped. Since
+kthread_exit() might sleep in exit_signals(), the warning is printed.
 
-Thanks so much for fixing this: it had been quietly bugging me for a while.
+Fix this by set the current state to running before exiting.
 
-This looks pretty good as is, but I have a few suggestions for
-extending it which could be nice to have. I've put them inline below.
+The following log can reveal it:
 
-Either way,
-Reviewed-by: David Gow <davidgow@google.com>
+[   26.713749] ------------[ cut here ]------------
+[   26.714135] do not call blocking ops when !TASK_RUNNING; state=1 set at [<ffffffff83c59b0f>] w1_process+0x22f/0x370
+[   26.715053] WARNING: CPU: 4 PID: 282 at kernel/sched/core.c:9660 __might_sleep+0x96/0xb0
+[   26.719007] RIP: 0010:__might_sleep+0x96/0xb0
+[   26.727411] Call Trace:
+[   26.727644]  <TASK>
+[   26.727832]  exit_signals+0x2f/0x3b0
+[   26.728143]  do_exit+0xcd/0x18c0
+[   26.728423]  ? kthread_should_stop+0x5f/0xa0
+[   26.728801]  ? w1_process+0x34e/0x370
+[   26.729115]  kthread_exit+0x42/0x60
+[   26.729407]  ? w1_process_callbacks+0x130/0x130
+[   26.729804]  kthread+0x272/0x2e0
+[   26.730083]  ? w1_process_callbacks+0x130/0x130
+[   26.730464]  ? kthread_blkcg+0xa0/0xa0
+[   26.730797]  ret_from_fork+0x22/0x30
+[   26.731109]  </TASK>
 
->  tools/testing/kunit/kunit_kernel.py | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-> index 483f78e15ce9..9731ceb7ad92 100644
-> --- a/tools/testing/kunit/kunit_kernel.py
-> +++ b/tools/testing/kunit/kunit_kernel.py
-> @@ -158,7 +158,7 @@ class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
->         def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
->                 """Runs the Linux UML binary. Must be named 'linux'."""
->                 linux_bin = os.path.join(build_dir, 'linux')
-> -               return subprocess.Popen([linux_bin] + params,
-> +               return subprocess.Popen([linux_bin] + params + ['kunit_shutdown=halt'],
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+---
+ drivers/w1/w1.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-I'd slightly prefer it if we assigned these extra parameters to a
-separate variable, rather than including them directly in the
-subprocess.Popen call.
+diff --git a/drivers/w1/w1.c b/drivers/w1/w1.c
+index f2ae2e563dc5..ae169f3ee941 100644
+--- a/drivers/w1/w1.c
++++ b/drivers/w1/w1.c
+@@ -1206,6 +1206,7 @@ int w1_process(void *data)
+ 			schedule();
+ 	}
+ 
++	__set_current_state(TASK_RUNNING);
+ 	atomic_dec(&dev->refcnt);
+ 
+ 	return 0;
+-- 
+2.25.1
 
-(One thing I'd like to do is to print out the command we're running,
-which we do for Qemu, and having it in a variable that's passed in
-would be convenient. I don't expect this patch to do that, but having
-these parameters separate would make that future diff a little
-smaller.)
-
->                                            stdin=subprocess.PIPE,
->                                            stdout=subprocess.PIPE,
->                                            stderr=subprocess.STDOUT,
-> @@ -332,7 +332,7 @@ class LinuxSourceTree(object):
->         def run_kernel(self, args=None, build_dir='', filter_glob='', timeout=None) -> Iterator[str]:
->                 if not args:
->                         args = []
-> -               args.extend(['mem=1G', 'console=tty', 'kunit_shutdown=halt'])
-> +               args.extend(['mem=1G', 'console=tty'])
-
-Does it make sense to also make these options UML only.
-
-Under Qemu, the amount of memory is already passed separately to qemu,
-so adding another limit here seems counterproductive. If an
-architecture particularly needs it, we can add it to the
-per-architecture config.
-
-And console=tty is overridden by console=ttyS0 on x86_64 anyway, so
-that also seems like it should be taken out. I tried commenting this
-line out entirely, and at least x86_64 still worked.
-
-
-
->                 if filter_glob:
->                         args.append('kunit.filter_glob='+filter_glob)
->
->
-> base-commit: b04d1a8dc7e7ff7ca91a20bef053bcc04265d83a
-> --
-> 2.35.1.1178.g4f1659d476-goog
->

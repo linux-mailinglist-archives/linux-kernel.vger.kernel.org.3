@@ -2,134 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0152B4F9F56
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 23:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADB204F9F55
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 23:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239909AbiDHVsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 17:48:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50920 "EHLO
+        id S239920AbiDHVsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 17:48:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239896AbiDHVs0 (ORCPT
+        with ESMTP id S239908AbiDHVso (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 17:48:26 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E00CF149D10;
-        Fri,  8 Apr 2022 14:46:19 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id o16so7212847ljp.3;
-        Fri, 08 Apr 2022 14:46:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=TXyccekD78c7MBXWhEgfVySSP1whQf6ylCa6PcUISgU=;
-        b=fW7TvCUjA7CK8g77sojE8srWCGBf+pIISDWmlBfbNARwtY9a7AiigZlinU5qtL6u4v
-         yQjDQ/q1eDlyDr07o3Md92Oaku0HAw1NXqYRjYpe03/J5UQcZ9bjKrKQ9L0+5HNRvkPP
-         hMu0YaQsXwPx+R2MbdfnItKsBXiDK90oW7SUoOlMUucDRpklqOBLmEdQjY576YFk1Khc
-         cv4takR33WUq46HhH3M8gaFRrhmKpOKup38ROmaWMqwHJNdRe0GKIdy3uSjMWzBXmzgc
-         sLQbHrlLFMkUzS8VJy5XnH6AsKU946WOG2w+RNXuNfyER/+nqs6gsH4zo2jdPg4x7YGX
-         nxfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=TXyccekD78c7MBXWhEgfVySSP1whQf6ylCa6PcUISgU=;
-        b=yNbG1A5r34rwwqqt99tpUFM/dmefa58iSkvkd8kKUkJllbvYnE4JPhwfEGMfTbPXQg
-         Ol+NWQCAR9AD1KWXS1LwZcs0SIFsHpJM2IjPOO+b3VKcwNIykC/mm0KQBy3ALd5JxDLG
-         TgtBVMP8sc0APJTerAzGettn3SnrhAulw9PzAjsBKOe2YphigOI9sGg1BVagSFjXN3WP
-         GcKukCgvEBJtgn+zMxADvKC2oNXv0i9F14H1ef/pAfGUCQJl+5gtUm87q/u1HPwDcPbY
-         gUMGf1aboQSZZyPgx8tEjvxf5EjfWnNkTyrhge7i4gyG+n24FmuVBf4aG+baSYUbTmP4
-         Z6lw==
-X-Gm-Message-State: AOAM531cy577DMKTk5YZhrSSx9A5DuKFtnc1v9rpT2phD5qBLKt74mhr
-        YacznEcFzyfGa4ZT+RwOUNw=
-X-Google-Smtp-Source: ABdhPJz7eGBmARu/8EmwiwUhDvTqwiOYpjHQoyH1Pg4ALlS5kDq0ACgmMQ+dDIk9Kk3IOpSsU32Fcg==
-X-Received: by 2002:a2e:a496:0:b0:24b:56ab:2068 with SMTP id h22-20020a2ea496000000b0024b56ab2068mr716638lji.37.1649454377913;
-        Fri, 08 Apr 2022 14:46:17 -0700 (PDT)
-Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id v6-20020a2ea446000000b0024b0abb3984sm2138691ljn.134.2022.04.08.14.46.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 14:46:17 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
-Date:   Fri, 8 Apr 2022 23:46:15 +0200
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        rcu <rcu@vger.kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
-        frederic@kernel.org
-Subject: Re: [PATCH RFC] rcu/nocb: Provide default all-CPUs mask for
- RCU_NOCB_CPU=y
-Message-ID: <YlCtJzlJDj1DBHQB@pc638.lan>
-References: <20220407210734.2548973-1-joel@joelfernandes.org>
- <20220408142232.GA4285@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YQWeqfcKdAKmCn4fFGyWXjOGd=29wvi6bL3k7s2bGkDJw@mail.gmail.com>
- <20220408155002.GF4285@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YQDgSO2XkkVhN3RBBz3vwYdAtTuPz-xYYsAPnwEnbYZPA@mail.gmail.com>
- <20220408174908.GK4285@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YQ+oE3xQ0tLnBMFxRXLqKZkT5UfjF+CULxnhf9F-dEA2g@mail.gmail.com>
- <CAEXW_YRK2t2JO4RyBTd8cR9sTVpgP7Z5Ywhb1g7CRz3HJ_kNQA@mail.gmail.com>
- <20220408205440.GL4285@paulmck-ThinkPad-P17-Gen-1>
+        Fri, 8 Apr 2022 17:48:44 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99BF160C37
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 14:46:37 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649454395;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4jv1XCzAA0sQnRATbKYwT40mQz2UjI4mAAOrGkzxjJ0=;
+        b=oN4OzZ98SJpzhn99fiyr2x/tQm0k3Xg6UFZEviT7uYkq4Anlr1oPBg5AY5R6t0QqJDo89d
+        /0eu8omXgmv2bJqj7eAs8rmTJA6PeWsdJ+WduCat+c7av47GH+DuSb6n5hehD7C4VXyM/1
+        Kpw3DXP6iLFNwNzS7xoeBDDip3STref5cHm7n5du2fU6hWEagdtkzjWF4xnYsXBcwAhufq
+        yUiv8/K7PspftKjQTy97FedXolVMkucDAuUjvqyiSyozSn9lsQ46aAa7c10NaP1ik5QDeE
+        Mam29PAXKZjER0BWs+lNN+jlXUGSKzy/1ylU+/ZIHR/SY1yfWLKuhQRdXGegaA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649454395;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4jv1XCzAA0sQnRATbKYwT40mQz2UjI4mAAOrGkzxjJ0=;
+        b=z4nQH3vI3VTtHrctAJwIeHhOG7tShlqCZwY4sb/sWZjZhPcyXv+lhQxxudhDbgVpwEwBaj
+        CHtnMcm1CuJTOdDw==
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>, jstultz@google.com,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [RFC][PATCH] timers: Add del_time_free() to be called before
+ freeing timers
+In-Reply-To: <20220408165827.42475fb2@gandalf.local.home>
+References: <20220407161745.7d6754b3@gandalf.local.home>
+ <87pmlrkgi3.ffs@tglx>
+ <CAHk-=whbsLXy85XpKRQmBXr=GqWbMoi+wVjFY_V22=BOE=dHog@mail.gmail.com>
+ <87v8vjiaih.ffs@tglx> <20220408165827.42475fb2@gandalf.local.home>
+Date:   Fri, 08 Apr 2022 23:46:34 +0200
+Message-ID: <87pmlri6yt.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220408205440.GL4285@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> 
-> Here is what I believe you are proposing:
-> 
-> 
-> 				---	rcu_nocbs	rcu_nocbs=???
-> 
-> CONFIG_RCU_NOCB_CPU_ALL=n	[1]	[2]		[3]
-> 
-> CONFIG_RCU_NOCB_CPU_ALL=y	[4]	[4]		[3]
-> 
-> 
-> [1]	No CPUs are offloaded at boot.	CPUs cannot be offloaded at
-> 	runtime.
-> 
-> [2]	No CPUs are offloaded at boot, but any CPU can be offloaded
-> 	(and later de-offloaded) at runtime.
-> 
-> [3]	The set of CPUs that are offloaded at boot are specified by the
-> 	mask, represented above with "???".  The CPUs that are offloaded
-> 	at boot can be de-offloaded and offloaded at runtime.  The CPUs
-> 	not offloaded at boot cannot be offloaded at runtime.
-> 
-> [4]	All CPUs are offloaded at boot, and any CPU can be de-offloaded
-> 	and offloaded at runtime.  This is the same behavior that
-> 	you would currently get with CONFIG_RCU_NOCB_CPU_ALL=n and
-> 	rcu_nocbs=0-N.
-> 
-> 
-> I am adding Frederic on CC, who will not be shy about correcting any
-> confusion I be suffering from have with respect to the current code.
-> 
-> Either way, if this is not what you had in mind, what are you suggesting
-> instead?
-> 
-> I believe that Steve Rostedt's review would carry weight for ChromeOS,
-> however, I am suffering a senior moment on the right person for Android.
-> 
-We(in Sony) mark all CPUs as offloaded ones because of power reasons. The
-energy aware scheduler has a better knowledge where to place an rcuop/x
-task to invoke callbacks. The decision is taken based on many reason and
-the most important is to drain less power as a result of task placement.
-For example, power table, if OPP becomes higher or not, CPU is idle, etc.
+On Fri, Apr 08 2022 at 16:58, Steven Rostedt wrote:
 
-What Joel does in this patch sounds natural to me at least from the first
-glance. I mean converting the RCU_NOCB_CPU=y to make all CPUs to do offloading.
+> On Fri, 08 Apr 2022 22:29:58 +0200
+> Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+>> What a shutdown function would prevent here is UAF, but I'm not entirely
+>> sure whether it will simplify coordinated shutdown and remove the
+>> requirement of a priv->shutdown flag all over the place. It might make
+>> some of the driver muck just get stuck in the shutdown, but that's
+>> definitely an improvement over a potential UAF which happens every blue
+>> moons.
+>
+> Note, it is the cause of a large percentage of crash reports reported by
+> ChromeOS.
+>
+> And we do not even know if it was this bluetooth issue that caused them.
+> There's evidence they are mostly caused by the wifi code. I only used the
+> bluetooth issue because it was the first one we found that looked obviously
+> wrong.
 
---
-Uladzislau Rezki
+I'm sure that there are hundres more...

@@ -2,119 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D76394F95E2
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:34:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFEFE4F95F4
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:40:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235802AbiDHMgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 08:36:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53704 "EHLO
+        id S235818AbiDHMmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 08:42:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiDHMgf (ORCPT
+        with ESMTP id S235812AbiDHMmg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 08:36:35 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28151344181;
-        Fri,  8 Apr 2022 05:34:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649421272; x=1680957272;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=RZ8r0XaBrcR4p4yR7/Tctmr9u64HN1HhO0whIRV1fbY=;
-  b=ZmLg5xp3i2wlIfEX+xHcQi+hrueymYNOHtBYS0UMHPTRJLJb2nCOK06I
-   ProU+YzhF+75GKo5+y8BQC962s6lilGS2N5D5eeH+ElTjIWpYi9nfT3yI
-   w9e8/Tc5oq2MxjXlhoj9Oxr1ABgps9t/VL2AeqY7WLUXAIXtZ0OT2nG2M
-   u2pi3u3oZ0IfaC9FKpf3h7xP9CwvE0WB5DKXXHlwFW8QOztIm6uf+CaF7
-   OpEB5LNQSDD4+LHjCuogYG1Ec67vurSS/XJf9XqB4YSd8fj5KlyuG7vJj
-   eTBsA0rbt97sdyvACNbP2hBNfKm1ENM6arlwKhF/v8WpKrO87noYxSMlF
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="243713908"
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="243713908"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 05:34:31 -0700
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="571476279"
-Received: from aecajiao-mobl.amr.corp.intel.com ([10.252.48.54])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 05:34:29 -0700
-Date:   Fri, 8 Apr 2022 15:34:27 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-cc:     linux-serial <linux-serial@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Gilles Buloz <gilles.buloz@kontron.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: Re: [PATCH v2 2/3] tty: Add lookahead param to receive_buf
-In-Reply-To: <YlAjfAab+Oh3HcCR@smile.fi.intel.com>
-Message-ID: <42fc2746-6a7c-9b44-87a5-32f219c1231@linux.intel.com>
-References: <20220408113954.9749-1-ilpo.jarvinen@linux.intel.com> <20220408113954.9749-3-ilpo.jarvinen@linux.intel.com> <YlAjfAab+Oh3HcCR@smile.fi.intel.com>
+        Fri, 8 Apr 2022 08:42:36 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87B3A295252
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 05:40:29 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id bi13-20020a05600c3d8d00b0038c2c33d8f3so7465457wmb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 05:40:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=JtXxBqYHvoARiWzEnaLQz1KM8jdVHYhcJ4+dJSrCNho=;
+        b=DaN6uMg1mWoy0sJAV0g1YvUeexSJXdw69mB/G8cDTl88B7hvvTMuHBQkKlxH+KxDBa
+         H81GzezGvpaDopE334/4Okotf/kCCXHz0vTpmLLKEx+Bku9pLOU5FLpp5gk3GohhXLd2
+         zblz1C20kzVUnt868ukX1W9mV9hWWq59Ym5miWpnU+vOc0PlqLBFpI4eiVEtZciOwdpN
+         9oRD1RByZh4b3H8vb6DNYjQgBx23gDCP7JeF9fdpNoGmFL1sUyzTBxx/b2Te50F26SqH
+         T5Cz05dVjRAjbO/3D1xZCcCuQgILdFS7HDXoHATbCKG4OH8TImR3t40881bgVzivKS3t
+         mUHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=JtXxBqYHvoARiWzEnaLQz1KM8jdVHYhcJ4+dJSrCNho=;
+        b=VZBfg/gcQj6T3S6XPjd4x7jJyE8GqxVkDlGbnJF5VpkfE3/D/MjWHq2HPepjbIDrxJ
+         3lPnxQ2zsbWbReVceu2Mom2pNYstk2/Oh198EWtHhS4CwLwqe2WGWNWvRXNXmJVdlonA
+         6s1GGEJ2yLLSXOg1TEVzzpKIQgyO1iIEvaf5vRJFByPOBXd+jxaVpb9L8fyZPa+QvlFM
+         AuGBly8g05NLS6kxmUjvQ6BQ2ulyayWHdlGMgv4EQR434Z2Jut/1yg58Al/FKYiJPUlH
+         U7YBtd6/5VMQu55GuKAIr+8sWiyjE2sd7XaLOAMb238d47N5mwhzfJyE7xcxGz1NL4xW
+         oJxQ==
+X-Gm-Message-State: AOAM531D4wqsF9hBuyt6SSvEBWOjNo4avd9GaDY8SImnoivVtPfyURZ3
+        aq2IYmKx3QjljKDVgKFHPCINMw==
+X-Google-Smtp-Source: ABdhPJwoCjsjihXGrySnrwKn6BzJl3Dg6+P50meXlcaikWCGLEuuq9Lafl4Wwjjb/OVp8TTTx0TyAg==
+X-Received: by 2002:a05:600c:3d86:b0:38d:581:89ad with SMTP id bi6-20020a05600c3d8600b0038d058189admr17088800wmb.42.1649421627958;
+        Fri, 08 Apr 2022 05:40:27 -0700 (PDT)
+Received: from ?IPV6:2001:861:44c0:66c0:eacd:ce6:e294:acd1? ([2001:861:44c0:66c0:eacd:ce6:e294:acd1])
+        by smtp.gmail.com with ESMTPSA id u7-20020a05600c19c700b0038cc9aac1a3sm11597138wmq.23.2022.04.08.05.40.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Apr 2022 05:40:27 -0700 (PDT)
+Message-ID: <25ca3826-44ee-ca6f-fb6b-1ef62f6da456@baylibre.com>
+Date:   Fri, 8 Apr 2022 14:40:23 +0200
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-262000026-1649421271=:1643"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 3/5] drm: bridge: dw_hdmi: Enable GCP only for Deep
+ Color
+Content-Language: en-US
+To:     Sandor Yu <Sandor.yu@nxp.com>, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, andrzej.hajda@intel.com,
+        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, hverkuil-cisco@xs4all.nl
+Cc:     shengjiu.wang@nxp.com, cai.huoqing@linux.dev, maxime@cerno.tech,
+        harry.wentland@amd.com
+References: <cover.1649412256.git.Sandor.yu@nxp.com>
+ <a0f9def7e7438592f78ef0a16cd0a560be0e6133.1649412256.git.Sandor.yu@nxp.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+In-Reply-To: <a0f9def7e7438592f78ef0a16cd0a560be0e6133.1649412256.git.Sandor.yu@nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-262000026-1649421271=:1643
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
-
-On Fri, 8 Apr 2022, Andy Shevchenko wrote:
-
-> On Fri, Apr 08, 2022 at 02:39:53PM +0300, Ilpo Järvinen wrote:
-> > After lookahead for XON/XOFF characters is added by the next
-> > patch, the receive side needs to ensure the flow-control
-> > actions are not retaken later on when those same characters
-> > get read by TTY.
-> > 
-> > Thus, pass lookahead count to receive_buf and skip
-> > flow-control character actions if already taken for the
-> > character in question. Lookahead count will become live after
-> > the next patch.
+On 08/04/2022 12:32, Sandor Yu wrote:
+> HDMI1.4b specification section 6.5.3:
+> Source shall only send GCPs with non-zero CD to sinks
+> that indicate support for Deep Color.
 > 
-> ...
+> DW HDMI GCP default enabled, clear gpc_auto bit for 24-bit color depth.
+
+It's right because we do not handle AVMUTE, Pixel Packing nor Default_Phase.
+
 > 
-> > +		if (c == STOP_CHAR(tty)) {
-> > +			if (!lookahead_done)
+> Signed-off-by: Sandor Yu <Sandor.yu@nxp.com>
+> ---
+>   drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 12 ++++++++++++
+>   1 file changed, 12 insertions(+)
 > 
-> But now it can be as below
-> 
-> 		if (c == STOP_CHAR(tty) && !lookahead_done)
-> 
-> > +				stop_tty(tty);
-> > +		} else if ((c == START_CHAR(tty) && !lookahead_done) ||
-> >  			 (tty->flow.stopped && !tty->flow.tco_stopped && I_IXANY(tty) &&
-> >  			  c != INTR_CHAR(tty) && c != QUIT_CHAR(tty) &&
-> >  			  c != SUSP_CHAR(tty))) {
+> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> index 02d8f7e08814..5a7ec066e37a 100644
+> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> @@ -1108,6 +1108,8 @@ static void hdmi_video_packetize(struct dw_hdmi *hdmi)
+>   	unsigned int output_select = HDMI_VP_CONF_OUTPUT_SELECTOR_PP;
+>   	struct hdmi_data_info *hdmi_data = &hdmi->hdmi_data;
+>   	u8 val, vp_conf;
+> +	u8 clear_gcp_auto = 0;
+> +
+>   
+>   	if (hdmi_bus_fmt_is_rgb(hdmi->hdmi_data.enc_out_bus_format) ||
+>   	    hdmi_bus_fmt_is_yuv444(hdmi->hdmi_data.enc_out_bus_format) ||
+> @@ -1117,6 +1119,7 @@ static void hdmi_video_packetize(struct dw_hdmi *hdmi)
+>   		case 8:
+>   			color_depth = 4;
+>   			output_select = HDMI_VP_CONF_OUTPUT_SELECTOR_BYPASS;
+> +			clear_gcp_auto = 1;
+>   			break;
+>   		case 10:
+>   			color_depth = 5;
+> @@ -1136,6 +1139,7 @@ static void hdmi_video_packetize(struct dw_hdmi *hdmi)
+>   		case 0:
+>   		case 8:
+>   			remap_size = HDMI_VP_REMAP_YCC422_16bit;
+> +			clear_gcp_auto = 1;
+>   			break;
+>   		case 10:
+>   			remap_size = HDMI_VP_REMAP_YCC422_20bit;
+> @@ -1160,6 +1164,14 @@ static void hdmi_video_packetize(struct dw_hdmi *hdmi)
+>   		HDMI_VP_PR_CD_DESIRED_PR_FACTOR_MASK);
+>   	hdmi_writeb(hdmi, val, HDMI_VP_PR_CD);
+>   
+> +	val = hdmi_readb(hdmi, HDMI_FC_DATAUTO3);
+> +	if (clear_gcp_auto == 1)
+> +		/* disable Auto GCP when 24-bit color */
 
-Are you sure about this? ...If I make that change to the first if, the 
-second part of the else if's condition get a chance it didn't have 
-previously.
+Maybe add a new define for HDMI_FC_DATAUTO3_GCP_AUTO bit and use it here.
 
-What I'd like to do here is to take advantage of the function that was 
-added:
+> +		val &= ~0x4;
+> +	else
+> +		val |= 0x4;
+> +	hdmi_writeb(hdmi, val, HDMI_FC_DATAUTO3);
 
-		if (!n_tty_receive_char_flow_ctrl(tty, c) &&
-		    tty->flow.stopped && !tty->flow.tco_stopped && I_IXANY(tty) &&
-        	    c != INTR_CHAR(tty) && c != QUIT_CHAR(tty) &&
-	            c != SUSP_CHAR(tty))) {
-			start_tty(tty);
-			process_echoes(tty);
-		}
-...but it will change STOP_CHAR vs START_CHAR precedence for the case 
-where they're the same characters. I don't know if it matters.
+Please also add a comment explaining we clear GCP because we only
+transmit CD and do not handle AVMUTE, PP nor Default_Phase (yet).
 
--- 
- i.
+> +
+>   	hdmi_modb(hdmi, HDMI_VP_STUFF_PR_STUFFING_STUFFING_MODE,
+>   		  HDMI_VP_STUFF_PR_STUFFING_MASK, HDMI_VP_STUFF);
+>   
 
---8323329-262000026-1649421271=:1643--
+Thanks,
+Neil

@@ -2,78 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B754F99AA
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 17:40:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DD4C4F99C7
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 17:44:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237701AbiDHPl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 11:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51406 "EHLO
+        id S237769AbiDHPqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 11:46:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237687AbiDHPlz (ORCPT
+        with ESMTP id S237751AbiDHPqI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 11:41:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960FDDE098;
-        Fri,  8 Apr 2022 08:39:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 330836201B;
-        Fri,  8 Apr 2022 15:39:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9009C385A3;
-        Fri,  8 Apr 2022 15:39:48 +0000 (UTC)
-Date:   Fri, 8 Apr 2022 11:39:46 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Kalesh Singh <kaleshsingh@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        kernel-team <kernel-team@android.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Tim Murray <timmurray@google.com>, Wei Wang <wvw@google.com>,
-        Kyle Lin <kylelin@google.com>,
-        Chunwei Lu <chunweilu@google.com>,
-        Lulu Wang <luluw@google.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        rcu <rcu@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] EXP rcu: Move expedited grace period (GP) work to RT
- kthread_worker
-Message-ID: <20220408113946.056c083e@gandalf.local.home>
-In-Reply-To: <CAEXW_YSqY2nFZrn4AjpUzJ+dwZc7jaVMG9RG5gvTyb3zFYWtQA@mail.gmail.com>
-References: <20220408045734.1158817-1-kaleshsingh@google.com>
-        <CAEXW_YSqY2nFZrn4AjpUzJ+dwZc7jaVMG9RG5gvTyb3zFYWtQA@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 8 Apr 2022 11:46:08 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6CCF939DF;
+        Fri,  8 Apr 2022 08:44:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649432643; x=1680968643;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gcJtOPIX2/0B3YxiUGz/EyzDxp0SAsqb/v7kxf3M3BU=;
+  b=YIlwpyceiHV/M2vrggkScgP/UKLnGgX4BOlZCRHXsY94hevyknTt0V+F
+   W4tGLSACYa5ddnCJtgehG86r8Fw4X6+M4ordmitHeV1GeoQPzSt+fFvP2
+   EL6IQKBWeVhjawwd1UGPcQkfPKw02Ev2XQXkywbKSQl6AZ2g164mfsAwf
+   74PE0+6bFJquoP0IneXW6qdWQY/eec5Diaaz8q9L4xRyWsUndLUE0BeC3
+   +ejLVXqSJHwQ95Fnl4jb33fZ2Kv21BoMFyKxpGULirjSWcrVz6dzUKIJ7
+   F1kcuvgyvQomHEVjVf1wrp0fOdn8sbEmxXDktcFCpKc+ZSnznDDjjwJRl
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="259218709"
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="259218709"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 08:43:44 -0700
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="589257568"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 08:43:36 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ncqiH-000Lsk-PD;
+        Fri, 08 Apr 2022 18:39:53 +0300
+Date:   Fri, 8 Apr 2022 18:39:53 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Qianggui Song <qianggui.song@amlogic.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marc Zyngier <maz@kernel.org>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Subject: Re: [PATCH v4 05/13] pinctrl: samsung: Switch to use
+ for_each_gpiochip_node() helper
+Message-ID: <YlBXSVyj88CqjGj4@smile.fi.intel.com>
+References: <20220401103604.8705-1-andriy.shevchenko@linux.intel.com>
+ <20220401103604.8705-6-andriy.shevchenko@linux.intel.com>
+ <d1f873c6-150f-5f4d-7aa8-7bb15823d991@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d1f873c6-150f-5f4d-7aa8-7bb15823d991@linaro.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 8 Apr 2022 06:21:03 -0400
-Joel Fernandes <joel@joelfernandes.org> wrote:
+On Fri, Apr 08, 2022 at 05:22:21PM +0200, Krzysztof Kozlowski wrote:
+> On 01/04/2022 12:35, Andy Shevchenko wrote:
+> > Switch the code to use for_each_gpiochip_node() helper.
 
-> > +       default !PREEMPT_RT && NR_CPUS <= 32  
+(...)
+
+> >  /*
+> >   * Iterate over all driver pin banks to find one matching the name of node,
+> >   * skipping optional "-gpio" node suffix. When found, assign node to the bank.
+> >   */
+> > -static void samsung_banks_of_node_get(struct device *dev,
+> > -				      struct samsung_pinctrl_drv_data *d,
+> > -				      struct device_node *node)
+> > +static void samsung_banks_node_get(struct device *dev, struct samsung_pinctrl_drv_data *d)
 > 
-> What is the benefit of turning it off on PREEMPT_RT, even if
-> PREEMPT_RT does not use expedited GPs much post-boot? I would think in
-> the future if PREEMPT_RT ever uses expedited GPs, they would want this
-> feature even more. I'd rather be future-proof now as I don't see any
-> advantages of disabling it on !PREEMPT_RT (And a drawback that the fix
-> won't apply to those systems). Also will keep the config simple.
+> This is worth simplification anyway, so please split it to separate patch.
 
-The default kthread priority is 1. This should not affect PREEMPT_RT, as
-PREEMPT_RT users are usually more concerned by the performance of their
-higher priority tasks. Priority 1 is not considered an issue.
+Not sure what to do and why it worth an additional churn.
 
-I do not see why PREEMPT_RT is special here. Why was it singled out?
+> >  {
+> >  	const char *suffix = "-gpio-bank";
+> >  	struct samsung_pin_bank *bank;
+> > -	struct device_node *child;
+> > +	struct fwnode_handle *child;
+> >  	/* Pin bank names are up to 4 characters */
+> >  	char node_name[20];
+> >  	unsigned int i;
+> > @@ -1038,17 +1037,17 @@ static void samsung_banks_of_node_get(struct device *dev,
+> >  			continue;
+> >  		}
+> >  
+> > -		for_each_child_of_node(node, child) {
+> > -			if (!of_find_property(child, "gpio-controller", NULL))
+> > -				continue;
+> 
+> This does not look equivalent. There are nodes without this property.
 
--- Steve
+Not sure I understand why not. The macro checks for the property and
+iterates over nodes that have this property.
+
+Can you elaborate, please?
+
+> > -			if (of_node_name_eq(child, node_name))
+> > +		for_each_gpiochip_node(dev, child) {
+> > +			struct device_node *np = to_of_node(child);
+> > +
+> > +			if (of_node_name_eq(np, node_name))
+> >  				break;
+> > -			else if (of_node_name_eq(child, bank->name))
+> > +			if (of_node_name_eq(np, bank->name))
+> >  				break;
+> >  		}
+> 
+> This patch has to wait till someone provides you a tested-by. I might do
+> it around next week.
+
+Fine with me, I will drop it from my repo for now.
+
+Thanks for review!
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

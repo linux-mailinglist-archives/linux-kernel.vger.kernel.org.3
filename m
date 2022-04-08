@@ -2,198 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D2334F9A5D
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 18:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CFCF4F9A63
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 18:21:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbiDHQWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 12:22:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60820 "EHLO
+        id S229958AbiDHQXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 12:23:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbiDHQWG (ORCPT
+        with ESMTP id S229767AbiDHQXu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 12:22:06 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2073.outbound.protection.outlook.com [40.107.236.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0908FF1
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 09:20:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=neL9Vs8P2CQoe+T+tEAmuaTaG0yDlA2plVQN7GoL8GetoOzeKvTxnJvFpABUKyzAsQUysWf1F+XL47tB1zoPB/WnVX2bXHa2PK8Aotc6XEH+SPp9MHIDTNCcWPR2iZvDfZiPKC5QZblr4t6AdfAbOeaUHg7gNj550Cac8aFdNAdBJ0XojYv1ZvMkSv240cXEHUE8H8b3GzlmPneSOcyWS6jjIaa+y2A8Q7+OtR1khTgnf3EbPjTPuHQxwyjY6/2i5BvQ+L85cGKtx6hs4jIog3zq9mWLjy/evUtK6SrIoNxCfxwyDpa+YSYCLmE0rOd3YDlH0865ZyVp+hxTzlMR6A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+NwKpZkQxqo3Kw0WQGbKlr19KbKAMQN0+aav7z5MEDE=;
- b=ghrXDOOHasq+81e8CZN66pe1g4Bs8wtIjioUn3EA/aWtCVJLnXzktAMc1p5lj4Ub8er3+bzIWLAsvpLCfXdzaLIOXDYqCcQZlUWafRP9u7e3WicioyE3eHOT7T1Xm2a9u1Gwhb5Nj/T9V2mpavoHdEFSj2fNyHR+2KGUCIanQqIuaq/nyXBwy+7+fnLciF8UmPKg9Rib7qF/Y+42pHf7wDZT6Nl8vlnKvwthD3w3cEOTaAZRtNPCILjmEGi9gW2O00lApFqLH7S64lT9qs4EFCAeGxkK+wjyNr0wg51slNn1j43WztFN/p4jxPluyA1x+8kT8H43tVgNVEYy4gH7gQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+NwKpZkQxqo3Kw0WQGbKlr19KbKAMQN0+aav7z5MEDE=;
- b=0i60NP5P+lT4W4v5tTdoWOfd/41qiowjktgI6S0bq3ndlt0Z/DEoqqJ93lX9P2fPcH/qnvnW0KEpVwMbukD1cBRwSoHn9Xx8hpgl3mC+qr8EW6dS3C7jaX6QpxUyw98RYd+alMqrLYyAA9E2PjpqGDj2KdZk7MwlNLEwruJU2bA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from SA0PR12MB4526.namprd12.prod.outlook.com (2603:10b6:806:98::23)
- by SJ0PR12MB5674.namprd12.prod.outlook.com (2603:10b6:a03:42c::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.25; Fri, 8 Apr
- 2022 16:19:59 +0000
-Received: from SA0PR12MB4526.namprd12.prod.outlook.com
- ([fe80::7ceb:a37c:cd60:9d5f]) by SA0PR12MB4526.namprd12.prod.outlook.com
- ([fe80::7ceb:a37c:cd60:9d5f%7]) with mapi id 15.20.5144.026; Fri, 8 Apr 2022
- 16:19:59 +0000
-Message-ID: <768e8812-ecbf-93e7-ffad-feec1b36d924@amd.com>
-Date:   Fri, 8 Apr 2022 11:19:54 -0500
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH] drm/amdgpu: disable ASPM for legacy products that don't
- support ASPM
-Content-Language: en-US
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        "airlied@linux.ie" <airlied@linux.ie>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>
-Cc:     "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220408154447.3519453-1-richard.gong@amd.com>
- <BL1PR12MB51576654D3EEB10F5DF862A7E2E99@BL1PR12MB5157.namprd12.prod.outlook.com>
-From:   "Gong, Richard" <richard.gong@amd.com>
-In-Reply-To: <BL1PR12MB51576654D3EEB10F5DF862A7E2E99@BL1PR12MB5157.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH2PR17CA0010.namprd17.prod.outlook.com
- (2603:10b6:610:53::20) To SA0PR12MB4526.namprd12.prod.outlook.com
- (2603:10b6:806:98::23)
+        Fri, 8 Apr 2022 12:23:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67249DF2E
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 09:21:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F3F40620A6
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 16:21:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E86FDC385A1;
+        Fri,  8 Apr 2022 16:21:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649434905;
+        bh=sp8YSgjJ9qp4rTSo+9/IQUyqWZQ2MCM4EJ7wecIecVc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WohqsiUtwM3ulQrXXgDuUJAdWWe4VpJB0EAV+ON4okCh67hN1k5Gt/NZOAapG+/hK
+         ObiO6p9lzJryOZmLbqL2+aHuWPxi5CikQaeeBIOFGJEDbBVyLCD8QriP7bsSRqXeO8
+         oaivFrKMARXOfe5da+6mpO8Y1FyzuR5eSBxQQP204hVHMYwBfH32bn33NGQwkh5nQ2
+         z1g4K+YyE4ev8xKvhDa5xj3OUH6UDjlFyxmKDlN2zt5rAAW1k5NOc/TVx9wkxFgH+p
+         TrHbiflPwHAxNLq0ybWzLOiPVEn0vjolmGKK5cHADdEGFUPMEq0HamDiDs7bgkNmUd
+         3xClnzPS5667w==
+Date:   Fri, 8 Apr 2022 17:21:40 +0100
+From:   Will Deacon <will@kernel.org>
+To:     James Morse <james.morse@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, maz@kernel.org,
+        catalin.marinas@arm.com, mark.rutland@arm.com
+Subject: Re: arm64 spectre-bhb backports break boot on stable kernels <= v5.4
+Message-ID: <20220408162139.GB28108@willie-the-truck>
+References: <20220408120041.GB27685@willie-the-truck>
+ <1a44f42c-0391-7428-ac85-1e27aaf0be14@arm.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d8633b7e-5e83-44dd-2f25-08da197ba079
-X-MS-TrafficTypeDiagnostic: SJ0PR12MB5674:EE_
-X-Microsoft-Antispam-PRVS: <SJ0PR12MB56746427D4582526BB1F1BD195E99@SJ0PR12MB5674.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: olblxAv5uYaxxuOiCzWzV/0g5tLeC13vJdE9PaRg0jIuCn/M278chX8C0dUWQgcja7KMpJ0GEuCyjjPNMWUDvNG9X3v09P2c53ebCP7k7FC/DiM0jOX6ykf9WeDkFf2OycT4wr+gsZsH3OYXbMMi6e6FwvE5lUT5KBenAS3TuUURNm2IQcyx6QLqbjdEXSxFmCvWXpA2BdRQatGWJLXbbZ6f4RVgGuLpeWMNuyBPqD3VwM7AM+/Jhb8VpxdFkINaTST/LJ2bjzeFMUXZoRtfXGGkEQM0GU0EodpbQdfvjwV0eiX53dD7T4uQj9i9SjYMJZOvRe6fLxAuROHFKKYslfJloHhao1rC9MNnlf2zLKK44VGjbhn+s2Mt+TcJWQ0PPuU2Pq5Y1qGDwVQke4jssCaf7adoJ2FacRh6vsz6VCmZLL6W1YavzlXZSNgBSw4KcrM8x4BeARva9hFYtfJ7Y5rk+Z24nxhsfuEQnzVbEqUS08Ir6TY8oSeGPWVxlA6XOF8tT2IaYk6b6jijEV0cqkuRVnTT047GksrI32h8vz8NqSW81LmO0RFyN4qPwcUoRpB9UIdke6SBEAa6YCiiFZt7RE9anF9HhhLaMm89d8bUjonijcgko3YyhHXkvXZhkVnT4ZHB+re1cz/sUGoxY6LBEBpwhajVlxhL/M2jYBxDonWYwnM0sAGDEkku7T7Aj+yStpTLliw269aEjT0K8dMlj8gZz3jS4XdVEbnzQg8VTHS5eJ62kup8PCwIi400
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA0PR12MB4526.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(31696002)(2906002)(508600001)(966005)(6666004)(54906003)(921005)(4326008)(8676002)(66946007)(66556008)(38100700002)(66476007)(8936002)(5660300002)(83380400001)(6512007)(110136005)(316002)(36756003)(31686004)(2616005)(6506007)(26005)(186003)(53546011)(86362001)(6486002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SnhpazBzcWVhQlpGQUxMRTlWTk5vcUpqTUN4NUJSRi9iZmVBa05WbW8xeTVI?=
- =?utf-8?B?NHhjZjk5bDVFNzYzckQwNHp5TW1Dc1Q4TElnZm82QmRtOTQ2ZHo1VjFoaDRP?=
- =?utf-8?B?MHpvcnRzNmhaQlhpaCtmRXFaaW9sY1hwNFBhanAzRkt3Tll2VDd2V3N6VGZW?=
- =?utf-8?B?YXVBY01mSnR5dHN2bzFrYnQ2SW95aFV3blpsYTVmTWFYbDhScDd5N3hxamdk?=
- =?utf-8?B?NlFuZVlJNkFpemlJemlUbW0xQUcrRzR2Ri9CVkMzV1pacjY3ZzFidUlUaXg4?=
- =?utf-8?B?ajF6V21JMUVtT0pTUWFpSUp6ZmN4eThKZ2Z0clBOSmx0bXU2bFVmeERhZjRm?=
- =?utf-8?B?OWRicDR1ZE14ejIxV0s0bnVHd2YzcFFHek5hdDBmcnZSVzFyUEV1RVVuaVRM?=
- =?utf-8?B?NWRjUmk3VXhlSXVubVpFMzk0RlF4aERzTGQvSG5qZU5JbkVYQ3dxVXJNQUQr?=
- =?utf-8?B?Y1cwVTJCaUtJdy9OeEg0U0tlM1pOZ2lGbHlCRzFMdlkrVkw5OU45RTM5YkF5?=
- =?utf-8?B?alhEbThsUXo3YkZDeHVPNUc1YVNzUGRZblBDSDdsSHUrU3FBODZUQXpCajcw?=
- =?utf-8?B?dlVwTG9WaHFqQlpESDZoNnJlU21rT1JqSFc5Nno2ZG9iRWNINjNURGNMcS9F?=
- =?utf-8?B?UVdaWGJvRjFwYWYzSlVDL2VWMWJ4OWhITWhzdUh6UENXa2tsL1ZMc2JUU2tW?=
- =?utf-8?B?eGpqNFp5dkJlenZtNTBObnlwUENWRUlxYzlhNTNYNUh3THkrbldtTk1pRW5I?=
- =?utf-8?B?c01xSHhnWEJmNGkyMThUMmxjZDk0SUtDU2hIc1o2MTQxZzdRbk5DRE9lSWhv?=
- =?utf-8?B?VXZzcjExWXQrOWt4QjJ5Y20wVGd0dDVYTUV6VUlaY0J2dWxFRUE1a2lkWmkx?=
- =?utf-8?B?b2E0SXlSeUJKci9oOTkrQ1Y2bzc1amkyUjRWWThRa1BPM2JNL3doWkkxa3pU?=
- =?utf-8?B?eW56aWh6MlNMUm1XZFNxcWQyeDVMbHRUckRLOTNVT3d0YlIrMFMrOVhqTEM3?=
- =?utf-8?B?VnloM2JNNXpFdkRqWWZEWktxN014QmRQcWx0a1ZDNTlGb0tlTWdlQlV5WmVQ?=
- =?utf-8?B?WjI1d2lFenZBcFYybVYyTlhNNEJzTFJBbm1UblJkV29yUEQrcU5kYkNWL0xy?=
- =?utf-8?B?M0hpanhlWC9Iby9Dd0crcXcvTktOZDFZV0NNRFhrVVpvblYyQmNtRC8vRlI5?=
- =?utf-8?B?YTRVYWJvVTVKcHlIYW9hT1NaVmxBd0ExSlhWbEYyb283VGFGall1R2loS0U3?=
- =?utf-8?B?NFBFWCtwUnJ1dzl0MzdYVVc5eXdaampGeSswTlB3VzY5aWxLUHFVeUpUbTVm?=
- =?utf-8?B?bGJadjJKaDVWMm8xMS9STGhTaHd0NUJKYnNQR3J4VVpVRmF6V3RobWpwT2s5?=
- =?utf-8?B?YVlVZnlYd1JhNU5aU3gxa2QzdFdxWllLM2lmKzFaQ0t1aVJKV0Q1T0dzU3Ro?=
- =?utf-8?B?SDlWNVdiOXRQeFFsV0R5MGhCQVdCcEVJNkF3dmh3Y0NHb0RuL2NVYlhORHZ6?=
- =?utf-8?B?MEtQMzhDOFVVNVh5QUVHV1RaamhBYUJwazdkUG9jcHlhOCtaMTNjYW85TmpE?=
- =?utf-8?B?a0pTYTVWYllacFVWVmtPNVU1K2xZRjlpdHVSSzk0eU9YSTNnNUV0RGpFQkZs?=
- =?utf-8?B?eVVVYUxiQ05MZk13S1NTdnlUWjM3Q3l6elFnSlFDbGRiVTVjUTcxSk5lY2JM?=
- =?utf-8?B?d3lQa2F6U3R4RkZzdWRid1gxem4wYlM1d2hoNTdEZVl4ZEsrclNJZFNqU2N6?=
- =?utf-8?B?c3JNd0RWNXQwbUcxU3VOMldiSXFrQkUzY0tGcVZScTBKeUN3VUF3OU02cFJR?=
- =?utf-8?B?YlNGRzF4elVSZGZsTlM2eFY2dU9yMU9yVXBZaWJqdGlaVXp4RGhNZkNtTDhD?=
- =?utf-8?B?TGl2S0FYakpyR3FvN2VLV3h5SjlxSWkvYnFuUEgrVk96NlZCRHl5dFJEcWdD?=
- =?utf-8?B?L2g1bEowODhVajJiRGcrZG5RV0lkR1hFdzQ1cDEyaGlENVBZZEJnNWIwN0s5?=
- =?utf-8?B?VlptUWtmWWJaL1JVM0czOWJpSHBsd1dlNkZWY3d0MEZuT0JZVmZhN01QWENm?=
- =?utf-8?B?T2tlWWgyWTZZak1qbGgxOURPakQvcDl3R2NKejU2MURJbVB3Z3djK0swc1pD?=
- =?utf-8?B?K2RZTzRJU0Y5dEtrT01ZQ2dkMjFiZkRvYW9Zb1ZuSGt3L2plUjNabS8wUUFi?=
- =?utf-8?B?QkxWamsxUDVaemU2YlEyU2Q1MmRWTitIWkFJK2xRQnA1OXl5a0l2UkFidXJU?=
- =?utf-8?B?UnNTWm5qdzlkWlNQN0pYVHpuNWlocGwvY2ZjclR2bGtGNlVTN1NlVXJMRFVI?=
- =?utf-8?B?NHJGRFJRQVVoejIxS1hNOE9jbWg1QXBnRjhPYUlmeFQxZUdHbmJ6Zz09?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d8633b7e-5e83-44dd-2f25-08da197ba079
-X-MS-Exchange-CrossTenant-AuthSource: SA0PR12MB4526.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Apr 2022 16:19:59.1564
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: drVDJcx4p+vDXyGEMwLkHOdNSJCcx8BwmnsdkvNZXMbqldEU7Fg6fiZwh9eIcT9BrxIFsptEK2NA4jJ0Idiy+A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5674
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1a44f42c-0391-7428-ac85-1e27aaf0be14@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi James,
 
-On 4/8/2022 10:47 AM, Limonciello, Mario wrote:
-> [Public]
->
->
->
->> -----Original Message-----
->> From: Gong, Richard <Richard.Gong@amd.com>
->> Sent: Friday, April 8, 2022 10:45
->> To: Deucher, Alexander <Alexander.Deucher@amd.com>; Koenig, Christian
->> <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>;
->> airlied@linux.ie; daniel@ffwll.ch
->> Cc: amd-gfx@lists.freedesktop.org; dri-devel@lists.freedesktop.org; linux-
->> kernel@vger.kernel.org; Limonciello, Mario <Mario.Limonciello@amd.com>;
->> Gong, Richard <Richard.Gong@amd.com>
->> Subject: [PATCH] drm/amdgpu: disable ASPM for legacy products that don't
->> support ASPM
->>
->> Active State Power Management (ASPM) feature is enabled since kernel
->> 5.14.
->> However there are some legacy products (WX3200 and RX640 are examples)
->> that
->> do not support ASPM. Use them as video/display output and system would
->> hang
->> during suspend/resume.
->>
->> Add extra check to disable ASPM for old products that don't have
->> ASPM support.
->>
->> Signed-off-by: Richard Gong <richard.gong@amd.com>
->> Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1885
->> ---
->>   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 4 ++++
->>   1 file changed, 4 insertions(+)
->>
->> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
->> b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
->> index bb1c025d9001..8987107f41ee 100644
->> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
->> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
->> @@ -2012,6 +2012,10 @@ static int amdgpu_pci_probe(struct pci_dev
->> *pdev,
->>   	if (amdgpu_aspm == -1 && !pcie_aspm_enabled(pdev))
->>   		amdgpu_aspm = 0;
->>
->> +	/* disable ASPM for the legacy products that don't support ASPM */
->> +	if ((flags & AMD_ASIC_MASK) == CHIP_POLARIS12)
->> +		amdgpu_aspm = 0;
->> +
-> I think it's problematic to disable it for the entire driver.  There might be multiple
-> AMDGPUs in the system, and others may support ASPM.
+On Fri, Apr 08, 2022 at 05:08:00PM +0100, James Morse wrote:
+> On 08/04/2022 13:00, Will Deacon wrote:
+> > Booting stable kernels <= v5.4 on arm64 with CONFIG_HARDEN_BRANCH_PREDICTOR=n
+> > results in a NULL pointer dereference during boot due to kvm_get_hyp_vector()
+> > dereferencing a NULL pointer from arm64_get_bp_hardening_data():
+> > 
+> > [    2.384444] Internal error: Oops: 96000004 [#1] PREEMPT SMP
+> > [    2.384461] pstate: 20400085 (nzCv daIf +PAN -UAO)
+> > [    2.384472] pc : cpu_hyp_reinit+0x114/0x30c
+> > [    2.384476] lr : cpu_hyp_reinit+0x80/0x30c
+> > [    2.384477] sp : ffff800010013e20
+> > [    2.384479] x29: ffff800010013e20 x28: ffff0000df033f00
+> > [    2.384484] x27: ffff800011caa000 x26: ffff0000de58e000
+> > [    2.384487] x25: ffff800011e57000 x24: ffff800011caad90
+> > [    2.384490] x23: ffff800011c778e0 x22: ffff800011a56000
+> > [    2.384494] x21: ffff800011a56000 x20: 0000b471121a6000
+> > [    2.384497] x19: 00000000de588000 x18: 0000000000000000
+> > [    2.384500] x17: 0000000000000000 x16: 0000000000000400
+> > [    2.384503] x15: 0000000000001000 x14: 00000000000007f2
+> > [    2.384507] x13: 0000000000000004 x12: 0000000000000002
+> > [    2.384510] x11: 0000000000000000 x10: 00000000121a6000
+> > [    2.384513] x9 : ffff800011c77fd8 x8 : 0000000000000010
+> > [    2.384516] x7 : 4f422effff306b64 x6 : 0000008080000000
+> > [    2.384519] x5 : 0000008080000000 x4 : ffff800011fabc94
+> > [    2.384522] x3 : ffff800011f5bde0 x2 : 0000000000000001
+> > [    2.384526] x1 : 00000000121a0000 x0 : ffff8000118f962d
+> > [    2.384529] Call trace:
+> > [    2.384533]  cpu_hyp_reinit+0x114/0x30c
+> > [    2.384537]  _kvm_arch_hardware_enable+0x30/0x54
+> > [    2.384541]  flush_smp_call_function_queue+0xe4/0x154
+> > [    2.384544]  generic_smp_call_function_single_interrupt+0x10/0x18
+> > [    2.384549]  ipi_handler+0x170/0x2b0
+> > [    2.384555]  handle_percpu_devid_fasteoi_ipi+0x120/0x1cc
+> > [    2.384560]  __handle_domain_irq+0x9c/0xf4
+> > [    2.384563]  gic_handle_irq+0x6c/0xe4
+> > [    2.384566]  el1_irq+0xf0/0x1c0
+> > [    2.384570]  arch_cpu_idle+0x28/0x44
+> > [    2.384574]  do_idle+0x100/0x2a8
+> > [    2.384577]  cpu_startup_entry+0x20/0x24
+> > [    2.384581]  secondary_start_kernel+0x1b0/0x1cc
+> > [    2.384589] Code: b9469d08 7100011f 540003ad 52800208 (f9400108)
+> > [    2.384600] ---[ end trace 266d08dbf96ff143 ]---
+> > [    2.385171] Kernel panic - not syncing: Fatal exception in interrupt
+> 
+> Yikes!
+> 
+> Interesting to know that stuff behind CONFIG_EXPERT has someone who cares about it.
+> (I was going to propose dropping the Kconfig option after a while).
 
-The "problem" are WX3200 and RX640, both are from the same POLARIS12 family.
+Yup! FWIW, the hardening options are enabled in Android (GKI), but this was
+reported to us externally by somebody using a custom config.
 
-> Can it be done just as part of probe for Polaris?
->
->>   	if (amdgpu_virtual_display ||
->>   	    amdgpu_device_asic_has_dc_support(flags & AMD_ASIC_MASK))
->>   		supports_atomic = true;
->> --
->> 2.25.1
+> > I can bodge this as below (untested), but it's pretty grotty.
+> 
+> I wanted to keep the detection code even if the feature is disabled so the sysfs reporting
+> is always correct.
+
+Makes sense. Another option is to check for ARM64_HARDEN_BRANCH_PREDICTOR in
+spectre_bhb_enable_mitigation(), but then I think the KVM code would need
+to query the mitigation state rather than just the cap.
+
+> > Please can you take a look?
+> 
+> Ugh, arm64_get_bp_hardening_data() returns NULL with that Kconfig setup.
+> 
+> 
+> For v5.4, this fixes it for me:
+> --------------------%<--------------------
+> diff --git a/arch/arm64/include/asm/kvm_mmu.h b/arch/arm64/include/asm/kvm_mmu.h
+> index 78d110667c0c..ffe0aad96b17 100644
+> --- a/arch/arm64/include/asm/kvm_mmu.h
+> +++ b/arch/arm64/include/asm/kvm_mmu.h
+> @@ -479,7 +479,8 @@ static inline void *kvm_get_hyp_vector(void)
+>         int slot = -1;
+> 
+>         if ((cpus_have_const_cap(ARM64_HARDEN_BRANCH_PREDICTOR) ||
+> -            cpus_have_const_cap(ARM64_SPECTRE_BHB)) && data->template_start) {
+> +            cpus_have_const_cap(ARM64_SPECTRE_BHB)) &&
+> +           data && data->template_start) {
+>                 vect = kern_hyp_va(kvm_ksym_ref(__bp_harden_hyp_vecs_start));
+>                 slot = data->hyp_vectors_slot;
+>         }
+
+That'll work, but will sysfs report that BHB is mitigated even if
+!ARM64_HARDEN_BRANCH_PREDICTOR?
+
+> --------------------%<--------------------
+> 
+> I'll check the other versions and post patches to the stable list. Earlier stable
+> backports grew a dependency between these features as it wasn't possible to unpick the
+> dependencies.
+
+Cheers. I know 4.19 is busted too, but I didn't check 4.14.
+
+Will

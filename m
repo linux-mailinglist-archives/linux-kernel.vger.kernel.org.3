@@ -2,86 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ECDC4F9ACA
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 18:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49D584F9AC7
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 18:36:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233117AbiDHQil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 12:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37054 "EHLO
+        id S232996AbiDHQih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 12:38:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232671AbiDHQic (ORCPT
+        with ESMTP id S232893AbiDHQid (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 12:38:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DBF1ED917;
-        Fri,  8 Apr 2022 09:36:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 12E1B620D1;
-        Fri,  8 Apr 2022 16:36:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B7FEC385A1;
-        Fri,  8 Apr 2022 16:36:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649435786;
-        bh=TkwBDUzJ9YyBhxYoCFRlqcRWI7UV6YLdvwfBWpDoxkM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qw7sf9W6lt3RpDJwysfpT+r6eWzmBjwOklM08kfvAxsH09zK9Z7N81LfuSqO+ZpW0
-         bGff2jTH0wpqc4JIhk6m+W9Mx9dMriwrD2ZOh0okm75cNEy0C3Ko6G9JHkE5ynTPPa
-         G6ZG/hFe/DwTMGEV++XWjEeQ+PwnEueReLLet6B/1x6ncqWyyjxWCQ6S9gF5wUFXC3
-         BIHu0WSdmPsTuQtwIl5e8wGZfH/ss1IjXmMOHF6YPnQRhBEhJdzElF3LRxPL3mCTtt
-         T3iTE/B+n6KkCzP9Hsil1j2iClbeu/gzW5GwClPeqtIQL8lWkxLFghr/LafkrN55L+
-         yWG7NIGiQu5Uw==
-Received: by mail-yb1-f180.google.com with SMTP id d138so16016866ybc.13;
-        Fri, 08 Apr 2022 09:36:26 -0700 (PDT)
-X-Gm-Message-State: AOAM531RDa7P4bN4bilrXJvBuBi0GjPqP7cLkZCpWp3gvl/NQIFlNiW6
-        a7XgosQOD9rH+y78tbVf859yTrny6X2R57ixIHA=
-X-Google-Smtp-Source: ABdhPJyQCzENX7aSD7Xm1y3IHarGAd00OfvNz3MtCITUYG2YdmOP0Yp14ZXNlGZXyEFfqNQOqZ916X9Txnh0PrLZPX4=
-X-Received: by 2002:a25:d40e:0:b0:641:1842:ed4b with SMTP id
- m14-20020a25d40e000000b006411842ed4bmr1124711ybf.257.1649435785548; Fri, 08
- Apr 2022 09:36:25 -0700 (PDT)
+        Fri, 8 Apr 2022 12:38:33 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145F4EDF0A
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 09:36:28 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id a16-20020a17090a6d9000b001c7d6c1bb13so10185733pjk.4
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 09:36:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pfTINF2/xfnGZVEw3z7BP1PK6XdQNXLNLCDBaw1lD30=;
+        b=k3QEquPd6TbgYblR0v+H84O27eBKCRbzHIFxGdsYYB40L1E1Hg8j/KLx93Xi7dKNj/
+         wSrZGo7VSZ27nRZuzyDGEFtUNlcz8DME06ys8Pf1kpzaYQJ4Yv/9J7YOJ2xt9yXAmUXJ
+         XDgu5LFZ+RYji5fR2baD2MzYNqx3kQpm9QDaNfg0B1qQ1XuB7o3E1RlAJ96H+hBmftyH
+         r4xacVo/0CRgDYxd4qWVcXs0kY5uTQhRzpirhWzT7XkVLveECKs4GK9GE/IfWKnL0g/o
+         YmHn4NWd8SeJ2fpGKVQMT+3J7e9eQ80vgoql8JPSY7wVl/0ur/7XelAmQ3kL1ISVvkt3
+         d8Cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pfTINF2/xfnGZVEw3z7BP1PK6XdQNXLNLCDBaw1lD30=;
+        b=BnHawJpwbcukBr8OEQMKjXadxdzFj21+Leoxe4LjIpPL36UiJ21AtvVIugRDc47yJL
+         Ucozcb4C2kyaA+yOVBTmmWij7r+uOEMJ380jpYWXCWvg+l8SxcrFgdHPke6kjmUFIr9t
+         /EEaaziIpms1KQtVfW/xSgZhEbaeYEFVXxVkrZLx0WCkHXHQzOn4VRdDJrOi8S4WeYRM
+         b6IomMYRCpTFjs7wbMSCKtrtu75aaUHh46AuR0eTbTPUcaWRvD6cbOuTFxG19/JuspJn
+         phdPusfzuJyzUFSKBJVXWZPe1vqOd+l41GGjVV45tyeCvafu/Z5uxRHSRS0I2U4U6xD/
+         lX4Q==
+X-Gm-Message-State: AOAM532ezHBGtUxc6fwZx8AxajSu6d903LeO07IpGkmbf0GnZwF0c4P3
+        uRFnkM6CWZ4Hgn7CX3fDZVAiqg==
+X-Google-Smtp-Source: ABdhPJy2KFW8FNw7hgTBTNpq63UwbSqcFK5XldeiM0tVPoz8diTDX0olaI5+v9g/NsDXbO+BJHk2vA==
+X-Received: by 2002:a17:902:e546:b0:157:832:2c0a with SMTP id n6-20020a170902e54600b0015708322c0amr8979222plf.37.1649435788330;
+        Fri, 08 Apr 2022 09:36:28 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id o32-20020a635d60000000b0039cd48c7f6asm4585009pgm.32.2022.04.08.09.36.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 09:36:27 -0700 (PDT)
+Date:   Fri, 8 Apr 2022 16:36:24 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     isaku.yamahata@intel.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>
+Subject: Re: [RFC PATCH v5 076/104] KVM: x86: Add option to force LAPIC
+ expiration wait
+Message-ID: <YlBkiOmTGk8VlWFh@google.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <52b0451a4ffba54455acf710b443715ac16effd4.1646422845.git.isaku.yamahata@intel.com>
 MIME-Version: 1.0
-References: <20220408084715.26097-1-xiam0nd.tong@gmail.com>
-In-Reply-To: <20220408084715.26097-1-xiam0nd.tong@gmail.com>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 8 Apr 2022 09:36:14 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4dTNShcoHGL1_t_=6f-+P3CSLTexSy+Mv2+HZSk8skOA@mail.gmail.com>
-Message-ID: <CAPhsuW4dTNShcoHGL1_t_=6f-+P3CSLTexSy+Mv2+HZSk8skOA@mail.gmail.com>
-Subject: Re: [PATCH v3] md: fix an incorrect NULL check in md_reload_sb
-To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Cc:     rgoldwyn@suse.com, Guoqing Jiang <guoqing.jiang@linux.dev>,
-        linux-raid <linux-raid@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <52b0451a4ffba54455acf710b443715ac16effd4.1646422845.git.isaku.yamahata@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 8, 2022 at 1:47 AM Xiaomeng Tong <xiam0nd.tong@gmail.com> wrote:
->
-> The bug is here:
->         if (!rdev || rdev->desc_nr != nr) {
->
-> The list iterator value 'rdev' will *always* be set and non-NULL
-> by rdev_for_each_rcu(), so it is incorrect to assume that the
-> iterator value will be NULL if the list is empty or no element
-> found (In fact, it will be a bogus pointer to an invalid struct
-> object containing the HEAD). Otherwise it will bypass the check
-> and lead to invalid memory access passing the check.
->
-> To fix the bug, use a new variable 'iter' as the list iterator,
-> while using the original variable 'pdev' as a dedicated pointer to
-> point to the found element.
->
-> Cc: stable@vger.kernel.org
-> Fixes: 70bcecdb1534 ("md-cluster: Improve md_reload_sb to be less error prone")
-> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+On Fri, Mar 04, 2022, isaku.yamahata@intel.com wrote:
+> From: Sean Christopherson <sean.j.christopherson@intel.com>
+> 
+> Add an option to skip the IRR check-in kvm_wait_lapic_expire().  This
+> will be used by TDX to wait if there is an outstanding notification for
+> a TD, i.e. a virtual interrupt is being triggered via posted interrupt
+> processing.  KVM TDX doesn't emulate PI processing, i.e. there will
+> never be a bit set in IRR/ISR, so the default behavior for APICv of
+> querying the IRR doesn't work as intended.
+> 
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> ---
+>  arch/x86/kvm/lapic.c   | 4 ++--
+>  arch/x86/kvm/lapic.h   | 2 +-
+>  arch/x86/kvm/svm/svm.c | 2 +-
+>  arch/x86/kvm/vmx/vmx.c | 2 +-
+>  4 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> index 9322e6340a74..d49f029ef0e3 100644
+> --- a/arch/x86/kvm/lapic.c
+> +++ b/arch/x86/kvm/lapic.c
+> @@ -1620,12 +1620,12 @@ static void __kvm_wait_lapic_expire(struct kvm_vcpu *vcpu)
+>  		__wait_lapic_expire(vcpu, tsc_deadline - guest_tsc);
+>  }
+>  
+> -void kvm_wait_lapic_expire(struct kvm_vcpu *vcpu)
+> +void kvm_wait_lapic_expire(struct kvm_vcpu *vcpu, bool force_wait)
+>  {
+>  	if (lapic_in_kernel(vcpu) &&
+>  	    vcpu->arch.apic->lapic_timer.expired_tscdeadline &&
+>  	    vcpu->arch.apic->lapic_timer.timer_advance_ns &&
+> -	    lapic_timer_int_injected(vcpu))
+> +	    (force_wait || lapic_timer_int_injected(vcpu)))
+>  		__kvm_wait_lapic_expire(vcpu);
 
-Applied to md-next. Thanks!
+If the guest_apic_protected idea works, rather than require TDX to tell the local
+APIC that it should wait, the common code can instead assume a timer IRQ is pending
+if the IRR holds garbage.
+
+Again, compile tested only...
+
+From: Sean Christopherson <seanjc@google.com>
+Date: Fri, 8 Apr 2022 09:24:39 -0700
+Subject: [PATCH] KVM: x86: Assume timer IRQ was injected if APIC state is
+ proteced
+
+If APIC state is protected, i.e. the vCPU is a TDX guest, assume a timer
+IRQ was injected when deciding whether or not to busy wait in the "timer
+advanced" path.  The "real" vIRR is not readable/writable, so trying to
+query for a pending timer IRQ will return garbage.
+
+Note, TDX can scour the PIR if it wants to be more precise and skip the
+"wait" call entirely.
+
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/lapic.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index 50a483abc0fe..e5555dce8db8 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -1531,8 +1531,17 @@ static void apic_update_lvtt(struct kvm_lapic *apic)
+ static bool lapic_timer_int_injected(struct kvm_vcpu *vcpu)
+ {
+ 	struct kvm_lapic *apic = vcpu->arch.apic;
+-	u32 reg = kvm_lapic_get_reg(apic, APIC_LVTT);
++	u32 reg;
+
++	/*
++	 * Assume a timer IRQ was "injected" if the APIC is protected.  KVM's
++	 * copy of the vIRR is bogus, it's the responsibility of the caller to
++	 * precisely check whether or not a timer IRQ is pending.
++	 */
++	if (apic->guest_apic_protected)
++		return true;
++
++	reg  = kvm_lapic_get_reg(apic, APIC_LVTT);
+ 	if (kvm_apic_hw_enabled(apic)) {
+ 		int vec = reg & APIC_VECTOR_MASK;
+ 		void *bitmap = apic->regs + APIC_ISR;
+
+base-commit: 33f2439cd63c84fcbc8b4cdd4eb731e83deead90
+--

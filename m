@@ -2,177 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC2144F9695
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 15:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FF744F969B
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 15:26:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236236AbiDHNXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 09:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
+        id S236240AbiDHN2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 09:28:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235323AbiDHNX3 (ORCPT
+        with ESMTP id S230135AbiDHN2k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 09:23:29 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8542625;
-        Fri,  8 Apr 2022 06:21:25 -0700 (PDT)
+        Fri, 8 Apr 2022 09:28:40 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE93713B
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 06:26:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649424085; x=1680960085;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=yJ+a09qZfU8xn/sBjF/pizQ4GwvK+1hMB8dFu0xFHhY=;
-  b=dks3rhWdqhN/8km+lLvg+eDM2BEZZbK2H3s8q69OoCP/q4UV0f+eQPOZ
-   Km6RYRfbgCVECMao6ld7j5xW8JgV4XnWNJBux8jvNV5eadub/IbKKbt8S
-   jJmKbZIY3yhs28LczHnujpMIyJA3QXJi4zDBJotXcmRx8rJGukYRZ0tkJ
-   +VIYmbrYNj7wPbCWYDGQS1q9/x3rOt2iCVpJv8Zp0y9htysN22sieR6IK
-   ndCd5euthEGR8dMpHCxOHuk/dLwEtT8ltxzWspjIunKla607T2WQWVjYn
-   yWTLuZw1WdZ6CVvrfe8x+D/Vcr17yN+afyO3kAAmd028abI3x/H97Hd6R
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="261582622"
+  t=1649424388; x=1680960388;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=a6JrpX5dESDXVdafOm6RvFXszoz4IdJc1N9aj6Tn5J0=;
+  b=dFQjbthmqDs7xtoo20jgsqhCKuho3BfaAqkFXWAPgTZE+Kg14hSPFo60
+   K3W+EaIK7DRTXBTVVsVecH+5pWIjDy5rXM0ozG8ReGwhtApMlt7JTN7ve
+   Cp7oEQnS1Ni1rw/Nrhfcp7Oio1JLjmqwjqLZ8VPb51sWuTiVnJLt7AZy+
+   q49YpLtC4gHyYxLcGJzTxwi9vnxPkX8n6ZRi5kUrQBuyPdzyObIi58pBD
+   YRqVhmWQGhdZB7oH5muqkaeiiztFjkZU/GTNcyJNhLl3B8MX+4nP2WEXQ
+   7ztyHmF91e6T82YDMwJo7JxvQROroD9pw/RNZD6TDYrIhJ6O6TrUXTn04
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="260428168"
 X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="261582622"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 06:21:24 -0700
+   d="scan'208";a="260428168"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 06:26:28 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="571485977"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
-  by orsmga008.jf.intel.com with ESMTP; 08 Apr 2022 06:21:16 -0700
-Date:   Fri, 8 Apr 2022 21:21:05 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com
-Subject: Re: [PATCH v5 05/13] KVM: Extend the memslot to support fd-based
- private memory
-Message-ID: <20220408132105.GC57095@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
- <20220310140911.50924-6-chao.p.peng@linux.intel.com>
- <YkIoRDNbwJH/IDeC@google.com>
+   d="scan'208";a="524773949"
+Received: from ahunter-desktop.fi.intel.com ([10.237.72.92])
+  by orsmga002.jf.intel.com with ESMTP; 08 Apr 2022 06:26:26 -0700
+From:   Adrian Hunter <adrian.hunter@intel.com>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Olsa <jolsa@redhat.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH] perf tools: Fix perf's libperf_print callback
+Date:   Fri,  8 Apr 2022 16:26:25 +0300
+Message-Id: <20220408132625.2451452-1-adrian.hunter@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YkIoRDNbwJH/IDeC@google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 09:27:32PM +0000, Sean Christopherson wrote:
-> On Thu, Mar 10, 2022, Chao Peng wrote:
-> > Extend the memslot definition to provide fd-based private memory support
-> > by adding two new fields (private_fd/private_offset). The memslot then
-> > can maintain memory for both shared pages and private pages in a single
-> > memslot. Shared pages are provided by existing userspace_addr(hva) field
-> > and private pages are provided through the new private_fd/private_offset
-> > fields.
-> > 
-> > Since there is no 'hva' concept anymore for private memory so we cannot
-> > rely on get_user_pages() to get a pfn, instead we use the newly added
-> > memfile_notifier to complete the same job.
-> > 
-> > This new extension is indicated by a new flag KVM_MEM_PRIVATE.
-> > 
-> > Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
-> 
-> Needs a Co-developed-by: for Yu, or a From: if Yu is the sole author.
+eprintf does not expect va_list as the 4th parameter.
+Use veprintf because it does.
 
-Yes a Co-developed-by for Yu is needed, for all the patches throught the series.
+Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+---
+ tools/perf/perf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> 
-> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> > ---
-> >  Documentation/virt/kvm/api.rst | 37 +++++++++++++++++++++++++++-------
-> >  include/linux/kvm_host.h       |  7 +++++++
-> >  include/uapi/linux/kvm.h       |  8 ++++++++
-> >  3 files changed, 45 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> > index 3acbf4d263a5..f76ac598606c 100644
-> > --- a/Documentation/virt/kvm/api.rst
-> > +++ b/Documentation/virt/kvm/api.rst
-> > @@ -1307,7 +1307,7 @@ yet and must be cleared on entry.
-> >  :Capability: KVM_CAP_USER_MEMORY
-> >  :Architectures: all
-> >  :Type: vm ioctl
-> > -:Parameters: struct kvm_userspace_memory_region (in)
-> > +:Parameters: struct kvm_userspace_memory_region(_ext) (in)
-> >  :Returns: 0 on success, -1 on error
-> >  
-> >  ::
-> > @@ -1320,9 +1320,17 @@ yet and must be cleared on entry.
-> >  	__u64 userspace_addr; /* start of the userspace allocated memory */
-> >    };
-> >  
-> > +  struct kvm_userspace_memory_region_ext {
-> > +	struct kvm_userspace_memory_region region;
-> > +	__u64 private_offset;
-> > +	__u32 private_fd;
-> > +	__u32 padding[5];
-> 
-> Uber nit, I'd prefer we pad u32 for private_fd separate from padding the size of
-> the structure for future expansion.
-> 
-> Regarding future expansion, any reason not to go crazy and pad like 128+ bytes?
-> It'd be rather embarassing if the next memslot extension needs 3 u64s and we end
-> up with region_ext2 :-)
+diff --git a/tools/perf/perf.c b/tools/perf/perf.c
+index 2f6b67189b42..6aae7b6c376b 100644
+--- a/tools/perf/perf.c
++++ b/tools/perf/perf.c
+@@ -434,7 +434,7 @@ void pthread__unblock_sigwinch(void)
+ static int libperf_print(enum libperf_print_level level,
+ 			 const char *fmt, va_list ap)
+ {
+-	return eprintf(level, verbose, fmt, ap);
++	return veprintf(level, verbose, fmt, ap);
+ }
+ 
+ int main(int argc, const char **argv)
+-- 
+2.25.1
 
-OK, so maybe:
-	__u64 private_offset;
-	__u32 private_fd;
-	__u32 pad1;
-	__u32 pad2[28];
-> 
-> > +};
-> > +
-> >    /* for kvm_memory_region::flags */
-> >    #define KVM_MEM_LOG_DIRTY_PAGES	(1UL << 0)
-> >    #define KVM_MEM_READONLY	(1UL << 1)
-> > +  #define KVM_MEM_PRIVATE		(1UL << 2)
-> >  
-> >  This ioctl allows the user to create, modify or delete a guest physical
-> >  memory slot.  Bits 0-15 of "slot" specify the slot id and this value
-> 
-> ...
-> 
-> > +static inline bool kvm_slot_is_private(const struct kvm_memory_slot *slot)
-> 
-> I 100% think we should usurp the name "private" for these memslots, but as prep
-> work this series should first rename KVM_PRIVATE_MEM_SLOTS to avoid confusion.
-> Maybe KVM_INTERNAL_MEM_SLOTS?
-
-Oh, I didn't realized 'PRIVATE' is already taken.  KVM_INTERNAL_MEM_SLOTS
-sounds good.
-
-Thanks,
-Chao

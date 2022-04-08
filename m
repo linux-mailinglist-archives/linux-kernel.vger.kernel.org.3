@@ -2,84 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B52154F9642
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C85C94F964C
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 15:03:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236026AbiDHNAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 09:00:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40322 "EHLO
+        id S235549AbiDHNFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 09:05:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232841AbiDHNAE (ORCPT
+        with ESMTP id S232621AbiDHNFR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 09:00:04 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC6A10E8;
-        Fri,  8 Apr 2022 05:57:59 -0700 (PDT)
-Received: from fraeml710-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KZdXh08ymz67kSQ;
-        Fri,  8 Apr 2022 20:56:04 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml710-chm.china.huawei.com (10.206.15.59) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 8 Apr 2022 14:57:56 +0200
-Received: from [10.47.91.39] (10.47.91.39) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 8 Apr
- 2022 13:57:55 +0100
-Message-ID: <7b3885e3-dbae-ff0b-21dc-c28d635d950b@huawei.com>
-Date:   Fri, 8 Apr 2022 13:57:52 +0100
+        Fri, 8 Apr 2022 09:05:17 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774751E868C;
+        Fri,  8 Apr 2022 06:03:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649422993; x=1680958993;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=fGTAiXBITEf6vhZtefTnJfo1Ql9L0wnvDyySANGwVrA=;
+  b=VImeqnQFsQyUuCRPDCbJI0VwXqNsrM93rbqct0nITwfbOLFGAfVcYnc7
+   MWggwbdwC7x+2YyvFCrHG1ewR8ekCYytgA7PiakRUQ+bvk791xwRER23P
+   oMQCDb+wuzhGZXS1GM3SnvtBIiwb6cdp56uJ9J4sU/bntxkZYzySEClMP
+   AmCw2UsRDJjK/8JuCkeAgk0EvJ6S7n5EWUkb6Is70uKAt7+5x74YJRUa/
+   wabL4YapZrjwggaXRXmEhIOIVmrvKLTvLpX7db/HkBEg9W1nZr+AmC3cW
+   5xwmSKUtes9mwNELZycnETTuXRjo28ANyie8lgMFfySkf5Uc1LFOfm+v9
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="242181296"
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="242181296"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 06:03:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="698175603"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
+  by fmsmga001.fm.intel.com with ESMTP; 08 Apr 2022 06:03:05 -0700
+Date:   Fri, 8 Apr 2022 21:02:54 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com
+Subject: Re: [PATCH v5 04/13] mm/shmem: Restrict MFD_INACCESSIBLE memory
+ against RLIMIT_MEMLOCK
+Message-ID: <20220408130254.GB57095@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
+ <20220310140911.50924-5-chao.p.peng@linux.intel.com>
+ <Yk8L0CwKpTrv3Rg3@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 1/4] scsi: core: constify pointer to scsi_host_template
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "Avri Altman" <avri.altman@wdc.com>,
-        Doug Gilbert <dgilbert@interlog.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220408103027.311624-1-krzysztof.kozlowski@linaro.org>
- <2a88a992-641a-b3ff-fe39-7a61fff87cb6@huawei.com>
- <4c3be5b6-50ef-9e9a-6cee-9642df943342@linaro.org>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <4c3be5b6-50ef-9e9a-6cee-9642df943342@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.91.39]
-X-ClientProxiedBy: lhreml718-chm.china.huawei.com (10.201.108.69) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yk8L0CwKpTrv3Rg3@google.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/04/2022 13:32, Krzysztof Kozlowski wrote:
-> On 08/04/2022 14:14, John Garry wrote:
->> On 08/04/2022 11:30, Krzysztof Kozlowski wrote:
->>> Several pointers to 'struct scsi_host_template' do not modify it, so
->>> made them const for safety.
->>>
->> Is this standard practice? What is so special here?
-> This is standard practice and there is nothing special here. Pointers to
-> const are preferred because:
-> 1. They add safety if data is actually const. This is not yet the case,
-> but scsi_host_template allocation could be made const with some effort.
-
-To me this seems better, but I think that some drivers might modify 
-their scsi_host_template (so not possible)
-
-> 2. The more const variables, the easier function contents and its impact
-> is to understand. This is actually the biggest benefit when dealing with
-> code touching different structures.
+On Thu, Apr 07, 2022 at 04:05:36PM +0000, Sean Christopherson wrote:
+> On Thu, Mar 10, 2022, Chao Peng wrote:
+> > Since page migration / swapping is not supported yet, MFD_INACCESSIBLE
+> > memory behave like longterm pinned pages and thus should be accounted to
+> > mm->pinned_vm and be restricted by RLIMIT_MEMLOCK.
+> > 
+> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> > ---
+> >  mm/shmem.c | 25 ++++++++++++++++++++++++-
+> >  1 file changed, 24 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/mm/shmem.c b/mm/shmem.c
+> > index 7b43e274c9a2..ae46fb96494b 100644
+> > --- a/mm/shmem.c
+> > +++ b/mm/shmem.c
+> > @@ -915,14 +915,17 @@ static void notify_fallocate(struct inode *inode, pgoff_t start, pgoff_t end)
+> >  static void notify_invalidate_page(struct inode *inode, struct folio *folio,
+> >  				   pgoff_t start, pgoff_t end)
+> >  {
+> > -#ifdef CONFIG_MEMFILE_NOTIFIER
+> >  	struct shmem_inode_info *info = SHMEM_I(inode);
+> >  
+> > +#ifdef CONFIG_MEMFILE_NOTIFIER
+> >  	start = max(start, folio->index);
+> >  	end = min(end, folio->index + folio_nr_pages(folio));
+> >  
+> >  	memfile_notifier_invalidate(&info->memfile_notifiers, start, end);
+> >  #endif
+> > +
+> > +	if (info->xflags & SHM_F_INACCESSIBLE)
+> > +		atomic64_sub(end - start, &current->mm->pinned_vm);
 > 
-> In general, constifying is a common practice everywhere in the kernel.
+> As Vishal's to-be-posted selftest discovered, this is broken as current->mm may
+> be NULL.  Or it may be a completely different mm, e.g. AFAICT there's nothing that
+> prevents a different process from punching hole in the shmem backing.
+> 
+> I don't see a sane way of tracking this in the backing store unless the inode is
+> associated with a single mm when it's created, and that opens up a giant can of
+> worms, e.g. what happens with the accounting if the creating process goes away?
+
+Yes, I realized this.
+
+> 
+> I think the correct approach is to not do the locking automatically for SHM_F_INACCESSIBLE,
+> and instead require userspace to do shmctl(.., SHM_LOCK, ...) if userspace knows the
+> consumers don't support migrate/swap.  That'd require wrapping migrate_page() and then
+> wiring up notifier hooks for migrate/swap, but IMO that's a good thing to get sorted
+> out sooner than later.  KVM isn't planning on support migrate/swap for TDX or SNP,
+> but supporting at least migrate for a software-only implementation a la pKVM should
+> be relatively straightforward.  On the notifiee side, KVM can terminate the VM if it
+> gets an unexpected migrate/swap, e.g. so that TDX/SEV VMs don't die later with
+> exceptions and/or data corruption (pre-SNP SEV guests) in the guest.
+
+SHM_LOCK sounds like a good match.
 
 Thanks,
-John
+Chao
+> 
+> Hmm, shmem_writepage() already handles SHM_F_INACCESSIBLE by rejecting the swap, so
+> maybe it's just the page migration path that needs to be updated?

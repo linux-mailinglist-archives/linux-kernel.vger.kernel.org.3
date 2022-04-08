@@ -2,135 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 863C24F9C79
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 20:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4917C4F9C90
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 20:24:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238552AbiDHSYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 14:24:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39320 "EHLO
+        id S238598AbiDHSYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 14:24:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbiDHSYN (ORCPT
+        with ESMTP id S238561AbiDHSYj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 14:24:13 -0400
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87DFD36DD9E;
-        Fri,  8 Apr 2022 11:22:08 -0700 (PDT)
-Received: by mail-ot1-f42.google.com with SMTP id i11-20020a9d4a8b000000b005cda3b9754aso6635164otf.12;
-        Fri, 08 Apr 2022 11:22:08 -0700 (PDT)
+        Fri, 8 Apr 2022 14:24:39 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE923767C2
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 11:22:35 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id g21so11571160iom.13
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 11:22:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RYwXnig9f21Chdat6SF+WPZVd4H+/rQmk5ghVe03Nnc=;
+        b=h0dxrAmJeLpuLhuCdZMXB9uBDxr79JzYzqk41IZ3Cees0HePkzfq7y61ayTKYZ4Kp0
+         stXuxDVzJwTGmgi1Py3QiOg/Wo/l5wAxlJPBwlvu8vRzkDPo7CnCEcWnv+OWUJwXSxsT
+         670r3vFrfqToyuEk94z29hg+JrtVflXzwY7A0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Lf2HIDOgcxd3N/SJmrm+i3BU0QKkjgIH52w0l9HZULg=;
-        b=EqzXutcN6XQcvHV0Lyf70TjAnCMJVdNvbZpDJAk+l2d16apb+brgxkf91hYThQx1V8
-         kxr+E+pysmSEpHCMTqjpBxvdhXruwdHZXPqln9EgMoNDWpmVYRzlpmxIdaP2I3Z6N6YC
-         yUc/UaQ0fdjxK/NAebS9XLh3WjVmtf2aVtb6H3bkBI43SQ2t0EKrAbG/IO4J9EQBUsG1
-         HJ4kDQji5gg8dc4VoqvMKArAlrfaZ9qtZEK14a7WHnCXbZWE/UpQiCcE5cpHblZ+WORP
-         uulri5klj+DrPAbxSAy9YGASK37alaDRnXUQ+b8gw7gnAs4RbCVm2WaOBblPH12h/d0d
-         IYbg==
-X-Gm-Message-State: AOAM533M7hmHhZEsat/RmTqE+KKdVkjAR6fHw0iZbj/twx/GkMJMHYTV
-        tConhtg14Xx3xmakarGzb9W/obrPOQ==
-X-Google-Smtp-Source: ABdhPJy91m7vj0F/F1zyS9qB+nTfpd/raBdG+Fj65mRFlO9Vv/D+Ezuacy99dHSUu24EJa4eacDzpg==
-X-Received: by 2002:a9d:4798:0:b0:5b2:3791:beb7 with SMTP id b24-20020a9d4798000000b005b23791beb7mr7026104otf.123.1649442127768;
-        Fri, 08 Apr 2022 11:22:07 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id z3-20020a056870d68300b000e2a0a74f9fsm394717oap.37.2022.04.08.11.22.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 11:22:07 -0700 (PDT)
-Received: (nullmailer pid 3810091 invoked by uid 1000);
-        Fri, 08 Apr 2022 18:22:06 -0000
-Date:   Fri, 8 Apr 2022 13:22:06 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Chen-Yu Tsai <wens@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/5] dt-bindings: display: ssd1307fb: Deprecate fbdev
- compatible strings
-Message-ID: <YlB9TsbhoQblo1H8@robh.at.kernel.org>
-References: <20220407200205.28838-1-javierm@redhat.com>
- <20220407200205.28838-2-javierm@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RYwXnig9f21Chdat6SF+WPZVd4H+/rQmk5ghVe03Nnc=;
+        b=Yleuw+orI3PxwYePvtBUCFuylF1npzu9oMBborFaNmbMprprJ1IuZCz79MJaICqoJq
+         kwhxqDmG95SvrnPhw2sDpcgvvH1B1im6F6aaFmc7MjP2iiFSmaorQkxBiuMVfOnUN9lI
+         GXJLwEnfiEqwEpHpmVd+1UNzuKgCqh3fkcai+3ylzocXT2qULCCmARfAU2vSIu6e059u
+         jhf0T+6XhKL2B/9QvBC7rHTD+lzFRT+8f8TUGGaAQ+Ho/K5bOE/mNO2H4DdbJ9D6bfaW
+         wvxUZyAuLzsSUNPW7cbC676tyiFrweVQl89QFH0OckPQcOYpI0hnJLKIPmDRD2XuxadH
+         4K8A==
+X-Gm-Message-State: AOAM531f5ON678HkEV7dUJ+MXrjDClDgcbnZp5uavjFdi40XbNIURQuu
+        8Tc5PLt3mDzJT1ru4f4SgqfxcK7WfzpzGKaOkfFmnAkZJ7g=
+X-Google-Smtp-Source: ABdhPJyH5A0/apLQNtsrXZwFHVr4iUeSw4iaQWZCvOiGUKrDUk8rTYV3pv5fABdZD/WULtvh1va7xOrMP1IlfUl2pNw=
+X-Received: by 2002:a5d:8450:0:b0:64c:cc87:c5fc with SMTP id
+ w16-20020a5d8450000000b0064ccc87c5fcmr8769758ior.190.1649442154606; Fri, 08
+ Apr 2022 11:22:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220407200205.28838-2-javierm@redhat.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220407210734.2548973-1-joel@joelfernandes.org>
+ <20220408142232.GA4285@paulmck-ThinkPad-P17-Gen-1> <CAEXW_YQWeqfcKdAKmCn4fFGyWXjOGd=29wvi6bL3k7s2bGkDJw@mail.gmail.com>
+ <20220408155002.GF4285@paulmck-ThinkPad-P17-Gen-1> <CAEXW_YQDgSO2XkkVhN3RBBz3vwYdAtTuPz-xYYsAPnwEnbYZPA@mail.gmail.com>
+ <20220408174908.GK4285@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20220408174908.GK4285@paulmck-ThinkPad-P17-Gen-1>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Fri, 8 Apr 2022 14:22:22 -0400
+Message-ID: <CAEXW_YQ+oE3xQ0tLnBMFxRXLqKZkT5UfjF+CULxnhf9F-dEA2g@mail.gmail.com>
+Subject: Re: [PATCH RFC] rcu/nocb: Provide default all-CPUs mask for RCU_NOCB_CPU=y
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        rcu <rcu@vger.kernel.org>, Steven Rostedt <rostedt@goodmis.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 10:02:00PM +0200, Javier Martinez Canillas wrote:
-> The current compatible strings for SSD130x I2C controllers contain an -fb
-> suffix, this seems to indicate that are for a fbdev driver. But the DT is
-> supposed to describe the hardware and not Linux implementation details.
+On Fri, Apr 8, 2022 at 1:49 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+>
+> On Fri, Apr 08, 2022 at 01:20:02PM -0400, Joel Fernandes wrote:
+> > On Fri, Apr 8, 2022 at 11:50 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+> > >
+> > > On Fri, Apr 08, 2022 at 10:52:21AM -0400, Joel Fernandes wrote:
+> > > > On Fri, Apr 8, 2022 at 10:22 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+> > > > >
+> > > > > On Thu, Apr 07, 2022 at 09:07:33PM +0000, Joel Fernandes wrote:
+> > > > > > On systems with CONFIG_RCU_NOCB_CPU=y, there is no default mask provided
+> > > > > > which ends up not offloading any CPU. This patch removes yet another
+> > > > > > dependency from the bootloader having to know about RCU, about how many
+> > > > > > CPUs the system has, and about how to provide the mask. Basically, I
+> > > > > > think we should stop pretending that the user knows what they are doing :).
+> > > > > > In other words, if NO_CB_CPU is enabled, lets make use of it.
+> > > > > >
+> > > > > > My goal is to make RCU as zero-config as possible with sane defaults. If
+> > > > > > user wants to provide rcu_nocbs= or nohz_full= options, then those will
+> > > > > > take precedence and this patch will have no effect.
+> > > > > >
+> > > > > > I tested providing rcu_nocbs= option, ensuring that is preferred over this.
+> > > > >
+> > > > > Unless something has changed, this would change behavior relied upon
+> > > > > the enterprise distros.  Last I checked, they want to supply a single
+> > > > > binary, as evidenced by the recent CONFIG_PREEMPT_DYNAMIC Kconfig option,
+> > > > > and they also want the default to be non-offloaded.  That is, given a
+> > > > > kernel built with CONFIG_RCU_NOCB_CPU=y and without either a nohz_full
+> > > > > or a nocbs_cpu boot parameter, all of the CPUs must be non-offloaded.
+> > > >
+> > > > Just curious, do you have information (like data, experiment results)
+> > > > on why they want default non-offloaded? Or maybe they haven't tried
+> > > > the recent work done in NOCB code?
+> > >
+> > > I most definitely do.  When I first introduced callback offloading, I
+> > > made it completely replace softirq callback invocation.  There were some
+> > > important throughput-oriented workloads that got hit with significant
+> > > performance degradation due to this change.  Enterprise Java workloads
+> > > were the worst hit.
+> > >
+> > > Android does not run these workloads, and I am not aware of ChromeOS
+> > > running them, either.
+> >
+> > Thanks a lot for mentioning this, I was not aware and will make note
+> > of it :-). I wonder if the scheduler had something to do with the
+> > degradation.
+>
+> It is all too easy to blame the scheduler and all too easy to forget
+> that the scheduler has a hard job.  ;-)
+>
+> And in this case, the scheduler was just doing what it was told.
 
-True, but compatible is just an identifier. There's no reason to 
-deprecate unless the binding as a whole needs to be redone.
+No was just saying the scheduler has to do more work with NOCB because
+of the extra threads, so that likely degrades the workloads (context
+switch, wake ups, etc).
 
-I imagine you also want 2 compatibles for 2 drivers. That's saying you 
-should change your firmware to switch drivers. The fact that we have 2 
-drivers for the same h/w is a kernel problem. Don't bring DT into it.
+> > > > > And is it really all -that- hard to specify an additional boot parameter
+> > > > > across ChromeOS devices?  Android seems to manage it.  ;-)
+> > > >
+> > > > That's not the hard part I think. The hard part is to make sure a
+> > > > future Linux user who is not an RCU expert does not forget to turn it
+> > > > on. ChromeOS is not the only OS that I've seen someone forget to do it
+> > > > ;-D. AFAIR, there were Android devices too in the past where I saw
+> > > > this forgotten. I don't think we should rely on the users doing the
+> > > > right thing (as much as possible).
+> > > >
+> > > > The single kernel binary point makes sense but in this case, I think
+> > > > the bigger question that I'd have is what is the default behavior and
+> > > > what do *most* users of RCU want. So we can keep sane defaults for the
+> > > > majority and reduce human errors related to configuration.
+> > >
+> > > If both the ChromeOS and Android guys need it, I could reinstate the
+> > > old RCU_NOCB_CPU_ALL Kconfig option.  This was removed due to complaints
+> > > about RCU Kconfig complexity, but I believe that Reviewed-by from ChromeOS
+> > > and Android movers and shakers would overcome lingering objections.
+> > >
+> > > Would that help?
+> >
+> > Yes, I think I would love for such a change. I am planning to add a
+> > test to ChromeOS to check whether config options were correctly set
+> > up. So I can test for both the RCU_NOCB_CPU options.
+>
+> Very good!
+>
+> Do you love such a change enough to create the patch and to collect
+> convincing Reviewed-by tags?
 
-> Let's deprecate those compatible strings and add a new enum that contains
-> compatible strings that don't have a -fb suffix. These will be matched by
-> the ssd130x-i2c DRM driver.
-> 
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> ---
-> 
->  .../bindings/display/solomon,ssd1307fb.yaml   | 36 ++++++++++++-------
->  1 file changed, 24 insertions(+), 12 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml b/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
-> index ade61d502edd..46207f2c12b8 100644
-> --- a/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
-> +++ b/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
-> @@ -12,12 +12,24 @@ maintainers:
->  
->  properties:
->    compatible:
-> -    enum:
-> -      - sinowealth,sh1106-i2c
-> -      - solomon,ssd1305fb-i2c
-> -      - solomon,ssd1306fb-i2c
-> -      - solomon,ssd1307fb-i2c
-> -      - solomon,ssd1309fb-i2c
-> +    oneOf:
-> +      # Deprecated compatible strings
-> +      - items:
-> +          - enum:
-> +              - solomon,ssd1305fb-i2c
-> +              - solomon,ssd1306fb-i2c
-> +              - solomon,ssd1307fb-i2c
-> +              - solomon,ssd1309fb-i2c
-> +        deprecated: true
-> +
-> +      # SSD130x I2C controllers
-> +      - items:
-> +          - enum:
-> +              - sinowealth,sh1106-i2c
-> +              - solomon,ssd1305-i2c
-> +              - solomon,ssd1306-i2c
-> +              - solomon,ssd1307-i2c
-> +              - solomon,ssd1309-i2c
+Yes sure, just so I understand - basically I have to make the code in
+my patch run when RCU_NOCB_CPU_ALL option is passed (and keep the
+option default disabled), but otherwise default to the current
+behavior, right?
 
-There's also no reason to put the bus interface into the compatible as 
-the same compatible will work on different buses. But since you want to 
-add SPI, just using the 'i2c' one will confuse people. For that reason 
-you could add 'solomon,ssd1305', etc. for both SPI support and I2C DRM. 
-(You should also support the 'fb-i2c' variant in DRM IMO, but doubtful 
-that I'll review that.)
+Thanks,
 
-Rob
+- Joel

@@ -2,79 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F5D4F9785
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:01:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48F844F978E
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236753AbiDHODQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 10:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50592 "EHLO
+        id S236697AbiDHOES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 10:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236712AbiDHOCi (ORCPT
+        with ESMTP id S236424AbiDHOEN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 10:02:38 -0400
-Received: from theia.8bytes.org (8bytes.org [IPv6:2a01:238:4383:600:38bc:a715:4b6d:a889])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311C13A5C5;
-        Fri,  8 Apr 2022 07:00:35 -0700 (PDT)
-Received: by theia.8bytes.org (Postfix, from userid 1000)
-        id 3256C1E9; Fri,  8 Apr 2022 16:00:33 +0200 (CEST)
-Date:   Fri, 8 Apr 2022 16:00:31 +0200
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        iommu@lists.linux-foundation.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 00/11] Fix BUG_ON in vfio_iommu_group_notifier()
-Message-ID: <YlA//+zdOqgaFkUc@8bytes.org>
-References: <20220308054421.847385-1-baolu.lu@linux.intel.com>
- <20220315002125.GU11336@nvidia.com>
- <Yk/q1BGN8pC5HVZp@8bytes.org>
- <1033ebe4-fa92-c9bd-a04b-8b28b21e25ea@linux.intel.com>
- <20220408122352.GW2120790@nvidia.com>
+        Fri, 8 Apr 2022 10:04:13 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95FC334BAE;
+        Fri,  8 Apr 2022 07:02:07 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 33FF9215FD;
+        Fri,  8 Apr 2022 14:02:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1649426526;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NntcuTEBNLs2a5PoQyJ5XTqfafqQKLdTMOol7WzzX0s=;
+        b=IOyS+CY4mKgPgZ8USr3nF2sek6nsoLhx0cr5TMVaaAs4Ag4bKj8Vi2sptagRUXESVfNODS
+        Ln94gENJtPAW0xwa1YTvXkhHuvtN+PZVtUN04bIOD5Gb1FPiPxXvY9276x42sDgCevWU0p
+        F0xk4+Bz9XncCGMfKPV4nKJOLviw8CE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1649426526;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NntcuTEBNLs2a5PoQyJ5XTqfafqQKLdTMOol7WzzX0s=;
+        b=YyECzpdo2dp1JJsJWW+9IUjgVDYVcTRsNKLbGqCSM7UYLC06N2gtmpywFUAHkgPWFPstwI
+        YstMAkxeXK3nzLCA==
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id C18F6A3B87;
+        Fri,  8 Apr 2022 14:02:05 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id 03176DA80E; Fri,  8 Apr 2022 15:58:02 +0200 (CEST)
+Date:   Fri, 8 Apr 2022 15:58:02 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     cgel.zte@gmail.com
+Cc:     dsterba@suse.com, tytso@mit.edu, clm@fb.com, josef@toxicpanda.com,
+        sfrench@samba.org, matthew.garrett@nebula.com, jk@ozlabs.org,
+        ardb@kernel.org, adilger.kernel@dilger.ca, rpeterso@redhat.com,
+        agruenba@redhat.com, viro@zeniv.linux.org.uk,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-efi@vger.kernel.org, linux-ext4@vger.kernel.org,
+        cluster-devel@redhat.com, linux-fsdevel@vger.kernel.org,
+        Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH v2] fs: remove unnecessary conditional
+Message-ID: <20220408135802.GQ15609@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz, cgel.zte@gmail.com, dsterba@suse.com,
+        tytso@mit.edu, clm@fb.com, josef@toxicpanda.com, sfrench@samba.org,
+        matthew.garrett@nebula.com, jk@ozlabs.org, ardb@kernel.org,
+        adilger.kernel@dilger.ca, rpeterso@redhat.com, agruenba@redhat.com,
+        viro@zeniv.linux.org.uk, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org, linux-efi@vger.kernel.org,
+        linux-ext4@vger.kernel.org, cluster-devel@redhat.com,
+        linux-fsdevel@vger.kernel.org, Lv Ruyi <lv.ruyi@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+References: <20220408021136.2493147-1-lv.ruyi@zte.com.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220408122352.GW2120790@nvidia.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220408021136.2493147-1-lv.ruyi@zte.com.cn>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 09:23:52AM -0300, Jason Gunthorpe wrote:
-> Why rc3? It has been 4 weeks now with no futher comments.
+On Fri, Apr 08, 2022 at 02:11:36AM +0000, cgel.zte@gmail.com wrote:
+> From: Lv Ruyi <lv.ruyi@zte.com.cn>
+> 
+> iput() has already handled null and non-null parameter, so it is no
+> need to use if().
+> 
+> This patch remove all unnecessary conditional in fs subsystem.
+> No functional changes.
 
-Because I start applying new code to branches based on -rc3. In the past
-I used different -rc's for the topic branches (usually the latest -rc
-available when I started applying to that branch), but that caused silly
-merge conflicts from time to time. So I am now basing every topic branch
-on the same -rc, which is usually -rc3. Rationale is that by -rc3 time
-the kernel should have reasonably stabilized after the merge window.
-
-Regards,
-
-	Joerg
+You'd need to split i by subsystem under fs/, each subdirectory has a
+differnt maintainer. I can take only the btrfs part.

@@ -2,32 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB5F74F9544
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:05:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F8F84F953D
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232295AbiDHMFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 08:05:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39728 "EHLO
+        id S235462AbiDHMFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 08:05:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235375AbiDHMFC (ORCPT
+        with ESMTP id S235383AbiDHMFD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 08:05:02 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF84238D86;
-        Fri,  8 Apr 2022 05:02:56 -0700 (PDT)
-X-UUID: 4ff0a7bdc4494983beaad7a56c56ee45-20220408
-X-UUID: 4ff0a7bdc4494983beaad7a56c56ee45-20220408
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        Fri, 8 Apr 2022 08:05:03 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F8C9AE47;
+        Fri,  8 Apr 2022 05:02:57 -0700 (PDT)
+X-UUID: 6d92a941786547079917dca204777f8e-20220408
+X-UUID: 6d92a941786547079917dca204777f8e-20220408
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
         (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 53419244; Fri, 08 Apr 2022 20:02:51 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 8 Apr 2022 20:02:49 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 449730846; Fri, 08 Apr 2022 20:02:52 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Fri, 8 Apr 2022 20:02:51 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 8 Apr
+ 2022 20:02:50 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 8 Apr 2022 20:02:47 +0800
+ Transport; Fri, 8 Apr 2022 20:02:49 +0800
 From:   Yunfei Dong <yunfei.dong@mediatek.com>
 To:     Yunfei Dong <yunfei.dong@mediatek.com>,
         Alexandre Courbot <acourbot@chromium.org>,
@@ -55,9 +58,9 @@ CC:     George Sun <george.sun@mediatek.com>,
         <srv_heupstream@mediatek.com>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v9, 04/17] media: mediatek: vcodec: Read max resolution from dec_capability
-Date:   Fri, 8 Apr 2022 20:02:27 +0800
-Message-ID: <20220408120240.29571-5-yunfei.dong@mediatek.com>
+Subject: [PATCH v9, 05/17] media: mediatek: vcodec: set each plane bytesused in buf prepare
+Date:   Fri, 8 Apr 2022 20:02:28 +0800
+Message-ID: <20220408120240.29571-6-yunfei.dong@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220408120240.29571-1-yunfei.dong@mediatek.com>
 References: <20220408120240.29571-1-yunfei.dong@mediatek.com>
@@ -74,162 +77,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Supported max resolution for different platforms are not the same: 2K
-or 4K, getting it according to dec_capability.
+call vb2_set_plane_payload to set each plane bytesused in buf prepare,
+need not to set independently for stateless and statefull architectures.
 
 Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-Reviewed-by: Tzung-Bi Shih<tzungbi@google.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- .../platform/mediatek/vcodec/mtk_vcodec_dec.c | 44 ++++++++++---------
- .../platform/mediatek/vcodec/mtk_vcodec_drv.h |  4 ++
- 2 files changed, 28 insertions(+), 20 deletions(-)
+ .../platform/mediatek/vcodec/mtk_vcodec_dec.c |  2 ++
+ .../mediatek/vcodec/mtk_vcodec_dec_stateful.c |  5 -----
+ .../vcodec/mtk_vcodec_dec_stateless.c         | 19 -------------------
+ 3 files changed, 2 insertions(+), 24 deletions(-)
 
 diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-index 130ecef2e766..e42d5c17d90e 100644
+index e42d5c17d90e..c1c3f439d7d1 100644
 --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
 +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
-@@ -152,13 +152,15 @@ void mtk_vcodec_dec_set_default_params(struct mtk_vcodec_ctx *ctx)
- 	q_data->coded_height = DFT_CFG_HEIGHT;
- 	q_data->fmt = ctx->dev->vdec_pdata->default_cap_fmt;
- 	q_data->field = V4L2_FIELD_NONE;
-+	ctx->max_width = MTK_VDEC_MAX_W;
-+	ctx->max_height = MTK_VDEC_MAX_H;
- 
- 	v4l_bound_align_image(&q_data->coded_width,
- 				MTK_VDEC_MIN_W,
--				MTK_VDEC_MAX_W, 4,
-+				ctx->max_width, 4,
- 				&q_data->coded_height,
- 				MTK_VDEC_MIN_H,
--				MTK_VDEC_MAX_H, 5, 6);
-+				ctx->max_height, 5, 6);
- 
- 	q_data->sizeimage[0] = q_data->coded_width * q_data->coded_height;
- 	q_data->bytesperline[0] = q_data->coded_width;
-@@ -217,7 +219,7 @@ static int vidioc_vdec_subscribe_evt(struct v4l2_fh *fh,
+@@ -741,6 +741,8 @@ int vb2ops_vdec_buf_prepare(struct vb2_buffer *vb)
+ 				i, vb2_plane_size(vb, i),
+ 				q_data->sizeimage[i]);
+ 		}
++		if (!V4L2_TYPE_IS_OUTPUT(vb->type))
++			vb2_set_plane_payload(vb, i, q_data->sizeimage[i]);
  	}
- }
  
--static int vidioc_try_fmt(struct v4l2_format *f,
-+static int vidioc_try_fmt(struct mtk_vcodec_ctx *ctx, struct v4l2_format *f,
- 			  const struct mtk_video_fmt *fmt)
+ 	return 0;
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateful.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateful.c
+index 7966c132be8f..e7fd39180123 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateful.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateful.c
+@@ -90,11 +90,6 @@ static struct vb2_buffer *get_display_buffer(struct mtk_vcodec_ctx *ctx)
+ 	vb = &dstbuf->m2m_buf.vb;
+ 	mutex_lock(&ctx->lock);
+ 	if (dstbuf->used) {
+-		vb2_set_plane_payload(&vb->vb2_buf, 0, ctx->picinfo.fb_sz[0]);
+-		if (ctx->q_data[MTK_Q_DATA_DST].fmt->num_planes == 2)
+-			vb2_set_plane_payload(&vb->vb2_buf, 1,
+-					      ctx->picinfo.fb_sz[1]);
+-
+ 		mtk_v4l2_debug(2, "[%d]status=%x queue id=%d to done_list %d",
+ 			       ctx->id, disp_frame_buffer->status,
+ 			       vb->vb2_buf.index, dstbuf->queued_in_vb2);
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
+index 5aebf88f997b..4df7b158ec5e 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_stateless.c
+@@ -108,23 +108,6 @@ static const struct mtk_codec_framesizes mtk_vdec_framesizes[] = {
+ 
+ #define NUM_SUPPORTED_FRAMESIZE ARRAY_SIZE(mtk_vdec_framesizes)
+ 
+-static void mtk_vdec_stateless_set_dst_payload(struct mtk_vcodec_ctx *ctx,
+-					       struct vdec_fb *fb)
+-{
+-	struct mtk_video_dec_buf *vdec_frame_buf =
+-		container_of(fb, struct mtk_video_dec_buf, frame_buffer);
+-	struct vb2_v4l2_buffer *vb = &vdec_frame_buf->m2m_buf.vb;
+-	unsigned int cap_y_size = ctx->q_data[MTK_Q_DATA_DST].sizeimage[0];
+-
+-	vb2_set_plane_payload(&vb->vb2_buf, 0, cap_y_size);
+-	if (ctx->q_data[MTK_Q_DATA_DST].fmt->num_planes == 2) {
+-		unsigned int cap_c_size =
+-			ctx->q_data[MTK_Q_DATA_DST].sizeimage[1];
+-
+-		vb2_set_plane_payload(&vb->vb2_buf, 1, cap_c_size);
+-	}
+-}
+-
+ static struct vdec_fb *vdec_get_cap_buffer(struct mtk_vcodec_ctx *ctx,
+ 					   struct vb2_v4l2_buffer *vb2_v4l2)
  {
- 	struct v4l2_pix_format_mplane *pix_fmt_mp = &f->fmt.pix_mp;
-@@ -225,9 +227,9 @@ static int vidioc_try_fmt(struct v4l2_format *f,
- 	pix_fmt_mp->field = V4L2_FIELD_NONE;
- 
- 	pix_fmt_mp->width =
--		clamp(pix_fmt_mp->width, MTK_VDEC_MIN_W, MTK_VDEC_MAX_W);
-+		clamp(pix_fmt_mp->width, MTK_VDEC_MIN_W, ctx->max_width);
- 	pix_fmt_mp->height =
--		clamp(pix_fmt_mp->height, MTK_VDEC_MIN_H, MTK_VDEC_MAX_H);
-+		clamp(pix_fmt_mp->height, MTK_VDEC_MIN_H, ctx->max_height);
- 
- 	if (f->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) {
- 		pix_fmt_mp->num_planes = 1;
-@@ -245,16 +247,16 @@ static int vidioc_try_fmt(struct v4l2_format *f,
- 		tmp_h = pix_fmt_mp->height;
- 		v4l_bound_align_image(&pix_fmt_mp->width,
- 					MTK_VDEC_MIN_W,
--					MTK_VDEC_MAX_W, 6,
-+					ctx->max_width, 6,
- 					&pix_fmt_mp->height,
- 					MTK_VDEC_MIN_H,
--					MTK_VDEC_MAX_H, 6, 9);
-+					ctx->max_height, 6, 9);
- 
- 		if (pix_fmt_mp->width < tmp_w &&
--			(pix_fmt_mp->width + 64) <= MTK_VDEC_MAX_W)
-+			(pix_fmt_mp->width + 64) <= ctx->max_width)
- 			pix_fmt_mp->width += 64;
- 		if (pix_fmt_mp->height < tmp_h &&
--			(pix_fmt_mp->height + 64) <= MTK_VDEC_MAX_H)
-+			(pix_fmt_mp->height + 64) <= ctx->max_height)
- 			pix_fmt_mp->height += 64;
- 
- 		mtk_v4l2_debug(0,
-@@ -294,7 +296,7 @@ static int vidioc_try_fmt_vid_cap_mplane(struct file *file, void *priv,
- 		fmt = mtk_vdec_find_format(f, dec_pdata);
+@@ -220,8 +203,6 @@ static void mtk_vdec_worker(struct work_struct *work)
+ 		}
  	}
  
--	return vidioc_try_fmt(f, fmt);
-+	return vidioc_try_fmt(ctx, f, fmt);
- }
- 
- static int vidioc_try_fmt_vid_out_mplane(struct file *file, void *priv,
-@@ -317,7 +319,7 @@ static int vidioc_try_fmt_vid_out_mplane(struct file *file, void *priv,
- 		return -EINVAL;
- 	}
- 
--	return vidioc_try_fmt(f, fmt);
-+	return vidioc_try_fmt(ctx, f, fmt);
- }
- 
- static int vidioc_vdec_g_selection(struct file *file, void *priv,
-@@ -444,8 +446,14 @@ static int vidioc_vdec_s_fmt(struct file *file, void *priv,
- 	if (fmt == NULL)
- 		return -EINVAL;
- 
-+	if (!(ctx->dev->dec_capability & VCODEC_CAPABILITY_4K_DISABLED)) {
-+		mtk_v4l2_debug(3, "4K is enabled");
-+		ctx->max_width = VCODEC_DEC_4K_CODED_WIDTH;
-+		ctx->max_height = VCODEC_DEC_4K_CODED_HEIGHT;
-+	}
-+
- 	q_data->fmt = fmt;
--	vidioc_try_fmt(f, q_data->fmt);
-+	vidioc_try_fmt(ctx, f, q_data->fmt);
- 	if (f->type == V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE) {
- 		q_data->sizeimage[0] = pix_mp->plane_fmt[0].sizeimage;
- 		q_data->coded_width = pix_mp->width;
-@@ -529,14 +537,9 @@ static int vidioc_enum_framesizes(struct file *file, void *priv,
- 
- 		fsize->type = V4L2_FRMSIZE_TYPE_STEPWISE;
- 		fsize->stepwise = dec_pdata->vdec_framesizes[i].stepwise;
--		if (!(ctx->dev->dec_capability &
--				VCODEC_CAPABILITY_4K_DISABLED)) {
--			mtk_v4l2_debug(3, "4K is enabled");
--			fsize->stepwise.max_width =
--					VCODEC_DEC_4K_CODED_WIDTH;
--			fsize->stepwise.max_height =
--					VCODEC_DEC_4K_CODED_HEIGHT;
--		}
-+
-+		fsize->stepwise.max_width = ctx->max_width;
-+		fsize->stepwise.max_height = ctx->max_height;
- 		mtk_v4l2_debug(1, "%x, %d %d %d %d %d %d",
- 				ctx->dev->dec_capability,
- 				fsize->stepwise.min_width,
-@@ -545,6 +548,7 @@ static int vidioc_enum_framesizes(struct file *file, void *priv,
- 				fsize->stepwise.min_height,
- 				fsize->stepwise.max_height,
- 				fsize->stepwise.step_height);
-+
- 		return 0;
- 	}
- 
-diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-index bb7b8e914d24..6d27e4d41ede 100644
---- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-+++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-@@ -284,6 +284,8 @@ struct vdec_pic_info {
-  *	  mtk_video_dec_buf.
-  * @hw_id: hardware index used to identify different hardware.
-  *
-+ * @max_width: hardware supported max width
-+ * @max_height: hardware supported max height
-  * @msg_queue: msg queue used to store lat buffer information.
-  */
- struct mtk_vcodec_ctx {
-@@ -329,6 +331,8 @@ struct mtk_vcodec_ctx {
- 	struct mutex lock;
- 	int hw_id;
- 
-+	unsigned int max_width;
-+	unsigned int max_height;
- 	struct vdec_msg_queue msg_queue;
- };
+-	mtk_vdec_stateless_set_dst_payload(ctx, dst_buf);
+-
+ 	v4l2_m2m_buf_done_and_job_finish(dev->m2m_dev_dec, ctx->m2m_ctx,
+ 					 ret ? VB2_BUF_STATE_ERROR : VB2_BUF_STATE_DONE);
  
 -- 
 2.18.0

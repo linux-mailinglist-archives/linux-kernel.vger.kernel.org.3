@@ -2,68 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 345474F8D60
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:25:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FFBA4F8DAA
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:25:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233972AbiDHDq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 23:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47600 "EHLO
+        id S233976AbiDHDuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 23:50:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiDHDqY (ORCPT
+        with ESMTP id S233965AbiDHDuo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 23:46:24 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83B4AC92E;
-        Thu,  7 Apr 2022 20:44:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649389461; x=1680925461;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IM4iBK3U8QJywOCMgFROUzizS6PUIpTFKrPyenWYVU4=;
-  b=ZCT1fU56zzoMZ/WgIkmgZ2KVEw/4dCbnC0zw6Lw53/Psr3k8rMJdin3G
-   FnbglK9YcxzAWb7Y7BaACy+c/StkMTZxCrDX3fhdcE5M+75RbieNcZXCI
-   sEKQxnOsBcYUmO8A1nmHtiVTz51CBH7uyts3yYwBpMdO8Y+4kEiKKGXjd
-   Uj1Lp7wYJAZFhI6lh7tExMuUMbkctAvxpVXafHROxXTpTL7z63QzmNtBi
-   AK5LJbtACkFx+pSOAMEHaNiUPpaXcwe4IB/C3OyylbbRIouLP5YCM1niy
-   vtGJm05B/mfYCVZJonDR0hcbNV/U72+IvEjmMw61+mIbRBm2eXsh/NrIb
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="260335403"
-X-IronPort-AV: E=Sophos;i="5.90,243,1643702400"; 
-   d="scan'208";a="260335403"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 20:44:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,243,1643702400"; 
-   d="scan'208";a="851925493"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 07 Apr 2022 20:44:17 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ncfXl-00060p-6Z;
-        Fri, 08 Apr 2022 03:44:17 +0000
-Date:   Fri, 8 Apr 2022 11:43:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        casey.schaufler@intel.com, jmorris@namei.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, casey@schaufler-ca.com,
-        linux-audit@redhat.com, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        paul@paul-moore.com, stephen.smalley.work@gmail.com,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v34 11/29] LSM: Use lsmblob in security_current_getsecid
-Message-ID: <202204081146.DPLvGqQ7-lkp@intel.com>
-References: <20220407212230.12893-12-casey@schaufler-ca.com>
+        Thu, 7 Apr 2022 23:50:44 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79789B6D1A
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 20:48:40 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id w21so11002963wra.2
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 20:48:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qw9/fVl9KGcF1N+ON2VlcYPlLRxtmlF2YnTYVIGgQX0=;
+        b=JQXl+vkUaU10zH18bl/Lgf66GCWNxu380Vrp7bMoo6KWXLAoLUedJU6jZ6rMk2evZM
+         aV+S39razgf5Oc7FqdEdqtYKEv/l9wvSvUEV6GPkmBRj4Nkqsdwt04yEwoC0UaT7mvuM
+         gwvfl6r2f86/e05U93kOybp5TcdmF/9uAHuMa2ODCwtzU5rAexyK5rlNRE2IvA/W4RBB
+         7ISbHr0slh0k/q/Pv8LvBenLkavs7NIxRsyxvAvkxnaQRX2+SJGyYeFSOHW4PSTJLsX9
+         2rRTkGxGwIrrRM+7M1HYG3HsJINVFO6b+HTuSDTgakmX3rwTZEuhalTnFncQChtWQj18
+         xW+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qw9/fVl9KGcF1N+ON2VlcYPlLRxtmlF2YnTYVIGgQX0=;
+        b=yvrdCohdpXvj/SrznwjV+zMFuQ0qRhBhoPsGoChVG7SSZgJqlM0M2tlP5pR3A6zGwF
+         iaqffXaWjIb6zkxNEDifADvQCPDvGq7pg8DMaZDjvCew8VtF5DAe3wYxoFac61fYR4p/
+         SAUailG/QIqlWlc79radhPArmt1eg21iQ68V5OA3xnzApPtFkv8KaQtk30k/R6m51rUl
+         b5QfKlrZ8Cpmbo4OjZ2omz3IVleXQNbgNFOHY/CCUqE5QIBUuotvkqYqZya/fhhA1LUO
+         eyfV7IYPolAFgJGLKrXnXSiT6VtW7j/25TchVyxcrECOKenJhYVuhA8mLkKl+Y0ox7Za
+         aIbw==
+X-Gm-Message-State: AOAM533A6O0sCKWNXkdktWwit6HNQUL9RGHHmTYV7VPJWLW6QnQ15ICj
+        3/Lk4HuiqrQo94sxXHmR9ZCFDy34dYuUtpbZXfD9/g==
+X-Google-Smtp-Source: ABdhPJw0aMo1cu17BScw1wZfBGM7eTkMKFe9m70bAk2K6FjBA15NHSvBXRpEkRyR7UUewsVcx6R7GDj84LGb1BKaVTI=
+X-Received: by 2002:adf:ed09:0:b0:206:81c:1eda with SMTP id
+ a9-20020adfed09000000b00206081c1edamr13801628wro.430.1649389718800; Thu, 07
+ Apr 2022 20:48:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220407212230.12893-12-casey@schaufler-ca.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20220407223019.2066361-1-dlatypov@google.com>
+In-Reply-To: <20220407223019.2066361-1-dlatypov@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 8 Apr 2022 11:48:27 +0800
+Message-ID: <CABVgOSmdD=GHN5yaU500Txd6r3w-ubNS5YM92PRbJRpcVKLMXA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: don't print out test statuses w/ 0s in summary
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000004f5e6305dc1c78e6"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,82 +72,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Casey,
+--0000000000004f5e6305dc1c78e6
+Content-Type: text/plain; charset="UTF-8"
 
-I love your patch! Perhaps something to improve:
+On Fri, Apr 8, 2022 at 6:30 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> Before:
+> > Testing complete. Passed: 137, Failed: 0, Crashed: 0, Skipped: 36, Errors: 0
+>
+> After:
+> > Testing complete. Passed: 137, Skipped: 36
+>
+> Even with our current set of statuses, the output is a bit verbose.
+> It could get worse in the future if we add more (e.g. timeout, kasan).
+> Let's only print the relevant ones.
+>
+> I had previously been sympathetic to the argument that always
+> printing out all the statuses would make it easier to parse results.
+> But now we have commit acd8e8407b8f ("kunit: Print test statistics on
+> failure"), there are test counts printed out in the raw output.
+> We don't currently print out an overall total across all suites, but it
+> would be easy to add, if we see a need for that.
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> ---
 
-[auto build test WARNING on pcmoore-selinux/next]
-[also build test WARNING on linus/master v5.18-rc1 next-20220407]
-[cannot apply to pcmoore-audit/next jmorris-security/next-testing]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Looks good to me. I agree that we should add a total, too. I was
+thinking of adding one anyway, but now there's more space for it, I've
+just sent a patch out.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Casey-Schaufler/integrity-disassociate-ima_filter_rule-from-security_audit_rule/20220408-062243
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git next
-config: arm-randconfig-c002-20220408 (https://download.01.org/0day-ci/archive/20220408/202204081146.DPLvGqQ7-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/0d4df6ae86e123057cb18eeb5ba1b1eff2641fe4
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Casey-Schaufler/integrity-disassociate-ima_filter_rule-from-security_audit_rule/20220408-062243
-        git checkout 0d4df6ae86e123057cb18eeb5ba1b1eff2641fe4
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash security/integrity/ima/
+Reviewed-by: David Gow <davidgow@google.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Cheers,
+-- David
 
-All warnings (new ones prefixed by >>):
+--0000000000004f5e6305dc1c78e6
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-   security/integrity/ima/ima_appraise.c: In function 'ima_must_appraise':
->> security/integrity/ima/ima_appraise.c:81:16: warning: array subscript 0 is outside array bounds of 'u32[0]' {aka 'unsigned int[]'} [-Warray-bounds]
-      81 |         return ima_match_policy(mnt_userns, inode, current_cred(),
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      82 |                                 blob.secid[0], func, mask,
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-      83 |                                 IMA_APPRAISE | IMA_HASH, NULL, NULL, NULL,
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      84 |                                 NULL);
-         |                                 ~~~~~
-   In file included from include/linux/ima.h:12,
-                    from security/integrity/ima/ima_appraise.c:14:
-   include/linux/security.h:150:17: note: while referencing 'secid'
-     150 |         u32     secid[LSMBLOB_ENTRIES];
-         |                 ^~~~~
-   security/integrity/ima/ima_appraise.c:74:24: note: defined here 'blob'
-      74 |         struct lsmblob blob;
-         |                        ^~~~
-
-
-vim +81 security/integrity/ima/ima_appraise.c
-
-    65	
-    66	/*
-    67	 * ima_must_appraise - set appraise flag
-    68	 *
-    69	 * Return 1 to appraise or hash
-    70	 */
-    71	int ima_must_appraise(struct user_namespace *mnt_userns, struct inode *inode,
-    72			      int mask, enum ima_hooks func)
-    73	{
-    74		struct lsmblob blob;
-    75	
-    76		if (!ima_appraise)
-    77			return 0;
-    78	
-    79		security_current_getsecid_subj(&blob);
-    80		/* scaffolding the .secid[0] */
-  > 81		return ima_match_policy(mnt_userns, inode, current_cred(),
-    82					blob.secid[0], func, mask,
-    83					IMA_APPRAISE | IMA_HASH, NULL, NULL, NULL,
-    84					NULL);
-    85	}
-    86	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+G7p3AiuB2sgfq6cOpbO5MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQBsL34EJkCtu9Nu
+2+R6l1Qzno5Gl+N2Cm6/YLujukDGYa1JW27txXiilR9dGP7yl60HYyG2Exd5i6fiLDlaNEw0SqzE
+dw9ZSIak3Qvm2UybR8zcnB0deCUiwahqh7ZncEPlhnPpB08ETEUtwBEqCEnndNEkIN67yz4kniCZ
+jZstNF/BUnI3864fATiXSbnNqBwlJS3YkoaCTpbI9qNTrf5VIvnbryT69xJ6f25yfmxrXNJJe5OG
+ncB34Cwnb7xQyk+uRLZ465yUBkbjk9pC/yamL0O7SOGYUclrQl2c5zzGuVBD84YcQGDOK6gSPj6w
+QuBfOooZPOyZZZ8AMih7J980MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABQeVybOOpR4bOOXZYL5T3MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDf
+We8M8GB2+earWA7hGJnlKGtALWS69y7TR7lsLbQu7TAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjA0MDgwMzQ4MzlaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAjY4M56/1wXgaFsvf8Gxq
+t1PsKJOhdbqnH9/CuzugHJxa6Q+Fe4dP8fSK3ZC6g4deUyK2VUPfL26nmFEHl/osPDZCCW5WjY68
+fHvcBZVoxZWefjrmI3fJS4HPwn48H4KG9gYmhL3DUyO5AVIRY8iA58gfQfQ1L09+ErhQcV8NSB4F
+RNeKp5P2yMbzBg2vZkE8hOdXZYqKgImP2Q97R9pRk0PfNahXdTmPxpg6TDzZy52r2u1NlalN9mzr
+CveSymdrplIzWKg994ta1ooqj7/F4hM3o8TGKyIQhwOazJ+jMvOxAFCdxou3quQGlrNH/BC1AzSF
+q6QGMzW6EmGQYrDWCg==
+--0000000000004f5e6305dc1c78e6--

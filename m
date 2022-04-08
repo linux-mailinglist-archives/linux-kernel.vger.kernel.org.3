@@ -2,86 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEBA54F921F
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 11:36:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EFC44F9222
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 11:39:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231526AbiDHJir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 05:38:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47294 "EHLO
+        id S232146AbiDHJk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 05:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbiDHJio (ORCPT
+        with ESMTP id S229825AbiDHJk5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 05:38:44 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740301CB02
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 02:36:38 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 86642210FC;
-        Fri,  8 Apr 2022 09:36:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1649410597; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Fri, 8 Apr 2022 05:40:57 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E18E013F2B;
+        Fri,  8 Apr 2022 02:38:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1649410729; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=95tOhAK/1hRdesCKfizRfrMyglbamAOnmgAf+q60Zdk=;
-        b=Uh8D+SNCT/P3uEEpbfCfYvbhA48dAm/GoQe8WQZF1/MqmX0o9K18NBdwtvif2B5QcF/vlw
-        jXy0BhEiwyvuumPF1hQrc3tNtStwM0GUGUGckmd8QomBlJSDvnSfauD1Q6+dGdP9hhe02k
-        IOlKP64NREeSCTqNGvPnpwL/Fn2OkMY=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 18681A3B82;
-        Fri,  8 Apr 2022 09:36:37 +0000 (UTC)
-Date:   Fri, 8 Apr 2022 11:36:36 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Nico Pache <npache@redhat.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Rafael Aquini <aquini@redhat.com>,
-        Waiman Long <longman@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Christoph von Recklinghausen <crecklin@redhat.com>,
-        Don Dutile <ddutile@redhat.com>,
-        "Herton R . Krzesinski" <herton@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Joel Savitz <jsavitz@redhat.com>,
-        Darren Hart <dvhart@infradead.org>, stable@kernel.org
-Subject: Re: [PATCH v8] oom_kill.c: futex: Don't OOM reap the VMA containing
- the robust_list_head
-Message-ID: <YlACJMp7AFaVa/Gt@dhcp22.suse.cz>
-References: <20220408032809.3696798-1-npache@redhat.com>
- <20220408081549.GM2731@worktop.programming.kicks-ass.net>
- <87tub4j7hg.ffs@tglx>
- <ddf1755e-fe69-b60e-ee07-e78d663b11b2@redhat.com>
+        bh=NrebAZrO+cMXZp6CaRNO+bsoFWQqrGGUkEnoihN5xWs=;
+        b=MQYgpLVvrULNIgrboUzg9K7r/BL1qhCJH2swSW53nukPGpWNhy0WYujcm5bZQlBIHbnG9T
+        w+LprBkTUAsdopa7B81SeZTwlDHLsMr5aCuAHFmEtZKIfjPG7CneBAucIygR/tVO4Avfly
+        /8j/0b+RpGf+2VwXoRSgIdrFa2S+KfQ=
+Date:   Fri, 08 Apr 2022 10:38:38 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v18 3/3] drm/ingenic: Add dw-hdmi driver specialization
+ for jz4780
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Paul Boddie <paul@boddie.org.uk>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-mips@vger.kernel.org,
+        letux-kernel@openphoenux.org,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Message-Id: <EGL0AR.AQWZJ0LNDYJ63@crapouillou.net>
+In-Reply-To: <e5cdf9cd44bde52cce379cc830f2d6117ea15c32.1649330171.git.hns@goldelico.com>
+References: <cover.1649330170.git.hns@goldelico.com>
+        <e5cdf9cd44bde52cce379cc830f2d6117ea15c32.1649330171.git.hns@goldelico.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ddf1755e-fe69-b60e-ee07-e78d663b11b2@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 08-04-22 04:52:33, Nico Pache wrote:
-[...]
-> In a heavily contended CPU with high memory pressure the delay may also
-> lead to other processes unnecessarily OOMing.
+Hi,
 
-Let me just comment on this part because there is likely a confusion
-inlved. Delaying the oom_reaper _cannot_ lead to additional OOM killing
-because the the oom killing is throttled by existence of a preexisting
-OOM victim. In other words as long as there is an alive victim no
-further victims are not selected and the oom killer backs off. The
-oom_repaer will hide the alive oom victim after it is processed.
-The longer the delay will be the longer an oom victim can block a
-further progress but it cannot really cause unnecessary OOMing.
--- 
-Michal Hocko
-SUSE Labs
+Le jeu., avril 7 2022 at 13:16:11 +0200, H. Nikolaus Schaller=20
+<hns@goldelico.com> a =E9crit :
+> From: Paul Boddie <paul@boddie.org.uk>
+>=20
+> A specialisation of the generic Synopsys HDMI driver is employed for
+> JZ4780 HDMI support. This requires a new driver, plus device tree and
+> configuration modifications.
+>=20
+> Here we add Kconfig DRM_INGENIC_DW_HDMI, Makefile and driver code.
+>=20
+> Note that there is no hpd-gpio installed on the CI20 board HDMI
+> connector. Hence there is no hpd detection by the connector driver
+> and we have to enable polling in the dw-hdmi core driver.
+>=20
+> For that we need to set .poll_enabled but that struct component
+> can only be accessed by core code. Hence we use the public
+> setter function drm_kms_helper_hotplug_event() introduced before.
+>=20
+> Also note that we disable Color Space Conversion since it is not
+> working on jz4780.
+>=20
+> Signed-off-by: Paul Boddie <paul@boddie.org.uk>
+> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+
+The patch looks good, if I can get an ack/review (Neil?), I can merge=20
+the whole series.
+
+Cheers,
+-Paul
+
+> ---
+>  drivers/gpu/drm/ingenic/Kconfig           |   9 ++
+>  drivers/gpu/drm/ingenic/Makefile          |   1 +
+>  drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c | 103=20
+> ++++++++++++++++++++++
+>  3 files changed, 113 insertions(+)
+>  create mode 100644 drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
+>=20
+> diff --git a/drivers/gpu/drm/ingenic/Kconfig=20
+> b/drivers/gpu/drm/ingenic/Kconfig
+> index 001f59fb06d56..090830bcbde7f 100644
+> --- a/drivers/gpu/drm/ingenic/Kconfig
+> +++ b/drivers/gpu/drm/ingenic/Kconfig
+> @@ -24,4 +24,13 @@ config DRM_INGENIC_IPU
+>=20
+>  	  The Image Processing Unit (IPU) will appear as a second primary=20
+> plane.
+>=20
+> +config DRM_INGENIC_DW_HDMI
+> +	tristate "Ingenic specific support for Synopsys DW HDMI"
+> +	depends on MACH_JZ4780
+> +	select DRM_DW_HDMI
+> +	help
+> +	  Choose this option to enable Synopsys DesignWare HDMI based=20
+> driver.
+> +	  If you want to enable HDMI on Ingenic JZ4780 based SoC, you should
+> +	  select this option.
+> +
+>  endif
+> diff --git a/drivers/gpu/drm/ingenic/Makefile=20
+> b/drivers/gpu/drm/ingenic/Makefile
+> index d313326bdddbb..f10cc1c5a5f22 100644
+> --- a/drivers/gpu/drm/ingenic/Makefile
+> +++ b/drivers/gpu/drm/ingenic/Makefile
+> @@ -1,3 +1,4 @@
+>  obj-$(CONFIG_DRM_INGENIC) +=3D ingenic-drm.o
+>  ingenic-drm-y =3D ingenic-drm-drv.o
+>  ingenic-drm-$(CONFIG_DRM_INGENIC_IPU) +=3D ingenic-ipu.o
+> +obj-$(CONFIG_DRM_INGENIC_DW_HDMI) +=3D ingenic-dw-hdmi.o
+> diff --git a/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c=20
+> b/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
+> new file mode 100644
+> index 0000000000000..72f8b44998a51
+> --- /dev/null
+> +++ b/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
+> @@ -0,0 +1,103 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (C) 2011-2013 Freescale Semiconductor, Inc.
+> + * Copyright (C) 2019, 2020 Paul Boddie <paul@boddie.org.uk>
+> + *
+> + * Derived from dw_hdmi-imx.c with i.MX portions removed.
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/platform_device.h>
+> +
+> +#include <drm/bridge/dw_hdmi.h>
+> +#include <drm/drm_of.h>
+> +#include <drm/drm_print.h>
+> +
+> +static const struct dw_hdmi_mpll_config ingenic_mpll_cfg[] =3D {
+> +	{ 45250000,  { { 0x01e0, 0x0000 }, { 0x21e1, 0x0000 }, { 0x41e2,=20
+> 0x0000 } } },
+> +	{ 92500000,  { { 0x0140, 0x0005 }, { 0x2141, 0x0005 }, { 0x4142,=20
+> 0x0005 } } },
+> +	{ 148500000, { { 0x00a0, 0x000a }, { 0x20a1, 0x000a }, { 0x40a2,=20
+> 0x000a } } },
+> +	{ 216000000, { { 0x00a0, 0x000a }, { 0x2001, 0x000f }, { 0x4002,=20
+> 0x000f } } },
+> +	{ ~0UL,      { { 0x0000, 0x0000 }, { 0x0000, 0x0000 }, { 0x0000,=20
+> 0x0000 } } }
+> +};
+> +
+> +static const struct dw_hdmi_curr_ctrl ingenic_cur_ctr[] =3D {
+> +	/*pixelclk     bpp8    bpp10   bpp12 */
+> +	{ 54000000,  { 0x091c, 0x091c, 0x06dc } },
+> +	{ 58400000,  { 0x091c, 0x06dc, 0x06dc } },
+> +	{ 72000000,  { 0x06dc, 0x06dc, 0x091c } },
+> +	{ 74250000,  { 0x06dc, 0x0b5c, 0x091c } },
+> +	{ 118800000, { 0x091c, 0x091c, 0x06dc } },
+> +	{ 216000000, { 0x06dc, 0x0b5c, 0x091c } },
+> +	{ ~0UL,      { 0x0000, 0x0000, 0x0000 } },
+> +};
+> +
+> +/*
+> + * Resistance term 133Ohm Cfg
+> + * PREEMP config 0.00
+> + * TX/CK level 10
+> + */
+> +static const struct dw_hdmi_phy_config ingenic_phy_config[] =3D {
+> +	/*pixelclk   symbol   term   vlev */
+> +	{ 216000000, 0x800d, 0x0005, 0x01ad},
+> +	{ ~0UL,      0x0000, 0x0000, 0x0000}
+> +};
+> +
+> +static enum drm_mode_status
+> +ingenic_dw_hdmi_mode_valid(struct dw_hdmi *hdmi, void *data,
+> +			   const struct drm_display_info *info,
+> +			   const struct drm_display_mode *mode)
+> +{
+> +	if (mode->clock < 13500)
+> +		return MODE_CLOCK_LOW;
+> +	/* FIXME: Hardware is capable of 270MHz, but setup data is missing.=20
+> */
+> +	if (mode->clock > 216000)
+> +		return MODE_CLOCK_HIGH;
+> +
+> +	return MODE_OK;
+> +}
+> +
+> +static struct dw_hdmi_plat_data ingenic_dw_hdmi_plat_data =3D {
+> +	.mpll_cfg   =3D ingenic_mpll_cfg,
+> +	.cur_ctr    =3D ingenic_cur_ctr,
+> +	.phy_config =3D ingenic_phy_config,
+> +	.mode_valid =3D ingenic_dw_hdmi_mode_valid,
+> +	.output_port	=3D 1,
+> +};
+> +
+> +static const struct of_device_id ingenic_dw_hdmi_dt_ids[] =3D {
+> +	{ .compatible =3D "ingenic,jz4780-dw-hdmi" },
+> +	{ /* Sentinel */ },
+> +};
+> +MODULE_DEVICE_TABLE(of, ingenic_dw_hdmi_dt_ids);
+> +
+> +static void ingenic_dw_hdmi_cleanup(void *data)
+> +{
+> +	struct dw_hdmi *hdmi =3D (struct dw_hdmi *)data;
+> +
+> +	dw_hdmi_remove(hdmi);
+> +}
+> +
+> +static int ingenic_dw_hdmi_probe(struct platform_device *pdev)
+> +{
+> +	struct dw_hdmi *hdmi;
+> +
+> +	hdmi =3D dw_hdmi_probe(pdev, &ingenic_dw_hdmi_plat_data);
+> +	if (IS_ERR(hdmi))
+> +		return PTR_ERR(hdmi);
+> +
+> +	return devm_add_action_or_reset(&pdev->dev,=20
+> ingenic_dw_hdmi_cleanup, hdmi);
+> +}
+> +
+> +static struct platform_driver ingenic_dw_hdmi_driver =3D {
+> +	.probe  =3D ingenic_dw_hdmi_probe,
+> +	.driver =3D {
+> +		.name =3D "dw-hdmi-ingenic",
+> +		.of_match_table =3D ingenic_dw_hdmi_dt_ids,
+> +	},
+> +};
+> +module_platform_driver(ingenic_dw_hdmi_driver);
+> +
+> +MODULE_DESCRIPTION("JZ4780 Specific DW-HDMI Driver Extension");
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_ALIAS("platform:dw-hdmi-ingenic");
+> --
+> 2.33.0
+>=20
+
+

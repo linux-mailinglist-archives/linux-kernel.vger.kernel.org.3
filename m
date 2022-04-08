@@ -2,107 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC3484F8F56
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:17:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4523A4F8F59
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:17:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229494AbiDHHTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 03:19:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52682 "EHLO
+        id S229507AbiDHHTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 03:19:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiDHHTN (ORCPT
+        with ESMTP id S229452AbiDHHTr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 03:19:13 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC823B030
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 00:17:10 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2e5e9025c20so86129877b3.7
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 00:17:10 -0700 (PDT)
+        Fri, 8 Apr 2022 03:19:47 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0460021DF22
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 00:17:43 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id r13so15518586ejd.5
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 00:17:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WnXHR5gRI6b51YG8ylhL5jPW3yJr07fqNZU/XZSig0k=;
-        b=AAcufFck/yBeQrNDVHVsf6MMXMwxY/5jmF3Dbk5qpkEevFCsvQ0Rnx1Na0EgbHbSUc
-         JkF3Kuxtsyw7el5+5FmrRG8MRzoOQRIgXOkIX9wbfxwldbd5/fofZ3qJOtq5Bvf+rUcj
-         pyA9S1Uwz8r+Xs2IrAbQTlRWIKm48N30FEYHDVr0Ffi1tAW6OCZI0VmKNV+kVIbltH+v
-         N9jNUtwFkn5P+f9YbgUH6LAeJ9R+UqzccxI9r97GuomTEMkbEzUqODWr9IzqaoWRpShG
-         JhLiSh9CLZ2lJAKWYhN+sBzvoQt+KqDIgBpNoh+qenG9R5TKfzfy/QB6LfyTjxrKTFIf
-         OlGg==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=0n61blmIAkKQaBF3fgsPecQx9lDeya+dROG3fR+36zM=;
+        b=rDO9wCF+y70cv/4I1pJUnF98waE70HN2mn7xOtAJ9/6tJr21SWhOZql1eQ2iIIAceV
+         SouBBS6HQQvDLfzFgnyLqOzIVFl74VSfOqOqLJcXsV/b5g3OJxI6OSGuxKFVvxboDHuU
+         dfcG7kxNFAm5pcNpnO+IOiXjDVjG73fGtM9xmBqIFuuPVrhbHvI7AQm8L0ota6qOyL3x
+         /3tWERQE7Ufrx//4MJWfnvyL49HaAS3AHb9RPVKBBLG8uBkomK6Ky0gFcm8h8w6I6CK4
+         l+cO5AMMgSgJhqe8hB6QpRdhcHJ/zsDOfoSawHbFzY8fLYM2K/+TyRlRhoTe6sVTxkYB
+         Gg9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WnXHR5gRI6b51YG8ylhL5jPW3yJr07fqNZU/XZSig0k=;
-        b=pYr2jcqHEzY78NGit1VN0Qs3jlHMeGP8B986ch1GBnsB+7WNbY7MDVgw9xgT83RmYV
-         xFkJ4Ijv7baWTvC2Ydy0JNvXNx9n2Jtw7F65xXfiVItcrc0zpupV61JnWhpTanjA6WDS
-         xD7aDXsbw2RBp04VbZH5ESPrSxCycpbN3U04C3ecesaZA1p68hGjHZ+5LVB9fh41j4+Q
-         eeHnms7O15qIcIk4JkUHRcN73Az5tcfUrqstcVQuhtJCeSk5OoEVH3i/b1U7gbyAYl/d
-         0BdpKIIKrU2Hid/wVcLZpbb1GZfzWgTRtV7jrlDvpSTHFJouvUuEQgNHfrq/BFCuy2az
-         wyiQ==
-X-Gm-Message-State: AOAM531418ies+ldYhxVm1qNRsdbryc0DRdo+4VINlyGD325QTckzSS8
-        jH6Bt4+BwNc4P4R8nLcgva5ZXvaZwau4bATq4MNn4A==
-X-Google-Smtp-Source: ABdhPJzz9u/go6IjZ0evDmj7LCqhKD7NZ4HenDRPbw4CEb7Ac7TRuTiUprMq4ljNG0b2p23ib9BBLjHhTrrJ56L/X80=
-X-Received: by 2002:a81:1985:0:b0:2eb:6021:12c4 with SMTP id
- 127-20020a811985000000b002eb602112c4mr14872505ywz.248.1649402229982; Fri, 08
- Apr 2022 00:17:09 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=0n61blmIAkKQaBF3fgsPecQx9lDeya+dROG3fR+36zM=;
+        b=k0UBZmeCI9dXnZQVTEVkRiHrJJHuq0ZeQ+l+z9K4JsqpKtUqQRID2uSUh0JjbShmPx
+         7/DAb2GlfXXq4ujS9HnT+T9tQNr0BR8Byxh4miiixiaAyUVdM1rQs+d9GjBNGZdzS0IX
+         oXTm5t+mgzaZovEzWIJgiORU40KUAly6JJcXphSWDFZ8FYB85Q06m6/GWdoMxb2ulMTp
+         FKPb4avyubGLosSvnQ2fpBLRlHTmEH9lA6zeAYdXRdEIz68M3z56IPy0kq9mURFp1Ips
+         HMAVn6P3NhE+1cB7DmzSePzvbeTxtZdsYhFU0KOlHgD+ddFLC0+WDs3R0DzBJXmyZ/lF
+         2czw==
+X-Gm-Message-State: AOAM530umyyHRIqbGqqhwWcOdj0VRZ2DtAVZrgyhhLEZ9R4gsDcMRBj/
+        cezTI1coz5+I037RlTKA7fQrRg==
+X-Google-Smtp-Source: ABdhPJxnIy7zF7uE8xRHZ/boIh9E4X89WLB9SMQMnABLEB9K24hPdos6iUbx2cmBnQl1AWhRIsKFYA==
+X-Received: by 2002:a17:906:434e:b0:6d0:ed9c:68bc with SMTP id z14-20020a170906434e00b006d0ed9c68bcmr16390976ejm.70.1649402262518;
+        Fri, 08 Apr 2022 00:17:42 -0700 (PDT)
+Received: from [192.168.0.187] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id bl24-20020a170906c25800b006e809b6bf89sm3720393ejb.221.2022.04.08.00.17.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Apr 2022 00:17:42 -0700 (PDT)
+Message-ID: <9d6ba801-6ad1-80aa-a92a-bfc06c1cf1df@linaro.org>
+Date:   Fri, 8 Apr 2022 09:17:41 +0200
 MIME-Version: 1.0
-References: <20220407021729.16655-1-zhouchengming@bytedance.com>
- <20220407021729.16655-2-zhouchengming@bytedance.com> <xm26pmlsvcah.fsf@bsegall-linux.svl.corp.google.com>
-In-Reply-To: <xm26pmlsvcah.fsf@bsegall-linux.svl.corp.google.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Fri, 8 Apr 2022 09:16:58 +0200
-Message-ID: <CAKfTPtAYR-G2X2RnCJKLqS6J-Kn-tZTp9JyzxR3j9jsFbmwZwA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] sched/fair: Delete useless condition in tg_unthrottle_up()
-To:     Benjamin Segall <bsegall@google.com>
-Cc:     Chengming Zhou <zhouchengming@bytedance.com>, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        bristot@redhat.com, linux-kernel@vger.kernel.org,
-        duanxiongchun@bytedance.com, songmuchun@bytedance.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 2/4] clocksource/drivers/exynos_mct: Support frc-shared
+ property
+Content-Language: en-US
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        tglx@linutronix.de, daniel.lezcano@linaro.org
+Cc:     kernel@axis.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, alim.akhtar@samsung.com,
+        devicetree@vger.kernel.org, robh+dt@kernel.org
+References: <20220407074432.424578-1-vincent.whitchurch@axis.com>
+ <20220407074432.424578-3-vincent.whitchurch@axis.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220407074432.424578-3-vincent.whitchurch@axis.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 7 Apr 2022 at 23:00, Benjamin Segall <bsegall@google.com> wrote:
->
-> Chengming Zhou <zhouchengming@bytedance.com> writes:
->
-> > Fully decayed cfs_rq is impossible to have queued entities,
-> > the first condition "!cfs_rq_is_decayed(cfs_rq)" is enough
-> > to cover.
->
-> In particular, cfs_rq->load.weight is part of cfs_rq_is_decayed.
+On 07/04/2022 09:44, Vincent Whitchurch wrote:
+> When the FRC is shared with another main processor, the other processor
+> is assumed to have started it and this processor should not write to the
+> global registers.
+> 
+> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+> ---
+> 
+> Notes:
+>     v3:
+>     - Split FRC sharing handling from local timer indices handling
+>     - Remove addition of global variable.
+> 
+>  drivers/clocksource/exynos_mct.c | 21 ++++++++++++++++++---
+>  1 file changed, 18 insertions(+), 3 deletions(-)
+> 
 
-Testing cfs_rq->load.weight is the key point because nothing prevent
-to add a task with null load
+Looks correct and I hope it works correct. :) I did not test it though.
 
-Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
->
-> Reviewed-by: Ben Segall <bsegall@google.com>
->
-> >
-> > Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
-> > ---
-> >  kernel/sched/fair.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index e6fa5d1141b4..17c13c38b1c2 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -4850,7 +4850,7 @@ static int tg_unthrottle_up(struct task_group *tg, void *data)
-> >                                            cfs_rq->throttled_clock_task;
-> >
-> >               /* Add cfs_rq with load or one or more already running entities to the list */
-> > -             if (!cfs_rq_is_decayed(cfs_rq) || cfs_rq->nr_running)
-> > +             if (!cfs_rq_is_decayed(cfs_rq))
-> >                       list_add_leaf_cfs_rq(cfs_rq);
-> >       }
+
+Best regards,
+Krzysztof

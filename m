@@ -2,139 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 223E64F9D9D
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 21:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0019C4F9DA2
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 21:25:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235907AbiDHTXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 15:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40454 "EHLO
+        id S236938AbiDHT1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 15:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231718AbiDHTXW (ORCPT
+        with ESMTP id S231718AbiDHT1E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 15:23:22 -0400
+        Fri, 8 Apr 2022 15:27:04 -0400
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860931DF84C;
-        Fri,  8 Apr 2022 12:21:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810571CCADF;
+        Fri,  8 Apr 2022 12:25:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649445677; x=1680981677;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=an1kgKT916kkjGguwaSRlVUu2JyLvI48Hqx3SubWWec=;
-  b=hdoUuMjvrFk1liUS+EtEi8aSu2HUvXnNmgolDnNQfI9Ep9t3L+IisXhu
-   3s9MnWqQbxY66M1h9HDqjFkfLug/C6F1GgjFRryxb9PP0z8hTz4BuJAQn
-   1DA4VkhpTC12RSHbjhi671j/Th0z+Y6T/ij+pI1zI0xPEnaRIK46hKeK5
-   hnMbpCxInCckM+scRHph5aGKnhFnWPh+6l3JYoXwvmSbBvDGrGPW5j/Yq
-   ikR6dZOS4k1ihI7BC/GS1ZL/56kLuejFJ9a4vxQoOaDutRymdA+pyF5L/
-   rI7bgVunQXxsylTXCyF01Z5Ccx8P5JQgd3KuaQi574ELN4znWzsMARve4
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="348106442"
+  t=1649445900; x=1680981900;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=QWXje4Jo7Kw+9lJyTdkR5NGVYVGitp430LMd/QOyuJA=;
+  b=IS3krlXHehcXM8hdJjOHPtDN9bGh0Ocl0xhsSNgBsX74e5OAD8TX8IRV
+   RlWvQyTyU9eXI4Bbj3IOdODtjC9FVm5qBPYp7SZbnZfF+dTVyGOLXCeZy
+   rk4WAfamwXcNbrYpIDm8QhvPAdJH9sUiNToGkd22Bh9LQ9Yy57Oz7Ahy3
+   axiZN/aNzZJu3pUkBI14CZf8/xdtF7TJmIe5WO4r0Hl0pnNGTfbuC9m/U
+   PWCLK67is5zMRKu4O/5EhOnZyQXAfMXUSVZCFBUC2cJEyUGG6hnttU+C8
+   bn8pmlHRolUcrB52Ti1Rj68LLOZL7n2feQnHAy0/KzQjxLYn3TkNx+URF
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="348106879"
 X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="348106442"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 12:21:17 -0700
+   d="scan'208";a="348106879"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 12:25:00 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="525495656"
-Received: from tsungtae-mobl.amr.corp.intel.com (HELO [10.134.43.198]) ([10.134.43.198])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 12:21:15 -0700
-Message-ID: <0e366406-9a3a-0bf3-e073-272279f6abf2@intel.com>
-Date:   Fri, 8 Apr 2022 12:21:19 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
+   d="scan'208";a="550625250"
+Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
+  by orsmga007.jf.intel.com with ESMTP; 08 Apr 2022 12:24:59 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Fri, 8 Apr 2022 12:24:58 -0700
+Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
+ fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.027;
+ Fri, 8 Apr 2022 12:24:58 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     "liuxp11@chinatelecom.cn" <liuxp11@chinatelecom.cn>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "anton@enomsg.org" <anton@enomsg.org>,
+        "ccross@android.com" <ccross@android.com>,
+        "Moore, Robert" <robert.moore@intel.com>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "gong.chen@linux.intel.com" <gong.chen@linux.intel.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
+Subject: RE: [PATCH v4] ACPI: APEI: fix missing erst record id
+Thread-Topic: [PATCH v4] ACPI: APEI: fix missing erst record id
+Thread-Index: AQHYSyKHiR0TBR/Q30CSA+N7POqBxqzmYapQ
+Date:   Fri, 8 Apr 2022 19:24:58 +0000
+Message-ID: <4208d2e15341432ba1137600b7e5b9ae@intel.com>
+References: <1649406427-9357-1-git-send-email-liuxp11@chinatelecom.cn>
+In-Reply-To: <1649406427-9357-1-git-send-email-liuxp11@chinatelecom.cn>
+Accept-Language: en-US
 Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
- <20220405234343.74045-7-kirill.shutemov@linux.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCHv4 6/8] x86/mm: Provide helpers for unaccepted memory
-In-Reply-To: <20220405234343.74045-7-kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.401.20
+x-originating-ip: [10.1.200.100]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/5/22 16:43, Kirill A. Shutemov wrote:
-> +void accept_memory(phys_addr_t start, phys_addr_t end)
-> +{
-> +	unsigned long *unaccepted_memory;
-> +	unsigned long flags;
-> +	unsigned int rs, re;
-> +
-> +	if (!boot_params.unaccepted_memory)
-> +		return;
-> +
-> +	unaccepted_memory = __va(boot_params.unaccepted_memory);
-> +	rs = start / PMD_SIZE;
-> +
-> +	spin_lock_irqsave(&unaccepted_memory_lock, flags);
-> +	for_each_set_bitrange_from(rs, re, unaccepted_memory,
-> +				   DIV_ROUND_UP(end, PMD_SIZE)) {
-> +		/* Platform-specific memory-acceptance call goes here */
-> +		panic("Cannot accept memory");
-> +		bitmap_clear(unaccepted_memory, rs, re - rs);
-> +	}
-> +	spin_unlock_irqrestore(&unaccepted_memory_lock, flags);
-> +}
+I think it might be a cleaner solution if you first implement a new functio=
+n:
 
-Just to reiterate: this is a global spinlock.  It's disabling
-interrupts.  "Platform-specific memory-acceptance call" will soon become:
+/*
+ * Like erst_read(), but look for a specific record type (by size and guid)
+ * also retry -ENOENT returns by skipping to next record_id
+ */
+ssize_t erst_read_record(u64 *record_id, struct cper_record_header *record,
+			size_t buflen, size_t recordlen, const guid_t *guid)
+{
+}
 
-	tdx_accept_memory(rs * PMD_SIZE, re * PMD_SIZE);
+Step 2: Update apei_read_mce() and erst_reader() to use this function.
 
-which is a page-by-page __tdx_module_call():
+Step 3: Apply your erst_clear_cache() fix to the new function
 
-> +	for (i = 0; i < (end - start) / PAGE_SIZE; i++) {
-> +		if (__tdx_module_call(TDACCEPTPAGE, start + i * PAGE_SIZE,
-> +				      0, 0, 0, NULL)) {
-> +			error("Cannot accept memory: page accept failed\n");
-> +		}
-> +	}
-
-Each __tdx_module_call() involves a privilege transition that also
-surely includes things like changing CR3.  It can't be cheap.  It also
-is presumably touching the memory and probably flushing it out of the
-CPU caches.  It's also unbounded:
-
-	spin_lock_irqsave(&unaccepted_memory_lock, flags);
-	for (i = 0; i < (end - start) / PAGE_SIZE; i++)
-		// thousands?  tens-of-thousands of cycles??
-	spin_lock_irqsave(&unaccepted_memory_lock, flags);
-
-How far apart can end and start be?  It's at *least* 2MB in the page
-allocator, which is on the order of a millisecond.  Are we sure there
-aren't any callers that want to do this at a gigabyte granularity?  That
-would hold the global lock and disable interrupts on the order of a second.
-
-Do we want to bound the time that the lock can be held?  Or, should we
-just let the lockup detectors tell us that we're being naughty?
+-Tony

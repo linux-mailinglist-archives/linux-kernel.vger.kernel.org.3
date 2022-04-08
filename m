@@ -2,193 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 282E24F9122
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 10:48:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A5654F912B
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 10:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232296AbiDHIuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 04:50:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48284 "EHLO
+        id S232329AbiDHIvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 04:51:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232263AbiDHIuG (ORCPT
+        with ESMTP id S232263AbiDHIvS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 04:50:06 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174C6B13;
-        Fri,  8 Apr 2022 01:48:04 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id s11so7301233pla.8;
-        Fri, 08 Apr 2022 01:48:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=I46UWeD98++HQALI8PtJ0TTP79FrXlHlDLM23fJH0TE=;
-        b=AMz/XhD4j+40NOgknVlsh0fHAwSm7KnOySa6l8Ft38KfLtGZOXWBTbIDEpOUbeAKHL
-         jO8J6IpYhF0ufvMwfCHs2uB+61dM8oHqrS8xtcoJ5/wBoEUG1x4Wgr7ypBWaCutsTM9l
-         kBCh7W1+eBVG84ibOFB0OgId55+DUJMx2itlnrW0lQgzhSjYIiHrsrnJdsx0eZZFNjo3
-         u0lGhZZ09lcU4A6vPkmXaebedsNTDXBKzDmfd0LW1imuZXZXTUcC7n7tUqKHKpHjtN4m
-         cUZmrTPh+RBB77t1ylPgxGvneFvThMP13CRyCgmBZRd1IgwbA1IMNNZdUSmI70PSg7zi
-         k0EQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=I46UWeD98++HQALI8PtJ0TTP79FrXlHlDLM23fJH0TE=;
-        b=Bdk4WMIRG309ertNAJok5l8RDDKC+pCGcBbCNiAl2lt+Gf7FedMli63Dz31Y0NImrW
-         vvrZx93YHhVWG41lWzQPaJIifvWNhtrweh1vzzKS9jkb87xYckRTd4p3ZXNeMsUvs+RY
-         6cfE+sS0uAvS/nZDy6w3gq7FLTVmACnnNIVxmYaXjMjRs/TW19A+HWd31psxRrHTHrke
-         TrrEFhyT+I5GrgkH+kU/Q/A/xSvGxZ0RqwsLhwakLv06Ofis5+KWeeJR4aF2wqfHgyIr
-         6mgTMZhwhtZrGoRLO2H97YiLmTLYZSGJbiCqj+2SVNgyYjfboRGvmCPaxy7w8mchjuyj
-         G3Ng==
-X-Gm-Message-State: AOAM531qLVWusepjkN/1p3/CZWGHsQDGhnes+uU4WirZAP9RJuEP7FW7
-        c8tdf47625WjwbcWPO3xvK0=
-X-Google-Smtp-Source: ABdhPJzF0G8x7dcWJzCeZT6g4GPh+o/q1DLD1IO0VBU9rC9Kh1hcN6yMub0dhGcwbN7OC1+nNMxR+w==
-X-Received: by 2002:a17:90a:9204:b0:1ca:8698:2470 with SMTP id m4-20020a17090a920400b001ca86982470mr20643616pjo.199.1649407683593;
-        Fri, 08 Apr 2022 01:48:03 -0700 (PDT)
-Received: from CHENGDONGLI-MB0.localdomain ([203.205.141.113])
-        by smtp.gmail.com with ESMTPSA id cq25-20020a056a00331900b004faf3a0c89csm23531322pfb.91.2022.04.08.01.48.02
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 08 Apr 2022 01:48:02 -0700 (PDT)
-From:   Chengdong Li <brytonlee01@gmail.com>
-X-Google-Original-From: Chengdong Li <chengdongli@tencent.com>
-Received: by CHENGDONGLI-MB0.localdomain (Postfix, from userid 501)
-        id 93A506D931DE; Fri,  8 Apr 2022 16:47:56 +0800 (CST)
-To:     adrian.hunter@intel.com, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, peterz@infradead.org,
-        mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
-        namhyung@kernel.org
-Cc:     ak@linux.intel.com, likexu@tencent.com, chengdongli@tencent.com
-Subject: [PATCH v4] perf test tsc: Fix error message report when not supported.
-Date:   Fri,  8 Apr 2022 16:47:48 +0800
-Message-Id: <20220408084748.43707-1-chengdongli@tencent.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <CAC2pzGdMFmtV8YNR4DszoATjM80uYNwrnW5As6vgBsyXVcWueA@mail.gmail.com>
-References: <CAC2pzGdMFmtV8YNR4DszoATjM80uYNwrnW5As6vgBsyXVcWueA@mail.gmail.com>
+        Fri, 8 Apr 2022 04:51:18 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B519C357F1C;
+        Fri,  8 Apr 2022 01:49:15 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id EBD411F46C4E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649407754;
+        bh=/ucyQFsnln0fUdd49CPO4IcMZgAGhdNJGgDPJIZXvBU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=k7NgI401bZto7wIRXjFFsY+lkbrcOJ5N0vgiMqgl0LthCepuCshjIkVZL6NDdn+NS
+         GlSr50TKMC5weSkUK3BwNwbO8AtNyQiIT7GOql3Ujcz6ZH3vCdXQmMJVCmB+rOIiDl
+         YDCpvOWYAQ3/2SHRxtqOJHfOmKk45gtv9OilkQWoR6nVztiP+3k6InyjSlmaBkRNLa
+         Sz/EMQPvqv9QTzpv5NDwXbTUK/5C7u0M/bh38wZ9bE0UqeJbKc2ehQmfrgBSymcGA8
+         tm2MMRJVRM63fJKACuIu2qrFi+wlbf+unhf8MO9OemKLI4MmRrmq0bEPQinz5EjiD+
+         8GucQsaJfhyig==
+Message-ID: <a48df6bb-6be8-6cb9-51d0-9044e706e834@collabora.com>
+Date:   Fri, 8 Apr 2022 10:49:10 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RESEND v17 3/7] soc: mediatek: add mtk-mmsys support for mt8195
+ vdosys0
+Content-Language: en-US
+To:     CK Hu <ck.hu@mediatek.com>,
+        Jason-JH Lin <jason-jh.lin@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Cc:     David Airlie <airlied@linux.ie>, singo.chang@mediatek.com,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        postmaster@vger.kernel.org, Fabien Parent <fparent@baylibre.com>,
+        John 'Warthog9' Hawley <warthog9@eaglescrag.net>,
+        linux-stm32@st-md-mailman.stormreply.com, roy-cw.yeh@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        devicetree@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        nancy.lin@mediatek.com, linux-mediatek@lists.infradead.org,
+        hsinyi@chromium.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, moudy.ho@mediatek.com,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>
+References: <20220407030409.9664-1-jason-jh.lin@mediatek.com>
+ <20220407030409.9664-4-jason-jh.lin@mediatek.com>
+ <67b3e42d6a094108f724ed9b8c73f5cd6b2ce219.camel@mediatek.com>
+ <d8711b8e4d233240eda73db54a625e88b9b3970b.camel@mediatek.com>
+ <1f1692b6d14280fed40e53f464145ed70b67135f.camel@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <1f1692b6d14280fed40e53f464145ed70b67135f.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chengdong Li <chengdongli@tencent.com>
+Il 08/04/22 03:28, CK Hu ha scritto:
+> Hi, Jason:
+> 
+> On Thu, 2022-04-07 at 14:27 +0800, Jason-JH Lin wrote:
+>> Hi CK,
+>>
+>> Thanks for the reviews.
+>>
+>> On Thu, 2022-04-07 at 13:45 +0800, CK Hu wrote:
+>>> Hi, Jason:
+>>>
+>>> On Thu, 2022-04-07 at 11:04 +0800, jason-jh.lin wrote:
+>>>> 1. Add mt8195 mmsys compatible for vdosys0.
+>>>> 2. Add mt8195 routing table settings and fix build fail.
+>>>> 3. Add clock name, clock driver name and routing table into the
+>>>> driver data
+>>>>     of mt8195 vdosys0.
+>>>> 4. Add get match data by clock name function and clock platform
+>>>> labels
+>>>>     to identify which mmsys node is corresponding to vdosys0.
+>>>>
+>>>> Signed-off-by: jason-jh.lin <jason-jh.lin@mediatek.com>
+>>>> ---
+>>>>   drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c |   2 +-
+>>>>   drivers/gpu/drm/mediatek/mtk_drm_drv.c      |   6 +-
+>>>>   drivers/soc/mediatek/mt8167-mmsys.h         |   2 +-
+>>>>   drivers/soc/mediatek/mt8183-mmsys.h         |   2 +-
+>>>>   drivers/soc/mediatek/mt8186-mmsys.h         |   4 +-
+>>>>   drivers/soc/mediatek/mt8192-mmsys.h         |   4 +-
+>>>>   drivers/soc/mediatek/mt8195-mmsys.h         | 370
+>>>> ++++++++++++++++++++
+>>>>   drivers/soc/mediatek/mt8365-mmsys.h         |   4 +-
+>>>>   drivers/soc/mediatek/mtk-mmsys.c            |  62 ++++
+>>>>   drivers/soc/mediatek/mtk-mmsys.h            |   1 +
+>>>>   drivers/soc/mediatek/mtk-mutex.c            |   8 +-
+>>>>   include/linux/soc/mediatek/mtk-mmsys.h      |  13 +-
+>>>>   12 files changed, 461 insertions(+), 17 deletions(-)
+>>>>   create mode 100644 drivers/soc/mediatek/mt8195-mmsys.h
+>>>>
+>>>
+>>> [snip]
+>>>
+>>>> diff --git a/drivers/soc/mediatek/mtk-mmsys.c
+>>>> b/drivers/soc/mediatek/mtk-mmsys.c
+>>>> index 4fc4c2c9ea20..b2fa239c5f5f 100644
+>>>> --- a/drivers/soc/mediatek/mtk-mmsys.c
+>>>> +++ b/drivers/soc/mediatek/mtk-mmsys.c
+>>>> @@ -4,6 +4,8 @@
+>>>>    * Author: James Liao <jamesjj.liao@mediatek.com>
+>>>>    */
+>>>>   
 
-By default `perf test tsc` does not return the error message
-when the child process detected kernel does not support. Instead,
-the child process print error message to stderr, unfortunately
-the stderr is redirected to /dev/null when verbose <= 0.
+..snip..
 
-This patch did three things:
-- returns TEST_SKIP to the parent process instead of TEST_OK when
-  perf_read_tsc_conversion() is not supported.
-- add a new subtest of testing if TSC is supported on current
-  architecture by moving exist code to a separate function.
-  It avoids two places in test__perf_time_to_tsc() that return
-  TEST_SKIP by doing this.
-- extended test suite definition to contain above two subtests.
-  Current test_suite and test_case structs do not support printing
-  skip reason when the number of subtest less than 1. To print skip
-  reason, it is necessary to extend current test suite definition.
+>>
+>> I think there might be another chip that needs to get driver data by
+>> clk_name .
+>> So I use "clk-mt8195" in clk_driver to identify the corresponding
+>> platform whose clk_name of mmsys is also "cfg_vod0".
+> 
+> We usually don't care the future because the future may not happen. If
 
-Changes since v3:
-- refine commit message again to make it clear. 
+Hello CK,
 
-Changes since v2:
-- refine error message format.
-- refine commit log message according to Adrian's review comments.
+I'm sorry, but I really have to disagree here.
+Sure, the future may not happen, but from what I can see, MediaTek's commitment
+on upstreaming their SoCs is continuative and they care about the future.
 
-Changes since v1 (thanks for the feedback from Adrian Hunter):
-- rebase commit to current source.
+Let's also not forget that these drivers are not on a downstream tree, where
+you don't care about the past or the future, but on upstream, where you:
+- Definitely care about the past
+- Should care about the future, if you want to avoid commit noise and
+   making big changes to your drivers everytime, which would slow down
+   your upstreaming due to reviewers having to put 3x efforts on each
+   iteration.
 
-Signed-off-by: Chengdong Li <chengdongli@tencent.com>
----
- tools/perf/tests/perf-time-to-tsc.c | 36 +++++++++++++++++++++--------
- 1 file changed, 27 insertions(+), 9 deletions(-)
+And let's also not forget that this being upstream means that these drivers
+may (or may not) be extended even by passionate community developers, for
+which, having such mechanisms there for other SoCs that MediaTek didn't try
+to upstream yet can only be good - and when these are engineered with a
+certain flexibility, while keeping the codebase solid, that can only be good.
 
-diff --git a/tools/perf/tests/perf-time-to-tsc.c b/tools/perf/tests/perf-time-to-tsc.c
-index d12d0ad81801..cc6df49a65a1 100644
---- a/tools/perf/tests/perf-time-to-tsc.c
-+++ b/tools/perf/tests/perf-time-to-tsc.c
-@@ -47,6 +47,17 @@
- 	}					\
- }
- 
-+static int test__tsc_is_supported(struct test_suite *test __maybe_unused,
-+				  int subtest __maybe_unused)
-+{
-+	if (!TSC_IS_SUPPORTED) {
-+		pr_debug("Test not supported on this architecture\n");
-+		return TEST_SKIP;
-+	}
-+
-+	return TEST_OK;
-+}
-+
- /**
-  * test__perf_time_to_tsc - test converting perf time to TSC.
-  *
-@@ -70,7 +81,7 @@ static int test__perf_time_to_tsc(struct test_suite *test __maybe_unused, int su
- 	struct perf_cpu_map *cpus = NULL;
- 	struct evlist *evlist = NULL;
- 	struct evsel *evsel = NULL;
--	int err = -1, ret, i;
-+	int err = TEST_FAIL, ret, i;
- 	const char *comm1, *comm2;
- 	struct perf_tsc_conversion tc;
- 	struct perf_event_mmap_page *pc;
-@@ -79,10 +90,6 @@ static int test__perf_time_to_tsc(struct test_suite *test __maybe_unused, int su
- 	u64 test_time, comm1_time = 0, comm2_time = 0;
- 	struct mmap *md;
- 
--	if (!TSC_IS_SUPPORTED) {
--		pr_debug("Test not supported on this architecture");
--		return TEST_SKIP;
--	}
- 
- 	threads = thread_map__new(-1, getpid(), UINT_MAX);
- 	CHECK_NOT_NULL__(threads);
-@@ -124,8 +131,8 @@ static int test__perf_time_to_tsc(struct test_suite *test __maybe_unused, int su
- 	ret = perf_read_tsc_conversion(pc, &tc);
- 	if (ret) {
- 		if (ret == -EOPNOTSUPP) {
--			fprintf(stderr, " (not supported)");
--			return 0;
-+			pr_debug("perf_read_tsc_conversion is not supported in current kernel\n");
-+			err = TEST_SKIP;
- 		}
- 		goto out_err;
- 	}
-@@ -191,7 +198,7 @@ static int test__perf_time_to_tsc(struct test_suite *test __maybe_unused, int su
- 	    test_tsc >= comm2_tsc)
- 		goto out_err;
- 
--	err = 0;
-+	err = TEST_OK;
- 
- out_err:
- 	evlist__delete(evlist);
-@@ -200,4 +207,15 @@ static int test__perf_time_to_tsc(struct test_suite *test __maybe_unused, int su
- 	return err;
- }
- 
--DEFINE_SUITE("Convert perf time to TSC", perf_time_to_tsc);
-+static struct test_case time_to_tsc_tests[] = {
-+	TEST_CASE_REASON("TSC support", tsc_is_supported,
-+			 "This architecture does not support"),
-+	TEST_CASE_REASON("Perf time to TSC", perf_time_to_tsc,
-+			 "perf_read_tsc_conversion is not supported"),
-+	{ .name = NULL, }
-+};
-+
-+struct test_suite suite__perf_time_to_tsc = {
-+	.desc = "Convert perf time to TSC",
-+	.test_cases = time_to_tsc_tests,
-+};
--- 
-2.27.0
+Besides, if I've misunderstood your "don't care the future" statement,
+pretend that I've never replied.
 
+
+> it's sure that would happen, I think clk_driver is not a good choice.
+> For now, the clk_driver name is different for each SoC, but it could be
+> the same for each SoC because only one clock driver would be compiled.
+> I think "compatible" would be different for each SoC.
+> 
+
+...but I agree on that one (and I gave my own review and suggestions on
+how to improve that situation).
+
+Regards,
+Angelo

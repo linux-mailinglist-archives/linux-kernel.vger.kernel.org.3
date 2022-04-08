@@ -2,55 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B5774F8C13
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:26:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AE2C4F8CC8
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233368AbiDHBVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 21:21:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38416 "EHLO
+        id S233367AbiDHBWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 21:22:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233320AbiDHBVP (ORCPT
+        with ESMTP id S233320AbiDHBWG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 21:21:15 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8B234BB7
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 18:19:13 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nfraprado)
-        with ESMTPSA id 8FD2F1F46B10
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649380752;
-        bh=DRF0VVql1NDF1AFBXdreQkrM736cxZe8TLofRJp+rIE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=CzKotq9B/GtJeR8NyobQE7fpb4jsG3di7QvNmI8YKfpttbMaevDT9Uf0OdhsDS3Wq
-         kW0OUMPFd8j73Nlc3Lx7iohdfUWUeC1u6t+C0BUkKMEfMlejJb/BOwbGK3j4oiaQzl
-         zV1wC6Be1FGMR6a/4BlZpDjMns3t8ZmMr6qU8M/9H3+myE196Vsk92YjgRydOUwQhB
-         F1h6D4bzcLn4Cau+hHx5IL9LmniCCecJfT4lHOneb0gonTu8akKH5rN3Lxdb82jKcK
-         rYHceKabJgfRjDlxubAvqcymueNkYSqbcd2MEn7p1ifNkTqfkboJOVEsqsCUZcY+/0
-         Qj2e/jOnJFqkA==
-From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-To:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>, Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH] drm/mediatek: dpi: Use mt8183 output formats for mt8192
-Date:   Thu,  7 Apr 2022 21:19:07 -0400
-Message-Id: <20220408011907.672120-1-nfraprado@collabora.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 7 Apr 2022 21:22:06 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590CD14F137
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 18:20:04 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id r13so14343046ejd.5
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 18:20:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=CpBl2AGd626FECD+GIqEV6PBhceN/t8eGFzx+f7coUk=;
+        b=3cPiceV6hD/ZvOf4gFgz+/Zbbb1qxTfbkNm4XV6V5+xHRZD/OwWXS0rT8rsxbHD5AA
+         IXmkMGgR23uopQ7vhW5gxFcqnpbiYaxhY71cDh75hcRDbB3kJ98qpB6i+HBgSHyaFoAw
+         poQe6uB/Nk6A7T1dk7kws1/GpzkcuhWzby3KtcTalLTu92PLzXSIfw+wihYnHcDRomq3
+         XiVAzl5h9QxfyyG9nyGkjDICoKwRhiOjGRjpGaQPn70KJgqmpq99q4226V6jiemKN9kt
+         Tc+H08w49VdTo/MxPl0R+CwjOzZO2Y/ATnGJGomCoLfbdpSKA6lue/maVB9gdrRAnUCm
+         U7cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=CpBl2AGd626FECD+GIqEV6PBhceN/t8eGFzx+f7coUk=;
+        b=WjHW7PNUq1mYOTZQNlINa6XG7Yp5I2/OntEwbfN4fzu0fDcPA85D6IgFWlZP9HXj2U
+         GbJrS2kx8dzhXkBwX1CT/Pex7lWIujlr8dAKy9vVjC5ctFLvI0rOqQZUmXvqcECiYlZO
+         lOG4j0AB/t5BGdtLZZcvyWZsV2M58/VwqmuXCPSL2eo9lPInGXyTGQPAw6sb1vPm2bGV
+         PkNJSOZq5OrG56hcXyXNgB8GL+FUSkGCdy+aLlU4FE75GqZs3f99KeEaAGQRiYDg6/+P
+         /NLzSLfNUVtA7zcIOpN6bE/Na3/I0JkmAw5fvtGLqx/wbLVHurfgC2JJkBZm9EvfSNRv
+         dipQ==
+X-Gm-Message-State: AOAM533jK4a+NKWsz2maUkJ/09tED47jLdLq1g0vvzqZnCwI9GeCD1dL
+        R7hIpVgXXvRskIdLVd9epHEOGavx4dedLLumXtAJ
+X-Google-Smtp-Source: ABdhPJwNkET74mR679RYTNFG2h05EKTSAGXbm9p/d1NNz5+zhishf2TSABELSlkCZxkK0XW+Qj9Ih8VcPHPiYGE0eec=
+X-Received: by 2002:a17:907:9803:b0:6db:ab21:738e with SMTP id
+ ji3-20020a170907980300b006dbab21738emr15515948ejc.112.1649380802771; Thu, 07
+ Apr 2022 18:20:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+References: <20220329125117.1393824-1-mic@digikod.net> <20220329125117.1393824-7-mic@digikod.net>
+In-Reply-To: <20220329125117.1393824-7-mic@digikod.net>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 7 Apr 2022 21:19:51 -0400
+Message-ID: <CAHC9VhQg0R5ddC_aLSAFyyf9OPs6wSyj3tqh1hwoN=RPpoDFuQ@mail.gmail.com>
+Subject: Re: [PATCH v2 06/12] LSM: Remove double path_rename hook calls for RENAME_EXCHANGE
+To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Jann Horn <jannh@google.com>,
+        John Johansen <john.johansen@canonical.com>,
+        Kees Cook <keescook@chromium.org>,
+        Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Kentaro Takeda <takedakn@nttdata.co.jp>,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@linux.microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,37 +79,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The configuration for mt8192 was incorrectly using the output formats
-from mt8173. Since the output formats for mt8192 are instead the same
-ones as for mt8183, which require two bus samples per pixel, the
-pixelclock and DDR edge setting were misconfigured. This made external
-displays unable to show the image.
+On Tue, Mar 29, 2022 at 8:51 AM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
+wrote:
+>
+> From: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
+>
+> In order to be able to identify a file exchange with renameat2(2) and
+> RENAME_EXCHANGE, which will be useful for Landlock [1], propagate the
+> rename flags to LSMs.  This may also improve performance because of the
+> switch from two set of LSM hook calls to only one, and because LSMs
+> using this hook may optimize the double check (e.g. only one lock,
+> reduce the number of path walks).
+>
+> AppArmor, Landlock and Tomoyo are updated to leverage this change.  This
+> should not change the current behavior (same check order), except
+> (different level of) speed boosts.
+>
+> [1] https://lore.kernel.org/r/20220221212522.320243-1-mic@digikod.net
+>
+> Cc: James Morris <jmorris@namei.org>
+> Cc: Kentaro Takeda <takedakn@nttdata.co.jp>
+> Cc: Paul Moore <paul@paul-moore.com>
+> Cc: Serge E. Hallyn <serge@hallyn.com>
+> Acked-by: John Johansen <john.johansen@canonical.com>
+> Acked-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> Signed-off-by: Micka=C3=ABl Sala=C3=BCn <mic@linux.microsoft.com>
+> Link: https://lore.kernel.org/r/20220329125117.1393824-7-mic@digikod.net
+> ---
+>
+> Changes since v1:
+> * Import patch from
+>   https://lore.kernel.org/r/20220222175332.384545-1-mic@digikod.net
+> * Add Acked-by: Tetsuo Handa.
+> * Add Acked-by: John Johansen.
+> ---
+>  include/linux/lsm_hook_defs.h |  2 +-
+>  include/linux/lsm_hooks.h     |  1 +
+>  security/apparmor/lsm.c       | 30 +++++++++++++++++++++++++-----
+>  security/landlock/fs.c        | 12 ++++++++++--
+>  security/security.c           |  9 +--------
+>  security/tomoyo/tomoyo.c      | 11 ++++++++++-
+>  6 files changed, 48 insertions(+), 17 deletions(-)
 
-Fix the issue by correcting the output format for mt8192 to be the same
-as for mt8183, fixing the usage of external displays for mt8192.
+Seems like a nice improvement to me, and while I'm not an AppArmor,
+Tomoyo, or Landlock expert the changes looked pretty straightforward.
 
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Reviewed-by: Paul Moore <paul@paul-moore.com>
 
----
-
- drivers/gpu/drm/mediatek/mtk_dpi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
-index 4554e2de1430..e61cd67b978f 100644
---- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-@@ -819,8 +819,8 @@ static const struct mtk_dpi_conf mt8192_conf = {
- 	.cal_factor = mt8183_calculate_factor,
- 	.reg_h_fre_con = 0xe0,
- 	.max_clock_khz = 150000,
--	.output_fmts = mt8173_output_fmts,
--	.num_output_fmts = ARRAY_SIZE(mt8173_output_fmts),
-+	.output_fmts = mt8183_output_fmts,
-+	.num_output_fmts = ARRAY_SIZE(mt8183_output_fmts),
- };
- 
- static int mtk_dpi_probe(struct platform_device *pdev)
--- 
-2.35.1
-
+--=20
+paul-moore.com

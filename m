@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DFE34F91A3
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 11:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92FAA4F91BE
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 11:14:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233081AbiDHJOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 05:14:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40368 "EHLO
+        id S233495AbiDHJPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 05:15:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232903AbiDHJLj (ORCPT
+        with ESMTP id S232752AbiDHJLk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 05:11:39 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AB61960B1;
-        Fri,  8 Apr 2022 02:09:01 -0700 (PDT)
-Date:   Fri, 08 Apr 2022 09:08:58 -0000
+        Fri, 8 Apr 2022 05:11:40 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E6C1AF504;
+        Fri,  8 Apr 2022 02:09:02 -0700 (PDT)
+Date:   Fri, 08 Apr 2022 09:08:59 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1649408940;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7P6jwAthNgvKI/av1jxqDocX2PVFAR0PfermJLNNVcE=;
-        b=FYrPLnfzcTMbrUdEmqt3qwMtZ1EAjwo5HytdAs8laVOU2giygGFvrS9lU2B5iNw/wOgCMM
-        cuceExBzl6HmcMzmtP0qsoAL9uSARpPY8nOIzCjCeEwKHYzqisaU4LDHRTigFsXHKt9J0Q
-        SDJ/tvV6aDGyLaGt3UEjxtASDkhkkEC/rdVwgVA79HukSmbYMF9GXuSUSg1WGE3CmZbm15
-        Yi+J6PDSq6//7lmnw06B87RCkoLe6lRCJ0yjT0akrsQXAdYmoVHGetYXzl76HxurUk2cru
-        cUBUHTgNa55B0qK16Aulfj0DPaSTj4Xrwq+81RWoa0rk7yqV3LdTcl4SEshzZg==
+        bh=iCdq15bEqQNm/pFXDaqlmavp/KSNQHpopp15hvX8rxg=;
+        b=YhDkLCQq8M43xWNUF0WoIZebjaidYuBeVrkALdbNz+wfI7u3mm6rreGaaVHhWOuy5qXYiK
+        4u6Jes85nIRIxb5pTbOZzh04ewmLyQIQMbdBHuvIHJxxcv1d84L0ha8f2QIy3qFtYa+NvR
+        lf1J25sZUUJnuZgkt8fli+y2jjJ+GguGExdIotuc55vPcVMpvvZEmW3mBRJBNRs8n59qbY
+        UrKxakdgJwElf8AmFatg8yhOL+UqOfdf9MHSGbm1E7pRuIw3Ba7PhB6JWRXGcCvbenxlVv
+        CrfRPguZuDtslSaI3mQzkX7c320LkrKMblrX5H97K5duHHjeeuLTVs7VlwaNcQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1649408940;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,22 +36,23 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7P6jwAthNgvKI/av1jxqDocX2PVFAR0PfermJLNNVcE=;
-        b=/VdO258eGS7VTa3QlNaLybOUF+0HTJ4072SHcB0nlV69B8XRtAdrzj0r7VqkXCKIZz88Me
-        ZoqLz2v/Cyp6bmDA==
+        bh=iCdq15bEqQNm/pFXDaqlmavp/KSNQHpopp15hvX8rxg=;
+        b=Gf0zKFxmaOsIT54ouXjxtc2/rWizn0CO63nrIAcy6XuBr0K6ZxDUJe8lcG1xj01ZgDlqR1
+        yROdbVDkkFawsTBg==
 From:   "tip-bot2 for Michael Roth" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/sev] x86/compressed/acpi: Move EFI detection to helper
-Cc:     Michael Roth <michael.roth@amd.com>,
+Subject: [tip: x86/sev] x86/head/64: Re-enable stack protection
+Cc:     Joerg Roedel <jroedel@suse.de>,
+        Michael Roth <michael.roth@amd.com>,
         Brijesh Singh <brijesh.singh@amd.com>,
         Borislav Petkov <bp@suse.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220307213356.2797205-25-brijesh.singh@amd.com>
-References: <20220307213356.2797205-25-brijesh.singh@amd.com>
+In-Reply-To: <20220307213356.2797205-24-brijesh.singh@amd.com>
+References: <20220307213356.2797205-24-brijesh.singh@amd.com>
 MIME-Version: 1.0
-Message-ID: <164940893880.389.10219939367701401345.tip-bot2@tip-bot2>
+Message-ID: <164940893965.389.13743968691185780967.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,189 +69,162 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/sev branch of tip:
 
-Commit-ID:     7c4146e8885512719a50b641e9277a1712e052ff
-Gitweb:        https://git.kernel.org/tip/7c4146e8885512719a50b641e9277a1712e052ff
+Commit-ID:     469693d8f62299709e8ba56d8fb3da9ea990213c
+Gitweb:        https://git.kernel.org/tip/469693d8f62299709e8ba56d8fb3da9ea990213c
 Author:        Michael Roth <michael.roth@amd.com>
-AuthorDate:    Wed, 09 Feb 2022 12:10:18 -06:00
+AuthorDate:    Wed, 09 Feb 2022 12:10:17 -06:00
 Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Wed, 06 Apr 2022 17:07:02 +02:00
+CommitterDate: Wed, 06 Apr 2022 17:06:55 +02:00
 
-x86/compressed/acpi: Move EFI detection to helper
+x86/head/64: Re-enable stack protection
 
-Future patches for SEV-SNP-validated CPUID will also require early
-parsing of the EFI configuration. Incrementally move the related code
-into a set of helpers that can be re-used for that purpose.
+Due to
 
-First, carve out the functionality which determines the EFI environment
-type the machine is booting on.
+  103a4908ad4d ("x86/head/64: Disable stack protection for head$(BITS).o")
+
+kernel/head{32,64}.c are compiled with -fno-stack-protector to allow
+a call to set_bringup_idt_handler(), which would otherwise have stack
+protection enabled with CONFIG_STACKPROTECTOR_STRONG.
+
+While sufficient for that case, there may still be issues with calls to
+any external functions that were compiled with stack protection enabled
+that in-turn make stack-protected calls, or if the exception handlers
+set up by set_bringup_idt_handler() make calls to stack-protected
+functions.
+
+Subsequent patches for SEV-SNP CPUID validation support will introduce
+both such cases. Attempting to disable stack protection for everything
+in scope to address that is prohibitive since much of the code, like the
+SEV-ES #VC handler, is shared code that remains in use after boot and
+could benefit from having stack protection enabled. Attempting to inline
+calls is brittle and can quickly balloon out to library/helper code
+where that's not really an option.
+
+Instead, re-enable stack protection for head32.c/head64.c, and make the
+appropriate changes to ensure the segment used for the stack canary is
+initialized in advance of any stack-protected C calls.
+
+For head64.c:
+
+- The BSP will enter from startup_64() and call into C code
+  (startup_64_setup_env()) shortly after setting up the stack, which
+  may result in calls to stack-protected code. Set up %gs early to allow
+  for this safely.
+- APs will enter from secondary_startup_64*(), and %gs will be set up
+  soon after. There is one call to C code prior to %gs being setup
+  (__startup_secondary_64()), but it is only to fetch 'sme_me_mask'
+  global, so just load 'sme_me_mask' directly instead, and remove the
+  now-unused __startup_secondary_64() function.
+
+For head32.c:
+
+- BSPs/APs will set %fs to __BOOT_DS prior to any C calls. In recent
+  kernels, the compiler is configured to access the stack canary at
+  %fs:__stack_chk_guard [1], which overlaps with the initial per-cpu
+  '__stack_chk_guard' variable in the initial/"master" .data..percpu
+  area. This is sufficient to allow access to the canary for use
+  during initial startup, so no changes are needed there.
+
+[1] 3fb0fdb3bbe7 ("x86/stackprotector/32: Make the canary into a regular percpu variable")
 
   [ bp: Massage commit message. ]
 
+Suggested-by: Joerg Roedel <jroedel@suse.de> #for 64-bit %gs set up
 Signed-off-by: Michael Roth <michael.roth@amd.com>
 Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/20220307213356.2797205-25-brijesh.singh@amd.com
+Link: https://lore.kernel.org/r/20220307213356.2797205-24-brijesh.singh@amd.com
 ---
- arch/x86/boot/compressed/Makefile |  1 +-
- arch/x86/boot/compressed/acpi.c   | 28 ++++++-----------
- arch/x86/boot/compressed/efi.c    | 50 ++++++++++++++++++++++++++++++-
- arch/x86/boot/compressed/misc.h   | 16 ++++++++++-
- 4 files changed, 77 insertions(+), 18 deletions(-)
- create mode 100644 arch/x86/boot/compressed/efi.c
+ arch/x86/include/asm/setup.h |  1 -
+ arch/x86/kernel/Makefile     |  2 --
+ arch/x86/kernel/head64.c     |  9 ---------
+ arch/x86/kernel/head_64.S    | 24 +++++++++++++++++++++---
+ 4 files changed, 21 insertions(+), 15 deletions(-)
 
-diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-index 6115274..e69c3d2 100644
---- a/arch/x86/boot/compressed/Makefile
-+++ b/arch/x86/boot/compressed/Makefile
-@@ -103,6 +103,7 @@ endif
- vmlinux-objs-$(CONFIG_ACPI) += $(obj)/acpi.o
+diff --git a/arch/x86/include/asm/setup.h b/arch/x86/include/asm/setup.h
+index 896e48d..a1b107f 100644
+--- a/arch/x86/include/asm/setup.h
++++ b/arch/x86/include/asm/setup.h
+@@ -50,7 +50,6 @@ extern unsigned long saved_video_mode;
+ extern void reserve_standard_io_resources(void);
+ extern void i386_reserve_resources(void);
+ extern unsigned long __startup_64(unsigned long physaddr, struct boot_params *bp);
+-extern unsigned long __startup_secondary_64(void);
+ extern void startup_64_setup_env(unsigned long physbase);
+ extern void early_setup_idt(void);
+ extern void __init do_early_exception(struct pt_regs *regs, int trapnr);
+diff --git a/arch/x86/kernel/Makefile b/arch/x86/kernel/Makefile
+index c41ef42..1a2dc32 100644
+--- a/arch/x86/kernel/Makefile
++++ b/arch/x86/kernel/Makefile
+@@ -46,8 +46,6 @@ endif
+ # non-deterministic coverage.
+ KCOV_INSTRUMENT		:= n
  
- vmlinux-objs-$(CONFIG_EFI_MIXED) += $(obj)/efi_thunk_$(BITS).o
-+vmlinux-objs-$(CONFIG_EFI) += $(obj)/efi.o
- efi-obj-$(CONFIG_EFI_STUB) = $(objtree)/drivers/firmware/efi/libstub/lib.a
- 
- $(obj)/vmlinux: $(vmlinux-objs-y) $(efi-obj-y) FORCE
-diff --git a/arch/x86/boot/compressed/acpi.c b/arch/x86/boot/compressed/acpi.c
-index 8bcbcee..db6c561 100644
---- a/arch/x86/boot/compressed/acpi.c
-+++ b/arch/x86/boot/compressed/acpi.c
-@@ -87,7 +87,7 @@ static acpi_physical_address kexec_get_rsdp_addr(void)
- 	efi_system_table_64_t *systab;
- 	struct efi_setup_data *esd;
- 	struct efi_info *ei;
--	char *sig;
-+	enum efi_type et;
- 
- 	esd = (struct efi_setup_data *)get_kexec_setup_data_addr();
- 	if (!esd)
-@@ -98,10 +98,9 @@ static acpi_physical_address kexec_get_rsdp_addr(void)
- 		return 0;
- 	}
- 
--	ei = &boot_params->efi_info;
--	sig = (char *)&ei->efi_loader_signature;
--	if (strncmp(sig, EFI64_LOADER_SIGNATURE, 4)) {
--		debug_putstr("Wrong kexec EFI loader signature.\n");
-+	et = efi_get_type(boot_params);
-+	if (et != EFI_TYPE_64) {
-+		debug_putstr("Unexpected kexec EFI environment (expected 64-bit EFI).\n");
- 		return 0;
- 	}
- 
-@@ -122,29 +121,22 @@ static acpi_physical_address efi_get_rsdp_addr(void)
- 	unsigned long systab, config_tables;
- 	unsigned int nr_tables;
- 	struct efi_info *ei;
-+	enum efi_type et;
- 	bool efi_64;
--	char *sig;
+-CFLAGS_head$(BITS).o	+= -fno-stack-protector
 -
--	ei = &boot_params->efi_info;
--	sig = (char *)&ei->efi_loader_signature;
+ CFLAGS_irq.o := -I $(srctree)/$(src)/../include/asm/trace
  
--	if (!strncmp(sig, EFI64_LOADER_SIGNATURE, 4)) {
-+	et = efi_get_type(boot_params);
-+	if (et == EFI_TYPE_64)
- 		efi_64 = true;
--	} else if (!strncmp(sig, EFI32_LOADER_SIGNATURE, 4)) {
-+	else if (et == EFI_TYPE_32)
- 		efi_64 = false;
--	} else {
--		debug_putstr("Wrong EFI loader signature.\n");
-+	else
- 		return 0;
--	}
+ obj-y			:= process_$(BITS).o signal.o
+diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
+index 656d2f3..c185f48 100644
+--- a/arch/x86/kernel/head64.c
++++ b/arch/x86/kernel/head64.c
+@@ -318,15 +318,6 @@ unsigned long __head __startup_64(unsigned long physaddr,
+ 	return sme_postprocess_startup(bp, pmd);
+ }
  
- 	/* Get systab from boot params. */
-+	ei = &boot_params->efi_info;
- #ifdef CONFIG_X86_64
- 	systab = ei->efi_systab | ((__u64)ei->efi_systab_hi << 32);
- #else
--	if (ei->efi_systab_hi || ei->efi_memmap_hi) {
--		debug_putstr("Error getting RSDP address: EFI system table located above 4GB.\n");
--		return 0;
--	}
- 	systab = ei->efi_systab;
- #endif
- 	if (!systab)
-diff --git a/arch/x86/boot/compressed/efi.c b/arch/x86/boot/compressed/efi.c
-new file mode 100644
-index 0000000..bad0ce3
---- /dev/null
-+++ b/arch/x86/boot/compressed/efi.c
-@@ -0,0 +1,50 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Helpers for early access to EFI configuration table.
-+ *
-+ * Originally derived from arch/x86/boot/compressed/acpi.c
-+ */
+-unsigned long __startup_secondary_64(void)
+-{
+-	/*
+-	 * Return the SME encryption mask (if SME is active) to be used as a
+-	 * modifier for the initial pgdir entry programmed into CR3.
+-	 */
+-	return sme_get_me_mask();
+-}
+-
+ /* Wipe all early page tables except for the kernel symbol map */
+ static void __init reset_early_page_tables(void)
+ {
+diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
+index 6bf340c..7bac9a4 100644
+--- a/arch/x86/kernel/head_64.S
++++ b/arch/x86/kernel/head_64.S
+@@ -65,6 +65,22 @@ SYM_CODE_START_NOALIGN(startup_64)
+ 	leaq	(__end_init_task - FRAME_SIZE)(%rip), %rsp
+ 
+ 	leaq	_text(%rip), %rdi
 +
-+#include "misc.h"
-+#include <linux/efi.h>
-+#include <asm/efi.h>
-+
-+/**
-+ * efi_get_type - Given a pointer to boot_params, determine the type of EFI environment.
-+ *
-+ * @bp:         pointer to boot_params
-+ *
-+ * Return: EFI_TYPE_{32,64} for valid EFI environments, EFI_TYPE_NONE otherwise.
-+ */
-+enum efi_type efi_get_type(struct boot_params *bp)
-+{
-+	struct efi_info *ei;
-+	enum efi_type et;
-+	const char *sig;
-+
-+	ei = &bp->efi_info;
-+	sig = (char *)&ei->efi_loader_signature;
-+
-+	if (!strncmp(sig, EFI64_LOADER_SIGNATURE, 4)) {
-+		et = EFI_TYPE_64;
-+	} else if (!strncmp(sig, EFI32_LOADER_SIGNATURE, 4)) {
-+		et = EFI_TYPE_32;
-+	} else {
-+		debug_putstr("No EFI environment detected.\n");
-+		et = EFI_TYPE_NONE;
-+	}
-+
-+#ifndef CONFIG_X86_64
 +	/*
-+	 * Existing callers like acpi.c treat this case as an indicator to
-+	 * fall-through to non-EFI, rather than an error, so maintain that
-+	 * functionality here as well.
++	 * initial_gs points to initial fixed_percpu_data struct with storage for
++	 * the stack protector canary. Global pointer fixups are needed at this
++	 * stage, so apply them as is done in fixup_pointer(), and initialize %gs
++	 * such that the canary can be accessed at %gs:40 for subsequent C calls.
 +	 */
-+	if (ei->efi_systab_hi || ei->efi_memmap_hi) {
-+		debug_putstr("EFI system table is located above 4GB and cannot be accessed.\n");
-+		et = EFI_TYPE_NONE;
-+	}
-+#endif
++	movl	$MSR_GS_BASE, %ecx
++	movq	initial_gs(%rip), %rax
++	movq	$_text, %rdx
++	subq	%rdx, %rax
++	addq	%rdi, %rax
++	movq	%rax, %rdx
++	shrq	$32,  %rdx
++	wrmsr
 +
-+	return et;
-+}
-diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/misc.h
-index 01cc13c..fede1af 100644
---- a/arch/x86/boot/compressed/misc.h
-+++ b/arch/x86/boot/compressed/misc.h
-@@ -176,4 +176,20 @@ void boot_stage2_vc(void);
- 
- unsigned long sev_verify_cbit(unsigned long cr3);
- 
-+enum efi_type {
-+	EFI_TYPE_64,
-+	EFI_TYPE_32,
-+	EFI_TYPE_NONE,
-+};
-+
-+#ifdef CONFIG_EFI
-+/* helpers for early EFI config table access */
-+enum efi_type efi_get_type(struct boot_params *bp);
+ 	pushq	%rsi
+ 	call	startup_64_setup_env
+ 	popq	%rsi
+@@ -147,9 +163,11 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
+ 	 * Retrieve the modifier (SME encryption mask if SME is active) to be
+ 	 * added to the initial pgdir entry that will be programmed into CR3.
+ 	 */
+-	pushq	%rsi
+-	call	__startup_secondary_64
+-	popq	%rsi
++#ifdef CONFIG_AMD_MEM_ENCRYPT
++	movq	sme_me_mask, %rax
 +#else
-+static inline enum efi_type efi_get_type(struct boot_params *bp)
-+{
-+	return EFI_TYPE_NONE;
-+}
-+#endif /* CONFIG_EFI */
-+
- #endif /* BOOT_COMPRESSED_MISC_H */
++	xorq	%rax, %rax
++#endif
+ 
+ 	/* Form the CR3 value being sure to include the CR3 modifier */
+ 	addq	$(init_top_pgt - __START_KERNEL_map), %rax

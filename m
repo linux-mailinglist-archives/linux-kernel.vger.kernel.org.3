@@ -2,188 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5E3C4F9FA0
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 00:34:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4794F9FA2
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 00:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234678AbiDHWf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 18:35:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56510 "EHLO
+        id S235553AbiDHWkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 18:40:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiDHWf4 (ORCPT
+        with ESMTP id S230439AbiDHWko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 18:35:56 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1906B29A
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 15:33:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649457231; x=1680993231;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Eyr3rnHZFWM8Kq5tlkOFbVPOWSflB44fUC999WLRy6w=;
-  b=EB/FbOI/OqbVCDQLImUe+DTbHErrXd+vMfHP60Z2EMkGlD1SkzFydEDN
-   9MoJ+F1g4Qw1hJAZreFp8lnmxwvC7GOrCOBZMflEz7Xp2t51vY7rlssHn
-   qE5fTCNZWK5bGpOvxB2RdUBziR6KEERqRHKJ/4gBdY19uEhyGGp22yQpP
-   fZcM6mMWEDH5jfX9EtF6m7WpGla2wjzjQI4gNhKhfdyLK0qPsxd6TJFbw
-   sTWXOKZysHRrSnbFHzegsTBOjo1EM0ixrhQhs12dS69pselIr7iYs2i6e
-   Tu18sozvCayNQaUgZogaYpR/kbigXBgyktVCBR4owusW1MAsCrbsCflXy
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="259307176"
-X-IronPort-AV: E=Sophos;i="5.90,246,1643702400"; 
-   d="scan'208";a="259307176"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 15:33:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,246,1643702400"; 
-   d="scan'208";a="621815434"
-Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 08 Apr 2022 15:33:49 -0700
-Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ncxAq-0000gb-Rf;
-        Fri, 08 Apr 2022 22:33:48 +0000
-Date:   Sat, 9 Apr 2022 06:32:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jonathan Bell <jonathan@raspberrypi.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Dom Cobley <popcornmix@gmail.com>
-Subject: [l1k:smsc95xx_5.17 140/888] drivers/usb/host/xhci.c:1689:29: sparse:
- sparse: incorrect type in assignment (different base types)
-Message-ID: <202204090637.J4hjtLu2-lkp@intel.com>
+        Fri, 8 Apr 2022 18:40:44 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38716305045
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 15:38:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:Message-ID:
+        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=TdDWWtph9MKECKwgagF4Td9hLvgzVIbb97HVX6hNwww=; b=FoDPqxcZrN+pGNfk2EgT7ciajf
+        IqzkX3jC1sLYm029XW7IbILbsncqxMx8XqqQaBM7ricKnvm4d8tgzz1lIp2FaD5cTCn1nK9XKytds
+        O1Y+TE/G8ruQpjjD+Mx/Bhv5y5V3B1g1/EE7p2hbDi6H5Rbmi/k5pd9k0y4FF4e1ZGg/oLQLQQbvc
+        HVU8oXLim7wr2DumqvIxXoNdiFr4Uf5c9pjOAanUHpghKWnUZejSsaAcoKIyRgkOx9XaPLtjKhUv9
+        V9jLIHApkgAt0lJ6/NpOiTlAdmpXM6rvUYwpebUOdRF7FI+jFqZcIrs8OAmMem17c1JIeGv0HqTb/
+        /8q1eCHw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ncxFM-00AE3x-Ti; Fri, 08 Apr 2022 22:38:29 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 3B0A69861C5; Sat,  9 Apr 2022 00:38:27 +0200 (CEST)
+Date:   Sat, 9 Apr 2022 00:38:27 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     x86@kernel.org, Lai Jiangshan <jiangshanlai@gmail.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        linux-kernel@vger.kernel.org
+Subject: [RFC][PATCH] x86: PUSH_AND_CLEAR_REGS_COMPAT
+Message-ID: <20220408223827.GR2731@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/l1k/linux smsc95xx_5.17
-head:   240f56c27361c195cd502d95aba51c6b8e5b808c
-commit: 18a0d6abec9adca77be3ce06941448e33250e4ed [140/888] xhci: implement xhci_fixup_endpoint for interval adjustments
-config: nios2-randconfig-s032-20220408 (https://download.01.org/0day-ci/archive/20220409/202204090637.J4hjtLu2-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/l1k/linux/commit/18a0d6abec9adca77be3ce06941448e33250e4ed
-        git remote add l1k https://github.com/l1k/linux
-        git fetch --no-tags l1k smsc95xx_5.17
-        git checkout 18a0d6abec9adca77be3ce06941448e33250e4ed
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=nios2 SHELL=/bin/bash
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+How insane?
 
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+ arch/x86/entry/calling.h         | 25 ++++++++----
+ arch/x86/entry/entry_64_compat.S | 87 ++--------------------------------------
+ 2 files changed, 21 insertions(+), 91 deletions(-)
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/usb/host/xhci.c:1689:29: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 [usertype] add_flags @@     got unsigned int @@
-   drivers/usb/host/xhci.c:1689:29: sparse:     expected restricted __le32 [usertype] add_flags
-   drivers/usb/host/xhci.c:1689:29: sparse:     got unsigned int
-
-vim +1689 drivers/usb/host/xhci.c
-
-  1612	
-  1613	static void xhci_fixup_endpoint(struct usb_hcd *hcd, struct usb_device *udev,
-  1614					struct usb_host_endpoint *ep, int interval)
-  1615	{
-  1616		struct xhci_hcd *xhci;
-  1617		struct xhci_ep_ctx *ep_ctx_out, *ep_ctx_in;
-  1618		struct xhci_command *command;
-  1619		struct xhci_input_control_ctx *ctrl_ctx;
-  1620		struct xhci_virt_device *vdev;
-  1621		int xhci_interval;
-  1622		int ret;
-  1623		int ep_index;
-  1624		unsigned long flags;
-  1625		u32 ep_info_tmp;
-  1626	
-  1627		xhci = hcd_to_xhci(hcd);
-  1628		ep_index = xhci_get_endpoint_index(&ep->desc);
-  1629	
-  1630		/* FS/LS interval translations */
-  1631		if ((udev->speed == USB_SPEED_FULL ||
-  1632		     udev->speed == USB_SPEED_LOW))
-  1633			interval *= 8;
-  1634	
-  1635		mutex_lock(&xhci->mutex);
-  1636	
-  1637		spin_lock_irqsave(&xhci->lock, flags);
-  1638	
-  1639		vdev = xhci->devs[udev->slot_id];
-  1640		/* Get context-derived endpoint interval */
-  1641		ep_ctx_out = xhci_get_ep_ctx(xhci, vdev->out_ctx, ep_index);
-  1642		ep_ctx_in = xhci_get_ep_ctx(xhci, vdev->in_ctx, ep_index);
-  1643		xhci_interval = EP_INTERVAL_TO_UFRAMES(le32_to_cpu(ep_ctx_out->ep_info));
-  1644	
-  1645		if (interval == xhci_interval) {
-  1646			spin_unlock_irqrestore(&xhci->lock, flags);
-  1647			mutex_unlock(&xhci->mutex);
-  1648			return;
-  1649		}
-  1650	
-  1651		xhci_dbg(xhci, "Fixup interval=%d xhci_interval=%d\n",
-  1652			 interval, xhci_interval);
-  1653		command = xhci_alloc_command_with_ctx(xhci, true, GFP_ATOMIC);
-  1654		if (!command) {
-  1655			/* Failure here is benign, poll at the original rate */
-  1656			spin_unlock_irqrestore(&xhci->lock, flags);
-  1657			mutex_unlock(&xhci->mutex);
-  1658			return;
-  1659		}
-  1660	
-  1661		/* xHCI uses exponents for intervals... */
-  1662		xhci_interval = fls(interval) - 1;
-  1663		xhci_interval = clamp_val(xhci_interval, 3, 10);
-  1664		ep_info_tmp = le32_to_cpu(ep_ctx_out->ep_info);
-  1665		ep_info_tmp &= ~EP_INTERVAL(255);
-  1666		ep_info_tmp |= EP_INTERVAL(xhci_interval);
-  1667	
-  1668		/* Keep the endpoint context up-to-date while issuing the command. */
-  1669		xhci_endpoint_copy(xhci, vdev->in_ctx,
-  1670				   vdev->out_ctx, ep_index);
-  1671		ep_ctx_in->ep_info = cpu_to_le32(ep_info_tmp);
-  1672	
-  1673		/*
-  1674		 * We need to drop the lock, so take an explicit copy
-  1675		 * of the ep context.
-  1676		 */
-  1677		xhci_endpoint_copy(xhci, command->in_ctx, vdev->in_ctx, ep_index);
-  1678	
-  1679		ctrl_ctx = xhci_get_input_control_ctx(command->in_ctx);
-  1680		if (!ctrl_ctx) {
-  1681			xhci_warn(xhci,
-  1682				  "%s: Could not get input context, bad type.\n",
-  1683				  __func__);
-  1684			spin_unlock_irqrestore(&xhci->lock, flags);
-  1685			xhci_free_command(xhci, command);
-  1686			mutex_unlock(&xhci->mutex);
-  1687			return;
-  1688		}
-> 1689		ctrl_ctx->add_flags = xhci_get_endpoint_flag_from_index(ep_index);
-  1690		ctrl_ctx->drop_flags = 0;
-  1691	
-  1692		spin_unlock_irqrestore(&xhci->lock, flags);
-  1693	
-  1694		ret = xhci_configure_endpoint(xhci, udev, command,
-  1695					      false, false);
-  1696		if (ret)
-  1697			xhci_warn(xhci, "%s: Configure endpoint failed: %d\n",
-  1698				  __func__, ret);
-  1699		xhci_free_command(xhci, command);
-  1700		mutex_unlock(&xhci->mutex);
-  1701	}
-  1702	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+diff --git a/arch/x86/entry/calling.h b/arch/x86/entry/calling.h
+index a4c061fb7c6e..7f938704da59 100644
+--- a/arch/x86/entry/calling.h
++++ b/arch/x86/entry/calling.h
+@@ -63,13 +63,15 @@ For 32-bit we have the following conventions - kernel is built with
+  * for assembly code:
+  */
+ 
+-.macro PUSH_REGS rdx=%rdx rax=%rax save_ret=0
++.macro PUSH_REGS rdx=%rdx rax=%rax save_ret=0 save_rdi=1
+ 	.if \save_ret
+ 	pushq	%rsi		/* pt_regs->si */
+ 	movq	8(%rsp), %rsi	/* temporarily store the return address in %rsi */
+ 	movq	%rdi, 8(%rsp)	/* pt_regs->di (overwriting original return address) */
+ 	.else
++	.if \save_rdi
+ 	pushq   %rdi		/* pt_regs->di */
++	.endif
+ 	pushq   %rsi		/* pt_regs->si */
+ 	.endif
+ 	pushq	\rdx		/* pt_regs->dx */
+@@ -92,7 +94,7 @@ For 32-bit we have the following conventions - kernel is built with
+ 	.endif
+ .endm
+ 
+-.macro CLEAR_REGS
++.macro CLEAR_REGS_lo
+ 	/*
+ 	 * Sanitize registers of values that a speculation attack might
+ 	 * otherwise want to exploit. The lower registers are likely clobbered
+@@ -101,22 +103,31 @@ For 32-bit we have the following conventions - kernel is built with
+ 	 */
+ 	xorl	%edx,  %edx	/* nospec dx  */
+ 	xorl	%ecx,  %ecx	/* nospec cx  */
++	xorl	%ebx,  %ebx	/* nospec rbx */
++	xorl	%ebp,  %ebp	/* nospec rbp */
++.endm
++
++.macro CLEAR_REGS_hi
+ 	xorl	%r8d,  %r8d	/* nospec r8  */
+ 	xorl	%r9d,  %r9d	/* nospec r9  */
+ 	xorl	%r10d, %r10d	/* nospec r10 */
+ 	xorl	%r11d, %r11d	/* nospec r11 */
+-	xorl	%ebx,  %ebx	/* nospec rbx */
+-	xorl	%ebp,  %ebp	/* nospec rbp */
+ 	xorl	%r12d, %r12d	/* nospec r12 */
+ 	xorl	%r13d, %r13d	/* nospec r13 */
+ 	xorl	%r14d, %r14d	/* nospec r14 */
+ 	xorl	%r15d, %r15d	/* nospec r15 */
++.endm
+ 
++.macro PUSH_AND_CLEAR_REGS rdx=%rdx rax=%rax save_ret=0 save_rdi=1
++	PUSH_REGS rdx=\rdx, rax=\rax, save_ret=\save_ret save_rdi=\save_rdi
++	CLEAR_REGS_lo
++	CLEAR_REGS_hi
+ .endm
+ 
+-.macro PUSH_AND_CLEAR_REGS rdx=%rdx rax=%rax save_ret=0
+-	PUSH_REGS rdx=\rdx, rax=\rax, save_ret=\save_ret
+-	CLEAR_REGS
++.macro PUSH_AND_CLEAR_REGS_COMPAT rdx=%rdx rax=%rax save_ret=0 save_rdi=1
++	CLEAR_REGS_hi
++	PUSH_REGS rdx=\rdx, rax=\rax, save_ret=\save_ret save_rdi=\save_rdi
++	CLEAR_REGS_lo
+ .endm
+ 
+ .macro POP_REGS pop_rdi=1 skip_r11rcx=0
+diff --git a/arch/x86/entry/entry_64_compat.S b/arch/x86/entry/entry_64_compat.S
+index 4fdb007cddbd..44a3eaf15de6 100644
+--- a/arch/x86/entry/entry_64_compat.S
++++ b/arch/x86/entry/entry_64_compat.S
+@@ -83,32 +83,7 @@ SYM_INNER_LABEL(entry_SYSENTER_compat_after_hwframe, SYM_L_GLOBAL)
+ 	movl	%eax, %eax
+ 
+ 	pushq	%rax			/* pt_regs->orig_ax */
+-	pushq	%rdi			/* pt_regs->di */
+-	pushq	%rsi			/* pt_regs->si */
+-	pushq	%rdx			/* pt_regs->dx */
+-	pushq	%rcx			/* pt_regs->cx */
+-	pushq	$-ENOSYS		/* pt_regs->ax */
+-	pushq   $0			/* pt_regs->r8  = 0 */
+-	xorl	%r8d, %r8d		/* nospec   r8 */
+-	pushq   $0			/* pt_regs->r9  = 0 */
+-	xorl	%r9d, %r9d		/* nospec   r9 */
+-	pushq   $0			/* pt_regs->r10 = 0 */
+-	xorl	%r10d, %r10d		/* nospec   r10 */
+-	pushq   $0			/* pt_regs->r11 = 0 */
+-	xorl	%r11d, %r11d		/* nospec   r11 */
+-	pushq   %rbx                    /* pt_regs->rbx */
+-	xorl	%ebx, %ebx		/* nospec   rbx */
+-	pushq   %rbp                    /* pt_regs->rbp (will be overwritten) */
+-	xorl	%ebp, %ebp		/* nospec   rbp */
+-	pushq   $0			/* pt_regs->r12 = 0 */
+-	xorl	%r12d, %r12d		/* nospec   r12 */
+-	pushq   $0			/* pt_regs->r13 = 0 */
+-	xorl	%r13d, %r13d		/* nospec   r13 */
+-	pushq   $0			/* pt_regs->r14 = 0 */
+-	xorl	%r14d, %r14d		/* nospec   r14 */
+-	pushq   $0			/* pt_regs->r15 = 0 */
+-	xorl	%r15d, %r15d		/* nospec   r15 */
+-
++	PUSH_AND_CLEAR_REGS_COMPAT rax=$-ENOSYS
+ 	UNWIND_HINT_REGS
+ 
+ 	cld
+@@ -225,35 +200,7 @@ SYM_INNER_LABEL(entry_SYSCALL_compat_safe_stack, SYM_L_GLOBAL)
+ SYM_INNER_LABEL(entry_SYSCALL_compat_after_hwframe, SYM_L_GLOBAL)
+ 	movl	%eax, %eax		/* discard orig_ax high bits */
+ 	pushq	%rax			/* pt_regs->orig_ax */
+-	pushq	%rdi			/* pt_regs->di */
+-	pushq	%rsi			/* pt_regs->si */
+-	xorl	%esi, %esi		/* nospec   si */
+-	pushq	%rdx			/* pt_regs->dx */
+-	xorl	%edx, %edx		/* nospec   dx */
+-	pushq	%rbp			/* pt_regs->cx (stashed in bp) */
+-	xorl	%ecx, %ecx		/* nospec   cx */
+-	pushq	$-ENOSYS		/* pt_regs->ax */
+-	pushq   $0			/* pt_regs->r8  = 0 */
+-	xorl	%r8d, %r8d		/* nospec   r8 */
+-	pushq   $0			/* pt_regs->r9  = 0 */
+-	xorl	%r9d, %r9d		/* nospec   r9 */
+-	pushq   $0			/* pt_regs->r10 = 0 */
+-	xorl	%r10d, %r10d		/* nospec   r10 */
+-	pushq   $0			/* pt_regs->r11 = 0 */
+-	xorl	%r11d, %r11d		/* nospec   r11 */
+-	pushq   %rbx                    /* pt_regs->rbx */
+-	xorl	%ebx, %ebx		/* nospec   rbx */
+-	pushq   %rbp                    /* pt_regs->rbp (will be overwritten) */
+-	xorl	%ebp, %ebp		/* nospec   rbp */
+-	pushq   $0			/* pt_regs->r12 = 0 */
+-	xorl	%r12d, %r12d		/* nospec   r12 */
+-	pushq   $0			/* pt_regs->r13 = 0 */
+-	xorl	%r13d, %r13d		/* nospec   r13 */
+-	pushq   $0			/* pt_regs->r14 = 0 */
+-	xorl	%r14d, %r14d		/* nospec   r14 */
+-	pushq   $0			/* pt_regs->r15 = 0 */
+-	xorl	%r15d, %r15d		/* nospec   r15 */
+-
++	PUSH_AND_CLEAR_REGS_COMPAT rax=$-ENOSYS
+ 	UNWIND_HINT_REGS
+ 
+ 	movq	%rsp, %rdi
+@@ -381,35 +328,7 @@ SYM_CODE_START(entry_INT80_compat)
+ 	pushq	1*8(%rdi)		/* regs->orig_ax */
+ 	pushq	(%rdi)			/* pt_regs->di */
+ .Lint80_keep_stack:
+-
+-	pushq	%rsi			/* pt_regs->si */
+-	xorl	%esi, %esi		/* nospec   si */
+-	pushq	%rdx			/* pt_regs->dx */
+-	xorl	%edx, %edx		/* nospec   dx */
+-	pushq	%rcx			/* pt_regs->cx */
+-	xorl	%ecx, %ecx		/* nospec   cx */
+-	pushq	$-ENOSYS		/* pt_regs->ax */
+-	pushq   %r8			/* pt_regs->r8 */
+-	xorl	%r8d, %r8d		/* nospec   r8 */
+-	pushq   %r9			/* pt_regs->r9 */
+-	xorl	%r9d, %r9d		/* nospec   r9 */
+-	pushq   %r10			/* pt_regs->r10*/
+-	xorl	%r10d, %r10d		/* nospec   r10 */
+-	pushq   %r11			/* pt_regs->r11 */
+-	xorl	%r11d, %r11d		/* nospec   r11 */
+-	pushq   %rbx                    /* pt_regs->rbx */
+-	xorl	%ebx, %ebx		/* nospec   rbx */
+-	pushq   %rbp                    /* pt_regs->rbp */
+-	xorl	%ebp, %ebp		/* nospec   rbp */
+-	pushq   %r12                    /* pt_regs->r12 */
+-	xorl	%r12d, %r12d		/* nospec   r12 */
+-	pushq   %r13                    /* pt_regs->r13 */
+-	xorl	%r13d, %r13d		/* nospec   r13 */
+-	pushq   %r14                    /* pt_regs->r14 */
+-	xorl	%r14d, %r14d		/* nospec   r14 */
+-	pushq   %r15                    /* pt_regs->r15 */
+-	xorl	%r15d, %r15d		/* nospec   r15 */
+-
++	PUSH_AND_CLEAR_REGS save_rdi=0
+ 	UNWIND_HINT_REGS
+ 
+ 	cld

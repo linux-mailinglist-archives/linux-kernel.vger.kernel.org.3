@@ -2,54 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 414724F955B
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A1BB4F9552
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:06:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235499AbiDHMIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 08:08:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51394 "EHLO
+        id S233574AbiDHMId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 08:08:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235565AbiDHMHb (ORCPT
+        with ESMTP id S235913AbiDHMIT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 08:07:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02043F94EF;
-        Fri,  8 Apr 2022 05:04:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1244B62075;
-        Fri,  8 Apr 2022 12:04:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB0B0C385A8;
-        Fri,  8 Apr 2022 12:04:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649419495;
-        bh=DvBk2NjJx6xXxR2HYjxT2aaULsB7g1Rt0KWFngBdd8E=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=M51P4EIJLO414AKWYGjdmcOo1wICr/XU/d4sLqUWKXCvZlVosh/fGh7xdDLXXjMXh
-         af9h17GGPTvTPJw//GOCLPewgaMJGnD/4Lthuv94VRVkHVmpFKU+y1eel9H+4WCI/P
-         TUwYVh/2wvBqi0bhdWNrI+5QVUb7dDcFxD1iKTvug/R5NPnly1TTbQcLIeyjWNjItN
-         ng26CBwvQIWNN/PvEjbM6exg/0CMSn3RiLmEXs4zGe2yU8rTi8/w0C/Lx1s25hs0T/
-         V5jePEzuNuzhYX3ZBWwZRuTOC5y8yh7yeoA4ZuN5Hit+0VVwt3X1xbs31F8voYq4Qj
-         hmg6qLPUHXOpA==
-Message-ID: <947af0b22bf50affa504bc0ca45fb0e290fc7805.camel@kernel.org>
-Subject: Re: [PATCH v4] ceph: invalidate pages when doing direct/sync writes
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Xiubo Li <xiubli@redhat.com>,
-        =?ISO-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>,
-        Ilya Dryomov <idryomov@gmail.com>
-Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 08 Apr 2022 08:04:53 -0400
-In-Reply-To: <0133ed11-bb90-9337-e787-66851cbbc379@redhat.com>
-References: <20220407151521.7968-1-lhenriques@suse.de>
-         <0133ed11-bb90-9337-e787-66851cbbc379@redhat.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Fri, 8 Apr 2022 08:08:19 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F164F38D86;
+        Fri,  8 Apr 2022 05:06:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=nigdLwVfEQ2J3jfM763Hz6LH2QveHz51UWg9LJkBT4w=; b=MUP+uMkfw7IEy5HJN+0xfUDICZ
+        mdTL2aBbAbBZXv+Zqw23HXvzG9oQ17G5U3CsmhNEvpT8Gfl1Z+bHoONo2PYZ7FqrBYmRfAvM6TD76
+        ZsKh7s3dcRlFgQh9EokiUCJi8sXaIYRA2aC5/D7OQ70Jtm7zGSLoT59SZqQS3pdh4/fuakX4YJ/cf
+        2Mgqub5CSYvvOSVxYTRY3ONImgVx2wn33UliU5bAHm2ZEMAwuCx0hkSuNKIH1GEEPvfU9tGVQX3Oh
+        Rc5OFTuEgaV6gidlRYZUPC4WlR8gj22dGTxtd4sfldRDJf1IzG8JhHyRDeC9hSocDPRUdIFdFQc4B
+        +lK4riUw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ncnNN-009nL9-Gn; Fri, 08 Apr 2022 12:06:05 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0019A30017F;
+        Fri,  8 Apr 2022 14:06:03 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id CD061302DDE0B; Fri,  8 Apr 2022 14:06:03 +0200 (CEST)
+Date:   Fri, 8 Apr 2022 14:06:03 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     madvenka@linux.microsoft.com
+Cc:     mark.rutland@arm.com, broonie@kernel.org, jpoimboe@redhat.com,
+        ardb@kernel.org, nobuta.keiya@fujitsu.com,
+        sjitindarsingh@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        jmorris@namei.org, linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v1 0/9] arm64: livepatch: Use DWARF Call Frame
+ Information for frame pointer validation
+Message-ID: <YlAlK+94gBlVlv2J@hirez.programming.kicks-ass.net>
+References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
+ <20220407202518.19780-1-madvenka@linux.microsoft.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220407202518.19780-1-madvenka@linux.microsoft.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,103 +63,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-08 at 10:47 +0800, Xiubo Li wrote:
-> On 4/7/22 11:15 PM, Luís Henriques wrote:
-> > When doing a direct/sync write, we need to invalidate the page cache in
-> > the range being written to.  If we don't do this, the cache will include
-> > invalid data as we just did a write that avoided the page cache.
-> > 
-> > Signed-off-by: Luís Henriques <lhenriques@suse.de>
-> > ---
-> >   fs/ceph/file.c | 19 ++++++++++++++-----
-> >   1 file changed, 14 insertions(+), 5 deletions(-)
-> > 
-> > Changes since v3:
-> > - Dropped initial call to invalidate_inode_pages2_range()
-> > - Added extra comment to document invalidation
-> > 
-> > Changes since v2:
-> > - Invalidation needs to be done after a write
-> > 
-> > Changes since v1:
-> > - Replaced truncate_inode_pages_range() by invalidate_inode_pages2_range
-> > - Call fscache_invalidate with FSCACHE_INVAL_DIO_WRITE if we're doing DIO
-> > 
-> > diff --git a/fs/ceph/file.c b/fs/ceph/file.c
-> > index 5072570c2203..97f764b2fbdd 100644
-> > --- a/fs/ceph/file.c
-> > +++ b/fs/ceph/file.c
-> > @@ -1606,11 +1606,6 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
-> >   		return ret;
-> >   
-> >   	ceph_fscache_invalidate(inode, false);
-> > -	ret = invalidate_inode_pages2_range(inode->i_mapping,
-> > -					    pos >> PAGE_SHIFT,
-> > -					    (pos + count - 1) >> PAGE_SHIFT);
-> > -	if (ret < 0)
-> > -		dout("invalidate_inode_pages2_range returned %d\n", ret);
-> >   
-> >   	while ((len = iov_iter_count(from)) > 0) {
-> >   		size_t left;
-> > @@ -1938,6 +1933,20 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
-> >   			break;
-> >   		}
-> >   		ceph_clear_error_write(ci);
-> > +
-> > +		/*
-> > +		 * we need to invalidate the page cache here, otherwise the
-> > +		 * cache will include invalid data in direct/sync writes.
-> > +		 */
-> > +		ret = invalidate_inode_pages2_range(
-> > +				inode->i_mapping,
-> > +				pos >> PAGE_SHIFT,
-> > +				(pos + len - 1) >> PAGE_SHIFT);
-> > +		if (ret < 0) {
-> > +			dout("invalidate_inode_pages2_range returned %d\n",
-> > +			     ret);
-> > +			ret = 0;
+On Thu, Apr 07, 2022 at 03:25:09PM -0500, madvenka@linux.microsoft.com wrote:
+> The solution
+> ============
 > 
-> For this, IMO it's not safe. If we just ignore it the pagecache will 
-> still have invalid data.
+> The goal here is to use the absolute minimum CFI needed to compute the FP at
+> every instruction address. The unwinder can compute the FP in each frame,
+> compare the actual FP with the computed one and validate the actual FP.
 > 
-
-That data is not invalid. It's dirty data from a buffered write that
-raced with the DIO/sync write we're handling here. i.e. another write
-came in while we were already processing the DIO write, but after the
-point where we called filemap_write_and_wait.
-
-When two write() calls to the same data are racing like that, the
-outcome is undefined. We can't be certain which one will prevail as the
-kernel could handle them in either order.
-
-The good news with Ceph/RADOS is that you shouldn't end up with a torn
-write, unless the write happens to span multiple objects. Not much we
-can do about that though.
-
-> I think what the 'ceph_direct_read_write()' does is more correct, it 
-> will make sure all the dirty pages are writeback from the pagecaches by 
-> using 'invalidate_inode_pages2_range()' without blocking and later will 
-> do the invalidate blocked by using 'truncate_inode_pages_range()' if 
-> some pages are not unmaped in 'invalidate_inode_pages2_range()' when EBUSY.
+> Objtool is enhanced to parse the CFI, extract just the rules required,
+> encode them in compact data structures and create special sections for
+> the rules. The unwinder uses the special sections to find the rules for
+> a given instruction address and compute the FP.
 > 
-
-I'm not convinced this is any better, and it's attempting to impose a
-deterministic outcome on a situation that is non-deterministic by
-nature.
-
-> This can always be sure that the pagecache has no invalid data after 
-> write finishes. I think why it use the truncate helper here is because 
-> it's safe and there shouldn't have any buffer write happen for DIO ?
+> Objtool can be invoked as follows:
 > 
-> But from my understanding the 'ceph_direct_read_write()' is still buggy. 
-> What if the page fault happen just after 'truncate_inode_pages_range()' 
-> ? Will this happen ? Should we leave this to use the file lock to 
-> guarantee it in user space ?
+> 	objtool dwarf generate <object-file>
 > 
-> Thought ?
+> The version of the DWARF standard supported in this work is version 4. The
+> official documentation for this version is here:
+> 
+> 	https://dwarfstd.org/doc/DWARF4.pdf
+> 
+> Section 6.4 contains the description of the CFI.
 
-Again, we can't really predict what the outcome of two racing writes to
-the same area will do, so I don't see that there is a problem.
+The problem is of course that DWARF is only available for compiler
+generated code and doesn't cover assembly code, of which is there is
+always lots.
 
--- 
-Jeff Layton <jlayton@kernel.org>
+I suppose you can go add DWARF annotations to all the assembly, but IIRC
+those are pretty terrible. We were *REALLY* happy to delete all that
+nasty from the x86 code.
+
+On top of that, AFAIK compilers don't generally consider DWARF
+generation to be a correctness issue. For them it's debug info and
+having it be correct is nice but not required. So using it as input for
+something that's required to be correct, seems unfortunate.

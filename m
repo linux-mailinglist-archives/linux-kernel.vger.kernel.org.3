@@ -2,72 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E13464FA012
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 01:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA1894FA01E
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 01:26:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236174AbiDHXXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 19:23:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60130 "EHLO
+        id S236705AbiDHX2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 19:28:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiDHXXh (ORCPT
+        with ESMTP id S236203AbiDHX2G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 19:23:37 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 917BC37A84;
-        Fri,  8 Apr 2022 16:21:31 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id u15so1443530ejf.11;
-        Fri, 08 Apr 2022 16:21:31 -0700 (PDT)
+        Fri, 8 Apr 2022 19:28:06 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FCC11A13;
+        Fri,  8 Apr 2022 16:26:00 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id u18so994351eda.3;
+        Fri, 08 Apr 2022 16:26:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=VeBo5MNmcNP8GgrnYnuxwD9C21s9NCSI0hQmRgeVZ2c=;
-        b=SwUdCASoZsLrVzHwYE9Q2w7j8anHVyABwID7GJeaxGfrbLM5k0Ll9QikJqmhJzldK2
-         DEhbbyAiFI6iSlauWF8t+jKysCy4/ituH373bOQYneDjgtlRMT6MU1S3YxRPtJMX4oX1
-         xiqUnHmj8t0fgyqR+02CHlzq+jgHtUhjPECIh0Ks3TbRC2E9CvqftD/OWYrUdEqNpZjp
-         3glxzcacU6WGhpBVaEXzCQ0oxQ8tSiZTZ4JCiNXATn1QSgRsiUvuhHZik+iIDX+IIXcf
-         8J9iJvcV6FOxsjwd8QIAaWSAR31c/r5e3ajAJURaZ6AV3A29bWAbfjYHTsvDoGioJU0U
-         luDQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4GaWA2Fuk8kXND0qeqeKieqo0o4cogxqEcU10NDv2L0=;
+        b=GCS7HNe7t4bJOfiX0Qgs3D/Mrf/3IfWv/qrKrcaR4fUWn8Koy+kdQ72uVPhlOqY3nj
+         LTPrf5LHX700EXL7K5HngD8vFI4X8RJzdQWQLaX2DNYSyE3rEB3PpiQERrgThmIpapVH
+         REDou3bA6BV+6pAcJRdaDevjwxvxqvpFP+p7U/eCkVRnQo0xBnr/gAz+p/9qyHuUdS77
+         NpqAqb4g3ZVSgAaJPcPtz5jFSTpJkd8jtP77nnsci/IsrvEftzEKptnwazPb9aEz3/Q8
+         QE4CEO310URG5WQh+D9eohVStBhYoJAOqaqen3AFvKauXpCHQepY//x58ltZP/XZL0M2
+         jb6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=VeBo5MNmcNP8GgrnYnuxwD9C21s9NCSI0hQmRgeVZ2c=;
-        b=LocO8QQASOg/2MlVENXwqXvko7M0Gyh1Q8rw2t21ZC8WE+asDd5XUA6w5btY24tQOW
-         excSungF3YW5SezEbbHfUlM6dqw6vbYNaiJit95QMI42ByKlqkJ7C8ymVpKQ6gfHRIlR
-         S2zAW4LCEEnZv18Bl0RHB/q4LiM0YgLjTHt3NlczevGIlJGp2EZdCHn0YFCrJsXIobK0
-         NxT9pecLK5WzOQGeNnfrCPp+e2jwe93aL4YVOROaBjkVxxn6YiliQyZLBxuXvUXqona6
-         RdoMIhFJVdbG+S+jGdCREHzkolyTWSVYs9HfwvOTn/9IZrUny+LxgJHb6Wtso5NabfoU
-         +j4A==
-X-Gm-Message-State: AOAM530fAMLsHsPbWJRGFrCsp+sHs7SrKst/uUNw7i/gkXChuGoX8575
-        MWblsKqZkcqUZUiSu5cE+c0=
-X-Google-Smtp-Source: ABdhPJw0QRTK6Xo+GwWqeZ539WFr3ViLkQZwB5m+GvauaxNMLcPszYUGFgrOGSqHLo80QDJyI0Moiw==
-X-Received: by 2002:a17:907:7da8:b0:6e0:5b94:5ed8 with SMTP id oz40-20020a1709077da800b006e05b945ed8mr19652474ejc.312.1649460090158;
-        Fri, 08 Apr 2022 16:21:30 -0700 (PDT)
-Received: from localhost ([185.92.221.13])
-        by smtp.gmail.com with ESMTPSA id v8-20020a50d848000000b0041cb912717asm8936807edj.91.2022.04.08.16.21.29
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 08 Apr 2022 16:21:29 -0700 (PDT)
-Date:   Fri, 8 Apr 2022 23:21:29 +0000
-From:   Wei Yang <richard.weiyang@gmail.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Juergen Gross <jgross@suse.com>, xen-devel@lists.xenproject.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        stable@vger.kernel.org,
-        Marek Marczykowski-G??recki <marmarek@invisiblethingslab.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Wei Yang <richard.weiyang@gmail.com>
-Subject: Re: [PATCH] mm, page_alloc: fix build_zonerefs_node()
-Message-ID: <20220408232129.caboqxtw6s4nmgde@master>
-Reply-To: Wei Yang <richard.weiyang@gmail.com>
-References: <20220407093221.1090-1-jgross@suse.com>
- <1028ca3c-5b6c-d95e-9372-ae64b1fcbc82@redhat.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4GaWA2Fuk8kXND0qeqeKieqo0o4cogxqEcU10NDv2L0=;
+        b=oq2pCIFy+gZ7PvS8hO1FW3gyAL8aENhoEekAeQbWzhKQcsAGVYMZwkl+13gFMEB1B9
+         2dfWQs+QWivfNIe2/YDT/b5YMQQIwtLqj/Ej0ZwWJSDf6r7B7B4HFCalgtQSkV3aiT7g
+         r3Vu+nd2LVtOYUHLCe1HaKqnEua+A45jziPqwh0t6yoL1vJAeM1jodGVJ5IJbPDiQB8I
+         ELPqbCMn2eHV1ola1h+ATuQ50DbemvnTgnSxewqF68+zLFpzgxb4jPsqTTW5j6izBnSB
+         m5E/eVo4KPEsm/8WprY1kR/Ims3JHZpbwCZ0rpjRTR4AMYwndxQ010bS3LbqpBrQVByY
+         wEgQ==
+X-Gm-Message-State: AOAM533SZiZxpAuhKPctyznAL0VVNbrGVcKaqPxuBjISjqsSOKbQ1xG2
+        XBaKe5ENLmN7fAZOuqRv9yw=
+X-Google-Smtp-Source: ABdhPJzfIvGtPN+jui8oCXx7bKJpTEqrNJuCGXO5M3y/EkXa0i1TjkJevRHfeKTTghskLBNHnllf2g==
+X-Received: by 2002:a05:6402:40ce:b0:41a:6817:5b07 with SMTP id z14-20020a05640240ce00b0041a68175b07mr21777105edb.7.1649460359283;
+        Fri, 08 Apr 2022 16:25:59 -0700 (PDT)
+Received: from skbuf ([188.26.57.45])
+        by smtp.gmail.com with ESMTPSA id r22-20020a17090638d600b006d584aaa9c9sm9170186ejd.133.2022.04.08.16.25.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 16:25:58 -0700 (PDT)
+Date:   Sat, 9 Apr 2022 02:25:57 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Prasanna Vengateshan <prasanna.vengateshan@microchip.com>
+Cc:     andrew@lunn.ch, netdev@vger.kernel.org, robh+dt@kernel.org,
+        UNGLinuxDriver@microchip.com, woojung.huh@microchip.com,
+        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        devicetree@vger.kernel.org, pabeni@redhat.com
+Subject: Re: [RFC PATCH v11 net-next 05/10] net: dsa: microchip: add DSA
+ support for microchip lan937x
+Message-ID: <20220408232557.b62l3lksotq5vuvm@skbuf>
+References: <20220325165341.791013-1-prasanna.vengateshan@microchip.com>
+ <20220325165341.791013-6-prasanna.vengateshan@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1028ca3c-5b6c-d95e-9372-ae64b1fcbc82@redhat.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <20220325165341.791013-6-prasanna.vengateshan@microchip.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -78,52 +76,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 11:46:13AM +0200, David Hildenbrand wrote:
->On 07.04.22 11:32, Juergen Gross wrote:
->> Since commit 9d3be21bf9c0 ("mm, page_alloc: simplify zonelist
->> initialization") only zones with free memory are included in a built
->> zonelist. This is problematic when e.g. all memory of a zone has been
->> ballooned out.
->> 
->> Use populated_zone() when building a zonelist as it has been done
->> before that commit.
->> 
->> Cc: stable@vger.kernel.org
->> Fixes: 9d3be21bf9c0 ("mm, page_alloc: simplify zonelist initialization")
->> Reported-by: Marek Marczykowski-G??recki <marmarek@invisiblethingslab.com>
->> Signed-off-by: Juergen Gross <jgross@suse.com>
->> ---
->>  mm/page_alloc.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->> 
->> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
->> index bdc8f60ae462..3d0662af3289 100644
->> --- a/mm/page_alloc.c
->> +++ b/mm/page_alloc.c
->> @@ -6128,7 +6128,7 @@ static int build_zonerefs_node(pg_data_t *pgdat, struct zoneref *zonerefs)
->>  	do {
->>  		zone_type--;
->>  		zone = pgdat->node_zones + zone_type;
->> -		if (managed_zone(zone)) {
->> +		if (populated_zone(zone)) {
->>  			zoneref_set_zone(zone, &zonerefs[nr_zones++]);
->>  			check_highest_zone(zone_type);
->>  		}
->
->Let's see if we have to find another way to properly handle fadump.
->
->Acked-by: David Hildenbrand <david@redhat.com>
+On Fri, Mar 25, 2022 at 10:23:36PM +0530, Prasanna Vengateshan wrote:
+> +static void lan937x_r_mib_stats64(struct ksz_device *dev, int port)
+> +{
+> +	struct ksz_port_mib *mib = &dev->ports[port].mib;
+> +	struct rtnl_link_stats64 *s;
+> +	u64 *ctr = mib->counters;
+> +
+> +	s = &mib->stats64;
+> +	spin_lock(&mib->stats64_lock);
 
-Ok, I see the point.
+I haven't looked at further patches yet to see if the situation improves
+or not, but right now, this spin lock is useless, as you do not
+implement .get_stats64.
 
-Reviewed-by: Wei Yang <richard.weiyang@gmail.com>
+> +
+> +	s->rx_packets = ctr[lan937x_mib_rx_mcast] +
+> +			ctr[lan937x_mib_rx_bcast] +
+> +			ctr[lan937x_mib_rx_ucast] +
+> +			ctr[lan937x_mib_rx_pause];
+> +
+> +	s->tx_packets = ctr[lan937x_mib_tx_mcast] +
+> +			ctr[lan937x_mib_tx_bcast] +
+> +			ctr[lan937x_mib_tx_ucast] +
+> +			ctr[lan937x_mib_tx_pause];
+> +
+> +	s->rx_bytes = ctr[lan937x_mib_rx_total];
+> +	s->tx_bytes = ctr[lan937x_mib_tx_total];
+> +
+> +	s->rx_errors = ctr[lan937x_mib_rx_fragments] +
+> +		       ctr[lan937x_mib_rx_jabbers] +
+> +		       ctr[lan937x_mib_rx_sym_err] +
+> +		       ctr[lan937x_mib_rx_align_err] +
+> +		       ctr[lan937x_mib_rx_crc_err];
+> +
+> +	s->tx_errors = ctr[lan937x_mib_tx_exc_col] +
+> +		       ctr[lan937x_mib_tx_late_col];
+> +
+> +	s->rx_dropped = ctr[lan937x_mib_rx_discard];
+> +	s->tx_dropped = ctr[lan937x_mib_tx_discard];
+> +	s->multicast = ctr[lan937x_mib_rx_mcast];
+> +
+> +	s->collisions = ctr[lan937x_mib_tx_late_col] +
+> +			ctr[lan937x_mib_tx_single_col] +
+> +			ctr[lan937x_mib_tx_mult_col];
+> +
+> +	s->rx_length_errors = ctr[lan937x_mib_rx_fragments] +
+> +			      ctr[lan937x_mib_rx_jabbers];
+> +
+> +	s->rx_crc_errors = ctr[lan937x_mib_rx_crc_err];
+> +	s->rx_frame_errors = ctr[lan937x_mib_rx_align_err];
+> +	s->tx_aborted_errors = ctr[lan937x_mib_tx_exc_col];
+> +	s->tx_window_errors = ctr[lan937x_mib_tx_late_col];
+> +
+> +	spin_unlock(&mib->stats64_lock);
+> +}
 
->
->-- 
->Thanks,
->
->David / dhildenb
+> +static int lan937x_init(struct ksz_device *dev)
+> +{
+> +	int ret;
+> +
+> +	ret = lan937x_switch_init(dev);
+> +	if (ret < 0) {
+> +		dev_err(dev->dev, "failed to initialize the switch");
+> +		return ret;
+> +	}
+> +
+> +	/* enable Indirect Access from SPI to the VPHY registers */
+> +	ret = lan937x_enable_spi_indirect_access(dev);
 
--- 
-Wei Yang
-Help you, Help me
+Do you need to call this both from lan937x_init() and from lan937x_setup()?
+
+> +	if (ret < 0) {
+> +		dev_err(dev->dev, "failed to enable spi indirect access");
+> +		return ret;
+> +	}
+> +
+> +	ret = lan937x_mdio_register(dev);
+> +	if (ret < 0) {
+> +		dev_err(dev->dev, "failed to register the mdio");
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+
+> +static void lan937x_port_stp_state_set(struct dsa_switch *ds, int port,
+> +				       u8 state)
+> +{
+> +	struct ksz_device *dev = ds->priv;
+> +	struct ksz_port *p;
+> +	u8 data;
+> +
+> +	lan937x_pread8(dev, port, P_STP_CTRL, &data);
+
+This is a copy-paste of ksz8_port_stp_state_set() except for the use of
+lan937x_pread8() instead of ksz_pread8(). But ksz_pread8() should work
+too, since it calls dev->dev_ops->get_port_addr(port, offset) which you
+translate into PORT_CTRL_ADDR(port, offset) which is exactly what
+lan937x_pread8() does.
+
+> +	data &= ~(PORT_TX_ENABLE | PORT_RX_ENABLE | PORT_LEARN_DISABLE);
+> +
+> +	switch (state) {
+> +	case BR_STATE_DISABLED:
+> +		data |= PORT_LEARN_DISABLE;
+> +		break;
+> +	case BR_STATE_LISTENING:
+> +		data |= (PORT_RX_ENABLE | PORT_LEARN_DISABLE);
+> +		break;
+> +	case BR_STATE_LEARNING:
+> +		data |= PORT_RX_ENABLE;
+> +		break;
+> +	case BR_STATE_FORWARDING:
+> +		data |= (PORT_TX_ENABLE | PORT_RX_ENABLE);
+> +		break;
+> +	case BR_STATE_BLOCKING:
+> +		data |= PORT_LEARN_DISABLE;
+> +		break;
+> +	default:
+> +		dev_err(ds->dev, "invalid STP state: %d\n", state);
+> +		return;
+> +	}
+> +
+> +	lan937x_pwrite8(dev, port, P_STP_CTRL, data);
+> +
+> +	p = &dev->ports[port];
+> +	p->stp_state = state;
+> +
+> +	ksz_update_port_member(dev, port);
+> +}

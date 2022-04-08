@@ -2,195 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AFB44F9C01
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 19:48:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 883CF4F9C02
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 19:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235195AbiDHRus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 13:50:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55788 "EHLO
+        id S237857AbiDHRvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 13:51:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230482AbiDHRur (ORCPT
+        with ESMTP id S229611AbiDHRvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 13:50:47 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9940BF947;
-        Fri,  8 Apr 2022 10:48:42 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id k23so18770915ejd.3;
-        Fri, 08 Apr 2022 10:48:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1dYMooINZBesZgE+qatHQg2DcF3xb71Lnrv9t8f9hFE=;
-        b=mJSARCmDj7mvEdVm4LUW8tlKV5ZElMGZfO2fPLhyqzHIzl3y20W7IVKyfZmJPOjD0A
-         xbMhzT6SkWuSQ33KIdYEXcm3uX/eQpod49u6ikQV0lXivg+Mfbk+hRDiUw77vUZ1/+NQ
-         YE+G0D8zjG5Uh1YHzHlNfAkY7yNF8adKNthr9F0DpQhD+ckMxfW0Lqdvd2Ictu/X21kO
-         AqRM8UxZfst7TxtSzZR8kevNOYLuEBuH0i+ESYBAorzi9A1JEmlKheUs3rez2ndS0csB
-         PEgjDsgvlXYKMwXuS8xNfMuE8ZgKMQayFGmMoNClN8XW8O+vMmqxV+nIGjxdgMjDDBWm
-         IAFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1dYMooINZBesZgE+qatHQg2DcF3xb71Lnrv9t8f9hFE=;
-        b=OCW3kXDhORV7AmkkJpgusyNFpHBwMXMkciCEFPAd5wI1goanA2zqp54rCMKvYAzgnH
-         j0QSdjI5+VWTr6Naubqw9szr+WmO8AwFzFvcJs176t037JIY20U5rzND6JJudiOW+6zT
-         Q07R4GVWWB22b1qKDypxjNxdABHPTBSAiY7Rz2eZNyRTqmCdR+hAPoQQ6VVgX29SWra7
-         uj1PRsvgAPodjjGY5WK05Yim2Gb/SQtfErrD/wWTCcPvXkBtMoMtROC3wk06ILLHbsnM
-         zjXck8kSkRVHu2lYLv6OHDiSEnFaMbgwJZ6xnWFx1c8kAQB5eohiVeyBMt5oDIU8tAU+
-         oOOw==
-X-Gm-Message-State: AOAM533ZQJDKnJYYZxLLRzfwOpMT1yEfAkj40bfrOvab2YH9xebQ62Ha
-        RePMNNufDGtfVxe8RK7N5TMD+wWOHZY8tA==
-X-Google-Smtp-Source: ABdhPJygv+AX+HiGiURYc2MGuFx9svBO5zEHUCxAXyqMDd394Zipfk1quOQo/017eoEzkg4iDbFp2g==
-X-Received: by 2002:a17:907:2d93:b0:6db:ab5e:7e0b with SMTP id gt19-20020a1709072d9300b006dbab5e7e0bmr19341556ejc.262.1649440121391;
-        Fri, 08 Apr 2022 10:48:41 -0700 (PDT)
-Received: from linux.. (p5dd1ed70.dip0.t-ipconnect.de. [93.209.237.112])
-        by smtp.gmail.com with ESMTPSA id gh9-20020a1709073c0900b006e803954409sm4487654ejc.5.2022.04.08.10.48.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 10:48:41 -0700 (PDT)
-From:   Bean Huo <huobean@gmail.com>
-To:     ulf.hansson@linaro.org, adrian.hunter@intel.com
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jakob.rossler@nokia.com, sperson@micron.com,
-        Bean Huo <beanhuo@micron.com>
-Subject: [PATCH v1] mmc-utils: Add General command CMD56 read support
-Date:   Fri,  8 Apr 2022 19:48:32 +0200
-Message-Id: <20220408174832.303915-1-huobean@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 8 Apr 2022 13:51:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6511C056E;
+        Fri,  8 Apr 2022 10:49:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 135F7B82C8B;
+        Fri,  8 Apr 2022 17:49:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C301FC385A5;
+        Fri,  8 Apr 2022 17:49:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649440148;
+        bh=DX5uSsYLa7Jfsvg5aV44fSkze11p6BwzgWDgpOisInI=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=UG3t7jIJRt0wdP5v2L58X5RzBAQJVQTFqVPxpHkSJubWdVQXApkRt9rs4+WzZtbL8
+         ymThaCnZ27H/PWp/S4uD2okkzYXCO5aVQN5+SRzvqPAH9gjwA6ch2AIT6vL+zIjJXn
+         2fo+JAbph1eYIAhvW3orf+VWoJ+aXe0SWUyfSZwF+CF2kvUHDMnKds3JHg9aSC0xKR
+         IWBqXZwDZ5tzWuBn1ufXQD6MO50EdMiofl1J+VOuOKCwLipoxFuAOcsH1Yf8OoVzs7
+         ImvOb2KWsbmZnqWPQchMXe05+QKLdMIrp5cqEt4jPNHbgnbeA3U6y70z6VoMcphPQy
+         8IjLautNiCEkA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 4E5A55C015D; Fri,  8 Apr 2022 10:49:08 -0700 (PDT)
+Date:   Fri, 8 Apr 2022 10:49:08 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        rcu <rcu@vger.kernel.org>, Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH RFC] rcu/nocb: Provide default all-CPUs mask for
+ RCU_NOCB_CPU=y
+Message-ID: <20220408174908.GK4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220407210734.2548973-1-joel@joelfernandes.org>
+ <20220408142232.GA4285@paulmck-ThinkPad-P17-Gen-1>
+ <CAEXW_YQWeqfcKdAKmCn4fFGyWXjOGd=29wvi6bL3k7s2bGkDJw@mail.gmail.com>
+ <20220408155002.GF4285@paulmck-ThinkPad-P17-Gen-1>
+ <CAEXW_YQDgSO2XkkVhN3RBBz3vwYdAtTuPz-xYYsAPnwEnbYZPA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEXW_YQDgSO2XkkVhN3RBBz3vwYdAtTuPz-xYYsAPnwEnbYZPA@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bean Huo <beanhuo@micron.com>
+On Fri, Apr 08, 2022 at 01:20:02PM -0400, Joel Fernandes wrote:
+> On Fri, Apr 8, 2022 at 11:50 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > On Fri, Apr 08, 2022 at 10:52:21AM -0400, Joel Fernandes wrote:
+> > > On Fri, Apr 8, 2022 at 10:22 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+> > > >
+> > > > On Thu, Apr 07, 2022 at 09:07:33PM +0000, Joel Fernandes wrote:
+> > > > > On systems with CONFIG_RCU_NOCB_CPU=y, there is no default mask provided
+> > > > > which ends up not offloading any CPU. This patch removes yet another
+> > > > > dependency from the bootloader having to know about RCU, about how many
+> > > > > CPUs the system has, and about how to provide the mask. Basically, I
+> > > > > think we should stop pretending that the user knows what they are doing :).
+> > > > > In other words, if NO_CB_CPU is enabled, lets make use of it.
+> > > > >
+> > > > > My goal is to make RCU as zero-config as possible with sane defaults. If
+> > > > > user wants to provide rcu_nocbs= or nohz_full= options, then those will
+> > > > > take precedence and this patch will have no effect.
+> > > > >
+> > > > > I tested providing rcu_nocbs= option, ensuring that is preferred over this.
+> > > >
+> > > > Unless something has changed, this would change behavior relied upon
+> > > > the enterprise distros.  Last I checked, they want to supply a single
+> > > > binary, as evidenced by the recent CONFIG_PREEMPT_DYNAMIC Kconfig option,
+> > > > and they also want the default to be non-offloaded.  That is, given a
+> > > > kernel built with CONFIG_RCU_NOCB_CPU=y and without either a nohz_full
+> > > > or a nocbs_cpu boot parameter, all of the CPUs must be non-offloaded.
+> > >
+> > > Just curious, do you have information (like data, experiment results)
+> > > on why they want default non-offloaded? Or maybe they haven't tried
+> > > the recent work done in NOCB code?
+> >
+> > I most definitely do.  When I first introduced callback offloading, I
+> > made it completely replace softirq callback invocation.  There were some
+> > important throughput-oriented workloads that got hit with significant
+> > performance degradation due to this change.  Enterprise Java workloads
+> > were the worst hit.
+> >
+> > Android does not run these workloads, and I am not aware of ChromeOS
+> > running them, either.
+> 
+> Thanks a lot for mentioning this, I was not aware and will make note
+> of it :-). I wonder if the scheduler had something to do with the
+> degradation.
 
-Micron eMMC offers an additional set of commands that go beyond the JEDEC Device
-Health Report. These additional DEVICE HEALTH commands are implemented using the
-generic CMD56 command and they return a significant amount of useful information
-about the status of the NAND device. Such as bad block counters, block erase
-counters ,etc. For more information, refer to TN-FC-32: e·MMC Device Health Report.
+It is all too easy to blame the scheduler and all too easy to forget
+that the scheduler has a hard job.  ;-)
 
-Since the CMD56 is specified in JEDEC, to make CMD56 universal used and let more
-users of mmc-utils get the benefit for this. I add CMD56 read, and let the user
-to input the CMD56 argument, also, here I didn't add data parsing, just print raw
-data, since it is vendor-specific.
+And in this case, the scheduler was just doing what it was told.
 
-Signed-off-by: Bean Huo <beanhuo@micron.com>
----
- mmc.c      |  7 +++++++
- mmc.h      |  2 ++
- mmc_cmds.c | 52 ++++++++++++++++++++++++++++++++++++++++++++++++++++
- mmc_cmds.h |  1 +
- 4 files changed, 62 insertions(+)
+With softirq, a common RCU code path sets a bit in a per-CPU variable.
+With offloaded kthreads, that same code path does a much more expensive
+wakeup operation.  In addition, in the common case, the softirq handler
+runs on the back of an interrupt, and that interrupt handler has already
+disrupted the caches, so additional disruption by the softirq handler
+is not a big deal.  In contrast, the scheduler has to do the wakeup at
+some point in time, and that point in time is very likely quite a bit
+more disruptive.
 
-diff --git a/mmc.c b/mmc.c
-index eb2638b12271..ea465e59fdf3 100644
---- a/mmc.c
-+++ b/mmc.c
-@@ -237,6 +237,13 @@ static struct Command commands[] = {
- 		"secure-trim1 | secure-trim2 | trim \n",
- 	NULL
- 	},
-+	{ do_general_cmd_read, -2,
-+	"gen_cmd read", "<arg> <device>\n"
-+		"Send GEN_CMD (CMD56) with specific <arg> to  <device> to read vendor\n"
-+		"specific data. <arg> must be 32 bits length hex number prefixed with 0x/0X.\n\n"
-+		"NOTE!: Because this option is only used to read, the bit0 in <arg> must be 1",
-+	NULL
-+	},
- 	{ 0, 0, 0, 0 }
- };
- 
-diff --git a/mmc.h b/mmc.h
-index 25d6864ac76f..b621374a1ed1 100644
---- a/mmc.h
-+++ b/mmc.h
-@@ -41,6 +41,8 @@
- 					      [1] Discard Enable
- 					      [0] Identify Write Blocks for
- 					      Erase (or TRIM Enable)  R1b */
-+#define MMC_GEN_CMD		56   /* adtc  [31:1] stuff bits.
-+					      [0]: RD/WR1 R1 */
- 
- #define R1_OUT_OF_RANGE         (1 << 31)       /* er, c */
- #define R1_ADDRESS_ERROR        (1 << 30)       /* erx, c */
-diff --git a/mmc_cmds.c b/mmc_cmds.c
-index 49d3e324d266..6e006b10d4fd 100644
---- a/mmc_cmds.c
-+++ b/mmc_cmds.c
-@@ -2981,3 +2981,55 @@ out:
- 	return ret;
- #endif
- }
-+
-+int do_general_cmd_read(int nargs, char **argv)
-+{
-+	int dev_fd;
-+	__u8 buf[512];
-+	__u32 arg;
-+	char *device;
-+	char *endptr;
-+	int ret = -EINVAL, i;
-+	struct mmc_ioc_cmd idata;
-+
-+	if (nargs != 3) {
-+		fprintf(stderr, "Usage: gen_cmd read <arg> </path/to/mmcblkX>\n");
-+		exit(1);
-+	}
-+
-+	device = argv[2];
-+	dev_fd = open(device, O_RDWR);
-+	if (dev_fd < 0) {
-+		perror("device open failed");
-+		exit(1);
-+	}
-+	arg = strtol(argv[1], &endptr, 16);
-+	if (errno != 0 || *endptr != '\0' || !arg&0x1) {
-+		fprintf(stderr, "Wrong ARG, it should be Hex number and bit0 must be 1\n");
-+		goto out;
-+	}
-+	memset(&idata, 0, sizeof(idata));
-+	idata.write_flag = 0;
-+	idata.opcode = MMC_GEN_CMD;
-+	idata.arg = arg;
-+	idata.flags = MMC_RSP_SPI_R1 | MMC_RSP_R1 | MMC_CMD_ADTC;
-+	idata.blksz = 512;
-+	idata.blocks = 1;
-+	mmc_ioc_cmd_set_data(idata, buf);
-+
-+	ret = ioctl(dev_fd, MMC_IOC_CMD, &idata);
-+	if (ret) {
-+		perror("ioctl");
-+		goto out;
-+	}
-+
-+	printf("Data:\n");
-+	for (i = 0; i < 512; i++) {
-+		printf("%2x ", buf[i]);
-+		if ((i + 1) % 16 == 0)
-+			printf("\n");
-+	}
-+out:
-+	close(dev_fd);
-+	return ret;
-+}
-diff --git a/mmc_cmds.h b/mmc_cmds.h
-index 8331ab2373fd..0f7c0041f753 100644
---- a/mmc_cmds.h
-+++ b/mmc_cmds.h
-@@ -46,3 +46,4 @@ int do_read_scr(int argc, char **argv);
- int do_read_cid(int argc, char **argv);
- int do_read_csd(int argc, char **argv);
- int do_erase(int nargs, char **argv);
-+int do_general_cmd_read(int nargs, char **argv);
--- 
-2.34.1
+> > > Another option I think is to make it enforce NOCB if NR_CPUS <= 32 if
+> > > that makes sense.
+> >
+> > That would avoid hurting RHEL and SLES users, so this would be better
+> > than making the change unconditionally.  But there are a lot of distros
+> > out there.
+> >
+> > I have to ask...  Isn't there already a way of specifying a set of kernel
+> > boot parameters that are required for ChromeOS?  If so, add rcu_nocbs=0-N
+> > to that list and be happy.
+> 
+> Yes, that's doable.
 
+Very good, thank you!
+
+> > > > And is it really all -that- hard to specify an additional boot parameter
+> > > > across ChromeOS devices?  Android seems to manage it.  ;-)
+> > >
+> > > That's not the hard part I think. The hard part is to make sure a
+> > > future Linux user who is not an RCU expert does not forget to turn it
+> > > on. ChromeOS is not the only OS that I've seen someone forget to do it
+> > > ;-D. AFAIR, there were Android devices too in the past where I saw
+> > > this forgotten. I don't think we should rely on the users doing the
+> > > right thing (as much as possible).
+> > >
+> > > The single kernel binary point makes sense but in this case, I think
+> > > the bigger question that I'd have is what is the default behavior and
+> > > what do *most* users of RCU want. So we can keep sane defaults for the
+> > > majority and reduce human errors related to configuration.
+> >
+> > If both the ChromeOS and Android guys need it, I could reinstate the
+> > old RCU_NOCB_CPU_ALL Kconfig option.  This was removed due to complaints
+> > about RCU Kconfig complexity, but I believe that Reviewed-by from ChromeOS
+> > and Android movers and shakers would overcome lingering objections.
+> >
+> > Would that help?
+> 
+> Yes, I think I would love for such a change. I am planning to add a
+> test to ChromeOS to check whether config options were correctly set
+> up. So I can test for both the RCU_NOCB_CPU options.
+
+Very good!
+
+Do you love such a change enough to create the patch and to collect
+convincing Reviewed-by tags?
+
+							Thanx, Paul

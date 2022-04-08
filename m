@@ -2,99 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B1054F9FF1
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 01:08:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F3694FA001
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 01:15:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240088AbiDHXJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 19:09:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37292 "EHLO
+        id S236022AbiDHXRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 19:17:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240023AbiDHXJ3 (ORCPT
+        with ESMTP id S229473AbiDHXRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 19:09:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 90F9D21A0CB
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 16:07:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649459244;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kF5xhxnWQ9HTmzExGgIu30spIsftwP3X1+IT/nsbEWE=;
-        b=TfeVDW7nwGRFspejB/6+ltX6NWUC3LlmWLHdKmby37XMNbVdbNIQA4rHpPVohDYnAnQ5MA
-        j+qdYFhTA3OG0zxEhPwnHAMBM+fV0ZivaEjiJYAYl2Vtcm4g1v0uGixcHCPRq5grEQs1sc
-        YwDMfSyRBnPMwpjcZkoXBe74FRDm0w0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-264-ABY17IbcORWnnZ3NaN7jvg-1; Fri, 08 Apr 2022 19:07:19 -0400
-X-MC-Unique: ABY17IbcORWnnZ3NaN7jvg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 35E78282B7F5;
-        Fri,  8 Apr 2022 23:07:19 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.37.45])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 11B6C40317B;
-        Fri,  8 Apr 2022 23:07:17 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH 8/8] fscache: remove FSCACHE_OLD_API Kconfig option
-From:   David Howells <dhowells@redhat.com>
-To:     linux-cachefs@redhat.com
-Cc:     Yue Hu <huyue2@coolpad.com>, dhowells@redhat.com,
-        Jeff Layton <jlayton@kernel.org>,
-        Jeffle Xu <jefflexu@linux.alibaba.com>,
-        Yue Hu <huyue2@coolpad.com>, linux-fsdevel@vger.kernel.org,
-        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Date:   Sat, 09 Apr 2022 00:07:17 +0100
-Message-ID: <164945923735.773423.9314584149728650918.stgit@warthog.procyon.org.uk>
-In-Reply-To: <164945915630.773423.14655306154231712324.stgit@warthog.procyon.org.uk>
-References: <164945915630.773423.14655306154231712324.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.4
+        Fri, 8 Apr 2022 19:17:09 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2883633F
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 16:15:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=387NM5ZeDMcsK5G5wFhbgPoD4mYSR3PEZAVSuZg05ME=; b=cWBX4Q9FwStDB6kIaP2JxkSQWy
+        aHAo0pbs5r/cSRC1+SF6m73peRCdOwyi/Ma/FZy/KNfJUNMLEKKEHs7GFYulEl3iHB8sjTBlJDXEm
+        CCuku2AocWuYog1G5RUKB/HR97Ui11OzzX7atsK3CZeIjQWHZD/X09jWWzqetqZa/crn+1wy9JCW7
+        CFtLk9h7F0Th9fVf5Gm0jWVGHmFZdY/vnPONFS8l1/BRayyvCdQvFcQ73j6uzd4EbqN02tbpdbxvH
+        k0bA4TwNvD9HefUGu4+QBK9BL8EZ/IRom9OL2P4KiKbwmcMRe+frh1hfnZ9VzCTTKb6/5IPzC9qnK
+        7sfjffsg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ncxoX-0036yn-VV; Fri, 08 Apr 2022 23:14:50 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id CC6699861C5; Sat,  9 Apr 2022 01:14:47 +0200 (CEST)
+Date:   Sat, 9 Apr 2022 01:14:47 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     x86@kernel.org, Lai Jiangshan <jiangshanlai@gmail.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     Andrew Cooper <Andrew.Cooper3@citrix.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC][PATCH] x86: PUSH_AND_CLEAR_REGS_COMPAT
+Message-ID: <20220408231447.GS2731@worktop.programming.kicks-ass.net>
+References: <20220408223827.GR2731@worktop.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220408223827.GR2731@worktop.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yue Hu <huyue2@coolpad.com>
+On Sat, Apr 09, 2022 at 12:38:27AM +0200, Peter Zijlstra wrote:
+> 
+> How insane?
 
-Commit 01491a756578 ("fscache, cachefiles: Disable configuration") added
-the FSCACHE_OLD_API configuration when rewritten. Now, it's not used any
-more. Remove it.
-
-Signed-off-by: Yue Hu <huyue2@coolpad.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: linux-cachefs@redhat.com
-Link: https://listman.redhat.com/archives/linux-cachefs/2022-March/006647.html # v1
----
-
- fs/fscache/Kconfig |    3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/fs/fscache/Kconfig b/fs/fscache/Kconfig
-index 76316c4a3fb7..b313a978ae0a 100644
---- a/fs/fscache/Kconfig
-+++ b/fs/fscache/Kconfig
-@@ -38,6 +38,3 @@ config FSCACHE_DEBUG
- 	  enabled by setting bits in /sys/modules/fscache/parameter/debug.
- 
- 	  See Documentation/filesystems/caching/fscache.rst for more information.
--
--config FSCACHE_OLD_API
--	bool
-
-
+Anyway, the questino is; since int80 doesn't wipe the high regs, can we
+get away with the SYS*_compat things not doing that either and then all
+using the normal PUSH_AND_CLEAR_REGS without having to invent _COMPAT
+for that?

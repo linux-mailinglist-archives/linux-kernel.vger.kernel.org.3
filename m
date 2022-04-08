@@ -2,126 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38AD94F90FA
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 10:37:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8DEF4F90FB
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 10:38:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232099AbiDHIjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 04:39:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36280 "EHLO
+        id S232124AbiDHIj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 04:39:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbiDHIji (ORCPT
+        with ESMTP id S229638AbiDHIjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 04:39:38 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FFBC3893;
-        Fri,  8 Apr 2022 01:37:35 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id b15so7814493pfm.5;
-        Fri, 08 Apr 2022 01:37:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=7K4+/b0R86ZT+hQk0J4XIxe35bIEDncPDFhNjSyqDJY=;
-        b=XasWnOzW95Uoedl03mI5VkKE+3O31vTqRQo+tSBRguQ4DlFo7RuUJ8gLEIO34tt8Ds
-         nBiXnGz2pAuDccybkVEA2PqtNcQh9ob6En+KywungX8WBKR6I3B/MSIOpTMV0eUjKn/L
-         DxlKMqzw4VAq6dRBS66Mz4sYJjMr1BKdR+J18YcnCKsHNtGLh1Nex7HC3zzT410EYNbQ
-         bTgCaiLpmTmyr85wiOSoL5RiG8j5EmxYhJNJVF3BGKW3Fw1Tjqq8cGkb7wyqPtFkPCIg
-         fUhTndUI8RxS9bycgTpPpu+VpKuCNIjzxsZsVg3/tWlNFSUPBEec113/b1pcHi0p5n2r
-         m/HQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=7K4+/b0R86ZT+hQk0J4XIxe35bIEDncPDFhNjSyqDJY=;
-        b=CiLCTJqo6rCp3X7wYjnQ4wxPdhFFymffn130Ze+SIv4Q4qoBQP51SYHZv6k4PyWDvp
-         nZcyN1K5Rng8osvkuMZa9ZBGNLvTMeZirAGrxq1fGhqojom3YorokbiKfJ2Wdnp8pE2N
-         F8NtCTMFWKSfzPE29T0KKPOsOswp2AnbVeVjC30o5eqX9BHHCQr3aDveB4ZWcZ0KLMdi
-         zjPNpBVLtc4mh0+wM7XUeFKpYUlj3+3MHLYuNv0DT7cDsvHt582B04hEt+ZUBD+Kjgjt
-         qe5x45bEyvdepCwEgZmdC/Wcw6QRpBCwwa/dTOqTjl+EGnKpTAG3H1h1Qaa5CHnJU5le
-         V79Q==
-X-Gm-Message-State: AOAM533o3wB4Mje2+crFX4ODN13uQ43R9zk0zqbXvO9ApOZX/crBJO/g
-        q0SLzemH8R4zPVbwbCvTGzs=
-X-Google-Smtp-Source: ABdhPJzPAAyCnfAkfDv0rkDk+TbHmnQVzxsOJFmo8rTcUWhL1aND4BHD874EYoaan+uMuo291m2vZg==
-X-Received: by 2002:a05:6a00:810:b0:4fa:e71f:7e40 with SMTP id m16-20020a056a00081000b004fae71f7e40mr18181684pfk.15.1649407055080;
-        Fri, 08 Apr 2022 01:37:35 -0700 (PDT)
-Received: from localhost.localdomain ([119.3.119.18])
-        by smtp.gmail.com with ESMTPSA id m7-20020a625807000000b004fe0a89f24fsm16536345pfb.112.2022.04.08.01.37.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 01:37:34 -0700 (PDT)
-From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
-To:     song@kernel.org
-Cc:     rgoldwyn@suse.com, guoqing.jiang@linux.dev,
-        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Subject: [PATCH v3] md: fix an incorrect NULL check in does_sb_need_changing
-Date:   Fri,  8 Apr 2022 16:37:28 +0800
-Message-Id: <20220408083728.25701-1-xiam0nd.tong@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 8 Apr 2022 04:39:53 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1732C3893
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 01:37:50 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649407067;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oISKE5LaMehx2C01N20eUScIwjSSk2eBrc+o245KWv4=;
+        b=05bJBQvp24Dg2sKt23/aO72hj8DzDnrYfy3ByG1lOW5b56M8i/ZSL78ZRqE5WgNB7XWe3d
+        qj+YrwxFGlayPpAQ21vh7p9QRVsWlDJkQQ4me8j6lhhGY7czRvwx/Vj12cxaBvQuXx2UqH
+        LR4rmAZX3qtJ1q8lsDm/UXFvYn+5QVLuPGnooP/9/OJiThtX/OUBD9Vn7tHsxj5r9ZMNXg
+        etLXLWeWlseVF/7ZpbzC9zf6fbJEeCcZlnpIbaquYOgq8LWEmuleDV3wHiNn/5vXMul0k+
+        79mZpO0q0fj+V38HFOMJtFWWFmbagPUBO5HV0JpRtAc8TizNB/bw9bvH5TkQ6A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649407067;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oISKE5LaMehx2C01N20eUScIwjSSk2eBrc+o245KWv4=;
+        b=kyb36WHbPjNrcEjhfChenUP8UmFtGni5hul51e0kQQ+s63IGL2sfZuz59MpTYh36TKnamP
+        OuIo2ZUSB1JAPmCw==
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Nico Pache <npache@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Rafael Aquini <aquini@redhat.com>,
+        Waiman Long <longman@redhat.com>, Baoquan He <bhe@redhat.com>,
+        Christoph von Recklinghausen <crecklin@redhat.com>,
+        Don Dutile <ddutile@redhat.com>,
+        "Herton R . Krzesinski" <herton@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Joel Savitz <jsavitz@redhat.com>,
+        Darren Hart <dvhart@infradead.org>, stable@kernel.org
+Subject: Re: [PATCH v8] oom_kill.c: futex: Don't OOM reap the VMA containing
+ the robust_list_head
+In-Reply-To: <20220408081549.GM2731@worktop.programming.kicks-ass.net>
+References: <20220408032809.3696798-1-npache@redhat.com>
+ <20220408081549.GM2731@worktop.programming.kicks-ass.net>
+Date:   Fri, 08 Apr 2022 10:37:47 +0200
+Message-ID: <87tub4j7hg.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The bug is here:
-	if (!rdev)
+On Fri, Apr 08 2022 at 10:15, Peter Zijlstra wrote:
+> On Thu, Apr 07, 2022 at 11:28:09PM -0400, Nico Pache wrote:
+>> Theoretically a failure can still occur if there are locks mapped as
+>> PRIVATE|ANON; however, the robust futexes are a best-effort approach.
+>> This patch only strengthens that best-effort.
+>> 
+>> The following case can still fail:
+>> robust head (skipped) -> private lock (reaped) -> shared lock
+>> (skipped)
+>
+> This is still all sorts of confused.. it's a list head, the entries can
+> be in any random other VMA. You must not remove *any* user memory before
+> doing the robust thing. Not removing the VMA that contains the head is
+> pointless in the extreme.
+>
+> Did you not read the previous discussion?
 
-The list iterator value 'rdev' will *always* be set and non-NULL
-by rdev_for_each(), so it is incorrect to assume that the iterator
-value will be NULL if the list is empty or no element found.
-Otherwise it will bypass the NULL check and lead to invalid memory
-access passing the check.
+Aside of that we all agreed that giving a oom-killed task time to
+cleanup itself instead of brute force cleaning it up immediately, which
+is the real problem here. Can we fix that first before adding broken
+heuristics?
 
-To fix the bug, use a new variable 'iter' as the list iterator,
-while using the original variable 'rdev' as a dedicated pointer to
-point to the found element.
+Thanks,
 
-Cc: stable@vger.kernel.org
-Fixes: 2aa82191ac36 ("md-cluster: Perform a lazy update")
-Acked-by: Guoqing Jiang <guoqing.jiang@linux.dev>
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
----
+        tglx
 
-changes since v2:
- - fix typo (Song Liu)
-
-changes since v1:
- - rephrase the subject (Guoqing Jiang)
- - add Acked-by: for Guoqing Jiang
-
-v2:https://lore.kernel.org/lkml/20220328081127.26148-1-xiam0nd.tong@gmail.com/
-v1:https://lore.kernel.org/lkml/20220327080002.11923-1-xiam0nd.tong@gmail.com/
-
----
- drivers/md/md.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/md/md.c b/drivers/md/md.c
-index 4d38bd7dadd6..7476fc204172 100644
---- a/drivers/md/md.c
-+++ b/drivers/md/md.c
-@@ -2629,14 +2629,16 @@ static void sync_sbs(struct mddev *mddev, int nospares)
- 
- static bool does_sb_need_changing(struct mddev *mddev)
- {
--	struct md_rdev *rdev;
-+	struct md_rdev *rdev = NULL, *iter;
- 	struct mdp_superblock_1 *sb;
- 	int role;
- 
- 	/* Find a good rdev */
--	rdev_for_each(rdev, mddev)
--		if ((rdev->raid_disk >= 0) && !test_bit(Faulty, &rdev->flags))
-+	rdev_for_each(iter, mddev)
-+		if ((iter->raid_disk >= 0) && !test_bit(Faulty, &iter->flags)) {
-+			rdev = iter;
- 			break;
-+		}
- 
- 	/* No good device found. */
- 	if (!rdev)
--- 
-2.17.1
 

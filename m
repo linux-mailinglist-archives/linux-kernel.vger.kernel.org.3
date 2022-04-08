@@ -2,203 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 028FC4F99D5
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 17:47:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D3DD4F99DF
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 17:50:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237671AbiDHPte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 11:49:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50986 "EHLO
+        id S237805AbiDHPwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 11:52:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234530AbiDHPtb (ORCPT
+        with ESMTP id S237793AbiDHPwS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 11:49:31 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2083.outbound.protection.outlook.com [40.107.92.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D130469286
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 08:47:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PMlUOMg0wOi7JQsiAqHz0EABZPSA3oU0IBR5rG7wzrrZHJj29WNYMI7ybRsYd6klDi8SB34GUq8S0slkJ++k95YjWfDQA3JsV39+OotYKoJutTo8dhUksM2m8g0BnjorVzpljgFPqLjE01RIm1FJ0/5LTZZ0C3QEadDysh2SQdzGO/9mCO1OmVek6y0Ind8YlDy2DU9SepncHPSI7KoFCRub0v6F6rgioqIzogFyUYhQ6iadhYtrkOFWWHNjeK3fntr+siBMPheSQy1VEGpjqKZiHirDdlb2lZjPAJ1VHg4Qd1pybYS5lQwWh50jQNAEgRndwVZdYoAHxrVz8NxLNA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6NhFt6KSOUJorbkP07V5Y3xZ4qP0ce3LVGNymT1ZNvU=;
- b=XGvLC12H+Gr+aaF6uoipIomgearMWazrgQ5EzirCayr/SNA9MBDvPo8BC4XK96IWRhjVhD5OsfccgkBxs9/cGATDlbXKjvbsJcySS1P3u6LFsi0J80+MnxVNoeYB8UQ22af2jyF/AZ8jucMWl5PLnLJ63MxRJDBggZ5QuYJexciGrEMDvbCEmgRGhdBKuveET/Q60A4XUiUu+xgfP6PZK9Wt0w47k/5lKXfuwAamRxojWdoViPtAg+ap6WwEbo2Wkwd4LEoqipgEor+hsxGSadeJvFNraclZXKza6gbLMTApyiBC/NtUMuFDro7CG+hOudKIVBJ0XQlS6aIodJrxog==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6NhFt6KSOUJorbkP07V5Y3xZ4qP0ce3LVGNymT1ZNvU=;
- b=RY3lQe5uyfCQNCNOvkvOMz1AtNnLTk+bN19YzkLyF5SsL1hhYQvEKuNsHbTrlTwyjPphiCcEMxWIYJg8YK/JbcsiFsjS52dS5U6B30GDbm+O9Zz90TSEcP+URf1pa73s+7zk39uwwnDsTzcGdgU9zL9Nj6POSifknFYv3w8zIOA=
-Received: from BL1PR12MB5157.namprd12.prod.outlook.com (2603:10b6:208:308::15)
- by DS7PR12MB6007.namprd12.prod.outlook.com (2603:10b6:8:7e::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.26; Fri, 8 Apr
- 2022 15:47:26 +0000
-Received: from BL1PR12MB5157.namprd12.prod.outlook.com
- ([fe80::70d6:f6dd:3e14:3c2d]) by BL1PR12MB5157.namprd12.prod.outlook.com
- ([fe80::70d6:f6dd:3e14:3c2d%5]) with mapi id 15.20.5144.025; Fri, 8 Apr 2022
- 15:47:25 +0000
-From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
-To:     "Gong, Richard" <Richard.Gong@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        "airlied@linux.ie" <airlied@linux.ie>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>
-CC:     "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] drm/amdgpu: disable ASPM for legacy products that don't
- support ASPM
-Thread-Topic: [PATCH] drm/amdgpu: disable ASPM for legacy products that don't
- support ASPM
-Thread-Index: AQHYS1+vbeZYg8F3L0aXkBYKsAfwnazmKNIA
-Date:   Fri, 8 Apr 2022 15:47:25 +0000
-Message-ID: <BL1PR12MB51576654D3EEB10F5DF862A7E2E99@BL1PR12MB5157.namprd12.prod.outlook.com>
-References: <20220408154447.3519453-1-richard.gong@amd.com>
-In-Reply-To: <20220408154447.3519453-1-richard.gong@amd.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2022-04-08T15:47:00Z;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP 2.0;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=34266d61-5264-4f57-bad7-5339d5ae0dee;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=1
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_enabled: true
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_setdate: 2022-04-08T15:47:23Z
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_method: Privileged
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_name: Public-AIP 2.0
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_actionid: 849b2a6b-5444-4b7d-adf3-a2b6f9eca422
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_contentbits: 0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f4d89494-e0c5-4c56-b4b4-08da19771425
-x-ms-traffictypediagnostic: DS7PR12MB6007:EE_
-x-microsoft-antispam-prvs: <DS7PR12MB6007F99B1850DA9E5395071BE2E99@DS7PR12MB6007.namprd12.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: cY6yUAHmML6XBj+gLbVmqgqC7EeRDYVDmup3FkbfXmYtBS/CnTzO8cv+Ih/bdHZpt9MSNS7RqwBGfLioDTNUE3/WZuMXA2Ztzzxdh2w3UHYbfwQ1efDutBBgmYIyXmeVX3MqHjKpD62s4JZrVpHiQDS27aFIg6C4PGh8jtoZxKhwYSOo0zjFAidEV10MsDb0ArzIoVhC/O6TwdTcLLRGuhKdtNaTxwGEpAiSd5wkS3kgnphZEJehMDcQ1xzRTNpAX/C7ULcPgbZFs41etdhLAmZDS4BFnuVYv8SI5Skb9W7LvIPyIDWlv2+WLXAKEwFFyJxnjyAq8s5iYTtQ80EXgYNJY92a04ZUWNaIROkLBDYLiGk6shj3X7Rzl+hrBzRJ9Fj2N8kaqbnKPKKzr+QLiLy8Mkw1ssQ69TMOfDtqA2x2989AJvfEvY0UhygedDAQHgH/u0hEpe3/Hm/FR5N2JZK/zmUntlM8JQXUQlRit0E7XOJEqNayWbErGuFIfSuEIX9teKMOPjNRHzYRVTx09rs4Dpbl+6NAxSeiVTLZOczwPvipntOkhqJmCfeQq9r0Wq5RJk5/hzqQ+sKH9JSiBpjbZ0osfADiTYlIcXgKQKK19xKhcAiYlP07xyx4SEXfsS9p6tPIzTt3b7dmciOZGOk5rlV3US6StwpbVQ8pU3ZAi2Xi1FDKL5WTsGiuaT9+vVw80yfZfB0znlzIRKCVKBuOz142HYrk0oFyLAT0M3U=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5157.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(316002)(921005)(122000001)(52536014)(966005)(7696005)(38070700005)(5660300002)(8936002)(2906002)(186003)(110136005)(54906003)(38100700002)(9686003)(83380400001)(86362001)(66556008)(64756008)(4326008)(8676002)(76116006)(66946007)(66446008)(55016003)(66476007)(71200400001)(33656002)(6506007)(53546011);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 2
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?yd2otWw4rYoNWc44MT2fyIFDvNWAAhVLnSRCPBTfeZVLP7Rny7AnyRefPV9V?=
- =?us-ascii?Q?zWdCbrMo/ovtpN5gna8h4lXQyLTdGup83mT8x1oBw9y0CyCtPLKTwQnUnQ9N?=
- =?us-ascii?Q?r+UHYeTuSh/3IzhHtIwlfPjwAzFHvwjzquIMuYyVJehXWRD3u5SzvPmkFTeW?=
- =?us-ascii?Q?ea6OMjfWRJSLjRv9xBgNnziNiz8tQIxvVAagucGZ+HKx/cktR9NV3M0NFRdL?=
- =?us-ascii?Q?2fLNwp3/1KEGoq2HLmuiENO7aTYgKBmw69pWzDGeH14zbAm0gkHoESEbvzqd?=
- =?us-ascii?Q?5rBLyrKs/pnXU7bih3l6H+zSUu8y2CWhYySs7/4oWpXkd1+R4Xzy/90R+f/m?=
- =?us-ascii?Q?AllEynvBD+bkh0etx74DBzAsaDaFe3R0XmTnbGurZQvpbzGpPf8OAz/4zNgI?=
- =?us-ascii?Q?USj9decVumEysv+6rh64zUMITMP9N8/C/SjWfYsyuNbuG7Vg3b+Mj5JL0Q7F?=
- =?us-ascii?Q?3e90uVoWhQzAnYdPAZnqT6oFQ8GsunhwxvWgAaNXDOenktMKrcn52axwKV4g?=
- =?us-ascii?Q?AA8hp23GkLBM3jhCTcymoFOkCGyP9Ud7s0nUiPC+vPiFM86aEkvMq9Bnd+h5?=
- =?us-ascii?Q?lJJvHt6B9Sp7fa4GN+lAfc2T4CUGkEsGi+GfSDfbLJXAP/1fBNcpZttaI1Kb?=
- =?us-ascii?Q?CjgqwBeotvXeH1Nk5hvtrgZU2QeNB0PM+m53dlPv7ZbcKXM1NmiujrVXeNTb?=
- =?us-ascii?Q?pT1ujgGrs0seKiqcMqpnrwhsYGhsiqu7uU5PIWyzs8HO9mLQHmvnkeDjuh82?=
- =?us-ascii?Q?Ag9MAzlRqAtep10S37J4t3PD6UEOU8/TMAeJqbdl5rj9DxnZ6c9KuacJ+8rS?=
- =?us-ascii?Q?DOFsgOWFs7t/Dc0OhRgUIH3YvfG/zZZWAm1BF09olSAzRI3uyAhYIAtU5e6o?=
- =?us-ascii?Q?HMr4TWTdkMETzaR6RHUJZOleYu6TsfZceMMry+EZaMtTRRHwtfY0RTBt1kew?=
- =?us-ascii?Q?IrIUzthnaYTAyMzwsPtw5e/OIgzqgYhc3kK4NJZeXUwaIJ9mJe8Pym4yaYBY?=
- =?us-ascii?Q?/rurXc8VnUruDmRtd28//YoRyOQmxB51KCszJE/IeCDA6QDxclWI4dY9mmcB?=
- =?us-ascii?Q?yDtQh5KuWwD2VoRRFQa76qUYrkCdKFlgSGMBdsxOxf3qD6zAtJHRQIRyMJrw?=
- =?us-ascii?Q?yMRkPdHRePeeuGY7yfupMcbirwgYsWnh+MFtHx2nze9j9CvLlDVaXFTnLKEe?=
- =?us-ascii?Q?Mo33zEy1sNKGC+3A2UoAOC2AeH6iYmmdaxCHGWtLX7b8IHSsBsDu/JwVhRXG?=
- =?us-ascii?Q?i9tL51Zl2YpgI5RV/33Bl7NSKiixrkWlieFhxsgCQuHUQg7/fFWEUxIyDL/8?=
- =?us-ascii?Q?79+2CmiG99JfHcONcfp4fuwzJtIhYGtXztHStD+SY6W7HOdpN+/KYm3xgcq/?=
- =?us-ascii?Q?RVy99M7aKVYPCpfl4+GRpQHSGweJclGPAqrPRU5wFTen1A8GjpbdGw2BRYJ5?=
- =?us-ascii?Q?hoW7AQ4uHZ5NhtJEoG/yrdt/RnNz4r+otr7gTug5x2G5wgaDJJMb6lvIQ0Fe?=
- =?us-ascii?Q?YN+57ATNSS1wGnuOwycTcoqSqcJTtnrhWH305QoHHvDGVRd2kFFHxBq0Pdm8?=
- =?us-ascii?Q?at81N/6NY7RgM+df/ypfXQuhK3/iYEKK+oMlitV8VRy0REikgMQ3nHjH6GxL?=
- =?us-ascii?Q?u8OelopjtnCy6zbXqytAmcdoWBv4sTABZueYLofyJqxZiv/MoISk2qytK8AA?=
- =?us-ascii?Q?ZMDnXU3lVECZSUMowZrYfz8cqUUJZ/+6oQQcaQJLkOi9fQE2iWARWrbBJg50?=
- =?us-ascii?Q?FmDrX5vxf5hmm/CB4LOJ3RPgnarp+aMAYNB0xMABbvnPiS0EazPWT9cmE8eB?=
-x-ms-exchange-antispam-messagedata-1: ERnFpW3nl4dC8A==
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 8 Apr 2022 11:52:18 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D3CFCA6FB;
+        Fri,  8 Apr 2022 08:50:12 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id EB2ECC0003;
+        Fri,  8 Apr 2022 15:50:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1649433011;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rAt83kGtVYJZF3EBEbN5MMvf2qH0ArJM1Y4wwCRzF+U=;
+        b=goYCf35UiOfKb4ovjeqCSFHPqjUX3tM40fxE3XD+Wq4RyPbPohztgA71H3Yi9bpVbBXBi5
+        gMskv8UFPDa90U/jaP3a/s6KsVrUrCb2wUT7rwKTCVgWAeX/xraUBK5dF4+7kGeJJYQpC2
+        aezVXmlE4tN8MSGGIu6pSlC1vTGmxM+M7H/n/cxYXjO4q3OKklOvPMscUXsybbIFmaad04
+        gFm+Jb0iPYEL6s6Tt8wIYS5tJljiUduDVbo5TtJ3WAloASa/kYC87so4fltXcq2Z2Ii79R
+        B35n6YO3fyqhB4hJ/WzTI6ZbTe+wkldCQMwNqt+o7Mf86A0AKrmqqSTo/j+6OQ==
+Date:   Fri, 8 Apr 2022 17:48:41 +0200
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Lizhi Hou <lizhi.hou@xilinx.com>,
+        Sonal Santan <sonal.santan@xilinx.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Allan Nielsen <allan.nielsen@microchip.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH v2 0/3] add fwnode support to reset subsystem
+Message-ID: <20220408174841.34458529@fixe.home>
+In-Reply-To: <Yk2TVAfPVh9a1tUR@robh.at.kernel.org>
+References: <20220324141237.297207-1-clement.leger@bootlin.com>
+        <Ykst0Vb4fk+iALzc@robh.at.kernel.org>
+        <20220405092434.6e424ed4@fixe.home>
+        <YkxWeMNw9Ba0KjHM@robh.at.kernel.org>
+        <20220405175120.23fc6b2a@fixe.home>
+        <CAL_JsqLdBcAw1KPnrATHqEngRWkx6moxDODH1xV67EKAufc6_w@mail.gmail.com>
+        <20220406094019.670a2956@fixe.home>
+        <Yk2TVAfPVh9a1tUR@robh.at.kernel.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5157.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f4d89494-e0c5-4c56-b4b4-08da19771425
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Apr 2022 15:47:25.4299
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 9y98nLF4MW17GR079bbgUaUWMMc/QqzDXfV6KV9HlEkC4eO2CZlJJqyfbByHxfODW59APE3EO2NnkVsd6dqzgA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6007
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Public]
+Le Wed, 6 Apr 2022 08:19:16 -0500,
+Rob Herring <robh@kernel.org> a =C3=A9crit :
 
-
-
-> -----Original Message-----
-> From: Gong, Richard <Richard.Gong@amd.com>
-> Sent: Friday, April 8, 2022 10:45
-> To: Deucher, Alexander <Alexander.Deucher@amd.com>; Koenig, Christian
-> <Christian.Koenig@amd.com>; Pan, Xinhui <Xinhui.Pan@amd.com>;
-> airlied@linux.ie; daniel@ffwll.ch
-> Cc: amd-gfx@lists.freedesktop.org; dri-devel@lists.freedesktop.org; linux=
--
-> kernel@vger.kernel.org; Limonciello, Mario <Mario.Limonciello@amd.com>;
-> Gong, Richard <Richard.Gong@amd.com>
-> Subject: [PATCH] drm/amdgpu: disable ASPM for legacy products that don't
-> support ASPM
+> >  =20
+> > >=20
+> > >  =20
+> > > > > I've told the Xilinx folks the same thing, but I would separate t=
+his
+> > > > > into 2 parts. First is just h/w work in a DT based system. Second=
+ is
+> > > > > creating a base tree an overlay can be applied to. The first part=
+ should
+> > > > > be pretty straightforward. We already have PCI bus bindings. The =
+only
+> > > > > tricky part is getting address translation working from leaf devi=
+ce thru
+> > > > > the PCI bus to host bus, but support for that should all be in pl=
+ace
+> > > > > (given we support ISA buses off of PCI bus). The second part will
+> > > > > require generating PCI DT nodes at runtime. That may be needed fo=
+r both
+> > > > > DT and ACPI systems as we don't always describe all the PCI hiera=
+rchy
+> > > > > in DT.   =20
+> > > >
+> > > > But then, if the driver generate the nodes, it will most probably
+> > > > have to describe the nodes by hardcoding them right ?   =20
+> > >=20
+> > > No, the kernel already maintains its own tree of devices. You just
+> > > need to use that to generate the tree. That's really not much more
+> > > than nodes with a 'reg' property encoding the device and function
+> > > numbers. =20
+> >=20
+> > Just to clarified a point, my PCI device exposes multiple peripherals
+> > behind one single PCI function. =20
 >=20
-> Active State Power Management (ASPM) feature is enabled since kernel
-> 5.14.
-> However there are some legacy products (WX3200 and RX640 are examples)
-> that
-> do not support ASPM. Use them as video/display output and system would
-> hang
-> during suspend/resume.
+> Right. I would expect your PCI device DT node to have a 'simple-bus'=20
+> child node with all those peripherals. And maybe there's other nodes=20
+> like fixed-clocks, etc.
 >=20
-> Add extra check to disable ASPM for old products that don't have
-> ASPM support.
+> > To be sure I understood what you are suggesting, you propose to create
+> > a DT node from the PCI driver that has been probed dynamically
+> > matching this same PCI device with a 'reg' property. I also think
+> > this would requires to generate some 'pci-ranges' to remap the
+> > downstream devices that are described in the DTBO, finally, load the
+> > overlay to be apply under this newly created node. Is that right ? =20
 >=20
-> Signed-off-by: Richard Gong <richard.gong@amd.com>
-> Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1885
-> ---
->  drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 4 ++++
->  1 file changed, 4 insertions(+)
->=20
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> index bb1c025d9001..8987107f41ee 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> @@ -2012,6 +2012,10 @@ static int amdgpu_pci_probe(struct pci_dev
-> *pdev,
->  	if (amdgpu_aspm =3D=3D -1 && !pcie_aspm_enabled(pdev))
->  		amdgpu_aspm =3D 0;
->=20
-> +	/* disable ASPM for the legacy products that don't support ASPM */
-> +	if ((flags & AMD_ASIC_MASK) =3D=3D CHIP_POLARIS12)
-> +		amdgpu_aspm =3D 0;
-> +
+> Right. You'll need to take the BAR address(es) for the device and stick=20
+> those into 'ranges' to translate offsets to BAR+offset.
 
-I think it's problematic to disable it for the entire driver.  There might =
-be multiple
-AMDGPUs in the system, and others may support ASPM.
+Hi Rob,
 
-Can it be done just as part of probe for Polaris?
+I got something working (address translation, probing and so on) using
+what you started. I switch to using changeset however, I'm not sure that
+it make sense for property creation since the node has not yet been
+added to the tree. Attaching the node with changeset however seems
+to make sense. But I'm no expert here, so any advise is welcome.
 
->  	if (amdgpu_virtual_display ||
->  	    amdgpu_device_asic_has_dc_support(flags & AMD_ASIC_MASK))
->  		supports_atomic =3D true;
-> --
-> 2.25.1
+Based on what we said, I created a PCI driver which uses a builtin
+overlay. In order to be able to apply the overlay on the correct PCI
+node -the one on which the card was plugged) and thus be totally plug
+and play, the 'target-path' property is patched using direct fdt
+function and replaced the target with the PCI device node path.
+I don't see any other way to do that before applying the overlay since
+of_overlay_fdt_apply() takes a fdt blob as input.
+
+The driver also insert correct ranges into the PCI device in order to
+translate the downstream node addresses to BAR addresses. It seems
+reasonnable to assume that this depends on the driver and thus should
+not be done by the PCI of core at all.
+
+Finally, the driver probes the newly added childs using
+of_platform_populate(). With all of that, the address translation
+and the probing works correctly and the platform devices are created.
+There is still a few things to fix such as the following:
+
+[ 2830.324773] OF: overlay: WARNING: memory leak will occur if overlay
+removed, property: /pci/pci@2,6/dev@0,0/compatible
+
+But it seems like this is something that works and would allow to
+support various use cases. From what I see, it should also work on
+other platforms. Major advantage of that over fwnode is that the
+changes are pretty small and relatively contained.
+
+However, one point that might be a bit of a problem is enabling
+CONFIG_OF on x86 for instance. While it seems to work, is there any
+potential concerns about this ? Moreover, ideally, I would want the
+driver to "select OF" since without that, the driver won't be visible.
+Or should it "depends on OF" but thus, it would be almost mandatory to
+enable CONFIG_OF on x86 kernels if we want to support this driver
+without the need to recompile a kernel.
+
+Thanks,
+
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com

@@ -2,100 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B1A44F95E3
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:34:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D76394F95E2
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:34:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235810AbiDHMgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 08:36:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53998 "EHLO
+        id S235802AbiDHMgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 08:36:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiDHMgi (ORCPT
+        with ESMTP id S229441AbiDHMgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 08:36:38 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4297D34419D;
-        Fri,  8 Apr 2022 05:34:35 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2389pBUC030712;
-        Fri, 8 Apr 2022 14:34:17 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=bp+advT6TM4LuIU9sLQaID0/TZyMgJN3G2xJZz8o1AU=;
- b=eABha4MSL/xg7cgiJru/aiX8yjGl3v7qG+TgqX0x9EsmjR7fprmru21plFCCWv0iUtD/
- Pc3sf5vj+xJXhbfr6Hgye9ZtH2MTzJu4XZMx2e+hrZyMKtTftOHiKjUhSIu3HQXPrDeN
- ZwvNLsljApLl40aI69xulJOMayBQbX/6xwqKLoO7Q+MWnRiTwcpjngYQNDjSgkwrdvGr
- H/KlWHLk60AXq2cTkQMx6LIMZYkIvdgax71qLWkIwMNS57yHVMbH/aAhRxAINsjmY7q8
- 6sZJLd7wy9k1zskvea3CbUUDVk9wpr+xddm3XTF9d35ul0mBw10+phSsYU8cB3R7UA/j ig== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3f6du1c173-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 08 Apr 2022 14:34:17 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0FC3C10002A;
-        Fri,  8 Apr 2022 14:34:17 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 08C2E21A233;
-        Fri,  8 Apr 2022 14:34:17 +0200 (CEST)
-Received: from [10.201.20.168] (10.75.127.50) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Fri, 8 Apr
- 2022 14:34:16 +0200
-Message-ID: <01e5e489-024c-89c1-4df0-21a12557401b@foss.st.com>
-Date:   Fri, 8 Apr 2022 14:34:16 +0200
+        Fri, 8 Apr 2022 08:36:35 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28151344181;
+        Fri,  8 Apr 2022 05:34:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649421272; x=1680957272;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=RZ8r0XaBrcR4p4yR7/Tctmr9u64HN1HhO0whIRV1fbY=;
+  b=ZmLg5xp3i2wlIfEX+xHcQi+hrueymYNOHtBYS0UMHPTRJLJb2nCOK06I
+   ProU+YzhF+75GKo5+y8BQC962s6lilGS2N5D5eeH+ElTjIWpYi9nfT3yI
+   w9e8/Tc5oq2MxjXlhoj9Oxr1ABgps9t/VL2AeqY7WLUXAIXtZ0OT2nG2M
+   u2pi3u3oZ0IfaC9FKpf3h7xP9CwvE0WB5DKXXHlwFW8QOztIm6uf+CaF7
+   OpEB5LNQSDD4+LHjCuogYG1Ec67vurSS/XJf9XqB4YSd8fj5KlyuG7vJj
+   eTBsA0rbt97sdyvACNbP2hBNfKm1ENM6arlwKhF/v8WpKrO87noYxSMlF
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="243713908"
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="243713908"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 05:34:31 -0700
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="571476279"
+Received: from aecajiao-mobl.amr.corp.intel.com ([10.252.48.54])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 05:34:29 -0700
+Date:   Fri, 8 Apr 2022 15:34:27 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+cc:     linux-serial <linux-serial@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Gilles Buloz <gilles.buloz@kontron.com>,
+        Johan Hovold <johan@kernel.org>
+Subject: Re: [PATCH v2 2/3] tty: Add lookahead param to receive_buf
+In-Reply-To: <YlAjfAab+Oh3HcCR@smile.fi.intel.com>
+Message-ID: <42fc2746-6a7c-9b44-87a5-32f219c1231@linux.intel.com>
+References: <20220408113954.9749-1-ilpo.jarvinen@linux.intel.com> <20220408113954.9749-3-ilpo.jarvinen@linux.intel.com> <YlAjfAab+Oh3HcCR@smile.fi.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 0/3] serial: stm32: add earlycon and polling mode
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>
-CC:     Jiri Slaby <jirislaby@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Erwan Le Ray <erwan.leray@foss.st.com>,
-        <linux-serial@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>
-References: <20220407123109.132035-1-valentin.caron@foss.st.com>
-From:   Valentin CARON <valentin.caron@foss.st.com>
-In-Reply-To: <20220407123109.132035-1-valentin.caron@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.50]
-X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-08_04,2022-04-08_01,2022-02-23_01
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-262000026-1649421271=:1643"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/7/22 14:31, Valentin Caron wrote:
-> - Add support of early console and polling mode in stm32-usart driver.
-> - Avoid a possible infinite loop in putchar function.
->
-> Valentin Caron (3):
->    serial: stm32: remove infinite loop possibility in putchar function
->    serial: stm32: add KGDB support
->    serial: stm32: add earlycon support
->
->   .../admin-guide/kernel-parameters.txt         |   6 ++
->   drivers/tty/serial/Kconfig                    |   1 +
->   drivers/tty/serial/stm32-usart.c              | 101 +++++++++++++++++-
->   drivers/tty/serial/stm32-usart.h              |   2 +
->   4 files changed, 105 insertions(+), 5 deletions(-)
->
-Hi,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Please drop this series, I sent a V2
+--8323329-262000026-1649421271=:1643
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
 
-Thanks,
-Valentin
+On Fri, 8 Apr 2022, Andy Shevchenko wrote:
+
+> On Fri, Apr 08, 2022 at 02:39:53PM +0300, Ilpo Järvinen wrote:
+> > After lookahead for XON/XOFF characters is added by the next
+> > patch, the receive side needs to ensure the flow-control
+> > actions are not retaken later on when those same characters
+> > get read by TTY.
+> > 
+> > Thus, pass lookahead count to receive_buf and skip
+> > flow-control character actions if already taken for the
+> > character in question. Lookahead count will become live after
+> > the next patch.
+> 
+> ...
+> 
+> > +		if (c == STOP_CHAR(tty)) {
+> > +			if (!lookahead_done)
+> 
+> But now it can be as below
+> 
+> 		if (c == STOP_CHAR(tty) && !lookahead_done)
+> 
+> > +				stop_tty(tty);
+> > +		} else if ((c == START_CHAR(tty) && !lookahead_done) ||
+> >  			 (tty->flow.stopped && !tty->flow.tco_stopped && I_IXANY(tty) &&
+> >  			  c != INTR_CHAR(tty) && c != QUIT_CHAR(tty) &&
+> >  			  c != SUSP_CHAR(tty))) {
+
+Are you sure about this? ...If I make that change to the first if, the 
+second part of the else if's condition get a chance it didn't have 
+previously.
+
+What I'd like to do here is to take advantage of the function that was 
+added:
+
+		if (!n_tty_receive_char_flow_ctrl(tty, c) &&
+		    tty->flow.stopped && !tty->flow.tco_stopped && I_IXANY(tty) &&
+        	    c != INTR_CHAR(tty) && c != QUIT_CHAR(tty) &&
+	            c != SUSP_CHAR(tty))) {
+			start_tty(tty);
+			process_echoes(tty);
+		}
+...but it will change STOP_CHAR vs START_CHAR precedence for the case 
+where they're the same characters. I don't know if it matters.
+
+-- 
+ i.
+
+--8323329-262000026-1649421271=:1643--

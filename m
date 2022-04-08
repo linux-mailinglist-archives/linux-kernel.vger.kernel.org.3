@@ -2,73 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E147F4F9EFA
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 23:12:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECFEB4F9EED
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 23:12:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239777AbiDHVMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 17:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57380 "EHLO
+        id S239795AbiDHVOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 17:14:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239766AbiDHVMw (ORCPT
+        with ESMTP id S239792AbiDHVON (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 17:12:52 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC61A181D8B
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 14:10:47 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id r66so8804674pgr.3
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 14:10:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=NGL7uIJYy64vRyv+WyTds0iR2sbu1H6xVYp+rBwYsq0=;
-        b=0goe0SNyqeqNy9wKzBOTFC+7DmniXqC3vl6B6Ja5dbVTVTC/BZKzxTot9QUgRHj3YF
-         TX9uws+8EDjls/VkPD49zygJEFl3fLPDh7wOGrUaQQ8Yi9manuILnBLXpKiJbDtK6wkd
-         GBiXXLaiaTeyvR6B0bEboiCWp+bmK6fpIW/N2D87y5kKLuBdCDygGdepx6sOGFnlnlPU
-         f25f1FkaVYI5MTYGDfi/LHNLH7gGp3EbDDCmm+zhZ3uyTsz7D43liONM+N5RJmkiJYTt
-         63QBbMSvZi3/thOx0tR9I1AIZtqdN8wPSiaDxF/GgO4azda9Ys9eZDXwB5bc14UwGZJd
-         PrcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=NGL7uIJYy64vRyv+WyTds0iR2sbu1H6xVYp+rBwYsq0=;
-        b=jJtgu94P4ITf3hZV0McBkUvHAxJRO82ZUjzbwHNH387IDlhY9h2bZlsS2Pkv+8PRB7
-         fVV6Br4pSeUCgb7yBmeGhVJU8PlEt7zjUKRMguoLlvefeRMxz71u8OboA2fautsiqjKT
-         VeqrBE2EXl+BkBxfRiXfdcMyBG1AAjMHSVV1Fh6oKbm5Qb35Vr93eLdCqLp3/e9nhrbG
-         5Yml46g5A0hdy/0eCG+kxZKZUckw+DVMMrVbvTZwPXnQ/J/NXvohcCoWQ0JtPnkXpSuL
-         yViOXJWOKyri82jLEhAUjcxjNEa5CZ1nvOPsf0/DYK81gUfDb4JQE14n+hf6aCplYJa3
-         qs6A==
-X-Gm-Message-State: AOAM532fEQjnM72rtzU5AKn3CvWsZJpY3D3z9lS1QAyZ5dpyf9GkrIVP
-        GZWJVXC6OGgEwftZXbNHzJPzRZx6mlqWeQ==
-X-Google-Smtp-Source: ABdhPJw5mutMPEroFwzVQlx6BF6zMMQsdO7eg6KiAaxV8KEQBMyUxgjwuUVnLSqBovjUXQR6fpGbkw==
-X-Received: by 2002:a63:4f0d:0:b0:399:5115:ff48 with SMTP id d13-20020a634f0d000000b003995115ff48mr17296204pgb.235.1649452247397;
-        Fri, 08 Apr 2022 14:10:47 -0700 (PDT)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id v4-20020a17090a00c400b001cb4f242c92sm2330393pjd.26.2022.04.08.14.10.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 14:10:47 -0700 (PDT)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org
-Cc:     matthias.bgg@gmail.com, jia-wei.chang@mediatek.com,
-        roger.lu@mediatek.com, hsinyi@google.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>
-Subject: Re: [PATCH V2 14/15] cpufreq: mediatek: Add support for MT8186
-In-Reply-To: <20220408045908.21671-15-rex-bc.chen@mediatek.com>
-References: <20220408045908.21671-1-rex-bc.chen@mediatek.com>
- <20220408045908.21671-15-rex-bc.chen@mediatek.com>
-Date:   Fri, 08 Apr 2022 14:10:46 -0700
-Message-ID: <7h8rsf5lih.fsf@baylibre.com>
+        Fri, 8 Apr 2022 17:14:13 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B99D18857E
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 14:12:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649452328; x=1680988328;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=oOnE/mTJZo1cLGs58Bcvu0FFjsM9iac91CNW9O8kwGw=;
+  b=l9X72tegVRuJnsrdR7AZYivAyfjEl9mqFPKJ8stm7XrG4GRc4JN78/iY
+   wSETKojPqL0lbpxhgvyvQnd+Q4I/LKyqDWLuxozG9RQyfVUyTmqa/bOpm
+   lsWefWmajBOom6p45Dfh1rOBConVKwEIQ2j3IyDZEXP+qXToMrLgp4YcR
+   yXwVjFxcSeg3c5KejobksQZkaHKxOpJhU0OEwWWfyt2kv2akfv0oAT++I
+   8fGRoaMsIqn4DHB+fMIkKPdIegLR/ploE5pzjZUQKrOuvfE1XpF1T+fQO
+   jYM4H/WIURQ2EkHuX2wWH5t+LmvfHFfdJyulQ08dvMiaKn9mASeR8UJAT
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="249213359"
+X-IronPort-AV: E=Sophos;i="5.90,246,1643702400"; 
+   d="scan'208";a="249213359"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 14:12:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,246,1643702400"; 
+   d="scan'208";a="698314316"
+Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 08 Apr 2022 14:12:05 -0700
+Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ncvtk-0000dw-Li;
+        Fri, 08 Apr 2022 21:12:04 +0000
+Date:   Sat, 9 Apr 2022 05:11:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     gellert <gellert@raspberrypi.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Dom Cobley <popcornmix@gmail.com>,
+        Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>,
+        Phil Elwell <phil@raspberrypi.org>,
+        Lukas Wunner <lukas@wunner.de>,
+        Yaroslav Rosomakho <yaroslavros@gmail.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Juerg Haefliger <juergh@canonical.com>
+Subject: [l1k:smsc95xx_5.17 62/888] drivers/mmc/host/bcm2835-mmc.c:655:6:
+ warning: no previous prototype for 'bcm2835_mmc_send_command'
+Message-ID: <202204090513.DJZRq10M-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,17 +70,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
+tree:   https://github.com/l1k/linux smsc95xx_5.17
+head:   240f56c27361c195cd502d95aba51c6b8e5b808c
+commit: 07021b7ee2fdb60a60c3289c983cc1c1d1494c71 [62/888] MMC: added alternative MMC driver
+config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20220409/202204090513.DJZRq10M-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/l1k/linux/commit/07021b7ee2fdb60a60c3289c983cc1c1d1494c71
+        git remote add l1k https://github.com/l1k/linux
+        git fetch --no-tags l1k smsc95xx_5.17
+        git checkout 07021b7ee2fdb60a60c3289c983cc1c1d1494c71
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/lib/ drivers/char/ drivers/gpio/ drivers/mmc/host/ drivers/perf/
 
-> From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
->
-> The platform data of MT8186 is different from previous MediaTek SoCs,
-> so we add a new compatible and platform data for it.
->
-> Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-There's no upstream DT for MT8186, so I"m curious how this was
-tested/valiated with upstream?
+All warnings (new ones prefixed by >>):
 
-Kevin
+>> drivers/mmc/host/bcm2835-mmc.c:655:6: warning: no previous prototype for 'bcm2835_mmc_send_command' [-Wmissing-prototypes]
+     655 | void bcm2835_mmc_send_command(struct bcm2835_host *host, struct mmc_command *cmd)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/mmc/host/bcm2835-mmc.c:1063:6: warning: no previous prototype for 'bcm2835_mmc_set_clock' [-Wmissing-prototypes]
+    1063 | void bcm2835_mmc_set_clock(struct bcm2835_host *host, unsigned int clock)
+         |      ^~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/bcm2835_mmc_send_command +655 drivers/mmc/host/bcm2835-mmc.c
+
+   654	
+ > 655	void bcm2835_mmc_send_command(struct bcm2835_host *host, struct mmc_command *cmd)
+   656	{
+   657		int flags;
+   658		u32 mask;
+   659		unsigned long timeout;
+   660	
+   661		WARN_ON(host->cmd);
+   662	
+   663		/* Wait max 10 ms */
+   664		timeout = 1000;
+   665	
+   666		mask = SDHCI_CMD_INHIBIT;
+   667		if ((cmd->data != NULL) || (cmd->flags & MMC_RSP_BUSY))
+   668			mask |= SDHCI_DATA_INHIBIT;
+   669	
+   670		/* We shouldn't wait for data inihibit for stop commands, even
+   671		   though they might use busy signaling */
+   672		if (host->mrq->data && (cmd == host->mrq->data->stop))
+   673			mask &= ~SDHCI_DATA_INHIBIT;
+   674	
+   675		while (bcm2835_mmc_readl(host, SDHCI_PRESENT_STATE) & mask) {
+   676			if (timeout == 0) {
+   677				pr_err("%s: Controller never released inhibit bit(s).\n",
+   678					mmc_hostname(host->mmc));
+   679				bcm2835_mmc_dumpregs(host);
+   680				cmd->error = -EIO;
+   681				tasklet_schedule(&host->finish_tasklet);
+   682				return;
+   683			}
+   684			timeout--;
+   685			udelay(10);
+   686		}
+   687	
+   688		if ((1000-timeout)/100 > 1 && (1000-timeout)/100 > host->max_delay) {
+   689			host->max_delay = (1000-timeout)/100;
+   690			pr_warn("Warning: MMC controller hung for %d ms\n", host->max_delay);
+   691		}
+   692	
+   693		timeout = jiffies;
+   694		if (!cmd->data && cmd->busy_timeout > 9000)
+   695			timeout += DIV_ROUND_UP(cmd->busy_timeout, 1000) * HZ + HZ;
+   696		else
+   697			timeout += 10 * HZ;
+   698		mod_timer(&host->timer, timeout);
+   699	
+   700		host->cmd = cmd;
+   701		host->use_dma = false;
+   702	
+   703		bcm2835_mmc_prepare_data(host, cmd);
+   704	
+   705		bcm2835_mmc_writel(host, cmd->arg, SDHCI_ARGUMENT, 6);
+   706	
+   707		bcm2835_mmc_set_transfer_mode(host, cmd);
+   708	
+   709		if ((cmd->flags & MMC_RSP_136) && (cmd->flags & MMC_RSP_BUSY)) {
+   710			pr_err("%s: Unsupported response type!\n",
+   711				mmc_hostname(host->mmc));
+   712			cmd->error = -EINVAL;
+   713			tasklet_schedule(&host->finish_tasklet);
+   714			return;
+   715		}
+   716	
+   717		if (!(cmd->flags & MMC_RSP_PRESENT))
+   718			flags = SDHCI_CMD_RESP_NONE;
+   719		else if (cmd->flags & MMC_RSP_136)
+   720			flags = SDHCI_CMD_RESP_LONG;
+   721		else if (cmd->flags & MMC_RSP_BUSY)
+   722			flags = SDHCI_CMD_RESP_SHORT_BUSY;
+   723		else
+   724			flags = SDHCI_CMD_RESP_SHORT;
+   725	
+   726		if (cmd->flags & MMC_RSP_CRC)
+   727			flags |= SDHCI_CMD_CRC;
+   728		if (cmd->flags & MMC_RSP_OPCODE)
+   729			flags |= SDHCI_CMD_INDEX;
+   730	
+   731		if (cmd->data)
+   732			flags |= SDHCI_CMD_DATA;
+   733	
+   734		bcm2835_mmc_writew(host, SDHCI_MAKE_CMD(cmd->opcode, flags), SDHCI_COMMAND);
+   735	}
+   736	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

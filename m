@@ -2,50 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF6EB4F975F
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 15:55:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 615954F9764
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 15:55:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236585AbiDHNzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 09:55:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52010 "EHLO
+        id S236586AbiDHN40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 09:56:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236566AbiDHNzo (ORCPT
+        with ESMTP id S231990AbiDHN4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 09:55:44 -0400
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2165D541BD
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 06:53:41 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1649426018;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dYRCEMKWYu0UDhikG8Ly0BDPYPTrRS4FaVxa2Scm9pU=;
-        b=D98jGQZJ/Q96aheRWk0f6JMhEQHX+yvMXktw/S+8PypGelMork+OaylW7lF5Rr6nNTDEmh
-        92u10xKgkamt9Ep6joVsygAllJQQpN/LNRihRUL5Rp/SYTbe0aZZ1LT/53CCUoPLaPtATN
-        5Rw90DCQuXRP1CXYkvnr1EBIa8yGhMU=
-From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
-To:     linux-mm@kvack.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v8 3/3] Revert "mm/memory-failure.c: fix race with changing page compound again"
-Date:   Fri,  8 Apr 2022 22:53:23 +0900
-Message-Id: <20220408135323.1559401-4-naoya.horiguchi@linux.dev>
-In-Reply-To: <20220408135323.1559401-1-naoya.horiguchi@linux.dev>
-References: <20220408135323.1559401-1-naoya.horiguchi@linux.dev>
+        Fri, 8 Apr 2022 09:56:23 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B27B7C46
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 06:54:17 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 1DB1032022DC;
+        Fri,  8 Apr 2022 09:54:16 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Fri, 08 Apr 2022 09:54:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; bh=8+GWNPlu+xtHevq89dUyEvFQikVJFhZl72wH8k
+        /wFqI=; b=XVBCU/18JAJw3KeTXOMYhe0DMRBrktc+jhuNaHW86/kTqa41qoYw9m
+        Esx8w8G1Sj7L0ymeEK2seWPJcSKzGOfzHj0kAIOOZ/Y+ejE6zDTuWxQC+6sOyuXF
+        M2FOhbBwu3UMfZuIvDHptJSUAvDhcWserDuVOwhBSL3vznXdQywmgRqRM70DJ28t
+        XhdmgYAUJUabA5xKFcBffhqRL243b5AfzplOixSFIc9fNdYCHZmXD5gJRTJbVxBs
+        Y0Ber6rflN+XZt5cAgU0SNe/Bxr9+s9SJrxhUtnWYxdRkyod/HNPHY2NRjFojX4i
+        KOEyxEYVdOXSPoQZ1cqz2oc7QyONfhLw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=8+GWNPlu+xtHevq89
+        dUyEvFQikVJFhZl72wH8k/wFqI=; b=Dsdq3J9TZefrOZPuCbSyxE9JCkZEEAN3V
+        hGpcq3ShN1HjDV5h9XYKcWCyJ8QzGEQYZD0V26Z3KtgvYygfVGlHfgolJrtc23Ys
+        5pz+U59I2yY1rFBrSU99lC8YL06Yk6ishDJwPMrwtvgzGBxyKGl4uquzeS3M5B3M
+        JUSY/JXRKUrZuwm1imgx9kRtOV5yfadQwUuCOa/9y70ozlVLUw1AtHR85FkVe4JR
+        V2kPvLdEb2gMxw2SUV+zHuW/yV/aBUarsa+HzcYIjzFn/Kos8h4A9h1JkrRvnaj3
+        PBCpMTp40qgreQ3hVS6HBcPP8TvajDEWQKn+xt+aPCl0p/DOtc6aQ==
+X-ME-Sender: <xms:hz5QYt3tV5_thf3ZYdFRm0UHeJxbAQVtt_qvvmnbI4rwgRa1b-5JTA>
+    <xme:hz5QYkHx1g1OG39Kjge9IGWVzUKXxTVGgENGkyECXGhe3McnYR1Dkp8UpDvx0lyy6
+    y5GD93ASEz63kBcY-g>
+X-ME-Received: <xmr:hz5QYt52kb51oJNuEedM3AKYvM0muxrXp2KDKZvvuGQFw0Ozu7Elo1JjKsxiv6eX5_-JP8i1rAMwqcXMdXkEXADX_gy2BDJkW3fQYvg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudektddgieekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepjeduvdfhkeekhfdtgeeihfeluddtvedthfektdelfeejgfeludfhteduveej
+    hefhnecuffhomhgrihhnpehfrhgvvgguvghskhhtohhprdhorhhgnecuvehluhhsthgvrh
+    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhho
+    rdhtvggthh
+X-ME-Proxy: <xmx:hz5QYq18RjKAOJNo1Vgdi-o6szEuSYumPNiQ1cYFzCwr8Rdox2ILlw>
+    <xmx:hz5QYgFIxu2XwBbCtPnmvurz5Xv5sG-kNfM2QTWmVb3Vz1DqnoFDmw>
+    <xmx:hz5QYr8q8CGRyjEqb232wXmnA5mE5yrlyZFcPq45ZU8iCNxq3Qfr0Q>
+    <xmx:hz5QYubSI9qfZXwe4Mp5pwsDpUaITnD_DakBat6oumNZ3AgvVrtCNQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 8 Apr 2022 09:54:14 -0400 (EDT)
+Date:   Fri, 8 Apr 2022 15:54:13 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/5] drm: Fix monochrome conversion for sdd130x
+Message-ID: <20220408135413.2vwp4oyzdlu7iczs@houat>
+References: <20220317081830.1211400-1-geert@linux-m68k.org>
+ <f94c0f44-36f1-e1a9-5963-5da0bafb8c90@redhat.com>
+ <YjSMWDFxTeJZZ/CB@smile.fi.intel.com>
+ <20220318142145.kwq46bf6exgce6wu@houat>
+ <YjSYL5oPaDuCXOJQ@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fpokwbkqxdym2r3r"
+Content-Disposition: inline
+In-Reply-To: <YjSYL5oPaDuCXOJQ@smile.fi.intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,74 +94,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Naoya Horiguchi <naoya.horiguchi@nec.com>
 
-Reverts commit 888af2701db7 ("mm/memory-failure.c: fix race with
-changing page compound again") because now we fetch the page refcount
-under hugetlb_lock in try_memory_failure_hugetlb() so that the race
-check is no longer necessary.
+--fpokwbkqxdym2r3r
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Suggested-by: Miaohe Lin <linmiaohe@huawei.com>
-Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
----
- include/linux/mm.h      |  1 -
- include/ras/ras_event.h |  1 -
- mm/memory-failure.c     | 11 -----------
- 3 files changed, 13 deletions(-)
+On Fri, Mar 18, 2022 at 04:33:19PM +0200, Andy Shevchenko wrote:
+> On Fri, Mar 18, 2022 at 03:21:45PM +0100, Maxime Ripard wrote:
+> > On Fri, Mar 18, 2022 at 03:42:48PM +0200, Andy Shevchenko wrote:
+> > > On Thu, Mar 17, 2022 at 12:39:57PM +0100, Javier Martinez Canillas wr=
+ote:
+> > > > On 3/17/22 09:18, Geert Uytterhoeven wrote:
+> > >=20
+> > > > By the way, you should probably request commit access to the drm-mi=
+sc tree:
+> > > >=20
+> > > > https://drm.pages.freedesktop.org/maintainer-tools/commit-access.ht=
+ml
+> > >=20
+> > > Does it really work? I tried and no one replied to request.
+> > > Keeping silent is a bad service. If people don't want a person
+> > > to have such access it should be well communicated.
+> >=20
+> > I don't see any issue on Gitlab to request commit access, so I'm not
+> > sure what you did exactly but it's not surprising you didn't get any
+> > answer.
+>=20
+> https://gitlab.freedesktop.org/freedesktop/freedesktop/-/issues/311
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 9f44254af8ce..d446e834a3e5 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -3251,7 +3251,6 @@ enum mf_action_page_type {
- 	MF_MSG_BUDDY,
- 	MF_MSG_DAX,
- 	MF_MSG_UNSPLIT_THP,
--	MF_MSG_DIFFERENT_PAGE_SIZE,
- 	MF_MSG_UNKNOWN,
- };
- 
-diff --git a/include/ras/ras_event.h b/include/ras/ras_event.h
-index 1e694fd239b9..d0337a41141c 100644
---- a/include/ras/ras_event.h
-+++ b/include/ras/ras_event.h
-@@ -374,7 +374,6 @@ TRACE_EVENT(aer_event,
- 	EM ( MF_MSG_BUDDY, "free buddy page" )				\
- 	EM ( MF_MSG_DAX, "dax page" )					\
- 	EM ( MF_MSG_UNSPLIT_THP, "unsplit thp" )			\
--	EM ( MF_MSG_DIFFERENT_PAGE_SIZE, "different page size" )	\
- 	EMe ( MF_MSG_UNKNOWN, "unknown page" )
- 
- /*
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index b2e32cdc3823..e2674532678b 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -733,7 +733,6 @@ static const char * const action_page_types[] = {
- 	[MF_MSG_BUDDY]			= "free buddy page",
- 	[MF_MSG_DAX]			= "dax page",
- 	[MF_MSG_UNSPLIT_THP]		= "unsplit thp",
--	[MF_MSG_DIFFERENT_PAGE_SIZE]	= "different page size",
- 	[MF_MSG_UNKNOWN]		= "unknown page",
- };
- 
-@@ -1605,16 +1604,6 @@ static int try_memory_failure_hugetlb(unsigned long pfn, int flags, int *hugetlb
- 		return res == MF_RECOVERED ? 0 : -EBUSY;
- 	}
- 
--	/*
--	 * The page could have changed compound pages due to race window.
--	 * If this happens just bail out.
--	 */
--	if (!PageHuge(p) || compound_head(p) != head) {
--		action_result(pfn, MF_MSG_DIFFERENT_PAGE_SIZE, MF_IGNORED);
--		res = -EBUSY;
--		goto out;
--	}
--
- 	page_flags = head->flags;
- 
- 	/*
--- 
-2.25.1
+Indeed, I wasn't expecting it to be that old.
 
+I'm not sure why it fell through the cracks, sorry for that.
+
+That being said, the criteria for requesting drm-misc commit access are
+listed here:
+https://drm.pages.freedesktop.org/maintainer-tools/commit-access.html#drm-m=
+isc
+
+And looking at your commit history so far, I'm not sure you qualifies
+yet for the first criteria. All your patches to drivers/gpu/drm, while
+definitely useful, only seem to be conversions to helpers and general
+best practices changes, which could be classified as trivial.
+
+Maxime
+
+--fpokwbkqxdym2r3r
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYlA+hQAKCRDj7w1vZxhR
+xQvdAQDsOhYAmhiCB4lkgsiPHP0a5xUK6B4s8GfY8/JUQqUTwAD+IzpK4e2WvPe1
+uTbv8hsn0TYWT/tJwgrscSRWOMsCVwI=
+=0hrM
+-----END PGP SIGNATURE-----
+
+--fpokwbkqxdym2r3r--

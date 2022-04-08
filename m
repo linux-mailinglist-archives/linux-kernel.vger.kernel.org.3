@@ -2,121 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71EC54F98A4
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:53:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 662214F98C4
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:57:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237219AbiDHOyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 10:54:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46956 "EHLO
+        id S237265AbiDHO7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 10:59:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233516AbiDHOyi (ORCPT
+        with ESMTP id S235049AbiDHO7r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 10:54:38 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B52116B79
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 07:52:34 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id e22so10837726ioe.11
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 07:52:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8VRYQ19FRWWgFB7eclpNXP2B+Re0MnAnD9mT5UitObs=;
-        b=K1wi6jy6dYdW+QpMSK3lfRGk4zGJJ8ogB8ZcDlfiGH3GEEOszOV9MxSDftrmkKhTz3
-         szCu7VsuIjubs5IEfqfb/bfE8LOTX934fRkIGREGB0ChGz9X8hy5IXOCfkarC2fUJRVw
-         Hu8rHgf0l2L0a8T1HtK35w2olAaeJfU7uETgM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8VRYQ19FRWWgFB7eclpNXP2B+Re0MnAnD9mT5UitObs=;
-        b=28YrwvojKSIcVx5PrTjIMksihtNeiPOl1h2FXG5BRJ93k7P7gQAQKBc4nEIFbQpeWX
-         DC2sKoSjzRzYvMLymR+mgzhPy0RJCy1ZmJko2ZLu8/f0ooGhN40vyv+9ECcIYZ25KFI7
-         x5Hz/X/jLZLp0xdpZ1yEYUOf9IVKxy/hWmM1I2W7+FnepIoGSYCJa823uWhY0Y+3XHeg
-         gn1os6npIC3+7LVVn/RMGiKS4gGPGAUGX8xMBiOMZhH/kufzE2p1W67VeIsBHVYNBR9l
-         EPDiciKBxdFRvHUgdTuMjbBn6ywJON81MJGBZ8YbIeVgomtZ5U5OpTEzoifh0/Sl0sAv
-         MoOA==
-X-Gm-Message-State: AOAM530q55DVmw5bSAypowOsuVRKFKIFTZJ0N7GDX9/W+ZME08H9V+ED
-        RlwI8mtxwA2FFTLSYToxkR+s5yufomBtu/MEXEeBbQ==
-X-Google-Smtp-Source: ABdhPJz1dIbPRtI2UatBy2KD/GE6d9cFkS0wAFaLtoor9dgLbnw2qoyzh4xp7F/X2+FFjvYqH9TMgWjgexBcH1bqCCM=
-X-Received: by 2002:a5e:8d15:0:b0:645:c856:e84a with SMTP id
- m21-20020a5e8d15000000b00645c856e84amr8616203ioj.84.1649429554195; Fri, 08
- Apr 2022 07:52:34 -0700 (PDT)
+        Fri, 8 Apr 2022 10:59:47 -0400
+Received: from mga06.intel.com (mga06.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2996F118636;
+        Fri,  8 Apr 2022 07:57:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649429864; x=1680965864;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Lyl03mlhWs42htV83HjHYtMI2teOzFnAwIEADD5Axxk=;
+  b=MlKymDw9njpg6sPabDymiAkiFVyz0DecoAQrSSdpRZH7+NjigpVfCXly
+   UHAOwLtRvsKGsAoYfO1mwkg9lT7EV6i+BurUn9UYvIxPmpv4GTrsoksjF
+   c2k6sMADR0JrGYga8KDCThbfyn3GS5WgVAkJ3k/bEpVdk2iG0IVIuUAKd
+   bl3Uet5mkmJS8JloNN6EjE4lEs+vqAkYqFyv2hynLEovqoENU1BREAIoK
+   awBwrMFUctbK49xYp+bv4/LjIz+ROxjdNljXFyd+1JwvwZyyHv7MU3Sys
+   wdqcfFw9R82t0xwsQzKkLPbyTxTv0KF4P0volqA3FsacyBs8+QEVxIe1n
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="322298671"
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="322298671"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 07:57:43 -0700
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="659511333"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 07:57:41 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ncpzr-000Kof-JN;
+        Fri, 08 Apr 2022 17:53:59 +0300
+Date:   Fri, 8 Apr 2022 17:53:59 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Michael Walle <michael@walle.cc>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>
+Subject: Re: [PATCH v5 1/4] device property: Allow error pointer to be passed
+ to fwnode APIs
+Message-ID: <YlBMh3A1UlsoDu1Q@smile.fi.intel.com>
+References: <20220406130552.30930-1-andriy.shevchenko@linux.intel.com>
+ <df3a78036864716fbeecf3cd94dbcbbe@walle.cc>
+ <Yk66wHWlMg3QLy6u@smile.fi.intel.com>
+ <YlAuEzW0fUuuXTN6@smile.fi.intel.com>
+ <YlA4Pp11ZXG3eSX/@paasikivi.fi.intel.com>
 MIME-Version: 1.0
-References: <20220407210734.2548973-1-joel@joelfernandes.org> <20220408142232.GA4285@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20220408142232.GA4285@paulmck-ThinkPad-P17-Gen-1>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Fri, 8 Apr 2022 10:52:21 -0400
-Message-ID: <CAEXW_YQWeqfcKdAKmCn4fFGyWXjOGd=29wvi6bL3k7s2bGkDJw@mail.gmail.com>
-Subject: Re: [PATCH RFC] rcu/nocb: Provide default all-CPUs mask for RCU_NOCB_CPU=y
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        rcu <rcu@vger.kernel.org>, Steven Rostedt <rostedt@goodmis.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YlA4Pp11ZXG3eSX/@paasikivi.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 8, 2022 at 10:22 AM Paul E. McKenney <paulmck@kernel.org> wrote:
->
-> On Thu, Apr 07, 2022 at 09:07:33PM +0000, Joel Fernandes wrote:
-> > On systems with CONFIG_RCU_NOCB_CPU=y, there is no default mask provided
-> > which ends up not offloading any CPU. This patch removes yet another
-> > dependency from the bootloader having to know about RCU, about how many
-> > CPUs the system has, and about how to provide the mask. Basically, I
-> > think we should stop pretending that the user knows what they are doing :).
-> > In other words, if NO_CB_CPU is enabled, lets make use of it.
-> >
-> > My goal is to make RCU as zero-config as possible with sane defaults. If
-> > user wants to provide rcu_nocbs= or nohz_full= options, then those will
-> > take precedence and this patch will have no effect.
-> >
-> > I tested providing rcu_nocbs= option, ensuring that is preferred over this.
->
-> Unless something has changed, this would change behavior relied upon
-> the enterprise distros.  Last I checked, they want to supply a single
-> binary, as evidenced by the recent CONFIG_PREEMPT_DYNAMIC Kconfig option,
-> and they also want the default to be non-offloaded.  That is, given a
-> kernel built with CONFIG_RCU_NOCB_CPU=y and without either a nohz_full
-> or a nocbs_cpu boot parameter, all of the CPUs must be non-offloaded.
+On Fri, Apr 08, 2022 at 04:27:26PM +0300, Sakari Ailus wrote:
+> On Fri, Apr 08, 2022 at 03:44:03PM +0300, Andy Shevchenko wrote:
+> > On Thu, Apr 07, 2022 at 01:19:44PM +0300, Andy Shevchenko wrote:
+> > > On Wed, Apr 06, 2022 at 08:05:23PM +0200, Michael Walle wrote:
 
-Just curious, do you have information (like data, experiment results)
-on why they want default non-offloaded? Or maybe they haven't tried
-the recent work done in NOCB code?
+...
 
-Another option I think is to make it enforce NOCB if NR_CPUS <= 32 if
-that makes sense.
+> > > > > +	if (IS_ERR_OR_NULL(fwnode))
+> > > > > +		return -ENOENT;
+> > > > > +
+> > > > >  	ret = fwnode_call_int_op(fwnode, get_reference_args, prop, nargs_prop,
+> > > > >  				 nargs, index, args);
+> > > > > +	if (ret == 0)
+> > > > > +		return ret;
+> > > > > 
+> > > > > -	if (ret < 0 && !IS_ERR_OR_NULL(fwnode) &&
+> > > > > -	    !IS_ERR_OR_NULL(fwnode->secondary))
+> > > > > -		ret = fwnode_call_int_op(fwnode->secondary, get_reference_args,
+> > > > > -					 prop, nargs_prop, nargs, index, args);
+> > > > > +	if (IS_ERR_OR_NULL(fwnode->secondary))
+> > > > > +		return -ENOENT;
+> > > > 
+> > > > Doesn't this mean you overwrite any return code != 0 with -ENOENT?
+> > > > Is this intended?
+> > > 
+> > > Indeed, it would shadow the error code.
+> > 
+> > I was thinking more on this and am not sure about the best approach here.
+> > On one hand in the original code this returns the actual error code from
+> > the call against primary fwnode. But it can be at least -ENOENT or -EINVAL.
+> > 
+> > But when we check the secondary fwnode we want to have understanding that it's
+> > secondary fwnode which has not been found, but this requires to have a good
+> > distinguishing between error codes from the callback.
+> > 
+> > That said, the error codes convention of ->get_reference_args() simply
+> > sucks. Sakari, do you have it on your TODO to fix this mess out, if it's
+> > even feasible?
+> 
+> What would you expect to see compared to what it is now?
+> 
+> I guess the error code could be different for a missing property and a
+> property with invalid data,
 
-> So for me to push this to mainline, I need an ack from someone from each
-> of the enterprise distros, and each of those someones needs to understand
-> the single-binary strategy used by the corresponding distro.
+Yes, something like this.
 
-Ok.
+> but I'm not sure any caller would be interested
+> in that.
 
-> And is it really all -that- hard to specify an additional boot parameter
-> across ChromeOS devices?  Android seems to manage it.  ;-)
+Yes, but it would be good for the consistency and working with fwnodes in
+general. Esp. if we move at some point from primary-secondary to a full
+linked list of fwnodes.
 
-That's not the hard part I think. The hard part is to make sure a
-future Linux user who is not an RCU expert does not forget to turn it
-on. ChromeOS is not the only OS that I've seen someone forget to do it
-;-D. AFAIR, there were Android devices too in the past where I saw
-this forgotten. I don't think we should rely on the users doing the
-right thing (as much as possible).
+> > To be on safest side, I will change as suggested in previous mail (see below)
+> > so it won't have impact on -EINVAL case.
+> > 
+> > > So, it should go with
+> > > 
+> > > 	if (IS_ERR_OR_NULL(fwnode->secondary))
+> > > 		return ret;
+> > > 
+> > > then.
 
-The single kernel binary point makes sense but in this case, I think
-the bigger question that I'd have is what is the default behavior and
-what do *most* users of RCU want. So we can keep sane defaults for the
-majority and reduce human errors related to configuration.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-thanks,
 
--Joel

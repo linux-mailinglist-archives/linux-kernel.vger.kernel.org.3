@@ -2,105 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9B4E4F8C36
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:26:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 410B94F8C60
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233600AbiDHCAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 22:00:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41910 "EHLO
+        id S230498AbiDHCBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 22:01:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbiDHCAX (ORCPT
+        with ESMTP id S229726AbiDHCBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 22:00:23 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89FBF63C3;
-        Thu,  7 Apr 2022 18:58:21 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id n8so6665088plh.1;
-        Thu, 07 Apr 2022 18:58:21 -0700 (PDT)
+        Thu, 7 Apr 2022 22:01:40 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4835ED49;
+        Thu,  7 Apr 2022 18:59:38 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id f3so7176558pfe.2;
+        Thu, 07 Apr 2022 18:59:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QDV7vyVJua5x627okL/E8Nxi+qH90boTSsIqmiOxLwI=;
-        b=bLbexJ08nK+TWPoYlGxZS1ziMwfEiNM87Hlc5Aqszi3h8/f4qux0ng/XTX6ol5mTaA
-         H39eWUpuBI9MAYKqMhrxBkAJXd52jvhwp24o4jqVANR7oNkQyNLbPtpOD6TtXAPtRsot
-         tIH7+M+u8k5IeGu584A4sF9KCmBn1U3AgmNw0A2vw4VlZ88ynwh2bf0eafSvudh3JkIS
-         wDu5j/BMfPTn8yrUGJkMLGFOl5PkBfsD/iH+TJo0R+MOzqC24PSr+HmDAwfKYIly7Lpj
-         3OQSIPP6arO/QbH6GuLkzGcBkdH5LD2+lWvUxI/SAW0qm0T/fcc5hgoCMF5pzDBHwGPx
-         OBVg==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=wahOeVHRHrdA6vkH13T44RAxm+omTMPbzwFhKmHyLQk=;
+        b=jcV7y+xiLLCvM1AEcseI1xxoIe3qUhIHIgfmnWtTFOcYWmg6IFbaeqUtUxHwjo1Z9i
+         aC5mS3qtLOLlgwgHYaIjf/xZ649ZcWYMB/aC2pmWXej6JZoBU3q5vE4bDB9YTcusjpBd
+         KAZaUZO+OE56Kg54IVcuU7JssRPwmXYQ6PvjoAhssdCZZsnxNH7d/k4+8Qe/U5XwZqFd
+         Ta3FTosT2mhdT/a4/RJhiIzMqlTJICq0WBWCzuqc8L+MUVmGV5j9qXIPVMIK1+fTrs4x
+         pnJYcSul2pXHdtwfmXrcJYsrZh85nMpPiLrOwYAPGthHDgnT/GVlpwCu5mQHO2tYO5q4
+         vZNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QDV7vyVJua5x627okL/E8Nxi+qH90boTSsIqmiOxLwI=;
-        b=XjdMjyJ+i9NxTg4QLTqN3U37p3GGb9L4XrTl4lrzMXzVWEo83Q0kviQyz5/J/d4D3E
-         8f8v6YeJctmjFjgver1quvJo6GuQcCYiRd2kJfg/Hg8Rvf8h/KF0SjEKbXSVGbdDORfK
-         joqo+5Txt3ibwJGupgEAh75Ss4XY/N/B3WBtmTUPVTCcYTVhdACBdXDtDEiDDaHR0KpL
-         s+Z3/jJH/EJ0V7mqCA6fo9s02+vYUII8UtUP019HDFLNcZ4lvUi4tYlHCnXti8Fg4FzS
-         iv5jhraTVwtuQLmZz6Tz/6oRWkNHd3ZAR1LlAtUgzIEF3GmOIj74EJ3HPyFxLanPoVWd
-         v7pw==
-X-Gm-Message-State: AOAM531tVwPfUVi/Q0Y5TqIWVn9e80Hqjk0IHgnm/pavsOQUNJ9GzWeh
-        gTVFUAAcjpHs3eYKDBz8PMbKyY3wCcwmyMBaRn4RDMM9gNSw
-X-Google-Smtp-Source: ABdhPJx0eXbtrpr/r855v08vuUbK+sfYFO73JqWyYf8oavJH3sMjVil0MSKbotkscRuus74X4yjHtAw2IjvhwhIT/L4=
-X-Received: by 2002:a17:90a:5407:b0:1bf:43ce:f11b with SMTP id
- z7-20020a17090a540700b001bf43cef11bmr19285418pjh.31.1649383101050; Thu, 07
- Apr 2022 18:58:21 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=wahOeVHRHrdA6vkH13T44RAxm+omTMPbzwFhKmHyLQk=;
+        b=IwvsGrbXJIX+c++WLl9sAPC3CEdX3koH+oHX1Ip1on02rSeOZKVUw2rCVW08icDolO
+         1CIQD2o9aAYnvVfZmv2Fx1lKNFh9ZGNluDaAGPwyEh729HcmK26WvKhzcM8pwKuc6lru
+         jQaBayBk8enVLRnv4sKE+uarM7QXGhdYgqm+QE3aV5yUr9kF90nvnxCv84WtxYjak88k
+         7uc0SsZhlSg1KVSYeDk5MqBovTAHI7z8LmqPw3jsfzXAGhUEmiqAGuXUiP1FcdX2lLI8
+         3P0GNWXAkq1v9qaUP+kA3i2j6uwdYEB3Mbs3yMzIW4O9Y8BqHOZyVLDz779/hYH3FCAV
+         C0pA==
+X-Gm-Message-State: AOAM5301VxdAaIpF6vRsaUNfid0684EuITiCtXhLrw1Gui5/EEMdOuhA
+        zUTH/2E8Hrh8VE1RIwbdYzw=
+X-Google-Smtp-Source: ABdhPJywb8SsI8kAwfnUiqYIks8RBbkl1PL1Z+wumrMhQwCJ58Nt37zaFMtJFMAyh9AR61/myIcuoQ==
+X-Received: by 2002:a63:e147:0:b0:39c:d177:c01f with SMTP id h7-20020a63e147000000b0039cd177c01fmr3857427pgk.81.1649383177810;
+        Thu, 07 Apr 2022 18:59:37 -0700 (PDT)
+Received: from [10.11.37.162] ([103.84.139.54])
+        by smtp.gmail.com with ESMTPSA id q3-20020a63ae03000000b003820cc3a451sm20449691pgf.45.2022.04.07.18.59.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 18:59:37 -0700 (PDT)
+Message-ID: <d40cb8cf-a92d-3f87-3af1-0422f8d8264f@gmail.com>
+Date:   Fri, 8 Apr 2022 09:59:32 +0800
 MIME-Version: 1.0
-References: <20220404084723.79089-1-zheyuma97@gmail.com> <20220404084723.79089-2-zheyuma97@gmail.com>
- <eb2edc5a-afad-f0c9-012f-9b9f226d2e5a@gmx.de>
-In-Reply-To: <eb2edc5a-afad-f0c9-012f-9b9f226d2e5a@gmx.de>
-From:   Zheyu Ma <zheyuma97@gmail.com>
-Date:   Fri, 8 Apr 2022 09:58:10 +0800
-Message-ID: <CAMhUBjmm6ADp2Fr89CCQNX5FnhmBBrwFE0EQ3sq7CLER0J3ZEg@mail.gmail.com>
-Subject: Re: [PATCH 1/7] video: fbdev: i740fb: Error out if 'pixclock' equals zero
-To:     Helge Deller <deller@gmx.de>
-Cc:     Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2] usb: usbip: fix a refcount leak in stub_probe()
+Content-Language: en-US
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        valentina.manea.m@gmail.com, shuah@kernel.org,
+        gregkh@linuxfoundation.org, khoroshilov@ispras.ru
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220407022204.10730-1-hbh25y@gmail.com>
+ <7c584e2d-1c23-3df9-7e4e-c4d9a9014224@linuxfoundation.org>
+From:   Hangyu Hua <hbh25y@gmail.com>
+In-Reply-To: <7c584e2d-1c23-3df9-7e4e-c4d9a9014224@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 8, 2022 at 3:50 AM Helge Deller <deller@gmx.de> wrote:
->
-> On 4/4/22 10:47, Zheyu Ma wrote:
-> > The userspace program could pass any values to the driver through
-> > ioctl() interface. If the driver doesn't check the value of 'pixclock',
-> > it may cause divide error.
-> >
-> > Fix this by checking whether 'pixclock' is zero in the function
-> > i740fb_check_var().
-> >
-> > The following log reveals it:
-> >
-> > divide error: 0000 [#1] PREEMPT SMP KASAN PTI
-> > RIP: 0010:i740fb_decode_var drivers/video/fbdev/i740fb.c:444 [inline]
-> > RIP: 0010:i740fb_set_par+0x272f/0x3bb0 drivers/video/fbdev/i740fb.c:739
-> > Call Trace:
-> >     fb_set_var+0x604/0xeb0 drivers/video/fbdev/core/fbmem.c:1036
-> >     do_fb_ioctl+0x234/0x670 drivers/video/fbdev/core/fbmem.c:1112
-> >     fb_ioctl+0xdd/0x130 drivers/video/fbdev/core/fbmem.c:1191
-> >     vfs_ioctl fs/ioctl.c:51 [inline]
-> >     __do_sys_ioctl fs/ioctl.c:874 [inline]
-> >
-> > Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
->
-> Hello Zheyu,
->
-> I've applied the patches #2-#7 of this series, but left
-> out this specific patch (for now).
-> As discussed on the mailing list we can try to come up with a
-> better fix (to round up the pixclock when it's invalid).
-> If not, I will apply this one later.
+Hi Shuah,
 
-I'm also looking forward to a more appropriate patch for this driver!
+I find this by code review. Do i really need to add this to commit log? 
+This look like a little weird.
 
-Thanks,
-Zheyu Ma
+Thanks
+
+On 2022/4/8 00:31, Shuah Khan wrote:
+> On 4/6/22 8:22 PM, Hangyu Hua wrote:
+>> usb_get_dev() is called in stub_device_alloc(). When stub_probe() fails
+>> after that, usb_put_dev() needs to be called to release the reference.
+>>
+>> Fix this by moving usb_put_dev() to sdev_free error path handling.
+>>
+>> Fixes: 3ff67445750a ("usbip: fix error handling in stub_probe()")
+>> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+>> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+>> ---
+>>
+>> v2: add more description of this patch.
+> 
+> Still missing details on how this problem was found. Please add them
+> to the commit log.
+> 
+> thanks,
+> -- Shuah

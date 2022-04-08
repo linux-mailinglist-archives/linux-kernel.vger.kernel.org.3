@@ -2,119 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E006C4F962E
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:53:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 714D74F9625
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:51:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235970AbiDHMzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 08:55:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47348 "EHLO
+        id S235947AbiDHMwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 08:52:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233840AbiDHMzI (ORCPT
+        with ESMTP id S230294AbiDHMwN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 08:55:08 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817F516590;
-        Fri,  8 Apr 2022 05:53:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649422384; x=1680958384;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=j4WT+QkS5ARvkWcd8WkQSnzVMZ9Z9qQyb45mo3nJ7oE=;
-  b=YCVU4UvSg5l8AGcem/mT/Swss1slAyd8L2uLOAkaHu9UumZ7XRXTuNII
-   grJdVelC8RhlSTvezbOnXjBwmnh85a/56r70+Gy0La8vNronV0Jzj4LxJ
-   3sirKQsFRac7wysJuCPXhZaWMSfSwPHR6FVFEg3Mdz35j3lJLB/ThW7PA
-   Te8hZELb1Dhx6+CvWCFY2etKSKlKmYY0LZWM1p6OaBvuUg7DnRz9z/85F
-   twoI1aTZcPtfcbZ/COvuHBHXYTyeN+6pEwT/21FiNJNydOR8yj5yy7+RN
-   vp/mCIWzjCFvdiFF0HVaFavDbZtskfHdZ1cuj05/Cr783cuo2LvJdriEZ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="259184073"
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="259184073"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 05:53:03 -0700
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="525365038"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 05:53:01 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nco3E-000Hxa-C3;
-        Fri, 08 Apr 2022 15:49:20 +0300
-Date:   Fri, 8 Apr 2022 15:49:20 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-serial <linux-serial@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Gilles Buloz <gilles.buloz@kontron.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: Re: [PATCH v2 2/3] tty: Add lookahead param to receive_buf
-Message-ID: <YlAvUL2rMreUZwdF@smile.fi.intel.com>
-References: <20220408113954.9749-1-ilpo.jarvinen@linux.intel.com>
- <20220408113954.9749-3-ilpo.jarvinen@linux.intel.com>
- <YlAjfAab+Oh3HcCR@smile.fi.intel.com>
- <42fc2746-6a7c-9b44-87a5-32f219c1231@linux.intel.com>
+        Fri, 8 Apr 2022 08:52:13 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D05159A64
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 05:50:10 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id h63so10387386iof.12
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 05:50:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gWnxP81Krl1/ek3smnFr/1fIQ4FLd2YLVlnmdEEfWNY=;
+        b=qpY9QBJF9tmKjitl46Z5T+orRb9634UQpMZOb4n219nmn3FiakgsDIkqjDAiWqitn/
+         9YD9Wdxei9le2dgeXk/xmaCfI3W+YaddTAWyNShSpFB/fkXMRtZm79jDd6GlXtJJuk8t
+         abOs2R4wLAGiMT5O8VfIQeaRntSLQmT87LhADlaVTGLt1DMR2cCthjwqyV3K6Jitn3CY
+         ZXe428mTWq76ki3zT8K2Q8uR7h9GqmB57i8lqXWk3vFYe5Ezg8s1yWvwebKkbCpuh2ak
+         /zzCMuwahIWpNm86bi2EkZTLw3QD0Zh89X/18OdKMgzpwNJ5TYKpJjcFH8x0ufBblXiO
+         0HMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gWnxP81Krl1/ek3smnFr/1fIQ4FLd2YLVlnmdEEfWNY=;
+        b=8Bxz9P9vGYgxOrYxhHek0bL1YjV8vqvmNMWZXeL0vCrfazStqC7QXH60ebW3GjYRrj
+         hEO0PeNbhutC4jcV/Th0DkYSiB3AHk7chi8aRfQYxzQlIsdvf4dtM7mMBo1bjfdzIh7C
+         2Q1NWdUsR7dBnJGauLnccQ5RttT/Pv5wKT+GX1j/gzxgB46QsSxJ64cjx9rKNvR2IgwT
+         5RmIodCdKfugQOYky/BEZa8Bb6RwkL/5ZPGgxBkdpTopgZw5mQtxgz1u9OgYk3kFO7uh
+         xczV0GUBz5bUoKu3oJeps19xkX3UQRhrCU3E4sk71+q3qSpQ1axtkl0mUdwOzb9mX4nO
+         jjDw==
+X-Gm-Message-State: AOAM5324Dg3FzIvfQvRQgXVz8nnxTnLrD4uZbkKE8HguE6mnxJsMtYzP
+        UagMKQ/oR0om17YlnZYteZmUsHmxtqRVUj1gusI=
+X-Google-Smtp-Source: ABdhPJykcIMT6OeBz6l6xE4bKmhe0btxTcTx2lyApwjPiUsc/xUtP6p3XpX/0v0qM9QXOGF76Pt09JnNGaSQWrBl/5A=
+X-Received: by 2002:a05:6638:cd3:b0:325:ff7a:4f79 with SMTP id
+ e19-20020a0566380cd300b00325ff7a4f79mr874384jak.22.1649422209917; Fri, 08 Apr
+ 2022 05:50:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <42fc2746-6a7c-9b44-87a5-32f219c1231@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220408124323.10028-1-vincenzo.frascino@arm.com>
+In-Reply-To: <20220408124323.10028-1-vincenzo.frascino@arm.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Fri, 8 Apr 2022 14:49:59 +0200
+Message-ID: <CA+fCnZczFuOo0sxcrvihzJY_j0JQmH26J=4uMaz7-bsqnhakzg@mail.gmail.com>
+Subject: Re: [PATCH v2] kasan: Fix hw tags enablement when KUNIT tests are disabled
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 03:34:27PM +0300, Ilpo Järvinen wrote:
-> On Fri, 8 Apr 2022, Andy Shevchenko wrote:
-> > On Fri, Apr 08, 2022 at 02:39:53PM +0300, Ilpo Järvinen wrote:
+On Fri, Apr 8, 2022 at 2:43 PM Vincenzo Frascino
+<vincenzo.frascino@arm.com> wrote:
+>
+> Kasan enables hw tags via kasan_enable_tagging() which based on the mode
+> passed via kernel command line selects the correct hw backend.
+> kasan_enable_tagging() is meant to be invoked indirectly via the cpu features
+> framework of the architectures that support these backends.
+> Currently the invocation of this function is guarded by CONFIG_KASAN_KUNIT_TEST
+> which allows the enablement of the correct backend only when KUNIT tests are
+> enabled in the kernel.
+>
+> This inconsistency was introduced in commit:
+>
+>   ed6d74446cbf ("kasan: test: support async (again) and asymm modes for HW_TAGS")
+>
+> ... and prevents to enable MTE on arm64 when KUNIT tests for kasan hw_tags are
+> disabled.
+>
+> Fix the issue making sure that the CONFIG_KASAN_KUNIT_TEST guard does not
+> prevent the correct invocation of kasan_enable_tagging().
+>
+> Fixes: ed6d74446cbf ("kasan: test: support async (again) and asymm modes for HW_TAGS")
+> Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
+> Cc: Alexander Potapenko <glider@google.com>
+> Cc: Andrey Konovalov <andreyknvl@gmail.com>
+> Cc: Dmitry Vyukov <dvyukov@google.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> ---
+>  mm/kasan/hw_tags.c |  5 +++--
+>  mm/kasan/kasan.h   | 10 ++++++----
+>  2 files changed, 9 insertions(+), 6 deletions(-)
+>
+> diff --git a/mm/kasan/hw_tags.c b/mm/kasan/hw_tags.c
+> index 07a76c46daa5..9e1b6544bfa8 100644
+> --- a/mm/kasan/hw_tags.c
+> +++ b/mm/kasan/hw_tags.c
+> @@ -336,8 +336,6 @@ void __kasan_poison_vmalloc(const void *start, unsigned long size)
+>
+>  #endif
+>
+> -#if IS_ENABLED(CONFIG_KASAN_KUNIT_TEST)
+> -
+>  void kasan_enable_tagging(void)
+>  {
+>         if (kasan_arg_mode == KASAN_ARG_MODE_ASYNC)
+> @@ -347,6 +345,9 @@ void kasan_enable_tagging(void)
+>         else
+>                 hw_enable_tagging_sync();
+>  }
+> +
+> +#if IS_ENABLED(CONFIG_KASAN_KUNIT_TEST)
+> +
+>  EXPORT_SYMBOL_GPL(kasan_enable_tagging);
+>
+>  void kasan_force_async_fault(void)
+> diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
+> index d79b83d673b1..b01b4bbe0409 100644
+> --- a/mm/kasan/kasan.h
+> +++ b/mm/kasan/kasan.h
+> @@ -355,25 +355,27 @@ static inline const void *arch_kasan_set_tag(const void *addr, u8 tag)
+>  #define hw_set_mem_tag_range(addr, size, tag, init) \
+>                         arch_set_mem_tag_range((addr), (size), (tag), (init))
+>
+> +void kasan_enable_tagging(void);
+> +
+>  #else /* CONFIG_KASAN_HW_TAGS */
+>
+>  #define hw_enable_tagging_sync()
+>  #define hw_enable_tagging_async()
+>  #define hw_enable_tagging_asymm()
+>
+> +static inline void kasan_enable_tagging(void) { }
+> +
+>  #endif /* CONFIG_KASAN_HW_TAGS */
+>
+>  #if defined(CONFIG_KASAN_HW_TAGS) && IS_ENABLED(CONFIG_KASAN_KUNIT_TEST)
+>
+> -void kasan_enable_tagging(void);
+>  void kasan_force_async_fault(void);
+>
+> -#else /* CONFIG_KASAN_HW_TAGS || CONFIG_KASAN_KUNIT_TEST */
+> +#else /* CONFIG_KASAN_HW_TAGS && CONFIG_KASAN_KUNIT_TEST */
+>
+> -static inline void kasan_enable_tagging(void) { }
+>  static inline void kasan_force_async_fault(void) { }
+>
+> -#endif /* CONFIG_KASAN_HW_TAGS || CONFIG_KASAN_KUNIT_TEST */
+> +#endif /* CONFIG_KASAN_HW_TAGS && CONFIG_KASAN_KUNIT_TEST */
+>
+>  #ifdef CONFIG_KASAN_SW_TAGS
+>  u8 kasan_random_tag(void);
+> --
+> 2.35.1
+>
 
-...
+Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
 
-> > > +		if (c == STOP_CHAR(tty)) {
-> > > +			if (!lookahead_done)
-> > 
-> > But now it can be as below
-> > 
-> > 		if (c == STOP_CHAR(tty) && !lookahead_done)
-> > 
-> > > +				stop_tty(tty);
-> > > +		} else if ((c == START_CHAR(tty) && !lookahead_done) ||
-> > >  			 (tty->flow.stopped && !tty->flow.tco_stopped && I_IXANY(tty) &&
-> > >  			  c != INTR_CHAR(tty) && c != QUIT_CHAR(tty) &&
-> > >  			  c != SUSP_CHAR(tty))) {
-> 
-> Are you sure about this? ...If I make that change to the first if, the 
-> second part of the else if's condition get a chance it didn't have 
-> previously.
-
-Oh, indeed. This will give a chance to the rest of the second conditional to be
-triggered because of ||.
-
-> What I'd like to do here is to take advantage of the function that was 
-> added:
-> 
-> 		if (!n_tty_receive_char_flow_ctrl(tty, c) &&
-> 		    tty->flow.stopped && !tty->flow.tco_stopped && I_IXANY(tty) &&
->         	    c != INTR_CHAR(tty) && c != QUIT_CHAR(tty) &&
-> 	            c != SUSP_CHAR(tty))) {
-> 			start_tty(tty);
-> 			process_echoes(tty);
-> 		}
-> ...but it will change STOP_CHAR vs START_CHAR precedence for the case 
-> where they're the same characters. I don't know if it matters.
-
-No idea of impact of such change.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Thanks!

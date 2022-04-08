@@ -2,126 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C5EE4F93E8
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 13:25:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 613854F93EE
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 13:25:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234002AbiDHL0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 07:26:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57896 "EHLO
+        id S234829AbiDHL1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 07:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234797AbiDHL0l (ORCPT
+        with ESMTP id S234808AbiDHL0w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 07:26:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395E43B2A1;
-        Fri,  8 Apr 2022 04:24:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C9CA361FE0;
-        Fri,  8 Apr 2022 11:24:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4EF5C385A9;
-        Fri,  8 Apr 2022 11:24:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649417076;
-        bh=Rk9OpF6aBV5T4VMV1WdnblyN3ubVnVL4sgz9Ot1Ls8g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pMlVG0Atr69SXbTNsTlNF2xFtKjE+m1WQNEdg6z643hq0+6hFNxzmw9v76l5bnd73
-         8jxGAjTOcV8HsNnHCEliEp0aJeQQ8cGpijDsI6XOuIqcakMontAlk5EMVyBNhxYQpK
-         IxTECsVbL/T5gmGzpZFA9LWaGUi/PS9kXHTF2qm4=
-Date:   Fri, 8 Apr 2022 13:24:32 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Alexey Khoroshilov <khoroshilov@ispras.ru>
-Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, stable@vger.kernel.org, lwn@lwn.net,
-        jslaby@suse.cz
-Subject: Re: Stable release process proposal (Was: Linux 5.10.109)
-Message-ID: <YlAbcMSpqrECMi2B@kroah.com>
-References: <164845571613863@kroah.com>
- <44e28591-873a-d873-e04a-78dda900a5de@ispras.ru>
- <YkPeTkf0sG/ns+L4@kroah.com>
- <cf4f2100-0518-56eb-29c8-393e2b49dc71@ispras.ru>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cf4f2100-0518-56eb-29c8-393e2b49dc71@ispras.ru>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Fri, 8 Apr 2022 07:26:52 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8C8649FB3
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 04:24:46 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id bh17so16653236ejb.8
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 04:24:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair;
+        h=mime-version:content-transfer-encoding:date:message-id:cc:subject
+         :from:to:references:in-reply-to;
+        bh=JB/CC7Ec3Hb4OFGT9SZA55npXZ1ZkvCNi/Sf1qgDY2g=;
+        b=EGJkYNDtG1rZUMJh9xXvZEpBljzhh7xVHW+qntSTHQ47vn8Gfqgnz7rO2M7nglYh+O
+         buNGI+A1uRjTH+HU4p3mJW4bmSa0whlUFjXAa7BawVguWDsmo0wpl9KA3ONSArzPWqOF
+         OESxAPTmt9r5/kWVksICuU9X97GoyPdZNxUHhQ7AM5rxjEI3wZPq1GfxgvyRuL5AV1gz
+         ijuPrbd583+AFbFzQPY+Eb7IVwk24g6fzUTNzsduEep6aJ8J46hExo7YFhnss713ATm0
+         ItwzcarpZrcdTRiSxxE2B2QyMvAzQCX7cu4U2ocU2g8sxKGSkvxZi+NAkHCyKVDwuZN9
+         1kLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:content-transfer-encoding:date
+         :message-id:cc:subject:from:to:references:in-reply-to;
+        bh=JB/CC7Ec3Hb4OFGT9SZA55npXZ1ZkvCNi/Sf1qgDY2g=;
+        b=FKnG9CO7LsZObmCIOYY+qR7Jfa9PKS1lnAw9ZU64bPeAAqae1TM7KcmVllwJFlCiQY
+         lJXUgfMGhs2wJrziJzdWPL8KY+uMLZhcg/5EdbkzlJAkMLOGu/3Q5oWrucvxmpHZHb1M
+         MSPkaE5vXTtE6gKHD/31jVvwiDF13RyJ6IxB0gjNdXlp3wXnD8Rhz1H9dMdhNsGhX+/F
+         l7z8ljn4Or4Wd69MIOv5BVYY05X6ojUSg8yC8ucblagNFuJMujxlZoNuoEbPuok7oMf7
+         C7GbilCx/xOQUWquRCwGHbUVuLMxzs7ICKS696p9TEMmThGzlj2VTtcIoiYhQ1S4HwVd
+         aU5w==
+X-Gm-Message-State: AOAM531nV8eQfOmp+CLuGeYq+pySaH/xq+36H56iW/wN0QjoWkAXGj7x
+        XC06CAuBtEjiYDP7W8m61CE3sA==
+X-Google-Smtp-Source: ABdhPJwKD0stjojj0JVqzk62Y5+rYQTTyLyP+wiunWy0fhaUgzh773Ul0MPHiF6T1xTfAVXlqMFVyg==
+X-Received: by 2002:a17:907:7d9e:b0:6df:9fe8:856a with SMTP id oz30-20020a1709077d9e00b006df9fe8856amr17667048ejc.373.1649417085194;
+        Fri, 08 Apr 2022 04:24:45 -0700 (PDT)
+Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id p14-20020a05640210ce00b00413211746d4sm10343381edu.51.2022.04.08.04.24.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Apr 2022 04:24:44 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Fri, 08 Apr 2022 13:24:43 +0200
+Message-Id: <CJ4TK3GWP00Q.1SDG6H9Q4GP37@otso>
+Cc:     <~postmarketos/upstreaming@lists.sr.ht>,
+        <linux-kernel@vger.kernel.org>, "Rob Herring" <robh+dt@kernel.org>,
+        <devicetree@vger.kernel.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        <linux-arm-msm@vger.kernel.org>,
+        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
+        "Andy Gross" <agross@kernel.org>, "Marc Zyngier" <maz@kernel.org>,
+        <phone-devel@vger.kernel.org>
+Subject: Re: [PATCH 03/10] dt-bindings: qcom,pdc: Add SM6350 compatible
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+To:     "Rob Herring" <robh@kernel.org>
+References: <20211213082614.22651-1-luca.weiss@fairphone.com>
+ <20211213082614.22651-4-luca.weiss@fairphone.com>
+ <YbpLnWKRq5TRO+Uk@robh.at.kernel.org>
+In-Reply-To: <YbpLnWKRq5TRO+Uk@robh.at.kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 11:29:33AM +0300, Alexey Khoroshilov wrote:
-> On 30.03.2022 07:36, Greg Kroah-Hartman wrote:
-> > On Wed, Mar 30, 2022 at 02:49:00AM +0300, Alexey Khoroshilov wrote:
-> >> Dear Greg,
-> >>
-> >> First of all, thank you very much for keeping stable maintenance so well.
-> >>
-> >> We (Linux Verification Center of ISPRAS (linuxtesting.org)) are going to
-> >> join a team of regular testers for releases in 5.10 stable branch (and
-> >> other branches later). We are deploying some test automation for that
-> >> and have met an oddity that would to discuss.
-> >>
-> >> Sometimes, like in 5.10.109 release, we have a situation when a
-> >> released version (5.10.109) differs from the release candidate
-> >> (5.10.109-rс1). In this case there was a patch "llc: only change
-> >> llc->dev when bind()succeeds" added to fix a bug in another llc fix.
-> >> Unfortunately, as Pavel noted, this patch does not fix a bug, but
-> >> introduces a new one, because another commit b37a46683739 ("netdevice:
-> >> add the case if dev is NULL") was missed in 5.10 branch.
-> > This happens quite frequently due to issues found in testing.  It's not
-> > a new thing.
-> >
-> >> The problem will be fixed in 5.10.110, but we still have a couple oddities:
-> >> - we have a release that should not be recommended for use
-> >> - we have a commit message misleading users when says:
-> >>
-> >>     Tested-by: Pavel Machek (CIP) <pavel@denx.de>
-> >>     Tested-by: Fox Chen <foxhlchen@gmail.com>
-> >>     Tested-by: Florian Fainelli <f.fainelli@gmail.com>
-> >>     Tested-by: Shuah Khan <skhan@linuxfoundation.org>
-> >>     Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> >>     Tested-by: Salvatore Bonaccorso <carnil@debian.org>
-> >>     Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >>     Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-> >>     Tested-by: Guenter Roeck <linux@roeck-us.net>
-> >>
-> >> but actually nobody tested that version.
-> >>
-> >> There are potential modifications in stable release process that can
-> >> prevent such problems:
-> >>
-> >> (1) to always release rс2 when there are changes in rc1 introduced
-> >>
-> >> (2) to avoid Tested-by: section from release commits in such situations.
-> >>
-> >> Or may be it is overkill and it too complicates maintenance work to be
-> >> worth. What do you think?
-> > I think it's not worth the extra work on my side for this given the
-> > already large workload.  What would benifit from this to justify it?
-> I see, thank you.
-> 
-> I believed the goal is to provide some minimal quality guarantees for a
-> particular version of the code.
+Hi all,
 
-I do not understand what you mean by this.  Can you please explain?
+On Wed Dec 15, 2021 at 9:10 PM CET, Rob Herring wrote:
+> On Mon, 13 Dec 2021 09:26:04 +0100, Luca Weiss wrote:
+> > Add devicetree compatible for pdc on SM6350 SoC.
+> >=20
+> > Also correct the compatibles for sm8250 and sm8350.
+> >=20
+> > Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> > ---
+> > I do have the .txt -> .yaml conversion ready for this but will send
+> > as a separate patch.
+> >=20
+> >  .../devicetree/bindings/interrupt-controller/qcom,pdc.txt    | 5 +++--
+> >  1 file changed, 3 insertions(+), 2 deletions(-)
+> >=20
+>
+> Acked-by: Rob Herring <robh@kernel.org>
 
-> But if the process of updates is quite
-> intensive, it may make sense to transfer responsibility for particular
-> release verification downstream.
+It looks like this patch hasn't been applied yet. Could the responsible
+maintainer please pick it up?
 
-There is no need to transfer anything as per the license of the kernel,
-right?
-
-I do not understand what you are trying to do here.  Can you provide
-details please?
-
-thanks,
-
-greg k-h
+Regards
+Luca

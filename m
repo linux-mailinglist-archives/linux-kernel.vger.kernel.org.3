@@ -2,200 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 391B54F8E93
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:27:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E43234F8EB1
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:27:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231685AbiDHDgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 23:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43194 "EHLO
+        id S231569AbiDHDgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 23:36:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbiDHDgV (ORCPT
+        with ESMTP id S230133AbiDHDgD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 23:36:21 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 898301D97DB
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 20:34:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649388859; x=1680924859;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=abyGfDHtT+FNSDaPKtoGtMGPODo9n9BpTa4wybmsBzo=;
-  b=nneDJbn+PmfNumr/wFQ4QQfjhT1rMr05fRN3EkQFtR5jgCxz4XmFpxrN
-   v2llnBxqRj1H7l5Cqh8WVdK5ROQ1SQ2Pm9WMLHo4JdBceoTkcKbxOjaNc
-   J18fBVoIU6uTUjZKddzW3MiWt9/mOiMeRAVsKI2jXH9iXKpD0+aXB6pVG
-   Ia8ERclyrvhd56fQIh49QUuEbykED2OejeiCra0ZsemH+IoVszueUAaVW
-   wDeoFXDbPblRjt9brmwvNDxMUl9G/nTl+fFr1lEWqOymbnFJ7zgQT2yzv
-   39UIsB7/EzbLGKRSyP0iz11XuWp16d5cMe+yDNAiUBfrJ5WJaY4zyeKyM
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="347939985"
-X-IronPort-AV: E=Sophos;i="5.90,243,1643702400"; 
-   d="scan'208";a="347939985"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 20:34:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,243,1643702400"; 
-   d="scan'208";a="525206623"
-Received: from lkp-server02.sh.intel.com (HELO a44fdfb70b94) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 07 Apr 2022 20:34:17 -0700
-Received: from kbuild by a44fdfb70b94 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ncfO4-00060R-W0;
-        Fri, 08 Apr 2022 03:34:16 +0000
-Date:   Fri, 8 Apr 2022 11:33:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: sound/soc/codecs/tlv320adc3xxx.c:1209:28: error: implicit
- declaration of function 'devm_gpiod_get'; did you mean 'devm_gpio_free'?
-Message-ID: <202204081135.5a7kyZH9-lkp@intel.com>
+        Thu, 7 Apr 2022 23:36:03 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FBB41D2B47;
+        Thu,  7 Apr 2022 20:34:00 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id q142so6658799pgq.9;
+        Thu, 07 Apr 2022 20:34:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=dw+ROn8RvBkqEEh4rGoMJ1WVteSRDkuc1/T16Z5qZMc=;
+        b=EeBrjzYK8SkX1OqjP+i4bvgZKa+egv6bbbX6Xseqd75gu8/cTyTmEKI66pcq42X4Tt
+         jUu+tdejhl+pgRUDFf3ekJue/654i8tzbQvbIqOElao4jnOElmCskBymalqtkaTdS7td
+         4B41UNZxOQSsBUXzZI7JAuypNaXHFhb90Int7OPOhfDVDz7wMoiEOiUf8ka6R2+Qk7H0
+         2SHBCSD0e181CRTA+6Ww96XYGQD6xsDEiQ/BlD4kvrq4ITL/TcB1KFDGKNft7l/ycYcC
+         l666RQJjkeA7+bKN3J4WOGxeH8isiZMHyGn8NoU+Am/JyeLwRLmzOppBIF6BOofCi9mi
+         IqdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=dw+ROn8RvBkqEEh4rGoMJ1WVteSRDkuc1/T16Z5qZMc=;
+        b=mJF17z/z7me98J0N1Piupk6WPYhieZxg7exRZwf8Y1nT5jcHiBPslDK3t7L3gBZRlv
+         g4mLYYKm9XNh4TF4mxtn4TPEr1tYL0kMv9Nf3TnewmqOhRME5ArucHNXJkONCtdzn80Z
+         HT50FuVZXOrT2RwBRBWWrhXNcc6vviRa0aLFYGxM9LCMDrXizj5fkGMijBwSgxU0r27H
+         yoQfgXfZb/UE9hi/0RxB7/eiXuD4MBvfM/+kzMg3mZwHhiH74dZSqNusupijoMTY/hT1
+         3zCHgGwXBhs2L8LQ/y/HKxYPOT9SOq+gZW3YRaLfZJRI/RQaSFPBVnAMphfyBDhZPqAF
+         YBfw==
+X-Gm-Message-State: AOAM531Y/eV58Ja8e7DILfILX1GTcKqETKxfheeq0yqXMQaOA2V32EC5
+        jC2Jfmior7DPo2sA7iMuQjk=
+X-Google-Smtp-Source: ABdhPJw2JVZSjgvThPvGb8qxgxHfxjyJ37Kl9thDcERfEhZZSRsH+ojMV4RqYMA6JgZqguQ1nXD3wg==
+X-Received: by 2002:a63:f24c:0:b0:383:c279:e662 with SMTP id d12-20020a63f24c000000b00383c279e662mr13907253pgk.303.1649388839948;
+        Thu, 07 Apr 2022 20:33:59 -0700 (PDT)
+Received: from localhost ([192.55.54.52])
+        by smtp.gmail.com with ESMTPSA id r10-20020a17090a454a00b001c96a912aa0sm10618624pjm.3.2022.04.07.20.33.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 20:33:59 -0700 (PDT)
+Date:   Thu, 7 Apr 2022 20:33:57 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     Xiaoyao Li <xiaoyao.li@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, isaku.yamahata@intel.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
+        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [RFC PATCH v5 027/104] KVM: TDX: initialize VM with TDX specific
+ parameters
+Message-ID: <20220408033357.GF2864606@ls.amr.corp.intel.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <c3b37cf5c83f92be0e153075d81a80729bf1031e.1646422845.git.isaku.yamahata@intel.com>
+ <e392b53a-fbaa-4724-07f4-171424144f70@redhat.com>
+ <a1052ec0-4ea6-d5db-a729-deec08712683@intel.com>
+ <34d773c8d32c8d38033aae7e0fee572d757e242c.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <34d773c8d32c8d38033aae7e0fee572d757e242c.camel@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+On Thu, Apr 07, 2022 at 01:51:38PM +1200,
+Kai Huang <kai.huang@intel.com> wrote:
 
-FYI, the error/warning still remains.
+> On Thu, 2022-04-07 at 09:29 +0800, Xiaoyao Li wrote:
+> > On 4/5/2022 8:58 PM, Paolo Bonzini wrote:
+> > > On 3/4/22 20:48, isaku.yamahata@intel.com wrote:
+> > > > +    td_params->attributes = init_vm->attributes;
+> > > > +    if (td_params->attributes & TDX_TD_ATTRIBUTE_PERFMON) {
+> > > > +        pr_warn("TD doesn't support perfmon. KVM needs to save/restore "
+> > > > +            "host perf registers properly.\n");
+> > > > +        return -EOPNOTSUPP;
+> > > > +    }
+> > > 
+> > > Why does KVM have to hardcode this (and LBR/AMX below)?  Is the level of 
+> > > hardware support available from tdx_caps, for example through the CPUID 
+> > > configs (0xA for this one, 0xD for LBR and AMX)?
+> > 
+> > It's wrong code. PMU is allowed.
+> > 
+> > AMX and LBR are disallowed because and the time we wrote the codes they 
+> > are not supported by KVM. Now AMX should be allowed, but (arch-)LBR 
+> > should be still blocked until KVM merges arch-LBR support.
+> 
+> I think Isaku's idea is we don't support them in the first submission?
+> 
+> If so as I suggested, we should add a TODO in comment..
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   42e7a03d3badebd4e70aea5362d6914dfc7c220b
-commit: 44bd27c42a1c9a00f1fbcb58301a7f3e6f5cdd0f ASoC: simple-amplifier: Remove spurious gpiolib select
-date:   8 weeks ago
-config: microblaze-randconfig-r034-20220408 (https://download.01.org/0day-ci/archive/20220408/202204081135.5a7kyZH9-lkp@intel.com/config)
-compiler: microblaze-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=44bd27c42a1c9a00f1fbcb58301a7f3e6f5cdd0f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 44bd27c42a1c9a00f1fbcb58301a7f3e6f5cdd0f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=microblaze SHELL=/bin/bash drivers/regulator/ sound/soc/codecs/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   sound/soc/codecs/tlv320adc3xxx.c: In function 'adc3xxx_i2c_probe':
->> sound/soc/codecs/tlv320adc3xxx.c:1209:28: error: implicit declaration of function 'devm_gpiod_get'; did you mean 'devm_gpio_free'? [-Werror=implicit-function-declaration]
-    1209 |         adc3xxx->rst_pin = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
-         |                            ^~~~~~~~~~~~~~
-         |                            devm_gpio_free
->> sound/soc/codecs/tlv320adc3xxx.c:1209:57: error: 'GPIOD_OUT_LOW' undeclared (first use in this function); did you mean 'GPIOF_INIT_LOW'?
-    1209 |         adc3xxx->rst_pin = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
-         |                                                         ^~~~~~~~~~~~~
-         |                                                         GPIOF_INIT_LOW
-   sound/soc/codecs/tlv320adc3xxx.c:1209:57: note: each undeclared identifier is reported only once for each function it appears in
->> sound/soc/codecs/tlv320adc3xxx.c:1257:9: error: implicit declaration of function 'gpiod_set_value_cansleep'; did you mean 'gpio_set_value_cansleep'? [-Werror=implicit-function-declaration]
-    1257 |         gpiod_set_value_cansleep(adc3xxx->rst_pin, 1);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~
-         |         gpio_set_value_cansleep
-   cc1: some warnings being treated as errors
-
-
-vim +1209 sound/soc/codecs/tlv320adc3xxx.c
-
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1196  
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1197  static int adc3xxx_i2c_probe(struct i2c_client *i2c,
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1198  			     const struct i2c_device_id *id)
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1199  {
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1200  	struct device *dev = &i2c->dev;
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1201  	struct adc3xxx *adc3xxx = NULL;
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1202  	int ret;
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1203  
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1204  	adc3xxx = devm_kzalloc(dev, sizeof(struct adc3xxx), GFP_KERNEL);
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1205  	if (!adc3xxx)
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1206  		return -ENOMEM;
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1207  	adc3xxx->dev = dev;
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1208  
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15 @1209  	adc3xxx->rst_pin = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1210  	if (IS_ERR(adc3xxx->rst_pin)) {
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1211  		return dev_err_probe(dev, PTR_ERR(adc3xxx->rst_pin),
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1212  				     "Failed to request rst_pin\n");
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1213  	}
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1214  
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1215  	adc3xxx->mclk = devm_clk_get(dev, NULL);
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1216  	if (IS_ERR(adc3xxx->mclk)) {
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1217  		/*
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1218  		 * The chip itself supports running off the BCLK either
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1219  		 * directly or via the PLL, but the driver does not (yet), so
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1220  		 * having a specified mclk is required. Otherwise, we could
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1221  		 * use the lack of a clocks property to indicate when BCLK is
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1222  		 * intended as the clock source.
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1223  		 */
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1224  		return dev_err_probe(dev, PTR_ERR(adc3xxx->mclk),
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1225  				     "Failed to acquire MCLK\n");
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1226  	} else if (adc3xxx->mclk) {
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1227  		ret = clk_prepare_enable(adc3xxx->mclk);
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1228  		if (ret < 0)
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1229  			return ret;
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1230  		dev_dbg(dev, "Enabled MCLK, freq %lu Hz\n", clk_get_rate(adc3xxx->mclk));
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1231  	}
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1232  
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1233  	ret = adc3xxx_parse_dt_gpio(adc3xxx, "ti,dmdin-gpio1", &adc3xxx->gpio_cfg[0]);
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1234  	if (ret < 0)
-8a2d8e4fed6d582 Yang Yingliang   2021-12-23  1235  		goto err_unprepare_mclk;
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1236  	ret = adc3xxx_parse_dt_gpio(adc3xxx, "ti,dmclk-gpio2", &adc3xxx->gpio_cfg[1]);
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1237  	if (ret < 0)
-8a2d8e4fed6d582 Yang Yingliang   2021-12-23  1238  		goto err_unprepare_mclk;
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1239  	ret = adc3xxx_parse_dt_micbias(adc3xxx, "ti,micbias1-vg", &adc3xxx->micbias_vg[0]);
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1240  	if (ret < 0)
-8a2d8e4fed6d582 Yang Yingliang   2021-12-23  1241  		goto err_unprepare_mclk;
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1242  	ret = adc3xxx_parse_dt_micbias(adc3xxx, "ti,micbias2-vg", &adc3xxx->micbias_vg[1]);
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1243  	if (ret < 0)
-8a2d8e4fed6d582 Yang Yingliang   2021-12-23  1244  		goto err_unprepare_mclk;
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1245  
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1246  	adc3xxx->regmap = devm_regmap_init_i2c(i2c, &adc3xxx_regmap);
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1247  	if (IS_ERR(adc3xxx->regmap)) {
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1248  		ret = PTR_ERR(adc3xxx->regmap);
-8a2d8e4fed6d582 Yang Yingliang   2021-12-23  1249  		goto err_unprepare_mclk;
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1250  	}
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1251  
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1252  	i2c_set_clientdata(i2c, adc3xxx);
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1253  
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1254  	adc3xxx->type = id->driver_data;
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1255  
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1256  	/* Reset codec chip */
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15 @1257  	gpiod_set_value_cansleep(adc3xxx->rst_pin, 1);
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1258  	usleep_range(2000, 100000); /* Requirement: > 10 ns (datasheet p13) */
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1259  	gpiod_set_value_cansleep(adc3xxx->rst_pin, 0);
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1260  
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1261  	/* Potentially set up pins used as GPIOs */
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1262  	adc3xxx_init_gpio(adc3xxx);
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1263  
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1264  	ret = snd_soc_register_component(dev,
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1265  			&soc_component_dev_adc3xxx, &adc3xxx_dai, 1);
-8a2d8e4fed6d582 Yang Yingliang   2021-12-23  1266  	if (ret < 0) {
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1267  		dev_err(dev, "Failed to register codec: %d\n", ret);
-8a2d8e4fed6d582 Yang Yingliang   2021-12-23  1268  		goto err_unprepare_mclk;
-8a2d8e4fed6d582 Yang Yingliang   2021-12-23  1269  	}
-8a2d8e4fed6d582 Yang Yingliang   2021-12-23  1270  
-8a2d8e4fed6d582 Yang Yingliang   2021-12-23  1271  	return 0;
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1272  
-8a2d8e4fed6d582 Yang Yingliang   2021-12-23  1273  err_unprepare_mclk:
-8a2d8e4fed6d582 Yang Yingliang   2021-12-23  1274  	clk_disable_unprepare(adc3xxx->mclk);
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1275  	return ret;
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1276  }
-e9a3b57efd28fe8 Ricard Wanderlof 2021-12-15  1277  
-
-:::::: The code at line 1209 was first introduced by commit
-:::::: e9a3b57efd28fe889a98171bdc1e9e0dd7eb9a50 ASoC: codec: tlv320adc3xxx: New codec driver
-
-:::::: TO: Ricard Wanderlof <ricardw@axis.com>
-:::::: CC: Mark Brown <broonie@kernel.org>
+Sure, will add a TODO comment.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Isaku Yamahata <isaku.yamahata@gmail.com>

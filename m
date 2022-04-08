@@ -2,79 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 494D64F969F
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 15:27:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE474F96A0
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 15:27:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236263AbiDHN3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 09:29:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33876 "EHLO
+        id S236249AbiDHN3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 09:29:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234901AbiDHN3G (ORCPT
+        with ESMTP id S230135AbiDHN3f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 09:29:06 -0400
-Received: from mail-4323.proton.ch (mail-4323.proton.ch [185.70.43.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056A1116B50
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 06:26:58 -0700 (PDT)
-Date:   Fri, 08 Apr 2022 13:26:50 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=emersion.fr;
-        s=protonmail2; t=1649424416;
-        bh=xKdnbX/uu4zDxFZ8hCkBVd/wtWNCWZBH1JAcwPtLw/U=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID;
-        b=LIdIuHNo44bjyNxrW+WjYFfH/4NTVydxbOGEB5iHHJ3owDhI4nYaiOvipxfn+FXvy
-         ISRv3yZxCJWe8nQIA+ES9ZFYs7Jhe+sXhp3X8qfjIK1tltflAvTcAUkIyz2okxJiOn
-         Zx6dmDOJ6pBaKfMrw1tK0kMiaQ4KAsz3eAPmgzBLiWEWnj+5Ym6Xg+FUNd8bTi3jHZ
-         VWAJdM/yRINXPQFHaVfE438ETtnh/XPI90OfXoTxM91zwnBG69RVqDCRevgTx8iRNS
-         IOjnq3OqvlRm0L5NAM6LToaXr+Nq6HbePYTbRzixIBO9e1CiSKJSr5s4urJpVoLlp+
-         vI7nkcslF/stQ==
-To:     Grigory Vasilyev <h0tc0d3@gmail.com>
-From:   Simon Ser <contact@emersion.fr>
-Cc:     Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Melissa Wen <mwen@igalia.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?utf-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        =?utf-8?Q?Michel_D=C3=A4nzer?= <mdaenzer@redhat.com>,
-        Evan Quan <evan.quan@amd.com>,
-        Sean Paul <seanpaul@chromium.org>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
-        ML dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Reply-To: Simon Ser <contact@emersion.fr>
-Subject: Re: [PATCH] drm/amdgpu: Fix NULL pointer dereference
-Message-ID: <2GaGJp5T0FARGpEE4FSEdCCQQNOecHtBBdQxqneeCWad2PD7gKqhp6-2LhdZSpTvDToW2kKggbfzlcvw9vsM7L_kJXo1uMNjoiAHJ4bQAjI=@emersion.fr>
-In-Reply-To: <CAD5ugGD6QzCUqk7_EVwH9Cc6PQtx_VfjVRWzzP9uKR5tkGh1RQ@mail.gmail.com>
-References: <20220408092803.3188-1-h0tc0d3@gmail.com> <4o2YD5id7zhK5g__CUK3Yf-6Dj459XQ0qsydW6wKHdco3YYtl78BqGUfXvQ9UO0AZoAsMPfhFB0jw1BFldiFDcbZXmGgsobuAoTMWmoDqmE=@emersion.fr> <CAP+8YyED70CSqVRaB7JgrAtK-yvBx5EsvrrdR7EpvOG2AVhskQ@mail.gmail.com> <QfKpxmkE_cy9wt5VJruw_TSdnl5KceKM8BxJGmZSBs-KiaRwIYfgc8h_-5h7Wmj6G-NtUJ3A88V5pzPvZuLlpkK-oRO5pSjeTxwHcZWlogs=@emersion.fr> <CAD5ugGD6QzCUqk7_EVwH9Cc6PQtx_VfjVRWzzP9uKR5tkGh1RQ@mail.gmail.com>
+        Fri, 8 Apr 2022 09:29:35 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A14BAE;
+        Fri,  8 Apr 2022 06:27:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649424451; x=1680960451;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/HA1QiQ6H5p+tsSS3FpYA6QqwmIqKeG4+bzRgPHZynE=;
+  b=QYfpu9yS0XGLYL+fF8SKmi+aEsYeSSmYuC0cDcvSobmjJfxj2y2E6Dji
+   ggiP8IbPXlwHjGXW9nAvMqCZSsn+WtTp/pg52y+aog/Y153dIJ12Tz4IE
+   1Qcgay6SF4dtyEaHXTTZsQsgn8LNw/sJYu0fMocHpSw9cOmLqPhQ1J5Pb
+   X3g3UrF8XddXCNLju+ieI0nD1QJNyMarG722i/q7XLZxIXjoJlnPCiqH7
+   ZbUfRMpCdKj2+3HTEfTHvNPkvumMJJp7Q1aDWiFTadPbdh+tDBC3Qhx6s
+   X07CCJuTvKO/3NLxMIfrCgGmHkUhMni1hDpy+WFYwwD5xXDBhOn4AXimb
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="243724447"
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="243724447"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 06:27:31 -0700
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="571487565"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 06:27:28 -0700
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 8EE0E201C0;
+        Fri,  8 Apr 2022 16:27:26 +0300 (EEST)
+Date:   Fri, 8 Apr 2022 16:27:26 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Michael Walle <michael@walle.cc>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>
+Subject: Re: [PATCH v5 1/4] device property: Allow error pointer to be passed
+ to fwnode APIs
+Message-ID: <YlA4Pp11ZXG3eSX/@paasikivi.fi.intel.com>
+References: <20220406130552.30930-1-andriy.shevchenko@linux.intel.com>
+ <df3a78036864716fbeecf3cd94dbcbbe@walle.cc>
+ <Yk66wHWlMg3QLy6u@smile.fi.intel.com>
+ <YlAuEzW0fUuuXTN6@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YlAuEzW0fUuuXTN6@smile.fi.intel.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Friday, April 8th, 2022 at 15:21, Grigory Vasilyev <h0tc0d3@gmail.com> w=
-rote:
+Hi Andy,
 
-> Simon Ser and Bas Nieuwenhuizen, do you understand that you are
-> proposing to make the code less safe in the future? In the future,
-> someone might rewrite the code and we'll get an error.
+On Fri, Apr 08, 2022 at 03:44:03PM +0300, Andy Shevchenko wrote:
+> On Thu, Apr 07, 2022 at 01:19:44PM +0300, Andy Shevchenko wrote:
+> > On Wed, Apr 06, 2022 at 08:05:23PM +0200, Michael Walle wrote:
+> 
+> ...
+> 
+> > > > +	if (IS_ERR_OR_NULL(fwnode))
+> > > > +		return -ENOENT;
+> > > > +
+> > > >  	ret = fwnode_call_int_op(fwnode, get_reference_args, prop, nargs_prop,
+> > > >  				 nargs, index, args);
+> > > > +	if (ret == 0)
+> > > > +		return ret;
+> > > > 
+> > > > -	if (ret < 0 && !IS_ERR_OR_NULL(fwnode) &&
+> > > > -	    !IS_ERR_OR_NULL(fwnode->secondary))
+> > > > -		ret = fwnode_call_int_op(fwnode->secondary, get_reference_args,
+> > > > -					 prop, nargs_prop, nargs, index, args);
+> > > > +	if (IS_ERR_OR_NULL(fwnode->secondary))
+> > > > +		return -ENOENT;
+> > > 
+> > > Doesn't this mean you overwrite any return code != 0 with -ENOENT?
+> > > Is this intended?
+> > 
+> > Indeed, it would shadow the error code.
+> 
+> I was thinking more on this and am not sure about the best approach here.
+> On one hand in the original code this returns the actual error code from
+> the call against primary fwnode. But it can be at least -ENOENT or -EINVAL.
+> 
+> But when we check the secondary fwnode we want to have understanding that it's
+> secondary fwnode which has not been found, but this requires to have a good
+> distinguishing between error codes from the callback.
+> 
+> That said, the error codes convention of ->get_reference_args() simply
+> sucks. Sakari, do you have it on your TODO to fix this mess out, if it's
+> even feasible?
 
-I don't think we should blindly add NULL checks for all functions which
-take a pointer as argument. This makes it way more complicated to find
-a bug when the function is mis-used. Crashing is better because it
-indicates a programmer error. In the future, any new call with a NULL
-pointer will produce a clear error.
+What would you expect to see compared to what it is now?
 
-Using pointers for output values is a common pattern in C, it allows a
-function to return multiple values.
+I guess the error code could be different for a missing property and a
+property with invalid data, but I'm not sure any caller would be interested
+in that.
+
+> 
+> To be on safest side, I will change as suggested in previous mail (see below)
+> so it won't have impact on -EINVAL case.
+> 
+> > So, it should go with
+> > 
+> > 	if (IS_ERR_OR_NULL(fwnode->secondary))
+> > 		return ret;
+> > 
+> > then.
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
+
+-- 
+Sakari Ailus

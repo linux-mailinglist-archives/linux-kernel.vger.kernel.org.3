@@ -2,181 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26E4D4F9FDA
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 01:05:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4626C4F9FFC
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 01:08:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235922AbiDHXG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 19:06:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55234 "EHLO
+        id S239999AbiDHXIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 19:08:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230518AbiDHXG4 (ORCPT
+        with ESMTP id S232918AbiDHXIO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 19:06:56 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE5F7252
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 16:04:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649459091; x=1680995091;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=MCrpFimKT99fCh/iU640v0eBtLj2dSvpLXHTgk0UqvM=;
-  b=lWOrRx1h+6OeGXckLOrZZHGFHKssbhfG9fnlPgUcH1C960H/B7mjxwhn
-   ur3DKVqe+DMURSHAtKOaqVuZ7ybfZxsqWMW5G4TrrCdFUspURCDmUTWL3
-   SyGnuC5BlOUkuj2hqtih2dvs6lFGi41dG4NbZ6vQ2ThyU8fZX9u2Kr/pg
-   s5zuR2VA4vMZqHSP1DV1MYGdb7N49Dmsgajz4wRDdhDZyYGCfjHO2QbYe
-   DFJ8Y6sk98wwAcbhOBf6hjWSxihl/ynbYobPBB4046E/YxH3VwsE7sJi5
-   lnc3tLLhVGW6n/rGQ2bb84rOChUJOoNQfhcIYlriQk874zuX2mo2klRLc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="259313833"
-X-IronPort-AV: E=Sophos;i="5.90,246,1643702400"; 
-   d="scan'208";a="259313833"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 16:04:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,246,1643702400"; 
-   d="scan'208";a="621829847"
-Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 08 Apr 2022 16:04:49 -0700
-Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ncxer-0000hF-3Z;
-        Fri, 08 Apr 2022 23:04:49 +0000
-Date:   Sat, 9 Apr 2022 07:03:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Phil Elwell <phil@raspberrypi.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Dom Cobley <popcornmix@gmail.com>
-Subject: [l1k:smsc95xx_5.17 95/888] drivers/irqchip/irq-bcm2835.c:204:22:
- warning: variable 'last_irq' set but not used
-Message-ID: <202204090628.LCLaLqKj-lkp@intel.com>
+        Fri, 8 Apr 2022 19:08:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 85AE31CEA51
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 16:06:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649459168;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=fFnzWGKk077SHJjN1dvWjxWxYOAqXtEPrfH68KIxBjo=;
+        b=De6OwwKyD9ZGiBzlD+RiArBbujgTVMaDa/ztpzrDXAC1a4lB4ibN2e45OSCDQCv2CcswuZ
+        cwWDI3uYWjY1Wl/2QNnvUPvo/VEqX3J/usfHCLLtGnqwh1zh7+AOQR5GOa9ccbDMPf2DTs
+        ERop/b3MahWGOYkZpZD/twA1nzgbERc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-343--IZuAnm4PHa3XJB99oFPcw-1; Fri, 08 Apr 2022 19:06:05 -0400
+X-MC-Unique: -IZuAnm4PHa3XJB99oFPcw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C5B4E380409B;
+        Fri,  8 Apr 2022 23:06:04 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.37.45])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2BA3B2167D60;
+        Fri,  8 Apr 2022 23:05:57 +0000 (UTC)
+Subject: [RFC][PATCH 0/8] fscache, cachefiles: Fixes
+From:   David Howells <dhowells@redhat.com>
+To:     linux-cachefs@redhat.com
+Cc:     Dave Wysochanski <dwysocha@redhat.com>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        Gao Xiang <hsiangkao@linux.alibaba.com>,
+        Yue Hu <huyue2@coolpad.com>, dhowells@redhat.com,
+        Jeff Layton <jlayton@kernel.org>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        Yue Hu <huyue2@coolpad.com>, linux-fsdevel@vger.kernel.org,
+        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Date:   Sat, 09 Apr 2022 00:05:56 +0100
+Message-ID: <164945915630.773423.14655306154231712324.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/l1k/linux smsc95xx_5.17
-head:   240f56c27361c195cd502d95aba51c6b8e5b808c
-commit: d721ee482d0edde5df2ddd15556b1e2754bdc5c0 [95/888] irqchip: irq-bcm2835: Calc. FIQ_START at boot-time
-config: arm64-defconfig (https://download.01.org/0day-ci/archive/20220409/202204090628.LCLaLqKj-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/l1k/linux/commit/d721ee482d0edde5df2ddd15556b1e2754bdc5c0
-        git remote add l1k https://github.com/l1k/linux
-        git fetch --no-tags l1k smsc95xx_5.17
-        git checkout d721ee482d0edde5df2ddd15556b1e2754bdc5c0
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Here's a collection of fscache and cachefiles fixes and misc small
+cleanups.  The two main fixes are:
 
-All warnings (new ones prefixed by >>):
+ (1) Add a missing unmark of the inode in-use mark in an error path.
 
-   drivers/irqchip/irq-bcm2835.c: In function 'armctrl_of_init':
->> drivers/irqchip/irq-bcm2835.c:204:22: warning: variable 'last_irq' set but not used [-Wunused-but-set-variable]
-     204 |         int irq = 0, last_irq, b, i;
-         |                      ^~~~~~~~
+ (2) Fix a KASAN slab-out-of-bounds error when setting the xattr on a
+     cachefiles volume due to the wrong length being given to memcpy().
+
+In addition, there's the removal of an unused parameter, removal of an
+unused Kconfig option, conditionalising a bit of procfs-related stuff and
+some doc fixes.
+
+The patches are on a branch here:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=fscache-fixes
+
+David
+
+---
+Dave Wysochanski (1):
+      cachefiles: Fix KASAN slab-out-of-bounds in cachefiles_set_volume_xattr
+
+Jeffle Xu (1):
+      cachefiles: unmark inode in use in error path
+
+Yue Hu (6):
+      docs: filesystems: caching/backend-api.rst: correct two relinquish APIs use
+      docs: filesystems: caching/backend-api.rst: fix an object withdrawn API
+      fscache: Remove the cookie parameter from fscache_clear_page_bits()
+      fscache: Move fscache_cookies_seq_ops specific code under CONFIG_PROC_FS
+      fscache: Use wrapper fscache_set_cache_state() directly when relinquishing
+      fscache: remove FSCACHE_OLD_API Kconfig option
 
 
-vim +/last_irq +204 drivers/irqchip/irq-bcm2835.c
+ .../filesystems/caching/backend-api.rst       |  8 ++---
+ .../filesystems/caching/netfs-api.rst         | 25 +++++++-------
+ fs/afs/write.c                                |  3 +-
+ fs/cachefiles/namei.c                         | 33 ++++++++++++++-----
+ fs/cachefiles/xattr.c                         |  2 +-
+ fs/fscache/Kconfig                            |  3 --
+ fs/fscache/cache.c                            |  2 +-
+ fs/fscache/cookie.c                           |  4 ++-
+ fs/fscache/internal.h                         |  4 +++
+ fs/fscache/io.c                               |  5 ++-
+ include/linux/fscache.h                       |  4 +--
+ 11 files changed, 53 insertions(+), 40 deletions(-)
 
-   198	
-   199	static int __init armctrl_of_init(struct device_node *node,
-   200					  struct device_node *parent,
-   201					  bool is_2836)
-   202	{
-   203		void __iomem *base;
- > 204		int irq = 0, last_irq, b, i;
-   205		u32 reg;
-   206	
-   207		base = of_iomap(node, 0);
-   208		if (!base)
-   209			panic("%pOF: unable to map IC registers\n", node);
-   210	
-   211		intc.base = base;
-   212		intc.domain = irq_domain_add_linear(node, NUMBER_IRQS * 2,
-   213						    &armctrl_ops, NULL);
-   214		if (!intc.domain)
-   215			panic("%pOF: unable to create IRQ domain\n", node);
-   216	
-   217		for (b = 0; b < NR_BANKS; b++) {
-   218			intc.pending[b] = base + reg_pending[b];
-   219			intc.enable[b] = base + reg_enable[b];
-   220			intc.disable[b] = base + reg_disable[b];
-   221	
-   222			for (i = 0; i < bank_irqs[b]; i++) {
-   223				irq = irq_create_mapping(intc.domain, MAKE_HWIRQ(b, i));
-   224				BUG_ON(irq <= 0);
-   225				irq_set_chip_and_handler(irq, &armctrl_chip,
-   226					handle_level_irq);
-   227				irq_set_probe(irq);
-   228			}
-   229	
-   230			reg = readl_relaxed(intc.enable[b]);
-   231			if (reg) {
-   232				writel_relaxed(reg, intc.disable[b]);
-   233				pr_err(FW_BUG "Bootloader left irq enabled: "
-   234				       "bank %d irq %*pbl\n", b, IRQS_PER_BANK, &reg);
-   235			}
-   236		}
-   237	
-   238		reg = readl_relaxed(base + REG_FIQ_CONTROL);
-   239		if (reg & FIQ_CONTROL_ENABLE) {
-   240			writel_relaxed(0, base + REG_FIQ_CONTROL);
-   241			pr_err(FW_BUG "Bootloader left fiq enabled\n");
-   242		}
-   243	
-   244		last_irq = irq;
-   245	
-   246		if (is_2836) {
-   247			int parent_irq = irq_of_parse_and_map(node, 0);
-   248	
-   249			if (!parent_irq) {
-   250				panic("%pOF: unable to get parent interrupt.\n",
-   251				      node);
-   252			}
-   253			irq_set_chained_handler(parent_irq, bcm2836_chained_handle_irq);
-   254		} else {
-   255			set_handle_irq(bcm2835_handle_irq);
-   256		}
-   257	
-   258		if (is_2836) {
-   259			extern void __iomem * __attribute__((weak)) arm_local_intc;
-   260			intc.local_base = arm_local_intc;
-   261			if (!intc.local_base)
-   262				pr_err("Failed to get local intc base. FIQ is disabled for cpus > 1\n");
-   263		}
-   264	
-   265		/* Make a duplicate irq range which is used to enable FIQ */
-   266		for (b = 0; b < NR_BANKS; b++) {
-   267			for (i = 0; i < bank_irqs[b]; i++) {
-   268				irq = irq_create_mapping(intc.domain,
-   269						MAKE_HWIRQ(b, i) + NUMBER_IRQS);
-   270				BUG_ON(irq <= 0);
-   271				irq_set_chip(irq, &armctrl_chip);
-   272				irq_set_probe(irq);
-   273			}
-   274		}
-   275	#ifndef CONFIG_ARM64
-   276		init_FIQ(irq - last_irq);
-   277	#endif
-   278	
-   279		return 0;
-   280	}
-   281	
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

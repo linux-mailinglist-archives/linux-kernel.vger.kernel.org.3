@@ -2,85 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EE2E4F8E2C
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:26:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B0DD4F8D70
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:25:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231244AbiDHGRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 02:17:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51228 "EHLO
+        id S233037AbiDHGRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 02:17:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbiDHGRD (ORCPT
+        with ESMTP id S229773AbiDHGRV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 02:17:03 -0400
-Received: from relay.hostedemail.com (relay.hostedemail.com [64.99.140.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5A59BE39
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 23:15:00 -0700 (PDT)
-Received: from omf05.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay11.hostedemail.com (Postfix) with ESMTP id 692B980C8C;
-        Fri,  8 Apr 2022 06:14:59 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf05.hostedemail.com (Postfix) with ESMTPA id 9A66F2001A;
-        Fri,  8 Apr 2022 06:14:52 +0000 (UTC)
-Message-ID: <34d0ad73f44ff4990f6bee49105ac49bb55352a5.camel@perches.com>
-Subject: Re: [PATCH v2 1/2] staging: rtl8192u: replace ternary statement
- with if and assignment
-From:   Joe Perches <joe@perches.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Julia Lawall <julia.lawall@inria.fr>
-Cc:     Rebecca Mckeever <remckee0@gmail.com>, outreachy@lists.linux.dev,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Date:   Thu, 07 Apr 2022 23:14:51 -0700
-In-Reply-To: <20220408055732.GO3293@kadam>
-References: <cover.1649378587.git.remckee0@gmail.com>
-         <36059ec66a2f3d58a8e339aa4f262772eabd3ef0.1649378587.git.remckee0@gmail.com>
-         <alpine.DEB.2.22.394.2204080614400.2199@hadrien>
-         <20220408055732.GO3293@kadam>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Fri, 8 Apr 2022 02:17:21 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C5181115A;
+        Thu,  7 Apr 2022 23:15:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649398519; x=1680934519;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=68dNn59YCjC6TD6XjImAybXjsyqeVIqyoKPnLWmhy8o=;
+  b=iLGwUf7d+UzilOn9sF3d/rDzFhY5jnwbmFoPNLkwowMCH1xn0FYj+G+8
+   X3d+6hUy8wWsDyN/MwFLjVDC5cZD2WHY/fGA1RmHLkNDyXp55qWdw1k+U
+   rvgMY2mUF2enctKLB5VOI0qONheNH9UJeI28q6I14IvNRLwXHIDpjjxiY
+   Y=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 07 Apr 2022 23:15:19 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 23:15:18 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 7 Apr 2022 23:15:18 -0700
+Received: from [10.216.50.51] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 7 Apr 2022
+ 23:15:14 -0700
+Message-ID: <e42527f9-fa5e-f03d-3af8-fe2c27f9597b@quicinc.com>
+Date:   Fri, 8 Apr 2022 11:45:11 +0530
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [V3] drivers/tty/serial/qcom-geni-serial: Do stop_rx in suspend
+ path for console if console_suspend is disabled
+Content-Language: en-CA
+To:     Jiri Slaby <jirislaby@kernel.org>, <agross@kernel.org>,
+        <bjorn.andersson@linaro.org>, <gregkh@linuxfoundation.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-serial@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <quic_msavaliy@quicinc.com>, <dianders@chromium.org>
+References: <1649316351-9220-1-git-send-email-quic_vnivarth@quicinc.com>
+ <1649316351-9220-2-git-send-email-quic_vnivarth@quicinc.com>
+ <0f52c6aa-46be-6971-76df-364150b1c1e1@kernel.org>
+From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+In-Reply-To: <0f52c6aa-46be-6971-76df-364150b1c1e1@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout07
-X-Rspamd-Queue-Id: 9A66F2001A
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Stat-Signature: u4og487og7ehspsp5guqhsgjtw76i9ch
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+cZfbi4qHorwDzKAdQesA7qUgqDtKrODY=
-X-HE-Tag: 1649398492-439562
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-08 at 08:57 +0300, Dan Carpenter wrote:
-> On Fri, Apr 08, 2022 at 06:15:14AM +0200, Julia Lawall wrote:
-> > On Thu, 7 Apr 2022, Rebecca Mckeever wrote:
-> > 
-> > > Replace ternary statement with an if statement followed by an assignment
-> > > to increase readability and make error handling more obvious.
-> > > Found with minmax coccinelle script.
-[]
-> > > diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211_wx.c b/drivers/staging/rtl8192u/ieee80211/ieee80211_wx.c
-[]
-> > > @@ -470,7 +470,9 @@ int ieee80211_wx_get_encode(struct ieee80211_device *ieee,
-> > >  		return 0;
-> > >  	}
-> > >  	len = crypt->ops->get_key(keybuf, SCM_KEY_LEN, NULL, crypt->priv);
-> > > -	erq->length = (len >= 0 ? len : 0);
-> > > +	if (len < 0)
-> > > +		len = 0;
-> > > +	erq->length = len;
-> > 
-> > Maybe you could use max here?
-> 
-> Initially Rebecca did use max() but I NAKed it.  It's really not less
-> readable.  Better to handle the error explicitly.  Keep the error path
-> indented two tabs.  Separate from the success path.
 
-A comment would be useful as it's not obvious it's an 'error' path.
-One has to read all 3 get_key functions to determine that.
+On 4/7/2022 1:21 PM, Jiri Slaby wrote:
+> On 07. 04. 22, 9:25, Vijaya Krishna Nivarthi wrote:
+>> For the case of console_suspend disabled, if back to back suspend/resume
+>> test is executed, at the end of test, sometimes console would appear to
+>> be frozen not responding to input. This would happen because, for
+>> console_suspend disabled, suspend/resume routines only turn resources
+>> off/on but don't do a port close/open.
+>> As a result, during resume, some rx transactions come in before 
+>> system is
+>> ready, malfunction of rx happens in turn resulting in console appearing
+>> to be stuck.
+>>
+>> Do a stop_rx in suspend sequence to prevent this. start_rx is already
+>> present in resume sequence as part of call to set_termios which does a
+>> stop_rx/start_rx.
+>
+> So why is it OK for every other driver? Should uart_suspend_port() be 
+> fixed instead?
+
+For qcom driver we know that set_termios() call in uart_suspend_port() 
+will recover with a call to start_rx.
+However that may not be the case with other drivers.
+
+We can move stop_rx to uart_suspend_port() and additionally have a 
+start_rx in uart_resume_port()
+Please let know if such a change would be ok.
+Thank you.
 
 

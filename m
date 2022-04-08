@@ -2,133 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA38C4F9D50
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 20:52:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE5B44F9D51
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 20:52:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbiDHSyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 14:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45622 "EHLO
+        id S239059AbiDHSyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 14:54:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbiDHSyR (ORCPT
+        with ESMTP id S237656AbiDHSyR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 8 Apr 2022 14:54:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88FD2DF67C;
-        Fri,  8 Apr 2022 11:52:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7128060E0A;
-        Fri,  8 Apr 2022 18:52:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9787C385A3;
-        Fri,  8 Apr 2022 18:52:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649443931;
-        bh=rK22gO2CZuph9kE+09bxScvaDcjvBm/GHuYiaQ2hvV4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=gklRPiMC62SixPPM1Ji7waJs7s0Jyp0ZnEbnS4/ArCXf1pAOMOnq3FIfQfre0/hzo
-         DIF+sNB6uDg1oYlWgQ0Q6LplwQMUBxxnEDV9eltMd9J0nJTvDqnwLIavcznszTy8/n
-         8mklVQsyWN27VAfgzmgZ7i1lovMyTAVAg0LyeZ06D1IA40ozOs8SubGr0fSb+BbHYz
-         jDpJaeSwoyJ9wQLgWHcjncudVjIB4HeTqcm44m/0WrBr5ljutjI3bEn0Z8ybDVO/yK
-         AVWar4piCXTxgmRUQy1Q2abkcVuuR+aeG11neHkvdtplE7ONpWHbA0q3dL6hajmN93
-         JNygfGroLy30A==
-Date:   Fri, 8 Apr 2022 13:52:10 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PCI <linux-pci@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v2] PCI: PM: Power up all devices during runtime resume
-Message-ID: <20220408185210.GA339319@bhelgaas>
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E252E0F1C
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 11:52:13 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id z8so9751240oix.3
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 11:52:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=EoW9bkJ8VflSJXuIwQtp2KcTvjQOPmURL+x9V0VjqHg=;
+        b=GSW8ckhPkiFVaRul+WfqeLsrbmLaMGNalavL8cvzX8O0aUgBBn1slSYEk0HF0y9vgS
+         EmteYEybQozNwEed+Wt6E9tD/JRuL9g08gjmSdaC+Cxwt+CeVQI+vpIZFCs7bTuJmnB7
+         JBUCQ/EGca0MLMAbZETu6fK4jorOPF8lwpIsE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=EoW9bkJ8VflSJXuIwQtp2KcTvjQOPmURL+x9V0VjqHg=;
+        b=gOIdWVfg5Y83hUzBqvzhWAgFiRVXXrrCfb+sGRm9H3ZosM0RLp0cKeS2xp6ed0zSHR
+         T/QWAuMHdWfRw/ZJDPQMunG0uxgl7llmRrMT0Vuiei1HxbcDxKBIxYUtwXSetQzgS6rg
+         NcEV2CIyXdtM17CSyQxH0Tcn+LL85rmNhnynXrlmUn6yf063/7Ptrasxe07RkNXFsNY8
+         n95ZVBko9MXdFRaoCcg++JCkEOFTQPKkygTi5a2B1G/BN8SRAebmnsZ7rRieJOKIsNGy
+         HnqaZ+q4DCCAJM6brIaFXCW+mRXgVaTUmu5odGpJ9/TVLCwQc7N8Qhul9k78qUlWXvyC
+         jVUQ==
+X-Gm-Message-State: AOAM5326HAEz1+lRVRpEf/0eWK6elY0IXcCA6pK+UCpAV+YGdgoBmPaa
+        XRXYUXUBrYyvuOfffXvQQQ8Zv1JJfz+/0YuuyQCxiQ==
+X-Google-Smtp-Source: ABdhPJz7pgTBza0Mz4Z5wC7O8xeXx5dmzt15mxveNuTH+LjbdzzlMTUO0LWujntIxqApxVG6BGbkxsW+xZZGDVMt9YY=
+X-Received: by 2002:aca:a9c8:0:b0:2da:45b6:b796 with SMTP id
+ s191-20020acaa9c8000000b002da45b6b796mr534515oie.193.1649443933201; Fri, 08
+ Apr 2022 11:52:13 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 8 Apr 2022 11:52:12 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2652115.mvXUDI8C0e@kreacher>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAE-0n52xQ+SbwpDfzuW-tMLJP17Z2qog2s_pS=XBTULLNpUkLg@mail.gmail.com>
+References: <20211125174751.25317-1-djakov@kernel.org> <CAE-0n51xeigKFS9Zek44HZGD9cdc4Em91aQ5HHzuy7P1FBmfFg@mail.gmail.com>
+ <CAE-0n52xQ+SbwpDfzuW-tMLJP17Z2qog2s_pS=XBTULLNpUkLg@mail.gmail.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Fri, 8 Apr 2022 11:52:12 -0700
+Message-ID: <CAE-0n53b3_mjXDP=W6XHQ9_5NEh7ee1GV6jQUSxtgE864A1ONw@mail.gmail.com>
+Subject: Re: [PATCH v3] interconnect: qcom: icc-rpmh: Add BCMs to commit list
+ in pre_aggregate
+To:     Alex Elder <elder@linaro.org>, djakov@kernel.org,
+        quic_mdtipton@quicinc.com
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mka@chromium.org,
+        dianders@chromium.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 08:29:01PM +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Subject: [PATCH] PCI: PM: Power up all devices during runtime resume
-> 
-> Currently, endpoint devices may not be powered up entirely during
-> runtime resume that follows a D3hot -> D0 transition of the parent
-> bridge.
-> 
-> Namely, even if the power state of an endpoint device, as indicated
-> by its PCI_PM_CTRL register, is D0 after powering up its parent
-> bridge, it may be still necessary to bring its ACPI companion into
-> D0 and that should be done before accessing it.  However, the current
-> code assumes that reading the PCI_PM_CTRL register is sufficient to
-> establish the endpoint device's power state, which may lead to
-> problems.
-> 
-> Address that by forcing a power-up of all PCI devices, including the
-> platform firmware part of it, during runtime resume.
-> 
-> Link: https://lore.kernel.org/linux-pm/11967527.O9o76ZdvQC@kreacher
-> Fixes: 5775b843a619 ("PCI: Restore config space on runtime resume despite being unbound")
-> Reported-by: Abhishek Sahu <abhsahu@nvidia.com>
-> Tested-by: Abhishek Sahu <abhsahu@nvidia.com>
-> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Quoting Stephen Boyd (2022-04-05 21:47:07)
+> Quoting Stephen Boyd (2022-04-05 16:00:55)
+> >
+> > It would be good to pick this back to stable kernels so we have a
+> > working suspend/resume on LTS kernels. I tried picking it back to
+> > 5.10.109 (latest 5.10 LTS) and booting it on my Lazor w/ LTE device but
+> > it crashes at boot pretty reliably in the IPA driver. Interestingly I
+> > can't get it to crash on 5.15.32 when I pick it back, so maybe something
+> > has changed between 5.10 and 5.15 for IPA? I'll try to bisect it.
+>
+> Bisecting pointed to commit 1aac309d3207 ("net: ipa: use autosuspend")
+> as fixing it. I think before that commit we weren't enabling some
+> interconnect, but now we're booting, runtime suspending, and then
+> runtime resuming again. With the sync state patch I suspect the
+> interconnect bandwidth is dropped and IPA needs to use runtime PM to
+> actually turn resources back on because it assumed that resources are on
+> when it probes.
 
-I replaced the v1 patch with this one on pci/pm, thanks!
-
-> ---
-> 
-> v1 -> v2:
->    * Move pci_pm_default_resume_early() away from #ifdef CONFIG_PM_SLEEP.
->    * Add R-by from Mika.
-> 
-> ---
->  drivers/pci/pci-driver.c |   10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> Index: linux-pm/drivers/pci/pci-driver.c
-> ===================================================================
-> --- linux-pm.orig/drivers/pci/pci-driver.c
-> +++ linux-pm/drivers/pci/pci-driver.c
-> @@ -551,10 +551,6 @@ static void pci_pm_default_resume(struct
->  	pci_enable_wake(pci_dev, PCI_D0, false);
->  }
->  
-> -#endif
-> -
-> -#ifdef CONFIG_PM_SLEEP
-> -
->  static void pci_pm_default_resume_early(struct pci_dev *pci_dev)
->  {
->  	pci_power_up(pci_dev);
-> @@ -563,6 +559,10 @@ static void pci_pm_default_resume_early(
->  	pci_pme_restore(pci_dev);
->  }
->  
-> +#endif
-> +
-> +#ifdef CONFIG_PM_SLEEP
-> +
->  /*
->   * Default "suspend" method for devices that have no driver provided suspend,
->   * or not even a driver at all (second part).
-> @@ -1312,7 +1312,7 @@ static int pci_pm_runtime_resume(struct
->  	 * to a driver because although we left it in D0, it may have gone to
->  	 * D3cold when the bridge above it runtime suspended.
->  	 */
-> -	pci_restore_standard_config(pci_dev);
-> +	pci_pm_default_resume_early(pci_dev);
->  
->  	if (!pci_dev->driver)
->  		return 0;
-> 
-> 
-> 
+I also found that when I make CONFIG_QCOM_IPA=y (and subsequently
+CONFIG_QCOM_Q6V5_MSS=y) I can reproduce a different crash in IPA on
+5.15.32 and 5.17.1 LTS kernels. I suppose there is some missing
+interconnect bandwidth request somewhere and the runtime PM patch half
+fixed it, except for when the modem and IPA drivers are builtin. When
+the two drivers are builtin they drop bandwidth requests earlier because
+they probe earlier. My guess is that the IPA driver is missing a
+runtime_pm_get_sync() call somewhere and accessing a register that isn't
+clocked. More digging...

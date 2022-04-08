@@ -2,67 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89CF14F9806
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:28:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E83484F9809
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236421AbiDHOa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 10:30:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39040 "EHLO
+        id S236905AbiDHOaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 10:30:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231684AbiDHOaZ (ORCPT
+        with ESMTP id S236894AbiDHOai (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 10:30:25 -0400
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1473E2E0A0;
-        Fri,  8 Apr 2022 07:28:16 -0700 (PDT)
-Received: by mail-oi1-f179.google.com with SMTP id v75so9001740oie.1;
-        Fri, 08 Apr 2022 07:28:16 -0700 (PDT)
+        Fri, 8 Apr 2022 10:30:38 -0400
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11023B6D0C;
+        Fri,  8 Apr 2022 07:28:35 -0700 (PDT)
+Received: by mail-oi1-f169.google.com with SMTP id z8so8994462oix.3;
+        Fri, 08 Apr 2022 07:28:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=WXgCguQ66oOF41SzdSpgngpMaWsUgrrgSYYn8bnZP4w=;
-        b=Bl0yeygJnxnGE4NLdc7ZKyoKYRyIcDsisUXziichehaoV8brrXEvEmHpRJ42zak50O
-         pbWxy521km44Uis47P/5/oaGtNxIGXa9sBUJchn4sbq9Y+xh5nI2gOAhbK5NhePGcMkB
-         Jvj6lFW4I5RNitNfoPlGv7ox7JjJ1gjiE7oyoApQbu6+VM5assmwcUS829igY9xNq2ZR
-         BUbueVnC0mWo9hsA85v88hCc6EcaI8CW1LH+vWzskjWqOcEsvESEpQRq3327R0mk6DsC
-         IdICPOo4XrRUT23JmcEirWpQR7y4qBNL/KnxC+lTwBwgM/aBqoZJ3YAyvBbUa9JAqv/w
-         FE/A==
-X-Gm-Message-State: AOAM532futc0OLPG5UNQMzNp0i5HGHIGXJ7jR+hywqipZkSLWgmRR6SH
-        SKpeKIGzmnaBP5SNiwAFYWFBPgWnCg==
-X-Google-Smtp-Source: ABdhPJxZqAGJzAtPAXsAQAHCDpuhQU+DE+9vx32+m0bAsC0m5cSXZFcsYO2+K2n/Qmmz2ny429LIOw==
-X-Received: by 2002:aca:2119:0:b0:2ec:a7ff:c042 with SMTP id 25-20020aca2119000000b002eca7ffc042mr8209366oiz.73.1649428095334;
-        Fri, 08 Apr 2022 07:28:15 -0700 (PDT)
+        bh=6P/eWNSUhhChiVA2KOS+s22CliAw2GeLV4Worl1v+Mo=;
+        b=79/OK/MvLwU4h0DdmcoVnobkD7MEO1GX9KNSm2LiNMvGqu6cpINmu1qClIRRiD1PH3
+         X74Bt8cfa1omlsanDbxXpL1g0k4hyvYLsloqnmyVKEr2gOhpE3cu8xLb0ulq3QEfIvJZ
+         xBFdPawhStaTHQq1N3Fp3jBhaTwvpaaTnHUM6xx0PBSTHmF7tAguOxxpsARminwfAsop
+         VURBP15quHufon4ZOX7S37sX3hdiv8Z7bQk7HZox5Z5AZijtuQhq9oTyguJbEEEmPUmJ
+         ttTKjOtvbnbNVc3fQrE9yDYwMvNFjGfnKy8lurjmkJ+kmzarLNgykvecm19XIoNPxMh3
+         na1g==
+X-Gm-Message-State: AOAM532FwGo5VTMpMPApageuGM5ybbBvslwhAOblkBAiArvVHpleWdwH
+        yx/+F9oJ/UrWSEXma8KaaijiUmpHkA==
+X-Google-Smtp-Source: ABdhPJwCYTAc9kSP9DxjzK3Qd+s1DFyWlQN1bwPqjRJXhLEIJBbp3+DVTkAUog7s4MEl1XqJcnd4cQ==
+X-Received: by 2002:a05:6808:ec8:b0:2f9:6119:d6ed with SMTP id q8-20020a0568080ec800b002f96119d6edmr7910009oiv.215.1649428114209;
+        Fri, 08 Apr 2022 07:28:34 -0700 (PDT)
 Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r19-20020a056830121300b005cdb11a7b85sm9254050otp.29.2022.04.08.07.28.14
+        by smtp.gmail.com with ESMTPSA id g25-20020a544f99000000b002da70c710b8sm8850858oiy.54.2022.04.08.07.28.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 07:28:15 -0700 (PDT)
-Received: (nullmailer pid 3435369 invoked by uid 1000);
-        Fri, 08 Apr 2022 14:28:14 -0000
-Date:   Fri, 8 Apr 2022 09:28:14 -0500
+        Fri, 08 Apr 2022 07:28:33 -0700 (PDT)
+Received: (nullmailer pid 3435863 invoked by uid 1000);
+        Fri, 08 Apr 2022 14:28:33 -0000
+Date:   Fri, 8 Apr 2022 09:28:33 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Luca Weiss <luca.weiss@fairphone.com>
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
         linux-arm-msm@vger.kernel.org,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, devicetree@vger.kernel.org,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>
-Subject: Re: [PATCH 05/10] dt-bindings: thermal: tsens: Add SM6350 compatible
-Message-ID: <YlBGfqNex49CgXze@robh.at.kernel.org>
+        Andy Gross <agross@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        phone-devel@vger.kernel.org
+Subject: Re: [PATCH 03/10] dt-bindings: qcom,pdc: Add SM6350 compatible
+Message-ID: <YlBGkVQCCEHlq1P4@robh.at.kernel.org>
 References: <20211213082614.22651-1-luca.weiss@fairphone.com>
- <20211213082614.22651-6-luca.weiss@fairphone.com>
- <YbpLqwFJI/nfvxd9@robh.at.kernel.org>
- <CJ4TKNHK955X.2YYNAV248UMK8@otso>
+ <20211213082614.22651-4-luca.weiss@fairphone.com>
+ <YbpLnWKRq5TRO+Uk@robh.at.kernel.org>
+ <CJ4TK3GWP00Q.1SDG6H9Q4GP37@otso>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CJ4TKNHK955X.2YYNAV248UMK8@otso>
+In-Reply-To: <CJ4TK3GWP00Q.1SDG6H9Q4GP37@otso>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -74,18 +70,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 01:25:26PM +0200, Luca Weiss wrote:
+On Fri, Apr 08, 2022 at 01:24:43PM +0200, Luca Weiss wrote:
 > Hi all,
 > 
 > On Wed Dec 15, 2021 at 9:10 PM CET, Rob Herring wrote:
-> > On Mon, 13 Dec 2021 09:26:06 +0100, Luca Weiss wrote:
-> > > Add devicetree compatible for tsens on SM6350 SoC.
+> > On Mon, 13 Dec 2021 09:26:04 +0100, Luca Weiss wrote:
+> > > Add devicetree compatible for pdc on SM6350 SoC.
+> > > 
+> > > Also correct the compatibles for sm8250 and sm8350.
 > > > 
 > > > Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> > > Acked-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 > > > ---
-> > >  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
-> > >  1 file changed, 1 insertion(+)
+> > > I do have the .txt -> .yaml conversion ready for this but will send
+> > > as a separate patch.
+> > > 
+> > >  .../devicetree/bindings/interrupt-controller/qcom,pdc.txt    | 5 +++--
+> > >  1 file changed, 3 insertions(+), 2 deletions(-)
 > > > 
 > >
 > > Acked-by: Rob Herring <robh@kernel.org>
@@ -93,6 +93,6 @@ On Fri, Apr 08, 2022 at 01:25:26PM +0200, Luca Weiss wrote:
 > It looks like this patch hasn't been applied yet. Could the responsible
 > maintainer please pick it up?
 
-Normally that should be the thermal maintainers, but I've applied this.
+Applied.
 
 Rob

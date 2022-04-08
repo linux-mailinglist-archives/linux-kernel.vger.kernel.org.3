@@ -2,93 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE264F95C4
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:29:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BC354F95CB
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:29:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235734AbiDHMaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 08:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56302 "EHLO
+        id S235726AbiDHMaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 08:30:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232535AbiDHMaH (ORCPT
+        with ESMTP id S235720AbiDHMaF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 08:30:07 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9841E33DCA7;
-        Fri,  8 Apr 2022 05:28:03 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 238CIqi2020806;
-        Fri, 8 Apr 2022 12:27:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : reply-to : references : mime-version : content-type
- : in-reply-to; s=pp1; bh=HU+8+zh9GUF93NeGHHtWuqd7tZIaGNgNVe0X/9nToYc=;
- b=UdAcjE4cIXBxmZz5ArcUuTEExs8f0VESYqFw3nJ/QzEo1zHaexHsb/7AihUG+Njh1T89
- 0J9HgDxTfYMkcwfMYQY8PuIO8J8I+LfUm+ns6IWJ6O9C9YcfWIHMYAj13DdM/0ccn1Xy
- XRVi2HLqGT0Qw4GS10fBDn246cCNIq09JDNE5IzMotgM+y9WLfhr+59ZV8T3Vx8KjKn8
- U8Im/MwlFVcLzzlppkMPSofk9GVEkawaYav4JPgPF4fp3Xes0YvdTp3eS0b7QOn1ylZW
- EcrELozeCuLUyYcb3xSsNMDg7wEjqgfXQVYaSxoUBmMx/j2gyHKK15wS2jwKqyBdhuyY LQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3faeqq7d6n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 08 Apr 2022 12:27:54 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 238Bks2M034821;
-        Fri, 8 Apr 2022 12:27:53 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3faeqq7d65-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 08 Apr 2022 12:27:53 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 238CDZ8t003675;
-        Fri, 8 Apr 2022 12:27:51 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3f6e493req-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 08 Apr 2022 12:27:51 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 238CRuDo46989570
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 8 Apr 2022 12:27:56 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D043BAE051;
-        Fri,  8 Apr 2022 12:27:48 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CD28EAE045;
-        Fri,  8 Apr 2022 12:27:46 +0000 (GMT)
-Received: from linux.vnet.ibm.com (unknown [9.40.195.195])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with SMTP;
-        Fri,  8 Apr 2022 12:27:46 +0000 (GMT)
-Date:   Fri, 8 Apr 2022 17:57:46 +0530
-From:   Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-To:     Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-Cc:     acme@kernel.org, jolsa@kernel.org, disgoel@linux.vnet.ibm.com,
-        mpe@ellerman.id.au, linux-perf-users@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, maddy@linux.vnet.ibm.com,
-        rnsastry@linux.ibm.com, kjain@linux.ibm.com,
-        linux-kernel@vger.kernel.org, irogers@google.com
-Subject: Re: [PATCH v2 1/4] tools/perf: Fix perf bench futex to correct usage
- of affinity for machines with #CPUs > 1K
-Message-ID: <20220408122746.GF568950@linux.vnet.ibm.com>
-Reply-To: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-References: <20220406175113.87881-1-atrajeev@linux.vnet.ibm.com>
- <20220406175113.87881-2-atrajeev@linux.vnet.ibm.com>
+        Fri, 8 Apr 2022 08:30:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A5133DF84;
+        Fri,  8 Apr 2022 05:28:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 70F3B620CC;
+        Fri,  8 Apr 2022 12:28:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76F3EC385A3;
+        Fri,  8 Apr 2022 12:27:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649420880;
+        bh=N5V72NGw/oH3V7jhL2eqxDT7AtT93lmGpSFjPpUk84o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XseQyrskrKHG2ZYifsSWw4C0ORCYktjrfjWSS39eovOSoMO70/BK0nmdZOGe8uAF7
+         nKHlITp70+P8S0fd+qQJKPAgFNDqnYWtysO05tDP6ghJh2fYhJPqQ6GgRtHFwy3rPu
+         bseVljcG6Btzk+eq4LvPQqWFKCdu63bpDcbMiXjEUtkTnZKsNitovhrBcQNiTI1fXl
+         rw65czT4wA2biLWos9N6btp2k8Qwm1fuY8d8ndxnc/DNxkMSdUOwyCip/QzvW0HLo6
+         uQywsCY3cal71kllpexhjuoo/Re0tlIlEPRLL4/IMR/dXK3oeND7VV5XRw95GdGJZH
+         dlRqLt/vN92aw==
+Date:   Fri, 8 Apr 2022 13:27:53 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Chuanhong Guo <gch981213@gmail.com>, linux-spi@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Pratyush Yadav <p.yadav@ti.com>, Yu Kuai <yukuai3@huawei.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:NAND FLASH SUBSYSTEM" <linux-mtd@lists.infradead.org>
+Subject: Re: [PATCH v4 1/5] mtd: nand: make mtk_ecc.c a separated module
+Message-ID: <YlAqSQ5w3y39aOy+@sirena.org.uk>
+References: <20220407150652.21885-1-gch981213@gmail.com>
+ <20220407150652.21885-2-gch981213@gmail.com>
+ <20220408083214.1473e88a@xps13>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ZqHgdsk0cLf7iTJ6"
 Content-Disposition: inline
-In-Reply-To: <20220406175113.87881-2-atrajeev@linux.vnet.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 5hrw8F5CNYz9fR6rIWH7nJ3V0hdhlQCp
-X-Proofpoint-ORIG-GUID: oM7ZKeYnD71NvGL7PjesL8HrBrBKKXES
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-08_04,2022-04-08_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 adultscore=0 spamscore=0 bulkscore=0
- impostorscore=0 mlxlogscore=999 priorityscore=1501 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204080062
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220408083214.1473e88a@xps13>
+X-Cookie: Look ere ye leap.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,285 +78,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Athira Rajeev <atrajeev@linux.vnet.ibm.com> [2022-04-06 23:21:10]:
 
-> perf bench futex testcase fails on systems with CPU's
-> more than 1K.
-> 
-> Testcase: perf bench futex all
-> Failure snippet:
-> <<>>Running futex/hash benchmark...
-> 
-> perf: pthread_create: No such file or directory
-> <<>>
-> 
-> All the futex benchmarks ( ie hash, lock-api, requeue, wake,
-> wake-parallel ), pthread_create is invoked in respective bench_futex_*
-> function. Though the logs shows direct failure from pthread_create,
-> strace logs showed that actual failure is from  "sched_setaffinity"
-> returning EINVAL (invalid argument). This happens because the default
-> mask size in glibc is 1024. To overcome this 1024 CPUs mask size
-> limitation of cpu_set_t, change the mask size using the CPU_*_S macros.
-> 
-> Patch addresses this by fixing all the futex benchmarks to use
-> CPU_ALLOC to allocate cpumask, CPU_ALLOC_SIZE for size, and
-> CPU_SET_S to set the mask.
-> 
-> Tested-by: Disha Goel <disgoel@linux.vnet.ibm.com>
-> Signed-off-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-> Reported-by: Disha Goel <disgoel@linux.vnet.ibm.com>
+--ZqHgdsk0cLf7iTJ6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Looks good to me
-Reviewed-by: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+On Fri, Apr 08, 2022 at 08:32:14AM +0200, Miquel Raynal wrote:
 
+> Otherwise on the MTD side the series looks good (besides the two
+> comments you already received).
 
-> ---
->  tools/perf/bench/futex-hash.c          | 26 +++++++++++++++++++-------
->  tools/perf/bench/futex-lock-pi.c       | 21 ++++++++++++++++-----
->  tools/perf/bench/futex-requeue.c       | 21 ++++++++++++++++-----
->  tools/perf/bench/futex-wake-parallel.c | 21 ++++++++++++++++-----
->  tools/perf/bench/futex-wake.c          | 22 ++++++++++++++++------
->  5 files changed, 83 insertions(+), 28 deletions(-)
-> 
-> diff --git a/tools/perf/bench/futex-hash.c b/tools/perf/bench/futex-hash.c
-> index 9627b6ab8670..dfce64e551e2 100644
-> --- a/tools/perf/bench/futex-hash.c
-> +++ b/tools/perf/bench/futex-hash.c
-> @@ -122,12 +122,14 @@ static void print_summary(void)
->  int bench_futex_hash(int argc, const char **argv)
->  {
->  	int ret = 0;
-> -	cpu_set_t cpuset;
-> +	cpu_set_t *cpuset;
->  	struct sigaction act;
->  	unsigned int i;
->  	pthread_attr_t thread_attr;
->  	struct worker *worker = NULL;
->  	struct perf_cpu_map *cpu;
-> +	int nrcpus;
-> +	size_t size;
-> 
->  	argc = parse_options(argc, argv, options, bench_futex_hash_usage, 0);
->  	if (argc) {
-> @@ -170,25 +172,35 @@ int bench_futex_hash(int argc, const char **argv)
->  	threads_starting = params.nthreads;
->  	pthread_attr_init(&thread_attr);
->  	gettimeofday(&bench__start, NULL);
-> +
-> +	nrcpus = perf_cpu_map__nr(cpu);
-> +	cpuset = CPU_ALLOC(nrcpus);
-> +	BUG_ON(!cpuset);
-> +	size = CPU_ALLOC_SIZE(nrcpus);
-> +
->  	for (i = 0; i < params.nthreads; i++) {
->  		worker[i].tid = i;
->  		worker[i].futex = calloc(params.nfutexes, sizeof(*worker[i].futex));
->  		if (!worker[i].futex)
->  			goto errmem;
-> 
-> -		CPU_ZERO(&cpuset);
-> -		CPU_SET(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, &cpuset);
-> +		CPU_ZERO_S(size, cpuset);
-> 
-> -		ret = pthread_attr_setaffinity_np(&thread_attr, sizeof(cpu_set_t), &cpuset);
-> -		if (ret)
-> +		CPU_SET_S(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, size, cpuset);
-> +		ret = pthread_attr_setaffinity_np(&thread_attr, size, cpuset);
-> +		if (ret) {
-> +			CPU_FREE(cpuset);
->  			err(EXIT_FAILURE, "pthread_attr_setaffinity_np");
-> -
-> +		}
->  		ret = pthread_create(&worker[i].thread, &thread_attr, workerfn,
->  				     (void *)(struct worker *) &worker[i]);
-> -		if (ret)
-> +		if (ret) {
-> +			CPU_FREE(cpuset);
->  			err(EXIT_FAILURE, "pthread_create");
-> +		}
-> 
->  	}
-> +	CPU_FREE(cpuset);
->  	pthread_attr_destroy(&thread_attr);
-> 
->  	pthread_mutex_lock(&thread_lock);
-> diff --git a/tools/perf/bench/futex-lock-pi.c b/tools/perf/bench/futex-lock-pi.c
-> index a512a320df74..61c3bb80d4cf 100644
-> --- a/tools/perf/bench/futex-lock-pi.c
-> +++ b/tools/perf/bench/futex-lock-pi.c
-> @@ -120,11 +120,17 @@ static void *workerfn(void *arg)
->  static void create_threads(struct worker *w, pthread_attr_t thread_attr,
->  			   struct perf_cpu_map *cpu)
->  {
-> -	cpu_set_t cpuset;
-> +	cpu_set_t *cpuset;
->  	unsigned int i;
-> +	int nrcpus =  perf_cpu_map__nr(cpu);
-> +	size_t size;
-> 
->  	threads_starting = params.nthreads;
-> 
-> +	cpuset = CPU_ALLOC(nrcpus);
-> +	BUG_ON(!cpuset);
-> +	size = CPU_ALLOC_SIZE(nrcpus);
-> +
->  	for (i = 0; i < params.nthreads; i++) {
->  		worker[i].tid = i;
-> 
-> @@ -135,15 +141,20 @@ static void create_threads(struct worker *w, pthread_attr_t thread_attr,
->  		} else
->  			worker[i].futex = &global_futex;
-> 
-> -		CPU_ZERO(&cpuset);
-> -		CPU_SET(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, &cpuset);
-> +		CPU_ZERO_S(size, cpuset);
-> +		CPU_SET_S(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, size, cpuset);
-> 
-> -		if (pthread_attr_setaffinity_np(&thread_attr, sizeof(cpu_set_t), &cpuset))
-> +		if (pthread_attr_setaffinity_np(&thread_attr, size, cpuset)) {
-> +			CPU_FREE(cpuset);
->  			err(EXIT_FAILURE, "pthread_attr_setaffinity_np");
-> +		}
-> 
-> -		if (pthread_create(&w[i].thread, &thread_attr, workerfn, &worker[i]))
-> +		if (pthread_create(&w[i].thread, &thread_attr, workerfn, &worker[i])) {
-> +			CPU_FREE(cpuset);
->  			err(EXIT_FAILURE, "pthread_create");
-> +		}
->  	}
-> +	CPU_FREE(cpuset);
->  }
-> 
->  int bench_futex_lock_pi(int argc, const char **argv)
-> diff --git a/tools/perf/bench/futex-requeue.c b/tools/perf/bench/futex-requeue.c
-> index aca47ce8b1e7..2cb013f7ffe5 100644
-> --- a/tools/perf/bench/futex-requeue.c
-> +++ b/tools/perf/bench/futex-requeue.c
-> @@ -123,22 +123,33 @@ static void *workerfn(void *arg __maybe_unused)
->  static void block_threads(pthread_t *w,
->  			  pthread_attr_t thread_attr, struct perf_cpu_map *cpu)
->  {
-> -	cpu_set_t cpuset;
-> +	cpu_set_t *cpuset;
->  	unsigned int i;
-> +	int nrcpus = perf_cpu_map__nr(cpu);
-> +	size_t size;
-> 
->  	threads_starting = params.nthreads;
-> 
-> +	cpuset = CPU_ALLOC(nrcpus);
-> +	BUG_ON(!cpuset);
-> +	size = CPU_ALLOC_SIZE(nrcpus);
-> +
->  	/* create and block all threads */
->  	for (i = 0; i < params.nthreads; i++) {
-> -		CPU_ZERO(&cpuset);
-> -		CPU_SET(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, &cpuset);
-> +		CPU_ZERO_S(size, cpuset);
-> +		CPU_SET_S(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, size, cpuset);
-> 
-> -		if (pthread_attr_setaffinity_np(&thread_attr, sizeof(cpu_set_t), &cpuset))
-> +		if (pthread_attr_setaffinity_np(&thread_attr, size, cpuset)) {
-> +			CPU_FREE(cpuset);
->  			err(EXIT_FAILURE, "pthread_attr_setaffinity_np");
-> +		}
-> 
-> -		if (pthread_create(&w[i], &thread_attr, workerfn, NULL))
-> +		if (pthread_create(&w[i], &thread_attr, workerfn, NULL)) {
-> +			CPU_FREE(cpuset);
->  			err(EXIT_FAILURE, "pthread_create");
-> +		}
->  	}
-> +	CPU_FREE(cpuset);
->  }
-> 
->  static void toggle_done(int sig __maybe_unused,
-> diff --git a/tools/perf/bench/futex-wake-parallel.c b/tools/perf/bench/futex-wake-parallel.c
-> index 888ee6037945..efa5070a5eb3 100644
-> --- a/tools/perf/bench/futex-wake-parallel.c
-> +++ b/tools/perf/bench/futex-wake-parallel.c
-> @@ -144,22 +144,33 @@ static void *blocked_workerfn(void *arg __maybe_unused)
->  static void block_threads(pthread_t *w, pthread_attr_t thread_attr,
->  			  struct perf_cpu_map *cpu)
->  {
-> -	cpu_set_t cpuset;
-> +	cpu_set_t *cpuset;
->  	unsigned int i;
-> +	int nrcpus = perf_cpu_map__nr(cpu);
-> +	size_t size;
-> 
->  	threads_starting = params.nthreads;
-> 
-> +	cpuset = CPU_ALLOC(nrcpus);
-> +	BUG_ON(!cpuset);
-> +	size = CPU_ALLOC_SIZE(nrcpus);
-> +
->  	/* create and block all threads */
->  	for (i = 0; i < params.nthreads; i++) {
-> -		CPU_ZERO(&cpuset);
-> -		CPU_SET(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, &cpuset);
-> +		CPU_ZERO_S(size, cpuset);
-> +		CPU_SET_S(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, size, cpuset);
-> 
-> -		if (pthread_attr_setaffinity_np(&thread_attr, sizeof(cpu_set_t), &cpuset))
-> +		if (pthread_attr_setaffinity_np(&thread_attr, size, cpuset)) {
-> +			CPU_FREE(cpuset);
->  			err(EXIT_FAILURE, "pthread_attr_setaffinity_np");
-> +		}
-> 
-> -		if (pthread_create(&w[i], &thread_attr, blocked_workerfn, NULL))
-> +		if (pthread_create(&w[i], &thread_attr, blocked_workerfn, NULL)) {
-> +			CPU_FREE(cpuset);
->  			err(EXIT_FAILURE, "pthread_create");
-> +		}
->  	}
-> +	CPU_FREE(cpuset);
->  }
-> 
->  static void print_run(struct thread_data *waking_worker, unsigned int run_num)
-> diff --git a/tools/perf/bench/futex-wake.c b/tools/perf/bench/futex-wake.c
-> index aa82db51c0ab..3a10f54900c1 100644
-> --- a/tools/perf/bench/futex-wake.c
-> +++ b/tools/perf/bench/futex-wake.c
-> @@ -97,22 +97,32 @@ static void print_summary(void)
->  static void block_threads(pthread_t *w,
->  			  pthread_attr_t thread_attr, struct perf_cpu_map *cpu)
->  {
-> -	cpu_set_t cpuset;
-> +	cpu_set_t *cpuset;
->  	unsigned int i;
-> -
-> +	size_t size;
-> +	int nrcpus = perf_cpu_map__nr(cpu);
->  	threads_starting = params.nthreads;
-> 
-> +	cpuset = CPU_ALLOC(nrcpus);
-> +	BUG_ON(!cpuset);
-> +	size = CPU_ALLOC_SIZE(nrcpus);
-> +
->  	/* create and block all threads */
->  	for (i = 0; i < params.nthreads; i++) {
-> -		CPU_ZERO(&cpuset);
-> -		CPU_SET(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, &cpuset);
-> +		CPU_ZERO_S(size, cpuset);
-> +		CPU_SET_S(perf_cpu_map__cpu(cpu, i % perf_cpu_map__nr(cpu)).cpu, size, cpuset);
-> 
-> -		if (pthread_attr_setaffinity_np(&thread_attr, sizeof(cpu_set_t), &cpuset))
-> +		if (pthread_attr_setaffinity_np(&thread_attr, size, cpuset)) {
-> +			CPU_FREE(cpuset);
->  			err(EXIT_FAILURE, "pthread_attr_setaffinity_np");
-> +		}
-> 
-> -		if (pthread_create(&w[i], &thread_attr, workerfn, NULL))
-> +		if (pthread_create(&w[i], &thread_attr, workerfn, NULL)) {
-> +			CPU_FREE(cpuset);
->  			err(EXIT_FAILURE, "pthread_create");
-> +		}
->  	}
-> +	CPU_FREE(cpuset);
->  }
-> 
->  static void toggle_done(int sig __maybe_unused,
-> -- 
-> 2.35.1
-> 
+What's the plan for merging then?
+
+> I don't know if something changed regarding the comments style in the
+> spi subsystem, but using // everywhere looks strange, it's usually
+> reserved for the SPDX tag, but I'll let Mark comment on it.
+
+I generally request that, it looks messy if the comment block at the top
+mixes styles.
+
+--ZqHgdsk0cLf7iTJ6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJQKkgACgkQJNaLcl1U
+h9CYWQf/aDU1pdMHOR+7llwkDyWQ1V82hUYybIHSsJissvDGWXzsR2f07fHLNOFM
+euloPRzwBaIkluvEtWUg48dvzNObDlNeV93OL5Fx+GQiYlHUq+X4GyfDaLuLGb7o
+cLvaD9w6MuQ33+vUy5/+yHIFymOVH7gqcTo2yXe4U23naTjMP4fedx8VW9BcztrQ
+kcQ7315oY/dOUy/We5tewUENw4MaXshvpPdaMAue4qU+C1vxygPIMdze3oPi6t3R
+YC1PjdjMaAC7HDqENoCzW97DuTNb43yj5Upg+9ZaRA/na0G2e/Q29+R7t5kuEYRx
+jOOZiAm5s7dtfFVI5Xy0BYSh/5sysA==
+=WOzd
+-----END PGP SIGNATURE-----
+
+--ZqHgdsk0cLf7iTJ6--

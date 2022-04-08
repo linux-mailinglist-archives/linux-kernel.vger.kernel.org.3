@@ -2,103 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C0304F9084
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 10:14:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAAC54F9086
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 10:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbiDHIQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 04:16:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56106 "EHLO
+        id S231372AbiDHIQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 04:16:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230260AbiDHIQe (ORCPT
+        with ESMTP id S231345AbiDHIQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 04:16:34 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C78A95D1A3;
-        Fri,  8 Apr 2022 01:14:31 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id 75so1386172qkk.8;
-        Fri, 08 Apr 2022 01:14:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pM1bFLWfOo7rc/PnxLcp8zaWNFzjr+zhCEHz91chh40=;
-        b=nHxmqdAMU5kYkZ+xk23GvmNIHGA1r1hKprfaDP/jAh5gRzKafrdO5qxPj81lyLwIpn
-         ZDTvTP+htIGkY2YkIrjjl4QbBd3Eux873VZ+47Uaz/qBLjWtfVMHDxc/YmEV168pVYRr
-         3ESk4BERDCpwsqFmV45tmpm3ht+3v+sjk/RVqJZrCvy7JO6WREWnDRB2kA9NgqyZ8kzs
-         ZP9yoAWOR0H1sKyyPtO9uokR9GJyStfmlhQ5Vf3y3uWyDc+DeorH3OXTSMf44Sxjj3o9
-         07L1g3WQuQIp3UJjrznawPKfJTyUiFTgHs8okUGxiAHarjyt6OUqIFrDPUS5fOH3c0f4
-         +Fpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pM1bFLWfOo7rc/PnxLcp8zaWNFzjr+zhCEHz91chh40=;
-        b=UK5j67f7lu/v6zF6YlsZLOLcwMflUkdIbHUVvERYp3gNlVVa/nr0Lg9waMy4rv9ad7
-         6x+c+4iSoIhDDGsyX7ddjUKB+AGQdpCyk86+BrbmbEQQ9LqZ5uAhI4RQ9vh8UMDKXS+B
-         HZGbf2M9QpeFMg5T1BVGmuG0GUWq9JPKNbyohv87VPVfsjup68/kEe9yqBZMZNQgRZQ3
-         2SJ7DV8pRBfMTif/K4VK5EI4Nep2YWArd4gcuvOts59Xh8EQcvDI3Vgpqq01Gs6jCJHK
-         c3HsfAdowJVgPDAgMLHo58jcOFIm1QHnXER5oVTc/MJgyKZwmq5+LP0jZ0FDfd1D6bNI
-         cbzg==
-X-Gm-Message-State: AOAM5303UPkMof61g19FqP9TrfKl+hKuwIG81GYRtDtK4usCF6rKPrZv
-        mk6ao1rItan2cu+2Gb3leHoodGPr3no=
-X-Google-Smtp-Source: ABdhPJxIW2IohQQIj36AwOCxSzJA+8EWW/MIQiRq9IktWUF2+nkYqMxdvTWKAKdIiD6SwhOVFrgnhQ==
-X-Received: by 2002:a05:620a:4541:b0:67e:4bb7:c11b with SMTP id u1-20020a05620a454100b0067e4bb7c11bmr11580005qkp.194.1649405671028;
-        Fri, 08 Apr 2022 01:14:31 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id b17-20020a05622a021100b002e1f86db385sm17225753qtx.68.2022.04.08.01.14.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 01:14:30 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     b-liu@ti.com
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] usb: musb: dsps: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-Date:   Fri,  8 Apr 2022 08:14:20 +0000
-Message-Id: <20220408081420.2494650-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Fri, 8 Apr 2022 04:16:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6960360D87;
+        Fri,  8 Apr 2022 01:14:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 054B3615A7;
+        Fri,  8 Apr 2022 08:14:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31BDFC385A1;
+        Fri,  8 Apr 2022 08:14:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649405678;
+        bh=DXntX2Jz7Nztnd1dMcRMCaGMy0UPIH0WJlp5HA4774s=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=Qu+tD/xH27JIeXTaUKCquAn5fQayD4kxRqf9nIEs5/Z/nJRRkNrYMgZhuJZXKt8Al
+         NkLhsVjHZOQo7GV7TnXxgY/OhKOkJU3Osmzr9x7wxOTEUJqNBpdfoz4FPDWMUGX/64
+         u5jSI6cp8wrTBzl12n2nao2HO36tXUvV7ocDKe08fD9PBw+bB24wUGrlfy8Po3axfC
+         48EribHBfxK/csfTD4gSi23AoDNCMmpAeki/n+TADylKpJEf3htCMIfhNEuUqVJq8e
+         vepktCqnHgHTjfdLOMttvcbqtGvHV3pvfSY79LhuYzJ1SgqriOd3dpsluPlBAmvsnT
+         YOSlmsHLEDPGA==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-mmc@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        Amitkumar Karwar <amitkarwar@gmail.com>,
+        Ganapathi Bhat <ganapathi017@gmail.com>,
+        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
+        Xinming Hu <huxinming820@gmail.com>,
+        linux-kernel@vger.kernel.org, ath10k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com
+Subject: Re: [PATCH 1/3] mmc: core: improve API to make clear mmc_hw_reset is for cards
+References: <20220408080045.6497-1-wsa+renesas@sang-engineering.com>
+        <20220408080045.6497-2-wsa+renesas@sang-engineering.com>
+Date:   Fri, 08 Apr 2022 11:14:31 +0300
+In-Reply-To: <20220408080045.6497-2-wsa+renesas@sang-engineering.com> (Wolfram
+        Sang's message of "Fri, 8 Apr 2022 10:00:42 +0200")
+Message-ID: <87bkxcouu0.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+Wolfram Sang <wsa+renesas@sang-engineering.com> writes:
 
-Using pm_runtime_resume_and_get is more appropriate
-for simplifing code
+> To make it unambiguous that mmc_hw_reset() is for cards and not for
+> controllers, we make the function argument mmc_card instead of mmc_host.
+> Also, all users are converted.
+>
+> Suggested-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>
+> Ulf prefers one cross-subsystem patch to have all users converted. So,
+> we are looking for ACKs from the maintainers of the wireless drivers.
+> Thank you!
+>
+> Changes since RFC:
+> * don't rename the function but only change the argument type
+> * remove fallback and convert all users in one go
+> * remove comment as suggested by Ulf
+>
+>  drivers/mmc/core/block.c                                | 2 +-
+>  drivers/mmc/core/core.c                                 | 5 +++--
+>  drivers/mmc/core/mmc_test.c                             | 3 +--
+>  drivers/net/wireless/ath/ath10k/sdio.c                  | 2 +-
+>  drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c | 2 +-
+>  drivers/net/wireless/marvell/mwifiex/sdio.c             | 2 +-
+>  drivers/net/wireless/ti/wlcore/sdio.c                   | 2 +-
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
----
- drivers/usb/musb/musb_dsps.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+For wireless:
 
-diff --git a/drivers/usb/musb/musb_dsps.c b/drivers/usb/musb/musb_dsps.c
-index f75cde0f2b43..ecda7bf73589 100644
---- a/drivers/usb/musb/musb_dsps.c
-+++ b/drivers/usb/musb/musb_dsps.c
-@@ -980,11 +980,9 @@ static int dsps_suspend(struct device *dev)
- 		/* This can happen if the musb device is in -EPROBE_DEFER */
- 		return 0;
- 
--	ret = pm_runtime_get_sync(dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(dev);
-+	ret = pm_runtime_resume_and_get(dev);
-+	if (ret < 0)
- 		return ret;
--	}
- 
- 	del_timer_sync(&musb->dev_timer);
- 
+Acked-by: Kalle Valo <kvalo@kernel.org>
+
 -- 
-2.25.1
+https://patchwork.kernel.org/project/linux-wireless/list/
 
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

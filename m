@@ -2,151 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2F104F9B87
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 19:21:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7559A4F9B89
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 19:22:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238118AbiDHRXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 13:23:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37198 "EHLO
+        id S238121AbiDHRYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 13:24:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236550AbiDHRXu (ORCPT
+        with ESMTP id S235014AbiDHRYN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 13:23:50 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24926393D4
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 10:21:46 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id t13so8310582pgn.8
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 10:21:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iM6uzIK2cRc6kF+XG8vLt5tKa+TcH20c4ZrUE/qi6/w=;
-        b=lhsl/nELK+CjK9EjiqEgxM40CNFrd8O33D5yScOZeEFmN2mtYBl1RRyh7teoVon061
-         kj8aY6QVT/NAOTigSUu8Y7225f3BAoDTOIFbFJkqfikA4nBu9W5zKfjzNjscVbUZpCEL
-         TOfbFvs9CWUtBubunb4AJlZmBb5dRqOf9Yk4pxiGSjBWmoRGBB5QRajWXj9az8Q251gb
-         crS7qVsWxwVcQFaYZGkjAOUYH9TaUrXMqf5Y/wuhESvfTMT3NyPb+tqY6eFtedGk1kHC
-         uNhWX+utb/ZtxKPlsJceIR3VICKbc1+Hr9yOvb7P/hl/5YSRR9rMdsoD2qOcmmo91tnf
-         ktpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iM6uzIK2cRc6kF+XG8vLt5tKa+TcH20c4ZrUE/qi6/w=;
-        b=Ds1UittaIGyhKD7OVQMwlFcGCcXKYiGap9sgiEvHfwW02oh/pE50EV3lzJTKK1bODS
-         vILvzHdODqkDgoqW0PO/+YO2RB7a+X45riw7e0GRUhK+RJ+83nbnjSahveKKd3nb2Jm9
-         R8X3szlutgKZFI7+bkpMMKIjHGtfhriKVXLFHQ8kPUCtjQfRlgH7Z4gTdCYpq0oOkOoO
-         G5BFnhTifO26Q8avoXyZrHSzLQdDmAY7Xs2mNJogzuT0HslEX1jc1LneMJRVUC/+7qcq
-         pvXdF2bu97wuvoQhuqwxzcvtaEq5flj32sdxdKvtjrwy/Sen3fNhHHTGxdybyK4S1sQI
-         t2QA==
-X-Gm-Message-State: AOAM530zOk0gaYrB/cxrBkJzdD1+oV0nqAz+ubyEnTSKdJ6acjhBleao
-        G+UFKHeSHWheGoMvMw5yZp/4nvGtxwknroe86gasPA==
-X-Google-Smtp-Source: ABdhPJyC7OqfNQfRa6C4f4USe56Z81wNzno+TIeM/lYp3ZM7PQEnEsoenRPgyb0yZY/kqYDC5BKIP2jJs8oo5ma2nH0=
-X-Received: by 2002:a62:e815:0:b0:505:8dbb:2f33 with SMTP id
- c21-20020a62e815000000b005058dbb2f33mr3189854pfi.68.1649438505432; Fri, 08
- Apr 2022 10:21:45 -0700 (PDT)
+        Fri, 8 Apr 2022 13:24:13 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2071.outbound.protection.outlook.com [40.107.223.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4543B15FC6;
+        Fri,  8 Apr 2022 10:22:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QihuWeY1VdQyXAgBY25TIDA1Y7NpsZF7VHLRSkNhk5lLw9LH9CggboEI+rfNqhEG/Y3J8k37oKHT5ltKhHkdjo+ugR2ZGLKqKLYIZZffFewXJRuvaA/WQ6PK98Sm/LjGlcbhniNwUdgtKBr4D0X4h+/xNfegyRYDmH4qmao71jVQ51gPejL7ztmNoUc5o9qTJjx5d9McAPLZjamCLLLJlFKF+23KC+hx/7hSHZeeS9yFF0ZAkEKZD+nM0QWVlnqZvaVNnnhzYHvTBy/mKYC0lmxoZLWepdoFjeFCV78NSTRxyWSzFvx5cx5YY0RIlRBNzwBMWbk+MzCsZo3tYS3mKQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Xw/a/ummHEaWM0F4smmi+yvtM9OQJlQmqewlMXe2hBg=;
+ b=Qi6dajl/mdXFZ1iyCBrgnQJHqfq15Mmc03u2X5xK52+WZ4GD8lg3/yzoRYovOkeZ7T3tPTADi9tqLw1TFEcTMqK95fihnlU7oEOuXZvBCav9EncrLasIMnE4UEp7IWQXvQRkKNzW1g7qSrLGk6Zg8QnJMQ9AfaA5PDi16geivCCIz7yth+W0EzhjpZs6nohLFfcOswrKU3qlxghiuDSo/npbq6QQo2paHUPa66219wBzpjyF57tu+VvLnc+V/TY5S24Ukmo/pbTUqlkkBY9ENFRGiWuAvLuDcII2pKe6qleegKvMDukMryUgnu5itzaovz2AIgNzjA2shrPxzvEJOg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Xw/a/ummHEaWM0F4smmi+yvtM9OQJlQmqewlMXe2hBg=;
+ b=sNccsY5AL9XkPJjhmZnJH/e+9Sn/b9JKPuxkVRw6/mBhaxjXb4JuwueeYYIMlmsNQX71HGJOmNper3mD6qUZCn2ht9zo7xMAu7XT+zFNdnTlVEY7NV4dzwR9UCCUuuePAvLb8S2fXoLMoaM3xt0FIRNXW/9m+Mq+ElgG4vBlGFG/TW6E+6m0aYt2m5dSI5VJGyuwoQFA75IMl/M4CJNlIXCCtxxCMvXUzG4c44Cl9QJ1sOk0+9scNUv8apu+9NmcPvIDzrjvDq2i2A1TF0q2EqMB1e2w970LzGpz3EkdbHKpCkasSkyDf7nh0W8hC4zOsVZZ61G7PWcCcFDj2C1gPw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by BYAPR12MB2952.namprd12.prod.outlook.com (2603:10b6:a03:13b::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.23; Fri, 8 Apr
+ 2022 17:22:05 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::cdfb:f88e:410b:9374]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::cdfb:f88e:410b:9374%6]) with mapi id 15.20.5144.026; Fri, 8 Apr 2022
+ 17:22:05 +0000
+Date:   Fri, 8 Apr 2022 14:22:03 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Jakob Koschel <jakobkoschel@gmail.com>
+Cc:     Leon Romanovsky <leon@kernel.org>,
+        =?utf-8?B?SMOla29u?= Bugge <haakon.bugge@oracle.com>,
+        Mark Zhang <markzhang@nvidia.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@kernel.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Leon Romanovsky <leonro@nvidia.com>
+Subject: Re: [PATCH v3] IB/SA: replace usage of found with dedicated list
+ iterator variable
+Message-ID: <20220408172203.GA3637956@nvidia.com>
+References: <20220331091634.644840-1-jakobkoschel@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220331091634.644840-1-jakobkoschel@gmail.com>
+X-ClientProxiedBy: BL1PR13CA0437.namprd13.prod.outlook.com
+ (2603:10b6:208:2c3::22) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-References: <20220408045743.1432968-1-yosryahmed@google.com>
- <20220408045743.1432968-2-yosryahmed@google.com> <YlA754XNFAmWQcm6@dschatzberg-fedora-PC0Y6AEN.dhcp.thefacebook.com>
-In-Reply-To: <YlA754XNFAmWQcm6@dschatzberg-fedora-PC0Y6AEN.dhcp.thefacebook.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Fri, 8 Apr 2022 10:21:09 -0700
-Message-ID: <CAJD7tkY8NwjOVeZX30Fc72kp5zRESBWRgXW3Ji-Owp0jjDuEbw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/4] memcg: introduce per-memcg reclaim interface
-To:     Dan Schatzberg <schatzberg.dan@gmail.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        Chen Wandun <chenwandun@huawei.com>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
-        Michal Hocko <mhocko@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 0c2f8829-8ea9-417f-6f80-08da19844d37
+X-MS-TrafficTypeDiagnostic: BYAPR12MB2952:EE_
+X-Microsoft-Antispam-PRVS: <BYAPR12MB2952352875A4DB68B9F52D5EC2E99@BYAPR12MB2952.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: I/MZZKMhtMRlInc9Lsf7l2JdFhWKeUIKiOfkUM1RrYmHSpbaytegmCiAhpDxjEsbjTAU62k5tWn/uLG3J9pcNL8M0vkMaFmKnG1aRPwcHof4mRgsjDpyqvXDv7UnszU0C6gvrcOrYEJAUoGpru0rz0aKDmxXKEApHMcajeLZFog8wm9gnNiPTn07EesKqchV691ixdK0oQi2bFS23DlY1msx3K1qb9gTiTyQ+rldIPUbPezwuu2qPOtxoTFusSKSg7qW/YGsZqxjGa/7dVpG7if0JpbyI5Aifv4TgplqXpI5/cbENOLAlncsdYvjtPkt7pkkTc3QpVOJ85Ph+ov39czEJ/9SNC08BiE3Xb/WF4t4yOdvNFtJ7nfkYAcQgpSkxuVvOIDjLmNQd6JJK+bNTo0yGpQEi0N3g9f+Yuxu0pWmVuVlywqoRVV6x5x3pcoowNtjyRi42ZvUktqp0mvfSS1T3fIxVgFrUTKCisGCBaH+LW82nVtFpUwnryV1rYJpZo7WOaNuWNyyxFNwjaXZV2lHrO2hmpzVvCBiNeCmOCqXTRrZuHELxnskdmE2L1rSklRYV8iWtBbzMO/jORaxviM4obqkCJv1Ug1Wki0RN2giZs+aesXelvmAxGx8hlfqKcwXB4YYhh+a9NgxNfTCif6zHHwwpacEIxwf21gDxBt6c6IhDLMESw2qL05RW7qIQpZg9x1+InzOndTkCrFSe0UoKZXnOHiA+3NGzeUT+Ys=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(7416002)(6486002)(2616005)(36756003)(26005)(4326008)(6512007)(2906002)(83380400001)(966005)(508600001)(8936002)(8676002)(38100700002)(86362001)(66476007)(66946007)(316002)(66556008)(54906003)(6506007)(33656002)(107886003)(1076003)(186003)(6916009)(5660300002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5krphoEBqrgods1169VE/37ARS8pl8vp2c5GAEXEMzBPPIqox7K4T8/XPfKt?=
+ =?us-ascii?Q?OiVqTdd+lYSZITXC1gvy52zaSGpPv867K+5V/LoZl3bR7I5P1+0fKjExx9m/?=
+ =?us-ascii?Q?GDQ43O/Lt40YeqsgJCJJPIW6joLbz3vtlmKS04hKW5+7CwV+g6xqELZXpJPK?=
+ =?us-ascii?Q?f8K55/04dPBArsiK6Q7hlUAxczijtxBIDNbm9lmtmpVrf9L/rjS/X3JJl1v0?=
+ =?us-ascii?Q?9gx09D7cFybeHT088fV2qcow/hapt1CVHAnpkFtAkrJkSRx61xqm5j4+BqBM?=
+ =?us-ascii?Q?R27zjbHTN87PEubENMHb+apYc+KwLN/z/++/1bvprYmMphYEma33GmlIN48a?=
+ =?us-ascii?Q?mIUgqzRVHUSp+4Ktdzb6zEzYGSzhriPuvNDFh4pNDz2+POFKejMSgRrGuHRu?=
+ =?us-ascii?Q?6BqeVW9dISOI4Yej8qSSmKzp05geDwpZ3V88A/xjH8YiiBv5VgzzBAJ/ueeB?=
+ =?us-ascii?Q?5lk4rPfpdM90eB2+t/V/New6fKHWDnYv/aCxgQkI1vPqqCxjfzfCyG+Si3mO?=
+ =?us-ascii?Q?OmblsXTmJjRabQB+MsSpPjqY6mh8V0vyYmPZJr7gqtiITn6z0zFhyTe1tsP9?=
+ =?us-ascii?Q?RFw41aWQ+zb/MXR9tG4ytdaBOW+qRRy4Pb+HgkRPzNcKkLKXs/3gU8+wM/jD?=
+ =?us-ascii?Q?IZIr0Wclm5gNYeqRbx7i/L2QkL6QxVUZKWYS5yZ8/ZTEDG90FUEz/MtlXN1e?=
+ =?us-ascii?Q?Ka8dDQEC2vzpIDk8ectiYEQXC+NXm5OPqoHO1ouxC+B1pXKfWrLf/tPgJ3HW?=
+ =?us-ascii?Q?NyL6UE7ngZO1f8vE5qhnYUq9S9XouZ9I+3KPbWVIbAb+uu2BBVS9vK0+yOOX?=
+ =?us-ascii?Q?5DqDaAQDe0lqmxf5/BkXjho+UKg3NmblqzgFtDX8ZLvRu/sO4S8Q8CX/vQPg?=
+ =?us-ascii?Q?WGAFxIzYmE4K5hKfMcQtd0PS0EV4tp+kvvGQ43TyXItx0Ozc2+auxpLyuheu?=
+ =?us-ascii?Q?3fKsxbFnUTt8Jx7y+pk314XBy/uX6kWBTRaPkhLklPf4qLhPmEP7L+TNpNfv?=
+ =?us-ascii?Q?SsVPaLnJli2iygPY2+Si+1YrJUqGfQgtWlolMjZdg7I41W7PNT/2Oh9ULVFw?=
+ =?us-ascii?Q?BFHo7WYxvpHTnP23+YYXn++RbuXqAb2JyRjlk+F59YSN9OIs7dWv4eeQH+06?=
+ =?us-ascii?Q?jztz0LYvD3tD4myvzpL7Xugth5vfq6StiYVB/uC+tMdXPtHJTZ0K1b/tlLvq?=
+ =?us-ascii?Q?zOoqK+ZxVgUDgfiyCYrneVftyUmFd9IFDdgvmnPqlZHX2Sa/5WzURRiXTkxe?=
+ =?us-ascii?Q?nNWDEtsaf48sLn2Up+HpTT8ppDgWrHfrM3e+bcd7hVLY7u7DefaU8vnNukwm?=
+ =?us-ascii?Q?PFqh3OsiTq5N3nu49hZ5Xu1m266KUGAo03Rsr3fCnH3lAUPg8E5jQtMEcLsY?=
+ =?us-ascii?Q?yw0pZlq8XBRq3N4jgKfYuEErB9KUiK7DHMqSGTrCNonepZlLe1Wh0IXwi7Kp?=
+ =?us-ascii?Q?G7S2mXHi80oUglN5dGWTjJuBLJWiYhTD6bYO07W0apKpKx28gyXfYvA9wHGI?=
+ =?us-ascii?Q?1xDGyebvIm6/fwq4jryEUD2AUJtTQwu8s5mez99P9sRLbeE7bxN2xqNGXS8A?=
+ =?us-ascii?Q?4C9EECORNw2vNvgL01gCKPaE6FmTQyJWARb9t0Pj6VoA4lcr17LuYBM8yhmJ?=
+ =?us-ascii?Q?hpU1CHH5vYRcpn5zIACI5SVnphIy/gWxrSh8yxMLQjqseLT7b7aD/Xpf1H6Y?=
+ =?us-ascii?Q?gQ4C5KKxJc+2tt0lH+g53Z2QX31/T/lXnIh4Asaqupmc50jXv1nTibKNFBDt?=
+ =?us-ascii?Q?zkaJX0WSfA=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0c2f8829-8ea9-417f-6f80-08da19844d37
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Apr 2022 17:22:05.1338
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /jnZl2lH0Xo0TqLE8Bh/8Gr8Ksvyn1ugb/Wfs/Sy75sBhTa1OSDi3Ei6MHXOikNO
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2952
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 8, 2022 at 6:43 AM Dan Schatzberg <schatzberg.dan@gmail.com> wrote:
->
-> On Fri, Apr 08, 2022 at 04:57:40AM +0000, Yosry Ahmed wrote:
-> > +static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
-> > +                           size_t nbytes, loff_t off)
-> > +{
-> > +     struct mem_cgroup *memcg = mem_cgroup_from_css(of_css(of));
-> > +     unsigned int nr_retries = MAX_RECLAIM_RETRIES;
-> > +     unsigned long nr_to_reclaim, nr_reclaimed = 0;
-> > +     int err;
-> > +
-> > +     buf = strstrip(buf);
-> > +     err = page_counter_memparse(buf, "", &nr_to_reclaim);
->
-> Is there a reason not to support "max"? Empty string seems odd to me
-> here.
+On Thu, Mar 31, 2022 at 11:16:34AM +0200, Jakob Koschel wrote:
+> To move the list iterator variable into the list_for_each_entry_*()
+> macro in the future it should be avoided to use the list iterator
+> variable after the loop body.
+> 
+> To *never* use the list iterator variable after the loop it was
+> concluded to use a separate iterator variable instead of a
+> found boolean.
+> 
+> This removes the need to use a found variable and simply checking if
+> the variable was set, can determine if the break/goto was hit.
+> 
+> Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+> 
+> v1->v2:
+> - set query correctly (Mark Zhang)
+> 
+> v2->v3:
+> - remove changelog and link from git commit message (Leon Romanovsky)
+> 
+> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/
+> 
+>  drivers/infiniband/core/sa_query.c | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
 
-We can certainly support "max" to reclaim as much as we can with
-MAX_RECLAIM_RETRIES, if there are no objections from the maintainers.
+Applied to for-next, thanks
 
->
-> > +     if (err)
-> > +             return err;
-> > +
-> > +     while (nr_reclaimed < nr_to_reclaim) {
-> > +             unsigned long reclaimed;
-> > +
-> > +             if (signal_pending(current))
-> > +                     break;
->
-> I think this should be `return -EINTR;`
-
-Yes this makes more sense. I think this was modeled after the if block
-in memory_high_write(), but maybe it makes sense there to just report
-success as the new high limit was set anyway.
-Will change it in the next version.
-
->
-> > +
-> > +             reclaimed = try_to_free_mem_cgroup_pages(memcg,
-> > +                                             nr_to_reclaim - nr_reclaimed,
-> > +                                             GFP_KERNEL, true);
-> > +
-> > +             if (!reclaimed && !nr_retries--)
-> > +                     break;
->
-> Here you can just `return -EAGAIN;`
-
-Will do.
->
-> > +
-> > +             nr_reclaimed += reclaimed;
-> > +     }
-> > +
-> > +     return nr_reclaimed < nr_to_reclaim ? -EAGAIN : nbytes;
->
-> Then this can just be `return nbytes;`
-
-Will do.
-
->
-> I'm very much in favor of this new interface. Thanks for working on
-> it!
-
-Thanks so much for reviewing it!
+Jason

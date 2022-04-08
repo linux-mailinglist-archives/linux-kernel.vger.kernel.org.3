@@ -2,143 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79B104F9583
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2292B4F9587
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:21:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235331AbiDHMWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 08:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52076 "EHLO
+        id S235419AbiDHMXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 08:23:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiDHMWQ (ORCPT
+        with ESMTP id S229550AbiDHMW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 08:22:16 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C2B33D0D3;
-        Fri,  8 Apr 2022 05:20:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649420412; x=1680956412;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=WPsslrFd0S6sXmVgTxDUoYEL32FPotRMU+1lqBKb5iU=;
-  b=bgjvTtW0I20mqkt5dHcgUItHH17Z+qewfQNWHsJwcYIE3w+aGwLZ4STF
-   ejqn1xjXsVg8sYoLKQTTD5Wi3q4Js8/dwuxL1myXeNKERhmThSDxq6dUM
-   O/UqoM7ppRmEz8SenT/hhbBFlHbSKN5BblCHrcbH3qhs7uFjVgEdDsQyw
-   kG7GW0s4U5eEcZ3nXEnBZHXKw2flmIEiCS7I3TfWEsazLoN9XOCRYmq83
-   Dm6weIKJDMs7ATVLEDSgmWJG74k/VrS2JhbheaJdhPyaiY0fORzLlnesi
-   UIAqEQ9jCJg2nLCV2fu4mf7Hsg1OmEvPxyGtCrFQ+BKEpadUcaGIcV3bk
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="249110195"
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="249110195"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 05:20:11 -0700
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="571473128"
-Received: from aecajiao-mobl.amr.corp.intel.com ([10.252.48.54])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 05:20:09 -0700
-Date:   Fri, 8 Apr 2022 15:20:07 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-cc:     linux-serial <linux-serial@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Gilles Buloz <gilles.buloz@kontron.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: Re: [PATCH v2 1/3] tty: Add functions for handling flow control
- chars
-In-Reply-To: <YlAkK16xqh3DgY20@smile.fi.intel.com>
-Message-ID: <d79c4c20-1cfd-a3a1-516b-b6b51360527c@linux.intel.com>
-References: <20220408113954.9749-1-ilpo.jarvinen@linux.intel.com> <20220408113954.9749-2-ilpo.jarvinen@linux.intel.com> <YlAkK16xqh3DgY20@smile.fi.intel.com>
+        Fri, 8 Apr 2022 08:22:57 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F4C33D0F4
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 05:20:53 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id m67-20020a1ca346000000b0038e6a1b218aso5438106wme.2
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 05:20:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=Tm3844p3tyj2hoHmI7W25/vDNLRVfKVH7ujOGYxkyIE=;
+        b=SQ4QXeiefAStQE0uIiuq5fbTmB6dqaolONV3x2vWJ/d61seFNX6BK/GfTHcpkaABjv
+         fN90oNIkgoBZXoioj+sQt2X7JdgL1a4QbcIKAtSVIqnkUK6DdA0oTRa3fxKiNaOYSwav
+         E0OUcFQLy5tttayTwrU4ht2Z6VjzGjpbDOhmKEVf3ug5gh+jzOlXvIfbyDj0Cp7quIv9
+         0rV7CEzteB98W5wJu/75nOqNpENOjVFuZwd7LycBEGWPvFpQx5RpQ3B2YvAW0+ZId6eh
+         WiQud2cf5ykiV6P4hyCUzQfaEES8MCcWGxwJcG0Nl80x01UqH/kh4K/BnH85E+ODKxup
+         hmBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=Tm3844p3tyj2hoHmI7W25/vDNLRVfKVH7ujOGYxkyIE=;
+        b=hbHZSCsSFfxrFLtH/24Ui5Je6geJYA+UeOatnO57HXpjhFFQW66CdM5V5fUiUquxXd
+         P4pvrJZx4ImjO0TmYJDop8HIpQTCRNkzPopLufprhIULmT49RtGZjx1jhbo9kylbCV2G
+         WzkehRgproWzJd5dS463Mp+daJtrcBJuJNlOU8mUiY4/9k5oIib7K0WLhStRvyA7Zyg4
+         IkvKPvc/h1u9KNI5LWqFmetqz+w13IUu4J9tVckHhB66/DWsdFRT2cvXIS4G0tD1SQlZ
+         a6EWimX5jWH5TsRGhqtLtQ+vtDYBYTs1lW2YhfQWb7gN9BHCJP12xfCWl4U/VzpFHHtl
+         Qxig==
+X-Gm-Message-State: AOAM533a4hWflla9N4li1sbHPe0PuvMquOArnPKrTHja21Zt5jktVn9f
+        1kW7xdLwulOmewkqDp8A40D1pw==
+X-Google-Smtp-Source: ABdhPJyGLvOJ/1FtA8a81Q6gFsU03e8HUiyv0If0DZiyYPgTULh2Nj1Yr/DOO3WhVFFKZf93TjeeVw==
+X-Received: by 2002:a05:600c:5021:b0:38c:70c0:80e9 with SMTP id n33-20020a05600c502100b0038c70c080e9mr16445209wmr.91.1649420451363;
+        Fri, 08 Apr 2022 05:20:51 -0700 (PDT)
+Received: from ?IPV6:2001:861:44c0:66c0:eacd:ce6:e294:acd1? ([2001:861:44c0:66c0:eacd:ce6:e294:acd1])
+        by smtp.gmail.com with ESMTPSA id j3-20020adfd203000000b0020616cddfd5sm11134751wrh.7.2022.04.08.05.20.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Apr 2022 05:20:50 -0700 (PDT)
+Message-ID: <50460cf7-34e9-7c8e-131b-6866f43ec2da@baylibre.com>
+Date:   Fri, 8 Apr 2022 14:20:49 +0200
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-865545589-1649420348=:1643"
-Content-ID: <d3d8d4fb-baab-977-cbb3-46e5455dab@linux.intel.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 2/5] drm: bridge: dw_hdmi: default enable workaround to
+ clear the overflow
+Content-Language: en-US
+To:     Sandor Yu <Sandor.yu@nxp.com>, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, andrzej.hajda@intel.com,
+        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, hverkuil-cisco@xs4all.nl
+Cc:     shengjiu.wang@nxp.com, cai.huoqing@linux.dev, maxime@cerno.tech,
+        harry.wentland@amd.com
+References: <cover.1649412256.git.Sandor.yu@nxp.com>
+ <39592fee39610c544058e6b8f9af4b4ea8dc4cdc.1649412256.git.Sandor.yu@nxp.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+In-Reply-To: <39592fee39610c544058e6b8f9af4b4ea8dc4cdc.1649412256.git.Sandor.yu@nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On 08/04/2022 12:32, Sandor Yu wrote:
+> i.MX8MPlus (v2.13a) has verified need the workaround to clear the
+> overflow with one iteration.
+> Only i.MX6Q(v1.30a) need the workaround with 4 iterations,
+> the others versions later than v1.3a have been identified as needing
+> the workaround with a single iteration.
+> 
+> Default enable the workaround with one iteration for all versions
+> later than v1.30a.
+> 
+> Signed-off-by: Sandor Yu <Sandor.yu@nxp.com>
+> ---
+>   drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 23 +++++++----------------
+>   1 file changed, 7 insertions(+), 16 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> index 4befc104d220..02d8f7e08814 100644
+> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> @@ -2086,30 +2086,21 @@ static void dw_hdmi_clear_overflow(struct dw_hdmi *hdmi)
+>   	 * then write one of the FC registers several times.
+>   	 *
+>   	 * The number of iterations matters and depends on the HDMI TX revision
+> -	 * (and possibly on the platform). So far i.MX6Q (v1.30a), i.MX6DL
+> -	 * (v1.31a) and multiple Allwinner SoCs (v1.32a) have been identified
+> -	 * as needing the workaround, with 4 iterations for v1.30a and 1
+> -	 * iteration for others.
+> -	 * The Amlogic Meson GX SoCs (v2.01a) have been identified as needing
+> -	 * the workaround with a single iteration.
+> -	 * The Rockchip RK3288 SoC (v2.00a) and RK3328/RK3399 SoCs (v2.11a) have
+> -	 * been identified as needing the workaround with a single iteration.
+> +	 * (and possibly on the platform).
+> +	 * 4 iterations for i.MX6Q(v1.30a) and 1 iteration for others.
+> +	 * i.MX6DL (v1.31a), Allwinner SoCs (v1.32a), Rockchip RK3288 SoC (v2.00a),
+> +	 * Amlogic Meson GX SoCs (v2.01a), RK3328/RK3399 SoCs (v2.11a)
+> +	 * and i.MX8MPlus (v2.13a) have been identified as needing the workaround
+> +	 * with a single iteration.
+>   	 */
+>   
+>   	switch (hdmi->version) {
+>   	case 0x130a:
+>   		count = 4;
+>   		break;
+> -	case 0x131a:
+> -	case 0x132a:
+> -	case 0x200a:
+> -	case 0x201a:
+> -	case 0x211a:
+> -	case 0x212a:
+> +	default:
+>   		count = 1;
+>   		break;
+> -	default:
+> -		return;
+>   	}
+>   
+>   	/* TMDS software reset */
 
---8323329-865545589-1649420348=:1643
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-Content-ID: <aed6b5c-6a20-30e9-96ef-1532ea8b2e1@linux.intel.com>
-
-On Fri, 8 Apr 2022, Andy Shevchenko wrote:
-
-> On Fri, Apr 08, 2022 at 02:39:52PM +0300, Ilpo Järvinen wrote:
-> > Move receive path flow control character handling to own function
-> > and a helper.
-> > 
-> > This seems cleanest approach especially once skipping due to lookahead
-> > is added. Its downside is the duplicated START_CHAR and STOP_CHAR
-> > checks.
-> > 
-> > No functional changes.
-> 
-> But it seems the change. See below.
-> 
-> ...
-> 
-> > +static bool n_tty_is_char_flow_ctrl(struct tty_struct *tty, unsigned char c)
-> > +{
-> > +	return c == START_CHAR(tty) || c == STOP_CHAR(tty);
-> > +}
-> > +
-> > +/* Returns true if c is consumed as flow-control character */
-> > +static bool n_tty_receive_char_flow_ctrl(struct tty_struct *tty, unsigned char c)
-> > +{
-> > +	if (!n_tty_is_char_flow_ctrl(tty, c))
-> > +		return false;
-> > +
-> > +	if (c == START_CHAR(tty)) {
-> > +		start_tty(tty);
-> > +		process_echoes(tty);
-> 
-> > +	} else if (c == STOP_CHAR(tty)) {
-> 
-> In the original code no 'else' was present.
->
-> Perhaps it's not a functional change, but this detail has to be explained.
-
-Correct that the previous code didn't have else, however, there was return 
-with the same effect. Adding this else here was no accident from my part 
-but it is intentionally there to have no functional change for the 
-START_CHAR == STOP_CHAR case!
-
-> > +		stop_tty(tty);
-> > +	}
-> > +
-> > +	return true;
-> > +}
-> 
-> ...
-> 
-> > -	if (I_IXON(tty)) {
-> > -		if (c == START_CHAR(tty)) {
-> > -			start_tty(tty);
-> > -			process_echoes(tty);
-> > -			return;
-> > -		}
-> > -		if (c == STOP_CHAR(tty)) {
-> > -			stop_tty(tty);
-> > -			return;
-> > -		}
-> > -	}
-> > +	if (I_IXON(tty) && n_tty_receive_char_flow_ctrl(tty, c))
-> > +		return;
-> 
-> 
-
--- 
- i.
---8323329-865545589-1649420348=:1643--
+Acked-by: Neil Armstrong <narmstrong@baylibre.com>

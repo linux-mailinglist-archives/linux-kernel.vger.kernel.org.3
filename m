@@ -2,100 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3C4E4FA045
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 01:51:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 690144FA049
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 01:52:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240098AbiDHXxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 19:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54540 "EHLO
+        id S240065AbiDHXyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 19:54:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236587AbiDHXxE (ORCPT
+        with ESMTP id S235169AbiDHXyW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 19:53:04 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F5FD0A8D;
-        Fri,  8 Apr 2022 16:50:56 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id i27so20164477ejd.9;
-        Fri, 08 Apr 2022 16:50:55 -0700 (PDT)
+        Fri, 8 Apr 2022 19:54:22 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0533C1B29E7
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 16:52:15 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id c7so15123741wrd.0
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 16:52:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=SUqMtItyQZq0VImWzHlQNyf9xOR5YZgjl7HG7ggaASA=;
-        b=nJriARLQYTMhH8chWXt44TKYI93PSDPUJtZYNgzWWUVvzVxPGiCZEEj1or0iOTefo6
-         cFscWaA85nZ2Y/kClhUqsgDfbrhKPUZDkkzyM5PK+amxjD4B9bkaMfh3UvILoEcBIGVp
-         pD9y/wuXRsQe30azkivrcgDlMms0jSrgpc0B4YRML0nOkZ8W8oa2xa3dmJEJI48q7Lph
-         hERaCN4LvyngWLcE/nNTdaJoURQxBLZ0UWrRoEU5cNkW9BTCN6Tydlp6kYyBV95RnXZw
-         p2O6zP4x77KUbOQ1olKZSBNoc7+rWVjcHZXqzKdeMH9GniNs2g4IkkVS8/3XGbjIDWwo
-         0yJw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9Z5lmTeyx84Yo2aB1/h1dMObiSZnUIdjrOa7dhn9z+0=;
+        b=bWrf8tXOOR8KJK7v9SrFzKCWzYyURowo3Mex/cgaWSy0JHDrBN5HbmpK0nYBuvar+5
+         hQbnXjbZsp7mu6M40ZDEUBVg+r0T1Muvri627DKFFIgkezlfeTJQSFF2kmDHiIP6xOxY
+         u6+ylUb+xzzk1Bm8UKJppu+9esqExyHMHhtxm389OAPwJ3q7fBzdS6qgiIRCClFTpixB
+         KupVRwkNVe5fcJDFhyxzRO0m/00vtg4zSw241C14U2jbyrzsCesen08pgQQjo2mIaoCV
+         jVQXPJhmzNIq/6XPeBz0GNrNQmnv834mZI9BFdU85VA6JI2Km9PSLYbsq3lZSfReDUvf
+         HISg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SUqMtItyQZq0VImWzHlQNyf9xOR5YZgjl7HG7ggaASA=;
-        b=8DPEZRpXJWWK2l766VV0YM7MbJPzXNZcKhKEtBwwll0TVZ6RXYkEiMUwBqKywHkwId
-         QrULu6Q2HkRO5VL9BZFp5ObTBAKkq4nVdAqrafVV0+KZ0RbijlxbfCjpYKmX9aFofvdl
-         3TALe/aUsSoZMPs9j3UHlqYrUGSHas2X6OXc5r87siL17KZ4WYyJrco9fEI9DxckRX2e
-         sV/GTb/BtaTIU9JwdaRLmek+JOq/FG7IKh+aCSRJv7EUOSTBRnYcgQy+x3QtLp27Ozdk
-         sEpDnvP/+wUB7rjmzfb5qKqoY5sT/nOToqlQq8ATTFmF8xmb1Y4262FF4DQBpFrGsNaF
-         BSbA==
-X-Gm-Message-State: AOAM533FUz76f6oZV7KItkI9wr477PfSkyg0kWcuNtCcQx/3Y/14UzAZ
-        tvfiBHtcAB03jqWEF6RxH30=
-X-Google-Smtp-Source: ABdhPJx48I6qNVXy5JRlDDppagH8Z8UT68EDC0Z1VNqIiGnngdmjei8lBxcmBqvnL8jnUCdrueVd4Q==
-X-Received: by 2002:a17:906:9c82:b0:6df:baa2:9f75 with SMTP id fj2-20020a1709069c8200b006dfbaa29f75mr20667399ejc.762.1649461854531;
-        Fri, 08 Apr 2022 16:50:54 -0700 (PDT)
-Received: from skbuf ([188.26.57.45])
-        by smtp.gmail.com with ESMTPSA id w14-20020a509d8e000000b0041cd217726dsm7443672ede.4.2022.04.08.16.50.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 16:50:54 -0700 (PDT)
-Date:   Sat, 9 Apr 2022 02:50:51 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        UNGLinuxDriver@microchip.com, Ariel Elior <aelior@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Casper Andersson <casper.casan@gmail.com>,
-        Bjarni Jonasson <bjarni.jonasson@microchip.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Michael Walle <michael@walle.cc>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Eric Dumazet <edumazet@google.com>,
-        Di Zhu <zhudi21@huawei.com>, Xu Wang <vulab@iscas.ac.cn>,
-        Netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: Re: [PATCH net-next 03/15] net: dsa: mv88e6xxx: Replace usage of
- found with dedicated iterator
-Message-ID: <20220408235051.2a4hh7p3lee3a3xv@skbuf>
-References: <20220407102900.3086255-1-jakobkoschel@gmail.com>
- <20220407102900.3086255-4-jakobkoschel@gmail.com>
- <20220408123101.p33jpynhqo67hebe@skbuf>
- <C2AFC0FB-08EC-4421-AF44-8C485BF48879@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9Z5lmTeyx84Yo2aB1/h1dMObiSZnUIdjrOa7dhn9z+0=;
+        b=w6H8mQDWcT7SyQTjSFXTyDOC/BMhbCEV/gt0yxWi7hzZ1RkI2SAviUlhJPw3ZaUzvN
+         xM5l0W935Hs4k9IugwuydTn5dJEMoXPpjpM2KDxuA8ic6yEjJDOvv+mA456IwKsZrpy5
+         RgpKcRui/5pWDXWW/yrpUi7iW0dFXODpqF6lYOGErq4ttmwl7691SU79eGg8S38BjxYv
+         vvEU/p08IOGu4KBqH0onk3CUS43eo6IAJryH02XJETw/YOZfHN9Ajt0wH1jgh6p4GqNG
+         xey0i4Wet+XkWnNr+cIs0bK/sfr36TmrY6afaO6L0cdzzbNjBH9CRd1RBgerW27ewPVT
+         jy4g==
+X-Gm-Message-State: AOAM533DeE0JxnVF5wXEOLN77DOTk5upXzrdHMKXoE9p06IEmbVgFROS
+        X9QyJRT7jjUZaZz6xjxxUBnIv4BYwL0ZnfIAtEvQvg==
+X-Google-Smtp-Source: ABdhPJwhpFPHZ6T5uG1eJYKJykakLx69sYt54ZUlpc0GREa0vdDTuFMxX6xYub8+/m83iXAOcL9lfessfIuumOJOb78=
+X-Received: by 2002:adf:f6c4:0:b0:206:1581:dabc with SMTP id
+ y4-20020adff6c4000000b002061581dabcmr16707057wrp.375.1649461933269; Fri, 08
+ Apr 2022 16:52:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <C2AFC0FB-08EC-4421-AF44-8C485BF48879@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220407230503.1265036-1-irogers@google.com> <CAM9d7cjM5jpPfdWUvoezYYJoz_Sh1rHpGHVGAvxOqxzb=AKBVQ@mail.gmail.com>
+In-Reply-To: <CAM9d7cjM5jpPfdWUvoezYYJoz_Sh1rHpGHVGAvxOqxzb=AKBVQ@mail.gmail.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Fri, 8 Apr 2022 16:52:00 -0700
+Message-ID: <CAP-5=fULT859R4-x4RRsvKEUSrGYySVVSxtWSWYUoKC0M0vCYg@mail.gmail.com>
+Subject: Re: [PATCH 0/5] Tidy up symbol end fixup
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Michael Petlan <mpetlan@redhat.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Alexandre Truong <alexandre.truong@arm.com>,
+        German Gomez <german.gomez@arm.com>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Li Huafei <lihuafei1@huawei.com>,
+        =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>,
+        William Cohen <wcohen@redhat.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Lexi Shao <shaolexi@huawei.com>,
+        Remi Bernon <rbernon@codeweavers.com>,
+        Denis Nikitin <denik@chromium.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,27 +95,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 09, 2022 at 01:44:00AM +0200, Jakob Koschel wrote:
-> > Let's try to not make convoluted code worse. Do the following 2 patches
-> > achieve what you are looking for? Originally I had a single patch (what
-> > is now 2/2) but I figured it would be cleaner to break out the unrelated
-> > change into what is now 1/2.
-> 
-> I do agree with not making convoluted code worse, but I was reluctant with
-> e.g. introducing new functions for this because others essentially
-> have the opposite opinion on this.
-> 
-> I however like solving it that way, it makes it a lot cleaner.
+On Fri, Apr 8, 2022 at 10:15 AM Namhyung Kim <namhyung@kernel.org> wrote:
+>
+> Hi Ian,
+>
+> On Thu, Apr 7, 2022 at 4:05 PM Ian Rogers <irogers@google.com> wrote:
+> >
+> > Fixing up more symbol ends as introduced in:
+> > https://lore.kernel.org/lkml/20220317135536.805-1-mpetlan@redhat.com/
+> > caused perf annotate to run into memory limits - every symbol holds
+> > all the disassembled code in the annotation, and so making symbols
+> > ends further away dramatically increased memory usage (40MB to
+> >  >1GB). Modify the symbol end logic so that special kernel cases aren't
+> > applied in the common case.
+>
+> I'm not sure what was the actual problem the patch tried to solve.
+> It seems like a specific problem on powerpc + kprobes and now
+> it affects all other architectures.
 
-Yeah, I think 'just adapt to the context and style and intentions of the
-code you're changing and don't try to push a robotic one-size-fits-all
-solution' is sensible enough for an initial guiding principle.
+Thanks Namhyung, this patch set reverts that.
 
-> > If you want I can submit these changes separately.
-> 
-> Sure if you want to submit them separately, go ahead. Otherwise I can
-> integrate it into a v2, whatever you prefer essentially.
+> In the above commit, optinsn_slot and kprobe_optinsn_page will
+> have the same address and optinsn_slot cannot be fixed up.
+> But I guess the kprobe_optinsn_page still can be fixed up and
+> you can use the symbol instead, no?
+>
+> To me, it'd be better to revert the change and add a special
+> handling for the kprobe insn pages as they appear as
+> modules.
+>
+> Also, all the arch symbols fixup routine seem to do the same
+> then we might move it to the general logic.
 
-If you're moving quickly feel free to pick them up. I have lots of other
-things on my backlog so it won't be until late next week until I even
-consider submitting these.
+Agreed. It isn't possible for me to test that behavior and so the
+change tries to make the behavior clearer and to isolate Michael's
+change to PowerPC. I like the idea of removing the weak symbols and
+making the behavior common. I also don't know why we're trying to fix
+broken elf file symbols and don't just let the assembly/compiler
+writers fix that.
+
+Thanks,
+Ian
+
+> Thanks,
+> Namhyung
+>
+> >
+> > Minor fix to perf annotate to not stall when stderr is full.
+> >
+> > Ian Rogers (5):
+> >   perf annotate: Drop objdump stderr
+> >   perf symbols: Always do architecture specific fixups
+> >   perf symbols: Add is_kernel argument to fixup end
+> >   perf symbol: By default only fix zero length symbols
+> >   perf symbols: More specific architecture end fixing
+> >
+> >  tools/perf/arch/arm64/util/machine.c   | 14 +++++++++-----
+> >  tools/perf/arch/powerpc/util/machine.c | 10 +++++++---
+> >  tools/perf/arch/s390/util/machine.c    | 12 ++++++++----
+> >  tools/perf/util/annotate.c             |  1 +
+> >  tools/perf/util/symbol-elf.c           |  2 +-
+> >  tools/perf/util/symbol.c               | 14 ++++++++------
+> >  tools/perf/util/symbol.h               |  4 ++--
+> >  7 files changed, 36 insertions(+), 21 deletions(-)
+> >
+> > --
+> > 2.35.1.1178.g4f1659d476-goog
+> >

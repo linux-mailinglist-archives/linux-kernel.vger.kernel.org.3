@@ -2,104 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 192604F994F
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 17:23:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A61F4F9951
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 17:23:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237514AbiDHPYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 11:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43348 "EHLO
+        id S237511AbiDHPZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 11:25:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbiDHPYa (ORCPT
+        with ESMTP id S229993AbiDHPZj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 11:24:30 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0335F108753
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 08:22:26 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9D875113E;
-        Fri,  8 Apr 2022 08:22:26 -0700 (PDT)
-Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D62393F73B;
-        Fri,  8 Apr 2022 08:22:24 -0700 (PDT)
-Date:   Fri, 8 Apr 2022 16:22:22 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Tong Tiangen <tongtiangen@huawei.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [RFC PATCH -next V2 5/7] arm64: add get_user to machine check
- safe
-Message-ID: <YlBTLn1cf7+gJmiM@lakrids>
-References: <20220406091311.3354723-1-tongtiangen@huawei.com>
- <20220406091311.3354723-6-tongtiangen@huawei.com>
- <Yk14AwR92MX0LKqZ@FVFF77S0Q05N>
- <ac80045b-24f0-a163-ea96-be0d01c48d29@huawei.com>
+        Fri, 8 Apr 2022 11:25:39 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952ACCDC
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 08:23:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649431415; x=1680967415;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=9H8BUXKRrkLgvJdGdu978TupPedHMZGCiuTf1WYFn5c=;
+  b=cCC5NJ36d/J3NlKnHr60S6U6B4m26gGr5lBYq23TEJYTZ2PIo+PCcEX9
+   oMYi+J2GEbS6BLzg0W4quswaQdkG4IWY2OVkrNJ8IEkUWTLTKF2c9Kw3f
+   8WX/llfGVTb0J3Go0/utvgFmRykeHz0qWgT7GudFhlOX/59QLbXwrXzTx
+   lwM7QlTzi7X6L7TvjCwCBIA7qdQLY3hgaXQQolETWQej3moW5BEzEXwgL
+   e+XGeliVv4CPXZCs3oBxxWUvGKz0ecob3xwvvz6Ol0yjypoYTxOxlpA9A
+   et4473fpCqPIS7Io0byoSJ8nIyR5cC+cpUi2xKWaFYaFjiS24XOoiE4xt
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="324779728"
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="324779728"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 08:23:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
+   d="scan'208";a="659521417"
+Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 08 Apr 2022 08:23:33 -0700
+Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ncqST-0000OV-4I;
+        Fri, 08 Apr 2022 15:23:33 +0000
+Date:   Fri, 8 Apr 2022 23:23:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dan Pasanen <dan.pasanen@gmail.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Dom Cobley <popcornmix@gmail.com>
+Subject: [l1k:smsc95xx_5.17 21/887] ld.lld: error: undefined symbol:
+ v4wb_dma_inv_range
+Message-ID: <202204082305.3yjg0eTb-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ac80045b-24f0-a163-ea96-be0d01c48d29@huawei.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 10:38:04PM +0800, Tong Tiangen wrote:
-> 在 2022/4/6 19:22, Mark Rutland 写道:
-> > On Wed, Apr 06, 2022 at 09:13:09AM +0000, Tong Tiangen wrote:
-> > > Add scenarios get_user to machine check safe. The processing of
-> > > EX_TYPE_UACCESS_ERR_ZERO and EX_TYPE_UACCESS_ERR_ZERO_UCE_RECOVERY is same
-> > > and both return -EFAULT.
-> > 
-> > Which uaccess cases do we expect to *not* be recoverable?
-> > 
-> > Naively I would assume that if we're going to treat a memory error on a uaccess
-> > as fatal to userspace we should be able to do that for *any* uacesses.
-> > 
-> > The commit message should explain why we need the distinction between a
-> > recoverable uaccess and a non-recoverable uaccess.
-> > 
-> > Thanks,
-> > Mark.
-> 
-> Currently, any memory error consumed in kernel mode will lead to panic
-> (do_sea()).
-> 
-> My idea is that not all memory errors consumed in kernel mode are fatal,
-> such as copy_ from_ user/get_ user is a memory error consumed when
-> reading user data in the process context. In this case, we can not let the
-> kernel panic, just kill the process without affecting the operation
-> of the system.
+tree:   https://github.com/l1k/linux smsc95xx_5.17
+head:   05d68ced287b30f62f18f95b5476135ef669804a
+commit: 158c801c65d225eb8dd0ca0eb79e7bee23710294 [21/887] arm: partially revert 702b94bff3c50542a6e4ab9a4f4cef093262fe65
+config: arm-randconfig-r026-20220408 (https://download.01.org/0day-ci/archive/20220408/202204082305.3yjg0eTb-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c29a51b3a257908aebc01cd7c4655665db317d66)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/l1k/linux/commit/158c801c65d225eb8dd0ca0eb79e7bee23710294
+        git remote add l1k https://github.com/l1k/linux
+        git fetch --no-tags l1k smsc95xx_5.17
+        git checkout 158c801c65d225eb8dd0ca0eb79e7bee23710294
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-I understood this part.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> However, not all uaccess can be recovered without affecting the normal
-> operation of the system. The key is not whether it is uaccess, but whether
-> there are key data affecting the normal operation of the system in the read
-> page.
+All errors (new ones prefixed by >>):
 
-Ok. Can you give an example of such a case where the a uaccess that hits
-a memory error must be fatal?
+   ld.lld: warning: lld uses blx instruction, no object with architecture supporting feature detected
+   ld.lld: warning: lld uses blx instruction, no object with architecture supporting feature detected
+>> ld.lld: error: undefined symbol: v4wb_dma_inv_range
+   >>> referenced by proc-syms.c
+   >>> mm/proc-syms.o:(__ksymtab_v4wb_dma_inv_range) in archive arch/arm/built-in.a
+--
+>> ld.lld: error: undefined symbol: v4wb_dma_clean_range
+   >>> referenced by proc-syms.c
+   >>> mm/proc-syms.o:(__ksymtab_v4wb_dma_clean_range) in archive arch/arm/built-in.a
 
-I think you might be trying to say that for copy_{to,from}_user() we can
-make that judgement, but those are combined user+kernel access
-primitives, and the *uaccess* part should never be reading from a page
-with "key data affecting the normal operation of the system", since
-that's userspace memory.
-
-Is there any *userspace access* (e.g. where we use LDTR/STTR today)
-where we must treat a memory error as fatal to the system?
-
-Thanks,
-Mark.
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

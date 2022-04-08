@@ -2,118 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AB8B4F97E5
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0822D4F97E9
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:21:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235641AbiDHOWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 10:22:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39100 "EHLO
+        id S236834AbiDHOXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 10:23:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236893AbiDHOWr (ORCPT
+        with ESMTP id S236828AbiDHOXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 10:22:47 -0400
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D088352757;
-        Fri,  8 Apr 2022 07:20:44 -0700 (PDT)
-Received: by mail-pf1-f181.google.com with SMTP id h19so8524357pfv.1;
-        Fri, 08 Apr 2022 07:20:44 -0700 (PDT)
+        Fri, 8 Apr 2022 10:23:36 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B172E0A0
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 07:21:32 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id q19so13075359wrc.6
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 07:21:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=olQLWu1R/3Sdbp1yPNJGC4ZbkN8O9H0Nzxueo3jwg+s=;
+        b=mXN8vH4bFI8g5XwcuA9uXkyRpBEmHbq23qEU0gWLfPy+9MrgPu+P/4kL2C+TalwK/h
+         ZhiqPrb5/kP3zT0K5WIvjw9sny/co3+iXpHLsCv/XNwnPPRDV7ke6RcBu5qPB7xPA1v7
+         vcz2n6OQtQqCxce5LQBxtY/LGKykNw58kGwYsX8iKpmJMUcZYSltIHQsHnXXr3jJ+fZQ
+         WQYMbgzEvM5JG1pqM7S0+L2fiRO/1hXlahUng5z7j6YZRBNQO0Er4WZ+i18aJUGE0v80
+         xzb7wJPddWA5ZZmWf933zqxlPCZUhKB0cIhE5KFs6mCYL9RsFDegBRH38+YCiRN71eJY
+         eCwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=59y8Knnm/vo+DF9GRlYZP2tt3eWm5aI01xbVEtK4FKw=;
-        b=6bqLueH0uxAM7KlwXt3UeA751KjQ+UUZr06bWXVhKl/hCbPhqHEtpzA9zD8woGG1ey
-         FwVquK7UtD/8UfiE0IQzskso5t/EMZ6OTW8mh2fbOrmTTIQk1bzu0rWKvdVCtQHo2VPT
-         hlfaSSZ3yDuCrWgqbeXWUAQFkq1E+JZeUoK3ckEgGrtagMHnAic3yA73ks8lY0bVP6N2
-         fJy2tzZwn2FJJjlXfQwuMaQ3WCxx4HEaSRNASc9fJtUgXcb7HH033NZIJErr14IWAnJ6
-         srcCxzDMYhc3e+dGKptlQilmbTxm6q1gKTAAxvSYIM2Uu6qpV46AfNFwp+eVeJdBXuz1
-         AtaQ==
-X-Gm-Message-State: AOAM5317bZODh+aE/bs2KuL91fpcuO/0iguo0tcDDlJcPLjfvNfk3PSE
-        eEkTHGyZ8ZtmXw+k7R/JAlM=
-X-Google-Smtp-Source: ABdhPJzZWMfIG402lALbShGS99uGAKZUQfqRqgaqZx31QtK9Qd/ymxMpyxANbS/x5lnbUscHq5QN2A==
-X-Received: by 2002:a05:6a00:8c9:b0:4fe:ecc:9bcd with SMTP id s9-20020a056a0008c900b004fe0ecc9bcdmr19787517pfu.34.1649427643485;
-        Fri, 08 Apr 2022 07:20:43 -0700 (PDT)
-Received: from ?IPV6:2601:647:4000:d7:feaa:14ff:fe9d:6dbd? ([2601:647:4000:d7:feaa:14ff:fe9d:6dbd])
-        by smtp.gmail.com with ESMTPSA id l22-20020a17090aaa9600b001ca7a005620sm11567002pjq.49.2022.04.08.07.20.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Apr 2022 07:20:42 -0700 (PDT)
-Message-ID: <f6bcc53d-1419-7190-fd9a-8c5fa7178fe1@acm.org>
-Date:   Fri, 8 Apr 2022 07:20:41 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=olQLWu1R/3Sdbp1yPNJGC4ZbkN8O9H0Nzxueo3jwg+s=;
+        b=LS+/+wHYAQJbKoH92CKxc4KBRDgLBySMVXJC3OQR3nKIcpAOYPelNghmwZKFMeKKXi
+         Yqu/Vs54RAG05ELTBO3/jKhEnImolcmsM38lKUkjrngkxTdyBr70nQ22R9rHoWf+D91q
+         nhN+jh2CsVadWvSFl5K03ISKpf83wby3CNdMD2Eo5bf+LnFOAd4RYbZhPauWIl8KS9rE
+         sfo0bCWlObVkcJf6fTVBRIF7sGdajfqCuS8DLIeVEKTRrUUuW+Vt2mzDZJLXvEqrZ0J4
+         1RMOOmICL6mHb1D8TUgd55sDb/wMMWr3341O/dWvsFLCGZJyxsAIy0V8YvxeQKqCSZ0y
+         N1yA==
+X-Gm-Message-State: AOAM532M/q8w5Lc4Q7i4fHsFaJy8Vb9ep50f96HlzWWiKtTDf5XGcjc9
+        VErpyaubMJ0ggtdocnKjRAvrZhuy9dEcwZ0x1NIZ/QDYB94=
+X-Google-Smtp-Source: ABdhPJyKvhoXFn5E9zZSLgAIAgWwA8ZDJ+RHJxplvBHU0FVzJSIA8Hsc26WwqGmI+QtEVor7CdQABz2AShAVsY/WACI=
+X-Received: by 2002:a05:6000:1862:b0:204:e417:9cf8 with SMTP id
+ d2-20020a056000186200b00204e4179cf8mr15247534wri.593.1649427691352; Fri, 08
+ Apr 2022 07:21:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH -next RFC v2 2/8] blk-mq: call 'bt_wait_ptr()' later in
- blk_mq_get_tag()
-Content-Language: en-US
-To:     Yu Kuai <yukuai3@huawei.com>, axboe@kernel.dk,
-        andriy.shevchenko@linux.intel.com, john.garry@huawei.com,
-        ming.lei@redhat.com
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-References: <20220408073916.1428590-1-yukuai3@huawei.com>
- <20220408073916.1428590-3-yukuai3@huawei.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220408073916.1428590-3-yukuai3@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220329163931.710555-1-xiehuan09@gmail.com>
+In-Reply-To: <20220329163931.710555-1-xiehuan09@gmail.com>
+From:   Jeff Xie <xiehuan09@gmail.com>
+Date:   Fri, 8 Apr 2022 22:21:18 +0800
+Message-ID: <CAEr6+EA-7H4tfpUhZqwLJA=nT+1NgXjwcKYuiqMrrDuC_Bj4hA@mail.gmail.com>
+Subject: Re: [PATCH 0/3] tracing: make tp_printk work on syscall tracepoints
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     mingo@redhat.com, Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/8/22 00:39, Yu Kuai wrote:
-> bt_wait_ptr() will increase 'wait_index', however, if blk_mq_get_tag()
-> get a tag successfully after bt_wait_ptr() is called and before
-> sbitmap_prepare_to_wait() is called, then the 'ws' is skipped. This
-> behavior might cause 8 waitqueues to be unbalanced.
-> 
-> Move bt_wait_ptr() later should reduce the problem when the disk is
-> under high io preesure.
-> 
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> ---
->   block/blk-mq-tag.c | 4 +---
->   1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/block/blk-mq-tag.c b/block/blk-mq-tag.c
-> index 68ac23d0b640..228a0001694f 100644
-> --- a/block/blk-mq-tag.c
-> +++ b/block/blk-mq-tag.c
-> @@ -155,7 +155,6 @@ unsigned int blk_mq_get_tag(struct blk_mq_alloc_data *data)
->   	if (data->flags & BLK_MQ_REQ_NOWAIT)
->   		return BLK_MQ_NO_TAG;
->   
-> -	ws = bt_wait_ptr(bt, data->hctx);
->   	do {
->   		struct sbitmap_queue *bt_prev;
->   
-> @@ -174,6 +173,7 @@ unsigned int blk_mq_get_tag(struct blk_mq_alloc_data *data)
->   		if (tag != BLK_MQ_NO_TAG)
->   			break;
->   
-> +		ws = bt_wait_ptr(bt, data->hctx);
->   		sbitmap_prepare_to_wait(bt, ws, &wait, TASK_UNINTERRUPTIBLE);
->   
->   		tag = __blk_mq_get_tag(data, bt);
-> @@ -201,8 +201,6 @@ unsigned int blk_mq_get_tag(struct blk_mq_alloc_data *data)
->   		 */
->   		if (bt != bt_prev)
->   			sbitmap_queue_wake_up(bt_prev);
-> -
-> -		ws = bt_wait_ptr(bt, data->hctx);
->   	} while (1);
+Hi,
 
-Is it necessary to call bt_wait_ptr() during every loop iteration or 
-only if bt != bt_prev? Would calling bt_wait_ptr() only if bt != bt_prev 
-help to reduce unfairness further?
+Anyone have any suggestions for this patch series? ;-)
 
-Thanks,
-
-Bart.
+On Wed, Mar 30, 2022 at 12:39 AM Jeff Xie <xiehuan09@gmail.com> wrote:
+>
+> Currently the tp_printk option has no effect on syscall tracepoint.
+> When adding the kernel option parameter tp_printk, then:
+>
+> echo 1 > /sys/kernel/debug/tracing/events/syscalls/enable
+>
+> When running any application, no trace information is printed on the
+> terminal.
+>
+> Now added printk for syscall tracepoints.
+>
+> Jeff Xie (3):
+>   tracing: make tracepoint_iter_lock public
+>   tracing: make tracepoint_printk_key public
+>   tracing: make tp_printk work on syscall tracepoints
+>
+>  kernel/trace/trace.c          |  4 ++--
+>  kernel/trace/trace.h          |  2 ++
+>  kernel/trace/trace_syscalls.c | 25 +++++++++++++++++++++++++
+>  3 files changed, 29 insertions(+), 2 deletions(-)
+>
+> --
+> 2.25.1
+>
+---
+JeffXie

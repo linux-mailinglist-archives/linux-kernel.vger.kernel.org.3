@@ -2,100 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55D3F4F8C15
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:26:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B83834F8C1D
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:26:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233468AbiDHBij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 21:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45312 "EHLO
+        id S233471AbiDHBiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 21:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbiDHBie (ORCPT
+        with ESMTP id S233418AbiDHBiw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 21:38:34 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BA5103B8C
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 18:36:32 -0700 (PDT)
-X-UUID: d52a4ffa836f408aa4a8bd25f04c60d3-20220408
-X-UUID: d52a4ffa836f408aa4a8bd25f04c60d3-20220408
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2074834216; Fri, 08 Apr 2022 09:36:19 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 8 Apr 2022 09:36:17 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 8 Apr 2022 09:36:17 +0800
-Message-ID: <6afe7366ceffb77674d34c48f84aa85b1c088bc3.camel@mediatek.com>
-Subject: Re: [PATCH] drm/mediatek: dpi: Use mt8183 output formats for mt8192
-From:   CK Hu <ck.hu@mediatek.com>
-To:     "=?ISO-8859-1?Q?N=EDcolas?= F. R. A. Prado" <nfraprado@collabora.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        <jitao.shi@mediatek.com>, <rex-bc.chen@mediatek.com>
-CC:     David Airlie <airlied@linux.ie>, <linux-kernel@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <kernel@collabora.com>, <linux-arm-kernel@lists.infradead.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Date:   Fri, 8 Apr 2022 09:36:17 +0800
-In-Reply-To: <20220408011907.672120-1-nfraprado@collabora.com>
-References: <20220408011907.672120-1-nfraprado@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 7 Apr 2022 21:38:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C8610FAE8
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 18:36:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 20D0AB829B5
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 01:36:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 873DCC385A0;
+        Fri,  8 Apr 2022 01:36:46 +0000 (UTC)
+Date:   Thu, 7 Apr 2022 21:36:44 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, jstultz@google.com,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Eric Dumazet <edumazet@google.com>
+Subject: Re: [RFC][PATCH] timers: Add del_time_free() to be called before
+ freeing timers
+Message-ID: <20220407213644.767ae1c7@gandalf.local.home>
+In-Reply-To: <63d4c8d8-89c6-33ed-8178-be9ea86e53b9@roeck-us.net>
+References: <20220407161745.7d6754b3@gandalf.local.home>
+        <20220407215802.GB186606@roeck-us.net>
+        <20220407185144.5ac036b7@gandalf.local.home>
+        <63d4c8d8-89c6-33ed-8178-be9ea86e53b9@roeck-us.net>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Jitao & Rex:
+On Thu, 7 Apr 2022 17:58:09 -0700
+Guenter Roeck <linux@roeck-us.net> wrote:
 
-Please help to comment on this patch.
+> >>> Add a del_timer_free() that not only does a del_timer_sync() but will mark  
+> >>
+> >> This limits the use case to situations where del_timer_sync() can actually
+> >> be called. There is, however, code where this is not possible.
+> >> Specifically, it doesn't work if the code triggered with the timer uses a
+> >> lock, and del_timer() is also called under that same lock. An example for
+> >> that is the code in sound/synth/emux/emux.c. How do you suggest to handle
+> >> that situation ?  
+> > 
+> > Easy. Tell me how that situation is not a bug?
+> >   
+> 
+> Sure, fixing the problem is of course the right thing to do. But replacing
+> del_timer() with your suggested version of del_timer_free() doesn't work
 
-On Thu, 2022-04-07 at 21:19 -0400, Nícolas F. R. A. Prado wrote:
-> The configuration for mt8192 was incorrectly using the output formats
-> from mt8173. Since the output formats for mt8192 are instead the same
-> ones as for mt8183, which require two bus samples per pixel, the
-> pixelclock and DDR edge setting were misconfigured. This made
-> external
-> displays unable to show the image.
-> 
-> Fix the issue by correcting the output format for mt8192 to be the
-> same
-> as for mt8183, fixing the usage of external displays for mt8192.
-> 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> 
-> ---
-> 
->  drivers/gpu/drm/mediatek/mtk_dpi.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> index 4554e2de1430..e61cd67b978f 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> @@ -819,8 +819,8 @@ static const struct mtk_dpi_conf mt8192_conf = {
->  	.cal_factor = mt8183_calculate_factor,
->  	.reg_h_fre_con = 0xe0,
->  	.max_clock_khz = 150000,
-> -	.output_fmts = mt8173_output_fmts,
-> -	.num_output_fmts = ARRAY_SIZE(mt8173_output_fmts),
-> +	.output_fmts = mt8183_output_fmts,
-> +	.num_output_fmts = ARRAY_SIZE(mt8183_output_fmts),
->  };
->  
->  static int mtk_dpi_probe(struct platform_device *pdev)
+I meant replacing the entire block with del_timer_free().
 
+diff --git a/sound/synth/emux/emux.c b/sound/synth/emux/emux.c
+index 5ed8e36d2e04..f631e090e074 100644
+--- a/sound/synth/emux/emux.c
++++ b/sound/synth/emux/emux.c
+@@ -131,10 +131,7 @@ int snd_emux_free(struct snd_emux *emu)
+ 	if (! emu)
+ 		return -EINVAL;
+ 
+-	spin_lock_irqsave(&emu->voice_lock, flags);
+-	if (emu->timer_active)
+-		del_timer(&emu->tlist);
+-	spin_unlock_irqrestore(&emu->voice_lock, flags);
++	del_timer_free(&emu->tlist);
+ 
+ 	snd_emux_proc_free(emu);
+ 	snd_emux_delete_virmidi(emu);
+
+It doesn't hurt to delete it if it wasn't queued. I'm not sure what the
+dance with spinlocks are all about.
+
+The above may actually be enough. I don't see where the timer could be
+enqueued again after that.
+
+That code goes back to original git history, so it was probably trying to
+do it's own del_timer_sync() albeit poorly.
+
+> with this code because it would deadlock. Sure, that would not fix the
+> underlying problem anyway, but that isn't the point I was trying to make:
+> I think it would be beneficial to be able to replace del_timer() with a
+> version that can not result in deadlocks but would still identify problems
+> such as the one in the code in emux.c.
+> 
+> Can we have del_timer_free() and del_timer_sync_free() ? Or am I missing
+> something and that doesn't really make sense ?
+
+No, that doesn't make sense.
+
+-- Steve

@@ -2,57 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA7844F8DE3
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:26:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE2E4F8E2C
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235076AbiDHGKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 02:10:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53958 "EHLO
+        id S231244AbiDHGRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 02:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235064AbiDHGKl (ORCPT
+        with ESMTP id S229773AbiDHGRD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 02:10:41 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB72312B5E3;
-        Thu,  7 Apr 2022 23:08:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=; b=w118xfJjXBhTzYmwil9Bnt9Ri8
-        3BVSZPliD0zFlaGLKjf3YBeLqM2n3lbfqA41a2DhCXVD5fjh5ENf4Rpgn7Xp8dB1UxjIohYpC7wNV
-        nIwBjhFSkISR4FaWtfcme+p7s756MdImBs5x5Z5UH8EaqqvU89jbE1U2wmU3T+b4drwsO+2lV5l2C
-        Ide5GfPc4dCp0VaTHuV5mlFBBpke8f6icEFkM+MTpbWEO0QCJ8PByX+GtrbPfpZuBLA6wvt8i1NYL
-        gppl1YniAiDTdCcb0REpqWG37GVLm0SGAQod9S84TZWYBmwAMUyFQUfN+Jv6wv59c81bb4kMOju9m
-        RJ6+tWSQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nchnQ-00FEZ8-FC; Fri, 08 Apr 2022 06:08:36 +0000
-Date:   Thu, 7 Apr 2022 23:08:36 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Logan Gunthorpe <logang@deltatee.com>
-Cc:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
-        Song Liu <song@kernel.org>,
-        Guoqing Jiang <guoqing.jiang@linux.dev>
-Subject: Re: [PATCH v1 7/7] md/raid5: Annotate functions that hold
- device_lock with __must_hold
-Message-ID: <Yk/RZBMB/K06BQKS@infradead.org>
-References: <20220407165713.9243-1-logang@deltatee.com>
- <20220407165713.9243-8-logang@deltatee.com>
+        Fri, 8 Apr 2022 02:17:03 -0400
+Received: from relay.hostedemail.com (relay.hostedemail.com [64.99.140.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5A59BE39
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 23:15:00 -0700 (PDT)
+Received: from omf05.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay11.hostedemail.com (Postfix) with ESMTP id 692B980C8C;
+        Fri,  8 Apr 2022 06:14:59 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf05.hostedemail.com (Postfix) with ESMTPA id 9A66F2001A;
+        Fri,  8 Apr 2022 06:14:52 +0000 (UTC)
+Message-ID: <34d0ad73f44ff4990f6bee49105ac49bb55352a5.camel@perches.com>
+Subject: Re: [PATCH v2 1/2] staging: rtl8192u: replace ternary statement
+ with if and assignment
+From:   Joe Perches <joe@perches.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Julia Lawall <julia.lawall@inria.fr>
+Cc:     Rebecca Mckeever <remckee0@gmail.com>, outreachy@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Date:   Thu, 07 Apr 2022 23:14:51 -0700
+In-Reply-To: <20220408055732.GO3293@kadam>
+References: <cover.1649378587.git.remckee0@gmail.com>
+         <36059ec66a2f3d58a8e339aa4f262772eabd3ef0.1649378587.git.remckee0@gmail.com>
+         <alpine.DEB.2.22.394.2204080614400.2199@hadrien>
+         <20220408055732.GO3293@kadam>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220407165713.9243-8-logang@deltatee.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout07
+X-Rspamd-Queue-Id: 9A66F2001A
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
+X-Stat-Signature: u4og487og7ehspsp5guqhsgjtw76i9ch
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+cZfbi4qHorwDzKAdQesA7qUgqDtKrODY=
+X-HE-Tag: 1649398492-439562
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks good:
+On Fri, 2022-04-08 at 08:57 +0300, Dan Carpenter wrote:
+> On Fri, Apr 08, 2022 at 06:15:14AM +0200, Julia Lawall wrote:
+> > On Thu, 7 Apr 2022, Rebecca Mckeever wrote:
+> > 
+> > > Replace ternary statement with an if statement followed by an assignment
+> > > to increase readability and make error handling more obvious.
+> > > Found with minmax coccinelle script.
+[]
+> > > diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211_wx.c b/drivers/staging/rtl8192u/ieee80211/ieee80211_wx.c
+[]
+> > > @@ -470,7 +470,9 @@ int ieee80211_wx_get_encode(struct ieee80211_device *ieee,
+> > >  		return 0;
+> > >  	}
+> > >  	len = crypt->ops->get_key(keybuf, SCM_KEY_LEN, NULL, crypt->priv);
+> > > -	erq->length = (len >= 0 ? len : 0);
+> > > +	if (len < 0)
+> > > +		len = 0;
+> > > +	erq->length = len;
+> > 
+> > Maybe you could use max here?
+> 
+> Initially Rebecca did use max() but I NAKed it.  It's really not less
+> readable.  Better to handle the error explicitly.  Keep the error path
+> indented two tabs.  Separate from the success path.
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+A comment would be useful as it's not obvious it's an 'error' path.
+One has to read all 3 get_key functions to determine that.
+
+

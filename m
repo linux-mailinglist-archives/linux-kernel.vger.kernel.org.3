@@ -2,212 +2,306 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF80F4F9A8D
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 18:23:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E62B4F9A8F
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 18:24:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230470AbiDHQZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 12:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46192 "EHLO
+        id S231332AbiDHQ0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 12:26:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230476AbiDHQZj (ORCPT
+        with ESMTP id S231324AbiDHQ0f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 12:25:39 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2085.outbound.protection.outlook.com [40.107.223.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3F11753A8
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 09:23:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XctnETpUpoE2Qta9e5hqtutvQ4mYdfNl4CSlrU+JFkXAC6e0aBqtYb2BLi/WV1L/LLk/kfxmTRDK0NMrp7Zue84bnBq/SYdrazlEcW3uFxr/d8lKOv8oQFAdnUKag6NbD5QhsOk/kXJ+C+y39KLqsNlWGTewA+FfV0BgEb78+L+Su09VoVtUfjDYHtSrUHM8sL5CRfepk+D1a/xT+uKv1XC+51lQ45rOjHwAtOAMaxx7vgbsnRxJOs+dzi8baLS07waTEZihxrZzHZDfHsWtvgBBsfp2vCabvfMer5rkQ2k4pILOD7Y06Dz5mo7JxGCqdgarJmlD3//MWbv/HFTvNA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0bqr3nPo/EdHsvqGv8sqjeBdZaX7WAJdXkI4b8JLkb4=;
- b=jVAXh8GKDUfoxUBl7W2lxzKTeAzEU3k8cVhYEMXkiboOr2LdlHzArTDGyRxc8ECXA7t9vwjgLGTuMcPNVthwEU6aDq0x4HTsOG+dAOUVKFKF1tcN1yRKsksO3iDNcZdlY0/t+DsFiG3uT7u3G1aSuOfUyMDcg0wrdX82UHEyPCK2bDmUdEQRKf3DGDbo3OChFLt0j02gALPOxoyQtSrp8PjPkLXZ38+ogevfkA9Jau/yB23XGD8tLqfDUtW52Jzgx+BASCDW9BG8VRxuMCwIdsaCOzvofgcFvMNXwx7AivYVNkPaBL3TBTPo1Bce+FoUVZZpJbMNbcNtFJKx2ybauw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0bqr3nPo/EdHsvqGv8sqjeBdZaX7WAJdXkI4b8JLkb4=;
- b=THQCCzGeqL8cObxvoMVBaZggXjEoNgNADr6AS/JPjfgYBGp/crvCS4jvM/Kbow+DWExERAFhzchL8AlUExo91pVy9D8Z6ZOJu3noCkt5zPy/8SLFMsO77RBm6UV2PTzqa82prYjzjAJiQwQqeb778MGBX2XP0I7hI7nyTRt0D5g=
-Received: from BL1PR12MB5157.namprd12.prod.outlook.com (2603:10b6:208:308::15)
- by BYAPR12MB3256.namprd12.prod.outlook.com (2603:10b6:a03:135::26) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.22; Fri, 8 Apr
- 2022 16:23:30 +0000
-Received: from BL1PR12MB5157.namprd12.prod.outlook.com
- ([fe80::70d6:f6dd:3e14:3c2d]) by BL1PR12MB5157.namprd12.prod.outlook.com
- ([fe80::70d6:f6dd:3e14:3c2d%5]) with mapi id 15.20.5144.025; Fri, 8 Apr 2022
- 16:23:30 +0000
-From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
-To:     "Gong, Richard" <Richard.Gong@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        "airlied@linux.ie" <airlied@linux.ie>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>
-CC:     "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] drm/amdgpu: disable ASPM for legacy products that don't
- support ASPM
-Thread-Topic: [PATCH] drm/amdgpu: disable ASPM for legacy products that don't
- support ASPM
-Thread-Index: AQHYS1+vbeZYg8F3L0aXkBYKsAfwnazmKNIAgAAJZACAAACksA==
-Date:   Fri, 8 Apr 2022 16:23:30 +0000
-Message-ID: <BL1PR12MB5157099D1DE3F8B3AC4F59FCE2E99@BL1PR12MB5157.namprd12.prod.outlook.com>
-References: <20220408154447.3519453-1-richard.gong@amd.com>
- <BL1PR12MB51576654D3EEB10F5DF862A7E2E99@BL1PR12MB5157.namprd12.prod.outlook.com>
- <768e8812-ecbf-93e7-ffad-feec1b36d924@amd.com>
-In-Reply-To: <768e8812-ecbf-93e7-ffad-feec1b36d924@amd.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2022-04-08T16:23:26Z;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP 2.0;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=b89953b9-3b4a-43cf-98ae-41ef61289b46;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=1
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_enabled: true
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_setdate: 2022-04-08T16:23:28Z
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_method: Privileged
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_name: Public-AIP 2.0
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_actionid: 70c15800-2c47-432f-ae89-2743b4122ff5
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_contentbits: 0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 987aa9e0-73d4-4928-5df6-08da197c1e84
-x-ms-traffictypediagnostic: BYAPR12MB3256:EE_
-x-microsoft-antispam-prvs: <BYAPR12MB3256691A75944F99932E3BD6E2E99@BYAPR12MB3256.namprd12.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: IUKK74Ns7O5UZPIMW/eokltkk5WrOSCbjxsDKoYJ26pXfU0pySTAOLWDc51zWZeNTSzy0Mf585AK83buh0ks8DpiOTs4zR4Quqv03M/a9AQUdkTK9OVrcu00yDHGTf15fAM/B5LvBO/F6r+9GkPN9ChXlwvyUXzx0t5V36mSEgCkHXJl3O+ml3i5p+5LlyZ+VfFootLxPQHDnBPyunZwvBcUkueCKIFyBNNzbBA8livsg6KAQnxvY4gR3l35eEP4QGOPzUhDRxO8mRuRhC8EBIPfTLQP6lNZTIADkUUgAGsIZnyy44bvC655SwBjSpm7a2e+UY08RWuAsSdFpqO9XpZdYKFq75CjFVl+VaIZpR8dW0gfr05qoO5U0MIGf6JOhd096rMH4x14UuTE45v5GTSNJDd1JrL36lwDhnlnGecSSu9PtLFEWj4PnHWIoK54Nng55wrUFy96PK2BSO4XwhezYGskL+MS6UoaLy1nb4ifLwTtL+saowGDothcDGo8XLAtDrP3MViefar8nNV9MNIHUFglYeU1IADm1L6OZk6xig5nuK09MGb8/hEcDUkZtKc/5VCq509eY/8wgMJqWgPySXvlgUXbODR2K1stJm/eMaY/NZDH+tj05RwHUwY366WYABiWYgfNzoA0uqNat3giaqx4E0+98cRf/mthO0AopWusw6IEfVIM2va6B2/PmCHe4XqM6LZfYTe67fgfBu/q8NL5n9JljJ3raJ2CjPc=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5157.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(9686003)(52536014)(508600001)(66446008)(6506007)(8936002)(86362001)(7696005)(2906002)(122000001)(921005)(38100700002)(55016003)(53546011)(186003)(966005)(33656002)(5660300002)(71200400001)(66556008)(83380400001)(66946007)(110136005)(38070700005)(54906003)(8676002)(66476007)(4326008)(64756008)(76116006)(316002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 2
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TDBtRVlrd0t6WU1NMTl0eVV0RHpkQWN1OWpuNnVIdDlIZXNHZFdrbmdkZkJ1?=
- =?utf-8?B?bFhYeTZDNmRMZm9JYVR3MjB0TWVzclBRVFpJOHhCTzZmZXlPZE5DZkF2TytR?=
- =?utf-8?B?ZFhBOTZ3WU9VOFBIOU0vZHlvRE5sU2lyT2l1R2NsalJkTXlWdldIalJMbFFS?=
- =?utf-8?B?QWtYcDhZcGlVYk9XcnBkaGpyMExIMW9kU0IzSTVSNGlqN0c1OHJUVDQ2WDBK?=
- =?utf-8?B?Y3FoUkZabXBkR0xpMnRZemNtSFUrNEI5MXN4bGljekluQjZRdVVKSmxTWmFr?=
- =?utf-8?B?Z2FJdUEyclhFSm1VeWNZTGhJb0IxQVBoVlV0MWZ6djJKWnR5STRNTktBdTRl?=
- =?utf-8?B?ZldvWjUwQVBpa1h5bEZzSVk1cUY2QXZybWNqZnNGS0E4MTZLL2hGRU54TlJk?=
- =?utf-8?B?Y0FNQ01WYmZPNkljd3Jhb0Z5MGNuTitJYjNCR1VDWWRDN25uMVVCenYwbVZa?=
- =?utf-8?B?UHhseDhZVzBZajR4ZEl1UUlXNEFrYkE5S3FrUUdZVzE1WWM3UVpTRHlWWXli?=
- =?utf-8?B?T2o2V1haTXVpZjBPMnVGOXpxNVFpWjI4ZVRwbEdOZ3hseUxLbG1Xc3ZuanRn?=
- =?utf-8?B?aXBFc3Z0OVh0TDRONWlWTUMrTzFUZzJpVVkyVVR6Ri9wM1RJWUhoZHdsVWRj?=
- =?utf-8?B?LzRZRlhuMmg4U1JaMVp1RWFvRkowbVZyeHZKd25MN3FmcjZ2VHNDSnRnbEx4?=
- =?utf-8?B?a0Z0bDc0bDhQeXJ5SEhrV1BOWnJpMHBHVm9EOE8xaEVKOHE1YkY2YVlGTExZ?=
- =?utf-8?B?MWd3OWwra0FGR0k2NTVieERXeVNod3J0UXk0QnorNjg4L3lQWWxJMkxoNWtn?=
- =?utf-8?B?K3IyNkJpanprTEV5QmU0czNJVDJ4Smo5NHpBMjVuZzFLMkNSTWN5TGtrRUdx?=
- =?utf-8?B?VE1qUjR2eXJZZkxrdWxSRk5TOGpGeTd1RDJEQUVzQnNXWU84bC9QdCttTHBj?=
- =?utf-8?B?U0VFQzZsTUREZzZqUjNweGs4OHk1bFRrWHJ3dE84U1lNRkhuSmtQNEdjbHQ5?=
- =?utf-8?B?cDhZOHRGOG13MmhST0VacDMvMmFvQ1NQNXZJUHRVL2NQYVF3b2VsZHNEQ3pN?=
- =?utf-8?B?cnR1RzU0R01qZkY0SHJsMXUvUHRwTFJ6MEgwUlMvcmhFUWdudmY1eWltVGk2?=
- =?utf-8?B?OXA5dTUreExqLzJaT3NyR05LZXdGWjhnYWFqT09Qb1UxMnJpQ2p5amF3L2hM?=
- =?utf-8?B?NzBQSGpOUFRwZWdwcldkT1F2ZkxoemtKUWcxUk00R1R3WXN4NG5vOFVIdFhm?=
- =?utf-8?B?bnJIbkRVek9sMHk4OXB1V1pzZjBVc0pwRm9JamtyaWRhS2wzeXhJRFdXaHU3?=
- =?utf-8?B?ZUpSOGt5S05jejFpUG1hcGVTMkhWTHhnRDh6RWMvdGowUmp0RiszYnpIWFRm?=
- =?utf-8?B?SER1L3plSVlHVUxRaUpNaFE3blZVV1FSb2o5OG5GL2VubWFJbjhGRmlFcmpP?=
- =?utf-8?B?cWFVdlc3WkN2dVVCMk80WGR5NHQ5WXpIV1ZyRUZSejZHdjBnV3F6YWc1eXc5?=
- =?utf-8?B?ZGI2aXNuVmFqck4vTjh4VzlMSmFFY1crWm1ta3JPTkwwaUczMW11SE15ZnZs?=
- =?utf-8?B?RmFZSStFZVBKdzJhYW9MWHp2MHdqZTdjbTR1TmlCd1BUZUZkdDNBcy81aGpo?=
- =?utf-8?B?R1pEMG5yUU1kQSt2NHhOc2lpRnZPNk5ueDc0eC9aMUd5RUgvZXNJbzF6VUc2?=
- =?utf-8?B?Q00yYmxGajdLT0M2WHhoanVBY0hrMXkwNm9PRmZTWHNmb2oydllYTk5tR0JZ?=
- =?utf-8?B?eVFhYjd1Rm9zbk9BNFA4andLdDZSdHlvbUVOd0x1dUZtcHFFNk1zZlBuK0JE?=
- =?utf-8?B?SVZKUFI1Y2xvKzJPaDNpb21zZDVodXJaa3ZlTEFNMXEzK0thNG1helZNOXdM?=
- =?utf-8?B?RkFBVCtJSW1Hayt6VmpRNSsyQTBGamtEbTliOWNnc2x3YlZlMVdCK0dGMy9G?=
- =?utf-8?B?QTRYdzl5RnVIWHdiTWoxdDAyK0ZybC9oQkIzNi9JVjN1T0k1S0lUblBsejE0?=
- =?utf-8?B?Ky85OXl3aWZac3lrc0tkdlZzOHV1ajBHWmVTL05QWVRHNElGblZFR0hZM1By?=
- =?utf-8?B?ek9laFE0TEV0aTdTSExRTVVpTHpHazgrMmNvK2o5SFlxYmE2ZG1YYklLMENx?=
- =?utf-8?B?VDRkRjVJNVMycE03RHZ6cS9HUGFHUkNwMkFnM0lnZnBIZ1cwUHAvejVIZWV6?=
- =?utf-8?B?OHlBN21NR0llWXpRTytPbkxmYVpMcHNHMXBNbUtENDZraHlvWVlvUzRCQlQx?=
- =?utf-8?B?SllSQmo4d0QyYUh5ZnJIRDZJemp6R2hTckxDbXR0QVdSVnRwZklQSEVXelZC?=
- =?utf-8?B?Q2E1TG1jVnRlZGZSRzBFell6QzF1L1FRZHo3NmhYcFhIdk5HYzZpaGZFV041?=
- =?utf-8?Q?TPjosZdONKCatLEGYJGkadf+k/BcfKLPCJuVUhLUJvO0K?=
-x-ms-exchange-antispam-messagedata-1: eXFaFAD+vqbaLw==
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Fri, 8 Apr 2022 12:26:35 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD2C5357704
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 09:24:30 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id o5-20020a17090ad20500b001ca8a1dc47aso12362383pju.1
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 09:24:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=rYnVVxyhKumfFmwnr0WfWEMxVmAFk7TEKHdgXJGr0Iw=;
+        b=Lb2aSr9fQtfGaUkxcjA8LrMiDQ95u/NfYqsd5OezZarMi1g23OrRGVPCN6PdH2bl9b
+         rP+lYwEMkV9iJnDH/WiRpuYrIVd3vInYuQVsCMp2oInnFfobiPvpNnox73+oiXC3Ia0f
+         EBbbfleWVGgWQnwDOF9NufVSz4lBUmByAVceXh/wpELX3+0IjhF80aFs2c/f1aodiyCB
+         p/0FPzp3IWxSChkyw3vkaCGG/o2z+pfx0tIWXX37MQ2nBp6O2FDLRo1xIK/iKooHSD0v
+         m+X+qs6R0kro0/yplqemrBpcWUfyCMghQII4Q5MOPLN7l59EuKK3SgPHfMjZs9PUjBUZ
+         RyXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rYnVVxyhKumfFmwnr0WfWEMxVmAFk7TEKHdgXJGr0Iw=;
+        b=EA9Z9B+srqRnnQikWEPbntiAxbFnm0GSrorrCaUzWj+rfOiJBoJVbd+Fue6EZz4krq
+         /GaQhjAYWhSTMMZLuZW9C1INiWOT52KDomxSV/7hH0xIZfrwST17V+7gLIpHeqRC5JkE
+         HHFvHjmYwV1X/+KRzBtuylMK+YJrxa3KArIR3kDZSsI7EA6aJzCEmPTb6glTnYDemHwG
+         eSDZDIRHFt3L6Isq2BaBUI4ClF2bMyOfxBqkhfBoodgjuHg8806WKzxGslzirpv5Iv1a
+         0KNrQ27+t2RWwmm+L8Ns3Dkv73YLcfODNeI0qnfeZxzPL6rWi1zFWzfBnnK5kd4I7lw8
+         XTZA==
+X-Gm-Message-State: AOAM53332eIZBZuP+zLHs1i6M7p1soPyhyT2/laj60OKWcBXYiShjprv
+        QCV9EHQsxws8+SK5Dj5AMepLmg==
+X-Google-Smtp-Source: ABdhPJyGUdSrugbndouHNjsZJUNAPPhiNS0lNKzUZWJGcnxfpVvlxYLjM1wO+Tx9kg3/QQbrtoxJSw==
+X-Received: by 2002:a17:902:7c0a:b0:156:87e0:846 with SMTP id x10-20020a1709027c0a00b0015687e00846mr19983597pll.8.1649435070040;
+        Fri, 08 Apr 2022 09:24:30 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id q18-20020aa78432000000b004fb0a5aa2c7sm28007919pfn.183.2022.04.08.09.24.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 09:24:29 -0700 (PDT)
+Date:   Fri, 8 Apr 2022 16:24:25 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     isaku.yamahata@intel.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>
+Subject: Re: [RFC PATCH v5 075/104] KVM: x86: Check for pending APICv
+ interrupt in kvm_vcpu_has_events()
+Message-ID: <YlBhuWElVRwYrrS+@google.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <d28f3b27c281e0c6a8f93c01bb4da78980d654c8.1646422845.git.isaku.yamahata@intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5157.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 987aa9e0-73d4-4928-5df6-08da197c1e84
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Apr 2022 16:23:30.3258
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: gNRdWmv3ng8kiehM7C4lBZl79wuOPBqPLjyKueAedCXlzn1ZX1hsjF2QjpbDo2dKgNQIYketfxq3OzGW4vJlnA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3256
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d28f3b27c281e0c6a8f93c01bb4da78980d654c8.1646422845.git.isaku.yamahata@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-W1B1YmxpY10NCg0KDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogR29u
-ZywgUmljaGFyZCA8UmljaGFyZC5Hb25nQGFtZC5jb20+DQo+IFNlbnQ6IEZyaWRheSwgQXByaWwg
-OCwgMjAyMiAxMToyMA0KPiBUbzogTGltb25jaWVsbG8sIE1hcmlvIDxNYXJpby5MaW1vbmNpZWxs
-b0BhbWQuY29tPjsgRGV1Y2hlciwgQWxleGFuZGVyDQo+IDxBbGV4YW5kZXIuRGV1Y2hlckBhbWQu
-Y29tPjsgS29lbmlnLCBDaHJpc3RpYW4NCj4gPENocmlzdGlhbi5Lb2VuaWdAYW1kLmNvbT47IFBh
-biwgWGluaHVpIDxYaW5odWkuUGFuQGFtZC5jb20+Ow0KPiBhaXJsaWVkQGxpbnV4LmllOyBkYW5p
-ZWxAZmZ3bGwuY2gNCj4gQ2M6IGFtZC1nZnhAbGlzdHMuZnJlZWRlc2t0b3Aub3JnOyBkcmktZGV2
-ZWxAbGlzdHMuZnJlZWRlc2t0b3Aub3JnOyBsaW51eC0NCj4ga2VybmVsQHZnZXIua2VybmVsLm9y
-Zw0KPiBTdWJqZWN0OiBSZTogW1BBVENIXSBkcm0vYW1kZ3B1OiBkaXNhYmxlIEFTUE0gZm9yIGxl
-Z2FjeSBwcm9kdWN0cyB0aGF0DQo+IGRvbid0IHN1cHBvcnQgQVNQTQ0KPiANCj4gDQo+IE9uIDQv
-OC8yMDIyIDEwOjQ3IEFNLCBMaW1vbmNpZWxsbywgTWFyaW8gd3JvdGU6DQo+ID4gW1B1YmxpY10N
-Cj4gPg0KPiA+DQo+ID4NCj4gPj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gPj4gRnJv
-bTogR29uZywgUmljaGFyZCA8UmljaGFyZC5Hb25nQGFtZC5jb20+DQo+ID4+IFNlbnQ6IEZyaWRh
-eSwgQXByaWwgOCwgMjAyMiAxMDo0NQ0KPiA+PiBUbzogRGV1Y2hlciwgQWxleGFuZGVyIDxBbGV4
-YW5kZXIuRGV1Y2hlckBhbWQuY29tPjsgS29lbmlnLA0KPiBDaHJpc3RpYW4NCj4gPj4gPENocmlz
-dGlhbi5Lb2VuaWdAYW1kLmNvbT47IFBhbiwgWGluaHVpIDxYaW5odWkuUGFuQGFtZC5jb20+Ow0K
-PiA+PiBhaXJsaWVkQGxpbnV4LmllOyBkYW5pZWxAZmZ3bGwuY2gNCj4gPj4gQ2M6IGFtZC1nZnhA
-bGlzdHMuZnJlZWRlc2t0b3Aub3JnOyBkcmktZGV2ZWxAbGlzdHMuZnJlZWRlc2t0b3Aub3JnOw0K
-PiBsaW51eC0NCj4gPj4ga2VybmVsQHZnZXIua2VybmVsLm9yZzsgTGltb25jaWVsbG8sIE1hcmlv
-DQo+IDxNYXJpby5MaW1vbmNpZWxsb0BhbWQuY29tPjsNCj4gPj4gR29uZywgUmljaGFyZCA8Umlj
-aGFyZC5Hb25nQGFtZC5jb20+DQo+ID4+IFN1YmplY3Q6IFtQQVRDSF0gZHJtL2FtZGdwdTogZGlz
-YWJsZSBBU1BNIGZvciBsZWdhY3kgcHJvZHVjdHMgdGhhdA0KPiBkb24ndA0KPiA+PiBzdXBwb3J0
-IEFTUE0NCj4gPj4NCj4gPj4gQWN0aXZlIFN0YXRlIFBvd2VyIE1hbmFnZW1lbnQgKEFTUE0pIGZl
-YXR1cmUgaXMgZW5hYmxlZCBzaW5jZSBrZXJuZWwNCj4gPj4gNS4xNC4NCj4gPj4gSG93ZXZlciB0
-aGVyZSBhcmUgc29tZSBsZWdhY3kgcHJvZHVjdHMgKFdYMzIwMCBhbmQgUlg2NDAgYXJlDQo+IGV4
-YW1wbGVzKQ0KPiA+PiB0aGF0DQo+ID4+IGRvIG5vdCBzdXBwb3J0IEFTUE0uIFVzZSB0aGVtIGFz
-IHZpZGVvL2Rpc3BsYXkgb3V0cHV0IGFuZCBzeXN0ZW0NCj4gd291bGQNCj4gPj4gaGFuZw0KPiA+
-PiBkdXJpbmcgc3VzcGVuZC9yZXN1bWUuDQo+ID4+DQo+ID4+IEFkZCBleHRyYSBjaGVjayB0byBk
-aXNhYmxlIEFTUE0gZm9yIG9sZCBwcm9kdWN0cyB0aGF0IGRvbid0IGhhdmUNCj4gPj4gQVNQTSBz
-dXBwb3J0Lg0KPiA+Pg0KPiA+PiBTaWduZWQtb2ZmLWJ5OiBSaWNoYXJkIEdvbmcgPHJpY2hhcmQu
-Z29uZ0BhbWQuY29tPg0KPiA+PiBMaW5rOiBodHRwczovL2dpdGxhYi5mcmVlZGVza3RvcC5vcmcv
-ZHJtL2FtZC8tL2lzc3Vlcy8xODg1DQo+ID4+IC0tLQ0KPiA+PiAgIGRyaXZlcnMvZ3B1L2RybS9h
-bWQvYW1kZ3B1L2FtZGdwdV9kcnYuYyB8IDQgKysrKw0KPiA+PiAgIDEgZmlsZSBjaGFuZ2VkLCA0
-IGluc2VydGlvbnMoKykNCj4gPj4NCj4gPj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvZ3B1L2RybS9h
-bWQvYW1kZ3B1L2FtZGdwdV9kcnYuYw0KPiA+PiBiL2RyaXZlcnMvZ3B1L2RybS9hbWQvYW1kZ3B1
-L2FtZGdwdV9kcnYuYw0KPiA+PiBpbmRleCBiYjFjMDI1ZDkwMDEuLjg5ODcxMDdmNDFlZSAxMDA2
-NDQNCj4gPj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL2FtZC9hbWRncHUvYW1kZ3B1X2Rydi5jDQo+
-ID4+ICsrKyBiL2RyaXZlcnMvZ3B1L2RybS9hbWQvYW1kZ3B1L2FtZGdwdV9kcnYuYw0KPiA+PiBA
-QCAtMjAxMiw2ICsyMDEyLDEwIEBAIHN0YXRpYyBpbnQgYW1kZ3B1X3BjaV9wcm9iZShzdHJ1Y3Qg
-cGNpX2Rldg0KPiA+PiAqcGRldiwNCj4gPj4gICAJaWYgKGFtZGdwdV9hc3BtID09IC0xICYmICFw
-Y2llX2FzcG1fZW5hYmxlZChwZGV2KSkNCj4gPj4gICAJCWFtZGdwdV9hc3BtID0gMDsNCj4gPj4N
-Cj4gPj4gKwkvKiBkaXNhYmxlIEFTUE0gZm9yIHRoZSBsZWdhY3kgcHJvZHVjdHMgdGhhdCBkb24n
-dCBzdXBwb3J0IEFTUE0gKi8NCj4gPj4gKwlpZiAoKGZsYWdzICYgQU1EX0FTSUNfTUFTSykgPT0g
-Q0hJUF9QT0xBUklTMTIpDQo+ID4+ICsJCWFtZGdwdV9hc3BtID0gMDsNCj4gPj4gKw0KPiA+IEkg
-dGhpbmsgaXQncyBwcm9ibGVtYXRpYyB0byBkaXNhYmxlIGl0IGZvciB0aGUgZW50aXJlIGRyaXZl
-ci4gIFRoZXJlIG1pZ2h0IGJlDQo+IG11bHRpcGxlDQo+ID4gQU1ER1BVcyBpbiB0aGUgc3lzdGVt
-LCBhbmQgb3RoZXJzIG1heSBzdXBwb3J0IEFTUE0uDQo+IA0KPiBUaGUgInByb2JsZW0iIGFyZSBX
-WDMyMDAgYW5kIFJYNjQwLCBib3RoIGFyZSBmcm9tIHRoZSBzYW1lIFBPTEFSSVMxMg0KPiBmYW1p
-bHkuDQo+IA0KDQpSaWdodCBidXQgd2hhdCBpZiBzb21lIG90aGVyICJ3b3JraW5nIiBjYXJkcyBh
-cmUgaW5jbHVkZWQgaW4gdGhlIHN5c3RlbSB0b28/DQpUaGVuIEFTUE0gZ2V0cyBkaXNhYmxlZCBm
-b3IgdGhlbSB0b28uICBJdCBzaG91bGQgb25seSBiZSBkaXNhYmxlZCBmb3IgdGhlIHBjaV9kZXYN
-CmNvcnJlc3BvbmRpbmcgdG8gcHJvYmxlbWF0aWMgR1BVcyBpbiBwcm9ibGVtYXRpYyBzaXR1YXRp
-b25zLg0KDQo+ID4gQ2FuIGl0IGJlIGRvbmUganVzdCBhcyBwYXJ0IG9mIHByb2JlIGZvciBQb2xh
-cmlzPw0KPiA+DQo+ID4+ICAgCWlmIChhbWRncHVfdmlydHVhbF9kaXNwbGF5IHx8DQo+ID4+ICAg
-CSAgICBhbWRncHVfZGV2aWNlX2FzaWNfaGFzX2RjX3N1cHBvcnQoZmxhZ3MgJiBBTURfQVNJQ19N
-QVNLKSkNCj4gPj4gICAJCXN1cHBvcnRzX2F0b21pYyA9IHRydWU7DQo+ID4+IC0tDQo+ID4+IDIu
-MjUuMQ0K
+On Fri, Mar 04, 2022, isaku.yamahata@intel.com wrote:
+> From: Sean Christopherson <sean.j.christopherson@intel.com>
+> 
+> Return true for kvm_vcpu_has_events() if the vCPU has a pending APICv
+> interrupt to support TDX's usage of APICv.  Unlike VMX, TDX doesn't have
+> access to vmcs.GUEST_INTR_STATUS and so can't emulate posted interrupts,
+
+Based on the discussion in the HLT patch, this is no longer true.
+
+> i.e. needs to generate a posted interrupt and more importantly can't
+> manually move requested interrupts into the vIRR (which it also doesn't
+> have access to).
+> 
+> Because pi_has_pending_interrupt() is heavy operation which uses two atomic
+> test bit operations and one atomic 256 bit bitmap check, introduce new
+> callback for this check instead of reusing dy_apicv_has_pending_interrupt()
+> callback to avoid affecting the exiting code.
+
+...
+
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 89d04cd64cd0..314ae43e07bf 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -12111,7 +12111,10 @@ static inline bool kvm_vcpu_has_events(struct kvm_vcpu *vcpu)
+>  
+>  	if (kvm_arch_interrupt_allowed(vcpu) &&
+>  	    (kvm_cpu_has_interrupt(vcpu) ||
+> -	    kvm_guest_apic_has_interrupt(vcpu)))
+> +	     kvm_guest_apic_has_interrupt(vcpu) ||
+> +	     (vcpu->arch.apicv_active &&
+> +	      kvm_x86_ops.apicv_has_pending_interrupt &&
+> +	      kvm_x86_ops.apicv_has_pending_interrupt(vcpu))))
+
+This is pretty gross (fully realizing that I wrote this patch).  It's also arguably
+wrong as it really should be called from apic_has_interrupt_for_ppr().
+
+  1. The hook implies it is valid for APICv in general, which is misleading.
+
+  2. It's wasted effort for VMX.
+ 
+  3. It does a poor job of conveying _why_ TDX is different.
+
+  4. KVM is unnecessarily processing its useless "copy" of the PPR/IRR for TDX
+     vCPUs.  It's functionally not an issue unless userspace stuffs garbage into
+     KVM's vAPIC, but it's unnecessary work.
+
+Rather than hook this path, I would rather we tag kvm_apic has having some of its
+state protected.  Then kvm_cpu_has_interrupt() can invoke the alternative,
+protected-apic-only hook when appropriate, and kvm_apic_has_interrupt() can bail
+immediately instead of doing useless processing of stale vAPIC state.
+
+Note, the below moves the !apic check from tdx_vcpu_reset() to tdx_vcpu_create().
+That part should be hoisted earlier in the series, there's no reason to wait until
+RESET to perform the check, and I suspect the WARN_ON() can be triggered by userespace.
+
+Compile tested only...
+
+From: Sean Christopherson <seanjc@google.com>
+Date: Fri, 8 Apr 2022 08:56:27 -0700
+Subject: [PATCH] KVM: TDX: Add support for find pending IRQ in a protected
+ local APIC
+
+Add flag and hook to KVM's local APIC management to support determining
+whether or not a TDX guest as a pending IRQ.  For TDX vCPUs, the virtual
+APIC page is owned by the TDX module and cannot be accessed by KVM.  As a
+result, registers that are virtualized by the CPU, e.g. PPR, cannot be
+read or written by KVM.  To deliver interrupts for TDX guests, KVM must
+send an IRQ to the CPU on the posted interrupt notification vector.  And
+to determine if TDX vCPU has a pending interrupt, KVM must check if there
+is an outstanding notification.
+
+Return "no interrupt" in kvm_apic_has_interrupt() if the guest APIC is
+protected to short-circuit the various other flows that try to pull an
+IRQ out of the vAPIC, the only valid operation is querying _if_ an IRQ is
+pending, KVM can't do anything based on _which_ IRQ is pending.
+
+Intentionally omit sanity checks from other flows, e.g. PPR update, so as
+not to degrade non-TDX guests with unecessary checks.  A well-behaved KVM
+and userspace will never reach those flows for TDX guests, but reaching
+them is not fatal if something does go awry.
+
+Note, this doesn't handle interrupts that have been delivered to the vCPU
+but not yet recognized by the core, i.e. interrupts that are sitting in
+vmcs.GUEST_INTR_STATUS.  Querying that state requires a SEAMCALL and will
+be supported in a future patch.
+
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/include/asm/kvm-x86-ops.h |  1 +
+ arch/x86/include/asm/kvm_host.h    |  1 +
+ arch/x86/kvm/irq.c                 |  3 +++
+ arch/x86/kvm/lapic.c               |  3 +++
+ arch/x86/kvm/lapic.h               |  2 ++
+ arch/x86/kvm/vmx/main.c            | 11 +++++++++++
+ arch/x86/kvm/vmx/tdx.c             |  9 ++++++---
+ 7 files changed, 27 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+index 7e27b73d839f..ce705d0c6241 100644
+--- a/arch/x86/include/asm/kvm-x86-ops.h
++++ b/arch/x86/include/asm/kvm-x86-ops.h
+@@ -110,6 +110,7 @@ KVM_X86_OP_NULL(update_pi_irte)
+ KVM_X86_OP_NULL(start_assignment)
+ KVM_X86_OP_NULL(apicv_post_state_restore)
+ KVM_X86_OP_NULL(dy_apicv_has_pending_interrupt)
++KVM_X86_OP_NULL(protected_apic_has_interrupt)
+ KVM_X86_OP_NULL(set_hv_timer)
+ KVM_X86_OP_NULL(cancel_hv_timer)
+ KVM_X86_OP(setup_mce)
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index 489374a57b66..b3dcc0814461 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -1491,6 +1491,7 @@ struct kvm_x86_ops {
+ 	void (*start_assignment)(struct kvm *kvm);
+ 	void (*apicv_post_state_restore)(struct kvm_vcpu *vcpu);
+ 	bool (*dy_apicv_has_pending_interrupt)(struct kvm_vcpu *vcpu);
++	bool (*protected_apic_has_interrupt)(struct kvm_vcpu *vcpu);
+
+ 	int (*set_hv_timer)(struct kvm_vcpu *vcpu, u64 guest_deadline_tsc,
+ 			    bool *expired);
+diff --git a/arch/x86/kvm/irq.c b/arch/x86/kvm/irq.c
+index 172b05343cfd..24f180c538b0 100644
+--- a/arch/x86/kvm/irq.c
++++ b/arch/x86/kvm/irq.c
+@@ -96,6 +96,9 @@ int kvm_cpu_has_interrupt(struct kvm_vcpu *v)
+ 	if (kvm_cpu_has_extint(v))
+ 		return 1;
+
++	if (lapic_in_kernel(v) && v->arch.apic->guest_apic_protected)
++		return static_call(kvm_x86_protected_apic_has_interrupt)(v);
++
+ 	return kvm_apic_has_interrupt(v) != -1;	/* LAPIC */
+ }
+ EXPORT_SYMBOL_GPL(kvm_cpu_has_interrupt);
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index 9322e6340a74..50a483abc0fe 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -2503,6 +2503,9 @@ int kvm_apic_has_interrupt(struct kvm_vcpu *vcpu)
+ 	if (!kvm_apic_present(vcpu))
+ 		return -1;
+
++	if (apic->guest_apic_protected)
++		return -1;
++
+ 	__apic_update_ppr(apic, &ppr);
+ 	return apic_has_interrupt_for_ppr(apic, ppr);
+ }
+diff --git a/arch/x86/kvm/lapic.h b/arch/x86/kvm/lapic.h
+index 2b44e533fc8d..7b62f1889a98 100644
+--- a/arch/x86/kvm/lapic.h
++++ b/arch/x86/kvm/lapic.h
+@@ -52,6 +52,8 @@ struct kvm_lapic {
+ 	bool sw_enabled;
+ 	bool irr_pending;
+ 	bool lvt0_in_nmi_mode;
++	/* Select registers in the vAPIC cannot be read/written. */
++	bool guest_apic_protected;
+ 	/* Number of bits set in ISR. */
+ 	s16 isr_count;
+ 	/* The highest vector set in ISR; if -1 - invalid, must scan ISR. */
+diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
+index 882358ac270b..31aab8add010 100644
+--- a/arch/x86/kvm/vmx/main.c
++++ b/arch/x86/kvm/vmx/main.c
+@@ -42,6 +42,9 @@ static __init int vt_hardware_setup(void)
+
+ 	tdx_hardware_setup(&vt_x86_ops);
+
++	if (!enable_tdx)
++		vt_x86_ops.protected_apic_has_interrupt = NULL;
++
+ 	if (enable_ept) {
+ 		const u64 init_value = enable_tdx ? VMX_EPT_SUPPRESS_VE_BIT : 0ull;
+ 		kvm_mmu_set_ept_masks(enable_ept_ad_bits,
+@@ -148,6 +151,13 @@ static void vt_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
+ 	return vmx_vcpu_load(vcpu, cpu);
+ }
+
++static bool vt_protected_apic_has_interrupt(struct kvm_vcpu *vcpu)
++{
++	KVM_BUG_ON(!is_td_vcpu(vcpu), vcpu->kvm);
++
++	return pi_has_pending_interrupt(vcpu);
++}
++
+ static void vt_flush_tlb_all(struct kvm_vcpu *vcpu)
+ {
+ 	if (is_td_vcpu(vcpu))
+@@ -297,6 +307,7 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
+ 	.sync_pir_to_irr = vmx_sync_pir_to_irr,
+ 	.deliver_interrupt = vmx_deliver_interrupt,
+ 	.dy_apicv_has_pending_interrupt = pi_has_pending_interrupt,
++	.protected_apic_has_interrupt = vt_protected_apic_has_interrupt,
+
+ 	.set_tss_addr = vmx_set_tss_addr,
+ 	.set_identity_map_addr = vmx_set_identity_map_addr,
+diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+index 3a0e826fbe0c..7b9370384ce4 100644
+--- a/arch/x86/kvm/vmx/tdx.c
++++ b/arch/x86/kvm/vmx/tdx.c
+@@ -467,6 +467,12 @@ int tdx_vcpu_create(struct kvm_vcpu *vcpu)
+ 	struct vcpu_tdx *tdx = to_tdx(vcpu);
+ 	int ret, i;
+
++	/* TDX only supports x2APIC, which requires an in-kernel local APIC. */
++	if (!vcpu->arch.apic)
++		return -EINVAL;
++
++	vcpu->arch.apic->guest_apic_protected = true;
++
+ 	ret = tdx_alloc_td_page(&tdx->tdvpr);
+ 	if (ret)
+ 		return ret;
+@@ -602,9 +608,6 @@ void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+ 	/* TDX doesn't support INIT event. */
+ 	if (WARN_ON(init_event))
+ 		goto td_bugged;
+-	/* TDX supports only X2APIC enabled. */
+-	if (WARN_ON(!vcpu->arch.apic))
+-		goto td_bugged;
+ 	if (WARN_ON(is_td_vcpu_created(tdx)))
+ 		goto td_bugged;
+
+
+base-commit: f88e9fa63cbd87cda9352ee9a86a6f815744be33
+--
+

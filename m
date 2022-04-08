@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99AB04F98BC
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:57:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ED314F98C1
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:57:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237243AbiDHO7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 10:59:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34912 "EHLO
+        id S237249AbiDHO72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 10:59:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234894AbiDHO7B (ORCPT
+        with ESMTP id S237248AbiDHO7Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 10:59:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC07E116B58
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 07:56:57 -0700 (PDT)
+        Fri, 8 Apr 2022 10:59:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52785116B79;
+        Fri,  8 Apr 2022 07:57:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 617FC61DAD
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 14:56:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A774C385A1;
-        Fri,  8 Apr 2022 14:56:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BE012B82BA9;
+        Fri,  8 Apr 2022 14:57:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 166A6C385A3;
+        Fri,  8 Apr 2022 14:57:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649429816;
-        bh=4dtkFE7DVojKCW9V0wSKn9hPjn6qHArtBjFqFArK9l4=;
+        s=k20201202; t=1649429838;
+        bh=WuczYS6ilAC0AV8hX0hQJdmcl49iTXUZaYKgxq2uR1Y=;
         h=From:To:Cc:Subject:Date:From;
-        b=jpHR26KhCRtslnq+IT3+Qj2wU1XWTwBNQyJw+WUwvL92uwp8nD0wpUDvtoZljSYp9
-         XbYaBt/vO2NicYOUfIxBQjCfBLfCmE1KP+6HGlDyKDGlYXjQK/xvVgc+GWseVh9vtm
-         uzeaPa1XRymTZ/E0Q0qzMivlcSi96Xm8SCzng7onk3iaIDEJLKK3el3Jr4v9OWAcD9
-         1om7ax+xDxP4Mlb6PEJbuTorOgfy6L2ZCcw/XYUfPW9RqNKYUld0KlQnF6cCbh5VIH
-         g9e1yaevgoTCHCcCJLu06GPFeB+WkL2a56XVdUiZ5VXc2aqJF+6R1b8XNxHhSPTsOF
-         zlYEtkwT12VIQ==
+        b=UDxdQEexibzMsvBr/rRCMhO/EiYMa86SvH/a4dYsZAFk++FJ7oLXmDPceXRgKgvZQ
+         5S7M9m1EsHbTNq6AqO15i0HimsklSJn5PzwGe5V47F7rK+eal5Cn7FhokI2U3njWgF
+         h97Wiw3CrWf2HN/x1NYk1KYeQCJURtktp67IH06UpGsnqRKg0cZImz1LSZU4ZNufv1
+         zCetyjkRXTMvu1CmQeCm99TOqcUfK0iBMohR7lTledHNQd6RK6UiQ4IrW5rL2ypKY5
+         tX+DzC7Z3ZO8Fm/exmhEUt6nqUMDFFRtwmZkcHHhp3c8ZQF2ck2XHvvEngOEbfr48w
+         0CROFI1rn2mdg==
 From:   Mark Brown <broonie@kernel.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>, linux-kernel@vger.kernel.org,
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
         Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] regulator fixes for v5.18-rc1
-Date:   Fri, 08 Apr 2022 15:56:49 +0100
-Message-Id: <20220408145656.4A774C385A1@smtp.kernel.org>
+Subject: [GIT PULL] SPI fixes for v5.18-rc1
+Date:   Fri, 08 Apr 2022 15:57:02 +0100
+Message-Id: <20220408145718.166A6C385A3@smtp.kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,31 +55,38 @@ The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git tags/regulator-fix-v5.18-rc1
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v5.18-rc1
 
-for you to fetch changes up to 908b768f9a8ffca2ef69f3145e23a6a259f99ac3:
+for you to fetch changes up to 2c7d1b281286c46049cd22b43435cecba560edde:
 
-  MAINTAINERS: Fix reviewer info for a few ROHM ICs (2022-04-08 12:09:45 +0100)
-
-----------------------------------------------------------------
-regulator: Fixes for v5.18
-
-A few small driver specific fixes for v5.18, plus an update to the
-MAINTAINERS file.
+  spi: bcm-qspi: fix MSPI only access with bcm_qspi_exec_mem_op() (2022-04-06 15:50:11 +0100)
 
 ----------------------------------------------------------------
-Axel Lin (2):
-      regulator: rtq2134: Fix missing active_discharge_on setting
-      regulator: atc260x: Fix missing active_discharge_on setting
+spi: Fixes for v5.18
 
-Jonathan Bakker (1):
-      regulator: wm8994: Add an off-on delay for WM8994 variant
+A small collection of fixes that have arrived since the merge window,
+the most noticable one is a fix for unmapping messages when the mapping
+was done with the struct device supplied to do the mapping overridden.
 
-Matti Vaittinen (1):
-      MAINTAINERS: Fix reviewer info for a few ROHM ICs
+----------------------------------------------------------------
+Christophe JAILLET (1):
+      spi: mxic: Fix an error handling path in mxic_spi_probe()
 
- MAINTAINERS                           | 12 +++++-----
- drivers/regulator/atc260x-regulator.c |  1 +
- drivers/regulator/rtq2134-regulator.c |  1 +
- drivers/regulator/wm8994-regulator.c  | 42 ++++++++++++++++++++++++++++++++---
- 4 files changed, 46 insertions(+), 10 deletions(-)
+Geert Uytterhoeven (1):
+      spi: rpc-if: Fix RPM imbalance in probe error path
+
+Kamal Dasu (1):
+      spi: bcm-qspi: fix MSPI only access with bcm_qspi_exec_mem_op()
+
+Matthias Schiffer (1):
+      spi: cadence-quadspi: fix protocol setup for non-1-1-X operations
+
+Vinod Koul (1):
+      spi: core: add dma_map_dev for __spi_unmap_msg()
+
+ drivers/spi/spi-bcm-qspi.c        |  4 ++--
+ drivers/spi/spi-cadence-quadspi.c | 46 ++++++++++-----------------------------
+ drivers/spi/spi-mxic.c            |  1 +
+ drivers/spi/spi-rpc-if.c          |  8 +++++--
+ drivers/spi/spi.c                 |  4 ++++
+ 5 files changed, 25 insertions(+), 38 deletions(-)

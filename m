@@ -2,153 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD9A64F98FC
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 17:06:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2AB74F9906
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 17:08:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237387AbiDHPHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 11:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38240 "EHLO
+        id S237395AbiDHPK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 11:10:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237425AbiDHPHf (ORCPT
+        with ESMTP id S233605AbiDHPK0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 11:07:35 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5B62405BF
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 08:05:30 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id v64-20020a1cac43000000b0038cfd1b3a6dso7767670wme.5
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 08:05:30 -0700 (PDT)
+        Fri, 8 Apr 2022 11:10:26 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70712167D6
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 08:08:21 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id u19so2264026ljd.11
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 08:08:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=z2vqFQdPAyfvut6ovQoXQ5XOm4NDygCMv5XEJBGIwVs=;
-        b=kZbVnHdSrExx7M2nYO683DIu9cLpkisfrS1P7V37RaHZVOCRV6srvL65ZqTkgVgpps
-         5es1L1ZX8PiQ6lYbBqafkUOufe0j48/IAtOG7kYWyFGkMUmjVJ8ypzm/SI2w1sdQR5P1
-         2lZroaCY2AVXV4lNW9kMFwge7FxP+Dm2U7tamg63N0QSKHVeVE7TOhT0wwD65RqnVfWu
-         6LgitVy/dU9rQr/Ddx2Q8d1ay/ddTBYfj7X63J9gyHcS0dhn3xZd+JFNG8WqXEqzdkKA
-         sZ8MKmIUPDQRPFgnyPigaKFfyBrT3C6gKcZNb8jiYsr8TRg/uUGPvlXy6QoWviwnHxss
-         smhg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XUTKl/IaJCwrxr2khPWm7F441fPDzuP0bn51KMo02uE=;
+        b=LwKcKItaVj506SbKhpxTEJLegJ7vxBPkSMYOBoTAw5zD3zRG011lCJGgQp/iMROOLV
+         rkpIxxYVFg5jGurHfNEhdUFSAqumasv7PScMzOwzQ/vW2+xv18Nf9+T/KiU/jI40q/+n
+         /+IOc5J0R/RNx3ZUJmcfghFmtotsRaMrt23FrB0Z3XvpDmiX7Bg423ovFjzS5+zqdrx5
+         /zqtPiw8XIoeet06K1K2mFq7Lx+Ot22dg15AmyFbQnhnt5wKnXDQJKgWoiUvAquu2hTu
+         wSXT1CKtGbsjkVmNIBtN/NgT49/TRHHbVJOBKKsOizmAuHoQTZujVKzIuwTizgEN9KU3
+         vQYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=z2vqFQdPAyfvut6ovQoXQ5XOm4NDygCMv5XEJBGIwVs=;
-        b=Ngf1lkJZkTlTbHtaeigrFWKKwgip6r5ye6cZMhyi/voN7QyjksfJYYEcu4o9HUSDb5
-         N8FB3fKzWvJJXJylcnIe4OcMLWJFLG0R6N3fOKo4mY6cBOv1JURZwRktaUA3dMaW/YYF
-         FCigLqhD5CHRI2nIy0nbzWCrKw+EvuejntvLJt9Nu7lTXp8H56iLxN5hQbXsHMqpq75d
-         4YtsL8X8i2gO14LRrwykUOC5T7P/QQxUviBuGGnMadLBEYbXd7JfRWQvlLqXs23fQniM
-         RskB2WYR+ZNvOALh4T3492s3ZnUUWEhwtSQkb/w6RiOUEEW9+H+zDwtDd5c9tTmT+tuN
-         Qz2A==
-X-Gm-Message-State: AOAM532OA+Hn0kabJ1Zy7/+j963D9qg6fyJcqxnpi3ByoQJmBa/2PUdG
-        5fhAdqNwVA1wX4vVpwtDqd95Og==
-X-Google-Smtp-Source: ABdhPJzaJKjlfwBc4j57iWbiUBbG/JGU1kd5M0DvZJTA45YHU8Zkq5kzdGmXh1xKiEp/TQEZIXxUVQ==
-X-Received: by 2002:a05:600c:4f42:b0:38c:21:fffe with SMTP id m2-20020a05600c4f4200b0038c0021fffemr17300289wmq.63.1649430329411;
-        Fri, 08 Apr 2022 08:05:29 -0700 (PDT)
-Received: from [192.168.0.188] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id l2-20020a05600c4f0200b0038e8fb63293sm4576689wmq.22.2022.04.08.08.05.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Apr 2022 08:05:28 -0700 (PDT)
-Message-ID: <1a45984a-752b-6bad-0320-f0946d83f2b9@linaro.org>
-Date:   Fri, 8 Apr 2022 17:05:27 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XUTKl/IaJCwrxr2khPWm7F441fPDzuP0bn51KMo02uE=;
+        b=CpR8yvnyYn4TY2+qNHUElOV42eeqdeuaLCu8OsPrtkGThLkI/AmILBd59Mqqxe45b7
+         NRXU9rsBoFxucVRB/Ae60wnWI3z49EJpKDaVfsRp9QMI98qB7/IPZ2YnAlnyi7T50t0e
+         O8QQrqv/s+809V9FT0326R4wB3rrIqs20GmgPk3X0DWJd1vTpCgWU9oas6b0KU/KWxFe
+         JvqiF3DXKajU+FV92Ggse3N7hBAUW8JDc4EWy/e5IFBxTn3DB64lnlhJlL7pyIALKq49
+         6n60qPY0DgGHom8u+g1uBRqTdMiw/FaZpUEzDzGmCSPNP5+xnUrFwzXmNkkADevgA5Yt
+         t8Vw==
+X-Gm-Message-State: AOAM5331JStYhXArT5eAN8CmtlpolDt/JlDvY5f9uCOrHCA9AnYTSkjR
+        08H2wbYmgvWH8LPWJVxgaQFx1KK9m7STMPSx7bcYYw==
+X-Google-Smtp-Source: ABdhPJzc5vUnMdnamgw4DGiOOGnvYUWnvrofIV54z4/jLe0Q8nWJgM0/eNXNojAsy/QsowaEFGtfyoMMutqxYi9v3kQ=
+X-Received: by 2002:a2e:bd09:0:b0:24b:9e3:30c6 with SMTP id
+ n9-20020a2ebd09000000b0024b09e330c6mr11355360ljq.282.1649430499181; Fri, 08
+ Apr 2022 08:08:19 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/3] dt-bindings: input: Add bindings for Awinic AW8695
- haptics
-Content-Language: en-US
-To:     Luca Weiss <luca.weiss@fairphone.com>, linux-input@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220408115311.237039-1-luca.weiss@fairphone.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220408115311.237039-1-luca.weiss@fairphone.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220407195908.633003-1-pgonda@google.com> <CAFNjLiXC0AdOw5f8Ovu47D==ex7F0=WN_Ocirymz4xL=mWvC5A@mail.gmail.com>
+In-Reply-To: <CAFNjLiXC0AdOw5f8Ovu47D==ex7F0=WN_Ocirymz4xL=mWvC5A@mail.gmail.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Fri, 8 Apr 2022 09:08:07 -0600
+Message-ID: <CAMkAt6r-Mc_YN-gVHuCpTj4E1EmcvyYpP9jhtHo5HRHnoNJAdA@mail.gmail.com>
+Subject: Re: [PATCH v3] KVM: SEV: Mark nested locking of vcpu->lock
+To:     John Sperbeck <jsperbeck@google.com>
+Cc:     kvm list <kvm@vger.kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/04/2022 13:53, Luca Weiss wrote:
-> Add a document describing the bindings for the AW8695 LRA Haptic Driver.
+On Thu, Apr 7, 2022 at 3:17 PM John Sperbeck <jsperbeck@google.com> wrote:
+>
+> On Thu, Apr 7, 2022 at 12:59 PM Peter Gonda <pgonda@google.com> wrote:
+> >
+> > svm_vm_migrate_from() uses sev_lock_vcpus_for_migration() to lock all
+> > source and target vcpu->locks. Mark the nested subclasses to avoid false
+> > positives from lockdep.
 
-(...)
+Nope. Good catch, I didn't realize there was a limit 8 subclasses:
 
-> +  reset-gpios:
-> +    maxItems: 1
-> +    description: GPIO connected to RSTN pin (active high)
-> +
-> +  awinic,f0-preset:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: Default value for the f0 of LRA
-> +
-> +  awinic,f0-coefficient:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: Coefficient between actual f0 and the value in the registers
-> +
-> +  awinic,f0-calibration-percent:
-> +    maxItems: 1
-> +    description: Limit of f0 deviation from awinic,f0-preset
-> +
-> +  awinic,drive-level:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: Level of drive waveform in normal driving
-> +
-> +  awinic,f0-detection-play-time:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: Drive waveform play times in the first period in the f0 detection
-
-Use standard unit suffixes for known units (e.g. time).
-
-> +
-> +  awinic,f0-detection-wait-time:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: Waveform wait times in the f0 detection
-
-Ditto.
-
-> +
-> +  awinic,f0-detection-repeat:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: Repeat times in the f0 detection
-> +
-> +  awinic,f0-detection-trace:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: Drive waveform play times in the second period and later in the f0 detection
-> +
-> +  awinic,boost-debug:
-> +    $ref: /schemas/types.yaml#/definitions/uint8-array
-> +    minItems: 3
-> +    maxItems: 3
-> +    description: Values for BSTDBG1-3 registers
-
-Do not encode device programming model (registers) into the binding. You
-need to define it as a property related to hardware itself, not its
-registers (e.g. boost value in mV).
-
-> +
-> +  awinic,tset:
-> +    $ref: /schemas/types.yaml#/definitions/uint8
-> +    description: Value for TSET register
-
-Ditto.
-
-> +
-> +  awinic,r-spare:
-> +    $ref: /schemas/types.yaml#/definitions/uint8
-> +    description: Value for R_SPARE register
-
-Ditto.
+[  509.093776] BUG: looking up invalid subclass: 8
+[  509.098314] turning off the locking correctness validator.
+[  509.103800] CPU: 185 PID: 28570 Comm: sev_migrate_tes Tainted: G
+       O      5.17.0-dbg-DEV #24
+[  509.112925] Hardware name: Google, Inc.
+                          Arcadia_IT_80/Arcadia_IT_80, BIOS
+30.6.12-gce 09/27/2021
+[  509.126386] Call Trace:
+[  509.128835]  <TASK>
+[  509.130939]  dump_stack_lvl+0x6c/0x9a
+[  509.134609]  dump_stack+0x10/0x12
+[  509.137925]  look_up_lock_class+0xf1/0x130
+[  509.142027]  register_lock_class+0x54/0x730
+[  509.146214]  __lock_acquire+0x85/0xf00
+[  509.149964]  ? lock_is_held_type+0xff/0x170
+[  509.154154]  lock_acquire+0xca/0x210
+[  509.157730]  ? sev_lock_vcpus_for_migration+0x82/0x150
+[  509.162872]  __mutex_lock_common+0xe4/0xe30
+[  509.167054]  ? sev_lock_vcpus_for_migration+0x82/0x150
+[  509.172194]  ? sev_lock_vcpus_for_migration+0x82/0x150
+[  509.177335]  ? rcu_lock_release+0x17/0x20
+[  509.181348]  mutex_lock_killable_nested+0x20/0x30
+[  509.186053]  sev_lock_vcpus_for_migration+0x82/0x150
+[  509.191019]  sev_vm_move_enc_context_from+0x190/0x750
+[  509.196072]  ? lock_release+0x20e/0x290
+[  509.199912]  kvm_vm_ioctl_enable_cap+0x29d/0x320
+[  509.204531]  kvm_vm_ioctl+0xc58/0x1060
+[  509.208285]  ? __this_cpu_preempt_check+0x13/0x20
+[  509.212989]  __se_sys_ioctl+0x77/0xc0
+[  509.216656]  __x64_sys_ioctl+0x1d/0x20
+[  509.220408]  do_syscall_64+0x44/0xa0
+[  509.223987]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[  509.229041] RIP: 0033:0x7f91b8531347
+[  509.232618] Code: 5d c3 cc 48 8b 05 f9 2f 07 00 64 c7 00 26 00 00
+00 48 c7 c0 ff ff ff ff c3 cc cc cc cc cc cc cc cc cc cc b8 10 00 00
+00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d c9 2f 07 00 f7 d8 64 89
+01 48
+[  509.251371] RSP: 002b:00007ffef7feb778 EFLAGS: 00000246 ORIG_RAX:
+0000000000000010
+[  509.258940] RAX: ffffffffffffffda RBX: 0000000000af6210 RCX: 00007f91b8531347
+[  509.266073] RDX: 00007ffef7feb790 RSI: 000000004068aea3 RDI: 0000000000000018
+[  509.273207] RBP: 00007ffef7feba10 R08: 000000000020331b R09: 000000000000000f
+[  509.280338] R10: 0000000000000001 R11: 0000000000000246 R12: 0000000000af8df0
+[  509.287470] R13: 0000000000afa3e0 R14: 0000000000000000 R15: 0000000000af7800
+[  509.294607]  </TASK>
 
 
-Best regards,
-Krzysztof
+
+> >
+> > Warning example:
+> > ============================================
+> > WARNING: possible recursive locking detected
+> > 5.17.0-dbg-DEV #15 Tainted: G           O
+> > --------------------------------------------
+> > sev_migrate_tes/18859 is trying to acquire lock:
+> > ffff8d672d484238 (&vcpu->mutex){+.+.}-{3:3}, at: sev_lock_vcpus_for_migration+0x7e/0x150
+> > but task is already holding lock:
+> > ffff8d67703f81f8 (&vcpu->mutex){+.+.}-{3:3}, at: sev_lock_vcpus_for_migration+0x7e/0x150
+> > other info that might help us debug this:
+> >  Possible unsafe locking scenario:
+> >        CPU0
+> >        ----
+> >   lock(&vcpu->mutex);
+> >   lock(&vcpu->mutex);
+> >  *** DEADLOCK ***
+> >  May be due to missing lock nesting notation
+> > 3 locks held by sev_migrate_tes/18859:
+> >  #0: ffff9302f91323b8 (&kvm->lock){+.+.}-{3:3}, at: sev_vm_move_enc_context_from+0x96/0x740
+> >  #1: ffff9302f906a3b8 (&kvm->lock/1){+.+.}-{3:3}, at: sev_vm_move_enc_context_from+0xae/0x740
+> >  #2: ffff8d67703f81f8 (&vcpu->mutex){+.+.}-{3:3}, at: sev_lock_vcpus_for_migration+0x7e/0x150
+> >
+> > Fixes: b56639318bb2b ("KVM: SEV: Add support for SEV intra host migration")
+> > Reported-by: John Sperbeck<jsperbeck@google.com>
+> > Suggested-by: David Rientjes <rientjes@google.com>
+> > Suggested-by: Sean Christopherson <seanjc@google.com>
+> > Cc: Paolo Bonzini <pbonzini@redhat.com>
+> > Cc: kvm@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Signed-off-by: Peter Gonda <pgonda@google.com>
+> >
+> > ---
+> >
+> > V3
+> >  * Updated signature to enum to self-document argument.
+> >  * Updated comment as Seanjc@ suggested.
+> >
+> > Tested by running sev_migrate_tests with lockdep enabled. Before we see
+> > a warning from sev_lock_vcpus_for_migration(). After we get no warnings.
+> >
+> > ---
+> >  arch/x86/kvm/svm/sev.c | 22 +++++++++++++++++-----
+> >  1 file changed, 17 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> > index 75fa6dd268f0..f66550ec8eaf 100644
+> > --- a/arch/x86/kvm/svm/sev.c
+> > +++ b/arch/x86/kvm/svm/sev.c
+> > @@ -1591,14 +1591,26 @@ static void sev_unlock_two_vms(struct kvm *dst_kvm, struct kvm *src_kvm)
+> >         atomic_set_release(&src_sev->migration_in_progress, 0);
+> >  }
+> >
+> > +/*
+> > + * To suppress lockdep false positives, subclass all vCPU mutex locks by
+> > + * assigning even numbers to the source vCPUs and odd numbers to destination
+> > + * vCPUs based on the vCPU's index.
+> > + */
+> > +enum sev_migration_role {
+> > +       SEV_MIGRATION_SOURCE = 0,
+> > +       SEV_MIGRATION_TARGET,
+> > +       SEV_NR_MIGRATION_ROLES,
+> > +};
+> >
+> > -static int sev_lock_vcpus_for_migration(struct kvm *kvm)
+> > +static int sev_lock_vcpus_for_migration(struct kvm *kvm,
+> > +                                       enum sev_migration_role role)
+> >  {
+> >         struct kvm_vcpu *vcpu;
+> >         unsigned long i, j;
+> >
+> > -       kvm_for_each_vcpu(i, vcpu, kvm) {
+> > -               if (mutex_lock_killable(&vcpu->mutex))
+> > +       kvm_for_each_vcpu(i, vcpu, kvm) {
+> > +               if (mutex_lock_killable_nested(
+> > +                           &vcpu->mutex, i * SEV_NR_MIGRATION_ROLES + role))
+> >                         goto out_unlock;
+> >         }
+> >
+> > @@ -1745,10 +1757,10 @@ int sev_vm_move_enc_context_from(struct kvm *kvm, unsigned int source_fd)
+> >                 charged = true;
+> >         }
+> >
+> > -       ret = sev_lock_vcpus_for_migration(kvm);
+> > +       ret = sev_lock_vcpus_for_migration(kvm, SEV_MIGRATION_SOURCE);
+> >         if (ret)
+> >                 goto out_dst_cgroup;
+> > -       ret = sev_lock_vcpus_for_migration(source_kvm);
+> > +       ret = sev_lock_vcpus_for_migration(source_kvm, SEV_MIGRATION_TARGET);
+> >         if (ret)
+> >                 goto out_dst_vcpu;
+> >
+> > --
+> > 2.35.1.1178.g4f1659d476-goog
+> >
+>
+> Does sev_migrate_tests survive lockdep checking if
+> NR_MIGRATE_TEST_VCPUS is changed to 16?

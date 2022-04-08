@@ -2,241 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F7014F8FA5
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:30:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76AAA4F8FA7
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 09:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbiDHHcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 03:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50130 "EHLO
+        id S230020AbiDHHdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 03:33:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230127AbiDHHco (ORCPT
+        with ESMTP id S229502AbiDHHde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 03:32:44 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6CE219E
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 00:30:41 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id bu29so13691658lfb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 00:30:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:subject:message-id:mime-version:content-disposition;
-        bh=kBQo90N7sEL0M7e1R27tsRN751KlpZFtkEzziLKe240=;
-        b=AZ6HmJwpJmTNX4yORBpvhAQouRMvxLFnmiNg/zoCmTIGMhLnR1ytyvEjbjgusUXY/i
-         pN8Z5J53fx9/3r0vJncFHu16J02fatjvE69tn7lpz4acudwTEZm5pmhBkAx4MDYQzpR7
-         wtQk6OvkHfD7aSx6nihj2astU1PEzJtmbZHjr/8TOWLZvwFzuBrNrxvcEZCGo+3n6Hlr
-         18d9n0qfjJYmLR7oNMRJ2HZWSjaWNkxsUMVQkY2RyNo44Xvn1jIjczL808d2ukkYyH+t
-         FJERR3eeE9KP3HwZM61HCWOh12Gkj9kJUjS2ojA9kWeFndNt2mXh4AbWGjr72qwLNQl+
-         t65A==
+        Fri, 8 Apr 2022 03:33:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 54A111D0F9
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 00:31:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649403088;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AJie/UdH9Mqf7tAIiWd8hXnktBcEVlo+NQRFJbbT0jQ=;
+        b=JwIiK0CVfCp3wjMb+11ryweoEmeU2F/gEDNqymOcXgWbO+HQ6e/Ba9P/K5Pnu6OjBQsmBa
+        bpNWaASmlUw5gVXyvG/ekBcjWV/IthUgSxLs43T1jltG0MDID7DxjbTxzgXjAKodLN6FHf
+        cx8kTCOg6vRTz841qAQAV9ozIzrBGaE=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-608-WpvjlPijNHa5anCtP-Xsjw-1; Fri, 08 Apr 2022 03:31:26 -0400
+X-MC-Unique: WpvjlPijNHa5anCtP-Xsjw-1
+Received: by mail-wr1-f72.google.com with SMTP id z16-20020adff1d0000000b001ef7dc78b23so1959505wro.12
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 00:31:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition;
-        bh=kBQo90N7sEL0M7e1R27tsRN751KlpZFtkEzziLKe240=;
-        b=bsTN+Fi5iUOZrCuwjYDpSqtm8HWsBOBKh0hoZK7R9OhKsrsP56AHn44SAMxAZWHpV8
-         x7OSPh9JNZd79STcica0Svw4qW8Yujn2Z7pAJ+j/S3gTzQqd5+csxO6cnDwYd3IDjbJm
-         yPRelgur6p8FPEOFw7sRh26T+sZ/QbfCQSnCXYVwCOwvi3Ch5enL3xveyoV7F/enJalK
-         1Tkh924IPXCAR0kxXG60cNsct0yMp0JnByjtC6eyWzVb1xaebkPAGDNZnGR38223qRMf
-         0SUUf/Jl+LVMruN/NTGkiwUXzDWSH3G6phHoctpG6BnKwaNQXmTJtwT12YBabD5QH1NF
-         bXwg==
-X-Gm-Message-State: AOAM530S+U3PpDDq34udttg+7G8qLm2oa25DrtEkUx8hxDE8nWjmliEB
-        zqyT8w/XWy8vd9iob+2DPz/UVrYK1/A=
-X-Google-Smtp-Source: ABdhPJxUw74C3ij570zJxqVSuzHpsuYvAZ5JxOtwqUnd7Rg+ndi6j71Pb4IXy16o5eYmKrNI11dCAw==
-X-Received: by 2002:a05:6512:33d0:b0:44a:72b2:cd36 with SMTP id d16-20020a05651233d000b0044a72b2cd36mr12241852lfg.113.1649403039787;
-        Fri, 08 Apr 2022 00:30:39 -0700 (PDT)
-Received: from crux (h-98-128-204-26.A444.priv.bahnhof.se. [98.128.204.26])
-        by smtp.gmail.com with ESMTPSA id h14-20020a0565123c8e00b0044a2ddb6694sm2382943lfv.124.2022.04.08.00.30.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 00:30:39 -0700 (PDT)
-Date:   Fri, 8 Apr 2022 09:30:37 +0200
-From:   Artur Bujdoso <artur.bujdoso@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: octeon-usb: remove unnecessary parentheses
-Message-ID: <Yk/knRtaujd/PzK7@crux>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=AJie/UdH9Mqf7tAIiWd8hXnktBcEVlo+NQRFJbbT0jQ=;
+        b=1r3m3gYCijvdeY6xAJ1ZEh/jzTXb+7ul5C0XIZQG0baw/zkNL3wgzg6XwiaZTxSMI1
+         CdCYA+zQIo51sgwbra5eIgPuZGnj4EgvllqsBzTvHla3wbTc/p9or/8t8KJ4/iDu1Rag
+         22DGhiolk5ONb3y/ZCihrkAQ6o/WiLSkAtwD2ZJV31zY230ByQeoCuLDSih0nOGxtl95
+         OvJuzpXTemnThVgMUKwXToLAPRhveQKstObsl3uGdhFfDfcr8lJm5VJBTnnwXFCvyGt0
+         lyPdxunrmO2w3N25BbrJtRLctjjRRWF8vnVskY88Cc62304e1+jhc5JGUb0O+zRDu3F9
+         pkdw==
+X-Gm-Message-State: AOAM532kB5+SaMSEt5E9cjGfJqVEzZGMg5cr7NqW1thFq0PKYLB1HAoq
+        RpMB0erMS+XS5KeDW3N5ggn4VIn048kQ8tNLog+rlC33w1qWqWopfXrT1vObZIq5e99U/6pYGmP
+        208sOgAJxKhBc3FlV5c5rvrZg
+X-Received: by 2002:a1c:7517:0:b0:38c:8722:9bc6 with SMTP id o23-20020a1c7517000000b0038c87229bc6mr15680350wmc.2.1649403085212;
+        Fri, 08 Apr 2022 00:31:25 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw3TTJ46O1ZC2FKUoNgMnaa7amF/PK4+JqHt94o201sprDkj+NNKAsFzvfC8rddbjp5DCgwYA==
+X-Received: by 2002:a1c:7517:0:b0:38c:8722:9bc6 with SMTP id o23-20020a1c7517000000b0038c87229bc6mr15680330wmc.2.1649403084913;
+        Fri, 08 Apr 2022 00:31:24 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:fd00:612:f12b:a4a2:26b0? (p200300cbc704fd000612f12ba4a226b0.dip0.t-ipconnect.de. [2003:cb:c704:fd00:612:f12b:a4a2:26b0])
+        by smtp.gmail.com with ESMTPSA id i14-20020a0560001ace00b00203da1fa749sm28007860wry.72.2022.04.08.00.31.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Apr 2022 00:31:24 -0700 (PDT)
+Message-ID: <a6ce4cd3-dfbc-134c-88a0-40fefa8094f6@redhat.com>
+Date:   Fri, 8 Apr 2022 09:31:23 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] delayacct: track delays from COW
+Content-Language: en-US
+To:     CGEL <cgel.zte@gmail.com>
+Cc:     akpm@linux-foundation.org, bsingharora@gmail.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Yang Yang <yang.yang29@zte.com.cn>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>
+References: <20220322110444.2340748-1-yang.yang29@zte.com.cn>
+ <9f9ddbf7-797a-58d8-2903-beacb2698329@redhat.com>
+ <624d434a.1c69fb81.11e99.b2b8@mx.google.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <624d434a.1c69fb81.11e99.b2b8@mx.google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adhere to Linux kernel coding style.
+On 06.04.22 09:37, CGEL wrote:
+> On Wed, Mar 23, 2022 at 09:49:46AM +0100, David Hildenbrand wrote:
+>> On 22.03.22 12:04, cgel.zte@gmail.com wrote:
+>>> From: Yang Yang <yang.yang29@zte.com.cn>
+>>>
+>>> Delay accounting does not track the delay of COW. When tasks trigger
+>>> much COW, it may spend a amount of time waiting for it. To get the
+>>> impact of tasks in COW, measure the delay when it happens. This
+>>> could help users to do tunnings, such as decide whether to use
+>>> ksm or not.
+>>>
+>>> Also update tools/accounting/getdelays.c:
+>>>
+>>>     / # ./getdelays -dl -p 231
+>>>     print delayacct stats ON
+>>>     listen forever
+>>>     PID     231
+>>>
+>>>     CPU             count     real total  virtual total    delay total  delay average
+>>>                      6247     1859000000     2154070021     1674255063          0.268ms
+>>>     IO              count    delay total  delay average
+>>>                         0              0              0ms
+>>>     SWAP            count    delay total  delay average
+>>>                         0              0              0ms
+>>>     RECLAIM         count    delay total  delay average
+>>>                         0              0              0ms
+>>>     THRASHING       count    delay total  delay average
+>>>                         0              0              0ms
+>>>     COMPACT         count    delay total  delay average
+>>>                         3          72758              0ms
+>>>     COW             count    delay total  delay average
+>>>                      3635      271567604              0ms
+>>
+>> You should also update Documentation/accounting/delay-accounting.rst
+>> most probably.
+>>
+>> Overall LGTM and this might be of value not only for KSM but for anybody
+>> using fork(). There will be collisions with [1], especially [2], which I
+>> want to get in -next early after we have v5.18-rc1 (after rebasing [1]
+>> on top of this).
+>>
+>> We'll have to decide if we want to also account hugetlb wp code
+>> (hugetlb_cow), and if we want to account "unsharing" here as well under
+>> cow (I tend to say that we want to for simplicity). For THP, we only
+>> split and don't copy, so there isn't anything to account.
+>>
+> As for simplicity, what about account "PAGECOPY" instead of "COW"?
+> "PAGECOPY" include COW and unsharing. And we may also account hugetlb
+> wp in follow-up patches, based on this patch is sufficient reviewed.
 
-Reported by checkpatch:
+PAGECOPY might be too generic. You actually want to express "potentially
+shared page was copied by the write-fault handler while it was write
+protected".
 
-CHECK:UNNECESSARY_PARENTHESES: Unnecessary parentheses
+do_wp_page()->wp_page_copy()
 
-Signed-off-by: Artur Bujdoso <artur.bujdoso@gmail.com>
----
- drivers/staging/octeon-usb/octeon-hcd.c | 62 ++++++++++++-------------
- 1 file changed, 31 insertions(+), 31 deletions(-)
+Maybe simply "WP_COPY" as a prefix ("Write-protect copy") ?
 
-diff --git a/drivers/staging/octeon-usb/octeon-hcd.c b/drivers/staging/octeon-usb/octeon-hcd.c
-index a1cd81d4a114..32bcd6c582f5 100644
---- a/drivers/staging/octeon-usb/octeon-hcd.c
-+++ b/drivers/staging/octeon-usb/octeon-hcd.c
-@@ -1101,9 +1101,9 @@ static struct cvmx_usb_pipe *cvmx_usb_open_pipe(struct octeon_hcd *usb,
- 	pipe = kzalloc(sizeof(*pipe), GFP_ATOMIC);
- 	if (!pipe)
- 		return NULL;
--	if ((device_speed == CVMX_USB_SPEED_HIGH) &&
--	    (transfer_dir == CVMX_USB_DIRECTION_OUT) &&
--	    (transfer_type == CVMX_USB_TRANSFER_BULK))
-+	if (device_speed == CVMX_USB_SPEED_HIGH &&
-+	    transfer_dir == CVMX_USB_DIRECTION_OUT &&
-+	    transfer_type == CVMX_USB_TRANSFER_BULK)
- 		pipe->flags |= CVMX_USB_PIPE_FLAGS_NEED_PING;
- 	pipe->device_addr = device_addr;
- 	pipe->endpoint_num = endpoint_num;
-@@ -1319,8 +1319,8 @@ static void cvmx_usb_fill_tx_fifo(struct octeon_hcd *usb, int channel)
- 	if (!usbc_hctsiz.s.xfersize)
- 		return;
- 
--	if ((hcchar.s.eptype == CVMX_USB_TRANSFER_INTERRUPT) ||
--	    (hcchar.s.eptype == CVMX_USB_TRANSFER_ISOCHRONOUS))
-+	if (hcchar.s.eptype == CVMX_USB_TRANSFER_INTERRUPT ||
-+	    hcchar.s.eptype == CVMX_USB_TRANSFER_ISOCHRONOUS)
- 		fifo = &usb->periodic;
- 	else
- 		fifo = &usb->nonperiodic;
-@@ -1637,9 +1637,9 @@ static void cvmx_usb_start_channel(struct octeon_hcd *usb, int channel,
- 			 * begin/middle/end of the data or all
- 			 */
- 			if (!usbc_hcsplt.s.compsplt &&
--			    (pipe->transfer_dir == CVMX_USB_DIRECTION_OUT) &&
--			    (pipe->transfer_type ==
--			     CVMX_USB_TRANSFER_ISOCHRONOUS)) {
-+			    pipe->transfer_dir == CVMX_USB_DIRECTION_OUT &&
-+			    pipe->transfer_type ==
-+			     CVMX_USB_TRANSFER_ISOCHRONOUS) {
- 				/*
- 				 * Clear the split complete frame number as
- 				 * there isn't going to be a split complete
-@@ -1813,7 +1813,7 @@ static void cvmx_usb_start_channel(struct octeon_hcd *usb, int channel,
- 		break;
- 	}
- 	{
--		union cvmx_usbcx_hctsizx usbc_hctsiz = { .u32 =
-+			union cvmx_usbcx_hctsizx usbc_hctsiz = { .u32 =
- 			cvmx_usb_read_csr32(usb,
- 					    CVMX_USBCX_HCTSIZX(channel,
- 							       usb->index))
-@@ -1849,11 +1849,11 @@ static struct cvmx_usb_pipe *cvmx_usb_find_ready_pipe(struct octeon_hcd *usb,
- 			list_first_entry(&pipe->transactions, typeof(*t),
- 					 node);
- 		if (!(pipe->flags & CVMX_USB_PIPE_FLAGS_SCHEDULED) && t &&
--		    (pipe->next_tx_frame <= current_frame) &&
--		    ((pipe->split_sc_frame == -1) ||
--		     ((((int)current_frame - pipe->split_sc_frame) & 0x7f) <
-+		    pipe->next_tx_frame <= current_frame &&
-+		    (pipe->split_sc_frame == -1 ||
-+		     (((int)current_frame - pipe->split_sc_frame) & 0x7f <
- 		      0x40)) &&
--		    (!usb->active_split || (usb->active_split == t))) {
-+		    !usb->active_split || (usb->active_split == t)) {
- 			prefetch(t);
- 			return pipe;
- 		}
-@@ -2075,8 +2075,8 @@ static void cvmx_usb_complete(struct octeon_hcd *usb,
- 		 * If there are more ISOs pending and we succeeded, schedule the
- 		 * next one
- 		 */
--		if ((transaction->iso_number_packets > 1) &&
--		    (complete_code == CVMX_USB_STATUS_OK)) {
-+		if (transaction->iso_number_packets > 1 &&
-+		    complete_code == CVMX_USB_STATUS_OK) {
- 			/* No bytes transferred for this packet as of yet */
- 			transaction->actual_bytes = 0;
- 			/* One less ISO waiting to transfer */
-@@ -2454,8 +2454,8 @@ static void cvmx_usb_transfer_control(struct octeon_hcd *usb,
- 		}
- 		break;
- 	case CVMX_USB_STAGE_DATA_SPLIT_COMPLETE:
--		if ((buffer_space_left == 0) ||
--		    (bytes_in_last_packet < pipe->max_packet)) {
-+		if (buffer_space_left == 0 ||
-+		    bytes_in_last_packet < pipe->max_packet) {
- 			pipe->pid_toggle = 1;
- 			transaction->stage = CVMX_USB_STAGE_STATUS;
- 		} else {
-@@ -2499,12 +2499,12 @@ static void cvmx_usb_transfer_bulk(struct octeon_hcd *usb,
- 			cvmx_usb_complete(usb, pipe, transaction,
- 					  CVMX_USB_STATUS_OK);
- 	} else {
--		if ((pipe->device_speed == CVMX_USB_SPEED_HIGH) &&
--		    (pipe->transfer_dir == CVMX_USB_DIRECTION_OUT) &&
--		    (usbc_hcint.s.nak))
-+		if (pipe->device_speed == CVMX_USB_SPEED_HIGH &&
-+		    pipe->transfer_dir == CVMX_USB_DIRECTION_OUT &&
-+		    usbc_hcint.s.nak)
- 			pipe->flags |= CVMX_USB_PIPE_FLAGS_NEED_PING;
- 		if (!buffer_space_left ||
--		    (bytes_in_last_packet < pipe->max_packet))
-+		    bytes_in_last_packet < pipe->max_packet)
- 			cvmx_usb_complete(usb, pipe, transaction,
- 					  CVMX_USB_STATUS_OK);
- 	}
-@@ -2555,7 +2555,7 @@ static void cvmx_usb_transfer_isoc(struct octeon_hcd *usb,
- 			 * then this transfer is complete. Otherwise start it
- 			 * again to send the next 188 bytes
- 			 */
--			if (!buffer_space_left || (bytes_this_transfer < 188)) {
-+			if (!buffer_space_left || bytes_this_transfer < 188) {
- 				pipe->next_tx_frame += pipe->interval;
- 				cvmx_usb_complete(usb, pipe, transaction,
- 						  CVMX_USB_STATUS_OK);
-@@ -2568,8 +2568,8 @@ static void cvmx_usb_transfer_isoc(struct octeon_hcd *usb,
- 			 * We are in the incoming data phase. Keep getting data
- 			 * until we run out of space or get a small packet
- 			 */
--			if ((buffer_space_left == 0) ||
--			    (bytes_in_last_packet < pipe->max_packet)) {
-+			if (buffer_space_left == 0 ||
-+			    bytes_in_last_packet < pipe->max_packet) {
- 				pipe->next_tx_frame += pipe->interval;
- 				cvmx_usb_complete(usb, pipe, transaction,
- 						  CVMX_USB_STATUS_OK);
-@@ -2737,8 +2737,8 @@ static int cvmx_usb_poll_channel(struct octeon_hcd *usb, int channel)
- 	 * the user's data. For this reason we don't count setup data as bytes
- 	 * transferred
- 	 */
--	if ((transaction->stage == CVMX_USB_STAGE_SETUP) ||
--	    (transaction->stage == CVMX_USB_STAGE_SETUP_SPLIT_COMPLETE))
-+	if (transaction->stage == CVMX_USB_STAGE_SETUP ||
-+	    transaction->stage == CVMX_USB_STAGE_SETUP_SPLIT_COMPLETE)
- 		bytes_this_transfer = 0;
- 
- 	/*
-@@ -2765,9 +2765,9 @@ static int cvmx_usb_poll_channel(struct octeon_hcd *usb, int channel)
- 	 * a ping before proceeding. If this isn't true the ACK processing below
- 	 * will clear this flag
- 	 */
--	if ((pipe->device_speed == CVMX_USB_SPEED_HIGH) &&
--	    (pipe->transfer_type == CVMX_USB_TRANSFER_BULK) &&
--	    (pipe->transfer_dir == CVMX_USB_DIRECTION_OUT))
-+	if (pipe->device_speed == CVMX_USB_SPEED_HIGH &&
-+	    pipe->transfer_type == CVMX_USB_TRANSFER_BULK &&
-+	    pipe->transfer_dir == CVMX_USB_DIRECTION_OUT)
- 		pipe->flags |= CVMX_USB_PIPE_FLAGS_NEED_PING;
- 
- 	if (WARN_ON_ONCE(bytes_this_transfer < 0)) {
-@@ -2820,8 +2820,8 @@ static int cvmx_usb_poll_channel(struct octeon_hcd *usb, int channel)
- 			 * If there is more data to go then we need to try
- 			 * again. Otherwise this transaction is complete
- 			 */
--			if ((buffer_space_left == 0) ||
--			    (bytes_in_last_packet < pipe->max_packet))
-+			if (buffer_space_left == 0 ||
-+			    bytes_in_last_packet < pipe->max_packet)
- 				cvmx_usb_complete(usb, pipe,
- 						  transaction,
- 						  CVMX_USB_STATUS_OK);
 -- 
-2.30.2
+Thanks,
+
+David / dhildenb
 

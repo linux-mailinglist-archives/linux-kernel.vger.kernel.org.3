@@ -2,182 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7E9B4F95A6
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:26:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 135E44F95B9
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:27:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235640AbiDHM2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 08:28:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48986 "EHLO
+        id S235687AbiDHM3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 08:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232419AbiDHM2V (ORCPT
+        with ESMTP id S235671AbiDHM33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 08:28:21 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C632610CF2A
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 05:26:18 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id p135so4460083iod.2
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 05:26:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=14DprhKsqJXStRxJvQBVCHfnfpx5IJV0lotlrHWmtH8=;
-        b=esQabPT8PgOCXCKowwR7iPuL6EBprRhLQCJjiCPpqKT+zo2s7AX5jsuWkcll++agNI
-         qfC0Ucv4sMoOuy6eyYoReKeUYoC9QGxNYsXavCGAuAXC/hroV6BeaIyRhjX/n7HYhIdw
-         XC0dYlDw+wOvgy/iXFPETMJ3T0oEmnrsTNCD3An6UIfMWZ0oiOW6YCLt8u4+aSbkdntI
-         wq/wGdvao4gProp39oOBDaT/EIqF3VTEnDP3nl/2nfoh/TXFXu2tAssMMra8SUy8j5/j
-         Pso54AqWlK8SW1LJxhGEMHqkvEAVIIlWkBbKHswvwFUE33WyPhGWj3vP7Eh3BEAIqyfK
-         RqWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=14DprhKsqJXStRxJvQBVCHfnfpx5IJV0lotlrHWmtH8=;
-        b=Y9MQJczj9LQHCvZwT3aoirTV8LER1u9i7iB8+bMCy/sxH8ic5/vOar1WJyJbfdZBqe
-         ltoV4kr7iyKd6pGpxzia7VbfVisWzsjMMwE0Kp4EEQubxcru7FIVSxgofD7pKegOneLt
-         cxOPZAjcCwFX5ogIeyFIUJ0yhvBRK7z4+gUckbTvYUY9sqBJONCge6oTodnvyP1K5zQf
-         pW3+40EpcaI3/Z1eWUKRowY4DZWnD8dhkZLYSD4ygcvQnYM+hn6y3Mjvm7f9cyCtRiYm
-         nq8X0Y+DActMJBkop9jDzgSGdlPDNI9lH898EZAg4MXeugYWYyoDXgpcI4flCL2kidwV
-         uIew==
-X-Gm-Message-State: AOAM5323JPZr8U3MyJxJ9R30irA8ne81jXlBeicd4ePCt7UoJuVEPVJl
-        T8aPnu23RzCYFDaBtf5tWIErWglsa+CA1uRtbUM=
-X-Google-Smtp-Source: ABdhPJwYxj9qTajeRNS0LUW6oTSTCIMHlweqyq8T5dvsb9mYLzdzzWROD6lYFfz4r3yy3eTAJ5SM+MzM3jeZJ3hAo9Q=
-X-Received: by 2002:a05:6602:490:b0:638:c8ed:1e38 with SMTP id
- y16-20020a056602049000b00638c8ed1e38mr8279012iov.202.1649420778200; Fri, 08
- Apr 2022 05:26:18 -0700 (PDT)
+        Fri, 8 Apr 2022 08:29:29 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38B633DCA7;
+        Fri,  8 Apr 2022 05:27:24 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 2389niGA022034;
+        Fri, 8 Apr 2022 14:27:04 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=dTAXQp+cFjdIWlRb6J7G7W0/qZzdDyJ57D7J0I+JRLE=;
+ b=2kt2tzQ0xJEwsVv/p6RD8AeVwBts83H5Zwyswg20qjAYuGRw9iUTfj0NW5l1Api1G+Rg
+ 5XFIUrVWGmpSqKnNdLP7+NNVjCw0EGCWcYEyAPEOmBVGFtc5SWpMA0qBHHDlt2Kd1PFe
+ t9yeyWEVKAWzoheBb1/e9DJkwHICxxx4v4wetnX03dmcSmAhz/qMluxOC1AtUWx2Zxrz
+ hC10JAYHoAoeaTU3HBQQSP1L45v0tkw+VaukveEvMzcqz6OZIQvVumaumNJl9ZMS7Y1a
+ kljROp4Jh58qsRZO2P14ZCwFU5nFu8GS4YZeMAT+2MeaQZUPMPKo7t0Kid330teRwMiV Bg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3f8x9gu5ej-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 08 Apr 2022 14:27:03 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 04F8C10002A;
+        Fri,  8 Apr 2022 14:27:03 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id F1FA121A21E;
+        Fri,  8 Apr 2022 14:27:02 +0200 (CEST)
+Received: from localhost (10.75.127.49) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Fri, 8 Apr 2022 14:27:02
+ +0200
+From:   Valentin Caron <valentin.caron@foss.st.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>
+CC:     Jiri Slaby <jirislaby@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Erwan Le Ray <erwan.leray@foss.st.com>,
+        Valentin Caron <valentin.caron@foss.st.com>,
+        <linux-serial@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>
+Subject: [PATCH V2 0/3] serial: stm32: add earlycon and polling mode
+Date:   Fri, 8 Apr 2022 14:26:33 +0200
+Message-ID: <20220408122636.505737-1-valentin.caron@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220408100340.43620-1-vincenzo.frascino@arm.com>
-In-Reply-To: <20220408100340.43620-1-vincenzo.frascino@arm.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Fri, 8 Apr 2022 14:26:07 +0200
-Message-ID: <CA+fCnZcoFWXyhjfKSxPh2djiTWjYCh2xmirPehyJS94DaoJC9w@mail.gmail.com>
-Subject: Re: [PATCH] kasan: Fix hw tags enablement when KUNIT tests are disabled
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-08_04,2022-04-08_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 8, 2022 at 12:04 PM Vincenzo Frascino
-<vincenzo.frascino@arm.com> wrote:
->
-> Kasan enables hw tags via kasan_enable_tagging() which based on the mode
-> passed via kernel command line selects the correct hw backend.
-> kasan_enable_tagging() is meant to be invoked indirectly via the cpu features
-> framework of the architectures that support these backends.
-> Currently the invocation of this function is guarded by CONFIG_KASAN_KUNIT_TEST
-> which allows the enablement of the correct backend only when KUNIT tests are
-> enabled in the kernel.
+- Add support of early console and polling mode in stm32-usart driver.
+- Avoid a possible infinite loop in putchar function.
 
-> ... and prevents to enable MTE on arm64 when KUNIT tests for kasan hw_tags are
-> disabled.
+Changes since v1:
+- Fix warning "unused variable 'ret'"
 
-Oh, indeed. Thanks for finding this!
+Valentin Caron (3):
+  serial: stm32: remove infinite loop possibility in putchar function
+  serial: stm32: add KGDB support
+  serial: stm32: add earlycon support
 
-> This inconsistency was introduced in commit:
->
->   f05842cfb9ae2 ("kasan, arm64: allow using KUnit tests with HW_TAGS mode")
+ .../admin-guide/kernel-parameters.txt         |   6 ++
+ drivers/tty/serial/Kconfig                    |   1 +
+ drivers/tty/serial/stm32-usart.c              | 100 +++++++++++++++++-
+ drivers/tty/serial/stm32-usart.h              |   2 +
+ 4 files changed, 104 insertions(+), 5 deletions(-)
 
-No, that commit is fine. The issue was introduced recently in
-ed6d74446cbf ("kasan: test: support async (again) and asymm modes for
-HW_TAGS"), where I changed kasan_init_hw_tags_cpu() to call
-kasan_enable_tagging() instead of hw_enable_tagging_*().
+-- 
+2.25.1
 
-> Fix the issue making sure that the CONFIG_KASAN_KUNIT_TEST guard does not
-> prevent the correct invocation of kasan_enable_tagging().
->
-> Fixes: f05842cfb9ae2 ("kasan, arm64: allow using KUnit tests with HW_TAGS mode")
-> Cc: Andrey Ryabinin <ryabinin.a.a@gmail.com>
-> Cc: Alexander Potapenko <glider@google.com>
-> Cc: Andrey Konovalov <andreyknvl@gmail.com>
-> Cc: Dmitry Vyukov <dvyukov@google.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> ---
->  mm/kasan/hw_tags.c |  4 ++--
->  mm/kasan/kasan.h   | 10 ++++++----
->  2 files changed, 8 insertions(+), 6 deletions(-)
->
-> diff --git a/mm/kasan/hw_tags.c b/mm/kasan/hw_tags.c
-> index 07a76c46daa5..e2677501c36e 100644
-> --- a/mm/kasan/hw_tags.c
-> +++ b/mm/kasan/hw_tags.c
-> @@ -336,8 +336,6 @@ void __kasan_poison_vmalloc(const void *start, unsigned long size)
->
->  #endif
->
-> -#if IS_ENABLED(CONFIG_KASAN_KUNIT_TEST)
-> -
->  void kasan_enable_tagging(void)
->  {
->         if (kasan_arg_mode == KASAN_ARG_MODE_ASYNC)
-> @@ -349,6 +347,8 @@ void kasan_enable_tagging(void)
->  }
->  EXPORT_SYMBOL_GPL(kasan_enable_tagging);
-
-Please keep this EXPORT_SYMBOL_GPL under CONFIG_KASAN_KUNIT_TEST.
-
->
-> +#if IS_ENABLED(CONFIG_KASAN_KUNIT_TEST)
-> +
->  void kasan_force_async_fault(void)
->  {
->         hw_force_async_tag_fault();
-> diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
-> index d79b83d673b1..b01b4bbe0409 100644
-> --- a/mm/kasan/kasan.h
-> +++ b/mm/kasan/kasan.h
-> @@ -355,25 +355,27 @@ static inline const void *arch_kasan_set_tag(const void *addr, u8 tag)
->  #define hw_set_mem_tag_range(addr, size, tag, init) \
->                         arch_set_mem_tag_range((addr), (size), (tag), (init))
->
-> +void kasan_enable_tagging(void);
-> +
->  #else /* CONFIG_KASAN_HW_TAGS */
->
->  #define hw_enable_tagging_sync()
->  #define hw_enable_tagging_async()
->  #define hw_enable_tagging_asymm()
->
-> +static inline void kasan_enable_tagging(void) { }
-> +
->  #endif /* CONFIG_KASAN_HW_TAGS */
->
->  #if defined(CONFIG_KASAN_HW_TAGS) && IS_ENABLED(CONFIG_KASAN_KUNIT_TEST)
->
-> -void kasan_enable_tagging(void);
->  void kasan_force_async_fault(void);
->
-> -#else /* CONFIG_KASAN_HW_TAGS || CONFIG_KASAN_KUNIT_TEST */
-> +#else /* CONFIG_KASAN_HW_TAGS && CONFIG_KASAN_KUNIT_TEST */
->
-> -static inline void kasan_enable_tagging(void) { }
->  static inline void kasan_force_async_fault(void) { }
->
-> -#endif /* CONFIG_KASAN_HW_TAGS || CONFIG_KASAN_KUNIT_TEST */
-> +#endif /* CONFIG_KASAN_HW_TAGS && CONFIG_KASAN_KUNIT_TEST */
->
->  #ifdef CONFIG_KASAN_SW_TAGS
->  u8 kasan_random_tag(void);
-> --
-> 2.35.1
->
-
-Thank you, Vincenzo!

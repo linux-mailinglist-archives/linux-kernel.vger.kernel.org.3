@@ -2,71 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 770C94F9ACB
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 18:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7EC04F9AC2
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 18:36:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232656AbiDHQiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 12:38:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34798 "EHLO
+        id S232862AbiDHQiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 12:38:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232479AbiDHQiC (ORCPT
+        with ESMTP id S232671AbiDHQiP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 12:38:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2DC06E2F7F
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 09:35:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649435758;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
-        b=U+jK/zcd4u+AZ4gm/4Wu0VkExNKsyMauvmxPjlNlztwKif66IlZfKWtxLANARkjd9v/9b/
-        C3ZRc4p5mpJQjke5Tgn7OzcKq3eCeUoq6XdBOofKsw+Ac89wQzH+FMI7PobzK+gk5WBq2+
-        1en9V+MWygb6IdcrtgIr3v0UXUNrRpA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-589-wrXrFkA3MNCSPA0CHImrfw-1; Fri, 08 Apr 2022 12:35:55 -0400
-X-MC-Unique: wrXrFkA3MNCSPA0CHImrfw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 8 Apr 2022 12:38:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA9E0E886C;
+        Fri,  8 Apr 2022 09:36:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AE0F71014A65;
-        Fri,  8 Apr 2022 16:35:54 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 75D8A1402427;
-        Fri,  8 Apr 2022 16:35:54 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] KVM: x86: hyper-v: Avoid writing to TSC page without an active vCPU
-Date:   Fri,  8 Apr 2022 12:35:53 -0400
-Message-Id: <20220408163553.461489-1-pbonzini@redhat.com>
-In-Reply-To: <20220407201013.963226-1-vkuznets@redhat.com>
-References: 
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6FDDDB82A1D;
+        Fri,  8 Apr 2022 16:36:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 263C7C385A3;
+        Fri,  8 Apr 2022 16:36:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649435766;
+        bh=K5Kb3Xp0nCtSmnffNpkwtXLSVOyZuSrWwz3IcdaEMsg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=WoNz2bF6JO0f/m2ru+xTXSU2mwhtzBKkDAtQZn+Uaryd6WxxDeiYxn0a+MGIN4e+0
+         1F22ktcK6ICMlzaCXccBwbv79SK3QJdLiapBugH9E6tgGfD3EKmD+w5jqopJ73GCve
+         EyMxOp0ckbP6T19dkF3aKe7HpIegg0x/+dFEi4PaZpi2gaQ9HdLNEg5fixdSNwam4T
+         ddYGwQXQ5aHe9+BHkEjg/12Dw6YuZWerS9t0U23OsoDQarHu1pqd2FTzIz1gbhgl4C
+         e0rR/O9ZRq9yUxODI2O1CZ+2NZhyp6UuP4mVmcziWVlvGnPWqnFQ181ih/jOXTSjJn
+         TBt/gq1632CxQ==
+Received: by mail-yb1-f172.google.com with SMTP id w134so16029149ybe.10;
+        Fri, 08 Apr 2022 09:36:06 -0700 (PDT)
+X-Gm-Message-State: AOAM531FUb+y9ivPz2iB9PXHfGgol2+GUNbHuzv8t3TtjKJ5KMI7VjEk
+        FM1XZ7qkwLi/rYKBpX2TqnGJr6W1Uo3ped+/1H0=
+X-Google-Smtp-Source: ABdhPJyKLjZmpdguSVpuN09IKlc04KncOOIfRxhBm2fII7mzd2UxjW7i6caa6tBWW95cP9i+gMEge8We3t1NQBHRysw=
+X-Received: by 2002:a25:6909:0:b0:63d:afc8:8b01 with SMTP id
+ e9-20020a256909000000b0063dafc88b01mr14441952ybc.561.1649435765226; Fri, 08
+ Apr 2022 09:36:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220408083728.25701-1-xiam0nd.tong@gmail.com> <20220408122348.bt7lkaumwhv36a2q@fiona>
+In-Reply-To: <20220408122348.bt7lkaumwhv36a2q@fiona>
+From:   Song Liu <song@kernel.org>
+Date:   Fri, 8 Apr 2022 09:35:54 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5qZiE4z0j_+pJbiHQ+zK9oVw3DLgEXdSQ0m=m5ULX1Mw@mail.gmail.com>
+Message-ID: <CAPhsuW5qZiE4z0j_+pJbiHQ+zK9oVw3DLgEXdSQ0m=m5ULX1Mw@mail.gmail.com>
+Subject: Re: [PATCH v3] md: fix an incorrect NULL check in does_sb_need_changing
+To:     Goldwyn Rodrigues <rgoldwyn@suse.de>
+Cc:     Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Guoqing Jiang <guoqing.jiang@linux.dev>,
+        linux-raid <linux-raid@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Queued, thanks.
+On Fri, Apr 8, 2022 at 5:23 AM Goldwyn Rodrigues <rgoldwyn@suse.de> wrote:
+>
+> On 16:37 08/04, Xiaomeng Tong wrote:
+> > The bug is here:
+> >       if (!rdev)
+> >
+> > The list iterator value 'rdev' will *always* be set and non-NULL
+> > by rdev_for_each(), so it is incorrect to assume that the iterator
+> > value will be NULL if the list is empty or no element found.
+> > Otherwise it will bypass the NULL check and lead to invalid memory
+> > access passing the check.
+> >
+> > To fix the bug, use a new variable 'iter' as the list iterator,
+> > while using the original variable 'rdev' as a dedicated pointer to
+> > point to the found element.
+> >
+> > Cc: stable@vger.kernel.org
+> > Fixes: 2aa82191ac36 ("md-cluster: Perform a lazy update")
+> > Acked-by: Guoqing Jiang <guoqing.jiang@linux.dev>
+> > Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+>
+> Also safeguards from reading sb from a faulty device if all devices are
+> faulty.
+>
+> Acked-by: Goldwyn Rodrigues <rgoldwyn@suse.com>
 
-Paolo
-
-
+Applied to md-next. Thanks!

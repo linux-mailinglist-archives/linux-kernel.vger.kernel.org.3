@@ -2,101 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F2514F8E96
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 299724F8DF1
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:26:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234743AbiDHF2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 01:28:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51682 "EHLO
+        id S234713AbiDHFhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 01:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234726AbiDHF15 (ORCPT
+        with ESMTP id S229933AbiDHFhC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 01:27:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C8B59394;
-        Thu,  7 Apr 2022 22:25:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E26961E6B;
-        Fri,  8 Apr 2022 05:25:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B753C385A1;
-        Fri,  8 Apr 2022 05:25:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649395553;
-        bh=QeG7e3it6xxlS97YcIp53LJohPxHBHQayoT1m2dcYRs=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=uy1+Efjrm8Psbhx5lRdKfFCeV5bDzw4z8FUthEHDYEPTP1vA6AcCzoEB3IZgheWBJ
-         fS/TUaZ1Af/ru/ySHzYP5ECpM58OSUfBUDNvhCL8A/6CNuRfJbiwb/Fv+VJkPiD5ij
-         gItwanegZG9lorKJzLvZpE4U+t1bxf4OpfcM+g3kZcxqGCNHQnXnPMGd/NES2rlKx+
-         j2BnAGyq/yRGLRvv2v3Ze5aRYn+J6DhrHYANCg4z/DdS4V3a616p/G9QUWbXNcQkMU
-         VgNRSpoGyuB5tPm6YzHUZyLSj8XO0/5tLJ61d48VFBsuGvphrHXSiI7SGUTu8wQs/F
-         ZHu0na+eYUn1g==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Zong-Zhe Yang <kevin_yang@realtek.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org, Ping-Ke Shih <pkshih@realtek.com>,
-        linux-wireless@vger.kernel.org
-Subject: Re: [ammarfaizi2-block:kvalo/ath/pending 9/45] drivers/net/wireless/realtek/rtw89/ser.c:319:2: warning: unannotated fall-through between switch labels
-References: <202204071343.R89skHKl-lkp@intel.com>
-Date:   Fri, 08 Apr 2022 08:25:48 +0300
-In-Reply-To: <202204071343.R89skHKl-lkp@intel.com> (kernel test robot's
-        message of "Thu, 7 Apr 2022 13:29:53 +0800")
-Message-ID: <87k0c0p2n7.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Fri, 8 Apr 2022 01:37:02 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D956E13D64;
+        Thu,  7 Apr 2022 22:35:00 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id y8so2326824pfw.0;
+        Thu, 07 Apr 2022 22:35:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=M9GeHxOMMEsAW0gA0HYTOdLUoDAu3ektn3I3+ONaQ78=;
+        b=iuN+YiAnhi4v1/0R0HOX4xh70eB3YiaK4mxf9D7VrRedSnKBVG1bPI7e4hBhLMyn6I
+         EP3EQVc/c5XXRpoPZtxAE2grPFYBMXYm7VW9IRGucH2ZOw05Fjx80ms4gqWQ8Xc26/0s
+         fQZB77ggqAr09i7Wp9zGWuKbn4kOkwahgb60gOXZyJ/XBilId/BGRSM1zycYTKbSbwTr
+         qD1V4F5S3rTVl7krq0UmV0+3GZwKggtIYpUfJZfjrh6Xl/ySynO2lhELXWTIsXdpS315
+         EVw2et4gxvLGuHtWUQjO53grE4n9TMzO0jefdg/9oT477pbO6U95H57vJNKRzo+z9qgj
+         bCpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=M9GeHxOMMEsAW0gA0HYTOdLUoDAu3ektn3I3+ONaQ78=;
+        b=1ewk4cbqiYgq+cHV0C8xTIx1bU6lSYUugLd2J4cjT6nJNhoDCvUo465sLFUZRqc0p/
+         DQMyJuuVePiiS+cxCZHvTsI8UX8yOb6St2QSPYDQwoSFzWiNTVsQdo3JoqmVY3hB2R9Q
+         GKAV12DC2bi+cZz5gI4tgQSdHX2WhLkgsFH7naD/NYSIinATOaNzYacHdrePFIpkWXa4
+         eTPFCx9pnUUyz0gWB5U0mZsEf6tB4BXkk1w9li0Xxgxv+10WMyDQ2Ye/Y04LPRnqnNpJ
+         jkK+/hsybQXWZw6p9lxyI/iTqXn01FYwi/6daFW9h8ZfZWIt3gexnLHvMsVFlQtpC/7o
+         yEfg==
+X-Gm-Message-State: AOAM5301ZYkSCQkwinWwcsXHm0s6SgudrRR1gnqifzh4bG/pnnHRuI6I
+        mKAM1jL1i6jAnMOD/5eJuyyzIewA1JA=
+X-Google-Smtp-Source: ABdhPJx/XECfC8Kwv7ypEIy3LDZeAQh4csiALroh2Vt6IrSaBqHpDu5jRjodhb64ZQWN1o2k2cYPKQ==
+X-Received: by 2002:a62:1e03:0:b0:505:64c1:3e19 with SMTP id e3-20020a621e03000000b0050564c13e19mr7824024pfe.32.1649396100336;
+        Thu, 07 Apr 2022 22:35:00 -0700 (PDT)
+Received: from localhost ([192.55.54.52])
+        by smtp.gmail.com with ESMTPSA id mn18-20020a17090b189200b001cac1781bb4sm10718776pjb.35.2022.04.07.22.34.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 22:34:59 -0700 (PDT)
+Date:   Thu, 7 Apr 2022 22:34:57 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sagi Shahar <sagis@google.com>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Jim Mattson <jmattson@google.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [RFC PATCH v5 083/104] KVM: x86: Split core of hypercall
+ emulation to helper function
+Message-ID: <20220408053457.GA857847@ls.amr.corp.intel.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <f3293bd872a916bf33165a2ec0d6fc50533b817f.1646422845.git.isaku.yamahata@intel.com>
+ <CAAhR5DFPsmxYXXXZ9WNW=MDWRRz5jrntPvsnKw7VTrRh5CbohQ@mail.gmail.com>
+ <1eac9040-f75f-8838-bd75-521cb666c61a@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1eac9040-f75f-8838-bd75-521cb666c61a@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kernel test robot <lkp@intel.com> writes:
+On Thu, Apr 07, 2022 at 03:12:57PM +0200,
+Paolo Bonzini <pbonzini@redhat.com> wrote:
 
-> tree:   https://github.com/ammarfaizi2/linux-block kvalo/ath/pending
-> head:   e1bd1e32fab0c91cf7a87e96fee9270e98e79351
-> commit: 14f9f4790048f684c2b151c899895feae0b5731a [9/45] rtw89: ser: control hci interrupts on/off by state
-> config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20220407/202204071343.R89skHKl-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b306233f78876a1d197ed6e1f05785505de7c63)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm64 cross compiling tool for clang build
->         # apt-get install binutils-aarch64-linux-gnu
->         # https://github.com/ammarfaizi2/linux-block/commit/14f9f4790048f684c2b151c899895feae0b5731a
->         git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
->         git fetch --no-tags ammarfaizi2-block kvalo/ath/pending
->         git checkout 14f9f4790048f684c2b151c899895feae0b5731a
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/net/wireless/realtek/rtw89/
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
->>> drivers/net/wireless/realtek/rtw89/ser.c:319:2: warning: unannotated fall-through between switch labels [-Wimplicit-fallthrough]
->            default:
->            ^
->    drivers/net/wireless/realtek/rtw89/ser.c:319:2: note: insert 'break;' to avoid fall-through
->            default:
->            ^
->            break; 
->    1 warning generated.
+> > > +       if (static_call(kvm_x86_get_cpl)(vcpu) != 0) {
+> > > +               ret = -KVM_EPERM;
+> > > +               goto out;
+> > > +       }
+> 
+> Is this guaranteed by TDG.VP.VMCALL?
 
-This should fix the warning:
+Yes. TDCALL instruction in TD results in #GP(0) if CPL > 0.
+It's documented in trust domain CPU architectural extensions spec.
+https://www.intel.com/content/dam/develop/external/us/en/documents-tps/intel-tdx-cpu-architectural-specification.pdf
 
-https://patchwork.kernel.org/project/linux-wireless/patch/20220408001353.17188-2-pkshih@realtek.com/
-
+Anyway VMM can't know TD guest CPL (or other CPU state).
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Isaku Yamahata <isaku.yamahata@gmail.com>

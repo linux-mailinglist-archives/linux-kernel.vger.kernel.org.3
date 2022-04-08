@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 897AF4F96DA
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 15:37:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 268604F96DC
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 15:37:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236338AbiDHNiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 09:38:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42554 "EHLO
+        id S236352AbiDHNi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 09:38:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236327AbiDHNiq (ORCPT
+        with ESMTP id S236340AbiDHNiv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 09:38:46 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006481E1F4B;
-        Fri,  8 Apr 2022 06:36:42 -0700 (PDT)
+        Fri, 8 Apr 2022 09:38:51 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D9C10BD08;
+        Fri,  8 Apr 2022 06:36:47 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id 157211F471A4
+        with ESMTPSA id 2C7A51F47188
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649425001;
-        bh=+tOnX4QIugfD+9Fhv/ALRTUmQmslQz3qMgPazBPnu7Y=;
+        s=mail; t=1649425006;
+        bh=9XQVJ/N+Dc94X8yCqDsgthkWlD10Vdhk6Lt9n5h9RdI=;
         h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-        b=FIqcdy3eJS4+vH4pOIMJwd7u3fep32bmhLVeFkb/+OrYF5FdBbkRvA9LGG2sO1Wkw
-         VglK7Yng/DBr/0M8/oamz874VPqmNmIM0ZM5n1e5nAuuQnLa2qY37WUtBtaeDG8hPk
-         bXRS43glG6pYxVRP50be1mze9nsyl+eZmTBaEkCMqpmL0mExixaLWaW5s+9cZ/+3UG
-         sD8luUio6Xc1mCEPeve4ag3LmyJRm23N3U0VXASr7DZlGVlMwF1NJZVBzjpoWv/PPS
-         kZNNkwqvxc/u0m+0b8pCkLr0cdbaAnSJhPbQcaKTLcWPsYty10rn6CbdJLa2Q8EMVV
-         DQHNBi9Lux7vQ==
-Message-ID: <13c1bee4-f9c0-2ca3-1f6c-ee60f090bef2@collabora.com>
-Date:   Fri, 8 Apr 2022 15:36:38 +0200
+        b=bzXIPcJCQ7bcSuMsfdu/WYkCxdyGs7HZ1QZX8aL+AhPXJzWNSYlmTtVKF1vUKH4O2
+         4WKGDlrTxU8+GHWu8rF43EVpuuRagcW2ykv7E93gITHMXlIECALOkY8pngDMPzTAF5
+         yDJY9VqLa0xxBJL6NBpc104Fvwnu2OqRwNGWZ6yTgReci8cjn1QjNMh1HmSnfLh4I3
+         xW1B/Sr0xKZFPj9+M4yccNuI++FqLTh9tM+Lh4vgBtAYxdPRIGK9AQfiiCY+aSyKX9
+         5kjr2HXVs7UZf01nGXK5z7qF39Dj09l1Z92GKV9gaTEXl2dtkT1aaJ95n/ZQZHz0pQ
+         /lPl1jSguZxHg==
+Message-ID: <bcc8a0e1-144e-b9ba-9532-f54d4051d8a6@collabora.com>
+Date:   Fri, 8 Apr 2022 15:36:42 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH V2 04/15] cpufreq: mediatek: Remove unused headers
+Subject: Re: [PATCH V2 05/15] cpufreq: mediatek: Enable clocks and regulators
 To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, rafael@kernel.org,
         viresh.kumar@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org
 Cc:     matthias.bgg@gmail.com, jia-wei.chang@mediatek.com,
@@ -43,11 +43,12 @@ Cc:     matthias.bgg@gmail.com, jia-wei.chang@mediatek.com,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        "Andrew-sh . Cheng" <andrew-sh.cheng@mediatek.com>
 References: <20220408045908.21671-1-rex-bc.chen@mediatek.com>
- <20220408045908.21671-5-rex-bc.chen@mediatek.com>
+ <20220408045908.21671-6-rex-bc.chen@mediatek.com>
 Content-Language: en-US
-In-Reply-To: <20220408045908.21671-5-rex-bc.chen@mediatek.com>
+In-Reply-To: <20220408045908.21671-6-rex-bc.chen@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -63,8 +64,14 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 Il 08/04/22 06:58, Rex-BC Chen ha scritto:
 > From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
 > 
-> Remove unused headers.
+> We need to enable regulators so that the max and min requested values will
+> be recorded.
+> The intermediate clock is not always enabled by CCF in different projects,
+> so we should enable it in the cpufreq driver.
 > 
+> Signed-off-by: Andrew-sh.Cheng <andrew-sh.cheng@mediatek.com>
 > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
 
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+

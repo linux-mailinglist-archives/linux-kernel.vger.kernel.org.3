@@ -2,106 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BE1F4F9D26
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 20:44:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DDAD4F9D31
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 20:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239110AbiDHSqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 14:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58520 "EHLO
+        id S238961AbiDHSvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 14:51:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238952AbiDHSqh (ORCPT
+        with ESMTP id S233108AbiDHSu6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 14:46:37 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C02B1D66C1
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 11:44:04 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id y8so3926599pfw.0
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 11:44:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7bnZPItrf/OuYXtsSpA6GbFrZ9ruz5AGfVA3JhHbTYg=;
-        b=PP6PYy7y7MFUeH857olAI/cYmO3NiifPtKjjkkECaRFx7D3/0FXZPooBLilzlJHeG3
-         axfuukjVUfOTFbexucHgTpc5tBTdbVWmgunrizZcNj4gAT2SAztSVzPjIIFmkcMkLWEc
-         ixtkGJmFWmb4lI2sMZKG5savEb98lmH/BLzDg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7bnZPItrf/OuYXtsSpA6GbFrZ9ruz5AGfVA3JhHbTYg=;
-        b=2c2OfhMr06hZJfZDM6WYYAYK/f26z4bubc6fdSZZc0rXR+RV3rCcecLsrY6u6AOU5K
-         vjdQDsS0bsgNC4qrS3xJHE2rzHA0Gv6L+7C53oh+VSs5eNsHBYnFWWOZQIqBZf9ucasr
-         zCNUFqijECHyz//ZcBBNOVHDjWsC7Wny91pG+cxABMnhrWVrz+u32mvKodTbd1RvNp9X
-         fsAEVBSZALKKNe8sAohJ0sYLl42WJrcxcTxrZosz1RvJk5Rbzg0eUZgnBZlm6n1TBL0b
-         TG60iB0vnqg+pzFQX63jgPIhHDGtuyHAZ0UhmdWH8AqeznsYBG0WSn+pv1zSZRsw5zkF
-         bwTQ==
-X-Gm-Message-State: AOAM531WYS4h++CR3Eo+WN1tIDu5wd2Jcs6Hsn5ZqFSZlMt7ZcWFsuvr
-        C1Q1caW7SxcjfaXBDHqCrbuNoQ==
-X-Google-Smtp-Source: ABdhPJzFkSSvLnmJ6PzGHU7tPTd1JjbOIusNY69XQd1OyZCCzYlZpEH5H+mbOPxzcPk0K+M4puupqA==
-X-Received: by 2002:a63:2f03:0:b0:398:b2fc:250c with SMTP id v3-20020a632f03000000b00398b2fc250cmr16464042pgv.75.1649443388591;
-        Fri, 08 Apr 2022 11:43:08 -0700 (PDT)
-Received: from evgreen-glaptop.lan ([98.47.98.87])
-        by smtp.gmail.com with ESMTPSA id w129-20020a628287000000b004fdc453b49asm26882487pfd.39.2022.04.08.11.43.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 11:43:08 -0700 (PDT)
-From:   Evan Green <evgreen@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Rajat Jain <rajatja@chromium.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Evan Green <evgreen@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH] xhci: Enable runtime PM on second Alderlake controller
-Date:   Fri,  8 Apr 2022 11:42:50 -0700
-Message-Id: <20220408114225.1.Ibcff6b86ed4eacfe4c4bc89c90e18416f3900a3e@changeid>
-X-Mailer: git-send-email 2.31.0
+        Fri, 8 Apr 2022 14:50:58 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950731C7E9D;
+        Fri,  8 Apr 2022 11:48:54 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 3F142210EF;
+        Fri,  8 Apr 2022 18:48:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1649443733;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rNReIfAGeus5Vto4N+wZUUGUeFj6AQ7Aj/5V+na+520=;
+        b=m1S+LWBpFXdSFeUXBG6HVVbc7p1NapziMGAzaDWMNT0iwUV0MekpJXuX1S/vdaUulXMHZh
+        Q6NX0la1j7fBSAs24pfx5ShIesxh3nXtZrGWn/WRYUSjpDZWPcBPvtgm/6E+gv3N0NMQdc
+        eFQl+GlGn+aiqA1Mlt0s8E0aaWAWhoc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1649443733;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rNReIfAGeus5Vto4N+wZUUGUeFj6AQ7Aj/5V+na+520=;
+        b=tlQQY436byyl4INEuQNnGOB4sEwVb0WU3HCjIuwMvLooh7qHcCywDBiqRrkR1La4IGKc/j
+        YgMpdoRbI62UNsAg==
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id 33FD6A3B89;
+        Fri,  8 Apr 2022 18:48:53 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id 41229DA832; Fri,  8 Apr 2022 20:44:50 +0200 (CEST)
+Date:   Fri, 8 Apr 2022 20:44:49 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     Schspa Shi <schspa@gmail.com>
+Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
+        terrelln@fb.com, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] btrfs: zstd: use spin_lock in timer function
+Message-ID: <20220408184449.GB15609@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz, Schspa Shi <schspa@gmail.com>,
+        clm@fb.com, josef@toxicpanda.com, dsterba@suse.com, terrelln@fb.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220408181523.92322-1-schspa@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220408181523.92322-1-schspa@gmail.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alderlake has two XHCI controllers with PCI IDs 0x461e and 0x51ed. We
-had previously added the quirk to default enable runtime PM for 0x461e,
-now add it for 0x51ed as well.
+On Sat, Apr 09, 2022 at 02:15:23AM +0800, Schspa Shi wrote:
+> timer callback was running on bh, and there is no need to disable bh again.
 
-Signed-off-by: Evan Green <evgreen@chromium.org>
----
-
-Someone at Intel can correct me on the proper name for this define.
----
- drivers/usb/host/xhci-pci.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 5c351970cdf1ce..d7e0e6ebf0800e 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -59,6 +59,7 @@
- #define PCI_DEVICE_ID_INTEL_TIGER_LAKE_XHCI		0x9a13
- #define PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI		0x1138
- #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_XHCI		0x461e
-+#define PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI	0x51ed
- 
- #define PCI_DEVICE_ID_AMD_RENOIR_XHCI			0x1639
- #define PCI_DEVICE_ID_AMD_PROMONTORYA_4			0x43b9
-@@ -266,7 +267,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 	     pdev->device == PCI_DEVICE_ID_INTEL_ICE_LAKE_XHCI ||
- 	     pdev->device == PCI_DEVICE_ID_INTEL_TIGER_LAKE_XHCI ||
- 	     pdev->device == PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI ||
--	     pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_XHCI))
-+	     pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_XHCI ||
-+	     pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_PCH_XHCI))
- 		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
- 
- 	if (pdev->vendor == PCI_VENDOR_ID_ETRON &&
--- 
-2.31.0
-
+Why do you think so? There was a specific fix fee13fe96529 ("btrfs:
+correct zstd workspace manager lock to use spin_lock_bh()") that
+actually added the _bh, so either you need to explain why exactly it's
+not needed anymore and verify that the reported lockdep warning from the
+fix does not happen.

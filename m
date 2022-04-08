@@ -2,81 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65B2B4F9ABE
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 18:35:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 770C94F9ACB
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 18:36:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232559AbiDHQhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 12:37:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33472 "EHLO
+        id S232656AbiDHQiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 12:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232479AbiDHQhp (ORCPT
+        with ESMTP id S232479AbiDHQiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 12:37:45 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F20B98F6A;
-        Fri,  8 Apr 2022 09:35:41 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id bq30so3241125lfb.3;
-        Fri, 08 Apr 2022 09:35:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=FFoYpbF863k/pBsPIF5QsC9t58VedUuM7a/RF6igal4=;
-        b=afkUqADE7Kkb8bW0nZw/GaT4xWYr1eKSw6jDRV+nkfdnDVLpid45/8ISvekE6oReop
-         DQSSBWmmk592uGL7Q1pFL8rBYYORE0q7n27a42F7YtjQ/DnwbHrAqFL9YLfGOXM+SPo6
-         LSNLcEqezquXx09qNbMlBMpQ0Nd4hXwaT6BMSskD/L23XgDBHjO90q3zb3F5ACqSyvqp
-         Foh+YyPEHJH7yc1sgByS7IvLspJHH/ngUGEz/Ifg/Pz8ZZaXwMzZEfTk16/CrXHC5STB
-         l/MdQoO8SkIAapZQIGFURyN0ddEg9OBWKOAoWWMbeoyz4Y2u3mqAeAUtdKmPWyf9Dhqg
-         r2KQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=FFoYpbF863k/pBsPIF5QsC9t58VedUuM7a/RF6igal4=;
-        b=24dn2dyfGGG2W+Wczp4MWvI7Eg1KDi2Q4qS4UZ+1kTeS2XaHRCMaHJB5w8uxyLzLsq
-         vXsv+D8k41H3gD9QmrcfPAMQhBvVTJTA+8awK3v6tkWyU1ATbm9yO7I6MCJ+ujC6cvxI
-         p7IIvBGfJ53IL9pv/czc5RJJMoPn+kGcGBmAzunytZcJ2u5vkvZ1fIER94CPKRXTrUpG
-         bG2aF1MnglTp10WFj0H1mCRTW1N2uxfwUfK8CBOlo0Ecr07m+WQ2yJP497csjI2MfO85
-         p6Q9U7XtZ7wDAvMIiOvOCdfJiZMZIwo2HiXNVHKfHUhBSiu7Q5GCISN4dZhjFJpR3c8C
-         lRug==
-X-Gm-Message-State: AOAM530f5psxBqjN8AFXJqL151ho8f2mbNi/cnbZ3/lJZqWtN2+sO0eL
-        oNTnVXbQHnqbH8xKYRJfaTSI4Qxhd64C4+R/IMU=
-X-Google-Smtp-Source: ABdhPJxFP/ouPbvMaJ5QMbtMWcOd1FddPolG7h+MMOx/15H8RobY8xBhjjZPrKUXtXyN769bc4d4N/LA78A8It6N6fg=
-X-Received: by 2002:a05:6512:b12:b0:44a:ba81:f874 with SMTP id
- w18-20020a0565120b1200b0044aba81f874mr13517769lfu.449.1649435739232; Fri, 08
- Apr 2022 09:35:39 -0700 (PDT)
+        Fri, 8 Apr 2022 12:38:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2DC06E2F7F
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 09:35:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649435758;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
+        b=U+jK/zcd4u+AZ4gm/4Wu0VkExNKsyMauvmxPjlNlztwKif66IlZfKWtxLANARkjd9v/9b/
+        C3ZRc4p5mpJQjke5Tgn7OzcKq3eCeUoq6XdBOofKsw+Ac89wQzH+FMI7PobzK+gk5WBq2+
+        1en9V+MWygb6IdcrtgIr3v0UXUNrRpA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-589-wrXrFkA3MNCSPA0CHImrfw-1; Fri, 08 Apr 2022 12:35:55 -0400
+X-MC-Unique: wrXrFkA3MNCSPA0CHImrfw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AE0F71014A65;
+        Fri,  8 Apr 2022 16:35:54 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 75D8A1402427;
+        Fri,  8 Apr 2022 16:35:54 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] KVM: x86: hyper-v: Avoid writing to TSC page without an active vCPU
+Date:   Fri,  8 Apr 2022 12:35:53 -0400
+Message-Id: <20220408163553.461489-1-pbonzini@redhat.com>
+In-Reply-To: <20220407201013.963226-1-vkuznets@redhat.com>
+References: 
 MIME-Version: 1.0
-From:   Paul Thomas <pthomas8589@gmail.com>
-Date:   Fri, 8 Apr 2022 12:35:27 -0400
-Message-ID: <CAD56B7dMg073f56vfaxp38=dZiAFU0iCn6kmDGiNcNtCijyFoA@mail.gmail.com>
-Subject: peak_usb: urb aborted
-To:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        support@peak-system.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Folks,
+Queued, thanks.
 
-I'm using a PCAN-USB adapter, and it seems to have a lot of trouble
-under medium load. I'm getting these urb aborted messages.
-[125054.082248] peak_usb 3-2.4.4:1.0 can0: Rx urb aborted (-71)
-[125077.886850] peak_usb 3-2.4.4:1.0 can0: Rx urb aborted (-32)
+Paolo
 
-Is there anything that can be done about this? This is very
-frustrating because it makes the USB adapter very difficult to use as
-a reliable partner of an embedded CAN device.
 
-I'm using Ubuntu with 5.4.0-107-generic. Any help would be appreciated.
-
--Paul

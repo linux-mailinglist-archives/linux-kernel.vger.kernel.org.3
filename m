@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF5E94F9B7F
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 19:20:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 273FE4F9B83
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 19:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238098AbiDHRWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 13:22:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59696 "EHLO
+        id S238104AbiDHRXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 13:23:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237545AbiDHRWS (ORCPT
+        with ESMTP id S234939AbiDHRXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 13:22:18 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941F310242D
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 10:20:14 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id 125so11366879iov.10
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 10:20:14 -0700 (PDT)
+        Fri, 8 Apr 2022 13:23:17 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5750F10242D;
+        Fri,  8 Apr 2022 10:21:12 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id z15so1988542qtj.13;
+        Fri, 08 Apr 2022 10:21:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ap3imm5PObX8OjFwHiIq7wbaVhzckxpuYj3ptqq60vU=;
-        b=UHfQeD1lAhbtCeKgODYSJwUtX5auhDWffFb658RRF9FBEG0q8T22o2gnveOVKsicw8
-         WPPubOCK3XBImjGPd2oXbXzmrv//eSoK6K+C33aybOXhaYYBgnPsHrNbf7BaGA88Onnz
-         ZQNYOORMnV0l6+5mPh1/MfHdNERrz9SgOPaz8=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=w53mUy5JVWp+l7UDjfpOdeHtwRO8q8QjeFkHdugkyDA=;
+        b=Ch3QMPejiCrhfiPCkc0KlBxrHZ6jo/geYFR746XH3Lhg/AVVBKLLAPsXWicVhUBOUU
+         hQnhOfiBD0tP5/rwWhEk4zRQ6SWcPFmJU8ShkV3cdErzb7eKTpOyhh9X19oBDrRNGSbL
+         IDh7dUKKotM3Z3VCE43gCYjTAI4gat4PxcKufljZfnbz2Z8k0Fw8MFqnJnekRTsaxfDi
+         POuTRINZfI1cxofu5pcQEDi3w4ADZM6f4zN9kmJudH+MNkTGSTjFp+VJPThFlx7v2Ho4
+         msR+q3Wv/8el+JlCbfrvolS5ngGlX4fV2x9yQ5B5uriRv7/t5J286rxMr07ntqzG8gHn
+         L8gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ap3imm5PObX8OjFwHiIq7wbaVhzckxpuYj3ptqq60vU=;
-        b=ATMw460UEbvRLjL0lY2cJW1ma9eg9vKAeeBnCK/sNroanr5B8Yy9sfM2JsTWM5Y45w
-         K9c6A477u3ZzpqoMYcXiLnv33i/32qbK3aHQrnOyTrh9S70ieKpsBNi2wz+ggWwwF9+z
-         zjnKNWs4IWei5kuN92qF/aFqnZorZ9358rmKe2EOLf38sMVjUep5MqiBPbQtzRFdLZya
-         nIezv1vstENsitPFgEAIFYDl5B5oqK3e9hQISrLfjrEwpk4N+RyH0f+dDBcsf8M7/sUf
-         B36LdKkC6uI84mQ7RdGpa24JGjBP2bRcCDU3GV18oSbpokdwGlQ3vORmOOmLmgFKY6TD
-         Wvkg==
-X-Gm-Message-State: AOAM530WKv5wSUPg9ogPMzpoi+OS5adYGT+T3bjWCQd5Eps44YHKLCiQ
-        PEOoehcWrrOnPM37bwyAuyIR7ufhQCP5ia/7sLQ99vAGX7kywQ==
-X-Google-Smtp-Source: ABdhPJwSKMj/cXiIp4ghHfKmz6M7gvuI55nrfQzJ50c1hNzfslGXmGEkmDdAfPwq9YV2BrL4R+7XwysmOAj5/jCxK9k=
-X-Received: by 2002:a05:6638:223:b0:326:22:e1c5 with SMTP id
- f3-20020a056638022300b003260022e1c5mr1367996jaq.259.1649438413882; Fri, 08
- Apr 2022 10:20:13 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=w53mUy5JVWp+l7UDjfpOdeHtwRO8q8QjeFkHdugkyDA=;
+        b=Fu3kYaS3lrCjLCDGQ16nI9Ng85q5o1NnmB2tsJIxrewL+GA3kkl1XvTISSWvJDFfOp
+         /VZOkGTkhEQxvgZHyp/af0Cm4/wsBIvAx9brQb18nbDn27HF4PkaVaG5xxjIs/utuieO
+         h89aReMdCJ3+RZBGTi2YeaAHvvq6T7YWo6M9VfSTd9DFTykhwCz1xL5PM6uAxhbbFHQZ
+         WhxvnnEJJhqeAZAqkSghFc1hcjMuWtkb887HRnGvS7CvwNDR01v2gW/DobQvUiZ6cLHZ
+         YY34w1SI2JhJ1diAsTTrwsoPV4TVosN7+PVbjH+DJpaV/h8cjgcMktlg/1q1lwNsbn0g
+         hUYA==
+X-Gm-Message-State: AOAM531Fni7Oz9oRNTdZqhl5/F1lwk/QG0g7w/FilSIVTX242lG8P+Lc
+        XLVVpLovQWmAIKnYKCY2nDc=
+X-Google-Smtp-Source: ABdhPJzpS+aigGsUmcgHTp7fhO3McjQyQkhz3VbEFkqd6pgLOkv5FWi7HcZ+NnY9b2mmpueFmGT+Wg==
+X-Received: by 2002:a05:622a:1a27:b0:2e0:64c2:7469 with SMTP id f39-20020a05622a1a2700b002e064c27469mr17003111qtb.187.1649438471403;
+        Fri, 08 Apr 2022 10:21:11 -0700 (PDT)
+Received: from xps8900.attlocal.net ([2600:1700:2442:6db0:db9:563b:eb2c:7a7b])
+        by smtp.gmail.com with ESMTPSA id br13-20020a05620a460d00b00680d020b4cbsm13378941qkb.10.2022.04.08.10.21.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 10:21:10 -0700 (PDT)
+From:   frowand.list@gmail.com
+To:     Rob Herring <robh+dt@kernel.org>, pantelis.antoniou@konsulko.com,
+        Slawomir Stepien <slawomir.stepien@nokia.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Slawomir Stepien <sst@poczta.fm>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Alan Tull <atull@kernel.org>
+Subject: [PATCH 1/1] of: overlay: of_overlay_apply() kfree() errors
+Date:   Fri,  8 Apr 2022 12:21:03 -0500
+Message-Id: <20220408172103.371637-1-frowand.list@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220407210734.2548973-1-joel@joelfernandes.org>
- <20220408142232.GA4285@paulmck-ThinkPad-P17-Gen-1> <CAEXW_YQWeqfcKdAKmCn4fFGyWXjOGd=29wvi6bL3k7s2bGkDJw@mail.gmail.com>
- <20220408155002.GF4285@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20220408155002.GF4285@paulmck-ThinkPad-P17-Gen-1>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Fri, 8 Apr 2022 13:20:02 -0400
-Message-ID: <CAEXW_YQDgSO2XkkVhN3RBBz3vwYdAtTuPz-xYYsAPnwEnbYZPA@mail.gmail.com>
-Subject: Re: [PATCH RFC] rcu/nocb: Provide default all-CPUs mask for RCU_NOCB_CPU=y
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        rcu <rcu@vger.kernel.org>, Steven Rostedt <rostedt@goodmis.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,88 +71,223 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 8, 2022 at 11:50 AM Paul E. McKenney <paulmck@kernel.org> wrote:
->
-> On Fri, Apr 08, 2022 at 10:52:21AM -0400, Joel Fernandes wrote:
-> > On Fri, Apr 8, 2022 at 10:22 AM Paul E. McKenney <paulmck@kernel.org> wrote:
-> > >
-> > > On Thu, Apr 07, 2022 at 09:07:33PM +0000, Joel Fernandes wrote:
-> > > > On systems with CONFIG_RCU_NOCB_CPU=y, there is no default mask provided
-> > > > which ends up not offloading any CPU. This patch removes yet another
-> > > > dependency from the bootloader having to know about RCU, about how many
-> > > > CPUs the system has, and about how to provide the mask. Basically, I
-> > > > think we should stop pretending that the user knows what they are doing :).
-> > > > In other words, if NO_CB_CPU is enabled, lets make use of it.
-> > > >
-> > > > My goal is to make RCU as zero-config as possible with sane defaults. If
-> > > > user wants to provide rcu_nocbs= or nohz_full= options, then those will
-> > > > take precedence and this patch will have no effect.
-> > > >
-> > > > I tested providing rcu_nocbs= option, ensuring that is preferred over this.
-> > >
-> > > Unless something has changed, this would change behavior relied upon
-> > > the enterprise distros.  Last I checked, they want to supply a single
-> > > binary, as evidenced by the recent CONFIG_PREEMPT_DYNAMIC Kconfig option,
-> > > and they also want the default to be non-offloaded.  That is, given a
-> > > kernel built with CONFIG_RCU_NOCB_CPU=y and without either a nohz_full
-> > > or a nocbs_cpu boot parameter, all of the CPUs must be non-offloaded.
-> >
-> > Just curious, do you have information (like data, experiment results)
-> > on why they want default non-offloaded? Or maybe they haven't tried
-> > the recent work done in NOCB code?
->
-> I most definitely do.  When I first introduced callback offloading, I
-> made it completely replace softirq callback invocation.  There were some
-> important throughput-oriented workloads that got hit with significant
-> performance degradation due to this change.  Enterprise Java workloads
-> were the worst hit.
->
-> Android does not run these workloads, and I am not aware of ChromeOS
-> running them, either.
+From: Frank Rowand <frank.rowand@sony.com>
 
-Thanks a lot for mentioning this, I was not aware and will make note
-of it :-). I wonder if the scheduler had something to do with the
-degradation.
+Fix various kfree() issues related to of_overlay_apply().
+  - Double kfree() of fdt and tree when init_overlay_changeset()
+    returns an error.
+  - free_overlay_changeset() free of the root of the unflattened
+    overlay (variable tree) instead of the memory that contains
+    the unflattened overlay.
+  - Move similar kfree()s from multiple error locations to a
+    common error path (err_free_tree_unlocked:).
 
-> > Another option I think is to make it enforce NOCB if NR_CPUS <= 32 if
-> > that makes sense.
->
-> That would avoid hurting RHEL and SLES users, so this would be better
-> than making the change unconditionally.  But there are a lot of distros
-> out there.
->
-> I have to ask...  Isn't there already a way of specifying a set of kernel
-> boot parameters that are required for ChromeOS?  If so, add rcu_nocbs=0-N
-> to that list and be happy.
+Double kfree()
+Reported-by: Slawomir Stepien <slawomir.stepien@nokia.com>
 
-Yes, that's doable.
+Signed-off-by: Frank Rowand <frank.rowand@sony.com>
+---
+ drivers/of/overlay.c | 64 ++++++++++++++++++++++++++++----------------
+ 1 file changed, 41 insertions(+), 23 deletions(-)
 
-> > > And is it really all -that- hard to specify an additional boot parameter
-> > > across ChromeOS devices?  Android seems to manage it.  ;-)
-> >
-> > That's not the hard part I think. The hard part is to make sure a
-> > future Linux user who is not an RCU expert does not forget to turn it
-> > on. ChromeOS is not the only OS that I've seen someone forget to do it
-> > ;-D. AFAIR, there were Android devices too in the past where I saw
-> > this forgotten. I don't think we should rely on the users doing the
-> > right thing (as much as possible).
-> >
-> > The single kernel binary point makes sense but in this case, I think
-> > the bigger question that I'd have is what is the default behavior and
-> > what do *most* users of RCU want. So we can keep sane defaults for the
-> > majority and reduce human errors related to configuration.
->
-> If both the ChromeOS and Android guys need it, I could reinstate the
-> old RCU_NOCB_CPU_ALL Kconfig option.  This was removed due to complaints
-> about RCU Kconfig complexity, but I believe that Reviewed-by from ChromeOS
-> and Android movers and shakers would overcome lingering objections.
->
-> Would that help?
+diff --git a/drivers/of/overlay.c b/drivers/of/overlay.c
+index d80160cf34bb..1b9a90d61496 100644
+--- a/drivers/of/overlay.c
++++ b/drivers/of/overlay.c
+@@ -58,6 +58,7 @@ struct fragment {
+  * @id:			changeset identifier
+  * @ovcs_list:		list on which we are located
+  * @fdt:		base of memory allocated to hold aligned FDT that was unflattened to create @overlay_tree
++ * @overlay_mem:	the memory chunk that contains @overlay_tree
+  * @overlay_tree:	expanded device tree that contains the fragment nodes
+  * @count:		count of fragment structures
+  * @fragments:		fragment nodes in the overlay expanded device tree
+@@ -68,6 +69,7 @@ struct overlay_changeset {
+ 	int id;
+ 	struct list_head ovcs_list;
+ 	const void *fdt;
++	const void *overlay_mem;
+ 	struct device_node *overlay_tree;
+ 	int count;
+ 	struct fragment *fragments;
+@@ -720,6 +722,7 @@ static struct device_node *find_target(struct device_node *info_node)
+  * init_overlay_changeset() - initialize overlay changeset from overlay tree
+  * @ovcs:	Overlay changeset to build
+  * @fdt:	base of memory allocated to hold aligned FDT that was unflattened to create @tree
++ * @tree_mem:	Memory that contains @tree
+  * @tree:	Contains the overlay fragments and overlay fixup nodes
+  *
+  * Initialize @ovcs.  Populate @ovcs->fragments with node information from
+@@ -730,13 +733,23 @@ static struct device_node *find_target(struct device_node *info_node)
+  * detected in @tree, or -ENOSPC if idr_alloc() error.
+  */
+ static int init_overlay_changeset(struct overlay_changeset *ovcs,
+-		const void *fdt, struct device_node *tree)
++		const void *fdt, const void *tree_mem, struct device_node *tree)
+ {
+ 	struct device_node *node, *overlay_node;
+ 	struct fragment *fragment;
+ 	struct fragment *fragments;
+ 	int cnt, id, ret;
+ 
++	/*
++	 * Must set these fields before any error return. fdt and tree_mem
++	 * will be freed by free_overlay_changeset(), which is called if
++	 * init_overlay_changeset() returns an error.
++	 */
++
++	ovcs->fdt = fdt;
++	ovcs->overlay_mem = tree_mem;
++	ovcs->overlay_tree = tree;
++
+ 	/*
+ 	 * Warn for some issues.  Can not return -EINVAL for these until
+ 	 * of_unittest_apply_overlay() is fixed to pass these checks.
+@@ -750,9 +763,6 @@ static int init_overlay_changeset(struct overlay_changeset *ovcs,
+ 	if (!of_node_is_root(tree))
+ 		pr_debug("%s() tree is not root\n", __func__);
+ 
+-	ovcs->overlay_tree = tree;
+-	ovcs->fdt = fdt;
+-
+ 	INIT_LIST_HEAD(&ovcs->ovcs_list);
+ 
+ 	of_changeset_init(&ovcs->cset);
+@@ -865,7 +875,7 @@ static void free_overlay_changeset(struct overlay_changeset *ovcs)
+ 	 * ovcs->fdt due to the policy that overlay notifiers are not allowed
+ 	 * to retain pointers into the overlay devicetree.
+ 	 */
+-	kfree(ovcs->overlay_tree);
++	kfree(ovcs->overlay_mem);
+ 	kfree(ovcs->fdt);
+ 	kfree(ovcs);
+ }
+@@ -875,6 +885,7 @@ static void free_overlay_changeset(struct overlay_changeset *ovcs)
+  *
+  * of_overlay_apply() - Create and apply an overlay changeset
+  * @fdt:	base of memory allocated to hold the aligned FDT
++ * @tree_mem:	Memory that contains @tree
+  * @tree:	Expanded overlay device tree
+  * @ovcs_id:	Pointer to overlay changeset id
+  *
+@@ -913,31 +924,27 @@ static void free_overlay_changeset(struct overlay_changeset *ovcs)
+  * id is returned to *ovcs_id.
+  */
+ 
+-static int of_overlay_apply(const void *fdt, struct device_node *tree,
+-		int *ovcs_id)
++static int of_overlay_apply(const void *fdt, void *tree_mem,
++		struct device_node *tree, int *ovcs_id)
+ {
+ 	struct overlay_changeset *ovcs;
+ 	int ret = 0, ret_revert, ret_tmp;
+ 
+ 	/*
+-	 * As of this point, fdt and tree belong to the overlay changeset.
++	 * As of this point, fdt and tree_mem belong to the overlay changeset.
+ 	 * overlay changeset code is responsible for freeing them.
+ 	 */
+ 
+ 	if (devicetree_corrupt()) {
+ 		pr_err("devicetree state suspect, refuse to apply overlay\n");
+-		kfree(fdt);
+-		kfree(tree);
+ 		ret = -EBUSY;
+-		goto out;
++		goto err_free_tree_unlocked;
+ 	}
+ 
+ 	ovcs = kzalloc(sizeof(*ovcs), GFP_KERNEL);
+ 	if (!ovcs) {
+-		kfree(fdt);
+-		kfree(tree);
+ 		ret = -ENOMEM;
+-		goto out;
++		goto err_free_tree_unlocked;
+ 	}
+ 
+ 	of_overlay_mutex_lock();
+@@ -947,9 +954,14 @@ static int of_overlay_apply(const void *fdt, struct device_node *tree,
+ 	if (ret)
+ 		goto err_free_tree;
+ 
+-	ret = init_overlay_changeset(ovcs, fdt, tree);
++	/*
++	 * init_overlay_changeset() promises to add tree_mem and tree to ovcs
++	 * even in the case of an early error return, so they can be freed by
++	 * free_overlay_changeset().
++	 */
++	ret = init_overlay_changeset(ovcs, fdt, tree_mem, tree);
+ 	if (ret)
+-		goto err_free_tree;
++		goto err_free_overlay_changeset;
+ 
+ 	/*
+ 	 * after overlay_notify(), ovcs->overlay_tree related pointers may have
+@@ -999,7 +1011,7 @@ static int of_overlay_apply(const void *fdt, struct device_node *tree,
+ 
+ err_free_tree:
+ 	kfree(fdt);
+-	kfree(tree);
++	kfree(tree_mem);
+ 
+ err_free_overlay_changeset:
+ 	free_overlay_changeset(ovcs);
+@@ -1008,9 +1020,14 @@ static int of_overlay_apply(const void *fdt, struct device_node *tree,
+ 	mutex_unlock(&of_mutex);
+ 	of_overlay_mutex_unlock();
+ 
+-out:
+ 	pr_debug("%s() err=%d\n", __func__, ret);
+ 
++	return ret;
++
++err_free_tree_unlocked:
++	kfree(fdt);
++	kfree(tree_mem);
++
+ 	return ret;
+ }
+ 
+@@ -1019,6 +1036,7 @@ int of_overlay_fdt_apply(const void *overlay_fdt, u32 overlay_fdt_size,
+ {
+ 	void *new_fdt;
+ 	void *new_fdt_align;
++	void *overlay_mem;
+ 	int ret;
+ 	u32 size;
+ 	struct device_node *overlay_root = NULL;
+@@ -1046,18 +1064,17 @@ int of_overlay_fdt_apply(const void *overlay_fdt, u32 overlay_fdt_size,
+ 	new_fdt_align = PTR_ALIGN(new_fdt, FDT_ALIGN_SIZE);
+ 	memcpy(new_fdt_align, overlay_fdt, size);
+ 
+-	of_fdt_unflatten_tree(new_fdt_align, NULL, &overlay_root);
+-	if (!overlay_root) {
++	overlay_mem = of_fdt_unflatten_tree(new_fdt_align, NULL, &overlay_root);
++	if (!overlay_mem) {
+ 		pr_err("unable to unflatten overlay_fdt\n");
+ 		ret = -EINVAL;
+ 		goto out_free_new_fdt;
+ 	}
+ 
+-	ret = of_overlay_apply(new_fdt, overlay_root, ovcs_id);
++	ret = of_overlay_apply(new_fdt, overlay_mem, overlay_root, ovcs_id);
+ 	if (ret < 0) {
+ 		/*
+-		 * new_fdt and overlay_root now belong to the overlay
+-		 * changeset.
++		 * new_fdt and overlay_mem now belong to the overlay changeset.
+ 		 * overlay changeset code is responsible for freeing them.
+ 		 */
+ 		goto out;
+@@ -1067,6 +1084,7 @@ int of_overlay_fdt_apply(const void *overlay_fdt, u32 overlay_fdt_size,
+ 
+ 
+ out_free_new_fdt:
++	kfree(overlay_mem);
+ 	kfree(new_fdt);
+ 
+ out:
+-- 
+Frank Rowand <frank.rowand@sony.com>
 
-Yes, I think I would love for such a change. I am planning to add a
-test to ChromeOS to check whether config options were correctly set
-up. So I can test for both the RCU_NOCB_CPU options.
-
-Thanks!
-
-- Joel

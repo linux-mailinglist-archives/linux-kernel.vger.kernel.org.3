@@ -2,134 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E1774F971E
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 15:43:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F7DA4F9727
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 15:44:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236418AbiDHNpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 09:45:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39490 "EHLO
+        id S236461AbiDHNqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 09:46:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231500AbiDHNpK (ORCPT
+        with ESMTP id S236456AbiDHNqB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 09:45:10 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC656007D;
-        Fri,  8 Apr 2022 06:43:06 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id b19so4779777qkk.12;
-        Fri, 08 Apr 2022 06:43:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=usXuRJ1HBdyqGrxJX6MSUUEje7zULhcW0WK5TkC07EU=;
-        b=JGvLuYecJdMvhSnQQgFQpCHMrAZp1psXgvW4Wojv80bQnyUjpdPY1Yz/DqdVdmQgQQ
-         pvWKNO78nmCZgnU3ADHDBABagTnxyahI46DtiJxJVRQzlYeEHap+MwA2HpwzyoyDOo9p
-         kmL77mgh5l4qdNdp3yFw/CVxBixxaPsKrJz6zmW5qinIGKYIxt3tpa0T1d6zGUcnDuDf
-         rclg+AatTczypAJ6SxUXFQ689CwdUCeGdii7LVrDr3UM5zg0YEvRQXzKqcFcqI4FvkRi
-         JQRMmH2pHZwahBOkt8ec4MIdUijj1lZt0bTK5ua3Zs9CXs+qRvwlaBGjVXNpT8jhrpkA
-         K/sQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=usXuRJ1HBdyqGrxJX6MSUUEje7zULhcW0WK5TkC07EU=;
-        b=XdNEJoZ9cmuTnd4EAg6U6om7zO8uclruN5gJVYG1NH8F2paaXY9PrJKHKACxH1BDPS
-         aAbiBHudlwwJYyCUL5llLFl5KE/eMoLsUyRptiBzmLmDKbVZtLGt4FCxSULqT1C3RneP
-         t/Z4OfuvRybg78kMj6wonzUzKpVaNnhuX6CeFy2ZAK053FMMHHPIz38TzBcC1xwdbRuu
-         /auUMJy877+qXDo9pGdWhn4ppiPIgLz2QhFRUPanixTmCcbTNsiel6NSGMYHr1KjRmdL
-         ZqtZ3n6pFuuoTY58ZhsgXRlTX5YKTp3OfovrZ5mMiQPK+hxDuwVbh8PSG8sSDdTYABdI
-         buWg==
-X-Gm-Message-State: AOAM530gEYUXb8Zdzrsx9PgsUKg2Ls/8AfUtnsSWsCRiKlfdB/TuzE3E
-        8JBlGcbcEBjakcUgqOfuWyBclBLKA1Ehlg==
-X-Google-Smtp-Source: ABdhPJwKb3j8nwLRTzxpkMdgP+ZKR36kQhmnucIRB4JxEvmQk5W70XZ9K3BjtfNj/y/WPSYCOCCD2g==
-X-Received: by 2002:a37:92c1:0:b0:699:a3e5:f74 with SMTP id u184-20020a3792c1000000b00699a3e50f74mr12768518qkd.141.1649425385772;
-        Fri, 08 Apr 2022 06:43:05 -0700 (PDT)
-Received: from dschatzberg-fedora-PC0Y6AEN.dhcp.thefacebook.com ([2620:10d:c091:500::2:77ef])
-        by smtp.gmail.com with ESMTPSA id v12-20020a05622a130c00b002e1b3ccd9adsm17660596qtk.79.2022.04.08.06.43.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 06:43:05 -0700 (PDT)
-Date:   Fri, 8 Apr 2022 09:43:03 -0400
-From:   Dan Schatzberg <schatzberg.dan@gmail.com>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        Chen Wandun <chenwandun@huawei.com>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>, cgroups@vger.kernel.org,
+        Fri, 8 Apr 2022 09:46:01 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9173066CBE;
+        Fri,  8 Apr 2022 06:43:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=U3X29t3+VLz2WJJhQemUxxtklWikOyMxuqcodamWqYc=; b=WVV+3pnhzr+qRY8PinZ3kgCl8A
+        L2NS6NDs0RVQapzxIBSFRHEwCZ8Rl7MgJflCcTj8c9QGennVYL5NxvvWo40KpmvWCNZzYdVLJwO6W
+        CSKnYny73Hve66dvz0w3keewkRrefPg274P7xpJPfy3ReqbUnu1Z0QB8iZgXLag/2CA8OperiAbfj
+        tRFBBXoc5mX8RbGpHC/t6CSP6tUAn61uH+pwi9NjX5ww6J0w5Lhyk2kzgZ+repbquFUkD6C8TMalN
+        C2gZ+xJZP4+GNrFNqZ6oiMBl3y7F7QKODMFPLQL3lmrAbZLydS6eKMbQ5zFTL7zv6fQUUaR8CzcrM
+        ySqEMQow==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ncotf-002vyl-HT; Fri, 08 Apr 2022 13:43:33 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id F05963001D0;
+        Fri,  8 Apr 2022 15:43:28 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id C60BC201C63B3; Fri,  8 Apr 2022 15:43:28 +0200 (CEST)
+Date:   Fri, 8 Apr 2022 15:43:28 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     "brookxu.cn" <brookxu.cn@gmail.com>, corbet@lwn.net,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Michal Hocko <mhocko@suse.com>
-Subject: Re: [PATCH v3 1/4] memcg: introduce per-memcg reclaim interface
-Message-ID: <YlA754XNFAmWQcm6@dschatzberg-fedora-PC0Y6AEN.dhcp.thefacebook.com>
-References: <20220408045743.1432968-1-yosryahmed@google.com>
- <20220408045743.1432968-2-yosryahmed@google.com>
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+Subject: Re: [PATCH] docs/scheduler: Change unit of cpu_time and rq_time to
+ nanoseconds
+Message-ID: <YlA8AEfqK6eRnAPO@hirez.programming.kicks-ass.net>
+References: <1649410266-32360-1-git-send-email-brookxu.cn@gmail.com>
+ <YlAub2NXBPeNcyAS@casper.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220408045743.1432968-2-yosryahmed@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YlAub2NXBPeNcyAS@casper.infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 04:57:40AM +0000, Yosry Ahmed wrote:
-> +static ssize_t memory_reclaim(struct kernfs_open_file *of, char *buf,
-> +			      size_t nbytes, loff_t off)
-> +{
-> +	struct mem_cgroup *memcg = mem_cgroup_from_css(of_css(of));
-> +	unsigned int nr_retries = MAX_RECLAIM_RETRIES;
-> +	unsigned long nr_to_reclaim, nr_reclaimed = 0;
-> +	int err;
-> +
-> +	buf = strstrip(buf);
-> +	err = page_counter_memparse(buf, "", &nr_to_reclaim);
+On Fri, Apr 08, 2022 at 01:45:35PM +0100, Matthew Wilcox wrote:
+> On Fri, Apr 08, 2022 at 05:31:06PM +0800, brookxu.cn wrote:
+> > From: Chunguang Xu <brookxu@tencent.com>
+> > 
+> > In the current implementation, cpu_time and rq_time should be
+> > in nanoseconds, so this document needs to be modified.
+> 
+> I agree that this is wrong, but we shouldn't be changing the units
+> of measurement reported to userspace without changing the schedstats
+> version.  I suspect this was an inadvertent change, and we should be
+> converting from sched_clock() time (~= ns) to jiffies in show_schedstat().
+> Adding scheduler experts.
 
-Is there a reason not to support "max"? Empty string seems odd to me
-here.
+Seems to have happend at 425e0968a25f ("sched: move code into
+kernel/sched_stats.h").
 
-> +	if (err)
-> +		return err;
-> +
-> +	while (nr_reclaimed < nr_to_reclaim) {
-> +		unsigned long reclaimed;
-> +
-> +		if (signal_pending(current))
-> +			break;
+Before that we have:
 
-I think this should be `return -EINTR;`
+-static inline void
+-rq_sched_info_depart(struct rq *rq, unsigned long delta_jiffies)
+-{
+-       if (rq)
+-               rq->rq_sched_info.cpu_time += delta_jiffies;
+-}
 
-> +
-> +		reclaimed = try_to_free_mem_cgroup_pages(memcg,
-> +						nr_to_reclaim - nr_reclaimed,
-> +						GFP_KERNEL, true);
-> +
-> +		if (!reclaimed && !nr_retries--)
-> +			break;
+-static inline void sched_info_depart(struct task_struct *t)
+-{
+-       unsigned long delta_jiffies = jiffies - t->sched_info.last_arrival;
+-
+-       t->sched_info.cpu_time += delta_jiffies;
+-       rq_sched_info_depart(task_rq(t), delta_jiffies);
+-}
 
-Here you can just `return -EAGAIN;`
+afterwards we have:
 
-> +
-> +		nr_reclaimed += reclaimed;
-> +	}
-> +
-> +	return nr_reclaimed < nr_to_reclaim ? -EAGAIN : nbytes;
++static inline void sched_info_depart(struct task_struct *t)
++{
++       unsigned long long delta = sched_clock() - t->sched_info.last_arrival;
++
++       t->sched_info.cpu_time += delta;
++       rq_sched_info_depart(task_rq(t), delta);
++}
 
-Then this can just be `return nbytes;`
+And that's 15 years and at least one SCHEDSTAT_VERSION ago (although
+this change itself didn't bump the version).
 
-I'm very much in favor of this new interface. Thanks for working on
-it!
+So I'm thinking we can update the documentation and forget about this.

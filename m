@@ -2,107 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C9B64F8E0D
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B80F84F8DCE
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233934AbiDHDop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 23:44:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41644 "EHLO
+        id S233960AbiDHDpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 23:45:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232750AbiDHDoi (ORCPT
+        with ESMTP id S232750AbiDHDpM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 23:44:38 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4316D851
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 20:42:34 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id y8so2157554pfw.0
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 20:42:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=K96mlN10n7EweDR+53jcFZAkfBQwRjsHeZeSVOaqH6U=;
-        b=dL1emr/SVvDUitmI/GhFvZ5GDfJfCZqqybUK0jY5r9YpcwDEym86lGSPk5ajT9fkXv
-         68GItVAds/Z+CMKr5K6+nclMV48nPWohX7Qz2mbKGSdt22CtfWYhovUHU9eWOOIJxF/x
-         TIwKpkgJMMkaKK6GQVnlphvoASG3ht7FbopB8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=K96mlN10n7EweDR+53jcFZAkfBQwRjsHeZeSVOaqH6U=;
-        b=Er1Fdt0cyuR+WeSYxXkT7/vhrLudBHJ7BmMU5TjqTbGiyInIhCPZWMq3nCAnLX+JrO
-         lDgRt2I1434r4ifxOFNu/AD+Ych0FSo0L7QqTL2CFUAHa8BAWCNuobzMHrI4zXhXFv/n
-         LkDLJHeD7LK7JyluoBkoPq3b++CUkPXzqixD6Ehq8StmoDcwvpXYzcJP6qS2dX3yl5Ib
-         UXe7Xt51CRY9zixnsGcoLY1q2c6GuM9pwUZDWCgWrVR64q+hyfkKfPOM4wAAZnVU8Cih
-         z5pnyb4vXEgJ7yZEbyTE9J12xOIT2v9czcmBaLFbrgqDStp6hkNma8zqe3rchDw8SFxy
-         6BRA==
-X-Gm-Message-State: AOAM532Y3uKk67HqcU00HIPa5BOMUXRsxaCnf+2G1elaxb7uEi9notpm
-        XVszPCbdWpyddl8LIjNj5yC8nA==
-X-Google-Smtp-Source: ABdhPJzs4BJvqoMUJeyjaJ1TeZcDIdeQX1b09zQG89u/2Jo2P8sjElQ6/UOvNErwvd9fdVv73z+YWw==
-X-Received: by 2002:a63:6c02:0:b0:398:833b:f739 with SMTP id h2-20020a636c02000000b00398833bf739mr14106439pgc.524.1649389353914;
-        Thu, 07 Apr 2022 20:42:33 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q27-20020aa7961b000000b004fdf7a4d49esm17171769pfg.170.2022.04.07.20.42.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Apr 2022 20:42:33 -0700 (PDT)
-Date:   Thu, 7 Apr 2022 20:42:32 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [RFC PATCH] lkdtm: Replace lkdtm_rodata_do_nothing() by
- do_nothing()
-Message-ID: <202204072037.FE91C45E@keescook>
-References: <fe36bf23fb14e7eff92a95a1092ed38edb01d5f5.1634491011.git.christophe.leroy@csgroup.eu>
+        Thu, 7 Apr 2022 23:45:12 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F108B6C1;
+        Thu,  7 Apr 2022 20:43:10 -0700 (PDT)
+X-UUID: e904f502777a4528b0b966f05d543c3c-20220408
+X-UUID: e904f502777a4528b0b966f05d543c3c-20220408
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <jiaxin.yu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1523501793; Fri, 08 Apr 2022 11:43:04 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Fri, 8 Apr 2022 11:43:02 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 8 Apr 2022 11:43:01 +0800
+Message-ID: <505ab354843d9360887e8052a3dbf6712317c6fd.camel@mediatek.com>
+Subject: Re: [v9 2/4] ASoC: mediatek: mt8192: refactor for I2S3 DAI link of
+ speaker
+From:   Jiaxin Yu <jiaxin.yu@mediatek.com>
+To:     "=?ISO-8859-1?Q?N=EDcolas?= F. R. A. Prado" <nfraprado@collabora.com>
+CC:     <broonie@kernel.org>, <robh+dt@kernel.org>, <tzungbi@google.com>,
+        <angelogioacchino.delregno@collabora.com>, <aaronyu@google.com>,
+        <matthias.bgg@gmail.com>, <trevor.wu@mediatek.com>,
+        <linmq006@gmail.com>, <alsa-devel@alsa-project.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Fri, 8 Apr 2022 11:43:01 +0800
+In-Reply-To: <20220407212420.tncc576jo5iwaqk7@notapiano>
+References: <20220406100514.11269-1-jiaxin.yu@mediatek.com>
+         <20220406100514.11269-3-jiaxin.yu@mediatek.com>
+         <20220407212420.tncc576jo5iwaqk7@notapiano>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fe36bf23fb14e7eff92a95a1092ed38edb01d5f5.1634491011.git.christophe.leroy@csgroup.eu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 17, 2021 at 07:19:47PM +0200, Christophe Leroy wrote:
-> But for EXEC_RODATA test, execute_location() uses
-> lkdtm_rodata_do_nothing() which is already in rodata section
-> at build time instead of using a copy of do_nothing(). However
-> it still uses the function descriptor of do_nothing(). There
-> is a risk that running lkdtm_rodata_do_nothing() with the
-> function descriptor of do_thing() is wrong.
+On Thu, 2022-04-07 at 17:24 -0400, Nícolas F. R. A. Prado wrote:
+> Hi Jiaxin,
+> 
+> On Wed, Apr 06, 2022 at 06:05:12PM +0800, Jiaxin Yu wrote:
+> > MT8192 platform will use rt1015 or rt1015p codec, so through the
+> > snd_soc_of_get_dai_link_codecs() to complete the configuration
+> > of dai_link's codecs.
+> 
+> Suggestion for the commit message:
+> 
+> As part of the refactoring to allow the same machine driver to be
+> used for the
+> rt1015(p) and rt5682(s) codecs on the MT8192 platform, parse the
+> rt1015(p)
+> codecs from the speaker-codecs property in the devicetree and wire
+> them to the
+> I2S3 backend, instead of hardcoding the links and selecting through
+> the
+> compatible.
+> 
+Hi Nícolas,
 
-Wrong how? (Could there be two descriptors?)
+I will update the commit message according to the rule of one row per
+75 columns. I will also refer to your suggestions to modify the rest of
+the series. Thanks for your review.
 
-> To remove the above risk, change the approach and do the same
-> as for other EXEC tests: use a copy of do_nothing(). The copy
-> cannot be done during the test because RODATA area is write
-> protected. Do the copy during init, before RODATA becomes
-> write protected.
+Jiaxin.Yu
+Thanks.
 
-Hmm, hmm. This is a nice way to handle it, but I'm not sure which
-"weird" way is better. I kind of prefer the code going through all the
-"regular" linking goo to end up in .rodata, but is it really any
-different from doing this via the ro_after_init section? It makes me
-nervous because they can technically be handled differently. For
-example, .rodata is mapped differently on some architectures compared to
-ro_after_init. Honestly, I actually this this patch should be modified
-to _add_ a new test for EXEC_RO_AFTER_INIT, and leave the existing
-.rodata one alone...
+> > 
+> > Signed-off-by: Jiaxin Yu <jiaxin.yu@mediatek.com>
+> 
+> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> 
+> - Tested on mt8192-asurada-spherion (rt1015p and rt5682). All audio
+> paths still
+>   work as previous to this refactor. And it's still possible to omit
+>   mediatek,hdmi-codec.
+> 
+> Thanks,
+> Nícolas
 
--Kees
-
--- 
-Kees Cook

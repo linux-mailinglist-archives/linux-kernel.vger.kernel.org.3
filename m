@@ -2,291 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9809B4F997D
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 17:29:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 673C24F9982
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 17:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237593AbiDHPbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 11:31:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42030 "EHLO
+        id S237614AbiDHPbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 11:31:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234109AbiDHPb2 (ORCPT
+        with ESMTP id S237603AbiDHPbi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 11:31:28 -0400
-Received: from na01-obe.outbound.protection.outlook.com (mail-centralusazon11021020.outbound.protection.outlook.com [52.101.62.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CB9119251;
-        Fri,  8 Apr 2022 08:29:23 -0700 (PDT)
+        Fri, 8 Apr 2022 11:31:38 -0400
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-eopbgr150077.outbound.protection.outlook.com [40.107.15.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49D011984A;
+        Fri,  8 Apr 2022 08:29:33 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Gfma/paRIJ/BFfSJ5d5Gtwr/e2pO6zydFYTmKZXsfYPgjOIUuEpdgh4KNLKnl2amkaHez850agzaGUOCzbcKJHnXbfpgVv9dL3j7fATiBZ39cAplsbigRs6F9K6NWqKXSUsFskgvzJ6RxlA+nXfq8IuaYOTUZ93k/9EW94lRL016+0s3rP+2ft/OL3pu+9/D3FRyWG/jvNORD0r/yFvhG4RZuXQz+o6GLhIGzNkkJfp80VCbwkXeyQS42eKTl4ddW1ovQvet1+nODKw2h9vC43LLbiLyU7fX8xEAqI+elQBQHSFt5veF9tAulWxmBYJQfNJlewQsbS91pFz4sgrV1w==
+ b=Fh//Odr+rb3gnzGT1Bof5yhMDRvaPrg/N/GAFi7XYwyM2N8c92MYzxoIHcsrp0z4Fmv2zqkcuFbxXLKUj/6fD2UlsLHwky6965ibJMe6pP8/4VHBmlT/A4kKCf7pRbNlg27vdAZcb8VN36J0QDxjwSHa6jx4PpwL2ntsW33IBgUHwYm4CRjEtpQICGkK7rXoJ9arw46a9usfUuNk5ncKZsNMGdZukkLi9a+ymFtFNi+7yqoqoGQL8jz1rmf6UJUyQbXWK/h4dMrlqLx+I+MnvasYDka8P3xDLsPNrXRgyqAaeivTYLfnKPuJN2Ic/zWm6tMWQfiWDZaX/EuaNqdHWg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/jIHfqevbz1nYFZa3SVNh9Pvkyl5mqUD010LBo4ZU7c=;
- b=ic6WUqRPR+VjMXoos11OWXNNBeoA2YPHLnlysOOtT3vwWk/CNq7AhmYxPz82qhjpxaCpc/WCLVrAZdpj7w6anJ6oDEstjVLfIaqrBoJou+SeXrlrzoZy/rNjLN83mr4G+VJaZ1RiLuTdRabjZdtvMMY+/okbtJ/gbvFFc1gdI0Ok8cEgTQ4lx4fhEdrUmJpjgORF9c6esIjd4pZvt0dyGsB1Yfhhljnk1rAXq+l4HtJhVeKfiUc4Z7kjUCP+NLgwhGO2Or5krYdMrt6eKuznY/UFyvBL3eZ3EznLy1JOs+iuLrNHG2xZo20lwRsgIrYSDg+HNb0NF7Su3IyZ/AJxeQ==
+ bh=kzDL0DcPthZuGshAiCRn7DUMJvGyuc1xnDEIaO0MNsI=;
+ b=JwrJl3kuwMC+3ykF9V1vi/xNvnyM3jrr1iaT///+EE9tU7KejHdf279lLmUGaHI2HUi2GDZGXkPnlgsN5ZECzvq57imcacnZ2xxuY3yz3/ycefFQ+zo6CW44rS20zA0P6tV/TqqudzUCmNEiu/FV5mj6JHzH27Zf5enYJHq143dmXI9Err3TVBLQmXKIpHFy3nL4OrfLnA2Ae3otp8+zj8aC3MwL9zNcUzFks7yWuwIg7EtCFWpm9pSeNgDkJUKISdQzASe3Cpi0Fi4N/CqRGeVdJq5rGurqkh/HxNTik5sjZHUXD/dwcd47qnjJMFP0wKV7Ua9iFW8APTISQMEybA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/jIHfqevbz1nYFZa3SVNh9Pvkyl5mqUD010LBo4ZU7c=;
- b=QXFE6SiXjEk5GFNZmuLkTTkz55y+3JqU7R6AqoCNWBPydrvyfZLNlfnndyolTQWaBfxyEgwvFjApYdalsVG5EflxSsrj9xjuzc9CcUqZChhrxmHBmhlrFGFcAWb5/+jsC1ONQAjfhWgeoanI+vbd6KCFlvlzRki8Fg74mjwFX30=
-Received: from PH0PR21MB3025.namprd21.prod.outlook.com (2603:10b6:510:d2::21)
- by DM5PR21MB1749.namprd21.prod.outlook.com (2603:10b6:4:9f::21) with
+ bh=kzDL0DcPthZuGshAiCRn7DUMJvGyuc1xnDEIaO0MNsI=;
+ b=YYbtZZIqBOeySV08gWd/tafp/YMIYeShqvhx+YE5tIta1N2uspl1Uf6GeL4PuFaQQbnpH136vrkzbBv/w+Be+ObNQtS/0wZ2M46iQhmvbcZQMDLIphXwYcioKUJ52Vmhqgbkrex7hLNl23/W1p3ey1JaQe53NGKs1SvSWgeK/tY=
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com (2603:10a6:803:55::19)
+ by AM6PR04MB5367.eurprd04.prod.outlook.com (2603:10a6:20b:2a::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.8; Fri, 8 Apr
- 2022 15:29:21 +0000
-Received: from PH0PR21MB3025.namprd21.prod.outlook.com
- ([fe80::ac09:6e1b:de72:2b2f]) by PH0PR21MB3025.namprd21.prod.outlook.com
- ([fe80::ac09:6e1b:de72:2b2f%7]) with mapi id 15.20.5164.012; Fri, 8 Apr 2022
- 15:29:21 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Wei Hu <weh@microsoft.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Wilczynski <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-CC:     "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 6/6] PCI: hv: Fix synchronization between channel callback
- and hv_compose_msi_msg()
-Thread-Topic: [PATCH 6/6] PCI: hv: Fix synchronization between channel
- callback and hv_compose_msi_msg()
-Thread-Index: AQHYSjh8S0Zfsnx3Mk2KxtXKQpnr1azmJjIw
-Date:   Fri, 8 Apr 2022 15:29:20 +0000
-Message-ID: <PH0PR21MB30258C44AFBC7B522AF17634D7E99@PH0PR21MB3025.namprd21.prod.outlook.com>
-References: <20220407043028.379534-1-parri.andrea@gmail.com>
- <20220407043028.379534-7-parri.andrea@gmail.com>
-In-Reply-To: <20220407043028.379534-7-parri.andrea@gmail.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.26; Fri, 8 Apr
+ 2022 15:29:30 +0000
+Received: from VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::8ed:49e7:d2e7:c55e]) by VI1PR04MB5136.eurprd04.prod.outlook.com
+ ([fe80::8ed:49e7:d2e7:c55e%3]) with mapi id 15.20.5123.031; Fri, 8 Apr 2022
+ 15:29:30 +0000
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Sasha Levin <sashal@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable <stable@vger.kernel.org>
+CC:     lkml <linux-kernel@vger.kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH stable 0/3] SOF_TIMESTAMPING_OPT_ID backport to 4.14 and
+ 4.19
+Thread-Topic: [PATCH stable 0/3] SOF_TIMESTAMPING_OPT_ID backport to 4.14 and
+ 4.19
+Thread-Index: AQHYSey/rjYFxWFs6ECKeXXw010xTqzmJwaA
+Date:   Fri, 8 Apr 2022 15:29:30 +0000
+Message-ID: <20220408152929.4zd2mclusdpazclv@skbuf>
+References: <20220406192956.3291614-1-vladimir.oltean@nxp.com>
+In-Reply-To: <20220406192956.3291614-1-vladimir.oltean@nxp.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=1802cd4c-e85e-4bf3-a2b3-14858aa6f45c;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-04-08T15:28:38Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
 authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
+ header.d=none;dmarc=none action=none header.from=nxp.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1ba1b3db-a189-4f7b-a971-08da19748db8
-x-ms-traffictypediagnostic: DM5PR21MB1749:EE_
-x-ms-exchange-atpmessageproperties: SA|SL
-x-microsoft-antispam-prvs: <DM5PR21MB1749CE59A29AB409DA15DE59D7E99@DM5PR21MB1749.namprd21.prod.outlook.com>
+x-ms-office365-filtering-correlation-id: 51697461-af0f-4af5-9c38-08da1974935c
+x-ms-traffictypediagnostic: AM6PR04MB5367:EE_
+x-microsoft-antispam-prvs: <AM6PR04MB53671D6243E3C707C65909AAE0E99@AM6PR04MB5367.eurprd04.prod.outlook.com>
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Gb/5eoe4hckbm2yqs84lLBoJv414ubBwrAIb7/vjgvnU8djE5W2lBFVEZPf/iIFbsNERw1GzaHgNF3hkzo8cBsZkeYtXvJiArNKsW+KoLoGcUqu8IGvC5K4c3I9dJoMy85D0CLH+hJQAn5yI8CtpcldICFxGTFOeiIlAGZb1J+m51Pe30M17I2mRBl7lWHyxTQb2LyQHptgMfHmAtxl76BG3ZRWZgs1TpF1htxVPMwQmmylQEbqa3F4tATkRgvkHQmkD8Jumy2iA3IO0xRugCv4hELxDvCXjDZfoqzk0MLqqXTlpX2a174U2JLBYwIM8RmdSJf2FGPgFKQrxITT3bGiWQqHWJKBp7lkF5xWF+y8cEdxbKBEZ/Cdg6qS6NIWUx8kYMCyvBe8alLTm7WyhY2JszTBCC9tTV7ik7LXQIrNXbR7ExUgGxMeZap/23NFcJ2du4NyWYRs17pjM3wfHLMu7tnyikkEGX+sh2PVrihamzZYPTLO/8joWZLrRjulh8ix8dXdjkznKhYrOOSPekmTNL8LTkV5yKThHcB1ESB6koFTHEymW64vlm6xken1I1qS9TwvCW1W4l96mdhLCEQf09x61y03yCZl2Mz8YQ/XB0TxwiKrNBwx4EMhYJ4jgjg6Txa7iHdJQcX0I5mEvhGfsAa5eGTXhWm+ddjoq5HcN5TIL9kuyJ2pJ9jDOeOCWGKKec6tPYXY5FIv2esfl+iT/Q7VuHWG7W2UexBC6Je6x9B80hWuhpDRkfPPMIHwnI2YHxHvB4ONX5QQAmRYK3A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR21MB3025.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(451199009)(76116006)(4326008)(52536014)(33656002)(122000001)(8936002)(66556008)(66446008)(64756008)(2906002)(66946007)(8676002)(508600001)(186003)(26005)(8990500004)(86362001)(71200400001)(7696005)(6506007)(5660300002)(54906003)(38100700002)(316002)(10290500003)(82950400001)(110136005)(55016003)(921005)(82960400001)(38070700005)(83380400001)(66476007)(9686003);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: qAkie90bc5v3HAk8y+U6ghykIXqUU57WprTMu0l9l8saNmAHTr0W3oEo9QU6SK6PnZ4mAgPAPl/mA2zTx2iLSM8jkjdqeVaGHIuQpbuSmXvgjEIzcqXNBe6QptTZAoD8JVZq4pr9SFBHkeJlGz5FKXtb6ZEcLQs1vQL6mBQUBaysfSUEQVOtmuFelDDV4etheJ3Sbham5NCEZwOMtR1J2wI6E11pTxsx/pU3N0Qts8aE1ndSdY13+gkOCj/yOyQVzercDumXX45wXpy/WYls6cyLXMi8R+Bvu6lpXv4bdZYSOschUxTuvrscTweiF5XQIMEp3QXxHC9m70IZ7ZYRsfW9A+8yGr8c5vmfbZbKE0jF3/iwzgaw2Qm4/WqVfajTfGX0mQXSDXXLThASSk77ZIi+Bgd6hR5yYlsEh2f4vIeVY2zLYC8wwBqqYtFBwbkQ84Ke+hd6SnSCwUYvYM/Zts52Of/90u2AlyUd2PiKPdPiFtCNHuy0JR28XKLv2wwnzFxHIHt1+CeuI/HNOtlv0xRWH01tHQGdh+9IvZwSE5JHbzBraZhn26aXy1LbCw6qf59nG0ig+nV19BsJNasok+4iJQxSPMnabU5jU2F2iOooMEnzT22XWx/N9QWsAg1kD9Iu1RxFP63gPht2fmZaEL4jm9HEeTgyjQyRM1iCOBMn7F16MzGCXGp3REnxXSuoK0GEiITYPtq2YArfZB5SlmuCwjfTgTXAvJfApRfM3lL25GISojIPmE7YY/ODVLWAM9ion29ZU8gXUan3fpDlfQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5136.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(7916004)(366004)(6506007)(6512007)(9686003)(33716001)(122000001)(38100700002)(71200400001)(38070700005)(83380400001)(26005)(186003)(1076003)(44832011)(5660300002)(54906003)(4744005)(8936002)(91956017)(316002)(4326008)(2906002)(76116006)(8676002)(66556008)(66476007)(64756008)(66946007)(66446008)(6486002)(508600001)(110136005)(86362001)(966005)(7416002);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?8bZViXM8ldCSg0NIf01JaafypdiIwHOCUXrpK7wXb5bIssxCl9YYcbWJT7vl?=
- =?us-ascii?Q?IXmATuQd1p+ypbYYz5RZ/Zz/4FwKCvnadwj0Q0CN9t1YdVn9EFCd9mzkIyX3?=
- =?us-ascii?Q?HgVVF2viyTUqoFErhclGVM7xBtyBhtISKsVmiGr4bsAzF7oazCWPL3Ur0fZ8?=
- =?us-ascii?Q?vPujyh7zUDuYQFsyxSe8RZjWzRR8pMuL9CRb4eir17vbh3ByYKSpyRY2tiWy?=
- =?us-ascii?Q?pMoclboTo99POD4Y58oEKjFgyhL8G+aDY5FAT2QthrFDZFumWoA999sZ7vXS?=
- =?us-ascii?Q?hJNetLCo8yq40DZBWu7shm0UpKcaPh4Ubye45U3TTKj/iHTcZD0PB30nDTaf?=
- =?us-ascii?Q?69fcAELq+KjsLOWp4cdaJR2/MNY5cj/0v/ZtKeEwoqUPAgkJO/zRT/O4NWmg?=
- =?us-ascii?Q?ybNWamhwmwuNYn0Xp6WG4gMokMkx/7hjKY6wUKOugx8kKcJgmCgbUK56lPG2?=
- =?us-ascii?Q?08OhqqJRLX0dQ+3AndDchFCz9M+qMm63AHDXCHeWh//Xkt7P6ZDpRSG9/LjS?=
- =?us-ascii?Q?78bHiFECwKH7DNQ4iCoHa6lR1ae65J0XJLoRqrmQ4ACHCpPgTkYWBONa7Cmh?=
- =?us-ascii?Q?i8G4B30EsKUJTUy18e1CkUFu7tGtWyNkL4j9rPwpPl8P2JhE9ZXgUZitwqJK?=
- =?us-ascii?Q?CCIgP0LOeHrDyVgZ+x/55TZsDKkPWrIpwhOiXbwR024rc7OhCppwzla8NL2R?=
- =?us-ascii?Q?q15fnaM+hd2RTRo4ofnEILtjdDcrXxrdMH97PnhHAvY2EKV5rNOgIe34sZ5F?=
- =?us-ascii?Q?eV6UqTIJIto2kXpBSJWuw4kepBjjL6fyT4me2gSYpsV6KCA7uc3lCq233MI9?=
- =?us-ascii?Q?BYdDLG/zGZOtz3nVl7ImlTG5TqP9q2pjNEO8TvbTAzYUpq5OX/azUt/X0YaI?=
- =?us-ascii?Q?iwzlmPVqhb4aRZlJ1Sjbjngj3FDmZlcvrMFoesZY7P031hRUs4vlQ2TdydYN?=
- =?us-ascii?Q?84Znx6xE9wbOFsajDBJXh/5F5PUZyPXjzKPUaMZ5qpiX4f4VcE1eepBCfQC3?=
- =?us-ascii?Q?ndPFKzugpGlIHcOiVnpOeIG58Hr5L09BCgPfKOD4EjwbGI3CGlR9id6ffP4h?=
- =?us-ascii?Q?abcs0ViwuE7sbqPKZ5gSGblJl2pZNIrisRdk8WUML+XH+07irk6L9hRwcUZa?=
- =?us-ascii?Q?iMlFP0eeErlG6qGJyboX+uVLxx+IL8AFjjZD3tYMSRL/29ld7G178+ZB63PA?=
- =?us-ascii?Q?naS2fZsDHUWqABMkQ2cY3LX6HSUskGt93PEby1km+pmGZD8PYUPwIqiXFxqH?=
- =?us-ascii?Q?eE9+9qv1+Z20iNc8y2D2IwqqOOz2N3rV5Y+B7k6Ef3PWsBNs/SUPyn0bvXnN?=
- =?us-ascii?Q?2Wd048Ga4E90KecP2I6XGjEtw3gsu2MMWdgUKDosMOTC3/JM1O5n9Vqv89DS?=
- =?us-ascii?Q?OvZ0LX9nv4u6Grgi/I2LBNRFW4gsuyOd/MUBGpW8lJN9EIiIo24GobMrhNQR?=
- =?us-ascii?Q?67418poH64Dqj6aRnarAqoi+JPKABMHxBuMsoCD2PdcmyxlZRgC1YdFnOumO?=
- =?us-ascii?Q?zvn0McBrY02A7u8WuLoUIPTVU6wA1g3l4EPZt6o3PkS6PPwW6a+Ffd8v1QsO?=
- =?us-ascii?Q?eGHzwFXVuqjRhvbN7aNewTYMFg0corx4aOOozUOOn+hS4g7SW1s7hHt87uPy?=
- =?us-ascii?Q?EPfQQC9ucxGcIqAfK0QcrAZSZxk1m0jlSnA3mEdTJRt52YmLxZ1pESro+FQ5?=
- =?us-ascii?Q?sP3Vf0jQ8iGC/ahzwjsLnNMTeKB0+sWOfV/ilhduC4XkCU2nfiZuf9eulrdW?=
- =?us-ascii?Q?2sf0WFIYA43vtm62tyyOvVVAdJ7kkew=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?4Il9pFvmxkziB5TFuiG4ZFOzac2J+yiiqawD7AsJFqQE4eNdZ+49QXyolO+F?=
+ =?us-ascii?Q?spVhWqk7wiqpefXv2esV+Ih9uX16tJPPvt4EXrMY/CcSqfCIn/wtll0XXgcJ?=
+ =?us-ascii?Q?GhrLzWivnj2H0xj2Sys3vv0ofshN+9QLLFse/E5rOEObPEZuQFFNj0ZY2hVY?=
+ =?us-ascii?Q?GaxpfS9xHdsdWB7ZoItGa+jwdy5S/obWnNen/s2fdEcv87dzPkwtz9x9CZK+?=
+ =?us-ascii?Q?5xDDs3PaqOyvveLZEkw2Fo2HV0JTsQMsQiDEe/x/t36v8HdoG39Bcv0NggpX?=
+ =?us-ascii?Q?urAWCnOqay3U/+n5WIqORlfGeost1s2M8ioIi5YDl0kxIWNeUd8rcjIU90nt?=
+ =?us-ascii?Q?txMbapfWDVL8mPkbbyR3xrx6bqEJe/Bjhaos/IJraNPdjCPv+eQRw2ls6Hss?=
+ =?us-ascii?Q?cuwIO4qXDMaWXIBn7wxviBs2JCAhPbFkBGw9FGtuHKkwTNxS01mNrYgQyJOh?=
+ =?us-ascii?Q?KsC6SAKxLyBbWJC+4sEEltXzt5/zoJQ31zJNCpPpXxjF9vk+4698dZZFt185?=
+ =?us-ascii?Q?AXGMthQG/eDJ31iMtrAoKVmwhA7uluIA7gPIGuUZ++b/orMr40LP/DB2jXNZ?=
+ =?us-ascii?Q?CjeGQMUWOdca9YhrLIRCyzkGlZvd98cATwtDj9u8aBJPk+m3I4FF2aKe7Wj6?=
+ =?us-ascii?Q?Lg52Ng6yIxwLfLFCGexTuvHWww/tXtgkDIbS1Bap0SdbE5RDm7i9g+inp/wY?=
+ =?us-ascii?Q?R/aCz/7qzPm72zhlG4LqyLixAWFd+VFfUSXEK67Lq+uGYGwQqchJ1vOjCKPO?=
+ =?us-ascii?Q?AJuht1I7AWZpp1qiwVpq96vSTh0GsYHR3V6XUddezYlGYaQtJYyJ+7hc6KDV?=
+ =?us-ascii?Q?WroFhIRwOElla/bxSb+16X8VYdtnNv7cSOPyv9JnNmWakWX6arVN4HWdHCTn?=
+ =?us-ascii?Q?c4krQbrl1I1+btk8PuO1cQwodt85pZXbbioAKoTTaitlLhmAsWhANQTmZ5s0?=
+ =?us-ascii?Q?eA7AvPBHYCfT0HlfEjzH3UZYQWLF7U4E2OcdLWG6BZF7j5tl2BA4e449GCtp?=
+ =?us-ascii?Q?T2w2rYpEqP26DgNKE5B7wAC+dnbspy7YgeksZ1g/jHGdE1wa545oYlG1b7rJ?=
+ =?us-ascii?Q?vuNHYdPH03ckqL/kw4tBbjATFuPQmh8qnsEmlP6a7fxDjZAaetgH5mf3o7Zn?=
+ =?us-ascii?Q?RNV6ZqwomyyMthcg05mY8K4xKCw9SPCiTjVtyFiFMgxv/RUNEqLvO5ZEB68Z?=
+ =?us-ascii?Q?YCajPvDObzM11yUcQh1Al3CpdynKAQRFDV64Adja+A6drZ4EWFepcRUrFmwB?=
+ =?us-ascii?Q?kphPm/8f2ECIYnmGzA+2y4vheRTyHM0WQ/EvAFvu6JsKXmnQT0plZIPdCX7t?=
+ =?us-ascii?Q?XmA7K/L0Ka2TDF1peAP5VGHFM6TrHYFTAsX41cZ/rYTntJfiw7D18CWrLtqq?=
+ =?us-ascii?Q?uHy5YsRz+DRxay+/26e9k9o6ucB4ptcgfT+ETJ/rkQ28I4Z9T61hRQvI+OSp?=
+ =?us-ascii?Q?3ddKmQugfUyoKiouJADq5w9myoRBev8R55rmAVDm7sSjt1aWLRyJ5UkhzQB+?=
+ =?us-ascii?Q?YlumrOVfykQDd/TPaYjtsgbacYCKnKQ0/hsaeGhbc0zns0nl+ZWOdCIWl0Io?=
+ =?us-ascii?Q?Pe9bX8TDAl+GyueCHqHJ1RaLgJyzz6GiGuuHkqC/ov6barQ9Mxmknvhy8haL?=
+ =?us-ascii?Q?X5h7KlXSVgmiJEY95wXEe8WOCeigaGwQF2dRyLL9joxHDAUAOun/LkPtvxam?=
+ =?us-ascii?Q?T4qdbOVtizsL5iQN7sykzhOtEhF6V/bhjlIFzeCh/nZetMWvbHCYDBmXtIVM?=
+ =?us-ascii?Q?myDPMvoXCktJUqgXDcCvahseFWPS7UE=3D?=
 Content-Type: text/plain; charset="us-ascii"
+Content-ID: <E57B3305739CB049887F83B360133723@eurprd04.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
+X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR21MB3025.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1ba1b3db-a189-4f7b-a971-08da19748db8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Apr 2022 15:29:20.9586
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5136.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 51697461-af0f-4af5-9c38-08da1974935c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Apr 2022 15:29:30.4317
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: mC2w/ClFFGSFrhzTw/XDn+aOyM/N2gE2Yu+4n/2ZDpHgUKZpkUYDWa4CbK17qkeDG/8Uz3/qbY7VqbOlW8ZVH12fPUWjMOkGbrQHtUJ5vZ0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR21MB1749
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-userprincipalname: eRi9DZd1fPSfFphB8ZWxX7FKkgII7oNtFFSuSTuszYavs1MtiOzkBxx/pWxg5dlWNtaYM+7+X7ViPfBfsHLRBA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB5367
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrea Parri (Microsoft) <parri.andrea@gmail.com> Sent: Wednesday, Ap=
-ril 6, 2022 9:30 PM
->=20
-> Dexuan wrote:
->=20
->   "[...]  when we disable AccelNet, the host PCI VSP driver sends a
->    PCI_EJECT message first, and the channel callback may set
->    hpdev->state to hv_pcichild_ejecting on a different CPU.  This can
->    cause hv_compose_msi_msg() to exit from the loop and 'return', and
->    the on-stack variable 'ctxt' is invalid.  Now, if the response
->    message from the host arrives, the channel callback will try to
->    access the invalid 'ctxt' variable, and this may cause a crash."
->=20
-> Schematically:
->=20
->   Hyper-V sends PCI_EJECT msg
->     hv_pci_onchannelcallback()
->       state =3D hv_pcichild_ejecting
->                                        hv_compose_msi_msg()
->                                          alloc and init comp_pkt
->                                          state =3D=3D hv_pcichild_ejectin=
-g
->   Hyper-V sends VM_PKT_COMP msg
->     hv_pci_onchannelcallback()
->       retrieve address of comp_pkt
->                                          'free' comp_pkt and return
->       comp_pkt->completion_func()
->=20
-> Dexuan also showed how the crash can be triggered after introducing
-> suitable delays in the driver code, thus validating the 'assumption'
-> that the host can still normally respond to the guest's compose_msi
-> request after the host has started to eject the PCI device.
->=20
-> Fix the synchronization by leveraging the requestor lock as follows:
->=20
->   - Before 'return'-ing in hv_compose_msi_msg(), remove the ID (while
->     holding the requestor lock) associated to the completion packet.
->=20
->   - Retrieve the address *and call ->completion_func() within a same
->     (requestor) critical section in hv_pci_onchannelcallback().
->=20
-> Fixes: de0aa7b2f97d3 ("PCI: hv: Fix 2 hang issues in hv_compose_msi_msg()=
-")
-> Reported-by: Wei Hu <weh@microsoft.com>
-> Reported-by: Dexuan Cui <decui@microsoft.com>
-> Suggested-by: Michael Kelley <mikelley@microsoft.com>
-> Signed-off-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
-> ---
-> The "Fixes:" tag is mainly a reference: a back-port would depend
-> on the entire series (which, in turn, shouldn't be backported to
-> commits preceding bf5fd8cae3c8f).
->=20
->  drivers/pci/controller/pci-hyperv.c | 33 +++++++++++++++++++++++------
->  1 file changed, 27 insertions(+), 6 deletions(-)
->=20
-> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller=
-/pci-hyperv.c
-> index c1322ac37cda9..f1d794f8a5ef1 100644
-> --- a/drivers/pci/controller/pci-hyperv.c
-> +++ b/drivers/pci/controller/pci-hyperv.c
-> @@ -1695,7 +1695,7 @@ static void hv_compose_msi_msg(struct irq_data *dat=
-a,
-> struct msi_msg *msg)
->  			struct pci_create_interrupt3 v3;
->  		} int_pkts;
->  	} __packed ctxt;
-> -
-> +	u64 trans_id;
->  	u32 size;
->  	int ret;
->=20
-> @@ -1757,10 +1757,10 @@ static void hv_compose_msi_msg(struct irq_data *d=
-ata,
-> struct msi_msg *msg)
->  		goto free_int_desc;
->  	}
->=20
-> -	ret =3D vmbus_sendpacket(hpdev->hbus->hdev->channel, &ctxt.int_pkts,
-> -			       size, (unsigned long)&ctxt.pci_pkt,
-> -			       VM_PKT_DATA_INBAND,
-> -			       VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED);
-> +	ret =3D vmbus_sendpacket_getid(hpdev->hbus->hdev->channel, &ctxt.int_pk=
-ts,
-> +				     size, (unsigned long)&ctxt.pci_pkt,
-> +				     &trans_id, VM_PKT_DATA_INBAND,
-> +
-> VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED);
->  	if (ret) {
->  		dev_err(&hbus->hdev->device,
->  			"Sending request for interrupt failed: 0x%x",
-> @@ -1839,6 +1839,15 @@ static void hv_compose_msi_msg(struct irq_data *da=
-ta,
-> struct msi_msg *msg)
->=20
->  enable_tasklet:
->  	tasklet_enable(&channel->callback_event);
-> +	/*
-> +	 * The completion packet on the stack becomes invalid after 'return';
-> +	 * remove the ID from the VMbus requestor if the identifier is still
-> +	 * mapped to/associated with the packet.  (The identifier could have
-> +	 * been 're-used', i.e., already removed and (re-)mapped.)
-> +	 *
-> +	 * Cf. hv_pci_onchannelcallback().
-> +	 */
-> +	vmbus_request_addr_match(channel, trans_id, (unsigned long)&ctxt.pci_pk=
-t);
->  free_int_desc:
->  	kfree(int_desc);
->  drop_reference:
-> @@ -2717,6 +2726,7 @@ static void hv_pci_onchannelcallback(void *context)
->  	struct pci_dev_inval_block *inval;
->  	struct pci_dev_incoming *dev_message;
->  	struct hv_pci_dev *hpdev;
-> +	unsigned long flags;
->=20
->  	buffer =3D kmalloc(bufferlen, GFP_ATOMIC);
->  	if (!buffer)
-> @@ -2751,8 +2761,11 @@ static void hv_pci_onchannelcallback(void *context=
-)
->  		switch (desc->type) {
->  		case VM_PKT_COMP:
->=20
-> -			req_addr =3D chan->request_addr_callback(chan, req_id);
-> +			lock_requestor(chan, flags);
-> +			req_addr =3D __vmbus_request_addr_match(chan, req_id,
-> +							      VMBUS_RQST_ADDR_ANY);
->  			if (req_addr =3D=3D VMBUS_RQST_ERROR) {
-> +				unlock_requestor(chan, flags);
->  				dev_warn_ratelimited(&hbus->hdev->device,
->  						     "Invalid transaction ID %llx\n",
->  						     req_id);
-> @@ -2760,9 +2773,17 @@ static void hv_pci_onchannelcallback(void *context=
-)
->  			}
->  			comp_packet =3D (struct pci_packet *)req_addr;
->  			response =3D (struct pci_response *)buffer;
-> +			/*
-> +			 * Call ->completion_func() within the critical section to make
-> +			 * sure that the packet pointer is still valid during the call:
-> +			 * here 'valid' means that there's a task still waiting for the
-> +			 * completion, and that the packet data is still on the waiting
-> +			 * task's stack.  Cf. hv_compose_msi_msg().
-> +			 */
->  			comp_packet->completion_func(comp_packet->compl_ctxt,
->  						     response,
->  						     bytes_recvd);
-> +			unlock_requestor(chan, flags);
->  			break;
->=20
->  		case VM_PKT_DATA_INBAND:
-> --
-> 2.25.1
+Hello Greg, Sasha,
 
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+On Wed, Apr 06, 2022 at 10:29:53PM +0300, Vladimir Oltean wrote:
+> As discussed with Willem here:
+> https://lore.kernel.org/netdev/CA+FuTSdQ57O6RWj_Lenmu_Vd3NEX9xMzMYkB0C3rK=
+MzGgcPc6A@mail.gmail.com/T/
+>=20
+> the kernel silently doesn't act upon the SOF_TIMESTAMPING_OPT_ID socket
+> option in several cases on older kernels, yet user space has no way to
+> find out about this, practically resulting in broken functionality.
+>=20
+> This patch set backports the support towards linux-4.14.y and linux-4.19.=
+y,
+> which fixes the issue described above by simply making the kernel act
+> upon SOF_TIMESTAMPING_OPT_ID as expected.
+>=20
+> Testing was done with the most recent (not the vintage-correct one)
+> kselftest script at:
+> tools/testing/selftests/networking/timestamping/txtimestamp.sh
+> with the message "OK. All tests passed".
 
+Could you please pick up these backports for "stable"? Thanks.=

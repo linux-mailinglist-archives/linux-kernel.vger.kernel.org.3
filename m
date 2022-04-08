@@ -2,97 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E83484F9809
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9493E4F980E
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:29:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236905AbiDHOaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 10:30:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39992 "EHLO
+        id S236911AbiDHObX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 10:31:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236894AbiDHOai (ORCPT
+        with ESMTP id S236824AbiDHObV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 10:30:38 -0400
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11023B6D0C;
-        Fri,  8 Apr 2022 07:28:35 -0700 (PDT)
-Received: by mail-oi1-f169.google.com with SMTP id z8so8994462oix.3;
-        Fri, 08 Apr 2022 07:28:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6P/eWNSUhhChiVA2KOS+s22CliAw2GeLV4Worl1v+Mo=;
-        b=79/OK/MvLwU4h0DdmcoVnobkD7MEO1GX9KNSm2LiNMvGqu6cpINmu1qClIRRiD1PH3
-         X74Bt8cfa1omlsanDbxXpL1g0k4hyvYLsloqnmyVKEr2gOhpE3cu8xLb0ulq3QEfIvJZ
-         xBFdPawhStaTHQq1N3Fp3jBhaTwvpaaTnHUM6xx0PBSTHmF7tAguOxxpsARminwfAsop
-         VURBP15quHufon4ZOX7S37sX3hdiv8Z7bQk7HZox5Z5AZijtuQhq9oTyguJbEEEmPUmJ
-         ttTKjOtvbnbNVc3fQrE9yDYwMvNFjGfnKy8lurjmkJ+kmzarLNgykvecm19XIoNPxMh3
-         na1g==
-X-Gm-Message-State: AOAM532FwGo5VTMpMPApageuGM5ybbBvslwhAOblkBAiArvVHpleWdwH
-        yx/+F9oJ/UrWSEXma8KaaijiUmpHkA==
-X-Google-Smtp-Source: ABdhPJwCYTAc9kSP9DxjzK3Qd+s1DFyWlQN1bwPqjRJXhLEIJBbp3+DVTkAUog7s4MEl1XqJcnd4cQ==
-X-Received: by 2002:a05:6808:ec8:b0:2f9:6119:d6ed with SMTP id q8-20020a0568080ec800b002f96119d6edmr7910009oiv.215.1649428114209;
-        Fri, 08 Apr 2022 07:28:34 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g25-20020a544f99000000b002da70c710b8sm8850858oiy.54.2022.04.08.07.28.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 07:28:33 -0700 (PDT)
-Received: (nullmailer pid 3435863 invoked by uid 1000);
-        Fri, 08 Apr 2022 14:28:33 -0000
-Date:   Fri, 8 Apr 2022 09:28:33 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Luca Weiss <luca.weiss@fairphone.com>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Fri, 8 Apr 2022 10:31:21 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 1AFE4362201
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 07:29:17 -0700 (PDT)
+Received: (qmail 257248 invoked by uid 1000); 8 Apr 2022 10:29:16 -0400
+Date:   Fri, 8 Apr 2022 10:29:16 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Evan Green <evgreen@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rajat Jain <rajatja@chromium.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        phone-devel@vger.kernel.org
-Subject: Re: [PATCH 03/10] dt-bindings: qcom,pdc: Add SM6350 compatible
-Message-ID: <YlBGkVQCCEHlq1P4@robh.at.kernel.org>
-References: <20211213082614.22651-1-luca.weiss@fairphone.com>
- <20211213082614.22651-4-luca.weiss@fairphone.com>
- <YbpLnWKRq5TRO+Uk@robh.at.kernel.org>
- <CJ4TK3GWP00Q.1SDG6H9Q4GP37@otso>
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Youngjin Jang <yj84.jang@samsung.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] USB: hcd-pci: Fully suspend across freeze/thaw cycle
+Message-ID: <YlBGvFFSp/R2CBmh@rowland.harvard.edu>
+References: <20220407115918.1.I8226c7fdae88329ef70957b96a39b346c69a914e@changeid>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CJ4TK3GWP00Q.1SDG6H9Q4GP37@otso>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220407115918.1.I8226c7fdae88329ef70957b96a39b346c69a914e@changeid>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 01:24:43PM +0200, Luca Weiss wrote:
-> Hi all,
+On Thu, Apr 07, 2022 at 11:59:55AM -0700, Evan Green wrote:
+> The documentation for the freeze() method says that it "should quiesce
+> the device so that it doesn't generate IRQs or DMA". The unspoken
+> consequence of not doing this is that MSIs aimed at non-boot CPUs may
+> get fully lost if they're sent during the period where the target CPU is
+> offline.
 > 
-> On Wed Dec 15, 2021 at 9:10 PM CET, Rob Herring wrote:
-> > On Mon, 13 Dec 2021 09:26:04 +0100, Luca Weiss wrote:
-> > > Add devicetree compatible for pdc on SM6350 SoC.
-> > > 
-> > > Also correct the compatibles for sm8250 and sm8350.
-> > > 
-> > > Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> > > ---
-> > > I do have the .txt -> .yaml conversion ready for this but will send
-> > > as a separate patch.
-> > > 
-> > >  .../devicetree/bindings/interrupt-controller/qcom,pdc.txt    | 5 +++--
-> > >  1 file changed, 3 insertions(+), 2 deletions(-)
-> > > 
-> >
-> > Acked-by: Rob Herring <robh@kernel.org>
+> The current callbacks for USB HCD do not fully quiesce interrupts,
+> specifically on XHCI. Change to use the full suspend/resume flow for
+> freeze/thaw to ensure interrupts are fully quiesced. This fixes issues
+> where USB devices fail to thaw during hibernation because XHCI misses
+> its interrupt and fails to recover.
+
+I don't think your interpretation is quite right.  The problem doesn't lie 
+in the HCD callbacks but rather in the root-hub callbacks.
+
+Correct me if I'm wrong about xHCI, but AFAIK the host controller doesn't 
+issue any interrupt requests on its own behalf; it issues IRQs only on 
+behalf of its root hubs.  Given that the root hubs should be suspended 
+(i.e., frozen) at this point, and hence not running, the only IRQs they 
+might make would be for wakeup requests.
+
+So during freeze, wakeups should be disabled on root hubs.  Currently I 
+believe we don't do this; if a root hub was already runtime suspended when 
+asked to go into freeze, its wakeup setting will remain unchanged.  _That_ 
+is the bug which needs to be fixed.  (Consider what would happen if a root 
+hub wakes up after it is frozen but before the host controller is frozen: 
+The attempt to freeze the host controller would fail, causing the entire 
+hibernation transition to fail.)
+
+The whole issue of how wakeup requests should be handled during hibernation 
+is a difficult one.  I don't think we have any good protection against cases 
+where a wakeup request races with the system entering hibernation.  For 
+instance, if a wakeup event occurs after we go into the thaw state, it won't 
+even be recognized as such because the system will be running normally and 
+will handle it as an ordinary event.  But then it will be consumed, so the 
+wakeup signal won't remain on to reactivate the system once it has shut 
+down, and when the stored kernel image is eventually restored it won't 
+remember that the event ever happened.
+
+Alan Stern
+
+> Signed-off-by: Evan Green <evgreen@chromium.org> ---
 > 
-> It looks like this patch hasn't been applied yet. Could the responsible
-> maintainer please pick it up?
-
-Applied.
-
-Rob
+> You may be able to reproduce this issue on your own machine via the
+> following:
+> 1. Disable runtime PM on your XHCI controller
+> 2. Aim your XHCI IRQ at a non-boot CPU (replace 174): echo 2 >
+>    /proc/irq/174/smp_affinity
+> 3. Attempt to hibernate (no need to actually go all the way down).
+> 
+> I run 2 and 3 in a loop, and can usually hit a hang or dead XHCI
+> controller within 1-2 iterations. I happened to notice this on an
+> Alderlake system where runtime PM is accidentally disabled for one of
+> the XHCI controllers. Some more discussion and debugging can be found at
+> [1].
+> 
+> [1] https://lore.kernel.org/linux-pci/CAE=gft4a-QL82iFJE_xRQ3JrMmz-KZKWREtz=MghhjFbJeK=8A@mail.gmail.com/T/#u
+> 
+> ---
+>  drivers/usb/core/hcd-pci.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
+> index 8176bc81a635d6..e02506807ffc6c 100644
+> --- a/drivers/usb/core/hcd-pci.c
+> +++ b/drivers/usb/core/hcd-pci.c
+> @@ -616,10 +616,10 @@ const struct dev_pm_ops usb_hcd_pci_pm_ops = {
+>  	.suspend_noirq	= hcd_pci_suspend_noirq,
+>  	.resume_noirq	= hcd_pci_resume_noirq,
+>  	.resume		= hcd_pci_resume,
+> -	.freeze		= check_root_hub_suspended,
+> -	.freeze_noirq	= check_root_hub_suspended,
+> -	.thaw_noirq	= NULL,
+> -	.thaw		= NULL,
+> +	.freeze		= hcd_pci_suspend,
+> +	.freeze_noirq	= hcd_pci_suspend_noirq,
+> +	.thaw_noirq	= hcd_pci_resume_noirq,
+> +	.thaw		= hcd_pci_resume,
+>  	.poweroff	= hcd_pci_suspend,
+>  	.poweroff_noirq	= hcd_pci_suspend_noirq,
+>  	.restore_noirq	= hcd_pci_resume_noirq,
+> -- 
+> 2.31.0
+> 

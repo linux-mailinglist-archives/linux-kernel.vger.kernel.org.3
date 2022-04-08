@@ -2,199 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D86AE4F9D46
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 20:50:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D7C4F9D48
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 20:51:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239053AbiDHSwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 14:52:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38444 "EHLO
+        id S239037AbiDHSwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 14:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239041AbiDHSwU (ORCPT
+        with ESMTP id S238325AbiDHSwg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 14:52:20 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A39B1F0CB3;
-        Fri,  8 Apr 2022 11:50:05 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 238FWMdq004900;
-        Fri, 8 Apr 2022 18:49:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=0hV3lJeiKwojUvqkS79nwm4G4GE8s9EQ2hw4HTNHU08=;
- b=MhaSzuSj4S+4I24Yeph46gQUGWamxEhjRPOAAAEvm81jaRB72RJKTvNaJ83Eqbjqw+Yf
- I2lg+eNtZhAe+FzCvYCo9e4OAva1OQnSFsK4roEHM9QsLWhcyHFSc48xnoSJg28e9EPJ
- CgmGG+qQO9SQGwO2mT8Dt6/+1FEQCHpsMzyL5eEPuB51PlP6koIY49jmNb7f5/efkJk2
- /ZYvJ+O2J8jomU2YYECmlQ1m/7cwqjK4v2UAYEXOf8prwkZ9TzqlWcFgl/YD3VIy4Os0
- 7CGq9dpTWCTgHiw3yICRkgmgpdwrbGxF5MLy8drbnxaPGR/RziNDixLBSbrb5z9UT/pw Nw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3fad2h0ky4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 08 Apr 2022 18:49:42 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 238IXjJU019573;
-        Fri, 8 Apr 2022 18:49:41 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3fad2h0kxn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 08 Apr 2022 18:49:41 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 238IlHhC027096;
-        Fri, 8 Apr 2022 18:49:39 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04ams.nl.ibm.com with ESMTP id 3f6e4949sf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 08 Apr 2022 18:49:39 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 238IbGae52953402
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 8 Apr 2022 18:37:16 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1A035A404D;
-        Fri,  8 Apr 2022 18:49:37 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 406ADA4040;
-        Fri,  8 Apr 2022 18:49:34 +0000 (GMT)
-Received: from sig-9-65-90-167.ibm.com (unknown [9.65.90.167])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri,  8 Apr 2022 18:49:34 +0000 (GMT)
-Message-ID: <986199739ff8bd730b9aabe8882e245946d3d9e9.camel@linux.ibm.com>
-Subject: Re: [PATCH 4/7] KEYS: Introduce a builtin root of trust key flag
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     David Howells <dhowells@redhat.com>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        "pvorel@suse.cz" <pvorel@suse.cz>, "tiwai@suse.de" <tiwai@suse.de>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>
-Date:   Fri, 08 Apr 2022 14:49:33 -0400
-In-Reply-To: <16DDA7F1-95BA-4279-BE4E-9F713A905B36@oracle.com>
-References: <20220406015337.4000739-1-eric.snowberg@oracle.com>
-         <20220406015337.4000739-5-eric.snowberg@oracle.com>
-         <4fbef0889d6f286c7fcd317db099b4857e1b2fa3.camel@linux.ibm.com>
-         <EF1544D5-54E8-4D47-82F8-F9337CA7AEA0@oracle.com>
-         <b8965652274b49ba7c6f67cad6d42965cf984b42.camel@linux.ibm.com>
-         <16DDA7F1-95BA-4279-BE4E-9F713A905B36@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: j72oO1op68dHqRXF_fBHlV6R3iEnrkel
-X-Proofpoint-GUID: 96N4JVPRA1gUBy_W7LJmM3Pjp_JTe3LJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-08_07,2022-04-08_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- lowpriorityscore=0 suspectscore=0 mlxlogscore=999 adultscore=0
- impostorscore=0 spamscore=0 phishscore=0 clxscore=1015 bulkscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204080092
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 8 Apr 2022 14:52:36 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7531CA13B
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 11:50:32 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id p135so5796762iod.2
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 11:50:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=nviX1/6p4CUWbYvt2CnKwJZCiHqpIsejd+tTLUDJVgE=;
+        b=eBTekpcLXRlJQPqY+REfGlqCcPVxi/XZA3Q3WxEbTt1zsUER99ENTDo5wxgk1NCYaE
+         k+eJK5U+zOCJsc3cIA1Bd0y3TL222fRA2cLUd0pw7Fz7DymFZ5bte2SQ9Ox3W+2bBhqc
+         S8nN6a2mDlgmthzBC9hv5f/9jlYb2kl2yR5p4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=nviX1/6p4CUWbYvt2CnKwJZCiHqpIsejd+tTLUDJVgE=;
+        b=XswWtPKk0syiEeDSXrYe7oOO6037+Zm6c8eO2bh1JZisE0i81k4+vJnjntHcw6HFqo
+         /5y+y/0y9YQr/kaOq40gjuIbcAyDE1YgjQf3NzCKXhLF44rEWoavPAeGWClIwL44xb/t
+         aqF6VGO1Y9rB3c8hdrQ08o5kuq873UrfVJZrUHbS7q8Yts+9IGOOsdBzhok4S0ArFucg
+         5tcxkRcvR6oaHTNa5d+XauOeHGWKrDOWafI+AQi1Dfm8ZA6ygGLyFgLXCFeEtb+0j9Z8
+         54zfqxHiDg7P+E3aM5xBaKZwSan8riU6xw2OCMHuNIkmgMwRTLHZAa+xguBUpoxt+OSw
+         0rlQ==
+X-Gm-Message-State: AOAM531bpfbOzEbnRCw/4R6/kqA6bvQWitqKnuQg7Sf2JqAH4jqONrre
+        M7XabU2i9v548dMml1Fn3jXkWQ==
+X-Google-Smtp-Source: ABdhPJwEoaSzOVNdsm4khb7IeT78P3S4EAlAqrw1X+agbnbmF5Oidu5sdBoIeHF777hmk9a1De1Y2w==
+X-Received: by 2002:a6b:580d:0:b0:64d:2495:b598 with SMTP id m13-20020a6b580d000000b0064d2495b598mr2989746iob.89.1649443831599;
+        Fri, 08 Apr 2022 11:50:31 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id c22-20020a5ea816000000b00649d360663asm15161159ioa.40.2022.04.08.11.50.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Apr 2022 11:50:31 -0700 (PDT)
+Subject: Re: [PATCH v1] kunit: add support for kunit_suites that reference
+ init code
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Martin Fernandez <martin.fernandez@eclypsium.com>
+Cc:     shuah@kernel.org, davidgow@google.com, dlatypov@google.com,
+        daniel.gutson@eclypsium.com, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        keescook@chromium.org, jk@codeconstruct.com.au,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220311072859.2174624-1-brendanhiggins@google.com>
+ <1e1472e8-1813-3903-f934-cb0ae7f09864@linuxfoundation.org>
+ <CAFd5g46JiiddNxHW_jK6fjdfjGMjWsXsFuvL6H9xcZc98HWQyQ@mail.gmail.com>
+ <CAKgze5bCf+v4PoS92XCDV2cD7d0iUvCvxHbPqAnLoW8pwoKbtQ@mail.gmail.com>
+ <CAFd5g44nSfp=3A+VDCY6o-WzgDtnCw4NCChoXv_RKvmZc7Seog@mail.gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <b5e0221c-5b64-5f60-406c-30f015e09b36@linuxfoundation.org>
+Date:   Fri, 8 Apr 2022 12:50:30 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <CAFd5g44nSfp=3A+VDCY6o-WzgDtnCw4NCChoXv_RKvmZc7Seog@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-08 at 17:34 +0000, Eric Snowberg wrote:
+On 4/8/22 11:34 AM, Brendan Higgins wrote:
+> On Thu, Apr 7, 2022 at 5:34 PM Martin Fernandez
+> <martin.fernandez@eclypsium.com> wrote:
+>>
+>> On 4/4/22, Brendan Higgins <brendanhiggins@google.com> wrote:
+>>> On Mon, Apr 4, 2022 at 6:37 PM Shuah Khan <skhan@linuxfoundation.org>
+>>> wrote:
+>>>>
+>>>> Hi Brendan,
+>>>>
+>>>> On 3/11/22 12:28 AM, Brendan Higgins wrote:
+>>>>> Add support for a new kind of kunit_suite registration macro called
+>>>>> kunit_test_init_suite(); this new registration macro allows the
+>>>>> registration of kunit_suites that reference functions marked __init and
+>>>>> data marked __initdata.
+>>>>>
+>>>>> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+>>>>> Tested-by: Martin Fernandez <martin.fernandez@eclypsium.com>
+>>>>> Reviewed-by: Kees Cook <keescook@chromium.org>
+>>>>> Reviewed-by: David Gow <davidgow@google.com>
+>>>>> ---
+>>>>>
+>>>>
+>>>> I almost applied it ...
+>>>>
+>>>>> This is a follow-up to the RFC here[1].
+>>>>>
+>>>>> This patch is in response to a KUnit user issue[2] in which the user
+>>>>> was
+>>>>> attempting to test some init functions; although this is a functional
+>>>>> solution as long as KUnit tests only run during the init phase, we will
+>>>>> need to do more work if we ever allow tests to run after the init phase
+>>>>> is over; it is for this reason that this patch adds a new registration
+>>>>> macro rather than simply modifying the existing macros.
+>>>>>
+>>>>> Changes since last version:
+>>>>>    - I added more to the kunit_test_init_suites() kernel-doc comment
+>>>>>      detailing "how" the modpost warnings are suppressed in addition to
+>>>>>      the existing information regarding "why" it is OK for the modpost
+>>>>>      warnings to be suppressed.
+>>>>>
+>>>>> [1]
+>>>>> https://lore.kernel.org/linux-kselftest/20220310210210.2124637-1-brendanhiggins@google.com/
+>>>>> [2] https://groups.google.com/g/kunit-dev/c/XDjieRHEneg/m/D0rFCwVABgAJ
+>>>>>
+>>>>> ---
+>>>>>    include/kunit/test.h | 26 ++++++++++++++++++++++++++
+>>>>>    1 file changed, 26 insertions(+)
+>>>>>
+>>>>> diff --git a/include/kunit/test.h b/include/kunit/test.h
+>>>>> index b26400731c02..7f303a06bc97 100644
+>>>>> --- a/include/kunit/test.h
+>>>>> +++ b/include/kunit/test.h
+>>>>> @@ -379,6 +379,32 @@ static inline int kunit_run_all_tests(void)
+>>>>>
+>>>>>    #define kunit_test_suite(suite)     kunit_test_suites(&suite)
+>>>>>
+>>>>> +/**
+>>>>> + * kunit_test_init_suites() - used to register one or more &struct
+>>>>> kunit_suite
+>>>>> + *                         containing init functions or init data.
+>>>>> + *
+>>>>> + * @__suites: a statically allocated list of &struct kunit_suite.
+>>>>> + *
+>>>>> + * This functions identically as &kunit_test_suites() except that it
+>>>>> suppresses
+>>>>> + * modpost warnings for referencing functions marked __init or data
+>>>>> marked
+>>>>> + * __initdata; this is OK because currently KUnit only runs tests upon
+>>>>> boot
+>>>>> + * during the init phase or upon loading a module during the init
+>>>>> phase.
+>>>>> + *
+>>>>> + * NOTE TO KUNIT DEVS: If we ever allow KUnit tests to be run after
+>>>>> boot, these
+>>>>> + * tests must be excluded.
+>>>>> + *
+>>>>> + * The only thing this macro does that's different from
+>>>>> kunit_test_suites is
+>>>>> + * that it suffixes the array and suite declarations it makes with
+>>>>> _probe;
+>>>>> + * modpost suppresses warnings about referencing init data for symbols
+>>>>> named in
+>>>>> + * this manner.
+>>>>> + */
+>>>>> +#define kunit_test_init_suites(__suites...)                          \
+>>>>> +     __kunit_test_suites(CONCATENATE(__UNIQUE_ID(array), _probe),    \
+>>>>> +                         CONCATENATE(__UNIQUE_ID(suites), _probe),   \
+>>>>> +                         ##__suites)
+>>>>> +
+>>>>> +#define kunit_test_init_suite(suite) kunit_test_init_suites(&suite)
+>>>>> +
+>>>>>    #define kunit_suite_for_each_test_case(suite, test_case)            \
+>>>>>        for (test_case = suite->test_cases; test_case->run_case;
+>>>>> test_case++)
+>>>>>
+>>>>>
+>>>>
+>>>> The naming of the function and macro are rather confusing and can become
+>>>> error prone. Let's find better naming scheme.
+>>>
+>>> Yeah, I wasn't sure about the name. I didn't have any better ideas
+>>> initially though. Any suggestions?
+>>>
+>>
+>> What about kunit_test_init_section_suite?
 > 
-> > On Apr 8, 2022, at 10:55 AM, Mimi Zohar <zohar@linux.ibm.com> wrote:
-> > 
-> > On Fri, 2022-04-08 at 15:27 +0000, Eric Snowberg wrote:
-> >> 
-> >>> On Apr 8, 2022, at 8:40 AM, Mimi Zohar <zohar@linux.ibm.com> wrote:
-> >>> 
-> >>> On Tue, 2022-04-05 at 21:53 -0400, Eric Snowberg wrote:
-> >>>> 
-> >>>> The first type of key to use this is X.509.  When a X.509 certificate
-> >>>> is self signed, has the kernCertSign Key Usage set and contains the
-> >>>> CA bit set this new flag is set.
-> >>>> 
-> >>>> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
-> >>>> 
-> >>>> diff --git a/include/linux/key.h b/include/linux/key.h
-> >>>> index 7febc4881363..97f6a1f86a27 100644
-> >>>> --- a/include/linux/key.h
-> >>>> +++ b/include/linux/key.h
-> >>>> @@ -230,6 +230,7 @@ struct key {
-> >>>> #define KEY_FLAG_ROOT_CAN_INVAL	7	/* set if key can be invalidated by root without permission */
-> >>>> #define KEY_FLAG_KEEP		8	/* set if key should not be removed */
-> >>>> #define KEY_FLAG_UID_KEYRING	9	/* set if key is a user or user session keyring */
-> >>>> +#define KEY_FLAG_BUILTIN_ROT	10	/* set if key is a builtin Root of Trust key */
-> >>>> 
-> >>>> 	/* the key type and key description string
-> >>>> 	 * - the desc is used to match a key against search criteria
-> >>>> @@ -290,6 +291,7 @@ extern struct key *key_alloc(struct key_type *type,
-> >>>> #define KEY_ALLOC_BYPASS_RESTRICTION	0x0008	/* Override the check on restricted keyrings */
-> >>>> #define KEY_ALLOC_UID_KEYRING		0x0010	/* allocating a user or user session keyring */
-> >>>> #define KEY_ALLOC_SET_KEEP		0x0020	/* Set the KEEP flag on the key/keyring */
-> >>>> +#define KEY_ALLOC_BUILT_IN_ROT		0x0040  /* Add builtin root of trust key */
-> >>> 
-> >>> Since the concept of root of trust is not generic, but limited to
-> >>> specific keyrings, the root CA certificate signing keys on the
-> >>> "machine" keyring need to be identified.  Similar to the
-> >>> KEY_ALLOC_BUILT_IN/KEY_FLAG_BUILTIN, new flags
-> >>> KEY_ALLOC_MACHINE/KEY_FLAG_MACHINE should be defined instead.
-> >> 
-> >> I’m open to renaming these, however this name change seems confusing to me.  
-> >> This flag gets set when the X.509 certificate contains the three CA requirements 
-> >> identified above.  The remaining keys in the machine keyring can be used for 
-> >> anything else.
-> > 
-> > Renaming the flag to KEY_ALLOC_MACHINE/KEY_FLAG_MACHINE differentiates
-> > between the "builtin" keys from the "machine" keys.  The trust models
-> > are very different.
+> Sounds fine to me. Shuah, does that sound OK to you?
 > 
-> Isn’t the trust model the same for machine and secondary keys?  Both are supplied by 
-> the end-user. That is why I’m confused by naming something _MACHINE when it applies 
-> to more than one keyring.
 
-True both are supplied by the end-user, but the trust models are
-different.  In one case the certificates are coming indirectly from
-firmware, while in the other case the certificates would be limited to
-certificates signed by the initial firmware certificates.  Loading only
-root-CA signing key certificates onto the "machine" keyring highlights
-and enforces the different types of trust.
+Sorry for the delay in responding.
 
-> 
-> >> Plus this flag can be set for keys loaded into the secondary trusted 
-> >> keyring (6th patch in the series).  When an intermediate CA gets loaded into the 
-> >> secondary, the flag is set as well.
-> > 
-> > Please include a full explanation with the motivation in the patch
-> > description as to why support for intermediary CAs is required for the
-> > "end-user" use case.
-> 
-> Ok, I can add it.  I thought this was an expectation, based on the help section of
-> IMA_KEYRINGS_PERMIT_SIGNED_BY_BUILTIN_OR_SECONDARY:
-> 
-> " Intermediate keys between those the kernel has compiled in and the 
->  IMA keys to be added may be added to the system secondary keyring,
->  provided they are validly signed by a key already resident in the
->  built-in or secondary trusted keyrings."
-
-This paragraph refers to keys on the "builtin_trusted_keys" keyring. 
-The concept would need to be expanded to include keys on the "machine"
-keyring.   Since support for intermediary CA keys isn't required for
-the simple "end-user" use case, the motivation  needs to be provided.
+As long as the two names are different enough to tell them apart.
+The proposed name does that.
 
 thanks,
-
-Mimi
-
+-- Shuah

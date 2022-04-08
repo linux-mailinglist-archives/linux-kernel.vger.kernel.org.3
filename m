@@ -2,32 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 997834F932A
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 12:41:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 389EF4F932C
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 12:41:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234682AbiDHKng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 06:43:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41448 "EHLO
+        id S234718AbiDHKnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 06:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234472AbiDHKne (ORCPT
+        with ESMTP id S234694AbiDHKng (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 06:43:34 -0400
+        Fri, 8 Apr 2022 06:43:36 -0400
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A29931C432;
-        Fri,  8 Apr 2022 03:41:29 -0700 (PDT)
-X-UUID: 636d0eff059842b288362b87671f150d-20220408
-X-UUID: 636d0eff059842b288362b87671f150d-20220408
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6A6452E5F;
+        Fri,  8 Apr 2022 03:41:32 -0700 (PDT)
+X-UUID: c6543a3d98814bb8857469b515f8697d-20220408
+X-UUID: c6543a3d98814bb8857469b515f8697d-20220408
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
         (envelope-from <allen-kh.cheng@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 523656911; Fri, 08 Apr 2022 18:41:26 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Fri, 8 Apr 2022 18:41:26 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1933144503; Fri, 08 Apr 2022 18:41:28 +0800
+Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 8 Apr 2022 18:41:27 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 8 Apr
+ 2022 18:41:27 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 8 Apr 2022 18:41:26 +0800
+ Transport; Fri, 8 Apr 2022 18:41:27 +0800
 From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
 To:     Matthias Brugger <matthias.bgg@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -41,10 +43,12 @@ CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         Ryder Lee <ryder.lee@kernel.org>,
         Hui Liu <hui.liu@mediatek.com>,
         Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Subject: [PATCH 0/1] arm64: dts: mt8192: Add vcodec lat and core nodes
-Date:   Fri, 8 Apr 2022 18:41:23 +0800
-Message-ID: <20220408104124.31395-1-allen-kh.cheng@mediatek.com>
+Subject: [PATCH 1/1] arm64: dts: mt8192: Add vcodec lat and core nodes
+Date:   Fri, 8 Apr 2022 18:41:24 +0800
+Message-ID: <20220408104124.31395-2-allen-kh.cheng@mediatek.com>
 X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220408104124.31395-1-allen-kh.cheng@mediatek.com>
+References: <20220408104124.31395-1-allen-kh.cheng@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK:  N
@@ -57,25 +61,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Take vcodec lat and core nodes patch from series 20220330133816.30806-1-allen-kh.cheng@mediatek.com/
-This patch is based on matthias.bgg/linux.git, v5.18-next/dts64
+Add vcodec lat and core nodes for mt8192 SoC.
 
-We add vcodec lat and core nodes for cell sizes of 2 cells for "dt-bindings:
-media: mediatek,vcodec: Fix addressing cell sizes, commit a50e431bbc6".
-
-change history from previous series,
-- remove the comment
-- vcodec: correct the clk names (remove vdec- prefix)
-- vcodec: use ranges for regs of subnodes
-- vcodec lat and core: use '-' instead of '_' in the node name, fix indentation and
-  set mtk-vcodec-lat and mtk-vcodec-core as subnodes of vcodec-dec
-
-Allen-KH Cheng (1):
-  arm64: dts: mt8192: Add vcodec lat and core nodes
-
+Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
  arch/arm64/boot/dts/mediatek/mt8192.dtsi | 60 ++++++++++++++++++++++++
  1 file changed, 60 insertions(+)
 
+diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+index 18a58239d6f1..c7f4b2fbb315 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+@@ -1120,6 +1120,66 @@
+ 			power-domains = <&spm MT8192_POWER_DOMAIN_ISP2>;
+ 		};
+ 
++		vcodec_dec: vcodec-dec@16000000 {
++			compatible = "mediatek,mt8192-vcodec-dec";
++			reg = <0 0x16000000 0 0x1000>;
++			mediatek,scp = <&scp>;
++			iommus = <&iommu0 M4U_PORT_L4_VDEC_MC_EXT>;
++			dma-ranges = <0x1 0x0 0x0 0x40000000 0x0 0xfff00000>;
++			#address-cells = <2>;
++			#size-cells = <2>;
++			ranges = <0 0 0 0x16000000 0 0x26000>;
++
++			vcodec_lat: vcodec-lat@10000 {
++				compatible = "mediatek,mtk-vcodec-lat";
++				reg = <0x0 0x10000 0 0x800>;
++				interrupts = <GIC_SPI 426 IRQ_TYPE_LEVEL_HIGH 0>;
++				iommus = <&iommu0 M4U_PORT_L5_VDEC_LAT0_VLD_EXT>,
++					 <&iommu0 M4U_PORT_L5_VDEC_LAT0_VLD2_EXT>,
++					 <&iommu0 M4U_PORT_L5_VDEC_LAT0_AVC_MV_EXT>,
++					 <&iommu0 M4U_PORT_L5_VDEC_LAT0_PRED_RD_EXT>,
++					 <&iommu0 M4U_PORT_L5_VDEC_LAT0_TILE_EXT>,
++					 <&iommu0 M4U_PORT_L5_VDEC_LAT0_WDMA_EXT>,
++					 <&iommu0 M4U_PORT_L5_VDEC_LAT0_RG_CTRL_DMA_EXT>,
++					 <&iommu0 M4U_PORT_L5_VDEC_UFO_ENC_EXT>;
++				clocks = <&topckgen CLK_TOP_VDEC_SEL>,
++					 <&vdecsys_soc CLK_VDEC_SOC_VDEC>,
++					 <&vdecsys_soc CLK_VDEC_SOC_LAT>,
++					 <&vdecsys_soc CLK_VDEC_SOC_LARB1>,
++					 <&topckgen CLK_TOP_MAINPLL_D4>;
++				clock-names = "sel", "soc-vdec", "soc-lat", "vdec", "top";
++				assigned-clocks = <&topckgen CLK_TOP_VDEC_SEL>;
++				assigned-clock-parents = <&topckgen CLK_TOP_MAINPLL_D4>;
++				power-domains = <&spm MT8192_POWER_DOMAIN_VDEC>;
++			};
++
++			vcodec_core: vcodec-core@25000 {
++				compatible = "mediatek,mtk-vcodec-core";
++				reg = <0 0x25000 0 0x1000>;
++				interrupts = <GIC_SPI 425 IRQ_TYPE_LEVEL_HIGH 0>;
++				iommus = <&iommu0 M4U_PORT_L4_VDEC_MC_EXT>,
++					 <&iommu0 M4U_PORT_L4_VDEC_UFO_EXT>,
++					 <&iommu0 M4U_PORT_L4_VDEC_PP_EXT>,
++					 <&iommu0 M4U_PORT_L4_VDEC_PRED_RD_EXT>,
++					 <&iommu0 M4U_PORT_L4_VDEC_PRED_WR_EXT>,
++					 <&iommu0 M4U_PORT_L4_VDEC_PPWRAP_EXT>,
++					 <&iommu0 M4U_PORT_L4_VDEC_TILE_EXT>,
++					 <&iommu0 M4U_PORT_L4_VDEC_VLD_EXT>,
++					 <&iommu0 M4U_PORT_L4_VDEC_VLD2_EXT>,
++					 <&iommu0 M4U_PORT_L4_VDEC_AVC_MV_EXT>,
++					 <&iommu0 M4U_PORT_L4_VDEC_RG_CTRL_DMA_EXT>;
++				clocks = <&topckgen CLK_TOP_VDEC_SEL>,
++					 <&vdecsys CLK_VDEC_VDEC>,
++					 <&vdecsys CLK_VDEC_LAT>,
++					 <&vdecsys CLK_VDEC_LARB1>,
++					 <&topckgen CLK_TOP_MAINPLL_D4>;
++				clock-names = "sel", "soc-vdec", "soc-lat", "vdec", "top";
++				assigned-clocks = <&topckgen CLK_TOP_VDEC_SEL>;
++				assigned-clock-parents = <&topckgen CLK_TOP_MAINPLL_D4>;
++				power-domains = <&spm MT8192_POWER_DOMAIN_VDEC2>;
++			};
++		};
++
+ 		larb5: larb@1600d000 {
+ 			compatible = "mediatek,mt8192-smi-larb";
+ 			reg = <0 0x1600d000 0 0x1000>;
 -- 
 2.18.0
 

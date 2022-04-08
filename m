@@ -2,100 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 125404F906F
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 10:11:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A6764F9070
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 10:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbiDHINU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 04:13:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
+        id S231180AbiDHINq convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 8 Apr 2022 04:13:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbiDHINS (ORCPT
+        with ESMTP id S230391AbiDHINn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 04:13:18 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B5B3BA51
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 01:11:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649405475; x=1680941475;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=O8vNjUjdb+YSE+BlMlVSPWKJInDOBFoDacAWhOamg7I=;
-  b=lBAeUnsL0cYuBeUgQyP80O5F9SxysgG6ChSDzRfJalCz/lW5hnSJFJ8E
-   GmiuPRMjKPhh4ow+soyIlqIAYyiN53v1hJxYgh6Blko57cbwluOQa0Hdg
-   H9upi35x+WNWStKkUI89tenQHM4qESvgtv8UCFdOb8Bipvc+qiaLJ2LrH
-   yuP9T5mEZW4MhmpajD8HW04klbEezIdA4QfsCjDIR6UswtfARFhzHens6
-   kuVTUxUeUqh8ruNiZBJgm+J0F8fsJCmUFh2Btq0DJWscLf8UIIqI+r5JG
-   jvOGDemKVBiuk2D8EH+AJV6CpJa0LTMUBbvmiDjC5GHpXgd63oPTlSG76
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="286530572"
-X-IronPort-AV: E=Sophos;i="5.90,244,1643702400"; 
-   d="scan'208";a="286530572"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 01:11:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,244,1643702400"; 
-   d="scan'208";a="589143206"
-Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 08 Apr 2022 01:11:12 -0700
-Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ncjhz-00002X-Q8;
-        Fri, 08 Apr 2022 08:11:07 +0000
-Date:   Fri, 8 Apr 2022 16:10:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: ttm_bo_vm.c:undefined reference to `vmf_insert_pfn_prot'
-Message-ID: <202204081648.gV63Gt0t-lkp@intel.com>
+        Fri, 8 Apr 2022 04:13:43 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF4913BA51
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 01:11:39 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-148-Svnn6zolP_-zt7pXcvy9uw-1; Fri, 08 Apr 2022 09:11:37 +0100
+X-MC-Unique: Svnn6zolP_-zt7pXcvy9uw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Fri, 8 Apr 2022 09:11:35 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Fri, 8 Apr 2022 09:11:35 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Jason A. Donenfeld'" <Jason@zx2c4.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>
+CC:     "tytso@mit.edu" <tytso@mit.edu>,
+        "sultan@kerneltoast.com" <sultan@kerneltoast.com>,
+        Jann Horn <jannh@google.com>
+Subject: RE: [PATCH v2] random: allow partial reads if later user copies fail
+Thread-Topic: [PATCH v2] random: allow partial reads if later user copies fail
+Thread-Index: AQHYStia62LV1RpflEWlDISfQ8tDQqzlqpzQ
+Date:   Fri, 8 Apr 2022 08:11:35 +0000
+Message-ID: <8d652dac67754a308b270c453b3032d2@AcuMS.aculab.com>
+References: <20220407193433.523299-1-Jason@zx2c4.com>
+ <20220407233558.3369-1-Jason@zx2c4.com>
+In-Reply-To: <20220407233558.3369-1-Jason@zx2c4.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   1831fed559732b132aef0ea8261ac77e73f7eadf
-commit: a0f25a6bb319aa05e04dcf51707c97c2881b4f47 drm/hisilicon/hibmc: Allow to be built if COMPILE_TEST is enabled
-date:   2 months ago
-config: riscv-buildonly-randconfig-r005-20220408 (https://download.01.org/0day-ci/archive/20220408/202204081648.gV63Gt0t-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a0f25a6bb319aa05e04dcf51707c97c2881b4f47
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout a0f25a6bb319aa05e04dcf51707c97c2881b4f47
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash
+From: Jason A. Donenfeld
+> Sent: 08 April 2022 00:36
+> 
+> Rather than failing entirely if a copy_to_user() fails at some point,
+> instead we should return a partial read for the amount that succeeded
+> prior, unless none succeeded at all, in which case we return -EFAULT as
+> before.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I think you now return -EFAULT for a zero length read.
 
-All errors (new ones prefixed by >>):
+	David
 
-   riscv64-linux-ld: drivers/gpu/drm/ttm/ttm_bo_vm.o: in function `.L97':
->> ttm_bo_vm.c:(.text+0x81c): undefined reference to `vmf_insert_pfn_prot'
-   riscv64-linux-ld: drivers/gpu/drm/ttm/ttm_bo_vm.o: in function `.L0 ':
-   ttm_bo_vm.c:(.text+0x9d8): undefined reference to `vmf_insert_pfn_prot'
+> 
+> This makes it consistent with other reader interfaces. For example, the
+> following snippet for /dev/zero outputs "4" followed by "1":
+> 
+>   int fd;
+>   void *x = mmap(NULL, 4096, PROT_WRITE, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
+>   assert(x != MAP_FAILED);
+>   fd = open("/dev/zero", O_RDONLY);
+>   assert(fd >= 0);
+>   printf("%zd\n", read(fd, x, 4));
+>   printf("%zd\n", read(fd, x + 4095, 4));
+>   close(fd);
+> 
+> This brings that same standard behavior to the various RNG reader
+> interfaces.
+> 
+> While we're at it, we can streamline the loop logic a little bit.
+> 
+> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Cc: Jann Horn <jannh@google.com>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> ---
+> Changes v1->v2:
+> - Do partial copies within individual blocks, not just per-block, also
+>   following how /dev/zero and ordinary filesystem files work.
+> 
+>  drivers/char/random.c | 22 ++++++++++++----------
+>  1 file changed, 12 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/char/random.c b/drivers/char/random.c
+> index e15063d61460..df43c5060f00 100644
+> --- a/drivers/char/random.c
+> +++ b/drivers/char/random.c
+> @@ -523,8 +523,7 @@ EXPORT_SYMBOL(get_random_bytes);
+> 
+>  static ssize_t get_random_bytes_user(void __user *buf, size_t nbytes)
+>  {
+> -	ssize_t ret = 0;
+> -	size_t len;
+> +	size_t len, left, ret = 0;
+>  	u32 chacha_state[CHACHA_STATE_WORDS];
+>  	u8 output[CHACHA_BLOCK_SIZE];
+> 
+> @@ -543,37 +542,40 @@ static ssize_t get_random_bytes_user(void __user *buf, size_t nbytes)
+>  	 * the user directly.
+>  	 */
+>  	if (nbytes <= CHACHA_KEY_SIZE) {
+> -		ret = copy_to_user(buf, &chacha_state[4], nbytes) ? -EFAULT : nbytes;
+> +		ret = nbytes - copy_to_user(buf, &chacha_state[4], nbytes);
+>  		goto out_zero_chacha;
+>  	}
+> 
+> -	do {
+> +	for (;;) {
+>  		chacha20_block(chacha_state, output);
+>  		if (unlikely(chacha_state[12] == 0))
+>  			++chacha_state[13];
+> 
+>  		len = min_t(size_t, nbytes, CHACHA_BLOCK_SIZE);
+> -		if (copy_to_user(buf, output, len)) {
+> -			ret = -EFAULT;
+> +		left = copy_to_user(buf, output, len);
+> +		if (left) {
+> +			ret += len - left;
+>  			break;
+>  		}
+> 
+> -		nbytes -= len;
+>  		buf += len;
+>  		ret += len;
+> +		nbytes -= len;
+> +		if (!nbytes)
+> +			break;
+> 
+>  		BUILD_BUG_ON(PAGE_SIZE % CHACHA_BLOCK_SIZE != 0);
+> -		if (!(ret % PAGE_SIZE) && nbytes) {
+> +		if (ret % PAGE_SIZE == 0) {
+>  			if (signal_pending(current))
+>  				break;
+>  			cond_resched();
+>  		}
+> -	} while (nbytes);
+> +	}
+> 
+>  	memzero_explicit(output, sizeof(output));
+>  out_zero_chacha:
+>  	memzero_explicit(chacha_state, sizeof(chacha_state));
+> -	return ret;
+> +	return ret ? ret : -EFAULT;
+>  }
+> 
+>  /*
+> --
+> 2.35.1
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for DRM_TTM
-   Depends on HAS_IOMEM && DRM && MMU
-   Selected by
-   - DRM_TTM_HELPER && HAS_IOMEM && DRM
-   - DRM_HISI_HIBMC && HAS_IOMEM && DRM && PCI && (ARM64 || COMPILE_TEST
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

@@ -2,94 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFA074F8E24
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:26:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 382C94F8E3C
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:26:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234354AbiDHEsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 00:48:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53040 "EHLO
+        id S232800AbiDHEu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 00:50:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231300AbiDHEso (ORCPT
+        with ESMTP id S231300AbiDHEuz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 00:48:44 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735A9119845;
-        Thu,  7 Apr 2022 21:46:41 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KZQgz5Y9Dz4xYM;
-        Fri,  8 Apr 2022 14:46:39 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1649393200;
-        bh=N+Uzp5hyYZdNyex81yxQ//SgXuZyUvzRwZF/wWGe9IM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=plvx7Zf/Fejsg8NvtOOm6pvbCZtOhW0U0gvmO+3VHt2DYyeaWV5drRR8i/mYoomgb
-         g+lnidCCfWpwoyy67Z/RQKcUy+oMgaRs36qRsDYSW2GRRHyVGDHjNQ2UrSpHD95Ce8
-         6Ec6hcmUC0xP9JsZ00rYDEqxY/hUqbUhrtw7KBPL2CP7VX6NVwNtxmy7cgBE7rIzAT
-         h9ZHhD0gxyqoPVFlujpqrM1lcHERPQxYZtkdss/l685V357fwKjJpCIwhnVhlL/RyE
-         G6Ae3YuBg+yc1vmUB/2coCO64+tnDIGR8Ck2avCvntWa6jzXYNuhZehzyIM4Cz3N2y
-         o8W/riC5MSDeQ==
-Date:   Fri, 8 Apr 2022 14:46:39 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Yongqiang Sun <yongqiang.sun@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <20220408144639.21a0f6d0@canb.auug.org.au>
+        Fri, 8 Apr 2022 00:50:55 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94ACBFABC8;
+        Thu,  7 Apr 2022 21:48:52 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id s2so7415936pfh.6;
+        Thu, 07 Apr 2022 21:48:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=s+UL35WfzSMP+2xZp9ViJx/yOJroVs1rmRwF6Q3Unm4=;
+        b=q0t5/nAt60OyqMBNKQ++uAnrvaALWWqLYOBLTx+WJzhYM5VyQ9OTyOym80McY8xXE7
+         WsiiVk5/T8n8ZdKsS+K/FeLF9CBXGrsm++o7SJoccq/hDBt2FAKrRI5DdUEoNmPsNP3V
+         b6AYP8OBZk/7u4zNRoZtWmB/cjg0yQ+Yo3YYA2Wi/ON/5mMLmuxGkGwboCKbzt9fTr9r
+         quWl+0QlNS6BO3uxBkez3tTxTQ8EV1sBGOZ1NOeacvwpFg28fjKhZSJctrx/gTV2r+YH
+         jniaPDF+QI07VmzUbZyKSvAWIn+NqJ4bSMzPxoyJoVfEMb19JWueferf3NDNRvqvwfV1
+         MN6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=s+UL35WfzSMP+2xZp9ViJx/yOJroVs1rmRwF6Q3Unm4=;
+        b=lO5hKuJgooVVuTLs5/Px4FkQft6XmYHNytdCSTWw7nstIvrryz471OOaMr5TzPd7Dx
+         TuotuH7+FCwYkQ59N3xsNIGbltV/UZP3l651a+qlUpLgAao4Vwha6UPXeInMkRkUNgDz
+         fiPWEtF4Sjvl1OjfAEn5YZdU6CXBjq7tlbeBvmcCuYtbOlQKlxRHbH/BosS1VaCgD1cS
+         GPbVO/mbZsTDaeP/DeGPcsGCnrHoBB1UDX+/dtxbdGge9HcU0x/oQmCeYjEQY/mDjSUI
+         MKuX9wXsF/EDia/rVx9riHQNINXYj6dJB/jcjkiSFWCsDUhWNZKWXmBfklzk/CEUXhuq
+         nvww==
+X-Gm-Message-State: AOAM532V2M2LU7exZEFqPe0j2B/Gccf5lyKaY27yD40dgSn5HShCDoj4
+        JFsjveFsBPpR9VctpzHDTkA=
+X-Google-Smtp-Source: ABdhPJzXCIq8telM9W/w36lyxOuzOEPAH9qgoif+AEcrH5yfRsvy3mg29DtGFZm+iiLV0mHkAotToQ==
+X-Received: by 2002:a63:b55d:0:b0:398:5eeb:e637 with SMTP id u29-20020a63b55d000000b003985eebe637mr13646038pgo.314.1649393331984;
+        Thu, 07 Apr 2022 21:48:51 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-1.three.co.id. [180.214.232.1])
+        by smtp.gmail.com with ESMTPSA id p3-20020a056a000b4300b004faee36ea56sm24799110pfo.155.2022.04.07.21.48.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 21:48:51 -0700 (PDT)
+Message-ID: <0e3f7e6d-80fa-7942-3e3b-c42d114243fe@gmail.com>
+Date:   Fri, 8 Apr 2022 11:48:39 +0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/XkCV5IUkhSHYCVbXjh9hVEq";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v10 14/14] mm: multi-gen LRU: design doc
+Content-Language: en-US
+To:     Jonathan Corbet <corbet@lwn.net>, Yu Zhao <yuzhao@google.com>,
+        Stephen Rothwell <sfr@rothwell.id.au>, linux-mm@kvack.org
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Barry Song <21cnbao@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, page-reclaim@google.com,
+        x86@kernel.org, Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        =?UTF-8?Q?Holger_Hoffst=c3=a4tte?= <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>
+References: <20220407031525.2368067-1-yuzhao@google.com>
+ <20220407031525.2368067-15-yuzhao@google.com>
+ <5ea69d84-be0c-2e9b-02b5-92d9442c8aff@gmail.com>
+ <87wng1838i.fsf@meer.lwn.net>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <87wng1838i.fsf@meer.lwn.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/XkCV5IUkhSHYCVbXjh9hVEq
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 07/04/22 19.52, Jonathan Corbet wrote:
+> Bagas, it is hard enough to get people to write useful documentation as
+> it is.  Could I ask you to please stop adding useless friction to the
+> process?
+> 
 
-Hi all,
+OK, thanks for reminding me.
 
-After merging the amdgpu tree, today's linux-next build (powerpc
-allyesconfig) failed like this:
-
-drivers/gpu/drm/amd/amdgpu/amdgpu_gmc.c:28:10: fatal error: asm/hypervisor.=
-h: No such file or directory
-   28 | #include <asm/hypervisor.h>
-      |          ^~~~~~~~~~~~~~~~~~
-
-Caused by commit
-
-  49aa98ca30cd ("drm/amd/amdgpu: Only reserve vram for firmware with vega9 =
-MS_HYPERV host.")
-
-I have reverted that commit for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/XkCV5IUkhSHYCVbXjh9hVEq
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJPvi8ACgkQAVBC80lX
-0Gziegf+OYswYy9kvA5dDOc4V1X6qeC8WV/zyCjOhXak1YWtuGBrJ956sB/HNocD
-oleRfSFDCdW2twsfhKt7XKTAZEdIgYmf+zoRU68dJNV7ZB4vW4KH+I3uUMP81Fn8
-epPHksXZ9G4hsxteZ6YvWPjL40m/S8mDClAUwXQsGq6IyQbJxNA3ZBGHrwLucvg6
-PDSCzQqi0Yw+nmuyYqy8onudDQkN6VGLSd0qMIOXYmE/CnNbrLz0cX+WmKGt2eXB
-6s9eqUK+upW/b1g/JfvDdCAXtQTd9PadDucPXWr15awfG4ChHpfgrIMSHvnnqHW4
-i4NKXAk2HET95G5LgOhoAQ9um1tBqg==
-=uZTb
------END PGP SIGNATURE-----
-
---Sig_/XkCV5IUkhSHYCVbXjh9hVEq--
+-- 
+An old man doll... just what I always wanted! - Clara

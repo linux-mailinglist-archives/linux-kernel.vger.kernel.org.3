@@ -2,229 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DC044F945A
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 13:41:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13CE04F945E
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 13:43:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234962AbiDHLnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 07:43:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35134 "EHLO
+        id S234990AbiDHLoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 07:44:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234928AbiDHLn2 (ORCPT
+        with ESMTP id S229893AbiDHLoC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 07:43:28 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482C6194AB5;
-        Fri,  8 Apr 2022 04:41:25 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id n6so16680124ejc.13;
-        Fri, 08 Apr 2022 04:41:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=oOLkJ7c4AnZzlwaZhpGpMRHcIgXhaokY4dCFfnVK8ik=;
-        b=AJg0uFFwQge4JGuOOuXx8CRkZnu1ZXDnzVzYyDLWHmvIU38NMZoqu0q4pVe158Dkgn
-         /eBGcEWGk1BeH46V8704WX2v2KXvFfp8vmK2QWBZU86JD8zqVMh6WPg5JLEG+MOHz132
-         joX/LTo9GNjQ/PHxRdkig9FP8sCB1PK8s/CVdG9aD27OA02ni/wYOQv2VKyManpb4r2V
-         l+NyhY4mu+ntHubH7dA6jGBBg6Rw6LlWbypc/PJx+kXrgjcCC5HTa5lEjYMn4vqquVmu
-         OjghRQ+Tl9pBKfNcLM6JX8eao7netCFmQK+me98hABNrns/o3jeMpBRevLlGuLTg9CDP
-         8pvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oOLkJ7c4AnZzlwaZhpGpMRHcIgXhaokY4dCFfnVK8ik=;
-        b=CWTUXkKCNjmXCfKQmIvAHVeFE4P4HDo+u0dJjnU8LG89pms8uU1B1TDL4zm1eBI0YC
-         1rGZ6K2rh5ejLCxr8DJFY1qmsTyQthuXS9XNwsAz6VCkxEhyHe28eXTFju6NE2uAB8SO
-         vKprCw+sRk/GFuLgEAQjvpzka5u42o3NfUbZBPD6ZgEtn3pPh+EIJk1rQYzRWry2fRlE
-         giEJXf1t6bNO0vXdZmpl4kxzQd3hkIzdZbSTEspRThCU2G4sNNZuF3OwJRmGfnrM/SAL
-         GXp9rBCqE1XECxFDhTh8CpX/oRbXor6bcJYPO2/hZJgF3uxn6VZzrwMZ6daDzQJrUyD5
-         z23w==
-X-Gm-Message-State: AOAM531ifMCMAWvGYqNelZRiSuCHvhWcnJ2YhChrI2qHpb6cizBQGRLV
-        HqKoRtrQiA/oQ/wsyM2/X/s=
-X-Google-Smtp-Source: ABdhPJxeGaH+7ttKQKVamBraqnau+HZGtwku7UJ842hOx0+3i3iRgWvMoiWyLlCCBLIqlNq60ltPnQ==
-X-Received: by 2002:a17:907:2d92:b0:6e8:4b2a:e41f with SMTP id gt18-20020a1709072d9200b006e84b2ae41fmr3203383ejc.124.1649418083561;
-        Fri, 08 Apr 2022 04:41:23 -0700 (PDT)
-Received: from skbuf ([188.26.57.45])
-        by smtp.gmail.com with ESMTPSA id e11-20020a50becb000000b0041b64129200sm10750300edk.50.2022.04.08.04.41.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 04:41:23 -0700 (PDT)
-Date:   Fri, 8 Apr 2022 14:41:20 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        UNGLinuxDriver@microchip.com, Ariel Elior <aelior@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Casper Andersson <casper.casan@gmail.com>,
-        Bjarni Jonasson <bjarni.jonasson@microchip.com>,
-        Colin Ian King <colin.king@intel.com>,
-        Michael Walle <michael@walle.cc>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Eric Dumazet <edumazet@google.com>,
-        Di Zhu <zhudi21@huawei.com>, Xu Wang <vulab@iscas.ac.cn>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, Mike Rapoport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: Re: [PATCH net-next 02/15] net: dsa: sja1105: Remove usage of
- iterator for list_add() after loop
-Message-ID: <20220408114120.tvf2lxvhfqbnrlml@skbuf>
-References: <20220407102900.3086255-1-jakobkoschel@gmail.com>
- <20220407102900.3086255-3-jakobkoschel@gmail.com>
+        Fri, 8 Apr 2022 07:44:02 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B442189A13;
+        Fri,  8 Apr 2022 04:41:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=mQ8AKdzMxBFGNBINjR+9BmtRxvC4/CfWJdXWKx3wQT4=; b=m/QV561VZKF+puSKyDHGrf42vS
+        xKNxcHw3Zc5G4f4MDCQC0n9n2hdn7NKoZVpNIyNpQ1UvMM/iZh1fSf+E4NkvXegXKu1Bp4K5wXSTT
+        1e4VdRp8o9+sNRJ0JbBkTysXUA/9+0wvuBNvNSRehpA16Qffd5YfW3sbbPLNK72G04/txaj9nS9Z/
+        EP3JmXAeyjpPHto+zFWczVd1tKqfDRQcLE2nnuK6/2rSEOGI3WvnXmq22lY8rQjrK6q7Cf91ykjri
+        NesmJO5qOzsoyapand3YA4CZBgFs2Qv5zblUNNWkjk0wQkUp9zsFkl1pS45RbhmUjnYNhGI1691AK
+        em+VAxDg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ncmzf-002tVN-F3; Fri, 08 Apr 2022 11:41:35 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id AA0E09861A4; Fri,  8 Apr 2022 13:41:33 +0200 (CEST)
+Date:   Fri, 8 Apr 2022 13:41:33 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     madvenka@linux.microsoft.com, mark.rutland@arm.com,
+        broonie@kernel.org, ardb@kernel.org, nobuta.keiya@fujitsu.com,
+        sjitindarsingh@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        jmorris@namei.org, linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        chenzhongjin@huawei.com
+Subject: Re: [RFC PATCH v1 0/9] arm64: livepatch: Use DWARF Call Frame
+ Information for frame pointer validation
+Message-ID: <20220408114133.GP2731@worktop.programming.kicks-ass.net>
+References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
+ <20220407202518.19780-1-madvenka@linux.microsoft.com>
+ <20220408002147.pk7clzruj6sawj7z@treble>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220407102900.3086255-3-jakobkoschel@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220408002147.pk7clzruj6sawj7z@treble>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Jakob,
 
-On Thu, Apr 07, 2022 at 12:28:47PM +0200, Jakob Koschel wrote:
-> In preparation to limit the scope of a list iterator to the list
-> traversal loop, use a dedicated pointer to point to the found element [1].
+Right; so not having seen the patches due to Madhaven's email being
+broken, I can perhaps less appreciated the crazy involved.
+
+On Thu, Apr 07, 2022 at 05:21:51PM -0700, Josh Poimboeuf wrote:
+> 2)
 > 
-> Before, the code implicitly used the head when no element was found
-> when using &pos->list. Since the new variable is only set if an
-> element was found, the list_add() is performed within the loop
-> and only done after the loop if it is done on the list head directly.
+> If I understand correctly, objtool is converting parts of DWARF to a new
+> format which can then be read by the kernel.  In that case, please don't
+> call it DWARF as that will cause a lot of confusion.
 > 
-> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
-> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
-> ---
->  drivers/net/dsa/sja1105/sja1105_vl.c | 14 +++++++++-----
->  1 file changed, 9 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/net/dsa/sja1105/sja1105_vl.c b/drivers/net/dsa/sja1105/sja1105_vl.c
-> index b7e95d60a6e4..cfcae4d19eef 100644
-> --- a/drivers/net/dsa/sja1105/sja1105_vl.c
-> +++ b/drivers/net/dsa/sja1105/sja1105_vl.c
-> @@ -27,20 +27,24 @@ static int sja1105_insert_gate_entry(struct sja1105_gating_config *gating_cfg,
->  	if (list_empty(&gating_cfg->entries)) {
->  		list_add(&e->list, &gating_cfg->entries);
->  	} else {
-> -		struct sja1105_gate_entry *p;
-> +		struct sja1105_gate_entry *p = NULL, *iter;
->  
-> -		list_for_each_entry(p, &gating_cfg->entries, list) {
-> -			if (p->interval == e->interval) {
-> +		list_for_each_entry(iter, &gating_cfg->entries, list) {
-> +			if (iter->interval == e->interval) {
->  				NL_SET_ERR_MSG_MOD(extack,
->  						   "Gate conflict");
->  				rc = -EBUSY;
->  				goto err;
->  			}
->  
-> -			if (e->interval < p->interval)
-> +			if (e->interval < iter->interval) {
-> +				p = iter;
-> +				list_add(&e->list, iter->list.prev);
->  				break;
-> +			}
->  		}
-> -		list_add(&e->list, p->list.prev);
-> +		if (!p)
-> +			list_add(&e->list, gating_cfg->entries.prev);
->  	}
->  
->  	gating_cfg->num_entries++;
-> -- 
-> 2.25.1
-> 
+> There are actually several similarities between your new format and ORC,
+> which is also an objtool-created DWARF alternative.  It would be
+> interesting to see if they could be combined somehow.
 
-I apologize in advance if I've misinterpreted the end goal of your patch.
-I do have a vague suspicion I understand what you're trying to achieve,
-and in that case, would you mind using this patch instead of yours?
-I think it still preserves the intention of the code in a clean manner.
+What Josh said; please use/extend ORC.
 
------------------------------[ cut here ]-----------------------------
-From 7aed740750d1bc3bff6e85fd33298f5905bb4e01 Mon Sep 17 00:00:00 2001
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
-Date: Fri, 8 Apr 2022 13:55:14 +0300
-Subject: [PATCH] net: dsa: sja1105: avoid use of type-confused pointer in
- sja1105_insert_gate_entry()
+I really don't understand where all this crazy is coming from; why does
+objtool need to do something radically weird for ARM64?
 
-It appears that list_for_each_entry() leaks a type-confused pointer when
-the iteration loop ends with no early break, since "*p" will no longer
-point to a "struct sja1105_gate_entry", but rather to some memory in
-front of "gating_cfg->entries".
+There are existing ARM64 patches for objtool; in fact they have recently
+been re-posted:
 
-This isn't actually a problem here, because if the element we insert has
-the highest interval, therefore we never exit the loop early, "p->list"
-(which is all that we use outside the loop) will in fact point to
-"gating_cfg->entries" even though "p" itself is invalid.
+ https://lkml.kernel.org/r/20220407120141.43801-1-chenzhongjin@huawei.com
 
-Nonetheless, there are preparations to increase the safety of
-list_for_each_entry() by making it impossible to use the encapsulating
-structure of the iterator element outside the loop. So something needs
-to change here before those preparations go in, even though this
-constitutes legitimate use.
+The only tricky bit seems to be the whole jump-table issue. Using DWARF
+as input to deal with jump-tables should be possible -- exceedingly
+overkill, but possible I suppose. Mandating DWARF sucks though, compile
+times are so much worse with DWARVES on :/
 
-Make it clear that we are not dereferencing members of the encapsulating
-"struct sja1105_gate_entry" outside the loop, by using the regular
-list_for_each() iterator, and dereferencing the struct sja1105_gate_entry
-only within the loop.
+Once objtool can properly follow/validate ARM64 code, it should be
+fairly straight forward to have it generate ORC data just like it does
+on x86_64.
 
-With list_for_each(), the iterator element at the end of the loop does
-have a sane value in all cases, and we can just use that as the "head"
-argument of list_add().
 
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
----
- drivers/net/dsa/sja1105/sja1105_vl.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/net/dsa/sja1105/sja1105_vl.c b/drivers/net/dsa/sja1105/sja1105_vl.c
-index c0e45b393fde..fe93c80fe5ef 100644
---- a/drivers/net/dsa/sja1105/sja1105_vl.c
-+++ b/drivers/net/dsa/sja1105/sja1105_vl.c
-@@ -27,9 +27,15 @@ static int sja1105_insert_gate_entry(struct sja1105_gating_config *gating_cfg,
- 	if (list_empty(&gating_cfg->entries)) {
- 		list_add(&e->list, &gating_cfg->entries);
- 	} else {
--		struct sja1105_gate_entry *p;
-+		struct list_head *pos;
-+
-+		/* We cannot safely use list_for_each_entry()
-+		 * because we dereference "pos" after the loop
-+		 */
-+		list_for_each(pos, &gating_cfg->entries) {
-+			struct sja1105_gate_entry *p;
- 
--		list_for_each_entry(p, &gating_cfg->entries, list) {
-+			p = list_entry(pos, struct sja1105_gate_entry, list);
- 			if (p->interval == e->interval) {
- 				NL_SET_ERR_MSG_MOD(extack,
- 						   "Gate conflict");
-@@ -40,7 +46,7 @@ static int sja1105_insert_gate_entry(struct sja1105_gating_config *gating_cfg,
- 			if (e->interval < p->interval)
- 				break;
- 		}
--		list_add(&e->list, p->list.prev);
-+		list_add(&e->list, pos->prev);
- 	}
- 
- 	gating_cfg->num_entries++;
------------------------------[ cut here ]-----------------------------

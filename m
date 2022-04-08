@@ -2,80 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAF534F8E30
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:26:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D68F84F8D85
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:25:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234450AbiDHFAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 01:00:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60594 "EHLO
+        id S234462AbiDHFAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 01:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234387AbiDHE74 (ORCPT
+        with ESMTP id S234452AbiDHFAN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 00:59:56 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC2F27CD7
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 21:57:52 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id c11-20020a17090a4d0b00b001cab6569b8cso4105484pjg.5
-        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 21:57:52 -0700 (PDT)
+        Fri, 8 Apr 2022 01:00:13 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C90E136FE1
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 21:58:08 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2ebd70a4cf5so25087147b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 21:58:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=3pTs/VmZPxq5q5wYSF5wNcPHcga+GtsVQl1Ey1cMTYA=;
-        b=rvhnsrqMv4sgVKJh1vywJDwJ5U1YIrm4qeZ+xvYMN5iNrp3UBtoPAwLYGST3GoaiMm
-         WHOaYmhgN89ZSkqq/rrlyrpsoAk9snev93OB3iD6xwnbay5f9TY/LZvY0DCAezc6XBkq
-         xL4SfAAQ1Asd+mUQruSX/RHQfET7mMtUa5hZPgL9lbYKPNV6DK0EbhmuK9i82PR/5pAt
-         /NhixDWU/pG6CKN2oFTyr8dDewwdERP0qYAzylJbweyHFeoMsu6trfoKBuDfsepu7Rek
-         a8aShEUZ343hISjyHiMcMdIBoVEqcQ1IoADLU9STJVAAr7sxoIvQ8281ix2aOcgAz9HZ
-         /kVw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ZX5okEH0sxWRyDJLsGr6K2bum/cs4WAHaeg4beO8EcU=;
+        b=DAAhVYhLZCjI176h4Y/+Ew2tlsNKNXjaimnB3l8ghCIUm1eDG0517Z85L0qW8WMQeD
+         4ZtzKQXW2yzjBjf8ZnhpR2uBwXpE4CZxUM1KvK6RiUV+CHE95HpU8CB0Pt0q06fihBiB
+         KCA4j42R7SeJoeYNKGQsZHxrJ8pBzlZ4OywDNt8/TKU6SmjRt/4CXCfTIdZtKoUZUF6x
+         dbSmHcfQKB/chBQlIpnDZHnudWjZvSTcucrRPdkeaVIcEEUcqGKERrBQCfdihSOZhDaV
+         IOT8+J0A8ccUqY+9pMYL0Zv4DbfV3pzensCG/qeI6KvBl5iFxBT0DIZpjjh5xsVREvxt
+         q9IA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=3pTs/VmZPxq5q5wYSF5wNcPHcga+GtsVQl1Ey1cMTYA=;
-        b=GphcQFyGpTXGNVa/SDeg2tYYVk0xVK5muqP5P8hdIQ4LMhEb5BxT5/DtOpO7jzQQjb
-         VPM2mKt3EqIhpluilNbmz87//Fw+8IF/IYpkJwtZWlxZJ+LA+Zl4BwHa8GexsRIqXxBP
-         A0Q3w4lMZRl8Q1dE4CwzYKpDVMfLXi0kCa1uOONzYT4B6AKAvrQIWSagkPn5Isf2iNG6
-         7Ardj08Y9ReeFGBKoyrzWTjIZClj/C20yP/mVtYbBtPzqDedq0iRzoBpgeQC5HFPmEL3
-         wn80wgT9hiULAy2mODB0o+3a9idJvc6wMRJhtaWqH+8D4eLSdL/O2vKAyaVk0uuKwPp+
-         ueTw==
-X-Gm-Message-State: AOAM5308HR//Ovnhi1WtpCk2eltVLFc1fUNRigL+y09jpLJHVJPBhplM
-        eRGNKIiBMvolClVsDiqzVA7qMg3lOq5LDmIp
-X-Google-Smtp-Source: ABdhPJwrP7dagj8dnlFgC14HxELMunGPx+PFv2E1bWL6b6NRaIqpjG704ThFr7Q8pI5XpMISvNAO5NCYkQKyivj5
-X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
- (user=yosryahmed job=sendgmr) by 2002:a17:903:22c4:b0:154:8399:5285 with SMTP
- id y4-20020a17090322c400b0015483995285mr17325689plg.56.1649393871741; Thu, 07
- Apr 2022 21:57:51 -0700 (PDT)
-Date:   Fri,  8 Apr 2022 04:57:43 +0000
-In-Reply-To: <20220408045743.1432968-1-yosryahmed@google.com>
-Message-Id: <20220408045743.1432968-5-yosryahmed@google.com>
-Mime-Version: 1.0
-References: <20220408045743.1432968-1-yosryahmed@google.com>
-X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
-Subject: [PATCH v3 4/4] selftests: cgroup: add a selftest for memory.reclaim
-From:   Yosry Ahmed <yosryahmed@google.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     David Rientjes <rientjes@google.com>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        Chen Wandun <chenwandun@huawei.com>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>,
-        "=?UTF-8?q?Michal=20Koutn=C3=BD?=" <mkoutny@suse.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Yosry Ahmed <yosryahmed@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ZX5okEH0sxWRyDJLsGr6K2bum/cs4WAHaeg4beO8EcU=;
+        b=vlL3HSWAAIFn4cSdVD3vEd6svPzQlLcP/ebrTk5uOuEqEhGCBUOlRYFHNax0DfW/+Z
+         ahDKxccqTxBJuS9/HMqpd97uwxy4WPLGnmPCQRxR2GitmAySou+V2wG9ijtTGOpy27g7
+         2Hhbw8lWmiok2qjuFnVqKDepoDH5jpPvmN6Am/G+rNQrT7K6TIh/zHQisjfZhjEC/V2Z
+         26r3Kcds4AQJXeMva3ROgOa3n7qkgce2uAgAmKX3UjSCQivzdyqCHcdfGOC2b6JO2uhq
+         M3OmQvbIpnEFvsOCP6F+rJBRykwsgRz0jao+FXHXnNpOSN5NDnYNmWktnE5kvIJtLBhr
+         /5pQ==
+X-Gm-Message-State: AOAM533Yh965QSO0gij0/N9pU8R8oRn6FueK6vUIZ/ZgP5TJlAfBv6bK
+        Bd9CPdpUVX7reLW8LByvRSdkwgheGXtkwE5dBi/O+g==
+X-Google-Smtp-Source: ABdhPJz9wMmJWQtIFzqEg8rC3BctdinsPVGW0ai+XVLN52fMF1F3b2ZuQix/RS1NZrE5RkAOxtSou+z+GjdE8Mdq1yI=
+X-Received: by 2002:a81:478b:0:b0:2ea:da8c:5c21 with SMTP id
+ u133-20020a81478b000000b002eada8c5c21mr15028974ywa.189.1649393887091; Thu, 07
+ Apr 2022 21:58:07 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220407183749.142181327@linuxfoundation.org>
+In-Reply-To: <20220407183749.142181327@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 8 Apr 2022 10:27:55 +0530
+Message-ID: <CA+G9fYvUptenwZkRPyiXKv9yK43Ornk1ptqgYL3-8zLMq2R7tg@mail.gmail.com>
+Subject: Re: [PATCH 5.10 000/597] 5.10.110-rc3 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,117 +71,180 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a new test for memory.reclaim that verifies that the interface
-correctly reclaims memory as intended, from both anon and file pages.
+On Fri, 8 Apr 2022 at 00:15, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.110 release.
+> There are 597 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 09 Apr 2022 18:35:00 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.110-rc3.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
----
- .../selftests/cgroup/test_memcontrol.c        | 85 +++++++++++++++++++
- 1 file changed, 85 insertions(+)
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-index f2ffb3a30194..75ae441c01c3 100644
---- a/tools/testing/selftests/cgroup/test_memcontrol.c
-+++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-@@ -760,6 +760,90 @@ static int test_memcg_max(const char *root)
- 	return ret;
- }
- 
-+/*
-+ * This test checks that memory.reclaim reclaims the given
-+ * amount of memory (from both anon and file).
-+ */
-+static int test_memcg_reclaim(const char *root)
-+{
-+	int ret = KSFT_FAIL, fd;
-+	char *memcg;
-+	long current, to_reclaim;
-+	char buf[64];
-+
-+	memcg = cg_name(root, "memcg_test");
-+	if (!memcg)
-+		goto cleanup;
-+
-+	if (cg_create(memcg))
-+		goto cleanup;
-+
-+	current = cg_read_long(memcg, "memory.current");
-+	if (current != 0)
-+		goto cleanup;
-+
-+	cg_run_nowait(memcg, alloc_anon_noexit, (void *) MB(50));
-+	sleep(1);
-+
-+	fd = get_temp_fd();
-+	if (fd < 0)
-+		goto cleanup;
-+
-+	cg_run_nowait(memcg, alloc_pagecache_50M_noexit, (void *)(long)fd);
-+	sleep(1);
-+
-+	current = cg_read_long(memcg, "memory.current");
-+	if (!values_close(current, MB(100), 10))
-+		goto cleanup;
-+
-+	/*
-+	 * Reclaim until current reaches 30M, make sure to reclaim over 50M to
-+	 * hit both anon and file.
-+	 */
-+	while (true) {
-+		int err;
-+
-+		current = cg_read_long(memcg, "memory.current");
-+		to_reclaim = current - MB(30);
-+
-+		/*
-+		 * We only keep looping if we get EAGAIN, which means we could
-+		 * not reclaim the full amount.
-+		 */
-+		if (to_reclaim <= 0)
-+			goto cleanup;
-+
-+
-+		snprintf(buf, sizeof(buf), "%ld", to_reclaim);
-+		err = cg_write(memcg, "memory.reclaim", buf);
-+		if (!err) {
-+			/*
-+			 * If writing succeeds, then the written amount should have been
-+			 * fully reclaimed (and maybe more).
-+			 */
-+			current = cg_read_long(memcg, "memory.current");
-+			if (!values_close(current, MB(30), 3) && current > MB(30))
-+				goto cleanup;
-+			break;
-+		}
-+
-+		/* The kernel could not reclaim the full amount, try again. */
-+		if (err == EAGAIN)
-+			continue;
-+
-+		/* We got an unexpected error. */
-+		goto cleanup;
-+	}
-+
-+	ret = KSFT_PASS;
-+cleanup:
-+	cg_destroy(memcg);
-+	free(memcg);
-+	close(fd);
-+
-+	return ret;
-+}
-+
- static int alloc_anon_50M_check_swap(const char *cgroup, void *arg)
- {
- 	long mem_max = (long)arg;
-@@ -1263,6 +1347,7 @@ struct memcg_test {
- 	T(test_memcg_high),
- 	T(test_memcg_high_sync),
- 	T(test_memcg_max),
-+	T(test_memcg_reclaim),
- 	T(test_memcg_oom_events),
- 	T(test_memcg_swap_max),
- 	T(test_memcg_sock),
--- 
-2.35.1.1178.g4f1659d476-goog
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+## Build
+* kernel: 5.10.110-rc3
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-5.10.y
+* git commit: 32dde4a44c8d6f6dd9cda13300bfda1468e13ec6
+* git describe: v5.10.109-598-g32dde4a44c8d
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
+.109-598-g32dde4a44c8d
+
+## Test Regressions (compared to v5.10.109-593-gd189d4a7b878)
+No test regressions found.
+
+## Metric Regressions (compared to v5.10.109-593-gd189d4a7b878)
+No metric regressions found.
+
+## Test Fixes (compared to v5.10.109-593-gd189d4a7b878)
+No test fixes found.
+
+## Metric Fixes (compared to v5.10.109-593-gd189d4a7b878)
+No metric fixes found.
+
+## Test result summary
+total: 99811, pass: 84222, fail: 869, skip: 13789, xfail: 931
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 291 total, 291 passed, 0 failed
+* arm64: 41 total, 41 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 40 total, 40 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 37 total, 37 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 60 total, 51 passed, 9 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 41 total, 41 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

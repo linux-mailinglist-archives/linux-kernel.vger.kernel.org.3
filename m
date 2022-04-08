@@ -2,87 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 315C34F944E
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 13:39:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E36814F9450
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 13:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234905AbiDHLlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 07:41:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56498 "EHLO
+        id S234910AbiDHLmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 07:42:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234889AbiDHLlp (ORCPT
+        with ESMTP id S229471AbiDHLmK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 07:41:45 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C63AC39B80;
-        Fri,  8 Apr 2022 04:39:38 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 238Bd93v9021654, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 238Bd93v9021654
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 8 Apr 2022 19:39:09 +0800
-Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
- RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 8 Apr 2022 19:39:09 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS02.realtek.com.tw (172.21.6.95) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Fri, 8 Apr 2022 19:39:05 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::34e7:ab63:3da4:27c6]) by
- RTEXMBS04.realtek.com.tw ([fe80::34e7:ab63:3da4:27c6%5]) with mapi id
- 15.01.2308.021; Fri, 8 Apr 2022 19:39:05 +0800
-From:   Pkshih <pkshih@realtek.com>
-To:     "kvalo@kernel.org" <kvalo@kernel.org>,
-        "cgel.zte@gmail.com" <cgel.zte@gmail.com>,
-        "davem@davemloft.net" <davem@davemloft.net>
-CC:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "zealci@zte.com.cn" <zealci@zte.com.cn>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "lv.ruyi@zte.com.cn" <lv.ruyi@zte.com.cn>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: [PATCH] realtek: rtlwifi: Fix spelling mistake "cacluated" -> "calculated"
-Thread-Topic: [PATCH] realtek: rtlwifi: Fix spelling mistake "cacluated" ->
- "calculated"
-Thread-Index: AQHYSy8qwaRiOksxDkaBMSpto1BJm6zlXf6A
-Date:   Fri, 8 Apr 2022 11:39:05 +0000
-Message-ID: <5f42f648f74a826d7f177122ee46e93584df17ae.camel@realtek.com>
-References: <20220408095803.2495336-1-lv.ruyi@zte.com.cn>
-In-Reply-To: <20220408095803.2495336-1-lv.ruyi@zte.com.cn>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.36.1-2 
-x-originating-ip: [125.224.82.63]
-x-kse-serverinfo: RTEXMBS02.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzQvOCDkuIrljYggMDk6NDU6MDA=?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <03C4668D7ACE8B4B90D374F6A816785B@realtek.com>
-Content-Transfer-Encoding: base64
+        Fri, 8 Apr 2022 07:42:10 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CC739816;
+        Fri,  8 Apr 2022 04:40:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649418006; x=1680954006;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=BvS9CZuns0lpFI7GkDa3syT/aVot97NbDMxoh6m25JM=;
+  b=fOF4AbrAr1khbMbYvw0U+ziU3Rzeb891KrUyOo9LruOLXgxPFE8O1M/4
+   C2ZQ6N5Py/smv8ZmUkm+8blkOkPXI7O89FVcCyEsTuQ0s0+0oeMjsfDUT
+   TOhuwIWVm5f+HK7WgUXrT2DKilcSeo2czwUnqIB5ovjrYxecGiqFUerVH
+   fVop1QGtYDP457Z7yrpboR6uBUseQXFhTbYGEw32NYDcOA54mJERD2eGg
+   mm9Kln+UclK7ieq7ahlqkdwS6vOiPIPNUAdoTUMNyumEnIZ1CJOhMrI41
+   4Wucu/xbRFzBl1KlOYkd8n6GiPXqe3iEPVcDFtRBwWC2N0aOppSpNQZYv
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="261749118"
+X-IronPort-AV: E=Sophos;i="5.90,244,1643702400"; 
+   d="scan'208";a="261749118"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 04:40:06 -0700
+X-IronPort-AV: E=Sophos;i="5.90,244,1643702400"; 
+   d="scan'208";a="571462625"
+Received: from aecajiao-mobl.amr.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.48.54])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 04:40:03 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Gilles Buloz <gilles.buloz@kontron.com>,
+        Johan Hovold <johan@kernel.org>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v2 0/3] tty/serial: Process XON/XOFF robustly
+Date:   Fri,  8 Apr 2022 14:39:51 +0300
+Message-Id: <20220408113954.9749-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRnJpLCAyMDIyLTA0LTA4IGF0IDA5OjU4ICswMDAwLCBjZ2VsLnp0ZUBnbWFpbC5jb20gd3Jv
-dGU6DQo+IEZyb206IEx2IFJ1eWkgPGx2LnJ1eWlAenRlLmNvbS5jbj4NCj4gDQo+IFRoZXJlIGFy
-ZSBzb21lIHNwZWxsaW5nIG1pc3Rha2VzIGluIHRoZSBjb21tZW50cy4gRml4IGl0Lg0KPiANCj4g
-UmVwb3J0ZWQtYnk6IFplYWwgUm9ib3QgPHplYWxjaUB6dGUuY29tLmNuPg0KPiBTaWduZWQtb2Zm
-LWJ5OiBMdiBSdXlpIDxsdi5ydXlpQHp0ZS5jb20uY24+DQoNCg0KQWNrZWQtYnk6IFBpbmctS2Ug
-U2hpaCA8cGtzaGloQHJlYWx0ZWsuY29tPg0KDQpbLi4uXQ0KDQo=
+XON/XOFF are used for software flow-control on serial lines.
+XON and XOFF appear as characters within the stream but should
+be processed as soon as possible.
+
+The characters received by the UART drivers are in intermediate
+buffers until TTY receives them. In the case where the TTY is
+not read from, the characters may get stuck into those
+intermediate buffers until user-space reads from the TTY. Among
+the characters stuck in the buffers, can also be those XON/XOFF
+flow control characters. A stuck flow-control character is not
+very useful. 
+
+This patch series addresses the issue by checking if TTY is slow
+to process characters, that is, eats less than the given amount.
+If TTY is slow, a lookahead is invoked for the characters that
+remain in the intermediate buffer(s).
+
+Then at a later time, receive_buf needs to ensure the
+flow-control actions are not retaken when those same characters
+get pushed to TTY. The necessary guards for that are added by
+the second patch of the series.
+
+This patch series fixes an issue but I'm not able to pinpoint to
+a specific commit id to provide a Fixes tag.
+
+v1 -> v2:
+- Add flow ctrl char funcs in separate change & rework logic a bit.
+  I believe it's now cleaner than it would have been with the
+  suggestions during v1 review, please recheck.
+- Renamed n_tty_lookahead_special to n_tty_lookahead_flow_ctrl
+- Fixed logic for START_CHAR == STOP_CHAR case
+- Use unsigned int for lookahead_count in receive_buf call chain
+- Use consistent types in lookahead call chain
+- Improved indentation & line splits for function params
+- Corrected tty_ldisc.h comments documenting tty_ldisc_ops
+- Tweaked comment format
+
+Ilpo Järvinen (3):
+  tty: Add functions for handling flow control chars
+  tty: Add lookahead param to receive_buf
+  tty: Implement lookahead to process XON/XOFF timely
+
+ drivers/accessibility/speakup/spk_ttyio.c |  2 +-
+ drivers/bluetooth/hci_ldisc.c             |  2 +-
+ drivers/char/pcmcia/synclink_cs.c         |  2 +-
+ drivers/input/serio/serport.c             |  4 +-
+ drivers/isdn/capi/capi.c                  |  2 +-
+ drivers/misc/ti-st/st_core.c              |  2 +-
+ drivers/net/caif/caif_serial.c            |  4 +-
+ drivers/net/can/slcan.c                   |  2 +-
+ drivers/net/hamradio/6pack.c              |  4 +-
+ drivers/net/hamradio/mkiss.c              |  2 +-
+ drivers/net/mctp/mctp-serial.c            |  2 +-
+ drivers/net/ppp/ppp_async.c               |  2 +-
+ drivers/net/ppp/ppp_synctty.c             |  2 +-
+ drivers/net/slip/slip.c                   |  2 +-
+ drivers/tty/n_gsm.c                       |  2 +-
+ drivers/tty/n_hdlc.c                      |  2 +-
+ drivers/tty/n_null.c                      |  2 +-
+ drivers/tty/n_tty.c                       | 99 ++++++++++++++++-------
+ drivers/tty/serdev/serdev-ttyport.c       |  3 +-
+ drivers/tty/synclink_gt.c                 |  2 +-
+ drivers/tty/tty_buffer.c                  | 67 ++++++++++++---
+ drivers/tty/tty_io.c                      |  2 +-
+ drivers/tty/tty_port.c                    | 26 +++++-
+ drivers/tty/vt/selection.c                |  2 +-
+ include/linux/tty_buffer.h                |  1 +
+ include/linux/tty_flip.h                  |  2 +-
+ include/linux/tty_ldisc.h                 | 31 +++++--
+ include/linux/tty_port.h                  |  5 +-
+ net/nfc/nci/uart.c                        |  2 +-
+ sound/soc/codecs/cx20442.c                |  2 +-
+ sound/soc/ti/ams-delta.c                  |  2 +-
+ 31 files changed, 205 insertions(+), 81 deletions(-)
+
+-- 
+2.30.2
+

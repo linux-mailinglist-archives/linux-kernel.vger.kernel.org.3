@@ -2,238 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2FBF4F9AB6
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 18:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7A114F9AAE
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 18:33:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232339AbiDHQgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 12:36:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56446 "EHLO
+        id S231976AbiDHQfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 12:35:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231303AbiDHQgM (ORCPT
+        with ESMTP id S231303AbiDHQfq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 12:36:12 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6277412635;
-        Fri,  8 Apr 2022 09:34:08 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id s17so4242680ljp.8;
-        Fri, 08 Apr 2022 09:34:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=iXxYhOZovoVWD00T32nm/pWCIlnIIec23xpqqBb7OP8=;
-        b=WeJA+BxGDcYcYhLmRbFuDEBVn3+Auwoho6PRs4s0Z0/HFrQvOaauJ5hccixiPBgFeK
-         zsJET1tUmwQ00KPMR3TrDwyCaKFCHBKVrYO/9GfRDlkTgCaIAzK0b7OoPm9GvoJqHi9N
-         zNt9d68kstgZ4DfwnAcBWHxY0s7PHG54WIIMKP6QOz03mNlC0uWeDiABqlg7XEWsn1u9
-         gWe5CFN8afkdwaAv5+6cYpaPtDnVc2L6CIDZM3YOT3VOcTyGotyJA09jWCZtunoIZMcj
-         UPGRYw4qFuGa5FK1jiI0QYyOjrAd0CsoPc83m1VeT3z2wWMYZcB6PT/5RzyEZ7SsuKrd
-         rJeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=iXxYhOZovoVWD00T32nm/pWCIlnIIec23xpqqBb7OP8=;
-        b=0lxWkz3jEcVu+RPjkS5rbh5RGQ0mLSVv31F1G/18mIQcVM5ADRTkW1kR5nCDeUjRJi
-         jIsuRcyUILOcO2VPo4wCTP9ikTydKKflO+EUg+fLolsyDOPBNl/UlL5GtDlC2Otb62sf
-         7YS+Ljo1qO8GDCvDumN8R7ZjcfPdsovi0y9xiaARFqRPUjfo3Yc99DBHYEja41v0i/4C
-         udP3y6QpuqAgwnXUxCpOzFIK22MziYsuB083bYyjpDH7lRmkqHuY6jzpCfQwTh/EOir2
-         gXCMjJU7KtkcFl++IsGkDGtSmaPzx1lD4v/KbKX/G9U5dBuVAugDaFegE3J7YK9d24pw
-         EzFg==
-X-Gm-Message-State: AOAM533ENLcyTzyvczFm+j85FflIwOwCUvDKtcOD6WkjUXjU/Q79nyqs
-        3uPmMgyZrHjx5W9VjJagZzYkF9msJ7Y=
-X-Google-Smtp-Source: ABdhPJxaJZnhq9RjyDB4u2ZXlLfI3Mgag/FEd7yCZrO8ehvDGFn0ohYdEamIjs1eSmWIXkA7s0T5QQ==
-X-Received: by 2002:a2e:b0d9:0:b0:24b:4c65:5ef6 with SMTP id g25-20020a2eb0d9000000b0024b4c655ef6mr3359223ljl.275.1649435646300;
-        Fri, 08 Apr 2022 09:34:06 -0700 (PDT)
-Received: from nergzd-desktop.localdomain ([194.39.226.133])
-        by smtp.gmail.com with ESMTPSA id q4-20020a0565123a8400b0044a27a8c63asm2495403lfu.80.2022.04.08.09.34.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 09:34:05 -0700 (PDT)
-From:   Markuss Broks <markuss.broks@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        Markuss Broks <markuss.broks@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH v4 1/2] dt-bindings: leds: convert ktd2692 bindings to yaml
-Date:   Fri,  8 Apr 2022 19:33:27 +0300
-Message-Id: <20220408163330.200898-2-markuss.broks@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220408163330.200898-1-markuss.broks@gmail.com>
-References: <20220408163330.200898-1-markuss.broks@gmail.com>
+        Fri, 8 Apr 2022 12:35:46 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8905D65C9;
+        Fri,  8 Apr 2022 09:33:42 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nicolas)
+        with ESMTPSA id CCA771F472F7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649435620;
+        bh=/tbQC/9J2hf57DwJAeFvsuSkxP9cojOW7/Vitx+0DRc=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=kFCddj/7WhsLUGeDoxNvsCJWGmgYoMZVEFWH4gti4wECBFfvu0xvDcVJK++EQr8x9
+         TdRePj0wTS24e6Z+I3VW7OM+YENce42o3jmUssrwRWk0QkSfqXpLGvGGLPQjZa/SQ4
+         /SS15K6Hf31vIrRhVn935ZhafdEYHGtogv+h622eHRSS4Nhp71nd/xtzuvlDVZakcV
+         wsRIfhoKNVeqh1pKakIL+L3Igv4dkEC6TUY3i5mU1JlRhq9x5W0jBIrvn3tWlfk9Mv
+         wNAe4MWkw4yTBpD+9peYs3j/ckqNdoWV9qn/ps2JL6TprzzS9DJxsLjrkpgwHRQ8TV
+         7nHlvVd62nj3Q==
+Message-ID: <34f586efdd6401b509cf11fba75039d5494c4eff.camel@collabora.com>
+Subject: Re: [PATCH v5 06/17] media: uapi: HEVC: Change pic_order_cnt
+ definition in v4l2_hevc_dpb_entry
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        mchehab@kernel.org, hverkuil@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        sebastian.fricke@collabora.com
+Date:   Fri, 08 Apr 2022 12:33:28 -0400
+In-Reply-To: <20220407152940.738159-7-benjamin.gaignard@collabora.com>
+References: <20220407152940.738159-1-benjamin.gaignard@collabora.com>
+         <20220407152940.738159-7-benjamin.gaignard@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch converts the leds-ktd2692.txt bindings to modern yaml
-style device-tree bindings.
+Le jeudi 07 avril 2022 =C3=A0 17:29 +0200, Benjamin Gaignard a =C3=A9crit=
+=C2=A0:
+> HEVC specifications say that:
+> "PicOrderCntVal is derived as follows:
+> PicOrderCntVal =3D PicOrderCntMsb + slice_pic_order_cnt_lsb
+> The value of PicOrderCntVal shall be in the range of =E2=88=92231 to 231 =
+=E2=88=92 1, inclusive."
+>=20
+> To match with these definitions change __u16 pic_order_cnt[2]
+> into __s32 pic_order_cnt_val.
 
-Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
----
- .../bindings/leds/kinetic,ktd2692.yaml        | 87 +++++++++++++++++++
- .../devicetree/bindings/leds/leds-ktd2692.txt | 50 -----------
- 2 files changed, 87 insertions(+), 50 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/leds/kinetic,ktd2692.yaml
- delete mode 100644 Documentation/devicetree/bindings/leds/leds-ktd2692.txt
+You forgot to update the slice_params->slice_pic_order_count.
 
-diff --git a/Documentation/devicetree/bindings/leds/kinetic,ktd2692.yaml b/Documentation/devicetree/bindings/leds/kinetic,ktd2692.yaml
-new file mode 100644
-index 000000000000..bac95a51afa1
---- /dev/null
-+++ b/Documentation/devicetree/bindings/leds/kinetic,ktd2692.yaml
-@@ -0,0 +1,87 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/leds/kinetic,ktd2692.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: KTD2692 Flash LED Driver from Kinetic Technologies
-+
-+maintainers:
-+  - Markuss Broks <markuss.broks@gmail.com>
-+
-+description: |
-+  KTD2692 is the ideal power solution for high-power flash LEDs.
-+  It uses ExpressWire single-wire programming for maximum flexibility.
-+
-+  The ExpressWire interface through CTRL pin can control LED on/off and
-+  enable/disable the IC, Movie(max 1/3 of Flash current) / Flash mode current,
-+  Flash timeout, LVP(low voltage protection).
-+
-+  Also, When the AUX pin is pulled high while CTRL pin is high,
-+  LED current will be ramped up to the flash-mode current level.
-+
-+properties:
-+  compatible:
-+    const: kinetic,ktd2692
-+
-+  ctrl-gpios:
-+    maxItems: 1
-+    description: Specifier of the GPIO connected to CTRL pin.
-+
-+  aux-gpios:
-+    maxItems: 1
-+    description: Specifier of the GPIO connected to CTRL pin.
-+
-+  vin-supply:
-+    description: LED supply (2.7V to 5.5V).
-+
-+  led:
-+    type: object
-+    $ref: common.yaml#
-+    description: Properties for the LED.
-+    properties:
-+      function: true
-+      color: true
-+      flash-max-timeout-us:
-+        description: Flash LED maximum timeout.
-+
-+      led-max-microamp:
-+        maximum: 300000
-+        description: Minimum Threshold for Timer protection
-+          is defined internally (Maximum 300mA).
-+
-+      flash-max-microamp:
-+        maximum: 300000
-+        description: Flash LED maximum current
-+          Formula - I(uA) = 15000000 / Rset.
-+
-+    additionalProperties: false
-+
-+required:
-+  - compatible
-+  - ctrl-gpios
-+  - led
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    #include <dt-bindings/leds/common.h>
-+
-+    ktd2692 {
-+      compatible = "kinetic,ktd2692";
-+      ctrl-gpios = <&gpc0 1 0>;
-+      aux-gpios = <&gpc0 2 0>;
-+      vin-supply = <&vbat>;
-+
-+      led {
-+        function = LED_FUNCTION_FLASH;
-+        color = <LED_COLOR_ID_WHITE>;
-+        flash-max-timeout-us = <250000>;
-+        flash-max-microamp = <150000>;
-+        led-max-microamp = <25000>;
-+      };
-+    };
-+
-+...
-diff --git a/Documentation/devicetree/bindings/leds/leds-ktd2692.txt b/Documentation/devicetree/bindings/leds/leds-ktd2692.txt
-deleted file mode 100644
-index 853737452580..000000000000
---- a/Documentation/devicetree/bindings/leds/leds-ktd2692.txt
-+++ /dev/null
-@@ -1,50 +0,0 @@
--* Kinetic Technologies - KTD2692 Flash LED Driver
--
--KTD2692 is the ideal power solution for high-power flash LEDs.
--It uses ExpressWire single-wire programming for maximum flexibility.
--
--The ExpressWire interface through CTRL pin can control LED on/off and
--enable/disable the IC, Movie(max 1/3 of Flash current) / Flash mode current,
--Flash timeout, LVP(low voltage protection).
--
--Also, When the AUX pin is pulled high while CTRL pin is high,
--LED current will be ramped up to the flash-mode current level.
--
--Required properties:
--- compatible : Should be "kinetic,ktd2692".
--- ctrl-gpios : Specifier of the GPIO connected to CTRL pin.
--- aux-gpios : Specifier of the GPIO connected to AUX pin.
--
--Optional properties:
--- vin-supply : "vin" LED supply (2.7V to 5.5V).
--  See Documentation/devicetree/bindings/regulator/regulator.txt
--
--A discrete LED element connected to the device must be represented by a child
--node - See Documentation/devicetree/bindings/leds/common.txt
--
--Required properties for flash LED child nodes:
--  See Documentation/devicetree/bindings/leds/common.txt
--- led-max-microamp : Minimum Threshold for Timer protection
--  is defined internally (Maximum 300mA).
--- flash-max-microamp : Flash LED maximum current
--  Formula : I(mA) = 15000 / Rset.
--- flash-max-timeout-us : Flash LED maximum timeout.
--
--Optional properties for flash LED child nodes:
--- label : See Documentation/devicetree/bindings/leds/common.txt
--
--Example:
--
--ktd2692 {
--	compatible = "kinetic,ktd2692";
--	ctrl-gpios = <&gpc0 1 0>;
--	aux-gpios = <&gpc0 2 0>;
--	vin-supply = <&vbat>;
--
--	flash-led {
--		label = "ktd2692-flash";
--		led-max-microamp = <300000>;
--		flash-max-microamp = <1500000>;
--		flash-max-timeout-us = <1835000>;
--	};
--};
--- 
-2.35.1
+Nicolas
+
+>=20
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> ---
+> version 5:
+> - change __u16 pic_order_cnt[2] into __s32 pic_order_cnt_val
+>  drivers/staging/media/hantro/hantro_g2_hevc_dec.c | 4 ++--
+>  drivers/staging/media/hantro/hantro_hevc.c        | 2 +-
+>  drivers/staging/media/hantro/hantro_hw.h          | 4 ++--
+>  drivers/staging/media/sunxi/cedrus/cedrus_h265.c  | 4 ++--
+>  include/media/hevc-ctrls.h                        | 2 +-
+>  5 files changed, 8 insertions(+), 8 deletions(-)
+>=20
+> diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/=
+staging/media/hantro/hantro_g2_hevc_dec.c
+> index c524af41baf5..6f3c774aa3d9 100644
+> --- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+> +++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+> @@ -386,7 +386,7 @@ static int set_ref(struct hantro_ctx *ctx)
+>  	 * pic_order_cnt[0] and ignore pic_order_cnt[1] used in field-coding.
+>  	 */
+>  	for (i =3D 0; i < decode_params->num_active_dpb_entries && i < ARRAY_SI=
+ZE(cur_poc); i++) {
+> -		char poc_diff =3D decode_params->pic_order_cnt_val - dpb[i].pic_order_=
+cnt[0];
+> +		char poc_diff =3D decode_params->pic_order_cnt_val - dpb[i].pic_order_=
+cnt_val;
+> =20
+>  		hantro_reg_write(vpu, &cur_poc[i], poc_diff);
+>  	}
+> @@ -413,7 +413,7 @@ static int set_ref(struct hantro_ctx *ctx)
+>  	dpb_longterm_e =3D 0;
+>  	for (i =3D 0; i < decode_params->num_active_dpb_entries &&
+>  	     i < (V4L2_HEVC_DPB_ENTRIES_NUM_MAX - 1); i++) {
+> -		luma_addr =3D hantro_hevc_get_ref_buf(ctx, dpb[i].pic_order_cnt[0]);
+> +		luma_addr =3D hantro_hevc_get_ref_buf(ctx, dpb[i].pic_order_cnt_val);
+>  		if (!luma_addr)
+>  			return -ENOMEM;
+> =20
+> diff --git a/drivers/staging/media/hantro/hantro_hevc.c b/drivers/staging=
+/media/hantro/hantro_hevc.c
+> index b6ec86d03d91..fadd40768579 100644
+> --- a/drivers/staging/media/hantro/hantro_hevc.c
+> +++ b/drivers/staging/media/hantro/hantro_hevc.c
+> @@ -54,7 +54,7 @@ static void hantro_hevc_ref_init(struct hantro_ctx *ctx=
+)
+>  }
+> =20
+>  dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx,
+> -				   int poc)
+> +				   s32 poc)
+>  {
+>  	struct hantro_hevc_dec_hw_ctx *hevc_dec =3D &ctx->hevc_dec;
+>  	int i;
+> diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/m=
+edia/hantro/hantro_hw.h
+> index ed018e293ba0..a648c529662b 100644
+> --- a/drivers/staging/media/hantro/hantro_hw.h
+> +++ b/drivers/staging/media/hantro/hantro_hw.h
+> @@ -131,7 +131,7 @@ struct hantro_hevc_dec_hw_ctx {
+>  	struct hantro_aux_buf tile_bsd;
+>  	struct hantro_aux_buf ref_bufs[NUM_REF_PICTURES];
+>  	struct hantro_aux_buf scaling_lists;
+> -	int ref_bufs_poc[NUM_REF_PICTURES];
+> +	s32 ref_bufs_poc[NUM_REF_PICTURES];
+>  	u32 ref_bufs_used;
+>  	struct hantro_hevc_dec_ctrls ctrls;
+>  	unsigned int num_tile_cols_allocated;
+> @@ -337,7 +337,7 @@ int hantro_hevc_dec_init(struct hantro_ctx *ctx);
+>  void hantro_hevc_dec_exit(struct hantro_ctx *ctx);
+>  int hantro_g2_hevc_dec_run(struct hantro_ctx *ctx);
+>  int hantro_hevc_dec_prepare_run(struct hantro_ctx *ctx);
+> -dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx, int poc);
+> +dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx, s32 poc);
+>  int hantro_hevc_add_ref_buf(struct hantro_ctx *ctx, int poc, dma_addr_t =
+addr);
+>  void hantro_hevc_ref_remove_unused(struct hantro_ctx *ctx);
+>  size_t hantro_hevc_chroma_offset(const struct v4l2_ctrl_hevc_sps *sps);
+> diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c b/drivers/s=
+taging/media/sunxi/cedrus/cedrus_h265.c
+> index 44f385be9f6c..d04521ffd920 100644
+> --- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+> +++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
+> @@ -143,8 +143,8 @@ static void cedrus_h265_frame_info_write_dpb(struct c=
+edrus_ctx *ctx,
+>  	for (i =3D 0; i < num_active_dpb_entries; i++) {
+>  		int buffer_index =3D vb2_find_timestamp(vq, dpb[i].timestamp, 0);
+>  		u32 pic_order_cnt[2] =3D {
+> -			dpb[i].pic_order_cnt[0],
+> -			dpb[i].pic_order_cnt[1]
+> +			dpb[i].pic_order_cnt_val & 0xffff,
+> +			(dpb[i].pic_order_cnt_val >> 16) & 0xffff
+>  		};
+> =20
+>  		cedrus_h265_frame_info_write_single(ctx, i, dpb[i].field_pic,
+> diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
+> index b3540167df9e..2812778b41f4 100644
+> --- a/include/media/hevc-ctrls.h
+> +++ b/include/media/hevc-ctrls.h
+> @@ -138,7 +138,7 @@ struct v4l2_hevc_dpb_entry {
+>  	__u64	timestamp;
+>  	__u8	flags;
+>  	__u8	field_pic;
+> -	__u16	pic_order_cnt[2];
+> +	__s32	pic_order_cnt_val;
+>  	__u8	padding[2];
+>  };
+> =20
 

@@ -2,61 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 419384F98F3
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 17:03:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 727764F98EB
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 17:03:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237349AbiDHPFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 11:05:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58518 "EHLO
+        id S237345AbiDHPEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 11:04:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233704AbiDHPFj (ORCPT
+        with ESMTP id S233704AbiDHPEv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 11:05:39 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8137C2F067E
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 08:03:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649430215; x=1680966215;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TyHB4nU/NMc9NlsQonWb1XUCFEXJdeRo+A0VKe0eQPo=;
-  b=Wn3gR44AFtYiLFoeytk8N3TZKOtudXHyzZaGZJmTECNs6cGXMZhFaO2t
-   Qnm2vsEx4GMsXT/69bWl+LvqerWjPDXODMKysWur3tjkECWIahSc7sEPq
-   frk0HD9vbynmnFVdpWTQjnyLQZQn8ia1FspywkahJhLpRxnI6gHMd7IgG
-   QlkT0riAEzrM/GkhqmPNFlU2gMm7VXYq8Ebrv7xopQZBFFzFv5mmise/L
-   d7epEA6+Wanu2F6kzJDscUHCCyru/kJQibTEJ2fuWtay42Wk6GXkW0UPa
-   J8vWU+hW0iocgzkWvJ9yB29J00A7n+cmrLKFA63qlJxrA/jNlm+X8n14p
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="261605226"
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="261605226"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 08:03:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="653293425"
-Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 08 Apr 2022 08:03:32 -0700
-Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ncq96-0000NZ-DJ;
-        Fri, 08 Apr 2022 15:03:32 +0000
-Date:   Fri, 8 Apr 2022 23:02:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dave Stevenson <dave.stevenson@raspberrypi.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Dom Cobley <popcornmix@gmail.com>
-Subject: [l1k:smsc95xx_5.17 578/887]
- drivers/gpu/drm/panel/panel-sitronix-st7701.c:677: undefined reference to
- `spi_setup'
-Message-ID: <202204082206.73JkRYwL-lkp@intel.com>
+        Fri, 8 Apr 2022 11:04:51 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD53267AF5;
+        Fri,  8 Apr 2022 08:02:47 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id a2so4021412wrh.5;
+        Fri, 08 Apr 2022 08:02:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=XWPynbA+VvHB2iSPSS71KhwO0dSYse4f1BplmAMKeV8=;
+        b=GML5dlTj2OGqeK3rxya07wSKsMrsHRTrTLqrTmuGhkImcNnQE8PKmuiRWpr3aKxrVs
+         lF2Rln8Ai5vMDMBWmU79daQTp527+gQrqCSIlGYqgkwZo5XSziztH88T5gBFjY/xrfL3
+         dRUdgCOPuHNfO1IGtlQejFbBEdX3CWH3d1KNAWQKeI4uvQ96DjRWSdeo09AT0+h0dy/4
+         6DiNoLnqAk+oeuJC4vDPFW2cOJ0JaojWsbh1U+YaYuQrSNuvTv5bk0LsjmtcuvjhhLk7
+         tUCaQG1PTYGY+28udFo/6T5CqrJsrXNjLVmCS7NuI4Q+l5MwdfBAdOebDuYUVcoDv4iP
+         Dt1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=XWPynbA+VvHB2iSPSS71KhwO0dSYse4f1BplmAMKeV8=;
+        b=1ktqk4zqzSg5eZyBMEFoyvt3q4YI0jIXRK9OfaGr+44AfYpbBy9v42bCntYVRvZBm+
+         F7fbSwokiqaJ8rE4E0DKApb+2CPnm9x0b2innqpEa4E/hCTY0IbbngJ2ii9raI+1OT7N
+         rZj6Q3ae9TB3HzQ7XQVn+J58KxHbUvGWsSq9OnU5oNCqrLHF0fukd6BWFu0dRRXgjsmj
+         /toQUX0WBCKJKuJji9ifRjWeOP5R3EnLzzi7NEjwbevcFEmtAN0Wn5jnUEheEj2lJpxP
+         PiT6ywDaSdO4WXg/WjNj9RiTJf4d0s+WuzGTJtOGkKfSYGQU3UE0gr7JIt7uqUGy5/Z0
+         0tsQ==
+X-Gm-Message-State: AOAM5328G9i4+SoO0MNL9eGYtyefc9eNzv5j4z1cs+kBV4IJgFlfbEhF
+        hgXMU1iLK8yZLn8PFMknyWh5JjrzpaDhQg==
+X-Google-Smtp-Source: ABdhPJwkc85x/7947LZIzx7niHX9hJrt6asWjl+mEuW1s0FlUGdKngYjJ2aIKOeB0cu8Mzsvqt2fUw==
+X-Received: by 2002:a5d:588a:0:b0:204:1f46:cf08 with SMTP id n10-20020a5d588a000000b002041f46cf08mr15288625wrf.133.1649430165509;
+        Fri, 08 Apr 2022 08:02:45 -0700 (PDT)
+Received: from [192.168.1.122] (cpc159313-cmbg20-2-0-cust161.5-4.cable.virginm.net. [82.0.78.162])
+        by smtp.gmail.com with ESMTPSA id p125-20020a1c2983000000b0038e5ca446bcsm10830627wmp.5.2022.04.08.08.02.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Apr 2022 08:02:45 -0700 (PDT)
+Subject: Re: [PATCH] sfc: ef10: Fix assigning negative value to unsigned
+ variable
+To:     Haowen Bai <baihaowen@meizu.com>,
+        Martin Habets <habetsm.xilinx@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1649383888-2745-1-git-send-email-baihaowen@meizu.com>
+From:   Edward Cree <ecree.xilinx@gmail.com>
+Message-ID: <e2e85510-f4ad-d983-f76c-b678bc9e397e@gmail.com>
+Date:   Fri, 8 Apr 2022 16:02:43 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+In-Reply-To: <1649383888-2745-1-git-send-email-baihaowen@meizu.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,118 +78,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/l1k/linux smsc95xx_5.17
-head:   05d68ced287b30f62f18f95b5476135ef669804a
-commit: 72c355c6c7656888e6124c1356c3f68cb9cf5b35 [578/887] drm/panel/panel-sitronix-st7701: Support SPI config and RGB data
-config: i386-randconfig-a012 (https://download.01.org/0day-ci/archive/20220408/202204082206.73JkRYwL-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/l1k/linux/commit/72c355c6c7656888e6124c1356c3f68cb9cf5b35
-        git remote add l1k https://github.com/l1k/linux
-        git fetch --no-tags l1k smsc95xx_5.17
-        git checkout 72c355c6c7656888e6124c1356c3f68cb9cf5b35
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+On 08/04/2022 03:11, Haowen Bai wrote:
+> fix warning reported by smatch:
+> 251 drivers/net/ethernet/sfc/ef10.c:2259 efx_ef10_tx_tso_desc()
+> warn: assigning (-208) to unsigned variable 'ip_tot_len'
+> 
+> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+> ---
+>  drivers/net/ethernet/sfc/ef10.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/sfc/ef10.c b/drivers/net/ethernet/sfc/ef10.c
+> index 50d535981a35..1434510dbdc9 100644
+> --- a/drivers/net/ethernet/sfc/ef10.c
+> +++ b/drivers/net/ethernet/sfc/ef10.c
+> @@ -2218,7 +2218,7 @@ int efx_ef10_tx_tso_desc(struct efx_tx_queue *tx_queue, struct sk_buff *skb,
+>  	u16 outer_ipv4_id = 0;
+>  	struct tcphdr *tcp;
+>  	struct iphdr *ip;
+> -	u16 ip_tot_len;
+> +	s16 ip_tot_len;
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+The debug-warning on line 2260 relies on this being unsigned; it would
+ be preferable to change the assignment on the line above to cast the
+ value to u16, or to assign "0x10000 - EFX_TSO2_MAX_HDRLEN", since that
+ is the actual semantics of the value.
 
-All errors (new ones prefixed by >>):
+-ed
 
-   ld: drivers/gpu/drm/panel/panel-sitronix-st7701.o: in function `st7701_spi_probe':
->> drivers/gpu/drm/panel/panel-sitronix-st7701.c:677: undefined reference to `spi_setup'
-   ld: drivers/gpu/drm/panel/panel-sitronix-st7701.o: in function `st7701_disable':
->> drivers/gpu/drm/panel/panel-sitronix-st7701.c:390: undefined reference to `spi_sync'
-   ld: drivers/gpu/drm/panel/panel-sitronix-st7701.o: in function `st7701_enable':
-   drivers/gpu/drm/panel/panel-sitronix-st7701.c:373: undefined reference to `spi_sync'
-   ld: drivers/gpu/drm/panel/panel-sitronix-st7701.o: in function `st7701_unprepare':
-   drivers/gpu/drm/panel/panel-sitronix-st7701.c:406: undefined reference to `spi_sync'
-   ld: drivers/gpu/drm/panel/panel-sitronix-st7701.o: in function `txw210001b0_init_sequence':
-   drivers/gpu/drm/panel/panel-sitronix-st7701.c:240: undefined reference to `spi_sync'
->> ld: drivers/gpu/drm/panel/panel-sitronix-st7701.c:244: undefined reference to `spi_sync'
-   ld: drivers/gpu/drm/panel/panel-sitronix-st7701.o:drivers/gpu/drm/panel/panel-sitronix-st7701.c:247: more undefined references to `spi_sync' follow
-   ld: drivers/gpu/drm/panel/panel-sitronix-st7701.o: in function `panel_st7701_init':
->> drivers/gpu/drm/panel/panel-sitronix-st7701.c:724: undefined reference to `__spi_register_driver'
+>  	u32 seqnum;
+>  	u32 mss;
+>  
+> 
 
-
-vim +677 drivers/gpu/drm/panel/panel-sitronix-st7701.c
-
-   669	
-   670	static int st7701_spi_probe(struct spi_device *spi)
-   671	{
-   672		struct st7701 *st7701;
-   673		int ret;
-   674	
-   675		spi->mode = SPI_MODE_3;
-   676		spi->bits_per_word = 9;
- > 677		ret = spi_setup(spi);
-   678		if (ret < 0) {
-   679			dev_err(&spi->dev, "failed to setup SPI: %d\n", ret);
-   680			return ret;
-   681		}
-   682	
-   683		ret = st7701_probe(&spi->dev, &st7701);
-   684	
-   685		if (ret)
-   686			return ret;
-   687	
-   688		spi_set_drvdata(spi, st7701);
-   689		st7701->spi = spi;
-   690	
-   691		return 0;
-   692	}
-   693	
-   694	static int st7701_spi_remove(struct spi_device *spi)
-   695	{
-   696		struct st7701 *ctx = spi_get_drvdata(spi);
-   697	
-   698		drm_panel_remove(&ctx->panel);
-   699	
-   700		return 0;
-   701	}
-   702	
-   703	static const struct spi_device_id st7701_spi_ids[] = {
-   704		{ "txw210001b0", 0 },
-   705		{ "hyperpixel2round", 0 },
-   706		{ /* sentinel */ }
-   707	};
-   708	MODULE_DEVICE_TABLE(spi, st7701_spi_ids);
-   709	
-   710	static struct spi_driver st7701_spi_driver = {
-   711		.probe = st7701_spi_probe,
-   712		.remove = st7701_spi_remove,
-   713		.driver = {
-   714			.name = "st7701",
-   715			.of_match_table = st7701_spi_of_match,
-   716		},
-   717		.id_table = st7701_spi_ids,
-   718	};
-   719	
-   720	static int __init panel_st7701_init(void)
-   721	{
-   722		int err;
-   723	
- > 724		err = spi_register_driver(&st7701_spi_driver);
-   725		if (err < 0)
-   726			return err;
-   727	
-   728		if (IS_ENABLED(CONFIG_DRM_MIPI_DSI)) {
-   729			err = mipi_dsi_driver_register(&st7701_dsi_driver);
-   730			if (err < 0)
-   731				goto err_did_spi_register;
-   732		}
-   733	
-   734		return 0;
-   735	
-   736	err_did_spi_register:
-   737		spi_unregister_driver(&st7701_spi_driver);
-   738	
-   739		return err;
-   740	}
-   741	module_init(panel_st7701_init);
-   742	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

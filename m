@@ -2,83 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F14704F9EB8
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 23:06:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F189A4F9EC2
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 23:06:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239684AbiDHVH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 17:07:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34964 "EHLO
+        id S239672AbiDHVIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 17:08:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239661AbiDHVHQ (ORCPT
+        with ESMTP id S239652AbiDHVH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 17:07:16 -0400
-Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AAB9137B2A;
-        Fri,  8 Apr 2022 14:05:11 -0700 (PDT)
-Received: by mail-oo1-f50.google.com with SMTP id y27-20020a4a9c1b000000b0032129651bb0so1685388ooj.2;
-        Fri, 08 Apr 2022 14:05:11 -0700 (PDT)
+        Fri, 8 Apr 2022 17:07:57 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A9813C70A
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 14:05:52 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id y23-20020a62b517000000b004fd8affa86aso4911778pfe.12
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 14:05:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=S51j5oo3opJvsRJNXI1+hkL5LxbcnR2OyLq+qXnMqiY=;
+        b=anWu23sq3AlcbJM+bTrIjG/wtoRFd3im82SYu+mFMpJO9qZuudYLBDNN7pinnQ0PSM
+         N70BfaXZ7yjraCCJFd3QJHbK39N9+lmHR6ezQmQ1F4Riv33qjWe6OHKqLLAWZw3oMHKH
+         s9WGoYCmw40XXp3mJebllnw05X6UnAxaxnwWp1yPYcREpvz1KMzCw8LAT2VOxfhGeCN9
+         PY6vNazZ+C8SM7L+ti/3Od7XldQy/EuDkvYk+DIwmiQO/2vQMxGDW30RR7icLRa9D/5M
+         L8n7bIJsu/fNBVucA9SQDP/t38M1riWt89Z6R0ZKrRESJyh84SJciIYTc+axtElSX5EW
+         eDBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FUAf7zk283U1T5VFSaBwah/pxXVLLCo5dNbwCoL9Vhw=;
-        b=fGbNul2gDxuMd54+6GJJjGkIqjllXb2TNRA51Md/rgC5G8X3es4KCKr5BrToQ9X9JK
-         pET5yhSoT+ackUNJNbD5fXhIogDnQEeErnSgJwVtj0kGMXKeiIEhBHgts9UqNDmNuFNO
-         qzidvnG5rbQLftseLxLXkyDUVIUweSDI/6SzwWcSpLfoUYYGMPf3OlAv/0CgJ6122+FY
-         /JuNp1T8gkMSFinxuuhQy6Fkg/rZxfSeofotTbNdpPMWU5K3BdgiFozDPd+niEpwJnEU
-         ITg+11OpoLcwBeZIryF0Av4SLv8PEeHTtHD17RvPYx2wlJ4fZi8ZEqOdnn/9N26I6dew
-         90GQ==
-X-Gm-Message-State: AOAM530i7ulE2Ifpcs4F+pKyapFQ973G3dgU/ZoYNWvobF0K4L6r4iB2
-        yj+y9O7q+5/KkVUvYPE2kDtM18oVsQ==
-X-Google-Smtp-Source: ABdhPJwodFcJpcdpNy4sdAksv7oOG3Rz2cNAXOY1I8YOsFmy2g4UgYW6rBapLL7VMiqT2CnN97i1yA==
-X-Received: by 2002:a4a:4f4f:0:b0:320:eccb:7309 with SMTP id c76-20020a4a4f4f000000b00320eccb7309mr6767810oob.44.1649451910726;
-        Fri, 08 Apr 2022 14:05:10 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id z3-20020a056870d68300b000e2a0a74f9fsm583084oap.37.2022.04.08.14.05.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 14:05:10 -0700 (PDT)
-Received: (nullmailer pid 4064290 invoked by uid 1000);
-        Fri, 08 Apr 2022 21:05:09 -0000
-Date:   Fri, 8 Apr 2022 16:05:09 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Subject: Re: [PATCH 04/14] dt-bindings: reset: bitmain,bm1880-reset: Convert
- to yaml
-Message-ID: <YlCjhZlAa7EB/pJG@robh.at.kernel.org>
-References: <20220407154338.4190674-1-p.zabel@pengutronix.de>
- <20220407154338.4190674-4-p.zabel@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220407154338.4190674-4-p.zabel@pengutronix.de>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=S51j5oo3opJvsRJNXI1+hkL5LxbcnR2OyLq+qXnMqiY=;
+        b=vyA+MkdxuVE8t7M7ciA1PbmCh3261bB1RZe6xTFgcHolnKt29zJNA7QNfk9Pz7sDs9
+         dbCiawRU6rIpZ+1PleIlJiTwOzsjqS7f22zpYjwHvLcBby/ToUZW+7cWjLHlXcL+kb6j
+         vTYyYjLpqFiDYM4Cq4a5jm6Yp5U8k3qFkWm955F0f+bf2UT+m9Z8wAQknO00liY+EKHC
+         EfhJGlQbocN9AKGNYhizQAXiIrcivRfxpu0I1qL4EBE1mLcxPNAfQpQOvyDuWPE6K75/
+         SUL4suDRrNDhkYlNXkQHbW9cLkKTi8ZIqu9gtjBsPbGt0XH/f2CfBTCvNEYHDeQU0r8O
+         w7Kg==
+X-Gm-Message-State: AOAM531/JOBPvZgUq3K7RMP1j+5tCqM7Sh9Ycn0tuh68HqhcW3gnsG5W
+        dX4MZeyw2rFvj+cvUbzhBzVxx8ZWL9SaPtAS
+X-Google-Smtp-Source: ABdhPJwBI62+i1Cn7AwOjIj/QaMxxnX07OYtWyneOi+VOeF3IfJ16nT4vhAOtlvrCVnJcwMsb1ROmtAAUBhAthta
+X-Received: from vannapurve2.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:41f8])
+ (user=vannapurve job=sendgmr) by 2002:a17:902:e889:b0:157:dd6:4621 with SMTP
+ id w9-20020a170902e88900b001570dd64621mr9269146plg.17.1649451952012; Fri, 08
+ Apr 2022 14:05:52 -0700 (PDT)
+Date:   Fri,  8 Apr 2022 21:05:40 +0000
+Message-Id: <20220408210545.3915712-1-vannapurve@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
+Subject: [RFC V1 PATCH 0/5] selftests: KVM: selftests for fd-based approach of
+ supporting private memory
+From:   Vishal Annapurve <vannapurve@google.com>
+To:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     pbonzini@redhat.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        jmattson@google.com, joro@8bytes.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, shauh@kernel.org, yang.zhong@intel.com,
+        drjones@redhat.com, ricarkol@google.com, aaronlewis@google.com,
+        wei.w.wang@intel.com, kirill.shutemov@linux.intel.com,
+        corbet@lwn.net, hughd@google.com, jlayton@kernel.org,
+        bfields@fieldses.org, akpm@linux-foundation.org,
+        chao.p.peng@linux.intel.com, yu.c.zhang@linux.intel.com,
+        jun.nakajima@intel.com, dave.hansen@intel.com,
+        michael.roth@amd.com, qperret@google.com, steven.price@arm.com,
+        ak@linux.intel.com, david@redhat.com, luto@kernel.org,
+        vbabka@suse.cz, marcorr@google.com, erdemaktas@google.com,
+        pgonda@google.com, seanjc@google.com, diviness@google.com,
+        Vishal Annapurve <vannapurve@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 07 Apr 2022 17:43:28 +0200, Philipp Zabel wrote:
-> Convert the device tree bindings for the Bitmain BM1880 reset controller
-> to YAML schema to allow participating in DT validation.
-> 
-> Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
-> Cc: Manivannan Sadhasivam <mani@kernel.org>
-> ---
->  .../bindings/reset/bitmain,bm1880-reset.txt   | 18 ----------
->  .../bindings/reset/bitmain,bm1880-reset.yaml  | 36 +++++++++++++++++++
->  2 files changed, 36 insertions(+), 18 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/reset/bitmain,bm1880-reset.txt
->  create mode 100644 Documentation/devicetree/bindings/reset/bitmain,bm1880-reset.yaml
-> 
+This series implements selftests targeting the feature floated by Chao
+via:
+https://lore.kernel.org/linux-mm/20220310140911.50924-1-chao.p.peng@linux.intel.com/
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Below changes aim to test the fd based approach for guest private memory
+in context of normal (non-confidential) VMs executing on non-confidential
+platforms.
+
+Confidential platforms along with the confidentiality aware software
+stack support a notion of private/shared accesses from the confidential
+VMs.
+Generally, a bit in the GPA conveys the shared/private-ness of the
+access. Non-confidential platforms don't have a notion of private or
+shared accesses from the guest VMs. To support this notion,
+KVM_HC_MAP_GPA_RANGE
+is modified to allow marking an access from a VM within a GPA range as
+always shared or private. Any suggestions regarding implementing this ioctl
+alternatively/cleanly are appreciated.
+
+priv_memfd_test.c file adds a suite of two basic selftests to access private
+memory from the guest via private/shared access and checking if the contents
+can be leaked to/accessed by vmm via shared memory view.
+
+Test results:
+1) PMPAT - PrivateMemoryPrivateAccess test passes
+2) PMSAT - PrivateMemorySharedAccess test fails currently and needs more
+analysis to understand the reason of failure.
+
+Important - Below patch is needed to ensure host kernel crash is avoided while
+running these tests:
+https://github.com/vishals4gh/linux/commit/b9adedf777ad84af39042e9c19899600a4add68a
+
+Github link for the patches posted as part of this series:
+https://github.com/vishals4gh/linux/commits/priv_memfd_selftests_v1
+Note that this series is dependent on Chao's v5 patches mentioned above
+applied on top of 5.17.
+
+Vishal Annapurve (5):
+  x86: kvm: HACK: Allow testing of priv memfd approach
+  selftests: kvm: Fix inline assembly for hypercall
+  selftests: kvm: Add a basic selftest test priv memfd
+  selftests: kvm: priv_memfd_test: Add support for memory conversion
+  selftests: kvm: priv_memfd_test: Add shared access test
+
+ arch/x86/include/uapi/asm/kvm_para.h          |   1 +
+ arch/x86/kvm/mmu/mmu.c                        |   9 +-
+ arch/x86/kvm/x86.c                            |  16 +-
+ include/linux/kvm_host.h                      |   3 +
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../selftests/kvm/lib/x86_64/processor.c      |   2 +-
+ tools/testing/selftests/kvm/priv_memfd_test.c | 410 ++++++++++++++++++
+ virt/kvm/kvm_main.c                           |   2 +-
+ 8 files changed, 436 insertions(+), 8 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/priv_memfd_test.c
+
+-- 
+2.35.1.1178.g4f1659d476-goog
+

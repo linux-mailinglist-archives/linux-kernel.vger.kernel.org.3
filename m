@@ -2,123 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92C054F912C
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 10:50:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB5824F911D
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 10:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232315AbiDHIvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 04:51:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51718 "EHLO
+        id S232260AbiDHItc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 04:49:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232263AbiDHIvK (ORCPT
+        with ESMTP id S232255AbiDHIt0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 04:51:10 -0400
-Received: from srv1.home.kabele.me (gw.home.kabele.me [195.88.143.223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ABC32357713;
-        Fri,  8 Apr 2022 01:49:06 -0700 (PDT)
-Received: from srv1.home.kabele.me (localhost [IPv6:::1])
-        by srv1.home.kabele.me (Postfix) with ESMTP id 05783188967;
-        Fri,  8 Apr 2022 10:49:02 +0200 (CEST)
-Received: from localhost ([77.8.79.100])
-        by srv1.home.kabele.me with ESMTPSA
-        id jqVFOf72T2LBmRcAnmUwTQ
-        (envelope-from <vit@kabele.me>); Fri, 08 Apr 2022 10:49:02 +0200
-Date:   Fri, 8 Apr 2022 10:46:46 +0200
-From:   Vit Kabele <vit@kabele.me>
-To:     platform-driver-x86@vger.kernel.org
-Cc:     r.marek@assembler.cz, x86@kernel.org, linux-kernel@vger.kernel.org,
-        rafael@kernel.org, mingo@redhat.com
-Subject: [PATCH v2] arch/x86: Check validity of EBDA pointer in mpparse.c
-Message-ID: <Yk/2dh4kDobivStp@czspare1-lap.sysgo.cz>
-References: <CAJZ5v0gBbdzUO9MRxbKESEnaeaNAu-+3oP6ADMretch=iHPNJA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0gBbdzUO9MRxbKESEnaeaNAu-+3oP6ADMretch=iHPNJA@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 8 Apr 2022 04:49:26 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B29E32B716;
+        Fri,  8 Apr 2022 01:47:23 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id z16so7837704pfh.3;
+        Fri, 08 Apr 2022 01:47:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=d9l5xKaN+YV177tsuKpxyr8ohblnrBNtN4kwgsorTCI=;
+        b=hT6fWVZQ4QHrs/G5kzOK8ctjiy/SO6JVcyyDISqiXwG3ZJLp9VqE6ddmvOuDR/0wDU
+         E5DmaI68tJW57R63aQmLxTG5MeRvYYhquibJ3GFXyWVp6dldmv/1Vlgeti2NY0FSYRQy
+         Mfq3x+BZmWbnsy9aD3S7VVqXDweIryJz0xatVtAFpxRTeLC/GE1bn2D8cngtzuAoEfpJ
+         +PN6tkcJ95S18VcOOPPV7LO+w3wNwcNAGDWv8nX4TFadXMrL77doA9OMgq3/Q1Yz7kPa
+         /v3Fd3lLRUA5xCEoKfMk9oAZwebyT+OnvH6Ziwm83DozGQ0tN07RXD5poCMVbedbsxSc
+         4XRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=d9l5xKaN+YV177tsuKpxyr8ohblnrBNtN4kwgsorTCI=;
+        b=wKD04DwsdbvfVznjR13OGZ0TVdWYRXb2/uuEmz9vteLSMXlUBpRNAfhXEFEtsLK8aZ
+         fAn4XjeBQJUKwx59S91+1wcg12LisuxWJ6ALhf86q+xoghRv/nrE+BOeiNU2DfD/GD3w
+         0QEl0Xdm6HEyeBB8i+Rt56WHpPH0siT5uJQyd+J0QzT7vu3h0wnl+kk8z7e5VwQyeiJ1
+         W4bJxZaxvzOA76MrV14SPhVVy/Sjn7IZNAj3XyBcEj/ITrATZnfioU7sfmqWC0Fwa437
+         xBgIriK0Se8aamPCkqRiKWMUNQzsSGqIFFmaqHabB0KKVTWH77q02zCT4JrggBf4zF+U
+         B3mw==
+X-Gm-Message-State: AOAM533yK6x2h9NFfx8h4Z3Axi4gHVXhyitTJkbzJ8HLsHMbxkhyVTt0
+        fYAPA0x/hQwPb1xc4yR77tc=
+X-Google-Smtp-Source: ABdhPJylB7FbYV53AoLAJpfIe+ZAg+aSaDxQaKBgF0H0ikVXkvCQXWwg8OikSUp8BUaGlQK7jvKZCQ==
+X-Received: by 2002:a65:46c2:0:b0:385:fb1c:f0c4 with SMTP id n2-20020a6546c2000000b00385fb1cf0c4mr14464825pgr.405.1649407642733;
+        Fri, 08 Apr 2022 01:47:22 -0700 (PDT)
+Received: from localhost.localdomain ([119.3.119.18])
+        by smtp.gmail.com with ESMTPSA id f12-20020a056a001acc00b004fb37ecc6b2sm25002506pfv.29.2022.04.08.01.47.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 01:47:22 -0700 (PDT)
+From:   Xiaomeng Tong <xiam0nd.tong@gmail.com>
+To:     song@kernel.org
+Cc:     rgoldwyn@suse.com, guoqing.jiang@linux.dev,
+        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Subject: [PATCH v3] md: fix an incorrect NULL check in md_reload_sb
+Date:   Fri,  8 Apr 2022 16:47:15 +0800
+Message-Id: <20220408084715.26097-1-xiam0nd.tong@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pointer to EBDA area is retrieved from a word at 0x40e in BDA.
-In case that the memory there is not initialized and contains garbage,
-it might happen that the kernel touches memory above 640K.
+The bug is here:
+	if (!rdev || rdev->desc_nr != nr) {
 
-This may cause unwanted reads from VGA memory which may not be decoded,
-or even present when running under virtualization.
+The list iterator value 'rdev' will *always* be set and non-NULL
+by rdev_for_each_rcu(), so it is incorrect to assume that the
+iterator value will be NULL if the list is empty or no element
+found (In fact, it will be a bogus pointer to an invalid struct
+object containing the HEAD). Otherwise it will bypass the check
+and lead to invalid memory access passing the check.
 
-This patch adds sanity check for the EBDA pointer retrieved from the memory
-so that scanning EBDA does not leave the low memory.
+To fix the bug, use a new variable 'iter' as the list iterator,
+while using the original variable 'pdev' as a dedicated pointer to
+point to the found element.
 
-Signed-off-by: Vit Kabele <vit@kabele.me>
-Reviewed-by: Rudolf Marek <r.marek@assembler.cz>
+Cc: stable@vger.kernel.org
+Fixes: 70bcecdb1534 ("md-cluster: Improve md_reload_sb to be less error prone")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 ---
-changes in v2:
- * Fix the comment formating
- * Change the condition. I used already defined symbol for easier
-    interpretation
 
- arch/x86/include/asm/bios_ebda.h |  3 +++
- arch/x86/kernel/ebda.c           |  3 ---
- arch/x86/kernel/mpparse.c        | 14 ++++++++++++--
- 3 files changed, 15 insertions(+), 5 deletions(-)
+changes from v2:
+ - fix typo (Song Liu)
 
-diff --git a/arch/x86/include/asm/bios_ebda.h b/arch/x86/include/asm/bios_ebda.h
-index 4d5a17e2febe..c3133c01d5b7 100644
---- a/arch/x86/include/asm/bios_ebda.h
-+++ b/arch/x86/include/asm/bios_ebda.h
-@@ -4,6 +4,9 @@
+changes from v1:
+ - rephrase the subject (Guoqing Jiang)
+
+v2:https://lore.kernel.org/lkml/20220328080559.25984-1-xiam0nd.tong@gmail.com/
+v1:https://lore.kernel.org/lkml/20220327080111.12028-1-xiam0nd.tong@gmail.com/
+
+---
+ drivers/md/md.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/md/md.c b/drivers/md/md.c
+index 7476fc204172..f156678c08bc 100644
+--- a/drivers/md/md.c
++++ b/drivers/md/md.c
+@@ -9794,16 +9794,18 @@ static int read_rdev(struct mddev *mddev, struct md_rdev *rdev)
  
- #include <asm/io.h>
- 
-+#define BIOS_START_MIN		0x20000U	/* 128K, less than this is insane */
-+#define BIOS_START_MAX		0x9f000U	/* 640K, absolute maximum */
-+
- /*
-  * Returns physical address of EBDA.  Returns 0 if there is no EBDA.
-  */
-diff --git a/arch/x86/kernel/ebda.c b/arch/x86/kernel/ebda.c
-index 38e7d597b660..86c0801fc3ce 100644
---- a/arch/x86/kernel/ebda.c
-+++ b/arch/x86/kernel/ebda.c
-@@ -50,9 +50,6 @@
- 
- #define BIOS_RAM_SIZE_KB_PTR	0x413
- 
--#define BIOS_START_MIN		0x20000U	/* 128K, less than this is insane */
--#define BIOS_START_MAX		0x9f000U	/* 640K, absolute maximum */
--
- void __init reserve_bios_regions(void)
+ void md_reload_sb(struct mddev *mddev, int nr)
  {
- 	unsigned int bios_start, ebda_start;
-diff --git a/arch/x86/kernel/mpparse.c b/arch/x86/kernel/mpparse.c
-index fed721f90116..9e0b4820f33b 100644
---- a/arch/x86/kernel/mpparse.c
-+++ b/arch/x86/kernel/mpparse.c
-@@ -633,8 +633,18 @@ void __init default_find_smp_config(void)
- 	 */
+-	struct md_rdev *rdev;
++	struct md_rdev *rdev = NULL, *iter;
+ 	int err;
  
- 	address = get_bios_ebda();
--	if (address)
--		smp_scan_config(address, 0x400);
-+
-+	/*
-+	 * Check that the EBDA address is sane and the get_bios_ebda() did not
-+	 * return just garbage from memory.
-+	 * The upper bound is considered valid if it points below 1K before
-+	 * end of the lower memory (i.e. 639K). The EBDA can be smaller
-+	 * than 1K in which case the pointer will point above 639K but that
-+	 * case is handled in step 2) above, and we don't need to adjust scan
-+	 * size to not bump into the memory above 640K.
-+	 */
-+	if (address >= BIOS_START_MIN && address < (BIOS_START_MAX - 1024))
-+		smp_scan_config(address, 1024);
- }
+ 	/* Find the rdev */
+-	rdev_for_each_rcu(rdev, mddev) {
+-		if (rdev->desc_nr == nr)
++	rdev_for_each_rcu(iter, mddev) {
++		if (iter->desc_nr == nr) {
++			rdev = iter;
+ 			break;
++		}
+ 	}
  
- #ifdef CONFIG_X86_IO_APIC
+-	if (!rdev || rdev->desc_nr != nr) {
++	if (!rdev) {
+ 		pr_warn("%s: %d Could not find rdev with nr %d\n", __func__, __LINE__, nr);
+ 		return;
+ 	}
 -- 
-2.30.2
+2.17.1
 

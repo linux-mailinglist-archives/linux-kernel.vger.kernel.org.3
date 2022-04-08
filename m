@@ -2,149 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2132C4F968A
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 15:19:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D585D4F968F
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 15:20:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236172AbiDHNUd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 09:20:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59822 "EHLO
+        id S236199AbiDHNWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 09:22:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232740AbiDHNUb (ORCPT
+        with ESMTP id S236201AbiDHNW1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 09:20:31 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998DDC90E1
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 06:18:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649423907; x=1680959907;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OlQ3mNetqWRw1aMb9LjUn6/UrLVxFJEr3k5naF0v43A=;
-  b=NivKZjd0OgHl/B/+bRHpQRAff+E6Kk0r3PyNtxulUiN+lm6QUa47bhgc
-   c1UXQUi1o5ER+4GNolPt2+OF2QpJw1VhYG5XRO2sKo0kn3OtNqpCFxs8Q
-   ievI/f2LmDQxQCLXn96pKO2u3YcUhseRTnbfI1yh5pDqzuKu1cRD8bDZ/
-   yuI0xqjEaZQjNNamlFpP3MWrKIxb4Drfla9UBhiH7wDO5DMT7HGDCzJCe
-   0vvxGZwyiFq/M41krvUqY7irNk95XGtg38iA9jtn+kPfkBJh2kppy6LNj
-   Y99QxGbk4itjni5bC0LR9h3ZX3Ec9arJv8WFesH7PJiIXIH7w7Kf7vJaY
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="259188300"
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="259188300"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 06:18:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,245,1643702400"; 
-   d="scan'208";a="723384474"
-Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 08 Apr 2022 06:18:25 -0700
-Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ncoVM-0000Hf-Vi;
-        Fri, 08 Apr 2022 13:18:25 +0000
-Date:   Fri, 8 Apr 2022 21:17:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Phil Elwell <phil@raspberrypi.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Dom Cobley <popcornmix@gmail.com>
-Subject: [l1k:smsc95xx_5.17 209/887] drivers/dma/bcm2835-dma.c:1104:5:
- warning: no previous prototype for 'bcm2711_dma40_memcpy_init'
-Message-ID: <202204082125.AHZubaGl-lkp@intel.com>
+        Fri, 8 Apr 2022 09:22:27 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CC16275;
+        Fri,  8 Apr 2022 06:20:21 -0700 (PDT)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1ncoXB-0002lO-KS; Fri, 08 Apr 2022 15:20:17 +0200
+Message-ID: <9af2d249-91e7-4871-59c8-704823118e48@leemhuis.info>
+Date:   Fri, 8 Apr 2022 15:20:14 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Nico Schottelius <nico-bugzilla.kernel.org@schottelius.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: Regression: Mouse gets sluggish after suspend/resume and power usage
+ significant higher after resume
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1649424023;a304c49a;
+X-HE-SMSGID: 1ncoXB-0002lO-KS
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/l1k/linux smsc95xx_5.17
-head:   05d68ced287b30f62f18f95b5476135ef669804a
-commit: 92eab2543e8b86cf7660e0cc70d5aee4313cbe58 [209/887] bcm2835-dma: Add proper 40-bit DMA support
-config: arm-multi_v7_defconfig (https://download.01.org/0day-ci/archive/20220408/202204082125.AHZubaGl-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/l1k/linux/commit/92eab2543e8b86cf7660e0cc70d5aee4313cbe58
-        git remote add l1k https://github.com/l1k/linux
-        git fetch --no-tags l1k smsc95xx_5.17
-        git checkout 92eab2543e8b86cf7660e0cc70d5aee4313cbe58
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/dma/
+Hi, this is your Linux kernel regression tracker.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I noticed a regression report in bugzilla.kernel.org that afaics nobody
+acted upon since it was reported about a week ago, that's why I decided
+to forward it to the lists and all people that seemed to be relevant
+here. To quote from https://bugzilla.kernel.org/show_bug.cgi?id=215747 :
 
-All warnings (new ones prefixed by >>):
+>  Nico Schottelius 2022-03-26 19:27:06 UTC
+> 
+> Created attachment 300619 [details]
+> dmesg
+> 
+> TL;DR:
+> 
+> Suspending and resume makes the ELAN0670:00 trackpad sluggish (very hard to move the pointer) and the energy usage of the notebook is about 3 times higher than before suspend.
+> 
+> Background:
+> 
+> 
+> On a Lenovo X1 Nano the trackpad works fine until suspend/resume.The estimated battery runtime PRIOR to suspend/resume is 8h 43m. After suspend resume it drops to 2h 20m instantly.
+> 
+> There seems to be a firmware error in the iwlwifi card show in the attached dmesg, but I am not sure whether "that's enough" to cause both symptoms.
+> 
+> Kernel is from Alpine Linux, which is basically stock upstream afaics.
 
->> drivers/dma/bcm2835-dma.c:1104:5: warning: no previous prototype for 'bcm2711_dma40_memcpy_init' [-Wmissing-prototypes]
-    1104 | int bcm2711_dma40_memcpy_init(void)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/dma/bcm2835-dma.c:1119:6: warning: no previous prototype for 'bcm2711_dma40_memcpy' [-Wmissing-prototypes]
-    1119 | void bcm2711_dma40_memcpy(dma_addr_t dst, dma_addr_t src, size_t size)
-         |      ^~~~~~~~~~~~~~~~~~~~
+See later comments for more details. In one of them the reporter states
+he's pretty sure that it didn't happen with 5.13.
 
+Not sure if this is input, PM, bluetooth, or something else. But sounds
+like a problem in the input code to me (you have to start somewhere...).
 
-vim +/bcm2711_dma40_memcpy_init +1104 drivers/dma/bcm2835-dma.c
+Could somebody take a look into this? Or was this discussed somewhere
+else already? Or even fixed?
 
-  1103	
-> 1104	int bcm2711_dma40_memcpy_init(void)
-  1105	{
-  1106		if (!memcpy_parent)
-  1107			return -EPROBE_DEFER;
-  1108	
-  1109		if (!memcpy_chan)
-  1110			return -EINVAL;
-  1111	
-  1112		if (!memcpy_scb)
-  1113			return -ENOMEM;
-  1114	
-  1115		return 0;
-  1116	}
-  1117	EXPORT_SYMBOL(bcm2711_dma40_memcpy_init);
-  1118	
-> 1119	void bcm2711_dma40_memcpy(dma_addr_t dst, dma_addr_t src, size_t size)
-  1120	{
-  1121		struct bcm2711_dma40_scb *scb = memcpy_scb;
-  1122		unsigned long flags;
-  1123	
-  1124		if (!scb) {
-  1125			pr_err("bcm2711_dma40_memcpy not initialised!\n");
-  1126			return;
-  1127		}
-  1128	
-  1129		spin_lock_irqsave(&memcpy_lock, flags);
-  1130	
-  1131		scb->ti = 0;
-  1132		scb->src = lower_32_bits(src);
-  1133		scb->srci = upper_32_bits(src) | BCM2711_DMA40_MEMCPY_XFER_INFO;
-  1134		scb->dst = lower_32_bits(dst);
-  1135		scb->dsti = upper_32_bits(dst) | BCM2711_DMA40_MEMCPY_XFER_INFO;
-  1136		scb->len = size;
-  1137		scb->next_cb = 0;
-  1138	
-  1139		writel((u32)(memcpy_scb_dma >> 5), memcpy_chan + BCM2711_DMA40_CB);
-  1140		writel(BCM2711_DMA40_MEMCPY_FLAGS + BCM2711_DMA40_ACTIVE,
-  1141		       memcpy_chan + BCM2711_DMA40_CS);
-  1142	
-  1143		/* Poll for completion */
-  1144		while (!(readl(memcpy_chan + BCM2711_DMA40_CS) & BCM2711_DMA40_END))
-  1145			cpu_relax();
-  1146	
-  1147		writel(BCM2711_DMA40_END, memcpy_chan + BCM2711_DMA40_CS);
-  1148	
-  1149		spin_unlock_irqrestore(&memcpy_lock, flags);
-  1150	}
-  1151	EXPORT_SYMBOL(bcm2711_dma40_memcpy);
-  1152	
+Anyway, to get this tracked:
+
+#regzbot introduced: v5.13..v5.15.31	
+#regzbot from: Nico Schottelius  <nico-bugzilla.kernel.org@schottelius.org>
+#regzbot title: input: Mouse gets sluggish after suspend/resume and
+power usage significant higher after resume
+#regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215747
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I'm getting a lot of
+reports on my table. I can only look briefly into most of them and lack
+knowledge about most of the areas they concern. I thus unfortunately
+will sometimes get things wrong or miss something important. I hope
+that's not the case here; if you think it is, don't hesitate to tell me
+in a public reply, it's in everyone's interest to set the public record
+straight.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Additional information about regzbot:
+
+If you want to know more about regzbot, check out its web-interface, the
+getting start guide, and the references documentation:
+
+https://linux-regtracking.leemhuis.info/regzbot/
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
+
+The last two documents will explain how you can interact with regzbot
+yourself if your want to.
+
+Hint for reporters: when reporting a regression it's in your interest to
+CC the regression list and tell regzbot about the issue, as that ensures
+the regression makes it onto the radar of the Linux kernel's regression
+tracker -- that's in your interest, as it ensures your report won't fall
+through the cracks unnoticed.
+
+Hint for developers: you normally don't need to care about regzbot once
+it's involved. Fix the issue as you normally would, just remember to
+include 'Link:' tag in the patch descriptions pointing to all reports
+about the issue. This has been expected from developers even before
+regzbot showed up for reasons explained in
+'Documentation/process/submitting-patches.rst' and
+'Documentation/process/5.Posting.rst'.

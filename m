@@ -2,63 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 826C54F9920
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 17:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61B4F4F9923
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 17:13:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237430AbiDHPOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 11:14:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35238 "EHLO
+        id S237442AbiDHPO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 11:14:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237418AbiDHPOr (ORCPT
+        with ESMTP id S237422AbiDHPOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 8 Apr 2022 11:14:47 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74481100A7C;
-        Fri,  8 Apr 2022 08:12:43 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id o18so3710757qtk.7;
-        Fri, 08 Apr 2022 08:12:43 -0700 (PDT)
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE2F100E29
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 08:12:44 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id 75so2197354qkk.8
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 08:12:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=OhT3uuxxEHcPBuHXHb1jb3YfeT1PnX/kEpDmvODTxcw=;
-        b=NsMM4YWVyUraCz/kt+F2EMVswAI3CaTU0YpNV/knTwNsdFgF08dAxMTCTEMQoYGxGX
-         /atW6laRZ1rN3aittfIb6/7h+Hd0khonSfmlyPSPe9fLOej9LMJu94Mj68YwkOvNMMTL
-         rtobblPenS1M3tLoC9l6b9JPo6TT12ypmDKX/kFC2kLyfaH0z+8MJl0pe1NHB6RlOel/
-         j9OptSo03QbptL+cX3POeHQ20X9hrPfHEOsamD0HD13Ms1ZYZDlQGtYIY2r6IjNc9ZAU
-         k0jPcUAx8G+aprnpSuF1E93o9lNl2iVt6VeSWJUTaWMdKPvSgPDFEJyV2XZGXD1b7RoL
-         iqwQ==
+        bh=ZtUJySmbIWUCXkZt6OYhMWHmPcZgwTz+ISBAU3SmGDQ=;
+        b=gUyAAC9v3ERVIgec02ALPphf34Xi2rpE30HcoIEAl12wO4+4DmF+INCjvNlfP6//bX
+         LwNdSlQN0FMAj17eSK4o8Y4ekWNq0q3JwACdWjTpuD3oUxuhKo+Kd0S7QgbS/V5iNtdN
+         EHH9p8BbZFmm8y8aHyfORhDOffQAIrbvlpYeueXZzHn40gmwlQ7V8qyv+6PgjsmKPr3R
+         1bjdeg3X4XsKH+97mtRF5tllilSgjXurlrXajiLamwAmN+bqGr9E8VfF2lZlYvNjua75
+         GPNcU0jkdtcKoBIgMDTYcgSjlkRrtGT/y6H15NVDAkfe/1i/s8WERY/cg4xcGay2LtUB
+         E5Hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=OhT3uuxxEHcPBuHXHb1jb3YfeT1PnX/kEpDmvODTxcw=;
-        b=oFcIcOhH6aXk0smH5rjoMP6Ql88uEeGWrFgLRqcxZV4Qo/RHXD4K+llPj3NageMqlf
-         OXSNQL4u30xLjNhtx33lDw450gB3AsIQ4HYGUXxu2ZMuM3RxBHEdx/QKMEnInzvYWx0L
-         Pyzg86/ZLAKMDdg1KuS6VGKOUvqJ0hevgGbviOTWQjgivSepAlQgrD7L5BT1kr/AWiOY
-         +RFDQZUMP6WcNTZoUQHqHLJxrMZ5HFE4ij3bZ1gXR9UKbUC8QZuoEw5Mcwh1rxlBaeYt
-         G37Yci3X+zRdY+4/jgdcLPG/60vSPoNASo1Jm10u1wfcwJB2tJFnPGP8v3+a4KKwrgyQ
-         z/hA==
-X-Gm-Message-State: AOAM530f/onqiBvY2lnt4FEQvYFzYddWkltzoUBc0+oeLVJ+LovIuKve
-        58X07YcTfeqLMoypYv6ASchTl227aKfM5Ic/
-X-Google-Smtp-Source: ABdhPJwl9PVVqdJdJKKdKDVS5ybYWrvIT/uqQnD+9OFv41VaukkHsOq0SWSPXzkAwkoNjLXPBPcz7Q==
-X-Received: by 2002:ac8:43d1:0:b0:2ed:8a1:e13d with SMTP id w17-20020ac843d1000000b002ed08a1e13dmr2470593qtn.432.1649430762560;
-        Fri, 08 Apr 2022 08:12:42 -0700 (PDT)
+        bh=ZtUJySmbIWUCXkZt6OYhMWHmPcZgwTz+ISBAU3SmGDQ=;
+        b=2rJZSGQAeIwfA53pmg/S07SVl9X+/UsCsBTQORiBYy+heYcko8DN1wGRuKY+SrCs9J
+         RVAcG1nJYPJrv73lCqMFDFW2kyGX+8L+6Z8WJv/13pUUIMy2RllNY6p+28p7zPB17Lau
+         CkpxlN+c1an2/WvlKCtDZGD5oaDNQ7diwUGouLlIilJXxEsAMeK/ParR/HbPW6grjMWq
+         Iy2eHSeAr06qny/u3aOlTv5r9BN7peWlq4BBN3z/4YJMQLihp2y9QGu8BA7Ktep7lL/t
+         mz4e+yaxTQ5blZ4x2g0eD0jcWT0ce3yQm+lYx6pwPq4eOMq4QI9w3zV67EMk3QaIgWzN
+         w3KQ==
+X-Gm-Message-State: AOAM530mBjpHiv9Z9LUnra8o8Xf0Kl5QBdA4f5SkgyWARUuKPx8kEPSP
+        a/oqB2dmrVuHP+g5TiqAmZouFfAz8rX7gA==
+X-Google-Smtp-Source: ABdhPJzO2WStjiG85MQLNiiZOS4kkxy+rUxW75KBCuvwTjYqenTUZaIskskKwgBfYUIyVOsllhj0Ag==
+X-Received: by 2002:a05:620a:228f:b0:67a:f432:af72 with SMTP id o15-20020a05620a228f00b0067af432af72mr13360897qkh.603.1649430763374;
+        Fri, 08 Apr 2022 08:12:43 -0700 (PDT)
 Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
-        by smtp.gmail.com with ESMTPSA id 191-20020a3707c8000000b0069a13545fcfsm2266052qkh.123.2022.04.08.08.12.41
+        by smtp.gmail.com with ESMTPSA id 191-20020a3707c8000000b0069a13545fcfsm2266052qkh.123.2022.04.08.08.12.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 08:12:42 -0700 (PDT)
+        Fri, 08 Apr 2022 08:12:43 -0700 (PDT)
 From:   Peter Geis <pgwipeout@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>
+To:     Heiko Stuebner <heiko@sntech.de>
 Cc:     linux-rockchip@lists.infradead.org,
         Peter Geis <pgwipeout@gmail.com>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 1/5] dt-bindings: soc: grf: add rk3566-pipe-grf compatible
-Date:   Fri,  8 Apr 2022 11:12:33 -0400
-Message-Id: <20220408151237.3165046-2-pgwipeout@gmail.com>
+Subject: [PATCH v5 2/5] soc: rockchip: set dwc3 clock for rk3566
+Date:   Fri,  8 Apr 2022 11:12:34 -0400
+Message-Id: <20220408151237.3165046-3-pgwipeout@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220408151237.3165046-1-pgwipeout@gmail.com>
 References: <20220408151237.3165046-1-pgwipeout@gmail.com>
@@ -74,29 +71,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The rk3566 requires special handling for the dwc3-otg clock in order for
-the port to function correctly.
-Add a binding for the rk3566-pipe-grf so we can handle setup with the
-grf driver.
+The rk3566 dwc3 otg port clock is unavailable at boot, as it defaults to
+the combophy as the clock source. As combophy0 doesn't exist on rk3566,
+we need to set the clock source to the usb2 phy instead.
+
+Add handling to the grf driver to handle this on boot.
 
 Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-Acked-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/soc/rockchip/grf.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/soc/rockchip/grf.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/soc/rockchip/grf.yaml b/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
-index b2ba7bed89b2..3be3cfd52f7b 100644
---- a/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
-+++ b/Documentation/devicetree/bindings/soc/rockchip/grf.yaml
-@@ -15,6 +15,7 @@ properties:
-       - items:
-           - enum:
-               - rockchip,rk3288-sgrf
-+              - rockchip,rk3566-pipe-grf
-               - rockchip,rk3568-usb2phy-grf
-               - rockchip,rv1108-usbgrf
-           - const: syscon
+diff --git a/drivers/soc/rockchip/grf.c b/drivers/soc/rockchip/grf.c
+index 494cf2b5bf7b..384461b70684 100644
+--- a/drivers/soc/rockchip/grf.c
++++ b/drivers/soc/rockchip/grf.c
+@@ -108,6 +108,20 @@ static const struct rockchip_grf_info rk3399_grf __initconst = {
+ 	.num_values = ARRAY_SIZE(rk3399_defaults),
+ };
+ 
++#define RK3566_GRF_USB3OTG0_CON1	0x0104
++
++static const struct rockchip_grf_value rk3566_defaults[] __initconst = {
++	{ "usb3otg port switch", RK3566_GRF_USB3OTG0_CON1, HIWORD_UPDATE(0, 1, 12) },
++	{ "usb3otg clock switch", RK3566_GRF_USB3OTG0_CON1, HIWORD_UPDATE(1, 1, 7) },
++	{ "usb3otg disable usb3", RK3566_GRF_USB3OTG0_CON1, HIWORD_UPDATE(1, 1, 0) },
++};
++
++static const struct rockchip_grf_info rk3566_pipegrf __initconst = {
++	.values = rk3566_defaults,
++	.num_values = ARRAY_SIZE(rk3566_defaults),
++};
++
++
+ static const struct of_device_id rockchip_grf_dt_match[] __initconst = {
+ 	{
+ 		.compatible = "rockchip,rk3036-grf",
+@@ -130,6 +144,9 @@ static const struct of_device_id rockchip_grf_dt_match[] __initconst = {
+ 	}, {
+ 		.compatible = "rockchip,rk3399-grf",
+ 		.data = (void *)&rk3399_grf,
++	}, {
++		.compatible = "rockchip,rk3566-pipe-grf",
++		.data = (void *)&rk3566_pipegrf,
+ 	},
+ 	{ /* sentinel */ },
+ };
 -- 
 2.25.1
 

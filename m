@@ -2,154 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABECF4F8AB1
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 02:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54EC94F8B28
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 02:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233006AbiDHAlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 20:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55926 "EHLO
+        id S232986AbiDHAkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 20:40:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232174AbiDHAk5 (ORCPT
+        with ESMTP id S232174AbiDHAkN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 20:40:57 -0400
-Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com [210.131.2.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C0A173366;
-        Thu,  7 Apr 2022 17:38:55 -0700 (PDT)
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id 2380cT7T020101;
-        Fri, 8 Apr 2022 09:38:29 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 2380cT7T020101
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1649378309;
-        bh=cNjeDzN9weH69RQ1VnbqR1X2JYg4D1jJ+YXitrVGUX0=;
+        Thu, 7 Apr 2022 20:40:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3EF16F6FF;
+        Thu,  7 Apr 2022 17:38:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A0CA2B829B3;
+        Fri,  8 Apr 2022 00:38:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3463EC385A5;
+        Fri,  8 Apr 2022 00:38:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649378289;
+        bh=CVHEzTa06w9IXQftEgZii1PHojo5m4h3tRQOFvFM99s=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=cg42i28bG+Ep5ujIFOo+HQxtafDM12rF0Hl0eDCFDbaadSlcSUvjDdGlRsDXtecGP
-         zPieKsxZdn2ZWOs7k8cbK1tW9SubohjUJIkOHpdgZegAs4XEAl2Ww2ArW8/mgcyIVw
-         3r3E8x2kNx8sxMvqMgRjcD8woYLReg86i+IAOn0akOzIOIqWg8t49iUFRVbDf37cuZ
-         BrL5rAd/l48P4VIFh1ts0rZGyi3ySwNO5UqOxP409gizRxtzeB7MfslhYubIeayrD6
-         dCmQUicolzwXlgXX+0987LGxquV1uU28Ng8uctqBO6nut8hI2DMY5/uht7NjzIIsqq
-         JqPu4iFsqqOxQ==
-X-Nifty-SrcIP: [209.85.216.45]
-Received: by mail-pj1-f45.google.com with SMTP id a16-20020a17090a6d9000b001c7d6c1bb13so8097598pjk.4;
-        Thu, 07 Apr 2022 17:38:29 -0700 (PDT)
-X-Gm-Message-State: AOAM530G33byvCygNBqTmoVw18TpJYKZ2y2puqkp90MQnG0iWvra3Pr3
-        +BC9WRFlS3ejud7NlHn4dJW/14Wqz6gMkvcEMkw=
-X-Google-Smtp-Source: ABdhPJw6lsS62tcWGGnhg03UEj21K0wbz57Z3DNmjww+2jiFGcHutlaNy92LYhxGd5kYikUskHoUuCIkgyBAGn3lzxM=
-X-Received: by 2002:a17:902:b183:b0:14f:c266:20d5 with SMTP id
- s3-20020a170902b18300b0014fc26620d5mr16718530plr.136.1649378308545; Thu, 07
- Apr 2022 17:38:28 -0700 (PDT)
+        b=pDZeBdKpytYf/RpT1wvDDi+93EZlNj/SQN1mhUKsjCetKqxsE6F3pgzwpBfPDQ4fZ
+         FDAD/ljw+OPvXlLbCvfQe2svXgSycFXKpYYoJGp6rRxieZiVYeHpGCmUAoDCCYtbH8
+         W0I7eNZQyi5sGKmBCFfHHlnjslk1VjRGX4MgsJIG25DPlKKkCEzt6tC+wrqhv541qD
+         KcvHrx1Imk/jfBC24wbY57AvDUSKiSYtmLuBDiwoz+VEmkkC3QUCfdFDn4R5qxpKdk
+         RWivXlbHO75PU/0wbwV8D3L2WTTXoFKGTqcxs4lIMSLbDNu+PUM0Jb/NB8Dy4v6GLr
+         4OesR0MEr+z9g==
+Received: by mail-yb1-f169.google.com with SMTP id r5so2738659ybd.8;
+        Thu, 07 Apr 2022 17:38:09 -0700 (PDT)
+X-Gm-Message-State: AOAM533OExlC8UVxblCgT71lQitsvmTOOnRLDx7GDxhtF9DtK4ztokLu
+        2QAymecNd5vFiuZulMpO3wN83pej61ButXrhYHI=
+X-Google-Smtp-Source: ABdhPJxZSEJvXnOSEuuJQrEwsomQA54vyst5hwzUzcTr7GcAKkuWwIWw4Yq8ZGv7YBWuDHCKqqxUUcRUzkhhmnK8mdE=
+X-Received: by 2002:a25:8b81:0:b0:629:17d5:68c1 with SMTP id
+ j1-20020a258b81000000b0062917d568c1mr11288152ybl.449.1649378288275; Thu, 07
+ Apr 2022 17:38:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220406153023.500847-1-masahiroy@kernel.org> <20220406153023.500847-7-masahiroy@kernel.org>
- <CAKwvOdm7NBPj43sRw-_dtjzgpHeOHnQ9uB3rSg3rYhUu0_PN7A@mail.gmail.com> <eedd7486cd484c359be90e6138b0b2be@AcuMS.aculab.com>
-In-Reply-To: <eedd7486cd484c359be90e6138b0b2be@AcuMS.aculab.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 8 Apr 2022 09:37:37 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASJKMqfaifGA9r_cYqgkVgL6OPCfjFZCGN4mZwxW_rZvw@mail.gmail.com>
-Message-ID: <CAK7LNASJKMqfaifGA9r_cYqgkVgL6OPCfjFZCGN4mZwxW_rZvw@mail.gmail.com>
-Subject: Re: [PATCH 6/7] kbuild: make *.mod not depend on *.o
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>
+References: <20220328080559.25984-1-xiam0nd.tong@gmail.com>
+In-Reply-To: <20220328080559.25984-1-xiam0nd.tong@gmail.com>
+From:   Song Liu <song@kernel.org>
+Date:   Thu, 7 Apr 2022 17:37:55 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW6AJAo_k1a5-EiUp-Qx9Rp=jkON155AtOMRO2JmhBVFjw@mail.gmail.com>
+Message-ID: <CAPhsuW6AJAo_k1a5-EiUp-Qx9Rp=jkON155AtOMRO2JmhBVFjw@mail.gmail.com>
+Subject: Re: [PATCH] md: fix an incorrect NULL check in md_reload_sb
+To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Cc:     rgoldwyn@suse.com, Guoqing Jiang <guoqing.jiang@linux.dev>,
+        linux-raid <linux-raid@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 8, 2022 at 6:39 AM David Laight <David.Laight@aculab.com> wrote:
+On Mon, Mar 28, 2022 at 1:06 AM Xiaomeng Tong <xiam0nd.tong@gmail.com> wrote:
 >
-> From: Nick Desaulniers
-> > Sent: 07 April 2022 18:59
-> >
-> > On Wed, Apr 6, 2022 at 8:31 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > >
-> > > The dependency
-> > >
-> > >     $(obj)/%.mod: $(obj)/%$(mod-prelink-ext).o
-> > >
-> > > ... exists because *.mod files previously contained undefined symbols,
-> > > which are computed from *.o files when CONFIG_TRIM_UNUSED_KSYMS=y.
-> > >
-> > > Now that the undefined symbols are put into separate *.usyms files,
-> > > there is no reason to make *.mod depend on *.o files.
-> > >
-> > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > > ---
-> > >
-> > >  Makefile               | 3 ++-
-> > >  scripts/Makefile.build | 5 ++---
-> > >  2 files changed, 4 insertions(+), 4 deletions(-)
-> > >
-> > > diff --git a/Makefile b/Makefile
-> > > index 82ee893909e9..e915aacd02b0 100644
-> > > --- a/Makefile
-> > > +++ b/Makefile
-> > > @@ -1792,7 +1792,8 @@ ifdef single-build
-> > >
-> > >  # .ko is special because modpost is needed
-> > >  single-ko := $(sort $(filter %.ko, $(MAKECMDGOALS)))
-> > > -single-no-ko := $(sort $(patsubst %.ko,%.mod, $(MAKECMDGOALS)))
-> > > +single-no-ko := $(filter-out $(single-ko), $(MAKECMDGOALS)) \
-> > > +               $(foreach x, o mod, $(patsubst %.ko, %.$x, $(single-ko)))
-> >
-> > I'm on board with this patch, and the overall goal with the series. My
-> > brain is having a hard time parsing `o mod` though. Can you walk me
-> > through that? Are those targets for .o and .mod files, respectively?
-
-
-Yes.
-
-Kbuild can build a module individually.
-
-    make  foo/bar/baz.ko
-
-(but modpost check does not work well)
-
-To do this, Kbuild needs to descend to
-the directory and generate
-foo/bar/baz.o  and  foo/bar/baz.mod.
-
-Previously, foo/bar/baz.o was generated as a
-prerequisite of foo/bar/baz.mod, but now we
-need to request Kbuild to generate both of them.
-
-
-
-
-
-> I think I'd do:
-> single-no-ko := $(filter-out $(single-ko), $(MAKECMDGOALS))
-> single-no-ko += $(patsubst %.ko, %.o, $(single-ko))
-> single-no-ko += $(patsubst %.ko, %.mod, $(single-ko))
+> The bug is here:
+>         if (!rdev || rdev->desc_nr != nr) {
 >
-> Although you can use the simpler SYSV make suffix substitution syntax:
-> single-no-ko += $(single-ko:.ko=.o) $(single-ko:.ko=.mod)
-
-
-Right.   I tend to use $(patsubst ), but
-in some places, shorter SYSV syntax is used.
-I admit inconsistency.
-
-
-
-
-
+> The list iterator value 'rdev' will *always* be set and non-NULL
+> by rdev_for_each_rcu(), so it is incorrect to assume that the
+> iterator value will be NULL if the list is empty or no element
+> found (In fact, it will be a bogus pointer to an invalid struct
+> object containing the HEAD). Otherwise it will bypass the check
+> and lead to invalid memory access passing the check.
 >
->         David
+> To fix the bug, use a new variable 'iter' as the list iterator,
+> while using the original variable 'pdev' as a dedicated pointer to
+> point to the found element.
 >
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
+> Cc: stable@vger.kernel.org
+> Fixes: 70bcecdb1534 ("amd-cluster: Improve md_reload_sb to be less error prone")
 
+s/amd-cluster/md-cluster/
 
-
--- 
-Best Regards
-Masahiro Yamada
+> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+> ---
+>
+> changes from v1:
+>  - rephrase the subject (Guoqing Jiang)
+>
+> v1:https://lore.kernel.org/lkml/20220327080111.12028-1-xiam0nd.tong@gmail.com/
+>
+> ---
+>  drivers/md/md.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/md/md.c b/drivers/md/md.c
+> index 7476fc204172..f156678c08bc 100644
+> --- a/drivers/md/md.c
+> +++ b/drivers/md/md.c
+> @@ -9794,16 +9794,18 @@ static int read_rdev(struct mddev *mddev, struct md_rdev *rdev)
+>
+>  void md_reload_sb(struct mddev *mddev, int nr)
+>  {
+> -       struct md_rdev *rdev;
+> +       struct md_rdev *rdev = NULL, *iter;
+>         int err;
+>
+>         /* Find the rdev */
+> -       rdev_for_each_rcu(rdev, mddev) {
+> -               if (rdev->desc_nr == nr)
+> +       rdev_for_each_rcu(iter, mddev) {
+> +               if (iter->desc_nr == nr) {
+> +                       rdev = iter;
+>                         break;
+> +               }
+>         }
+>
+> -       if (!rdev || rdev->desc_nr != nr) {
+> +       if (!rdev) {
+>                 pr_warn("%s: %d Could not find rdev with nr %d\n", __func__, __LINE__, nr);
+>                 return;
+>         }
+> --
+> 2.17.1
+>

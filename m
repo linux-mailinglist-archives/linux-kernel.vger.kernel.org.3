@@ -2,97 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C79AD4F9D15
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 20:39:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7820A4F9D18
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 20:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238942AbiDHSlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 14:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44588 "EHLO
+        id S239062AbiDHSnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 14:43:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238878AbiDHSky (ORCPT
+        with ESMTP id S237887AbiDHSm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 14:40:54 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB4476585;
-        Fri,  8 Apr 2022 11:38:50 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id q142so8441669pgq.9;
-        Fri, 08 Apr 2022 11:38:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kKGKZuSpYFN37tCG4CcIHU7+d9wEn83BskzEwQsLfrQ=;
-        b=Zbwlo1H8+ZlJmoZIVtHazGl96gDb2dUENvySNvgZVl3hDqaWhmJ1EH8DQKQ1MrNJDh
-         eQqd3G4XgU91qDmn6YYM40TmLk/S8HuH3SUn3HzUKWjOZka2JJE9o9TJF+mjHkFUkEpj
-         IdUdamR8NT05UTdpzWsm6rPeiHZ5ko2503qAcBe2FsiwX/sQ/GDSOfEWTyoErCQ1Jzuo
-         fwXfvgUEiBssi2PcKS9qJ8a7HeKn+bF/K8aa6f5ZAsmEo87k+k/Q9DUr7f1gv6N8I9ZA
-         3bMp11ysXwIGBfLdE0acU0DZNpqo7ybMf+EAxb1JCWQTQzbqtf/LPudj+Rn090MHbsgE
-         UyNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kKGKZuSpYFN37tCG4CcIHU7+d9wEn83BskzEwQsLfrQ=;
-        b=S6RMs0EE8ceeAUkQlOFlJ/944PRnd7fnJQfYhbIOJbNRmUaPLDatBWoVLKXYyG3nL/
-         xQEYyZsmzHYx69clYMquphWBOuCYgUNbNRe0X4dEJnYik/hfZu4nh7QRj95pzP2nk5KA
-         OjSIi1G/x/xm740sei1vDPQksetV3vify1DVVzlx35hrlULMg85ZEOhHSnWvKVNwiKF5
-         X1QjuEgxiGYyZVMBLENSax8ydPJnClUjoQwh+dASTVWBT9liV7Visdcgoum2AdtIrqx2
-         8Xkpip5vNb4r8gMNGX+BiThzP8H5n7oCJ5NFAmxAYWqIyNJztO/FxdaimrTRyeDv2biI
-         fLMg==
-X-Gm-Message-State: AOAM532IHE+DC/vc13XfQ/hfLT4aEosnOS/m2CtljSNjSXXErZBrGQ+m
-        pX4IvV2VYo8DoWfRYBNh2wA=
-X-Google-Smtp-Source: ABdhPJwWvCeq1v7/DCTMwPxRS6kD3AmeHD9zIlblaKqiKk633UzIAN1sJuKreKzCS8m9MU15WnKISw==
-X-Received: by 2002:a63:6a0a:0:b0:398:6fb4:33c2 with SMTP id f10-20020a636a0a000000b003986fb433c2mr16900822pgc.151.1649443129394;
-        Fri, 08 Apr 2022 11:38:49 -0700 (PDT)
-Received: from localhost ([192.55.54.52])
-        by smtp.gmail.com with ESMTPSA id e11-20020a056a001a8b00b004fab740dbddsm27094392pfv.105.2022.04.08.11.38.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 11:38:48 -0700 (PDT)
-Date:   Fri, 8 Apr 2022 11:38:47 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Kai Huang <kai.huang@intel.com>, isaku.yamahata@intel.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
-        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Subject: Re: [RFC PATCH v5 037/104] KVM: x86/mmu: Allow non-zero init value
- for shadow PTE
-Message-ID: <20220408183847.GB857847@ls.amr.corp.intel.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <b74b3660f9d16deafe83f2670539a8287bef988f.1646422845.git.isaku.yamahata@intel.com>
- <968de4765e63d8255ae1b3ac7062ffdca64706e4.camel@intel.com>
- <3cfffe9a29e53ae58dc59d0af3d52128babde79f.camel@intel.com>
- <1474e665-c619-1a01-3a28-51894161e316@redhat.com>
+        Fri, 8 Apr 2022 14:42:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7690190B77;
+        Fri,  8 Apr 2022 11:40:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F15360B4D;
+        Fri,  8 Apr 2022 18:40:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37DAEC385A3;
+        Fri,  8 Apr 2022 18:40:19 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="hw7ZM3DK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1649443217;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5p8HbWxOv/2pCcrFRIk5uy5GvnZxVWWqGCXEJeAr/VI=;
+        b=hw7ZM3DKXNV/PCbZ27tOsMmXRTiv/fRiwXtCpNB0Y95WzzR8bK+prKfASznhrt+sI6VYcP
+        JgT9H5GtkoA+jROggAq+JYownqGfREZ8MSGOuZKcJzf+CHaADipObRJFEs60xwyHJ1+hny
+        xsJ6FQ5svtLEpIhYOh3ZMRBXxb2C+BU=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 6baee431 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Fri, 8 Apr 2022 18:40:17 +0000 (UTC)
+Date:   Fri, 8 Apr 2022 20:40:08 +0200
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        arnd@arndb.de, Theodore Ts'o <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "David S . Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, x86@kernel.org,
+        linux-xtensa@linux-xtensa.org
+Subject: Re: [PATCH RFC v1 07/10] arm64: use sched_clock() for
+ random_get_entropy() instead of zero
+Message-ID: <YlCBiLIh5ZFqMr6X@zx2c4.com>
+References: <20220408182145.142506-1-Jason@zx2c4.com>
+ <20220408182145.142506-8-Jason@zx2c4.com>
+ <YlCAEaG4i/OuMKet@lakrids>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1474e665-c619-1a01-3a28-51894161e316@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YlCAEaG4i/OuMKet@lakrids>
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 04:14:25PM +0200,
-Paolo Bonzini <pbonzini@redhat.com> wrote:
+Hi Mark,
 
-> On 4/1/22 09:13, Kai Huang wrote:
-> > Btw, I think the relevant part of TDP MMU change should be included in this
-> > patch too otherwise TDP MMU is broken with this patch.
+On Fri, Apr 08, 2022 at 07:33:53PM +0100, Mark Rutland wrote:
+> On Fri, Apr 08, 2022 at 08:21:42PM +0200, Jason A. Donenfeld wrote:
+> > In the event that random_get_entropy() can't access a cycle counter or
+> > similar, falling back to returning 0 is really not the best we can do.
+> > Instead, at least calling sched_clock() would be preferable, because
+> > that always needs to return _something_, even falling back to jiffies
+> > eventually. It's not as though sched_clock() is super high precision or
+> > guaranteed to be entropic, but basically anything that's not zero all
+> > the time is better than returning zero all the time.
+> > 
+> > If CONFIG_ARM_ARCH_TIMER=n, then get_cycles() will return 0, so we only
+> > need the fallback code for that case.
 > 
-> I agree.
+> In arch/arm64/Kconfig we unconditionally select CONFIG_ARM_ARCH_TIMER,
+> so that configuration shouldn't be possible, and I don't think this
+> patch is necessary.
 > 
-> Paolo
-> 
-> > Actually in this series legacy MMU is not supported to work with TDX, so above
-> > change to legacy MMU doesn't matter actually.  Instead, TDP MMU change should be
-> > here.
+> On arm64 we depend on the architected timer in a bunch of places, so
+> anyone hacking that out has bigger problems.
 
-Sure, will reorganize it in the next respin.
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Thanks for the tip. I'll drop this patch from the series.
+
+Jason

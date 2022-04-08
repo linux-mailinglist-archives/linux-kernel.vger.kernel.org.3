@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 444F34F9E86
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 23:01:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F06224F9E85
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 23:01:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239581AbiDHVCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 17:02:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45478 "EHLO
+        id S239586AbiDHVCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 17:02:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbiDHVCk (ORCPT
+        with ESMTP id S237244AbiDHVCk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 8 Apr 2022 17:02:40 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42F9F70D3
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 14:00:35 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so10978074fac.7
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 14:00:35 -0700 (PDT)
+Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359FFF7F67
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 14:00:36 -0700 (PDT)
+Received: by mail-oo1-xc31.google.com with SMTP id y7-20020a4a9807000000b003296ea2104eso1675707ooi.13
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 14:00:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=f8JKuamLlG+jVMNtvAkq4wZJiZp3w7kpyzKbDeN8Fnw=;
-        b=NLO9SLAPT58rbnIklDh7wm66wgY8PpYlyEhH8yN94D6RQ4oNojHPhLWkid7T60WtR8
-         vmLvgJwMQMNgOTTcBFt2lNsma5aRvRim2DUeaxMORvS6fC1Lisw65k290IW7lWGmtnRo
-         mxUs3O4nGCkIP7NS7IFGbrgK+cDPc11Ig2N2C8d5HggIFMcQV6BiFaOuR9l8KyubQlFO
-         X/vI/47rplgg3y0SZTHhGhFf54/uhB9DKbyOPuTImDOXmqPJ7nK3W28bs1LgHM6EwHI0
-         MEVssq1u8Sj79Ai+yE++qTCNUhbWG/V2Yz8hrOvHjvKXHGWXWdtU1opjzEHLsC3JOEPj
-         GH/Q==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=/6bF252QqnY12H7PjXHxtHVXzmjhuS4IY4ywpEiT3F4=;
+        b=t9eaw3470SQsd1wU8fIBzSCDwU93D3/U5o7El/OjmTy/I/XW40z25vnyJRfDe180ji
+         6GVsXBXQorbud91CxmGZV4Na3ft9TgYHHi3PIzLFlx+1OKjL2aphMwALvb3tTiabF6gN
+         RcLnSJ1kAy9nybVb9TvGuxKDqFdxuiM/rg7UmqX4psrIvVxOh/VEnAWbQM1sqNEDW/7I
+         NE+0X4K7taXlXnSSd2OIutuIRZWpiW0RJQIb1dvIHpfxxhxlUDtgoiAFSQcXkv+l8Ku2
+         jtixuZhBORYm/NPQtNHLsPDs1p6hE3PPik4BqIPP0qxY/HZ/Ll0eVZEK9ZU9n64KkqKI
+         TUug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=f8JKuamLlG+jVMNtvAkq4wZJiZp3w7kpyzKbDeN8Fnw=;
-        b=URgH7rQOd9O7KIDPaywuSLXmW5MFXePyiMQZE/sZhRbC57XzSAe8AQMM1ci3cstO2c
-         4VEXrX6jMOyxeJp7AYjXzlaWNWP+xoyf6l7RBc6NAr0/Xe7bpvGp3qCpN8jKP+5Xegmn
-         3rpaCW3zBtCLAmtySrbLR7YmZkdh1Mj5HIUSwDGfiFf/C2+q/EKyf5mTOUhzi/7COHax
-         wTl7xHAZJ/n/4IcdkBLXTvZqF0hcASk2wRSCI7s784BYcmxfUdDao2O2jY8rka7Ir8FV
-         INigXSZFUpjtBim4WTP44671+xjdDDYxt2iSQtU35tx22Utb/DXbY7vXlGz1o5WsQWF9
-         1UoQ==
-X-Gm-Message-State: AOAM532uFZLsde40p0S9f7UkjN0ecGiITP6/qAHVJaP4kDQryJxXZlWF
-        hUydGKVdVD7M8Q5dnVPGgOxC5A==
-X-Google-Smtp-Source: ABdhPJyI+VIO0rEHSz94ZWi70PoGLTvBLc0XQ2Fxj6aiFvF8KexUrGX3Jl09zX+KRsIqz8mRmFwviA==
-X-Received: by 2002:a05:6870:9611:b0:df:200f:a6dd with SMTP id d17-20020a056870961100b000df200fa6ddmr9166367oaq.299.1649451634423;
-        Fri, 08 Apr 2022 14:00:34 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=/6bF252QqnY12H7PjXHxtHVXzmjhuS4IY4ywpEiT3F4=;
+        b=xVY1hx0hMiG8ClJtNB07Q7PRH/PlrG5L6gydPHuBwls4w6rbHTflZvBcq/qOE2Sarr
+         /L0NtQi2SfduZ2/6kosXFImaVZ3eiA6eZgxghS6+cM3Fe67V2zgq5NQCd9ka8Qfkg94G
+         lmSNVM7LUkaPUWUncXl2GE9qZuyBTkS5RpOXqFDYy3snj6liogHWmt9tRrV2EzKCkNsB
+         dOs/tiswQiGgNlFYmGn4C4V5t9yvvCRXbJdtFbLnnynYMangd7W+/1NrC/bMp284JpiB
+         I4IMkidM1QH9hPT49TnDePUeYz8pgxslVyjovJo9dlaUBDW+txcsIVeSXXo52YbhiKjA
+         MU0Q==
+X-Gm-Message-State: AOAM532FskcUS6a9cjEbWe9lc8DTcNMtKs58M6KUr6WXOt4FjkfVNo1D
+        KMtcSd9iLM5XBm2MwlJ9ItcNgw==
+X-Google-Smtp-Source: ABdhPJzEyHtkxoluS20SeKqiN/F4ipRlBq7hIPzS0/fxSKWetul7V//ubEQF1a5ctnVubF0wepHU3w==
+X-Received: by 2002:a4a:d08d:0:b0:321:54c7:8fe0 with SMTP id i13-20020a4ad08d000000b0032154c78fe0mr6782448oor.10.1649451635561;
+        Fri, 08 Apr 2022 14:00:35 -0700 (PDT)
 Received: from ripper.. ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id j126-20020acab984000000b002da77222b7dsm9160490oif.22.2022.04.08.14.00.33
+        by smtp.gmail.com with ESMTPSA id j126-20020acab984000000b002da77222b7dsm9160490oif.22.2022.04.08.14.00.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 14:00:33 -0700 (PDT)
+        Fri, 08 Apr 2022 14:00:34 -0700 (PDT)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     Rob Clark <robdclark@gmail.com>,
         Abhinav Kumar <quic_abhinavk@quicinc.com>,
@@ -60,97 +60,112 @@ Cc:     Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
         linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
         freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/2] dt-bindings: display: msm: Add optional resets
-Date:   Fri,  8 Apr 2022 14:02:52 -0700
-Message-Id: <20220408210253.581337-1-bjorn.andersson@linaro.org>
+Subject: [PATCH v2 2/2] drm/msm/dpu: Issue MDSS reset during initialization
+Date:   Fri,  8 Apr 2022 14:02:53 -0700
+Message-Id: <20220408210253.581337-2-bjorn.andersson@linaro.org>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220408210253.581337-1-bjorn.andersson@linaro.org>
+References: <20220408210253.581337-1-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add an optional reference to the MDSS_CORE reset, which when specified
-can be used by the implementation to reset the hardware blocks.
+It's typical for the bootloader to bring up the display for showing a
+boot splash or efi framebuffer. But in some cases the kernel driver ends
+up only partially configuring (in particular) the DPU, which might
+result in e.g. that two different data paths attempts to push data to
+the interface - with resulting graphical artifacts.
+
+Naturally the end goal would be to inherit the bootloader's
+configuration and provide the user with a glitch free handover from the
+boot configuration to a running DPU.
+
+But as implementing seamless transition from the bootloader
+configuration to the running OS will be a considerable effort, start by
+simply resetting the entire MDSS to its power-on state, to avoid the
+partial configuration.
 
 Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 ---
 
 Changes since v2:
-- None
+- Move the reset before the probing of the children, to avoid issues if child
+  drivers touched hardware at probe time.
+- Extend reset assert time as the previous 1us showed reliability issues on
+  Lenovo Flex 5G.
 
- .../devicetree/bindings/display/msm/dpu-qcm2290.yaml          | 4 ++++
- Documentation/devicetree/bindings/display/msm/dpu-sc7180.yaml | 4 ++++
- Documentation/devicetree/bindings/display/msm/dpu-sc7280.yaml | 4 ++++
- Documentation/devicetree/bindings/display/msm/dpu-sdm845.yaml | 4 ++++
- 4 files changed, 16 insertions(+)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_mdss.c | 32 ++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/display/msm/dpu-qcm2290.yaml b/Documentation/devicetree/bindings/display/msm/dpu-qcm2290.yaml
-index 6fb7e321f011..734d14de966d 100644
---- a/Documentation/devicetree/bindings/display/msm/dpu-qcm2290.yaml
-+++ b/Documentation/devicetree/bindings/display/msm/dpu-qcm2290.yaml
-@@ -66,6 +66,10 @@ properties:
-   interconnect-names:
-     const: mdp0-mem
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_mdss.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_mdss.c
+index b10ca505f9ac..6f921910d0e0 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_mdss.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_mdss.c
+@@ -3,10 +3,12 @@
+  * Copyright (c) 2018, The Linux Foundation
+  */
  
-+  resets:
-+    items:
-+      - description: MDSS_CORE reset
++#include <linux/delay.h>
+ #include <linux/irq.h>
+ #include <linux/irqchip.h>
+ #include <linux/irqdesc.h>
+ #include <linux/irqchip/chained_irq.h>
++#include <linux/reset.h>
+ #include "dpu_kms.h"
+ 
+ #define to_dpu_mdss(x) container_of(x, struct dpu_mdss, base)
+@@ -197,6 +199,32 @@ static void dpu_mdss_destroy(struct msm_mdss *mdss)
+ 	dpu_mdss->mmio = NULL;
+ }
+ 
++static int dpu_mdss_reset(struct device *dev)
++{
++	struct reset_control *reset;
 +
- patternProperties:
-   "^display-controller@[0-9a-f]+$":
-     type: object
-diff --git a/Documentation/devicetree/bindings/display/msm/dpu-sc7180.yaml b/Documentation/devicetree/bindings/display/msm/dpu-sc7180.yaml
-index 12a86b1ec1bc..b41991eaa454 100644
---- a/Documentation/devicetree/bindings/display/msm/dpu-sc7180.yaml
-+++ b/Documentation/devicetree/bindings/display/msm/dpu-sc7180.yaml
-@@ -65,6 +65,10 @@ properties:
-   interconnect-names:
-     const: mdp0-mem
- 
-+  resets:
-+    items:
-+      - description: MDSS_CORE reset
++	reset = reset_control_get_optional_exclusive(dev, NULL);
++	if (!reset) {
++		/* Optional reset not specified */
++		return 0;
++	} else if (IS_ERR(reset)) {
++		DPU_ERROR("failed to acquire mdss reset, ret=%ld", PTR_ERR(reset));
++		return PTR_ERR(reset);
++	}
 +
- patternProperties:
-   "^display-controller@[0-9a-f]+$":
-     type: object
-diff --git a/Documentation/devicetree/bindings/display/msm/dpu-sc7280.yaml b/Documentation/devicetree/bindings/display/msm/dpu-sc7280.yaml
-index fbeb931a026e..6e417d06fc79 100644
---- a/Documentation/devicetree/bindings/display/msm/dpu-sc7280.yaml
-+++ b/Documentation/devicetree/bindings/display/msm/dpu-sc7280.yaml
-@@ -64,6 +64,10 @@ properties:
-   interconnect-names:
-     const: mdp0-mem
- 
-+  resets:
-+    items:
-+      - description: MDSS_CORE reset
++	reset_control_assert(reset);
++	/*
++	 * Tests indicate that reset has to be held for some period of time,
++	 * make it one frame in a typical system
++	 */
++	msleep(20);
++	reset_control_deassert(reset);
 +
- patternProperties:
-   "^display-controller@[0-9a-f]+$":
-     type: object
-diff --git a/Documentation/devicetree/bindings/display/msm/dpu-sdm845.yaml b/Documentation/devicetree/bindings/display/msm/dpu-sdm845.yaml
-index 0dca4b3d66e4..1a42491efdbc 100644
---- a/Documentation/devicetree/bindings/display/msm/dpu-sdm845.yaml
-+++ b/Documentation/devicetree/bindings/display/msm/dpu-sdm845.yaml
-@@ -57,6 +57,10 @@ properties:
- 
-   ranges: true
- 
-+  resets:
-+    items:
-+      - description: MDSS_CORE reset
++	reset_control_put(reset);
 +
- patternProperties:
-   "^display-controller@[0-9a-f]+$":
-     type: object
++	return 0;
++}
++
+ static const struct msm_mdss_funcs mdss_funcs = {
+ 	.enable	= dpu_mdss_enable,
+ 	.disable = dpu_mdss_disable,
+@@ -210,6 +238,10 @@ int dpu_mdss_init(struct platform_device *pdev)
+ 	int ret;
+ 	int irq;
+ 
++	ret = dpu_mdss_reset(&pdev->dev);
++	if (ret)
++		return ret;
++
+ 	dpu_mdss = devm_kzalloc(&pdev->dev, sizeof(*dpu_mdss), GFP_KERNEL);
+ 	if (!dpu_mdss)
+ 		return -ENOMEM;
 -- 
 2.35.1
 

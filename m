@@ -2,92 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 690144FA049
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 01:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 964F54FA04C
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 01:54:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240065AbiDHXyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 19:54:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59320 "EHLO
+        id S240107AbiDHX42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 19:56:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235169AbiDHXyW (ORCPT
+        with ESMTP id S230205AbiDHX40 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 19:54:22 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0533C1B29E7
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 16:52:15 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id c7so15123741wrd.0
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 16:52:14 -0700 (PDT)
+        Fri, 8 Apr 2022 19:56:26 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178FDE21;
+        Fri,  8 Apr 2022 16:54:19 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id p189so6473245wmp.3;
+        Fri, 08 Apr 2022 16:54:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9Z5lmTeyx84Yo2aB1/h1dMObiSZnUIdjrOa7dhn9z+0=;
-        b=bWrf8tXOOR8KJK7v9SrFzKCWzYyURowo3Mex/cgaWSy0JHDrBN5HbmpK0nYBuvar+5
-         hQbnXjbZsp7mu6M40ZDEUBVg+r0T1Muvri627DKFFIgkezlfeTJQSFF2kmDHiIP6xOxY
-         u6+ylUb+xzzk1Bm8UKJppu+9esqExyHMHhtxm389OAPwJ3q7fBzdS6qgiIRCClFTpixB
-         KupVRwkNVe5fcJDFhyxzRO0m/00vtg4zSw241C14U2jbyrzsCesen08pgQQjo2mIaoCV
-         jVQXPJhmzNIq/6XPeBz0GNrNQmnv834mZI9BFdU85VA6JI2Km9PSLYbsq3lZSfReDUvf
-         HISg==
+        d=gmail.com; s=20210112;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=n5UPNQEDai1gUFUdN9sucmKpzqqEUym2Bv+35OpgTmc=;
+        b=pG1F0MrmF0MxsheTCnU5KlnL7Fq3an1SzIoDIJWlvZTcNPwAejlsTxkr/aITjxttuN
+         4t9qOz+HWVuW9mjRCjV1vM02Lp8cdd8MquH/W9I+QdExZFr0zL5FS2Nb0kvl0UlWCFVK
+         NgbMRkfNJM8aq4eRSV2Ai4D/koQFTxUsZyeBDHnWTq2iI4ygMQjDD0DiM26d3Eg9r9fy
+         whdlpXipwUciya55rwa+AMb/cR0AFXTNn9znvHshZnrvO2q7Hhgb3ypRlYjgYvC2QDHR
+         tvaZ+Czt68GGIRMZ42zUl+nz0t57NIJTSXJjhID/BEsFgMymPAqNrdXgUaadY0zKbhfr
+         5DQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9Z5lmTeyx84Yo2aB1/h1dMObiSZnUIdjrOa7dhn9z+0=;
-        b=w6H8mQDWcT7SyQTjSFXTyDOC/BMhbCEV/gt0yxWi7hzZ1RkI2SAviUlhJPw3ZaUzvN
-         xM5l0W935Hs4k9IugwuydTn5dJEMoXPpjpM2KDxuA8ic6yEjJDOvv+mA456IwKsZrpy5
-         RgpKcRui/5pWDXWW/yrpUi7iW0dFXODpqF6lYOGErq4ttmwl7691SU79eGg8S38BjxYv
-         vvEU/p08IOGu4KBqH0onk3CUS43eo6IAJryH02XJETw/YOZfHN9Ajt0wH1jgh6p4GqNG
-         xey0i4Wet+XkWnNr+cIs0bK/sfr36TmrY6afaO6L0cdzzbNjBH9CRd1RBgerW27ewPVT
-         jy4g==
-X-Gm-Message-State: AOAM533DeE0JxnVF5wXEOLN77DOTk5upXzrdHMKXoE9p06IEmbVgFROS
-        X9QyJRT7jjUZaZz6xjxxUBnIv4BYwL0ZnfIAtEvQvg==
-X-Google-Smtp-Source: ABdhPJwhpFPHZ6T5uG1eJYKJykakLx69sYt54ZUlpc0GREa0vdDTuFMxX6xYub8+/m83iXAOcL9lfessfIuumOJOb78=
-X-Received: by 2002:adf:f6c4:0:b0:206:1581:dabc with SMTP id
- y4-20020adff6c4000000b002061581dabcmr16707057wrp.375.1649461933269; Fri, 08
- Apr 2022 16:52:13 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220407230503.1265036-1-irogers@google.com> <CAM9d7cjM5jpPfdWUvoezYYJoz_Sh1rHpGHVGAvxOqxzb=AKBVQ@mail.gmail.com>
-In-Reply-To: <CAM9d7cjM5jpPfdWUvoezYYJoz_Sh1rHpGHVGAvxOqxzb=AKBVQ@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Fri, 8 Apr 2022 16:52:00 -0700
-Message-ID: <CAP-5=fULT859R4-x4RRsvKEUSrGYySVVSxtWSWYUoKC0M0vCYg@mail.gmail.com>
-Subject: Re: [PATCH 0/5] Tidy up symbol end fixup
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Michael Petlan <mpetlan@redhat.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Alexandre Truong <alexandre.truong@arm.com>,
-        German Gomez <german.gomez@arm.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Li Huafei <lihuafei1@huawei.com>,
-        =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>,
-        William Cohen <wcohen@redhat.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Lexi Shao <shaolexi@huawei.com>,
-        Remi Bernon <rbernon@codeweavers.com>,
-        Denis Nikitin <denik@chromium.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=n5UPNQEDai1gUFUdN9sucmKpzqqEUym2Bv+35OpgTmc=;
+        b=wqZVqkg+tRgqcKqW6VxL7qebjlw7bN7VSILHHzoDAWT6JOSyWCmG1Pfqrue6F84e9d
+         Wf930uH4I2jPtvkZQJUblyLYEqCw+Xri8PNmcUkH6UFwdrYGQgFxechZyo1H0lWb9MZJ
+         cObdGTL8Cwh7JvWxUv8hSI5cvXv8/N3aGEXim+i1NTpyQbVzOOmPTs8Qe0bn7ILXVrEW
+         sPXh34yb5lyYa7IjTxnEAINAIOg1KcQ3xZXX0LgAvXjwGjAJ6PNapOs6b7uwXmpxk0oh
+         PuVW7N8W/azJooFUKzhPcpg1nMcpYVu3BitjzQUBX6cipi4/3aZgwwoOxTW2UlYlG8Mh
+         WIhw==
+X-Gm-Message-State: AOAM532b3NbAxxexktrI8/feHraKLsEeKv6NfixZdYb1KirBdoHORkiy
+        kB3AC05Mor4I6F0l8ACvTtU=
+X-Google-Smtp-Source: ABdhPJzYPe2XZp3HIcQrurMuTy8KVeKXLKzzK2Euy2m/YilBtUjHiW3sSWpaiPkVrXseuI50+m05lg==
+X-Received: by 2002:a05:600c:190e:b0:38c:b1ea:f4ac with SMTP id j14-20020a05600c190e00b0038cb1eaf4acmr18783624wmq.70.1649462057538;
+        Fri, 08 Apr 2022 16:54:17 -0700 (PDT)
+Received: from smtpclient.apple ([185.238.38.242])
+        by smtp.gmail.com with ESMTPSA id p16-20020a5d6390000000b00203ffebddf3sm26542577wru.99.2022.04.08.16.54.16
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 08 Apr 2022 16:54:16 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
+Subject: Re: [PATCH net-next 02/15] net: dsa: sja1105: Remove usage of
+ iterator for list_add() after loop
+From:   Jakob Koschel <jakobkoschel@gmail.com>
+In-Reply-To: <20220408114120.tvf2lxvhfqbnrlml@skbuf>
+Date:   Sat, 9 Apr 2022 01:54:13 +0200
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        UNGLinuxDriver@microchip.com, Ariel Elior <aelior@marvell.com>,
+        Manish Chopra <manishc@marvell.com>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        Martin Habets <habetsm.xilinx@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Casper Andersson <casper.casan@gmail.com>,
+        Bjarni Jonasson <bjarni.jonasson@microchip.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Michael Walle <michael@walle.cc>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Eric Dumazet <edumazet@google.com>,
+        Di Zhu <zhudi21@huawei.com>, Xu Wang <vulab@iscas.ac.cn>,
+        Netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <FA317E17-3B09-411B-9DF6-05BDD320D988@gmail.com>
+References: <20220407102900.3086255-1-jakobkoschel@gmail.com>
+ <20220407102900.3086255-3-jakobkoschel@gmail.com>
+ <20220408114120.tvf2lxvhfqbnrlml@skbuf>
+To:     Vladimir Oltean <olteanv@gmail.com>
+X-Mailer: Apple Mail (2.3696.80.82.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,70 +104,173 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 8, 2022 at 10:15 AM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> Hi Ian,
->
-> On Thu, Apr 7, 2022 at 4:05 PM Ian Rogers <irogers@google.com> wrote:
-> >
-> > Fixing up more symbol ends as introduced in:
-> > https://lore.kernel.org/lkml/20220317135536.805-1-mpetlan@redhat.com/
-> > caused perf annotate to run into memory limits - every symbol holds
-> > all the disassembled code in the annotation, and so making symbols
-> > ends further away dramatically increased memory usage (40MB to
-> >  >1GB). Modify the symbol end logic so that special kernel cases aren't
-> > applied in the common case.
->
-> I'm not sure what was the actual problem the patch tried to solve.
-> It seems like a specific problem on powerpc + kprobes and now
-> it affects all other architectures.
+Hello Vladimir,
 
-Thanks Namhyung, this patch set reverts that.
+> On 8. Apr 2022, at 13:41, Vladimir Oltean <olteanv@gmail.com> wrote:
+>=20
+> Hello Jakob,
+>=20
+> On Thu, Apr 07, 2022 at 12:28:47PM +0200, Jakob Koschel wrote:
+>> In preparation to limit the scope of a list iterator to the list
+>> traversal loop, use a dedicated pointer to point to the found element =
+[1].
+>>=20
+>> Before, the code implicitly used the head when no element was found
+>> when using &pos->list. Since the new variable is only set if an
+>> element was found, the list_add() is performed within the loop
+>> and only done after the loop if it is done on the list head directly.
+>>=20
+>> Link: =
+https://lore.kernel.org/all/CAHk-=3DwgRr_D8CB-D9Kg-c=3DEHreAsk5SqXPwr9Y7k9=
+sA6cWXJ6w@mail.gmail.com/ [1]
+>> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+>> ---
+>> drivers/net/dsa/sja1105/sja1105_vl.c | 14 +++++++++-----
+>> 1 file changed, 9 insertions(+), 5 deletions(-)
+>>=20
+>> diff --git a/drivers/net/dsa/sja1105/sja1105_vl.c =
+b/drivers/net/dsa/sja1105/sja1105_vl.c
+>> index b7e95d60a6e4..cfcae4d19eef 100644
+>> --- a/drivers/net/dsa/sja1105/sja1105_vl.c
+>> +++ b/drivers/net/dsa/sja1105/sja1105_vl.c
+>> @@ -27,20 +27,24 @@ static int sja1105_insert_gate_entry(struct =
+sja1105_gating_config *gating_cfg,
+>> 	if (list_empty(&gating_cfg->entries)) {
+>> 		list_add(&e->list, &gating_cfg->entries);
+>> 	} else {
+>> -		struct sja1105_gate_entry *p;
+>> +		struct sja1105_gate_entry *p =3D NULL, *iter;
+>>=20
+>> -		list_for_each_entry(p, &gating_cfg->entries, list) {
+>> -			if (p->interval =3D=3D e->interval) {
+>> +		list_for_each_entry(iter, &gating_cfg->entries, list) {
+>> +			if (iter->interval =3D=3D e->interval) {
+>> 				NL_SET_ERR_MSG_MOD(extack,
+>> 						   "Gate conflict");
+>> 				rc =3D -EBUSY;
+>> 				goto err;
+>> 			}
+>>=20
+>> -			if (e->interval < p->interval)
+>> +			if (e->interval < iter->interval) {
+>> +				p =3D iter;
+>> +				list_add(&e->list, iter->list.prev);
+>> 				break;
+>> +			}
+>> 		}
+>> -		list_add(&e->list, p->list.prev);
+>> +		if (!p)
+>> +			list_add(&e->list, gating_cfg->entries.prev);
+>> 	}
+>>=20
+>> 	gating_cfg->num_entries++;
+>> --=20
+>> 2.25.1
+>>=20
+>=20
+> I apologize in advance if I've misinterpreted the end goal of your =
+patch.
+> I do have a vague suspicion I understand what you're trying to =
+achieve,
+> and in that case, would you mind using this patch instead of yours?
 
-> In the above commit, optinsn_slot and kprobe_optinsn_page will
-> have the same address and optinsn_slot cannot be fixed up.
-> But I guess the kprobe_optinsn_page still can be fixed up and
-> you can use the symbol instead, no?
->
-> To me, it'd be better to revert the change and add a special
-> handling for the kprobe insn pages as they appear as
-> modules.
->
-> Also, all the arch symbols fixup routine seem to do the same
-> then we might move it to the general logic.
+I think you are very much spot on!
 
-Agreed. It isn't possible for me to test that behavior and so the
-change tries to make the behavior clearer and to isolate Michael's
-change to PowerPC. I like the idea of removing the weak symbols and
-making the behavior common. I also don't know why we're trying to fix
-broken elf file symbols and don't just let the assembly/compiler
-writers fix that.
+> I think it still preserves the intention of the code in a clean =
+manner.
+>=20
+> -----------------------------[ cut here ]-----------------------------
+> =46rom 7aed740750d1bc3bff6e85fd33298f5905bb4e01 Mon Sep 17 00:00:00 =
+2001
+> From: Vladimir Oltean <vladimir.oltean@nxp.com>
+> Date: Fri, 8 Apr 2022 13:55:14 +0300
+> Subject: [PATCH] net: dsa: sja1105: avoid use of type-confused pointer =
+in
+> sja1105_insert_gate_entry()
+>=20
+> It appears that list_for_each_entry() leaks a type-confused pointer =
+when
+> the iteration loop ends with no early break, since "*p" will no longer
+> point to a "struct sja1105_gate_entry", but rather to some memory in
+> front of "gating_cfg->entries".
+>=20
+> This isn't actually a problem here, because if the element we insert =
+has
+> the highest interval, therefore we never exit the loop early, =
+"p->list"
+> (which is all that we use outside the loop) will in fact point to
+> "gating_cfg->entries" even though "p" itself is invalid.
+>=20
+> Nonetheless, there are preparations to increase the safety of
+> list_for_each_entry() by making it impossible to use the encapsulating
+> structure of the iterator element outside the loop. So something needs
+> to change here before those preparations go in, even though this
+> constitutes legitimate use.
+>=20
+> Make it clear that we are not dereferencing members of the =
+encapsulating
+> "struct sja1105_gate_entry" outside the loop, by using the regular
+> list_for_each() iterator, and dereferencing the struct =
+sja1105_gate_entry
+> only within the loop.
+>=20
+> With list_for_each(), the iterator element at the end of the loop does
+> have a sane value in all cases, and we can just use that as the "head"
+> argument of list_add().
+>=20
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> ---
+> drivers/net/dsa/sja1105/sja1105_vl.c | 12 +++++++++---
+> 1 file changed, 9 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/net/dsa/sja1105/sja1105_vl.c =
+b/drivers/net/dsa/sja1105/sja1105_vl.c
+> index c0e45b393fde..fe93c80fe5ef 100644
+> --- a/drivers/net/dsa/sja1105/sja1105_vl.c
+> +++ b/drivers/net/dsa/sja1105/sja1105_vl.c
+> @@ -27,9 +27,15 @@ static int sja1105_insert_gate_entry(struct =
+sja1105_gating_config *gating_cfg,
+> 	if (list_empty(&gating_cfg->entries)) {
+> 		list_add(&e->list, &gating_cfg->entries);
+> 	} else {
+> -		struct sja1105_gate_entry *p;
+> +		struct list_head *pos;
+> +
+> +		/* We cannot safely use list_for_each_entry()
+> +		 * because we dereference "pos" after the loop
+> +		 */
+> +		list_for_each(pos, &gating_cfg->entries) {
+> +			struct sja1105_gate_entry *p;
+>=20
+> -		list_for_each_entry(p, &gating_cfg->entries, list) {
+> +			p =3D list_entry(pos, struct sja1105_gate_entry, =
+list);
+> 			if (p->interval =3D=3D e->interval) {
+> 				NL_SET_ERR_MSG_MOD(extack,
+> 						   "Gate conflict");
+> @@ -40,7 +46,7 @@ static int sja1105_insert_gate_entry(struct =
+sja1105_gating_config *gating_cfg,
+> 			if (e->interval < p->interval)
+> 				break;
+> 		}
+> -		list_add(&e->list, p->list.prev);
+> +		list_add(&e->list, pos->prev);
 
-Thanks,
-Ian
+I was actually considering doing it this way before but wasn't sure if =
+this would be preferred.
+I've done something like this in [1] and it does turn out quite well.
 
-> Thanks,
-> Namhyung
->
-> >
-> > Minor fix to perf annotate to not stall when stderr is full.
-> >
-> > Ian Rogers (5):
-> >   perf annotate: Drop objdump stderr
-> >   perf symbols: Always do architecture specific fixups
-> >   perf symbols: Add is_kernel argument to fixup end
-> >   perf symbol: By default only fix zero length symbols
-> >   perf symbols: More specific architecture end fixing
-> >
-> >  tools/perf/arch/arm64/util/machine.c   | 14 +++++++++-----
-> >  tools/perf/arch/powerpc/util/machine.c | 10 +++++++---
-> >  tools/perf/arch/s390/util/machine.c    | 12 ++++++++----
-> >  tools/perf/util/annotate.c             |  1 +
-> >  tools/perf/util/symbol-elf.c           |  2 +-
-> >  tools/perf/util/symbol.c               | 14 ++++++++------
-> >  tools/perf/util/symbol.h               |  4 ++--
-> >  7 files changed, 36 insertions(+), 21 deletions(-)
-> >
-> > --
-> > 2.35.1.1178.g4f1659d476-goog
-> >
+I'll integrate this in the v2 series.
+
+Thanks for the suggestion.
+
+> 	}
+>=20
+> 	gating_cfg->num_entries++;
+> -----------------------------[ cut here ]-----------------------------
+
+[1] =
+https://lore.kernel.org/linux-kernel/20220407102900.3086255-12-jakobkosche=
+l@gmail.com/
+
+	Jakob=

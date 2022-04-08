@@ -2,125 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF534F9134
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 10:53:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6334C4F913B
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 10:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232440AbiDHIzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 04:55:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36482 "EHLO
+        id S232478AbiDHI7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 04:59:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232463AbiDHIy5 (ORCPT
+        with ESMTP id S230314AbiDHI7f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 04:54:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC4AE3693B6
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 01:52:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649407967;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xCLh2noLYHvoYJ5n2RIW5aWBr/p7U0RqG8wHzDGzBW4=;
-        b=EdGaSpR13V/XnI3kDUVZ67+/kDVapEJmyBPHPk4Klzd0mF2MF3OMgoQJyfqc+NRyHg0MJB
-        7Ps3zdhhrBHr52iPLKVO3nlwnQU/UEDdfJ4tHeT5f+Gii1zjQ/K67JGQ5T5DCV0uyoYElz
-        Ez+sJ9qe+EC+VJNzNIMPsot5KD+0390=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-355-u151QTY-NXqv3xvkf4MaEw-1; Fri, 08 Apr 2022 04:52:46 -0400
-X-MC-Unique: u151QTY-NXqv3xvkf4MaEw-1
-Received: by mail-wr1-f69.google.com with SMTP id i64-20020adf90c6000000b00203f2b5e090so2021056wri.9
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 01:52:46 -0700 (PDT)
+        Fri, 8 Apr 2022 04:59:35 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F26B6FE436
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 01:57:31 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2e5e9025c20so88366907b3.7
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 01:57:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Hr6J2iPWEM1G7f/GWAb9UseXtfq7g0i2J/Jf0pGrEeA=;
+        b=CfKyNLLdlzoSnVWbuL18jbZh3k0NYHmE7xz045BxLpwzVB9xiTBJj+vaXYCc60dVLe
+         37hsTlNWhWYDkm89uCYX1VpAU1EYe+M4MrAIaAwfRUVrG/yKVYc+GUE7PvjQPJr/NS88
+         94dgmwQaVU8clCz9YdZLWbBm6Rx23DefakRwti6+VHFBjUVpdRjWlJWruxeAGohZTyKq
+         xOI0XYdcjaV7wG9ewnsuvFGDEh20mYLpakYUrLm2qu/DDt/ESy63epRA30Xw9VhwCYGp
+         xWAVSOxBc07s8i7t6NYqZU5ApSCSI3p2LvH1A2HSfvXr4VAMJ1JGJunwVAnDp7Gk21oS
+         zzCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=xCLh2noLYHvoYJ5n2RIW5aWBr/p7U0RqG8wHzDGzBW4=;
-        b=YwkgBozRbDU69BG1rgC9X9KlmouJ4CzfLDlLvbfZTPCIV6W2JrzsRaAK7JAbwzezOy
-         EQm69uI9GY1lt1OHg7ZgiX7bbeAgdZtA08jdUatEix07klRV1PVtCIBvEei7uJIeUGzV
-         ++/rsRwJj0DeONBDosvMkgqzYVas5xe8VVMlgyhC+7ptRDqMyZ3CK4zitxv9GuQd+BG6
-         Q6z1W5In38r4DvfW2VAvNy3mydftkS5LwQ97XsQZSGhK78CypX0RYfqdEp0CETCV8CAP
-         1VFPbT7TRcECheVon7KN0non0rlRXQ8xeYwM8d9yiThZfWJ1o2XAsOyhFt6fKkt8T+LA
-         2WPA==
-X-Gm-Message-State: AOAM5315W9TZnaEf+MXfwa5pvsQEoeUA+LfZRRxAjC1KwbIQaWiB2E06
-        SFPfi9hw6OsuKneZaHGRZ5ojDs1mlkw6TNHXIletBSKATtmEdIBdWH1cqfLl+St8+F4E2qdM0Nw
-        TQg/rFG7Ha++76DOY9ylcA1Gp
-X-Received: by 2002:adf:fdd0:0:b0:206:15b0:4478 with SMTP id i16-20020adffdd0000000b0020615b04478mr13626445wrs.266.1649407965376;
-        Fri, 08 Apr 2022 01:52:45 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyRqLFg7VzPUGFyZuzQrHaarDUcRgbWlUwak6IE3xfZBRbBHIjt56yN5nEb4kTyWJCpQKJlwg==
-X-Received: by 2002:adf:fdd0:0:b0:206:15b0:4478 with SMTP id i16-20020adffdd0000000b0020615b04478mr13626428wrs.266.1649407965097;
-        Fri, 08 Apr 2022 01:52:45 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c704:fd00:612:f12b:a4a2:26b0? (p200300cbc704fd000612f12ba4a226b0.dip0.t-ipconnect.de. [2003:cb:c704:fd00:612:f12b:a4a2:26b0])
-        by smtp.gmail.com with ESMTPSA id y15-20020a056000168f00b002057a9f9f5csm23224387wrd.31.2022.04.08.01.52.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Apr 2022 01:52:44 -0700 (PDT)
-Message-ID: <05ba9f7c-f124-2696-2673-3d7e6763c8c1@redhat.com>
-Date:   Fri, 8 Apr 2022 10:52:43 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Hr6J2iPWEM1G7f/GWAb9UseXtfq7g0i2J/Jf0pGrEeA=;
+        b=cLeCBOPjUFDrPxd8T6XDpJIwALRga6/uuYCcAUc1JczNycWZYToinhA2YWR6vYgEIM
+         BNgrK+q4vEyPmdCNplf/6NhmmVeauu3b/o8t1pfVHSHwTJq9LTnsph6c1nqvl05k2iwm
+         nGIIZnYDxVgNm46eeWOOqOyWV3aAPadIAyo0EIJWPFZW6zvTliYpPjm/nwaCykUEK7US
+         jPKisuaDWR8JEaw6gc3gZWjEtQXHVIRy6MEmlrKD8uGiSMUdvJygU1MDuh6tO3gsogX4
+         C7+wwrCDo+n+675fm1UVvTtdjaCv869DIgYrn7wsxt3QANTbiUXvIwJ54kG1eb6yArwO
+         DFwA==
+X-Gm-Message-State: AOAM530ZFt+vIGT8mlxT/0p8WA7B2F3Ft2xg8d0nSXl6ciQcUBKOVqj2
+        idxocV+6PAumfYB9UirZuzKSl4ppFHXZ1gCKDN0IRzlz94E=
+X-Google-Smtp-Source: ABdhPJwsUiUt8HXafvzY8HWkiqUJqhCSoXJGUTMwW6nSVzoIY4h8nywnaQNGIe/XjW5dGwphFcZ4DS0lG+mTgRIwoxY=
+X-Received: by 2002:a0d:fa01:0:b0:2d6:595d:81d4 with SMTP id
+ k1-20020a0dfa01000000b002d6595d81d4mr15578498ywf.86.1649408251125; Fri, 08
+ Apr 2022 01:57:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH 2/3] mm/memory-failure.c: minor cleanup for
- HWPoisonHandlable
-Content-Language: en-US
-To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org,
-        naoya.horiguchi@nec.com
-Cc:     shy828301@gmail.com, mike.kravetz@oracle.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20220407130352.15618-1-linmiaohe@huawei.com>
- <20220407130352.15618-3-linmiaohe@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220407130352.15618-3-linmiaohe@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220204141941.GE4077@xsang-OptiPlex-9020> <CADjb_WT0fcP2QBjYpsCAJEcVYWKNw1rQ6XZNz33i+KCbD8jB-A@mail.gmail.com>
+ <CAKfTPtDFhORUyOfqr==ZrOSgBd8=vzvYgWMxw87bvq3pQmq7DQ@mail.gmail.com>
+ <CADjb_WQL7ZTSrThgFHtoF2apwwqio8wgwGYmCOq9LBfamo3D0Q@mail.gmail.com>
+ <CAKfTPtBEcbiqaOjY9jEAWoJH5VSixunQ_r6DcDHcp2cej9QFVA@mail.gmail.com> <CADjb_WRbm3pt9kqhPKhTRSAcJFt1whaKw2MMMyYzkdW=rDXFdA@mail.gmail.com>
+In-Reply-To: <CADjb_WRbm3pt9kqhPKhTRSAcJFt1whaKw2MMMyYzkdW=rDXFdA@mail.gmail.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Fri, 8 Apr 2022 10:57:19 +0200
+Message-ID: <CAKfTPtCCLH8dHx=J7mUNthbu785nr5d1LkZz6z6cG9BK85LFcA@mail.gmail.com>
+Subject: Re: [sched/pelt] 2d02fa8cc2: stress-ng.pipeherd.ops_per_sec -9.7% regression
+To:     Chen Yu <yu.chen.surf@gmail.com>
+Cc:     kernel test robot <oliver.sang@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Sachin Sant <sachinp@linux.ibm.com>,
+        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
+        0day robot <lkp@intel.com>, Huang Ying <ying.huang@intel.com>,
+        feng.tang@intel.com, zhengjun.xing@linux.intel.com,
+        fengwei.yin@intel.com, Aubrey Li <aubrey.li@linux.intel.com>,
+        Chen Yu <yu.c.chen@intel.com>, tim.c.chen@intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.04.22 15:03, Miaohe Lin wrote:
-> The local variable movable can be removed by returning true directly. Also
-> fix typo 'mirgate'. No functional change intended.
-> 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> ---
->  mm/memory-failure.c | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
-> 
-> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> index 2e97302d62e4..bd563f47630c 100644
-> --- a/mm/memory-failure.c
-> +++ b/mm/memory-failure.c
-> @@ -1180,13 +1180,11 @@ void ClearPageHWPoisonTakenOff(struct page *page)
->   */
->  static inline bool HWPoisonHandlable(struct page *page, unsigned long flags)
->  {
-> -	bool movable = false;
-> -
-> -	/* Soft offline could mirgate non-LRU movable pages */
-> +	/* Soft offline could migrate non-LRU movable pages */
->  	if ((flags & MF_SOFT_OFFLINE) && __PageMovable(page))
-> -		movable = true;
-> +		return true;
->  
-> -	return movable || PageLRU(page) || is_free_buddy_page(page);
-> +	return PageLRU(page) || is_free_buddy_page(page);
->  }
->  
->  static int __get_hwpoison_page(struct page *page, unsigned long flags)
+On Tue, 5 Apr 2022 at 16:23, Chen Yu <yu.chen.surf@gmail.com> wrote:
+>
+> On Mon, Apr 4, 2022 at 5:53 PM Vincent Guittot
+> <vincent.guittot@linaro.org> wrote:
+> >
+> > On Fri, 1 Apr 2022 at 20:32, Chen Yu <yu.chen.surf@gmail.com> wrote:
+> > >
+> > > On Fri, Apr 1, 2022 at 12:17 AM Vincent Guittot
+> > > <vincent.guittot@linaro.org> wrote:
+> > > >
+> > > > On Thu, 31 Mar 2022 at 16:19, Chen Yu <yu.chen.surf@gmail.com> wrote:
+> > > > >
+> > > > > Hi Vincent,
+> > > > >
+> > > > > On Wed, Feb 9, 2022 at 1:17 PM kernel test robot <oliver.sang@intel.com> wrote:
+> > > > > >
+> > > > > >
+> > > > > >
+> > > > > > Greeting,
+> > > > > >
+> > > > > > FYI, we noticed a -9.7% regression of stress-ng.pipeherd.ops_per_sec due to commit:
+> > > > > >
+> > > > > >
+> > > > > > commit: 2d02fa8cc21a93da35cfba462bf8ab87bf2db651 ("sched/pelt: Relax the sync of load_sum with load_avg")
+> > > > > > https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+> > > > > >
+> > > > > > in testcase: stress-ng
+> > > > > > on test machine: 128 threads 2 sockets Intel(R) Xeon(R) Platinum 8358 CPU @ 2.60GHz with 128G memory
+> > > > > > with following parameters:
+> > > > > >
+> > > > > >         nr_threads: 100%
+> > > > > >         testtime: 60s
+> > > > > >         class: memory
+> > > > > >         test: pipeherd
+> > > > > >         cpufreq_governor: performance
+> > > > > >         ucode: 0xd000280
+> > > > > >
+> > > > > This week we have re-run the test result and it seems that this
+> > > > > regression is still there.
+> > > > > As we are evaluating whether this report is valid or if the
+> > > > > downgrading is expected, appreciated
+> > > > > if you could give suggestion on further steps:
+> > > > >
+> > > > > 1.  If I understand correctly,
+> > > > > 2d02fa8cc21a93da35cfba462bf8ab87bf2db651 ("sched/pelt: Relax the sync
+> > > > > of load_sum with load_avg")
+> > > > >      fixed the calculating of  load_sum.  Before this patch  the
+> > > > > contribution part would be 'skipped' and caused the load_sum
+> > > > >      to be lower than expected.
+> > > >
+> > > > Yes, you understand it correctly
+> > > >
+> > > > > 2. If above is true, after this patch, the load_sum becomes higher. Is
+> > > > > there a scenario that higher load_sum added to 1 cfs_rq brings
+> > > > >     more imbalance between this group and other sched_group, thus
+> > > > > brings more task migration/wake up? (because in below perf result,
+> > > > >     it seems that, with this patch applied, there are slightly more
+> > > > > take wake up)
+> > > >
+> > > > This change should not impact load balance as it only does comparison
+> > > > and I expect the load increase to happen on all cfs rq.
+> > > > The only place that could be impacted, would be wake_affine_weight()
+> > > > because it removes task load from previous cfs rq load before
+> > > > comparing.
+> > > > The task's load was not impacted by the underestimate which means that
+> > > > the load of prev cfs  might be seen lower than current cfs after
+> > > > subtracting the task's load whereas both cfs rqs were similarly
+> > > > underestimated.
+> > > > Now the load of prev cfs rq is not underestimated and becomes
+> > > > comparable or slightly higher than the current cfs and the task
+> > > > migrate on current cfs instead of staying on prev one at wakeup
+> > > >
+> > > Could you please elaborate a little more on this scenario, since both current
+> > > and previous cfs rqs were underestimated, how could previous cfs rq has
+> > > lower load than the current one before applying this patch?
+> > >
+> > > Say, suppose the previous cfs rq has a load of L1, and current cfs rq has
+> > > a load of L2, the waken task has a load of h, then wake_affine_weight()
+> > > compares L1 - h  with L2 + h ,  when L1 < L2 + 2h, the task will remain on
+> > > previous CPU.  Since L1 and L2 were underestimated in the same scale,
+> > > I'm not quite sure how this patch would affect the choice between
+> > > prev and current CPU.
+> >
+> > Let's take the example of  this_cpu load L1 = 0 and prev_cpu load L2 =
+> > 2h'+d. h' reflects h in the cpu load and d is a small delta load. The
+> > task will migrate if we have the condition below:
+> >
+> >     h < 2h'-h+d
+> >
+> > With this patch, we assume that h' == h as we don't underestimate the
+> > load of cfs rqs anymore. The condition for migrating the task is :
+> >     h < h+d
+> > And the task will migrate on this cpu as soon as there is a small load
+> > on prev_cpu in addition to the 2h.
+> >
+> > Without the patch, the load of cfs_rqs are underestimated which means
+> > that the task's load is underestimated in the cfs rq. This can be
+> > described as h'  == h-U. U being the underestimated part. In this case
+> > the condition to migrate the task becomes:
+> >     h < h-2U+d
+> > The task will migrate on this cpu is d is large enough to compensate
+> > the underestimation so we will migrate less often
+> >
+> I see. Thanks for this example! So in this scenario when previous CPU
+> has some higher load than the current CPU, without this patch applied,
+> the OS would have more chances to keep the task on the previous CPU,
+> thus less migration and less rq lock contention(according to the perf result).
+> I don't have a good idea in mind on how to deal with this case, except that
+> by disabling WA_WEIGHT or WA_BIAS(prefer 'this' CPU I suppose).
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+I don't think that there is any good solution for this bench. It was
+taking advantage of the underestimated load_avg because it seems that
+it doesn't like to migrate on local cpu but on the other side, some
+benches will take advantage of this migration.
 
--- 
-Thanks,
-
-David / dhildenb
-
+Thanks
+Vincent
+>
+> --
+> Thanks,
+> Chenyu

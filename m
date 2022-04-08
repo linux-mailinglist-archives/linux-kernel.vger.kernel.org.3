@@ -2,235 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B2AF4F9969
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 17:28:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEB3F4F996F
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 17:28:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237548AbiDHP37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 11:29:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36062 "EHLO
+        id S237566AbiDHPaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 11:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235776AbiDHP36 (ORCPT
+        with ESMTP id S237561AbiDHPaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 11:29:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D063981B;
-        Fri,  8 Apr 2022 08:27:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A775961FB8;
-        Fri,  8 Apr 2022 15:27:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6C8FC385A1;
-        Fri,  8 Apr 2022 15:27:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649431672;
-        bh=spbvvLexuDlNOPAlzsWxyFyJy2c3S3c/xnyxDLTAJKs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=s3T+UM3bbC990eRqsi6NhvUT6CFbXbUzlJJ7VAxn07ZBhzQG+29cnyImFqJ3u727w
-         pZEJ8O19sk/acW3gVNyv6AW5ROMaWOvbxBWslRzWb4LsTYFLl1A74/eY13LTuYBW0H
-         LKbHb/t/fq6qI9uQDXerF3hB2GuwbykX3lAax31pCM380YN3KO75K9fkEul73+/cge
-         4IuvRaeP31LFPmQo1jOBvS2it/GgVn88HwAt40v24EBVYTRGoqdKWIuaJNAmFl7xXD
-         mnUaCEJL6geLSL3bGHQbqjYjrB24GZZNBIhraFJa4bnwy5dhrBYDLMdZ6e9Yo/q3mv
-         b17lE59IperfQ==
-Date:   Fri, 8 Apr 2022 10:27:50 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] PCI: Add function for parsing
- 'slot-power-limit-milliwatt' DT property
-Message-ID: <20220408152750.GA306189@bhelgaas>
+        Fri, 8 Apr 2022 11:30:19 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B8110C53D
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 08:28:15 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 17so11970711lji.1
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 08:28:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=K2IauWY4j4S877ahR/vQIQuOqpMFWHocXV+o9eQuTEk=;
+        b=lqZITmKiT+C/NLCwnMmEETtXUsHoMvUrXEgjGe1trko++PcRtcP2x71ZWngk3A9qVJ
+         GtxEA4vc/tTyYTybakjMhq5p+QQhdu/EBN2rPjR7kB+ndIJbUsKXD71UQU1gXHu7d2nk
+         oujm0ANKW+j7/Jmcs3AqJ5bbw+5VJpXXX7s3D23yzGvdRTgaULE5xh4viLRTdVsd8uTk
+         ft87kvLAOlsAGYAw13SnImPmFsGm2mxHDCyX0z1V8QjOIy/TLbQr47jwODS+FFOg1Svl
+         GJe6kERzsBFoPQS19xfJjtpWr1TBWxigdYtMPXIh4VeQzXJY/NCt2ucApxmnU5JBeUOW
+         pOcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=K2IauWY4j4S877ahR/vQIQuOqpMFWHocXV+o9eQuTEk=;
+        b=LqD8vk4gy+l3cQYDW5AADdtQSqsfNFatLWZ/X5FTB8gSVOHOOFYmI1YFZhZOSKwYfU
+         EODCAJdlPC4tbeLVuhCA2fj8JpcB/3XBBYiB4Ct92Rrp84Iyg+cYrL7p7sQ9bBbMjSw8
+         BL6UdJ8z/UkAjX3StMwi3K7TM0mTju3aDcfL9BI6tLIeNmdoa78EhIK+YzyoxObZtFbl
+         pan94BosQDAuyVGqsp/EtaY+Xwf1ta3AxE4FyxitcLcySY3Uzzjjoo3lIgGTyOYDWa67
+         s0fh9DJmiPXIC0AZDE5Me8a5ReUmn2aRevsFDBYBTepKP1N3jk7CrCqv5NNclU+GTj0a
+         +VWQ==
+X-Gm-Message-State: AOAM533YBfu7kWnW4VyLg2JNGA1eLu8OwtqAPc2ZmOAvpvUAUVFL2ugd
+        katyk8MJa2u7N2gI5IYxtWdGQ3/GNiWT7wj4pj9vGrZaefY=
+X-Google-Smtp-Source: ABdhPJwEhFCWnJxbnX9f/VLAvYTGBsLP+bArtXUb6d5gUexHwlJqrgPl7y1bXLPYlQbzPKdb7ZLkBg5KPR4+1SFyegI=
+X-Received: by 2002:a2e:a7c1:0:b0:24b:51eb:e432 with SMTP id
+ x1-20020a2ea7c1000000b0024b51ebe432mr1549163ljp.238.1649431693395; Fri, 08
+ Apr 2022 08:28:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220325093827.4983-4-pali@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <d62431af-5ce4-3d8f-542f-df8e7a7faaf1@leemhuis.info>
+In-Reply-To: <d62431af-5ce4-3d8f-542f-df8e7a7faaf1@leemhuis.info>
+From:   Todd Kjos <tkjos@google.com>
+Date:   Fri, 8 Apr 2022 08:28:00 -0700
+Message-ID: <CAHRSSEw5CBnCpXcowKKG5KzOoazecC6jDn+4_fd0Gp3+e9Yixw@mail.gmail.com>
+Subject: Re: Regression in BinderFS: Kernel bug at binder.c:2352
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "quackdoctech@gmail.com" <quackdoctech@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 10:38:26AM +0100, Pali Rohár wrote:
-> Add function of_pci_get_slot_power_limit(), which parses the
-> 'slot-power-limit-milliwatt' DT property, returning the value in
-> milliwatts and in format ready for the PCIe Slot Capabilities Register.
-> 
-> Signed-off-by: Pali Rohár <pali@kernel.org>
-> Signed-off-by: Marek Behún <kabel@kernel.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
-> Changes in v3:
-> * Set 600 W when DT slot-power-limit-milliwatt > 600 W
-> Changes in v2:
-> * Added support for PCIe 6.0 slot power limit encodings
-> * Round down slot power limit value
-> ---
->  drivers/pci/of.c  | 64 +++++++++++++++++++++++++++++++++++++++++++++++
->  drivers/pci/pci.h | 15 +++++++++++
->  2 files changed, 79 insertions(+)
-> 
-> diff --git a/drivers/pci/of.c b/drivers/pci/of.c
-> index cb2e8351c2cc..5ebff26edd41 100644
-> --- a/drivers/pci/of.c
-> +++ b/drivers/pci/of.c
-> @@ -633,3 +633,67 @@ int of_pci_get_max_link_speed(struct device_node *node)
->  	return max_link_speed;
->  }
->  EXPORT_SYMBOL_GPL(of_pci_get_max_link_speed);
-> +
-> +/**
-> + * of_pci_get_slot_power_limit - Parses the "slot-power-limit-milliwatt"
-> + *				 property.
-> + *
-> + * @node: device tree node with the slot power limit information
-> + * @slot_power_limit_value: pointer where the value should be stored in PCIe
-> + *			    Slot Capabilities Register format
-> + * @slot_power_limit_scale: pointer where the scale should be stored in PCIe
-> + *			    Slot Capabilities Register format
-> + *
-> + * Returns the slot power limit in milliwatts and if @slot_power_limit_value
-> + * and @slot_power_limit_scale pointers are non-NULL, fills in the value and
-> + * scale in format used by PCIe Slot Capabilities Register.
-> + *
-> + * If the property is not found or is invalid, returns 0.
-> + */
-> +u32 of_pci_get_slot_power_limit(struct device_node *node,
-> +				u8 *slot_power_limit_value,
-> +				u8 *slot_power_limit_scale)
-> +{
-> +	u32 slot_power_limit_mw;
-> +	u8 value, scale;
-> +
-> +	if (of_property_read_u32(node, "slot-power-limit-milliwatt",
-> +				 &slot_power_limit_mw))
-> +		slot_power_limit_mw = 0;
-> +
-> +	/* Calculate Slot Power Limit Value and Slot Power Limit Scale */
-> +	if (slot_power_limit_mw == 0) {
-> +		value = 0x00;
-> +		scale = 0;
-> +	} else if (slot_power_limit_mw <= 255) {
-> +		value = slot_power_limit_mw;
-> +		scale = 3;
-> +	} else if (slot_power_limit_mw <= 255*10) {
-> +		value = slot_power_limit_mw / 10;
-> +		scale = 2;
-> +	} else if (slot_power_limit_mw <= 255*100) {
-> +		value = slot_power_limit_mw / 100;
-> +		scale = 1;
-> +	} else if (slot_power_limit_mw <= 239*1000) {
-> +		value = slot_power_limit_mw / 1000;
-> +		scale = 0;
-> +	} else if (slot_power_limit_mw <= 250*1000) {
-> +		value = 0xF0;
-> +		scale = 0;
+On Fri, Apr 8, 2022 at 3:27 AM Thorsten Leemhuis
+<regressions@leemhuis.info> wrote:
+>
+> Hi, this is your Linux kernel regression tracker.
+>
+> Todd, seems there is a regression that is caused by one of your Linux
+> kernel changes:
 
-I think the spec is poorly worded here.  PCIe r6.0, sec 7.5.3.9, says:
+Yes, it was reported a few days ago by the ChromeOS team. Already
+looking into it.
 
-  F0h   > 239 W and <= 250 W Slot Power Limit
-
-I don't think it's meaningful for the spec to include a range here.
-The amount of power the slot can supply has a single maximum.  I
-suspect the *intent* of F0h/00b is that a device in the slot may
-consume up to 250W.
-
-Your code above would mean that slot_power_limit_mw == 245,000 would
-cause the slot to advertise F0h/00b (250W), which seems wrong.
-
-I think we should do something like this instead:
-
-  scale = 0;
-  if (slot_power_limit_mw >= 600*1000) {
-    value = 0xFE;
-    slot_power_limit_mw = 600*1000;
-  } else if (slot_power_limit_mw >= 575*1000) {
-    value = 0xFD;
-    slot_power_limit_mw = 575*1000;
-  } ...
-
-I raised an issue with the PCI SIG about this.
-
-> +	} else if (slot_power_limit_mw <= 600*1000) {
-> +		value = 0xF0 + (slot_power_limit_mw / 1000 - 250) / 25;
-> +		scale = 0;
-> +	} else {
-> +		value = 0xFE;
-> +		scale = 0;
-> +	}
-> +
-> +	if (slot_power_limit_value)
-> +		*slot_power_limit_value = value;
-> +
-> +	if (slot_power_limit_scale)
-> +		*slot_power_limit_scale = scale;
-> +
-> +	return slot_power_limit_mw;
-
-If the DT tells us 800W is available, we'll store (FEh/00b), which
-means the slot can advertise to a downstream device that 600W is
-available.  I think that's correct, since the current spec doesn't
-provide a way to encode any value larger than 600W.
-
-But the function still returns 800,000 mW, which means the next patch will
-print:
-
-  %s: Slot power limit 800.0W
-
-even though it programs Slot Capabilities to advertise 600W.
-That's why I suggested setting slot_power_limit_mw = 600*1000 above.
-
-> +}
-> +EXPORT_SYMBOL_GPL(of_pci_get_slot_power_limit);
-> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
-> index 3d60cabde1a1..e10cdec6c56e 100644
-> --- a/drivers/pci/pci.h
-> +++ b/drivers/pci/pci.h
-> @@ -627,6 +627,9 @@ struct device_node;
->  int of_pci_parse_bus_range(struct device_node *node, struct resource *res);
->  int of_get_pci_domain_nr(struct device_node *node);
->  int of_pci_get_max_link_speed(struct device_node *node);
-> +u32 of_pci_get_slot_power_limit(struct device_node *node,
-> +				u8 *slot_power_limit_value,
-> +				u8 *slot_power_limit_scale);
->  void pci_set_of_node(struct pci_dev *dev);
->  void pci_release_of_node(struct pci_dev *dev);
->  void pci_set_bus_of_node(struct pci_bus *bus);
-> @@ -653,6 +656,18 @@ of_pci_get_max_link_speed(struct device_node *node)
->  	return -EINVAL;
->  }
->  
-> +static inline u32
-> +of_pci_get_slot_power_limit(struct device_node *node,
-> +			    u8 *slot_power_limit_value,
-> +			    u8 *slot_power_limit_scale)
-> +{
-> +	if (slot_power_limit_value)
-> +		*slot_power_limit_value = 0;
-> +	if (slot_power_limit_scale)
-> +		*slot_power_limit_scale = 0;
-> +	return 0;
-> +}
-> +
->  static inline void pci_set_of_node(struct pci_dev *dev) { }
->  static inline void pci_release_of_node(struct pci_dev *dev) { }
->  static inline void pci_set_bus_of_node(struct pci_bus *bus) { }
-> -- 
-> 2.20.1
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+>
+> I noticed a regression report in bugzilla.kernel.org that afaics nobody
+> acted upon since it was reported about a week ago, that's why I decided
+> to forward it to the lists and all people that seemed to be relevant
+> here. To quote from https://bugzilla.kernel.org/show_bug.cgi?id=3D215795 =
+:
+>
+> >  quackdoctech@gmail.com 2022-04-02 19:56:29 UTC
+> >
+> > Created attachment 300686 [details]
+> > Dmesg output cut to error
+> >
+> > Apologies if this should have been reported under Drivers where the sou=
+rce is, selftests has it listed under filesystems so I chose here. Using Wa=
+ydroid which is android run via LXC, on android 10 the bug comes when tryin=
+g to use video playback. I know of issues on android 11 but have not yet ha=
+d the chance to get the logs from it. the issue does not occur in Linux ker=
+nel 5.16 series. but does occur on linux 5.17. the issue is confirmed on bo=
+th Arch's linux-zen 5.17.1.zen1-1 kernel as well as some users reporting a =
+fedora kernel with the issue.
+> >
+> > [reply] [=E2=88=92] Comment 1 quackdoctech@gmail.com 2022-04-03 19:38:3=
+7 UTC
+> >
+> > I've narrowed down the issue to this patch series.
+> >
+> > https://lore.kernel.org/all/20211130185152.437403-1-tkjos@google.com/
+> >
+>
+> Could somebody take a look into this? Or was this discussed somewhere
+> else already? Or even fixed?
+>
+> Anyway, to get this tracked:
+>
+> #regzbot introduced: v5.16..v5.17
+> #regzbot from: quackdoctech@gmail.com <quackdoctech@gmail.com>
+> #regzbot title: BinderFS: Kernel bug at binder.c:2352
+> #regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=3D215795
+>
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+>
+> P.S.: As the Linux kernel's regression tracker I'm getting a lot of
+> reports on my table. I can only look briefly into most of them and lack
+> knowledge about most of the areas they concern. I thus unfortunately
+> will sometimes get things wrong or miss something important. I hope
+> that's not the case here; if you think it is, don't hesitate to tell me
+> in a public reply, it's in everyone's interest to set the public record
+> straight.
+>
+> --
+> Additional information about regzbot:
+>
+> If you want to know more about regzbot, check out its web-interface, the
+> getting start guide, and the references documentation:
+>
+> https://linux-regtracking.leemhuis.info/regzbot/
+> https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
+> https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
+>
+> The last two documents will explain how you can interact with regzbot
+> yourself if your want to.
+>
+> Hint for reporters: when reporting a regression it's in your interest to
+> CC the regression list and tell regzbot about the issue, as that ensures
+> the regression makes it onto the radar of the Linux kernel's regression
+> tracker -- that's in your interest, as it ensures your report won't fall
+> through the cracks unnoticed.
+>
+> Hint for developers: you normally don't need to care about regzbot once
+> it's involved. Fix the issue as you normally would, just remember to
+> include 'Link:' tag in the patch descriptions pointing to all reports
+> about the issue. This has been expected from developers even before
+> regzbot showed up for reasons explained in
+> 'Documentation/process/submitting-patches.rst' and
+> 'Documentation/process/5.Posting.rst'.

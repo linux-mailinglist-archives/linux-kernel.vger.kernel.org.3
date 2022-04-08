@@ -2,132 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 320094F9D53
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 20:53:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 220874F9D57
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 20:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238603AbiDHSzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 14:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50434 "EHLO
+        id S238995AbiDHS4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 14:56:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbiDHSzj (ORCPT
+        with ESMTP id S230098AbiDHS4M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 14:55:39 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A343B9396;
-        Fri,  8 Apr 2022 11:53:34 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: nicolas)
-        with ESMTPSA id 4BC421F473B1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649444012;
-        bh=r1uTA7u5ZuBHwJEYWmnZvWNMO0Xo6FFVj0EubH+YtL8=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=EJS6kkAybGAyLEkOzvKZh2fHTuNEdkEE+Ex+3qrvSsAZhQ97MVT27SOT+RkuBLMUX
-         znygWl9zx1gXJbSdl5xK/rU+TJ/xbcP+hAg7lq2v6UucrPUJfYVUJ0R5llQcz93WC8
-         T3zPcxkuvtXod9cWJ6SmV4a7DGlg3mywiIxuAaJ5YwlUUVxYvbmm0NDtPg2FEeKAdt
-         Mie+pssSYeft3zi7Bb26OBcaX0BNxV1U13dyROoqPeiEwLXnpuW4abIxkatu/T4/L7
-         285bmIhO01AeomMxQFI3bG9F4cjVY29kBwdwmJsiWgHa8DRh7DXlcmgfVcm0+Y5kmF
-         LLchSBfC5EMSg==
-Message-ID: <3179e400d52704d11dd150bf4270dab4c1064cad.camel@collabora.com>
-Subject: Re: [PATCH v5 09/17] media: uapi: HEVC: Define
- V4L2_CID_STATELESS_HEVC_SLICE_PARAMS as a dynamic array
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        mchehab@kernel.org, hverkuil@xs4all.nl,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, mripard@kernel.org,
-        paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        sebastian.fricke@collabora.com
-Date:   Fri, 08 Apr 2022 14:53:20 -0400
-In-Reply-To: <20220407152940.738159-10-benjamin.gaignard@collabora.com>
-References: <20220407152940.738159-1-benjamin.gaignard@collabora.com>
-         <20220407152940.738159-10-benjamin.gaignard@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
+        Fri, 8 Apr 2022 14:56:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EEFE53C30F9
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 11:54:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649444047;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9uyU2VFoeBsyhZOJQIlctyu40TJSn7XsF2RPXyVl1do=;
+        b=bPbJpzFTWJ1kz+HbNC8CputV4kqjt3EqDmVP0l7nUYx4EsrhnA6u0XW00SgrmliA8NjrS6
+        Z00od8mtowCCuTEsXKXNA5/iNoZKTpKJzUFSquw7JcFOWojwUqSYA0azShz0qBGpN2IC2K
+        7KD05f5tQd02w3Ol4O/n4BAOCl4OHaE=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-354-s0gkpkHvOtuJ0g1lbFeUhA-1; Fri, 08 Apr 2022 14:54:06 -0400
+X-MC-Unique: s0gkpkHvOtuJ0g1lbFeUhA-1
+Received: by mail-wr1-f71.google.com with SMTP id v3-20020adf8b43000000b00205e463b017so2417869wra.10
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 11:54:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=9uyU2VFoeBsyhZOJQIlctyu40TJSn7XsF2RPXyVl1do=;
+        b=j31DLRwlGOEzHnoBXBZjJ7OKvkkhr33XgStw2vyZRFvvZifpOeLvpsVBSUkT7DqW3Z
+         El425MTn2RBMT7P2aHMBU9Bv8J/p1NiknKz1bsWmV0H3uOlx1ojCAUmys8vI39Ys5tYa
+         TqAXKLmbaofcXiiG4dQz3AbiYy16GErTwUJMYPjpV4QoxUgjKduru4FxAYa6Y8VJful3
+         LkcZzWKICSZsJiueL88zpUl6Muf03buH42V+SnDnYTej5xhmoVlglV6qo1/QgXJOGnf5
+         HIXXpyf67H9XwrvNKlt7o35I/x9Wvvfjw+WwjST7/HD2wHBDWwUF92eEX3k6rTfUieLh
+         slsg==
+X-Gm-Message-State: AOAM531VB7OKOkq0Bn1Z7DJUy0b6levj4nWrGnkmvUveHpswkjtQ8hou
+        KXhRXewcMkonEMEt35KIj3k/bNpDj+lDpRrqWbbEJ5rhiFb8CuE5tWydQxCZyZCcEnnflM7T3sU
+        nACIfjLRg+yfkRMf5Gs39CbhR
+X-Received: by 2002:a05:600c:4f96:b0:38e:7dbf:f80b with SMTP id n22-20020a05600c4f9600b0038e7dbff80bmr18613225wmq.2.1649444044836;
+        Fri, 08 Apr 2022 11:54:04 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwfhFIN8L3LyDcNyYvbpwcm/BIFpkPDSLWEfCSbEb0j8Zms39cvKkg2Ev9kPXAaH+LcMXIctA==
+X-Received: by 2002:a05:600c:4f96:b0:38e:7dbf:f80b with SMTP id n22-20020a05600c4f9600b0038e7dbff80bmr18613189wmq.2.1649444044533;
+        Fri, 08 Apr 2022 11:54:04 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:fd00:612:f12b:a4a2:26b0? (p200300cbc704fd000612f12ba4a226b0.dip0.t-ipconnect.de. [2003:cb:c704:fd00:612:f12b:a4a2:26b0])
+        by smtp.gmail.com with ESMTPSA id o19-20020a05600c511300b0038d0d8f67e5sm10994785wms.16.2022.04.08.11.54.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Apr 2022 11:54:04 -0700 (PDT)
+Message-ID: <7ab689e7-e04d-5693-f899-d2d785b09892@redhat.com>
+Date:   Fri, 8 Apr 2022 20:54:02 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Andy Lutomirski <luto@kernel.org>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>,
+        kvm list <kvm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Andi Kleen <ak@linux.intel.com>
+References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
+ <20220310140911.50924-5-chao.p.peng@linux.intel.com>
+ <Yk8L0CwKpTrv3Rg3@google.com>
+ <02e18c90-196e-409e-b2ac-822aceea8891@www.fastmail.com>
+ <YlB3Z8fqJ+67a2Ck@google.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v5 04/13] mm/shmem: Restrict MFD_INACCESSIBLE memory
+ against RLIMIT_MEMLOCK
+In-Reply-To: <YlB3Z8fqJ+67a2Ck@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le jeudi 07 avril 2022 =C3=A0 17:29 +0200, Benjamin Gaignard a =C3=A9crit=
-=C2=A0:
-> Make explicit that V4L2_CID_STATELESS_HEVC_SLICE_PARAMS control is
-> a dynamic array control type.
-> Some drivers may be able to receive multiple slices in one control
-> to improve decoding performance.
->=20
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> ---
->  Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst | 2 ++
->  include/media/hevc-ctrls.h                                | 3 +++
->  2 files changed, 5 insertions(+)
->=20
-> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/=
-Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> index 7fcc6c2bac4c..1aaf3b84b584 100644
-> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> @@ -2964,6 +2964,8 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->      These bitstream parameters are defined according to :ref:`hevc`.
->      They are described in section 7.4.7 "General slice segment header
->      semantics" of the specification.
-> +    This control is a dynamically sized 1-dimensional array,
-> +    V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag must be set when using it.
-> =20
->  .. c:type:: v4l2_ctrl_hevc_slice_params
-> =20
-> diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
-> index 96a9b71d1def..28049e1a8a07 100644
-> --- a/include/media/hevc-ctrls.h
-> +++ b/include/media/hevc-ctrls.h
-> @@ -314,6 +314,9 @@ struct v4l2_hevc_pred_weight_table {
->  /**
->   * v4l2_ctrl_hevc_slice_params - HEVC slice parameters
->   *
-> + * This control is a dynamically sized 1-dimensional array,
-> + * V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag must be set when using it.
-> + *
+On 08.04.22 19:56, Sean Christopherson wrote:
+> On Thu, Apr 07, 2022, Andy Lutomirski wrote:
+>>
+>> On Thu, Apr 7, 2022, at 9:05 AM, Sean Christopherson wrote:
+>>> On Thu, Mar 10, 2022, Chao Peng wrote:
+>>>> Since page migration / swapping is not supported yet, MFD_INACCESSIBLE
+>>>> memory behave like longterm pinned pages and thus should be accounted to
+>>>> mm->pinned_vm and be restricted by RLIMIT_MEMLOCK.
+>>>>
+>>>> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+>>>> ---
+>>>>  mm/shmem.c | 25 ++++++++++++++++++++++++-
+>>>>  1 file changed, 24 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/mm/shmem.c b/mm/shmem.c
+>>>> index 7b43e274c9a2..ae46fb96494b 100644
+>>>> --- a/mm/shmem.c
+>>>> +++ b/mm/shmem.c
+>>>> @@ -915,14 +915,17 @@ static void notify_fallocate(struct inode *inode, pgoff_t start, pgoff_t end)
+>>>>  static void notify_invalidate_page(struct inode *inode, struct folio *folio,
+>>>>  				   pgoff_t start, pgoff_t end)
+>>>>  {
+>>>> -#ifdef CONFIG_MEMFILE_NOTIFIER
+>>>>  	struct shmem_inode_info *info = SHMEM_I(inode);
+>>>>  
+>>>> +#ifdef CONFIG_MEMFILE_NOTIFIER
+>>>>  	start = max(start, folio->index);
+>>>>  	end = min(end, folio->index + folio_nr_pages(folio));
+>>>>  
+>>>>  	memfile_notifier_invalidate(&info->memfile_notifiers, start, end);
+>>>>  #endif
+>>>> +
+>>>> +	if (info->xflags & SHM_F_INACCESSIBLE)
+>>>> +		atomic64_sub(end - start, &current->mm->pinned_vm);
+>>>
+>>> As Vishal's to-be-posted selftest discovered, this is broken as current->mm
+>>> may be NULL.  Or it may be a completely different mm, e.g. AFAICT there's
+>>> nothing that prevents a different process from punching hole in the shmem
+>>> backing.
+>>>
+>>
+>> How about just not charging the mm in the first place?  There’s precedent:
+>> ramfs and hugetlbfs (at least sometimes — I’ve lost track of the current
+>> status).
+>>
+>> In any case, for an administrator to try to assemble the various rlimits into
+>> a coherent policy is, and always has been, quite messy. ISTM cgroup limits,
+>> which can actually add across processes usefully, are much better.
+>>
+>> So, aside from the fact that these fds aren’t in a filesystem and are thus
+>> available by default, I’m not convinced that this accounting is useful or
+>> necessary.
+>>
+>> Maybe we could just have some switch require to enable creation of private
+>> memory in the first place, and anyone who flips that switch without
+>> configuring cgroups is subject to DoS.
+> 
+> I personally have no objection to that, and I'm 99% certain Google doesn't rely
+> on RLIMIT_MEMLOCK.
+> 
 
-I'm not sure about this comment, but I'm sure you forgot:
+It's unnacceptable for distributions to have random unprivileged users
+be able to allocate an unlimited amount of unmovable memory. And any
+kind of these "switches" won't help a thing because the distribution
+will have to enable them either way.
 
+I raised in the past that accounting might be challenging, so it's no
+surprise that something popped up now.
 
---- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-@@ -1505,6 +1505,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum
-v4l2_ctrl_type *type,
-                break;
-        case V4L2_CID_STATELESS_HEVC_SLICE_PARAMS:
-                *type =3D V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS;
-+               *flags |=3D V4L2_CTRL_FLAG_DYNAMIC_ARRAY;
-                break;
-        case V4L2_CID_STATELESS_HEVC_SCALING_MATRIX:
-                *type =3D V4L2_CTRL_TYPE_HEVC_SCALING_MATRIX;
+RLIMIT_MEMLOCK was the obvious candidate, but as we discovered int he
+past already with secretmem, it's not 100% that good of a fit (unmovable
+is worth than mlocked). But it gets the job done for now at least.
 
-Also, in AV1 we have V4L2_AV1_MAX_TILE_COUNT, which can be used in cfg.dims=
-,
-something the driver will actually set. We could have
+So I'm open for alternative to limit the amount of unmovable memory we
+might allocate for user space, and then we could convert seretmem as well.
 
-#define V4L2_HEVC_MAX_TILE_COUNT 600
+Random switches are not an option.
 
-And drives can set:
+-- 
+Thanks,
 
-   .dims =3D { V4L2_HEVC_MAX_TILE_COUNT },
-
-In the control config.
-
->   * @bit_size: size (in bits) of the current slice data
->   * @data_bit_offset: offset (in bits) to the video data in the current s=
-lice data
->   * @nal_unit_type: specifies the coding type of the slice (B, P or I)
+David / dhildenb
 

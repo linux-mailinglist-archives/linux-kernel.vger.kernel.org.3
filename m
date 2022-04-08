@@ -2,109 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB19B4F908B
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 10:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 100E64F9091
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 10:17:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231405AbiDHIS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 04:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35262 "EHLO
+        id S231443AbiDHITf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 04:19:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbiDHISY (ORCPT
+        with ESMTP id S231382AbiDHITd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 04:18:24 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA28657A0
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 01:16:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=9waK1GE6Xo1fRvL2g920wRma1kjG5tt3UIqXpis3+Gg=; b=lUGzIaWdoZwMt2kUyFEN2QSwYH
-        7Yyi5jmaN7iUzK0vnVvs+sltz+iF5E6vpTGjt9skfyJbOKYxnC9FekrYfsGYAfoDPHFBX4cJgNskk
-        UX4oL+V/9oe+00qlR+L0ython3kkTMO19+FbJZGZjhiqvFll1axcPhH8FRYBNjalBai1+rpYJN99f
-        N09hlKKQ6zpu67MtCqT+g7mBC1jLmc/ApUx0oWLp7ntAS0E9uffmUTc4Hq2d0n4KO63uxr45RbLLG
-        yZw0blKpD1jj8PcWU4Exs0/8bcdjrsKbcrpZ9ZDcTP6dgEIM9ZSJSAslvPpjIZwgBx/wns8KWS53X
-        MuWjj+rA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ncjmZ-009dKd-NG; Fri, 08 Apr 2022 08:15:51 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id ACBDF9862CF; Fri,  8 Apr 2022 10:15:49 +0200 (CEST)
-Date:   Fri, 8 Apr 2022 10:15:49 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Nico Pache <npache@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Rafael Aquini <aquini@redhat.com>,
-        Waiman Long <longman@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Christoph von Recklinghausen <crecklin@redhat.com>,
-        Don Dutile <ddutile@redhat.com>,
-        "Herton R . Krzesinski" <herton@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Joel Savitz <jsavitz@redhat.com>,
-        Darren Hart <dvhart@infradead.org>, stable@kernel.org
-Subject: Re: [PATCH v8] oom_kill.c: futex: Don't OOM reap the VMA containing
- the robust_list_head
-Message-ID: <20220408081549.GM2731@worktop.programming.kicks-ass.net>
-References: <20220408032809.3696798-1-npache@redhat.com>
+        Fri, 8 Apr 2022 04:19:33 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA6625C9
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 01:17:29 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id k2so9158058edj.9
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 01:17:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=yuQFl788i69gkuHZnfVhALt8fZsIexOSaYwO7DsFL54=;
+        b=gx8vkxt3S763Ala7vzwT1kODYsT4g6h9F/zXUPb23Kp7SxBqah2MLv/qepESsLFEk6
+         I0ssg1XGAfLpTdDwbWD4XOyGCf1OaXP7MTUwFge2EkjWfCqDuI9cbnBKQghpKTSNb+FZ
+         qQiXqB5C+6GD7/kuW52bYq8t0iaiLUOwEH2Gy5BwrGYXzXXkp7NTwGQcZ2MpnvUUOoRE
+         8UllVY1p3GkIjUo9lvPFKOrk+3+oTIFWk3jYgmGy2leoAdfs+MGwaRimWw+KYJ0Gamjn
+         j+cp3u90dmMQdHjdkVO7f2J+JL8VKRUppRdrEM545wEFGS7/HXzUyxt2c1TjJNQuTQQ1
+         yHtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=yuQFl788i69gkuHZnfVhALt8fZsIexOSaYwO7DsFL54=;
+        b=rGsJkcifl5Y1W9q0iZKMwSrN0At5Yc3WRF3gEQIukKh31g0VMzo2H+07MtDhVFpWf+
+         fZgAUpLo/GzHYSyc/7BcT0WhP8ww7pNujIJVGT6Hq3l6FqweB44+VUH8pt5p03SorPbf
+         EtFBwouohoLGmKAB+bYi7oxvm2ENvmymiWyp+VIaBbTXAXhq88s2KnfnQrW0hUy3qU4I
+         vDDlq9A6Xq12A/VIluC0iX1ZVAwJPIuCfoCe1Ou0A78MG/sHMFGfpLLUE5Wht5oG96Hi
+         JIvKYq9olkocYNMsrsrtTR7jZYVrQ8YClrCY8J4sCnHwgujBni7Qsl5jat4ymPQg8lbD
+         wkNw==
+X-Gm-Message-State: AOAM533PM6wRkv0TmwAgSwr+tOEC6gzA2MCyQnPpUKlAmgBh9f/oJ1A3
+        u9pYVn+KDtRt96PwbI509Hcovw==
+X-Google-Smtp-Source: ABdhPJx+VdDdTFo570Fvyfw4GeKW7zvLGZVHe5kAq6tSIeQZxQjNGhr1a2UD5tZKmhXqwhMA9rkmDA==
+X-Received: by 2002:aa7:d287:0:b0:41d:79:73ca with SMTP id w7-20020aa7d287000000b0041d007973camr8932500edq.142.1649405848011;
+        Fri, 08 Apr 2022 01:17:28 -0700 (PDT)
+Received: from [192.168.0.187] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id h26-20020a170906111a00b006e778bd4fc8sm6167691eja.38.2022.04.08.01.17.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Apr 2022 01:17:27 -0700 (PDT)
+Message-ID: <855d7daa-45d1-d6d8-32bd-51778cf58392@linaro.org>
+Date:   Fri, 8 Apr 2022 10:17:26 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220408032809.3696798-1-npache@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: devfreq: mediatek: Add mtk cci
+ devfreq dt-bindings
+Content-Language: en-US
+To:     Johnson Wang <johnson.wang@mediatek.com>, cw00.choi@samsung.com,
+        krzk+dt@kernel.org, robh+dt@kernel.org, kyungmin.park@samsung.com
+Cc:     khilman@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, jia-wei.chang@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220408052150.22536-1-johnson.wang@mediatek.com>
+ <20220408052150.22536-2-johnson.wang@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220408052150.22536-2-johnson.wang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 11:28:09PM -0400, Nico Pache wrote:
-> The pthread struct is allocated on PRIVATE|ANONYMOUS memory [1] which can
-> be targeted by the oom reaper. This mapping is used to store the futex
-> robust list head; the kernel does not keep a copy of the robust list and
-> instead references a userspace address to maintain the robustness during
-> a process death. A race can occur between exit_mm and the oom reaper that
-> allows the oom reaper to free the memory of the futex robust list before
-> the exit path has handled the futex death:
+On 08/04/2022 07:21, Johnson Wang wrote:
+> Add devicetree binding of mtk cci devfreq on MediaTek SoC.
 > 
->     CPU1                               CPU2
-> ------------------------------------------------------------------------
->     page_fault
->     do_exit "signal"
->     wake_oom_reaper
->                                         oom_reaper
->                                         oom_reap_task_mm (invalidates mm)
->     exit_mm
->     exit_mm_release
->     futex_exit_release
->     futex_cleanup
->     exit_robust_list
->     get_user (EFAULT- can't access memory)
-> 
-> If the get_user EFAULT's, the kernel will be unable to recover the
-> waiters on the robust_list, leaving userspace mutexes hung indefinitely.
-> 
-> Use the robust_list address stored in the kernel to skip the VMA that holds
-> it, allowing a successful futex_cleanup.
-> 
-> Theoretically a failure can still occur if there are locks mapped as
-> PRIVATE|ANON; however, the robust futexes are a best-effort approach.
-> This patch only strengthens that best-effort.
-> 
-> The following case can still fail:
-> robust head (skipped) -> private lock (reaped) -> shared lock (skipped)
 
-This is still all sorts of confused.. it's a list head, the entries can
-be in any random other VMA. You must not remove *any* user memory before
-doing the robust thing. Not removing the VMA that contains the head is
-pointless in the extreme.
+Thank you for your patch. There is something to discuss/improve.
 
-Did you not read the previous discussion?
+> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
+> Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> ---
+>  .../devicetree/bindings/devfreq/mtk-cci.yaml  | 72 +++++++++++++++++++
+>  1 file changed, 72 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/devfreq/mtk-cci.yaml
+
+Filename with vendor prefix, so something like:
+
+mediatek,cci.yaml
+
+Also please put it in the "interconnect" directory.
+
+> 
+> diff --git a/Documentation/devicetree/bindings/devfreq/mtk-cci.yaml b/Documentation/devicetree/bindings/devfreq/mtk-cci.yaml
+> new file mode 100644
+> index 000000000000..ef4ea951025c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/devfreq/mtk-cci.yaml
+> @@ -0,0 +1,72 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/devfreq/mtk-cci.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek Cache Coherent Interconnect (CCI) frequency and voltage scaling
+> +
+> +maintainers:
+> +  - Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> +
+> +description: |
+> +  MediaTek Cache Coherent Interconnect (CCI) uses the software devfreq module
+
+Do not reference software implementation (devfreq).
+
+> +  to scale the clock frequency and adjust the voltage. MediaTek CCI shares
+> +  the same power supplies with CPU, so the scheduling involves with CPUfreq.
+
+The same - cpufreq.
+
+Instead, focus on the hardware, what do you describe here?
+
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mediatek,mt8183-cci
+> +      - mediatek,mt8186-cci
+> +
+> +  clocks:
+> +    items:
+> +      - description:
+> +          The multiplexer for clock input of CPU cluster.
+> +      - description:
+> +          A parent of "cpu" clock which is used as an intermediate clock source
+> +          when the original CPU is under transition and not stable yet.
+> +
+> +  clock-names:
+> +    items:
+> +      - const: cci
+> +      - const: intermediate
+> +
+> +  operating-points-v2:
+> +    description:
+> +      For details, please refer to
+> +      Documentation/devicetree/bindings/opp/opp-v2.yaml
+
+No need for description. Just "operating-points-v2: true".
+
+"opp-table:true" could stay. My previous comment about its removal was a
+wrong advice, because opp-table is used for a table being a children of
+this device node.
+
+Best regards,
+Krzysztof

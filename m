@@ -2,52 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69ACC4F8C77
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1DC24F8C6B
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233727AbiDHCkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 22:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48480 "EHLO
+        id S233774AbiDHCnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 22:43:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232018AbiDHCkf (ORCPT
+        with ESMTP id S233758AbiDHCnR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 22:40:35 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA0F102424;
-        Thu,  7 Apr 2022 19:38:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 62EF4CE29DA;
-        Fri,  8 Apr 2022 02:38:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88AAFC385A0;
-        Fri,  8 Apr 2022 02:38:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649385509;
-        bh=s5ixvDNITfgSHahK5E+OM7MgUQMNYPFTNm1hieAfez0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=j1nYvznKzvHmSTATQgK62im9zqf20J5QddcqysoyaoLleFQd/u4QuQjb1Rr3iXdBc
-         NnyZP4l3MUBgQ7wSbUdqohZuHAi0PIcP6bUpNKe7au4iGkOjPw+tPAN62fQzXYfl3X
-         tMeviCT7JFwXICj0oT2r/DE4tUsKtVQexET190b84IZCBptY9u03HgjWoB7b3wqjhy
-         DU+H4/I0phC860SXS1er+U9R6rZ5grZaWN5YnIMwtcbsMT1rgR9ML8KZT1B+YKV/bJ
-         g/KhsxBD2xRBVncm+2w7FgNrzUN0BFMW+BRtHYSgEnRssGM+A+IR9ebE+ZaOpquAYX
-         iFlOCTJ5sV5uA==
-Date:   Thu, 7 Apr 2022 19:38:28 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Haowen Bai <baihaowen@meizu.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V2] ethernet: Fix some formatting issues
-Message-ID: <20220407193828.6c95928c@kernel.org>
-In-Reply-To: <1649327764-29869-1-git-send-email-baihaowen@meizu.com>
-References: <1649327764-29869-1-git-send-email-baihaowen@meizu.com>
+        Thu, 7 Apr 2022 22:43:17 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D2CCB7EF;
+        Thu,  7 Apr 2022 19:41:15 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 23C5811FB;
+        Thu,  7 Apr 2022 19:41:15 -0700 (PDT)
+Received: from [192.168.0.8] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 51A463F718;
+        Thu,  7 Apr 2022 19:41:12 -0700 (PDT)
+Message-ID: <a84bdc2a-2656-0474-4a14-5532c29f9043@arm.com>
+Date:   Fri, 8 Apr 2022 08:11:38 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH V4 0/7] mm/mmap: Drop arch_vm_get_page_prot() and
+ arch_filter_pgprot()
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, Christoph Hellwig <hch@infradead.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220407103251.1209606-1-anshuman.khandual@arm.com>
+ <20220407162024.7747ee14092d04082f13aa9d@linux-foundation.org>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20220407162024.7747ee14092d04082f13aa9d@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,21 +49,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 7 Apr 2022 18:36:04 +0800 Haowen Bai wrote:
-> reported by checkpatch.pl
 
-Please don't send "checkpatch fixes" for networking.
 
-> WARNING: suspect code indent for conditional statements (16, 16)
-> #732: FILE: drivers/net/ethernet/3com/3c589_cs.c:732:
-> CHECK: Alignment should match open parenthesis
-> #733: FILE: drivers/net/ethernet/3com/3c589_cs.c:733:
-> CHECK: Alignment should match open parenthesis
-> #735: FILE: drivers/net/ethernet/3com/3c589_cs.c:735:
-> WARNING: suspect code indent for conditional statements (16, 16)
-> #736: FILE: drivers/net/ethernet/3com/3c589_cs.c:736:
-> CHECK: Alignment should match open parenthesis
-> #737: FILE: drivers/net/ethernet/3com/3c589_cs.c:737:
-> CHECK: Alignment should match open parenthesis
-> #739: FILE: drivers/net/ethernet/3com/3c589_cs.c:739:
-> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+On 4/8/22 04:50, Andrew Morton wrote:
+> On Thu,  7 Apr 2022 16:02:44 +0530 Anshuman Khandual <anshuman.khandual@arm.com> wrote:
+> 
+>> protection_map[] is an array based construct that translates given vm_flags
+>> combination. This array contains page protection map, which is populated by
+>> the platform via [__S000 .. __S111] and [__P000 .. __P111] exported macros.
+>> Primary usage for protection_map[] is for vm_get_page_prot(), which is used
+>> to determine page protection value for a given vm_flags. vm_get_page_prot()
+>> implementation, could again call platform overrides arch_vm_get_page_prot()
+>> and arch_filter_pgprot(). Some platforms override protection_map[] that was
+>> originally built with __SXXX/__PXXX with different runtime values.
+>>
+>> Currently there are multiple layers of abstraction i.e __SXXX/__PXXX macros
+>> , protection_map[], arch_vm_get_page_prot() and arch_filter_pgprot() built
+>> between the platform and generic MM, finally defining vm_get_page_prot().
+>>
+>> Hence this series proposes to drop later two abstraction levels and instead
+>> just move the responsibility of defining vm_get_page_prot() to the platform
+>> (still utilizing generic protection_map[] array) itself making it clean and
+>> simple.
+>>
+>> This first introduces ARCH_HAS_VM_GET_PAGE_PROT which enables the platforms
+>> to define custom vm_get_page_prot(). This starts converting platforms that
+>> define the overrides arch_filter_pgprot() or arch_vm_get_page_prot() which
+>> enables for those constructs to be dropped off completely.
+>>
+>> The series has been inspired from an earlier discuss with Christoph Hellwig
+>>
+>> https://lore.kernel.org/all/1632712920-8171-1-git-send-email-anshuman.khandual@arm.com/
+>>
+>> This series applies on 5.18-rc1 after the following patch.
+>>
+>> https://lore.kernel.org/all/1643004823-16441-1-git-send-email-anshuman.khandual@arm.com/
+> 
+> Confusing.  That patch is already in 5.18-rc1.
+Ahh, my bad, forgot to delete these lines here in the cover letter.
+This series just applies cleanly on 5.18-rc1 without dependency.
+
+> But the version which was merged (24e988c7fd1ee701e) lacked the change
+> to arch/arm64/Kconfig.  I seem to recall that this patch went through a
+> few issues and perhaps the arm64 change was dropped.  Can you please
+> check?
+
+ARCH_HAS_FILTER_PGPROT on arm64 got dropped off via another commit i.e
+6e2edd6371a4 ("arm64: Ensure execute-only permissions are not allowed
+without EPAN").
+
+> 
+> (It would be easier for me to track all this down if the original patch
+> had had cc:linux-mm.  Please cc linux-mm!
+Sure, will do. Please do let me know if there is anything else that needs
+to be taken care.

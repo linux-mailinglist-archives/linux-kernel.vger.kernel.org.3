@@ -2,279 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1CE4F8DF3
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86A114F8EA2
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 08:27:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234801AbiDHFCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 01:02:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38976 "EHLO
+        id S234672AbiDHFDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 01:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234454AbiDHFBa (ORCPT
+        with ESMTP id S234557AbiDHFDD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 01:01:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459DA19E39F;
-        Thu,  7 Apr 2022 21:59:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6E82FB829B6;
-        Fri,  8 Apr 2022 04:59:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94920C385A9;
-        Fri,  8 Apr 2022 04:59:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649393963;
-        bh=L/WHVqu6oXXWB4ZDJIpAw8g8GHxO3sA9DNFDL/KsO0c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QSy6I2plQUP3T1DugJ/2xySuOtcqRrs9EzjDIvkjDVmIDbszWly0qr6Vy/7iRo+0u
-         RSLcj+qzsPZIT2EF6NXKF84qnqovFcsQvtgujs4T1ZOw6EaG3I7VFU35Wc/ogPkopQ
-         HPXSFRM1WDtEPhtVuNXbvRXvvHGy9wLAsr47noeE=
-Date:   Fri, 8 Apr 2022 06:59:20 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jithu Joseph <jithu.joseph@intel.com>
-Cc:     hdegoede@redhat.com, markgross@kernel.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, corbet@lwn.net,
-        andriy.shevchenko@linux.intel.com, ashok.raj@intel.com,
-        tony.luck@intel.com, rostedt@goodmis.org, dan.j.williams@intel.com,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, patches@lists.linux.dev,
-        ravi.v.shankar@intel.com
-Subject: Re: [PATCH v2 08/10] platform/x86/intel/ifs: Add IFS sysfs interface
-Message-ID: <Yk/BKInZAsNPvyNa@kroah.com>
-References: <20220407191347.9681-1-jithu.joseph@intel.com>
- <20220407191347.9681-9-jithu.joseph@intel.com>
+        Fri, 8 Apr 2022 01:03:03 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62AFB1AF7EC
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 22:00:57 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id a2so1834669wrh.5
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 22:00:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KEUIEi9adSNdoXW8KXtclgU3RetFXDHu8Pw4dW2isbA=;
+        b=o7RXxtZ1cDCZRue0sRrHz1TVue0enjTGqt1HjvEk+IA8raVTONQrvfvX0FeTXqSKvX
+         FtSzfFjcRFZtxjtFHjiRKr9z2um3s99f3Jn4Jsb9WAydhWNJHdtJM7igBo8PjX7H3Rjf
+         mqqkKxr+7KexBHf3vNHS9f0qPUmgY37p2YUyp6/AflZqY2NsKxUitAvgrFQyRqvJQyc5
+         KmKCzAK9duyoWb5HnTL7/rqzXKXmJFmeqhaGPBh4Z/8PXETA2bYyWEL3YDL6NLNSN2z3
+         kMv5ynQ4wZtEKiYYloH6n1Z8y/rIw4HEW4YYgpLXpX24QberMRKQ3RVbD3QPsFyyd6Ym
+         K6og==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KEUIEi9adSNdoXW8KXtclgU3RetFXDHu8Pw4dW2isbA=;
+        b=OkPn9FC9M9cnIbE6KqNNi98YtFr/zZePexPV8IdsXaCrJg/tAWxm3yeY8leMV4VUbI
+         tN4anptrgD9QsSh4IpBR/ombZ/gpxM+Q/x7Jaat3xQFdWIsy0WFY/I3dCe0l4EVJsKhe
+         M41w9s7yxToVROBSNYWbh6Uk5vTrgWzdPEgeUJJFZw/z4ZoTAs9Wz687XlmIJ47Ftk5b
+         jkiU9pO4dt/UUMC0QL9lXr1km2k0WOxBodn0BzESSXe2zod7n14CWTDScr/8HJfSI+Wy
+         DBrju2zput95Pywz4Y3CaAX4D4uS8sz5wrP3FfVGxeM4tPo9EX+/Z4m5fR2ZI8W3dd9n
+         siuA==
+X-Gm-Message-State: AOAM530+bBiT72+eyBFt7VpfmWj2/EjR+s2NIw9jMECYDvNxMzBMZ8K6
+        8WVy6P5rB8uvYoI2HBaGs1Y6pDGYUNTSlSJFbDf2sw==
+X-Google-Smtp-Source: ABdhPJx8gwwFGKo9JHFub9Glw4ixcEqLNimwl5VmXqky+27dSQgR/DF9ZrdodFvPPP+gdnMxF2HiStZfvRzIoAASGEo=
+X-Received: by 2002:adf:8066:0:b0:206:1563:8b2b with SMTP id
+ 93-20020adf8066000000b0020615638b2bmr13333325wrk.582.1649394055492; Thu, 07
+ Apr 2022 22:00:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220407191347.9681-9-jithu.joseph@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220407224244.1374102-1-yosryahmed@google.com>
+ <20220407224244.1374102-4-yosryahmed@google.com> <CAJD7tkaPaXQ4M_w-YxJizD2DG8co-3Q2bVDfd7_FaG2ivgT6UA@mail.gmail.com>
+In-Reply-To: <CAJD7tkaPaXQ4M_w-YxJizD2DG8co-3Q2bVDfd7_FaG2ivgT6UA@mail.gmail.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Thu, 7 Apr 2022 22:00:07 -0700
+Message-ID: <CAJD7tkZNAts_4M9TZx02L1y24hp5ty4H5vgrzryZk4a_uFR=6Q@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] selftests: cgroup: fix alloc_anon_noexit()
+ instantly freeing memory
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     David Rientjes <rientjes@google.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
+        Chen Wandun <chenwandun@huawei.com>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, Huang@google.com,
+        Ying <ying.huang@intel.com>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 12:13:45PM -0700, Jithu Joseph wrote:
-> Implement sysfs interface to trigger ifs test for a specific cpu.
-> Additional interfaces related to checking the status of the
-> scan test and seeing the version of the loaded IFS binary
-> are also added.
-> 
-> The basic usage is as below.
->    - To start test, for example on cpu5:
->        echo 5 > /sys/devices/platform/intel_ifs/run_test
->    - To see the status of the last test
->        cat /sys/devices/platform/intel_ifs/status
->    - To see the version of the loaded scan binary
->        cat /sys/devices/platform/intel_ifs/image_version
-> 
-> Reviewed-by: Tony Luck <tony.luck@intel.com>
-> Signed-off-by: Jithu Joseph <jithu.joseph@intel.com>
-> ---
->  drivers/platform/x86/intel/ifs/Makefile |   2 +-
->  drivers/platform/x86/intel/ifs/core.c   |   1 +
->  drivers/platform/x86/intel/ifs/ifs.h    |   2 +
->  drivers/platform/x86/intel/ifs/sysfs.c  | 139 ++++++++++++++++++++++++
->  4 files changed, 143 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/platform/x86/intel/ifs/sysfs.c
-> 
-> diff --git a/drivers/platform/x86/intel/ifs/Makefile b/drivers/platform/x86/intel/ifs/Makefile
-> index d5905e5d2de8..93745fcdf652 100644
-> --- a/drivers/platform/x86/intel/ifs/Makefile
-> +++ b/drivers/platform/x86/intel/ifs/Makefile
-> @@ -1,3 +1,3 @@
->  obj-$(CONFIG_INTEL_IFS)			+= intel_ifs.o
->  
-> -intel_ifs-objs				:= core.o load.o runtest.o
-> +intel_ifs-objs				:= core.o load.o runtest.o sysfs.o
-> diff --git a/drivers/platform/x86/intel/ifs/core.c b/drivers/platform/x86/intel/ifs/core.c
-> index 95847e00038b..85442953d0f5 100644
-> --- a/drivers/platform/x86/intel/ifs/core.c
-> +++ b/drivers/platform/x86/intel/ifs/core.c
-> @@ -82,6 +82,7 @@ static int __init ifs_init(void)
->  		goto drv_unreg;
->  	}
->  
-> +	ifs_sysfs_add();
->  	ret = platform_device_add(ifs_pdev);
->  	if (ret) {
->  		pr_err("intel_ifs: platform device add failed\n");
-> diff --git a/drivers/platform/x86/intel/ifs/ifs.h b/drivers/platform/x86/intel/ifs/ifs.h
-> index 93cc1af4aea0..3200d9de4436 100644
-> --- a/drivers/platform/x86/intel/ifs/ifs.h
-> +++ b/drivers/platform/x86/intel/ifs/ifs.h
-> @@ -127,6 +127,8 @@ struct ifs_test {
->  
->  int load_ifs_binary(void);
->  int do_core_test(int cpu);
-> +void ifs_sysfs_add(void);
-> +
->  extern struct platform_device *ifs_pdev;
->  extern struct ifs_binary ifs_binary;
->  extern struct ifs_test ifs_test;
-> diff --git a/drivers/platform/x86/intel/ifs/sysfs.c b/drivers/platform/x86/intel/ifs/sysfs.c
-> new file mode 100644
-> index 000000000000..f6decebbeae9
-> --- /dev/null
-> +++ b/drivers/platform/x86/intel/ifs/sysfs.c
-> @@ -0,0 +1,139 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/* Copyright(c) 2022 Intel Corporation. */
-> +
-> +#include <linux/cpu.h>
-> +#include <linux/delay.h>
-> +#include <linux/fs.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/semaphore.h>
-> +#include <linux/slab.h>
-> +
-> +#include "ifs.h"
-> +
-> +static DEFINE_SEMAPHORE(ifs_sem);
-> +
-> +/*
-> + * The sysfs interface to check additional details of last test
-> + * cat /sys/devices/system/platform/ifs/details
-> + */
-> +static ssize_t details_show(struct device *dev,
-> +			    struct device_attribute *attr,
-> +			    char *buf)
-> +{
-> +	int ret;
-> +
-> +	if (down_trylock(&ifs_sem))
-> +		return -EBUSY;
+On Thu, Apr 7, 2022 at 4:04 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+>
+> On Thu, Apr 7, 2022 at 3:43 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+> >
+> > Currently, alloc_anon_noexit() calls alloc_anon() which instantly frees
+> > the allocated memory. alloc_anon_noexit() is usually used with
+> > cg_run_nowait() to run a process in the background that allocates
+> > memory. It makes sense for the background process to keep the memory
+> > allocated and not instantly free it (otherwise there is no point of
+> > running it in the background).
+> >
+> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> > ---
+> >  tools/testing/selftests/cgroup/test_memcontrol.c | 9 +++++++--
+> >  1 file changed, 7 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+> > index 36ccf2322e21..c1ec71d83af7 100644
+> > --- a/tools/testing/selftests/cgroup/test_memcontrol.c
+> > +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+> > @@ -211,13 +211,18 @@ static int alloc_pagecache_50M_noexit(const char *cgroup, void *arg)
+> >  static int alloc_anon_noexit(const char *cgroup, void *arg)
+> >  {
+> >         int ppid = getppid();
+> > +       size_t size = (unsigned long)arg;
+> > +       char *buf, *ptr;
+> >
+> > -       if (alloc_anon(cgroup, arg))
+> > -               return -1;
+> > +       buf = malloc(size);
+> > +       for (ptr = buf; ptr < buf + size; ptr += PAGE_SIZE)
+> > +               *ptr = 0;
+> >
+> >         while (getppid() == ppid)
+> >                 sleep(1);
+> >
+> > +       printf("Freeing buffer");
+>
+> Hey Andew,
+>
+> I am very sorry but I left a debugging printf there by mistake. If
+> it's no hassle, do you mind removing it from the patch (assuming I
+> won't need to send a v3 anyway)?
 
-Why do you care about locking here at all?
-
-> +
-> +	ret = sysfs_emit(buf, "%#llx\n", ifs_test.scan_details);
-> +	up(&ifs_sem);
-
-What are you protecting?  The value can change right after the lock is
-released, so who cares?
-
-> +
-> +	return ret;
-> +}
-> +
-> +static DEVICE_ATTR_RO(details);
-> +
-> +static const char * const status_msg[] = {
-> +	[SCAN_NOT_TESTED] = "untested",
-> +	[SCAN_TEST_PASS] = "pass",
-> +	[SCAN_TEST_FAIL] = "fail"
-> +};
-> +
-> +/*
-> + * The sysfs interface to check the test status:
-> + * To check the status of last test
-> + * cat /sys/devices/platform/ifs/status
-> + */
-> +static ssize_t status_show(struct device *dev,
-> +			   struct device_attribute *attr,
-> +			   char *buf)
-> +{
-> +	int ret;
-> +
-> +	if (down_trylock(&ifs_sem))
-> +		return -EBUSY;
-> +
-> +	ret = sysfs_emit(buf, "%s\n", status_msg[ifs_test.status]);
-> +
-> +	up(&ifs_sem);
-> +
-> +	return ret;
-> +}
-> +
-> +static DEVICE_ATTR_RO(status);
-> +
-> +/*
-> + * The sysfs interface for single core testing
-> + * To start test, for example, cpu5
-> + * echo 5 > /sys/devices/platform/ifs/run_test
-> + * To check the result:
-> + * cat /sys/devices/platform/ifs/result
-> + * The sibling core gets tested at the same time.
-> + */
-> +static ssize_t run_test_store(struct device *dev,
-> +			      struct device_attribute *attr,
-> +			      const char *buf, size_t count)
-> +{
-> +	unsigned int cpu;
-> +	int ret = count;
-> +	int rc;
-> +
-> +	if (!ifs_binary.loaded) {
-> +		dev_info(&ifs_pdev->dev, "Load scan binary using driver bind interface\n");
-
-Do not allow userspace to spam kernel logs for no reason :(
-
-sysfs files are not "help files" in the kernel.
-
-> +		return -EPERM;
-> +	}
-> +
-> +	if (ifs_disabled)
-> +		return -ENXIO;
-> +
-> +	rc = kstrtouint(buf, 0, &cpu);
-> +	if (rc < 0 || cpu >= nr_cpu_ids)
-> +		return -EINVAL;
-> +
-> +	if (down_trylock(&ifs_sem))
-> +		return -EBUSY;
-> +
-> +	rc = do_core_test(cpu);
-> +	if (rc)
-> +		ret = rc;
-> +
-> +	up(&ifs_sem);
-> +
-> +	return ret;
-> +}
-> +
-> +static DEVICE_ATTR_WO(run_test);
-> +
-> +/*
-> + * Currently loaded IFS image version.
-> + */
-> +static ssize_t image_version_show(struct device *dev,
-> +				  struct device_attribute *attr, char *buf)
-> +{
-> +	return sysfs_emit(buf, "%#x\n", ifs_binary.loaded_version);
-> +}
-> +
-> +static DEVICE_ATTR_RO(image_version);
-> +
-> +/* global scan sysfs attributes */
-> +static struct attribute *plat_ifs_attrs[] = {
-> +	&dev_attr_image_version.attr,
-> +	&dev_attr_run_test.attr,
-> +	&dev_attr_status.attr,
-> +	&dev_attr_details.attr,
-> +	NULL
-> +};
-> +
-> +static const struct attribute_group plat_ifs_attr_group = {
-> +	.attrs = plat_ifs_attrs,
-> +};
-> +
-> +static const struct attribute_group *plat_ifs_groups[] = {
-> +	&plat_ifs_attr_group,
-> +	NULL
-> +};
-> +
-> +void ifs_sysfs_add(void)
-> +{
-> +	ifs_pdev->dev.groups = plat_ifs_groups;
-
-Why do you have a single global structure?
-
-{sigh}
-
-
+Never mind I already sent v3 and removed it with other fixes.
+>
+> Thanks!
+>
+> > +       free(buf);
+> >         return 0;
+> >  }
+> >
+> > --
+> > 2.35.1.1178.g4f1659d476-goog
+> >

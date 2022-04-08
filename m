@@ -2,180 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2984B4F98CC
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E64AE4F98D7
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 16:59:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237328AbiDHPAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 11:00:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41698 "EHLO
+        id S236205AbiDHPBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 11:01:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237308AbiDHPAq (ORCPT
+        with ESMTP id S232535AbiDHPBf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 11:00:46 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83111C5902
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 07:58:40 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id 10so10766829qtz.11
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 07:58:40 -0700 (PDT)
+        Fri, 8 Apr 2022 11:01:35 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E27F24CECE
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 07:59:31 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 238CPIlm006371;
+        Fri, 8 Apr 2022 14:59:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=2zzyI7smGU2RMQ16UaE9y0utQG3Yje8jR7Jabb4p8is=;
+ b=0VB4y/aovcWeOWiOZgF9Bm5mK5IiG0Gr9xPK+Oad/DUQihftO+SF+tNN6wBXQa+aQE+h
+ V+AZc4DaAKqyfAk+TsJSaDMByRpFIYrnZD/Pba96cSggM0JtO+7RMrZbtYIhc1FsIcKP
+ O2pOz3RSGBYJzYF/UtxMq0MuZvVpRwCHxFkjv/riHqvhOBBTHKdJkzwipfnzCCoGL5uT
+ iortM6vc/mBVbWXIAyREI9k/rqrJpLdN02Z+ymsF9XAFCTZSeOFCwCLQaDTpiKeQ3CLq
+ Ce6HBaRst33K4IXaR0cR1BjBj9BVKgfcr6OyaufZMijLnz+hRWncEoDoIuN+CJuraye4 bQ== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3f6d31qfnj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 08 Apr 2022 14:59:13 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 238DUqIp030686;
+        Fri, 8 Apr 2022 14:59:11 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2046.outbound.protection.outlook.com [104.47.66.46])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3f9805byw2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 08 Apr 2022 14:59:11 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KHOqRGKpl/nVIcJ3AsLIQ5zqjS0mgwAwV85dMwV3NHH2h58LvxDNTRcgFH3V/YAkIMLlzYvFtN0kjuKF9m29fWu0PiT5cIFkwJ4qs4bAhLn15RwAQATpn+XfSUmeS/kj8XDI6LIG07Gz1nQAS3fr62XNYQ/UQIY7LRTqGUm6ev2BjhdEX/zzdbfmxbHH0Ch+HOTGNkpCnThi5Sbqj3BntAsACZq5Py5hqr8pXeMvxZtEJDWdMkjvoscgY6V89uoGUKdraQvS5l6pioAzHvYx/ErsJIJFbxMqg1ymHi8GpLpKy6dekYyf7qu5O62xDoMaZ3MpYSSDBz42GPzU2Yjuzg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2zzyI7smGU2RMQ16UaE9y0utQG3Yje8jR7Jabb4p8is=;
+ b=XSNXxO2/yN5sLUo+k6hUsyEXJV4T4noWMSWh3Es8hEhEnp4xWhZVY39/5XlrVLtt2scWIDQg3fJ7WEnVBlHe/5tD+kMkdmUsX+IPh37if9B4e8doGVXpphxxVh3+oLoT2HAN1J/H7bPJPCyvgR+JJveUl9+TQDijjEMmkkZ/6TYesZTgRmCfuCtyUWpyLzaUh+5Rebi+DsZ1QUbzMjBdABNGbn+oGUqiPXvQBkbqyjLeiJLug+66fUzL2omeUc+dfMLyHrAFs/1VWBplTN2/QdJEE07KWPKc07QeGmv16uVk+NB/jUOJbUCIzVneGaEjS0GLpd2GePX0HAZwo+RhlQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oK4c0Q5n4J9QZqL0KRS62UFXdtvmGL0QpHUG9UqlFtM=;
-        b=JiaoeEJ/h9I9ehyz8BB6b9aKvzhlWiELooPvTLvhQPWAibE2DQQfgLRqmoAyu/5dvT
-         rnPF14ChjvoWWRTv1O1+XGk7d7CJaDjrPBzhI5kNAqSbVvHLEDKlSwnepynKSS382oJy
-         KRSei97PDYMYZ94FSluYQxLrD913+mXOOxVOtoZkWB3KA5eS5WrnMIHM2QkMCAAs7Dbu
-         7bmklpOVzpmMLTFCXp1ZBNeN4XW577KkV4MJy3932uMLZ3wmLOWREGM25Ndko/6r690q
-         r5EPs7PQTXDQR5cT4l3+GmWBYArICqxEdbETXBxTRdr6Q6Dhix31+mOqoVVKgySLNTpy
-         VmWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oK4c0Q5n4J9QZqL0KRS62UFXdtvmGL0QpHUG9UqlFtM=;
-        b=wVseTkS7GdxNvsGmjaQSMIqAcVBQCK4eomFCJTwjruWPEaYcHBRIz6ap6MTRjFyVs0
-         rohCRCgCe+/jxdtUJjIzanqaUXHG70QYb03hGhk++47jFAezn8uXuF74+49wfhvLa56B
-         hx/Yk6+8b575zaGtKbnIZyJwILloH6iaJ22pZSJ6n9IcRTI6DE+Xg8XnOAw7UG3UMQSR
-         UqSTezD1EfQUGbKxfuAHVFPMABmd6AF1JbIgCiIUGmheWtedfojPwdTawScR6IpunmrL
-         u08s3KgvFFzuhf09YGOL09o97jYDfXcabVtfD9Kobj8NpTYkD9+x91twQEeZMIBJVnmA
-         BJfA==
-X-Gm-Message-State: AOAM530zfWRBiDCEY5MXW+A8QYVIY4DckHnbDDkXJXGNRkNz5kiE4DNW
-        qZ37579ao8PTwX+FuvxFxiXaLzDhW77F5FgHLOQNiQPCZbgyTw==
-X-Google-Smtp-Source: ABdhPJz4zF64TRpqJTVRBI33gdjEupkPabNbuA0AKMSnErc+1tO72wtp19hJVfKoDbuiPTth9omw+T8ZHl/AJ/7gkmg=
-X-Received: by 2002:ac8:5a46:0:b0:2e2:2edd:374 with SMTP id
- o6-20020ac85a46000000b002e22edd0374mr16119166qta.295.1649429920056; Fri, 08
- Apr 2022 07:58:40 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2zzyI7smGU2RMQ16UaE9y0utQG3Yje8jR7Jabb4p8is=;
+ b=X7BtX3x9X9JwIPsdft3wWON3OGDYIg3ynKFTXm8fwEq1lmeVFkuT2EEzkPSLGD3jnqDm4BjsAtx23bRaBaAG9nMLzl6KU7qgG4qBTw9Dqc9n4IijU3j8KVlvw1IDO/FaWMeGvmnl3JKOinOLw89jdvrawbOTVCcS0BTprfG+G3k=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by CY4PR1001MB2134.namprd10.prod.outlook.com
+ (2603:10b6:910:49::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.22; Fri, 8 Apr
+ 2022 14:58:59 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::b5d5:7b39:ca2d:1b87]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::b5d5:7b39:ca2d:1b87%5]) with mapi id 15.20.5144.022; Fri, 8 Apr 2022
+ 14:58:58 +0000
+Date:   Fri, 8 Apr 2022 17:58:36 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Yihao Han <hanyihao@vivo.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Fabio Aiuto <fabioaiuto83@gmail.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Xiangyang Zhang <xyz.sun.ok@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Bryan Brattlof <hello@bryanbrattlof.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kernel@vivo.com
+Subject: Re: [PATCH v3] staging: rtl8723bs: tidy up error handling
+Message-ID: <20220408145836.GV3293@kadam>
+References: <20220408144442.17611-1-hanyihao@vivo.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220408144442.17611-1-hanyihao@vivo.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: JNAP275CA0017.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4c::22)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-References: <1648656179-10347-1-git-send-email-quic_sbillaka@quicinc.com>
- <1648656179-10347-2-git-send-email-quic_sbillaka@quicinc.com>
- <CAD=FV=X+QvjwoT2zGP82KW4kD0oMUY6ZgCizSikNX_Uj8dNDqA@mail.gmail.com>
- <392b933f-760c-3c81-1040-c514045df3da@linaro.org> <CAD=FV=W4PYK-t607yjRbfjDjjEZX0KdgHDRukw_vSH8E8EDH6w@mail.gmail.com>
- <CAA8EJppt9XONbgtKfmHmN+==QNqiVJeb8GKJFdZm=yyY-tgmHQ@mail.gmail.com>
- <CAD=FV=U5-sTDLYdkeJWLAOG-0wgxR49VxtwUyUO7z2PuibLGsg@mail.gmail.com>
- <CAA8EJppgfYgQjG8A4LsR-1wmBj3Ku3eO8cKfAYhxjWXL7e3eHg@mail.gmail.com>
- <CAD=FV=V=a1CnT8fqTJR40WoS3BaDQ3xZ=HnHVHqZh=MEmVUZBA@mail.gmail.com>
- <3e5fa57f-d636-879a-b98f-77323d07c156@linaro.org> <CAD=FV=Uibu-kZyix7K4_WVc-+C8xpzTqU4WFy7O=6sukMZrX5g@mail.gmail.com>
- <MW4PR02MB7186245772DAC3E04FA8D1C0E1E69@MW4PR02MB7186.namprd02.prod.outlook.com>
- <CAD=FV=Wk3U7_bVdiCPp8iQ4bcCA_Botemu4pwHeRtgBa3Xk6KQ@mail.gmail.com>
- <c4f086ce-c56f-f7c9-4092-7f2432330d50@quicinc.com> <CAD=FV=UmU_BVUaL_X75yOEvQPtGUBTR5-jiVWBHq7uSRt6HM4Q@mail.gmail.com>
- <225d2c0a-42ec-28ad-688c-e7e9e2035ee1@quicinc.com> <CAD=FV=W=WjSACHvRDFBnkLUp-LU2c4XMu3=FTzTx=zexNF5PAw@mail.gmail.com>
- <CAA8EJpqLZ9up4euGEbhf5QyBqm4tJuLcHi7D+0Si7ak9Jej52w@mail.gmail.com>
- <CAD=FV=XwOzsRf7RnvyBjr5TtedMhC0LJFKoK9tp-kw1eEyuJmQ@mail.gmail.com>
- <CAA8EJprb5UF24WRNvGaY_hSqW--NPd=9=8AaPYWSMbUumNn+dQ@mail.gmail.com> <CAD=FV=UG7k4A+hMXxwju-0mLddD1oJdGngXMkMA-dO3AxOx0rQ@mail.gmail.com>
-In-Reply-To: <CAD=FV=UG7k4A+hMXxwju-0mLddD1oJdGngXMkMA-dO3AxOx0rQ@mail.gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Fri, 8 Apr 2022 17:58:28 +0300
-Message-ID: <CAA8EJprLRiWrkqLG09UG1arDmo1fuq917ztfxts66p+AaYcYbA@mail.gmail.com>
-Subject: Re: [PATCH v6 1/8] drm/msm/dp: Add eDP support via aux_bus
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        "Sankeerth Billakanti (QUIC)" <quic_sbillaka@quicinc.com>,
-        quic_kalyant <quic_kalyant@quicinc.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        quic_vproddut <quic_vproddut@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        Sean Paul <seanpaul@chromium.org>,
-        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Sean Paul <sean@poorly.run>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d5f1071c-f47e-4d3f-5a32-08da19704f60
+X-MS-TrafficTypeDiagnostic: CY4PR1001MB2134:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR1001MB21343FFE1171F012085287FB8EE99@CY4PR1001MB2134.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: aQCNivOcG2mopvsdqBHMmpL4uWz28EyzSAguuNj4ZBOrWqiK9oPU4N4c/tKdklXgtbjdXShsmt8uauIm+YUXeO22yOxznEGEl+7K/R0v7obx+teR59qctf/VQAHftP3/hcg6tFwTVxYpmVYME0GLLlvb38Y3irRGeii5CrKFNmSWu+j+7brzd3Q4DmdhVKF25GlohsW7NiI1fW/uhckHyv1/hIknsGj0MT8yV+V0sxAX9YqlL7QQQH9mf38z1nEkwVbDlgqmLP6uTk1ZmcbPM8Desi7uQTOHN5GqOwb6cvo5ogP4zzTuZ+3XH9hsHCsMa6yA16gGuji0kN8bPZYW2F0+Pt3NFKCUVJi1O0On9963S4Jdb2S/3aHc4rOQg7A0gveygQr0UAnwweonauhzD9Qp+cOrGLzei+HYNN6NP/7D8ZegKPQniSV6Av3/FSbTmQtPZdFS09GaBjGgrOgJpSXcqTN94cr5cY7LIPBUP03CRHQb65YNiwJPXeH5JB6uYOVgK4Nz4/KTskxTT3PTMj+kwG4FA562W5DvY8oKiNRpNkPIhn4OAiZxbv1+x1M/TQCyjFOr61DYfVvYHtiyiQVTxVpoLNDGu9CAFD07A5fxSih9cVnXiI8e4aJh8fNkIQoJ1dSJJNgL067cfOVBCJiJ3YVXF8+um6CsMideUW0y46MldIyqDgRAcKn+FCTugY9DbIIDJ5fqwdlexs5y4A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(7416002)(508600001)(6506007)(44832011)(26005)(33716001)(6666004)(6486002)(83380400001)(1076003)(33656002)(52116002)(186003)(54906003)(8936002)(4744005)(66946007)(66556008)(2906002)(66476007)(8676002)(9686003)(6512007)(4326008)(86362001)(38350700002)(38100700002)(5660300002)(316002)(6916009);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VxSIuQZwA/+BJyJU6pEmKo46hrxrlE6p2l/yri3Czqms3ixRvnMD2pStmztD?=
+ =?us-ascii?Q?ZRFsTV50be/7CtRxxSnaiz8EGQOzF7QEqoF/eWliQekvmi0SK9EmyEvHkYOR?=
+ =?us-ascii?Q?tInq89j1HJRINugHfkwSf/lDUBjZpQx5+WsrEef99YiOYENc3xpx7r8Vy3iA?=
+ =?us-ascii?Q?QtnXwdIKy/EHNr/3qAR/HQEbVEyGjgK0iWJ3XXLFjIz5AWjPtNZadZrv+cqt?=
+ =?us-ascii?Q?l1JZNcH2NRQfLnKfKvbl9eAXYrUgSBW2mLRmoy2mKH8nDPOE3xzUTwjhVC6z?=
+ =?us-ascii?Q?oqHO/Z1mBhumfKEIN0a3QqnZMT0zCS98/vaOi5w847wiW0OzgczA+MzPOJ5X?=
+ =?us-ascii?Q?FUwvKv7vI9heKjNuME1DctwJe1XZwJYvFABYZ0Zgx4W6h9b+4ESZlxuE1q54?=
+ =?us-ascii?Q?X7jk+bswBCNpUNsrE/DwplWF80Beq9GoTUlOCrwEhj9Gp3ghraH4RzL9iBla?=
+ =?us-ascii?Q?eP/aLI0REeb30GoJT6dhPptu4hbt8t38gCAu1/hhkoljqdxTpQrb36W0FA31?=
+ =?us-ascii?Q?t9OxPHtjYgPBAs1MztUE6G7arnhUfq+b7UaNP7oxAyg8jZEJysXYIr/FAB8Y?=
+ =?us-ascii?Q?v+/17IhoNWG6+kvOVmmpRQ9XiwGxiZuQsSQqOAmwKbJ7qGjqm6qPJr0Hlpd4?=
+ =?us-ascii?Q?ZHeb9wufv/jJFs7qVJ+5v0P71hwupOdBduZTlzMttsFI1ILJcdKTrQWm4AUu?=
+ =?us-ascii?Q?gJNVhORlovo8qMbo17kARx7mwqdlMnpW7bz35malHemGe6QvvXusheW4WMQD?=
+ =?us-ascii?Q?sXmvRe0EX8zEH2y0TptvIAuvTc3oYarmX0etETVJkheFgN9XEfRzAR44DmmR?=
+ =?us-ascii?Q?zRfubJfQYuYlFhqtMapn/ux1JENrJQsGkSV97tf8/GvSSwAZjmRwVKF75we8?=
+ =?us-ascii?Q?tjow/XtgwDXRpxb+zcIahJke8UVgmEktJ1GJkAnJqV8YiOOPuPVQSSiH90UX?=
+ =?us-ascii?Q?QTgK/blXia/+RuqH4h54m6GahO9J4QPZPkuEPEmzGc2GtQI0hU75aXdwMMww?=
+ =?us-ascii?Q?9FikWRMUyDhPdHEgsVsrL+470/aTMcl2eWmvGQ0nA1PdmYdPIoHE7iFkof9x?=
+ =?us-ascii?Q?C59Hu63lsVYcf34FOupWY70UBWgLUDaI57kp7a+P/LgSgXrrGfScxNjQEOKX?=
+ =?us-ascii?Q?aumFGfrRaVRsxFG5lCu4qTPHa3z7hFiEMXf4rouk6nFHNYHzQz3q0TGscNRv?=
+ =?us-ascii?Q?TRK+yf4cxROIzfKQapPtqu8NEDZFzH0CeRzCb/xqlZXunC7Qsl7uAx52s4fa?=
+ =?us-ascii?Q?VsQMRssIjCRFmJzJByrgWxWlVZi3yHOZeZdbKaydOVcfrPVTL0mbZIERMHRU?=
+ =?us-ascii?Q?ul2rJncbTHvNssPNo2JhmiSWWqA5rPaBXkeKnm05PcNnFfnES/otkXGzh/XR?=
+ =?us-ascii?Q?jGWf7ouuJPDR7rImABS4+T+LWmHY0uY+x3RrtZH1eKrTnzkzZnv7VmdM1buG?=
+ =?us-ascii?Q?FhgyvxUZ+laFZlWsAGzjXRj1mIIFqeWWMANFBFgNVy5MqLWTOyM3PhpKlFSN?=
+ =?us-ascii?Q?9s9VRPljaHzBxk7uJ0cLIdj+TRwG3Dqam8eGXg4iwhUO6ZlgslGpNla3TCbp?=
+ =?us-ascii?Q?RyUyWZ44LSKnzH07WVocC65HcQuFL0xHLS3T09KIXH1/1E48lHDc14YtA1Dn?=
+ =?us-ascii?Q?AylyOLNr3hp8r+bDggwVZfrw3tETL4cZU5XFCuHiCkhhAixG1/qzcTyg0aPg?=
+ =?us-ascii?Q?GoFew4RGH7mwnzqIMYY57eZ4gyCTwYJJfqNYizWnL76ljYiflnv9ip9VLKTL?=
+ =?us-ascii?Q?Uq6Vk8RzIMgC0hY5gMx1m+90eskK3Hs=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d5f1071c-f47e-4d3f-5a32-08da19704f60
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Apr 2022 14:58:58.7748
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FmgDDCbUHEIIl/trq9KmLIYhLRvLTW4BpnRGGIoZSYqO9ttCtguRbWQgCcFigokkCAUVLosc8ezHpqPYDCD+iWg0wqWqZKp/lBiq/QkAyek=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1001MB2134
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.858
+ definitions=2022-04-08_04:2022-04-08,2022-04-08 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 adultscore=0
+ suspectscore=0 spamscore=0 mlxlogscore=999 bulkscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204080058
+X-Proofpoint-GUID: U_5GUDpeei0Qv1ft3tzo2kt2m3XKCVl4
+X-Proofpoint-ORIG-GUID: U_5GUDpeei0Qv1ft3tzo2kt2m3XKCVl4
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 8 Apr 2022 at 16:43, Doug Anderson <dianders@chromium.org> wrote:
->
-> Hi,
->
-> On Fri, Apr 8, 2022 at 5:20 AM Dmitry Baryshkov
-> <dmitry.baryshkov@linaro.org> wrote:
-> >
-> > > I guess my thought was that in DP you could still create the AUX bus
-> > > at probe time. Then for DP you just return an instant "transfer
-> > > failed" from the AUX bus if HPD isn't asserted. For eDP (as discussed
-> > > elsewhere) when we try to do an AUX transfer then we delay until HPD
-> > > is there.
-> >
-> > I think panel-edp would already handle the delay, so we do not need to
-> > have this logic in the DP driver.
->
-> There's a whole discussion about this between Stephen and me in patch
-> #5 ("drm/msm/dp: wait for hpd high before any sink interaction").
-> Basically:
->
-> * If panel HPD is hooked up to the dedicated HPD pin on the eDP
-> controller then the panel driver doesn't have a way to read it.
+On Fri, Apr 08, 2022 at 07:44:40AM -0700, Yihao Han wrote:
+> The check for if rtw_skb_alloc() fails is done twice and is written
+> in a confusing way.  Move the "if (!recvbuf->pskb)" right after
+> the allocation.  The "if (recvbuf->pskb)" check can now be deleted
+> and the code pulled in one tab.
+> 
+> Suggested-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Signed-off-by: Yihao Han <hanyihao@vivo.com>
+> ---
+> v2: more extensive cleanup
+> v3: edit commit message
 
-I refreshed that dialog. I must admit, I have missed the fact that the
-HPD pin might not be visible as the GPIO pin.
+Thanks!
 
-> * We can't leverage the existing "HPD" query functions in DRM because
-> those indicate whether a panel is _physically_ connected. For eDP, it
-> always is.
+Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
 
-Yes, I was thinking about (mis)using the
-drm_bridge_connector_hpd_notify() for generic HPD-related
-notifications (to tell eDP that it should check the current state). I
-have abandoned that idea.
+regards,
+dan carpenter
 
-> For now the rule is that the AUX transfer function is in charge of
-> waiting for HPD for eDP if the dedicated HPD pin is used. If we want
-> to re-invent this we could, but that system works, isn't _too_ ugly,
-> and we're already making big enough changes in this series.
-
-The is_hpd_asserted() looks like a good callback for the aux bus.
-It will allow the panel driver to check if the panel is powered up (in
-the absence of the GPIO pin).
-
-> > > So we can still acquire resources (clocks, PHY, io maps, etc) at probe
-> > > time for DP and create the AUX bus, right? It will just return
-> > > "-ENODEV" if HPD isn't asserted and you're DP?
-> >
-> > Yes, please. I still suppose that we'd need a separate case to
-> > power_on eDP's PHY during the probe time. Maybe I'm mistaken here.
->
-> I think the ideal way is to do it like Kieran's proposal for sn65dsi86:
->
-> https://lore.kernel.org/r/20220317131250.1481275-4-kieran.bingham+renesas@ideasonboard.com/
->
-> * When enabling HPD (physical hot plug detect) in the hpd_enable()
-> callback you do a pm_runtime_get(). You do the
-> pm_runtime_put_autosuspend() when disabling. This is only used for DP
-> since we only provide DRM_BRIDGE_OP_HPD for DP, not for eDP.
->
-> * We do a pm_runtime_get() / pm_runtime_put_autosuspend() in the AUX
-> transfer routine. While holding the pm_runtime reference we check HPD.
-> For DP we return immediately if HPD isn't asserted. For eDP, we delay.
->
-> * We do the pm_runtime_get() in pre_enable and the pm_runtime_put() in
-> post_disable. For DP this will add a 2nd refcount (since we probably
-> were holding the reference for HPD). For eDP this will cause us to
-> power on.
->
-> * If there's any other time we need to read HW registers, and we
-> aren't guaranteed to already have a pm_runtime reference (like during
-> probe), we can do a temporary pm_runtime_get() /
-> pm_runtime_put_autosuspend().
-
-This looks good. I'd be more than welcome to review such series.
-
-Note: I think this would require using
-drm_bridge_connector_enable_hpd() in the DP code.
-Hopefully at some point we would be able to move all
-drm_bridge_connector calls to the core msm layer.
---
-With best wishes
-Dmitry

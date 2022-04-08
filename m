@@ -2,67 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC4914F8C5F
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E76274F8C21
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233066AbiDHCqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 22:46:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40770 "EHLO
+        id S231327AbiDHCtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 22:49:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbiDHCqG (ORCPT
+        with ESMTP id S229611AbiDHCtt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 22:46:06 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A59151D23
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 19:43:59 -0700 (PDT)
-Received: from kwepemi100003.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KZMsY1yX8zBrgq;
-        Fri,  8 Apr 2022 10:39:45 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- kwepemi100003.china.huawei.com (7.221.188.122) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 8 Apr 2022 10:43:57 +0800
-Received: from [10.174.179.234] (10.174.179.234) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 8 Apr 2022 10:43:56 +0800
-Message-ID: <d7ef4e03-343e-f7e3-2890-a45b87ac8203@huawei.com>
-Date:   Fri, 8 Apr 2022 10:43:55 +0800
+        Thu, 7 Apr 2022 22:49:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D0DDBBF64
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 19:47:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649386065;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hqW8d1OLA7Y9iadlUnkgKcFa9rHdusyjgClqd2kz4/g=;
+        b=I0OMt4LPgKgMLYV8z+AMjtqIx7gD0B6VrRgZ3n4VTY1lCcSWjP3mTGuV5qM2ZTBXvg0zWx
+        DQqITPvDDR2/OXoloK6Eqt251oHeCayESmmc7Gz5j9U5XLA/vRqEmLIF9Uo989WBz57/CV
+        BO8yg8zV2D9H7CqN6ATOSbJ8xhKy4e8=
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
+ [209.85.210.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-661--skMFhfdMLGEazMx6UMEgg-1; Thu, 07 Apr 2022 22:47:44 -0400
+X-MC-Unique: -skMFhfdMLGEazMx6UMEgg-1
+Received: by mail-pf1-f199.google.com with SMTP id d5-20020a62f805000000b0050566b4f4c0so2176302pfh.11
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 19:47:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=hqW8d1OLA7Y9iadlUnkgKcFa9rHdusyjgClqd2kz4/g=;
+        b=i9EKbH3p8SbXiX2xzxzKrBqEznODOT88OMY+hYxZOqJTrDG5muiaPl/ufcdQ/Y5OZn
+         zYraGHENCqxBZWNYjh6Zh6h5QHuLwq1IHxVqDghaZyGf/jSYeOUAAm9Rnnm9kAlw8Szn
+         1hgURrj2etIFUy97K5um2XbVV9hSZHHti+MLQ5o/ipHi1rx3n0TFMvOrSMZbvTLR12SB
+         wyQR2O7hFgiMU+ezCNZTpOIvnejGqNwHOQoS1oaToqdScyfzW80wIVmBi/C9X5c5bAg4
+         pNyA6QDx3fIHJBvZCyMUQA6l7a9IXS1NsZr2bizM5gNNJZs9LH/4qRiNhB64IrL3pH1G
+         oamw==
+X-Gm-Message-State: AOAM533ELya3HsO30J/nFEt2la9IWBUZR3tekNFzgvx8avgXjCF3idkB
+        7hc1Cov5zpjqbT3pznLPsLisCLPlV0ZB4SBFkSfMsCmUqhKbT0R8nt4DSJ3KEvCf0rWUW2hmrB5
+        PUMT6SX0O+SuomskfhvkcGzj/8foKlqRaPMGfVcYAgxBkS1WKgXs6/7ibp8/uDx+0ZzqbZ6tFXQ
+        ==
+X-Received: by 2002:a17:90b:2242:b0:1c6:80e3:71b6 with SMTP id hk2-20020a17090b224200b001c680e371b6mr19189246pjb.152.1649386063443;
+        Thu, 07 Apr 2022 19:47:43 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxrA8ySa9lcDYRnbcJPHwP5hG2NP90cq3X0zXkIlasV1evG8cuqWmpvkSQ3C2jpmxqZf/n39Q==
+X-Received: by 2002:a17:90b:2242:b0:1c6:80e3:71b6 with SMTP id hk2-20020a17090b224200b001c680e371b6mr19189228pjb.152.1649386063072;
+        Thu, 07 Apr 2022 19:47:43 -0700 (PDT)
+Received: from [10.72.12.194] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id v16-20020aa78090000000b0050583cb0adbsm436241pff.196.2022.04.07.19.47.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Apr 2022 19:47:42 -0700 (PDT)
+Subject: Re: [PATCH v4] ceph: invalidate pages when doing direct/sync writes
+To:     =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>,
+        Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220407151521.7968-1-lhenriques@suse.de>
+From:   Xiubo Li <xiubli@redhat.com>
+Message-ID: <0133ed11-bb90-9337-e787-66851cbbc379@redhat.com>
+Date:   Fri, 8 Apr 2022 10:47:10 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [RFC PATCH -next V2 7/7] arm64: add pagecache reading to machine
- check safe
-To:     Robin Murphy <robin.murphy@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>, <james.morse@arm.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>, <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-References: <20220406091311.3354723-1-tongtiangen@huawei.com>
- <20220406091311.3354723-8-tongtiangen@huawei.com>
- <Yk15Fex1+fg6ZQrX@FVFF77S0Q05N>
- <afd5285b-9d8b-3c58-111e-095d1e5b74f8@huawei.com>
- <debf5db0-d4b8-5fdd-f798-b7b41e316342@arm.com>
-From:   Tong Tiangen <tongtiangen@huawei.com>
-In-Reply-To: <debf5db0-d4b8-5fdd-f798-b7b41e316342@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+In-Reply-To: <20220407151521.7968-1-lhenriques@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.234]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -70,450 +85,86 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+On 4/7/22 11:15 PM, Luís Henriques wrote:
+> When doing a direct/sync write, we need to invalidate the page cache in
+> the range being written to.  If we don't do this, the cache will include
+> invalid data as we just did a write that avoided the page cache.
+>
+> Signed-off-by: Luís Henriques <lhenriques@suse.de>
+> ---
+>   fs/ceph/file.c | 19 ++++++++++++++-----
+>   1 file changed, 14 insertions(+), 5 deletions(-)
+>
+> Changes since v3:
+> - Dropped initial call to invalidate_inode_pages2_range()
+> - Added extra comment to document invalidation
+>
+> Changes since v2:
+> - Invalidation needs to be done after a write
+>
+> Changes since v1:
+> - Replaced truncate_inode_pages_range() by invalidate_inode_pages2_range
+> - Call fscache_invalidate with FSCACHE_INVAL_DIO_WRITE if we're doing DIO
+>
+> diff --git a/fs/ceph/file.c b/fs/ceph/file.c
+> index 5072570c2203..97f764b2fbdd 100644
+> --- a/fs/ceph/file.c
+> +++ b/fs/ceph/file.c
+> @@ -1606,11 +1606,6 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
+>   		return ret;
+>   
+>   	ceph_fscache_invalidate(inode, false);
+> -	ret = invalidate_inode_pages2_range(inode->i_mapping,
+> -					    pos >> PAGE_SHIFT,
+> -					    (pos + count - 1) >> PAGE_SHIFT);
+> -	if (ret < 0)
+> -		dout("invalidate_inode_pages2_range returned %d\n", ret);
+>   
+>   	while ((len = iov_iter_count(from)) > 0) {
+>   		size_t left;
+> @@ -1938,6 +1933,20 @@ ceph_sync_write(struct kiocb *iocb, struct iov_iter *from, loff_t pos,
+>   			break;
+>   		}
+>   		ceph_clear_error_write(ci);
+> +
+> +		/*
+> +		 * we need to invalidate the page cache here, otherwise the
+> +		 * cache will include invalid data in direct/sync writes.
+> +		 */
+> +		ret = invalidate_inode_pages2_range(
+> +				inode->i_mapping,
+> +				pos >> PAGE_SHIFT,
+> +				(pos + len - 1) >> PAGE_SHIFT);
+> +		if (ret < 0) {
+> +			dout("invalidate_inode_pages2_range returned %d\n",
+> +			     ret);
+> +			ret = 0;
 
-在 2022/4/7 23:53, Robin Murphy 写道:
-> On 2022-04-07 15:56, Tong Tiangen wrote:
->>
->>
->> 在 2022/4/6 19:27, Mark Rutland 写道:
->>> On Wed, Apr 06, 2022 at 09:13:11AM +0000, Tong Tiangen wrote:
->>>> When user process reading file, the data is cached in pagecache and
->>>> the data belongs to the user process, When machine check error is
->>>> encountered during pagecache reading, killing the user process and
->>>> isolate the user page with hardware memory errors is a more reasonable
->>>> choice than kernel panic.
->>>>
->>>> The __arch_copy_mc_to_user() in copy_to_user_mc.S is largely borrows
->>>> from __arch_copy_to_user() in copy_to_user.S and the main difference
->>>> is __arch_copy_mc_to_user() add the extable entry to support machine
->>>> check safe.
->>>
->>> As with prior patches, *why* is the distinction necessary?
->>>
->>> This patch adds a bunch of conditional logic, but *structurally* it 
->>> doesn't
->>> alter the handling to be substantially different for the MC and 
->>> non-MC cases.
->>>
->>> This seems like pointless duplication that just makes it harder to 
->>> maintain
->>> this code.
->>>
->>> Thanks,
->>> Mark.
->>
->> Agreed, The implementation here looks a little ugly and harder to 
->> maintain.
->>
->> The purpose of my doing this is not all copy_to_user can be recovered.
->>
->> A memory error is consumed when reading pagecache using copy_to_user.
->> I think in this scenario, only the process is affected because it 
->> can't read
->> pagecache data correctly. Just kill the process and don't need the whole
->> kernel panic.
->>
->> So I need two different copy_to_user implementation, one is existing 
->> __arch_copy_to_user,
->> this function will panic when consuming memory errors. The other one 
->> is this new helper
->> __arch_copy_mc_to_user, this interface is used when reading pagecache. 
->> It can recover from
->> consume memory error.
-> 
-> OK, but do we really need two almost-identical implementations of every 
-> function where the only difference is how the exception table entries 
-> are annotated? Could the exception handler itself just figure out who 
-> owns the page where the fault occurred and decide what action to take as 
-> appropriate?
-> 
-> Robin.
-> 
+For this, IMO it's not safe. If we just ignore it the pagecache will 
+still have invalid data.
 
-Thank you, Robin.
+I think what the 'ceph_direct_read_write()' does is more correct, it 
+will make sure all the dirty pages are writeback from the pagecaches by 
+using 'invalidate_inode_pages2_range()' without blocking and later will 
+do the invalidate blocked by using 'truncate_inode_pages_range()' if 
+some pages are not unmaped in 'invalidate_inode_pages2_range()' when EBUSY.
 
-I added this call path in this patchset: do_sea() -> fixup_exception(), 
-the purpose is to provide a chance for sea fault to fixup (refer patch 
-3/7).
+This can always be sure that the pagecache has no invalid data after 
+write finishes. I think why it use the truncate helper here is because 
+it's safe and there shouldn't have any buffer write happen for DIO ?
 
-If fixup successful, panic can be avoided. Otherwise, panic can be 
-eliminated according to the original logic.
+But from my understanding the 'ceph_direct_read_write()' is still buggy. 
+What if the page fault happen just after 'truncate_inode_pages_range()' 
+? Will this happen ? Should we leave this to use the file lock to 
+guarantee it in user space ?
 
-fixup_exception() will set regs->pc and jump to regs->pc when the 
-context recovery of an exception occurs.
+Thought ?
 
-If mc-safe-fixup added to  __arch_copy_to_user(),  in *non pagecache 
-reading* scenario encount memory error when call __arch_copy_to_user() , 
-do_sea() -> fixup_exception() will not return fail and will miss the 
-panic logic in do_sea().
+-- Xiubo
 
-So I add new helper __arch_copy_mc_to_user()  and add mc-safe-fixup to 
-this helper, which can be used in the required scenarios. At present, 
-there is only one pagecache reading scenario, other scenarios need to be 
-developed.
+> +		}
+>   		pos += len;
+>   		written += len;
+>   		dout("sync_write written %d\n", written);
+>
 
-This is my current confusion. Of course, I will think about the solution 
-to  solve the duplicate code problem.
-
-Thanks,
-Tong.
->>
->> In future, if find a scenario use copy_to_user can also be recovered, 
->> we can also use this mc
->> safe helper instead it.
->>
->> Thanks,
->> Tong.
->>
->>>
->>>> In _copy_page_to_iter(), machine check safe only considered ITER_IOVEC
->>>> which is used by pagecache reading.
->>>>
->>>> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
->>>> ---
->>>>   arch/arm64/include/asm/uaccess.h | 15 ++++++
->>>>   arch/arm64/lib/Makefile          |  2 +-
->>>>   arch/arm64/lib/copy_to_user_mc.S | 78 +++++++++++++++++++++++++++++
->>>>   include/linux/uio.h              |  9 +++-
->>>>   lib/iov_iter.c                   | 85 
->>>> +++++++++++++++++++++++++-------
->>>>   5 files changed, 170 insertions(+), 19 deletions(-)
->>>>   create mode 100644 arch/arm64/lib/copy_to_user_mc.S
->>>>
->>>> diff --git a/arch/arm64/include/asm/uaccess.h 
->>>> b/arch/arm64/include/asm/uaccess.h
->>>> index 24b662407fbd..f0d5e811165a 100644
->>>> --- a/arch/arm64/include/asm/uaccess.h
->>>> +++ b/arch/arm64/include/asm/uaccess.h
->>>> @@ -448,6 +448,21 @@ extern long strncpy_from_user(char *dest, const 
->>>> char __user *src, long count);
->>>>   extern __must_check long strnlen_user(const char __user *str, long 
->>>> n);
->>>> +#ifdef CONFIG_ARCH_HAS_COPY_MC
->>>> +extern unsigned long __must_check __arch_copy_mc_to_user(void 
->>>> __user *to,
->>>> +                             const void *from, unsigned long n);
->>>> +static inline unsigned long __must_check
->>>> +copy_mc_to_user(void __user *to, const void *from, unsigned long n)
->>>> +{
->>>> +    uaccess_ttbr0_enable();
->>>> +    n = __arch_copy_mc_to_user(__uaccess_mask_ptr(to), from, n);
->>>> +    uaccess_ttbr0_disable();
->>>> +
->>>> +    return n;
->>>> +}
->>>> +#define copy_mc_to_user copy_mc_to_user
->>>> +#endif
->>>> +
->>>>   #ifdef CONFIG_ARCH_HAS_UACCESS_FLUSHCACHE
->>>>   struct page;
->>>>   void memcpy_page_flushcache(char *to, struct page *page, size_t 
->>>> offset, size_t len);
->>>> diff --git a/arch/arm64/lib/Makefile b/arch/arm64/lib/Makefile
->>>> index 29c578414b12..9b3571227fb4 100644
->>>> --- a/arch/arm64/lib/Makefile
->>>> +++ b/arch/arm64/lib/Makefile
->>>> @@ -23,4 +23,4 @@ obj-$(CONFIG_ARM64_MTE) += mte.o
->>>>   obj-$(CONFIG_KASAN_SW_TAGS) += kasan_sw_tags.o
->>>> -obj-$(CONFIG_ARCH_HAS_CPY_MC) += copy_page_mc.o
->>>> +obj-$(CONFIG_ARCH_HAS_COPY_MC) += copy_page_mc.o copy_to_user_mc.o
->>>> diff --git a/arch/arm64/lib/copy_to_user_mc.S 
->>>> b/arch/arm64/lib/copy_to_user_mc.S
->>>> new file mode 100644
->>>> index 000000000000..9d228ff15446
->>>> --- /dev/null
->>>> +++ b/arch/arm64/lib/copy_to_user_mc.S
->>>> @@ -0,0 +1,78 @@
->>>> +/* SPDX-License-Identifier: GPL-2.0-only */
->>>> +/*
->>>> + * Copyright (C) 2012 ARM Ltd.
->>>> + */
->>>> +
->>>> +#include <linux/linkage.h>
->>>> +
->>>> +#include <asm/asm-uaccess.h>
->>>> +#include <asm/assembler.h>
->>>> +#include <asm/cache.h>
->>>> +
->>>> +/*
->>>> + * Copy to user space from a kernel buffer (alignment handled by 
->>>> the hardware)
->>>> + *
->>>> + * Parameters:
->>>> + *    x0 - to
->>>> + *    x1 - from
->>>> + *    x2 - n
->>>> + * Returns:
->>>> + *    x0 - bytes not copied
->>>> + */
->>>> +    .macro ldrb1 reg, ptr, val
->>>> +    1000: ldrb  \reg, [\ptr], \val;
->>>> +    _asm_extable_mc 1000b, 9998f;
->>>> +    .endm
->>>> +
->>>> +    .macro strb1 reg, ptr, val
->>>> +    user_ldst_mc 9998f, sttrb, \reg, \ptr, \val
->>>> +    .endm
->>>> +
->>>> +    .macro ldrh1 reg, ptr, val
->>>> +    1001: ldrh  \reg, [\ptr], \val;
->>>> +    _asm_extable_mc 1001b, 9998f;
->>>> +    .endm
->>>> +
->>>> +    .macro strh1 reg, ptr, val
->>>> +    user_ldst_mc 9997f, sttrh, \reg, \ptr, \val
->>>> +    .endm
->>>> +
->>>> +    .macro ldr1 reg, ptr, val
->>>> +    1002: ldr \reg, [\ptr], \val;
->>>> +    _asm_extable_mc 1002b, 9998f;
->>>> +    .endm
->>>> +
->>>> +    .macro str1 reg, ptr, val
->>>> +    user_ldst_mc 9997f, sttr, \reg, \ptr, \val
->>>> +    .endm
->>>> +
->>>> +    .macro ldp1 reg1, reg2, ptr, val
->>>> +    1003: ldp \reg1, \reg2, [\ptr], \val;
->>>> +    _asm_extable_mc 1003b, 9998f;
->>>> +    .endm
->>>> +
->>>> +    .macro stp1 reg1, reg2, ptr, val
->>>> +    user_stp 9997f, \reg1, \reg2, \ptr, \val
->>>> +    .endm
->>>> +
->>>> +end    .req    x5
->>>> +srcin    .req    x15
->>>> +SYM_FUNC_START(__arch_copy_mc_to_user)
->>>> +    add    end, x0, x2
->>>> +    mov    srcin, x1
->>>> +#include "copy_template.S"
->>>> +    mov    x0, #0
->>>> +    ret
->>>> +
->>>> +    // Exception fixups
->>>> +9997:    cbz    x0, 9998f            // Check machine check exception
->>>> +    cmp    dst, dstin
->>>> +    b.ne    9998f
->>>> +    // Before being absolutely sure we couldn't copy anything, try 
->>>> harder
->>>> +    ldrb    tmp1w, [srcin]
->>>> +USER(9998f, sttrb tmp1w, [dst])
->>>> +    add    dst, dst, #1
->>>> +9998:    sub    x0, end, dst            // bytes not copied
->>>> +    ret
->>>> +SYM_FUNC_END(__arch_copy_mc_to_user)
->>>> +EXPORT_SYMBOL(__arch_copy_mc_to_user)
->>>> diff --git a/include/linux/uio.h b/include/linux/uio.h
->>>> index 739285fe5a2f..539d9ee9b032 100644
->>>> --- a/include/linux/uio.h
->>>> +++ b/include/linux/uio.h
->>>> @@ -147,10 +147,17 @@ size_t _copy_to_iter(const void *addr, size_t 
->>>> bytes, struct iov_iter *i);
->>>>   size_t _copy_from_iter(void *addr, size_t bytes, struct iov_iter *i);
->>>>   size_t _copy_from_iter_nocache(void *addr, size_t bytes, struct 
->>>> iov_iter *i);
->>>> +#ifdef CONFIG_ARCH_HAS_COPY_MC
->>>> +size_t copy_mc_page_to_iter(struct page *page, size_t offset, 
->>>> size_t bytes,
->>>> +                struct iov_iter *i);
->>>> +#else
->>>> +#define copy_mc_page_to_iter copy_page_to_iter
->>>> +#endif
->>>> +
->>>>   static inline size_t copy_folio_to_iter(struct folio *folio, 
->>>> size_t offset,
->>>>           size_t bytes, struct iov_iter *i)
->>>>   {
->>>> -    return copy_page_to_iter(&folio->page, offset, bytes, i);
->>>> +    return copy_mc_page_to_iter(&folio->page, offset, bytes, i);
->>>>   }
->>>>   static __always_inline __must_check
->>>> diff --git a/lib/iov_iter.c b/lib/iov_iter.c
->>>> index 6dd5330f7a99..2c5f3bb6391d 100644
->>>> --- a/lib/iov_iter.c
->>>> +++ b/lib/iov_iter.c
->>>> @@ -157,6 +157,19 @@ static int copyout(void __user *to, const void 
->>>> *from, size_t n)
->>>>       return n;
->>>>   }
->>>> +#ifdef CONFIG_ARCH_HAS_COPY_MC
->>>> +static int copyout_mc(void __user *to, const void *from, size_t n)
->>>> +{
->>>> +    if (access_ok(to, n)) {
->>>> +        instrument_copy_to_user(to, from, n);
->>>> +        n = copy_mc_to_user((__force void *) to, from, n);
->>>> +    }
->>>> +    return n;
->>>> +}
->>>> +#else
->>>> +#define copyout_mc copyout
->>>> +#endif
->>>> +
->>>>   static int copyin(void *to, const void __user *from, size_t n)
->>>>   {
->>>>       if (should_fail_usercopy())
->>>> @@ -169,7 +182,7 @@ static int copyin(void *to, const void __user 
->>>> *from, size_t n)
->>>>   }
->>>>   static size_t copy_page_to_iter_iovec(struct page *page, size_t 
->>>> offset, size_t bytes,
->>>> -             struct iov_iter *i)
->>>> +             struct iov_iter *i, bool mc_safe)
->>>>   {
->>>>       size_t skip, copy, left, wanted;
->>>>       const struct iovec *iov;
->>>> @@ -194,7 +207,10 @@ static size_t copy_page_to_iter_iovec(struct 
->>>> page *page, size_t offset, size_t b
->>>>           from = kaddr + offset;
->>>>           /* first chunk, usually the only one */
->>>> -        left = copyout(buf, from, copy);
->>>> +        if (mc_safe)
->>>> +            left = copyout_mc(buf, from, copy);
->>>> +        else
->>>> +            left = copyout(buf, from, copy);
->>>>           copy -= left;
->>>>           skip += copy;
->>>>           from += copy;
->>>> @@ -204,7 +220,10 @@ static size_t copy_page_to_iter_iovec(struct 
->>>> page *page, size_t offset, size_t b
->>>>               iov++;
->>>>               buf = iov->iov_base;
->>>>               copy = min(bytes, iov->iov_len);
->>>> -            left = copyout(buf, from, copy);
->>>> +            if (mc_safe)
->>>> +                left = copyout_mc(buf, from, copy);
->>>> +            else
->>>> +                left = copyout(buf, from, copy);
->>>>               copy -= left;
->>>>               skip = copy;
->>>>               from += copy;
->>>> @@ -223,7 +242,10 @@ static size_t copy_page_to_iter_iovec(struct 
->>>> page *page, size_t offset, size_t b
->>>>       kaddr = kmap(page);
->>>>       from = kaddr + offset;
->>>> -    left = copyout(buf, from, copy);
->>>> +    if (mc_safe)
->>>> +        left = copyout_mc(buf, from, copy);
->>>> +    else
->>>> +        left = copyout(buf, from, copy);
->>>>       copy -= left;
->>>>       skip += copy;
->>>>       from += copy;
->>>> @@ -232,7 +254,10 @@ static size_t copy_page_to_iter_iovec(struct 
->>>> page *page, size_t offset, size_t b
->>>>           iov++;
->>>>           buf = iov->iov_base;
->>>>           copy = min(bytes, iov->iov_len);
->>>> -        left = copyout(buf, from, copy);
->>>> +        if (mc_safe)
->>>> +            left = copyout_mc(buf, from, copy);
->>>> +        else
->>>> +            left = copyout(buf, from, copy);
->>>>           copy -= left;
->>>>           skip = copy;
->>>>           from += copy;
->>>> @@ -674,15 +699,6 @@ size_t _copy_to_iter(const void *addr, size_t 
->>>> bytes, struct iov_iter *i)
->>>>   EXPORT_SYMBOL(_copy_to_iter);
->>>>   #ifdef CONFIG_ARCH_HAS_COPY_MC
->>>> -static int copyout_mc(void __user *to, const void *from, size_t n)
->>>> -{
->>>> -    if (access_ok(to, n)) {
->>>> -        instrument_copy_to_user(to, from, n);
->>>> -        n = copy_mc_to_user((__force void *) to, from, n);
->>>> -    }
->>>> -    return n;
->>>> -}
->>>> -
->>>>   static size_t copy_mc_pipe_to_iter(const void *addr, size_t bytes,
->>>>                   struct iov_iter *i)
->>>>   {
->>>> @@ -846,10 +862,10 @@ static inline bool page_copy_sane(struct page 
->>>> *page, size_t offset, size_t n)
->>>>   }
->>>>   static size_t __copy_page_to_iter(struct page *page, size_t 
->>>> offset, size_t bytes,
->>>> -             struct iov_iter *i)
->>>> +             struct iov_iter *i, bool mc_safe)
->>>>   {
->>>>       if (likely(iter_is_iovec(i)))
->>>> -        return copy_page_to_iter_iovec(page, offset, bytes, i);
->>>> +        return copy_page_to_iter_iovec(page, offset, bytes, i, 
->>>> mc_safe);
->>>>       if (iov_iter_is_bvec(i) || iov_iter_is_kvec(i) || 
->>>> iov_iter_is_xarray(i)) {
->>>>           void *kaddr = kmap_local_page(page);
->>>>           size_t wanted = _copy_to_iter(kaddr + offset, bytes, i);
->>>> @@ -878,7 +894,7 @@ size_t copy_page_to_iter(struct page *page, 
->>>> size_t offset, size_t bytes,
->>>>       offset %= PAGE_SIZE;
->>>>       while (1) {
->>>>           size_t n = __copy_page_to_iter(page, offset,
->>>> -                min(bytes, (size_t)PAGE_SIZE - offset), i);
->>>> +                min(bytes, (size_t)PAGE_SIZE - offset), i, false);
->>>>           res += n;
->>>>           bytes -= n;
->>>>           if (!bytes || !n)
->>>> @@ -893,6 +909,41 @@ size_t copy_page_to_iter(struct page *page, 
->>>> size_t offset, size_t bytes,
->>>>   }
->>>>   EXPORT_SYMBOL(copy_page_to_iter);
->>>> +#ifdef CONFIG_ARCH_HAS_COPY_MC
->>>> +/**
->>>> + * copy_mc_page_to_iter - copy page to iter with source memory 
->>>> error exception handling.
->>>> + *
->>>> + * The filemap_read deploys this for pagecache reading and the main 
->>>> differences between
->>>> + * this and typical copy_page_to_iter() is call __copy_page_to_iter 
->>>> with mc_safe true.
->>>> + *
->>>> + * Return: number of bytes copied (may be %0)
->>>> + */
->>>> +size_t copy_mc_page_to_iter(struct page *page, size_t offset, 
->>>> size_t bytes,
->>>> +             struct iov_iter *i)
->>>> +{
->>>> +    size_t res = 0;
->>>> +
->>>> +    if (unlikely(!page_copy_sane(page, offset, bytes)))
->>>> +        return 0;
->>>> +    page += offset / PAGE_SIZE; // first subpage
->>>> +    offset %= PAGE_SIZE;
->>>> +    while (1) {
->>>> +        size_t n = __copy_page_to_iter(page, offset,
->>>> +                min(bytes, (size_t)PAGE_SIZE - offset), i, true);
->>>> +        res += n;
->>>> +        bytes -= n;
->>>> +        if (!bytes || !n)
->>>> +            break;
->>>> +        offset += n;
->>>> +        if (offset == PAGE_SIZE) {
->>>> +            page++;
->>>> +            offset = 0;
->>>> +        }
->>>> +    }
->>>> +    return res;
->>>> +}
->>>> +#endif
->>>> +
->>>>   size_t copy_page_from_iter(struct page *page, size_t offset, 
->>>> size_t bytes,
->>>>                struct iov_iter *i)
->>>>   {
->>>> -- 
->>>> 2.18.0.huawei.25
->>>>
->>>>
->>>> _______________________________________________
->>>> linux-arm-kernel mailing list
->>>> linux-arm-kernel@lists.infradead.org
->>>> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
->>> .
->>
->> _______________________________________________
->> linux-arm-kernel mailing list
->> linux-arm-kernel@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-> .

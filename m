@@ -2,124 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D634F928D
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 12:08:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEA7E4F928F
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 12:08:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbiDHKKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 06:10:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48916 "EHLO
+        id S231725AbiDHKKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 06:10:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiDHKJ5 (ORCPT
+        with ESMTP id S229565AbiDHKK2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 06:09:57 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B32235DEC
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 03:07:52 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nclWo-0001D7-OD; Fri, 08 Apr 2022 12:07:42 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nclWo-001mY5-FE; Fri, 08 Apr 2022 12:07:41 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1nclWl-001wSJ-UN; Fri, 08 Apr 2022 12:07:39 +0200
-Date:   Fri, 8 Apr 2022 12:07:21 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Wan Jiabing <wanjiabing@vivo.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pwm: sifive: simplify if-if to if-else
-Message-ID: <20220408100721.rinvvgard3nr5wff@pengutronix.de>
-References: <20220408083007.41538-1-wanjiabing@vivo.com>
+        Fri, 8 Apr 2022 06:10:28 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13623BA50;
+        Fri,  8 Apr 2022 03:08:24 -0700 (PDT)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nclXN-0003iK-As; Fri, 08 Apr 2022 12:08:17 +0200
+Message-ID: <715d745d-5a85-092a-68c2-b9b1dd8ad53e@leemhuis.info>
+Date:   Fri, 8 Apr 2022 12:08:16 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5hmg2yezfbimyu7f"
-Content-Disposition: inline
-In-Reply-To: <20220408083007.41538-1-wanjiabing@vivo.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Moritz Duge <duge@pre-sense.de>,
+        Aurelien Aptel <aaptel@suse.com>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Steve French <stfrench@microsoft.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>
+To:     "Paulo Alcantara (SUSE)" <pc@cjr.nz>
+Subject: Regression: CIFS umount fails since 14302ee33 with some servers (exit
+ code 32)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1649412504;6f8dbe02;
+X-HE-SMSGID: 1nclXN-0003iK-As
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, this is your Linux kernel regression tracker.
 
---5hmg2yezfbimyu7f
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Paul, it seems a commit authored by you causes a regression:
 
-On Fri, Apr 08, 2022 at 04:30:07PM +0800, Wan Jiabing wrote:
-> use if and else instead of if(A) and if (!A).
->=20
-> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
-> ---
->  drivers/pwm/pwm-sifive.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/pwm/pwm-sifive.c b/drivers/pwm/pwm-sifive.c
-> index 253c4a17d255..e6d05a329002 100644
-> --- a/drivers/pwm/pwm-sifive.c
-> +++ b/drivers/pwm/pwm-sifive.c
-> @@ -138,10 +138,9 @@ static int pwm_sifive_enable(struct pwm_chip *chip, =
-bool enable)
->  			dev_err(ddata->chip.dev, "Enable clk failed\n");
->  			return ret;
->  		}
-> -	}
-> -
-> -	if (!enable)
-> +	} else {
->  		clk_disable(ddata->clk);
-> +	}
-> =20
->  	return 0;
->  }
+I noticed a regression report in bugzilla.kernel.org that afaics nobody
+acted upon since it was reported about a week ago, that's why I decided
+to forward it to the lists and all people that seemed to be relevant
+here. To quote from
+https://bugzilla.kernel.org/show_bug.cgi?id=215782
 
-The patch looks fine. I wonder if it would be sensible to clean up even
-more: pwm_sifive_apply() is only a single caller of
-pwm_sifive_enable(). If this is optimized to skip the duty_cycle and
-period calculation for the state->enabled =3D false case and just disables
-the clock this should still work.
+>  Moritz Duge 2022-03-31 16:47:35 UTC
+> 
+> With upstream kernel 5.16.9 CIFS umount fails when using certain SMB servers.
+> 
+> "umount" returns exit code 32 and the "mount" command still lists the mount as being present.
+> See below for the bad commit I've bisected.
+> 
+> The bug has been reproduced multiple times with upstream kernel 5.16.9!
+> But additionally I've done much testing with openSUSE kernels.
+> Here's the openSUSE bugreport:
+> https://bugzilla.opensuse.org/show_bug.cgi?id=1194945
+> Additionally with the same servers there's a problem showing the free space with the "df" command. But I haven't been able to find out if this is really related to the umount problem.
+> 
+> 
+> 
+> 
+> = SMB Server =
+> 
+> I haven't been able to identify the exact server side settings. But this problem occured with at least this SMB server (with upstream kernel 5.16.9):
+> NetApp (Release 9.7P12) with dfs and CIFS mount options "vers=3.1.1,seal"
+> (quota state unknown)
+> 
+> Additionally I've verified the bug with the openSUSE kernel 5.3.18-lp152.72-default and this SMB server:
+> Windows Server 2019 with dfs and quota enabled
+> (no explicit "vers" or "seal" mount options)
+> 
+> Additionally the bug appeared with another NetApp SMB server (tested upstream 5.16.9) and two unknown servers (tested only openSUSE-15.2 kernels).
+> 
+> Also it looks like the bug may need a setup where the user can only read //server/share/username/ but has no permissions to read //server/share/.
+> 
+> 
+> 
+> 
+> = Bad Commit =
+> 
+> With the openSUSE kernel I bisected the problem down to this commit (6ae27f2b2) between openSUSE-15.2 kernels 5.3.18-lp152.69.1 and 5.3.18-lp152.72.1.
+> https://github.com/SUSE/kernel/commit/6ae27f2b260e91f16583bbc1ded3147e0f7c5d94
+> 
+> This commit is also present in the upstream kernel (14302ee33).
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=14302ee3301b3a77b331cc14efb95bf7184c73cc
+> And it has been merged between 5.11 and 5.12.
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=d0df9aabefda4d0a64730087f939f53f91e29ee6
+> 
+> As said I can't reproduce this with arbitrary SMB servers. And it's always a time consuming procedure for me to do a test with the affected production SMB servers. But if you're really unhappy with the bisect search on the openSUSE kernel, I can repeat the test with the upstream commit 14302ee33 and it's predecessor.
 
-Also I wonder if there is a clk mismatch issue in this driver: .probe
-enables the clk and if the PWM is off (i.e. .get_state diagnoses that)
-the clock will never be disabled while the driver is bound, will it?
 
-Best regards
-Uwe
+Could somebody take a look into this? Or was this discussed somewhere
+else already? Or even fixed?
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+Anyway, to get this tracked:
 
---5hmg2yezfbimyu7f
-Content-Type: application/pgp-signature; name="signature.asc"
+#regzbot introduced: 14302ee3301b3a77b331cc14
+#regzbot from: Moritz Duge <duge@pre-sense.de>
+#regzbot title: CIFS: umount fails with some servers (exit code 32)
+#regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215782
 
------BEGIN PGP SIGNATURE-----
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmJQCVcACgkQwfwUeK3K
-7Al38Af7BAOq90kL/kjCqKlWjXccUKG6Dj3BDwGcg5UfGg/JRiJmYayalIAR2LIn
-mKa9mxv/NmCLa9jl5uPCJ5WqvJnmYcdz4rL11wXGwlEY93YYn56FOG0U7MBo1ij9
-NUdVK8np9+RnN2HYy3YWeiIwGnHFu4xoU9Iv1ahdfPGw+UAPiH2VSYCUkQguXjZ5
-0Lf49mFIHiOBjyiWCHO2pV1k7JWAXLlbPbSthFLufhdQORrYkfqb6K+o8/LfgPtL
-VswPzS7Hd/LNUzP3pHKF1tig1XNRMaTq1E+vkG4x680WLeVgCzWxeIjqeB+wZFar
-8g21tTWYs3nI8bfyBzbE27vAwKI58w==
-=xpSm
------END PGP SIGNATURE-----
+P.S.: As the Linux kernel's regression tracker I'm getting a lot of
+reports on my table. I can only look briefly into most of them and lack
+knowledge about most of the areas they concern. I thus unfortunately
+will sometimes get things wrong or miss something important. I hope
+that's not the case here; if you think it is, don't hesitate to tell me
+in a public reply, it's in everyone's interest to set the public record
+straight.
 
---5hmg2yezfbimyu7f--
+-- 
+Additional information about regzbot:
+
+If you want to know more about regzbot, check out its web-interface, the
+getting start guide, and the references documentation:
+
+https://linux-regtracking.leemhuis.info/regzbot/
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
+
+The last two documents will explain how you can interact with regzbot
+yourself if your want to.
+
+Hint for reporters: when reporting a regression it's in your interest to
+CC the regression list and tell regzbot about the issue, as that ensures
+the regression makes it onto the radar of the Linux kernel's regression
+tracker -- that's in your interest, as it ensures your report won't fall
+through the cracks unnoticed.
+
+Hint for developers: you normally don't need to care about regzbot once
+it's involved. Fix the issue as you normally would, just remember to
+include 'Link:' tag in the patch descriptions pointing to all reports
+about the issue. This has been expected from developers even before
+regzbot showed up for reasons explained in
+'Documentation/process/submitting-patches.rst' and
+'Documentation/process/5.Posting.rst'.

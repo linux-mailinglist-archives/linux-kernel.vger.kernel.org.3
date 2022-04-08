@@ -2,264 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B6F84F91E4
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 11:19:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A4B74F91F2
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 11:22:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233241AbiDHJUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 05:20:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60972 "EHLO
+        id S232680AbiDHJVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 05:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233841AbiDHJRq (ORCPT
+        with ESMTP id S235703AbiDHJUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 05:17:46 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC3E24E27C;
-        Fri,  8 Apr 2022 02:12:32 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2389CUM4085581;
-        Fri, 8 Apr 2022 04:12:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1649409150;
-        bh=elCJdmY3sfAxfF8zHHCCiGjDa7ESfftTerkXFKvEorE=;
-        h=From:To:CC:Subject:Date;
-        b=rDnPh6roC+hum0NrVpsDb7T1eP8WU6bkFVqD8lPcvaD+6JHhZ16X16ieQ5kBECuXk
-         paLhZKfUlxIAplyWSw/A/qdtoYxWwgiAmG04Nw7rrrj7DsoKLSsrUhhG/U83+aUq6D
-         C0ieWmtTGFLaanM4PG2eHDi3hqtrUyuEIEIahWIg=
-Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2389CUAM025682
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 8 Apr 2022 04:12:30 -0500
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 8
- Apr 2022 04:12:30 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 8 Apr 2022 04:12:30 -0500
-Received: from ubuntu.ent.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2389CSgD039327;
-        Fri, 8 Apr 2022 04:12:28 -0500
-From:   Matt Ranostay <mranostay@ti.com>
-To:     <devicetree@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, Matt Ranostay <mranostay@ti.com>
-Subject: [PATCH] arm64: dts: k3-j721e-sk: add CAN-FD transceiver nodes
-Date:   Fri, 8 Apr 2022 02:12:08 -0700
-Message-ID: <20220408091208.26629-1-mranostay@ti.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 8 Apr 2022 05:20:20 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B101A5927;
+        Fri,  8 Apr 2022 02:16:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649409404; x=1680945404;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Q/nocOIVLnEDtEH4qjcth1mCPyRdpJGq3TRyxa8RS+c=;
+  b=ieapZpvmrIscg10AITem8yCfwidjlNwVUz+vzCBPYmPHJXOy/9IK2Eo2
+   FEvFecylOa+EicHefmq/3BW9DIIV40s+AQ+vHb0C/Qp14bkw1d6ldnUiu
+   QXDUZ93GNOdWP8YGQCk068g17EuJ3j6Hv/ZJKJvn1DhK4I/fO1IdPJW7D
+   bUmZCvt4RTmM5GUP5CNZFPoOF7+hI6xZzNpoBJuH53OkP9rJH3si0fgPL
+   U6yslVtUJzJ92+lazX5UHDVZrdv6zr/0lIEG1rbdps7v9xw7DHwAtvpFt
+   PUdF96tmBhzoqa78PB95ih8yDOYB4+czdhkDu2h9TJSWiCC1q0lyxaE5A
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10310"; a="261243512"
+X-IronPort-AV: E=Sophos;i="5.90,244,1643702400"; 
+   d="scan'208";a="261243512"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 02:16:44 -0700
+X-IronPort-AV: E=Sophos;i="5.90,244,1643702400"; 
+   d="scan'208";a="550437664"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.40.214])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 02:16:41 -0700
+Message-ID: <00e04618-f7ed-e016-cddf-0475fdc5fe91@intel.com>
+Date:   Fri, 8 Apr 2022 12:16:36 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.7.0
+Subject: Re: [PATCH v4] perf test tsc: Fix error message report when not
+ supported.
+Content-Language: en-US
+To:     Chengdong Li <brytonlee01@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, peterz@infradead.org,
+        mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
+        namhyung@kernel.org
+Cc:     ak@linux.intel.com, likexu@tencent.com, chengdongli@tencent.com
+References: <CAC2pzGdMFmtV8YNR4DszoATjM80uYNwrnW5As6vgBsyXVcWueA@mail.gmail.com>
+ <20220408084748.43707-1-chengdongli@tencent.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20220408084748.43707-1-chengdongli@tencent.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add transceiver, and pincontrol definitions for the CAN-FD interfaces
-on the J721E Starter Kit (e.g. J1, J2, J5, J6 headers). Additionally,
-MCAN interfaces that cannot be accessed are disabled.
+On 08/04/2022 11.47, Chengdong Li wrote:
+> From: Chengdong Li <chengdongli@tencent.com>
+> 
+> By default `perf test tsc` does not return the error message
+> when the child process detected kernel does not support. Instead,
+> the child process print error message to stderr, unfortunately
+> the stderr is redirected to /dev/null when verbose <= 0.
+> 
+> This patch did three things:
+> - returns TEST_SKIP to the parent process instead of TEST_OK when
+>   perf_read_tsc_conversion() is not supported.
+> - add a new subtest of testing if TSC is supported on current
+>   architecture by moving exist code to a separate function.
+>   It avoids two places in test__perf_time_to_tsc() that return
+>   TEST_SKIP by doing this.
+> - extended test suite definition to contain above two subtests.
+>   Current test_suite and test_case structs do not support printing
+>   skip reason when the number of subtest less than 1. To print skip
+>   reason, it is necessary to extend current test suite definition.
+> 
+> Changes since v3:
+> - refine commit message again to make it clear. 
+> 
+> Changes since v2:
+> - refine error message format.
+> - refine commit log message according to Adrian's review comments.
+> 
+> Changes since v1 (thanks for the feedback from Adrian Hunter):
+> - rebase commit to current source.
+> 
+> Signed-off-by: Chengdong Li <chengdongli@tencent.com>
 
-Largely based on original work from Amarnath MB <amarnath.mb@ti.com>
+Reviewed-by: Adrian Hunter <adrian.hunter@intel.com>
 
-Signed-off-by: Matt Ranostay <mranostay@ti.com>
----
- arch/arm64/boot/dts/ti/k3-j721e-sk.dts | 159 +++++++++++++++++++++++++
- 1 file changed, 159 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-index f25d85169e0d..dc809750c3d5 100644
---- a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-+++ b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-@@ -213,6 +213,41 @@ dp_pwr_3v3: fixedregulator-dp-prw {
- 		enable-active-high;
- 	};
- 
-+	transceiver1: can-phy0 {
-+		compatible = "ti,tcan1042";
-+		#phy-cells = <0>;
-+		max-bitrate = <5000000>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&mcu_mcan0_gpio_pins_default>;
-+		standby-gpios = <&wkup_gpio0 3 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+	transceiver2: can-phy1 {
-+		compatible = "ti,tcan1042";
-+		#phy-cells = <0>;
-+		max-bitrate = <5000000>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&main_mcan0_gpio_pins_default>;
-+		standby-gpios = <&main_gpio0 65 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+	transceiver3: can-phy2 {
-+		compatible = "ti,tcan1042";
-+		#phy-cells = <0>;
-+		max-bitrate = <5000000>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&main_mcan5_gpio_pins_default>;
-+		standby-gpios = <&main_gpio0 66 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+	transceiver4: can-phy3 {
-+		compatible = "ti,tcan1042";
-+		#phy-cells = <0>;
-+		max-bitrate = <5000000>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&main_mcan9_gpio_pins_default>;
-+		standby-gpios = <&main_gpio0 67 GPIO_ACTIVE_HIGH>;
-+	};
- };
- 
- &main_pmx0 {
-@@ -272,6 +307,45 @@ J721E_IOPAD(0x214, PIN_OUTPUT, 4) /* (V4) MCAN1_TX.USB1_DRVVBUS */
- 		>;
- 	};
- 
-+	main_mcan0_pins_default: main-mcan0-pins-default {
-+		pinctrl-single,pins = <
-+			J721E_IOPAD(0x208, PIN_INPUT, 0) /* (W5) MCAN0_RX */
-+			J721E_IOPAD(0x20c, PIN_OUTPUT, 0) /* (W6) MCAN0_TX */
-+		>;
-+	};
-+
-+	main_mcan0_gpio_pins_default: main-mcan0-gpio-pins-default {
-+		pinctrl-single,pins = <
-+			J721E_IOPAD(0x108, PIN_INPUT, 7) /* (AD27) PRG0_PRU1_GPO2.GPIO0_65 */
-+		>;
-+	};
-+
-+	main_mcan5_pins_default: main-mcan5-pins-default {
-+		pinctrl-single,pins = <
-+			J721E_IOPAD(0x50, PIN_INPUT, 6) /* (AE21) PRG1_PRU0_GPO18.MCAN5_RX */
-+			J721E_IOPAD(0x4c, PIN_OUTPUT, 6) /* (AJ21) PRG1_PRU0_GPO17.MCAN5_TX */
-+		>;
-+	};
-+
-+	main_mcan5_gpio_pins_default: main-mcan5-gpio-pins-default {
-+		pinctrl-single,pins = <
-+			J721E_IOPAD(0x10c, PIN_INPUT, 7) /* (AC25) PRG0_PRU1_GPO3.GPIO0_66 */
-+		>;
-+	};
-+
-+	main_mcan9_pins_default: main-mcan9-pins-default {
-+		pinctrl-single,pins = <
-+			J721E_IOPAD(0xd0, PIN_INPUT, 6) /* (AC27) PRG0_PRU0_GPO8.MCAN9_RX */
-+			J721E_IOPAD(0xcc, PIN_OUTPUT, 6) /* (AC28) PRG0_PRU0_GPO7.MCAN9_TX */
-+		>;
-+	};
-+
-+	main_mcan9_gpio_pins_default: main-mcan9-gpio-pins-default {
-+		pinctrl-single,pins = <
-+			J721E_IOPAD(0x110, PIN_INPUT, 7) /* (AD29) PRG0_PRU1_GPO4.GPIO0_67 */
-+		>;
-+	};
-+
- 	dp0_pins_default: dp0-pins-default {
- 		pinctrl-single,pins = <
- 			J721E_IOPAD(0x1c4, PIN_INPUT, 5) /* SPI0_CS1.DP0_HPD */
-@@ -385,6 +459,19 @@ J721E_WKUP_IOPAD(0xfc, PIN_INPUT_PULLUP, 0) /* (H24) WKUP_I2C0_SDA */
- 		>;
- 	};
- 
-+	mcu_mcan0_pins_default: mcu-mcan0-pins-default {
-+		pinctrl-single,pins = <
-+			J721E_WKUP_IOPAD(0xac, PIN_INPUT, 0) /* (C29) MCU_MCAN0_RX */
-+			J721E_WKUP_IOPAD(0xa8, PIN_OUTPUT, 0) /* (D29) MCU_MCAN0_TX */
-+		>;
-+	};
-+
-+	mcu_mcan0_gpio_pins_default: mcu-mcan0-gpio-pins-default {
-+		pinctrl-single,pins = <
-+			J721E_WKUP_IOPAD(0xbc, PIN_INPUT, 7) /* (F27) WKUP_GPIO0_3 */
-+		>;
-+	};
-+
- 	/* Reset for M.2 M Key slot on PCIe1  */
- 	mkey_reset_pins_default: mkey-reset-pns-pins-default {
- 		pinctrl-single,pins = <
-@@ -998,3 +1085,75 @@ &c71_0 {
- 	memory-region = <&c71_0_dma_memory_region>,
- 			<&c71_0_memory_region>;
- };
-+
-+&mcu_mcan0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mcu_mcan0_pins_default>;
-+	phys = <&transceiver1>;
-+};
-+
-+&mcu_mcan1 {
-+	status = "disabled";
-+};
-+
-+&main_mcan0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_mcan0_pins_default>;
-+	phys = <&transceiver2>;
-+};
-+
-+&main_mcan1 {
-+	status = "disabled";
-+};
-+
-+&main_mcan2 {
-+	status = "disabled";
-+};
-+
-+&main_mcan3 {
-+	status = "disabled";
-+};
-+
-+&main_mcan4 {
-+	status = "disabled";
-+};
-+
-+&main_mcan5 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_mcan5_pins_default>;
-+	phys = <&transceiver3>;
-+};
-+
-+&main_mcan6 {
-+	status = "disabled";
-+};
-+
-+&main_mcan7 {
-+	status = "disabled";
-+};
-+
-+&main_mcan8 {
-+	status = "disabled";
-+};
-+
-+&main_mcan9 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_mcan9_pins_default>;
-+	phys = <&transceiver4>;
-+};
-+
-+&main_mcan10 {
-+	status = "disabled";
-+};
-+
-+&main_mcan11 {
-+	status = "disabled";
-+};
-+
-+&main_mcan12 {
-+	status = "disabled";
-+};
-+
-+&main_mcan13 {
-+	status = "disabled";
-+};
--- 
-2.30.2
+> ---
+>  tools/perf/tests/perf-time-to-tsc.c | 36 +++++++++++++++++++++--------
+>  1 file changed, 27 insertions(+), 9 deletions(-)
+> 
+> diff --git a/tools/perf/tests/perf-time-to-tsc.c b/tools/perf/tests/perf-time-to-tsc.c
+> index d12d0ad81801..cc6df49a65a1 100644
+> --- a/tools/perf/tests/perf-time-to-tsc.c
+> +++ b/tools/perf/tests/perf-time-to-tsc.c
+> @@ -47,6 +47,17 @@
+>  	}					\
+>  }
+>  
+> +static int test__tsc_is_supported(struct test_suite *test __maybe_unused,
+> +				  int subtest __maybe_unused)
+> +{
+> +	if (!TSC_IS_SUPPORTED) {
+> +		pr_debug("Test not supported on this architecture\n");
+> +		return TEST_SKIP;
+> +	}
+> +
+> +	return TEST_OK;
+> +}
+> +
+>  /**
+>   * test__perf_time_to_tsc - test converting perf time to TSC.
+>   *
+> @@ -70,7 +81,7 @@ static int test__perf_time_to_tsc(struct test_suite *test __maybe_unused, int su
+>  	struct perf_cpu_map *cpus = NULL;
+>  	struct evlist *evlist = NULL;
+>  	struct evsel *evsel = NULL;
+> -	int err = -1, ret, i;
+> +	int err = TEST_FAIL, ret, i;
+>  	const char *comm1, *comm2;
+>  	struct perf_tsc_conversion tc;
+>  	struct perf_event_mmap_page *pc;
+> @@ -79,10 +90,6 @@ static int test__perf_time_to_tsc(struct test_suite *test __maybe_unused, int su
+>  	u64 test_time, comm1_time = 0, comm2_time = 0;
+>  	struct mmap *md;
+>  
+> -	if (!TSC_IS_SUPPORTED) {
+> -		pr_debug("Test not supported on this architecture");
+> -		return TEST_SKIP;
+> -	}
+>  
+>  	threads = thread_map__new(-1, getpid(), UINT_MAX);
+>  	CHECK_NOT_NULL__(threads);
+> @@ -124,8 +131,8 @@ static int test__perf_time_to_tsc(struct test_suite *test __maybe_unused, int su
+>  	ret = perf_read_tsc_conversion(pc, &tc);
+>  	if (ret) {
+>  		if (ret == -EOPNOTSUPP) {
+> -			fprintf(stderr, " (not supported)");
+> -			return 0;
+> +			pr_debug("perf_read_tsc_conversion is not supported in current kernel\n");
+> +			err = TEST_SKIP;
+>  		}
+>  		goto out_err;
+>  	}
+> @@ -191,7 +198,7 @@ static int test__perf_time_to_tsc(struct test_suite *test __maybe_unused, int su
+>  	    test_tsc >= comm2_tsc)
+>  		goto out_err;
+>  
+> -	err = 0;
+> +	err = TEST_OK;
+>  
+>  out_err:
+>  	evlist__delete(evlist);
+> @@ -200,4 +207,15 @@ static int test__perf_time_to_tsc(struct test_suite *test __maybe_unused, int su
+>  	return err;
+>  }
+>  
+> -DEFINE_SUITE("Convert perf time to TSC", perf_time_to_tsc);
+> +static struct test_case time_to_tsc_tests[] = {
+> +	TEST_CASE_REASON("TSC support", tsc_is_supported,
+> +			 "This architecture does not support"),
+> +	TEST_CASE_REASON("Perf time to TSC", perf_time_to_tsc,
+> +			 "perf_read_tsc_conversion is not supported"),
+> +	{ .name = NULL, }
+> +};
+> +
+> +struct test_suite suite__perf_time_to_tsc = {
+> +	.desc = "Convert perf time to TSC",
+> +	.test_cases = time_to_tsc_tests,
+> +};
 

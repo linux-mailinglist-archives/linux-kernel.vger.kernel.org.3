@@ -2,71 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 001C04F9ACD
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 18:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06B144F9AD0
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 18:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233205AbiDHQj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 12:39:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40202 "EHLO
+        id S233302AbiDHQk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 12:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232671AbiDHQj0 (ORCPT
+        with ESMTP id S233234AbiDHQkZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 12:39:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CAE2211FE02
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 09:37:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649435841;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
-        b=iFX6x2ro5Ptjsrf9j2tflbVBG3hjSttp7i7W9nL6EMuFUdLMSb42bpBBjomcR06GvSWLSm
-        TSfSq9TvERChOtTI1Jqb4NsqXClHAs37ycvJ3Li3ZK6u1/7aOLNAWASnQVOzrMf1EedVka
-        NfmLQZ81Ue7cMs28TUNWG5nQePqSYac=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-642-hzbC6PTjPjOLpZHnEjkOTQ-1; Fri, 08 Apr 2022 12:37:16 -0400
-X-MC-Unique: hzbC6PTjPjOLpZHnEjkOTQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 65AA73C01DBA;
-        Fri,  8 Apr 2022 16:37:16 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2BED02024CC6;
-        Fri,  8 Apr 2022 16:37:16 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     kvm@vger.kernel.org,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] kvm: minor fixes and cleanups
-Date:   Fri,  8 Apr 2022 12:37:15 -0400
-Message-Id: <20220408163715.462096-1-pbonzini@redhat.com>
-In-Reply-To: <20220406063715.55625-1-likexu@tencent.com>
-References: 
+        Fri, 8 Apr 2022 12:40:25 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B823212220F
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 09:38:20 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2CAD21042;
+        Fri,  8 Apr 2022 09:38:20 -0700 (PDT)
+Received: from [10.1.196.218] (eglon.cambridge.arm.com [10.1.196.218])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2E8AC3F73B;
+        Fri,  8 Apr 2022 09:38:19 -0700 (PDT)
+Subject: Re: arm64 spectre-bhb backports break boot on stable kernels <= v5.4
+To:     Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, maz@kernel.org,
+        catalin.marinas@arm.com, mark.rutland@arm.com
+References: <20220408120041.GB27685@willie-the-truck>
+ <1a44f42c-0391-7428-ac85-1e27aaf0be14@arm.com>
+ <20220408162139.GB28108@willie-the-truck>
+From:   James Morse <james.morse@arm.com>
+Message-ID: <d3d1c89e-82d7-6894-5bc0-3a0bbf367b8f@arm.com>
+Date:   Fri, 8 Apr 2022 17:38:13 +0100
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220408162139.GB28108@willie-the-truck>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Queued, thanks.
+Hi Will,
 
-Paolo
+On 08/04/2022 17:21, Will Deacon wrote:
+> On Fri, Apr 08, 2022 at 05:08:00PM +0100, James Morse wrote:
+>> On 08/04/2022 13:00, Will Deacon wrote:
+>>> Booting stable kernels <= v5.4 on arm64 with CONFIG_HARDEN_BRANCH_PREDICTOR=n
+>>> results in a NULL pointer dereference during boot due to kvm_get_hyp_vector()
+>>> dereferencing a NULL pointer from arm64_get_bp_hardening_data():
+>>>
+>>> [    2.384444] Internal error: Oops: 96000004 [#1] PREEMPT SMP
+>>> [    2.384461] pstate: 20400085 (nzCv daIf +PAN -UAO)
+>>> [    2.384472] pc : cpu_hyp_reinit+0x114/0x30c
+>>> [    2.384476] lr : cpu_hyp_reinit+0x80/0x30c
+
+>>> [    2.385171] Kernel panic - not syncing: Fatal exception in interrupt
+>>
+>> Yikes!
+>>
+>> Interesting to know that stuff behind CONFIG_EXPERT has someone who cares about it.
+>> (I was going to propose dropping the Kconfig option after a while).
+
+> Yup! FWIW, the hardening options are enabled in Android (GKI), but this was
+> reported to us externally by somebody using a custom config.
+
+>>> I can bodge this as below (untested), but it's pretty grotty.
+>>
+>> I wanted to keep the detection code even if the feature is disabled so the sysfs reporting
+>> is always correct.
+> 
+> Makes sense. Another option is to check for ARM64_HARDEN_BRANCH_PREDICTOR in
+> spectre_bhb_enable_mitigation(), but then I think the KVM code would need
+> to query the mitigation state rather than just the cap.
+
+It already does, but as you say KVM is only using the cap here.
 
 
+>>> Please can you take a look?
+>>
+>> Ugh, arm64_get_bp_hardening_data() returns NULL with that Kconfig setup.
+>>
+>>
+>> For v5.4, this fixes it for me:
+>> --------------------%<--------------------
+>> diff --git a/arch/arm64/include/asm/kvm_mmu.h b/arch/arm64/include/asm/kvm_mmu.h
+>> index 78d110667c0c..ffe0aad96b17 100644
+>> --- a/arch/arm64/include/asm/kvm_mmu.h
+>> +++ b/arch/arm64/include/asm/kvm_mmu.h
+>> @@ -479,7 +479,8 @@ static inline void *kvm_get_hyp_vector(void)
+>>         int slot = -1;
+>>
+>>         if ((cpus_have_const_cap(ARM64_HARDEN_BRANCH_PREDICTOR) ||
+>> -            cpus_have_const_cap(ARM64_SPECTRE_BHB)) && data->template_start) {
+>> +            cpus_have_const_cap(ARM64_SPECTRE_BHB)) &&
+>> +           data && data->template_start) {
+>>                 vect = kern_hyp_va(kvm_ksym_ref(__bp_harden_hyp_vecs_start));
+>>                 slot = data->hyp_vectors_slot;
+>>         }
+> 
+> That'll work, but will sysfs report that BHB is mitigated even if
+> !ARM64_HARDEN_BRANCH_PREDICTOR?
+
+The (!IS_ENABLED(CONFIG_HARDEN_BRANCH_PREDICTOR) in check_branch_predictor() will set
+__hardenbp_enab to false, which get_spectre_v2_workaround_state() picks up and causes
+spectre_bhb_enable_mitigation() to skip all the mitigations, leaving state =
+SPECTRE_VULNERABLE.
+
+(The interactions with the other Spectre mitigations across the stable kernels
+were/continue-to-be a pain in the neck)
+
+
+>> --------------------%<--------------------
+>>
+>> I'll check the other versions and post patches to the stable list. Earlier stable
+>> backports grew a dependency between these features as it wasn't possible to unpick the
+>> dependencies.
+> 
+> Cheers. I know 4.19 is busted too, but I didn't check 4.14.
+
+Yup, I've just reproduced that one. I suspect v4.14 is where I added the Kconfig dependency.
+
+
+Thanks,
+
+James

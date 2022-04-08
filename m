@@ -2,371 +2,336 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A36F54F95C3
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:29:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DCCB4F95CE
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 14:31:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235744AbiDHMbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 08:31:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
+        id S235753AbiDHMdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 08:33:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232535AbiDHMbC (ORCPT
+        with ESMTP id S231550AbiDHMdK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 08:31:02 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5177133E58B;
-        Fri,  8 Apr 2022 05:28:59 -0700 (PDT)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 238C5dlh011335;
-        Fri, 8 Apr 2022 12:28:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : reply-to : references : mime-version : content-type
- : in-reply-to; s=pp1; bh=dJ4beaFBj69hR6/xMuS7HEMqPjkxsdKD2Fy234LyYS8=;
- b=JeQ0wfcPD349R6HwWtTdNc9u/RqNzD1wcuh7wQq/O/+ZRXYkqkOfFykoxW0djKhsKT72
- ccWdwyTT/BeDFgPi3IHr7/gNt5O2Og0SywVfNZS3dq6ytIo8VRcPbali2DE7MnVqsdZj
- jhyjn6D+Fa4S2i3JCkkbtncUCT5Qr8pkyTovG9ew/UJCRmq1Vr0BWo85y8HbRGcHztot
- Omv8XIwPGPB0uX267vBp4AjgSnVe2dUwLF8U9w3Oet7Lesg4lritAsb4Grxg1k+7kFOx
- hrn4L1V0hi1na4URCq6ihe+zwxadhihYn2wYoJ4Hja6+x3gBeAlpOjHw+aEEeH9BMzgZ Og== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3faewhyen7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 08 Apr 2022 12:28:51 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 238C4rqM012381;
-        Fri, 8 Apr 2022 12:28:51 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3faewhyemc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 08 Apr 2022 12:28:51 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 238CDCg9021288;
-        Fri, 8 Apr 2022 12:28:48 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma06ams.nl.ibm.com with ESMTP id 3f6drhur53-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 08 Apr 2022 12:28:48 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 238CSjo031523300
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 8 Apr 2022 12:28:45 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 98FD44C04A;
-        Fri,  8 Apr 2022 12:28:45 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C956D4C040;
-        Fri,  8 Apr 2022 12:28:43 +0000 (GMT)
-Received: from linux.vnet.ibm.com (unknown [9.40.195.195])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with SMTP;
-        Fri,  8 Apr 2022 12:28:43 +0000 (GMT)
-Date:   Fri, 8 Apr 2022 17:58:43 +0530
-From:   Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-To:     Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-Cc:     acme@kernel.org, jolsa@kernel.org, disgoel@linux.vnet.ibm.com,
-        mpe@ellerman.id.au, linux-perf-users@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, maddy@linux.vnet.ibm.com,
-        rnsastry@linux.ibm.com, kjain@linux.ibm.com,
-        linux-kernel@vger.kernel.org, irogers@google.com
-Subject: Re: [PATCH v2 3/4] tools/perf: Fix perf numa bench to fix usage of
- affinity for machines with #CPUs > 1K
-Message-ID: <20220408122843.GG568950@linux.vnet.ibm.com>
-Reply-To: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-References: <20220406175113.87881-1-atrajeev@linux.vnet.ibm.com>
- <20220406175113.87881-4-atrajeev@linux.vnet.ibm.com>
+        Fri, 8 Apr 2022 08:33:10 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B733F3150F;
+        Fri,  8 Apr 2022 05:31:06 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id b15so9899513edn.4;
+        Fri, 08 Apr 2022 05:31:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=MdB4ANwvghcG4fkQozdLA8gRjmcacHbkquFwAsn8CRc=;
+        b=DiZ9jvoKF93GbRCqokSIJWSa1Cgz/AAF7qnZXRgs26kl2t5t/RnDVPs+M1q6PNMbRx
+         HPeTZEHveI4zWPG8wAK5IGmRrvLHNXG7uhwya4CpBOWeDH6HVCFW4quBofsxSwCaYHsU
+         zGUq+ETYq/9PuZF0oCFJPBVyL0du9IY5LGiM6mPebPK8DLte4lamuL//mpS90Qto0ldD
+         bwIMw4MHHNRsImr51cp2Jsw4tTJnDoQ0ekoCIeoYZHigcEhcfJXSW3qDVnSDy5l8UrO4
+         XKqBOGz8DWnUVdEtAxFi7bNJP6Y+xFAmLkn9uGSZWeA9A7r7vXseb56pXiLvAHR2+ZeK
+         HXfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MdB4ANwvghcG4fkQozdLA8gRjmcacHbkquFwAsn8CRc=;
+        b=43r9lW3aFBEr3qE8u3XAo24WXdPhjOXjAL9jHeYS6KZ6QPKCA+bN1WjPHNM6PGr1Pe
+         egbht8reXQWmuOIgRWk21+/Q/+i5Lgj+6rfcRPt80b5BDaKqJjJUgNMGQ4zNYv7slcK6
+         2by29e4YUN2Df1ScpybE4jD9OPFjeUM/rDqUBiDz435EWI49pnQn/PWRMI0hiH1QduMz
+         dr6y8GDSWVsPRPv3m7MiXR2gKXjGNkjNY6V4mH0x2ejPM/C8YJlWuIS2hKB7ZXoVA5Sv
+         UlavebiDIExMvTMdaGokiTOTIru+cQxGhq44kkO4uMYDKP0mBIV7Kcsghu5EVSkwp8y3
+         SK+g==
+X-Gm-Message-State: AOAM53104aBbGSskAbEfUqvSE9KejXmnlnWfzuGsZ1Fii8W0XwiUZ/wi
+        QDt9M5b6V9UxpWrXzpWjE+k=
+X-Google-Smtp-Source: ABdhPJyAZrneojIBn7WVn8l4/2ymdhQ3RO+ob3K825lN5od6g+iFNxw2mpyIJef4bqmid+dNV8h1ug==
+X-Received: by 2002:a05:6402:289f:b0:41c:d9af:ce39 with SMTP id eg31-20020a056402289f00b0041cd9afce39mr19631558edb.415.1649421064812;
+        Fri, 08 Apr 2022 05:31:04 -0700 (PDT)
+Received: from skbuf ([188.26.57.45])
+        by smtp.gmail.com with ESMTPSA id o22-20020a170906289600b006e44a0c1105sm8703503ejd.46.2022.04.08.05.31.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 05:31:04 -0700 (PDT)
+Date:   Fri, 8 Apr 2022 15:31:01 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Jakob Koschel <jakobkoschel@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        UNGLinuxDriver@microchip.com, Ariel Elior <aelior@marvell.com>,
+        Manish Chopra <manishc@marvell.com>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        Martin Habets <habetsm.xilinx@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Casper Andersson <casper.casan@gmail.com>,
+        Bjarni Jonasson <bjarni.jonasson@microchip.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Michael Walle <michael@walle.cc>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Eric Dumazet <edumazet@google.com>,
+        Di Zhu <zhudi21@huawei.com>, Xu Wang <vulab@iscas.ac.cn>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, Mike Rapoport <rppt@kernel.org>,
+        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Subject: Re: [PATCH net-next 03/15] net: dsa: mv88e6xxx: Replace usage of
+ found with dedicated iterator
+Message-ID: <20220408123101.p33jpynhqo67hebe@skbuf>
+References: <20220407102900.3086255-1-jakobkoschel@gmail.com>
+ <20220407102900.3086255-4-jakobkoschel@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220406175113.87881-4-atrajeev@linux.vnet.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: _ibXQBYgrYKyfjg5p_lAh_xtppsCcFzW
-X-Proofpoint-GUID: uzpDh3wRuwTmoQRKYQ_nh379siq8HWRl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-08_04,2022-04-08_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- bulkscore=0 spamscore=0 clxscore=1015 mlxlogscore=999 priorityscore=1501
- impostorscore=0 lowpriorityscore=0 malwarescore=0 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204080062
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220407102900.3086255-4-jakobkoschel@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Athira Rajeev <atrajeev@linux.vnet.ibm.com> [2022-04-06 23:21:12]:
+Hi Jakob,
 
-> perf bench numa testcase fails on systems with CPU's
-> more than 1K.
+On Thu, Apr 07, 2022 at 12:28:48PM +0200, Jakob Koschel wrote:
+> To move the list iterator variable into the list_for_each_entry_*()
+> macro in the future it should be avoided to use the list iterator
+> variable after the loop body.
 > 
-> Testcase: perf bench numa mem -p 1 -t 3 -P 512 -s 100 -zZ0qcm --thp  1
-> Snippet of code:
-> <<>>
-> perf: bench/numa.c:302: bind_to_node: Assertion `!(ret)' failed.
-> Aborted (core dumped)
-> <<>>
+> To *never* use the list iterator variable after the loop it was
+> concluded to use a separate iterator variable instead of a
+> found boolean [1].
 > 
-> bind_to_node function uses "sched_getaffinity" to save the original
-> cpumask and this call is returning EINVAL ((invalid argument).
-> This happens because the default mask size in glibc is 1024.
-> To overcome this 1024 CPUs mask size limitation of cpu_set_t,
-> change the mask size using the CPU_*_S macros ie, use CPU_ALLOC to
-> allocate cpumask, CPU_ALLOC_SIZE for size. Apart from fixing this
-> for "orig_mask", apply same logic to "mask" as well which is used to
-> setaffinity so that mask size is large enough to represent number
-> of possible CPU's in the system.
+> This removes the need to use a found variable and simply checking if
+> the variable was set, can determine if the break/goto was hit.
 > 
-> sched_getaffinity is used in one more place in perf numa bench. It
-> is in "bind_to_cpu" function. Apply the same logic there also. Though
-> currently no failure is reported from there, it is ideal to change
-> getaffinity to work with such system configurations having CPU's more
-> than default mask size supported by glibc.
-> 
-> Also fix "sched_setaffinity" to use mask size which is large enough
-> to represent number of possible CPU's in the system.
-> 
-> Fixed all places where "bind_cpumask" which is part of "struct
-> thread_data" is used such that bind_cpumask works in all configuration.
-> 
-> Tested-by: Disha Goel <disgoel@linux.vnet.ibm.com>
-> Signed-off-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-> Reported-by: Disha Goel <disgoel@linux.vnet.ibm.com>
-
-Looks good to me.
-
-Reviewed-by: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-
+> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
+> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
 > ---
->  tools/perf/bench/numa.c | 97 ++++++++++++++++++++++++++++++-----------
->  1 file changed, 71 insertions(+), 26 deletions(-)
+>  drivers/net/dsa/mv88e6xxx/chip.c | 21 ++++++++++-----------
+>  1 file changed, 10 insertions(+), 11 deletions(-)
 > 
-> diff --git a/tools/perf/bench/numa.c b/tools/perf/bench/numa.c
-> index f2640179ada9..29e41e32bd88 100644
-> --- a/tools/perf/bench/numa.c
-> +++ b/tools/perf/bench/numa.c
-> @@ -54,7 +54,7 @@
-> 
->  struct thread_data {
->  	int			curr_cpu;
-> -	cpu_set_t		bind_cpumask;
-> +	cpu_set_t		*bind_cpumask;
->  	int			bind_node;
->  	u8			*process_data;
->  	int			process_nr;
-> @@ -266,46 +266,71 @@ static bool node_has_cpus(int node)
->  	return ret;
->  }
-> 
-> -static cpu_set_t bind_to_cpu(int target_cpu)
-> +static cpu_set_t *bind_to_cpu(int target_cpu)
+> diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
+> index 64f4fdd02902..f254f537c357 100644
+> --- a/drivers/net/dsa/mv88e6xxx/chip.c
+> +++ b/drivers/net/dsa/mv88e6xxx/chip.c
+> @@ -1381,28 +1381,27 @@ static int mv88e6xxx_set_mac_eee(struct dsa_switch *ds, int port,
+>  /* Mask of the local ports allowed to receive frames from a given fabric port */
+>  static u16 mv88e6xxx_port_vlan(struct mv88e6xxx_chip *chip, int dev, int port)
 >  {
-> -	cpu_set_t orig_mask, mask;
-> +	int nrcpus = numa_num_possible_cpus();
-> +	cpu_set_t *orig_mask, *mask;
-> +	size_t size;
->  	int ret;
-> 
-> -	ret = sched_getaffinity(0, sizeof(orig_mask), &orig_mask);
-> -	BUG_ON(ret);
-> +	orig_mask = CPU_ALLOC(nrcpus);
-> +	BUG_ON(!orig_mask);
-> +	size = CPU_ALLOC_SIZE(nrcpus);
-> +	CPU_ZERO_S(size, orig_mask);
-> +
-> +	ret = sched_getaffinity(0, size, orig_mask);
-> +	if (ret) {
-> +		CPU_FREE(orig_mask);
-> +		BUG_ON(ret);
-> +	}
-> 
-> -	CPU_ZERO(&mask);
-> +	mask = CPU_ALLOC(nrcpus);
-> +	BUG_ON(!mask);
-> +	CPU_ZERO_S(size, mask);
-> 
->  	if (target_cpu == -1) {
->  		int cpu;
-> 
->  		for (cpu = 0; cpu < g->p.nr_cpus; cpu++)
-> -			CPU_SET(cpu, &mask);
-> +			CPU_SET_S(cpu, size, mask);
->  	} else {
->  		BUG_ON(target_cpu < 0 || target_cpu >= g->p.nr_cpus);
-> -		CPU_SET(target_cpu, &mask);
-> +		CPU_SET_S(target_cpu, size, mask);
->  	}
-> 
-> -	ret = sched_setaffinity(0, sizeof(mask), &mask);
-> +	ret = sched_setaffinity(0, size, mask);
-> +	CPU_FREE(mask);
->  	BUG_ON(ret);
-> 
->  	return orig_mask;
->  }
-> 
-> -static cpu_set_t bind_to_node(int target_node)
-> +static cpu_set_t *bind_to_node(int target_node)
->  {
-> -	cpu_set_t orig_mask, mask;
-> +	int nrcpus = numa_num_possible_cpus();
-> +	cpu_set_t *orig_mask, *mask;
-> +	size_t size;
->  	int cpu;
->  	int ret;
-> 
-> -	ret = sched_getaffinity(0, sizeof(orig_mask), &orig_mask);
-> -	BUG_ON(ret);
-> +	orig_mask = CPU_ALLOC(nrcpus);
-> +	BUG_ON(!orig_mask);
-> +	size = CPU_ALLOC_SIZE(nrcpus);
-> +	CPU_ZERO_S(size, orig_mask);
-> +
-> +	ret = sched_getaffinity(0, size, orig_mask);
-> +	if (ret) {
-> +		CPU_FREE(orig_mask);
-> +		BUG_ON(ret);
-> +	}
-> 
-> -	CPU_ZERO(&mask);
-> +	mask = CPU_ALLOC(nrcpus);
-> +	BUG_ON(!mask);
-> +	CPU_ZERO_S(size, mask);
-> 
->  	if (target_node == NUMA_NO_NODE) {
->  		for (cpu = 0; cpu < g->p.nr_cpus; cpu++)
-> -			CPU_SET(cpu, &mask);
-> +			CPU_SET_S(cpu, size, mask);
->  	} else {
->  		struct bitmask *cpumask = numa_allocate_cpumask();
-> 
-> @@ -313,24 +338,29 @@ static cpu_set_t bind_to_node(int target_node)
->  		if (!numa_node_to_cpus(target_node, cpumask)) {
->  			for (cpu = 0; cpu < (int)cpumask->size; cpu++) {
->  				if (numa_bitmask_isbitset(cpumask, cpu))
-> -					CPU_SET(cpu, &mask);
-> +					CPU_SET_S(cpu, size, mask);
+> +	struct dsa_port *dp = NULL, *iter, *other_dp;
+>  	struct dsa_switch *ds = chip->ds;
+>  	struct dsa_switch_tree *dst = ds->dst;
+> -	struct dsa_port *dp, *other_dp;
+> -	bool found = false;
+>  	u16 pvlan;
+>  
+>  	/* dev is a physical switch */
+>  	if (dev <= dst->last_switch) {
+> -		list_for_each_entry(dp, &dst->ports, list) {
+> -			if (dp->ds->index == dev && dp->index == port) {
+> -				/* dp might be a DSA link or a user port, so it
+> +		list_for_each_entry(iter, &dst->ports, list) {
+> +			if (iter->ds->index == dev && iter->index == port) {
+> +				/* iter might be a DSA link or a user port, so it
+>  				 * might or might not have a bridge.
+> -				 * Use the "found" variable for both cases.
+> +				 * Set the "dp" variable for both cases.
+>  				 */
+> -				found = true;
+> +				dp = iter;
+>  				break;
 >  			}
 >  		}
->  		numa_free_cpumask(cpumask);
->  	}
-> 
-> -	ret = sched_setaffinity(0, sizeof(mask), &mask);
-> +	ret = sched_setaffinity(0, size, mask);
-> +	CPU_FREE(mask);
->  	BUG_ON(ret);
-> 
->  	return orig_mask;
->  }
-> 
-> -static void bind_to_cpumask(cpu_set_t mask)
-> +static void bind_to_cpumask(cpu_set_t *mask)
->  {
->  	int ret;
-> +	size_t size = CPU_ALLOC_SIZE(numa_num_possible_cpus());
-> 
-> -	ret = sched_setaffinity(0, sizeof(mask), &mask);
-> -	BUG_ON(ret);
-> +	ret = sched_setaffinity(0, size, mask);
-> +	if (ret) {
-> +		CPU_FREE(mask);
-> +		BUG_ON(ret);
-> +	}
->  }
-> 
->  static void mempol_restore(void)
-> @@ -376,7 +406,7 @@ do {							\
->  static u8 *alloc_data(ssize_t bytes0, int map_flags,
->  		      int init_zero, int init_cpu0, int thp, int init_random)
->  {
-> -	cpu_set_t orig_mask;
-> +	cpu_set_t *orig_mask;
->  	ssize_t bytes;
->  	u8 *buf;
->  	int ret;
-> @@ -434,6 +464,7 @@ static u8 *alloc_data(ssize_t bytes0, int map_flags,
->  	/* Restore affinity: */
->  	if (init_cpu0) {
->  		bind_to_cpumask(orig_mask);
-> +		CPU_FREE(orig_mask);
->  		mempol_restore();
->  	}
-> 
-> @@ -589,6 +620,7 @@ static int parse_setup_cpu_list(void)
->  		BUG_ON(bind_cpu_0 > bind_cpu_1);
-> 
->  		for (bind_cpu = bind_cpu_0; bind_cpu <= bind_cpu_1; bind_cpu += step) {
-> +			size_t size = CPU_ALLOC_SIZE(g->p.nr_cpus);
->  			int i;
-> 
->  			for (i = 0; i < mul; i++) {
-> @@ -608,10 +640,12 @@ static int parse_setup_cpu_list(void)
->  					tprintf("%2d", bind_cpu);
->  				}
-> 
-> -				CPU_ZERO(&td->bind_cpumask);
-> +				td->bind_cpumask = CPU_ALLOC(g->p.nr_cpus);
-> +				BUG_ON(!td->bind_cpumask);
-> +				CPU_ZERO_S(size, td->bind_cpumask);
->  				for (cpu = bind_cpu; cpu < bind_cpu+bind_len; cpu++) {
->  					BUG_ON(cpu < 0 || cpu >= g->p.nr_cpus);
-> -					CPU_SET(cpu, &td->bind_cpumask);
-> +					CPU_SET_S(cpu, size, td->bind_cpumask);
->  				}
->  				t++;
->  			}
-> @@ -1241,7 +1275,7 @@ static void *worker_thread(void *__tdata)
->  		 * by migrating to CPU#0:
->  		 */
->  		if (first_task && g->p.perturb_secs && (int)(stop.tv_sec - last_perturbance) >= g->p.perturb_secs) {
-> -			cpu_set_t orig_mask;
-> +			cpu_set_t *orig_mask;
->  			int target_cpu;
->  			int this_cpu;
-> 
-> @@ -1265,6 +1299,7 @@ static void *worker_thread(void *__tdata)
->  				printf(" (injecting perturbalance, moved to CPU#%d)\n", target_cpu);
-> 
->  			bind_to_cpumask(orig_mask);
-> +			CPU_FREE(orig_mask);
+>  	/* dev is a virtual bridge */
+>  	} else {
+> -		list_for_each_entry(dp, &dst->ports, list) {
+> -			unsigned int bridge_num = dsa_port_bridge_num_get(dp);
+> +		list_for_each_entry(iter, &dst->ports, list) {
+> +			unsigned int bridge_num = dsa_port_bridge_num_get(iter);
+>  
+>  			if (!bridge_num)
+>  				continue;
+> @@ -1410,13 +1409,13 @@ static u16 mv88e6xxx_port_vlan(struct mv88e6xxx_chip *chip, int dev, int port)
+>  			if (bridge_num + dst->last_switch != dev)
+>  				continue;
+>  
+> -			found = true;
+> +			dp = iter;
+>  			break;
 >  		}
-> 
->  		if (details >= 3) {
-> @@ -1398,21 +1433,31 @@ static void init_thread_data(void)
-> 
->  	for (t = 0; t < g->p.nr_tasks; t++) {
->  		struct thread_data *td = g->threads + t;
-> +		size_t cpuset_size = CPU_ALLOC_SIZE(g->p.nr_cpus);
->  		int cpu;
-> 
->  		/* Allow all nodes by default: */
->  		td->bind_node = NUMA_NO_NODE;
-> 
->  		/* Allow all CPUs by default: */
-> -		CPU_ZERO(&td->bind_cpumask);
-> +		td->bind_cpumask = CPU_ALLOC(g->p.nr_cpus);
-> +		BUG_ON(!td->bind_cpumask);
-> +		CPU_ZERO_S(cpuset_size, td->bind_cpumask);
->  		for (cpu = 0; cpu < g->p.nr_cpus; cpu++)
-> -			CPU_SET(cpu, &td->bind_cpumask);
-> +			CPU_SET_S(cpu, cpuset_size, td->bind_cpumask);
 >  	}
->  }
-> 
->  static void deinit_thread_data(void)
->  {
->  	ssize_t size = sizeof(*g->threads)*g->p.nr_tasks;
-> +	int t;
-> +
-> +	/* Free the bind_cpumask allocated for thread_data */
-> +	for (t = 0; t < g->p.nr_tasks; t++) {
-> +		struct thread_data *td = g->threads + t;
-> +		CPU_FREE(td->bind_cpumask);
-> +	}
-> 
->  	free_data(g->threads, size);
->  }
+>  
+>  	/* Prevent frames from unknown switch or virtual bridge */
+> -	if (!found)
+> +	if (!dp)
+>  		return 0;
+>  
+>  	/* Frames from DSA links and CPU ports can egress any local port */
 > -- 
-> 2.35.1
+> 2.25.1
 > 
+
+Let's try to not make convoluted code worse. Do the following 2 patches
+achieve what you are looking for? Originally I had a single patch (what
+is now 2/2) but I figured it would be cleaner to break out the unrelated
+change into what is now 1/2.
+
+If you want I can submit these changes separately.
+
+-----------------------------[ cut here ]-----------------------------
+From 2d84ecd87566b1535a04526b4ebb2764e764625f Mon Sep 17 00:00:00 2001
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
+Date: Fri, 8 Apr 2022 15:15:30 +0300
+Subject: [PATCH 1/2] net: dsa: mv88e6xxx: remove redundant check in
+ mv88e6xxx_port_vlan()
+
+We know that "dev > dst->last_switch" in the "else" block.
+In other words, that "dev - dst->last_switch" is > 0.
+
+dsa_port_bridge_num_get(dp) can be 0, but the check
+"if (bridge_num + dst->last_switch != dev) continue", rewritten as
+"if (bridge_num != dev - dst->last_switch) continue", aka
+"if (bridge_num != something which cannot be 0) continue",
+makes it redundant to have the extra "if (!bridge_num) continue" logic,
+since a bridge_num of zero would have been skipped anyway.
+
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+---
+ drivers/net/dsa/mv88e6xxx/chip.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
+index 64f4fdd02902..b3aa0e5bc842 100644
+--- a/drivers/net/dsa/mv88e6xxx/chip.c
++++ b/drivers/net/dsa/mv88e6xxx/chip.c
+@@ -1404,9 +1404,6 @@ static u16 mv88e6xxx_port_vlan(struct mv88e6xxx_chip *chip, int dev, int port)
+ 		list_for_each_entry(dp, &dst->ports, list) {
+ 			unsigned int bridge_num = dsa_port_bridge_num_get(dp);
+ 
+-			if (!bridge_num)
+-				continue;
+-
+ 			if (bridge_num + dst->last_switch != dev)
+ 				continue;
+ 
+-----------------------------[ cut here ]-----------------------------
+
+-----------------------------[ cut here ]-----------------------------
+From dabafdbe38b408f7c563ad91fc6e57791055fed7 Mon Sep 17 00:00:00 2001
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
+Date: Fri, 8 Apr 2022 14:57:45 +0300
+Subject: [PATCH 2/2] net: dsa: mv88e6xxx: refactor mv88e6xxx_port_vlan()
+
+To avoid bugs and speculative execution exploits due to type-confused
+pointers at the end of a list_for_each_entry() loop, one measure is to
+restrict code to not use the iterator variable outside the loop block.
+
+In the case of mv88e6xxx_port_vlan(), this isn't a problem, as we never
+let the loops exit through "natural causes" anyway, by using a "found"
+variable and then using the last "dp" iterator prior to the break, which
+is a safe thing to do.
+
+Nonetheless, with the expected new syntax, this pattern will no longer
+be possible.
+
+Profit off of the occasion and break the two port finding methods into
+smaller sub-functions. Somehow, returning a copy of the iterator pointer
+is still accepted.
+
+This change makes it redundant to have a "bool found", since the "dp"
+from mv88e6xxx_port_vlan() now holds NULL if we haven't found what we
+were looking for.
+
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+---
+ drivers/net/dsa/mv88e6xxx/chip.c | 54 ++++++++++++++++++--------------
+ 1 file changed, 31 insertions(+), 23 deletions(-)
+
+diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
+index b3aa0e5bc842..1f35e89053e6 100644
+--- a/drivers/net/dsa/mv88e6xxx/chip.c
++++ b/drivers/net/dsa/mv88e6xxx/chip.c
+@@ -1378,42 +1378,50 @@ static int mv88e6xxx_set_mac_eee(struct dsa_switch *ds, int port,
+ 	return 0;
+ }
+ 
++static struct dsa_port *mv88e6xxx_find_port(struct dsa_switch_tree *dst,
++					    int sw_index, int port)
++{
++	struct dsa_port *dp;
++
++	list_for_each_entry(dp, &dst->ports, list)
++		if (dp->ds->index == sw_index && dp->index == port)
++			return dp;
++
++	return NULL;
++}
++
++static struct dsa_port *
++mv88e6xxx_find_port_by_bridge_num(struct dsa_switch_tree *dst,
++				  unsigned int bridge_num)
++{
++	struct dsa_port *dp;
++
++	list_for_each_entry(dp, &dst->ports, list)
++		if (dsa_port_bridge_num_get(dp) == bridge_num)
++			return dp;
++
++	return NULL;
++}
++
+ /* Mask of the local ports allowed to receive frames from a given fabric port */
+ static u16 mv88e6xxx_port_vlan(struct mv88e6xxx_chip *chip, int dev, int port)
+ {
+ 	struct dsa_switch *ds = chip->ds;
+ 	struct dsa_switch_tree *dst = ds->dst;
+ 	struct dsa_port *dp, *other_dp;
+-	bool found = false;
+ 	u16 pvlan;
+ 
+-	/* dev is a physical switch */
+ 	if (dev <= dst->last_switch) {
+-		list_for_each_entry(dp, &dst->ports, list) {
+-			if (dp->ds->index == dev && dp->index == port) {
+-				/* dp might be a DSA link or a user port, so it
+-				 * might or might not have a bridge.
+-				 * Use the "found" variable for both cases.
+-				 */
+-				found = true;
+-				break;
+-			}
+-		}
+-	/* dev is a virtual bridge */
++		/* dev is a physical switch */
++		dp = mv88e6xxx_find_port(dst, dev, port);
+ 	} else {
+-		list_for_each_entry(dp, &dst->ports, list) {
+-			unsigned int bridge_num = dsa_port_bridge_num_get(dp);
+-
+-			if (bridge_num + dst->last_switch != dev)
+-				continue;
+-
+-			found = true;
+-			break;
+-		}
++		/* dev is a virtual bridge */
++		dp = mv88e6xxx_find_port_by_bridge_num(dst,
++						       dev - dst->last_switch);
+ 	}
+ 
+ 	/* Prevent frames from unknown switch or virtual bridge */
+-	if (!found)
++	if (!dp)
+ 		return 0;
+ 
+ 	/* Frames from DSA links and CPU ports can egress any local port */
+-----------------------------[ cut here ]-----------------------------

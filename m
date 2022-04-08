@@ -2,207 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B6954F8C73
-	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FA244F8C8E
+	for <lists+linux-kernel@lfdr.de>; Fri,  8 Apr 2022 05:27:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233838AbiDHDFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 7 Apr 2022 23:05:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56006 "EHLO
+        id S233855AbiDHDJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 7 Apr 2022 23:09:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233808AbiDHDFq (ORCPT
+        with ESMTP id S233835AbiDHDI6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 7 Apr 2022 23:05:46 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE2911DD0A
-        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 20:03:41 -0700 (PDT)
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220408030338epoutp02c1a173d0f00be27880a4437be3935d68~jzMFAFauJ1695116951epoutp02I
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 03:03:38 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220408030338epoutp02c1a173d0f00be27880a4437be3935d68~jzMFAFauJ1695116951epoutp02I
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1649387018;
-        bh=NqnIwYUo6niXNmWjuw14e36GtazGL6Nf5Zv0Vep+wGQ=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=iJasyV43RmJQC/Ajgqu43vfcBKIIgTZcGDu2RsoHFgMvftOj4euURnO2TQgrWv9iM
-         eEeHyhA51MxDJCtkhdK2Fjxbclho5ScCmmfkOVoq6EeXCVm31sUYj1r9BpyiV63cvS
-         6ChvPdN4gcPaD+iWsyQBOnZv6ftleRWhdvs5nEJE=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20220408030338epcas5p3ea48e7ae232b11e4415ee868d3ed3087~jzMEKWfBC0231302313epcas5p36;
-        Fri,  8 Apr 2022 03:03:38 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.177]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4KZNNy36LBz4x9Q1; Fri,  8 Apr
-        2022 03:03:30 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        28.32.06423.FF5AF426; Fri,  8 Apr 2022 12:03:27 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220408030327epcas5p44b95cb7b423f1a21b52d250bcf4de4a6~jzL6XASwC3226932269epcas5p4r;
-        Fri,  8 Apr 2022 03:03:27 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220408030327epsmtrp2baaa5716cd2e0f04104662370e67d348~jzL6WR6cq0577705777epsmtrp2e;
-        Fri,  8 Apr 2022 03:03:27 +0000 (GMT)
-X-AuditID: b6c32a49-b13ff70000001917-10-624fa5ff320e
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        FD.C4.24342.FF5AF426; Fri,  8 Apr 2022 12:03:27 +0900 (KST)
-Received: from alimakhtar03 (unknown [107.122.12.5]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220408030325epsmtip16e87273227a4af2a00c8ff49367ec743~jzL4Sh8N70208202082epsmtip1Q;
-        Fri,  8 Apr 2022 03:03:25 +0000 (GMT)
-From:   "Alim Akhtar" <alim.akhtar@samsung.com>
-To:     "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
-        "'Greg Kroah-Hartman'" <gregkh@linuxfoundation.org>,
-        "'Rob Herring'" <robh+dt@kernel.org>,
-        "'Krzysztof Kozlowski'" <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Cc:     "'Rob Herring'" <robh@kernel.org>
-In-Reply-To: <20220407192611.15353-1-krzysztof.kozlowski@linaro.org>
-Subject: RE: [RESEND PATCH] dt-bindings: usb: samsung,exynos-usb2: include
- usb-hcd schema
-Date:   Fri, 8 Apr 2022 08:33:23 +0530
-Message-ID: <000001d84af5$37e001e0$a7a005a0$@samsung.com>
+        Thu, 7 Apr 2022 23:08:58 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C4112E76E
+        for <linux-kernel@vger.kernel.org>; Thu,  7 Apr 2022 20:06:54 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id f10so6757131plr.6
+        for <linux-kernel@vger.kernel.org>; Thu, 07 Apr 2022 20:06:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=EC5S9HeeAeWu2eNBsyivixNrTA70JdgMnP+Pf2/O2qg=;
+        b=EpAjw7jw4WWVD+pRhIzuMb0FhqzyaNBFP80LNXjV0r/rD1/RB0ZkW8mCtl8L5gOm9V
+         vYcU6A29g2I+ODCG7pJZTrN48/CYZYH2lv+cQ1Lf7e6rqqAWkC4Zg44oVvO2qbceqxRo
+         2qLu9D+9FYKb3NJMrbsxNA0m6heqbgDkSiRLDlvDb1HeKTXTSt9G9kajaf7pzoL45aP7
+         er0hjWFfhWotgPNcWgxfJDyv1MZZNuzL3s89S1dWzCczh9jGeW2xgklsEbgMgjSxgw6R
+         x4FhGo9SSJMZy48OO8AsLDL/iCZU9HnFQ24dhJNIik7tEolbvUEEVC685pqbjr5/nDw0
+         ND+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EC5S9HeeAeWu2eNBsyivixNrTA70JdgMnP+Pf2/O2qg=;
+        b=62bB5Z+StbNUivOetlSsNpsNdBti+zyCyx0/oiS+q8mTOSsMDpVbBPG5Y/8qGI0B0d
+         jJMjYj720NdJkTwFxgjs/RgXet+RrmF4Q0HKSIvac89ORcs27W8SzemoaRihRWdxEY0Q
+         7VTPt9KYFAg0wgKEKk1bGZoq0xsBSwcSjhwoyd439SJooYeo/dvwTOjW3TkYcL51QLut
+         t68CuivT4uBlbr0l83nzublLkl9IHValZ6vPMlCXgfD38pGGDom2qSGitPHcur5T9WFu
+         +hhMMOzijPs9KOm9dLo+Yk1l00tI6lZDdqAhG39CwNGIC7kzeEkkY9vBU85bKUaQT9Fw
+         utqg==
+X-Gm-Message-State: AOAM531YIf35gXNZW7CZep2SaohoHcc3K7cJMgV01WeOEBNycPzOcROU
+        xbkuLmwZTPIo1lAIDj/kURRyPR5+x2kK9g==
+X-Google-Smtp-Source: ABdhPJxAdWyP+XVhR9LTj3ckSl+Vd8CbfsIFM48H3Oti2JTQQI09MpZlrgO3+njMgmysdIXAz/Vv0Q==
+X-Received: by 2002:a17:90a:d354:b0:1ca:a0aa:bc23 with SMTP id i20-20020a17090ad35400b001caa0aabc23mr19424438pjx.142.1649387213690;
+        Thu, 07 Apr 2022 20:06:53 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id u6-20020a17090a3fc600b001ca88b0bdfesm10338286pjm.13.2022.04.07.20.06.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Apr 2022 20:06:52 -0700 (PDT)
+Date:   Fri, 8 Apr 2022 03:06:49 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com
+Subject: Re: [PATCH v5 11/13] KVM: Zap existing KVM mappings when pages
+ changed in the private fd
+Message-ID: <Yk+myTh1rMfeWOt3@google.com>
+References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
+ <20220310140911.50924-12-chao.p.peng@linux.intel.com>
+ <20220405234535.ijctzcbxkat2o5ij@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQFuzieljrADWxPIJnfTI8Y9r+zgewKpefSQraMCHrA=
-Content-Language: en-us
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrBJsWRmVeSWpSXmKPExsWy7bCmuu7/pf5JBl+umVrMP3KO1aJ58Xo2
-        i74XD5kt9r7eym6x6fE1VovLu+awWcw4v4/JYtGyVmaL1r1H2C3+79nB7sDlsWlVJ5vHnWt7
-        2Dz2z13D7rF5Sb3H501yAaxR2TYZqYkpqUUKqXnJ+SmZeem2St7B8c7xpmYGhrqGlhbmSgp5
-        ibmptkouPgG6bpk5QEcpKZQl5pQChQISi4uV9O1sivJLS1IVMvKLS2yVUgtScgpMCvSKE3OL
-        S/PS9fJSS6wMDQyMTIEKE7Izrty5wlawXKji04nHjA2M7fxdjJwcEgImEismnGXvYuTiEBLY
-        zSix6OgqVgjnE6PE0UUtLBDON0aJOaua2WFabq7tY4JI7GWUmN1zlBnCecko0b2ghRWkik1A
-        V2LH4jY2kISIQBuzxPlJxxhBEswCqhJz/vxiBrE5BVwkfny8A9YgLBAt8fjUJzCbRUBF4t6H
-        Z2A2r4ClxKzTCxkhbEGJkzOfsEDMkZfY/nYOM8RJChI/ny4DqxcRsJKY/Gcr1C5xiZdHj4B9
-        JyGwkkPiy9urQEUcQI6LxN/jpRC9whKvjm+Bek1K4vO7vWwQJR4Si/5IQYQzJN4uX88IYdtL
-        HLgyhwWkhFlAU2L9Ln2ITXwSvb+fMEF08kp0tAlBVKtKNL+7ygJhS0tM7O5mhbA9JO4+2M8y
-        gVFxFpK/ZiH5axaS+2chLFvAyLKKUTK1oDg3PbXYtMAwL7UcHt/J+bmbGMFJVstzB+PdBx/0
-        DjEycTAeYpTgYFYS4a3K9UkS4k1JrKxKLcqPLyrNSS0+xGgKDOyJzFKiyfnANJ9XEm9oYmlg
-        YmZmZmJpbGaoJM57On1DopBAemJJanZqakFqEUwfEwenVANT2BuLP1y1Z64ynyzo/zrt7bqE
-        xC/3bu80mtc9y+TnvNl65Uo/9lzuUop+LLun4Phi3inqi+de3/6r4NQEdQdbw7M2t5betH5f
-        ff/b5kfV9gcOst84xNC8NpLbXs2d5YrtFNMThUrluet3GfNx9YYm3bxxpDbJ2Um6J3p26MRN
-        23Oq5iRnl3C1PiiN+3VGnWGxUyLb/0nWkhe+3RdcxdZ8l8s1xt1x5aangRvtQ6PES5Y+eePY
-        7/Q8JzCtu5737JE03lzZW84HJSeFXGX78ZXz+TqWzUvVudxvT98z+4zIL70UiZlC32RjEkM2
-        l5tdrTTevGq5mkfIxIX2y6fv2ZPiFbvr2BPBWYE/f6sdfJjYo8RSnJFoqMVcVJwIALQW1pM7
-        BAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupnkeLIzCtJLcpLzFFi42LZdlhJTvf/Uv8kg54dUhbzj5xjtWhevJ7N
-        ou/FQ2aLva+3sltsenyN1eLyrjlsFjPO72OyWLSsldmide8Rdov/e3awO3B5bFrVyeZx59oe
-        No/9c9ewe2xeUu/xeZNcAGsUl01Kak5mWWqRvl0CV8aVO1fYCpYLVXw68ZixgbGdv4uRk0NC
-        wETi5to+JhBbSGA3o8S6n4IQcWmJ6xsnsEPYwhIr/z0HsrmAap4zSmzb95cRJMEmoCuxY3Eb
-        G0hCRKCHWeLf+yNgHcwCqhJz/vxihpg6lVFibZcOiM0p4CLx4+MdVhBbWCBSonl6K9ggFgEV
-        iXsfnoHFeQUsJWadXsgIYQtKnJz5hKWLkQNopp5E20ZGiPHyEtvfzmGGOE5B4ufTZWCtIgJW
-        EpP/bIWqEZd4efQI+wRG4VlIJs1CmDQLyaRZSDoWMLKsYpRMLSjOTc8tNiwwzEst1ytOzC0u
-        zUvXS87P3cQIjjMtzR2M21d90DvEyMTBeIhRgoNZSYS3KtcnSYg3JbGyKrUoP76oNCe1+BCj
-        NAeLkjjvha6T8UIC6YklqdmpqQWpRTBZJg5OqQYmCcXJuWxHu2fUzJFRn5GwTv+FwbLvM23y
-        Pmw8scM95bn9x8wKkX2Tl6yS4lm+95rcv1faz/XTLTwKAlPCzzB4H5zAeSx3ncqppy+MwoOX
-        /2vd1/tv/bNcrodHeHw279t8QOD5x+SjIv+bf3huKRTpdjH+sN5073vW9dJzeSN/Wf5/aXfn
-        rm+nnESYNEuMSdqXySbS/htXtPqrnuO5pHRi4VLJQpuo5xHXg2sO/7XSlE5bYbY7q1W49sM0
-        h/wmmRMBa0sKtRcaZxmzhLRN23361dMItQ2TVq1U3npl8mSNV6dNnd5IaZZ7X+svFDh85NVu
-        W63jv6WnaK7505S14N7CGuPLSQGLW3nr7y3+f0nHQomlOCPRUIu5qDgRACZlYqgiAwAA
-X-CMS-MailID: 20220408030327epcas5p44b95cb7b423f1a21b52d250bcf4de4a6
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220407192621epcas5p12f91bf50c90695f6e4547c7d5fe7037a
-References: <CGME20220407192621epcas5p12f91bf50c90695f6e4547c7d5fe7037a@epcas5p1.samsung.com>
-        <20220407192611.15353-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220405234535.ijctzcbxkat2o5ij@amd.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof
+On Tue, Apr 05, 2022, Michael Roth wrote:
+> On Thu, Mar 10, 2022 at 10:09:09PM +0800, Chao Peng wrote:
+> >  static inline bool kvm_slot_is_private(const struct kvm_memory_slot *slot)
+> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> > index 67349421eae3..52319f49d58a 100644
+> > --- a/virt/kvm/kvm_main.c
+> > +++ b/virt/kvm/kvm_main.c
+> > @@ -841,8 +841,43 @@ static int kvm_init_mmu_notifier(struct kvm *kvm)
+> >  #endif /* CONFIG_MMU_NOTIFIER && KVM_ARCH_WANT_MMU_NOTIFIER */
+> >  
+> >  #ifdef CONFIG_MEMFILE_NOTIFIER
+> > +static void kvm_memfile_notifier_handler(struct memfile_notifier *notifier,
+> > +					 pgoff_t start, pgoff_t end)
+> > +{
+> > +	int idx;
+> > +	struct kvm_memory_slot *slot = container_of(notifier,
+> > +						    struct kvm_memory_slot,
+> > +						    notifier);
+> > +	struct kvm_gfn_range gfn_range = {
+> > +		.slot		= slot,
+> > +		.start		= start - (slot->private_offset >> PAGE_SHIFT),
+> > +		.end		= end - (slot->private_offset >> PAGE_SHIFT),
+> > +		.may_block 	= true,
+> > +	};
+> > +	struct kvm *kvm = slot->kvm;
+> > +
+> > +	gfn_range.start = max(gfn_range.start, slot->base_gfn);
+> > +	gfn_range.end = min(gfn_range.end, slot->base_gfn + slot->npages);
+> > +
+> > +	if (gfn_range.start >= gfn_range.end)
+> > +		return;
+> > +
+> > +	idx = srcu_read_lock(&kvm->srcu);
+> > +	KVM_MMU_LOCK(kvm);
+> > +	kvm_unmap_gfn_range(kvm, &gfn_range);
+> > +	kvm_flush_remote_tlbs(kvm);
+> > +	KVM_MMU_UNLOCK(kvm);
+> > +	srcu_read_unlock(&kvm->srcu, idx);
+> 
+> Should this also invalidate gfn_to_pfn_cache mappings? Otherwise it seems
+> possible the kernel might end up inadvertantly writing to now-private guest
+> memory via a now-stale gfn_to_pfn_cache entry.
 
->-----Original Message-----
->From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@linaro.org]
->Sent: Friday, April 8, 2022 12:56 AM
->To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>; Rob Herring
-><robh+dt@kernel.org>; Krzysztof Kozlowski
-><krzysztof.kozlowski+dt@linaro.org>; Alim Akhtar
-><alim.akhtar@samsung.com>; linux-usb@vger.kernel.org;
->devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
->samsung-soc@vger.kernel.org; linux-kernel@vger.kernel.org
->Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>; Rob Herring
-><robh@kernel.org>
->Subject: [RESEND PATCH] dt-bindings: usb: samsung,exynos-usb2: include
->usb-hcd schema
->
->Remove parts duplicated with usb-hcd.yaml DT schema and include it
-directly.
->
->Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->Reviewed-by: Rob Herring <robh@kernel.org>
->---
-
-Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
-
-> .../bindings/usb/samsung,exynos-usb2.yaml         | 15 ++-------------
-> 1 file changed, 2 insertions(+), 13 deletions(-)
->
->diff --git a/Documentation/devicetree/bindings/usb/samsung,exynos-
->usb2.yaml b/Documentation/devicetree/bindings/usb/samsung,exynos-
->usb2.yaml
->index 340dff8d19c3..d51f91d1139f 100644
->--- a/Documentation/devicetree/bindings/usb/samsung,exynos-usb2.yaml
->+++ b/Documentation/devicetree/bindings/usb/samsung,exynos-usb2.yaml
->@@ -15,9 +15,6 @@ properties:
->       - samsung,exynos4210-ehci
->       - samsung,exynos4210-ohci
->
->-  '#address-cells':
->-    const: 1
->-
->   clocks:
->     maxItems: 1
->
->@@ -46,15 +43,6 @@ properties:
->       Only for controller in EHCI mode, if present, specifies the GPIO
-that
->       needs to be pulled up for the bus to be powered.
->
->-  '#size-cells':
->-    const: 0
->-
->-patternProperties:
->-  "^.*@[0-9a-f]{1,2}$":
->-    description: The hard wired USB devices
->-    type: object
->-    $ref: /usb/usb-device.yaml
->-
-> required:
->   - compatible
->   - clocks
->@@ -64,6 +52,7 @@ required:
->   - phy-names
->
-> allOf:
->+  - $ref: usb-hcd.yaml#
->   - if:
->       properties:
->         compatible:
->@@ -73,7 +62,7 @@ allOf:
->       properties:
->         samsung,vbus-gpio: false
->
->-additionalProperties: false
->+unevaluatedProperties: false
->
-> examples:
->   - |
->--
->2.32.0
-
-
+Yes.  Ideally we'd get these flows to share common code and avoid these goofs.
+I tried very briefly but they're just different enough to make it ugly.

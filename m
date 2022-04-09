@@ -2,94 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 828A44FAB18
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 00:56:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39B774FAB1C
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 01:29:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232925AbiDIW6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 18:58:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40900 "EHLO
+        id S232934AbiDIXWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 19:22:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230498AbiDIW6C (ORCPT
+        with ESMTP id S230498AbiDIXWh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 18:58:02 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773DB2DF5
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 15:55:53 -0700 (PDT)
-Received: from zn.tnic (p200300ea9715615c329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9715:615c:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 062741EC0374;
-        Sun, 10 Apr 2022 00:55:47 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1649544948;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=xIT9zTmzXlnnxsXpoina8IMgsOJaNX9T9llrfoqzbJc=;
-        b=Hx8vWy8fQ1TynGbMxVT1gC76URc1gSq+hqnpzxCRyS4nShhLHNJo+p46T1TWum/hJSZsg7
-        OJ5yAxkmwNMI5fJ2G1aqoymPuqs5CFB9/uGrIiv4wFhcC4kPvw1D4pNRxblc4yu7ulMUSl
-        tABRoioVAaqb1sNkA6JfNDG7rUMCYIk=
-Date:   Sun, 10 Apr 2022 00:55:44 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     NULL <ayz.out@gmail.com>
-Cc:     lkml <linux-kernel@vger.kernel.org>, x86@kernel.org, arnd@arndb.de,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: Request: Regarding the phasing out of "a.out support" in Linux
- Kernels
-Message-ID: <YlIO8GbSYN9xANnb@zn.tnic>
-References: <CADt9uBkMkrywjSo_jyUJtS85ATTQtRTVXPRsRVUKZpujYo9SUQ@mail.gmail.com>
- <YlGoOXoBaW8i1xrt@zn.tnic>
- <CADt9uBnKs9p5BP6qF8+v+gQ8Pe7S10_CSiFLAr9GyBWnftGqUQ@mail.gmail.com>
+        Sat, 9 Apr 2022 19:22:37 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3380F12621
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 16:20:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649546428; x=1681082428;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7ZHJQEOwF/MeNPTWYrUODuI57RvjnwKWAIlsemHcqyI=;
+  b=QxaqWKiReqTdrZsoTF1ZRle5+XaRbeKAR6mX0FraFaK0M+n0leHQU3Yq
+   DAJTDViO0h+1dP40jTeWEgP7W5Czjkoq96ueR88NTjqv+KW2oKN1HDFVO
+   PALq916v1p1kDTWs22P2SCwHRVGzqgtQwnJqmlANH8IjoP68Gi5pOf8gy
+   0gIWWakNpnzaqA/ZtBrkzi3UtD0L9V9mFLcUgVbP+FKoSYoxcq5MPhyMG
+   lZ1398hAL2fE1vMMqXsWqJg2FY4lL/7w2hWmp+EcWfOWB61GIB8yhYCXg
+   LUPv8dE0Ucq+FGojcuTO6CNFoe7gp3l2+x3cfUPJ+tn/spOGVMaKIZxBi
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10312"; a="242510043"
+X-IronPort-AV: E=Sophos;i="5.90,248,1643702400"; 
+   d="scan'208";a="242510043"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2022 16:20:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,248,1643702400"; 
+   d="scan'208";a="622373043"
+Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 09 Apr 2022 16:20:26 -0700
+Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ndKNV-0000Tz-Cg;
+        Sat, 09 Apr 2022 23:20:25 +0000
+Date:   Sun, 10 Apr 2022 07:19:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Quentin Perret <qperret@google.com>
+Subject: arch/arm64/kvm/va_layout.c:292:6: warning: no previous prototype for
+ 'kvm_compute_final_ctr_el0'
+Message-ID: <202204100747.cAEiiULQ-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CADt9uBnKs9p5BP6qF8+v+gQ8Pe7S10_CSiFLAr9GyBWnftGqUQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ Readding back previous recipients. ]
+Hi Marc,
 
-On Sat, Apr 09, 2022 at 05:16:52PM +0100, NULL wrote:
-> Thank you for your reply, I was hoping more that the 327 aout.o lines would
-> remain in makefile & arch /ia32/ia32_aout.c for 5.19 (even if ignored by
-> default KConfig flags as a test to see if it would break anything for
-> other) as opposed to the currently proposed PR.
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/diff/?h=x86/cleanups&id=f9444ea5e20847d1dd4a98d4dff4cc97655834bb
-> 
->  Essentially just asking for 5.19 to announce the proposed removal & to
-> hold/push the ia32 commits back by one or two releases, With complete
-> removal of all the code only occurring in 5.21's Release.
+FYI, the error/warning still remains.
 
-First of all, please hit "reply-to-all" when replying to a mail on a
-public mailing list so that others can see the conversation too and can
-participate, if they wish.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e1f700ebd6bea293abe3c7e2807b252018efde01
+commit: 755db23420a1ce4b740186543432983e9bbe713e KVM: arm64: Generate final CTR_EL0 value when running in Protected mode
+date:   1 year, 1 month ago
+config: arm64-randconfig-r002-20220410 (https://download.01.org/0day-ci/archive/20220410/202204100747.cAEiiULQ-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=755db23420a1ce4b740186543432983e9bbe713e
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 755db23420a1ce4b740186543432983e9bbe713e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/
 
-Then, it is kinda hard to take you seriously if your name is "NULL" or
-"Non Null". If I'm using my real name - you could too.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Furthermore, you haven't given any concrete reason why you'd need this
-except maybe something along the lines that it might be good to have it
-in an LTS release. And that's not nearly a good reason to keep ancient
-code which no one uses and which current toolchains can't even produce.
+All warnings (new ones prefixed by >>):
 
-If you've followed the previous discussions, there was a pretty simple
-ELF loader posted for a.out executables so it's not like there are no
-alternatives. You can also run an older kernel in a VM. And so on...
+   arch/arm64/kvm/va_layout.c:188:6: warning: no previous prototype for 'kvm_patch_vector_branch' [-Wmissing-prototypes]
+     188 | void kvm_patch_vector_branch(struct alt_instr *alt,
+         |      ^~~~~~~~~~~~~~~~~~~~~~~
+   arch/arm64/kvm/va_layout.c:286:6: warning: no previous prototype for 'kvm_get_kimage_voffset' [-Wmissing-prototypes]
+     286 | void kvm_get_kimage_voffset(struct alt_instr *alt,
+         |      ^~~~~~~~~~~~~~~~~~~~~~
+>> arch/arm64/kvm/va_layout.c:292:6: warning: no previous prototype for 'kvm_compute_final_ctr_el0' [-Wmissing-prototypes]
+     292 | void kvm_compute_final_ctr_el0(struct alt_instr *alt,
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
 
-Finally, pls do not top-post but put your reply underneath the next
-you're commenting on like I just did.
 
-Thx.
+vim +/kvm_compute_final_ctr_el0 +292 arch/arm64/kvm/va_layout.c
+
+   291	
+ > 292	void kvm_compute_final_ctr_el0(struct alt_instr *alt,
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+0-DAY CI Kernel Test Service
+https://01.org/lkp

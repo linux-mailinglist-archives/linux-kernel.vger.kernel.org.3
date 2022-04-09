@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F36C4FA98E
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 18:37:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B9E64FA998
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 18:37:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242683AbiDIQfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 12:35:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60438 "EHLO
+        id S242636AbiDIQfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 12:35:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242626AbiDIQeh (ORCPT
+        with ESMTP id S241904AbiDIQej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 12:34:37 -0400
+        Sat, 9 Apr 2022 12:34:39 -0400
 Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5490823EC77
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 09:32:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB25223F3B7
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 09:32:30 -0700 (PDT)
 Received: from ipservice-092-217-091-111.092.217.pools.vodafone-ip.de ([92.217.91.111] helo=martin-debian-2.paytec.ch)
         by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.89)
         (envelope-from <martin@kaiser.cx>)
-        id 1ndE0f-0006Rg-Oy; Sat, 09 Apr 2022 18:32:25 +0200
+        id 1ndE0g-0006Rg-RV; Sat, 09 Apr 2022 18:32:26 +0200
 From:   Martin Kaiser <martin@kaiser.cx>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
@@ -27,9 +27,9 @@ Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         Michael Straube <straube.linux@gmail.com>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 09/10] staging: r8188eu: improve timeout handling in efuse_read_phymap_from_txpktbuf
-Date:   Sat,  9 Apr 2022 18:32:11 +0200
-Message-Id: <20220409163212.241122-10-martin@kaiser.cx>
+Subject: [PATCH 10/10] staging: r8188eu: remove unused timer functions
+Date:   Sat,  9 Apr 2022 18:32:12 +0200
+Message-Id: <20220409163212.241122-11-martin@kaiser.cx>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220409163212.241122-1-martin@kaiser.cx>
 References: <20220409163212.241122-1-martin@kaiser.cx>
@@ -44,40 +44,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the standard kernel functions to define and check the timeout in
-efuse_read_phymap_from_txpktbuf.
+rtw_get_passing_time_ms and rtw_systime_to_ms are not used any more.
+Remove them.
 
 Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 ---
- drivers/staging/r8188eu/hal/rtl8188e_hal_init.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/staging/r8188eu/include/osdep_service.h |  3 ---
+ drivers/staging/r8188eu/os_dep/osdep_service.c  | 11 -----------
+ 2 files changed, 14 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
-index efdadfb61905..e17375a74f17 100644
---- a/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
-+++ b/drivers/staging/r8188eu/hal/rtl8188e_hal_init.c
-@@ -186,8 +186,8 @@ static void efuse_read_phymap_from_txpktbuf(
- 	u16 *size	/* for efuse content: the max byte to read. will update to byte read */
- 	)
+diff --git a/drivers/staging/r8188eu/include/osdep_service.h b/drivers/staging/r8188eu/include/osdep_service.h
+index 1e55a8008acc..f1a703643e74 100644
+--- a/drivers/staging/r8188eu/include/osdep_service.h
++++ b/drivers/staging/r8188eu/include/osdep_service.h
+@@ -77,9 +77,6 @@ void *rtw_malloc2d(int h, int w, int size);
+ 		spin_lock_init(&((q)->lock));			\
+ 	} while (0)
+ 
+-u32  rtw_systime_to_ms(u32 systime);
+-s32  rtw_get_passing_time_ms(u32 start);
+-
+ void rtw_usleep_os(int us);
+ 
+ static inline unsigned char _cancel_timer_ex(struct timer_list *ptimer)
+diff --git a/drivers/staging/r8188eu/os_dep/osdep_service.c b/drivers/staging/r8188eu/os_dep/osdep_service.c
+index 7b177d50eee2..812acd59be79 100644
+--- a/drivers/staging/r8188eu/os_dep/osdep_service.c
++++ b/drivers/staging/r8188eu/os_dep/osdep_service.c
+@@ -42,17 +42,6 @@ Otherwise, there will be racing condition.
+ Caller must check if the list is empty before calling rtw_list_delete
+ */
+ 
+-inline u32 rtw_systime_to_ms(u32 systime)
+-{
+-	return systime * 1000 / HZ;
+-}
+-
+-/*  the input parameter start use the same unit as jiffies */
+-inline s32 rtw_get_passing_time_ms(u32 start)
+-{
+-	return rtw_systime_to_ms(jiffies - start);
+-}
+-
+ void rtw_usleep_os(int us)
  {
-+	unsigned long timeout;
- 	u16 dbg_addr = 0;
--	u32 start  = 0, passing_time = 0;
- 	__le32 lo32 = 0, hi32 = 0;
- 	u16 len = 0, count = 0;
- 	int i = 0;
-@@ -206,9 +206,8 @@ static void efuse_read_phymap_from_txpktbuf(
- 		rtw_write16(adapter, REG_PKTBUF_DBG_ADDR, dbg_addr + i);
- 
- 		rtw_write8(adapter, REG_TXPKTBUF_DBG, 0);
--		start = jiffies;
--		while (!rtw_read8(adapter, REG_TXPKTBUF_DBG) &&
--		       (passing_time = rtw_get_passing_time_ms(start)) < 1000)
-+		timeout = jiffies + msecs_to_jiffies(1000);
-+		while (!rtw_read8(adapter, REG_TXPKTBUF_DBG) && time_before(jiffies, timeout))
- 			rtw_usleep_os(100);
- 
- 		/* data from EEPROM needs to be in LE */
+ 	if (1 < (us / 1000))
 -- 
 2.30.2
 

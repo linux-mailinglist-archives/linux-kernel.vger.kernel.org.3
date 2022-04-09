@@ -2,154 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0FD84FA17B
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 04:00:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE1C54FA180
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 04:00:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240461AbiDICCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 22:02:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52456 "EHLO
+        id S240516AbiDICCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 22:02:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbiDICCS (ORCPT
+        with ESMTP id S240572AbiDICCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 22:02:18 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6DECB0A4C;
-        Fri,  8 Apr 2022 19:00:11 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id AC6DA5C0191;
-        Fri,  8 Apr 2022 22:00:08 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Fri, 08 Apr 2022 22:00:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=9lxjt1eCK1sCUN2U3
-        ZA/uMQai3qIWY0P3RCwD0Y1H10=; b=ImVsVJDYieuJviuvTYfjN3zmcVnC0yBVc
-        gAf3Vp0QRJeXVTBir2b9FRv1iFfcePyIo+zqL6qc87macmxsggOkaXpmTxRaLQzD
-        ZBZD7Gwe+y1JpIbJ2s+dW21UbYcL8DcgJHpNcCkh6wSzpnBrnqOhr4vwh9PuoU4A
-        nAik+VpMvmKlwCSK7KJzkah40P7uFkMqCI8CCJZpwSCbqpoBgaVAcA+n4azJcn9X
-        LKiX2+Kh1Ps+phv0VLnmp8JS4ZO5iLDr+pKOzV+WthoX8YcJsRkiRa5vx3qDV0pD
-        lr6kcjvM6tvT99BAQM4vIc6WvNcgaaYPyY1SLyqwNr1t46Rx52B5A==
-X-ME-Sender: <xms:p-hQYiG0t5MMQuqFFuIM0gTCkQEMXoG4nK18sba6qAazuPSirVuSGg>
-    <xme:p-hQYjV0b-VrW2ZIGmh875pw2FXjFqNXBD6tyRS3T8wfBSGq0YGisvtK2pLlMvQby
-    Bhul1OcsKpibnkgAqM>
-X-ME-Received: <xmr:p-hQYsJwGOGdp5G3I2104Y6nkLPUbyCQfJLRwksBCU5EBpl6CBuX7bhG97cTtryRpjQDiYFrBMpbDoD9wkIpjsGa_79gOHTFBZs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudekuddggeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffujgfkfhggtgesthdtredttddtvdenucfhrhhomhephfhinhhnucfv
-    hhgrihhnuceofhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgheqnecuggftrfgrth
-    htvghrnhepffduhfegfedvieetudfgleeugeehkeekfeevfffhieevteelvdfhtdevffet
-    uedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepfh
-    hthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgh
-X-ME-Proxy: <xmx:p-hQYsG6cUAt5KTOfe5-bCBMufJOrEvNjMTUpENIenYZlqFicYVrdw>
-    <xmx:p-hQYoWuZWJDDmKZBL6Z2CLLZ5WBhjyxE6aRp2QWbWafzm0PpgDZTQ>
-    <xmx:p-hQYvNomfkBfWSrR0dejtPiEVcEMFgSW1Oeg1lpXBFSdnyk0eSFBQ>
-    <xmx:qOhQYpVbcUk1bKzlGr7DDE33LTHY0V_uv4o3O-V9hs6Guvo_C5VEow>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 8 Apr 2022 22:00:04 -0400 (EDT)
-Date:   Sat, 9 Apr 2022 11:59:57 +1000 (AEST)
-From:   Finn Thain <fthain@linux-m68k.org>
-To:     Rob Landley <rob@landley.net>
-cc:     Greg Ungerer <gerg@linux-m68k.org>,
-        Daniel Palmer <daniel@0x0f.com>, Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "moderated list:H8/300 ARCHITECTURE" 
-        <uclinux-h8-devel@lists.sourceforge.jp>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>, Max Filippov <jcmvbkbc@gmail.com>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-Subject: Re: [RFC PULL] remove arch/h8300
-In-Reply-To: <8f9be869-7244-d92a-4683-f9c53da97755@landley.net>
-Message-ID: <3d5cf48c-94f1-2948-1683-4a2a87f4c697@linux-m68k.org>
-References: <Yib9F5SqKda/nH9c@infradead.org> <CAK8P3a1dUVsZzhAe81usLSkvH29zHgiV9fhEkWdq7_W+nQBWbg@mail.gmail.com> <YkmWh2tss8nXKqc5@infradead.org> <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com> <6a38e8b8-7ccc-afba-6826-cb6e4f92af83@linux-m68k.org>
- <CAFr9PXkk=8HOxPwVvFRzqHZteRREWxSOOcdjrcOPe0d=9AW2yQ@mail.gmail.com> <5b7687d4-8ba5-ad79-8a74-33fc2496a3db@linux-m68k.org> <8f9be869-7244-d92a-4683-f9c53da97755@landley.net>
+        Fri, 8 Apr 2022 22:02:37 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9AAFBD7ED
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 19:00:30 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id i27so20499742ejd.9
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 19:00:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pensando.io; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=v0rcGJnboGGVbRg2sFI+AuDUGawxAK6MV1vuJM0DxRw=;
+        b=tGE1HuhzwXSMVbeSUYMnXc2zbkLuWbqQnrjJ7kjvfTR06nvfAQ2W+6qd4+n+cbPvcE
+         jtJZrZ36bxxcfatWgFOuGAWEnwqRnp+Jsy78Jgzp+5f6puXjqwHjpLwNQ5mMufYjGr8I
+         QJVdlOSd08tXJ6YYJY9mCt3sK0WFE9SCrSgZvw7IGi2QiiPJ+hImyKtBeG9f48KLYtG3
+         ylraL9Hrnt6+7oESRirffVco49RGnQoZmnqyZ5vjMxnp2Ri1C6x8x8n6tQRtccIYmkcX
+         z0SQ1rTIJwdnfVWOq+k21s7VqWT0sqzzQ5rWMy5zHJQIuGYimcTy3undqQpyT8yYWTXK
+         3hrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=v0rcGJnboGGVbRg2sFI+AuDUGawxAK6MV1vuJM0DxRw=;
+        b=lnANjxseV108QYW/hpYcCx+96jQFMclp+ovMSoUliOuh2x39PkgVN8a5bvU7NuZ+4V
+         1fAGuDL6Ejbjtb4198jh/ukHUj9T8Os/USRXwCSfdWC8v/8vipWmhgnWjsI0fBZqUyCF
+         3P9i87mKF9hUnJHkqTx8RUGxbx2TQXqCB3Ssi1VxAdU3syMf+DXySQoPsdLwdxh+8QLs
+         9Qy9wNYRnKX44xzYfuNbcchi3zqOYFQN/RDlcQmEU6AMnIA5m+WTgPBiomPfVJp22c1/
+         CmTC2TgobF9wEfbtvZYIa+sa94BSztFsPiBcrlxPqsUcoexNUPCuH2hUoH7DurZsY0zu
+         8TmA==
+X-Gm-Message-State: AOAM533voDb0pMy41kqj9u7nSft5KEdeK15pKrwg9Q+mJpG/BrB4OjCH
+        lrqSt+1DFCRNjBHLrjenPJCRA9iQ1NK/sGsrNX+BPQ==
+X-Google-Smtp-Source: ABdhPJzVth0f36+BeTyV+oOehHk7jHOitDypzZKA7xyCz85+VI8/f7Tx9kxd2JsPCdFuw6wihMmOYr8BNzyTAPWqRIA=
+X-Received: by 2002:a17:907:2a8b:b0:6e8:46b4:a955 with SMTP id
+ fl11-20020a1709072a8b00b006e846b4a955mr6693018ejc.462.1649469629392; Fri, 08
+ Apr 2022 19:00:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220406233648.21644-1-brad@pensando.io> <20220406233648.21644-3-brad@pensando.io>
+ <b51086d6-00d4-cc8e-8f11-64c01afb8b3a@linaro.org>
+In-Reply-To: <b51086d6-00d4-cc8e-8f11-64c01afb8b3a@linaro.org>
+From:   Brad Larson <brad@pensando.io>
+Date:   Fri, 8 Apr 2022 19:00:18 -0700
+Message-ID: <CAK9rFnytvQx9KNJpCcHN1c01vJvdeE_SXbG8-HDA6FU2rwKHsw@mail.gmail.com>
+Subject: Re: [PATCH 02/11] dt-bindings: Add vendor prefix for Pensando Systems
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Mark Brown <broonie@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Olof Johansson <olof@lixom.net>,
+        David Clear <dac2@pensando.io>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 8 Apr 2022, Rob Landley wrote:
+On Thu, Apr 7, 2022 at 11:43 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> > +  "^pensando,.*":
+> > +    description: Pensando Systems Inc.
+>
+> List is ordered alphabetically, so this goes one further.
+>
+> >    "^pda,.*":
+> >      description: Precision Design Associates, Inc.
+> >    "^pericom,.*":
 
-> On 4/5/22 08:07, Greg Ungerer wrote:
-> > On 5/4/22 13:23, Daniel Palmer wrote:
-> >> On Mon, 4 Apr 2022 at 22:42, Greg Ungerer <gerg@linux-m68k.org> wrote:
-> >>> But we could consider the Dragonball support for removal. I keep it 
-> >>> compiling, but I don't use it and can't test that it actually works. 
-> >>> Not sure that it has been used for a very long time now. And I 
-> >>> didn't even realize but its serial driver (68328serial.c) was 
-> >>> removed in 2015. No one seems too have noticed and complained.
-> >> 
-> >> I noticed this and I am working on fixing it up for a new Dragonball 
-> >> homebrew machine. I'm trying to add a 68000 machine to QEMU to make 
-> >> the development easier because I'm currently waiting an hour or more 
-> >> for a kernel to load over serial. It might be a few months.
-> 
-> I've been booting Linux on qemu-system-m68k -M q800 for a couple years 
-> now? (The CROSS=m68k target of mkroot in toybox?)
-> 
-> # cat /proc/cpuinfo
-> CPU:		68040
-> MMU:		68040
-> FPU:		68040
-> Clocking:	1261.9MHz
-> BogoMips:	841.31
-> Calibration:	4206592 loops
-> 
-> It certainly THINKS it's got m68000...
-> 
+Hi Krzysztof,
 
-Most 68040 processor variants have a built-in MMU and the m68k "nommu" 
-Linux port doesn't support them. The nommu port covers processors like 
-68000, Dragonball etc. whereas the m68k "mmu" port covers 680x0 where x is 
-one of 2,3,4,6 with MMU.
+Ahh yes, pda, pen, ... I was looking at the company name.  Moving it down one.
 
-> $ qemu-system-m68k -cpu ?
-> cfv4e
-> m5206
-> m5208
-> m68000
-> m68010
-> m68020
-> m68030
-> m68040
-> m68060
-> any
-> 
-> (I'd love to get an m68k nommu system working but never sat down and 
-> worked out a kernel .config qemu agreed to run, plus compiler and libc. 
-> Musl added m68k support but I dunno if that includes coldfire?)
-> 
-
-I could never figure out how to boot a coldfire machine in qemu either. 
-There was no documentation about that back when I attempted it but maybe 
-things have improved since.
-
-> >> It looked like 68328serial.c was removed because someone tried to 
-> >> clean it up and it was decided that no one was using it and it was 
-> >> best to delete it. My plan was to at some point send a series to fix 
-> >> up the issues with the Dragonball support, revert removing the serial 
-> >> driver and adding the patch that cleaned it up.
-> > 
-> > Nice. I will leave all the 68000/68328 code alone for now then.
-> 
-> The q800 config uses CONFIG_SERIAL_PMACZILOG. Seems to work fine?
-> 
-
-That driver would work on certain 68000 systems e.g. early Macs. (And IIRC 
-someone did once boot a customized Linux kernel on a Mac SE...)
+Best,
+Brad

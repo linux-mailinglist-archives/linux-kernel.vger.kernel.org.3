@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A341E4FA59B
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 09:42:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23CA54FA59C
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 09:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240359AbiDIHkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 03:40:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44164 "EHLO
+        id S240369AbiDIHk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 03:40:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238396AbiDIHkj (ORCPT
+        with ESMTP id S238676AbiDIHkk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 03:40:39 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D1A37A9A
+        Sat, 9 Apr 2022 03:40:40 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12AF3167C3
         for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 00:38:33 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Kb6RD69sZz1HBW1;
-        Sat,  9 Apr 2022 15:38:00 +0800 (CST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Kb6Pn6S06zgYWT;
+        Sat,  9 Apr 2022 15:36:45 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 9 Apr
- 2022 15:38:30 +0800
+ 2022 15:38:31 +0800
 From:   Miaohe Lin <linmiaohe@huawei.com>
 To:     <akpm@linux-foundation.org>
 CC:     <mike.kravetz@oracle.com>, <shy828301@gmail.com>,
@@ -33,9 +33,9 @@ CC:     <mike.kravetz@oracle.com>, <shy828301@gmail.com>,
         <osalvador@suse.de>, <david@redhat.com>, <sfr@canb.auug.org.au>,
         <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <linmiaohe@huawei.com>
-Subject: [PATCH 2/4] mm/migration: remove unneeded lock page and PageMovable check
-Date:   Sat, 9 Apr 2022 15:38:44 +0800
-Message-ID: <20220409073846.22286-3-linmiaohe@huawei.com>
+Subject: [PATCH 3/4] mm/migration: return errno when isolate_huge_page failed
+Date:   Sat, 9 Apr 2022 15:38:45 +0800
+Message-ID: <20220409073846.22286-4-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20220409073846.22286-1-linmiaohe@huawei.com>
 References: <20220409073846.22286-1-linmiaohe@huawei.com>
@@ -55,34 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When non-lru movable page was freed from under us, __ClearPageMovable must
-have been done. Even if it's not done, ClearPageIsolated here won't hurt
-as page will be freed anyway. So we can thus remove unneeded lock page and
-PageMovable check here.
+We might fail to isolate huge page due to e.g. the page is under migration
+which cleared HPageMigratable. So we should return -EBUSY in this case
+rather than always return 1 which could confuse the user.
 
+Fixes: e8db67eb0ded ("mm: migrate: move_pages() supports thp migration")
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
- mm/migrate.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ mm/migrate.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
 diff --git a/mm/migrate.c b/mm/migrate.c
-index d8aae6c75990..381963231a62 100644
+index 381963231a62..044656a14ae2 100644
 --- a/mm/migrate.c
 +++ b/mm/migrate.c
-@@ -1098,12 +1098,8 @@ static int unmap_and_move(new_page_t get_new_page,
- 		/* page was freed from under us. So we are done. */
- 		ClearPageActive(page);
- 		ClearPageUnevictable(page);
--		if (unlikely(__PageMovable(page))) {
--			lock_page(page);
--			if (!PageMovable(page))
--				ClearPageIsolated(page);
--			unlock_page(page);
+@@ -1632,10 +1632,8 @@ static int add_page_for_migration(struct mm_struct *mm, unsigned long addr,
+ 		goto out_putpage;
+ 
+ 	if (PageHuge(page)) {
+-		if (PageHead(page)) {
+-			isolate_huge_page(page, pagelist);
+-			err = 1;
 -		}
-+		if (unlikely(__PageMovable(page)))
-+			ClearPageIsolated(page);
- 		goto out;
- 	}
++		if (PageHead(page))
++			err = isolate_huge_page(page, pagelist) ? 1 : -EBUSY;
+ 	} else {
+ 		struct page *head;
  
 -- 
 2.23.0

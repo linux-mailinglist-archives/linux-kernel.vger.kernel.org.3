@@ -2,237 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F8C04FA564
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 08:24:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C81984FA565
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 08:25:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236919AbiDIG0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 02:26:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48404 "EHLO
+        id S240067AbiDIG1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 02:27:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231951AbiDIG0H (ORCPT
+        with ESMTP id S233998AbiDIG1I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 02:26:07 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F6732DCE
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 23:24:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649485441; x=1681021441;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=o0Kidqq7ChtJB5LjNY72wCdecLyykNyGhxKhNN3+MPk=;
-  b=ZCoaUFUf4YDaMANGsvZfixiZfdAxAAq3x3fyLuvDSVg2XQzMyElD0r0w
-   1XCj4xOAi2qOClp2kW1wOzla2br3TNTe7M40vQZ7bkkWIPPiuyaSp0Kqm
-   bLL3o4ZwalB1mVhuuDIG/VFiQs6GsWqSoWPoK1Po2TcbLsZSXzUHlseI7
-   M4dXUshKjOeBcZFl/ONSvmPiW/MsnNhYYTUhLO1I8tM+Et1YLNMIfUpFM
-   sgJIoPMrq4g0YrsANQYZD7sNF+ak5n3ySyc3fex7fbeg3HI/0zUBGtUAm
-   dmrWrTgRv1VHH1SXMhDOSxZgNrbfTlGT6/o2bmY2tfoLon2o3eCIiweZs
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="259363496"
-X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
-   d="scan'208";a="259363496"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 23:24:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
-   d="scan'208";a="643246205"
-Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 08 Apr 2022 23:23:58 -0700
-Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nd4Vp-0000xd-TJ;
-        Sat, 09 Apr 2022 06:23:57 +0000
-Date:   Sat, 9 Apr 2022 14:23:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: [cxl:for-5.19/cxl-device-lock 2/12] include/linux/device.h:849:3:
- error: use of undeclared identifier 'DRV_NAME'
-Message-ID: <202204091427.VqNnQI8Y-lkp@intel.com>
+        Sat, 9 Apr 2022 02:27:08 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A353638B1;
+        Fri,  8 Apr 2022 23:25:02 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id s14so113328plk.8;
+        Fri, 08 Apr 2022 23:25:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pA0w4O8CRiuXzvroFL62p9tDgX2SohP+G9Ok90h6Fcc=;
+        b=L3BiklhbmiTW5WIODOPjQsK+EqQy7cAIB1x2Ta48ZFCfL4ylkePY8rt0k48ijrGnZi
+         yixG4Dzh0uwl7HYOFM7N+jvM0QLUjtKWdA4yb2tPDqQk6EcusiqFXjMOhfl8Jll3ABuc
+         zDDTkFd7lclif8zLg4LqGoqfkPhI/qwY8YJcTeuVnc/+n9mRAbI0WS19SP9HGW+/eExk
+         3QMpyEg2nHGqLpYREc01qy10tC2Vqro0SaIcXAh4xq4ZwiE6u9+8w4t+waUqLgmM34iY
+         l3EkMkk1EhIX+gEuD4Wp2BK0aa4uKjbp3DYjNVA57eakqIhvLkV7URyfm0gg7kxs23Q8
+         PReQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pA0w4O8CRiuXzvroFL62p9tDgX2SohP+G9Ok90h6Fcc=;
+        b=bxlqsgxb2fj4d1Z0iKItHO+eXub6Jhqg1BEx3uldIOXzB1Wm8JRvzEz7owas1is+3C
+         nNt8YN8AzGOPa2ia+Ob6gUROGDN0zwV3R7OeYYKbQXAYdgD4xOkHDH0r7m1/Yd4c/9gY
+         dkc8mMXuD0b0/hPqnL3Q0KRc+r9/VpwoMR4KxOx0csfqJuLaowrVdiqw1dyUna5IG5w1
+         CvlNyCw34cugMnXoGP7mvbNsgGKldZu+Bi4UVs1iqwLgSwO6+c+l5Wa2n2GrDjBHjnR8
+         FFzGrClHYHO1GTdZGm6SJhM246Ek7SJoJVF02aOu24l47tZcwEU9ZgfhmUVBRBO6pN3K
+         6Yuw==
+X-Gm-Message-State: AOAM533dFdYVXUr5RoJl2aa/uyH4lQCqUSKrkWijZh0BlQA+eHgxS4OZ
+        JLgOsvhGykiHyxpV0cXITA==
+X-Google-Smtp-Source: ABdhPJzWQcBOPqOngHyVHxk75RPQHA6pbYbYLBoE2zEL49QqbCtGx9ArK4Djp3I7JPx7JN+5JB7VIA==
+X-Received: by 2002:a17:90b:1e4e:b0:1c7:3507:30db with SMTP id pi14-20020a17090b1e4e00b001c7350730dbmr25713445pjb.39.1649485502117;
+        Fri, 08 Apr 2022 23:25:02 -0700 (PDT)
+Received: from localhost.localdomain ([144.202.91.207])
+        by smtp.gmail.com with ESMTPSA id 8-20020a056a00070800b004e14ae3e8d7sm26387128pfl.164.2022.04.08.23.24.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 23:25:01 -0700 (PDT)
+From:   Zheyu Ma <zheyuma97@gmail.com>
+To:     stas.yakovlev@gmail.com, kvalo@kernel.org, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>
+Subject: [PATCH] wireless: ipw2x00: Refine the error handling of ipw2100_pci_init_one()
+Date:   Sat,  9 Apr 2022 14:24:49 +0800
+Message-Id: <20220409062449.3752252-1-zheyuma97@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git for-5.19/cxl-device-lock
-head:   fd011b3bf6035eb145160f266fe0250e1e42b86e
-commit: 69d523de7046a14555e4f4986c4682e8c1635740 [2/12] device-core: Add dev->lock_class to enable device_lock() lockdep validation
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220409/202204091427.VqNnQI8Y-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c29a51b3a257908aebc01cd7c4655665db317d66)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/commit/?id=69d523de7046a14555e4f4986c4682e8c1635740
-        git remote add cxl https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git
-        git fetch --no-tags cxl for-5.19/cxl-device-lock
-        git checkout 69d523de7046a14555e4f4986c4682e8c1635740
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+The driver should release resources in reverse order, i.e., the
+resources requested first should be released last, and the driver
+should adjust the order of error handling code by this rule.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+---
+ drivers/net/wireless/intel/ipw2x00/ipw2100.c | 34 +++++++++-----------
+ 1 file changed, 16 insertions(+), 18 deletions(-)
 
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/xen/xen-pciback/conf_space.c:17:
-   In file included from include/linux/pci.h:37:
->> include/linux/device.h:849:3: error: use of undeclared identifier 'DRV_NAME'
-                   dev_warn(dev,
-                   ^
-   include/linux/dev_printk.h:146:54: note: expanded from macro 'dev_warn'
-           dev_printk_index_wrap(_dev_warn, KERN_WARNING, dev, dev_fmt(fmt), ##__VA_ARGS__)
-                                                               ^
-   drivers/xen/xen-pciback/conf_space.c:13:22: note: expanded from macro 'dev_fmt'
-   #define dev_fmt(fmt) DRV_NAME ": " fmt
-                        ^
-   In file included from drivers/xen/xen-pciback/conf_space.c:17:
-   In file included from include/linux/pci.h:1522:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:700:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                           ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/xen/xen-pciback/conf_space.c:17:
-   In file included from include/linux/pci.h:1522:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:700:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return (set->sig[3] | set->sig[2] |
-                                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/xen/xen-pciback/conf_space.c:17:
-   In file included from include/linux/pci.h:1522:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:700:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:4: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                           set->sig[1] | set->sig[0]) == 0;
-                           ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/xen/xen-pciback/conf_space.c:17:
-   In file included from include/linux/pci.h:1522:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:700:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:100:11: warning: array index 1 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return (set->sig[1] | set->sig[0]) == 0;
-                           ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/xen/xen-pciback/conf_space.c:17:
-   In file included from include/linux/pci.h:1522:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:700:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return  (set1->sig[3] == set2->sig[3]) &&
-                            ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-           unsigned long sig[_NSIG_WORDS];
-           ^
-   In file included from drivers/xen/xen-pciback/conf_space.c:17:
-   In file included from include/linux/pci.h:1522:
-   In file included from include/linux/dmapool.h:14:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:700:
-   In file included from include/linux/huge_mm.h:8:
-   In file included from include/linux/fs.h:33:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (which contains 1 element) [-Warray-bounds]
-                   return  (set1->sig[3] == set2->sig[3]) &&
-
-
-vim +/DRV_NAME +849 include/linux/device.h
-
-   826	
-   827	/*
-   828	 * Note: this routine expects that the state of @dev->mutex is stable
-   829	 * from entry to exit. There is no support for changing lockdep
-   830	 * validation classes, only enabling and disabling validation.
-   831	 */
-   832	static inline void device_set_lock_class(struct device *dev, int lock_class)
-   833	{
-   834		/*
-   835		 * Allow for setting or clearing the lock class while the
-   836		 * device_lock() is held, in which case the paired nested lock
-   837		 * might need to be acquired or released now to accommodate the
-   838		 * next device_unlock().
-   839		 */
-   840		if (dev->lock_class < 0 && lock_class >= 0) {
-   841			/* Enabling lockdep validation... */
-   842			if (mutex_is_locked(&dev->mutex))
-   843				mutex_lock_nested(&dev->lockdep_mutex, lock_class);
-   844		} else if (dev->lock_class >= 0 && lock_class < 0) {
-   845			/* Disabling lockdep validation... */
-   846			if (mutex_is_locked(&dev->mutex))
-   847				mutex_unlock(&dev->lockdep_mutex);
-   848		} else {
- > 849			dev_warn(dev,
-   850				 "%s: failed to change lock_class from: %d to %d\n",
-   851				 __func__, dev->lock_class, lock_class);
-   852			return;
-   853		}
-   854		dev->lock_class = lock_class;
-   855	}
-   856	#else /* !CONFIG_PROVE_LOCKING */
-   857	static inline void device_lockdep_init(struct device *dev)
-   858	{
-   859		lockdep_set_novalidate_class(&dev->mutex);
-   860	}
-   861	
-
+diff --git a/drivers/net/wireless/intel/ipw2x00/ipw2100.c b/drivers/net/wireless/intel/ipw2x00/ipw2100.c
+index 2ace2b27ecad..b10d10660eb8 100644
+--- a/drivers/net/wireless/intel/ipw2x00/ipw2100.c
++++ b/drivers/net/wireless/intel/ipw2x00/ipw2100.c
+@@ -6166,7 +6166,7 @@ static int ipw2100_pci_init_one(struct pci_dev *pci_dev,
+ 		printk(KERN_WARNING DRV_NAME
+ 		       "Error calling ioremap.\n");
+ 		err = -EIO;
+-		goto fail;
++		goto out;
+ 	}
+ 
+ 	/* allocate and initialize our net_device */
+@@ -6175,36 +6175,33 @@ static int ipw2100_pci_init_one(struct pci_dev *pci_dev,
+ 		printk(KERN_WARNING DRV_NAME
+ 		       "Error calling ipw2100_alloc_device.\n");
+ 		err = -ENOMEM;
+-		goto fail;
++		goto fail_iounmap;
+ 	}
+ 
++	priv = libipw_priv(dev);
++	pci_set_master(pci_dev);
++	pci_set_drvdata(pci_dev, priv);
++
+ 	/* set up PCI mappings for device */
+ 	err = pci_enable_device(pci_dev);
+ 	if (err) {
+ 		printk(KERN_WARNING DRV_NAME
+ 		       "Error calling pci_enable_device.\n");
+-		return err;
++		goto fail_dev;
+ 	}
+ 
+-	priv = libipw_priv(dev);
+-
+-	pci_set_master(pci_dev);
+-	pci_set_drvdata(pci_dev, priv);
+-
+ 	err = dma_set_mask(&pci_dev->dev, DMA_BIT_MASK(32));
+ 	if (err) {
+ 		printk(KERN_WARNING DRV_NAME
+ 		       "Error calling pci_set_dma_mask.\n");
+-		pci_disable_device(pci_dev);
+-		return err;
++		goto fail_disable;
+ 	}
+ 
+ 	err = pci_request_regions(pci_dev, DRV_NAME);
+ 	if (err) {
+ 		printk(KERN_WARNING DRV_NAME
+ 		       "Error calling pci_request_regions.\n");
+-		pci_disable_device(pci_dev);
+-		return err;
++		goto fail_disable;
+ 	}
+ 
+ 	/* We disable the RETRY_TIMEOUT register (0x41) to keep
+@@ -6306,9 +6303,13 @@ static int ipw2100_pci_init_one(struct pci_dev *pci_dev,
+ out:
+ 	return err;
+ 
+-      fail_unlock:
++fail_unlock:
+ 	mutex_unlock(&priv->action_mutex);
+-      fail:
++fail:
++	pci_release_regions(pci_dev);
++fail_disable:
++	pci_disable_device(pci_dev);
++fail_dev:
+ 	if (dev) {
+ 		if (registered >= 2)
+ 			unregister_netdev(dev);
+@@ -6334,11 +6335,8 @@ static int ipw2100_pci_init_one(struct pci_dev *pci_dev,
+ 
+ 		free_libipw(dev, 0);
+ 	}
+-
++fail_iounmap:
+ 	pci_iounmap(pci_dev, ioaddr);
+-
+-	pci_release_regions(pci_dev);
+-	pci_disable_device(pci_dev);
+ 	goto out;
+ }
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+

@@ -2,160 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DA8F4FA9FF
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 19:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92F454FAA00
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 19:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242950AbiDIRwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 13:52:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38208 "EHLO
+        id S242936AbiDIR5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 13:57:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234519AbiDIRwt (ORCPT
+        with ESMTP id S238721AbiDIR5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 13:52:49 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 180A21CFFB5
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 10:50:41 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id b21so20019866lfb.5
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 10:50:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2BJwi+4MUHVrKX308NfOg46ABCdrEGwFNuCfJTM4PEA=;
-        b=MN50HswbicjFFL7K5mQ5CImChULXEkQz0FzkiaI3+yYKdPBrcrNzQMylJQdy8TjEQf
-         5wcmnqtlY6cIWr4Xwwhf9qfp8YDXgnNp89sliELF/wPXIOODX3w4yMpkdZo4HBh1nycu
-         HS84zY9faBsIE5HwW8AqridmwGGbjA8ZCFMdSkmf8q+yET0bkKRsutZOyVTnJxI0XK0X
-         zT8+sXdketeYf0lWkZ/JTEURmbHJhouPvYqBYKM/lXukoPLyzU99u0RB86e6XN0moGGi
-         Y5ih3+OSgtBEuDPI8SUkl+4qC2exssdnliXZ71YfnkSnuCm5gudeyMUsppD01fj1gAeH
-         0xFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2BJwi+4MUHVrKX308NfOg46ABCdrEGwFNuCfJTM4PEA=;
-        b=d0/q9ZgsLrPyMR6vRDyrUzIbID4JzvSxQjGu2CbQuNIlH2TOAc1S/FAA9kvRPEiXt7
-         28/G4HezwoAsixHwQhAlECrleDrAUA22Zwy+qgA4AJBtlTv8+T2+HCg2yjS38xhECbF4
-         EtJ/mZqB66ZvdWdiFsPTsqtrkTr/PUazSJEjHgwMEagRLwE1zc9piI/ZZqLnpM5uwN2A
-         14p8PqGUBXE+fzmW4i6SgVwea79PvxANqBJbeMSSD7bUkQaJF69epWtHVf0++BKG74gQ
-         Z18allygGGFQMiYkrU18xba2Ckrn4fWpa6pzXIkCcnnEgi49v5XDzfVTuTmxf2sQudJk
-         Yscg==
-X-Gm-Message-State: AOAM5309uZUbGA77YRgUThC/DmLEp5x+AbQadYx2u9Yfv7eq81J7nl/e
-        kBv/EDpaBxiakNIBdbBYSdpW4Q==
-X-Google-Smtp-Source: ABdhPJyiKDi7TSfRV/vRqhjM4G5p2LRlKpj4VTzoGYJmpsDau3aBPPbEKGpuhXEfzoNTsoN8W7+JPw==
-X-Received: by 2002:a05:6512:ac1:b0:46b:8fd0:b030 with SMTP id n1-20020a0565120ac100b0046b8fd0b030mr2977704lfu.372.1649526639318;
-        Sat, 09 Apr 2022 10:50:39 -0700 (PDT)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id h24-20020a19ca58000000b0046b9dbfc809sm65098lfj.56.2022.04.09.10.50.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Apr 2022 10:50:38 -0700 (PDT)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 1747B1039DB; Sat,  9 Apr 2022 20:52:10 +0300 (+03)
-Date:   Sat, 9 Apr 2022 20:52:10 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>
-Subject: Re: [PATCHv4 1/8] mm: Add support for unaccepted memory
-Message-ID: <20220409175210.xik3ue3shpagskvi@box.shutemov.name>
-References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
- <20220405234343.74045-2-kirill.shutemov@linux.intel.com>
- <93a7cfdf-02e6-6880-c563-76b01c9f41f5@intel.com>
+        Sat, 9 Apr 2022 13:57:23 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D7F1704E
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 10:55:12 -0700 (PDT)
+Received: from [192.168.0.2] (ip5f5ae90c.dynamic.kabel-deutschland.de [95.90.233.12])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 929A161EA1928;
+        Sat,  9 Apr 2022 19:55:09 +0200 (CEST)
+Message-ID: <67f42821-34ad-cee6-98fb-7086599c4c0f@molgen.mpg.de>
+Date:   Sat, 9 Apr 2022 19:55:09 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <93a7cfdf-02e6-6880-c563-76b01c9f41f5@intel.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2] soc: nuvoton: Add SoC info driver for WPCM450
+Content-Language: en-US
+To:     =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>
+Cc:     openbmc@lists.ozlabs.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Hector Martin <marcan@marcan.st>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Joel Stanley <joel@jms.id.au>
+References: <20220409173319.2491196-1-j.neuschaefer@gmx.net>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20220409173319.2491196-1-j.neuschaefer@gmx.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 12:11:58PM -0700, Dave Hansen wrote:
-> On 4/5/22 16:43, Kirill A. Shutemov wrote:
-> > Kernel only needs to accept memory once after boot, so during the boot
-> > and warm up phase there will be a lot of memory acceptance. After things
-> > are settled down the only price of the feature if couple of checks for
-> > PageUnaccepted() in allocate and free paths. The check refers a hot
-> > variable (that also encodes PageBuddy()), so it is cheap and not visible
-> > on profiles.
-> 
-> Let's also not sugar-coat this.  Page acceptance is hideously slow.
-> It's agonizingly slow.  To boot, it's done holding a global spinlock
-> with interrupts disabled (see patch 6/8).  At the very, very least, each
-> acceptance operation involves a couple of what are effectively ring
-> transitions, a 2MB memset(), and a bunch of cache flushing.
-> 
-> The system is going to be downright unusable during this time, right?
+Dear Jonathan,
 
-Well, yes. The CPU that doing accepting is completely blocked by it.
-But other CPUs may proceed until in in its turn steps onto memory
-accepting.
 
-> Sure, it's *temporary* and only happens once at boot.  But, it's going
-> to suck.
-> 
-> Am I over-stating this in any way?
-> 
-> The ACCEPT_MEMORY vmstat is good to have around.  Thanks for adding it.
->  But, I think we should also write down some guidance like:
-> 
-> 	If your TDX system seems as slow as snail after boot, look at
-> 	the "accept_memory" counter in /proc/vmstat.  If it is
-> 	incrementing, then TDX memory acceptance is likely to blame.
+Thank you for your patch.
 
-Sure. Will add to commit message.
+Am 09.04.22 um 19:33 schrieb Jonathan Neuschäfer:
+> Add a SoC information driver for Nuvoton WPCM450 SoCs. It provides
+> information such as the SoC revision.
 
-> Do we need anything more discrete to tell users when acceptance is over?
+Maybe add an example command, how to read the model and revision.
 
-I can imagine setups that where acceptance is never over. A VM running
-a workload with fixed dataset can have planty of memory unaccepted.
-
-I don't think "make it over" should be the goal.
-
->  For instance, maybe they run something and it goes really slow, they
-> watch "accept_memory" until it stops.  They rejoice at their good
-> fortune!  Then, memory allocation starts falling over to a new node and
-> the agony beings anew.
+> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+> Reviewed-by: Joel Stanley <joel@jms.id.au>
+> ---
 > 
-> I can think of dealing with this in two ways:
+> v2:
+> - Add R-b tag
+> - rebase on 5.18-rc1
 > 
-> 	cat /sys/.../unaccepted_pages_left
+> v1:
+> - https://lore.kernel.org/lkml/20220129143316.2321460-1-j.neuschaefer@gmx.net/
+> ---
+>   drivers/soc/Kconfig               |  1 +
+>   drivers/soc/Makefile              |  1 +
+>   drivers/soc/nuvoton/Kconfig       | 11 ++++
+>   drivers/soc/nuvoton/Makefile      |  2 +
+>   drivers/soc/nuvoton/wpcm450-soc.c | 90 +++++++++++++++++++++++++++++++
+>   5 files changed, 105 insertions(+)
+>   create mode 100644 drivers/soc/nuvoton/Kconfig
+>   create mode 100644 drivers/soc/nuvoton/Makefile
+>   create mode 100644 drivers/soc/nuvoton/wpcm450-soc.c
 > 
-> which just walks the bitmap and counts the amount of pages remaining. or
-> something like:
-> 
-> 	echo 1 > /sys/devices/system/node/node0/make_the_pain_stop
-> 
-> Which will, well, make the pain stop on node0.
+> diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
+> index c5aae42673d3b..42a5e0be77f3d 100644
+> --- a/drivers/soc/Kconfig
+> +++ b/drivers/soc/Kconfig
+> @@ -14,6 +14,7 @@ source "drivers/soc/ixp4xx/Kconfig"
+>   source "drivers/soc/litex/Kconfig"
+>   source "drivers/soc/mediatek/Kconfig"
+>   source "drivers/soc/microchip/Kconfig"
+> +source "drivers/soc/nuvoton/Kconfig"
+>   source "drivers/soc/qcom/Kconfig"
+>   source "drivers/soc/renesas/Kconfig"
+>   source "drivers/soc/rockchip/Kconfig"
+> diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
+> index 904eec2a78713..3239fc49eeb27 100644
+> --- a/drivers/soc/Makefile
+> +++ b/drivers/soc/Makefile
+> @@ -19,6 +19,7 @@ obj-$(CONFIG_SOC_XWAY)		+= lantiq/
+>   obj-$(CONFIG_LITEX_SOC_CONTROLLER) += litex/
+>   obj-y				+= mediatek/
+>   obj-y				+= microchip/
+> +obj-y				+= nuvoton/
+>   obj-y				+= amlogic/
+>   obj-y				+= qcom/
+>   obj-y				+= renesas/
+> diff --git a/drivers/soc/nuvoton/Kconfig b/drivers/soc/nuvoton/Kconfig
+> new file mode 100644
+> index 0000000000000..50166f37096b7
+> --- /dev/null
+> +++ b/drivers/soc/nuvoton/Kconfig
+> @@ -0,0 +1,11 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +menuconfig WPCM450_SOC
+> +	bool "Nuvoton WPCM450 SoC driver"
+> +	default y if ARCH_WPCM450
+> +	select SOC_BUS
+> +	help
+> +	  Say Y here to compile the SoC information driver for Nuvoton
+> +	  WPCM450 SoCs.
+> +
+> +	  This driver provides information such as the SoC model and
+> +	  revision.
+> diff --git a/drivers/soc/nuvoton/Makefile b/drivers/soc/nuvoton/Makefile
+> new file mode 100644
+> index 0000000000000..e30317b4e8290
+> --- /dev/null
+> +++ b/drivers/soc/nuvoton/Makefile
+> @@ -0,0 +1,2 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +obj-$(CONFIG_WPCM450_SOC)	+= wpcm450-soc.o
+> diff --git a/drivers/soc/nuvoton/wpcm450-soc.c b/drivers/soc/nuvoton/wpcm450-soc.c
+> new file mode 100644
+> index 0000000000000..8bad63e1f7a80
+> --- /dev/null
+> +++ b/drivers/soc/nuvoton/wpcm450-soc.c
+> @@ -0,0 +1,90 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Nuvoton WPCM450 SoC Identification
+> + *
+> + * Copyright (C) 2022 Jonathan Neuschäfer
+> + */
+> +
+> +#include <linux/mfd/syscon.h>
+> +#include <linux/of.h>
+> +#include <linux/regmap.h>
+> +#include <linux/sys_soc.h>
+> +#include <linux/slab.h>
+> +
+> +#define GCR_PDID	0
+> +#define PDID_CHIP(x)	((x) & 0x00ffffff)
+> +#define CHIP_WPCM450	0x926450
+> +#define PDID_REV(x)	((x) >> 24)
+> +
+> +struct revision {
+> +	u8 number;
 
-Sure we can add handles. But API is hard. Maybe we should wait and see
-what is actually needed. (Yes, I'm lazy.:)
+Can this be just be `unsigned int`s
 
--- 
- Kirill A. Shutemov
+> +	const char *name;
+> +};
+> +
+> +const struct revision revisions[] __initconst = {
+> +	{ 0x00, "Z1" },
+> +	{ 0x03, "Z2" },
+> +	{ 0x04, "Z21" },
+> +	{ 0x08, "A1" },
+> +	{ 0x09, "A2" },
+> +	{ 0x0a, "A3" },
+> +	{}
+> +};
+> +
+> +static const char * __init get_revision(u8 rev)
+> +{
+> +	int i;
+
+I’d do `unsigned int`, though it does not make a difference in the end 
+result.
+
+> +
+> +	for (i = 0; revisions[i].name; i++)
+> +		if (revisions[i].number == rev)
+> +			return revisions[i].name;
+> +	return NULL;
+> +}
+> +
+> +static int __init wpcm450_soc_init(void)
+> +{
+> +	struct soc_device_attribute *attr;
+> +	struct soc_device *soc;
+> +	const char *revision;
+> +	struct regmap *gcr;
+> +	u32 pdid;
+> +	int ret;
+> +
+> +	if (!of_machine_is_compatible("nuvoton,wpcm450"))
+> +		return 0;
+> +
+> +	gcr = syscon_regmap_lookup_by_compatible("nuvoton,wpcm450-gcr");
+> +	if (IS_ERR(gcr))
+> +		return PTR_ERR(gcr);
+> +	ret = regmap_read(gcr, GCR_PDID, &pdid);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (PDID_CHIP(pdid) != CHIP_WPCM450) {
+> +		pr_warn("Unknown chip ID in GCR.PDID: 0x%06x\n", PDID_CHIP(pdid));
+> +		return -ENODEV;
+> +	}
+> +
+> +	revision = get_revision(PDID_REV(pdid));
+
+The signature of `get_revision()` is u8, but you pass u32, if I am not 
+mistaken.
+
+> +	if (!revision) {
+> +		pr_warn("Unknown chip revision in GCR.PDID: 0x%02x\n", PDID_REV(pdid));
+> +		return -ENODEV;
+> +	}
+> +
+> +	attr = kzalloc(sizeof(*attr), GFP_KERNEL);
+> +	if (!attr)
+> +		return -ENOMEM;
+> +
+> +	attr->family = "Nuvoton NPCM";
+> +	attr->soc_id = "WPCM450";
+> +	attr->revision = revision;
+> +	soc = soc_device_register(attr);
+> +	if (IS_ERR(soc)) {
+> +		kfree(attr);
+> +		pr_warn("Could not register SoC device\n");
+> +		return PTR_ERR(soc);
+> +	}
+> +
+> +	return 0;
+> +}
+> +device_initcall(wpcm450_soc_init);
+> --
+> 2.35.1
+> 
+
+Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
+
+
+Kind regards,
+
+Paul

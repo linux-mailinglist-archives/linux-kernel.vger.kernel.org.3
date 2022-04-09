@@ -2,134 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70E154FA1F7
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 05:30:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E394FA1FA
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 05:35:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238184AbiDIDcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 23:32:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47442 "EHLO
+        id S237041AbiDIDhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 23:37:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiDIDcD (ORCPT
+        with ESMTP id S229549AbiDIDhT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 23:32:03 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2F02AE9DE;
-        Fri,  8 Apr 2022 20:29:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649474997; x=1681010997;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IOogZbtQVdUydOALD2TY2ZdOngstt4IqBJqKyDVb1ZY=;
-  b=mFIpbo4c/WFxL4LJ498HGEusi08usOVTa3TDq4tGSvfzk9Jl5IrLHGBC
-   wSD73bX7TL1oaKvSI2QaEB0+GzPDsu1iKHd/UsXJSfsvcFV6xBJvO/oQF
-   CkN6gFS26bPY9pcMWkB/+6Ey8ujyPbcWFlwuQRNfGXw6O/oRbe7pQ6SDB
-   JHNroj/ldcrpqq27385FmryQUPGQ/rys31TEDJpHx4oR9UuBSoExyBrKB
-   gsOCUOu7/BeRKJre4bDtGTfC1idZ1CiXWsGMtShxt/JX2NqeahYPu9R9O
-   N4pmxwoXSeec+WIZ32Uu+BWY/kEH/ZHzthLT//+HjaR55Vx5XamSejJyr
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="286749461"
-X-IronPort-AV: E=Sophos;i="5.90,246,1643702400"; 
-   d="scan'208";a="286749461"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 20:29:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,246,1643702400"; 
-   d="scan'208";a="643185585"
-Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 08 Apr 2022 20:29:54 -0700
-Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nd1nO-0000qL-6J;
-        Sat, 09 Apr 2022 03:29:54 +0000
-Date:   Sat, 9 Apr 2022 11:29:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Qu Wenruo <wqu@suse.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        David Sterba <dsterba@suse.com>, linux-doc@vger.kernel.org
-Subject: [kdave:for-next 112/127] fs/btrfs/raid56.c:1000: warning: This
- comment starts with '/**', but isn't a kernel-doc comment. Refer
- Documentation/doc-guide/kernel-doc.rst
-Message-ID: <202204091154.PHMWy5ha-lkp@intel.com>
+        Fri, 8 Apr 2022 23:37:19 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF1CC17
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 20:35:14 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-ddfa38f1c1so11678233fac.11
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 20:35:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NhYLnZjSBj3vGUK1h2W/q7E9jlIzGMped+bnp/r8ylc=;
+        b=WHVpb8hi7JLuhz2Zor+MoULlhOCIpVXQZs5W+ydESh5QlFHxXdfquBsTXSVjcpNT8/
+         MrqOr2JpiL1nodleQMUITY4Epp+3bfaiTGmuq7ulVvp57sFykjfzGsI+n2k9G796KlN+
+         JFqQ9z406TQiqnk4ZADdYM3mDCuqqofoxbAB0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NhYLnZjSBj3vGUK1h2W/q7E9jlIzGMped+bnp/r8ylc=;
+        b=4OLZeNgUe4N+d8+oZFc3bsMPbFk7sEoMvrsjSrUHURt+qLFbzqQJKK0JTZf2iR1Dwx
+         AKif9cHmlcgP+y3lq+iGJetZbo2ruASQ/U7C53/Rcdbw3jISfFV+zXXfL+erAS7mqkLL
+         pDBg4JpiNn8nOwVXSaB26J6ERFbZjTOwUi2pVfRsP+h9P0aquUXNKZ+oT2Dt0dtZxyNv
+         hsC5T4+FPDITFbW7sPERJ4otZzM/pG2k3bzeSGjgjxRNYtshXH4v8R7K9+PEZTc/NIup
+         TS9utUUrpVKB17AEiTnPKc4RTMGJZSFA1CvK8pOJfaTrgQcBq6SkrqhmpGpj7GCKkYpq
+         AmJg==
+X-Gm-Message-State: AOAM5333npY9CBwdCI5wf+RcZ2lXF4iv0tsbHmfEmEBFYy3W9EMinr2z
+        Ou2b4lo0JobTehTVCWMsUKPmAYGFXfGWpQ==
+X-Google-Smtp-Source: ABdhPJzxS2HfWthPrnZ5BpG5vTYAutK120UMhwnglowIiPEQ3XAys+weMyxGLP4QN7MhYj/g/JOEcA==
+X-Received: by 2002:a05:6870:2216:b0:e2:9dea:4611 with SMTP id i22-20020a056870221600b000e29dea4611mr1912274oaf.122.1649475313413;
+        Fri, 08 Apr 2022 20:35:13 -0700 (PDT)
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com. [209.85.210.49])
+        by smtp.gmail.com with ESMTPSA id h11-20020a9d6f8b000000b005b230ab0461sm9801358otq.64.2022.04.08.20.35.11
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Apr 2022 20:35:11 -0700 (PDT)
+Received: by mail-ot1-f49.google.com with SMTP id k25-20020a056830151900b005b25d8588dbso7407656otp.4
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 20:35:11 -0700 (PDT)
+X-Received: by 2002:a05:6830:1041:b0:5cd:b09b:2164 with SMTP id
+ b1-20020a056830104100b005cdb09b2164mr7808516otp.186.1649475310609; Fri, 08
+ Apr 2022 20:35:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220406014842.2771799-1-briannorris@chromium.org>
+ <CGME20220406094558epcas1p4fa0c77a5acd6b73c192f6b19136cd5f9@epcas1p4.samsung.com>
+ <20220405184816.RFC.1.Ib865f199d15221eab4ff77f70bd7e9e2eb04d32f@changeid> <c8664eae-4a10-bd1a-8898-01b96c05331e@samsung.com>
+In-Reply-To: <c8664eae-4a10-bd1a-8898-01b96c05331e@samsung.com>
+From:   Brian Norris <briannorris@chromium.org>
+Date:   Fri, 8 Apr 2022 20:34:59 -0700
+X-Gmail-Original-Message-ID: <CA+ASDXNx+nwVKuisMAsHEKLfd=hqBzZmhFxphcYUF=bamqN2kA@mail.gmail.com>
+Message-ID: <CA+ASDXNx+nwVKuisMAsHEKLfd=hqBzZmhFxphcYUF=bamqN2kA@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/2] soc: rockchip: power-domain: Manage resource
+ conflicts with firmware
+To:     Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        Elaine Zhang <zhangqing@rock-chips.com>,
+        linux-pm <linux-pm@vger.kernel.org>,
+        Doug Anderson <dianders@chromium.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-next
-head:   cc4b66eaf7fbeab15e9c3dd2f2c12e41a1d741eb
-commit: a32642fa6cda14b43626226169dc248ccdbdd63d [112/127] btrfs: raid56: make rbio_add_io_page() subpage compatible
-config: x86_64-randconfig-a015 (https://download.01.org/0day-ci/archive/20220409/202204091154.PHMWy5ha-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git/commit/?id=a32642fa6cda14b43626226169dc248ccdbdd63d
-        git remote add kdave https://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git
-        git fetch --no-tags kdave for-next
-        git checkout a32642fa6cda14b43626226169dc248ccdbdd63d
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kvm/ fs/btrfs/
+Hi Chanwoo,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Wed, Apr 6, 2022 at 9:38 PM Chanwoo Choi <cw00.choi@samsung.com> wrote:
+> Instead of adding the specific function for only rockchip,
+> how about adding new function pointer (like block/unblock or start/stop and others)
+> into 'struct generic_pm_domain'? And add new pm_genpd_* function
+> to control the power domain.
 
-All warnings (new ones prefixed by >>):
+I suppose that is technically possible, but I'm not sure it makes a
+ton of sense.
 
->> fs/btrfs/raid56.c:1000: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Get a sector pointer specified by its @stripe_nr and @sector_nr
+First, genpd doesn't seem to typically expose operations directly to
+client device drivers. It's mostly about abstract handling of the
+dependencies of "how do I power on this device?" behind the scenes of
+things like pm_runtime_*(). I guess maybe something like
+dev_pm_genpd_set_performance_state() is an approximately similar API
+though (i.e., a genpd operation exposed to client drivers)? I could
+try to go that route, if the genpd maintainers think this makes sense.
 
+But secondly, this isn't exactly an operation on one power domain.
+It's an operation on the entire power controller. I suppose I could
+make a new domain here for the memory controller, and teach that
+domain to implicitly manipulate all the other domains provided by the
+PMU, but that feels like a fake abstraction to me.
 
-vim +1000 fs/btrfs/raid56.c
+Lastly, and perhaps least importantly: this likely would require a
+device tree binding change. So far, the memory controller hasn't had
+its own power domain. I guess one could argue that it has some
+similarities to a power domain, albeit one that is managed in firmware
+-- so maybe this is a reasonable "bug" to fix, if it really comes down
+to it.
 
-   998	
-   999	/**
-> 1000	 * Get a sector pointer specified by its @stripe_nr and @sector_nr
-  1001	 *
-  1002	 * @rbio:               The raid bio
-  1003	 * @stripe_nr:          Stripe number, valid range [0, real_stripe)
-  1004	 * @sector_nr:		Sector number inside the stripe,
-  1005	 *			valid range [0, stripe_nsectors)
-  1006	 * @bio_list_only:      Whether to use sectors inside the bio list only.
-  1007	 *
-  1008	 * The read/modify/write code wants to reuse the original bio page as much
-  1009	 * as possible, and only use stripe_sectors as fallback.
-  1010	 */
-  1011	static struct sector_ptr *sector_in_rbio(struct btrfs_raid_bio *rbio,
-  1012						 int stripe_nr, int sector_nr,
-  1013						 bool bio_list_only)
-  1014	{
-  1015		struct sector_ptr *sector;
-  1016		int index;
-  1017	
-  1018		ASSERT(stripe_nr >= 0 && stripe_nr < rbio->real_stripes);
-  1019		ASSERT(sector_nr >= 0 && sector_nr < rbio->stripe_nsectors);
-  1020	
-  1021		index = stripe_nr * rbio->stripe_nsectors + sector_nr;
-  1022		ASSERT(index >= 0 && index < rbio->nr_sectors);
-  1023	
-  1024		spin_lock_irq(&rbio->bio_list_lock);
-  1025		sector = &rbio->bio_sectors[index];
-  1026		if (sector->page || bio_list_only) {
-  1027			/* Don't return sector without a valid page pointer */
-  1028			if (!sector->page)
-  1029				sector = NULL;
-  1030			spin_unlock_irq(&rbio->bio_list_lock);
-  1031			return sector;
-  1032		}
-  1033		spin_unlock_irq(&rbio->bio_list_lock);
-  1034	
-  1035		return &rbio->stripe_sectors[index];
-  1036	}
-  1037	
+> Because it is better to use subsystem interface.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+I don't agree this is universally true. It makes sense when there are
+truly abstract concepts represented, which are likely to appear across
+multiple implementations. Or maybe if the object model is complex. But
+this operation seems very SoC-specific to me, and it's pretty simple
+to implement this way. Or, do you think this is really something that
+others will need -- pausing (and powering) a power controller so
+another entity can manage it?
+
+I guess I'd also like some thoughts from the genpd maintainers (CC'd),
+of whether this seems like a good fit for a new genpd callback and
+API.
+
+Brian

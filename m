@@ -2,219 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9BA4FA553
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 08:10:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7A454FA559
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 08:12:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239997AbiDIGMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 02:12:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53202 "EHLO
+        id S240015AbiDIGOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 02:14:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236912AbiDIGMH (ORCPT
+        with ESMTP id S234804AbiDIGOK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 02:12:07 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA5750E11
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 23:10:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649484600; x=1681020600;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=y9fFMSbHT3dSK74mWR/kmrJc9IJkM9rjzo0StktOQYk=;
-  b=JCHSQDgDnbz1nqSRvgs1RtwBywAjLPPn6nNL/6E+dKBouZwWmE5XoCRl
-   L2657ZQw0PtIiW6BLpy4RG53PYcF30Pe3qjkafTWIWS5Eke6F7SmIf2bs
-   BwkyMlbXtcA+hD543VklRJ+kzDA3UZYZ20GAQbb2XZE3F/Z3yhb+Ji01b
-   aBXjzFHLegTCY95y5eslBsvQuRflvyLHh/z5AuNwt+a34GpHPrNeFoBJB
-   BhhXrTDgENS2UHTxUDpVZZ3pItsFDkut9aPjiVmQS6cmoaG4aw4r7QwLc
-   7DEQqPZO6zeU2UB619ESgJfqKiV2qRZxuAfYD1O/98InFkF+RGDNB98Kk
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="286762995"
-X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
-   d="scan'208";a="286762995"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 23:09:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
-   d="scan'208";a="653611830"
-Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 08 Apr 2022 23:09:58 -0700
-Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nd4IH-0000wu-Mx;
-        Sat, 09 Apr 2022 06:09:57 +0000
-Date:   Sat, 09 Apr 2022 14:09:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/tdx] BUILD SUCCESS
- b9c7ba58777acfd0892b808aea25074d46e0618f
-Message-ID: <62512315./GmcXraRDJOKks+9%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 9 Apr 2022 02:14:10 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9106DD0A97;
+        Fri,  8 Apr 2022 23:12:03 -0700 (PDT)
+Received: from [192.168.0.2] (ip5f5ae90c.dynamic.kabel-deutschland.de [95.90.233.12])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id CDD4761E6478B;
+        Sat,  9 Apr 2022 08:12:01 +0200 (CEST)
+Message-ID: <9cf20395-369a-2738-608d-dd5f1aabe48b@molgen.mpg.de>
+Date:   Sat, 9 Apr 2022 08:12:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v6 2/3] dt-bindings: edac: nuvoton: add NPCM memory
+ controller
+Content-Language: en-US
+To:     Medad CChien <medadyoung@gmail.com>
+Cc:     rric@kernel.org, james.morse@arm.com, tony.luck@intel.com,
+        mchehab@kernel.org, bp@alien8.de, robh+dt@kernel.org,
+        benjaminfair@google.com, yuenn@google.com, venture@google.com,
+        KWLIU@nuvoton.com, YSCHU@nuvoton.com, JJLIU0@nuvoton.com,
+        KFTING@nuvoton.com, avifishman70@gmail.com, tmaimon77@gmail.com,
+        tali.perry1@gmail.com, ctcchien@nuvoton.com,
+        devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org
+References: <20220322030152.19018-1-ctcchien@nuvoton.com>
+ <20220322030152.19018-3-ctcchien@nuvoton.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20220322030152.19018-3-ctcchien@nuvoton.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/tdx
-branch HEAD: b9c7ba58777acfd0892b808aea25074d46e0618f  Documentation/x86: Document TDX kernel architecture
+Dear Medad,
 
-elapsed time: 722m
 
-configs tested: 133
-configs skipped: 3
+Thank you for your patch.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Am 22.03.22 um 04:01 schrieb Medad CChien:
+> Added device tree binding documentation for Nuvoton BMC
+> NPCM memory controller.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                              allyesconfig
-arm64                               defconfig
-i386                          randconfig-c001
-microblaze                      mmu_defconfig
-powerpc                    sam440ep_defconfig
-xtensa                              defconfig
-sh                        edosk7760_defconfig
-h8300                            alldefconfig
-sh                           se7722_defconfig
-arc                          axs103_defconfig
-m68k                        m5407c3_defconfig
-powerpc                    adder875_defconfig
-sh                            migor_defconfig
-arm64                            alldefconfig
-nios2                         10m50_defconfig
-mips                    maltaup_xpa_defconfig
-sh                           se7206_defconfig
-powerpc                      chrp32_defconfig
-arm                            xcep_defconfig
-arm                          badge4_defconfig
-sh                        sh7785lcr_defconfig
-arm                          exynos_defconfig
-s390                       zfcpdump_defconfig
-xtensa                generic_kc705_defconfig
-ia64                             allmodconfig
-arc                     haps_hs_smp_defconfig
-riscv             nommu_k210_sdcard_defconfig
-xtensa                  nommu_kc705_defconfig
-h8300                       h8s-sim_defconfig
-parisc                generic-32bit_defconfig
-mips                         db1xxx_defconfig
-mips                         cobalt_defconfig
-arm                            qcom_defconfig
-arm                  randconfig-c002-20220408
-x86_64                        randconfig-c001
-ia64                             allyesconfig
-ia64                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-sparc                               defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-arc                  randconfig-r043-20220408
-s390                 randconfig-r044-20220408
-riscv                randconfig-r042-20220408
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-x86_64                    rhel-8.3-kselftests
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                                  kexec
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                         rhel-8.3-kunit
+Please use present tense, and spell *devicetree* without a space. The 
+line below even fits in 75 characters:
 
-clang tested configs:
-x86_64                        randconfig-c007
-i386                          randconfig-c001
-s390                 randconfig-c005-20220408
-powerpc              randconfig-c003-20220408
-riscv                randconfig-c006-20220408
-mips                 randconfig-c004-20220408
-arm                  randconfig-c002-20220408
-arm                     am200epdkit_defconfig
-mips                      pic32mzda_defconfig
-powerpc                     pseries_defconfig
-powerpc                   bluestone_defconfig
-powerpc                      obs600_defconfig
-powerpc                 mpc8560_ads_defconfig
-mips                malta_qemu_32r6_defconfig
-mips                        qi_lb60_defconfig
-mips                     cu1000-neo_defconfig
-riscv                             allnoconfig
-mips                   sb1250_swarm_defconfig
-mips                     loongson1c_defconfig
-powerpc                       ebony_defconfig
-powerpc                     mpc5200_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-hexagon              randconfig-r045-20220408
-hexagon              randconfig-r041-20220408
+Document devicetree bindings for the Nuvoton BMC NPCM memory controller.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> ---
+>   .../edac/nuvoton,npcm-memory-controller.yaml  | 62 +++++++++++++++++++
+>   1 file changed, 62 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml b/Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml
+> new file mode 100644
+> index 000000000000..97469294f4ba
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml
+> @@ -0,0 +1,62 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/edac/nuvoton,npcm-memory-controller.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Nuvoton NPCM Memory Controller
+> +
+> +maintainers:
+> +  - Medad CChien <ctcchien@nuvoton.com>
+> +
+> +description: |
+> +  The Nuvoton BMC SoC supports DDR4 memory with and without ECC (error
+> +  correction check).
+> +
+> +  The memory controller supports single bit error correction, double bit
+> +  error detection (in-line ECC in which a section (1/8th) of the
+> +  memory device used to store data is used for ECC storage).
+
+*memory* fits on the line above?
+
+> +
+> +  Note, the bootloader must configure ECC mode for the memory controller.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - nuvoton,npcm845-memory-controller
+> +      - nuvoton,npcm750-memory-controller
+
+Sort the entries?
+
+
+Kind regards,
+
+Paul
+
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    minItems: 1
+> +    items:
+> +      - description: uncorrectable error interrupt
+> +      - description: correctable error interrupt
+> +
+> +  interrupt-names:
+> +    minItems: 1
+> +    items:
+> +      - const: ue
+> +      - const: ce
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    ahb {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +        mc: memory-controller@f0824000 {
+> +            compatible = "nuvoton,npcm750-memory-controller";
+> +            reg = <0x0 0xf0824000 0x0 0x1000>;
+> +            interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
+> +        };
+> +    };
+> +

@@ -2,102 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38F924FA0EA
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 03:06:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1188A4FA0EC
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 03:11:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237457AbiDIBIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 21:08:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47738 "EHLO
+        id S240197AbiDIBL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 21:11:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230157AbiDIBIO (ORCPT
+        with ESMTP id S239330AbiDIBLU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 21:08:14 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B5728E31
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 18:06:03 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id p21so12594173ioj.4
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 18:06:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4KTg8PibcC8KQTgPBqCOsiC3mDCYVERkDcQnsHvYI9I=;
-        b=PlFXj0irn77GOUGppxUMOrj5Hf8SW7F+QH+5hFPzJA4Ayryp5TsXijQV+Yocm3Mf69
-         SxzfPnQ6Ks07h+kryRHAXafNXA2GJDi6pPDkPaL9PyuddbQw4W2skzJV5djaC2zi5spf
-         7TJC1kRisK/n1XLcr61EuxSWU8AjO9wUxJLZrwL+XglcG95hUdDu02AQxhl98flbAXx5
-         knwUfIDKQ+1tBIUt32nP4XtiOV7hVoIMYn+PVKJ8iHq6YpwGB8U8rQ/kb/Lk7k2gebzd
-         WHyaYhd9nWuBHxE76QzM26ojDh2PAzob3bjO03FAGmNnRIO3n2ri/qWWd7WHlbUVY1oU
-         BHtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4KTg8PibcC8KQTgPBqCOsiC3mDCYVERkDcQnsHvYI9I=;
-        b=CuLqGJV945njfOzLRp7grcsNNPRXk+Dii3rhIvdyL2z2lymDmnpsIrOCPYfOAWj9r/
-         RZGtpXk5PFG/joxYbWCSXazqc5mk/3uQqLmZiTuh/nWRxSpfqCvzoUsuCFkJOWNj0Cna
-         RBBEagv/ntFcWZ4culOvjMDLGwXY/zzJ7XYZmrtdmSlAx1TpXa+BH6zx+oFfGcRVl0Fx
-         MHueOcP884y43JJRBGXpmH7YxOkw+dqPhbl95gY6pa/oMR3VQtSsGRxMGL87fg0sMdRY
-         dTNZz+e06AitD3ufuohPPgvrZ1vxF3HWtVlM+KuC6yKCXbVDsZ08Z6iCtePcIs6yLxRz
-         kciA==
-X-Gm-Message-State: AOAM532Gz6Ji2gNuT01qO0YWqj7iiWqi9GW5l3EYtEkfkgmaPns0sjkZ
-        QaU1UtI9LNbYjYLrRWlu8TxNagetnl03W1jgQWuvtg==
-X-Google-Smtp-Source: ABdhPJwWV1PbV74ls5FpClgb/DYi825MGm4/TudHWERdAAPIAc2vwYZYHR2MnU2d/hDKv3+J9rr4iNnh56SL2eHKdaA=
-X-Received: by 2002:a5d:898b:0:b0:649:5bbb:7d95 with SMTP id
- m11-20020a5d898b000000b006495bbb7d95mr9371853iol.107.1649466362417; Fri, 08
- Apr 2022 18:06:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220408045908.21671-1-rex-bc.chen@mediatek.com> <7h5ynj5lhc.fsf@baylibre.com>
-In-Reply-To: <7h5ynj5lhc.fsf@baylibre.com>
-From:   Hsin-Yi Wang <hsinyi@google.com>
-Date:   Sat, 9 Apr 2022 09:05:36 +0800
-Message-ID: <CACb=7PVu6Rt3giBW78LWtkM=9xV6JzZgFSKOmUNx_26O0Wvowg@mail.gmail.com>
-Subject: Re: [PATCH V2 00/15] cpufreq: mediatek: Cleanup and support MT8183
- and MT8186
-To:     Kevin Hilman <khilman@baylibre.com>
-Cc:     Rex-BC Chen <rex-bc.chen@mediatek.com>, rafael@kernel.org,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, krzk+dt@kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tim Chang <jia-wei.chang@mediatek.com>, roger.lu@mediatek.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 8 Apr 2022 21:11:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A605337A92;
+        Fri,  8 Apr 2022 18:09:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5D68EB82DFB;
+        Sat,  9 Apr 2022 01:09:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 09B38C385A3;
+        Sat,  9 Apr 2022 01:09:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649466553;
+        bh=FQuzKu6yg787WQYGd+91H/VL60/wz5Prh4W0gVs0DZ0=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=NB4vcqorZS5LH7gNVbozsE6T7hKOnplij5N3YcDIUI2pJGZJAtWaCabR420QdBN4q
+         C3lSPlZX8C9vLgiiHrN6M+yM/46CsWMBUT8YbgDQgOjiapP7P87T/Ipj5GEQZha4h/
+         hwQGOajE4QGfxrOxE21tZ3AEN35UQAizmE40BD5TD1ECo9kFZasva9OF09c8LkHpCG
+         KoZwuDVlD/0yvFGou9oefHKBl6mmz6Aqi4vRAeVQEBj2m/5y+7yxNHeFvNU3+BpVYz
+         KjcMq9GBlsxPatndjqkA3Dh+L2wcyo5FFTvMrBOxI1d4hLpd30mmBLxdji0+16+BU8
+         4I7/DK/j0GAag==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E6E49E8DCCE;
+        Sat,  9 Apr 2022 01:09:12 +0000 (UTC)
+Subject: Re: [GIT PULL] KUnit update for Linux 5.18-rc2
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <f8e5687f-958b-c97b-4ddb-7bbfbdfa036f@linuxfoundation.org>
+References: <f8e5687f-958b-c97b-4ddb-7bbfbdfa036f@linuxfoundation.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <f8e5687f-958b-c97b-4ddb-7bbfbdfa036f@linuxfoundation.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-fixes-5.18-rc2
+X-PR-Tracked-Commit-Id: 02c7efa43627163e489a8db87882445a0ff381f7
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 6c7376da23587738ab0e84b8b90b6cc02db5181e
+Message-Id: <164946655294.8314.14661504987868871783.pr-tracker-bot@kernel.org>
+Date:   Sat, 09 Apr 2022 01:09:12 +0000
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shuah@kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 9, 2022 at 5:11 AM Kevin Hilman <khilman@baylibre.com> wrote:
->
-> Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
->
-> > Cpufreq is a DVFS driver used for power saving to scale the clock frequency
-> > and supply the voltage for CPUs. This series do some cleanup for MediaTek
-> > cpufreq drivers and add support for MediaTek SVS[2] and MediaTek CCI
-> > devfreq[3] which are supported in MT8183 and MT8186.
->
-> There's no upstream DT for MT8186 and there are no OPPs defined in the
-> upstream DT for MT8183.
->
-> In order to test this on mainline, could you provide a patch for MT8183
-> that adds OPPs to the DT so this can be tested with mainline?
->
-The DT change used in the downstream kernel is from here:
-https://patchwork.kernel.org/project/linux-mediatek/patch/1616499241-4906-9-git-send-email-andrew-sh.cheng@mediatek.com/
-Might need some update (eg. add the cci property in cpu) though.
-Rex, you can also include the 8183 DT change in the next version since
-most of the mt8183 dts are in the mainline.
+The pull request you sent on Fri, 8 Apr 2022 12:55:58 -0600:
 
-Thanks
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-kunit-fixes-5.18-rc2
 
-> Thanks,
->
-> Kevin
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/6c7376da23587738ab0e84b8b90b6cc02db5181e
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

@@ -2,117 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47D304FA0E1
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 03:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3B8A4FA0E2
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 03:03:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237363AbiDIBDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 21:03:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58282 "EHLO
+        id S237450AbiDIBEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 21:04:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230157AbiDIBDP (ORCPT
+        with ESMTP id S230157AbiDIBEn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 21:03:15 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0C523FF3D
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 18:01:06 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id c15so13459333ljr.9
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 18:01:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wdHWP0t2I4gTt2PnJNuvhJwBXPRJYjBIPAiVJ3HB0e0=;
-        b=QtAta4NfzmiaG3n/anjUkJNn/RBokeZn0QIZMmuCVSGsHCTZUWaxqGlO1P8T9+WL0k
-         zTWPE9DViaYKncd3qngYwMM3R+8/o0SagjzQJ385e/ugtsauPumK4FH43ZUlpCAInf/4
-         n217oxniv5EAtBR7ErJqbWZE+J3gTSLW/PBa0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wdHWP0t2I4gTt2PnJNuvhJwBXPRJYjBIPAiVJ3HB0e0=;
-        b=koBCM/svEzsI7hg57xjQjjmfNlWIr2kudrlFr9ZWf+7n2xrq2qvQ+Hf95WnEiolHgR
-         eg35TtAyqmEdby1vilOObZ9MaWle+RQ0xrQktiMDrDwyPNUTQt5MZUsf3TxoLd+V62WV
-         KKhHUVTiFKBXx/n0bEewqShWQoIqab83y7Q6bNTUrlBINbNCWN7QG6mreM4389BqOiV9
-         lt/4Kp+9t1aTFmeSlZ4duVfdM3aa+Iu7nCf+sOHmIuJckvnJgDd95RmUt5t4oHkqQkwM
-         CqJNCp6dRjMrQXCsGbMHqHmNx8RTf94vlo0ZLtXwrvKnrwdZho+5lIRrS8rwRJBXYHI8
-         mvBA==
-X-Gm-Message-State: AOAM5330pRdf2FhHxlaDO3ZPn1ASY5YH2+/RAUWLXQw9QKlAyiT4gbmJ
-        eDyumhlMv/oH1nOjKUtx5xg/lA7bKS+7EcWt
-X-Google-Smtp-Source: ABdhPJxds7tylQVSiuLVc5BoUUrCjhj4IbJ1M6jhCp0JIcLHOw5rc5btasWhoE0rK3QGDYDIepUbew==
-X-Received: by 2002:a2e:b8c9:0:b0:249:90fc:71ba with SMTP id s9-20020a2eb8c9000000b0024990fc71bamr13267337ljp.466.1649466063892;
-        Fri, 08 Apr 2022 18:01:03 -0700 (PDT)
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com. [209.85.208.182])
-        by smtp.gmail.com with ESMTPSA id e16-20020a196910000000b0044a13085dd5sm2596818lfc.270.2022.04.08.18.01.00
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Apr 2022 18:01:00 -0700 (PDT)
-Received: by mail-lj1-f182.google.com with SMTP id s17so5519638ljp.8
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 18:01:00 -0700 (PDT)
-X-Received: by 2002:a05:651c:b07:b0:24b:4af9:828 with SMTP id
- b7-20020a05651c0b0700b0024b4af90828mr4951637ljr.506.1649466060069; Fri, 08
- Apr 2022 18:01:00 -0700 (PDT)
+        Fri, 8 Apr 2022 21:04:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D33F22CB3AA
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 18:02:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649466157;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RbsAzZvTljYo+RBJswsnAR5lYXPWhOrtFUVWlHUhygc=;
+        b=aF5cMbJ0KTGzUFcr8O6W6KQ1wtTwCTALG8AEJuMqHzfh5QttYw0QPDOZnasxsn0TeV8j7V
+        DOsL7qazhKYMG4T6OjdNjFFPhIzAfIW2h0J83/72Vj3iBfaugRnPBdxMy3Dln/T7RZXcUU
+        O7UdBrWV+FIljTvXt8ym1BgGwjEIYyQ=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-183-4QYPejBPMdmQgr3pUtPhmw-1; Fri, 08 Apr 2022 21:02:34 -0400
+X-MC-Unique: 4QYPejBPMdmQgr3pUtPhmw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 44E792999B23;
+        Sat,  9 Apr 2022 01:02:34 +0000 (UTC)
+Received: from localhost (ovpn-12-19.pek2.redhat.com [10.72.12.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id EAB83C44CC0;
+        Sat,  9 Apr 2022 01:02:32 +0000 (UTC)
+Date:   Sat, 9 Apr 2022 09:02:29 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     kernel test robot <lkp@intel.com>
+Cc:     akpm@linux-foundation.org, willy@infradead.org,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        kexec@lists.infradead.org, hch@lst.de, yangtiezhu@loongson.cn,
+        amit.kachhap@arm.com, linux-fsdevel@vger.kernel.org,
+        viro@zeniv.linux.org.uk
+Subject: Re: [PATCH v5 RESEND 1/3] vmcore: Convert copy_oldmem_page() to take
+ an iov_iter
+Message-ID: <YlDbJSy4AI3/cODr@MiWiFi-R3L-srv>
+References: <20220408090636.560886-2-bhe@redhat.com>
+ <202204082128.JKXXDGpa-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220407161745.7d6754b3@gandalf.local.home> <87pmlrkgi3.ffs@tglx>
- <CAHk-=whbsLXy85XpKRQmBXr=GqWbMoi+wVjFY_V22=BOE=dHog@mail.gmail.com>
- <87v8vjiaih.ffs@tglx> <20220408202230.0ea5388f@rorschach.local.home>
- <CAHk-=wg3icnjr+6aU-Wyw+kBoSRBM28P4o4iTgimOWDuuUiStQ@mail.gmail.com> <20220408204925.16361b44@rorschach.local.home>
-In-Reply-To: <20220408204925.16361b44@rorschach.local.home>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 8 Apr 2022 15:00:43 -1000
-X-Gmail-Original-Message-ID: <CAHk-=wg6ZTjCoWev039ijHkzJGOE8v1Psc=yDANkt5r3GBxc0w@mail.gmail.com>
-Message-ID: <CAHk-=wg6ZTjCoWev039ijHkzJGOE8v1Psc=yDANkt5r3GBxc0w@mail.gmail.com>
-Subject: Re: [RFC][PATCH] timers: Add del_time_free() to be called before
- freeing timers
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>, jstultz@google.com,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202204082128.JKXXDGpa-lkp@intel.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 8, 2022 at 2:49 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> Hmm, well, I'm not sure it would work for all architectures, but what
-> about the MSB?  Setting it to zero on "shutdown"?
+On 04/08/22 at 09:17pm, kernel test robot wrote:
+> Hi Baoquan,
+> 
+> Thank you for the patch! Perhaps something to improve:
+> 
+> [auto build test WARNING on powerpc/next]
+> [also build test WARNING on s390/features linus/master v5.18-rc1 next-20220408]
+> [cannot apply to tip/x86/core hnaz-mm/master arm64/for-next/core]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/Convert-vmcore-to-use-an-iov_iter/20220408-170846
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
+> config: sh-randconfig-s032-20220408 (https://download.01.org/0day-ci/archive/20220408/202204082128.JKXXDGpa-lkp@intel.com/config)
+> compiler: sh4-linux-gcc (GCC) 11.2.0
+> reproduce:
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
 
-Let's just clear the whole thing for now. We don't actually _have_ any
-timer_restart() cases yet.
+Thanks for reporting this, do I need to try this on ppc system?
 
-I was more thinking that we might have situations where "I don't want
-to race with timers, but I also don't want to take an interrupt-safe
-lock" makes a lot of sense.
+I tried on x86_64 system, for the 1st step, I got this:
 
-Most people most definitely are just about "module unload" and similar
-issues, where it goes along with doing "task_work_cancel()" and
-friends.
+[ ~]# wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+/root/bin/make.cross: No such file or directory
 
-I do wonder if we want some way to shut down new timers that doesn't
-actually wait for old ones to finish.
+What else should I do to proceed?
 
-We've had issues with some code not being able to use del_timer_sync()
-simply because they hold locks that could deadlock with any "wait for
-running timer" situation.
+Thanks
+Baoquan
 
-Those places couldn't use a synchronous cancel operation either, for
-the same reason.
+>         chmod +x ~/bin/make.cross
+>         # apt-get install sparse
+>         # sparse version: v0.6.4-dirty
+>         # https://github.com/intel-lab-lkp/linux/commit/a5e42962f5c0bea73aa382a2415094b4bd6c6c73
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Baoquan-He/Convert-vmcore-to-use-an-iov_iter/20220408-170846
+>         git checkout a5e42962f5c0bea73aa382a2415094b4bd6c6c73
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sh SHELL=/bin/bash arch/sh/kernel/
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> 
+> sparse warnings: (new ones prefixed by >>)
+> >> arch/sh/kernel/crash_dump.c:23:36: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const *addr @@     got void [noderef] __iomem * @@
+>    arch/sh/kernel/crash_dump.c:23:36: sparse:     expected void const *addr
+>    arch/sh/kernel/crash_dump.c:23:36: sparse:     got void [noderef] __iomem *
+> 
+> vim +23 arch/sh/kernel/crash_dump.c
+> 
+>     13	
+>     14	ssize_t copy_oldmem_page(struct iov_iter *iter, unsigned long pfn,
+>     15				 size_t csize, unsigned long offset)
+>     16	{
+>     17		void  __iomem *vaddr;
+>     18	
+>     19		if (!csize)
+>     20			return 0;
+>     21	
+>     22		vaddr = ioremap(pfn << PAGE_SHIFT, PAGE_SIZE);
+>   > 23		csize = copy_to_iter(vaddr + offset, csize, iter);
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
+> 
 
-I'm not sure a "make sure no future timers can start" operation is
-sensible on its own, though. I can't think of a situation where that
-wouldn't also need that "wait for existing ones to finish".
-
-                       Linus

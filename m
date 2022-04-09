@@ -2,65 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D1BA4FA5A1
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 09:46:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D79B4FA5A4
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 09:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235258AbiDIHs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 03:48:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47268 "EHLO
+        id S236860AbiDIHyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 03:54:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbiDIHsz (ORCPT
+        with ESMTP id S230105AbiDIHyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 03:48:55 -0400
-Received: from mx1.smtp.larsendata.com (mx1.smtp.larsendata.com [91.221.196.215])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315E3BB8
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 00:46:47 -0700 (PDT)
-Received: from mail01.mxhotel.dk (mail01.mxhotel.dk [91.221.196.236])
-        by mx1.smtp.larsendata.com (Halon) with ESMTPS
-        id 360b3d46-b7d9-11ec-8da1-0050568c148b;
-        Sat, 09 Apr 2022 07:46:48 +0000 (UTC)
-Received: from ravnborg.org (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sam@ravnborg.org)
-        by mail01.mxhotel.dk (Postfix) with ESMTPSA id 0087E194B3E;
-        Sat,  9 Apr 2022 09:46:46 +0200 (CEST)
-Date:   Sat, 9 Apr 2022 09:46:40 +0200
-X-Report-Abuse-To: abuse@mxhotel.dk
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org
-Subject: Re: [PATCH] sparc: cacheflush_32.h needs <linux/mm.h>
-Message-ID: <YlE54Cs0mi0WDPo7@ravnborg.org>
-References: <20220409060215.19890-1-rdunlap@infradead.org>
+        Sat, 9 Apr 2022 03:54:19 -0400
+Received: from mxout2.routing.net (mxout2.routing.net [IPv6:2a03:2900:1:a::b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8514146B50;
+        Sat,  9 Apr 2022 00:52:12 -0700 (PDT)
+Received: from mxbox1.masterlogin.de (unknown [192.168.10.88])
+        by mxout2.routing.net (Postfix) with ESMTP id 6D2A95FDFA;
+        Sat,  9 Apr 2022 07:52:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
+        s=20200217; t=1649490730;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Woadcv1V4mB8TNR0hX8FoYo4UZy8QqujR0u1IsxgXzk=;
+        b=LotVTLABBbxNHxFz/KdC+RuwH+FBndhUE2ckpJVvYC0M9Oy61s1OBFE1BZcgR16eaav06b
+        yEl/OZLRzjecQhNJVU/QnyAUAjeTKaheVVVTLGLtzXADW6o3mSF5KOWUklazdgfPEnO9WD
+        sw1XELdCQbyO0Buo2hG2SmbFRLwP4wE=
+Received: from localhost.localdomain (fttx-pool-217.61.154.105.bambit.de [217.61.154.105])
+        by mxbox1.masterlogin.de (Postfix) with ESMTPSA id 848854021D;
+        Sat,  9 Apr 2022 07:52:09 +0000 (UTC)
+From:   Frank Wunderlich <linux@fw-web.de>
+To:     linux-rockchip@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: rockchip: Fix clocks for rk356x usb
+Date:   Sat,  9 Apr 2022 09:51:47 +0200
+Message-Id: <20220409075147.136187-1-linux@fw-web.de>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220409060215.19890-1-rdunlap@infradead.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Mail-ID: b784876b-6e21-42de-8301-4411050e2401
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Randy,
+From: Frank Wunderlich <frank-w@public-files.de>
 
-On Fri, Apr 08, 2022 at 11:02:15PM -0700, Randy Dunlap wrote:
-> Add <linux/mm.h> to cacheflush_32.h just as in cacheflush_64.h.
+after these 2 commit different clock names are needed compared to 5.17
 
-Just add a forward declaration like this to fix it:
+commit 5114c3ee2487 ("usb: dwc3: Calculate REFCLKPER based on reference clock")
+commit 33fb697ec7e5 ("usb: dwc3: Get clocks individually")
 
-struct page;
+change them in new rk356x usb support
 
-No need to pull in a header file when a forward is enough.
+Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+---
+this is a fix for this series not yet applied
+https://patchwork.kernel.org/project/linux-rockchip/list/?series=630470
+@peter
+after testing you can squash it into your series and add a co-developed or similar
+---
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Maybe we could simplify sparc64 in a similar way, but that is another
-patch and it may require extra work in other files anyway.
+diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+index 55e6dcb948cc..6dfe54e53be1 100644
+--- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+@@ -264,8 +264,8 @@ usb_host0_xhci: usb@fcc00000 {
+ 		interrupts = <GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH>;
+ 		clocks = <&cru CLK_USB3OTG0_REF>, <&cru CLK_USB3OTG0_SUSPEND>,
+ 			 <&cru ACLK_USB3OTG0>;
+-		clock-names = "ref_clk", "suspend_clk",
+-			      "bus_clk";
++		clock-names = "ref", "suspend_clk",
++			      "bus_early";
+ 		dr_mode = "host";
+ 		phy_type = "utmi_wide";
+ 		power-domains = <&power RK3568_PD_PIPE>;
+@@ -280,8 +280,8 @@ usb_host1_xhci: usb@fd000000 {
+ 		interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH>;
+ 		clocks = <&cru CLK_USB3OTG1_REF>, <&cru CLK_USB3OTG1_SUSPEND>,
+ 			 <&cru ACLK_USB3OTG1>;
+-		clock-names = "ref_clk", "suspend_clk",
+-			      "bus_clk";
++		clock-names = "ref", "suspend_clk",
++			      "bus_early";
+ 		dr_mode = "host";
+ 		phys = <&usb2phy0_host>, <&combphy1 PHY_TYPE_USB3>;
+ 		phy-names = "usb2-phy", "usb3-phy";
+-- 
+2.25.1
 
-	Sam

@@ -2,52 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9C9D4FA2B7
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 06:34:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6B1C4FA2BE
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 06:39:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232197AbiDIEgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 00:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55662 "EHLO
+        id S239532AbiDIEla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 00:41:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238645AbiDIEgE (ORCPT
+        with ESMTP id S239490AbiDIEl0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 00:36:04 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA745DFFA1
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 21:33:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=7m6se8Bm0BswzM19uLzar7xl1IWq0GXFdlMrOUC/4DE=; b=jlL6sjTIeY3FL/DwtIUXx50Fi+
-        sV/FThHT3f6v+4yQ0nUkotUEI4pXdMZYtbEXXs4wH6jZUynChtyZNiZkQ0Gw0b7hmWAKXJY1F46mB
-        ALcp46FYpvxnwbhvyUFGMA1spY8uWE39a865cUEDS7931wiKTcd1e8R+BL+UQXBY46hlW1DXTg30E
-        ZVZhAnpDYHY3tmpVHxDCz1Ee502Gfk1V/zqO3ZYCxztNhBNs8ab3yOgdU5K0owJISU0q89T4KSurU
-        3KEUYlqfrol3rshsY7mTQAvtNFzj/RskOfxZCNlejXhUo4GFOmUSvCX84EkfUdOCHUUAbLLbwrkvq
-        EjR8+WRQ==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nd2nI-003DKS-1l; Sat, 09 Apr 2022 04:33:53 +0000
-Message-ID: <4c2b304e-385e-8550-eefe-50d4da889048@infradead.org>
-Date:   Fri, 8 Apr 2022 21:33:46 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3] drm/gma500: depend on framebuffer
-Content-Language: en-US
-To:     James Hilliard <james.hilliard1@gmail.com>,
-        dri-devel@lists.freedesktop.org
-Cc:     Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org
-References: <20220409042321.3184493-1-james.hilliard1@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220409042321.3184493-1-james.hilliard1@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Sat, 9 Apr 2022 00:41:26 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984E43A71C;
+        Fri,  8 Apr 2022 21:39:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 07504CE2EEB;
+        Sat,  9 Apr 2022 04:39:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6AEC1C385A0;
+        Sat,  9 Apr 2022 04:39:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649479158;
+        bh=Z7QYTmVS6p3z2NybpQqu5jAgAyXrncGJtZmjaHDUYuY=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=ocg7JTrb/zZeby5WUjfpKKtbnNiHL4SpfThqfKoRVfOYHkCXaRSwANo78DklkBCA6
+         8Ngxxj0bGl4uoFw9bnhawYAkeXLsOUK88zI3nTFPLzPHK5R753RxdJ5P7sVVDhvpXW
+         YXmHIukqiNaWODdsh+PxlqROQbceluOCk/W6I5FtsQOOO/ync8d4FeqaqExF2NMofX
+         HIerhvQbS3BnbKRq+SCpRneyelWIFn6/yOuX2Zs56pHTx7b1X0GukCRm6NYwniQQkM
+         Ebu1gKLX/k3pMlMgyjQkhWVcOwGX8miGJhHXnLq1oLGLVNBUeIAIrkul7XKQsjobkY
+         fLg1Fv4pSR6Xg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 510A5E85D15;
+        Sat,  9 Apr 2022 04:39:18 +0000 (UTC)
+Subject: Re: [GIT PULL] ACPI updates for v5.18-rc2
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0g+31PFhkoROu18aT2CLGkn61v7aLgiPC3M_zbqqf_yCg@mail.gmail.com>
+References: <CAJZ5v0g+31PFhkoROu18aT2CLGkn61v7aLgiPC3M_zbqqf_yCg@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0g+31PFhkoROu18aT2CLGkn61v7aLgiPC3M_zbqqf_yCg@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-5.18-rc2
+X-PR-Tracked-Commit-Id: 87ad236001eb95cf1760ccaf7670c94722231097
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: d017a3167bcb76caedf2b444645bf4db75f775a5
+Message-Id: <164947915832.5739.5376590233982977489.pr-tracker-bot@kernel.org>
+Date:   Sat, 09 Apr 2022 04:39:18 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,50 +63,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+The pull request you sent on Fri, 8 Apr 2022 20:33:07 +0200:
 
-On 4/8/22 21:23, James Hilliard wrote:
-> Select the efi framebuffer if efi is enabled.
-> 
-> This appears to be needed for video output to function correctly.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-5.18-rc2
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/d017a3167bcb76caedf2b444645bf4db75f775a5
 
-> ---
-> Changes v2 -> v3:
->   - select EFI_FB instead of depending on it
-> Changes v1 -> v2:
->   - use depends instead of select
-> ---
->  drivers/gpu/drm/gma500/Kconfig | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/gma500/Kconfig b/drivers/gpu/drm/gma500/Kconfig
-> index 0cff20265f97..a422fa84d53b 100644
-> --- a/drivers/gpu/drm/gma500/Kconfig
-> +++ b/drivers/gpu/drm/gma500/Kconfig
-> @@ -2,11 +2,13 @@
->  config DRM_GMA500
->  	tristate "Intel GMA500/600/3600/3650 KMS Framebuffer"
->  	depends on DRM && PCI && X86 && MMU
-> +	depends on FB
->  	select DRM_KMS_HELPER
->  	# GMA500 depends on ACPI_VIDEO when ACPI is enabled, just like i915
->  	select ACPI_VIDEO if ACPI
->  	select BACKLIGHT_CLASS_DEVICE if ACPI
->  	select INPUT if ACPI
+Thank you!
 
-That "select INPUT" is really bad -- but not your problem.
-In the entire kernel tree there are only 3 drivers that select INPUT,
-and they are all in drivers/gpu/drm/.
-
-> +	select FB_EFI if EFI
->  	help
->  	  Say yes for an experimental 2D KMS framebuffer driver for the
->  	  Intel GMA500 (Poulsbo), Intel GMA600 (Moorestown/Oak Trail) and
-
-thanks.
 -- 
-~Randy
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

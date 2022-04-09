@@ -2,100 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2D404FA838
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 15:23:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BCD14FA879
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 15:29:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241964AbiDINZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 09:25:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35882 "EHLO
+        id S242132AbiDINbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 09:31:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241959AbiDINZZ (ORCPT
+        with ESMTP id S242101AbiDINbE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 09:25:25 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2A99AE4C
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 06:23:18 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id bg10so22336249ejb.4
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 06:23:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=CFsLuLri4ZzuxFZWMK4QbGgplfV1RiWIfvfyl0fXXPM=;
-        b=JuUlSycWzsEw/r0jFMz9JwRuwtyT0Y7Q/BQu5h4xdSSU6heuxxnEEHiJAbq5O2FMnJ
-         nvhasA1n/LKezFpGAk910XpeWCK3K0873+/GQwxGW2aUWRPwVLciFeA9jZin+txjOMhe
-         KP9+5fWc87S2ImGZlf8uN+t6ImU1gv715j8WSNikxuyrY/XkAZAmGd3jpCbhgprci38T
-         CfM0ogcxEo/pxTjtzQGDph7uQQavF0ES+fXNnhsZpeTLR1ln6nC2h+r/i5kj0fOI6bEW
-         Jo6zni2rpb+flYw01ZxrvpOlL8Oxve33pJP9BECetmBxEsJkENybzWOya5lMT1qh93sQ
-         rpMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=CFsLuLri4ZzuxFZWMK4QbGgplfV1RiWIfvfyl0fXXPM=;
-        b=FnnzWvgkz8v6GvWzsK+RPJvjt6SXXdIhf/aOUdf9kZBTCKWsdiBy1b4TWHAv9m8bat
-         GZXrh6jMRLW2WtDkvmLYCSxvuv2O0rxZ6DINsWOU7jAG5LzVLdtfhCdP+4KPn5iS6l0c
-         JU/lt5Y+SVPto5Qc4AeYR4XhmYjrb4RndJAaoP2/oOHpT1frh5lbmBrJIP7HIRiJ6bra
-         ZxoKQsLn3/jN0GfM1WpBxMk/fwJkt7RgXciltdwMLtwrMmOdSpqTaqT5ugzPmRxwaUoZ
-         pfUAvgKDLIa6nwpy4xZDGrNirc8Er9x6C8W/52jVao09vrcPK6+zwtUawWhAPhj4cGmv
-         scEw==
-X-Gm-Message-State: AOAM5303w2hyahlTaq+9hOwwtcxCjmAaSLGDtSrtTcKubLmDp989CXUw
-        ct9hMfBAFOjarAYOdPKcsrGX4Q==
-X-Google-Smtp-Source: ABdhPJz/ZL5SjGOTUIidyHTeqYDZw4kqPsYAOodMQYLCgvX6YAi/lThfvlEQviqPHkG7ehSftBVgbw==
-X-Received: by 2002:a17:906:1be1:b0:6ce:b0a8:17d with SMTP id t1-20020a1709061be100b006ceb0a8017dmr22401411ejg.413.1649510596982;
-        Sat, 09 Apr 2022 06:23:16 -0700 (PDT)
-Received: from [192.168.0.188] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id f1-20020a056402194100b00416b174987asm11933953edz.35.2022.04.09.06.23.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 09 Apr 2022 06:23:16 -0700 (PDT)
-Message-ID: <2961d892-609c-c0bf-e9c1-c54306f608c7@linaro.org>
-Date:   Sat, 9 Apr 2022 15:23:15 +0200
+        Sat, 9 Apr 2022 09:31:04 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B51BA9947;
+        Sat,  9 Apr 2022 06:28:57 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id 6f83bd5860e6572f; Sat, 9 Apr 2022 15:28:56 +0200
+Received: from kreacher.localnet (89-77-51-84.dynamic.chello.pl [89.77.51.84])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 43C8F66BCD0;
+        Sat,  9 Apr 2022 15:28:55 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PCI <linux-pci@vger.kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH v1 5/7] PCI/PM: Move pci_set_low_power_state() next to its caller
+Date:   Sat, 09 Apr 2022 15:23:49 +0200
+Message-ID: <8948282.CDJkKcVGEf@kreacher>
+In-Reply-To: <4419002.LvFx2qVVIh@kreacher>
+References: <4419002.LvFx2qVVIh@kreacher>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 07/18] MIPS: DTS: jz4780: fix otg node as reported by
- dtbscheck
-Content-Language: en-US
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Paul Cercueil <paul@crapouillou.net>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, letux-kernel@openphoenux.org
-References: <cover.1649443080.git.hns@goldelico.com>
- <298162bfa2e7225ccc753865e1ffa39ce2722b2a.1649443080.git.hns@goldelico.com>
- <bd19b6eb-d53a-b665-749d-46c275c85ccc@linaro.org>
- <3XN2AR.4ZAYNTAI4XBT3@crapouillou.net>
- <36C96109-0A56-4ACF-ACD1-367DAD9E3A47@goldelico.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <36C96109-0A56-4ACF-ACD1-367DAD9E3A47@goldelico.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 89.77.51.84
+X-CLIENT-HOSTNAME: 89-77-51-84.dynamic.chello.pl
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudekvddgfeelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvjeelgffhiedukedtleekkedvudfggefhgfegjefgueekjeelvefggfdvledutdenucfkphepkeelrdejjedrhedurdekgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeekledrjeejrdehuddrkeegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphgtihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihhkrgdrfigvshht
+ vghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/04/2022 15:18, H. Nikolaus Schaller wrote:
-hould have a specific compatible.
->>> Please mention why it does not.
->>
->> Agreed. The "snps,dwc2" should be a fallback string, otherwise there is no way to uniquely identify the JZ4780 implementation of the IP.
-> 
-> Well, there is no specifc implementation and driver for it. So no need to uniquely identify it.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Specific implementation and driver are not arguments here. This does not
-matter. It's really unrelated argument.
+Because pci_set_power_state() is the only caller of
+pci_set_low_power_state(), move the latter next to the former.
 
-Bindings are not about implementation in Linux. Implementation can
-change, so bindings should also?
+No functional impact.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/pci/pci.c |  174 +++++++++++++++++++++++++++---------------------------
+ 1 file changed, 87 insertions(+), 87 deletions(-)
+
+Index: linux-pm/drivers/pci/pci.c
+===================================================================
+--- linux-pm.orig/drivers/pci/pci.c
++++ linux-pm/drivers/pci/pci.c
+@@ -1068,93 +1068,6 @@ static inline bool platform_pci_bridge_d
+ }
+ 
+ /**
+- * pci_set_low_power_state - Program the given device into a low-power state
+- * @dev: PCI device to handle.
+- * @state: PCI power state (D1, D2, D3hot) to put the device into.
+- *
+- * RETURN VALUE:
+- * -EINVAL if the requested state is invalid.
+- * -EIO if device does not support PCI PM or its PM capabilities register has a
+- * wrong version, or device doesn't support the requested state.
+- * 0 if device already is in the requested state.
+- * 0 if device's power state has been successfully changed.
+- */
+-static int pci_set_low_power_state(struct pci_dev *dev, pci_power_t state)
+-{
+-	u16 pmcsr;
+-
+-	/* Check if we're already there */
+-	if (dev->current_state == state)
+-		return 0;
+-
+-	if (!dev->pm_cap)
+-		return -EIO;
+-
+-	if (state < PCI_D1 || state > PCI_D3hot)
+-		return -EINVAL;
+-
+-	/*
+-	 * Validate transition: We can enter D0 from any state, but if
+-	 * we're already in a low-power state, we can only go deeper.  E.g.,
+-	 * we can go from D1 to D3, but we can't go directly from D3 to D1;
+-	 * we'd have to go from D3 to D0, then to D1.
+-	 */
+-	if (dev->current_state <= PCI_D3cold && dev->current_state > state) {
+-		pci_err(dev, "invalid power transition (from %s to %s)\n",
+-			pci_power_name(dev->current_state),
+-			pci_power_name(state));
+-		return -EINVAL;
+-	}
+-
+-	/* Check if this device supports the desired state */
+-	if ((state == PCI_D1 && !dev->d1_support)
+-	   || (state == PCI_D2 && !dev->d2_support))
+-		return -EIO;
+-
+-	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+-	if (PCI_POSSIBLE_ERROR(pmcsr)) {
+-		pci_err(dev, "can't change power state from %s to %s (config space inaccessible)\n",
+-			pci_power_name(dev->current_state),
+-			pci_power_name(state));
+-		return -EIO;
+-	}
+-
+-	/*
+-	 * If we're (effectively) in D3, force entire word to 0.
+-	 * This doesn't affect PME_Status, disables PME_En, and
+-	 * sets PowerState to 0.
+-	 */
+-	if (dev->current_state <= PCI_D2) {
+-		pmcsr &= ~PCI_PM_CTRL_STATE_MASK;
+-		pmcsr |= state;
+-	}
+-
+-	/* Enter specified state */
+-	pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL, pmcsr);
+-
+-	/*
+-	 * Mandatory power management transition delays; see PCI PM 1.1
+-	 * 5.6.1 table 18
+-	 */
+-	if (state == PCI_D3hot)
+-		pci_dev_d3_sleep(dev);
+-	else if (state == PCI_D2)
+-		udelay(PCI_PM_D2_DELAY);
+-
+-	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+-	dev->current_state = (pmcsr & PCI_PM_CTRL_STATE_MASK);
+-	if (dev->current_state != state)
+-		pci_info_ratelimited(dev, "refused to change power state from %s to %s\n",
+-			 pci_power_name(dev->current_state),
+-			 pci_power_name(state));
+-
+-	if (dev->bus->self)
+-		pcie_aspm_pm_state_change(dev->bus->self);
+-
+-	return 0;
+-}
+-
+-/**
+  * pci_update_current_state - Read power state of given device and cache it
+  * @dev: PCI device to handle.
+  * @state: State to cache in case the device doesn't have the PM capability
+@@ -1391,6 +1304,93 @@ static int pci_set_full_power_state(stru
+ 
+ 	if (dev->bus->self)
+ 		pcie_aspm_pm_state_change(dev->bus->self);
++
++	return 0;
++}
++
++/**
++ * pci_set_low_power_state - Program the given device into a low-power state
++ * @dev: PCI device to handle.
++ * @state: PCI power state (D1, D2, D3hot) to put the device into.
++ *
++ * RETURN VALUE:
++ * -EINVAL if the requested state is invalid.
++ * -EIO if device does not support PCI PM or its PM capabilities register has a
++ * wrong version, or device doesn't support the requested state.
++ * 0 if device already is in the requested state.
++ * 0 if device's power state has been successfully changed.
++ */
++static int pci_set_low_power_state(struct pci_dev *dev, pci_power_t state)
++{
++	u16 pmcsr;
++
++	/* Check if we're already there */
++	if (dev->current_state == state)
++		return 0;
++
++	if (!dev->pm_cap)
++		return -EIO;
++
++	if (state < PCI_D1 || state > PCI_D3hot)
++		return -EINVAL;
++
++	/*
++	 * Validate transition: We can enter D0 from any state, but if
++	 * we're already in a low-power state, we can only go deeper.  E.g.,
++	 * we can go from D1 to D3, but we can't go directly from D3 to D1;
++	 * we'd have to go from D3 to D0, then to D1.
++	 */
++	if (dev->current_state <= PCI_D3cold && dev->current_state > state) {
++		pci_err(dev, "invalid power transition (from %s to %s)\n",
++			pci_power_name(dev->current_state),
++			pci_power_name(state));
++		return -EINVAL;
++	}
++
++	/* Check if this device supports the desired state */
++	if ((state == PCI_D1 && !dev->d1_support)
++	   || (state == PCI_D2 && !dev->d2_support))
++		return -EIO;
++
++	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
++	if (PCI_POSSIBLE_ERROR(pmcsr)) {
++		pci_err(dev, "can't change power state from %s to %s (config space inaccessible)\n",
++			pci_power_name(dev->current_state),
++			pci_power_name(state));
++		return -EIO;
++	}
++
++	/*
++	 * If we're (effectively) in D3, force entire word to 0.
++	 * This doesn't affect PME_Status, disables PME_En, and
++	 * sets PowerState to 0.
++	 */
++	if (dev->current_state <= PCI_D2) {
++		pmcsr &= ~PCI_PM_CTRL_STATE_MASK;
++		pmcsr |= state;
++	}
++
++	/* Enter specified state */
++	pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL, pmcsr);
++
++	/*
++	 * Mandatory power management transition delays; see PCI PM 1.1
++	 * 5.6.1 table 18
++	 */
++	if (state == PCI_D3hot)
++		pci_dev_d3_sleep(dev);
++	else if (state == PCI_D2)
++		udelay(PCI_PM_D2_DELAY);
++
++	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
++	dev->current_state = (pmcsr & PCI_PM_CTRL_STATE_MASK);
++	if (dev->current_state != state)
++		pci_info_ratelimited(dev, "refused to change power state from %s to %s\n",
++			 pci_power_name(dev->current_state),
++			 pci_power_name(state));
++
++	if (dev->bus->self)
++		pcie_aspm_pm_state_change(dev->bus->self);
+ 
+ 	return 0;
+ }
 
 
-Best regards,
-Krzysztof
+

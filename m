@@ -2,47 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 927754FAA7C
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 21:26:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9D784FAA85
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 21:40:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbiDIT15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 15:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42642 "EHLO
+        id S229772AbiDITmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 15:42:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiDIT1y (ORCPT
+        with ESMTP id S229455AbiDITmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 15:27:54 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BBA0CE6;
-        Sat,  9 Apr 2022 12:25:45 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 97C83482;
-        Sat,  9 Apr 2022 21:25:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1649532342;
-        bh=NGodcPcuMgVqLfK/lv7UN9kdDu88L3Dqzl9+IQ2YupM=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=NRmKL9A7lhYf+PoplZGSUjnG0X16HiM7lQVyqjrBWsezx6Y6oyGDkh3KmDw5+M2La
-         pCYVJhBhNx9XeZz7wbBYzsvHqNiWgek1IZIj21F/TTVLsLAeLW42AdHWVud5fm2ugG
-         8oEP+LUeldopF4qALrsI66E1DZZdDTRyuGUDNy6g=
-Content-Type: text/plain; charset="utf-8"
+        Sat, 9 Apr 2022 15:42:19 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F051BE112
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 12:40:08 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id r2so134717ljd.10
+        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 12:40:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=LRK5NCYhQ3Fmmdu1Nq/r6lgNA/het1WCzf4tV6aXNNc=;
+        b=rlKEJbZpAwy8y3TZiwpi3c3SwsbVjgoFxEqjcACdj/mOh4cfZri7DmsaMJPvpV0cio
+         QpRL1BHjj6CXRt2yW94jjtWHvG5uoCoPWnaiixTb9kDlKgeglHpMB9P8jPSj0116hqSH
+         zjZVGR5j13019vnHrS7oOeLOdeD6WLovtUdXUPySrb8s5/iL987igaUaowCX+zP/zIv6
+         FUR4e5T+qm5tWF5RBKW+oJ2DEx6sCpGc6NGkbS+fXWfFWa8XfZKPI+wCRUcObFmUwmE6
+         4ikdDMOUmMnap6wChuC1gmROJhGeiJ1MT3Jf26uaPPYu6X+hhPKsO7ECxfO8PC16iBXT
+         mFRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LRK5NCYhQ3Fmmdu1Nq/r6lgNA/het1WCzf4tV6aXNNc=;
+        b=iZMn73b8AN5qaGVZlkheH/SwQSZ4kZtFkaf/leHVl/nFXdWIws+TSI6qwrS+V2rAO7
+         Do02FNfkhX8TnV6uguq/R1I4hWmMh+fc8RuVa3XdN0MpwFM0YHI3IqYbl5Kk+R5S7hwl
+         VaYmM0/Sh5iRNKH39F5JCa2xv+TaSv0+IVmjZzFRMPpmrUV4athGR9B4XEXyfUNVM4lY
+         XJEpx7dLiJjoh9ZdK7mIlhXy67kxUwP/25eH/sgAHwUKNIBbahKYHTXqpLSDUV9RadzP
+         ke0alCak5KDaRI455xwODTPXTo97J5VrTAxhCwFw9IEMQlGnJaqMJYng2vcJ5N7ixFxL
+         YGKg==
+X-Gm-Message-State: AOAM530JxELripSLeX+4lluPjqPjiVdeKRzY4IBJwjSFJLgxtIYWi63r
+        ypuTX7QQg9t3VtqFd+WGdR42SQ==
+X-Google-Smtp-Source: ABdhPJxeKGBViGlrj5LsAbQbGRDtUjUXzGUPQv/lXHzeqUlJMXodiQjFo1rWxw8q5suEmdOPa+PGVw==
+X-Received: by 2002:a05:651c:1a21:b0:249:8ccf:65eb with SMTP id by33-20020a05651c1a2100b002498ccf65ebmr16035500ljb.166.1649533206875;
+        Sat, 09 Apr 2022 12:40:06 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id i23-20020a198c57000000b0045dcb4816d3sm1621742lfj.35.2022.04.09.12.40.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 09 Apr 2022 12:40:05 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 0C2EA1039DB; Sat,  9 Apr 2022 22:41:37 +0300 (+03)
+Date:   Sat, 9 Apr 2022 22:41:37 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv4 3/8] efi/x86: Implement support for unaccepted memory
+Message-ID: <20220409194137.yui73qnno5bd45xn@box.shutemov.name>
+References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
+ <20220405234343.74045-4-kirill.shutemov@linux.intel.com>
+ <c4b987d5-00d3-40ea-4c20-bf82b7512dec@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <21f190a8bb9ddaa43949b4455983bd66b4e11798.1649440397.git.ian.dev@arkver.com>
-References: <21f190a8bb9ddaa43949b4455983bd66b4e11798.1649440397.git.ian.dev@arkver.com>
-Subject: Re: [PATCH] media: media-entity.h: Fix documentation for media_create_intf_link
-From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc:     Ian Arkver <ian.arkver.dev@gmail.com>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-To:     Ian Jamison <ian.dev@arkver.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Date:   Sat, 09 Apr 2022 20:25:40 +0100
-Message-ID: <164953234079.22830.17385702287665697579@Monstersaurus>
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c4b987d5-00d3-40ea-4c20-bf82b7512dec@intel.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,48 +95,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Ian Jamison (2022-04-08 18:53:45)
-> The documentation comment was inserted between the return type
-> and the function name. Reunite the lines.
->=20
-> Signed-off-by: Ian Jamison <ian.dev@arkver.com>
-> Fixes: db7ee32aa185 ("[media] media-device.h: Improve documentation and u=
-pdate it")
-> ---
->  include/media/media-entity.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/include/media/media-entity.h b/include/media/media-entity.h
-> index 742918962d46..9bc9a55df71e 100644
-> --- a/include/media/media-entity.h
-> +++ b/include/media/media-entity.h
-> @@ -1030,7 +1030,6 @@ __must_check media_devnode_create(struct media_devi=
-ce *mdev,
->   * removed.
->   */
->  void media_devnode_remove(struct media_intf_devnode *devnode);
-> -struct media_link *
+On Fri, Apr 08, 2022 at 10:26:14AM -0700, Dave Hansen wrote:
+> On 4/5/22 16:43, Kirill A. Shutemov wrote:
+> > +void mark_unaccepted(struct boot_params *params, u64 start, u64 end)
+> > +{
+> > +	/*
+> > +	 * The accepted memory bitmap only works at PMD_SIZE granularity.
+> > +	 * If a request comes in to mark memory as unaccepted which is not
+> > +	 * PMD_SIZE-aligned, simply accept the memory now since it can not be
+> > +	 * *marked* as unaccepted.
+> > +	 */
+> > +
+> > +	/*
+> > +	 * Accept small regions that might not be able to be represented
+> > +	 * in the bitmap:
+> > +	 */
+> > +	if (end - start < 2 * PMD_SIZE) {
+> > +		__accept_memory(start, end);
+> > +		return;
+> > +	}
+> 
+> This is not my first time looking at this code and I still had to think
+> about this a bit.  That's not good.  That pathological case here is
+> actually something like this:
+> 
+> | 4k | 2044k + 2044k | 4k |
+> ^ 0x0 	     ^ 2MB	  ^ 4MB
+> 
+> Where we have a 2MB-aligned 4k accepted area, a 4088k unaccepted area,
+> then another 4k accepted area.  That will not result in any bits being
+> set in the accepted memory bitmap because no 2MB region is fully accepted.
+> 
+> The one oddball case is this:
+> 
+> | 4k | 2044k |    2048k   |
+> ^ 0x0 	     ^ 2MB	  ^ 4MB
+> 
+> Which would fall into the if() above, but *can* have part of its range
+> marked in the bitmap.
+> 
+> Maybe we need something more like this:
+> 
+> 	/*
+> 	 * Accept small regions that might not be able to be represented
+> 	 * in the bitmap.  This is a bit imprecise and may accept some
+> 	 * areas that could have been represented in the bitmap instead.
+> 	 * But, the imprecision makes the code simpler by ensuring that
+> 	 * at least one bit will be set int the bitmap below.
+> 	 */
 
-Eeep. I guess that was some sort of merge conflict resolution that
-didn't quite get it right sometime.
+Okay, will change.
 
-But definitely a good fix.
+> > diff --git a/drivers/firmware/efi/Kconfig b/drivers/firmware/efi/Kconfig
+> > index 2c3dac5ecb36..b17ceec757d0 100644
+> > --- a/drivers/firmware/efi/Kconfig
+> > +++ b/drivers/firmware/efi/Kconfig
+> > @@ -243,6 +243,21 @@ config EFI_DISABLE_PCI_DMA
+> >  	  options "efi=disable_early_pci_dma" or "efi=no_disable_early_pci_dma"
+> >  	  may be used to override this option.
+> >  
+> > +config UNACCEPTED_MEMORY
+> > +	bool
+> > +	depends on EFI_STUB
+> > +	depends on !KEXEC_CORE
+> 
+> The changelog should probably say something about how the kexec()
+> incompatibility is going to be rectified in the future.
 
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Okay.
 
-> =20
->  /**
->   * media_create_intf_link() - creates a link between an entity and an in=
-terface
-> @@ -1061,6 +1060,7 @@ struct media_link *
->   *    the interface and media_device_register_entity() should be called =
-for the
->   *    interface that will be part of the link.
->   */
-> +struct media_link *
->  __must_check media_create_intf_link(struct media_entity *entity,
->                                     struct media_interface *intf,
->                                     u32 flags);
-> --=20
-> 2.35.1
->
+> > +	help
+> > +	   Some Virtual Machine platforms, such as Intel TDX, require
+> > +	   some memory to be "accepted" by the guest before it can be used.
+> > +	   This mechanism helps prevent malicious hosts from making changes
+> > +	   to guest memory.
+> > +
+> > +	   UEFI specification v2.9 introduced EFI_UNACCEPTED_MEMORY memory type.
+> > +
+> > +	   This option adds support for unaccepted memory and makes such memory
+> > +	   usable by kernel.
+> > +
+> >  endmenu
+> 
+> BTW, what happens if this is compiled out?  Do TDX guests just lose all
+> the unaccepted memory?
+
+No. It will not have access to unaccepted memory and will only use memory
+accepted by BIOS.
+
+> Should TDX be selecting this or something?
+
+Yes, it should and we do this.
+
+> > @@ -504,6 +506,13 @@ setup_e820(struct boot_params *params, struct setup_data *e820ext, u32 e820ext_s
+> >  			e820_type = E820_TYPE_PMEM;
+> >  			break;
+> >  
+> > +		case EFI_UNACCEPTED_MEMORY:
+> > +			if (!IS_ENABLED(CONFIG_UNACCEPTED_MEMORY))
+> > +				continue;
+> 
+> This seems worthy of a pr_info().  We're effectively throwing away
+> memory with this "continue", right?
+
+Yes. In this case we threat unaccepted as reserved and inaccessible to
+kernel.
+
+Maybe pr_warn() is more appropriate.
+
+
+-- 
+ Kirill A. Shutemov

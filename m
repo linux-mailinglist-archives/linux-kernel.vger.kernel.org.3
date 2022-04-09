@@ -2,69 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEB484FA8A9
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 15:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 632B24FA8AC
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 15:44:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242207AbiDINpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 09:45:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49526 "EHLO
+        id S242214AbiDINqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 09:46:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241844AbiDINpA (ORCPT
+        with ESMTP id S235301AbiDINqT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 09:45:00 -0400
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF0E456C3D
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 06:42:53 -0700 (PDT)
-Received: by mail-vs1-xe33.google.com with SMTP id u2so7159265vsl.6
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 06:42:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=WK6OLngTEGMQZnXAmgyK8gksEaTtYBKX+MRhgq0dtFw=;
-        b=LPasulMBi6RtloUPQhHeOfT4cjSndFRN84+1L6oK65iGY/Q9+3P53fmwQFslhIvMMN
-         0HtJQiHC4deVflDwpTo1ilQLyCQND7Fs9jKSz/YcaShf3V2zTghrvXfOFiUT2Ngv+pes
-         aDeSFrDW5b7DzO+jwY1z1LtCoWSEy9Y5SP9cWrwOPNHTxTKrBu9aRq5giImtM++ZuwUm
-         DYyefSbHfv3tHZnS5ny4Kg7UonUSHwY9tqy+PyNwQIg4oGTVW9yjZq5FlKuSXOjuXq8p
-         SZ1N62OTXlRKe/sAawrjibmqukppjatBkyz0ycEhfcW7ZqpQBZcT8I9O5l+V5TAhrTAL
-         CVTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=WK6OLngTEGMQZnXAmgyK8gksEaTtYBKX+MRhgq0dtFw=;
-        b=e9VkK1k3Pjj7JgjP9iV7IGTN0p8lichvs67mpvB7TO97DBdcCWirRXkc/RNhMrrnyN
-         3Z7npzm9WhaPeePjvFXBYkRBm0IE135fO8KnfybQjxKpS5ohbz+NlrDQnLC3Tm3tqMJT
-         KIBO6FHf9zSYceeyQQkmbF3Gf6dJoLSU2QbPiCZh6kkq01rSzTOOaMJW9t+psvELHGkZ
-         2DyEMrm3ARlwQecAkukJzOOWLinVL51eFTksn8WSiL/QgPdrexNXuOqJSZErrYhHbFwr
-         gO4gjhleEYxKFYhpZCyuZhC/l8lHbqLEkHCB6wEJoGYvbiQZKrdeHCiZ1ihqywQeWJVq
-         nfUw==
-X-Gm-Message-State: AOAM5318ZTfmH0bPYQfY52T2AA6QrO5qijtgZU3tAfAD8YnLHRD+KzJP
-        Fp77KFlPbupb/zMm+wc2bGs+XOrAceJ0QvTojjY=
-X-Google-Smtp-Source: ABdhPJyTMjFwvkBhIdLrMEkn3ZGpIU5dM1o16GKBW5U1J3LV1Qkj5ONs7ErD8qyUTEiKOtbSPgZqFmhQyHcX2L1x87s=
-X-Received: by 2002:a05:6102:3234:b0:325:5b7e:cf2f with SMTP id
- x20-20020a056102323400b003255b7ecf2fmr7923279vsf.65.1649511772895; Sat, 09
- Apr 2022 06:42:52 -0700 (PDT)
+        Sat, 9 Apr 2022 09:46:19 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A085A939D2;
+        Sat,  9 Apr 2022 06:44:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1649511851; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YLnpjWKWdJSzyYl1QcHeDFBttOq+hxRx+fuv0aLpL/g=;
+        b=Dn9raXykAtJqjunhLTgxl1TKU1h5UmANNI/XkZqMaClk7KqzF2l7lD4scQhvcm+xwitEV6
+        7+XUWC3LaRM9mrhgjt0IFGiybWGMitvAhKbknvhcqWGKbKCVn7Vdy1EDrMu6ZWKgeadQ4j
+        pQHbC0L6h9Gdhhnf7ng+sTXKTIHFsZw=
+Date:   Sat, 09 Apr 2022 14:43:57 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 07/18] MIPS: DTS: jz4780: fix otg node as reported by
+ dtbscheck
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, letux-kernel@openphoenux.org
+Message-Id: <9HR2AR.5RNNT3NES815@crapouillou.net>
+In-Reply-To: <51EEBAB0-849A-4AA5-80E0-B9FAC8FC5E14@goldelico.com>
+References: <cover.1649443080.git.hns@goldelico.com>
+        <298162bfa2e7225ccc753865e1ffa39ce2722b2a.1649443080.git.hns@goldelico.com>
+        <bd19b6eb-d53a-b665-749d-46c275c85ccc@linaro.org>
+        <3XN2AR.4ZAYNTAI4XBT3@crapouillou.net>
+        <36C96109-0A56-4ACF-ACD1-367DAD9E3A47@goldelico.com>
+        <2961d892-609c-c0bf-e9c1-c54306f608c7@linaro.org>
+        <51EEBAB0-849A-4AA5-80E0-B9FAC8FC5E14@goldelico.com>
 MIME-Version: 1.0
-Received: by 2002:ab0:638a:0:0:0:0:0 with HTTP; Sat, 9 Apr 2022 06:42:52 -0700 (PDT)
-Reply-To: sgtkaylam28@gmail.com
-From:   Kayla Manthey <adossirobert@gmail.com>
-Date:   Sat, 9 Apr 2022 07:42:52 -0600
-Message-ID: <CAMAp8G-LWi9R2BV1S7ygB303K0kbQGy0tGyLP_TH91BwCkiZ_g@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Greetings,
-Please did you receive my previous message? Write me back
+
+
+Le sam., avril 9 2022 at 15:37:51 +0200, H. Nikolaus Schaller=20
+<hns@goldelico.com> a =E9crit :
+>=20
+>=20
+>>  Am 09.04.2022 um 15:23 schrieb Krzysztof Kozlowski=20
+>> <krzysztof.kozlowski@linaro.org>:
+>>=20
+>>  On 09/04/2022 15:18, H. Nikolaus Schaller wrote:
+>>  hould have a specific compatible.
+>>>>>  Please mention why it does not.
+>>>>=20
+>>>>  Agreed. The "snps,dwc2" should be a fallback string, otherwise=20
+>>>> there is no way to uniquely identify the JZ4780 implementation of=20
+>>>> the IP.
+>>>=20
+>>>  Well, there is no specifc implementation and driver for it. So no=20
+>>> need to uniquely identify it.
+>>=20
+>>  Specific implementation and driver are not arguments here. This=20
+>> does not
+>>  matter. It's really unrelated argument.
+>=20
+> The argumentation is in reverse: if there is no need for a=20
+> specialized driver or implementation,
+> why is there is a need to define a specialization.
+>=20
+> Your argument was:
+> "there is no way to uniquely identify the JZ4780 implementation of=20
+> the IP"
+>=20
+> My question is:
+> "what do we need that for?"
+
+You may not need the differenciation now, but if you need it in the=20
+future and you had only the "snps,dwc2" compatible previously, then=20
+you're screwed, since your driver must support older device tree blobs.
+
+-Paul
+
+>>  Bindings are not about implementation in Linux. Implementation can
+>>  change, so bindings should also?
+>=20
+> No. Implementations should be agnostic.
+>=20
+
+

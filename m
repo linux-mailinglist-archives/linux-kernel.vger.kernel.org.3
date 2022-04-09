@@ -2,200 +2,351 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 405E44FAAA3
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 22:08:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 853A54FAAAD
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 22:19:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231124AbiDIULD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 16:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57216 "EHLO
+        id S231301AbiDIUVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 16:21:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230215AbiDIULA (ORCPT
+        with ESMTP id S230215AbiDIUVO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 16:11:00 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF6F1E532A
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 13:08:51 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649534928;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ePu+BNLNCkBdEe6g7SLLA68lLVuHXGvD/Y9XEmQw0X0=;
-        b=KJ4ljAmExspZSHOsoSy8WizLdL8RHpW5RqiXigg4sSVry7lGk2vubfCAiORAS8brGTUbSL
-        gyPSdEQHbijsberfRKNjm4bFRyiljC4Fmq6grAfNWi0650tR4xVDYtqLkHQ4QenglgzySA
-        qZyG/4hBnOBRZop/IHcvxX/zH//Xu9CFEqeJmkC+9MFA20COWFysL5zx1qW68YVEzQIqud
-        hwiHBhVFHO2jBVYqr5InTdeSeEaBCNAlSkKgFj5qL+TrF65QtVGKcCKx+uQsRKFqRvvnDV
-        UfXW2OEpRSmnDd+xdAqFHnQWdwcFe4KX36BMxHs8ZtnFJG3Sv30X2zDzVoY4PA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649534928;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ePu+BNLNCkBdEe6g7SLLA68lLVuHXGvD/Y9XEmQw0X0=;
-        b=DnyrRnS6pNeYTMtsuKX1LryUzrjmBFTjIPV7G7MkA6XDi7MZR6myQL6lxaTmU99DbE5lhq
-        uu1+amLEsp9WYIDg==
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: x86 multi-msi w/o iommu
-In-Reply-To: <6410d0d5-bd88-64d5-6ae7-cca33746b302@quicinc.com>
-References: <6410d0d5-bd88-64d5-6ae7-cca33746b302@quicinc.com>
-Date:   Sat, 09 Apr 2022 22:08:48 +0200
-Message-ID: <877d7yhve7.ffs@tglx>
+        Sat, 9 Apr 2022 16:21:14 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E866152
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 13:19:06 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id j9so12257146lfe.9
+        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 13:19:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=utPJ4OpHzIuWZ6mtiY7xqmOAIwiwKlyZjzrr4O5cYow=;
+        b=nMZ0h7GOa4H2p6vKBZ+JCmQZu33B6qM92cKCiZIf1QR2kpJ+Ky2WnnYLixmsENFjXI
+         Jw65IzG6zq1zhXt3viRJhktQ7jSOQaE+luzhMfPZ6QcvILl4T2o/YbLANI198yM/FV+L
+         xLbT8eVUHs+YMLR8HQvCU4zUK2kfiZKrXru+qqGJFAkF1xLo2muV2eyV5RZYk1Y43s4k
+         2DUkJikTXsnvqgXw13CAfFBIt40FtPlR1cgB+i88r2Me46md6+HpBYTfHODkX9c0y6gq
+         JG2kzL/cYdB0PHi/6DM9ygRqiZToZtG+pGbvYIjn07PRMjVuYV1O8l9VCSSOA3yh+jEa
+         yqsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=utPJ4OpHzIuWZ6mtiY7xqmOAIwiwKlyZjzrr4O5cYow=;
+        b=kbvGHrkj9xhbjthMrrSbTROqjC5EPRcIrbdGCovYmL3jp3JzgWKRnfozfccAyS7kHU
+         /1hi3zG1uAR4o90xzKyYJs3qWbcUs+b5tA2EQgrEbOzmYGztYagwkReYtUOnMzZsvO20
+         rbQR1ijlFvhwN4WF1PgAP5CdxUxqJ3L3Jhs9jF6WGddD54FCGBrIGYui6oFSVLFzuAV5
+         5pd5dIuDiepTq14gZwCOI/r6bmHEXhGB/qv+vINx7rSqA3kR55/akBtfR79GPPR7tb7+
+         w4CR/OUU+qRLQD5plcei2LME7tYzC5rtmVXaTTmvv25F24K29rsfZV/6gPrAzZ1QJ2Qa
+         lMIg==
+X-Gm-Message-State: AOAM533vxzUibW4FjV8Q0LNqlmTINHhV5ubR+SJSbgIU9i2Szv65cSP4
+        GUmt6lH2scqwaTV70Hfu5mllTw==
+X-Google-Smtp-Source: ABdhPJxh5rUaKkwO5aFBiCl0/2qtvg3DxbAAW/Dpp1NovAXOzWhBxhdD7Kk7wGK6sEBQevLPGMkAvg==
+X-Received: by 2002:a05:6512:6c4:b0:44a:95a4:83e1 with SMTP id u4-20020a05651206c400b0044a95a483e1mr17003345lff.93.1649535544449;
+        Sat, 09 Apr 2022 13:19:04 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id v6-20020a2ea446000000b0024b0abb3984sm2422555ljn.134.2022.04.09.13.19.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 09 Apr 2022 13:19:03 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 413631039DB; Sat,  9 Apr 2022 23:20:35 +0300 (+03)
+Date:   Sat, 9 Apr 2022 23:20:35 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv4 4/8] x86/boot/compressed: Handle unaccepted memory
+Message-ID: <20220409202035.plaiekzuihov4kvq@box.shutemov.name>
+References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
+ <20220405234343.74045-5-kirill.shutemov@linux.intel.com>
+ <043469ae-427c-b2bb-89ff-db8975894266@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <043469ae-427c-b2bb-89ff-db8975894266@intel.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jeffrey!
+On Fri, Apr 08, 2022 at 10:57:17AM -0700, Dave Hansen wrote:
+> On 4/5/22 16:43, Kirill A. Shutemov wrote:
+> > Firmware is responsible for accepting memory where compressed kernel
+> > image and initrd land. But kernel has to accept memory for decompression
+> > buffer: accept memory just before decompression starts.
+> 
+> I think I'd appreciate a sentence or two more about what's going on.
+> How about something like this?
+> 
+> The firmware starts the kernel by booting into the "compressed" kernel
+> stub.  That stub's job is to decompress the full kernel image and then
+> jump to it.
+> 
+> The firmware will pre-accept the memory used to run the stub.  But, the
+> stub is responsible for accepting the memory into which it decompresses
+> the main kernel.  Accept memory just before decompression starts.
+> 
+> The stub is also responsible for choosing a physical address in which to
+> place the decompressed kernel image.  The KASLR mechanism will randomize
+> this physical address.  Since the unaccepted memory region is relatively
+> small, KASLR would be quite ineffective if it only used the pre-accepted
+> area (EFI_CONVENTIONAL_MEMORY).  Ensure that KASLR randomizes among the
+> entire physical address space by also including EFI_UNACCEPTED_MEMORY.
 
-On Fri, Apr 08 2022 at 11:34, Jeffrey Hugo wrote:
-> I'd like to get multi-MSI without IOMMU working on x86. I'm hoping you
-> could help me understand the current state of things, and if there is
-> a path toward enabling this.
+Sure, looks good.
 
-Hope is definitely required here, but you did not explain yet WHY you
-want that to work. Making it work just because is not really a good
-starting point.
+> > diff --git a/arch/x86/boot/compressed/bitmap.c b/arch/x86/boot/compressed/bitmap.c
+> > index bf58b259380a..ba2de61c0823 100644
+> > --- a/arch/x86/boot/compressed/bitmap.c
+> > +++ b/arch/x86/boot/compressed/bitmap.c
+> > @@ -2,6 +2,48 @@
+> >  /* Taken from lib/string.c */
+> >  
+> >  #include <linux/bitmap.h>
+> > +#include <linux/math.h>
+> > +#include <linux/minmax.h>
+> > +
+> > +unsigned long _find_next_bit(const unsigned long *addr1,
+> > +		const unsigned long *addr2, unsigned long nbits,
+> > +		unsigned long start, unsigned long invert, unsigned long le)
+> > +{
+> > +	unsigned long tmp, mask;
+> > +
+> > +	if (unlikely(start >= nbits))
+> > +		return nbits;
+> > +
+> > +	tmp = addr1[start / BITS_PER_LONG];
+> > +	if (addr2)
+> > +		tmp &= addr2[start / BITS_PER_LONG];
+> > +	tmp ^= invert;
+> > +
+> > +	/* Handle 1st word. */
+> > +	mask = BITMAP_FIRST_WORD_MASK(start);
+> > +	if (le)
+> > +		mask = swab(mask);
+> > +
+> > +	tmp &= mask;
+> > +
+> > +	start = round_down(start, BITS_PER_LONG);
+> > +
+> > +	while (!tmp) {
+> > +		start += BITS_PER_LONG;
+> > +		if (start >= nbits)
+> > +			return nbits;
+> > +
+> > +		tmp = addr1[start / BITS_PER_LONG];
+> > +		if (addr2)
+> > +			tmp &= addr2[start / BITS_PER_LONG];
+> > +		tmp ^= invert;
+> > +	}
+> > +
+> > +	if (le)
+> > +		tmp = swab(tmp);
+> > +
+> > +	return min(start + __ffs(tmp), nbits);
+> > +}
+> >  
+> >  void __bitmap_set(unsigned long *map, unsigned int start, int len)
+> >  {
+> > @@ -22,3 +64,23 @@ void __bitmap_set(unsigned long *map, unsigned int start, int len)
+> >  		*p |= mask_to_set;
+> >  	}
+> >  }
+> > +
+> > +void __bitmap_clear(unsigned long *map, unsigned int start, int len)
+> > +{
+> > +	unsigned long *p = map + BIT_WORD(start);
+> > +	const unsigned int size = start + len;
+> > +	int bits_to_clear = BITS_PER_LONG - (start % BITS_PER_LONG);
+> > +	unsigned long mask_to_clear = BITMAP_FIRST_WORD_MASK(start);
+> > +
+> > +	while (len - bits_to_clear >= 0) {
+> > +		*p &= ~mask_to_clear;
+> > +		len -= bits_to_clear;
+> > +		bits_to_clear = BITS_PER_LONG;
+> > +		mask_to_clear = ~0UL;
+> > +		p++;
+> > +	}
+> > +	if (len) {
+> > +		mask_to_clear &= BITMAP_LAST_WORD_MASK(size);
+> > +		*p &= ~mask_to_clear;
+> > +	}
+> > +}
+> 
+> It's a real shame that we have to duplicate this code.  Is there
+> anything crazy we could do here like
+> 
+> #include "../../../lib/find_bit.c"
+> 
+> ?
 
-> This is an overly simplistic assessment, but this reportedly works in 
-> other OSes, so it looks like Linux is broken in comparison.
->
-> In my investigation so far, the failure stems from
-> x86_vector_alloc_irqs() in arch/x86/kernel/apic/vector.c [1].
+Well, it would require fracturing source files on the kernel side.
 
-The failure? That's not a failure, that's a deliberate decision.
+__bitmap_set() and __bitmap_clear() are now in lib/bitmap.c.
 
-Side note: Please spare us the links to random code sites and git web
-interfaces. A function name and a commit id is good enough.
+_find_next_bit() is in lib/find_bit.c.
 
-> If we need a contiguous allocation of more than one irq, the
-> allocation immediately fails:
->
-> 	/* Currently vector allocator can't guarantee contiguous allocations */
-> 	if ((info->flags & X86_IRQ_ALLOC_CONTIGUOUS_VECTORS) && nr_irqs > 1)
-> 		return -ENOSYS;
->
-> As I'm sure you are aware, this only impacts MSI without IOMMU as both 
-> MSI-X and MSI with IOMMU can handle a discontinuous allocation (the flag 
-> is not set for either of those cases).
->
-> That check was added back in 2015 with [2].
+Both lib/bitmap.c and lib/find_bit.c have a lot of stuff that are not used
+here. I guess we would need to split them into few pieces to make it in
+sane way. Do you want me to go this path?
 
-X86 never supported multi-MSI in Linux. See:
+> 
+> > diff --git a/arch/x86/boot/compressed/kaslr.c b/arch/x86/boot/compressed/kaslr.c
+> > index 411b268bc0a2..59db90626042 100644
+> > --- a/arch/x86/boot/compressed/kaslr.c
+> > +++ b/arch/x86/boot/compressed/kaslr.c
+> > @@ -725,10 +725,20 @@ process_efi_entries(unsigned long minimum, unsigned long image_size)
+> >  		 * but in practice there's firmware where using that memory leads
+> >  		 * to crashes.
+> >  		 *
+> > -		 * Only EFI_CONVENTIONAL_MEMORY is guaranteed to be free.
+> > +		 * Only EFI_CONVENTIONAL_MEMORY and EFI_UNACCEPTED_MEMORY (if
+> > +		 * supported) are guaranteed to be free.
+> >  		 */
+> > -		if (md->type != EFI_CONVENTIONAL_MEMORY)
+> > +
+> > +		switch (md->type) {
+> > +		case EFI_CONVENTIONAL_MEMORY:
+> > +			break;
+> > +		case EFI_UNACCEPTED_MEMORY:
+> > +			if (IS_ENABLED(CONFIG_UNACCEPTED_MEMORY))
+> > +				break;
+> >  			continue;
+> > +		default:
+> > +			continue;
+> > +		}
+> >  
+> >  		if (efi_soft_reserve_enabled() &&
+> >  		    (md->attribute & EFI_MEMORY_SP))
+> > diff --git a/arch/x86/boot/compressed/misc.c b/arch/x86/boot/compressed/misc.c
+> > index fa8969fad011..c1d9d71a6615 100644
+> > --- a/arch/x86/boot/compressed/misc.c
+> > +++ b/arch/x86/boot/compressed/misc.c
+> > @@ -18,6 +18,7 @@
+> >  #include "../string.h"
+> >  #include "../voffset.h"
+> >  #include <asm/bootparam_utils.h>
+> > +#include <asm/unaccepted_memory.h>
+> >  
+> >  /*
+> >   * WARNING!!
+> > @@ -43,6 +44,9 @@
+> >  void *memmove(void *dest, const void *src, size_t n);
+> >  #endif
+> >  
+> > +#undef __pa
+> > +#define __pa(x)	((unsigned long)(x))
+> 
+> Those #undef's always worry me.  Why is this one needed?
 
-    commit 1c8d7b0a562d ("PCI MSI: Add support for multiple MSI")
+arch/x86/boot/compressed/misc.c:47:9: warning: '__pa' macro redefined [-Wmacro-redefined]
+#define __pa(x) ((unsigned long)(x))
+        ^
+arch/x86/include/asm/page.h:47:9: note: previous definition is here
+#define __pa(x)         __phys_addr((unsigned long)(x))
 
-> In 2017, it looks like you refactored the allocator to the irq_matrix
-> component [3].  However, the limitation remains to today.
+Note that sev.c does the same. At least we are consistent :)
 
-For very good reasons.
+> >  /*
+> >   * This is set up by the setup-routine at boot-time
+> >   */
+> > @@ -451,6 +455,13 @@ asmlinkage __visible void *extract_kernel(void *rmode, memptr heap,
+> >  #endif
+> >  
+> >  	debug_putstr("\nDecompressing Linux... ");
+> > +
+> > +	if (IS_ENABLED(CONFIG_UNACCEPTED_MEMORY) &&
+> > +	    boot_params->unaccepted_memory) {
+> > +		debug_putstr("Accepting memory... ");
+> > +		accept_memory(__pa(output), __pa(output) + needed_size);
+> > +	}
+> > +
+> >  	__decompress(input_data, input_len, NULL, NULL, output, output_len,
+> >  			NULL, error);
+> >  	parse_elf(output);
+> > diff --git a/arch/x86/boot/compressed/unaccepted_memory.c b/arch/x86/boot/compressed/unaccepted_memory.c
+> > index d363acf59c08..3ebab63789bb 100644
+> > --- a/arch/x86/boot/compressed/unaccepted_memory.c
+> > +++ b/arch/x86/boot/compressed/unaccepted_memory.c
+> > @@ -51,3 +51,17 @@ void mark_unaccepted(struct boot_params *params, u64 start, u64 end)
+> >  	bitmap_set((unsigned long *)params->unaccepted_memory,
+> >  		   start / PMD_SIZE, (end - start) / PMD_SIZE);
+> >  }
+> > +
+> > +void accept_memory(phys_addr_t start, phys_addr_t end)
+> > +{
+> > +	unsigned long *unaccepted_memory;
+> > +	unsigned int rs, re;
+> > +
+> > +	unaccepted_memory = (unsigned long *)boot_params->unaccepted_memory;
+> > +	rs = start / PMD_SIZE;
+> 
+> OK, so start is a physical address, PMD_SIZE is 2^21, and 'rs' is an
+> unsigned int.  That means 'rs' can, at most, represent a physical
+> address at 2^(21+32), or 2^53.  That's cutting it a *bit* close, don't
+> you think?
+> 
+> Could we please just give 'rs' and 're' real names and make them
+> 'unsigned long's, please?  It will surely save at least one other person
+> from doing math.  The find_next_bit() functions seem to take ulongs anyway.
 
-> Digging a bit further, it looks like the internal function 
-> matrix_alloc_area() [4] is capable of doing a contiguous allocation, but 
-> all the callers of that via the public api hardcode num to 1.  I 
-> wouldn't say it would be trivial to refactor the irq_matrix public api 
-> to do a contigious range allocation, and refactor 
-> x86_vector_alloc_irqs() to do that based on 
-> X86_IRQ_ALLOC_CONTIGUOUS_VECTORS, but since it seems like that hasn't 
-> been tackled in 5-7 years (depending on how you look at the history), I 
-> suspect I'm missing something.
+Okay. 'range_start' and 'range_end' are good enough names?
 
-There are two fundamental issues with multi-MSI:
+> 
+> > +	for_each_set_bitrange_from(rs, re, unaccepted_memory,
+> > +				   DIV_ROUND_UP(end, PMD_SIZE)) {
+> > +		__accept_memory(rs * PMD_SIZE, re * PMD_SIZE);
+> > +		bitmap_clear(unaccepted_memory, rs, re - rs);
+> > +	}
+> > +}
+> 
+> Could we please introduce some intermediate variable?  For instance:
+> 
+> 	unsigned long bitmap_size = DIV_ROUND_UP(end, PMD_SIZE);
+> 
+> That will make this all a lot easier to read.
 
-   1) General
+Okay.
 
-      a) Multi-MSI is a single MSI message. The device sets the vector
-         offset in the lower bits of message data.
+> 
+> > diff --git a/arch/x86/include/asm/unaccepted_memory.h b/arch/x86/include/asm/unaccepted_memory.h
+> > index cbc24040b853..f1f835d3cd78 100644
+> > --- a/arch/x86/include/asm/unaccepted_memory.h
+> > +++ b/arch/x86/include/asm/unaccepted_memory.h
+> > @@ -9,4 +9,6 @@ struct boot_params;
+> >  
+> >  void mark_unaccepted(struct boot_params *params, u64 start, u64 num);
+> >  
+> > +void accept_memory(phys_addr_t start, phys_addr_t end);
+> > +
+> >  #endif
+> 
 
-      b) As a consequence the Multi-MSI interrupts of a given device are
-         all affine to a single target and you cannot set affinity for
-         them separately, which limits the usefulness very much.
-
-   2) x86
-
-      a) Due to #1a this requires N consecutive vectors on one CPU and
-         these vectors have to be aligned so that the device can set the
-         vector offset into the lower bits of message data. The
-         alignment requirement depends on the number of vectors and is
-         always power of 2 in the range (2, 4, 8, 16, 32).
-
-         Easy to do in theory. But in practice there is the limited
-         vector space on x86 (~200) for device interrupts per CPU.
-
-         That creates a problem for allocations in general and for CPU
-         hotplug. On hotplug all active interrupts are moved away from
-         the outgoing CPU. Due to the alignment requirement this is
-         pretty much a guarantee for vector exhaustion.
-
-      b) Changing interrupt affinity for MSI w/o IOMMU is an interesting
-         exercise on X86 when the interrupt is not maskable, which is
-         unfortunately the case in the majority of MSI hardware
-         implementations.
-
-         In that case while the new vectors are installed interrupts can
-         be issued by the device. So you need to be very careful _not_
-         to lose an interrupt in the case that both the message address
-         (the target APIC) and the message data (the vector) are
-         changed. You can find the gory details in:
-
-                  arch/x86/kerne/apic/msi.c::msi_set_affinity()
-
-         and the related change logs espescially:
-         6f1a4891a592 ("x86/apic/msi: Plug non-maskable MSI affinity race")
-
-         Due to #1b changing interrupt affinity has to move _all_
-         vectors associated to the device at once, which makes this
-         excercise even more interesting.
-
-         This code is already horrible as hell and the thought alone to
-         expand it for multi MSI makes me shudder.
-
-Now with interrupt remapping all of the above goes away:
-
-    - The alignment problem and consecutive space issue moves into
-      the remap tables which have plenty of space.
-
-    - Each interrupts affinity can be individually controlled because
-      the affinity setting happens in the remap table and does not
-      require the horrors of the non remapped case.
-
-That means in Multi-MSI can be implemented on x86 w/o remapping, but is
-it worth the trouble? From looking at the problem space and under
-consideration that the advantage of multi-MSI is very limited the
-decision was made to not support it. That's not broken as you claim,
-that's a very reasonable technical decision.
-
-From experimentation I know that multi-MSI w/o remapping has a very
-limited benefit because it cannot provide scalability through
-parallelism obviously. The only benefit is a clear separation of
-interrupt functionality which spares a MMIO read to get the pending bits
-and a few conditionals. Here is a trivial experiment to demonstrate the
-benefit or the lack of it:
-
-    Use a system with interrupt remapping and add a module parameter to
-    your driver which allows you to select ONE or MANY MSIs. Then run
-    performance tests with both setups.
-    
-The result might not be what you expect depending on the device and the
-resulting interrupt patterns.
-
-The problems of MSI are known since two decades, but hardware folks
-still insist on it. MSI-X exists for a reason, but sure it makes the
-chips $0.01 more expensive and lots of hardware people still work under
-the assumption that whatever they get wrong can be fixed in software,
-which is unfortunately wishful thinking.
-
-I hope this clarifies it for you.
-
-Thanks,
-
-        tglx
+-- 
+ Kirill A. Shutemov

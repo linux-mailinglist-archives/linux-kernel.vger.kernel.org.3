@@ -2,98 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C02954FAA22
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 20:22:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E30284FAA2C
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 20:37:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242990AbiDISYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 14:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37778 "EHLO
+        id S242993AbiDISic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 14:38:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238956AbiDISYq (ORCPT
+        with ESMTP id S233793AbiDISi3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 14:24:46 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA5727AD7D;
-        Sat,  9 Apr 2022 11:22:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1649528525;
-        bh=S+JIsUWtPOwYWYyB2E9KgSEzbhqzWkIfhvyksSh185M=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=RtcSzWZrFFr3F6HMnJBTOTQyJ54eC+eE+Kw9yORmhIkuzLJWOlGygzyH0Qnez1d/t
-         6uFFK9j+C4I/iqBTqA5lUfknz+rOEXHxu2attjXnIe8neWal6njGOjlFp7pDrx+hTb
-         tu1RT/Ry2/O0iNC9KFfi5KOU9+rjA1OEF7tfSg9M=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([78.35.207.192]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MLiCu-1nLaJR225I-00Hfti; Sat, 09
- Apr 2022 20:22:05 +0200
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     netdev@vger.kernel.org
-Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Yang Shen <shenyang39@huawei.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH] net: calxedaxgmac: Fix typo (doubled "the")
-Date:   Sat,  9 Apr 2022 20:21:45 +0200
-Message-Id: <20220409182147.2509788-1-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.35.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        Sat, 9 Apr 2022 14:38:29 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B82215FC6;
+        Sat,  9 Apr 2022 11:36:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649529381; x=1681065381;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=nwxYJAzF/LAA0DJM4O2jahEN8qOB5l2Eu97VtmdfefQ=;
+  b=OZcljuFEe6sc8a9N9kCfQCdnTO5hZjEIAHgBSUw4LG8Rz2uu9pBnx7Lw
+   sK01y+MhpeLNbmtOO1Et4TjBtadeDyZfM/ZOaNNFDQ2deD/89BJeTdcAP
+   9HAN6KpgK71Uh2a3kJ1pRqXDGuTnsYCj/8AXLNsk43YBZxTeKaEOsbOVX
+   jE1inMUfeUITIWvgm0bUtcGkAAvAA7VmKNFUrce7Gh+Rg1rd31Tu2QoMA
+   8yLw9F6zYKw0JIMuHDwsqly4Vq5pQHREG3yzxnXyorTqwubJ27NGOFZkN
+   pd2B0OwzXY8R5txKtvwSgvZipieT0rtHQTeZs9DGBokRrRf7h7L1EgZYU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10312"; a="260714533"
+X-IronPort-AV: E=Sophos;i="5.90,248,1643702400"; 
+   d="scan'208";a="260714533"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2022 11:36:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,248,1643702400"; 
+   d="scan'208";a="698755489"
+Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
+  by fmsmga001.fm.intel.com with ESMTP; 09 Apr 2022 11:36:19 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Sat, 9 Apr 2022 11:36:19 -0700
+Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
+ fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.027;
+ Sat, 9 Apr 2022 11:36:19 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     "liuxp11@chinatelecom.cn" <liuxp11@chinatelecom.cn>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "anton@enomsg.org" <anton@enomsg.org>,
+        "ccross@android.com" <ccross@android.com>,
+        "Moore, Robert" <robert.moore@intel.com>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "gong.chen@linux.intel.com" <gong.chen@linux.intel.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
+Subject: RE: [PATCH v5] ACPI: APEI: fix missing erst record id
+Thread-Topic: [PATCH v5] ACPI: APEI: fix missing erst record id
+Thread-Index: AQHYTAyQxdgmMBplYUmGBj6YE5b9Mazn6P5g
+Date:   Sat, 9 Apr 2022 18:36:17 +0000
+Message-ID: <43244db2842d441a8ba9e2f6bf8bf478@intel.com>
+References: <1649506891-27622-1-git-send-email-liuxp11@chinatelecom.cn>
+In-Reply-To: <1649506891-27622-1-git-send-email-liuxp11@chinatelecom.cn>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-reaction: no-action
+dlp-version: 11.6.401.20
+x-originating-ip: [10.1.200.100]
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:MzRYXerfuQKo4NMjt0teyY17AoArObCa0ia0c5JtBjtduSkasTB
- 3+4xi0ufqPNYCaJCEo1MEDuYtSjfCbRE8jyVyxvCLX0qj52pkA5JkNRnc2frZ9l7ksPcC/F
- Za+I/i7d/nFfxtjLnkbgy4PsAxBWbi4mWkAR5DE/8qjYcbvz53cprKO6V1nuYnpiwBDA/5f
- t+Icw8MevJRpPDBhZ4fxA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:zoOWCozI0+4=:jSLjqHTVCVVjeiF4j0kBxa
- d9nFxUu+WcMZdVoKmUHwCWOOh8DtnQbRqz1zAkvECTeH51Au+A/Qzuidpk2o1152N4AJ6fQ+s
- KBt3gNLSv4W/37xStYv9F+Yd8sWAEU48hybzoVG3OvdQtOvr4s93KVnbWGHp7gmilD40oNdhP
- bQVu6GA6CNtuh1EClDC1p9QNAmnuseQmLGvjNh3CwocckKf+/PU98EOvzV1kjk1jIiDVREXAb
- kY4wyy8TSv6Q+JjAq++LBJOm9yighLeOinUP1qs1DAXF87PoY6v+QQL+hRED11fdenOghbM0Y
- C7iK6/yz7sG1X8XoZMdRyKHsGEAfQmNJsFQwDGb8pYoVCwJbBCoLtQoV1TY42e1tSnKfmB6Og
- gc0QMa86ZUuwjU8C7nIkgXxgqOYNrgybI7SqoySWg2H6o2DjOakaWcDNkPyTuHj4v9xkqEwgt
- pTVbitbjhTCLDXtUqqd4fu+Jo2QUC4gKv2GYgjDB6f56HzUpHBtZmpBiFeCP+LMSnQagzCQP1
- fYUiEm1vKe4ncsLwpjK/r5irhSsPD4aEFKqoF8bdlGAmCNOFcZK3TPv19fdrlXvRE95qYIi/s
- WMeABOMtyBicz7zKqMYUrz/WaeiN/PaEP9w4/QyC6BEOwoxr6HYidbdrgoSR2aKY6QtoMJD3F
- 6hphDQI9mlJPdY65/PIudb+FkzgQeMN6OUwbt+Y7eAXRZIwBS6so/n939e9vCQVsmhlP8Riuq
- I85QzpHD/TURD6+nBIiF78QzROHtLdU1p6Ke0daFgNP2nPw01aQ99DTl2cD9wSJqVR5teApw1
- fHKzaLw54IHwWFh5szU8glhcjNskzMu64jTCPinCh+nqtODRAOu+rbdsbzJRu4V5cemqzNV8x
- UcF7tGim9ddhQNLlV2vQqf4VEkS2F45uq8MAIlkGuvi3+CS4rMLQrKUikS9ZtWFKPuo1jgY1Q
- QRMD+Hws6KXzkp9qFTjz9AGES86rg/2MiAhtZiji6OTirEkXDOMsWyYNOgs0J4E1r/no1zPaX
- NPZKsNSh3HPhqBxAghOk/kNIIx/SxRrlT+T1QyxeReigcl8uWtUmKGBDobRSW69+BKllZYOzY
- Bj2GwzWPNHI2w0=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix a doubled word in the comment above xgmac_poll.
+> v4->v5  implement a new function for looking for a specific record
+> type, suggested by Luck Tony
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
- drivers/net/ethernet/calxeda/xgmac.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Looks ok to me.
 
-diff --git a/drivers/net/ethernet/calxeda/xgmac.c b/drivers/net/ethernet/c=
-alxeda/xgmac.c
-index 457cb71210003..1281d1565ef84 100644
-=2D-- a/drivers/net/ethernet/calxeda/xgmac.c
-+++ b/drivers/net/ethernet/calxeda/xgmac.c
-@@ -1224,7 +1224,7 @@ static int xgmac_rx(struct xgmac_priv *priv, int lim=
-it)
-  *  @budget : maximum number of packets that the current CPU can receive =
-from
-  *	      all interfaces.
-  *  Description :
-- *   This function implements the the reception process.
-+ *   This function implements the reception process.
-  *   Also it runs the TX completion thread
-  */
- static int xgmac_poll(struct napi_struct *napi, int budget)
-=2D-
-2.35.1
+Reviewed-by: Tony Luck <tony.luck@intel.com>
 

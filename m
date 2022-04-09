@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE52C4FAAFE
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 23:38:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 662B34FAB06
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 23:59:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232412AbiDIVkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 17:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42848 "EHLO
+        id S232477AbiDIWAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 18:00:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiDIVkc (ORCPT
+        with ESMTP id S231857AbiDIWAf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 17:40:32 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8758626F7
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 14:38:24 -0700 (PDT)
+        Sat, 9 Apr 2022 18:00:35 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367991E3E0B
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 14:58:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649540304; x=1681076304;
+  t=1649541506; x=1681077506;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YlRobrTQ9cB5hUfMBRyvcvPet5xvdKlMzi8YSEKYzeM=;
-  b=O2MliSDQD8uy2OlfTGiLVNH0T8BLkeva55IbY+YzmBkm+0waZsizquIY
-   468S0Y4YXVST/biKwzmN0Bh1VoAudtiIXiLWozPv3SK/9xmOpJAiT/M33
-   PobBwwKDJQj4eSYytCyW71QvjHe0THNdwCabzOKdICW772eLpWzuw/oAs
-   MsBPVvEe9LIiLfk/qlkmUxkjM+cNZo7/dLnyJsp53Bv5q88O6iaYkEe9L
-   8/kV7jD2Cs78f5Mf1nf/VKKnGlEtsxXMgv0YHQjvqo6olbVJioQJZPkKB
-   vCsPdNvqx8TL+BYXhKntjqZMpwXUGYFM7KX05A2O1kYE6DZxS+yUhvmlD
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10312"; a="262092362"
+  bh=GzEHq9J8LjhIRKV2m9DF0vVPuSpnlcZiRGhCdrYqJQ8=;
+  b=D90OFlphljtJ/S2StDE1hFdFqPHJON8wALffEWhFPhaKhwJmOhF8jvy+
+   UsmPelWSDA6/J6DzCBr2rugpzhqcQCakkKKbwKFM4n10M2e0YyjRCQFR5
+   VBcGxrf4sEG4zNLR7os3El8PWnYyi0/c/6gCC6q3zMNz4dFmMBNXuctDx
+   /hcm8ps5mFOb3f12Gq0SAlTjKAPUHHZSGezCfDmMWiMzCrmFmbujKWDmW
+   7gWxBbYHv8Z2XnN+udWd9strSgb1S0DodhBogVe45XepW2tcLOwE2rXxo
+   KWm6JPlJHbix0W5vR+j/MHEPvijtudBA1sRpqSnt5aSqExHG+tHT2gpbq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10312"; a="348347818"
 X-IronPort-AV: E=Sophos;i="5.90,248,1643702400"; 
-   d="scan'208";a="262092362"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2022 14:38:24 -0700
+   d="scan'208";a="348347818"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2022 14:58:25 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,248,1643702400"; 
-   d="scan'208";a="698842415"
+   d="scan'208";a="852730176"
 Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 09 Apr 2022 14:38:23 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 09 Apr 2022 14:58:23 -0700
 Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1ndImk-0000Pz-OU;
-        Sat, 09 Apr 2022 21:38:22 +0000
-Date:   Sun, 10 Apr 2022 05:37:21 +0800
+        id 1ndJ67-0000Qg-5S;
+        Sat, 09 Apr 2022 21:58:23 +0000
+Date:   Sun, 10 Apr 2022 05:58:01 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [ardb:arm64-head-refactor-v3 20/31] ld.lld: error: undefined symbol:
- kaslr_init
-Message-ID: <202204100546.UPgpZlI9-lkp@intel.com>
+To:     Quentin Perret <qperret@google.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>
+Subject: arch/arm64/kvm/hyp/nvhe/setup.c:133:17: warning: no previous
+ prototype for '__pkvm_init_finalise'
+Message-ID: <202204100501.3dZ5BTDU-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,32 +63,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git arm64-head-refactor-v3
-head:   9100077933636313b1b15d23cb9cc068a40d838d
-commit: 47f4cfe71f69abd40ca9e64dab211434c00edb6c [20/31] arm64: head: relocate kernel only a single time if KASLR is enabled
-config: arm64-randconfig-r021-20220410 (https://download.01.org/0day-ci/archive/20220410/202204100546.UPgpZlI9-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 256c6b0ba14e8a7ab6373b61b7193ea8c0a3651c)
+Hi Quentin,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e1f700ebd6bea293abe3c7e2807b252018efde01
+commit: f320bc742bc23c1d43567712fe2814bf04b19ebc KVM: arm64: Prepare the creation of s1 mappings at EL2
+date:   1 year, 1 month ago
+config: arm64-randconfig-r002-20220410 (https://download.01.org/0day-ci/archive/20220410/202204100501.3dZ5BTDU-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=47f4cfe71f69abd40ca9e64dab211434c00edb6c
-        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
-        git fetch --no-tags ardb arm64-head-refactor-v3
-        git checkout 47f4cfe71f69abd40ca9e64dab211434c00edb6c
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f320bc742bc23c1d43567712fe2814bf04b19ebc
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f320bc742bc23c1d43567712fe2814bf04b19ebc
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: kaslr_init
-   >>> referenced by setup.c:316 (arch/arm64/kernel/setup.c:316)
-   >>>               kernel/setup.o:(setup_arch) in archive arch/arm64/built-in.a
+>> arch/arm64/kvm/hyp/nvhe/setup.c:133:17: warning: no previous prototype for '__pkvm_init_finalise' [-Wmissing-prototypes]
+     133 | void __noreturn __pkvm_init_finalise(void)
+         |                 ^~~~~~~~~~~~~~~~~~~~
+
+
+vim +/__pkvm_init_finalise +133 arch/arm64/kvm/hyp/nvhe/setup.c
+
+   132	
+ > 133	void __noreturn __pkvm_init_finalise(void)
+   134	{
+   135		struct kvm_host_data *host_data = this_cpu_ptr(&kvm_host_data);
+   136		struct kvm_cpu_context *host_ctxt = &host_data->host_ctxt;
+   137		unsigned long nr_pages, reserved_pages, pfn;
+   138		int ret;
+   139	
+   140		/* Now that the vmemmap is backed, install the full-fledged allocator */
+   141		pfn = hyp_virt_to_pfn(hyp_pgt_base);
+   142		nr_pages = hyp_s1_pgtable_pages();
+   143		reserved_pages = hyp_early_alloc_nr_used_pages();
+   144		ret = hyp_pool_init(&hpool, pfn, nr_pages, reserved_pages);
+   145		if (ret)
+   146			goto out;
+   147	
+   148		pkvm_pgtable_mm_ops = (struct kvm_pgtable_mm_ops) {
+   149			.zalloc_page = hyp_zalloc_hyp_page,
+   150			.phys_to_virt = hyp_phys_to_virt,
+   151			.virt_to_phys = hyp_virt_to_phys,
+   152			.get_page = hyp_get_page,
+   153			.put_page = hyp_put_page,
+   154		};
+   155		pkvm_pgtable.mm_ops = &pkvm_pgtable_mm_ops;
+   156	
+   157	out:
+   158		/*
+   159		 * We tail-called to here from handle___pkvm_init() and will not return,
+   160		 * so make sure to propagate the return value to the host.
+   161		 */
+   162		cpu_reg(host_ctxt, 1) = ret;
+   163	
+   164		__host_enter(host_ctxt);
+   165	}
+   166	
 
 -- 
 0-DAY CI Kernel Test Service

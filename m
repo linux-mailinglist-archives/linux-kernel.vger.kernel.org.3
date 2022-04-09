@@ -2,115 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 467BD4FA20C
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 05:40:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2AA04FA20B
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 05:40:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238898AbiDIDmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 23:42:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48918 "EHLO
+        id S238655AbiDIDmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 23:42:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238553AbiDIDly (ORCPT
+        with ESMTP id S240649AbiDIDmG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 23:41:54 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A6DB396B5;
-        Fri,  8 Apr 2022 20:39:47 -0700 (PDT)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dx3xP9_1BiOesbAA--.5440S5;
-        Sat, 09 Apr 2022 11:39:46 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Jens Axboe <axboe@kernel.dk>, Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] block: print correct sectors in printk_all_partitions()
-Date:   Sat,  9 Apr 2022 11:39:41 +0800
-Message-Id: <1649475581-12139-4-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1649475581-12139-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1649475581-12139-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9Dx3xP9_1BiOesbAA--.5440S5
-X-Coremail-Antispam: 1UD129KBjvJXoW7ZryxGF43uFy5Aw1kZw45GFg_yoW8KrW5pr
-        43KFn5GFW8Wr1DZ3WDCF1UXFWrCayrZa1rtFWI93sru3s8Wrnrta4akrWjyw12qF1fXay2
-        vw48Wr9IyFn8CaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUB2b7Iv0xC_KF4lb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI
-        8067AKxVWUWwA2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF
-        64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcV
-        CY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv
-        6xkF7I0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4
-        CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvj
-        eVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY02Avz4vE14v_Gr4l42xK82IYc2
-        Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-        6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0x
-        vE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE
-        42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6x
-        kF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUsNeoUUUUU
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 8 Apr 2022 23:42:06 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FEDD304E04;
+        Fri,  8 Apr 2022 20:39:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649475598; x=1681011598;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qze9RYK4ui0ByNmAqFkQyf4VBZx1hpmkKmu8YdbL7gM=;
+  b=oA2EHTT325u3nHFqgJCRdaaxLFUM2eBjIcUrrZnGa8DSB+NUPJaODQnn
+   uOn2v7dhnLrMl9FaWTZkavixHuClu2n1p66dCEOfFe5gP5mvbPT3GKiJ5
+   1mXs6hkhc2swC2anJbs4lmh8iMp3fh289P03izCXVXJQaEz8M0/aN7e0G
+   SdU7gah+2C+gcOpW/BoS3PduA9mfuIZoDiscsOQO5Biy9Vy6oQiqr2EFG
+   W52+pRppVBsWKg3uw51tSNoBlMuwIyfj+J2sgMZb+7gSVHUfGbJrf1cC/
+   QnoqDVXlOj/kGBVKA6WjkTORh04TXv1P6GoPRFnJGwBIIm8LNY3yT0yrd
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="241688562"
+X-IronPort-AV: E=Sophos;i="5.90,246,1643702400"; 
+   d="scan'208";a="241688562"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 20:39:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,246,1643702400"; 
+   d="scan'208";a="653558544"
+Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 08 Apr 2022 20:39:55 -0700
+Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nd1x4-0000qb-Bv;
+        Sat, 09 Apr 2022 03:39:54 +0000
+Date:   Sat, 9 Apr 2022 11:39:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rob Herring <robh@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Len Brown <lenb@kernel.org>
+Subject: Re: [PATCH v6 4/5] device property: Constify fwnode_handle_get()
+Message-ID: <202204091133.KMBmLNSx-lkp@intel.com>
+References: <20220408184844.22829-4-andriy.shevchenko@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220408184844.22829-4-andriy.shevchenko@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If there is no valid initrd, but root=UUID or root=LABEL is used
-in the command line, boot hangs like this:
+Hi Andy,
 
-[    5.739815] VFS: Cannot open root device "UUID=19957230-2e15-494c-8dfa-84aab3591961" or unknown-block(0,0): error -6
-[    5.750280] Please append a correct "root=" boot option; here are the available partitions:
-[    5.856059] 0800       125034840 sda
-[    5.856061]  driver: sd
-[    5.862124]   0801          307200 sda1 d5077411-3d87-4f85-b312-8cc309ef9073
-[    5.862128]
-[    5.870603]   0802         1048576 sda2 aae0dd30-e5f5-44e1-994e-d47bf5ce2e52
-[    5.870606]
-[    5.879080]   0803        52428800 sda3 759079ee-85fa-4636-9de7-1ac0643ab87e
-[    5.879083]
-[    5.887558]   0804         8388608 sda4 439c4b0a-7b4f-4434-82f1-f9d380b55fb9
-[    5.887560]
-[    5.896035]   0805        62860288 sda5 ee52e951-1315-4fab-a3e5-45c6eeae6ce6
-[    5.910575] Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0)
-[    5.918796] ---[ end Kernel panic - not syncing: VFS: Unable to mount root fs on unknown-block(0,0) ]---
+I love your patch! Perhaps something to improve:
 
-In the above log, the sectors are not consistent with the output
-of fdisk command, fix it.
+[auto build test WARNING on driver-core/driver-core-testing]
+[also build test WARNING on rafael-pm/linux-next robh/for-next linus/master v5.18-rc1 next-20220408]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-[root@linux loongson]# fdisk -l /dev/sda
+url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/device-property-Allow-error-pointer-to-be-passed-to-fwnode-APIs/20220409-025056
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git 3123109284176b1532874591f7c81f3837bbdc17
+config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20220409/202204091133.KMBmLNSx-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/477683439b5ee0954b08970d8c356b4cdaca8bc0
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Andy-Shevchenko/device-property-Allow-error-pointer-to-be-passed-to-fwnode-APIs/20220409-025056
+        git checkout 477683439b5ee0954b08970d8c356b4cdaca8bc0
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash drivers/base/
 
-Disk /dev/sda: 119.2 GiB, 128035676160 bytes, 250069680 sectors
-Units: sectors of 1 * 512 = 512 bytes
-Sector size (logical/physical): 512 bytes / 512 bytes
-I/O size (minimum/optimal): 512 bytes / 512 bytes
-Disklabel type: gpt
-Disk identifier: 01D1BA1C-232F-45CA-AC12-0AF2A5D8CE0D
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Device         Start       End   Sectors  Size Type
-/dev/sda1       2048    616447    614400  300M EFI System
-/dev/sda2     616448   2713599   2097152    1G Linux filesystem
-/dev/sda3    2713600 107571199 104857600   50G Linux filesystem
-/dev/sda4  107571200 124348415  16777216    8G Linux swap
-/dev/sda5  124348416 250068991 125720576   60G Linux filesystem
+All warnings (new ones prefixed by >>):
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- block/genhd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+   drivers/base/property.c: In function 'fwnode_handle_get':
+>> drivers/base/property.c:782:24: warning: return discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+     782 |                 return fwnode;
+         |                        ^~~~~~
 
-diff --git a/block/genhd.c b/block/genhd.c
-index b8b6759..453ce42 100644
---- a/block/genhd.c
-+++ b/block/genhd.c
-@@ -761,7 +761,7 @@ void __init printk_all_partitions(void)
- 			printk("%s%s %10llu %pg %s",
- 			       bdev_is_partition(part) ? "  " : "",
- 			       bdevt_str(part->bd_dev, devt_buf),
--			       bdev_nr_sectors(part) >> 1, part,
-+			       bdev_nr_sectors(part), part,
- 			       part->bd_meta_info ?
- 					part->bd_meta_info->uuid : "");
- 			if (bdev_is_partition(part))
+
+vim +/const +782 drivers/base/property.c
+
+613e97218ccbd7f Adam Thomson    2016-06-21  772  
+e7887c284969a23 Sakari Ailus    2017-03-28  773  /**
+e7887c284969a23 Sakari Ailus    2017-03-28  774   * fwnode_handle_get - Obtain a reference to a device node
+e7887c284969a23 Sakari Ailus    2017-03-28  775   * @fwnode: Pointer to the device node to obtain the reference to.
+cf89a31ca55272e Sakari Ailus    2017-09-19  776   *
+cf89a31ca55272e Sakari Ailus    2017-09-19  777   * Returns the fwnode handle.
+e7887c284969a23 Sakari Ailus    2017-03-28  778   */
+477683439b5ee09 Andy Shevchenko 2022-04-08  779  struct fwnode_handle *fwnode_handle_get(const struct fwnode_handle *fwnode)
+e7887c284969a23 Sakari Ailus    2017-03-28  780  {
+cf89a31ca55272e Sakari Ailus    2017-09-19  781  	if (!fwnode_has_op(fwnode, get))
+cf89a31ca55272e Sakari Ailus    2017-09-19 @782  		return fwnode;
+cf89a31ca55272e Sakari Ailus    2017-09-19  783  
+cf89a31ca55272e Sakari Ailus    2017-09-19  784  	return fwnode_call_ptr_op(fwnode, get);
+e7887c284969a23 Sakari Ailus    2017-03-28  785  }
+e7887c284969a23 Sakari Ailus    2017-03-28  786  EXPORT_SYMBOL_GPL(fwnode_handle_get);
+e7887c284969a23 Sakari Ailus    2017-03-28  787  
+
 -- 
-2.1.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

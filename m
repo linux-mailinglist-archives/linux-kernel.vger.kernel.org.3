@@ -2,100 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D6904FA4FA
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 07:14:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42B064FA502
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 07:22:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236227AbiDIFQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 01:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33970 "EHLO
+        id S237212AbiDIFXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 01:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbiDIFQZ (ORCPT
+        with ESMTP id S232126AbiDIFXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 01:16:25 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E160369D5
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 22:14:19 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id d4so7175719iln.6
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 22:14:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=Jm5k1O0ZeZqd8MeZ2OXXiUTadUaS2iqPnz3zX1P9dJ0=;
-        b=VdumWYMSMHXHPzqhKgM2QguXKGHpjCspmt9ZajAMKYWkR7qaIhoZYOOoZt3LpT1t0t
-         od0W2wY9wJXXfl9j3B3r43mJ6nUWEPP/kxqsSU5u8cb2wVlZUJbVyY0LUKJdaVWLkDdw
-         W5N8n0rtZVfkVXcYNpoSxUwuR7liE9sKGylDpATugD0v+n5XV20oU4zEPVA+rxPcDigC
-         V8RpLnp6I9CDOKWpYYmsUwI5CrHPY48YARRzoaH2qpslMNN96NvM3XiAkSkOKCeeIXla
-         OX4kqBSG7/DWzWi/F5gTUcCrBJVMcf/zA+IVcnzefALZs/Qrj5kRUAOGhooR5GgcET38
-         ipcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=Jm5k1O0ZeZqd8MeZ2OXXiUTadUaS2iqPnz3zX1P9dJ0=;
-        b=jOCDSQEdhMV6pOECjiV6xQrdaVSIyrNaH82iZkw/T4oXK49Xh0tcyqGH3zyZY4nU01
-         4KdJCTj/NvinMOmCUzF/i+9Q/wW09L35Q4f8BKVsi3FX8noBMwTmXMsI2BNzLBdywWvR
-         flXQDzikSlJYaASE94V8PzbBm1yug2WZzrR+zViAgUEwxUdtbgU46pPhA5iMgtMoVV9R
-         qRTKOcheYPLAESqjH69GuduGJtX1RSfCVJaPfPE4MMqboaTwCIgTPOAJPVZZtXkdH5KW
-         5L176CWp4mI7IDD11voTy33z4FkdAzaNovKv9RDRcSGyep4BYEyuCBUpmmTp5mzpnHbw
-         DMmw==
-X-Gm-Message-State: AOAM533qI/ZWktKQO2Vf95yc3kEg4QOmGJgYU/3s0qGmwlMgHE+zeFuo
-        ILyXSgjsQs/YVOGq+HibBtg2hwVbM4l7pfCrXGQ=
-X-Google-Smtp-Source: ABdhPJxyb0VSxkPRCzucL6+7ah35z1gL825BphoporD9eRi1bwf/QqsOJDu9qqdiXe44nyqtrsFOIzZt8WVOQ0Fg+D8=
-X-Received: by 2002:a92:cda6:0:b0:2c8:8289:c31 with SMTP id
- g6-20020a92cda6000000b002c882890c31mr9152461ild.245.1649481258794; Fri, 08
- Apr 2022 22:14:18 -0700 (PDT)
+        Sat, 9 Apr 2022 01:23:36 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370211D337
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 22:21:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=L0vleVIlE534qVbDB+2q/IG8Y66YuIRD+ClxjHh9uKs=; b=iotYhzG6/ErQMr3KAc//VLH0KZ
+        8bHeTQ62XL8KfU+yNWbCONpi67LMEiJzi5exzXfGhOqyOwuyT3jLET1oHI9nLvKXXvfcdNORHgkFo
+        AMQjG9nNoTsEuDp6O7dn6Osq0L0DfPDAY1/mdKmzeqjMy1cpNdBiRGhTRgB6flOBqUEYXfq0ncaTW
+        arnNwHeFc1TzOCD3+tN7LHGmdPORaoyIRcCyE5CVqIsjQq9om5G+IJymzBrn5XIS3MbtM7r0ky/h1
+        bIF4HcVPYa64RWpThlipfH+DK5ukO0jXTcJGqdWu31eOi0t3Kbi8MUBh4WN1RXp1t8HAK8bSQUTIc
+        01aqiMSg==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nd3XF-002FZ1-QK; Sat, 09 Apr 2022 05:21:25 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Ricard Wanderlof <ricardw@axis.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org
+Subject: [PATCH] sound: soc/codecs: tlv320adc3xxx: needs GPIOLIB
+Date:   Fri,  8 Apr 2022 22:21:20 -0700
+Message-Id: <20220409052120.3780-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <YktYX2OnLtyobRYD@kernel.org> <Ykto1FgmPMMCysbI@dev-arch.thelio-3990X>
- <YkxWcYzph5pC1EK8@kernel.org> <CA+icZUVMtrqRA-a3k8N0fVcszm=Sn2Jb9nMfF8mXqvSTu2HUhw@mail.gmail.com>
- <Ykyfzn6Z8Wkf1Ccl@kernel.org> <Yky4TjOLiVvOcLYN@kernel.org>
- <YlBLh6Y0WWEVuN1F@kernel.org> <CA+icZUUnj-CjG3AsypSdJ3szx93mx49uD7MaBCeSbHqa50QYuw@mail.gmail.com>
-In-Reply-To: <CA+icZUUnj-CjG3AsypSdJ3szx93mx49uD7MaBCeSbHqa50QYuw@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Sat, 9 Apr 2022 07:13:42 +0200
-Message-ID: <CA+icZUVAAfwet87Du60EBode-byot4w9z52aeEGffXViqw8nzA@mail.gmail.com>
-Subject: Re: Build perf with clang, failure with libperf
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Fangrui Song <maskray@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        John Keeping <john@metanate.com>, Leo Yan <leo.yan@linaro.org>,
-        Michael Petlan <mpetlan@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> P.S.: I requested to bump perl to version 5.34.1 (see [2]) plus diff from [3].
->
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/log/?h=tmp.perf/urgent
-> [2] https://bugs.debian.org/1009170
-> [3] https://bugs.debian.org/1009149
+Fix build errors when CONFIG_GPIOLIB is not enabled:
 
-OK, new perl package shipping the fix.
+../sound/soc/codecs/tlv320adc3xxx.c: In function 'adc3xxx_i2c_probe':
+../sound/soc/codecs/tlv320adc3xxx.c:1352:28: error: implicit declaration of function 'devm_gpiod_get'; did you mean 'devm_gpio_free'? [-Werror=implicit-function-declaration]
+ 1352 |         adc3xxx->rst_pin = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
+../sound/soc/codecs/tlv320adc3xxx.c:1352:57: error: 'GPIOD_OUT_LOW' undeclared (first use in this function); did you mean 'GPIOF_INIT_LOW'?
+ 1352 |         adc3xxx->rst_pin = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
+  CC      lib/dynamic_debug.o
+../sound/soc/codecs/tlv320adc3xxx.c:1400:9: error: implicit declaration of function 'gpiod_set_value_cansleep'; did you mean 'gpio_set_value_cansleep'? [-Werror=implicit-function-declaration]
+ 1400 |         gpiod_set_value_cansleep(adc3xxx->rst_pin, 1);
 
-perl (5.34.0-4) unstable; urgency=medium
+Fixes: e9a3b57efd28 ("ASoC: codec: tlv320adc3xxx: New codec driver")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Liam Girdwood <lgirdwood@gmail.com>
+Cc: Ricard Wanderlof <ricardw@axis.com>
+Cc: Jaroslav Kysela <perex@perex.cz>
+Cc: Takashi Iwai <tiwai@suse.com>
+Cc: alsa-devel@alsa-project.org
+---
+ sound/soc/codecs/Kconfig |    1 +
+ 1 file changed, 1 insertion(+)
 
- * Refresh cross build support files for all architectures.
- * Fix massively parallel builds by first making 'depend'.
-   (Closes: #996953)
- * Backport upstream patch to perl.h fixing build warnings on clang.
-   (Closes: #1009149)
-
--- Niko Tyni <ntyni@debian.org>  Fri, 08 Apr 2022 20:12:38 +0300
-
-- Sedat -
-
-- Sedat -
+--- a/sound/soc/codecs/Kconfig
++++ b/sound/soc/codecs/Kconfig
+@@ -1567,6 +1567,7 @@ config SND_SOC_TFA989X
+ config SND_SOC_TLV320ADC3XXX
+ 	tristate "Texas Instruments TLV320ADC3001/3101 audio ADC"
+ 	depends on I2C
++	depends on GPIOLIB
+ 	help
+ 	 Enable support for Texas Instruments TLV320ADC3001 and TLV320ADC3101
+ 	 ADCs.

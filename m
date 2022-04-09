@@ -2,56 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCA694FA761
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 13:52:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00CF84FA767
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 13:57:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241683AbiDILyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 07:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42912 "EHLO
+        id S241691AbiDIL7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 07:59:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbiDILyg (ORCPT
+        with ESMTP id S229735AbiDIL7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 07:54:36 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20FDE811A1
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 04:52:30 -0700 (PDT)
-Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nd9dh-0002on-NS; Sat, 09 Apr 2022 13:52:26 +0200
-Message-ID: <b685f3d0-da34-531d-1aa9-479accd3e21b@leemhuis.info>
-Date:   Sat, 9 Apr 2022 13:52:17 +0200
+        Sat, 9 Apr 2022 07:59:19 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EEF01CB0E;
+        Sat,  9 Apr 2022 04:57:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1649505409;
+        bh=v2/xJ7yto9BmCfd00GAKmMJNCuq5Souzk3hwnLPMWcc=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=LSTwAdCroFkqACPFFmDVbWXFphpW6RBq59c1ddGthV5a/ryIhbxB4UvHzJm0ixyeR
+         U9ssmsJVX0yX6vOnYjezwFRwd75+qIDzTP9za5D4dNr1uNCf26A4cdn515FxaEo0Lc
+         gJgxTWdWZUyBRgV4jFn7SssmIslCxPNi//G8IXsM=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [217.61.154.105] ([217.61.154.105]) by web-mail.gmx.net
+ (3c-app-gmx-bap35.server.lan [172.19.172.105]) (via HTTP); Sat, 9 Apr 2022
+ 13:56:49 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: Bug 215734 - shared object loaded very low in memory ARM 32bit
- with kernel 5.17.0
-Content-Language: en-US
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     "H.J. Lu" <hjl.tools@gmail.com>
-Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Chris Kennelly <ckennelly@google.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Song Liu <songliubraving@fb.com>,
-        David Rientjes <rientjes@google.com>,
-        Ian Rogers <irogers@google.com>,
-        Hugh Dickins <hughd@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sandeep Patil <sspatil@google.com>,
-        Fangrui Song <maskray@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <e2b90c55-1a4a-4cf1-2dc7-2b2a4dc7d168@leemhuis.info>
-In-Reply-To: <e2b90c55-1a4a-4cf1-2dc7-2b2a4dc7d168@leemhuis.info>
+Message-ID: <trinity-da7d86cc-5703-4657-858c-f241e5f0a6fd-1649505409042@3c-app-gmx-bap35>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     Peter Geis <pgwipeout@gmail.com>, Dan Johansen <strit@manjaro.org>,
+        Frank Wunderlich <linux@fw-web.de>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Aw: Re:  Re: Re: [PATCH] arm64: dts: rockchip: Fix clocks for
+ rk356x usb
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1649505150;11c51eec;
-X-HE-SMSGID: 1nd9dh-0002on-NS
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Date:   Sat, 9 Apr 2022 13:56:49 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <4232341.5fSG56mABF@phil>
+References: <20220409075147.136187-1-linux@fw-web.de>
+ <CAMdYzYqx1iUuEe9FPpUTgL0L2i=Q5Sq2+0oiSYzqkV6noQ8BFw@mail.gmail.com>
+ <CAMdYzYqaGe9_GbRCvG3kvLpNsVfVqGNkg=YYgbVR90Qtcs9YSA@mail.gmail.com>
+ <4232341.5fSG56mABF@phil>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:IpO6iEatWIxd338hHRF5AGz8rNo4DAr/13bwlpwbcBkjfcy7yL02zG1I+1zX3LCi0/8hi
+ 7sG089SdN79CJ/5wSouKpXJDvRGXCITX9wP7etALmwlmAgqOlRx21lzg/RKhxs6Mf0Eke9hJIlld
+ pYnlXHihiP84w6FXkQNhA8VgaikP+U3oQw4mdiJqasbJ/bB9q8R1UEkBLHWRbMP9GRb/FpzERBc7
+ a3G947ISBK5Wk9PpklhxJTQS3Pr567bwyBn7HiLPkDuCwuLilXxgQWZDd263cthJ1YIKeB8jkeUX
+ 7M=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ceG3UwnHoAs=:pHlwaSspH0+O9pfaynPKeo
+ yNyGFkpxcEYItEbLIMbUVEltaghh2bMXdz4mHqGZcwBwDXVL6BgXJaVgCGHXVo/SFZlmyRk7S
+ ND55sSTK60b50Gwm237kOYG/z3PWbhNXAyKs1fB9keZEi34sRrppkUJxIqyC7zY1tMF297eH4
+ OiXPYfLYywBJhNSGSfOUPeX0rHcprgeW7NzsDMqZP8hFWQ8xagObZc8TpN0vRVHLpfbOQBGO6
+ Faf0CbFxDSNZV9Uy4p14m6fcK+PTDsZ/udzeZDcNbMgVpLA492ak28LKEYY7xDvVwgdv3MxYV
+ xDxY3pOKmJjgoHZb1zGuQRhR2olXEv5y4bsdQGdbNXAwpIafdC9b9h72El4llkfhrpvUqF9Sf
+ ey6sKnXhH36lH7zOgKZ3KLk+wILkPT9q0shOxbH7U6J4or0vWsQdZLHbbfto/eLoUQKgriU3t
+ yXvFpO5IzKiVXQeJS5d0+GA8HkCkoIW3Zzlbybslrk5P8mRdtCNhzKuqYvi4yRfWoz0VZ+xlF
+ hmFDWuMnDoxqeaMK8XGqVvWqJ8Zptwo3PDf2Bt7tqG4MJhMwdhq+IxhTWZbWGkl4BcSmMCZWw
+ LMKJFeUTPFiaD1r2Ijh+FYHm/iwJSRHTJ3o/j5BKaFhzIykRklsbJrY1Bsmg0WDJwBuV0sj6c
+ gZjfua55wlVNCFjAIDIK2x8t2gabCiHqZTZqpJeGqOo8kAxGtKH8KFixaoi9YChvkwNpfDKm6
+ tbp1ryMg+IP1baF+sRp8Nwqfz62GDpRE/RmTNGaBbT2UXPjeme+UpNOzEBe4zJDvUxyj+IALN
+ JenhYhU
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,98 +81,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker. Top-posting for once,
-to make this easily accessible to everyone.
+Hi,
 
-Hey, what's up here? Was this regressions fixed already?
+so to not break the binding and other boards the right Patch should be lik=
+e this
 
-H.J. Lu: reminder, this is caused by a patch of yours. One that causes
-two regressions I track, and it seem neither is getting addressed with
-the appropriate urgency. FWIW, the other regression can can be found here:
-https://lore.kernel.org/lkml/cb5b81bd-9882-e5dc-cd22-54bdbaaefbbc@leemhuis.info/
-https://bugzilla.kernel.org/show_bug.cgi?id=215720
++++ b/drivers/usb/dwc3/core.c
+@@ -1691,17 +1691,17 @@ static int dwc3_probe(struct platform_device *pdev=
+)
+                 * Clocks are optional, but new DT platforms should suppor=
+t all
+                 * clocks as required by the DT-binding.
+                 */
+-               dwc->bus_clk =3D devm_clk_get_optional(dev, "bus_early");
++               dwc->bus_clk =3D devm_clk_get_optional(dev, "bus_clk");
+                if (IS_ERR(dwc->bus_clk))
+                        return dev_err_probe(dev, PTR_ERR(dwc->bus_clk),
+                                             "could not get bus clock\n");
 
-Mike, if you have a minute: '925346c129da' ("fs/binfmt_elf: fix PT_LOAD
-p_align values for loaders") in 'next' contains a 'Fixes:' tag for the
-culprit of this regression, but I assume it fixes a different issue?
+-               dwc->ref_clk =3D devm_clk_get_optional(dev, "ref");
++               dwc->ref_clk =3D devm_clk_get_optional(dev, "ref_clk");
+                if (IS_ERR(dwc->ref_clk))
+                        return dev_err_probe(dev, PTR_ERR(dwc->ref_clk),
+                                             "could not get ref clock\n");
 
-Ciao, Thorsten
+-               dwc->susp_clk =3D devm_clk_get_optional(dev, "suspend");
++               dwc->susp_clk =3D devm_clk_get_optional(dev, "suspend_clk"=
+);
+                if (IS_ERR(dwc->susp_clk))
+                        return dev_err_probe(dev, PTR_ERR(dwc->susp_clk),
+                                             "could not get suspend clock\=
+n");
 
-#regzbot poke
+but this needs fixing dts using the new clock names
 
-On 31.03.22 08:17, Thorsten Leemhuis wrote:
-> Hi, this is your Linux kernel regression tracker.
-> 
-> I noticed a regression report in bugzilla.kernel.org that afaics nobody
-> acted upon since it was reported about a week ago, that's why I decided
-> to forward it to the lists and all people that seemed to be relevant
-> here. Note, this is the second regression report referencin a commit
-> from H.J. Lu as culprit (9630f0d60fec ("fs/binfmt_elf: use PT_LOAD
-> p_align values for static PIE")). I forwarded the first one on Monday
-> already, but seems nothing happened:
-> https://lore.kernel.org/all/cb5b81bd-9882-e5dc-cd22-54bdbaaefbbc@leemhuis.info/
-> 
-> Anyway, to get back to the latest report. To quote from
-> https://bugzilla.kernel.org/show_bug.cgi?id=215734 :
-> 
->>  Jan Palus 2022-03-24 10:17:02 UTC
->>
->> This is a followup to https://sourceware.org/bugzilla/show_bug.cgi?id=28990 where ld.so --verify segfault was reported on binaries > 4MB.
->>
->> It appears that starting with kernel 5.17.0 shared object is loaded in the begging of address space at least on 32-bit ARM:
->>
->> /proc/<pid>/maps just before mmap (5.17):
->> 00400000-00429000 r-xp 00000000 b3:02 393320     /lib/ld-linux-armhf.so.3
->> 00439000-0043c000 rw-p 00029000 b3:02 393320     /lib/ld-linux-armhf.so.3
->> 76ffd000-76ffe000 r-xp 00000000 00:00 0          [sigpage]
->> 76ffe000-76fff000 r--p 00000000 00:00 0          [vvar]
->> 76fff000-77000000 r-xp 00000000 00:00 0          [vdso]
->> 7efdf000-7f000000 rw-p 00000000 00:00 0          [stack]
->> ffff0000-ffff1000 r-xp 00000000 00:00 0          [vectors]
->>
->> causing segfaults when mmaping large binaries at fixed address 0x10000 (ie done by ld.so --verify used by ldd).
->>
->> By comparison it is not the case for kernel 5.16.8:
->>
->> /proc/<pid>/maps just before mmap (5.16):
->> 76fc4000-76fed000 r-xp 00000000 b3:02 393320     /lib/ld-linux-armhf.so.3
->> 76ffa000-76ffb000 r-xp 00000000 00:00 0          [sigpage]
->> 76ffb000-76ffc000 r--p 00000000 00:00 0          [vvar]
->> 76ffc000-76ffd000 r-xp 00000000 00:00 0          [vdso]
->> 76ffd000-77000000 rw-p 00029000 b3:02 393320     /lib/ld-linux-armhf.so.3
->> 7efdf000-7f000000 rw-p 00000000 00:00 0          [stack]
->> ffff0000-ffff1000 r-xp 00000000 00:00 0          [vectors]
->>
->> [reply] [−] Comment 1 Jan Palus 2022-03-29 22:14:12 UTC
->>
->> First bad commit appears to be:
->>
->> From: "H.J. Lu" <hjl.tools@gmail.com>
->> Date: Wed, 19 Jan 2022 18:09:40 -0800
->> Subject: fs/binfmt_elf: use PT_LOAD p_align values for static PIE
->>
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9630f0d60fec5fbcaa4435a66f75df1dc9704b66
->>
-> 
-> Could somebody take a look into this? Or was this discussed somewhere
-> else already? Or even fixed?
-> 
-> 
-> Anyway, to get this tracked:
-> 
-> #regzbot introduced: 9630f0d60fec5fbcaa4435a66f75df1dc9704b6
-> #regzbot from: Jan Palus <jpalus@fastmail.com>
-> #regzbot title: shared object loaded very low in memory ARM 32bit
-> causing segfaults on binaries > 4MB
-> #regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215734
-> 
-> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-> 
-> P.S.: As the Linux kernel's regression tracker I'm getting a lot of
-> reports on my table. I can only look briefly into most of them and lack
-> knowledge about most of the areas they concern. I thus unfortunately
-> will sometimes get things wrong or miss something important. I hope
-> that's not the case here; if you think it is, don't hesitate to tell me
-> in a public reply, it's in everyone's interest to set the public record
-> straight.
-> 
+this is a link to the series moving from bulk_clk to named clocks:
+
+https://patchwork.kernel.org/project/linux-usb/patch/20220127200636.145617=
+5-3-sean.anderson@seco.com/
+
+regards Frank

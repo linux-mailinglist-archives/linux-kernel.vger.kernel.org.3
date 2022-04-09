@@ -2,104 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 424564FA8B8
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 15:46:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE5554FA8B7
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 15:46:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242243AbiDINsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 09:48:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34334 "EHLO
+        id S242251AbiDINsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 09:48:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231314AbiDINsl (ORCPT
+        with ESMTP id S242244AbiDINsn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 09:48:41 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id DB2309D06B
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 06:46:33 -0700 (PDT)
-Received: (qmail 285322 invoked by uid 1000); 9 Apr 2022 09:46:32 -0400
-Date:   Sat, 9 Apr 2022 09:46:32 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Maxim Devaev <mdevaev@gmail.com>
-Cc:     linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: f_mass_storage: break IO operations via
- configfs
-Message-ID: <YlGOOJ9SwkD7WVmX@rowland.harvard.edu>
-References: <20220406092445.215288-1-mdevaev@gmail.com>
- <Yk2wvhSTMKTLFK6c@rowland.harvard.edu>
- <20220406195234.4f63cb4a@reki>
- <Yk3TLPKyaQDsnuD4@rowland.harvard.edu>
- <20220406213634.104cae45@reki>
- <Yk8L6b9wEWTjWOg4@rowland.harvard.edu>
- <20220407204553.35cead72@reki>
- <YlBN4Zcn9NYw0PLA@rowland.harvard.edu>
- <20220409115756.4f9b015d@reki>
+        Sat, 9 Apr 2022 09:48:43 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF309D06B
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 06:46:36 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id bq8so22336002ejb.10
+        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 06:46:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=+XyNRW/l0jJ+Y/IrKpe8HRBR60t3UvVTtiQLW83IWfE=;
+        b=hCviDOktJ9lpvcQpltWvA475M8EZ6J2NXrExnyy2qisTizDTA5x/R4rJQK7hO1XCgK
+         qWLKRIL0HzNxwslxcTUzfM2OdqazMNmtWr7hEKGawKsNQCtoWGKBZuxgl/iQzu43OpmV
+         wwzSG6XAnnFjBJoFrZZNTGm9RoPHr1R7W6YmwUXbjCmSKHltM05z8auSkqlFWvAVTGdT
+         woUk04dRHCg8JNrDaCxekT385wMWOAVaKGdCGyO7x29yqwCyuGjTfQ3AJukJXitP43xM
+         cDDhB6ETTM2eaiokXuyoddP3UlsxKYfJdGB7ex2CXqdy1Dp9bf37OhiFALrHIdLs6tos
+         CS2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+XyNRW/l0jJ+Y/IrKpe8HRBR60t3UvVTtiQLW83IWfE=;
+        b=GDoEGQaiI6qjl93OHfkjqu0Lw1fMMgvZnOjsE5mpPjnHz8/alhKV0DyACaugpMqNEL
+         a2x1mpACK5N05mISu0IcK6avcSXEALe6KBbsPdVvzyTgGE0saICnLAcK9Sp9/3F7POKX
+         kUcxKrsK4gPmZHstMHvmoYsrS7NOKyXGA9D5mGE/19kbGCHdwIWk0cZ9XCVwKk4v3vmq
+         WGwEJTifoVniXU25eyN5juXSMukNTybk//4bIMWu+4xgfFtPK3oWoP2WLVM49jnOzleR
+         IE7JB7npk63owtB0TY8mMeVkk5cskUcApLBzectkSDCEP+K32nMgfA5z3FCUrQb3IODj
+         wVwA==
+X-Gm-Message-State: AOAM532KrSdE6zOIp/y5LJGqRW7fzHL3KzQ+oFsh+lMNDtSERMIGpHtu
+        NksG5PGYF6+Ir9U5Esgf/VurvQ==
+X-Google-Smtp-Source: ABdhPJwJqM+CUyXCktrnrGvmubRDadUfAc+cYtxqSZq03ERzhKQq1EUXTh+eLhuYObcundzB4YaeUw==
+X-Received: by 2002:a17:906:2991:b0:6cd:ac19:ce34 with SMTP id x17-20020a170906299100b006cdac19ce34mr22810415eje.746.1649511995079;
+        Sat, 09 Apr 2022 06:46:35 -0700 (PDT)
+Received: from [192.168.0.188] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id a18-20020a1709063e9200b006e0527baa77sm9760255ejj.92.2022.04.09.06.46.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 09 Apr 2022 06:46:34 -0700 (PDT)
+Message-ID: <fb521d87-2d52-c15c-83c0-1b62bf1b1cc4@linaro.org>
+Date:   Sat, 9 Apr 2022 15:46:33 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220409115756.4f9b015d@reki>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 05/18] MIPS: DTS: jz4780: fix pinctrl as reported by
+ dtbscheck
+Content-Language: en-US
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, letux-kernel@openphoenux.org
+References: <cover.1649443080.git.hns@goldelico.com>
+ <1941bc4ed553b27f399ad00ea61ff2b0237d14e3.1649443080.git.hns@goldelico.com>
+ <e905896e-335d-a88a-1961-d17b92e46585@linaro.org>
+ <530E0F7F-FC03-45DD-BF87-D049D3108AD3@goldelico.com>
+ <c84b5ec0-0193-ab62-1985-25bc2baa9f05@linaro.org>
+ <B5EB5983-DA9F-4631-B737-2B1417CF9054@goldelico.com>
+ <f40e1a00-be4d-11c7-6a7c-6b50635a2960@linaro.org>
+ <499848FD-3F64-4B5D-9259-5C9E1ED4E8AB@goldelico.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <499848FD-3F64-4B5D-9259-5C9E1ED4E8AB@goldelico.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 09, 2022 at 11:57:56AM +0300, Maxim Devaev wrote:
-> В Fri, 8 Apr 2022 10:59:45 -0400
-> Alan Stern <stern@rowland.harvard.edu> wrote:
-> > > At least there is one situation where the behavior of f_mass_storage differs
-> > > from the behavior of a real drive. What happens when you click on the physical
-> > > "eject" button?  
-> > 
-> > If the host has prevented ejection, nothing happens.  Otherwise the disc 
-> > gets ejected.
-> > 
-> > > Yes, the OS can block this, but the problem is that we don't have
-> > > an "eject" here.  
-> > 
-> > What do you mean?  Writing an empty string to the sysfs "file" attribute 
-> > is the virtual analog of pressing the eject button.
+On 09/04/2022 15:41, H. Nikolaus Schaller wrote:
+>>
+>> No. I ask you to fix all pin-controller cases, for entire MIPS, not just
+>> one.
 > 
-> But I can't eject the disc event it's not mounted on Linux host. It seems to me
-> it differs from the real drive behavior.
+> Oops. Nope. I am a volunteer and neither your employee nor slave.
 
-It sounds like either there's a bug or else you're not doing the right 
-thing.  Tell me exactly what you do when this fails.
+No one thinks differently and I am sorry that you felt it. Please accept
+my apologies, if you get different impression. You understand though the
+meaning of word "ask for something" and "order something" (the latter
+which I did not use).
 
-> > ...
-> 
-> I have reflected on the rest of your arguments and changed my mind.
-> I think that "forced_eject" for a specific lun without interrupting operations would
-> really be the best solution. I wrote a simple patch and tested it, everything seems
-> to work. What do you think about something like this?
-> 
-> 
-> static ssize_t fsg_lun_opts_forced_eject_store(struct config_item *item,
->                                                const char *page, size_t len)
-> {
->         struct fsg_lun_opts *opts = to_fsg_lun_opts(item);
->         struct fsg_opts *fsg_opts = to_fsg_opts(opts->group.cg_item.ci_parent);
->         int ret;
-> 
->         opts->lun->prevent_medium_removal = 0;
->         ret = fsg_store_file(opts->lun, &fsg_opts->common->filesem, "", 0);
->         return ret < 0 ? ret : len;
-> }
-> 
-> CONFIGFS_ATTR_WO(fsg_lun_opts_, forced_eject);
+I just asked.
 
-The basic idea is right.  But this should not be a CONFIGFS option; it 
-should be an ordinary LUN attribute.  For an example, see the definition of 
-file_store() in f_mass_storage.c; your routine should look very similar.
-
-> If you find this acceptable, I will test this patch on my users to make sure
-> that its behavior meets our expectations.
-
-Okay.
-
-Alan Stern
+Best regards,
+Krzysztof

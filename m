@@ -2,53 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5BC54FA92A
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 17:12:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D36E4FA92C
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 17:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242388AbiDIPN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 11:13:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52728 "EHLO
+        id S242394AbiDIPOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 11:14:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiDIPN5 (ORCPT
+        with ESMTP id S229437AbiDIPOt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 11:13:57 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C33329A7;
-        Sat,  9 Apr 2022 08:11:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=j64UWVGLACOcUBS02FLv/L/l+9fAVMmfjcXAezhW5FY=; b=HeY5lvhxJDGexvXt4qVZBrH08D
-        QS38P6lzFmxWtI4U8z2gh66SUFYV9rHnO5xp1tB4mCGnVUmRUmSt0kd/WvtW7NcdI0xF7n6Y9w28L
-        /XIEO9wYLALdWjOK7I3bLJx3TLbjQlT4fqDowLcbaLDqjkghmBCFAhDjISzvoCySU5juO3SdI3fu2
-        4uaGQU5H7u5TrONzn+I40JJJntQ4eJwoaOwej/w/30pMWFAKxVLz8ODD2hkrbopUDyDI2w4gZiVI4
-        dnbwUoGCwNFACRiTInYixCxydCjno6Qf5OvG/ytawFkhfNCKh9R7NjM/Ps5hwEIciflNl8FqGknV1
-        ts3PGGGA==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ndCkY-00AmG0-Ms; Sat, 09 Apr 2022 15:11:43 +0000
-Message-ID: <ea594b7a-22d5-ba39-6e83-921f98fa76a5@infradead.org>
-Date:   Sat, 9 Apr 2022 08:11:37 -0700
+        Sat, 9 Apr 2022 11:14:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7885E205DB;
+        Sat,  9 Apr 2022 08:12:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2DC28B80025;
+        Sat,  9 Apr 2022 15:12:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C9E4C385A0;
+        Sat,  9 Apr 2022 15:12:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649517159;
+        bh=UFt6d+nDavXkqAbzhdwyRWgMrNoPlcPEvcy0Athveww=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oSp0Ol0j6f4brdIvMwXtvU9jQGAXTuQ8DfcR/VqOccK8ygkdACqNY2FK8XVVz9vPI
+         /Y75iIIThKW1s4teFOeX1ZUdAyOsNQHIwhiZjPEhBKyO6JCWVQH6a+pDhPO0ytdEHv
+         OUJn7lEsreOtikxhUwLqdQE1Ni9YnimQ54SSjsO4aZkvZc1nlj7lEFj2PCsh7poRFy
+         OIogR3n4ZgrCLabMboEMvEraReJ5dVZwJcoAMhbXX1q/dSohuHLmUlEvTHdqV1K7aI
+         Y+PXhQZ15SpZH7eznEpsFOC2QgX8xWHfgq78tM/67Kh8jMOlft0zILoF3MbpjZWRkL
+         IKp2Cl6LnLvlQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 0EB0240407; Sat,  9 Apr 2022 12:12:37 -0300 (-03)
+Date:   Sat, 9 Apr 2022 12:12:37 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     Namhyung Kim <namhyung@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        leo.yan@linaro.com, German Gomez <German.Gomez@arm.com>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Ravi Bangoria <ravi.bangoria@linux.ibm.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] perf: arm-spe: Fix perf report --mem-mode
+Message-ID: <YlGiZRZlrBCmO+YG@kernel.org>
+References: <20220408144056.1955535-1-james.clark@arm.com>
+ <CAM9d7cji=xSAy673sXGf2GXFsKKsR7=pNKJceLtHX1sFFUZcKg@mail.gmail.com>
+ <20220409095941.GA1000846@leoy-ThinkPad-X240s>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] sparc: cacheflush_32.h needs <linux/mm.h>
-Content-Language: en-US
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org
-References: <20220409060215.19890-1-rdunlap@infradead.org>
- <YlE54Cs0mi0WDPo7@ravnborg.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <YlE54Cs0mi0WDPo7@ravnborg.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220409095941.GA1000846@leoy-ThinkPad-X240s>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,26 +71,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/9/22 00:46, Sam Ravnborg wrote:
-> Hi Randy,
+Em Sat, Apr 09, 2022 at 05:59:41PM +0800, Leo Yan escreveu:
+> On Fri, Apr 08, 2022 at 11:13:09AM -0700, Namhyung Kim wrote:
+> > Hello,
+> > 
+> > On Fri, Apr 8, 2022 at 7:41 AM James Clark <james.clark@arm.com> wrote:
+> > >
+> > > Since commit bb30acae4c4d ("perf report: Bail out --mem-mode if mem info
+> > > is not available") "perf mem report" and "perf report --mem-mode" don't
+> > > allow opening the file unless one of the events has PERF_SAMPLE_DATA_SRC
+> > > set.
+> > >
+> > > SPE doesn't have this set even though synthetic memory data is generated
+> > > after it is decoded. Fix this issue by setting DATA_SRC on SPE events.
+> > > This has no effect on the data collected because the SPE driver doesn't
+> > > do anything with that flag and doesn't generate samples.
+> > >
+> > > Fixes: bb30acae4c4d ("perf report: Bail out --mem-mode if mem info is not available")
+> > > Signed-off-by: James Clark <james.clark@arm.com>
+> > 
+> > Acked-by: Namhyung Kim <namhyung@kernel.org>
 > 
-> On Fri, Apr 08, 2022 at 11:02:15PM -0700, Randy Dunlap wrote:
->> Add <linux/mm.h> to cacheflush_32.h just as in cacheflush_64.h.
+> Tested-by: Leo Yan <leo.yan@linaro.org>
 > 
-> Just add a forward declaration like this to fix it:
-> 
-> struct page;
-> 
-> No need to pull in a header file when a forward is enough.
+> It's a bit awkward that after the commit bb30acae4c4d we cannot be
+> backward compatible and any old perf data file will be failed to
+> support by 'perf mem report' tool.
 
-Sure, will do.
+oh well, I think we should put in place a mechanism to run perf record
+before some change, then make sure that a new perf is able to process
+it after a rebuild.
 
-> Maybe we could simplify sparc64 in a similar way, but that is another
-> patch and it may require extra work in other files anyway.
-> 
-> 	Sam
+If its something unsurmountable, then a proper explanation should be
+done with a workaround to process those older files, even if pointing
+out  to the perf version that is able to process the old file.
 
--- 
-~Randy
+Anyway, applying this pa tch.
+
+- ARnaldo

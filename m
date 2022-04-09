@@ -2,331 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 912BD4FA26B
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 06:18:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BDDF4FA26E
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 06:19:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240801AbiDIEUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 00:20:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35122 "EHLO
+        id S240811AbiDIEVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 00:21:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239169AbiDIEUj (ORCPT
+        with ESMTP id S239169AbiDIEVB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 00:20:39 -0400
-Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47405DAFF4;
-        Fri,  8 Apr 2022 21:18:34 -0700 (PDT)
-Date:   Sat, 09 Apr 2022 04:18:22 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail; t=1649477906;
-        bh=U8tO9Uhx7aZ+Pgz6/NCzhtoBXj9rP0uBOrQKLUzwmWM=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc:Date:
-         Subject:Reply-To:Feedback-ID:Message-ID;
-        b=wPjR91ZkD46y7ThmPzkK+l+0OF+IGAPNI5jhaw6xgRQ+yAI3VAG/iWpa0UJSd7Y0e
-         lZhPiMfGOcWr7Di8vhcA2vuG+zO9BDmW5EdWqNgAMLI8xh4b9yZle3D2Ho/DQertnC
-         6anlEkeRRekGJ9Hif+m3FKImrQi3Jtl8wwg6KB1zUKDaRp9pYbmrKeaFFRDEj+46Nl
-         prWkVLdFS2hW3g2goylh17jXmhdZyfY5G9ZmOe8wBVbCuxY4iUnqyWfE+hvEn5y0yL
-         KYutgCcUDWY5G5QeUg1FS6iqQZiDyhKmAR2sDLIyDKBXwPjfsUinvOxEGqDICrKpJU
-         Nl8ApQNZTGOaw==
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-From:   Yassine Oudjana <y.oudjana@protonmail.com>
-Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Reply-To: Yassine Oudjana <y.oudjana@protonmail.com>
-Subject: [PATCH v2 6/9] arm64: dts: qcom: msm8996: Remove MSM8996 Pro speed bins from cluster OPP tables
-Message-ID: <deu5V6KmodOfeN73k_rpdUq7HRgepFlptThaAuPcJOVkx8GAR-k8c216zSFqvWPgvYqN1Xb4ZJlOWEzTJIUdtAKGFcSxZ3SRQnaopVo6ZVU=@protonmail.com>
+        Sat, 9 Apr 2022 00:21:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26913DBD14;
+        Fri,  8 Apr 2022 21:18:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AEC3860A78;
+        Sat,  9 Apr 2022 04:18:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 662C1C385A8;
+        Sat,  9 Apr 2022 04:18:50 +0000 (UTC)
+Message-ID: <147dc6cc-1fbb-558f-8e6d-29d4327d54b4@linux-m68k.org>
+Date:   Sat, 9 Apr 2022 14:18:48 +1000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [RFC PULL] remove arch/h8300
+Content-Language: en-US
+To:     Finn Thain <fthain@linux-m68k.org>, Rob Landley <rob@landley.net>
+Cc:     Daniel Palmer <daniel@0x0f.com>, Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "moderated list:H8/300 ARCHITECTURE" 
+        <uclinux-h8-devel@lists.sourceforge.jp>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>, Max Filippov <jcmvbkbc@gmail.com>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>
+References: <Yib9F5SqKda/nH9c@infradead.org>
+ <CAK8P3a1dUVsZzhAe81usLSkvH29zHgiV9fhEkWdq7_W+nQBWbg@mail.gmail.com>
+ <YkmWh2tss8nXKqc5@infradead.org>
+ <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com>
+ <6a38e8b8-7ccc-afba-6826-cb6e4f92af83@linux-m68k.org>
+ <CAFr9PXkk=8HOxPwVvFRzqHZteRREWxSOOcdjrcOPe0d=9AW2yQ@mail.gmail.com>
+ <5b7687d4-8ba5-ad79-8a74-33fc2496a3db@linux-m68k.org>
+ <8f9be869-7244-d92a-4683-f9c53da97755@landley.net>
+ <3d5cf48c-94f1-2948-1683-4a2a87f4c697@linux-m68k.org>
+From:   Greg Ungerer <gerg@linux-m68k.org>
+In-Reply-To: <3d5cf48c-94f1-2948-1683-4a2a87f4c697@linux-m68k.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that qcom-cpufreq-nvmem doesn't use SMEM to combine both MSM8996
-and MSM8996 Pro speed bins into the same supported-hw bitmask, remove
-bits 4,5,6 from all opp-supported-hw in cluster OPPs. These bits will
-be placed in a separate device tree for MSM8996 Pro.
 
-Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
----
- arch/arm64/boot/dts/qcom/msm8996.dtsi | 82 +++++++++++++--------------
- 1 file changed, 41 insertions(+), 41 deletions(-)
+On 9/4/22 11:59, Finn Thain wrote:
+> On Fri, 8 Apr 2022, Rob Landley wrote:
+> 
+>> On 4/5/22 08:07, Greg Ungerer wrote:
+>>> On 5/4/22 13:23, Daniel Palmer wrote:
+>>>> On Mon, 4 Apr 2022 at 22:42, Greg Ungerer <gerg@linux-m68k.org> wrote:
+>>>>> But we could consider the Dragonball support for removal. I keep it
+>>>>> compiling, but I don't use it and can't test that it actually works.
+>>>>> Not sure that it has been used for a very long time now. And I
+>>>>> didn't even realize but its serial driver (68328serial.c) was
+>>>>> removed in 2015. No one seems too have noticed and complained.
+>>>>
+>>>> I noticed this and I am working on fixing it up for a new Dragonball
+>>>> homebrew machine. I'm trying to add a 68000 machine to QEMU to make
+>>>> the development easier because I'm currently waiting an hour or more
+>>>> for a kernel to load over serial. It might be a few months.
+>>
+>> I've been booting Linux on qemu-system-m68k -M q800 for a couple years
+>> now? (The CROSS=m68k target of mkroot in toybox?)
+>>
+>> # cat /proc/cpuinfo
+>> CPU:		68040
+>> MMU:		68040
+>> FPU:		68040
+>> Clocking:	1261.9MHz
+>> BogoMips:	841.31
+>> Calibration:	4206592 loops
+>>
+>> It certainly THINKS it's got m68000...
+>>
+> 
+> Most 68040 processor variants have a built-in MMU and the m68k "nommu"
+> Linux port doesn't support them. The nommu port covers processors like
+> 68000, Dragonball etc. whereas the m68k "mmu" port covers 680x0 where x is
+> one of 2,3,4,6 with MMU.
+> 
+>> $ qemu-system-m68k -cpu ?
+>> cfv4e
+>> m5206
+>> m5208
+>> m68000
+>> m68010
+>> m68020
+>> m68030
+>> m68040
+>> m68060
+>> any
+>>
+>> (I'd love to get an m68k nommu system working but never sat down and
+>> worked out a kernel .config qemu agreed to run, plus compiler and libc.
+>> Musl added m68k support but I dunno if that includes coldfire?)
+>>
+> 
+> I could never figure out how to boot a coldfire machine in qemu either.
+> There was no documentation about that back when I attempted it but maybe
+> things have improved since.
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qc=
-om/msm8996.dtsi
-index 6fb3ef9df05b..5695671bb934 100644
---- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-@@ -142,82 +142,82 @@ cluster0_opp: opp-table-cluster0 {
- =09=09/* Nominal fmax for now */
- =09=09opp-307200000 {
- =09=09=09opp-hz =3D /bits/ 64 <307200000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-422400000 {
- =09=09=09opp-hz =3D /bits/ 64 <422400000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-480000000 {
- =09=09=09opp-hz =3D /bits/ 64 <480000000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-556800000 {
- =09=09=09opp-hz =3D /bits/ 64 <556800000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-652800000 {
- =09=09=09opp-hz =3D /bits/ 64 <652800000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-729600000 {
- =09=09=09opp-hz =3D /bits/ 64 <729600000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-844800000 {
- =09=09=09opp-hz =3D /bits/ 64 <844800000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-960000000 {
- =09=09=09opp-hz =3D /bits/ 64 <960000000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-1036800000 {
- =09=09=09opp-hz =3D /bits/ 64 <1036800000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-1113600000 {
- =09=09=09opp-hz =3D /bits/ 64 <1113600000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-1190400000 {
- =09=09=09opp-hz =3D /bits/ 64 <1190400000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-1228800000 {
- =09=09=09opp-hz =3D /bits/ 64 <1228800000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-1324800000 {
- =09=09=09opp-hz =3D /bits/ 64 <1324800000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-1401600000 {
- =09=09=09opp-hz =3D /bits/ 64 <1401600000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-1478400000 {
- =09=09=09opp-hz =3D /bits/ 64 <1478400000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-1593600000 {
- =09=09=09opp-hz =3D /bits/ 64 <1593600000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09};
-@@ -230,127 +230,127 @@ cluster1_opp: opp-table-cluster1 {
- =09=09/* Nominal fmax for now */
- =09=09opp-307200000 {
- =09=09=09opp-hz =3D /bits/ 64 <307200000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-403200000 {
- =09=09=09opp-hz =3D /bits/ 64 <403200000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-480000000 {
- =09=09=09opp-hz =3D /bits/ 64 <480000000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-556800000 {
- =09=09=09opp-hz =3D /bits/ 64 <556800000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-652800000 {
- =09=09=09opp-hz =3D /bits/ 64 <652800000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-729600000 {
- =09=09=09opp-hz =3D /bits/ 64 <729600000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-806400000 {
- =09=09=09opp-hz =3D /bits/ 64 <806400000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-883200000 {
- =09=09=09opp-hz =3D /bits/ 64 <883200000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-940800000 {
- =09=09=09opp-hz =3D /bits/ 64 <940800000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-1036800000 {
- =09=09=09opp-hz =3D /bits/ 64 <1036800000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-1113600000 {
- =09=09=09opp-hz =3D /bits/ 64 <1113600000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-1190400000 {
- =09=09=09opp-hz =3D /bits/ 64 <1190400000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-1248000000 {
- =09=09=09opp-hz =3D /bits/ 64 <1248000000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-1324800000 {
- =09=09=09opp-hz =3D /bits/ 64 <1324800000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-1401600000 {
- =09=09=09opp-hz =3D /bits/ 64 <1401600000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-1478400000 {
- =09=09=09opp-hz =3D /bits/ 64 <1478400000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-1555200000 {
- =09=09=09opp-hz =3D /bits/ 64 <1555200000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-1632000000 {
- =09=09=09opp-hz =3D /bits/ 64 <1632000000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-1708800000 {
- =09=09=09opp-hz =3D /bits/ 64 <1708800000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-1785600000 {
- =09=09=09opp-hz =3D /bits/ 64 <1785600000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-1824000000 {
- =09=09=09opp-hz =3D /bits/ 64 <1824000000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-1920000000 {
- =09=09=09opp-hz =3D /bits/ 64 <1920000000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-1996800000 {
- =09=09=09opp-hz =3D /bits/ 64 <1996800000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-2073600000 {
- =09=09=09opp-hz =3D /bits/ 64 <2073600000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09=09opp-2150400000 {
- =09=09=09opp-hz =3D /bits/ 64 <2150400000>;
--=09=09=09opp-supported-hw =3D <0x77>;
-+=09=09=09opp-supported-hw =3D <0x7>;
- =09=09=09clock-latency-ns =3D <200000>;
- =09=09};
- =09};
---
-2.35.1
+FWIW this will do it:
+
+     qemu-system-m68k -nographic -machine mcf5208evb -kernel vmlinux
+
+That will boot an m5208evb_defconfig generated vmlinux.
+But you will need a user space to get a full boot to login/shell.
+
+Regards
+Greg
+
 

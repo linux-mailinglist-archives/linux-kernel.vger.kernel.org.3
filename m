@@ -2,229 +2,397 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B8084FA95C
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 17:47:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A473D4FA95F
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 17:53:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242536AbiDIPte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 11:49:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39644 "EHLO
+        id S242506AbiDIPzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 11:55:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231217AbiDIPta (ORCPT
+        with ESMTP id S234989AbiDIPzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 11:49:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D1263D4;
-        Sat,  9 Apr 2022 08:47:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F1D24B80838;
-        Sat,  9 Apr 2022 15:47:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46329C385A0;
-        Sat,  9 Apr 2022 15:47:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649519238;
-        bh=1hDJD3hTsuVDxAsALlgt5YmHYTWI48kaqDcXIUmC9rs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ZuCreQDsJXuQvEv4wdldU3vz7oDqN2sf4luGmaRHkbnsSwDuMpvLPE6xMEaDYPtJO
-         poirqCbd+K6UkKAyha8WHUDYh9zjb6bG+R/R2XXTrGkMtByzhjSQVAF7a9qnUf5Ffy
-         HhlCTVVsxD7tTwXNSGs5Iknx1T159h9T99qJnKt4Zs6El9eIWMuCiieOeqTUHPmXXw
-         rjmF0aANwSwaEHfJPGO3+zREeLuByw0EKJmXU697B0wu4kIcXgETiSpqRYaQpjld00
-         oMd8DNn2uGpcSq1NKoGApl52Ay+E5SITuoSzyF96tU0R4VyOpNJMJPJoFhtHgWtCv4
-         fhIf5Cf3IpdDw==
-Date:   Sat, 9 Apr 2022 17:47:14 +0200
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        Piotr Chmura <chmooreck@gmail.com>
-Cc:     Robert Schlabbach <robert_s@gmx.net>,
-        LMML <linux-media@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Antti Palosaari <crope@iki.fi>
-Subject: Re: [PATCH v3] si2157: unknown chip version Si2147-A30 ROM 0x50
-Message-ID: <20220409174714.0c94f78d@coco.lan>
-In-Reply-To: <20220409173138.2a9d8a6e@coco.lan>
-References: <c4bcaff8-fbad-969e-ad47-e2c487ac02a1@gmail.com>
-        <f2fc5822-56fb-26e8-00f3-71d2e359cf80@leemhuis.info>
-        <20220409173138.2a9d8a6e@coco.lan>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
+        Sat, 9 Apr 2022 11:55:04 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E37B7D53
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 08:52:56 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id j9so11620999lfe.9
+        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 08:52:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hipyA+VdoCYs/q6L4fybzDyFBHWJqPMIOpZlgArjiq0=;
+        b=Ki0Lb8Vdq3QXgufsULBVyMXZx1RCC0kaYN+83epHTLYepnUs9zjn2U+VLzp2nfnMQh
+         6XERa6etXb/gsln+X3GURJeYdl0S9r4d3gaUVtw0P0MB0ZozcAIbdTxLcAFav2UbllHf
+         0SEz5T8ZnKdKpJxUtnzPySqpWcuuW3piKVNdWidyFggh9iZxmn05PCgPA6JgGPbELHZb
+         HiAzWF3l+G5sjrcLtaCqoh4EJl8BQRT+ugQIE6MJQAYAD4huqhrBE5RqiTmYzO65udba
+         323WLeW/HXcX8C3kOp60LASrixUE/uWn+aKbI7JTMemxme+/vvdHtPi+6+XLX1xFqy/M
+         VpMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hipyA+VdoCYs/q6L4fybzDyFBHWJqPMIOpZlgArjiq0=;
+        b=JxIdCnbHGTmhHQEtcbP3hJ6m8DSIl5Y1TjziztudLhv352qAACc5FKCi2OwsosyI+4
+         bY6fTeSQa1D+cAxFCs/3z0GXn0fhnOs2J5dstt4QB4bQ24q6Fy9Ok0NAklSJ9YSXKWuv
+         eH6bUsIIlsI9b6MxvHcUEjorhU80R4fcPBVuk5OlU0iWaxb1PULhJZX7QXTtrpVqd95Z
+         lU/cYNvOPI+whLcaNCNE8+IPDB/DGqERQCqz9VAuQSBcn3RUrkCP8ODH5MtKpy4F0oN6
+         X1HXlorHVgJD8MtBq6qzGN07eDeTgCKKZtdTNaBeA6iHSBX4iF7jq1qYipjq48hcKoZO
+         OGQA==
+X-Gm-Message-State: AOAM532eRiUn55YEbI0YF1Vd4gNG3RLRi7qndIPvuDgS4ZLBhMzwpGja
+        qUYki/g7UtFMHfSzTkpak7t2ag==
+X-Google-Smtp-Source: ABdhPJyZ70SN8H4VNEmJK6kJ9+nC4blt10fHCvsKTIXf+GtYppcgMkdb1rNhz3C337ZokhxLhD+w/w==
+X-Received: by 2002:a05:6512:3b8c:b0:46b:9446:422b with SMTP id g12-20020a0565123b8c00b0046b9446422bmr1653894lfv.381.1649519574966;
+        Sat, 09 Apr 2022 08:52:54 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id o18-20020a2e9b52000000b0024af0b04d04sm2582983ljj.1.2022.04.09.08.52.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 09 Apr 2022 08:52:52 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id E44BC1039DB; Sat,  9 Apr 2022 18:54:23 +0300 (+03)
+Date:   Sat, 9 Apr 2022 18:54:23 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: Re: [PATCHv4 1/8] mm: Add support for unaccepted memory
+Message-ID: <20220409155423.iv2arckmvavvpegt@box.shutemov.name>
+References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
+ <20220405234343.74045-2-kirill.shutemov@linux.intel.com>
+ <767c2100-c171-1fd3-6a92-0af2e4bf3067@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <767c2100-c171-1fd3-6a92-0af2e4bf3067@intel.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Sat, 9 Apr 2022 17:31:38 +0200
-Mauro Carvalho Chehab <mchehab@kernel.org> escreveu:
+On Fri, Apr 08, 2022 at 11:55:43AM -0700, Dave Hansen wrote:
+> On 4/5/22 16:43, Kirill A. Shutemov wrote:
+> > UEFI Specification version 2.9 introduces the concept of memory
+> > acceptance. Some Virtual Machine platforms, such as Intel TDX or AMD
+> > SEV-SNP, requiring memory to be accepted before it can be used by the
+> 
+> 		^ require
 
-> Em Sat, 9 Apr 2022 14:53:52 +0200
-> Thorsten Leemhuis <regressions@leemhuis.info> escreveu:
->=20
-> > Hi, this is your Linux kernel regression tracker. Top-posting for once,
-> > to make this easily accessible to everyone.
-> >=20
-> > Mauro, what's the hold-up here? Below patch is fixing a regression
-> > caused by one of your patches. Why haven't you applied this or provided
-> > feedback to Piotr what needs to be improved? Or am I missing something
-> > and progress was made? =20
->=20
-> We're currently without a sub-maintainer for dvb, so it takes a longer
-> time for patches like that to be noticed.
->=20
-> In the specific case of this patch, the problem is that it doesn't apply.=
-..
-> The emailer mangled the patch, replacing spaces by U+0xa0 characters.
->=20
-> Piotr,
->=20
-> Please re-submit them with git send-email (or use some other client
-> that won't damage whitespaces.
+Heh. That's wording form the spec.
 
-Nevermind. as the patch is short, I fixed it this time. Next time, please
-check please use an emailer that is capable of properly encoding whitespaces
-and tabs.
+> > guest. Accepting happens via a protocol specific for the Virtual Machine
+> > platform.
+> 
+> 							^ s/for/to
+> 
+> > Accepting memory is costly and it makes VMM allocate memory for the
+> > accepted guest physical address range. It's better to postpone memory
+> > acceptance until memory is needed. It lowers boot time and reduces
+> > memory overhead.
+> > 
+> > Support of such memory requires a few changes in core-mm code:
+> > 
+> >   - memblock has to accept memory on allocation;
+> > 
+> >   - page allocator has to accept memory on the first allocation of the
+> >     page;
+> > 
+> > Memblock change is trivial.
+> > 
+> > The page allocator is modified to accept pages on the first allocation.
+> > PageUnaccepted() is used to indicate that the page requires acceptance.
+> 
+> Does this consume an actual page flag or is it aliased?
 
-Regards,
-Mauro
+It is encoded as a page type in mapcount of unallocated memory. It is not
+aliased with PageOffline() as I did before.
 
->=20
-> Regards,
-> Mauro
->=20
-> >=20
-> > This really is overdue, the first version of this patch was already
-> > posted two and a half weeks ago. Reminder, the newly added document on
-> > handling regressions (
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
-/Documentation/process/handling-regressions.rst#n132
-> > ) for this case states this as rule of thumb: "Aim to fix regressions
-> > within one week ".
-> >=20
-> > Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-> >=20
-> > P.S.: As the Linux kernel's regression tracker I'm getting a lot of
-> > reports on my table. I can only look briefly into most of them and lack
-> > knowledge about most of the areas they concern. I thus unfortunately
-> > will sometimes get things wrong or miss something important. I hope
-> > that's not the case here; if you think it is, don't hesitate to tell me
-> > in a public reply, it's in everyone's interest to set the public record
-> > straight.
-> >=20
-> >=20
-> > #regzbot poke
-> >=20
-> >=20
-> > On 31.03.22 17:55, Piotr Chmura wrote: =20
-> > > Fix firmware file names assignment in si2157 tuner, allow for running
-> > > devices without firmware files needed.
-> > >=20
-> > >=20
-> > > It's regression in kernel 5.17.0, worked fine in 5.16 series.
-> > >=20
-> > > device: 07ca:1871 AVerMedia Technologies, Inc. TD310 DVB-T/T2/C dongle
-> > > modprobe gives error: unknown chip version Si2147-A30 ROM 0x50
-> > > Device initialization is interrupted.
-> > >=20
-> > > caused by:
-> > > 1. table si2157_tuners has swapped fields rom_id and required vs stru=
-ct
-> > > si2157_tuner_info.
-> > > 2. both firmware file names can be null for devices with required =3D=
-=3D
-> > > false - device uses build-in firmware in this case
-> > >=20
-> > > Fix:
-> > > 1. Rearrange fields in table si2157_tuners
-> > > 2. Allow both firmware file names be NULL for devices defined with
-> > > required =3D=3D false
-> > >=20
-> > >=20
-> > > Fixes: 1c35ba3bf972 ("media: si2157: use a different namespace for
-> > > firmware")
-> > > Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D215726
-> > > Link:
-> > > https://lore.kernel.org/lkml/5f660108-8812-383c-83e4-29ee0558d623@lee=
-mhuis.info/
-> > >=20
-> > > Cc: stable@vger.kernel.org # 5.17.x
-> > > Signed-off-by: Piotr Chmura <chmooreck@gmail.com>
-> > > Tested-by: Robert Schlabbach <robert_s@gmx.net>
-> > >=20
-> > > ---
-> > >=20
-> > > --- a/drivers/media/tuners/si2157.c=C2=A0=C2=A0=C2=A0 2022-03-20 21:1=
-4:17.000000000 +0100
-> > > +++ b/drivers/media/tuners/si2157.c=C2=A0=C2=A0=C2=A0 2022-03-22 23:4=
-8:05.604408331 +0100
-> > > @@ -77,16 +77,16 @@ err_mutex_unlock:
-> > > =C2=A0}
-> > >=20
-> > > =C2=A0static const struct si2157_tuner_info si2157_tuners[] =3D {
-> > > -=C2=A0=C2=A0=C2=A0 { SI2141, false, 0x60, SI2141_60_FIRMWARE, SI2141=
-_A10_FIRMWARE },
-> > > -=C2=A0=C2=A0=C2=A0 { SI2141, false, 0x61, SI2141_61_FIRMWARE, SI2141=
-_A10_FIRMWARE },
-> > > -=C2=A0=C2=A0=C2=A0 { SI2146, false, 0x11, SI2146_11_FIRMWARE, NULL },
-> > > -=C2=A0=C2=A0=C2=A0 { SI2147, false, 0x50, SI2147_50_FIRMWARE, NULL },
-> > > -=C2=A0=C2=A0=C2=A0 { SI2148, true,=C2=A0 0x32, SI2148_32_FIRMWARE, S=
-I2158_A20_FIRMWARE },
-> > > -=C2=A0=C2=A0=C2=A0 { SI2148, true,=C2=A0 0x33, SI2148_33_FIRMWARE, S=
-I2158_A20_FIRMWARE },
-> > > -=C2=A0=C2=A0=C2=A0 { SI2157, false, 0x50, SI2157_50_FIRMWARE, SI2157=
-_A30_FIRMWARE },
-> > > -=C2=A0=C2=A0=C2=A0 { SI2158, false, 0x50, SI2158_50_FIRMWARE, SI2158=
-_A20_FIRMWARE },
-> > > -=C2=A0=C2=A0=C2=A0 { SI2158, false, 0x51, SI2158_51_FIRMWARE, SI2158=
-_A20_FIRMWARE },
-> > > -=C2=A0=C2=A0=C2=A0 { SI2177, false, 0x50, SI2177_50_FIRMWARE, SI2157=
-_A30_FIRMWARE },
-> > > +=C2=A0=C2=A0=C2=A0 { SI2141, 0x60, false, SI2141_60_FIRMWARE, SI2141=
-_A10_FIRMWARE },
-> > > +=C2=A0=C2=A0=C2=A0 { SI2141, 0x61, false, SI2141_61_FIRMWARE, SI2141=
-_A10_FIRMWARE },
-> > > +=C2=A0=C2=A0=C2=A0 { SI2146, 0x11, false, SI2146_11_FIRMWARE, NULL },
-> > > +=C2=A0=C2=A0=C2=A0 { SI2147, 0x50, false, SI2147_50_FIRMWARE, NULL },
-> > > +=C2=A0=C2=A0=C2=A0 { SI2148, 0x32, true,=C2=A0 SI2148_32_FIRMWARE, S=
-I2158_A20_FIRMWARE },
-> > > +=C2=A0=C2=A0=C2=A0 { SI2148, 0x33, true,=C2=A0 SI2148_33_FIRMWARE, S=
-I2158_A20_FIRMWARE },
-> > > +=C2=A0=C2=A0=C2=A0 { SI2157, 0x50, false, SI2157_50_FIRMWARE, SI2157=
-_A30_FIRMWARE },
-> > > +=C2=A0=C2=A0=C2=A0 { SI2158, 0x50, false, SI2158_50_FIRMWARE, SI2158=
-_A20_FIRMWARE },
-> > > +=C2=A0=C2=A0=C2=A0 { SI2158, 0x51, false, SI2158_51_FIRMWARE, SI2158=
-_A20_FIRMWARE },
-> > > +=C2=A0=C2=A0=C2=A0 { SI2177, 0x50, false, SI2177_50_FIRMWARE, SI2157=
-_A30_FIRMWARE },
-> > > =C2=A0};
-> > >=20
-> > > =C2=A0static int si2157_load_firmware(struct dvb_frontend *fe,
-> > > @@ -178,7 +178,7 @@ static int si2157_find_and_load_firmware
-> > > =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 }
-> > > =C2=A0=C2=A0=C2=A0=C2=A0 }
-> > >=20
-> > > -=C2=A0=C2=A0=C2=A0 if (!fw_name && !fw_alt_name) {
-> > > +=C2=A0=C2=A0=C2=A0 if (required && !fw_name && !fw_alt_name) {
-> > > =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 dev_err(&client->dev,
-> > > =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 "unkno=
-wn chip version Si21%d-%c%c%c ROM 0x%02x\n",
-> > > =C2=A0=C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0 part_i=
-d, cmd.args[1], cmd.args[3], cmd.args[4], rom_id);
-> > >    =20
-> >  =20
->=20
->=20
->=20
-> Thanks,
-> Mauro
+I will mention that it is a new page type.
 
+> > Kernel only needs to accept memory once after boot, so during the boot
+> > and warm up phase there will be a lot of memory acceptance. After things
+> > are settled down the only price of the feature if couple of checks for
+> > PageUnaccepted() in allocate and free paths. The check refers a hot
+> 
+> 							       ^ to
+> 
+> ...
+> > + /*
+> > +  * PageUnaccepted() indicates that the page has to be "accepted" before it can
+> > +  * be used. Page allocator has to call accept_page() before returning the page
+> > +  * to the caller.
+> > +  */
+> 
+> Let's talk about "used" with a bit more detail.  Maybe:
+> 
+> /*
+>  * PageUnaccepted() indicates that the page has to be "accepted" before
+>  * it can be read or written.  The page allocator must to call
+>  * accept_page() before touching the page or returning it to the caller.
+>  */
 
+I guess s/must to call/must call/, right?
 
-Thanks,
-Mauro
+> ...
+> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> > index 2db95780e003..53f4aa1c92a7 100644
+> > --- a/mm/page_alloc.c
+> > +++ b/mm/page_alloc.c
+> > @@ -121,6 +121,12 @@ typedef int __bitwise fpi_t;
+> >   */
+> >  #define FPI_SKIP_KASAN_POISON	((__force fpi_t)BIT(2))
+> >  
+> > +/*
+> > + * Check if the page needs to be marked as PageUnaccepted().
+> > + * Used for the new pages added to the buddy allocator for the first time.
+> > + */
+> > +#define FPI_UNACCEPTED		((__force fpi_t)BIT(3))
+> > +
+> >  /* prevent >1 _updater_ of zone percpu pageset ->high and ->batch fields */
+> >  static DEFINE_MUTEX(pcp_batch_high_lock);
+> >  #define MIN_PERCPU_PAGELIST_HIGH_FRACTION (8)
+> > @@ -1023,6 +1029,26 @@ buddy_merge_likely(unsigned long pfn, unsigned long buddy_pfn,
+> >  	return page_is_buddy(higher_page, higher_buddy, order + 1);
+> >  }
+> >  
+> > +static void accept_page(struct page *page, unsigned int order)
+> > +{
+> > +	phys_addr_t start = page_to_phys(page);
+> > +	int i;
+> > +
+> > +	accept_memory(start, start + (PAGE_SIZE << order));
+> > +
+> > +	for (i = 0; i < (1 << order); i++) {
+> > +		if (PageUnaccepted(page + i))
+> > +			__ClearPageUnaccepted(page + i);
+> > +	}
+> > +}
+> 
+> It's probably worth a comment somewhere that this can be really slow.
+> 
+> > +static bool page_is_unaccepted(struct page *page, unsigned int order)
+> > +{
+> > +	phys_addr_t start = page_to_phys(page);
+> > +
+> > +	return memory_is_unaccepted(start, start + (PAGE_SIZE << order));
+> > +}
+> > +
+> >  /*
+> >   * Freeing function for a buddy system allocator.
+> >   *
+> > @@ -1058,6 +1084,7 @@ static inline void __free_one_page(struct page *page,
+> >  	unsigned long combined_pfn;
+> >  	struct page *buddy;
+> >  	bool to_tail;
+> > +	bool unaccepted = PageUnaccepted(page);
+> >  
+> >  	VM_BUG_ON(!zone_is_initialized(zone));
+> >  	VM_BUG_ON_PAGE(page->flags & PAGE_FLAGS_CHECK_AT_PREP, page);
+> > @@ -1089,6 +1116,11 @@ static inline void __free_one_page(struct page *page,
+> >  			clear_page_guard(zone, buddy, order, migratetype);
+> >  		else
+> >  			del_page_from_free_list(buddy, zone, order);
+> > +
+> > +		/* Mark page unaccepted if any of merged pages were unaccepted */
+> > +		if (PageUnaccepted(buddy))
+> > +			unaccepted = true;
+> 
+> Naming nit: following the logic with a double-negative like !unaccepted
+> is a bit hard.  Would this be more readable if it were:
+> 
+> 	bool page_needs_acceptance = PageUnaccepted(page);
+> 
+> and then the code below...
+> 
+> >  		combined_pfn = buddy_pfn & pfn;
+> >  		page = page + (combined_pfn - pfn);
+> >  		pfn = combined_pfn;
+> > @@ -1124,6 +1156,17 @@ static inline void __free_one_page(struct page *page,
+> >  done_merging:
+> >  	set_buddy_order(page, order);
+> >  
+> > +	/*
+> > +	 * Check if the page needs to be marked as PageUnaccepted().
+> > +	 * Used for the new pages added to the buddy allocator for the first
+> > +	 * time.
+> > +	 */
+> > +	if (!unaccepted && (fpi_flags & FPI_UNACCEPTED))
+> > +		unaccepted = page_is_unaccepted(page, order);
+> 
+> 	if (page_needs_acceptance && (fpi_flags & FPI_UNACCEPTED))
+> 		page_needs_acceptance = page_is_unaccepted(page, order);
+> 
+> > +	if (unaccepted)
+> > +		__SetPageUnaccepted(page);
+> 
+> This is getting hard for me to follow.
+> 
+> There are:
+> 1. Pages that come in here with PageUnaccepted()==1
+> 2. Pages that come in here with PageUnaccepted()==0, but a buddy that
+>    was PageUnaccepted()==1
+> 
+> In either of those cases, the bitmap will be consulted to see if the
+> page is *truly* unaccepted or not.  But, I'm struggling to figure out
+> how a page could end up in one of those scenarios and *not* be
+> page_is_unaccepted().
+> 
+> There are three pieces of information that come in:
+> 1. PageUnaccepted(page)
+> 2. PageUnaccepted(buddies[])
+> 3. the bitmap
+
+1 and 2 are the same conceptionally: merged-in pieces of the resulting page.
+
+> 
+> and one piece of information going out:
+> 
+> PageUnaccepted(page);
+> 
+> I think I need a more coherent description of how those four things fit
+> together.
+
+The page gets marked as PageUnaccepted() if any of merged-in pages is
+PageUnaccepted().
+
+For new pages, just being added to buddy allocator, consult
+page_is_unaccepted(). FPI_UNACCEPTED indicates that the page is new and
+page_is_unaccepted() check is required.
+
+Avoid calling page_is_unaccepted() if it is known that the page needs
+acceptance anyway. It can be costly.
+
+Is it good enough explanation?
+
+FPI_UNACCEPTED is not a good name. Any help with a better one?
+FPI_CHECK_UNACCEPTED?
+
+> >  	if (fpi_flags & FPI_TO_TAIL)
+> >  		to_tail = true;
+> >  	else if (is_shuffle_order(order))
+> > @@ -1149,7 +1192,8 @@ static inline void __free_one_page(struct page *page,
+> >  static inline bool page_expected_state(struct page *page,
+> >  					unsigned long check_flags)
+> >  {
+> > -	if (unlikely(atomic_read(&page->_mapcount) != -1))
+> > +	if (unlikely(atomic_read(&page->_mapcount) != -1) &&
+> > +	    !PageUnaccepted(page))
+> >  		return false;
+> 
+> That probably deserves a comment, and maybe its own if() statement.
+
+Own if does not work. PageUnaccepted() is encoded in _mapcount.
+
+What about this:
+
+	/*
+	 * page->_mapcount is expected to be -1.
+	 *
+	 * There is an exception for PageUnaccepted(). The page type can be set
+	 * for pages on free list. Page types are encoded in _mapcount.
+	 *
+	 * PageUnaccepted() will get cleared in post_alloc_hook().
+	 */
+	if (unlikely((atomic_read(&page->_mapcount) | PG_unaccepted) != -1))
+		return false;
+
+?
+
+> >  	if (unlikely((unsigned long)page->mapping |
+> > @@ -1654,7 +1698,8 @@ void __free_pages_core(struct page *page, unsigned int order)
+> >  	 * Bypass PCP and place fresh pages right to the tail, primarily
+> >  	 * relevant for memory onlining.
+> >  	 */
+> > -	__free_pages_ok(page, order, FPI_TO_TAIL | FPI_SKIP_KASAN_POISON);
+> > +	__free_pages_ok(page, order,
+> > +			FPI_TO_TAIL | FPI_SKIP_KASAN_POISON | FPI_UNACCEPTED);
+> >  }
+> >  
+> >  #ifdef CONFIG_NUMA
+> > @@ -1807,6 +1852,7 @@ static void __init deferred_free_range(unsigned long pfn,
+> >  		return;
+> >  	}
+> >  
+> > +	accept_memory(pfn << PAGE_SHIFT, (pfn + nr_pages) << PAGE_SHIFT);
+> >  	for (i = 0; i < nr_pages; i++, page++, pfn++) {
+> >  		if ((pfn & (pageblock_nr_pages - 1)) == 0)
+> >  			set_pageblock_migratetype(page, MIGRATE_MOVABLE);
+> 
+> Comment, please.  I assume doing the slow accept up front is OK here
+> because this is in the deferred path.  But, it would be nice to know for
+> sure.
+
+It is acceptance of smaller than page block upfront. I will add a comment.
+
+> 
+> > @@ -2266,6 +2312,10 @@ static inline void expand(struct zone *zone, struct page *page,
+> >  		if (set_page_guard(zone, &page[size], high, migratetype))
+> >  			continue;
+> >  
+> > +		/* Transfer PageUnaccepted() to the newly split pages */
+> > +		if (PageUnaccepted(page))
+> > +			__SetPageUnaccepted(&page[size]);
+> 
+> We don't want to just accept the page here, right?  Because we're
+> holding the zone lock?  Maybe we should mention that:
+> 
+> 		/*
+> 		 * Transfer PageUnaccepted() to the newly split pages so
+> 		 * they can be accepted after dropping the zone lock.
+> 		 */
+
+Okay.
+
+> >  		add_to_free_list(&page[size], zone, high, migratetype);
+> >  		set_buddy_order(&page[size], high);
+> >  	}
+> > @@ -2396,6 +2446,9 @@ inline void post_alloc_hook(struct page *page, unsigned int order,
+> >  	 */
+> >  	kernel_unpoison_pages(page, 1 << order);
+> >  
+> > +	if (PageUnaccepted(page))
+> > +		accept_page(page, order);
+> > +
+> >  	/*
+> >  	 * As memory initialization might be integrated into KASAN,
+> >  	 * KASAN unpoisoning and memory initializion code must be
+> 
+> Is accepted memory guaranteed to be zeroed?  Do we want to skip the
+> __GFP_ZERO behavior later in this function?  Or is that just a silly
+> over-optimization?
+
+For TDX, it is true that the memory gets cleared on acceptance, but I
+don't we can say the same for any possible implementation.
+
+I would rather leave __GFP_ZERO for peace of mind. Clearing the cache-hot
+page for the second time shouldn't be a big deal comparing to acceptance
+cost.
+
+-- 
+ Kirill A. Shutemov

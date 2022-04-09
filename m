@@ -2,250 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4C664FA7A0
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 14:22:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 152884FA7A3
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 14:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235614AbiDIMYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 08:24:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47792 "EHLO
+        id S239789AbiDIM1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 08:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbiDIMYJ (ORCPT
+        with ESMTP id S229712AbiDIM04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 08:24:09 -0400
-Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB7CE3298F;
-        Sat,  9 Apr 2022 05:21:59 -0700 (PDT)
-HMM_SOURCE_IP: 172.18.0.188:51628.1449227777
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-202.80.192.38 (unknown [172.18.0.188])
-        by chinatelecom.cn (HERMES) with SMTP id 53ECD28009D;
-        Sat,  9 Apr 2022 20:21:50 +0800 (CST)
-X-189-SAVE-TO-SEND: +liuxp11@chinatelecom.cn
-Received: from  ([172.18.0.188])
-        by app0023 with ESMTP id 6826f5d46ed048fcae8a3b2942c236e4 for rafael@kernel.org;
-        Sat, 09 Apr 2022 20:21:58 CST
-X-Transaction-ID: 6826f5d46ed048fcae8a3b2942c236e4
-X-Real-From: liuxp11@chinatelecom.cn
-X-Receive-IP: 172.18.0.188
-X-MEDUSA-Status: 0
-Sender: liuxp11@chinatelecom.cn
-From:   Liu Xinpeng <liuxp11@chinatelecom.cn>
-To:     rafael@kernel.org, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, keescook@chromium.org, anton@enomsg.org,
-        ccross@android.com, robert.moore@intel.com, tony.luck@intel.com,
-        lenb@kernel.org, james.morse@arm.com, bp@alien8.de,
-        tglx@linutronix.de, mingo@redhat.com, ying.huang@intel.com,
-        gong.chen@linux.intel.com
-Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        Liu Xinpeng <liuxp11@chinatelecom.cn>
-Subject: [PATCH v5] ACPI: APEI: fix missing erst record id
-Date:   Sat,  9 Apr 2022 20:21:31 +0800
-Message-Id: <1649506891-27622-1-git-send-email-liuxp11@chinatelecom.cn>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sat, 9 Apr 2022 08:26:56 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AEFF1F619;
+        Sat,  9 Apr 2022 05:24:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1649507087; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Xpz9qP27pZinyYZJySzqFZgO4JRDvkPdeCd3c2zUkL8=;
+        b=lijqlWlqTZP5GTrescOMdRwvaKM9Y4prV/GiR2ActZqW0tTuWdbItRuhl4cHpa+c1GReIu
+        pgrFGPcbXhrCdP94pApEN9IvYDxpe9e00uR6OCUWLcW3RE97+LV70TB/DI/yOyzjw9wR9j
+        9+7uppfuv1ull072TfDf4ZgJ4UWHV9A=
+Date:   Sat, 09 Apr 2022 13:24:37 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 03/18] MIPS: DTS: jz4780: fix tcu timer as reported by
+ dtbscheck
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, letux-kernel@openphoenux.org
+Message-Id: <1TN2AR.Q91IJNXMNNNA1@crapouillou.net>
+In-Reply-To: <e5ea96d8-f8c9-b925-04ee-81e80e30a5d0@linaro.org>
+References: <cover.1649443080.git.hns@goldelico.com>
+        <c48277625f0ab5afc86d89deb1b87537e9c592f6.1649443080.git.hns@goldelico.com>
+        <e5ea96d8-f8c9-b925-04ee-81e80e30a5d0@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Read a record is cleared by others, but the deleted record cache entry is
-still created by erst_get_record_id_next. When next enumerate the records,
-get the cached deleted record, then erst_read return -ENOENT and try to
-get next record, loop back to first ID will return 0 in function
-__erst_record_id_cache_add_one and then set record_id as
-APEI_ERST_INVALID_RECORD_ID, finished this time read operation.
-It will result in read the records just in the cache hereafter.
+Hi Krzysztof,
 
-This patch cleared the deleted record cache, fix the issue that
-"./erst-inject -p" shows record counts not equal to "./erst-inject -n".
+Le sam., avril 9 2022 at 13:11:48 +0200, Krzysztof Kozlowski=20
+<krzysztof.kozlowski@linaro.org> a =E9crit :
+> On 08/04/2022 20:37, H. Nikolaus Schaller wrote:
+>>  arch/mips/boot/dts/ingenic/ci20.dtb: timer@10002000: compatible:=20
+>> 'oneOf' conditional failed, one must be fixed:
+>>  	['ingenic,jz4780-tcu', 'ingenic,jz4770-tcu', 'simple-mfd'] is too=20
+>> long
+>>  	'ingenic,jz4780-tcu' is not one of ['ingenic,jz4740-tcu',=20
+>> 'ingenic,jz4725b-tcu', 'ingenic,jz4760-tcu', 'ingenic,x1000-tcu']
+>>  	'simple-mfd' was expected
+>>  	'ingenic,jz4760-tcu' was expected
+>=20
+> Trim it a bit...
+>=20
+>>  	From schema:=20
+>> Documentation/devicetree/bindings/timer/ingenic,tcu.yaml
+>=20
+> You need to explain this. You're changing the effective compatible of
+> the device and doing so based only on schema warning does not look
+> enough. Please write real reason instead of this fat warning, e.g.=20
+> that
+> both devices are actually compatible and this has no real effect=20
+> except
+> schema checks.
 
-A reproducer of the problem(retry many times):
+Well, if the schema says that it should use a particular fallback=20
+string, then that's what the DTS should use, right?
 
-[root@localhost erst-inject]# ./erst-inject -c 0xaaaaa00011
-[root@localhost erst-inject]# ./erst-inject -p
-rc: 273
-rcd sig: CPER
-rcd id: 0xaaaaa00012
-rc: 273
-rcd sig: CPER
-rcd id: 0xaaaaa00013
-rc: 273
-rcd sig: CPER
-rcd id: 0xaaaaa00014
-[root@localhost erst-inject]# ./erst-inject -i 0xaaaaa000006
-[root@localhost erst-inject]# ./erst-inject -i 0xaaaaa000007
-[root@localhost erst-inject]# ./erst-inject -i 0xaaaaa000008
-[root@localhost erst-inject]# ./erst-inject -p
-rc: 273
-rcd sig: CPER
-rcd id: 0xaaaaa00012
-rc: 273
-rcd sig: CPER
-rcd id: 0xaaaaa00013
-rc: 273
-rcd sig: CPER
-rcd id: 0xaaaaa00014
-[root@localhost erst-inject]# ./erst-inject -n
-total error record count: 6
+If making the DTS schema-compliant causes breakages, then that means=20
+the schema is wrong and should be fixed.
 
-Changelog:
-v1->v2  fix style problems
-v2->v3  fix apei_read_mce called erst_get_record_id_next and modify
-the commit message.
-v3->v4  add erst_clear_cache in another retry.
-v4->v5  implement a new function for looking for a specific record
- type, suggested by Luck Tony
+Cheers,
+-Paul
 
-Signed-off-by: Liu Xinpeng <liuxp11@chinatelecom.cn>
----
- arch/x86/kernel/cpu/mce/apei.c |  8 ++---
- drivers/acpi/apei/erst-dbg.c   |  3 +-
- drivers/acpi/apei/erst.c       | 62 ++++++++++++++++++++++++++++++++--
- include/acpi/apei.h            |  2 ++
- 4 files changed, 66 insertions(+), 9 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/mce/apei.c b/arch/x86/kernel/cpu/mce/apei.c
-index 0e3ae64d3b76..717192915f28 100644
---- a/arch/x86/kernel/cpu/mce/apei.c
-+++ b/arch/x86/kernel/cpu/mce/apei.c
-@@ -177,16 +177,14 @@ ssize_t apei_read_mce(struct mce *m, u64 *record_id)
- 	/* no more record */
- 	if (*record_id == APEI_ERST_INVALID_RECORD_ID)
- 		goto out;
--	rc = erst_read(*record_id, &rcd.hdr, sizeof(rcd));
-+	rc = erst_read_record(*record_id, &rcd.hdr, sizeof(rcd), sizeof(rcd),
-+			&CPER_CREATOR_MCE);
- 	/* someone else has cleared the record, try next one */
- 	if (rc == -ENOENT)
- 		goto retry;
- 	else if (rc < 0)
- 		goto out;
--	/* try to skip other type records in storage */
--	else if (rc != sizeof(rcd) ||
--		 !guid_equal(&rcd.hdr.creator_id, &CPER_CREATOR_MCE))
--		goto retry;
-+
- 	memcpy(m, &rcd.mce, sizeof(*m));
- 	rc = sizeof(*m);
- out:
-diff --git a/drivers/acpi/apei/erst-dbg.c b/drivers/acpi/apei/erst-dbg.c
-index c740f0faad39..8bc71cdc2270 100644
---- a/drivers/acpi/apei/erst-dbg.c
-+++ b/drivers/acpi/apei/erst-dbg.c
-@@ -111,7 +111,8 @@ static ssize_t erst_dbg_read(struct file *filp, char __user *ubuf,
- 		goto out;
- 	}
- retry:
--	rc = len = erst_read(id, erst_dbg_buf, erst_dbg_buf_len);
-+	rc = len = erst_read_record(id, erst_dbg_buf, erst_dbg_buf_len,
-+			erst_dbg_buf_len, NULL);
- 	/* The record may be cleared by others, try read next record */
- 	if (rc == -ENOENT)
- 		goto retry_next;
-diff --git a/drivers/acpi/apei/erst.c b/drivers/acpi/apei/erst.c
-index 698d67cee052..1dc238783f63 100644
---- a/drivers/acpi/apei/erst.c
-+++ b/drivers/acpi/apei/erst.c
-@@ -856,6 +856,63 @@ ssize_t erst_read(u64 record_id, struct cper_record_header *record,
- }
- EXPORT_SYMBOL_GPL(erst_read);
- 
-+static int erst_clear_cache(u64 record_id)
-+{
-+	int rc, i;
-+	u64 *entries;
-+
-+	if (erst_disable)
-+		return -ENODEV;
-+
-+	rc = mutex_lock_interruptible(&erst_record_id_cache.lock);
-+	if (rc)
-+		return rc;
-+
-+	entries = erst_record_id_cache.entries;
-+	for (i = 0; i < erst_record_id_cache.len; i++) {
-+		if (entries[i] == record_id)
-+			entries[i] = APEI_ERST_INVALID_RECORD_ID;
-+	}
-+	__erst_record_id_cache_compact();
-+
-+	mutex_unlock(&erst_record_id_cache.lock);
-+
-+	return rc;
-+}
-+
-+ssize_t erst_read_record(u64 record_id, struct cper_record_header *record,
-+		size_t buflen, size_t recordlen, const guid_t *creatorid)
-+{
-+	ssize_t len;
-+
-+	/*
-+	 * if creatorid is NULL, read any record for erst-dbg module
-+	 */
-+	if (creatorid == NULL) {
-+		len = erst_read(record_id, record, buflen);
-+		if (len == -ENOENT)
-+			erst_clear_cache(record_id);
-+
-+		return len;
-+	}
-+
-+	len = erst_read(record_id, record, buflen);
-+	/*
-+	 * if erst_read return value is -ENOENT or not equal to record length,
-+	 * or not wanted creatorid, consider them as not found,
-+	 * and clear the record_id cache.
-+	 */
-+	if (len == -ENOENT || len != recordlen ||
-+			!guid_equal(&record->creator_id, creatorid)) {
-+		len = -ENOENT;
-+		erst_clear_cache(record_id);
-+	}
-+
-+
-+	return len;
-+}
-+EXPORT_SYMBOL_GPL(erst_read_record);
-+
- int erst_clear(u64 record_id)
- {
- 	int rc, i;
-@@ -996,7 +1053,8 @@ static ssize_t erst_reader(struct pstore_record *record)
- 		goto out;
- 	}
- 
--	len = erst_read(record_id, &rcd->hdr, rcd_len);
-+	len = erst_read_record(record_id, &rcd->hdr, rcd_len, rcd_len,
-+			&CPER_CREATOR_PSTORE);
- 	/* The record may be cleared by others, try read next record */
- 	if (len == -ENOENT)
- 		goto skip;
-@@ -1004,8 +1062,6 @@ static ssize_t erst_reader(struct pstore_record *record)
- 		rc = -EIO;
- 		goto out;
- 	}
--	if (!guid_equal(&rcd->hdr.creator_id, &CPER_CREATOR_PSTORE))
--		goto skip;
- 
- 	record->buf = kmalloc(len, GFP_KERNEL);
- 	if (record->buf == NULL) {
-diff --git a/include/acpi/apei.h b/include/acpi/apei.h
-index afaca3a075e8..dc60f7db5524 100644
---- a/include/acpi/apei.h
-+++ b/include/acpi/apei.h
-@@ -46,6 +46,8 @@ int erst_get_record_id_next(int *pos, u64 *record_id);
- void erst_get_record_id_end(void);
- ssize_t erst_read(u64 record_id, struct cper_record_header *record,
- 		  size_t buflen);
-+ssize_t erst_read_record(u64 record_id, struct cper_record_header *record,
-+		size_t buflen, size_t recordlen, const guid_t *creatorid);
- int erst_clear(u64 record_id);
- 
- int arch_apei_enable_cmcff(struct acpi_hest_header *hest_hdr, void *data);
--- 
-2.23.0
 

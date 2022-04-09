@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EDEB4FAA45
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 20:41:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F2D14FAA48
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 20:41:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236021AbiDISnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 14:43:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52318 "EHLO
+        id S243090AbiDISn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 14:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243089AbiDISno (ORCPT
+        with ESMTP id S243083AbiDISnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 14:43:44 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29131D08F0;
-        Sat,  9 Apr 2022 11:41:35 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id a42so4642189pfx.7;
-        Sat, 09 Apr 2022 11:41:35 -0700 (PDT)
+        Sat, 9 Apr 2022 14:43:47 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1791E5328;
+        Sat,  9 Apr 2022 11:41:39 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id r66so10638810pgr.3;
+        Sat, 09 Apr 2022 11:41:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=shhc4vVqv9l2wKwY0kN4Lkjnnu+qZsCnM2eNImBcqfg=;
-        b=iZSijiySwMfAE7hJT5S4G0ImnvCP9t9jYMk17mCskyw2xogkmpGQPHoCcyJ26NZVgL
-         BJBdJ2eMkPcR8HIScndhDdSDxWNxTeuI2i0UrPC92L93P5VKWH7waREbhBVjOk323kGu
-         2mIXECyNTQbQztazHepnJFZti3/NN3+PFzYFZKJLUbUYkC4EsFZUwMbxhSPJnBWl/18N
-         jxBT+wpxY3O62HyIm5M1aKZEOedrVsUtKofbrR9puiKr4vFrAludyaituvTDD68AuVLc
-         iRkEETsI57wCjRUAz6mIWpKWPfvM4lZiye9YAkHOW1BaVv77DK7zXvb1aLNiS7pk7yTj
-         CKpA==
+        bh=1bMmIQPCL5e+l7dlDIOHx2g7GlKBqwKdndE18CxyLT8=;
+        b=oPV8cZ3dugqJvTm8GE56LvsPeG4IQKT9RYFmjrseVt09UuNHn9aZm2YquLiNnthFVw
+         2mVspMctMvN3koP4ievop0wNjDFiuR56EAcPJ1ThjWyqetZkQjV4xEJ4iyTxRxU9+llN
+         cGPQeSqUJtj/7twFIWJVc/7N/8YTcN3GprrSolGmJDsgzptiBYXS3Ut81AC8PHKdBTT2
+         X8EEfU+JPY9zMKySN6JoIABaHJCSY9h6B+ErixPUUGj5kaM3xAfEN+9LNT/zMh08VaAb
+         GzsaX0tTmDXxa4DSYa/yj68hzouSAzv50BFq6n8Ze6I+Dymeqpaze03x/YZVdghxENEr
+         BL4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=shhc4vVqv9l2wKwY0kN4Lkjnnu+qZsCnM2eNImBcqfg=;
-        b=XGk3hfps+G3oCeSxd2PIL6sSak0yw+0PMvxpRjMPpoLzPbj4dInSW5xq9mP4yfY7Vt
-         dfQ7Nday+FD6jkuBFkEvfVCtcWPBB3Afg4qZtUyu1WRngZxd3uNpLdsR7GSi+oGVsgJJ
-         MfRfSQgNuSLk/Z69+dQyQb05bt2ts81DOkdhbNz40MZoHZtjL1yQMp5nYGUwb++gBpf9
-         LFMngP9vhG0YyWgrY9qp0yg4AmTSz2btpP8DjEWtBeidUUfwNtz2sZLiyDymf+2FKpjq
-         703hzrzL9tdU0TnVDwQtLMSSwW0Ufsh4Ct1ip4YmqVNk2gaDsxyVY68kZbjYwmZDVN4c
-         QOrw==
-X-Gm-Message-State: AOAM5338KrO8HBFTATRwo1fwKEkEaAv0ec7X5+ClbCOmkQIB//PLq6P5
-        tIoPiUi7jEq6zjEUCKKtdwA=
-X-Google-Smtp-Source: ABdhPJzxNKJtx7p/3OSvp583CZNP7EpTTJnlPbZ1GUvDN8gUSjIUcP2kF5IYG/dDYbc4Crmdr5X8wA==
-X-Received: by 2002:a65:41cc:0:b0:380:6f53:a550 with SMTP id b12-20020a6541cc000000b003806f53a550mr20100322pgq.471.1649529695298;
-        Sat, 09 Apr 2022 11:41:35 -0700 (PDT)
+        bh=1bMmIQPCL5e+l7dlDIOHx2g7GlKBqwKdndE18CxyLT8=;
+        b=gt1SL9FstEIjcRbedub5DCBP+6uJZabvg5fCyE8SHH9bOVnh+6hWmjfunWgUWOoUDB
+         Th2SWf57UBxEi9h1ElBBt1eCLw0WRMqvkp21eRsoyhQdFE07EHsR8c0xeBRDVamln3pT
+         BgGBQrCXrjF7WiXUi2mWE/zMijoAkr5pb+RoT+NQX6jDNt0LYU2i210QtqLTrEQ7da6Y
+         PCPcEugzQLRVOlfqHzBfyL1iRxvpMJgJKxCduwcc3IufcgwMbMFOvabwrMF4WB75iYaK
+         1Ngq1kCHgDSVZHhO93zvSFyLlxiYF6vW4bC3ANwEfyN+41zDCqXE9Ln7weJHwqfNFy0g
+         SoYQ==
+X-Gm-Message-State: AOAM533xgB1860YNt2Zmjp/dxgwXwrGFQjrFgNROIbQkk1/tSnT+PosA
+        WnMYLdD3TRI5rfiZMNfrkJI=
+X-Google-Smtp-Source: ABdhPJzBBqG49i2yOD6q8h9v3tCvR/5GwxbtzG5jxlMHyxosfNSNYpJkPnqEYK45cTy4tsRM5IDCUw==
+X-Received: by 2002:a63:5710:0:b0:399:365e:5dde with SMTP id l16-20020a635710000000b00399365e5ddemr21082538pgb.192.1649529698639;
+        Sat, 09 Apr 2022 11:41:38 -0700 (PDT)
 Received: from localhost.localdomain ([122.161.51.18])
-        by smtp.gmail.com with ESMTPSA id g3-20020a63ad03000000b003821d0f0ef4sm25813933pgf.71.2022.04.09.11.41.32
+        by smtp.gmail.com with ESMTPSA id g3-20020a63ad03000000b003821d0f0ef4sm25813933pgf.71.2022.04.09.11.41.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Apr 2022 11:41:34 -0700 (PDT)
+        Sat, 09 Apr 2022 11:41:38 -0700 (PDT)
 From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -56,9 +56,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         Kuldeep Singh <singh.kuldeep87k@gmail.com>,
         linux-arm-msm@vger.kernel.org
-Subject: [PATCH 3/6] arm64: dts: qcom: msm8996: User generic node name for DMA
-Date:   Sun, 10 Apr 2022 00:11:12 +0530
-Message-Id: <20220409184115.15612-4-singh.kuldeep87k@gmail.com>
+Subject: [PATCH 4/6] ARM: dts: qcom: ipq4019: User generic node name for DMA
+Date:   Sun, 10 Apr 2022 00:11:13 +0530
+Message-Id: <20220409184115.15612-5-singh.kuldeep87k@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220409184115.15612-1-singh.kuldeep87k@gmail.com>
 References: <20220409184115.15612-1-singh.kuldeep87k@gmail.com>
@@ -79,22 +79,63 @@ Qcom BAM DT spec expects generic DMA controller node name as
 
 Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
 ---
- arch/arm64/boot/dts/qcom/msm8996.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1.dtsi | 4 ++--
+ arch/arm/boot/dts/qcom-ipq4019.dtsi           | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-index f0f81c23c16f..bbe677b9e5bf 100644
---- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-@@ -707,7 +707,7 @@ tsens1: thermal-sensor@4ad000 {
- 			#thermal-sensor-cells = <1>;
+diff --git a/arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1.dtsi b/arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1.dtsi
+index 0c10d9e096db..03bb9e1768c4 100644
+--- a/arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1.dtsi
++++ b/arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1.dtsi
+@@ -64,7 +64,7 @@ pinconf_cs {
+ 			};
  		};
  
--		cryptobam: dma@644000 {
-+		cryptobam: dma-controller@644000 {
+-		blsp_dma: dma@7884000 {
++		blsp_dma: dma-controller@7884000 {
+ 			status = "okay";
+ 		};
+ 
+@@ -89,7 +89,7 @@ serial@78af000 {
+ 			status = "okay";
+ 		};
+ 
+-		cryptobam: dma@8e04000 {
++		cryptobam: dma-controller@8e04000 {
+ 			status = "okay";
+ 		};
+ 
+diff --git a/arch/arm/boot/dts/qcom-ipq4019.dtsi b/arch/arm/boot/dts/qcom-ipq4019.dtsi
+index a9d0566a3190..258510eb30fc 100644
+--- a/arch/arm/boot/dts/qcom-ipq4019.dtsi
++++ b/arch/arm/boot/dts/qcom-ipq4019.dtsi
+@@ -233,7 +233,7 @@ sdhci: sdhci@7824900 {
+ 			status = "disabled";
+ 		};
+ 
+-		blsp_dma: dma@7884000 {
++		blsp_dma: dma-controller@7884000 {
  			compatible = "qcom,bam-v1.7.0";
- 			reg = <0x00644000 0x24000>;
- 			interrupts = <GIC_SPI 206 IRQ_TYPE_LEVEL_HIGH>;
+ 			reg = <0x07884000 0x23000>;
+ 			interrupts = <GIC_SPI 238 IRQ_TYPE_LEVEL_HIGH>;
+@@ -300,7 +300,7 @@ blsp1_i2c4: i2c@78b8000 { /* BLSP1 QUP4 */
+ 			status = "disabled";
+ 		};
+ 
+-		cryptobam: dma@8e04000 {
++		cryptobam: dma-controller@8e04000 {
+ 			compatible = "qcom,bam-v1.7.0";
+ 			reg = <0x08e04000 0x20000>;
+ 			interrupts = <GIC_SPI 207 IRQ_TYPE_LEVEL_HIGH>;
+@@ -471,7 +471,7 @@ pcie0: pci@40000000 {
+ 			status = "disabled";
+ 		};
+ 
+-		qpic_bam: dma@7984000 {
++		qpic_bam: dma-controller@7984000 {
+ 			compatible = "qcom,bam-v1.7.0";
+ 			reg = <0x7984000 0x1a000>;
+ 			interrupts = <GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>;
 -- 
 2.25.1
 

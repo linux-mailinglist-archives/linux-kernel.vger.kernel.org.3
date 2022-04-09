@@ -2,178 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F13B4FA57C
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 08:46:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2471E4FA57D
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 08:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240200AbiDIGqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 02:46:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39090 "EHLO
+        id S239270AbiDIGwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 02:52:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237637AbiDIGqG (ORCPT
+        with ESMTP id S233423AbiDIGwN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 02:46:06 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03315B6D2E
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 23:44:00 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id h5so8684356pgc.7
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 23:43:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4KIbEhpDOtCyioS8BZF5p0mGW/6SLKhNyk9CSQ+cWmo=;
-        b=mJomCgJeV+RXmlPTrKz6qrQhrHm7UDKRrcrKS4fB3ekDBuMvYloc6N3zmoewCRpve5
-         5wL2KDqW8Z+tm6tNzomwdJaRht0Ve91sWusE4dVKDHUDO7qYsjj+FJxjENUtyF7aeBAn
-         dlxb86l3upJFsQhUVQzQHMwAnzbOq3hpu68G8h/vPyJhHFbsDHrlvpzXBgmB8YrMsUU5
-         vEnxIy4If3++IMbF512A0INdexqm6swj5Y83/EA90VybgBNxHF6AGuIGFQIKy/ogAVrY
-         Fn7I8qbZ/6vMDoiFS2le7qfO1qviRbm+GcB25jK+buDGEz4Q8WoecYXCA5GlPJ+0QAlK
-         9Lcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4KIbEhpDOtCyioS8BZF5p0mGW/6SLKhNyk9CSQ+cWmo=;
-        b=nVTE6GPVUg2t6ABT8sI9fDfflSjKCt4U6A4W2NYC8i3IJINC9TrUTf6xnPNwGP2ZdZ
-         lFP/TdUVevHDfcCHsErfbYBAS0q9qT2UQzWOyitwHQb4KTHx0KPCzRfEFXSc/7njetZC
-         ll+tYHbYbVslpG0uSxiIenSY/J4fwRV85MlgL0aZ7FXZ8LOIEO1Sehj8vZpCSPvXcuG9
-         0ez9vrpoX9RsdnpSf/lwdnvGusS6SYuvvId/6v+9anW+BomslmhmS2T/SmUrpXICPiKW
-         5izT6FkcgJYRitimi3jCAtIWTr0F44OpaDj1Et3eYkZ+0aEkp0L4FywhVUoMD24dxX8H
-         23Bw==
-X-Gm-Message-State: AOAM5336EYZw1LQ5IKBa3vQ1e/wqpeCVEU8SA2wuWzujaHk6eDq5GQji
-        Nabz/JlgN/6boOW39IzvuXWifjZL3fpZpK3ejlBQKA==
-X-Google-Smtp-Source: ABdhPJxoI+Rt3FuHlytPnMV9pwghZ6eRumL6W/khQzhcnTwilPXXMAY9cLvkEbBH/0UBAvxjMbxqY66yaPmjd4OXrpc=
-X-Received: by 2002:a63:3e8d:0:b0:398:5222:3a3 with SMTP id
- l135-20020a633e8d000000b00398522203a3mr18742608pga.561.1649486639371; Fri, 08
- Apr 2022 23:43:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220408045743.1432968-1-yosryahmed@google.com>
- <20220408045743.1432968-3-yosryahmed@google.com> <CAJD7tkb6VJt=pfqnW11r6S7A0r2Vh85a3YZaVso-qyiCM06nDQ@mail.gmail.com>
- <YlDlCRSyR9xNW5dJ@carbon.dhcp.thefacebook.com>
-In-Reply-To: <YlDlCRSyR9xNW5dJ@carbon.dhcp.thefacebook.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Fri, 8 Apr 2022 23:43:23 -0700
-Message-ID: <CAJD7tkbiLQ8XV89yKDzJ467A7+=xvRMPw3pYwt+0gSnbwqBtVA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/4] selftests: cgroup: return the errno of write() in
- cg_write() on failure
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        Chen Wandun <chenwandun@huawei.com>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 9 Apr 2022 02:52:13 -0400
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4623917072
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 23:50:06 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [10.15.192.164])
+        by mail-app4 (Coremail) with SMTP id cS_KCgDn76eSLFFiSuD3AA--.47632S2;
+        Sat, 09 Apr 2022 14:49:57 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-staging@lists.linux.dev, alexander.deucher@amd.com,
+        davem@davemloft.net, gregkh@linuxfoundation.org,
+        Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH V2 06/11] drivers: staging: rtl8192bs: Fix deadlock in rtw_joinbss_event_prehandle()
+Date:   Sat,  9 Apr 2022 14:49:53 +0800
+Message-Id: <20220409064953.67420-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cS_KCgDn76eSLFFiSuD3AA--.47632S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tF15Zr48uF17JFyxAr4UCFg_yoW8trWfpF
+        Wjgwn3uF1kZr429a1kG3WDXF1Iva10gr1DJrWftws5Zrn5Zrn3ZFWUtrWaqF45tFnrXwsI
+        9r1kW3s3AF4UC3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUka1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
+        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
+        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v
+        1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgQPAVZdtZGjxwBMsP
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 8, 2022 at 6:44 PM Roman Gushchin <roman.gushchin@linux.dev> wrote:
->
-> On Fri, Apr 08, 2022 at 06:21:55PM -0700, Yosry Ahmed wrote:
-> > On Thu, Apr 7, 2022 at 9:57 PM Yosry Ahmed <yosryahmed@google.com> wrote:
-> > >
-> > > Currently, cg_write() returns 0 on success and -1 on failure. Modify it
-> > > to return the errno of write() syscall when write() fails.
-> > >
-> > > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> > > ---
-> > >  tools/testing/selftests/cgroup/cgroup_util.c | 32 +++++++++++---------
-> > >  1 file changed, 17 insertions(+), 15 deletions(-)
-> > >
-> > > diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
-> > > index dbaa7aabbb4a..3b6bb09985fa 100644
-> > > --- a/tools/testing/selftests/cgroup/cgroup_util.c
-> > > +++ b/tools/testing/selftests/cgroup/cgroup_util.c
-> > > @@ -38,23 +38,23 @@ static ssize_t read_text(const char *path, char *buf, size_t max_len)
-> > >         return len;
-> > >  }
-> > >
-> > > -static ssize_t write_text(const char *path, char *buf, ssize_t len)
-> > > +/*
-> > > + * Returns:
-> > > + *     success -> 0
-> > > + *     open() failure -> -1
-> > > + *     write() failure -> errno
-> > > + */
-> > > +static int write_text(const char *path, char *buf, ssize_t len)
-> > >  {
-> > > -       int fd;
-> > > +       int fd, ret;
-> > >
-> > >         fd = open(path, O_WRONLY | O_APPEND);
-> > >         if (fd < 0)
-> > >                 return fd;
-> > >
-> > > -       len = write(fd, buf, len);
-> > > -       if (len < 0) {
-> > > -               close(fd);
-> > > -               return len;
-> > > -       }
-> > > -
-> > > +       ret = write(fd, buf, len) < 0 ? errno : 0;
-> > >         close(fd);
-> > > -
-> > > -       return len;
-> > > +       return ret;
-> > >  }
-> > >
-> > >  char *cg_name(const char *root, const char *name)
-> > > @@ -177,17 +177,19 @@ long cg_read_lc(const char *cgroup, const char *control)
-> > >         return cnt;
-> > >  }
-> > >
-> > > +/*
-> > > + * Returns:
-> > > + *     success -> 0
-> > > + *     open() failure -> -1
-> > > + *     write() failure -> errno
-> > > + */
-> > >  int cg_write(const char *cgroup, const char *control, char *buf)
-> > >  {
-> > >         char path[PATH_MAX];
-> > >         ssize_t len = strlen(buf);
-> > >
-> > >         snprintf(path, sizeof(path), "%s/%s", cgroup, control);
-> > > -
-> > > -       if (write_text(path, buf, len) == len)
-> > > -               return 0;
-> > > -
-> > > -       return -1;
-> > > +       return write_text(path, buf, len);
-> > >  }
-> >
-> > I have changed this in v4 to a cleaner implementation that either
-> > returns 0 on success or -errno on failure. I also made sure to check
-> > that the full buffer was being written, and updated cg_read() as well
-> > for the interface to be consistent.
-> >
-> > Will send out once the discussion on patch 1 in v3 reaches a consensus.
->
-> Ok, sounds good, please feel free to add my
-> Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
-> for the whole series. It looks really nice and ready for merging upstream to me.
->
-> Thanks!
+There is a deadlock in rtw_joinbss_event_prehandle(), which is shown
+below:
 
-Thanks a lot for reviewing it! I would appreciate it if you still took
-a look at the v4 version of this patch when I send it (probably early
-next week) as it's significantly different and includes changes to
-cg_read() and read_text() as well.
+   (Thread 1)                |      (Thread 2)
+                             | _set_timer()
+rtw_joinbss_event_prehandle()|  mod_timer()
+ spin_lock_bh() //(1)        |  (wait a time)
+ ...                         | _rtw_join_timeout_handler()
+ del_timer_sync()            |  spin_lock_bh() //(2)
+ (wait timer to stop)        |  ...
+
+We hold pmlmepriv->lock in position (1) of thread 1 and
+use del_timer_sync() to wait timer to stop, but timer handler
+also need pmlmepriv->lock in position (2) of thread 2.
+As a result, rtw_joinbss_event_prehandle() will block forever.
+
+This patch extracts del_timer_sync() from the protection of
+spin_lock_bh(), which could let timer handler to obtain
+the needed lock. What`s more, we change spin_lock_bh() to
+spin_lock_irq() in _rtw_join_timeout_handler() in order to
+prevent deadlock.
+
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+Changes in V2:
+  - Change spin_lock_bh() to spin_lock_irq() in
+    _rtw_join_timeout_handler().
+
+ drivers/staging/rtl8723bs/core/rtw_mlme.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/staging/rtl8723bs/core/rtw_mlme.c b/drivers/staging/rtl8723bs/core/rtw_mlme.c
+index 62f140985e3..24d6af886f7 100644
+--- a/drivers/staging/rtl8723bs/core/rtw_mlme.c
++++ b/drivers/staging/rtl8723bs/core/rtw_mlme.c
+@@ -1240,8 +1240,10 @@ void rtw_joinbss_event_prehandle(struct adapter *adapter, u8 *pbuf)
+ 
+ 			spin_unlock_bh(&pmlmepriv->scanned_queue.lock);
+ 
++			spin_unlock_bh(&pmlmepriv->lock);
+ 			/* s5. Cancel assoc_timer */
+ 			del_timer_sync(&pmlmepriv->assoc_timer);
++			spin_lock_bh(&pmlmepriv->lock);
+ 		} else {
+ 			spin_unlock_bh(&(pmlmepriv->scanned_queue.lock));
+ 		}
+@@ -1547,7 +1549,7 @@ void _rtw_join_timeout_handler(struct timer_list *t)
+ 	if (adapter->bDriverStopped || adapter->bSurpriseRemoved)
+ 		return;
+ 
+-	spin_lock_bh(&pmlmepriv->lock);
++	spin_lock_irq(&pmlmepriv->lock);
+ 
+ 	if (rtw_to_roam(adapter) > 0) { /* join timeout caused by roaming */
+ 		while (1) {
+@@ -1575,7 +1577,7 @@ void _rtw_join_timeout_handler(struct timer_list *t)
+ 
+ 	}
+ 
+-	spin_unlock_bh(&pmlmepriv->lock);
++	spin_unlock_irq(&pmlmepriv->lock);
+ }
+ 
+ /*
+-- 
+2.17.1
+

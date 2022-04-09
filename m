@@ -2,57 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C76184FA12A
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 03:39:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46E434FA12F
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 03:39:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240511AbiDIBbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 21:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45666 "EHLO
+        id S240473AbiDIBbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 21:31:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240400AbiDIBa0 (ORCPT
+        with ESMTP id S240393AbiDIBaZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 21:30:26 -0400
+        Fri, 8 Apr 2022 21:30:25 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765A4118661;
-        Fri,  8 Apr 2022 18:27:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F363193F1;
+        Fri,  8 Apr 2022 18:27:42 -0700 (PDT)
 Date:   Sat, 09 Apr 2022 01:27:40 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649467662;
+        s=2020; t=1649467661;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=TtsK9jOzHJeRr5Z6QvFU2509e8uykkDBpfaap+m00lc=;
-        b=nDYEe6SmIX3nddo7JkduwZMbtJOVESsNIRE/xXFZv5CQdxjWaZq1WUqSloQFZropNTqApB
-        LpLqJ3YFf2Wu+9tTL66OGSDJBltHZj9NWFP35FYy0OW5eobAOrGPSLYFV+1OcCpVSKnDq/
-        DROzlCE6PBaHRmlI3u+vXPpjoo3H5CwJgptrOW1+DFgec+ysgoqm/yXo3PYIr7wnbYhzso
-        RLyosBpFPE9BpPuDj99vZjlEertRDMwpGa9lGxiWmIz/hKbUGWV3pI7UOyeL2u7311OMgE
-        7OQmpfAHTX5Ax3UG34xzj4MRduyjutKhfxztgPbYWLt9obfkCSiltDQk3xCLhw==
+        bh=DIamPipLa2HMu6qbtf3UAGy0nEC+13pjmiWwezcteHo=;
+        b=KK9DrPC2KKMlNIwhkIlT31lDTJjxg/QBUTSjCyMc3ywPzshFDDlq14k+BvQvGXk27eVnZP
+        JJ+N9l8/Vg5D7yc6VnRlyKXeegiyQumurr6d2L1j98+3Cbmh0Ih0NNWEusLexl+6seQoOd
+        iTFHqju1qVcTVJf9Qw7rHGz+KJVWcBjD+e7+Jn+kTV5yazfw/StH6y9NJFqUuBueaIbtp6
+        uREPtsInAgkvAX2FRmVkE/fCmF246DlmMNWOpW5LtugLS1waOsdnFbRF6yQT6g7f9deMCR
+        zYLnHQAzTCP/hVlTRxFZ2CBwuf2DPTCK//10yVoO/ULEdPMmFe7q3CXXmDGDsg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649467662;
+        s=2020e; t=1649467661;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=TtsK9jOzHJeRr5Z6QvFU2509e8uykkDBpfaap+m00lc=;
-        b=aL+bzKm05/H76paVTQOIADhAypuDKaWIoWYoNzMpAyoRV8159U1CwGRIpGuhykunb+GJbi
-        U9H+eAnR+FvEF8Dg==
+        bh=DIamPipLa2HMu6qbtf3UAGy0nEC+13pjmiWwezcteHo=;
+        b=JhzzKNfpp8uMuONtbhimo2MAq3Fozn+FNKpTV36wPB1LKT53XssOPnwg1Rwx6ggByB/Zj0
+        IFLRUmxN06bu3/Cg==
 From:   "tip-bot2 for Kirill A. Shutemov" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/tdx] x86/tdx: Extend the confidential computing API to
- support TDX guests
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+Subject: [tip: x86/tdx] x86/tdx: Exclude shared bit from __PHYSICAL_MASK
+Cc:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@suse.de>, x86@kernel.org,
+        Andi Kleen <ak@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220405232939.73860-5-kirill.shutemov@linux.intel.com>
-References: <20220405232939.73860-5-kirill.shutemov@linux.intel.com>
+In-Reply-To: <20220405232939.73860-6-kirill.shutemov@linux.intel.com>
+References: <20220405232939.73860-6-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
-Message-ID: <164946766092.4207.2489904492168561416.tip-bot2@tip-bot2>
+Message-ID: <164946766003.4207.16570460228314176239.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,158 +72,69 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/tdx branch of tip:
 
-Commit-ID:     41394e33f3a0ce791caf0e086e1fca850832ddec
-Gitweb:        https://git.kernel.org/tip/41394e33f3a0ce791caf0e086e1fca850832ddec
+Commit-ID:     65fab5bc033aad1a9faf976caec46558c2f88319
+Gitweb:        https://git.kernel.org/tip/65fab5bc033aad1a9faf976caec46558c2f88319
 Author:        Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-AuthorDate:    Wed, 06 Apr 2022 02:29:13 +03:00
+AuthorDate:    Wed, 06 Apr 2022 02:29:14 +03:00
 Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Thu, 07 Apr 2022 08:27:50 -07:00
+CommitterDate: Thu, 07 Apr 2022 08:27:51 -07:00
 
-x86/tdx: Extend the confidential computing API to support TDX guests
+x86/tdx: Exclude shared bit from __PHYSICAL_MASK
 
-Confidential Computing (CC) features (like string I/O unroll support,
-memory encryption/decryption support, etc) are conditionally enabled
-in the kernel using cc_platform_has() API. Since TDX guests also need
-to use these CC features, extend cc_platform_has() API and add TDX
-guest-specific CC attributes support.
+In TDX guests, by default memory is protected from host access. If a
+guest needs to communicate with the VMM (like the I/O use case), it uses
+a single bit in the physical address to communicate the protected/shared
+attribute of the given page.
 
-CC API also provides an interface to deal with encryption mask. Extend
-it to cover TDX.
+In the x86 ARCH code, __PHYSICAL_MASK macro represents the width of the
+physical address in the given architecture. It is used in creating
+physical PAGE_MASK for address bits in the kernel. Since in TDX guest,
+a single bit is used as metadata, it needs to be excluded from valid
+physical address bits to avoid using incorrect addresses bits in the
+kernel.
 
-Details about which bit in the page table entry to be used to indicate
-shared/private state is determined by using the TDINFO TDCALL.
+Enable DYNAMIC_PHYSICAL_MASK to support updating the __PHYSICAL_MASK.
 
+Co-developed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
-Reviewed-by: Borislav Petkov <bp@suse.de>
-Link: https://lkml.kernel.org/r/20220405232939.73860-5-kirill.shutemov@linux.intel.com
+Reviewed-by: Andi Kleen <ak@linux.intel.com>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+Link: https://lkml.kernel.org/r/20220405232939.73860-6-kirill.shutemov@linux.intel.com
 ---
- arch/x86/Kconfig        |  1 +-
- arch/x86/coco/core.c    | 12 ++++++++++-
- arch/x86/coco/tdx/tdx.c | 47 ++++++++++++++++++++++++++++++++++++++++-
- 3 files changed, 60 insertions(+)
+ arch/x86/Kconfig        | 1 +
+ arch/x86/coco/tdx/tdx.c | 8 ++++++++
+ 2 files changed, 9 insertions(+)
 
 diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 4ae2732..984315c 100644
+index 984315c..aea4cc4 100644
 --- a/arch/x86/Kconfig
 +++ b/arch/x86/Kconfig
-@@ -882,6 +882,7 @@ config INTEL_TDX_GUEST
- 	bool "Intel TDX (Trust Domain Extensions) - Guest Support"
+@@ -883,6 +883,7 @@ config INTEL_TDX_GUEST
  	depends on X86_64 && CPU_SUP_INTEL
  	depends on X86_X2APIC
-+	select ARCH_HAS_CC_PLATFORM
+ 	select ARCH_HAS_CC_PLATFORM
++	select DYNAMIC_PHYSICAL_MASK
  	help
  	  Support running as a guest under Intel TDX.  Without this support,
  	  the guest kernel can not boot or run under TDX.
-diff --git a/arch/x86/coco/core.c b/arch/x86/coco/core.c
-index fc1365d..3f30087 100644
---- a/arch/x86/coco/core.c
-+++ b/arch/x86/coco/core.c
-@@ -87,9 +87,18 @@ EXPORT_SYMBOL_GPL(cc_platform_has);
- 
- u64 cc_mkenc(u64 val)
- {
-+	/*
-+	 * Both AMD and Intel use a bit in the page table to indicate
-+	 * encryption status of the page.
-+	 *
-+	 * - for AMD, bit *set* means the page is encrypted
-+	 * - for Intel *clear* means encrypted.
-+	 */
- 	switch (vendor) {
- 	case CC_VENDOR_AMD:
- 		return val | cc_mask;
-+	case CC_VENDOR_INTEL:
-+		return val & ~cc_mask;
- 	default:
- 		return val;
- 	}
-@@ -97,9 +106,12 @@ u64 cc_mkenc(u64 val)
- 
- u64 cc_mkdec(u64 val)
- {
-+	/* See comment in cc_mkenc() */
- 	switch (vendor) {
- 	case CC_VENDOR_AMD:
- 		return val & ~cc_mask;
-+	case CC_VENDOR_INTEL:
-+		return val | cc_mask;
- 	default:
- 		return val;
- 	}
 diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-index 4b57880..96b2611 100644
+index 96b2611..e84f6dd 100644
 --- a/arch/x86/coco/tdx/tdx.c
 +++ b/arch/x86/coco/tdx/tdx.c
-@@ -5,8 +5,12 @@
- #define pr_fmt(fmt)     "tdx: " fmt
+@@ -89,5 +89,13 @@ void __init tdx_early_init(void)
+ 	cc_mask = get_cc_mask();
+ 	cc_set_mask(cc_mask);
  
- #include <linux/cpufeature.h>
-+#include <asm/coco.h>
- #include <asm/tdx.h>
- 
-+/* TDX module Call Leaf IDs */
-+#define TDX_GET_INFO			1
-+
- /*
-  * Wrapper for standard use of __tdx_hypercall with no output aside from
-  * return code.
-@@ -31,8 +35,47 @@ void __tdx_hypercall_failed(void)
- 	panic("TDVMCALL failed. TDX module bug?");
- }
- 
-+/*
-+ * Used for TDX guests to make calls directly to the TD module.  This
-+ * should only be used for calls that have no legitimate reason to fail
-+ * or where the kernel can not survive the call failing.
-+ */
-+static inline void tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
-+				   struct tdx_module_output *out)
-+{
-+	if (__tdx_module_call(fn, rcx, rdx, r8, r9, out))
-+		panic("TDCALL %lld failed (Buggy TDX module!)\n", fn);
-+}
-+
-+static u64 get_cc_mask(void)
-+{
-+	struct tdx_module_output out;
-+	unsigned int gpa_width;
-+
 +	/*
-+	 * TDINFO TDX module call is used to get the TD execution environment
-+	 * information like GPA width, number of available vcpus, debug mode
-+	 * information, etc. More details about the ABI can be found in TDX
-+	 * Guest-Host-Communication Interface (GHCI), section 2.4.2 TDCALL
-+	 * [TDG.VP.INFO].
++	 * All bits above GPA width are reserved and kernel treats shared bit
++	 * as flag, not as part of physical address.
 +	 *
-+	 * The GPA width that comes out of this call is critical. TDX guests
-+	 * can not meaningfully run without it.
++	 * Adjust physical mask to only cover valid GPA bits.
 +	 */
-+	tdx_module_call(TDX_GET_INFO, 0, 0, 0, 0, &out);
-+
-+	gpa_width = out.rcx & GENMASK(5, 0);
-+
-+	/*
-+	 * The highest bit of a guest physical address is the "sharing" bit.
-+	 * Set it for shared pages and clear it for private pages.
-+	 */
-+	return BIT_ULL(gpa_width - 1);
-+}
-+
- void __init tdx_early_init(void)
- {
-+	u64 cc_mask;
- 	u32 eax, sig[3];
- 
- 	cpuid_count(TDX_CPUID_LEAF_ID, 0, &eax, &sig[0], &sig[2],  &sig[1]);
-@@ -42,5 +85,9 @@ void __init tdx_early_init(void)
- 
- 	setup_force_cpu_cap(X86_FEATURE_TDX_GUEST);
- 
-+	cc_set_vendor(CC_VENDOR_INTEL);
-+	cc_mask = get_cc_mask();
-+	cc_set_mask(cc_mask);
++	physical_mask &= cc_mask - 1;
 +
  	pr_info("Guest detected\n");
  }

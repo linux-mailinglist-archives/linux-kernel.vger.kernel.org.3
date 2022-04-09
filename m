@@ -2,81 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B1A4FA538
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 07:44:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0062F4FA53A
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 07:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238097AbiDIFqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 01:46:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45172 "EHLO
+        id S236042AbiDIFtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 01:49:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiDIFqE (ORCPT
+        with ESMTP id S232726AbiDIFts (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 01:46:04 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E7B2A03ED
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 22:43:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649483038; x=1681019038;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=By0MpIlVHngS6o2onufHLva0kYouUV5umlgSpRk+4ow=;
-  b=MmK5idskcQn2HsufP3WwIGtksZ+5IasdJE6fXs/KLU/am01vjDHJZAfU
-   E1ZHmeI/fO2FF2VbbZLxwkK057Pu6Qr/9Nl+CVEzWjrf/I9lX54tUqWbL
-   HoFb/OEgQnoJnKkWQwcCyh2RxDA8boVR1i0RKlCM9i0j0G5Gciqc7MxfK
-   BhId6z9/zKOElTSoOdswycBmJgZbBlDj9VKPJuM8w27S5idEaLF5lbtPG
-   I6REzVt6N9WCenxSc+jFBgK2jw+ZB3mV+KOYz3fXU5SWHHe2bqOjsNfTP
-   YNIZNXohPbXKlIFKGkjISA2Ud4GicAGwsGsHJ/+0hfHxVG2M5XVciPbDd
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="261942992"
-X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
-   d="scan'208";a="261942992"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 22:43:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
-   d="scan'208";a="610073255"
-Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 08 Apr 2022 22:43:57 -0700
-Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nd3t6-0000v3-RT;
-        Sat, 09 Apr 2022 05:43:56 +0000
-Date:   Sat, 9 Apr 2022 13:43:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     James Morse <james.morse@arm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [morse:mpam/snapshot/v5.17 135/137] fs/resctrl/rdtgroup.c:829:2-3:
- Unneeded semicolon
-Message-ID: <202204091338.vxPar47H-lkp@intel.com>
+        Sat, 9 Apr 2022 01:49:48 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E8D21813;
+        Fri,  8 Apr 2022 22:47:42 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kb3zw5D7zz4xR1;
+        Sat,  9 Apr 2022 15:47:40 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1649483261;
+        bh=TlaRdfUL8TWbLMMzPZD0xEBDDFHBJrTDLpIKVVNj178=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=fPK4RELuP0u27nws7S8gbegJTKMd1Y2PdBV9buGZSO9NT+IpunltMIwLVx2cbb6Vu
+         /zEPh1lTT46QWc4strsezvGPgdDL48vh4G9u4uKIlVrRkYFdeElgajJgDDJtV8ZYTK
+         htGJSJnklZcpYumnd7ierIq2n+KRHgJsvacirZPBnortbbCam+9ag/W7dElei1rBaP
+         dhD35l/6hHhh2PLuyEQtjZMmeXXDtJkU6J9mtS6JMZ1spbFR1fanxgP/90P1j6QqWp
+         XWFt8FF28cbJRIGvxlOnRV9pDXqPGaPO3nTeE91+77+g2OILFgNTIMGETOXIrgEImp
+         FeZGRiPFL7qkQ==
+Date:   Sat, 9 Apr 2022 15:47:39 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Moritz Fischer <mdf@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
+        Xu Yilun <yilun.xu@intel.com>, Wu Hao <hao.wu@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] MAINTAINERS: Update linux-fpga repository location
+Message-ID: <20220409154739.1a85472d@canb.auug.org.au>
+In-Reply-To: <20220408022002.22957-1-mdf@kernel.org>
+References: <20220408022002.22957-1-mdf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/WQolCI/D+ghByf=zJPnB8M6";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git mpam/snapshot/v5.17
-head:   fb7499c2de17b6b98e0e3ac5b7b023bfc5a6f3a4
-commit: add9f185ed2abdcd1edf0d784e7ece998165a5a5 [135/137] untested: fs/resctrl: Add support for assigning iommu_groups to resctrl groups
-config: x86_64-randconfig-c022 (https://download.01.org/0day-ci/archive/20220409/202204091338.vxPar47H-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
+--Sig_/WQolCI/D+ghByf=zJPnB8M6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Hi Moritz,
 
+On Thu,  7 Apr 2022 19:20:02 -0700 Moritz Fischer <mdf@kernel.org> wrote:
+>
+> As maintainer team we have decided to move the linux-fpga development
+> to a shared repository with shared access.
+>=20
+> Cc: Xu Yilun <yilun.xu@intel.com>
+> Cc: Wu Hao <hao.wu@intel.com>
+> Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Moritz Fischer <mdf@kernel.org>
+> ---
+>=20
+> Hi Stephen,
+>=20
+> can you help us update the linux-next part accordingly?
 
-cocci warnings: (new ones prefixed by >>)
->> fs/resctrl/rdtgroup.c:829:2-3: Unneeded semicolon
+I have done so, but you forgot to create the "fixes" branch in the new
+tree.  Also, did you want more contacts listed for the tree (apart from
+yourself)?
 
-Please review and possibly fold the followup patch.
+--=20
+Cheers,
+Stephen Rothwell
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--Sig_/WQolCI/D+ghByf=zJPnB8M6
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEyBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJRHfwACgkQAVBC80lX
+0GyTCwf4ii8zjQxzZDEYqzmMEHVKA4LxEryf5XPk2FaCwOV0/wdQckKjG0aYFL84
+H+P0skRzpR2pY10LMPVi7Tc8CJfBeKjf4fhr5wZQmVqAqhdcOFODhPd6jH9AJQzY
+yFu6qiqBSHsoqZivtH58cjQASw+t0GW0KfJR9Pw5vqKGMMeQq0kqpAo5gBARhSsX
+SlyU9KklrqQlMTBqRxJwcjv4N+uGcKIrEwimBwxIUZ1G5G3NcCEgTENfJumMBWMz
+2xLlg1qbuLk1H47ElHa40ZK1h5etQ4OzkwkAHfs2OQdLs3l0sLeOfdiMSl8zYvW+
+DesxyLwgBQt2oDZjFvEcIPFQDSUv
+=P4na
+-----END PGP SIGNATURE-----
+
+--Sig_/WQolCI/D+ghByf=zJPnB8M6--

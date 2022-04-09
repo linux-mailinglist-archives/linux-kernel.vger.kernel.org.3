@@ -2,146 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A9FC4FA235
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 06:07:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3B04FA239
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 06:13:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240724AbiDIEJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 00:09:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52762 "EHLO
+        id S238173AbiDIEPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 00:15:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231236AbiDIEJT (ORCPT
+        with ESMTP id S230083AbiDIEPC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 00:09:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAAF5C0B
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 21:07:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BE7860A1B
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 04:07:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67EE7C385A4;
-        Sat,  9 Apr 2022 04:07:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1649477230;
-        bh=9rN5m4lI0oo91HwX0H51G1AD32a+RVoqZlgugsuLU+0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=UTG2Lg/6h6VFTMDPuqpCHxzHxyi5l4Vk+mpCUhFbROzj6kMB+yTxkHo0/ONCSUjQq
-         v9EIUpHkK/Tm5ptyU7CcDzYsflLTl6MBjwm3PcKVQLB/9MT8GRnzlDU9S2v6uBWK16
-         s27ZdxG4Qy+CVYjn/n1BW+MJEKNNtEy3HbG1Wr3w=
-Date:   Fri, 8 Apr 2022 21:07:09 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Huang Ying <ying.huang@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@techsingularity.net>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Michal Hocko <mhocko@suse.com>,
-        Rik van Riel <riel@surriel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Yang Shi <shy828301@gmail.com>, Zi Yan <ziy@nvidia.com>,
-        Wei Xu <weixugc@google.com>, osalvador <osalvador@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        Zhong Jiang <zhongjiang-ali@linux.alibaba.com>
-Subject: Re: [PATCH 0/3] memory tiering: hot page selection
-Message-Id: <20220408210709.ce4ede3a9c778700dda0a292@linux-foundation.org>
-In-Reply-To: <20220408071222.219689-1-ying.huang@intel.com>
-References: <20220408071222.219689-1-ying.huang@intel.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 9 Apr 2022 00:15:02 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD2238BDC
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 21:12:51 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id CF6E33201DE8;
+        Sat,  9 Apr 2022 00:12:48 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Sat, 09 Apr 2022 00:12:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
+         h=cc:cc:content-transfer-encoding:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm1; bh=SnrLR3Sr37N2IK+ovWdtsG2oHIe46e1XW5qxi2
+        8NvZs=; b=YyY0CKkeBs4TQ4eVNBXIMFQgjcC5X1ynOl+Y0Wz3ICfay3DcPhl/sZ
+        akpkNVCR00i00WOOadJ+MBubnLhswKK21AcXcuWQgQFcN/i1EHavkIjZRS4Rnt+8
+        1qzeIPmoLQjax6TFcFKdadzGTf1NGnw3KgTkja7TD14GVV0Hb6xb57A0BsHHtrbP
+        lR7Ek8bhbeHPOhEnLwX9EVXXl7W/wuvPweDL+dw5L187xN5Di7ZkulzCsgqPNjuk
+        p/+rDNbocBnEKsUvDBnLqiTGOVH76V4xf+FvSY84JBR0/3QbSTGY784vVyqeynYG
+        VUg0j0SOIn/FSBw8kJSqN5rEMP/xhwPQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm3; bh=SnrLR3Sr37N2IK+ovWdtsG2oHIe46
+        e1XW5qxi28NvZs=; b=nK3P+zeW/T8wQL+Vg/eByQMkQFCjo6lpIqCE5RfyvRiS3
+        wTcnh8817kj/hYjuDKKfTCo+fy/M1TSWiE747Ku8qOCzAPdYOLMOCjekoMiKjvSg
+        PMCj2ztPqLFCGyvqrIg1UEQW3Fix/8WG0pQu5iV9455d/NqItzG+GBc6ql/qWjxe
+        uIEYZvvi+K5+qb1PvHSC2qhqP35uQxUhCJ7R3DH/2h2TpTUZGVFS7hjg1PZtke6h
+        8JhKvSj5/oUoEmK2wqtyKY1QyFIEPRxdXRR0w1vB4iLAsXhO7T9beJzCE3/T3dKx
+        jcYCBeIyguz+nJRWtlCnhdpldQzCnlt8QaYWMXc4A==
+X-ME-Sender: <xms:vwdRYn4yV8TT6W6H_b6oQP5UorSd1RvtwO6upMN3gLSRm64T0vEK1w>
+    <xme:vwdRYs7PmwhsDOfoRNKjtFvj9En01kFezXCxYyuIqr__J08DOD8HJwXuXX48fOdm6
+    fJzgdOSKTotfIAjvpg>
+X-ME-Received: <xmr:vwdRYufmUtSkCKOiYrZxaD-hyEGVITvP9A8VTmyPpVlAHWIXULyN-x9_Lv-EDw7-aIoLu3AVs_gEKh90Aqp0sopvUm-kgT1gG7UIbZwXGbV2Q7A8efY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudekuddgjeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvffufffkofgggfestdekredtre
+    dttdenucfhrhhomhepvfgrkhgrshhhihcuufgrkhgrmhhothhouceoohdqthgrkhgrshhh
+    ihesshgrkhgrmhhotggthhhirdhjpheqnecuggftrfgrthhtvghrnhepteeiuefhjeekke
+    efheetieekvdegfefhgffgvdeiheehhfehiedvhffgjeejuddunecuffhomhgrihhnpehk
+    vghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
+    hlfhhrohhmpehoqdhtrghkrghshhhisehsrghkrghmohgttghhihdrjhhp
+X-ME-Proxy: <xmx:wAdRYoJGl1alGqvkd6Z_2H7mtoj3cWK4cBCJY4nmJkTMouF2ARwJrA>
+    <xmx:wAdRYrKV3b-w9kFXGWEWwymTSuu0bCVVEZ2IeRVyWvQ3u9Xffs9rRg>
+    <xmx:wAdRYhxF1aKVxyUkvK965n7LcmSlnyU2DTEe3e_EmV_7np2Fg2mvWQ>
+    <xmx:wAdRYiXnDkm2a3HrgxRukcapBjsMZmaOqhKyYYXRsEkAwkD1B2aw3g>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 9 Apr 2022 00:12:46 -0400 (EDT)
+From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
+To:     tiwai@suse.de
+Cc:     linux1394-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: [PATCH 0/3] firewire: fixes for kernel v4.9 or later
+Date:   Sat,  9 Apr 2022 13:12:40 +0900
+Message-Id: <20220409041243.603210-1-o-takashi@sakamocchi.jp>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  8 Apr 2022 15:12:19 +0800 Huang Ying <ying.huang@intel.com> wrote:
+Hi,
 
-> To optimize page placement in a memory tiering system with NUMA
-> balancing, the hot pages in the slow memory node need to be
-> identified.  Essentially, the original NUMA balancing implementation
-> selects and promote the mostly recently accessed (MRU) pages.  But the
-> recently accessed pages may be cold.
+This patchset respins patches posted before to fix some bugs for Linux
+FireWire subsystem. I expect them to be sent to Linus via pull request
+by maintainer of Linux sound subsystem since the path appears to be
+available after a short conversation with the maintainer. This patchset
+is expected to be applied to 'for-linus' branch for v5.18 kernel, and
+to stable kernels based on v4.9 or later.
 
-Wait.  What.  How on earth could the most recently accessed page be
-considered "cold"?
+This patchset includes below patches:
 
-Changelog needs work, please.
+* [PATCH V2] drivers/firewire: use struct_size over open coded arithmetic
+    * https://lore.kernel.org/lkml/20220210060805.1608198-1-chi.minghao@zte.com.cn/
+* [PATCH] firewire: core: extend card->lock in fw_core_handle_bus_reset
+    * https://lore.kernel.org/lkml/20220303183038.54126-1-dossche.niels@gmail.com/
+* [PATCH] firewire: remove check of list iterator against head past the loop body
+    * https://lore.kernel.org/lkml/20220331223601.902329-1-jakobkoschel@gmail.com/
 
-> So in this patchset, we
-> implement a new hot page identification algorithm based on the latency
-> between NUMA balancing page table scanning and hint page fault.
+Chengfeng Ye (1):
+  firewire: fix potential uaf in outbound_phy_packet_callback()
 
-That sounds reasonable.
+Jakob Koschel (1):
+  firewire: remove check of list iterator against head past the loop
+    body
 
-> And the hot page promotion can incur some overhead in the system.  To
-> control the overhead a simple promotion rate limit mechanism is
-> implemented.
+Niels Dossche (1):
+  firewire: core: extend card->lock in fw_core_handle_bus_reset
 
-That sounds like a hack to fix a problem you just added?  Maybe a
-reasonable one..
+ drivers/firewire/core-card.c        |  3 +++
+ drivers/firewire/core-cdev.c        |  4 +++-
+ drivers/firewire/core-topology.c    |  9 +++------
+ drivers/firewire/core-transaction.c | 30 +++++++++++++++--------------
+ drivers/firewire/sbp2.c             | 13 +++++++------
+ 5 files changed, 32 insertions(+), 27 deletions(-)
 
-> The hot threshold used to identify the hot pages is workload dependent
-> usually.  So we also implemented a hot threshold automatic adjustment
-> algorithm.  The basic idea is to increase/decrease the hot threshold
-> to make the number of pages that pass the hot threshold (promote
-> candidate) near the rate limit.
-
-hot threshold is tweakable via debugfs.  So it's an unstable interface,
-undocumented, may be withdrawn at any time, etc.
-
-Please justify this.  Is it intended that this interface be removed? 
-If yes, please describe the plan for this in the changelog.  If no then
-this interface should be in sysfs, it should be fully documented in the
-kernel tree and it should be fully changelogged (preferably with usage
-examples) so that reviewers can best understand what is a permanent
-extension to the kernel API which we must maintain for all time.
-
-
-
-Does this code build correctly if !LAST_CPUPID_NOT_IN_PAGE_FLAGS?
-
-
-> TODO: Add ABI document for new sysctl knob.
-
-um, yes.
-
-
-check_cpupid() is a poor function name.  Check for what?  Liver damage?
-A better identifier would be cpupid_valid(), perhaps.  And perhaps it
-should be implemented in mm.h.  And even documented.
-
-
-Oddly, the proposed changes do a decent job of documenting
-intra-function changes but a poor job of documenting newly added
-functions.  Please review every new function and decide whether it is
-so simple and obvious that it can be added to Linux without any inline
-description at all.  
-
-pgdat_free_space_enough() and  numa_hint_fault_latency().
-
-numa_migration_check_rate_limit() particularly.  There's that "check"
-word again.  Check for what?
-
-
-
-The numa_balancing_rate_limit_mbps sysctl.  I assume "b" means "bytes".
-That's better than "pages", but still.  Machines vary a lot in how
-many bytes they have and in the speed at which they process those
-bytes.  Is there some metric which we can use here which at least
-partially insulates us from this variability?  So that sysadmins don't
-need to set all their machines differently, based upon their size and
-speed?
-
-
-numa_threshold_ts is apparently in units of jiffies.  This was not
-documented at the definition site, and it should be.  But jiffies can
-vary between machines and configs.  Why add this inter-machine and
-inter-config uncertainty/variability when we have include/linux/ktime.h?
-
-
+-- 
+2.34.1
 

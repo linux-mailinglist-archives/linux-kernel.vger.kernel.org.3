@@ -2,131 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46EBA4FA8F1
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 16:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6486B4FA905
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 16:33:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238989AbiDIO33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 10:29:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35580 "EHLO
+        id S233918AbiDIOfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 10:35:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiDIO31 (ORCPT
+        with ESMTP id S242338AbiDIOf1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 10:29:27 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894F4C49
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 07:27:19 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id g20so13071953edw.6
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 07:27:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=VnRqAxbBSJiOT0qnggIVf3Uo/0FEFMXAxgN78+BZAGA=;
-        b=kwBSLc6wR8xpV8lonIJ07GU/O0s570O8AqLJ9/YhVJx3j0vrexLv1sPXKQUIu+YB5m
-         Z/l1QRYCYKshHTLufUNZYr5SjhLhUas6xPBvR5nI9zWlr4u+q5Y00pUswmG8ce67QLjy
-         8fY8d6JJDvuWvmm7tKcBbY5f/JZNvWXrWdv9cqn2QnOJwdm4aVn3yX0ePzJgBkCQDsaI
-         cW7rVwZtD5fH8Bcmy5PHrRrrSr4+Vo9KcvOTBVEW2zI8qG/qQNotURH9lHdhuZ04VmPO
-         go3KKcPU35O9/ZRly0kJBroHo9qI27wr0HzfmiLI4k4Vie+jSlwSbEeMDK/DK5KWiQ5u
-         A2eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=VnRqAxbBSJiOT0qnggIVf3Uo/0FEFMXAxgN78+BZAGA=;
-        b=yFVsZKmbFBkAke0mI7mn3jIYgHZowNn+UTDiv06favE6gRIHdI56n4SUIDn4q+fueh
-         ED2L7vMsOQWEx4DKxKqzvb6T4o/BxCpb7U4uzJgkHuM/O8hQnFyjAYpX4xDgVF0Fkv9X
-         cyUpfCfbhzrU2kmUfy5L4PmY9ulcsuyXR8P8GFp7fXQnU8zLIbCHz4DX+YZi+ooledIH
-         o2kap35I5QpXpuEW5E6BijpA72Mu4E4DOXgi5v2KsV0EAdgKeb+WhTSfW5WkeAXXr9fm
-         LB7Qe/eeK5qDDv6SlVvx0sIvflZStRwZX3T+EKJpQTHBbmUPNBw43TiIs8H0kCfxZ9wV
-         dsow==
-X-Gm-Message-State: AOAM533KGFxywnymLBeszGuDTIh5RDkFMw+ogQ/hg1tCun8eFlLOCOCl
-        6H1JrZZBVDNg+q2J/L7wync=
-X-Google-Smtp-Source: ABdhPJzTUgfQOGe92yo7zilHLXxu6T6oEquhi3ZjKO0CdO2hjB40oOgTPTVfjPB2CJk0W/EIuH/8Dw==
-X-Received: by 2002:a05:6402:440d:b0:412:9e8a:5e51 with SMTP id y13-20020a056402440d00b004129e8a5e51mr24747197eda.362.1649514438081;
-        Sat, 09 Apr 2022 07:27:18 -0700 (PDT)
-Received: from ?IPV6:2a02:908:1252:fb60:1f4f:2923:d7f1:41f2? ([2a02:908:1252:fb60:1f4f:2923:d7f1:41f2])
-        by smtp.gmail.com with ESMTPSA id a12-20020a170906468c00b006e874be7420sm553215ejr.60.2022.04.09.07.27.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 09 Apr 2022 07:27:17 -0700 (PDT)
-Message-ID: <4d0cbb79-4955-a3ed-4aa2-7f6cdaa00481@gmail.com>
-Date:   Sat, 9 Apr 2022 16:27:17 +0200
+        Sat, 9 Apr 2022 10:35:27 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2770637AA7;
+        Sat,  9 Apr 2022 07:33:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1649514793;
+        bh=8hN+2AVbFXleT27mHGzC218qFEUyVtCqOPDIaAbNPX0=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=VYtBQJ4ZBZgI2YKC51XQHYkbw2j5rDmErWTNFYKXbXO3ZXAYDGhXezPvSqnP7vQBm
+         ZtzisTD6h/05mU9+ZLcvA5w+YxM7TBt9PfZYh/GB+FnnnAt92QMYsun3z/1EoEFmfH
+         9V63dxMcGk+wfmBT2+kn+ueKToa68O2qYITDZlNs=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([78.35.207.192]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MzQgC-1nqJDs3vvs-00vPuC; Sat, 09
+ Apr 2022 16:33:12 +0200
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     openbmc@lists.ozlabs.org
+Cc:     Joel Stanley <joel@jms.id.au>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ARM: dts: nuvoton: Add missing aliases for serial0/serial1
+Date:   Sat,  9 Apr 2022 16:33:09 +0200
+Message-Id: <20220409143309.2446741-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [Bug][5.18-rc0] Between commits ed4643521e6a and 34af78c4e616,
- appears warning "WARNING: CPU: 31 PID: 51848 at
- drivers/dma-buf/dma-fence-array.c:191 dma_fence_array_create+0x101/0x120" and
- some games stopped working.
-Content-Language: en-US
-To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Cc:     thomas.hellstrom@linux.intel.com,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        "Deucher, Alexander" <alexander.deucher@amd.com>, Ken.Xue@amd.com
-References: <CABXGCsNVp=R5zC9B3PXWJ5nddtt3gkRzDsAsRKvhXq7exGjSAg@mail.gmail.com>
- <f3bc34e1-0eaf-84ef-486e-b7759e60b792@amd.com>
- <CABXGCsOD+tDdFcM37NP_1nS9eLym7qC=jUQy3iqYkc1m2iQgxw@mail.gmail.com>
- <0d5f66d8-9852-b6a9-0e27-9eb9e736d698@amd.com>
- <CABXGCsPi68Lyvg+6UjTK2aJm6PVBs83YJuP6x68mcrzAQgpuZg@mail.gmail.com>
- <eef04fc4-741d-606c-c2c6-f054e4e3fffd@amd.com>
- <CABXGCsNNwEjo_dvWJL7GLULBPy+RmwsC9ObpowR_M1nQ3fKt3g@mail.gmail.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <CABXGCsNNwEjo_dvWJL7GLULBPy+RmwsC9ObpowR_M1nQ3fKt3g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:iIZmxWytLTz+5+OF4HAMOkkSGGLVy/iwOE4rQF3lm0xhe1C8IgA
+ mP/2HFSpfKUGUR5HhsLAbjIZhplUAPi3xtGMOOlq0HatVIJOvbG9ABGJvMkilaKnyPasI/7
+ Ghe1SK+JUV6u5GPvWD3u5g1G90+y0CdRSy+vOo4nS5k1nm445bdDn0SIMsiVKxPzGx81iz0
+ fr2CtmMkSgjsmn0LjdXKw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:/LlXazknttE=:+z+MkVSa87IJ4Xv6hrvBc+
+ Sfo0R2vSjFWmfRFwJq83Qn2u1D4+v5pdJAe8CTqPaHpJxXqJii2Ca44B32K7ue8N1xuk6dXw1
+ CydANBAsinVCRybAcwh2jnUVS/RZzIobX6WJo6WrKDY3LG0EOnOoGmA/NYABpguF8UOe6P5id
+ By3HCrUubrFBKW+3b2ElstNE4CP6bNZ6hhbWontQmWKIxNVyVGrKq4zwab+JlgpcQQrkNtcsb
+ /PjjFXRLpeGd/nA9k/IDcez3LwtvXrXAmX5No1/aeiNuDBWxPXDMrKx4diInCBELPzJf2m7ax
+ EN3GmdKm0go3Lai4KY3SIFFO7gia5SPj6QnByfFw9P4VKHYNwcjyDbo8w16RyoUQ+VzOETKdY
+ ZTAPD7VpjDo2guXVbQfnC8E2se80rnqsGjPOHxHJDjkXZaAY0bWpIPxF9wOp0GJxJAPq9UA5S
+ tZpsvpKL2Ls9r3hsv6UA/OTLbfwYDlr6t0DFPGmLDMsI6GoJ/XCH4KriMTeyb7zhnIEOAjNkZ
+ utajzHMf6PqYPb26VTM01GfbZPX/yeTwghfA58lFxzt9z9LBf71SV5WbH5c/Wa0VOeGPwMFMF
+ gHimbfn5Uwau+yGYIStS9L9pyQhsL0khyVcRf7cWR0CpHXdCU6VbLq42aniLCOjhLEYZVebC+
+ spLR+kADqTfEU1xUgasT5WYUysfWXE0vJ+Uo5VTs33sqy4YFOd9uBo5fU7P+7AHz+HLQJJO6y
+ elVYDJ2ATHZjZG8UoOI7P6uLNonpvp4MN5PLSBNgcHxwV307XpfUKKznKZx/EsIJSiHzlBjtt
+ esNUShDyjdfTNbkZbPcH9a5kN5542jzZSmElaepeweP/MZcprOrXbkvNz91li0rk5RV2/eEJm
+ L6zomOqUXTXNKF4XuaUVp0eENJCUlMppB3atjK69qXOj5LycR/C/zPSmwuJ18oB6hxky54GoW
+ KRtms2U4strSZ6Kh6RR7q+cZwNnm53Gqmu0RTqV7A1Z8a6gcbl7//pFxvpcF6/ShY1eQJUMld
+ u1zcpq4w+/R7TtoxCLnXH1zzvydWN4Tyj/x7JoSgCJxItyJoEI1HOedcBnypIOHHNWHXeAiFj
+ gidGV207Ov6X3g=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 08.04.22 um 19:25 schrieb Mikhail Gavrilov:
-> On Fri, 8 Apr 2022 at 19:27, Christian König <christian.koenig@amd.com> wrote:
->> Please test the attached patch, it just re-introduce the lock without
->> doing much else.
->>
->> And does your branch contain the following patch:
->>
->> commit d18b8eadd83e3d8d63a45f9479478640dbcfca02
->> Author: Christian König <christian.koenig@amd.com>
->> Date:   Wed Feb 23 14:35:31 2022 +0100
->>
->>       drm/amdgpu: install ctx entities with cmpxchg
->>
->>       Since we removed the context lock we need to make sure that not two
->> threads
->>       are trying to install an entity at the same time.
->>
->>       Signed-off-by: Christian König <christian.koenig@amd.com>
->>       Fixes: 461fa7b0ac565e ("drm/amdgpu: remove ctx->lock")
->>       Reviewed-by: Andrey Grodzovsky <andrey.grodzovsky@amd.com>
->>       Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-> The all listed games are now working with an attached patch.
-> Also flood messages "WARNING: CPU: 31 PID: 51848 at
-> drivers/dma-buf/dma-fence-array.c:191
-> dma_fence_array_create+0x101/0x120" has gone.
+Without these, /chosen/stdout-path =3D "serial0:115200n8", as done in
+nuvoton-wpcm450-supermicro-x9sci-ln4f.dts, does not work.
 
-That's unfortunately not the end of the story.
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+=2D--
+ arch/arm/boot/dts/nuvoton-wpcm450.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
 
-This is fixing your problem, but reintroducing the original problem that 
-we call the syncobj with a lock held which can crash badly as well.
+diff --git a/arch/arm/boot/dts/nuvoton-wpcm450.dtsi b/arch/arm/boot/dts/nu=
+voton-wpcm450.dtsi
+index 93595850a4c3c..57943bf5aa4a9 100644
+=2D-- a/arch/arm/boot/dts/nuvoton-wpcm450.dtsi
++++ b/arch/arm/boot/dts/nuvoton-wpcm450.dtsi
+@@ -17,6 +17,8 @@ aliases {
+ 		gpio5 =3D &gpio5;
+ 		gpio6 =3D &gpio6;
+ 		gpio7 =3D &gpio7;
++		serial0 =3D &serial0;
++		serial1 =3D &serial1;
+ 	};
 
-Going to take a closer look on Monday. I hope you can test a few more 
-patches to help narrow down what's actually going wrong here.
-
-Thanks,
-Christian.
-
->
-> Thanks.
->
-> Tested-by: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
->
+ 	cpus {
+=2D-
+2.35.1
 

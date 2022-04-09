@@ -2,48 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 018B64FA145
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 03:39:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9A5A4FA118
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 03:39:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240305AbiDIBaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 21:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41372 "EHLO
+        id S240299AbiDIB35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 21:29:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240246AbiDIB3b (ORCPT
+        with ESMTP id S240253AbiDIB3b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 8 Apr 2022 21:29:31 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DBB4DA6DF;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF6E10428E;
         Fri,  8 Apr 2022 18:27:25 -0700 (PDT)
-Date:   Sat, 09 Apr 2022 01:27:22 -0000
+Date:   Sat, 09 Apr 2022 01:27:23 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649467643;
+        s=2020; t=1649467644;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=pj7zAY+ecbdHbFINkS7R1cfeTd265W+vWoWHJuTlpxo=;
-        b=OUkBWS/0mTUmSLJSWQ2HBji8YhoSVSRkWZZT7B89wq2YxxW72GkBTXWyx06oFFVg0+sdHG
-        YEQXljyGwZTNdCCTDKijMAabhY+1k4GbxSEnOCl5mVNIcbMKwHx3eHMgE7l8wwt5nRsZve
-        FY1Dzw8Plpci1Z+ILe9p5ZqFesplyGeslPkqkJJZMlCZZYqWu1T6n3XsH11ydWzEmlt/fP
-        iMYtfysd+Zsbjia3sggLwCkNxOi0uZ/X5ROPMf10O9/jpivKJqt220iFjii/YBuc3mH0og
-        jNSEjwn0nIc+O6raHJBl9q2NRa/zq5EbFIftbhS0In6BOsGKGYeDBs897PMJMg==
+        bh=nsKjo7b5BJ9MSr8SUroCbByi5yW9JG5hg7haZIIsKu4=;
+        b=Q5Frkhfzb18PBxxphJ/kqEuXJIfmth4m2r0hrLdDmr8wzTcjyU9g+Z4Or7rRPqjEkBH3xW
+        5QnAln4IEFc8x/rH8tKbZPYbmvce72G4qABJz6lvwiWt9M4lf5BGBqADTCy25wl6r9HQl2
+        10uMt57I8fdBJtf8txxskvX1CoNJu8MsLGBbNfTb8xMi/dDeq6Xn4HcV4m1sryVZwuUVdw
+        PlqQhzh6eBKlF+3A7uN34OJDjQL+ApyEMKdH4sMbqzerorW7Dh/M3iIQUc4lP01aoikuSI
+        kseWvcgM73cR6k/66A38mMsRwFOatcs/DXNXcrEsdBhpJHhGn3l8jaWIL24FUQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649467643;
+        s=2020e; t=1649467644;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=pj7zAY+ecbdHbFINkS7R1cfeTd265W+vWoWHJuTlpxo=;
-        b=QT6f4+wuoxz1nwco4jdxYD4xnT/VFU0tlMvnkX2L0cN2nYi9HHK4vICrY/b+tUPCykdbGo
-        LzaoQgRPwJa/XoDA==
-From:   "tip-bot2 for Kirill A. Shutemov" <tip-bot2@linutronix.de>
+        bh=nsKjo7b5BJ9MSr8SUroCbByi5yW9JG5hg7haZIIsKu4=;
+        b=FI53CLxZiXYHWwAwSLQVITtCwZKSxuSAD3+00uARxj+0+gFFJwnVOGz8h67wowzCxqeLZA
+        gpqGRXeedsxyRBBg==
+From:   "tip-bot2 for Kuppuswamy Sathyanarayanan" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/tdx] x86/tdx: Make pages shared in ioremap()
+Subject: [tip: x86/tdx] x86/topology: Disable CPU online/offline control for
+ TDX guests
 Cc:     Kuppuswamy Sathyanarayanan 
         <sathyanarayanan.kuppuswamy@linux.intel.com>,
         "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
@@ -52,10 +53,10 @@ Cc:     Kuppuswamy Sathyanarayanan
         Tony Luck <tony.luck@intel.com>,
         Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220405232939.73860-26-kirill.shutemov@linux.intel.com>
-References: <20220405232939.73860-26-kirill.shutemov@linux.intel.com>
+In-Reply-To: <20220405232939.73860-25-kirill.shutemov@linux.intel.com>
+References: <20220405232939.73860-25-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
-Message-ID: <164946764230.4207.8183154708201575322.tip-bot2@tip-bot2>
+Message-ID: <164946764312.4207.14697790452742535352.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -72,58 +73,101 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/tdx branch of tip:
 
-Commit-ID:     9aa6ea69852c46e551f4180dce4208bd53df418c
-Gitweb:        https://git.kernel.org/tip/9aa6ea69852c46e551f4180dce4208bd53df418c
-Author:        Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-AuthorDate:    Wed, 06 Apr 2022 02:29:34 +03:00
+Commit-ID:     bae1a962ac2c5e6be08319ff3f7d6df542584fce
+Gitweb:        https://git.kernel.org/tip/bae1a962ac2c5e6be08319ff3f7d6df542584fce
+Author:        Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+AuthorDate:    Wed, 06 Apr 2022 02:29:33 +03:00
 Committer:     Dave Hansen <dave.hansen@linux.intel.com>
 CommitterDate: Thu, 07 Apr 2022 08:27:53 -07:00
 
-x86/tdx: Make pages shared in ioremap()
+x86/topology: Disable CPU online/offline control for TDX guests
 
-In TDX guests, guest memory is protected from host access. If a guest
-performs I/O, it needs to explicitly share the I/O memory with the host.
+Unlike regular VMs, TDX guests use the firmware hand-off wakeup method
+to wake up the APs during the boot process. This wakeup model uses a
+mailbox to communicate with firmware to bring up the APs. As per the
+design, this mailbox can only be used once for the given AP, which means
+after the APs are booted, the same mailbox cannot be used to
+offline/online the given AP. More details about this requirement can be
+found in Intel TDX Virtual Firmware Design Guide, sec titled "AP
+initialization in OS" and in sec titled "Hotplug Device".
 
-Make all ioremap()ed pages that are not backed by normal memory
-(IORES_DESC_NONE or IORES_DESC_RESERVED) mapped as shared.
+Since the architecture does not support any method of offlining the
+CPUs, disable CPU hotplug support in the kernel.
 
-The permissions in PAGE_KERNEL_IO already work for "decrypted" memory
-on AMD SEV/SME systems.  That means that they have no need to make a
-pgprot_decrypted() call.
+Since this hotplug disable feature can be re-used by other VM guests,
+add a new CC attribute CC_ATTR_HOTPLUG_DISABLED and use it to disable
+the hotplug support.
 
-TDX guests, on the other hand, _need_ change to PAGE_KERNEL_IO for
-"decrypted" mappings.  Add a pgprot_decrypted() for TDX.
+Attempt to offline CPU will fail with -EOPNOTSUPP.
 
-Co-developed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
 Reviewed-by: Andi Kleen <ak@linux.intel.com>
 Reviewed-by: Tony Luck <tony.luck@intel.com>
-Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
 Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lkml.kernel.org/r/20220405232939.73860-26-kirill.shutemov@linux.intel.com
+Link: https://lkml.kernel.org/r/20220405232939.73860-25-kirill.shutemov@linux.intel.com
 ---
- arch/x86/mm/ioremap.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/x86/coco/core.c        |  1 +
+ include/linux/cc_platform.h | 10 ++++++++++
+ kernel/cpu.c                |  7 +++++++
+ 3 files changed, 18 insertions(+)
 
-diff --git a/arch/x86/mm/ioremap.c b/arch/x86/mm/ioremap.c
-index 17a492c..1ad0228 100644
---- a/arch/x86/mm/ioremap.c
-+++ b/arch/x86/mm/ioremap.c
-@@ -242,10 +242,15 @@ __ioremap_caller(resource_size_t phys_addr, unsigned long size,
- 	 * If the page being mapped is in memory and SEV is active then
- 	 * make sure the memory encryption attribute is enabled in the
- 	 * resulting mapping.
-+	 * In TDX guests, memory is marked private by default. If encryption
-+	 * is not requested (using encrypted), explicitly set decrypt
-+	 * attribute in all IOREMAPPED memory.
+diff --git a/arch/x86/coco/core.c b/arch/x86/coco/core.c
+index df08edc..70956f9 100644
+--- a/arch/x86/coco/core.c
++++ b/arch/x86/coco/core.c
+@@ -20,6 +20,7 @@ static bool intel_cc_platform_has(enum cc_attr attr)
+ {
+ 	switch (attr) {
+ 	case CC_ATTR_GUEST_UNROLL_STRING_IO:
++	case CC_ATTR_HOTPLUG_DISABLED:
+ 		return true;
+ 	default:
+ 		return false;
+diff --git a/include/linux/cc_platform.h b/include/linux/cc_platform.h
+index efd8205..691494b 100644
+--- a/include/linux/cc_platform.h
++++ b/include/linux/cc_platform.h
+@@ -72,6 +72,16 @@ enum cc_attr {
+ 	 * Examples include TDX guest & SEV.
  	 */
- 	prot = PAGE_KERNEL_IO;
- 	if ((io_desc.flags & IORES_MAP_ENCRYPTED) || encrypted)
- 		prot = pgprot_encrypted(prot);
-+	else
-+		prot = pgprot_decrypted(prot);
+ 	CC_ATTR_GUEST_UNROLL_STRING_IO,
++
++	/**
++	 * @CC_ATTR_HOTPLUG_DISABLED: Hotplug is not supported or disabled.
++	 *
++	 * The platform/OS is running as a guest/virtual machine does not
++	 * support CPU hotplug feature.
++	 *
++	 * Examples include TDX Guest.
++	 */
++	CC_ATTR_HOTPLUG_DISABLED,
+ };
  
- 	switch (pcm) {
- 	case _PAGE_CACHE_MODE_UC:
+ #ifdef CONFIG_ARCH_HAS_CC_PLATFORM
+diff --git a/kernel/cpu.c b/kernel/cpu.c
+index 5797c2a..edb8c19 100644
+--- a/kernel/cpu.c
++++ b/kernel/cpu.c
+@@ -35,6 +35,7 @@
+ #include <linux/percpu-rwsem.h>
+ #include <linux/cpuset.h>
+ #include <linux/random.h>
++#include <linux/cc_platform.h>
+ 
+ #include <trace/events/power.h>
+ #define CREATE_TRACE_POINTS
+@@ -1186,6 +1187,12 @@ out:
+ 
+ static int cpu_down_maps_locked(unsigned int cpu, enum cpuhp_state target)
+ {
++	/*
++	 * If the platform does not support hotplug, report it explicitly to
++	 * differentiate it from a transient offlining failure.
++	 */
++	if (cc_platform_has(CC_ATTR_HOTPLUG_DISABLED))
++		return -EOPNOTSUPP;
+ 	if (cpu_hotplug_disabled)
+ 		return -EBUSY;
+ 	return _cpu_down(cpu, 0, target);

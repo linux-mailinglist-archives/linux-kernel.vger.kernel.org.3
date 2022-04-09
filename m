@@ -2,298 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C0C54FA0BE
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 02:40:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2D4A4FA0C8
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 02:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240202AbiDIAm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 20:42:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37790 "EHLO
+        id S234321AbiDIAn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 20:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240244AbiDIAmV (ORCPT
+        with ESMTP id S231269AbiDIAn5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 20:42:21 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DAB8EA356
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 17:40:08 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 66so9113160pga.12
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 17:40:08 -0700 (PDT)
+        Fri, 8 Apr 2022 20:43:57 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD0CAFAD0
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 17:41:51 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id r13so20337039ejd.5
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 17:41:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=xqlerOQAShjNpw89fatQQNxfhA2VCQCLIXOVkoBth0o=;
-        b=VvcYqbP5xIbGHM96pPPS+PZc1Crc6wRFz6M1fph4k93ezi3QU576d6OjvWsnyS8xop
-         VFTQjq+vfqdo5b9Pp28v6K+xGK6JVYc72VLiMGf78gEvYqd1iRCBcyZMe80W5FdSY+gO
-         XA9+BhATg0JbV2wv2GMWqZaqyr9eTw0mJ44nPbwf/51R5BF8jLZf82nRizIB/sX7aJMa
-         fYQifX3JDi+lAOduZegsDAf6/UDSb61QphmtjoyXAUVmX8kaq/5XtVjscnXrKA9qOOJK
-         c/1VFoxF2imjQOLk2NIAWR0/T6MH20HonYHqipbBueSLH9U9rwbaZ8pWUS4oi0PgLfAP
-         OhvA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=i4viXU341zw5uhZBWqAUdlrrXjczKy3fJ8dlKQXYSdw=;
+        b=d3uC8hXwTeSWR613kgs675SF4j6XAHsUEDcEqvmGXPNadrGEEdG4vJWPx3WA9Lgc6M
+         NcZ6TDea1zl26kxYexGUxdNGpiEExJwcSBWGKIOAFbDHPRTc26jCtfXJt8B53kTUVYPY
+         icxoeJ1oBXUJ1hZJTKfNo9dHqTMvtGwjyHJ9WNk1AXhSmtcth20WL4057u7JiSwP3k/a
+         vpu2EAHcO9ca3uOGC2KYxW4wK5NMXlEefQCLcrpE7Z8Xjxx6eLaOBbIYgsJHC5ZpUsXo
+         Ny46JZb/qFepjl3ltZrBkPR8jHuceBAmrybamggvWfd+GyDSWdliiW00JC4KsCqmXGjL
+         9mhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=xqlerOQAShjNpw89fatQQNxfhA2VCQCLIXOVkoBth0o=;
-        b=D8/vP4QLGpH0Q1Fgvv4GaRBLLg+fQML/IrN1EsJLd/cXbwYcBzLdIfZcV0nH4k3+YC
-         Ha1ako+P743gPTiFEAT/jeGdiGeBRT5txIV2EVX9M29MSK0KkJ1ONhIxiX6bxZXUgl0q
-         fGzyYUlBTmQA0AnvP69LkddW+oh8BM5wbqqlbRmKCtinDBCBltO2CdlXLYon8+nf1qVH
-         6tMri7IjfP5G0XOMoVEJRp6ftEZs9qHgKbeaXMKtsWJvonzjMlySdz60C4/Ly4qVWtZQ
-         Ynb0yQWvmyMzSo8NltyLfLewoACTbWNlFPlcbnC8OJgll6pR2BVr1Tl+YkuDkUZBt0Cn
-         T7oA==
-X-Gm-Message-State: AOAM533fv7MkuhsmBHC84LF7Gib2LZ1cVGHT72uc3//6H2BoDt0pQ9TI
-        TPziPJh1Sh2qQqCMbkSXOqE7Tw==
-X-Google-Smtp-Source: ABdhPJwRKcJoWZI2eJVAhdHXfRYRDgvJV9CaMCaIGY/2Fd8OmQb/XJCEYH3jZGBs4GoSe7lpmIWz2Q==
-X-Received: by 2002:a63:f54b:0:b0:384:64d1:fa45 with SMTP id e11-20020a63f54b000000b0038464d1fa45mr17607928pgk.95.1649464807808;
-        Fri, 08 Apr 2022 17:40:07 -0700 (PDT)
-Received: from [10.255.182.146] ([139.177.225.255])
-        by smtp.gmail.com with ESMTPSA id q61-20020a17090a17c300b001cb0df6b046sm6731349pja.24.2022.04.08.17.40.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Apr 2022 17:40:07 -0700 (PDT)
-Message-ID: <7213fc3b-27f5-373a-0786-0ca9441b9e7e@bytedance.com>
-Date:   Sat, 9 Apr 2022 08:40:00 +0800
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=i4viXU341zw5uhZBWqAUdlrrXjczKy3fJ8dlKQXYSdw=;
+        b=zk2QxOv57CGVMDS5IKkL2GZpeCcWkJIYL9QdzQJk/py+8peFNxjUr+FD9ZrNMA6jEZ
+         PKhFYZF+UzAZw4JHkE2x60PvgRgbtHQUoxapljveinwIu+ORZLYZ1DjwxDN+UtFKo8Yj
+         gTYUQvZyeyBvRVhpMz+NAznylL7sGRacZ5HXSOB19HiUJbABCsPJ/4sJUVt36l2IttX7
+         OCV+1WZOzgmk88775eBn0OZkiVUcY1GbwVt9VwB0aMiq2w1vuGKJPyZ2R4BdGAR2zmoE
+         FLcxJXNe9Kv0sWC8Np8MUN9WGJmJ0f5AFxcfSq6RunWDD7/RG9SOn0vd8ZrKL8JGgXkG
+         7EgQ==
+X-Gm-Message-State: AOAM533cXrhkiJ5rZQLw6UjQSEyxU7sRH4xu040OTMIUteTrNk80RQsw
+        UHwpYBnHYpRbceZElqbNoUI=
+X-Google-Smtp-Source: ABdhPJwAZwmKpd8B+JKs5Nny4Muxuojr8cjAy2bujuuASE8bgIIAlU2MeUbNxWXTpMJB64doFItH8g==
+X-Received: by 2002:a17:907:6e88:b0:6da:8f01:7a8f with SMTP id sh8-20020a1709076e8800b006da8f017a8fmr21121719ejc.619.1649464910352;
+        Fri, 08 Apr 2022 17:41:50 -0700 (PDT)
+Received: from leap.localnet (host-87-4-4-217.retail.telecomitalia.it. [87.4.4.217])
+        by smtp.gmail.com with ESMTPSA id q7-20020a170906540700b006d5eca5c9cfsm9183350ejo.191.2022.04.08.17.41.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 17:41:49 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        perex@perex.cz, syzkaller-bugs@googlegroups.com, tiwai@suse.com
+Cc:     syzbot <syzbot+205eb15961852c2c5974@syzkaller.appspotmail.com>
+Subject: Re: [syzbot] KASAN: null-ptr-deref Write in snd_pcm_format_set_silence
+Date:   Sat, 09 Apr 2022 02:41:47 +0200
+Message-ID: <4181875.ejJDZkT8p0@leap>
+In-Reply-To: <000000000000d188ef05dc2c7279@google.com>
+References: <000000000000d188ef05dc2c7279@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [PATCH] percpu_ref: call wake_up_all() after percpu_ref_put()
- completes
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     dennis@kernel.org, cl@linux.com, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        zhouchengming@bytedance.com, songmuchun@bytedance.com
-References: <20220407103335.36885-1-zhengqi.arch@bytedance.com>
- <YlBzsakUloG4nS7W@slm.duckdns.org>
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <YlBzsakUloG4nS7W@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="nextPart2109924.Mh6RI2rZIc"
+Content-Transfer-Encoding: 7Bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is a multi-part message in MIME format.
 
+--nextPart2109924.Mh6RI2rZIc
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
 
-On 2022/4/9 1:41 AM, Tejun Heo wrote:
+On sabato 9 aprile 2022 00:52:26 CEST syzbot wrote:
 > Hello,
 > 
-> On Thu, Apr 07, 2022 at 06:33:35PM +0800, Qi Zheng wrote:
->> In the percpu_ref_call_confirm_rcu(), we call the wake_up_all()
->> before calling percpu_ref_put(), which will cause the value of
->> percpu_ref to be unstable when percpu_ref_switch_to_atomic_sync()
->> returns.
->>
->> 	CPU0				CPU1
->>
->> percpu_ref_switch_to_atomic_sync(&ref)
->> --> percpu_ref_switch_to_atomic(&ref)
->>      --> percpu_ref_get(ref);	/* put after confirmation */
->> 	call_rcu(&ref->data->rcu, percpu_ref_switch_to_atomic_rcu);
->>
->> 					percpu_ref_switch_to_atomic_rcu
->> 					--> percpu_ref_call_confirm_rcu
->> 					    --> data->confirm_switch = NULL;
->> 						wake_up_all(&percpu_ref_switch_waitq);
->>
->>      /* here waiting to wake up */
->>      wait_event(percpu_ref_switch_waitq, !ref->data->confirm_switch);
->> 						(A)percpu_ref_put(ref);
->> /* The value of &ref is unstable! */
->> percpu_ref_is_zero(&ref)
->> 						(B)percpu_ref_put(ref);
->>
->> As shown above, assuming that the counts on each cpu add up to 0 before
->> calling percpu_ref_switch_to_atomic_sync(), we expect that after switching
->> to atomic mode, percpu_ref_is_zero() can return true. But actually it will
->> return different values in the two cases of A and B, which is not what
->> we expected.
->>
->> Maybe the original purpose of percpu_ref_switch_to_atomic_sync() is
->> just to ensure that the conversion to atomic mode is completed, but it
->> should not return with an extra reference count.
->>
->> Calling wake_up_all() after percpu_ref_put() ensures that the value of
->> percpu_ref is stable after percpu_ref_switch_to_atomic_sync() returns.
->> So just do it.
->>
->> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
->> ---
->>   lib/percpu-refcount.c | 3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/lib/percpu-refcount.c b/lib/percpu-refcount.c
->> index af9302141bcf..b11b4152c8cd 100644
->> --- a/lib/percpu-refcount.c
->> +++ b/lib/percpu-refcount.c
->> @@ -154,13 +154,14 @@ static void percpu_ref_call_confirm_rcu(struct rcu_head *rcu)
->>   
->>   	data->confirm_switch(ref);
->>   	data->confirm_switch = NULL;
->> -	wake_up_all(&percpu_ref_switch_waitq);
->>   
->>   	if (!data->allow_reinit)
->>   		__percpu_ref_exit(ref);
->>   
->>   	/* drop ref from percpu_ref_switch_to_atomic() */
->>   	percpu_ref_put(ref);
->> +
->> +	wake_up_all(&percpu_ref_switch_waitq);
+> syzbot found the following issue on:
 > 
-> The interface, at least originally, doesn't give any guarantee over whether
-> there's gonna be a residual reference on it or not. There's nothing
-> necessarily wrong with guaranteeing that but it's rather unusual and given
-> that putting the base ref in a percpu_ref is a special "kill" operation and
-> a ref in percpu mode always returns %false on is_zero(), I'm not quite sure
-> how such semantics would be useful. Do you care to explain the use case with
-> concrete examples?
-
-There are currently two users of percpu_ref_switch_to_atomic_sync(), and 
-both are used in the example, one is mddev->writes_pending in
-driver/md/md.c and the other is q->q_usage_counter in block/blk-pm.c.
-
-The former discards the initial reference count after percpu_ref_init(),
-and the latter kills the initial reference count(by calling 
-percpu_ref_kill() in blk_freeze_queue_start()) before
-percpu_ref_switch_to_atomic_sync(). Looks like they all expect
-percpu_ref to be stable when percpu_ref_switch_to_atomic_sync() returns.
-
+> HEAD commit:    312310928417 Linux 5.18-rc1
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=16f30a90f00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=595bcd2109a73f9c
+> dashboard link: https://syzkaller.appspot.com/bug?extid=205eb15961852c2c5974
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1798df4f700000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12981dbf700000
 > 
-> Also, the proposed patch is racy. There's nothing preventing
-> percpu_ref_switch_to_atomic_sync() from waking up early between
-> confirm_switch clearing and the wake_up_all, so the above change doesn't
-> guarantee what it tries to guarantee. For that, you'd have to move
-> confirm_switch clearing *after* percpu_ref_put() but then, you'd be
-> accessing the ref after its final ref is put which can lead to
-> use-after-free.
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+205eb15961852c2c5974@syzkaller.appspotmail.com
 > 
-
-Oh sorry, it is my bad missing.
-
-> In fact, the whole premise seems wrong. The switching needs a reference to
-> the percpu_ref because it is accessing it asynchronously. The switching side
-> doesn't know when the ref is gonna go away once it puts its reference and
-> thus can't signal that they're done after putting their reference.
+> ==================================================================
+> BUG: KASAN: null-ptr-deref in snd_pcm_format_set_silence sound/core/pcm_misc.c:441 [inline]
+> BUG: KASAN: null-ptr-deref in snd_pcm_format_set_silence+0x215/0x350 sound/core/pcm_misc.c:424
+> Write of size 16383 at addr 0000000000000001 by task syz-executor156/3605
 > 
-> We *can* make that work by putting the whole thing in its own critical
-> section so that we can make confirm_switch clearing atomic with the possibly
-> final put, but that's gonna add some complexity and begs the question why
-> we'd need such a thing.
-
-How about moving the last percpu_ref_put() outside of the
-percpu_ref_switch_to_atomic_rcu() in sync mode like below? But this may 
-not be elegant.
-
-diff --git a/include/linux/percpu-refcount.h 
-b/include/linux/percpu-refcount.h
-index d73a1c08c3e3..07f92e7e3e19 100644
---- a/include/linux/percpu-refcount.h
-+++ b/include/linux/percpu-refcount.h
-@@ -98,6 +98,7 @@ struct percpu_ref_data {
-         percpu_ref_func_t       *confirm_switch;
-         bool                    force_atomic:1;
-         bool                    allow_reinit:1;
-+       bool                    sync;
-         struct rcu_head         rcu;
-         struct percpu_ref       *ref;
-  };
-@@ -123,7 +124,8 @@ int __must_check percpu_ref_init(struct percpu_ref *ref,
-                                  gfp_t gfp);
-  void percpu_ref_exit(struct percpu_ref *ref);
-  void percpu_ref_switch_to_atomic(struct percpu_ref *ref,
--                                percpu_ref_func_t *confirm_switch);
-+                                percpu_ref_func_t *confirm_switch,
-+                                bool sync);
-  void percpu_ref_switch_to_atomic_sync(struct percpu_ref *ref);
-  void percpu_ref_switch_to_percpu(struct percpu_ref *ref);
-  void percpu_ref_kill_and_confirm(struct percpu_ref *ref,
-diff --git a/lib/percpu-refcount.c b/lib/percpu-refcount.c
-index af9302141bcf..2a9d777bcf35 100644
---- a/lib/percpu-refcount.c
-+++ b/lib/percpu-refcount.c
-@@ -99,6 +99,7 @@ int percpu_ref_init(struct percpu_ref *ref, 
-percpu_ref_func_t *release,
-         data->release = release;
-         data->confirm_switch = NULL;
-         data->ref = ref;
-+       data->sync = false;
-         ref->data = data;
-         return 0;
-  }
-@@ -146,21 +147,30 @@ void percpu_ref_exit(struct percpu_ref *ref)
-  }
-  EXPORT_SYMBOL_GPL(percpu_ref_exit);
-
-+static inline void percpu_ref_switch_to_atomic_post(struct percpu_ref *ref)
-+{
-+       struct percpu_ref_data *data = ref->data;
-+
-+       if (!data->allow_reinit)
-+               __percpu_ref_exit(ref);
-+
-+       /* drop ref from percpu_ref_switch_to_atomic() */
-+       percpu_ref_put(ref);
-+}
-+
-  static void percpu_ref_call_confirm_rcu(struct rcu_head *rcu)
-  {
-         struct percpu_ref_data *data = container_of(rcu,
-                         struct percpu_ref_data, rcu);
-         struct percpu_ref *ref = data->ref;
-+       bool need_put = !data->sync;
-
-         data->confirm_switch(ref);
-         data->confirm_switch = NULL;
-         wake_up_all(&percpu_ref_switch_waitq);
-
--       if (!data->allow_reinit)
--               __percpu_ref_exit(ref);
--
--       /* drop ref from percpu_ref_switch_to_atomic() */
--       percpu_ref_put(ref);
-+       if (need_put)
-+               percpu_ref_switch_to_atomic_post(ref);
-  }
-
-  static void percpu_ref_switch_to_atomic_rcu(struct rcu_head *rcu)
-@@ -302,12 +312,14 @@ static void __percpu_ref_switch_mode(struct 
-percpu_ref *ref,
-   * switching to atomic mode, this function can be called from any context.
-   */
-  void percpu_ref_switch_to_atomic(struct percpu_ref *ref,
--                                percpu_ref_func_t *confirm_switch)
-+                                percpu_ref_func_t *confirm_switch,
-+                                bool sync)
-  {
-         unsigned long flags;
-
-         spin_lock_irqsave(&percpu_ref_switch_lock, flags);
-
-+       ref->data->sync = sync;
-         ref->data->force_atomic = true;
-         __percpu_ref_switch_mode(ref, confirm_switch);
-
-@@ -325,8 +337,9 @@ EXPORT_SYMBOL_GPL(percpu_ref_switch_to_atomic);
-   */
-  void percpu_ref_switch_to_atomic_sync(struct percpu_ref *ref)
-  {
--       percpu_ref_switch_to_atomic(ref, NULL);
-+       percpu_ref_switch_to_atomic(ref, NULL, true);
-         wait_event(percpu_ref_switch_waitq, !ref->data->confirm_switch);
-+       percpu_ref_switch_to_atomic_post(ref);
-  }
-  EXPORT_SYMBOL_GPL(percpu_ref_switch_to_atomic_sync);
-
+> CPU: 0 PID: 3605 Comm: syz-executor156 Not tainted 5.18.0-rc1-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+>  print_report mm/kasan/report.c:432 [inline]
+>  kasan_report.cold+0x61/0x1c6 mm/kasan/report.c:491
+>  check_region_inline mm/kasan/generic.c:183 [inline]
+>  kasan_check_range+0x13d/0x180 mm/kasan/generic.c:189
+>  memset+0x20/0x40 mm/kasan/shadow.c:44
+>  snd_pcm_format_set_silence sound/core/pcm_misc.c:441 [inline]
+>  snd_pcm_format_set_silence+0x215/0x350 sound/core/pcm_misc.c:424
+>  snd_pcm_oss_sync+0x60e/0x800 sound/core/oss/pcm_oss.c:1690
+>  snd_pcm_oss_ioctl+0x208c/0x3430 sound/core/oss/pcm_oss.c:2634
+>  vfs_ioctl fs/ioctl.c:51 [inline]
+>  __do_sys_ioctl fs/ioctl.c:870 [inline]
+>  __se_sys_ioctl fs/ioctl.c:856 [inline]
+>  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0x80 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> RIP: 0033:0x7f0846a59e69
+> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 c1 18 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007f0846c74318 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> RAX: ffffffffffffffda RBX: 00007f0846af0028 RCX: 00007f0846a59e69
+> RDX: 0000000000000000 RSI: 0000000000005001 RDI: 0000000000000003
+> RBP: 00007f0846af0020 R08: 0000000000000000 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000246 R12: 6475612f7665642f
+> R13: 00007f0846bffd8f R14: 00007f0846c74400 R15: 0000000000022000
+>  </TASK>
+> ==================================================================
 > 
-> Andrew, I don't think the patch as proposed makes much sense. Maybe it'd be
-> better to keep it out of the tree for the time being?
 > 
-> Thanks.
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
 > 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> syzbot can test patches for this issue, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
+> 
+> -- 
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/000000000000d188ef05dc2c7279%40google.com.
+> 
+Let's try and check if "pat" is valid...
 
--- 
-Thanks,
-Qi
+#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+
+Fabio M. De Francesco
+
+P.S.: I'm sorry, in my previous email I forgot to Cc all people and lists.
+
+--nextPart2109924.Mh6RI2rZIc
+Content-Disposition: attachment; filename="snd_pcm_format_set_silence.diff"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/x-patch; charset="UTF-8"; name="snd_pcm_format_set_silence.diff"
+
+diff --git a/sound/core/pcm_misc.c b/sound/core/pcm_misc.c
+index 4866aed97aac..5588b6a1ee8b 100644
+--- a/sound/core/pcm_misc.c
++++ b/sound/core/pcm_misc.c
+@@ -433,7 +433,7 @@ int snd_pcm_format_set_silence(snd_pcm_format_t format, void *data, unsigned int
+ 		return 0;
+ 	width = pcm_formats[(INT)format].phys; /* physical width */
+ 	pat = pcm_formats[(INT)format].silence;
+-	if (! width)
++	if (!width || !pat)
+ 		return -EINVAL;
+ 	/* signed or 1 byte data */
+ 	if (pcm_formats[(INT)format].signd == 1 || width <= 8) {
+
+--nextPart2109924.Mh6RI2rZIc--
+
+
+

@@ -2,134 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AC724FA601
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 10:31:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A3CB4FA60C
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 10:36:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240021AbiDIIda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 04:33:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49218 "EHLO
+        id S240524AbiDIIiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 04:38:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236246AbiDIId0 (ORCPT
+        with ESMTP id S240434AbiDIIiP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 04:33:26 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 435E42AF4;
-        Sat,  9 Apr 2022 01:31:19 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id t2so12366200qtw.9;
-        Sat, 09 Apr 2022 01:31:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ltAY4NbF/ZSQmQzIhU/4Ym22AhhgYTgYnlUh+8O5iJA=;
-        b=cIJfldWO0aaKZ/s2g7WrzTjdvvmjd4AqSw4a7vCyoXHk9atITLN3cYXJZzBrxGWzS3
-         2IAzSleIVK14v/0qzAT0xa7Ym+LPV4nMqqOA8jUcX5r3wKaMve1WbBiGNCAc830xTSGY
-         Jkh8UkYcogL/RwuGGOdsFDAbTgnZLCKT/Y2XwHO/LQb+FFIVzG8zvyhxjQsQ4yp7LLYU
-         Gr116iV2EuFE4Te/zywR072GzV9kYiSf5rRTZpvcxpJRqvLE/IiJZ/Bakjv75Q/90RpT
-         rbtYmAfdKtdXLYdSrtYuNPUwNEYs2R9V+8omraLsLbqFILV5IU3gicQwCzn+qtxEZq/h
-         I8Ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ltAY4NbF/ZSQmQzIhU/4Ym22AhhgYTgYnlUh+8O5iJA=;
-        b=DVsS/n2fIYhvgOHDFfQnUAeH8xLuYaqAqMggMkte/SRG0vNiZkhtzAGcQ9qywn/qJA
-         YWHtdU+53ZBVgpIu9HMLQ9HebgteB23bHjvIU124qIvMe/gsNUAq0qMHss4i1tr1MRBD
-         wnPP/6ei4Rt6Nyth5i8Kc7cI2dRrUKfunDtlYXGpgaQ4GOZHXTUzpPrD+Ng6ylZu9ehj
-         1DbTUsW+v9Kq8OozXmCZgvD6Ddqkchu+CJ1KvkXrjDCyPYV/rqMNiLWP8o1jW4braGGo
-         LeUdv+znODZWzAazdby5vqzV4hQKpG83b1XhqvaQ1WuubpD2jTFamswAlA5U5YH+C8S5
-         /9xQ==
-X-Gm-Message-State: AOAM531fuew+kK5UriMo2fugyqWOY1WK2Vevqlgmw7a7+PPHlSssXXbO
-        6wMgd8r7vk1UtGntS5tST/o=
-X-Google-Smtp-Source: ABdhPJyPw38hwLF/dooO3O86uxNY+G/TWkIEvyniY/+jSbTxqEMrcWm7UJDTy/nryC2ybFBUgzzGFQ==
-X-Received: by 2002:ac8:124c:0:b0:2ed:e5d:d07e with SMTP id g12-20020ac8124c000000b002ed0e5dd07emr3274899qtj.231.1649493078308;
-        Sat, 09 Apr 2022 01:31:18 -0700 (PDT)
-Received: from localhost ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id 14-20020a37090e000000b0069bfe98662csm260436qkj.17.2022.04.09.01.31.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Apr 2022 01:31:17 -0700 (PDT)
-Message-ID: <62514455.1c69fb81.5db1c.0ef7@mx.google.com>
-X-Google-Original-Message-ID: <20220409083114.GA2513948@cgel.zte@gmail.com>
-Date:   Sat, 9 Apr 2022 08:31:14 +0000
-From:   CGEL <cgel.zte@gmail.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     akpm@linux-foundation.org, david@redhat.com, corbet@lwn.net,
-        bsingharora@gmail.com, mike.kravetz@oracle.com,
-        yang.yang29@zte.com.cn, wang.yong12@zte.com.cn,
-        ran.xiaokai@zte.com.cn, jiang.xuexin@zte.com.cn,
-        thomas.orgis@uni-hamburg.de, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        sfr@canb.auug.org.au
-Subject: Re: [PATCH v2] delayacct: track delays from write-protect copy
-References: <20220409014342.2505532-1-yang.yang29@zte.com.cn>
- <YlE7ZVMfAhs4Ba27@hirez.programming.kicks-ass.net>
+        Sat, 9 Apr 2022 04:38:15 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD97326C4
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 01:36:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649493369; x=1681029369;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=cXZ+57K9X37iBLo1CEy7c3wy6+UDR+MRQQCbT05aUbs=;
+  b=HQTgdrj2K9uFYhNLZg4G3LVHoNWvr3+S9TcOvb+OgEKFJCEfqx0W893N
+   X0ouKYyvz1X2lZNbT0N1XVbnSzQBvfjzPfg+kJg10ysSJGCMBaupjbvWu
+   O8H7GFT6feoxARfZZekNfdBmKNsxKkiAMsP5NQvDldMI8YWTDKlNtCGVE
+   nRSkRPCPhU66BakadpO0peGKhLHs2cf+WSuDcgsrgUawRQJNYVKBv9T8e
+   jbEtb2W/ZG9Ny8alKRiPROyhsJLHbmxZgSY7lPwSuCwW5EoJNIrBsneQE
+   eKkJsW73IwUv3tju2e+9kMGPBAt5hJHE2syTVfFmLOZUua4DjyDw5Azb1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="242371881"
+X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
+   d="scan'208";a="242371881"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2022 01:36:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
+   d="scan'208";a="698563982"
+Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 09 Apr 2022 01:36:00 -0700
+Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nd6Zb-00011U-Gb;
+        Sat, 09 Apr 2022 08:35:59 +0000
+Date:   Sat, 9 Apr 2022 16:35:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Jason A. Donenfeld" <zx2c4@kernel.org>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:crng/random/jd/not-zero-entropy 7/11]
+ arch/arm/include/asm/timex.h:15:40: error: implicit declaration of function
+ 'read_current_timer'
+Message-ID: <202204091618.rkNKCgBL-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YlE7ZVMfAhs4Ba27@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 09, 2022 at 09:53:09AM +0200, Peter Zijlstra wrote:
-> On Sat, Apr 09, 2022 at 01:43:44AM +0000, cgel.zte@gmail.com wrote:
-> > From: Yang Yang <yang.yang29@zte.com.cn>
-> > 
-> > Delay accounting does not track the delay of write-protect copy. When
-> > tasks trigger many write-protect copys(include COW and unsharing of
-> > anonymous pages[1]), it may spend a amount of time waiting for them.
-> > To get the delay of tasks in write-protect copy, could help users to
-> > evaluate the impact of using KSM or fork() or GUP.
-> > 
-> > Also update tools/accounting/getdelays.c:
-> > 
-> >     / # ./getdelays -dl -p 231
-> >     print delayacct stats ON
-> >     listen forever
-> >     PID     231
-> > 
-> >     CPU             count     real total  virtual total    delay total  delay average
-> >                      6247     1859000000     2154070021     1674255063          0.268ms
-> >     IO              count    delay total  delay average
-> >                         0              0              0ms
-> >     SWAP            count    delay total  delay average
-> >                         0              0              0ms
-> >     RECLAIM         count    delay total  delay average
-> >                         0              0              0ms
-> >     THRASHING       count    delay total  delay average
-> >                         0              0              0ms
-> >     COMPACT         count    delay total  delay average
-> >                         3          72758              0ms
-> >     WPCOPY          count    delay total  delay average
-> >                      3635      271567604              0ms
-> > 
-> > [1] commit 31cc5bc4af70("mm: support GUP-triggered unsharing of anonymous pages")
-> > 
-> > Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
-> > Reviewed-by: David Hildenbrand <david@redhat.com>
-> > Reviewed-by: Jiang Xuexin <jiang.xuexin@zte.com.cn>
-> > Reviewed-by: Ran Xiaokai <ran.xiaokai@zte.com.cn>
-> > Reviewed-by: wangyong <wang.yong12@zte.com.cn>
-> 
-> As per always; I refuse to take patches from cgel.zte@gmail.com. Because
-> yet again From and Sender don't match.
-> 
-> If you want me to consider your email, please send from the email
-> address you've listed in your SoB.
-Very sorry to have this problem, because our company's mail system
-(xx.zte.com.cn)has a little format problem, so we use gmail instead.
+tree:   https://github.com/ammarfaizi2/linux-block crng/random/jd/not-zero-entropy
+head:   ac7d8411f0216fe77e48592ed0ff2ccbd599d0de
+commit: 5cde0b2eaaf94891163f14984697361fe51849e6 [7/11] arm: use sched_clock() for random_get_entropy() instead of zero
+config: arm-randconfig-m031-20220408 (https://download.01.org/0day-ci/archive/20220409/202204091618.rkNKCgBL-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/5cde0b2eaaf94891163f14984697361fe51849e6
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block crng/random/jd/not-zero-entropy
+        git checkout 5cde0b2eaaf94891163f14984697361fe51849e6
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm prepare
 
-We do want to do a little work for the community, so sent patches
-before it fixed. I will try to connect our mail system administrator
-to solve it next time.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-For this patch, it had been modified for several times, special thanks
-to David Hildenbrand, so we hope to merge it(if no other problem).
+All errors (new ones prefixed by >>):
 
-Thanks!
+   In file included from include/linux/timex.h:66,
+                    from include/linux/time32.h:13,
+                    from include/linux/time.h:60,
+                    from include/linux/ktime.h:24,
+                    from include/linux/timer.h:6,
+                    from include/linux/workqueue.h:9,
+                    from include/linux/rhashtable-types.h:15,
+                    from include/linux/ipc.h:7,
+                    from include/uapi/linux/sem.h:5,
+                    from include/linux/sem.h:5,
+                    from include/linux/sched.h:15,
+                    from arch/arm/kernel/asm-offsets.c:11:
+   arch/arm/include/asm/timex.h: In function 'random_get_entropy':
+>> arch/arm/include/asm/timex.h:15:40: error: implicit declaration of function 'read_current_timer' [-Werror=implicit-function-declaration]
+      15 | #define get_cycles()    ({ cycles_t c; read_current_timer(&c) ? 0 : c; })
+         |                                        ^~~~~~~~~~~~~~~~~~
+   arch/arm/include/asm/timex.h:19:29: note: in expansion of macro 'get_cycles'
+      19 |         unsigned long ret = get_cycles();
+         |                             ^~~~~~~~~~
+   In file included from include/linux/time32.h:13,
+                    from include/linux/time.h:60,
+                    from include/linux/ktime.h:24,
+                    from include/linux/timer.h:6,
+                    from include/linux/workqueue.h:9,
+                    from include/linux/rhashtable-types.h:15,
+                    from include/linux/ipc.h:7,
+                    from include/uapi/linux/sem.h:5,
+                    from include/linux/sem.h:5,
+                    from include/linux/sched.h:15,
+                    from arch/arm/kernel/asm-offsets.c:11:
+   include/linux/timex.h: At top level:
+   include/linux/timex.h:53: error: unterminated #ifndef
+      53 | #ifndef _LINUX_TIMEX_H
+         | 
+   In file included from include/linux/jiffies.h:11,
+                    from include/linux/ktime.h:25,
+                    from include/linux/timer.h:6,
+                    from include/linux/workqueue.h:9,
+                    from include/linux/rhashtable-types.h:15,
+                    from include/linux/ipc.h:7,
+                    from include/uapi/linux/sem.h:5,
+                    from include/linux/sem.h:5,
+                    from include/linux/sched.h:15,
+                    from arch/arm/kernel/asm-offsets.c:11:
+   include/linux/timex.h:53: error: unterminated #ifndef
+      53 | #ifndef _LINUX_TIMEX_H
+         | 
+   cc1: some warnings being treated as errors
+   make[2]: *** [scripts/Makefile.build:120: arch/arm/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1194: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +/read_current_timer +15 arch/arm/include/asm/timex.h
+
+5cde0b2eaaf948 arch/arm/include/asm/timex.h Jason A. Donenfeld 2022-04-08  13  
+^1da177e4c3f41 include/asm-arm/timex.h      Linus Torvalds     2005-04-16  14  typedef unsigned long cycles_t;
+923df96b9f31b7 arch/arm/include/asm/timex.h Will Deacon        2012-07-06 @15  #define get_cycles()	({ cycles_t c; read_current_timer(&c) ? 0 : c; })
+^1da177e4c3f41 include/asm-arm/timex.h      Linus Torvalds     2005-04-16  16  
+
+:::::: The code at line 15 was first introduced by commit
+:::::: 923df96b9f31b7d08d8438ff9677326d9537accf ARM: 7451/1: arch timer: implement read_current_timer and get_cycles
+
+:::::: TO: Will Deacon <will.deacon@arm.com>
+:::::: CC: Russell King <rmk+kernel@arm.linux.org.uk>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

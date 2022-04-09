@@ -2,117 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CEC64FA1B8
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 04:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BF774FA1BA
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 04:37:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240624AbiDICia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 22:38:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45016 "EHLO
+        id S240629AbiDICjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 22:39:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231502AbiDICi2 (ORCPT
+        with ESMTP id S230244AbiDICjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 22:38:28 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8EDBC1E
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 19:36:21 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KZzkZ00S8zdZnT;
-        Sat,  9 Apr 2022 10:35:49 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 9 Apr 2022 10:36:20 +0800
-Subject: Re: [PATCH 1/3] mm/memory-failure.c: avoid false-postive
- PageSwapCache test
-To:     Yang Shi <shy828301@gmail.com>,
-        David Hildenbrand <david@redhat.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
-        <naoya.horiguchi@nec.com>, Mike Kravetz <mike.kravetz@oracle.com>,
-        Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220407130352.15618-1-linmiaohe@huawei.com>
- <20220407130352.15618-2-linmiaohe@huawei.com>
- <09d363ba-5bd0-75ae-8ece-cd91997f1b46@redhat.com>
- <CAHbLzko-oobg2rNO0y-Sgj9ePPEpoFEMmhgBumjzzFFFa=argw@mail.gmail.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <80b5b191-222b-493c-0192-80ceb5afafa8@huawei.com>
-Date:   Sat, 9 Apr 2022 10:36:19 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Fri, 8 Apr 2022 22:39:11 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB76B2B9
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 19:37:05 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id r66so9331450pgr.3
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 19:37:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=k0r4eugt/zHQSwmjktu+6LYEjQZQ8ZAZdKlNVpJcKJU=;
+        b=I8mJTJYqOErm2ec//WI+XTEovyymBRMahAIacDQgqkTgdMcYuibYVSQdv2LVeO0HOy
+         8Lb1S2uWve12AKz9ZK8hFYNF5BXUrwfCVbrZuP5MWkmtfzkPUI0GJmyMLQkK/sh6pSO1
+         WXgsqljLwtoYQl/lgROvlA8KTA8SFTlXG0EVg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=k0r4eugt/zHQSwmjktu+6LYEjQZQ8ZAZdKlNVpJcKJU=;
+        b=C8m/0B6E+lODW5QljL8m6QRxDlD1wqezvSHhb7zNawgiaSokrrYBlZ66IYfECYT0Sc
+         e/f4j7Ay+5EpevI0ZFh3YFLyoBjhxJs4Vly1Q1Yd2dPQVcEtPu5Yr197nwoNE+vdjqM/
+         jmv0tsGY7QC+kcfo/3L2gNWEZXClNkXoi/9IuQvi06BY7h2hxZ55XE52ihn73vDl0z6k
+         LZFR2nWsNg58o44OL4rkrV9scS8bTBmzzQGE1irI3vz3pWHvvLLNioWd4+x2yHnXAqlc
+         dTODvmnxWecnxN/Alx/JiIzDq4dPKUEtBQDtKe6hqwWE+30GGRY8qtTRm1rkMJVYRn+/
+         m3xw==
+X-Gm-Message-State: AOAM532vsbs1P8RqfAiy0W2rCw4CnmmDfDxZ1Ym2APaWSGzTaJSP9tC/
+        8A7TU+fJQ8w3LeYn1QO0q9xFEQ==
+X-Google-Smtp-Source: ABdhPJyHdJUiczO0eILsMOQhkv7fmwI8W0QSVzkpdCsY8n0607fbDN/FuUPnIR7FGuzc6v2Ce5dP1w==
+X-Received: by 2002:a63:6a88:0:b0:398:54fb:85ba with SMTP id f130-20020a636a88000000b0039854fb85bamr18035803pgc.88.1649471825230;
+        Fri, 08 Apr 2022 19:37:05 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:17db:64e:48d4:a4e])
+        by smtp.gmail.com with ESMTPSA id 188-20020a6215c5000000b0050597294893sm759999pfv.124.2022.04.08.19.37.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 19:37:04 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     dri-devel@lists.freedesktop.org
+Cc:     Robert Foss <robert.foss@linaro.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Philip Chen <philipchen@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Kees Cook <keescook@chromium.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lyude Paul <lyude@redhat.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org
+Subject: [RFC PATCH 0/6] drm/dp: Improvements for DP AUX channel
+Date:   Fri,  8 Apr 2022 19:36:22 -0700
+Message-Id: <20220409023628.2104952-1-dianders@chromium.org>
+X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
 MIME-Version: 1.0
-In-Reply-To: <CAHbLzko-oobg2rNO0y-Sgj9ePPEpoFEMmhgBumjzzFFFa=argw@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/9 1:32, Yang Shi wrote:
-> On Fri, Apr 8, 2022 at 1:52 AM David Hildenbrand <david@redhat.com> wrote:
->>
->> On 07.04.22 15:03, Miaohe Lin wrote:
->>> PageSwapCache is only reliable when PageAnon is true because PG_swapcache
->>> serves as PG_owner_priv_1 which can be used by fs if it's pagecache page.
->>> So we should test PageAnon to distinguish pagecache page from swapcache
->>> page to avoid false-postive PageSwapCache test.
->>
->> Well, that's not quite correct. Just because a page is PageAnon()
->> doesn't mean that it's in the swapache. It means that it might be in the
->> swapcache but cannot be in the pagecache.
->>
->> Maybe you wanted to say
->>
->> "So we should test PageAnon() to distinguish pagecache pages from
->> anonymous pages."
+This patch addresses pre-existing issues that came up during the
+review process of Sankeerth's series trying to add eDP for Qualcomm
+SoCs [1].
 
-That's indeed what I want to say.
+It's really sorta two series but jammed into one. The first two
+patches fix a problem with ps8640 when the panel doesn't finish
+probing right away. The rest of the patches attempt to improve how eDP
+panel drivers deal with the HPD signal. NOTE: if everyone hates the
+"generic driver" that I added in the first patch, I have a different
+version that just adds uses the Linux auxiliary bus stright in
+ps8640. I'm happy to switch back to that, but it seemed like a buncha
+copy-pasta that I was hoping to avoid.
 
-> 
-> Yeah, I agree. The patch looks fine to me with David's comment addressed.
+I haven't done a crazy amount of testing with this, but it seems to
+work and I wanted to get something out there. I'll try to do some more
+testing next week. This is why I added the tag "RFC". It's entirely
+possibled that I've actually caught all the bugs and this is great,
+but I just wanted to be sure.
 
-Many thanks for both of you! Will do it in v3.
+This _doesn't_ attempt to fix the Analogix driver. If this works out,
+ideally someone can post a patch up to do that.
 
-> 
->>
->>>
->>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->>> ---
->>>  mm/memory-failure.c | 2 +-
->>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
->>> index ef402b490663..2e97302d62e4 100644
->>> --- a/mm/memory-failure.c
->>> +++ b/mm/memory-failure.c
->>> @@ -2262,7 +2262,7 @@ static int __soft_offline_page(struct page *page)
->>>               return 0;
->>>       }
->>>
->>> -     if (!PageHuge(page) && PageLRU(page) && !PageSwapCache(page))
->>> +     if (!PageHuge(page) && PageLRU(page) && !PageAnon(page))
->>>               /*
->>>                * Try to invalidate first. This should work for
->>>                * non dirty unmapped page cache pages.
->>
->>
->> --
->> Thanks,
->>
->> David / dhildenb
->>
->>
-> .
-> 
+[1] https://lore.kernel.org/r/1648656179-10347-2-git-send-email-quic_sbillaka@quicinc.com/
+
+
+Douglas Anderson (6):
+  drm/dp: Helpers to make it easier for drivers to use DP AUX bus
+    properly
+  drm/bridge: parade-ps8640: Break probe in two to handle DP AUX better
+  drm/dp: Add is_hpd_asserted() callback to struct drm_dp_aux
+  drm/panel-edp: Take advantage of is_hpd_asserted() in struct
+    drm_dp_aux
+  drm/panel: atna33xc20: Take advantage of is_hpd_asserted() in struct
+    drm_dp_aux
+  drm/bridge: parade-ps8640: Provide is_hpd_asserted() in struct
+    drm_dp_aux
+
+ drivers/gpu/drm/bridge/parade-ps8640.c        |  87 +++++----
+ drivers/gpu/drm/dp/drm_dp_aux_bus.c           | 165 +++++++++++++++++-
+ drivers/gpu/drm/panel/panel-edp.c             |  37 +++-
+ .../gpu/drm/panel/panel-samsung-atna33xc20.c  |  35 +++-
+ include/drm/dp/drm_dp_aux_bus.h               |  58 ++++++
+ include/drm/dp/drm_dp_helper.h                |  14 ++
+ 6 files changed, 353 insertions(+), 43 deletions(-)
+
+-- 
+2.35.1.1178.g4f1659d476-goog
 

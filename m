@@ -2,65 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 397C04FA576
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 08:43:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F13B4FA57C
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 08:46:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238636AbiDIGpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 02:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35066 "EHLO
+        id S240200AbiDIGqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 02:46:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237637AbiDIGpL (ORCPT
+        with ESMTP id S237637AbiDIGqG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 02:45:11 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED59DB647B;
-        Fri,  8 Apr 2022 23:43:02 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id h126-20020a1c2184000000b0038eb17fb7d6so336811wmh.2;
-        Fri, 08 Apr 2022 23:43:02 -0700 (PDT)
+        Sat, 9 Apr 2022 02:46:06 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03315B6D2E
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 23:44:00 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id h5so8684356pgc.7
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 23:43:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=Hew5fcLWaJy7bwAuvYjA3lNei48lfLSyllJNDnqQkVc=;
-        b=jILQ4LHxO5+CInWgmA9XopC7fi7sLeqXXx9pBVE3OL7uY/CCkh9vQt8hlKNx8vQQv6
-         lCLmAnhndgoqf1I+4UIz9HdwcUb8XBn8cGk0o58ymElyZOOt+rqSa5ZJo5ze9rkezna0
-         oxsSslQgdJGQv/f3Q41ckLEsfGQeoZ4MvdjDcFOBfA1DHSpsR6gm+N02GSgGY7tIs9Lw
-         KwZTlemStbsCE7Rf9k23+HFArdXbk867jm3jn0D5OHMX7LrPEE7eQXcEVxGoE6eTLZmU
-         qyB1RPeLQgzslAiW9Guq3hP8d4Gsg8b7s52l+/1pS23Q4hd6M15L6u4QX9aRtfEy+ezN
-         x5/Q==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4KIbEhpDOtCyioS8BZF5p0mGW/6SLKhNyk9CSQ+cWmo=;
+        b=mJomCgJeV+RXmlPTrKz6qrQhrHm7UDKRrcrKS4fB3ekDBuMvYloc6N3zmoewCRpve5
+         5wL2KDqW8Z+tm6tNzomwdJaRht0Ve91sWusE4dVKDHUDO7qYsjj+FJxjENUtyF7aeBAn
+         dlxb86l3upJFsQhUVQzQHMwAnzbOq3hpu68G8h/vPyJhHFbsDHrlvpzXBgmB8YrMsUU5
+         vEnxIy4If3++IMbF512A0INdexqm6swj5Y83/EA90VybgBNxHF6AGuIGFQIKy/ogAVrY
+         Fn7I8qbZ/6vMDoiFS2le7qfO1qviRbm+GcB25jK+buDGEz4Q8WoecYXCA5GlPJ+0QAlK
+         9Lcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=Hew5fcLWaJy7bwAuvYjA3lNei48lfLSyllJNDnqQkVc=;
-        b=UxZeWnMDL19WGNyKYUM0HdQn2oYIoccdgE+zrzk9qRdtUo67KQeeK0tWxxmAvnTQ++
-         F4rh9x/GT56H3KibfSKlOgxUY1egb7Rybp5V1TI21u2Oud1ln1d8ngIT79aHMWA/6vc+
-         A2/H7OhIIQP50FjA5bomJbAeTaUGxgP7E7NBY+84zNjIuFHb/nCMZhuA2V7LVtGnlsLk
-         Eowhk+mdho6MiHK6AVZUQ88sUys0WrFVK9YOYwiFRfjxQQKyvz+yxF9n07pYR7p9OEfc
-         +PAdVVGCm63Cmw9CPOj/iAOKZpUF46xETQ+wEvM+3lklxcpg+pxoOZnzIF6AeFrlFDxc
-         mwEQ==
-X-Gm-Message-State: AOAM531g0cJVhlSOjk5WLl64zYCP0C/xQximZ+U/olZQE1LC8H+RbeUV
-        0NSgHDMPhrk0neskn8drMUM=
-X-Google-Smtp-Source: ABdhPJxdQ1FvRmMXuNN14cFg6MkFQt5NUoRYqlA8V6b4WyYE1xKS45Ugoygq92XUmHHpnELWWhi/eA==
-X-Received: by 2002:a7b:c188:0:b0:38e:74f1:7cbf with SMTP id y8-20020a7bc188000000b0038e74f17cbfmr19905948wmi.104.1649486581395;
-        Fri, 08 Apr 2022 23:43:01 -0700 (PDT)
-Received: from localhost.localdomain ([87.200.95.144])
-        by smtp.gmail.com with ESMTPSA id n7-20020a5d5987000000b00207891050d4sm5375643wri.46.2022.04.08.23.42.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 23:43:01 -0700 (PDT)
-From:   Christian Hewitt <christianshewitt@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Christian Hewitt <christianshewitt@gmail.com>
-Subject: [PATCH] arm64: dts: meson: alpa sort the board Makefile
-Date:   Sat,  9 Apr 2022 06:42:57 +0000
-Message-Id: <20220409064257.24453-1-christianshewitt@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4KIbEhpDOtCyioS8BZF5p0mGW/6SLKhNyk9CSQ+cWmo=;
+        b=nVTE6GPVUg2t6ABT8sI9fDfflSjKCt4U6A4W2NYC8i3IJINC9TrUTf6xnPNwGP2ZdZ
+         lFP/TdUVevHDfcCHsErfbYBAS0q9qT2UQzWOyitwHQb4KTHx0KPCzRfEFXSc/7njetZC
+         ll+tYHbYbVslpG0uSxiIenSY/J4fwRV85MlgL0aZ7FXZ8LOIEO1Sehj8vZpCSPvXcuG9
+         0ez9vrpoX9RsdnpSf/lwdnvGusS6SYuvvId/6v+9anW+BomslmhmS2T/SmUrpXICPiKW
+         5izT6FkcgJYRitimi3jCAtIWTr0F44OpaDj1Et3eYkZ+0aEkp0L4FywhVUoMD24dxX8H
+         23Bw==
+X-Gm-Message-State: AOAM5336EYZw1LQ5IKBa3vQ1e/wqpeCVEU8SA2wuWzujaHk6eDq5GQji
+        Nabz/JlgN/6boOW39IzvuXWifjZL3fpZpK3ejlBQKA==
+X-Google-Smtp-Source: ABdhPJxoI+Rt3FuHlytPnMV9pwghZ6eRumL6W/khQzhcnTwilPXXMAY9cLvkEbBH/0UBAvxjMbxqY66yaPmjd4OXrpc=
+X-Received: by 2002:a63:3e8d:0:b0:398:5222:3a3 with SMTP id
+ l135-20020a633e8d000000b00398522203a3mr18742608pga.561.1649486639371; Fri, 08
+ Apr 2022 23:43:59 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220408045743.1432968-1-yosryahmed@google.com>
+ <20220408045743.1432968-3-yosryahmed@google.com> <CAJD7tkb6VJt=pfqnW11r6S7A0r2Vh85a3YZaVso-qyiCM06nDQ@mail.gmail.com>
+ <YlDlCRSyR9xNW5dJ@carbon.dhcp.thefacebook.com>
+In-Reply-To: <YlDlCRSyR9xNW5dJ@carbon.dhcp.thefacebook.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Fri, 8 Apr 2022 23:43:23 -0700
+Message-ID: <CAJD7tkbiLQ8XV89yKDzJ467A7+=xvRMPw3pYwt+0gSnbwqBtVA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/4] selftests: cgroup: return the errno of write() in
+ cg_write() on failure
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
+        Chen Wandun <chenwandun@huawei.com>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,100 +85,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's alpha-sort the board Makefile to keep things organised.
+On Fri, Apr 8, 2022 at 6:44 PM Roman Gushchin <roman.gushchin@linux.dev> wrote:
+>
+> On Fri, Apr 08, 2022 at 06:21:55PM -0700, Yosry Ahmed wrote:
+> > On Thu, Apr 7, 2022 at 9:57 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+> > >
+> > > Currently, cg_write() returns 0 on success and -1 on failure. Modify it
+> > > to return the errno of write() syscall when write() fails.
+> > >
+> > > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> > > ---
+> > >  tools/testing/selftests/cgroup/cgroup_util.c | 32 +++++++++++---------
+> > >  1 file changed, 17 insertions(+), 15 deletions(-)
+> > >
+> > > diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
+> > > index dbaa7aabbb4a..3b6bb09985fa 100644
+> > > --- a/tools/testing/selftests/cgroup/cgroup_util.c
+> > > +++ b/tools/testing/selftests/cgroup/cgroup_util.c
+> > > @@ -38,23 +38,23 @@ static ssize_t read_text(const char *path, char *buf, size_t max_len)
+> > >         return len;
+> > >  }
+> > >
+> > > -static ssize_t write_text(const char *path, char *buf, ssize_t len)
+> > > +/*
+> > > + * Returns:
+> > > + *     success -> 0
+> > > + *     open() failure -> -1
+> > > + *     write() failure -> errno
+> > > + */
+> > > +static int write_text(const char *path, char *buf, ssize_t len)
+> > >  {
+> > > -       int fd;
+> > > +       int fd, ret;
+> > >
+> > >         fd = open(path, O_WRONLY | O_APPEND);
+> > >         if (fd < 0)
+> > >                 return fd;
+> > >
+> > > -       len = write(fd, buf, len);
+> > > -       if (len < 0) {
+> > > -               close(fd);
+> > > -               return len;
+> > > -       }
+> > > -
+> > > +       ret = write(fd, buf, len) < 0 ? errno : 0;
+> > >         close(fd);
+> > > -
+> > > -       return len;
+> > > +       return ret;
+> > >  }
+> > >
+> > >  char *cg_name(const char *root, const char *name)
+> > > @@ -177,17 +177,19 @@ long cg_read_lc(const char *cgroup, const char *control)
+> > >         return cnt;
+> > >  }
+> > >
+> > > +/*
+> > > + * Returns:
+> > > + *     success -> 0
+> > > + *     open() failure -> -1
+> > > + *     write() failure -> errno
+> > > + */
+> > >  int cg_write(const char *cgroup, const char *control, char *buf)
+> > >  {
+> > >         char path[PATH_MAX];
+> > >         ssize_t len = strlen(buf);
+> > >
+> > >         snprintf(path, sizeof(path), "%s/%s", cgroup, control);
+> > > -
+> > > -       if (write_text(path, buf, len) == len)
+> > > -               return 0;
+> > > -
+> > > -       return -1;
+> > > +       return write_text(path, buf, len);
+> > >  }
+> >
+> > I have changed this in v4 to a cleaner implementation that either
+> > returns 0 on success or -errno on failure. I also made sure to check
+> > that the full buffer was being written, and updated cg_read() as well
+> > for the interface to be consistent.
+> >
+> > Will send out once the discussion on patch 1 in v3 reaches a consensus.
+>
+> Ok, sounds good, please feel free to add my
+> Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+> for the whole series. It looks really nice and ready for merging upstream to me.
+>
+> Thanks!
 
-Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
----
- arch/arm64/boot/dts/amlogic/Makefile | 38 ++++++++++++++--------------
- 1 file changed, 19 insertions(+), 19 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/amlogic/Makefile b/arch/arm64/boot/dts/amlogic/Makefile
-index 0eec18678311..8773211df50e 100644
---- a/arch/arm64/boot/dts/amlogic/Makefile
-+++ b/arch/arm64/boot/dts/amlogic/Makefile
-@@ -1,17 +1,18 @@
- # SPDX-License-Identifier: GPL-2.0
--dtb-$(CONFIG_ARCH_MESON) += meson-axg-s400.dtb
-+dtb-$(CONFIG_ARCH_MESON) += meson-a1-ad401.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-axg-jethome-jethub-j100.dtb
-+dtb-$(CONFIG_ARCH_MESON) += meson-axg-s400.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12a-radxa-zero.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12a-sei510.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12a-u200.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12a-x96-max.dtb
-+dtb-$(CONFIG_ARCH_MESON) += meson-g12b-a311d-khadas-vim3.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-gsking-x.dtb
--dtb-$(CONFIG_ARCH_MESON) += meson-g12b-gtking.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-gtking-pro.dtb
--dtb-$(CONFIG_ARCH_MESON) += meson-g12b-a311d-khadas-vim3.dtb
--dtb-$(CONFIG_ARCH_MESON) += meson-g12b-s922x-khadas-vim3.dtb
--dtb-$(CONFIG_ARCH_MESON) += meson-g12b-odroid-n2.dtb
-+dtb-$(CONFIG_ARCH_MESON) += meson-g12b-gtking.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-odroid-n2-plus.dtb
-+dtb-$(CONFIG_ARCH_MESON) += meson-g12b-odroid-n2.dtb
-+dtb-$(CONFIG_ARCH_MESON) += meson-g12b-s922x-khadas-vim3.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-ugoos-am6.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-gxbb-kii-pro.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-gxbb-nanopi-k2.dtb
-@@ -19,29 +20,29 @@ dtb-$(CONFIG_ARCH_MESON) += meson-gxbb-nexbox-a95x.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-gxbb-odroidc2.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-gxbb-p200.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-gxbb-p201.dtb
--dtb-$(CONFIG_ARCH_MESON) += meson-gxbb-vega-s95-pro.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-gxbb-vega-s95-meta.dtb
-+dtb-$(CONFIG_ARCH_MESON) += meson-gxbb-vega-s95-pro.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-gxbb-vega-s95-telos.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-gxbb-wetek-hub.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-gxbb-wetek-play2.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s805x-libretech-ac.dtb
--dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905x-hwacom-amazetv.dtb
--dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905x-khadas-vim.dtb
--dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905x-libretech-cc.dtb
--dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905x-libretech-cc-v2.dtb
--dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905x-nexbox-a95x.dtb
--dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905x-p212.dtb
-+dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s805x-p241.dtb
-+dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905d-libretech-pc.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905d-mecool-kii-pro.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905d-p230.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905d-p231.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905d-phicomm-n1.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905d-sml5442tw.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905d-vero4k-plus.dtb
--dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s805x-p241.dtb
-+dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905w-jethome-jethub-j80.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905w-p281.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905w-tx3-mini.dtb
--dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905d-libretech-pc.dtb
--dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905w-jethome-jethub-j80.dtb
-+dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905x-hwacom-amazetv.dtb
-+dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905x-khadas-vim.dtb
-+dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905x-libretech-cc-v2.dtb
-+dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905x-libretech-cc.dtb
-+dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905x-nexbox-a95x.dtb
-+dtb-$(CONFIG_ARCH_MESON) += meson-gxl-s905x-p212.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-gxm-khadas-vim2.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-gxm-mecool-kiii-pro.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-gxm-minix-neo-u9h.dtb
-@@ -52,15 +53,14 @@ dtb-$(CONFIG_ARCH_MESON) += meson-gxm-rbox-pro.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-gxm-s912-libretech-pc.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-gxm-vega-s96.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-gxm-wetek-core2.dtb
--dtb-$(CONFIG_ARCH_MESON) += meson-sm1-a95xf3-air.dtb
-+dtb-$(CONFIG_ARCH_MESON) += meson-s4-s805x2-aq222.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-sm1-a95xf3-air-gbit.dtb
-+dtb-$(CONFIG_ARCH_MESON) += meson-sm1-a95xf3-air.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-sm1-bananapi-m5.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-sm1-h96-max.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-sm1-khadas-vim3l.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-sm1-odroid-c4.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-sm1-odroid-hc4.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-sm1-sei610.dtb
--dtb-$(CONFIG_ARCH_MESON) += meson-sm1-x96-air.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-sm1-x96-air-gbit.dtb
--dtb-$(CONFIG_ARCH_MESON) += meson-a1-ad401.dtb
--dtb-$(CONFIG_ARCH_MESON) += meson-s4-s805x2-aq222.dtb
-+dtb-$(CONFIG_ARCH_MESON) += meson-sm1-x96-air.dtb
--- 
-2.17.1
-
+Thanks a lot for reviewing it! I would appreciate it if you still took
+a look at the v4 version of this patch when I send it (probably early
+next week) as it's significantly different and includes changes to
+cg_read() and read_text() as well.

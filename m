@@ -2,106 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E5C34FA1CE
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 04:40:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AC134FA1DB
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 04:56:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240673AbiDIClT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 22:41:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56440 "EHLO
+        id S234373AbiDIC6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 22:58:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240674AbiDIClO (ORCPT
+        with ESMTP id S229790AbiDIC6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 22:41:14 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9264D0827
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 19:39:07 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id k23so20606027ejd.3
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 19:39:07 -0700 (PDT)
+        Fri, 8 Apr 2022 22:58:39 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4556830A;
+        Fri,  8 Apr 2022 19:56:32 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id be5so3500345plb.13;
+        Fri, 08 Apr 2022 19:56:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pensando.io; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=SDiJEuDFuGkwHXojfi+3MVI4ItQG2aZ6jj0r0oRWV5A=;
-        b=n4+0WtW8kldSsZLnkOUjeF0TmKTgewJZB73x8goESRf9r+HNgRxPplcS7sti7TU5Wo
-         tNWwSSZm/k56aQOuZYTsyPrkO9Ky17gapk9fifDxyNGZwd6kg/HCqlPIcwZK5b9FI7WE
-         nN0hmqTQgaNr4hsisvFK0yOC1KVwsaItbxoJbowE44bbzo1ArxyC8YEte16+8etgU0bb
-         L7hsgaEoBRa/hdBpshsNeMPa5aIdj0PVfNAuMGc96s3x0t4XXUmuAM3jArb06zXvdlOq
-         9dks3huTuaS3+H4IL/MXaRT/Lx1qRNqMdbaKSDGoeCbA0KTo1I2pMsxq1mO0bUkrc+7O
-         lDtA==
+        bh=VQyPSrgr9MS7EpRh2VWlvGNNESfQ8NWuUEdNThLjldw=;
+        b=j/+h/dLqzkWj5Fqfos0fPiStfP0opcXSwBlFQkktY5MZUxfJ5nwud8+5hbcHt4e2SF
+         FtGayZQopAgXHgIn1LrXgdyZUaTwI34YQd5YavavKifblyB0mKcxl3b5rPCb7yjPOpdT
+         zGxHkBNKDa0fuiqD0hOHVNwArO+3Kjm0ZN8mFGWxEzxHRwc3mQzM2g9I2/NtOSFufhxD
+         ZP6V7wRQnS1G4ZZCbG9MAcB+vDfYTs9yozwGFYeEfoAHG0l88BpEOLBB72l/CTxWQEfW
+         +QeuC7O2hDB40zrKD/2heMtRrcU1wdnilyxTVzzCcCHu65yIILpKnowDZjM02qM5A/cx
+         JNXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=SDiJEuDFuGkwHXojfi+3MVI4ItQG2aZ6jj0r0oRWV5A=;
-        b=QkXTpftSlfocoDcCCumdyMK29ItAK+f0IicyXrgV0au6bMrfUjDEsft16ITebHfXt5
-         UxBlbuKK5Cv47o2gnOrtFLvC+ZRvHCONoFihx9fTO6PAoDWpH/zYQqAaGd4Sy2uIJUD8
-         Iu46r+zeytByiN5LRDZexgXdqfnOYfd/SBmBh/4oC1stzT/SdZpr9jpojGcx9jUYjecD
-         A+qhwBXm9zM5i1fqxZXlJUhOh+fzI712+ksBITPsJd2t/p4u0mwYYV+p/WQWkKmC7YwH
-         vnSd5vyXLDCXLv66034EoNQyfN6c9+ji8CVqcvSZNCMQV+Sy1R+Y8fjnJLUIC4GnclWR
-         +F1Q==
-X-Gm-Message-State: AOAM532YC/344uDpIw4UuE4ENn5jsqRmY/nXtrEFuH8zbMDFyepzjM/P
-        9rs7KgdDbq5gotJOJwn6NnrmLP9JxQwUXvbsM+r9FQ==
-X-Google-Smtp-Source: ABdhPJwZC/wvD6VzNIpF/Y/XATk6DvG8Fq7Kxsq+wI7cylWx0LPWterz+z+mAq8/iVcfHJ3ALSjOZtB3VDiJOEvRFGs=
-X-Received: by 2002:a17:906:300f:b0:6e0:b38d:777d with SMTP id
- 15-20020a170906300f00b006e0b38d777dmr21259966ejz.189.1649471946515; Fri, 08
- Apr 2022 19:39:06 -0700 (PDT)
+        bh=VQyPSrgr9MS7EpRh2VWlvGNNESfQ8NWuUEdNThLjldw=;
+        b=TpQoz6++D+H12KEm050blNFvxr4+h3HYy151nEHTOfyAON0FVALiM60uZV1diBtkYI
+         YM6/fPHGfsWO75N8QHxEcbcPzklVOGc1X9oVT/dB3Vcdc8IHuQsjI77evYjhntUJR9gc
+         Ha3u1zAR+kw1+o8fTHL48sn3gnv+xhdH7Nmv9uc8jNvyM29yon0Srd5KxFk7jomWSFlN
+         dp2MJYus/nkvnGUx/FobCU9FJT2GIVSDODO8yzoU+HMExQPF1jIDPCep+eVI4JXL5nq1
+         ReIuzPg8OV1fYPnkAUGPIaAa218WDuFYkQ/yaaUvOTu84jYDGREiosWnr77zYUffcfi5
+         qB2g==
+X-Gm-Message-State: AOAM533pWRJmX/6mc/FeESbQK0L+JK7LdGfzOVe372g3+u42l1HnCGhH
+        m9Aj4piiE4IMCWv2DQgxyWAO8SwKd8xAxnpQoA==
+X-Google-Smtp-Source: ABdhPJysfJ3hL7zN/14NcjhG+NL5gN9Clmu0frccbRswIVmlJPnlxX6eWfAoWuAW0vahw3vc6onqFPX7Wiq9q3zMTS4=
+X-Received: by 2002:a17:902:e80c:b0:156:bc53:704e with SMTP id
+ u12-20020a170902e80c00b00156bc53704emr21820688plg.31.1649472992064; Fri, 08
+ Apr 2022 19:56:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220406233648.21644-1-brad@pensando.io> <20220406233648.21644-12-brad@pensando.io>
- <9c08f621be28dba65e811bc9cdedc882@kernel.org>
-In-Reply-To: <9c08f621be28dba65e811bc9cdedc882@kernel.org>
-From:   Brad Larson <brad@pensando.io>
-Date:   Fri, 8 Apr 2022 19:38:55 -0700
-Message-ID: <CAK9rFnyRTX+VM5g9P-ar=3VaExhHcwR8DzLvxtv-tG8cN9gqEQ@mail.gmail.com>
-Subject: Re: [PATCH 11/11] arm64: dts: Add Pensando Elba SoC support
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Mark Brown <broonie@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Olof Johansson <olof@lixom.net>,
-        David Clear <dac2@pensando.io>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
+References: <20220409022629.3493557-1-zheyuma97@gmail.com> <YlDwoazfX4rcf4ho@google.com>
+In-Reply-To: <YlDwoazfX4rcf4ho@google.com>
+From:   Zheyu Ma <zheyuma97@gmail.com>
+Date:   Sat, 9 Apr 2022 10:56:21 +0800
+Message-ID: <CAMhUBj=Z+zsU9-cjRZv5b3=_N5GMNeW7C3z9BATrMZcNpQ9JKw@mail.gmail.com>
+Subject: Re: [PATCH] input: cypress-sf: Register a callback to disable the regulators
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     y.oudjana@protonmail.com, linux-input@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 7, 2022 at 12:57 AM Marc Zyngier <maz@kernel.org> wrote:
+On Sat, Apr 9, 2022 at 10:34 AM Dmitry Torokhov
+<dmitry.torokhov@gmail.com> wrote:
 >
-> > +             gic: interrupt-controller@800000 {
-> > +                     compatible = "arm,gic-v3";
-> > +                     #interrupt-cells = <3>;
-> > +                     #address-cells = <2>;
-> > +                     #size-cells = <2>;
-> > +                     ranges;
-> > +                     interrupt-controller;
-> > +                     reg = <0x0 0x800000 0x0 0x200000>,      /* GICD */
-> > +                           <0x0 0xa00000 0x0 0x200000>;      /* GICR */
+> Hi Zheyu,
 >
-> You are still missing the GICV and GICH regions that are
-> provided by the CPU. I already pointed that out in [1].
+> On Sat, Apr 09, 2022 at 10:26:29AM +0800, Zheyu Ma wrote:
+> > When the driver fails to probe, we will get the following splat:
+> >
+> > [   19.311970] ------------[ cut here ]------------
+> > [   19.312566] WARNING: CPU: 3 PID: 375 at drivers/regulator/core.c:2257 _regulator_put+0x3ec/0x4e0
+> > [   19.317591] RIP: 0010:_regulator_put+0x3ec/0x4e0
+> > [   19.328831] Call Trace:
+> > [   19.329112]  <TASK>
+> > [   19.329369]  regulator_bulk_free+0x82/0xe0
+> > [   19.329860]  devres_release_group+0x319/0x3d0
+> > [   19.330357]  i2c_device_probe+0x766/0x940
+> >
+> > Fix this by adding a callback that will deal with the disabling when the
+> > driver fails to probe.
+> >
+> > Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+> > ---
+> >  drivers/input/keyboard/cypress-sf.c | 11 +++++++++++
+> >  1 file changed, 11 insertions(+)
+> >
+> > diff --git a/drivers/input/keyboard/cypress-sf.c b/drivers/input/keyboard/cypress-sf.c
+> > index c28996028e80..798611b76de6 100644
+> > --- a/drivers/input/keyboard/cypress-sf.c
+> > +++ b/drivers/input/keyboard/cypress-sf.c
+> > @@ -61,6 +61,13 @@ static irqreturn_t cypress_sf_irq_handler(int irq, void *devid)
+> >       return IRQ_HANDLED;
+> >  }
+> >
+> > +static void cypress_sf_disable_regulator(void *arg)
+> > +{
+> > +     struct cypress_sf_data *data = arg;
+> > +
+> > +     regulator_bulk_disable(ARRAY_SIZE(data->regulators), data->regulators);
+> > +}
+> > +
+> >  static int cypress_sf_probe(struct i2c_client *client)
+> >  {
+> >       struct cypress_sf_data *touchkey;
+> > @@ -84,6 +91,10 @@ static int cypress_sf_probe(struct i2c_client *client)
+> >               return error;
+> >       }
+> >
+> > +     error = devm_add_action_or_reset(&client->dev, cypress_sf_disable_regulator, touchkey);
+> > +     if (error)
+> > +             return error;
 >
-> The Cortex-A72 TRM will tell you where to find them (at
-> an offset from PERIPHBASE).
+> This needs to be moved to the spot after we enabled regulators. I
+> adjusted and applied.
 
-Hi Marc,
+Thanks for your reminder!
 
-Got the addresses, neither region is used, and will be included in the
-next submission.
-
-Best,
-Brad
+Zheyu Ma

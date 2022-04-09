@@ -2,190 +2,339 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9ADE4FA4D2
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 07:03:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC1B44FA4B7
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 07:03:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241065AbiDIFFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 01:05:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38734 "EHLO
+        id S241054AbiDIFE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 01:04:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241822AbiDIE7x (ORCPT
+        with ESMTP id S242547AbiDIFCE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 00:59:53 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68E6106602
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 21:54:09 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id q142so9459707pgq.9
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 21:54:09 -0700 (PDT)
+        Sat, 9 Apr 2022 01:02:04 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0906BB39;
+        Fri,  8 Apr 2022 21:59:57 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id b21so18160764lfb.5;
+        Fri, 08 Apr 2022 21:59:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0FSMl2l16K/gl13Zkq9p7J1+n7AVpMqSjL319MjBslk=;
-        b=f8q2LsZ3fu25tNPoP1dPPW2SWEZHiYPUc4dmuQsuRQX3RIHDgHRLRvFjBPTMCHgdTA
-         uwIfQ6fvE0GBFYMYzWYK0s4GWH73EHZLDQewePd9t4fPn1sq57fyXWZCCizSlRcR9Q0n
-         Voj3Z4uDMztrsQFnhFSw/3neUlL4Ho/DQh8v5zhBDHslgurbPd8NmMTlFpZJXjyDoCdJ
-         UCkKn726gTrnEZf2broMTcG6pF/9ucVFhLc0uGfbIb7PfaIRBj+TaWebt44CKDwrN/Up
-         6P5Cws4IrW2Aa+yJweZcX7b5RfG3Fbj0JfXCnYSMIT4M3WyJGiYlTL/SpW9/cqLKjUV2
-         PSKg==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=zVSR57Cc7QE1uggb8Qy0UDFjKrea3UykmqHWvT1DiyY=;
+        b=E3LGWZi8amaw7nhl++phVHvK+pbP2A/KT0gzkMp73wWpmD0qgt2M6oLozmkokX/mn7
+         uANjh2KJQjjru18AzOHnUrRUNYp+6iDZdfWz3nurk2oW91foLcRGLDleKhyZ0wyG/ry1
+         0IAibz60tK0+dHykDpjU7LNPjgWmDYyLw3l4fbttNQVOet/WxdHRXpzuiJ7MIm0XbT0U
+         MDLgxVDCC1c/q9jS/00PVjh0RADo/N5FA5hrcrclCtpFPaPQ/jg6rmbicnrc6Fmezjh7
+         +pDK8140WXosP5Js07Go7J1sTH02Fb2eQDgQJjs4uppo51W2JB6l9NpCtqiheQs/Sam4
+         ksAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0FSMl2l16K/gl13Zkq9p7J1+n7AVpMqSjL319MjBslk=;
-        b=JUb54uigwUeaPqupt095KZ5UrhQ1wVmyuCEQKiWeWyhzOxygUZ7DFNwcKSgGTwEB0d
-         ndJikSVp6DtKlFFOUmK3lkMOdX2THmV2MJldj2T7c7/IgWVlvlawGqXwiObgvYMc89lr
-         5Dx3yq08Q+SSYIF2ONEKNvDhAqi8tTfUST2tztw6ZyW67GUFH/FkIcX/VhbFsf/gsWwp
-         fFsqtoV/rTeyYIkl+hThmgp0YwXDgxMRPEUi9nJXShh1phTJI1wOSf3wvi6UJuTwFF9n
-         eiHGvWvMsTh/Dy/gJpTEVRuXxO24SrSN8MhxFJO3zPBUXEm4dkwuXIAwuLW4OGrZNvd7
-         tfdQ==
-X-Gm-Message-State: AOAM530T4KzEaISlHY/H0ZPAWFxjAw3ANQhCLasiOxSx/kTmUdzV8X0B
-        0FW4YhTKI2x4hFL1RcAUOvufPA==
-X-Google-Smtp-Source: ABdhPJylLEgTAoaTFJvLKSHpb+nVvTv8/O/u2Nrurc3h+pvbM18KHPe0h0KE2zYt5zXkslcbp65K1A==
-X-Received: by 2002:a63:5d1c:0:b0:39c:c5d7:ebbb with SMTP id r28-20020a635d1c000000b0039cc5d7ebbbmr9722766pgb.54.1649480049291;
-        Fri, 08 Apr 2022 21:54:09 -0700 (PDT)
-Received: from x1.hsd1.or.comcast.net ([2601:1c2:1001:7090:8fa3:3402:f693:9f86])
-        by smtp.gmail.com with ESMTPSA id k6-20020a056a00134600b004faba67f9d4sm28423050pfu.197.2022.04.08.21.54.07
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zVSR57Cc7QE1uggb8Qy0UDFjKrea3UykmqHWvT1DiyY=;
+        b=nxb6ybykwFs0XEtYHQNIC0rLvJCuoFIKJvp10afHuFqdHpd+ns+f9+/t6VH6nj+ad3
+         wsfHV+OutpNRRYREbQ5x9Sz1gUOjLT7e/4OE9srE9ibt8IMh8nxsm1DYRhGLr4t3xcUJ
+         0/001B6JpjRo871xgOdeY2u3n0osu5W3+EFgBzdPImWseLHwnOE9wWODhuOBh+/LbfSZ
+         xFiGvKRg1OoqWMlkTtV7vokLckhr1FLWvOiVmsvsKaZLzHpVf2tLQ3NRj2itUo6o2gI1
+         VyUJliw0jOLSaXnTOx3GHsv4o+2J12dWdML2OcMORWkeXdw1VCrgZzTe9Jdh98YuMHpY
+         3W7Q==
+X-Gm-Message-State: AOAM530RNeTZT5Z4cUYRmofXKyPMRVkln0abmUooB+UbmHkLLpLIYJr4
+        rILhs89Uk/2qVGyERLonk/k=
+X-Google-Smtp-Source: ABdhPJx782kS+jVFQgcJrQHY8TzqoG50hdn9605PvdQiq4hfmTjCeemXIq3OPsPkDHgTvnHA2Q31Ww==
+X-Received: by 2002:a05:6512:304a:b0:44a:c4a4:8e9d with SMTP id b10-20020a056512304a00b0044ac4a48e9dmr14458299lfb.624.1649480395014;
+        Fri, 08 Apr 2022 21:59:55 -0700 (PDT)
+Received: from mobilestation ([95.79.134.149])
+        by smtp.gmail.com with ESMTPSA id w17-20020a194911000000b0046b9191418fsm100214lfa.64.2022.04.08.21.59.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 21:54:08 -0700 (PDT)
-From:   Drew Fustini <dfustini@baylibre.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Nishanth Menon <nm@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Dave Gerlach <d-gerlach@ti.com>,
-        Tony Lindgren <tony@atomide.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Drew Fustini <dfustini@baylibre.com>,
-        Keerthy <j-keerthy@ti.com>
-Subject: [PATCH 2/2] soc: ti: wkup_m3_ipc: Add support for toggling VTT regulator
-Date:   Fri,  8 Apr 2022 21:51:45 -0700
-Message-Id: <20220409045145.2434096-3-dfustini@baylibre.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220409045145.2434096-1-dfustini@baylibre.com>
-References: <20220409045145.2434096-1-dfustini@baylibre.com>
+        Fri, 08 Apr 2022 21:59:54 -0700 (PDT)
+Date:   Sat, 9 Apr 2022 07:59:52 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Rob Herring <robh+dt@kernel.org>, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 05/21] ata: libahci_platform: Convert to using devm bulk
+ clocks API
+Message-ID: <20220409045952.3h4jkzkgziea4ysh@mobilestation>
+References: <20220324001628.13028-1-Sergey.Semin@baikalelectronics.ru>
+ <20220324001628.13028-6-Sergey.Semin@baikalelectronics.ru>
+ <603eb020-3f43-c193-b3f6-8ff697f845c8@opensource.wdc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <603eb020-3f43-c193-b3f6-8ff697f845c8@opensource.wdc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Gerlach <d-gerlach@ti.com>
+On Thu, Mar 24, 2022 at 10:29:01AM +0900, Damien Le Moal wrote:
+> On 3/24/22 09:16, Serge Semin wrote:
+> > In order to simplify the clock-related code there is a way to convert the
+> > current fixed clocks array into using the common bulk clocks kernel API
+> > with dynamic set of the clock handlers and device-managed clock-resource
+> > tracking. It's a bit tricky due to the complication coming from the
+> > requirement to support the platforms (da850, spear13xx) with the
+> > non-OF-based clock source, but still doable.
+> > 
+> > Before this modification there are two methods have been used to get the
+> > clocks connected to an AHCI device: clk_get() - to get the very first
+> > clock in the list and of_clk_get() - to get the rest of them. Basically
+> > the platforms with non-OF-based clocks definition could specify only a
+> > single reference clock source. The platforms with OF-hw clocks have been
+> > luckier and could setup up to AHCI_MAX_CLKS clocks. Such semantic can be
+> > retained with using devm_clk_bulk_get_all() to retrieve the clocks defined
+> > via the DT firmware and devm_clk_get_optional() otherwise. In both cases
+> > using the device-managed version of the methods will cause the automatic
+> > resources deallocation on the AHCI device removal event. The only
+> > complicated part in the suggested approach is the explicit allocation and
+> > initialization of the clk_bulk_data structure instance for the non-OF
+> > reference clocks. It's required in order to use the Bulk Clocks API for
+> > the both denoted cases of the clocks definition.
+> > 
+> > Note aside with the clock-related code reduction and natural
+> > simplification, there are several bonuses the suggested modification
+> > provides. First of all the limitation of having no greater than
+> > AHCI_MAX_CLKS clocks is now removed, since the devm_clk_bulk_get_all()
+> > method will allocate as many reference clocks data descriptors as there
+> > are clocks specified for the device. Secondly the clock names are
+> > auto-detected. So the glue drivers can make sure that the required clocks
+> > are specified just by checking the clock IDs in the clk_bulk_data array.
+> > Thirdly using the handy Bulk Clocks kernel API improves the
+> > clocks-handling code readability. And the last but not least this
+> > modification implements a true optional clocks support to the
+> > ahci_platform_get_resources() method. Indeed the previous clocks getting
+> > procedure just stopped getting the clocks on any errors (aside from
+> > non-critical -EPROBE_DEFER) in a way so the callee wasn't even informed
+> > about abnormal loop termination. The new implementation lacks of such
+> > problem. The ahci_platform_get_resources() will return an error code if
+> > the corresponding clocks getting method ends execution abnormally.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > ---
+> >  drivers/ata/ahci.h             |  4 +-
+> >  drivers/ata/libahci_platform.c | 82 +++++++++++++++-------------------
+> >  2 files changed, 37 insertions(+), 49 deletions(-)
+> > 
+> > diff --git a/drivers/ata/ahci.h b/drivers/ata/ahci.h
+> > index eeac5482f1d1..1564c691094a 100644
+> > --- a/drivers/ata/ahci.h
+> > +++ b/drivers/ata/ahci.h
+> > @@ -38,7 +38,6 @@
+> >  
+> >  enum {
+> >  	AHCI_MAX_PORTS		= 32,
+> > -	AHCI_MAX_CLKS		= 5,
+> >  	AHCI_MAX_SG		= 168, /* hardware max is 64K */
+> >  	AHCI_DMA_BOUNDARY	= 0xffffffff,
+> >  	AHCI_MAX_CMDS		= 32,
+> > @@ -341,7 +340,8 @@ struct ahci_host_priv {
+> >  	u32			em_msg_type;	/* EM message type */
+> >  	u32			remapped_nvme;	/* NVMe remapped device count */
+> >  	bool			got_runtime_pm; /* Did we do pm_runtime_get? */
+> > -	struct clk		*clks[AHCI_MAX_CLKS]; /* Optional */
+> > +	unsigned int		n_clks;
+> > +	struct clk_bulk_data	*clks;		/* Optional */
+> >  	struct reset_control	*rsts;		/* Optional */
+> >  	struct regulator	**target_pwrs;	/* Optional */
+> >  	struct regulator	*ahci_regulator;/* Optional */
+> > diff --git a/drivers/ata/libahci_platform.c b/drivers/ata/libahci_platform.c
+> > index 8eabbb5f208c..d805ddc3a024 100644
+> > --- a/drivers/ata/libahci_platform.c
+> > +++ b/drivers/ata/libahci_platform.c
+> > @@ -8,6 +8,7 @@
+> >   *   Anton Vorontsov <avorontsov@ru.mvista.com>
+> >   */
+> >  
+> > +#include <linux/clk-provider.h>
+> >  #include <linux/clk.h>
+> >  #include <linux/kernel.h>
+> >  #include <linux/gfp.h>
+> > @@ -97,28 +98,14 @@ EXPORT_SYMBOL_GPL(ahci_platform_disable_phys);
+> >   * ahci_platform_enable_clks - Enable platform clocks
+> >   * @hpriv: host private area to store config values
+> >   *
+> > - * This function enables all the clks found in hpriv->clks, starting at
+> > - * index 0. If any clk fails to enable it disables all the clks already
+> > - * enabled in reverse order, and then returns an error.
+> > + * This function enables all the clks found for the AHCI device.
+> >   *
+> >   * RETURNS:
+> >   * 0 on success otherwise a negative error code
+> >   */
+> >  int ahci_platform_enable_clks(struct ahci_host_priv *hpriv)
+> >  {
+> > -	int c, rc;
+> > -
+> > -	for (c = 0; c < AHCI_MAX_CLKS && hpriv->clks[c]; c++) {
+> > -		rc = clk_prepare_enable(hpriv->clks[c]);
+> > -		if (rc)
+> > -			goto disable_unprepare_clk;
+> > -	}
+> > -	return 0;
+> > -
+> > -disable_unprepare_clk:
+> > -	while (--c >= 0)
+> > -		clk_disable_unprepare(hpriv->clks[c]);
+> > -	return rc;
+> > +	return clk_bulk_prepare_enable(hpriv->n_clks, hpriv->clks);
+> >  }
+> >  EXPORT_SYMBOL_GPL(ahci_platform_enable_clks);
+> >  
+> > @@ -126,16 +113,13 @@ EXPORT_SYMBOL_GPL(ahci_platform_enable_clks);
+> >   * ahci_platform_disable_clks - Disable platform clocks
+> >   * @hpriv: host private area to store config values
+> >   *
+> > - * This function disables all the clks found in hpriv->clks, in reverse
+> > - * order of ahci_platform_enable_clks (starting at the end of the array).
+> > + * This function disables all the clocks enabled before
+> > + * (bulk-clocks-disable function is supposed to do that in reverse
+> > + * from the enabling procedure order).
+> >   */
+> >  void ahci_platform_disable_clks(struct ahci_host_priv *hpriv)
+> >  {
+> > -	int c;
+> > -
+> > -	for (c = AHCI_MAX_CLKS - 1; c >= 0; c--)
+> > -		if (hpriv->clks[c])
+> > -			clk_disable_unprepare(hpriv->clks[c]);
+> > +	clk_bulk_disable_unprepare(hpriv->n_clks, hpriv->clks);
+> >  }
+> >  EXPORT_SYMBOL_GPL(ahci_platform_disable_clks);
+> >  
+> > @@ -292,8 +276,6 @@ static void ahci_platform_put_resources(struct device *dev, void *res)
+> >  		pm_runtime_disable(dev);
+> >  	}
+> >  
+> > -	for (c = 0; c < AHCI_MAX_CLKS && hpriv->clks[c]; c++)
+> > -		clk_put(hpriv->clks[c]);
+> >  	/*
+> >  	 * The regulators are tied to child node device and not to the
+> >  	 * SATA device itself. So we can't use devm for automatically
+> > @@ -374,8 +356,8 @@ static int ahci_platform_get_regulator(struct ahci_host_priv *hpriv, u32 port,
+> >   * 1) mmio registers (IORESOURCE_MEM 0, mandatory)
+> >   * 2) regulator for controlling the targets power (optional)
+> >   *    regulator for controlling the AHCI controller (optional)
+> > - * 3) 0 - AHCI_MAX_CLKS clocks, as specified in the devs devicetree node,
+> > - *    or for non devicetree enabled platforms a single clock
+> > + * 3) all clocks specified in the devicetree node, or a single
+> > + *    clock for non-OF platforms (optional)
+> >   * 4) resets, if flags has AHCI_PLATFORM_GET_RESETS (optional)
+> >   * 5) phys (optional)
+> >   *
+> > @@ -385,11 +367,10 @@ static int ahci_platform_get_regulator(struct ahci_host_priv *hpriv, u32 port,
+> >  struct ahci_host_priv *ahci_platform_get_resources(struct platform_device *pdev,
+> >  						   unsigned int flags)
+> >  {
+> > +	int enabled_ports = 0, rc = 0, child_nodes;
+> >  	struct device *dev = &pdev->dev;
+> >  	struct ahci_host_priv *hpriv;
+> > -	struct clk *clk;
+> >  	struct device_node *child;
+> > -	int i, enabled_ports = 0, rc = 0, child_nodes;
+> >  	u32 mask_port_map = 0;
+> >  
+> >  	if (!devres_open_group(dev, NULL, GFP_KERNEL))
+> > @@ -413,25 +394,32 @@ struct ahci_host_priv *ahci_platform_get_resources(struct platform_device *pdev,
+> >  		}
+> >  	}
+> >  
+> > -	for (i = 0; i < AHCI_MAX_CLKS; i++) {
+> > -		/*
+> > -		 * For now we must use clk_get(dev, NULL) for the first clock,
+> > -		 * because some platforms (da850, spear13xx) are not yet
+> > -		 * converted to use devicetree for clocks.  For new platforms
+> > -		 * this is equivalent to of_clk_get(dev->of_node, 0).
+> > -		 */
+> > -		if (i == 0)
+> > -			clk = clk_get(dev, NULL);
+> > -		else
+> > -			clk = of_clk_get(dev->of_node, i);
+> > -
+> > -		if (IS_ERR(clk)) {
+> > -			rc = PTR_ERR(clk);
+> > -			if (rc == -EPROBE_DEFER)
+> > -				goto err_out;
+> > -			break;
+> > +	/*
+> > +	 * Bulk clock get procedure can fail to find any clock due to running
+> > +	 * an a non-OF platform or due to the clocks being defined in bypass
+> > +	 * from the DT firmware (like da850, spear13xx). In that case we
+> > +	 * fallback to getting a single clock source right from the dev clocks
+> > +	 * list.
+> > +	 */
+> > +	rc = devm_clk_bulk_get_all(dev, &hpriv->clks);
+> 
 
-Some boards (currently AM335x EVM-SK) provides s/w control via
-GPIO to toggle VTT regulator to reduce power consumption in low
-power state.
+> I would move the error check first here to make things more readable:
 
-The VTT regulator should be disabled after enabling self-refresh on
-suspend, and should be enabled before disabling self-refresh on resume.
-This is to allow proper self-refresh entry/exit commands to be
-transmitted to the memory.
+Agreed. Good note.
 
-Add support for toggling VTT regulator using DT properties.
-Actual toggling happens in CM3 Firmware. The enable option & the GPIO
-pin used is collected in A8 Core and then sent to CM3 using IPC
-registers.
+> 
+> 	rc = devm_clk_bulk_get_all(dev, &hpriv->clks);
+> 	if (rc < 0)
+> 		goto err_out;
+> 
+> 	if (rc) {
+> 		/* Got clocks in bulk */
+> 		hpriv->n_clks = rc;
+> 	} else {
+> 		/*
+> 		 * No clock bulk found: fallback to manually getting
+> 		 * the optional clock.
+> 		 */
+> 		hpriv->clks = devm_kzalloc(dev, sizeof(*hpriv->clks),
+> 					   GFP_KERNEL);
+> 		...
+> 	}
+> 
+> And it may be cleaner to move this entire code hunk into a helper,
+> something like ahci_platform_get_clks() ?
 
-Note:
-Here it is assumed that VTT Toggle will be done using a pin on GPIO-0
-Instance. The reason is GPIO-0 is in wakeup domain.
+I'd rather keep the code embedded seeing it won't be used anywhere
+than here and in order to keep the ahci_platform_get_resources()
+function more-or-less coherent.  Otherwise moving just a part of the
+function would be a half-measure since the methods like
+ahci_platform_get_regs(), ahci_platform_get_regulators(), etc could be
+also unpinned.
 
-Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
-Signed-off-by: Keerthy <j-keerthy@ti.com>
-Signed-off-by: Drew Fustini <dfustini@baylibre.com>
----
- drivers/soc/ti/wkup_m3_ipc.c | 27 +++++++++++++++++++++++++--
- include/linux/wkup_m3_ipc.h  |  1 +
- 2 files changed, 26 insertions(+), 2 deletions(-)
+-Sergey
 
-diff --git a/drivers/soc/ti/wkup_m3_ipc.c b/drivers/soc/ti/wkup_m3_ipc.c
-index 2f03ced0f411..8b92425255a2 100644
---- a/drivers/soc/ti/wkup_m3_ipc.c
-+++ b/drivers/soc/ti/wkup_m3_ipc.c
-@@ -40,6 +40,13 @@
- #define M3_FW_VERSION_MASK		0xffff
- #define M3_WAKE_SRC_MASK		0xff
- 
-+#define IPC_MEM_TYPE_SHIFT		(0x0)
-+#define IPC_MEM_TYPE_MASK		(0x7 << 0)
-+#define IPC_VTT_STAT_SHIFT		(0x3)
-+#define IPC_VTT_STAT_MASK		(0x1 << 3)
-+#define IPC_VTT_GPIO_PIN_SHIFT		(0x4)
-+#define IPC_VTT_GPIO_PIN_MASK		(0x3f << 4)
-+
- #define M3_STATE_UNKNOWN		0
- #define M3_STATE_RESET			1
- #define M3_STATE_INITED			2
-@@ -215,6 +222,12 @@ static int wkup_m3_is_available(struct wkup_m3_ipc *m3_ipc)
- 		(m3_ipc->state != M3_STATE_UNKNOWN));
- }
- 
-+static void wkup_m3_set_vtt_gpio(struct wkup_m3_ipc *m3_ipc, int gpio)
-+{
-+	m3_ipc->vtt_conf = (1 << IPC_VTT_STAT_SHIFT) |
-+			    (gpio << IPC_VTT_GPIO_PIN_SHIFT);
-+}
-+
- /* Public functions */
- /**
-  * wkup_m3_set_mem_type - Pass wkup_m3 which type of memory is in use
-@@ -294,7 +307,8 @@ static int wkup_m3_prepare_low_power(struct wkup_m3_ipc *m3_ipc, int state)
- 	/* Program each required IPC register then write defaults to others */
- 	wkup_m3_ctrl_ipc_write(m3_ipc, m3_ipc->resume_addr, 0);
- 	wkup_m3_ctrl_ipc_write(m3_ipc, m3_power_state, 1);
--	wkup_m3_ctrl_ipc_write(m3_ipc, m3_ipc->mem_type, 4);
-+	wkup_m3_ctrl_ipc_write(m3_ipc, m3_ipc->mem_type |
-+			       m3_ipc->vtt_conf, 4);
- 
- 	wkup_m3_ctrl_ipc_write(m3_ipc, DS_IPC_DEFAULT, 2);
- 	wkup_m3_ctrl_ipc_write(m3_ipc, DS_IPC_DEFAULT, 3);
-@@ -433,12 +447,13 @@ static int wkup_m3_rproc_boot_thread(void *arg)
- static int wkup_m3_ipc_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
--	int irq, ret;
-+	int irq, ret, temp;
- 	phandle rproc_phandle;
- 	struct rproc *m3_rproc;
- 	struct resource *res;
- 	struct task_struct *task;
- 	struct wkup_m3_ipc *m3_ipc;
-+	struct device_node *np = dev->of_node;
- 
- 	m3_ipc = devm_kzalloc(dev, sizeof(*m3_ipc), GFP_KERNEL);
- 	if (!m3_ipc)
-@@ -496,6 +511,14 @@ static int wkup_m3_ipc_probe(struct platform_device *pdev)
- 
- 	m3_ipc->ops = &ipc_ops;
- 
-+	if (of_find_property(np, "ti,needs-vtt-toggle", NULL) &&
-+	    !(of_property_read_u32(np, "ti,vtt-gpio-pin", &temp))) {
-+		if (temp >= 0 && temp <= 31)
-+			wkup_m3_set_vtt_gpio(m3_ipc, temp);
-+		else
-+			dev_warn(dev, "Invalid VTT GPIO(%d) pin\n", temp);
-+	}
-+
- 	/*
- 	 * Wait for firmware loading completion in a thread so we
- 	 * can boot the wkup_m3 as soon as it's ready without holding
-diff --git a/include/linux/wkup_m3_ipc.h b/include/linux/wkup_m3_ipc.h
-index 3f496967b538..2bc52c6381d5 100644
---- a/include/linux/wkup_m3_ipc.h
-+++ b/include/linux/wkup_m3_ipc.h
-@@ -33,6 +33,7 @@ struct wkup_m3_ipc {
- 
- 	int mem_type;
- 	unsigned long resume_addr;
-+	int vtt_conf;
- 	int state;
- 
- 	struct completion sync_complete;
--- 
-2.32.0
-
+> 
+> > +	if (rc > 0) {
+> > +		hpriv->n_clks = rc;
+> > +	} else if (!rc) {
+> > +		hpriv->clks = devm_kzalloc(dev, sizeof(*hpriv->clks), GFP_KERNEL);
+> > +		if (!hpriv->clks) {
+> > +			rc = -ENOMEM;
+> > +			goto err_out;
+> >  		}
+> > -		hpriv->clks[i] = clk;
+> > +		hpriv->clks->clk = devm_clk_get_optional(dev, NULL);
+> > +		if (IS_ERR(hpriv->clks->clk)) {
+> > +			rc = PTR_ERR(hpriv->clks->clk);
+> > +			goto err_out;
+> > +		} else if (hpriv->clks->clk) {
+> > +			hpriv->clks->id = __clk_get_name(hpriv->clks->clk);
+> > +			hpriv->n_clks = 1;
+> > +		}
+> > +	} else {
+> > +		goto err_out;
+> >  	}
+> >  
+> >  	hpriv->ahci_regulator = devm_regulator_get(dev, "ahci");
+> 
+> 
+> -- 
+> Damien Le Moal
+> Western Digital Research

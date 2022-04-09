@@ -2,110 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D0E64FA0FD
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 03:19:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2369A4FA0FF
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 03:19:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238077AbiDIBUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 21:20:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35050 "EHLO
+        id S238429AbiDIBVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 21:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiDIBUO (ORCPT
+        with ESMTP id S229609AbiDIBVA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 21:20:14 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430C56398;
-        Fri,  8 Apr 2022 18:18:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 96EF3CE2E75;
-        Sat,  9 Apr 2022 01:18:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F209FC385A3;
-        Sat,  9 Apr 2022 01:18:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649467085;
-        bh=JDgbXu1r/B28ewr+7REvw/NDIWKfigmu2Yr8qTLopwE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=oMkqk95vMf9qSSqPS3B6245igexQ2zmPBPLB2m/ASzh3TnC6e4FjjA+Jn+8DQ3kNy
-         uXLRF6CHxMJGvVRpdGvHaoK/XcFqUKJY08D8oEzl16F5fSK7EV2aUFKljDvjwIirCk
-         0K3Z71zNI50eW88wneZHvjHpHNA3RlsHNDoOHDmX4vPM7sA7t8goyEyf3an446d6aB
-         RXj0DXXd+Yr9kib8b0UBkLRerzelf8JykaOP4v7UQiRv8Dvw+bpa115QX0agKjkxgq
-         0O6rpNjYX77A9i4KJ4QAwL0AJSB3CzvS+xxW4/hyqkTiKlKhKLjQBQQL6vqSmCA7Hz
-         Zs492SPJefBHA==
-Message-ID: <d7a85a29-0d7f-b5e2-c908-4aa9f89bb476@kernel.org>
-Date:   Fri, 8 Apr 2022 19:18:03 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [PATCH net-next v2] net/ipv6: Introduce accept_unsolicited_na
- knob to implement router-side changes for RFC9131
-Content-Language: en-US
-To:     Arun Ajith S <aajith@arista.com>, netdev@vger.kernel.org
-Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, yoshfuji@linux-ipv6.org,
-        kuba@kernel.org, pabeni@redhat.com, corbet@lwn.net,
-        prestwoj@gmail.com, gilligan@arista.com, noureddine@arista.com,
-        gk@arista.com
-References: <20220407074428.1623-1-aajith@arista.com>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <20220407074428.1623-1-aajith@arista.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 8 Apr 2022 21:21:00 -0400
+Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8CBFA6398;
+        Fri,  8 Apr 2022 18:18:53 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [10.15.192.164])
+        by mail-app2 (Coremail) with SMTP id by_KCgBXj0zz3lBi0_JhAQ--.24619S2;
+        Sat, 09 Apr 2022 09:18:46 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-rdma@vger.kernel.org, jgg@ziepe.ca, shiraz.saleem@intel.com,
+        mustafa.ismail@intel.com, dan.carpenter@oracle.com,
+        Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH V5 09/11] drivers: infiniband: hw: Fix deadlock in irdma_cleanup_cm_core()
+Date:   Sat,  9 Apr 2022 09:18:42 +0800
+Message-Id: <20220409011842.45858-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: by_KCgBXj0zz3lBi0_JhAQ--.24619S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Aw13Ar15Xw1rZryxtF43Jrb_yoW8AF4xpr
+        WDW34akryq9F42ka18Xw1kZF9xXwn5XFWqvryvv395ZFn7XFyUAFnFyr1jqFZ8JF9Fgrn3
+        GF1FvryrCF9Ivr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkI1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
+        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
+        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v
+        1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgAPAVZdtZGdgQAUsr
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/7/22 1:44 AM, Arun Ajith S wrote:
-> Add a new neighbour cache entry in STALE state for routers on receiving
-> an unsolicited (gratuitous) neighbour advertisement with
-> target link-layer-address option specified.
-> This is similar to the arp_accept configuration for IPv4.
-> A new sysctl endpoint is created to turn on this behaviour:
-> /proc/sys/net/ipv6/conf/interface/accept_unsolicited_na.
-> 
-> Signed-off-by: Arun Ajith S <aajith@arista.com>
-> Tested-by: Arun Ajith S <aajith@arista.com>
+There is a deadlock in irdma_cleanup_cm_core(), which is shown
+below:
 
-you don't need the Tested-by line since you wrote the patch; you are
-expected to test it.
+   (Thread 1)              |      (Thread 2)
+                           | irdma_schedule_cm_timer()
+irdma_cleanup_cm_core()    |  add_timer()
+ spin_lock_irqsave() //(1) |  (wait a time)
+ ...                       | irdma_cm_timer_tick()
+ del_timer_sync()          |  spin_lock_irqsave() //(2)
+ (wait timer to stop)      |  ...
 
+We hold cm_core->ht_lock in position (1) of thread 1 and
+use del_timer_sync() to wait timer to stop, but timer handler
+also need cm_core->ht_lock in position (2) of thread 2.
+As a result, irdma_cleanup_cm_core() will block forever.
 
-> diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
-> index 1afc4c024981..1b4d278d0454 100644
-> --- a/net/ipv6/addrconf.c
-> +++ b/net/ipv6/addrconf.c
-> @@ -5587,6 +5587,7 @@ static inline void ipv6_store_devconf(struct ipv6_devconf *cnf,
->  	array[DEVCONF_IOAM6_ID] = cnf->ioam6_id;
->  	array[DEVCONF_IOAM6_ID_WIDE] = cnf->ioam6_id_wide;
->  	array[DEVCONF_NDISC_EVICT_NOCARRIER] = cnf->ndisc_evict_nocarrier;
-> +	array[DEVCONF_ACCEPT_UNSOLICITED_NA] = cnf->accept_unsolicited_na;
->  }
->  
->  static inline size_t inet6_ifla6_size(void)
-> @@ -7037,6 +7038,13 @@ static const struct ctl_table addrconf_sysctl[] = {
->  		.extra1		= (void *)SYSCTL_ZERO,
->  		.extra2		= (void *)SYSCTL_ONE,
->  	},
-> +	{
-> +		.procname	= "accept_unsolicited_na",
-> +		.data		= &ipv6_devconf.accept_unsolicited_na,
-> +		.maxlen		= sizeof(int),
-> +		.mode		= 0644,
-> +		.proc_handler	= proc_dointvec,
-> +	},
+This patch removes the check of timer_pending() in
+irdma_cleanup_cm_core(), because the del_timer_sync()
+function will just return directly if there isn't a
+pending timer. As a result, the lock is redundant,
+because there is no resource it could protect.
 
-I realize drop_unsolicited_na does not have limits, but this is a new
-sysctl - add the upper and lower bounds via extra1 and extra2 arguments.
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+Changes in V5:
+  - Remove mod_timer() in irdma_schedule_cm_timer and irdma_cm_timer_tick.
 
+ drivers/infiniband/hw/irdma/cm.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
+diff --git a/drivers/infiniband/hw/irdma/cm.c b/drivers/infiniband/hw/irdma/cm.c
+index dedb3b7edd8..4b6b1065f85 100644
+--- a/drivers/infiniband/hw/irdma/cm.c
++++ b/drivers/infiniband/hw/irdma/cm.c
+@@ -3251,10 +3251,7 @@ void irdma_cleanup_cm_core(struct irdma_cm_core *cm_core)
+ 	if (!cm_core)
+ 		return;
+ 
+-	spin_lock_irqsave(&cm_core->ht_lock, flags);
+-	if (timer_pending(&cm_core->tcp_timer))
+-		del_timer_sync(&cm_core->tcp_timer);
+-	spin_unlock_irqrestore(&cm_core->ht_lock, flags);
++	del_timer_sync(&cm_core->tcp_timer);
+ 
+ 	destroy_workqueue(cm_core->event_wq);
+ 	cm_core->dev->ws_reset(&cm_core->iwdev->vsi);
+-- 
+2.17.1
 
-also, please add test cases under tools/testing/selftests/net. You can
-use fib_tests.sh as a template. mausezahn is already used in a number of
-tests; it should be able to create the NA packets. Be sure to cover
-combinations of drop and accept settings.

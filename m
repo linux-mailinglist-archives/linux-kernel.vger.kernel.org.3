@@ -2,169 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C81984FA565
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 08:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B67724FA569
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 08:27:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240067AbiDIG1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 02:27:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52706 "EHLO
+        id S240091AbiDIG3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 02:29:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233998AbiDIG1I (ORCPT
+        with ESMTP id S230444AbiDIG32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 02:27:08 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A353638B1;
-        Fri,  8 Apr 2022 23:25:02 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id s14so113328plk.8;
-        Fri, 08 Apr 2022 23:25:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pA0w4O8CRiuXzvroFL62p9tDgX2SohP+G9Ok90h6Fcc=;
-        b=L3BiklhbmiTW5WIODOPjQsK+EqQy7cAIB1x2Ta48ZFCfL4ylkePY8rt0k48ijrGnZi
-         yixG4Dzh0uwl7HYOFM7N+jvM0QLUjtKWdA4yb2tPDqQk6EcusiqFXjMOhfl8Jll3ABuc
-         zDDTkFd7lclif8zLg4LqGoqfkPhI/qwY8YJcTeuVnc/+n9mRAbI0WS19SP9HGW+/eExk
-         3QMpyEg2nHGqLpYREc01qy10tC2Vqro0SaIcXAh4xq4ZwiE6u9+8w4t+waUqLgmM34iY
-         l3EkMkk1EhIX+gEuD4Wp2BK0aa4uKjbp3DYjNVA57eakqIhvLkV7URyfm0gg7kxs23Q8
-         PReQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pA0w4O8CRiuXzvroFL62p9tDgX2SohP+G9Ok90h6Fcc=;
-        b=bxlqsgxb2fj4d1Z0iKItHO+eXub6Jhqg1BEx3uldIOXzB1Wm8JRvzEz7owas1is+3C
-         nNt8YN8AzGOPa2ia+Ob6gUROGDN0zwV3R7OeYYKbQXAYdgD4xOkHDH0r7m1/Yd4c/9gY
-         dkc8mMXuD0b0/hPqnL3Q0KRc+r9/VpwoMR4KxOx0csfqJuLaowrVdiqw1dyUna5IG5w1
-         CvlNyCw34cugMnXoGP7mvbNsgGKldZu+Bi4UVs1iqwLgSwO6+c+l5Wa2n2GrDjBHjnR8
-         FFzGrClHYHO1GTdZGm6SJhM246Ek7SJoJVF02aOu24l47tZcwEU9ZgfhmUVBRBO6pN3K
-         6Yuw==
-X-Gm-Message-State: AOAM533dFdYVXUr5RoJl2aa/uyH4lQCqUSKrkWijZh0BlQA+eHgxS4OZ
-        JLgOsvhGykiHyxpV0cXITA==
-X-Google-Smtp-Source: ABdhPJzWQcBOPqOngHyVHxk75RPQHA6pbYbYLBoE2zEL49QqbCtGx9ArK4Djp3I7JPx7JN+5JB7VIA==
-X-Received: by 2002:a17:90b:1e4e:b0:1c7:3507:30db with SMTP id pi14-20020a17090b1e4e00b001c7350730dbmr25713445pjb.39.1649485502117;
-        Fri, 08 Apr 2022 23:25:02 -0700 (PDT)
-Received: from localhost.localdomain ([144.202.91.207])
-        by smtp.gmail.com with ESMTPSA id 8-20020a056a00070800b004e14ae3e8d7sm26387128pfl.164.2022.04.08.23.24.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 23:25:01 -0700 (PDT)
-From:   Zheyu Ma <zheyuma97@gmail.com>
-To:     stas.yakovlev@gmail.com, kvalo@kernel.org, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>
-Subject: [PATCH] wireless: ipw2x00: Refine the error handling of ipw2100_pci_init_one()
-Date:   Sat,  9 Apr 2022 14:24:49 +0800
-Message-Id: <20220409062449.3752252-1-zheyuma97@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 9 Apr 2022 02:29:28 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F322DB8;
+        Fri,  8 Apr 2022 23:27:23 -0700 (PDT)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 2391w3ba025898;
+        Sat, 9 Apr 2022 06:27:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to; s=pp1;
+ bh=nYfBhDx5KHSviKmstdKzW4aGEpU3WaJk1veF4iMWIYQ=;
+ b=lZAT0Jq4ePVPHjzHWWjB/o3Q7pG2Y+j55Ob4S6hcGssB4c4DGDL3Ocis7aaMFms834EL
+ qNvd8ev4GvfzpWdZbTlpYZgHyaVov/Z4hTdNKio36DHg0dPmcdLW4BSow8PJZCDo7oKL
+ cJ1G2+duxuot+Q0jhrEBU96LZ0QRGs9hfTmtyOYO2PfmqJNZveV61+PhHOrmH8uqPwrF
+ VgOOvFdj0LX9Psu5+EcoH8rAT2Cdlt5o2pM1G/ZhGiAkOeFSsIGxvupCBcunMzm0IQdk
+ eWOlzA2jSnT6mgAKwpEmO8j4UHLUJfKha+bQdWAAEFa9Bhodh1jmupksovQ/9SDwDGY5 OQ== 
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fb0xs2r47-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 09 Apr 2022 06:27:08 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2396OB1g017901;
+        Sat, 9 Apr 2022 06:27:05 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma01fra.de.ibm.com with ESMTP id 3fb1s8r5kr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 09 Apr 2022 06:27:05 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2396RBrd39911928
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 9 Apr 2022 06:27:11 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0C9A2AE051;
+        Sat,  9 Apr 2022 06:27:03 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 75477AE04D;
+        Sat,  9 Apr 2022 06:26:57 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.211.90.23])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Sat,  9 Apr 2022 06:26:57 +0000 (GMT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
+Subject: Re: [PATCH V3] testing/selftests/mqueue: Fix mq_perf_tests to free
+ the allocated cpu set
+From:   Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+In-Reply-To: <1a1d119a-e68e-a590-a518-cfb3c78ed888@linuxfoundation.org>
+Date:   Sat, 9 Apr 2022 11:56:53 +0530
+Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        disgoel@linux.vnet.ibm.com,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        maddy@linux.vnet.ibm.com, kajoljain <kjain@linux.ibm.com>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+Content-Transfer-Encoding: 7bit
+Message-Id: <4973403A-8E1A-4863-B5B1-C56BC2707B4A@linux.vnet.ibm.com>
+References: <20220408072431.94947-1-atrajeev@linux.vnet.ibm.com>
+ <1a1d119a-e68e-a590-a518-cfb3c78ed888@linuxfoundation.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+X-Mailer: Apple Mail (2.3654.120.0.1.13)
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: SQpAvJspqU78G8kAEF2mu5h6fMw24oIl
+X-Proofpoint-GUID: SQpAvJspqU78G8kAEF2mu5h6fMw24oIl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-08_09,2022-04-08_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
+ mlxscore=0 phishscore=0 malwarescore=0 suspectscore=0 spamscore=0
+ priorityscore=1501 bulkscore=0 impostorscore=0 clxscore=1015
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204090037
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver should release resources in reverse order, i.e., the
-resources requested first should be released last, and the driver
-should adjust the order of error handling code by this rule.
 
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
----
- drivers/net/wireless/intel/ipw2x00/ipw2100.c | 34 +++++++++-----------
- 1 file changed, 16 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/net/wireless/intel/ipw2x00/ipw2100.c b/drivers/net/wireless/intel/ipw2x00/ipw2100.c
-index 2ace2b27ecad..b10d10660eb8 100644
---- a/drivers/net/wireless/intel/ipw2x00/ipw2100.c
-+++ b/drivers/net/wireless/intel/ipw2x00/ipw2100.c
-@@ -6166,7 +6166,7 @@ static int ipw2100_pci_init_one(struct pci_dev *pci_dev,
- 		printk(KERN_WARNING DRV_NAME
- 		       "Error calling ioremap.\n");
- 		err = -EIO;
--		goto fail;
-+		goto out;
- 	}
- 
- 	/* allocate and initialize our net_device */
-@@ -6175,36 +6175,33 @@ static int ipw2100_pci_init_one(struct pci_dev *pci_dev,
- 		printk(KERN_WARNING DRV_NAME
- 		       "Error calling ipw2100_alloc_device.\n");
- 		err = -ENOMEM;
--		goto fail;
-+		goto fail_iounmap;
- 	}
- 
-+	priv = libipw_priv(dev);
-+	pci_set_master(pci_dev);
-+	pci_set_drvdata(pci_dev, priv);
-+
- 	/* set up PCI mappings for device */
- 	err = pci_enable_device(pci_dev);
- 	if (err) {
- 		printk(KERN_WARNING DRV_NAME
- 		       "Error calling pci_enable_device.\n");
--		return err;
-+		goto fail_dev;
- 	}
- 
--	priv = libipw_priv(dev);
--
--	pci_set_master(pci_dev);
--	pci_set_drvdata(pci_dev, priv);
--
- 	err = dma_set_mask(&pci_dev->dev, DMA_BIT_MASK(32));
- 	if (err) {
- 		printk(KERN_WARNING DRV_NAME
- 		       "Error calling pci_set_dma_mask.\n");
--		pci_disable_device(pci_dev);
--		return err;
-+		goto fail_disable;
- 	}
- 
- 	err = pci_request_regions(pci_dev, DRV_NAME);
- 	if (err) {
- 		printk(KERN_WARNING DRV_NAME
- 		       "Error calling pci_request_regions.\n");
--		pci_disable_device(pci_dev);
--		return err;
-+		goto fail_disable;
- 	}
- 
- 	/* We disable the RETRY_TIMEOUT register (0x41) to keep
-@@ -6306,9 +6303,13 @@ static int ipw2100_pci_init_one(struct pci_dev *pci_dev,
- out:
- 	return err;
- 
--      fail_unlock:
-+fail_unlock:
- 	mutex_unlock(&priv->action_mutex);
--      fail:
-+fail:
-+	pci_release_regions(pci_dev);
-+fail_disable:
-+	pci_disable_device(pci_dev);
-+fail_dev:
- 	if (dev) {
- 		if (registered >= 2)
- 			unregister_netdev(dev);
-@@ -6334,11 +6335,8 @@ static int ipw2100_pci_init_one(struct pci_dev *pci_dev,
- 
- 		free_libipw(dev, 0);
- 	}
--
-+fail_iounmap:
- 	pci_iounmap(pci_dev, ioaddr);
--
--	pci_release_regions(pci_dev);
--	pci_disable_device(pci_dev);
- 	goto out;
- }
- 
--- 
-2.25.1
+> On 09-Apr-2022, at 12:00 AM, Shuah Khan <skhan@linuxfoundation.org> wrote:
+> 
+> On 4/8/22 1:24 AM, Athira Rajeev wrote:
+>> The selftest "mqueue/mq_perf_tests.c" use CPU_ALLOC to allocate
+>> CPU set. This cpu set is used further in pthread_attr_setaffinity_np
+>> and by pthread_create in the code. But in current code, allocated
+>> cpu set is not freed.
+>> Fix this issue by adding CPU_FREE in the "shutdown" function which
+>> is called in most of the error/exit path for the cleanup. There are
+>> few error paths which exit without using shutdown. Add a common goto
+>> error path with CPU_FREE for these cases.
+>> Fixes: 7820b0715b6f ("tools/selftests: add mq_perf_tests")
+>> Signed-off-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+>> ---
+>> Changelog:
+>>  From v2 -> v3:
+>>   Addressed review comment from Shuah Khan to add
+>>   common "goto" error path with CPU_FREE for few exit
+>>   cases.
+>>  From v1 -> v2:
+>>   Addressed review comment from Shuah Khan to add
+>>   CPU_FREE in other exit paths where it is needed
+> 
+> Thank you. I will queue this up for Linux 5.18-rc3
+
+Thanks Shuah
+
+Athira
+> 
+> thanks,
+> -- Shuah
 

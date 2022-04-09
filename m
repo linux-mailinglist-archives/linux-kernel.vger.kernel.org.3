@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CFDC4FA1BF
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 04:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77A514FA1BD
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 04:37:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240640AbiDICjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 22:39:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47764 "EHLO
+        id S240648AbiDICjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 22:39:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230244AbiDICjN (ORCPT
+        with ESMTP id S240631AbiDICjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 22:39:13 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 572F8BC1E
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 19:37:07 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id b2-20020a17090a010200b001cb0c78db57so8181296pjb.2
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 19:37:07 -0700 (PDT)
+        Fri, 8 Apr 2022 22:39:15 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11D72B9
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 19:37:08 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id h19so10009121pfv.1
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 19:37:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=I1/DzlPFjUFk0MjYzMHo2z03FD2uR6K2mx8XfQf0a9U=;
-        b=XZtT8yrKepRFfhERhZAp5oo71XA263KXjL3Qjv4XAAbSeNPB3UhOKJeeKBXJF4YOU4
-         1NFNl4bRllbgKNxIicQhhlurTGU2TU0TCRwrC8X6a08sifilyZXq2XdCQCJ9yfMxLYNn
-         ISCVmEx57U/sDoC5QIJ2q6HqSZrdUq1JRkehM=
+        bh=P+4B9VZqL5jIvczk1CaOVWkNfySt1cT6osyGLgTnwSY=;
+        b=k7QxZ7tjs5d7WytyQLNKCOlmID1fy4+B+8Baj1jZuvNY8qkePxZvPREuL644WYZR+U
+         wDo3DKUgXhvJmvzbHG92cLUN0jrjwCLMQ2oPrxjjT2YSCclVvUziw8quzLYHRbwg6C8B
+         6grIU4ndH8qWUq/EmX7U3IC4Tgu2WR1x0IkfM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=I1/DzlPFjUFk0MjYzMHo2z03FD2uR6K2mx8XfQf0a9U=;
-        b=OVS29d5ioDS7+5KnvMOki5kdZnA8Z/rgL+U2juxJ/9tcuElORPE2HShjhlVRMO41Nn
-         sAJun/nLHzoQanUR/fePT1HvRpYbbelHEZGnQBwExGYXKiO9W6CKqnK22zaba9733Jtx
-         KnaHi/jCFMvCXyr9rDHLhsokDDU1kiAICVUcvaj7Cv2HQ1yuutVn7veeogrAp2U7Mnhf
-         oH8KIdQDaAboBeCnFwvoy672oHdv3Pbirfhg3ocg9pscXlamoS8G3zFHTGW19TjvnCMo
-         wQ7ikuQIaBiDKyDgNozJ/r9AgnIV5+DVN/rF+E4Ue4sEmJn4GhnGj1JXnnN3RgzNktp7
-         BzJQ==
-X-Gm-Message-State: AOAM531QjqSabroZADXAzgA+nTL/PqL05XjJyjgG6Bj/5F8ZvOQAufUr
-        N556zHkUt4ehKcKzrPZBcpcUTPsjsyjyDTWEDYjOOQ==
-X-Google-Smtp-Source: ABdhPJwZdt51lsk3c3IHjJBxHYM5wDmVdwq7Z2csXBU3FBLf+eGZyutknjA9bakiNcf6U0m+VMVpcg==
-X-Received: by 2002:a17:902:7e0d:b0:156:47a4:a7c4 with SMTP id b13-20020a1709027e0d00b0015647a4a7c4mr22687102plm.141.1649471826788;
-        Fri, 08 Apr 2022 19:37:06 -0700 (PDT)
+        bh=P+4B9VZqL5jIvczk1CaOVWkNfySt1cT6osyGLgTnwSY=;
+        b=Qps8BGiKAyCc+/ZLNl4ZmTjd16Z+ud26MrLRFgXQvUdjDdjvacM1lyAW89iX/AcNl3
+         vQdLPu0gsH47/Zs8soXalnefFbRF/zv2xsotej3Ndz9yQ1bzFoowXmwwD50nm1Z7nG+t
+         CBlu/EmtztiF61Olwc8nTSRENPgp5JpY1XBSn3eF2ZCgnEHoQz+oUUlaL92JReuJYkEk
+         liKc+/UDXK2hprdGV6vo00xJvzN+FmLQDAxv+fNRuQuOdZ18lRhIcYoKG1nWviBOW6s7
+         kdqS4Kr5I/s6GWRlHMTwEnytrVXnKaQSusL66v8UirOEov6fUAtF77DRTEt4EKt3HXnp
+         glfw==
+X-Gm-Message-State: AOAM5311IKFamRTa9VxXExTHLJBiJL+Edcjytda+cj7+pBhmmoy6KLgQ
+        19W8uNwXqYeXAnrNbXwCePJ6VQ==
+X-Google-Smtp-Source: ABdhPJx2Qn55vuhb0i/A319oTIt5Xlsg2IJgX6xY7+/M+P1CNWVeQFfa1aJkz+iCeezxOeyYVl5MUQ==
+X-Received: by 2002:a63:214b:0:b0:39c:c451:be39 with SMTP id s11-20020a63214b000000b0039cc451be39mr10102090pgm.391.1649471828391;
+        Fri, 08 Apr 2022 19:37:08 -0700 (PDT)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:17db:64e:48d4:a4e])
-        by smtp.gmail.com with ESMTPSA id 188-20020a6215c5000000b0050597294893sm759999pfv.124.2022.04.08.19.37.05
+        by smtp.gmail.com with ESMTPSA id 188-20020a6215c5000000b0050597294893sm759999pfv.124.2022.04.08.19.37.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 19:37:06 -0700 (PDT)
+        Fri, 08 Apr 2022 19:37:08 -0700 (PDT)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     dri-devel@lists.freedesktop.org
 Cc:     Robert Foss <robert.foss@linaro.org>,
@@ -55,15 +55,17 @@ Cc:     Robert Foss <robert.foss@linaro.org>,
         Philip Chen <philipchen@chromium.org>,
         Stephen Boyd <swboyd@chromium.org>,
         Douglas Anderson <dianders@chromium.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
         Daniel Vetter <daniel@ffwll.ch>,
         David Airlie <airlied@linux.ie>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Lyude Paul <lyude@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
         linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 1/6] drm/dp: Helpers to make it easier for drivers to use DP AUX bus properly
-Date:   Fri,  8 Apr 2022 19:36:23 -0700
-Message-Id: <20220408193536.RFC.1.I4182ae27e00792842cb86f1433990a0ef9c0a073@changeid>
+Subject: [RFC PATCH 2/6] drm/bridge: parade-ps8640: Break probe in two to handle DP AUX better
+Date:   Fri,  8 Apr 2022 19:36:24 -0700
+Message-Id: <20220408193536.RFC.2.Ia6324ebc848cd40b4dbd3ad3289a7ffb5c197779@changeid>
 X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
 In-Reply-To: <20220409023628.2104952-1-dianders@chromium.org>
 References: <20220409023628.2104952-1-dianders@chromium.org>
@@ -79,301 +81,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As talked about in the kerneldoc for "struct dp_aux_ep_client" in this
-patch and also in the past in commit a1e3667a9835 ("drm/bridge:
-ti-sn65dsi86: Promote the AUX channel to its own sub-dev"), to use the
-DP AUX bus properly we really need two "struct device"s. One "struct
-device" is in charge of providing the DP AUX bus and the other is
-where we'll try to get a reference to the newly probed endpoint
-devices.
+While it works, for the most part, to assume that the panel has
+finished probing when devm_of_dp_aux_populate_ep_devices() returns,
+it's a bit fragile. This is talked about at length in commit
+a1e3667a9835 ("drm/bridge: ti-sn65dsi86: Promote the AUX channel to
+its own sub-dev").
 
-In ti-sn65dsi86 this wasn't too difficult to accomplish. That driver
-is already broken up into several "struct devices" anyway because it
-also provides a PWM and some GPIOs. Adding one more wasn't that
-difficult / ugly.
+When reviewing the ps8640 code, I managed to convince myself that it
+was OK not to worry about it there and that maybe it wasn't really
+_that_ fragile. However, it turns out that it really is. Simply
+hardcoding panel_edp_probe() to return -EPROBE_DEFER was enough to put
+the boot process into an infinite loop. I believe this manages to trip
+the same issues that we used to trip with the main MSM code where
+something about our actions trigger Linux to re-probe previously
+deferred devices right away and each time we try again we re-trigger
+Linux to re-probe.
 
-When I tried to do the same solution in parade-ps8640, it felt like I
-was copying too much boilerplate code. I made the realization that I
-didn't _really_ need a separate "driver" for each person that wanted
-to do the same thing. By putting all the "driver" related code in a
-common place then we could save a bit of hassle. This change
-effectively adds a new "ep_client" driver that can be used by
-anyone. The devices instantiated by this driver will just call through
-to the probe/remove/shutdown calls provided.
+It's really not that crazy to just break the probe up. Let's use the
+new helpers introduced in the patch ("drm/dp: Helpers to make it
+easier for drivers to use DP AUX bus properly") to break the driver
+into two.
 
-At the moment, the "ep_client" driver is backed by the Linux auxiliary
-bus (unfortunate naming--this has nothing to do with DP AUX). I didn't
-want to expose this to clients, though, so as far as clients are
-concerned they get a vanilla "struct device".
+With this change, the device still boots (though obviously the panel
+doesn't come up) if I force panel-edp to always return -EPROBE_DEFER.
 
 Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
 
- drivers/gpu/drm/dp/drm_dp_aux_bus.c | 165 +++++++++++++++++++++++++++-
- include/drm/dp/drm_dp_aux_bus.h     |  58 ++++++++++
- 2 files changed, 222 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/bridge/parade-ps8640.c | 66 +++++++++++++++-----------
+ 1 file changed, 39 insertions(+), 27 deletions(-)
 
-diff --git a/drivers/gpu/drm/dp/drm_dp_aux_bus.c b/drivers/gpu/drm/dp/drm_dp_aux_bus.c
-index 415afce3cf96..5386ceacf133 100644
---- a/drivers/gpu/drm/dp/drm_dp_aux_bus.c
-+++ b/drivers/gpu/drm/dp/drm_dp_aux_bus.c
-@@ -12,6 +12,7 @@
-  * to perform transactions on that bus.
-  */
+diff --git a/drivers/gpu/drm/bridge/parade-ps8640.c b/drivers/gpu/drm/bridge/parade-ps8640.c
+index 9766cbbd62ad..96e883985608 100644
+--- a/drivers/gpu/drm/bridge/parade-ps8640.c
++++ b/drivers/gpu/drm/bridge/parade-ps8640.c
+@@ -93,6 +93,7 @@ enum ps8640_vdo_control {
+ };
  
-+#include <linux/auxiliary_bus.h>
- #include <linux/init.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
-@@ -299,6 +300,163 @@ void dp_aux_dp_driver_unregister(struct dp_aux_ep_driver *drv)
+ struct ps8640 {
++	struct dp_aux_ep_client ep_client;
+ 	struct drm_bridge bridge;
+ 	struct drm_bridge *panel_bridge;
+ 	struct drm_dp_aux aux;
+@@ -584,10 +585,36 @@ static int ps8640_bridge_host_attach(struct device *dev, struct ps8640 *ps_bridg
+ 	return 0;
  }
- EXPORT_SYMBOL_GPL(dp_aux_dp_driver_unregister);
  
-+/* -----------------------------------------------------------------------------
-+ * DP AUX EP Client
-+ */
-+
-+struct dp_aux_ep_client_data {
-+	struct dp_aux_ep_client *client;
-+	struct auxiliary_device adev;
-+};
-+
-+static int dp_aux_ep_client_probe(struct auxiliary_device *adev,
-+				  const struct auxiliary_device_id *id)
++static int ps8640_bridge_probe(struct device *clientdev, struct dp_aux_ep_client *client)
 +{
-+	struct dp_aux_ep_client_data *data =
-+		container_of(adev, struct dp_aux_ep_client_data, adev);
-+
-+	if (!data->client->probe)
-+		return 0;
-+
-+	return data->client->probe(&adev->dev, data->client);
-+}
-+
-+static void dp_aux_ep_client_remove(struct auxiliary_device *adev)
-+{
-+	struct dp_aux_ep_client_data *data =
-+		container_of(adev, struct dp_aux_ep_client_data, adev);
-+
-+	if (data->client->remove)
-+		data->client->remove(&adev->dev, data->client);
-+}
-+
-+static void dp_aux_ep_client_shutdown(struct auxiliary_device *adev)
-+{
-+	struct dp_aux_ep_client_data *data =
-+		container_of(adev, struct dp_aux_ep_client_data, adev);
-+
-+	if (data->client->shutdown)
-+		data->client->shutdown(&adev->dev, data->client);
-+}
-+
-+static void dp_aux_ep_client_dev_release(struct device *dev)
-+{
-+	struct auxiliary_device *adev = to_auxiliary_dev(dev);
-+	struct dp_aux_ep_client_data *data =
-+		container_of(adev, struct dp_aux_ep_client_data, adev);
-+
-+	kfree(data);
-+}
-+
-+/**
-+ * dp_aux_register_ep_client() - Register an DP AUX EP client
-+ * @client: The structure describing the client. It's the client's
-+ *          responsibility to keep this memory around until
-+ *          dp_aux_unregister_ep_client() is called, either explicitly or
-+ *          implicitly via devm.
-+ *
-+ * See the description of "struct dp_aux_ep_client" for a full explanation
-+ * of when you should use this and why.
-+ *
-+ * Return: 0 if no error or negative error code.
-+ */
-+int dp_aux_register_ep_client(struct dp_aux_ep_client *client)
-+{
-+	struct dp_aux_ep_client_data *data;
++	struct ps8640 *ps_bridge = container_of(client, struct ps8640, ep_client);
++	struct device_node *np = clientdev->of_node;
 +	int ret;
 +
-+	data = kzalloc(sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
++	/* port@1 is ps8640 output port */
++	ps_bridge->panel_bridge = devm_drm_of_get_bridge(clientdev, np, 1, 0);
++	if (IS_ERR(ps_bridge->panel_bridge))
++		return PTR_ERR(ps_bridge->panel_bridge);
 +
-+	data->client = client;
-+	data->adev.name = "ep_client";
-+	data->adev.dev.parent = client->aux->dev;
-+	data->adev.dev.release = dp_aux_ep_client_dev_release;
-+	device_set_of_node_from_dev(&data->adev.dev, client->aux->dev);
++	drm_bridge_add(&ps_bridge->bridge);
 +
-+	ret = auxiliary_device_init(&data->adev);
-+	if (ret) {
-+		/*
-+		 * NOTE: if init doesn't fail then it takes ownership
-+		 * of memory and this kfree() is magically part of
-+		 * auxiliary_device_uninit().
-+		 */
-+		kfree(data);
-+		return ret;
-+	}
-+
-+	ret = auxiliary_device_add(&data->adev);
++	ret = ps8640_bridge_host_attach(clientdev, ps_bridge);
 +	if (ret)
-+		goto err_did_init;
++		drm_bridge_remove(&ps_bridge->bridge);
 +
-+	client->_opaque = data;
-+
-+	return 0;
-+
-+err_did_init:
-+	auxiliary_device_uninit(&data->adev);
 +	return ret;
 +}
 +
-+/**
-+ * dp_aux_unregister_ep_client() - Inverse of dp_aux_register_ep_client()
-+ * @client: The structure describing the client.
-+ *
-+ * If dp_aux_register_ep_client() returns no error then you should call this
-+ * to free resources.
-+ */
-+void dp_aux_unregister_ep_client(struct dp_aux_ep_client *client)
++static void ps8640_bridge_remove(struct device *clientdev, struct dp_aux_ep_client *client)
 +{
-+	struct dp_aux_ep_client_data *data = client->_opaque;
++	struct ps8640 *ps_bridge = container_of(client, struct ps8640, ep_client);
 +
-+	auxiliary_device_delete(&data->adev);
-+	auxiliary_device_uninit(&data->adev);
++	drm_bridge_remove(&ps_bridge->bridge);
 +}
 +
-+static void dp_aux_unregister_ep_client_void(void *data)
-+{
-+	dp_aux_unregister_ep_client(data);
-+}
-+
-+/**
-+ * devm_dp_aux_register_ep_client() - devm wrapper for dp_aux_register_ep_client()
-+ * @client: The structure describing the client.
-+ *
-+ * Handles freeing w/ devm on the device "client->aux->dev".
-+ *
-+ * Return: 0 if no error or negative error code.
-+ */
-+int devm_dp_aux_register_ep_client(struct dp_aux_ep_client *client)
-+{
-+	int ret;
-+
-+	ret = dp_aux_register_ep_client(client);
-+	if (ret)
-+		return ret;
-+
-+	return devm_add_action_or_reset(client->aux->dev,
-+					dp_aux_unregister_ep_client_void,
-+					client);
-+}
-+
-+static const struct auxiliary_device_id dp_aux_ep_client_id_table[] = {
-+	{ .name = "drm_dp_aux_bus.ep_client", },
-+	{},
-+};
-+
-+static struct auxiliary_driver dp_aux_ep_client_driver = {
-+	.name = "ep_client",
-+	.probe = dp_aux_ep_client_probe,
-+	.remove = dp_aux_ep_client_remove,
-+	.shutdown = dp_aux_ep_client_shutdown,
-+	.id_table = dp_aux_ep_client_id_table,
-+};
-+
-+/* -----------------------------------------------------------------------------
-+ * Module init
-+ */
-+
- static int __init dp_aux_bus_init(void)
+ static int ps8640_probe(struct i2c_client *client)
  {
+ 	struct device *dev = &client->dev;
+-	struct device_node *np = dev->of_node;
+ 	struct ps8640 *ps_bridge;
  	int ret;
-@@ -307,11 +465,16 @@ static int __init dp_aux_bus_init(void)
- 	if (ret)
- 		return ret;
+ 	u32 i;
+@@ -672,31 +699,17 @@ static int ps8640_probe(struct i2c_client *client)
  
+ 	devm_of_dp_aux_populate_ep_devices(&ps_bridge->aux);
+ 
+-	/* port@1 is ps8640 output port */
+-	ps_bridge->panel_bridge = devm_drm_of_get_bridge(dev, np, 1, 0);
+-	if (IS_ERR(ps_bridge->panel_bridge))
+-		return PTR_ERR(ps_bridge->panel_bridge);
+-
+-	drm_bridge_add(&ps_bridge->bridge);
+-
+-	ret = ps8640_bridge_host_attach(dev, ps_bridge);
+-	if (ret)
+-		goto err_bridge_remove;
+-
 -	return 0;
-+	ret = auxiliary_driver_register(&dp_aux_ep_client_driver);
-+	if (ret)
-+		bus_unregister(&dp_aux_bus_type);
-+
-+	return ret;
+-
+-err_bridge_remove:
+-	drm_bridge_remove(&ps_bridge->bridge);
+-	return ret;
+-}
+-
+-static int ps8640_remove(struct i2c_client *client)
+-{
+-	struct ps8640 *ps_bridge = i2c_get_clientdata(client);
+-
+-	drm_bridge_remove(&ps_bridge->bridge);
+-
+-	return 0;
++	/*
++	 * Create a sub-device and kick off a probe to it. This effectively
++	 * breaks our probe in two and lets the first half complete even if
++	 * the second half might return -EPROBE_DEFER. If we didn't do this
++	 * then if a panel isn't immediately ready we'd delete it right away
++	 * and never give it a chance to finish.
++	 */
++	ps_bridge->ep_client.probe = ps8640_bridge_probe;
++	ps_bridge->ep_client.remove = ps8640_bridge_remove;
++	ps_bridge->ep_client.aux = &ps_bridge->aux;
++	return devm_dp_aux_register_ep_client(&ps_bridge->ep_client);
  }
  
- static void __exit dp_aux_bus_exit(void)
- {
-+	auxiliary_driver_unregister(&dp_aux_ep_client_driver);
- 	bus_unregister(&dp_aux_bus_type);
- }
+ static const struct of_device_id ps8640_match[] = {
+@@ -707,7 +720,6 @@ MODULE_DEVICE_TABLE(of, ps8640_match);
  
-diff --git a/include/drm/dp/drm_dp_aux_bus.h b/include/drm/dp/drm_dp_aux_bus.h
-index 4f19b20b1dd6..ecf68b6873bd 100644
---- a/include/drm/dp/drm_dp_aux_bus.h
-+++ b/include/drm/dp/drm_dp_aux_bus.h
-@@ -54,4 +54,62 @@ int __dp_aux_dp_driver_register(struct dp_aux_ep_driver *aux_ep_drv,
- 				struct module *owner);
- void dp_aux_dp_driver_unregister(struct dp_aux_ep_driver *aux_ep_drv);
- 
-+/**
-+ * struct dp_aux_ep_device - Helper for clients of DP AUX EP devices
-+ *
-+ * The DP AUX bus can be a bit tricky to use properly. Usually, the way
-+ * things work is that:
-+ * - The DP controller driver provides the DP AUX bus and would like to probe
-+ *   the endpoints on the DP AUX bus (AKA the panel) as part of its probe
-+ *   routine.
-+ * - The DP controller driver would also like to acquire a reference to the
-+ *   DP AUX endpoints (AKA the panel) as part of its probe.
-+ *
-+ * The problem is that the DP AUX endpoints aren't guaranteed to complete their
-+ * probe right away. They could be probing asynchronously or they simply might
-+ * fail to acquire some resource and return -EPROBE_DEFER.
-+ *
-+ * The best way to solve this is to break the DP controller's probe into
-+ * two parts. The first part will create the DP AUX bus. The second part will
-+ * acquire the reference to the DP AUX endpoint. The first part can complete
-+ * finish with no problems and be "done" even if the second part ends up
-+ * deferring while waiting for the DP AUX endpoint.
-+ *
-+ * The dp_aux_ep_client structure and associated functions help with managing
-+ * this common case. They will create/add a second "struct device" for you.
-+ * In the probe for this second "struct device" (known as the "clientdev" here)
-+ * you can acquire references to the AUX DP endpoints and can freely return
-+ * -EPROBE_DEFER if they're not ready yet.
-+ *
-+ * A few notes:
-+ * - The parent of the clientdev is guaranteed to be aux->dev
-+ * - The of_node of the clientdev is guaranteed to be the same as the of_node
-+ *   of aux->dev, copied with device_set_of_node_from_dev().
-+ * - If you're doing "devm" type things in the clientdev's probe you should
-+ *   use the clientdev. This makes lifetimes be managed properly.
-+ *
-+ * NOTE: there's no requirement to use these helpers if you have solved the
-+ * problem described above in some other way.
-+ */
-+struct dp_aux_ep_client {
-+	/** @probe: The second half of the probe */
-+	int (*probe)(struct device *clientdev, struct dp_aux_ep_client *client);
-+
-+	/** @remove: Remove function corresponding to the probe */
-+	void (*remove)(struct device *clientdev, struct dp_aux_ep_client *client);
-+
-+	/** @shutdown: Shutdown function corresponding to the probe */
-+	void (*shutdown)(struct device *clientdev, struct dp_aux_ep_client *client);
-+
-+	/** @aux: The AUX bus */
-+	struct drm_dp_aux *aux;
-+
-+	/** @_opaque: Used by the implementation */
-+	void *_opaque;
-+};
-+
-+int dp_aux_register_ep_client(struct dp_aux_ep_client *client);
-+void dp_aux_unregister_ep_client(struct dp_aux_ep_client *client);
-+int devm_dp_aux_register_ep_client(struct dp_aux_ep_client *client);
-+
- #endif /* _DP_AUX_BUS_H_ */
+ static struct i2c_driver ps8640_driver = {
+ 	.probe_new = ps8640_probe,
+-	.remove = ps8640_remove,
+ 	.driver = {
+ 		.name = "ps8640",
+ 		.of_match_table = ps8640_match,
 -- 
 2.35.1.1178.g4f1659d476-goog
 

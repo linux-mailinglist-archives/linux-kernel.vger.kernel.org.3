@@ -2,112 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D6A4FA53C
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 07:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F5B04FA545
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 07:58:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235326AbiDIFyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 01:54:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44642 "EHLO
+        id S239876AbiDIF7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 01:59:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231721AbiDIFyC (ORCPT
+        with ESMTP id S230012AbiDIF7s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 01:54:02 -0400
-Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8FCAE2D1E4
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 22:51:54 -0700 (PDT)
-Received: from ubuntu.localdomain (unknown [10.15.192.164])
-        by mail-app4 (Coremail) with SMTP id cS_KCgDHPKTnHlFieTn3AA--.58552S2;
-        Sat, 09 Apr 2022 13:51:39 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-xtensa@linux-xtensa.org, kuba@kernel.org,
-        alexander.deucher@amd.com, gregkh@linuxfoundation.org,
-        davem@davemloft.net, jcmvbkbc@gmail.com, chris@zankel.net,
-        Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH V2 10/11] arch: xtensa: platforms: Fix deadlock in iss_net_close()
-Date:   Sat,  9 Apr 2022 13:51:35 +0800
-Message-Id: <20220409055135.54921-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cS_KCgDHPKTnHlFieTn3AA--.58552S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7AF1DWFyDKr4xXFWUGFy8Krg_yoW8ArW3pr
-        WYgry3tF48Wr4Iga1DA3WDu3y7ua1ktr1UGrZxG3y8uas7Xry3XF4Utw4rWF47KFZFqFZ3
-        Crn5X345AFs8Z3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUka1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
-        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
-        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v
-        1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
-        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
-        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgQPAVZdtZGjxwA3s0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sat, 9 Apr 2022 01:59:48 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148B6263;
+        Fri,  8 Apr 2022 22:57:41 -0700 (PDT)
+Received: from [192.168.0.2] (ip5f5ae90c.dynamic.kabel-deutschland.de [95.90.233.12])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 9B8C361E6478B;
+        Sat,  9 Apr 2022 07:57:37 +0200 (CEST)
+Message-ID: <c73bf178-f5bd-01c6-209d-051706112877@molgen.mpg.de>
+Date:   Sat, 9 Apr 2022 07:57:39 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v6 1/3] ARM: dts: nuvoton: Add memory controller node
+Content-Language: en-US
+To:     Medad CChien <medadyoung@gmail.com>
+Cc:     rric@kernel.org, james.morse@arm.com, tony.luck@intel.com,
+        mchehab@kernel.org, bp@alien8.de, robh+dt@kernel.org,
+        benjaminfair@google.com, yuenn@google.com, venture@google.com,
+        KWLIU@nuvoton.com, YSCHU@nuvoton.com, JJLIU0@nuvoton.com,
+        KFTING@nuvoton.com, avifishman70@gmail.com, tmaimon77@gmail.com,
+        tali.perry1@gmail.com, ctcchien@nuvoton.com,
+        devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org
+References: <20220322030152.19018-1-ctcchien@nuvoton.com>
+ <20220322030152.19018-2-ctcchien@nuvoton.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20220322030152.19018-2-ctcchien@nuvoton.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a deadlock in iss_net_close(), which is shown
-below:
+Dear Medad,
 
-   (Thread 1)              |      (Thread 2)
-                           | iss_net_open()
-iss_net_close()            |  mod_timer()
- spin_lock_bh() //(1)      |  (wait a time)
- ...                       | iss_net_timer()
- del_timer_sync()          |  spin_lock() //(2)
- (wait timer to stop)      |  ...
 
-We hold lp->lock in position (1) of thread 1 and use
-del_timer_sync() to wait timer to stop, but timer handler
-also need lp->lock in position (2) of thread 2. As a result,
-iss_net_close() will block forever.
+Thank you for the patch.
 
-This patch extracts del_timer_sync() from the protection of
-spin_lock_bh(), which could let timer handler to obtain
-the needed lock. What`s more, we should remove spin_lock()
-in iss_net_timer(), because there is no resource need to
-protect and spin_lock() may cause deadlock in timer handler.
+Am 22.03.22 um 04:01 schrieb Medad CChien:
+> ECC must be configured in the BootBlock header.
 
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
-Changes in V2:
-  - Remove spin_lock() in iss_net_timer().
+bootblock
 
- arch/xtensa/platforms/iss/network.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I search for *bootblock* in Linux and the git commit messages, and does 
+not seem to be a common term. Is that term used in the datasheet?
 
-diff --git a/arch/xtensa/platforms/iss/network.c b/arch/xtensa/platforms/iss/network.c
-index be3aaaad8be..1ae39c18c6e 100644
---- a/arch/xtensa/platforms/iss/network.c
-+++ b/arch/xtensa/platforms/iss/network.c
-@@ -352,9 +352,7 @@ static void iss_net_timer(struct timer_list *t)
- 	struct iss_net_private *lp = from_timer(lp, t, timer);
- 
- 	iss_net_poll();
--	spin_lock(&lp->lock);
- 	mod_timer(&lp->timer, jiffies + lp->timer_val);
--	spin_unlock(&lp->lock);
- }
- 
- 
-@@ -403,7 +401,9 @@ static int iss_net_close(struct net_device *dev)
- 	list_del(&opened);
- 	spin_unlock(&opened_lock);
- 
-+	spin_unlock_bh(&lp->lock);
- 	del_timer_sync(&lp->timer);
-+	spin_lock_bh(&lp->lock);
- 
- 	lp->tp.close(lp);
- 
--- 
-2.17.1
+> Then, you can read error counts via
+> the EDAC kernel framework.
 
+Please reflow for 75 characters per line. (Also, there is no need to 
+break lines after a sentence, unless 75 characters are reached or a new 
+paragraph starts.)
+
+Tested on what board?
+
+> Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
+
+Out of curiosity, is the first C in CChien the letter of your middle 
+name, or the last name really spelled with two capital letters in the 
+beginning?
+
+> ---
+>   arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi | 7 +++++++
+>   1 file changed, 7 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi b/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
+> index 3696980a3da1..ba542b26941e 100644
+> --- a/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
+> +++ b/arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi
+> @@ -106,6 +106,13 @@
+>   		interrupt-parent = <&gic>;
+>   		ranges;
+>   
+> +		mc: memory-controller@f0824000 {
+> +			compatible = "nuvoton,npcm750-memory-controller";
+> +			reg = <0x0 0xf0824000 0x0 0x1000>;
+
+Is f0824000 from some datasheet?
+
+> +			interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
+> +			status = "disabled";
+> +		};
+> +
+>   		rstc: rstc@f0801000 {
+>   			compatible = "nuvoton,npcm750-reset";
+>   			reg = <0xf0801000 0x70>;
+
+
+Kind regards,
+
+Paul

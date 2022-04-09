@@ -2,53 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7C3B4FA740
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 13:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C87E4FA743
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 13:22:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241638AbiDILYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 07:24:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36196 "EHLO
+        id S241652AbiDILYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 07:24:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236302AbiDILYa (ORCPT
+        with ESMTP id S236135AbiDILYp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 07:24:30 -0400
-Received: from mxout2.routing.net (mxout2.routing.net [IPv6:2a03:2900:1:a::b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1BA62D4BC8;
-        Sat,  9 Apr 2022 04:22:23 -0700 (PDT)
-Received: from mxbox3.masterlogin.de (unknown [192.168.10.78])
-        by mxout2.routing.net (Postfix) with ESMTP id 28E275FDEF;
-        Sat,  9 Apr 2022 11:22:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1649503342;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1HXXCd3EGrkCXHAxs1ufwjLKFz7n60SEUlQZm+lRm7Q=;
-        b=S2XxkNXnry1vD06tavxy28oInfZtq9tvEfaBooAo6Jac+xrvdbEZ5y2FM4TJJCVBMk4x2v
-        AYKEGNU1WOsgirPfjWcxrz4IXaSoD9Y/HlVaTMpoXHMltPIqroTuBvoEVn0ZpXYOBMGu8P
-        SFIRRTsKPu3A+JKSpgP7bXrUF6tOL80=
-Received: from localhost.localdomain (fttx-pool-217.61.154.105.bambit.de [217.61.154.105])
-        by mxbox3.masterlogin.de (Postfix) with ESMTPSA id 7FBD436065D;
-        Sat,  9 Apr 2022 11:22:21 +0000 (UTC)
-From:   Frank Wunderlich <linux@fw-web.de>
-To:     linux-rockchip@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] arm64: dts: rockchip: Add SATA support to BPI-R2-Pro
-Date:   Sat,  9 Apr 2022 13:21:36 +0200
-Message-Id: <20220409112136.164481-3-linux@fw-web.de>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220409112136.164481-1-linux@fw-web.de>
-References: <20220409112136.164481-1-linux@fw-web.de>
+        Sat, 9 Apr 2022 07:24:45 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111F72D8C28;
+        Sat,  9 Apr 2022 04:22:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=LbzHadhH/DtBXgPRRQM3ojAn+8JRNa/F/dn71QaSpzc=; b=ml64Ik3eYsRGrNQ5LUoQkIqZEB
+        DLwmWoH8CrTLneNBbwmtkQmAnM7/bd2mv6N5f+hj4VTvOz+6PQuNIXYCQc8N9RW+t29nzBsTiNape
+        I9zoQDHOepVvUVLJ+TPcCx3etDoajV4w+iB6QEe6Mj8dYh9UJKYzwmORJOjzMkf6rZdq2TjMLEqNI
+        DSm8lXLhLqknt1zjXsdOF0J5gwda+oWBlgn2SWXb7O9yTGCTKTDA18qCD65a+4O3wY1gDMGXi7aBo
+        AUoiWF/SzNN4dHT2wEm5EH5pktY3p4av/ByuNPbTfl6jBDQlM21lmnq+hWUOJnV3fqq/CDlupqaoj
+        C899HO+Q==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58180)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1nd9Ab-00071R-8D; Sat, 09 Apr 2022 12:22:21 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1nd9AY-0007uv-97; Sat, 09 Apr 2022 12:22:18 +0100
+Date:   Sat, 9 Apr 2022 12:22:18 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     YueHaibing <yuehaibing@huawei.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        vladimir.oltean@nxp.com, s-vadapalli@ti.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] net: ethernet: ti: am65-cpsw: Fix build error
+ without PHYLINK
+Message-ID: <YlFsauXYPB2QzUjc@shell.armlinux.org.uk>
+References: <20220409105931.9080-1-yuehaibing@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Mail-ID: 54a16b4f-c6eb-44a6-a462-bdcb58611f6f
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220409105931.9080-1-yuehaibing@huawei.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,42 +59,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Wunderlich <frank-w@public-files.de>
+On Sat, Apr 09, 2022 at 06:59:31PM +0800, YueHaibing wrote:
+> If PHYLINK is n, build fails:
+> 
+> drivers/net/ethernet/ti/am65-cpsw-ethtool.o: In function `am65_cpsw_set_link_ksettings':
+> am65-cpsw-ethtool.c:(.text+0x118): undefined reference to `phylink_ethtool_ksettings_set'
+> drivers/net/ethernet/ti/am65-cpsw-ethtool.o: In function `am65_cpsw_get_link_ksettings':
+> am65-cpsw-ethtool.c:(.text+0x138): undefined reference to `phylink_ethtool_ksettings_get'
+> drivers/net/ethernet/ti/am65-cpsw-ethtool.o: In function `am65_cpsw_set_eee':
+> am65-cpsw-ethtool.c:(.text+0x158): undefined reference to `phylink_ethtool_set_eee'
+> 
+> Select PHYLINK for TI_K3_AM65_CPSW_NUSS to fix this.
+> 
+> Fixes: e8609e69470f ("net: ethernet: ti: am65-cpsw: Convert to PHYLINK")
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 
-Enable the Combphy and Sata nodes in Bananapi R2 Pro Board.
+Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
----
- arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Thanks.
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts b/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
-index 879557595a64..40cf2236c0b6 100644
---- a/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3568-bpi-r2-pro.dts
-@@ -119,6 +119,11 @@ &combphy1 {
- 	status = "okay";
- };
- 
-+&combphy2 {
-+	/* used for SATA */
-+	status = "okay";
-+};
-+
- &gmac0 {
- 	assigned-clocks = <&cru SCLK_GMAC0_RX_TX>, <&cru SCLK_GMAC0>;
- 	assigned-clock-parents = <&cru SCLK_GMAC0_RGMII_SPEED>, <&cru CLK_MAC0_2TOP>;
-@@ -484,6 +489,10 @@ &saradc {
- 	status = "okay";
- };
- 
-+&sata2 {
-+	status = "okay";
-+};
-+
- &sdhci {
- 	bus-width = <8>;
- 	max-frequency = <200000000>;
 -- 
-2.25.1
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

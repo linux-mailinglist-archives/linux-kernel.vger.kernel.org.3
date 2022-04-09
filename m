@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74CFB4FA814
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 15:14:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C107B4FA818
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 15:15:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241911AbiDINQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 09:16:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57404 "EHLO
+        id S241920AbiDINRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 09:17:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232922AbiDINQF (ORCPT
+        with ESMTP id S234474AbiDINRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 09:16:05 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DDA092D25
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 06:13:58 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id u15so3624812ejf.11
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 06:13:57 -0700 (PDT)
+        Sat, 9 Apr 2022 09:17:42 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19182939CC
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 06:15:35 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id i27so22267214ejd.9
+        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 06:15:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=d0410HLBP6KDAh1PJS07oAulungk6qL8Pp4HkxfBbq4=;
-        b=wdXpe2opIoSojVyd0Er2F1SBdOz1jlzcWmMpvT4AoYCiUCqrYlmMpVCyxzPAPKuC38
-         8FkGrIpMOfz57tTCHs76qi01VpoSYGdMU7OSxwn5ovDH5LLuT6CFp0aEuReP3gzDxExH
-         l4w8c8UfYVtSgifZCqC73FDjHA/iEIUYy39Sm3DICwklq8PPUCZlJ8/Pfp2WLjMKaJqD
-         LgoM6sGZR+Xr3ntcTHzmCkQFFOySfAZChAOWMLorhZxCEhd7ykQ6p21yMfzaDjjis4Fx
-         bBepaRxFCuQeNPkEVkU43CXpsoc4Hjm3rfB7hbHmf+31NmFZbMlBDdr7N60tXjJAdGGE
-         7jOQ==
+        bh=S1kx45CDYtbXE3aPQS22yI8qdr+jqfxleCsscPsVroo=;
+        b=l4QBV0ALsMCa7V6Qgs7OAKmW6ZvX8tgBkP3b+1vA5GnBkykASR3TEFGnl7wTNqZOeE
+         JyuPUeRxjDlnXG7M8z9lzjzvWVMrM94/fxYwAr1RFL5yRelqr7Ufnw8jtFHKAznJLDvH
+         kFInQ7n6yic+bRw0MSOlHSYgyOnglXuV5D2t8SCvayqETm6YvPfzVBqc42rRL8sFP3YH
+         jCn8+DNZ+KHwsRuH0mgVhe4kY63vRODpdoBO0PzSldVRY78Kn/oZDgrfJ/i/elz+HQTj
+         wZI2wbY73wxdvgor/4ND3PlNtepqdQkcH362r9f1hh9qpLFUTNu95LQbFgyFkSOcUUSm
+         SCOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=d0410HLBP6KDAh1PJS07oAulungk6qL8Pp4HkxfBbq4=;
-        b=D/kHTAo4fpbepgYCxzDLx4Zm4bX0j5y0i4aqAF2HB0nXmJcSWt/ccGY8WV+dxrXTSy
-         MekTAZtWY/MZrsl84wXofib5tHWzhzwvhNLHMDATtxxOFv+/LyeqdNXgH9bZ1aI1yjXV
-         bXLQfVbUm8Da6kL4rV4K0eaVJoKrzucB10n46LbQNbZHKOdi+1JQ2u71VcFe3sh1fJgR
-         VL386YCw26YzgdHFWHYoYQIJiXpj8JdERHfi6CAUgfFn2g+XBDyAONLXPm+cCUb3LXvt
-         C7q6n1YC1XQZm7KqzcIB19L11vIvFSWzkRgdybYmT+iA0HVRAL7Te4T4I4uBovi2Bvrf
-         Vnng==
-X-Gm-Message-State: AOAM530Yd89D9+2/lFt0z5zxziFiGBblvTa8jLmLcTiqmGuVaG8W22NP
-        ZFr/2ANIhdteKfzHUEq+HMcilLK5hEfN+du8
-X-Google-Smtp-Source: ABdhPJynznWXeu0fS5zY5vii5EuYYK4aSuoB4bkjD9wMFfAG0g+7uTbOlL0pOjAniA4bC4Hq0NNc7A==
-X-Received: by 2002:a17:907:948c:b0:6e7:fe2b:68f0 with SMTP id dm12-20020a170907948c00b006e7fe2b68f0mr22510421ejc.749.1649510036643;
-        Sat, 09 Apr 2022 06:13:56 -0700 (PDT)
+        bh=S1kx45CDYtbXE3aPQS22yI8qdr+jqfxleCsscPsVroo=;
+        b=ur/WpyhY2iG0NDe5kA+ybPfVaoUE7eX1VrFmjxPY/v8hLlmwGsBSw8Pl68rb5eGWBU
+         rQj0jJu/J0Z2QqVpSCZgE6x3X+oPScCnHGU1P3IgYJvshJk5vPqwXtVG9uZbpartsqvi
+         5/c3KVtan/bX9xGqyv7BFW36Qd0Aoq9h1i0J35cdd/WuA6GthswQvpZFrodDsWUARuqp
+         QqBXQBzuiloKRq7FLhIHCCVDiqUzseobkqoSPM0uZBfJjn4WsH8aTAY/paoHsUzUDoO+
+         p89Xb866bvBK9pthn8UBEKstTFuZp0+HXdN+xnJovXV10EMihWoNruYXhwg3jE2LQw6I
+         dt8g==
+X-Gm-Message-State: AOAM532mdylVr143i4YncffyiHeJotpgkkT6BiNGh0stOHxyStG9JCWm
+        63cxeqkD6VHTGk1KTq6N6b4gQA==
+X-Google-Smtp-Source: ABdhPJyhcWkx5nvbgdb9aN9/K78uAs1TAb9srjwlo+4FYaMTNGRjKYmU9qZumuKsjZpCKJkPNNjdrA==
+X-Received: by 2002:a17:906:7952:b0:6da:94c9:cccb with SMTP id l18-20020a170906795200b006da94c9cccbmr22644777ejo.469.1649510133702;
+        Sat, 09 Apr 2022 06:15:33 -0700 (PDT)
 Received: from [192.168.0.188] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id t12-20020a1709067c0c00b006e86db76851sm794137ejo.193.2022.04.09.06.13.55
+        by smtp.gmail.com with ESMTPSA id mp19-20020a1709071b1300b006dfdfe15cf8sm9940447ejc.196.2022.04.09.06.15.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 09 Apr 2022 06:13:56 -0700 (PDT)
-Message-ID: <c84b5ec0-0193-ab62-1985-25bc2baa9f05@linaro.org>
-Date:   Sat, 9 Apr 2022 15:13:54 +0200
+        Sat, 09 Apr 2022 06:15:33 -0700 (PDT)
+Message-ID: <535e3eab-a28e-46f3-2a7e-f1ffd1913470@linaro.org>
+Date:   Sat, 9 Apr 2022 15:15:32 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH 05/18] MIPS: DTS: jz4780: fix pinctrl as reported by
+Subject: Re: [PATCH 07/18] MIPS: DTS: jz4780: fix otg node as reported by
  dtbscheck
 Content-Language: en-US
 To:     "H. Nikolaus Schaller" <hns@goldelico.com>
@@ -64,16 +64,16 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mips@vger.kernel.org, letux-kernel@openphoenux.org
 References: <cover.1649443080.git.hns@goldelico.com>
- <1941bc4ed553b27f399ad00ea61ff2b0237d14e3.1649443080.git.hns@goldelico.com>
- <e905896e-335d-a88a-1961-d17b92e46585@linaro.org>
- <530E0F7F-FC03-45DD-BF87-D049D3108AD3@goldelico.com>
+ <298162bfa2e7225ccc753865e1ffa39ce2722b2a.1649443080.git.hns@goldelico.com>
+ <bd19b6eb-d53a-b665-749d-46c275c85ccc@linaro.org>
+ <822182F3-5429-4731-9FA1-8F18C5D95DEC@goldelico.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <530E0F7F-FC03-45DD-BF87-D049D3108AD3@goldelico.com>
+In-Reply-To: <822182F3-5429-4731-9FA1-8F18C5D95DEC@goldelico.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,52 +81,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/04/2022 15:04, H. Nikolaus Schaller wrote:
-> 
-> 
->> Am 09.04.2022 um 13:13 schrieb Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>:
+On 09/04/2022 15:05, H. Nikolaus Schaller wrote:
 >>
->> On 08/04/2022 20:37, H. Nikolaus Schaller wrote:
->>> arch/mips/boot/dts/ingenic/ci20.dtb: pin-controller@10010000: $nodename:0: 'pin-controller@10010000' does not match '^(pinctrl|pinmux)(@[0-9a-f]+)?$'
->>> 	From schema: Documentation/devicetree/bindings/pinctrl/ingenic,pinctrl.yaml
->>>
->>> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
->>> ---
->>> arch/mips/boot/dts/ingenic/jz4780.dtsi | 2 +-
->>> 1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/arch/mips/boot/dts/ingenic/jz4780.dtsi b/arch/mips/boot/dts/ingenic/jz4780.dtsi
->>> index 5f44cf004d473..b5299eaffb84a 100644
->>> --- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
->>> +++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
->>> @@ -155,7 +155,7 @@ rtc_dev: rtc@10003000 {
->>> 		clock-names = "rtc";
->>> 	};
->>>
->>> -	pinctrl: pin-controller@10010000 {
->>> +	pinctrl: pinctrl@10010000 {
->>
->> Do it once for all DTSes, not one file at a time. There are four more
->> places with this.
+>> This looks wrong, the block usually should have a specific compatible.
+>> Please mention why it does not.
 > 
-> Well, automation has no notion of "similarity" in this case to
-> merge several patches.
+> Well, I did not even have that idea that it could need an explanation.
+> 
+> There is no "ingenic,jz4780-otg" and none is needed here to make it work.
 
-What does that mean? One cannot create multiple patches and apply them?
-
-> And they are not related. Every one is based on a different .yaml
-> schema file.
-
-Which does not matter, because the name of the node does not matter. We
-enforce it in schema to makes things organized and easier in testing.
-This does not fix any real problem, just the problem we created by
-ourselves with schema.
+Make it work in what terms? We talk about hardware description, right?
 
 > 
-> That in all cases the result looks similar comes from similar
-> requirements by the schemata and has no inherent connection.
+> Therefore the generic "snps,dwc2" is sufficient.
 
-All schemas will require it, won't they? The same for arm...
+No, you are mixing now driver behavior (is sufficient) with hardware
+description. Most of licensed blocks require the specific compatible to
+differentiate it.
+
 
 Best regards,
 Krzysztof

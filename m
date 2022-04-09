@@ -2,104 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D86124FA895
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 15:32:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 195AA4FA899
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 15:34:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242182AbiDINes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 09:34:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42058 "EHLO
+        id S242177AbiDINgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 09:36:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242084AbiDINen (ORCPT
+        with ESMTP id S239163AbiDINgE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 09:34:43 -0400
-Received: from mo4-p03-ob.smtp.rzone.de (mo4-p03-ob.smtp.rzone.de [81.169.146.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F7A1A54E4;
-        Sat,  9 Apr 2022 06:32:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1649511152;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=j43DOErzeD42TmNN/jzEMLB8mvqxdLFcFY7ph+usTRw=;
-    b=QAubdMng9kvLWHlgiV/y2VxQOB3hA3+4dy1/ZMYcdz/QtvYUhGBKc1y5Cg6SuAo2GP
-    G2fgT9aXf3HEBlaCt0noL5xBACnpHivaoZaO/fjnGsHMUbpgz2lsAAdy8EYWVHzkVYBS
-    esMJzHz3umdhXA1/sbaAzsA0n9KId41mvSH5+MVJvHVXAbuGIZvwXmTHNu017jQqTkNm
-    WzL1p1TQpknsU95dIlKxeoV8YZTjWDYDmQMs3w448ZOEUpKtQRNHrtGfW6gotEyVFO5t
-    VgMgp7fZijqP7UvhzusaZfdzo5Aq5zzlyvFUHVJhQDp5LiIkos8uBieAPZ7+Bwwmuapl
-    uHBQ==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7wpz8NIGH/jrwDepmg=="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.42.2 DYNA|AUTH)
-    with ESMTPSA id k708cfy39DWWuWk
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Sat, 9 Apr 2022 15:32:32 +0200 (CEST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH 07/18] MIPS: DTS: jz4780: fix otg node as reported by
- dtbscheck
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <535e3eab-a28e-46f3-2a7e-f1ffd1913470@linaro.org>
-Date:   Sat, 9 Apr 2022 15:32:31 +0200
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, letux-kernel@openphoenux.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <7B66AC66-EF73-4F75-A775-589A4F98BEFC@goldelico.com>
-References: <cover.1649443080.git.hns@goldelico.com>
- <298162bfa2e7225ccc753865e1ffa39ce2722b2a.1649443080.git.hns@goldelico.com>
- <bd19b6eb-d53a-b665-749d-46c275c85ccc@linaro.org>
- <822182F3-5429-4731-9FA1-8F18C5D95DEC@goldelico.com>
- <535e3eab-a28e-46f3-2a7e-f1ffd1913470@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-X-Mailer: Apple Mail (2.3445.104.21)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sat, 9 Apr 2022 09:36:04 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECAD4298D5D
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 06:33:52 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id dr20so22245813ejc.6
+        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 06:33:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=LO7mTJuUjnyguTxwzU4yCMRsr4W3KT8BOY3t4LlaHc0=;
+        b=NSPuRoYHtyOw+PcsMZMVtuInfF33reqEX80RTlsMYF96wzkfEaIKPTkf0zDLCojnUm
+         7GdAM9ck8RvQnAE0+woC+0Cz0hKM9k7ConH5cc8CM3A80Q22AF30cnY5tVI5IrRhfRiq
+         fUs2YJsfoDOLl23ee7Kfwr0FQg7iHJDavcGzo6omSFqqR7QkLBp6xvW024IMq4mk8XcH
+         aI+dI62HLCe60/HRWGhTBdhYz6pdh05BA5qgDsK/MG0ybk9Vjkb5p0YHoofix6xORs7e
+         TQjQGp1ld64FVyUXf1RkiYaMnO4jpnKDkq/gesw7lqgg3jkxwTzzbP8gH8cCxOWqkIK3
+         2lCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=LO7mTJuUjnyguTxwzU4yCMRsr4W3KT8BOY3t4LlaHc0=;
+        b=u0D2oPRuR7k2ziajs9f8JQsh4DPdB3r87hE9bKt8f6+RGI5mI2wtWu73dlpm7uZCsS
+         Pk/o9ieV0vGLQX5skcwesH7irc1MbhCLlmPILOKTUgOvrzpsE/TQEq0mPT25O9tf2JNV
+         C2F85piFgCgI4q7JUsN8caRLQBChcZ+tNkuBPsMMQfTmO0SCwuddQsAKTYPwRejv8r9i
+         5iA71TqzyazCIuiHC19Fc208lXnPfH/oLkyGXKJF4fr6fw8Hdl6uDzCg0x881xLNKO75
+         544hCxWU1JKNVLzmt8pOxNXfOJFMu8tm8QpE80kQyRrNac5IJuojohgkYdKXzHlKmbCq
+         aLjQ==
+X-Gm-Message-State: AOAM533SSVb87HKfY12HLR9KvGbs6D9iST1N4U9xeMioK/EO+N2zCnWv
+        BQh3rU1ZmL5bt8TGhphygGwRLw==
+X-Google-Smtp-Source: ABdhPJw7Y7cYYHPAiiiP0NIjLn5Hmp6+EKk8JZn75hkyokX3E/0ElhCjWMr9REwrEdqcx3UfkRN70w==
+X-Received: by 2002:a17:906:d204:b0:6d6:df17:835e with SMTP id w4-20020a170906d20400b006d6df17835emr22437048ejz.20.1649511231518;
+        Sat, 09 Apr 2022 06:33:51 -0700 (PDT)
+Received: from [192.168.0.188] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id q22-20020a170906771600b006cf8a37ebf5sm9774514ejm.103.2022.04.09.06.33.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 09 Apr 2022 06:33:51 -0700 (PDT)
+Message-ID: <3b527700-444e-1f6e-fee1-5cd6ed2ef7f9@linaro.org>
+Date:   Sat, 9 Apr 2022 15:33:49 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v4 05/13] pinctrl: samsung: Switch to use
+ for_each_gpiochip_node() helper
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Qianggui Song <qianggui.song@amlogic.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marc Zyngier <maz@kernel.org>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+References: <20220401103604.8705-1-andriy.shevchenko@linux.intel.com>
+ <20220401103604.8705-6-andriy.shevchenko@linux.intel.com>
+ <d1f873c6-150f-5f4d-7aa8-7bb15823d991@linaro.org>
+ <YlBXSVyj88CqjGj4@smile.fi.intel.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <YlBXSVyj88CqjGj4@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 08/04/2022 17:39, Andy Shevchenko wrote:
+> On Fri, Apr 08, 2022 at 05:22:21PM +0200, Krzysztof Kozlowski wrote:
+>> On 01/04/2022 12:35, Andy Shevchenko wrote:
+>>> Switch the code to use for_each_gpiochip_node() helper.
+> 
+> (...)
+> 
+>>>  /*
+>>>   * Iterate over all driver pin banks to find one matching the name of node,
+>>>   * skipping optional "-gpio" node suffix. When found, assign node to the bank.
+>>>   */
+>>> -static void samsung_banks_of_node_get(struct device *dev,
+>>> -				      struct samsung_pinctrl_drv_data *d,
+>>> -				      struct device_node *node)
+>>> +static void samsung_banks_node_get(struct device *dev, struct samsung_pinctrl_drv_data *d)
+>>
+>> This is worth simplification anyway, so please split it to separate patch.
+> 
+> Not sure what to do and why it worth an additional churn.
+
+Makes this change smaller so it's easier to review.
+
+> 
+>>>  {
+>>>  	const char *suffix = "-gpio-bank";
+>>>  	struct samsung_pin_bank *bank;
+>>> -	struct device_node *child;
+>>> +	struct fwnode_handle *child;
+>>>  	/* Pin bank names are up to 4 characters */
+>>>  	char node_name[20];
+>>>  	unsigned int i;
+>>> @@ -1038,17 +1037,17 @@ static void samsung_banks_of_node_get(struct device *dev,
+>>>  			continue;
+>>>  		}
+>>>  
+>>> -		for_each_child_of_node(node, child) {
+>>> -			if (!of_find_property(child, "gpio-controller", NULL))
+>>> -				continue;
+>>
+>> This does not look equivalent. There are nodes without this property.
+> 
+> Not sure I understand why not. The macro checks for the property and
+> iterates over nodes that have this property.
+> 
+> Can you elaborate, please?
+
+Eh, my bad, it is equivalent.
+
+> 
+>>> -			if (of_node_name_eq(child, node_name))
+>>> +		for_each_gpiochip_node(dev, child) {
+>>> +			struct device_node *np = to_of_node(child);
+>>> +
+>>> +			if (of_node_name_eq(np, node_name))
+>>>  				break;
+>>> -			else if (of_node_name_eq(child, bank->name))
+>>> +			if (of_node_name_eq(np, bank->name))
+>>>  				break;
+>>>  		}
+>>
+>> This patch has to wait till someone provides you a tested-by. I might do
+>> it around next week.
+> 
+> Fine with me, I will drop it from my repo for now.
 
 
-> Am 09.04.2022 um 15:15 schrieb Krzysztof Kozlowski =
-<krzysztof.kozlowski@linaro.org>:
->=20
-> On 09/04/2022 15:05, H. Nikolaus Schaller wrote:
->>>=20
->>> This looks wrong, the block usually should have a specific =
-compatible.
->>> Please mention why it does not.
->>=20
->> Well, I did not even have that idea that it could need an =
-explanation.
->>=20
->> There is no "ingenic,jz4780-otg" and none is needed here to make it =
-work.
->=20
-> Make it work in what terms? We talk about hardware description, right?
-
-Yes.
-
->=20
->>=20
->> Therefore the generic "snps,dwc2" is sufficient.
->=20
-> No, you are mixing now driver behavior (is sufficient) with hardware
-> description.
-
-No. "snps,dwc2" is a hardware description for a licensed block.
-Not a driver behavior.
-
-> Most of licensed blocks require the specific compatible to
-> differentiate it.
-
-If there is a need to differentiate.=
+Best regards,
+Krzysztof

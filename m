@@ -2,123 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACAF14FA949
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 17:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1FC04FA94D
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 17:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242492AbiDIPfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 11:35:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44268 "EHLO
+        id S242508AbiDIPic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 11:38:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiDIPfV (ORCPT
+        with ESMTP id S242503AbiDIPi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 11:35:21 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54F7025AEE1;
-        Sat,  9 Apr 2022 08:33:11 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id e71so5507681ybf.8;
-        Sat, 09 Apr 2022 08:33:11 -0700 (PDT)
+        Sat, 9 Apr 2022 11:38:27 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5021A15714
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 08:36:19 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id s14-20020a17090a880e00b001caaf6d3dd1so14417274pjn.3
+        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 08:36:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5CNNYXuOr2RcG8eSzPuXT83KGiDGSucj1aFS0r5c1ZA=;
-        b=dc+l+QFt+ZkI4ADTsbh1RkzZ7R3GKYOGpQPN5INmbHlFKc7ns4gaQ8MzsnTZxHC9VZ
-         sbB+msnC5t+3A0if7JaXZ36vTXMRQDtmmNtdcUvAsD1GXSfjPe0XqX40aVc8WaaCdXR3
-         FKbS96lEEYq8OvHfAKySYgRQOCU13wtfmO2z3cW4WuEOX/uFIHm22Bbt8NKrZTXdd5zn
-         6Krcdg+Zap+0/M3Ee0533KHqgEnbVS/gOg93P/KNY4YLpf8ezcXDX6JTxgibmW/+PIEs
-         IjtMFpEt+lHA9MZi3/RZ1SHRC7/jYdMqTmE6qz+mbwfHMbAv4TcYcVYzdKffy/eR2a9W
-         nLxQ==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8MqG/9eNugQ5tJ/Rtq+PYRLEoeHJFnYsCD3SnMQn4kg=;
+        b=eDw0XX8vEuIxsKGozNNZkOhGWPGtwsuAkFfLzUQ+yypbCh/xcMJygJI7OS56r3htJO
+         qQLLMDEH6AMQzz3W8+BQ5uQrRXlBQiXB+Je8D2lOlWyWmcGYiG3wKApKfwg1/Bvuqs7t
+         WswxkWDQhddfR2XZuRzKm249vKm0mRxrImRJJhK87V2IfrCYKhqZkNYH1JwhDawj4Ydl
+         imBXDNCEglXTrDLtnosUSHCjnPB9xEe+O3gR/0We8a0bA5gzYn6/18W6Fx2a+RzskD6k
+         ZSCjTTJ8mEN5okEbgx8Cno+N466acr7GAAsyBQu7iSmDs9tcZE94ijqsdriVqkx6gjmq
+         Nc2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5CNNYXuOr2RcG8eSzPuXT83KGiDGSucj1aFS0r5c1ZA=;
-        b=sYSB9KLe7E34ii2Dd5aJRN93SaQ4oEAuoUvL8Df/6Cjkxpmc4eN7g6vGEqTRExZezH
-         R8ws3Ro9ldFZqLlw/ewZgBwPxbXCoSHuZ1Sjq3kp/MYDLx5FwB7RD5tlmLVlBCJNJVqm
-         qCsMBYycVoF2TGI6O9WhHtLiiuBR9ioi9ua6VEWHSr0fpp09odBmYyYo1cayO7Ua+BKG
-         kuH6N6F0SbkqysePMnAPqPj53nnnFVDHgI63Vksg+i5c42nW53FLDlIGsWH/foCz1pHu
-         quNBP86q3YcE2vBSmL2vXGD8QHrgfNezeK7Ge67BkUm5FZStJ7wLYzWxmv3npTLiTP0o
-         tSHA==
-X-Gm-Message-State: AOAM531T9tBiiq+M4pef5V9glJLl9KQnYyCAZY+qyZ3TsAI/7CpvVL8X
-        BFtGfbQabsG9yWHmXYAqwSbvqDXf4WoRb2XAB5NQ9CzJe9Ujrfk1
-X-Google-Smtp-Source: ABdhPJz+u2vMB6vK+JAGuD+cHl3/9qosUF8iC3kUhZx4Qftx7dvTPzvltpLQ174kmxzW5MzbnQt7E8oPwm5+FKTFhMA=
-X-Received: by 2002:a5b:ac7:0:b0:633:cf3f:6d1b with SMTP id
- a7-20020a5b0ac7000000b00633cf3f6d1bmr17740849ybr.585.1649518390548; Sat, 09
- Apr 2022 08:33:10 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8MqG/9eNugQ5tJ/Rtq+PYRLEoeHJFnYsCD3SnMQn4kg=;
+        b=UIvbAdQhW0Msj09syEez0IN2oO0UagDibMly03n4ooqXphKLjPj7A9RPXr/mCjfIAJ
+         vboprwwOJoyDyArrx2gBOZt/GGYBoGwGU7PUWuZ5fGm7JiX1HtzlOyGxrnwUTcHtgCUx
+         I+caCeG5JmI6YY1snzq3k2t68Zpg/BqWCpV5hazzzuH3ktuOPCJkXTO27Uubr/NXIs2m
+         V0B5DHPpd/iWzQM2CKrLs8Gf1+52BM+1F1Q5t7ue341DUR5v2h8VQlWNlvRgKeWU/s4G
+         qI53OH8Wiv5A0rOtIi0vlXr8p5PW3oIDVTlYPODLGeLb2p7pt7XNO5qpnpJYWKDVoQb+
+         FpKQ==
+X-Gm-Message-State: AOAM530szMQKQzEIwHgGq7law+V+MTwT9feBpDx4GP8q8HHf3Z+9FE4T
+        WQR+LBy/rM6tyOMXsJPRytNDdA==
+X-Google-Smtp-Source: ABdhPJxJ6Bo6jodPi4S/LMUoloiu+LpPOAAl/jt9H56UlC5++ydCyKVu/ohLCA79/QKaaxG4oyUNBA==
+X-Received: by 2002:a17:90a:8a85:b0:1ca:9d13:9f61 with SMTP id x5-20020a17090a8a8500b001ca9d139f61mr27887356pjn.35.1649518578706;
+        Sat, 09 Apr 2022 08:36:18 -0700 (PDT)
+Received: from localhost.localdomain ([2409:8a28:e6c:f010:e956:3be0:d6a3:f6ba])
+        by smtp.gmail.com with ESMTPSA id m1-20020a17090ade0100b001cb3feaddfcsm4810546pjv.2.2022.04.09.08.36.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 09 Apr 2022 08:36:18 -0700 (PDT)
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+To:     rostedt@goodmis.org, mingo@redhat.com, catalin.marinas@arm.com,
+        will@kernel.org, tglx@linutronix.de, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        broonie@kernel.org, mark.rutland@arm.com, ardb@kernel.org,
+        zhouchengming@bytedance.com, linux-arm-kernel@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
+        songmuchun@bytedance.com
+Subject: [PATCH v4 1/2] ftrace: cleanup ftrace_graph_caller enable and disable
+Date:   Sat,  9 Apr 2022 23:35:53 +0800
+Message-Id: <20220409153554.14470-1-zhouchengming@bytedance.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220408151237.3165046-1-pgwipeout@gmail.com> <20220408151237.3165046-4-pgwipeout@gmail.com>
- <trinity-3ae2b0d1-a3f0-4c64-acb6-2fb4fa0b36b3-1649434480623@3c-app-gmx-bap48>
- <CAMdYzYrK2KV1svrHS=zMjGYh=dUis-JKjgYHaeOB4LQWXM1+4A@mail.gmail.com>
- <trinity-7dbd5148-923f-479b-9eed-a75f000456e5-1649489032880@3c-app-gmx-bap35> <trinity-75c90ab6-a336-4f5d-972a-364b7f32c597-1649489861756@3c-app-gmx-bap35>
-In-Reply-To: <trinity-75c90ab6-a336-4f5d-972a-364b7f32c597-1649489861756@3c-app-gmx-bap35>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Sat, 9 Apr 2022 11:32:59 -0400
-Message-ID: <CAMdYzYqHLVnu7nwnGHAFGTEctnZuaRx515usYqeGmGnEpBb8Gg@mail.gmail.com>
-Subject: Re: Re: [PATCH v5 3/5] arm64: dts: rockchip: add rk356x dwc3 usb3 nodes
-To:     Frank Wunderlich <frank-w@public-files.de>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 9, 2022 at 3:37 AM Frank Wunderlich <frank-w@public-files.de> wrote:
->
-> Got it,
-> these Patches require different clock names
->
-> ref_clk => ref
-> bus_clk => bus_early
->
-> after renaming usb works on my board
->
-> will send an follow-up patch for this series
->
-> regards Frank
->
->
-> > Gesendet: Samstag, 09. April 2022 um 09:23 Uhr
-> > Von: "Frank Wunderlich" <frank-w@public-files.de>
-> >
-> > at least i nailed it down to these 2 commits in drivers/usb/dwc3/core.c, without them it works
-> >
-> > 5114c3ee2487 2022-01-27 usb: dwc3: Calculate REFCLKPER based on reference clock
-> > 33fb697ec7e5 2022-01-27 usb: dwc3: Get clocks individually
->
+The ftrace_[enable,disable]_ftrace_graph_caller() are used to do
+special hooks for graph tracer, which are not needed on some ARCHs
+that use graph_ops:func function to install return_hooker.
 
-I've submitted a fix for the dwc3 issue.
-https://patchwork.kernel.org/project/linux-rockchip/patch/20220409152116.3834354-1-pgwipeout@gmail.com/
-The offending commit was: 33fb697ec7e5 ("usb: dwc3: Get clocks individually").
-It breaks backwards compatibility with rk3328, which follows the
-rockchip,dwc3.yaml dt-binding, and thus this series as well.
+So introduce the weak version in ftrace core code to cleanup
+in x86.
 
-This fix is standalone and necessary no matter which route we decide
-to go with this series (and the rk3328/rk3399 support as well).
-With this patch, dwc3 is functional on the rk356x as the series was
-submitted, so if we decide to fix everything all at once, that is a
-viable option.
+Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+---
+v4:
+ - put weak ftrace_enable,disable_ftrace_graph_caller() in
+   fgraph.c instead of ftrace.c as suggested by Steve.
 
-For those not following the other conversation, here is the TLDR:
-- rockchip,dwc3.yaml has different clock names than snps,dwc3.yaml
-- rk3328 and rk356x attach directly to the dwc3 core driver
-- rk3399 uses the dwc3-simple driver, which still uses the clk_bulk api.
-- commit 33fb697ec7e5 changed to individual clocks, which follow
-snps,dwc3.yaml naming
-- to correct this beyond my fix patch, we would need to align
-rockchip,dwc3.yaml with snps,dwc3.yaml, which means rk3328, rk3399,
-and rk356x will move to the snps clock naming scheme.
+v3:
+ - consolidate two #if into a single #if, suggested by Steve. Thanks.
+---
+ arch/x86/kernel/ftrace.c | 17 ++---------------
+ kernel/trace/fgraph.c    | 18 ++++++++++++++++++
+ 2 files changed, 20 insertions(+), 15 deletions(-)
 
-I think we need Rob Herring to weigh in here, as this is a rather
-uncomfortable dt-binding issue.
+diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+index 1e31c7d21597..b09d73c2ba89 100644
+--- a/arch/x86/kernel/ftrace.c
++++ b/arch/x86/kernel/ftrace.c
+@@ -579,9 +579,7 @@ void arch_ftrace_trampoline_free(struct ftrace_ops *ops)
+ 
+ #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+ 
+-#ifdef CONFIG_DYNAMIC_FTRACE
+-
+-#ifndef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS
++#if defined(CONFIG_DYNAMIC_FTRACE) && !defined(CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS)
+ extern void ftrace_graph_call(void);
+ static const char *ftrace_jmp_replace(unsigned long ip, unsigned long addr)
+ {
+@@ -610,18 +608,7 @@ int ftrace_disable_ftrace_graph_caller(void)
+ 
+ 	return ftrace_mod_jmp(ip, &ftrace_stub);
+ }
+-#else /* !CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS */
+-int ftrace_enable_ftrace_graph_caller(void)
+-{
+-	return 0;
+-}
+-
+-int ftrace_disable_ftrace_graph_caller(void)
+-{
+-	return 0;
+-}
+-#endif /* CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS */
+-#endif /* !CONFIG_DYNAMIC_FTRACE */
++#endif /* CONFIG_DYNAMIC_FTRACE && !CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS */
+ 
+ /*
+  * Hook the return address and push it in the stack of return addrs
+diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
+index 8f4fb328133a..289311680c29 100644
+--- a/kernel/trace/fgraph.c
++++ b/kernel/trace/fgraph.c
+@@ -30,6 +30,24 @@ int ftrace_graph_active;
+ /* Both enabled by default (can be cleared by function_graph tracer flags */
+ static bool fgraph_sleep_time = true;
+ 
++/*
++ * archs can override this function if they must do something
++ * to enable hook for graph tracer.
++ */
++int __weak ftrace_enable_ftrace_graph_caller(void)
++{
++	return 0;
++}
++
++/*
++ * archs can override this function if they must do something
++ * to disable hook for graph tracer.
++ */
++int __weak ftrace_disable_ftrace_graph_caller(void)
++{
++	return 0;
++}
++
+ /**
+  * ftrace_graph_stop - set to permanently disable function graph tracing
+  *
+-- 
+2.35.1
+

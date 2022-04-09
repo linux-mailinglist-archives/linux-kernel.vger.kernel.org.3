@@ -2,151 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E45E4FA27D
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 06:20:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB3B4FA27F
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 06:23:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240831AbiDIEWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 00:22:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40766 "EHLO
+        id S239314AbiDIEZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 00:25:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235675AbiDIEWM (ORCPT
+        with ESMTP id S230078AbiDIEZh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 00:22:12 -0400
-Received: from mail-4324.protonmail.ch (mail-4324.protonmail.ch [185.70.43.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23F2DCA82;
-        Fri,  8 Apr 2022 21:20:04 -0700 (PDT)
-Date:   Sat, 09 Apr 2022 04:20:00 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail; t=1649478002;
-        bh=1G4kcKsu+V9ba6ODhUKp40IVqdmE3MfHKuvyo+ThTOQ=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:From:To:Cc:Date:
-         Subject:Reply-To:Feedback-ID:Message-ID;
-        b=gibdyB98QFHb+tGpILKkq7Y2E7JcteE36UHPBNVhmXd1bDF/Krib55pibiGJ6D9h5
-         Mw4UYyJO0n+xra2IxiJJC8xR9WmZ5tIvrTlOkn6xpKksSGOpG7NXx5LlmiuH8+keWK
-         xYMP21Ef5sEX/9+daEYvLvFKJPFSqOqE/b1VBpSoITkUj3DuR3qqkcq8F61RxE7lp2
-         Rf8IVgWIwPRb21mxsaTAH4uqlr9MvC20DTZMjUQUNWdGbjG9+4Vtyjh8pTrTRbQCQN
-         5GqE4Ea0VDdxFtDoeSVEks+juZdoSQU+ez8mjcvRzCeJt4njHnWIBnXZ10l5HO8fsg
-         wMlzODslre6oA==
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-From:   Yassine Oudjana <y.oudjana@protonmail.com>
-Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Reply-To: Yassine Oudjana <y.oudjana@protonmail.com>
-Subject: [PATCH v2 9/9] arm64: dts: qcom: msm8996-xiaomi-scorpio: Use MSM8996 Pro
-Message-ID: <I8rKN2XYPwD-pMiRLt6Hqy7v6Dw3fwg5U8sApTSX6n-4olK8_yz7c-lu_YuRsBW94N8PlXojurNpPjHWM6_710s705ptHtdyu-U7Y65SzPc=@protonmail.com>
+        Sat, 9 Apr 2022 00:25:37 -0400
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6CB10CF34
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 21:23:30 -0700 (PDT)
+Received: by mail-il1-x12d.google.com with SMTP id 14so7755873ily.11
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 21:23:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DJypOpOA9aIF7A07tGX4soaaBLyBuWYyjxJ7q0m7th0=;
+        b=NPEqzwWw0cB7k1ALFugu0+c2isySmZUAJchwKU9c8auBivUs+EHCCrcmT/NvOvtXZA
+         l0T7McZG8qNrO25el8VQcNND1MWmlkX+p8q1h3+E/mUgFMa0wgup2AJ7MkIjBguHS/x4
+         UqCuRhRXePhAN/9IGhExY7IUwGj2J29JvefULPBsv3QTybO45tikhIpCj+Vi4MAuNjRz
+         bL/Z7yHlADVHboa8Qt/gQKaqH5APKeuPSQOWezK+mRJz9LyaZWbCWvIq/WcG+7s6YnFj
+         9u04BgzxodGacaWU/vig6sn/9Y9sjc0/fNPjedKBwpoNzTX+y2mXftaya9rVMLcDAsJ4
+         2duQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DJypOpOA9aIF7A07tGX4soaaBLyBuWYyjxJ7q0m7th0=;
+        b=7WF37vGvFp3M6TdRwtP9YXLydZAHXv5b/6bIykIoeVlnmkcmEop/le4oPq0f/sbJHI
+         fU8jBGDGGZEa+MyOAV5Wxc2ajHBUgaPDGsbiRjx4ctQpVo+FCInY8b1i6P9r3RZFyyJ2
+         oDiag7ESNC0RltVh+AcN5wB/viu6ZMVXIXAvL/O6hxTXuqYrQohCY6x1IACVHB4ZZp1Z
+         Ak0/fG8x8jVcq8mDv59XGok4s9QyX3zmFWeUKAsKfIDtwxTixh18L4vIOfSSC5bpJY8S
+         kiObqnwo/wQm8wyLxNKyemFxV8fWasn1JOviwMcGt9mE5o6xJVTO6nZOCOX1ktAhQ09R
+         qunw==
+X-Gm-Message-State: AOAM532r9YXls2WvwTSgP0fWpRtkC9J5UIqrU+nry/WreYJLE42xa0ek
+        fFbw2JAsVE2f9IGB3f+mvBw=
+X-Google-Smtp-Source: ABdhPJzPxk4qY6Q6zL03Wzq9wKditxBAobGL6/CMo2XFZXDH58+NCffkqUpLV6nfgehKIxDxhJ4QTw==
+X-Received: by 2002:a05:6e02:216f:b0:2ca:85f4:1473 with SMTP id s15-20020a056e02216f00b002ca85f41473mr2671059ilv.17.1649478209896;
+        Fri, 08 Apr 2022 21:23:29 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-122-133.hlrn.qwest.net. [71.218.122.133])
+        by smtp.gmail.com with ESMTPSA id r9-20020a6b6009000000b006412abddbbbsm16131051iog.24.2022.04.08.21.23.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 21:23:29 -0700 (PDT)
+From:   James Hilliard <james.hilliard1@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        James Hilliard <james.hilliard1@gmail.com>,
+        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] drm/gma500: depend on framebuffer
+Date:   Fri,  8 Apr 2022 22:23:21 -0600
+Message-Id: <20220409042321.3184493-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Xiaomi Mi Note 2 has the MSM8996 Pro SoC. Rename the dts
-to match, include msm8996pro.dtsi, and add the qcom,msm8996pro
-compatible. To do that, the msm8996.dtsi include in msm8996-xiaomi-common
-has to be moved to msm8996-xiaomi-gemini, the only device that needs it
-included after this change. The msm-id is also removed as it is now defined
-in msm8996pro.dtsi.
+Select the efi framebuffer if efi is enabled.
 
-Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+This appears to be needed for video output to function correctly.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- arch/arm64/boot/dts/qcom/Makefile                             | 2 +-
- arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi           | 3 ---
- arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts            | 1 +
- ...m8996-xiaomi-scorpio.dts =3D> msm8996pro-xiaomi-scorpio.dts} | 4 ++--
- 4 files changed, 4 insertions(+), 6 deletions(-)
- rename arch/arm64/boot/dts/qcom/{msm8996-xiaomi-scorpio.dts =3D> msm8996pr=
-o-xiaomi-scorpio.dts} (99%)
+Changes v2 -> v3:
+  - select EFI_FB instead of depending on it
+Changes v1 -> v2:
+  - use depends instead of select
+---
+ drivers/gpu/drm/gma500/Kconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/M=
-akefile
-index f9e6343acd03..72b8fcdd9074 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -37,7 +37,7 @@ dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8996-sony-xperia-tone-d=
-ora.dtb
- dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8996-sony-xperia-tone-kagura.dtb
- dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8996-sony-xperia-tone-keyaki.dtb
- dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8996-xiaomi-gemini.dtb
--dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8996-xiaomi-scorpio.dtb
-+dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8996pro-xiaomi-scorpio.dtb
- dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8998-asus-novago-tp370ql.dtb
- dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8998-fxtec-pro1.dtb
- dtb-$(CONFIG_ARCH_QCOM)=09+=3D msm8998-hp-envy-x2.dtb
-diff --git a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi b/arch/arm=
-64/boot/dts/qcom/msm8996-xiaomi-common.dtsi
-index 7a9fcbe9bb31..1bdd3f09f536 100644
---- a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi
-@@ -3,9 +3,6 @@
-  * Copyright (c) 2020, Yassine Oudjana <y.oudjana@protonmail.com>
-  */
-
--/dts-v1/;
--
--#include "msm8996.dtsi"
- #include "pm8994.dtsi"
- #include "pmi8994.dtsi"
- #include <dt-bindings/input/input.h>
-diff --git a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts b/arch/arm6=
-4/boot/dts/qcom/msm8996-xiaomi-gemini.dts
-index 34f82e06ef53..e360187109a2 100644
---- a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts
-@@ -5,6 +5,7 @@
-
- /dts-v1/;
-
-+#include "msm8996.dtsi"
- #include "msm8996-xiaomi-common.dtsi"
- #include <dt-bindings/sound/qcom,q6afe.h>
- #include <dt-bindings/sound/qcom,q6asm.h>
-diff --git a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dts b/arch/arm=
-64/boot/dts/qcom/msm8996pro-xiaomi-scorpio.dts
-similarity index 99%
-rename from arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dts
-rename to arch/arm64/boot/dts/qcom/msm8996pro-xiaomi-scorpio.dts
-index 27a45ddbb5bd..2028325e1c0f 100644
---- a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8996pro-xiaomi-scorpio.dts
-@@ -5,6 +5,7 @@
-
- /dts-v1/;
-
-+#include "msm8996pro.dtsi"
- #include "msm8996-xiaomi-common.dtsi"
- #include "pmi8996.dtsi"
- #include <dt-bindings/sound/qcom,q6afe.h>
-@@ -12,9 +13,8 @@
-
- / {
- =09model =3D "Xiaomi Mi Note 2";
--=09compatible =3D "xiaomi,scorpio", "qcom,msm8996";
-+=09compatible =3D "xiaomi,scorpio", "qcom,msm8996pro", "qcom,msm8996";
- =09chassis-type =3D "handset";
--=09qcom,msm-id =3D <305 0x10000>;
- =09qcom,board-id =3D <34 0>;
-
- =09chosen {
---
-2.35.1
+diff --git a/drivers/gpu/drm/gma500/Kconfig b/drivers/gpu/drm/gma500/Kconfig
+index 0cff20265f97..a422fa84d53b 100644
+--- a/drivers/gpu/drm/gma500/Kconfig
++++ b/drivers/gpu/drm/gma500/Kconfig
+@@ -2,11 +2,13 @@
+ config DRM_GMA500
+ 	tristate "Intel GMA500/600/3600/3650 KMS Framebuffer"
+ 	depends on DRM && PCI && X86 && MMU
++	depends on FB
+ 	select DRM_KMS_HELPER
+ 	# GMA500 depends on ACPI_VIDEO when ACPI is enabled, just like i915
+ 	select ACPI_VIDEO if ACPI
+ 	select BACKLIGHT_CLASS_DEVICE if ACPI
+ 	select INPUT if ACPI
++	select FB_EFI if EFI
+ 	help
+ 	  Say yes for an experimental 2D KMS framebuffer driver for the
+ 	  Intel GMA500 (Poulsbo), Intel GMA600 (Moorestown/Oak Trail) and
+-- 
+2.25.1
 

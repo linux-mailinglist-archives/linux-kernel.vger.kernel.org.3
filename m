@@ -2,56 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11A2E4FAA3C
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 20:41:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 395F94FAA3E
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 20:41:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243056AbiDISnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 14:43:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50562 "EHLO
+        id S243069AbiDISnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 14:43:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243044AbiDISnW (ORCPT
+        with ESMTP id S243061AbiDISnd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 14:43:22 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A45BCB48
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 11:41:12 -0700 (PDT)
-Received: from localhost.localdomain ([37.4.249.94]) by
- mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MSckp-1nWM8T0dib-00SzaR; Sat, 09 Apr 2022 20:41:00 +0200
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>
-Cc:     bcm-kernel-feedback-list@broadcom.com,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        "Ivan T . Ivanov" <iivanov@suse.de>, linux-kernel@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Stefan Wahren <stefan.wahren@i2se.com>
-Subject: [PATCH] MAINTAINERS: add raspberrypi to BCM2835 architecture
-Date:   Sat,  9 Apr 2022 20:40:17 +0200
-Message-Id: <20220409184017.114804-1-stefan.wahren@i2se.com>
+        Sat, 9 Apr 2022 14:43:33 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D8AFC131;
+        Sat,  9 Apr 2022 11:41:26 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id r66so10638560pgr.3;
+        Sat, 09 Apr 2022 11:41:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WN+cZ+EH/2jdMXxpTEKPOeickiZoQW84lQN8HFTlfGk=;
+        b=GVr+YmrpKw9iWExzzn0YYiFAVz0khz0N4A6GJYFa4ApK4WwiSNadltPKsdak1Fl0+W
+         /U+ll7cTgWilgsrcytPMn+E2rN0DlTXPYZvfGfwMSPGq+4DVxwlYgVyvR7YqY4ZqTET5
+         EAYjUBcW3lQruMSMxg5EfSsXY6LgR13c1o24In5YsqNgTh+zAOtUnhzYbebTAkK7SIVN
+         h39n/5AzlXuBN4r0Jmx2+gEOXcrgcatdBXnReqEFHp8sUBx5hGBElnq2XblXrY4GITvc
+         +46IudDIR+lvNPAfyNbMey5XXNEqqLsWmCrQFkrHp+8vDCZD7yc6DNMa/3BSK+sGsu13
+         gKNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WN+cZ+EH/2jdMXxpTEKPOeickiZoQW84lQN8HFTlfGk=;
+        b=U3zHtnG6W9JgB0S5lSR6lYUNzXf2HtkOksGQenjHQW71fVQQkH03KihYEMmgJygoTt
+         QyId4LCDa8M0EKXPbgakVHvZ6LkXGX/vv8d7RB0Y5/VyRPXQYvXHiMgmX5NrNsGUrYaP
+         dkIPqdg4jK6a8FcxIzH6Jt+h5cKop0yCn8CIlN3tw3dg2AFOT0peiJntR55G+gCA+XPD
+         +O5wWE55ZWE9lZ6uSOwXUxbesNsZwpO9n6ItixK1lPi90pDRqU5cIMCY0n0hqlsH9m/e
+         7T/SpOjO7Snldj+Qyc2FJomzQGF5rHdaoLX/RvklivbNITl8PyimbnTaVwfacScie3+c
+         5Tpg==
+X-Gm-Message-State: AOAM532ugHDqK/Y4yKSbaOIYBy115pTQJYigYsRfYUkGyibczqyr8LKi
+        YELSlly39KK5ZucdDkF+wU7BJY7IuEQ=
+X-Google-Smtp-Source: ABdhPJw9Tw2GpTtcmFXjMJJp93pcZOSpYFzo9oV6lAt8ttC99gcYK3AqXAp91Odw8nptfOEQQHiuJw==
+X-Received: by 2002:a05:6a00:2124:b0:4fa:739f:2386 with SMTP id n4-20020a056a00212400b004fa739f2386mr25196272pfj.68.1649529685701;
+        Sat, 09 Apr 2022 11:41:25 -0700 (PDT)
+Received: from localhost.localdomain ([122.161.51.18])
+        by smtp.gmail.com with ESMTPSA id g3-20020a63ad03000000b003821d0f0ef4sm25813933pgf.71.2022.04.09.11.41.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 09 Apr 2022 11:41:25 -0700 (PDT)
+From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Kuldeep Singh <singh.kuldeep87k@gmail.com>
+Subject: [PATCH 0/6] Covert Qcom BAM dma binding to json format
+Date:   Sun, 10 Apr 2022 00:11:09 +0530
+Message-Id: <20220409184115.15612-1-singh.kuldeep87k@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:zsmJB+KgfxpZtVlTRSiOUnBIJIV/4ohcGWFhE4ewp5+bVBltY7m
- yPHie505sRlclaRu23HDTefPWnDkybE8VNPJady689Lu17yUJilKRhzjADpbQodjqF6FjGT
- +fkNwHd5RXzpoYQ+Rpf0qYWE0Vwdj5Lh65TXRmCELgQlrK/GcsCeNJZ3ygictTUZgZH85s7
- xbF1+3j7qpUD7XVM/T98A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:CeU5Jc4fvGk=:MheYd2Ib56eB2zOm+lQHQT
- mO61AgSuQGtsdEfRmvlm+7plZSo2NqltA+YVuTUsgJkFTk1FpRwY5QQEbeEEgLQrdXPMS3+sn
- PGg7qLsLUmNHiyyJY1AMkaSikQXoMCH4mXLfLb/QtUntHZo33RZQbiWpD7zWmMa92MFc+w4R2
- +qaI1pvsucoOKD7oMRMNuCLfe3Sa+lMoEWEgLhq9q90Smx4SxZVXAq6in4FrjQV+qFDf2dXQ8
- LQLcB0b5I9pLltSf761HpBxrUN0o9fFOKYrUk0dn9p9411iFUFE2LhAz2K7OCm4Jy5+ySkObK
- xBeC9TinhNHRN5RAW/oX4gjJHWcWhAPjKoIbcEtLWHxfpGjLrMIKlE9rdqJccyxJX9rfoPR6h
- oLoqW8LfLfjEZa71Xlev/3d6xbpsi/DadzkzdJxCWAKFem5fMo6ccuYv5QaUOFw8EAzPmeEZZ
- DrqpL0nBhD4RAwX+RaMj5xHB0buDDsFFk5aKBq4+ylY0KDTeuOl9GQAdkmHHunyAOuFkyBae5
- q75KU6vZaQLXZ2W67wKcuLCBRDpGQW6JUbVZFz+mQHgzJceYREZA9SlGrVYRajwrAb+0D0DYM
- woXyMVUv1++OV6RV0xg1wYMvxeFWclX64zGqdTGi3cJaYZASTI9ukxbAk/hm7dUl2UwUCLEJ4
- S2LevD4zyRMyIbAagqdkJQYsHhm7XfBCH3b6Z25TqhsePbKbrlOuTIeS+AEQ0CtEaWrkvsr5d
- oUDuMN6HhcukWpsu
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,27 +69,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Recent changes to the firmware clock driver have not be send
-to the architecture maintainers. So fix this by adding the
-matching pattern.
+Patch 1,2,3,4,5 require generic node name for dma and 6/6 is actual
+conversion change.
 
-Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+Looking forward towards review comments. Thanks!
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fd768d43e048..1432bd345d22 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3752,6 +3752,7 @@ F:	drivers/pci/controller/pcie-brcmstb.c
- F:	drivers/staging/vc04_services
- N:	bcm2711
- N:	bcm283*
-+N:	raspberrypi
- 
- BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITECTURE
- M:	Florian Fainelli <f.fainelli@gmail.com>
+Kuldeep Singh (6):
+  ARM: dts: qcom: apq8064: User generic node name for DMA
+  ARM: dts: qcom: mdm9615: User generic node name for DMA
+  arm64: dts: qcom: msm8996: User generic node name for DMA
+  ARM: dts: qcom: ipq4019: User generic node name for DMA
+  ARM: dts: qcom: ipq8064: User generic node name for DMA
+  dt-bindings: dma: Convert Qualcomm BAM DMA binding to json format
+
+ .../devicetree/bindings/dma/qcom,bam-dma.yaml | 90 +++++++++++++++++++
+ .../devicetree/bindings/dma/qcom_bam_dma.txt  | 52 -----------
+ arch/arm/boot/dts/qcom-apq8064.dtsi           |  6 +-
+ arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1.dtsi |  4 +-
+ arch/arm/boot/dts/qcom-ipq4019.dtsi           |  6 +-
+ arch/arm/boot/dts/qcom-ipq8064.dtsi           |  4 +-
+ arch/arm/boot/dts/qcom-mdm9615.dtsi           |  4 +-
+ arch/arm64/boot/dts/qcom/msm8996.dtsi         |  2 +-
+ 8 files changed, 103 insertions(+), 65 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
+ delete mode 100644 Documentation/devicetree/bindings/dma/qcom_bam_dma.txt
+
 -- 
 2.25.1
 

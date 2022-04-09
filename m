@@ -2,103 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2369A4FA0FF
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 03:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 309374FA105
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 03:22:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238429AbiDIBVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 21:21:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37854 "EHLO
+        id S240176AbiDIBYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 21:24:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiDIBVA (ORCPT
+        with ESMTP id S237698AbiDIBYj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 21:21:00 -0400
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8CBFA6398;
-        Fri,  8 Apr 2022 18:18:53 -0700 (PDT)
-Received: from ubuntu.localdomain (unknown [10.15.192.164])
-        by mail-app2 (Coremail) with SMTP id by_KCgBXj0zz3lBi0_JhAQ--.24619S2;
-        Sat, 09 Apr 2022 09:18:46 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-rdma@vger.kernel.org, jgg@ziepe.ca, shiraz.saleem@intel.com,
-        mustafa.ismail@intel.com, dan.carpenter@oracle.com,
-        Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH V5 09/11] drivers: infiniband: hw: Fix deadlock in irdma_cleanup_cm_core()
-Date:   Sat,  9 Apr 2022 09:18:42 +0800
-Message-Id: <20220409011842.45858-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: by_KCgBXj0zz3lBi0_JhAQ--.24619S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Aw13Ar15Xw1rZryxtF43Jrb_yoW8AF4xpr
-        WDW34akryq9F42ka18Xw1kZF9xXwn5XFWqvryvv395ZFn7XFyUAFnFyr1jqFZ8JF9Fgrn3
-        GF1FvryrCF9Ivr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkI1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
-        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
-        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v
-        1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
-        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
-        x4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgAPAVZdtZGdgQAUsr
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 8 Apr 2022 21:24:39 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABAA723165
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 18:22:33 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id s14-20020a17090a880e00b001caaf6d3dd1so13364541pjn.3
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 18:22:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=I0F2P2ML/pBi824KYgTw5KU1Y45bJmTHodkEFj/msPE=;
+        b=rnIIkb90V9I9bcpVMa5/w0cTf4Gar8GVFDke+JSlU2hEHFp3OsRcTAqk7dfPeFG8tF
+         dDExEmFCxiNoVK2EMa1ylHUlmv7DSThq6XmiX4TNJLDsXoKoUElD/mYy3ENP5lUCX6Cm
+         L0cqaNurq1CWtLL/S3jZRhd8I253TJx1CfvGJLV8g4b2GyGGXfVeqwYyZcNtCYqWoaTJ
+         rljgm3m6gGpplEG1geT3BvdWqZgCrGRUG3e99TyERwVqbDQLP1p54prwkHbmcNQHKk4J
+         2yNkYps6CqNhbHgl2xIZXaESlcelXNqaHtoVajN8GB4WEs0RS7UrQYqzpjddvSoSRqdi
+         sZ6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=I0F2P2ML/pBi824KYgTw5KU1Y45bJmTHodkEFj/msPE=;
+        b=JMo8tpbE+7JL0IvyVRkGi5XsUUqYYZ+EiaepimTkn8EhazRVXHLKuQd3zwz44FVhpC
+         5ZiMbQHkN+WK/QNN38+twUrS9pq6YkoYCfx5DITNjDuI6JfDQDsyHWsG9FznHba+GXzN
+         Nh4YtMrwy02IDvs+CqYcYESLIang7LRSGgPWN7h3e20LbUNP3CUY31u5ICr2tLMw+dn2
+         MWal6Fj5Wace97EZVuo2IsOgGLCx2bltMVoUHk8dID3Fa86lADhz1mGnQ3GJ6GMg3OQQ
+         CYuoIkheYt8fxqrga29DkH7bZWbphTpF0EZwNtO3UJdKQiPxLZBdlryiVU7nr4ElMHk4
+         k39g==
+X-Gm-Message-State: AOAM533w6wSpDZ5glZxSH+10SYatuhJSCX0X3IiT/EbMQ/PAD0EfQm/I
+        ODxZhR9CdDQE5IblrUoHZyFbOCWS1vGYHC/3WGvX2Q==
+X-Google-Smtp-Source: ABdhPJyJCUjj5J7R135dzSPAdcxIjuPzJmPklzIABqKF59nyK/U0cF2KfJdhnRS2Ev/Kou5gxn1s4+XTYi7R+kW7BNM=
+X-Received: by 2002:a17:90b:3886:b0:1c7:c935:4447 with SMTP id
+ mu6-20020a17090b388600b001c7c9354447mr25107776pjb.196.1649467351747; Fri, 08
+ Apr 2022 18:22:31 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220408045743.1432968-1-yosryahmed@google.com> <20220408045743.1432968-3-yosryahmed@google.com>
+In-Reply-To: <20220408045743.1432968-3-yosryahmed@google.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Fri, 8 Apr 2022 18:21:55 -0700
+Message-ID: <CAJD7tkb6VJt=pfqnW11r6S7A0r2Vh85a3YZaVso-qyiCM06nDQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/4] selftests: cgroup: return the errno of write() in
+ cg_write() on failure
+To:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     David Rientjes <rientjes@google.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
+        Chen Wandun <chenwandun@huawei.com>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a deadlock in irdma_cleanup_cm_core(), which is shown
-below:
+On Thu, Apr 7, 2022 at 9:57 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+>
+> Currently, cg_write() returns 0 on success and -1 on failure. Modify it
+> to return the errno of write() syscall when write() fails.
+>
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> ---
+>  tools/testing/selftests/cgroup/cgroup_util.c | 32 +++++++++++---------
+>  1 file changed, 17 insertions(+), 15 deletions(-)
+>
+> diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
+> index dbaa7aabbb4a..3b6bb09985fa 100644
+> --- a/tools/testing/selftests/cgroup/cgroup_util.c
+> +++ b/tools/testing/selftests/cgroup/cgroup_util.c
+> @@ -38,23 +38,23 @@ static ssize_t read_text(const char *path, char *buf, size_t max_len)
+>         return len;
+>  }
+>
+> -static ssize_t write_text(const char *path, char *buf, ssize_t len)
+> +/*
+> + * Returns:
+> + *     success -> 0
+> + *     open() failure -> -1
+> + *     write() failure -> errno
+> + */
+> +static int write_text(const char *path, char *buf, ssize_t len)
+>  {
+> -       int fd;
+> +       int fd, ret;
+>
+>         fd = open(path, O_WRONLY | O_APPEND);
+>         if (fd < 0)
+>                 return fd;
+>
+> -       len = write(fd, buf, len);
+> -       if (len < 0) {
+> -               close(fd);
+> -               return len;
+> -       }
+> -
+> +       ret = write(fd, buf, len) < 0 ? errno : 0;
+>         close(fd);
+> -
+> -       return len;
+> +       return ret;
+>  }
+>
+>  char *cg_name(const char *root, const char *name)
+> @@ -177,17 +177,19 @@ long cg_read_lc(const char *cgroup, const char *control)
+>         return cnt;
+>  }
+>
+> +/*
+> + * Returns:
+> + *     success -> 0
+> + *     open() failure -> -1
+> + *     write() failure -> errno
+> + */
+>  int cg_write(const char *cgroup, const char *control, char *buf)
+>  {
+>         char path[PATH_MAX];
+>         ssize_t len = strlen(buf);
+>
+>         snprintf(path, sizeof(path), "%s/%s", cgroup, control);
+> -
+> -       if (write_text(path, buf, len) == len)
+> -               return 0;
+> -
+> -       return -1;
+> +       return write_text(path, buf, len);
+>  }
 
-   (Thread 1)              |      (Thread 2)
-                           | irdma_schedule_cm_timer()
-irdma_cleanup_cm_core()    |  add_timer()
- spin_lock_irqsave() //(1) |  (wait a time)
- ...                       | irdma_cm_timer_tick()
- del_timer_sync()          |  spin_lock_irqsave() //(2)
- (wait timer to stop)      |  ...
+I have changed this in v4 to a cleaner implementation that either
+returns 0 on success or -errno on failure. I also made sure to check
+that the full buffer was being written, and updated cg_read() as well
+for the interface to be consistent.
 
-We hold cm_core->ht_lock in position (1) of thread 1 and
-use del_timer_sync() to wait timer to stop, but timer handler
-also need cm_core->ht_lock in position (2) of thread 2.
-As a result, irdma_cleanup_cm_core() will block forever.
+Will send out once the discussion on patch 1 in v3 reaches a consensus.
 
-This patch removes the check of timer_pending() in
-irdma_cleanup_cm_core(), because the del_timer_sync()
-function will just return directly if there isn't a
-pending timer. As a result, the lock is redundant,
-because there is no resource it could protect.
-
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
-Changes in V5:
-  - Remove mod_timer() in irdma_schedule_cm_timer and irdma_cm_timer_tick.
-
- drivers/infiniband/hw/irdma/cm.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/drivers/infiniband/hw/irdma/cm.c b/drivers/infiniband/hw/irdma/cm.c
-index dedb3b7edd8..4b6b1065f85 100644
---- a/drivers/infiniband/hw/irdma/cm.c
-+++ b/drivers/infiniband/hw/irdma/cm.c
-@@ -3251,10 +3251,7 @@ void irdma_cleanup_cm_core(struct irdma_cm_core *cm_core)
- 	if (!cm_core)
- 		return;
- 
--	spin_lock_irqsave(&cm_core->ht_lock, flags);
--	if (timer_pending(&cm_core->tcp_timer))
--		del_timer_sync(&cm_core->tcp_timer);
--	spin_unlock_irqrestore(&cm_core->ht_lock, flags);
-+	del_timer_sync(&cm_core->tcp_timer);
- 
- 	destroy_workqueue(cm_core->event_wq);
- 	cm_core->dev->ws_reset(&cm_core->iwdev->vsi);
--- 
-2.17.1
-
+>
+>  int cg_find_unified_root(char *root, size_t len)
+> --
+> 2.35.1.1178.g4f1659d476-goog
+>

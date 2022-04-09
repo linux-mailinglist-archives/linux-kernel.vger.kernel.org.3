@@ -2,47 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71A8E4FA8A1
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 15:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E79E64FA8A4
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 15:38:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242192AbiDINjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 09:39:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59304 "EHLO
+        id S242201AbiDINkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 09:40:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233645AbiDINjl (ORCPT
+        with ESMTP id S233597AbiDINkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 09:39:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4271AECBA;
-        Sat,  9 Apr 2022 06:37:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EAF63B8006F;
-        Sat,  9 Apr 2022 13:37:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F443C385A4;
-        Sat,  9 Apr 2022 13:37:29 +0000 (UTC)
-Date:   Sat, 9 Apr 2022 09:37:27 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Kurt Kanzenbach <kurt@linutronix.de>
-Cc:     John Stultz <john.stultz@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Richard Cochran <richardcochran@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] timekeeping: Introduce fast accessor to clock tai
-Message-ID: <20220409093727.7dda6371@rorschach.local.home>
-In-Reply-To: <20220409081300.4762-2-kurt@linutronix.de>
-References: <20220409081300.4762-1-kurt@linutronix.de>
-        <20220409081300.4762-2-kurt@linutronix.de>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        Sat, 9 Apr 2022 09:40:04 -0400
+Received: from mo4-p03-ob.smtp.rzone.de (mo4-p03-ob.smtp.rzone.de [85.215.255.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E09FE13C71A;
+        Sat,  9 Apr 2022 06:37:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1649511472;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=A38jLkMhxB0aROCgv4/oyefD9VABl9BLTRNARBXZigo=;
+    b=KXsyl70AyDNwepKNwhiqVA/4Pd/eVmogE6tRm5L9GkbpfTWmrMKkKIR/nae4QFKQVh
+    VT9IahtUym14jkKxvPj9C7g0dzplboGMW6ZklsDsG6pEBV0VQMgAFjy2u4EDovx5rk54
+    lrMwyeWs0af25yZuhHIctEMagB8BwyfapbG+eG+mtuZoT0JqrdDTplIdxpunW2PaMtxZ
+    e3vIhgpKYtso+k3ubcXHmqfTphNcZ3VgeLYXZM+FT6kn7P7Lm/RnIPxveyged2dJnDIx
+    D+FNTk0lI8w/72wVLXDxxCH0VvpfMBo1ZTuLg7PeMML15oUVvkIj2D6FfJV6BJnARWyz
+    cwqw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7wpz8NIGH/jrwDepmg=="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 47.42.2 DYNA|AUTH)
+    with ESMTPSA id k708cfy39DbpuXD
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Sat, 9 Apr 2022 15:37:51 +0200 (CEST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [PATCH 07/18] MIPS: DTS: jz4780: fix otg node as reported by
+ dtbscheck
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <2961d892-609c-c0bf-e9c1-c54306f608c7@linaro.org>
+Date:   Sat, 9 Apr 2022 15:37:51 +0200
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, letux-kernel@openphoenux.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <51EEBAB0-849A-4AA5-80E0-B9FAC8FC5E14@goldelico.com>
+References: <cover.1649443080.git.hns@goldelico.com>
+ <298162bfa2e7225ccc753865e1ffa39ce2722b2a.1649443080.git.hns@goldelico.com>
+ <bd19b6eb-d53a-b665-749d-46c275c85ccc@linaro.org>
+ <3XN2AR.4ZAYNTAI4XBT3@crapouillou.net>
+ <36C96109-0A56-4ACF-ACD1-367DAD9E3A47@goldelico.com>
+ <2961d892-609c-c0bf-e9c1-c54306f608c7@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: Apple Mail (2.3445.104.21)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,15 +69,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat,  9 Apr 2022 10:12:58 +0200
-Kurt Kanzenbach <kurt@linutronix.de> wrote:
 
-> ---
->  include/linux/timekeeping.h |  1 +
->  kernel/time/timekeeping.c   | 17 +++++++++++++++++
->  2 files changed, 18 insertions(+)
 
-If the time keeping folks are OK with this and ack it, I'm happy to
-take this through my tree.
+> Am 09.04.2022 um 15:23 schrieb Krzysztof Kozlowski =
+<krzysztof.kozlowski@linaro.org>:
+>=20
+> On 09/04/2022 15:18, H. Nikolaus Schaller wrote:
+> hould have a specific compatible.
+>>>> Please mention why it does not.
+>>>=20
+>>> Agreed. The "snps,dwc2" should be a fallback string, otherwise there =
+is no way to uniquely identify the JZ4780 implementation of the IP.
+>>=20
+>> Well, there is no specifc implementation and driver for it. So no =
+need to uniquely identify it.
+>=20
+> Specific implementation and driver are not arguments here. This does =
+not
+> matter. It's really unrelated argument.
 
--- Steve
+The argumentation is in reverse: if there is no need for a specialized =
+driver or implementation,
+why is there is a need to define a specialization.
+
+Your argument was:
+"there is no way to uniquely identify the JZ4780 implementation of the =
+IP"
+
+My question is:
+"what do we need that for?"
+
+> Bindings are not about implementation in Linux. Implementation can
+> change, so bindings should also?
+
+No. Implementations should be agnostic.
+

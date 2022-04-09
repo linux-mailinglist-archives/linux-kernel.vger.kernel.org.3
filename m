@@ -2,139 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D1334FA09A
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 02:21:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 905E94FA0A0
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 02:22:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbiDIAVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 20:21:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47604 "EHLO
+        id S238224AbiDIAYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 20:24:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230295AbiDIAVw (ORCPT
+        with ESMTP id S229799AbiDIAYj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 20:21:52 -0400
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A064DE911
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 17:19:46 -0700 (PDT)
-Received: from [192.168.0.2] (ip5f5ae917.dynamic.kabel-deutschland.de [95.90.233.23])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Fri, 8 Apr 2022 20:24:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062A9DFDC9
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 17:22:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 5F95861E6478B;
-        Sat,  9 Apr 2022 02:19:43 +0200 (CEST)
-Message-ID: <44354d78-b340-fbc4-fd6c-060d7ad3404e@molgen.mpg.de>
-Date:   Sat, 9 Apr 2022 02:19:43 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 987B062199
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 00:22:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07F18C385A1;
+        Sat,  9 Apr 2022 00:22:31 +0000 (UTC)
+Date:   Fri, 8 Apr 2022 20:22:30 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>, jstultz@google.com,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [RFC][PATCH] timers: Add del_time_free() to be called before
+ freeing timers
+Message-ID: <20220408202230.0ea5388f@rorschach.local.home>
+In-Reply-To: <87v8vjiaih.ffs@tglx>
+References: <20220407161745.7d6754b3@gandalf.local.home>
+        <87pmlrkgi3.ffs@tglx>
+        <CAHk-=whbsLXy85XpKRQmBXr=GqWbMoi+wVjFY_V22=BOE=dHog@mail.gmail.com>
+        <87v8vjiaih.ffs@tglx>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCHv2] drm/amdgpu: disable ASPM on Intel AlderLake based
- systems
-Content-Language: en-US
-To:     Richard Gong <richard.gong@amd.com>
-Cc:     mario.limonciello@amd.com, dri-devel@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        alexander.deucher@amd.com, christian.koenig@amd.com,
-        xinhui.pan@amd.com, airlied@linux.ie, daniel@ffwll.ch
-References: <20220408190502.4103670-1-richard.gong@amd.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20220408190502.4103670-1-richard.gong@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Richard,
+On Fri, 08 Apr 2022 22:29:58 +0200
+Thomas Gleixner <tglx@linutronix.de> wrote:
 
+> Well, you'd have to reinitialize it first before the explicit rearm
+> because the shutdown cleared the function pointer or if we use a flag
+> then the flag would prevent arming it again.
 
-Thank you for your patch.
+We could always use the LSB bit of the function as a "shutdown" flag, where:
 
-Am 08.04.22 um 21:05 schrieb Richard Gong:
-> Active State Power Management (ASPM) feature is enabled since kernel 5.14.
-> There are some AMD GFX cards (such as WX3200 and RX640) that cannot be
-> used with Intel AlderLake based systems to enable ASPM. Using these GFX
+timer_shutdown() {
+	[..]
+	timer->fn = (void *)((unsigned long)timer->fn | 1);
+	[..]
+}
 
-Alder Lake
+timer_rearm() {
+	[..]
+	timer->fn = (void *)((unsigned long)timer->fn & ~1UL);
+	[..]
+}
 
-> cards as video/display output, Intel Alder Lake based systems will hang
-> during suspend/resume.
+mod_timer() {
 
-Please reflow for 75 characters per line.
+	if ((unsigned long)timer->fn & 1)
+		return -EBUSY?;
 
-Also please mention the exact system you had problems with (also 
-firmware versions).
+	[..]
+}
 
-> 
-> Add extra check to disable ASPM on Intel AlderLake based systems.
-
-Is that a problem with Intel Alder Lake or the Dell system? Shouldn’t 
-ASPM just be disabled for the problematic cards for the Dell system. You 
-write newer cards worked fine.
-
-> Fixes: 0064b0ce85bb ("drm/amd/pm: enable ASPM by default")
-> Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1885
-> Signed-off-by: Richard Gong <richard.gong@amd.com>
-> ---
-> v2: correct commit description
->      move the check from chip family to problematic platform
-> ---
->   drivers/gpu/drm/amd/amdgpu/vi.c | 17 ++++++++++++++++-
->   1 file changed, 16 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/amd/amdgpu/vi.c b/drivers/gpu/drm/amd/amdgpu/vi.c
-> index 039b90cdc3bc..8b4eaf54b23e 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/vi.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/vi.c
-> @@ -81,6 +81,10 @@
->   #include "mxgpu_vi.h"
->   #include "amdgpu_dm.h"
->   
-> +#if IS_ENABLED(CONFIG_X86_64)
-> +#include <asm/intel-family.h>
-> +#endif
-> +
->   #define ixPCIE_LC_L1_PM_SUBSTATE	0x100100C6
->   #define PCIE_LC_L1_PM_SUBSTATE__LC_L1_SUBSTATES_OVERRIDE_EN_MASK	0x00000001L
->   #define PCIE_LC_L1_PM_SUBSTATE__LC_PCI_PM_L1_2_OVERRIDE_MASK	0x00000002L
-> @@ -1134,13 +1138,24 @@ static void vi_enable_aspm(struct amdgpu_device *adev)
->   		WREG32_PCIE(ixPCIE_LC_CNTL, data);
->   }
->   
-> +static bool intel_core_apsm_chk(void)
-
-aspm
-
-> +{
-> +#if IS_ENABLED(CONFIG_X86_64)
-> +	struct cpuinfo_x86 *c = &cpu_data(0);
-> +
-> +	return (c->x86 == 6 && c->x86_model == INTEL_FAM6_ALDERLAKE);
-> +#else
-> +	return false;
-> +#endif
-
-Please do the check in C code and not the preprocessor.
-
-> +}
-> +
->   static void vi_program_aspm(struct amdgpu_device *adev)
->   {
->   	u32 data, data1, orig;
->   	bool bL1SS = false;
->   	bool bClkReqSupport = true;
->   
-> -	if (!amdgpu_device_should_use_aspm(adev))
-> +	if (!amdgpu_device_should_use_aspm(adev) || intel_core_apsm_chk())
->   		return;
->   
->   	if (adev->flags & AMD_IS_APU ||
-
-
-Kind regards,
-
-Paul
+-- Steve

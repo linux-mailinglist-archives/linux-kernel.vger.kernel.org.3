@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 054B44FA72C
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 13:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD7A4FA730
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 13:18:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241605AbiDILUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 07:20:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47436 "EHLO
+        id S241609AbiDILVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 07:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231807AbiDILUW (ORCPT
+        with ESMTP id S237297AbiDILU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 07:20:22 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9000413CE8
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 04:18:15 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id r64so7050380wmr.4
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 04:18:15 -0700 (PDT)
+        Sat, 9 Apr 2022 07:20:59 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50035165A4
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 04:18:52 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id b19so16382008wrh.11
+        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 04:18:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=B0N+OwSXB4knXphkA3npowoH01kBKtCCzuJR6vseaEQ=;
-        b=U6LMLN8h8KPMYnFF90Ad+319fMHmZaNuu8dafLLpmL1o7WALiw1SspYwvoG5xUUnqx
-         sQnMBGfKrVV8hr6FT9DPGBaRzTR3v7g5/xIvaErTcvQp4GH+S+mB0fDkE1m3CbJcjVeU
-         46TGzZhNou7jtgS4g/V86Q5UUoiblIQs9T1/zqfpRfDgPedp4os7nP5IC5/HgIM+zttt
-         7vg2E8X3gRlVSOYNgGQoCr/2k4uS062764fOvpDIi9f1mUac/jSuSO2FI66lROMWRroO
-         qCZmMzgjh/FYzRdp6mSCkZ5/687En6YQPz1NaBUJ74yFVyWox9Y/ZLb8pM8DydSZXN+y
-         njMA==
+        bh=f/z45wIq/QdJwfG+0KT/Os2LMDAnKUavyQnArPNoU9I=;
+        b=G7NyFQkys+nt8S29UMcHhB9DNFlBtze2CGv9LztxDaDXZZQglmZnAgYT76fN1tf50J
+         lPNQx8mkBG1BC7b6GiG2/eWXGzkwVL6sTRQSvJomhU0NooVbYwu4y2s1meItzj+ctBEe
+         AcdYH8/ZvAsDX40rPuKNJpFJL8jBkw6SaN6S9f9tiFk/j4sWT7ecQQtl8fFyxNezupUF
+         6qEWZHLZ/EL+10UOMnKO/MiQpPWEzbdjT4onwYN2WyCeoLVxvhNXzHhgPKa2F+aMWp0l
+         0oaOOyAeOdVjEt0uCoSkf80oPuRWpuH8rAREizD6b/DIypPwptnIizN9/NWP7zOTRZAq
+         k7qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=B0N+OwSXB4knXphkA3npowoH01kBKtCCzuJR6vseaEQ=;
-        b=wLX1owWKYdQFUpCPdooEK2jPEz8Tba4YZ8VLZXJnIa06GNq07ASTdxDR3tN1NIEMo7
-         8j/HEEZZGrBjmMcXI/7zApm3mDB0XOl/K9/JpcMfmDG0e0s7AGCRrTo2d8P+bgwAjXTE
-         3lc8FwWKFbf3cfrB5uMDODr+kaNViZ3FnC4LaM8fZ+8L2ZSmhC0LsMkLkifKtDU4ZDHk
-         /I/NC+Qbt4FoZ8E/G7S4+dwGMQYs+VTE9TA9DTZn7VJurDY+aMXzXYXncOdPsMJSnVCg
-         doZob3FoF1zJK0TA3cKXX4RIhPlIgJWXL1Y53k86rWruoWSZz80VNxE57cTudzEda6dN
-         fv2w==
-X-Gm-Message-State: AOAM532CsUIIRRAEDPFhM8vyaaHQuvqg14sndZLaTPEb2mErM7dYXOo3
-        D5uxPugKmDYw2kfp24B6ZL1TXQ==
-X-Google-Smtp-Source: ABdhPJwKRHMCNsGjq9T8m+T0mzvnY0pzB7roLlQWrdLdsg3ui2lnN0aVZwlrelYEpzHTFOk9WSgnng==
-X-Received: by 2002:a7b:cb0d:0:b0:38e:aaf3:b08f with SMTP id u13-20020a7bcb0d000000b0038eaaf3b08fmr4981786wmj.12.1649503094236;
-        Sat, 09 Apr 2022 04:18:14 -0700 (PDT)
+        bh=f/z45wIq/QdJwfG+0KT/Os2LMDAnKUavyQnArPNoU9I=;
+        b=J7pkwJ3G9s63Jz9LUTYtmw8pRtZp+Pi3seR76zG/WERnFctno2h77zz4M1pgKy8uAx
+         lsPZ3JQh7kmFvrf8mJdF7HTgTpoB285R3534vdGdNZukb2YmeyJjh21EIavv7Ke3R8Oy
+         ioXEMLT8oNowgSqrury5L0iaszsdr+9OyfsbNr9J7arzgqa27J+Go35+6VmjEzp6ePWh
+         xSUzoCwWutyikir33mUSN+qLrYpRPB8tgMLcj5XSvnl3fpykjaTqhXhVhdoHxNVbnhdV
+         nXOgdG+MnNVZGBheq6gNsAXWnJTLz7vH243Kj5vIc8Sa+kzF6FGAn4LxmmpvVMzLtaLL
+         Vk0A==
+X-Gm-Message-State: AOAM531z4EuNu2gxYjm+CmkSi2/g2o0/qpVv6LKKxrEWdoKZxOIW4YBN
+        z+YtC83LzljfgeYzfCvCuyFl2Q==
+X-Google-Smtp-Source: ABdhPJyOznpQ2/2yJAJ3R2KKPkRcEogaYqNMi8E+rE4dubxvyyI3ivBs6jhbVQ8E3FqzBX5y+yB72w==
+X-Received: by 2002:adf:ebd0:0:b0:1e3:f9b:7b77 with SMTP id v16-20020adfebd0000000b001e30f9b7b77mr17511554wrn.691.1649503130913;
+        Sat, 09 Apr 2022 04:18:50 -0700 (PDT)
 Received: from [192.168.0.188] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id p17-20020adfc391000000b002079f14979dsm1168578wrf.13.2022.04.09.04.18.13
+        by smtp.gmail.com with ESMTPSA id a11-20020a5d456b000000b0020406ce0e06sm21207664wrc.94.2022.04.09.04.18.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 09 Apr 2022 04:18:13 -0700 (PDT)
-Message-ID: <a7a46736-e917-7274-1593-147ed36a2a68@linaro.org>
-Date:   Sat, 9 Apr 2022 13:18:12 +0200
+        Sat, 09 Apr 2022 04:18:50 -0700 (PDT)
+Message-ID: <7e986851-bb2b-f2f5-3bf4-8c26801d6ce3@linaro.org>
+Date:   Sat, 9 Apr 2022 13:18:49 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH 10/18] MIPS: DTS: jz4780: fix uart dmas as reported by
- dtbscheck
+Subject: Re: [PATCH 12/18] MIPS: DTS: jz4780: fix nemc memory controller as
+ reported by dtbscheck
 Content-Language: en-US
 To:     "H. Nikolaus Schaller" <hns@goldelico.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -64,14 +64,14 @@ To:     "H. Nikolaus Schaller" <hns@goldelico.com>,
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mips@vger.kernel.org, letux-kernel@openphoenux.org
 References: <cover.1649443080.git.hns@goldelico.com>
- <00ec9d965cac78b252e14444deed8c93f5116bca.1649443080.git.hns@goldelico.com>
+ <995a8977d6ecc5798bf6139811698f3493b71249.1649443080.git.hns@goldelico.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <00ec9d965cac78b252e14444deed8c93f5116bca.1649443080.git.hns@goldelico.com>
+In-Reply-To: <995a8977d6ecc5798bf6139811698f3493b71249.1649443080.git.hns@goldelico.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,29 +80,17 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 08/04/2022 20:37, H. Nikolaus Schaller wrote:
-> arch/mips/boot/dts/ingenic/ci20.dtb: serial@10030000: 'dmas' is a required property
-> 	From schema: Documentation/devicetree/bindings/serial/ingenic,uart.yaml
-> arch/mips/boot/dts/ingenic/ci20.dtb: serial@10030000: 'dma-names' is a required property
-> 	From schema: Documentation/devicetree/bindings/serial/ingenic,uart.yaml
-> arch/mips/boot/dts/ingenic/ci20.dtb: serial@10031000: 'dmas' is a required property
-> 	From schema: Documentation/devicetree/bindings/serial/ingenic,uart.yaml
-> arch/mips/boot/dts/ingenic/ci20.dtb: serial@10031000: 'dma-names' is a required property
-> 	From schema: Documentation/devicetree/bindings/serial/ingenic,uart.yaml
-> arch/mips/boot/dts/ingenic/ci20.dtb: serial@10032000: 'dmas' is a required property
-> 	From schema: Documentation/devicetree/bindings/serial/ingenic,uart.yaml
-> arch/mips/boot/dts/ingenic/ci20.dtb: serial@10032000: 'dma-names' is a required property
-> 	From schema: Documentation/devicetree/bindings/serial/ingenic,uart.yaml
-> arch/mips/boot/dts/ingenic/ci20.dtb: serial@10033000: 'dmas' is a required property
-> 	From schema: Documentation/devicetree/bindings/serial/ingenic,uart.yaml
-> arch/mips/boot/dts/ingenic/ci20.dtb: serial@10033000: 'dma-names' is a required property
-> 	From schema: Documentation/devicetree/bindings/serial/ingenic,uart.yaml
-> arch/mips/boot/dts/ingenic/ci20.dtb: serial@10034000: 'dmas' is a required property
-> 	From schema: Documentation/devicetree/bindings/serial/ingenic,uart.yaml
-> arch/mips/boot/dts/ingenic/ci20.dtb: serial@10034000: 'dma-names' is a required property
-> 	From schema: Documentation/devicetree/bindings/serial/ingenic,uart.yaml
-> arch/mips/boot/dts/ingenic/ci20.dtb: i2c@10050000: 'dmas' is a required property
+> arch/mips/boot/dts/ingenic/ci20.dtb: nemc@13410000: $nodename:0: 'nemc@13410000' does not match '^memory-controller@[0-9a-f]+$'
+> 	From schema: Documentation/devicetree/bindings/memory-controllers/ingenic,nemc.yaml
+> 
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> ---
+>  arch/mips/boot/dts/ingenic/jz4780.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-All these warnings are the same two warnings...
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 
 Best regards,

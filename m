@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 820394FA4D7
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 07:07:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2147B4FA4ED
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 07:12:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238698AbiDIFHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 01:07:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60350 "EHLO
+        id S237125AbiDIFOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 01:14:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241090AbiDIFFu (ORCPT
+        with ESMTP id S229701AbiDIFNz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 01:05:50 -0400
+        Sat, 9 Apr 2022 01:13:55 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5421DDFE0
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 22:01:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B93DF5E;
+        Fri,  8 Apr 2022 22:11:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649480518; x=1681016518;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mrxeIMFE/zCJOE//MbawfI5/xq/MFMlJPnchF/qYcHY=;
-  b=KmGV02V130nQznsgVtsk2SnL3yP9zrrldFl5bzKc11je5hEyNWFid4MY
-   1Wn/Z84wv/sc+MjRbw3iPeTSPaZYl5UFRUd6b47Dm8PlCFCQ3Jf7RjNXZ
-   smB16eA/l+jOGr06VU+Btko4wYoFxqFD13zF/t7s6orWW8hkR+Fs/1c4G
-   KcnvHOhVtb4ce7b2bqpSZToH/vT959yOW45Bya03b7R+DTTx4MpN6xRfk
-   a6LgKP1+R3c62l57A8uPbxYieY2Ek/0HvhrF4YGCvxhdEhCAdgBJZ4est
-   XECKfOZV5w0XwIFMSY3DArJmnrWosz41RPvH0PXyQGCCKaXUN8bzCQQbw
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="259357342"
+  t=1649481110; x=1681017110;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2uEEnJaBm8W3hYNznIdKioT/aZO4ljgRCwHcLaiU/lc=;
+  b=erQdJ5618afcriUXVQxl8l1BGHzotIsKyxUV4ttObG8VRtdDBbC2trXD
+   fPJe189DQI35KWU69mTQ4r6Kb+MyQ84PRGY+8O3hxvrVTmEwrSTMRaJsL
+   HyybidxO1eAAY+ba7lwHN0Kwf6QuhJs8Qx0iX514AHays2b7KGj6tdQ2H
+   awoUfDCIQIdhz8Fy1fWIczkw5pPeODtUIPpdmkSEUZQaGUG0du9lOpAHt
+   mWhMWN+QEpUeWL44AmFlVOZHPcSjP3AhlrF7tDMq7FmdWU3ttwTpzYfhC
+   MQi0MTJwL3z2WpYNI9y4vUXXMw5/ZdMfi57znF8X/DaPpvgsXQKmgdnAv
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="259358125"
 X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
-   d="scan'208";a="259357342"
+   d="scan'208";a="259358125"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 22:01:58 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 22:11:49 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
-   d="scan'208";a="698496085"
-Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 08 Apr 2022 22:01:56 -0700
-Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nd3ER-0000sr-IU;
-        Sat, 09 Apr 2022 05:01:55 +0000
-Date:   Sat, 9 Apr 2022 13:01:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: drivers/watchdog/mtx-1_wdt.c:184:27: sparse: sparse: incorrect type
- in initializer (incompatible argument 2 (different address spaces))
-Message-ID: <202204091208.7UtE1W6a-lkp@intel.com>
+   d="scan'208";a="698498511"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
+  by fmsmga001.fm.intel.com with ESMTP; 08 Apr 2022 22:11:47 -0700
+Date:   Sat, 9 Apr 2022 13:04:23 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
+        conor.dooley@microchip.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, system@metrotek.ru,
+        linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v9 1/3] fpga: fpga-mgr: support bitstream offset in image
+ buffer
+Message-ID: <20220409050423.GA265355@yilunxu-OptiPlex-7050>
+References: <20220407133658.15699-1-i.bornyakov@metrotek.ru>
+ <20220407133658.15699-2-i.bornyakov@metrotek.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20220407133658.15699-2-i.bornyakov@metrotek.ru>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -64,68 +65,170 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Thu, Apr 07, 2022 at 04:36:56PM +0300, Ivan Bornyakov wrote:
+> It is not always whole FPGA image buffer meant to be written to the
+> device.
 
-First bad commit (maybe != root cause):
+Thanks for improving the fpga core. Please see my comments inline.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   6c7376da23587738ab0e84b8b90b6cc02db5181e
-commit: 76215889be9d2cd388207545424bbbe3bf80e1ea watchdog: mtx-1: drop au1000.h header file
-date:   10 months ago
-config: mips-randconfig-s032-20220409 (https://download.01.org/0day-ci/archive/20220409/202204091208.7UtE1W6a-lkp@intel.com/config)
-compiler: mips64el-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=76215889be9d2cd388207545424bbbe3bf80e1ea
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 76215889be9d2cd388207545424bbbe3bf80e1ea
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=mips SHELL=/bin/bash drivers/watchdog/
+Maybe more description about the issue, i.e. in which case we don't
+write the whole buffer, what's the problem in current implementation.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> 
+> Add bitstream_start and bitstream_size to the fpga_image_info struct and
+> adjust fpga_mgr_write() callers with respect to them.
+> 
+> If initial_header_size is not known beforehand, pass whole buffer to low
+> level driver's write_init() so it could setup info->bitstream_start and
+> info->bitstream_size regardless.
+> 
+> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> ---
+>  drivers/fpga/fpga-mgr.c       | 48 +++++++++++++++++++++++++++++------
+>  include/linux/fpga/fpga-mgr.h |  5 ++++
+>  2 files changed, 45 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
+> index d49a9ce34568..c64e60e23a71 100644
+> --- a/drivers/fpga/fpga-mgr.c
+> +++ b/drivers/fpga/fpga-mgr.c
+> @@ -139,7 +139,8 @@ EXPORT_SYMBOL_GPL(fpga_image_info_free);
+>   * Call the low level driver's write_init function.  This will do the
+>   * device-specific things to get the FPGA into the state where it is ready to
+>   * receive an FPGA image. The low level driver only gets to see the first
+> - * initial_header_size bytes in the buffer.
+> + * initial_header_size bytes in the buffer, if initial_header_size is set.
+> + * Otherwise, the whole buffer will be passed.
+>   */
+>  static int fpga_mgr_write_init_buf(struct fpga_manager *mgr,
+>  				   struct fpga_image_info *info,
+> @@ -148,12 +149,10 @@ static int fpga_mgr_write_init_buf(struct fpga_manager *mgr,
+>  	int ret;
+>  
+>  	mgr->state = FPGA_MGR_STATE_WRITE_INIT;
+> -	if (!mgr->mops->initial_header_size)
+> -		ret = fpga_mgr_write_init(mgr, info, NULL, 0);
+> -	else
+> -		ret = fpga_mgr_write_init(
+> -		    mgr, info, buf, min(mgr->mops->initial_header_size, count));
+> +	if (mgr->mops->initial_header_size)
+> +		count = min(mgr->mops->initial_header_size, count);
+>  
+> +	ret = fpga_mgr_write_init(mgr, info, buf, count);
 
+Here we pass the whole buffer for write_init(). Maybe it works for mapped buf,
+but still doesn't work for sg buf.
 
-sparse warnings: (new ones prefixed by >>)
-   command-line: note: in included file:
-   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQUIRE redefined
-   builtin:0:0: sparse: this was the original definition
-   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_SEQ_CST redefined
-   builtin:0:0: sparse: this was the original definition
-   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_ACQ_REL redefined
-   builtin:0:0: sparse: this was the original definition
-   builtin:1:9: sparse: sparse: preprocessor token __ATOMIC_RELEASE redefined
-   builtin:0:0: sparse: this was the original definition
->> drivers/watchdog/mtx-1_wdt.c:184:27: sparse: sparse: incorrect type in initializer (incompatible argument 2 (different address spaces)) @@     expected long ( *write )( ... ) @@     got long ( * )( ... ) @@
-   drivers/watchdog/mtx-1_wdt.c:184:27: sparse:     expected long ( *write )( ... )
-   drivers/watchdog/mtx-1_wdt.c:184:27: sparse:     got long ( * )( ... )
+It is also inefficient if we change to map and copy all sg buffers just for
+write_init().
 
-vim +184 drivers/watchdog/mtx-1_wdt.c
+We could discuss on the solution.
 
-04bf3b4f5fc033 drivers/char/watchdog/mtx-1_wdt.c Florian Fainelli 2007-05-06  177  
-b47a166ed0baaa drivers/watchdog/mtx-1_wdt.c      Jan Engelhardt   2008-01-22  178  static const struct file_operations mtx1_wdt_fops = {
-04bf3b4f5fc033 drivers/char/watchdog/mtx-1_wdt.c Florian Fainelli 2007-05-06  179  	.owner		= THIS_MODULE,
-04bf3b4f5fc033 drivers/char/watchdog/mtx-1_wdt.c Florian Fainelli 2007-05-06  180  	.llseek		= no_llseek,
-ed78c2da149247 drivers/watchdog/mtx-1_wdt.c      Alan Cox         2008-05-19  181  	.unlocked_ioctl	= mtx1_wdt_ioctl,
-b6dfb2477fb0bf drivers/watchdog/mtx-1_wdt.c      Arnd Bergmann    2019-06-03  182  	.compat_ioctl	= compat_ptr_ioctl,
-04bf3b4f5fc033 drivers/char/watchdog/mtx-1_wdt.c Florian Fainelli 2007-05-06  183  	.open		= mtx1_wdt_open,
-04bf3b4f5fc033 drivers/char/watchdog/mtx-1_wdt.c Florian Fainelli 2007-05-06 @184  	.write		= mtx1_wdt_write,
-7944d3a5a70ee5 drivers/watchdog/mtx-1_wdt.c      Wim Van Sebroeck 2008-08-06  185  	.release	= mtx1_wdt_release,
-04bf3b4f5fc033 drivers/char/watchdog/mtx-1_wdt.c Florian Fainelli 2007-05-06  186  };
-04bf3b4f5fc033 drivers/char/watchdog/mtx-1_wdt.c Florian Fainelli 2007-05-06  187  
-04bf3b4f5fc033 drivers/char/watchdog/mtx-1_wdt.c Florian Fainelli 2007-05-06  188  
+My quick mind is we introduce an optional fpga_manager_ops.parse_header()
+callback, and a header_size (dynamic header size) field in
+fpga_image_info. FPGA core starts with mapping a buf of initial_header_size
+for parse_header(), let the drivers decide the dynamic header_size.
 
-:::::: The code at line 184 was first introduced by commit
-:::::: 04bf3b4f5fc033adf921f2e57d034ddbebef5fe7 [WATCHDOG] MTX-1 Watchdog driver
+The parse_header() could be called several times with updated dynamic
+header_size, if drivers doesn't get enough buffer for final decision and
+return -EAGAIN.
 
-:::::: TO: Florian Fainelli <florian.fainelli@int-evry.fr>
-:::::: CC: Wim Van Sebroeck <wim@iguana.be>
+Then write_init() be called with the final dynamic header size.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+For mapped buffer, just passing the whole buffer for write_init() is
+fine.
+
+>  	if (ret) {
+>  		dev_err(&mgr->dev, "Error preparing FPGA for writing\n");
+>  		mgr->state = FPGA_MGR_STATE_WRITE_INIT_ERR;
+> @@ -235,13 +234,33 @@ static int fpga_mgr_buf_load_sg(struct fpga_manager *mgr,
+>  	if (mgr->mops->write_sg) {
+>  		ret = fpga_mgr_write_sg(mgr, sgt);
+>  	} else {
+> +		size_t offset, count, length, bitstream_size;
+>  		struct sg_mapping_iter miter;
+>  
+> +		offset = info->bitstream_start;
+> +		bitstream_size = info->bitstream_size;
+> +		count = 0;
+> +
+>  		sg_miter_start(&miter, sgt->sgl, sgt->nents, SG_MITER_FROM_SG);
+>  		while (sg_miter_next(&miter)) {
+> -			ret = fpga_mgr_write(mgr, miter.addr, miter.length);
+> -			if (ret)
+> +			if (offset >= miter.length) {
+> +				offset -= miter.length;
+> +				continue;
+> +			}
+> +
+> +			if (bitstream_size)
+> +				length = min(miter.length - offset,
+> +					     bitstream_size - count);
+> +			else
+> +				length = miter.length - offset;
+> +
+> +			count += length;
+> +
+> +			ret = fpga_mgr_write(mgr, miter.addr + offset, length);
+> +			if (ret || count == bitstream_size)
+>  				break;
+> +
+> +			offset = 0;
+>  		}
+>  		sg_miter_stop(&miter);
+>  	}
+> @@ -265,6 +284,19 @@ static int fpga_mgr_buf_load_mapped(struct fpga_manager *mgr,
+>  	if (ret)
+>  		return ret;
+>  
+> +	if (info->bitstream_start > count) {
+> +		dev_err(&mgr->dev,
+> +			"Bitstream start %zd outruns firmware image %zd\n",
+> +			info->bitstream_start, count);
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (info->bitstream_size)
+> +		count = min(info->bitstream_start + info->bitstream_size, count);
+> +
+> +	buf += info->bitstream_start;
+> +	count -= info->bitstream_start;
+> +
+>  	/*
+>  	 * Write the FPGA image to the FPGA.
+>  	 */
+> diff --git a/include/linux/fpga/fpga-mgr.h b/include/linux/fpga/fpga-mgr.h
+> index 0f9468771bb9..32464fd10cca 100644
+> --- a/include/linux/fpga/fpga-mgr.h
+> +++ b/include/linux/fpga/fpga-mgr.h
+> @@ -85,6 +85,9 @@ enum fpga_mgr_states {
+>   * @sgt: scatter/gather table containing FPGA image
+>   * @buf: contiguous buffer containing FPGA image
+>   * @count: size of buf
+> + * @bitstream_start: offset in image buffer where bitstream data starts
+> + * @bitstream_size: size of bitstream.
+> + *	If 0, (count - bitstream_start) will be used.
+>   * @region_id: id of target region
+>   * @dev: device that owns this
+>   * @overlay: Device Tree overlay
+> @@ -98,6 +101,8 @@ struct fpga_image_info {
+>  	struct sg_table *sgt;
+>  	const char *buf;
+>  	size_t count;
+> +	size_t bitstream_start;
+
+How about we name it header_size?
+
+> +	size_t bitstream_size;
+
+And how about data_size?
+
+Thanks,
+Yilun
+
+>  	int region_id;
+>  	struct device *dev;
+>  #ifdef CONFIG_OF
+> -- 
+> 2.25.1
+> 

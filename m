@@ -2,35 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 611AD4FA6E9
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 12:59:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 960E04FA6EB
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 13:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241458AbiDILBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 07:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34620 "EHLO
+        id S241468AbiDILCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 07:02:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231465AbiDILBn (ORCPT
+        with ESMTP id S231465AbiDILCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 07:01:43 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88EBF6D859;
-        Sat,  9 Apr 2022 03:59:36 -0700 (PDT)
-Received: from canpemm500007.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KbBsl6rx5zgYLj;
-        Sat,  9 Apr 2022 18:57:47 +0800 (CST)
+        Sat, 9 Apr 2022 07:02:14 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AADDB0A41;
+        Sat,  9 Apr 2022 04:00:07 -0700 (PDT)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KbBtL3LfMzgYN2;
+        Sat,  9 Apr 2022 18:58:18 +0800 (CST)
 Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
  (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 9 Apr
- 2022 18:59:34 +0800
+ 2022 19:00:05 +0800
 From:   YueHaibing <yuehaibing@huawei.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <linux@armlinux.org.uk>, <vladimir.oltean@nxp.com>,
-        <s-vadapalli@ti.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+To:     <sean.wang@kernel.org>, <linus.walleij@linaro.org>,
+        <matthias.bgg@gmail.com>, <light.hsieh@mediatek.com>
+CC:     <linux-mediatek@lists.infradead.org>, <linux-gpio@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
         YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH -next] net: ethernet: ti: am65-cpsw: Fix build error without PHYLINK
-Date:   Sat, 9 Apr 2022 18:59:31 +0800
-Message-ID: <20220409105931.9080-1-yuehaibing@huawei.com>
+Subject: [PATCH -next] pinctrl: mediatek: moore: Fix build error
+Date:   Sat, 9 Apr 2022 18:59:58 +0800
+Message-ID: <20220409105958.37412-1-yuehaibing@huawei.com>
 X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
 Content-Type: text/plain
@@ -47,35 +48,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If PHYLINK is n, build fails:
+If EINT_MTK is m and PINCTRL_MTK_V2 is y, build fails:
 
-drivers/net/ethernet/ti/am65-cpsw-ethtool.o: In function `am65_cpsw_set_link_ksettings':
-am65-cpsw-ethtool.c:(.text+0x118): undefined reference to `phylink_ethtool_ksettings_set'
-drivers/net/ethernet/ti/am65-cpsw-ethtool.o: In function `am65_cpsw_get_link_ksettings':
-am65-cpsw-ethtool.c:(.text+0x138): undefined reference to `phylink_ethtool_ksettings_get'
-drivers/net/ethernet/ti/am65-cpsw-ethtool.o: In function `am65_cpsw_set_eee':
-am65-cpsw-ethtool.c:(.text+0x158): undefined reference to `phylink_ethtool_set_eee'
+drivers/pinctrl/mediatek/pinctrl-moore.o: In function `mtk_gpio_set_config':
+pinctrl-moore.c:(.text+0xa6c): undefined reference to `mtk_eint_set_debounce'
+drivers/pinctrl/mediatek/pinctrl-moore.o: In function `mtk_gpio_to_irq':
+pinctrl-moore.c:(.text+0xacc): undefined reference to `mtk_eint_find_irq'
 
-Select PHYLINK for TI_K3_AM65_CPSW_NUSS to fix this.
+Select EINT_MTK for PINCTRL_MTK_V2 to fix this.
 
-Fixes: e8609e69470f ("net: ethernet: ti: am65-cpsw: Convert to PHYLINK")
+Fixes: 8174a8512e3e ("pinctrl: mediatek: make MediaTek pinctrl v2 driver ready for buidling loadable module")
 Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 ---
- drivers/net/ethernet/ti/Kconfig | 1 +
+ drivers/pinctrl/mediatek/Kconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/ethernet/ti/Kconfig b/drivers/net/ethernet/ti/Kconfig
-index affcf92cd3aa..fb30bc5d56cb 100644
---- a/drivers/net/ethernet/ti/Kconfig
-+++ b/drivers/net/ethernet/ti/Kconfig
-@@ -94,6 +94,7 @@ config TI_K3_AM65_CPSW_NUSS
- 	depends on ARCH_K3 && OF && TI_K3_UDMA_GLUE_LAYER
- 	select NET_DEVLINK
- 	select TI_DAVINCI_MDIO
-+	select PHYLINK
- 	imply PHY_TI_GMII_SEL
- 	depends on TI_K3_AM65_CPTS || !TI_K3_AM65_CPTS
- 	help
+diff --git a/drivers/pinctrl/mediatek/Kconfig b/drivers/pinctrl/mediatek/Kconfig
+index 8dca1ef04965..40accd110c3d 100644
+--- a/drivers/pinctrl/mediatek/Kconfig
++++ b/drivers/pinctrl/mediatek/Kconfig
+@@ -30,6 +30,7 @@ config PINCTRL_MTK_MOORE
+ 	select GENERIC_PINMUX_FUNCTIONS
+ 	select GPIOLIB
+ 	select OF_GPIO
++	select EINT_MTK
+ 	select PINCTRL_MTK_V2
+ 
+ config PINCTRL_MTK_PARIS
 -- 
 2.17.1
 

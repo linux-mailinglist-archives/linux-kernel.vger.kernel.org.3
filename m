@@ -2,93 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B9E64FA998
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 18:37:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B3F84FA992
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 18:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242636AbiDIQfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 12:35:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60534 "EHLO
+        id S242741AbiDIQhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 12:37:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241904AbiDIQej (ORCPT
+        with ESMTP id S242715AbiDIQhl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 12:34:39 -0400
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB25223F3B7
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 09:32:30 -0700 (PDT)
-Received: from ipservice-092-217-091-111.092.217.pools.vodafone-ip.de ([92.217.91.111] helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <martin@kaiser.cx>)
-        id 1ndE0g-0006Rg-RV; Sat, 09 Apr 2022 18:32:26 +0200
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Michael Straube <straube.linux@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 10/10] staging: r8188eu: remove unused timer functions
-Date:   Sat,  9 Apr 2022 18:32:12 +0200
-Message-Id: <20220409163212.241122-11-martin@kaiser.cx>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220409163212.241122-1-martin@kaiser.cx>
-References: <20220409163212.241122-1-martin@kaiser.cx>
+        Sat, 9 Apr 2022 12:37:41 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E08ADEE2;
+        Sat,  9 Apr 2022 09:35:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 22F37CE0B45;
+        Sat,  9 Apr 2022 16:35:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB270C385A4;
+        Sat,  9 Apr 2022 16:35:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649522130;
+        bh=UNmAi171eTNd0PPrvmtUJH8M0u3zpsWVYMVybZm/oiM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=GeWfrBjtLgc0BHtuan+OrjSI9uh9efXebpb9lBCSkapoYb6b72TajpTN4ICirxZrO
+         x3Z61CbxatI73IBSF1MXm+Y0zAYPeejrktuwbyviy2g2gfpvQLflJY0oOFzIn04jpF
+         Gn8qyFhtzXxo43Ee5ZaX5PxtFSEFzk183B0ZDVyzKVJGBcv8EiVY/PIOkHYFdYDCkE
+         itGDxpNWZdrNlbZtgqdtc0fAR/i8xU21epthi+DaUN6eDS3KVPqFuPebFvHR2nJ+Cy
+         MFtRW3O0UVkEJeJBhrCF7VT5NGCwhVqoHkghYk+BcYGALz9aVsYTRWDMFxKxe6xOV9
+         T//qKwCSVIeHg==
+Message-ID: <6c246d08-136d-13df-7228-354b049a66ea@kernel.org>
+Date:   Sat, 9 Apr 2022 18:35:23 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 1/2] dt-bindings: display: msm: Add optional resets
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220408210813.581391-1-bjorn.andersson@linaro.org>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20220408210813.581391-1-bjorn.andersson@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-rtw_get_passing_time_ms and rtw_systime_to_ms are not used any more.
-Remove them.
+On 08/04/2022 23:08, Bjorn Andersson wrote:
+> Add an optional reference to the MDSS_CORE reset, which when specified
+> can be used by the implementation to reset the hardware blocks.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+> 
+> Resending these two patches again as I put "v2" in the subject, even though I
+> meant v3. Sorry about that.
+> 
 
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
----
- drivers/staging/r8188eu/include/osdep_service.h |  3 ---
- drivers/staging/r8188eu/os_dep/osdep_service.c  | 11 -----------
- 2 files changed, 14 deletions(-)
+I reviewed v2, so one here as well:
 
-diff --git a/drivers/staging/r8188eu/include/osdep_service.h b/drivers/staging/r8188eu/include/osdep_service.h
-index 1e55a8008acc..f1a703643e74 100644
---- a/drivers/staging/r8188eu/include/osdep_service.h
-+++ b/drivers/staging/r8188eu/include/osdep_service.h
-@@ -77,9 +77,6 @@ void *rtw_malloc2d(int h, int w, int size);
- 		spin_lock_init(&((q)->lock));			\
- 	} while (0)
- 
--u32  rtw_systime_to_ms(u32 systime);
--s32  rtw_get_passing_time_ms(u32 start);
--
- void rtw_usleep_os(int us);
- 
- static inline unsigned char _cancel_timer_ex(struct timer_list *ptimer)
-diff --git a/drivers/staging/r8188eu/os_dep/osdep_service.c b/drivers/staging/r8188eu/os_dep/osdep_service.c
-index 7b177d50eee2..812acd59be79 100644
---- a/drivers/staging/r8188eu/os_dep/osdep_service.c
-+++ b/drivers/staging/r8188eu/os_dep/osdep_service.c
-@@ -42,17 +42,6 @@ Otherwise, there will be racing condition.
- Caller must check if the list is empty before calling rtw_list_delete
- */
- 
--inline u32 rtw_systime_to_ms(u32 systime)
--{
--	return systime * 1000 / HZ;
--}
--
--/*  the input parameter start use the same unit as jiffies */
--inline s32 rtw_get_passing_time_ms(u32 start)
--{
--	return rtw_systime_to_ms(jiffies - start);
--}
--
- void rtw_usleep_os(int us)
- {
- 	if (1 < (us / 1000))
--- 
-2.30.2
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+
+Best regards,
+Krzysztof

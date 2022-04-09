@@ -2,136 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3B8A4FA0E2
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 03:03:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38F924FA0EA
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 03:06:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237450AbiDIBEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 21:04:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35034 "EHLO
+        id S237457AbiDIBIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 21:08:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230157AbiDIBEn (ORCPT
+        with ESMTP id S230157AbiDIBIO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 21:04:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D33F22CB3AA
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 18:02:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649466157;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RbsAzZvTljYo+RBJswsnAR5lYXPWhOrtFUVWlHUhygc=;
-        b=aF5cMbJ0KTGzUFcr8O6W6KQ1wtTwCTALG8AEJuMqHzfh5QttYw0QPDOZnasxsn0TeV8j7V
-        DOsL7qazhKYMG4T6OjdNjFFPhIzAfIW2h0J83/72Vj3iBfaugRnPBdxMy3Dln/T7RZXcUU
-        O7UdBrWV+FIljTvXt8ym1BgGwjEIYyQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-183-4QYPejBPMdmQgr3pUtPhmw-1; Fri, 08 Apr 2022 21:02:34 -0400
-X-MC-Unique: 4QYPejBPMdmQgr3pUtPhmw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 44E792999B23;
-        Sat,  9 Apr 2022 01:02:34 +0000 (UTC)
-Received: from localhost (ovpn-12-19.pek2.redhat.com [10.72.12.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id EAB83C44CC0;
-        Sat,  9 Apr 2022 01:02:32 +0000 (UTC)
-Date:   Sat, 9 Apr 2022 09:02:29 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     akpm@linux-foundation.org, willy@infradead.org,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        kexec@lists.infradead.org, hch@lst.de, yangtiezhu@loongson.cn,
-        amit.kachhap@arm.com, linux-fsdevel@vger.kernel.org,
-        viro@zeniv.linux.org.uk
-Subject: Re: [PATCH v5 RESEND 1/3] vmcore: Convert copy_oldmem_page() to take
- an iov_iter
-Message-ID: <YlDbJSy4AI3/cODr@MiWiFi-R3L-srv>
-References: <20220408090636.560886-2-bhe@redhat.com>
- <202204082128.JKXXDGpa-lkp@intel.com>
+        Fri, 8 Apr 2022 21:08:14 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B5728E31
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 18:06:03 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id p21so12594173ioj.4
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 18:06:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4KTg8PibcC8KQTgPBqCOsiC3mDCYVERkDcQnsHvYI9I=;
+        b=PlFXj0irn77GOUGppxUMOrj5Hf8SW7F+QH+5hFPzJA4Ayryp5TsXijQV+Yocm3Mf69
+         SxzfPnQ6Ks07h+kryRHAXafNXA2GJDi6pPDkPaL9PyuddbQw4W2skzJV5djaC2zi5spf
+         7TJC1kRisK/n1XLcr61EuxSWU8AjO9wUxJLZrwL+XglcG95hUdDu02AQxhl98flbAXx5
+         knwUfIDKQ+1tBIUt32nP4XtiOV7hVoIMYn+PVKJ8iHq6YpwGB8U8rQ/kb/Lk7k2gebzd
+         WHyaYhd9nWuBHxE76QzM26ojDh2PAzob3bjO03FAGmNnRIO3n2ri/qWWd7WHlbUVY1oU
+         BHtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4KTg8PibcC8KQTgPBqCOsiC3mDCYVERkDcQnsHvYI9I=;
+        b=CuLqGJV945njfOzLRp7grcsNNPRXk+Dii3rhIvdyL2z2lymDmnpsIrOCPYfOAWj9r/
+         RZGtpXk5PFG/joxYbWCSXazqc5mk/3uQqLmZiTuh/nWRxSpfqCvzoUsuCFkJOWNj0Cna
+         RBBEagv/ntFcWZ4culOvjMDLGwXY/zzJ7XYZmrtdmSlAx1TpXa+BH6zx+oFfGcRVl0Fx
+         MHueOcP884y43JJRBGXpmH7YxOkw+dqPhbl95gY6pa/oMR3VQtSsGRxMGL87fg0sMdRY
+         dTNZz+e06AitD3ufuohPPgvrZ1vxF3HWtVlM+KuC6yKCXbVDsZ08Z6iCtePcIs6yLxRz
+         kciA==
+X-Gm-Message-State: AOAM532Gz6Ji2gNuT01qO0YWqj7iiWqi9GW5l3EYtEkfkgmaPns0sjkZ
+        QaU1UtI9LNbYjYLrRWlu8TxNagetnl03W1jgQWuvtg==
+X-Google-Smtp-Source: ABdhPJwWV1PbV74ls5FpClgb/DYi825MGm4/TudHWERdAAPIAc2vwYZYHR2MnU2d/hDKv3+J9rr4iNnh56SL2eHKdaA=
+X-Received: by 2002:a5d:898b:0:b0:649:5bbb:7d95 with SMTP id
+ m11-20020a5d898b000000b006495bbb7d95mr9371853iol.107.1649466362417; Fri, 08
+ Apr 2022 18:06:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202204082128.JKXXDGpa-lkp@intel.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220408045908.21671-1-rex-bc.chen@mediatek.com> <7h5ynj5lhc.fsf@baylibre.com>
+In-Reply-To: <7h5ynj5lhc.fsf@baylibre.com>
+From:   Hsin-Yi Wang <hsinyi@google.com>
+Date:   Sat, 9 Apr 2022 09:05:36 +0800
+Message-ID: <CACb=7PVu6Rt3giBW78LWtkM=9xV6JzZgFSKOmUNx_26O0Wvowg@mail.gmail.com>
+Subject: Re: [PATCH V2 00/15] cpufreq: mediatek: Cleanup and support MT8183
+ and MT8186
+To:     Kevin Hilman <khilman@baylibre.com>
+Cc:     Rex-BC Chen <rex-bc.chen@mediatek.com>, rafael@kernel.org,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, krzk+dt@kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tim Chang <jia-wei.chang@mediatek.com>, roger.lu@mediatek.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/08/22 at 09:17pm, kernel test robot wrote:
-> Hi Baoquan,
-> 
-> Thank you for the patch! Perhaps something to improve:
-> 
-> [auto build test WARNING on powerpc/next]
-> [also build test WARNING on s390/features linus/master v5.18-rc1 next-20220408]
-> [cannot apply to tip/x86/core hnaz-mm/master arm64/for-next/core]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/Convert-vmcore-to-use-an-iov_iter/20220408-170846
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-> config: sh-randconfig-s032-20220408 (https://download.01.org/0day-ci/archive/20220408/202204082128.JKXXDGpa-lkp@intel.com/config)
-> compiler: sh4-linux-gcc (GCC) 11.2.0
-> reproduce:
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-
-Thanks for reporting this, do I need to try this on ppc system?
-
-I tried on x86_64 system, for the 1st step, I got this:
-
-[ ~]# wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-/root/bin/make.cross: No such file or directory
-
-What else should I do to proceed?
+On Sat, Apr 9, 2022 at 5:11 AM Kevin Hilman <khilman@baylibre.com> wrote:
+>
+> Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
+>
+> > Cpufreq is a DVFS driver used for power saving to scale the clock frequency
+> > and supply the voltage for CPUs. This series do some cleanup for MediaTek
+> > cpufreq drivers and add support for MediaTek SVS[2] and MediaTek CCI
+> > devfreq[3] which are supported in MT8183 and MT8186.
+>
+> There's no upstream DT for MT8186 and there are no OPPs defined in the
+> upstream DT for MT8183.
+>
+> In order to test this on mainline, could you provide a patch for MT8183
+> that adds OPPs to the DT so this can be tested with mainline?
+>
+The DT change used in the downstream kernel is from here:
+https://patchwork.kernel.org/project/linux-mediatek/patch/1616499241-4906-9-git-send-email-andrew-sh.cheng@mediatek.com/
+Might need some update (eg. add the cci property in cpu) though.
+Rex, you can also include the 8183 DT change in the next version since
+most of the mt8183 dts are in the mainline.
 
 Thanks
-Baoquan
 
->         chmod +x ~/bin/make.cross
->         # apt-get install sparse
->         # sparse version: v0.6.4-dirty
->         # https://github.com/intel-lab-lkp/linux/commit/a5e42962f5c0bea73aa382a2415094b4bd6c6c73
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Baoquan-He/Convert-vmcore-to-use-an-iov_iter/20220408-170846
->         git checkout a5e42962f5c0bea73aa382a2415094b4bd6c6c73
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=sh SHELL=/bin/bash arch/sh/kernel/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> 
-> sparse warnings: (new ones prefixed by >>)
-> >> arch/sh/kernel/crash_dump.c:23:36: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const *addr @@     got void [noderef] __iomem * @@
->    arch/sh/kernel/crash_dump.c:23:36: sparse:     expected void const *addr
->    arch/sh/kernel/crash_dump.c:23:36: sparse:     got void [noderef] __iomem *
-> 
-> vim +23 arch/sh/kernel/crash_dump.c
-> 
->     13	
->     14	ssize_t copy_oldmem_page(struct iov_iter *iter, unsigned long pfn,
->     15				 size_t csize, unsigned long offset)
->     16	{
->     17		void  __iomem *vaddr;
->     18	
->     19		if (!csize)
->     20			return 0;
->     21	
->     22		vaddr = ioremap(pfn << PAGE_SHIFT, PAGE_SIZE);
->   > 23		csize = copy_to_iter(vaddr + offset, csize, iter);
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
-> 
-
+> Thanks,
+>
+> Kevin

@@ -2,89 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 720174FA7FA
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 15:05:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B261C4FA888
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 15:29:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241861AbiDINHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 09:07:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51066 "EHLO
+        id S242165AbiDINbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 09:31:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240058AbiDINHP (ORCPT
+        with ESMTP id S242150AbiDINbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 09:07:15 -0400
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A06F21689C2;
-        Sat,  9 Apr 2022 06:05:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1649509498;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=MHp3hQkTnYwGib275bEgr4tWcu5Xdj2zI31TXKbFIWs=;
-    b=lzI0j+bwTtZ8vyfgFjmKJ2Zu/YViURxoOzYauhCdA/AcGSN1/ao2IhNK0zMbUI0jbQ
-    aqQa09K6RS8NqyQlOEpa1FCeuYpum/KQ78pHi0PWrb7stgJQ2SkeW2JSdtkhBsym2RJ7
-    tiYhrGwFD9GboWzS9OH2hyzSPfWSGxZtpwmaq0wUqNTg/i5YHdB7TQWwfQVvWt6Ehla+
-    KWZ2uXvZUXKiyyX+IdJL2p4PGU3M6Fcv3Xxj9Jyt4WqCoUXnCk4TjfolrPN2uFgdloPO
-    QPmKZ9aWNShjgx5ccEF3QnMpkWN2CrUdjn2EoqrzsUByIpJKZvqGoGoaDaX/iqpqbBVk
-    nAlw==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7wpz8NIGH/jrwDepmg=="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.42.2 DYNA|AUTH)
-    with ESMTPSA id k708cfy39D4wuU9
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Sat, 9 Apr 2022 15:04:58 +0200 (CEST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH 06/18] MIPS: DTS: jz4780: fix rtc node as reported by
- dtbscheck
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <c41851c5-8f17-4ac0-d4c8-a3aaa7f7fb8a@linaro.org>
-Date:   Sat, 9 Apr 2022 15:04:57 +0200
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
-        <devicetree@vger.kernel.org>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <A01C0C5E-AFA3-424B-8205-F96158F88700@goldelico.com>
-References: <cover.1649443080.git.hns@goldelico.com>
- <5b4831407a68c22fbc63c7d29dd608ebfdd4cef2.1649443080.git.hns@goldelico.com>
- <c41851c5-8f17-4ac0-d4c8-a3aaa7f7fb8a@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>
-X-Mailer: Apple Mail (2.3445.104.21)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 9 Apr 2022 09:31:12 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E89CBB914;
+        Sat,  9 Apr 2022 06:29:03 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id 07983d4bf8017218; Sat, 9 Apr 2022 15:29:02 +0200
+Received: from kreacher.localnet (89-77-51-84.dynamic.chello.pl [89.77.51.84])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id B023D66BCE9;
+        Sat,  9 Apr 2022 15:29:01 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PCI <linux-pci@vger.kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH v1 1/7] PCI/PM: Resume subordinate bus in bus type callbacks
+Date:   Sat, 09 Apr 2022 15:05:28 +0200
+Message-ID: <1842667.tdWV9SEqCh@kreacher>
+In-Reply-To: <4419002.LvFx2qVVIh@kreacher>
+References: <4419002.LvFx2qVVIh@kreacher>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 89.77.51.84
+X-CLIENT-HOSTNAME: 89-77-51-84.dynamic.chello.pl
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudekvddgfeelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvjeelgffhiedukedtleekkedvudfggefhgfegjefgueekjeelvefggfdvledutdenucfkphepkeelrdejjedrhedurdekgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeekledrjeejrdehuddrkeegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphgtihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihhkrgdrfigvshht
+ vghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-> Am 09.04.2022 um 13:14 schrieb Krzysztof Kozlowski =
-<krzysztof.kozlowski@linaro.org>:
->=20
-> On 08/04/2022 20:37, H. Nikolaus Schaller wrote:
->> arch/mips/boot/dts/ingenic/ci20.dtb: rtc@10003000: compatible: =
-'oneOf' conditional failed, one must be fixed:
->> 	['ingenic,jz4780-rtc'] is too short
->> 	'ingenic,jz4780-rtc' is not one of ['ingenic,jz4740-rtc', =
-'ingenic,jz4760-rtc']
->> 	'ingenic,jz4725b-rtc' was expected
->> 	=46rom schema: =
-Documentation/devicetree/bindings/rtc/ingenic,rtc.yaml
->=20
-> Why? Maybe the schema is wrong. These devices might not be compatible.
+Calling pci_resume_bus() on the secondary bus from pci_power_up() as
+it is done now is questionable, because it depends on the mandatory
+bridge power-up delays that are only covered by the PCI bus type PM
+callbacks.
 
-Here you may be right that the .yaml is wrong. Paul?
+For this reason, move the subordinate bus resume to those callbacks
+too and use the observation that if a bridge is being powered-up
+during resume from system-wide suspend, it may be still desirable
+to runtime-resume its subordinate bus after completing the system-
+wide transition (in case the resume of the devices on that bus is
+skipped during it).
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/pci/pci-driver.c |   15 +++++++++++++--
+ drivers/pci/pci.c        |   15 ---------------
+ 2 files changed, 13 insertions(+), 17 deletions(-)
+
+Index: linux-pm/drivers/pci/pci-driver.c
+===================================================================
+--- linux-pm.orig/drivers/pci/pci-driver.c
++++ linux-pm/drivers/pci/pci-driver.c
+@@ -559,6 +559,17 @@ static void pci_pm_default_resume_early(
+ 	pci_pme_restore(pci_dev);
+ }
+ 
++static void pci_pm_bridge_power_up_actions(struct pci_dev *pci_dev)
++{
++	pci_bridge_wait_for_secondary_bus(pci_dev);
++	/*
++	 * When powering on a bridge from D3cold, the whole hierarchy may be
++	 * powered on into D0uninitialized state, resume them to give them a
++	 * chance to suspend again
++	 */
++	pci_resume_bus(pci_dev->subordinate);
++}
++
+ #endif
+ 
+ #ifdef CONFIG_PM_SLEEP
+@@ -934,7 +945,7 @@ static int pci_pm_resume_noirq(struct de
+ 	pcie_pme_root_status_cleanup(pci_dev);
+ 
+ 	if (!skip_bus_pm && prev_state == PCI_D3cold)
+-		pci_bridge_wait_for_secondary_bus(pci_dev);
++		pci_pm_bridge_power_up_actions(pci_dev);
+ 
+ 	if (pci_has_legacy_pm_support(pci_dev))
+ 		return 0;
+@@ -1321,7 +1332,7 @@ static int pci_pm_runtime_resume(struct
+ 	pci_pm_default_resume(pci_dev);
+ 
+ 	if (prev_state == PCI_D3cold)
+-		pci_bridge_wait_for_secondary_bus(pci_dev);
++		pci_pm_bridge_power_up_actions(pci_dev);
+ 
+ 	if (pm && pm->runtime_resume)
+ 		error = pm->runtime_resume(dev);
+Index: linux-pm/drivers/pci/pci.c
+===================================================================
+--- linux-pm.orig/drivers/pci/pci.c
++++ linux-pm/drivers/pci/pci.c
+@@ -1310,21 +1310,6 @@ static int pci_dev_wait(struct pci_dev *
+ int pci_power_up(struct pci_dev *dev)
+ {
+ 	pci_platform_power_transition(dev, PCI_D0);
+-
+-	/*
+-	 * Mandatory power management transition delays are handled in
+-	 * pci_pm_resume_noirq() and pci_pm_runtime_resume() of the
+-	 * corresponding bridge.
+-	 */
+-	if (dev->runtime_d3cold) {
+-		/*
+-		 * When powering on a bridge from D3cold, the whole hierarchy
+-		 * may be powered on into D0uninitialized state, resume them to
+-		 * give them a chance to suspend again
+-		 */
+-		pci_resume_bus(dev->subordinate);
+-	}
+-
+ 	return pci_raw_set_power_state(dev, PCI_D0);
+ }
+ 
+
+
 

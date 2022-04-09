@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E95D44FA138
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 03:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4484FA149
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 03:39:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240252AbiDIB3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 21:29:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41080 "EHLO
+        id S240272AbiDIB3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 21:29:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237791AbiDIB30 (ORCPT
+        with ESMTP id S240229AbiDIB32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 21:29:26 -0400
+        Fri, 8 Apr 2022 21:29:28 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C799101F0B;
-        Fri,  8 Apr 2022 18:27:21 -0700 (PDT)
-Date:   Sat, 09 Apr 2022 01:27:18 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E88110242B;
+        Fri,  8 Apr 2022 18:27:22 -0700 (PDT)
+Date:   Sat, 09 Apr 2022 01:27:19 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1649467640;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=TDRE3JIcr2hY/DHw9IOdrcLFKUf37UqkwqHPl09hq0Q=;
-        b=ST2whTrRPmaJ8SYEZocSOTvu98KXLlXvdOPHeMgtka48R/rkB6LRXSMAI0f2Jo9rzHw7iO
-        yXads78h7dRzjAE+YqLm1siDC7Y4Y30it33yPBVx71hCgN8dbKvYUyCxvjBHeddDK2pmgF
-        r7HaV4ntzQ6I+7en3l6GhEDH5g3nqQIW32SmVQfTK9L5W8O95VvEPH4lJURjHArpTx/joR
-        Cfr4MP0JoSHUaeirrIShI2l7bkltre8z1ALgzUwnQE5pWVjTgVc/j3u9qy30ewn9vEKx0B
-        6a3GlMeAFguhOmMvqd4U1gKdancrwBws1KMVykLb4OKMhDDS8xKTf1SsXlvUGg==
+        bh=hS4ThWOQAWnwSJVvu+j6r1vOFuoOlOSD6fagvzGDZVc=;
+        b=XRrKYUzhsDjucfwgrpksrzLOymNLLByTrfkfi/V1klMbPjKrTfi7mR1fsO87LNE5UdIP5x
+        X947FmLyibAVAvojl4Io8uUb5KlnQofQ4694rWZKbK8kWHKtFUwLlYqNz7qEInropJB3Yw
+        QM4/ST10OLNuKIf8hqtTR4TB/PMIYNfbPV5l6KFeTldWopiQF0PvGZdnwVeExypOihEe19
+        XQ4smlcqtVyhfvSswhal5s0cD5Dv1tkgxbeLUgcvWPqqOL1XW6ltmUM2ghPoCGbSOhk/Xl
+        hI6K77VEwKdLRcqf4IHfy7kv1mzQBdynp8PWj4tumo0PN0xgEAZgoupVHZ9XBg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1649467640;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,23 +36,27 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=TDRE3JIcr2hY/DHw9IOdrcLFKUf37UqkwqHPl09hq0Q=;
-        b=brF7Pbjr/zLF4bazd4xiUqbYkjUlhwVbBxLIvW5MrbkW/YlDQiw/2oJICsC5CgmphYPr1O
-        i2VPl07+H0uf8wBQ==
-From:   "tip-bot2 for Kirill A. Shutemov" <tip-bot2@linutronix.de>
+        bh=hS4ThWOQAWnwSJVvu+j6r1vOFuoOlOSD6fagvzGDZVc=;
+        b=38J0srL9TOHW2OheyU9GV28GzjDQMpigEvpsr0c1hcLf64Wwx2Ub3cFyz/V92nAdXQOfqR
+        /v0vQwDpPypTEhBQ==
+From:   "tip-bot2 for Isaku Yamahata" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/tdx] ACPICA: Avoid cache flush inside virtual machines
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+Subject: [tip: x86/tdx] x86/tdx/ioapic: Add shared bit for IOAPIC base address
+Cc:     Isaku Yamahata <isaku.yamahata@intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
         Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220405232939.73860-30-kirill.shutemov@linux.intel.com>
-References: <20220405232939.73860-30-kirill.shutemov@linux.intel.com>
+In-Reply-To: <20220405232939.73860-29-kirill.shutemov@linux.intel.com>
+References: <20220405232939.73860-29-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
-Message-ID: <164946763897.4207.11572808641505094885.tip-bot2@tip-bot2>
+Message-ID: <164946763982.4207.6455220351838692404.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,70 +73,96 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/tdx branch of tip:
 
-Commit-ID:     e2efb6359e620521d1e13f69b2257de8ceaa9475
-Gitweb:        https://git.kernel.org/tip/e2efb6359e620521d1e13f69b2257de8ceaa9475
-Author:        Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-AuthorDate:    Wed, 06 Apr 2022 02:29:38 +03:00
+Commit-ID:     f4c9361f97c40d365c34f9cb8b8bc3eae0ee7778
+Gitweb:        https://git.kernel.org/tip/f4c9361f97c40d365c34f9cb8b8bc3eae0ee7778
+Author:        Isaku Yamahata <isaku.yamahata@intel.com>
+AuthorDate:    Wed, 06 Apr 2022 02:29:37 +03:00
 Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Thu, 07 Apr 2022 08:27:54 -07:00
+CommitterDate: Thu, 07 Apr 2022 08:27:53 -07:00
 
-ACPICA: Avoid cache flush inside virtual machines
+x86/tdx/ioapic: Add shared bit for IOAPIC base address
 
-While running inside virtual machine, the kernel can bypass cache
-flushing. Changing sleep state in a virtual machine doesn't affect the
-host system sleep state and cannot lead to data loss.
+The kernel interacts with each bare-metal IOAPIC with a special
+MMIO page. When running under KVM, the guest's IOAPICs are
+emulated by KVM.
 
-Before entering sleep states, the ACPI code flushes caches to prevent
-data loss using the WBINVD instruction.  This mechanism is required on
-bare metal.
+When running as a TDX guest, the guest needs to mark each IOAPIC
+mapping as "shared" with the host.  This ensures that TDX private
+protections are not applied to the page, which allows the TDX host
+emulation to work.
 
-But, any use WBINVD inside of a guest is worthless.  Changing sleep
-state in a virtual machine doesn't affect the host system sleep state
-and cannot lead to data loss, so most hypervisors simply ignore it.
-Despite this, the ACPI code calls WBINVD unconditionally anyway.
-It's useless, but also normally harmless.
+ioremap()-created mappings such as virtio will be marked as
+shared by default. However, the IOAPIC code does not use ioremap() and
+instead uses the fixmap mechanism.
 
-In TDX guests, though, WBINVD stops being harmless; it triggers a
-virtualization exception (#VE).  If the ACPI cache-flushing WBINVD
-were left in place, TDX guests would need handling to recover from
-the exception.
+Introduce a special fixmap helper just for the IOAPIC code.  Ensure
+that it marks IOAPIC pages as "shared".  This replaces
+set_fixmap_nocache() with __set_fixmap() since __set_fixmap()
+allows custom 'prot' values.
 
-Avoid using WBINVD whenever running under a hypervisor.  This both
-removes the useless WBINVDs and saves TDX from implementing WBINVD
-handling.
+AMD SEV gets IOAPIC pages shared because FIXMAP_PAGE_NOCACHE has _ENC
+bit clear. TDX has to set bit to share the page with the host.
 
+Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Reviewed-by: Andi Kleen <ak@linux.intel.com>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
 Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
 Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lkml.kernel.org/r/20220405232939.73860-30-kirill.shutemov@linux.intel.com
+Link: https://lkml.kernel.org/r/20220405232939.73860-29-kirill.shutemov@linux.intel.com
 ---
- arch/x86/include/asm/acenv.h | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+ arch/x86/kernel/apic/io_apic.c | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/include/asm/acenv.h b/arch/x86/include/asm/acenv.h
-index 9aff97f..d937c55 100644
---- a/arch/x86/include/asm/acenv.h
-+++ b/arch/x86/include/asm/acenv.h
-@@ -13,7 +13,19 @@
+diff --git a/arch/x86/kernel/apic/io_apic.c b/arch/x86/kernel/apic/io_apic.c
+index c1bb384..a868b76 100644
+--- a/arch/x86/kernel/apic/io_apic.c
++++ b/arch/x86/kernel/apic/io_apic.c
+@@ -65,6 +65,7 @@
+ #include <asm/irq_remapping.h>
+ #include <asm/hw_irq.h>
+ #include <asm/apic.h>
++#include <asm/pgtable.h>
  
- /* Asm macros */
+ #define	for_each_ioapic(idx)		\
+ 	for ((idx) = 0; (idx) < nr_ioapics; (idx)++)
+@@ -2677,6 +2678,19 @@ static struct resource * __init ioapic_setup_resources(void)
+ 	return res;
+ }
  
--#define ACPI_FLUSH_CPU_CACHE()	wbinvd()
-+/*
-+ * ACPI_FLUSH_CPU_CACHE() flushes caches on entering sleep states.
-+ * It is required to prevent data loss.
-+ *
-+ * While running inside virtual machine, the kernel can bypass cache flushing.
-+ * Changing sleep state in a virtual machine doesn't affect the host system
-+ * sleep state and cannot lead to data loss.
-+ */
-+#define ACPI_FLUSH_CPU_CACHE()					\
-+do {								\
-+	if (!cpu_feature_enabled(X86_FEATURE_HYPERVISOR))	\
-+		wbinvd();					\
-+} while (0)
++static void io_apic_set_fixmap(enum fixed_addresses idx, phys_addr_t phys)
++{
++	pgprot_t flags = FIXMAP_PAGE_NOCACHE;
++
++	/*
++	 * Ensure fixmaps for IOAPIC MMIO respect memory encryption pgprot
++	 * bits, just like normal ioremap():
++	 */
++	flags = pgprot_decrypted(flags);
++
++	__set_fixmap(idx, phys, flags);
++}
++
+ void __init io_apic_init_mappings(void)
+ {
+ 	unsigned long ioapic_phys, idx = FIX_IO_APIC_BASE_0;
+@@ -2709,7 +2723,7 @@ fake_ioapic_page:
+ 				      __func__, PAGE_SIZE, PAGE_SIZE);
+ 			ioapic_phys = __pa(ioapic_phys);
+ 		}
+-		set_fixmap_nocache(idx, ioapic_phys);
++		io_apic_set_fixmap(idx, ioapic_phys);
+ 		apic_printk(APIC_VERBOSE, "mapped IOAPIC to %08lx (%08lx)\n",
+ 			__fix_to_virt(idx) + (ioapic_phys & ~PAGE_MASK),
+ 			ioapic_phys);
+@@ -2838,7 +2852,7 @@ int mp_register_ioapic(int id, u32 address, u32 gsi_base,
+ 	ioapics[idx].mp_config.flags = MPC_APIC_USABLE;
+ 	ioapics[idx].mp_config.apicaddr = address;
  
- int __acpi_acquire_global_lock(unsigned int *lock);
- int __acpi_release_global_lock(unsigned int *lock);
+-	set_fixmap_nocache(FIX_IO_APIC_BASE_0 + idx, address);
++	io_apic_set_fixmap(FIX_IO_APIC_BASE_0 + idx, address);
+ 	if (bad_ioapic_register(idx)) {
+ 		clear_fixmap(FIX_IO_APIC_BASE_0 + idx);
+ 		return -ENODEV;

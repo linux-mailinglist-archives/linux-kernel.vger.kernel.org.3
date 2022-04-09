@@ -2,128 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 009614FA872
+	by mail.lfdr.de (Postfix) with ESMTP id 482EA4FA873
 	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 15:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242031AbiDIN3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 09:29:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41184 "EHLO
+        id S242051AbiDIN3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 09:29:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242218AbiDIN2C (ORCPT
+        with ESMTP id S242522AbiDIN2w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 09:28:02 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9159BBF95A
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 06:24:52 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id u18so2283769eda.3
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 06:24:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=fDcvYkIEVq0f5BjuAYxIIri1A/cHLRrOx9YyUXqMPAI=;
-        b=UawB3WzU+FxwrZ0kFUke+Bm5I2fHVYUC0ogGFxCbj94TVJljWRaz0NDT5A7zTtAUZP
-         fw8JHjOxm0qDf1SFRI97P2JQv88wFOu2m9eUaHnYpkfvpZ25Rvb4FAMqI14CNSdAjI0q
-         MchM+RmS9n5ye2oDsJq58sV+qzk6fsAb7jzr2e4SvyCyBgoCRj4qEEcZZJWfJkv24jHM
-         RLCIy70bXWocIqk0Ww1n3bzsMfnl5U3iEJa6RmO6EmtvJN+P+HdPPAewAKhfBkB9OdPi
-         ypoMSsTJBzRCut4Tt2V/nUtglORaWD2g+yPw4BTVrKPG/Ir3Rfaxnpm309KIsB8iHEza
-         yEDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=fDcvYkIEVq0f5BjuAYxIIri1A/cHLRrOx9YyUXqMPAI=;
-        b=UKNI6miGfZl8t6B7uUYnGQDgq+RN24csidzw3WzD9eXP1otCkzN/EFgt9nu55isrsc
-         7jsXlVdwsB/M3YdsuGIKHlRHd9BgxvWwCQutoq+aeP33uAjZkWT2QV2x/CMLH1Sd4JtK
-         XbTioi2O+tGCTIVknGThzSW7F3O271d63zVg++sqfUNu5jpVbXRncWL/OjrhFOXU/vBw
-         QoJdoCFeFS7sbVwhA36PZS2vfyoMkQbMkFCxgHd2laiP6aL5/5umlXOsshIdiZGoHQti
-         ZCLnN+kn0//aYIuZCFOrwigxZ1PM3XliWrnDYo2sAVsUTmDpKy8AKt5dHTLDCFZs07xP
-         oebg==
-X-Gm-Message-State: AOAM531KUY3JfqRSvTApsuC/V0CTjb0GCQNYRwjn35Fmf8V04RHGKpXB
-        RntZx+k+oZodvrOEKVTwax7R3w==
-X-Google-Smtp-Source: ABdhPJw6YN/NpLXgV8emVgfWbE/XMoacETKHzCEKKobJ+5XMQwN9fvrsU3zZ93bJ71gUMnzQUAZ8xg==
-X-Received: by 2002:a50:8d09:0:b0:41c:b898:19a6 with SMTP id s9-20020a508d09000000b0041cb89819a6mr24551282eds.30.1649510690712;
-        Sat, 09 Apr 2022 06:24:50 -0700 (PDT)
-Received: from [192.168.0.188] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id m20-20020a170906235400b006e718d8b849sm7846661eja.45.2022.04.09.06.24.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 09 Apr 2022 06:24:50 -0700 (PDT)
-Message-ID: <f40e1a00-be4d-11c7-6a7c-6b50635a2960@linaro.org>
-Date:   Sat, 9 Apr 2022 15:24:49 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 05/18] MIPS: DTS: jz4780: fix pinctrl as reported by
+        Sat, 9 Apr 2022 09:28:52 -0400
+Received: from mo4-p03-ob.smtp.rzone.de (mo4-p03-ob.smtp.rzone.de [85.215.255.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7CE3CA72;
+        Sat,  9 Apr 2022 06:26:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1649510797;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=nI08LVmRMf2l9xKPXB+SU7SsJSUx7X6QcmnVhpy//bQ=;
+    b=WF8oYnbvA/N8xEvntvt3hSQDpv6kRoZmSJVT0tx3h5Cf3xTwP4j2hw5zKOuPBk0DxQ
+    d7/3kL8o18Zl6aS+tA1zPip3BGaR7VYSmHIx0mn4BPKsZQNaGITdFdepTzTGuCs8xdkj
+    nn+cKUFjWrdAarVqEg1POe5q2GvRNkjxKJSa7qaNIwqZO2rz4YvHiDLqT2PfstmmaMoe
+    BG/hVUg58JYvDjlS261LI3tUqk7bG6Z694onf0mkr39aFyRyHfr783m2e9AMBI1oq6dY
+    ceesByZdYWpJOmqC7+Gcu2+5BcyMXTPNwQPs644vnPnAfegU8B96zcmD8jkGVuUaOib5
+    ob8A==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7wpz8NIGH/jrwDepmg=="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 47.42.2 DYNA|AUTH)
+    with ESMTPSA id k708cfy39DQauWH
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Sat, 9 Apr 2022 15:26:36 +0200 (CEST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [PATCH 10/18] MIPS: DTS: jz4780: fix uart dmas as reported by
  dtbscheck
-Content-Language: en-US
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <79dd8425-947d-603c-ebab-0625921551d8@linaro.org>
+Date:   Sat, 9 Apr 2022 15:26:36 +0200
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Paul Cercueil <paul@crapouillou.net>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mips@vger.kernel.org, letux-kernel@openphoenux.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <5F7268BB-CCF3-4F01-ABB9-D5C3319F31F1@goldelico.com>
 References: <cover.1649443080.git.hns@goldelico.com>
- <1941bc4ed553b27f399ad00ea61ff2b0237d14e3.1649443080.git.hns@goldelico.com>
- <e905896e-335d-a88a-1961-d17b92e46585@linaro.org>
- <530E0F7F-FC03-45DD-BF87-D049D3108AD3@goldelico.com>
- <c84b5ec0-0193-ab62-1985-25bc2baa9f05@linaro.org>
- <B5EB5983-DA9F-4631-B737-2B1417CF9054@goldelico.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <B5EB5983-DA9F-4631-B737-2B1417CF9054@goldelico.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+ <00ec9d965cac78b252e14444deed8c93f5116bca.1649443080.git.hns@goldelico.com>
+ <a7a46736-e917-7274-1593-147ed36a2a68@linaro.org>
+ <86044652-7B23-4F4D-B60F-C413F3C7BEF1@goldelico.com>
+ <79dd8425-947d-603c-ebab-0625921551d8@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: Apple Mail (2.3445.104.21)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/04/2022 15:22, H. Nikolaus Schaller wrote:
->>
->> What does that mean? One cannot create multiple patches and apply them?
-> 
-> This patch set was created by some automatic scripts. And they produce one patch
-> per group of warnings.
-> 
-> But here you ask me to merge 4 unrelated topics into a single one.
-> 
-> Or do you mean something else?
-
-You can edit a commit, right? git commit --amend? So where is the problem?
-
-> 
->>
->>> And they are not related. Every one is based on a different .yaml
->>> schema file.
->>
->> Which does not matter, because the name of the node does not matter. We
->> enforce it in schema to makes things organized and easier in testing.
->> This does not fix any real problem, just the problem we created by
->> ourselves with schema.
->>
->>>
->>> That in all cases the result looks similar comes from similar
->>> requirements by the schemata and has no inherent connection.
->>
->> All schemas will require it, won't they? The same for arm...
-> 
-> We may be talking about different things here.
-> 
-> My understanding:
-> you ask me to merge 5/18, 8/18, 9/18, 12/18 because they contain "controller" in the node-name.
-> 
-> Right? If not then we must clarify that first.
-
-No. I ask you to fix all pin-controller cases, for entire MIPS, not just
-one.
-
-And in one month one more. And then again one more.
 
 
-Best regards,
-Krzysztof
+> Am 09.04.2022 um 15:16 schrieb Krzysztof Kozlowski =
+<krzysztof.kozlowski@linaro.org>:
+>=20
+> On 09/04/2022 15:07, H. Nikolaus Schaller wrote:
+>>=20
+>>=20
+>>> Am 09.04.2022 um 13:18 schrieb Krzysztof Kozlowski =
+<krzysztof.kozlowski@linaro.org>:
+>>>=20
+>>> On 08/04/2022 20:37, H. Nikolaus Schaller wrote:
+>>>> arch/mips/boot/dts/ingenic/ci20.dtb: serial@10030000: 'dmas' is a =
+required property
+>>>> 	=46rom schema: =
+Documentation/devicetree/bindings/serial/ingenic,uart.yaml
+>>>> arch/mips/boot/dts/ingenic/ci20.dtb: serial@10030000: 'dma-names' =
+is a required property
+>>>> 	=46rom schema: =
+Documentation/devicetree/bindings/serial/ingenic,uart.yaml
+>>>> arch/mips/boot/dts/ingenic/ci20.dtb: serial@10031000: 'dmas' is a =
+required property
+>>>> 	=46rom schema: =
+Documentation/devicetree/bindings/serial/ingenic,uart.yaml
+>>>> arch/mips/boot/dts/ingenic/ci20.dtb: serial@10031000: 'dma-names' =
+is a required property
+>>>> 	=46rom schema: =
+Documentation/devicetree/bindings/serial/ingenic,uart.yaml
+>>>> arch/mips/boot/dts/ingenic/ci20.dtb: serial@10032000: 'dmas' is a =
+required property
+>>>> 	=46rom schema: =
+Documentation/devicetree/bindings/serial/ingenic,uart.yaml
+>>>> arch/mips/boot/dts/ingenic/ci20.dtb: serial@10032000: 'dma-names' =
+is a required property
+>>>> 	=46rom schema: =
+Documentation/devicetree/bindings/serial/ingenic,uart.yaml
+>>>> arch/mips/boot/dts/ingenic/ci20.dtb: serial@10033000: 'dmas' is a =
+required property
+>>>> 	=46rom schema: =
+Documentation/devicetree/bindings/serial/ingenic,uart.yaml
+>>>> arch/mips/boot/dts/ingenic/ci20.dtb: serial@10033000: 'dma-names' =
+is a required property
+>>>> 	=46rom schema: =
+Documentation/devicetree/bindings/serial/ingenic,uart.yaml
+>>>> arch/mips/boot/dts/ingenic/ci20.dtb: serial@10034000: 'dmas' is a =
+required property
+>>>> 	=46rom schema: =
+Documentation/devicetree/bindings/serial/ingenic,uart.yaml
+>>>> arch/mips/boot/dts/ingenic/ci20.dtb: serial@10034000: 'dma-names' =
+is a required property
+>>>> 	=46rom schema: =
+Documentation/devicetree/bindings/serial/ingenic,uart.yaml
+>>>> arch/mips/boot/dts/ingenic/ci20.dtb: i2c@10050000: 'dmas' is a =
+required property
+>>>=20
+>>> All these warnings are the same two warnings...
+>>=20
+>> See my earlier explanation that without them you can't verify by just =
+reading commit message
+>> and diff that all existing warnings have been addressed.
+>=20
+> Which does not make sense and there is no need... Automation does it
+> (see Rob's tools). Don't make human life more difficult...
+
+Ok, you are right. If you apply this patch and then run dtbscheck again, =
+there would be
+a warning left over.
+
+But may I honestly ask why you review the commits and read the commit =
+message at all?
+You could simply ignore it... And it would be easier for both of us to =
+leave it completely
+to Rob's tools :)
+
+BR and thanks,
+Nikolaus
+

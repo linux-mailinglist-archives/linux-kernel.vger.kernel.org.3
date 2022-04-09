@@ -2,175 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66D834FA2C2
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 06:47:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0E634FA4BC
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 07:03:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234695AbiDIEt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 00:49:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39444 "EHLO
+        id S238281AbiDIFEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 01:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiDIEt5 (ORCPT
+        with ESMTP id S241675AbiDIE7U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 00:49:57 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2102.outbound.protection.outlook.com [40.107.236.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B203B186F5;
-        Fri,  8 Apr 2022 21:47:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=l2rACTW8fyIl6B5/gMuNg9SqJbXUpF9ZQ5ZCEIv6ueKQqdflVOLfOgAgiICdoO4J/87V97vKVupo9kpvCZeaNpPE9saGmkaUyOMwI86iZBi7Iaz/YHtATMekHeBxtYUVIAIA8WOXvANd74VFkOrztVeNv92NJtzQ+21YQLOz9x0uujqf9yX7GwrIETp3qlxO4ZCfzmGNSa1MLSsoneZ2hkHgt7DSUbYUgNqdj9rnz7EFcP1AJSCrX5VnQk14IkCbKK7aiuYvSi5gGjsMn5OaGtyYKDlvNYq+4Iq8/zllIiFu5cdNXuvoh6v65Tc/Ckw9DZ1gbDe0QN++aGUEN476AQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Yu//EBPRbY2ybck6eotzkM0S0J2CYaop+QtmEzEG4lc=;
- b=N3ZOMYqE6gfsY1EFVEZ/cup7npNrFnN5Cxuip8XmMrMC2iDTZoB7QS2CaSUTeDGA7GfNgdnplGG66sDyEMUXNtgqbqtBAxxnkUHMsnrvBT4G8hOWeIVdZzjnGQQ3GgdckToJl613fl20gC8N6lxmRBouC0rgmYqU5eCqisYmc8x+VmMMNrfYgd/p0fk8vkwdJfiQpxaAusHjcWvTV849oy72ezRHjzTcbpryyeeqObP4jzKK3p3XOCsovZm6ZrdZxbbYw+pspotVcaUQriECWYx9WE3nX0QJdbC3y+KqEeHFFPH7hGVTHzwNnoAQybRE7TO/FI4UiEGRjpPGy16bxQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
- header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
+        Sat, 9 Apr 2022 00:59:20 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E657FD6DC
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 21:53:53 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id y8so4973270pfw.0
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 21:53:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Yu//EBPRbY2ybck6eotzkM0S0J2CYaop+QtmEzEG4lc=;
- b=D4VIkyoDyG769uyzsb1EokN+/REGxUfmuKXpPmNKuCWotPwgEbQw8GMCznwpYq3i4yTWdhdaEvfm1YQw8RVwhHICNQt7b8Pf1slXvUY7iHOfWvlWhVzH0TTwPf3x/KXAhHjkF/s9dwN6AAVXJLdmqOW5zcUedbfbDm3buTADi5M=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=analogixsemi.com;
-Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
- by SN6PR04MB4685.namprd04.prod.outlook.com (2603:10b6:805:b1::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.26; Sat, 9 Apr
- 2022 04:47:48 +0000
-Received: from BY5PR04MB6739.namprd04.prod.outlook.com
- ([fe80::4ce0:7cd5:e703:3444]) by BY5PR04MB6739.namprd04.prod.outlook.com
- ([fe80::4ce0:7cd5:e703:3444%4]) with mapi id 15.20.5144.026; Sat, 9 Apr 2022
- 04:47:48 +0000
-Date:   Sat, 9 Apr 2022 12:47:40 +0800
-From:   Xin Ji <xji@analogixsemi.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, bliang@analogixsemi.com,
-        qwen@analogixsemi.com, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] dt-bindings: drm/bridge: anx7625: Change bus-type to
- 7 (DPI)
-Message-ID: <20220409044740.GA595530@anxtwsw-Precision-3640-Tower>
-References: <20220328120956.1848795-1-xji@analogixsemi.com>
- <20220328120956.1848795-3-xji@analogixsemi.com>
- <YkswTpDiPYfdIFtE@robh.at.kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YkswTpDiPYfdIFtE@robh.at.kernel.org>
-X-ClientProxiedBy: HKAPR04CA0006.apcprd04.prod.outlook.com
- (2603:1096:203:d0::16) To BY5PR04MB6739.namprd04.prod.outlook.com
- (2603:10b6:a03:229::8)
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FJ4dGJ7sVS9YhuL3gPRfql4u69Q9PfZJIjem0IKvyeg=;
+        b=S2cDr3I91TR6BB/bZSGD8JTyF/0+thIhtHzT2IHSBxZkCmVKo7ZcC5bu9OrVutrrcO
+         /kgACE8mTu1XcJByfrFpzbCPdk5lvopTRIhMiMscGUmEx3Jf17g+CBDWnlsGVrT8rYoy
+         LmYhqrrvJLlM7fH2h8x04EeNT35TWM7pvzwdK0F3lkWa4Rx0u2k3WGnNawYx3LrQAUY3
+         vcBV+LOkkEDh4LO7hKsCLSgkdRZ7FvypCudjBbHTAnc+QAmF+U8M5+L/ZFjKsmf0K/x9
+         2VU6Snjh6nxi4MBsmSMFg/9aYpHUhKocpia/odQ+I9FDaJYAx3AIK/oq/okss90UMRCb
+         xLgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FJ4dGJ7sVS9YhuL3gPRfql4u69Q9PfZJIjem0IKvyeg=;
+        b=eIq6KpX6RnqR+Yk6MYeR7rXGylvx1Iq2MUe2+YMaKRf+FfFAMCz2W+nmy1xk1M6pHn
+         swzmS298VqgAy6vG5ejCI6PMxNXVQV8vbO0737o91cegmRJkrSjJ7K1ke4lZkemZRLVY
+         RmXejTiUC+7RQVmEsCXz11VI6tKeTUp+7JNX/Q/fEyY3m6nB0NWbnO3Sw0l89GgwK0MN
+         PO3zbHF0CAF13hoiLFDRba2kHGOtdrnGH6sEt7hyV0GPUchsh84NgXvmJyTTSrkcs9pB
+         CpgAwZ5YKtp437CTnH3qParvT5WCaA1luoEyJU8fAcnJTIrSCC1wJXagqGjA2pcEWvh8
+         6eLw==
+X-Gm-Message-State: AOAM533MPy+Fwkjm6KmYO1HY35DO0RxRnXmsBK45HMyUQznTy/2XmdFI
+        E3PVVnmn/TSzaql9++ZOqNwb0A==
+X-Google-Smtp-Source: ABdhPJzV0t38gvHo3pqGYQis8tX3ACUxEyEb/NFADRFc5BZplzVCiQ4DPxlgKDKjdlesbi6L0aB4Rw==
+X-Received: by 2002:a05:6a00:298c:b0:4fa:8e7b:349d with SMTP id cj12-20020a056a00298c00b004fa8e7b349dmr23161154pfb.26.1649480032862;
+        Fri, 08 Apr 2022 21:53:52 -0700 (PDT)
+Received: from x1.hsd1.or.comcast.net ([2601:1c2:1001:7090:8fa3:3402:f693:9f86])
+        by smtp.gmail.com with ESMTPSA id k6-20020a056a00134600b004faba67f9d4sm28423050pfu.197.2022.04.08.21.53.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 21:53:52 -0700 (PDT)
+From:   Drew Fustini <dfustini@baylibre.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Dave Gerlach <d-gerlach@ti.com>,
+        Tony Lindgren <tony@atomide.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Drew Fustini <dfustini@baylibre.com>
+Subject: [PATCH 0/2] soc: ti: wkup_m3_ipc: support vtt toggle
+Date:   Fri,  8 Apr 2022 21:51:43 -0700
+Message-Id: <20220409045145.2434096-1-dfustini@baylibre.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 88152bc8-2106-401e-b6d5-08da19e41837
-X-MS-TrafficTypeDiagnostic: SN6PR04MB4685:EE_
-X-Microsoft-Antispam-PRVS: <SN6PR04MB46854216095C78759F4635FEC7E89@SN6PR04MB4685.namprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ydzcOSI5FQPPCy4gSuASx5Q3BtfJTHqVCDccWpBn5WhIrS3EBXc7VtHYrtM9vyzdNF+Kg8zpZ/WqfMs8pG9SH5G68ZtyeVL5uQ1W7JAwTfOxZuzcKNya+uKuwCh5dJMa2tWT9e5YeLCXfWiSEDHa+s3imdr4WFYxBlg4NZlpZ33mOpDTy6rEwCzs38xnfJBW5T5M+h5J4FH3MIb76dadV8931MPdL0Gi2FJP0b2PrOksLfPUU72jVnJcuiuJplY+NeKZBmgE7JnQO0VGibF+bMgEkQOp3d+3tVG3Q9B+scZrhCVYKF66uFcoEBQv2nPUvgipzsdSyB81JxGUtCD3WUUz8m0VNIqAgFnTGASwaYkHeBkaj3xGvxYhxyGPU3T1+aYSMdZ58KrMR76cSqgzGJDTOMOghs6YHnyftJPHZWlv6bhzYMU752bnbif4wAUuOkuFl9JGN8BiIN7zq+rDL2MuEfgw8a6PWI7uWtZsOIpv8EyIM3VrA6WbbE8hFNQmfCzsL57Wclsa4PEF5wEq/Q+WdflwA01gvCIs1wDP0Qge6BtynVWc2yCaw0JavktmVWCXGQb48uNiVDut/RVzMRNva7ZltSAZAMSYrPNziEpAEm0M0hMBvVakR+IZ6T3k4vML0GWXA/q99AAYPiHMWeCx2LoPmURFQrX+kbTk66BaqOtU4HsRKa8Pd8sStVodM1RUZN9C0wHfOgeEejeMPw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(6506007)(33716001)(316002)(8676002)(66946007)(66476007)(66556008)(6666004)(4326008)(1076003)(33656002)(9686003)(6916009)(508600001)(83380400001)(6512007)(6486002)(966005)(54906003)(38100700002)(38350700002)(86362001)(2906002)(8936002)(55236004)(52116002)(7416002)(186003)(26005)(5660300002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?01qlJTywqAphopUuZi8fIK/ZmVIW3Egvvm5ShSzNbRNT0wAqSVET++rSkG1R?=
- =?us-ascii?Q?ZLvQL/TzXtNP/kFOIyRprqWcStWCKEbkWomrLdR8pyeiaJ0vsK1rcizswXGw?=
- =?us-ascii?Q?dHC7XsHFcD1RatgqEVPRduo33tFwRNSMfe2YdG9b4OF7ye+Jkf/7XnYrkymL?=
- =?us-ascii?Q?NLQhlRvoLrvAn7KDhgrx1QWojt9Uv6qyhNTlI7IYMSMJCkra7v7KA33wsTxl?=
- =?us-ascii?Q?D6XJwSe8giZXTp/jkYRojB8llg3jdi/LanKuiVMRFKVscuoydM2FppGPExE8?=
- =?us-ascii?Q?iXxwCrBlPW76KixYZRODLjRHsMzBIybK/vy1iwIDIKlSpz4AYsAs4jKFjc53?=
- =?us-ascii?Q?+A6+N0iMIrsa3/kLoP+wwtEj6k2skHK2/0qChXD0hHm1XEkBxLbeZvcbiOpy?=
- =?us-ascii?Q?0fPvsEX5zqvax6GZtBT0yklqVN1sfV4G+BYBcoNKR26YpNXDkI8ZGn+k5/B5?=
- =?us-ascii?Q?W0t5LjdlJDRD6LDuR7yRwgOR24oSqoihlhOR2CwkNxD0pwQw7nENVbffOF4O?=
- =?us-ascii?Q?AGf6XqW88/liC6H0xEpSwSt2Xl2eyl897/0KCH57uG9RGKFF4tV6UD08HJYC?=
- =?us-ascii?Q?985MVjqxT0tRi/C3EUkjhwBcSQDKq7FxjxzQZ5PqFeJA8fquECYz/YKbsGrx?=
- =?us-ascii?Q?aNHavcI8RwQzpvoVYQ/do5M6u4umv3GXDLvA8ivfgtZDxos4WCMxqKXtg/XL?=
- =?us-ascii?Q?kRFTVOL0IbVekASHQUNaC8f+3LXdf7sTFwXN0Fz00fusdyAthYSsiTKLj00L?=
- =?us-ascii?Q?dJs9PJPBvfgZV98OmoS8kHVGVacNCvwlLkXXbLn1N3Zi5X2WDd6fka9l2FyI?=
- =?us-ascii?Q?UwIQ7M64QOslCZAmMxBvtOFgubNYhm7WbFN8op+KYOKy7LuyNayX47SERJt9?=
- =?us-ascii?Q?p+X/kvrTpGEWX9tZqQ52chiuxLmFEOMxwmV4teGhDVsTzXGTtLxJ2+IhZejm?=
- =?us-ascii?Q?EWdPW0Jf5TeVMpUrEtta7vaLBQGrXcRJXUp0TbNqOdSJage54B3qBpjzkMxb?=
- =?us-ascii?Q?od5wxsQ4jnSf4UfSXk32YX7qxuXl4RMfal2ofaDNjsBrFCekMfN5jCHExZ0S?=
- =?us-ascii?Q?zH+VlK8Wg30aHa/qvGHFmcbRtj/OMfYLFtRCL3ppCOzzJLmdKKuCOqp/qbPs?=
- =?us-ascii?Q?IvXvqKN8zegugwpJmlW7uDYqkffmQXo84qWB88CP84Iy/lhwkYkSB2VbIfUo?=
- =?us-ascii?Q?FX0qKQhAajYLIgtcOIflbHaA02uG38I77eibAPbtOohSkzbdcKsBIj/e1fWb?=
- =?us-ascii?Q?MrK/hH94fEwHDRvQSuedBP0WJx52yMPq09okY+RF2bg93rMcqHEsDBd44pDc?=
- =?us-ascii?Q?oltwCmnVYmCyIqQRNsgLfDHKiky0P6cN5dQM5cJGKBrBne+OrJZKsFTmFTPS?=
- =?us-ascii?Q?/nXzVG3l9UYsYxpya5Rb0n1Nkr4s9999910h7EgvkxwnNKEMKv7+FPV3iZmf?=
- =?us-ascii?Q?Xpoe/jH65RF9NAsaYiCbRGeUKBuR4r6DlslUpYgqxxSIAoednlfqnAvG8Kdt?=
- =?us-ascii?Q?NG0fpUujMjsJ4U2KRQNU0jMeqjOkDvRddbVe4KCRsJanY/GwhzN57gPcqAJI?=
- =?us-ascii?Q?D845lJgOgU3JO6Cwn5DGyF6mUbEN3F55+F6r0VqjOWSdKHjdx3jtS2y0wg2A?=
- =?us-ascii?Q?9n0DIUFOyFJyf/aSX1AfcWkNmWjbhBNJeys5n0b9cC1bZX+80hcgO2UQFc4y?=
- =?us-ascii?Q?uC1okn5kBJnWLH+3bTF7WI1plavs+iXN8l12kMh0WaKLaDTzAO5ZKU5O+UvX?=
- =?us-ascii?Q?A3WAFgblzw=3D=3D?=
-X-OriginatorOrg: analogixsemi.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 88152bc8-2106-401e-b6d5-08da19e41837
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Apr 2022 04:47:47.8232
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: s2Y6ZOAxFOoW3We/e+YGgaRA44ZPJRxzZWgtlYfK6P+AtRMIHvkEY6Jmwapo9a8zchQ3OLcqwGJ8el38E4tYPw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR04MB4685
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 04, 2022 at 12:52:14PM -0500, Rob Herring wrote:
-> On Mon, Mar 28, 2022 at 08:09:54PM +0800, Xin Ji wrote:
-> > Change bus-type define for DPI.
-> > 
-> > Fixes: a43661e7e819 ("dt-bindings:drm/bridge:anx7625:add vendor define")
-> > 
-> > Signed-off-by: Xin Ji <xji@analogixsemi.com>
-> > ---
-> >  .../devicetree/bindings/display/bridge/analogix,anx7625.yaml  | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> > index 0d38d6fe3983..4590186c4a0b 100644
-> > --- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> > +++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> > @@ -106,7 +106,7 @@ properties:
-> >                remote-endpoint: true
-> >  
-> >                bus-type:
-> > -                enum: [1, 5]
-> > +                enum: [7]
-> 
-> Changing is an ABI break, but didn't we revert adding this?
-Hi Rob, sorry, what do you mean about ABI break? Do I need remove this
-patch in this serial? Or do I need revert patch
-https://patchwork.freedesktop.org/patch/462331/, I don't know how to do
-it.
+This series enables the Cortex M3 processor found in AM33xx and AM43xx
+SoCs to toggle the VTT regulator during low power mode transitions.
 
-Thanks,
-Xin
-> 
-> >                  default: 1
-> >  
-> >                data-lanes: true
-> > @@ -158,7 +158,7 @@ examples:
-> >                      reg = <0>;
-> >                      anx7625_in: endpoint {
-> >                          remote-endpoint = <&mipi_dsi>;
-> > -                        bus-type = <5>;
-> > +                        bus-type = <7>;
-> >                          data-lanes = <0 1 2 3>;
-> >                      };
-> >                  };
-> > -- 
-> > 2.25.1
-> > 
-> > 
+I recently converted the Wakeup M3 IPC bindings to YAML. Rob has applied
+that patch [1]. It is a prerequisite for the wkup-m3-ipc.yaml patch in
+this series.
+
+[1] https://lore.kernel.org/linux-devicetree/YlCACSZx5xsPSwNC@robh.at.kernel.org/
+
+Dave Gerlach (1):
+  soc: ti: wkup_m3_ipc: Add support for toggling VTT regulator
+
+Drew Fustini (1):
+  dt-bindings: wkup-m3-ipc: Add vtt toggle bindings
+
+ .../bindings/soc/ti/wkup-m3-ipc.yaml          | 21 +++++++++++++++
+ drivers/soc/ti/wkup_m3_ipc.c                  | 27 +++++++++++++++++--
+ include/linux/wkup_m3_ipc.h                   |  1 +
+ 3 files changed, 47 insertions(+), 2 deletions(-)
+
+-- 
+2.32.0
+

@@ -2,190 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 964934FA616
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 10:57:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90CED4FA619
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 10:58:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237616AbiDII5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 04:57:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50924 "EHLO
+        id S240723AbiDIJAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 05:00:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235914AbiDII5l (ORCPT
+        with ESMTP id S235914AbiDIJAK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 04:57:41 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E36222BD
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 01:55:34 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id n8so9899720plh.1
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 01:55:34 -0700 (PDT)
+        Sat, 9 Apr 2022 05:00:10 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5320923BDE;
+        Sat,  9 Apr 2022 01:58:03 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id u7so1553115lfs.8;
+        Sat, 09 Apr 2022 01:58:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=kxJc/L4B08IhoXEXn1ImpzHE+tjcdedq5j1cVSzMG3A=;
-        b=3qOIBb8Jc63it5q3BkitEvnGJJIt9oOJMkthl6v8VwWzmN6R2KtLakWlhEjg+A/1ko
-         mklYTgy+r2B/6oLuE8dVcC22Qp3daAtEM5rUZ+80eImOUwqOw2WWCECTdh+Z8MKaNHj8
-         mKRZBpoztcuhxjWop67fmqcVLZcHMHEf9veRlR6uBHgaJL7NX4PUDeZ7PsNtHwLMwVwg
-         TRK1sB1mSlxGTngT/YrG5CweZGBP4oMztq2Py66OLNFjLckfMunm7qOAjUDVoEttb2TZ
-         hXavJQMw+FLJ8vTlZw3ZRMWRANkCXGdTZ3AqBzTUMfP7SMpdRNnkuNFQOz8TVnFjCKF+
-         IsHA==
+        bh=0ugBxmjpEkz6OGkNDpns8lmpiOPbxLWOThWTF0EVsTM=;
+        b=nKn0DMkbrRNBmOACOREi7d4S5gRfOWPHyFx2eNGSZyH6I6zPLqVCcoxECKsjyJcTPw
+         FziZxDquVtKijnqLT9QjmBYJXvAi4O+evgoSnSdy2FaUp9XSBudQ4sOiToIaLHOP2AO4
+         3SXCYsROURNJ9Veoch/DVLDZ3NKvgW1w6PHkuuxwfjQNkIWlK8ot0UPpLqv+1MzDZB/7
+         XIOwKhp3fOvttDz6q3QidRgn7pwfxPxQ3ErxThp5k+MNyHdmV/7qmjEGHFITmF30I8Ou
+         7ffLdLG3BGyYCryu/O6/kjndYcSnRTye4GVVWRi/s18nI8KFQVFovlCz5+LRS03otizz
+         blBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=kxJc/L4B08IhoXEXn1ImpzHE+tjcdedq5j1cVSzMG3A=;
-        b=cLkUrlJr9VqRpd/g4qxiqlDr5a+Aauj+WAguhdB+IfQfbYmls07dCmJBC1GOxI4hPq
-         sd+1tveXXw27C/3Ea5oF2bq8alqJoK/DG4tlHo1jm0A+YcdiAKIgl0agQYKEm6U1Ap8Q
-         ugjeS8ms7xBVYH27DyLX8ItnUFau/+Db1Wr1B313OUm6jHwVkRvKNINYdzg6BTJgXw9Y
-         XJeJC2laJBnryY2e/NTwvZ8M7V6KQzkVcnyH44yRurV6iw83u0FVLkgOi7Tf5dJxu0AG
-         XukcLlNQEWXPvYhpKNIY7m7DnFgEaiD3SWaG7pAbFnCWL+KoDotl8M3lc8Eu8O4pZFZd
-         b8Xg==
-X-Gm-Message-State: AOAM530KoAkra8mHOZQkBcrDVUqGyLyZqCsBjx1+JkCD3mFieOOicfbZ
-        iUyBaXzZJ/5zoo04eNwtS3+NUQ==
-X-Google-Smtp-Source: ABdhPJwKiD1Z7MvHcHawqfJq5oN5AoDHGof8inJWY83SQt2a2oOa0tBZCgIdatlX99ybNsPoXojwYw==
-X-Received: by 2002:a17:902:d512:b0:156:b23f:ed62 with SMTP id b18-20020a170902d51200b00156b23fed62mr23655101plg.147.1649494534033;
-        Sat, 09 Apr 2022 01:55:34 -0700 (PDT)
-Received: from localhost.localdomain ([2409:8a28:e6c:f010:3c21:7dc2:3a08:b6bc])
-        by smtp.gmail.com with ESMTPSA id f192-20020a636ac9000000b0039836edcf42sm24460806pgc.85.2022.04.09.01.55.25
+        bh=0ugBxmjpEkz6OGkNDpns8lmpiOPbxLWOThWTF0EVsTM=;
+        b=Y9LrCEHVeilOlUnTyDQ6gV3MoBbAvOD9I8DmMM1vUteeCKsNDcDeVEg/qyldOAYV7L
+         3ZeNOaDx7SBa1McPdtFFy8wudLfF6xQboP7VgTNw+zv7n94uxXIMMtkjhqXHtgD4IRV9
+         ibIBShw4NX3rLN4t0HK84dUIzfRhjC51LD3UB+yEzbMVenvA6KN9Qsn6rCJwTEa5eo0h
+         7dvezxB4GxXn/trWmHzqCgtFW+fU+gq1hN/Nu21gENDbn2NOgejTp626oefRKYvVkeOU
+         m/BXOACT8wkPD3GVyDXf7pyqkUQv7jaR+emLN27wuifAAouSsuZXp9emW/8z7iZ8Htje
+         P8KA==
+X-Gm-Message-State: AOAM533JSeAyHhrLHx9VRckz+43oxcqchHKDxyAGKGCjFPXBx0DtjYyX
+        4gctOBt/hkV+pUErSkGcxJA=
+X-Google-Smtp-Source: ABdhPJyXpLKAgLvipO9J90s11C24nH2BsseSQQCAD0zbOuq9TF2KNYx/GEefQm8+U6v1oskP3l70ew==
+X-Received: by 2002:a05:6512:b90:b0:46b:81d5:4eef with SMTP id b16-20020a0565120b9000b0046b81d54eefmr5626170lfv.683.1649494681278;
+        Sat, 09 Apr 2022 01:58:01 -0700 (PDT)
+Received: from reki (broadband-95-84-198-152.ip.moscow.rt.ru. [95.84.198.152])
+        by smtp.gmail.com with ESMTPSA id b26-20020a056512061a00b0044a57b38530sm2680793lfe.164.2022.04.09.01.58.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Apr 2022 01:55:32 -0700 (PDT)
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-To:     rostedt@goodmis.org, mingo@redhat.com, catalin.marinas@arm.com,
-        will@kernel.org, tglx@linutronix.de, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        broonie@kernel.org, mark.rutland@arm.com, ardb@kernel.org,
-        zhouchengming@bytedance.com, linux-arm-kernel@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
-        songmuchun@bytedance.com
-Subject: [PATCH RESEND v3 2/2] arm64/ftrace: Make function graph use ftrace directly
-Date:   Sat,  9 Apr 2022 16:55:00 +0800
-Message-Id: <20220409085500.4549-2-zhouchengming@bytedance.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220409085500.4549-1-zhouchengming@bytedance.com>
-References: <20220409085500.4549-1-zhouchengming@bytedance.com>
+        Sat, 09 Apr 2022 01:58:00 -0700 (PDT)
+Date:   Sat, 9 Apr 2022 11:57:56 +0300
+From:   Maxim Devaev <mdevaev@gmail.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: f_mass_storage: break IO operations via
+ configfs
+Message-ID: <20220409115756.4f9b015d@reki>
+In-Reply-To: <YlBN4Zcn9NYw0PLA@rowland.harvard.edu>
+References: <20220406092445.215288-1-mdevaev@gmail.com>
+        <Yk2wvhSTMKTLFK6c@rowland.harvard.edu>
+        <20220406195234.4f63cb4a@reki>
+        <Yk3TLPKyaQDsnuD4@rowland.harvard.edu>
+        <20220406213634.104cae45@reki>
+        <Yk8L6b9wEWTjWOg4@rowland.harvard.edu>
+        <20220407204553.35cead72@reki>
+        <YlBN4Zcn9NYw0PLA@rowland.harvard.edu>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As we do in commit 0c0593b45c9b ("x86/ftrace: Make function graph
-use ftrace directly"), we don't need special hook for graph tracer,
-but instead we use graph_ops:func function to install return_hooker.
+=D0=92 Fri, 8 Apr 2022 10:59:45 -0400
+Alan Stern <stern@rowland.harvard.edu> wrote:
 
-Since commit 3b23e4991fb6 ("arm64: implement ftrace with regs") add
-implementation for FTRACE_WITH_REGS on arm64, we can easily adopt
-the same cleanup on arm64.
+> On Thu, Apr 07, 2022 at 08:47:13PM +0300, Maxim Devaev wrote:
+> > =D0=92 Thu, 7 Apr 2022 12:06:01 -0400
+> > Alan Stern <stern@rowland.harvard.edu> wrote:
+> >  =20
+> > > On Wed, Apr 06, 2022 at 09:36:34PM +0300, Maxim Devaev wrote: =20
+> > > > =D0=92 Wed, 6 Apr 2022 13:51:40 -0400
+> > > > Alan Stern <stern@rowland.harvard.edu> wrote:
+> > > >    =20
+> > > > > On Wed, Apr 06, 2022 at 07:52:34PM +0300, Maxim Devaev wrote:   =
+=20
+> > > > > > > It's not clear to me how breaking I/O operations allows you t=
+o do a=20
+> > > > > > > "force eject".  It seems that what you would need is somethin=
+g like=20
+> > > > > > > fsg_store_file() that omits the curlun->prevent_medium_remova=
+l check.
+> > > > > > > Interrupting a lengthy I/O operation doesn't really have anyt=
+hing to do=20
+> > > > > > > with this.     =20
+> > > > > >=20
+> > > > > > Perhaps I chose the wrong path, it's just how my userspace code=
+ works now.
+> > > > > > If the drive is connected to a Linux host, then in order to cle=
+ar
+> > > > > > the "file" and extract the image, I sent a SIGUSR1 signal to th=
+e "file-storage"
+> > > > > > thread. This interrupted long IO operations, reset curlun->prev=
+ent_medium_removal
+> > > > > > and I got the ability to extract.     =20
+> > > > >=20
+> > > > > Oh, I see.  That's kind of an unintended side effect of not calli=
+ng=20
+> > > > > raise_exception().
+> > > > >=20
+> > > > > And while it does interrupt long I/O operations, it does so in=20
+> > > > > non-sanctioned way.  To the host it will appear as though the gad=
+get's=20
+> > > > > firmware has crashed, since the gadget will stop sending or recei=
+ving=20
+> > > > > data.  Eventually the host will time out and reset the gadget.
+> > > > >=20
+> > > > > Maybe that's the sort of thing you want, but I rather doubt it.  =
+ =20
+> > > >=20
+> > > > It's hard to say how it actually should work in case of force remov=
+ing.
+> > > > At least the currect approach with SIGUSR1 is really working on tho=
+usands
+> > > > systems and with Linux, Mac and Windows. I believe that the criteri=
+on
+> > > > of the experiment is quite important here. I know of several other =
+utilities
+> > > > that use SIGUSR1 for similar purposes.   =20
+> > >=20
+> > > This merely means that the current unintended behavior of userspace U=
+SR1=20
+> > > signals must not be changed.  But it doesn't mean you have to continu=
+e=20
+> > > to rely on that behavior; you can implement something better. =20
+> >=20
+> > So I suggest break_io :) I haven't come up with anything better. =20
+>=20
+> But breaking an I/O doesn't do all that you want.  That is, interrupting =
+an=20
+> I/O request (causing an executing command to terminate early) doesn't in=
+=20
+> itself change the prevent/allow status.  Those are two separate operation=
+s. =20
+> The fact that sending a USR1 signal does both is merely a coincidence.
+>=20
+> Furthermore, it's not clear just what you mean when you say KVM needs to=
+=20
+> "turn it off immediately".  How soon is "immediately"?  Even a USR1 signa=
+l=20
+> doesn't work instantaneously.  You may find that a forced eject without a=
+n=20
+> I/O interruption works quickly enough.
 
-And this cleanup only changes the FTRACE_WITH_REGS implementation,
-so the mcount-based implementation is unaffected.
+Yes, you're right. I need to focus on forced eject operation.
 
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
----
-v3:
- - Add comments in ftrace_graph_func() as suggested by Steve. Thanks.
+> > > > > > Will masking the curlun->prevent_medium_removal flag be enough?=
+     =20
+> > > > >=20
+> > > > > I think so.  But it will be blocked to some extent by long-runnin=
+g I/O=20
+> > > > > operations, because those operations acquire the filesem rw-semap=
+hore=20
+> > > > > for reading.
+> > > > >=20
+> > > > > More precisely, each individual command holds the rw-semaphore.  =
+But the=20
+> > > > > semaphore is dropped between commands, and a long-running I/O ope=
+ration=20
+> > > > > typically consists of many separate commands.  So the blocking ma=
+y be=20
+> > > > > acceptable.   =20
+> > > >=20
+> > > > It is very important for KVM-over-IP to be able to command "turn it=
+ off immediately".   =20
+> > >=20
+> > > Why is this?  A lot of actual devices (DVD drives, for instance) don'=
+t=20
+> > > give you the ability to eject the media when the host has prevented i=
+t. =20
+> > > Why should f-mass-storage be different? =20
+> >=20
+> > The DVD drive has the ability to physically eject the disc. =20
+>=20
+> You mean by sticking an unfolded paperclip into the manual-eject hole?
 
-v2:
- - Remove FTRACE_WITH_REGS ftrace_graph_caller asm, thanks Mark.
----
- arch/arm64/include/asm/ftrace.h  |  7 +++++++
- arch/arm64/kernel/entry-ftrace.S | 17 -----------------
- arch/arm64/kernel/ftrace.c       | 17 +++++++++++++++++
- 3 files changed, 24 insertions(+), 17 deletions(-)
+Yes.
 
-diff --git a/arch/arm64/include/asm/ftrace.h b/arch/arm64/include/asm/ftrace.h
-index 1494cfa8639b..dbc45a4157fa 100644
---- a/arch/arm64/include/asm/ftrace.h
-+++ b/arch/arm64/include/asm/ftrace.h
-@@ -80,8 +80,15 @@ static inline unsigned long ftrace_call_adjust(unsigned long addr)
- 
- #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
- struct dyn_ftrace;
-+struct ftrace_ops;
-+struct ftrace_regs;
-+
- int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec);
- #define ftrace_init_nop ftrace_init_nop
-+
-+void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
-+		       struct ftrace_ops *op, struct ftrace_regs *fregs);
-+#define ftrace_graph_func ftrace_graph_func
- #endif
- 
- #define ftrace_return_address(n) return_address(n)
-diff --git a/arch/arm64/kernel/entry-ftrace.S b/arch/arm64/kernel/entry-ftrace.S
-index e535480a4069..d42a205ef625 100644
---- a/arch/arm64/kernel/entry-ftrace.S
-+++ b/arch/arm64/kernel/entry-ftrace.S
-@@ -97,12 +97,6 @@ SYM_CODE_START(ftrace_common)
- SYM_INNER_LABEL(ftrace_call, SYM_L_GLOBAL)
- 	bl	ftrace_stub
- 
--#ifdef CONFIG_FUNCTION_GRAPH_TRACER
--SYM_INNER_LABEL(ftrace_graph_call, SYM_L_GLOBAL) // ftrace_graph_caller();
--	nop				// If enabled, this will be replaced
--					// "b ftrace_graph_caller"
--#endif
--
- /*
-  * At the callsite x0-x8 and x19-x30 were live. Any C code will have preserved
-  * x19-x29 per the AAPCS, and we created frame records upon entry, so we need
-@@ -127,17 +121,6 @@ ftrace_common_return:
- 	ret	x9
- SYM_CODE_END(ftrace_common)
- 
--#ifdef CONFIG_FUNCTION_GRAPH_TRACER
--SYM_CODE_START(ftrace_graph_caller)
--	ldr	x0, [sp, #S_PC]
--	sub	x0, x0, #AARCH64_INSN_SIZE	// ip (callsite's BL insn)
--	add	x1, sp, #S_LR			// parent_ip (callsite's LR)
--	ldr	x2, [sp, #PT_REGS_SIZE]	   	// parent fp (callsite's FP)
--	bl	prepare_ftrace_return
--	b	ftrace_common_return
--SYM_CODE_END(ftrace_graph_caller)
--#endif
--
- #else /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
- 
- /*
-diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
-index 4506c4a90ac1..35eb7c9b5e53 100644
---- a/arch/arm64/kernel/ftrace.c
-+++ b/arch/arm64/kernel/ftrace.c
-@@ -268,6 +268,22 @@ void prepare_ftrace_return(unsigned long self_addr, unsigned long *parent,
- }
- 
- #ifdef CONFIG_DYNAMIC_FTRACE
-+
-+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
-+void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
-+		       struct ftrace_ops *op, struct ftrace_regs *fregs)
-+{
-+	/*
-+	 * Athough graph_ops doesn't have FTRACE_OPS_FL_SAVE_REGS set in flags,
-+	 * regs can't be NULL in DYNAMIC_FTRACE_WITH_REGS. By design, it should
-+	 * be fixed when DYNAMIC_FTRACE_WITH_ARGS is implemented.
-+	 */
-+	struct pt_regs *regs = arch_ftrace_get_regs(fregs);
-+	unsigned long *parent = (unsigned long *)&procedure_link_pointer(regs);
-+
-+	prepare_ftrace_return(ip, parent, frame_pointer(regs));
-+}
-+#else
- /*
-  * Turn on/off the call to ftrace_graph_caller() in ftrace_caller()
-  * depending on @enable.
-@@ -297,5 +313,6 @@ int ftrace_disable_ftrace_graph_caller(void)
- {
- 	return ftrace_modify_graph_caller(false);
- }
-+#endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
- #endif /* CONFIG_DYNAMIC_FTRACE */
- #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
--- 
-2.20.1
+> >  It's not too good
+> > for the drive itself, but it's just there. We can also urgently remove
+> > the USB flash drive. =20
+>=20
+> Removing a USB flash drive is not a media-eject operation; it's a=20
+> disconnect operation.  (That is, it removes the entire device, not just t=
+he=20
+> media.)  By contrast, taking an SD card out from a USB card reader _is_ a=
+n=20
+> example of a media ejection.  But card readers do not claim to support th=
+e=20
+> prevent/allow mechanism.
+>=20
+> > At least there is one situation where the behavior of f_mass_storage di=
+ffers
+> > from the behavior of a real drive. What happens when you click on the p=
+hysical
+> > "eject" button? =20
+>=20
+> If the host has prevented ejection, nothing happens.  Otherwise the disc=
+=20
+> gets ejected.
+>=20
+> > Yes, the OS can block this, but the problem is that we don't have
+> > an "eject" here. =20
+>=20
+> What do you mean?  Writing an empty string to the sysfs "file" attribute=
+=20
+> is the virtual analog of pressing the eject button.
 
+But I can't eject the disc event it's not mounted on Linux host. It seems t=
+o me
+it differs from the real drive behavior.
+
+> ...
+
+I have reflected on the rest of your arguments and changed my mind.
+I think that "forced_eject" for a specific lun without interrupting operati=
+ons would
+really be the best solution. I wrote a simple patch and tested it, everythi=
+ng seems
+to work. What do you think about something like this?
+
+
+static ssize_t fsg_lun_opts_forced_eject_store(struct config_item *item,
+                                               const char *page, size_t len)
+{
+        struct fsg_lun_opts *opts =3D to_fsg_lun_opts(item);
+        struct fsg_opts *fsg_opts =3D to_fsg_opts(opts->group.cg_item.ci_pa=
+rent);
+        int ret;
+
+        opts->lun->prevent_medium_removal =3D 0;
+        ret =3D fsg_store_file(opts->lun, &fsg_opts->common->filesem, "", 0=
+);
+        return ret < 0 ? ret : len;
+}
+
+CONFIGFS_ATTR_WO(fsg_lun_opts_, forced_eject);
+
+
+If you find this acceptable, I will test this patch on my users to make sure
+that its behavior meets our expectations.

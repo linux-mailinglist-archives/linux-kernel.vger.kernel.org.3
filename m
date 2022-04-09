@@ -2,124 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0B5B4FA692
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 11:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 504B74FA69C
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 11:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241178AbiDIJot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 05:44:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60866 "EHLO
+        id S236389AbiDIJyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 05:54:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231248AbiDIJop (ORCPT
+        with ESMTP id S232364AbiDIJyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 05:44:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E082E3BA45
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 02:42:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 78CD860F0B
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 09:42:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBAE8C385A0;
-        Sat,  9 Apr 2022 09:42:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649497356;
-        bh=z/VQ7UBPEEz1ClVwweMM7AeDdYXV0a8DdIT6eAZDtxg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=d2/z83hlnDS7YQrDomzn3kn6JRBGeHYP4u9/wTJwEOxr3elnaffi9Na7lPcOt0cjJ
-         MwTqci6f0+JyDWFQ/HyNOr/rUcIa2L5nw1AuoDP/n+ZL7Qlh4EIY8D1RL5UbGAFmjc
-         BPeoc9zofSxljYqNYBXme2rEKsGMFmLunifkHTmteR6XrSk20FLdALklFQwCxXfDMU
-         DZMOF+iw/grLxz1+0kstRMA3Pil3Sh0wF4Iln1M6X5OYvqlZN8VAGK4kyZGGpc9ozN
-         PC7vN8iPg9NEZHG7n5rb6SkR0tw2DqGmdSMqIdLDMCoAdoX+5UDf8UvNMHjR1weexj
-         JYbYkZW5YKJXQ==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=why.lan)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nd7c2-002y4g-BZ; Sat, 09 Apr 2022 10:42:34 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        Hulk Robot <hulkci@huawei.com>,
-        Jingyi Wang <wangjingyi11@huawei.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Nianyao Tang <tangnianyao@huawei.com>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        YueHaibing <yuehaibing@huawei.com>, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Subject: [GIT PULL] irqchip fixes for 5.18, take #1
-Date:   Sat,  9 Apr 2022 10:42:29 +0100
-Message-Id: <20220409094229.267649-1-maz@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Sat, 9 Apr 2022 05:54:37 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB9A11165;
+        Sat,  9 Apr 2022 02:52:29 -0700 (PDT)
+Received: from localhost.localdomain ([37.4.249.94]) by
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MmCyE-1oLIHi1dGi-00iBEv; Sat, 09 Apr 2022 11:52:10 +0200
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>
+Cc:     bcm-kernel-feedback-list@broadcom.com,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Stefan Wahren <stefan.wahren@i2se.com>
+Subject: [PATCH 1/2] gpiolib: of: Introduce hook for missing gpio-ranges
+Date:   Sat,  9 Apr 2022 11:51:28 +0200
+Message-Id: <20220409095129.45786-2-stefan.wahren@i2se.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220409095129.45786-1-stefan.wahren@i2se.com>
+References: <20220409095129.45786-1-stefan.wahren@i2se.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: tglx@linutronix.de, andre.przywara@arm.com, hulkci@huawei.com, wangjingyi11@huawei.com, lorenzo.pieralisi@arm.com, tangnianyao@huawei.com, shawn.guo@linaro.org, yangyingliang@huawei.com, yuehaibing@huawei.com, linux-kernel@vger.kernel.org, kernel-team@android.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:CB02EKvvYydZC5du8AH3IAtLs1fKTmze7x6PqWzMFj9x2Xcd7BX
+ DR+H15vbZSkfGzXjc8/tPJndsZk+GZlKFGP+LiQnHoQYy8Er0bANYgFfsUb7NYDU6kHSkcF
+ HYR4Gv7TpReJCf2bH2UtDaWIpVcdhoLVsci82KxBAvMgBpCy/ZGjx/11Xzom4PcPS+ttYXc
+ hObbjupwVjHxXTfxZjDJQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:1wUrPbMJhgY=:qii99htR46ZMXophlALDu0
+ 2FIx4j10br7+X4bpuAeH1ggCmPk6s93xNaqPiUHKisP/bwR6g/yoUN4Rc5MGLvbIAHGhAaIpi
+ HzeWdlYZVkc4Wwd93ImTmRp4QSYj2MFhlD9mBNe/1uzEotfpdrYufNDp8cqzNaHhAEUCgr/jI
+ YLA6HoSCpIBuzcy3AjoR54TGpFmdioBlvheXXiVsIsDhpj2YpPRlu1hjfTXy3uuphJYnhm9bw
+ RYXGCY+kbn7RdPOuQ7Ht0OgS4uQ1nFVh/BhJnCmtZRzel4oZGyUUeAQyD0HqE83pSV3q9xNDZ
+ lc7Rkm+pL5awl7EYi6LJqoH4TRPYRrUcRUEBqVHKxcq95grJubj33UNN9uyQD20Uq+66HsI8w
+ qEfWCFbwQ0yg9z4D75rbovFHh97VOuX+9aPYtMs3tFGT0/I8bI7UpKgM51g1huzgS2+4WqDF7
+ SaGv9ucDwj+Vjm1f4HJbdkjlo0bIbegP8BRnXSv1s9H+mx6smnyVoTHO8Y+iDBTLFc5Rdy3xx
+ T4pihvDAkGil44Y9xokUbaV+aflxu9VTzaoML8U0l1lNKQ7R9xqgZQOAE7cxd5reX/wVk+8Go
+ ERER8s6wNGETt3CSgf2XuAb4j39jLvVuq0APzskfGPF0UC8Ao6mCR+E9UhoZBHoCIdwiQMC1t
+ yACjBXZsju4eBRGWtDAaGEySnfe2mX7pd8wMawNfvC5D+cW/3fkvX20AqjtLbQxL/oq7XN5QR
+ 5Iw4auJINtaJRNXL
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas
+Since commit 2ab73c6d8323 ("gpio: Support GPIO controllers without pin-ranges")
+the device tree nodes of GPIO controller need the gpio-ranges property to
+handle gpio-hogs. Unfortunately it's impossible to guarantee that every new
+kernel is shipped with an updated device tree binary.
 
-Here's a handful of fixes from the irqchip department. Most of them
-are affecting the various GICs one way or another, with a pretty
-embarrassing one that took no less than 8 years to spot... I'll take
-the blame on that one.
+In order to provide backward compatibility with those older DTB, we need a
+callback within of_gpiochip_add_pin_range() so the relevant platform driver
+can handle this case.
 
-Please pull,
+Fixes: 2ab73c6d8323 ("gpio: Support GPIO controllers without pin-ranges")
+Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+Acked-by: Bartosz Golaszewski <brgl@bgdev.pl>
+---
+ drivers/gpio/gpiolib-of.c   |  5 +++++
+ include/linux/gpio/driver.h | 12 ++++++++++++
+ 2 files changed, 17 insertions(+)
 
-	M.
+diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
+index ae1ce319cd78..d9b235c88b54 100644
+--- a/drivers/gpio/gpiolib-of.c
++++ b/drivers/gpio/gpiolib-of.c
+@@ -931,6 +931,11 @@ static int of_gpiochip_add_pin_range(struct gpio_chip *chip)
+ 	if (!np)
+ 		return 0;
+ 
++	if (!of_property_read_bool(np, "gpio-ranges") &&
++	    chip->of_gpio_ranges_fallback) {
++		return chip->of_gpio_ranges_fallback(chip, np);
++	}
++
+ 	group_names = of_find_property(np, group_names_propname, NULL);
+ 
+ 	for (;; index++) {
+diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
+index 98c93510640e..b5d53decea5a 100644
+--- a/include/linux/gpio/driver.h
++++ b/include/linux/gpio/driver.h
+@@ -492,6 +492,18 @@ struct gpio_chip {
+ 	 */
+ 	int (*of_xlate)(struct gpio_chip *gc,
+ 			const struct of_phandle_args *gpiospec, u32 *flags);
++
++	/**
++	 * @of_gpio_ranges_fallback
++	 *
++	 * Optional hook for the case that no gpio-ranges property is defined
++	 * within the device tree node "np" (usually DT before introduction
++	 * of gpio-ranges). So this callback is helpful to provide the
++	 * necessary backward compatibility for the pin ranges.
++	 */
++	int (*of_gpio_ranges_fallback)(struct gpio_chip *gc,
++				       struct device_node *np);
++
+ #endif /* CONFIG_OF_GPIO */
+ };
+ 
+-- 
+2.25.1
 
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
-
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git tags/irqchip-fixes-5.18-1
-
-for you to fetch changes up to 544808f7e21cb9ccdb8f3aa7de594c05b1419061:
-
-  irqchip/gic, gic-v3: Prevent GSI to SGI translations (2022-04-05 16:33:47 +0100)
-
-----------------------------------------------------------------
-irqchip fixes for 5.18, take #1
-
-- Fix GICv3 polling for RWP in redistributors
-
-- Reject ACPI attempts to use SGIs on GIC/GICv3
-
-- Fix unpredictible behaviour when making a VPE non-resident
-  with GICv4
-
-- A couple of fixes for the newly merged qcom-mpm driver
-
-----------------------------------------------------------------
-Andre Przywara (1):
-      irqchip/gic, gic-v3: Prevent GSI to SGI translations
-
-Marc Zyngier (2):
-      irqchip/gic-v4: Wait for GICR_VPENDBASER.Dirty to clear before descheduling
-      irqchip/gic-v3: Fix GICR_CTLR.RWP polling
-
-Yang Yingliang (1):
-      irqchip/irq-qcom-mpm: fix return value check in qcom_mpm_init()
-
-YueHaibing (1):
-      irq/qcom-mpm: Fix build error without MAILBOX
-
- drivers/irqchip/Kconfig          |  1 +
- drivers/irqchip/irq-gic-v3-its.c | 28 +++++++++++++++++++---------
- drivers/irqchip/irq-gic-v3.c     | 14 ++++++++++----
- drivers/irqchip/irq-gic.c        |  6 ++++++
- drivers/irqchip/irq-qcom-mpm.c   |  2 +-
- 5 files changed, 37 insertions(+), 14 deletions(-)

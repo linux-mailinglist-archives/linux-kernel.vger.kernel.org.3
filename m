@@ -2,61 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 395F94FAA3E
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 20:41:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B63B54FAA39
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 20:41:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243069AbiDISnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 14:43:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51506 "EHLO
+        id S241375AbiDISnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 14:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243061AbiDISnd (ORCPT
+        with ESMTP id S243067AbiDISnh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 14:43:33 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D8AFC131;
-        Sat,  9 Apr 2022 11:41:26 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id r66so10638560pgr.3;
-        Sat, 09 Apr 2022 11:41:26 -0700 (PDT)
+        Sat, 9 Apr 2022 14:43:37 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D50B1C8D9C;
+        Sat,  9 Apr 2022 11:41:29 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id n9so10670592plc.4;
+        Sat, 09 Apr 2022 11:41:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WN+cZ+EH/2jdMXxpTEKPOeickiZoQW84lQN8HFTlfGk=;
-        b=GVr+YmrpKw9iWExzzn0YYiFAVz0khz0N4A6GJYFa4ApK4WwiSNadltPKsdak1Fl0+W
-         /U+ll7cTgWilgsrcytPMn+E2rN0DlTXPYZvfGfwMSPGq+4DVxwlYgVyvR7YqY4ZqTET5
-         EAYjUBcW3lQruMSMxg5EfSsXY6LgR13c1o24In5YsqNgTh+zAOtUnhzYbebTAkK7SIVN
-         h39n/5AzlXuBN4r0Jmx2+gEOXcrgcatdBXnReqEFHp8sUBx5hGBElnq2XblXrY4GITvc
-         +46IudDIR+lvNPAfyNbMey5XXNEqqLsWmCrQFkrHp+8vDCZD7yc6DNMa/3BSK+sGsu13
-         gKNg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ddTuY51+NiyyyGu6kYjILoiFlTrP+EFOSDUDkBgM0uA=;
+        b=Bw6O05KWIPpoOvgPLrBwYut1P8eKytQOweHxRYOnrXAVoH201OocsZOHz5S8KcgHae
+         2EKq37AtUqK7R7rARt1bAoMSMKqUzZXQmAgDA/NYFMPtEEJ149Jbqd3qONhEfWY5rNR6
+         DmWUXgATsMS0wxCr5CMHvTfEK+k+CPY15SeaCY7ybDqacjQr3rq7/r7iH+BveuZ7CXNG
+         vBNHJwLpSpwrtr3YIjvoCi5c/qK4L6IBZGPLWEGZeZnir6UUrjqkAd7gv6fj85BnRIzf
+         l01xhJdBlEO8PAi/KjW7SihqOzqME465eDLLNhE/WHJptE9ihfsq47wKi+myw4NoK4W4
+         thKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WN+cZ+EH/2jdMXxpTEKPOeickiZoQW84lQN8HFTlfGk=;
-        b=U3zHtnG6W9JgB0S5lSR6lYUNzXf2HtkOksGQenjHQW71fVQQkH03KihYEMmgJygoTt
-         QyId4LCDa8M0EKXPbgakVHvZ6LkXGX/vv8d7RB0Y5/VyRPXQYvXHiMgmX5NrNsGUrYaP
-         dkIPqdg4jK6a8FcxIzH6Jt+h5cKop0yCn8CIlN3tw3dg2AFOT0peiJntR55G+gCA+XPD
-         +O5wWE55ZWE9lZ6uSOwXUxbesNsZwpO9n6ItixK1lPi90pDRqU5cIMCY0n0hqlsH9m/e
-         7T/SpOjO7Snldj+Qyc2FJomzQGF5rHdaoLX/RvklivbNITl8PyimbnTaVwfacScie3+c
-         5Tpg==
-X-Gm-Message-State: AOAM532ugHDqK/Y4yKSbaOIYBy115pTQJYigYsRfYUkGyibczqyr8LKi
-        YELSlly39KK5ZucdDkF+wU7BJY7IuEQ=
-X-Google-Smtp-Source: ABdhPJw9Tw2GpTtcmFXjMJJp93pcZOSpYFzo9oV6lAt8ttC99gcYK3AqXAp91Odw8nptfOEQQHiuJw==
-X-Received: by 2002:a05:6a00:2124:b0:4fa:739f:2386 with SMTP id n4-20020a056a00212400b004fa739f2386mr25196272pfj.68.1649529685701;
-        Sat, 09 Apr 2022 11:41:25 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ddTuY51+NiyyyGu6kYjILoiFlTrP+EFOSDUDkBgM0uA=;
+        b=4EFItigIMWzWEoDWfVaseF2jcXpcjh6nEBeKrLBVsf1Tj4PyNXmtyJ3FH+cVykubdN
+         uRh+Ho1B3igCRMX2JstK2X1tJdlsvbEbPI2WKiqmoG8dnfA/uiRuDqmXQoOtVG9r8HxC
+         v9hpaB4rkZHCB4gOFl6ZFyNe6r9aqewYBahwnjv6XTXb2MB9v5mmkc++Mfk3hHdO80ZO
+         3HRjtmzEltKSNXAJrYrY4kxKK+k9XgeskxsrBU9DFi7r4F5amPBdD/ZKujTKCgQ2Fdh0
+         3DaUsyVMgTibq9c3z+aoqbAFIVxCjqlUcXhw/HuAjv4SgNNOXTvkBvlNsiG+2jMH/4dE
+         lzag==
+X-Gm-Message-State: AOAM530gf/McP3mf+0M+6YjgkRdwXNbPrtpcwPIAASqsWKCGD58Ppu0m
+        p6L/uhUJmSW/fWW6lGS/h7U=
+X-Google-Smtp-Source: ABdhPJwzJurB/UUTXpYOJnd1TWVhD+nqxxZOlakfm+O2uCafxX4AvTnR5L0k43d3ZGwB1K4tvfRkSg==
+X-Received: by 2002:a17:90b:3a92:b0:1c6:64a5:a403 with SMTP id om18-20020a17090b3a9200b001c664a5a403mr27883344pjb.89.1649529688853;
+        Sat, 09 Apr 2022 11:41:28 -0700 (PDT)
 Received: from localhost.localdomain ([122.161.51.18])
-        by smtp.gmail.com with ESMTPSA id g3-20020a63ad03000000b003821d0f0ef4sm25813933pgf.71.2022.04.09.11.41.22
+        by smtp.gmail.com with ESMTPSA id g3-20020a63ad03000000b003821d0f0ef4sm25813933pgf.71.2022.04.09.11.41.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Apr 2022 11:41:25 -0700 (PDT)
+        Sat, 09 Apr 2022 11:41:28 -0700 (PDT)
 From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Kuldeep Singh <singh.kuldeep87k@gmail.com>
-Subject: [PATCH 0/6] Covert Qcom BAM dma binding to json format
-Date:   Sun, 10 Apr 2022 00:11:09 +0530
-Message-Id: <20220409184115.15612-1-singh.kuldeep87k@gmail.com>
+        Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH 1/6] ARM: dts: qcom: apq8064: User generic node name for DMA
+Date:   Sun, 10 Apr 2022 00:11:10 +0530
+Message-Id: <20220409184115.15612-2-singh.kuldeep87k@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220409184115.15612-1-singh.kuldeep87k@gmail.com>
+References: <20220409184115.15612-1-singh.kuldeep87k@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,31 +74,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Patch 1,2,3,4,5 require generic node name for dma and 6/6 is actual
-conversion change.
+Qcom BAM DT spec expects generic DMA controller node name as
+"dma-controller" to enable validations.
 
-Looking forward towards review comments. Thanks!
+Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+---
+ arch/arm/boot/dts/qcom-apq8064.dtsi | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Kuldeep Singh (6):
-  ARM: dts: qcom: apq8064: User generic node name for DMA
-  ARM: dts: qcom: mdm9615: User generic node name for DMA
-  arm64: dts: qcom: msm8996: User generic node name for DMA
-  ARM: dts: qcom: ipq4019: User generic node name for DMA
-  ARM: dts: qcom: ipq8064: User generic node name for DMA
-  dt-bindings: dma: Convert Qualcomm BAM DMA binding to json format
-
- .../devicetree/bindings/dma/qcom,bam-dma.yaml | 90 +++++++++++++++++++
- .../devicetree/bindings/dma/qcom_bam_dma.txt  | 52 -----------
- arch/arm/boot/dts/qcom-apq8064.dtsi           |  6 +-
- arch/arm/boot/dts/qcom-ipq4019-ap.dk01.1.dtsi |  4 +-
- arch/arm/boot/dts/qcom-ipq4019.dtsi           |  6 +-
- arch/arm/boot/dts/qcom-ipq8064.dtsi           |  4 +-
- arch/arm/boot/dts/qcom-mdm9615.dtsi           |  4 +-
- arch/arm64/boot/dts/qcom/msm8996.dtsi         |  2 +-
- 8 files changed, 103 insertions(+), 65 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
- delete mode 100644 Documentation/devicetree/bindings/dma/qcom_bam_dma.txt
-
+diff --git a/arch/arm/boot/dts/qcom-apq8064.dtsi b/arch/arm/boot/dts/qcom-apq8064.dtsi
+index a1c8ae516d21..b2975be3ae04 100644
+--- a/arch/arm/boot/dts/qcom-apq8064.dtsi
++++ b/arch/arm/boot/dts/qcom-apq8064.dtsi
+@@ -1040,7 +1040,7 @@ sata0: sata@29000000 {
+ 		};
+ 
+ 		/* Temporary fixed regulator */
+-		sdcc1bam:dma@12402000{
++		sdcc1bam: dma-controller@12402000{
+ 			compatible = "qcom,bam-v1.3.0";
+ 			reg = <0x12402000 0x8000>;
+ 			interrupts = <0 98 IRQ_TYPE_LEVEL_HIGH>;
+@@ -1050,7 +1050,7 @@ sdcc1bam:dma@12402000{
+ 			qcom,ee = <0>;
+ 		};
+ 
+-		sdcc3bam:dma@12182000{
++		sdcc3bam: dma-controller@12182000{
+ 			compatible = "qcom,bam-v1.3.0";
+ 			reg = <0x12182000 0x8000>;
+ 			interrupts = <0 96 IRQ_TYPE_LEVEL_HIGH>;
+@@ -1060,7 +1060,7 @@ sdcc3bam:dma@12182000{
+ 			qcom,ee = <0>;
+ 		};
+ 
+-		sdcc4bam:dma@121c2000{
++		sdcc4bam: dma-controller@121c2000{
+ 			compatible = "qcom,bam-v1.3.0";
+ 			reg = <0x121c2000 0x8000>;
+ 			interrupts = <0 95 IRQ_TYPE_LEVEL_HIGH>;
 -- 
 2.25.1
 

@@ -2,59 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AABE44FA12D
+	by mail.lfdr.de (Postfix) with ESMTP id 1B2644FA12B
 	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 03:39:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240290AbiDIB3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 21:29:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41234 "EHLO
+        id S240295AbiDIB3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 21:29:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240243AbiDIB33 (ORCPT
+        with ESMTP id S239146AbiDIB3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 21:29:29 -0400
+        Fri, 8 Apr 2022 21:29:30 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E7E167F0;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03ECBDA6DF;
         Fri,  8 Apr 2022 18:27:23 -0700 (PDT)
-Date:   Sat, 09 Apr 2022 01:27:20 -0000
+Date:   Sat, 09 Apr 2022 01:27:21 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649467641;
+        s=2020; t=1649467642;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mH8By/GgdgGyUkiWYBFEyRc3L7rPagI/PKIHVgpre8s=;
-        b=UqqkMLVKoOUkJEccfxhxs4v/SOmnSZwEfwZe46zDdTuxTt4L3heSRXxfylwU3UQWYl4vYI
-        tJdzzlaH+W/tc47QTe2inEfqDDZgWMUYh55bJ7ISiCYB4wpaXsNweqkxI7L77+zmC3BVZV
-        4rT1041KotpMe6tabtI/2fmoe01vJebcHSmLlHBl+EjEFYEbm1ejBka+elTAiPMcz1w7x8
-        l7YyxJqDtyx7Z8vwp0a+mvfjyC00bfj/CdSmLIeXvglwG2hBg4TYLF7Ex7zxNad9IxDYE1
-        TbSHfAMbw94phT3N3Sbw5m/BQ2Wm5zW8mYThPXEQApUfC/k3jGHOpp7MojmXdA==
+        bh=KJEJ0EYWeJWu3nu5hajmx4qwo3tvuJglxoa+gD2xJXg=;
+        b=AFaY0xuglFgMb4cFRcntvFP6C6uTiC754vhxSzPMgukfWFOrriLzDcxfaMVcDIN76QMSuS
+        h6a5mPPOA82SbxwNzA+0zybdklbPoOWp3VlE8wjpaO26vbvsg+23lRIaDakQQ4Ix8mc8t/
+        YiSxTprgR95fkI/vkfMj1loABLBN8hdpNtdJXDHaq96kOQprthXyHbDAyFzTiXHJRE8EK2
+        Fx2f2BtnJfsR+uxRX2Dogv4GIC3HhEmRRBmM/urlP7TRWMRS3ZAcZNPkA9fpUDnBzii8xs
+        2hCcaOMkqmaxE/f9Ce1J2fOIV9nb3wS7H95tq2Cym3tVKiLB4f7zb8BzhVktvQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649467641;
+        s=2020e; t=1649467642;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mH8By/GgdgGyUkiWYBFEyRc3L7rPagI/PKIHVgpre8s=;
-        b=k5FocexBd60A8qJPy/QcLrbfc04QXF2CClt3uJXfiu19xf58Aiob9XM8tN5is9uBf8MU6u
-        3aA6EDx1b40+tIAQ==
+        bh=KJEJ0EYWeJWu3nu5hajmx4qwo3tvuJglxoa+gD2xJXg=;
+        b=n4pBGpQ0RFs7cJoVzR82pNTwtUD3f75ouyyRL3lvyy64e04uizPihCMTmtmw2DOK90kRg4
+        Q/ghEv2pm1AeTqCg==
 From:   "tip-bot2 for Kirill A. Shutemov" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/tdx] x86/mm: Make DMA memory shared for TD guest
-Cc:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+Subject: [tip: x86/tdx] x86/mm/cpa: Add support for TDX shared memory
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220405232939.73860-28-kirill.shutemov@linux.intel.com>
-References: <20220405232939.73860-28-kirill.shutemov@linux.intel.com>
+In-Reply-To: <20220405232939.73860-27-kirill.shutemov@linux.intel.com>
+References: <20220405232939.73860-27-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
-Message-ID: <164946764066.4207.16794288838350034935.tip-bot2@tip-bot2>
+Message-ID: <164946764149.4207.1620159764822684171.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -71,121 +68,222 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/tdx branch of tip:
 
-Commit-ID:     968b493173ac5205fe75f6330ee767f96bf88e57
-Gitweb:        https://git.kernel.org/tip/968b493173ac5205fe75f6330ee767f96bf88e57
+Commit-ID:     7dbde7631629896b478bc5b1f4c3e52e6d518d12
+Gitweb:        https://git.kernel.org/tip/7dbde7631629896b478bc5b1f4c3e52e6d518d12
 Author:        Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-AuthorDate:    Wed, 06 Apr 2022 02:29:36 +03:00
+AuthorDate:    Wed, 06 Apr 2022 02:29:35 +03:00
 Committer:     Dave Hansen <dave.hansen@linux.intel.com>
 CommitterDate: Thu, 07 Apr 2022 08:27:53 -07:00
 
-x86/mm: Make DMA memory shared for TD guest
+x86/mm/cpa: Add support for TDX shared memory
 
-Intel TDX doesn't allow VMM to directly access guest private memory.
-Any memory that is required for communication with the VMM must be
-shared explicitly. The same rule applies for any DMA to and from the
-TDX guest. All DMA pages have to be marked as shared pages. A generic way
-to achieve this without any changes to device drivers is to use the
-SWIOTLB framework.
+Intel TDX protects guest memory from VMM access. Any memory that is
+required for communication with the VMM must be explicitly shared.
 
-The previous patch ("Add support for TDX shared memory") gave TDX guests
-the _ability_ to make some pages shared, but did not make any pages
-shared. This actually marks SWIOTLB buffers *as* shared.
+It is a two-step process: the guest sets the shared bit in the page
+table entry and notifies VMM about the change. The notification happens
+using MapGPA hypercall.
 
-Start returning true for cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT) in
-TDX guests.  This has several implications:
+Conversion back to private memory requires clearing the shared bit,
+notifying VMM with MapGPA hypercall following with accepting the memory
+with AcceptPage hypercall.
 
- - Allows the existing mem_encrypt_init() to be used for TDX which
-   sets SWIOTLB buffers shared (aka. "decrypted").
- - Ensures that all DMA is routed via the SWIOTLB mechanism (see
-   pci_swiotlb_detect())
+Provide a TDX version of x86_platform.guest.* callbacks. It makes
+__set_memory_enc_pgtable() work right in TDX guest.
 
-Stop selecting DYNAMIC_PHYSICAL_MASK directly. It will get set
-indirectly by selecting X86_MEM_ENCRYPT.
-
-mem_encrypt_init() is currently under an AMD-specific #ifdef. Move it to
-a generic area of the header.
-
-Co-developed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Reviewed-by: Andi Kleen <ak@linux.intel.com>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
-Link: https://lkml.kernel.org/r/20220405232939.73860-28-kirill.shutemov@linux.intel.com
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+Link: https://lkml.kernel.org/r/20220405232939.73860-27-kirill.shutemov@linux.intel.com
 ---
- arch/x86/Kconfig                   |  2 +-
- arch/x86/coco/core.c               |  1 +
- arch/x86/include/asm/mem_encrypt.h |  6 +++---
- arch/x86/mm/mem_encrypt.c          |  9 ++++++++-
- 4 files changed, 13 insertions(+), 5 deletions(-)
+ arch/x86/coco/core.c    |   1 +-
+ arch/x86/coco/tdx/tdx.c | 133 +++++++++++++++++++++++++++++++++++++++-
+ arch/x86/kernel/traps.c |   2 +-
+ 3 files changed, 135 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index a181855..7021ec7 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -883,7 +883,7 @@ config INTEL_TDX_GUEST
- 	depends on X86_64 && CPU_SUP_INTEL
- 	depends on X86_X2APIC
- 	select ARCH_HAS_CC_PLATFORM
--	select DYNAMIC_PHYSICAL_MASK
-+	select X86_MEM_ENCRYPT
- 	select X86_MCE
- 	help
- 	  Support running as a guest under Intel TDX.  Without this support,
 diff --git a/arch/x86/coco/core.c b/arch/x86/coco/core.c
-index 9f74125..4320fad 100644
+index 70956f9..9f74125 100644
 --- a/arch/x86/coco/core.c
 +++ b/arch/x86/coco/core.c
-@@ -22,6 +22,7 @@ static bool intel_cc_platform_has(enum cc_attr attr)
+@@ -21,6 +21,7 @@ static bool intel_cc_platform_has(enum cc_attr attr)
+ 	switch (attr) {
  	case CC_ATTR_GUEST_UNROLL_STRING_IO:
  	case CC_ATTR_HOTPLUG_DISABLED:
- 	case CC_ATTR_GUEST_MEM_ENCRYPT:
-+	case CC_ATTR_MEM_ENCRYPT:
++	case CC_ATTR_GUEST_MEM_ENCRYPT:
  		return true;
  	default:
  		return false;
-diff --git a/arch/x86/include/asm/mem_encrypt.h b/arch/x86/include/asm/mem_encrypt.h
-index e2c6f43..88ceaf3 100644
---- a/arch/x86/include/asm/mem_encrypt.h
-+++ b/arch/x86/include/asm/mem_encrypt.h
-@@ -49,9 +49,6 @@ void __init early_set_mem_enc_dec_hypercall(unsigned long vaddr, int npages,
+diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+index f50f530..03deb4d 100644
+--- a/arch/x86/coco/tdx/tdx.c
++++ b/arch/x86/coco/tdx/tdx.c
+@@ -10,10 +10,15 @@
+ #include <asm/vmx.h>
+ #include <asm/insn.h>
+ #include <asm/insn-eval.h>
++#include <asm/pgtable.h>
  
- void __init mem_encrypt_free_decrypted_mem(void);
- 
--/* Architecture __weak replacement functions */
--void __init mem_encrypt_init(void);
--
- void __init sev_es_init_vc_handling(void);
- 
- #define __bss_decrypted __section(".bss..decrypted")
-@@ -89,6 +86,9 @@ static inline void mem_encrypt_free_decrypted_mem(void) { }
- 
- #endif	/* CONFIG_AMD_MEM_ENCRYPT */
- 
-+/* Architecture __weak replacement functions */
-+void __init mem_encrypt_init(void);
+ /* TDX module Call Leaf IDs */
+ #define TDX_GET_INFO			1
+ #define TDX_GET_VEINFO			3
++#define TDX_ACCEPT_PAGE			6
 +
- /*
-  * The __sme_pa() and __sme_pa_nodebug() macros are meant for use when
-  * writing to or comparing values from the cr3 register.  Having the
-diff --git a/arch/x86/mm/mem_encrypt.c b/arch/x86/mm/mem_encrypt.c
-index 50d2099..10ee40b 100644
---- a/arch/x86/mm/mem_encrypt.c
-+++ b/arch/x86/mm/mem_encrypt.c
-@@ -42,7 +42,14 @@ bool force_dma_unencrypted(struct device *dev)
++/* TDX hypercall Leaf IDs */
++#define TDVMCALL_MAP_GPA		0x10001
  
- static void print_mem_encrypt_feature_info(void)
- {
--	pr_info("AMD Memory Encryption Features active:");
-+	pr_info("Memory Encryption Features active:");
+ /* MMIO direction */
+ #define EPT_READ	0
+@@ -531,6 +536,130 @@ bool tdx_handle_virt_exception(struct pt_regs *regs, struct ve_info *ve)
+ 	return ret;
+ }
+ 
++static bool tdx_tlb_flush_required(bool private)
++{
++	/*
++	 * TDX guest is responsible for flushing TLB on private->shared
++	 * transition. VMM is responsible for flushing on shared->private.
++	 *
++	 * The VMM _can't_ flush private addresses as it can't generate PAs
++	 * with the guest's HKID.  Shared memory isn't subject to integrity
++	 * checking, i.e. the VMM doesn't need to flush for its own protection.
++	 *
++	 * There's no need to flush when converting from shared to private,
++	 * as flushing is the VMM's responsibility in this case, e.g. it must
++	 * flush to avoid integrity failures in the face of a buggy or
++	 * malicious guest.
++	 */
++	return !private;
++}
 +
-+	if (cpu_feature_enabled(X86_FEATURE_TDX_GUEST)) {
-+		pr_cont(" Intel TDX\n");
-+		return;
++static bool tdx_cache_flush_required(void)
++{
++	/*
++	 * AMD SME/SEV can avoid cache flushing if HW enforces cache coherence.
++	 * TDX doesn't have such capability.
++	 *
++	 * Flush cache unconditionally.
++	 */
++	return true;
++}
++
++static bool try_accept_one(phys_addr_t *start, unsigned long len,
++			  enum pg_level pg_level)
++{
++	unsigned long accept_size = page_level_size(pg_level);
++	u64 tdcall_rcx;
++	u8 page_size;
++
++	if (!IS_ALIGNED(*start, accept_size))
++		return false;
++
++	if (len < accept_size)
++		return false;
++
++	/*
++	 * Pass the page physical address to the TDX module to accept the
++	 * pending, private page.
++	 *
++	 * Bits 2:0 of RCX encode page size: 0 - 4K, 1 - 2M, 2 - 1G.
++	 */
++	switch (pg_level) {
++	case PG_LEVEL_4K:
++		page_size = 0;
++		break;
++	case PG_LEVEL_2M:
++		page_size = 1;
++		break;
++	case PG_LEVEL_1G:
++		page_size = 2;
++		break;
++	default:
++		return false;
 +	}
 +
-+	pr_cont("AMD ");
++	tdcall_rcx = *start | page_size;
++	if (__tdx_module_call(TDX_ACCEPT_PAGE, tdcall_rcx, 0, 0, 0, NULL))
++		return false;
++
++	*start += accept_size;
++	return true;
++}
++
++/*
++ * Inform the VMM of the guest's intent for this physical page: shared with
++ * the VMM or private to the guest.  The VMM is expected to change its mapping
++ * of the page in response.
++ */
++static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
++{
++	phys_addr_t start = __pa(vaddr);
++	phys_addr_t end   = __pa(vaddr + numpages * PAGE_SIZE);
++
++	if (!enc) {
++		/* Set the shared (decrypted) bits: */
++		start |= cc_mkdec(0);
++		end   |= cc_mkdec(0);
++	}
++
++	/*
++	 * Notify the VMM about page mapping conversion. More info about ABI
++	 * can be found in TDX Guest-Host-Communication Interface (GHCI),
++	 * section "TDG.VP.VMCALL<MapGPA>"
++	 */
++	if (_tdx_hypercall(TDVMCALL_MAP_GPA, start, end - start, 0, 0))
++		return false;
++
++	/* private->shared conversion  requires only MapGPA call */
++	if (!enc)
++		return true;
++
++	/*
++	 * For shared->private conversion, accept the page using
++	 * TDX_ACCEPT_PAGE TDX module call.
++	 */
++	while (start < end) {
++		unsigned long len = end - start;
++
++		/*
++		 * Try larger accepts first. It gives chance to VMM to keep
++		 * 1G/2M SEPT entries where possible and speeds up process by
++		 * cutting number of hypercalls (if successful).
++		 */
++
++		if (try_accept_one(&start, len, PG_LEVEL_1G))
++			continue;
++
++		if (try_accept_one(&start, len, PG_LEVEL_2M))
++			continue;
++
++		if (!try_accept_one(&start, len, PG_LEVEL_4K))
++			return false;
++	}
++
++	return true;
++}
++
+ void __init tdx_early_init(void)
+ {
+ 	u64 cc_mask;
+@@ -555,5 +684,9 @@ void __init tdx_early_init(void)
+ 	 */
+ 	physical_mask &= cc_mask - 1;
  
- 	/* Secure Memory Encryption */
- 	if (cc_platform_has(CC_ATTR_HOST_MEM_ENCRYPT)) {
++	x86_platform.guest.enc_cache_flush_required = tdx_cache_flush_required;
++	x86_platform.guest.enc_tlb_flush_required   = tdx_tlb_flush_required;
++	x86_platform.guest.enc_status_change_finish = tdx_enc_status_changed;
++
+ 	pr_info("Guest detected\n");
+ }
+diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
+index f9fb653..a4e2efd 100644
+--- a/arch/x86/kernel/traps.c
++++ b/arch/x86/kernel/traps.c
+@@ -1378,7 +1378,7 @@ static void ve_raise_fault(struct pt_regs *regs, long error_code)
+  *
+  * In the settings that Linux will run in, virtualization exceptions are
+  * never generated on accesses to normal, TD-private memory that has been
+- * accepted.
++ * accepted (by BIOS or with tdx_enc_status_changed()).
+  *
+  * Syscall entry code has a critical window where the kernel stack is not
+  * yet set up. Any exception in this window leads to hard to debug issues

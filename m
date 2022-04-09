@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BD7A4FA730
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 13:18:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55ED34FA733
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 13:20:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241609AbiDILVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 07:21:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50182 "EHLO
+        id S241613AbiDILWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 07:22:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237297AbiDILU7 (ORCPT
+        with ESMTP id S234200AbiDILWT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 07:20:59 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50035165A4
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 04:18:52 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id b19so16382008wrh.11
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 04:18:52 -0700 (PDT)
+        Sat, 9 Apr 2022 07:22:19 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08FDA1DA76
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 04:20:12 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id n35so7057789wms.5
+        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 04:20:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=f/z45wIq/QdJwfG+0KT/Os2LMDAnKUavyQnArPNoU9I=;
-        b=G7NyFQkys+nt8S29UMcHhB9DNFlBtze2CGv9LztxDaDXZZQglmZnAgYT76fN1tf50J
-         lPNQx8mkBG1BC7b6GiG2/eWXGzkwVL6sTRQSvJomhU0NooVbYwu4y2s1meItzj+ctBEe
-         AcdYH8/ZvAsDX40rPuKNJpFJL8jBkw6SaN6S9f9tiFk/j4sWT7ecQQtl8fFyxNezupUF
-         6qEWZHLZ/EL+10UOMnKO/MiQpPWEzbdjT4onwYN2WyCeoLVxvhNXzHhgPKa2F+aMWp0l
-         0oaOOyAeOdVjEt0uCoSkf80oPuRWpuH8rAREizD6b/DIypPwptnIizN9/NWP7zOTRZAq
-         k7qw==
+        bh=CXZpCuRpjFsOGJWVG8aQtynijWwxxpOqzYSjsnpBEwE=;
+        b=wb4A+PvMto8K/V1tFkCorbwnL5D/LZ/WQiTQunbXxo/gob3CLfqPV1tQfeSt5xm/RZ
+         2HR3bMKaogiUhf49lY5u0U7diPKgzQbzz9igVGbjywFcGcO+JKxHqLE7z/Mic1m4X/O+
+         2eNcqGmZ7AVWNgVD2v/p9/texU1MC7f3BG+PM/tneJF2IaOKgKb+XOQmWlwOIabSkSzQ
+         1gTS/5hagBjdRi+zSUE8QZKhpGikPMXlNc16j79vM+hvmEt52vTuub/rXP1V1vY1Fspk
+         r8fppTLpOaOJv8QMgrrXoyuYtFQxN4InEDQp566Z50qbmgGrGuzsde2mUVl+yWGNgNvm
+         b78w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=f/z45wIq/QdJwfG+0KT/Os2LMDAnKUavyQnArPNoU9I=;
-        b=J7pkwJ3G9s63Jz9LUTYtmw8pRtZp+Pi3seR76zG/WERnFctno2h77zz4M1pgKy8uAx
-         lsPZ3JQh7kmFvrf8mJdF7HTgTpoB285R3534vdGdNZukb2YmeyJjh21EIavv7Ke3R8Oy
-         ioXEMLT8oNowgSqrury5L0iaszsdr+9OyfsbNr9J7arzgqa27J+Go35+6VmjEzp6ePWh
-         xSUzoCwWutyikir33mUSN+qLrYpRPB8tgMLcj5XSvnl3fpykjaTqhXhVhdoHxNVbnhdV
-         nXOgdG+MnNVZGBheq6gNsAXWnJTLz7vH243Kj5vIc8Sa+kzF6FGAn4LxmmpvVMzLtaLL
-         Vk0A==
-X-Gm-Message-State: AOAM531z4EuNu2gxYjm+CmkSi2/g2o0/qpVv6LKKxrEWdoKZxOIW4YBN
-        z+YtC83LzljfgeYzfCvCuyFl2Q==
-X-Google-Smtp-Source: ABdhPJyOznpQ2/2yJAJ3R2KKPkRcEogaYqNMi8E+rE4dubxvyyI3ivBs6jhbVQ8E3FqzBX5y+yB72w==
-X-Received: by 2002:adf:ebd0:0:b0:1e3:f9b:7b77 with SMTP id v16-20020adfebd0000000b001e30f9b7b77mr17511554wrn.691.1649503130913;
-        Sat, 09 Apr 2022 04:18:50 -0700 (PDT)
+        bh=CXZpCuRpjFsOGJWVG8aQtynijWwxxpOqzYSjsnpBEwE=;
+        b=uEByyKUv7FoOPl9rvrAyHS8nHo8X1oT0//VgobGbItaoGzUozy9hPM29dW+DB1R4lM
+         7fjXqgCj7uJxVrJ9ccUi6CblL1pyORPLlJNBeyB8NPdpJXm0ON1pddf+oqL2IGHQllvT
+         1Lma5YaJelCtTPQfEd0CtLBIuTRL/EPfKvjoht8gkhXRnVkjP51RHoraIrydpJ84ZXK/
+         wgGP5JbkbT0lGR13VcTPmyWaNU+w+oXViNt76Zt+zUB4P062FbgqNxT8knfTiMMTzARM
+         ePbbjjiUBHJlkf+KmbxJcWs0/L6X21/XUDhG7Tji4m0rSzv/6eXtKpyJdEFT7R/bp/zp
+         Qy5w==
+X-Gm-Message-State: AOAM532GY7YLO4QtKQiXp69BFz2A2U77Y+nKa9Ii4RSARYo+XzlycPNi
+        nW8FiqcARoscu7OSlrQ5L1zQag==
+X-Google-Smtp-Source: ABdhPJyah1d42gYPUuQagzdOo5ncl0A+hSil1ZDFDPb6sGvJWozu90Apb2wx8JDxtGa0jYQT2SZ3tw==
+X-Received: by 2002:a7b:c190:0:b0:38e:7e47:744a with SMTP id y16-20020a7bc190000000b0038e7e47744amr7828455wmi.38.1649503210673;
+        Sat, 09 Apr 2022 04:20:10 -0700 (PDT)
 Received: from [192.168.0.188] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id a11-20020a5d456b000000b0020406ce0e06sm21207664wrc.94.2022.04.09.04.18.49
+        by smtp.gmail.com with ESMTPSA id 61-20020adf8143000000b002061d8d807esm11857688wrm.87.2022.04.09.04.20.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 09 Apr 2022 04:18:50 -0700 (PDT)
-Message-ID: <7e986851-bb2b-f2f5-3bf4-8c26801d6ce3@linaro.org>
-Date:   Sat, 9 Apr 2022 13:18:49 +0200
+        Sat, 09 Apr 2022 04:20:10 -0700 (PDT)
+Message-ID: <a4f7d456-45d7-b461-6744-7c580ae94556@linaro.org>
+Date:   Sat, 9 Apr 2022 13:20:09 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH 12/18] MIPS: DTS: jz4780: fix nemc memory controller as
- reported by dtbscheck
+Subject: Re: [PATCH 15/18] MIPS: DTS: CI20: fix fixed regulators as reported
+ by dtbscheck
 Content-Language: en-US
 To:     "H. Nikolaus Schaller" <hns@goldelico.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -64,9 +64,9 @@ To:     "H. Nikolaus Schaller" <hns@goldelico.com>,
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mips@vger.kernel.org, letux-kernel@openphoenux.org
 References: <cover.1649443080.git.hns@goldelico.com>
- <995a8977d6ecc5798bf6139811698f3493b71249.1649443080.git.hns@goldelico.com>
+ <f04ba92a958abe0051be7ce3202f6361cb0f05f2.1649443080.git.hns@goldelico.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <995a8977d6ecc5798bf6139811698f3493b71249.1649443080.git.hns@goldelico.com>
+In-Reply-To: <f04ba92a958abe0051be7ce3202f6361cb0f05f2.1649443080.git.hns@goldelico.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,17 +80,38 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 08/04/2022 20:37, H. Nikolaus Schaller wrote:
-> arch/mips/boot/dts/ingenic/ci20.dtb: nemc@13410000: $nodename:0: 'nemc@13410000' does not match '^memory-controller@[0-9a-f]+$'
-> 	From schema: Documentation/devicetree/bindings/memory-controllers/ingenic,nemc.yaml
+> arch/mips/boot/dts/ingenic/ci20.dtb: /: fixedregulator@0: 'anyOf' conditional failed, one must be fixed:
+> 	'reg' is a required property
+> 	'ranges' is a required property
+> 	From schema: python/site-packages/dtschema/schemas/root-node.yaml
+> arch/mips/boot/dts/ingenic/ci20.dtb: /: fixedregulator@1: 'anyOf' conditional failed, one must be fixed:
+> 	'reg' is a required property
+> 	'ranges' is a required property
+> 	From schema: python/site-packages/dtschema/schemas/root-node.yaml
+> arch/mips/boot/dts/ingenic/ci20.dtb: /: fixedregulator@2: 'anyOf' conditional failed, one must be fixed:
+> 	'reg' is a required property
+> 	'ranges' is a required property
+> 	From schema: python/site-packages/dtschema/schemas/root-node.yaml
 > 
 > Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
 > ---
->  arch/mips/boot/dts/ingenic/jz4780.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  arch/mips/boot/dts/ingenic/ci20.dts | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
+> diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
+> index cb5257d32b55e..c045c4f75895e 100644
+> --- a/arch/mips/boot/dts/ingenic/ci20.dts
+> +++ b/arch/mips/boot/dts/ingenic/ci20.dts
+> @@ -69,7 +69,7 @@ led3 {
+>  		};
+>  	};
+>  
+> -	eth0_power: fixedregulator@0 {
+> +	eth0_power: eth3v3 {
 
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+No, Devicetree spec requires generic node name, so "regulator-0" is
+appropriate. See also examples of device tree node names in the spec.
+"eth3v3" is a specific one, not generic.
 
 
 Best regards,

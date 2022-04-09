@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A7844FA987
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 18:32:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AA804FA995
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 18:37:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242648AbiDIQey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 12:34:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60168 "EHLO
+        id S242680AbiDIQfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 12:35:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242616AbiDIQed (ORCPT
+        with ESMTP id S242617AbiDIQed (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 9 Apr 2022 12:34:33 -0400
 Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C90C23F386
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 09:32:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB4A23F391
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 09:32:26 -0700 (PDT)
 Received: from ipservice-092-217-091-111.092.217.pools.vodafone-ip.de ([92.217.91.111] helo=martin-debian-2.paytec.ch)
         by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.89)
         (envelope-from <martin@kaiser.cx>)
-        id 1ndE0b-0006Rg-TY; Sat, 09 Apr 2022 18:32:22 +0200
+        id 1ndE0c-0006Rg-TS; Sat, 09 Apr 2022 18:32:23 +0200
 From:   Martin Kaiser <martin@kaiser.cx>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
@@ -27,9 +27,9 @@ Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
         Michael Straube <straube.linux@gmail.com>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 05/10] staging: r8188eu: improve timeout handling in rtw_check_join_candidate
-Date:   Sat,  9 Apr 2022 18:32:07 +0200
-Message-Id: <20220409163212.241122-6-martin@kaiser.cx>
+Subject: [PATCH 06/10] staging: r8188eu: make LPS_RF_ON_check static
+Date:   Sat,  9 Apr 2022 18:32:08 +0200
+Message-Id: <20220409163212.241122-7-martin@kaiser.cx>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220409163212.241122-1-martin@kaiser.cx>
 References: <20220409163212.241122-1-martin@kaiser.cx>
@@ -44,37 +44,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the standard kernel functions to define and check the timeout in
-rtw_check_join_candidate.
+LPS_RF_ON_check is used only in rtw_pwrctrl.c. Make it a static function.
 
 Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 ---
- drivers/staging/r8188eu/core/rtw_mlme.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/staging/r8188eu/core/rtw_pwrctrl.c    | 2 +-
+ drivers/staging/r8188eu/include/rtw_pwrctrl.h | 1 -
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
-index c90f36dee1ea..aa39f07847c2 100644
---- a/drivers/staging/r8188eu/core/rtw_mlme.c
-+++ b/drivers/staging/r8188eu/core/rtw_mlme.c
-@@ -1419,6 +1419,7 @@ static int rtw_check_join_candidate(struct mlme_priv *pmlmepriv
+diff --git a/drivers/staging/r8188eu/core/rtw_pwrctrl.c b/drivers/staging/r8188eu/core/rtw_pwrctrl.c
+index 093794414d67..ffafeb7f9c47 100644
+--- a/drivers/staging/r8188eu/core/rtw_pwrctrl.c
++++ b/drivers/staging/r8188eu/core/rtw_pwrctrl.c
+@@ -237,7 +237,7 @@ static bool lps_rf_on(struct adapter *adapter)
+  *	-1:	Timeout
+  *	-2:	Other error
+  */
+-s32 LPS_RF_ON_check(struct adapter *padapter, u32 delay_ms)
++static s32 LPS_RF_ON_check(struct adapter *padapter, u32 delay_ms)
  {
- 	int updated = false;
- 	struct adapter *adapter = container_of(pmlmepriv, struct adapter, mlmepriv);
-+	unsigned long scan_res_expire;
+ 	u32 start_time;
+ 	s32 err = 0;
+diff --git a/drivers/staging/r8188eu/include/rtw_pwrctrl.h b/drivers/staging/r8188eu/include/rtw_pwrctrl.h
+index a5bc2f276024..4324e41780e9 100644
+--- a/drivers/staging/r8188eu/include/rtw_pwrctrl.h
++++ b/drivers/staging/r8188eu/include/rtw_pwrctrl.h
+@@ -103,7 +103,6 @@ int ips_leave(struct adapter *padapter);
  
- 	/* check bssid, if needed */
- 	if (pmlmepriv->assoc_by_bssid) {
-@@ -1436,8 +1437,9 @@ static int rtw_check_join_candidate(struct mlme_priv *pmlmepriv
- 	if (!rtw_is_desired_network(adapter, competitor))
- 		goto exit;
+ void rtw_ps_processor(struct adapter *padapter);
  
-+	scan_res_expire = competitor->last_scanned + msecs_to_jiffies(RTW_SCAN_RESULT_EXPIRE);
- 	if (rtw_to_roaming(adapter) > 0) {
--		if (rtw_get_passing_time_ms((u32)competitor->last_scanned) >= RTW_SCAN_RESULT_EXPIRE ||
-+		if (time_after(jiffies, scan_res_expire) ||
- 		    !is_same_ess(&competitor->network, &pmlmepriv->cur_network.network))
- 			goto exit;
- 	}
+-s32 LPS_RF_ON_check(struct adapter *adapter, u32 delay_ms);
+ void LPS_Enter(struct adapter *adapter);
+ void LPS_Leave(struct adapter *adapter);
+ 
 -- 
 2.30.2
 

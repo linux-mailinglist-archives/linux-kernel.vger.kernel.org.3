@@ -2,99 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E30284FAA2C
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 20:37:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11A2E4FAA3C
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 20:41:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242993AbiDISic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 14:38:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59822 "EHLO
+        id S243056AbiDISnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 14:43:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233793AbiDISi3 (ORCPT
+        with ESMTP id S243044AbiDISnW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 14:38:29 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B82215FC6;
-        Sat,  9 Apr 2022 11:36:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649529381; x=1681065381;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=nwxYJAzF/LAA0DJM4O2jahEN8qOB5l2Eu97VtmdfefQ=;
-  b=OZcljuFEe6sc8a9N9kCfQCdnTO5hZjEIAHgBSUw4LG8Rz2uu9pBnx7Lw
-   sK01y+MhpeLNbmtOO1Et4TjBtadeDyZfM/ZOaNNFDQ2deD/89BJeTdcAP
-   9HAN6KpgK71Uh2a3kJ1pRqXDGuTnsYCj/8AXLNsk43YBZxTeKaEOsbOVX
-   jE1inMUfeUITIWvgm0bUtcGkAAvAA7VmKNFUrce7Gh+Rg1rd31Tu2QoMA
-   8yLw9F6zYKw0JIMuHDwsqly4Vq5pQHREG3yzxnXyorTqwubJ27NGOFZkN
-   pd2B0OwzXY8R5txKtvwSgvZipieT0rtHQTeZs9DGBokRrRf7h7L1EgZYU
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10312"; a="260714533"
-X-IronPort-AV: E=Sophos;i="5.90,248,1643702400"; 
-   d="scan'208";a="260714533"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2022 11:36:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,248,1643702400"; 
-   d="scan'208";a="698755489"
-Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
-  by fmsmga001.fm.intel.com with ESMTP; 09 Apr 2022 11:36:19 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Sat, 9 Apr 2022 11:36:19 -0700
-Received: from fmsmsx610.amr.corp.intel.com ([10.18.126.90]) by
- fmsmsx610.amr.corp.intel.com ([10.18.126.90]) with mapi id 15.01.2308.027;
- Sat, 9 Apr 2022 11:36:19 -0700
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     "liuxp11@chinatelecom.cn" <liuxp11@chinatelecom.cn>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "anton@enomsg.org" <anton@enomsg.org>,
-        "ccross@android.com" <ccross@android.com>,
-        "Moore, Robert" <robert.moore@intel.com>,
-        "lenb@kernel.org" <lenb@kernel.org>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "gong.chen@linux.intel.com" <gong.chen@linux.intel.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
-Subject: RE: [PATCH v5] ACPI: APEI: fix missing erst record id
-Thread-Topic: [PATCH v5] ACPI: APEI: fix missing erst record id
-Thread-Index: AQHYTAyQxdgmMBplYUmGBj6YE5b9Mazn6P5g
-Date:   Sat, 9 Apr 2022 18:36:17 +0000
-Message-ID: <43244db2842d441a8ba9e2f6bf8bf478@intel.com>
-References: <1649506891-27622-1-git-send-email-liuxp11@chinatelecom.cn>
-In-Reply-To: <1649506891-27622-1-git-send-email-liuxp11@chinatelecom.cn>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.401.20
-x-originating-ip: [10.1.200.100]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Sat, 9 Apr 2022 14:43:22 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A45BCB48
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 11:41:12 -0700 (PDT)
+Received: from localhost.localdomain ([37.4.249.94]) by
+ mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MSckp-1nWM8T0dib-00SzaR; Sat, 09 Apr 2022 20:41:00 +0200
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>
+Cc:     bcm-kernel-feedback-list@broadcom.com,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        "Ivan T . Ivanov" <iivanov@suse.de>, linux-kernel@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Stefan Wahren <stefan.wahren@i2se.com>
+Subject: [PATCH] MAINTAINERS: add raspberrypi to BCM2835 architecture
+Date:   Sat,  9 Apr 2022 20:40:17 +0200
+Message-Id: <20220409184017.114804-1-stefan.wahren@i2se.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:zsmJB+KgfxpZtVlTRSiOUnBIJIV/4ohcGWFhE4ewp5+bVBltY7m
+ yPHie505sRlclaRu23HDTefPWnDkybE8VNPJady689Lu17yUJilKRhzjADpbQodjqF6FjGT
+ +fkNwHd5RXzpoYQ+Rpf0qYWE0Vwdj5Lh65TXRmCELgQlrK/GcsCeNJZ3ygictTUZgZH85s7
+ xbF1+3j7qpUD7XVM/T98A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:CeU5Jc4fvGk=:MheYd2Ib56eB2zOm+lQHQT
+ mO61AgSuQGtsdEfRmvlm+7plZSo2NqltA+YVuTUsgJkFTk1FpRwY5QQEbeEEgLQrdXPMS3+sn
+ PGg7qLsLUmNHiyyJY1AMkaSikQXoMCH4mXLfLb/QtUntHZo33RZQbiWpD7zWmMa92MFc+w4R2
+ +qaI1pvsucoOKD7oMRMNuCLfe3Sa+lMoEWEgLhq9q90Smx4SxZVXAq6in4FrjQV+qFDf2dXQ8
+ LQLcB0b5I9pLltSf761HpBxrUN0o9fFOKYrUk0dn9p9411iFUFE2LhAz2K7OCm4Jy5+ySkObK
+ xBeC9TinhNHRN5RAW/oX4gjJHWcWhAPjKoIbcEtLWHxfpGjLrMIKlE9rdqJccyxJX9rfoPR6h
+ oLoqW8LfLfjEZa71Xlev/3d6xbpsi/DadzkzdJxCWAKFem5fMo6ccuYv5QaUOFw8EAzPmeEZZ
+ DrqpL0nBhD4RAwX+RaMj5xHB0buDDsFFk5aKBq4+ylY0KDTeuOl9GQAdkmHHunyAOuFkyBae5
+ q75KU6vZaQLXZ2W67wKcuLCBRDpGQW6JUbVZFz+mQHgzJceYREZA9SlGrVYRajwrAb+0D0DYM
+ woXyMVUv1++OV6RV0xg1wYMvxeFWclX64zGqdTGi3cJaYZASTI9ukxbAk/hm7dUl2UwUCLEJ4
+ S2LevD4zyRMyIbAagqdkJQYsHhm7XfBCH3b6Z25TqhsePbKbrlOuTIeS+AEQ0CtEaWrkvsr5d
+ oUDuMN6HhcukWpsu
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> v4->v5  implement a new function for looking for a specific record
-> type, suggested by Luck Tony
+Recent changes to the firmware clock driver have not be send
+to the architecture maintainers. So fix this by adding the
+matching pattern.
 
-Looks ok to me.
+Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Reviewed-by: Tony Luck <tony.luck@intel.com>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index fd768d43e048..1432bd345d22 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3752,6 +3752,7 @@ F:	drivers/pci/controller/pcie-brcmstb.c
+ F:	drivers/staging/vc04_services
+ N:	bcm2711
+ N:	bcm283*
++N:	raspberrypi
+ 
+ BROADCOM BCM281XX/BCM11XXX/BCM216XX ARM ARCHITECTURE
+ M:	Florian Fainelli <f.fainelli@gmail.com>
+-- 
+2.25.1
 

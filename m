@@ -2,225 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 786324FAB12
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 00:42:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1FAB4FAB14
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 00:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232597AbiDIWoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 18:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49630 "EHLO
+        id S232666AbiDIWrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 18:47:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbiDIWol (ORCPT
+        with ESMTP id S229832AbiDIWrJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 18:44:41 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E49321263;
-        Sat,  9 Apr 2022 15:42:32 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id bn33so15781078ljb.6;
-        Sat, 09 Apr 2022 15:42:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=V3DpwAUsQgb6G8qmUX1oHaQUdshucAf20LGidketc2c=;
-        b=LPqt/5Mn9KEvxn7UooOfzqJnrt9u+2iTR+Ccamvz6czLvrSRW7AsJbVnfxALmYhK4B
-         kWLgnNusvWqFDY/Knvw821FaxAF+1o5cKo54TtC2G9jOGOW0Jajzu9ojIkB99DnlMK2n
-         rQ+0Mzb5Vcp9HuPl0eF8pgXLUDcqoWrPNUSGMqJX4uqd+MULBQFyERfjyjtrk83g/2jL
-         bZZPzvfed5bRi2SNrxkipbMh+NXpyWBxwWxxPLMUQtZET5i9Dz2tTUvesxuMfYqxRUzW
-         4HVbVekyor3tjUbkrXCkY3OF1PmLJ0s6SJPEQWqHzxK5LntWqnOIiWeVasfiNzbRnAWn
-         yvoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=V3DpwAUsQgb6G8qmUX1oHaQUdshucAf20LGidketc2c=;
-        b=YILQjF3uZimqGRSw+LxVSFpTLtUonxE0WFSL1FJNAK8EcAFndCFUYrBgSh7/ucQUrd
-         b8679dhTXkxJ6DDfeNMgG5IH5sH1ukLhE04hmW1IFGVFu3XJE8etKg4C4SyVwEaU0c6C
-         R3Ax17HTanr4mqASwNRl7nfhlKqCvSLMi//NVcsgIrkJtrMRUKrkuQBC4kWQr9uj9WdD
-         Jws2p+BBigwPNDL//SrNA99zv9R4chNFCwMkgSSmxD+y0cTMIvp/xPzsuITxgZTVodjN
-         2y2KfmQFYStG7jMkAttOrlap7B7Wq+TJDPx+VaBLNG7qKUDHT9yqtptZwmTiK3PN/Y2g
-         7WFg==
-X-Gm-Message-State: AOAM530iKpqDIwCjhmwWd/atbjTZd9KP8jqE7yW1k93fHfJHUH6RwtYO
-        X5NAd1+26boN1Np8z+Cal0ibG3+QNCH90Rc3lbU=
-X-Google-Smtp-Source: ABdhPJzpMPCKhxa2Us+9jzHCbAfVmz6k/bdiJ1tn2LgLlC5mgwJ7jBsnzfJx0NLGLEnDbkIER4iQMg==
-X-Received: by 2002:a05:651c:2313:b0:24b:6019:6e8c with SMTP id bi19-20020a05651c231300b0024b60196e8cmr71193ljb.296.1649544150703;
-        Sat, 09 Apr 2022 15:42:30 -0700 (PDT)
-Received: from reki (broadband-95-84-198-152.ip.moscow.rt.ru. [95.84.198.152])
-        by smtp.gmail.com with ESMTPSA id f23-20020a2e9e97000000b0024921bcf06bsm2667120ljk.57.2022.04.09.15.42.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Apr 2022 15:42:29 -0700 (PDT)
-Date:   Sun, 10 Apr 2022 01:42:28 +0300
-From:   Maxim Devaev <mdevaev@gmail.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: f_mass_storage: break IO operations via
- configfs
-Message-ID: <20220410014228.117d9f66@reki>
-In-Reply-To: <YlHrBdYkBSR0L6FL@rowland.harvard.edu>
-References: <Yk2wvhSTMKTLFK6c@rowland.harvard.edu>
-        <20220406195234.4f63cb4a@reki>
-        <Yk3TLPKyaQDsnuD4@rowland.harvard.edu>
-        <20220406213634.104cae45@reki>
-        <Yk8L6b9wEWTjWOg4@rowland.harvard.edu>
-        <20220407204553.35cead72@reki>
-        <YlBN4Zcn9NYw0PLA@rowland.harvard.edu>
-        <20220409115756.4f9b015d@reki>
-        <YlGOOJ9SwkD7WVmX@rowland.harvard.edu>
-        <20220409170837.02f0853f@reki>
-        <YlHrBdYkBSR0L6FL@rowland.harvard.edu>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Sat, 9 Apr 2022 18:47:09 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12olkn2024.outbound.protection.outlook.com [40.92.22.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC6922475C;
+        Sat,  9 Apr 2022 15:45:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DquxnYX9siIWHDr/xDYEN2bx2LoEou5XhWH0C/jw6JNIu56sZ/4cCxI2W3fa+q6rmyzYMoan6llrDxAp8V3yILkbfL8pO247U4MQw6IqfMymIoITtBknUVZJVjuARiNneKzFQZd+eSAfMDEMe9Vzdh1brrW6t0ynDwWOpxCERPbUmvMGaUQAsKh8IwXQ0BUu8mF9oG7AJUst1/jY8p09cz7P+bHsvLq4ydpSHYuEMYpugFrwl9tWR3+C4RLru1fyCD6mt5PRN3Lpeoe56hm1lSFjcG9tCTpeeAARKvYMmsNl6hDGG2VfUPfXmksmEy2721zdptUiWXOvu2eeAh+dxQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iyy/BOXv5yg/C7ssSVFuz8r1FqS/uuZxbpPzJ8zmlXQ=;
+ b=Qlgwo7vty6Onz/NMkDW23hHQmLLpX1NX0/I5fDZ4X1eE2uahu9oaQuz7LdSGWnO+NeL9RpHPZhCkS1pooz17PxvSoNw72xQRYUwKVlP3+EyvTQV8rkQIsS5Azl4io7/W2UsmiRJZT96C35/9iNYpeXAoXiu09OAtKWqOOTxG0bdyt9zyrheZUr7+I1CLQxLzEbXg3rIed1xqKba2Yhnn4HJJSNci+qGv2CJt1gNUMhb3/4QrmO+mA3OopN5OY7/T9Us5oB2XEWWukD9mMQW3YGGJL9/Gl+7K5KkU0302QwTJWOGOsTS/h0wDhtRSf1f5UvFSysY4df2YohibA8HTfw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iyy/BOXv5yg/C7ssSVFuz8r1FqS/uuZxbpPzJ8zmlXQ=;
+ b=ErxOCprKDuKxMaeAHRYyVrgpLrdvpnaJblAkOt1DUZLajvLzNXj0MjQFF/81WUv4vsrVV0q3Dv1sz5qpk+8TWlk0BfWX+RDgxUOguLp8J5B7SZc+/Bn2ByRBSkz3PUwq2+rm628b5+pWBWVxUssdIX+S6svHRYScXOrEH12csFjdKGa9SqPzQ5hqLJv6eFzYvS4+0TDimqhwNnWgXz04F/MHYwjFHtk0uzFYB1k9FLGMac5yKwCFWSrLJfF6XRlsqWpFWjEDpdGbv1p+Z9LbRCyGkWbCZ82rw5TFTRoKRnTTTosFVJsqPLX/odty/D2DQcThGwe29Vp4dBCbIiIbRw==
+Received: from CO6PR03MB6241.namprd03.prod.outlook.com (2603:10b6:303:13b::6)
+ by MN2PR03MB5293.namprd03.prod.outlook.com (2603:10b6:208:1ec::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.28; Sat, 9 Apr
+ 2022 22:44:59 +0000
+Received: from CO6PR03MB6241.namprd03.prod.outlook.com
+ ([fe80::98cd:da57:6117:c992]) by CO6PR03MB6241.namprd03.prod.outlook.com
+ ([fe80::98cd:da57:6117:c992%6]) with mapi id 15.20.5144.028; Sat, 9 Apr 2022
+ 22:44:59 +0000
+From:   Tao Jin <tao-j@outlook.com>
+To:     Takashi Iwai <tiwai@suse.com>
+Cc:     Tao Jin <tao-j@outlook.com>, Jaroslav Kysela <perex@perex.cz>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: [PATCH] ALSA: hda/realtek: add quirk for Lenovo Thinkpad X12 speakers
+Date:   Sat,  9 Apr 2022 18:44:24 -0400
+Message-ID: <CO6PR03MB6241CD73310B37858FE64C85E1E89@CO6PR03MB6241.namprd03.prod.outlook.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TMN:  [ICOZYkYu0rTz0KlrLcSv1G4xFuUCsMjw]
+X-ClientProxiedBy: BL1PR13CA0394.namprd13.prod.outlook.com
+ (2603:10b6:208:2c2::9) To CO6PR03MB6241.namprd03.prod.outlook.com
+ (2603:10b6:303:13b::6)
+X-Microsoft-Original-Message-ID: <20220409224424.5799-1-tao-j@outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1e9035a1-7931-4bbd-a83e-08da1a7a9379
+X-MS-Exchange-SLBlob-MailProps: CaK+F7me6CmnDvzDWcGIx3iUI0Ph/HzgjFKSm6FW9MK6Y9hSoT9A6xvrKwwmv5fl7UURPKv7a2iaYHQgsablZuIPqmXdG06w8F/cugNb1CJplgvgQfVHDLckdViqVIUEXn9U3hHnF4JjuOPFe3oHC5jJ3mc/zBgt6uc+ALS+1NfJyuRFXNHdKl5XHBqAcMWmybOm1UEwFZW96vICkOxO0xA/HNbM8ezDUN3ElJblV7l9EFExmRfNC7SH7tT4Cn3B2Un8kj95RNbKxEG1B9Ay86+kEDQcADqVVdeq3ymJ58+6VykbF5kL8jvkkSM7scjeamZ+MfTNELMICIzp3YWvnGhEVyOM0QF0GQGvKtMYJ+0jKy7aouba+bjHsPemhByvy8lMk/APs4eUo5YeVrChu+QLfgjxbJm2gAKGHw464NxwSpguP1gMRKKcJTX3x07AOgYA6FvVfgnqf3zsA8Q0sZOwuz41xOArLUPfMNbpWqAgp4KUhkNXVtoB4QpZICsVgtaAm1qA30wwSSlbhGi73/3jF664fEUkufxtlZHnFXDxVmlYRoK3v31e5tGOe+VhNwGxHXpopGMT4dwyp+54ggIQO/IVYoVPbcO/sWlknEInaqQfkqANrnpt7+pyAeE7/FTZMbwrCNgYMIC/lkuJZwgPvsEOHcHRyZcD8adDyrC34dIMgatDzJl3R6zjFk3At+XA6mnqMVRMkW4pUw7z+ESk/g/SwrL+Ijvzg7JKdBwJRxkjRyFjDQ==
+X-MS-TrafficTypeDiagnostic: MN2PR03MB5293:EE_
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 7+zw4isalb0CDZ+W50eRFgp9Ws53gmi4etwB+T8jhB98122yJJkCB+5FOQou8StBogPnwPr3F4frsu+8RZrqAPRZ/T4mU98rEBL61vuxM7ERJzZ+0zmkR4/8axUi1PFtUZ5JjJVT8LFjGBzWEIeN30A0LudQ2lSK6ji5ZXyLc7gBmQBBHRf2VocoTlAovS5QSIkr1RUIHKcmRZPEN/kq6aErLQLZSbpr/bjpS+EZ+hjG3jAmEXNiJNhmsgscKqxVq54MZOImwU5gV+f/DYu9cm13ol4P3BOHdTSXq0n1zCN1VyHQ8SGbd17ilVtwbaTnqHxOaedBRD4WiB5xj6x4DzA5Y5PzHNsFqUTo+cgefCKEX4yy9feV+gWvwyiOOovoB/wzV1Pu4vbC+R1RHTuxMrhCYG7obvtO1wPUQB5vKIBNcdKHeu72G+Fs0+uwTpTM47iwzlYNdnX3zUYNs5MTBQ7+qrbMMEicPuvPippe+Q2rxs2/1Omex06lED9lfZIu+Pi1nyLNqumrHDqA8Ih2OTry1SU9A9rdYpYf+PstWb+gvD51LuoV1njyJQhxdfINCu922aQBoifnDRSSDJfYGw==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9tFugCo49xt4cDEFMPrAR1SVEUqrPrqCpw8pa+IaIMOJHiW40UD/nKV70gsG?=
+ =?us-ascii?Q?iqwKH0Xi5VHGcshQaBCsou29hUdQWpt0Q8nE0EjOCBi0YueZg8SPtCn0xZYP?=
+ =?us-ascii?Q?9xQvNNge8qFux2VI4XPc+TEb/fJHfnO4tKcpguscA6P+PBqvEYXwVpS04yYp?=
+ =?us-ascii?Q?hnd6UpM9uh9hYi7eGhuuqlsBQC0lHpu9DlC5cKc7tH3gOhBMnlpes2s93VJn?=
+ =?us-ascii?Q?erO7502xKc+/6yS1wSTmRVb4rYiS0pghujUtgazaQOA29f7kgSYM0sLXS1qv?=
+ =?us-ascii?Q?ITHHnjGZ5RiCaNKZWubGax1HUJeNY3d0XMGlFf/UamCoIY4q7kyj8tBdPcfm?=
+ =?us-ascii?Q?wUcpKyaUP2ARV00la1si3GUfn2oAV2Yd5+8++IUsNfO/cij1h+inHprXiUCA?=
+ =?us-ascii?Q?1uQU/DxWF7LRYSfkGHC2ijW9Iqq+T4bWDwTXF98F0ZNKlQVRlki4FtcnAZII?=
+ =?us-ascii?Q?HcE9wG7dWuwLPOBJyKGFM7DWl2bl6NgY+YdT9SufCBHl/9hhLbvJgNHoObdT?=
+ =?us-ascii?Q?op+oM49fw+EiARzk6U97pdETJva2hG3tF9xmFu34X/TmeJFe5XYxSj+wCTAZ?=
+ =?us-ascii?Q?+0SAiQJ3p7nKCSPLKi3Nwc8rBldkGEoD2aCM1EOeZAJY2Ct1ydXk2nszsUma?=
+ =?us-ascii?Q?vKSrgErsWnYeBzDuN73XY2RDkk7uMCNCc2dnVdl3Axc2eumFZmQgMDb7w43q?=
+ =?us-ascii?Q?dmKm3QNdGbjcLiNcy9Ik91OwtSFk0edidxH/VDPboQxnSWFx260KcppfGFli?=
+ =?us-ascii?Q?JNfgP2tCWO8bKuQT0hdagQFgamYBWCR+EYu0/iEwui0wpbftbSdDjEvbKcv6?=
+ =?us-ascii?Q?fH7NREiz+NKuRyPMp0JKJlyMST9MzTHVxYjtl7l3OO6mHOI0P8IWNAeK2Jn8?=
+ =?us-ascii?Q?rz77KfDDZdmrDPJecRHiIxj5Tjzxm0x4DzzRjUUMgrCk0Mu4ixgxv8YdySdP?=
+ =?us-ascii?Q?ZTgKy3NqOWHEGrduXzLkvhqi8UHpM27JuqRDlSWSsdPIWignkOfqONPEju16?=
+ =?us-ascii?Q?CYhVNolIkJcM5XjVXNmEvpqGfmG/6EG1oy04PRwoTO+4HuAZrAkLK3WD0/ek?=
+ =?us-ascii?Q?sqO/NwNkvtWexhXs9hqIJqwRVLTnKSJ0I3poltSk7UWC97nVTxOWfEaf1uZf?=
+ =?us-ascii?Q?We/DN5dQo4XG+o4rZ+xx7fu6DGx89powhz1jc+R4wYaJd2h6/q13VCxBSXXB?=
+ =?us-ascii?Q?FytSOGbcF7LosLoDmFr3wIl9yZjyOE4CE8gXyq7BeHaGDVBCtp9LcwIL43aP?=
+ =?us-ascii?Q?qmfM+4oXA2bqG0tA1zs/kfGGNtzLoeLR83bBZHbTZtG30cD5qXniDkU31213?=
+ =?us-ascii?Q?EDgHQJP6rPmI47pm5EvVKyuDshBI/8cWrkqNuim0sZ9Ny814YlHYEk7xf79l?=
+ =?us-ascii?Q?Ci8ENop/ZfWF04ODuUpjv7MNbyuNtypPQNnJOfvKOfRzNYhXZq2WNzG071+L?=
+ =?us-ascii?Q?gfApl9Rri2E=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1e9035a1-7931-4bbd-a83e-08da1a7a9379
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR03MB6241.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Apr 2022 22:44:59.2027
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR03MB5293
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=D0=92 Sat, 9 Apr 2022 16:22:29 -0400
-Alan Stern <stern@rowland.harvard.edu> wrote:
+For this specific device on Lenovo Thinkpad X12 tablet, the verbs were 
+dumped by qemu running a guest OS that init this codec properly. 
+After studying the dump, it turns out that 
+the same quirk used by the other Lenovo devices can be reused. 
 
-> On Sat, Apr 09, 2022 at 05:08:37PM +0300, Maxim Devaev wrote:
-> > =D0=92 Sat, 9 Apr 2022 09:46:32 -0400
-> > Alan Stern <stern@rowland.harvard.edu> wrote:
-> >  =20
-> > > On Sat, Apr 09, 2022 at 11:57:56AM +0300, Maxim Devaev wrote: =20
-> > > > =D0=92 Fri, 8 Apr 2022 10:59:45 -0400
-> > > > Alan Stern <stern@rowland.harvard.edu> wrote:   =20
-> > > > > > At least there is one situation where the behavior of f_mass_st=
-orage differs
-> > > > > > from the behavior of a real drive. What happens when you click =
-on the physical
-> > > > > > "eject" button?     =20
-> > > > >=20
-> > > > > If the host has prevented ejection, nothing happens.  Otherwise t=
-he disc=20
-> > > > > gets ejected.
-> > > > >    =20
-> > > > > > Yes, the OS can block this, but the problem is that we don't ha=
-ve
-> > > > > > an "eject" here.     =20
-> > > > >=20
-> > > > > What do you mean?  Writing an empty string to the sysfs "file" at=
-tribute=20
-> > > > > is the virtual analog of pressing the eject button.   =20
-> > > >=20
-> > > > But I can't eject the disc event it's not mounted on Linux host. It=
- seems to me
-> > > > it differs from the real drive behavior.   =20
-> > >=20
-> > > It sounds like either there's a bug or else you're not doing the righ=
-t=20
-> > > thing.  Tell me exactly what you do when this fails. =20
-> >=20
-> > I'm using Raspberry Pi with DWC2. So:
-> > - Connect RPi-based gadget to the Linux host.
-> > - Set image in the "file" attribute. =20
->=20
-> Exactly what is the full pathname you're using for the "file" attribute?
+The patch was tested working against the mainline kernel. 
 
-/sys/kernel/config/usb_gadget/kvmd/functions/mass_storage.usb0/lun.0/file
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Tao Jin <tao-j@outlook.com>
+---
+ sound/pci/hda/patch_realtek.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> > - Mount gadget's drive on the Linux host.
-> > - Umount it.
-> > - Try to eject using emptying the "file" attribute.
-> > - Get EBUSY error. =20
->=20
-> This must mean that some program on the host is keeping the device file=20
-> open, even though it isn't mounted.  (I tried running a similar test on=20
-> my system and it worked perfectly, with no other programs accessing the=20
-> device).  You might be able to identify which program is accessing the=20
-> device by running lsof on the host and searching the output for the=20
-> device name.
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index 75ff7e8..a5d6f8a 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -9207,6 +9207,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x17aa, 0x505d, "Thinkpad", ALC298_FIXUP_TPT470_DOCK),
+ 	SND_PCI_QUIRK(0x17aa, 0x505f, "Thinkpad", ALC298_FIXUP_TPT470_DOCK),
+ 	SND_PCI_QUIRK(0x17aa, 0x5062, "Thinkpad", ALC298_FIXUP_TPT470_DOCK),
++	SND_PCI_QUIRK(0x17aa, 0x508b, "Thinkpad X12 Gen 1", ALC287_FIXUP_LEGION_15IMHG05_SPEAKERS),
+ 	SND_PCI_QUIRK(0x17aa, 0x5109, "Thinkpad", ALC269_FIXUP_LIMIT_INT_MIC_BOOST),
+ 	SND_PCI_QUIRK(0x17aa, 0x511e, "Thinkpad", ALC298_FIXUP_TPT470_DOCK),
+ 	SND_PCI_QUIRK(0x17aa, 0x511f, "Thinkpad", ALC298_FIXUP_TPT470_DOCK),
+-- 
+2.35.1
 
-I've been thinking about it too. I tried lsof but it didn't display anything
-related with sr0 device. But after execution the "eject" command on the hos=
-t,
-I was able to emptify the "file" attribute of the gadget.
-
-> I also tried sending a USR1 signal to the driver's kernel thread while=20
-> an image was mounted and being accessed.  It did clear the prevent_allow=
-=20
-> flag, so I could eject the image.  But it also caused a 30-second delay=20
-> on the host, as predicted.  Now, maybe you don't care about such delays=20
-> when you're going to eject the media anyway, but it still seems like a=20
-> bad thing to do.
-
-It looks like the prevent_medium_removal flag switching really works better=
- in this case.
->=20
-> > > > I have reflected on the rest of your arguments and changed my mind.
-> > > > I think that "forced_eject" for a specific lun without interrupting=
- operations would
-> > > > really be the best solution. I wrote a simple patch and tested it, =
-everything seems
-> > > > to work. What do you think about something like this?
-> > > >=20
-> > > >=20
-> > > > static ssize_t fsg_lun_opts_forced_eject_store(struct config_item *=
-item,
-> > > >                                                const char *page, si=
-ze_t len)
-> > > > {
-> > > >         struct fsg_lun_opts *opts =3D to_fsg_lun_opts(item);
-> > > >         struct fsg_opts *fsg_opts =3D to_fsg_opts(opts->group.cg_it=
-em.ci_parent);
-> > > >         int ret;
-> > > >=20
-> > > >         opts->lun->prevent_medium_removal =3D 0;
-> > > >         ret =3D fsg_store_file(opts->lun, &fsg_opts->common->filese=
-m, "", 0);
-> > > >         return ret < 0 ? ret : len;
-> > > > }
-> > > >=20
-> > > > CONFIGFS_ATTR_WO(fsg_lun_opts_, forced_eject);   =20
-> > >=20
-> > > The basic idea is right.  But this should not be a CONFIGFS option; i=
-t=20
-> > > should be an ordinary LUN attribute.  For an example, see the definit=
-ion of=20
-> > > file_store() in f_mass_storage.c; your routine should look very simil=
-ar. =20
-> >=20
-> > Okay, but where this attribute is located in sysfs? How can I use it? =
-=20
->=20
-> Well, it's going to be in different places depending on what UDC driver=20
-> your gadget uses.  On my system I'm using the dummy_udc driver, so the=20
-> sysfs "file" attribute is located at:
->=20
-> 	/sys/devices/platform/dummy_ucd.0/gadget/lun0/file
->=20
-> If instead you're looking at
->=20
-> 	/sys/module/g_mass_storage/parameters/file
->=20
-> or in some configfs directory, that's the wrong place.  You can eject=20
-> the media simply by doing (as root):
->=20
-> 	echo >/sys/devices/.../gadget/lun0/file
->=20
-> (fill in the "..." appropriately for your system).
->=20
-> > Sorry for the stupid question. =20
->=20
-> Not at all.
-
-Thanks! Unfortunately I'm using dwc2 driver and it doesn't have any gadget =
-parameters
-outside of the configfs:
-
-[root@pikvm ~]# find /sys -iname lun0
-[root@pikvm ~]# find /sys -iname lun.0
-/sys/kernel/config/usb_gadget/kvmd/functions/mass_storage.usb0/lun.0
-[root@pikvm ~]#
-
-So in my local case configfs is only way to place forced_eject :(
-Could we add both device attrs and configfs file?

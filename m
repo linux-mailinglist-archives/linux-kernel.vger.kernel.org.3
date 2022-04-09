@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 811944FAA3F
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 20:41:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EDEB4FAA45
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 20:41:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243087AbiDISnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 14:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52040 "EHLO
+        id S236021AbiDISnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 14:43:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243078AbiDISnk (ORCPT
+        with ESMTP id S243089AbiDISno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 14:43:40 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 828531D7887;
-        Sat,  9 Apr 2022 11:41:32 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id 125so10599918pgc.11;
-        Sat, 09 Apr 2022 11:41:32 -0700 (PDT)
+        Sat, 9 Apr 2022 14:43:44 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29131D08F0;
+        Sat,  9 Apr 2022 11:41:35 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id a42so4642189pfx.7;
+        Sat, 09 Apr 2022 11:41:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=A5Rv+dmEkw/2qllLfPwnoJL+bLGrLkW6dy1dyuOIpRM=;
-        b=H9+MzW0mKY3xj41NdLLTEQ/q6evrrtdciLWM7d/A2Z589XCCWO6E9HtENhjLFrKHcz
-         L9/26SZp7Y+wm7FioFNzgXBdt9f+08indGkuLIM4OOebjTfY3UawhLzJcZnJQLTGvxDe
-         K9JU4YwCL5Wk5x3ShPCtqfB2KjDCnZqEneS9so/mb6/qPajxRt3NGuWUd/EHgvfCkruP
-         F9HfEoPZcea2/gtxIKK321qINAVv2Kff99y0xuNioyuI9ncpUhHJrE1fHlxDsK0Xqo5R
-         7dUOQ33WwsY3oXh39I3OghmhhRYTMWunvwDGQ+n1WIAQftrGv4PX1LtjaAuY9jZvyJLd
-         b/rw==
+        bh=shhc4vVqv9l2wKwY0kN4Lkjnnu+qZsCnM2eNImBcqfg=;
+        b=iZSijiySwMfAE7hJT5S4G0ImnvCP9t9jYMk17mCskyw2xogkmpGQPHoCcyJ26NZVgL
+         BJBdJ2eMkPcR8HIScndhDdSDxWNxTeuI2i0UrPC92L93P5VKWH7waREbhBVjOk323kGu
+         2mIXECyNTQbQztazHepnJFZti3/NN3+PFzYFZKJLUbUYkC4EsFZUwMbxhSPJnBWl/18N
+         jxBT+wpxY3O62HyIm5M1aKZEOedrVsUtKofbrR9puiKr4vFrAludyaituvTDD68AuVLc
+         iRkEETsI57wCjRUAz6mIWpKWPfvM4lZiye9YAkHOW1BaVv77DK7zXvb1aLNiS7pk7yTj
+         CKpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=A5Rv+dmEkw/2qllLfPwnoJL+bLGrLkW6dy1dyuOIpRM=;
-        b=djT/NWDIkY2XWms65LyqTmG3jv0VmZtKIo9zPAyQ6tSND3T/6RJTz37S/yRRYVwS5s
-         LnvkOjzep02JuDXO1ArxELETfSon7s+NrFXHeC9Y1mxdEvLAgqwnyU7z827c5U/bd7xg
-         Ae4DblQO8WP7cZyZIetCKc4LZ4jLfndqSv9KmcOlZZ99p3J9m8+fafu/ZTrXblm/GiAc
-         +n/ECHujBbZoGztTPT6qaM8czOmWci+m0AJOzIrUXcVkpkiLGlM58iFgK6I8o/vdLr+T
-         J4037YywQh9fVthmqPbXWQlRdNy+fw/dLXX/NWqkN50C8N3TjEisTvjmdAy1ySzfNpso
-         Ca9w==
-X-Gm-Message-State: AOAM531DzXNAadHfoCBTh6Qer8YR+suUWo2y785S/27naJAX7BoGvtCO
-        HA8UZVCfPoB4f95iuGnYk9Q=
-X-Google-Smtp-Source: ABdhPJxDXxDG52tEEIdO0TJllV3NIGMV/FgXYy1k5aUJybBSwgFC7iBIKdzkzPoSbl6OkwSyNUQ1Tg==
-X-Received: by 2002:a05:6a00:1589:b0:4fb:e7c:7c53 with SMTP id u9-20020a056a00158900b004fb0e7c7c53mr24879164pfk.78.1649529692021;
-        Sat, 09 Apr 2022 11:41:32 -0700 (PDT)
+        bh=shhc4vVqv9l2wKwY0kN4Lkjnnu+qZsCnM2eNImBcqfg=;
+        b=XGk3hfps+G3oCeSxd2PIL6sSak0yw+0PMvxpRjMPpoLzPbj4dInSW5xq9mP4yfY7Vt
+         dfQ7Nday+FD6jkuBFkEvfVCtcWPBB3Afg4qZtUyu1WRngZxd3uNpLdsR7GSi+oGVsgJJ
+         MfRfSQgNuSLk/Z69+dQyQb05bt2ts81DOkdhbNz40MZoHZtjL1yQMp5nYGUwb++gBpf9
+         LFMngP9vhG0YyWgrY9qp0yg4AmTSz2btpP8DjEWtBeidUUfwNtz2sZLiyDymf+2FKpjq
+         703hzrzL9tdU0TnVDwQtLMSSwW0Ufsh4Ct1ip4YmqVNk2gaDsxyVY68kZbjYwmZDVN4c
+         QOrw==
+X-Gm-Message-State: AOAM5338KrO8HBFTATRwo1fwKEkEaAv0ec7X5+ClbCOmkQIB//PLq6P5
+        tIoPiUi7jEq6zjEUCKKtdwA=
+X-Google-Smtp-Source: ABdhPJzxNKJtx7p/3OSvp583CZNP7EpTTJnlPbZ1GUvDN8gUSjIUcP2kF5IYG/dDYbc4Crmdr5X8wA==
+X-Received: by 2002:a65:41cc:0:b0:380:6f53:a550 with SMTP id b12-20020a6541cc000000b003806f53a550mr20100322pgq.471.1649529695298;
+        Sat, 09 Apr 2022 11:41:35 -0700 (PDT)
 Received: from localhost.localdomain ([122.161.51.18])
-        by smtp.gmail.com with ESMTPSA id g3-20020a63ad03000000b003821d0f0ef4sm25813933pgf.71.2022.04.09.11.41.29
+        by smtp.gmail.com with ESMTPSA id g3-20020a63ad03000000b003821d0f0ef4sm25813933pgf.71.2022.04.09.11.41.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Apr 2022 11:41:31 -0700 (PDT)
+        Sat, 09 Apr 2022 11:41:34 -0700 (PDT)
 From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -56,9 +56,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         Kuldeep Singh <singh.kuldeep87k@gmail.com>,
         linux-arm-msm@vger.kernel.org
-Subject: [PATCH 2/6] ARM: dts: qcom: mdm9615: User generic node name for DMA
-Date:   Sun, 10 Apr 2022 00:11:11 +0530
-Message-Id: <20220409184115.15612-3-singh.kuldeep87k@gmail.com>
+Subject: [PATCH 3/6] arm64: dts: qcom: msm8996: User generic node name for DMA
+Date:   Sun, 10 Apr 2022 00:11:12 +0530
+Message-Id: <20220409184115.15612-4-singh.kuldeep87k@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220409184115.15612-1-singh.kuldeep87k@gmail.com>
 References: <20220409184115.15612-1-singh.kuldeep87k@gmail.com>
@@ -79,31 +79,22 @@ Qcom BAM DT spec expects generic DMA controller node name as
 
 Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
 ---
- arch/arm/boot/dts/qcom-mdm9615.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/qcom/msm8996.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/qcom-mdm9615.dtsi b/arch/arm/boot/dts/qcom-mdm9615.dtsi
-index 4d4f37cebf21..8f0752ce1c7b 100644
---- a/arch/arm/boot/dts/qcom-mdm9615.dtsi
-+++ b/arch/arm/boot/dts/qcom-mdm9615.dtsi
-@@ -330,7 +330,7 @@ pmicgpio: gpio@150 {
- 			};
+diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+index f0f81c23c16f..bbe677b9e5bf 100644
+--- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
+@@ -707,7 +707,7 @@ tsens1: thermal-sensor@4ad000 {
+ 			#thermal-sensor-cells = <1>;
  		};
  
--		sdcc1bam: dma@12182000{
-+		sdcc1bam: dma-controller@12182000{
- 			compatible = "qcom,bam-v1.3.0";
- 			reg = <0x12182000 0x8000>;
- 			interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
-@@ -340,7 +340,7 @@ sdcc1bam: dma@12182000{
- 			qcom,ee = <0>;
- 		};
- 
--		sdcc2bam: dma@12142000{
-+		sdcc2bam: dma-controller@12142000{
- 			compatible = "qcom,bam-v1.3.0";
- 			reg = <0x12142000 0x8000>;
- 			interrupts = <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>;
+-		cryptobam: dma@644000 {
++		cryptobam: dma-controller@644000 {
+ 			compatible = "qcom,bam-v1.7.0";
+ 			reg = <0x00644000 0x24000>;
+ 			interrupts = <GIC_SPI 206 IRQ_TYPE_LEVEL_HIGH>;
 -- 
 2.25.1
 

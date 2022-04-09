@@ -2,162 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96B4E4FAA12
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 20:04:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DB164FAA14
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 20:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242938AbiDISGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 14:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57908 "EHLO
+        id S242958AbiDISGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 14:06:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233305AbiDISGA (ORCPT
+        with ESMTP id S242953AbiDISGR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 14:06:00 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43AEB94
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 11:03:52 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id g21so14179785iom.13
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 11:03:52 -0700 (PDT)
+        Sat, 9 Apr 2022 14:06:17 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E233192B8;
+        Sat,  9 Apr 2022 11:04:10 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id r206-20020a1c44d7000000b0038ccb70e239so2039050wma.3;
+        Sat, 09 Apr 2022 11:04:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mUG6QiQTmHfwgnDwUso5dIAM47XXDf7ghDlvuJZskMg=;
-        b=HS3dzFtie/5Nyl5rwdbRdpbcwvuu/y1rpDazlF5GPV09aPpwT/ehBSkg6SZexjHnza
-         dOapUYQtTICQQSZWinlzmucupskGQrRjlyet5Rc5ZW1+GX2AwCy4Hx6exsPrlXuW+Fvi
-         aQnuEM2N8mb7x2WOIrGNmV3VtKBGMQ51dtAMvKrOEeD0Xn54uxWExsw82JQiyrik/jYe
-         ulwQCLZX8t67W+Ol3TerRyx3hTfNAaEelr7Z+kihIQvpgP3CXXMfPiXHqzQ42ooW0VIM
-         QSSJJqPpM4y88IVtwVfUmZiYWYtnlcHR/6LO+WY4RP5IQOZNCGEFIQDeSo2WspK887t+
-         ZRPA==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=x+ZHRh6e82n5qKqvhVpyoJ5hZgFMYZM/zhsoK6Nbo1Q=;
+        b=YKOP6jVnRkzeNqGA3VvHJwzmjyDK08GWK/YjBh5+xYw1W4RUHgOuaZJpf6wWfZbmwX
+         UnS1BuFb+tfQ/sRE1kJdPw23yE9cepOTX12r+AXiVyTszFDEozTaL7SrgMHi+EyS0izg
+         zq3+87+Kl8eGRCbCwdSeW1JXQ5R/VEg1MEeRrdoy5pyNAgP2Tr82+UVwvFHDA2WU1SJT
+         R9SFIeBollfKOJiRQiY74UvCDqlOHd57iqXVJ2LfY2YhWhkOyc+1wL3OzXwEw+0QOE4w
+         G3CLiYfPmFEVtwmzmv4OQBY12+MYpEOQoWC3OIfpyBnNKji7gDbyoVRVkMW3SdTtB/PS
+         ABVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=mUG6QiQTmHfwgnDwUso5dIAM47XXDf7ghDlvuJZskMg=;
-        b=kgt5KzlJSVuZMuJYzTljprToqxxl6ywjFlBCY9HdoRQ7sZWE2uC1Ra3em+yU57c7cH
-         Q1LoK/ZRSOplEloHjEL52wW2ka8YetymDv3aAHidb0pzxQ6QPwLda6N0DHbipfi7Y8cA
-         /ncuHwdsHWJ7mu1sRNKM0wwYVqYCIRiPbXXlKghk52w5WFYccxvFKo4ATrPoSmlibSj+
-         havFOvurJGjAdCGjzImksbIaCy1JJE/B9deIxHz9SN95cujn64BTb3lWZGn6DSYmNV0T
-         wMsuSoDsr/wxJz4cKTZqt5/drQERcbHZ0+FB6Q2sSfGoubi6jtKkYif8s83IYIIZ4S+s
-         i/gA==
-X-Gm-Message-State: AOAM531KmwGjmTEOweFB4jSJerag+8SgXU3q8zdACV1FAn20Sa38Ifyc
-        rvQZTlHbPmM78R5tbGvT8KmVzurBft3cASsbQw4=
-X-Google-Smtp-Source: ABdhPJz5IDX6IYiWakCJ7dXBepfl1RZ9dG5b0DCHXZir0DSkpbDhDr1LS6KVoI8RipCrEhQYTkdUrg==
-X-Received: by 2002:a6b:f217:0:b0:64c:de54:4e8d with SMTP id q23-20020a6bf217000000b0064cde544e8dmr10563946ioh.48.1649527431633;
-        Sat, 09 Apr 2022 11:03:51 -0700 (PDT)
-Received: from localhost (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
-        by smtp.gmail.com with UTF8SMTPSA id w2-20020a92c882000000b002c81bffee08sm15706695ilo.55.2022.04.09.11.03.49
+        bh=x+ZHRh6e82n5qKqvhVpyoJ5hZgFMYZM/zhsoK6Nbo1Q=;
+        b=vjezQHPn8IWt5fK8Inpufx9nedPvEpnSYySuBYbtiwTOQ5GqVOVsKPRNeKzaqyeC87
+         29Jc5RE2b2L9EgRv+zR4qIsIZfO50xjkGomtdAw0/5TIX0S2YXY2nLHkht6YpLocZFGC
+         16/hjDp+k/Itp6EbwLohS//g2RtibILNagFYs405D9T0SwAcBF+c7TzkVeWkSmPtLkQr
+         zM0qX6VGBMSuf6WQos1NLM+kKY7bME/ujH4vN+Cuc62qmKyTVZsUjj3NwNH0Yyi/fqFr
+         Ape0K4bq5Wc8G0jwNcgnkBY/k1I4Xrk4gIhD/OaYvF1e0UbkdyuMQoGb1UvuU0xhvksz
+         1MGw==
+X-Gm-Message-State: AOAM533EUIY8F6DoOCrlwWDhAHJ4rMmLIpO2oJyrbAvfBFqZKYeGL/gS
+        x/SZfHaLSleGstU0hfR6C8g=
+X-Google-Smtp-Source: ABdhPJwLn4H230P5wbpYMvAJbu0DCavPV2PqvXJ+80n8Ppagqwl4TVLKYE2L9RCL3YmS05IwqaKrDA==
+X-Received: by 2002:a05:600c:213:b0:38e:6379:af70 with SMTP id 19-20020a05600c021300b0038e6379af70mr21401923wmi.157.1649527448742;
+        Sat, 09 Apr 2022 11:04:08 -0700 (PDT)
+Received: from ?IPV6:2001:470:9898:9eac:f1cb:6e16:4fc0:c830? ([2a09:bac0:79::82a:3425])
+        by smtp.gmail.com with ESMTPSA id 2-20020a1c1902000000b00380d3873d6asm13715098wmz.43.2022.04.09.11.04.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 09 Apr 2022 11:03:51 -0700 (PDT)
-From:   Schspa Shi <schspa@gmail.com>
-To:     swboyd@chromium.org, akpm@linux-foundation.org
-Cc:     schspa@gmail.com, linux-kernel@vger.kernel.org
-Subject: [PATCH] scripts/decode_stacktrace.sh: support old bash version
-Date:   Sun, 10 Apr 2022 02:03:32 +0800
-Message-Id: <20220409180331.24047-1-schspa@gmail.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
+        Sat, 09 Apr 2022 11:04:08 -0700 (PDT)
+Message-ID: <1b391399-984b-7a63-3265-62ef09caec39@gmail.com>
+Date:   Sat, 9 Apr 2022 21:04:05 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: [PATCH v2 1/2] dt-bindings: mtd: partitions: Add binding for Sercomm
+ parser
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     NOGUCHI Hiroshi <drvlabo@gmail.com>, Karim <Karimdplay@gmail.com>,
+        M <x1@disroot.org>, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220406195557.1956-1-csharper2005@gmail.com>
+ <20220406195946.2019-1-csharper2005@gmail.com>
+ <8d0d8b27-35ff-3693-cf80-897b80c26b4e@linaro.org>
+ <57bebf2f-af4c-b2d9-10e5-19e5104946fb@gmail.com>
+ <29cfa017-bbaf-3aba-fe1d-06771957dbaa@linaro.org>
+From:   Mikhail Zhilkin <csharper2005@gmail.com>
+In-Reply-To: <29cfa017-bbaf-3aba-fe1d-06771957dbaa@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Old bash version don't support associative array variables.
-Avoid to use associative array variables to avoid error.
+On 4/9/2022 3:43 PM, Krzysztof Kozlowski wrote:
 
-Without this, old bash version will report error as fellowing
-[   15.954042] Kernel panic - not syncing: sysrq triggered crash
-[   15.955252] CPU: 1 PID: 167 Comm: sh Not tainted 5.18.0-rc1-00208-gb7d075db2fd5 #4
-[   15.956472] Hardware name: Hobot J5 Virtual development board (DT)
-[   15.957856] Call trace:
-./scripts/decode_stacktrace.sh: line 128: ,dump_backtrace: syntax error: operand expected (error token is ",dump_backtrace")
+>> I'm not sure that "scpart-id" is necessary here. "sercomm,sc-partitions"
+>> is necessary. I'm going to add vendor prefix in a separate patch. Is this
+>> ok?
+> Yes.
 
-Signed-off-by: Schspa Shi <schspa@gmail.com>
+Thanks!
+
+>>>> +required:
+>>>> +  - compatible
+>>> Missing reg.
+>> reg isn't required. Parser can read partition offsets and sizes from
+>> SC PART MAP table. Or do you mean something else?  All is ok
+>> without reg definition in "Example" (except the warns that reg property
+>> is missing).
+> reg might not be required for current implementation but it is required
+> by devicetree for every node with unit address. Do you expect here nodes
+> without unit addresses?
+Only "partitions" node has no unit address. All subnodes  have unit
+addresses and therefore have to have reg property. I've just realized
+that "fixed-partitions.yaml" is almost my case. It looks like I can
+copy'n'paste  "required" and "*properties".
+Do you mind if I don't reinvent the wheel and reuse this good
+practice?
+
+Here's what I got (no any warnings appears):
+
 ---
- scripts/decode_stacktrace.sh | 27 +++++++++++++++++++--------
- 1 file changed, 19 insertions(+), 8 deletions(-)
+ .../mtd/partitions/sercomm,sc-partitions.yaml | 70 +++++++++++++++++++
+ 1 file changed, 70 insertions(+)
+ create mode 100644
+Documentation/devicetree/bindings/mtd/partitions/sercomm,sc-partitions.yaml
 
-diff --git a/scripts/decode_stacktrace.sh b/scripts/decode_stacktrace.sh
-index 5fbad61fe490..7075e26ab2c4 100755
---- a/scripts/decode_stacktrace.sh
-+++ b/scripts/decode_stacktrace.sh
-@@ -45,8 +45,13 @@ else
- 	fi
- fi
- 
--declare -A cache
--declare -A modcache
-+declare aarray_support=true
-+declare -A cache 2>/dev/null
-+if [[ $? != 0 ]]; then
-+	aarray_support=false
-+else
-+	declare -A modcache
-+fi
- 
- find_module() {
- 	if [[ -n $debuginfod ]] ; then
-@@ -97,7 +102,7 @@ parse_symbol() {
- 
- 	if [[ $module == "" ]] ; then
- 		local objfile=$vmlinux
--	elif [[ "${modcache[$module]+isset}" == "isset" ]]; then
-+	elif [[ $aarray_support == true && "${modcache[$module]+isset}" == "isset" ]]; then
- 		local objfile=${modcache[$module]}
- 	else
- 		local objfile=$(find_module)
-@@ -105,7 +110,9 @@ parse_symbol() {
- 			echo "WARNING! Modules path isn't set, but is needed to parse this symbol" >&2
- 			return
- 		fi
--		modcache[$module]=$objfile
-+		if [[ $aarray_support == true ]]; then
-+			modcache[$module]=$objfile
-+		fi
- 	fi
- 
- 	# Remove the englobing parenthesis
-@@ -125,7 +132,7 @@ parse_symbol() {
- 	# Use 'nm vmlinux' to figure out the base address of said symbol.
- 	# It's actually faster to call it every time than to load it
- 	# all into bash.
--	if [[ "${cache[$module,$name]+isset}" == "isset" ]]; then
-+	if [[ $aarray_support == true && "${cache[$module,$name]+isset}" == "isset" ]]; then
- 		local base_addr=${cache[$module,$name]}
- 	else
- 		local base_addr=$(nm "$objfile" 2>/dev/null | awk '$3 == "'$name'" && ($2 == "t" || $2 == "T") {print $1; exit}')
-@@ -133,7 +140,9 @@ parse_symbol() {
- 			# address not found
- 			return
- 		fi
--		cache[$module,$name]="$base_addr"
-+		if [[ $aarray_support == true ]]; then
-+			cache[$module,$name]="$base_addr"
-+		fi
- 	fi
- 	# Let's start doing the math to get the exact address into the
- 	# symbol. First, strip out the symbol total length.
-@@ -149,11 +158,13 @@ parse_symbol() {
- 
- 	# Pass it to addr2line to get filename and line number
- 	# Could get more than one result
--	if [[ "${cache[$module,$address]+isset}" == "isset" ]]; then
-+	if [[ $aarray_support == true && "${cache[$module,$address]+isset}" == "isset" ]]; then
- 		local code=${cache[$module,$address]}
- 	else
- 		local code=$(${CROSS_COMPILE}addr2line -i -e "$objfile" "$address" 2>/dev/null)
--		cache[$module,$address]=$code
-+		if [[ $aarray_support == true ]]; then
-+			cache[$module,$address]=$code
-+		fi
- 	fi
- 
- 	# addr2line doesn't return a proper error code if it fails, so
+diff --git
+a/Documentation/devicetree/bindings/mtd/partitions/sercomm,sc-partitions.yaml
+b/Documentation/devicetree/bindings/mtd/partitions/sercomm,sc-partitions.yaml
+new file mode 100644
+index 000000000000..cb171a0383aa
+--- /dev/null
++++
+b/Documentation/devicetree/bindings/mtd/partitions/sercomm,sc-partitions.yaml
+@@ -0,0 +1,70 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id:
+http://devicetree.org/schemas/mtd/partitions/sercomm,sc-partitions.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Sercomm Partitions
++
++description: |
++  Sercomm is one of hardware manufacturers providing SoCs used in home
+routers.
++  The Sercomm partition map table contains information about non-standard
++  partition offsets and sizes (depending on the bad blocks presence and
+their
++  locations). Partition map is used by many Sercomm-based Ralink devices
++  (e.g. Beeline, Netgear).
++
++maintainers:
++  - Mikhail Zhilkin <csharper2005@gmail.com>
++
++properties:
++  compatible:
++    const: sercomm,sc-partitions
++
++  "#address-cells": true
++
++  "#size-cells": true
++
++required:
++  - "#address-cells"
++  - "#size-cells"
++
++additionalProperties: true
++
++examples:
++  - |
++    partitions {
++        compatible = "sercomm,sc-partitions";
++        #address-cells = <1>;
++        #size-cells = <1>;
++
++        partition@0 {
++            label = "u-boot";
++            reg = <0x0 0x100000>;
++            scpart-id = <0>;
++            read-only;
++        };
++
++        partition@100000 {
++            label = "dynamic partition map";
++            reg = <0x100000 0x100000>;
++            scpart-id = <1>;
++        };
++
++        factory: partition@200000 {
++            label = "Factory";
++            reg = <0x200000 0x100000>;
++            scpart-id = <2>;
++            read-only;
++
++            compatible = "nvmem-cells";
++            #address-cells = <1>;
++            #size-cells = <1>;
++
++            macaddr_factory_21000: macaddr@21000 {
++                reg = <0x21000 0x6>;
++            };
++        };
++
++        /* ... */
++
++    };
 -- 
-2.24.3 (Apple Git-128)
+
+(...)
+
+> Best regards,
+> Krzysztof
+
+-- 
+Best regards,
+Mikhail
 

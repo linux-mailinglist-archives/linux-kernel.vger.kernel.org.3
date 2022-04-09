@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12E8D4FA5CE
+	by mail.lfdr.de (Postfix) with ESMTP id 870F54FA5CF
 	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 10:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240837AbiDIIPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 04:15:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38578 "EHLO
+        id S240782AbiDIIPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 04:15:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237199AbiDIIP0 (ORCPT
+        with ESMTP id S230343AbiDIIP0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 9 Apr 2022 04:15:26 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F00F102D;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C387A674F0;
         Sat,  9 Apr 2022 01:13:20 -0700 (PDT)
 From:   Kurt Kanzenbach <kurt@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649491998;
+        s=2020; t=1649491999;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YlxWxeEGkgLnVt3u2pgdSqjRibYcLflLeZsegRG9WOc=;
-        b=xDmm0sG3jd/oqIpzz8MQ38dxRoQ52XMer/238Lvsr3ZhBDH5h7w+uotPNjeiLa8xna5d2b
-        2YA0DbImJoadBLtlE5Zo2oDLiIkPb4aWcU5DuHqEysd9ba+a55Boo6oRI4h3Pou88EdW1V
-        iLKGLVjUmPX4udhoz7gjJLy/ZiETfod2XfNrGERDtKq0hPCLxFPKRO5ZQv1VIHBAdequMX
-        D7YfO77+caxoJBd4q80qDHqEbZLyQuVpt0x8gkvl1aU3XZ5EQj4hMI+MF7tAZ2vd61+be6
-        UaV6kEsriP66SRRPET3L4N2/pgU42xejczJiWEV7m5IWSZrCV2dQe1x0op+Wsg==
+        bh=oM+FoGv/BkTkG2TdHv8UkTd+jiQ2ziLqcW0PI5BxId8=;
+        b=RJ3g47WFm501Wsc7a9Pc5BI3r/v+TZVkRFbVskQ9OA/vtf7diHW8GOxpwN0OjYnOl3cWvH
+        V8zwNI+H645fJ8qK38iBrXLvxzt/M4zGpCRHCMGdjv/6JIKldxAXKb0+5488FVLRrAqTu4
+        FdhMYkIzer+9Pn+WIS6WVdjTYkLAkgAIOgo/1n46l68lbS2PXCEtZTBvBeQVd/OoYDHPLe
+        rkZyayYQSeZ78dLxC5efEwKBYKSrL+T/wQKC02xj/R7xBxoGzfKQ8FAUAKWUQ3VRvlk2IM
+        8DfNxUS2JgJYxzfE471Rw3frvW/vj3QLmWQXNbbrU6LCQPCWhDE9dxRiRLhMzg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649491998;
+        s=2020e; t=1649491999;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YlxWxeEGkgLnVt3u2pgdSqjRibYcLflLeZsegRG9WOc=;
-        b=cnO2eHfwQp0Gdg+4h4uQCl1yl1f8YhWosVFtQh7ktUuNizTZnxjdgfiHEf72xqFaCbMuWw
-        CaH7olfYTqOcG6Bw==
+        bh=oM+FoGv/BkTkG2TdHv8UkTd+jiQ2ziLqcW0PI5BxId8=;
+        b=v+XCuAeDY6E9LehoYbDZmkqdjG0BKLsseED+lKx6+nUBcdJnfzPjov3fYy203ZyXQFwslg
+        n/BsRLw11Sgpx6Bw==
 To:     John Stultz <john.stultz@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Stephen Boyd <sboyd@kernel.org>,
@@ -46,9 +46,9 @@ To:     John Stultz <john.stultz@linaro.org>,
 Cc:     Richard Cochran <richardcochran@gmail.com>,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         Kurt Kanzenbach <kurt@linutronix.de>
-Subject: [PATCH 2/3] tracing: Introduce trace clock tai
-Date:   Sat,  9 Apr 2022 10:12:59 +0200
-Message-Id: <20220409081300.4762-3-kurt@linutronix.de>
+Subject: [PATCH 3/3] tracing: Add documentation for trace clock tai
+Date:   Sat,  9 Apr 2022 10:13:00 +0200
+Message-Id: <20220409081300.4762-4-kurt@linutronix.de>
 In-Reply-To: <20220409081300.4762-1-kurt@linutronix.de>
 References: <20220409081300.4762-1-kurt@linutronix.de>
 MIME-Version: 1.0
@@ -63,26 +63,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A fast/NMI safe accessor for CLOCK_TAI has been introduced.
-Use it for adding the additional trace clock "tai".
+Add documentation for new introduced trace clock tai.
+This clock corresponds to CLOCK_TAI.
 
 Signed-off-by: Kurt Kanzenbach <kurt@linutronix.de>
 ---
- kernel/trace/trace.c | 1 +
- 1 file changed, 1 insertion(+)
+ Documentation/trace/ftrace.rst | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index f4de111fa18f..7be87b29c6c1 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -1542,6 +1542,7 @@ static struct {
- 	{ ktime_get_mono_fast_ns,	"mono",		1 },
- 	{ ktime_get_raw_fast_ns,	"mono_raw",	1 },
- 	{ ktime_get_boot_fast_ns,	"boot",		1 },
-+	{ ktime_get_tai_fast_ns,	"tai",		1 },
- 	ARCH_TRACE_CLOCKS
- };
+diff --git a/Documentation/trace/ftrace.rst b/Documentation/trace/ftrace.rst
+index 45b8c56af67a..b37dc19e4d40 100644
+--- a/Documentation/trace/ftrace.rst
++++ b/Documentation/trace/ftrace.rst
+@@ -517,6 +517,18 @@ of ftrace. Here is a list of some of the key files:
+ 		processing should be able to handle them. See comments in the
+ 		ktime_get_boot_fast_ns() function for more information.
  
++	tai:
++		This is the tai clock (CLOCK_TAI) and is derived from the wall-
++		clock time. However, this clock does not experience
++		discontinuities and backwards jumps caused by NTP inserting leap
++		seconds. Since the clock access is designed for use in tracing,
++		side effects are possible. The clock access may yield wrong
++		readouts in case the internal TAI offset is updated e.g., caused
++		by setting the system time or using adjtimex() with an offset.
++		These effects are rare and post processing should be able to
++		handle them. See comments in the ktime_get_tai_fast_ns()
++		function for more information.
++
+ 	To set a clock, simply echo the clock name into this file::
+ 
+ 	  # echo global > trace_clock
 -- 
 2.30.2
 

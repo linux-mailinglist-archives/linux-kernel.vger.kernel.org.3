@@ -2,351 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 853A54FAAAD
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 22:19:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E9624FAAB4
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 22:22:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231301AbiDIUVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 16:21:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37814 "EHLO
+        id S231421AbiDIUYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 16:24:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230215AbiDIUVO (ORCPT
+        with ESMTP id S231276AbiDIUYk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 16:21:14 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E866152
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 13:19:06 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id j9so12257146lfe.9
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 13:19:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=utPJ4OpHzIuWZ6mtiY7xqmOAIwiwKlyZjzrr4O5cYow=;
-        b=nMZ0h7GOa4H2p6vKBZ+JCmQZu33B6qM92cKCiZIf1QR2kpJ+Ky2WnnYLixmsENFjXI
-         Jw65IzG6zq1zhXt3viRJhktQ7jSOQaE+luzhMfPZ6QcvILl4T2o/YbLANI198yM/FV+L
-         xLbT8eVUHs+YMLR8HQvCU4zUK2kfiZKrXru+qqGJFAkF1xLo2muV2eyV5RZYk1Y43s4k
-         2DUkJikTXsnvqgXw13CAfFBIt40FtPlR1cgB+i88r2Me46md6+HpBYTfHODkX9c0y6gq
-         JG2kzL/cYdB0PHi/6DM9ygRqiZToZtG+pGbvYIjn07PRMjVuYV1O8l9VCSSOA3yh+jEa
-         yqsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=utPJ4OpHzIuWZ6mtiY7xqmOAIwiwKlyZjzrr4O5cYow=;
-        b=kbvGHrkj9xhbjthMrrSbTROqjC5EPRcIrbdGCovYmL3jp3JzgWKRnfozfccAyS7kHU
-         /1hi3zG1uAR4o90xzKyYJs3qWbcUs+b5tA2EQgrEbOzmYGztYagwkReYtUOnMzZsvO20
-         rbQR1ijlFvhwN4WF1PgAP5CdxUxqJ3L3Jhs9jF6WGddD54FCGBrIGYui6oFSVLFzuAV5
-         5pd5dIuDiepTq14gZwCOI/r6bmHEXhGB/qv+vINx7rSqA3kR55/akBtfR79GPPR7tb7+
-         w4CR/OUU+qRLQD5plcei2LME7tYzC5rtmVXaTTmvv25F24K29rsfZV/6gPrAzZ1QJ2Qa
-         lMIg==
-X-Gm-Message-State: AOAM533vxzUibW4FjV8Q0LNqlmTINHhV5ubR+SJSbgIU9i2Szv65cSP4
-        GUmt6lH2scqwaTV70Hfu5mllTw==
-X-Google-Smtp-Source: ABdhPJxh5rUaKkwO5aFBiCl0/2qtvg3DxbAAW/Dpp1NovAXOzWhBxhdD7Kk7wGK6sEBQevLPGMkAvg==
-X-Received: by 2002:a05:6512:6c4:b0:44a:95a4:83e1 with SMTP id u4-20020a05651206c400b0044a95a483e1mr17003345lff.93.1649535544449;
-        Sat, 09 Apr 2022 13:19:04 -0700 (PDT)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id v6-20020a2ea446000000b0024b0abb3984sm2422555ljn.134.2022.04.09.13.19.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Apr 2022 13:19:03 -0700 (PDT)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 413631039DB; Sat,  9 Apr 2022 23:20:35 +0300 (+03)
-Date:   Sat, 9 Apr 2022 23:20:35 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv4 4/8] x86/boot/compressed: Handle unaccepted memory
-Message-ID: <20220409202035.plaiekzuihov4kvq@box.shutemov.name>
-References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
- <20220405234343.74045-5-kirill.shutemov@linux.intel.com>
- <043469ae-427c-b2bb-89ff-db8975894266@intel.com>
+        Sat, 9 Apr 2022 16:24:40 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 6D24B2BCE
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 13:22:30 -0700 (PDT)
+Received: (qmail 293258 invoked by uid 1000); 9 Apr 2022 16:22:29 -0400
+Date:   Sat, 9 Apr 2022 16:22:29 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Maxim Devaev <mdevaev@gmail.com>
+Cc:     linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: f_mass_storage: break IO operations via
+ configfs
+Message-ID: <YlHrBdYkBSR0L6FL@rowland.harvard.edu>
+References: <Yk2wvhSTMKTLFK6c@rowland.harvard.edu>
+ <20220406195234.4f63cb4a@reki>
+ <Yk3TLPKyaQDsnuD4@rowland.harvard.edu>
+ <20220406213634.104cae45@reki>
+ <Yk8L6b9wEWTjWOg4@rowland.harvard.edu>
+ <20220407204553.35cead72@reki>
+ <YlBN4Zcn9NYw0PLA@rowland.harvard.edu>
+ <20220409115756.4f9b015d@reki>
+ <YlGOOJ9SwkD7WVmX@rowland.harvard.edu>
+ <20220409170837.02f0853f@reki>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <043469ae-427c-b2bb-89ff-db8975894266@intel.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220409170837.02f0853f@reki>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 10:57:17AM -0700, Dave Hansen wrote:
-> On 4/5/22 16:43, Kirill A. Shutemov wrote:
-> > Firmware is responsible for accepting memory where compressed kernel
-> > image and initrd land. But kernel has to accept memory for decompression
-> > buffer: accept memory just before decompression starts.
+On Sat, Apr 09, 2022 at 05:08:37PM +0300, Maxim Devaev wrote:
+> В Sat, 9 Apr 2022 09:46:32 -0400
+> Alan Stern <stern@rowland.harvard.edu> wrote:
 > 
-> I think I'd appreciate a sentence or two more about what's going on.
-> How about something like this?
+> > On Sat, Apr 09, 2022 at 11:57:56AM +0300, Maxim Devaev wrote:
+> > > В Fri, 8 Apr 2022 10:59:45 -0400
+> > > Alan Stern <stern@rowland.harvard.edu> wrote:  
+> > > > > At least there is one situation where the behavior of f_mass_storage differs
+> > > > > from the behavior of a real drive. What happens when you click on the physical
+> > > > > "eject" button?    
+> > > > 
+> > > > If the host has prevented ejection, nothing happens.  Otherwise the disc 
+> > > > gets ejected.
+> > > >   
+> > > > > Yes, the OS can block this, but the problem is that we don't have
+> > > > > an "eject" here.    
+> > > > 
+> > > > What do you mean?  Writing an empty string to the sysfs "file" attribute 
+> > > > is the virtual analog of pressing the eject button.  
+> > > 
+> > > But I can't eject the disc event it's not mounted on Linux host. It seems to me
+> > > it differs from the real drive behavior.  
+> > 
+> > It sounds like either there's a bug or else you're not doing the right 
+> > thing.  Tell me exactly what you do when this fails.
 > 
-> The firmware starts the kernel by booting into the "compressed" kernel
-> stub.  That stub's job is to decompress the full kernel image and then
-> jump to it.
-> 
-> The firmware will pre-accept the memory used to run the stub.  But, the
-> stub is responsible for accepting the memory into which it decompresses
-> the main kernel.  Accept memory just before decompression starts.
-> 
-> The stub is also responsible for choosing a physical address in which to
-> place the decompressed kernel image.  The KASLR mechanism will randomize
-> this physical address.  Since the unaccepted memory region is relatively
-> small, KASLR would be quite ineffective if it only used the pre-accepted
-> area (EFI_CONVENTIONAL_MEMORY).  Ensure that KASLR randomizes among the
-> entire physical address space by also including EFI_UNACCEPTED_MEMORY.
+> I'm using Raspberry Pi with DWC2. So:
+> - Connect RPi-based gadget to the Linux host.
+> - Set image in the "file" attribute.
 
-Sure, looks good.
+Exactly what is the full pathname you're using for the "file" attribute?
 
-> > diff --git a/arch/x86/boot/compressed/bitmap.c b/arch/x86/boot/compressed/bitmap.c
-> > index bf58b259380a..ba2de61c0823 100644
-> > --- a/arch/x86/boot/compressed/bitmap.c
-> > +++ b/arch/x86/boot/compressed/bitmap.c
-> > @@ -2,6 +2,48 @@
-> >  /* Taken from lib/string.c */
-> >  
-> >  #include <linux/bitmap.h>
-> > +#include <linux/math.h>
-> > +#include <linux/minmax.h>
-> > +
-> > +unsigned long _find_next_bit(const unsigned long *addr1,
-> > +		const unsigned long *addr2, unsigned long nbits,
-> > +		unsigned long start, unsigned long invert, unsigned long le)
-> > +{
-> > +	unsigned long tmp, mask;
-> > +
-> > +	if (unlikely(start >= nbits))
-> > +		return nbits;
-> > +
-> > +	tmp = addr1[start / BITS_PER_LONG];
-> > +	if (addr2)
-> > +		tmp &= addr2[start / BITS_PER_LONG];
-> > +	tmp ^= invert;
-> > +
-> > +	/* Handle 1st word. */
-> > +	mask = BITMAP_FIRST_WORD_MASK(start);
-> > +	if (le)
-> > +		mask = swab(mask);
-> > +
-> > +	tmp &= mask;
-> > +
-> > +	start = round_down(start, BITS_PER_LONG);
-> > +
-> > +	while (!tmp) {
-> > +		start += BITS_PER_LONG;
-> > +		if (start >= nbits)
-> > +			return nbits;
-> > +
-> > +		tmp = addr1[start / BITS_PER_LONG];
-> > +		if (addr2)
-> > +			tmp &= addr2[start / BITS_PER_LONG];
-> > +		tmp ^= invert;
-> > +	}
-> > +
-> > +	if (le)
-> > +		tmp = swab(tmp);
-> > +
-> > +	return min(start + __ffs(tmp), nbits);
-> > +}
-> >  
-> >  void __bitmap_set(unsigned long *map, unsigned int start, int len)
-> >  {
-> > @@ -22,3 +64,23 @@ void __bitmap_set(unsigned long *map, unsigned int start, int len)
-> >  		*p |= mask_to_set;
-> >  	}
-> >  }
-> > +
-> > +void __bitmap_clear(unsigned long *map, unsigned int start, int len)
-> > +{
-> > +	unsigned long *p = map + BIT_WORD(start);
-> > +	const unsigned int size = start + len;
-> > +	int bits_to_clear = BITS_PER_LONG - (start % BITS_PER_LONG);
-> > +	unsigned long mask_to_clear = BITMAP_FIRST_WORD_MASK(start);
-> > +
-> > +	while (len - bits_to_clear >= 0) {
-> > +		*p &= ~mask_to_clear;
-> > +		len -= bits_to_clear;
-> > +		bits_to_clear = BITS_PER_LONG;
-> > +		mask_to_clear = ~0UL;
-> > +		p++;
-> > +	}
-> > +	if (len) {
-> > +		mask_to_clear &= BITMAP_LAST_WORD_MASK(size);
-> > +		*p &= ~mask_to_clear;
-> > +	}
-> > +}
+> - Mount gadget's drive on the Linux host.
+> - Umount it.
+> - Try to eject using emptying the "file" attribute.
+> - Get EBUSY error.
+
+This must mean that some program on the host is keeping the device file 
+open, even though it isn't mounted.  (I tried running a similar test on 
+my system and it worked perfectly, with no other programs accessing the 
+device).  You might be able to identify which program is accessing the 
+device by running lsof on the host and searching the output for the 
+device name.
+
+I also tried sending a USR1 signal to the driver's kernel thread while 
+an image was mounted and being accessed.  It did clear the prevent_allow 
+flag, so I could eject the image.  But it also caused a 30-second delay 
+on the host, as predicted.  Now, maybe you don't care about such delays 
+when you're going to eject the media anyway, but it still seems like a 
+bad thing to do.
+
+> > > I have reflected on the rest of your arguments and changed my mind.
+> > > I think that "forced_eject" for a specific lun without interrupting operations would
+> > > really be the best solution. I wrote a simple patch and tested it, everything seems
+> > > to work. What do you think about something like this?
+> > > 
+> > > 
+> > > static ssize_t fsg_lun_opts_forced_eject_store(struct config_item *item,
+> > >                                                const char *page, size_t len)
+> > > {
+> > >         struct fsg_lun_opts *opts = to_fsg_lun_opts(item);
+> > >         struct fsg_opts *fsg_opts = to_fsg_opts(opts->group.cg_item.ci_parent);
+> > >         int ret;
+> > > 
+> > >         opts->lun->prevent_medium_removal = 0;
+> > >         ret = fsg_store_file(opts->lun, &fsg_opts->common->filesem, "", 0);
+> > >         return ret < 0 ? ret : len;
+> > > }
+> > > 
+> > > CONFIGFS_ATTR_WO(fsg_lun_opts_, forced_eject);  
+> > 
+> > The basic idea is right.  But this should not be a CONFIGFS option; it 
+> > should be an ordinary LUN attribute.  For an example, see the definition of 
+> > file_store() in f_mass_storage.c; your routine should look very similar.
 > 
-> It's a real shame that we have to duplicate this code.  Is there
-> anything crazy we could do here like
-> 
-> #include "../../../lib/find_bit.c"
-> 
-> ?
+> Okay, but where this attribute is located in sysfs? How can I use it?
 
-Well, it would require fracturing source files on the kernel side.
+Well, it's going to be in different places depending on what UDC driver 
+your gadget uses.  On my system I'm using the dummy_udc driver, so the 
+sysfs "file" attribute is located at:
 
-__bitmap_set() and __bitmap_clear() are now in lib/bitmap.c.
+	/sys/devices/platform/dummy_ucd.0/gadget/lun0/file
 
-_find_next_bit() is in lib/find_bit.c.
+If instead you're looking at
 
-Both lib/bitmap.c and lib/find_bit.c have a lot of stuff that are not used
-here. I guess we would need to split them into few pieces to make it in
-sane way. Do you want me to go this path?
+	/sys/module/g_mass_storage/parameters/file
 
-> 
-> > diff --git a/arch/x86/boot/compressed/kaslr.c b/arch/x86/boot/compressed/kaslr.c
-> > index 411b268bc0a2..59db90626042 100644
-> > --- a/arch/x86/boot/compressed/kaslr.c
-> > +++ b/arch/x86/boot/compressed/kaslr.c
-> > @@ -725,10 +725,20 @@ process_efi_entries(unsigned long minimum, unsigned long image_size)
-> >  		 * but in practice there's firmware where using that memory leads
-> >  		 * to crashes.
-> >  		 *
-> > -		 * Only EFI_CONVENTIONAL_MEMORY is guaranteed to be free.
-> > +		 * Only EFI_CONVENTIONAL_MEMORY and EFI_UNACCEPTED_MEMORY (if
-> > +		 * supported) are guaranteed to be free.
-> >  		 */
-> > -		if (md->type != EFI_CONVENTIONAL_MEMORY)
-> > +
-> > +		switch (md->type) {
-> > +		case EFI_CONVENTIONAL_MEMORY:
-> > +			break;
-> > +		case EFI_UNACCEPTED_MEMORY:
-> > +			if (IS_ENABLED(CONFIG_UNACCEPTED_MEMORY))
-> > +				break;
-> >  			continue;
-> > +		default:
-> > +			continue;
-> > +		}
-> >  
-> >  		if (efi_soft_reserve_enabled() &&
-> >  		    (md->attribute & EFI_MEMORY_SP))
-> > diff --git a/arch/x86/boot/compressed/misc.c b/arch/x86/boot/compressed/misc.c
-> > index fa8969fad011..c1d9d71a6615 100644
-> > --- a/arch/x86/boot/compressed/misc.c
-> > +++ b/arch/x86/boot/compressed/misc.c
-> > @@ -18,6 +18,7 @@
-> >  #include "../string.h"
-> >  #include "../voffset.h"
-> >  #include <asm/bootparam_utils.h>
-> > +#include <asm/unaccepted_memory.h>
-> >  
-> >  /*
-> >   * WARNING!!
-> > @@ -43,6 +44,9 @@
-> >  void *memmove(void *dest, const void *src, size_t n);
-> >  #endif
-> >  
-> > +#undef __pa
-> > +#define __pa(x)	((unsigned long)(x))
-> 
-> Those #undef's always worry me.  Why is this one needed?
+or in some configfs directory, that's the wrong place.  You can eject 
+the media simply by doing (as root):
 
-arch/x86/boot/compressed/misc.c:47:9: warning: '__pa' macro redefined [-Wmacro-redefined]
-#define __pa(x) ((unsigned long)(x))
-        ^
-arch/x86/include/asm/page.h:47:9: note: previous definition is here
-#define __pa(x)         __phys_addr((unsigned long)(x))
+	echo >/sys/devices/.../gadget/lun0/file
 
-Note that sev.c does the same. At least we are consistent :)
+(fill in the "..." appropriately for your system).
 
-> >  /*
-> >   * This is set up by the setup-routine at boot-time
-> >   */
-> > @@ -451,6 +455,13 @@ asmlinkage __visible void *extract_kernel(void *rmode, memptr heap,
-> >  #endif
-> >  
-> >  	debug_putstr("\nDecompressing Linux... ");
-> > +
-> > +	if (IS_ENABLED(CONFIG_UNACCEPTED_MEMORY) &&
-> > +	    boot_params->unaccepted_memory) {
-> > +		debug_putstr("Accepting memory... ");
-> > +		accept_memory(__pa(output), __pa(output) + needed_size);
-> > +	}
-> > +
-> >  	__decompress(input_data, input_len, NULL, NULL, output, output_len,
-> >  			NULL, error);
-> >  	parse_elf(output);
-> > diff --git a/arch/x86/boot/compressed/unaccepted_memory.c b/arch/x86/boot/compressed/unaccepted_memory.c
-> > index d363acf59c08..3ebab63789bb 100644
-> > --- a/arch/x86/boot/compressed/unaccepted_memory.c
-> > +++ b/arch/x86/boot/compressed/unaccepted_memory.c
-> > @@ -51,3 +51,17 @@ void mark_unaccepted(struct boot_params *params, u64 start, u64 end)
-> >  	bitmap_set((unsigned long *)params->unaccepted_memory,
-> >  		   start / PMD_SIZE, (end - start) / PMD_SIZE);
-> >  }
-> > +
-> > +void accept_memory(phys_addr_t start, phys_addr_t end)
-> > +{
-> > +	unsigned long *unaccepted_memory;
-> > +	unsigned int rs, re;
-> > +
-> > +	unaccepted_memory = (unsigned long *)boot_params->unaccepted_memory;
-> > +	rs = start / PMD_SIZE;
-> 
-> OK, so start is a physical address, PMD_SIZE is 2^21, and 'rs' is an
-> unsigned int.  That means 'rs' can, at most, represent a physical
-> address at 2^(21+32), or 2^53.  That's cutting it a *bit* close, don't
-> you think?
-> 
-> Could we please just give 'rs' and 're' real names and make them
-> 'unsigned long's, please?  It will surely save at least one other person
-> from doing math.  The find_next_bit() functions seem to take ulongs anyway.
+> Sorry for the stupid question.
 
-Okay. 'range_start' and 'range_end' are good enough names?
+Not at all.
 
-> 
-> > +	for_each_set_bitrange_from(rs, re, unaccepted_memory,
-> > +				   DIV_ROUND_UP(end, PMD_SIZE)) {
-> > +		__accept_memory(rs * PMD_SIZE, re * PMD_SIZE);
-> > +		bitmap_clear(unaccepted_memory, rs, re - rs);
-> > +	}
-> > +}
-> 
-> Could we please introduce some intermediate variable?  For instance:
-> 
-> 	unsigned long bitmap_size = DIV_ROUND_UP(end, PMD_SIZE);
-> 
-> That will make this all a lot easier to read.
-
-Okay.
-
-> 
-> > diff --git a/arch/x86/include/asm/unaccepted_memory.h b/arch/x86/include/asm/unaccepted_memory.h
-> > index cbc24040b853..f1f835d3cd78 100644
-> > --- a/arch/x86/include/asm/unaccepted_memory.h
-> > +++ b/arch/x86/include/asm/unaccepted_memory.h
-> > @@ -9,4 +9,6 @@ struct boot_params;
-> >  
-> >  void mark_unaccepted(struct boot_params *params, u64 start, u64 num);
-> >  
-> > +void accept_memory(phys_addr_t start, phys_addr_t end);
-> > +
-> >  #endif
-> 
-
--- 
- Kirill A. Shutemov
+Alan Stern

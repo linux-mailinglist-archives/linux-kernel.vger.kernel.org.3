@@ -2,101 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F0164FA911
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 16:40:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 333E24FA914
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 16:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242337AbiDIOmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 10:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53154 "EHLO
+        id S242345AbiDIOpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 10:45:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235533AbiDIOmM (ORCPT
+        with ESMTP id S232292AbiDIOpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 10:42:12 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F233C235846
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 07:40:04 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 66so10241022pga.12
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 07:40:04 -0700 (PDT)
+        Sat, 9 Apr 2022 10:45:03 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8573BDE8F
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 07:42:55 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id h23-20020a17090a051700b001c9c1dd3acbso12314510pjh.3
+        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 07:42:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=JU41SxMqoMbPQ8QDWJHCi79lbMEbsjN5J5bWfMPCK44=;
-        b=FcErb1/aURM81N0KQMBD4HiiOBV3ZvN/fKTZEZCoVKB4fpu3Yz2xPUczF6QvdYRNoF
-         l+8SzpOuuPgzj9fkGjH7uHoEDVg6+VdDH3GC1qA12fmXurrcYKgEoPirQCHDPkJu4dXQ
-         5rL0z9yh/sslZFzBAJzMffuqGGMwyMD2W6lKYPxOhQY18mH85wVuYt05zPRxlAZy+YL0
-         7YUyl9TJAHE+6zeWsNamzUdjJrZ2COO12vYK50DkZRQ8W/qF6LLVd8sfozz2w9YtxjcD
-         2Jew7Cb4adTIRU62EqpBj28FQcMTLFaTchc3ZaKVl28JgkAhGkyx8mH2l/9dXfP+ah1v
-         JDuA==
+        bh=vl38/Gn1Ja/tfx1OE95rZjNeXGNT1OOD4zzjhjOONik=;
+        b=K1WsvwuoCpAIHJWhA/t7k/ll20oJIFxUcaj9+xFS8rndq8lbEQnGLMXJKZM92HJ5AG
+         iYR9vg9r170/BRZdFbYm/E9/61C8iwLGhVZYfL7acFA+08b7E3iHtHQFDIYuwunVOt9H
+         D5St9/4uIf3Fjdura6SkBzwY3HJ9jNvDI70sKSbT7ICPZdJoL2SIBSGDMbqzhlDMato+
+         gE0osfNBgJ7tDoSm7Yt3hETKG4VlH4CRVtImaL+hqCBFxESMw2oGY6U4bI/cJbWAjlPK
+         blbZE2zVGlRNrllye2MBu16e8vHPCTOxXxY4+/c4VcMeif9zdMBEm8cBhWYG8rEEfiz6
+         AJPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=JU41SxMqoMbPQ8QDWJHCi79lbMEbsjN5J5bWfMPCK44=;
-        b=CyZ8PX0obPcVfftCAqX96rMlBzhrm577A4usdPPal16Ej2huJOOG2/zxgvQ+2cdmVt
-         uE98NBzI//G1DlU2GtWqe3EeFaBhAWthf3ERfS2m8/fJRIKXH8KqH2mqme0lrAMLdNKP
-         byMirKHFYLMyDi37x4W54q3An7aZUTQqEe34mrnsqPYVQEhk4ssTzYB+vnUYJZ4b19rp
-         oSZYAHG0PVetAiHVM1Fdfi/M6sqVvY+vyfg58FoqBqYH4mlZhyfmNhH+SUAuk/ZhWQec
-         UpwIMDwbwx+o67N+rT0q/l/6w46+CYzYsgfjkgCMFz3fCq8Erj2ag5b83J7b8ZJbdZw5
-         zt9A==
-X-Gm-Message-State: AOAM531N1Q+S++qABmtJv+X0E0WpTcT7+BDHas+JRTudVLylLeoMOJZi
-        2au/AlN2vskbV+H1t/AI5g==
-X-Google-Smtp-Source: ABdhPJzsW+eToTWCrP8SHQ9RBgakFlrWo4D3JSdC6x9/gCg055Ug42/f1pZhPJGIslBLxzrw0/4W8A==
-X-Received: by 2002:a05:6a00:b47:b0:4fd:a5b5:a279 with SMTP id p7-20020a056a000b4700b004fda5b5a279mr24556558pfo.19.1649515204528;
-        Sat, 09 Apr 2022 07:40:04 -0700 (PDT)
-Received: from localhost.localdomain ([144.202.91.207])
-        by smtp.gmail.com with ESMTPSA id f15-20020a056a001acf00b004fb2ad05521sm29225307pfv.215.2022.04.09.07.40.00
+        bh=vl38/Gn1Ja/tfx1OE95rZjNeXGNT1OOD4zzjhjOONik=;
+        b=WDqJalPKAJ3izf+nOYmPD7zt/wBRATPAlw1SxrQqOPhNLnZGIro4k+5wK9FZfa1svX
+         DP1LOddS7aZeH3hAHLX8haBOHDYyjFyxdC5tybBzFoX6IZLZvEiwuc5WVYLedodLmJK9
+         stoc9yXrspcqQBZtSyiLZR8t2jYsT1L3XX7DYtihk7AYxGklecnpdYus9c8hH2qfgl0n
+         8IB+z4lLUirZn3Gk1sE8UKSfB/sVkZvpBm28GPznQ7Jpg3bTc6tTGQDi4DQZv004ZCvd
+         fDscs9suibJXH3TXV7xtRO+aZingtom6+YqVPj7GZ1EIBsHabAwA3mcPAFA9eRz6SbUp
+         wSdA==
+X-Gm-Message-State: AOAM531Wo3ELU3+5FjHqeY95Dkl1yRNSV29ZOUSMdUSdcp9Qbh2pf3aM
+        iAdAvYKBeJbAtj5Cf47lAA==
+X-Google-Smtp-Source: ABdhPJzxdWFiiA50vM0YwFC3qcQrpLR0x4AQV9NPemYyBGaoQaD8ChdalwfSOXfyP27GkjMl8dt8Uw==
+X-Received: by 2002:a17:90b:1bc8:b0:1c7:443:3ffb with SMTP id oa8-20020a17090b1bc800b001c704433ffbmr26976623pjb.84.1649515374917;
+        Sat, 09 Apr 2022 07:42:54 -0700 (PDT)
+Received: from localhost.localdomain ([121.165.123.189])
+        by smtp.gmail.com with ESMTPSA id q5-20020a17090a68c500b001cb651fffdbsm2218373pjj.8.2022.04.09.07.42.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Apr 2022 07:40:03 -0700 (PDT)
-From:   Zheyu Ma <zheyuma97@gmail.com>
-To:     pierre-louis.bossart@linux.intel.com, lgirdwood@gmail.com,
-        ranjani.sridharan@linux.intel.com, kai.vehmanen@linux.intel.com,
-        broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
-        peter.ujfalusi@linux.intel.com
-Cc:     sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>
-Subject: [PATCH] ASoC: SOF: Intel: Check the bar size before remapping
-Date:   Sat,  9 Apr 2022 22:39:50 +0800
-Message-Id: <20220409143950.2570186-1-zheyuma97@gmail.com>
+        Sat, 09 Apr 2022 07:42:54 -0700 (PDT)
+From:   JaeSang Yoo <js.yoo.5b@gmail.com>
+X-Google-Original-From: JaeSang Yoo <jsyoo5b@gmail.com>
+To:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Ohhoon Kwon <ohkwon1043@gmail.com>,
+        Wonhyuk Yang <vvghjk1234@gmail.com>,
+        Jiyoup Kim <lakroforce@gmail.com>,
+        Donghyeok Kim <dthex5d@gmail.com>,
+        JaeSang Yoo <jsyoo5b@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] mm/slub: remove meaningless node check in ___slab_alloc()
+Date:   Sat,  9 Apr 2022 23:42:39 +0900
+Message-Id: <20220409144239.2649257-1-jsyoo5b@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver should use the pci_resource_len() to get the actual length of
-pci bar, and compare it with the expect value. If the bar size is too
-small (such as a broken device), the driver should return an error.
+node_match() with node=NUMA_NO_NODE always returns 1.
+Duplicate check by goto statement is meaningless. Remove it.
 
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: JaeSang Yoo <jsyoo5b@gmail.com>
 ---
- sound/soc/sof/intel/pci-tng.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ mm/slub.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/sound/soc/sof/intel/pci-tng.c b/sound/soc/sof/intel/pci-tng.c
-index 6efef225973f..7d502cc3ca80 100644
---- a/sound/soc/sof/intel/pci-tng.c
-+++ b/sound/soc/sof/intel/pci-tng.c
-@@ -75,7 +75,11 @@ static int tangier_pci_probe(struct snd_sof_dev *sdev)
- 
- 	/* LPE base */
- 	base = pci_resource_start(pci, desc->resindex_lpe_base) - IRAM_OFFSET;
--	size = PCI_BAR_SIZE;
-+	size = pci_resource_len(pci, desc->resindex_lpe_base);
-+	if (size < PCI_BAR_SIZE) {
-+		dev_err(sdev->dev, "error: I/O region is too small.\n");
-+		return -ENODEV;
-+	}
- 
- 	dev_dbg(sdev->dev, "LPE PHY base at 0x%x size 0x%x", base, size);
- 	sdev->bar[DSP_BAR] = devm_ioremap(sdev->dev, base, size);
+diff --git a/mm/slub.c b/mm/slub.c
+index 9fe000fd19ca..a65e282b8238 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -2913,7 +2913,6 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
+ 		 */
+ 		if (!node_isset(node, slab_nodes)) {
+ 			node = NUMA_NO_NODE;
+-			goto redo;
+ 		} else {
+ 			stat(s, ALLOC_NODE_MISMATCH);
+ 			goto deactivate_slab;
 -- 
 2.25.1
 

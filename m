@@ -2,96 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C02B4FA9A3
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 18:43:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D337C4FA9AB
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 18:44:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242713AbiDIQpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 12:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46408 "EHLO
+        id S242737AbiDIQps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 12:45:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239832AbiDIQpf (ORCPT
+        with ESMTP id S239832AbiDIQpp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 12:45:35 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282663EBB0
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 09:43:28 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id u18so2679142eda.3
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 09:43:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=q2Xgrp2SvwSgy23wzVIg4eWWwU/q3lLMvMENos7vSco=;
-        b=WPkK7WqS+9VyphmH4DzUlDA2VtRDTpcKYuK2SHqPk/Sgy1ZJXGPWhilZ56r9NRaD54
-         w12G5FzPAKESkVLeSgLLe/TwgEnMtHM1RjvrZ5vv8gf8pP2CVdkFj0yHA4arB+qZ512o
-         6iklEqmaDYMmBCeWYrUwEtkJIOI7nUOEsBjUM+u7D4k9OW3u0HjWBemszqvjta9ejEI1
-         NYoibLGq4zj6pRGeO4AZpgPboQDM8A8OUfXbMDJFfPB1Ob4PYdq6iaEfaHSsXe2B2mQb
-         O/WND9wDzOXtdtWvYNcgC1BEXCQuYyDXJJACc9jCWxKDyZ4vi0TvO30L2lnLuTMdNxEj
-         o5pg==
+        Sat, 9 Apr 2022 12:45:45 -0400
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1972E2414EB;
+        Sat,  9 Apr 2022 09:43:38 -0700 (PDT)
+Received: by mail-ej1-f52.google.com with SMTP id l26so22978395ejx.1;
+        Sat, 09 Apr 2022 09:43:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=q2Xgrp2SvwSgy23wzVIg4eWWwU/q3lLMvMENos7vSco=;
-        b=UTck+sd/HkuxQ46QuMi4Udf6SI0haexnQseP5289HMX7gt6e/gWEX7jHFGCa0WTHTa
-         TaUiuWmWxA9JXs+WnFRmpYi59ULRVw2H2V8bFPwgt3hTv0DwD/qcyVokTXw429/oS3Tt
-         QK1beoHU+gEHIiRwIk4TctV4gUlEajsG7C9r59dici1pKt03YHWSv1sVMAVW7a6KiDNg
-         IEbH4fe1zHeKBovTOqa6ERP82wDeTBZGC6/oY7TUhq3kEM8nQLn6NkXPdU6AfRmj2pdo
-         iGGK7//4R4DGMwaBxnze+3os2z2iieANA5myav2osPUp3VsDskz+muKnUglH+qqdGmDR
-         YQVw==
-X-Gm-Message-State: AOAM5305iUE3fnTTNdh3oMfIogislowocfF7np1CC1H0LEAtJKXKmAjv
-        AyRVjip0XP4PWYykvlNWo+DghmqcnL7DsdRh
-X-Google-Smtp-Source: ABdhPJxItMkFoN+71dJAmgY4CgUb2u9HoeScZoyiwkXHZZapD1U5eSQywJx4BHh3SJ/VFXak2lPGZg==
-X-Received: by 2002:a50:d4d9:0:b0:41d:6ee0:80d with SMTP id e25-20020a50d4d9000000b0041d6ee0080dmr2512412edj.254.1649522606745;
-        Sat, 09 Apr 2022 09:43:26 -0700 (PDT)
-Received: from [192.168.0.188] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id j12-20020a056402238c00b0041ce094cf47sm6588602eda.60.2022.04.09.09.43.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 09 Apr 2022 09:43:26 -0700 (PDT)
-Message-ID: <f2b65fad-6c95-493d-1714-d9d3fcfb2705@linaro.org>
-Date:   Sat, 9 Apr 2022 18:43:25 +0200
+        bh=pVmzukBjy0oK5OWKVTDNtxD4bzljFSiqXQowPFnBMAs=;
+        b=ihuV1XAQXcB4zoZMmEQcaiHloP5uBDw+kpfi/IJX8q0Cq/cgof3X1oAGmKFXujZ1Pq
+         fLle/bdsZS+CPemgKP3KiTXRRZgAq42lktZ3KWwOwppdkwF6OX8KB9aZSQjvPXfRjuRq
+         a4sIWzbVYOhnjgarqZ7zEXlXII5QIKWc7hAvO81cFK7XxeM9F9tObO1dgcwoWvN92ibi
+         2v2NRz15bo/HQD5HXot9KoPHimpWseOPdsDwVtFOufJym+4vbuqgSUBUyZaYZJT3SDzi
+         bjL5yrLaXfy2zqp2ZHHb47A3sBstc31V5dd91XLZqYcbnT4NHas7GCEWmndsNfEPpw3a
+         wcQg==
+X-Gm-Message-State: AOAM530/Wku3QSgSJQsvTdN0K8+znbfShbhPReyl7zIM0RYo3RwAI1bF
+        yT+lYZRnSFrFyo1NOAfWeow=
+X-Google-Smtp-Source: ABdhPJzqla9fbXMWhSk7USFQi80ez1A3cQaB67I3GHpphQCdfi0MUOiNvSFfSUUj+Z8egjN7MomlTw==
+X-Received: by 2002:a17:906:9c84:b0:6e0:7c75:6f01 with SMTP id fj4-20020a1709069c8400b006e07c756f01mr22916698ejc.103.1649522616408;
+        Sat, 09 Apr 2022 09:43:36 -0700 (PDT)
+Received: from aryzen.lan (cpc87451-finc19-2-0-cust61.4-2.cable.virginm.net. [82.11.51.62])
+        by smtp.googlemail.com with ESMTPSA id hu8-20020a170907a08800b006dfd2056ab2sm9893735ejc.97.2022.04.09.09.43.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 09 Apr 2022 09:43:35 -0700 (PDT)
+From:   Lucas Tanure <tanure@linux.com>
+To:     Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Lucas Tanure <tanure@linux.com>
+Subject: [PATCH v2 0/2] Ensure High and Low periods of SCL are correct
+Date:   Sat,  9 Apr 2022 17:43:32 +0100
+Message-Id: <20220409164334.157664-1-tanure@linux.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] dt-bindings: watchdog: Add SC8180X and SC8280XP
- compatibles
-Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220408212854.581481-1-bjorn.andersson@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220408212854.581481-1-bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/04/2022 23:28, Bjorn Andersson wrote:
-> Add compatibles for the SC8180X and SC8280XP platforms to the Qualcomm
-> watchdog binding.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
->  Documentation/devicetree/bindings/watchdog/qcom-wdt.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
+The default duty cycle of 33% is less than the required
+by the I2C specs for the LOW period of the SCL clock at
+100KHz bus speed.
 
+So, for 100Khz or less, use 50%H/50%L duty cycle, and
+for the clock above 100Khz, use 40%H/60%L duty cycle.
+That ensures the low period of SCL is always more than
+the minimum required by the specs at any given frequency.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+I did a few measures on the Khadas Vim3 board:
 
+i2c_AO (i2c@5000):
 
-Best regards,
-Krzysztof
+Before the patchset, I got:
+- 100KHz: 3.338us HIGH, 6.746us LOW, 33%/67%, Freq 99KHz (Not Valid tHIGH < 4.0us)
+- 400KHz: 860ns HIGH, 1.734us LOW, 33.15%/62.85%, Freq 385.505KHz (Valid)
+- 1000KHz: 362ns HIGH, 732ns LOW, 33.09%/66.91%, Freq 914.077KHz (Valid)
+
+With the patchset
+- 100KHz: 4.952us HIGH, 5.134us LOW, 49%/51%, Freq 99KHz (Valid)
+- 400KHz: 966ns HIGH, 1.628us LOW, 37.24%/62.76%, Freq 385.505KHz (Valid)
+- 1000KHz: 372ns HIGH, 720ns LOW, 34.07%/65.93%, Freq 915.741KHz (Valid)
+
+i2c3 (i2c@1c000):
+
+Before the patchset, I got:
+- 100KHz: 3.348us HIGH, 6.704us LOW, 33%/67%, Freq 99.5KHz (Not Valid tHIGH < 4.0us)
+- 400KHz: 864ns HIGH, 1.69us LOW, 33.83%/62.17%, Freq 391.543KHz (Valid)
+- 1000KHz: 360ns HIGH, 690ns LOW, 34.29%/65.71%, Freq 952.381KHz (Valid)
+
+With the patchset
+- 100KHz: 4.958us HIGH, 5.092us LOW, 49%/51%, Freq 99KHz (Valid)
+- 400KHz: 970ns HIGH, 1.582us LOW, 38%/62%, Freq 391.85KHz (Valid)
+- 1000KHz: 370ns HIGH, 680ns LOW, 35.24%/64.76%, Freq 952.57KHz (Valid)
+
+v2 changelog:
+ - Keep the previous calculation for Meson6
+ - Use I2C_MAX_STANDARD_MODE_FREQ
+ - move the comment before the if()
+ - use FIELD_PREP for setting div_l
+ - Drop removal of meson_i2c_data
+
+Previous versions:
+ V1: https://lkml.org/lkml/2022/3/26/109
+
+Lucas Tanure (2):
+  i2c: meson: Use _SHIFT and _MASK for register definitions
+  i2c: meson: Use 50% duty cycle for I2C clock
+
+ drivers/i2c/busses/i2c-meson.c | 111 ++++++++++++++++++++++++---------
+ 1 file changed, 82 insertions(+), 29 deletions(-)
+
+-- 
+2.35.1
+

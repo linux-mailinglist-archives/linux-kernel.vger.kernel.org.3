@@ -2,59 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E53F4FA16F
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 03:54:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBBB94FA173
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 03:58:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240449AbiDIB4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 21:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58462 "EHLO
+        id S236423AbiDICAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 22:00:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiDIB42 (ORCPT
+        with ESMTP id S229490AbiDICAB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 21:56:28 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01B51D7631;
-        Fri,  8 Apr 2022 18:54:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=po28GC7DIdQXTfB1hhQQWcuehU2iBp5gBTF64q3n/f0=; b=ipuebQ7QloxLERMoDAWtI9BBqE
-        9c6+dhRf4zs5UEY7JNpVvY/z+3dWVyYo5ArYY84HMpNC5xbXkb/UZtlffJstBmeIKCU3+1JOq6s+U
-        luZUmbmvFoWJ6KuNb5wulkCbkdHq5frsH75fjmZQMXq2iHE7HIcuM0CPrc4J+ZgMRDN2RxGyoQXNf
-        hLYXNoUWWaYX6X/cJgw+dwHA07xFsnkgNbSNU56U9lSKcWaHcDfHs772IQ8nE3wXwDWqHTEng27Ov
-        JBiSCxSFsFX/nYlPzmEfFRnXi9mqiwRe1hHkF9kesThsfg0MeBuntVP+vjCFrQ+0+++J0/Gy8EZfb
-        3X6DjlhQ==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nd0In-00ALMa-7e; Sat, 09 Apr 2022 01:54:13 +0000
-Message-ID: <ca208328-f632-3285-2f57-83dded6bd930@infradead.org>
-Date:   Fri, 8 Apr 2022 18:54:09 -0700
+        Fri, 8 Apr 2022 22:00:01 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CDA2AC4C
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 18:57:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649469474; x=1681005474;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=WbxxERTt3tjk5D9kdcgRolm9kB5K0owt6IPbE9QXvV4=;
+  b=YCFHCgYhJc2khXDBLkYQ2iqag8rc1GyfSRydv5uJPZtR7VkjPgoVmmqN
+   k5k2nWe2SpC/TgBSda3bewF0vtga+6KhESNfY1Qc1bYtlu7fn0aXlNGe3
+   kwek9vIwdSrOgtLrybp0uhldwc+p1zgAmw5Q/tZjEk/pr/ZkHsSp7P5C5
+   +GjjQ1QeFgna98kYMgDz9qKUkUXxS9YD0Dyv69sJHJ5xllghSEYDqG7Om
+   rbTaXXxv9PnVlcI3NnjyrGlRSN95vrIs1flHCKr1FYivvMOYKI4etLdg6
+   AQtW2CbBeVf+9lsfAln3JIq8N6UWjJBBLXqC+fV5Bg1TgXEcyX1O1thzF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="261922765"
+X-IronPort-AV: E=Sophos;i="5.90,246,1643702400"; 
+   d="scan'208";a="261922765"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Apr 2022 18:57:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,246,1643702400"; 
+   d="scan'208";a="621898234"
+Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 08 Apr 2022 18:57:53 -0700
+Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nd0MK-0000nS-ES;
+        Sat, 09 Apr 2022 01:57:52 +0000
+Date:   Sat, 9 Apr 2022 09:57:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Jason A. Donenfeld" <zx2c4@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:crng/random/jd/not-zero-entropy 7/11]
+ arch/arm/include/asm/timex.h:19:22: error: implicit declaration of function
+ 'read_current_timer' is invalid in C99
+Message-ID: <202204090940.51vg3sZ7-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCHv1] kbuild: support W=e to make build abort in case of
- warning
-Content-Language: en-US
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Yann Droneaud <ydroneaud@opteya.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <1422803720-14723-1-git-send-email-ydroneaud@opteya.com>
- <20220408084607.106468-1-ydroneaud@opteya.com>
- <CAK7LNAQZLt_OecOogOQiSu5snW+sffsMoFgVcjPTx_idj_=_tQ@mail.gmail.com>
- <CAKwvOd=yNnKsHJo0QWvoTuFF9p-y=cTftTD+7FY-wJ_f23zFTQ@mail.gmail.com>
- <81585705-6ed8-12e5-1355-332a6a5d2b17@infradead.org>
- <CAK7LNAS6ap9dR=kzRgQgt+d7FBBbVrwEqGU9g_pFD+nzMUt+gQ@mail.gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <CAK7LNAS6ap9dR=kzRgQgt+d7FBBbVrwEqGU9g_pFD+nzMUt+gQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,81 +65,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/ammarfaizi2/linux-block crng/random/jd/not-zero-entropy
+head:   ac7d8411f0216fe77e48592ed0ff2ccbd599d0de
+commit: 5cde0b2eaaf94891163f14984697361fe51849e6 [7/11] arm: use sched_clock() for random_get_entropy() instead of zero
+config: arm-randconfig-c002-20220408 (https://download.01.org/0day-ci/archive/20220409/202204090940.51vg3sZ7-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c29a51b3a257908aebc01cd7c4655665db317d66)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/ammarfaizi2/linux-block/commit/5cde0b2eaaf94891163f14984697361fe51849e6
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block crng/random/jd/not-zero-entropy
+        git checkout 5cde0b2eaaf94891163f14984697361fe51849e6
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm prepare
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/arm/kernel/asm-offsets.c:11:
+   In file included from include/linux/sched.h:15:
+   In file included from include/linux/sem.h:5:
+   In file included from include/uapi/linux/sem.h:5:
+   In file included from include/linux/ipc.h:7:
+   In file included from include/linux/rhashtable-types.h:15:
+   In file included from include/linux/workqueue.h:9:
+   In file included from include/linux/timer.h:6:
+   In file included from include/linux/ktime.h:24:
+   In file included from include/linux/time.h:60:
+   In file included from include/linux/time32.h:13:
+   In file included from include/linux/timex.h:66:
+>> arch/arm/include/asm/timex.h:19:22: error: implicit declaration of function 'read_current_timer' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           unsigned long ret = get_cycles();
+                               ^
+   arch/arm/include/asm/timex.h:15:37: note: expanded from macro 'get_cycles'
+   #define get_cycles()    ({ cycles_t c; read_current_timer(&c) ? 0 : c; })
+                                          ^
+   In file included from arch/arm/kernel/asm-offsets.c:11:
+   In file included from include/linux/sched.h:15:
+   In file included from include/linux/sem.h:5:
+   In file included from include/uapi/linux/sem.h:5:
+   In file included from include/linux/ipc.h:7:
+   In file included from include/linux/rhashtable-types.h:15:
+   In file included from include/linux/workqueue.h:9:
+   In file included from include/linux/timer.h:6:
+   In file included from include/linux/ktime.h:24:
+   In file included from include/linux/time.h:60:
+   In file included from include/linux/time32.h:13:
+   include/linux/timex.h:53:2: error: unterminated conditional directive
+   #ifndef _LINUX_TIMEX_H
+    ^
+   In file included from arch/arm/kernel/asm-offsets.c:11:
+   In file included from include/linux/sched.h:15:
+   In file included from include/linux/sem.h:5:
+   In file included from include/uapi/linux/sem.h:5:
+   In file included from include/linux/ipc.h:7:
+   In file included from include/linux/rhashtable-types.h:15:
+   In file included from include/linux/workqueue.h:9:
+   In file included from include/linux/timer.h:6:
+   In file included from include/linux/ktime.h:25:
+   In file included from include/linux/jiffies.h:11:
+   include/linux/timex.h:53:2: error: unterminated conditional directive
+   #ifndef _LINUX_TIMEX_H
+    ^
+   In file included from arch/arm/kernel/asm-offsets.c:12:
+   In file included from include/linux/mm.h:700:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:11: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                           ^        ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/arm/kernel/asm-offsets.c:12:
+   In file included from include/linux/mm.h:700:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:97:25: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return (set->sig[3] | set->sig[2] |
+                                         ^        ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/arm/kernel/asm-offsets.c:12:
+   In file included from include/linux/mm.h:700:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:11: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return  (set1->sig[3] == set2->sig[3]) &&
+                            ^         ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/arm/kernel/asm-offsets.c:12:
+   In file included from include/linux/mm.h:700:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:113:27: warning: array index 3 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                   return  (set1->sig[3] == set2->sig[3]) &&
+                                            ^         ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/arm/kernel/asm-offsets.c:12:
+   In file included from include/linux/mm.h:700:
+   In file included from include/linux/huge_mm.h:8:
+   In file included from include/linux/fs.h:33:
+   In file included from include/linux/percpu-rwsem.h:7:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:5: warning: array index 2 is past the end of the array (which contains 2 elements) [-Warray-bounds]
+                           (set1->sig[2] == set2->sig[2]) &&
+                            ^         ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+           unsigned long sig[_NSIG_WORDS];
+           ^
+   In file included from arch/arm/kernel/asm-offsets.c:12:
+   In file included from include/linux/mm.h:700:
+   In file included from include/linux/huge_mm.h:8:
 
 
-On 4/8/22 18:47, Masahiro Yamada wrote:
-> On Sat, Apr 9, 2022 at 5:36 AM Randy Dunlap <rdunlap@infradead.org> wrote:
->>
->>
->>
->> On 4/8/22 13:29, Nick Desaulniers wrote:
->>> On Fri, Apr 8, 2022 at 4:06 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->>>>
->>>> On Fri, Apr 8, 2022 at 5:46 PM Yann Droneaud <ydroneaud@opteya.com> wrote:
->>>>>
->>>>> When developing new code/feature, CONFIG_WERROR is most
->>>>> often turned off, especially for people using make W=12 to
->>>>> get more warnings.
->>>>>
->>>>> In such case, turning on -Werror temporarily would require
->>>>> switching on CONFIG_WERROR in the configuration, building,
->>>>> then switching off CONFIG_WERROR.
->>>>>
->>>>> For this use case, this patch introduces a new 'e' modifier
->>>>> to W= as a short hand for KCFLAGS+=-Werror" so that -Werror
->>>>> got added to the kernel (built-in) and modules' CFLAGS.
->>>>>
->>>>> Signed-off-by: Yann Droneaud <ydroneaud@opteya.com>
->>>>> ---
->>>>>  Makefile                   |  1 +
->>>>>  scripts/Makefile.extrawarn | 13 +++++++++++--
->>>>>  2 files changed, 12 insertions(+), 2 deletions(-)
->>>>>
->>>>> Changes since v0[0]:
->>>>>
->>>>>  - rebase on top of commit 64a91907c896 ("kbuild: refactor scripts/Makefile.extrawarn")
->>>>>  - document use case after commit 3fe617ccafd6 ("Enable '-Werror' by default for all kernel builds")
->>>>>
->>>>> [0] https://lore.kernel.org/all/1422803720-14723-1-git-send-email-ydroneaud@opteya.com/
->>>>
->>>>
->>>> I remembered the previous submission, I liked it, but I had lost it.
->>>>
->>>> It seems already 7 years ago, (before I became the Kbuild maintainer).
->>>> Thanks for coming back to this.
->>>>
->>>>
->>>> I like this, but I will wait some time for review comments.
->>>
->>> Dunno, this seems pretty simple:
->>>
->>> $ ./scripts/config -e WERROR
->>> $ make ... W=12
->>
->> Yeah, that's about what I was thinking too..
-> 
-> 
-> 
-> But, you cannot change the .config
-> when you build external modules.
-> 
-> "make W=e" might be useful for people who strive to
-> keep their downstream modules warning-free.
-> 
-> 
-> W=e is the same pattern.
-> I do not see much downside.
-> 
+vim +/read_current_timer +19 arch/arm/include/asm/timex.h
 
-Well, I don't see much downside either.
-
-> 
-> 
-> (BTW, I do not like CONFIG_WERROR.)
-
-Yeah, I disable it most of the time, but I am pretty good
-at searching for errors & warnings. Apparently some people
-are not.
+    16	
+    17	static inline unsigned long random_get_entropy(void)
+    18	{
+  > 19		unsigned long ret = get_cycles();
+    20		if (ret)
+    21			return ret;
+    22		return sched_clock();
+    23	}
+    24	#define random_get_entropy random_get_entropy
+    25	
 
 -- 
-~Randy
+0-DAY CI Kernel Test Service
+https://01.org/lkp

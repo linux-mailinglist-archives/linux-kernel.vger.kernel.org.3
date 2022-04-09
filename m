@@ -2,126 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08F5B4FA7D4
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 14:59:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADC1C4FA7BB
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 14:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241793AbiDINBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 09:01:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55858 "EHLO
+        id S241714AbiDIMqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 08:46:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbiDINB2 (ORCPT
+        with ESMTP id S237709AbiDIMqP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 09:01:28 -0400
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CF9455BC;
-        Sat,  9 Apr 2022 05:59:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
-         references;
-        bh=MmsrU07PgLUD8XKlGAlPmaXdI+yyXvNNcYAukLrx62Y=;
-        b=CEI2hXzSPqnIcufESjduzwbYlCeHlDyPUTHL3FWC7B1OvItyXEclcgmIXLx9vpVt+N1DhLe2vbRWE
-         KPv2Cv2gWs58Uacjv8iDViXf9vtOgLwpHGBXnuF6OY2I2wZv91aU+5balZe5ZuLHBL3DBUJGdNBfwn
-         p4ltj6MAQDWVko0oCiW48L8cDvlPv5LMISSymSyt7OBxfmWnmLd9cZwVNstJ4Vc8U9bunmwHWU4MjN
-         L2e3KD5WdNE4kPdVNn4g9aPQoxT7MvLwwAXFDt18PMzYDn9niG9w35jF78hfQKrlai009Eo9n30lZY
-         WmRGeNmJrWKryzxvk9Rcd5g2uw4X54w==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.16.2.1410, Stamp: 3], Multi: [Enabled, t: (0.000008,0.008582)], BW: [Enabled, t: (0.000013,0.000001)], RTDA: [Enabled, t: (0.063684), Hit: No, Details: v2.34.0; Id: 15.52k78o.1g076fs5a.4ace; mclb], total: 0(700)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from x260 ([178.70.66.234])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Sat, 9 Apr 2022 15:58:51 +0300
-Date:   Sat, 9 Apr 2022 15:38:51 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     Xu Yilun <yilun.xu@intel.com>
-Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
-        conor.dooley@microchip.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, system@metrotek.ru,
-        linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v9 1/3] fpga: fpga-mgr: support bitstream offset in image
- buffer
-Message-ID: <20220409123851.tcjflctnuurag2yb@x260>
-References: <20220407133658.15699-1-i.bornyakov@metrotek.ru>
- <20220407133658.15699-2-i.bornyakov@metrotek.ru>
- <20220409050423.GA265355@yilunxu-OptiPlex-7050>
+        Sat, 9 Apr 2022 08:46:15 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 476C41E1123
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 05:44:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649508246; x=1681044246;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=BEmosva6/JPOAQ+B3/z10tUfAiquglXBN4RK3qAAr70=;
+  b=Ok5hSRABN4sKQEXx1wZLy6mOuEcdQGY4j7m/CoZpenqyfMNqYg42O75u
+   anXr5C8Y/ZrYq+YACeRxtwjIQM3ioao3Ikc3cv6YtvDiXY/vtJSgZEzDb
+   +naGTsOczmlLHmu5yn8qNuLBuHRGzO30MgZh7D8C5f3h+CTWMj8CgBM9e
+   rANd7PybcPW48IJ9v3KJgMDkNc/t/rj9ucglrHSJG5iIFb/17PfQcaQm4
+   PvOSeVU1oISPPBofNMut0sgAwYXITqMf5tJhPC41Wi6DWkSyH1tdDoMFJ
+   PqoRLhdbVLrN5BhFLDjxk5p3PJMFEpm96zkVcGgSLFcexnB++//AD7ktE
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="242392001"
+X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
+   d="scan'208";a="242392001"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2022 05:44:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
+   d="scan'208";a="852546628"
+Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 09 Apr 2022 05:44:04 -0700
+Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ndARf-00019X-Sj;
+        Sat, 09 Apr 2022 12:44:03 +0000
+Date:   Sat, 09 Apr 2022 20:43:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2022.04.03c] BUILD SUCCESS
+ 59eee46c88762acab3021927babb6be77fc23967
+Message-ID: <62517f81.xY6La0JiMgreVDGG%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220409050423.GA265355@yilunxu-OptiPlex-7050>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 09, 2022 at 01:04:23PM +0800, Xu Yilun wrote:
-> On Thu, Apr 07, 2022 at 04:36:56PM +0300, Ivan Bornyakov wrote:
-> > 
-> > ... snip ...
-> > 
-> > @@ -148,12 +149,10 @@ static int fpga_mgr_write_init_buf(struct fpga_manager *mgr,
-> >  	int ret;
-> >  
-> >  	mgr->state = FPGA_MGR_STATE_WRITE_INIT;
-> > -	if (!mgr->mops->initial_header_size)
-> > -		ret = fpga_mgr_write_init(mgr, info, NULL, 0);
-> > -	else
-> > -		ret = fpga_mgr_write_init(
-> > -		    mgr, info, buf, min(mgr->mops->initial_header_size, count));
-> > +	if (mgr->mops->initial_header_size)
-> > +		count = min(mgr->mops->initial_header_size, count);
-> >  
-> > +	ret = fpga_mgr_write_init(mgr, info, buf, count);
-> 
-> Here we pass the whole buffer for write_init(). Maybe it works for mapped buf,
-> but still doesn't work for sg buf.
-> 
-> It is also inefficient if we change to map and copy all sg buffers just for
-> write_init().
-> 
-> We could discuss on the solution.
-> 
-> My quick mind is we introduce an optional fpga_manager_ops.parse_header()
-> callback, and a header_size (dynamic header size) field in
-> fpga_image_info. FPGA core starts with mapping a buf of initial_header_size
-> for parse_header(), let the drivers decide the dynamic header_size.
-> 
-> The parse_header() could be called several times with updated dynamic
-> header_size, if drivers doesn't get enough buffer for final decision and
-> return -EAGAIN.
-> 
-> Then write_init() be called with the final dynamic header size.
-> 
-> For mapped buffer, just passing the whole buffer for write_init() is
-> fine.
-> 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.04.03c
+branch HEAD: 59eee46c88762acab3021927babb6be77fc23967  rcu-tasks: Handle sparse cpu_possible_mask in rcu_tasks_invoke_cbs()
 
-Ok, that's sounds reasonable. Should we pass PAGE_SIZE of a buffer to
-the parse_header() if initial_header_size is not set? The other option
-would be to make initial_header_size to be mandatory for usage of
-parse_header().
+elapsed time: 1111m
 
-> > 
-> > ... snip ...
-> > 
-> > @@ -98,6 +101,8 @@ struct fpga_image_info {
-> >  	struct sg_table *sgt;
-> >  	const char *buf;
-> >  	size_t count;
-> > +	size_t bitstream_start;
-> 
-> How about we name it header_size?
-> 
-> > +	size_t bitstream_size;
-> 
-> And how about data_size?
-> 
+configs tested: 117
+configs skipped: 3
 
-Sure, I don't mind.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+s390                                defconfig
+mips                      loongson3_defconfig
+arm                       aspeed_g5_defconfig
+mips                 decstation_r4k_defconfig
+mips                  maltasmvp_eva_defconfig
+m68k                             allyesconfig
+microblaze                      mmu_defconfig
+powerpc                    sam440ep_defconfig
+xtensa                              defconfig
+m68k                        m5407c3_defconfig
+h8300                            alldefconfig
+sh                        edosk7760_defconfig
+sh                           se7722_defconfig
+arc                          axs103_defconfig
+powerpc                    adder875_defconfig
+sh                           se7206_defconfig
+arm64                            alldefconfig
+nios2                         10m50_defconfig
+sh                            migor_defconfig
+mips                    maltaup_xpa_defconfig
+s390                       zfcpdump_defconfig
+arm                          exynos_defconfig
+alpha                            allyesconfig
+powerpc64                           defconfig
+ia64                          tiger_defconfig
+powerpc                 mpc8540_ads_defconfig
+arm                          gemini_defconfig
+ia64                             allmodconfig
+xtensa                generic_kc705_defconfig
+h8300                       h8s-sim_defconfig
+parisc                generic-32bit_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220408
+ia64                             allyesconfig
+ia64                                defconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arc                  randconfig-r043-20220408
+s390                 randconfig-r044-20220408
+riscv                randconfig-r042-20220408
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
+
+clang tested configs:
+x86_64                        randconfig-c007
+i386                          randconfig-c001
+powerpc              randconfig-c003-20220408
+riscv                randconfig-c006-20220408
+mips                 randconfig-c004-20220408
+arm                  randconfig-c002-20220408
+s390                 randconfig-c005-20220408
+powerpc                   bluestone_defconfig
+powerpc                      obs600_defconfig
+mips                        qi_lb60_defconfig
+mips                     cu1000-neo_defconfig
+riscv                             allnoconfig
+mips                   sb1250_swarm_defconfig
+mips                     loongson1c_defconfig
+powerpc                       ebony_defconfig
+powerpc                     mpc5200_defconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+hexagon              randconfig-r045-20220408
+hexagon              randconfig-r041-20220408
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

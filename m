@@ -2,156 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7A454FA559
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 08:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35E194FA560
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 08:19:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240015AbiDIGOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 02:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60662 "EHLO
+        id S236772AbiDIGU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 02:20:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234804AbiDIGOK (ORCPT
+        with ESMTP id S231951AbiDIGUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 02:14:10 -0400
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9106DD0A97;
-        Fri,  8 Apr 2022 23:12:03 -0700 (PDT)
-Received: from [192.168.0.2] (ip5f5ae90c.dynamic.kabel-deutschland.de [95.90.233.12])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id CDD4761E6478B;
-        Sat,  9 Apr 2022 08:12:01 +0200 (CEST)
-Message-ID: <9cf20395-369a-2738-608d-dd5f1aabe48b@molgen.mpg.de>
-Date:   Sat, 9 Apr 2022 08:12:03 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v6 2/3] dt-bindings: edac: nuvoton: add NPCM memory
- controller
-Content-Language: en-US
-To:     Medad CChien <medadyoung@gmail.com>
-Cc:     rric@kernel.org, james.morse@arm.com, tony.luck@intel.com,
-        mchehab@kernel.org, bp@alien8.de, robh+dt@kernel.org,
-        benjaminfair@google.com, yuenn@google.com, venture@google.com,
-        KWLIU@nuvoton.com, YSCHU@nuvoton.com, JJLIU0@nuvoton.com,
-        KFTING@nuvoton.com, avifishman70@gmail.com, tmaimon77@gmail.com,
-        tali.perry1@gmail.com, ctcchien@nuvoton.com,
-        devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org
-References: <20220322030152.19018-1-ctcchien@nuvoton.com>
- <20220322030152.19018-3-ctcchien@nuvoton.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20220322030152.19018-3-ctcchien@nuvoton.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 9 Apr 2022 02:20:54 -0400
+Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88A0CDF69
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 23:18:47 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [10.15.192.164])
+        by mail-app4 (Coremail) with SMTP id cS_KCgBHSfA8JVFiUYv3AA--.41344S2;
+        Sat, 09 Apr 2022 14:18:39 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-staging@lists.linux.dev, alexander.deucher@amd.com,
+        davem@davemloft.net, gregkh@linuxfoundation.org,
+        Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH V2 04/11] drivers: staging: rtl8723bs: Fix deadlock in rtw_surveydone_event_callback()
+Date:   Sat,  9 Apr 2022 14:18:35 +0800
+Message-Id: <20220409061836.60529-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cS_KCgBHSfA8JVFiUYv3AA--.41344S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Cr1Utw17GFWfKryUKrWkCrg_yoW8uw1Upr
+        W0g34YkF1jqr1293Z7G3WDZr4fua18Kr47XFs3Kws8ZrZ5ZFy3XF98t34aqF4aqFnrXwsI
+        yr18X34fAF1UCw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUka1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
+        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
+        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v
+        1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgQPAVZdtZGjxwA-s8
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Medad,
+There is a deadlock in rtw_surveydone_event_callback(),
+which is shown below:
 
+   (Thread 1)                  |      (Thread 2)
+                               | _set_timer()
+rtw_surveydone_event_callback()|  mod_timer()
+ spin_lock_bh() //(1)          |  (wait a time)
+ ...                           | rtw_scan_timeout_handler()
+ del_timer_sync()              |  spin_lock_bh() //(2)
+ (wait timer to stop)          |  ...
 
-Thank you for your patch.
+We hold pmlmepriv->lock in position (1) of thread 1 and use
+del_timer_sync() to wait timer to stop, but timer handler
+also need pmlmepriv->lock in position (2) of thread 2.
+As a result, rtw_surveydone_event_callback() will block forever.
 
-Am 22.03.22 um 04:01 schrieb Medad CChien:
-> Added device tree binding documentation for Nuvoton BMC
-> NPCM memory controller.
+This patch extracts del_timer_sync() from the protection of
+spin_lock_bh(), which could let timer handler to obtain
+the needed lock. What`s more, we change spin_lock_bh() in
+rtw_scan_timeout_handler() to spin_lock_irq(). Otherwise,
+spin_lock_bh() will also cause deadlock() in timer handler.
 
-Please use present tense, and spell *devicetree* without a space. The 
-line below even fits in 75 characters:
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+Changes in V2:
+  - Change spin_lock_bh() to spin_lock_irq() in timer handler.
 
-Document devicetree bindings for the Nuvoton BMC NPCM memory controller.
+ drivers/staging/rtl8723bs/core/rtw_mlme.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-> Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> ---
->   .../edac/nuvoton,npcm-memory-controller.yaml  | 62 +++++++++++++++++++
->   1 file changed, 62 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml b/Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml
-> new file mode 100644
-> index 000000000000..97469294f4ba
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/edac/nuvoton,npcm-memory-controller.yaml
-> @@ -0,0 +1,62 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/edac/nuvoton,npcm-memory-controller.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Nuvoton NPCM Memory Controller
-> +
-> +maintainers:
-> +  - Medad CChien <ctcchien@nuvoton.com>
-> +
-> +description: |
-> +  The Nuvoton BMC SoC supports DDR4 memory with and without ECC (error
-> +  correction check).
-> +
-> +  The memory controller supports single bit error correction, double bit
-> +  error detection (in-line ECC in which a section (1/8th) of the
-> +  memory device used to store data is used for ECC storage).
+diff --git a/drivers/staging/rtl8723bs/core/rtw_mlme.c b/drivers/staging/rtl8723bs/core/rtw_mlme.c
+index ed2d3b7d44d..62f140985e3 100644
+--- a/drivers/staging/rtl8723bs/core/rtw_mlme.c
++++ b/drivers/staging/rtl8723bs/core/rtw_mlme.c
+@@ -751,7 +751,9 @@ void rtw_surveydone_event_callback(struct adapter	*adapter, u8 *pbuf)
+ 	}
+ 
+ 	if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY)) {
++		spin_unlock_bh(&pmlmepriv->lock);
+ 		del_timer_sync(&pmlmepriv->scan_to_timer);
++		spin_lock_bh(&pmlmepriv->lock);
+ 		_clr_fwstate_(pmlmepriv, _FW_UNDER_SURVEY);
+ 	}
+ 
+@@ -1586,11 +1588,11 @@ void rtw_scan_timeout_handler(struct timer_list *t)
+ 						  mlmepriv.scan_to_timer);
+ 	struct	mlme_priv *pmlmepriv = &adapter->mlmepriv;
+ 
+-	spin_lock_bh(&pmlmepriv->lock);
++	spin_lock_irq(&pmlmepriv->lock);
+ 
+ 	_clr_fwstate_(pmlmepriv, _FW_UNDER_SURVEY);
+ 
+-	spin_unlock_bh(&pmlmepriv->lock);
++	spin_unlock_irq(&pmlmepriv->lock);
+ 
+ 	rtw_indicate_scan_done(adapter, true);
+ }
+-- 
+2.17.1
 
-*memory* fits on the line above?
-
-> +
-> +  Note, the bootloader must configure ECC mode for the memory controller.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - nuvoton,npcm845-memory-controller
-> +      - nuvoton,npcm750-memory-controller
-
-Sort the entries?
-
-
-Kind regards,
-
-Paul
-
-
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    minItems: 1
-> +    items:
-> +      - description: uncorrectable error interrupt
-> +      - description: correctable error interrupt
-> +
-> +  interrupt-names:
-> +    minItems: 1
-> +    items:
-> +      - const: ue
-> +      - const: ce
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    ahb {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +        mc: memory-controller@f0824000 {
-> +            compatible = "nuvoton,npcm750-memory-controller";
-> +            reg = <0x0 0xf0824000 0x0 0x1000>;
-> +            interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
-> +        };
-> +    };
-> +

@@ -2,114 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0784FA8CE
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 15:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1D354FA8DA
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 15:59:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242279AbiDIN7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 09:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42950 "EHLO
+        id S242297AbiDIOBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 10:01:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233332AbiDIN7O (ORCPT
+        with ESMTP id S236016AbiDIOBT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 09:59:14 -0400
-Received: from mo4-p03-ob.smtp.rzone.de (mo4-p03-ob.smtp.rzone.de [85.215.255.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 994B012AB7;
-        Sat,  9 Apr 2022 06:57:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1649512623;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=cgH1sK1tnwa7jff/ajXwpd4M2gdphLhkWXp6ch5sicQ=;
-    b=iyeBVPcjItMsTmdAHkgv9cHZl2YGUdC6d90BTe28SiKFWnnpvWhQT/NywkHTkC8o0d
-    7BQujUJ69SFw1HG0O0OGtbO+M5cdYz9ugaX5jvDfnWdf0W4N6qaMeF3RttC/c1iSOWc6
-    U+dV0+kqZ6hm9Hm42CVsqG0/A4njHOvSv19GqqewMpTtxgG3qUldf0UNC5duS2m4KdlN
-    goyrE/dxrBi7QOT0kwQYJVFAtxDe+qUekrBhNv+6UCMiqMURNdcwsnXH5jpF63Uo6g9x
-    ffzHb1ZcNhPog6kiFRwwdEFT32d4Rc95oiE0ddawaZSYrpplKOpsTl2Hx2LhTmY8zUUw
-    5ydA==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7wpz8NIGH/jrwDepmg=="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.42.2 DYNA|AUTH)
-    with ESMTPSA id k708cfy39Dv3uap
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Sat, 9 Apr 2022 15:57:03 +0200 (CEST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH 05/18] MIPS: DTS: jz4780: fix pinctrl as reported by
- dtbscheck
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <fb521d87-2d52-c15c-83c0-1b62bf1b1cc4@linaro.org>
-Date:   Sat, 9 Apr 2022 15:57:02 +0200
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, letux-kernel@openphoenux.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <F0C0E942-BA61-4C74-860B-93D57C3D0F9A@goldelico.com>
-References: <cover.1649443080.git.hns@goldelico.com>
- <1941bc4ed553b27f399ad00ea61ff2b0237d14e3.1649443080.git.hns@goldelico.com>
- <e905896e-335d-a88a-1961-d17b92e46585@linaro.org>
- <530E0F7F-FC03-45DD-BF87-D049D3108AD3@goldelico.com>
- <c84b5ec0-0193-ab62-1985-25bc2baa9f05@linaro.org>
- <B5EB5983-DA9F-4631-B737-2B1417CF9054@goldelico.com>
- <f40e1a00-be4d-11c7-6a7c-6b50635a2960@linaro.org>
- <499848FD-3F64-4B5D-9259-5C9E1ED4E8AB@goldelico.com>
- <fb521d87-2d52-c15c-83c0-1b62bf1b1cc4@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-X-Mailer: Apple Mail (2.3445.104.21)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 9 Apr 2022 10:01:19 -0400
+Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BD1B7E0AA;
+        Sat,  9 Apr 2022 06:59:10 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [10.15.192.164])
+        by mail-app2 (Coremail) with SMTP id by_KCgDnFMUekVFiXCpqAQ--.46320S2;
+        Sat, 09 Apr 2022 21:58:58 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-kernel@vger.kernel.org
+Cc:     netdev@vger.kernel.org, alexander.deucher@amd.com,
+        gregkh@linuxfoundation.org, davem@davemloft.net, krzk@kernel.org,
+        Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH] drivers: nfc: nfcmrvl: fix UAF bug in nfcmrvl_nci_unregister_dev()
+Date:   Sat,  9 Apr 2022 21:58:54 +0800
+Message-Id: <20220409135854.33333-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: by_KCgDnFMUekVFiXCpqAQ--.46320S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7KFyxXr1ruw1fuFWrur43Awb_yoW8Wry5pa
+        15WFy0kw1kKFW5XF4rJFnxta45Wa13C34UWFZxJ3s29wn0qFW0yrnFya48XryUJrWUJFWF
+        krsxAa4UuF4vyF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUka1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
+        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r10
+        6r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v
+        1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUZa9-UUUUU=
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgIPAVZdtZG3xwAgsx
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+There is a potential UAF bug in nfcmrvl usb driver between
+unregister and resume operation.
 
+The race that cause that UAF can be shown as below:
 
-> Am 09.04.2022 um 15:46 schrieb Krzysztof Kozlowski =
-<krzysztof.kozlowski@linaro.org>:
->=20
-> On 09/04/2022 15:41, H. Nikolaus Schaller wrote:
->>>=20
->>> No. I ask you to fix all pin-controller cases, for entire MIPS, not =
-just
->>> one.
->>=20
->> Oops. Nope. I am a volunteer and neither your employee nor slave.
->=20
-> No one thinks differently and I am sorry that you felt it. Please =
-accept
-> my apologies, if you get different impression. You understand though =
-the
-> meaning of word "ask for something" and "order something" (the latter
-> which I did not use).
->=20
-> I just asked.
+   (FREE)                   |      (USE)
+                            | nfcmrvl_resume
+                            |  nfcmrvl_submit_bulk_urb
+                            |   nfcmrvl_bulk_complete
+                            |    nfcmrvl_nci_recv_frame
+                            |     nfcmrvl_fw_dnld_recv_frame
+                            |      skb_queue_tail
+nfcmrvl_disconnect          |
+ nfcmrvl_nci_unregister_dev |
+  nfcmrvl_fw_dnld_deinit    |      ...
+   destroy_workqueue //(1)  |
+   ...                      |      queue_work //(2)
 
-Ok. Maybe english is not our mother language and we sometimes don't
-get the nuances right. Sorry if I understood that wrongly.
+When nfcmrvl usb driver is resuming, we detach the device.
+The workqueue is destroyed in position (1), but it will be
+latter used in position (2), which leads to data race.
 
-At least I now understand what you did suggest.
+This patch reorders the nfcmrvl_fw_dnld_deinit after
+nci_unregister_device in order to prevent UAF. Because
+nci_unregister_device will not return until finish all
+operations from upper layer.
 
-Doing the same change for treewide MIPS is beyond my capabilities since
-I can't easily test any compile setup. So far I only compile for CI20 =
-and
-as far as I know every machine still needs its own config for MIPS=20
-(haven't checked recently). So I am not even sure if dtbscheck tells me
-all locations.
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+ drivers/nfc/nfcmrvl/main.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-BR and thanks,
-Nikolaus
-
-
-
-
+diff --git a/drivers/nfc/nfcmrvl/main.c b/drivers/nfc/nfcmrvl/main.c
+index 2fcf545012b..5ed17b23ee8 100644
+--- a/drivers/nfc/nfcmrvl/main.c
++++ b/drivers/nfc/nfcmrvl/main.c
+@@ -186,12 +186,11 @@ void nfcmrvl_nci_unregister_dev(struct nfcmrvl_private *priv)
+ 	if (priv->ndev->nfc_dev->fw_download_in_progress)
+ 		nfcmrvl_fw_dnld_abort(priv);
+ 
+-	nfcmrvl_fw_dnld_deinit(priv);
+-
+ 	if (gpio_is_valid(priv->config.reset_n_io))
+ 		gpio_free(priv->config.reset_n_io);
+ 
+ 	nci_unregister_device(ndev);
++	nfcmrvl_fw_dnld_deinit(priv);
+ 	nci_free_device(ndev);
+ 	kfree(priv);
+ }
+-- 
+2.17.1
 

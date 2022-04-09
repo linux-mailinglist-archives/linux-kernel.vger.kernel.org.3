@@ -2,70 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5141D4FA90F
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 16:36:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F0164FA911
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 16:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241144AbiDIOiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 10:38:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39564 "EHLO
+        id S242337AbiDIOmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 10:42:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235533AbiDIOiM (ORCPT
+        with ESMTP id S235533AbiDIOmM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 10:38:12 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60429DCE19;
-        Sat,  9 Apr 2022 07:36:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1649514958;
-        bh=ghNr2zs3nB8uWGOaMVInvT80i/YBm7oEAKKakSvfjK4=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=YgHVQaVRN98ayrwUocBoKQV1ebg1Xk4gO95TJXL28Cv5urL0frJOq/D7AOBNf3Yxp
-         r1cENgW6sPoGp2/sOlsRMscoEdkIifSbL/y1YvX+Rpmk8K04UaMUc3Oahokt36E8TX
-         i7SnDizvp4YUK8QFTOql/vR6KRlYlBfkuUfVrWEI=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([78.35.207.192]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1McpNy-1oCo7o0gvC-00ZttH; Sat, 09
- Apr 2022 16:35:58 +0200
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     openbmc@lists.ozlabs.org
-Cc:     Joel Stanley <joel@jms.id.au>,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] ARM: dts: nuvoton: wpcm450: Add missing aliases for serial0/serial1
-Date:   Sat,  9 Apr 2022 16:35:49 +0200
-Message-Id: <20220409143549.2447801-1-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220409143309.2446741-1-j.neuschaefer@gmx.net>
-References: <20220409143309.2446741-1-j.neuschaefer@gmx.net>
+        Sat, 9 Apr 2022 10:42:12 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F233C235846
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 07:40:04 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 66so10241022pga.12
+        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 07:40:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JU41SxMqoMbPQ8QDWJHCi79lbMEbsjN5J5bWfMPCK44=;
+        b=FcErb1/aURM81N0KQMBD4HiiOBV3ZvN/fKTZEZCoVKB4fpu3Yz2xPUczF6QvdYRNoF
+         l+8SzpOuuPgzj9fkGjH7uHoEDVg6+VdDH3GC1qA12fmXurrcYKgEoPirQCHDPkJu4dXQ
+         5rL0z9yh/sslZFzBAJzMffuqGGMwyMD2W6lKYPxOhQY18mH85wVuYt05zPRxlAZy+YL0
+         7YUyl9TJAHE+6zeWsNamzUdjJrZ2COO12vYK50DkZRQ8W/qF6LLVd8sfozz2w9YtxjcD
+         2Jew7Cb4adTIRU62EqpBj28FQcMTLFaTchc3ZaKVl28JgkAhGkyx8mH2l/9dXfP+ah1v
+         JDuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JU41SxMqoMbPQ8QDWJHCi79lbMEbsjN5J5bWfMPCK44=;
+        b=CyZ8PX0obPcVfftCAqX96rMlBzhrm577A4usdPPal16Ej2huJOOG2/zxgvQ+2cdmVt
+         uE98NBzI//G1DlU2GtWqe3EeFaBhAWthf3ERfS2m8/fJRIKXH8KqH2mqme0lrAMLdNKP
+         byMirKHFYLMyDi37x4W54q3An7aZUTQqEe34mrnsqPYVQEhk4ssTzYB+vnUYJZ4b19rp
+         oSZYAHG0PVetAiHVM1Fdfi/M6sqVvY+vyfg58FoqBqYH4mlZhyfmNhH+SUAuk/ZhWQec
+         UpwIMDwbwx+o67N+rT0q/l/6w46+CYzYsgfjkgCMFz3fCq8Erj2ag5b83J7b8ZJbdZw5
+         zt9A==
+X-Gm-Message-State: AOAM531N1Q+S++qABmtJv+X0E0WpTcT7+BDHas+JRTudVLylLeoMOJZi
+        2au/AlN2vskbV+H1t/AI5g==
+X-Google-Smtp-Source: ABdhPJzsW+eToTWCrP8SHQ9RBgakFlrWo4D3JSdC6x9/gCg055Ug42/f1pZhPJGIslBLxzrw0/4W8A==
+X-Received: by 2002:a05:6a00:b47:b0:4fd:a5b5:a279 with SMTP id p7-20020a056a000b4700b004fda5b5a279mr24556558pfo.19.1649515204528;
+        Sat, 09 Apr 2022 07:40:04 -0700 (PDT)
+Received: from localhost.localdomain ([144.202.91.207])
+        by smtp.gmail.com with ESMTPSA id f15-20020a056a001acf00b004fb2ad05521sm29225307pfv.215.2022.04.09.07.40.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 09 Apr 2022 07:40:03 -0700 (PDT)
+From:   Zheyu Ma <zheyuma97@gmail.com>
+To:     pierre-louis.bossart@linux.intel.com, lgirdwood@gmail.com,
+        ranjani.sridharan@linux.intel.com, kai.vehmanen@linux.intel.com,
+        broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
+        peter.ujfalusi@linux.intel.com
+Cc:     sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>
+Subject: [PATCH] ASoC: SOF: Intel: Check the bar size before remapping
+Date:   Sat,  9 Apr 2022 22:39:50 +0800
+Message-Id: <20220409143950.2570186-1-zheyuma97@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:UDmceD+wOc+uQq+TihNCEBkomyR+dEQoC35DYTAHqnjZc9Jd4ok
- av/sSSAx3tsVPIG0TcugS3QmFbNZA8bhF6Fgh8CLeiZS5bz9jOnJTEoH18WyvNkEjFosuw0
- eZSjRXXhwUdcf1udrukTEG2dAFn9xU6GGQFPy/TWSxsaqBfX0Sg9rjb7FymSH8LOCmhqLaU
- sp9Z264KX/5u4H4PmEDkQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:QB55vLoh4ws=:Vj6JcyBgIiHxCFNJJfFbPj
- EItxw2ktRq0GOAtn0xsRuGQ7wxsq1OUR5qzVwC9SaHtHQer1f+ihdHxA46VQZVMftNcKi1vqH
- Rpwl0DMD7v2jZRQTL9x/W11YdcUbiHStcHMHlLdHdy0acgrxUpEUpYWwN9rjq8B0nle8jlhCe
- tWut46ZJtJohM5TngVrtKSktY8c1O6rrNOK60fwFVCBj0Ax8eIXI4h7hJCQqS+WXxKoWMY0/R
- xDMgyOlprJq/8qYLIGoy8oiy5+j64RTEaWhQaXJiDaqDcPKeawPnPSG49VQbs9KT31p9UrYyc
- fAQneqpfeBF+P+3sUSSYwsNd5ZYbbJXwpuCEoMfa0jpWb9BI//NT62Pgb1lLy/aEUvnhJZMuO
- rTByJnLa2Ek8EEckntiQE/OVkEuCPc+Oq9i3PZKKLRjdj+6yjd95wC4Mc6x86/Qu0tFInLuOU
- wvY5sO3IEZVYCVNploTKCILWiDyTlz4T6m2McLBqEfFK6sqkH7OUC+M5lkMwRSbX0karzGsEw
- hNVZsHc/H0JQKwvVrvJQp1iilGGIS2bdQI6/Iz91wq9TEFLNRPEGIp09+d0mTGbYVx/P2/CUT
- T0p8MIhzdMJRlRVzHtyah9lAPhcZX0AoE+MUGapDYiSwKFvbxdcQ1hW20kOc8FDEtB0dCeQ2n
- WTdsnVlm/WXbIyFgf7aYqSyMDuhooqpcQAQiKEUhe4FG5LULt0K9TS7XoY3n4EEiAm6xN/l3A
- 1kss2jGVQWR/cn339H4kBQjwUdXyoOLMYHmLWLToPbcOxo+d5xVbI6sI2PcLT6mD6lBwunYo8
- Y5TvlDFgOlgBwG1LwqoIvO5LK7V6kBMvZ5EQ5TwqpEHJxurJoMgZrxWWOclyD+QTjQ/PHF5ka
- B2i7ebWwDZ+ZBJwIeI3OVbyuMVP1mYdfHIxPO5gS5kMagEOV0MhGVmUtML+2BbcCkg2S7zjTi
- usZmHWrO7ojTiPi5D/Z9LfKrmMocN4HYaxIBmqlHWtMGFO/reD3o7kua1ss1ZhqwVibwiBcqX
- sTMD4hVpxyadmZh/ienNGUs0qXB4Y/upA1GDqBZLkPYS5K49lVfhyXebJFT1VqQLIIKYDdw5C
- gqi93z/ZIZ4Z9E=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,32 +71,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Without these, /chosen/stdout-path =3D "serial0:115200n8", as done in
-nuvoton-wpcm450-supermicro-x9sci-ln4f.dts, does not work.
+The driver should use the pci_resource_len() to get the actual length of
+pci bar, and compare it with the expect value. If the bar size is too
+small (such as a broken device), the driver should return an error.
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+---
+ sound/soc/sof/intel/pci-tng.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-v2:
-- mention WPCM450 in the summary
-=2D--
- arch/arm/boot/dts/nuvoton-wpcm450.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/arm/boot/dts/nuvoton-wpcm450.dtsi b/arch/arm/boot/dts/nu=
-voton-wpcm450.dtsi
-index 93595850a4c3c..57943bf5aa4a9 100644
-=2D-- a/arch/arm/boot/dts/nuvoton-wpcm450.dtsi
-+++ b/arch/arm/boot/dts/nuvoton-wpcm450.dtsi
-@@ -17,6 +17,8 @@ aliases {
- 		gpio5 =3D &gpio5;
- 		gpio6 =3D &gpio6;
- 		gpio7 =3D &gpio7;
-+		serial0 =3D &serial0;
-+		serial1 =3D &serial1;
- 	};
-
- 	cpus {
-=2D-
-2.35.1
+diff --git a/sound/soc/sof/intel/pci-tng.c b/sound/soc/sof/intel/pci-tng.c
+index 6efef225973f..7d502cc3ca80 100644
+--- a/sound/soc/sof/intel/pci-tng.c
++++ b/sound/soc/sof/intel/pci-tng.c
+@@ -75,7 +75,11 @@ static int tangier_pci_probe(struct snd_sof_dev *sdev)
+ 
+ 	/* LPE base */
+ 	base = pci_resource_start(pci, desc->resindex_lpe_base) - IRAM_OFFSET;
+-	size = PCI_BAR_SIZE;
++	size = pci_resource_len(pci, desc->resindex_lpe_base);
++	if (size < PCI_BAR_SIZE) {
++		dev_err(sdev->dev, "error: I/O region is too small.\n");
++		return -ENODEV;
++	}
+ 
+ 	dev_dbg(sdev->dev, "LPE PHY base at 0x%x size 0x%x", base, size);
+ 	sdev->bar[DSP_BAR] = devm_ioremap(sdev->dev, base, size);
+-- 
+2.25.1
 

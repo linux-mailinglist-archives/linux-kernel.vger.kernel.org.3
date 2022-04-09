@@ -2,119 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C7074FA591
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 09:22:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F2204FA595
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 09:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237780AbiDIHYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 03:24:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39914 "EHLO
+        id S240296AbiDIH01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 03:26:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiDIHYA (ORCPT
+        with ESMTP id S229530AbiDIH0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 03:24:00 -0400
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4034429F
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 00:21:52 -0700 (PDT)
-Received: from ubuntu.localdomain (unknown [10.15.192.164])
-        by mail-app3 (Coremail) with SMTP id cC_KCgAXScj_M1FiXry4AQ--.49990S2;
-        Sat, 09 Apr 2022 15:21:39 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-staging@lists.linux.dev, alexander.deucher@amd.com,
-        kuba@kernel.org, broonie@kernel.org, davem@davemloft.net,
-        gregkh@linuxfoundation.org, phil@philpotter.co.uk,
-        Larry.Finger@lwfinger.net, Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH] drivers: staging: rtl8192eu: Fix deadlock in rtw_joinbss_event_prehandle
-Date:   Sat,  9 Apr 2022 15:21:35 +0800
-Message-Id: <20220409072135.74248-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: cC_KCgAXScj_M1FiXry4AQ--.49990S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tF15Zr48urWUKFWkGw15Jwb_yoW8tF4rpF
-        Wjgr1fuF1vqr429F4kJ3WDXF13Za18WryUJFWrG3yku3s5Arn3ZFW5trWftF4aqFn7W39I
-        9r1kW3sxAF4DCw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvl1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
-        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
-        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
-        cxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJV
-        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
-        1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
-        IIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
-        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
-        DU0xZFpf9x0JUdHUDUUUUU=
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgQPAVZdtZGjxwBTsQ
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Sat, 9 Apr 2022 03:26:25 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68AB836155;
+        Sat,  9 Apr 2022 00:24:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1649489033;
+        bh=71qv70vZxF+QqOQSgEW+RQ5BfofYTTkw2+VdXFLTcNA=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=Vc6rWvHiBmEpggo1vCR0Z6lX9UhZXC6n7sOzWUULSB0v0Vnnnrwgthw7hWl7wEb3w
+         6Z+n/zEU1Ue82RBSqD7uLa8aNjd/uchDo9j68qrYHG4RzOQGgWL+NirQlAPCyDUAt3
+         uS0l0wSlXXnJPSv8jTfjXYBDBYWrBBQ3c4NQ6GR8=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [217.61.154.105] ([217.61.154.105]) by web-mail.gmx.net
+ (3c-app-gmx-bap35.server.lan [172.19.172.105]) (via HTTP); Sat, 9 Apr 2022
+ 09:23:52 +0200
+MIME-Version: 1.0
+Message-ID: <trinity-7dbd5148-923f-479b-9eed-a75f000456e5-1649489032880@3c-app-gmx-bap35>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Peter Geis <pgwipeout@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Aw: Re: [PATCH v5 3/5] arm64: dts: rockchip: add rk356x dwc3 usb3
+ nodes
+Content-Type: text/plain; charset=UTF-8
+Date:   Sat, 9 Apr 2022 09:23:52 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <CAMdYzYrK2KV1svrHS=zMjGYh=dUis-JKjgYHaeOB4LQWXM1+4A@mail.gmail.com>
+References: <20220408151237.3165046-1-pgwipeout@gmail.com>
+ <20220408151237.3165046-4-pgwipeout@gmail.com>
+ <trinity-3ae2b0d1-a3f0-4c64-acb6-2fb4fa0b36b3-1649434480623@3c-app-gmx-bap48>
+ <CAMdYzYrK2KV1svrHS=zMjGYh=dUis-JKjgYHaeOB4LQWXM1+4A@mail.gmail.com>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:TeZQKSghMMZUkUJKs83ylTXQSsU7yV7FSkqP/fuUaLAE6KQax+QMuXgqsf3qW1M6JW66d
+ NHzdML2cIYdHIRESCTwArTUiHYPIaXTSsBm+y2j1c/jVZNx61/K1vKsD6piKqna0HLktYtRt6Sba
+ eKjfuS2RyCepOg45TbGRY3XDLFZw8WlmWh33BvGfVtmiF2Lc0vd3LemRfBN5gfStMh03Fn3xOMgK
+ Aq0PervdwShRT7KoRrCr0bUjd6NoCI1YXwsmvKiTJ43EsDOi8dBsY7va9ajIXvhocpiOGlTog/mN
+ ZU=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:xgRQTaYlAUc=:XIjlEiF7C5aazhG/BoUhUm
+ T91Mr8O3RSzpflZWmrPJ1NAlQZLLeHmYJQG7HQ+X4L7nm1zSf7IPBrLUMDh0gizBIVyloMW3L
+ 0fE/pJhELkc1s1lxf49VodX+qU8xmxBIRdReI6otgP+S8dhoxXFBjzA/0nUMJIDJpKo9PMNcc
+ N5afQ13D3XzUdGnxZkdVXinIGyYqiMC8byFQUmusFR3Pnks5SUv8koMNicPw4DL4V2/UAvpoR
+ dPMhJj0bY6dCz1OTqaMN46f2OGMqaTCOFjxn0Jh3ja/P6qvAggzKBDGNtKmOmqaamvuibVMBS
+ vP6l9pZePvrjOjMNU9s8PFqBuwxLe9m+xbdGl4GqIw5nhXfqJj2L1evKpeB5v/F4BSzvGTAqI
+ IKPVx5GBdQT4jhWKvRTDxDtm+YwLOev4awU8Xm7blpcLCg+Xyrir9MeQW2tLvTvzwSn6xC5e3
+ 2PxfmAesluRiyRWbdfgA+/aF3wkU351BvzZ1gZKl+sFTTetuVnZHS8EU8F0XkvxercHMQop7Z
+ CVrDUuKyRjHIOThoMAWGUgNnx8LSiR+mtKrUUe8z569cQDBSqnw6Kay7lWdV1VmSWyGVYXIOE
+ WIlNFj8hPYvxhYmNDHQhPvcFGIirraR5oaBzY4CPuxsc/xoEQxrosMzc1FhjBIMwKOV9Gohz9
+ xmsQFwyApZx9ukzSK5nXFFI3htl8kbyR+J51889ABYNy74beFY8OO4batPBsAQkQtTo0MxjLN
+ q7i3RN4FH5hQhUzX1mViDs3gzQp9KM3IoyGx1K0+z+GkgXs0NYVmA/FOMI+lxM7uqlP9HsPJv
+ HjyXXel
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a deadlock in rtw_joinbss_event_prehandle(), which is shown below:
+Tested on mediatek board (mt7623/bpi-r2) and there xhci is working.
+So it is no problem in core/protocol and specific to rockchip xhci driver.
 
-   (Thread 1)                |      (Thread 2)
-                             | _set_timer()
-rtw_joinbss_event_prehandle()|  mod_timer()
- spin_lock_bh() //(1)        |  (wait a time)
- ...                         | rtw_join_timeout_handler()
-                             |  _rtw_join_timeout_handler()
- del_timer_sync()            |   spin_lock_bh() //(2)
- (wait timer to stop)        |   ...
+at least i nailed it down to these 2 commits in drivers/usb/dwc3/core.c, w=
+ithout them it works
 
-We hold pmlmepriv->lock in position (1) of thread 1 and
-use del_timer_sync() to wait timer to stop, but timer handler
-also need pmlmepriv->lock in position (2) of thread 2.
-As a result, rtw_joinbss_event_prehandle() will block forever.
+5114c3ee2487 2022-01-27 usb: dwc3: Calculate REFCLKPER based on reference =
+clock
+33fb697ec7e5 2022-01-27 usb: dwc3: Get clocks individually
 
-This patch extracts del_timer_sync() from the protection of
-spin_lock_bh(), which could let timer handler to obtain
-the needed lock. What`s more, we change spin_lock_bh() to
-spin_lock_irq() in _rtw_join_timeout_handler() in order to
-prevent deadlock.
+regards Frank
 
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
----
- drivers/staging/r8188eu/core/rtw_mlme.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
-index 6f0bff18647..76cf6a69bf0 100644
---- a/drivers/staging/r8188eu/core/rtw_mlme.c
-+++ b/drivers/staging/r8188eu/core/rtw_mlme.c
-@@ -1071,8 +1071,10 @@ void rtw_joinbss_event_prehandle(struct adapter *adapter, u8 *pbuf)
- 				rtw_indicate_connect(adapter);
- 			}
- 
-+			spin_unlock_bh(&pmlmepriv->lock);
- 			/* s5. Cancel assoc_timer */
- 			del_timer_sync(&pmlmepriv->assoc_timer);
-+			spin_lock_bh(&pmlmepriv->lock);
- 		} else {
- 			spin_unlock_bh(&pmlmepriv->scanned_queue.lock);
- 			goto ignore_joinbss_callback;
-@@ -1310,7 +1312,7 @@ void _rtw_join_timeout_handler (struct adapter *adapter)
- 	if (adapter->bDriverStopped || adapter->bSurpriseRemoved)
- 		return;
- 
--	spin_lock_bh(&pmlmepriv->lock);
-+	spin_lock_irq(&pmlmepriv->lock);
- 
- 	if (rtw_to_roaming(adapter) > 0) { /* join timeout caused by roaming */
- 		while (1) {
-@@ -1329,7 +1331,7 @@ void _rtw_join_timeout_handler (struct adapter *adapter)
- 		rtw_indicate_disconnect(adapter);
- 		free_scanqueue(pmlmepriv);/*  */
- 	}
--	spin_unlock_bh(&pmlmepriv->lock);
-+	spin_unlock_irq(&pmlmepriv->lock);
- 
- }
- 
--- 
-2.17.1
+> Gesendet: Samstag, 09. April 2022 um 01:39 Uhr
+> Von: "Peter Geis" <pgwipeout@gmail.com>
+
+> On Fri, Apr 8, 2022 at 12:14 PM Frank Wunderlich
+> <frank-w@public-files.de> wrote:
+
+> > seems like usb (2+3) is broken in 5.18-rc1
+> >
+> > i see controllers, ports are powered, but no device detection.
+> >
+> > maybe anyone else have same behaviour with different board?
+>
+> Yes, it seems you are correct, there has been a regression with xhci
+> between v5.17 and v5.18.
+> I'm bisecting now.
 

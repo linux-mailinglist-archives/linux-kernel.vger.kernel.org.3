@@ -2,61 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D0274FA753
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 13:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 154254FA757
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 13:39:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241646AbiDILie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 07:38:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35948 "EHLO
+        id S241656AbiDILlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 07:41:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231778AbiDILi3 (ORCPT
+        with ESMTP id S238441AbiDILlP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 07:38:29 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5576E6565;
-        Sat,  9 Apr 2022 04:36:22 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4KbCkC4fZ6z9sTL;
-        Sat,  9 Apr 2022 13:36:19 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id lY7tFaIkTcqy; Sat,  9 Apr 2022 13:36:19 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4KbCkC3V0xz9sT3;
-        Sat,  9 Apr 2022 13:36:19 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 61A1F8B76D;
-        Sat,  9 Apr 2022 13:36:19 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id xy5JHFm3eEDp; Sat,  9 Apr 2022 13:36:19 +0200 (CEST)
-Received: from [192.168.203.47] (unknown [192.168.203.47])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 88E408B765;
-        Sat,  9 Apr 2022 13:36:18 +0200 (CEST)
-Message-ID: <8f1d5ba5-c03e-d222-ffc0-d9a6baea1037@csgroup.eu>
-Date:   Sat, 9 Apr 2022 13:36:17 +0200
+        Sat, 9 Apr 2022 07:41:15 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BEAD6565
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 04:39:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649504348; x=1681040348;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=f4JJrb0SZ08czHL0/SY43nKxcE+oJ/SvBU95M3SBJ4k=;
+  b=oAthf0AZZ5T8QT/aa2ArhOzP5J/VRxnt82WY4kZLX02igvOVbLwgTfBf
+   kqMeTDaEFNLNC3A52mTCU1KJKNmqG3tRN+DKbTkV5G/Up0YxiJtwm+RfP
+   Wv5lC22WRbfRCh5Ys+/fhYa8sBFh2NyYi7i1Xr4ALbMN4kNTFkGWXeEq1
+   OOj4UtYHwO2LZsJEOzhYfKNmOdSOPVGQ4KJr86vCujgQXTHusUqSYyXsG
+   CVBDfeJDGszEHNzXCO28Y09FM9LjqaOkJZCeLQROWbbaQ0vbltrTMc9MP
+   MebaWP8wZHSLjAJla/jDqWKe3RO1QNcqLJe2xaNH3sPY8CTnz39csi+mk
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="260636922"
+X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
+   d="scan'208";a="260636922"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2022 04:39:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
+   d="scan'208";a="653707027"
+Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 09 Apr 2022 04:39:03 -0700
+Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nd9Ql-00017t-2O;
+        Sat, 09 Apr 2022 11:39:03 +0000
+Date:   Sat, 9 Apr 2022 19:38:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
+Cc:     kbuild-all@lists.01.org, mike.kravetz@oracle.com,
+        shy828301@gmail.com, willy@infradead.org, ying.huang@intel.com,
+        ziy@nvidia.com, minchan@kernel.org, apopple@nvidia.com,
+        dave.hansen@linux.intel.com, o451686892@gmail.com,
+        jhubbard@nvidia.com, peterx@redhat.com, naoya.horiguchi@nec.com,
+        mhocko@suse.com, riel@redhat.com, osalvador@suse.de,
+        david@redhat.com, sfr@canb.auug.org.au, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linmiaohe@huawei.com
+Subject: Re: [PATCH 4/4] mm/migration: fix potential pte_unmap on an not
+ mapped pte
+Message-ID: <202204091914.psVO4TrI-lkp@intel.com>
+References: <20220409073846.22286-5-linmiaohe@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH V4 2/7] powerpc/mm: Enable ARCH_HAS_VM_GET_PAGE_PROT
-Content-Language: fr-FR
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org,
-        akpm@linux-foundation.org
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>,
-        Paul Mackerras <paulus@samba.org>, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org
-References: <20220407103251.1209606-1-anshuman.khandual@arm.com>
- <20220407103251.1209606-3-anshuman.khandual@arm.com>
- <e860f404-af69-aebc-c5eb-8822a585e653@csgroup.eu>
-In-Reply-To: <e860f404-af69-aebc-c5eb-8822a585e653@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220409073846.22286-5-linmiaohe@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,132 +72,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Miaohe,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on hnaz-mm/master]
+[also build test ERROR on linus/master v5.18-rc1 next-20220408]
+[cannot apply to linux/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Miaohe-Lin/A-few-cleanup-and-fixup-patches-for-migration/20220409-154028
+base:   https://github.com/hnaz/linux-mm master
+config: powerpc64-randconfig-r015-20220408 (https://download.01.org/0day-ci/archive/20220409/202204091914.psVO4TrI-lkp@intel.com/config)
+compiler: powerpc64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/73a982570cc62313c55cc5cbc2dd7acf40601474
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Miaohe-Lin/A-few-cleanup-and-fixup-patches-for-migration/20220409-154028
+        git checkout 73a982570cc62313c55cc5cbc2dd7acf40601474
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/mm/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   arch/powerpc/mm/hugetlbpage.c: In function 'follow_huge_pd':
+>> arch/powerpc/mm/hugetlbpage.c:537:25: error: too few arguments to function '__migration_entry_wait'
+     537 |                         __migration_entry_wait(mm, ptep, ptl);
+         |                         ^~~~~~~~~~~~~~~~~~~~~~
+   In file included from arch/powerpc/mm/hugetlbpage.c:20:
+   include/linux/swapops.h:233:13: note: declared here
+     233 | extern void __migration_entry_wait(struct mm_struct *mm, pte_t *ptep,
+         |             ^~~~~~~~~~~~~~~~~~~~~~
 
 
-Le 08/04/2022 à 14:53, Christophe Leroy a écrit :
-> 
-> 
-> Le 07/04/2022 à 12:32, Anshuman Khandual a écrit :
->> This defines and exports a platform specific custom vm_get_page_prot() 
->> via
->> subscribing ARCH_HAS_VM_GET_PAGE_PROT. While here, this also localizes
->> arch_vm_get_page_prot() as powerpc_vm_get_page_prot() and moves it near
->> vm_get_page_prot().
->>
->> Cc: Michael Ellerman <mpe@ellerman.id.au>
->> Cc: Paul Mackerras <paulus@samba.org>
->> Cc: linuxppc-dev@lists.ozlabs.org
->> Cc: linux-kernel@vger.kernel.org
->> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->> ---
->>   arch/powerpc/Kconfig            |  1 +
->>   arch/powerpc/include/asm/mman.h | 12 ------------
->>   arch/powerpc/mm/mmap.c          | 26 ++++++++++++++++++++++++++
->>   3 files changed, 27 insertions(+), 12 deletions(-)
->>
->> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
->> index 174edabb74fa..eb9b6ddbf92f 100644
->> --- a/arch/powerpc/Kconfig
->> +++ b/arch/powerpc/Kconfig
->> @@ -140,6 +140,7 @@ config PPC
->>       select ARCH_HAS_TICK_BROADCAST        if 
->> GENERIC_CLOCKEVENTS_BROADCAST
->>       select ARCH_HAS_UACCESS_FLUSHCACHE
->>       select ARCH_HAS_UBSAN_SANITIZE_ALL
->> +    select ARCH_HAS_VM_GET_PAGE_PROT
->>       select ARCH_HAVE_NMI_SAFE_CMPXCHG
->>       select ARCH_KEEP_MEMBLOCK
->>       select ARCH_MIGHT_HAVE_PC_PARPORT
->> diff --git a/arch/powerpc/include/asm/mman.h 
->> b/arch/powerpc/include/asm/mman.h
->> index 7cb6d18f5cd6..1b024e64c8ec 100644
->> --- a/arch/powerpc/include/asm/mman.h
->> +++ b/arch/powerpc/include/asm/mman.h
->> @@ -24,18 +24,6 @@ static inline unsigned long 
->> arch_calc_vm_prot_bits(unsigned long prot,
->>   }
->>   #define arch_calc_vm_prot_bits(prot, pkey) 
->> arch_calc_vm_prot_bits(prot, pkey)
->> -static inline pgprot_t arch_vm_get_page_prot(unsigned long vm_flags)
->> -{
->> -#ifdef CONFIG_PPC_MEM_KEYS
->> -    return (vm_flags & VM_SAO) ?
->> -        __pgprot(_PAGE_SAO | vmflag_to_pte_pkey_bits(vm_flags)) :
->> -        __pgprot(0 | vmflag_to_pte_pkey_bits(vm_flags));
->> -#else
->> -    return (vm_flags & VM_SAO) ? __pgprot(_PAGE_SAO) : __pgprot(0);
->> -#endif
->> -}
->> -#define arch_vm_get_page_prot(vm_flags) arch_vm_get_page_prot(vm_flags)
->> -
->>   static inline bool arch_validate_prot(unsigned long prot, unsigned 
->> long addr)
->>   {
->>       if (prot & ~(PROT_READ | PROT_WRITE | PROT_EXEC | PROT_SEM | 
->> PROT_SAO))
->> diff --git a/arch/powerpc/mm/mmap.c b/arch/powerpc/mm/mmap.c
->> index c475cf810aa8..cd17bd6fa36b 100644
->> --- a/arch/powerpc/mm/mmap.c
->> +++ b/arch/powerpc/mm/mmap.c
->> @@ -254,3 +254,29 @@ void arch_pick_mmap_layout(struct mm_struct *mm, 
->> struct rlimit *rlim_stack)
->>           mm->get_unmapped_area = arch_get_unmapped_area_topdown;
->>       }
->>   }
->> +
->> +#ifdef CONFIG_PPC64
->> +static pgprot_t powerpc_vm_get_page_prot(unsigned long vm_flags)
->> +{
->> +#ifdef CONFIG_PPC_MEM_KEYS
->> +    return (vm_flags & VM_SAO) ?
->> +        __pgprot(_PAGE_SAO | vmflag_to_pte_pkey_bits(vm_flags)) :
->> +        __pgprot(0 | vmflag_to_pte_pkey_bits(vm_flags));
->> +#else
->> +    return (vm_flags & VM_SAO) ? __pgprot(_PAGE_SAO) : __pgprot(0);
->> +#endif
->> +}
->> +#else
->> +static pgprot_t powerpc_vm_get_page_prot(unsigned long vm_flags)
->> +{
->> +    return __pgprot(0);
->> +}
->> +#endif /* CONFIG_PPC64 */
-> 
-> Can we reduce this forest of #ifdefs and make it more readable ?
-> 
-> mm/mmap.c is going away with patch 
-> https://patchwork.ozlabs.org/project/linuxppc-dev/patch/d6d849621f821af253e777a24eda4c648814a76e.1646847562.git.christophe.leroy@csgroup.eu/ 
-> 
-> 
-> So it would be better to add two versions of vm_get_page_prot(), for 
-> instance one in mm/pgtable_64.c and one in mm/pgtable_32.c
+vim +/__migration_entry_wait +537 arch/powerpc/mm/hugetlbpage.c
 
-Indeed, you don't need anything at all for PPC32. All you need to do is
+^1da177e4c3f41 arch/ppc64/mm/hugetlbpage.c   Linus Torvalds   2005-04-16  507  
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  508  struct page *follow_huge_pd(struct vm_area_struct *vma,
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  509  			    unsigned long address, hugepd_t hpd,
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  510  			    int flags, int pdshift)
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  511  {
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  512  	pte_t *ptep;
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  513  	spinlock_t *ptl;
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  514  	struct page *page = NULL;
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  515  	unsigned long mask;
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  516  	int shift = hugepd_shift(hpd);
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  517  	struct mm_struct *mm = vma->vm_mm;
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  518  
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  519  retry:
+ed515b6898c367 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2018-06-01  520  	/*
+ed515b6898c367 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2018-06-01  521  	 * hugepage directory entries are protected by mm->page_table_lock
+ed515b6898c367 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2018-06-01  522  	 * Use this instead of huge_pte_lockptr
+ed515b6898c367 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2018-06-01  523  	 */
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  524  	ptl = &mm->page_table_lock;
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  525  	spin_lock(ptl);
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  526  
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  527  	ptep = hugepte_offset(hpd, address, pdshift);
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  528  	if (pte_present(*ptep)) {
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  529  		mask = (1UL << shift) - 1;
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  530  		page = pte_page(*ptep);
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  531  		page += ((address & mask) >> PAGE_SHIFT);
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  532  		if (flags & FOLL_GET)
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  533  			get_page(page);
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  534  	} else {
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  535  		if (is_hugetlb_entry_migration(*ptep)) {
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  536  			spin_unlock(ptl);
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06 @537  			__migration_entry_wait(mm, ptep, ptl);
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  538  			goto retry;
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  539  		}
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  540  	}
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  541  	spin_unlock(ptl);
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  542  	return page;
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  543  }
+50791e6de0b5f2 arch/powerpc/mm/hugetlbpage.c Aneesh Kumar K.V 2017-07-06  544  
 
-	select ARCH_HAS_VM_GET_PAGE_PROT if PPC64
-
-And in fact it could even be PPC_BOOK3S_64 instead of PPC64 because 
-CONFIG_PPC_MEM_KEYS depends on PPC_BOOK3S_64 and _PAGE_SAO is 0 on 
-nohash/64.
-
-So you can then put it into arch/powerpc/mm/book3s64/pgtable.c
-
-
-> 
-> 
->> +
->> +pgprot_t vm_get_page_prot(unsigned long vm_flags)
->> +{
->> +    return __pgprot(pgprot_val(protection_map[vm_flags &
->> +            (VM_READ|VM_WRITE|VM_EXEC|VM_SHARED)]) |
->> +           pgprot_val(powerpc_vm_get_page_prot(vm_flags)));
->> +}
->> +EXPORT_SYMBOL(vm_get_page_prot);
-> 
-> By the way I'm a bit puzzled with the name powerpc_vm_get_page_prot(), 
-> the name suggests that it's just a powerpc replacement of 
-> vm_get_page_prot(). I'd prefer if it was named __vm_get_page_prot(), it 
-> would be clearer that it is a complement to vm_get_page_prot() and not a 
-> remplacement.
-> 
-> Christophe
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

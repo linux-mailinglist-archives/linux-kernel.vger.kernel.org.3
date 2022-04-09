@@ -2,201 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 599704FA5F5
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 10:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A52934FA5F9
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 10:26:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237172AbiDII0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 04:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53008 "EHLO
+        id S240822AbiDII2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 04:28:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230459AbiDII0m (ORCPT
+        with ESMTP id S240061AbiDII2J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 04:26:42 -0400
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3F3AFAD6
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 01:24:34 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id e22so9229787qvf.9
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 01:24:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:user-agent:mime-version;
-        bh=Xo3TDCl9lnHvYZIBx0/vWJUdhCjK+01adkajyrWwuXQ=;
-        b=RX525FW7wvM/fQtnoLRrUCOxEfdSv4b6pkSvRE9I8YHjH8Ugtn3DWS99gauhv7d3Z+
-         Qu2/Mb1DD64YKAWZXdHl8No2v5MRhuXo33AqcZRPHgRlRXIFNPL7yHPENh9SRNiWcGZG
-         B4y00Hvvko5HZYeUQFoJOkX71wwjGlnpoMjb5hPtyx3yLSAqRdiUas6XaU2+huEGI1fz
-         Sbgw3nqtL5tciFM8ZN/Wl33c0ylAdncsM+SmpIO1ErPlRQBJ4ohEubo51CiS8xtkFwco
-         u4QE0M4niFz8MykfvFTGbtX2fmkjs+nGS33qp6asCBz/jtGqfW4wQZPz9oo4KtsQuA6r
-         N6bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:user-agent
-         :mime-version;
-        bh=Xo3TDCl9lnHvYZIBx0/vWJUdhCjK+01adkajyrWwuXQ=;
-        b=0F9jGWGaF3dP+QJGUSUD2CvW3WdEHGhPrf/PMkEsRt4vT6ktYnsKRqEaB+s8DM07Ve
-         0Wcj+itwEShgRFOoBOlVppmcIuel1pauSdIOumLPijqyUSD/HQS1ZzISj0Jon3i1wadP
-         qwpJUzsaWzpPdBowvk+VkpfwrFuYY1Emmw6V3PtX33F8VL73Q7cMLeNJfFvVQnGbkYdq
-         IkeXsdfbqZzaKQk8cGOl17d4/xYlcIZpX9LpLPYWRQxxKVspgEb+P+f29yv9f/Mu4Qnb
-         CAqePR6BON2eMro4jvhWotAuPi1mqpfeHxsaKtN+SY2b2gw0ndsy7SnnGdxl+iIxZFRk
-         wP6w==
-X-Gm-Message-State: AOAM5320KDM7qyMLY1f6T55OjYqpx7EDZm+fI+sehEeWK6z0dTkKjRnV
-        dMIrZlaulQdkRf3MJqvSIFI=
-X-Google-Smtp-Source: ABdhPJyq2aM+sdiiq8wKK7K+grw7q7ldBLWXM7u4NuWBICcMKk70ESqRvkDn7En4JjXHjuXQIcPKcw==
-X-Received: by 2002:a05:6214:622:b0:441:2918:ee18 with SMTP id a2-20020a056214062200b004412918ee18mr19862341qvx.118.1649492673490;
-        Sat, 09 Apr 2022 01:24:33 -0700 (PDT)
-Received: from ?IPv6:2600:100d:b149:69f7:cf8b:f19c:28ed:6dd9? ([2600:100d:b149:69f7:cf8b:f19c:28ed:6dd9])
-        by smtp.gmail.com with ESMTPSA id g5-20020ac87f45000000b002e125ef0ba3sm19972038qtk.82.2022.04.09.01.24.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Apr 2022 01:24:33 -0700 (PDT)
-Message-ID: <7cf8c5e16847aa2a9430298ba264900227a90026.camel@gmail.com>
-Subject: Staging: rtl8192e: rtllib_softmac_wx.c: Fixed multiple coding style
- issues
-From:   Colton <cspur43@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     len.baker@gmx.com, linux-staging@lists.linux.dev,
+        Sat, 9 Apr 2022 04:28:09 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD46AFAEB
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 01:26:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649492762; x=1681028762;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Z89rAS6nK8vPE6PqwXyApxLr8DEMMn6pGUFoYLv0L8I=;
+  b=WhtmLDua3fGQ+w9lAwQ5XL30AV+fNX+hVG+h+6cU2T/WNtkndm0T9VGz
+   HXRJvmeW/rkXwrEPSqfQO9EfZB+gEN4ROTN7hm3BBoCsB03mQdga5YfKa
+   1yBcdi/7+cVq1jV2PIPHVeWwCUKBkdFSIu/ihkxKxs+tuCEIVRbVNe+Mr
+   Z6oIVL41gb0N45GJ/61GWKh4m47sZWt0uYMfjTd0eyhXWBa9Y9Jyvtdj8
+   Cu4gnFLQ7ZiQ7NX5Lrp80RXAhmmPVSj/cVByPbeL0fOhPQ8ZjOZoOGSMO
+   FycRsZeJ2VVsHLLEIa8vZEISRxlgoznqFkJNoxwGrFB40mqw5EeAzBdy6
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="260621695"
+X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
+   d="scan'208";a="260621695"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2022 01:26:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
+   d="scan'208";a="622019793"
+Received: from lkp-server02.sh.intel.com (HELO 7e80bc2a00a0) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 09 Apr 2022 01:25:59 -0700
+Received: from kbuild by 7e80bc2a00a0 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nd6Pv-00010d-9g;
+        Sat, 09 Apr 2022 08:25:59 +0000
+Date:   Sat, 9 Apr 2022 16:25:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chuanhong Guo <gch981213@gmail.com>, linux-mtd@lists.infradead.org
+Cc:     kbuild-all@lists.01.org, Chuanhong Guo <gch981213@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
         linux-kernel@vger.kernel.org
-Date:   Sat, 09 Apr 2022 03:24:30 -0500
-Content-Type: multipart/mixed; boundary="=-oVFLOU8SUT0ZE0oLvJSx"
-User-Agent: Evolution 3.44.0 
+Subject: Re: [PATCH] mtd: nand: separate ecc-mxic from nandcore
+Message-ID: <202204091647.rave7jtW-lkp@intel.com>
+References: <20220409052148.2159196-1-gch981213@gmail.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220409052148.2159196-1-gch981213@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=-oVFLOU8SUT0ZE0oLvJSx
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Hi Chuanhong,
 
-    Staging: rtl8192e: rtllib_softmac_wx.c: Fixed multiple coding style iss=
-ues
-   =20
-    Fixed issues  with whitespace, unbalanced braces unnecessary (int) cast=
-s, and attempted to fix alignment issue still flagged by checkpatch.pl
-   =20
-    Signed-off-by: Colton Spurgin <cspur43@gmail.com>
+Thank you for the patch! Yet something to improve:
 
+[auto build test ERROR on mtd/nand/next]
+[also build test ERROR on v5.18-rc1 next-20220408]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
---=-oVFLOU8SUT0ZE0oLvJSx
-Content-Disposition: attachment;
-	filename*0=0001-Staging-rtl8192e-rtllib_softmac_wx.c-Fixed-multiple-.pat;
-	filename*1=ch
-Content-Type: text/x-patch;
-	name="0001-Staging-rtl8192e-rtllib_softmac_wx.c-Fixed-multiple-.patch";
-	charset="UTF-8"
-Content-Transfer-Encoding: base64
+url:    https://github.com/intel-lab-lkp/linux/commits/Chuanhong-Guo/mtd-nand-separate-ecc-mxic-from-nandcore/20220409-132331
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next
+config: sh-randconfig-r013-20220408 (https://download.01.org/0day-ci/archive/20220409/202204091647.rave7jtW-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/a96780fbe6f7bc76d07fd5a4ccc390e7fedcc8b5
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Chuanhong-Guo/mtd-nand-separate-ecc-mxic-from-nandcore/20220409-132331
+        git checkout a96780fbe6f7bc76d07fd5a4ccc390e7fedcc8b5
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sh SHELL=/bin/bash
 
-RnJvbSA0MmZkM2FmZDVlZmZjYjY2NzU2MmE0MTdlNGU4OTVmYmMwOWNiYzJjIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBDb2x0b24gPGNzcHVyNDNAZ21haWwuY29tPgpEYXRlOiBTYXQs
-IDkgQXByIDIwMjIgMDI6NDY6MzQgLTA1MDAKU3ViamVjdDogW1BBVENIXSBTdGFnaW5nOiBydGw4
-MTkyZTogcnRsbGliX3NvZnRtYWNfd3guYzogRml4ZWQgbXVsdGlwbGUgY29kaW5nCiBzdHlsZSBp
-c3N1ZXMKCkZpeGVkIGlzc3VlcyAgd2l0aCB3aGl0ZXNwYWNlLCB1bmJhbGFuY2VkIGJyYWNlcyB1
-bm5lY2Vzc2FyeSAoaW50KSBjYXN0cywgYW5kIGF0dGVtcHRlZCB0byBmaXggYWxpZ25tZW50IGlz
-c3VlIHN0aWxsIGZsYWdnZWQgYnkgY2hlY2twYXRjaC5wbAoKU2lnbmVkLW9mZi1ieTogQ29sdG9u
-IFNwdXJnaW4gPGNzcHVyNDNAZ21haWwuY29tPgotLS0KIGRyaXZlcnMvc3RhZ2luZy9ydGw4MTky
-ZS9ydGxsaWJfc29mdG1hY193eC5jIHwgNDIgKysrKysrLS0tLS0tLS0tLS0tLS0KIDEgZmlsZSBj
-aGFuZ2VkLCAxMyBpbnNlcnRpb25zKCspLCAyOSBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9k
-cml2ZXJzL3N0YWdpbmcvcnRsODE5MmUvcnRsbGliX3NvZnRtYWNfd3guYyBiL2RyaXZlcnMvc3Rh
-Z2luZy9ydGw4MTkyZS9ydGxsaWJfc29mdG1hY193eC5jCmluZGV4IDU3YTZkMTEzMGI2YS4uZjY3
-YjgyOWYyOGQxIDEwMDY0NAotLS0gYS9kcml2ZXJzL3N0YWdpbmcvcnRsODE5MmUvcnRsbGliX3Nv
-ZnRtYWNfd3guYworKysgYi9kcml2ZXJzL3N0YWdpbmcvcnRsODE5MmUvcnRsbGliX3NvZnRtYWNf
-d3guYwpAQCAtMTIsNyArMTIsNiBAQAogICogb3duIGl0J3MgY29weXJpZ2h0IDstKQogICovCiAj
-aW5jbHVkZSA8bGludXgvZXRoZXJkZXZpY2UuaD4KLQogI2luY2x1ZGUgInJ0bGxpYi5oIgogI2lu
-Y2x1ZGUgImRvdDExZC5oIgogLyogRklYTUU6IGFkZCBBIGZyZXFzICovCkBAIC0yNSw3ICsyNCw2
-IEBAIGNvbnN0IGxvbmcgcnRsbGliX3dsYW5fZnJlcXVlbmNpZXNbXSA9IHsKIH07CiBFWFBPUlRf
-U1lNQk9MKHJ0bGxpYl93bGFuX2ZyZXF1ZW5jaWVzKTsKIAotCiBpbnQgcnRsbGliX3d4X3NldF9m
-cmVxKHN0cnVjdCBydGxsaWJfZGV2aWNlICppZWVlLCBzdHJ1Y3QgaXdfcmVxdWVzdF9pbmZvICph
-LAogCQkJICAgICB1bmlvbiBpd3JlcV9kYXRhICp3cnF1LCBjaGFyICpiKQogewpAQCAtNDEsOCAr
-MzksOCBAQCBpbnQgcnRsbGliX3d4X3NldF9mcmVxKHN0cnVjdCBydGxsaWJfZGV2aWNlICppZWVl
-LCBzdHJ1Y3QgaXdfcmVxdWVzdF9pbmZvICphLAogCiAJLyogaWYgc2V0dGluZyBieSBmcmVxIGNv
-bnZlcnQgdG8gY2hhbm5lbCAqLwogCWlmIChmd3JxLT5lID09IDEpIHsKLQkJaWYgKChmd3JxLT5t
-ID49IChpbnQpIDIuNDEyZTggJiYKLQkJICAgICBmd3JxLT5tIDw9IChpbnQpIDIuNDg3ZTgpKSB7
-CisJCWlmICgoZndycS0+bSA+PSAyLjQxMmU4ICYmCisJCSAgICAgZndycS0+bSA8PSAyLjQ4N2U4
-KSkgewogCQkJaW50IGYgPSBmd3JxLT5tIC8gMTAwMDAwOwogCQkJaW50IGMgPSAwOwogCkBAIC04
-Myw3ICs4MSw2IEBAIGludCBydGxsaWJfd3hfc2V0X2ZyZXEoc3RydWN0IHJ0bGxpYl9kZXZpY2Ug
-KmllZWUsIHN0cnVjdCBpd19yZXF1ZXN0X2luZm8gKmEsCiB9CiBFWFBPUlRfU1lNQk9MKHJ0bGxp
-Yl93eF9zZXRfZnJlcSk7CiAKLQogaW50IHJ0bGxpYl93eF9nZXRfZnJlcShzdHJ1Y3QgcnRsbGli
-X2RldmljZSAqaWVlZSwKIAkJCSAgICAgc3RydWN0IGl3X3JlcXVlc3RfaW5mbyAqYSwKIAkJCSAg
-ICAgdW5pb24gaXdyZXFfZGF0YSAqd3JxdSwgY2hhciAqYikKQEAgLTkyLDcgKzg5LDcgQEAgaW50
-IHJ0bGxpYl93eF9nZXRfZnJlcShzdHJ1Y3QgcnRsbGliX2RldmljZSAqaWVlZSwKIAogCWlmIChp
-ZWVlLT5jdXJyZW50X25ldHdvcmsuY2hhbm5lbCA9PSAwKQogCQlyZXR1cm4gLTE7Ci0JZndycS0+
-bSA9IHJ0bGxpYl93bGFuX2ZyZXF1ZW5jaWVzW2llZWUtPmN1cnJlbnRfbmV0d29yay5jaGFubmVs
-LTFdICoKKwlmd3JxLT5tID0gcnRsbGliX3dsYW5fZnJlcXVlbmNpZXNbaWVlZS0+Y3VycmVudF9u
-ZXR3b3JrLmNoYW5uZWwgLSAxXSAqCiAJCSAgMTAwMDAwOwogCWZ3cnEtPmUgPSAxOwogCXJldHVy
-biAwOwpAQCAtMTI4LDEzICsxMjUsMTEgQEAgaW50IHJ0bGxpYl93eF9nZXRfd2FwKHN0cnVjdCBy
-dGxsaWJfZGV2aWNlICppZWVlLAogfQogRVhQT1JUX1NZTUJPTChydGxsaWJfd3hfZ2V0X3dhcCk7
-CiAKLQogaW50IHJ0bGxpYl93eF9zZXRfd2FwKHN0cnVjdCBydGxsaWJfZGV2aWNlICppZWVlLAog
-CQkJIHN0cnVjdCBpd19yZXF1ZXN0X2luZm8gKmluZm8sCiAJCQkgdW5pb24gaXdyZXFfZGF0YSAq
-YXdycSwKIAkJCSBjaGFyICpleHRyYSkKIHsKLQogCWludCByZXQgPSAwOwogCXVuc2lnbmVkIGxv
-bmcgZmxhZ3M7CiAKQEAgLTE2NCw3ICsxNTksNiBAQCBpbnQgcnRsbGliX3d4X3NldF93YXAoc3Ry
-dWN0IHJ0bGxpYl9kZXZpY2UgKmllZWUsCiAJCWdvdG8gb3V0OwogCX0KIAotCiAJaWYgKGlmdXAp
-CiAJCXJ0bGxpYl9zdG9wX3Byb3RvY29sKGllZWUsIHRydWUpOwogCkBAIC0yMjAsNyArMjE0LDYg
-QEAgaW50IHJ0bGxpYl93eF9nZXRfZXNzaWQoc3RydWN0IHJ0bGxpYl9kZXZpY2UgKmllZWUsIHN0
-cnVjdCBpd19yZXF1ZXN0X2luZm8gKmEsCiAJc3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgmaWVlZS0+
-bG9jaywgZmxhZ3MpOwogCiAJcmV0dXJuIHJldDsKLQogfQogRVhQT1JUX1NZTUJPTChydGxsaWJf
-d3hfZ2V0X2Vzc2lkKTsKIApAQCAtMjI4LDEwICsyMjEsOSBAQCBpbnQgcnRsbGliX3d4X3NldF9y
-YXRlKHN0cnVjdCBydGxsaWJfZGV2aWNlICppZWVlLAogCQkJICAgICBzdHJ1Y3QgaXdfcmVxdWVz
-dF9pbmZvICppbmZvLAogCQkJICAgICB1bmlvbiBpd3JlcV9kYXRhICp3cnF1LCBjaGFyICpleHRy
-YSkKIHsKLQogCXUzMiB0YXJnZXRfcmF0ZSA9IHdycXUtPmJpdHJhdGUudmFsdWU7CiAKLQlpZWVl
-LT5yYXRlID0gdGFyZ2V0X3JhdGUvMTAwMDAwOworCWllZWUtPnJhdGUgPSB0YXJnZXRfcmF0ZSAv
-IDEwMDAwMDsKIAlyZXR1cm4gMDsKIH0KIEVYUE9SVF9TWU1CT0wocnRsbGliX3d4X3NldF9yYXRl
-KTsKQEAgLTI1MCwxNiArMjQyLDE1IEBAIGludCBydGxsaWJfd3hfZ2V0X3JhdGUoc3RydWN0IHJ0
-bGxpYl9kZXZpY2UgKmllZWUsCiB9CiBFWFBPUlRfU1lNQk9MKHJ0bGxpYl93eF9nZXRfcmF0ZSk7
-CiAKLQogaW50IHJ0bGxpYl93eF9zZXRfcnRzKHN0cnVjdCBydGxsaWJfZGV2aWNlICppZWVlLAog
-CQkJICAgICBzdHJ1Y3QgaXdfcmVxdWVzdF9pbmZvICppbmZvLAogCQkJICAgICB1bmlvbiBpd3Jl
-cV9kYXRhICp3cnF1LCBjaGFyICpleHRyYSkKIHsKIAlpZiAod3JxdS0+cnRzLmRpc2FibGVkIHx8
-ICF3cnF1LT5ydHMuZml4ZWQpCiAJCWllZWUtPnJ0cyA9IERFRkFVTFRfUlRTX1RIUkVTSE9MRDsK
-LQllbHNlIHsKKwl9IGVsc2UgewogCQlpZiAod3JxdS0+cnRzLnZhbHVlIDwgTUlOX1JUU19USFJF
-U0hPTEQgfHwKLQkJCQl3cnF1LT5ydHMudmFsdWUgPiBNQVhfUlRTX1RIUkVTSE9MRCkKKwkJCXdy
-cXUtPnJ0cy52YWx1ZSA+IE1BWF9SVFNfVEhSRVNIT0xEKQogCQkJcmV0dXJuIC1FSU5WQUw7CiAJ
-CWllZWUtPnJ0cyA9IHdycXUtPnJ0cy52YWx1ZTsKIAl9CkBAIC0yNjgsOCArMjU5LDggQEAgaW50
-IHJ0bGxpYl93eF9zZXRfcnRzKHN0cnVjdCBydGxsaWJfZGV2aWNlICppZWVlLAogRVhQT1JUX1NZ
-TUJPTChydGxsaWJfd3hfc2V0X3J0cyk7CiAKIGludCBydGxsaWJfd3hfZ2V0X3J0cyhzdHJ1Y3Qg
-cnRsbGliX2RldmljZSAqaWVlZSwKLQkJCSAgICAgc3RydWN0IGl3X3JlcXVlc3RfaW5mbyAqaW5m
-bywKLQkJCSAgICAgdW5pb24gaXdyZXFfZGF0YSAqd3JxdSwgY2hhciAqZXh0cmEpCisJCQkJCXN0
-cnVjdCBpd19yZXF1ZXN0X2luZm8gKmluZm8sCisJCQkJCXVuaW9uIGl3cmVxX2RhdGEgKndycXUs
-IGNoYXIgKmV4dHJhKQogewogCXdycXUtPnJ0cy52YWx1ZSA9IGllZWUtPnJ0czsKIAl3cnF1LT5y
-dHMuZml4ZWQgPSAwOwkvKiBubyBhdXRvIHNlbGVjdCAqLwpAQCAtMjc5LDcgKzI3MCw3IEBAIGlu
-dCBydGxsaWJfd3hfZ2V0X3J0cyhzdHJ1Y3QgcnRsbGliX2RldmljZSAqaWVlZSwKIEVYUE9SVF9T
-WU1CT0wocnRsbGliX3d4X2dldF9ydHMpOwogCiBpbnQgcnRsbGliX3d4X3NldF9tb2RlKHN0cnVj
-dCBydGxsaWJfZGV2aWNlICppZWVlLCBzdHJ1Y3QgaXdfcmVxdWVzdF9pbmZvICphLAotCQkJICAg
-ICB1bmlvbiBpd3JlcV9kYXRhICp3cnF1LCBjaGFyICpiKQorCQkJCQkJdW5pb24gaXdyZXFfZGF0
-YSAqd3JxdSwgY2hhciAqYikKIHsKIAlpbnQgc2V0X21vZGVfc3RhdHVzID0gMDsKIApAQCAtNDEw
-LDcgKzQwMSw2IEBAIHZvaWQgcnRsbGliX3d4X3N5bmNfc2Nhbl93cSh2b2lkICpkYXRhKQogCiBv
-dXQ6CiAJbXV0ZXhfdW5sb2NrKCZpZWVlLT53eF9tdXRleCk7Ci0KIH0KIAogaW50IHJ0bGxpYl93
-eF9zZXRfc2NhbihzdHJ1Y3QgcnRsbGliX2RldmljZSAqaWVlZSwgc3RydWN0IGl3X3JlcXVlc3Rf
-aW5mbyAqYSwKQEAgLTQ0MSw3ICs0MzEsNiBAQCBpbnQgcnRsbGliX3d4X3NldF9lc3NpZChzdHJ1
-Y3QgcnRsbGliX2RldmljZSAqaWVlZSwKIAkJCXN0cnVjdCBpd19yZXF1ZXN0X2luZm8gKmEsCiAJ
-CQl1bmlvbiBpd3JlcV9kYXRhICp3cnF1LCBjaGFyICpleHRyYSkKIHsKLQogCWludCByZXQgPSAw
-LCBsZW4sIGk7CiAJc2hvcnQgcHJvdG9fc3RhcnRlZDsKIAl1bnNpZ25lZCBsb25nIGZsYWdzOwpA
-QCAtNDY4LDcgKzQ1Nyw2IEBAIGludCBydGxsaWJfd3hfc2V0X2Vzc2lkKHN0cnVjdCBydGxsaWJf
-ZGV2aWNlICppZWVlLAogCWlmIChwcm90b19zdGFydGVkKQogCQlydGxsaWJfc3RvcF9wcm90b2Nv
-bChpZWVlLCB0cnVlKTsKIAotCiAJLyogdGhpcyBpcyBqdXN0IHRvIGJlIHN1cmUgdGhhdCB0aGUg
-R0VUIHd4IGNhbGxiYWNrCiAJICogaGFzIGNvbnNpc3RlbnQgaW5mb3MuIG5vdCBuZWVkZWQgb3Ro
-ZXJ3aXNlCiAJICovCkBAIC01NTEsMTEgKzUzOSwxMCBAQCBpbnQgcnRsbGliX3d4X2dldF9uYW1l
-KHN0cnVjdCBydGxsaWJfZGV2aWNlICppZWVlLCBzdHJ1Y3QgaXdfcmVxdWVzdF9pbmZvICppbmZv
-LAogfQogRVhQT1JUX1NZTUJPTChydGxsaWJfd3hfZ2V0X25hbWUpOwogCi0KIC8qIHRoaXMgaXMg
-bW9zdGx5IHN0b2xlbiBmcm9tIGhvc3RhcCAqLwogaW50IHJ0bGxpYl93eF9zZXRfcG93ZXIoc3Ry
-dWN0IHJ0bGxpYl9kZXZpY2UgKmllZWUsCi0JCQkJIHN0cnVjdCBpd19yZXF1ZXN0X2luZm8gKmlu
-Zm8sCi0JCQkJIHVuaW9uIGl3cmVxX2RhdGEgKndycXUsIGNoYXIgKmV4dHJhKQorCQkJCQkJc3Ry
-dWN0IGl3X3JlcXVlc3RfaW5mbyAqaW5mbywKKwkJCQkJCXVuaW9uIGl3cmVxX2RhdGEgKndycXUs
-IGNoYXIgKmV4dHJhKQogewogCWludCByZXQgPSAwOwogCkBAIC02MDEsMTkgKzU4OCwxNyBAQCBp
-bnQgcnRsbGliX3d4X3NldF9wb3dlcihzdHJ1Y3QgcnRsbGliX2RldmljZSAqaWVlZSwKIAlkZWZh
-dWx0OgogCQlyZXQgPSAtRUlOVkFMOwogCQlnb3RvIGV4aXQ7Ci0KIAl9CiBleGl0OgogCW11dGV4
-X3VubG9jaygmaWVlZS0+d3hfbXV0ZXgpOwogCXJldHVybiByZXQ7Ci0KIH0KIEVYUE9SVF9TWU1C
-T0wocnRsbGliX3d4X3NldF9wb3dlcik7CiAKIC8qIHRoaXMgaXMgc3RvbGVuIGZyb20gaG9zdGFw
-ICovCiBpbnQgcnRsbGliX3d4X2dldF9wb3dlcihzdHJ1Y3QgcnRsbGliX2RldmljZSAqaWVlZSwK
-LQkJCQkgc3RydWN0IGl3X3JlcXVlc3RfaW5mbyAqaW5mbywKLQkJCQkgdW5pb24gaXdyZXFfZGF0
-YSAqd3JxdSwgY2hhciAqZXh0cmEpCisJCQkJCQlzdHJ1Y3QgaXdfcmVxdWVzdF9pbmZvICppbmZv
-LAorCQkJCQkJdW5pb24gaXdyZXFfZGF0YSAqd3JxdSwgY2hhciAqZXh0cmEpCiB7CiAJbXV0ZXhf
-bG9jaygmaWVlZS0+d3hfbXV0ZXgpOwogCkBAIC02NDMsNiArNjI4LDUgQEAgaW50IHJ0bGxpYl93
-eF9nZXRfcG93ZXIoc3RydWN0IHJ0bGxpYl9kZXZpY2UgKmllZWUsCiBleGl0OgogCW11dGV4X3Vu
-bG9jaygmaWVlZS0+d3hfbXV0ZXgpOwogCXJldHVybiAwOwotCiB9CiBFWFBPUlRfU1lNQk9MKHJ0
-bGxpYl93eF9nZXRfcG93ZXIpOwotLSAKMi4zNS4xCgo=
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
---=-oVFLOU8SUT0ZE0oLvJSx--
+>> ERROR: modpost: "mxic_ecc_process_data_pipelined" [drivers/spi/spi-mxic.ko] undefined!
+>> ERROR: modpost: "mxic_ecc_get_pipelined_engine" [drivers/spi/spi-mxic.ko] undefined!
+>> ERROR: modpost: "mxic_ecc_get_pipelined_ops" [drivers/spi/spi-mxic.ko] undefined!
+>> ERROR: modpost: "mxic_ecc_put_pipelined_engine" [drivers/spi/spi-mxic.ko] undefined!
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

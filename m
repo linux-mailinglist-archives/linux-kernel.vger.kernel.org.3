@@ -2,125 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7ABB4FA08E
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 02:18:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D1334FA09A
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 02:21:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240130AbiDIAVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 20:21:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43900 "EHLO
+        id S229481AbiDIAVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 20:21:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238299AbiDIAVA (ORCPT
+        with ESMTP id S230295AbiDIAVw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 20:21:00 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA47B9D07E
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 17:18:54 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-e2442907a1so11034892fac.8
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 17:18:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=50xptwVRrkuRO66P0RVniJpVpOVm1a9lccHqnLvTlfE=;
-        b=AmiZYX62pPfnCtUyEyYbUUuIlm5QJX31JlXqQPG6DdRm11ixOurVukbq0OobhW9wNJ
-         +wLsJm0MDe/0tw7a55pwdBnRAILieI+RDqSF9L0Zs3yEut5/tC6bluMxaao84HHXBhd9
-         GxWIr4DvBJARM8f/S01X5h197q3UTNPG3UFPsPQe4RIwcPLckiG/gvcbxKKnIApOljzN
-         NH10WkvcZAbVpO6Y9RFo6WxTDa00Y/u0bqPtnf2XivcJM0smlmWqFLCF5yqpZX053O4s
-         XWqx8JvrPjHsYircGxNfKtuWuB8jWl3RlN/p3A1wJfikJfK56owM91jz5XtDSKSdCi+6
-         73YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=50xptwVRrkuRO66P0RVniJpVpOVm1a9lccHqnLvTlfE=;
-        b=iKii0fFuKMcR2gMJs+Un3WXDI0n1/dN5TgUy4R48YGr6zJZFU9IGXS6KKpAtR4rRsR
-         V8UP757P7NIMo8uK1ATjXxqf+Gtv5yRxzXqVTQ51VAJ1FHrHF4SfTltGQ6khLl6fLzVY
-         HuIYKFK+MBGMeklvjm1sxAWA55pdFWefpCl932hwSIgrmRNgx7zSxsIZcwEOY7DZuN9c
-         YfSkCqPstp6dHinAaHzI52TFq8c2RXgamZ1rH3a/yZNfiOd9rFUFdgeuz+RCOC5UPxhA
-         yyzFEt1oXyoo6OPnCHPCekKaISkkUgmE18JDNZ901q+w5YySN6yQF+YRsOWI7OEQyC8Q
-         X/vQ==
-X-Gm-Message-State: AOAM532rwSrymxtTb23qK84p3vosK/OQkSDbg01OTT4BJSO6afH9XNYF
-        kwhU9VSlkbElVcrMZK3eLZlwog==
-X-Google-Smtp-Source: ABdhPJx+aln7MEBB70i3l11Ekrt/TtO5AGwQEfIeBbGMN8Y1DEbJs0dkAoACV8uHpyJPSysMYr8KLg==
-X-Received: by 2002:a05:6870:41d2:b0:e2:1465:b63d with SMTP id z18-20020a05687041d200b000e21465b63dmr9960149oac.164.1649463534279;
-        Fri, 08 Apr 2022 17:18:54 -0700 (PDT)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id 184-20020a4a03c1000000b003240492fc15sm9159240ooi.36.2022.04.08.17.18.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 17:18:53 -0700 (PDT)
-Date:   Fri, 8 Apr 2022 19:18:52 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        quic_msavaliy@quicinc.com
-Subject: Re: [V3 0/3] arch: arm64: dts: qcom: Configure cts sleep pinctrl to
- bias-bus-hold
-Message-ID: <YlDQ7GyxSSIOsHVq@builder.lan>
-References: <1649229362-31183-1-git-send-email-quic_vnivarth@quicinc.com>
- <CAD=FV=XieM5MHMBBV9d7jrbiN+8RVdo6=_XSNf9L-yqEZUTO_Q@mail.gmail.com>
+        Fri, 8 Apr 2022 20:21:52 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A064DE911
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 17:19:46 -0700 (PDT)
+Received: from [192.168.0.2] (ip5f5ae917.dynamic.kabel-deutschland.de [95.90.233.23])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 5F95861E6478B;
+        Sat,  9 Apr 2022 02:19:43 +0200 (CEST)
+Message-ID: <44354d78-b340-fbc4-fd6c-060d7ad3404e@molgen.mpg.de>
+Date:   Sat, 9 Apr 2022 02:19:43 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAD=FV=XieM5MHMBBV9d7jrbiN+8RVdo6=_XSNf9L-yqEZUTO_Q@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCHv2] drm/amdgpu: disable ASPM on Intel AlderLake based
+ systems
+Content-Language: en-US
+To:     Richard Gong <richard.gong@amd.com>
+Cc:     mario.limonciello@amd.com, dri-devel@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        alexander.deucher@amd.com, christian.koenig@amd.com,
+        xinhui.pan@amd.com, airlied@linux.ie, daniel@ffwll.ch
+References: <20220408190502.4103670-1-richard.gong@amd.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20220408190502.4103670-1-richard.gong@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 06 Apr 10:04 CDT 2022, Doug Anderson wrote:
+Dear Richard,
 
-> Hi,
+
+Thank you for your patch.
+
+Am 08.04.22 um 21:05 schrieb Richard Gong:
+> Active State Power Management (ASPM) feature is enabled since kernel 5.14.
+> There are some AMD GFX cards (such as WX3200 and RX640) that cannot be
+> used with Intel AlderLake based systems to enable ASPM. Using these GFX
+
+Alder Lake
+
+> cards as video/display output, Intel Alder Lake based systems will hang
+> during suspend/resume.
+
+Please reflow for 75 characters per line.
+
+Also please mention the exact system you had problems with (also 
+firmware versions).
+
 > 
-> On Wed, Apr 6, 2022 at 12:16 AM Vijaya Krishna Nivarthi
-> <quic_vnivarth@quicinc.com> wrote:
-> >
-> > WLAN rail was leaking power during RBSC/sleep even after turning BT off.
-> > Change sleep pinctrl configuration to handle same.
-> >
-> > ---
-> > v3: apply same change to active state and other sc7280*.dts* as well
-> > v2: used bias-bus-hold as per review comments
-> > v1: intial patch used bias-disable for sleep pinctrl in sc7280-idp only
-> > ---
-> >
-> > Vijaya Krishna Nivarthi (3):
-> >   arch: arm64: dts: qcom: Configure cts sleep pinctrl to bias-bus-hold
-> >   arch: arm64: dts: qcom: Configure cts sleep pinctrl to bias-bus-hold
-> >   arch: arm64: dts: qcom: Configure cts sleep pinctrl to bias-bus-hold
-> >
-> >  arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r0.dts | 12 ++++++------
-> >  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi                   | 12 ++++++------
-> >  arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi                 | 13 ++++++++-----
-> >  3 files changed, 20 insertions(+), 17 deletions(-)
+> Add extra check to disable ASPM on Intel AlderLake based systems.
+
+Is that a problem with Intel Alder Lake or the Dell system? Shouldn’t 
+ASPM just be disabled for the problematic cards for the Dell system. You 
+write newer cards worked fine.
+
+> Fixes: 0064b0ce85bb ("drm/amd/pm: enable ASPM by default")
+> Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1885
+> Signed-off-by: Richard Gong <richard.gong@amd.com>
+> ---
+> v2: correct commit description
+>      move the check from chip family to problematic platform
+> ---
+>   drivers/gpu/drm/amd/amdgpu/vi.c | 17 ++++++++++++++++-
+>   1 file changed, 16 insertions(+), 1 deletion(-)
 > 
-> Probably the subject of all the patches should be modified to talk
-> about what each patch is applying to. Having 3 identically named
-> patches is not ideal.
-> 
-> I'll let Bjorn chime in on whether he'd rather adjust the subject
-> himself or whether he'd rather you re-send. In any case, with the
-> subject modified then for all 3 patches:
-> 
+> diff --git a/drivers/gpu/drm/amd/amdgpu/vi.c b/drivers/gpu/drm/amd/amdgpu/vi.c
+> index 039b90cdc3bc..8b4eaf54b23e 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/vi.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/vi.c
+> @@ -81,6 +81,10 @@
+>   #include "mxgpu_vi.h"
+>   #include "amdgpu_dm.h"
+>   
+> +#if IS_ENABLED(CONFIG_X86_64)
+> +#include <asm/intel-family.h>
+> +#endif
+> +
+>   #define ixPCIE_LC_L1_PM_SUBSTATE	0x100100C6
+>   #define PCIE_LC_L1_PM_SUBSTATE__LC_L1_SUBSTATES_OVERRIDE_EN_MASK	0x00000001L
+>   #define PCIE_LC_L1_PM_SUBSTATE__LC_PCI_PM_L1_2_OVERRIDE_MASK	0x00000002L
+> @@ -1134,13 +1138,24 @@ static void vi_enable_aspm(struct amdgpu_device *adev)
+>   		WREG32_PCIE(ixPCIE_LC_CNTL, data);
+>   }
+>   
+> +static bool intel_core_apsm_chk(void)
 
-I've been fixing up a ton of these during the last few releases, so I
-think it's time that I stop doing that.
+aspm
 
-Please resubmit this with subject prefixes that matches the existing git
-log for each change.
+> +{
+> +#if IS_ENABLED(CONFIG_X86_64)
+> +	struct cpuinfo_x86 *c = &cpu_data(0);
+> +
+> +	return (c->x86 == 6 && c->x86_model == INTEL_FAM6_ALDERLAKE);
+> +#else
+> +	return false;
+> +#endif
 
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Please do the check in C code and not the preprocessor.
 
-Thanks,
-Bjorn
+> +}
+> +
+>   static void vi_program_aspm(struct amdgpu_device *adev)
+>   {
+>   	u32 data, data1, orig;
+>   	bool bL1SS = false;
+>   	bool bClkReqSupport = true;
+>   
+> -	if (!amdgpu_device_should_use_aspm(adev))
+> +	if (!amdgpu_device_should_use_aspm(adev) || intel_core_apsm_chk())
+>   		return;
+>   
+>   	if (adev->flags & AMD_IS_APU ||
 
+
+Kind regards,
+
+Paul

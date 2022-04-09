@@ -2,95 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 029A94FA935
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 17:17:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D50894FA93A
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 17:17:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242398AbiDIPSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 11:18:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39406 "EHLO
+        id S241593AbiDIPS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 11:18:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242437AbiDIPST (ORCPT
+        with ESMTP id S242429AbiDIPSU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 11:18:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F30BFB
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 08:16:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 45F5DB807E5
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 15:16:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B75B2C385A0;
-        Sat,  9 Apr 2022 15:16:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649517369;
-        bh=lfcFAc+RhqZ1/cu2c6UePcSLmxOGoyzClv2kkRwyLNE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Nzub0L71StbPq58BmZC+BGa1div5LkIYJFBQSjcVZquUFVPlfEpwSsIIPcxORSsOy
-         VTJg4UXipWRM2o36uMvMRBDRr7H8WLb19YzilJuYoUuDMR1aO4c/LE5kpWi/tYW0+s
-         Y/mCZk9X+LaU26lbTvwxPMBW2QG71H1YsqS5bAXx/2diIpeMFNin55fyb+hezWzPAT
-         KGW+r7qp1W5iKmoaTaexH2M023arLZ/b4QAHIiFpni/lA84061m9GfqQanr6w93ghl
-         McMkKqQqdNmSXUIxMphWfY+86607ozvQiDzhrjxmBnPlYW4eBZ6eES8hPUAUeFcj2U
-         YIBCJxKy1SXMg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 68CFD40407; Sat,  9 Apr 2022 12:16:07 -0300 (-03)
-Date:   Sat, 9 Apr 2022 12:16:07 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Jiri Olsa <jolsa@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] perf tools: Fix perf's libperf_print callback
-Message-ID: <YlGjN1YOKakAWSVx@kernel.org>
-References: <20220408132625.2451452-1-adrian.hunter@intel.com>
+        Sat, 9 Apr 2022 11:18:20 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2499D2632;
+        Sat,  9 Apr 2022 08:16:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=DWJgIpccgAwiD7TVhNFpkZOWqtVX9h8FRKAluJQvIhU=; b=2GCyGWBHoZwI1xTAyiCq4XPl0x
+        omnN5J0sdbTSBIVxm207lFJBJ7pWbWs3HAIG1e9jzvELgpJfFHRa39UASiRTRTyP7UAYxk1TUbjut
+        /mjz+U2qbbJlwv04Yvuob96ouAT1exFqTYhMZ7WjWVFYaW4Hu3GevtEmk2ClMuQBddXygY0fB23lU
+        gjq4gb7jpW0mjGQBFWKAKBh90EJV294iCLv7mHfNKmr7cxHTcvWCkLpLn/m3lsGZJtsQumGCR0uiK
+        yZSo4zJpM5wEoFNYuMsARpjsf24+HxNYXkCk5evL6wdvvPgvadyxaihVQW9wBv9asWfU50IFA6tPO
+        Bndolyiw==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ndCos-003O0g-NJ; Sat, 09 Apr 2022 15:16:10 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sam Ravnborg <sam@ravnborg.org>, sparclinux@vger.kernel.org
+Subject: [PATCH v2] sparc: cacheflush_32.h needs struct page
+Date:   Sat,  9 Apr 2022 08:16:09 -0700
+Message-Id: <20220409151609.3715-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220408132625.2451452-1-adrian.hunter@intel.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Apr 08, 2022 at 04:26:25PM +0300, Adrian Hunter escreveu:
-> eprintf does not expect va_list as the 4th parameter.
-> Use veprintf because it does.
+Add a struct page forward declaration to cacheflush_32.h.
+Fixes this build warning:
 
-You forgot to add this:
+  CC      drivers/crypto/xilinx/zynqmp-sha.o
+In file included from ../arch/sparc/include/asm/cacheflush.h:11,
+                 from ../include/linux/cacheflush.h:5,
+                 from ../drivers/crypto/xilinx/zynqmp-sha.c:6:
+../arch/sparc/include/asm/cacheflush_32.h:38:37: warning: 'struct page' declared inside parameter list will not be visible outside of this definition or declaration
+   38 | void sparc_flush_page_to_ram(struct page *page);
 
-Fixes: 428dab813a56ce94 ("libperf: Merge libperf_set_print() into libperf_init()")
+Exposed by commit 0e03b8fd2936
+("crypto: xilinx - Turn SHA into a tristate and allow COMPILE_TEST")
+but not Fixes: that commit.
 
-Please consider doing it next time.
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: David S. Miller <davem@davemloft.net>
+Cc: Sam Ravnborg <sam@ravnborg.org>
+Cc: sparclinux@vger.kernel.org
+---
+v2: use forward declaration instead of adding <linux/mm.h> (Sam)
 
-Thanks, applied.
+ arch/sparc/include/asm/cacheflush_32.h |    1 +
+ 1 file changed, 1 insertion(+)
 
-- Arnaldo
+--- a/arch/sparc/include/asm/cacheflush_32.h
++++ b/arch/sparc/include/asm/cacheflush_32.h
+@@ -35,6 +35,7 @@
+ #define flush_page_for_dma(addr) \
+ 	sparc32_cachetlb_ops->page_for_dma(addr)
  
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-> ---
->  tools/perf/perf.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/perf/perf.c b/tools/perf/perf.c
-> index 2f6b67189b42..6aae7b6c376b 100644
-> --- a/tools/perf/perf.c
-> +++ b/tools/perf/perf.c
-> @@ -434,7 +434,7 @@ void pthread__unblock_sigwinch(void)
->  static int libperf_print(enum libperf_print_level level,
->  			 const char *fmt, va_list ap)
->  {
-> -	return eprintf(level, verbose, fmt, ap);
-> +	return veprintf(level, verbose, fmt, ap);
->  }
->  
->  int main(int argc, const char **argv)
-> -- 
-> 2.25.1
-
--- 
-
-- Arnaldo
++struct page;
+ void sparc_flush_page_to_ram(struct page *page);
+ 
+ #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1

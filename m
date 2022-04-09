@@ -2,105 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D79B4FA5A4
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 09:52:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B3E94FA5A5
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 09:53:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236860AbiDIHyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 03:54:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39810 "EHLO
+        id S237346AbiDIHzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 03:55:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230105AbiDIHyT (ORCPT
+        with ESMTP id S238367AbiDIHzD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 03:54:19 -0400
-Received: from mxout2.routing.net (mxout2.routing.net [IPv6:2a03:2900:1:a::b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8514146B50;
-        Sat,  9 Apr 2022 00:52:12 -0700 (PDT)
-Received: from mxbox1.masterlogin.de (unknown [192.168.10.88])
-        by mxout2.routing.net (Postfix) with ESMTP id 6D2A95FDFA;
-        Sat,  9 Apr 2022 07:52:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailerdienst.de;
-        s=20200217; t=1649490730;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Woadcv1V4mB8TNR0hX8FoYo4UZy8QqujR0u1IsxgXzk=;
-        b=LotVTLABBbxNHxFz/KdC+RuwH+FBndhUE2ckpJVvYC0M9Oy61s1OBFE1BZcgR16eaav06b
-        yEl/OZLRzjecQhNJVU/QnyAUAjeTKaheVVVTLGLtzXADW6o3mSF5KOWUklazdgfPEnO9WD
-        sw1XELdCQbyO0Buo2hG2SmbFRLwP4wE=
-Received: from localhost.localdomain (fttx-pool-217.61.154.105.bambit.de [217.61.154.105])
-        by mxbox1.masterlogin.de (Postfix) with ESMTPSA id 848854021D;
-        Sat,  9 Apr 2022 07:52:09 +0000 (UTC)
-From:   Frank Wunderlich <linux@fw-web.de>
-To:     linux-rockchip@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: rockchip: Fix clocks for rk356x usb
-Date:   Sat,  9 Apr 2022 09:51:47 +0200
-Message-Id: <20220409075147.136187-1-linux@fw-web.de>
-X-Mailer: git-send-email 2.25.1
+        Sat, 9 Apr 2022 03:55:03 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519E932FDE6
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 00:52:57 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id p135so7226131iod.2
+        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 00:52:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=A9mD/yV8z2vnJwKkyc2vW5H7BXGV5SMHDI/OBudkqAE=;
+        b=gxM5BMk81CwQ33kmlfo4Aaqny7Y/pxaKUBrKsH2SpDVnHvz0Cm3qUJ29yhXJhvNNuX
+         +0n/Wvb0uH0U3ynXRTM1IQQtQdtDf+uXTsFnJ+JZIEB9hBPRVapaFDrZlnEFLDo89whI
+         1e9tA68EFeneSRZTAIBvOUHltFaXq9OW7XWqOZEkU7rIKfsuZwE8uJen9eSR9kQ6JrLM
+         B1+4Cw0AT8kGLALyDh40648uhzKP7YYajvBMa65tuR1IXBPP3TlyCF+cPtc8tV5HrKnO
+         fzq3O7wY5P5kkZ87GQmMhk6qdBIMowlN9Zqvw8B3P48HGcLTWnCfDWLst5z3h8e4Wm9M
+         vyRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=A9mD/yV8z2vnJwKkyc2vW5H7BXGV5SMHDI/OBudkqAE=;
+        b=3hmAi+hl8qX7dy9vatoqpClwM3NlsrSme1mR4+e5D21QS0PZsdask62lzUbT+GKQjG
+         ZYDIDDBabACMm1MgvyUasPKXmKU1oojI6AvGzWuD4zCbTD7Ljktjqh6MnBKebq9eIzXZ
+         zVD+MswKhxqGALG1hGeVap9IbJdnCTdTlcq8S9GBYTBYf4MucBD2DDCwCHdnyHmJiOvL
+         qofFE76k28mVsiL7tzKdzgcIOWWUzNM6ZMtJrKpWyP4oIcGkaxY+/JYJouuEA2+z0lYC
+         aV5XoqPWmQ0QtW5st1hIKxNr7suz4NQL+ubkH1x68FME0mblAasCQ2olSUruabByUrNH
+         JNmQ==
+X-Gm-Message-State: AOAM533P+u6KyJk6pUiGvWTp7o1lDn7QrlBcOxwoRyrqk3q0PVJRd47z
+        B1QYF+JrQvRwmYqfjhO3L0A=
+X-Google-Smtp-Source: ABdhPJzVQYlyY5ewWXmUyrOkjHU/+ABr0Ewjk3epV3on6lkSmvm8OUBFdEP+v229Ql8JLoRfUah4yg==
+X-Received: by 2002:a6b:8e91:0:b0:645:c11f:e322 with SMTP id q139-20020a6b8e91000000b00645c11fe322mr10074519iod.162.1649490776641;
+        Sat, 09 Apr 2022 00:52:56 -0700 (PDT)
+Received: from localhost ([240e:390:a28:12c0:449c:329d:d29b:9026])
+        by smtp.gmail.com with UTF8SMTPSA id p7-20020a92d487000000b002caa066f9e4sm335787ilg.88.2022.04.09.00.52.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 09 Apr 2022 00:52:56 -0700 (PDT)
+From:   Schspa Shi <schspa@gmail.com>
+To:     peterz@infradead.org, mingo@redhat.com, will@kernel.org,
+        longman@redhat.com, boqun.feng@gmail.com
+Cc:     schspa@gmail.com, linux-kernel@vger.kernel.org
+Subject: [PATCH] lockdep: doc: fix function documentation
+Date:   Sat,  9 Apr 2022 15:52:45 +0800
+Message-Id: <20220409075245.62628-1-schspa@gmail.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Mail-ID: b784876b-6e21-42de-8301-4411050e2401
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frank Wunderlich <frank-w@public-files.de>
+Correct the struct description to correct position in the comment.
 
-after these 2 commit different clock names are needed compared to 5.17
-
-commit 5114c3ee2487 ("usb: dwc3: Calculate REFCLKPER based on reference clock")
-commit 33fb697ec7e5 ("usb: dwc3: Get clocks individually")
-
-change them in new rk356x usb support
-
-Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+Signed-off-by: Schspa Shi <schspa@gmail.com>
 ---
-this is a fix for this series not yet applied
-https://patchwork.kernel.org/project/linux-rockchip/list/?series=630470
-@peter
-after testing you can squash it into your series and add a co-developed or similar
----
- arch/arm64/boot/dts/rockchip/rk356x.dtsi | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ kernel/locking/lockdep.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-index 55e6dcb948cc..6dfe54e53be1 100644
---- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-@@ -264,8 +264,8 @@ usb_host0_xhci: usb@fcc00000 {
- 		interrupts = <GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH>;
- 		clocks = <&cru CLK_USB3OTG0_REF>, <&cru CLK_USB3OTG0_SUSPEND>,
- 			 <&cru ACLK_USB3OTG0>;
--		clock-names = "ref_clk", "suspend_clk",
--			      "bus_clk";
-+		clock-names = "ref", "suspend_clk",
-+			      "bus_early";
- 		dr_mode = "host";
- 		phy_type = "utmi_wide";
- 		power-domains = <&power RK3568_PD_PIPE>;
-@@ -280,8 +280,8 @@ usb_host1_xhci: usb@fd000000 {
- 		interrupts = <GIC_SPI 170 IRQ_TYPE_LEVEL_HIGH>;
- 		clocks = <&cru CLK_USB3OTG1_REF>, <&cru CLK_USB3OTG1_SUSPEND>,
- 			 <&cru ACLK_USB3OTG1>;
--		clock-names = "ref_clk", "suspend_clk",
--			      "bus_clk";
-+		clock-names = "ref", "suspend_clk",
-+			      "bus_early";
- 		dr_mode = "host";
- 		phys = <&usb2phy0_host>, <&combphy1 PHY_TYPE_USB3>;
- 		phy-names = "usb2-phy", "usb3-phy";
+diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
+index c06cab6546ed..f4782564d710 100644
+--- a/kernel/locking/lockdep.c
++++ b/kernel/locking/lockdep.c
+@@ -353,13 +353,13 @@ struct pending_free {
+ /**
+  * struct delayed_free - data structures used for delayed freeing
+  *
+- * A data structure for delayed freeing of data structures that may be
+- * accessed by RCU readers at the time these were freed.
+- *
+  * @rcu_head:  Used to schedule an RCU callback for freeing data structures.
+  * @index:     Index of @pf to which freed data structures are added.
+  * @scheduled: Whether or not an RCU callback has been scheduled.
+  * @pf:        Array with information about data structures about to be freed.
++ *
++ * A data structure for delayed freeing of data structures that may be
++ * accessed by RCU readers at the time these were freed.
+  */
+ static struct delayed_free {
+ 	struct rcu_head		rcu_head;
+@@ -1666,6 +1666,7 @@ static inline struct lock_list *__bfs_next(struct lock_list *lock, int offset)
+  * @source_entry: the source of the path we are searching for.
+  * @data: data used for the second parameter of @match function
+  * @match: match function for the search
++ * @skip: skip function for the search
+  * @target_entry: pointer to the target of a matched path
+  * @offset: the offset to struct lock_class to determine whether it is
+  *          locks_after or locks_before
 -- 
-2.25.1
+2.24.3 (Apple Git-128)
 

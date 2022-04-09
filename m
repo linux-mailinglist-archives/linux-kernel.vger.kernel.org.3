@@ -2,107 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CB3B4FA27F
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 06:23:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E4EB4FA2AD
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 06:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239314AbiDIEZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 00:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51790 "EHLO
+        id S239341AbiDIE2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 00:28:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbiDIEZh (ORCPT
+        with ESMTP id S240861AbiDIE1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 00:25:37 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6CB10CF34
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 21:23:30 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id 14so7755873ily.11
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 21:23:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DJypOpOA9aIF7A07tGX4soaaBLyBuWYyjxJ7q0m7th0=;
-        b=NPEqzwWw0cB7k1ALFugu0+c2isySmZUAJchwKU9c8auBivUs+EHCCrcmT/NvOvtXZA
-         l0T7McZG8qNrO25el8VQcNND1MWmlkX+p8q1h3+E/mUgFMa0wgup2AJ7MkIjBguHS/x4
-         UqCuRhRXePhAN/9IGhExY7IUwGj2J29JvefULPBsv3QTybO45tikhIpCj+Vi4MAuNjRz
-         bL/Z7yHlADVHboa8Qt/gQKaqH5APKeuPSQOWezK+mRJz9LyaZWbCWvIq/WcG+7s6YnFj
-         9u04BgzxodGacaWU/vig6sn/9Y9sjc0/fNPjedKBwpoNzTX+y2mXftaya9rVMLcDAsJ4
-         2duQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DJypOpOA9aIF7A07tGX4soaaBLyBuWYyjxJ7q0m7th0=;
-        b=7WF37vGvFp3M6TdRwtP9YXLydZAHXv5b/6bIykIoeVlnmkcmEop/le4oPq0f/sbJHI
-         fU8jBGDGGZEa+MyOAV5Wxc2ajHBUgaPDGsbiRjx4ctQpVo+FCInY8b1i6P9r3RZFyyJ2
-         oDiag7ESNC0RltVh+AcN5wB/viu6ZMVXIXAvL/O6hxTXuqYrQohCY6x1IACVHB4ZZp1Z
-         Ak0/fG8x8jVcq8mDv59XGok4s9QyX3zmFWeUKAsKfIDtwxTixh18L4vIOfSSC5bpJY8S
-         kiObqnwo/wQm8wyLxNKyemFxV8fWasn1JOviwMcGt9mE5o6xJVTO6nZOCOX1ktAhQ09R
-         qunw==
-X-Gm-Message-State: AOAM532r9YXls2WvwTSgP0fWpRtkC9J5UIqrU+nry/WreYJLE42xa0ek
-        fFbw2JAsVE2f9IGB3f+mvBw=
-X-Google-Smtp-Source: ABdhPJzPxk4qY6Q6zL03Wzq9wKditxBAobGL6/CMo2XFZXDH58+NCffkqUpLV6nfgehKIxDxhJ4QTw==
-X-Received: by 2002:a05:6e02:216f:b0:2ca:85f4:1473 with SMTP id s15-20020a056e02216f00b002ca85f41473mr2671059ilv.17.1649478209896;
-        Fri, 08 Apr 2022 21:23:29 -0700 (PDT)
-Received: from james-x399.localdomain (71-218-122-133.hlrn.qwest.net. [71.218.122.133])
-        by smtp.gmail.com with ESMTPSA id r9-20020a6b6009000000b006412abddbbbsm16131051iog.24.2022.04.08.21.23.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 21:23:29 -0700 (PDT)
-From:   James Hilliard <james.hilliard1@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        James Hilliard <james.hilliard1@gmail.com>,
-        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] drm/gma500: depend on framebuffer
-Date:   Fri,  8 Apr 2022 22:23:21 -0600
-Message-Id: <20220409042321.3184493-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 9 Apr 2022 00:27:47 -0400
+Received: from nksmu.kylinos.cn (mailgw.kylinos.cn [123.150.8.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845412E1627;
+        Fri,  8 Apr 2022 21:25:39 -0700 (PDT)
+X-UUID: ba5dd6ec4e194e7e858000d3602be3bc-20220409
+X-CPASD-INFO: dfdc728120ed4e33ae419e466acbcd6f@rbaeg2RkZmFeUKewg6h-bYGWZGFpkVS
+        FeJuDkpGUYoaVhH5xTWVlZ15UfYBqVWVbZV9ZenRqUmFeaFxTi3akdmpQYIRkXW10qrWmnVdiZmE=
+X-CLOUD-ID: dfdc728120ed4e33ae419e466acbcd6f
+X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:0.6,TVAL:179
+        .0,ESV:0.0,ECOM:0.0,ML:0.0,FD:0.0,CUTS:110.0,IP:-2.0,MAL:-5.0,PHF:0.0,PHC:0.0
+        ,SPF:4.0,EDMS:-5,IPLABEL:-2.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-5,AU
+        F:10,DUF:36647,ACD:248,DCD:350,SL:0,EISP:0,AG:0,CFC:0.324,CFSR:0.2,UAT:1,RAF:
+        2,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,EAF
+        :0,CID:-5.0,VERSION:2.3.17
+X-CPASD-ID: ba5dd6ec4e194e7e858000d3602be3bc-20220409
+X-CPASD-BLOCK: 1000
+X-CPASD-STAGE: 1
+X-UUID: ba5dd6ec4e194e7e858000d3602be3bc-20220409
+X-User: lienze@kylinos.cn
+Received: from asus [(61.48.215.124)] by nksmu.kylinos.cn
+        (envelope-from <lienze@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 1212242366; Sat, 09 Apr 2022 12:24:25 +0800
+Date:   Sat, 9 Apr 2022 12:25:30 +0800
+From:   Enze Li <lienze@kylinos.cn>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     phil@philpotter.co.uk, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org
+Subject: Re: [PATCH] cdrom: do not print info list when there is no cdrom
+ device
+Message-ID: <20220409122530.60353fcd@asus>
+In-Reply-To: <25390602-cfa0-dba3-bfbc-a35ed6b44bcf@kernel.dk>
+References: <20220408084221.1681592-1-lienze@kylinos.cn>
+        <25390602-cfa0-dba3-bfbc-a35ed6b44bcf@kernel.dk>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Select the efi framebuffer if efi is enabled.
+On Fri, 8 Apr 2022 06:34:04 -0600
+Jens Axboe <axboe@kernel.dk> wrote:
 
-This appears to be needed for video output to function correctly.
+> On 4/8/22 2:42 AM, Enze Li wrote:
+> > There is no need to print a list of cdrom entries with blank info
+> > when no cdrom device exists.  With this patch applied, we get:
+> > 
+> > ================================================
+> > $ cat /proc/sys/dev/cdrom/info
+> > CD-ROM information, Id:cdrom.c 3.20 2003/12/17
+> > 
+> > No device found.
+> > 
+> > ================================================  
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
-Changes v2 -> v3:
-  - select EFI_FB instead of depending on it
-Changes v1 -> v2:
-  - use depends instead of select
----
- drivers/gpu/drm/gma500/Kconfig | 2 ++
- 1 file changed, 2 insertions(+)
+Hi Jens,
 
-diff --git a/drivers/gpu/drm/gma500/Kconfig b/drivers/gpu/drm/gma500/Kconfig
-index 0cff20265f97..a422fa84d53b 100644
---- a/drivers/gpu/drm/gma500/Kconfig
-+++ b/drivers/gpu/drm/gma500/Kconfig
-@@ -2,11 +2,13 @@
- config DRM_GMA500
- 	tristate "Intel GMA500/600/3600/3650 KMS Framebuffer"
- 	depends on DRM && PCI && X86 && MMU
-+	depends on FB
- 	select DRM_KMS_HELPER
- 	# GMA500 depends on ACPI_VIDEO when ACPI is enabled, just like i915
- 	select ACPI_VIDEO if ACPI
- 	select BACKLIGHT_CLASS_DEVICE if ACPI
- 	select INPUT if ACPI
-+	select FB_EFI if EFI
- 	help
- 	  Say yes for an experimental 2D KMS framebuffer driver for the
- 	  Intel GMA500 (Poulsbo), Intel GMA600 (Moorestown/Oak Trail) and
--- 
-2.25.1
+Thanks for your review.
 
+> 
+> And what did we get before?
+
+Without the patch, we get:
+
+================================================
+$ cat /proc/sys/dev/cdrom/info
+CD-ROM information, Id: cdrom.c 3.20 2003/12/17
+
+drive name:	
+drive speed:	
+drive # of slots:
+Can close tray:	
+Can open tray:	
+Can lock tray:	
+Can change speed:
+Can select disk:
+Can read multisession:
+Can read MCN:	
+Reports media changed:
+Can play audio:	
+Can write CD-R:	
+Can write CD-RW:
+Can read DVD:	
+Can write DVD-R:
+Can write DVD-RAM:
+Can read MRW:	
+Can write MRW:	
+Can write RAM:	
+
+
+================================================
+
+> 
+> Will this potentially break applications that parse it?
+> 
+
+I dunno, is there any way to confirm this thing?  And if this is really
+a possibility, does it mean that we cannot make changes?
+
+BTW, could you pls help review the following patch?  I forgot to cc you
+and linux-block@list. :)
+https://lore.kernel.org/lkml/20220406090337.1116708-1-lienze@kylinos.cn/
+
+Thanks,
+Enze

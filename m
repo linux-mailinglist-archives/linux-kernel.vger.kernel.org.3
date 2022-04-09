@@ -2,120 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 928D64FA1A7
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 04:26:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9158E4FA1A9
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 04:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238133AbiDIC2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 22:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37736 "EHLO
+        id S238099AbiDICae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 22:30:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238035AbiDIC2o (ORCPT
+        with ESMTP id S229515AbiDICab (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 22:28:44 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65DABCF4A0;
-        Fri,  8 Apr 2022 19:26:39 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id t13so9300623pgn.8;
-        Fri, 08 Apr 2022 19:26:39 -0700 (PDT)
+        Fri, 8 Apr 2022 22:30:31 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1CE353A78
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 19:28:24 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id ll10so1826315pjb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 19:28:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5UdmH2TSJ6/W5WTIzQNOvHyLqEMqCn/FlcP3EV3SVAY=;
-        b=o0oAp1sMWxOU33K7DKS0ihI+p+e2vYYKndOPxUtGsl/FUN7jRivXToBoMM9zq9fNuF
-         T9rgaqKDb4dzI1Jip3QSiOgv6ix/VU2f5/NyERiaQhOS4cEj5No/zndT2n/9gB8sjvBW
-         5a3XljgbtaX7eUaRtHIZG017vA2is52yLAgoL6wszVq7AeV4IBZep5sq0c5fcu/RUzY+
-         8rcWc5J6juZ3o3akWsJzlZ9ufnOWYVCJXWEUf6bHBv7lpHAEosgB2Jidumybwlco57xr
-         OEyybBFs808C+G36xoQkfoqIHrhjMSY4YkS/5kil7pQ3PjUJyobG/LEBYW5wmUkXkcxq
-         b5mg==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=aP/uEaYpsHrJ8Gy8ffXu+nyzx0P9m+j2gLhkvWYNHO8=;
+        b=FixpIaCvf2/5FS8G5XpQa4vwIkx44LKaD0JlnAtR18K43rkynRPe2QhPtdq60IfH/v
+         SgDblxwh6K4UlulMSOy8Z30ZttqI74PNtO3KfVpdu0RZGoG3DjKj+WHGFzzCHr9cXZC4
+         w177gBQfMZ/Y2nVN0DDpnXLbmEm/Y9IpbtEzp/7fEEYwwvDN21iTDhJivZnmt+UJHlIe
+         fsFPhSh55OhtbyIHi5ksO7cAluBnD3F1Bje3Ve/Jqcy6TuoX1oVMeXh6v8buefZln/ob
+         GTUX86LDkxRSdwvM7q2paH8oy87yW2/mdG8L83UPrFrjV59lAGzWnrCRvvvU9zR5woxC
+         Xfrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=5UdmH2TSJ6/W5WTIzQNOvHyLqEMqCn/FlcP3EV3SVAY=;
-        b=gadfT25EhVn3VE5JbYQN9xEP2e2xUinMqGWFAd4KnQdzEkuWjghXQ9cgNiRSKqPdJf
-         T5FXdG83EVMrvAjV5eWr5B/juobMsYxim31lGbJIGtNyPTJgQpyONYMkc+c+XF/xpJqz
-         Jg99dLxXO4pMrVCZKes9gK0UcfR5xsSxtOFITkzDLLAHt3jAsuaQKVshNEWr4ocYJEfG
-         XKKnJSnjSGn1/tMenuFhH6dNylHpkh3kqvsEC6lDxw9pZomQUmmpVY6r+Qh9O0vw1vFv
-         WKxjuKcmfbdS7dLVyOW5/hSDHzQFQYldaHQwJRPzakJliAN0Uh2vP0tXuvl0yRjRfFr7
-         78dQ==
-X-Gm-Message-State: AOAM530vzLxb98mntPB4cId1loMOoaass+XlZFRcLZNPeSB0Vy3xChDs
-        Rhc22OpnnbIUYUuMAVKphg==
-X-Google-Smtp-Source: ABdhPJykHg1fTfGUL3jdbE9lNYg5/XgGDc01mI0XemcQ3hG9AIui77Qu6318cAQkfL8p5bj6Si8jHw==
-X-Received: by 2002:a05:6a00:b95:b0:4fa:ec15:7eb7 with SMTP id g21-20020a056a000b9500b004faec157eb7mr22686404pfj.74.1649471198871;
-        Fri, 08 Apr 2022 19:26:38 -0700 (PDT)
-Received: from localhost.localdomain ([202.112.51.162])
-        by smtp.gmail.com with ESMTPSA id lx13-20020a17090b4b0d00b001c9989c721esm14080066pjb.17.2022.04.08.19.26.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 19:26:38 -0700 (PDT)
-From:   Zheyu Ma <zheyuma97@gmail.com>
-To:     y.oudjana@protonmail.com, dmitry.torokhov@gmail.com
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Zheyu Ma <zheyuma97@gmail.com>
-Subject: [PATCH] input: cypress-sf: Register a callback to disable the regulators
-Date:   Sat,  9 Apr 2022 10:26:29 +0800
-Message-Id: <20220409022629.3493557-1-zheyuma97@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=aP/uEaYpsHrJ8Gy8ffXu+nyzx0P9m+j2gLhkvWYNHO8=;
+        b=ehE7WjMa4Q7KqKGUQ6AB3Qe4CcObAgdVs4inXE4QzPSgxiaHVIqsndR5fEbdWEEgW7
+         Ny5+642QP5wcOYC0N7VDc3pFggwik/Y1YHyFmH4IxpPz27fp8zsCGxkJqciBlQu3wE07
+         3sEpSjUHm8d714mWa3ja3+mszLp6O2kNBwEdJgpogV6z66wtkA1HlYn1CLVU/aXbY1U5
+         4Z/xgTGAZ/vpkOJulsgz9TkkZrbMKp2W8ZfDhaOGHywCG3MRJ2l6VWYiSW+GixzJ0XZ0
+         TUvckifa0yaKhXwrBZXwQel5qt85H5Io+JjydQS5LKxUEZNAOWdSCic0QjbOdrvMPcJM
+         0nCQ==
+X-Gm-Message-State: AOAM532edQXcs+X+JTUUS67Y5+MEqf4ZL5yCwKf8dY0wMgeN7MsZuIzs
+        LYT1yZea96Qu9DYzv9HOjUQBPpAq2fZi9A==
+X-Google-Smtp-Source: ABdhPJy+TzZDF9jQhI5qKF0oImy73TjPXXrrcmBng8ALso07xGqsuiiwEtDc9mXlAxmM0sC1q1xdvA==
+X-Received: by 2002:a17:902:c643:b0:156:b53e:60e1 with SMTP id s3-20020a170902c64300b00156b53e60e1mr22428468pls.43.1649471304208;
+        Fri, 08 Apr 2022 19:28:24 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id y6-20020a17090a154600b001cb59d912f1sm1255901pja.13.2022.04.08.19.28.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 08 Apr 2022 19:28:23 -0700 (PDT)
+Message-ID: <98d3b9b9-1786-837c-d316-cc991305c8aa@kernel.dk>
+Date:   Fri, 8 Apr 2022 20:28:22 -0600
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH -next RFC v2 0/8] improve tag allocation under heavy load
+Content-Language: en-US
+To:     "yukuai (C)" <yukuai3@huawei.com>,
+        andriy.shevchenko@linux.intel.com, john.garry@huawei.com,
+        ming.lei@redhat.com
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+References: <20220408073916.1428590-1-yukuai3@huawei.com>
+ <d50a0ee1-c7e2-1b99-8d3f-ce2edeea92cd@kernel.dk>
+ <d02f416f-a1de-f7d9-881e-a88c1bdd25c1@huawei.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <d02f416f-a1de-f7d9-881e-a88c1bdd25c1@huawei.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the driver fails to probe, we will get the following splat:
+On 4/8/22 8:26 PM, yukuai (C) wrote:
+> 在 2022/04/09 3:10, Jens Axboe 写道:
+>> For this one, and other patches you send, they send up in spam because
+>> the sender can't be verified. I would encourage you to figure out what
+>> is going wrong here, because a lot of your patches end up getting
+>> dropped or missed because of it.
+>>
+> 
+> Hi,
+> 
+> Thanks for your notice, however, I have no clue what is going on right
+> now. I'll look for some help and hopefully that can be fixed.
 
-[   19.311970] ------------[ cut here ]------------
-[   19.312566] WARNING: CPU: 3 PID: 375 at drivers/regulator/core.c:2257 _regulator_put+0x3ec/0x4e0
-[   19.317591] RIP: 0010:_regulator_put+0x3ec/0x4e0
-[   19.328831] Call Trace:
-[   19.329112]  <TASK>
-[   19.329369]  regulator_bulk_free+0x82/0xe0
-[   19.329860]  devres_release_group+0x319/0x3d0
-[   19.330357]  i2c_device_probe+0x766/0x940
+The easiest is probably to try and send patches to a gmail account. If
+you don't have one, just create one. That will help you see the issue
+and verify whatever the fix might be. It might be a company email
+server issue, hower.
 
-Fix this by adding a callback that will deal with the disabling when the
-driver fails to probe.
-
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
----
- drivers/input/keyboard/cypress-sf.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/drivers/input/keyboard/cypress-sf.c b/drivers/input/keyboard/cypress-sf.c
-index c28996028e80..798611b76de6 100644
---- a/drivers/input/keyboard/cypress-sf.c
-+++ b/drivers/input/keyboard/cypress-sf.c
-@@ -61,6 +61,13 @@ static irqreturn_t cypress_sf_irq_handler(int irq, void *devid)
- 	return IRQ_HANDLED;
- }
- 
-+static void cypress_sf_disable_regulator(void *arg)
-+{
-+	struct cypress_sf_data *data = arg;
-+
-+	regulator_bulk_disable(ARRAY_SIZE(data->regulators), data->regulators);
-+}
-+
- static int cypress_sf_probe(struct i2c_client *client)
- {
- 	struct cypress_sf_data *touchkey;
-@@ -84,6 +91,10 @@ static int cypress_sf_probe(struct i2c_client *client)
- 		return error;
- 	}
- 
-+	error = devm_add_action_or_reset(&client->dev, cypress_sf_disable_regulator, touchkey);
-+	if (error)
-+		return error;
-+
- 	touchkey->num_keys = device_property_read_u32_array(&client->dev,
- 							    "linux,keycodes",
- 							    NULL, 0);
 -- 
-2.25.1
+Jens Axboe
 

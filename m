@@ -2,98 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD64A4FAAE3
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 23:08:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48A144FAAE7
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 23:11:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231818AbiDIVBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 17:01:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42870 "EHLO
+        id S231869AbiDIVNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 17:13:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231634AbiDIVBM (ORCPT
+        with ESMTP id S231475AbiDIVNp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 17:01:12 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C1C510BD11
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 13:59:04 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id c64so1646857edf.11
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 13:59:04 -0700 (PDT)
+        Sat, 9 Apr 2022 17:13:45 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2199643F
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 14:11:36 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id u14so11743876pjj.0
+        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 14:11:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=d12oPKQYmPRZxibcnnbYIKPV48P5kQ/K2Jm+dOK55is=;
-        b=oGtt24kqoDhxdGwzLtSU0GmNtjcoi8NQoXUP+igb0fdMeK1XzigLaGtVNr0lPKkFMv
-         pLo60ifxJgH6DCCYKZis8DIkvNC+7nq5jGHi/yXIZnhdlG8LK/AQ6TlM0PYojoEiwr60
-         A//RI5ytvUIeNOI6DOdeY5PSM5sxe6KYeOHitWRhKNUG5cAzDusab7FgUvsJKjl00G5p
-         jsgsJkjOEm0JnU6S5uc3ln0B3OuBedgN9zGF3rFBZYRivstYeKc98BOA2RWzKD3So+G7
-         DXmvIunPMOcE67UYK/HT2IfDgF7EIwyCOFQE+9wouXcl9pBSKiEoSe0lCKbtxqWD8MbB
-         ylMw==
+        bh=Fl0UDxxZomizuOKOJeEDmXzFGf+c6sq/bowGavq/zN0=;
+        b=c61wVcPSk0Vdkta0MBX5FTGeRCW/JhaUOc+REcHu8V9VrHKUXtOBOyq31lhazRpizN
+         Ext1svLL49b1clvhthBuUpiDyAbPO/Y3FZGanScAu0fC62WmG19h1kSZ2adVRZ6FdGXk
+         qi4J0KQXruM9I6Xp2KfmKsn+ztk8NeeeExIaumtyy9LSMIyse3UiZZUqeF44yC9yg/rB
+         IRqTSHy/bwBJwDJXjGR4NvuyFHt8p/cbVCs+4XY85Gg+hVC3s23H8IzmqHa+pQ0nbi32
+         gw4zhLWPCkTcofIcJ6nt9/ScxqLLFHQrMcBqrUhmONEdG4mbKkTld71Ffqso07MZSkKQ
+         nYYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=d12oPKQYmPRZxibcnnbYIKPV48P5kQ/K2Jm+dOK55is=;
-        b=IR6Xv3lg4lZCtY8b4851AMvkWm80Nn9fpoM6Z38KbKE054uPfMYa9njqVKgJuYR+jC
-         0IQNJAz1gmlxZkwP9LPiI+szlVnMTymZIk7SrYhrPOegGrPrqfawATrpHoHXZcy1IHYh
-         afS1kRCE6xwadrDFFE1B5FChKimdD39VWVTYlgeB+9gvJIO7bgKiwsVxzhsdLwKSiq2q
-         wclKe4VNZpCh199pwF/SbZQE4NZTlCFI4M5HRM5//C8azzfPg3VPBmsHQUyMZwVa9FcC
-         VorRyU4CKk5T+BBmdHFyPsEhEe+JCu366QaCgzYlWW1bIGGsxO0mjB4KJnHsE4AGHlfB
-         wPZw==
-X-Gm-Message-State: AOAM533Zwd1DkEfne3Cx4SpCJzljiVgX1lj5lwtSAeR/l41VjRSgNoDU
-        NpC7CdrGx27XzgvifaN29gY=
-X-Google-Smtp-Source: ABdhPJyxQLLRTF8KOCrmgAYDavqLophKNRQ1oPCeDiN/A4+OQ9+KbKWT1VjMYbVZkigPmoU/6S2U6w==
-X-Received: by 2002:a50:cd19:0:b0:41d:709f:5c57 with SMTP id z25-20020a50cd19000000b0041d709f5c57mr2840304edi.227.1649537942862;
-        Sat, 09 Apr 2022 13:59:02 -0700 (PDT)
-Received: from localhost.localdomain (host-87-4-4-217.retail.telecomitalia.it. [87.4.4.217])
-        by smtp.gmail.com with ESMTPSA id u6-20020a17090626c600b006e74ef7f092sm8251298ejc.176.2022.04.09.13.59.00
+        bh=Fl0UDxxZomizuOKOJeEDmXzFGf+c6sq/bowGavq/zN0=;
+        b=nGiDU8+E3787b2ZBhNrhHSZ6xkG2P1Jkw3ypzrHoaY5k9d5lHa2Uxk9Pxackwr0TKv
+         m4EsRGWidW/ksRX/u53FNtmmgFDSoYCx+mJtu5/9HDnYKbaM/DtSEGQj+gouSZ6JXobW
+         JW155iK9lSKSMw+LUG461gCZxizZXSXnF/Gfiz1ceJKrEHiko3Fx70sNdL/ENtTe1qgl
+         DjAPkRLLPaIexkfIo/oF5VSZTv+8yE3kaNZyCOfJGloTF6xRspNFltBJMiRSgRDKL8ae
+         l5IYE59zMPfD8/WimFB2wDD7GJc1w3htqNhihzGtYZWbMeQtlMsAClXPoNvNnmLmP3pf
+         Rj5Q==
+X-Gm-Message-State: AOAM533xJKGc6sF6s88U31mMDE98QATgu6qVOLK0gItQu236yY2bAR5G
+        AGJ8Zrb/s6tKfX3SSKmg6DFiXQ==
+X-Google-Smtp-Source: ABdhPJzTT7G5DI7y8+F3UyGjR1dMbBVd7qJoS3EyQBezLxuWoeaTBMPaiEZqYzLX2NjfEujO8FwtPg==
+X-Received: by 2002:a17:90b:1b03:b0:1c7:778b:d4ce with SMTP id nu3-20020a17090b1b0300b001c7778bd4cemr28799573pjb.128.1649538695910;
+        Sat, 09 Apr 2022 14:11:35 -0700 (PDT)
+Received: from x1.hsd1.or.comcast.net ([2601:1c2:1001:7090:925c:1a60:e433:31b7])
+        by smtp.gmail.com with ESMTPSA id w127-20020a627b85000000b00505a9142ce5sm1393295pfc.22.2022.04.09.14.11.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Apr 2022 13:59:01 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Liu Junqi <liujunqi@pku.edu.cn>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Leonardo Araujo <leonardo.aa88@gmail.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, sparmaintainer@unisys.com,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Subject: [PATCH] MAINTAINERS: Remove D. Kershner from Unisys S-PAR maintainers
-Date:   Sat,  9 Apr 2022 22:58:57 +0200
-Message-Id: <20220409205857.32083-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Sat, 09 Apr 2022 14:11:35 -0700 (PDT)
+From:   Drew Fustini <dfustini@baylibre.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Dave Gerlach <d-gerlach@ti.com>,
+        Tony Lindgren <tony@atomide.com>, Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Drew Fustini <dfustini@baylibre.com>
+Subject: [PATCH v2 0/2] soc: ti: wkup_m3_ipc: support vtt toggle
+Date:   Sat,  9 Apr 2022 14:12:13 -0700
+Message-Id: <20220409211215.2529387-1-dfustini@baylibre.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The email address of David Kershner is no more reachable. Remove his
-entry from the MAINTAINERS file for UNISYS S-PAR DRIVERS.
+This series enables the Cortex M3 processor found in AM33xx and AM43xx
+SoCs to toggle the VTT regulator during low power mode transitions.
 
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
- MAINTAINERS | 1 -
- 1 file changed, 1 deletion(-)
+I recently converted the Wakeup M3 IPC bindings to YAML. Rob has applied
+that patch [1]. It is a prerequisite for the wkup-m3-ipc.yaml patch in
+this series.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ba405f6ec31a..3b7497359c2b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -20188,7 +20188,6 @@ F:	include/linux/cdrom.h
- F:	include/uapi/linux/cdrom.h
- 
- UNISYS S-PAR DRIVERS
--M:	David Kershner <david.kershner@unisys.com>
- L:	sparmaintainer@unisys.com (Unisys internal)
- S:	Supported
- F:	drivers/staging/unisys/
+[1] https://lore.kernel.org/linux-devicetree/YlCACSZx5xsPSwNC@robh.at.kernel.org/
+
+Changes since v1:
+- Removed unnecessary "ti,needs-vtt-toggle" property
+
+Dave Gerlach (1):
+  soc: ti: wkup_m3_ipc: Add support for toggling VTT regulator
+
+Drew Fustini (1):
+  dt-bindings: wkup-m3-ipc: Add vtt toggle gpio pin property
+
+ .../bindings/soc/ti/wkup-m3-ipc.yaml          | 13 ++++++++++
+ drivers/soc/ti/wkup_m3_ipc.c                  | 26 +++++++++++++++++--
+ include/linux/wkup_m3_ipc.h                   |  1 +
+ 3 files changed, 38 insertions(+), 2 deletions(-)
+
 -- 
-2.34.1
+2.32.0
 

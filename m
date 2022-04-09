@@ -2,78 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E1584FA827
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 15:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A5A24FA82F
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 15:21:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241958AbiDINUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 09:20:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46932 "EHLO
+        id S241875AbiDINXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 09:23:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241945AbiDINUd (ORCPT
+        with ESMTP id S241781AbiDINXS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 09:20:33 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FFF93CFE0
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 06:18:26 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id bg10so22320866ejb.4
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 06:18:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=TIvV9HUS6U5uZnee53C8qefZW/ieHFeAYqZWIX5PS5Y=;
-        b=SzRXWvWDjWrGNzjafa7OdZ7o4vH48igNd7Ks1ce5EJ7N6I4dXV5MDU1qtLQ2jzFovL
-         ITZxvtYVCEWld541IVMPomLfM7UzhLXw82SzeUPQnhw4WGEsRDV9ynC/d7wOvDiSXJL1
-         6jWU5rE5JqUyBNCOGagVZAOxv/7xgYkhbgIhc2wsa+5ndvp2bQHfNZvryIrFBmfygBKi
-         zkwOQ21EPtH3azxG3YsXTBM08W7eBDA/ho0x6AFGZtYQlBQMuR6pbVJOwTW4c/OXpzke
-         X8yuVBwVlsTBhY50urMq1+Js4wjTcDwbXW3/4yv9CApFeW+n0Qmc7RDDK1Eyym7GsGeQ
-         LrZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=TIvV9HUS6U5uZnee53C8qefZW/ieHFeAYqZWIX5PS5Y=;
-        b=mZXroiEBhY/oNzxuS/MSFvFClYD8jnV5AYHL4Su2Tf1S8GAU/9e0NqqcLgpnyy6g7a
-         vpIXuYSCVT7BUhMvN5ziwyG+PUtWsFqseYNz5TCD8lIzK6tTJJJajcZ1w3cf85q3K00I
-         n0ahhR2rLV01+iL6Og1YBwLD6D5McQZQ38gGO1oAFhFwnQMqxwsXDaQ6sANmq+FpUPDa
-         hQbj025SEMJ+SUHUUQ00xhQH1vrInqwvAx81oOE0iei4w8v5MfRonzdwqlC7aJZdjwEM
-         y9N6sBNthZVL+wxNSnW3IxSB9VwdcHRtsb+J7EJufhqqQcpNWQldmbYYlpsu9ug2UjJw
-         58hg==
-X-Gm-Message-State: AOAM530XwWrpArQtdCXfBmpjYJPDyhnEcUkwOwDhqFC8jMSeDuztDxUs
-        mviHRq0/UHMhfDSsfXl6mtdn7g==
-X-Google-Smtp-Source: ABdhPJyMTC2qnmHi/0NCn+YqVeHeFQKswOIEzO1b2qZlKMPsJ8Q1z+DgYVKcFcBzrX/UfC7asrFiuw==
-X-Received: by 2002:a17:906:d924:b0:6e8:6a04:c1bc with SMTP id rn4-20020a170906d92400b006e86a04c1bcmr4257899ejb.720.1649510304986;
-        Sat, 09 Apr 2022 06:18:24 -0700 (PDT)
-Received: from [192.168.0.188] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id sh31-20020a1709076e9f00b006e8289e5836sm3550229ejc.117.2022.04.09.06.18.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 09 Apr 2022 06:18:24 -0700 (PDT)
-Message-ID: <99a97b0f-19a5-136d-9160-c9fde6f3548c@linaro.org>
-Date:   Sat, 9 Apr 2022 15:18:23 +0200
+        Sat, 9 Apr 2022 09:23:18 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938F011C1D;
+        Sat,  9 Apr 2022 06:21:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649510470; x=1681046470;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vfC+nRqScmWArguoYMf/e1ASOBmxDV4xlBHdGwcPDiE=;
+  b=i08DAC8o8GBUOoKhGtcLNxJQe5PEcssKB3VuNCkuScbkRmqaiaAmXLRc
+   KGCjn49LOGezsBn6HT6y+uX/vU7Kr4sU9Xtvt3L9i9mn4tvEwM8OO4+Jz
+   hScWrgVGyEcRd563g8LA9pVFfVCLcq+0qU4KBoq1LgnXGKxekoAYGYWAp
+   HMMDRdmcdr0NOdswNhhoCYlOK4De1TPJ94sSUM8aZ4Y86R4dTumwdpg7t
+   IdCLiEye7MSMwfLWig38HlGtd8qOA+LQaKm1T9dQ4dIIJ/a8rGyiJSuyf
+   MoFFKr7zCF49w5in/O0wanabeodcsybq7m5bhHulRHWkKEZyEGQf9+bf2
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10311"; a="259398775"
+X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
+   d="scan'208";a="259398775"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2022 06:21:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,247,1643702400"; 
+   d="scan'208";a="622153364"
+Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 09 Apr 2022 06:21:04 -0700
+Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ndB1T-00002H-Ef;
+        Sat, 09 Apr 2022 13:21:03 +0000
+Date:   Sat, 9 Apr 2022 21:19:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+Cc:     kbuild-all@lists.01.org, linux-media@vger.kernel.org,
+        Irui Wang <irui.wang@mediatek.com>,
+        George Sun <george.sun@mediatek.com>,
+        Steve Cho <stevecho@chromium.org>, srv_heupstream@mediatek.com,
+        devicetree@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-kernel@vger.kernel.org,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
+        linux-mediatek@lists.infradead.org,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v9, 16/17] media: mediatek: vcodec: support stateless VP9
+ decoding
+Message-ID: <202204092137.3RrpN4Hr-lkp@intel.com>
+References: <20220408120240.29571-17-yunfei.dong@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 13/18] dt-bindings: fix jz4780-nemc issue as reported by
- dtbscheck
-Content-Language: en-US
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, letux-kernel@openphoenux.org
-References: <cover.1649443080.git.hns@goldelico.com>
- <84adfe6237cd4cfd52cb9723416f69926e556e55.1649443080.git.hns@goldelico.com>
- <036b66b2-c221-6e9e-6a56-510e7a0d20d3@linaro.org>
- <B9FD64FE-82B0-4DC2-B4C3-BE266DAB28A0@goldelico.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <B9FD64FE-82B0-4DC2-B4C3-BE266DAB28A0@goldelico.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220408120240.29571-17-yunfei.dong@mediatek.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,54 +89,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/04/2022 15:09, H. Nikolaus Schaller wrote:
-> 
-> 
->> Am 09.04.2022 um 13:26 schrieb Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>:
->>
->> On 08/04/2022 20:37, H. Nikolaus Schaller wrote:
->>> jz4780-nemc needs to be compatible to simple-mfd as well or we get
->>>
->>> arch/mips/boot/dts/ingenic/ci20.dtb: memory-controller@13410000: compatible: 'oneOf' conditional failed, one must be fixed:
->>> 	['ingenic,jz4780-nemc', 'simple-mfd'] is too long
->>> 	'ingenic,jz4725b-nemc' was expected
->>> 	'ingenic,jz4740-nemc' was expected
->>> 	From schema: Documentation/devicetree/bindings/memory-controllers/ingenic,nemc.yaml
->>>
->>> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
->>> ---
->>> .../devicetree/bindings/memory-controllers/ingenic,nemc.yaml    | 2 +-
->>> 1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/memory-controllers/ingenic,nemc.yaml b/Documentation/devicetree/bindings/memory-controllers/ingenic,nemc.yaml
->>> index 24f9e19820282..3b1116588de3d 100644
->>> --- a/Documentation/devicetree/bindings/memory-controllers/ingenic,nemc.yaml
->>> +++ b/Documentation/devicetree/bindings/memory-controllers/ingenic,nemc.yaml
->>> @@ -17,7 +17,7 @@ properties:
->>>     oneOf:
->>>       - enum:
->>>           - 
->>> -          - ingenic,jz4780-nemc
->>> +          - [ , simple-mfd ]
->>
->> This is not correct representation. If you really need simple-mfd, then
->> this should be a separate item below oneOf.
-> 
-> Well, it is valid YAML syntax and seems to be accepted by dtbscheck.
+Hi Yunfei,
 
-It's not how we code it. Please do not introduce inconsistent - even if
-valid - blocks.
+Thank you for the patch! Yet something to improve:
 
-> 
->> The true question is whether you need simple-mfd. Isn't the binding (and
->> the driver) expected to instantiate its children?
-> 
-> I had expected that but current ingenic,jz4780-nemc code doesn't.
+[auto build test ERROR on media-tree/master]
+[also build test ERROR on v5.18-rc1 next-20220408]
+[cannot apply to remoteproc/rproc-next drm-tip/drm-tip]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Paul provided good reason for the simple-mfd. Use this one instead of dt
-check warning. DT check warning means nothing, does not bring the actual
-answer to "why", because it is artificial tool. The answer to "why" is
-in what Paul wrote.
+url:    https://github.com/intel-lab-lkp/linux/commits/Yunfei-Dong/media-mediatek-vcodec-Add-vdec-enable-disable-hardware-helpers/20220408-210244
+base:   git://linuxtv.org/media_tree.git master
+config: arm64-randconfig-r015-20220408 (https://download.01.org/0day-ci/archive/20220409/202204092137.3RrpN4Hr-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/251c7c77f6690881357df39867a32a03eb7db3b7
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yunfei-Dong/media-mediatek-vcodec-Add-vdec-enable-disable-hardware-helpers/20220408-210244
+        git checkout 251c7c77f6690881357df39867a32a03eb7db3b7
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-Best regards,
-Krzysztof
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   aarch64-linux-ld: drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.o: in function `vdec_vp9_slice_update_prob.isra.0':
+>> vdec_vp9_req_lat_if.c:(.text+0x2654): undefined reference to `v4l2_vp9_adapt_noncoef_probs'
+   vdec_vp9_req_lat_if.c:(.text+0x2654): relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol `v4l2_vp9_adapt_noncoef_probs'
+>> aarch64-linux-ld: vdec_vp9_req_lat_if.c:(.text+0x26c0): undefined reference to `v4l2_vp9_adapt_coef_probs'
+   vdec_vp9_req_lat_if.c:(.text+0x26c0): relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol `v4l2_vp9_adapt_coef_probs'
+   aarch64-linux-ld: vdec_vp9_req_lat_if.c:(.text+0x26d8): undefined reference to `v4l2_vp9_adapt_coef_probs'
+   vdec_vp9_req_lat_if.c:(.text+0x26d8): relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol `v4l2_vp9_adapt_coef_probs'
+   aarch64-linux-ld: vdec_vp9_req_lat_if.c:(.text+0x26f0): undefined reference to `v4l2_vp9_adapt_coef_probs'
+   vdec_vp9_req_lat_if.c:(.text+0x26f0): relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol `v4l2_vp9_adapt_coef_probs'
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

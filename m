@@ -2,88 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0173C4FA221
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 05:50:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 945274FA224
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 05:51:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240675AbiDIDwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 23:52:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54706 "EHLO
+        id S240700AbiDIDxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 23:53:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231783AbiDIDw2 (ORCPT
+        with ESMTP id S234150AbiDIDxb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 23:52:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8799ECB25;
-        Fri,  8 Apr 2022 20:50:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 41BDC622CA;
-        Sat,  9 Apr 2022 03:50:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C41AC385A0;
-        Sat,  9 Apr 2022 03:50:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649476221;
-        bh=TR63dPr9fJPfot2802e64a1epeSUkv6k0Aki8zERagk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=gtoTUM/NnYz0uCGUQVXRs0qomk4d6l6RM/0qIVvBL2fNt9Usu6ePW2SJY+UXa/pns
-         VICSx05ydTjTirxs0D7gELSKS8On3yN+c64WM9r1FtuwAvzPrG645XWAMsokJijqXS
-         A4HJ16Asw/aeL9zMcNGWq8E+Zvs5XyOccWNOKyWqE40oUDh9AXhpDjMUayinFN9w5k
-         8wcNhMjUfRKUrX7d5u+AdzziYbe16zGq4K2LOkwVBmY6wQLTQp/gHCbq63hKL7ZQAy
-         Sf87Srnx7X5ks6Zrbc8Mlem2GB2DztYWPTqHHtNmy3c99eM2eYPwBuIjlYh8xffnSf
-         eQ+LDG3CPgj8Q==
-Message-ID: <3d5c2bfc-cfb1-ea2d-f88c-36e0e4f92293@kernel.org>
-Date:   Fri, 8 Apr 2022 21:50:19 -0600
+        Fri, 8 Apr 2022 23:53:31 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A414F332DCC
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 20:51:25 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id c190-20020a1c35c7000000b0038e37907b5bso8872327wma.0
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 20:51:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=hjV85bpMkNJuL8vvhI9IAAgoX1lYtvK7CB2b32NFcGE=;
+        b=2WTmPakhdY7m3RR1J07Q3HKF1lUUw9xYcvbeLmdmCbGu1QsrzEF4yovjQ0w0PTqUP8
+         ttUY4tWy+XJwxrc5eD98+gpJlyvafAhc5eahueerCdGExOWlMyceUC4SSm3BEAWLpoyX
+         bsJdfVmNiSmv38SYHT3dlVZt/EStxBgDHN9WuZ3jj8tElkN2+eLulHgK4z+qjG6AuZEZ
+         JEnEE39kL7T9irPQd/LL8aplExKzX14Ib9lV2E/eIugV2sd+u5TLYpsWJTBiU2ja4mYF
+         UmQNAKfH6PykEeJvOrTXhKGFherqje+MPiA4F74VK9myrEuen1txu7tXO0Iqv2D/XgW3
+         Wmcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=hjV85bpMkNJuL8vvhI9IAAgoX1lYtvK7CB2b32NFcGE=;
+        b=ew0o2PO2u+1ezogrJSHgD4Yyzlwjdk3CsaMcwtuYyvSM0MS6LDUl01ajQ7kKncuatl
+         uKNVvb0SFDlfk5XztAceFJRJq8HqdGd1YHk1E/ZeIRsyVhPQh5h8TQlRzvfrEKX/TbN/
+         bX//gLZB7lcR01QLyDwAjUlRq7M9I9diqKtoGkHaM/R9JNZq+e6amQFzT2Ufiqc9LNBG
+         w/qAwv22SnfqrxXwYoNd6BI5ZfFpT7W1lrbqfWy8KdG7JEFTWW2K0voAPSC8jKBgT/Ga
+         qUBssbP6BkuR/AD9k5UbQHpKO6+8TEfy2oTBT4Y77CzCqh84ogbv1j7udpB3t8qcatAX
+         6/6A==
+X-Gm-Message-State: AOAM53343O1P9wRv8o2oAVY4JyeXx270W5Ra3BOjIbKX6A9q4m5zcrxn
+        qCVtz3rGMEhHOs3yDYhvY6XWt9fIwvAeijYqNKNaVw==
+X-Google-Smtp-Source: ABdhPJyLzclFI9xwJ/UwHbG50eZvcrZ5NNZ72tDpou23WT/C53Yz/iLCM/pefwav/FSn5lluityAclN+tIZJY/VOdss=
+X-Received: by 2002:a05:600c:1d04:b0:38c:ba2f:88ba with SMTP id
+ l4-20020a05600c1d0400b0038cba2f88bamr19619710wms.137.1649476284108; Fri, 08
+ Apr 2022 20:51:24 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [PATCH RESEND net-next v5 2/4] net: skb: rename
- SKB_DROP_REASON_PTYPE_ABSENT
-Content-Language: en-US
-To:     menglong8.dong@gmail.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     rostedt@goodmis.org, mingo@redhat.com, xeb@mail.ru,
-        davem@davemloft.net, yoshfuji@linux-ipv6.org,
-        imagedong@tencent.com, edumazet@google.com, kafai@fb.com,
-        talalahmad@google.com, keescook@chromium.org, alobakin@pm.me,
-        flyingpeng@tencent.com, mengensun@tencent.com,
-        dongli.zhang@oracle.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, benbjiang@tencent.com
-References: <20220407062052.15907-1-imagedong@tencent.com>
- <20220407062052.15907-3-imagedong@tencent.com>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <20220407062052.15907-3-imagedong@tencent.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220408092415.1603661-1-heiko@sntech.de>
+In-Reply-To: <20220408092415.1603661-1-heiko@sntech.de>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Sat, 9 Apr 2022 09:21:11 +0530
+Message-ID: <CAAhSdy0ZPH2a9D0jDNhp5OU2oRdvC-wZcu0Zjtcq9ZhMWcrMng@mail.gmail.com>
+Subject: Re: [PATCH] RISC-V: KVM: include missing hwcap.h into vcpu_fp
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        KVM General <kvm@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/7/22 12:20 AM, menglong8.dong@gmail.com wrote:
-> From: Menglong Dong <imagedong@tencent.com>
-> 
-> As David Ahern suggested, the reasons for skb drops should be more
-> general and not be code based.
-> 
-> Therefore, rename SKB_DROP_REASON_PTYPE_ABSENT to
-> SKB_DROP_REASON_UNHANDLED_PROTO, which is used for the cases of no
-> L3 protocol handler, no L4 protocol handler, version extensions, etc.
-> 
-> From previous discussion, now we have the aim to make these reasons
-> more abstract and users based, avoiding code based.
-> 
-> Signed-off-by: Menglong Dong <imagedong@tencent.com>
+On Fri, Apr 8, 2022 at 2:54 PM Heiko Stuebner <heiko@sntech.de> wrote:
+>
+> vcpu_fp uses the riscv_isa_extension mechanism which gets
+> defined in hwcap.h but doesn't include that head file.
+>
+> While it seems to work in most cases, in certain conditions
+> this can lead to build failures like
+>
+> ../arch/riscv/kvm/vcpu_fp.c: In function =E2=80=98kvm_riscv_vcpu_fp_reset=
+=E2=80=99:
+> ../arch/riscv/kvm/vcpu_fp.c:22:13: error: implicit declaration of functio=
+n =E2=80=98riscv_isa_extension_available=E2=80=99 [-Werror=3Dimplicit-funct=
+ion-declaration]
+>    22 |         if (riscv_isa_extension_available(&isa, f) ||
+>       |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> ../arch/riscv/kvm/vcpu_fp.c:22:49: error: =E2=80=98f=E2=80=99 undeclared =
+(first use in this function)
+>    22 |         if (riscv_isa_extension_available(&isa, f) ||
+>
+> Fix this by simply including the necessary header.
+>
+> Fixes: 0a86512dc113 ("RISC-V: KVM: Factor-out FP virtualization into sepa=
+rate sources")
+> Signed-off-by: Heiko Stuebner <heiko@sntech.de>
+
+I have queued this for RC fixes.
+
+Thanks,
+Anup
+
 > ---
->  include/linux/skbuff.h     | 8 +++-----
->  include/trace/events/skb.h | 2 +-
->  net/core/dev.c             | 8 +++-----
->  3 files changed, 7 insertions(+), 11 deletions(-)
-> 
-
-
-Reviewed-by: David Ahern <dsahern@kernel.org>
+>  arch/riscv/kvm/vcpu_fp.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/arch/riscv/kvm/vcpu_fp.c b/arch/riscv/kvm/vcpu_fp.c
+> index 4449a976e5a6..d4308c512007 100644
+> --- a/arch/riscv/kvm/vcpu_fp.c
+> +++ b/arch/riscv/kvm/vcpu_fp.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/err.h>
+>  #include <linux/kvm_host.h>
+>  #include <linux/uaccess.h>
+> +#include <asm/hwcap.h>
+>
+>  #ifdef CONFIG_FPU
+>  void kvm_riscv_vcpu_fp_reset(struct kvm_vcpu *vcpu)
+> --
+> 2.35.1
+>

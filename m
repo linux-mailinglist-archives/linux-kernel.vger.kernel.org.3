@@ -2,177 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F18F24FA0F3
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 03:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A161E4FA0F7
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 03:16:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236660AbiDIBPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 21:15:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46904 "EHLO
+        id S237575AbiDIBRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 21:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiDIBPr (ORCPT
+        with ESMTP id S229609AbiDIBRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 21:15:47 -0400
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 146C5C0B;
-        Fri,  8 Apr 2022 18:13:42 -0700 (PDT)
-Date:   Fri, 8 Apr 2022 18:13:29 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1649466820;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=H//e2ty06NElxV3oXbEOWS2Nb6fAWBDWPPJzb55T3rY=;
-        b=XapiOUYqHdDb2K9tAA0ftrN5h20ybKOWHg0Iy/mqlm/WVinf4DBP7ahmYtxacOGutc2mn+
-        /cfvwtisoA3IBAhwkTQzrE/nnr8q+0Iz01Zfw/1SaelKbAteprCeRQ3avIk7jvNtWWpjCs
-        WFvmxmZYFGMacn8G4oNFAGXKJEkLHa8=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
+        Fri, 8 Apr 2022 21:17:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59772615E
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 18:14:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E672E621DC
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 01:14:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1F30C385A3;
+        Sat,  9 Apr 2022 01:14:54 +0000 (UTC)
+Date:   Fri, 8 Apr 2022 21:14:53 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>, jstultz@google.com,
+        Stephen Boyd <sboyd@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        Chen Wandun <chenwandun@huawei.com>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>,
-        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Michal Hocko <mhocko@suse.com>
-Subject: Re: [PATCH v3 1/4] memcg: introduce per-memcg reclaim interface
-Message-ID: <YlDduQ0LMTyfJxIs@carbon.dhcp.thefacebook.com>
-References: <20220408045743.1432968-1-yosryahmed@google.com>
- <20220408045743.1432968-2-yosryahmed@google.com>
+        Peter Zijlstra <peterz@infradead.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [RFC][PATCH] timers: Add del_time_free() to be called before
+ freeing timers
+Message-ID: <20220408211453.52d7c9a5@rorschach.local.home>
+In-Reply-To: <CAHk-=wg6ZTjCoWev039ijHkzJGOE8v1Psc=yDANkt5r3GBxc0w@mail.gmail.com>
+References: <20220407161745.7d6754b3@gandalf.local.home>
+        <87pmlrkgi3.ffs@tglx>
+        <CAHk-=whbsLXy85XpKRQmBXr=GqWbMoi+wVjFY_V22=BOE=dHog@mail.gmail.com>
+        <87v8vjiaih.ffs@tglx>
+        <20220408202230.0ea5388f@rorschach.local.home>
+        <CAHk-=wg3icnjr+6aU-Wyw+kBoSRBM28P4o4iTgimOWDuuUiStQ@mail.gmail.com>
+        <20220408204925.16361b44@rorschach.local.home>
+        <CAHk-=wg6ZTjCoWev039ijHkzJGOE8v1Psc=yDANkt5r3GBxc0w@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220408045743.1432968-2-yosryahmed@google.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 04:57:40AM +0000, Yosry Ahmed wrote:
-> From: Shakeel Butt <shakeelb@google.com>
-> 
-> Introduce a memcg interface to trigger memory reclaim on a memory cgroup.
-> 
-> Use case: Proactive Reclaim
-> ---------------------------
-> 
-> A userspace proactive reclaimer can continuously probe the memcg to
-> reclaim a small amount of memory. This gives more accurate and
-> up-to-date workingset estimation as the LRUs are continuously
-> sorted and can potentially provide more deterministic memory
-> overcommit behavior. The memory overcommit controller can provide
-> more proactive response to the changing behavior of the running
-> applications instead of being reactive.
-> 
-> A userspace reclaimer's purpose in this case is not a complete replacement
-> for kswapd or direct reclaim, it is to proactively identify memory savings
-> opportunities and reclaim some amount of cold pages set by the policy
-> to free up the memory for more demanding jobs or scheduling new jobs.
-> 
-> A user space proactive reclaimer is used in Google data centers.
-> Additionally, Meta's TMO paper recently referenced a very similar
-> interface used for user space proactive reclaim:
-> https://dl.acm.org/doi/pdf/10.1145/3503222.3507731
-> 
-> Benefits of a user space reclaimer:
-> -----------------------------------
-> 
-> 1) More flexible on who should be charged for the cpu of the memory
-> reclaim. For proactive reclaim, it makes more sense to be centralized.
-> 
-> 2) More flexible on dedicating the resources (like cpu). The memory
-> overcommit controller can balance the cost between the cpu usage and
-> the memory reclaimed.
-> 
-> 3) Provides a way to the applications to keep their LRUs sorted, so,
-> under memory pressure better reclaim candidates are selected. This also
-> gives more accurate and uptodate notion of working set for an
-> application.
-> 
-> Why memory.high is not enough?
-> ------------------------------
-> 
-> - memory.high can be used to trigger reclaim in a memcg and can
->   potentially be used for proactive reclaim.
->   However there is a big downside in using memory.high. It can potentially
->   introduce high reclaim stalls in the target application as the
->   allocations from the processes or the threads of the application can hit
->   the temporary memory.high limit.
-> 
-> - Userspace proactive reclaimers usually use feedback loops to decide
->   how much memory to proactively reclaim from a workload. The metrics
->   used for this are usually either refaults or PSI, and these metrics
->   will become messy if the application gets throttled by hitting the
->   high limit.
-> 
-> - memory.high is a stateful interface, if the userspace proactive
->   reclaimer crashes for any reason while triggering reclaim it can leave
->   the application in a bad state.
-> 
-> - If a workload is rapidly expanding, setting memory.high to proactively
->   reclaim memory can result in actually reclaiming more memory than
->   intended.
-> 
-> The benefits of such interface and shortcomings of existing interface
-> were further discussed in this RFC thread:
-> https://lore.kernel.org/linux-mm/5df21376-7dd1-bf81-8414-32a73cea45dd@google.com/
-> 
-> Interface:
-> ----------
-> 
-> Introducing a very simple memcg interface 'echo 10M > memory.reclaim' to
-> trigger reclaim in the target memory cgroup.
-> 
-> The interface is introduced as a nested-keyed file to allow for future
-> optional arguments to be easily added to configure the behavior of
-> reclaim.
-> 
-> Possible Extensions:
-> --------------------
-> 
-> - This interface can be extended with an additional parameter or flags
->   to allow specifying one or more types of memory to reclaim from (e.g.
->   file, anon, ..).
-> 
-> - The interface can also be extended with a node mask to reclaim from
->   specific nodes. This has use cases for reclaim-based demotion in memory
->   tiering systens.
-> 
-> - A similar per-node interface can also be added to support proactive
->   reclaim and reclaim-based demotion in systems without memcg.
-> 
-> - Add a timeout parameter to make it easier for user space to call the
->   interface without worrying about being blocked for an undefined amount
->   of time.
-> 
-> For now, let's keep things simple by adding the basic functionality.
-> 
-> [yosryahmed@google.com: refreshed to current master, updated commit
-> message based on recent discussions and use cases]
-> Signed-off-by: Shakeel Butt <shakeelb@google.com>
-> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
-> Acked-by: Michal Hocko <mhocko@suse.com>
-> Acked-by: Wei Xu <weixugc@google.com>
+On Fri, 8 Apr 2022 15:00:43 -1000
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+> On Fri, Apr 8, 2022 at 2:49 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+> >
+> > Hmm, well, I'm not sure it would work for all architectures, but what
+> > about the MSB?  Setting it to zero on "shutdown"?  
+> 
+> Let's just clear the whole thing for now. We don't actually _have_ any
+> timer_restart() cases yet.
 
-Thank you for incorporating all the feedback!
-Nice work!
+OK, so this has gone toward the handling all sorts of situations tangent.
+
+Thus, I want to get back to the current situation at hand. We have a
+bunch of places that use del_timer(), and possibly del_timer_sync() but
+can then have it rearm, and then the timer gets freed and BOOM we get a
+crash in the timer code. Worse yet, we have no idea what timer it was
+that did the UAF.
+
+So, we could just add that "timer_shutdown()" function that clears the
+function and mod_timer() would no longer rearm it. It would also need
+to do the synchronization as well. Which means it can't be called with
+locks that might be taken in the timer itself.
+
+We can look into more elaborate APIs if we want to help fix other
+issues later, but for now, it would be nice to go audit the kernel for
+all locations that do a del_timer(_sync) followed by freeing the timer,
+and replace it with a timer_shutdown() call.
+
+For the del_timer() cases, we will have to make sure it's not done that
+way due to locking. But they will still need to be dealt with because
+they are still prone to UAF.
+
+-- Steve

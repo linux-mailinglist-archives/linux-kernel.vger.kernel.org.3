@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77A514FA1BD
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 04:37:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 646534FA1C4
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 04:37:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240648AbiDICjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 22:39:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47952 "EHLO
+        id S240658AbiDICj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 22:39:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240631AbiDICjP (ORCPT
+        with ESMTP id S240633AbiDICjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 8 Apr 2022 22:39:15 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11D72B9
-        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 19:37:08 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id h19so10009121pfv.1
-        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 19:37:08 -0700 (PDT)
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A89E7C31F9
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 19:37:10 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id s14-20020a17090a880e00b001caaf6d3dd1so13461447pjn.3
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 19:37:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=P+4B9VZqL5jIvczk1CaOVWkNfySt1cT6osyGLgTnwSY=;
-        b=k7QxZ7tjs5d7WytyQLNKCOlmID1fy4+B+8Baj1jZuvNY8qkePxZvPREuL644WYZR+U
-         wDo3DKUgXhvJmvzbHG92cLUN0jrjwCLMQ2oPrxjjT2YSCclVvUziw8quzLYHRbwg6C8B
-         6grIU4ndH8qWUq/EmX7U3IC4Tgu2WR1x0IkfM=
+        bh=fymhEmFv/O8Tuh2GeqHqqsiXL5aZG/ohxN9zZ7IUhcE=;
+        b=i+Scf6wXGKJdppgcWPtk6/VxfqcDhX6IxbHqkMo9S9/gnqJfZJZ/jFMAnhpL7M2Qx0
+         eVfB4+aLpgVl0JDgirYwZ4r2JL2A6MM6//5/GgcKMkp63LMC3g2r6AxLsfiILIhWsl4P
+         HA7k1MrDAfJlFt/ATY9UBfp4U4kxIIca89fAI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=P+4B9VZqL5jIvczk1CaOVWkNfySt1cT6osyGLgTnwSY=;
-        b=Qps8BGiKAyCc+/ZLNl4ZmTjd16Z+ud26MrLRFgXQvUdjDdjvacM1lyAW89iX/AcNl3
-         vQdLPu0gsH47/Zs8soXalnefFbRF/zv2xsotej3Ndz9yQ1bzFoowXmwwD50nm1Z7nG+t
-         CBlu/EmtztiF61Olwc8nTSRENPgp5JpY1XBSn3eF2ZCgnEHoQz+oUUlaL92JReuJYkEk
-         liKc+/UDXK2hprdGV6vo00xJvzN+FmLQDAxv+fNRuQuOdZ18lRhIcYoKG1nWviBOW6s7
-         kdqS4Kr5I/s6GWRlHMTwEnytrVXnKaQSusL66v8UirOEov6fUAtF77DRTEt4EKt3HXnp
-         glfw==
-X-Gm-Message-State: AOAM5311IKFamRTa9VxXExTHLJBiJL+Edcjytda+cj7+pBhmmoy6KLgQ
-        19W8uNwXqYeXAnrNbXwCePJ6VQ==
-X-Google-Smtp-Source: ABdhPJx2Qn55vuhb0i/A319oTIt5Xlsg2IJgX6xY7+/M+P1CNWVeQFfa1aJkz+iCeezxOeyYVl5MUQ==
-X-Received: by 2002:a63:214b:0:b0:39c:c451:be39 with SMTP id s11-20020a63214b000000b0039cc451be39mr10102090pgm.391.1649471828391;
-        Fri, 08 Apr 2022 19:37:08 -0700 (PDT)
+        bh=fymhEmFv/O8Tuh2GeqHqqsiXL5aZG/ohxN9zZ7IUhcE=;
+        b=QxbNzOJvUlDPY+CAtjFHsifChantDT6MhzuQl6G9YLrTveuNifmpqOriwzkINAPoGg
+         ifIVhyVbSjQN2IvYdSKGdY5WnWxOycWKXrNr1HBSeVF57qyeN2ExLHwuCCGZzNNQ9MyK
+         RqpfkIww/a9ludSDNY//pK1b5/IOXAmYf9EgsgymXT2hJBamGC2uYzOv4H7RKxnbqrUX
+         +OqO1SCoWOfvvcAt0/aYzq5bTK7ASNlvinY68QT0RvKkgqO11Jrjr0mUMrUKUeELTa4d
+         4OSEgdWnCBox30QW9o9Il1R+F6W/USTNVx7puuDveN3IhAXRaTN2Kc9dlaoTmG6prxT5
+         btgA==
+X-Gm-Message-State: AOAM532mtDsUdVHuXy7aJuDa1VAlp5X/B+KDC+BTLBC/y3WUnJfVH7eB
+        tp30MgLzd0YQFw12NwiTtxKSLg==
+X-Google-Smtp-Source: ABdhPJy7nNxWCXeW3m5jAZNd2k2Rh17DkzCXweSCpmeLDWahQW5YDzra5ADMhXthsjGqsE/I0/FyMQ==
+X-Received: by 2002:a17:902:f652:b0:156:701b:9a2a with SMTP id m18-20020a170902f65200b00156701b9a2amr22122893plg.14.1649471830116;
+        Fri, 08 Apr 2022 19:37:10 -0700 (PDT)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:17db:64e:48d4:a4e])
-        by smtp.gmail.com with ESMTPSA id 188-20020a6215c5000000b0050597294893sm759999pfv.124.2022.04.08.19.37.07
+        by smtp.gmail.com with ESMTPSA id 188-20020a6215c5000000b0050597294893sm759999pfv.124.2022.04.08.19.37.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Apr 2022 19:37:08 -0700 (PDT)
+        Fri, 08 Apr 2022 19:37:09 -0700 (PDT)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     dri-devel@lists.freedesktop.org
 Cc:     Robert Foss <robert.foss@linaro.org>,
@@ -55,17 +55,15 @@ Cc:     Robert Foss <robert.foss@linaro.org>,
         Philip Chen <philipchen@chromium.org>,
         Stephen Boyd <swboyd@chromium.org>,
         Douglas Anderson <dianders@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
         Daniel Vetter <daniel@ffwll.ch>,
         David Airlie <airlied@linux.ie>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 2/6] drm/bridge: parade-ps8640: Break probe in two to handle DP AUX better
-Date:   Fri,  8 Apr 2022 19:36:24 -0700
-Message-Id: <20220408193536.RFC.2.Ia6324ebc848cd40b4dbd3ad3289a7ffb5c197779@changeid>
+        Jani Nikula <jani.nikula@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Lyude Paul <lyude@redhat.com>,
+        Maxime Ripard <maxime@cerno.tech>, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH 3/6] drm/dp: Add is_hpd_asserted() callback to struct drm_dp_aux
+Date:   Fri,  8 Apr 2022 19:36:25 -0700
+Message-Id: <20220408193536.RFC.3.Icf57bb12233a47727013c6ab69eebf803e22ebc1@changeid>
 X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
 In-Reply-To: <20220409023628.2104952-1-dianders@chromium.org>
 References: <20220409023628.2104952-1-dianders@chromium.org>
@@ -81,137 +79,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While it works, for the most part, to assume that the panel has
-finished probing when devm_of_dp_aux_populate_ep_devices() returns,
-it's a bit fragile. This is talked about at length in commit
-a1e3667a9835 ("drm/bridge: ti-sn65dsi86: Promote the AUX channel to
-its own sub-dev").
+Sometimes it's useful for users of the DP AUX bus (like panels) to be
+able to poll HPD. Let's add a callback that allows DP AUX busses
+drivers to provide this.
 
-When reviewing the ps8640 code, I managed to convince myself that it
-was OK not to worry about it there and that maybe it wasn't really
-_that_ fragile. However, it turns out that it really is. Simply
-hardcoding panel_edp_probe() to return -EPROBE_DEFER was enough to put
-the boot process into an infinite loop. I believe this manages to trip
-the same issues that we used to trip with the main MSM code where
-something about our actions trigger Linux to re-probe previously
-deferred devices right away and each time we try again we re-trigger
-Linux to re-probe.
-
-It's really not that crazy to just break the probe up. Let's use the
-new helpers introduced in the patch ("drm/dp: Helpers to make it
-easier for drivers to use DP AUX bus properly") to break the driver
-into two.
-
-With this change, the device still boots (though obviously the panel
-doesn't come up) if I force panel-edp to always return -EPROBE_DEFER.
-
+Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
 
- drivers/gpu/drm/bridge/parade-ps8640.c | 66 +++++++++++++++-----------
- 1 file changed, 39 insertions(+), 27 deletions(-)
+ include/drm/dp/drm_dp_helper.h | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/drivers/gpu/drm/bridge/parade-ps8640.c b/drivers/gpu/drm/bridge/parade-ps8640.c
-index 9766cbbd62ad..96e883985608 100644
---- a/drivers/gpu/drm/bridge/parade-ps8640.c
-+++ b/drivers/gpu/drm/bridge/parade-ps8640.c
-@@ -93,6 +93,7 @@ enum ps8640_vdo_control {
- };
+diff --git a/include/drm/dp/drm_dp_helper.h b/include/drm/dp/drm_dp_helper.h
+index dad1442c91df..a12951319573 100644
+--- a/include/drm/dp/drm_dp_helper.h
++++ b/include/drm/dp/drm_dp_helper.h
+@@ -2021,6 +2021,20 @@ struct drm_dp_aux {
+ 	ssize_t (*transfer)(struct drm_dp_aux *aux,
+ 			    struct drm_dp_aux_msg *msg);
  
- struct ps8640 {
-+	struct dp_aux_ep_client ep_client;
- 	struct drm_bridge bridge;
- 	struct drm_bridge *panel_bridge;
- 	struct drm_dp_aux aux;
-@@ -584,10 +585,36 @@ static int ps8640_bridge_host_attach(struct device *dev, struct ps8640 *ps_bridg
- 	return 0;
- }
- 
-+static int ps8640_bridge_probe(struct device *clientdev, struct dp_aux_ep_client *client)
-+{
-+	struct ps8640 *ps_bridge = container_of(client, struct ps8640, ep_client);
-+	struct device_node *np = clientdev->of_node;
-+	int ret;
-+
-+	/* port@1 is ps8640 output port */
-+	ps_bridge->panel_bridge = devm_drm_of_get_bridge(clientdev, np, 1, 0);
-+	if (IS_ERR(ps_bridge->panel_bridge))
-+		return PTR_ERR(ps_bridge->panel_bridge);
-+
-+	drm_bridge_add(&ps_bridge->bridge);
-+
-+	ret = ps8640_bridge_host_attach(clientdev, ps_bridge);
-+	if (ret)
-+		drm_bridge_remove(&ps_bridge->bridge);
-+
-+	return ret;
-+}
-+
-+static void ps8640_bridge_remove(struct device *clientdev, struct dp_aux_ep_client *client)
-+{
-+	struct ps8640 *ps_bridge = container_of(client, struct ps8640, ep_client);
-+
-+	drm_bridge_remove(&ps_bridge->bridge);
-+}
-+
- static int ps8640_probe(struct i2c_client *client)
- {
- 	struct device *dev = &client->dev;
--	struct device_node *np = dev->of_node;
- 	struct ps8640 *ps_bridge;
- 	int ret;
- 	u32 i;
-@@ -672,31 +699,17 @@ static int ps8640_probe(struct i2c_client *client)
- 
- 	devm_of_dp_aux_populate_ep_devices(&ps_bridge->aux);
- 
--	/* port@1 is ps8640 output port */
--	ps_bridge->panel_bridge = devm_drm_of_get_bridge(dev, np, 1, 0);
--	if (IS_ERR(ps_bridge->panel_bridge))
--		return PTR_ERR(ps_bridge->panel_bridge);
--
--	drm_bridge_add(&ps_bridge->bridge);
--
--	ret = ps8640_bridge_host_attach(dev, ps_bridge);
--	if (ret)
--		goto err_bridge_remove;
--
--	return 0;
--
--err_bridge_remove:
--	drm_bridge_remove(&ps_bridge->bridge);
--	return ret;
--}
--
--static int ps8640_remove(struct i2c_client *client)
--{
--	struct ps8640 *ps_bridge = i2c_get_clientdata(client);
--
--	drm_bridge_remove(&ps_bridge->bridge);
--
--	return 0;
-+	/*
-+	 * Create a sub-device and kick off a probe to it. This effectively
-+	 * breaks our probe in two and lets the first half complete even if
-+	 * the second half might return -EPROBE_DEFER. If we didn't do this
-+	 * then if a panel isn't immediately ready we'd delete it right away
-+	 * and never give it a chance to finish.
++	/**
++	 * @is_hpd_asserted: returns true if HPD is asserted
++	 *
++	 * This is mainly useful for eDP panels drivers to query whether
++	 * an eDP panel has finished powering on. This is an optional function.
++	 *
++	 * NOTE: this function specifically reports the state of the HPD pin
++	 * that's associated with the DP AUX channel. This is different from
++	 * the HPD concept in much of the rest of DRM which is more about
++	 * physical presence of a display. For eDP, for instance, a display is
++	 * assumed always present even if the HPD pin is deasserted.
 +	 */
-+	ps_bridge->ep_client.probe = ps8640_bridge_probe;
-+	ps_bridge->ep_client.remove = ps8640_bridge_remove;
-+	ps_bridge->ep_client.aux = &ps_bridge->aux;
-+	return devm_dp_aux_register_ep_client(&ps_bridge->ep_client);
- }
- 
- static const struct of_device_id ps8640_match[] = {
-@@ -707,7 +720,6 @@ MODULE_DEVICE_TABLE(of, ps8640_match);
- 
- static struct i2c_driver ps8640_driver = {
- 	.probe_new = ps8640_probe,
--	.remove = ps8640_remove,
- 	.driver = {
- 		.name = "ps8640",
- 		.of_match_table = ps8640_match,
++	bool (*is_hpd_asserted)(struct drm_dp_aux *aux);
++
+ 	/**
+ 	 * @i2c_nack_count: Counts I2C NACKs, used for DP validation.
+ 	 */
 -- 
 2.35.1.1178.g4f1659d476-goog
 

@@ -2,60 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC134FA1DB
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 04:56:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FF8F4FA1E0
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 05:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234373AbiDIC6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 8 Apr 2022 22:58:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33846 "EHLO
+        id S235793AbiDIDCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 8 Apr 2022 23:02:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbiDIC6j (ORCPT
+        with ESMTP id S229745AbiDIDCS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 8 Apr 2022 22:58:39 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4556830A;
-        Fri,  8 Apr 2022 19:56:32 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id be5so3500345plb.13;
-        Fri, 08 Apr 2022 19:56:32 -0700 (PDT)
+        Fri, 8 Apr 2022 23:02:18 -0400
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1FD33A0A
+        for <linux-kernel@vger.kernel.org>; Fri,  8 Apr 2022 20:00:12 -0700 (PDT)
+Received: by mail-il1-x12d.google.com with SMTP id b17so680717ilq.5
+        for <linux-kernel@vger.kernel.org>; Fri, 08 Apr 2022 20:00:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VQyPSrgr9MS7EpRh2VWlvGNNESfQ8NWuUEdNThLjldw=;
-        b=j/+h/dLqzkWj5Fqfos0fPiStfP0opcXSwBlFQkktY5MZUxfJ5nwud8+5hbcHt4e2SF
-         FtGayZQopAgXHgIn1LrXgdyZUaTwI34YQd5YavavKifblyB0mKcxl3b5rPCb7yjPOpdT
-         zGxHkBNKDa0fuiqD0hOHVNwArO+3Kjm0ZN8mFGWxEzxHRwc3mQzM2g9I2/NtOSFufhxD
-         ZP6V7wRQnS1G4ZZCbG9MAcB+vDfYTs9yozwGFYeEfoAHG0l88BpEOLBB72l/CTxWQEfW
-         +QeuC7O2hDB40zrKD/2heMtRrcU1wdnilyxTVzzCcCHu65yIILpKnowDZjM02qM5A/cx
-         JNXQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7RUgxB5lUnMf0m/8cJBKRpGrEmDxJAR3LLco6CCvSoQ=;
+        b=XOXBEPeFHHNN7CMBaD7IyFVzbQgjm8LkaxzYx1ftFJNSXV6gS4JkUd3UW9t/qvpKhZ
+         3YqwXfBtp1ZwgTxM8bHyhRab4zRiuVR5U+P86722emmM0Z+rkuRzVSFGXbMwxf2YJvKl
+         +5dSv5E54VhyCQS6z4Uh87JCJvbgeNU+ztiegdXow7rIUt5CJjZoj06jKgDKGpMWuWnb
+         n/KBhqUHRdJDauCFwQJvFZFx2l2LR25EQ9ZFShh+AOVFcx7jcsznU5rQXBoxfpgyU55e
+         s9nDMzZP93lBA1F/g2jfVaETN4k5Hdh3hrL9THd1tFNTPAMlkAfqw/kwODL0inMrukXH
+         RsXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VQyPSrgr9MS7EpRh2VWlvGNNESfQ8NWuUEdNThLjldw=;
-        b=TpQoz6++D+H12KEm050blNFvxr4+h3HYy151nEHTOfyAON0FVALiM60uZV1diBtkYI
-         YM6/fPHGfsWO75N8QHxEcbcPzklVOGc1X9oVT/dB3Vcdc8IHuQsjI77evYjhntUJR9gc
-         Ha3u1zAR+kw1+o8fTHL48sn3gnv+xhdH7Nmv9uc8jNvyM29yon0Srd5KxFk7jomWSFlN
-         dp2MJYus/nkvnGUx/FobCU9FJT2GIVSDODO8yzoU+HMExQPF1jIDPCep+eVI4JXL5nq1
-         ReIuzPg8OV1fYPnkAUGPIaAa218WDuFYkQ/yaaUvOTu84jYDGREiosWnr77zYUffcfi5
-         qB2g==
-X-Gm-Message-State: AOAM533pWRJmX/6mc/FeESbQK0L+JK7LdGfzOVe372g3+u42l1HnCGhH
-        m9Aj4piiE4IMCWv2DQgxyWAO8SwKd8xAxnpQoA==
-X-Google-Smtp-Source: ABdhPJysfJ3hL7zN/14NcjhG+NL5gN9Clmu0frccbRswIVmlJPnlxX6eWfAoWuAW0vahw3vc6onqFPX7Wiq9q3zMTS4=
-X-Received: by 2002:a17:902:e80c:b0:156:bc53:704e with SMTP id
- u12-20020a170902e80c00b00156bc53704emr21820688plg.31.1649472992064; Fri, 08
- Apr 2022 19:56:32 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7RUgxB5lUnMf0m/8cJBKRpGrEmDxJAR3LLco6CCvSoQ=;
+        b=EbU6+ab9py2Atgw0OScLwJARQlRSm4jnQUhBDs4x+drb6utf5keKoLsWOoyD/5E2yQ
+         LG2Z1FhcCyAPxp5R8uBDUskPhLx/UDzJ3DKgiDXizDK6fWkQAA86PxdrG6S/ickJtt3w
+         d026MEVUPecsWZ78ZzS/mVZbYvDzyF8ndkO9nyRHEaK6dYK76XBi6tmruQeqz660M+QZ
+         whVi2kgaMIzak7L/ALVr+emLjO9niwxUmQulwoFWXmXpgN8ChuK+/U8rzNG60ZOpnicx
+         EcyuwIQxzirH17TpAxMI75YTSXs4ykYWIRkMAzpi4WeUoFGVV/arNKz9Musn/N30S8Zw
+         X0Yw==
+X-Gm-Message-State: AOAM530jxXGb8We0Il/SB+avBHiXP1AmX6K0OX+XO7rYYx584vl1w3f+
+        x1he/lmhB4+/YHANEjEFd5rPDNsNL8NwQQ==
+X-Google-Smtp-Source: ABdhPJwrhxj/LWZYAEPg4H8QbXHQjFpoQ8f4XNumCm8a/VGKhnV20+mtj6vY1XGvloXnr8hnu3nTqQ==
+X-Received: by 2002:a05:6e02:1c41:b0:2ca:8a04:ad8d with SMTP id d1-20020a056e021c4100b002ca8a04ad8dmr2527592ilg.195.1649473211662;
+        Fri, 08 Apr 2022 20:00:11 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-122-133.hlrn.qwest.net. [71.218.122.133])
+        by smtp.gmail.com with ESMTPSA id y8-20020a920908000000b002ca38acaa60sm10314731ilg.81.2022.04.08.20.00.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 20:00:11 -0700 (PDT)
+From:   James Hilliard <james.hilliard1@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     James Hilliard <james.hilliard1@gmail.com>,
+        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/gma500: select framebuffer dependency
+Date:   Fri,  8 Apr 2022 20:59:48 -0600
+Message-Id: <20220409025948.3179636-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220409022629.3493557-1-zheyuma97@gmail.com> <YlDwoazfX4rcf4ho@google.com>
-In-Reply-To: <YlDwoazfX4rcf4ho@google.com>
-From:   Zheyu Ma <zheyuma97@gmail.com>
-Date:   Sat, 9 Apr 2022 10:56:21 +0800
-Message-ID: <CAMhUBj=Z+zsU9-cjRZv5b3=_N5GMNeW7C3z9BATrMZcNpQ9JKw@mail.gmail.com>
-Subject: Re: [PATCH] input: cypress-sf: Register a callback to disable the regulators
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     y.oudjana@protonmail.com, linux-input@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -66,60 +70,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 9, 2022 at 10:34 AM Dmitry Torokhov
-<dmitry.torokhov@gmail.com> wrote:
->
-> Hi Zheyu,
->
-> On Sat, Apr 09, 2022 at 10:26:29AM +0800, Zheyu Ma wrote:
-> > When the driver fails to probe, we will get the following splat:
-> >
-> > [   19.311970] ------------[ cut here ]------------
-> > [   19.312566] WARNING: CPU: 3 PID: 375 at drivers/regulator/core.c:2257 _regulator_put+0x3ec/0x4e0
-> > [   19.317591] RIP: 0010:_regulator_put+0x3ec/0x4e0
-> > [   19.328831] Call Trace:
-> > [   19.329112]  <TASK>
-> > [   19.329369]  regulator_bulk_free+0x82/0xe0
-> > [   19.329860]  devres_release_group+0x319/0x3d0
-> > [   19.330357]  i2c_device_probe+0x766/0x940
-> >
-> > Fix this by adding a callback that will deal with the disabling when the
-> > driver fails to probe.
-> >
-> > Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-> > ---
-> >  drivers/input/keyboard/cypress-sf.c | 11 +++++++++++
-> >  1 file changed, 11 insertions(+)
-> >
-> > diff --git a/drivers/input/keyboard/cypress-sf.c b/drivers/input/keyboard/cypress-sf.c
-> > index c28996028e80..798611b76de6 100644
-> > --- a/drivers/input/keyboard/cypress-sf.c
-> > +++ b/drivers/input/keyboard/cypress-sf.c
-> > @@ -61,6 +61,13 @@ static irqreturn_t cypress_sf_irq_handler(int irq, void *devid)
-> >       return IRQ_HANDLED;
-> >  }
-> >
-> > +static void cypress_sf_disable_regulator(void *arg)
-> > +{
-> > +     struct cypress_sf_data *data = arg;
-> > +
-> > +     regulator_bulk_disable(ARRAY_SIZE(data->regulators), data->regulators);
-> > +}
-> > +
-> >  static int cypress_sf_probe(struct i2c_client *client)
-> >  {
-> >       struct cypress_sf_data *touchkey;
-> > @@ -84,6 +91,10 @@ static int cypress_sf_probe(struct i2c_client *client)
-> >               return error;
-> >       }
-> >
-> > +     error = devm_add_action_or_reset(&client->dev, cypress_sf_disable_regulator, touchkey);
-> > +     if (error)
-> > +             return error;
->
-> This needs to be moved to the spot after we enabled regulators. I
-> adjusted and applied.
+This appears to be needed for video output to function correctly.
 
-Thanks for your reminder!
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ drivers/gpu/drm/gma500/Kconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Zheyu Ma
+diff --git a/drivers/gpu/drm/gma500/Kconfig b/drivers/gpu/drm/gma500/Kconfig
+index 0cff20265f97..ff8c7b6e87f5 100644
+--- a/drivers/gpu/drm/gma500/Kconfig
++++ b/drivers/gpu/drm/gma500/Kconfig
+@@ -7,6 +7,8 @@ config DRM_GMA500
+ 	select ACPI_VIDEO if ACPI
+ 	select BACKLIGHT_CLASS_DEVICE if ACPI
+ 	select INPUT if ACPI
++	select FB
++	select FB_EFI if EFI
+ 	help
+ 	  Say yes for an experimental 2D KMS framebuffer driver for the
+ 	  Intel GMA500 (Poulsbo), Intel GMA600 (Moorestown/Oak Trail) and
+-- 
+2.25.1
+

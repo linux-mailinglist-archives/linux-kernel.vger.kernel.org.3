@@ -2,127 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0F8D4FA74A
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 13:28:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 350374FA74C
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 13:31:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241485AbiDILaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 07:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58280 "EHLO
+        id S240568AbiDILdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 07:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238660AbiDILaW (ORCPT
+        with ESMTP id S232971AbiDILdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 07:30:22 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EACAE2CF2F9
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 04:28:15 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id n6so21851951ejc.13
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 04:28:15 -0700 (PDT)
+        Sat, 9 Apr 2022 07:33:02 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC794329BF;
+        Sat,  9 Apr 2022 04:30:55 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id z33so19347954ybh.5;
+        Sat, 09 Apr 2022 04:30:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=PooaHONqZ3morb3wBaewUnRY9UPBpG0RRv03MJGzAek=;
-        b=MssUOwxelL9/v9ooozb9mBvooglCpqSDKkLiInz+GRpaeeJQ/gFZfzlcDBUrJEzN+2
-         25EUEsQMrbJa6xigfY7dXZ9onLPDoZUCH2QZ2t+ym6BBYLARlpj0axukYLjkMGm2gN2w
-         aMx6gYvbRMhhxnsejouyaTefWI8JWVxZJTMLQfwqm2ipTbRiMuDPHcpeX0kZwZ1Lw7yO
-         E9GddyM1l8nEM2XKKjMKDhUszg7bJHtFXtRrujxbcPaCS+PstzGKK0vPgJjpifGB7kBo
-         vXQFE88H/RayhO432luOCYs0wBUcLJbzLCKqgctzATTVvcojRC4X95mQE4E6YbhVnSi0
-         J/TA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mEdKNOhh1cJDumzmCZuUJ2Wd2FaFg67XH6NgTF7v8WY=;
+        b=LIxE2fWa9+x7p5aHVMDiLcfp1TOnxGHGxyZ+iEYDu3WEdZ20PCzgEy/SjoLWMMN7Vz
+         003K2adDJcFxWm6BpWILM+aMKWEAv3lJEB1q7gJ2GdO4441kuhy1N/p06Mqdx3PeM5ib
+         jLaeNTVPv30y8zGCAy8h8dFsAqXYcKzLC1++wueiCPxYjI2b7AugrzDpSq+qGNh9nG/M
+         QjtL0IHWKi1yvvv87ZJKzMA9HX9YRXZxUYmU4VaEX4inSqTYkHxKpGp4fF9dkICUtalx
+         +nG3HF4p/z8DftmT2e5pTEKmnvGGd2oIBUqU7OlihbGCtHi94FYbEyz2sYksWRNuFQ8F
+         R7eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=PooaHONqZ3morb3wBaewUnRY9UPBpG0RRv03MJGzAek=;
-        b=gVISj6T5mITjGrAvv7LI3Kn1LYEXtbC3rD7RRPu9ljxJCX3xLTmr8swJ5TaCP9AVAZ
-         V6B/I51suCd7sNXrL/I6QKcKWkr09qf4AK6zYEU88CsYN+JW2c89vmRbIfgocGBRtb9D
-         6CuBHzCy5qfCiDnM0lKWcdw/eAevWcsbmnIymu4crj20cJ7mXFP7ocRB04XbFU1MnQ88
-         oFFm5l6yq2d+2yzFRCyY/itPzEbhSVNapq8gXMh17KWT/JBeey4HtXfxnFbKqrWDEP8n
-         JHX3ZVItY2X+li0tppRIl0cfZyniuTohT9CM5h4xFTkji9B+Mmms/g0B9WodQxdgFYz2
-         BQdw==
-X-Gm-Message-State: AOAM532Ki4Rdb80ncZHtlOqbT2jBu/XsEHzWXaXmqdo83vJUFk3hHkYV
-        +QyxPIoG7dHwqhbRtB2ERcxjnQ==
-X-Google-Smtp-Source: ABdhPJwzDeJ1FFxw1gerOuBsfxqzcuc/CtzzQSYaIGqY/Vsx02rgbyStflfendIRMubNpji+NSCjVA==
-X-Received: by 2002:a17:906:fa16:b0:6e8:4762:be82 with SMTP id lo22-20020a170906fa1600b006e84762be82mr7617821ejb.243.1649503694328;
-        Sat, 09 Apr 2022 04:28:14 -0700 (PDT)
-Received: from [192.168.0.188] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id h5-20020a170906718500b006e7edcda732sm6946077ejk.125.2022.04.09.04.28.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 09 Apr 2022 04:28:13 -0700 (PDT)
-Message-ID: <202bc116-0df3-da07-62d5-5eb9bdd53baa@linaro.org>
-Date:   Sat, 9 Apr 2022 13:28:13 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mEdKNOhh1cJDumzmCZuUJ2Wd2FaFg67XH6NgTF7v8WY=;
+        b=65NDOtalHwNUI0iVmvcYKN0Uu/8bukmRQAFtunf4qzQoet/bXeTCl8aw5LKswaZuQy
+         NS9aeXMJOliZ+xJ+ekZ4t8RHHOP2auYes5qSA5hKsYFlSPEorq0l47P3EbAnVt3MgoHs
+         ViB9D1EL83Tn3nLOPSCqdjp8Gh/1ki78ptHnEuGADNnopX0DWCztU2iw1/he5AAh24st
+         DZqwTciRPd/r/J2nJl6JOxabSe6+sxX4wlrvpHvr5A/bt8J+6cFggRT6AIMWE6QuzWc/
+         1sZw8n0bSImQec1Oq+1kEVERtjxQtmWpkK3+IzVMWSWl6+c6ier68QjPr8/bT62zfjZJ
+         LMyg==
+X-Gm-Message-State: AOAM5327QruJaL3Jj04PSS+v5CPVVO5TegdxmdNbFopdJIzAQv/ThRfn
+        8xPPELHTRnQFnH2/N2OfbgJsWzsqIbGfVPauBEs=
+X-Google-Smtp-Source: ABdhPJxqVEZXDf3+mCnU5nKUvPBmSkptvptGaHEpqZlM50Q8ex928jQytNFPWQ3jzbK4691NI6HFuB4CUcuyT1o8nCA=
+X-Received: by 2002:a05:6902:cf:b0:641:32bb:53fc with SMTP id
+ i15-20020a05690200cf00b0064132bb53fcmr365654ybs.232.1649503854885; Sat, 09
+ Apr 2022 04:30:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v6 2/2] mmc: Add mmc driver for Sunplus SP7021
-Content-Language: en-US
-To:     =?UTF-8?B?VG9ueSBIdWFuZyDpu4Pmh7fljpo=?= <tony.huang@sunplus.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
+References: <20220409075147.136187-1-linux@fw-web.de> <ba60121a-a120-b717-6a2f-7883685d17e6@manjaro.org>
+ <trinity-b6d141b2-264a-4a57-9707-6a38a80cea16-1649501859874@3c-app-gmx-bap35>
+ <4559790.iIbC2pHGDl@phil> <CAMdYzYqx1iUuEe9FPpUTgL0L2i=Q5Sq2+0oiSYzqkV6noQ8BFw@mail.gmail.com>
+In-Reply-To: <CAMdYzYqx1iUuEe9FPpUTgL0L2i=Q5Sq2+0oiSYzqkV6noQ8BFw@mail.gmail.com>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Sat, 9 Apr 2022 07:30:44 -0400
+Message-ID: <CAMdYzYqaGe9_GbRCvG3kvLpNsVfVqGNkg=YYgbVR90Qtcs9YSA@mail.gmail.com>
+Subject: Re: Aw: Re: Re: [PATCH] arm64: dts: rockchip: Fix clocks for rk356x usb
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     Dan Johansen <strit@manjaro.org>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Frank Wunderlich <linux@fw-web.de>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
         Rob Herring <robh+dt@kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>,
-        =?UTF-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>
-References: <e99f3027590b5ab3938c2e2d8713bf6284a810b2.1649229258.git.tonyhuang.sunplus@gmail.com>
- <202204070029.JvyEor8F-lkp@intel.com>
- <CAHpW4oQc0=SinXTVW=ph8BgKQ4bN1mXOtWDv46MCNgXED+9TGQ@mail.gmail.com>
- <607c96516048441db549f716656ea62f@sphcmbx02.sunplus.com.tw>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <607c96516048441db549f716656ea62f@sphcmbx02.sunplus.com.tw>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/04/2022 13:11, Tony Huang 黃懷厚 wrote:
-> Dear Arnd:
-> 
->>
->> All error/warnings (new ones prefixed by >>):
->>
->>    drivers/mmc/host/sunplus-mmc.c: In function 'spmmc_set_bus_timing':
->>>> drivers/mmc/host/sunplus-mmc.c:311:15: warning: variable
->>>> 'timing_name' set but not used [-Wunused-but-set-variable]
->>      311 |         char *timing_name;
->>          |               ^~~~~~~~~~~
->>    drivers/mmc/host/sunplus-mmc.c: At top level:
->>>> drivers/mmc/host/sunplus-mmc.c:798:13: warning: no previous prototype
->>>> for 'spmmc_irq' [-Wmissing-prototypes]
->>      798 | irqreturn_t spmmc_irq(int irq, void *dev_id)
->>          |             ^~~~~~~~~
->>>> drivers/mmc/host/sunplus-mmc.c:894:5: warning: no previous prototype
->>>> for 'spmmc_get_cd' [-Wmissing-prototypes]
->>      894 | int spmmc_get_cd(struct mmc_host *mmc)
->>          |     ^~~~~~~~~~~~
->>    drivers/mmc/host/sunplus-mmc.c: In function 'spmmc_drv_probe':
->>>> drivers/mmc/host/sunplus-mmc.c:1021:22: warning: variable 'mode' set
->>>> but not used [-Wunused-but-set-variable]
->>     1021 |         unsigned int mode;
->>          |                      ^~~~
->>    drivers/mmc/host/sunplus-mmc.c: At top level:
->>>> drivers/mmc/host/sunplus-mmc.c:1170:9: error: implicit declaration of
->>>> function 'SYSTEM_SLEEP_PM_OPS'; did you mean
->>>> 'SET_SYSTEM_SLEEP_PM_OPS'? [-Werror=implicit-function-declaration]
->>     1170 |         SYSTEM_SLEEP_PM_OPS(spmmc_pm_suspend,
->> spmmc_pm_resume)
->>          |         ^~~~~~~~~~~~~~~~~~~
->>          |         SET_SYSTEM_SLEEP_PM_OPS
-> 
-> I follow your sugguest in v5. 						
-> "It's better to use SYSTEM_SLEEP_PM_OPS/RUNTIME_PM_OPS instead of the SET_ version"						
-> But kernel test robot shows error.						
+On Sat, Apr 9, 2022 at 7:14 AM Peter Geis <pgwipeout@gmail.com> wrote:
+>
+> On Sat, Apr 9, 2022 at 7:01 AM Heiko Stuebner <heiko@sntech.de> wrote:
+> >
+> > Am Samstag, 9. April 2022, 12:57:39 CEST schrieb Frank Wunderlich:
+> > > Hi
+> > > > Gesendet: Samstag, 09. April 2022 um 12:40 Uhr
+> > > > Von: "Dan Johansen" <strit@manjaro.org>
+> > >
+> > > > So the issue is only with usb 3 ports, not usb 2 ports?
+> > >
+> > > my board has no standalone usb2-ports. usb2 is integrated into the usb3 ports (dual phy). here both were not working.
+> > >
+> > > afaik rk3566 has standalone usb2 ports that may not be broken, but i have no such board for testing.
+>
+> Good Morning,
+>
+> >
+> > As far as I understand the issue now after checking the code, this
+> > patch actually fixes the usb3 series from Peter, right?
+> >
+> > I.e. the usb-nodes that are fixed in this patch are not yet present
+> > in the main rk356x dtsi and only get added in
+> > "arm64: dts: rockchip: add rk356x dwc3 usb3 nodes" [0]
+> >
+> > As we don't want to add broken changes, this fix should squashed
+> > into a next version of the patch adding the nodes.
+>
+> Thank you for reporting this, I will squash this fix in and add your signed-off.
+>
+> However the offending patch is in fact the clock separation patch, and
+> it breaks backwards compatibility with the rk3328 dtsi which is why my
+> series also is broken.
+>
+> The rockchip,dwc3.yaml needs to be fixed to align with the
+> snps,dwc3.yaml, and both the rk3328 and rk3399 clock names updated.
+> Also the offending clock separation patch needs a fix to grab the old
+> clock names for rk3328 backwards compatibility to be retained.
+>
+> This might also be a good time to look into moving rk3399 to the core
+> dwc3 driver?
+>
+> This is a delightful mess.
 
-Which you need to fix. Kernel test robot gave you tools needed to
-reproduce all these errors, so go ahead and fix them. :)
+In the idea of getting this series to land, if all parties agree, I'll
+submit a patch that fixes the clock separation patch with this series
+and leave the naming as is for now.
+The renaming of clocks and alignment of everything can be addressed in
+a future series once discussion on how best to handle it has happened.
 
-Best regards,
-Krzysztof
+Do you concur with this?
+
+>
+> >
+> >
+> > Heiko
+> >
+> > [0] https://lore.kernel.org/r/20220408151237.3165046-4-pgwipeout@gmail.com
+> >
+> >
+>
+> Very Respectfully,
+> Peter Geis

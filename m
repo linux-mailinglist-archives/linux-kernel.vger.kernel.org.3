@@ -2,132 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D62614FA7BE
-	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 14:46:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6083B4FA7C2
+	for <lists+linux-kernel@lfdr.de>; Sat,  9 Apr 2022 14:47:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239511AbiDIMr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 08:47:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
+        id S241696AbiDIMte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 08:49:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232848AbiDIMrw (ORCPT
+        with ESMTP id S232848AbiDIMtd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 08:47:52 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B991825B463
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 05:45:44 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KbFGC70JLz4xXS;
-        Sat,  9 Apr 2022 22:45:39 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1649508340;
-        bh=dzSSI05vJdRsELqLVcyOWZYjZ1aa5BhxOpYnMRaD7sw=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Vwvh/UKDZl/zxJK8ITlEY2gh1W8gFhv+/Ql0lAnG2Hq+6GtgCGM0SFN4v0/KayFoW
-         Bobo1s+iAtJ916Z/aNDJsH86GM7vKuHi1CK+Su1ymzQP1Q40XGJF65XgTVnDBvtsKp
-         CW5RTOsPkZOS9tgUnv14IWSoN9bpxC/q94tM8S86vdtt4spBPOCDNRdFaOYvGRTMxy
-         SbMV82F8NoA4JjmZmobDYMUq0qRBbKBmGclZ52ApHZr2NvFhbsxNDbWzWQu/u8XdmZ
-         V622UhqtAvsYFW0CdYwY7RygVCVZ2Rg7ZjmgD0DD2qiMWJHZHT2ZqTzNKc+ksf9kmD
-         Ygun8PVjefMsA==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH v9 0/4] mm: Enable conversion of powerpc to default
- topdown mmap layout
-In-Reply-To: <8f1f194f-6b54-a382-b46e-5221cb82c80f@csgroup.eu>
-References: <cover.1649401201.git.christophe.leroy@csgroup.eu>
- <20220408202516.254e22a8293a57324650bd3f@linux-foundation.org>
- <8f1f194f-6b54-a382-b46e-5221cb82c80f@csgroup.eu>
-Date:   Sat, 09 Apr 2022 22:45:35 +1000
-Message-ID: <87h77277dc.fsf@mpe.ellerman.id.au>
+        Sat, 9 Apr 2022 08:49:33 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1815229FC7E
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 05:47:26 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id p15so22178415ejc.7
+        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 05:47:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=RYkFt3jpACagbux2jezQDt+Hlb4Mllg2F+Pvo9I6yg8=;
+        b=Iy2/plpTG2l4eGMzjWcPnr0DLlDOGCDFhQbyb2f9WLFdecVumS74oVVqskMl9HG/F/
+         dNCj1CG/S8UwtpnjIwEOINnE4ftiBnlv5qieaG3Ak7C7Bnao40qskHKyHlzYLvNabUYi
+         tpNQgk8mESb86xGcxLHzgL49y5Ial5x1Ux6jKVNfdn9sC4GOoiIie4HRegfCoB+ohBb8
+         9QTCx4Hl4nmk1MMLkg3YlNdWFa/kA2ynDkNahRNYu+EZA8PwVV4rEhkvlS8F1y24zXwS
+         TByvKQVsxGyK2thUArKffFYbGPpqlduoamI7Fh5OdV4rLV4vgKeLob2tFZl1+aM37p8Q
+         0esg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=RYkFt3jpACagbux2jezQDt+Hlb4Mllg2F+Pvo9I6yg8=;
+        b=fo70H772n54/1ZGLW+8hSTZl3k23Pwoxt8axUl8W8AZRHnF/+FwpmUAkODI5jqhjRw
+         JKBUFT4iGVgVItjbtwLdjD+v8PV8DIkahjIxCk6lwbpGCSmRfswmUUt6dD8yYZBPSyaa
+         qTOVDNiQYrrZISImh2y6f8FdskFEcm4+wfGJJgn5/U/s1ssY+UziSLrAI9VsuXqlfPh3
+         5LITbDaaPv5amJ7xFGXyroZ4htvSRGWesD54M2Ek89FDDx2uagcuHm9paZX4GmRNFyK8
+         hOpUVBAebsenQruTfdnEx4aQRr2mC5KK1m8FQe0J/HjBzZ3qUHGS8q0PVv1jYnogSzG/
+         ndRg==
+X-Gm-Message-State: AOAM532ImUTzJN+n54iLZTInfIawdwcuNhMTjV8oWRaFjdsE7/fQy35H
+        kDbve2cRUQLGEHi8HJlO8mKg/g==
+X-Google-Smtp-Source: ABdhPJyHbFNq9sjIttDPtopX84JitwYlNirupvNY03oGBfQPZkHlb0YESQGDm3byfy/d13g9cZRmyw==
+X-Received: by 2002:a17:907:629c:b0:6e1:6ad:5dd8 with SMTP id nd28-20020a170907629c00b006e106ad5dd8mr21620810ejc.641.1649508444649;
+        Sat, 09 Apr 2022 05:47:24 -0700 (PDT)
+Received: from [192.168.0.188] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id q17-20020a17090622d100b006e87bcf7ae7sm151041eja.208.2022.04.09.05.47.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 09 Apr 2022 05:47:24 -0700 (PDT)
+Message-ID: <2e1495ab-2773-a3bb-0ad2-4af607cccc11@linaro.org>
+Date:   Sat, 9 Apr 2022 14:47:23 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 13/18] dt-bindings: fix jz4780-nemc issue as reported by
+ dtbscheck
+Content-Language: en-US
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, letux-kernel@openphoenux.org
+References: <cover.1649443080.git.hns@goldelico.com>
+ <84adfe6237cd4cfd52cb9723416f69926e556e55.1649443080.git.hns@goldelico.com>
+ <036b66b2-c221-6e9e-6a56-510e7a0d20d3@linaro.org>
+ <VDO2AR.XO9112UD3KYT3@crapouillou.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <VDO2AR.XO9112UD3KYT3@crapouillou.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christophe Leroy <christophe.leroy@csgroup.eu> writes:
-> Le 09/04/2022 =C3=A0 05:25, Andrew Morton a =C3=A9crit=C2=A0:
->> On Fri,  8 Apr 2022 09:24:58 +0200 Christophe Leroy <christophe.leroy@cs=
-group.eu> wrote:
->>=20
->>> Rebased on top of Linux 5.18-rc1
->>>
->>> This is the mm part of the series that converts powerpc to default
->>> topdown mmap layout, for merge into v5.18
->>=20
->> We're at 5.18-rc1.  The 5.18 merge window has closed and we're in
->> fixes-only mode.
->
-> Umm ... There must have been a misunderstanding then.
+On 09/04/2022 14:37, Paul Cercueil wrote:
+>> The true question is whether you need simple-mfd. Isn't the binding 
+>> (and
+>> the driver) expected to instantiate its children?
+> 
+> I can explain that one. There is the EFUSE controller located inside 
+> the nemc's memory area, and the two are pretty much unrelated, hence 
+> the "simple-mfd" compatible string.
 
-That's probably my fault for not getting back to Andrew.
+I saw the efuse children and that's why I asked who is expected to
+populate them. You said that simple-mfd is required for this, I say no.
+It should work without simple-mfd...
 
-> Le 11/03/2022 =C3=A0 05:26, Michael Ellerman a =C3=A9crit :
->  >
->  > Yeah I didn't pick it up because the mm changes don't have many acks a=
-nd
->  > I'm always nervous about carrying generic mm changes.
->  >
->  > It would be my preference if Andrew could take 2-5 through mm for v5.1=
-8,
->  > but it is quite late, so I'm not sure how he will feel about that.
->  >
->  > Arguably 2, 3, 4 do very little. It's only patch 5 that has much effec=
-t,
->  > and it has a reviewed-by from Catalin at least.
->
-> Michael, is it now ok for you to merge it via powerpc tree with Andrew's=
-=20
-> Ack ?
+I am kind of repeating myself but I really do not see the need of
+simple-mfd in the bindings.
 
-Yes.
-
->> Also, [4/4] has a cc:stable.  This is a bit odd because -stable
->> candidates should be standalone patches, staged ahead of all
->> for-next-merge-window material, so we can get them merged up quickly.
->>=20
->> More oddly, [4/4]'s changelog provides no explanation for why the patch
->> should be considered for backporting.
-=20
-Yeah it's just a bit too politely worded :)
-
-It says it's "a complement of f6795053dac8", but it's actually a fix for
-a bug in that commit, that commit should have updated hugetlb behaviour.
-
-> That was a request from Catalin from ARM64:
->
-> Le 04/01/2022 =C3=A0 17:21, Catalin Marinas a =C3=A9crit :
->  > I wonder whether we should add a fixes tag (or at least the cc stable):
->  >
->  > Fixes: f6795053dac8 ("mm: mmap: Allow for "high" userspace addresses")
->  > Cc: <stable@vger.kernel.org> # 5.0.x
->  >
->  > I think the original commit should have changed
->  > hugetlb_get_unmapped_area() to have the same behaviour as
->  > arch_get_unmapped_area(). Steve, any thoughts?
->  >
->  > FWIW,
->  >
->  > Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
->
->  From=20
-> https://patchwork.ozlabs.org/project/linuxppc-dev/patch/db238c1ca2d46e33c=
-57328f8d450f2563e92f8c2.1639736449.git.christophe.leroy@csgroup.eu/
->
-> I can try and see whether this can be moved in front of the other patches.
-
-Thanks, that would be preferable.
-
-cheers
+Best regards,
+Krzysztof

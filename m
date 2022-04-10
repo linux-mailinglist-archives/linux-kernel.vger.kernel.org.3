@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D2D14FAD24
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 12:13:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3CF84FAD26
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 12:14:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231513AbiDJKPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 06:15:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50848 "EHLO
+        id S234982AbiDJKQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 06:16:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiDJKPT (ORCPT
+        with ESMTP id S229545AbiDJKQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 06:15:19 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8686766FBD
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 03:13:09 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id r206-20020a1c44d7000000b0038ccb70e239so2743402wma.3
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 03:13:09 -0700 (PDT)
+        Sun, 10 Apr 2022 06:16:34 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B96673DD
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 03:14:20 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id m30so18962642wrb.1
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 03:14:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=cZo/m1bqkSUtO6Lom2S713GFjpljpLQ71ASMRg5Hn7w=;
-        b=G58Fiwr1roHUchNnV8uMiaCFlRz2gDTmTryzv+V6xhpmcC2+7j2UYPcxbrxAQ9+rrC
-         C/VGld+ZVH6mDkRxPT/wFr2XNJxJN4pjaPhTq70m+y4m/9bur6+N0IV9ClOGx0Tltjkd
-         MAM9BzWlGt6Iu5Fy/dIk9cwzKb4emXlRp41t+JtYjnaiL+FwxQ7Zw4lGn9MPUS2ok9bH
-         1kgqpfnryNMqmoX4D439+Hlf+b2V686Gx5+avWu3xvMntxGqAUO/5rtBrTax5dOgYJM4
-         T1FnmDekMJtgEUXCjydAuYejPCtkWVgUqTCFawTlTWYz+xCScuKzzgQOBaSseJtnwDA/
-         1Iwg==
+        bh=pAKQLRfHBIi8gVpWsIm4XJUTgKXNjZKuay5CjFRlndQ=;
+        b=VCf5YefLkMAEwD1FEbA3M/9+95V60y1Xqx6EBj4uQJjMbDDAd+MDQOfLPgvqHeoKhJ
+         i40q+rYXlnsSQYx3F5AhrNnG2AsjHJ5VeHLrYys9LfEX7WymHQknubY1Jm8Et/vNOTzl
+         BuIUagPUdVCsov9XGd6zT8NJgyZEcCON0Ez+v7PEvcGT0r3E9tCebYAEWz55IHR2IP/L
+         hCzFHLZOKqmVpUcyZ+iGyIL7JN3oSkfp/MpVQ7Zgua+LE7kZ35agu10UX4wZ8S6tPPWt
+         gUaaWeuXspLmXjM22aITSbX7FU1gzbcwN4/EN/zwNOABUJjXaX++a3pXYOkT5UukwN4r
+         bF2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=cZo/m1bqkSUtO6Lom2S713GFjpljpLQ71ASMRg5Hn7w=;
-        b=preZ/kobXtWkaghCZPcqOfl3Vs3McLHagkEVJyd810TJ3kly6FnnpS9AkruTM+D6I0
-         1msPfa+t4S+a5uEyN2eFnfRkzrmHJk4xIxgGnsw8beIQYqnxnKMa5hqHQWw1dMh+vArN
-         Lt2xH3djZd/nWhDs5tksbO98NIsyW9/NJvsbNBVdBdRv1eIS3jMw/5UIkKFRMkssIq9R
-         V41dEWlVUc3qYwnI77DlIOR8TuVl8le0p6BcZ+GYA9WfNZdd36AvGwfCV0tvVTn1T38F
-         IBlLpQB/qcyH//tkg/IBrJK1jAdxt6IVH5syFlbaXc4YGAOmAa/4hvXH1nS5MRX/Otpm
-         9NOw==
-X-Gm-Message-State: AOAM532CsMRQGo4Vo+5WWQr5bUmYFS0rCOfYq6uETnuLv5zZ0J66yoQ1
-        prECSdcDlsOcC8xtzBtN0M0=
-X-Google-Smtp-Source: ABdhPJxGa9m+AiJOIpY+QhfkC4bE2zpKqtFGZEkSzed002NzgVtl8V100+Yzc8eR8U8nqrx6SN/B3w==
-X-Received: by 2002:a7b:cb0d:0:b0:38e:aaf3:b08f with SMTP id u13-20020a7bcb0d000000b0038eaaf3b08fmr8769112wmj.12.1649585587969;
-        Sun, 10 Apr 2022 03:13:07 -0700 (PDT)
+        bh=pAKQLRfHBIi8gVpWsIm4XJUTgKXNjZKuay5CjFRlndQ=;
+        b=tVMWtWvlotq+GAMGZuY6Ag5qmcCQU2NtVUJWTbVqkgqX4+UgcwRYEIbfIBtDKekYFY
+         Pw5Vus4+5n7c1fXtA4LGiXaRxLJs0OKu/t0SfynK4Up54M5XIp6wJ4IZ/0hH/xwU9uw3
+         HS8YZlOo4Q15GakzKJ/1Kr9OM/YyqcuR3hqyxMmTlCKv9hkBuIRWNipAXv0Y1e4ajV9d
+         fpYI3IDfW4qMIks5rS+lPdRD2UzK9ToCqYW9TpxyOD4NMKIxGqMGZQTOjKSOgD/pI1DU
+         eJH45ZEC9ISMUjvIY77tPWzO+ixbCQMou2k47VtaJSjZ93irfIUnM7Lj6o5RIMZi7ZnT
+         qWIA==
+X-Gm-Message-State: AOAM530T45Z/zydozyazoxvxJqwnpUoU3q9usxPjyap5xVJtsSiyN7r8
+        cRv4AVd+7qUhaRQD8h7EXJM=
+X-Google-Smtp-Source: ABdhPJxletA1b6QlOrf9vLg3Ffaz3R05kgZSgfITv/n69SnaIoSn9nssUQfbsGVcrhE4jzWuW9059g==
+X-Received: by 2002:a5d:47a8:0:b0:204:72:7051 with SMTP id 8-20020a5d47a8000000b0020400727051mr21325747wrb.451.1649585658641;
+        Sun, 10 Apr 2022 03:14:18 -0700 (PDT)
 Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
-        by smtp.gmail.com with ESMTPSA id i4-20020a1c5404000000b0038e7dc5e469sm14467590wmb.25.2022.04.10.03.13.06
+        by smtp.gmail.com with ESMTPSA id n37-20020a05600c3ba500b0038cc9d6ff5bsm14748150wms.4.2022.04.10.03.14.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Apr 2022 03:13:07 -0700 (PDT)
+        Sun, 10 Apr 2022 03:14:18 -0700 (PDT)
 From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
 To:     Sandor Yu <Sandor.yu@nxp.com>, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org, andrzej.hajda@intel.com,
@@ -56,11 +56,11 @@ To:     Sandor Yu <Sandor.yu@nxp.com>, dri-devel@lists.freedesktop.org,
         Neil Armstrong <narmstrong@baylibre.com>
 Cc:     shengjiu.wang@nxp.com, cai.huoqing@linux.dev, maxime@cerno.tech,
         harry.wentland@amd.com
-Subject: Re: [PATCH v2 1/5] drm: bridge: dw_hdmi: cec: Add cec suspend/resume function
-Date:   Sun, 10 Apr 2022 12:13:06 +0200
-Message-ID: <3658461.kQq0lBPeGt@jernej-laptop>
-In-Reply-To: <4a6a4b70-3e24-3043-4e9d-f62e4798f28b@baylibre.com>
-References: <cover.1649412256.git.Sandor.yu@nxp.com> <45739041a743cd435415ca53264678e57a653147.1649412256.git.Sandor.yu@nxp.com> <4a6a4b70-3e24-3043-4e9d-f62e4798f28b@baylibre.com>
+Subject: Re: [PATCH v2 4/5] drm: bridge: dw_hdmi: add reset function for PHY GEN1
+Date:   Sun, 10 Apr 2022 12:14:17 +0200
+Message-ID: <8917523.CDJkKcVGEf@jernej-laptop>
+In-Reply-To: <ddf6d1b2-9fa4-4384-6eda-7cd8b1119f89@baylibre.com>
+References: <cover.1649412256.git.Sandor.yu@nxp.com> <ab85938ee3f3b4a9482b4e2414165041d6a4c62e.1649412256.git.Sandor.yu@nxp.com> <ddf6d1b2-9fa4-4384-6eda-7cd8b1119f89@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -74,119 +74,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne petek, 08. april 2022 ob 15:41:36 CEST je Neil Armstrong napisal(a):
+Dne petek, 08. april 2022 ob 14:22:52 CEST je Neil Armstrong napisal(a):
 > On 08/04/2022 12:32, Sandor Yu wrote:
-> > CEC interrupt status/mask and logical address registers
-> > will be reset when device enter suspend.
-> > It will cause cec fail to work after device resume.
-> > Add CEC suspend/resume functions, reinitialize logical address registers
-> > and restore interrupt status/mask registers after resume.
+> > PHY reset register(MC_PHYRSTZ) active high reset control for PHY GEN2,
+> > and active low reset control for PHY GEN1.
+> > 
+> > Rename function dw_hdmi_phy_reset to dw_hdmi_phy_gen2_reset.
+> > Add dw_hdmi_phy_gen1_reset function for PHY GEN1.
 > > 
 > > Signed-off-by: Sandor Yu <Sandor.yu@nxp.com>
 > > ---
 > > 
-> >   drivers/gpu/drm/bridge/synopsys/dw-hdmi-cec.c | 37 +++++++++++++++++++
-> >   1 file changed, 37 insertions(+)
+> >   drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 14 +++++++++++---
+> >   drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c    |  2 +-
+> >   include/drm/bridge/dw_hdmi.h              |  4 +++-
+> >   3 files changed, 15 insertions(+), 5 deletions(-)
 > > 
-> > diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi-cec.c
-> > b/drivers/gpu/drm/bridge/synopsys/dw-hdmi-cec.c index
-> > c8f44bcb298a..ab176401b727 100644
-> > --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi-cec.c
-> > +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi-cec.c
-> > @@ -62,6 +62,10 @@ struct dw_hdmi_cec {
-> > 
-> >   	bool rx_done;
-> >   	struct cec_notifier *notify;
-> >   	int irq;
-> > 
-> > +
-> > +	u8 regs_polarity;
-> > +	u8 regs_mask;
-> > +	u8 regs_mute_stat0;
-> > 
-> >   };
-> >   
-> >   static void dw_hdmi_write(struct dw_hdmi_cec *cec, u8 val, int offset)
-> > 
-> > @@ -306,11 +310,44 @@ static int dw_hdmi_cec_remove(struct platform_device
-> > *pdev)> 
-> >   	return 0;
+> > diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> > b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c index
+> > 5a7ec066e37a..13270d96e5be 100644
+> > --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> > +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> > @@ -1369,13 +1369,21 @@ static void
+> > dw_hdmi_phy_sel_interface_control(struct dw_hdmi *hdmi, u8 enable)> 
+> >   			 HDMI_PHY_CONF0_SELDIPIF_MASK);
 > >   
 > >   }
 > > 
-> > +static int __maybe_unused dw_hdmi_cec_resume(struct device *dev)
+> > -void dw_hdmi_phy_reset(struct dw_hdmi *hdmi)
+> > +void dw_hdmi_phy_gen1_reset(struct dw_hdmi *hdmi)
 > > +{
-> > +	struct dw_hdmi_cec *cec = dev_get_drvdata(dev);
-> > +
-> > +	/* Restore logical address */
-> > +	dw_hdmi_write(cec, cec->addresses & 255, HDMI_CEC_ADDR_L);
-> > +	dw_hdmi_write(cec, cec->addresses >> 8, HDMI_CEC_ADDR_H);
-> > +
-> > +	/* Restore interrupt status/mask register */
-> > +	dw_hdmi_write(cec, cec->regs_polarity, HDMI_CEC_POLARITY);
-> > +	dw_hdmi_write(cec, cec->regs_mask, HDMI_CEC_MASK);
-> > +	dw_hdmi_write(cec, cec->regs_mute_stat0, HDMI_IH_MUTE_CEC_STAT0);
-> > +
-> > +	return 0;
+> > +	/* PHY reset. The reset signal is active low on Gen1 PHYs. */
+> > +	hdmi_writeb(hdmi, 0, HDMI_MC_PHYRSTZ);
+> > +	hdmi_writeb(hdmi, HDMI_MC_PHYRSTZ_PHYRSTZ, HDMI_MC_PHYRSTZ);
 > > +}
+> > +EXPORT_SYMBOL_GPL(dw_hdmi_phy_gen1_reset);
 > > +
-> > +static int __maybe_unused dw_hdmi_cec_suspend(struct device *dev)
-> > +{
-> > +	struct dw_hdmi_cec *cec = dev_get_drvdata(dev);
-> > +
-> > +	/* store interrupt status/mask register */
-> > +	 cec->regs_polarity = dw_hdmi_read(cec, HDMI_CEC_POLARITY);
-> > +	 cec->regs_mask = dw_hdmi_read(cec, HDMI_CEC_MASK);
-> > +	 cec->regs_mute_stat0 = dw_hdmi_read(cec, HDMI_IH_MUTE_CEC_STAT0);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static const struct dev_pm_ops dw_hdmi_cec_pm = {
-> > +	SET_SYSTEM_SLEEP_PM_OPS(dw_hdmi_cec_suspend, dw_hdmi_cec_resume)
-> > +};
-> > +
+> > +void dw_hdmi_phy_gen2_reset(struct dw_hdmi *hdmi)
 > > 
-> >   static struct platform_driver dw_hdmi_cec_driver = {
+> >   {
 > >   
-> >   	.probe	= dw_hdmi_cec_probe,
-> >   	.remove	= dw_hdmi_cec_remove,
-> >   	.driver = {
+> >   	/* PHY reset. The reset signal is active high on Gen2 PHYs. */
+> >   	hdmi_writeb(hdmi, HDMI_MC_PHYRSTZ_PHYRSTZ, HDMI_MC_PHYRSTZ);
+> >   	hdmi_writeb(hdmi, 0, HDMI_MC_PHYRSTZ);
+> >   
+> >   }
+> > 
+> > -EXPORT_SYMBOL_GPL(dw_hdmi_phy_reset);
+> > +EXPORT_SYMBOL_GPL(dw_hdmi_phy_gen2_reset);
+> > 
+> >   void dw_hdmi_phy_i2c_set_addr(struct dw_hdmi *hdmi, u8 address)
+> >   {
+> > 
+> > @@ -1529,7 +1537,7 @@ static int hdmi_phy_configure(struct dw_hdmi *hdmi,
+> > 
+> >   	if (phy->has_svsret)
 > >   	
-> >   		.name = "dw-hdmi-cec",
+> >   		dw_hdmi_phy_enable_svsret(hdmi, 1);
 > > 
-> > +		.pm = &dw_hdmi_cec_pm,
+> > -	dw_hdmi_phy_reset(hdmi);
+> > +	dw_hdmi_phy_gen2_reset(hdmi);
 > > 
-> >   	},
+> >   	hdmi_writeb(hdmi, HDMI_MC_HEACPHY_RST_ASSERT, 
+HDMI_MC_HEACPHY_RST);
+> > 
+> > diff --git a/drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c
+> > b/drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c index 5e2b0175df36..2860e6bff8b7
+> > 100644
+> > --- a/drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c
+> > +++ b/drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c
+> > @@ -135,7 +135,7 @@ static int sun8i_hdmi_phy_config_a83t(struct dw_hdmi
+> > *hdmi,> 
+> >   	dw_hdmi_phy_gen2_txpwron(hdmi, 0);
+> >   	dw_hdmi_phy_gen2_pddq(hdmi, 1);
+> > 
+> > -	dw_hdmi_phy_reset(hdmi);
+> > +	dw_hdmi_phy_gen2_reset(hdmi);
+> > 
+> >   	dw_hdmi_phy_gen2_pddq(hdmi, 0);
+> > 
+> > diff --git a/include/drm/bridge/dw_hdmi.h b/include/drm/bridge/dw_hdmi.h
+> > index 2a1f85f9a8a3..70082f80a8c8 100644
+> > --- a/include/drm/bridge/dw_hdmi.h
+> > +++ b/include/drm/bridge/dw_hdmi.h
+> > @@ -187,9 +187,11 @@ void dw_hdmi_phy_i2c_set_addr(struct dw_hdmi *hdmi,
+> > u8 address);> 
+> >   void dw_hdmi_phy_i2c_write(struct dw_hdmi *hdmi, unsigned short data,
 > >   
-> >   };
-> >   module_platform_driver(dw_hdmi_cec_driver);
+> >   			   unsigned char addr);
+> > 
+> > +void dw_hdmi_phy_gen1_reset(struct dw_hdmi *hdmi);
+> > +
+> > 
+> >   void dw_hdmi_phy_gen2_pddq(struct dw_hdmi *hdmi, u8 enable);
+> >   void dw_hdmi_phy_gen2_txpwron(struct dw_hdmi *hdmi, u8 enable);
+> > 
+> > -void dw_hdmi_phy_reset(struct dw_hdmi *hdmi);
+> > +void dw_hdmi_phy_gen2_reset(struct dw_hdmi *hdmi);
+> > 
+> >   enum drm_connector_status dw_hdmi_phy_read_hpd(struct dw_hdmi *hdmi,
+> >   
+> >   					       void *data);
 > 
-> As Hans said on v1, why don't you call dw_hdmi_cec_enable(cec->adap, false)
-> in suspend and dw_hdmi_cec_enable(cec->adap, true) in resume ?
-> 
-> With this, CEC engine is not disabled on suspend.
+> Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
 
-This should not be done, at least not unconditionally. CEC wakeup 
-functionality is used by Crust firmware for Allwinner boards. In fact, DW HDMI 
-CEC controller was designed with suspend/resume functionality in mind. If 
-properly set, it can autonomously scan for preset CEC messages and generate 
-interrupt when found.
-
-Actually, I'm not fan of this patch, since it looks like workaround for power 
-management firmware not restoring previous state. Or is this HW issue? In any 
-case, Allwinner SoCs with DW-HDMI CEC don't need restoring any register, so 
-it's certainly not a general issue.
-
-> 
-> Do you plan to use the engine from the suspend code ?
-
-As mentioned before, it's already done for Allwinner, so CEC should remain 
-enabled.
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
 Best regards,
 Jernej
 
+> 
+> If a sun4i drm maintainer can ack, then it would be all good to apply.
 > 
 > Neil
 

@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C654FB009
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 22:12:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42DAB4FB00A
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 22:12:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243893AbiDJUOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 16:14:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50436 "EHLO
+        id S243904AbiDJUOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 16:14:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242054AbiDJUOe (ORCPT
+        with ESMTP id S243889AbiDJUOg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 16:14:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915E44B1CF
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 13:12:23 -0700 (PDT)
+        Sun, 10 Apr 2022 16:14:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B3574B1CC
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 13:12:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 19F2F611EF
+        by ams.source.kernel.org (Postfix) with ESMTPS id ECC83B80E7D
         for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 20:12:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7B79CC385A5;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 96911C385A4;
         Sun, 10 Apr 2022 20:12:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1649621542;
-        bh=OB/9w2kURv9vwHBi5CS4bnLPjUTr0g2RxU2i1mbSCRk=;
+        bh=lXzVYyKX9kMuwe87o/UiXITPzlGmt/cZtZ4IHhprIq0=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=lLWn+OIZYjUZ0wXQocaD+Wr85mexxzl2Xor3hAAYDM88vrYL5ANppi858oMVfu1Er
-         SaK+AVGMWQ0VARBxspM65cy1tL0pqkukSTh4RCQ3xPvfRueRuu7QdUlJx+Dpcw4aKF
-         eGjgX2cOKKx0jpEXva3N6VenVoAieXckJj+ZkSTMqzqKdK3TdHzhDGV/YH+qT4EWKY
-         vcmDGgjcVcHmBvzyxarQummr365VAFitH28bUB6cr+qS12Gjl775tCF4Q1xKyiV/VR
-         D75Zsp0715zGuIa9EzH8DbS0uQcXUYdanNKV0/7RkNPw0dL8P/GStJfubXLwLnsvGG
-         2bmnufK98FaxA==
+        b=KICWpaIRjthSiv+9yN3tOsyOPejXJ7zIF+4tqohaNMwFUs+WZtt1IiqEDEH7x0PYU
+         BHqbOP/qWRJ9SGJaiEvKA+j4oaTkmVH4aujcLAQYMkSnsUUTWPr6npTj/KnpzJJ3Yp
+         03xffgynchV/1IBIB/AKb/FNrf1cC+7WMFyzY0PDxrVSO0kcrT+EYXlwIQnjdjULLG
+         0rWcPutSknqGrh+9OTNGdu1OSHS6861Eelr1GcKvOYt9hlt+tctRw7Hj7MuXhAaMe8
+         OIefpATC/hbZIeXb6OD0cVsDXklDhZsDcUVuOYMJgl/2wxHb/TnsAcJTxE0G9aaFAB
+         cDDOlZ97A0v0w==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 65541E8DD5D;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 847D1E8DD64;
         Sun, 10 Apr 2022 20:12:22 +0000 (UTC)
-Subject: Re: [GIT PULL] Char/Misc driver fix 5.18-rc2
+Subject: Re: [GIT PULL] Staging driver fix for 5.18-rc2
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YlK/M8Va5si3UQ+y@kroah.com>
-References: <YlK/M8Va5si3UQ+y@kroah.com>
+In-Reply-To: <YlLRwmx7f+fdiDuu@kroah.com>
+References: <YlLRwmx7f+fdiDuu@kroah.com>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YlK/M8Va5si3UQ+y@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git tags/char-misc-5.18-rc2
-X-PR-Tracked-Commit-Id: 94865e2dcb46c1c852c881cfa769cec4947d8f28
+X-PR-Tracked-Message-Id: <YlLRwmx7f+fdiDuu@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git tags/staging-5.18-rc2
+X-PR-Tracked-Commit-Id: 20314bacd2f9b1b8fc10895417e6db0dc85f8248
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: f58d3410c5586bc22ceae2e65a17754378fc4a7c
-Message-Id: <164962154240.385.4976020006594554032.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: 95aa17c36dc89bf008753217ed27f8a8eb5faf79
+Message-Id: <164962154253.385.4073204117109499480.pr-tracker-bot@kernel.org>
 Date:   Sun, 10 Apr 2022 20:12:22 +0000
 To:     Greg KH <gregkh@linuxfoundation.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -62,12 +63,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun, 10 Apr 2022 13:27:47 +0200:
+The pull request you sent on Sun, 10 Apr 2022 14:46:58 +0200:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git tags/char-misc-5.18-rc2
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git tags/staging-5.18-rc2
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/f58d3410c5586bc22ceae2e65a17754378fc4a7c
+https://git.kernel.org/torvalds/c/95aa17c36dc89bf008753217ed27f8a8eb5faf79
 
 Thank you!
 

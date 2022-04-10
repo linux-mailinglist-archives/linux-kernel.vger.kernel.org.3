@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3CF84FAD26
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 12:14:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4178D4FAD2B
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 12:21:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234982AbiDJKQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 06:16:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52760 "EHLO
+        id S232528AbiDJKXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 06:23:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiDJKQe (ORCPT
+        with ESMTP id S229545AbiDJKXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 06:16:34 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B96673DD
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 03:14:20 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id m30so18962642wrb.1
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 03:14:20 -0700 (PDT)
+        Sun, 10 Apr 2022 06:23:14 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA31840916
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 03:21:02 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 123-20020a1c1981000000b0038b3616a71aso8278863wmz.4
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 03:21:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=pAKQLRfHBIi8gVpWsIm4XJUTgKXNjZKuay5CjFRlndQ=;
-        b=VCf5YefLkMAEwD1FEbA3M/9+95V60y1Xqx6EBj4uQJjMbDDAd+MDQOfLPgvqHeoKhJ
-         i40q+rYXlnsSQYx3F5AhrNnG2AsjHJ5VeHLrYys9LfEX7WymHQknubY1Jm8Et/vNOTzl
-         BuIUagPUdVCsov9XGd6zT8NJgyZEcCON0Ez+v7PEvcGT0r3E9tCebYAEWz55IHR2IP/L
-         hCzFHLZOKqmVpUcyZ+iGyIL7JN3oSkfp/MpVQ7Zgua+LE7kZ35agu10UX4wZ8S6tPPWt
-         gUaaWeuXspLmXjM22aITSbX7FU1gzbcwN4/EN/zwNOABUJjXaX++a3pXYOkT5UukwN4r
-         bF2A==
+        bh=8ohIuOdM6DzJDhbBlT7yQBBise/yXXw2K/gzL9jVclM=;
+        b=hq3T+QZbJGzqXy1RTjkX6lJuyGFt12NpBY5omJXC8yM3Bj3LRiIq2LH71J4pURY7/Y
+         vGTdytP1PjwMyFd4tHzAy06DGN+e7LAP2XKAkzorOO3oJSEDu15/f1V1X7jmWs6rCwC4
+         cQGAaO+4HGtE2b2mXvT2QBAKCmmSfMuerSQSZCLwEMAahd3HuWCca4Tl3dulQ8dLN2+b
+         vAWDNpK5ssYlt4eLB6lUATK3+sd2AQXePzBXasTO2ab6JZgDUXnpUV1f7g3hm5FXjtve
+         sgUqt3gkgpfYKV2N7DaZ3CkOPIxyqiSYxByY02ZZukkFzEl+L4aoCTror9yakfiy5W4g
+         kjJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=pAKQLRfHBIi8gVpWsIm4XJUTgKXNjZKuay5CjFRlndQ=;
-        b=tVMWtWvlotq+GAMGZuY6Ag5qmcCQU2NtVUJWTbVqkgqX4+UgcwRYEIbfIBtDKekYFY
-         Pw5Vus4+5n7c1fXtA4LGiXaRxLJs0OKu/t0SfynK4Up54M5XIp6wJ4IZ/0hH/xwU9uw3
-         HS8YZlOo4Q15GakzKJ/1Kr9OM/YyqcuR3hqyxMmTlCKv9hkBuIRWNipAXv0Y1e4ajV9d
-         fpYI3IDfW4qMIks5rS+lPdRD2UzK9ToCqYW9TpxyOD4NMKIxGqMGZQTOjKSOgD/pI1DU
-         eJH45ZEC9ISMUjvIY77tPWzO+ixbCQMou2k47VtaJSjZ93irfIUnM7Lj6o5RIMZi7ZnT
-         qWIA==
-X-Gm-Message-State: AOAM530T45Z/zydozyazoxvxJqwnpUoU3q9usxPjyap5xVJtsSiyN7r8
-        cRv4AVd+7qUhaRQD8h7EXJM=
-X-Google-Smtp-Source: ABdhPJxletA1b6QlOrf9vLg3Ffaz3R05kgZSgfITv/n69SnaIoSn9nssUQfbsGVcrhE4jzWuW9059g==
-X-Received: by 2002:a5d:47a8:0:b0:204:72:7051 with SMTP id 8-20020a5d47a8000000b0020400727051mr21325747wrb.451.1649585658641;
-        Sun, 10 Apr 2022 03:14:18 -0700 (PDT)
+        bh=8ohIuOdM6DzJDhbBlT7yQBBise/yXXw2K/gzL9jVclM=;
+        b=YS/xutkuthOlVGh/v0njtwFmWhQwzejnIaRShUZcBW7Z1lzehHFHAeZA+qHK9MeuVt
+         hMUYt9hwjgHAraPqh/1+vMi4AxiO2n4VrNc0pswaeS0AOGmSv7eRuUP5GchXScBFz0VI
+         ImHtK1z2oQgHD3NagUERMSWRBVPWa7GJim27kfL0eUj6Dlf3oQ4nXYgFBPC5TZMEo0yl
+         7e4KO0DM7Z88Jg1c1aK6wnKgVPZ0fJsL28S4V6IZ8yBtSFv0Spf+S8joXAUFQ6Ns4Irh
+         K9Uv9ePOAsdTZYLzkyIs5Rn4WMyet38dx6mfN6SHeKKKustpkUYWnR4qgk9Erx/bNIz1
+         Dx1w==
+X-Gm-Message-State: AOAM531cjeZcy1xdVAsFTJa2d2cfdz16oqHnICDzgcnhJWfOMl0LpTN7
+        lcUDx0UUWjGvJdDNfjDZYhq70ao6B7Sptw==
+X-Google-Smtp-Source: ABdhPJxnZBhyOuKv7rt3TbuLfT5xeuF09Ok0dSyFkx/h4GqX91irFb+b5FiBQjHDhSxAMKCbNZTD2Q==
+X-Received: by 2002:a7b:cd03:0:b0:37b:fc83:a4e2 with SMTP id f3-20020a7bcd03000000b0037bfc83a4e2mr24599840wmj.193.1649586061290;
+        Sun, 10 Apr 2022 03:21:01 -0700 (PDT)
 Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
-        by smtp.gmail.com with ESMTPSA id n37-20020a05600c3ba500b0038cc9d6ff5bsm14748150wms.4.2022.04.10.03.14.17
+        by smtp.gmail.com with ESMTPSA id a11-20020a056000188b00b00204109f7826sm26818620wri.28.2022.04.10.03.21.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Apr 2022 03:14:18 -0700 (PDT)
+        Sun, 10 Apr 2022 03:21:00 -0700 (PDT)
 From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Sandor Yu <Sandor.yu@nxp.com>, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, andrzej.hajda@intel.com,
+To:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        andrzej.hajda@intel.com, narmstrong@baylibre.com,
         robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
         jonas@kwiboo.se, hverkuil-cisco@xs4all.nl,
-        Neil Armstrong <narmstrong@baylibre.com>
-Cc:     shengjiu.wang@nxp.com, cai.huoqing@linux.dev, maxime@cerno.tech,
-        harry.wentland@amd.com
-Subject: Re: [PATCH v2 4/5] drm: bridge: dw_hdmi: add reset function for PHY GEN1
-Date:   Sun, 10 Apr 2022 12:14:17 +0200
-Message-ID: <8917523.CDJkKcVGEf@jernej-laptop>
-In-Reply-To: <ddf6d1b2-9fa4-4384-6eda-7cd8b1119f89@baylibre.com>
-References: <cover.1649412256.git.Sandor.yu@nxp.com> <ab85938ee3f3b4a9482b4e2414165041d6a4c62e.1649412256.git.Sandor.yu@nxp.com> <ddf6d1b2-9fa4-4384-6eda-7cd8b1119f89@baylibre.com>
+        Sandor Yu <Sandor.yu@nxp.com>
+Cc:     Sandor.yu@nxp.com, shengjiu.wang@nxp.com, cai.huoqing@linux.dev,
+        maxime@cerno.tech, harry.wentland@amd.com
+Subject: Re: [PATCH v2 2/5] drm: bridge: dw_hdmi: default enable workaround to clear the overflow
+Date:   Sun, 10 Apr 2022 12:20:59 +0200
+Message-ID: <8087050.NyiUUSuA9g@jernej-laptop>
+In-Reply-To: <39592fee39610c544058e6b8f9af4b4ea8dc4cdc.1649412256.git.Sandor.yu@nxp.com>
+References: <cover.1649412256.git.Sandor.yu@nxp.com> <39592fee39610c544058e6b8f9af4b4ea8dc4cdc.1649412256.git.Sandor.yu@nxp.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -74,119 +74,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne petek, 08. april 2022 ob 14:22:52 CEST je Neil Armstrong napisal(a):
-> On 08/04/2022 12:32, Sandor Yu wrote:
-> > PHY reset register(MC_PHYRSTZ) active high reset control for PHY GEN2,
-> > and active low reset control for PHY GEN1.
-> > 
-> > Rename function dw_hdmi_phy_reset to dw_hdmi_phy_gen2_reset.
-> > Add dw_hdmi_phy_gen1_reset function for PHY GEN1.
-> > 
-> > Signed-off-by: Sandor Yu <Sandor.yu@nxp.com>
-> > ---
-> > 
-> >   drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 14 +++++++++++---
-> >   drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c    |  2 +-
-> >   include/drm/bridge/dw_hdmi.h              |  4 +++-
-> >   3 files changed, 15 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> > b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c index
-> > 5a7ec066e37a..13270d96e5be 100644
-> > --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> > +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
-> > @@ -1369,13 +1369,21 @@ static void
-> > dw_hdmi_phy_sel_interface_control(struct dw_hdmi *hdmi, u8 enable)> 
-> >   			 HDMI_PHY_CONF0_SELDIPIF_MASK);
-> >   
-> >   }
-> > 
-> > -void dw_hdmi_phy_reset(struct dw_hdmi *hdmi)
-> > +void dw_hdmi_phy_gen1_reset(struct dw_hdmi *hdmi)
-> > +{
-> > +	/* PHY reset. The reset signal is active low on Gen1 PHYs. */
-> > +	hdmi_writeb(hdmi, 0, HDMI_MC_PHYRSTZ);
-> > +	hdmi_writeb(hdmi, HDMI_MC_PHYRSTZ_PHYRSTZ, HDMI_MC_PHYRSTZ);
-> > +}
-> > +EXPORT_SYMBOL_GPL(dw_hdmi_phy_gen1_reset);
-> > +
-> > +void dw_hdmi_phy_gen2_reset(struct dw_hdmi *hdmi)
-> > 
-> >   {
-> >   
-> >   	/* PHY reset. The reset signal is active high on Gen2 PHYs. */
-> >   	hdmi_writeb(hdmi, HDMI_MC_PHYRSTZ_PHYRSTZ, HDMI_MC_PHYRSTZ);
-> >   	hdmi_writeb(hdmi, 0, HDMI_MC_PHYRSTZ);
-> >   
-> >   }
-> > 
-> > -EXPORT_SYMBOL_GPL(dw_hdmi_phy_reset);
-> > +EXPORT_SYMBOL_GPL(dw_hdmi_phy_gen2_reset);
-> > 
-> >   void dw_hdmi_phy_i2c_set_addr(struct dw_hdmi *hdmi, u8 address)
-> >   {
-> > 
-> > @@ -1529,7 +1537,7 @@ static int hdmi_phy_configure(struct dw_hdmi *hdmi,
-> > 
-> >   	if (phy->has_svsret)
-> >   	
-> >   		dw_hdmi_phy_enable_svsret(hdmi, 1);
-> > 
-> > -	dw_hdmi_phy_reset(hdmi);
-> > +	dw_hdmi_phy_gen2_reset(hdmi);
-> > 
-> >   	hdmi_writeb(hdmi, HDMI_MC_HEACPHY_RST_ASSERT, 
-HDMI_MC_HEACPHY_RST);
-> > 
-> > diff --git a/drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c
-> > b/drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c index 5e2b0175df36..2860e6bff8b7
-> > 100644
-> > --- a/drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c
-> > +++ b/drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c
-> > @@ -135,7 +135,7 @@ static int sun8i_hdmi_phy_config_a83t(struct dw_hdmi
-> > *hdmi,> 
-> >   	dw_hdmi_phy_gen2_txpwron(hdmi, 0);
-> >   	dw_hdmi_phy_gen2_pddq(hdmi, 1);
-> > 
-> > -	dw_hdmi_phy_reset(hdmi);
-> > +	dw_hdmi_phy_gen2_reset(hdmi);
-> > 
-> >   	dw_hdmi_phy_gen2_pddq(hdmi, 0);
-> > 
-> > diff --git a/include/drm/bridge/dw_hdmi.h b/include/drm/bridge/dw_hdmi.h
-> > index 2a1f85f9a8a3..70082f80a8c8 100644
-> > --- a/include/drm/bridge/dw_hdmi.h
-> > +++ b/include/drm/bridge/dw_hdmi.h
-> > @@ -187,9 +187,11 @@ void dw_hdmi_phy_i2c_set_addr(struct dw_hdmi *hdmi,
-> > u8 address);> 
-> >   void dw_hdmi_phy_i2c_write(struct dw_hdmi *hdmi, unsigned short data,
-> >   
-> >   			   unsigned char addr);
-> > 
-> > +void dw_hdmi_phy_gen1_reset(struct dw_hdmi *hdmi);
-> > +
-> > 
-> >   void dw_hdmi_phy_gen2_pddq(struct dw_hdmi *hdmi, u8 enable);
-> >   void dw_hdmi_phy_gen2_txpwron(struct dw_hdmi *hdmi, u8 enable);
-> > 
-> > -void dw_hdmi_phy_reset(struct dw_hdmi *hdmi);
-> > +void dw_hdmi_phy_gen2_reset(struct dw_hdmi *hdmi);
-> > 
-> >   enum drm_connector_status dw_hdmi_phy_read_hpd(struct dw_hdmi *hdmi,
-> >   
-> >   					       void *data);
+Dne petek, 08. april 2022 ob 12:32:25 CEST je Sandor Yu napisal(a):
+> i.MX8MPlus (v2.13a) has verified need the workaround to clear the
+> overflow with one iteration.
+> Only i.MX6Q(v1.30a) need the workaround with 4 iterations,
+> the others versions later than v1.3a have been identified as needing
+> the workaround with a single iteration.
 > 
-> Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+> Default enable the workaround with one iteration for all versions
+> later than v1.30a.
+> 
+> Signed-off-by: Sandor Yu <Sandor.yu@nxp.com>
+> ---
+>  drivers/gpu/drm/bridge/synopsys/dw-hdmi.c | 23 +++++++----------------
+>  1 file changed, 7 insertions(+), 16 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c index
+> 4befc104d220..02d8f7e08814 100644
+> --- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> +++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+> @@ -2086,30 +2086,21 @@ static void dw_hdmi_clear_overflow(struct dw_hdmi
+> *hdmi) * then write one of the FC registers several times.
+>  	 *
+>  	 * The number of iterations matters and depends on the HDMI TX 
+revision
+> -	 * (and possibly on the platform). So far i.MX6Q (v1.30a), i.MX6DL
+> -	 * (v1.31a) and multiple Allwinner SoCs (v1.32a) have been 
+identified
+> -	 * as needing the workaround, with 4 iterations for v1.30a and 1
+> -	 * iteration for others.
+> -	 * The Amlogic Meson GX SoCs (v2.01a) have been identified as 
+needing
+> -	 * the workaround with a single iteration.
+> -	 * The Rockchip RK3288 SoC (v2.00a) and RK3328/RK3399 SoCs 
+(v2.11a) have
+> -	 * been identified as needing the workaround with a single 
+iteration.
+> +	 * (and possibly on the platform).
+> +	 * 4 iterations for i.MX6Q(v1.30a) and 1 iteration for others.
+> +	 * i.MX6DL (v1.31a), Allwinner SoCs (v1.32a), Rockchip RK3288 SoC
+> (v2.00a), +	 * Amlogic Meson GX SoCs (v2.01a), RK3328/RK3399 SoCs (v2.11a)
+> +	 * and i.MX8MPlus (v2.13a) have been identified as needing the 
+workaround
+> +	 * with a single iteration.
+>  	 */
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+It would be easier to read and modify later if platforms/controllers/variants 
+are given as list, one per line, but it could be done later.
 
 Best regards,
 Jernej
 
 > 
-> If a sun4i drm maintainer can ack, then it would be all good to apply.
+>  	switch (hdmi->version) {
+>  	case 0x130a:
+>  		count = 4;
+>  		break;
+> -	case 0x131a:
+> -	case 0x132a:
+> -	case 0x200a:
+> -	case 0x201a:
+> -	case 0x211a:
+> -	case 0x212a:
+> +	default:
+>  		count = 1;
+>  		break;
+> -	default:
+> -		return;
+>  	}
 > 
-> Neil
+>  	/* TMDS software reset */
 
 
 

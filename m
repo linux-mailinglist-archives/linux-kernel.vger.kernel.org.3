@@ -2,78 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 264A74FADED
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 14:47:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 919144FADF0
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 14:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242759AbiDJMtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 08:49:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54160 "EHLO
+        id S242942AbiDJMvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 08:51:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbiDJMtP (ORCPT
+        with ESMTP id S229677AbiDJMvM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 08:49:15 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD2663503
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 05:47:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 2F7AECE0ED3
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 12:47:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30C06C385A1;
-        Sun, 10 Apr 2022 12:47:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649594821;
-        bh=dYMhQEzpgHnWUUNH0hPRezY0fA5jNru+ZMP67xw1L00=;
-        h=Date:From:To:Cc:Subject:From;
-        b=dEfF+UWCpTHhBJWPSuimRamdiovi0mi7pC4pLcSsfqqIWIxTbxJ4dh8NbwKrX6a9+
-         6mlguTg+8SxzspANIK5Dzuv+CFaegrnc9EZxz31NR26aweykiZdzguMK5/2XpSNMRA
-         MAiDGtG+hXAumOXVATLltHQHoxvxq5IqcYAmmjAo=
-Date:   Sun, 10 Apr 2022 14:46:58 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [GIT PULL] Staging driver fix for 5.18-rc2
-Message-ID: <YlLRwmx7f+fdiDuu@kroah.com>
+        Sun, 10 Apr 2022 08:51:12 -0400
+Received: from out20-51.mail.aliyun.com (out20-51.mail.aliyun.com [115.124.20.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F3B4A3E6;
+        Sun, 10 Apr 2022 05:49:00 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07449171|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.183864-0.0663327-0.749803;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047187;MF=guan@eryu.me;NM=1;PH=DS;RN=5;RT=5;SR=0;TI=SMTPD_---.NNn8Kq0_1649594937;
+Received: from localhost(mailfrom:guan@eryu.me fp:SMTPD_---.NNn8Kq0_1649594937)
+          by smtp.aliyun-inc.com(33.45.46.134);
+          Sun, 10 Apr 2022 20:48:57 +0800
+Date:   Sun, 10 Apr 2022 20:48:57 +0800
+From:   Eryu Guan <guan@eryu.me>
+To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
+Cc:     fstests@vger.kernel.org, riteshh@linux.ibm.com,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ext4/053: Add support for testing mb_optimize_scan
+Message-ID: <YlLSObvNaXxrrZkw@desktop>
+References: <5b0d252484cbe973c2df0c677cb47b30012b0db1.1647253313.git.ojaswin@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <5b0d252484cbe973c2df0c677cb47b30012b0db1.1647253313.git.ojaswin@linux.ibm.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+On Mon, Mar 14, 2022 at 04:02:07PM +0530, Ojaswin Mujoo wrote:
+> Add support to test the mb_optimize_scan mount option.
+> Since its value is not reflected in the "options" file in proc,
+> use "mb_structs_summary" to verify its value.
+> 
+> Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
 
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+mb_optimize_scan option was added in v5.13 by commit 196e402adf2e ("ext4:
+improve cr 0 / cr 1 group scanning"), and ext4/053 will run on v5.12
+kernel (and newer kernels), so test will fail when testing v5.12 kernel.
 
-are available in the Git repository at:
+> ---
+>  tests/ext4/053 | 21 ++++++++++++---------
+>  1 file changed, 12 insertions(+), 9 deletions(-)
+> 
+> diff --git a/tests/ext4/053 b/tests/ext4/053
+> index e1e79592..bd92002f 100755
+> --- a/tests/ext4/053
+> +++ b/tests/ext4/053
+> @@ -100,6 +100,7 @@ test_mnt() {
+>  	(
+>  	ret=0
+>  	IFS=','
+> +	proc_path="/proc/fs/ext4/$(_short_dev $SCRATCH_DEV)"
+>  	for option in $OPTS; do
+>  		if echo $IGNORED | grep -w $option; then
+>  			continue
+> @@ -114,11 +115,16 @@ test_mnt() {
+>  		fi
+>  		option=${option#^}
+>  
+> -		if echo $CHECK_MINFO | grep -w $option; then
+> +		if [[ $option =~ ^mb_optimize_scan=.*$ ]]; then
+> +			# mb_optimize_scan needs special handling
+> +			expected=${option#*=}
+> +			ret=$(cat $proc_path/mb_structs_summary | grep "optimize_scan" \
+> +				| awk '{ print $2 }')
+> +		elif echo $CHECK_MINFO | grep -w $option; then
+>  			findmnt -n -o OPTIONS $SCRATCH_DEV | grep $option
+>  			ret=$?
+>  		else
+> -			grep $option /proc/fs/ext4/$(_short_dev $SCRATCH_DEV)/options
+> +			grep $option $proc_path/options
+>  			ret=$?
+>  		fi
+>  
+> @@ -526,13 +532,10 @@ for fstype in ext2 ext3 ext4; do
+>  
+>  	mnt prefetch_block_bitmaps removed
+>  	mnt no_prefetch_block_bitmaps
+> -	# We don't currently have a way to know that the option has been
+> -	# applied, so comment it out for now. This should be fixed in the
+> -	# future.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git tags/staging-5.18-rc2
+As the comment said, we need a way to know if mb_optimize_scan option is
+supported by current kernel.
 
-for you to fetch changes up to 20314bacd2f9b1b8fc10895417e6db0dc85f8248:
+Thanks,
+Eryu
 
-  staging: r8188eu: Fix PPPoE tag insertion on little endian systems (2022-04-04 16:35:20 +0200)
-
-----------------------------------------------------------------
-Staging driver fix for 5.18-rc2
-
-Here is a single staging driver fix for 5.18-rc2 that resolves an endian
-issue for the r8188eu driver.  It has been in linux-next all this week
-with no reported problems.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Guenter Roeck (1):
-      staging: r8188eu: Fix PPPoE tag insertion on little endian systems
-
- drivers/staging/r8188eu/core/rtw_br_ext.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> -	#mnt mb_optimize_scan=0
+> -	#mnt mb_optimize_scan=1
+> -	#not_mnt mb_optimize_scan=9
+> -	#not_mnt mb_optimize_scan=
+> +	mnt mb_optimize_scan=0
+> +	mnt mb_optimize_scan=1
+> +	not_mnt mb_optimize_scan=9
+> +	not_mnt mb_optimize_scan=
+>  	mnt nombcache
+>  	mnt no_mbcache nombcache
+>  	mnt check=none removed
+> -- 
+> 2.27.0

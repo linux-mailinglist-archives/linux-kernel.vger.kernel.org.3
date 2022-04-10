@@ -2,70 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E9434FAF2F
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 19:11:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF6044FAF3D
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 19:13:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242693AbiDJRNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 13:13:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55134 "EHLO
+        id S243738AbiDJRPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 13:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231439AbiDJRNi (ORCPT
+        with ESMTP id S243709AbiDJRPT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 13:13:38 -0400
-Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E3F22B3A;
-        Sun, 10 Apr 2022 10:11:25 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL TLS DV RSA Mixed SHA256 2020 CA-1" (verified OK))
-        by bmailout1.hostsharing.net (Postfix) with ESMTPS id 34ADC30057E6C;
-        Sun, 10 Apr 2022 19:11:23 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id 298284A855; Sun, 10 Apr 2022 19:11:23 +0200 (CEST)
-Date:   Sun, 10 Apr 2022 19:11:23 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Lino Sanfilippo <LinoSanfilippo@gmx.de>, peterhuewe@gmx.de,
-        jarkko@kernel.org, =robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stefanb@linux.ibm.com, p.rosenberger@kunbus.com
-Subject: Re: [PATCH 1/5] tpm: add functions to set and unset the tpm chips
- reset state
-Message-ID: <20220410171123.GA24453@wunner.de>
-References: <20220407111849.5676-1-LinoSanfilippo@gmx.de>
- <20220407111849.5676-2-LinoSanfilippo@gmx.de>
- <20220407142526.GW64706@ziepe.ca>
+        Sun, 10 Apr 2022 13:15:19 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1C434B87;
+        Sun, 10 Apr 2022 10:13:08 -0700 (PDT)
+Received: from p508fdda7.dip0.t-ipconnect.de ([80.143.221.167] helo=phil.fritz.box)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1ndb7S-0006hD-7o; Sun, 10 Apr 2022 19:12:58 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Brian Norris <briannorris@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        Lin Huang <hl@rock-chips.com>,
+        Derek Basehore <dbasehore@chromium.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: (subset) [PATCH v4 00/15] rk3399: Clean up and enable DDR DVFS
+Date:   Sun, 10 Apr 2022 19:12:52 +0200
+Message-Id: <164961074166.23152.15908748993701910543.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220308190901.3144566-1-briannorris@chromium.org>
+References: <20220308190901.3144566-1-briannorris@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220407142526.GW64706@ziepe.ca>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 11:25:26AM -0300, Jason Gunthorpe wrote:
-> On Thu, Apr 07, 2022 at 01:18:45PM +0200, Lino Sanfilippo wrote:
-> > Currently it is not possible to set the tpm chips reset state from within
-> > the driver. This is problematic if the chip is still in reset after the
-> > system comes up. This may e.g. happen if the reset line is pulled into
-> > reset state by a pin configuration in the device tree.
+On Tue, 8 Mar 2022 11:08:46 -0800, Brian Norris wrote:
+> This series covers 2 primary tasks:
 > 
-> This kind of system is badly misdesigned.
+> 1) Resubmit prior work:
 > 
-> TPM PCRs fundementally cannot work if the TPM reset line is under
-> software control.
+> [RESEND PATCH v5 3/4] arm64: dts: rockchip: Enable dmc and dfi nodes on gru.
+> https://lore.kernel.org/lkml/20210308233858.24741-2-daniel.lezcano@linaro.org/
+> [RESEND PATCH v5 2/4] arm64: dts: rk3399: Add dfi and dmc nodes.
+> https://lore.kernel.org/lkml/20210308233858.24741-3-daniel.lezcano@linaro.org/
+> 
+> [...]
 
-Not every system which incorporates a TPM wants to use or is even capable
-of measuring software state of any kind or perform secure boot.
+Applied, thanks!
 
-Those systems may merely want to use the TPM to store key material.
+[11/15] arm64: dts: rk3399: Add dfi and dmc nodes
+        commit: 1b3f36854ab74839693582bc957930f4416ce8ff
+[12/15] arm64: dts: rockchip: Enable dmc and dfi nodes on gru
+        commit: 80bc6f34c559c97069b75d6eb453d4218c3ed017
 
-Thanks,
-
-Lukas
+Best regards,
+-- 
+Heiko Stuebner <heiko@sntech.de>

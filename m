@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35E974FAB60
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 03:28:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D61C4FAB61
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 03:33:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234216AbiDJBaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 21:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55564 "EHLO
+        id S234308AbiDJBe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 21:34:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234139AbiDJBaO (ORCPT
+        with ESMTP id S229470AbiDJBey (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 21:30:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132BB26D;
-        Sat,  9 Apr 2022 18:28:06 -0700 (PDT)
+        Sat, 9 Apr 2022 21:34:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3584F140AC
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 18:32:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C81B2B80761;
-        Sun, 10 Apr 2022 01:28:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0377CC385A0;
-        Sun, 10 Apr 2022 01:28:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 97B3E60E26
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 01:32:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C04EC385A4;
+        Sun, 10 Apr 2022 01:32:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649554083;
-        bh=KYUIDdGadwCWYX1/JBcmj0ypEv2EUIi/0XYJ3YHRYcg=;
+        s=k20201202; t=1649554364;
+        bh=ynfEPwoFwYmFUswcCqs1LxJiNY8AVZwcm2J0YbXk8Vo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MiuMcEK/Z6t/pyE3BgZLmvOhtBwX1JfD8Cdj2ZGLQSFPL91Fg+KPeIyBvk5ta5/D0
-         X63D7ig1OJRiFd6Y28EL3pI4c/tAUe4h/vCB2dTVywrDJqk+RcvzCBO5DubMHxACbC
-         A/a/UthnNPa1WNCk80/oMOFWw6ysQzfdn5YfwwzaobrACqpP/CftTNEbWHoViX1yt4
-         TheaD+tA/VJ6Scd2NxQKp/+a6xmIsu/j9zFZIZ4Jy882ETkMwixXLrhzdtfMAevpZ7
-         DTnIElRo7BZdAL1qp5UvZIqqs4SxUEBhcs5RrEmdwyCMuuxN0pBmablP42IF3Pwxfn
-         XzyPVQNTFtRqg==
-Date:   Sun, 10 Apr 2022 09:27:57 +0800
+        b=qN96ZKgsipA5HJNqv0AoEbsZEM9QDqCXlV/Ge9FA7s8MS/ZxndGabmmchpFu1WVAq
+         jn1EwtwjsQrx1+y1JZyMxlttOfIln/cJ4Sd+oYjxGW4knSeAcdetiQwcV7Nheuad8O
+         Y4E9Ljubf4y9S4R2Y+TiHgzex7FMkHia87YDSov1avMKAZjscnNmnw2t6A72fJu4jq
+         wWOmTjqHX9PW4JnJxAyQw0roLDgbeuLOsKPPSNJ801XvCd1tUiR6k1zaaS27tB4c9E
+         3806FZdCpwjTk1vWwRGkgw2nxGEdViF9qkJishCCCCjTPNpJmy2WIHQ1X9IH/RGPTl
+         fH0iH4/oIEYmg==
+Date:   Sun, 10 Apr 2022 09:32:39 +0800
 From:   Shawn Guo <shawnguo@kernel.org>
-To:     Li Yang <leoyang.li@nxp.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Pankaj Bansal <pankaj.bansal@nxp.com>,
-        Sandeep Malik <sandeep.malik@nxp.com>,
-        Priyanka Jain <priyanka.jain@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+To:     Adam Ford <aford173@gmail.com>
+Cc:     linux-arm-kernel@lists.infradead.org, aford@beaconembedded.com,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/6] arm64: dts: ls208x: remove NXP Erratum A008585 from
- LS2088A.
-Message-ID: <20220410012757.GK129381@dragon>
-References: <20220317190109.3742-1-leoyang.li@nxp.com>
- <20220317190109.3742-6-leoyang.li@nxp.com>
+Subject: Re: [PATCH V2] soc: imx: imx8m-blk-ctrl: Fix IMX8MN_DISPBLK_PD_ISI
+ hang
+Message-ID: <20220410013239.GL129381@dragon>
+References: <20220320205212.701548-1-aford173@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220317190109.3742-6-leoyang.li@nxp.com>
+In-Reply-To: <20220320205212.701548-1-aford173@gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,57 +60,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 02:01:09PM -0500, Li Yang wrote:
-> From: Pankaj Bansal <pankaj.bansal@nxp.com>
+On Sun, Mar 20, 2022 at 03:52:12PM -0500, Adam Ford wrote:
+> The imx8mn clock list for the ISI lists four clocks, but DOMAIN_MAX_CLKS
+> was set to 3.  Because of this, attempts to enable the fourth clock failed,
+> threw some splat, and ultimately hung.
 > 
-> NXP Erratum A008585 affects A57 core cluster used in LS2085rev1.
+> Fixes: 7f511d514e8c ("soc: imx: imx8m-blk-ctrl: add i.MX8MN DISP blk-ctrl")
+> Signed-off-by: Adam Ford <aford173@gmail.com>
 
-s/LS2085rev1/LS2085 rev1
-
-Shawn
-
-> However this problem has been fixed in A72 core cluster used in LS2088.
-> Therefore remove the erratum from LS2088A. Keeping it only in LS2085.
-> 
-> Signed-off-by: Pankaj Bansal <pankaj.bansal@nxp.com>
-> Reviewed-by: Sandeep Malik <sandeep.malik@nxp.com>
-> Acked-by: Priyanka Jain <priyanka.jain@nxp.com>
-> ---
->  arch/arm64/boot/dts/freescale/fsl-ls2080a.dtsi | 4 ++++
->  arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi | 3 +--
->  2 files changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls2080a.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls2080a.dtsi
-> index 6f6667b70028..a2cadf757148 100644
-> --- a/arch/arm64/boot/dts/freescale/fsl-ls2080a.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls2080a.dtsi
-> @@ -150,3 +150,7 @@ &pcie4 {
->  	ranges = <0x81000000 0x0 0x00000000 0x16 0x00010000 0x0 0x00010000   /* downstream I/O */
->  		  0x82000000 0x0 0x40000000 0x16 0x40000000 0x0 0x40000000>; /* non-prefetchable memory */
->  };
-> +
-> +&timer {
-> +	fsl,erratum-a008585;
-> +};
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi b/arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi
-> index 3cb9c21d2775..d823d54a01a5 100644
-> --- a/arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls208xa.dtsi
-> @@ -239,13 +239,12 @@ map0 {
->  		};
->  	};
->  
-> -	timer {
-> +	timer: timer {
->  		compatible = "arm,armv8-timer";
->  		interrupts = <1 13 4>, /* Physical Secure PPI, active-low */
->  			     <1 14 4>, /* Physical Non-Secure PPI, active-low */
->  			     <1 11 4>, /* Virtual PPI, active-low */
->  			     <1 10 4>; /* Hypervisor PPI, active-low */
-> -		fsl,erratum-a008585;
->  	};
->  
->  	pmu {
-> -- 
-> 2.25.1
-> 
+Applied, thanks!

@@ -2,196 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AEF44FADBF
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 14:03:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 154034FADC3
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 14:14:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238717AbiDJMFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 08:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54106 "EHLO
+        id S238759AbiDJMQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 08:16:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238644AbiDJMFm (ORCPT
+        with ESMTP id S232013AbiDJMQf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 08:05:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85648515A7;
-        Sun, 10 Apr 2022 05:03:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2C77FB80CBF;
-        Sun, 10 Apr 2022 12:03:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46800C385A5;
-        Sun, 10 Apr 2022 12:03:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649592208;
-        bh=XhnYD3ZlSsnUjTeNZb68B85wGee+IQ5tw0+v9WwntL4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=u8npcF3FbNolc81rIV9ILUaWLNxzPH7VwanZHPBgUYJMcX0cg4Y++3sPvlyOQIlHw
-         XCO0C2sUK6fn9iTFfNKJuKJW9eB4kVPOi83NEKTWjBbXJcUZugb1/+tPbvCC627aWC
-         vLQ/d+gvxzuvqOYFzMWXRBJWNtfAcm/P7APKC2iDROU5vN6a4c5VToMru89Xi1nJVF
-         SOlxU/4zY82hmk+pa/zDdZ8lQdlCXXLZuZUqj+UZHdtXjQT1Xtr/c0q4cMAof984aV
-         Toqu5pN18Yc5G7SWBOZZ4Q1Bf48OW6wIfSrRWLbco1VMv7JA1vdE8hOJbroKnLZvjT
-         UrFA9JpOjghpg==
-Date:   Sun, 10 Apr 2022 15:03:24 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Mark Zhang <markzhang@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org,
-        syzbot+8fcbb77276d43cc8b693@syzkaller.appspotmail.com
-Subject: Re: [PATCH rdma-rc] RDMA/cma: Limit join multicast to UD QP type only
-Message-ID: <YlLHjFlR8BtCc5Hu@unreal>
-References: <4132fdbc9fbba5dca834c84ae383d7fe6a917760.1649083917.git.leonro@nvidia.com>
- <20220408182440.GA3647277@nvidia.com>
+        Sun, 10 Apr 2022 08:16:35 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67FF3D1EF;
+        Sun, 10 Apr 2022 05:14:23 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649592860;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OFmRIgWsEfS1u8csltcfGL85/93nZMY90Oa0fL8OYn8=;
+        b=iT0LHVcBBKaQRnyzmg4Y+pQ1Zje/qhPE8eV5XllPWuJ4R+iBHPdx9bCyQ9QdsjydL8HFvk
+        1w0gYfwVe8VW8lKPFCmaDWBNh8ISxg3cRTHc7GVEmrmpCBQx3AiuVbn0LBkwJB1vOoL/tp
+        G5//ftF7PNePvQAGZiqfIbJJxRm2MIYMzrUxHy86ge44t8xM3X4Cl7WSN59H3Cq6YzkbcI
+        FzjQFrDr9PL0DJ98d09c3GnDHeGuSUQ21h1ZlqSlyPuztoLNeEgo9qJe3mnLB0zYgBKpBu
+        Zl6CBbqroeK/y5EOHWcTkUXPHEjKjgfyppbAHZn3B6XT5mwPT2FSDXHvyDkvhA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649592860;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OFmRIgWsEfS1u8csltcfGL85/93nZMY90Oa0fL8OYn8=;
+        b=ZowN3hDL00e5KRJGyl0d0NcP84qDlITpO7vwsVPu9kvaRTv5XnipOOoo0K4Pv//bkRseYI
+        YFGsrNPSqm8U+tAQ==
+To:     Pete Swain <swine@google.com>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Johan Hovold <johan@kernel.org>,
+        Feng Tang <feng.tang@intel.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Pete Swain <swine@google.com>
+Subject: Re: [PATCH 2/2] timers: retpoline mitigation for time funcs
+In-Reply-To: <20220218221820.950118-2-swine@google.com>
+References: <20220218221820.950118-1-swine@google.com>
+ <20220218221820.950118-2-swine@google.com>
+Date:   Sun, 10 Apr 2022 14:14:20 +0200
+Message-ID: <87r165gmoz.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220408182440.GA3647277@nvidia.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 03:24:40PM -0300, Jason Gunthorpe wrote:
-> On Mon, Apr 04, 2022 at 05:52:18PM +0300, Leon Romanovsky wrote:
-> > -static int cma_set_qkey(struct rdma_id_private *id_priv, u32 qkey)
-> > +static int cma_set_default_qkey(struct rdma_id_private *id_priv)
-> >  {
-> >  	struct ib_sa_mcmember_rec rec;
-> >  	int ret = 0;
-> >  
-> > -	if (id_priv->qkey) {
-> > -		if (qkey && id_priv->qkey != qkey)
-> > -			return -EINVAL;
-> > -		return 0;
-> > -	}
-> > -
-> > -	if (qkey) {
-> > -		id_priv->qkey = qkey;
-> > -		return 0;
-> > -	}
-> > -
-> >  	switch (id_priv->id.ps) {
-> >  	case RDMA_PS_UDP:
-> >  	case RDMA_PS_IB:
-> > @@ -528,9 +517,22 @@ static int cma_set_qkey(struct rdma_id_private *id_priv, u32 qkey)
-> >  	default:
-> >  		break;
-> >  	}
-> > +
-> >  	return ret;
-> >  }
-> >  
-> > +static int cma_set_qkey(struct rdma_id_private *id_priv, u32 qkey)
-> > +{
-> > +	if (!qkey)
-> > +		return cma_set_default_qkey(id_priv);
-> 
-> This should be called in the couple of places that are actually
-> allowed to set a default qkey. We have some confusion about when that
-> is supposed to happen and when a 0 qkey can be presented.
-> 
-> But isn't this not the same? The original behavior was to make the
-> set_default a NOP if the id_priv already had a qkey:
-> 
->  -	if (id_priv->qkey) {
->  -		if (qkey && id_priv->qkey != qkey)
-> 
-> But that is gone now?
+On Fri, Feb 18 2022 at 14:18, Pete Swain wrote:
+> Adds indirect call exports for clock reads from tsc, apic,
+> hrtimer, via clock-event, timekeeper & posix interfaces.
 
-When I reviewed, I got an impression what once we create id_priv and set
-qkey to default values, we won't hit this if (..).
+Sure, but why?
 
-> 
-> I got this:
-> 
-> diff --git a/drivers/infiniband/core/cma.c b/drivers/infiniband/core/cma.c
-> index 3e315fc0ac16cb..ef980ea7153e51 100644
-> --- a/drivers/infiniband/core/cma.c
-> +++ b/drivers/infiniband/core/cma.c
-> @@ -1102,7 +1102,7 @@ static int cma_ib_init_qp_attr(struct rdma_id_private *id_priv,
->  	*qp_attr_mask = IB_QP_STATE | IB_QP_PKEY_INDEX | IB_QP_PORT;
+> Signed-off-by: Pete Swain <swine@google.com>
+> ---
+>  arch/x86/kernel/apic/apic.c    |  8 +++++---
+>  arch/x86/kernel/tsc.c          |  3 ++-
+>  include/linux/hrtimer.h        | 19 ++++++++++++++++---
+>  kernel/time/clockevents.c      |  9 ++++++---
+>  kernel/time/hrtimer.c          |  3 ++-
+>  kernel/time/posix-cpu-timers.c |  4 ++--
+>  kernel/time/posix-timers.c     |  3 ++-
+>  kernel/time/timekeeping.c      |  2 +-
+>  8 files changed, 36 insertions(+), 15 deletions(-)
+
+Can this please be split up properly? 
+
+> diff --git a/arch/x86/kernel/apic/apic.c b/arch/x86/kernel/apic/apic.c
+> index b70344bf6600..523a569dd35e 100644
+> --- a/arch/x86/kernel/apic/apic.c
+> +++ b/arch/x86/kernel/apic/apic.c
+> @@ -463,15 +463,17 @@ EXPORT_SYMBOL_GPL(setup_APIC_eilvt);
+>  /*
+>   * Program the next event, relative to now
+>   */
+> -static int lapic_next_event(unsigned long delta,
+> +INDIRECT_CALLABLE_SCOPE
+> +int lapic_next_event(unsigned long delta,
+>  			    struct clock_event_device *evt)
+
+So this was formatted properly:
+
+static int lapic_next_event(unsigned long delta,
+  			    struct clock_event_device *evt)
+
+Now it turned into garbage:
+
+INDIRECT_CALLABLE_SCOPE
+int lapic_next_event(unsigned long delta,
+  			    struct clock_event_device *evt)
+
+while:
+
+INDIRECT_CALLABLE_SCOPE int lapic_next_event(unsigned long delta,
+					     struct clock_event_device *evt)
+or
+
+INDIRECT_CALLABLE_SCOPE
+int lapic_next_event(unsigned long delta, struct clock_event_device *evt)
+
+are both what a reader would expect.
+
+Similar issues all over the place.
+
+> diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
+> index a698196377be..ff2868d5ddea 100644
+> --- a/arch/x86/kernel/tsc.c
+> +++ b/arch/x86/kernel/tsc.c
+> @@ -1090,7 +1090,8 @@ static void tsc_resume(struct clocksource *cs)
+>   * checking the result of read_tsc() - cycle_last for being negative.
+>   * That works because CLOCKSOURCE_MASK(64) does not mask out any bit.
+>   */
+> -static u64 read_tsc(struct clocksource *cs)
+> +INDIRECT_CALLABLE_SCOPE
+> +u64 read_tsc(struct clocksource *cs)
+
+What's the extra line for?
+
+>  {
+>  	return (u64)rdtsc_ordered();
+>  }
+> diff --git a/include/linux/hrtimer.h b/include/linux/hrtimer.h
+> index 0ee140176f10..9d2d110f0b8c 100644
+> --- a/include/linux/hrtimer.h
+> +++ b/include/linux/hrtimer.h
+> @@ -20,6 +20,7 @@
+>  #include <linux/seqlock.h>
+>  #include <linux/timer.h>
+>  #include <linux/timerqueue.h>
+> +#include <linux/indirect_call_wrapper.h>
 >  
->  	if (id_priv->id.qp_type == IB_QPT_UD) {
-> -		ret = cma_set_qkey(id_priv, 0);
-> +		ret = cma_set_default_qkey(id_priv);
-
-This is ok
-
->  		if (ret)
->  			return ret;
+>  struct hrtimer_clock_base;
+>  struct hrtimer_cpu_base;
+> @@ -297,14 +298,17 @@ static inline s64 hrtimer_get_expires_ns(const struct hrtimer *timer)
+>  	return ktime_to_ns(timer->node.expires);
+>  }
 >  
-> @@ -4430,14 +4430,10 @@ int rdma_accept(struct rdma_cm_id *id, struct rdma_conn_param *conn_param)
+> +INDIRECT_CALLABLE_DECLARE(extern ktime_t ktime_get(void));
+> +
+>  static inline ktime_t hrtimer_expires_remaining(const struct hrtimer *timer)
+>  {
+> -	return ktime_sub(timer->node.expires, timer->base->get_time());
+> +	return ktime_sub(timer->node.expires,
+> +			INDIRECT_CALL_1(timer->base->get_time, ktime_get));
+
+This wants a proper explanation in a changelog for the hrtimer check,
+why this is optimized for ktime_get().
+
+>  }
 >  
->  	if (rdma_cap_ib_cm(id->device, id->port_num)) {
->  		if (id->qp_type == IB_QPT_UD) {
-> -			if (conn_param)
-> -				ret = cma_send_sidr_rep(id_priv, IB_SIDR_SUCCESS,
-> -							conn_param->qkey,
-> -							conn_param->private_data,
-> -							conn_param->private_data_len);
-> -			else
-> -				ret = cma_send_sidr_rep(id_priv, IB_SIDR_SUCCESS,
-> -							0, NULL, 0);
-> +			ret = cma_send_sidr_rep(id_priv, IB_SIDR_SUCCESS,
-> +						conn_param->qkey,
-> +						conn_param->private_data,
-> +						conn_param->private_data_len);
-
-It is ok too and we have many other places with not-possible "if (conn_param)".
-
->  		} else {
->  			if (conn_param)
->  				ret = cma_accept_ib(id_priv, conn_param);
-> @@ -4685,7 +4681,7 @@ static int cma_join_ib_multicast(struct rdma_id_private *id_priv,
->  	if (ret)
->  		return ret;
+>  static inline ktime_t hrtimer_cb_get_time(struct hrtimer *timer)
+>  {
+> -	return timer->base->get_time();
+> +	return INDIRECT_CALL_1(timer->base->get_time, ktime_get);
+>  }
 >  
-> -	ret = cma_set_qkey(id_priv, 0);
-> +	ret = cma_set_default_qkey(id_priv);
->  	if (ret)
->  		return ret;
+>  static inline int hrtimer_is_hres_active(struct hrtimer *timer)
+> @@ -503,7 +507,9 @@ hrtimer_forward(struct hrtimer *timer, ktime_t now, ktime_t interval);
+>  static inline u64 hrtimer_forward_now(struct hrtimer *timer,
+>  				      ktime_t interval)
+>  {
+> -	return hrtimer_forward(timer, timer->base->get_time(), interval);
+> +	return hrtimer_forward(timer,
+> +			INDIRECT_CALL_1(timer->base->get_time, ktime_get),
+> +			interval);
+>  }
 >  
-> 
-> >  static void cma_translate_ib(struct sockaddr_ib *sib, struct rdma_dev_addr *dev_addr)
-> >  {
-> >  	dev_addr->dev_type = ARPHRD_INFINIBAND;
-> > @@ -4762,8 +4764,7 @@ static int cma_iboe_join_multicast(struct rdma_id_private *id_priv,
-> >  	cma_iboe_set_mgid(addr, &ib.rec.mgid, gid_type);
-> >  
-> >  	ib.rec.pkey = cpu_to_be16(0xffff);
-> > -	if (id_priv->id.ps == RDMA_PS_UDP)
-> > -		ib.rec.qkey = cpu_to_be32(RDMA_UDP_QKEY);
-> > +	ib.rec.qkey = cpu_to_be32(RDMA_UDP_QKEY);
-> 
-> Why isn't this symetrical with the IB side:
-> 
-> 	ret = cma_set_default_qkey(id_priv);
-> 	if (ret)
-> 		return ret;
-> 	rec.qkey = cpu_to_be32(id_priv->qkey);
-> 
-> 
-> ??
+>  /* Precise sleep: */
+> @@ -536,4 +542,11 @@ int hrtimers_dead_cpu(unsigned int cpu);
+>  #define hrtimers_dead_cpu	NULL
+>  #endif
+>  
+> +struct clock_event_device;
+> +INDIRECT_CALLABLE_DECLARE(extern __weak u64 read_tsc(struct clocksource *cs));
+> +INDIRECT_CALLABLE_DECLARE(extern int thread_cpu_clock_get(
+> +		const clockid_t which_clock, struct timespec64 *tp));
+> +INDIRECT_CALLABLE_DECLARE(extern __weak int lapic_next_deadline(
+> +		unsigned long delta, struct clock_event_device *evt));
+> +
 
-The original code didn't touch id_priv.
+No. This is not how it works. This is a generic header and x86 specific
+muck has no place here.
 
-> 
-> It fells like set_default_qkey() is the right thing to do incase the
-> qkey was already set by something, just as IB does it.
-> 
-> > @@ -4815,6 +4816,9 @@ int rdma_join_multicast(struct rdma_cm_id *id, struct sockaddr *addr,
-> >  			    READ_ONCE(id_priv->state) != RDMA_CM_ADDR_RESOLVED))
-> >  		return -EINVAL;
-> >  
-> > +	if (id_priv->id.qp_type != IB_QPT_UD)
-> > +		return -EINVAL;
-> > +
-> 
-> This makes sense
-> 
-> Jason
+>  #endif
+> diff --git a/kernel/time/clockevents.c b/kernel/time/clockevents.c
+> index 003ccf338d20..ac15412e87c4 100644
+> --- a/kernel/time/clockevents.c
+> +++ b/kernel/time/clockevents.c
+> @@ -245,7 +245,8 @@ static int clockevents_program_min_delta(struct clock_event_device *dev)
+>  
+>  		dev->retries++;
+>  		clc = ((unsigned long long) delta * dev->mult) >> dev->shift;
+> -		if (dev->set_next_event((unsigned long) clc, dev) == 0)
+> +		if (INDIRECT_CALL_1(dev->set_next_event, lapic_next_deadline,
+> +				  (unsigned long) clc, dev) == 0)
+
+No. We are not sprinkling x86'isms into generic code.
+
+> diff --git a/kernel/time/posix-cpu-timers.c b/kernel/time/posix-cpu-timers.c
+> index 96b4e7810426..d8bf325fa84e 100644
+> --- a/kernel/time/posix-cpu-timers.c
+> +++ b/kernel/time/posix-cpu-timers.c
+> @@ -1596,8 +1596,8 @@ static int thread_cpu_clock_getres(const clockid_t which_clock,
+>  {
+>  	return posix_cpu_clock_getres(THREAD_CLOCK, tp);
+>  }
+> -static int thread_cpu_clock_get(const clockid_t which_clock,
+> -				struct timespec64 *tp)
+> +INDIRECT_CALLABLE_SCOPE
+> +int thread_cpu_clock_get(const clockid_t which_clock, struct timespec64 *tp)
+>  {
+>  	return posix_cpu_clock_get(THREAD_CLOCK, tp);
+>  }
+> diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
+> index 1cd10b102c51..35eac10ee796 100644
+> --- a/kernel/time/posix-timers.c
+> +++ b/kernel/time/posix-timers.c
+> @@ -1089,7 +1089,8 @@ SYSCALL_DEFINE2(clock_gettime, const clockid_t, which_clock,
+>  	if (!kc)
+>  		return -EINVAL;
+>  
+> -	error = kc->clock_get_timespec(which_clock, &kernel_tp);
+> +	error = INDIRECT_CALL_1(kc->clock_get_timespec, thread_cpu_clock_get,
+> +				which_clock, &kernel_tp);
+
+The argument for selecting thread_cpu_clock_get() as optimization target
+is?
+
+>  
+>  	if (!error && put_timespec64(&kernel_tp, tp))
+>  		error = -EFAULT;
+> diff --git a/kernel/time/timekeeping.c b/kernel/time/timekeeping.c
+> index dcdcb85121e4..2b1a3b146614 100644
+> --- a/kernel/time/timekeeping.c
+> +++ b/kernel/time/timekeeping.c
+> @@ -190,7 +190,7 @@ static inline u64 tk_clock_read(const struct tk_read_base *tkr)
+>  {
+>  	struct clocksource *clock = READ_ONCE(tkr->clock);
+>  
+> -	return clock->read(clock);
+> +	return INDIRECT_CALL_1(clock->read, read_tsc, clock);
+
+Again. No X86 muck here.
+
+Thanks,
+
+        tglx

@@ -2,44 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 978B94FAF3C
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 19:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 356A84FAF28
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 19:05:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243724AbiDJRPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 13:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59258 "EHLO
+        id S240719AbiDJRHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 13:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239314AbiDJRPP (ORCPT
+        with ESMTP id S242571AbiDJRHa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 13:15:15 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94ABD34B88;
-        Sun, 10 Apr 2022 10:13:04 -0700 (PDT)
-Received: from p508fdda7.dip0.t-ipconnect.de ([80.143.221.167] helo=phil.fritz.box)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1ndb7T-0006hD-O7; Sun, 10 Apr 2022 19:12:59 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-usb@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 0/5] enable usb support on rk356x
-Date:   Sun, 10 Apr 2022 19:12:56 +0200
-Message-Id: <164961074165.23152.8964489836130801474.b4-ty@sntech.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220408151237.3165046-1-pgwipeout@gmail.com>
-References: <20220408151237.3165046-1-pgwipeout@gmail.com>
+        Sun, 10 Apr 2022 13:07:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5AB3101CF;
+        Sun, 10 Apr 2022 10:05:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 52F75B80E28;
+        Sun, 10 Apr 2022 17:05:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C674EC385A4;
+        Sun, 10 Apr 2022 17:05:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649610317;
+        bh=7quyUdm7Aq4txqWmhfJZl/DrSbjN8BfInAOcqAh00as=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=A6Pv/CVY9iPEZ3OxWr/blSZDtVbew9r5Q2ZvtxTeW8KmSL7V9Zp+zCbpecR6pGulj
+         3CjtK/b0gMI2uZtDmgyV3e1I9yWVkWHcwLnJtyQGQYqg4PypXWz07uoOO6w15oqUn4
+         MBUcwdmX04t1H+nlbaIxSWyzyHZVczKG+Lvn67gPmAzkXU6jALqui1Lz4wfeLAMpDo
+         24qSeNvZ2R6O86bFcTS4Q2n+/p7glYlAkxll816NJp8KR+Nrkr/ixnNHG0VVgHjpFe
+         JLkvd+5wF0dTKVMIQmY+tSnQEjTb5nGd1rcaHJ2/lRYmcP5KdBj3qWoamvQuh8XJ8R
+         SZfAAi2NNmO3A==
+Date:   Sun, 10 Apr 2022 18:13:06 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Puranjay Mohan <puranjay12@gmail.com>, gregkh@linuxfoundation.org,
+        rafael@kernel.org, heikki.krogerus@linux.intel.com,
+        kuba@kernel.org, saravanak@google.com,
+        linux-kernel@vger.kernel.org, lars@metafoo.de,
+        Michael.Hennerich@analog.com, linux-iio@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] iio: accel: adxl355: use fwnode_irq_get_byname()
+Message-ID: <20220410181306.23202f25@jic23-huawei>
+In-Reply-To: <20220227124134.4d4e4644@jic23-huawei>
+References: <20211109200840.135019-1-puranjay12@gmail.com>
+        <20211109200840.135019-3-puranjay12@gmail.com>
+        <YflfEpKj0ilHnQQm@smile.fi.intel.com>
+        <20220227124134.4d4e4644@jic23-huawei>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,30 +61,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 8 Apr 2022 11:12:32 -0400, Peter Geis wrote:
-> Good Morning,
-> 
-> This is my patch series that I have maintained out of tree until the
-> combophy driver landed.
-> 
-> This has been rebased on v5.18-rc1, several patches in the previous
-> series already landed and have been dropped.
-> 
-> [...]
+On Sun, 27 Feb 2022 12:41:34 +0000
+Jonathan Cameron <jic23@kernel.org> wrote:
 
-Applied, thanks!
+> On Tue, 1 Feb 2022 18:25:54 +0200
+> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> 
+> > On Wed, Nov 10, 2021 at 01:38:40AM +0530, Puranjay Mohan wrote:  
+> > > Use the generic fwnode_irq_get_byname() in place of of_irq_get_byname()
+> > > to get the IRQ number from the interrupt pin.    
+> > 
+> > Heads up, the fwnode_irq_get_byname() is in I2C tree and if Jonathan wants to
+> > apply this one, the PR [1] can be used.
+> > 
+> > [1]: https://lore.kernel.org/linux-i2c/YfRiGR3AT8tzyweG@shikoro/T/#u
+> >   
+> 
+> Thanks Andy. 
+> 
+> I'm going to let this go the slow way and pick up this patch after the
+> merge window when I can avoid pulling in that PR.
+> 
+> Basically I'm feeling lazy today :)
 
-[1/5] dt-bindings: soc: grf: add rk3566-pipe-grf compatible
-      commit: 2a872dd86eeb349f169df0a204668afa578a94b2
-[2/5] soc: rockchip: set dwc3 clock for rk3566
-      commit: 5c0bb71138770d85ea840acd379edc6471b867ee
-[3/5] arm64: dts: rockchip: add rk356x dwc3 usb3 nodes
-      commit: 9f4c480f24e2ce1d464ff9d5f8a249a485acdc7f
-[4/5] arm64: dts: rockchip: enable dwc3 on quartz64-a
-      commit: e432309ff8bf2a148bbdd4946ca1580c6b5b610c
-[5/5] arm64: dts: rockchip: add usb3 support to rk3568-evb1-v10
-      commit: d6cfb110b0fdfb4e61ef4e3c3ab89a8f21b4d1b8
+Now applied to the togreg branch of iio.git and pushed out as testing to
+see if 0-day can find any problems.
 
-Best regards,
--- 
-Heiko Stuebner <heiko@sntech.de>
+Thanks,
+
+Jonathan
+
+> 
+> Jonathan
+

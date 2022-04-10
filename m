@@ -2,74 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFE9F4FAD03
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 11:03:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 780E64FAD08
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 11:16:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236039AbiDJJF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 05:05:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33674 "EHLO
+        id S236100AbiDJJQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 05:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbiDJJFY (ORCPT
+        with ESMTP id S236120AbiDJJQT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 05:05:24 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E796BDCD;
-        Sun, 10 Apr 2022 02:03:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1649581382;
-        bh=PP14lou5/93ZSwesKhs/aFkM74lBQAXbbozD+ZJY6U4=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=ZkwGSJuNfcFO7nTjEEvntg+JMEeyHNAK9nZ+ZZimKMp8Gq6y6pg8/om/eqhKTLUlR
-         ozJm+O5ukBlOFSBeyc5D41uC+BsWweSN6dihEgvpSQwX87SuPq45qxBm+gTFjGEU1s
-         2P5EOKEiDqIrg0DRO6x4uBPGwu+3b0ewU4kzlfW0=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.0.33] ([46.223.3.230]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N3bSt-1o3Z4v1Mln-010g6J; Sun, 10
- Apr 2022 11:03:02 +0200
-Subject: Re: [PATCH 1/5] tpm: add functions to set and unset the tpm chips
- reset state
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     peterhuewe@gmx.de, jarkko@kernel.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stefanb@linux.ibm.com,
-        p.rosenberger@kunbus.com, lukas@wunner.de
-References: <20220407111849.5676-1-LinoSanfilippo@gmx.de>
- <20220407111849.5676-2-LinoSanfilippo@gmx.de>
- <20220407142526.GW64706@ziepe.ca>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <caf9dc77-8d81-9f79-9c4b-4b9e4fdf5b92@gmx.de>
-Date:   Sun, 10 Apr 2022 11:03:01 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Sun, 10 Apr 2022 05:16:19 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282795E17B
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 02:14:07 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id s14-20020a17090a880e00b001caaf6d3dd1so15647370pjn.3
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 02:14:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=WDPfrzxoEqoQc1/eGWlrbqzJhsvrBmHHWTvNKjsYkJM=;
+        b=QkEh1cbcPct4JczcOnXh+aKqtrHGkH6NNm7c3AONE1RhylRzyBpeOLzvd7XWaCm6XH
+         0w+5Wx7u/vA05q6JUyqN7PQhtlbPVEysyU/yzh0BQULuiFdn8agGYwB+505VhLt4peSN
+         4TQqL0CwpNkLD+pXkok19uXrGYOz1aLuv2SoKOxiG7XXzfYrJOFdAFlZPt91JtvjVucl
+         8meujpcl/phahG9kPygAXIHfghNcXE4SYZgupB24Crh1GdY5Wp3W4DUMacPMraqYwDHG
+         Ihs0My6BDesqs2JDr04owaQwiBUL40bYC6Zr0GgT47YsCjoM5Q8dxiknldQpzfe+gFOU
+         BG6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=WDPfrzxoEqoQc1/eGWlrbqzJhsvrBmHHWTvNKjsYkJM=;
+        b=Jy1+XMGi48StMbCh5kbkW2JcdPfW5RlCGsU3na9K+7dtFskwvBAklJUhNkZOI6WzQn
+         U1HsnJ+9i6XahC8GQeVYtgeYL33DSIoReES7NXb+JCtq5rWKGlrV+ECK01upBacB2+0J
+         uUj33LVCCrHDog8wqzJg2mlvD4B6yM5KqvtEl5BY08AaHIWQJyy9OfR8jFJOhCaC+T61
+         YJgA6cQW6RgdG51MdiReAoFI0lCn7+knzKP+Vsnoio083CsQR8gxI9SyC61X77EPWXJX
+         sSXlBgQV/sZC6nlvjiSf2QvhzejTyTGbu7chDOHuHVU2lMk5gAUd19QhjE2xwkRexXZJ
+         N2BQ==
+X-Gm-Message-State: AOAM531gpOXdoR6f/N+PgpnRe9NtFLHTL8DnN0DWhpVkq3x1yGrZwfa7
+        Sxpr4YcdusNg9OqT7dfvUWyTJidGzMrjLrXOxaKQzBEyzzG6ar8=
+X-Google-Smtp-Source: ABdhPJxlVIb0T0CZqME8DQnXouztNp0D0cA7yEivwZdQ+Mrtmiv3y7hyXAvfEkrS8G4zaFx+aG1mH3vaE5zcmg+cO7w=
+X-Received: by 2002:a17:90b:915:b0:1ca:b584:8241 with SMTP id
+ bo21-20020a17090b091500b001cab5848241mr30853251pjb.46.1649582046260; Sun, 10
+ Apr 2022 02:14:06 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220407142526.GW64706@ziepe.ca>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:ITy5SCgzF2q6XF6Ozh6e95KHI6g1E9Q2aEPU72b+QaVsae4rdFe
- UpWzx90EakqwrUVtrwPxgBfrd/AF2Uq3k1ZUoGc9lZBi6z+51nCotcC518HIH7Slqxu2iYC
- /iXgE8U4Tc2howXJiTkrJveCP2SjrFv0/16udH+8886gib3VavEuoS+mVTCn0sCVpfzORpO
- yo0kp2eVgafG1lL19CwTw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:shEpdg1hFZI=:KaypvA4/ER9yIL6Rp6c2LD
- dMogNUJvuk5kBMe24Hv3CkktxEqBXRHwfOAkIro9PXr4JJRj2B+Tawgn9FQVlsJiz4lYyogwc
- dlOgiKoP1jB7ww91GUvDfLREmRL4KN9iDtTYcIDG5nfLNJR4tBW9jfQbwA1ss3S2NTfDDarmw
- AGSS59fTsPZACkfuZaVqYclOPY2RzkKVu7mHVq4gKhRAYlW2qBx6lvi2WzsxgnHbRol/5SXXX
- f/eVgy+rKvc1JAF8XpruDKbAhGYG1PPaklQ4tEuWUINX3BFEOYMCST11VRuKj65wNrLAl56JA
- I9kL9lB8+X72CpwveVEX0/MRyXcrpK2Bbqz3RL7hcZbYOEP9gOTaElqasd3VgXY0jROsllaMt
- mV1Cxjt0kd2e6JwD6wz1VyZmQogqVNnhVwyrVeMk0Xlpggw9YYQZoeQ+/MaOSRHQd2yXnE1ui
- COr85dYcdUBy2mVoXZBkc/Q8fGS85nnKgh6uduaw83AeSFfyu/wauDvzuVKL7hnJC1gk4IpkP
- S4OUBPZuqB/9kucbwnblhUSR1/7i0lel7Zdfu3mi+2D577dvdUZO3Z+NNRF81SwmjbJz12Li7
- NgFIYsueUqmVvl4YPkhHjKLa/T0Nj/nkI9TBgANWjc3nP9qXVbONdCYx1F+nNi/XZ9yr7aDUI
- P5EkFg8S++SZqX6OHB4IU0X7JvHa67qI5eyAjX6mu8n8RsCYX3Wh7H5cBPYPGs17p8A2AYNTq
- NrUHszI+seXjLeicAjCBHldiU0fTyGdxQqukeJ4m7fBjmqdHm9WkxAsCSRQe2lw+19vpykbR8
- emRUADabTz2Mc3bM55jIfpareb4x5W9HMPPaXSbnecar4RyBKlhCFDoLzPQL4b3Na2CbFdD9m
- 9d8CIhnYwl2/fmawhQtwpU2DlrFUeP/Ig2Nea2P2JwFhrYO6w3ILS3uPrH9ytHGIb/ELPqck/
- EkLEr0OD55fzIpqVyNNo4GgKvoFP2VU1bnswy1T98cmsw7VgBgaoc9XbCr/i3Ykupgay1uPi2
- Rm7QjcR1qsgjikDpt6ZzfW7UJ397/nN+ZS0nCw60EcGsf5ldkTpP1tBpgNlLBPzAd3Qbl3Kxt
- XTt6csB/4I590M=
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+From:   Zheyu Ma <zheyuma97@gmail.com>
+Date:   Sun, 10 Apr 2022 17:13:55 +0800
+Message-ID: <CAMhUBjm2AdyEZ_-EgexdNDN7SvY4f89=4=FwAL+c0Mg0O+X50A@mail.gmail.com>
+Subject: [BUG] ALSA: echoaudio: warning when the driver fails to probe
+To:     perex@perex.cz, tiwai@suse.com
+Cc:     alsa-devel@alsa-project.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,35 +62,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-Hi,
+I found a bug in echoaudio.c.
+When the driver fails at the function snd_echo_create(), it should
+release resources requested before, otherwise we will get the
+following warning:
 
-On 07.04.22 at 16:25, Jason Gunthorpe wrote:
-> On Thu, Apr 07, 2022 at 01:18:45PM +0200, Lino Sanfilippo wrote:
->> Currently it is not possible to set the tpm chips reset state from with=
-in
->> the driver. This is problematic if the chip is still in reset after the
->> system comes up. This may e.g. happen if the reset line is pulled into
->> reset state by a pin configuration in the device tree.
->
-> This kind of system is badly misdesigned.
->
-> TPM PCRs fundementally cannot work if the TPM reset line is under
-> software control.
->
-> Jason
->
-
-
-you may be right about the misdesign, but as a matter of fact
-there are systems which have the TPMs reset line connected to a GPIO and n=
-ot
-the system reset. For those systems we should provide a way to let at leas=
-t the
-driver put the TPM out of reset (note that on those systems the TPM reset =
-can
-be triggered by software anyway by asserting/deasserting the GPIO line).
-
+[    3.262866] remove_proc_entry: removing non-empty directory
+'irq/21', leaking at least 'snd_indigodj'
+[    3.263577] WARNING: CPU: 3 PID: 261 at fs/proc/generic.c:717
+remove_proc_entry+0x389/0x3f0
+[    3.267098] RIP: 0010:remove_proc_entry+0x389/0x3f0
+[    3.269976] Call Trace:
+[    3.269979]  <TASK>
+[    3.269988]  unregister_irq_proc+0x14c/0x170
+[    3.269997]  irq_free_descs+0x94/0xe0
+[    3.270004]  mp_unmap_irq+0xb6/0x100
+[    3.270011]  acpi_unregister_gsi_ioapic+0x27/0x40
+[    3.270017]  acpi_pci_irq_disable+0x1d3/0x320
+[    3.270025]  pci_disable_device+0x1ad/0x380
+[    3.270034]  pcim_release+0x566/0x6d0
+[    3.270046]  devres_release_all+0x1f1/0x2c0
+[    3.270057]  really_probe+0xe0/0x920
 
 Regards,
-Lino
+Zheyu Ma

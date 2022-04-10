@@ -2,139 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E1664FADFF
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 15:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66CAD4FAE00
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 15:13:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237579AbiDJNIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 09:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53008 "EHLO
+        id S239282AbiDJNPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 09:15:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232721AbiDJNIn (ORCPT
+        with ESMTP id S232721AbiDJNPX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 09:08:43 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2056.outbound.protection.outlook.com [40.107.220.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DDF44773;
-        Sun, 10 Apr 2022 06:06:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FBI8/MMphzaOooiJn08HRUexCmuBqFj/10wM6/hhJkQ9xHBiM9QOo2MnlDbzSRaB9HpP0G0QZRpniToj21g1BwXz7Oi9hz1/vaoSpmqioBSMXBOV6rdEzFQoW80O4PUgHiwISO19mTU9BX11/2xmippWSTc/sQMw4FJD2p7Ytsv1bQ8VyFtPRGwzyyeJxLap3P14Inhj+Aknejg21eZnZ1tBo0IccaRe7PADSPxxJk66mQejNFVroZvsnQrS44O6jEfCW2Nbf0BC6pzAI+fcTi3d6DkGtz4Rut0pXaAkD/nenYtEuZa7y3T4vHCTLD0Od1PGxsYwBDTiPAGsJSHa1A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=upy9XV5vedWSYvRUcxWq1QOoLbvApinjd8h6fLN7N6g=;
- b=BauEGkayN7uTzsIyoSCUxQbxlX2ZhtDkdDWmpJ1n30/RwXn9VvKgG3PXP3JzJptsW/Vjur/GfXWmQ7MMCEl9b5VNyaGdG6QDLm7r2KaNqqIy4+ww516II7jxbdDLBTiy31ksc6tOTgCX9kd/V7Lm8ZPXnPROyUwTjHwzJ2tAKJ8K3uJava7XKTuC/n3yCaHfkSPnSbQsXx91h1ZTv/qSROajV5sWtc1EYdPkmA/z3Y2HPDwT89Vqg8bsS9uk3FWBsa0yK6HCQayVVls5acLVSHnGsxrUfqv/3G7HNyI8BepcfMojmrCJikS5/IxP67MSJN/bzk9bbOwfAPGSrVUiNQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=upy9XV5vedWSYvRUcxWq1QOoLbvApinjd8h6fLN7N6g=;
- b=FhpCnCVkTwAyWHRqqLj9ynbBY8TJDM64UNaZWP4qxIPiYVsFyEZcL4pr2MuR+j9u92/a/QGN5XAt8ZP3uQUWxXYjZeejmy2BwPsc2bosjke0AuAntNl4Yc1Bc7O8z0cMIMUWXtUvy/H+gAJlVxSM0mqVKLRpvELtIhkJYMsUerw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by BY5PR12MB3681.namprd12.prod.outlook.com (2603:10b6:a03:194::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.28; Sun, 10 Apr
- 2022 13:06:30 +0000
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::a941:fe42:23a5:c501]) by BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::a941:fe42:23a5:c501%3]) with mapi id 15.20.5144.028; Sun, 10 Apr 2022
- 13:06:30 +0000
-Date:   Sun, 10 Apr 2022 13:06:26 +0000
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     Carlos Bilbao <carlos.bilbao@amd.com>
-Cc:     bp@alien8.de, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
-        bilbao@vt.edu
-Subject: Re: [PATCH 2/2] x86/mce: Add messages for panic errors in AMD's MCE
- grading
-Message-ID: <YlLWUlt1V0lx52a8@yaz-ubuntu>
-References: <20220405183212.354606-1-carlos.bilbao@amd.com>
- <20220405183212.354606-3-carlos.bilbao@amd.com>
+        Sun, 10 Apr 2022 09:15:23 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE5342A35
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 06:13:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649596392; x=1681132392;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Oa5bpy+gNfChABbpxEkWgNikKQpwd0lEyDIMcNwzXHM=;
+  b=VvlLgtNzVCZlGEjCiv/M97M83J/TUfbDeQy+QVSxzUtSm/TifIHV/7hm
+   kaZ66Av1/6R+xWLHhkf6lHa6hj6z06cNRS4dC7a1fJoxSgyMz+nVxv7hW
+   v2vPkJXlFvA/Z5jSL4Zbfstr7gvfJgoIbAV2Vhnl2+9ixu757EvXhNoKy
+   yFznYpS4l0dYN+6ZYD1m9E+pHl6ZaJ56HqtAiTRuTvD1dxRou7aWEIpsG
+   pJHjMcPKT6+BsEhC+5+MibUcVLDBBk4oXQe68Ub2gSnv1GPdD21FGpaGi
+   afaLeXL+ooa9aPmO4pYr/BpZGcozYTgffG66zV3nfzoCWUztz+Rk+hDhK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10312"; a="259566228"
+X-IronPort-AV: E=Sophos;i="5.90,249,1643702400"; 
+   d="scan'208";a="259566228"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2022 06:13:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,249,1643702400"; 
+   d="scan'208";a="525627479"
+Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 10 Apr 2022 06:13:09 -0700
+Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ndXNN-0000tr-5d;
+        Sun, 10 Apr 2022 13:13:09 +0000
+Date:   Sun, 10 Apr 2022 21:12:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [toke:xdp-queueing-04 6/12] net/core/filter.c:10530:31: sparse:
+ sparse: symbol 'dequeue_verifier_ops' was not declared. Should it be static?
+Message-ID: <202204102150.YZdkMTrK-lkp@intel.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220405183212.354606-3-carlos.bilbao@amd.com>
-X-ClientProxiedBy: CH2PR18CA0021.namprd18.prod.outlook.com
- (2603:10b6:610:4f::31) To BN8PR12MB3108.namprd12.prod.outlook.com
- (2603:10b6:408:40::20)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a441b3cf-652d-4438-ee29-08da1af2ee18
-X-MS-TrafficTypeDiagnostic: BY5PR12MB3681:EE_
-X-Microsoft-Antispam-PRVS: <BY5PR12MB36812901F486196FC3158C19F8EB9@BY5PR12MB3681.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hk0BU9P29LzLEv/crSBk5h2nhj2gxIAnzW69/dD1GUUdW22+eIGahCjCUlenzVt25hTbFv6KKxYpoztWA8Gtitrqk0NxT4zotIgCex1PnrquypGcz+Ki9ejaQvxlo4VZzVO/VDwxWKhQyoOJ0E8SKrOOVXHFhc1KxglWnKipWSMcdp4Fx8wRXdrFEtYTUNpYJvxpl4ShxUPMMmQhetuXx5bT0zNq/ui61BuUjp0pnJuDlQ1j9uVRFet0GS4d+63G6DHzJwNspB0kw3k4Kx6TmtU4UEhdc1QIzbV7KSmL3EFKEtl8CxqrHlzuoaNvptFQWCiYn1QpkmYiAKVUOd/6Os3ULp2TF/x1CGDGXXPlnM6O4y3QQmqBOzHTjJH9HBRZHdaXf9TKnG7bjWoL6SQDY0woyv8EcY/EsByN4bgb9R5YXWnQf+CgJxQa18iUGA6A//Z0KUkMp4PaZIl3d2wAhL1grNGXgDmVipRBUruwA9fu5i2qMAkWuOBgX6XEM4Gq5BgnHyZJbFXgrCbEWANY8ZitnMZW95MuHrf2tqblZ3qrpJ19YuOhBBUGkd/k3zd6RzT0Q5pQd/RgnXQuON8IinuF0GL9pqamvwMV1LY0Z4abiGM4yflOLLhYbo1Tc7bhWbO7gSA8SOaac2r5zc0RHw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(4636009)(366004)(38100700002)(6486002)(66946007)(66556008)(66476007)(508600001)(15650500001)(186003)(26005)(8676002)(6862004)(8936002)(5660300002)(83380400001)(2906002)(6636002)(6512007)(4326008)(316002)(33716001)(9686003)(86362001)(4744005)(44832011)(6666004)(6506007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PmpYzyeNxD8dpl7GAeAseizGqZBfLHJZMVbZSdedW5JIieFQteCH1cWjQR11?=
- =?us-ascii?Q?1sBmbhlBjaFwtR+V0XHKhpVJkmWUKy0F4d/ycFI3Z7aypesSV4+PadlXjM8y?=
- =?us-ascii?Q?v3nmBl9qwZqTo0VPVoLZDwTeIxFuk64gP5WPyRSBH4CfaGNdh+ThTFQpcRg4?=
- =?us-ascii?Q?13HTLHH4PLt9Ew6Qdax4Z4IrtuCycvhg8Av0CG1xMNW3ARp6lAZ8F9ls91eT?=
- =?us-ascii?Q?mgMY0MZwlNRBKRVapZQIC1NkQiareiGDOFTl0ffKv62yEXLAMgG7nEWJmZ84?=
- =?us-ascii?Q?YXANCuhwdCRx7PDA3REH5XOL4eukgfyTCGRm3ftT0RO8yzn9HhZcalXR7IRF?=
- =?us-ascii?Q?e+deftvgo6V/c4VCVKJQ9KlFKwJV+HilfhNCfm/qtvA/vRvOOpxcpN3sd5KD?=
- =?us-ascii?Q?htxYXTUhxfYjSgg3EonTt/uwXQeBWJVmhvQSuzJ4TavucKkPgS5re/0WBtlg?=
- =?us-ascii?Q?OIbVeQEBzNPwX/inRTNyUpG6Azl0UHQaFgvEb++euwwLkkQ+4/QfEys2gNuJ?=
- =?us-ascii?Q?5j4T33pS+wImuVTTxeKDQhJMFKWRWXBwEFy640x898flUSF3hsFjehj0FwA1?=
- =?us-ascii?Q?EZAjAYuA/KdH+5SX34AI5srSYmeEtpJJFIBIxU46eEd1Ydt0d+8i5q8XbKSm?=
- =?us-ascii?Q?oMj1TYgFWZUgWD+Ns4j2GwCvRz7juVotrXsbE1JVxD149mQMTjq+ptAVvur8?=
- =?us-ascii?Q?r/tfUH1VdGcchu5d8g4Jxf9qdO2UmKhnctceQh2SBFoGU8BfCvcS6492DLMc?=
- =?us-ascii?Q?huzGpQWNXk/HKa91EOO/FV0zIsityfjBO4frk6F6GA1sFQRBPJD7uhEFyWlQ?=
- =?us-ascii?Q?+mYeJ8cK5KlsV5PxL9jeM0PlqHx1ZyxjhBV7eDPUmuoZidTulAdeJ5HrCPPo?=
- =?us-ascii?Q?Y3P91sDTZrP8SVxzMK3JjiAagz6ZbOlW/DNXvozHAiIhVNrCbbAL/Oo9b78x?=
- =?us-ascii?Q?dO3ZwCFcQUP+tbOjsdfwmSMJ7d9XQTkS4BoEidzR33SXu4eV5Hwm9+OTV/Z5?=
- =?us-ascii?Q?f5L3aa6iY3xZvhvxJgrIaAD75zrPlLT+8n6PjKhIopLd8/nhU9BlazJtEFf0?=
- =?us-ascii?Q?fSq2kcQ6Gc1UBrNfW79qmBeyn6lzXk4jSaAo7Vbjj4saEAsOZA8gi9q/BTZ6?=
- =?us-ascii?Q?TQCzQhwMQacCG1PjO4io7AMXO2NoOVkco4VajIRXgHhVzlMphuHfdgZapnZG?=
- =?us-ascii?Q?bfc0UWLf39KUZbDcW92jE0McjjjZuZtNkEUG7pFOn2q/VeeKPcqjick/RN32?=
- =?us-ascii?Q?1zs6BFwg+/EbPz6apcWiB16v/eEwkCjg1mZNU/m7bH/BbIaJWbfmP2mdxf4a?=
- =?us-ascii?Q?G2kuqI40tmq5zWJ3uVSmWLd5mPO0znkpYztCjJjjfwcrCQfgVb9w+cV0wMvK?=
- =?us-ascii?Q?k1SHz/k7JN/0TEXUumUIea8nNy7kbRBAi8xHhAbMef0SRTCzufHye86IH29c?=
- =?us-ascii?Q?n0il0tQNqrHVcX+aLdro+RYsG4k2zsusRCWOLmGXjteS67PnhxQmXpAoTomW?=
- =?us-ascii?Q?sISCasIycfY53T6ZzUs2zRCWNm49ERP1c2bK1rRBLdWvJ2Tc0EbR+upCuorO?=
- =?us-ascii?Q?dSrpifbD39DuddRZTk2AhaAhS1kjKomSfTx6tRmgK2I6dPLYvpKlLtGKWn5S?=
- =?us-ascii?Q?9eZxTCMCBdPsUO78q1DZ68/ZnIjLHaz9ovSQzrWOyDn8IJ2Sz9MmcffvOb/W?=
- =?us-ascii?Q?8ikUTBolybeIPYDjFOESx+/ZzMw7VmN1HVfsuCR64l2QU6xwaQLSFE4igaRu?=
- =?us-ascii?Q?Bv1DXsHIDQ=3D=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a441b3cf-652d-4438-ee29-08da1af2ee18
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Apr 2022 13:06:30.6771
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BMFmuWbkgnF308L4fsp/eeEwhgMfF6C90IDkpJImVjCW7OC1OMjfvvB45QQt6sda9CDRvZgsiD1d6tFPWG90kw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB3681
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 01:32:14PM -0500, Carlos Bilbao wrote:
-> When a machine error is graded as PANIC by AMD grading logic, the MCE
-> handler calls mce_panic(). The notification chain does not come into effect
-> so the AMD EDAC driver does not decode the errors. In these cases, the
-> messages displayed to the user are more cryptic and miss information
-> that might be relevant, like the context in which the error took place.
-> 
-> Fix the above issue including messages on AMD's grading logic for machine
-> errors graded as PANIC.
-> 
-> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
-> ---
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git xdp-queueing-04
+head:   d67202baf237752a91366c8ba9bd801942e5fdaf
+commit: 8a45b14641ca025c0927e9e7fd502c11125ae864 [6/12] xdp: add dequeue program type for getting packets from a PIFO
+config: alpha-randconfig-s031-20220410 (https://download.01.org/0day-ci/archive/20220410/202204102150.YZdkMTrK-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git/commit/?id=8a45b14641ca025c0927e9e7fd502c11125ae864
+        git remote add toke https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git
+        git fetch --no-tags toke xdp-queueing-04
+        git checkout 8a45b14641ca025c0927e9e7fd502c11125ae864
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=alpha SHELL=/bin/bash net/core/
 
-Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks!
 
--Yazen
+sparse warnings: (new ones prefixed by >>)
+   net/core/filter.c:5931:9: sparse: sparse: switch with no cases
+   net/core/filter.c:5972:9: sparse: sparse: switch with no cases
+   net/core/filter.c:1410:39: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct sock_filter const *filter @@     got struct sock_filter [noderef] __user *filter @@
+   net/core/filter.c:1410:39: sparse:     expected struct sock_filter const *filter
+   net/core/filter.c:1410:39: sparse:     got struct sock_filter [noderef] __user *filter
+   net/core/filter.c:1488:39: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct sock_filter const *filter @@     got struct sock_filter [noderef] __user *filter @@
+   net/core/filter.c:1488:39: sparse:     expected struct sock_filter const *filter
+   net/core/filter.c:1488:39: sparse:     got struct sock_filter [noderef] __user *filter
+   net/core/filter.c:10496:31: sparse: sparse: symbol 'sk_filter_verifier_ops' was not declared. Should it be static?
+   net/core/filter.c:10503:27: sparse: sparse: symbol 'sk_filter_prog_ops' was not declared. Should it be static?
+   net/core/filter.c:10507:31: sparse: sparse: symbol 'tc_cls_act_verifier_ops' was not declared. Should it be static?
+   net/core/filter.c:10515:27: sparse: sparse: symbol 'tc_cls_act_prog_ops' was not declared. Should it be static?
+   net/core/filter.c:10519:31: sparse: sparse: symbol 'xdp_verifier_ops' was not declared. Should it be static?
+>> net/core/filter.c:10530:31: sparse: sparse: symbol 'dequeue_verifier_ops' was not declared. Should it be static?
+>> net/core/filter.c:10537:27: sparse: sparse: symbol 'dequeue_prog_ops' was not declared. Should it be static?
+   net/core/filter.c:10541:31: sparse: sparse: symbol 'cg_skb_verifier_ops' was not declared. Should it be static?
+   net/core/filter.c:10547:27: sparse: sparse: symbol 'cg_skb_prog_ops' was not declared. Should it be static?
+   net/core/filter.c:10551:31: sparse: sparse: symbol 'lwt_in_verifier_ops' was not declared. Should it be static?
+   net/core/filter.c:10557:27: sparse: sparse: symbol 'lwt_in_prog_ops' was not declared. Should it be static?
+   net/core/filter.c:10561:31: sparse: sparse: symbol 'lwt_out_verifier_ops' was not declared. Should it be static?
+   net/core/filter.c:10567:27: sparse: sparse: symbol 'lwt_out_prog_ops' was not declared. Should it be static?
+   net/core/filter.c:10571:31: sparse: sparse: symbol 'lwt_xmit_verifier_ops' was not declared. Should it be static?
+   net/core/filter.c:10578:27: sparse: sparse: symbol 'lwt_xmit_prog_ops' was not declared. Should it be static?
+   net/core/filter.c:10582:31: sparse: sparse: symbol 'lwt_seg6local_verifier_ops' was not declared. Should it be static?
+   net/core/filter.c:10588:27: sparse: sparse: symbol 'lwt_seg6local_prog_ops' was not declared. Should it be static?
+   net/core/filter.c:10592:31: sparse: sparse: symbol 'cg_sock_verifier_ops' was not declared. Should it be static?
+   net/core/filter.c:10598:27: sparse: sparse: symbol 'cg_sock_prog_ops' was not declared. Should it be static?
+   net/core/filter.c:10601:31: sparse: sparse: symbol 'cg_sock_addr_verifier_ops' was not declared. Should it be static?
+   net/core/filter.c:10607:27: sparse: sparse: symbol 'cg_sock_addr_prog_ops' was not declared. Should it be static?
+   net/core/filter.c:10610:31: sparse: sparse: symbol 'sock_ops_verifier_ops' was not declared. Should it be static?
+   net/core/filter.c:10616:27: sparse: sparse: symbol 'sock_ops_prog_ops' was not declared. Should it be static?
+   net/core/filter.c:10619:31: sparse: sparse: symbol 'sk_skb_verifier_ops' was not declared. Should it be static?
+   net/core/filter.c:10626:27: sparse: sparse: symbol 'sk_skb_prog_ops' was not declared. Should it be static?
+   net/core/filter.c:10629:31: sparse: sparse: symbol 'sk_msg_verifier_ops' was not declared. Should it be static?
+   net/core/filter.c:10636:27: sparse: sparse: symbol 'sk_msg_prog_ops' was not declared. Should it be static?
+   net/core/filter.c:10639:31: sparse: sparse: symbol 'flow_dissector_verifier_ops' was not declared. Should it be static?
+   net/core/filter.c:10645:27: sparse: sparse: symbol 'flow_dissector_prog_ops' was not declared. Should it be static?
+   net/core/filter.c:246:32: sparse: sparse: cast to restricted __be16
+   net/core/filter.c:246:32: sparse: sparse: cast to restricted __be16
+   net/core/filter.c:246:32: sparse: sparse: cast to restricted __be16
+   net/core/filter.c:246:32: sparse: sparse: cast to restricted __be16
+   net/core/filter.c:273:32: sparse: sparse: cast to restricted __be32
+   net/core/filter.c:273:32: sparse: sparse: cast to restricted __be32
+   net/core/filter.c:273:32: sparse: sparse: cast to restricted __be32
+   net/core/filter.c:273:32: sparse: sparse: cast to restricted __be32
+   net/core/filter.c:273:32: sparse: sparse: cast to restricted __be32
+   net/core/filter.c:273:32: sparse: sparse: cast to restricted __be32
+   net/core/filter.c:1909:43: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected restricted __wsum [usertype] diff @@     got unsigned long long [usertype] to @@
+   net/core/filter.c:1909:43: sparse:     expected restricted __wsum [usertype] diff
+   net/core/filter.c:1909:43: sparse:     got unsigned long long [usertype] to
+   net/core/filter.c:1912:36: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected restricted __be16 [usertype] old @@     got unsigned long long [usertype] from @@
+   net/core/filter.c:1912:36: sparse:     expected restricted __be16 [usertype] old
+   net/core/filter.c:1912:36: sparse:     got unsigned long long [usertype] from
+   net/core/filter.c:1912:42: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected restricted __be16 [usertype] new @@     got unsigned long long [usertype] to @@
+   net/core/filter.c:1912:42: sparse:     expected restricted __be16 [usertype] new
+   net/core/filter.c:1912:42: sparse:     got unsigned long long [usertype] to
+   net/core/filter.c:1915:36: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected restricted __be32 [usertype] from @@     got unsigned long long [usertype] from @@
+   net/core/filter.c:1915:36: sparse:     expected restricted __be32 [usertype] from
+   net/core/filter.c:1915:36: sparse:     got unsigned long long [usertype] from
+   net/core/filter.c:1915:42: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected restricted __be32 [usertype] to @@     got unsigned long long [usertype] to @@
+   net/core/filter.c:1915:42: sparse:     expected restricted __be32 [usertype] to
+   net/core/filter.c:1915:42: sparse:     got unsigned long long [usertype] to
+   net/core/filter.c:1960:59: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected restricted __wsum [usertype] diff @@     got unsigned long long [usertype] to @@
+   net/core/filter.c:1960:59: sparse:     expected restricted __wsum [usertype] diff
+   net/core/filter.c:1960:59: sparse:     got unsigned long long [usertype] to
+   net/core/filter.c:1963:52: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected restricted __be16 [usertype] from @@     got unsigned long long [usertype] from @@
+   net/core/filter.c:1963:52: sparse:     expected restricted __be16 [usertype] from
+   net/core/filter.c:1963:52: sparse:     got unsigned long long [usertype] from
+   net/core/filter.c:1963:58: sparse: sparse: incorrect type in argument 4 (different base types) @@     expected restricted __be16 [usertype] to @@     got unsigned long long [usertype] to @@
+   net/core/filter.c:1963:58: sparse:     expected restricted __be16 [usertype] to
+   net/core/filter.c:1963:58: sparse:     got unsigned long long [usertype] to
+   net/core/filter.c:1966:52: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected restricted __be32 [usertype] from @@     got unsigned long long [usertype] from @@
+   net/core/filter.c:1966:52: sparse:     expected restricted __be32 [usertype] from
+   net/core/filter.c:1966:52: sparse:     got unsigned long long [usertype] from
+   net/core/filter.c:1966:58: sparse: sparse: incorrect type in argument 4 (different base types) @@     expected restricted __be32 [usertype] to @@     got unsigned long long [usertype] to @@
+   net/core/filter.c:1966:58: sparse:     expected restricted __be32 [usertype] to
+   net/core/filter.c:1966:58: sparse:     got unsigned long long [usertype] to
+   net/core/filter.c:2012:28: sparse: sparse: incorrect type in return expression (different base types) @@     expected unsigned long long @@     got restricted __wsum @@
+   net/core/filter.c:2012:28: sparse:     expected unsigned long long
+   net/core/filter.c:2012:28: sparse:     got restricted __wsum
+   net/core/filter.c:2034:35: sparse: sparse: incorrect type in return expression (different base types) @@     expected unsigned long long @@     got restricted __wsum [usertype] csum @@
+   net/core/filter.c:2034:35: sparse:     expected unsigned long long
+   net/core/filter.c:2034:35: sparse:     got restricted __wsum [usertype] csum
+
+vim +/dequeue_verifier_ops +10530 net/core/filter.c
+
+ 10529	
+ 10530	const struct bpf_verifier_ops dequeue_verifier_ops = {
+ 10531		.get_func_proto		= dequeue_func_proto,
+ 10532		.is_valid_access	= dequeue_is_valid_access,
+ 10533		.convert_ctx_access	= dequeue_convert_ctx_access,
+ 10534		.gen_prologue		= bpf_noop_prologue,
+ 10535	};
+ 10536	
+ 10537	const struct bpf_prog_ops dequeue_prog_ops = {
+ 10538		.test_run		= bpf_prog_test_run_dequeue,
+ 10539	};
+ 10540	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

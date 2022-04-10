@@ -2,212 +2,453 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 958E94FB063
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 23:50:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0355F4FB060
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 23:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242688AbiDJVwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 17:52:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40720 "EHLO
+        id S242687AbiDJVv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 17:51:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242749AbiDJVw3 (ORCPT
+        with ESMTP id S241901AbiDJVvz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 17:52:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93A0F73;
-        Sun, 10 Apr 2022 14:50:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 333E7B80D9C;
-        Sun, 10 Apr 2022 21:50:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A83A6C385A1;
-        Sun, 10 Apr 2022 21:50:11 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="pYNzQz9R"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1649627409;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=LJrd+NtDQlznIg8cc0nDb/z2OXp2bjAbSihY/d2tY4E=;
-        b=pYNzQz9RQ5eqsRIdR/NtgerIdGDbtTt3I6e+oJvxWz0XaIbHPRgsz8BXjLJiHUOgL8XO/t
-        LhjsNhsKY4qnkJTuwjXjSD8V1g6T66d0ibvN+V52GUS4nxDOfOUG78O4E3K8pL5Fsp7y74
-        GcylDa/hG/lBRoQWJyv4JOWd/Cldcz8=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 19f87fe0 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Sun, 10 Apr 2022 21:50:09 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        tglx@linutronix.de, arnd@arndb.de
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "David S . Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, x86@kernel.org,
-        linux-xtensa@linux-xtensa.org
-Subject: [PATCH v2 00/11] archs/random: fallback to using ktime_read_raw_clock() if no cycle counter
-Date:   Sun, 10 Apr 2022 23:49:40 +0200
-Message-Id: <20220410214951.55294-1-Jason@zx2c4.com>
+        Sun, 10 Apr 2022 17:51:55 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F72219C27;
+        Sun, 10 Apr 2022 14:49:43 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so15299997fac.7;
+        Sun, 10 Apr 2022 14:49:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=aUh9o5kodqaSvR+43OknHeM7QaVi7lSGcW2nc2bP0O8=;
+        b=cLQqMSaW6vyY+JeOF83mWpJAAC27RKKEzOXyT98LeagpCqFMWjJsm8NLwArkRQLpKK
+         8aKiYgjWAZths7fQ0QrVHSkCxrgrirow2DLG4VmUx+N6YlVOwv1/XyjoxvSU0SyICekP
+         QGVnXfGWraPQoQY7TiYNsqW/C5YnVRDOjy94YtbZzij78/6f1CJYEGg/wGdXW1jvMBCQ
+         FICHdgVbUAD5yj8y2lTXknx7Uz85zcTgKfGei1+qu36CczjxHCfpeJWsZP/usYU5Ave/
+         pmyp0zmwhe7X5Z30ZiJ74p3yI0sjsVXnINhMN3m1UkUXpMjGShmglsskkHZ3NPE2qy7z
+         jtzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=aUh9o5kodqaSvR+43OknHeM7QaVi7lSGcW2nc2bP0O8=;
+        b=qXhh7Uz3flNHJlo8HtS2pKgMXDs6sMoUGIESbsppzhL6aMu2WRiI+h5TfO8REHctMp
+         0nHN6HlJVg8mXv7FTkMN27LytpL9KTshjqfOpeoFXDkSgev6Yv0ZKJx8sdr40mLV7onw
+         dq/OeiY0OWqiw/d6kAyTojeow56mAOI8eSmqFB9W/f3hKXExeDo6qGZDlNc/OFSIgHXo
+         MqlnN6VqtoRZajbkHYDbF45JBh3dVo4m9mCJOprZjORUGOvgdzm5GQAoz1LOIeJJj3Px
+         20r+GzMxgvPZnASR2hjVG7i2aynilCxyE16Uee2NHxyY0TqtHBcMqhCpIIZDtMmjARbS
+         a26g==
+X-Gm-Message-State: AOAM533v4wGZlDfUcosG25ReY318oRiUyjNORskFuQADJOJQSh3iyG7J
+        8sre9F0Rm4K/FCfQ8OI9D6s=
+X-Google-Smtp-Source: ABdhPJx3+ERPJJurrCVovEKcdeqCDrpc0EsL0RtvDNUdl/Xo5xQCBFPZ7gbzNlqmARi6hEBJeqSubw==
+X-Received: by 2002:a05:6870:968e:b0:e2:d796:1979 with SMTP id o14-20020a056870968e00b000e2d7961979mr273498oaq.103.1649627382644;
+        Sun, 10 Apr 2022 14:49:42 -0700 (PDT)
+Received: from ?IPV6:2600:1700:2442:6db0:6c1b:d125:bcaa:58ab? ([2600:1700:2442:6db0:6c1b:d125:bcaa:58ab])
+        by smtp.gmail.com with ESMTPSA id r8-20020a05683001c800b005cdadc2a837sm11540493ota.70.2022.04.10.14.49.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 10 Apr 2022 14:49:42 -0700 (PDT)
+Message-ID: <8a35c20b-0d93-8387-aa4a-b768a8a81b5f@gmail.com>
+Date:   Sun, 10 Apr 2022 16:49:41 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 2/2] of: overlay: rework overlay apply and remove
+ kfree()s
+Content-Language: en-US
+From:   Frank Rowand <frowand.list@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>, pantelis.antoniou@konsulko.com,
+        Slawomir Stepien <slawomir.stepien@nokia.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Slawomir Stepien <sst@poczta.fm>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Alan Tull <atull@kernel.org>
+References: <20220410210833.441504-1-frowand.list@gmail.com>
+ <20220410210833.441504-3-frowand.list@gmail.com>
+In-Reply-To: <20220410210833.441504-3-frowand.list@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi folks,
+On 4/10/22 16:08, frowand.list@gmail.com wrote:
+> From: Frank Rowand <frank.rowand@sony.com>
+> 
+> Fix various kfree() issues related to of_overlay_apply().
+>   - Double kfree() of fdt and tree when init_overlay_changeset()
+>     returns an error.
+>   - free_overlay_changeset() free the root of the unflattened
+>     overlay (variable tree) instead of the memory that contains
+>     the unflattened overlay.
+>   - For the case of a failure during applying an overlay, move kfree()
+>     of new_fdt and overlay_mem into the function that allocated them.
+>     For the case of removing an overlay, the kfree() remains in
+>     free_overlay_changeset().
+>   - Check return value of of_fdt_unflatten_tree() for error instead
+>     of checking the returnded value of overlay_root.
+> 
+> More clearly document policy related to lifetime of pointers into
+> overlay memory.
+> 
+> Double kfree()
+> Reported-by: Slawomir Stepien <slawomir.stepien@nokia.com>
 
-The RNG uses a function called random_get_entropy() basically anytime
-that it needs to timestamp an event. For example, an interrupt comes in,
-and we mix a random_get_entropy() into the entropy pool somehow.
-Somebody mashes their keyboard or moves their mouse around? We mix a
-random_get_entropy() into the entropy pool. It's one of the main
-varieties of input.
+I should have also added:
 
-Unfortunately, it's always 0 on a few platforms. The RNG has accumulated
-various hacks to deal with this, but in general it's not great. Surely
-we can do better than 0. In fact, *anything* that's not the same exact
-value all the time would be better than 0. Even a counter that
-increments once per hour would be better than 0! I think you get the
-idea.
+Fixes: 83ef4777f5ff ("of: overlay: Stop leaking resources on overlay removal")
 
-On most platforms, random_get_entropy() is aliased to get_cycles(),
-which makes sense for platforms where get_cycles() is defined. RDTSC,
-for example, has all the characteristics we care about for this
-function: it's fast to acquire (i.e. acceptable in an irq handler),
-pretty high precision, available, forms a 2-monotone distribution, etc.
-But for platforms without that, what is the next best thing?
+-Frank
 
-Sometimes the next best thing is architecture-defined. For example,
-really old MIPS has the CP0 random register, which isn't a cycle
-counter, but is at least something. However, some platforms don't even
-have an architecture-defined fallback.
-
-Fortunately, the timekeeping subsystem has already solved this problem
-of trying to determine what the least bad clock is on constrained
-systems, falling back to jiffies in the worst case. By exporting the raw
-clock, we can get a decent fallback function for when there's no cycle
-counter or architecture-specific function.
-
-This series makes the RNG more useful on: m68k, RISC-V, MIPS, ARM32,
-NIOS II, SPARC32, Xtensa, and Usermode Linux. Previously these platforms
-would, in certain circumstances, but out of luck with regards to having
-any type of event timestamping source in the RNG.
-
-Finally, note that this series isn't about "jitter entropy" or other
-ways of initializing the RNG. That's a different topic for a different
-thread. Please don't let this discussion veer off into that. Here, I'm
-just trying to find a good fallback counter/timer for platforms without
-get_cycles(), a question with limited scope.
-
-If this (or a future revision) looks good to you all and receives the
-requisite acks, my plan was to take these through the random.git tree
-for 5.19, so that I can then build on top of it.
-
-Thanks,
-Jason
-
-Changes v1->v2:
-- Use ktime_read_raw_clock() instead of sched_clock(), per Thomas'
-  suggestion.
-- Drop arm64 change.
-- Cleanup header inclusion ordering problem.
-
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Theodore Ts'o <tytso@mit.edu>
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: Albert Ou <aou@eecs.berkeley.edu>
-Cc: David S. Miller <davem@davemloft.net>
-Cc: Richard Weinberger <richard@nod.at>
-Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Cc: Johannes Berg <johannes@sipsolutions.net>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: H. Peter Anvin <hpa@zytor.com>
-Cc: Chris Zankel <chris@zankel.net>
-Cc: Max Filippov <jcmvbkbc@gmail.com>
-Cc: John Stultz <john.stultz@linaro.org>
-Cc: Stephen Boyd <sboyd@kernel.org>
-Cc: Dinh Nguyen <dinguyen@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-m68k@lists.linux-m68k.org
-Cc: linux-mips@vger.kernel.org
-Cc: linux-riscv@lists.infradead.org
-Cc: sparclinux@vger.kernel.org
-Cc: linux-um@lists.infradead.org
-Cc: x86@kernel.org
-Cc: linux-xtensa@linux-xtensa.org
-
-Jason A. Donenfeld (11):
-  timekeeping: add accessor for raw clock
-  timekeeping: use ktime_read_raw_clock() for random_get_entropy() if no
-    get_cycles()
-  m68k: use ktime_read_raw_clock() for random_get_entropy() instead of
-    zero
-  riscv: use ktime_read_raw_clock() for random_get_entropy() instead of
-    zero
-  mips: use ktime_read_raw_clock() for random_get_entropy() instead of
-    zero
-  arm: use ktime_read_raw_clock() for random_get_entropy() instead of
-    zero
-  nios2: use ktime_read_raw_clock() for random_get_entropy() instead of
-    zero
-  x86: use ktime_read_raw_clock() for random_get_entropy() instead of
-    zero
-  um: use ktime_read_raw_clock() for random_get_entropy() instead of
-    zero
-  sparc: use ktime_read_raw_clock() for random_get_entropy() instead of
-    zero
-  xtensa: use ktime_read_raw_clock() for random_get_entropy() instead of
-    zero
-
- arch/arm/include/asm/timex.h      |  1 +
- arch/m68k/include/asm/timex.h     |  2 +-
- arch/mips/include/asm/timex.h     |  2 +-
- arch/nios2/include/asm/timex.h    |  2 ++
- arch/riscv/include/asm/timex.h    |  2 +-
- arch/sparc/include/asm/timex_32.h |  4 +---
- arch/um/include/asm/timex.h       |  9 ++-------
- arch/x86/include/asm/tsc.h        | 10 ++++++++++
- arch/xtensa/include/asm/timex.h   |  6 ++----
- include/linux/timex.h             |  8 ++++++++
- kernel/time/timekeeping.c         |  8 ++++++++
- 11 files changed, 37 insertions(+), 17 deletions(-)
-
--- 
-2.35.1
+> 
+> Signed-off-by: Frank Rowand <frank.rowand@sony.com>
+> ---
+> 
+> Changes since v1:
+>   - Move kfree()s from init_overlay_changeset() to of_overlay_fdt_apply()
+>   - Better document lifetime of pointers into overlay, both in overlay.c
+>     and Documentation/devicetree/overlay-notes.rst
+> 
+>  Documentation/devicetree/overlay-notes.rst |  23 +++-
+>  drivers/of/overlay.c                       | 127 ++++++++++++---------
+>  2 files changed, 91 insertions(+), 59 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/overlay-notes.rst b/Documentation/devicetree/overlay-notes.rst
+> index b2b8db765b8c..7a6e85f75567 100644
+> --- a/Documentation/devicetree/overlay-notes.rst
+> +++ b/Documentation/devicetree/overlay-notes.rst
+> @@ -119,10 +119,25 @@ Finally, if you need to remove all overlays in one-go, just call
+>  of_overlay_remove_all() which will remove every single one in the correct
+>  order.
+>  
+> -In addition, there is the option to register notifiers that get called on
+> +There is the option to register notifiers that get called on
+>  overlay operations. See of_overlay_notifier_register/unregister and
+>  enum of_overlay_notify_action for details.
+>  
+> -Note that a notifier callback is not supposed to store pointers to a device
+> -tree node or its content beyond OF_OVERLAY_POST_REMOVE corresponding to the
+> -respective node it received.
+> +A notifier callback for OF_OVERLAY_PRE_APPLY, OF_OVERLAY_POST_APPLY, or
+> +OF_OVERLAY_PRE_REMOVE may store pointers to a device tree node in the overlay
+> +or its content but these pointers must not persist past the notifier callback
+> +for OF_OVERLAY_POST_REMOVE.  The memory containing the overlay will be
+> +kfree()ed after OF_OVERLAY_POST_REMOVE notifiers are called.  Note that the
+> +memory will be kfree()ed even if the notifier for OF_OVERLAY_POST_REMOVE
+> +returns an error.
+> +
+> +The changeset notifiers in drivers/of/dynamic.c are a second type of notifier
+> +that could be triggered by applying or removing an overlay.  These notifiers
+> +are not allowed to store pointers to a device tree node in the overlay
+> +or its content.  The overlay code does not protect against such pointers
+> +remaining active when the memory containing the overlay is freed as a result
+> +of removing the overlay.
+> +
+> +Any other code that retains a pointer to the overlay nodes or data is
+> +considered to be a bug because after removing the overlay the pointer
+> +will refer to freed memory.
+> diff --git a/drivers/of/overlay.c b/drivers/of/overlay.c
+> index f74aa9ff67aa..c8e999518f2f 100644
+> --- a/drivers/of/overlay.c
+> +++ b/drivers/of/overlay.c
+> @@ -58,6 +58,7 @@ struct fragment {
+>   * @id:			changeset identifier
+>   * @ovcs_list:		list on which we are located
+>   * @new_fdt:		Memory allocated to hold unflattened aligned FDT
+> + * @overlay_mem:	the memory chunk that contains @overlay_tree
+>   * @overlay_tree:	expanded device tree that contains the fragment nodes
+>   * @count:		count of fragment structures
+>   * @fragments:		fragment nodes in the overlay expanded device tree
+> @@ -68,6 +69,7 @@ struct overlay_changeset {
+>  	int id;
+>  	struct list_head ovcs_list;
+>  	const void *new_fdt;
+> +	const void *overlay_mem;
+>  	struct device_node *overlay_tree;
+>  	int count;
+>  	struct fragment *fragments;
+> @@ -720,18 +722,20 @@ static struct device_node *find_target(struct device_node *info_node)
+>   * init_overlay_changeset() - initialize overlay changeset from overlay tree
+>   * @ovcs:		Overlay changeset to build
+>   * @new_fdt:		Memory allocated to hold unflattened aligned FDT
+> + * @tree_mem:		Memory that contains @overlay_tree
+>   * @overlay_tree:	Contains the overlay fragments and overlay fixup nodes
+>   *
+>   * Initialize @ovcs.  Populate @ovcs->fragments with node information from
+>   * the top level of @overlay_tree.  The relevant top level nodes are the
+>   * fragment nodes and the __symbols__ node.  Any other top level node will
+> - * be ignored.
+> + * be ignored.  Populate other @ovcs fields.
+>   *
+>   * Return: 0 on success, -ENOMEM if memory allocation failure, -EINVAL if error
+>   * detected in @overlay_tree, or -ENOSPC if idr_alloc() error.
+>   */
+>  static int init_overlay_changeset(struct overlay_changeset *ovcs,
+> -		const void *new_fdt, struct device_node *overlay_tree)
+> +		const void *new_fdt, const void *tree_mem,
+> +		struct device_node *overlay_tree)
+>  {
+>  	struct device_node *node, *overlay_node;
+>  	struct fragment *fragment;
+> @@ -751,9 +755,6 @@ static int init_overlay_changeset(struct overlay_changeset *ovcs,
+>  	if (!of_node_is_root(overlay_tree))
+>  		pr_debug("%s() overlay_tree is not root\n", __func__);
+>  
+> -	ovcs->overlay_tree = overlay_tree;
+> -	ovcs->new_fdt = new_fdt;
+> -
+>  	INIT_LIST_HEAD(&ovcs->ovcs_list);
+>  
+>  	of_changeset_init(&ovcs->cset);
+> @@ -832,6 +833,9 @@ static int init_overlay_changeset(struct overlay_changeset *ovcs,
+>  
+>  	ovcs->id = id;
+>  	ovcs->count = cnt;
+> +	ovcs->new_fdt = new_fdt;
+> +	ovcs->overlay_mem = tree_mem;
+> +	ovcs->overlay_tree = overlay_tree;
+>  	ovcs->fragments = fragments;
+>  
+>  	return 0;
+> @@ -846,7 +850,7 @@ static int init_overlay_changeset(struct overlay_changeset *ovcs,
+>  	return ret;
+>  }
+>  
+> -static void free_overlay_changeset(struct overlay_changeset *ovcs)
+> +static void free_overlay_changeset_contents(struct overlay_changeset *ovcs)
+>  {
+>  	int i;
+>  
+> @@ -861,12 +865,20 @@ static void free_overlay_changeset(struct overlay_changeset *ovcs)
+>  		of_node_put(ovcs->fragments[i].overlay);
+>  	}
+>  	kfree(ovcs->fragments);
+> +}
+> +static void free_overlay_changeset(struct overlay_changeset *ovcs)
+> +{
+> +
+> +	free_overlay_changeset_contents(ovcs);
+> +
+>  	/*
+> -	 * There should be no live pointers into ovcs->overlay_tree and
+> +	 * There should be no live pointers into ovcs->overlay_mem and
+>  	 * ovcs->new_fdt due to the policy that overlay notifiers are not
+> -	 * allowed to retain pointers into the overlay devicetree.
+> +	 * allowed to retain pointers into the overlay devicetree other
+> +	 * than the window between OF_OVERLAY_PRE_APPLY overlay notifiers
+> +	 * and the OF_OVERLAY_POST_REMOVE overlay notifiers.
+>  	 */
+> -	kfree(ovcs->overlay_tree);
+> +	kfree(ovcs->overlay_mem);
+>  	kfree(ovcs->new_fdt);
+>  	kfree(ovcs);
+>  }
+> @@ -876,8 +888,10 @@ static void free_overlay_changeset(struct overlay_changeset *ovcs)
+>   *
+>   * of_overlay_apply() - Create and apply an overlay changeset
+>   * @new_fdt:		Memory allocated to hold the aligned FDT
+> + * @tree_mem:		Memory that contains @overlay_tree
+>   * @overlay_tree:	Expanded overlay device tree
+>   * @ovcs_id:		Pointer to overlay changeset id
+> + * @kfree_unsafe:	Pointer to flag to not kfree() @new_fdt and @overlay_tree
+>   *
+>   * Creates and applies an overlay changeset.
+>   *
+> @@ -910,34 +924,25 @@ static void free_overlay_changeset(struct overlay_changeset *ovcs)
+>   * refused.
+>   *
+>   * Returns 0 on success, or a negative error number.  Overlay changeset
+> - * id is returned to *ovcs_id.
+> + * id is returned to *ovcs_id.  When references to @new_fdt and @overlay_tree
+> + * may exist, *kfree_unsafe is set to true.
+>   */
+>  
+> -static int of_overlay_apply(const void *new_fdt,
+> -		struct device_node *overlay_tree, int *ovcs_id)
+> +static int of_overlay_apply(const void *new_fdt, void *tree_mem,
+> +		struct device_node *overlay_tree, int *ovcs_id,
+> +		bool *kfree_unsafe)
+>  {
+>  	struct overlay_changeset *ovcs;
+>  	int ret = 0, ret_revert, ret_tmp;
+>  
+> -	/*
+> -	 * As of this point, new_fdt and overlay_tree belong to the overlay
+> -	 * changeset.  overlay changeset code is responsible for freeing them.
+> -	 */
+> -
+>  	if (devicetree_corrupt()) {
+>  		pr_err("devicetree state suspect, refuse to apply overlay\n");
+> -		kfree(new_fdt);
+> -		kfree(overlay_tree);
+> -		ret = -EBUSY;
+> -		goto out;
+> +		return -EBUSY;
+>  	}
+>  
+>  	ovcs = kzalloc(sizeof(*ovcs), GFP_KERNEL);
+>  	if (!ovcs) {
+> -		kfree(new_fdt);
+> -		kfree(overlay_tree);
+> -		ret = -ENOMEM;
+> -		goto out;
+> +		return -ENOMEM;
+>  	}
+>  
+>  	of_overlay_mutex_lock();
+> @@ -945,28 +950,27 @@ static int of_overlay_apply(const void *new_fdt,
+>  
+>  	ret = of_resolve_phandles(overlay_tree);
+>  	if (ret)
+> -		goto err_free_overlay_tree;
+> +		goto err_free_ovcs;
+>  
+> -	ret = init_overlay_changeset(ovcs, new_fdt, overlay_tree);
+> +	ret = init_overlay_changeset(ovcs, new_fdt, tree_mem, overlay_tree);
+>  	if (ret)
+> -		goto err_free_overlay_tree;
+> +		goto err_free_ovcs_contents;
+>  
+>  	/*
+> -	 * after overlay_notify(), ovcs->overlay_tree related pointers may have
+> -	 * leaked to drivers, so can not kfree() overlay_tree,
+> -	 * aka ovcs->overlay_tree; and can not free memory containing aligned
+> -	 * fdt.  The aligned fdt is contained within the memory at
+> -	 * ovcs->new_fdt, possibly at an offset from ovcs->new_fdt.
+> +	 * After overlay_notify(), ovcs->overlay_tree related pointers may have
+> +	 * leaked to drivers, so can not kfree() ovcs->overlay_mem and
+> +	 * ovcs->new_fdt until after OF_OVERLAY_POST_REMOVE notifiers.
+>  	 */
+> +	*kfree_unsafe = true;
+>  	ret = overlay_notify(ovcs, OF_OVERLAY_PRE_APPLY);
+>  	if (ret) {
+>  		pr_err("overlay changeset pre-apply notify error %d\n", ret);
+> -		goto err_free_overlay_changeset;
+> +		goto err_free_ovcs_contents;
+>  	}
+>  
+>  	ret = build_changeset(ovcs);
+>  	if (ret)
+> -		goto err_free_overlay_changeset;
+> +		goto err_free_ovcs_contents;
+>  
+>  	ret_revert = 0;
+>  	ret = __of_changeset_apply_entries(&ovcs->cset, &ret_revert);
+> @@ -976,7 +980,7 @@ static int of_overlay_apply(const void *new_fdt,
+>  				 ret_revert);
+>  			devicetree_state_flags |= DTSF_APPLY_FAIL;
+>  		}
+> -		goto err_free_overlay_changeset;
+> +		goto err_free_ovcs_contents;
+>  	}
+>  
+>  	ret = __of_changeset_apply_notify(&ovcs->cset);
+> @@ -997,18 +1001,16 @@ static int of_overlay_apply(const void *new_fdt,
+>  
+>  	goto out_unlock;
+>  
+> -err_free_overlay_tree:
+> -	kfree(new_fdt);
+> -	kfree(overlay_tree);
+> +err_free_ovcs_contents:
+> +	free_overlay_changeset_contents(ovcs);
+>  
+> -err_free_overlay_changeset:
+> -	free_overlay_changeset(ovcs);
+> +err_free_ovcs:
+> +	kfree(ovcs);
+>  
+>  out_unlock:
+>  	mutex_unlock(&of_mutex);
+>  	of_overlay_mutex_unlock();
+>  
+> -out:
+>  	pr_debug("%s() err=%d\n", __func__, ret);
+>  
+>  	return ret;
+> @@ -1019,11 +1021,14 @@ int of_overlay_fdt_apply(const void *overlay_fdt, u32 overlay_fdt_size,
+>  {
+>  	void *new_fdt;
+>  	void *new_fdt_align;
+> +	void *overlay_mem;
+> +	bool kfree_unsafe;
+>  	int ret;
+>  	u32 size;
+>  	struct device_node *overlay_root = NULL;
+>  
+>  	*ovcs_id = 0;
+> +	kfree_unsafe = false;
+>  
+>  	if (overlay_fdt_size < sizeof(struct fdt_header) ||
+>  	    fdt_check_header(overlay_fdt)) {
+> @@ -1046,30 +1051,37 @@ int of_overlay_fdt_apply(const void *overlay_fdt, u32 overlay_fdt_size,
+>  	new_fdt_align = PTR_ALIGN(new_fdt, FDT_ALIGN_SIZE);
+>  	memcpy(new_fdt_align, overlay_fdt, size);
+>  
+> -	of_fdt_unflatten_tree(new_fdt_align, NULL, &overlay_root);
+> -	if (!overlay_root) {
+> +	overlay_mem = of_fdt_unflatten_tree(new_fdt_align, NULL, &overlay_root);
+> +	if (!overlay_mem) {
+>  		pr_err("unable to unflatten overlay_fdt\n");
+>  		ret = -EINVAL;
+>  		goto out_free_new_fdt;
+>  	}
+>  
+> -	ret = of_overlay_apply(new_fdt, overlay_root, ovcs_id);
+> -	if (ret < 0) {
+> -		/*
+> -		 * new_fdt and overlay_root now belong to the overlay
+> -		 * changeset.
+> -		 * overlay changeset code is responsible for freeing them.
+> -		 */
+> -		goto out;
+> -	}
+> +	ret = of_overlay_apply(new_fdt, overlay_mem, overlay_root, ovcs_id,
+> +			&kfree_unsafe);
+> +	if (ret < 0)
+> +		goto out_free_overlay_mem;
+>  
+> +	/*
+> +	 * new_fdt and overlay_mem now belong to the overlay changeset.
+> +	 * free_overlay_changeset() is responsible for freeing them.
+> +	 */
+>  	return 0;
+>  
+> +	/*
+> +	 * After overlay_notify(), ovcs->overlay_tree related pointers may have
+> +	 * leaked to drivers, so can not kfree() overlay_mem and new_fdt.  This
+> +	 * will result in a memory leak.
+> +	 */
+> +out_free_overlay_mem:
+> +	if (!kfree_unsafe)
+> +		kfree(overlay_mem);
+>  
+>  out_free_new_fdt:
+> -	kfree(new_fdt);
+> +	if (!kfree_unsafe)
+> +		kfree(new_fdt);
+>  
+> -out:
+>  	return ret;
+>  }
+>  EXPORT_SYMBOL_GPL(of_overlay_fdt_apply);
+> @@ -1237,6 +1249,11 @@ int of_overlay_remove(int *ovcs_id)
+>  
+>  	*ovcs_id = 0;
+>  
+> +	/*
+> +	 * Note that the overlay memory will be kfree()ed by
+> +	 * free_overlay_changeset() even if the notifier for
+> +	 * OF_OVERLAY_POST_REMOVE returns an error.
+> +	 */
+>  	ret_tmp = overlay_notify(ovcs, OF_OVERLAY_POST_REMOVE);
+>  	if (ret_tmp) {
+>  		pr_err("overlay changeset post-remove notify error %d\n",
 

@@ -2,114 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 919144FADF0
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 14:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECB974FADF2
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 14:49:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242942AbiDJMvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 08:51:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56450 "EHLO
+        id S243044AbiDJMvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 08:51:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbiDJMvM (ORCPT
+        with ESMTP id S229677AbiDJMvt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 08:51:12 -0400
-Received: from out20-51.mail.aliyun.com (out20-51.mail.aliyun.com [115.124.20.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F3B4A3E6;
-        Sun, 10 Apr 2022 05:49:00 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07449171|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.183864-0.0663327-0.749803;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047187;MF=guan@eryu.me;NM=1;PH=DS;RN=5;RT=5;SR=0;TI=SMTPD_---.NNn8Kq0_1649594937;
-Received: from localhost(mailfrom:guan@eryu.me fp:SMTPD_---.NNn8Kq0_1649594937)
-          by smtp.aliyun-inc.com(33.45.46.134);
-          Sun, 10 Apr 2022 20:48:57 +0800
-Date:   Sun, 10 Apr 2022 20:48:57 +0800
-From:   Eryu Guan <guan@eryu.me>
-To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Cc:     fstests@vger.kernel.org, riteshh@linux.ibm.com,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ext4/053: Add support for testing mb_optimize_scan
-Message-ID: <YlLSObvNaXxrrZkw@desktop>
-References: <5b0d252484cbe973c2df0c677cb47b30012b0db1.1647253313.git.ojaswin@linux.ibm.com>
+        Sun, 10 Apr 2022 08:51:49 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5C563BD6;
+        Sun, 10 Apr 2022 05:49:38 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649594977;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lgNaYQOZDZrYXzopZbAPdhOPlBXFs/fNvReQ9xctjZk=;
+        b=HOL3aJ+6jPVAgjwp2KAXHc8AewtgSbf/UBgjnuXMyhTyavjUhWPP2EjjQ7whqONUW9TeYR
+        c8NS4rwPvOXlFdT9ab3zfE4m7HWhj8iEc7uhBOzSkLCu658ji/endviGmHULRZz0xwwHRj
+        AILf19WdjVa/M3C7AQIRHiXVfj1Yv+dmBtVrDRJZ54TgjUJx0U+VaBDvidwX9k28YJWfgh
+        8gp6rVehuOvMZuX7dxSLd322yxjCYxcIi+T/iCiHodwfUvJQXDdjbwDgAM6GRGLYuUDbuB
+        bIMA9E0+eB1AO8pUNlj5Pb6XLDPLaYkdDZrlNaUSLKL4q+YrtrzEjwaTS1qSLA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649594977;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lgNaYQOZDZrYXzopZbAPdhOPlBXFs/fNvReQ9xctjZk=;
+        b=txJVi4mQU4gdNFwZ/0mv52AODIpImaCKYYSbk7L3SUBW5SyRI+GfBizOeETt3PMI5UN/Qx
+        TfYOabsLucfzc4BA==
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH V2] lib/irq_poll: Add local_bh_disable() in irq_poll_cpu_dead()
+In-Reply-To: <87o819glbf.ffs@tglx>
+References: <YgJ/XWVxxWDVBBVA@linutronix.de>
+ <YgNzsnIE9bwQZ1Zg@infradead.org> <YgUGI9qAKUh4AOUY@linutronix.de>
+ <YgYDePJLsVLXKqEP@infradead.org> <87o819glbf.ffs@tglx>
+Date:   Sun, 10 Apr 2022 14:49:36 +0200
+Message-ID: <87k0bxgl27.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5b0d252484cbe973c2df0c677cb47b30012b0db1.1647253313.git.ojaswin@linux.ibm.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 14, 2022 at 04:02:07PM +0530, Ojaswin Mujoo wrote:
-> Add support to test the mb_optimize_scan mount option.
-> Since its value is not reflected in the "options" file in proc,
-> use "mb_structs_summary" to verify its value.
-> 
-> Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 
-mb_optimize_scan option was added in v5.13 by commit 196e402adf2e ("ext4:
-improve cr 0 / cr 1 group scanning"), and ext4/053 will run on v5.12
-kernel (and newer kernels), so test will fail when testing v5.12 kernel.
+irq_poll_cpu_dead() pulls the blk_cpu_iopoll backlog from the dead CPU and
+raises the POLL softirq with __raise_softirq_irqoff() on the CPU it is
+running on. That just sets the bit in the pending softirq mask.
 
-> ---
->  tests/ext4/053 | 21 ++++++++++++---------
->  1 file changed, 12 insertions(+), 9 deletions(-)
-> 
-> diff --git a/tests/ext4/053 b/tests/ext4/053
-> index e1e79592..bd92002f 100755
-> --- a/tests/ext4/053
-> +++ b/tests/ext4/053
-> @@ -100,6 +100,7 @@ test_mnt() {
->  	(
->  	ret=0
->  	IFS=','
-> +	proc_path="/proc/fs/ext4/$(_short_dev $SCRATCH_DEV)"
->  	for option in $OPTS; do
->  		if echo $IGNORED | grep -w $option; then
->  			continue
-> @@ -114,11 +115,16 @@ test_mnt() {
->  		fi
->  		option=${option#^}
->  
-> -		if echo $CHECK_MINFO | grep -w $option; then
-> +		if [[ $option =~ ^mb_optimize_scan=.*$ ]]; then
-> +			# mb_optimize_scan needs special handling
-> +			expected=${option#*=}
-> +			ret=$(cat $proc_path/mb_structs_summary | grep "optimize_scan" \
-> +				| awk '{ print $2 }')
-> +		elif echo $CHECK_MINFO | grep -w $option; then
->  			findmnt -n -o OPTIONS $SCRATCH_DEV | grep $option
->  			ret=$?
->  		else
-> -			grep $option /proc/fs/ext4/$(_short_dev $SCRATCH_DEV)/options
-> +			grep $option $proc_path/options
->  			ret=$?
->  		fi
->  
-> @@ -526,13 +532,10 @@ for fstype in ext2 ext3 ext4; do
->  
->  	mnt prefetch_block_bitmaps removed
->  	mnt no_prefetch_block_bitmaps
-> -	# We don't currently have a way to know that the option has been
-> -	# applied, so comment it out for now. This should be fixed in the
-> -	# future.
+This means the handling of the softirq is delayed until the next interrupt
+or a local_bh_disable/enable() pair. As a consequence the CPU on which this
+code runs can reach idle with the POLL softirq pending, which triggers a
+warning in the NOHZ idle code.
 
-As the comment said, we need a way to know if mb_optimize_scan option is
-supported by current kernel.
+Add a local_bh_disable/enable() pair around the interrupts disabled section
+in irq_poll_cpu_dead(). local_bh_enable will handle the pending softirq.
 
-Thanks,
-Eryu
+[tglx: Massaged changelog and comment]
 
-> -	#mnt mb_optimize_scan=0
-> -	#mnt mb_optimize_scan=1
-> -	#not_mnt mb_optimize_scan=9
-> -	#not_mnt mb_optimize_scan=
-> +	mnt mb_optimize_scan=0
-> +	mnt mb_optimize_scan=1
-> +	not_mnt mb_optimize_scan=9
-> +	not_mnt mb_optimize_scan=
->  	mnt nombcache
->  	mnt no_mbcache nombcache
->  	mnt check=none removed
-> -- 
-> 2.27.0
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+---
+V2: Updated changelog and comment
+---
+ lib/irq_poll.c |    8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+--- a/lib/irq_poll.c
++++ b/lib/irq_poll.c
+@@ -188,14 +188,18 @@ EXPORT_SYMBOL(irq_poll_init);
+ static int irq_poll_cpu_dead(unsigned int cpu)
+ {
+ 	/*
+-	 * If a CPU goes away, splice its entries to the current CPU
+-	 * and trigger a run of the softirq
++	 * If a CPU goes away, splice its entries to the current CPU and
++	 * set the POLL softirq bit. The local_bh_disable()/enable() pair
++	 * ensures that it is handled. Otherwise the current CPU could
++	 * reach idle with the POLL softirq pending.
+ 	 */
++	local_bh_disable();
+ 	local_irq_disable();
+ 	list_splice_init(&per_cpu(blk_cpu_iopoll, cpu),
+ 			 this_cpu_ptr(&blk_cpu_iopoll));
+ 	__raise_softirq_irqoff(IRQ_POLL_SOFTIRQ);
+ 	local_irq_enable();
++	local_bh_enable();
+ 
+ 	return 0;
+ }

@@ -2,127 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 408EE4FAF2A
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 19:07:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16DED4FAF2B
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 19:08:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241757AbiDJRJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 13:09:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42848 "EHLO
+        id S243683AbiDJRKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 13:10:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbiDJRJZ (ORCPT
+        with ESMTP id S231439AbiDJRKN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 13:09:25 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075EA1117C
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 10:07:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649610434; x=1681146434;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3irv/Hvk7J3OLv+AdB6F7l6hdeozHP/Z6qCmFvQNX4Q=;
-  b=a3T+ZsBn2WNpa4XCvrKhJki3fHBitmxs9Uz4cHUOhiqJtI1BHhfTpqyZ
-   70jf/q8BtzScWfhpCZobtAfMf9F7XWpcqboAORY9pQxQH/kNQXczpxfY5
-   RmBYM13jtb5BNyEmyLltimlZlC5dXsMIef4XyxWp8X9X03Yx5R80Jzd3t
-   IKsjFIJ0erjdYoTbL0hN76y8bXb6O6g9x14qjelpLCPq8tGCr/YpHMSpd
-   lCd/vjxnDDCANy0CdwUyAPWGmFOSPFxUSzY1e9l1GbhPQhtY1HI038YJu
-   LMdB9a+GmfVvXp8aBj5mDtPP77xdYd6n/UMxTx7piiiQDWN3fmJnDwfA2
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="261728428"
-X-IronPort-AV: E=Sophos;i="5.90,250,1643702400"; 
-   d="scan'208";a="261728428"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2022 10:07:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,250,1643702400"; 
-   d="scan'208";a="699083777"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 10 Apr 2022 10:07:12 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ndb1r-0000yW-OV;
-        Sun, 10 Apr 2022 17:07:11 +0000
-Date:   Mon, 11 Apr 2022 01:06:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Jason A. Donenfeld" <zx2c4@kernel.org>
-Cc:     kbuild-all@lists.01.org, zx2c4@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [crng-random:jd/not-zero-entropy 7/12]
- arch/arm/include/asm/timex.h:14:63: error: implicit declaration of function
- 'sched_clock'
-Message-ID: <202204110106.XXNJ3BEs-lkp@intel.com>
+        Sun, 10 Apr 2022 13:10:13 -0400
+Received: from relay.hostedemail.com (relay.hostedemail.com [64.99.140.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FB911C14
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 10:08:02 -0700 (PDT)
+Received: from omf16.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay09.hostedemail.com (Postfix) with ESMTP id D73DD22FA7;
+        Sun, 10 Apr 2022 17:08:00 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf16.hostedemail.com (Postfix) with ESMTPA id 27B8520019;
+        Sun, 10 Apr 2022 17:07:59 +0000 (UTC)
+Message-ID: <783d850ce7778e9d8f203155034e432910553b1b.camel@perches.com>
+Subject: Re: [PATCH 1/6] staging: r8188eu: drop unnecessary wrapper
+ rtw_free_cmd_priv
+From:   Joe Perches <joe@perches.com>
+To:     Vihas Makwana <makvihas@gmail.com>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Straube <straube.linux@gmail.com>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Pavel Skripkin <paskripkin@gmail.com>
+Date:   Sun, 10 Apr 2022 10:07:58 -0700
+In-Reply-To: <20220410163117.3964-2-makvihas@gmail.com>
+References: <20220410163117.3964-1-makvihas@gmail.com>
+         <20220410163117.3964-2-makvihas@gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: 27B8520019
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
+X-Stat-Signature: izm1rq8p4turfu5zpncoxejchtfie6ou
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/lClx2oPpr4EGHJAsyxoihyxirHS6hFEk=
+X-HE-Tag: 1649610479-746718
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git jd/not-zero-entropy
-head:   efec3e2057963ad20223fa50a657b3ca9314ed45
-commit: 904df0ccc3b52e7dffc4b968b8839d63ecba08ce [7/12] arm: use sched_clock() for random_get_entropy() instead of zero
-config: arm-buildonly-randconfig-r001-20220410 (https://download.01.org/0day-ci/archive/20220411/202204110106.XXNJ3BEs-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git/commit/?id=904df0ccc3b52e7dffc4b968b8839d63ecba08ce
-        git remote add crng-random git://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git
-        git fetch --no-tags crng-random jd/not-zero-entropy
-        git checkout 904df0ccc3b52e7dffc4b968b8839d63ecba08ce
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
+On Sun, 2022-04-10 at 22:01 +0530, Vihas Makwana wrote:
+> Remove the unnecessary wrapper. The logic of rtw_free_cmd_priv can
+> be moved to _rtw_free_cmd_priv.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from include/linux/timex.h:65,
-                    from include/linux/time32.h:13,
-                    from include/linux/time.h:60,
-                    from include/linux/jiffies.h:10,
-                    from lib/random32.c:38:
-   lib/random32.c: In function 'prandom_init_early':
->> arch/arm/include/asm/timex.h:14:63: error: implicit declaration of function 'sched_clock' [-Werror=implicit-function-declaration]
-      14 | #define random_get_entropy() ((unsigned long)(get_cycles() ?: sched_clock()))
-         |                                                               ^~~~~~~~~~~
-   lib/random32.c:469:22: note: in expansion of macro 'random_get_entropy'
-     469 |                 v1 = random_get_entropy();
-         |                      ^~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
---
-   In file included from include/linux/timex.h:65,
-                    from include/linux/time32.h:13,
-                    from include/linux/time.h:60,
-                    from include/linux/stat.h:19,
-                    from include/linux/module.h:13,
-                    from crypto/jitterentropy-kcapi.c:41:
-   crypto/jitterentropy-kcapi.c: In function 'jent_get_nstime':
->> arch/arm/include/asm/timex.h:14:63: error: implicit declaration of function 'sched_clock' [-Werror=implicit-function-declaration]
-      14 | #define random_get_entropy() ((unsigned long)(get_cycles() ?: sched_clock()))
-         |                                                               ^~~~~~~~~~~
-   crypto/jitterentropy-kcapi.c:85:15: note: in expansion of macro 'random_get_entropy'
-      85 |         tmp = random_get_entropy();
-         |               ^~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+If you are going to drop wrappers, my preference would be
+to drop the underscore prefixed ones.
 
 
-vim +/sched_clock +14 arch/arm/include/asm/timex.h
-
-    11	
-    12	typedef unsigned long cycles_t;
-    13	#define get_cycles()	({ cycles_t c; read_current_timer(&c) ? 0 : c; })
-  > 14	#define random_get_entropy() ((unsigned long)(get_cycles() ?: sched_clock()))
-    15	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

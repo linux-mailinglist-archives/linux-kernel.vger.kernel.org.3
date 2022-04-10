@@ -2,128 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8CA74FB044
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 22:57:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C96F4FB04E
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 23:08:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242374AbiDJU7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 16:59:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47946 "EHLO
+        id S240770AbiDJVK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 17:10:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242351AbiDJU7U (ORCPT
+        with ESMTP id S229795AbiDJVK4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 16:59:20 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BFF11C2D;
-        Sun, 10 Apr 2022 13:57:04 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649624223;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hE+Xcw0JizEU8Wnq0ZP70KLvw79L4CjFSDQ+JeFdg1E=;
-        b=wcxdyIRUujqol7xM6/jNUaTiJK9LjQ2TxNswzkFqW9IdoCXdLl06LKnKcZu+/PhgcujoFD
-        4BL6UvqV2KyZxKcXAHyaYhKgWh+hW7kmtVsrR50bN2kEyItTRS4qenN4xdW+pqDVD/EBQJ
-        FRBUDZAXAnKdCAGLESQsbxyitf9btYLvPr88J6g6SWQULeVv1+BpRryz8V4vlo0Sxn5A1B
-        B7jn62NOZrsua6pLpW1KUXCpCdbVHaodhuhDNbeQMQoqpedjr6x5wCT5mekwEWTjKpLkBQ
-        ZhVOGqfjVtVh2uqjxiB4TKZirCwCtL5e55pMSWAO2Ry+8zKLnyd7j8EtVVFiMg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649624223;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hE+Xcw0JizEU8Wnq0ZP70KLvw79L4CjFSDQ+JeFdg1E=;
-        b=WYkLY0CPXnB/0QIxOUzf7pdAwpOuVx9Tljat/8ZOy+GrRKgqIku37SjusWmBW3We4uxu9x
-        QGtzsFUk86/12iAg==
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        arnd@arndb.de, Theodore Ts'o <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "David S . Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, x86@kernel.org,
-        linux-xtensa@linux-xtensa.org
-Subject: Re: [PATCH RFC v1 00/10] archs/random: fallback to using
- sched_clock() if no cycle counter
-In-Reply-To: <YlLo8JVOS6FDmWUM@zx2c4.com>
-References: <20220408182145.142506-1-Jason@zx2c4.com> <87wnfxhm3n.ffs@tglx>
- <YlLo8JVOS6FDmWUM@zx2c4.com>
-Date:   Sun, 10 Apr 2022 22:57:02 +0200
-Message-ID: <877d7whd29.ffs@tglx>
+        Sun, 10 Apr 2022 17:10:56 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B0CDC1;
+        Sun, 10 Apr 2022 14:08:44 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id ke15so11810778qvb.11;
+        Sun, 10 Apr 2022 14:08:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uuGcB3VRccVwSj8pHR359GBojRIxqgRtMfnRzy/LJCo=;
+        b=lhuzd65iJi8ylH1ApT2DjunGJwOxBJGHIT0dhXl4HQvEvP6QtR+RPoZ2Fq2cuUZtWW
+         AuFqCEtgyUqwIwAMUIDlVkOczZZo0WTCYQgxbh6rQZlTiT9Ki9EyUV1IqA9zSvi0UpCz
+         PIKdmfiynTf1Zlox7+qn65PasHl2aWPyOgpJ57J7B7yEr/ckZZ4YP7c1o065pozi3Zqp
+         ksrUxOXW+ruLvpllUFnograt+xAQhzxuMpvCYRr/WN6Jkf4NL0p89PFNg0PA0+PBBnAM
+         hVZR+bn50nAq0gZTd95aHKhyd4E1oUhEIvWf1CuKfdSa2g3RvgE3FrEWwx1y/mr96rzx
+         dKEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uuGcB3VRccVwSj8pHR359GBojRIxqgRtMfnRzy/LJCo=;
+        b=Igd897ma9JaKcGOTqrdCAu7MbNFn9tEC3arQW7Onx69TjhGt079wfvejFTpWlEHGiX
+         DbyEvuFJYqxk6riOdiZx2W+M8mopN+Z38plBMXAZt1n//ihTMNbj0Acb8sEfiq1K12t9
+         B0UF4NGx5QMe5C+NZgoCe3n/eeXUcXjDC2Mwn7N+NCTfaEHkDxhMMF7potm2jQxrKVqX
+         m6hybZcy+ULbZl3DjZL9kcdzj5tvThxNku7rpfPsp5s4QG/GvN0kfcy2PkQN4KlLqzp2
+         CgvZOpkl9IGykFaX714p9H/nMUNnw78SV+5I41xDkN7CzdtYs/Vx7B5G42OGrii7Leuo
+         H5UQ==
+X-Gm-Message-State: AOAM5308oJHfzJm2OiMiXEYzZwVU1cAHWo3EAm7Rhm6bzcaM0rXY7x2S
+        JNcdUwdvH7hoDCTxtQ6k/50=
+X-Google-Smtp-Source: ABdhPJxBa3YgOKkohaXEOlN65yPywx80K8sigvmIuhus6PZgDt8fG+CkiZFlTMoNlTnL+rfqr4Xw/w==
+X-Received: by 2002:a05:6214:300d:b0:444:4ada:a471 with SMTP id ke13-20020a056214300d00b004444adaa471mr82752qvb.93.1649624924050;
+        Sun, 10 Apr 2022 14:08:44 -0700 (PDT)
+Received: from xps8900.attlocal.net ([2600:1700:2442:6db0:b84e:f99c:2a1b:100b])
+        by smtp.gmail.com with ESMTPSA id i68-20020a375447000000b006809e0adfffsm18438090qkb.25.2022.04.10.14.08.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Apr 2022 14:08:43 -0700 (PDT)
+From:   frowand.list@gmail.com
+To:     Rob Herring <robh+dt@kernel.org>, pantelis.antoniou@konsulko.com,
+        Slawomir Stepien <slawomir.stepien@nokia.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Slawomir Stepien <sst@poczta.fm>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Alan Tull <atull@kernel.org>
+Subject: [PATCH v2 0/2] of: overlay: rework overlay apply and remove kfree()s
+Date:   Sun, 10 Apr 2022 16:08:31 -0500
+Message-Id: <20220410210833.441504-1-frowand.list@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jason,
+From: Frank Rowand <frank.rowand@sony.com>
 
-On Sun, Apr 10 2022 at 16:25, Jason A. Donenfeld wrote:
-> On Sun, Apr 10, 2022 at 01:29:32AM +0200, Thomas Gleixner wrote:
->> But the below uncompiled hack gives you access to the 'best' clocksource
->> of a machine, i.e. the one which the platform decided to be the one
->> which is giving the best resolution. The minimal bitwidth of that is
->> AFAICT 20 bits. In the jiffies case this will at least advance every
->> tick.
->
-> Oh, huh, that's pretty cool. I can try to make a commit out of that. Are
-> you suggesting I use this as the fallback for all platforms that
-> currently return zero, or just for m68k per Arnd's suggestion, and then
-> use sched_clock() for the others? It sounds to me like you're saying
-> this would be best for all of them. If so, that'd be quite nice.
+Fix various kfree() issues related to of_overlay_apply().
 
-It's the best in terms of timekeeping. Not the fastest :)
+The fixes revealed inconsist variable names for the same variable
+across functions, resulting in difficulty understanding the code
+that was being modified.  Doing both variable renaming and the
+fixes results in a hard to review patch, so split into two patches.
 
->> The price, e.g. on x86 would be that RDTSC would be invoked via an
->> indirect function call. Not the end of the world...
->
-> Well on x86, random_get_entropy() is overridden in the arch/ code to
-> call get_cycles(). So this would really just be for 486 and for other
-> architectures with no cycle counter that are currently returning zero.
-> However, this brings up a good point: if your proposed
-> ktime_read_raw_clock() function really is so nice, should it be used
-> everywhere unconditionally with no arch-specific overrides? On x86, is
-> it really guaranteed to be RDTSC, and not, say, some off-core HPET
-> situation? And is this acceptable to call from the hard irq handler?
+The first patch in the series contains only variable renaming.
+The second patch contains the kfree() related fixes.
 
-No, that's the sad part. On system where TSC is unstable (for whatever
-reason) this might fallback to some off-core clock (HPET, PMTIMER).
-The good news is that this is mostly affecting older systems. After 20+
-years of complaining the hardware people seem to have figured out that a
-fast accessible and realiable clocksource is something useful. :)
+Frank Rowand (2):
+  of: overlay: rename variables to be consistent
+  of: overlay: rework overlay apply and remove kfree()s
 
-> Not yet having too much knowledge, I'm tentatively leaning toward the
-> safe side, of just using ktime_read_raw_clock() in the current places
-> that return zero all the time -- that is, for the purpose this patchset
-> has.
+ Documentation/devicetree/overlay-notes.rst |  23 ++-
+ drivers/of/overlay.c                       | 175 +++++++++++----------
+ 2 files changed, 115 insertions(+), 83 deletions(-)
 
-That's probably a good approach and it's init/runtime discoverable.
+-- 
+Frank Rowand <frank.rowand@sony.com>
 
-Thanks,
-
-        tglx

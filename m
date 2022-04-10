@@ -2,134 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2E724FB0CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 01:23:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75C384FB0CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 01:25:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234079AbiDJXZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 19:25:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35186 "EHLO
+        id S234291AbiDJX1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 19:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbiDJXZP (ORCPT
+        with ESMTP id S243437AbiDJX0z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 19:25:15 -0400
-Received: from mail.itouring.de (mail.itouring.de [IPv6:2a01:4f8:a0:4463::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2940115810;
-        Sun, 10 Apr 2022 16:23:03 -0700 (PDT)
-Received: from tux.applied-asynchrony.com (p5ddd7616.dip0.t-ipconnect.de [93.221.118.22])
-        by mail.itouring.de (Postfix) with ESMTPSA id 91BD2124EC0;
-        Mon, 11 Apr 2022 01:22:58 +0200 (CEST)
-Received: from [192.168.100.221] (hho.applied-asynchrony.com [192.168.100.221])
-        by tux.applied-asynchrony.com (Postfix) with ESMTP id 4733CF01601;
-        Mon, 11 Apr 2022 01:22:58 +0200 (CEST)
-Subject: Re: [tip: sched/core] sched/tracing: Don't re-read p->state when
- emitting sched_switch event
-To:     Qais Yousef <qais.yousef@arm.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
-        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>, x86@kernel.org,
-        stable@vger.kernel.org
-References: <20220120162520.570782-2-valentin.schneider@arm.com>
- <164614827941.16921.4995078681021904041.tip-bot2@tip-bot2>
- <20220308180240.qivyjdn4e3te3urm@wubuntu> <YiecMTy8ckUdXTQO@kroah.com>
- <20220308185138.ldxfqd242uxowymd@wubuntu>
- <20220409233829.o2s6tffuzujkx6w2@airbuntu>
- <20220410220608.cdf6hmf5mwcqzwun@airbuntu>
-From:   =?UTF-8?Q?Holger_Hoffst=c3=a4tte?= <holger@applied-asynchrony.com>
-Organization: Applied Asynchrony, Inc.
-Message-ID: <db6ec3a4-3ac9-e96b-d7a5-3e1b4de2adc8@applied-asynchrony.com>
-Date:   Mon, 11 Apr 2022 01:22:58 +0200
+        Sun, 10 Apr 2022 19:26:55 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A23520192
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 16:24:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649633083; x=1681169083;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=vs+iY8oK0qHZfUcC9MHwcZsvx/hIx+dS5NECv9WowVw=;
+  b=kpCE7fE5lNrfXASXqGFQ1y4AqFSS+1BBv2NkhJyrn2sd94DAikYx2zFj
+   gGKCrVQY539AxaSO3rGV4v7SEp5mhUuOA3DrPCQT/GTyf99zn/RlvfS6x
+   x6FfBExHiquzE1FLoq+PmAz9VeNMY6utx1WIXo4OkjZh3ZDwo1748m2Fa
+   CJDAX5KB/33qZ5btPS4ejIeiK/H+rWeYUOrAeBhMI2FIXe0WDAEDhwEQ6
+   7x7mW9MqSZXjfdiHQCHYO6n+PIIbPk+McTpwQEfO56MdAwEQdJ1USaDeG
+   23qaLBeDO+c8zva6AA4yzd3EETp2H92eJa3dn7gOb/OjEYCnTGMd07UcF
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="242591179"
+X-IronPort-AV: E=Sophos;i="5.90,250,1643702400"; 
+   d="scan'208";a="242591179"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2022 16:24:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,250,1643702400"; 
+   d="scan'208";a="506886682"
+Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 10 Apr 2022 16:24:41 -0700
+Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ndgvA-0001Bf-KI;
+        Sun, 10 Apr 2022 23:24:40 +0000
+Date:   Mon, 11 Apr 2022 07:24:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Luiz Angelo Daros de Luca <luizluca@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        Florian Fainelli <f.fainelli@gmail.com>
+Subject: or1k-linux-ld: drivers/net/dsa/realtek/realtek-smi.o:undefined
+ reference to `rtl8366rb_variant'
+Message-ID: <202204110757.XIafvVnj-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220410220608.cdf6hmf5mwcqzwun@airbuntu>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-04-11 00:06, Qais Yousef wrote:
-> On 04/10/22 00:38, Qais Yousef wrote:
->> On 03/08/22 18:51, Qais Yousef wrote:
->>> On 03/08/22 19:10, Greg KH wrote:
->>>> On Tue, Mar 08, 2022 at 06:02:40PM +0000, Qais Yousef wrote:
->>>>> +CC stable
->>>>>
->>>>> On 03/01/22 15:24, tip-bot2 for Valentin Schneider wrote:
->>>>>> The following commit has been merged into the sched/core branch of tip:
->>>>>>
->>>>>> Commit-ID:     fa2c3254d7cfff5f7a916ab928a562d1165f17bb
->>>>>> Gitweb:        https://git.kernel.org/tip/fa2c3254d7cfff5f7a916ab928a562d1165f17bb
->>>>>> Author:        Valentin Schneider <valentin.schneider@arm.com>
->>>>>> AuthorDate:    Thu, 20 Jan 2022 16:25:19
->>>>>> Committer:     Peter Zijlstra <peterz@infradead.org>
->>>>>> CommitterDate: Tue, 01 Mar 2022 16:18:39 +01:00
->>>>>>
->>>>>> sched/tracing: Don't re-read p->state when emitting sched_switch event
->>>>>>
->>>>>> As of commit
->>>>>>
->>>>>>    c6e7bd7afaeb ("sched/core: Optimize ttwu() spinning on p->on_cpu")
->>>>>>
->>>>>> the following sequence becomes possible:
->>>>>>
->>>>>> 		      p->__state = TASK_INTERRUPTIBLE;
->>>>>> 		      __schedule()
->>>>>> 			deactivate_task(p);
->>>>>>    ttwu()
->>>>>>      READ !p->on_rq
->>>>>>      p->__state=TASK_WAKING
->>>>>> 			trace_sched_switch()
->>>>>> 			  __trace_sched_switch_state()
->>>>>> 			    task_state_index()
->>>>>> 			      return 0;
->>>>>>
->>>>>> TASK_WAKING isn't in TASK_REPORT, so the task appears as TASK_RUNNING in
->>>>>> the trace event.
->>>>>>
->>>>>> Prevent this by pushing the value read from __schedule() down the trace
->>>>>> event.
->>>>>>
->>>>>> Reported-by: Abhijeet Dharmapurikar <adharmap@quicinc.com>
->>>>>> Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
->>>>>> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
->>>>>> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
->>>>>> Link: https://lore.kernel.org/r/20220120162520.570782-2-valentin.schneider@arm.com
->>>>>
->>>>> Any objection to picking this for stable? I'm interested in this one for some
->>>>> Android users but prefer if it can be taken by stable rather than backport it
->>>>> individually.
->>>>>
->>>>> I think it makes sense to pick the next one in the series too.
->>>>
->>>> What commit does this fix in Linus's tree?
->>>
->>> It should be this one: c6e7bd7afaeb ("sched/core: Optimize ttwu() spinning on p->on_cpu")
->>
->> Should this be okay to be picked up by stable now? I can see AUTOSEL has picked
->> it up for v5.15+, but it impacts v5.10 too.
-> 
-> commit: fa2c3254d7cfff5f7a916ab928a562d1165f17bb
-> subject: sched/tracing: Don't re-read p->state when emitting sched_switch event
-> 
-> This patch has an impact on Android 5.10 users who experience tooling breakage.
-> Is it possible to include in 5.10 LTS please?
-> 
-> It was already picked up for 5.15+ by AUTOSEL and only 5.10 is missing.
-> 
+Hi Luiz,
 
-https://lore.kernel.org/stable/Yk2PQzynOVOzJdPo@kroah.com/
+First bad commit (maybe != root cause):
 
-However, since then further investigation (still in progress) has shown that this
-may have been the fault of the tool in question, so if you can verify that tracing
-sched still works for you with this patch in 5.15.x then by all means
-let's merge it.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   4ea3c6425269d33da53c79d539ce9554117cf4d4
+commit: 765c39a4fafe6f7ea0d370aa5f30c811579cf8eb net: dsa: realtek: convert subdrivers into modules
+date:   2 months ago
+config: openrisc-buildonly-randconfig-r003-20220411 (https://download.01.org/0day-ci/archive/20220411/202204110757.XIafvVnj-lkp@intel.com/config)
+compiler: or1k-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=765c39a4fafe6f7ea0d370aa5f30c811579cf8eb
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 765c39a4fafe6f7ea0d370aa5f30c811579cf8eb
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=openrisc SHELL=/bin/bash
 
--h
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> or1k-linux-ld: drivers/net/dsa/realtek/realtek-smi.o:(.rodata+0x16c): undefined reference to `rtl8366rb_variant'
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

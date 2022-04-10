@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B1224FAB40
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 02:57:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75D364FAB42
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 02:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233589AbiDJA71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 20:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57818 "EHLO
+        id S233749AbiDJA7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 20:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233471AbiDJA7Y (ORCPT
+        with ESMTP id S233544AbiDJA71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 20:59:24 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F1CD48
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 17:57:16 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id md4so3701662pjb.4
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 17:57:16 -0700 (PDT)
+        Sat, 9 Apr 2022 20:59:27 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17FCAB1D
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 17:57:18 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id 2so12005866pjw.2
+        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 17:57:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=/jtK/Vrx2NulzdlRFPGXxwDEDEKWt3aWW57PRS+XOqA=;
-        b=Q3fqWcBLRFXsFMjVzCyo5s+q9IpD4s0sEc6ysGZlrrkF2Ufdtp/Ec0mcPPf5BV5znC
-         UiJEoJeMyXdZdZvbGsISnmRGT23acVGxG1HI86sd0PvBcGdJF9gfmleiafIilCVKT6O4
-         0bRk+tVTWeMTIvZeaO12t1sM58Qba6cujenymQ4ivLB1VhHFf34G+f1eE+ijl5CLq9of
-         Wc31h0wWKrSURHkYSZ1xP0urSU2pZ/d1jeuF4bUoXbvdaS6BjDigA16RoKbCdyMdQSYz
-         a4jC7EtsBZJt2Ap/UAhXVE3CC8WvIvpuFPy8Blgg6pt6UzlA7e4iCOEdLg8iJNQcoGni
-         s8CA==
+        bh=iewQTcBhULh0Wlv/puXFU1ZAd6A0j76cf895Aowl2UU=;
+        b=L/QeTnVVQn5jjd6snJlLFoNDo34diFEa7BHp0Oy6Cd8XrjkU2pIzp5UPnr7I8QcZjA
+         SEA+jA204dyrIqws1t4y3z5Ovwb4L+G5JkyckHDKDzcIeIqOTnbEH238f//fHvKDhcFG
+         KeL74z3++8KfMVnrSX+pzPMB/81fR2LP/4VOIVpNapMH/qFM9hVqQqaH3ttnzATPrW6K
+         wS0h0sw4otD+tnuHvP1SijmCvMIWzejGS3bIsBi7FfZppv6Am+ZJZLbxojHqXX+UCIrd
+         vm/+oMTEvgRsdrcXAEXEyaHzWltL7qmD9JKxUgaraKqTP6uli6B7nu8RQYejLmiyOPkn
+         Hv0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/jtK/Vrx2NulzdlRFPGXxwDEDEKWt3aWW57PRS+XOqA=;
-        b=w/jf/oH0gbBeZc+O5iICZaViCjlXzT/mu7qN8erFChzMmWhwvtCJ4VdEljgLM/Lmf1
-         hlZjSahq02JtQzcFkhXVW5GcFlIcTsDhsbvCIqqS2mbQjxRZymCuKAkBhJ8gNOk91f9l
-         v1dgaTi/5Rd2/uF7j4u9KHX0DLfqOSvuPcXb5aNDK25zVvufVcFbShSY1Ih0KTeSUjLk
-         rBrM2EVyWhy8oRlwmPD1FM2xGoY/8iAnzFBqRuQHQdv4VThEmOTC9QH9/HSLd/Mvj6xz
-         NBMBEGXf5+ru31IV0KZpXycg/P1tbAUHeA6L9yWcdwgEGgMvpaJL+h5IhWGWDn5lrBtL
-         wNZQ==
-X-Gm-Message-State: AOAM532OVMHY6eH0tZrNmQxFhsM1z8RDdK1aRVrK4cyUxsFC7LGZ6dqu
-        RkeM2fE4Wn8FoL8yH7u0v9A=
-X-Google-Smtp-Source: ABdhPJzuaAn5Pz4e119YMSAWmO4/3v2UeHNIGezXp/yG9Yb2N7Uc3Prc+aahlQaU53wphLrS52qHjw==
-X-Received: by 2002:a17:903:1108:b0:156:73a7:7c1 with SMTP id n8-20020a170903110800b0015673a707c1mr25778457plh.101.1649552235927;
-        Sat, 09 Apr 2022 17:57:15 -0700 (PDT)
+        bh=iewQTcBhULh0Wlv/puXFU1ZAd6A0j76cf895Aowl2UU=;
+        b=WGsUxmHEeWU7n6BCvgcqPeY8/GEvgp3chfaaDCsxqdQJ9HLQa+Di2g56hBVNj3aFxN
+         QdmquApQfZsFonXlpJUrJZVJZBk9EZap+8PU5/uCBUEMIqPZnOctH7yah8kC679OhtmY
+         qYOR3TFz4zClX0laPl8imu0pMbY9VApzXACa/PaEF1i3kn40tA5fWW/HqSLduYCJLsY8
+         FCJFnUePjWKUsyom8EZ11McDhYi1d3Ep4x8U9Y/zKKNBuCsekPR807BufvDBbZl0q5gd
+         PKYBi3nRs3SUBLGBhUNN7hv0iknTv4fvwTP/N9prqkuf2RtXYQ+dHA4uD3a24zOE2bL6
+         cWOg==
+X-Gm-Message-State: AOAM531Cdz0Uszi2l/Yo3FKw9CY/Ekk+/btNFqmUh2hOx+tLniHydcFp
+        K2cgAZg64yLgt7qwo43OVAA=
+X-Google-Smtp-Source: ABdhPJxuIbEUR2rjIgM+QIPwPcWDxqVzGadLvv5PLEpQI792X8OmRHPI+iyWRlhk+5SZC9wabjGa9A==
+X-Received: by 2002:a17:902:ce82:b0:156:bb3c:3297 with SMTP id f2-20020a170902ce8200b00156bb3c3297mr25408771plg.159.1649552237537;
+        Sat, 09 Apr 2022 17:57:17 -0700 (PDT)
 Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:172c:26af:268e:6e9f])
-        by smtp.gmail.com with ESMTPSA id l67-20020a633e46000000b003986e01e982sm25088215pga.67.2022.04.09.17.57.14
+        by smtp.gmail.com with ESMTPSA id l67-20020a633e46000000b003986e01e982sm25088215pga.67.2022.04.09.17.57.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Apr 2022 17:57:15 -0700 (PDT)
+        Sat, 09 Apr 2022 17:57:16 -0700 (PDT)
 From:   Max Filippov <jcmvbkbc@gmail.com>
 To:     linux-xtensa@linux-xtensa.org
 Cc:     Chris Zankel <chris@zankel.net>, linux-kernel@vger.kernel.org,
@@ -56,9 +56,9 @@ Cc:     Chris Zankel <chris@zankel.net>, linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "David S. Miller" <davem@davemloft.net>,
         Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH 1/4] xtensa: iss: drop opened_list logic from the network driver
-Date:   Sat,  9 Apr 2022 17:56:29 -0700
-Message-Id: <20220410005632.3925219-2-jcmvbkbc@gmail.com>
+Subject: [PATCH 2/4] xtensa: iss: replace iss_net_set_mac with eth_mac_addr
+Date:   Sat,  9 Apr 2022 17:56:30 -0700
+Message-Id: <20220410005632.3925219-3-jcmvbkbc@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220410005632.3925219-1-jcmvbkbc@gmail.com>
 References: <20220410005632.3925219-1-jcmvbkbc@gmail.com>
@@ -75,131 +75,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-opened_list is used to poll all opened devices in the timer callback,
-but there's individual timer that is associated with each device.
-Drop opened_list and only poll the device that is associated with the
-timer in the timer callback.
+iss_net_set_mac is just a copy of eth_mac_addr with pointless locking.
+Drop this function and replace it with eth_mac_addr.
 
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 ---
- arch/xtensa/platforms/iss/network.c | 53 ++++++++---------------------
- 1 file changed, 14 insertions(+), 39 deletions(-)
+ arch/xtensa/platforms/iss/network.c | 15 +--------------
+ 1 file changed, 1 insertion(+), 14 deletions(-)
 
 diff --git a/arch/xtensa/platforms/iss/network.c b/arch/xtensa/platforms/iss/network.c
-index be3aaaad8bee..409def002f55 100644
+index 409def002f55..e9454652551b 100644
 --- a/arch/xtensa/platforms/iss/network.c
 +++ b/arch/xtensa/platforms/iss/network.c
-@@ -38,9 +38,6 @@
- #define ISS_NET_TIMER_VALUE (HZ / 10)
- 
- 
--static DEFINE_SPINLOCK(opened_lock);
--static LIST_HEAD(opened);
--
- static DEFINE_SPINLOCK(devices_lock);
- static LIST_HEAD(devices);
- 
-@@ -63,7 +60,6 @@ struct tuntap_info {
- 
- struct iss_net_private {
- 	struct list_head device_list;
--	struct list_head opened_list;
- 
- 	spinlock_t lock;
- 	struct net_device *dev;
-@@ -311,38 +307,28 @@ static int iss_net_rx(struct net_device *dev)
- 	return pkt_len;
+@@ -436,19 +436,6 @@ static void iss_net_tx_timeout(struct net_device *dev, unsigned int txqueue)
+ {
  }
  
--static int iss_net_poll(void)
-+static int iss_net_poll(struct iss_net_private *lp)
- {
--	struct list_head *ele;
- 	int err, ret = 0;
- 
--	spin_lock(&opened_lock);
+-static int iss_net_set_mac(struct net_device *dev, void *addr)
+-{
+-	struct iss_net_private *lp = netdev_priv(dev);
+-	struct sockaddr *hwaddr = addr;
 -
--	list_for_each(ele, &opened) {
--		struct iss_net_private *lp;
--
--		lp = list_entry(ele, struct iss_net_private, opened_list);
--
--		if (!netif_running(lp->dev))
--			break;
-+	if (!netif_running(lp->dev))
-+		return 0;
- 
--		spin_lock(&lp->lock);
-+	spin_lock(&lp->lock);
- 
--		while ((err = iss_net_rx(lp->dev)) > 0)
--			ret++;
-+	while ((err = iss_net_rx(lp->dev)) > 0)
-+		ret++;
- 
--		spin_unlock(&lp->lock);
-+	spin_unlock(&lp->lock);
- 
--		if (err < 0) {
--			pr_err("Device '%s' read returned %d, shutting it down\n",
--			       lp->dev->name, err);
--			dev_close(lp->dev);
--		} else {
--			/* FIXME reactivate_fd(lp->fd, ISS_ETH_IRQ); */
--		}
-+	if (err < 0) {
-+		pr_err("Device '%s' read returned %d, shutting it down\n",
-+		       lp->dev->name, err);
-+		dev_close(lp->dev);
-+	} else {
-+		/* FIXME reactivate_fd(lp->fd, ISS_ETH_IRQ); */
- 	}
- 
--	spin_unlock(&opened_lock);
- 	return ret;
- }
- 
-@@ -351,7 +337,7 @@ static void iss_net_timer(struct timer_list *t)
- {
- 	struct iss_net_private *lp = from_timer(lp, t, timer);
- 
--	iss_net_poll();
-+	iss_net_poll(lp);
- 	spin_lock(&lp->lock);
- 	mod_timer(&lp->timer, jiffies + lp->timer_val);
- 	spin_unlock(&lp->lock);
-@@ -378,12 +364,6 @@ static int iss_net_open(struct net_device *dev)
- 	while ((err = iss_net_rx(dev)) > 0)
- 		;
- 
--	spin_unlock_bh(&lp->lock);
--	spin_lock_bh(&opened_lock);
--	list_add(&lp->opened_list, &opened);
--	spin_unlock_bh(&opened_lock);
+-	if (!is_valid_ether_addr(hwaddr->sa_data))
+-		return -EADDRNOTAVAIL;
 -	spin_lock_bh(&lp->lock);
+-	eth_hw_addr_set(dev, hwaddr->sa_data);
+-	spin_unlock_bh(&lp->lock);
+-	return 0;
+-}
 -
- 	timer_setup(&lp->timer, iss_net_timer, 0);
- 	lp->timer_val = ISS_NET_TIMER_VALUE;
- 	mod_timer(&lp->timer, jiffies + lp->timer_val);
-@@ -399,10 +379,6 @@ static int iss_net_close(struct net_device *dev)
- 	netif_stop_queue(dev);
- 	spin_lock_bh(&lp->lock);
- 
--	spin_lock(&opened_lock);
--	list_del(&opened);
--	spin_unlock(&opened_lock);
--
- 	del_timer_sync(&lp->timer);
- 
- 	lp->tp.close(lp);
-@@ -520,7 +496,6 @@ static int iss_net_configure(int index, char *init)
- 	lp = netdev_priv(dev);
- 	*lp = (struct iss_net_private) {
- 		.device_list		= LIST_HEAD_INIT(lp->device_list),
--		.opened_list		= LIST_HEAD_INIT(lp->opened_list),
- 		.dev			= dev,
- 		.index			= index,
- 	};
+ static int iss_net_change_mtu(struct net_device *dev, int new_mtu)
+ {
+ 	return -EINVAL;
+@@ -474,7 +461,7 @@ static const struct net_device_ops iss_netdev_ops = {
+ 	.ndo_start_xmit		= iss_net_start_xmit,
+ 	.ndo_validate_addr	= eth_validate_addr,
+ 	.ndo_change_mtu		= iss_net_change_mtu,
+-	.ndo_set_mac_address	= iss_net_set_mac,
++	.ndo_set_mac_address	= eth_mac_addr,
+ 	.ndo_tx_timeout		= iss_net_tx_timeout,
+ 	.ndo_set_rx_mode	= iss_net_set_multicast_list,
+ };
 -- 
 2.30.2
 

@@ -2,134 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B455C4FB0A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 00:08:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 823854FB0A8
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 00:13:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243986AbiDJWJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 18:09:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42744 "EHLO
+        id S241375AbiDJWPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 18:15:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238297AbiDJWJa (ORCPT
+        with ESMTP id S229622AbiDJWPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 18:09:30 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFCF648E75;
-        Sun, 10 Apr 2022 15:07:18 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id c1so2067788qke.10;
-        Sun, 10 Apr 2022 15:07:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lLhtRYu7uRpqF6UzH4W4hGNVqeKtsIf+LFdDV1FH9AA=;
-        b=Pf9KD80gKq4lpLTlNHSxm0OpmWpVF+lDJVeJDWonIAresYV4KaG2Je1CxJYc0JNcEn
-         bh3BdAGvY8MOKdlLjpa70kx6Gvbvv6bjfXka5ENV821QkPzRuROyiaYo92j1y4uzksVN
-         TZZP7OzzR/hOZI1sDXEX1MmgW9YU7CLZP3F6Vpjjhc6cFwGsWIyowxwsTQ7KOqDbFqf8
-         oYFfAkAvx2ZNP5ovdbpsJyx+HS35Ne1zGxfLyr541S+CMSMU8AT5LN4Qo69qGtkFLcYH
-         N0sKb03iMU81yIGNnyWJhs12ip8tQ9+bivtUbyVugwTIAbklNw1GtESqAQ6+VyPxQAo9
-         d8pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lLhtRYu7uRpqF6UzH4W4hGNVqeKtsIf+LFdDV1FH9AA=;
-        b=W6/0vCwII2K9kjysLCmSwCKeemm1RnUEsIVrJ+UZkEh1u2vHNw/Fsy0RGz/GeE6fn5
-         9hNXqXFbnjlSvbaIGJc/Vf+zo+iqJww6RduG+vKaIoDIqZGYf9yhGHgDX8P6P0+5yK+R
-         VYiwG5/4FlQjFKZMZxMh2hnJuY2GUM/KSab9zLlg/UKsQcbbX9k5N99PP8maZNeunjVD
-         R3IynR0/sJyS5P4ekqTtCgIL3OUHZ9DrOQXKk6YwGcihSwqjrwRSj7mmW50UeDhuizvH
-         p8eaR4sAtYvsJ2dcsoYgrngFUnQ1KbwFp/C62dHSKFARodeb9wfNeHYuTIaBAZkR+qz5
-         37Zg==
-X-Gm-Message-State: AOAM532rIwMOxHVJmzS1diESSw8Wp0gRuSelcg/pYxHB3b2ApHad/Iwh
-        fmYvqmAMkpb89qITEC/lBC3ukzG3Jn2l
-X-Google-Smtp-Source: ABdhPJyOhDTxUv0dBoQrjbd/G4yGRICic04riEunSWDSyVxTqRkuEDZTp8MvJvrv5pVfpzVKwlkhkg==
-X-Received: by 2002:a05:620a:214f:b0:69b:f840:f8c3 with SMTP id m15-20020a05620a214f00b0069bf840f8c3mr5388160qkm.600.1649628437348;
-        Sun, 10 Apr 2022 15:07:17 -0700 (PDT)
-Received: from arch.. ([2607:fb90:966:1288:8e89:a5ff:fe6f:56d3])
-        by smtp.gmail.com with ESMTPSA id r17-20020a05620a299100b00680b43004bfsm20916357qkp.45.2022.04.10.15.07.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Apr 2022 15:07:16 -0700 (PDT)
-From:   Daniel Bomar <dbdaniel42@gmail.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Daniel Bomar <dbdaniel42@gmail.com>
-Subject: [PATCH 4/4] input: hid-microsoft: Implement trigger rumble for Xbox One S over bluetooth
-Date:   Sun, 10 Apr 2022 17:07:13 -0500
-Message-Id: <20220410220713.5303-1-dbdaniel42@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Sun, 10 Apr 2022 18:15:50 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6FD002F3;
+        Sun, 10 Apr 2022 15:13:38 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 23A40ED1;
+        Sun, 10 Apr 2022 15:13:38 -0700 (PDT)
+Received: from airbuntu (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 62E2C3F70D;
+        Sun, 10 Apr 2022 15:13:35 -0700 (PDT)
+Date:   Sun, 10 Apr 2022 23:13:25 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Alexey Gladkov <legion@kernel.org>,
+        "Kenta.Tada@sony.com" <Kenta.Tada@sony.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Ed Tsai <ed.tsai@mediatek.com>,
+        Valentin Schneider <valentin.schneider@arm.com>
+Subject: Re: [PATCH v3 2/2] sched/tracing: Report TASK_RTLOCK_WAIT tasks as
+ TASK_UNINTERRUPTIBLE
+Message-ID: <20220410221325.fimxzpzg26zmmsiz@airbuntu>
+References: <20220120162520.570782-1-valentin.schneider@arm.com>
+ <20220120162520.570782-3-valentin.schneider@arm.com>
+ <20220409234224.q57dr43bpcll3ryv@airbuntu>
+ <YlJ1q0zohdPvQBUd@kroah.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YlJ1q0zohdPvQBUd@kroah.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Daniel Bomar <dbdaniel42@gmail.com>
----
- drivers/hid/hid-microsoft.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+On 04/10/22 08:14, Greg KH wrote:
+> On Sun, Apr 10, 2022 at 12:42:24AM +0100, Qais Yousef wrote:
+> > +CC stable
+> > 
+> > On 01/20/22 16:25, Valentin Schneider wrote:
+> > > TASK_RTLOCK_WAIT currently isn't part of TASK_REPORT, thus a task blocking
+> > > on an rtlock will appear as having a task state == 0, IOW TASK_RUNNING.
+> > > 
+> > > The actual state is saved in p->saved_state, but reading it after reading
+> > > p->__state has a few issues:
+> > > o that could still be TASK_RUNNING in the case of e.g. rt_spin_lock
+> > > o ttwu_state_match() might have changed that to TASK_RUNNING
+> > > 
+> > > As pointed out by Eric, adding TASK_RTLOCK_WAIT to TASK_REPORT implies
+> > > exposing a new state to userspace tools which way not know what to do with
+> > > them. The only information that needs to be conveyed here is that a task is
+> > > waiting on an rt_mutex, which matches TASK_UNINTERRUPTIBLE - there's no
+> > > need for a new state.
+> > > 
+> > > Reported-by: Uwe Kleine-Kï¿½nig <u.kleine-koenig@pengutronix.de>
+> > > Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
+> > 
+> > Any objection for this to be picked up by stable? We care about Patch 1 only in
+> > this series for stable, but it seems sensible to pick this one too, no strong
+> > feeling if it is omitted though.
+> > 
+> > AFAICT it seems the problem dates back since commit:
+> > 
+> > 	1593baab910d ("sched/debug: Implement consistent task-state printing")
+> > 
+> > or even before. I think v4.14+ is good enough.
+> 
+> 
+> <formletter>
+> 
+> This is not the correct way to submit patches for inclusion in the
+> stable kernel tree.  Please read:
+>     https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+> for how to do this properly.
+> 
+> </formletter>
 
-diff --git a/drivers/hid/hid-microsoft.c b/drivers/hid/hid-microsoft.c
-index 071fd093a5f4..061275626c42 100644
---- a/drivers/hid/hid-microsoft.c
-+++ b/drivers/hid/hid-microsoft.c
-@@ -32,6 +32,8 @@ struct ms_data {
- 	unsigned long quirks;
- 	struct hid_device *hdev;
- 	struct work_struct ff_worker;
-+	__u8 trigger_left;
-+	__u8 trigger_right;
- 	__u8 strong;
- 	__u8 weak;
- 	void *output_report_dmabuf;
-@@ -40,9 +42,13 @@ struct ms_data {
- #define XB1S_FF_REPORT		3
- #define ENABLE_WEAK		BIT(0)
- #define ENABLE_STRONG		BIT(1)
-+#define ENABLE_RIGHT		BIT(2)
-+#define ENABLE_LEFT		BIT(3)
- 
- enum {
--	MAGNITUDE_STRONG = 2,
-+	MAGNITUDE_LEFT,
-+	MAGNITUDE_RIGHT,
-+	MAGNITUDE_STRONG,
- 	MAGNITUDE_WEAK,
- 	MAGNITUDE_NUM
- };
-@@ -288,7 +294,7 @@ static void ms_ff_worker(struct work_struct *work)
- 	memset(r, 0, sizeof(*r));
- 
- 	r->report_id = XB1S_FF_REPORT;
--	r->enable = ENABLE_WEAK | ENABLE_STRONG;
-+	r->enable = ENABLE_WEAK | ENABLE_STRONG | ENABLE_RIGHT | ENABLE_LEFT;
- 	/*
- 	 * Specifying maximum duration and maximum loop count should
- 	 * cover maximum duration of a single effect, which is 65536
-@@ -296,6 +302,8 @@ static void ms_ff_worker(struct work_struct *work)
- 	 */
- 	r->duration_10ms = U8_MAX;
- 	r->loop_count = U8_MAX;
-+	r->magnitude[MAGNITUDE_LEFT] = ms->trigger_left;
-+	r->magnitude[MAGNITUDE_RIGHT] = ms->trigger_right;
- 	r->magnitude[MAGNITUDE_STRONG] = ms->strong; /* left actuator */
- 	r->magnitude[MAGNITUDE_WEAK] = ms->weak;     /* right actuator */
- 
-@@ -316,6 +324,8 @@ static int ms_play_effect(struct input_dev *dev, void *data,
- 	/*
- 	 * Magnitude is 0..100 so scale the 16-bit input here
- 	 */
-+	ms->trigger_left = ((u32) effect->u.rumble.trigger_left * 100) / U16_MAX;
-+	ms->trigger_right = ((u32) effect->u.rumble.trigger_right * 100) / U16_MAX;
- 	ms->strong = ((u32) effect->u.rumble.strong_magnitude * 100) / U16_MAX;
- 	ms->weak = ((u32) effect->u.rumble.weak_magnitude * 100) / U16_MAX;
- 
--- 
-2.35.1
+Apologies.
 
+commit: 25795ef6299f07ce3838f3253a9cb34f64efcfae
+Subject: sched/tracing: Report TASK_RTLOCK_WAIT tasks as TASK_UNINTERRUPTIBLE
+
+I am interested in Patch 1 in this series as I know it impacts some Android
+5.10 users. But this patch seems a good candidate for stable too since it was
+observed by a user (Uwe) and AFAICT the problem dates back to v4.14+ kernels.
+
+Suggested kernels: v4.14+. This has already been picked up by AUTOSEL for
+v5.15+ stable trees.
+
+Hope I got the process right this time.
+
+Thanks!
+
+--
+Qais Yousef

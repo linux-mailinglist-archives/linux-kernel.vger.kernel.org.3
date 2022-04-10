@@ -2,68 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 965734FAC3E
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 08:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 984D24FAC4A
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 08:26:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232536AbiDJGQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 02:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42124 "EHLO
+        id S232759AbiDJGYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 02:24:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbiDJGQT (ORCPT
+        with ESMTP id S229994AbiDJGYm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 02:16:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F81BA3;
-        Sat,  9 Apr 2022 23:14:07 -0700 (PDT)
+        Sun, 10 Apr 2022 02:24:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E302954F99
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 23:22:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C1A260ED2;
-        Sun, 10 Apr 2022 06:14:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9DD8C385A1;
-        Sun, 10 Apr 2022 06:14:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DC8260DDC
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 06:22:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 346AAC385A1;
+        Sun, 10 Apr 2022 06:22:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649571246;
-        bh=riXjiNxoLF8mDSf3ncTuLYxn5erKsgT1pWzC0ZYs/yE=;
+        s=korg; t=1649571751;
+        bh=62ZM2k+nlOZ6MmyQlNkdqC5FBtCMerHAYg0IffedikM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=U64HF4HQ04+XF3DuslJ07g8B8r53kPQw0qbe6DDzegUIzwPraU9NpcoUTtn+Zjne7
-         on9wj0WjdSWqyKyU0pPiu5tqPmZMEmM1cULh87Gi3CoW1p2s4alhSAgzDkHr9NLst+
-         8/qFf7q/fsZ4ROBKgHwiTF9VAJe4ipFYoR0L4YYo=
-Date:   Sun, 10 Apr 2022 08:14:03 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Qais Yousef <qais.yousef@arm.com>
-Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Alexey Gladkov <legion@kernel.org>,
-        "Kenta.Tada@sony.com" <Kenta.Tada@sony.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Ed Tsai <ed.tsai@mediatek.com>,
-        Valentin Schneider <valentin.schneider@arm.com>
-Subject: Re: [PATCH v3 2/2] sched/tracing: Report TASK_RTLOCK_WAIT tasks as
- TASK_UNINTERRUPTIBLE
-Message-ID: <YlJ1q0zohdPvQBUd@kroah.com>
-References: <20220120162520.570782-1-valentin.schneider@arm.com>
- <20220120162520.570782-3-valentin.schneider@arm.com>
- <20220409234224.q57dr43bpcll3ryv@airbuntu>
+        b=iV5I24j6Pe6TIdDBCUkZY3gbpWdcZUHR1BLoBjCSGFTjN1mjVHZQZsgKJJ7bbvkgd
+         IyExQYf1YfZ52ssbWqCYxs/w3wof3pTGhme5bZXOagRIdEPnz0ebrQX3jXP7TNfZt+
+         JfCAsx4ZyPerlSASyEdR+ZluL/gOC+ev//Q7c05I=
+Date:   Sun, 10 Apr 2022 08:22:26 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Liu Junqi <liujunqi@pku.edu.cn>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Leonardo Araujo <leonardo.aa88@gmail.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, sparmaintainer@unisys.com,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: Remove D. Kershner from Unisys S-PAR
+ maintainers
+Message-ID: <YlJ3ot74ZwfGx53i@kroah.com>
+References: <20220409205857.32083-1-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220409234224.q57dr43bpcll3ryv@airbuntu>
+In-Reply-To: <20220409205857.32083-1-fmdefrancesco@gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -74,43 +57,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 10, 2022 at 12:42:24AM +0100, Qais Yousef wrote:
-> +CC stable
+On Sat, Apr 09, 2022 at 10:58:57PM +0200, Fabio M. De Francesco wrote:
+> The email address of David Kershner is no more reachable. Remove his
+> entry from the MAINTAINERS file for UNISYS S-PAR DRIVERS.
 > 
-> On 01/20/22 16:25, Valentin Schneider wrote:
-> > TASK_RTLOCK_WAIT currently isn't part of TASK_REPORT, thus a task blocking
-> > on an rtlock will appear as having a task state == 0, IOW TASK_RUNNING.
-> > 
-> > The actual state is saved in p->saved_state, but reading it after reading
-> > p->__state has a few issues:
-> > o that could still be TASK_RUNNING in the case of e.g. rt_spin_lock
-> > o ttwu_state_match() might have changed that to TASK_RUNNING
-> > 
-> > As pointed out by Eric, adding TASK_RTLOCK_WAIT to TASK_REPORT implies
-> > exposing a new state to userspace tools which way not know what to do with
-> > them. The only information that needs to be conveyed here is that a task is
-> > waiting on an rt_mutex, which matches TASK_UNINTERRUPTIBLE - there's no
-> > need for a new state.
-> > 
-> > Reported-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> > Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> ---
+>  MAINTAINERS | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-> Any objection for this to be picked up by stable? We care about Patch 1 only in
-> this series for stable, but it seems sensible to pick this one too, no strong
-> feeling if it is omitted though.
-> 
-> AFAICT it seems the problem dates back since commit:
-> 
-> 	1593baab910d ("sched/debug: Implement consistent task-state printing")
-> 
-> or even before. I think v4.14+ is good enough.
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index ba405f6ec31a..3b7497359c2b 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -20188,7 +20188,6 @@ F:	include/linux/cdrom.h
+>  F:	include/uapi/linux/cdrom.h
+>  
+>  UNISYS S-PAR DRIVERS
+> -M:	David Kershner <david.kershner@unisys.com>
+>  L:	sparmaintainer@unisys.com (Unisys internal)
+>  S:	Supported
 
+If so, then that means this list needs to be dropped and the entry
+changed to orphaned :(
 
-<formletter>
+thanks,
 
-This is not the correct way to submit patches for inclusion in the
-stable kernel tree.  Please read:
-    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-for how to do this properly.
-
-</formletter>
+greg k-h

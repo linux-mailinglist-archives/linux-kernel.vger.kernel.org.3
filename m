@@ -2,323 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC76C4FAEA5
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 18:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1586B4FAED7
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 18:19:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240576AbiDJQKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 12:10:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48870 "EHLO
+        id S240567AbiDJQVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 12:21:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230406AbiDJQKf (ORCPT
+        with ESMTP id S236321AbiDJQVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 12:10:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE395DE63;
-        Sun, 10 Apr 2022 09:08:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B1B8B80D9B;
-        Sun, 10 Apr 2022 16:08:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1138C385AE;
-        Sun, 10 Apr 2022 16:08:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649606901;
-        bh=/Nlx4o4B49uox3p3jL/xY0vtdYZPYp92P6ZZk1VPnBE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Sh5utZJV+9qKGagd9s9d4HokoXE/SFKxdVTg8Ol0DW9ednAyZnhlk7JxumtOhOQ3I
-         Z6AhhHgnCMzxKAIx82tqYalM2c8BfPEwNP2ezeKB+ywgBfEF430ssgWC0zAOuZYsfD
-         e2uiLQDhOawfsJ9dwVNMrPSYVsnwsCngTralBj8vMnagtdg+oiq8r6eCHWBHOF5tM0
-         2Q8l1NW565Dz4NNLFAqJux1POz5HLZU4oJ+nXZr59IWgqMcoK/5pSp11yRo6cFcwsR
-         qptwPdhGypLTAfWSwBeQrWY5FDHV0U7MYAABL+y4VIPP9gMZaLnHVs5gqArpqBLNq+
-         NXSb2CGgW/iTg==
-Date:   Sun, 10 Apr 2022 17:16:10 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Cixi Geng <gengcixi@gmail.com>
-Cc:     lars@metafoo.de, robh+dt@kernel.org, orsonzhai@gmail.com,
-        baolin.wang7@gmail.com, zhang.lyra@gmail.com,
-        yuming.zhu1@unisoc.com, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V3 3/7] iio: adc: sc27xx: structure adjuststment and
- optimization
-Message-ID: <20220410171610.7baaa3f8@jic23-huawei>
-In-Reply-To: <20220407082148.571442-4-gengcixi@gmail.com>
-References: <20220407082148.571442-1-gengcixi@gmail.com>
-        <20220407082148.571442-4-gengcixi@gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Sun, 10 Apr 2022 12:21:50 -0400
+Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DCAD4754D;
+        Sun, 10 Apr 2022 09:19:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+        Content-ID:Content-Description;
+        bh=iXhxaxOJ7zcu/qjQPnyjomESbF8vvrLASyS5P7s+x3k=; b=jmLugh90t2msM6S5E0h/SNUMBJ
+        Jv6yqUTaFeAFbb7FYRdELoxxH0oWEHMbSwRjaKIKvQEbkPw5MwI9O0y+IkWMx2ARzMaeyKxVXiuoo
+        behJgtO3xLf5mVDLclw4bFjFQwNqfAV/c7pgYWnHfZqUyPEWKcVZDUC46t0tvBeCMtHHhQ1gyq5um
+        Sr7GOfuEE0OCvaYgG5dMli7kIWd0HlTlTKxJY6JD35a/hSo1DCHcZTGv5P8VGVH6p5k20m8mJZp71
+        pyxKDXTc0Vdd/67XGATa1+IexLIkZO8eKvreUVShnE2JVRsG4XcQN6spPPsR003BDdMsBIfqxwWyC
+        keHSHbGbYtWdH0Hv7tFc5WMwvNtG7XRY0Fwx+7MQ6ML2L2Unf7xZSGMYeoSv/bhxChyYRbmxUCKTq
+        FQplaaFeifWf7JXk1Mdy3kXJl1sArYGawiaD5CrvL8huHA9Yro+WYkU0yKNwgyIUoE+bh2dnRIJu2
+        SwqhS8oN/OWhKx9mMBMa9Kp1H/4x8uopsih9WyO+KIRKV7KCiNyFRhMhU2LD1fgi+f/W2HOMBzEiw
+        6PZ/1tcH2+ksytYHCNrG9E0XvrM5UWOvuNHu8PNhuMyOEhlMzcFGz9Eh5p5Wvyf8Qppb3U51NfJ+P
+        jnSF4gbokxB+HPZfHa8OjOg+xXy2OB33SqY5nyBDg=;
+From:   Christian Schoenebeck <linux_oss@crudebyte.com>
+To:     asmadeus@codewreck.org
+Cc:     David Kahurani <k.kahurani@gmail.com>, davem@davemloft.net,
+        ericvh@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        lucho@ionkov.net, netdev@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        David Howells <dhowells@redhat.com>, Greg Kurz <groug@kaod.org>
+Subject: Re: 9p fs-cache tests/benchmark (was: 9p fscache Duplicate cookie detected)
+Date:   Sun, 10 Apr 2022 18:18:38 +0200
+Message-ID: <1966295.VQPMLLWD4E@silver>
+In-Reply-To: <9591612.lsmsJCMaJN@silver>
+References: <CAAZOf26g-L2nSV-Siw6mwWQv1nv6on8c0fWqB4bKmX73QAFzow@mail.gmail.com>
+ <3791738.ukkqOL8KQD@silver> <9591612.lsmsJCMaJN@silver>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu,  7 Apr 2022 16:21:44 +0800
-Cixi Geng <gengcixi@gmail.com> wrote:
+On Samstag, 9. April 2022 13:16:11 CEST Christian Schoenebeck wrote:
+> On Mittwoch, 30. M=E4rz 2022 14:21:16 CEST Christian Schoenebeck wrote:
+> > I made some tests & benchmarks regarding the fs-cache issue of 9p, runn=
+ing
+> > different kernel versions and kernel configurations in comparison.
+> [...]
+> > Case  Linux kernel version           .config  msize    cache  duration =
+ host cpu  errors/warnings
+> >
+> > A)    5.17.0+[2] + msize patches[1]  debug    4186112  mmap   20m 40s  =
+ ~80%      none
+> > B)    5.17.0+[2] + msize patches[1]  debug    4186112  loose  31m 28s  =
+ ~35%      several errors (compilation completed)
+> > C)    5.17.0+[2] + msize patches[1]  debug    507904   mmap   20m 25s  =
+ ~84%      none
+> > D)    5.17.0+[2] + msize patches[1]  debug    507904   loose  31m 2s   =
+ ~33%      several errors (compilation completed)
+> > E)    5.17.0+[2]                     debug    512000   mmap   23m 45s  =
+ ~75%      none
+> > F)    5.17.0+[2]                     debug    512000   loose  32m 6s   =
+ ~31%      several errors (compilation completed)
+> > G)    5.17.0+[2]                     release  512000   mmap   23m 18s  =
+ ~76%      none
+> > H)    5.17.0+[2]                     release  512000   loose  32m 33s  =
+ ~31%      several errors (compilation completed)
+> > I)    5.17.0+[2] + msize patches[1]  release  4186112  mmap   20m 30s  =
+ ~83%      none
+> > J)    5.17.0+[2] + msize patches[1]  release  4186112  loose  31m 21s  =
+ ~31%      several errors (compilation completed)
+> > K)    5.10.84                        release  512000   mmap   39m 20s  =
+ ~80%      none
+> > L)    5.10.84                        release  512000   loose  13m 40s  =
+ ~55%      none
+> [...]
+> > About the errors: I actually already see errors with cache=3Dloose and =
+recent
+> > kernel version just when booting the guest OS. For these tests I chose =
+some
+> > sources which allowed me to complete the build to capture some benchmar=
+k as
+> > well, I got some "soft" errors with those, but the build completed at l=
+east.
+> > I had other sources OTOH which did not complete though and aborted with
+> > certain invalid file descriptor errors, which I obviously could not use=
+ for
+> > those benchmarks here.
+>=20
+> I used git-bisect to identify the commit that broke 9p behaviour, and it =
+is
+> indeed this one:
+>=20
+> commit eb497943fa215897f2f60fd28aa6fe52da27ca6c (HEAD, refs/bisect/bad)
+> Author: David Howells <dhowells@redhat.com>
+> Date:   Tue Nov 2 08:29:55 2021 +0000
+>=20
+>     9p: Convert to using the netfs helper lib to do reads and caching
+>    =20
+>     Convert the 9p filesystem to use the netfs helper lib to handle readp=
+age,
+>     readahead and write_begin, converting those into a common issue_op fo=
+r the
+>     filesystem itself to handle.  The netfs helper lib also handles readi=
+ng
+>     from fscache if a cache is available, and interleaving reads from both
+>     sources.
 
-> From: Cixi Geng <cixi.geng1@unisoc.com>
-In patch title "adjustment"
-> 
-> Introduce one variant device data structure to be compatible
-> with SC2731 PMIC since it has different scale and ratio calculation
-> and so on.
-> 
-> Co-developed-by: Yuming Zhu <yuming.zhu1@unisoc.com>
-> Signed-off-by: Yuming Zhu <yuming.zhu1@unisoc.com>
-> Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
-Hi Cixi,
+I looked into the errors I get, and as far as I can see it, all misbehaviou=
+rs
+that I see, boil down to "Bad file descriptor" (EBADF) errors being the
+originating cause.
 
-Some minor comments inline. Biggest one is you have some (small) functional
-changes in this patch that should be pulled out to their own patch with
-explanation of why the scales are changing slightly.
+The easiest misbehaviours on the guest system I can look into, are errors
+with the git client. For instance 'git fetch origin' fails this way:
 
-Thanks,
+=2E..
+write(3, "d16782889ee07005d1f57eb884f4a06b"..., 40) =3D 40
+write(3, "\n", 1)                       =3D 1
+close(3)                                =3D 0
+access(".git/hooks/reference-transaction", X_OK) =3D -1 ENOENT (No such fil=
+e or directory)
+openat(AT_FDCWD, ".git/logs/refs/remotes/origin/master", O_WRONLY|O_CREAT|O=
+_APPEND, 0666) =3D 3
+openat(AT_FDCWD, "/etc/localtime", O_RDONLY|O_CLOEXEC) =3D 7
+fstat(7, {st_mode=3DS_IFREG|0644, st_size=3D2326, ...}) =3D 0
+fstat(7, {st_mode=3DS_IFREG|0644, st_size=3D2326, ...}) =3D 0
+read(7, "TZif2\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\t\0\0\0\t\0\0\0\0"..., 8=
+192) =3D 2326
+lseek(7, -1467, SEEK_CUR)               =3D 859
+read(7, "TZif2\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\t\0\0\0\t\0\0\0\0"..., 8=
+192) =3D 1467
+close(7)                                =3D 0
+write(3, "d8a68c5027ef629d93b9d9519ff4da95"..., 168) =3D -1 EBADF (Bad file=
+ descriptor)
+=2E..
+error: cannot update the ref 'refs/remotes/origin/master': unable to append=
+ to '.git/logs/refs/remotes/origin/master': Bad file descriptor
 
-Jonathan
+I tried to manually replicate those file access operations on that
+=2Egit/logs/refs/remotes/origin/master file in question, and it worked. But=
+ when
+I look at the strace output above, I see there is a close(3) call just befo=
+re
+the subsequent openat(".git/logs/refs/remotes/origin/master") call returnin=
+g 3,
+which makes me wonder, is this maybe a concurrency issue on file descriptor
+management?
 
-> ---
->  drivers/iio/adc/sc27xx_adc.c | 99 ++++++++++++++++++++++++++++--------
->  1 file changed, 78 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/iio/adc/sc27xx_adc.c b/drivers/iio/adc/sc27xx_adc.c
-> index aee076c8e2b1..28bd70c27420 100644
-> --- a/drivers/iio/adc/sc27xx_adc.c
-> +++ b/drivers/iio/adc/sc27xx_adc.c
-> @@ -12,9 +12,9 @@
->  #include <linux/slab.h>
->  
->  /* PMIC global registers definition */
-> -#define SC27XX_MODULE_EN		0xc08
-> +#define SC2731_MODULE_EN		0xc08
->  #define SC27XX_MODULE_ADC_EN		BIT(5)
-> -#define SC27XX_ARM_CLK_EN		0xc10
-> +#define SC2731_ARM_CLK_EN		0xc10
->  #define SC27XX_CLK_ADC_EN		BIT(5)
->  #define SC27XX_CLK_ADC_CLK_EN		BIT(6)
->  
-> @@ -78,6 +78,23 @@ struct sc27xx_adc_data {
->  	int channel_scale[SC27XX_ADC_CHANNEL_MAX];
->  	u32 base;
->  	int irq;
-> +	const struct sc27xx_adc_variant_data *var_data;
-> +};
-> +
-> +/*
-> + * Since different PMICs of SC27xx series can have different
-> + * address and ratio, we should save ratio config and base
-> + * in the device data structure.
-> + */
-> +struct sc27xx_adc_variant_data {
-> +	u32 module_en;
-> +	u32 clk_en;
-> +	u32 scale_shift;
-> +	u32 scale_mask;
-> +	const struct sc27xx_adc_linear_graph *bscale_cal;
-> +	const struct sc27xx_adc_linear_graph *sscale_cal;
-> +	void (*init_scale)(struct sc27xx_adc_data *data);
-> +	int (*get_ratio)(int channel, int scale);
->  };
->  
->  struct sc27xx_adc_linear_graph {
-> @@ -103,14 +120,15 @@ static struct sc27xx_adc_linear_graph small_scale_graph = {
->  	100, 341,
->  };
->  
-> -static const struct sc27xx_adc_linear_graph big_scale_graph_calib = {
-> -	4200, 856,
-> -	3600, 733,
-> +/* Add these for sc2731 pmic, and the [big|small]_scale_graph_calib for common's */
-> +static const struct sc27xx_adc_linear_graph sc2731_big_scale_graph_calib = {
-> +	4200, 850,
-> +	3600, 728,
->  };
->  
-> -static const struct sc27xx_adc_linear_graph small_scale_graph_calib = {
-> -	1000, 833,
-> -	100, 80,
-> +static const struct sc27xx_adc_linear_graph sc2731_small_scale_graph_calib = {
-> +	1000, 838,
+Ideas anyone?
 
-These changes are small, but they aren't the main topic of the patch
-so should be in a separate patch. I expected this patch to be a no-op refactoring
-but it's not with these value changes.
+Best regards,
+Christian Schoenebeck
 
-> +	100, 84,
->  };
->  
->  static int sc27xx_adc_get_calib_data(u32 calib_data, int calib_adc)
-> @@ -130,11 +148,11 @@ static int sc27xx_adc_scale_calibration(struct sc27xx_adc_data *data,
->  	size_t len;
->  
->  	if (big_scale) {
-> -		calib_graph = &big_scale_graph_calib;
-> +		calib_graph = data->var_data->bscale_cal;
->  		graph = &big_scale_graph;
->  		cell_name = "big_scale_calib";
->  	} else {
-> -		calib_graph = &small_scale_graph_calib;
-> +		calib_graph = data->var_data->sscale_cal;
->  		graph = &small_scale_graph;
->  		cell_name = "small_scale_calib";
->  	}
-> @@ -160,7 +178,7 @@ static int sc27xx_adc_scale_calibration(struct sc27xx_adc_data *data,
->  	return 0;
->  }
->  
-> -static int sc27xx_adc_get_ratio(int channel, int scale)
-> +static int sc2731_adc_get_ratio(int channel, int scale)
->  {
->  	switch (channel) {
->  	case 1:
-> @@ -185,6 +203,23 @@ static int sc27xx_adc_get_ratio(int channel, int scale)
->  	return SC27XX_VOLT_RATIO(1, 1);
->  }
->  
-> +/*
-> + * According to the datasheet set specific value on some channel.
-> + */
-> +static void sc2731_adc_scale_init(struct sc27xx_adc_data *data)
-> +{
-> +	int i;
-> +	/* In the current software design, SC2731 support 2 scales,
-Trivial, but in IIO we use
-/*
- * In the current software design...
- * channels...
- */
-style for multi line comments.
 
-> +	 * channels 5 uses big scale, others use smale.
-> +	 */
-> +	for (i = 0; i < SC27XX_ADC_CHANNEL_MAX; i++) {
-> +		if (i == 5)
-> +			data->channel_scale[i] = 1;
-> +		else
-> +			data->channel_scale[i] = 0;
-> +	}
-> +}
-> +
->  static int sc27xx_adc_read(struct sc27xx_adc_data *data, int channel,
->  			   int scale, int *val)
->  {
-> @@ -208,10 +243,11 @@ static int sc27xx_adc_read(struct sc27xx_adc_data *data, int channel,
->  		goto disable_adc;
->  
->  	/* Configure the channel id and scale */
-> -	tmp = (scale << SC27XX_ADC_SCALE_SHIFT) & SC27XX_ADC_SCALE_MASK;
-> +	tmp = (scale << data->var_data->scale_shift) & data->var_data->scale_mask;
->  	tmp |= channel & SC27XX_ADC_CHN_ID_MASK;
->  	ret = regmap_update_bits(data->regmap, data->base + SC27XX_ADC_CH_CFG,
-> -				 SC27XX_ADC_CHN_ID_MASK | SC27XX_ADC_SCALE_MASK,
-> +				 SC27XX_ADC_CHN_ID_MASK |
-> +				 data->var_data->scale_mask,
->  				 tmp);
->  	if (ret)
->  		goto disable_adc;
-> @@ -262,8 +298,9 @@ static void sc27xx_adc_volt_ratio(struct sc27xx_adc_data *data,
->  				  int channel, int scale,
->  				  u32 *div_numerator, u32 *div_denominator)
->  {
-> -	u32 ratio = sc27xx_adc_get_ratio(channel, scale);
-> +	u32 ratio;
->  
-> +	ratio = data->var_data->get_ratio(channel, scale);
->  	*div_numerator = ratio >> SC27XX_RATIO_NUMERATOR_OFFSET;
->  	*div_denominator = ratio & SC27XX_RATIO_DENOMINATOR_MASK;
->  }
-> @@ -432,13 +469,13 @@ static int sc27xx_adc_enable(struct sc27xx_adc_data *data)
->  {
->  	int ret;
->  
-> -	ret = regmap_update_bits(data->regmap, SC27XX_MODULE_EN,
-> +	ret = regmap_update_bits(data->regmap, data->var_data->module_en,
->  				 SC27XX_MODULE_ADC_EN, SC27XX_MODULE_ADC_EN);
->  	if (ret)
->  		return ret;
->  
->  	/* Enable ADC work clock and controller clock */
-> -	ret = regmap_update_bits(data->regmap, SC27XX_ARM_CLK_EN,
-> +	ret = regmap_update_bits(data->regmap, data->var_data->clk_en,
->  				 SC27XX_CLK_ADC_EN | SC27XX_CLK_ADC_CLK_EN,
->  				 SC27XX_CLK_ADC_EN | SC27XX_CLK_ADC_CLK_EN);
->  	if (ret)
-> @@ -456,10 +493,10 @@ static int sc27xx_adc_enable(struct sc27xx_adc_data *data)
->  	return 0;
->  
->  disable_clk:
-> -	regmap_update_bits(data->regmap, SC27XX_ARM_CLK_EN,
-> +	regmap_update_bits(data->regmap, data->var_data->clk_en,
->  			   SC27XX_CLK_ADC_EN | SC27XX_CLK_ADC_CLK_EN, 0);
->  disable_adc:
-> -	regmap_update_bits(data->regmap, SC27XX_MODULE_EN,
-> +	regmap_update_bits(data->regmap, data->var_data->module_en,
->  			   SC27XX_MODULE_ADC_EN, 0);
->  
->  	return ret;
-> @@ -470,21 +507,39 @@ static void sc27xx_adc_disable(void *_data)
->  	struct sc27xx_adc_data *data = _data;
->  
->  	/* Disable ADC work clock and controller clock */
-> -	regmap_update_bits(data->regmap, SC27XX_ARM_CLK_EN,
-> +	regmap_update_bits(data->regmap, data->var_data->clk_en,
->  			   SC27XX_CLK_ADC_EN | SC27XX_CLK_ADC_CLK_EN, 0);
->  
-> -	regmap_update_bits(data->regmap, SC27XX_MODULE_EN,
-> +	regmap_update_bits(data->regmap, data->var_data->module_en,
->  			   SC27XX_MODULE_ADC_EN, 0);
->  }
->  
-> +static const struct sc27xx_adc_variant_data sc2731_data = {
-> +	.module_en = SC2731_MODULE_EN,
-> +	.clk_en = SC2731_ARM_CLK_EN,
-> +	.scale_shift = SC27XX_ADC_SCALE_SHIFT,
-> +	.scale_mask = SC27XX_ADC_SCALE_MASK,
-> +	.bscale_cal = &sc2731_big_scale_graph_calib,
-> +	.sscale_cal = &sc2731_small_scale_graph_calib,
-> +	.init_scale = sc2731_adc_scale_init,
-> +	.get_ratio = sc2731_adc_get_ratio,
-> +};
-> +
->  static int sc27xx_adc_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
->  	struct device_node *np = dev->of_node;
->  	struct sc27xx_adc_data *sc27xx_data;
-> +	const struct sc27xx_adc_variant_data *pdata;
->  	struct iio_dev *indio_dev;
->  	int ret;
->  
-> +	pdata = of_device_get_match_data(dev);
-> +	if (!pdata) {
-> +		dev_err(dev, "No matching driver data found\n");
-> +		return -EINVAL;
-> +	}
-> +
->  	indio_dev = devm_iio_device_alloc(dev, sizeof(*sc27xx_data));
->  	if (!indio_dev)
->  		return -ENOMEM;
-> @@ -520,6 +575,8 @@ static int sc27xx_adc_probe(struct platform_device *pdev)
->  	}
->  
->  	sc27xx_data->dev = dev;
-> +	sc27xx_data->var_data = pdata;
-> +	sc27xx_data->var_data->init_scale(sc27xx_data);
->  
->  	ret = sc27xx_adc_enable(sc27xx_data);
->  	if (ret) {
-> @@ -546,7 +603,7 @@ static int sc27xx_adc_probe(struct platform_device *pdev)
->  }
->  
->  static const struct of_device_id sc27xx_adc_of_match[] = {
-> -	{ .compatible = "sprd,sc2731-adc", },
-> +	{ .compatible = "sprd,sc2731-adc", .data = &sc2731_data},
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(of, sc27xx_adc_of_match);
+
 

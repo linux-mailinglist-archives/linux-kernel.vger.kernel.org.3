@@ -2,96 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 432814FAD18
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 11:46:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2343C4FAD15
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 11:45:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236543AbiDJJtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 05:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52398 "EHLO
+        id S236439AbiDJJrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 05:47:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236522AbiDJJs5 (ORCPT
+        with ESMTP id S231849AbiDJJra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 05:48:57 -0400
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF0902AE34;
-        Sun, 10 Apr 2022 02:46:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1649583974; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=IVcX0fVbhg5OMdbn7yaaahvzH6Jk2UFXb6S57wQE6mF64PN465M9ikQr9DQOJX4N9SUNymMsaAmH02J1bKWBcOgOaffuK8jJwtakMfILGMoSSQ3wDk2XQ24OtIA7B64sISbYhtDNziyJWdbduZiQCOHwtWurbwgbxn5DsNjY0TU=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1649583974; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
-        bh=7poOT/rw9kdWGl9YXFYkvmc3/pYXbV5NbQ/hwxad42M=; 
-        b=KlPTgF95iaPYLBCkM8ali76274TsIaK2wS0PTd2d8gK+LRaZ89eRkKGr8rWdxl3dYJlT+Hu/pF4ZeuFJtDDXubg1+4U+iMBb5rI8okd3pLQy6meSgYSnG5WZqWu3mIHHDwWbtRQZkuDiYcwR3579wO+EH7WxiHVkSZojF3eXPAg=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1649583974;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:Reply-To;
-        bh=7poOT/rw9kdWGl9YXFYkvmc3/pYXbV5NbQ/hwxad42M=;
-        b=N9gfTA2+3liFeCJtn3lIw243pbKnDgkmCdHkETOQoZmaJ1DM1QsnQI+EBblwQ/Zn
-        8xCojxGwoSFXwsHMC0kVtPMrwcUcktXLA/cmqYXf5ZEr/plM6dPTT7DJA1w4X9s5svq
-        AA9Ydhhpm9wqljShTE5pMbV+5y+UAA4cqgBZ/Y/g=
-Received: from arinc9-PC.localdomain (85.117.236.245 [85.117.236.245]) by mx.zohomail.com
-        with SMTPS id 1649583972146345.7919696113951; Sun, 10 Apr 2022 02:46:12 -0700 (PDT)
-From:   =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
-        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
-Subject: [PATCH] ARM: dts: BCM5301X: Disable gmac0 and enable port@8 on Asus RT-AC88U
-Date:   Sun, 10 Apr 2022 12:44:55 +0300
-Message-Id: <20220410094454.2788-1-arinc.unal@arinc9.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 10 Apr 2022 05:47:30 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F542AE1B;
+        Sun, 10 Apr 2022 02:45:20 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649583917;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PwDpLp/IMcJeecAEvyOp/CYm1m3XWAQNJ0gM0y66GTQ=;
+        b=kCx397iONgJx+LSvUgmZu29Rb44BWTfWoCL8Pzjc8ufkItUIIR38qbeJLReuhNk3rb1DHM
+        whqWSjLgo7Scvl4fH+JNTnOJAWd+kO7w+LBmanIMJhiy9/0fMpWzg4Ak99I57kQBbsOM2e
+        tSwe6jeCdrX4uj/rRBaCwVCHbV6hVXsdb/oJtcq2Vrd0wBm7+vwl9GACvpYTOqdjeEOsuU
+        9agKG1r8ekyRkF35jQbAP/4ToufmpVClp2HtjZmBsFTBUX7YqszQZHEwW8xExBkmnLmB0d
+        daniebCRqDDa09QEqnyirTAOCKDUqZPZm3O/GGPmsqfrrfoYgk1WrYti6apQlg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649583917;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PwDpLp/IMcJeecAEvyOp/CYm1m3XWAQNJ0gM0y66GTQ=;
+        b=qLi11xHyICneogaEQzyv/PpMpYfwMLTmvBluPhW0NzoHdx4mAe6pomo5wn0wHOrpeSBkY0
+        gDS6wRX8cCadJTAg==
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Theodore Ts'o <tytso@mit.edu>
+Subject: Re: [PATCH] random: make random_get_entropy() return an unsigned long
+In-Reply-To: <20220408175317.140778-1-Jason@zx2c4.com>
+References: <20220408175317.140778-1-Jason@zx2c4.com>
+Date:   Sun, 10 Apr 2022 11:45:16 +0200
+Message-ID: <87tub1gtlf.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Disable gmac0 which is not connected to any switch MAC. Enable port@8 of
-the Broadcom switch which is connected to gmac2.
+On Fri, Apr 08 2022 at 19:53, Jason A. Donenfeld wrote:
+> Some implementations were returning type `unsigned long`, while others
+> that fell back to get_cycles() were implicitly returning a `cycles_t` or
+> an untyped constant int literal. That makes for weird and confusing
+> code, and basically all code in the kernel already handled it like it
+> was an `unsigned long`. I recently tried to handle it as the largest
+> type it could be, a `cycles_t`, but doing so doesn't really help with
+> much. Instead let's just make random_get_entropy() return an unsigned
+> long all the time. This also matches the commonly used
+> `arch_get_random_long()` function, so now RDRAND and RDTSC return the
+> same sized integer, which means one can fallback to the other more
+> gracefully.
 
-Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
----
- arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts b/arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts
-index 2f944d1c0330..d8503758342b 100644
---- a/arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts
-+++ b/arch/arm/boot/dts/bcm47094-asus-rt-ac88u.dts
-@@ -232,7 +232,6 @@ port@8 {
- 			reg = <8>;
- 			ethernet = <&gmac2>;
- 			label = "cpu";
--			status = "disabled";
- 
- 			fixed-link {
- 				speed = <1000>;
-@@ -242,6 +241,10 @@ fixed-link {
- 	};
- };
- 
-+&gmac0 {
-+	status = "disabled";
-+};
-+
- &gmac1 {
- 	nvmem-cells = <&et1macaddr>;
- 	nvmem-cell-names = "mac-address";
--- 
-2.25.1
-
+Acked-by: Thomas Gleixner <tglx@linutronix.de>

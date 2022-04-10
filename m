@@ -2,60 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDF904FAEA0
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 18:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C9434FAEBA
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 18:09:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240436AbiDJQIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 12:08:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41838 "EHLO
+        id S243494AbiDJQLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 12:11:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230406AbiDJQH7 (ORCPT
+        with ESMTP id S243045AbiDJQLY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 12:07:59 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D8145BE7F
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 09:05:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=FM836GhEXqpwKC8D1Fkh0HgSJYHRHMp/sLuYDx0vbkY=; b=giCO8IdBvsPvrL7wWfE7W1Lujs
-        sme0XiFVUz0iq9S3yAOqx2eQqfVpz8MLu0eH6EuaoPsxN32oXLl0Ehh5Cz0gw0HJfvY4k6ajEqHcb
-        y2KUz6DMzvqRIWnEtFsyqSxVyhEClG8JyabKcPSvmkFr014oXdrUEpTDeefE9Rjt8pzhpBaUlj+nd
-        hfRKlyf0Moj67XpCcPQEzcIHmv+AKUBuvTRBDmng6v5DKzk4BHP17fEcijcHKadirOgkAmWB+Hqvo
-        hkQcbRTwr6IfDojsCqYsHPyJVPFvYpIsWGb7I8qDKc8u9DM9TPeaGzMTSBKQHqY4dDiOaK3BcPuVe
-        Wxu7abmA==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nda4M-00Bb9W-3V; Sun, 10 Apr 2022 16:05:42 +0000
-Message-ID: <9cda10ff-7daa-808e-477f-6b9c4e0445d9@infradead.org>
-Date:   Sun, 10 Apr 2022 09:05:36 -0700
+        Sun, 10 Apr 2022 12:11:24 -0400
+Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 043456470;
+        Sun, 10 Apr 2022 09:09:12 -0700 (PDT)
+IronPort-Data: =?us-ascii?q?A9a23=3AUjr6dKvHp6u5eFJwS7zZCIx6lOfnVD1fMUV32f8?=
+ =?us-ascii?q?akzHdYEJGY0x3yjNJD2GEPa3eYmKjLY8iO42zoEhXvZeDmNc3T1c5qylgHilAw?=
+ =?us-ascii?q?SbnLY7Hdx+vZUt+DSFioHpPtpxYMp+ZRCwNZie0SiyFb/6x/RGQ6YnSHuCmULS?=
+ =?us-ascii?q?cY3goLeNZYHxJZSxLyrdRbrFA0YDR7zOl4bsekuWHULOX82cc3lE8t8pvnChSU?=
+ =?us-ascii?q?MHa41v0iLCRicdj5zcyn1FNZH4WyDrYw3HQGuG4FcbiLwrPIS3Qw4/Xw/stIov?=
+ =?us-ascii?q?NfrfTeUtMTKPQPBSVlzxdXK3Kbhpq/3R0i/hkcqFHLxo/ZzahxridzP1XqJW2U?=
+ =?us-ascii?q?hZvMKvXhMwTThtZDzpje6ZB/dcrJFDm65fPkhaWKSOEL/JGSRte0Zcj0up+H2B?=
+ =?us-ascii?q?C3fICLzUKdBqCm6S9x7fTYulnhuwiKsfxNY8Ss30myivWZd4qSJaFQePV5Ntc3?=
+ =?us-ascii?q?T41nehPG+rTY4wSbj8HRBjCfBpJNX8UBYg4kePugWPwGxVcqVSIte8y5kDQ0gV?=
+ =?us-ascii?q?60/7qKtW9UtqUScRQm26cp3na5CL9AxcHJJqTxCTt2nClgOKJliPmcIUIHba8+?=
+ =?us-ascii?q?7hhh1j77mgSDgAGEFWgrfSnh0qWRd1SMQoX9zAooKx081akJvH5XhulsDuHswQ?=
+ =?us-ascii?q?aVt54DeI38keOx7DS7gLfAXILJhZFado7pIomSycCyFCEhZXqCCZpvbnTTmiSn?=
+ =?us-ascii?q?op4Bxva1TM9dDdEPHFbC1BepYSLnW36tTqXJv4LLUJ/poad9enM/g23?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3ApSggPaOycVo3YMBcTimjsMiBIKoaSvp037Eq?=
+ =?us-ascii?q?v3oedfUzSL39qynOpoV96faaslYssR0b9exoW5PwJE80l6QFgrX5VI3KNGKN1V?=
+ =?us-ascii?q?dAR7sC0WKN+VLd8lXFh4xgPLlbAtNDIey1HV5nltz7/QX9N94hxeOM+Keuify2?=
+ =?us-ascii?q?9QYVcShaL7Fn8xxiChuWVml/RAx9D5I/E5aGouVdoT7IQwVuUu2LQmkCQ/PYp8?=
+ =?us-ascii?q?DG0LbvYRs9DRYh7wWUyROEgYSKdSSl4g=3D=3D?=
+X-IronPort-AV: E=Sophos;i="5.88,333,1635177600"; 
+   d="scan'208";a="123453820"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 11 Apr 2022 00:09:08 +0800
+Received: from G08CNEXMBPEKD05.g08.fujitsu.local (unknown [10.167.33.204])
+        by cn.fujitsu.com (Postfix) with ESMTP id DE4DC4D16FF4;
+        Mon, 11 Apr 2022 00:09:05 +0800 (CST)
+Received: from G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.85) by
+ G08CNEXMBPEKD05.g08.fujitsu.local (10.167.33.204) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Mon, 11 Apr 2022 00:09:07 +0800
+Received: from irides.mr.mr (10.167.225.141) by
+ G08CNEXCHPEKD09.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
+ id 15.0.1497.23 via Frontend Transport; Mon, 11 Apr 2022 00:09:04 +0800
+From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
+        <nvdimm@lists.linux.dev>, <linux-mm@kvack.org>,
+        <linux-fsdevel@vger.kernel.org>
+CC:     <djwong@kernel.org>, <dan.j.williams@intel.com>,
+        <david@fromorbit.com>, <hch@infradead.org>, <jane.chu@oracle.com>
+Subject: [PATCH v12 0/7] fsdax: introduce fs query to support reflink
+Date:   Mon, 11 Apr 2022 00:08:57 +0800
+Message-ID: <20220410160904.3758789-1-ruansy.fnst@fujitsu.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] macintosh: fix via-pmu and via-cuda build without
- RTC_CLASS
-Content-Language: en-US
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     kernel test robot <lkp@intel.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Kees Cook <keescook@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Finn Thain <fthain@linux-m68k.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-References: <20220409020821.10229-1-rdunlap@infradead.org>
- <ae85daa9-97a4-3ed2-5692-0d4545a88b58@csgroup.eu>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <ae85daa9-97a4-3ed2-5692-0d4545a88b58@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-yoursite-MailScanner-ID: DE4DC4D16FF4.A3DF7
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: ruansy.fnst@fujitsu.com
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,57 +71,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+This patchset is aimed to support shared pages tracking for fsdax.
 
-On 4/10/22 00:03, Christophe Leroy wrote:
-> 
-> 
-> Le 09/04/2022 à 04:08, Randy Dunlap a écrit :
->> Fix build when RTC_CLASS is not set/enabled.
->> Eliminates these build errors:
->>
->> m68k-linux-ld: drivers/macintosh/via-pmu.o: in function `pmu_set_rtc_time':
->> drivers/macintosh/via-pmu.c:1769: undefined reference to `rtc_tm_to_time64'
->> m68k-linux-ld: drivers/macintosh/via-cuda.o: in function `cuda_set_rtc_time':
->> drivers/macintosh/via-cuda.c:797: undefined reference to `rtc_tm_to_time64'
-> 
-> You don't need RTC_CLASS for that. All you need is RTC_LIB I think.
+Changes since V11:
+  - Rebased onto next-20220408
+  - Move dax_register_holder()'s job into fs_dax_get_by_bdev(),
+      and move dax_unregister_holder()'s job into fs_put_dax()
+  - Change ->memory_failure() signature to page-based
+  - Drop "mm: move pgoff_address() to vma_pgoff_address()"
+  - Fix #ifdef ... #endif wrappers
+  - Other minor fixes
 
-Oh good.
+This patchset moves owner tracking from dax_assocaite_entry() to pmem
+device driver, by introducing an interface ->memory_failure() for struct
+pagemap.  This interface is called by memory_failure() in mm, and
+implemented by pmem device.
 
-> What about selecting RTC_LIB from m68k Kconfig just like powerpc and a 
-> few architectures do ?
+Then call holder operations to find the filesystem which the corrupted
+data located in, and call filesystem handler to track files or metadata
+associated with this page.
 
-Sounds good. I'll test that now.
+Finally we are able to try to fix the corrupted data in filesystem and
+do other necessary processing, such as killing processes who are using
+the files affected.
 
-> See 
-> https://elixir.bootlin.com/linux/v5.18-rc1/source/arch/powerpc/Kconfig#L269
-> 
-> Otherwise, I think it would be better to move (and rename) 
-> rtc_tm_to_time64() into kernel/time/time.c instead of opencoding it twice.
-> 
+The call trace is like this:
+memory_failure()
+|* fsdax case
+|------------
+|pgmap->ops->memory_failure()      => pmem_pgmap_memory_failure()
+| dax_holder_notify_failure()      =>
+|  dax_device->holder_ops->notify_failure() =>
+|                                     - xfs_dax_notify_failure()
+|  |* xfs_dax_notify_failure()
+|  |--------------------------
+|  |   xfs_rmap_query_range()
+|  |    xfs_dax_failure_fn()
+|  |    * corrupted on metadata
+|  |       try to recover data, call xfs_force_shutdown()
+|  |    * corrupted on file data
+|  |       try to recover data, call mf_dax_kill_procs()
+|* normal case
+|-------------
+|mf_generic_kill_procs()
 
-Yeah, I didn't like that either.
+==
+Shiyang Ruan (7):
+  dax: Introduce holder for dax_device
+  mm: factor helpers for memory_failure_dev_pagemap
+  pagemap,pmem: Introduce ->memory_failure()
+  fsdax: Introduce dax_lock_mapping_entry()
+  mm: Introduce mf_dax_kill_procs() for fsdax case
+  xfs: Implement ->notify_failure() for XFS
+  fsdax: set a CoW flag when associate reflink mappings
 
->>
->> Fixes: 0792a2c8e0bb ("macintosh: Use common code to access RTC")
->> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
->> Reported-by: kernel test robot <lkp@intel.com>
->> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
->> Cc: Michael Ellerman <mpe@ellerman.id.au>
->> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
->> Cc: Kees Cook <keescook@chromium.org>
->> Cc: Arnd Bergmann <arnd@arndb.de>
->> Cc: Finn Thain <fthain@linux-m68k.org>
->> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
->> Cc: Nathan Chancellor <nathan@kernel.org>
->> Cc: Nick Desaulniers <ndesaulniers@google.com>
->> Cc: linuxppc-dev@lists.ozlabs.org
->> ---
->>   drivers/macintosh/via-cuda.c |    5 ++++-
->>   drivers/macintosh/via-pmu.c  |    5 ++++-
->>   2 files changed, 8 insertions(+), 2 deletions(-)
+ drivers/dax/super.c         |  66 +++++++++-
+ drivers/md/dm.c             |   2 +-
+ drivers/nvdimm/pmem.c       |  17 +++
+ fs/dax.c                    | 128 ++++++++++++++++--
+ fs/erofs/super.c            |  10 +-
+ fs/ext2/super.c             |   7 +-
+ fs/ext4/super.c             |   9 +-
+ fs/xfs/Makefile             |   5 +
+ fs/xfs/xfs_buf.c            |   6 +-
+ fs/xfs/xfs_fsops.c          |   3 +
+ fs/xfs/xfs_mount.h          |   1 +
+ fs/xfs/xfs_notify_failure.c | 219 +++++++++++++++++++++++++++++++
+ fs/xfs/xfs_super.h          |   1 +
+ include/linux/dax.h         |  48 +++++--
+ include/linux/memremap.h    |  12 ++
+ include/linux/mm.h          |   2 +
+ include/linux/page-flags.h  |   6 +
+ mm/memory-failure.c         | 255 +++++++++++++++++++++++++-----------
+ 18 files changed, 691 insertions(+), 106 deletions(-)
+ create mode 100644 fs/xfs/xfs_notify_failure.c
 
-thanks.
 -- 
-~Randy
+2.35.1
+
+
+

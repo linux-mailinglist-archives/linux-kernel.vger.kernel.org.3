@@ -2,116 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B3A94FB030
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 22:37:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D8814FB034
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 22:42:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242263AbiDJUkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 16:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44056 "EHLO
+        id S243425AbiDJUon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 16:44:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235427AbiDJUkF (ORCPT
+        with ESMTP id S235427AbiDJUom (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 16:40:05 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8223A21E25
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 13:37:52 -0700 (PDT)
-Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AD3881EC02B9;
-        Sun, 10 Apr 2022 22:37:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1649623066;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=V8ZzOUBL7xD1yUccl21XOGqXXja/Y5DnANuDg4EUg+4=;
-        b=BPFkxgPstSR5/P/X7db6tYPIBiAI29xBlCNirXUz45ijMZbOcx9sErW8xObtt5DxNsLCys
-        zFojJ8BOmAhMeiQobD9ofQvf/hHw1si52EEKeoOoT7Dn6WJQqTBvFXTeXWz0UIeqjsqTZR
-        LsF6nbqaRR0J1nkGprDqD/kvq2YIq0w=
-Date:   Sun, 10 Apr 2022 22:37:45 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
-        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
-        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
-        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
-        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
-        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        Sun, 10 Apr 2022 16:44:42 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D43109A;
+        Sun, 10 Apr 2022 13:42:30 -0700 (PDT)
+Date:   Sun, 10 Apr 2022 20:42:27 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649623348;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=L2zWUV+nMMwSggeVHi8blL9PevsrRBPc46LpSIX0ts0=;
+        b=PM7dI6nIWKaeiY/JSy+FE+dkvCPvMJC/ymmXVKNiuWENsiYqdEVakAkLWKW6jGDx8k90ez
+        V1fC04ZBi//d+rYjn6dspQkLYhS6N4RbG+xPyeJgEfJvik9qb+cRcDclamYhRbblaqfOLK
+        HzVuSTvZPUcVThAwpNlX5LFmEBAeaQwa6mBCAIiFrKEyyUFUCaHpwZchmozjXCyJ4uNgNk
+        Vxk6m++4HLWIBs/ZaFzvkf/kvZ6nZq1+wunj4LBkJ2QVK9HTLJQy+XZC0QquBK9Gp0Fjgw
+        DbDy6aznWrMoGfv5nnAAlP7v5HfmzSTdnMnYBWg5pVYgD1z1FVqyFiOFMqsmjg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649623348;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=L2zWUV+nMMwSggeVHi8blL9PevsrRBPc46LpSIX0ts0=;
+        b=3fJfGIPy0dgtpv/OYyusdCOvZCvt+FYWZHIfe9Jsx2IE9nrf9V4f2ms4zzGFM0A8hSDqMQ
+        5XERuFby0/4eJYCA==
+From:   "tip-bot2 for Yury Norov" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cleanups] x86/mm: Replace nodes_weight() with nodes_empty()
+ where appropriate
+Cc:     Yury Norov <yury.norov@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv8 14/30] x86: Consolidate port I/O helpers
-Message-ID: <YlNAGcXS1fmTu/WS@zn.tnic>
-References: <20220405232939.73860-1-kirill.shutemov@linux.intel.com>
- <20220405232939.73860-15-kirill.shutemov@linux.intel.com>
- <YlK4SYXV6zbDa1Lq@zn.tnic>
- <20220410200025.3stf4jjvwfe5oxew@box.shutemov.name>
+In-Reply-To: <20220210224933.379149-26-yury.norov@gmail.com>
+References: <20220210224933.379149-26-yury.norov@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220410200025.3stf4jjvwfe5oxew@box.shutemov.name>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <164962334763.4207.6178679393836557321.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 10, 2022 at 11:00:25PM +0300, Kirill A. Shutemov wrote:
-> Right. <asm/shared/io.h> is enough for lib/kaslr.c.
-> 
-> What about this:
-> 
-> From 164de295599f8befa2ee1ff05dc03542c02b0800 Mon Sep 17 00:00:00 2001
-> From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-> Date: Sun, 10 Apr 2022 22:49:28 +0300
-> Subject: [PATCH] x86/kaslr: Fix build warning in KASLR code in boot stub
-> 
-> lib/kaslr.c used by both the main kernel and the boot stub. It includes
-> <asm/io.h> that intended to be used in the main kernel. It leads to
-> build warnings like this:
-> 
-> 	warning: implicit declaration of function 'outl' is invalid in
-> 	C99 [-Wimplicit-function-declaration]
-> 
-> Replace <asm/io.h> with <asm/shared/io.h> which is suitable for both
-> cases.
-> 
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Fixes: 1e8f93e18379 ("x86: Consolidate port I/O helpers")
+The following commit has been merged into the x86/cleanups branch of tip:
 
-Reported-by: me
+Commit-ID:     c2a911d302b0d014a4d0d732a2bfc319e643eb62
+Gitweb:        https://git.kernel.org/tip/c2a911d302b0d014a4d0d732a2bfc319e643eb62
+Author:        Yury Norov <yury.norov@gmail.com>
+AuthorDate:    Thu, 10 Feb 2022 14:49:09 -08:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Sun, 10 Apr 2022 22:35:38 +02:00
 
-> ---
->  arch/x86/lib/kaslr.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/lib/kaslr.c b/arch/x86/lib/kaslr.c
-> index 2b3eb8c948a3..a58f451a7dd3 100644
-> --- a/arch/x86/lib/kaslr.c
-> +++ b/arch/x86/lib/kaslr.c
-> @@ -11,7 +11,7 @@
->  #include <asm/msr.h>
->  #include <asm/archrandom.h>
->  #include <asm/e820/api.h>
-> -#include <asm/io.h>
-> +#include <asm/shared/io.h>
->  
->  /*
->   * When built for the regular kernel, several functions need to be stubbed out
-> -- 
+x86/mm: Replace nodes_weight() with nodes_empty() where appropriate
 
-Thanks, that works and looks nice too.
+Various mm code calls nodes_weight() to check if any bit of a given
+nodemask is set.
 
-I'll queue it tomorrow.
+This can be done more efficiently with nodes_empty() because nodes_empty()
+stops traversing the nodemask as soon as it finds first set bit, while
+nodes_weight() counts all bits unconditionally.
 
--- 
-Regards/Gruss,
-    Boris.
+Signed-off-by: Yury Norov <yury.norov@gmail.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Link: https://lore.kernel.org/r/20220210224933.379149-26-yury.norov@gmail.com
 
-https://people.kernel.org/tglx/notes-about-netiquette
+---
+ arch/x86/mm/amdtopology.c    | 2 +-
+ arch/x86/mm/numa_emulation.c | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/mm/amdtopology.c b/arch/x86/mm/amdtopology.c
+index 058b2f3..b3ca7d2 100644
+--- a/arch/x86/mm/amdtopology.c
++++ b/arch/x86/mm/amdtopology.c
+@@ -154,7 +154,7 @@ int __init amd_numa_init(void)
+ 		node_set(nodeid, numa_nodes_parsed);
+ 	}
+ 
+-	if (!nodes_weight(numa_nodes_parsed))
++	if (nodes_empty(numa_nodes_parsed))
+ 		return -ENOENT;
+ 
+ 	/*
+diff --git a/arch/x86/mm/numa_emulation.c b/arch/x86/mm/numa_emulation.c
+index 1a02b79..9a93053 100644
+--- a/arch/x86/mm/numa_emulation.c
++++ b/arch/x86/mm/numa_emulation.c
+@@ -123,7 +123,7 @@ static int __init split_nodes_interleave(struct numa_meminfo *ei,
+ 	 * Continue to fill physical nodes with fake nodes until there is no
+ 	 * memory left on any of them.
+ 	 */
+-	while (nodes_weight(physnode_mask)) {
++	while (!nodes_empty(physnode_mask)) {
+ 		for_each_node_mask(i, physnode_mask) {
+ 			u64 dma32_end = PFN_PHYS(MAX_DMA32_PFN);
+ 			u64 start, limit, end;
+@@ -270,7 +270,7 @@ static int __init split_nodes_size_interleave_uniform(struct numa_meminfo *ei,
+ 	 * Fill physical nodes with fake nodes of size until there is no memory
+ 	 * left on any of them.
+ 	 */
+-	while (nodes_weight(physnode_mask)) {
++	while (!nodes_empty(physnode_mask)) {
+ 		for_each_node_mask(i, physnode_mask) {
+ 			u64 dma32_end = PFN_PHYS(MAX_DMA32_PFN);
+ 			u64 start, limit, end;

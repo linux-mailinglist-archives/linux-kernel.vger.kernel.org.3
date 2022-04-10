@@ -2,101 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F54A4FAFD5
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 21:40:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C74FD4FAFD7
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 21:41:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241621AbiDJTmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 15:42:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32874 "EHLO
+        id S242645AbiDJTnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 15:43:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233614AbiDJTmk (ORCPT
+        with ESMTP id S233614AbiDJTnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 15:42:40 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59DF846B01
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 12:40:27 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649619625;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FF23cSZ1l3Y5yPotVlxMxAKU+a4XmyD6dOumhinfpP4=;
-        b=idd97FJ9/26MIUh5k3HejD2ofr204yiAixCK4spN/qliyMrOa6rGE62+4KS6AeNDWjWyxx
-        k6YDCQ12aTM01SMMOdxNo2x18c+Ls/r3ESbucvJR2znC+OF0/yAzvddxgJuhWgPKFFIxiD
-        NBF14DLSCs1r9YAOWHnhyVNnZy3UKjBWqAsd+r2jBvJ+JQFUiDcOZqIVrAJnl1t4IsxZi8
-        8JrDGBhhDyt3zWn8B6WAKnq4zesXO17nafwjMk/v4A+ZfCWuenCVhEoOdWtcNWiZbHY4nm
-        MMLlsVztvRvZsKG7dhTQbRKHrzQ2xI4+upZiTaf++ROuVcZBtqj1XEIbzveLNg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649619625;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FF23cSZ1l3Y5yPotVlxMxAKU+a4XmyD6dOumhinfpP4=;
-        b=8y1kmnj6ZiKZCLeRkGK8BKGrhxnktGpECq6XCPfHqYwBMflRJANvDz2bj8uChbHsJTZwiV
-        QertNFdJdM2IJhBQ==
-To:     Chen Lifu <chenlifu@huawei.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] irq: print depth in __enable_irq WARNING
-In-Reply-To: <20220325013359.2691092-1-chenlifu@huawei.com>
-References: <20220325013359.2691092-1-chenlifu@huawei.com>
-Date:   Sun, 10 Apr 2022 21:40:24 +0200
-Message-ID: <87czhohglz.ffs@tglx>
+        Sun, 10 Apr 2022 15:43:04 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6FDC4D63B
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 12:40:52 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id k25-20020a056830151900b005b25d8588dbso9951395otp.4
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 12:40:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FUl8Qd04XCFc9FE72bNsCtMOh/C1JcO2xYzOigY3DOQ=;
+        b=Fs8J9GIrPrs0yfIjawm/mukc4LqbyZydY837wCeZzQMbyYw+qUDHoOB4d4Dnf5BCqn
+         GUoWZYgF2SzH9ngNhAo5FBXK+x28VGcmjgeDbXEiKismueXnZ98WF1olWpE4hTCpAuEI
+         qCPGER4oR27g8qXzEegktq8aKzNsmo7ic1QFf+Fay2R9P9L0wJ4Izc7fp4NtUlfVRgzk
+         LqsWFpcTBiMOGuLDxJqkYGcXhkWzcKa5YiS7cpTTpS457B8+Dsa62BD3AtRnNP0A5x+m
+         xdJ/ZDJ2gWuA+xs0rIzU3eypS35hhU5wOSEkq4euPEtkvBDwKcbI1tdugX3ZHTdH86Ko
+         6IFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FUl8Qd04XCFc9FE72bNsCtMOh/C1JcO2xYzOigY3DOQ=;
+        b=7CgMSqKWknMTPNuXUlNMRA4hoHTKNiwR/nfbKAiVu8kWIPtqzlc4zZO4rWVjsAIgGc
+         dCszwEQxobaB1r91AiVe8KKA4K+l5kb/fj1E5ifnQOnNTK8ck6QjsVNy4+pElsyL0hjU
+         b3ktYvePQNGPpTCssAGC+YZYEbIbdPk67ZWfZRpzMAAXw5qtbCEvxTY5MaNz0clCuJJw
+         HolcqqKnq9gSTrMuxS6EhLVCkb3zPNDAIN15lS5NqsJ9ocxvjVxXRmuDLTxGzGapE6SU
+         O0ugYKjF2TCgKCo+8ulOlA/CxUzDEYn94R4mAXlSY0vgoPNab/Ci5cO+tZxPOyRX7/xT
+         GRVg==
+X-Gm-Message-State: AOAM531KESHs9YsWvzRN0auIFi4uvK/mqPu6+w2AH4DTvNfynBixTtDX
+        Ksai2+CgbPs9wVUkpmxnGyPNnsZa2kPOA+7lU8LwZNeVQGg=
+X-Google-Smtp-Source: ABdhPJyYr3ENb63/2H2lblSxQ8S9ju20aVO7Z+CEMkVpE7y12Suji93mEHkrGh9UDB/WuPnf43Uh7+G/gqpgpiDV1qk=
+X-Received: by 2002:a05:6830:4d3:b0:5cb:73f0:2f1a with SMTP id
+ s19-20020a05683004d300b005cb73f02f1amr9833533otd.30.1649619652273; Sun, 10
+ Apr 2022 12:40:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220409042321.3184493-1-james.hilliard1@gmail.com> <CAMeQTsanEow=zq=MuZLjMqpzybdS=5S0=JrkxuCdT7d5MxpEWQ@mail.gmail.com>
+In-Reply-To: <CAMeQTsanEow=zq=MuZLjMqpzybdS=5S0=JrkxuCdT7d5MxpEWQ@mail.gmail.com>
+From:   James Hilliard <james.hilliard1@gmail.com>
+Date:   Sun, 10 Apr 2022 13:40:40 -0600
+Message-ID: <CADvTj4rBKzGFch8iVzHu1s+6=P0PcLEwoFi74xd_ormEX+2rMA@mail.gmail.com>
+Subject: Re: [PATCH v3] drm/gma500: depend on framebuffer
+To:     Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Chen!
+On Sun, Apr 10, 2022 at 1:36 PM Patrik Jakobsson
+<patrik.r.jakobsson@gmail.com> wrote:
+>
+> On Sat, Apr 9, 2022 at 6:23 AM James Hilliard <james.hilliard1@gmail.com> wrote:
+> >
+> > Select the efi framebuffer if efi is enabled.
+> >
+> > This appears to be needed for video output to function correctly.
+> >
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+>
+> Hi James,
+> EFI_FB is its own driver and not needed by gma500 to drive its
+> hardware. What makes you think it's required?
 
-On Fri, Mar 25 2022 at 09:33, Chen Lifu wrote:
+I wasn't getting any HDMI video output without it enabled for some reason,
+I assume it is doing some sort of initialization needed by gma500
+during startup.
 
-The subsystem prefix for the interrupt core is 'genirq' as you can easy
-check via 'git log kernel/irq/manage.c'
-
-> Since case 0 and 1 of desc->depth may print same warning messages as follows,
-> according to the messages, we do not know in which case the warning is generated.
-> This patch prints extra desc->depth in the warning messages to distinguish
-> these cases.
-
-This patch prints? The patch cannot print anything.
-
-Please read the patch submission notes in Documentation/process/
-including the tip tree specific rules in Documentation/process/maintainer-tip.html
-
->  void __enable_irq(struct irq_desc *desc)
->  {
->  	switch (desc->depth) {
->  	case 0:
->   err_out:
-> -		WARN(1, KERN_WARNING "Unbalanced enable for IRQ %d\n",
-> -		     irq_desc_get_irq(desc));
-> +		WARN(1, KERN_WARNING "depth %u: Unbalanced enable for IRQ %d\n",
-> +		     desc->depth, irq_desc_get_irq(desc));
-
-If we change this then we really want separate messages which makes it
-clear what this is about. Something like:
-
-        if (likely(depth == 1)) {
-        	if (WARN_ONCE(suspended, "Enable of suspended irq %d", irq))
-                	return;
-                ....
-                return;
-        }
-
-        if (WARN_ONCE(!depth, "Unbalanced enable of irq %d", irq))
-        	return;
-
-	desc->depth--;
-
-Hmm?
-
-Thanks,
-
-        tglx
+>
+> -Patrik
+>
+> > ---
+> > Changes v2 -> v3:
+> >   - select EFI_FB instead of depending on it
+> > Changes v1 -> v2:
+> >   - use depends instead of select
+> > ---
+> >  drivers/gpu/drm/gma500/Kconfig | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/drivers/gpu/drm/gma500/Kconfig b/drivers/gpu/drm/gma500/Kconfig
+> > index 0cff20265f97..a422fa84d53b 100644
+> > --- a/drivers/gpu/drm/gma500/Kconfig
+> > +++ b/drivers/gpu/drm/gma500/Kconfig
+> > @@ -2,11 +2,13 @@
+> >  config DRM_GMA500
+> >         tristate "Intel GMA500/600/3600/3650 KMS Framebuffer"
+> >         depends on DRM && PCI && X86 && MMU
+> > +       depends on FB
+> >         select DRM_KMS_HELPER
+> >         # GMA500 depends on ACPI_VIDEO when ACPI is enabled, just like i915
+> >         select ACPI_VIDEO if ACPI
+> >         select BACKLIGHT_CLASS_DEVICE if ACPI
+> >         select INPUT if ACPI
+> > +       select FB_EFI if EFI
+> >         help
+> >           Say yes for an experimental 2D KMS framebuffer driver for the
+> >           Intel GMA500 (Poulsbo), Intel GMA600 (Moorestown/Oak Trail) and
+> > --
+> > 2.25.1
+> >

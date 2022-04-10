@@ -2,132 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11B924FB056
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 23:17:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8674A4FB057
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 23:21:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240363AbiDJVTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 17:19:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53244 "EHLO
+        id S242506AbiDJVXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 17:23:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236902AbiDJVTo (ORCPT
+        with ESMTP id S241593AbiDJVXa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 17:19:44 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D47424AE;
-        Sun, 10 Apr 2022 14:17:29 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id z16so12931688pfh.3;
-        Sun, 10 Apr 2022 14:17:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=amVR16GyPmaXgXRfnOWV2/JFp0ofkaxxky40KG8lyB0=;
-        b=QeMlkDEgxQjiSluao5CAZXhXOZu1x48Vh34v656xUcO5PPTcLwwZsEPlXyFu6P+3nj
-         hP7Wk8lubU6e1bD2nMvev7HdLtnb4u/QpbTJVEbHbbkrMnIOdfUjheg/rliZkJQYZgep
-         Q9SE3Sd251ehrXWBlCt0pp+BNR4dPIWmaZ/MTyQzH7E7gwT/f7JBagwoVu3j22z7OiHC
-         YUu5aWv/Tf2DEXiZ9iv7NdpUva668OlMl8EpuUagiIUDDS+sPngKpnhNE8o1sJ4kwfBv
-         io+/QC1JVlJ5mXTKI3iGdv4HEUinJJtWnxUoLj/Twe12gS1kw2ozIeTqwrX1+8Y8Ljsx
-         R55Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=amVR16GyPmaXgXRfnOWV2/JFp0ofkaxxky40KG8lyB0=;
-        b=m8O1SHzA7Od0aP0kg8AORRVaZ4O6pYS0mOc8WV9DR5uoZA0syTg4LClvPTLt00h0ow
-         JnFrCdgl36ckr7CXTAYBPl/AWjlRlSqxMEIR0GhcNLR7a5MYAtjLJII44UccPOBXvswY
-         mqVq6qYR93jJuAwgntVNZk0X3QtisEamXjnUb6qZwxJF5aGbE37aN2f6PH4VOL+9tmZA
-         jFRGIjCzagZNuVTkTVYshwbmpBJKAvKDDGTFaPX7hAyJM8sIAmOSrfiKJ8f7bzeUZK67
-         90Bm4iaJ+UMG7fezOYOfMrUbQE3dT0s4YrrLxCdXgffz5EpVKEMpAz9SbdSkHdTD/0Ct
-         WtJA==
-X-Gm-Message-State: AOAM532/iCTMlzqt8Hn8gVIYQW/ljYGGfertbLCLe1uJt4HKKXh0ilHD
-        dDDT/9AOjNjP5fJ3/h0UMCr7Ak+CcAqFmQOYHbU=
-X-Google-Smtp-Source: ABdhPJxNNRfj9YmDq1W26AK8eKZva0BjvIFLZ2HXbF10bTccLvZ+vTCpK6t+a6Wxi1K+TqgcHmYxHihYWheGfzm2hgw=
-X-Received: by 2002:a63:7c06:0:b0:398:31d5:f759 with SMTP id
- x6-20020a637c06000000b0039831d5f759mr24028460pgc.513.1649625449274; Sun, 10
- Apr 2022 14:17:29 -0700 (PDT)
+        Sun, 10 Apr 2022 17:23:30 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1AB6E3D
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 14:21:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649625678; x=1681161678;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ziPfFp9611FJlX7VRYRPEoEzmDMwCtMOWXYO5NJQa0Y=;
+  b=UYIrXWQaM2hwwDodc7VT7QgDBK1kOg7cgSysnqzWkDamtrzalzAEAKRD
+   yeq2ckGqyqQkOTeyXVVGazVnCvSbQ/GnWGDj43msiojQlEWQ1bowEKcnc
+   L3BrBSo07Z5SRXglX40D5phpZxBH0/W3blPP071EQ/iGyyhMfIjTZSX9r
+   PZpcjMxbMTfmX4UPcE7T+IYyahTTr/W7jfLgeeCnLcrdxUCOJ2pot6/Jb
+   ii+yX+rFaveaohK1hyeRKGd42QISSxp859firpMDZLjqNNqmAypRxaLgM
+   OOx+JwNo0eSwMjyo/zeRcTM32SOlmkQYfpXE1kqcNh0Smiw7LIJCe1+cT
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="243879838"
+X-IronPort-AV: E=Sophos;i="5.90,250,1643702400"; 
+   d="scan'208";a="243879838"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2022 14:21:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,250,1643702400"; 
+   d="scan'208";a="525714244"
+Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 10 Apr 2022 14:21:17 -0700
+Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ndezk-00016h-IN;
+        Sun, 10 Apr 2022 21:21:16 +0000
+Date:   Mon, 11 Apr 2022 05:21:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [norov:bitmap-for-next 43/43] lib/bitmap.c:1571:36: warning:
+ operation on 'i' may be undefined
+Message-ID: <202204110512.jCY23V15-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220210224933.379149-22-yury.norov@gmail.com>
- <164962245994.4207.10090580398155704963.tip-bot2@tip-bot2> <573841649622719@mail.yandex.com>
-In-Reply-To: <573841649622719@mail.yandex.com>
-From:   Yury Norov <yury.norov@gmail.com>
-Date:   Sun, 10 Apr 2022 14:17:18 -0700
-Message-ID: <CAAH8bW-=baSvb6pY+9t=5Fn6DA56G3eTJP0uBeXDZsVuDkHr9g@mail.gmail.com>
-Subject: Re: [tip: irq/core] genirq/affinity: Replace cpumask_weight() with
- cpumask_empty() where appropriate
-To:     Ozgur <ozgur@linux.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-tip-commits@vger.kernel.org" 
-        <linux-tip-commits@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "maz@kernel.org" <maz@kernel.org>, Ming Lei <ming.lei@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 10, 2022 at 1:35 PM Ozgur <ozgur@linux.com> wrote:
->
->
->
-> 10.04.2022, 23:27, "tip-bot2 for Yury Norov" <tip-bot2@linutronix.de>:
->
-> The following commit has been merged into the irq/core branch of tip:
->
-> Commit-ID: 911488de0565f1d53bd36174d20917ebc4b44c0e
-> Gitweb: https://git.kernel.org/tip/911488de0565f1d53bd36174d20917ebc4b44c0e
-> Author: Yury Norov <yury.norov@gmail.com>
-> AuthorDate: Thu, 10 Feb 2022 14:49:05 -08:00
-> Committer: Thomas Gleixner <tglx@linutronix.de>
-> CommitterDate: Sun, 10 Apr 2022 22:20:28 +02:00
->
-> genirq/affinity: Replace cpumask_weight() with cpumask_empty() where appropriate
->
-> __irq_build_affinity_masks() calls cpumask_weight() to check if any bit of
-> a given cpumask is set.
->
-> This can be done more efficiently with cpumask_empty() because
-> cpumask_empty() stops traversing the cpumask as soon as it finds first set
-> bit, while cpumask_weight() counts all bits unconditionally.
->
-> Hello,
-> in this patch, struct cpumask *nmsk will also be affected because is called ncpus = cpumask_weight(nmsk);
-> right?
+tree:   https://github.com/norov/linux bitmap-for-next
+head:   a136dfabd10d0c1354c41a069cc4e00147a721e1
+commit: a136dfabd10d0c1354c41a069cc4e00147a721e1 [43/43] bitmap_from_arr64
+config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20220411/202204110512.jCY23V15-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/norov/linux/commit/a136dfabd10d0c1354c41a069cc4e00147a721e1
+        git remote add norov https://github.com/norov/linux
+        git fetch --no-tags norov bitmap-for-next
+        git checkout a136dfabd10d0c1354c41a069cc4e00147a721e1
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash
 
-Sorry, I don't understand that. The line that you mentioned can't
-modify nmsk neither before
-nor after this patch. Can you clarify your concern in greater details?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks,
-Yury
+All warnings (new ones prefixed by >>):
 
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Link: https://lore.kernel.org/r/20220210224933.379149-22-yury.norov@gmail.com
->
-> ---
->  kernel/irq/affinity.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/kernel/irq/affinity.c b/kernel/irq/affinity.c
-> index f7ff891..18740fa 100644
-> --- a/kernel/irq/affinity.c
-> +++ b/kernel/irq/affinity.c
-> @@ -258,7 +258,7 @@ static int __irq_build_affinity_masks(unsigned int startvec,
->          nodemask_t nodemsk = NODE_MASK_NONE;
->          struct node_vectors *node_vectors;
->
-> - if (!cpumask_weight(cpu_mask))
-> + if (cpumask_empty(cpu_mask))
->                  return 0;
->
->          nodes = get_nodes_in_cpumask(node_to_cpumask, cpu_mask, &nodemsk);
->
->
-> Ozgur
+   lib/bitmap.c: In function 'bitmap_to_arr64':
+>> lib/bitmap.c:1571:36: warning: operation on 'i' may be undefined [-Wsequence-point]
+    1571 |                 buf[i/2] = bitmap[i++];
+         |                                   ~^~
+>> lib/bitmap.c:1573:49: warning: left shift count >= width of type [-Wshift-count-overflow]
+    1573 |                         buf[i/2] |= bitmap[i++] << 32;
+         |                                                 ^~
+   lib/bitmap.c:1573:45: warning: operation on 'i' may be undefined [-Wsequence-point]
+    1573 |                         buf[i/2] |= bitmap[i++] << 32;
+         |                                            ~^~
+   lib/bitmap.c:1573:45: warning: operation on 'i' may be undefined [-Wsequence-point]
+
+
+vim +/i +1571 lib/bitmap.c
+
+  1559	
+  1560	/**
+  1561	 * bitmap_to_arr64 - copy the contents of bitmap to a u64 array of bits
+  1562	 *	@buf: array of u64 (in host byte order), the dest bitmap
+  1563	 *	@bitmap: array of unsigned longs, the source bitmap
+  1564	 *	@nbits: number of bits in @bitmap
+  1565	 */
+  1566	void bitmap_to_arr64(u64 *buf, const unsigned long *bitmap, unsigned int nbits)
+  1567	{
+  1568		unsigned int i = 0, words = BITS_TO_LONGS(nbits);
+  1569	
+  1570		while (i < words) {
+> 1571			buf[i/2] = bitmap[i++];
+  1572			if (i < words)
+> 1573				buf[i/2] |= bitmap[i++] << 32;
+  1574		}
+  1575	
+  1576		/* Clear tail bits in last element of array beyond nbits. */
+  1577		if (nbits % 64)
+  1578			buf[i - 1] &= GENMASK_ULL(nbits, 0);
+  1579	}
+  1580	EXPORT_SYMBOL(bitmap_to_arr64);
+  1581	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

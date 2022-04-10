@@ -2,53 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB554FAEF0
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 18:33:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 218AE4FAEE2
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 18:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243712AbiDJQem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 12:34:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46302 "EHLO
+        id S243594AbiDJQ2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 12:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243639AbiDJQe3 (ORCPT
+        with ESMTP id S240608AbiDJQ2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 12:34:29 -0400
-Received: from out28-50.mail.aliyun.com (out28-50.mail.aliyun.com [115.124.28.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E1E192B8;
-        Sun, 10 Apr 2022 09:32:13 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07502633|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.094111-0.000410477-0.905478;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047213;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=9;RT=9;SR=0;TI=SMTPD_---.NNs1TPY_1649608329;
-Received: from 192.168.30.128(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.NNs1TPY_1649608329)
-          by smtp.aliyun-inc.com(33.37.77.208);
-          Mon, 11 Apr 2022 00:32:10 +0800
-Subject: Re: [PATCH 07/18] MIPS: DTS: jz4780: fix otg node as reported by
- dtbscheck
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, letux-kernel@openphoenux.org
-References: <cover.1649443080.git.hns@goldelico.com>
- <298162bfa2e7225ccc753865e1ffa39ce2722b2a.1649443080.git.hns@goldelico.com>
- <bd19b6eb-d53a-b665-749d-46c275c85ccc@linaro.org>
- <822182F3-5429-4731-9FA1-8F18C5D95DEC@goldelico.com>
- <535e3eab-a28e-46f3-2a7e-f1ffd1913470@linaro.org>
- <7B66AC66-EF73-4F75-A775-589A4F98BEFC@goldelico.com>
- <3e95f567-03f5-bf9c-1856-9fe602e9b025@linaro.org>
- <81BA49E3-AFDE-4DFD-BB77-2B03488C727B@goldelico.com>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <b6090a27-12b7-0c01-6d33-ae32b31b4b74@wanyeetech.com>
-Date:   Mon, 11 Apr 2022 00:32:08 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        Sun, 10 Apr 2022 12:28:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 642E05E74A;
+        Sun, 10 Apr 2022 09:25:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2C582B80B00;
+        Sun, 10 Apr 2022 16:25:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A780C385A1;
+        Sun, 10 Apr 2022 16:25:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649607947;
+        bh=NGKU1NW31S2WhJRxze0FB2Ln7FKN0fJi8+bBdLHPWEg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=uLdIA8rujL0YIz/V7rMMUrvCDJHL+plvWQ4n4O9ky0EcEdJ/Ay9MSl11cfvdTguTY
+         epbQVeK+DDzTaBm+2fEqcamujU6Wn7DDTAYNTbQeClIPn4dqIOafjpwwh/BvBbTmR4
+         RsyEKzVC0HeMIzBqOR7f0eAUfWZ8FOTZNAl8XOMWaMVS9+2q5bydRvew+pAwVXbZOO
+         Q/8exo3u9SYI5rvfwxrH5cytwJF1ZD2WrSak6kuvChs2+6VqlDnJEMf6FsSiQZzt28
+         bkv/AvyY81ei2uLH+H4IGXaFfifjF1SgBlHsoqKiyP69slB26lSxCa7I9BNUoq2KGg
+         8/A11WagbUaig==
+Date:   Sun, 10 Apr 2022 17:33:38 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Cixi Geng <gengcixi@gmail.com>
+Cc:     lars@metafoo.de, robh+dt@kernel.org, orsonzhai@gmail.com,
+        baolin.wang7@gmail.com, zhang.lyra@gmail.com,
+        yuming.zhu1@unisoc.com, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V3 6/7] iio: adc: sc27xx: add support for PMIC sc2730
+Message-ID: <20220410173338.35061998@jic23-huawei>
+In-Reply-To: <20220407082148.571442-7-gengcixi@gmail.com>
+References: <20220407082148.571442-1-gengcixi@gmail.com>
+        <20220407082148.571442-7-gengcixi@gmail.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <81BA49E3-AFDE-4DFD-BB77-2B03488C727B@goldelico.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,66 +58,176 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi folks,
+On Thu,  7 Apr 2022 16:21:47 +0800
+Cixi Geng <gengcixi@gmail.com> wrote:
 
-On 2022/4/9 下午9:53, H. Nikolaus Schaller wrote:
->
->> Am 09.04.2022 um 15:44 schrieb Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>:
->>
->> On 09/04/2022 15:32, H. Nikolaus Schaller wrote:
->>>
->>>> Am 09.04.2022 um 15:15 schrieb Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>:
->>>>
->>>> On 09/04/2022 15:05, H. Nikolaus Schaller wrote:
->>>>>> This looks wrong, the block usually should have a specific compatible.
->>>>>> Please mention why it does not.
->>>>> Well, I did not even have that idea that it could need an explanation.
->>>>>
->>>>> There is no "ingenic,jz4780-otg" and none is needed here to make it work.
->>>> Make it work in what terms? We talk about hardware description, right?
->>> Yes.
->>>
->>>>> Therefore the generic "snps,dwc2" is sufficient.
->>>> No, you are mixing now driver behavior (is sufficient) with hardware
->>>> description.
->>> No. "snps,dwc2" is a hardware description for a licensed block.
->>> Not a driver behavior.
->> snps,dwc2 matches the original block, not necessarily this
->> implementation. Unless you are sure?
-> I assume. Nobody has reported an issue without having any specific jz4780 driver in place.
-> Well, that is only evidence, not bullet proof.
->
->>>> Most of licensed blocks require the specific compatible to
->>>> differentiate it.
->>> If there is a need to differentiate.
->> No, regardless whether there is a need currently, most of them have
->> specific compatibles, because there are some minor differences. Even if
->> difference is not visible from programming model or wiring, it might
->> justify it's own specific compatible. For example because maybe once
->> that tiny difference will require some changes.
->>
->> Someone added the ingenic compatible, so why do you assume that one tool
->> (bindings) is correct but other piece of code (using specific
->> compatible) is not? You use the argument "bindings warning" which is not
->> enough. Argument that blocks are 100% same, is good enough, if you are
->> sure. Just use it in commit msg. But are you sure that these are the
->> same? Same pins, same programming model (entire model, not used by Linux)?
-> The compatible ingenic,jz4780-otg was introduced in 158c774d3c64859e84dd20e04d5fb18c8d3d318e.
-> Hence I have added Yanjie for clarification why he added it in the .dts and not in the bindings.
+> From: Cixi Geng <cixi.geng1@unisoc.com>
+> 
+> sc2730 is the product of sc27xx series.
+> 
+> Co-developed-by: Yuming Zhu <yuming.zhu1@unisoc.com>
+> Signed-off-by: Yuming Zhu <yuming.zhu1@unisoc.com>
+> Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
 
+One minor comment inline.
 
-It's my fault, last year I made an OTG driver for Ingenic SoCs and sent it
-to the mailing list, and then I received some revision comments, but for
-some personal reasons I didn't continue to improve it.
+Thanks,
 
-I'll finish these modifications as soon as possible and send them out.
-Then after they merge into the mainline, this problem will be solved.
+Jonathan
 
+> ---
+>  drivers/iio/adc/sc27xx_adc.c | 105 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 105 insertions(+)
+> 
+> diff --git a/drivers/iio/adc/sc27xx_adc.c b/drivers/iio/adc/sc27xx_adc.c
+> index eb9e789dd8ee..43655a818d09 100644
+> --- a/drivers/iio/adc/sc27xx_adc.c
+> +++ b/drivers/iio/adc/sc27xx_adc.c
+> @@ -13,9 +13,11 @@
+>  #include <linux/slab.h>
+>  
+>  /* PMIC global registers definition */
+> +#define SC2730_MODULE_EN		0x1808
+>  #define SC2731_MODULE_EN		0xc08
+>  #define SC27XX_MODULE_ADC_EN		BIT(5)
+>  #define SC2721_ARM_CLK_EN		0xc0c
+> +#define SC2730_ARM_CLK_EN		0x180c
+>  #define SC2731_ARM_CLK_EN		0xc10
+>  #define SC27XX_CLK_ADC_EN		BIT(5)
+>  #define SC27XX_CLK_ADC_CLK_EN		BIT(6)
+> @@ -307,6 +309,80 @@ static int sc2721_adc_get_ratio(int channel, int scale)
+>  	return SC27XX_VOLT_RATIO(1, 1);
+>  }
+>  
+> +static int sc2730_adc_get_ratio(int channel, int scale)
+> +{
+> +	switch (channel) {
+> +	case 14:
+> +		switch (scale) {
+> +		case 0:
+> +			return SC27XX_VOLT_RATIO(68, 900);
+> +		case 1:
+> +			return SC27XX_VOLT_RATIO(68, 1760);
+> +		case 2:
+> +			return SC27XX_VOLT_RATIO(68, 2327);
+> +		case 3:
+> +			return SC27XX_VOLT_RATIO(68, 3654);
+> +		default:
+> +			return SC27XX_VOLT_RATIO(1, 1);
+> +		}
+> +	case 15:
+> +		switch (scale) {
+> +		case 0:
+> +			return SC27XX_VOLT_RATIO(1, 3);
+> +		case 1:
+> +			return SC27XX_VOLT_RATIO(1000, 5865);
+> +		case 2:
+> +			return SC27XX_VOLT_RATIO(500, 3879);
+> +		case 3:
+> +			return SC27XX_VOLT_RATIO(500, 6090);
+> +		default:
+> +			return SC27XX_VOLT_RATIO(1, 1);
+> +		}
+> +	case 16:
+> +		switch (scale) {
+> +		case 0:
+> +			return SC27XX_VOLT_RATIO(48, 100);
+> +		case 1:
+> +			return SC27XX_VOLT_RATIO(480, 1955);
+> +		case 2:
+> +			return SC27XX_VOLT_RATIO(480, 2586);
+> +		case 3:
+> +			return SC27XX_VOLT_RATIO(48, 406);
+> +		default:
+> +			return SC27XX_VOLT_RATIO(1, 1);
+> +		}
+> +	case 21:
+> +	case 22:
+> +	case 23:
+> +		switch (scale) {
+> +		case 0:
+> +			return SC27XX_VOLT_RATIO(3, 8);
+> +		case 1:
+> +			return SC27XX_VOLT_RATIO(375, 1955);
+> +		case 2:
+> +			return SC27XX_VOLT_RATIO(375, 2586);
+> +		case 3:
+> +			return SC27XX_VOLT_RATIO(300, 3248);
+> +		default:
+> +			return SC27XX_VOLT_RATIO(1, 1);
+> +		}
+> +	default:
+> +		switch (scale) {
+> +		case 0:
+> +			return SC27XX_VOLT_RATIO(1, 1);
+> +		case 1:
+> +			return SC27XX_VOLT_RATIO(1000, 1955);
+> +		case 2:
+> +			return SC27XX_VOLT_RATIO(1000, 2586);
+> +		case 3:
+> +			return SC27XX_VOLT_RATIO(1000, 4060);
+> +		default:
+> +			return SC27XX_VOLT_RATIO(1, 1);
+> +		}
+> +	}
+> +	return SC27XX_VOLT_RATIO(1, 1);
+> +}
+> +
+>  static int sc2731_adc_get_ratio(int channel, int scale)
+>  {
+>  	switch (channel) {
+> @@ -363,6 +439,22 @@ static void sc2720_adc_scale_init(struct sc27xx_adc_data *data)
+>  	}
+>  }
+>  
+> +static void sc2730_adc_scale_init(struct sc27xx_adc_data *data)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < SC27XX_ADC_CHANNEL_MAX; i++) {
+> +		if (i == 5 || i == 10 || i == 19 || i == 30 || i == 31)
 
-Thanks and best regards!
+I'd keep this looking like the other instances (in the previous patch)
+and use a switch statement.  They are more lines, but easier to read.
 
+> +			data->channel_scale[i] = 3;
+> +		else if (i == 7 || i == 9)
+> +			data->channel_scale[i] = 2;
+> +		else if (i == 13)
+> +			data->channel_scale[i] = 1;
+> +		else
+> +			data->channel_scale[i] = 0;
+> +	}
+> +}
+> +
+>  static void sc2731_adc_scale_init(struct sc27xx_adc_data *data)
+>  {
+>  	int i;
+> @@ -720,6 +812,18 @@ static const struct sc27xx_adc_variant_data sc2731_data = {
+>  	.get_ratio = sc2731_adc_get_ratio,
+>  };
+>  
+> +static const struct sc27xx_adc_variant_data sc2730_data = {
+> +	.pmic_type = SC27XX_ADC,
+> +	.module_en = SC2730_MODULE_EN,
+> +	.clk_en = SC2730_ARM_CLK_EN,
+> +	.scale_shift = SC27XX_ADC_SCALE_SHIFT,
+> +	.scale_mask = SC27XX_ADC_SCALE_MASK,
+> +	.bscale_cal = &big_scale_graph_calib,
+> +	.sscale_cal = &small_scale_graph_calib,
+> +	.init_scale = sc2730_adc_scale_init,
+> +	.get_ratio = sc2730_adc_get_ratio,
+> +};
+> +
+>  static const struct sc27xx_adc_variant_data sc2721_data = {
+>  	.pmic_type = SC2721_ADC,
+>  	.module_en = SC2731_MODULE_EN,
+> @@ -834,6 +938,7 @@ static int sc27xx_adc_probe(struct platform_device *pdev)
+>  
+>  static const struct of_device_id sc27xx_adc_of_match[] = {
+>  	{ .compatible = "sprd,sc2731-adc", .data = &sc2731_data},
+> +	{ .compatible = "sprd,sc2730-adc", .data = &sc2730_data},
+>  	{ .compatible = "sprd,sc2721-adc", .data = &sc2721_data},
+>  	{ .compatible = "sprd,sc2720-adc", .data = &sc2720_data},
+>  	{ }
 
->
-> BR and thanks,
-> Nikolaus
->

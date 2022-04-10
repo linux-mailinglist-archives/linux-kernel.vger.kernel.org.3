@@ -2,98 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D0DD4FB040
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 22:56:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8CA74FB044
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 22:57:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242337AbiDJU6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 16:58:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45982 "EHLO
+        id S242374AbiDJU7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 16:59:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234484AbiDJU6v (ORCPT
+        with ESMTP id S242351AbiDJU7U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 16:58:51 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040E3BB9
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 13:56:39 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id p8so11818394qvv.5
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 13:56:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=prism19-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=v4Dm0zZiVNz+3KjhnBsylTDpY1b0Arid63IH2fuAnik=;
-        b=XrE9JJrRaF5iLY2JPFzzhhBr+NmyNaXlURO7Am8sXuwB5LTKcNq7cbc57ZCESWKJVA
-         ViMCAynxoDmUwjI3l1MH/DclLSskI/r/ezCnkW2hNwIg9LL6WvqwNgFjxvNYO2gs7TZO
-         v9I9kihxoJBmmWlji9Jg6CjthaNKMaL3SaeKWU4Cc4/bk6sdhCfBHfx8kQxq/CyEcKOM
-         SQYmaRjaJw25yY2fjA4rh+L8UAr/TBEJ5onCKlHA7+Is6ftwEPo7OapWRPU5ElVav7jQ
-         JGUDps5Y6qtMvtJaDEJUAEBadoEeIy4Xiok33I4BWXH+WkEkTffro2AgOmLm1NcX1elX
-         fr8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=v4Dm0zZiVNz+3KjhnBsylTDpY1b0Arid63IH2fuAnik=;
-        b=Mbj7aw8UKOA2zGiZVk9o7IIyxN2lmugAZpqrCxZZbyCrXLAsXhsS28Prc9oPYQ3M0x
-         4+QgZ9nYD3Y2OVWfuXTxtDuV2d3I5BkKrp6/JDRQ4d2F+tM+DNoOshzTwvMFwwQCvF+c
-         v2wD/8YPWRFCrFwqYJJf+MPzSDEtOGReVaXhh16O/DrGvfsM8tTvjijpv4w6EL8mRmhY
-         jKLAJYBpDA9u9VXM3CN/BvfXeSBiQKSSXxfAWu2QS8qhU7CsI+7m9rp2k7RVnRqHNapn
-         SYric04Lsh+sjzZwS1JHn/No3FUOBLHiz+F/qx3RvYHbUovuiWeoiM90KMSVmrmmESA9
-         0LNg==
-X-Gm-Message-State: AOAM530XBJyof4cFT8KPWuNb6A3PhlBa7ZXS9iD04eon6uqDVf8aEyni
-        I6MXXM0yJz9AbkOB9XO1jkZN3cbvPPzridg6KAdw7Q==
-X-Google-Smtp-Source: ABdhPJzKr+05g1w/9S4kzn27/Px/j9DsPrGWiXdcX3y2gI1UMnWoBRqzRfgcxanrSdHR+07WQSThEA==
-X-Received: by 2002:a05:6214:1d2b:b0:441:6a41:f726 with SMTP id f11-20020a0562141d2b00b004416a41f726mr24547900qvd.102.1649624198180;
-        Sun, 10 Apr 2022 13:56:38 -0700 (PDT)
-Received: from RADIUM.localdomain (bras-base-mtrlpq2718w-grc-02-76-67-205-66.dsl.bell.ca. [76.67.205.66])
-        by smtp.googlemail.com with ESMTPSA id bl22-20020a05620a1a9600b00680da570a5dsm19073102qkb.61.2022.04.10.13.56.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Apr 2022 13:56:37 -0700 (PDT)
-From:   Guillaume Giraudon <ggiraudon@prism19.com>
-To:     kernel-dev@prism19.com
-Cc:     ggiraudon@prism19.com, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: meson-sm1-bananapi-m5: fix wrong GPIO pin labeling for CON1
-Date:   Sun, 10 Apr 2022 16:56:24 -0400
-Message-Id: <20220410205624.14295-1-ggiraudon@prism19.com>
-X-Mailer: git-send-email 2.20.1
+        Sun, 10 Apr 2022 16:59:20 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BFF11C2D;
+        Sun, 10 Apr 2022 13:57:04 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649624223;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hE+Xcw0JizEU8Wnq0ZP70KLvw79L4CjFSDQ+JeFdg1E=;
+        b=wcxdyIRUujqol7xM6/jNUaTiJK9LjQ2TxNswzkFqW9IdoCXdLl06LKnKcZu+/PhgcujoFD
+        4BL6UvqV2KyZxKcXAHyaYhKgWh+hW7kmtVsrR50bN2kEyItTRS4qenN4xdW+pqDVD/EBQJ
+        FRBUDZAXAnKdCAGLESQsbxyitf9btYLvPr88J6g6SWQULeVv1+BpRryz8V4vlo0Sxn5A1B
+        B7jn62NOZrsua6pLpW1KUXCpCdbVHaodhuhDNbeQMQoqpedjr6x5wCT5mekwEWTjKpLkBQ
+        ZhVOGqfjVtVh2uqjxiB4TKZirCwCtL5e55pMSWAO2Ry+8zKLnyd7j8EtVVFiMg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649624223;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hE+Xcw0JizEU8Wnq0ZP70KLvw79L4CjFSDQ+JeFdg1E=;
+        b=WYkLY0CPXnB/0QIxOUzf7pdAwpOuVx9Tljat/8ZOy+GrRKgqIku37SjusWmBW3We4uxu9x
+        QGtzsFUk86/12iAg==
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        arnd@arndb.de, Theodore Ts'o <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "David S . Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, x86@kernel.org,
+        linux-xtensa@linux-xtensa.org
+Subject: Re: [PATCH RFC v1 00/10] archs/random: fallback to using
+ sched_clock() if no cycle counter
+In-Reply-To: <YlLo8JVOS6FDmWUM@zx2c4.com>
+References: <20220408182145.142506-1-Jason@zx2c4.com> <87wnfxhm3n.ffs@tglx>
+ <YlLo8JVOS6FDmWUM@zx2c4.com>
+Date:   Sun, 10 Apr 2022 22:57:02 +0200
+Message-ID: <877d7whd29.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The labels for lines 61 through 84 on the periphs-banks were offset by 2.
-Realigned them to match the Banana Pi M5 schematics.
+Jason,
 
-Signed-off-by: Guillaume Giraudon <ggiraudon@prism19.com>
----
- arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sun, Apr 10 2022 at 16:25, Jason A. Donenfeld wrote:
+> On Sun, Apr 10, 2022 at 01:29:32AM +0200, Thomas Gleixner wrote:
+>> But the below uncompiled hack gives you access to the 'best' clocksource
+>> of a machine, i.e. the one which the platform decided to be the one
+>> which is giving the best resolution. The minimal bitwidth of that is
+>> AFAICT 20 bits. In the jiffies case this will at least advance every
+>> tick.
+>
+> Oh, huh, that's pretty cool. I can try to make a commit out of that. Are
+> you suggesting I use this as the fallback for all platforms that
+> currently return zero, or just for m68k per Arnd's suggestion, and then
+> use sched_clock() for the others? It sounds to me like you're saying
+> this would be best for all of them. If so, that'd be quite nice.
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts b/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
-index 5751c48620ed..754c3d43ef0b 100644
---- a/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
-+++ b/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
-@@ -448,7 +448,7 @@
- 		"",
- 		/* GPIOA */
- 		"", "", "", "", "", "", "", "",
--		"", "", "", "", "", "",
-+		"", "", "", "", "", "", "", "",
- 		"CON1-P27", /* GPIOA_14 */
- 		"CON1-P28", /* GPIOA_15 */
- 		/* GPIOX */
--- 
-2.20.1
+It's the best in terms of timekeeping. Not the fastest :)
 
+>> The price, e.g. on x86 would be that RDTSC would be invoked via an
+>> indirect function call. Not the end of the world...
+>
+> Well on x86, random_get_entropy() is overridden in the arch/ code to
+> call get_cycles(). So this would really just be for 486 and for other
+> architectures with no cycle counter that are currently returning zero.
+> However, this brings up a good point: if your proposed
+> ktime_read_raw_clock() function really is so nice, should it be used
+> everywhere unconditionally with no arch-specific overrides? On x86, is
+> it really guaranteed to be RDTSC, and not, say, some off-core HPET
+> situation? And is this acceptable to call from the hard irq handler?
+
+No, that's the sad part. On system where TSC is unstable (for whatever
+reason) this might fallback to some off-core clock (HPET, PMTIMER).
+The good news is that this is mostly affecting older systems. After 20+
+years of complaining the hardware people seem to have figured out that a
+fast accessible and realiable clocksource is something useful. :)
+
+> Not yet having too much knowledge, I'm tentatively leaning toward the
+> safe side, of just using ktime_read_raw_clock() in the current places
+> that return zero all the time -- that is, for the purpose this patchset
+> has.
+
+That's probably a good approach and it's init/runtime discoverable.
+
+Thanks,
+
+        tglx

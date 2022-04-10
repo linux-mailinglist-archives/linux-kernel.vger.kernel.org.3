@@ -2,91 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7F44FAE31
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 16:18:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A9E94FAE34
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 16:19:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239885AbiDJOT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 10:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47476 "EHLO
+        id S239920AbiDJOU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 10:20:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239732AbiDJOT5 (ORCPT
+        with ESMTP id S229534AbiDJOU5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 10:19:57 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4CF4BFF5
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 07:17:47 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id t13so11949646pgn.8
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 07:17:47 -0700 (PDT)
+        Sun, 10 Apr 2022 10:20:57 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4389D4C78F;
+        Sun, 10 Apr 2022 07:18:47 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id b21so22455731lfb.5;
+        Sun, 10 Apr 2022 07:18:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=FMBgmq8WKX+31y3rGclfHeDGwB3PfPowydFLKHwFCfQ=;
-        b=mLvHvlFkv6OT+7/x+LeJDrtZZr8fRBhJJ2mgrN717MhJA26x5JO4ysK2LM7P81ymhR
-         k4glu0J8QDC6TPkV0AXEmKQvwzr8DyzKNLF/fk94lOB0nfuJA1p7pkCz5/+R6hH3pGT3
-         37/cPCRNJDKj53Rgn/ktsG2VJznD+UqYBNdbGBJEcZ+Jh+kKugSo8bqNLThh4I0vQ594
-         sBnuA6K5kOJtUNHzd56qIo1TQP66ntFROjh80n6+M6A1bLhS7w6K07qhZGdSC+1Yqmmm
-         vWyVeteSS5VhXpBvGE90hD5i2nn0phU/lJkBHm7tSKAp3plwCB+ftCUP/h/BYrZtYdg3
-         Vg3w==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zu02Bp5Bmo69mY+ZzCrRwSJldwE8Eb/jrbse8/ezonE=;
+        b=BN33pqXNRLlK+TdFHmXv4pg7XkbnubNfhUkTZTJfzbTrpgHeXVV6OMhFl3RrepVGCF
+         h9cJ7+Ue69kNFWHB83p17QKKSbiLT0hqfbeChyf49YLQTbcii1sb49ImLIhCNNgFs7Rs
+         Ew31GUlnL0lgtgj/psjJd0RxZtmfunYu4fW6UGkzzhZweoKUGDhNM5hNq3jFee7bK7sH
+         qqSTC+6zTKKMAjJlqwu3D/cLU+a1ZDMFX6GRPT9MdUwBm4/tZ+hsyBPUgKeYLBvUSKoB
+         jtvAgg4NMgWuEH/K31HxGIzKmCLe5VLrdploKKpZjop00f/q1xx0uUqmMQgwXUPBkvnw
+         gd5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=FMBgmq8WKX+31y3rGclfHeDGwB3PfPowydFLKHwFCfQ=;
-        b=t0oeuU6it3VeTTMYmZ3GH80mBOM+xvPdoSJgJkFMJT0wafUWpPAalGsaybFTtSvpKh
-         eOpAd42Zzxs++OnSOagMcWF8SC/zY4M2QDrwu6mT0io0w2sIUVbwkeTdEYQdObwTSSp7
-         xZYfxCwGKm6nOYr6S0XpEIo93nYQqz1Raa+ymlC1c2Q7p5lcFDW0EBgU4XQ8L0CfwznL
-         C7iBklb1I4qrIOoikz/UfwHEFjN391i7EoCa36rZMEzyYTY59v4RVF5xLw9tsdkAdLvG
-         yp4hVwhENdco1VK1YeeEsONRp5niQ2x6fEA9MmOhR33mhdppHdaD6wyx76+xNDJeNEIB
-         MBsQ==
-X-Gm-Message-State: AOAM533KTnNhUv6pPraXj8MbcFF6Bssp1S2Ya7erVMQuqAlEat5exP3W
-        l9PIdEUapwgpdoqbnTf0EkhQhW+huCOlpLgjkQ==
-X-Google-Smtp-Source: ABdhPJznr7MjkdWgQf2yJa7FooAbfWqjAnQjRrdpSS6+CnEn4MUZoHzPicnQcAWZ5sW1Z0LFsgLUyp7RqWNXpTFZQyI=
-X-Received: by 2002:a05:6a00:ad0:b0:4f7:a357:6899 with SMTP id
- c16-20020a056a000ad000b004f7a3576899mr28594362pfl.80.1649600266651; Sun, 10
- Apr 2022 07:17:46 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zu02Bp5Bmo69mY+ZzCrRwSJldwE8Eb/jrbse8/ezonE=;
+        b=gGAdr6CofwCfB0ZtRMJYXBnvGcpQxrpv62qIE8NjcAbp/sOsl4PDXyxmVIbeTxvYO8
+         THS81z9g2QdJ2lhopIhaZpY4rPhTLZDKsAGvd6a/VHe6JwO1AQcyjptC+wEZ+jSqEy8X
+         aY6J6lDVldqJCqewOYWzBEQ7AikiVjFVjTEsTKjcrDQOVFOTfJ80gLnONoYuYT1YwGVX
+         qq+XuDzDxMYEL5l7ePTCBboknJWqGCg7o5Zc3BF7zwGhR8h9pul1sHYWDXlz3ABgBfkx
+         JMelmJRnFMoOes0w74VBOnRUYum8LcxXHoKl+/N/LTpWwNGYw9KkIFMpWARQHG5bE1oq
+         yiZQ==
+X-Gm-Message-State: AOAM5315nr9cddsuXFIfeIJg4qXoK15WPJPpMHq+8Ad/iRBN2hsA9cll
+        XP/yIpnRQznc0w8v0zEUe+c=
+X-Google-Smtp-Source: ABdhPJx9OUDwUGEFE2E7HRlKV6j0WftRq+v41puWGQp/JtNZ5oHd15avpwdi4RU/4iO0XEB0TBYpeQ==
+X-Received: by 2002:a05:6512:31cd:b0:44a:9e36:a9d with SMTP id j13-20020a05651231cd00b0044a9e360a9dmr19093278lfe.271.1649600325391;
+        Sun, 10 Apr 2022 07:18:45 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-138-167.dynamic.spd-mgts.ru. [109.252.138.167])
+        by smtp.googlemail.com with ESMTPSA id p7-20020a2e8047000000b0024aeee8607csm2862513ljg.27.2022.04.10.07.18.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 10 Apr 2022 07:18:44 -0700 (PDT)
+Message-ID: <3bbbffff-6aa3-7068-6f0c-4372d53daf94@gmail.com>
+Date:   Sun, 10 Apr 2022 17:18:43 +0300
 MIME-Version: 1.0
-From:   Zheyu Ma <zheyuma97@gmail.com>
-Date:   Sun, 10 Apr 2022 22:17:35 +0800
-Message-ID: <CAMhUBjn40pO7A=icudFKOoiMrckcH_o7mdi-uCmgCFHi6Ueuzw@mail.gmail.com>
-Subject: [BUG] mtd: rawnand: denali_pci: page fault when probing fails
-To:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com
-Cc:     linux-mtd@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [Patch v6 1/4] memory: tegra: Add memory controller channels
+ support
+Content-Language: en-US
+To:     Ashish Mhetre <amhetre@nvidia.com>, krzysztof.kozlowski@linaro.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     vdumpa@nvidia.com, Snikam@nvidia.com
+References: <20220406052459.10438-1-amhetre@nvidia.com>
+ <20220406052459.10438-2-amhetre@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <20220406052459.10438-2-amhetre@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+06.04.2022 08:24, Ashish Mhetre пишет:
+> +	num_dt_channels = of_property_count_elems_of_size(pdev->dev.of_node, "reg",
+> +							  reg_cells * sizeof(u32));
+> +	/*
+> +	 * On tegra186 onwards, memory controller support multiple channels.
+> +	 * Apart from regular memory controller channels, there is one broadcast
+> +	 * channel and one for stream-id registers.
+> +	 */
+> +	if (num_dt_channels < mc->soc->num_channels + 2) {
+> +		dev_warn(&pdev->dev, "MC channels are missing, please update memory controller DT node with MC channels\n");
+> +		return 0;
+> +	}
+> +
+> +	mc->bcast_ch_regs = devm_platform_ioremap_resource_byname(pdev, "mc-broadcast");
+> +	if (IS_ERR(mc->bcast_ch_regs))
+> +		return PTR_ERR(mc->bcast_ch_regs);
 
-I found a bug in the denali_pci module.
-When the driver fails to probe, we will get the following splat:
+Looks to me that you don't need to use of_property_count_elems_of_size()
+and could only check the "mc-broadcast" presence to decide whether this
+is an older DT.
 
-[    4.472703] denali-nand-pci 0000:00:05.0: timeout while waiting for
-irq 0x1000
-[    4.474071] denali-nand-pci: probe of 0000:00:05.0 failed with error -5
-[    4.473538] nand: No NAND device found
-[    4.474068] BUG: unable to handle page fault for address:
-ffffc90005000410
-[    4.475169] #PF: supervisor write access in kernel mode
-[    4.475579] #PF: error_code(0x0002) - not-present page
-[    4.478362] RIP: 0010:iowrite32+0x9/0x50
-[    4.486068] Call Trace:
-[    4.486269]  <IRQ>
-[    4.486443]  denali_isr+0x15b/0x300 [denali]
-[    4.486788]  ? denali_direct_write+0x50/0x50 [denali]
-[    4.487189]  __handle_irq_event_percpu+0x161/0x3b0
-[    4.487571]  handle_irq_event+0x7d/0x1b0
-[    4.487884]  handle_fasteoi_irq+0x2b0/0x770
-[    4.488219]  __common_interrupt+0xc8/0x1b0
-[    4.488549]  common_interrupt+0x9a/0xc0
-
-It seems that the driver unmap the memory region before disabling the irq.
-
-Regards,
-Zheyu Ma
+mc->bcast_ch_regs = devm_platform_ioremap_resource_byname(pdev,
+"broadcast");
+if (IS_ERR(mc->bcast_ch_regs)) {
+	dev_warn(&pdev->dev, "Broadcast channel is missing, please update your
+device-tree\n");
+	return PTR_ERR(mc->bcast_ch_regs);
+}

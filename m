@@ -2,107 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDAE94FAFEC
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 21:57:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EA454FAFEF
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 21:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241853AbiDJT7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 15:59:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56024 "EHLO
+        id S243842AbiDJUBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 16:01:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiDJT7F (ORCPT
+        with ESMTP id S229590AbiDJUBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 15:59:05 -0400
-Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3870A27CC7
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 12:56:54 -0700 (PDT)
-Received: by mail-vk1-xa33.google.com with SMTP id j204so6636567vkj.8
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 12:56:54 -0700 (PDT)
+        Sun, 10 Apr 2022 16:01:08 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3F724BED
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 12:58:56 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id u19so3169448lff.4
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 12:58:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=OE0cJSkFezf+YJwrcp188z4Lj5GTucq0T2aibHnjxt0=;
-        b=JbwGbUn5XjC8ixf/oYJOSNQcQWuYPh4CEpwhnmutJxLp6s9gYcraM9iYlolW9y7fF0
-         uu43VYQsunooF+hL8h0eusvBm8kjxNkF3Js6kj+A3dXD2gklm1bgnryckpzQukIIEWuP
-         /I3B9sgOaoVd/mCkpfNvvHT/c/u6uLuq9VU2ocbeYCm0HuB+kLxVmjsb3PvQZKkYFCxg
-         zTPoWtQQBT6sco7SMoiR9vGUS/SAAyolGdXA+UPW+e8eHKpA+5dAtURfxai6sjkVqlzH
-         bS/pR4zeCFfQXqSb0onDDB4hMboCRXKLa12NGWnBBkCWafQBKMVGu7KKO50tE93Ak2op
-         UXfg==
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=i/oSg9CrxJRnQxeUPmlx0mpM+OCUDcuxMV4Hy9i5v8M=;
+        b=msO3gNXWzO1zO1DvK8KfVh+CKsuH7swYmYOgw9kzyO8qJa+4rHqQRFB0D7viyQiemH
+         2k38cUCQWXSgzpkelkzGSgOT2YDyCwhozUt5hpeQlHh7/ZvLpaNePEyqmxhkbhZKOVjg
+         LPT2GI/Js+asU6nC2//0lxbvP8cc7uQWMs8yWarGaNWuMt150FTCLya/UVeUoBT1mNdV
+         w0Xidbn+t3FjKGcfAsQX3MvFwrvB/AZkc8giW3COeH+SWGbXd6gKXW4U3w5w8n2t5vrJ
+         Zrym7h71MM6mEkfmsC4RRJOn1g6KhapTS2IypR1QdKWZW4rqq5lM1VNqvfYwTNvH9FRo
+         Jiig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=OE0cJSkFezf+YJwrcp188z4Lj5GTucq0T2aibHnjxt0=;
-        b=QYipRsqOXBNN8K8Ibe4gU4OII8NIvxuCfl+uAP6FHDFCAbgKi/AtnO2NtzC7yFL1Uf
-         b4yDYPrNCwrz1FfBWiubAx9CZTqMLqzAma9xdFX63ueILrLTr57s7khV+qxX01TyXQU2
-         x62Uyl/VLZvVesiAj8anxy0B4pW3uxBfe27KwitP+uCXTutZBRTIKX2Dz+FPJFTR08zt
-         esq5dbUREJVskf9icS+tq9/7yvqqrtqcJu8rH0mS/OQfoGfQisH/SNN7Sd82JP2YF5ir
-         baxTEiKRz0rAk9dEnOCMlByZc2t7bm598dk/GOwh8XEutKg1/rWUYwuZvqMfHyYTLWQ7
-         ef2Q==
-X-Gm-Message-State: AOAM532wfSekqsMTCpQzOVD/a1RlFpg9S2zXyA0/o12+FUVdVkDwj0zq
-        DeH3cUTbFgEvnaEXCTpuGsWtnzk1+mLpfJPDopk=
-X-Google-Smtp-Source: ABdhPJxZsdwDZZ+Zdnn7iyP9CyMxBGObZWXWkkkiX1K+5XuPBHAmmrBKhSEY5v4vyuEjFdXhvdLI4eMy1Y2sU95r1K4=
-X-Received: by 2002:a05:6122:c89:b0:345:96a1:c0ab with SMTP id
- ba9-20020a0561220c8900b0034596a1c0abmr539312vkb.39.1649620612930; Sun, 10 Apr
- 2022 12:56:52 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=i/oSg9CrxJRnQxeUPmlx0mpM+OCUDcuxMV4Hy9i5v8M=;
+        b=YyIs6DldlVDVlt74xcZlpFuBNEJRnIpErnWDUB6BSuw72Xo4BYOv6s0wqxxRGvjsmr
+         OFX7/H687OzZQhy29v64r9Q1QX4YNbwtW0arwRqqUkwmtihjJ4x1nahQgEaw578O3Lwo
+         owAYz5eENcr+R7Z7/vVDKC5Z3tqq+j8MzyWE3slnQnRcgJL88AgrbepRNRAD7gJ/y7HH
+         pvVem+n3AswaFdr1iPA5gs4+/zlbC4eSIOkCL/sdUmGmeZEeHhDX0I23bGLB3O35s99G
+         d7BzR7x6a0FQtedDiHr4dBXpoHX5gvQYd8NrLJdc/BW+EbVCmDbHFznca925juJe70q2
+         VLMQ==
+X-Gm-Message-State: AOAM530oox16E4zFkx20iMzrXO3KZE8beoFX9l15rws+hf6Grg6VxahV
+        6Os3/uupRIFf0nabPJiM7bDLog==
+X-Google-Smtp-Source: ABdhPJzZpveH/oCPtSdDoCQpCrvmjQzSll2tE6efunLOHYSaUHR8grFJDKHFw3V51hSWc70/OsuZkQ==
+X-Received: by 2002:a19:9107:0:b0:46b:96e0:41c9 with SMTP id t7-20020a199107000000b0046b96e041c9mr4657386lfd.333.1649620735223;
+        Sun, 10 Apr 2022 12:58:55 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id b11-20020ac2410b000000b004457116a575sm3110709lfi.273.2022.04.10.12.58.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Apr 2022 12:58:53 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id AD2D410446F; Sun, 10 Apr 2022 23:00:25 +0300 (+03)
+Date:   Sun, 10 Apr 2022 23:00:25 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@intel.com,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, aarcange@redhat.com,
+        ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
+        hpa@zytor.com, jgross@suse.com, jmattson@google.com,
+        joro@8bytes.org, jpoimboe@redhat.com, knsathya@kernel.org,
+        pbonzini@redhat.com, sdeep@vmware.com, seanjc@google.com,
+        tony.luck@intel.com, vkuznets@redhat.com, wanpengli@tencent.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv8 14/30] x86: Consolidate port I/O helpers
+Message-ID: <20220410200025.3stf4jjvwfe5oxew@box.shutemov.name>
+References: <20220405232939.73860-1-kirill.shutemov@linux.intel.com>
+ <20220405232939.73860-15-kirill.shutemov@linux.intel.com>
+ <YlK4SYXV6zbDa1Lq@zn.tnic>
 MIME-Version: 1.0
-Sender: mrsnicolemarois8@gmail.com
-Received: by 2002:a59:d84a:0:b0:2a6:5319:fba2 with HTTP; Sun, 10 Apr 2022
- 12:56:52 -0700 (PDT)
-From:   Miss Qing Yu <qing9560yu@gmail.com>
-Date:   Sun, 10 Apr 2022 19:56:52 +0000
-X-Google-Sender-Auth: nLbu6AUTLHp2aMjYwD3ZjBCHt6M
-Message-ID: <CAAadsjtZ0rAXq_+8x1Oez2=7ERopPs8N1T3ioxaXFZb_gSBEQw@mail.gmail.com>
-Subject: Hello!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,HK_NAME_FM_MR_MRS,HK_SCAM,LOTS_OF_MONEY,MILLION_USD,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:a33 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mrsnicolemarois8[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [mrsnicolemarois8[at]gmail.com]
-        *  1.4 MILLION_USD BODY: Talks about millions of dollars
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.9 HK_SCAM No description available.
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  1.2 HK_NAME_FM_MR_MRS No description available.
-        *  2.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YlK4SYXV6zbDa1Lq@zn.tnic>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I am Mrs Yu. Ging Yunnan, and i have Covid-19 and the doctor said I
-will not survive it with the critical condition am in because all
-vaccines has been given to me but to no avian, am a China woman but I
-base here in France because am married here and I have no child for my
-late husband and now am a widow. My reason of communicating you is
-that i have $9.2million USD which was deposited in BNP Paribas Bank
-here in France by my late husband which am the next of kin to and I
-want you to stand as the replacement beneficiary beneficiary.
+On Sun, Apr 10, 2022 at 12:58:17PM +0200, Borislav Petkov wrote:
+> On Wed, Apr 06, 2022 at 02:29:23AM +0300, Kirill A. Shutemov wrote:
+> > There are two implementations of port I/O helpers: one in the kernel and
+> > one in the boot stub.
+> > 
+> > Move the helpers required for both to <asm/shared/io.h> and use the one
+> > implementation everywhere.
+> > 
+> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+> > ---
+> >  arch/x86/boot/boot.h             | 35 +-------------------------------
+> >  arch/x86/boot/compressed/misc.h  |  2 +-
+> >  arch/x86/include/asm/io.h        | 22 ++------------------
+> >  arch/x86/include/asm/shared/io.h | 34 +++++++++++++++++++++++++++++++
+> >  4 files changed, 38 insertions(+), 55 deletions(-)
+> >  create mode 100644 arch/x86/include/asm/shared/io.h
+> 
+> This complains with clang-13 here, config attached.
+> 
+> And yap, this is the damn include hell I keep talking about. That
+> lib/kalsr.c thing includes the kernel proper io.h header ...
 
-Can you handle the process?
+Right. <asm/shared/io.h> is enough for lib/kaslr.c.
 
-Mrs Yu. Ging Yunnan.
+What about this:
+
+From 164de295599f8befa2ee1ff05dc03542c02b0800 Mon Sep 17 00:00:00 2001
+From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Date: Sun, 10 Apr 2022 22:49:28 +0300
+Subject: [PATCH] x86/kaslr: Fix build warning in KASLR code in boot stub
+
+lib/kaslr.c used by both the main kernel and the boot stub. It includes
+<asm/io.h> that intended to be used in the main kernel. It leads to
+build warnings like this:
+
+	warning: implicit declaration of function 'outl' is invalid in
+	C99 [-Wimplicit-function-declaration]
+
+Replace <asm/io.h> with <asm/shared/io.h> which is suitable for both
+cases.
+
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Fixes: 1e8f93e18379 ("x86: Consolidate port I/O helpers")
+---
+ arch/x86/lib/kaslr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/lib/kaslr.c b/arch/x86/lib/kaslr.c
+index 2b3eb8c948a3..a58f451a7dd3 100644
+--- a/arch/x86/lib/kaslr.c
++++ b/arch/x86/lib/kaslr.c
+@@ -11,7 +11,7 @@
+ #include <asm/msr.h>
+ #include <asm/archrandom.h>
+ #include <asm/e820/api.h>
+-#include <asm/io.h>
++#include <asm/shared/io.h>
+ 
+ /*
+  * When built for the regular kernel, several functions need to be stubbed out
+-- 
+ Kirill A. Shutemov

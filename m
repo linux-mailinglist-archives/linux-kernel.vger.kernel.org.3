@@ -2,186 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 674D34FB035
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 22:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D0DD4FB040
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 22:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243963AbiDJUor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 16:44:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60026 "EHLO
+        id S242337AbiDJU6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 16:58:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237605AbiDJUom (ORCPT
+        with ESMTP id S234484AbiDJU6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 16:44:42 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2101B2BC2;
-        Sun, 10 Apr 2022 13:42:31 -0700 (PDT)
-Date:   Sun, 10 Apr 2022 20:42:28 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649623349;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=R6BBnVu8wzaCIqJ1ur2LhpDFOZ8Llfg8Elmbox5Ubp8=;
-        b=yE/1/j+ZB2kEjRWkKB4ihQpdqUn6Yk7yZa8pN1Ci1QqHJ5/3Jn72BZ98CoMKJE8zlaLxX4
-        TyX2hborFbjgjJSF9H1E93ca2RLrdqXkzB2aMIDzB7fvX+Kia2nFJ1MsZrDgn21T39rTZJ
-        UV/QYWvYVRjuNeFbByfJwj0GgQnHv537Zfs7YVORi8cfrK605Vk9pVZhhnN8s1JwqNAYpK
-        FsbKc6v3gRLI2PpkJyK2hqtG7cwpcPJPn8W6axasQRN82yqQf8bIM0CbnaM8qnKcNt7tDr
-        71Tmch/UD1PXHyyT3jvncDPkg4q0dZWfCZk532ay2oNivezY3TgYUM/vYabwKw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649623349;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=R6BBnVu8wzaCIqJ1ur2LhpDFOZ8Llfg8Elmbox5Ubp8=;
-        b=vKU4ijpTkHuRFk0KX8w6LRUDZbp9ZjlL/RI3cnx0A/BfRJ3JoSP3pxCLYs/nYBC5Q1yGch
-        ebchjh+FPfBrBUAA==
-From:   "tip-bot2 for Yury Norov" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cleanups] x86: Replace cpumask_weight() with
- cpumask_empty() where appropriate
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steve Wahl <steve.wahl@hpe.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220210224933.379149-17-yury.norov@gmail.com>
-References: <20220210224933.379149-17-yury.norov@gmail.com>
+        Sun, 10 Apr 2022 16:58:51 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040E3BB9
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 13:56:39 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id p8so11818394qvv.5
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 13:56:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=prism19-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=v4Dm0zZiVNz+3KjhnBsylTDpY1b0Arid63IH2fuAnik=;
+        b=XrE9JJrRaF5iLY2JPFzzhhBr+NmyNaXlURO7Am8sXuwB5LTKcNq7cbc57ZCESWKJVA
+         ViMCAynxoDmUwjI3l1MH/DclLSskI/r/ezCnkW2hNwIg9LL6WvqwNgFjxvNYO2gs7TZO
+         v9I9kihxoJBmmWlji9Jg6CjthaNKMaL3SaeKWU4Cc4/bk6sdhCfBHfx8kQxq/CyEcKOM
+         SQYmaRjaJw25yY2fjA4rh+L8UAr/TBEJ5onCKlHA7+Is6ftwEPo7OapWRPU5ElVav7jQ
+         JGUDps5Y6qtMvtJaDEJUAEBadoEeIy4Xiok33I4BWXH+WkEkTffro2AgOmLm1NcX1elX
+         fr8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=v4Dm0zZiVNz+3KjhnBsylTDpY1b0Arid63IH2fuAnik=;
+        b=Mbj7aw8UKOA2zGiZVk9o7IIyxN2lmugAZpqrCxZZbyCrXLAsXhsS28Prc9oPYQ3M0x
+         4+QgZ9nYD3Y2OVWfuXTxtDuV2d3I5BkKrp6/JDRQ4d2F+tM+DNoOshzTwvMFwwQCvF+c
+         v2wD/8YPWRFCrFwqYJJf+MPzSDEtOGReVaXhh16O/DrGvfsM8tTvjijpv4w6EL8mRmhY
+         jKLAJYBpDA9u9VXM3CN/BvfXeSBiQKSSXxfAWu2QS8qhU7CsI+7m9rp2k7RVnRqHNapn
+         SYric04Lsh+sjzZwS1JHn/No3FUOBLHiz+F/qx3RvYHbUovuiWeoiM90KMSVmrmmESA9
+         0LNg==
+X-Gm-Message-State: AOAM530XBJyof4cFT8KPWuNb6A3PhlBa7ZXS9iD04eon6uqDVf8aEyni
+        I6MXXM0yJz9AbkOB9XO1jkZN3cbvPPzridg6KAdw7Q==
+X-Google-Smtp-Source: ABdhPJzKr+05g1w/9S4kzn27/Px/j9DsPrGWiXdcX3y2gI1UMnWoBRqzRfgcxanrSdHR+07WQSThEA==
+X-Received: by 2002:a05:6214:1d2b:b0:441:6a41:f726 with SMTP id f11-20020a0562141d2b00b004416a41f726mr24547900qvd.102.1649624198180;
+        Sun, 10 Apr 2022 13:56:38 -0700 (PDT)
+Received: from RADIUM.localdomain (bras-base-mtrlpq2718w-grc-02-76-67-205-66.dsl.bell.ca. [76.67.205.66])
+        by smtp.googlemail.com with ESMTPSA id bl22-20020a05620a1a9600b00680da570a5dsm19073102qkb.61.2022.04.10.13.56.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Apr 2022 13:56:37 -0700 (PDT)
+From:   Guillaume Giraudon <ggiraudon@prism19.com>
+To:     kernel-dev@prism19.com
+Cc:     ggiraudon@prism19.com, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: meson-sm1-bananapi-m5: fix wrong GPIO pin labeling for CON1
+Date:   Sun, 10 Apr 2022 16:56:24 -0400
+Message-Id: <20220410205624.14295-1-ggiraudon@prism19.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Message-ID: <164962334860.4207.11115767621323928557.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/cleanups branch of tip:
+The labels for lines 61 through 84 on the periphs-banks were offset by 2.
+Realigned them to match the Banana Pi M5 schematics.
 
-Commit-ID:     3a5ff1f6dd50f5e1c2aa87491910dd6d275af24b
-Gitweb:        https://git.kernel.org/tip/3a5ff1f6dd50f5e1c2aa87491910dd6d275af24b
-Author:        Yury Norov <yury.norov@gmail.com>
-AuthorDate:    Thu, 10 Feb 2022 14:49:00 -08:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Sun, 10 Apr 2022 22:35:38 +02:00
-
-x86: Replace cpumask_weight() with cpumask_empty() where appropriate
-
-In some cases, x86 code calls cpumask_weight() to check if any bit of a
-given cpumask is set.
-
-This can be done more efficiently with cpumask_empty() because
-cpumask_empty() stops traversing the cpumask as soon as it finds first set
-bit, while cpumask_weight() counts all bits unconditionally.
-
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Steve Wahl <steve.wahl@hpe.com>
-Link: https://lore.kernel.org/r/20220210224933.379149-17-yury.norov@gmail.com
-
+Signed-off-by: Guillaume Giraudon <ggiraudon@prism19.com>
 ---
- arch/x86/kernel/cpu/resctrl/rdtgroup.c | 14 +++++++-------
- arch/x86/mm/mmio-mod.c                 |  2 +-
- arch/x86/platform/uv/uv_nmi.c          |  2 +-
- 3 files changed, 9 insertions(+), 9 deletions(-)
+ arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-index 83f901e..f276aff 100644
---- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-+++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-@@ -341,14 +341,14 @@ static int cpus_mon_write(struct rdtgroup *rdtgrp, cpumask_var_t newmask,
- 
- 	/* Check whether cpus belong to parent ctrl group */
- 	cpumask_andnot(tmpmask, newmask, &prgrp->cpu_mask);
--	if (cpumask_weight(tmpmask)) {
-+	if (!cpumask_empty(tmpmask)) {
- 		rdt_last_cmd_puts("Can only add CPUs to mongroup that belong to parent\n");
- 		return -EINVAL;
- 	}
- 
- 	/* Check whether cpus are dropped from this group */
- 	cpumask_andnot(tmpmask, &rdtgrp->cpu_mask, newmask);
--	if (cpumask_weight(tmpmask)) {
-+	if (!cpumask_empty(tmpmask)) {
- 		/* Give any dropped cpus to parent rdtgroup */
- 		cpumask_or(&prgrp->cpu_mask, &prgrp->cpu_mask, tmpmask);
- 		update_closid_rmid(tmpmask, prgrp);
-@@ -359,7 +359,7 @@ static int cpus_mon_write(struct rdtgroup *rdtgrp, cpumask_var_t newmask,
- 	 * and update per-cpu rmid
- 	 */
- 	cpumask_andnot(tmpmask, newmask, &rdtgrp->cpu_mask);
--	if (cpumask_weight(tmpmask)) {
-+	if (!cpumask_empty(tmpmask)) {
- 		head = &prgrp->mon.crdtgrp_list;
- 		list_for_each_entry(crgrp, head, mon.crdtgrp_list) {
- 			if (crgrp == rdtgrp)
-@@ -394,7 +394,7 @@ static int cpus_ctrl_write(struct rdtgroup *rdtgrp, cpumask_var_t newmask,
- 
- 	/* Check whether cpus are dropped from this group */
- 	cpumask_andnot(tmpmask, &rdtgrp->cpu_mask, newmask);
--	if (cpumask_weight(tmpmask)) {
-+	if (!cpumask_empty(tmpmask)) {
- 		/* Can't drop from default group */
- 		if (rdtgrp == &rdtgroup_default) {
- 			rdt_last_cmd_puts("Can't drop CPUs from default group\n");
-@@ -413,12 +413,12 @@ static int cpus_ctrl_write(struct rdtgroup *rdtgrp, cpumask_var_t newmask,
- 	 * and update per-cpu closid/rmid.
- 	 */
- 	cpumask_andnot(tmpmask, newmask, &rdtgrp->cpu_mask);
--	if (cpumask_weight(tmpmask)) {
-+	if (!cpumask_empty(tmpmask)) {
- 		list_for_each_entry(r, &rdt_all_groups, rdtgroup_list) {
- 			if (r == rdtgrp)
- 				continue;
- 			cpumask_and(tmpmask1, &r->cpu_mask, tmpmask);
--			if (cpumask_weight(tmpmask1))
-+			if (!cpumask_empty(tmpmask1))
- 				cpumask_rdtgrp_clear(r, tmpmask1);
- 		}
- 		update_closid_rmid(tmpmask, rdtgrp);
-@@ -488,7 +488,7 @@ static ssize_t rdtgroup_cpus_write(struct kernfs_open_file *of,
- 
- 	/* check that user didn't specify any offline cpus */
- 	cpumask_andnot(tmpmask, newmask, cpu_online_mask);
--	if (cpumask_weight(tmpmask)) {
-+	if (!cpumask_empty(tmpmask)) {
- 		ret = -EINVAL;
- 		rdt_last_cmd_puts("Can only assign online CPUs\n");
- 		goto unlock;
-diff --git a/arch/x86/mm/mmio-mod.c b/arch/x86/mm/mmio-mod.c
-index 933a2eb..c3317f0 100644
---- a/arch/x86/mm/mmio-mod.c
-+++ b/arch/x86/mm/mmio-mod.c
-@@ -400,7 +400,7 @@ static void leave_uniprocessor(void)
- 	int cpu;
- 	int err;
- 
--	if (!cpumask_available(downed_cpus) || cpumask_weight(downed_cpus) == 0)
-+	if (!cpumask_available(downed_cpus) || cpumask_empty(downed_cpus))
- 		return;
- 	pr_notice("Re-enabling CPUs...\n");
- 	for_each_cpu(cpu, downed_cpus) {
-diff --git a/arch/x86/platform/uv/uv_nmi.c b/arch/x86/platform/uv/uv_nmi.c
-index 1e9ff28..ea277fc 100644
---- a/arch/x86/platform/uv/uv_nmi.c
-+++ b/arch/x86/platform/uv/uv_nmi.c
-@@ -985,7 +985,7 @@ static int uv_handle_nmi(unsigned int reason, struct pt_regs *regs)
- 
- 	/* Clear global flags */
- 	if (master) {
--		if (cpumask_weight(uv_nmi_cpu_mask))
-+		if (!cpumask_empty(uv_nmi_cpu_mask))
- 			uv_nmi_cleanup_mask();
- 		atomic_set(&uv_nmi_cpus_in_nmi, -1);
- 		atomic_set(&uv_nmi_cpu, -1);
+diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts b/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
+index 5751c48620ed..754c3d43ef0b 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
++++ b/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
+@@ -448,7 +448,7 @@
+ 		"",
+ 		/* GPIOA */
+ 		"", "", "", "", "", "", "", "",
+-		"", "", "", "", "", "",
++		"", "", "", "", "", "", "", "",
+ 		"CON1-P27", /* GPIOA_14 */
+ 		"CON1-P28", /* GPIOA_15 */
+ 		/* GPIOX */
+-- 
+2.20.1
+

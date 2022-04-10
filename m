@@ -2,60 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 746D34FB091
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 23:53:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E4584FB09A
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 00:05:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241991AbiDJVzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 17:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42780 "EHLO
+        id S242816AbiDJWH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 18:07:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244103AbiDJVzE (ORCPT
+        with ESMTP id S239481AbiDJWH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 17:55:04 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 785AA1FCDC
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 14:52:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649627539; x=1681163539;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OxpzmW2lJIgftIQ43tvUJMQprbRPeePUBTd2vzh+7CY=;
-  b=PDGCCpnKw9+YM3feHPs+IxVNjZRem10Vl3HRzsnJ40XUv9tAlxrMUjze
-   8kxBD9or+huk10T9WupNJj/anT1CZWaChm00FhPm51kZMcpvhfBG/HGou
-   XH7ugpXFL9jR9c5E/MQ/mDZy+zg/3UnuCAMl9Go44hLaVgNrQjA+a8fgO
-   lW4PvmZ+ptYtsbAFZBBRfa9tNJSaSxFha0VOWiX7s+a6iVyEMyMuhwW/1
-   8R7oWMA9XjwRjv6h2Wnjq+Ff+qDyZXPStCYeQshd6jO2X7W5RgURZUYib
-   lMzZTl6XBK3pDSANjGbpRqR0AREJlarsRLLt9kw5p4H9xKDmxVD+0cO4P
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="287003470"
-X-IronPort-AV: E=Sophos;i="5.90,250,1643702400"; 
-   d="scan'208";a="287003470"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2022 14:52:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,250,1643702400"; 
-   d="scan'208";a="659804676"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 10 Apr 2022 14:52:17 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ndfTl-00017d-0N;
-        Sun, 10 Apr 2022 21:52:17 +0000
-Date:   Mon, 11 Apr 2022 05:51:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [norov:bitmap-for-next 43/43] lib/bitmap.c:1571:22: warning:
- unsequenced modification and access to 'i'
-Message-ID: <202204110545.nVd02heW-lkp@intel.com>
+        Sun, 10 Apr 2022 18:07:57 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 549A843AE4;
+        Sun, 10 Apr 2022 15:05:46 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id t2so14957773qtw.9;
+        Sun, 10 Apr 2022 15:05:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Nh3BY/EYiNfImd0QzFgK2E2ecYL3iEaaQiYQ9Tc14OM=;
+        b=ozKeQyn3xHVnU1Fs4XtrInbFM+Rs/mT64TzGHHb1h2eJ1D9iYrqV4u78uTWwTXfDSA
+         YuJo9IVQuCVWo5TnnMgiB4lK4fJV9PIajSBDMmRpy/RgnIFeJ7ao9awagrg9rLo14vvF
+         2hPsaacF/EH5g36D2rWbPOWmL7qHjcAvitw6d1ARgRK8xr2ECtNOQVH6PfcUkXcp+zrV
+         CQSdXFJvnDIpq/TLe4unKadPproWrkCQKhtgo3fJg0HsvR9FD/qTFp6GuF6XinCrANaO
+         SxUnoEN14zghaFhESofrixnzWfjlDpYUt/Qi1KX57LpoltDYknZiDNC5q93OqjaABoLb
+         TU5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Nh3BY/EYiNfImd0QzFgK2E2ecYL3iEaaQiYQ9Tc14OM=;
+        b=zOAXdYvnQavSLbK2V9HfwHgxH9wUGuZ/MVsxU9Ja1oxoP4oOcA2Fhvy/+Y9FGZo3M7
+         oXfATSXr5yp8WIATpJIxq39FMXAhboCFD8UTZeM+m+8S98i5BMQSj54OQxyBcgT2P5I2
+         bgiFfAqLRi1cWkafI5hkQspPsx3vh090Bwxp/tYlCVImMkyj4YvtYndi2IQr6j31UYPu
+         VM9V4C85+JTVzGyzvFsWTB5/HnoQIG9qsvW/voGNE0Q39CyePLOf4IC9VGD6pU5HYieM
+         fSYjb9osV49wOt2bIyQIjYE+6SR4n+Af/oxZ2XOiNEza4omTMsXvHD8tyBLq1B5Xd1gc
+         7jog==
+X-Gm-Message-State: AOAM532RYpul/9cfL25FGAeqiMb2gHy4ljYNHADrWnhBkvTNB+DBwi90
+        4BCzHkqiHR8x+HORd2MI4A==
+X-Google-Smtp-Source: ABdhPJzgr+FOzRIqwc2a3t8I2DuFGic8dJ3+X2bw+UAscB5cws/CWCNQjMbC1Lxuu5P3bdrvfPBjKQ==
+X-Received: by 2002:ac8:74d2:0:b0:2ed:130f:d69c with SMTP id j18-20020ac874d2000000b002ed130fd69cmr5007189qtr.49.1649628345308;
+        Sun, 10 Apr 2022 15:05:45 -0700 (PDT)
+Received: from arch.. ([2607:fb90:966:1288:8e89:a5ff:fe6f:56d3])
+        by smtp.gmail.com with ESMTPSA id j18-20020ac85c52000000b002e1b9897ae7sm23593601qtj.10.2022.04.10.15.05.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Apr 2022 15:05:44 -0700 (PDT)
+From:   Daniel Bomar <dbdaniel42@gmail.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Daniel Bomar <dbdaniel42@gmail.com>
+Subject: [PATCH 0/4] input: Implement an API for trigger rumble motors
+Date:   Sun, 10 Apr 2022 17:04:49 -0500
+Message-Id: <20220410220449.5071-1-dbdaniel42@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,67 +70,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/norov/linux bitmap-for-next
-head:   a136dfabd10d0c1354c41a069cc4e00147a721e1
-commit: a136dfabd10d0c1354c41a069cc4e00147a721e1 [43/43] bitmap_from_arr64
-config: arm-hackkit_defconfig (https://download.01.org/0day-ci/archive/20220411/202204110545.nVd02heW-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 256c6b0ba14e8a7ab6373b61b7193ea8c0a3651c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/norov/linux/commit/a136dfabd10d0c1354c41a069cc4e00147a721e1
-        git remote add norov https://github.com/norov/linux
-        git fetch --no-tags norov bitmap-for-next
-        git checkout a136dfabd10d0c1354c41a069cc4e00147a721e1
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+This patchset extends the force feedback API to allow userspace to control
+the force feedback motors underneath the triggers in some gamepads.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Patches 3 and 4 of this patchset implement this API in the xpad and
+hid-microsoft drivers for the Xbox One controller over USB and bluetooth
+respectively.
 
-All warnings (new ones prefixed by >>):
+Daniel Bomar (4):
+  input: uapi: Add trigger_left and trigger_right to ff_rumble_effect
+    struct
+  input: ff-memless: Add trigger left/right in ml_combine_effects
+  input: xpad: Implement trigger rumble for Xbox One controllers
+  input: hid-microsoft: Implement trigger rumble for Xbox One S over
+    bluetooth
 
->> lib/bitmap.c:1571:22: warning: unsequenced modification and access to 'i' [-Wunsequenced]
-                   buf[i/2] = bitmap[i++];
-                       ~              ^
->> lib/bitmap.c:1573:28: warning: shift count >= width of type [-Wshift-count-overflow]
-                           buf[i/2] |= bitmap[i++] << 32;
-                                                   ^  ~~
-   lib/bitmap.c:1573:24: warning: unsequenced modification and access to 'i' [-Wunsequenced]
-                           buf[i/2] |= bitmap[i++] << 32;
-                               ~               ^
-   3 warnings generated.
-
-
-vim +/i +1571 lib/bitmap.c
-
-  1559	
-  1560	/**
-  1561	 * bitmap_to_arr64 - copy the contents of bitmap to a u64 array of bits
-  1562	 *	@buf: array of u64 (in host byte order), the dest bitmap
-  1563	 *	@bitmap: array of unsigned longs, the source bitmap
-  1564	 *	@nbits: number of bits in @bitmap
-  1565	 */
-  1566	void bitmap_to_arr64(u64 *buf, const unsigned long *bitmap, unsigned int nbits)
-  1567	{
-  1568		unsigned int i = 0, words = BITS_TO_LONGS(nbits);
-  1569	
-  1570		while (i < words) {
-> 1571			buf[i/2] = bitmap[i++];
-  1572			if (i < words)
-> 1573				buf[i/2] |= bitmap[i++] << 32;
-  1574		}
-  1575	
-  1576		/* Clear tail bits in last element of array beyond nbits. */
-  1577		if (nbits % 64)
-  1578			buf[i - 1] &= GENMASK_ULL(nbits, 0);
-  1579	}
-  1580	EXPORT_SYMBOL(bitmap_to_arr64);
-  1581	
+ drivers/hid/hid-microsoft.c   | 14 ++++++++++++--
+ drivers/input/ff-memless.c    |  8 +++++++-
+ drivers/input/joystick/xpad.c |  8 ++++++--
+ include/uapi/linux/input.h    |  4 ++++
+ 4 files changed, 29 insertions(+), 5 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+

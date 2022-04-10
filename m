@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83B414FAD91
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 12:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 589974FAD92
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 12:55:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239145AbiDJK5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 06:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
+        id S239337AbiDJK5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 06:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238032AbiDJK4p (ORCPT
+        with ESMTP id S238033AbiDJK4p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 10 Apr 2022 06:56:45 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90F91B7AC;
-        Sun, 10 Apr 2022 03:54:32 -0700 (PDT)
-Date:   Sun, 10 Apr 2022 10:54:30 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4AA71C90A;
+        Sun, 10 Apr 2022 03:54:33 -0700 (PDT)
+Date:   Sun, 10 Apr 2022 10:54:31 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649588071;
+        s=2020; t=1649588072;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fvGqTsjP8E61NKSYj+gKdPH9D515JASx/4dlmok3OtQ=;
-        b=At6+kftCobmhiVtJRgiLb+d0YrF69e1byrgYwnsbgSB/kvEFwB9DtrKIWhnxIanxancoAV
-        8ZzAnWrH8mg+UTzL7gmx3BALF53ZeXtwa8xhu2hXrRWl0PgBuPSJa2K06SLfLIA626mLXN
-        7QCH05S74Fa9D6UD8dKNBa9gPyuPs+3EP++x71/AhzCqTn4+3hcR3ZKVogsCxCLPJjSiYZ
-        Sz7nNZv8B3ccZSZMJ8WCHd15OayUIuIBc/dLDpJrBAooHpJ9L0l0O4zIWauGs/0MLOO0Vi
-        A1OOoCAO0wkFPAlcKrrBmv3FmYTG7Vg7wk+WRC2nwHihGjwDLnXGwHIBX/aP8A==
+        bh=1guhnHZzwrCZjyg166lm4hwq2SxmL4BgKNLB9lB4vxE=;
+        b=2zIBUf7gmhtPq7kot62BA18baedOv9znbEd9CyUG76EpCLWaoaFmwRIsilxlfpPpkH2U/i
+        Kc59SfB9fSilDIGOnIK8eWnTBJzGxdUiOA53Ek9Pe4ufwV9PZ8EYUqHG1quoMj+035CfZE
+        ZZbzjvyx9oHkaj8Rm7UUb7otGqxg6NhBaX70ltJyeBhlFOQh3vL9ut/gD7f/NClcip8xPv
+        Tl762w5ukWnPvphyR1Pt/YmcZI58g5d+050M9gQ0IsJO9ECrWwspbJNzj82lN6ocetDor9
+        tIq8zhsDi8MzuK+Jsq2QbRR4ohv0XGcANpF/WqH7sFnt99o5f8gvN+6Vfp3LHw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649588071;
+        s=2020e; t=1649588072;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fvGqTsjP8E61NKSYj+gKdPH9D515JASx/4dlmok3OtQ=;
-        b=5cL//+C5bRPmibdh2F5t4i0IqqOMzMdwCgfZH5578clqNNDjj0PY4UFJL/K8rXzp4LEn1Z
-        BqFl/KptYKc6cHBw==
+        bh=1guhnHZzwrCZjyg166lm4hwq2SxmL4BgKNLB9lB4vxE=;
+        b=IZLlrJ6/lND26UKXN4nwTq9UmBrILB0kNbAIOoyzUBJie28xUqPK3OB9ys1xXRUeEytq3f
+        bA2hDX7z1i1OLoAw==
 From:   "tip-bot2 for Maciej W. Rozycki" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/irq] x86/PCI: Add support for the SiS85C497 PIRQ router
+Subject: [tip: x86/irq] x86/PCI: Disambiguate SiS85C503 PIRQ router code entities
 Cc:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Nikolai Zhubr <zhubr.2@gmail.com>, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <alpine.DEB.2.21.2203301610490.22465@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2203301610490.22465@angie.orcam.me.uk>
+In-Reply-To: <alpine.DEB.2.21.2203301610000.22465@angie.orcam.me.uk>
+References: <alpine.DEB.2.21.2203301610000.22465@angie.orcam.me.uk>
 MIME-Version: 1.0
-Message-ID: <164958807049.4207.2725071892682453211.tip-bot2@tip-bot2>
+Message-ID: <164958807141.4207.9726378089695079049.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,137 +67,97 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/irq branch of tip:
 
-Commit-ID:     fe62bc23620fa027162e05594a610ff5e556496a
-Gitweb:        https://git.kernel.org/tip/fe62bc23620fa027162e05594a610ff5e556496a
+Commit-ID:     5a0e5fa957db79177baa851d687b6f6aa5a0be96
+Gitweb:        https://git.kernel.org/tip/5a0e5fa957db79177baa851d687b6f6aa5a0be96
 Author:        Maciej W. Rozycki <macro@orcam.me.uk>
-AuthorDate:    Thu, 31 Mar 2022 08:10:46 +01:00
+AuthorDate:    Thu, 31 Mar 2022 08:10:39 +01:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Sun, 10 Apr 2022 12:48:14 +02:00
 
-x86/PCI: Add support for the SiS85C497 PIRQ router
+x86/PCI: Disambiguate SiS85C503 PIRQ router code entities
 
-The SiS 85C496/497 486 Green PC VESA/ISA/PCI Chipset has support for PCI 
-steering and the ELCR register implemented.  These features are handled 
-by the SiS85C497 AT Bus Controller & Megacell (ATM) ISA bridge, however 
-the device is wired as a peer bridge directly to the host bus and has 
-its PCI configuration registers decoded at addresses 0x80-0xff by the 
-accompanying SiS85C496 PCI & CPU Memory Controller (PCM) host bridge[1].  
-Therefore we need to match on the host bridge's vendor and device ID.
+In preparation to adding support for the SiS85C497 PIRQ router add `503' 
+to the names of SiS85C503 PIRQ router code entities so that they clearly 
+indicate which device they refer to.
 
-Like with the SiS85C503 PIRQ router handle link value ranges of 1-4 and 
-0xc0-0xc3, corresponding respectively to PIRQ line numbers counted from 
-1 and link register PCI configuration space addresses.
+Also restructure `sis_router_probe' such that new device IDs will be 
+just new switch cases.
 
-References:
-
-[1]  "486 Green PC VESA/ISA/PCI Chipset, SiS 85C496/497", Rev 3.0,
-     Silicon Integrated Systems Corp., July 1995, Part IV, Section 3. 
-     "PCI Configuration Space Registers (00h ~ FFh)", p. 114
+No functional change.
 
 Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Nikolai Zhubr <zhubr.2@gmail.com>
-Link: https://lore.kernel.org/r/alpine.DEB.2.21.2203301610490.22465@angie.orcam.me.uk
+Link: https://lore.kernel.org/r/alpine.DEB.2.21.2203301610000.22465@angie.orcam.me.uk
 
 ---
- arch/x86/pci/irq.c | 80 +++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 80 insertions(+)
+ arch/x86/pci/irq.c | 33 ++++++++++++++++++---------------
+ 1 file changed, 18 insertions(+), 15 deletions(-)
 
 diff --git a/arch/x86/pci/irq.c b/arch/x86/pci/irq.c
-index e5bc9f7..4b0e008 100644
+index bd32e4b..e5bc9f7 100644
 --- a/arch/x86/pci/irq.c
 +++ b/arch/x86/pci/irq.c
-@@ -580,6 +580,81 @@ static int pirq_cyrix_set(struct pci_dev *router, struct pci_dev *dev, int pirq,
- 	return 1;
+@@ -641,11 +641,12 @@ static int pirq_cyrix_set(struct pci_dev *router, struct pci_dev *dev, int pirq,
+  *				bit 6-4 are probably unused, not like 5595
+  */
+ 
+-#define PIRQ_SIS_IRQ_MASK	0x0f
+-#define PIRQ_SIS_IRQ_DISABLE	0x80
+-#define PIRQ_SIS_USB_ENABLE	0x40
++#define PIRQ_SIS503_IRQ_MASK	0x0f
++#define PIRQ_SIS503_IRQ_DISABLE	0x80
++#define PIRQ_SIS503_USB_ENABLE	0x40
+ 
+-static int pirq_sis_get(struct pci_dev *router, struct pci_dev *dev, int pirq)
++static int pirq_sis503_get(struct pci_dev *router, struct pci_dev *dev,
++			   int pirq)
+ {
+ 	u8 x;
+ 	int reg;
+@@ -654,10 +655,11 @@ static int pirq_sis_get(struct pci_dev *router, struct pci_dev *dev, int pirq)
+ 	if (reg >= 0x01 && reg <= 0x04)
+ 		reg += 0x40;
+ 	pci_read_config_byte(router, reg, &x);
+-	return (x & PIRQ_SIS_IRQ_DISABLE) ? 0 : (x & PIRQ_SIS_IRQ_MASK);
++	return (x & PIRQ_SIS503_IRQ_DISABLE) ? 0 : (x & PIRQ_SIS503_IRQ_MASK);
  }
  
-+
-+/*
-+ *	PIRQ routing for the SiS85C497 AT Bus Controller & Megacell (ATM)
-+ *	ISA bridge used with the SiS 85C496/497 486 Green PC VESA/ISA/PCI
-+ *	Chipset.
-+ *
-+ *	There are four PCI INTx#-to-IRQ Link registers provided in the
-+ *	SiS85C497 part of the peculiar combined 85C496/497 configuration
-+ *	space decoded by the SiS85C496 PCI & CPU Memory Controller (PCM)
-+ *	host bridge, at 0xc0/0xc1/0xc2/0xc3 respectively for the PCI INT
-+ *	A/B/C/D lines.  Bit 7 enables the respective link if set and bits
-+ *	3:0 select the 8259A IRQ line as follows:
-+ *
-+ *	0000 : Reserved
-+ *	0001 : Reserved
-+ *	0010 : Reserved
-+ *	0011 : IRQ3
-+ *	0100 : IRQ4
-+ *	0101 : IRQ5
-+ *	0110 : IRQ6
-+ *	0111 : IRQ7
-+ *	1000 : Reserved
-+ *	1001 : IRQ9
-+ *	1010 : IRQ10
-+ *	1011 : IRQ11
-+ *	1100 : IRQ12
-+ *	1101 : Reserved
-+ *	1110 : IRQ14
-+ *	1111 : IRQ15
-+ *
-+ *	We avoid using a reserved value for disabled links, hence the
-+ *	choice of IRQ15 for that case.
-+ *
-+ *	References:
-+ *
-+ *	"486 Green PC VESA/ISA/PCI Chipset, SiS 85C496/497", Rev 3.0,
-+ *	Silicon Integrated Systems Corp., July 1995
-+ */
-+
-+#define PCI_SIS497_INTA_TO_IRQ_LINK	0xc0u
-+
-+#define PIRQ_SIS497_IRQ_MASK		0x0fu
-+#define PIRQ_SIS497_IRQ_ENABLE		0x80u
-+
-+static int pirq_sis497_get(struct pci_dev *router, struct pci_dev *dev,
-+			   int pirq)
-+{
-+	int reg;
-+	u8 x;
-+
-+	reg = pirq;
-+	if (reg >= 1 && reg <= 4)
-+		reg += PCI_SIS497_INTA_TO_IRQ_LINK - 1;
-+
-+	pci_read_config_byte(router, reg, &x);
-+	return (x & PIRQ_SIS497_IRQ_ENABLE) ? (x & PIRQ_SIS497_IRQ_MASK) : 0;
-+}
-+
-+static int pirq_sis497_set(struct pci_dev *router, struct pci_dev *dev,
+-static int pirq_sis_set(struct pci_dev *router, struct pci_dev *dev, int pirq, int irq)
++static int pirq_sis503_set(struct pci_dev *router, struct pci_dev *dev,
 +			   int pirq, int irq)
-+{
-+	int reg;
-+	u8 x;
-+
-+	reg = pirq;
-+	if (reg >= 1 && reg <= 4)
-+		reg += PCI_SIS497_INTA_TO_IRQ_LINK - 1;
-+
-+	pci_read_config_byte(router, reg, &x);
-+	x &= ~(PIRQ_SIS497_IRQ_MASK | PIRQ_SIS497_IRQ_ENABLE);
-+	x |= irq ? (PIRQ_SIS497_IRQ_ENABLE | irq) : PIRQ_SIS497_IRQ_MASK;
-+	pci_write_config_byte(router, reg, x);
-+	return 1;
-+}
-+
- /*
-  *	PIRQ routing for SiS 85C503 router used in several SiS chipsets.
-  *	We have to deal with the following issues here:
-@@ -962,6 +1037,11 @@ static __init int serverworks_router_probe(struct irq_router *r,
+ {
+ 	u8 x;
+ 	int reg;
+@@ -666,8 +668,8 @@ static int pirq_sis_set(struct pci_dev *router, struct pci_dev *dev, int pirq, i
+ 	if (reg >= 0x01 && reg <= 0x04)
+ 		reg += 0x40;
+ 	pci_read_config_byte(router, reg, &x);
+-	x &= ~(PIRQ_SIS_IRQ_MASK | PIRQ_SIS_IRQ_DISABLE);
+-	x |= irq ? irq: PIRQ_SIS_IRQ_DISABLE;
++	x &= ~(PIRQ_SIS503_IRQ_MASK | PIRQ_SIS503_IRQ_DISABLE);
++	x |= irq ? irq : PIRQ_SIS503_IRQ_DISABLE;
+ 	pci_write_config_byte(router, reg, x);
+ 	return 1;
+ }
+@@ -959,13 +961,14 @@ static __init int serverworks_router_probe(struct irq_router *r,
+ 
  static __init int sis_router_probe(struct irq_router *r, struct pci_dev *router, u16 device)
  {
- 	switch (device) {
-+	case PCI_DEVICE_ID_SI_496:
-+		r->name = "SiS85C497";
-+		r->get = pirq_sis497_get;
-+		r->set = pirq_sis497_set;
+-	if (device != PCI_DEVICE_ID_SI_503)
+-		return 0;
+-
+-	r->name = "SIS";
+-	r->get = pirq_sis_get;
+-	r->set = pirq_sis_set;
+-	return 1;
++	switch (device) {
++	case PCI_DEVICE_ID_SI_503:
++		r->name = "SiS85C503";
++		r->get = pirq_sis503_get;
++		r->set = pirq_sis503_set;
 +		return 1;
- 	case PCI_DEVICE_ID_SI_503:
- 		r->name = "SiS85C503";
- 		r->get = pirq_sis503_get;
++	}
++	return 0;
+ }
+ 
+ static __init int cyrix_router_probe(struct irq_router *r, struct pci_dev *router, u16 device)

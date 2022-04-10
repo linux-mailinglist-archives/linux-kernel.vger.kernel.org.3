@@ -2,272 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 154034FADC3
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 14:14:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC9724FADC4
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 14:15:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238759AbiDJMQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 08:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57606 "EHLO
+        id S238806AbiDJMRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 08:17:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232013AbiDJMQf (ORCPT
+        with ESMTP id S232013AbiDJMRV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 08:16:35 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67FF3D1EF;
-        Sun, 10 Apr 2022 05:14:23 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649592860;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OFmRIgWsEfS1u8csltcfGL85/93nZMY90Oa0fL8OYn8=;
-        b=iT0LHVcBBKaQRnyzmg4Y+pQ1Zje/qhPE8eV5XllPWuJ4R+iBHPdx9bCyQ9QdsjydL8HFvk
-        1w0gYfwVe8VW8lKPFCmaDWBNh8ISxg3cRTHc7GVEmrmpCBQx3AiuVbn0LBkwJB1vOoL/tp
-        G5//ftF7PNePvQAGZiqfIbJJxRm2MIYMzrUxHy86ge44t8xM3X4Cl7WSN59H3Cq6YzkbcI
-        FzjQFrDr9PL0DJ98d09c3GnDHeGuSUQ21h1ZlqSlyPuztoLNeEgo9qJe3mnLB0zYgBKpBu
-        Zl6CBbqroeK/y5EOHWcTkUXPHEjKjgfyppbAHZn3B6XT5mwPT2FSDXHvyDkvhA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649592860;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OFmRIgWsEfS1u8csltcfGL85/93nZMY90Oa0fL8OYn8=;
-        b=ZowN3hDL00e5KRJGyl0d0NcP84qDlITpO7vwsVPu9kvaRTv5XnipOOoo0K4Pv//bkRseYI
-        YFGsrNPSqm8U+tAQ==
-To:     Pete Swain <swine@google.com>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Johan Hovold <johan@kernel.org>,
-        Feng Tang <feng.tang@intel.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Pete Swain <swine@google.com>
-Subject: Re: [PATCH 2/2] timers: retpoline mitigation for time funcs
-In-Reply-To: <20220218221820.950118-2-swine@google.com>
-References: <20220218221820.950118-1-swine@google.com>
- <20220218221820.950118-2-swine@google.com>
-Date:   Sun, 10 Apr 2022 14:14:20 +0200
-Message-ID: <87r165gmoz.ffs@tglx>
+        Sun, 10 Apr 2022 08:17:21 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E582C4C40E
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 05:15:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649592910; x=1681128910;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=R77cuSTiyJPt6vWz2tJy04oolBZ3kRtK4ONPcd5GBSE=;
+  b=KpVs/LyeuLuk7ZwbapogmWzDUdbCcYfRKc0zi5mdZjfNfVMLwEtK8FHH
+   ZaJGiwrOVZYwoM//KOsPiQanUTyQWn32VF4MCd1p291xC962MX9w3ewG4
+   OgDjVfhp/zNEiM0XS/IT6sQz07rXFrwKiEknNhON4myqzuhBKhWFKKb7s
+   wc83HTryFgUGBX0WnNo2oarCsY/2+AVNI93ydcJwL1A7erP6fRAHFCnw8
+   SULFUEV0MXe0itEVfknW2thpF30Z9cZmTYa1tnShsvZleoEPDb4ekl2b0
+   s0a3HXrkwqoxoFlWSGtkXckjulvC7dhhktBmJgBBlmTZ2Yi2OimV12m9Z
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10312"; a="324879315"
+X-IronPort-AV: E=Sophos;i="5.90,249,1643702400"; 
+   d="scan'208";a="324879315"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2022 05:15:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,249,1643702400"; 
+   d="scan'208";a="525616748"
+Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 10 Apr 2022 05:15:09 -0700
+Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ndWTE-0000sZ-CV;
+        Sun, 10 Apr 2022 12:15:08 +0000
+Date:   Sun, 10 Apr 2022 20:14:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:irq/urgent] BUILD SUCCESS
+ 63ef1a8a07ef64f802af1adadae3b05ba824c534
+Message-ID: <6252ca3d.L3gvNNdoHDvwljfV%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 18 2022 at 14:18, Pete Swain wrote:
-> Adds indirect call exports for clock reads from tsc, apic,
-> hrtimer, via clock-event, timekeeper & posix interfaces.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/urgent
+branch HEAD: 63ef1a8a07ef64f802af1adadae3b05ba824c534  Merge tag 'irqchip-fixes-5.18-1' of git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms into irq/urgent
 
-Sure, but why?
+elapsed time: 723m
 
-> Signed-off-by: Pete Swain <swine@google.com>
-> ---
->  arch/x86/kernel/apic/apic.c    |  8 +++++---
->  arch/x86/kernel/tsc.c          |  3 ++-
->  include/linux/hrtimer.h        | 19 ++++++++++++++++---
->  kernel/time/clockevents.c      |  9 ++++++---
->  kernel/time/hrtimer.c          |  3 ++-
->  kernel/time/posix-cpu-timers.c |  4 ++--
->  kernel/time/posix-timers.c     |  3 ++-
->  kernel/time/timekeeping.c      |  2 +-
->  8 files changed, 36 insertions(+), 15 deletions(-)
+configs tested: 96
+configs skipped: 3
 
-Can this please be split up properly? 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> diff --git a/arch/x86/kernel/apic/apic.c b/arch/x86/kernel/apic/apic.c
-> index b70344bf6600..523a569dd35e 100644
-> --- a/arch/x86/kernel/apic/apic.c
-> +++ b/arch/x86/kernel/apic/apic.c
-> @@ -463,15 +463,17 @@ EXPORT_SYMBOL_GPL(setup_APIC_eilvt);
->  /*
->   * Program the next event, relative to now
->   */
-> -static int lapic_next_event(unsigned long delta,
-> +INDIRECT_CALLABLE_SCOPE
-> +int lapic_next_event(unsigned long delta,
->  			    struct clock_event_device *evt)
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+xtensa                  audio_kc705_defconfig
+ia64                         bigsur_defconfig
+sh                           sh2007_defconfig
+mips                        vocore2_defconfig
+powerpc                 mpc834x_mds_defconfig
+arc                     nsimosci_hs_defconfig
+s390                                defconfig
+powerpc                   motionpro_defconfig
+arm                          badge4_defconfig
+arc                        vdk_hs38_defconfig
+powerpc                 mpc85xx_cds_defconfig
+powerpc                 canyonlands_defconfig
+openrisc                    or1ksim_defconfig
+sh                          lboxre2_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220410
+ia64                             allmodconfig
+ia64                             allyesconfig
+ia64                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
 
-So this was formatted properly:
+clang tested configs:
+x86_64                        randconfig-c007
+powerpc              randconfig-c003-20220410
+arm                  randconfig-c002-20220410
+i386                          randconfig-c001
+riscv                randconfig-c006-20220410
+mips                 randconfig-c004-20220410
+hexagon                          alldefconfig
+powerpc                    mvme5100_defconfig
+arm                       aspeed_g4_defconfig
+powerpc                      ppc64e_defconfig
+powerpc                     skiroot_defconfig
+powerpc                     mpc512x_defconfig
+mips                     cu1000-neo_defconfig
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+riscv                randconfig-r042-20220410
+hexagon              randconfig-r041-20220410
+hexagon              randconfig-r045-20220410
 
-static int lapic_next_event(unsigned long delta,
-  			    struct clock_event_device *evt)
-
-Now it turned into garbage:
-
-INDIRECT_CALLABLE_SCOPE
-int lapic_next_event(unsigned long delta,
-  			    struct clock_event_device *evt)
-
-while:
-
-INDIRECT_CALLABLE_SCOPE int lapic_next_event(unsigned long delta,
-					     struct clock_event_device *evt)
-or
-
-INDIRECT_CALLABLE_SCOPE
-int lapic_next_event(unsigned long delta, struct clock_event_device *evt)
-
-are both what a reader would expect.
-
-Similar issues all over the place.
-
-> diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
-> index a698196377be..ff2868d5ddea 100644
-> --- a/arch/x86/kernel/tsc.c
-> +++ b/arch/x86/kernel/tsc.c
-> @@ -1090,7 +1090,8 @@ static void tsc_resume(struct clocksource *cs)
->   * checking the result of read_tsc() - cycle_last for being negative.
->   * That works because CLOCKSOURCE_MASK(64) does not mask out any bit.
->   */
-> -static u64 read_tsc(struct clocksource *cs)
-> +INDIRECT_CALLABLE_SCOPE
-> +u64 read_tsc(struct clocksource *cs)
-
-What's the extra line for?
-
->  {
->  	return (u64)rdtsc_ordered();
->  }
-> diff --git a/include/linux/hrtimer.h b/include/linux/hrtimer.h
-> index 0ee140176f10..9d2d110f0b8c 100644
-> --- a/include/linux/hrtimer.h
-> +++ b/include/linux/hrtimer.h
-> @@ -20,6 +20,7 @@
->  #include <linux/seqlock.h>
->  #include <linux/timer.h>
->  #include <linux/timerqueue.h>
-> +#include <linux/indirect_call_wrapper.h>
->  
->  struct hrtimer_clock_base;
->  struct hrtimer_cpu_base;
-> @@ -297,14 +298,17 @@ static inline s64 hrtimer_get_expires_ns(const struct hrtimer *timer)
->  	return ktime_to_ns(timer->node.expires);
->  }
->  
-> +INDIRECT_CALLABLE_DECLARE(extern ktime_t ktime_get(void));
-> +
->  static inline ktime_t hrtimer_expires_remaining(const struct hrtimer *timer)
->  {
-> -	return ktime_sub(timer->node.expires, timer->base->get_time());
-> +	return ktime_sub(timer->node.expires,
-> +			INDIRECT_CALL_1(timer->base->get_time, ktime_get));
-
-This wants a proper explanation in a changelog for the hrtimer check,
-why this is optimized for ktime_get().
-
->  }
->  
->  static inline ktime_t hrtimer_cb_get_time(struct hrtimer *timer)
->  {
-> -	return timer->base->get_time();
-> +	return INDIRECT_CALL_1(timer->base->get_time, ktime_get);
->  }
->  
->  static inline int hrtimer_is_hres_active(struct hrtimer *timer)
-> @@ -503,7 +507,9 @@ hrtimer_forward(struct hrtimer *timer, ktime_t now, ktime_t interval);
->  static inline u64 hrtimer_forward_now(struct hrtimer *timer,
->  				      ktime_t interval)
->  {
-> -	return hrtimer_forward(timer, timer->base->get_time(), interval);
-> +	return hrtimer_forward(timer,
-> +			INDIRECT_CALL_1(timer->base->get_time, ktime_get),
-> +			interval);
->  }
->  
->  /* Precise sleep: */
-> @@ -536,4 +542,11 @@ int hrtimers_dead_cpu(unsigned int cpu);
->  #define hrtimers_dead_cpu	NULL
->  #endif
->  
-> +struct clock_event_device;
-> +INDIRECT_CALLABLE_DECLARE(extern __weak u64 read_tsc(struct clocksource *cs));
-> +INDIRECT_CALLABLE_DECLARE(extern int thread_cpu_clock_get(
-> +		const clockid_t which_clock, struct timespec64 *tp));
-> +INDIRECT_CALLABLE_DECLARE(extern __weak int lapic_next_deadline(
-> +		unsigned long delta, struct clock_event_device *evt));
-> +
-
-No. This is not how it works. This is a generic header and x86 specific
-muck has no place here.
-
->  #endif
-> diff --git a/kernel/time/clockevents.c b/kernel/time/clockevents.c
-> index 003ccf338d20..ac15412e87c4 100644
-> --- a/kernel/time/clockevents.c
-> +++ b/kernel/time/clockevents.c
-> @@ -245,7 +245,8 @@ static int clockevents_program_min_delta(struct clock_event_device *dev)
->  
->  		dev->retries++;
->  		clc = ((unsigned long long) delta * dev->mult) >> dev->shift;
-> -		if (dev->set_next_event((unsigned long) clc, dev) == 0)
-> +		if (INDIRECT_CALL_1(dev->set_next_event, lapic_next_deadline,
-> +				  (unsigned long) clc, dev) == 0)
-
-No. We are not sprinkling x86'isms into generic code.
-
-> diff --git a/kernel/time/posix-cpu-timers.c b/kernel/time/posix-cpu-timers.c
-> index 96b4e7810426..d8bf325fa84e 100644
-> --- a/kernel/time/posix-cpu-timers.c
-> +++ b/kernel/time/posix-cpu-timers.c
-> @@ -1596,8 +1596,8 @@ static int thread_cpu_clock_getres(const clockid_t which_clock,
->  {
->  	return posix_cpu_clock_getres(THREAD_CLOCK, tp);
->  }
-> -static int thread_cpu_clock_get(const clockid_t which_clock,
-> -				struct timespec64 *tp)
-> +INDIRECT_CALLABLE_SCOPE
-> +int thread_cpu_clock_get(const clockid_t which_clock, struct timespec64 *tp)
->  {
->  	return posix_cpu_clock_get(THREAD_CLOCK, tp);
->  }
-> diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
-> index 1cd10b102c51..35eac10ee796 100644
-> --- a/kernel/time/posix-timers.c
-> +++ b/kernel/time/posix-timers.c
-> @@ -1089,7 +1089,8 @@ SYSCALL_DEFINE2(clock_gettime, const clockid_t, which_clock,
->  	if (!kc)
->  		return -EINVAL;
->  
-> -	error = kc->clock_get_timespec(which_clock, &kernel_tp);
-> +	error = INDIRECT_CALL_1(kc->clock_get_timespec, thread_cpu_clock_get,
-> +				which_clock, &kernel_tp);
-
-The argument for selecting thread_cpu_clock_get() as optimization target
-is?
-
->  
->  	if (!error && put_timespec64(&kernel_tp, tp))
->  		error = -EFAULT;
-> diff --git a/kernel/time/timekeeping.c b/kernel/time/timekeeping.c
-> index dcdcb85121e4..2b1a3b146614 100644
-> --- a/kernel/time/timekeeping.c
-> +++ b/kernel/time/timekeeping.c
-> @@ -190,7 +190,7 @@ static inline u64 tk_clock_read(const struct tk_read_base *tkr)
->  {
->  	struct clocksource *clock = READ_ONCE(tkr->clock);
->  
-> -	return clock->read(clock);
-> +	return INDIRECT_CALL_1(clock->read, read_tsc, clock);
-
-Again. No X86 muck here.
-
-Thanks,
-
-        tglx
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

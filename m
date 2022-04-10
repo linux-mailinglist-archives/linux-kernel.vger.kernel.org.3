@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 086E04FAD3C
+	by mail.lfdr.de (Postfix) with ESMTP id 982C04FAD3E
 	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 12:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237200AbiDJKaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 06:30:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38326 "EHLO
+        id S236922AbiDJKaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 06:30:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236719AbiDJK3i (ORCPT
+        with ESMTP id S236753AbiDJK3l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 06:29:38 -0400
+        Sun, 10 Apr 2022 06:29:41 -0400
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D2F66C82
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 03:27:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCB0673CA
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 03:27:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649586448; x=1681122448;
+  t=1649586451; x=1681122451;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=tbyPavgTClKEq610i0Jm+ug5uU5a3xD+avms0HQq1vo=;
-  b=VdFrAc48zkKHgdkiA8703XPDpD6Avr8BdlDbpVUugUgWzA2p0PQU1k2n
-   h35qfVDOrrj4gb+imrVDoR6bu+5gt/IwmsGopfDFxAWQ10L8vzsUZDJk7
-   V23RIIobq6i+SoyAptRCNe84aKi+QMMhfha/K0qsmhnBvl/GVy7zfFjHp
-   zRwUxCAhN2CKxjINlEPnXnlnb7HHtxOZOwH+bOEHAcyT02StEhYTflplX
-   +9W+20fc9t4vkuZu1R4wS7ncxleY36LlMW5wEvYU4ZZ6vsQn/efPEh/pL
-   WpLPVCKcGbedVT8SXQewGhly6j1cWzkDJSlvwRpQEZwfcZaw5ALNBps/u
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10312"; a="286962897"
+  bh=Kq4s1NHCuryhOFKECsJ3c8j/56TsU8RAVcNQNz5E+OY=;
+  b=cx4GrEBsx+y23vK4Z/BqxLBBahQjovRfPMhsuF4ztw3p6Q+hsV+7jVvr
+   VtVGaor/PT8wWF2VV7Z81JEuhOIsHG9t3EdqFkFcv3M/EOwbPuM1QcsUq
+   0ZGDloQ9X+jQnIK8Zmg+rMjF0XYi/vLbNnu3MzDNV3hz4ZaSFd85we+hY
+   MXgHu1imM7IXAghz7cjHy4nwvIA9oQaWRhXbcVjGYfSDtdrUDGBBxh2O6
+   /C4z7xlkkyrw5jPdlJfwITLTaiUTPLDObxE6fp/pjuUF2El0KMLDQn12B
+   GdP1ojDr27NPQDpiJtdKLAqJ4aw6+AX66ofEd9D9XLYtY1E3qVhuXiymL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10312"; a="286962902"
 X-IronPort-AV: E=Sophos;i="5.90,249,1643702400"; 
-   d="scan'208";a="286962897"
+   d="scan'208";a="286962902"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2022 03:27:27 -0700
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2022 03:27:31 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,249,1643702400"; 
-   d="scan'208";a="699019608"
+   d="scan'208";a="699019615"
 Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by fmsmga001.fm.intel.com with ESMTP; 10 Apr 2022 03:27:23 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 10 Apr 2022 03:27:27 -0700
 From:   Lu Baolu <baolu.lu@linux.intel.com>
 To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
         Christoph Hellwig <hch@infradead.org>,
@@ -48,11 +48,10 @@ To:     Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@nvidia.com>,
 Cc:     Eric Auger <eric.auger@redhat.com>, Liu Yi L <yi.l.liu@intel.com>,
         Jacob jun Pan <jacob.jun.pan@intel.com>,
         iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>
-Subject: [PATCH RFC v3 05/12] iommu/vt-d: Remove SVM_FLAG_SUPERVISOR_MODE support
-Date:   Sun, 10 Apr 2022 18:24:36 +0800
-Message-Id: <20220410102443.294128-6-baolu.lu@linux.intel.com>
+        Lu Baolu <baolu.lu@linux.intel.com>
+Subject: [PATCH RFC v3 06/12] iommu/vt-d: Add SVA domain support
+Date:   Sun, 10 Apr 2022 18:24:37 +0800
+Message-Id: <20220410102443.294128-7-baolu.lu@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220410102443.294128-1-baolu.lu@linux.intel.com>
 References: <20220410102443.294128-1-baolu.lu@linux.intel.com>
@@ -68,131 +67,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current in-kernel supervisor PASID support is based on the SVA
-machinery in SVA lib. The binding between a kernel PASID and kernel
-mapping has many flaws. Remove SVM_FLAG_SUPERVISOR_MODE support.
+Add support for SVA domain allocation and provide an SVA-specific
+iommu_domain_ops.
 
-Link: https://lore.kernel.org/linux-iommu/20210511194726.GP1002214@nvidia.com/
-Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 ---
- drivers/iommu/intel/svm.c | 53 +++++++++------------------------------
- 1 file changed, 12 insertions(+), 41 deletions(-)
+ include/linux/intel-iommu.h |  1 +
+ drivers/iommu/intel/iommu.c | 10 ++++++++++
+ drivers/iommu/intel/svm.c   | 37 +++++++++++++++++++++++++++++++++++++
+ 3 files changed, 48 insertions(+)
 
+diff --git a/include/linux/intel-iommu.h b/include/linux/intel-iommu.h
+index 2f9891cb3d00..c14283137fb5 100644
+--- a/include/linux/intel-iommu.h
++++ b/include/linux/intel-iommu.h
+@@ -744,6 +744,7 @@ void intel_svm_unbind(struct iommu_sva *handle);
+ u32 intel_svm_get_pasid(struct iommu_sva *handle);
+ int intel_svm_page_response(struct device *dev, struct iommu_fault_event *evt,
+ 			    struct iommu_page_response *msg);
++extern const struct iommu_domain_ops intel_svm_domain_ops;
+ 
+ struct intel_svm_dev {
+ 	struct list_head list;
+diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+index ffad7f8f2d73..9c2714ba04ff 100644
+--- a/drivers/iommu/intel/iommu.c
++++ b/drivers/iommu/intel/iommu.c
+@@ -4324,6 +4324,16 @@ static struct iommu_domain *intel_iommu_domain_alloc(unsigned type)
+ 		return domain;
+ 	case IOMMU_DOMAIN_IDENTITY:
+ 		return &si_domain->domain;
++#ifdef CONFIG_INTEL_IOMMU_SVM
++	case IOMMU_DOMAIN_SVA:
++		dmar_domain = alloc_domain(type);
++		if (!dmar_domain)
++			return NULL;
++		domain = &dmar_domain->domain;
++		domain->ops = &intel_svm_domain_ops;
++
++		return domain;
++#endif /* CONFIG_INTEL_IOMMU_SVM */
+ 	default:
+ 		return NULL;
+ 	}
 diff --git a/drivers/iommu/intel/svm.c b/drivers/iommu/intel/svm.c
-index 23a38763c1d1..4c283a250541 100644
+index 4c283a250541..251a3a65d77f 100644
 --- a/drivers/iommu/intel/svm.c
 +++ b/drivers/iommu/intel/svm.c
-@@ -313,8 +313,7 @@ static int pasid_to_svm_sdev(struct device *dev, unsigned int pasid,
- 	return 0;
- }
- 
--static int intel_svm_alloc_pasid(struct device *dev, struct mm_struct *mm,
--				 unsigned int flags)
-+static int intel_svm_alloc_pasid(struct device *dev, struct mm_struct *mm)
- {
- 	ioasid_t max_pasid = dev_is_pci(dev) ?
- 			pci_max_pasids(to_pci_dev(dev)) : intel_pasid_max_id;
-@@ -324,8 +323,7 @@ static int intel_svm_alloc_pasid(struct device *dev, struct mm_struct *mm,
- 
- static struct iommu_sva *intel_svm_bind_mm(struct intel_iommu *iommu,
- 					   struct device *dev,
--					   struct mm_struct *mm,
--					   unsigned int flags)
-+					   struct mm_struct *mm)
- {
- 	struct device_domain_info *info = dev_iommu_priv_get(dev);
- 	unsigned long iflags, sflags;
-@@ -341,22 +339,18 @@ static struct iommu_sva *intel_svm_bind_mm(struct intel_iommu *iommu,
- 
- 		svm->pasid = mm->pasid;
- 		svm->mm = mm;
--		svm->flags = flags;
- 		INIT_LIST_HEAD_RCU(&svm->devs);
- 
--		if (!(flags & SVM_FLAG_SUPERVISOR_MODE)) {
--			svm->notifier.ops = &intel_mmuops;
--			ret = mmu_notifier_register(&svm->notifier, mm);
--			if (ret) {
--				kfree(svm);
--				return ERR_PTR(ret);
--			}
-+		svm->notifier.ops = &intel_mmuops;
-+		ret = mmu_notifier_register(&svm->notifier, mm);
-+		if (ret) {
-+			kfree(svm);
-+			return ERR_PTR(ret);
- 		}
- 
- 		ret = pasid_private_add(svm->pasid, svm);
- 		if (ret) {
--			if (svm->notifier.ops)
--				mmu_notifier_unregister(&svm->notifier, mm);
-+			mmu_notifier_unregister(&svm->notifier, mm);
- 			kfree(svm);
- 			return ERR_PTR(ret);
- 		}
-@@ -391,9 +385,7 @@ static struct iommu_sva *intel_svm_bind_mm(struct intel_iommu *iommu,
- 	}
- 
- 	/* Setup the pasid table: */
--	sflags = (flags & SVM_FLAG_SUPERVISOR_MODE) ?
--			PASID_FLAG_SUPERVISOR_MODE : 0;
--	sflags |= cpu_feature_enabled(X86_FEATURE_LA57) ? PASID_FLAG_FL5LP : 0;
-+	sflags = cpu_feature_enabled(X86_FEATURE_LA57) ? PASID_FLAG_FL5LP : 0;
- 	spin_lock_irqsave(&iommu->lock, iflags);
- 	ret = intel_pasid_setup_first_level(iommu, dev, mm->pgd, mm->pasid,
- 					    FLPT_DEFAULT_DID, sflags);
-@@ -410,8 +402,7 @@ static struct iommu_sva *intel_svm_bind_mm(struct intel_iommu *iommu,
- 	kfree(sdev);
- free_svm:
- 	if (list_empty(&svm->devs)) {
--		if (svm->notifier.ops)
--			mmu_notifier_unregister(&svm->notifier, mm);
-+		mmu_notifier_unregister(&svm->notifier, mm);
- 		pasid_private_remove(mm->pasid);
- 		kfree(svm);
- 	}
-@@ -817,37 +808,17 @@ static irqreturn_t prq_event_thread(int irq, void *d)
- struct iommu_sva *intel_svm_bind(struct device *dev, struct mm_struct *mm, void *drvdata)
- {
- 	struct intel_iommu *iommu = device_to_iommu(dev, NULL, NULL);
--	unsigned int flags = 0;
- 	struct iommu_sva *sva;
- 	int ret;
- 
--	if (drvdata)
--		flags = *(unsigned int *)drvdata;
--
--	if (flags & SVM_FLAG_SUPERVISOR_MODE) {
--		if (!ecap_srs(iommu->ecap)) {
--			dev_err(dev, "%s: Supervisor PASID not supported\n",
--				iommu->name);
--			return ERR_PTR(-EOPNOTSUPP);
--		}
--
--		if (mm) {
--			dev_err(dev, "%s: Supervisor PASID with user provided mm\n",
--				iommu->name);
--			return ERR_PTR(-EINVAL);
--		}
--
--		mm = &init_mm;
--	}
--
- 	mutex_lock(&pasid_mutex);
--	ret = intel_svm_alloc_pasid(dev, mm, flags);
-+	ret = intel_svm_alloc_pasid(dev, mm);
- 	if (ret) {
- 		mutex_unlock(&pasid_mutex);
- 		return ERR_PTR(ret);
- 	}
- 
--	sva = intel_svm_bind_mm(iommu, dev, mm, flags);
-+	sva = intel_svm_bind_mm(iommu, dev, mm);
+@@ -927,3 +927,40 @@ int intel_svm_page_response(struct device *dev,
  	mutex_unlock(&pasid_mutex);
- 
- 	return sva;
+ 	return ret;
+ }
++
++static int intel_svm_attach_dev_pasid(struct iommu_domain *domain,
++				      struct device *dev, ioasid_t pasid)
++{
++	struct device_domain_info *info = dev_iommu_priv_get(dev);
++	struct mm_struct *mm = iommu_sva_domain_mm(domain);
++	struct intel_iommu *iommu = info->iommu;
++	struct iommu_sva *sva;
++	int ret = 0;
++
++	mutex_lock(&pasid_mutex);
++	sva = intel_svm_bind_mm(iommu, dev, mm);
++	if (IS_ERR(sva))
++		ret = PTR_ERR(sva);
++	mutex_unlock(&pasid_mutex);
++
++	return ret;
++}
++
++static void intel_svm_detach_dev_pasid(struct iommu_domain *domain,
++				       struct device *dev, ioasid_t pasid)
++{
++	mutex_lock(&pasid_mutex);
++	intel_svm_unbind_mm(dev, pasid);
++	mutex_unlock(&pasid_mutex);
++}
++
++static void intel_svm_domain_free(struct iommu_domain *domain)
++{
++	kfree(to_dmar_domain(domain));
++}
++
++const struct iommu_domain_ops intel_svm_domain_ops = {
++	.attach_dev_pasid	= intel_svm_attach_dev_pasid,
++	.detach_dev_pasid	= intel_svm_detach_dev_pasid,
++	.free			= intel_svm_domain_free,
++};
 -- 
 2.25.1
 

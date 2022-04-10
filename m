@@ -2,72 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DE1D4FAB41
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 02:57:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D793A4FAB45
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 03:01:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233551AbiDJA7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 20:59:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58344 "EHLO
+        id S233642AbiDJBDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 21:03:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233658AbiDJA7e (ORCPT
+        with ESMTP id S233599AbiDJBDB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 20:59:34 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888CCC0
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 17:57:21 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id s21so6582662pgv.13
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 17:57:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=4iRUXL5EjBMyBZSPE/qcFAd30W/jy0/d7mesyYzIDjE=;
-        b=a6MdRpZNHypAnH2GDSZ1p5dpqA4nHrNO3ZbUHBzNlMwwxwiSspxlmVP8qSgtfAy3Kx
-         Ata4cquvJL5jyp4yprQn73mHpLLxLpNIVah/m9DAldEohIV+WcPHhy6T/+HMW1eAJGz/
-         EUqI4BeGzJLbypf5p6zbup1US7KHJ6ozxiq6HqvOPxRvIj4NDaSl1W5N1mcQtKwVrdrJ
-         UjmNDu1soJOlYWlRifnefGJmUqw3yhBCuNuXZC3ElgXT9WpTngMjrHmAoRXTETSLQPkP
-         wz8tvSJO3+RLwVtt2aXQrcRw5Wiy/0di9MQo6yLcmHsYXq98AG/9Y+T2OEb9/w2DrpJO
-         WCug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=4iRUXL5EjBMyBZSPE/qcFAd30W/jy0/d7mesyYzIDjE=;
-        b=QQO8hHYz8gBCHSp1DMXOwXPdf+jVKQbLGr/WK1hkjZMNiER+ZK7jguvhY+IQG6hiLV
-         lxhD7bC8O0Dhbk1L43vlsMAz1D/CHhuR9yHM1Y4fKVnz0nnNm1rtWOpkYqEdKEkZsZDV
-         NlBm0e9NUlJIwryoQdPT8intO9xBsnryihSa8zAvZRXAAszi39G+pKDr/wr0+GLI93Sm
-         DPFQjI/VtH5zAiQsPbe8P5WoAiMTHxqiJ9PoaWheVVxwAtRk1XaNq+1IqonEaWrdSPPo
-         W4cN96KJGvcSguYq7YFLnQaUuwlIB3ersdUscntgrxKWVibQtD2B6+FlCYuKnmVsoRqL
-         yQCA==
-X-Gm-Message-State: AOAM533NC5M58lJjSa5SwEBHLGKtxwxlzgmHfmUJnHsf7hjJc7yWfS6k
-        ZpDDlwR9GtnHwLCX4lMXtEA=
-X-Google-Smtp-Source: ABdhPJxzQ2ENfrXJ19nbHzvj3yrTKUn+qIqOGgMXwQpALKXXpGJikbZTWUa4stddYRTxHyPP9wDgeA==
-X-Received: by 2002:a05:6a00:985:b0:505:9b3b:3fd6 with SMTP id u5-20020a056a00098500b005059b3b3fd6mr5038821pfg.30.1649552240941;
-        Sat, 09 Apr 2022 17:57:20 -0700 (PDT)
-Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:172c:26af:268e:6e9f])
-        by smtp.gmail.com with ESMTPSA id l67-20020a633e46000000b003986e01e982sm25088215pga.67.2022.04.09.17.57.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Apr 2022 17:57:20 -0700 (PDT)
-From:   Max Filippov <jcmvbkbc@gmail.com>
-To:     linux-xtensa@linux-xtensa.org
-Cc:     Chris Zankel <chris@zankel.net>, linux-kernel@vger.kernel.org,
-        Duoming Zhou <duoming@zju.edu.cn>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH 4/4] xtensa: iss: extract and constify network callbacks
-Date:   Sat,  9 Apr 2022 17:56:32 -0700
-Message-Id: <20220410005632.3925219-5-jcmvbkbc@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220410005632.3925219-1-jcmvbkbc@gmail.com>
-References: <20220410005632.3925219-1-jcmvbkbc@gmail.com>
+        Sat, 9 Apr 2022 21:03:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E609CFE;
+        Sat,  9 Apr 2022 18:00:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 318E9B807E7;
+        Sun, 10 Apr 2022 01:00:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D3C7C385A4;
+        Sun, 10 Apr 2022 01:00:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649552446;
+        bh=gscMQDA1Nf1JKZaGWicmeiTr6Zz5nB+FiP4QfEUIFpU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Pj3BsvmqNLI6EkHpK1lEkntdPY39BHUWxB5prxLsZmIb/uW+Gd9nziAakjbfMDDMT
+         YyaeigjmQFa2ymkY0g6aqBMLmbj0vxd0zS5SVaDb8ZwB7WTku+PGdMSpL4vssREDAT
+         x5CJoVWjMxHPKJHuyR5WtShVnPNzImOY8VCbJTl7fdqcFXAInjUsLAvs4443a5L//q
+         IUuGJRF6xiBgee7l/W3KKjOioKhJmc/Gq4hrNOqxx7YUb+2aUBpxKJkBKt+n4VTa/I
+         0QRUVjhSfQntz0eg0QF3Y1INd4TIMzYcaWXD2NKsUt/n7XBcjdF1g0npRlsf+ung9f
+         J1hLOV88wA6XA==
+Date:   Sun, 10 Apr 2022 09:00:39 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Ming Qian <ming.qian@nxp.com>
+Cc:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl, robh+dt@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, aisheng.dong@nxp.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v19] arm64: dts: freescale: imx8q: add imx vpu codec
+ entries
+Message-ID: <20220410010039.GE129381@dragon>
+References: <20220317061130.20857-1-ming.qian@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220317061130.20857-1-ming.qian@nxp.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,134 +58,196 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of storing pointers to callback functions in the
-struct iss_net_private::tp move them to struct struct iss_net_ops and
-store a const pointer to it. Make static const tuntap_ops structure with
-tuntap callbacks and initialize tp.net_ops with it in the tuntap_probe.
+On Thu, Mar 17, 2022 at 02:11:30PM +0800, Ming Qian wrote:
+> Add the Video Processing Unit node for IMX8Q SoC.
+> 
+> Signed-off-by: Ming Qian <ming.qian@nxp.com>
+> Signed-off-by: Shijie Qin <shijie.qin@nxp.com>
+> Signed-off-by: Zhou Peng <eagle.zhou@nxp.com>
+> ---
+>  .../arm64/boot/dts/freescale/imx8-ss-vpu.dtsi | 74 +++++++++++++++++++
+>  arch/arm64/boot/dts/freescale/imx8qxp-mek.dts | 25 +++++++
+>  arch/arm64/boot/dts/freescale/imx8qxp.dtsi    | 24 ++++++
+>  3 files changed, 123 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/freescale/imx8-ss-vpu.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/imx8-ss-vpu.dtsi b/arch/arm64/boot/dts/freescale/imx8-ss-vpu.dtsi
+> new file mode 100644
+> index 000000000000..989f2bf07b5e
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/freescale/imx8-ss-vpu.dtsi
+> @@ -0,0 +1,74 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Copyright 2021 NXP
+> + *	Dong Aisheng <aisheng.dong@nxp.com>
+> + */
+> +
+> +vpu: vpu@2c000000 {
+> +	#address-cells = <1>;
+> +	#size-cells = <1>;
+> +	ranges = <0x2c000000 0x0 0x2c000000 0x2000000>;
+> +	reg = <0 0x2c000000 0 0x1000000>;
+> +	power-domains = <&pd IMX_SC_R_VPU>;
+> +	status = "disabled";
+> +
+> +	mu_m0: mailbox@2d000000 {
+> +		compatible = "fsl,imx6sx-mu";
+> +		reg = <0x2d000000 0x20000>;
+> +		interrupts = <GIC_SPI 469 IRQ_TYPE_LEVEL_HIGH>;
+> +		#mbox-cells = <2>;
+> +		power-domains = <&pd IMX_SC_R_VPU_MU_0>;
+> +		status = "disabled";
+> +	};
+> +
+> +	mu1_m0: mailbox@2d020000 {
+> +		compatible = "fsl,imx6sx-mu";
+> +		reg = <0x2d020000 0x20000>;
+> +		interrupts = <GIC_SPI 470 IRQ_TYPE_LEVEL_HIGH>;
+> +		#mbox-cells = <2>;
+> +		power-domains = <&pd IMX_SC_R_VPU_MU_1>;
+> +		status = "disabled";
+> +	};
+> +
+> +	mu2_m0: mailbox@2d040000 {
+> +		compatible = "fsl,imx6sx-mu";
+> +		reg = <0x2d040000 0x20000>;
+> +		interrupts = <GIC_SPI 474 IRQ_TYPE_LEVEL_HIGH>;
+> +		#mbox-cells = <2>;
+> +		power-domains = <&pd IMX_SC_R_VPU_MU_2>;
+> +		status = "disabled";
+> +	};
+> +
+> +	vpu_core0: vpu_core@2d080000 {
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
----
- arch/xtensa/platforms/iss/network.c | 47 +++++++++++++++++------------
- 1 file changed, 28 insertions(+), 19 deletions(-)
+Hyphen is recommended in node name than underscore.
 
-diff --git a/arch/xtensa/platforms/iss/network.c b/arch/xtensa/platforms/iss/network.c
-index 13802babba17..fd84d4891758 100644
---- a/arch/xtensa/platforms/iss/network.c
-+++ b/arch/xtensa/platforms/iss/network.c
-@@ -56,6 +56,17 @@ struct tuntap_info {
- /* ------------------------------------------------------------------------- */
- 
- 
-+struct iss_net_private;
-+
-+struct iss_net_ops {
-+	int (*open)(struct iss_net_private *lp);
-+	void (*close)(struct iss_net_private *lp);
-+	int (*read)(struct iss_net_private *lp, struct sk_buff **skb);
-+	int (*write)(struct iss_net_private *lp, struct sk_buff **skb);
-+	unsigned short (*protocol)(struct sk_buff *skb);
-+	int (*poll)(struct iss_net_private *lp);
-+};
-+
- /* This structure contains out private information for the driver. */
- 
- struct iss_net_private {
-@@ -78,12 +89,7 @@ struct iss_net_private {
- 			struct tuntap_info tuntap;
- 		} info;
- 
--		int (*open)(struct iss_net_private *lp);
--		void (*close)(struct iss_net_private *lp);
--		int (*read)(struct iss_net_private *lp, struct sk_buff **skb);
--		int (*write)(struct iss_net_private *lp, struct sk_buff **skb);
--		unsigned short (*protocol)(struct sk_buff *skb);
--		int (*poll)(struct iss_net_private *lp);
-+		const struct iss_net_ops *net_ops;
- 	} tp;
- 
- };
-@@ -211,6 +217,15 @@ static int tuntap_poll(struct iss_net_private *lp)
- 	return simc_poll(lp->tp.info.tuntap.fd);
- }
- 
-+static const struct iss_net_ops tuntap_ops = {
-+	.open		= tuntap_open,
-+	.close		= tuntap_close,
-+	.read		= tuntap_read,
-+	.write		= tuntap_write,
-+	.protocol	= tuntap_protocol,
-+	.poll		= tuntap_poll,
-+};
-+
- /*
-  * ethX=tuntap,[mac address],device name
-  */
-@@ -253,13 +268,7 @@ static int tuntap_probe(struct iss_net_private *lp, int index, char *init)
- 	lp->mtu = TRANSPORT_TUNTAP_MTU;
- 
- 	lp->tp.info.tuntap.fd = -1;
--
--	lp->tp.open = tuntap_open;
--	lp->tp.close = tuntap_close;
--	lp->tp.read = tuntap_read;
--	lp->tp.write = tuntap_write;
--	lp->tp.protocol = tuntap_protocol;
--	lp->tp.poll = tuntap_poll;
-+	lp->tp.net_ops = &tuntap_ops;
- 
- 	return 1;
- }
-@@ -274,7 +283,7 @@ static int iss_net_rx(struct net_device *dev)
- 
- 	/* Check if there is any new data. */
- 
--	if (lp->tp.poll(lp) == 0)
-+	if (lp->tp.net_ops->poll(lp) == 0)
- 		return 0;
- 
- 	/* Try to allocate memory, if it fails, try again next round. */
-@@ -293,12 +302,12 @@ static int iss_net_rx(struct net_device *dev)
- 
- 	skb->dev = dev;
- 	skb_reset_mac_header(skb);
--	pkt_len = lp->tp.read(lp, &skb);
-+	pkt_len = lp->tp.net_ops->read(lp, &skb);
- 	skb_put(skb, pkt_len);
- 
- 	if (pkt_len > 0) {
- 		skb_trim(skb, pkt_len);
--		skb->protocol = lp->tp.protocol(skb);
-+		skb->protocol = lp->tp.net_ops->protocol(skb);
- 
- 		spin_lock_bh(&lp->lock);
- 		lp->stats.rx_bytes += skb->len;
-@@ -347,7 +356,7 @@ static int iss_net_open(struct net_device *dev)
- 	struct iss_net_private *lp = netdev_priv(dev);
- 	int err;
- 
--	err = lp->tp.open(lp);
-+	err = lp->tp.net_ops->open(lp);
- 	if (err < 0)
- 		return err;
- 
-@@ -373,7 +382,7 @@ static int iss_net_close(struct net_device *dev)
- 
- 	netif_stop_queue(dev);
- 	del_timer_sync(&lp->timer);
--	lp->tp.close(lp);
-+	lp->tp.net_ops->close(lp);
- 
- 	return 0;
- }
-@@ -385,7 +394,7 @@ static int iss_net_start_xmit(struct sk_buff *skb, struct net_device *dev)
- 
- 	netif_stop_queue(dev);
- 
--	len = lp->tp.write(lp, &skb);
-+	len = lp->tp.net_ops->write(lp, &skb);
- 
- 	if (len == skb->len) {
- 		spin_lock_bh(&lp->lock);
--- 
-2.30.2
+> +		reg = <0x2d080000 0x10000>;
+> +		compatible = "nxp,imx8q-vpu-decoder";
+> +		power-domains = <&pd IMX_SC_R_VPU_DEC_0>;
+> +		mbox-names = "tx0", "tx1", "rx";
+> +		mboxes = <&mu_m0 0 0>,
+> +			<&mu_m0 0 1>,
+> +			<&mu_m0 1 0>;
+> +		status = "disabled";
+> +	};
+> +
+> +	vpu_core1: vpu_core@2d090000 {
+> +		reg = <0x2d090000 0x10000>;
+> +		compatible = "nxp,imx8q-vpu-encoder";
+> +		power-domains = <&pd IMX_SC_R_VPU_ENC_0>;
+> +		mbox-names = "tx0", "tx1", "rx";
+> +		mboxes = <&mu1_m0 0 0>,
+> +			<&mu1_m0 0 1>,
+> +			<&mu1_m0 1 0>;
+> +		status = "disabled";
+> +	};
+> +
+> +	vpu_core2: vpu_core@2d0a0000 {
+> +		reg = <0x2d0a0000 0x10000>;
+> +		compatible = "nxp,imx8q-vpu-encoder";
+> +		power-domains = <&pd IMX_SC_R_VPU_ENC_1>;
+> +		mbox-names = "tx0", "tx1", "rx";
+> +		mboxes = <&mu2_m0 0 0>,
+> +			<&mu2_m0 0 1>,
+> +			<&mu2_m0 1 0>;
+> +		status = "disabled";
+> +	};
+> +};
+> diff --git a/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts b/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
+> index 863232a47004..44347a076722 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
+> +++ b/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
+> @@ -196,6 +196,31 @@ &usdhc2 {
+>  	status = "okay";
+>  };
+>  
+> +&vpu {
+> +	compatible = "nxp,imx8qxp-vpu";
+> +	status = "okay";
+> +};
+> +
+> +&mu_m0 {
 
+Keep them sort alphabetically.
+
+Shawn
+
+> +	status = "okay";
+> +};
+> +
+> +&mu1_m0 {
+> +	status = "okay";
+> +};
+> +
+> +&vpu_core0 {
+> +	reg = <0x2d040000 0x10000>;
+> +	memory-region = <&decoder_boot>, <&decoder_rpc>;
+> +	status = "okay";
+> +};
+> +
+> +&vpu_core1 {
+> +	reg = <0x2d050000 0x10000>;
+> +	memory-region = <&encoder_boot>, <&encoder_rpc>;
+> +	status = "okay";
+> +};
+> +
+>  &iomuxc {
+>  	pinctrl_fec1: fec1grp {
+>  		fsl,pins = <
+> diff --git a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
+> index dbec7c106e0b..a79ae33cbad2 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
+> @@ -46,6 +46,9 @@ aliases {
+>  		serial1 = &lpuart1;
+>  		serial2 = &lpuart2;
+>  		serial3 = &lpuart3;
+> +		vpu_core0 = &vpu_core0;
+> +		vpu_core1 = &vpu_core1;
+> +		vpu_core2 = &vpu_core2;
+>  	};
+>  
+>  	cpus {
+> @@ -162,10 +165,30 @@ reserved-memory {
+>  		#size-cells = <2>;
+>  		ranges;
+>  
+> +		decoder_boot: decoder-boot@84000000 {
+> +			reg = <0 0x84000000 0 0x2000000>;
+> +			no-map;
+> +		};
+> +
+> +		encoder_boot: encoder-boot@86000000 {
+> +			reg = <0 0x86000000 0 0x200000>;
+> +			no-map;
+> +		};
+> +
+> +		decoder_rpc: decoder-rpc@92000000 {
+> +			reg = <0 0x92000000 0 0x100000>;
+> +			no-map;
+> +		};
+> +
+>  		dsp_reserved: dsp@92400000 {
+>  			reg = <0 0x92400000 0 0x2000000>;
+>  			no-map;
+>  		};
+> +
+> +		encoder_rpc: encoder-rpc@94400000 {
+> +			reg = <0 0x94400000 0 0x700000>;
+> +			no-map;
+> +		};
+>  	};
+>  
+>  	pmu {
+> @@ -287,6 +310,7 @@ map0 {
+>  
+>  	/* sorted in register address */
+>  	#include "imx8-ss-img.dtsi"
+> +	#include "imx8-ss-vpu.dtsi"
+>  	#include "imx8-ss-adma.dtsi"
+>  	#include "imx8-ss-conn.dtsi"
+>  	#include "imx8-ss-ddr.dtsi"
+> -- 
+> 2.33.0
+> 

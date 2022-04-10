@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E2BD4FADEC
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 14:45:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 264A74FADED
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 14:47:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242691AbiDJMrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 08:47:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43482 "EHLO
+        id S242759AbiDJMtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 08:49:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbiDJMrN (ORCPT
+        with ESMTP id S229677AbiDJMtP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 08:47:13 -0400
+        Sun, 10 Apr 2022 08:49:15 -0400
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0B25EBFE
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 05:45:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD2663503
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 05:47:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 259E9CE0ED3
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 12:45:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0769BC385A1;
-        Sun, 10 Apr 2022 12:44:58 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2F7AECE0ED3
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 12:47:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30C06C385A1;
+        Sun, 10 Apr 2022 12:47:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649594699;
-        bh=uDDfnG5bAhcDP2q9ZjMVVdqN4Dtm4VK3H76v0t8Ytp8=;
+        s=korg; t=1649594821;
+        bh=dYMhQEzpgHnWUUNH0hPRezY0fA5jNru+ZMP67xw1L00=;
         h=Date:From:To:Cc:Subject:From;
-        b=btw7XrB3E1IXrdgiLSmwpclxzCWD3qQGdfxRQqaO/jcEEWxcM5FNthQlVoZ830h9K
-         1OCQdYVi3GZe4DNnUGJ116lD35pfWNIAqi88YElovsw/LT8yG7rU70wce7ar+xiiyQ
-         rTJdKZzNeB4yqOHMNz+HVKjTuA7emEjgZ7eyYy4Y=
-Date:   Sun, 10 Apr 2022 14:44:56 +0200
+        b=dEfF+UWCpTHhBJWPSuimRamdiovi0mi7pC4pLcSsfqqIWIxTbxJ4dh8NbwKrX6a9+
+         6mlguTg+8SxzspANIK5Dzuv+CFaegrnc9EZxz31NR26aweykiZdzguMK5/2XpSNMRA
+         MAiDGtG+hXAumOXVATLltHQHoxvxq5IqcYAmmjAo=
+Date:   Sun, 10 Apr 2022 14:46:58 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Saravana Kannan <saravanak@google.com>
-Subject: [GIT PULL] Driver core changes for 5.18-rc2
-Message-ID: <YlLRSO25cPZ7cLZR@kroah.com>
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+Subject: [GIT PULL] Staging driver fix for 5.18-rc2
+Message-ID: <YlLRwmx7f+fdiDuu@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -57,42 +56,24 @@ The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git tags/driver-core-5.18-rc2
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git tags/staging-5.18-rc2
 
-for you to fetch changes up to cdb4f26a63c391317e335e6e683a614358e70aeb:
+for you to fetch changes up to 20314bacd2f9b1b8fc10895417e6db0dc85f8248:
 
-  kobject: kobj_type: remove default_attrs (2022-04-05 15:39:19 +0200)
+  staging: r8188eu: Fix PPPoE tag insertion on little endian systems (2022-04-04 16:35:20 +0200)
 
 ----------------------------------------------------------------
-Driver core changes for 5.18-rc2
+Staging driver fix for 5.18-rc2
 
-Here are 2 small driver core changes for 5.18-rc2.
-
-They are the final bits in the removal of the default_attrs field in
-struct kobj_type.  I had to wait until after 5.18-rc1 for all of the
-changes to do this came in through different development trees, and then
-one new user snuck in.  So this series has 2 changes:
-	- removal of the default_attrs field in the powerpc/pseries/vas
-	  code.  Change has been acked by the PPC maintainers to come
-	  through this tree
-	- removal of default_attrs from struct kobj_type now that all
-	  in-kernel users are removed.  This cleans up the kobject code
-	  a little bit and removes some duplicated functionality that
-	  confused people (now there is only one way to do default
-	  groups.)
-
-All of these have been in linux-next for all of this week with no
-reported problems.
+Here is a single staging driver fix for 5.18-rc2 that resolves an endian
+issue for the r8188eu driver.  It has been in linux-next all this week
+with no reported problems.
 
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 ----------------------------------------------------------------
-Greg Kroah-Hartman (2):
-      powerpc/pseries/vas: use default_groups in kobj_type
-      kobject: kobj_type: remove default_attrs
+Guenter Roeck (1):
+      staging: r8188eu: Fix PPPoE tag insertion on little endian systems
 
- arch/powerpc/platforms/pseries/vas-sysfs.c |  6 ++++--
- fs/sysfs/file.c                            | 13 ------------
- include/linux/kobject.h                    |  1 -
- lib/kobject.c                              | 32 ------------------------------
- 4 files changed, 4 insertions(+), 48 deletions(-)
+ drivers/staging/r8188eu/core/rtw_br_ext.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)

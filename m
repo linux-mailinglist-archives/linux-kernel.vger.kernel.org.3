@@ -2,186 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD074FAC92
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 09:33:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA6C04FAC96
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 09:42:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234271AbiDJHfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 03:35:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60654 "EHLO
+        id S234370AbiDJHoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 03:44:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234164AbiDJHfl (ORCPT
+        with ESMTP id S231268AbiDJHo3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 03:35:41 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4ADB546B2;
-        Sun, 10 Apr 2022 00:33:31 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id j9so13494425lfe.9;
-        Sun, 10 Apr 2022 00:33:31 -0700 (PDT)
+        Sun, 10 Apr 2022 03:44:29 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A762F0
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 00:42:18 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id y6so11436106plg.2
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 00:42:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ox3tf6Vdl+MQsr77fGjpkrwS1r+0QmB/6mtEgP5kOo8=;
-        b=Bz0LpOefLI1lEojOFoqUlsAMdkco/5HPV+AeTU8rHp3rFzg2cMD4iJ00Rm8TxmsIxZ
-         sQ1/5o80CAfxhQMQ92Uv0ZIWBiDcfEftMM9yT+G9p3ptL5HUn7yIbqeqVVjgGwneCRJ0
-         5nn0YNGTFNK9A4MaqZXdlfeteZadEXkSG7YgMXeAVw5bdHl0+NfShg2FVksEaH0QLaYb
-         9VAbdRSL7/217gvvfj/DFOdJ8jMwie1OVmRuDZqJJDWz5D7zB0Dzfjr74dQ3e44hi3QB
-         BRxQHStxTpWRqYaHaupRGJewHhsSVcra/7/KN/DzesBRXa5L4KyhCxzOcISyXRon0ihN
-         DUJw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cSXw+XVYOoX2G7IopQ/sIWz/YQYFoZXQ3ZmEBf6FWSM=;
+        b=HpxHKRU2aoHfoFqFL83nSo0hUqwoFOEviIl5QHGVndY2acZcZC1lvJiuQkznBuSY6y
+         R2c1aZV7JW3jZB4kmcRDqXiJGkYhHb2wTFvltgURNixUpkLQ6wF701ibEmM118PD+w6i
+         EEcMjqFqkGLTRDqEL3X7eATLmFbiy9rZE0UK2IslN50mYTzAcz2eyjcVn6L6GQqub96N
+         VIg4wL+2KLzlMFJNLhTl6tVsoICvejpW8/QeA88BpqNLPbq5x6epmOITXgwUS4r2DlNx
+         3c2byneqiiiDt+MYO7p6twH9+3Ghz2TN4EvwTDWh3JQX4QFhfYtqVvOWJGLgcbLcJ+Qi
+         wzNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ox3tf6Vdl+MQsr77fGjpkrwS1r+0QmB/6mtEgP5kOo8=;
-        b=NRdY90ZjGixBHQtMO5XpT/QfQuNS78Xys/7jTp5UpLNogALpPq02+35Q9rB8YQTLMF
-         wDmI+v9TNkOiT+bckx3W4DGDvUVggPG8S7Gl4UL4+RkP2twrmYDSfPAm8KiJtI9/M+Eh
-         2drTeV5aiicBXXFCVtbqIcX4ejLZyUADqmv8h4raUQRWWxjuBzZOLmQYytm6Z3hNhhF2
-         7xgOe183imFJi62OuwF7LSB4JmomMpgCQNyLPBeTAB+H4dnw+HtD7rcZ0z7J0V65nnTT
-         xoJiHQrErIMfGKTpfl2HFBG3x1QaT+ay7da4g64rDa0HGrlreS3XGVOfStsPyicVrFLY
-         j+Yg==
-X-Gm-Message-State: AOAM5307ypVZUAMf18X3NpLPiXAyVHAYcNRUGVRd16vheMPXr3HaL65c
-        3OX4NsuSBpFqNkxsRTUyf6wzkbulbG4XN3bX5g==
-X-Google-Smtp-Source: ABdhPJxMe5Lm1RdB41pICYNqF8fraGS6Hg0euDwsM1rxKXmiuFYkQ8RgSAxFld06VADpygjbCv6naNQgqZecQN5dzrs=
-X-Received: by 2002:a05:6512:3b2c:b0:44a:35fd:994c with SMTP id
- f44-20020a0565123b2c00b0044a35fd994cmr17605988lfv.473.1649576009787; Sun, 10
- Apr 2022 00:33:29 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cSXw+XVYOoX2G7IopQ/sIWz/YQYFoZXQ3ZmEBf6FWSM=;
+        b=BtzhrTB1QBKsP0G4BX0PZlBy8EXtH82Kp+ngOTlBnof4l3hxxmuS6sGjl5te2/WV9W
+         0q953QA2CGCjEZLN/9S2AC8vzLqfA4vQxbQe3gRvx+txyFyoSlE0z56UyKRX9hzfH74A
+         03FGmGQfYlEa5V0LRw5Oz6k8wLHnD9aWDxssZAWYRj/Izk793yBL69uAec8GBrJLhX0h
+         jCjskfyqxfZAu8vzCKv+RyFO5JD+44DtGbPzw/pClH1e2hh8Sur/3jn+uHE5rGjEFd5C
+         McvmC05UAJlZsonb57KvNVMPSU3+nHyceJEx5vK4wLlzvvlnC8xoHUoc4MSBmCtSSZvU
+         n6GQ==
+X-Gm-Message-State: AOAM533Taevp9KqWNdb8Bw4JyuIVn9YBBPQYsCsRhFHQzhWoB/xI4CxO
+        ElZmInRF15FzWsWVfFEIeroRW3B1tOE=
+X-Google-Smtp-Source: ABdhPJz1R7lcKspCAXdSnT/AtJp8Obuzx7gzxJj0iY67kpevyLxwvwEzljeNPVcvLWpn2/znIyjXlg==
+X-Received: by 2002:a17:902:a710:b0:156:5650:f94a with SMTP id w16-20020a170902a71000b001565650f94amr26471202plq.86.1649576538467;
+        Sun, 10 Apr 2022 00:42:18 -0700 (PDT)
+Received: from hyeyoo ([114.29.24.243])
+        by smtp.gmail.com with ESMTPSA id z10-20020a17090a8b8a00b001ca7bafba51sm15750166pjn.0.2022.04.10.00.42.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Apr 2022 00:42:17 -0700 (PDT)
+Date:   Sun, 10 Apr 2022 16:42:08 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Jiyoup Kim <lakroforce@gmail.com>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Ohhoon Kwon <ohkwon1043@gmail.com>,
+        JaeSang Yoo <jsyoo5b@gmail.com>,
+        Wonhyuk Yang <vvghjk1234@gmail.com>,
+        Donghyeok Kim <dthex5d@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/slub: remove duplicate flag in allocate_slab()
+Message-ID: <YlKKUGWta0XayfMb@hyeyoo>
+References: <20220409150538.1264-1-lakroforce@gmail.com>
 MIME-Version: 1.0
-References: <20220303083141.8742-1-warp5tw@gmail.com> <20220303083141.8742-10-warp5tw@gmail.com>
- <YiCaSSbbszm3qYIQ@smile.fi.intel.com> <CAHb3i=sStqdSpLKtF_UGmTsOssR_swssTd3pv6c2-z_kiUPTTA@mail.gmail.com>
- <YiDNDsPWKyaIUlQR@smile.fi.intel.com> <CAKKbWA5FyCKTjEUw8rqtkoL7aw6f7Fa_QzcAkgaRnnUMTe0SKg@mail.gmail.com>
- <YkvsB27Oj0kSmJRG@smile.fi.intel.com>
-In-Reply-To: <YkvsB27Oj0kSmJRG@smile.fi.intel.com>
-From:   Avi Fishman <avifishman70@gmail.com>
-Date:   Sun, 10 Apr 2022 10:33:18 +0300
-Message-ID: <CAKKbWA5aQeQTtM06NdNvg0=D5ThcghW5rVaM__0c1kopftqX+w@mail.gmail.com>
-Subject: Re: [PATCH v3 09/11] i2c: npcm: Handle spurious interrupts
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Tali Perry <tali.perry1@gmail.com>,
-        Tyrone Ting <warp5tw@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        yangyicong@hisilicon.com, semen.protsenko@linaro.org,
-        Wolfram Sang <wsa@kernel.org>, jie.deng@intel.com,
-        sven@svenpeter.dev, bence98@sch.bme.hu,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, olof@lixom.net,
-        Tali Perry <tali.perry@nuvoton.com>,
-        Avi Fishman <Avi.Fishman@nuvoton.com>,
-        Tomer Maimon <tomer.maimon@nuvoton.com>, KWLIU@nuvoton.com,
-        JJLIU0@nuvoton.com, kfting@nuvoton.com,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220409150538.1264-1-lakroforce@gmail.com>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 10:13 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Mon, Apr 04, 2022 at 08:03:44PM +0300, Avi Fishman wrote:
-> > On Thu, Mar 3, 2022 at 4:14 PM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-> > > On Thu, Mar 03, 2022 at 02:48:20PM +0200, Tali Perry wrote:
-> > > > > On Thu, Mar 3, 2022 at 12:37 PM Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> > > > > > On Thu, Mar 03, 2022 at 04:31:39PM +0800, Tyrone Ting wrote:
-> > > > > > > From: Tali Perry <tali.perry1@gmail.com>
-> > > > > > >
-> > > > > > > In order to better handle spurious interrupts:
-> > > > > > > 1. Disable incoming interrupts in master only mode.
-> > > > > > > 2. Clear end of busy (EOB) after every interrupt.
-> > > > > > > 3. Return correct status during interrupt.
-> > > > > >
-> > > > > > This is bad commit message, it doesn't explain "why" you are doing these.
-> > >
-> > > ...
-> > >
-> > > > BMC users connect a huge tree of i2c devices and muxes.
-> > > > This tree suffers from spikes, noise and double clocks.
-> > > > All these may cause spurious interrupts to the BMC.
->
-> (1)
->
-> > > > If the driver gets an IRQ which was not expected and was not handled
-> > > > by the IRQ handler,
-> > > > there is nothing left to do but to clear the interrupt and move on.
-> > >
-> > > Yes, the problem is what "move on" means in your case.
-> > > If you get a spurious interrupts there are possibilities what's wrong:
-> > > 1) HW bug(s)
-> > > 2) FW bug(s)
-> > > 3) Missed IRQ mask in the driver
-> > > 4) Improper IRQ mask in the driver
-> > >
-> > > The below approach seems incorrect to me.
-> >
-> > Andy, What about this explanation:
-> > On rare cases the i2c gets a spurious interrupt which means that we
-> > enter an interrupt but in
-> > the interrupt handler we don't find any status bit that points to the
-> > reason we got this interrupt.
-> > This may be a rare case of HW issue that is still under investigation
+On Sun, Apr 10, 2022 at 12:05:37AM +0900, Jiyoup Kim wrote:
+> In allocate_slab(), __GFP_NOFAIL flag is removed twice when trying
+> higher-order allocation. Remove it.
+> 
+> Signed-off-by: Jiyoup Kim <lakroforce@gmail.com>
+> ---
+>  mm/slub.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/slub.c b/mm/slub.c
+> index 74d92aa4a3a2..a0e605ab3036 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -1939,7 +1939,7 @@ static struct slab *allocate_slab(struct kmem_cache *s, gfp_t flags, int node)
+>  	 */
+>  	alloc_gfp = (flags | __GFP_NOWARN | __GFP_NORETRY) & ~__GFP_NOFAIL;
+>  	if ((alloc_gfp & __GFP_DIRECT_RECLAIM) && oo_order(oo) > oo_order(s->min))
+> -		alloc_gfp = (alloc_gfp | __GFP_NOMEMALLOC) & ~(__GFP_RECLAIM|__GFP_NOFAIL);
+> +		alloc_gfp = (alloc_gfp | __GFP_NOMEMALLOC) & ~__GFP_RECLAIM;
+>  
+>  	slab = alloc_slab_page(alloc_gfp, node, oo);
+>  	if (unlikely(!slab)) {
 
-About 1 to 100,000 transactions
+Looks good to me.
 
-> > In order to overcome this we are doing the following:
-> > 1. Disable incoming interrupts in master mode only when slave mode is
-> > not enabled.
-> > 2. Clear end of busy (EOB) after every interrupt.
-> > 3. Clear other status bits (just in case since we found them cleared)
-> > 4. Return correct status during the interrupt that will finish the transaction.
-> > On next xmit transaction if the bus is still busy the master will
-> > issue a recovery process before issuing the new transaction.
->
-> This sounds better, thanks.
->
-> One thing to clarify, the (1) states that the HW "issue" is known and becomes a
-> PCB level one, i.e. noisy environment that has not been properly shielded.
-> So, if it is known, please put the reason in the commit message.
->
+Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 
-The HW issue is not known yet, we see it on few platforms and in other
-platforms we don't, so the first assumption was this.
-So eventually we don't want to claim this without proving it.
+Thanks!
 
-> Also would be good to see numbers of "rare". Is it 0.1%?
-
-I added above the known statistics.
-
->
-> > > > If the transaction failed, driver has a recovery function.
-> > > > After that, user may retry to send the message.
-> > > >
-> > > > Indeed the commit message doesn't explain all this.
-> > > > We will fix and add to the next patchset.
-> > > >
-> > > > > > > +     /*
-> > > > > > > +      * if irq is not one of the above, make sure EOB is disabled and all
-> > > > > > > +      * status bits are cleared.
-> > > > > >
-> > > > > > This does not explain why you hide the spurious interrupt.
-> > > > > >
-> > > > > > > +      */
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
-
+> -- 
+> 2.25.1
+> 
+> 
 
 -- 
-Regards,
-Avi
+Thanks,
+Hyeonggon

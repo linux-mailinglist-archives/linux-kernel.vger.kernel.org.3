@@ -2,131 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD284FAE65
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 17:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A19024FAE69
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 17:17:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240375AbiDJPR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 11:17:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56728 "EHLO
+        id S241765AbiDJPT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 11:19:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232464AbiDJPRY (ORCPT
+        with ESMTP id S235030AbiDJPT2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 11:17:24 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A9F29806
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 08:15:13 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-d6ca46da48so14675118fac.12
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 08:15:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AykdxVkfek06fjXsLB9I2IRHzCOJ6nIrMbEtU2HTEq0=;
-        b=A/nT1N5myhjcL/iH9Bw8eSo2yqIZp8xF1pBJy3wtyHqPNG0WBG5cVpRDBWUYwMadtc
-         b6qXuao0UknR6L+QodumzaDlSmugfdvmQP65aTADnopUAQXHTAOPV0n5bGv3V96CxbbR
-         V7P3W3C0wdGHBaxOMjM5uS1J1SN5DIw0YcSgR7XqrtddyoBNzZgcTQBQvdE/DQxMLYn/
-         up01o53v/D+e1NyNX24m3Ff3TVZxISLbThUtbw7CnWvIPL36ujBBVMqKm9CwPuNnMJbN
-         SzW9907FEjhnSyXOfFmBNbSiD1OxjakTAJsNxqr6cE6JXGrwYQdSRcegbFqdhUXYJdyE
-         YGJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AykdxVkfek06fjXsLB9I2IRHzCOJ6nIrMbEtU2HTEq0=;
-        b=MxS283RVvLmLrxZxzfpcnIvRbHSI2+QKw8wY7BlIxwT2xQ//v+ikpwaaU8Wz3MZuVI
-         LMb9IfRWO8Ng6zUCYfz7l3pl11julgZcMgf+WB3muhrBD9/gdQm9yJ3nxPNMNFGbLEyg
-         6RhpjsbLo6QUQtHvt/bVy4pTXgowDK6mecKdsIAskhQML//2Yv2h8lWUgI2uqWod3GOm
-         YeGJYZmEfIvbgbbRESsiI9Rm87C1ggHIbB236qvsy1rLeQ5wzkrdvmxXMvOGidiQS5ig
-         FKICh5xD02vS6ZlWBzAFanFGIzJgncCNP88FPPIjU6Hdzp6LS5NDYqiqg4D64xeOP5sD
-         xLSw==
-X-Gm-Message-State: AOAM532ztaSvOEVM4/S5I6XUIELPxeRAW6t746h/wCCHBb5TVrfgTy9Y
-        oi6MN6NDgu2nE0C979Kul9J/3+vJvBhL2Sq1pwfgqA==
-X-Google-Smtp-Source: ABdhPJw4JlX7XrQmjaKV9AkjsvEklgyp/+SYdmSxL3OSV1KqjDA84a+/qb1G0521cTO8XAEfbAt1IhBKhpUfEDvvMME=
-X-Received: by 2002:a05:6870:b021:b0:e1:dc43:9000 with SMTP id
- y33-20020a056870b02100b000e1dc439000mr12076705oae.172.1649603713127; Sun, 10
- Apr 2022 08:15:13 -0700 (PDT)
+        Sun, 10 Apr 2022 11:19:28 -0400
+Received: from m12-14.163.com (m12-14.163.com [220.181.12.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 850B329807
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 08:17:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=f+gzV
+        gflGQ2MmmgekNynfu/UnVwmEIcJrCmr9PyxEMA=; b=VWcuUe1e3z6hC68Dw861G
+        wqb5Kj10+eX8IPVjjMMnR+GKT/+TScvkAncYTR2jBGAc690sYdZtUaPnBCcGT8x4
+        g9ohN5K55ERreTsbdDt7wVl1qYVXSenov0ZrZvMqZ0D8cym3hPTI6ymGqzrSW6mI
+        oS/X0ItE7e/TfqEGPETAsc=
+Received: from localhost (unknown [61.141.73.6])
+        by smtp10 (Coremail) with SMTP id DsCowACX5mHu9FJigrl9Ag--.49087S2;
+        Sun, 10 Apr 2022 23:17:03 +0800 (CST)
+From:   Junwen Wu <wudaemon@163.com>
+To:     arnd@arndb.de, gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, wujunwen <wudaemon@163.com>
+Subject: [PATCH RESEND v2] char: misc:use DEFINE_PROC_SHOW_ATTRIBUTE micro to simplify misc proc_fops
+Date:   Sun, 10 Apr 2022 15:16:27 +0000
+Message-Id: <20220410151628.288568-1-wudaemon@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220406142606.18464-1-eric.lin@sifive.com> <20220406142606.18464-2-eric.lin@sifive.com>
- <YlGgro3TupbOEnJC@kernel.org>
-In-Reply-To: <YlGgro3TupbOEnJC@kernel.org>
-From:   Eric Lin <eric.lin@sifive.com>
-Date:   Sun, 10 Apr 2022 23:15:01 +0800
-Message-ID: <CAPqJEFrh71h-UZF1=TQKWTrsL84R=nzoBTieAw6rtoyBbu7kRQ@mail.gmail.com>
-Subject: Re: [PATCH 1/1] perf jitdump: Add riscv64 support.
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        jolsa@kernel.org, Namhyung Kim <namhyung@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
-        iii@linux.ibm.com, linux-perf-users@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Greentime Hu <greentime.hu@sifive.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DsCowACX5mHu9FJigrl9Ag--.49087S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxCr4UuFWDZFWrGw1xJF47urg_yoW5WF15pF
+        4fZ347JF4UJF4xWrW2yF4DuF9IqFn7X34q9rnrG3ySvF1DZr1jgFnrAa47ZFy5G3ykWrnx
+        XFs8Kry3Cw1jy3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0z_xhLxUUUUU=
+X-Originating-IP: [61.141.73.6]
+X-CM-SenderInfo: 5zxgtvxprqqiywtou0bp/1tbisQ-ebVXlpE6+AwAAsq
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnaldo,
+From: wujunwen <wudaemon@163.com>
 
-On Sat, Apr 9, 2022 at 11:05 PM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Wed, Apr 06, 2022 at 10:26:06PM +0800, Eric Lin escreveu:
-> > Signed-off-by: Eric Lin <eric.lin@sifive.com>
->
-> Can you plese provide some series of commands demonstrating the usage of
-> this functionality on riscv?
->
-> A dump, for instance.
->
-> - Arnaldo
->
+DEFINE_PROC_SHOW_ATTRIBUTE is used to simply seq_file flow ,so
+we can use it to simplify misc proc_fops.
 
-OK, I got it. I'll show the series of commands in the commit message
-in v2 patch.
-Thanks.
+Signed-off-by: wujunwen <wudaemon@163.com>
+---
+V1 -> V2: Fix compile error with no "CONFIG_PROC_FS"
 
-> > ---
-> >  tools/perf/arch/riscv/Makefile | 1 +
-> >  tools/perf/util/genelf.h       | 3 +++
-> >  2 files changed, 4 insertions(+)
-> >
-> > diff --git a/tools/perf/arch/riscv/Makefile b/tools/perf/arch/riscv/Makefile
-> > index 1aa9dd772489..a8d25d005207 100644
-> > --- a/tools/perf/arch/riscv/Makefile
-> > +++ b/tools/perf/arch/riscv/Makefile
-> > @@ -2,3 +2,4 @@ ifndef NO_DWARF
-> >  PERF_HAVE_DWARF_REGS := 1
-> >  endif
-> >  PERF_HAVE_ARCH_REGS_QUERY_REGISTER_OFFSET := 1
-> > +PERF_HAVE_JITDUMP := 1
-> > diff --git a/tools/perf/util/genelf.h b/tools/perf/util/genelf.h
-> > index 3db3293213a9..ae138afe6c56 100644
-> > --- a/tools/perf/util/genelf.h
-> > +++ b/tools/perf/util/genelf.h
-> > @@ -38,6 +38,9 @@ int jit_add_debug_info(Elf *e, uint64_t code_addr, void *debug, int nr_debug_ent
-> >  #elif defined(__s390x__)
-> >  #define GEN_ELF_ARCH EM_S390
-> >  #define GEN_ELF_CLASS        ELFCLASS64
-> > +#elif defined(__riscv) && __riscv_xlen == 64
-> > +#define GEN_ELF_ARCH EM_RISCV
-> > +#define GEN_ELF_CLASS        ELFCLASS64
-> >  #else
-> >  #error "unsupported architecture"
-> >  #endif
-> > --
-> > 2.35.1
->
-> --
->
-> - Arnaldo
+ drivers/char/misc.c | 41 ++++++++++++++---------------------------
+ 1 file changed, 14 insertions(+), 27 deletions(-)
+
+diff --git a/drivers/char/misc.c b/drivers/char/misc.c
+index ca5141ed5ef3..076b7f08aa7a 100644
+--- a/drivers/char/misc.c
++++ b/drivers/char/misc.c
+@@ -64,40 +64,23 @@ static DEFINE_MUTEX(misc_mtx);
+ static DECLARE_BITMAP(misc_minors, DYNAMIC_MINORS);
+ 
+ #ifdef CONFIG_PROC_FS
+-static void *misc_seq_start(struct seq_file *seq, loff_t *pos)
+-{
+-	mutex_lock(&misc_mtx);
+-	return seq_list_start(&misc_list, *pos);
+-}
+ 
+-static void *misc_seq_next(struct seq_file *seq, void *v, loff_t *pos)
++static int misc_show(struct seq_file *seq, void *v)
+ {
+-	return seq_list_next(v, &misc_list, pos);
+-}
++	const struct miscdevice *p;
+ 
+-static void misc_seq_stop(struct seq_file *seq, void *v)
+-{
++	mutex_lock(&misc_mtx);
++	list_for_each_entry(p, &misc_list, list) {
++		seq_printf(seq, "%3i %s\n", p->minor, p->name ? p->name : "");
++	}
+ 	mutex_unlock(&misc_mtx);
+-}
+-
+-static int misc_seq_show(struct seq_file *seq, void *v)
+-{
+-	const struct miscdevice *p = list_entry(v, struct miscdevice, list);
+-
+-	seq_printf(seq, "%3i %s\n", p->minor, p->name ? p->name : "");
+ 	return 0;
+ }
+ 
+-
+-static const struct seq_operations misc_seq_ops = {
+-	.start = misc_seq_start,
+-	.next  = misc_seq_next,
+-	.stop  = misc_seq_stop,
+-	.show  = misc_seq_show,
+-};
++DEFINE_PROC_SHOW_ATTRIBUTE(misc);
+ #endif
+ 
+-static int misc_open(struct inode *inode, struct file *file)
++static int misc_fops_open(struct inode *inode, struct file *file)
+ {
+ 	int minor = iminor(inode);
+ 	struct miscdevice *c;
+@@ -148,7 +131,7 @@ static struct class *misc_class;
+ 
+ static const struct file_operations misc_fops = {
+ 	.owner		= THIS_MODULE,
+-	.open		= misc_open,
++	.open		= misc_fops_open,
+ 	.llseek		= noop_llseek,
+ };
+ 
+@@ -266,9 +249,11 @@ static char *misc_devnode(struct device *dev, umode_t *mode)
+ static int __init misc_init(void)
+ {
+ 	int err;
++#ifdef CONFIG_PROC_FS
+ 	struct proc_dir_entry *ret;
+ 
+-	ret = proc_create_seq("misc", 0, NULL, &misc_seq_ops);
++	ret = proc_create("misc", 0, NULL, &misc_proc_ops);
++#endif
+ 	misc_class = class_create(THIS_MODULE, "misc");
+ 	err = PTR_ERR(misc_class);
+ 	if (IS_ERR(misc_class))
+@@ -284,8 +269,10 @@ static int __init misc_init(void)
+ 	pr_err("unable to get major %d for misc devices\n", MISC_MAJOR);
+ 	class_destroy(misc_class);
+ fail_remove:
++#ifdef CONFIG_PROC_FS
+ 	if (ret)
+ 		remove_proc_entry("misc", NULL);
++#endif
+ 	return err;
+ }
+ subsys_initcall(misc_init);
+-- 
+2.25.1
+

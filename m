@@ -2,89 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 780E64FAD08
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 11:16:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D1B4FAD0A
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 11:16:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236100AbiDJJQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 05:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40936 "EHLO
+        id S236186AbiDJJTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 05:19:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236120AbiDJJQT (ORCPT
+        with ESMTP id S236116AbiDJJTD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 05:16:19 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282795E17B
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 02:14:07 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id s14-20020a17090a880e00b001caaf6d3dd1so15647370pjn.3
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 02:14:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=WDPfrzxoEqoQc1/eGWlrbqzJhsvrBmHHWTvNKjsYkJM=;
-        b=QkEh1cbcPct4JczcOnXh+aKqtrHGkH6NNm7c3AONE1RhylRzyBpeOLzvd7XWaCm6XH
-         0w+5Wx7u/vA05q6JUyqN7PQhtlbPVEysyU/yzh0BQULuiFdn8agGYwB+505VhLt4peSN
-         4TQqL0CwpNkLD+pXkok19uXrGYOz1aLuv2SoKOxiG7XXzfYrJOFdAFlZPt91JtvjVucl
-         8meujpcl/phahG9kPygAXIHfghNcXE4SYZgupB24Crh1GdY5Wp3W4DUMacPMraqYwDHG
-         Ihs0My6BDesqs2JDr04owaQwiBUL40bYC6Zr0GgT47YsCjoM5Q8dxiknldQpzfe+gFOU
-         BG6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=WDPfrzxoEqoQc1/eGWlrbqzJhsvrBmHHWTvNKjsYkJM=;
-        b=Jy1+XMGi48StMbCh5kbkW2JcdPfW5RlCGsU3na9K+7dtFskwvBAklJUhNkZOI6WzQn
-         U1HsnJ+9i6XahC8GQeVYtgeYL33DSIoReES7NXb+JCtq5rWKGlrV+ECK01upBacB2+0J
-         uUj33LVCCrHDog8wqzJg2mlvD4B6yM5KqvtEl5BY08AaHIWQJyy9OfR8jFJOhCaC+T61
-         YJgA6cQW6RgdG51MdiReAoFI0lCn7+knzKP+Vsnoio083CsQR8gxI9SyC61X77EPWXJX
-         sSXlBgQV/sZC6nlvjiSf2QvhzejTyTGbu7chDOHuHVU2lMk5gAUd19QhjE2xwkRexXZJ
-         N2BQ==
-X-Gm-Message-State: AOAM531gpOXdoR6f/N+PgpnRe9NtFLHTL8DnN0DWhpVkq3x1yGrZwfa7
-        Sxpr4YcdusNg9OqT7dfvUWyTJidGzMrjLrXOxaKQzBEyzzG6ar8=
-X-Google-Smtp-Source: ABdhPJxlVIb0T0CZqME8DQnXouztNp0D0cA7yEivwZdQ+Mrtmiv3y7hyXAvfEkrS8G4zaFx+aG1mH3vaE5zcmg+cO7w=
-X-Received: by 2002:a17:90b:915:b0:1ca:b584:8241 with SMTP id
- bo21-20020a17090b091500b001cab5848241mr30853251pjb.46.1649582046260; Sun, 10
- Apr 2022 02:14:06 -0700 (PDT)
+        Sun, 10 Apr 2022 05:19:03 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4837E644E7;
+        Sun, 10 Apr 2022 02:16:52 -0700 (PDT)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1ndTgg-0004FQ-IP; Sun, 10 Apr 2022 11:16:50 +0200
+Message-ID: <b24daa29-ae7c-6e24-ebdc-2fe8e0576a9d@leemhuis.info>
+Date:   Sun, 10 Apr 2022 11:16:50 +0200
 MIME-Version: 1.0
-From:   Zheyu Ma <zheyuma97@gmail.com>
-Date:   Sun, 10 Apr 2022 17:13:55 +0800
-Message-ID: <CAMhUBjm2AdyEZ_-EgexdNDN7SvY4f89=4=FwAL+c0Mg0O+X50A@mail.gmail.com>
-Subject: [BUG] ALSA: echoaudio: warning when the driver fails to probe
-To:     perex@perex.cz, tiwai@suse.com
-Cc:     alsa-devel@alsa-project.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] PCI: PM: Quirk bridge D3 on Elo i2
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Linux PCI <linux-pci@vger.kernel.org>,
+        Stefan Gottwald <gottwald@igel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <CAJZ5v0g9cg=nJ0yr5-a_phNnJLiU74KrfsULsAEsWBKeRr7HCQ@mail.gmail.com>
+ <20220408195342.GA339430@bhelgaas>
+ <CAJZ5v0g6ahvQrCKPXTgQANiUYJNByDUvJZ8Zsp7anqeM7EBAXw@mail.gmail.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <CAJZ5v0g6ahvQrCKPXTgQANiUYJNByDUvJZ8Zsp7anqeM7EBAXw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1649582212;bf5f48ec;
+X-HE-SMSGID: 1ndTgg-0004FQ-IP
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 09.04.22 15:35, Rafael J. Wysocki wrote:
+> On Fri, Apr 8, 2022 at 9:53 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>>
+>> On Mon, Apr 04, 2022 at 04:46:14PM +0200, Rafael J. Wysocki wrote:
+>>> On Fri, Apr 1, 2022 at 1:34 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>>>> On Thu, Mar 31, 2022 at 11:57 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>>>>> On Thu, Mar 31, 2022 at 07:38:51PM +0200, Rafael J. Wysocki wrote:
+>>>>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>>>>>
+>>>>>> If one of the PCIe root ports on Elo i2 is put into D3cold and then
+>>>>>> back into D0, the downstream device becomes permanently inaccessible,
+>>>>>> so add a bridge D3 DMI quirk for that system.
+>>>>>>
+>>>>>> This was exposed by commit 14858dcc3b35 ("PCI: Use
+>>>>>> pci_update_current_state() in pci_enable_device_flags()"), but before
+>>>>>> that commit the root port in question had never been put into D3cold
+>>>>>> for real due to a mismatch between its power state retrieved from the
+>>>>>> PCI_PM_CTRL register (which was accessible even though the platform
+>>>>>> firmware indicated that the port was in D3cold) and the state of an
+>>>>>> ACPI power resource involved in its power management.
+>>>>>
+>>>>> In the bug report you suspect a firmware issue.  Any idea what that
+>>>>> might be?  It looks like a Gemini Lake Root Port, so I wouldn't think
+>>>>> it would be a hardware issue.
+>>>>
+>>>> The _ON method of the ACPI power resource associated with the root
+>>>> port doesn't work correctly.
+>>>>
+>>>>> Weird how things come in clumps.  Was just looking at Mario's patch,
+>>>>> which also has to do with bridges and D3.
+>>>>>
+>>>>> Do we need a Fixes line?  E.g.,
+>>>>>
+>>>>>   Fixes: 14858dcc3b35 ("PCI: Use pci_update_current_state() in pci_enable_device_flags()")
+>>>>
+>>>> Strictly speaking, it is not a fix for the above commit.
+>>>>
+>>>> It is a workaround for a firmware issue uncovered by it which wasn't
+>>>> visible, because power management was not used correctly on the
+>>>> affected system because of another firmware problem addressed by
+>>>> 14858dcc3b35.  It wouldn't have worked anyway had it been attempted
+>>>> AFAICS.
+>>>>
+>>>> I was thinking about CCing this change to -stable instead.
+>>
+>> Makes sense, thanks.
+>>
+>>>>>> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215715
+>>>>>> Reported-by: Stefan Gottwald <gottwald@igel.com>
+>>>>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>>>>> ---
+>>>>>>  drivers/pci/pci.c |   10 ++++++++++
+>>>>>>  1 file changed, 10 insertions(+)
+>>>>>>
+>>>>>> Index: linux-pm/drivers/pci/pci.c
+>>>>>> ===================================================================
+>>>>>> --- linux-pm.orig/drivers/pci/pci.c
+>>>>>> +++ linux-pm/drivers/pci/pci.c
+>>>>>> @@ -2920,6 +2920,16 @@ static const struct dmi_system_id bridge
+>>>>>>                       DMI_MATCH(DMI_BOARD_VENDOR, "Gigabyte Technology Co., Ltd."),
+>>>>>>                       DMI_MATCH(DMI_BOARD_NAME, "X299 DESIGNARE EX-CF"),
+>>>>>>               },
+>>>>>> +             /*
+>>>>>> +              * Downstream device is not accessible after putting a root port
+>>>>>> +              * into D3cold and back into D0 on Elo i2.
+>>>>>> +              */
+>>>>>> +             .ident = "Elo i2",
+>>>>>> +             .matches = {
+>>>>>> +                     DMI_MATCH(DMI_SYS_VENDOR, "Elo Touch Solutions"),
+>>>>>> +                     DMI_MATCH(DMI_PRODUCT_NAME, "Elo i2"),
+>>>>>> +                     DMI_MATCH(DMI_PRODUCT_VERSION, "RevB"),
+>>>>>> +             },
+>>>>>
+>>>>> Is this bridge_d3_blacklist[] similar to the PCI_DEV_FLAGS_NO_D3 bit?
+>>>>
+>>>> Not really.  The former applies to the entire platform and not to an
+>>>> individual device.
+>>>>
+>>>>> Could they be folded together?  We have a lot of bits that seem
+>>>>> similar but maybe not exactly the same (dev->bridge_d3,
+>>>>> dev->no_d3cold, dev->d3cold_allowed, dev->runtime_d3cold,
+>>>>> PCI_DEV_FLAGS_NO_D3, pci_bridge_d3_force, etc.)  Ugh.
+>>>>
+>>>> Yes, I agree that this needs to be cleaned up.
+>>>>
+>>>>> bridge_d3_blacklist[] itself was added by 85b0cae89d52 ("PCI:
+>>>>> Blacklist power management of Gigabyte X299 DESIGNARE EX PCIe ports"),
+>>>>> which honestly looks kind of random, i.e., it doesn't seem to be
+>>>>> working around a hardware or even a firmware defect.
+>>>>>
+>>>>> Apparently the X299 issue is that 00:1c.4 is connected to a
+>>>>> Thunderbolt controller, and the BIOS keeps the Thunderbolt controller
+>>>>> powered off unless something is attached to it?  At least, 00:1c.4
+>>>>> leads to bus 05, and in the dmesg log attached to [1] shows no devices
+>>>>> on bus 05.
+>>>>>
+>>>>> It also says the platform doesn't support PCIe native hotplug, which
+>>>>> matches what Mika said about it using ACPI hotplug.  If a system is
+>>>>> using ACPI hotplug, it seems like maybe *that* should prevent us from
+>>>>> putting things in D3cold?  How can we know whether ACPI hotplug
+>>>>> depends on a certain power state?
+>>>>
+>>>> We have this check in pci_bridge_d3_possible():
+>>>>
+>>>> if (bridge->is_hotplug_bridge && !pciehp_is_native(bridge))
+>>>>             return false;
+>>>>
+>>>> but this only applies to the case when the particular bridge itself is
+>>>> a hotplug one using ACPI hotplug.
+>>>>
+>>>> If ACPI hotplug is used, it generally is unsafe to put PCIe ports into
+>>>> D3cold, because in that case it is unclear what the platform
+>>>> firmware's assumptions regarding control of the config space are.
+>>>>
+>>>> However, I'm not sure how this is related to the patch at hand.
+>>>
+>>> So I'm not sure how you want to proceed here.
+>>>
+>>> The platform is quirky, so the quirk for it will need to be added this
+>>> way or another.  The $subject patch adds it using the existing
+>>> mechanism, which is the least intrusive way.
+>>>
+>>> You seem to be thinking that the existing mechanism may not be
+>>> adequate, but I'm not sure for what reason and anyway I think that it
+>>> can be adjusted after adding the quirk.
+>>>
+>>> Please let me know what you think.
+>>
+>> I don't understand all that's going on here, but I applied it to
+>> pci/pm for v5.19, thanks!
+> Thank you!
 
-I found a bug in echoaudio.c.
-When the driver fails at the function snd_echo_create(), it should
-release resources requested before, otherwise we will get the
-following warning:
+Sorry, but this made me wonder: why v5.19? It's a regression exposed in
+v5.15, so it afaics would be good to get this in this cycle -- and also
+backported to v5.15.y, but it seem a tag to take care of that is
+missing. :-/
 
-[    3.262866] remove_proc_entry: removing non-empty directory
-'irq/21', leaking at least 'snd_indigodj'
-[    3.263577] WARNING: CPU: 3 PID: 261 at fs/proc/generic.c:717
-remove_proc_entry+0x389/0x3f0
-[    3.267098] RIP: 0010:remove_proc_entry+0x389/0x3f0
-[    3.269976] Call Trace:
-[    3.269979]  <TASK>
-[    3.269988]  unregister_irq_proc+0x14c/0x170
-[    3.269997]  irq_free_descs+0x94/0xe0
-[    3.270004]  mp_unmap_irq+0xb6/0x100
-[    3.270011]  acpi_unregister_gsi_ioapic+0x27/0x40
-[    3.270017]  acpi_pci_irq_disable+0x1d3/0x320
-[    3.270025]  pci_disable_device+0x1ad/0x380
-[    3.270034]  pcim_release+0x566/0x6d0
-[    3.270046]  devres_release_all+0x1f1/0x2c0
-[    3.270057]  really_probe+0xe0/0x920
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
 
-Regards,
-Zheyu Ma
+P.S.: As the Linux kernel's regression tracker I'm getting a lot of
+reports on my table. I can only look briefly into most of them and lack
+knowledge about most of the areas they concern. I thus unfortunately
+will sometimes get things wrong or miss something important. I hope
+that's not the case here; if you think it is, don't hesitate to tell me
+in a public reply, it's in everyone's interest to set the public record
+straight.
+
+

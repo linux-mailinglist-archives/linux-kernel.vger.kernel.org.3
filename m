@@ -2,179 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D57364FAE4E
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 16:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33A504FAE53
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 16:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239969AbiDJOw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 10:52:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34944 "EHLO
+        id S240003AbiDJO50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 10:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235811AbiDJOwz (ORCPT
+        with ESMTP id S234253AbiDJO5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 10:52:55 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6EF237FF
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 07:50:44 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id p25so5710234pfn.13
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 07:50:44 -0700 (PDT)
+        Sun, 10 Apr 2022 10:57:21 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 870AC59A64;
+        Sun, 10 Apr 2022 07:55:09 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id h14so17400767lfl.2;
+        Sun, 10 Apr 2022 07:55:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2FkD7lQO8tokeJCcV4E291TvzDxKaTjKO6gYJPs1B1A=;
-        b=FRj7DsXXoEOeqEUbYv4qF1zHwL5NJIcWQuweoQ0lcjlgHrWJlIblassRshhI4uFSbk
-         XziCWq+2kMdHt63z4dMpZJHljEndzFVXSJ/LUzp0k/xIZq5rce2Dsqw5gOmkISfEnrYp
-         Cn+d6FfwQQgl7zky0kERjeZlN6oR2ZOX8G0bw6vc38NDZTuKhoosg3sROXuBwDf3tqjc
-         C5IT1CjtDL8XRtyrYO1FhnCyh6svNGLFjoZnPqKVpMkK4jLzXolP3ETVA+VMKAUWx+ZO
-         aOIi2w6adWisWiM20q0AVyhA8wgFWigz6zV392dmkYqGp033Le7gndrt4EO5P8xp0l47
-         f/ig==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=+/mbHYHqdNArCgS9qTOTJxvVmCb8ix9XakUfpewkf2U=;
+        b=TL0E87KmTHg5SFGpsw4jCR1ZBfXW04iq4IAgRKpLHISIs4Updu89Aq8ATFkswhobSo
+         xOYLwVY4YkPWkVrlV8zduinh68pCdBqao8GqLj9wX7aIr1hgZxGAHyvOHAXPidQ4BhAr
+         KoMqCwQ8SwQhi6vbzLr4ybIIeiOmmvJxE/uIEilEVWH1YFsi2PEIZDyWsr69qXv3jHr0
+         /axxFtRtvap6JT1p6O0uRjXnHWmaoQAL4gm0uPc6VvnbpdvI1F2Ia90ZRPZdyCVKWyCd
+         sMcVbNGicHM0eU56HBZKsUGFVZSBc3HCBonQezkzNMjv4fV/6mEl0dcD9iXaBTj4NMfA
+         6XYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=2FkD7lQO8tokeJCcV4E291TvzDxKaTjKO6gYJPs1B1A=;
-        b=qeGug/YfNsnWDQqWxeoRuxz5v8rF1+CYCVDTHqMhVJ7sFmlXy9nMeoLJUVbiKet5FE
-         7IajezxeoS7g69qnSfr8lEB/oc/TFf0UsjgPs2oSibVON+OWPWpgv8dOSg6S/BlBZi2z
-         bEFC9cH+vTv2HXlwfB5OR0LNH3z9nOc9bYvhcFcWCw5DJ4W4ZScaD2BKo3IKFupwLhG7
-         XrXR/56aSMhRPlTVdOdhJgdQ+/o0mJOYvf6Ap3fKQ1NOBQUWpWTcpAwqNy6VOTuzCMHI
-         tjvolMqk/V+npLMKRljo1XrQB9FqeExGeRMakvoWhPasfuESc3jf52TJNaLQJK5A2pTW
-         Jtcw==
-X-Gm-Message-State: AOAM533UsYksBuhCiXnFg2UTMC2xjXqmYdth8fxYpqfW5LU1ipmz9cef
-        ycOKMM4Oc5viaQMmlO0vwdQ=
-X-Google-Smtp-Source: ABdhPJzWgn2nniq1EmxPayz62WRRlh0X0+GcmmQ/ytP4//4VYTgbbx5wkKnGhHA6QICCg2InLaWBwQ==
-X-Received: by 2002:a63:f34d:0:b0:399:5abe:b2e1 with SMTP id t13-20020a63f34d000000b003995abeb2e1mr23509778pgj.451.1649602243814;
-        Sun, 10 Apr 2022 07:50:43 -0700 (PDT)
-Received: from localhost.localdomain (li567-56.members.linode.com. [192.155.81.56])
-        by smtp.gmail.com with ESMTPSA id s24-20020a63af58000000b003981789eadfsm26846652pgo.21.2022.04.10.07.50.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Apr 2022 07:50:42 -0700 (PDT)
-From:   Jeff Xie <xiehuan09@gmail.com>
-To:     rostedt@goodmis.org
-Cc:     mingo@redhat.com, mhiramat@kernel.org, zanussi@kernel.org,
-        linux-kernel@vger.kernel.org, Jeff Xie <xiehuan09@gmail.com>
-Subject: [PATCH v2] tracing: Make tp_printk work on syscall tracepoints
-Date:   Sun, 10 Apr 2022 22:50:25 +0800
-Message-Id: <20220410145025.681144-1-xiehuan09@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=+/mbHYHqdNArCgS9qTOTJxvVmCb8ix9XakUfpewkf2U=;
+        b=kUJWia7puROk6u5yXTOOX5kqPMj6PV6vPVMG8k2QNGdMksCLW4ZGbSRoPnSATWQTBz
+         IycLFIzDq3iPd/T2ErcO7ZVnt6N0f48grszDddyMBEfEVNhQXKYTMxTZl2/nHXFhGNyg
+         LMGJCRH9ZityuURSmdM5BJV5mCeA4YvbyRropCpEPO5F8q3I0hH++WnPPUm7swBFgNWE
+         P8RD/7UmRyqAMyuUOyECiphYaK5h07iT7lBZmEWLW/1KDFMhdhZ1Yde+zjw9ZTy4bzgB
+         fBardjT4pKq3XYcTAnWISbvxLWsjwF8zFNPIvX9XM3OHtEtjfab4aKroxb7sd/yP4jjV
+         1swg==
+X-Gm-Message-State: AOAM5308oS1XQs9ZQId6Wq3S74VV2Zy0Bvl8QUCgqRagRD1G29yKEXw9
+        JTfSu1IND+ZWA2EF6iwwl89HkyArqw8=
+X-Google-Smtp-Source: ABdhPJxaE6Y9qAhd0NsVlCoitvjNKPLwLesH4TaOVjpQ7pOJJ09X++RuDu+00mA/9MpwR8iPhKNapg==
+X-Received: by 2002:ac2:4899:0:b0:464:f80b:a86d with SMTP id x25-20020ac24899000000b00464f80ba86dmr10593989lfc.65.1649602507670;
+        Sun, 10 Apr 2022 07:55:07 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-138-167.dynamic.spd-mgts.ru. [109.252.138.167])
+        by smtp.googlemail.com with ESMTPSA id t23-20020a2e9d17000000b0024b15c8ac65sm2236291lji.47.2022.04.10.07.55.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 10 Apr 2022 07:55:07 -0700 (PDT)
+Message-ID: <158816cb-9509-5962-11ea-e06aee991e14@gmail.com>
+Date:   Sun, 10 Apr 2022 17:55:06 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [Patch v6 2/4] memory: tegra: Add MC error logging on tegra186
+ onward
+Content-Language: en-US
+To:     Ashish Mhetre <amhetre@nvidia.com>, krzysztof.kozlowski@linaro.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     vdumpa@nvidia.com, Snikam@nvidia.com
+References: <20220406052459.10438-1-amhetre@nvidia.com>
+ <20220406052459.10438-3-amhetre@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+In-Reply-To: <20220406052459.10438-3-amhetre@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the tp_printk option has no effect on syscall tracepoint.
-When adding the kernel option parameter tp_printk, then:
+06.04.2022 08:24, Ashish Mhetre пишет:
+>  	/* clear interrupts */
+> -	mc_writel(mc, status, MC_INTSTATUS);
+> +	if (mc->soc->num_channels) {
+> +		u32 status_chan_bit;
+> +
+> +		mc_ch_writel(mc, channel, status, MC_INTSTATUS);
+> +		status_chan_bit = BIT(channel) << mc->soc->status_reg_chan_shift;
 
-echo 1 > /sys/kernel/debug/tracing/events/syscalls/enable
+s/status_reg_chan_shift/global_intstatus_channel_shift/
 
-When running any application, no trace information is printed on the
-terminal.
+> +		mc_ch_writel(mc, MC_BROADCAST_CHANNEL, status_chan_bit, MC_GLOBAL_INTSTATUS);
+and maybe add a one-line mc_channel_to_global_intstatus(mc, channel) helper
 
-Now added printk for syscall tracepoints.
+mc_ch_writel(mc, MC_BROADCAST_CHANNEL,
+	     mc_channel_to_global_intstatus(mc, chan), 
+	     MC_GLOBAL_INTSTATUS);
 
-Signed-off-by: Jeff Xie <xiehuan09@gmail.com>
----
+> +	} else
+> +		mc_writel(mc, status, MC_INTSTATUS);
 
-v2:
-- Use trace_event_buffer_reserve() and trace_event_buffer_commit()
-  instead of reimplementing logic.
+Missing braces after "else", "./scripts/checkpatch.pl --strict" should warn about this.
 
-- Modify the subject to start with a capital letter.
-
- kernel/trace/trace_syscalls.c | 35 +++++++++++------------------------
- 1 file changed, 11 insertions(+), 24 deletions(-)
-
-diff --git a/kernel/trace/trace_syscalls.c b/kernel/trace/trace_syscalls.c
-index f755bde42fd0..b69e207012c9 100644
---- a/kernel/trace/trace_syscalls.c
-+++ b/kernel/trace/trace_syscalls.c
-@@ -154,7 +154,7 @@ print_syscall_enter(struct trace_iterator *iter, int flags,
- 			goto end;
- 
- 		/* parameter types */
--		if (tr->trace_flags & TRACE_ITER_VERBOSE)
-+		if (tr && tr->trace_flags & TRACE_ITER_VERBOSE)
- 			trace_seq_printf(s, "%s ", entry->types[i]);
- 
- 		/* parameter values */
-@@ -296,9 +296,7 @@ static void ftrace_syscall_enter(void *data, struct pt_regs *regs, long id)
- 	struct trace_event_file *trace_file;
- 	struct syscall_trace_enter *entry;
- 	struct syscall_metadata *sys_data;
--	struct ring_buffer_event *event;
--	struct trace_buffer *buffer;
--	unsigned int trace_ctx;
-+	struct trace_event_buffer fbuffer;
- 	unsigned long args[6];
- 	int syscall_nr;
- 	int size;
-@@ -321,20 +319,16 @@ static void ftrace_syscall_enter(void *data, struct pt_regs *regs, long id)
- 
- 	size = sizeof(*entry) + sizeof(unsigned long) * sys_data->nb_args;
- 
--	trace_ctx = tracing_gen_ctx();
--
--	event = trace_event_buffer_lock_reserve(&buffer, trace_file,
--			sys_data->enter_event->event.type, size, trace_ctx);
--	if (!event)
-+	entry = trace_event_buffer_reserve(&fbuffer, trace_file, size);
-+	if (!entry)
- 		return;
- 
--	entry = ring_buffer_event_data(event);
-+	entry = ring_buffer_event_data(fbuffer.event);
- 	entry->nr = syscall_nr;
- 	syscall_get_arguments(current, regs, args);
- 	memcpy(entry->args, args, sizeof(unsigned long) * sys_data->nb_args);
- 
--	event_trigger_unlock_commit(trace_file, buffer, event, entry,
--				    trace_ctx);
-+	trace_event_buffer_commit(&fbuffer);
- }
- 
- static void ftrace_syscall_exit(void *data, struct pt_regs *regs, long ret)
-@@ -343,9 +337,7 @@ static void ftrace_syscall_exit(void *data, struct pt_regs *regs, long ret)
- 	struct trace_event_file *trace_file;
- 	struct syscall_trace_exit *entry;
- 	struct syscall_metadata *sys_data;
--	struct ring_buffer_event *event;
--	struct trace_buffer *buffer;
--	unsigned int trace_ctx;
-+	struct trace_event_buffer fbuffer;
- 	int syscall_nr;
- 
- 	syscall_nr = trace_get_syscall_nr(current, regs);
-@@ -364,20 +356,15 @@ static void ftrace_syscall_exit(void *data, struct pt_regs *regs, long ret)
- 	if (!sys_data)
- 		return;
- 
--	trace_ctx = tracing_gen_ctx();
--
--	event = trace_event_buffer_lock_reserve(&buffer, trace_file,
--			sys_data->exit_event->event.type, sizeof(*entry),
--			trace_ctx);
--	if (!event)
-+	entry = trace_event_buffer_reserve(&fbuffer, trace_file, sizeof(*entry));
-+	if (!entry)
- 		return;
- 
--	entry = ring_buffer_event_data(event);
-+	entry = ring_buffer_event_data(fbuffer.event);
- 	entry->nr = syscall_nr;
- 	entry->ret = syscall_get_return_value(current, regs);
- 
--	event_trigger_unlock_commit(trace_file, buffer, event, entry,
--				    trace_ctx);
-+	trace_event_buffer_commit(&fbuffer);
- }
- 
- static int reg_event_syscall_enter(struct trace_event_file *file,
--- 
-2.25.1
-
+Otherwise this patch looks okay at a quick glance.

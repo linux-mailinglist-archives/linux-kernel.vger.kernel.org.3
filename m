@@ -2,122 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C74FD4FAFD7
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 21:41:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E1194FAFDB
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 21:45:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242645AbiDJTnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 15:43:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34500 "EHLO
+        id S241775AbiDJTrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 15:47:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233614AbiDJTnE (ORCPT
+        with ESMTP id S233614AbiDJTrM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 15:43:04 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6FDC4D63B
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 12:40:52 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id k25-20020a056830151900b005b25d8588dbso9951395otp.4
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 12:40:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FUl8Qd04XCFc9FE72bNsCtMOh/C1JcO2xYzOigY3DOQ=;
-        b=Fs8J9GIrPrs0yfIjawm/mukc4LqbyZydY837wCeZzQMbyYw+qUDHoOB4d4Dnf5BCqn
-         GUoWZYgF2SzH9ngNhAo5FBXK+x28VGcmjgeDbXEiKismueXnZ98WF1olWpE4hTCpAuEI
-         qCPGER4oR27g8qXzEegktq8aKzNsmo7ic1QFf+Fay2R9P9L0wJ4Izc7fp4NtUlfVRgzk
-         LqsWFpcTBiMOGuLDxJqkYGcXhkWzcKa5YiS7cpTTpS457B8+Dsa62BD3AtRnNP0A5x+m
-         xdJ/ZDJ2gWuA+xs0rIzU3eypS35hhU5wOSEkq4euPEtkvBDwKcbI1tdugX3ZHTdH86Ko
-         6IFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FUl8Qd04XCFc9FE72bNsCtMOh/C1JcO2xYzOigY3DOQ=;
-        b=7CgMSqKWknMTPNuXUlNMRA4hoHTKNiwR/nfbKAiVu8kWIPtqzlc4zZO4rWVjsAIgGc
-         dCszwEQxobaB1r91AiVe8KKA4K+l5kb/fj1E5ifnQOnNTK8ck6QjsVNy4+pElsyL0hjU
-         b3ktYvePQNGPpTCssAGC+YZYEbIbdPk67ZWfZRpzMAAXw5qtbCEvxTY5MaNz0clCuJJw
-         HolcqqKnq9gSTrMuxS6EhLVCkb3zPNDAIN15lS5NqsJ9ocxvjVxXRmuDLTxGzGapE6SU
-         O0ugYKjF2TCgKCo+8ulOlA/CxUzDEYn94R4mAXlSY0vgoPNab/Ci5cO+tZxPOyRX7/xT
-         GRVg==
-X-Gm-Message-State: AOAM531KESHs9YsWvzRN0auIFi4uvK/mqPu6+w2AH4DTvNfynBixTtDX
-        Ksai2+CgbPs9wVUkpmxnGyPNnsZa2kPOA+7lU8LwZNeVQGg=
-X-Google-Smtp-Source: ABdhPJyYr3ENb63/2H2lblSxQ8S9ju20aVO7Z+CEMkVpE7y12Suji93mEHkrGh9UDB/WuPnf43Uh7+G/gqpgpiDV1qk=
-X-Received: by 2002:a05:6830:4d3:b0:5cb:73f0:2f1a with SMTP id
- s19-20020a05683004d300b005cb73f02f1amr9833533otd.30.1649619652273; Sun, 10
- Apr 2022 12:40:52 -0700 (PDT)
+        Sun, 10 Apr 2022 15:47:12 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E44D5D5F2;
+        Sun, 10 Apr 2022 12:44:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1649619888;
+        bh=0b150G6BrvAci/6qIgV9dOcDSR6KYc3RHxHU8xPDus0=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=Ul8XQ3zhOwkrGvPbXl6Qh1pCcpgTgQ0urdJ//KTpUQxLlPkTei9THqUxK1Llt2qbM
+         IGaD4+ECMNxsy+lINyxo6QJSWVRF4oBwSpXCKjzmKVNizOgm83eBy2GuckgF0wHyM5
+         TwMX5WNcR86XK5x2LA6W/lY3gUi/fPne0t5MpDNM=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.0.33] ([46.223.3.230]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mt79P-1nxNCT0dwX-00tPw9; Sun, 10
+ Apr 2022 21:44:48 +0200
+Subject: Re: [PATCH 5/5] tpm: tpm_tis_spi_slb_9670: implement set_reset and
+ unset_reset functions
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
+        =robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stefanb@linux.ibm.com, p.rosenberger@kunbus.com
+References: <20220407111849.5676-1-LinoSanfilippo@gmx.de>
+ <20220407111849.5676-6-LinoSanfilippo@gmx.de>
+ <20220410171826.GB24453@wunner.de>
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Message-ID: <1229fbc4-0abd-376e-a9d7-ccdd6d56c2ae@gmx.de>
+Date:   Sun, 10 Apr 2022 21:44:47 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20220409042321.3184493-1-james.hilliard1@gmail.com> <CAMeQTsanEow=zq=MuZLjMqpzybdS=5S0=JrkxuCdT7d5MxpEWQ@mail.gmail.com>
-In-Reply-To: <CAMeQTsanEow=zq=MuZLjMqpzybdS=5S0=JrkxuCdT7d5MxpEWQ@mail.gmail.com>
-From:   James Hilliard <james.hilliard1@gmail.com>
-Date:   Sun, 10 Apr 2022 13:40:40 -0600
-Message-ID: <CADvTj4rBKzGFch8iVzHu1s+6=P0PcLEwoFi74xd_ormEX+2rMA@mail.gmail.com>
-Subject: Re: [PATCH v3] drm/gma500: depend on framebuffer
-To:     Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220410171826.GB24453@wunner.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:mSm71vcc1o0VqmXNuuRUwbw/0qJB1BZH90rQsG55VU+wQkrfCzm
+ 6pMOb4LSwaOycSFvCkcGxMT2vtoKI8dHgBX8DafWOZuTCdbeMImfFlhS787f40Nsbnmq7K9
+ rtZ6wNQdXdrOXMxelkvqU9lQV6dnS1PxlitRFnZhR52IFntqBH6DqucbrETE36Ibh1fJ4Ka
+ dvZIAuXaMCWYzm8Juzj1Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:LfGMUcy+Qhw=:8gNvMHcSLwyqzQTM/qdGPb
+ kBSyA2A5Cx6VsCLx+8vIAGBPGC4m4S0qQNtwRKSzicgmdHOq40GKo2QB8Gpteca2dNtjzYPfM
+ +92jHFlvLP7DGYuKM607uevtj4wMjnAUQJSHzugRwLpkFzyGQV3VB+GtfGn0htN3xu4oUhZGp
+ 3D4uniB+JZDOtqCGQhzKnTLz9D8AkNGMPguIGeY95bjMerBQZ7nm+mp9Yc+PLmOdf8zSYlQby
+ AxkQWRjAmJsqOOcK0JElMrHgw0/2k6NQZf+3LcvshTgzfbFOfhoWvaNCyEo/43QQbOaDPKeSu
+ P9wqUR1GZKjuaJ86aNYpN0T6xpGkB/YZvK2IgbfBlgLHS1cURmCznaI2C0sE0sIkPcAKj4kuK
+ 0FlUCglZI8Y7Puwf0hTQ2qLds3ouFr6QNT4GYvNWQylNw4q2OI2m2ehm4c9CPS5aRi7ZlpQ3x
+ 6x9edZ9Q1o/xyaWTLV019zX5t35h5CeM1qlKIc5BTn8zHIcR2lWcI1wqZW3zevXzKGao+/0hx
+ DRWE7L66MwkOigV2HmQXgkJpgD0iSlGEI8lgL4rt8jx8rWLavsauxiu+A7QCSJagf0YuJngrJ
+ fEsV1OR6HP71bWUyf4d+JGKB/RjzOzjgdlh/oaNM5NTtncTZHShbCFTNzECoWcPqBfFFE+kW0
+ skY6zK2DRnMqJ8QxiMmSM0EsDMihe7a63uo1JWHYUEUNrb7eHGlwf9+2BJFflc8j18LUPUXPu
+ wm6Ku0KD37UjMkOgQjvJEqG45YjBT0XQxExfGAoKfHxqpnozhzIAUEUufgTj7guzkKYYo8a6Q
+ Lc71jkSZSxzsk43xffTn7qOhusa2XY+UoQYlLFO/92rC/SDjD/DhjGnSTqN8cYKAvStk/bwGy
+ 0QejNLQsrqEw4RLX8hGAgjXD3jtYQa3DMGpOX5wt7mhylF6FAFaoGTwqwW6hFMn3Y0LgzaNp/
+ gIltBiVlDXVFyHdEZlH9KDHPT+lupXTV2QZ+5MPT22pG85Uso40b+y268pziBtCGARaOkQ529
+ ez3e5EiKKaoVhJjXDVkGs43FcVFfhF+G16wqiJwE77W22B7G+AhFRcUpG97SsZx1C/0un5te0
+ PBbzspKhssoLAM=
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 10, 2022 at 1:36 PM Patrik Jakobsson
-<patrik.r.jakobsson@gmail.com> wrote:
+On 10.04.22 at 19:18, Lukas Wunner wrote:
+> On Thu, Apr 07, 2022 at 01:18:49PM +0200, Lino Sanfilippo wrote:
+>> --- /dev/null
+>> +++ b/drivers/char/tpm/tpm_tis_spi_slb9670.c
+> [...]
+>> +int slb9670_spi_unset_reset(struct tpm_tis_data *data)
+> [...]
+>> +int slb9670_spi_set_reset(struct tpm_tis_data *data)
+> [...]
+>> +static const struct tpm_tis_phy_ops slb9670_spi_phy_ops =3D {
+>> +	.read_bytes =3D tpm_tis_spi_read_bytes,
+>> +	.write_bytes =3D tpm_tis_spi_write_bytes,
+>> +	.read16 =3D tpm_tis_spi_read16,
+>> +	.read32 =3D tpm_tis_spi_read32,
+>> +	.write32 =3D tpm_tis_spi_write32,
+>> +	.set_reset =3D slb9670_spi_set_reset,
+>> +	.unset_reset =3D slb9670_spi_unset_reset,
+>> +};
 >
-> On Sat, Apr 9, 2022 at 6:23 AM James Hilliard <james.hilliard1@gmail.com> wrote:
-> >
-> > Select the efi framebuffer if efi is enabled.
-> >
-> > This appears to be needed for video output to function correctly.
-> >
-> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> 0-day is complaining that slb9670_spi_set_reset() / slb9670_spi_unset_re=
+set()
+> are not declared static:
 >
-> Hi James,
-> EFI_FB is its own driver and not needed by gma500 to drive its
-> hardware. What makes you think it's required?
+> https://lore.kernel.org/all/202204081357.8SfjQosI-lkp@intel.com/
+>
+> Thanks,
+>
+> Lukas
+>
 
-I wasn't getting any HDMI video output without it enabled for some reason,
-I assume it is doing some sort of initialization needed by gma500
-during startup.
+Right, I will fix this in the next version, thanks!
 
->
-> -Patrik
->
-> > ---
-> > Changes v2 -> v3:
-> >   - select EFI_FB instead of depending on it
-> > Changes v1 -> v2:
-> >   - use depends instead of select
-> > ---
-> >  drivers/gpu/drm/gma500/Kconfig | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/drivers/gpu/drm/gma500/Kconfig b/drivers/gpu/drm/gma500/Kconfig
-> > index 0cff20265f97..a422fa84d53b 100644
-> > --- a/drivers/gpu/drm/gma500/Kconfig
-> > +++ b/drivers/gpu/drm/gma500/Kconfig
-> > @@ -2,11 +2,13 @@
-> >  config DRM_GMA500
-> >         tristate "Intel GMA500/600/3600/3650 KMS Framebuffer"
-> >         depends on DRM && PCI && X86 && MMU
-> > +       depends on FB
-> >         select DRM_KMS_HELPER
-> >         # GMA500 depends on ACPI_VIDEO when ACPI is enabled, just like i915
-> >         select ACPI_VIDEO if ACPI
-> >         select BACKLIGHT_CLASS_DEVICE if ACPI
-> >         select INPUT if ACPI
-> > +       select FB_EFI if EFI
-> >         help
-> >           Say yes for an experimental 2D KMS framebuffer driver for the
-> >           Intel GMA500 (Poulsbo), Intel GMA600 (Moorestown/Oak Trail) and
-> > --
-> > 2.25.1
-> >
+Regards,
+Lino
+

@@ -2,69 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FEE84FAB3E
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 02:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7219F4FAB3C
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 02:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233606AbiDJAyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 20:54:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33444 "EHLO
+        id S233368AbiDJAxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 20:53:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233691AbiDJAwh (ORCPT
+        with ESMTP id S233329AbiDJAxv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 20:52:37 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E149167C1
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 17:50:28 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id u18so3469905eda.3
-        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 17:50:28 -0700 (PDT)
+        Sat, 9 Apr 2022 20:53:51 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC00105
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 17:51:42 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id bh17so24144460ejb.8
+        for <linux-kernel@vger.kernel.org>; Sat, 09 Apr 2022 17:51:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=7HtVe2guHiIahNbZDnAKk5WaarwcdEBXzqi2lyPe5QI=;
-        b=WebFnt8vxXxGF9+rn0eXifa+Pk7Pg897od0g0G9rMzYZiHzWGLOFv4tzOcSRkloPNk
-         ZfCAmKoJQSs22cv7vAEF9bb/W20yEPZjHeMijK7yMzgq8VPA4sN9R69aGH+XTVaBFsxi
-         EZyeSftXxzY82g2AkJDeYAD6JLrf9mmMCM/RZoI3FHNhyOBEP5rmdL47x2r4QDiUk2nv
-         UWvDfyCz5WC1Mw5oPvGqisRYdouOAht1OJhGaCswEGhFI9vr9+SjpmGUN69q+qp8zCvz
-         d2QdaJVmTk0VPbfQQZ6t/ug+/Y6ojBz+2Qn474YrDwlLhzn5jfp3TjNNa6RBrmy+KQ1I
-         VjHw==
+        bh=UumSOi3bVb4/q3h+ATEP8uiyPH1qa/l+xbjDc3aGRoY=;
+        b=Wpfv8e/QtYVqq+ae3AXvVreoZ7ZF1txzYHecTrr6f56GfjQtarUN44NuJsrNRyb/pn
+         yXdgDWBp+gdex/zmzOXSU+AORuclxUPOTszcK7G6DjWiDLLFThwtIzCB13ekoVvA0jTi
+         F12b9sY+ZsI6QCdTC+pzifJnBCrldSU7l2fy/Cx2hsspibI6TSkqO0aJBsqW9KuRz40g
+         QIc3LcQacL/TRM1to+DMqQl6wL6CCJNdp/f7PsLM+3gkznrfWcd5WsQptG2mtUyUK27a
+         mRx7WK5dYQao28oCwkjSvy7fXVbvaeRGgOlW/V/GBKfTWIdtlRbhA1Kjd06Jxrhgr0iR
+         ltKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=7HtVe2guHiIahNbZDnAKk5WaarwcdEBXzqi2lyPe5QI=;
-        b=mm2a9dyWzxcHMfvJZb5TX+dCPluaBtIGAzaEtqM1GuZPJqApr+3bQ44DI2u+dmE2H4
-         MQFhS5wDGPrS+s0VNhKR89bk06W54By5w6tjqLuqhwYdTjV0X2Si19fjIrUTUsv6UC1w
-         Tjv+vqE59uHjHKEruNPkk81q8+pQBmt4ner2kXVxW/+J11aw/+oBLbkZ64xKfXM1s2E3
-         MQsswxLf0EQpSOJzpGTIax4ej6nwzOYej+Jo681B83VLT/M139Ougerj5g80X9CVGCaZ
-         LkO/3a6//jnrUKOP9Emf3iKuQ3sfORK4Obe5OH75KlaCA8aOtD30P02TllLepjdesKe/
-         9LNw==
-X-Gm-Message-State: AOAM531vAFcyW4mPxjieoelWOUjNyy8lvKwB19jCQPoPWOcp296WRZRw
-        UzEkGWL7AcydoQwyhAvTDEsHj7qjlR4xMd3bN98=
-X-Google-Smtp-Source: ABdhPJxrqwFrLV44uG+X6bhKQxtFAe//AUKD4xulz+mQi3zOvMiBcpohNfsTapnOWH4OzRPGHvXTS8+L228j29ItyEw=
-X-Received: by 2002:a05:6402:1907:b0:41d:29d9:e3d with SMTP id
- e7-20020a056402190700b0041d29d90e3dmr10131837edz.250.1649551826678; Sat, 09
- Apr 2022 17:50:26 -0700 (PDT)
+        bh=UumSOi3bVb4/q3h+ATEP8uiyPH1qa/l+xbjDc3aGRoY=;
+        b=RTNLqis63O4QJs+LrOaUW+xD0Nt2SJZUmAMxmZyXw6tyJ51pl0uk8p1SYga5GJ3JLv
+         Ujp8zBlyNQtqIRqlbuxh7adsFwNwYEETJd6kQxjkDkc83RyMWlKWpjjlPzfUgSTGc4zv
+         WgmuBN7pfFlOHGA8KAq+JGuUZbUNG9Y61sviCSQwdUq84Q2pHIHrWDleD+mCkv22nsSA
+         awg/G0X1GU8IC4xQ7oJ3DocR10PUyqN24XWCLbxozXT8uM1WAyls1OWXYIkKm+ub2EXz
+         LPq/6IPn8IaNtSUKMpAvcYtC68CY478eTXKCVvD47dlx1piIdAWxA16haiqvV0+ie7oy
+         2MYg==
+X-Gm-Message-State: AOAM532JB8+ZwA5TuVSl1A987laintDSfQZtmPP3cHB6v+8Byty2/pd6
+        lrMaNjfmQjP7KOZ+kC6ZbGWSCJmq+XeGv8WYv4o=
+X-Google-Smtp-Source: ABdhPJxQwID87p/D+o6yfKWz+g3H0+XBvfl8OCx5eFBQpBraG6rnAHk332AH/yFvoDWsBBhKeP5wO3o39UJkUr3VFG0=
+X-Received: by 2002:a17:907:daa:b0:6e4:9b0d:3f1 with SMTP id
+ go42-20020a1709070daa00b006e49b0d03f1mr23879729ejc.37.1649551900752; Sat, 09
+ Apr 2022 17:51:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220405173632.2663-1-h0tc0d3@gmail.com> <614a4844-fa5d-8b8e-0628-894394f31608@amd.com>
- <874k3670ez.fsf@intel.com> <f742b6b8-4056-543c-17a5-ae373ca71b45@amd.com>
-In-Reply-To: <f742b6b8-4056-543c-17a5-ae373ca71b45@amd.com>
+References: <20220408092803.3188-1-h0tc0d3@gmail.com> <4o2YD5id7zhK5g__CUK3Yf-6Dj459XQ0qsydW6wKHdco3YYtl78BqGUfXvQ9UO0AZoAsMPfhFB0jw1BFldiFDcbZXmGgsobuAoTMWmoDqmE=@emersion.fr>
+ <CAP+8YyED70CSqVRaB7JgrAtK-yvBx5EsvrrdR7EpvOG2AVhskQ@mail.gmail.com>
+ <QfKpxmkE_cy9wt5VJruw_TSdnl5KceKM8BxJGmZSBs-KiaRwIYfgc8h_-5h7Wmj6G-NtUJ3A88V5pzPvZuLlpkK-oRO5pSjeTxwHcZWlogs=@emersion.fr>
+ <CAD5ugGD6QzCUqk7_EVwH9Cc6PQtx_VfjVRWzzP9uKR5tkGh1RQ@mail.gmail.com> <436116c9-6ce4-87cc-b1cd-f44b72fcfb35@amd.com>
+In-Reply-To: <436116c9-6ce4-87cc-b1cd-f44b72fcfb35@amd.com>
 From:   Grigory Vasilyev <h0tc0d3@gmail.com>
-Date:   Sun, 10 Apr 2022 03:50:25 +0300
-Message-ID: <CAD5ugGBZeA1+7pS2eSyXkCt+DvHY8=6wObD7eJ98UAgY-FPVOw@mail.gmail.com>
-Subject: Re: [PATCH] drm/amdgpu: Senseless code and unnecessary memset
+Date:   Sun, 10 Apr 2022 03:51:39 +0300
+Message-ID: <CAD5ugGDrDrWWf1xMKTy=56H1AR8cyXMV41f1X8P=HVtYY6idDA@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdgpu: Fix NULL pointer dereference
 To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     Jani Nikula <jani.nikula@intel.com>,
+Cc:     Simon Ser <contact@emersion.fr>,
+        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
         Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
         Melissa Wen <mwen@igalia.com>,
         Alex Deucher <alexander.deucher@amd.com>,
         "Pan, Xinhui" <Xinhui.Pan@amd.com>,
         David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Jiawei Gu <Jiawei.Gu@amd.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?Q?Michel_D=C3=A4nzer?= <mdaenzer@redhat.com>,
+        Evan Quan <evan.quan@amd.com>,
+        Sean Paul <seanpaul@chromium.org>,
+        Qingqing Zhuo <qingqing.zhuo@amd.com>,
+        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
+        ML dri-devel <dri-devel@lists.freedesktop.org>,
         LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
@@ -78,105 +83,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christian K=C3=B6nig in fact the compiler will very often replace {0} with
-a memset call. I don't see a problem using {0} for local arrays with
-primitive types.
-There should also be no problem with memory alignment. Because the
-compiler understands it. Using sizeof is also not a good idea.
-More often everyone also makes mistakes with sizeof. It's best to
-leave it as is, and there's no errors.
-Indeed, when using structures and {0}, errors may occur, but I am not
-aware of errors when using primitive types. I also looked at the
-amdgpu code and  {0} is used in many places.
-Also from experience malloc+memset is the most dangerous chain, can
-silently damage memory, causing a bunch of subtle problems, and it is
-better to replace them with more safe calloc.
-Such a problem, for example, was recently found by me in fontconfig
-and it crashed intel quartus. Therefore, where possible, I try to
-avoid memset.
+Christian K=C3=B6nig, Simon Ser In fact, the code looks strange, we return
+the return code, but for some reason we also write false and 0. In my
+opinion, the caller should do this.
+Of course, you are right, but I look from the position that nothing
+should fall in the user system. There may be strange errors that occur
+periodically under certain conditions and do not affect developers.
+Also, the user will not always be able to correctly write a bug report.
 
 Regards, Grigory.
 
-=D1=81=D1=80, 6 =D0=B0=D0=BF=D1=80. 2022 =D0=B3. =D0=B2 17:43, Christian K=
+=D0=BF=D1=82, 8 =D0=B0=D0=BF=D1=80. 2022 =D0=B3. =D0=B2 17:30, Christian K=
 =C3=B6nig <christian.koenig@amd.com>:
 >
-> Am 06.04.22 um 16:26 schrieb Jani Nikula:
-> > On Tue, 05 Apr 2022, Christian K=C3=B6nig <christian.koenig@amd.com> wr=
-ote:
-> >> Am 05.04.22 um 19:36 schrieb Grigory Vasilyev:
-> >>> Using memset on local arrays before exiting the function is pointless=
-.
-> >>> Compilator will remove this code. Also for local arrays is preferable=
- to
-> >>> use {0} instead of memset. Mistakes are often made when working with
-> >>> memset.
-> >> Well actually memset is preferred when working with structures which a=
-re
-> >> given to the hardware parser because {0} won't initialize paddings.
-> > Not that I'd know anything that's going on here... but it sure seems
-> > strange to me to be passing unpacked structures where the padding might
-> > matter to a "hardware parser".
+> Am 08.04.22 um 15:21 schrieb Grigory Vasilyev:
+> > Simon Ser and Bas Nieuwenhuizen, do you understand that you are
+> > proposing to make the code less safe in the future? In the future,
+> > someone might rewrite the code and we'll get an error.
 >
-> Well to me it is an absolute miracle why the heck compilers don't
-> initialize paddings.
+> Which is perfectly fine.
 >
-> We had so many ups moments over the years and I really don't see why it
-> should be more optimal to do this.
+> See error handling is to handle userspace or hardware errors and *not*
+> coding errors.
 >
-> Anyway, the memset() is used intentionally here and I don't really want
-> to change it. What we could do is removing the second superfluous memset
-> and use sizeof() instead of hard coding the size.
+> Testing all pointers for NULL without any reason is not defensive, but
+> rather the exactly opposite since it helps hiding real bugs.
 >
 > Regards,
 > Christian.
 >
 > >
-> > *shrug*
-> >
-> >
-> > BR,
-> > Jani.
-> >
-> >
-> >> So please don't use {0} in any of the atom bios code.
+> > =D0=BF=D1=82, 8 =D0=B0=D0=BF=D1=80. 2022 =D0=B3. =D0=B2 14:48, Simon Se=
+r <contact@emersion.fr>:
+> >> On Friday, April 8th, 2022 at 13:28, Bas Nieuwenhuizen <bas@basnieuwen=
+huizen.nl> wrote:
 > >>
-> >> Regards,
-> >> Christian.
-> >>
-> >>> Signed-off-by: Grigory Vasilyev <h0tc0d3@gmail.com>
-> >>> ---
-> >>>    drivers/gpu/drm/amd/amdgpu/atom.c | 8 +-------
-> >>>    1 file changed, 1 insertion(+), 7 deletions(-)
+> >>> On Fri, Apr 8, 2022 at 12:01 PM Simon Ser contact@emersion.fr wrote:
 > >>>
-> >>> diff --git a/drivers/gpu/drm/amd/amdgpu/atom.c b/drivers/gpu/drm/amd/=
-amdgpu/atom.c
-> >>> index be9d61bcb8ae..537e48fbbe6b 100644
-> >>> --- a/drivers/gpu/drm/amd/amdgpu/atom.c
-> >>> +++ b/drivers/gpu/drm/amd/amdgpu/atom.c
-> >>> @@ -1538,11 +1538,9 @@ struct atom_context *amdgpu_atom_parse(struct =
-card_info *card, void *bios)
-> >>>    int amdgpu_atom_asic_init(struct atom_context *ctx)
-> >>>    {
-> >>>     int hwi =3D CU16(ctx->data_table + ATOM_DATA_FWI_PTR);
-> >>> -   uint32_t ps[16];
-> >>> +   uint32_t ps[16] =3D {0};
-> >>>     int ret;
-> >>>
-> >>> -   memset(ps, 0, 64);
-> >>> -
-> >>>     ps[0] =3D cpu_to_le32(CU32(hwi + ATOM_FWI_DEFSCLK_PTR));
-> >>>     ps[1] =3D cpu_to_le32(CU32(hwi + ATOM_FWI_DEFMCLK_PTR));
-> >>>     if (!ps[0] || !ps[1])
-> >>> @@ -1551,10 +1549,6 @@ int amdgpu_atom_asic_init(struct atom_context =
-*ctx)
-> >>>     if (!CU16(ctx->cmd_table + 4 + 2 * ATOM_CMD_INIT))
-> >>>             return 1;
-> >>>     ret =3D amdgpu_atom_execute_table(ctx, ATOM_CMD_INIT, ps);
-> >>> -   if (ret)
-> >>> -           return ret;
-> >>> -
-> >>> -   memset(ps, 0, 64);
-> >>>
-> >>>     return ret;
-> >>>    }
+> >>>> Is amdgpu_display_get_fb_info ever called with NULL tiling_flags/tmz=
+_surface?
+> >>>> If not, there's no point in adding NULL checks.
+> >>> It isn't called with NULL anywhere, the NULL checks that already exis=
+t
+> >>> seem redundant.
+> >> Grigory, would be be willing to submit a v2 which removes the unnecess=
+ary
+> >> NULL checks?
 >

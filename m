@@ -2,88 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D8824FAC8B
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 09:27:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBBDC4FAC8E
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 09:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234021AbiDJHaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 03:30:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45412 "EHLO
+        id S234088AbiDJHcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 03:32:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiDJHaD (ORCPT
+        with ESMTP id S231809AbiDJHb5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 03:30:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9A52DA99;
-        Sun, 10 Apr 2022 00:27:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7A6B3B80A39;
-        Sun, 10 Apr 2022 07:27:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CF98C385A1;
-        Sun, 10 Apr 2022 07:27:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649575671;
-        bh=YzGXDlYnNncDbrCmQDBWKW1BaIk5s78v/1hoNSGUe/8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BzEdy6SzPyPdEBHTxiqN1qhLmwXWfOFJep58yRrbbFebbdrNgPjsO2jVchOlT0otH
-         w6bYNdvtapd6VoJSX2Pz1+9uzhpvOuDXdtMrfqncR215ekgX86eEGycsr9bdcCE17s
-         CJyDT+oAS8DrW9KvEvYfGjDYXNLMzN1QLAN5yUacLYl4AkGbPucCAoLfw8NK+QyUEG
-         S720hZ89RPaBo+FuaGRApGdHjagvvBvoCzHuTbkjnz8+FsKN8/fFIEFiryRfC1Fawk
-         9g4vBL1eX+/a6IwrdD7MTwxB+C7HPM/jOXeOiZbhl5J2we5QV/VMgrXXTl8/b846b0
-         7s+pz5YaeHjmg==
-Date:   Sun, 10 Apr 2022 15:27:45 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Li Yang <leoyang.li@nxp.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/6] ARM: dts: ls1021a: remove "simple-bus" compatible
- from ifc node
-Message-ID: <20220410072745.GN129381@dragon>
-References: <20220322022818.9860-1-leoyang.li@nxp.com>
+        Sun, 10 Apr 2022 03:31:57 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBF565EB
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 00:29:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649575786; x=1681111786;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7acdqeNYB2mQbesxSUxPXsF/SJMG5dV5Al5NEqwCNfw=;
+  b=NmVeb2sK5y5EIAAiHIQA9WVy6D87+aDNXrYArHOchykqYJn9uR35iNdI
+   e4H7gAJDQ4EQgQPtM6EP4GSzeHilW+M1v3/s82TkeOXuNUqAR/1YSM8GW
+   CdZIhwwC8KnGWTYYOYN9/llKcuFk57vqAb5qpK0eLihhv4ulQb+L17jUs
+   svUL3V6ZFjtQRthd+7UnSJM5sL70Mbjus3IlhxVV7SM9g9GmIY9nz1ml7
+   fALhcZzECK/ner9ZHk6HQ30QCbpq8y1J/ROHRkOnBumuz8UXWS1Ab3tHE
+   9H0S5XB+Z6RdMlt7sDUX9ae5GS6F+XkOTuj8fP+Lg5aVHwDF6qww348WV
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10312"; a="243834135"
+X-IronPort-AV: E=Sophos;i="5.90,249,1643702400"; 
+   d="scan'208";a="243834135"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2022 00:29:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,249,1643702400"; 
+   d="scan'208";a="506734254"
+Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 10 Apr 2022 00:29:44 -0700
+Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ndS11-0000mn-PL;
+        Sun, 10 Apr 2022 07:29:43 +0000
+Date:   Sun, 10 Apr 2022 15:28:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Borislav Petkov <bp@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: arch/x86/kernel/cpu/bugs.c:657:6: error: no previous prototype for
+ 'unpriv_ebpf_notify'
+Message-ID: <202204101514.YEhzsZ1Q-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220322022818.9860-1-leoyang.li@nxp.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022 at 09:28:13PM -0500, Li Yang wrote:
-> The binding of ifc device has been updated.  Update dts to match
-> accordingly.
-> 
-> Signed-off-by: Li Yang <leoyang.li@nxp.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e1f700ebd6bea293abe3c7e2807b252018efde01
+commit: 44a3918c8245ab10c6c9719dd12e7a8d291980d8 x86/speculation: Include unprivileged eBPF status in Spectre v2 mitigation reporting
+date:   7 weeks ago
+config: x86_64-sof-customedconfig-bpf-defconfig (https://download.01.org/0day-ci/archive/20220410/202204101514.YEhzsZ1Q-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=44a3918c8245ab10c6c9719dd12e7a8d291980d8
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 44a3918c8245ab10c6c9719dd12e7a8d291980d8
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-I only received patches #1, #2, #4 and #5, while it claims there are 6
-patches in the series.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Shawn
+All errors (new ones prefixed by >>):
 
-> ---
->  arch/arm/boot/dts/ls1021a.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/boot/dts/ls1021a.dtsi b/arch/arm/boot/dts/ls1021a.dtsi
-> index 2e69d6eab4d1..52835d3dfa1b 100644
-> --- a/arch/arm/boot/dts/ls1021a.dtsi
-> +++ b/arch/arm/boot/dts/ls1021a.dtsi
-> @@ -123,7 +123,7 @@ msi2: msi-controller@1570e08 {
->  		};
->  
->  		ifc: ifc@1530000 {
-> -			compatible = "fsl,ifc", "simple-bus";
-> +			compatible = "fsl,ifc";
->  			reg = <0x0 0x1530000 0x0 0x10000>;
->  			interrupts = <GIC_SPI 75 IRQ_TYPE_LEVEL_HIGH>;
->  			status = "disabled";
-> -- 
-> 2.25.1
-> 
+>> arch/x86/kernel/cpu/bugs.c:657:6: error: no previous prototype for 'unpriv_ebpf_notify' [-Werror=missing-prototypes]
+     657 | void unpriv_ebpf_notify(int new_state)
+         |      ^~~~~~~~~~~~~~~~~~
+   cc1: all warnings being treated as errors
+
+
+vim +/unpriv_ebpf_notify +657 arch/x86/kernel/cpu/bugs.c
+
+   655	
+   656	#ifdef CONFIG_BPF_SYSCALL
+ > 657	void unpriv_ebpf_notify(int new_state)
+   658	{
+   659		if (spectre_v2_enabled == SPECTRE_V2_EIBRS && !new_state)
+   660			pr_err(SPECTRE_V2_EIBRS_EBPF_MSG);
+   661	}
+   662	#endif
+   663	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

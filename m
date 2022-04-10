@@ -2,156 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9440E4FAFC7
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 21:22:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C26A4FAFCB
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 21:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239857AbiDJTY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 15:24:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34300 "EHLO
+        id S241619AbiDJTiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 15:38:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239612AbiDJTY0 (ORCPT
+        with ESMTP id S229739AbiDJTiJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 15:24:26 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C3AF61A38
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 12:22:14 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id w18so15838688edi.13
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 12:22:14 -0700 (PDT)
+        Sun, 10 Apr 2022 15:38:09 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C545675F;
+        Sun, 10 Apr 2022 12:35:57 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id 9so16459296iou.5;
+        Sun, 10 Apr 2022 12:35:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=s6KjH9J3ytpASWaQQB4P5MO6mBW14v4qfdZP5NXbNT4=;
-        b=oLuTi98g+Wdw5qPwwn5hP22zOCPhryp+4nyUj6UfFG29yTGiWEaT7fPcbqEEbdjqDg
-         urUPjUKu8t8lNEP1V5nReYVu4Pi3XlfHg1AAU8Pt974pzKlUT9aDDJW3WTSMz5WODnnO
-         2/XQpm+hbjqIBHUVDHNwpZdUFvm/al1ejJAMZWONzVLSFmW+Pw2D56OejF+K/NhAvJWW
-         WzRmWk1qT0WcXB+BgPUAlhJB4GzUkrS4kysDrYl2YAcFcxazQtohQ6GnpkWdxXdueJfG
-         1e78ZaIet0s2fUVTBern6ieCmkSsR/HtDlx5QKbWyGko/kMkL7kQk3q3HjYHLTj7AV2V
-         JByg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OoM9N7gAcL1d/1QfBxr0+hst6MaoVrluKO3H52z5ckY=;
+        b=SxbSn+vQ0He6FR1PGQmKjJijrpOeLnxsh7NJhXocRKQ7uyLDjtjzslL+t/TpdFHrW6
+         duOfC+PHPVcurOnpGQ37UtqjNc8yEJePYta3p9W6BQdGqBjQHtP+l15xlJ2dYgJ/U1X/
+         8jHdC+SHGG7yRXrHlA9UQNyQ2lkhvB5wBaM36EbHRsW9D3sZiuJ8FtPfs+zZHNrRu96S
+         HcwsNFLDJOCdLWw2ADCEdoU36xu9Ha9fVu+dxpezLJIVuTWW2t5wMOdD4bikgoaAJ0hu
+         zDjFaVAgWou4Vm9Cdipy5Nb8D8KX0s+O1vEGJj4bI2aUpLe0RjE5yA53Qu56wEoVu4J6
+         q6ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=s6KjH9J3ytpASWaQQB4P5MO6mBW14v4qfdZP5NXbNT4=;
-        b=ZkeW3+PMJ0Y6gPIXbSRrbavp9rHadOsETzuAqbYguAnhLPbu/6YuhIUh93Suy0F9XT
-         IEYeTkH5HKFptzQ20iLWOFLEd57N8vkoAWod/4EPsOUAXwNgPlXztQ1zJKCK8i39hZi8
-         v1LaQWxSE+SAvRuK9NHBwHAJkppLqexd4YVrSgjzJTMFASb/aYRAJvRJlnfs7cgyHwYZ
-         WujvB60nqIFhg2spjeqHtcShigs6ph/2zZnofkT9H1/0I/hk1KWdTLP9y9tha9C001KT
-         yn/OYDXYQo2rh8khPFKbT4LBe8x8J081QbTbxEAF22PZrecTsXF+OSDUJtS9hjJcnbeE
-         KzmQ==
-X-Gm-Message-State: AOAM530hl72bTKEBlJtjqhnx1sKeCUI7y5hI/LfsNLc3zY+C80/4iinZ
-        CGljqKEyhAXqRMsRU5iOWszUBg==
-X-Google-Smtp-Source: ABdhPJx3cpzWE+zgaW9gPdnaedxS3xosxveySly6+/6lSyGnvAOznTJckftEgJaLGW0IBNmNpDCj8g==
-X-Received: by 2002:a05:6402:11d4:b0:419:5a50:75a4 with SMTP id j20-20020a05640211d400b004195a5075a4mr30229188edw.226.1649618533103;
-        Sun, 10 Apr 2022 12:22:13 -0700 (PDT)
-Received: from [192.168.0.191] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id w1-20020a1709064a0100b006e89334f5dfsm441488eju.136.2022.04.10.12.22.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Apr 2022 12:22:12 -0700 (PDT)
-Message-ID: <14ecb746-56f0-2d3b-2f93-1af9407de4b7@linaro.org>
-Date:   Sun, 10 Apr 2022 21:22:11 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 6/6] dt-bindings: dma: Convert Qualcomm BAM DMA binding
- to json format
-Content-Language: en-US
-To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        bh=OoM9N7gAcL1d/1QfBxr0+hst6MaoVrluKO3H52z5ckY=;
+        b=GzlAs5jFUIz4JwMTI726+OWsEV27uVFCRIIrpIkkDXOxj8/SaMgBZ9vHIN+ZziLRD1
+         YMmLTwPAHhvHLJRplGhCxsFaqMmCT9b3OEoINFQ3WZhlhtTA1YUd8ocggFkw165Hx0VS
+         cXOIv7khGkQ1SdRHkYlex41JdNZM8I88cSFcA62yJYdBLFcKAk/VzUk+1CgvU/UpwEVF
+         0ki5Tg05poNKbz7WglSc938NVKloJvTO6t9T9CcMojarrSZq28dnhhzx4zNyO0l4VXr0
+         Hb9tJk3ZXWn4FxgnUZDJi8VQ0kBimY8fDxSkyk98PX/G96Gpprw4FMZvsAB9r32bMSLn
+         B4QQ==
+X-Gm-Message-State: AOAM532fO0Bb2cOlXIw7Btmv0KFUnTTRexMGN2htYHvOd53E3Z+y7QiR
+        a309qWSIgFo196kh+UQ2Xlfsh4x7Kfw=
+X-Google-Smtp-Source: ABdhPJxBgn0fjnm8kPAHoN3v+ZE7RGxfdnz/32Jw7hl3KO7lGjTHAZrwur9qH+22pIu7Py0o1R6aSA==
+X-Received: by 2002:a6b:b786:0:b0:645:b8e7:2d1d with SMTP id h128-20020a6bb786000000b00645b8e72d1dmr12083391iof.52.1649619356614;
+        Sun, 10 Apr 2022 12:35:56 -0700 (PDT)
+Received: from aford-IdeaCentre-A730.lan ([2601:448:8400:9e8:1e67:6f3b:4d7f:4f90])
+        by smtp.gmail.com with ESMTPSA id m6-20020a923f06000000b002ca74f4fab2sm7218409ila.14.2022.04.10.12.35.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Apr 2022 12:35:55 -0700 (PDT)
+From:   Adam Ford <aford173@gmail.com>
+To:     linux-mmc@vger.kernel.org
+Cc:     aford@beaconembedded.com, Adam Ford <aford173@gmail.com>,
+        haibo.chen@nxp.com, Ulf Hansson <ulf.hansson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org
-References: <20220410175056.79330-1-singh.kuldeep87k@gmail.com>
- <20220410175056.79330-7-singh.kuldeep87k@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220410175056.79330-7-singh.kuldeep87k@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V4 1/3] dt-bindings: mmc: imx-esdhc: Update compatible fallbacks
+Date:   Sun, 10 Apr 2022 14:35:41 -0500
+Message-Id: <20220410193544.1745684-1-aford173@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/04/2022 19:50, Kuldeep Singh wrote:
-> Convert Qualcomm BAM DMA controller binding to DT schema format using
-> json schema.
+The SDHC controller in the imx8mn and imx8mp have the same controller
+as the imx8mm which is slightly different than that of the imx7d.
 
-Thank you for your patch. There is something to discuss/improve.
+Using the fallback of the imx8mm enables the controllers to support
+HS400-ES which is not available on the imx7d. After discussion with NXP,
+it turns out that the imx8qm should fall back to the imx8qxp, because
+those have some additional flags not present in the imx8mm.
 
-(...)
+Mark the current state of the fallbacks as deprecated, and add the
+proper fallbacks so in the future, the deprecated combination can be
+removed and prevent any future devices from using the wrong fallback.
 
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  iommus:
-> +    minItems: 1
-> +    maxItems: 4
+Suggested-by: haibo.chen@nxp.com
+Signed-off-by: Adam Ford <aford173@gmail.com>
+---
+V4:  Mark deprecated items with "deprecated: true" instead of a comment
+V3:  Add support for the interim fallback on imx8mn and imx8mp where
+     they both fallback to imx8mm, but keep the imx7d to prevent any
+     breakage.
 
-This is something new and it seems only one SoC defines it (not even one
-BAM version). I wonder whether this is actually correct or this
-particular version of BAM is slightly different. Maybe someone could
-clarify it, but if no - looks ok.
+diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+index 7dbbcae9485c..58447095f000 100644
+--- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
++++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+@@ -34,22 +34,46 @@ properties:
+           - fsl,imx6ull-usdhc
+           - fsl,imx7d-usdhc
+           - fsl,imx7ulp-usdhc
++          - fsl,imx8mm-usdhc
+           - fsl,imxrt1050-usdhc
+           - nxp,s32g2-usdhc
++      - items:
++          - enum:
++              - fsl,imx8mq-usdhc
++          - const: fsl,imx7d-usdhc
++      - items:
++          - enum:
++              - fsl,imx8mn-usdhc
++              - fsl,imx8mp-usdhc
++              - fsl,imx93-usdhc
++              - fsl,imx8ulp-usdhc
++          - const: fsl,imx8mm-usdhc
++      - items:
++          - enum:
++              - fsl,imx8qm-usdhc
++          - const: fsl,imx8qxp-usdhc
+       - items:
+           - enum:
+               - fsl,imx8mm-usdhc
+               - fsl,imx8mn-usdhc
+               - fsl,imx8mp-usdhc
+-              - fsl,imx8mq-usdhc
+               - fsl,imx8qm-usdhc
+               - fsl,imx8qxp-usdhc
+           - const: fsl,imx7d-usdhc
++        deprecated: true
+       - items:
+           - enum:
+-              - fsl,imx93-usdhc
+-              - fsl,imx8ulp-usdhc
++              - fsl,imx8mn-usdhc
++              - fsl,imx8mp-usdhc
+           - const: fsl,imx8mm-usdhc
++          - const: fsl,imx7d-usdhc
++        deprecated: true
++      - items:
++          - enum:
++              - fsl,imx8qm-usdhc
++          - const: fsl,imx8qxp-usdhc
++          - const: fsl,imx7d-usdhc
++        deprecated: true
+ 
+   reg:
+     maxItems: 1
+-- 
+2.34.1
 
-> +
-> +  num-channels:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      Indicates supported number of DMA channels in a remotely controlled bam.
-> +
-> +  qcom,controlled-remotely:
-> +    $ref: /schemas/types.yaml#/definitions/flag
-
-type: boolean
-
-> +    description:
-> +      Indicates that the bam is controlled by remote proccessor i.e. execution
-> +      environment.
-> +
-> +  qcom,ee:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      Indicates the active Execution Environment identifier (0-7) used in the
-> +      secure world.
-
-maximum: 7
-
-> +
-> +  qcom,num-ees:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description:
-> +      Indicates supported number of Execution Environments in a remotely
-> +      controlled bam.
-> +
-> +  qcom,powered-remotely:
-> +    $ref: /schemas/types.yaml#/definitions/flag
-
-type: boolean
-
-> +    description:
-> +      Indicates that the bam is powered up by a remote processor but must be
-> +      initialized by the local processor.
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - "#dma-cells"
-> +  - interrupts
-> +  - reg
-
-clocks, clock-names, qcom-ee - these are required according to old bindings.
-
-
-Best regards,
-Krzysztof

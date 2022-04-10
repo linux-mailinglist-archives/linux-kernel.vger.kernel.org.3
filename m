@@ -2,106 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBBDC4FAC8E
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 09:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CD074FAC92
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 09:33:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234088AbiDJHcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 03:32:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48402 "EHLO
+        id S234271AbiDJHfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 03:35:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231809AbiDJHb5 (ORCPT
+        with ESMTP id S234164AbiDJHfl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 03:31:57 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBF565EB
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 00:29:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649575786; x=1681111786;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7acdqeNYB2mQbesxSUxPXsF/SJMG5dV5Al5NEqwCNfw=;
-  b=NmVeb2sK5y5EIAAiHIQA9WVy6D87+aDNXrYArHOchykqYJn9uR35iNdI
-   e4H7gAJDQ4EQgQPtM6EP4GSzeHilW+M1v3/s82TkeOXuNUqAR/1YSM8GW
-   CdZIhwwC8KnGWTYYOYN9/llKcuFk57vqAb5qpK0eLihhv4ulQb+L17jUs
-   svUL3V6ZFjtQRthd+7UnSJM5sL70Mbjus3IlhxVV7SM9g9GmIY9nz1ml7
-   fALhcZzECK/ner9ZHk6HQ30QCbpq8y1J/ROHRkOnBumuz8UXWS1Ab3tHE
-   9H0S5XB+Z6RdMlt7sDUX9ae5GS6F+XkOTuj8fP+Lg5aVHwDF6qww348WV
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10312"; a="243834135"
-X-IronPort-AV: E=Sophos;i="5.90,249,1643702400"; 
-   d="scan'208";a="243834135"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2022 00:29:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,249,1643702400"; 
-   d="scan'208";a="506734254"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 10 Apr 2022 00:29:44 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ndS11-0000mn-PL;
-        Sun, 10 Apr 2022 07:29:43 +0000
-Date:   Sun, 10 Apr 2022 15:28:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Borislav Petkov <bp@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: arch/x86/kernel/cpu/bugs.c:657:6: error: no previous prototype for
- 'unpriv_ebpf_notify'
-Message-ID: <202204101514.YEhzsZ1Q-lkp@intel.com>
+        Sun, 10 Apr 2022 03:35:41 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4ADB546B2;
+        Sun, 10 Apr 2022 00:33:31 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id j9so13494425lfe.9;
+        Sun, 10 Apr 2022 00:33:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ox3tf6Vdl+MQsr77fGjpkrwS1r+0QmB/6mtEgP5kOo8=;
+        b=Bz0LpOefLI1lEojOFoqUlsAMdkco/5HPV+AeTU8rHp3rFzg2cMD4iJ00Rm8TxmsIxZ
+         sQ1/5o80CAfxhQMQ92Uv0ZIWBiDcfEftMM9yT+G9p3ptL5HUn7yIbqeqVVjgGwneCRJ0
+         5nn0YNGTFNK9A4MaqZXdlfeteZadEXkSG7YgMXeAVw5bdHl0+NfShg2FVksEaH0QLaYb
+         9VAbdRSL7/217gvvfj/DFOdJ8jMwie1OVmRuDZqJJDWz5D7zB0Dzfjr74dQ3e44hi3QB
+         BRxQHStxTpWRqYaHaupRGJewHhsSVcra/7/KN/DzesBRXa5L4KyhCxzOcISyXRon0ihN
+         DUJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ox3tf6Vdl+MQsr77fGjpkrwS1r+0QmB/6mtEgP5kOo8=;
+        b=NRdY90ZjGixBHQtMO5XpT/QfQuNS78Xys/7jTp5UpLNogALpPq02+35Q9rB8YQTLMF
+         wDmI+v9TNkOiT+bckx3W4DGDvUVggPG8S7Gl4UL4+RkP2twrmYDSfPAm8KiJtI9/M+Eh
+         2drTeV5aiicBXXFCVtbqIcX4ejLZyUADqmv8h4raUQRWWxjuBzZOLmQYytm6Z3hNhhF2
+         7xgOe183imFJi62OuwF7LSB4JmomMpgCQNyLPBeTAB+H4dnw+HtD7rcZ0z7J0V65nnTT
+         xoJiHQrErIMfGKTpfl2HFBG3x1QaT+ay7da4g64rDa0HGrlreS3XGVOfStsPyicVrFLY
+         j+Yg==
+X-Gm-Message-State: AOAM5307ypVZUAMf18X3NpLPiXAyVHAYcNRUGVRd16vheMPXr3HaL65c
+        3OX4NsuSBpFqNkxsRTUyf6wzkbulbG4XN3bX5g==
+X-Google-Smtp-Source: ABdhPJxMe5Lm1RdB41pICYNqF8fraGS6Hg0euDwsM1rxKXmiuFYkQ8RgSAxFld06VADpygjbCv6naNQgqZecQN5dzrs=
+X-Received: by 2002:a05:6512:3b2c:b0:44a:35fd:994c with SMTP id
+ f44-20020a0565123b2c00b0044a35fd994cmr17605988lfv.473.1649576009787; Sun, 10
+ Apr 2022 00:33:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220303083141.8742-1-warp5tw@gmail.com> <20220303083141.8742-10-warp5tw@gmail.com>
+ <YiCaSSbbszm3qYIQ@smile.fi.intel.com> <CAHb3i=sStqdSpLKtF_UGmTsOssR_swssTd3pv6c2-z_kiUPTTA@mail.gmail.com>
+ <YiDNDsPWKyaIUlQR@smile.fi.intel.com> <CAKKbWA5FyCKTjEUw8rqtkoL7aw6f7Fa_QzcAkgaRnnUMTe0SKg@mail.gmail.com>
+ <YkvsB27Oj0kSmJRG@smile.fi.intel.com>
+In-Reply-To: <YkvsB27Oj0kSmJRG@smile.fi.intel.com>
+From:   Avi Fishman <avifishman70@gmail.com>
+Date:   Sun, 10 Apr 2022 10:33:18 +0300
+Message-ID: <CAKKbWA5aQeQTtM06NdNvg0=D5ThcghW5rVaM__0c1kopftqX+w@mail.gmail.com>
+Subject: Re: [PATCH v3 09/11] i2c: npcm: Handle spurious interrupts
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Tali Perry <tali.perry1@gmail.com>,
+        Tyrone Ting <warp5tw@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        yangyicong@hisilicon.com, semen.protsenko@linaro.org,
+        Wolfram Sang <wsa@kernel.org>, jie.deng@intel.com,
+        sven@svenpeter.dev, bence98@sch.bme.hu,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, olof@lixom.net,
+        Tali Perry <tali.perry@nuvoton.com>,
+        Avi Fishman <Avi.Fishman@nuvoton.com>,
+        Tomer Maimon <tomer.maimon@nuvoton.com>, KWLIU@nuvoton.com,
+        JJLIU0@nuvoton.com, kfting@nuvoton.com,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e1f700ebd6bea293abe3c7e2807b252018efde01
-commit: 44a3918c8245ab10c6c9719dd12e7a8d291980d8 x86/speculation: Include unprivileged eBPF status in Spectre v2 mitigation reporting
-date:   7 weeks ago
-config: x86_64-sof-customedconfig-bpf-defconfig (https://download.01.org/0day-ci/archive/20220410/202204101514.YEhzsZ1Q-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=44a3918c8245ab10c6c9719dd12e7a8d291980d8
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 44a3918c8245ab10c6c9719dd12e7a8d291980d8
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On Tue, Apr 5, 2022 at 10:13 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Mon, Apr 04, 2022 at 08:03:44PM +0300, Avi Fishman wrote:
+> > On Thu, Mar 3, 2022 at 4:14 PM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> > > On Thu, Mar 03, 2022 at 02:48:20PM +0200, Tali Perry wrote:
+> > > > > On Thu, Mar 3, 2022 at 12:37 PM Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> > > > > > On Thu, Mar 03, 2022 at 04:31:39PM +0800, Tyrone Ting wrote:
+> > > > > > > From: Tali Perry <tali.perry1@gmail.com>
+> > > > > > >
+> > > > > > > In order to better handle spurious interrupts:
+> > > > > > > 1. Disable incoming interrupts in master only mode.
+> > > > > > > 2. Clear end of busy (EOB) after every interrupt.
+> > > > > > > 3. Return correct status during interrupt.
+> > > > > >
+> > > > > > This is bad commit message, it doesn't explain "why" you are doing these.
+> > >
+> > > ...
+> > >
+> > > > BMC users connect a huge tree of i2c devices and muxes.
+> > > > This tree suffers from spikes, noise and double clocks.
+> > > > All these may cause spurious interrupts to the BMC.
+>
+> (1)
+>
+> > > > If the driver gets an IRQ which was not expected and was not handled
+> > > > by the IRQ handler,
+> > > > there is nothing left to do but to clear the interrupt and move on.
+> > >
+> > > Yes, the problem is what "move on" means in your case.
+> > > If you get a spurious interrupts there are possibilities what's wrong:
+> > > 1) HW bug(s)
+> > > 2) FW bug(s)
+> > > 3) Missed IRQ mask in the driver
+> > > 4) Improper IRQ mask in the driver
+> > >
+> > > The below approach seems incorrect to me.
+> >
+> > Andy, What about this explanation:
+> > On rare cases the i2c gets a spurious interrupt which means that we
+> > enter an interrupt but in
+> > the interrupt handler we don't find any status bit that points to the
+> > reason we got this interrupt.
+> > This may be a rare case of HW issue that is still under investigation
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+About 1 to 100,000 transactions
 
-All errors (new ones prefixed by >>):
+> > In order to overcome this we are doing the following:
+> > 1. Disable incoming interrupts in master mode only when slave mode is
+> > not enabled.
+> > 2. Clear end of busy (EOB) after every interrupt.
+> > 3. Clear other status bits (just in case since we found them cleared)
+> > 4. Return correct status during the interrupt that will finish the transaction.
+> > On next xmit transaction if the bus is still busy the master will
+> > issue a recovery process before issuing the new transaction.
+>
+> This sounds better, thanks.
+>
+> One thing to clarify, the (1) states that the HW "issue" is known and becomes a
+> PCB level one, i.e. noisy environment that has not been properly shielded.
+> So, if it is known, please put the reason in the commit message.
+>
 
->> arch/x86/kernel/cpu/bugs.c:657:6: error: no previous prototype for 'unpriv_ebpf_notify' [-Werror=missing-prototypes]
-     657 | void unpriv_ebpf_notify(int new_state)
-         |      ^~~~~~~~~~~~~~~~~~
-   cc1: all warnings being treated as errors
+The HW issue is not known yet, we see it on few platforms and in other
+platforms we don't, so the first assumption was this.
+So eventually we don't want to claim this without proving it.
 
+> Also would be good to see numbers of "rare". Is it 0.1%?
 
-vim +/unpriv_ebpf_notify +657 arch/x86/kernel/cpu/bugs.c
+I added above the known statistics.
 
-   655	
-   656	#ifdef CONFIG_BPF_SYSCALL
- > 657	void unpriv_ebpf_notify(int new_state)
-   658	{
-   659		if (spectre_v2_enabled == SPECTRE_V2_EIBRS && !new_state)
-   660			pr_err(SPECTRE_V2_EIBRS_EBPF_MSG);
-   661	}
-   662	#endif
-   663	
+>
+> > > > If the transaction failed, driver has a recovery function.
+> > > > After that, user may retry to send the message.
+> > > >
+> > > > Indeed the commit message doesn't explain all this.
+> > > > We will fix and add to the next patchset.
+> > > >
+> > > > > > > +     /*
+> > > > > > > +      * if irq is not one of the above, make sure EOB is disabled and all
+> > > > > > > +      * status bits are cleared.
+> > > > > >
+> > > > > > This does not explain why you hide the spurious interrupt.
+> > > > > >
+> > > > > > > +      */
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards,
+Avi

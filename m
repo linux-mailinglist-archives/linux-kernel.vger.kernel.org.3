@@ -2,144 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 661E84FAB70
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 03:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BBC54FAB71
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 03:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbiDJBqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 21:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56522 "EHLO
+        id S229716AbiDJB7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 21:59:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235030AbiDJBqn (ORCPT
+        with ESMTP id S229534AbiDJB7O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 21:46:43 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 581D81836A
-        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 18:44:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649555071; x=1681091071;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ttrLoAmatZlxQHCatQdDGTiXF+SLlVSJzfMaTaZsuxg=;
-  b=MFKokQJwfP50/4nsRBsGiypvSxhaS6gjEQM69Y72PsEk2mwTrIoX+ncj
-   ub3xqk+SyvyPNCiZwdanY10NZItG11HkZyGOj5kayqx0FcIUWzdWW9RxN
-   xovxXMB5qHbJiCvghnGp7IVHnf+eKjsg/cETO3je4ZnCk/f17tHC24+UY
-   O7AAwFjf6UWe0XwXM1WRebiaa95q5rEPT3CBje/UNpnFiorc61FFZ6ZrZ
-   deyYi7JRGjBbFKP8G95IRLCmHT9/z4wzn7ocrqEOigYWI8FUy3gZ25rJJ
-   GK8yBibdFLvHRHvrMZDKEckxkn9tuD3cjS428wAkefSbnv2EibmLGP7W5
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10312"; a="242519889"
-X-IronPort-AV: E=Sophos;i="5.90,248,1643702400"; 
-   d="scan'208";a="242519889"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2022 18:44:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,248,1643702400"; 
-   d="scan'208";a="622412159"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 09 Apr 2022 18:44:29 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ndMcu-0000Z9-U4;
-        Sun, 10 Apr 2022 01:44:28 +0000
-Date:   Sun, 10 Apr 2022 09:43:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Johannes Holland <johannes.holland@infineon.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Subject: [jarkko-tpmdd:master 3/3]
- drivers/char/tpm/tpm_tis_synquacer.c:89:32: sparse: sparse: incorrect type
- in argument 1 (different base types)
-Message-ID: <202204100909.ln7j7uK4-lkp@intel.com>
+        Sat, 9 Apr 2022 21:59:14 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 60A90BCC
+        for <linux-kernel@vger.kernel.org>; Sat,  9 Apr 2022 18:57:04 -0700 (PDT)
+Received: (qmail 298947 invoked by uid 1000); 9 Apr 2022 21:57:03 -0400
+Date:   Sat, 9 Apr 2022 21:57:03 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Maxim Devaev <mdevaev@gmail.com>
+Cc:     linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: f_mass_storage: break IO operations via
+ configfs
+Message-ID: <YlI5b1SNdsVnuo/v@rowland.harvard.edu>
+References: <Yk3TLPKyaQDsnuD4@rowland.harvard.edu>
+ <20220406213634.104cae45@reki>
+ <Yk8L6b9wEWTjWOg4@rowland.harvard.edu>
+ <20220407204553.35cead72@reki>
+ <YlBN4Zcn9NYw0PLA@rowland.harvard.edu>
+ <20220409115756.4f9b015d@reki>
+ <YlGOOJ9SwkD7WVmX@rowland.harvard.edu>
+ <20220409170837.02f0853f@reki>
+ <YlHrBdYkBSR0L6FL@rowland.harvard.edu>
+ <20220410014228.117d9f66@reki>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220410014228.117d9f66@reki>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git master
-head:   b6e0cdb87bf37357489de1069d55bd59f008daeb
-commit: b6e0cdb87bf37357489de1069d55bd59f008daeb [3/3] tpm: Remove read16/read32/write32 calls from tpm_tis_phy_ops
-config: openrisc-randconfig-s031-20220410 (https://download.01.org/0day-ci/archive/20220410/202204100909.ln7j7uK4-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/commit/?id=b6e0cdb87bf37357489de1069d55bd59f008daeb
-        git remote add jarkko-tpmdd git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
-        git fetch --no-tags jarkko-tpmdd master
-        git checkout b6e0cdb87bf37357489de1069d55bd59f008daeb
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=openrisc SHELL=/bin/bash drivers/char/tpm/
+On Sun, Apr 10, 2022 at 01:42:28AM +0300, Maxim Devaev wrote:
+> В Sat, 9 Apr 2022 16:22:29 -0400
+> Alan Stern <stern@rowland.harvard.edu> wrote:
+> > > I'm using Raspberry Pi with DWC2. So:
+> > > - Connect RPi-based gadget to the Linux host.
+> > > - Set image in the "file" attribute.  
+> > 
+> > Exactly what is the full pathname you're using for the "file" attribute?
+> 
+> /sys/kernel/config/usb_gadget/kvmd/functions/mass_storage.usb0/lun.0/file
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Yeah, that doesn't seem right at all.
 
+You're doing this under KVM, right?  Is the gadget driver running in the 
+host OS or the guest OS?  And the sysfs file accesses -- are they in the 
+host's filesystem or in the guest's?
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/char/tpm/tpm_tis_synquacer.c:89:32: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned char [usertype] @@     got unsigned char const [usertype] * @@
-   drivers/char/tpm/tpm_tis_synquacer.c:89:32: sparse:     expected unsigned char [usertype]
-   drivers/char/tpm/tpm_tis_synquacer.c:89:32: sparse:     got unsigned char const [usertype] *
-   drivers/char/tpm/tpm_tis_synquacer.c:90:32: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned char [usertype] @@     got unsigned char const [usertype] * @@
-   drivers/char/tpm/tpm_tis_synquacer.c:90:32: sparse:     expected unsigned char [usertype]
-   drivers/char/tpm/tpm_tis_synquacer.c:90:32: sparse:     got unsigned char const [usertype] *
-   drivers/char/tpm/tpm_tis_synquacer.c:91:32: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned char [usertype] @@     got unsigned char const [usertype] * @@
-   drivers/char/tpm/tpm_tis_synquacer.c:91:32: sparse:     expected unsigned char [usertype]
-   drivers/char/tpm/tpm_tis_synquacer.c:91:32: sparse:     got unsigned char const [usertype] *
-   drivers/char/tpm/tpm_tis_synquacer.c:92:32: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned char [usertype] @@     got unsigned char const [usertype] * @@
-   drivers/char/tpm/tpm_tis_synquacer.c:92:32: sparse:     expected unsigned char [usertype]
-   drivers/char/tpm/tpm_tis_synquacer.c:92:32: sparse:     got unsigned char const [usertype] *
->> drivers/char/tpm/tpm_tis_synquacer.c:89:33: sparse: sparse: non size-preserving pointer to integer cast
-   drivers/char/tpm/tpm_tis_synquacer.c:90:33: sparse: sparse: non size-preserving pointer to integer cast
-   drivers/char/tpm/tpm_tis_synquacer.c:91:33: sparse: sparse: non size-preserving pointer to integer cast
-   drivers/char/tpm/tpm_tis_synquacer.c:92:33: sparse: sparse: non size-preserving pointer to integer cast
+What happens if you don't use KVM and just load the gadget driver on the 
+physical machine?
 
-vim +89 drivers/char/tpm/tpm_tis_synquacer.c
+> > > - Mount gadget's drive on the Linux host.
+> > > - Umount it.
+> > > - Try to eject using emptying the "file" attribute.
+> > > - Get EBUSY error.  
+> > 
+> > This must mean that some program on the host is keeping the device file 
+> > open, even though it isn't mounted.  (I tried running a similar test on 
+> > my system and it worked perfectly, with no other programs accessing the 
+> > device).  You might be able to identify which program is accessing the 
+> > device by running lsof on the host and searching the output for the 
+> > device name.
+> 
+> I've been thinking about it too. I tried lsof but it didn't display anything
+> related with sr0 device. But after execution the "eject" command on the host,
+> I was able to emptify the "file" attribute of the gadget.
 
-    66	
-    67	static int tpm_tis_synquacer_write_bytes(struct tpm_tis_data *data, u32 addr,
-    68						 u16 len, const u8 *value,
-    69						 enum tpm_tis_io_mode io_mode)
-    70	{
-    71		struct tpm_tis_synquacer_phy *phy = to_tpm_tis_tcg_phy(data);
-    72		__le16 result_le16;
-    73		__le32 result_le32;
-    74		u16 result16;
-    75		u32 result32;
-    76	
-    77		switch (io_mode) {
-    78		case TPM_TIS_PHYS_8:
-    79			while (len--)
-    80				iowrite8(*value++, phy->iobase + addr);
-    81			break;
-    82		case TPM_TIS_PHYS_16:
-    83			return -EINVAL;
-    84		case TPM_TIS_PHYS_32:
-    85			/*
-    86			 * Due to the limitation of SPI controller on SynQuacer,
-    87			 * 16/32 bits access must be done in byte-wise and descending order.
-    88			 */
-  > 89			iowrite8(&value[3], phy->iobase + addr + 3);
-    90			iowrite8(&value[2], phy->iobase + addr + 2);
-    91			iowrite8(&value[1], phy->iobase + addr + 1);
-    92			iowrite8(&value[0], phy->iobase + addr);
-    93			break;
-    94		}
-    95	
-    96		return 0;
-    97	}
-    98	
+The eject command should set the "file" attribute to an empty string all 
+by itself, with no need for you to do anything else.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> > I also tried sending a USR1 signal to the driver's kernel thread while 
+> > an image was mounted and being accessed.  It did clear the prevent_allow 
+> > flag, so I could eject the image.  But it also caused a 30-second delay 
+> > on the host, as predicted.  Now, maybe you don't care about such delays 
+> > when you're going to eject the media anyway, but it still seems like a 
+> > bad thing to do.
+> 
+> It looks like the prevent_medium_removal flag switching really works better in this case.
+
+I don't understand that comment.  In what case?  Works better than what?
+
+> > > > > I have reflected on the rest of your arguments and changed my mind.
+> > > > > I think that "forced_eject" for a specific lun without interrupting operations would
+> > > > > really be the best solution. I wrote a simple patch and tested it, everything seems
+> > > > > to work. What do you think about something like this?
+> > > > > 
+> > > > > 
+> > > > > static ssize_t fsg_lun_opts_forced_eject_store(struct config_item *item,
+> > > > >                                                const char *page, size_t len)
+> > > > > {
+> > > > >         struct fsg_lun_opts *opts = to_fsg_lun_opts(item);
+> > > > >         struct fsg_opts *fsg_opts = to_fsg_opts(opts->group.cg_item.ci_parent);
+> > > > >         int ret;
+> > > > > 
+> > > > >         opts->lun->prevent_medium_removal = 0;
+> > > > >         ret = fsg_store_file(opts->lun, &fsg_opts->common->filesem, "", 0);
+> > > > >         return ret < 0 ? ret : len;
+> > > > > }
+> > > > > 
+> > > > > CONFIGFS_ATTR_WO(fsg_lun_opts_, forced_eject);    
+> > > > 
+> > > > The basic idea is right.  But this should not be a CONFIGFS option; it 
+> > > > should be an ordinary LUN attribute.  For an example, see the definition of 
+> > > > file_store() in f_mass_storage.c; your routine should look very similar.  
+> > > 
+> > > Okay, but where this attribute is located in sysfs? How can I use it?  
+> > 
+> > Well, it's going to be in different places depending on what UDC driver 
+> > your gadget uses.  On my system I'm using the dummy_udc driver, so the 
+> > sysfs "file" attribute is located at:
+> > 
+> > 	/sys/devices/platform/dummy_ucd.0/gadget/lun0/file
+> > 
+> > If instead you're looking at
+> > 
+> > 	/sys/module/g_mass_storage/parameters/file
+> > 
+> > or in some configfs directory, that's the wrong place.  You can eject 
+> > the media simply by doing (as root):
+> > 
+> > 	echo >/sys/devices/.../gadget/lun0/file
+> > 
+> > (fill in the "..." appropriately for your system).
+> > 
+> > > Sorry for the stupid question.  
+> > 
+> > Not at all.
+> 
+> Thanks! Unfortunately I'm using dwc2 driver and it doesn't have any gadget parameters
+> outside of the configfs:
+> 
+> [root@pikvm ~]# find /sys -iname lun0
+> [root@pikvm ~]# find /sys -iname lun.0
+> /sys/kernel/config/usb_gadget/kvmd/functions/mass_storage.usb0/lun.0
+> [root@pikvm ~]#
+> 
+> So in my local case configfs is only way to place forced_eject :(
+
+That can't possibly be right.  Again, we may be miscommunicating because 
+of the way you're using KVM.
+
+What happens if you set up the gadget using g-mass-storage instead of 
+configfs?  For example:
+
+	modprobe g-mass-storage cdrom=y removable=y ro=y file=...
+
+> Could we add both device attrs and configfs file?
+
+No.  Configfs files are for setting up the gadget in the first place, or 
+changing its configuration while it isn't attached to a host.  Device 
+attribute files are for modifying the gadget while it is running.
+
+Alan Stern

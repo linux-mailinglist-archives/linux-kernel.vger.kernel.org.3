@@ -2,101 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AFBD4FAE30
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 16:17:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE7F44FAE31
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 16:18:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239849AbiDJOTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 10:19:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46198 "EHLO
+        id S239885AbiDJOT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 10:19:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239732AbiDJOTg (ORCPT
+        with ESMTP id S239732AbiDJOT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 10:19:36 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C0E44A3CE
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 07:17:26 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id i27so25969172ejd.9
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 07:17:26 -0700 (PDT)
+        Sun, 10 Apr 2022 10:19:57 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4CF4BFF5
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 07:17:47 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id t13so11949646pgn.8
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 07:17:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=jDP8OQWCZ1cApEjs6Ir/qYFwpOISQGD4DToqFNLbWwI=;
-        b=r9qjBUHUfWFDMYVuB0F1ZaXh7z7nJWY76ywnBJ+g/GEAle6Em6Sh509MmX5YpxZSgA
-         crcsjUHlrrIp+0JRp8C9JXhjyk0P8JZZXI9Q69rh4OHyGFbU8uMZfbfIz7ykgRdS0gfF
-         8NM3619gDS/DD8Qcav3ELp8GE/2dCYU/dc51Esyfq5xlGVIsZW0Z/p53tSQdCAuVBo+S
-         UPONE2lE2cMfAedkRYdZe64ubOwN2oyz6UvKC9ji5v9TmK+rq4gRHtWra0e8I8r6dtDl
-         CFcrUuLUztVpC9BLywqI37rT13PYG49SngXL7RZbbj4crjd+FQzOMvw4DE1KjFpkDH5q
-         O1dg==
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=FMBgmq8WKX+31y3rGclfHeDGwB3PfPowydFLKHwFCfQ=;
+        b=mLvHvlFkv6OT+7/x+LeJDrtZZr8fRBhJJ2mgrN717MhJA26x5JO4ysK2LM7P81ymhR
+         k4glu0J8QDC6TPkV0AXEmKQvwzr8DyzKNLF/fk94lOB0nfuJA1p7pkCz5/+R6hH3pGT3
+         37/cPCRNJDKj53Rgn/ktsG2VJznD+UqYBNdbGBJEcZ+Jh+kKugSo8bqNLThh4I0vQ594
+         sBnuA6K5kOJtUNHzd56qIo1TQP66ntFROjh80n6+M6A1bLhS7w6K07qhZGdSC+1Yqmmm
+         vWyVeteSS5VhXpBvGE90hD5i2nn0phU/lJkBHm7tSKAp3plwCB+ftCUP/h/BYrZtYdg3
+         Vg3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=jDP8OQWCZ1cApEjs6Ir/qYFwpOISQGD4DToqFNLbWwI=;
-        b=jChuGKOtm51z4aWO2Jo4RLiKdfvywpoLVdT+aBlo/vHyirOsYJFL4SypgK9VHbzZfg
-         hJXcGKtsWS/i/CJffIkYi53wAbISgPhOcuG6rb4bIjB6ErClHyjHxd1OSw80yKOyBcFV
-         8VA/+mdKRLAOOnAxOdmAeoRhYY+sGeRsq8yp5tJ/Mf0DJLHemOc4f6CfkEdIUAYj1HFL
-         Hph4tLHVdVthvv6PJBySZnSlt9HbWH+JJwes5LJEZO1LrvJ9m7VRoA2Cx0PjOXi8iyGO
-         +Xr0mCMEhFfZ/cP/0uWzfjSQ+XUO1ZYDOQU62MiODGVqOu0Y1pcFDegNzGxchjxyaYCU
-         sOmA==
-X-Gm-Message-State: AOAM530eUGSxncfmXClEmJXd/kL7GjjCWw72conQ1ieoYc5ah6CqziXJ
-        Qs+sHGV/T1c94hfc3KTyiquraUQLlgk7Fayj
-X-Google-Smtp-Source: ABdhPJy7Y9rR1HtBTTpbaKcxUf6/EytDbPTH2s40DrF85ncNaJGiu4dq4FKFOQoIl6Ao2wclofDrMw==
-X-Received: by 2002:a17:906:3101:b0:6d6:5b64:906f with SMTP id 1-20020a170906310100b006d65b64906fmr26840864ejx.513.1649600244930;
-        Sun, 10 Apr 2022 07:17:24 -0700 (PDT)
-Received: from [192.168.0.188] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id e9-20020a17090618e900b006e8669f3941sm2283276ejf.209.2022.04.10.07.17.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Apr 2022 07:17:24 -0700 (PDT)
-Message-ID: <17c8f015-df02-1dcf-07c2-f57a1dfd3aa0@linaro.org>
-Date:   Sun, 10 Apr 2022 16:17:23 +0200
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=FMBgmq8WKX+31y3rGclfHeDGwB3PfPowydFLKHwFCfQ=;
+        b=t0oeuU6it3VeTTMYmZ3GH80mBOM+xvPdoSJgJkFMJT0wafUWpPAalGsaybFTtSvpKh
+         eOpAd42Zzxs++OnSOagMcWF8SC/zY4M2QDrwu6mT0io0w2sIUVbwkeTdEYQdObwTSSp7
+         xZYfxCwGKm6nOYr6S0XpEIo93nYQqz1Raa+ymlC1c2Q7p5lcFDW0EBgU4XQ8L0CfwznL
+         C7iBklb1I4qrIOoikz/UfwHEFjN391i7EoCa36rZMEzyYTY59v4RVF5xLw9tsdkAdLvG
+         yp4hVwhENdco1VK1YeeEsONRp5niQ2x6fEA9MmOhR33mhdppHdaD6wyx76+xNDJeNEIB
+         MBsQ==
+X-Gm-Message-State: AOAM533KTnNhUv6pPraXj8MbcFF6Bssp1S2Ya7erVMQuqAlEat5exP3W
+        l9PIdEUapwgpdoqbnTf0EkhQhW+huCOlpLgjkQ==
+X-Google-Smtp-Source: ABdhPJznr7MjkdWgQf2yJa7FooAbfWqjAnQjRrdpSS6+CnEn4MUZoHzPicnQcAWZ5sW1Z0LFsgLUyp7RqWNXpTFZQyI=
+X-Received: by 2002:a05:6a00:ad0:b0:4f7:a357:6899 with SMTP id
+ c16-20020a056a000ad000b004f7a3576899mr28594362pfl.80.1649600266651; Sun, 10
+ Apr 2022 07:17:46 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: wkup-m3-ipc: Add vtt toggle gpio pin
- property
-Content-Language: en-US
-To:     Drew Fustini <dfustini@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Dave Gerlach <d-gerlach@ti.com>,
-        Tony Lindgren <tony@atomide.com>, Nishanth Menon <nm@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220409211215.2529387-1-dfustini@baylibre.com>
- <20220409211215.2529387-2-dfustini@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220409211215.2529387-2-dfustini@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Zheyu Ma <zheyuma97@gmail.com>
+Date:   Sun, 10 Apr 2022 22:17:35 +0800
+Message-ID: <CAMhUBjn40pO7A=icudFKOoiMrckcH_o7mdi-uCmgCFHi6Ueuzw@mail.gmail.com>
+Subject: [BUG] mtd: rawnand: denali_pci: page fault when probing fails
+To:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com
+Cc:     linux-mtd@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/04/2022 23:12, Drew Fustini wrote:
-> Document Wakeup M3 IPC property that indicates a GPIO pin is connected
-> to the enable pin on DDR VTT regulator and can be toggled during low
-> power mode transitions.
-> 
-> Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
-> [dfustini: converted to YAML, removed unnecessary "ti,needs-vtt-toggle"]
-> Signed-off-by: Drew Fustini <dfustini@baylibre.com>
-> ---
->  .../devicetree/bindings/soc/ti/wkup-m3-ipc.yaml     | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
+Hello,
 
+I found a bug in the denali_pci module.
+When the driver fails to probe, we will get the following splat:
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+[    4.472703] denali-nand-pci 0000:00:05.0: timeout while waiting for
+irq 0x1000
+[    4.474071] denali-nand-pci: probe of 0000:00:05.0 failed with error -5
+[    4.473538] nand: No NAND device found
+[    4.474068] BUG: unable to handle page fault for address:
+ffffc90005000410
+[    4.475169] #PF: supervisor write access in kernel mode
+[    4.475579] #PF: error_code(0x0002) - not-present page
+[    4.478362] RIP: 0010:iowrite32+0x9/0x50
+[    4.486068] Call Trace:
+[    4.486269]  <IRQ>
+[    4.486443]  denali_isr+0x15b/0x300 [denali]
+[    4.486788]  ? denali_direct_write+0x50/0x50 [denali]
+[    4.487189]  __handle_irq_event_percpu+0x161/0x3b0
+[    4.487571]  handle_irq_event+0x7d/0x1b0
+[    4.487884]  handle_fasteoi_irq+0x2b0/0x770
+[    4.488219]  __common_interrupt+0xc8/0x1b0
+[    4.488549]  common_interrupt+0x9a/0xc0
 
+It seems that the driver unmap the memory region before disabling the irq.
 
-Best regards,
-Krzysztof
+Regards,
+Zheyu Ma

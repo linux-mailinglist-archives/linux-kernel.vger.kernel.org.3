@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C1564FAD44
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 12:37:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 855C34FAD4C
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 12:39:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236873AbiDJKf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 06:35:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33148 "EHLO
+        id S235540AbiDJKkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 06:40:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233653AbiDJKfO (ORCPT
+        with ESMTP id S233152AbiDJKj5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 06:35:14 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D53673C6;
-        Sun, 10 Apr 2022 03:33:04 -0700 (PDT)
-Date:   Sun, 10 Apr 2022 10:33:01 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649586782;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=60Lfwzh0nAtHFcSVWbVw2y7ROX/9cN8agVJL8qXTZ+w=;
-        b=olLE6vPdCbJgJNxvvqrlDTs5gvaXAKVmPamzDz7CAZBmaUknR6tPcw3FhJL5WoLeI6Pcmz
-        BqrrtwUofoHrWAwTQ1qqfgWPkREaP4s9cHW0mxkGBzIt9l9KStjn1zSBLJqZMqAhj7QmJZ
-        2NgPNnQo2Jmdf/ia2+9IjsUKhZsy4DZekdGL6BD21fNfEtic7df8j3+ycizGbK6N0/TaN5
-        oJdYWFfnwPrQEvrjdCIQgrXCEw9kgAu6J8UqS4cG+M/48FAHeP/vmIqByD7xNfASCIFxYf
-        j2veZrATjFhvUB9SRGY4uiyfikLcU1Qe1Z6RushYiOx01d9NuA2BQ5eckyCCoA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649586782;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=60Lfwzh0nAtHFcSVWbVw2y7ROX/9cN8agVJL8qXTZ+w=;
-        b=0uRNVo9rYMkOmWY+Lo77BEMlbSc7IOTVMp3rUEtGXaKKGuCUiMY1UgCbGDQwh3WomDytT4
-        THIQg7RtOv4z02AA==
-From:   "tip-bot2 for Paul Gortmaker" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/urgent] tick/nohz: Use WARN_ON_ONCE() to prevent console
- saturation
-Cc:     Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Thomas Gleixner <tglx@linutronix.de>, stable@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20211206145950.10927-3-paul.gortmaker@windriver.com>
-References: <20211206145950.10927-3-paul.gortmaker@windriver.com>
+        Sun, 10 Apr 2022 06:39:57 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E37C2F00C
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 03:37:46 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1293821112;
+        Sun, 10 Apr 2022 10:37:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1649587065; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=o06aH5Wwm/wBPkhKlY5uWIbR23iz0C2sKU3U9zZmu9A=;
+        b=swEx90bQ6B4wcKPwLHWTN+5yQ7469Xl9vvpzi6sFaDPcp8jkH5mw+3357AWi9IREzTjFiC
+        d/C/zp0phP1g7EO3pD3TET2zrkzTS1vnvS3QY13yDiI01BbhpBZQI8f5XaEr54zgoCGaq5
+        tyRtUZ8T99G+HKCAwFn+xgoEBchXhSU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1649587065;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=o06aH5Wwm/wBPkhKlY5uWIbR23iz0C2sKU3U9zZmu9A=;
+        b=+S4niASwVrD8PZD9jAgjAISlUUtI0FDf2HPBmkxrKgp1Xaq0uxUxi2D/nwz+9sS3U/qewA
+        nhCuuvx9IPjplZBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 057A913A91;
+        Sun, 10 Apr 2022 10:37:45 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Z4hTAXmzUmJ8IAAAMHmgww
+        (envelope-from <bp@suse.de>); Sun, 10 Apr 2022 10:37:45 +0000
+Date:   Sun, 10 Apr 2022 12:37:42 +0200
+From:   Borislav Petkov <bp@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     x86-ml <x86@kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] sched/urgent for v5.18-rc2
+Message-ID: <YlKzdjk+VtarQ5pr@zn.tnic>
 MIME-Version: 1.0
-Message-ID: <164958678121.4207.8216849655499016396.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -66,50 +67,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the timers/urgent branch of tip:
+Hi Linus,
 
-Commit-ID:     40e97e42961f8c6cc7bd5fe67cc18417e02d78f1
-Gitweb:        https://git.kernel.org/tip/40e97e42961f8c6cc7bd5fe67cc18417e02d78f1
-Author:        Paul Gortmaker <paul.gortmaker@windriver.com>
-AuthorDate:    Mon, 06 Dec 2021 09:59:50 -05:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Sun, 10 Apr 2022 12:23:34 +02:00
+please pull a couple of urgent scheduler fixes for 5.18-rc2.
 
-tick/nohz: Use WARN_ON_ONCE() to prevent console saturation
-
-While running some testing on code that happened to allow the variable
-tick_nohz_full_running to get set but with no "possible" NOHZ cores to
-back up that setting, this warning triggered:
-
-        if (unlikely(tick_do_timer_cpu == TICK_DO_TIMER_NONE))
-                WARN_ON(tick_nohz_full_running);
-
-The console was overwhemled with an endless stream of one WARN per tick
-per core and there was no way to even see what was going on w/o using a
-serial console to capture it and then trace it back to this.
-
-Change it to WARN_ON_ONCE().
-
-Fixes: 08ae95f4fd3b ("nohz_full: Allow the boot CPU to be nohz_full")
-Signed-off-by: Paul Gortmaker <paul.gortmaker@windriver.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20211206145950.10927-3-paul.gortmaker@windriver.com
+Thx.
 
 ---
- kernel/time/tick-sched.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
-index 2d76c91..3506f6e 100644
---- a/kernel/time/tick-sched.c
-+++ b/kernel/time/tick-sched.c
-@@ -188,7 +188,7 @@ static void tick_sched_do_timer(struct tick_sched *ts, ktime_t now)
- 	 */
- 	if (unlikely(tick_do_timer_cpu == TICK_DO_TIMER_NONE)) {
- #ifdef CONFIG_NO_HZ_FULL
--		WARN_ON(tick_nohz_full_running);
-+		WARN_ON_ONCE(tick_nohz_full_running);
- #endif
- 		tick_do_timer_cpu = cpu;
- 	}
+The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+
+  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git tags/sched_urgent_for_v5.18_rc2
+
+for you to fetch changes up to 0a70045ed8516dfcff4b5728557e1ef3fd017c53:
+
+  entry: Fix compile error in dynamic_irqentry_exit_cond_resched() (2022-04-05 09:59:36 +0200)
+
+----------------------------------------------------------------
+- Use the correct static key checking primitive on the IRQ exit path
+
+- Two fixes for the new forceidle balancer
+
+----------------------------------------------------------------
+Peter Zijlstra (1):
+      sched/core: Fix forceidle balancing
+
+Sebastian Andrzej Siewior (1):
+      sched: Teach the forced-newidle balancer about CPU affinity limitation.
+
+Sven Schnelle (1):
+      entry: Fix compile error in dynamic_irqentry_exit_cond_resched()
+
+ kernel/entry/common.c |  2 +-
+ kernel/sched/core.c   | 16 +++++++++++-----
+ kernel/sched/idle.c   |  1 -
+ kernel/sched/sched.h  |  6 ------
+ 4 files changed, 12 insertions(+), 13 deletions(-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Ivo Totev, HRB 36809, AG Nürnberg

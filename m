@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB624FAEEA
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 18:32:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31C264FAEEB
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 18:32:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243629AbiDJQeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 12:34:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46318 "EHLO
+        id S243634AbiDJQeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 12:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243604AbiDJQeO (ORCPT
+        with ESMTP id S243614AbiDJQeR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 12:34:14 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D0E13FA0
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 09:32:03 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id k14so12153733pga.0
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 09:32:03 -0700 (PDT)
+        Sun, 10 Apr 2022 12:34:17 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A14515835
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 09:32:06 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id r66so12127259pgr.3
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 09:32:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=isbZTSF51sQ2FdPVyH6jc9Gphy+CzzvzSabiko7I6mc=;
-        b=WQ6NrFWjgSROqckS7LZwaf2sC8rup0FYK90P5hEB5nGjeUppWwR2JJCEwHYN+LsJaP
-         02tCUiWEVQaC5PpKqlM0TpO6r1hmFEWQAVAmM4k5XNhtKOxhNoj+P5BiH/Rl8oCQDPlL
-         pSM86wRl3fFr6cq/g2nj4LQeW4LiXhQyf4SDLjCAgzptOiKu3ul6+/4zlCh+lXcunRka
-         Iol3zQQxHbbaP5q4QOsjOjbT/7chZVGCFFarKZzNDf1xqF3GAgnrT4cbH9xh5PZo5c5m
-         2mYdu/UZ9UtDfRKxLx1aCS58JQzhU9+vh03RQwl4XZkCoMk864dhvFNE2NBFBZRwiG2m
-         vcTQ==
+        bh=QN6xP3dvTt8eDyyxi0GOR7k7xaEfRxM7p59jD419ae4=;
+        b=h9NPejbZZiVsyzDuJB41AHo0EZuxX1138V+yJNlXFfy50OodXO0hQP+E/YgUDwPv/e
+         NBEaq+RvL7ZBwasX+sSSXA+IGct0dw4A4fI43uBRInPJYk58MJrWy5wGyJ3LvNfzFmQB
+         fqDI1DDoidIKsZo9P6Wokl0ThG07WfVGrMSP7J7ONujW05Bz38wWC49tOUkaJXHRfFhF
+         UVZ6+EroYgo6rntyOfW90xgj7684lZBWUsrutg9yBLiYIp1TmDYtwSa4nMeLF51flP7T
+         TMk1XFhyxpFT330mI5ZuCedwWlEkfZjMfylRsBqcH9rIOP4LjrINcYZkonlx2tXcl/5l
+         KS5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=isbZTSF51sQ2FdPVyH6jc9Gphy+CzzvzSabiko7I6mc=;
-        b=C94MY3QQJ89p7/0PhAgVdQzYhEWbR7NOKtbPvEJCf2T7jyazG6ugepTF4Vd3mXbqk2
-         bDviINuaaeM1Qrp6X9AhY+pPxALCDaV+J6bwRJIRC6YpGEBTtAWVTKOzeEMQfz79iUky
-         k53x2yvEoeJ+9uk4D7VxhHBHeiE/IQIg26Wlmhtcp9qfB/iRzwhBhmjhSutQyWaCge5Q
-         SvX8LU93Wn82qoHvVmGELqBOSiIPY5PpKHYD25JLYdZOrICbq9VV3VKahzM1iiaIQZ6o
-         WnTb2sL0pj1m2/qjn4336M2LU3Q6XeVp3LoDcub2jnoIP3gCddTYmjTEjXw/qRkC0qip
-         J8Rw==
-X-Gm-Message-State: AOAM533op8bHTHCU2kAkqjKeDMOOc+8mK0/Nd0TrNE1ADH2Bdb4L3Ef7
-        3m3HSyPU/7Fm+JANxr/x2kw=
-X-Google-Smtp-Source: ABdhPJzsjuokRfZ4sVFRJ05ODDxjzY9aXs4YH+x2yITz4ZIwskSlkbJNeDFx2Fl7jlZhMBVV0LjyQA==
-X-Received: by 2002:a63:6c04:0:b0:398:54fb:5632 with SMTP id h4-20020a636c04000000b0039854fb5632mr22918201pgc.78.1649608322658;
-        Sun, 10 Apr 2022 09:32:02 -0700 (PDT)
+        bh=QN6xP3dvTt8eDyyxi0GOR7k7xaEfRxM7p59jD419ae4=;
+        b=mBUVoEMSZJ/PBFFhq4ritcDS9IK5v7wDwpuX4ApRYSbM+MFOrcUdyUrh9lqqXCxxxC
+         5rm0Wg8DrVAKkoBX3DkT1SPh91J9huxyzDZ8OceNYQTpY7tPPPKu5mw9mfOfYRgtaX6s
+         0MR/VK4l0eCZl3vasx7Oh9/eQL/VjHV6PSJr2f+9zBRdgloGtFb1eIEBVqph79aY8tmc
+         V5B0f6NT/6j6BRyP6m1deoFMJt0rPpN/6GQAnM+iL4D3yFXnc2wvyKiBqZP/1INuhAnX
+         e37QwcS6Zu39iT1IFHDwBY82Qtlu4+5s/R/OfRYLrKsDd3wyB9L1uQ7fAjIuyCk58xBS
+         qhIg==
+X-Gm-Message-State: AOAM530WFsSolGmz36fsuLe2B/gW3dpcsVfH93bXwJHYU8iZTwHAZ0GM
+        503uC476yhojDO5Yc/dUgAI=
+X-Google-Smtp-Source: ABdhPJxIK56wYzdB6oyCxjj2QAgoMYhH9R78QWHe529frT47k3gqhIOYunoTMmgsb0l2DVS5E2ZNvA==
+X-Received: by 2002:a65:6951:0:b0:381:f10:ccaa with SMTP id w17-20020a656951000000b003810f10ccaamr22824522pgq.587.1649608325970;
+        Sun, 10 Apr 2022 09:32:05 -0700 (PDT)
 Received: from makvihas.localhost.com ([2405:201:202b:15:606b:10e4:2085:6825])
-        by smtp.gmail.com with ESMTPSA id f12-20020a056a001acc00b004fb37ecc6b2sm31940021pfv.29.2022.04.10.09.31.59
+        by smtp.gmail.com with ESMTPSA id f12-20020a056a001acc00b004fb37ecc6b2sm31940021pfv.29.2022.04.10.09.32.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Apr 2022 09:32:02 -0700 (PDT)
+        Sun, 10 Apr 2022 09:32:05 -0700 (PDT)
 From:   Vihas Makwana <makvihas@gmail.com>
 To:     Larry Finger <Larry.Finger@lwfinger.net>,
         Phillip Potter <phil@philpotter.co.uk>,
@@ -57,9 +57,9 @@ Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Dan Carpenter <dan.carpenter@oracle.com>,
         Pavel Skripkin <paskripkin@gmail.com>,
         Vihas Makwana <makvihas@gmail.com>
-Subject: [PATCH 4/6] staging: r8188eu: drop unnecessary wrapper rtw_dequeue_cmd
-Date:   Sun, 10 Apr 2022 22:01:15 +0530
-Message-Id: <20220410163117.3964-5-makvihas@gmail.com>
+Subject: [PATCH 5/6] staging: r8188eu: drop unnecessary wrapper rtw_init_mlme_priv
+Date:   Sun, 10 Apr 2022 22:01:16 +0530
+Message-Id: <20220410163117.3964-6-makvihas@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220410163117.3964-1-makvihas@gmail.com>
 References: <20220410163117.3964-1-makvihas@gmail.com>
@@ -75,79 +75,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the unnecessary wrapper. The logic of rtw_dequeue_cmd can
-be moved to _rtw_dequeue_cmd.
+Remove the unnecessary wrapper. The logic of rtw_init_mlme_priv can
+be moved to _rtw_init_mlme_priv.
 
 Signed-off-by: Vihas Makwana <makvihas@gmail.com>
 ---
- drivers/staging/r8188eu/core/rtw_cmd.c    | 16 ++++------------
- drivers/staging/r8188eu/include/rtw_cmd.h |  2 +-
- 2 files changed, 5 insertions(+), 13 deletions(-)
+ drivers/staging/r8188eu/core/rtw_mlme.c    | 11 +----------
+ drivers/staging/r8188eu/include/rtw_mlme.h |  2 +-
+ drivers/staging/r8188eu/os_dep/os_intfs.c  |  2 +-
+ 3 files changed, 3 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
-index ac6e710e5..9d1beca43 100644
---- a/drivers/staging/r8188eu/core/rtw_cmd.c
-+++ b/drivers/staging/r8188eu/core/rtw_cmd.c
-@@ -121,10 +121,11 @@ static int _rtw_enqueue_cmd(struct __queue *queue, struct cmd_obj *obj)
- 	return _SUCCESS;
+diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
+index c90f36dee..f2a61c162 100644
+--- a/drivers/staging/r8188eu/core/rtw_mlme.c
++++ b/drivers/staging/r8188eu/core/rtw_mlme.c
+@@ -30,7 +30,7 @@ u8 rtw_to_roaming(struct adapter *adapter)
+ 	return adapter->mlmepriv.to_roaming;
  }
  
--static struct cmd_obj *_rtw_dequeue_cmd(struct __queue *queue)
-+struct cmd_obj *_rtw_dequeue_cmd(struct cmd_priv *pcmdpriv)
+-static int _rtw_init_mlme_priv(struct adapter *padapter)
++int _rtw_init_mlme_priv(struct adapter *padapter)
  {
- 	struct cmd_obj *obj;
- 	unsigned long flags;
-+	struct __queue *queue = &pcmdpriv->cmd_queue;
- 
- 	spin_lock_irqsave(&queue->lock, flags);
- 	if (list_empty(&queue->queue)) {
-@@ -178,15 +179,6 @@ u32 rtw_enqueue_cmd(struct cmd_priv *pcmdpriv, struct cmd_obj *cmd_obj)
- 	return res;
+ 	int	i;
+ 	u8	*pbuf;
+@@ -288,15 +288,6 @@ u8 *rtw_get_beacon_interval_from_ie(u8 *ie)
+ 	return ie + 8;
  }
  
--struct	cmd_obj	*rtw_dequeue_cmd(struct cmd_priv *pcmdpriv)
+-int rtw_init_mlme_priv(struct adapter *padapter)/* struct	mlme_priv *pmlmepriv) */
 -{
--	struct cmd_obj *cmd_obj;
+-	int	res;
 -
--	cmd_obj = _rtw_dequeue_cmd(&pcmdpriv->cmd_queue);
+-	res = _rtw_init_mlme_priv(padapter);/*  (pmlmepriv); */
 -
--	return cmd_obj;
+-	return res;
 -}
 -
- void rtw_free_cmd_obj(struct cmd_obj *pcmd)
+ void rtw_free_mlme_priv(struct mlme_priv *pmlmepriv)
  {
+ 	_rtw_free_mlme_priv(pmlmepriv);
+diff --git a/drivers/staging/r8188eu/include/rtw_mlme.h b/drivers/staging/r8188eu/include/rtw_mlme.h
+index 1dc1fbf04..b5b1a0e10 100644
+--- a/drivers/staging/r8188eu/include/rtw_mlme.h
++++ b/drivers/staging/r8188eu/include/rtw_mlme.h
+@@ -438,7 +438,7 @@ int event_thread(void *context);
+ void rtw_join_timeout_handler (struct timer_list *t);
+ void _rtw_scan_timeout_handler (struct timer_list *t);
+ void rtw_free_network_queue(struct adapter *adapter, u8 isfreeall);
+-int rtw_init_mlme_priv(struct adapter *adapter);
++int _rtw_init_mlme_priv(struct adapter *adapter);
+ void rtw_free_mlme_priv (struct mlme_priv *pmlmepriv);
+ int rtw_select_and_join_from_scanned_queue(struct mlme_priv *pmlmepriv);
+ int rtw_set_key(struct adapter *adapter, struct security_priv *psecuritypriv,
+diff --git a/drivers/staging/r8188eu/os_dep/os_intfs.c b/drivers/staging/r8188eu/os_dep/os_intfs.c
+index f041c3d87..448ea9533 100644
+--- a/drivers/staging/r8188eu/os_dep/os_intfs.c
++++ b/drivers/staging/r8188eu/os_dep/os_intfs.c
+@@ -478,7 +478,7 @@ u8 rtw_init_drv_sw(struct adapter *padapter)
+ 		goto free_cmd_priv;
+ 	}
  
-@@ -230,7 +222,7 @@ int rtw_cmd_thread(void *context)
- 		    padapter->bSurpriseRemoved)
- 			break;
- 
--		pcmd = rtw_dequeue_cmd(pcmdpriv);
-+		pcmd = _rtw_dequeue_cmd(pcmdpriv);
- 		if (!pcmd)
- 			continue;
- 
-@@ -280,7 +272,7 @@ int rtw_cmd_thread(void *context)
- 
- 	/*  free all cmd_obj resources */
- 	do {
--		pcmd = rtw_dequeue_cmd(pcmdpriv);
-+		pcmd = _rtw_dequeue_cmd(pcmdpriv);
- 		if (!pcmd)
- 			break;
- 
-diff --git a/drivers/staging/r8188eu/include/rtw_cmd.h b/drivers/staging/r8188eu/include/rtw_cmd.h
-index 7edce0f88..d581deebb 100644
---- a/drivers/staging/r8188eu/include/rtw_cmd.h
-+++ b/drivers/staging/r8188eu/include/rtw_cmd.h
-@@ -77,7 +77,7 @@ struct c2h_evt_hdr {
- #define c2h_evt_exist(c2h_evt) ((c2h_evt)->id || (c2h_evt)->plen)
- 
- u32 rtw_enqueue_cmd(struct cmd_priv *pcmdpriv, struct cmd_obj *obj);
--struct cmd_obj *rtw_dequeue_cmd(struct cmd_priv *pcmdpriv);
-+struct cmd_obj *_rtw_dequeue_cmd(struct cmd_priv *pcmdpriv);
- void rtw_free_cmd_obj(struct cmd_obj *pcmd);
- 
- int rtw_cmd_thread(void *context);
+-	if (rtw_init_mlme_priv(padapter) == _FAIL) {
++	if (_rtw_init_mlme_priv(padapter) == _FAIL) {
+ 		dev_err(dvobj_to_dev(padapter->dvobj), "rtw_init_mlme_priv failed\n");
+ 		goto free_evt_priv;
+ 	}
 -- 
 2.30.2
 

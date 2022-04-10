@@ -2,141 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15CB34FB0BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 00:56:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C03864FB0C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 01:00:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243121AbiDJW52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 18:57:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42796 "EHLO
+        id S243162AbiDJXCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 19:02:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233132AbiDJW50 (ORCPT
+        with ESMTP id S233589AbiDJXCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 18:57:26 -0400
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6503912628;
-        Sun, 10 Apr 2022 15:55:13 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 136C5C01F; Mon, 11 Apr 2022 00:55:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1649631311; bh=/TFwqpjQ2c/XbjkybhTOL9F0BbKaoZelQEB5XR4NO2o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DdQxknF8c5E5y8Rt9M4hIiL0IdYl/WjsghQKDKUicOg2ozLRQ+Lpql7urObG9Stu5
-         a9jYN+cO+ttNsovxzf6TkRls+9zk+PDEsdQFTc63+sM8HAIVGPHfZ9ppFFScTNNWrN
-         Uz7mVQ/VqIm5m4BUzR+kljWEdWlxlDUoDdxTyzsEMT3P/bzQMQsdGtYidHwUerTWgD
-         kv3UNnBleyoCrJThHoDLA4+L39fT8eLNnBN/1Q2b+Lq1TDsv5R2jpYWM4yRHSUw5v7
-         6Xc3TbJ+QYsQXUvc1qfC0KjonUgxeI7bZlVd4GOQUN/pbR1YROG7K/fJ4OXXB4zunD
-         JuL5Ke5IpHhvQ==
+        Sun, 10 Apr 2022 19:02:37 -0400
+Received: from hall.aurel32.net (hall.aurel32.net [IPv6:2001:bc8:30d7:100::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9212917056;
+        Sun, 10 Apr 2022 16:00:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
+        ; s=202004.hall; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:
+        Subject:Cc:To:From:Content-Type:From:Reply-To:Subject:Content-ID:
+        Content-Description:In-Reply-To:References:X-Debbugs-Cc;
+        bh=H5rYQQZTVbwBGqFOdWYp6vWsZ00yzYqWcc7DygnQfQw=; b=ooeMpdp3oxFm2vcEwmxzbIYTje
+        ZxE5b7FawkWEkEdx4fvfueCX78iyCQXfPqve9tN4sJRsMDIbUKFl18Iuc1TQl315zXJIF9CyNSKbH
+        FRznsBNYD/vZLhcI3s8UsQgNN1VKSmM8tJwEG+wifwVe/kwjlEovvvGKGEJHsgA6XAwhED3NpY81i
+        NrdPVMFWYOxnF8JnCd0DYM2yrYzcFCgwk09j5vrG11HVitrNjn+AfOVmJX/L6GitS/0AnqgblA+ku
+        kYg59O6/7UAIyFiZSzd4Mj/Dv2FXz5bqKhRzTcw2s/C5E0CVrew0cqwJ/uHXr501Z3SiP/Mz0O80v
+        1xiZqLWQ==;
+Received: from [2a01:e34:ec5d:a741:8a4c:7c4e:dc4c:1787] (helo=ohm.rr44.fr)
+        by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <aurelien@aurel32.net>)
+        id 1ndgXc-00BKcL-Pm; Mon, 11 Apr 2022 01:00:20 +0200
+Received: from aurel32 by ohm.rr44.fr with local (Exim 4.95)
+        (envelope-from <aurelien@aurel32.net>)
+        id 1ndgXc-000ZMS-3P;
+        Mon, 11 Apr 2022 01:00:20 +0200
+From:   Aurelien Jarno <aurelien@aurel32.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     Aurelien Jarno <aurelien@aurel32.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Olof Johansson <olof@lixom.net>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org, soc@kernel.org
+Subject: [PATCH 0/2] arm/arm64: dts: Enable device-tree overlay support for RPi devices
+Date:   Mon, 11 Apr 2022 00:59:38 +0200
+Message-Id: <20220410225940.135744-1-aurelien@aurel32.net>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id D0851C009;
-        Mon, 11 Apr 2022 00:55:06 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1649631309; bh=/TFwqpjQ2c/XbjkybhTOL9F0BbKaoZelQEB5XR4NO2o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jGgeP9srjGzbGXebFnW4o1uQvo4gSg4sDgWNrBgx4It6QGoYDvUbXfhPMltb2yzF/
-         bXYxoQ66FJTeUxtrpdt03RTFG2uJD7Yvyx3XZoOK19tVmrXi3z1bP10Oc/TnRixAJd
-         ANrmPMiPo0yciuRP5ZHe6r0k1BffxmVY8TI2Y9TsIy4kUYsfFucTBsTFQxcND01zfb
-         Jf2pcssq5x/vOmI9OT8kXPFPyN+Zj9I22GXBy40UUwj7fsMx6AqAu3ALS6rrS0dSoM
-         wrFvP7T4NykSc8jSyc+yvWBxchNi2/sAYqMpHVkaWZYyVMWEeyG+MUkIsnobagZxmS
-         MrzAGANLqN13Q==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 4ae191f4;
-        Sun, 10 Apr 2022 22:55:02 +0000 (UTC)
-Date:   Mon, 11 Apr 2022 07:54:47 +0900
-From:   asmadeus@codewreck.org
-To:     Christian Schoenebeck <linux_oss@crudebyte.com>
-Cc:     David Kahurani <k.kahurani@gmail.com>, davem@davemloft.net,
-        ericvh@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        lucho@ionkov.net, netdev@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        David Howells <dhowells@redhat.com>, Greg Kurz <groug@kaod.org>
-Subject: Re: 9p fs-cache tests/benchmark (was: 9p fscache Duplicate cookie
- detected)
-Message-ID: <YlNgN5f1KnT1walD@codewreck.org>
-References: <CAAZOf26g-L2nSV-Siw6mwWQv1nv6on8c0fWqB4bKmX73QAFzow@mail.gmail.com>
- <3791738.ukkqOL8KQD@silver>
- <9591612.lsmsJCMaJN@silver>
- <1966295.VQPMLLWD4E@silver>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1966295.VQPMLLWD4E@silver>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for keeping it up!
+This patchset changes the generation of the Raspberry Pi devices DTB
+files to improve the support for out-of-tree device-tree overlays, like
+it has recently been done for the Nvidia SoCs.
 
-Christian Schoenebeck wrote on Sun, Apr 10, 2022 at 06:18:38PM +0200:
-> > I used git-bisect to identify the commit that broke 9p behaviour, and it is
-> > indeed this one:
-> > 
-> > commit eb497943fa215897f2f60fd28aa6fe52da27ca6c (HEAD, refs/bisect/bad)
-> > Author: David Howells <dhowells@redhat.com>
-> > Date:   Tue Nov 2 08:29:55 2021 +0000
-> > 
-> >     9p: Convert to using the netfs helper lib to do reads and caching
+I personally only need that for arm64, but I have added a similar patch
+to do the same on arm.
 
-Yes, quite a few things changed with that.
+Aurelien Jarno (2):
+  arm64: dts: broadcom: Enable device-tree overlay support for RPi
+    devices
+  arm: dts: Enable device-tree overlay support for RPi devices
 
-> I looked into the errors I get, and as far as I can see it, all misbehaviours
-> that I see, boil down to "Bad file descriptor" (EBADF) errors being the
-> originating cause.
-> 
-> The easiest misbehaviours on the guest system I can look into, are errors
-> with the git client. For instance 'git fetch origin' fails this way:
-
-FWIW I didn't report but did try to reproduce, on my machines (tried a
-couple) booting on a small alpine rootfs over 9p works, and I tried some
-git clone/git fetch of variying sizes of local repo (tmpfs in VM -> 9p
-mount of tmpfs on host) to no avail.
-Perhaps backing filesystem dependant? qemu version? virtfs access options?
-
-It's all extremely slow though... like the final checkout counting files
-at less than 10/s
-
-> ...
-> write(3, "d16782889ee07005d1f57eb884f4a06b"..., 40) = 40
-> write(3, "\n", 1)                       = 1
-> close(3)                                = 0
-> access(".git/hooks/reference-transaction", X_OK) = -1 ENOENT (No such file or directory)
-> openat(AT_FDCWD, ".git/logs/refs/remotes/origin/master", O_WRONLY|O_CREAT|O_APPEND, 0666) = 3
-> openat(AT_FDCWD, "/etc/localtime", O_RDONLY|O_CLOEXEC) = 7
-> fstat(7, {st_mode=S_IFREG|0644, st_size=2326, ...}) = 0
-> fstat(7, {st_mode=S_IFREG|0644, st_size=2326, ...}) = 0
-> read(7, "TZif2\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\t\0\0\0\t\0\0\0\0"..., 8192) = 2326
-> lseek(7, -1467, SEEK_CUR)               = 859
-> read(7, "TZif2\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\t\0\0\0\t\0\0\0\0"..., 8192) = 1467
-> close(7)                                = 0
-> write(3, "d8a68c5027ef629d93b9d9519ff4da95"..., 168) = -1 EBADF (Bad file descriptor)
-> ...
-> error: cannot update the ref 'refs/remotes/origin/master': unable to append to '.git/logs/refs/remotes/origin/master': Bad file descriptor
-> 
-> I tried to manually replicate those file access operations on that
-> .git/logs/refs/remotes/origin/master file in question, and it worked. But when
-> I look at the strace output above, I see there is a close(3) call just before
-> the subsequent openat(".git/logs/refs/remotes/origin/master") call returning 3,
-> which makes me wonder, is this maybe a concurrency issue on file descriptor
-> management?
-
-hmm, in cache=loose case write should just be updating the page cache
-for buffers to be flushed later, so this is definitely weird.
-
-If you can reproduce well enough for this, could you first confirm that
-the EBADF comes from the client and not qemu? either mounting with debug
-or getting traces from qemu at a protocol level would get that.
-
-If it's local there are only so many places EBADF can come from and it
-should be possible to trace it back with e.g. perf probe or bpftrace,
-but even if we confirm that e.g. the process' fd table is messed up it
-won't tell us why it was, so it's going to be annoying... I'd really
-like to be able to reproduce this somehow :/
+ arch/arm/boot/dts/Makefile            | 18 ++++++++++++++++++
+ arch/arm64/boot/dts/broadcom/Makefile | 11 +++++++++++
+ 2 files changed, 29 insertions(+)
 
 -- 
-Dominique
+2.34.1
 

@@ -2,90 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99D7E4FB05C
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 23:43:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF2724FB05E
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 23:45:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242567AbiDJVob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 17:44:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48924 "EHLO
+        id S242629AbiDJVry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 17:47:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbiDJVoa (ORCPT
+        with ESMTP id S241131AbiDJVrw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 17:44:30 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B1D25D2
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 14:42:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649626939; x=1681162939;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=15MDV13rK6hgSx358Rl8VAA0ogWGReFU+VPsgF70dxg=;
-  b=RwbFN+u6d/vXLQRRB6SwiK+kJYjHeMVyY3QIrl15wK6z5eGGSKXAn3z5
-   oNfCmbbjDIytHDrIkt0k1M+P2ONaJqzNpPRIJ4yhT8oax1+KtfXzhaR7M
-   NTP3QVlLyN9HfGP0M3cjcVH9k3ylLpSO4NkffVQcVmRimqeAxtnciax59
-   BusySvNpsSFWPgaQYARpr11Gh3igN1/pIXHpec7KneeYk64aUMzHMGYek
-   J2QRz3Zjfw6d08Cfiz921GSiMoC4p2rEzQHeB79aZrPAUXT4+DPT50A9m
-   RX9Ny9jLPVP7FlAC4shtpj6txDaKFiNpn2KYnW4XAmpDEktu3lsNMVRd3
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="324909556"
-X-IronPort-AV: E=Sophos;i="5.90,250,1643702400"; 
-   d="scan'208";a="324909556"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2022 14:42:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,250,1643702400"; 
-   d="scan'208";a="525104413"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 10 Apr 2022 14:42:17 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ndfK4-00017L-Q1;
-        Sun, 10 Apr 2022 21:42:16 +0000
-Date:   Mon, 11 Apr 2022 05:41:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: drivers/hwmon/sch56xx-common.o: warning: objtool:
- sch56xx_init()+0xfd: stack state mismatch: cfa1=4+200 cfa2=5+40
-Message-ID: <202204110525.Bxed5ZYq-lkp@intel.com>
+        Sun, 10 Apr 2022 17:47:52 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37DDC65F0;
+        Sun, 10 Apr 2022 14:45:40 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kc5Bl1RT9z4xQq;
+        Mon, 11 Apr 2022 07:45:34 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1649627135;
+        bh=3hD96S4rSglqd8+81oM0O3Vm+2qDgPKjF42FNs0aZG0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=PX0JLZj5J4eSlnR7v2GikrNw+CYbB1nBiLNaed0cPkGfey4X8qF1QWe0azBAADxsX
+         sLi9Kqv9ffkvXeulTcP7jZCu06UtEPqdX4WWGjpnhCa72CGmVZJjPD2SXN4e/j6u8M
+         sdoZhpuTT/E6sis5v577VBa1L9ye/GWpNMNF0wafpidkeI3GwMJjaU5q62LZCOci3F
+         erxEIkWABSvgJak3uS/ecrGYZuK8AWb85MIAHHS44E/zs/SYOWRE5l8FtLi8Ae4nFw
+         /mhCP3Mj69dLC0ugV5qln+jaRky8j3EhbMsIAZ34QLokRHoBH8x0qTrEbhOiA99z5L
+         iYCl1vYwDg06Q==
+Date:   Mon, 11 Apr 2022 07:45:34 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the rockchip tree
+Message-ID: <20220411074534.719cd324@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/uGsLD1l3l=miSOr_uzcCPWz";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   4ea3c6425269d33da53c79d539ce9554117cf4d4
-commit: 393935baa45e5ccb9603cf7f9f020ed1bc0915f7 hwmon: (sch56xx-common) Add automatic module loading on supported devices
-date:   6 weeks ago
-config: x86_64-randconfig-c022-20220411 (https://download.01.org/0day-ci/archive/20220411/202204110525.Bxed5ZYq-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=393935baa45e5ccb9603cf7f9f020ed1bc0915f7
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 393935baa45e5ccb9603cf7f9f020ed1bc0915f7
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
+--Sig_/uGsLD1l3l=miSOr_uzcCPWz
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Hi all,
 
-All warnings (new ones prefixed by >>):
+Commit
 
->> drivers/hwmon/sch56xx-common.o: warning: objtool: sch56xx_init()+0xfd: stack state mismatch: cfa1=4+200 cfa2=5+40
+  e0badfe359ef ("ARM: dts: rockchip: rename pcfg_pull_default node name on =
+rk3036")
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+is missing a Signed-off-by from its committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/uGsLD1l3l=miSOr_uzcCPWz
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJTT/4ACgkQAVBC80lX
+0Gzfggf+Km4cN2P99g2DxkEtxm/CJuV0tugqtuwKaMw6alKW2RYaoEeA0a6bilIJ
+8RxPoeH813iOx/4X1CJa9f8Lcnt3UGFNpr68YzMMpbgM9PoKIATbSmiDuPJT+AG1
+Qt15kRsqwavnmdBtgxnDmlZXEGaFhyi4Rowdc+PrABv7QegohdVCYtcjxjvNm251
+vTKFeArn6UhSDQP1Or4PrGn4K7EjO3hDuNA5wg7nSYJrmzPEQuxDKniufMepJRSx
+vo2HA6ANtVdsy3Xbt+8anmjbpF2Wt978u69foj0GVdPv/8NbFlzPKDyOfO/IG04R
++ES7aTDcAN/SSqSqUjwNXnHceAc3zA==
+=vXvU
+-----END PGP SIGNATURE-----
+
+--Sig_/uGsLD1l3l=miSOr_uzcCPWz--

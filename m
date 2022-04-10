@@ -2,50 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CDB64FAB51
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 03:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C10674FAB54
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 03:20:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233964AbiDJBPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 9 Apr 2022 21:15:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57074 "EHLO
+        id S234012AbiDJBWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 9 Apr 2022 21:22:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233921AbiDJBPD (ORCPT
+        with ESMTP id S233996AbiDJBVz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 9 Apr 2022 21:15:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C8E19B;
-        Sat,  9 Apr 2022 18:12:54 -0700 (PDT)
+        Sat, 9 Apr 2022 21:21:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5DEC7;
+        Sat,  9 Apr 2022 18:19:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EA0860E33;
-        Sun, 10 Apr 2022 01:12:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1284C385A0;
-        Sun, 10 Apr 2022 01:12:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 891ACB80A39;
+        Sun, 10 Apr 2022 01:19:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1954BC385A4;
+        Sun, 10 Apr 2022 01:19:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649553171;
-        bh=11X7BFVd63x1Y3vMcLyg2CEPEkM0R057PGTYfGDr/Xc=;
+        s=k20201202; t=1649553584;
+        bh=RKZGZZFqYkTuto/B6SKG7HgLvK2hvzhwcduFq+fXXXE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=t+C92Bse7Ij2ZSHUZhYTs21YiFrxBMPT+CvQsJdq3m/8FZCAmCPz/3aB1vJ0/Nb8u
-         931L4P8E6/wUKQwSZ7AW0FYtmvqCaVQILwXfy736u0MjzGQfgkopbEZ3+Zeq2NAE3B
-         QIPVJpa86pC/tEaXBa2iqonmeIr0ciNTvvabCtyNJx2qpT+CtFeejlVOP/N3rq8psh
-         kDlEwwYu3qXATMhjOPFvRqfe37ihDpy9EJkpYK6LWdKF+WWLzOASN8ujpO4RwXm6Dt
-         fS4u8KxVdoUg0cUiVuXzvxMUf+pPTx4KlsWAmP/S0ZVOOJAmhIX4s3ToWgU5Mo4MYv
-         X7zCFWUEihiVA==
-Date:   Sun, 10 Apr 2022 09:12:44 +0800
+        b=Ce57SvrYZ98Ddl7fpVV+1fYkAhXBHVcxKboBToge8KSRjZIPziIz/TjCgwltHnwXJ
+         EzAkKI3H23gXcmSoJ2SRvRSp0+3YahV7Jkx/7sgMlVzIkFyJ7Pl0SDqG31GN9J0r8S
+         oxvV3mdQ+5xAUoy9ObYfTGEq7yJ0d5xTlap7JHVtg1VB6Z+byj8gasSJq5vz25kJxQ
+         uUVzwAm1PRD/9lllX6xzMSl6G5QSf9ertqEBDgaS9Hxe2YnAGK/DM3femXQukCuVAf
+         1xl4Wh8qsovehzxo7eSBagruHnl9TUNe73TdYzpCYRO9cNbdMycXHl+UPMLnNTGzIP
+         lycaXzeDjBs6Q==
+Date:   Sun, 10 Apr 2022 09:19:38 +0800
 From:   Shawn Guo <shawnguo@kernel.org>
 To:     Li Yang <leoyang.li@nxp.com>
 Cc:     Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/6] arm64: dts: ls2080a-rdb: add phy nodes
-Message-ID: <20220410011244.GH129381@dragon>
+        Priyanka Jain <priyanka.jain@nxp.com>,
+        Santan Kumar <santan.kumar@nxp.com>,
+        Tao Yang <b31903@freescale.com>,
+        Yogesh Gaur <yogeshnarayan.gaur@nxp.com>,
+        Abhimanyu Saini <abhimanyu.saini@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 4/6] arm64: dts: ls2081a-rdb: Add DTS support for NXP
+ LS2081ARDB
+Message-ID: <20220410011938.GI129381@dragon>
 References: <20220317190109.3742-1-leoyang.li@nxp.com>
- <20220317190109.3742-3-leoyang.li@nxp.com>
+ <20220317190109.3742-4-leoyang.li@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220317190109.3742-3-leoyang.li@nxp.com>
+In-Reply-To: <20220317190109.3742-4-leoyang.li@nxp.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,94 +62,189 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 17, 2022 at 02:01:06PM -0500, Li Yang wrote:
-> Define PHY nodes on the board.
+On Thu, Mar 17, 2022 at 02:01:07PM -0500, Li Yang wrote:
+> From: Priyanka Jain <priyanka.jain@nxp.com>
 > 
-> Signed-off-by: Li Yang <leoyang.li@nxp.com>
-> ---
->  .../boot/dts/freescale/fsl-ls2080a-rdb.dts    | 68 +++++++++++++++++++
->  1 file changed, 68 insertions(+)
+> This patch add support for NXP LS2081ARDB board which has
+> LS2081A SoC.
 > 
-> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls2080a-rdb.dts b/arch/arm64/boot/dts/freescale/fsl-ls2080a-rdb.dts
-> index 44894356059c..1c8c99a74071 100644
-> --- a/arch/arm64/boot/dts/freescale/fsl-ls2080a-rdb.dts
-> +++ b/arch/arm64/boot/dts/freescale/fsl-ls2080a-rdb.dts
-> @@ -23,3 +23,71 @@ chosen {
->  		stdout-path = "serial1:115200n8";
->  	};
->  };
-> +
-> +&dpmac5 {
-> +	phy-handle = <&mdio2_phy1>;
-> +	phy-connection-type = "10gbase-r";
-> +};
-> +
-> +&dpmac6 {
-> +	phy-handle = <&mdio2_phy2>;
-> +	phy-connection-type = "10gbase-r";
-> +};
-> +
-> +&dpmac7 {
-> +	phy-handle = <&mdio2_phy3>;
-> +	phy-connection-type = "10gbase-r";
-> +};
-> +
-> +&dpmac8 {
-> +	phy-handle = <&mdio2_phy4>;
-> +	phy-connection-type = "10gbase-r";
-> +};
-> +
-> +&emdio1 {
-> +	status = "disabled";
-> +
-> +	/* CS4340 PHYs */
-> +	mdio1_phy1: emdio1_phy@1 {
+> LS2081A SoC is 40-pin derivative of LS2088A SoC So, from functional
 
-We prefer hyphen rather than underscore in node name.
+... SoC. So, ...?
+
+> perspective both are same.  Hence,ls2088a SoC dtsi files are included
+
+Hence, ls2088a ...
+
+> from ls2081ARDB dts
+
+LS2081ARDB dts.
+
+I won't review the patch content until the commit log looks good.
 
 Shawn
 
-> +		reg = <0x10>;
+> 
+> Signed-off-by: Priyanka Jain <priyanka.jain@nxp.com>
+> Signed-off-by: Santan Kumar <santan.kumar@nxp.com>
+> Signed-off-by: Tao Yang <b31903@freescale.com>
+> Signed-off-by: Yogesh Gaur <yogeshnarayan.gaur@nxp.com>
+> Signed-off-by: Abhimanyu Saini <abhimanyu.saini@nxp.com>
+> Signed-off-by: Li Yang <leoyang.li@nxp.com>
+> ---
+>  arch/arm64/boot/dts/freescale/Makefile        |   1 +
+>  .../boot/dts/freescale/fsl-ls2081a-rdb.dts    | 131 ++++++++++++++++++
+>  2 files changed, 132 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/freescale/fsl-ls2081a-rdb.dts
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+> index 6d8f0a532587..1b5cb71a6828 100644
+> --- a/arch/arm64/boot/dts/freescale/Makefile
+> +++ b/arch/arm64/boot/dts/freescale/Makefile
+> @@ -38,6 +38,7 @@ dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1088a-rdb.dtb
+>  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls1088a-ten64.dtb
+>  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls2080a-qds.dtb
+>  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls2080a-rdb.dtb
+> +dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls2081a-rdb.dtb
+>  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls2080a-simu.dtb
+>  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls2088a-qds.dtb
+>  dtb-$(CONFIG_ARCH_LAYERSCAPE) += fsl-ls2088a-rdb.dtb
+> diff --git a/arch/arm64/boot/dts/freescale/fsl-ls2081a-rdb.dts b/arch/arm64/boot/dts/freescale/fsl-ls2081a-rdb.dts
+> new file mode 100644
+> index 000000000000..908b9aff0489
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/freescale/fsl-ls2081a-rdb.dts
+> @@ -0,0 +1,131 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Device Tree file for NXP LS2081A RDB Board.
+> + *
+> + * Copyright 2017 NXP
+> + *
+> + * Priyanka Jain <priyanka.jain@nxp.com>
+> + *
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "fsl-ls2088a.dtsi"
+> +
+> +/ {
+> +	model = "NXP Layerscape 2081A RDB Board";
+> +	compatible = "fsl,ls2081a-rdb", "fsl,ls2081a";
+> +
+> +	aliases {
+> +		serial0 = &serial0;
+> +		serial1 = &serial1;
 > +	};
 > +
-> +	mdio1_phy2: emdio1_phy@2 {
-> +		reg = <0x11>;
-> +	};
-> +
-> +	mdio1_phy3: emdio1_phy@3 {
-> +		reg = <0x12>;
-> +	};
-> +
-> +	mdio1_phy4: emdio1_phy@4 {
-> +		reg = <0x13>;
+> +	chosen {
+> +		stdout-path = "serial1:115200n8";
 > +	};
 > +};
 > +
-> +&emdio2 {
-> +	/* AQR405 PHYs */
-> +	mdio2_phy1: emdio2_phy@1 {
-> +		compatible = "ethernet-phy-ieee802.3-c45";
-> +		interrupts = <0 1 0x4>; /* Level high type */
-> +		reg = <0x0>;
+> +&dspi {
+> +	status = "okay";
+> +
+> +	n25q512a: flash@0 {
+> +		compatible = "jedec,spi-nor";
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		spi-max-frequency = <3000000>;
+> +		reg = <0>;
+> +	};
+> +};
+> +
+> +&esdhc {
+> +	status = "okay";
+> +};
+> +
+> +&ifc {
+> +	status = "disabled";
+> +};
+> +
+> +&i2c0 {
+> +	status = "okay";
+> +
+> +	pca9547: mux@75 {
+> +		compatible = "nxp,pca9547";
+> +		reg = <0x75>;
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		i2c@1 {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			reg = <0x01>;
+> +			rtc@51 {
+> +				compatible = "nxp,pcf2129";
+> +				reg = <0x51>;
+> +			};
+> +		};
+> +
+> +		i2c@2 {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			reg = <0x02>;
+> +
+> +			ina220@40 {
+> +				compatible = "ti,ina220";
+> +				reg = <0x40>;
+> +				shunt-resistor = <500>;
+> +			};
+> +		};
+> +
+> +		i2c@3 {
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +			reg = <0x3>;
+> +
+> +			adt7481@4c {
+> +				compatible = "adi,adt7461";
+> +				reg = <0x4c>;
+> +			};
+> +		};
+> +	};
+> +};
+> +
+> +&qspi {
+> +	status = "okay";
+> +
+> +	s25fs512s0: flash@0 {
+> +		compatible = "jedec,spi-nor";
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		spi-rx-bus-width = <4>;
+> +		spi-tx-bus-width = <4>;
+> +		spi-max-frequency = <20000000>;
+> +		reg = <0>;
 > +	};
 > +
-> +	mdio2_phy2: emdio2_phy@2 {
-> +		compatible = "ethernet-phy-ieee802.3-c45";
-> +		interrupts = <0 2 0x4>; /* Level high type */
-> +		reg = <0x1>;
+> +	s25fs512s1: flash@1 {
+> +		compatible = "jedec,spi-nor";
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +		spi-rx-bus-width = <4>;
+> +		spi-tx-bus-width = <4>;
+> +		spi-max-frequency = <20000000>;
+> +		reg = <1>;
 > +	};
+> +};
 > +
-> +	mdio2_phy3: emdio2_phy@3 {
-> +		compatible = "ethernet-phy-ieee802.3-c45";
-> +		interrupts = <0 4 0x4>; /* Level high type */
-> +		reg = <0x2>;
-> +	};
+> +&sata0 {
+> +	status = "okay";
+> +};
 > +
-> +	mdio2_phy4: emdio2_phy@4 {
-> +		compatible = "ethernet-phy-ieee802.3-c45";
-> +		interrupts = <0 5 0x4>; /* Level high type */
-> +		reg = <0x3>;
-> +	};
+> +&sata1 {
+> +	status = "okay";
+> +};
+> +
+> +&usb0 {
+> +	status = "okay";
+> +};
+> +
+> +&usb1 {
+> +	status = "okay";
 > +};
 > -- 
 > 2.25.1

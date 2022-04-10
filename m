@@ -2,168 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14B554FAE49
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 16:36:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A94084FAE61
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 17:09:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243258AbiDJOjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 10:39:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49222 "EHLO
+        id S243273AbiDJPLr convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 10 Apr 2022 11:11:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbiDJOi5 (ORCPT
+        with ESMTP id S236382AbiDJPLp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 10:38:57 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9444FC51;
-        Sun, 10 Apr 2022 07:36:47 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id w18so15262861edi.13;
-        Sun, 10 Apr 2022 07:36:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BKkGQ0Mvqi4FBstenNkXAi42Rt/g6fYjLkhfPoyt3WM=;
-        b=HkgsCSL58PnbdcUBEOhGnHm6bJa+DOxjnoSIAlawOv1amwFaBpH6xfy629c4kCnBby
-         WUoJLA/YSQIcw+yi/FA+hKHSdo3KYfxfCUD2jJoaaZX+Z4GNzz7/urKDCSBz4RrsdN3y
-         AkJiaTLVMJScsv258BEFIrZtfrdYd6jPnoPVYU9Cu/jcKLgBaM3zOHQq86qJTKBYy+jW
-         y1I9BsvJQAJaIJs81NIZ2zIYMNKVzIav0LtD7aMnebtNLgKkeZ2Cj7uF/utQfsT6NG6C
-         pFjqAAHVmA1af2uKYgsOm+Z6tiQqJtj48EtHBFYvIgNQVmzcPhmxGTJbIhHkPO2DaGJo
-         QOrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BKkGQ0Mvqi4FBstenNkXAi42Rt/g6fYjLkhfPoyt3WM=;
-        b=xm/sjEWFbZQsUMqPjbNDsuYAz1nm+4A+L4DNGDEAaZloyghKnSz+355oexTBRe9zux
-         C7wgK2rAXGwDp2pZyKL5nzBdOd0PUtLfw6zf5trL63AdpVsS/OMODANO+ea6B1C6muLe
-         PHqsuQ1WSlxJ9fiKJ8AbrdwXy6+UP5wJThEoWGF4J08xo9bgS6kSKNQB5UCSWNlaZKj0
-         DOA3Gzgyq4n2GmsAahX8tVxKBzats/mIY8d8672e87f0sqHG6dkjD24TeO/MYmlenYuc
-         0COu3Xc6fXYHFsi4TLGMzfewWQ9Wevwzw4luTl1YE8u8vsyF12qzsxJW5+Yi/gY5QRut
-         tczQ==
-X-Gm-Message-State: AOAM532TzQYU5yvSB2jDD/CXAyqzxLK/Ki5Io8NQR8xVzdkwm7DbSLtx
-        NamUG//l2jNh7I40X7RHXLQPwE24FGeHZFQOhfw=
-X-Google-Smtp-Source: ABdhPJzTDZ5SdBgHlmf6b0kuw1eJUXWFsZR/bspw3My95hu+0WpS5LLqUJLEvCUrOzoKmjYfdJiCVqH6U2RA+lZXSss=
-X-Received: by 2002:a05:6402:2142:b0:413:6531:bd9e with SMTP id
- bq2-20020a056402214200b004136531bd9emr28703628edb.5.1649601405556; Sun, 10
- Apr 2022 07:36:45 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220402193942.744737-1-aford173@gmail.com> <20220402193942.744737-2-aford173@gmail.com>
- <a66f17c6-cec6-3eb8-92df-9990d74dd122@linaro.org>
-In-Reply-To: <a66f17c6-cec6-3eb8-92df-9990d74dd122@linaro.org>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Sun, 10 Apr 2022 09:36:34 -0500
-Message-ID: <CAHCN7x+mm_oXdkzXOTEQwjCFfDB99p2JG8zZzydbL5_pUVJqCQ@mail.gmail.com>
-Subject: Re: [PATCH V3 1/3] dt-bindings: mmc: imx-esdhc: Update compatible fallbacks
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-mmc <linux-mmc@vger.kernel.org>,
-        Haibo Chen <haibo.chen@nxp.com>,
-        Adam Ford-BE <aford@beaconembedded.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 10 Apr 2022 11:11:45 -0400
+X-Greylist: delayed 467 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 10 Apr 2022 08:09:32 PDT
+Received: from m1.ira.inaf.it (m1.ira.inaf.it [192.167.165.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20271ADB0
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 08:09:32 -0700 (PDT)
+Received: by m1.ira.inaf.it (Postfix, from userid 1000)
+        id A535A182A6C; Sun, 10 Apr 2022 16:59:35 +0200 (CEST)
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: ******
+X-Spam-Status: Yes, score=6.8 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,FROM_MISSP_REPLYTO,LOTS_OF_MONEY,
+        MONEY_FREEMAIL_REPTO,MONEY_FROM_MISSP,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+Received: from [103.151.125.173] (unknown [103.151.125.173])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: spingola)
+        by m1.ira.inaf.it (Postfix) with ESMTPSA id 920071874FD;
+        Sun, 10 Apr 2022 16:41:38 +0200 (CEST)
+Content-Type: text/plain; charset="iso-8859-1"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Buongiorno,
+To:     Recipients <roberto@archimediaassociati.com>
+From:   "CLAUDETTE LABRIE" <roberto@archimediaassociati.com>
+Date:   Sun, 10 Apr 2022 07:41:28 -0700
+Reply-To: claudettelabrie@protonmail.com
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.2 (m1.ira.inaf.it [0.0.0.0]); Sun, 10 Apr 2022 16:41:44 +0200 (CEST)
+Message-Id: <20220410145935.A535A182A6C@m1.ira.inaf.it>
+X-Spam-Report: * -2.3 RCVD_IN_DNSWL_MED RBL: Sender listed at https://www.dnswl.org/,
+        *       medium trust
+        *      [192.167.165.13 listed in list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.7 SPF_SOFTFAIL SPF: sender does not match SPF record (softfail)
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  2.0 MONEY_FROM_MISSP Lots of money and misspaced From
+        *  2.2 FROM_MISSP_REPLYTO From misspaced, has Reply-To
+        *  1.4 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 2, 2022 at 3:12 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 02/04/2022 21:39, Adam Ford wrote:
-> > The SDHC controller in the imx8mn and imx8mp have the same controller
-> > as the imx8mm which is slightly different than that of the imx7d.
-> > Using the fallback of the imx8mm enables the controllers to support
-> > HS400-ES which is not available on the imx7d. After discussion with NXP,
-> > it turns out that the imx8qm should fall back to the imx8qxp, because
-> > those have some additional flags not present in the imx8mm.
-> >
-> > Suggested-by: haibo.chen@nxp.com
-> > Signed-off-by: Adam Ford <aford173@gmail.com>
-> > ---
-> > V3:  Marked the imx7d-usdhc as deprecated when there are better
-> >      fallback options or the fallback isn't needed.
-> >      Leave the deprecated fallback in the YAML to prevent errors
-> >      Remove Reviewed-by from Krzysztof Kozlowski due to the above
-> >
-> > V2:  Update the table per recomendation from Haibo.
-> >
-> > diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-> > index 7dbbcae9485c..11f039320d79 100644
-> > --- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-> > +++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-> > @@ -34,23 +34,34 @@ properties:
-> >            - fsl,imx6ull-usdhc
-> >            - fsl,imx7d-usdhc
-> >            - fsl,imx7ulp-usdhc
-> > +          - fsl,imx8mm-usdhc
-> > +          - fsl,imx8qxp-usdhc
-> >            - fsl,imxrt1050-usdhc
-> >            - nxp,s32g2-usdhc
-> >        - items:
-> >            - enum:
-> >                - fsl,imx8mm-usdhc
-> > +              - fsl,imx8mq-usdhc
-> > +            # fsl,imx7d-usdhc fallback is deprecated for imx8mm-usdhc
-> > +          - const: fsl,imx7d-usdhc
->
-> Instead of comment use (I think on the same level as items):
->
-> deprecated: true
-
-I have tried various combinations of where to place "deprecated" and
-whether or not to use a hyphen, but I always get syntax errors.  Do
-you have an example of this I can see?
-
-adam
->
-> > +      - items:
-> > +          - enum:
-> >                - fsl,imx8mn-usdhc
-> >                - fsl,imx8mp-usdhc
->
-> So if this is a deprecated list, where is a proper one? The list with
-> this enum + imx8mm?
->
-> IOW, you need to list here:
-> 1. Old combinations with "deprecated: true"
-> 2. New combinations.
->
-> > -              - fsl,imx8mq-usdhc
-> > -              - fsl,imx8qm-usdhc
-> > -              - fsl,imx8qxp-usdhc
-> > +          - const: fsl,imx8mm-usdhc
-> > +            # fsl,imx7d-usdhc fallback is deprecated
-> >            - const: fsl,imx7d-usdhc
-> >        - items:
-> >            - enum:
-> > -              - fsl,imx93-usdhc
-> >                - fsl,imx8ulp-usdhc
-> > +              - fsl,imx93-usdhc
-> >            - const: fsl,imx8mm-usdhc
-> > -
-> > +      - items:
-> > +          - enum:
-> > +              - fsl,imx8qm-usdhc
-> > +          - const: fsl,imx8qxp-usdhc
-> > +            # fsl,imx7d-usdhc fallback is deprecated
-> > +          - const: fsl,imx7d-usdhc
-> >    reg:
-> >      maxItems: 1
-> >
->
->
-> Best regards,
-> Krzysztof
+Buongiorno,
+ Pur ringraziandovi per l'attenzione che dedicherete ai miei più cari auguri, vorrei che sapeste che non sono stato nella persona sbagliata inviandovi questo messaggio. Il mio ardente desiderio è sempre stato quello di incontrare un individuo anonimo affinché quest'ultimo possa svolgere azioni sociali attraverso una fondazione. Tuttavia, comprerei il tuo stupore per il mio modo di procedere. Mi chiamo CLAUDETTE LABRIE nata il 25/09/1942 di nazionalità francese ma attualmente sotto osservazione medica in un ospedale di SINGAPORE. Ho dovuto contattarti in questo modo perché desidero portarti attraverso di te per donare la somma di 1.500.000 euro per aiutare le persone bisognose, rendere felici le famiglie povere, gli orfani, aiutare i giovani imprenditori in cerca di finanziamenti per far crescere i loro settori di attività. ..... dal tuo entourage. La mia vita professionale è stata un vero turismo, soprattutto perché ho sempre vissuto lontano dal mio paese. Prima in Kuwait, dove ho lavorato per due anni nel settore petrolifero. Poi sono andato nella Repubblica del Benin (anno 2001) dove ho costituito diverse società (società immobiliari, ingegneri, ecc.) È in questo paese accogliente che ho provato la vera felicità, quella del matrimonio, con un canadese che era lavorando anche in quel paese. Purtroppo non siamo stati abbastanza fortunati da avere figli. Dopo cinque (05) anni di convivenza, mio ??marito ha perso la vita a seguito di una lunga malattia. Così rimasi di nuovo solo con un maggiordomo a mia disposizione e un cane finché questo cancro non arrivò a limitare la mia vita. Tra poco sono quattro anni che combatto contro questa malattia e la medicina non può più fare nulla a seguito dei risultati delle visite mediche di cui i miei giorni sono contati secondo l'indagine del mio medico curante. Avevo bloccato questa somma così importante in una delle banche del BENIN per un progetto di costruzione. Sarò felice di affidarti questi soldi affinché il mio progetto di donazione possa avere successo. Per favore, accetta questo, perché è un dono di una donna morente e senza chiedere nulla in cambio. Per favore, rispondimi il prima possibile al mio indirizzo e-mail che è: claudettelabrie@protonmail.com
+LA VEDOVA CLAUDETTE LABRIE

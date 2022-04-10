@@ -2,381 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7875C4FAEDE
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 18:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5411F4FAEDF
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 18:25:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243575AbiDJQ12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 12:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50812 "EHLO
+        id S243584AbiDJQ1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 12:27:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240592AbiDJQ1Y (ORCPT
+        with ESMTP id S243582AbiDJQ1b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 12:27:24 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D93D27B22
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 09:25:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649607913; x=1681143913;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xmN5YbBTIWQiGIjmyWp1BlSLePBZ1DpmExBB91MT4wU=;
-  b=WqYuaZuIeXzC44Ux8W8RxbMae5bJ1U1LWDjJgApMBqmKtCm9vPFYH7VM
-   /wWnVl+ZVTE4+/lnzGGTFt06Ls9oyiwpd1Ndcd+32W0LixzrhrXaOI+wP
-   Yjb4HLxPUvbDrX2QNOqGtOzbcETzE3HorOGgCyheHufsfEPZiTxzAGJfR
-   ofL9OB7zU08cmOYt3ClU7Q++1XC74vU0uevIoEzcNMIv8xv3Azh9MJOaN
-   mIAXRwkjIlhezmTEonmSgXZjIb1SK0tsu8+OdYIGXCk6Z/gEOLS5WBgw0
-   aaXGT7I+rHeQLIR8wlVMmC/FLQFtz0S8YY3IRGegod8L7OCr5N8zGNfqB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="286986154"
-X-IronPort-AV: E=Sophos;i="5.90,249,1643702400"; 
-   d="scan'208";a="286986154"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2022 09:25:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,249,1643702400"; 
-   d="scan'208";a="659754404"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 10 Apr 2022 09:25:11 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ndaNC-0000xC-R1;
-        Sun, 10 Apr 2022 16:25:10 +0000
-Date:   Mon, 11 Apr 2022 00:24:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Jason A. Donenfeld" <zx2c4@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, zx2c4@kernel.org,
+        Sun, 10 Apr 2022 12:27:31 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D46B3703D
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 09:25:20 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id j17so11086948pfi.9
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 09:25:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vgYau9yYdCljtzTr6MtTaLrwj9ih04H5dgCFTrcTCP8=;
+        b=fX1sS2gnm4hZVr3Zi9jdGyuK9CNudj1DjNK9yC6AZfhipZ1VR/Bug89B/knheOPpDW
+         RpPj3tBxndzn+vXz4WYx/gkXCAFvaCv9u58Ze1f0r2QV+tnw4vPGfBNlA0OnKxUP+r2p
+         qFwaPxbnKy1+UNG20+h8M9a72TinACBrFadtamkkuKzko3d25F0pHaOWmWLOOqtR0mMG
+         +Am4TSO1a/pTJR9ODfxMZIwjPzmwWcZwHc7vP1lR/ALCAraOLYiu+UPOgItfaJxKl+K/
+         MlKcNEEzoQuann4OT8f+GffsS+KEqxyOK3AAWrl4QwNA408txVvrtt6kFNpZHstatv/i
+         x4Fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vgYau9yYdCljtzTr6MtTaLrwj9ih04H5dgCFTrcTCP8=;
+        b=pbnubqycT5vsbnvmImkCzfMlH4WyoaKJYmSSzbitn7kZFW8pZI/0iIQtzMSaJ0bm3k
+         cyIjkBHVL5+Lo3ojE8DFTP10coHuisnnWnmqoa1IzeGlQ2GLy9FLupVlw36QXks9R7ls
+         HT96eQKpMmIw+ZFnojB3ko+iJKr1d9ClH7ILgPgBksBsmv7EtTG/YLoYq+JRmLLYICQd
+         uEwZqsEqJ8DjMKZHXglJHJaUYSsf8C3q+GyKwLe9QMqJiEAwhlmqxB7QkCqL79qHruCq
+         gIOITYzLTNBmvMso6ZYu/O66hO1WPHuEI/S51tfz0j7Wz7KqnOLvC/TXNS07JZzQPCXB
+         GEYw==
+X-Gm-Message-State: AOAM5303NvJPrcDtDkiB1YTLlVjH7AdnIDqvZRyF+vLeYlQCisCfxEvy
+        jyP1g9qusUBpj2ViOTtr+KQ=
+X-Google-Smtp-Source: ABdhPJyGKIG19qwgzjrGkKmRYgZwFdkyBzYaBwHyyuWiqSh8PSL0BT4GZDXOrZ2ZaPPwmfMUtvYH5A==
+X-Received: by 2002:a63:2266:0:b0:39c:f643:ee69 with SMTP id t38-20020a632266000000b0039cf643ee69mr10466052pgm.288.1649607919633;
+        Sun, 10 Apr 2022 09:25:19 -0700 (PDT)
+Received: from localhost.localdomain ([210.100.217.177])
+        by smtp.gmail.com with ESMTPSA id n19-20020a62e513000000b005048eef5827sm13386553pff.142.2022.04.10.09.25.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Apr 2022 09:25:19 -0700 (PDT)
+From:   Ohhoon Kwon <ohkwon1043@gmail.com>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Ohhoon Kwon <ohkwon1043@gmail.com>,
+        JaeSang Yoo <jsyoo5b@gmail.com>,
+        Wonhyuk Yang <vvghjk1234@gmail.com>,
+        Jiyoup Kim <lakroforce@gmail.com>,
+        Donghyeok Kim <dthex5d@gmail.com>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: [crng-random:jd/not-zero-entropy-ktime 7/13]
- include/linux/timekeeping.h:67:8: error: unknown type name 'ktime_t'; did
- you mean 'timer_t'?
-Message-ID: <202204110022.wpsdiK5T-lkp@intel.com>
+Subject: [PATCH v2] mm/slab_common: move dma-kmalloc caches creation into new_kmalloc_cache()
+Date:   Mon, 11 Apr 2022 01:25:11 +0900
+Message-Id: <20220410162511.656541-1-ohkwon1043@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git jd/not-zero-entropy-ktime
-head:   340a25fe529e8fc1df1a82b42f021a9d0fa4fb51
-commit: 51f687126c25fec1a6e2956a1a31c1ef1bc1fb44 [7/13] mips: use ktime_read_raw_clock() for random_get_entropy() instead of zero
-config: mips-qi_lb60_defconfig (https://download.01.org/0day-ci/archive/20220411/202204110022.wpsdiK5T-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 256c6b0ba14e8a7ab6373b61b7193ea8c0a3651c)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git/commit/?id=51f687126c25fec1a6e2956a1a31c1ef1bc1fb44
-        git remote add crng-random git://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git
-        git fetch --no-tags crng-random jd/not-zero-entropy-ktime
-        git checkout 51f687126c25fec1a6e2956a1a31c1ef1bc1fb44
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips prepare
+There are four types of kmalloc_caches: KMALLOC_NORMAL, KMALLOC_CGROUP,
+KMALLOC_RECLAIM, and KMALLOC_DMA. While the first three types are
+created using new_kmalloc_cache(), KMALLOC_DMA caches are created in a
+separate logic. Let KMALLOC_DMA caches be also created using
+new_kmalloc_cache(), to enhance readability.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Historically, there were only KMALLOC_NORMAL caches and KMALLOC_DMA
+caches in the first place, and they were initialized in two separate
+logics. However, when KMALLOC_RECLAIM was introduced in v4.20 via
+commit 1291523f2c1d ("mm, slab/slub: introduce kmalloc-reclaimable
+caches") and KMALLOC_CGROUP was introduced in v5.14 via
+commit 494c1dfe855e ("mm: memcg/slab: create a new set of kmalloc-cg-<n>
+caches"), their creations were merged with KMALLOC_NORMAL's only.
+KMALLOC_DMA creation logic should be merged with them, too.
 
-All errors (new ones prefixed by >>):
+By merging KMALLOC_DMA initialization with other types, the following
+two changes might occur:
+1. The order dma-kmalloc-<n> caches added in slab_cache list may be
+sorted by size. i.e. the order they appear in /proc/slabinfo may change
+as well.
+2. slab_state will be set to UP after KMALLOC_DMA is created.
+In case of slub, freelist randomization is dependent on slab_state>=UP,
+and therefore KMALLOC_DMA cache's freelist will not be randomized in
+creation, but will be deferred to init_freelist_randomization().
 
-   In file included from arch/mips/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:10:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:65:
-   In file included from arch/mips/include/asm/timex.h:15:
->> include/linux/timekeeping.h:67:8: error: unknown type name 'ktime_t'; did you mean 'timer_t'?
-   extern ktime_t ktime_get(void);
-          ^~~~~~~
-          timer_t
-   include/linux/types.h:26:26: note: 'timer_t' declared here
-   typedef __kernel_timer_t        timer_t;
-                                   ^
-   In file included from arch/mips/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:10:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:65:
-   In file included from arch/mips/include/asm/timex.h:15:
-   include/linux/timekeeping.h:68:8: error: unknown type name 'ktime_t'; did you mean 'timer_t'?
-   extern ktime_t ktime_get_with_offset(enum tk_offsets offs);
-          ^~~~~~~
-          timer_t
-   include/linux/types.h:26:26: note: 'timer_t' declared here
-   typedef __kernel_timer_t        timer_t;
-                                   ^
-   In file included from arch/mips/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:10:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:65:
-   In file included from arch/mips/include/asm/timex.h:15:
-   include/linux/timekeeping.h:69:8: error: unknown type name 'ktime_t'; did you mean 'timer_t'?
-   extern ktime_t ktime_get_coarse_with_offset(enum tk_offsets offs);
-          ^~~~~~~
-          timer_t
-   include/linux/types.h:26:26: note: 'timer_t' declared here
-   typedef __kernel_timer_t        timer_t;
-                                   ^
-   In file included from arch/mips/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:10:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:65:
-   In file included from arch/mips/include/asm/timex.h:15:
-   include/linux/timekeeping.h:70:8: error: unknown type name 'ktime_t'; did you mean 'timer_t'?
-   extern ktime_t ktime_mono_to_any(ktime_t tmono, enum tk_offsets offs);
-          ^~~~~~~
-          timer_t
-   include/linux/types.h:26:26: note: 'timer_t' declared here
-   typedef __kernel_timer_t        timer_t;
-                                   ^
-   In file included from arch/mips/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:10:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:65:
-   In file included from arch/mips/include/asm/timex.h:15:
-   include/linux/timekeeping.h:70:34: error: unknown type name 'ktime_t'; did you mean 'timer_t'?
-   extern ktime_t ktime_mono_to_any(ktime_t tmono, enum tk_offsets offs);
-                                    ^~~~~~~
-                                    timer_t
-   include/linux/types.h:26:26: note: 'timer_t' declared here
-   typedef __kernel_timer_t        timer_t;
-                                   ^
-   In file included from arch/mips/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:10:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:65:
-   In file included from arch/mips/include/asm/timex.h:15:
-   include/linux/timekeeping.h:71:8: error: unknown type name 'ktime_t'; did you mean 'timer_t'?
-   extern ktime_t ktime_get_raw(void);
-          ^~~~~~~
-          timer_t
-   include/linux/types.h:26:26: note: 'timer_t' declared here
-   typedef __kernel_timer_t        timer_t;
-                                   ^
-   In file included from arch/mips/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:10:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:65:
-   In file included from arch/mips/include/asm/timex.h:15:
-   include/linux/timekeeping.h:77:15: error: unknown type name 'ktime_t'; did you mean 'timer_t'?
-   static inline ktime_t ktime_get_real(void)
-                 ^~~~~~~
-                 timer_t
-   include/linux/types.h:26:26: note: 'timer_t' declared here
-   typedef __kernel_timer_t        timer_t;
-                                   ^
-   In file included from arch/mips/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:10:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:65:
-   In file included from arch/mips/include/asm/timex.h:15:
-   include/linux/timekeeping.h:82:15: error: unknown type name 'ktime_t'; did you mean 'timer_t'?
-   static inline ktime_t ktime_get_coarse_real(void)
-                 ^~~~~~~
-                 timer_t
-   include/linux/types.h:26:26: note: 'timer_t' declared here
-   typedef __kernel_timer_t        timer_t;
-                                   ^
-   In file included from arch/mips/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:10:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:65:
-   In file included from arch/mips/include/asm/timex.h:15:
-   include/linux/timekeeping.h:93:15: error: unknown type name 'ktime_t'; did you mean 'timer_t'?
-   static inline ktime_t ktime_get_boottime(void)
-                 ^~~~~~~
-                 timer_t
-   include/linux/types.h:26:26: note: 'timer_t' declared here
-   typedef __kernel_timer_t        timer_t;
-                                   ^
-   In file included from arch/mips/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:10:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:65:
-   In file included from arch/mips/include/asm/timex.h:15:
-   include/linux/timekeeping.h:98:15: error: unknown type name 'ktime_t'; did you mean 'timer_t'?
-   static inline ktime_t ktime_get_coarse_boottime(void)
-                 ^~~~~~~
-                 timer_t
-   include/linux/types.h:26:26: note: 'timer_t' declared here
-   typedef __kernel_timer_t        timer_t;
-                                   ^
-   In file included from arch/mips/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:10:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:65:
-   In file included from arch/mips/include/asm/timex.h:15:
-   include/linux/timekeeping.h:106:15: error: unknown type name 'ktime_t'; did you mean 'timer_t'?
-   static inline ktime_t ktime_get_clocktai(void)
-                 ^~~~~~~
-                 timer_t
-   include/linux/types.h:26:26: note: 'timer_t' declared here
-   typedef __kernel_timer_t        timer_t;
-                                   ^
-   In file included from arch/mips/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:10:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:65:
-   In file included from arch/mips/include/asm/timex.h:15:
-   include/linux/timekeeping.h:111:15: error: unknown type name 'ktime_t'; did you mean 'timer_t'?
-   static inline ktime_t ktime_get_coarse_clocktai(void)
-                 ^~~~~~~
-                 timer_t
-   include/linux/types.h:26:26: note: 'timer_t' declared here
-   typedef __kernel_timer_t        timer_t;
-                                   ^
-   In file included from arch/mips/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:10:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:65:
-   In file included from arch/mips/include/asm/timex.h:15:
-   include/linux/timekeeping.h:116:15: error: unknown type name 'ktime_t'; did you mean 'timer_t'?
-   static inline ktime_t ktime_get_coarse(void)
-                 ^~~~~~~
-                 timer_t
-   include/linux/types.h:26:26: note: 'timer_t' declared here
-   typedef __kernel_timer_t        timer_t;
-                                   ^
-   In file included from arch/mips/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:10:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:65:
-   In file included from arch/mips/include/asm/timex.h:15:
->> include/linux/timekeeping.h:121:9: error: implicit declaration of function 'timespec64_to_ktime' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           return timespec64_to_ktime(ts);
-                  ^
-   include/linux/timekeeping.h:121:9: note: did you mean 'timespec64_to_ns'?
-   include/linux/time64.h:127:19: note: 'timespec64_to_ns' declared here
-   static inline s64 timespec64_to_ns(const struct timespec64 *ts)
-                     ^
-   In file included from arch/mips/kernel/asm-offsets.c:12:
-   In file included from include/linux/compat.h:10:
-   In file included from include/linux/time.h:60:
-   In file included from include/linux/time32.h:13:
-   In file included from include/linux/timex.h:65:
-   In file included from arch/mips/include/asm/timex.h:15:
->> include/linux/timekeeping.h:126:9: error: implicit declaration of function 'ktime_to_ns' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           return ktime_to_ns(ktime_get_coarse());
-                  ^
-   include/linux/timekeeping.h:131:9: error: implicit declaration of function 'ktime_to_ns' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           return ktime_to_ns(ktime_get_coarse_real());
-                  ^
-   include/linux/timekeeping.h:136:9: error: implicit declaration of function 'ktime_to_ns' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           return ktime_to_ns(ktime_get_coarse_boottime());
-                  ^
-   include/linux/timekeeping.h:141:9: error: implicit declaration of function 'ktime_to_ns' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           return ktime_to_ns(ktime_get_coarse_clocktai());
-                  ^
-   include/linux/timekeeping.h:147:15: error: unknown type name 'ktime_t'; did you mean 'timer_t'?
-   static inline ktime_t ktime_mono_to_real(ktime_t mono)
-                 ^~~~~~~
-                 timer_t
-   include/linux/types.h:26:26: note: 'timer_t' declared here
-   typedef __kernel_timer_t        timer_t;
-                                   ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   20 errors generated.
-   make[2]: *** [scripts/Makefile.build:120: arch/mips/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1194: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+Co-developed-by: JaeSang Yoo <jsyoo5b@gmail.com>
+Signed-off-by: JaeSang Yoo <jsyoo5b@gmail.com>
+Signed-off-by: Ohhoon Kwon <ohkwon1043@gmail.com>
+---
+ mm/slab_common.c | 18 +++---------------
+ 1 file changed, 3 insertions(+), 15 deletions(-)
 
-
-vim +67 include/linux/timekeeping.h
-
-0077dc60f274b9 Thomas Gleixner    2014-07-16   66  
-8b094cd03b4a37 Thomas Gleixner    2014-07-16  @67  extern ktime_t ktime_get(void);
-0077dc60f274b9 Thomas Gleixner    2014-07-16   68  extern ktime_t ktime_get_with_offset(enum tk_offsets offs);
-b9ff604cff1135 Arnd Bergmann      2018-04-27   69  extern ktime_t ktime_get_coarse_with_offset(enum tk_offsets offs);
-9a6b51976ea3a3 Thomas Gleixner    2014-07-16   70  extern ktime_t ktime_mono_to_any(ktime_t tmono, enum tk_offsets offs);
-f519b1a2e08c91 Thomas Gleixner    2014-07-16   71  extern ktime_t ktime_get_raw(void);
-6374f9124efea5 Harald Geyer       2015-04-07   72  extern u32 ktime_get_resolution_ns(void);
-8b094cd03b4a37 Thomas Gleixner    2014-07-16   73  
-f5264d5d5a0729 Thomas Gleixner    2014-07-16   74  /**
-f5264d5d5a0729 Thomas Gleixner    2014-07-16   75   * ktime_get_real - get the real (wall-) time in ktime_t format
-f5264d5d5a0729 Thomas Gleixner    2014-07-16   76   */
-f5264d5d5a0729 Thomas Gleixner    2014-07-16   77  static inline ktime_t ktime_get_real(void)
-f5264d5d5a0729 Thomas Gleixner    2014-07-16   78  {
-f5264d5d5a0729 Thomas Gleixner    2014-07-16   79  	return ktime_get_with_offset(TK_OFFS_REAL);
-f5264d5d5a0729 Thomas Gleixner    2014-07-16   80  }
-f5264d5d5a0729 Thomas Gleixner    2014-07-16   81  
-b9ff604cff1135 Arnd Bergmann      2018-04-27   82  static inline ktime_t ktime_get_coarse_real(void)
-b9ff604cff1135 Arnd Bergmann      2018-04-27   83  {
-b9ff604cff1135 Arnd Bergmann      2018-04-27   84  	return ktime_get_coarse_with_offset(TK_OFFS_REAL);
-b9ff604cff1135 Arnd Bergmann      2018-04-27   85  }
-b9ff604cff1135 Arnd Bergmann      2018-04-27   86  
-a3ed0e4393d688 Thomas Gleixner    2018-04-25   87  /**
-a3ed0e4393d688 Thomas Gleixner    2018-04-25   88   * ktime_get_boottime - Returns monotonic time since boot in ktime_t format
-a3ed0e4393d688 Thomas Gleixner    2018-04-25   89   *
-a3ed0e4393d688 Thomas Gleixner    2018-04-25   90   * This is similar to CLOCK_MONTONIC/ktime_get, but also includes the
-a3ed0e4393d688 Thomas Gleixner    2018-04-25   91   * time spent in suspend.
-a3ed0e4393d688 Thomas Gleixner    2018-04-25   92   */
-a3ed0e4393d688 Thomas Gleixner    2018-04-25   93  static inline ktime_t ktime_get_boottime(void)
-a3ed0e4393d688 Thomas Gleixner    2018-04-25   94  {
-a3ed0e4393d688 Thomas Gleixner    2018-04-25   95  	return ktime_get_with_offset(TK_OFFS_BOOT);
-a3ed0e4393d688 Thomas Gleixner    2018-04-25   96  }
-a3ed0e4393d688 Thomas Gleixner    2018-04-25   97  
-b9ff604cff1135 Arnd Bergmann      2018-04-27   98  static inline ktime_t ktime_get_coarse_boottime(void)
-b9ff604cff1135 Arnd Bergmann      2018-04-27   99  {
-b9ff604cff1135 Arnd Bergmann      2018-04-27  100  	return ktime_get_coarse_with_offset(TK_OFFS_BOOT);
-b9ff604cff1135 Arnd Bergmann      2018-04-27  101  }
-b9ff604cff1135 Arnd Bergmann      2018-04-27  102  
-afab07c0e91ecf Thomas Gleixner    2014-07-16  103  /**
-afab07c0e91ecf Thomas Gleixner    2014-07-16  104   * ktime_get_clocktai - Returns the TAI time of day in ktime_t format
-afab07c0e91ecf Thomas Gleixner    2014-07-16  105   */
-afab07c0e91ecf Thomas Gleixner    2014-07-16  106  static inline ktime_t ktime_get_clocktai(void)
-afab07c0e91ecf Thomas Gleixner    2014-07-16  107  {
-afab07c0e91ecf Thomas Gleixner    2014-07-16  108  	return ktime_get_with_offset(TK_OFFS_TAI);
-afab07c0e91ecf Thomas Gleixner    2014-07-16  109  }
-afab07c0e91ecf Thomas Gleixner    2014-07-16  110  
-b9ff604cff1135 Arnd Bergmann      2018-04-27  111  static inline ktime_t ktime_get_coarse_clocktai(void)
-b9ff604cff1135 Arnd Bergmann      2018-04-27  112  {
-b9ff604cff1135 Arnd Bergmann      2018-04-27  113  	return ktime_get_coarse_with_offset(TK_OFFS_TAI);
-b9ff604cff1135 Arnd Bergmann      2018-04-27  114  }
-b9ff604cff1135 Arnd Bergmann      2018-04-27  115  
-4c54294d01e605 Jason A. Donenfeld 2019-06-21  116  static inline ktime_t ktime_get_coarse(void)
-4c54294d01e605 Jason A. Donenfeld 2019-06-21  117  {
-4c54294d01e605 Jason A. Donenfeld 2019-06-21  118  	struct timespec64 ts;
-4c54294d01e605 Jason A. Donenfeld 2019-06-21  119  
-4c54294d01e605 Jason A. Donenfeld 2019-06-21  120  	ktime_get_coarse_ts64(&ts);
-4c54294d01e605 Jason A. Donenfeld 2019-06-21 @121  	return timespec64_to_ktime(ts);
-4c54294d01e605 Jason A. Donenfeld 2019-06-21  122  }
-4c54294d01e605 Jason A. Donenfeld 2019-06-21  123  
-4c54294d01e605 Jason A. Donenfeld 2019-06-21  124  static inline u64 ktime_get_coarse_ns(void)
-4c54294d01e605 Jason A. Donenfeld 2019-06-21  125  {
-4c54294d01e605 Jason A. Donenfeld 2019-06-21 @126  	return ktime_to_ns(ktime_get_coarse());
-4c54294d01e605 Jason A. Donenfeld 2019-06-21  127  }
-4c54294d01e605 Jason A. Donenfeld 2019-06-21  128  
-
-:::::: The code at line 67 was first introduced by commit
-:::::: 8b094cd03b4a3793220d8d8d86a173bfea8c285b time: Consolidate the time accessor prototypes
-
-:::::: TO: Thomas Gleixner <tglx@linutronix.de>
-:::::: CC: John Stultz <john.stultz@linaro.org>
-
+diff --git a/mm/slab_common.c b/mm/slab_common.c
+index 6ee64d6208b3..a959d247c27b 100644
+--- a/mm/slab_common.c
++++ b/mm/slab_common.c
+@@ -849,6 +849,8 @@ new_kmalloc_cache(int idx, enum kmalloc_cache_type type, slab_flags_t flags)
+ 			return;
+ 		}
+ 		flags |= SLAB_ACCOUNT;
++	} else if (IS_ENABLED(CONFIG_ZONE_DMA) && (type == KMALLOC_DMA)) {
++		flags |= SLAB_CACHE_DMA;
+ 	}
+ 
+ 	kmalloc_caches[type][idx] = create_kmalloc_cache(
+@@ -877,7 +879,7 @@ void __init create_kmalloc_caches(slab_flags_t flags)
+ 	/*
+ 	 * Including KMALLOC_CGROUP if CONFIG_MEMCG_KMEM defined
+ 	 */
+-	for (type = KMALLOC_NORMAL; type <= KMALLOC_RECLAIM; type++) {
++	for (type = KMALLOC_NORMAL; type < NR_KMALLOC_TYPES; type++) {
+ 		for (i = KMALLOC_SHIFT_LOW; i <= KMALLOC_SHIFT_HIGH; i++) {
+ 			if (!kmalloc_caches[type][i])
+ 				new_kmalloc_cache(i, type, flags);
+@@ -898,20 +900,6 @@ void __init create_kmalloc_caches(slab_flags_t flags)
+ 
+ 	/* Kmalloc array is now usable */
+ 	slab_state = UP;
+-
+-#ifdef CONFIG_ZONE_DMA
+-	for (i = 0; i <= KMALLOC_SHIFT_HIGH; i++) {
+-		struct kmem_cache *s = kmalloc_caches[KMALLOC_NORMAL][i];
+-
+-		if (s) {
+-			kmalloc_caches[KMALLOC_DMA][i] = create_kmalloc_cache(
+-				kmalloc_info[i].name[KMALLOC_DMA],
+-				kmalloc_info[i].size,
+-				SLAB_CACHE_DMA | flags, 0,
+-				kmalloc_info[i].size);
+-		}
+-	}
+-#endif
+ }
+ #endif /* !CONFIG_SLOB */
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+

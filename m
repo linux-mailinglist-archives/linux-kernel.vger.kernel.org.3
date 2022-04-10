@@ -2,189 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9195D4FAC82
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 09:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 284FC4FAC83
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 09:15:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233781AbiDJHMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 03:12:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
+        id S233726AbiDJHRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 03:17:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233679AbiDJHMD (ORCPT
+        with ESMTP id S233795AbiDJHQ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 03:12:03 -0400
-Received: from mail-oa1-x44.google.com (mail-oa1-x44.google.com [IPv6:2001:4860:4864:20::44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E7AF45
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 00:09:53 -0700 (PDT)
-Received: by mail-oa1-x44.google.com with SMTP id 586e51a60fabf-d39f741ba0so14023724fac.13
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 00:09:53 -0700 (PDT)
+        Sun, 10 Apr 2022 03:16:58 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA135D186
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 00:14:49 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id mm4-20020a17090b358400b001cb93d8b137so136950pjb.2
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 00:14:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=landley-net.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=OKup0UvyxPHrx0lsepB2qlQY1RT8puztmE8wI+Ie6eo=;
-        b=QCTXxgYbpzlPbQmu7QRkEF4MSgBLoi71fZIg7nNTtVwhbP4ZzU0ijP5Katefmz09CM
-         7nekHR+oM9sNPqq7w2ZC1Itd/L5PjXkgQDl/aBdYchkS7oXLbtyA7xzAKrBnfVmRd+T2
-         rMk0+lA5ZL9QY5cmhoJyotOMDYzKf2H0YBAid47gFuq1ODRrYAxhcY0n6+VlQgvS0Nzv
-         SB+jZI16hqzMhbV3BONWAvZIQQl3x2qkxtYOA6v2b3NdKaeKGeh8nJiN90wzxwUEn9zG
-         BiinAFmTfMtXURXkkl/BCS77f4e26tAseFf7a7NM6Aqcx913REwEgW6LAJBc97rca0qu
-         RScQ==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=PMY5eIllAtYW0O4Krr8r6TdMFoC/4GNbntYNUsV7TDM=;
+        b=pmJnpsJ5BKsfrji2xj06XksVesUPMK0FhCQ9OlttXfXl9J/RuqkX01pkBZcbhsB5IQ
+         ICh+EVF8SoUt1+0bKuDFGxo5IrH6BTyRJ0Rmguz/fW5gjmsIaFvPV/TGuEK3k8Uv1Civ
+         xO1W4AnOeFWBR/JOoL+RWSY7DJMRniBOAl+qD8zEEUfegepBvP0oDAc1uXJ2WabrAOg7
+         MropX/Jm3slB7HpWLL+TELBcfqYkzOJ7cTjIXwtcfxi1SWDufax+fPwfgTH/cAUJjrer
+         JTC3NZ5/G0m2cZx3X2JdT7HV9mQpLnFUhIcN0mv7r5VcQIfGrH4RVHFTfiyH5Q1OPpY0
+         RAMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=OKup0UvyxPHrx0lsepB2qlQY1RT8puztmE8wI+Ie6eo=;
-        b=ErsrUMewKVAYq9UO44CuZQhFOyUopJsaqu1xYT0YvaBD/fv7HF4N9kg5F7dNyGUv0W
-         01+ewqhqWxREuIHbwI5pH7aPupsaFMr6EhHPO5akpjMjNGKE8qeVubW1LvHrz+4upzdp
-         VLMBML8/pxcV9LG9y63wWKrWL2Lk/qeuX/nFYaTsnN/VBZGp+XDr4ahO0iF5q6gLWiMr
-         Xapyxl1njoyh06DqOBMqK7LWu8Cje8i+yMd8zTAU/rM0HZYGbGzdhO1x9NIX45O97eFN
-         u212GIWbyKB9yqFd8x3PIW04b4qAHB0VyP/bQVHsf8bVEy0iuNv9OuWPN0Pho17Trx7D
-         RL7A==
-X-Gm-Message-State: AOAM5304VbFXpi1vl2/tutlby6QeDiykwJED598/CIYRWX/oF+/4IxcL
-        Fknkz1Fxuau2AuCoarP3BWwDCw==
-X-Google-Smtp-Source: ABdhPJxbO7EoBK0LBV5p3t+tud/FMcIYTo+1NKItqNRZ77i9OoY59ZK0upMNHy9Cd/jRS17Y3Yxziw==
-X-Received: by 2002:a05:6870:a189:b0:da:b3f:2b83 with SMTP id a9-20020a056870a18900b000da0b3f2b83mr11770176oaf.290.1649574592181;
-        Sun, 10 Apr 2022 00:09:52 -0700 (PDT)
-Received: from [192.168.224.179] ([172.58.198.202])
-        by smtp.gmail.com with ESMTPSA id p22-20020a056870831600b000ccfbea4f23sm11420278oae.33.2022.04.10.00.09.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Apr 2022 00:09:51 -0700 (PDT)
-Message-ID: <1730bed2-3978-cc4d-98ad-b0f6af38ab8e@landley.net>
-Date:   Sun, 10 Apr 2022 02:13:56 -0500
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=PMY5eIllAtYW0O4Krr8r6TdMFoC/4GNbntYNUsV7TDM=;
+        b=LFHcl1SrPt52keSutz4JgpaN+Zy3dGvBpgIMWMEU9Kc3ZZCDeGOGqpOsSvcXs9mioi
+         XHxDUfoHokQ7w4JX/J3omCaT+vjyO0OcfB68Px9+xU11vHeGwGo6cgIWVtatwKP4QKCv
+         WvFiUCNdXDGotglS+CGusD6+xOJirT5yji9PMRMTz7uZ9tF8MaVmqY+uw31cjPXzGf2R
+         w7Vp9r8HP1gPjNREF5m/e9ATCM6Fm55G7Yge97ITPqy3DU6Idm2vROBe9CudoUlXKtZy
+         IJYdP4MpqYtF0guDD51QlyAyDIiuUJFKJol6myU5ze5nEAR+2ZVABDOTUMfW4p9V2H8s
+         t9ig==
+X-Gm-Message-State: AOAM533aDgrGbGa1wnE2HegFw3ZonOQAwd4LvZYPdYL0ofrvXm12EO7z
+        rj9DFzZgJnoOoRrzB4jHuMY=
+X-Google-Smtp-Source: ABdhPJzT2Js1kF46f/1gtMncEUNMETja4yVeubZOnQDIW0iO59NQE/+UrLiSGfVndfjTXq8eGEn4aA==
+X-Received: by 2002:a17:902:7447:b0:158:2662:b8e2 with SMTP id e7-20020a170902744700b001582662b8e2mr9795761plt.54.1649574888369;
+        Sun, 10 Apr 2022 00:14:48 -0700 (PDT)
+Received: from hyeyoo ([114.29.24.243])
+        by smtp.gmail.com with ESMTPSA id w123-20020a623081000000b005056a4d71e3sm10359056pfw.77.2022.04.10.00.14.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Apr 2022 00:14:47 -0700 (PDT)
+Date:   Sun, 10 Apr 2022 16:14:38 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     JaeSang Yoo <js.yoo.5b@gmail.com>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Ohhoon Kwon <ohkwon1043@gmail.com>,
+        Wonhyuk Yang <vvghjk1234@gmail.com>,
+        Jiyoup Kim <lakroforce@gmail.com>,
+        Donghyeok Kim <dthex5d@gmail.com>,
+        JaeSang Yoo <jsyoo5b@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/slub: remove meaningless node check in ___slab_alloc()
+Message-ID: <YlKD3oz3HqQnucyc@hyeyoo>
+References: <20220409144239.2649257-1-jsyoo5b@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [RFC PULL] remove arch/h8300
-Content-Language: en-US
-To:     Daniel Palmer <daniel@0x0f.com>
-Cc:     Greg Ungerer <gerg@linux-m68k.org>, Arnd Bergmann <arnd@arndb.de>,
-        Christoph Hellwig <hch@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "moderated list:H8/300 ARCHITECTURE" 
-        <uclinux-h8-devel@lists.sourceforge.jp>,
-        "open list:TENSILICA XTENSA PORT (xtensa)" 
-        <linux-xtensa@linux-xtensa.org>, Max Filippov <jcmvbkbc@gmail.com>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>
-References: <Yib9F5SqKda/nH9c@infradead.org>
- <CAK8P3a1dUVsZzhAe81usLSkvH29zHgiV9fhEkWdq7_W+nQBWbg@mail.gmail.com>
- <YkmWh2tss8nXKqc5@infradead.org>
- <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com>
- <6a38e8b8-7ccc-afba-6826-cb6e4f92af83@linux-m68k.org>
- <CAFr9PXkk=8HOxPwVvFRzqHZteRREWxSOOcdjrcOPe0d=9AW2yQ@mail.gmail.com>
- <5b7687d4-8ba5-ad79-8a74-33fc2496a3db@linux-m68k.org>
- <8f9be869-7244-d92a-4683-f9c53da97755@landley.net>
- <CAFr9PXmMzFa_iD1iECi7S=DvpMRKgLu=7P+=2RmbEWtqczjduA@mail.gmail.com>
-From:   Rob Landley <rob@landley.net>
-In-Reply-To: <CAFr9PXmMzFa_iD1iECi7S=DvpMRKgLu=7P+=2RmbEWtqczjduA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220409144239.2649257-1-jsyoo5b@gmail.com>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/8/22 22:37, Daniel Palmer wrote:
-> Hi Rob,
+On Sat, Apr 09, 2022 at 11:42:39PM +0900, JaeSang Yoo wrote:
+> node_match() with node=NUMA_NO_NODE always returns 1.
+> Duplicate check by goto statement is meaningless. Remove it.
+
+Yeah, I think node = NUMA_NO_NODE here is to remove constraints
+when later calling get_partial_node() or new_slab().
+
+So no further check is required.
+
 > 
-> On Sat, 9 Apr 2022 at 09:20, Rob Landley <rob@landley.net> wrote:
+> Signed-off-by: JaeSang Yoo <jsyoo5b@gmail.com>
+> ---
+>  mm/slub.c | 1 -
+>  1 file changed, 1 deletion(-)
 > 
->> I've been booting Linux on qemu-system-m68k -M q800 for a couple years now? (The
->> CROSS=m68k target of mkroot in toybox?)
->>
->> # cat /proc/cpuinfo
->> CPU:            68040
->> MMU:            68040
->> FPU:            68040
->> Clocking:       1261.9MHz
->> BogoMips:       841.31
->> Calibration:    4206592 loops
->>
->> It certainly THINKS it's got m68000...
+> diff --git a/mm/slub.c b/mm/slub.c
+> index 9fe000fd19ca..a65e282b8238 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -2913,7 +2913,6 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
+>  		 */
+>  		if (!node_isset(node, slab_nodes)) {
+>  			node = NUMA_NO_NODE;
+> -			goto redo;
+>  		} else {
+>  			stat(s, ALLOC_NODE_MISMATCH);
+>  			goto deactivate_slab;
+> -- 
+> 2.25.1
+
+Looks good to me.
+
+Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+
+Thanks!
+
 > 
-> I couldn't work out how to define a mc68000 machine on the command line alone.
-> There might be a way but it didn't seem like it.
-
-By adding "-cpu m68000" to the qemu command line?
-
-The problem is you need a working _system_. If you wget
-http://landley.net/toybox/downloads/binaries/mkroot/latest/m68k.tgz and extract
-it and run
-./qemu-m68k.sh it boots to a shell prompt. If you "./qemu-m68k.sh -cpu m68000"
-it doesn't boot because the kernel is built for 68040.
-
->> (I'd love to get an m68k nommu system working but never sat down and worked out
->> a kernel .config qemu agreed to run, plus compiler and libc. Musl added m68k
->> support but I dunno if that includes coldfire?)
 > 
-> Once I get QEMU to emulate a simple mc68000 system my plan is to get
-> u-boot going (I managed to get it to build for plain mc68000 but I
-> didn't get far enough with the QEMU bit to try booting it yet) then
-> put together the buildroot configs to build qemu, u-boot, a kernel and
-> rootfs that just work. Then I can hook it into CI and have it build
-> and boot test automatically and it won't bit rot anymore.
 
-I don't bother with buildroot much, I wrote a 300 line bash script that builds a
-bootable Linux system instead:
-
-  https://github.com/landley/toybox/blob/master/scripts/mkroot.sh
-
-As for adding coldfire support, let's see... google for "qemu coldfire" first
-hit is https://qemu.readthedocs.io/en/latest/system/target-m68k.html which says
-the default board in qemu-system-m68k is coldfire and has run uclinux. There's a
-defconfig for it (arch/m68k/configs/m5208evb_defconfig) so:
-
-$ make ARCH=m68k m5208evb_defconfig
-...
-$ CROSS_COMPILE=m68k-linux-musl- make ARCH-m68k
-...
-$ qemu-system-m68k -nographic -kernel vmlinux
-
-Hey, console output on serial using my existing m68k toolchain. Good sign. Ok,
-let's see, can I get a userspace...
-
-No, I can't. The coldfire kernel only supports BINFLT, which is an a.out
-derivative. All the nommu targets I'm supporting are either FDPIC or (where gcc
-hasn't merged fdpic support yet) I'm building static pie and using the FDPIC
-loader in the kernel, which can load normal ELF: FDPIC makes the 4
-bss/data/text/rodata sections independently relocatable and static PIE has those
-4 glued together into one contiguous lump but at least that lump is relocatable,
-so it's a lot worse about fragmentation but does at least RUN...
-
-If I can't wire up the fdpic loader for coldfire, I can't build ELF format
-binaries for it, and I just don't mess with a.out anymore.
-
->> >> It looked like 68328serial.c was removed because someone tried to
->> >> clean it up and it was decided that no one was using it and it was
->> >> best to delete it.
->> >> My plan was to at some point send a series to fix up the issues with
->> >> the Dragonball support, revert removing the serial driver and adding
->> >> the patch that cleaned it up.
->> >
->> > Nice. I will leave all the 68000/68328 code alone for now then.
->>
->> The q800 config uses CONFIG_SERIAL_PMACZILOG. Seems to work fine?
-> 
-> Dragonball uses a weird UART that doesn't seem to be compatible with
-> any of the common ones so it needs its own driver.
-
-Indeed.
-
-That said, the 5208 is using CONFIG_SERIAL_MCF and I got serial output from the
-kernel I just built. Pity it hasn't got FDPIC support...
-
-> Cheers,
-> 
-> Daniel
-
-Rob
+-- 
+Thanks,
+Hyeonggon

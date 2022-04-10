@@ -2,139 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FE534FAE46
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 16:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14B554FAE49
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 16:36:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243230AbiDJOhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 10:37:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43980 "EHLO
+        id S243258AbiDJOjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 10:39:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243298AbiDJOhi (ORCPT
+        with ESMTP id S229673AbiDJOi5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 10:37:38 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A81F041614
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 07:35:26 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id z12so2730023edl.2
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 07:35:26 -0700 (PDT)
+        Sun, 10 Apr 2022 10:38:57 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9444FC51;
+        Sun, 10 Apr 2022 07:36:47 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id w18so15262861edi.13;
+        Sun, 10 Apr 2022 07:36:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=eTOdXk23m0jnDdzRGCxaR/MFXhCBLn0KmXc705LQ8io=;
-        b=tYI1JyIFHFrHxxOvc576qb1b2qrpxDEj7uajtZkxxxbP//OHX6b8tpkcaMrxgncmua
-         Kl4X8exdveN7R3HkpJv7yWBfznp5G1V1YjzMy3FRUhqIBy5Rfah0kpAsu/26CiEPsYXG
-         RwQ17Lea3XNoY1sF5CzJ7nhPYQ22woI5g+hwX7D/z3n2nnaFj/gbke5Ean/2WUnfgetC
-         /21FdUUv93ZkooS8jezWHqW8/FBwsjG9p6mNj5bY111Fz0ISzX0p0aC65O3jBSLTPONH
-         vAPtKdTiWV3VtA/evfGNjcv4/c0R0D923QvZQhj5gdqYrn9eBVHTmlinhrM1w3B6Wzbk
-         4fJQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BKkGQ0Mvqi4FBstenNkXAi42Rt/g6fYjLkhfPoyt3WM=;
+        b=HkgsCSL58PnbdcUBEOhGnHm6bJa+DOxjnoSIAlawOv1amwFaBpH6xfy629c4kCnBby
+         WUoJLA/YSQIcw+yi/FA+hKHSdo3KYfxfCUD2jJoaaZX+Z4GNzz7/urKDCSBz4RrsdN3y
+         AkJiaTLVMJScsv258BEFIrZtfrdYd6jPnoPVYU9Cu/jcKLgBaM3zOHQq86qJTKBYy+jW
+         y1I9BsvJQAJaIJs81NIZ2zIYMNKVzIav0LtD7aMnebtNLgKkeZ2Cj7uF/utQfsT6NG6C
+         pFjqAAHVmA1af2uKYgsOm+Z6tiQqJtj48EtHBFYvIgNQVmzcPhmxGTJbIhHkPO2DaGJo
+         QOrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=eTOdXk23m0jnDdzRGCxaR/MFXhCBLn0KmXc705LQ8io=;
-        b=rEh6nsgv/RehVaebIMhLPFvO7WXeHcPrvOOw2942PHHoozXX19EUKSsCLZCcYOa4PH
-         5e8bU5NuvHov8KxAoWeLiFiWVQc6HPl5lj5CSLHSurHLe+aqqqvGbQOqb9PfuUDobjmE
-         exl3AcS/xaQE8QRmN1kNi8VvemMxNrZlWObZ/nS9lZEGtU1W6NI23Gslv9duI5L4qBE2
-         3upv+6kDq/zRvSbHYuEKHms99ysW0nOPPJc3q2Dl8RGh4KpAWo42PB5v5F4ZtuT3y0Ux
-         E0IDz7Dgt2U07Nodq0G0i8Av6ozEb+oY/KhVtFx5CfmzwssaXYF29mZEztGXWpkqsNpg
-         sLEg==
-X-Gm-Message-State: AOAM530g/Er4dvKuyeBPrJl0e4FtAUsXARK9pfS6fS2tDqBcVA0Ne6kZ
-        oJvnJqoSLChXrsH7H1KdhtseLw==
-X-Google-Smtp-Source: ABdhPJxreNnaYua1edc9AwH1IrWzc7BaRzLjxEf+3cBwCy80r76YN6goNZuhnEDAWvwRKvMoMZHppw==
-X-Received: by 2002:a05:6402:158e:b0:41d:176:7594 with SMTP id c14-20020a056402158e00b0041d01767594mr18638652edv.214.1649601325090;
-        Sun, 10 Apr 2022 07:35:25 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s ([104.245.96.34])
-        by smtp.gmail.com with ESMTPSA id c13-20020a17090654cd00b006e0db351d01sm10912522ejp.124.2022.04.10.07.35.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Apr 2022 07:35:24 -0700 (PDT)
-Date:   Sun, 10 Apr 2022 22:35:17 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Namhyung Kim <namhyung@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        leo.yan@linaro.com, German Gomez <German.Gomez@arm.com>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Ravi Bangoria <ravi.bangoria@linux.ibm.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] perf: arm-spe: Fix perf report --mem-mode
-Message-ID: <20220410143517.GA226043@leoy-ThinkPad-X240s>
-References: <20220408144056.1955535-1-james.clark@arm.com>
- <CAM9d7cji=xSAy673sXGf2GXFsKKsR7=pNKJceLtHX1sFFUZcKg@mail.gmail.com>
- <20220409095941.GA1000846@leoy-ThinkPad-X240s>
- <YlGiZRZlrBCmO+YG@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BKkGQ0Mvqi4FBstenNkXAi42Rt/g6fYjLkhfPoyt3WM=;
+        b=xm/sjEWFbZQsUMqPjbNDsuYAz1nm+4A+L4DNGDEAaZloyghKnSz+355oexTBRe9zux
+         C7wgK2rAXGwDp2pZyKL5nzBdOd0PUtLfw6zf5trL63AdpVsS/OMODANO+ea6B1C6muLe
+         PHqsuQ1WSlxJ9fiKJ8AbrdwXy6+UP5wJThEoWGF4J08xo9bgS6kSKNQB5UCSWNlaZKj0
+         DOA3Gzgyq4n2GmsAahX8tVxKBzats/mIY8d8672e87f0sqHG6dkjD24TeO/MYmlenYuc
+         0COu3Xc6fXYHFsi4TLGMzfewWQ9Wevwzw4luTl1YE8u8vsyF12qzsxJW5+Yi/gY5QRut
+         tczQ==
+X-Gm-Message-State: AOAM532TzQYU5yvSB2jDD/CXAyqzxLK/Ki5Io8NQR8xVzdkwm7DbSLtx
+        NamUG//l2jNh7I40X7RHXLQPwE24FGeHZFQOhfw=
+X-Google-Smtp-Source: ABdhPJzTDZ5SdBgHlmf6b0kuw1eJUXWFsZR/bspw3My95hu+0WpS5LLqUJLEvCUrOzoKmjYfdJiCVqH6U2RA+lZXSss=
+X-Received: by 2002:a05:6402:2142:b0:413:6531:bd9e with SMTP id
+ bq2-20020a056402214200b004136531bd9emr28703628edb.5.1649601405556; Sun, 10
+ Apr 2022 07:36:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YlGiZRZlrBCmO+YG@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220402193942.744737-1-aford173@gmail.com> <20220402193942.744737-2-aford173@gmail.com>
+ <a66f17c6-cec6-3eb8-92df-9990d74dd122@linaro.org>
+In-Reply-To: <a66f17c6-cec6-3eb8-92df-9990d74dd122@linaro.org>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Sun, 10 Apr 2022 09:36:34 -0500
+Message-ID: <CAHCN7x+mm_oXdkzXOTEQwjCFfDB99p2JG8zZzydbL5_pUVJqCQ@mail.gmail.com>
+Subject: Re: [PATCH V3 1/3] dt-bindings: mmc: imx-esdhc: Update compatible fallbacks
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-mmc <linux-mmc@vger.kernel.org>,
+        Haibo Chen <haibo.chen@nxp.com>,
+        Adam Ford-BE <aford@beaconembedded.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 09, 2022 at 12:12:37PM -0300, Arnaldo Carvalho de Melo wrote:
-> Em Sat, Apr 09, 2022 at 05:59:41PM +0800, Leo Yan escreveu:
-> > On Fri, Apr 08, 2022 at 11:13:09AM -0700, Namhyung Kim wrote:
-> > > Hello,
-> > > 
-> > > On Fri, Apr 8, 2022 at 7:41 AM James Clark <james.clark@arm.com> wrote:
-> > > >
-> > > > Since commit bb30acae4c4d ("perf report: Bail out --mem-mode if mem info
-> > > > is not available") "perf mem report" and "perf report --mem-mode" don't
-> > > > allow opening the file unless one of the events has PERF_SAMPLE_DATA_SRC
-> > > > set.
-> > > >
-> > > > SPE doesn't have this set even though synthetic memory data is generated
-> > > > after it is decoded. Fix this issue by setting DATA_SRC on SPE events.
-> > > > This has no effect on the data collected because the SPE driver doesn't
-> > > > do anything with that flag and doesn't generate samples.
-> > > >
-> > > > Fixes: bb30acae4c4d ("perf report: Bail out --mem-mode if mem info is not available")
-> > > > Signed-off-by: James Clark <james.clark@arm.com>
-> > > 
-> > > Acked-by: Namhyung Kim <namhyung@kernel.org>
-> > 
-> > Tested-by: Leo Yan <leo.yan@linaro.org>
-> > 
-> > It's a bit awkward that after the commit bb30acae4c4d we cannot be
-> > backward compatible and any old perf data file will be failed to
-> > support by 'perf mem report' tool.
-> 
-> oh well, I think we should put in place a mechanism to run perf record
-> before some change, then make sure that a new perf is able to process
-> it after a rebuild.
-> 
-> If its something unsurmountable, then a proper explanation should be
-> done with a workaround to process those older files, even if pointing
-> out  to the perf version that is able to process the old file.
+On Sat, Apr 2, 2022 at 3:12 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 02/04/2022 21:39, Adam Ford wrote:
+> > The SDHC controller in the imx8mn and imx8mp have the same controller
+> > as the imx8mm which is slightly different than that of the imx7d.
+> > Using the fallback of the imx8mm enables the controllers to support
+> > HS400-ES which is not available on the imx7d. After discussion with NXP,
+> > it turns out that the imx8qm should fall back to the imx8qxp, because
+> > those have some additional flags not present in the imx8mm.
+> >
+> > Suggested-by: haibo.chen@nxp.com
+> > Signed-off-by: Adam Ford <aford173@gmail.com>
+> > ---
+> > V3:  Marked the imx7d-usdhc as deprecated when there are better
+> >      fallback options or the fallback isn't needed.
+> >      Leave the deprecated fallback in the YAML to prevent errors
+> >      Remove Reviewed-by from Krzysztof Kozlowski due to the above
+> >
+> > V2:  Update the table per recomendation from Haibo.
+> >
+> > diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> > index 7dbbcae9485c..11f039320d79 100644
+> > --- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> > +++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> > @@ -34,23 +34,34 @@ properties:
+> >            - fsl,imx6ull-usdhc
+> >            - fsl,imx7d-usdhc
+> >            - fsl,imx7ulp-usdhc
+> > +          - fsl,imx8mm-usdhc
+> > +          - fsl,imx8qxp-usdhc
+> >            - fsl,imxrt1050-usdhc
+> >            - nxp,s32g2-usdhc
+> >        - items:
+> >            - enum:
+> >                - fsl,imx8mm-usdhc
+> > +              - fsl,imx8mq-usdhc
+> > +            # fsl,imx7d-usdhc fallback is deprecated for imx8mm-usdhc
+> > +          - const: fsl,imx7d-usdhc
+>
+> Instead of comment use (I think on the same level as items):
+>
+> deprecated: true
 
-I will follow up to add a sub test case for Arm SPE with 'perf mem'.
+I have tried various combinations of where to place "deprecated" and
+whether or not to use a hyphen, but I always get syntax errors.  Do
+you have an example of this I can see?
 
-I tried to find possible workround for old perf data files but failed,
-the 'perf mem' tool reports error in a very early time so I cannot add
-workaround in Arm SPE specific code (e.g. arm_spe_process_auxtrace_info()).
-I will check furthermore, as a backup will send a patch to remind
-suitable perf version.
-
-A backlog task for me is to setup an automatic testing envoirnment
-for daily testing perf on Arm64.  I will setup an automatic testing
-for this.
-
-> Anyway, applying this pa tch.
-
-Thanks!
-
-Leo
+adam
+>
+> > +      - items:
+> > +          - enum:
+> >                - fsl,imx8mn-usdhc
+> >                - fsl,imx8mp-usdhc
+>
+> So if this is a deprecated list, where is a proper one? The list with
+> this enum + imx8mm?
+>
+> IOW, you need to list here:
+> 1. Old combinations with "deprecated: true"
+> 2. New combinations.
+>
+> > -              - fsl,imx8mq-usdhc
+> > -              - fsl,imx8qm-usdhc
+> > -              - fsl,imx8qxp-usdhc
+> > +          - const: fsl,imx8mm-usdhc
+> > +            # fsl,imx7d-usdhc fallback is deprecated
+> >            - const: fsl,imx7d-usdhc
+> >        - items:
+> >            - enum:
+> > -              - fsl,imx93-usdhc
+> >                - fsl,imx8ulp-usdhc
+> > +              - fsl,imx93-usdhc
+> >            - const: fsl,imx8mm-usdhc
+> > -
+> > +      - items:
+> > +          - enum:
+> > +              - fsl,imx8qm-usdhc
+> > +          - const: fsl,imx8qxp-usdhc
+> > +            # fsl,imx7d-usdhc fallback is deprecated
+> > +          - const: fsl,imx7d-usdhc
+> >    reg:
+> >      maxItems: 1
+> >
+>
+>
+> Best regards,
+> Krzysztof

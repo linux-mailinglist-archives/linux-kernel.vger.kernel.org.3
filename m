@@ -2,102 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31AA04FADB0
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 13:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AEF44FADBF
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 14:03:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238568AbiDJLuh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 07:50:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42310 "EHLO
+        id S238717AbiDJMFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 08:05:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230057AbiDJLuf (ORCPT
+        with ESMTP id S238644AbiDJMFm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 07:50:35 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D93A2E6A7
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 04:48:25 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id md20-20020a17090b23d400b001cb70ef790dso2061508pjb.5
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 04:48:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+Wa9XPtQomZw9/qSdanoMdYPd0EpQEW8XKYDlUj1N1w=;
-        b=O/u0lYLdcpcBNSW+V5qHCpVsK0bkoX0+2w7PwPl0iwR+07qiSOkjoL9BCtT7LPIR7k
-         lCQpcZc6HaYgAaD/PDoHWkalH+1h3BMaNI1dSkQt8QAzy4hETCfgN+ixb6T1Qqrs3pLy
-         mR6c5cp1eUeCMmyY0JxQyMZpZlHCmkyVSArKkiMF7F745retyg1CpzOax7U4SR01XQt8
-         bk0gSUKnhD94Sj3w7mZ4PpwPJgf4/UUoSZp+Y8ttGWXq/SG3cp82vC9msTmU6sTi9mz9
-         Z5P/zPHQP/T0D8jTsE/yISA3mvEjdg2Mhs/Zd8oVCQVvFRQtdE437C5Ae++9fpvJ1u/a
-         +Qyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+Wa9XPtQomZw9/qSdanoMdYPd0EpQEW8XKYDlUj1N1w=;
-        b=NOJNbKf8OOetkP6kY3oQ+Tt9FwaecXGKzGYQrE2PgYhSNWdeErSzc6BgdmIIt4oLRh
-         dJZ33v2aVsfsHTnTeGnAFwoewxFbrNHcbDzMCDNIccA2yzBFA73r7RqAGRWdMYttAkOZ
-         gpernjwwDMP+LW92KiMzj44XJaaBm8cvtg1nJwbRUjjyMXs6Cfq7lLgH3z2p9e7Vlrur
-         ocOE4k2BbKRgOAW56WLHUXDrkH+m4VyVROGNJJAF6UYz1f55MCj82geVEY2mW10+ncsD
-         mGWoF3joB0wKwtUxi+tCp9WNcHeew7Cr7dVXHNLpQuDdGJP7OSR1Y826h1k+xwfQK+Ga
-         O4/A==
-X-Gm-Message-State: AOAM5336Cl+KY4bXxdLWBH63S3heTNqD5d2o3x8PPbTjtTeV1EkfKK5/
-        7lL891p1pVMmz2vmSXKmrQ==
-X-Google-Smtp-Source: ABdhPJzg3V1MNZAFs4oTOJwzWdkxsaLklLwaK/R2HsgboUKWbtiManpRTf1wLVJjTrQTImu6rF9igQ==
-X-Received: by 2002:a17:90b:4c0f:b0:1c7:d2de:5aec with SMTP id na15-20020a17090b4c0f00b001c7d2de5aecmr31515353pjb.110.1649591305160;
-        Sun, 10 Apr 2022 04:48:25 -0700 (PDT)
-Received: from localhost.localdomain ([144.202.91.207])
-        by smtp.gmail.com with ESMTPSA id t31-20020a056a00139f00b00505b8a8ac08sm1307119pfg.160.2022.04.10.04.48.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Apr 2022 04:48:24 -0700 (PDT)
-From:   Zheyu Ma <zheyuma97@gmail.com>
-To:     gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     linux-kernel@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>
-Subject: [PATCH] tty: synclink_gt: Fix null-pointer-dereference in slgt_clean()
-Date:   Sun, 10 Apr 2022 19:48:14 +0800
-Message-Id: <20220410114814.3920474-1-zheyuma97@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 10 Apr 2022 08:05:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85648515A7;
+        Sun, 10 Apr 2022 05:03:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2C77FB80CBF;
+        Sun, 10 Apr 2022 12:03:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46800C385A5;
+        Sun, 10 Apr 2022 12:03:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649592208;
+        bh=XhnYD3ZlSsnUjTeNZb68B85wGee+IQ5tw0+v9WwntL4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u8npcF3FbNolc81rIV9ILUaWLNxzPH7VwanZHPBgUYJMcX0cg4Y++3sPvlyOQIlHw
+         XCO0C2sUK6fn9iTFfNKJuKJW9eB4kVPOi83NEKTWjBbXJcUZugb1/+tPbvCC627aWC
+         vLQ/d+gvxzuvqOYFzMWXRBJWNtfAcm/P7APKC2iDROU5vN6a4c5VToMru89Xi1nJVF
+         SOlxU/4zY82hmk+pa/zDdZ8lQdlCXXLZuZUqj+UZHdtXjQT1Xtr/c0q4cMAof984aV
+         Toqu5pN18Yc5G7SWBOZZ4Q1Bf48OW6wIfSrRWLbco1VMv7JA1vdE8hOJbroKnLZvjT
+         UrFA9JpOjghpg==
+Date:   Sun, 10 Apr 2022 15:03:24 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Mark Zhang <markzhang@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org,
+        syzbot+8fcbb77276d43cc8b693@syzkaller.appspotmail.com
+Subject: Re: [PATCH rdma-rc] RDMA/cma: Limit join multicast to UD QP type only
+Message-ID: <YlLHjFlR8BtCc5Hu@unreal>
+References: <4132fdbc9fbba5dca834c84ae383d7fe6a917760.1649083917.git.leonro@nvidia.com>
+ <20220408182440.GA3647277@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220408182440.GA3647277@nvidia.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the driver fails at alloc_hdlcdev(), and then we remove the driver
-module, we will get the following splat:
+On Fri, Apr 08, 2022 at 03:24:40PM -0300, Jason Gunthorpe wrote:
+> On Mon, Apr 04, 2022 at 05:52:18PM +0300, Leon Romanovsky wrote:
+> > -static int cma_set_qkey(struct rdma_id_private *id_priv, u32 qkey)
+> > +static int cma_set_default_qkey(struct rdma_id_private *id_priv)
+> >  {
+> >  	struct ib_sa_mcmember_rec rec;
+> >  	int ret = 0;
+> >  
+> > -	if (id_priv->qkey) {
+> > -		if (qkey && id_priv->qkey != qkey)
+> > -			return -EINVAL;
+> > -		return 0;
+> > -	}
+> > -
+> > -	if (qkey) {
+> > -		id_priv->qkey = qkey;
+> > -		return 0;
+> > -	}
+> > -
+> >  	switch (id_priv->id.ps) {
+> >  	case RDMA_PS_UDP:
+> >  	case RDMA_PS_IB:
+> > @@ -528,9 +517,22 @@ static int cma_set_qkey(struct rdma_id_private *id_priv, u32 qkey)
+> >  	default:
+> >  		break;
+> >  	}
+> > +
+> >  	return ret;
+> >  }
+> >  
+> > +static int cma_set_qkey(struct rdma_id_private *id_priv, u32 qkey)
+> > +{
+> > +	if (!qkey)
+> > +		return cma_set_default_qkey(id_priv);
+> 
+> This should be called in the couple of places that are actually
+> allowed to set a default qkey. We have some confusion about when that
+> is supposed to happen and when a 0 qkey can be presented.
+> 
+> But isn't this not the same? The original behavior was to make the
+> set_default a NOP if the id_priv already had a qkey:
+> 
+>  -	if (id_priv->qkey) {
+>  -		if (qkey && id_priv->qkey != qkey)
+> 
+> But that is gone now?
 
-[   25.065966] general protection fault, probably for non-canonical address 0xdffffc0000000182: 0000 [#1] PREEMPT SMP KASAN PTI
-[   25.066914] KASAN: null-ptr-deref in range [0x0000000000000c10-0x0000000000000c17]
-[   25.069262] RIP: 0010:detach_hdlc_protocol+0x2a/0x3e0
-[   25.077709] Call Trace:
-[   25.077924]  <TASK>
-[   25.078108]  unregister_hdlc_device+0x16/0x30
-[   25.078481]  slgt_cleanup+0x157/0x9f0 [synclink_gt]
+When I reviewed, I got an impression what once we create id_priv and set
+qkey to default values, we won't hit this if (..).
 
-Fix this by checking whether the 'info->netdev' is a null pointer first.
+> 
+> I got this:
+> 
+> diff --git a/drivers/infiniband/core/cma.c b/drivers/infiniband/core/cma.c
+> index 3e315fc0ac16cb..ef980ea7153e51 100644
+> --- a/drivers/infiniband/core/cma.c
+> +++ b/drivers/infiniband/core/cma.c
+> @@ -1102,7 +1102,7 @@ static int cma_ib_init_qp_attr(struct rdma_id_private *id_priv,
+>  	*qp_attr_mask = IB_QP_STATE | IB_QP_PKEY_INDEX | IB_QP_PORT;
+>  
+>  	if (id_priv->id.qp_type == IB_QPT_UD) {
+> -		ret = cma_set_qkey(id_priv, 0);
+> +		ret = cma_set_default_qkey(id_priv);
 
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
----
- drivers/tty/synclink_gt.c | 2 ++
- 1 file changed, 2 insertions(+)
+This is ok
 
-diff --git a/drivers/tty/synclink_gt.c b/drivers/tty/synclink_gt.c
-index 25c558e65ece..9bc2a9265277 100644
---- a/drivers/tty/synclink_gt.c
-+++ b/drivers/tty/synclink_gt.c
-@@ -1746,6 +1746,8 @@ static int hdlcdev_init(struct slgt_info *info)
-  */
- static void hdlcdev_exit(struct slgt_info *info)
- {
-+	if (!info->netdev)
-+		return;
- 	unregister_hdlc_device(info->netdev);
- 	free_netdev(info->netdev);
- 	info->netdev = NULL;
--- 
-2.25.1
+>  		if (ret)
+>  			return ret;
+>  
+> @@ -4430,14 +4430,10 @@ int rdma_accept(struct rdma_cm_id *id, struct rdma_conn_param *conn_param)
+>  
+>  	if (rdma_cap_ib_cm(id->device, id->port_num)) {
+>  		if (id->qp_type == IB_QPT_UD) {
+> -			if (conn_param)
+> -				ret = cma_send_sidr_rep(id_priv, IB_SIDR_SUCCESS,
+> -							conn_param->qkey,
+> -							conn_param->private_data,
+> -							conn_param->private_data_len);
+> -			else
+> -				ret = cma_send_sidr_rep(id_priv, IB_SIDR_SUCCESS,
+> -							0, NULL, 0);
+> +			ret = cma_send_sidr_rep(id_priv, IB_SIDR_SUCCESS,
+> +						conn_param->qkey,
+> +						conn_param->private_data,
+> +						conn_param->private_data_len);
 
+It is ok too and we have many other places with not-possible "if (conn_param)".
+
+>  		} else {
+>  			if (conn_param)
+>  				ret = cma_accept_ib(id_priv, conn_param);
+> @@ -4685,7 +4681,7 @@ static int cma_join_ib_multicast(struct rdma_id_private *id_priv,
+>  	if (ret)
+>  		return ret;
+>  
+> -	ret = cma_set_qkey(id_priv, 0);
+> +	ret = cma_set_default_qkey(id_priv);
+>  	if (ret)
+>  		return ret;
+>  
+> 
+> >  static void cma_translate_ib(struct sockaddr_ib *sib, struct rdma_dev_addr *dev_addr)
+> >  {
+> >  	dev_addr->dev_type = ARPHRD_INFINIBAND;
+> > @@ -4762,8 +4764,7 @@ static int cma_iboe_join_multicast(struct rdma_id_private *id_priv,
+> >  	cma_iboe_set_mgid(addr, &ib.rec.mgid, gid_type);
+> >  
+> >  	ib.rec.pkey = cpu_to_be16(0xffff);
+> > -	if (id_priv->id.ps == RDMA_PS_UDP)
+> > -		ib.rec.qkey = cpu_to_be32(RDMA_UDP_QKEY);
+> > +	ib.rec.qkey = cpu_to_be32(RDMA_UDP_QKEY);
+> 
+> Why isn't this symetrical with the IB side:
+> 
+> 	ret = cma_set_default_qkey(id_priv);
+> 	if (ret)
+> 		return ret;
+> 	rec.qkey = cpu_to_be32(id_priv->qkey);
+> 
+> 
+> ??
+
+The original code didn't touch id_priv.
+
+> 
+> It fells like set_default_qkey() is the right thing to do incase the
+> qkey was already set by something, just as IB does it.
+> 
+> > @@ -4815,6 +4816,9 @@ int rdma_join_multicast(struct rdma_cm_id *id, struct sockaddr *addr,
+> >  			    READ_ONCE(id_priv->state) != RDMA_CM_ADDR_RESOLVED))
+> >  		return -EINVAL;
+> >  
+> > +	if (id_priv->id.qp_type != IB_QPT_UD)
+> > +		return -EINVAL;
+> > +
+> 
+> This makes sense
+> 
+> Jason

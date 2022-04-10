@@ -2,95 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97AFF4FAC7E
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 09:08:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9195D4FAC82
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 09:10:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233665AbiDJHKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 03:10:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46322 "EHLO
+        id S233781AbiDJHMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 03:12:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiDJHK2 (ORCPT
+        with ESMTP id S233679AbiDJHMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 03:10:28 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D988233EB2;
-        Sun, 10 Apr 2022 00:08:18 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id p25so5242536pfn.13;
-        Sun, 10 Apr 2022 00:08:18 -0700 (PDT)
+        Sun, 10 Apr 2022 03:12:03 -0400
+Received: from mail-oa1-x44.google.com (mail-oa1-x44.google.com [IPv6:2001:4860:4864:20::44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E7AF45
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 00:09:53 -0700 (PDT)
+Received: by mail-oa1-x44.google.com with SMTP id 586e51a60fabf-d39f741ba0so14023724fac.13
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 00:09:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=HVWBsgmreVM7NWYIFYraUpWAz5bg5eNhLs14aCiVGc0=;
-        b=k9PhERDb0On3yStvqqyKVL+kfQcIpVZBzBASw+Gp6PQSmtCQHgKlWS0nxQPpc7c7dr
-         +prqxSG8V+QzxUZqntQhO06VnuMu+9mupVTNdZm8ZXUv/otsHo/2ds89gLOjZPyGyU+U
-         sRjTMO5/eHL0zIoiYoKWcci3c+LQQijXlM6HZQnxSPcbuiipNe5AWOoxev6QdY+AHnfK
-         ZUCo3YaRN6uFwANT6oyRbgEHuDZwW4e9FEP6b4PRq1mQWsdAkT8OZDcBGsiAQWmtj8Y6
-         HGVlMgY1coxBNuYkXG+jWgPuCBHRVPVzCyD6s+goaw/A61qa1XWpgWBNcXu/eZqD1WIn
-         gToA==
+        d=landley-net.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=OKup0UvyxPHrx0lsepB2qlQY1RT8puztmE8wI+Ie6eo=;
+        b=QCTXxgYbpzlPbQmu7QRkEF4MSgBLoi71fZIg7nNTtVwhbP4ZzU0ijP5Katefmz09CM
+         7nekHR+oM9sNPqq7w2ZC1Itd/L5PjXkgQDl/aBdYchkS7oXLbtyA7xzAKrBnfVmRd+T2
+         rMk0+lA5ZL9QY5cmhoJyotOMDYzKf2H0YBAid47gFuq1ODRrYAxhcY0n6+VlQgvS0Nzv
+         SB+jZI16hqzMhbV3BONWAvZIQQl3x2qkxtYOA6v2b3NdKaeKGeh8nJiN90wzxwUEn9zG
+         BiinAFmTfMtXURXkkl/BCS77f4e26tAseFf7a7NM6Aqcx913REwEgW6LAJBc97rca0qu
+         RScQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=HVWBsgmreVM7NWYIFYraUpWAz5bg5eNhLs14aCiVGc0=;
-        b=jDxRpx6p030UCBQQHnALIaDtq19kEl+KxOVgQnm1FrF3sJV5AyWDH4xZ6syCc1acZW
-         pni7bCm36GX4AWbHetrXVOqjjaNsTF9Kd3slbyR+wh6A7RvA/CN0cY0/V+nREgrw1nFN
-         jV4H5wo4RjADeHYS7SUs0WB6P6Ta32t02io8MIsd+ymUrRgoERLeMhJNgUdTcKvCFfdh
-         30grboAmGd2PuP3OrnMVpXsWmU/g/B0elnLsJ9ynI6fsct3Z4QJrPJe+mhauaw1UDTFM
-         rT3x5BvcmmF2ONxH5RkYfMwkF9yo4hBynE72k3dx6B2I177LFcduty6aRd00Xb5keQMy
-         tKSw==
-X-Gm-Message-State: AOAM530ZigxigCiVvaGszDqsMg+5WOxCGiTzyJi49nYbF2NDOb3eJ+F/
-        UE+djeCghWc9JJOj0IWC+9NUtY+Mwh8II6ij5Uv7bbPoLf0wPlI=
-X-Google-Smtp-Source: ABdhPJzzrQAbQ4gE/xYri6oJag17XAmEBKxfSBlgZA9Nb2uXUnmhNRDno4cF5cyC5BCFlyrr3Z2OnquVKFambr031dQ=
-X-Received: by 2002:a05:6a00:ad0:b0:4f7:a357:6899 with SMTP id
- c16-20020a056a000ad000b004f7a3576899mr27329756pfl.80.1649574498352; Sun, 10
- Apr 2022 00:08:18 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=OKup0UvyxPHrx0lsepB2qlQY1RT8puztmE8wI+Ie6eo=;
+        b=ErsrUMewKVAYq9UO44CuZQhFOyUopJsaqu1xYT0YvaBD/fv7HF4N9kg5F7dNyGUv0W
+         01+ewqhqWxREuIHbwI5pH7aPupsaFMr6EhHPO5akpjMjNGKE8qeVubW1LvHrz+4upzdp
+         VLMBML8/pxcV9LG9y63wWKrWL2Lk/qeuX/nFYaTsnN/VBZGp+XDr4ahO0iF5q6gLWiMr
+         Xapyxl1njoyh06DqOBMqK7LWu8Cje8i+yMd8zTAU/rM0HZYGbGzdhO1x9NIX45O97eFN
+         u212GIWbyKB9yqFd8x3PIW04b4qAHB0VyP/bQVHsf8bVEy0iuNv9OuWPN0Pho17Trx7D
+         RL7A==
+X-Gm-Message-State: AOAM5304VbFXpi1vl2/tutlby6QeDiykwJED598/CIYRWX/oF+/4IxcL
+        Fknkz1Fxuau2AuCoarP3BWwDCw==
+X-Google-Smtp-Source: ABdhPJxbO7EoBK0LBV5p3t+tud/FMcIYTo+1NKItqNRZ77i9OoY59ZK0upMNHy9Cd/jRS17Y3Yxziw==
+X-Received: by 2002:a05:6870:a189:b0:da:b3f:2b83 with SMTP id a9-20020a056870a18900b000da0b3f2b83mr11770176oaf.290.1649574592181;
+        Sun, 10 Apr 2022 00:09:52 -0700 (PDT)
+Received: from [192.168.224.179] ([172.58.198.202])
+        by smtp.gmail.com with ESMTPSA id p22-20020a056870831600b000ccfbea4f23sm11420278oae.33.2022.04.10.00.09.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 10 Apr 2022 00:09:51 -0700 (PDT)
+Message-ID: <1730bed2-3978-cc4d-98ad-b0f6af38ab8e@landley.net>
+Date:   Sun, 10 Apr 2022 02:13:56 -0500
 MIME-Version: 1.0
-From:   Zheyu Ma <zheyuma97@gmail.com>
-Date:   Sun, 10 Apr 2022 15:08:04 +0800
-Message-ID: <CAMhUBjnc1rCoE5G8MPHO-nzMdQs=O3=YLH1QnuF7mbKbds2QMQ@mail.gmail.com>
-Subject: [BUG] IB/hfi1: Warning when the driver fails to probe
-To:     mike.marciniszyn@cornelisnetworks.com,
-        dennis.dalessandro@cornelisnetworks.com, jgg@ziepe.ca
-Cc:     linux-rdma@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [RFC PULL] remove arch/h8300
+Content-Language: en-US
+To:     Daniel Palmer <daniel@0x0f.com>
+Cc:     Greg Ungerer <gerg@linux-m68k.org>, Arnd Bergmann <arnd@arndb.de>,
+        Christoph Hellwig <hch@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "moderated list:H8/300 ARCHITECTURE" 
+        <uclinux-h8-devel@lists.sourceforge.jp>,
+        "open list:TENSILICA XTENSA PORT (xtensa)" 
+        <linux-xtensa@linux-xtensa.org>, Max Filippov <jcmvbkbc@gmail.com>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>
+References: <Yib9F5SqKda/nH9c@infradead.org>
+ <CAK8P3a1dUVsZzhAe81usLSkvH29zHgiV9fhEkWdq7_W+nQBWbg@mail.gmail.com>
+ <YkmWh2tss8nXKqc5@infradead.org>
+ <CAK8P3a0QdFOJbM72geYTWOKumeKPSCVD8Nje5pBpZWazX0GEnQ@mail.gmail.com>
+ <6a38e8b8-7ccc-afba-6826-cb6e4f92af83@linux-m68k.org>
+ <CAFr9PXkk=8HOxPwVvFRzqHZteRREWxSOOcdjrcOPe0d=9AW2yQ@mail.gmail.com>
+ <5b7687d4-8ba5-ad79-8a74-33fc2496a3db@linux-m68k.org>
+ <8f9be869-7244-d92a-4683-f9c53da97755@landley.net>
+ <CAFr9PXmMzFa_iD1iECi7S=DvpMRKgLu=7P+=2RmbEWtqczjduA@mail.gmail.com>
+From:   Rob Landley <rob@landley.net>
+In-Reply-To: <CAFr9PXmMzFa_iD1iECi7S=DvpMRKgLu=7P+=2RmbEWtqczjduA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 4/8/22 22:37, Daniel Palmer wrote:
+> Hi Rob,
+> 
+> On Sat, 9 Apr 2022 at 09:20, Rob Landley <rob@landley.net> wrote:
+> 
+>> I've been booting Linux on qemu-system-m68k -M q800 for a couple years now? (The
+>> CROSS=m68k target of mkroot in toybox?)
+>>
+>> # cat /proc/cpuinfo
+>> CPU:            68040
+>> MMU:            68040
+>> FPU:            68040
+>> Clocking:       1261.9MHz
+>> BogoMips:       841.31
+>> Calibration:    4206592 loops
+>>
+>> It certainly THINKS it's got m68000...
+> 
+> I couldn't work out how to define a mc68000 machine on the command line alone.
+> There might be a way but it didn't seem like it.
 
-I found a bug at the init_one() function in the hfi driver.
-When the function xa_alloc_irq() fails, the driver executes the error
-handling function sdma_clean(), and this function uses the lock '
-dd->sde_map_lock'. But this lock is initialized after executing the
-function xa_alloc_irq(), which causes the following warning:
+By adding "-cpu m68000" to the qemu command line?
 
-[   23.257762] hfi1 0000:00:05.0: Could not allocate unit ID: error 1
-[   23.269915] INFO: trying to register non-static key.
-[   23.270318] The code is fine but needs lockdep annotation, or maybe
-[   23.270808] you didn't initialize this object before use?
-[   23.271229] turning off the locking correctness validator.
-[   23.273198] Call Trace:
-[   23.274185]  register_lock_class+0x11b/0x880
-[   23.274525]  __lock_acquire+0xf3/0x7930
-[   23.275769]  lock_acquire+0xff/0x2d0
-[   23.276053]  ? sdma_clean+0x42a/0x660 [hfi1]
-[   23.276485]  ? lock_release+0x472/0x710
-[   23.276789]  _raw_spin_lock_irq+0x46/0x60
-[   23.277105]  ? sdma_clean+0x42a/0x660 [hfi1]
-[   23.277530]  sdma_clean+0x42a/0x660 [hfi1]
-[   23.277945]  ? trace_kfree+0x28/0xc0
-[   23.278232]  hfi1_free_devdata+0x3a7/0x420 [hfi1]
-[   23.278688]  init_one+0x867/0x11a0 [hfi1]
-[   23.279090]  ? _raw_spin_unlock_irqrestore+0x3d/0x60
-[   23.279482]  ? rcu_lock_release+0x20/0x20 [hfi1]
-[   23.279930]  pci_device_probe+0x40e/0x8d0
+The problem is you need a working _system_. If you wget
+http://landley.net/toybox/downloads/binaries/mkroot/latest/m68k.tgz and extract
+it and run
+./qemu-m68k.sh it boots to a shell prompt. If you "./qemu-m68k.sh -cpu m68000"
+it doesn't boot because the kernel is built for 68040.
 
-Regards,
-Zheyu Ma
+>> (I'd love to get an m68k nommu system working but never sat down and worked out
+>> a kernel .config qemu agreed to run, plus compiler and libc. Musl added m68k
+>> support but I dunno if that includes coldfire?)
+> 
+> Once I get QEMU to emulate a simple mc68000 system my plan is to get
+> u-boot going (I managed to get it to build for plain mc68000 but I
+> didn't get far enough with the QEMU bit to try booting it yet) then
+> put together the buildroot configs to build qemu, u-boot, a kernel and
+> rootfs that just work. Then I can hook it into CI and have it build
+> and boot test automatically and it won't bit rot anymore.
+
+I don't bother with buildroot much, I wrote a 300 line bash script that builds a
+bootable Linux system instead:
+
+  https://github.com/landley/toybox/blob/master/scripts/mkroot.sh
+
+As for adding coldfire support, let's see... google for "qemu coldfire" first
+hit is https://qemu.readthedocs.io/en/latest/system/target-m68k.html which says
+the default board in qemu-system-m68k is coldfire and has run uclinux. There's a
+defconfig for it (arch/m68k/configs/m5208evb_defconfig) so:
+
+$ make ARCH=m68k m5208evb_defconfig
+...
+$ CROSS_COMPILE=m68k-linux-musl- make ARCH-m68k
+...
+$ qemu-system-m68k -nographic -kernel vmlinux
+
+Hey, console output on serial using my existing m68k toolchain. Good sign. Ok,
+let's see, can I get a userspace...
+
+No, I can't. The coldfire kernel only supports BINFLT, which is an a.out
+derivative. All the nommu targets I'm supporting are either FDPIC or (where gcc
+hasn't merged fdpic support yet) I'm building static pie and using the FDPIC
+loader in the kernel, which can load normal ELF: FDPIC makes the 4
+bss/data/text/rodata sections independently relocatable and static PIE has those
+4 glued together into one contiguous lump but at least that lump is relocatable,
+so it's a lot worse about fragmentation but does at least RUN...
+
+If I can't wire up the fdpic loader for coldfire, I can't build ELF format
+binaries for it, and I just don't mess with a.out anymore.
+
+>> >> It looked like 68328serial.c was removed because someone tried to
+>> >> clean it up and it was decided that no one was using it and it was
+>> >> best to delete it.
+>> >> My plan was to at some point send a series to fix up the issues with
+>> >> the Dragonball support, revert removing the serial driver and adding
+>> >> the patch that cleaned it up.
+>> >
+>> > Nice. I will leave all the 68000/68328 code alone for now then.
+>>
+>> The q800 config uses CONFIG_SERIAL_PMACZILOG. Seems to work fine?
+> 
+> Dragonball uses a weird UART that doesn't seem to be compatible with
+> any of the common ones so it needs its own driver.
+
+Indeed.
+
+That said, the 5208 is using CONFIG_SERIAL_MCF and I got serial output from the
+kernel I just built. Pity it hasn't got FDPIC support...
+
+> Cheers,
+> 
+> Daniel
+
+Rob

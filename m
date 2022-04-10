@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B3264FAE59
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 17:01:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F174FAE5C
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 17:04:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240060AbiDJPDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 11:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37388 "EHLO
+        id S240063AbiDJPGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 11:06:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236436AbiDJPDp (ORCPT
+        with ESMTP id S235249AbiDJPGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 11:03:45 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26CB55237;
-        Sun, 10 Apr 2022 08:01:34 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id u19so2444651lff.4;
-        Sun, 10 Apr 2022 08:01:34 -0700 (PDT)
+        Sun, 10 Apr 2022 11:06:48 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705D056775;
+        Sun, 10 Apr 2022 08:04:37 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id o2so907623lfu.13;
+        Sun, 10 Apr 2022 08:04:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=NpZ0H0PYk+uGbKLbd/gkxpqsa6ufWmgTBUsmgUksc5w=;
-        b=FgVMCG7A/GVw1Y33WtLbZTijOLO+KYfmAZP0uQTQM4AqHP6nZWXsrTni9PTOzLRjXy
-         pp+4Na/Hk5xBT8SqMYVhOaknakUBeqIFDEmJQrY1GwV7wflZR0CYxr1nmHaMSEu0RNqa
-         4rUwi9FSRnzkVfBdgykTKboURg1WFPN32ym14ETuUrXf7OHt1YRHeHRqTnnTq6l4OZ96
-         JvKoUgI2rGuqynUYipq8E1pUZxfWECVmjPA86zrZWgBghb7MNWYMBQ3+DwCCwpTfk9ST
-         Gr4INbTxq2zoWgp/u1JZ6U12Q1z1mbqkcxbt4fQiZT9LSfQvPtHUrYRJNUxUu8rGTr0B
-         +fhQ==
+        bh=uOwN9vBmQdLiAiop5qvqolDSzn0EbScB1TJ3qvgyKP4=;
+        b=N/EAxeksoGcR25P1cO+rRBnnWJeh954SB9clCW8JYB7mC/p8FbN8llnTZCR14ZBTwp
+         e3IZn6kQ/YGF1mmrUyBhAFyn9/cPSC8f2wiJBjhd8OXrYwz7qyhTZGLz+vjUfkhAGeo7
+         7K9YJPggY72uhbhDdPUHR95VaFicvncBeLwtROWM6ULrrMohcokHfdtR86MQZTd+vonf
+         ohAvLJ/Tw6wLSAcIgqZdumhaxIRewDBDhkZTZUKkRFTootnGUEnxXyky8jmKKCB1CZIA
+         BMXEpjbdGJ8A5hU6pQwfJR9TmN2nc3sg5V7FGiLnzzZfCG3YL8PAvIb0KyN6nLkdLARU
+         WCrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=NpZ0H0PYk+uGbKLbd/gkxpqsa6ufWmgTBUsmgUksc5w=;
-        b=67g3RNiGO2yVqs1UE2ZCdX5vEaOwBrXo2jm758BIGKE5uUgpYxAaflp4KHdQs4YpBo
-         H3h81Uo/ZYOl5/VF85KOJXkko4OFCocyPiUQxUdPLFK6hEj+mDvPd3QYj79LE1X5IN7x
-         zD/4ZwSpagZeGgxGtttH7M8IiaWvv/Zp/2wzD6llnyuOwn7bfxRVX9rjWg4bRa7lhlle
-         O3TK+7XxR/Jb7EkAGEqxP5PmxUgO+OWYjk/BTYY8tgNHUoq6sD0FonHxMe82ywIr+uzs
-         /CUcMRpfkf6S23MyaR6Mc/jD+Rszym0zcbeCALfwZlat6vPh7KZB2bzA7wHjAkoc0zOp
-         WEYg==
-X-Gm-Message-State: AOAM533vcJQ9rQja6ixE3SO6rXhfZIaGdo4qz9cSSZW8K0DEul1ZuAR+
-        9T9hUxMfNBieEDd0pVE1pDxLd0fFrYo=
-X-Google-Smtp-Source: ABdhPJxy/AQZqO3SE/CbvqyyFUu9/UsD19QKrLrXUPTNPDoOv6oY1NIGGwjPaUEEPN4IGz8/Y5a/tA==
-X-Received: by 2002:a05:6512:e95:b0:45d:cb99:358 with SMTP id bi21-20020a0565120e9500b0045dcb990358mr19280179lfb.444.1649602893206;
-        Sun, 10 Apr 2022 08:01:33 -0700 (PDT)
+        bh=uOwN9vBmQdLiAiop5qvqolDSzn0EbScB1TJ3qvgyKP4=;
+        b=WOLqdLbktL54BbtkHh3ZJZ6JfC7LW5VKH0QuG8Z/EZbLgxVFb2PjBw5mK/jDa9RW6J
+         xiz6K62agL6+aSvTWszW8IBSGa5/t4WwHZe7/LkYUnquxR6cxdjOdY32mb5VaTqfwscM
+         R0H89UxbCbb+Pakxrd/nQFR7M5JZtL4TltHeEMYIm/VFdSq/5f1ngA7vjqg/1jlAEFMp
+         IPb2NuTw2dPzLz6XIyHBIQeltBBZC1OyjDJ+cwrQoOOi/Q/gtGDtN/TDx3HOXQJZAMZE
+         JYFwiW4gaERVP35tI+Qu3NjVsJy0bjsD7HvODFDXBuMnL4Eo5cfllr1ykq+QuGpuVfdm
+         Z8Mg==
+X-Gm-Message-State: AOAM532GPX0ZdLA0JpzUkmXqNIQ2npvMwxjQ2+VzI6ss0qFfEqFDcNsz
+        FatE2mO3VAfD4COxe93CJk4=
+X-Google-Smtp-Source: ABdhPJw8OMY3Ri0SfS4Q6JJrZLFioLRzz+diX3CAjHnsMo1KRWVVUJ1ANDt81caOOte3RkO0sN+JTw==
+X-Received: by 2002:ac2:4194:0:b0:442:ed9e:4a25 with SMTP id z20-20020ac24194000000b00442ed9e4a25mr17987613lfh.629.1649603075677;
+        Sun, 10 Apr 2022 08:04:35 -0700 (PDT)
 Received: from [192.168.2.145] (109-252-138-167.dynamic.spd-mgts.ru. [109.252.138.167])
-        by smtp.googlemail.com with ESMTPSA id a2-20020ac25042000000b0046b9f84bbcesm282229lfm.48.2022.04.10.08.01.31
+        by smtp.googlemail.com with ESMTPSA id f4-20020ac24e44000000b0044b07e39d75sm2217435lfr.74.2022.04.10.08.04.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Apr 2022 08:01:32 -0700 (PDT)
-Message-ID: <3b9cab7e-9ebb-7903-4ae6-2ec6adbc72a6@gmail.com>
-Date:   Sun, 10 Apr 2022 18:01:31 +0300
+        Sun, 10 Apr 2022 08:04:34 -0700 (PDT)
+Message-ID: <bf23e357-1e74-6bbe-7f37-11147654e5fc@gmail.com>
+Date:   Sun, 10 Apr 2022 18:04:34 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
@@ -98,5 +98,22 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 >  	irqreturn_t (*handle_irq)(int irq, void *data);
 >  	int (*probe_device)(struct tegra_mc *mc, struct device *dev);
 > +	int (*map_regs)(struct tegra_mc *mc, struct platform_device *pdev);
+>  };
+>  
+>  struct tegra_mc_soc {
+> @@ -194,6 +198,7 @@ struct tegra_mc_soc {
+>  	unsigned int atom_size;
+>  
+>  	u8 client_id_mask;
+> +	u8 num_channels;
+>  
+>  	const struct tegra_smmu_soc *smmu;
+>  
+> @@ -212,6 +217,8 @@ struct tegra_mc {
+>  	struct tegra_smmu *smmu;
+>  	struct gart_device *gart;
+>  	void __iomem *regs;
+> +	void __iomem *bcast_ch_regs;
+> +	void __iomem *ch_regs[MC_MAX_CHANNELS];
 
-Use to_platform_device(mc->dev) instead of passing the pdev argument.
+Why not to allocate ch_regs at runtime?

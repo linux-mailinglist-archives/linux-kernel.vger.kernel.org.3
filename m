@@ -2,50 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB4D4FADD1
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 14:24:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ABBA4FADD3
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 14:26:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239074AbiDJM0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 08:26:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59044 "EHLO
+        id S239168AbiDJM25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 08:28:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239024AbiDJM0N (ORCPT
+        with ESMTP id S229740AbiDJM2y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 08:26:13 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE759F
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 05:24:01 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649593440;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=wbzLQSGcP/oPIn5CnOWXYz9lPuorrybKkMQRJJxMa10=;
-        b=aUsbmJ3FvdoG/PCj4QBpohpPsejOZ0teF/xE5Ivb+ClUcWRBtg6Jua2nMDqiayDc7mPTR2
-        nBsYvjyPvVu8vsF6J1ekoaGVfhEo6SsMvOP/DjYdtE4NOcMCDubja6WgD5vnM/bI8iIfQU
-        pr5iNJiFbcslY3RE8aJJuhwaUm186/AZmxnFR7KN9ruPdA9ZJBc7sgdEIcmdNSktoAddzM
-        19OMZuuZIFp11hoeJDuJXMrUwxZZhkiaV7zbRSirsqw3693tsv2qs3A9Wz3xYYyrTrcbuT
-        fxiv9plAXXjhILKhPr8yzA94SZzOhRYNb5wLUKPMYERuT52NCySTSK5TySWAbA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649593440;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=wbzLQSGcP/oPIn5CnOWXYz9lPuorrybKkMQRJJxMa10=;
-        b=RcB/0RclzvdRe3aaPayqxm6tfBAph6YvsmclK7tB+jeXm9VxeCKo7f7fRRUSm0BV2/LEdL
-        8zgCdPCalV+/QXDA==
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org
-Subject: [GIT pull] irq/urgent for v5.18-rc2
-Message-ID: <164959340965.293972.6241179986026423856.tglx@xen13>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+        Sun, 10 Apr 2022 08:28:54 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4BC326D6;
+        Sun, 10 Apr 2022 05:26:44 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id l7so20245457ejn.2;
+        Sun, 10 Apr 2022 05:26:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=nrVjh0v7eyUha8NLGu08fv9hbISVTSpHgFj2vhTVT5E=;
+        b=YtoXBYxKcKPvDhefulGfma1Zo1bDAzjpHf2TWEtPMGa5Bq3kNycUjtRqC5uc9zWMJM
+         ZjeIwrZT21voVvVZrzz6LKQLsV8BmdM6wQjUcMdUNDV6AuziLCUyop2zbTKPaj1Ts8+d
+         BjMeieoGO8JHFRjNze39mksh1O3WmSwiCzXDFezrEqQY6xtdXpmXYW98m/BZQK7N5SiS
+         Rki6J0SYRhjfhbI0goSi8B/a9AloQbiMM0QMX0OryoGTnl04xoQ/6+RqkwecUm7EhS2n
+         n6V1JDWvMKSiifZnV+xZsE/zEXnZQfzO4INSEc3jTvKKWRTeXW9Fb79lvcZpdHcA1ajC
+         O0vA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=nrVjh0v7eyUha8NLGu08fv9hbISVTSpHgFj2vhTVT5E=;
+        b=VBnEhISAZBQgfyNPH9ScnFJJTBFgS7DbyPDn/85hyVcXSZeyCwaSwq8KBTi9hPAcjc
+         NH8YDey0rJQsMT/q8MwHdc3OeHmkpJ0dbuUN72jZqLJuQ3PiRuUIvBMW0lnMEr2KQ5Aj
+         AOXtuUgoCXF/7TlWdXr2RtDngJyosdtbeV5UFuIQ16IEsgHLL2eFD3Pkk7UvlLHU7j/v
+         7vXWxmqF/fXqIVvQoe42w+kuHGzSJmEm+3P7VQX9NoNN7twzeYJla0CiTJy7ro4IZwAi
+         +FagobhGQAE2J+zc3GWr03h7yIqlE1FvtuC6Ggwl9K7/k6e6QNNfL1ueKjaWIH2Du8UA
+         X6Bg==
+X-Gm-Message-State: AOAM533T1F8IyUqmz6IOQnzhfvMf6JN5qAmMZQYSVBMPb+cfI2LfUZAy
+        jmhXPumpLpfb99/fYtdjhOSQzfMBVvc=
+X-Google-Smtp-Source: ABdhPJx23xzGdSoaggDeGrOD7hqVTSLZ57ctcuWTCORiMr5EKMocSW9sHenju8TGfjxGUDJe5f1h3Q==
+X-Received: by 2002:a17:907:6e87:b0:6e7:f655:3b41 with SMTP id sh7-20020a1709076e8700b006e7f6553b41mr25358691ejc.704.1649593602255;
+        Sun, 10 Apr 2022 05:26:42 -0700 (PDT)
+Received: from leap.localnet (host-82-60-208-254.retail.telecomitalia.it. [82.60.208.254])
+        by smtp.gmail.com with ESMTPSA id g16-20020a170906521000b006d58773e992sm10823359ejm.188.2022.04.10.05.26.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Apr 2022 05:26:40 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>, peterz@infradead.org
+Subject: Re: [PATCH] Documentation/vm: Extend "Temporary Virtual Mappings" in highmem.rst
+Date:   Sun, 10 Apr 2022 14:26:38 +0200
+Message-ID: <2129241.NgBsaNRSFp@leap>
+In-Reply-To: <YlJNI7c9pwq5R0RB@casper.infradead.org>
+References: <20220409184907.25122-1-fmdefrancesco@gmail.com> <YlJNI7c9pwq5R0RB@casper.infradead.org>
 MIME-Version: 1.0
-Date:   Sun, 10 Apr 2022 14:23:59 +0200 (CEST)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,202 +71,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+Hi Matthew, 
 
-please pull the latest irq/urgent branch from:
+Thank you for this review.
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq-urgent-2022-=
-04-10
+On domenica 10 aprile 2022 05:21:07 CEST Matthew Wilcox wrote:
+> On Sat, Apr 09, 2022 at 08:49:07PM +0200, Fabio M. De Francesco wrote:
+> > @@ -52,25 +52,65 @@ Temporary Virtual Mappings
+> >  
+> >  The kernel contains several ways of creating temporary mappings:
+> >  
+> > -* vmap().  This can be used to make a long duration mapping of multiple
+> > -  physical pages into a contiguous virtual space.  It needs global
+> > -  synchronization to unmap.
+> > +* vmap().  This can be used to make a long duration mapping of multiple physical
+> > +  pages into a contiguous virtual space. It needs global synchronization to unmap.
+> 
+> Did you change any words here?  If so, I can't see them.  Please don't
+> gratuitously reformat paragraphs; it obscures the real changes.  Also,
+> 75 characters is a good limit for line length, and you're well past
+> that.  If in doubt, use `fmt`.
 
-up to:  63ef1a8a07ef: Merge tag 'irqchip-fixes-5.18-1' of git://git.kernel.or=
-g/pub/scm/linux/kernel/git/maz/arm-platforms into irq/urgent
+No, I did not change any words. I'll restore it back as it was so that 
+the real changes won't be obscured.
+ 
+> > -* kmap().  This permits a short duration mapping of a single page.  It needs
+> > -  global synchronization, but is amortized somewhat.  It is also prone to
+> > -  deadlocks when using in a nested fashion, and so it is not recommended for
+> > -  new code.
+> > +* kmap().  This can be used to make long duration mapping of a single page with
+> 
+> kmap() really isn't for long duration.  But the pointer returned from
+> kmap() is valid across all CPUs, unlike kmap_local() or kmap_atomic().
 
-A set of interrupt chip driver fixes:
+I think that I used the wrong words because "long duration", in my mind, 
+should have meant that there are no restrictions on preemption or migrations 
+across CPUs (differently from the other functions for mappings). I decided 
+to express these concepts as "This can be used to make long duration 
+mappings []".
 
-  - A fix for a long standing bug in the ARM GICv3 redistributor polling
-    which uses the wrong bit number to test.
+Now I understand that this is not technically accurate and that it is not 
+what the Author wanted to convey. Therefore I'll restore it to how it was 
+before my changes.
+ 
+> > +  no restrictions on preemption or migration. It comes with an overhead as mapping
+> > +  space is restricted and protected by a global lock for synchronization. When
+> > +  mapping is no more needed, page must be released with kunmap().
+> 
+> kunmap() doesn't release the page, it releases the address that the
+> page was mapped to.
 
-  - Prevent translation of bogus ACPI table entries which map device
-    interrupts into the IPI space on ARM GICs.
+It's just a mistake in expressing the correct semantics which I think I know 
+properly. I should have probably read it once more and notice this mistake 
+before sending my patch. 
 
-  - Don't write into the pending register of ARM GICV4 before the scan
-    in hardware has completed.
+I'll use the proper wording in v2.
 
-  - A set of build and correctness fixes for the Qualcomm MPM driver
+> > +  Mapping changes must be propagated across all the CPUs. kmap() also requires
+> > +  global TLB invalidation when the kmap's pool wraps and it might block when the
+> > +  mapping space is fully utilized until a slot becomes available. Therefore,
+> > +  kmap() is only callable from preemptible context.
+> >  
+> > +  All the above work is necessary if a mapping must last for a relatively long
+> > +  time but the bulk of high-memory mappings in the kernel are short-lived and
+> > +  only used in one place.
+> > +
+> > +  This means that the cost of kmap() is mostly wasted in such cases; therefore,
+> > +  newer code is discouraged from using kmap().
+> >  
+> > -* kmap_atomic().  This permits a very short duration mapping of a single
+> > -  page.  Since the mapping is restricted to the CPU that issued it, it
+> > -  performs well, but the issuing task is therefore required to stay on that
+> > -  CPU until it has finished, lest some other task displace its mappings.
+> > +* kmap_atomic().  This permits a very short duration mapping of a single page.
+> > +  Since the mapping is restricted to the CPU that issued it, it performs well,
+> > +  but the issuing task is therefore required to stay on that CPU until it has
+> > +  finished, lest some other task displace its mappings.
+> >  
+> > -  kmap_atomic() may also be used by interrupt contexts, since it is does not
+> > -  sleep and the caller may not sleep until after kunmap_atomic() is called.
+> > +  kmap_atomic() may also be used by interrupt contexts, since it is does not
+> > +  sleep and the caller too can not sleep until after kunmap_atomic() is called.
+> > +  Each call of kmap_atomic() in the kernel creates a non-preemptible section and
+> > +  disable pagefaults.
+> > +
+> > +  This could be a source of unwanted latency, so it should be only used if it is
+> > +  absolutely required, otherwise the corresponding kmap_local_*() variant should
+> > +  be used if it is feasible (see below).
+> > +
+> > +  On 64-bit systems, calls to kmap() and kmap_atomic() have no real work to do
+> > +  because a 64-bit address space is more than sufficient to address all the
+> > +  physical memory, so all of physical memory appears in the direct mapping.
+> > +
+> > -  It may be assumed that k[un]map_atomic() won't fail.
+> > +  It is assumed that k[un]map_atomic() won't fail.
+> > +
+> > +* kmap_local_*().  These provide a set of functions similar to kmap_atomic() and
+> > +  are used to require short term mappings. They can be invoked from any context
+> > +  (including interrupts).
+> > +
+> > +  The mapping can only be used in the context which acquired it, it is per thread,
+> > +  CPU local (i.e., migration from one CPU to another is disabled - this is why
+> > +  they are called "local"), but they don't disable preemption. It's valid to take
+> > +  pagefaults in a local kmap region, unless the context in which the local mapping
+> > +  is acquired does not allow it for other reasons.
+> > +
+> > +  If a task holding local kmaps is preempted, the maps are removed on context
+> > +  switch and restored when the task comes back on the CPU. As the maps are strictly
+> > +  CPU local, it is guaranteed that the task stays on the CPU and that the CPU
+> > +  cannot be unplugged until the local kmaps are released.
+> > +
+> > +  Nesting kmap_local.*() and kmap_atomic.*() mappings is allowed to a certain
+> > +  extent (up to KMAP_TYPE_NR). Nested kmap_local.*() and kunmap_local.*()
+> > +  invocations have to be strictly ordered because the map implementation is stack
+> > +  based.
+> 
+> I think the original layout of all this is flawed.  We should start by
+> describing the interface we want people to use first -- kmap_local*(),
+> then say "But if you can't use that, there's kmap_atomic()" and "If
+> you can't use kmap_atomic(), you can use kmap()".  And vmap() should
+> go right at the end because it's entirely different from the kmap()
+> family.  I even question if it should be in this document, but it's not
+> really documented anywhere else.
+ 
+I agree in full. We should start by describing kmap_local_*(). Actually I 
+had noticed that the layout is flawed when I had to write: "(see below)". 
+Making a reference to what comes after looks very strange to my eyes. 
 
-Thanks,
+I'll rework the layout in v2. 
 
-	tglx
+> Also, you should probably cc the person who is listed as the author
+> of the document, don't you think?
 
------------------->
-Andre Przywara (1):
-      irqchip/gic, gic-v3: Prevent GSI to SGI translations
+Oh, yes, I'm sorry. I don't know how I could have overlooked Peter Zijlstra. 
+It won't happen again with my v2 patch (I have already noticed that you added
+him in Cc with your email).
 
-Marc Zyngier (2):
-      irqchip/gic-v4: Wait for GICR_VPENDBASER.Dirty to clear before deschedu=
-ling
-      irqchip/gic-v3: Fix GICR_CTLR.RWP polling
+Again, many thanks for taking the time to write this review,
 
-Yang Yingliang (1):
-      irqchip/irq-qcom-mpm: fix return value check in qcom_mpm_init()
-
-YueHaibing (1):
-      irq/qcom-mpm: Fix build error without MAILBOX
+Fabio M. De Francesco
 
 
- drivers/irqchip/Kconfig          |  1 +
- drivers/irqchip/irq-gic-v3-its.c | 28 +++++++++++++++++++---------
- drivers/irqchip/irq-gic-v3.c     | 14 ++++++++++----
- drivers/irqchip/irq-gic.c        |  6 ++++++
- drivers/irqchip/irq-qcom-mpm.c   |  2 +-
- 5 files changed, 37 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index 680d2fcf2686..15edb9a6fcae 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -433,6 +433,7 @@ config QCOM_PDC
- config QCOM_MPM
- 	tristate "QCOM MPM"
- 	depends on ARCH_QCOM
-+	depends on MAILBOX
- 	select IRQ_DOMAIN_HIERARCHY
- 	help
- 	  MSM Power Manager driver to manage and configure wakeup
-diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-it=
-s.c
-index cd772973114a..a0fc764ec9dc 100644
---- a/drivers/irqchip/irq-gic-v3-its.c
-+++ b/drivers/irqchip/irq-gic-v3-its.c
-@@ -3011,18 +3011,12 @@ static int __init allocate_lpi_tables(void)
- 	return 0;
- }
-=20
--static u64 its_clear_vpend_valid(void __iomem *vlpi_base, u64 clr, u64 set)
-+static u64 read_vpend_dirty_clear(void __iomem *vlpi_base)
- {
- 	u32 count =3D 1000000;	/* 1s! */
- 	bool clean;
- 	u64 val;
-=20
--	val =3D gicr_read_vpendbaser(vlpi_base + GICR_VPENDBASER);
--	val &=3D ~GICR_VPENDBASER_Valid;
--	val &=3D ~clr;
--	val |=3D set;
--	gicr_write_vpendbaser(val, vlpi_base + GICR_VPENDBASER);
--
- 	do {
- 		val =3D gicr_read_vpendbaser(vlpi_base + GICR_VPENDBASER);
- 		clean =3D !(val & GICR_VPENDBASER_Dirty);
-@@ -3033,10 +3027,26 @@ static u64 its_clear_vpend_valid(void __iomem *vlpi_b=
-ase, u64 clr, u64 set)
- 		}
- 	} while (!clean && count);
-=20
--	if (unlikely(val & GICR_VPENDBASER_Dirty)) {
-+	if (unlikely(!clean))
- 		pr_err_ratelimited("ITS virtual pending table not cleaning\n");
-+
-+	return val;
-+}
-+
-+static u64 its_clear_vpend_valid(void __iomem *vlpi_base, u64 clr, u64 set)
-+{
-+	u64 val;
-+
-+	/* Make sure we wait until the RD is done with the initial scan */
-+	val =3D read_vpend_dirty_clear(vlpi_base);
-+	val &=3D ~GICR_VPENDBASER_Valid;
-+	val &=3D ~clr;
-+	val |=3D set;
-+	gicr_write_vpendbaser(val, vlpi_base + GICR_VPENDBASER);
-+
-+	val =3D read_vpend_dirty_clear(vlpi_base);
-+	if (unlikely(val & GICR_VPENDBASER_Dirty))
- 		val |=3D GICR_VPENDBASER_PendingLast;
--	}
-=20
- 	return val;
- }
-diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
-index 0efe1a9a9f3b..b252d5534547 100644
---- a/drivers/irqchip/irq-gic-v3.c
-+++ b/drivers/irqchip/irq-gic-v3.c
-@@ -206,11 +206,11 @@ static inline void __iomem *gic_dist_base(struct irq_da=
-ta *d)
- 	}
- }
-=20
--static void gic_do_wait_for_rwp(void __iomem *base)
-+static void gic_do_wait_for_rwp(void __iomem *base, u32 bit)
- {
- 	u32 count =3D 1000000;	/* 1s! */
-=20
--	while (readl_relaxed(base + GICD_CTLR) & GICD_CTLR_RWP) {
-+	while (readl_relaxed(base + GICD_CTLR) & bit) {
- 		count--;
- 		if (!count) {
- 			pr_err_ratelimited("RWP timeout, gone fishing\n");
-@@ -224,13 +224,13 @@ static void gic_do_wait_for_rwp(void __iomem *base)
- /* Wait for completion of a distributor change */
- static void gic_dist_wait_for_rwp(void)
- {
--	gic_do_wait_for_rwp(gic_data.dist_base);
-+	gic_do_wait_for_rwp(gic_data.dist_base, GICD_CTLR_RWP);
- }
-=20
- /* Wait for completion of a redistributor change */
- static void gic_redist_wait_for_rwp(void)
- {
--	gic_do_wait_for_rwp(gic_data_rdist_rd_base());
-+	gic_do_wait_for_rwp(gic_data_rdist_rd_base(), GICR_CTLR_RWP);
- }
-=20
- #ifdef CONFIG_ARM64
-@@ -1466,6 +1466,12 @@ static int gic_irq_domain_translate(struct irq_domain =
-*d,
- 		if(fwspec->param_count !=3D 2)
- 			return -EINVAL;
-=20
-+		if (fwspec->param[0] < 16) {
-+			pr_err(FW_BUG "Illegal GSI%d translation request\n",
-+			       fwspec->param[0]);
-+			return -EINVAL;
-+		}
-+
- 		*hwirq =3D fwspec->param[0];
- 		*type =3D fwspec->param[1];
-=20
-diff --git a/drivers/irqchip/irq-gic.c b/drivers/irqchip/irq-gic.c
-index 58ba835bee1f..09c710ecc387 100644
---- a/drivers/irqchip/irq-gic.c
-+++ b/drivers/irqchip/irq-gic.c
-@@ -1123,6 +1123,12 @@ static int gic_irq_domain_translate(struct irq_domain =
-*d,
- 		if(fwspec->param_count !=3D 2)
- 			return -EINVAL;
-=20
-+		if (fwspec->param[0] < 16) {
-+			pr_err(FW_BUG "Illegal GSI%d translation request\n",
-+			       fwspec->param[0]);
-+			return -EINVAL;
-+		}
-+
- 		*hwirq =3D fwspec->param[0];
- 		*type =3D fwspec->param[1];
-=20
-diff --git a/drivers/irqchip/irq-qcom-mpm.c b/drivers/irqchip/irq-qcom-mpm.c
-index eea5a753618c..d30614661eea 100644
---- a/drivers/irqchip/irq-qcom-mpm.c
-+++ b/drivers/irqchip/irq-qcom-mpm.c
-@@ -375,7 +375,7 @@ static int qcom_mpm_init(struct device_node *np, struct d=
-evice_node *parent)
- 	raw_spin_lock_init(&priv->lock);
-=20
- 	priv->base =3D devm_platform_ioremap_resource(pdev, 0);
--	if (!priv->base)
-+	if (IS_ERR(priv->base))
- 		return PTR_ERR(priv->base);
-=20
- 	for (i =3D 0; i < priv->reg_stride; i++) {
 

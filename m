@@ -2,77 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD7DB4FACF2
-	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 10:38:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00CA84FACF3
+	for <lists+linux-kernel@lfdr.de>; Sun, 10 Apr 2022 10:42:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235350AbiDJIkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 04:40:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38972 "EHLO
+        id S235852AbiDJIoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 04:44:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232701AbiDJIkN (ORCPT
+        with ESMTP id S232701AbiDJIoM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 04:40:13 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F2852CC94
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 01:38:03 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id u15so6467790ejf.11
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 01:38:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=gh/AAtf8cRdIoELrwepmpCDeMPbSdp9UytLl5DDKHr4=;
-        b=x77uAlufM1epd1LMPe9Z/2F2riMaIPZRMerJ87AO+zQtngB7ZoBqlLFePS3p1rpT/x
-         wxEByYkYLXXr9KJ213Y7HEVVxLJ2t8WN4e2+G9j2o5xKutWghtaoMr39E4GFqIi+FDXF
-         CXytZ5L1aYOQSRw8KIgTLBiRj516kpVXl62p6NLhPG7xTs2Si5PiQLpXZXb79m2YK7IU
-         Jk8ZXKC/KAJbCt6jeNhbDxJEtw+Y9I2EZ9/FUm1e7m55PueRHsYG5G+Aetsoywucp53d
-         61+WqRWfpmygyk5kav5wDrWA18af463WGbAB0XdhmZDjj0teluS/13ASd5wY3s6yzrJf
-         3iQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gh/AAtf8cRdIoELrwepmpCDeMPbSdp9UytLl5DDKHr4=;
-        b=2/3y8BOHBRKsytDdTToeUY+9/fP3qpVytL61BvvHdL9OAJYG2ywbr5r4fJ8amG6AvD
-         cs70x7r96KWNe9Zp6h0jPUtQjflXrSVTj97/SGy8sjhmWVQn+QJA5eZDqJcyUIA3qyHU
-         cXw/x35hQwfGa96C0KTTd4r99d8ZRS1VPHTHq6IThNwryGLYitW87TOyTfYfI6RTFRFu
-         oYAp5QeV6DlLXcz0YyKoMV8lSToG1Eeoe9FAVODCqQhpRJdD4/7uUySqZrz+5UDY2OUF
-         eUElHmUABDQcOf4NyCo9gC3fr7G2R+OPVO/ktBzIU7I82AAG17vy3oF4B6wj5b9RLKwo
-         LhRA==
-X-Gm-Message-State: AOAM530a+7UwVU0I3lvFt1dfETT7wnFsN+ijZ32siyQm3y8RzlXTjqsx
-        yLBNZJBzDU/qjLXalaNndxyglA==
-X-Google-Smtp-Source: ABdhPJwWopm2EQV2ZJwh6NTf592QrsI18/yNtY37mQW+51gPPFLvkjJsgKAo0HfXO4jYgMRD1boAsA==
-X-Received: by 2002:a17:906:d552:b0:6e8:4edc:f2ee with SMTP id cr18-20020a170906d55200b006e84edcf2eemr10035344ejc.572.1649579881603;
-        Sun, 10 Apr 2022 01:38:01 -0700 (PDT)
-Received: from [192.168.0.188] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id s20-20020a056402015400b00418f9574a36sm13021400edu.73.2022.04.10.01.38.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Apr 2022 01:38:00 -0700 (PDT)
-Message-ID: <4f20ad11-40c5-638e-7335-c68d2369373d@linaro.org>
-Date:   Sun, 10 Apr 2022 10:37:59 +0200
+        Sun, 10 Apr 2022 04:44:12 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B4549910
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 01:42:01 -0700 (PDT)
+Received: from ip4d144895.dynamic.kabel-deutschland.de ([77.20.72.149] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1ndT8r-0008O2-Nu; Sun, 10 Apr 2022 10:41:53 +0200
+Message-ID: <1b03d888-cea3-3e6f-087f-daeb5642a975@leemhuis.info>
+Date:   Sun, 10 Apr 2022 10:41:52 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v2] dt-bindings: mfd: convert to yaml Qualcomm SPMI PMIC
 Content-Language: en-US
-To:     David Heidelberg <david@ixit.cz>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     ~okias/devicetree@lists.sr.ht,
-        Caleb Connolly <caleb@connolly.tech>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220111220026.102838-1-david@ixit.cz>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220111220026.102838-1-david@ixit.cz>
+To:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Richard Weinberger <richard@nod.at>
+Cc:     Jeff Dike <jdike@addtoit.com>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Eduard-Gabriel Munteanu <maxdamage@aladin.ro>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        regressions@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+References: <20210508032239.2177-1-thunder.leizhen@huawei.com>
+ <Yjt31seiNv18HYrf@dev-arch.thelio-3990X>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+Subject: Re: [PATCH 1/1] um: fix error return code in winch_tramp()
+In-Reply-To: <Yjt31seiNv18HYrf@dev-arch.thelio-3990X>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1649580121;1780612e;
+X-HE-SMSGID: 1ndT8r-0008O2-Nu
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,133 +52,168 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/01/2022 23:00, David Heidelberg wrote:
-> Convert Qualcomm SPMI PMIC binding to yaml format.
+Hi, this is your Linux kernel regression tracker. Top-posting for once,
+to make this easily accessible to everyone.
+
+Zhen Lei, Richard, what's up here? Below regression report is more than
+two weeks old now and afaics didn't even get a single reply.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I'm getting a lot of
+reports on my table. I can only look briefly into most of them and lack
+knowledge about most of the areas they concern. I thus unfortunately
+will sometimes get things wrong or miss something important. I hope
+that's not the case here; if you think it is, don't hesitate to tell me
+in a public reply, it's in everyone's interest to set the public record
+straight.
+
+
+
+On 23.03.22 20:41, Nathan Chancellor wrote:
+> Hello,
 > 
-> Additional changes:
->  - filled many missing compatibles
+> On Sat, May 08, 2021 at 11:22:39AM +0800, Zhen Lei wrote:
+>> Fix to return a negative error code from the error handling case instead
+>> of 0, as done elsewhere in this function.
+>>
+>> Fixes: 89df6bfc0405 ("uml: DEBUG_SHIRQ fixes")
+>> Reported-by: Hulk Robot <hulkci@huawei.com>
+>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>> ---
+>>  arch/um/drivers/chan_user.c | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/um/drivers/chan_user.c b/arch/um/drivers/chan_user.c
+>> index d8845d4aac6a..6040817c036f 100644
+>> --- a/arch/um/drivers/chan_user.c
+>> +++ b/arch/um/drivers/chan_user.c
+>> @@ -256,7 +256,8 @@ static int winch_tramp(int fd, struct tty_port *port, int *fd_out,
+>>  		goto out_close;
+>>  	}
+>>  
+>> -	if (os_set_fd_block(*fd_out, 0)) {
+>> +	err = os_set_fd_block(*fd_out, 0);
+>> +	if (err) {
+>>  		printk(UM_KERN_ERR "winch_tramp: failed to set thread_fd "
+>>  		       "non-blocking.\n");
+>>  		goto out_close;
+>> -- 
+>> 2.25.1
+>>
+>>
+>>
 > 
-> Co-developed-by: Caleb Connolly <caleb@connolly.tech>
-> Signed-off-by: David Heidelberg <david@ixit.cz>
-> ---
-
-Thank you for your patch. There is something to discuss/improve.
-
-(...)
-
-> +
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - qcom,pm660
-> +          - qcom,pm660l
-> +          - qcom,pm6150
-> +          - qcom,pm6150l
-> +          - qcom,pm6350
-> +          - qcom,pm7325
-> +          - qcom,pm8004
-> +          - qcom,pm8005
-> +          - qcom,pm8009
-> +          - qcom,pm8019
-> +          - qcom,pm8110
-> +          - qcom,pm8150
-> +          - qcom,pm8150b
-> +          - qcom,pm8150l
-> +          - qcom,pm8226
-> +          - qcom,pm8350
-> +          - qcom,pm8350b
-> +          - qcom,pm8350c
-> +          - qcom,pm8841
-> +          - qcom,pm8909
-> +          - qcom,pm8916
-> +          - qcom,pm8941
-> +          - qcom,pm8950
-> +          - qcom,pm8994
-> +          - qcom,pm8998
-> +          - qcom,pma8084
-> +          - qcom,pmd9635
-> +          - qcom,pmi8950
-> +          - qcom,pmi8962
-> +          - qcom,pmi8994
-> +          - qcom,pmi8998
-> +          - qcom,pmk8350
-> +          - qcom,pmm8155au
-> +          - qcom,pmr735a
-> +          - qcom,pmr735b
-> +          - qcom,pms405
-> +          - qcom,pmx55
-> +          - qcom,smb2351
-> +      - const: qcom,spmi-pmic
-> +
-> +  reg: true
-
-maxItems
-
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 0
-> +
-> +
-
-Just one blank line.
-
-> +patternProperties:
-> +  '^(labibb|([a-z][a-z0-9]+-)?regulators)$':
-> +    type: object
-> +
-
-This should be more specific, preferably by including schema for
-regulators (or any other children if applicable).
-
-> +    required:
-> +      - compatible
-
-unevaluatedProperties: false
-> +
-> +  '@[0-9a-f]+$':
-> +    type: object
-> +    description: >
-
-You don't need '>'.
-
-This also should be specified - what is expected to be here? Usually the
-children are exactly known.
-
-> +      Each child node of the PMIC represents a function of it.
-> +
-> +    properties:
-> +      reg: true
-
-maxItems
-
-> +
-> +      interrupts:
-> +        description: >
-
-No need for >
-
-> +          Interrupts are specified as a 4-tuple. For more information see
-> +          Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
-> +
-> +    required:
-> +      - compatible
-> +
-> +    additionalProperties: true
-
-This will have to unevaluated or additional properties false, depending
-whether you include other schema or not.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-
-
-Best regards,
-Krzysztof
+> Sorry for the necro bump but this patch as commit ccf1236ecac4 ("um: fix
+> error return code in winch_tramp()") prevents UML from exiting cleanly
+> when it is called from within in a shell script. It is still
+> reproducible at next-20220323. I did see a patch from Richard that
+> touches this area but that patch does not make a difference:
+> 
+> https://lore.kernel.org/r/20220101215810.13260-3-richard@nod.at/
+> 
+> My bisect log:
+> 
+> # bad: [7d2a07b769330c34b4deabeed939325c77a7ec2f] Linux 5.14
+> # good: [62fb9874f5da54fdb243003b386128037319b219] Linux 5.13
+> git bisect start 'v5.14' 'v5.13'
+> # good: [406254918b232db198ed60f5bf1f8b84d96bca00] Merge tag 'perf-tools-for-v5.14-2021-07-01' of git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux
+> git bisect good 406254918b232db198ed60f5bf1f8b84d96bca00
+> # good: [4ea90317956718e0648e1f87e56530db809a5a04] Merge tag 'for-linus-5.14-rc1-tag' of git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip
+> git bisect good 4ea90317956718e0648e1f87e56530db809a5a04
+> # bad: [65ca89c2b12cca0d473f3dd54267568ad3af55cc] ASoC: intel: atom: Fix breakage for PCM buffer address setup
+> git bisect bad 65ca89c2b12cca0d473f3dd54267568ad3af55cc
+> # bad: [6e207b882159ed3e35a4cd4ff0fc155cce5e3cbc] Merge tag 'arm-soc-5.14' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
+> git bisect bad 6e207b882159ed3e35a4cd4ff0fc155cce5e3cbc
+> # good: [f55966571d5eb2876a11e48e798b4592fa1ffbb7] Merge tag 'drm-next-2021-07-08-1' of git://anongit.freedesktop.org/drm/drm
+> git bisect good f55966571d5eb2876a11e48e798b4592fa1ffbb7
+> # bad: [1459718d7d79013a4814275c466e0b32da6a26bc] Merge tag 'powerpc-5.14-2' of git://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux
+> git bisect bad 1459718d7d79013a4814275c466e0b32da6a26bc
+> # good: [227c4d507c71acb7bece298a98d83e5b44433f62] Merge tag 'f2fs-for-5.14-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs
+> git bisect good 227c4d507c71acb7bece298a98d83e5b44433f62
+> # good: [96890bc2eaa1f6bfc1b194e0f0815a10824352a4] Merge tag 'nfs-for-5.14-1' of git://git.linux-nfs.org/projects/trondmy/linux-nfs
+> git bisect good 96890bc2eaa1f6bfc1b194e0f0815a10824352a4
+> # good: [e49d68ce7cc5a865ce14c1e57938438ab01c3ce3] Merge tag 'ext4_for_linus_stable' of git://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4
+> git bisect good e49d68ce7cc5a865ce14c1e57938438ab01c3ce3
+> # bad: [ccf1236ecac476d9d2704866d9a476c86e387971] um: fix error return code in winch_tramp()
+> git bisect bad ccf1236ecac476d9d2704866d9a476c86e387971
+> # good: [68f5d3f3b6543266b29e047cfaf9842333019b4c] um: add PCI over virtio emulation driver
+> git bisect good 68f5d3f3b6543266b29e047cfaf9842333019b4c
+> # good: [c0ecca6604b80e438b032578634c6e133c7028f6] um: enable the use of optimized xor routines in UML
+> git bisect good c0ecca6604b80e438b032578634c6e133c7028f6
+> # good: [80f849bf541ef9b633a9c08ac208f9c9afd14eb9] um: implement flush_cache_vmap/flush_cache_vunmap
+> git bisect good 80f849bf541ef9b633a9c08ac208f9c9afd14eb9
+> # good: [b77e81fbe5f5fb4ad9a61ec80f6d1e30b6da093a] um: fix error return code in slip_open()
+> git bisect good b77e81fbe5f5fb4ad9a61ec80f6d1e30b6da093a
+> # first bad commit: [ccf1236ecac476d9d2704866d9a476c86e387971] um: fix error return code in winch_tramp()
+> 
+> $ make -skj"$(nproc)" ARCH=um mrproper defconfig all
+> 
+> $ ./linux ubd0=...
+> ...
+> Run /sbin/init as init process
+> EXT4-fs (ubda): re-mounted. Quota mode: none.
+> Starting syslogd: OK
+> Starting klogd: OK
+> Running sysctl: OK
+> Initializing random number generator: OK
+> Saving random seed: OK
+> Starting network: OK
+> Linux version 5.17.0-next-20220323 (nathan@dev-arch.thelio-3990X) (gcc (GCC) 11.2.0, GNU ld (GNU Binutils) 2.38) #1 Wed Mar 23 12:05:22 MST 2022
+> Stopping network: OK
+> Saving random seed: OK
+> Stopping klogd: OK
+> Stopping syslogd: OK
+> EXT4-fs (ubda): re-mounted. Quota mode: none.
+> The system is going down NOW!
+> Sent SIGTERM to all processes
+> Sent SIGKILL to all processes
+> Requesting system poweroff
+> reboot: System halted
+> 
+> $ echo $?
+> 0
+> 
+> $ cat test.sh
+> #!/usr/bin/env bash
+> 
+> ./linux ubd0=...
+> 
+> $ ./test.sh
+> ...
+> Run /sbin/init as init process
+> EXT4-fs (ubda): re-mounted. Quota mode: none.
+> Starting syslogd: OK
+> Starting klogd: OK
+> Running sysctl: OK
+> Initializing random number generator: OK
+> Saving random seed: OK
+> Starting network: OK
+> Linux version 5.17.0-next-20220323 (nathan@dev-arch.thelio-3990X) (gcc (GCC) 11.2.0, GNU ld (GNU Binutils) 2.38) #1 Wed Mar 23 12:10:31 MST 2022
+> Stopping network: OK
+> Saving random seed: OK
+> Stopping klogd: OK
+> Stopping syslogd: OK
+> EXT4-fs (ubda): re-mounted. Quota mode: none.
+> The system is going down NOW!
+> Sent SIGTERM to all processes
+> Sent SIGKILL to all processes
+> Requesting system poweroff
+> reboot: System halted
+> ./test.sh: line 5: 970978 Killed                  ./linux ubd0=...
+> 
+> $ echo $?
+> 137
+> 
+> The rootfs is a simple Buildroot image, which just prints the version
+> string then runs "poweroff". It is available at:
+> 
+> https://github.com/nathanchance/boot-utils/raw/bd4b962ee12e00f666eef12e3413a79d334a0685/images/x86_64/rootfs.ext4.zst
+> 
+> in case it helps. I am happy to provide more information or test patches
+> as necessary.
+> 
+> Cheers,
+> Nathan
+> 
+> 

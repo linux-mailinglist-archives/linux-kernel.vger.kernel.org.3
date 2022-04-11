@@ -2,118 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F09194FC0AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:27:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D6584FC0A4
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:26:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348013AbiDKP3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 11:29:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58498 "EHLO
+        id S1347899AbiDKP2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 11:28:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348001AbiDKP2i (ORCPT
+        with ESMTP id S1347967AbiDKP2E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 11:28:38 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566D53D1CE;
-        Mon, 11 Apr 2022 08:26:23 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id v2so9879344wrv.6;
-        Mon, 11 Apr 2022 08:26:23 -0700 (PDT)
+        Mon, 11 Apr 2022 11:28:04 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D97771A3A1
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:25:17 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id h11so20598555ljb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:25:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=RWQkTK3rSopa+8qydH4cKynBwojuwyz5cLnIhJAViHI=;
-        b=GRiTgBcRca6sECMacftvFpl+a0/eMYsWuTLi5kdaEw2MYVFiv/5dqE79gmrDQKHwDj
-         58ekxBYj4TauMYafu44BJOZgNuo5mVwdSkSMSFyCSsU9Wyu4SyXWHtCuKcLVFp16FKB7
-         D5cMqscqt2nHnXo77ZDFytCC9+fnpBpa90B5BGXEMhClQ+syz3b3P80bRbCdW8D8Di5t
-         YeotdxshhBo7GP4D1bzzUNA4IAYPTAO/RXFm8cL+eFsn/008Q/KWXMeqpm0f7y593NM+
-         CNhQsNbee7+21aSpHWz/ycVM3JETUX09vnxZvEQqsI/4zpebhFsy1qu3ecPyfS3NI9C8
-         DqAg==
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=rFr6s0nrZU/l/rYSbRMVpOLqR853sTAxGnl/eB7rqRM=;
+        b=vqJYdIQWv8WkNNNn9dPXtN92UFDTRrKywzC32jqHUXQPd0+vkYBmnq9rZ4NZXVIxFT
+         qFZtKKzAXyLtgRUtZW0cMECXBtK3dk3Wyx0Mmsh8UZ/OzlNIFCM15Boa0s9MFTZnFSN3
+         8zObizgXQHcCLVp6LDk/Jzo1jR2NDPvFFPY4ogEXWUB70897ie3SGoK0vWAAx5unyy9n
+         6j5A9PCMQnyGGwVeSCqGXUcxMULTqx2b4wpel2RMEuBXrpI2Je1yyPDmgKNutqRQhKPF
+         E3eAJ4YsBCcURT61ntTfs2vYmJhK1nZzXt1rqLkINEtuod8EjW60nrtXooL3LRDyK+/7
+         0TjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=RWQkTK3rSopa+8qydH4cKynBwojuwyz5cLnIhJAViHI=;
-        b=HiGsVafaDCAladdQIpg6pGMhDwcZ04OLTr/oBbB7o+1/dFuhIryv7rat4n0EfyLwrC
-         q42ylD28G2pOeIXARWvMHjskf54pTk8KCnDAxn3uh24HI0f/b4+8gcsj5hxSuUYgdKuw
-         Vp/nlJ1oo8XtIHFROWCJRpAE67Za+fKycA7BsauZQ/fUgt8Mrazh1BggrukJ0CAfEXvH
-         rHn9wXLv0XALuD0h1dHZ+X53jARZDfou/+9VJQuJ/tSIV7fUxfK7aYA7qqNhxwXc0loR
-         0g48xuJ/he/CVDi2UJteGGJOfzYjEnLxcZih/cLcdnBdXwhxNxahA9gM9cB1s9sMnRDw
-         PwwQ==
-X-Gm-Message-State: AOAM531mt9iPwiWerhv17O2i0O1t7Fn707kOZZ9UjY0yMxJCySS81PIy
-        ZTab/AYcWV2CV6hNEtx6xAg=
-X-Google-Smtp-Source: ABdhPJwKM1YG/JgnOOVdHFFtRjVMNl3v2yETrecwEBgXJy9DyzKjATELxoXpvLb+SDzu5iGVkC3UJA==
-X-Received: by 2002:a5d:588b:0:b0:204:1c1a:965d with SMTP id n11-20020a5d588b000000b002041c1a965dmr25246909wrf.669.1649690781695;
-        Mon, 11 Apr 2022 08:26:21 -0700 (PDT)
-Received: from kista.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
-        by smtp.gmail.com with ESMTPSA id c8-20020a056000184800b002040e925afasm31421816wri.59.2022.04.11.08.26.20
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rFr6s0nrZU/l/rYSbRMVpOLqR853sTAxGnl/eB7rqRM=;
+        b=1hv6RyfjlVO2QXpR9KVIO/8G4/1tj2am99NkCOCuFncNrg/OsRptSBPnBdo4KTkogt
+         v6tVNCLNl4XRf8EWw/8NJjJdB4WwzTxyT7EkPDmlFef2ckEXLYpbvA9GgRo2qIjktFKF
+         FuEbdxemUDxxnLq5AKD2xQvmkvqlUdMHB3C4k0T8BGaSWfEiM4ZG+Z+rawxhJK6SwLMF
+         pxUr0k4Y/7ttofBSWOiDRAjWeyyPEsXsR1//Gy/yusz4VBfg1Wu5O1BPGAeOfayyKpW1
+         imWC/OsQaksXbZSdvJztJssEsnOTDWilpxzaCqVlAH18oEiBgk++JTgt8jfVZt9n5vbl
+         8GfQ==
+X-Gm-Message-State: AOAM533HIleI5GmK/JpVuw2QiIjdQF9k8iXvvcWCeeUx1lAi29kQAoJm
+        PfeWjKxmNohQuDC3yStj+USAuw==
+X-Google-Smtp-Source: ABdhPJxUo+KOo46oZZC8/G3tHjCARN4FX+eDd1+/GBegGd9jDdlQ537rMvPHZViYY23J0dOhGwiqZg==
+X-Received: by 2002:a2e:80d7:0:b0:24b:bd8:b89e with SMTP id r23-20020a2e80d7000000b0024b0bd8b89emr20019551ljg.174.1649690715205;
+        Mon, 11 Apr 2022 08:25:15 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id z6-20020a056512308600b0044af5ea2be1sm2837295lfd.274.2022.04.11.08.25.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 08:26:21 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Chen-Yu Tsai <wens@csie.org>, Maxime Ripard <mripard@kernel.org>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH] dt-bindings: clock: Add compatible for D1 DE2 clocks
-Date:   Mon, 11 Apr 2022 17:26:19 +0200
-Message-ID: <1811990.tdWV9SEqCh@kista>
-In-Reply-To: <20220411044002.37579-1-samuel@sholland.org>
-References: <20220411044002.37579-1-samuel@sholland.org>
+        Mon, 11 Apr 2022 08:25:14 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 189A9103CE0; Mon, 11 Apr 2022 18:26:47 +0300 (+03)
+Date:   Mon, 11 Apr 2022 18:26:47 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, qemu-devel@nongnu.org,
+        Wanpeng Li <wanpengli@tencent.com>, jun.nakajima@intel.com,
+        david@redhat.com, "J . Bruce Fields" <bfields@fieldses.org>,
+        dave.hansen@intel.com, "H . Peter Anvin" <hpa@zytor.com>,
+        ak@linux.intel.com, Jonathan Corbet <corbet@lwn.net>,
+        Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
+        Hugh Dickins <hughd@google.com>,
+        Steven Price <steven.price@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Borislav Petkov <bp@alien8.de>, luto@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Jim Mattson <jmattson@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Mike Rapoport <rppt@kernel.org>
+Subject: Re: [PATCH v5 03/13] mm/shmem: Support memfile_notifier
+Message-ID: <20220411152647.uvl2ukuwishsckys@box.shutemov.name>
+References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
+ <20220310140911.50924-4-chao.p.peng@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220310140911.50924-4-chao.p.peng@linux.intel.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne ponedeljek, 11. april 2022 ob 06:40:01 CEST je Samuel Holland napisal(a):
-> Allwinner D1 contains a display engine 2.0. Its clock controller
-> matches the layout of the H5 DE2 clocks (2 mixers, no rotation engine,
-> and separate resets), so use that compatible as a fallback.
-> 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-
-Best regards,
-Jernej
-
-> ---
-> 
->  .../bindings/clock/allwinner,sun8i-a83t-de2-clk.yaml           | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/allwinner,sun8i-a83t-
-de2-clk.yaml b/Documentation/devicetree/bindings/clock/allwinner,sun8i-a83t-
-de2-clk.yaml
-> index e79eeac5f086..17caf78f0ccf 100644
-> --- a/Documentation/devicetree/bindings/clock/allwinner,sun8i-a83t-de2-
-clk.yaml
-> +++ b/Documentation/devicetree/bindings/clock/allwinner,sun8i-a83t-de2-
-clk.yaml
-> @@ -28,6 +28,9 @@ properties:
->        - items:
->            - const: allwinner,sun8i-r40-de2-clk
->            - const: allwinner,sun8i-h3-de2-clk
-> +      - items:
-> +          - const: allwinner,sun20i-d1-de2-clk
-> +          - const: allwinner,sun50i-h5-de2-clk
+On Thu, Mar 10, 2022 at 10:09:01PM +0800, Chao Peng wrote:
+> diff --git a/mm/shmem.c b/mm/shmem.c
+> index 9b31a7056009..7b43e274c9a2 100644
+> --- a/mm/shmem.c
+> +++ b/mm/shmem.c
+> @@ -903,6 +903,28 @@ static struct folio *shmem_get_partial_folio(struct inode *inode, pgoff_t index)
+>  	return page ? page_folio(page) : NULL;
+>  }
 >  
->    reg:
->      maxItems: 1
-> -- 
-> 2.35.1
-> 
-> 
+> +static void notify_fallocate(struct inode *inode, pgoff_t start, pgoff_t end)
+> +{
+> +#ifdef CONFIG_MEMFILE_NOTIFIER
+> +	struct shmem_inode_info *info = SHMEM_I(inode);
+> +
+> +	memfile_notifier_fallocate(&info->memfile_notifiers, start, end);
+> +#endif
 
+All these #ifdefs look ugly. Could you provide dummy memfile_* for
+!MEMFILE_NOTIFIER case?
 
+-- 
+ Kirill A. Shutemov

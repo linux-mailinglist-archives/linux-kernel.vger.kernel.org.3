@@ -2,94 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 934964FBC2E
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 14:35:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E4FC4FBC34
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 14:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346122AbiDKMhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 08:37:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42964 "EHLO
+        id S1346142AbiDKMi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 08:38:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346134AbiDKMhd (ORCPT
+        with ESMTP id S1346125AbiDKMiZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 08:37:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 79F2B1B789
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 05:35:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649680518;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9lC0yv022i0CueqKYelOpTAIE5sprvHncsYQxz3lXPE=;
-        b=Htkb5rlS7qXrEaBijnil9Lzd8OkNCtUx80GpZQaVuEllpf4zJQbiQpYnKvjURrBOF+HDVi
-        OX4BKp22kAdy7UreSOMr828jDzO+oxXWd0i+IbSpLzc2Y5hA40ojlmohtmCejhQS7DAI0J
-        6RwVnm28pANjT5IYp7y7XrFYHpQC1R4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-449-ZPIfAO1VN8qxKXuAQn97-Q-1; Mon, 11 Apr 2022 08:35:12 -0400
-X-MC-Unique: ZPIfAO1VN8qxKXuAQn97-Q-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7E6AE803D67;
-        Mon, 11 Apr 2022 12:35:11 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.37.45])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 166A2C2813D;
-        Mon, 11 Apr 2022 12:35:08 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20220406075612.60298-5-jefflexu@linux.alibaba.com>
-References: <20220406075612.60298-5-jefflexu@linux.alibaba.com> <20220406075612.60298-1-jefflexu@linux.alibaba.com>
-To:     Jeffle Xu <jefflexu@linux.alibaba.com>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org,
-        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        willy@infradead.org, linux-fsdevel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
-        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
-        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
-        fannaihao@baidu.com
-Subject: Re: [PATCH v8 04/20] cachefiles: notify user daemon when withdrawing cookie
+        Mon, 11 Apr 2022 08:38:25 -0400
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123091AD99;
+        Mon, 11 Apr 2022 05:36:11 -0700 (PDT)
+Received: by mail-qv1-f49.google.com with SMTP id b17so13060462qvf.12;
+        Mon, 11 Apr 2022 05:36:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gwALCLphRY0C4UTHiPknn9pMqBg3LkP1UU4uqZKSCNE=;
+        b=PNpyaatoefdjsoaMPBBAlGfqIIOu+1zyG8Q2yzsCkxzosDg+1q+2CPUOVZhL4z5yon
+         /quA3qTRMjggxrul+tdpLe9axVad1F5gFFhlEa10PQwtjeVguSiLjdKWklQ3IFwKDONL
+         w4TM+vhyUWnN3x7zfcM4sajBOMeP+F54dyDlnV7A/fOFHJsfBdXQiFH4QyLcoXAtakxd
+         2eeyqIloSIY8DpG3t0CB5vcyL8MAsqA9yy1QK2AA+bCqUrOXJacFsX6MgBQfF5GiOup7
+         DtSIadt3Bu0by98YL92GoQh3yyokACFPGfF82vgmOuP0xOCt+5cVb5NEOr3j6pM6LDMT
+         SRyw==
+X-Gm-Message-State: AOAM533yUszR+ECKXzzxE2coubJb5sIbsg+ThtUxkZVMSRRkXrrDjjdN
+        E2Ze5HumcU2ZhDSkoAh46pWzJ51sdSprZg==
+X-Google-Smtp-Source: ABdhPJx2BpNj2C+T2b7AbXzgGzOzuchZp0EGVAhwk6oS//FnCZi5lF8FXj72jmKXwQfNW4bYI4I4Ow==
+X-Received: by 2002:a05:6214:622:b0:441:2825:c288 with SMTP id a2-20020a056214062200b004412825c288mr26910719qvx.79.1649680569907;
+        Mon, 11 Apr 2022 05:36:09 -0700 (PDT)
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
+        by smtp.gmail.com with ESMTPSA id p7-20020a05620a22a700b0069c37e2c473sm5978qkh.94.2022.04.11.05.36.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Apr 2022 05:36:09 -0700 (PDT)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-2ec05db3dfbso42127267b3.7;
+        Mon, 11 Apr 2022 05:36:09 -0700 (PDT)
+X-Received: by 2002:a81:c703:0:b0:2d0:cc6b:3092 with SMTP id
+ m3-20020a81c703000000b002d0cc6b3092mr25284348ywi.449.1649680568889; Mon, 11
+ Apr 2022 05:36:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1091404.1649680508.1@warthog.procyon.org.uk>
-Date:   Mon, 11 Apr 2022 13:35:08 +0100
-Message-ID: <1091405.1649680508@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220317191527.96237-1-singh.kuldeep87k@gmail.com>
+ <20220317191527.96237-3-singh.kuldeep87k@gmail.com> <558f0c92-c499-daca-e1ad-2b16137f8c06@arm.com>
+ <20220317212508.GB99538@9a2d8922b8f1> <Yjd23Gro6B6zWCrO@robh.at.kernel.org>
+In-Reply-To: <Yjd23Gro6B6zWCrO@robh.at.kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 11 Apr 2022 14:35:57 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdV1z3wi-TG7vYFyF=rbYNuV5=wVffAv6a2mzTRMW-1f+A@mail.gmail.com>
+Message-ID: <CAMuHMdV1z3wi-TG7vYFyF=rbYNuV5=wVffAv6a2mzTRMW-1f+A@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] dt-bindings: timer: Document arm, cortex-a7-timer
+ in arch timer
+To:     Rob Herring <robh@kernel.org>
+Cc:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <marc.zyngier@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jeffle Xu <jefflexu@linux.alibaba.com> wrote:
+On Sun, Mar 20, 2022 at 7:56 PM Rob Herring <robh@kernel.org> wrote:
+> On Fri, Mar 18, 2022 at 02:55:08AM +0530, Kuldeep Singh wrote:
+> > On Thu, Mar 17, 2022 at 08:25:12PM +0000, Robin Murphy wrote:
+> > > On 2022-03-17 19:15, Kuldeep Singh wrote:
+> > > > Renesas RZ/N1D platform uses compatible "arm,cortex-a7-timer" in
+> > > > conjugation with "arm,armv7-timer". Since, initial entry is not
+> > > > documented, it start raising dtbs_check warnings.
 
-> +static int init_close_req(struct cachefiles_req *req, void *private)
+I hadn't seen this thread, but I had already removed the unneeded
+compatible value locally, and was just waiting for the merge window and
+holidays to end for sending the patch...
 
-"cachefiles_" prefix please.
+> > > >
+> > > > ['arm,cortex-a7-timer', 'arm,armv7-timer'] is too long
+> > > > 'arm,cortex-a7-timer' is not one of ['arm,armv7-timer', 'arm,armv8-timer']
+> > > > 'arm,cortex-a7-timer' is not one of ['arm,cortex-a15-timer']
+> > > >
+> > > > Document this compatible to address it. The motivation to add this
+> > > > change is taken from an already existing entry "arm,cortex-a15-timer".
+> > > > Please note, this will not hurt any arch timer users.
+> > >
+> > > Eh, if it's never been documented or supported, I say just get rid of it.
+> > > The arch timer interface is by definition part of a CPU, and we can tell
+> > > what the CPU is by reading its ID registers. Indeed that's how the driver
+> > > handles the non-zero number of CPU-specific errata that already exist - we
+> > > don't need compatibles for that.
+> > >
+> > > In some ways it might have been nice to have *SoC-specific* compatibles
+> > > given the difficulty some integrators seem to have had in wiring up a stable
+> > > count *to* the interface, but it's not like they could be magically added to
+> > > already-deployed DTs after a bug is discovered, and nor could we have
+> > > mandated them from day 1 just in case and subsequently maintained a binding
+> > > that is just an ever-growing list of every SoC. Oh well.
+> >
+> > Robin, A similar discussion was already done on v1 thread. Please see
+> > below for details:
+> > https://lore.kernel.org/linux-devicetree/20220317065925.GA9158@9a2d8922b8f1/
+> > https://lore.kernel.org/linux-devicetree/726bde76-d792-febf-d364-6eedeb748c3b@canonical.com/
+> >
+> > And final outcome of discussion turns out to add this compatible string.
+>
+> I agree with Robin on dropping. More specific here is not useful. If
+> we're going to add some cores, then we should add every core
+> implementation.
 
-> +	/*
-> +	 * It's possible if the cookie looking up phase failed before READ
-> +	 * request has ever been sent.
-> +	 */
+... So consider it gone.
 
-What "it" is possible?  You might want to say "It's possible that the
-cookie..."
+https://lore.kernel.org/r/a8e0cf00a983b4c539cdb1cfad5cc6b10b423c5b.1649680220.git.geert+renesas@glider.be/
 
-> +	if (fd == 0)
-> +		return -ENOENT;
+Gr{oetje,eeting}s,
 
-0 is a valid fd.
+                        Geert
 
-David
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

@@ -2,86 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B94BF4FC02D
+	by mail.lfdr.de (Postfix) with ESMTP id 716E94FC02C
 	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:17:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347737AbiDKPTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 11:19:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58402 "EHLO
+        id S1347756AbiDKPTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 11:19:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347731AbiDKPSx (ORCPT
+        with ESMTP id S1347726AbiDKPSt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 11:18:53 -0400
+        Mon, 11 Apr 2022 11:18:49 -0400
 Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26712B1D3
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:16:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11980B1DA
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:16:33 -0700 (PDT)
 X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
 Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 6A05A22400;
-        Mon, 11 Apr 2022 15:16:34 +0000 (UTC)
+        by relay.mailchannels.net (Postfix) with ESMTP id 580DC6C2F38;
+        Mon, 11 Apr 2022 15:16:31 +0000 (UTC)
 Received: from pdx1-sub0-mail-a264.dreamhost.com (unknown [127.0.0.6])
         (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 7FD7922A57;
-        Mon, 11 Apr 2022 15:16:33 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1649690193; a=rsa-sha256;
+        by relay.mailchannels.net (Postfix) with ESMTPA id 7617B6C2210;
+        Mon, 11 Apr 2022 15:16:30 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1649690190; a=rsa-sha256;
         cv=none;
-        b=uFmirawn8VXJ17kg3ctxX2LHmz75Cb7Kqz0QaA/8ErahmBRId03fpO7BKDwCWWukbp8ue6
-        SSL777fQgBhuK29qqBGYUBNX7jnbM4BRwt63+ndI/JowDn7qS4YVJM0lGKOdJDdayDaCt8
-        c3K44JZ6IF2ZssV++E41QLWNZpxbpN49kepZRv5QAW2G2LNy8LRVslxI7gzepySGJe9+ta
-        j46sK9nDKqgGWxdfKY3GG4QEXvboN/ax0aAGYsvNkoScfcgCig9P8HU+mKBf9y46gudgz6
-        F6Fj1NEjUsOurCs8XDYB4bro9//PE3DeW+Ap1Ml76lao7mRrjZbLMsOPBu4lgg==
+        b=1w7t/NTBQ48D7hVdmupDPmDxHWaeTFxYb6pzN9ubC71YUxrLByEaZNFyeP0+MGA+pvT9yS
+        /qzzdkb0bfJ8l2JEoienKYWR4ted8L6WKaxieFT5uOivsjVJmyNwcW5lgva+xieVD+SAOg
+        ua//t4quX31z5mqhXhKY52n5AzGMSCIfxCB6WUW6nHtEDM8l3d55Ba5MInWQBRx0o+e3yi
+        cZqmLHUajUq0kiW2tJ4FSQZQ+8YvPCmYutaTaGG3nvQGvA5xXMz7shxVc2OLaxpKsSbSd5
+        RknaKVWFdhX1umubWAQjtAg6c18Y9520L+y0SxP0KUJaTekuRAJQjC2FEyBebA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mailchannels.net;
-        s=arc-2022; t=1649690193;
+        s=arc-2022; t=1649690190;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=KnsgWCrmXA8Rcv/KOO/9y4OP+M/ua1Izb2uMyIZ9qZ4=;
-        b=xcBDrmH1m/Y1M0KVp0kvqVyIGxVAjYfKB2dl3DCd1Eq9lGBexa/r/euYBzWo1/YOyDEaFi
-        IQuSNuMbZnV7LhmbGAxXJ/D3E4F0CoizhULf1xX9HLgYT/p7I9aqSxwZhAtui5NnGXWqdH
-        oH38kZby9cij80qIxbf2m7KTn9cU2FkYwRSuf2JWzrspP/+QRYYQJu+Jg/EXM7N0go2Rye
-        pby9EeUzKZDUQY7Vz15SKmjk5hHJWvHtIOWqWfqnJc5yDKBUR8z1+vbSf6rG3OfRHs/mYq
-        CoHgYjwIjHrLYTQ9b4/t3z4pDq2LINThUyXQQU6opRMtwQQW2O8ArKb2w9+NGg==
+        bh=gtD9/3R3fsIE1iOjF+WezkBbCL5lnD7f+xJAJilt+Nw=;
+        b=8F+08J+WusnXOkwRDsHCfEWUNLn4MvwSqBoqaFR9l9tW1v3F+d/MdHQSd36Nt2sF3pzVIj
+        KjaCWFF8UZLnIAPfZJoBf60KLEfF0m2huEfzOc1sp9KtMZ75uemeCNUuIQJHARetUAcb9D
+        lRT2/x57L/VAKvDtPgOxaY30RxliMTPuSO1EegsRrW7FcZX2Bl87o5SeI2Hw++Vf0tCYkO
+        2f/yUcnttWdjxynNgjUM+/lsd7UHW1yadZoelNJsUB6sufl5ZXqwuOq/GHRBIfsAzRnDyj
+        EsUDvohF4hKpIRz6yN0c5/mjferPQqxdegBVFV4QvZ9EK1lJtjwBFSDJjjzRXA==
 ARC-Authentication-Results: i=1;
-        rspamd-68f9d8f9d5-8mcww;
+        rspamd-68f9d8f9d5-2ngq6;
         auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
 X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
 Received: from pdx1-sub0-mail-a264.dreamhost.com (pop.dreamhost.com
  [64.90.62.162])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.120.38.135 (trex/6.7.1);
-        Mon, 11 Apr 2022 15:16:34 +0000
+        by 100.107.255.155 (trex/6.7.1);
+        Mon, 11 Apr 2022 15:16:31 +0000
 X-MC-Relay: Neutral
 X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
 X-MailChannels-Auth-Id: dreamhost
-X-Wiry-Bubble: 583918570618a022_1649690193995_4056338885
-X-MC-Loop-Signature: 1649690193995:1015188680
-X-MC-Ingress-Time: 1649690193994
+X-Eyes-Hook: 360b6eb66c74954e_1649690190844_3488285450
+X-MC-Loop-Signature: 1649690190844:1245218366
+X-MC-Ingress-Time: 1649690190844
 Received: from localhost.localdomain (unknown [104.36.29.104])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a264.dreamhost.com (Postfix) with ESMTPSA id 4KcXWK2tWtz32;
+        by pdx1-sub0-mail-a264.dreamhost.com (Postfix) with ESMTPSA id 4KcXWK6dnqz1dl;
         Mon, 11 Apr 2022 08:16:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1649690189;
-        bh=KnsgWCrmXA8Rcv/KOO/9y4OP+M/ua1Izb2uMyIZ9qZ4=;
+        s=dreamhost; t=1649690190;
+        bh=gtD9/3R3fsIE1iOjF+WezkBbCL5lnD7f+xJAJilt+Nw=;
         h=From:To:Cc:Subject:Date:Content-Transfer-Encoding;
-        b=rbYqobj07NcPFsyO7asS4G/CP1GQ+vYYxTg35zI8quU7AhqKeVfuyDSH9LrhjeZdD
-         Gd5l+U0UM8QUE5OREci8G22/AE5Q7uUOOUigUaxk1dknA1d1rDfHG1lSBQMRhZQjiV
-         O1q0pyKw/nTsX8jF5Q12m5SBrD18deAQExbzogpW9oKga9VBB10JmSXY99bDUKNHaz
-         Ik+amL+/MMURiNKrx/CcUBTMmbG3v6F3B9d3XS5su4++2BL5Cjy4QO2j4T8sEm/qkR
-         txaSp1Q8bNXCN9JzycSlXI0QAel+YHkFc8eL0o7mIRxK6NT1aiBVCnfU83U7i5otgY
-         tBHcPGe8LHhag==
+        b=USChZilcn++JiMdYmi5woxFIzghtZKkNISt7OySSiCWOyrPZkbFGyAxtg2P2UgiPx
+         L/H8/P8LmQL456TiTwN+HqkbiW/PHMELA1ud0hiRTc1o4fakgNhLaSWD0eIu2lJe9X
+         twdDW2Hzm3uQghA+DLBHaHfNTXiew2DfmQDmgZmVNhl1UDlfXix1ZYYABCSx+t8de8
+         GulYvpuhC9KLF73AcQmfPU5ZqCtiLvAnxhAw95xAaye7/M/zJST73yTcFM5pTXxx+O
+         t8+SfqFRdR4WJ/MmunC7b3q+9iloc9T3UCPiq84NkeBys9jc+saFu0jWDW42T9+gF7
+         sBkN4EyiWa3jg==
 From:   Davidlohr Bueso <dave@stgolabs.net>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         dave@stgolabs.net
-Subject: [PATCH 1/6] staging/most, dim2: convert dim2_tasklet to threaded irq
-Date:   Mon, 11 Apr 2022 08:16:15 -0700
-Message-Id: <20220411151620.129178-2-dave@stgolabs.net>
+Subject: [PATCH 2/6] staging/wlan-ng, prism2usb: replace reaper_bh tasklet with work
+Date:   Mon, 11 Apr 2022 08:16:16 -0700
+Message-Id: <20220411151620.129178-3-dave@stgolabs.net>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20220411151620.129178-1-dave@stgolabs.net>
 References: <20220411151620.129178-1-dave@stgolabs.net>
@@ -100,104 +100,101 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 Tasklets have long been deprecated as being too heavy on the system
 by running in irq context - and this is not a performance critical
 path. If a higher priority process wants to run, it must wait for
-the tasklet to finish before doing so. A more suitable equivalent
-is to converted to threaded irq instead and service channels in
-regular task context.
+the tasklet to finish before doing so.
+
+The reaper_bh tasklet will now run in process context and have further
+concurrency (tasklets being serialized among themselves), but this
+is done holding the ctlxq.lock, so it should be fine.
 
 Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
 ---
- drivers/staging/most/dim2/dim2.c | 29 +++++++++--------------------
- 1 file changed, 9 insertions(+), 20 deletions(-)
+ drivers/staging/wlan-ng/hfa384x.h     |  2 +-
+ drivers/staging/wlan-ng/hfa384x_usb.c | 14 +++++++-------
+ drivers/staging/wlan-ng/prism2usb.c   |  2 +-
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/staging/most/dim2/dim2.c b/drivers/staging/most/dim2/dim2.c
-index 29f8ce2a47f5..97dff82b7a5f 100644
---- a/drivers/staging/most/dim2/dim2.c
-+++ b/drivers/staging/most/dim2/dim2.c
-@@ -45,9 +45,6 @@ MODULE_PARM_DESC(fcnt, "Num of frames per sub-buffer for sync channels as a powe
+diff --git a/drivers/staging/wlan-ng/hfa384x.h b/drivers/staging/wlan-ng/hfa384x.h
+index 98c154a8d8c1..7480d808e946 100644
+--- a/drivers/staging/wlan-ng/hfa384x.h
++++ b/drivers/staging/wlan-ng/hfa384x.h
+@@ -1227,7 +1227,7 @@ struct hfa384x {
  
- static DEFINE_SPINLOCK(dim_lock);
+ 	struct timer_list throttle;
  
--static void dim2_tasklet_fn(unsigned long data);
--static DECLARE_TASKLET_OLD(dim2_tasklet, dim2_tasklet_fn);
--
- /**
-  * struct hdm_channel - private structure to keep channel specific data
-  * @name: channel name
-@@ -361,15 +358,9 @@ static irqreturn_t dim2_mlb_isr(int irq, void *_dev)
- 	return IRQ_HANDLED;
- }
+-	struct tasklet_struct reaper_bh;
++	struct work_struct reaper_bh;
+ 	struct tasklet_struct completion_bh;
  
--/**
-- * dim2_tasklet_fn - tasklet function
-- * @data: private data
-- *
-- * Service each initialized channel, if needed
-- */
--static void dim2_tasklet_fn(unsigned long data)
-+static irqreturn_t dim2_task_irq(int irq, void *_dev)
- {
--	struct dim2_hdm *dev = (struct dim2_hdm *)data;
-+	struct dim2_hdm *dev = _dev;
- 	unsigned long flags;
- 	int ch_idx;
+ 	struct work_struct usb_work;
+diff --git a/drivers/staging/wlan-ng/hfa384x_usb.c b/drivers/staging/wlan-ng/hfa384x_usb.c
+index 938e11a1a0b6..4000c321cb3a 100644
+--- a/drivers/staging/wlan-ng/hfa384x_usb.c
++++ b/drivers/staging/wlan-ng/hfa384x_usb.c
+@@ -193,7 +193,7 @@ static void hfa384x_usb_throttlefn(struct timer_list *t);
  
-@@ -385,6 +376,8 @@ static void dim2_tasklet_fn(unsigned long data)
- 		while (!try_start_dim_transfer(dev->hch + ch_idx))
- 			continue;
- 	}
-+
-+	return IRQ_HANDLED;
- }
+ static void hfa384x_usbctlx_completion_task(struct tasklet_struct *t);
  
- /**
-@@ -392,8 +385,8 @@ static void dim2_tasklet_fn(unsigned long data)
-  * @irq: irq number
-  * @_dev: private data
+-static void hfa384x_usbctlx_reaper_task(struct tasklet_struct *t);
++static void hfa384x_usbctlx_reaper_task(struct work_struct *work);
+ 
+ static int hfa384x_usbctlx_submit(struct hfa384x *hw,
+ 				  struct hfa384x_usbctlx *ctlx);
+@@ -539,7 +539,7 @@ void hfa384x_create(struct hfa384x *hw, struct usb_device *usb)
+ 	/* Initialize the authentication queue */
+ 	skb_queue_head_init(&hw->authq);
+ 
+-	tasklet_setup(&hw->reaper_bh, hfa384x_usbctlx_reaper_task);
++	INIT_WORK(&hw->reaper_bh, hfa384x_usbctlx_reaper_task);
+ 	tasklet_setup(&hw->completion_bh, hfa384x_usbctlx_completion_task);
+ 	INIT_WORK(&hw->link_bh, prism2sta_processing_defer);
+ 	INIT_WORK(&hw->usb_work, hfa384x_usb_defer);
+@@ -2585,7 +2585,7 @@ void hfa384x_tx_timeout(struct wlandevice *wlandev)
+ /*----------------------------------------------------------------
+  * hfa384x_usbctlx_reaper_task
   *
-- * Acknowledge the interrupt and schedule a tasklet to service channels.
-- * Return IRQ_HANDLED.
-+ * Acknowledge the interrupt and service each initialized channel,
-+ * if needed, in task context.
+- * Tasklet to delete dead CTLX objects
++ * Deferred work to delete dead CTLX objects
+  *
+  * Arguments:
+  *	data	ptr to a struct hfa384x
+@@ -2593,12 +2593,12 @@ void hfa384x_tx_timeout(struct wlandevice *wlandev)
+  * Returns:
+  *
+  * Call context:
+- *	Interrupt
++ *      Task
+  *----------------------------------------------------------------
   */
- static irqreturn_t dim2_ahb_isr(int irq, void *_dev)
+-static void hfa384x_usbctlx_reaper_task(struct tasklet_struct *t)
++static void hfa384x_usbctlx_reaper_task(struct work_struct *work)
  {
-@@ -405,9 +398,7 @@ static irqreturn_t dim2_ahb_isr(int irq, void *_dev)
- 	dim_service_ahb_int_irq(get_active_channels(dev, buffer));
- 	spin_unlock_irqrestore(&dim_lock, flags);
+-	struct hfa384x *hw = from_tasklet(hw, t, reaper_bh);
++	struct hfa384x *hw = container_of(work, struct hfa384x, reaper_bh);
+ 	struct hfa384x_usbctlx *ctlx, *temp;
+ 	unsigned long flags;
  
--	dim2_tasklet.data = (unsigned long)dev;
--	tasklet_schedule(&dim2_tasklet);
--	return IRQ_HANDLED;
-+	return IRQ_WAKE_THREAD;
+@@ -2686,7 +2686,7 @@ static void hfa384x_usbctlx_completion_task(struct tasklet_struct *t)
+ 	spin_unlock_irqrestore(&hw->ctlxq.lock, flags);
+ 
+ 	if (reap)
+-		tasklet_schedule(&hw->reaper_bh);
++		schedule_work(&hw->reaper_bh);
  }
  
- /**
-@@ -654,14 +645,12 @@ static int poison_channel(struct most_interface *most_iface, int ch_idx)
- 	if (!hdm_ch->is_initialized)
- 		return -EPERM;
+ /*----------------------------------------------------------------
+diff --git a/drivers/staging/wlan-ng/prism2usb.c b/drivers/staging/wlan-ng/prism2usb.c
+index dc0749b8eff7..36340f36b0cb 100644
+--- a/drivers/staging/wlan-ng/prism2usb.c
++++ b/drivers/staging/wlan-ng/prism2usb.c
+@@ -182,7 +182,7 @@ static void prism2sta_disconnect_usb(struct usb_interface *interface)
+ 		usb_kill_urb(&hw->ctlx_urb);
  
--	tasklet_disable(&dim2_tasklet);
- 	spin_lock_irqsave(&dim_lock, flags);
- 	hal_ret = dim_destroy_channel(&hdm_ch->ch);
- 	hdm_ch->is_initialized = false;
- 	if (ch_idx == dev->atx_idx)
- 		dev->atx_idx = -1;
- 	spin_unlock_irqrestore(&dim_lock, flags);
--	tasklet_enable(&dim2_tasklet);
- 	if (hal_ret != DIM_NO_ERROR) {
- 		pr_err("HAL Failed to close channel %s\n", hdm_ch->name);
- 		ret = -EFAULT;
-@@ -821,8 +810,8 @@ static int dim2_probe(struct platform_device *pdev)
- 		goto err_shutdown_dim;
- 	}
+ 		tasklet_kill(&hw->completion_bh);
+-		tasklet_kill(&hw->reaper_bh);
++		cancel_work_sync(&hw->reaper_bh);
  
--	ret = devm_request_irq(&pdev->dev, irq, dim2_ahb_isr, 0,
--			       "dim2_ahb0_int", dev);
-+	ret = devm_request_threaded_irq(&pdev->dev, irq, dim2_ahb_isr,
-+					dim2_task_irq, 0, "dim2_ahb0_int", dev);
- 	if (ret) {
- 		dev_err(&pdev->dev, "failed to request ahb0_int irq %d\n", irq);
- 		goto err_shutdown_dim;
+ 		cancel_work_sync(&hw->link_bh);
+ 		cancel_work_sync(&hw->commsqual_bh);
 -- 
 2.26.2
 

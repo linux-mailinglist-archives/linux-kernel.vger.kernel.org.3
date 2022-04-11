@@ -2,104 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9D374FBC08
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 14:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B2544FBC05
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 14:27:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346048AbiDKMa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 08:30:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51048 "EHLO
+        id S1346027AbiDKM34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 08:29:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245248AbiDKMa0 (ORCPT
+        with ESMTP id S236026AbiDKM3x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 08:30:26 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C5F2CC86
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 05:28:12 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id bg24so2704671pjb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 05:28:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QodfVSYvtajfZu5GfMihFlyPJS016l+/i2+aa3dvR/M=;
-        b=48tVOWYpd8ZPY/3YXoKZl/BMYH7ui+Amk8t7+6bc6Y3MHSVGrA7nNaU4JNpefswj4O
-         3QIbwtZ5+BHBTZNgGUx6DrH3/naQop/ghumvjDr5b4gjrSw5xBXTR+9zH8IAaoLG5gv8
-         gD+ExHUS5TaUwjwlBih/bZxaVMFu2pAfBQK6etpOVvQnbXqO15kpDPu07EQ5Hns27pDy
-         GdJdYuKQsFNBL/EYDP1UNsIuB8BOmBL5kmxp4DW+gbRcvB5rsPta4dYUENQVHVbbLWVR
-         zP4WnsTReOaNJvd5FYJsk+SEB+0e5y8/aNOQ5n1BKxPeWkivTzYBGdVtTERal50mDJcC
-         dgDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QodfVSYvtajfZu5GfMihFlyPJS016l+/i2+aa3dvR/M=;
-        b=RyX65f0FHFlbXAR+jHMtq0wkRQmBFIldxOFFu0iomvpfi9TcmrYJIWr3cD64rZimTW
-         lywov/UA7PkKaAGGtsI+oesRpiHgB+3ztM3ONdVTo6ASwbstIkwOoLo5Ovo0/5z91DWC
-         /A3uwTOU9BgRj1IEps520tXjzgwurtzOPR/LuJPhH1cj/coICCzHJ4hXnfCrIXHBDKhu
-         +D9WClHyICpOVEtLwYfXSQ7eiv3hKZq6LVmTC0/orTNcTQxOySv+QzNTqESpAR+ZxVdo
-         +q/bAUQzUGrJGGcs0neOutyO7XdVWLQZdwHULBMMwocCqARm5rw7dXHQz1XcLmsxKSRC
-         obiA==
-X-Gm-Message-State: AOAM533s9IDCyyi25Pzb1sN7+X5NX6TXkQ2l0zPboKk/7AAfr8tB2Ks3
-        ZjvZvQ8EWuK8UvlOelR4ojrQ2XAbEDo/Vw==
-X-Google-Smtp-Source: ABdhPJymaL28YkA+U0QTjSOpHtH19n1Ae0krubSKlT0fk5Q1jJNPCSnDRqn1pqEh0YKC/Ps/1r0OBw==
-X-Received: by 2002:a17:90a:600b:b0:1cb:8ba5:d3bc with SMTP id y11-20020a17090a600b00b001cb8ba5d3bcmr7319539pji.42.1649680091792;
-        Mon, 11 Apr 2022 05:28:11 -0700 (PDT)
-Received: from FVFYT0MHHV2J.bytedance.net ([139.177.225.245])
-        by smtp.gmail.com with ESMTPSA id fa11-20020a17090af0cb00b001ca6e27a684sm20065699pjb.16.2022.04.11.05.28.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 05:28:11 -0700 (PDT)
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     will@kernel.org, catalin.marinas@arm.com,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        steven.price@arm.com, lengxujun2007@126.com, arnd@arndb.de,
-        smuchun@gmail.com, duanxiongchun@bytedance.com,
-        quic_qiancai@quicinc.com, aneesh.kumar@linux.ibm.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: [PATCH v2] arm64: mm: fix pmd_leaf()
-Date:   Mon, 11 Apr 2022 20:26:53 +0800
-Message-Id: <20220411122653.40284-1-songmuchun@bytedance.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+        Mon, 11 Apr 2022 08:29:53 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2053.outbound.protection.outlook.com [40.107.94.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E3F286EE
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 05:27:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ktxsGS43oErAocmecpULTwkxHqvlXpI+fTMhF8EmZ1ZIm2ou7l5knpSGkAYCS70S6U1nf4KXK29XM6aoXqWday+7b6k7mfEP6zGr6PSJNoncECxkvk4LQ1JJqon4LXSEmRoofDy3hbzVH3u4+pPHSzP7iMzefYPXoQXudhS+wZl1BtuF/nz3DABMINLRf9b4HHs+q/nW+b1ytSVY3lRMxdkkh0dmFx7BQwauDAcy9ZNW3t5wOh/tRk5KW3JqB9HwH63Pdib8SXsLSBtiiVFe9fGDEJWoc5Oq3V6TnUHXGC7XWI9YTvadeIFfRZsXsKoVqs/Fth0Zh69/8TcSApvAWA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JFz/k8UR5BPc2LCqeuQXVR7q+ecmyaE+OB+MDMhb5II=;
+ b=SP4fYF649jSJaOE8YTlo1sxgA8DX3SwI9bYqlcSrieOJbuJRuk6xXWnfY3S1PtD45Wwwli1lkS59tG8k1x0w4d1ENzC0WFZVNisrBoyb7OJFirvjO9kuYoqIFPJAc7arxamE4SYzy/BWgrNwbUwxRNl8lVXNBa8uidEPyg3mLcHzu5soDiKgJPUxlEjB9HgVpSphT04iFggmIghcn/6jFZcu7SFKX2LV8qf/U4NTb6D32n0NU2h+34cKP7m5fXvJFfsFBSUmvnAbEtFL5YkTn2agxyVYb7iPhQyZsjVqLByKA5a4VSI5lfzgitDWDqBJEzYmEk/IXSGZi7QlsUZAnw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.236) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JFz/k8UR5BPc2LCqeuQXVR7q+ecmyaE+OB+MDMhb5II=;
+ b=Bn6E+TSjN5/eNYxWHoWFFbm9ENV0hGVkB6q5oZi7LKGQvvL4ItcF4R/UduLoGHbgXjbfX3+A1D1C27JYB+4rp56XDovfAt8Z8lmwqTDwEzmCKfqT/BiQfcLZvltwNSvbl2ZXSHZLReiLNtRljBYnbYqlBU7hnKsCXGBvsnzC/tKi8d2i2+kmrwtQpRjm0Uip23ST5OFNNJ3X6Vsum7BnQP9A+jvC3MCwuHVo4inFsIC2tLTjp2LKeXf7EXHbQTrgXtWNi1P+mj80o23NXvu+Dly+oaY+dXVuHCl7t+BvDsv8J8xGzYvqS2dTceB8Y+oy5GbNdlP9XjFbhYdqb4IIYQ==
+Received: from MW4PR04CA0115.namprd04.prod.outlook.com (2603:10b6:303:83::30)
+ by BN8PR12MB3604.namprd12.prod.outlook.com (2603:10b6:408:45::31) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Mon, 11 Apr
+ 2022 12:27:38 +0000
+Received: from CO1NAM11FT016.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:83:cafe::58) by MW4PR04CA0115.outlook.office365.com
+ (2603:10b6:303:83::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29 via Frontend
+ Transport; Mon, 11 Apr 2022 12:27:37 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.236; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.236) by
+ CO1NAM11FT016.mail.protection.outlook.com (10.13.175.141) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5144.20 via Frontend Transport; Mon, 11 Apr 2022 12:27:37 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ DRHQMAIL109.nvidia.com (10.27.9.19) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.32; Mon, 11 Apr 2022 12:27:36 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 11 Apr 2022 05:27:36 -0700
+Received: from vdi.nvidia.com (10.127.8.13) by mail.nvidia.com
+ (10.126.190.182) with Microsoft SMTP Server id 15.2.986.22 via Frontend
+ Transport; Mon, 11 Apr 2022 05:27:34 -0700
+From:   Eli Cohen <elic@nvidia.com>
+To:     <mst@redhat.com>, <asowang@redhat.com>
+CC:     <virtualization@lists.linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>, <si-wei.liu@oracle.com>,
+        Eli Cohen <elic@nvidia.com>
+Subject: [PATCH 0/3] mlx5_vdpa: Support MAC/VLAN haw offloading
+Date:   Mon, 11 Apr 2022 15:27:25 +0300
+Message-ID: <20220411122728.225588-1-elic@nvidia.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: fdcd71f6-7d11-4f09-e5b4-08da1bb6a9e3
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3604:EE_
+X-Microsoft-Antispam-PRVS: <BN8PR12MB3604C4EAD226301808F2FA73ABEA9@BN8PR12MB3604.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WfnYPFqIkCgAMaC2tmWU9yS0rgaQRPgQwkuOYDLzY0U9j4DqILsDmO8ebzfuW6iX1WZnA6r5ylAH1zzpXs27ZCNh6aEpn1n9/D+VBky2rk9AYqAlxmi8PTqhdgbfiKwOv2fFi17mai3n0iDNF/EWD8lGlOZ8552a4R/LEHApHJeJfvz6OGYUUkcGTWupl9uMQ4RRh/vk2wX9j9g++TdETGo0QQTmVAL1/qkAjCMnmL0iv9+exwrRR2qlSUAtVinLagcdf3OJEUbFk7vEKie89Rgtl59SKN9LPTBxOy43fR1KG0e1aOxvE9GaLH75t22lIZl2f8KZVS0/ANGeZWVTDI9Lux8deLya+QLAk884oUP02a91oSc9rcinPqC1d1Xol6qCCQA5yhE39fLldtnB4aplJaBbC6ZFnWTUYyILBikQC+qHYl98CBrGhnjS4yYAkFdncai1L43APMnZ61SPTgOYyIUJue8TZITWCS0CqNytKH0vWv5bphkULiIxzp6UWwwFlOaD5YmBwJQB5sv2+zqe72u38ju4arAtyNHFe6Klt0Rt5MyXjtkLKG2ZWrovb9C/QQuGCLNUJsonzB4uBBB+VetW+2uDCe0yuprCWSEb9Pnxiw6tbMZ0ltqvKwGd0BvYRBh8aRB1tLaprky3Lfp/PU9nn2audkqtf2bvaiRlddN9wZYrA7sbTwaO6W+s+lqLSUhSe87tNAnT+E1t6A==
+X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(6666004)(81166007)(83380400001)(82310400005)(36756003)(2906002)(2616005)(110136005)(4744005)(8936002)(508600001)(86362001)(356005)(426003)(36860700001)(336012)(7696005)(47076005)(107886003)(1076003)(186003)(26005)(40460700003)(4326008)(70206006)(5660300002)(8676002)(316002)(70586007)(54906003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2022 12:27:37.3535
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: fdcd71f6-7d11-4f09-e5b4-08da1bb6a9e3
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT016.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3604
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pmd_leaf() is used to test a leaf mapped PMD, however, it misses
-the PROT_NONE mapped PMD on arm64.  Fix it.  A real world issue [1]
-caused by this was reported by Qian Cai.
+The following patches introduce MAC/VLAN filter suport for mlx5 vdpa.
+First patch remove code that uses hardware counters which are not
+necessary anymore.
+Second patch add missing struct to carry VLAN IDs.
+The third patch is the actual vlan MAC/VLAN filtering implementation. 
 
-Link: https://patchwork.kernel.org/comment/24798260/ [1]
-Fixes: 8aa82df3c123 ("arm64: mm: add p?d_leaf() definitions")
-Reported-by: Qian Cai <quic_qiancai@quicinc.com>
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
----
-v2:
-- Replace pmd_present() with pmd_val() since we expect pmd_leaf() works
-  well on non-present pmd case.
+Eli Cohen (3):
+  vdpa/mlx5: Remove flow counter from steering
+  virtio_net: Add control VQ struct to carry vlan id
+  vdpa/mlx5: Add RX MAC VLAN filter support
 
- arch/arm64/include/asm/pgtable.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/vdpa/mlx5/net/mlx5_vnet.c | 292 ++++++++++++++++++++++--------
+ include/uapi/linux/virtio_net.h   |   3 +
+ 2 files changed, 222 insertions(+), 73 deletions(-)
 
-diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-index ad9b221963d4..00cdd2d895d3 100644
---- a/arch/arm64/include/asm/pgtable.h
-+++ b/arch/arm64/include/asm/pgtable.h
-@@ -551,7 +551,7 @@ extern pgprot_t phys_mem_access_prot(struct file *file, unsigned long pfn,
- 				 PMD_TYPE_TABLE)
- #define pmd_sect(pmd)		((pmd_val(pmd) & PMD_TYPE_MASK) == \
- 				 PMD_TYPE_SECT)
--#define pmd_leaf(pmd)		pmd_sect(pmd)
-+#define pmd_leaf(pmd)		(pmd_val(pmd) && !(pmd_val(pmd) & PMD_TABLE_BIT))
- #define pmd_bad(pmd)		(!pmd_table(pmd))
- 
- #define pmd_leaf_size(pmd)	(pmd_cont(pmd) ? CONT_PMD_SIZE : PMD_SIZE)
 -- 
-2.11.0
+2.35.1
 

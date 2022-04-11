@@ -2,60 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 297C24FB730
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 11:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B7934FB736
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 11:18:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244457AbiDKJTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 05:19:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39856 "EHLO
+        id S1344318AbiDKJVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 05:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236206AbiDKJTL (ORCPT
+        with ESMTP id S235213AbiDKJU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 05:19:11 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C74E2C67F
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 02:16:58 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C22B2ED1;
-        Mon, 11 Apr 2022 02:16:57 -0700 (PDT)
-Received: from [10.163.38.140] (unknown [10.163.38.140])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A9ABB3F73B;
-        Mon, 11 Apr 2022 02:16:51 -0700 (PDT)
-Message-ID: <46a99793-2e24-f3c5-c63f-ab2ad88966ea@arm.com>
-Date:   Mon, 11 Apr 2022 14:47:26 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v4 2/2] arm64: mm: hugetlb: Enable
- HUGETLB_PAGE_FREE_VMEMMAP for arm64
+        Mon, 11 Apr 2022 05:20:59 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08on2073.outbound.protection.outlook.com [40.107.100.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B302CC87;
+        Mon, 11 Apr 2022 02:18:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AJjrckAUIF20lCKkmC9wv8VPmAHEwQMCB3K0vq2KmzQYWsH11cqlkWXT9ofzqA44PWlkh4/0HKFJGAW8A0zXARtc/+v9wThfoOkN7FEo8TDgjWWgoA4tjWBamwItAvNX1VtVopIeQb9BJ8m5pia+eAf8tnOd2IOfiZwvyPMhLL6vhGvSLYA1GH21INgPyr7cH4LmfUZhsWJtNk2G7wQ84ZlBeMDZYCT5aeiLJs3ri9hG8LVxlL4rVZuhBBicHEB/ekUJzvKK2iMFJIvuEuWSv7jHK6s7gJ5bhypSULzXdqlAxqpYzndQYB8UxWAAbm1SRd7c2CuOa9qOsqAcrxJgKg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XYihiIgFzQ2wo7fdbF09jXIxG0+Gq0PcsOKTsd8EAM4=;
+ b=bUGjdr0DHsBBx5pkKSdvASXukLOIpIlpFRANLe0E/gBBh1lPgBuZHt1h1laQmMuO+/zaiKjqCRci1Et5ShvLLHnUSBq4ea0Naia+fJsuP28b2DiKUMLHrC6tvxJOExfF8FYSV++aCGe66AjthlE+f3Xa2B+Q5tzRbS05bmERfZPpSLdiEzwYtjEpWM+DnmKL7E2WO5TjyzMW5yCi68Q93JiPWF4WWpwRWEdjkmwulHjmTvFVbvHj+cZgm/c+BpITcN+rNTKYsEFouLoVv428D5qAofMpLGdyYGBtDwk17w15Vk2J/k/71SAw68NTmY9PQ4gA8jdMSFVvOiZqJpADZA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XYihiIgFzQ2wo7fdbF09jXIxG0+Gq0PcsOKTsd8EAM4=;
+ b=eENLSwLK6hlACtoJD2AUF/l3ZOL7zCYo0F53AgP+YndekKGRJekRzEz1icChMXTZaJnc8iaBLTFJVZpHRtdCoTwJN1IN0HaWdc0zcijDJlpTQkGLQadTHDpmuJdFAhS/jc7/jvt8jMFjDpg6vR/vguBeIi0i4VcKonlhfNCKEzvmRex9fU97ihJ1R08nPdn/gMWnUQfbSYOw4AvhG/FOP1/Kkl4eGHJdOnEJBd1eG9Adqfc/mYIJgdKJ9jojWF3oHdSTzjWLM9ScdEgHfBIBNBTziUJg8qFy/tjm4q5sfugw7+r8uX5bEp8exAwXwM9F0YZfSvRT6pceTuKl5Cu7Ww==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from SA0PR12MB4349.namprd12.prod.outlook.com (2603:10b6:806:98::21)
+ by PH7PR12MB5877.namprd12.prod.outlook.com (2603:10b6:510:1d5::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.28; Mon, 11 Apr
+ 2022 09:18:43 +0000
+Received: from SA0PR12MB4349.namprd12.prod.outlook.com
+ ([fe80::e15c:41ca:1c76:2ef]) by SA0PR12MB4349.namprd12.prod.outlook.com
+ ([fe80::e15c:41ca:1c76:2ef%4]) with mapi id 15.20.5144.029; Mon, 11 Apr 2022
+ 09:18:43 +0000
+Message-ID: <3414a89d-bb80-ec89-3605-e435c7656321@nvidia.com>
+Date:   Mon, 11 Apr 2022 14:48:28 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [Patch v6 1/4] memory: tegra: Add memory controller channels
+ support
 Content-Language: en-US
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        David Rientjes <rientjes@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>, james.morse@arm.com,
-        Barry Song <21cnbao@gmail.com>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Xiongchun duan <duanxiongchun@bytedance.com>,
-        Fam Zheng <fam.zheng@bytedance.com>,
-        Muchun Song <smuchun@gmail.com>
-References: <20220331065640.5777-1-songmuchun@bytedance.com>
- <20220331065640.5777-2-songmuchun@bytedance.com>
- <d6e2581e-a8ac-4848-2c64-4a221bd03bca@arm.com>
- <CAMZfGtWyXmPwZWsH_pP_M7p30uBww8BdP0DRXQRjBkT_VP=uUA@mail.gmail.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <CAMZfGtWyXmPwZWsH_pP_M7p30uBww8BdP0DRXQRjBkT_VP=uUA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        krzysztof.kozlowski@linaro.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     vdumpa@nvidia.com, Snikam@nvidia.com
+References: <20220406052459.10438-1-amhetre@nvidia.com>
+ <20220406052459.10438-2-amhetre@nvidia.com>
+ <3bbbffff-6aa3-7068-6f0c-4372d53daf94@gmail.com>
+ <ba28886f-be5d-9ab2-41d0-942609934263@nvidia.com>
+ <0ce65e42-6567-9fd5-d959-3bc5aa0457eb@collabora.com>
+ <16d5c86b-cb04-5f57-7923-724850ce2633@nvidia.com>
+ <185f72b6-e6a1-3062-5f36-864973d12ec5@collabora.com>
+From:   Ashish Mhetre <amhetre@nvidia.com>
+In-Reply-To: <185f72b6-e6a1-3062-5f36-864973d12ec5@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MA0PR01CA0002.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a01:80::8) To SA0PR12MB4349.namprd12.prod.outlook.com
+ (2603:10b6:806:98::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b0b73a3e-4801-4693-1468-08da1b9c45c3
+X-MS-TrafficTypeDiagnostic: PH7PR12MB5877:EE_
+X-Microsoft-Antispam-PRVS: <PH7PR12MB587792DFC70693A663793778CAEA9@PH7PR12MB5877.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: GID/BxMJngsO55UC7jCA2Ljb3yiP4ZBnY7bYE165jLxCC1mkZJt4xw/x3rDEkgyE7pVfP3jnjCiC0yZyv3DStalBHNBShR9XYPG2tFDzATqCrvb4Y1HXQ7EQ1WksIELS/cEUt++mhKE0g/LmIKMpECngL5pbJC+KWnXpRxyBMmmYEq76l04YNPWMbnxJWYpMJlcE6+C5Q98Bn4pFxvJBSVQW8L4iNHlPvuZj6l6nfDio3yhWYzawzeR33MtVkvuOAiGzFsKJmUDUw4XvXx+/eCmmQxOZ5QrbZaAJ9be9eRsWE3h9rplcGUcnN+vPebiUHf2o6fKBE8IBUUgNxbbnJCifsfLjVjqm/8ykV6xXnnH+MtfBENfcg9Hk7kml0pa3srM2rFvlgaT8mU5nN4qHHhKKOnSBYjVLSmSGHco598Lx0v17PqF5JW76zPPMp0LUlorYNVmOKQUcDkzdYJ8Wf4gO35UklUm2EfMHtt8nmR/Dkzjig8KIuiKNrLm8TwOJ0s4WvCXyjolU0Uy2r9M0zA/wK4HDu1K4z7rC58nPbh8lk5QwGKyFQqTn1+1jb8VF6xaC9t9nkBMC5B6uD+0UYQRhIibJfnN7PMZ3KOqgx8mHJ5DDLROhCrSIp3kxUVEPVsC5Ys4IKi535T7Qc5i9cqazctSV/fGe8fBFa7jlkzhMOxlW5TGMjMaApYoKR8mWpNbUNfK3qULgj4NLEqx/3ppG9Z8I9orCL/4lv9jf7kvxMEl8P6IU7SvP+/+l8eJkfJO6/dHVfSgabdXsrJEDnA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA0PR12MB4349.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(110136005)(921005)(6486002)(31696002)(38100700002)(8936002)(4326008)(66946007)(316002)(66476007)(8676002)(5660300002)(508600001)(66556008)(26005)(186003)(107886003)(6506007)(83380400001)(6666004)(2616005)(55236004)(6512007)(53546011)(31686004)(2906002)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RVZKOVREYktYY2FBOXp2U05RdjJYUlF6ZXdXb2hjOTZPdURkL1FhdXluYm8z?=
+ =?utf-8?B?NnQvdzhocHZ5NWZWQlc2aGxqcDZxaGNSN3JuNzdUM3VVNXJOakgvaHNHYy8r?=
+ =?utf-8?B?aGowdXpVajhLek9iMk1BWFJnaW11b0RvQmJKd0o2K0tzZHNpaGtFT08yWmlY?=
+ =?utf-8?B?c0haWEtZbzdqcXc5RGJjQzdvdldwa2tWenNYVmpuQ3pPWXkxczVPZXhOYTNm?=
+ =?utf-8?B?QzBrZ3JvZzVORDFZdThpc1pIQWlEODZIQzZnQXBjdHBaU2hScnU4bnBUbks3?=
+ =?utf-8?B?TW5rQmNYVHFVeElmems1b3liVE9xS084RVQrMTc4c1BZMVg3Ti9Dd1hPWEc5?=
+ =?utf-8?B?SUx6d3lqQ3N0VUFjMlMxTmRJOWR2dVo5QW9WdnpGN2o3YldCTGlrajdmenhn?=
+ =?utf-8?B?NUhySlBuMnpCQmN4WXkzVzhCYzBmaFRUTFR2S25oSkpKTmVLbkhqK2hiblFy?=
+ =?utf-8?B?eGNEMkliMjFZSkRlTmY2em5taGd0TU1mQ1pPU0t0MmM0WFVIWVpEd1VtQUVj?=
+ =?utf-8?B?TUo3a3pybThxZDVQNHpYaXpRcGQxRGpOZEwzbGl4ZU9FZTcyTG5aMUJMdGJR?=
+ =?utf-8?B?djNRYmhFMXM2S2xycFFtaEpOYjZEWUFGVDdNTmw3SnlMWTJqYW04c00wTyts?=
+ =?utf-8?B?OUxqcnh6L0h4b05qRWNFcGNhckpici82VW5saDZ3dFRkSnc0OXQxOVBwUkFt?=
+ =?utf-8?B?VGJzTTg5UFVMbXpVTkx6aUNteW1XS29YTjNOYnQvdXltYjVtNFA2cVlMWHEv?=
+ =?utf-8?B?U1NzVGVlSmpldFRmNHNNdnRqUXlEcm90SGtWbFg0NEJlc20yY016ZUQyUFIx?=
+ =?utf-8?B?MVVYWHNsU3dMcTkvUHZDWERzMVpBbFNaZTZKOUsrWGZWUHRCc1EzdWNodjhx?=
+ =?utf-8?B?ODA2TmU3SDBOZEVYTjRVT1dNZDkzWVVLMlBmaE5YRWVLa3NEbmZXU0RkNzdX?=
+ =?utf-8?B?bjFncVBVVlMrc2Z3Q01TVkx2UEdDemxBdXhScVdQWE9UbGhzczgrVkVXdU5K?=
+ =?utf-8?B?dFVHOGFmdksvcVVYRzQ3Rk93WjlMM3VpS0IyY3NRQWZ6Z29tUDVBWnRFZndP?=
+ =?utf-8?B?VFpVTTcwL1JzdENPSUVCSDJQZTVyNlZxWG9aTjlmYmtMcjdBUWUwaW9rUGVY?=
+ =?utf-8?B?SGFtZWxseUhTK1FKUWhJNVRVbmxPUTVaQTZ1blRvVW4xMllMMDJpdld6a2JE?=
+ =?utf-8?B?TVQ2S3JpVXNWSGxudHRERjFvUkN1YmxQUnQ3Z090bWo5S3FEa2RaUFd6K01Z?=
+ =?utf-8?B?em9DNm9WZnI3ZG9EaW1sZTZwWkhPT2tMMEtDQ1dHWDdJT2V0S3hrazVvV3M5?=
+ =?utf-8?B?RS9jUm0rWWl5Nm9pZE12YVRweDBhK3dKK1hsUWlzdGUzTDF3NU1JQTgwUmM1?=
+ =?utf-8?B?d3ZqSjZJanRhQmcvZzRhWVNobVY2ejZJQkozTUdFKzA5R3JDUkZKRFNKSnFl?=
+ =?utf-8?B?UmV1OGR3RzNiU250MU0rRjVPcEtNYm1ZOFhuczBPSlBySkpFS1lnZXN3cGxy?=
+ =?utf-8?B?ZnlYRGdlN2xCZFhUT056RkRtVFlSSDk0RzJBVFNtQndKSzRkUHcxT002TnBh?=
+ =?utf-8?B?Rkc5ckxOc0Fac3JyTUZiWUllUTdvZ3pqY0VwWmJPTEZ6T2lGTDNZSFE5QWp5?=
+ =?utf-8?B?S3YvNm0wOTNDQ1hXVGJQWWpRUTZQaFprOWFaTTdPZlFVdUUzRlptTG5DM2U1?=
+ =?utf-8?B?a0FmZjF0bzl3VTJyTU9ubkRhSEFwUnAvWU1UVEh0aDliQUxZMGV0R0hsWWJh?=
+ =?utf-8?B?Ri8ra3VDSUd6aHJuSnk2dWdOVEs5bndhWHVhQXNQQmJ0Q1l4Z0l5K1pEaVpX?=
+ =?utf-8?B?QVBBald4UkhORHBka2tmaHlMUEZwUDFvS29OVi9iNmVKVDlOSWhmTWtnbzVJ?=
+ =?utf-8?B?TjBVM0ZRS3hMcUVyV2l3bGFUaCs1bzJvd1BDTm82UlNkVEFEMjRTMEdFcllr?=
+ =?utf-8?B?bkNHSnZmcklIeGRUdUFQVUs3WmgxVGViZUY2cmFlcTBuU1ZmdUFZQVNEM0dE?=
+ =?utf-8?B?ZWZkUld6Zi80dlBFcmFFdVd0dVVPeFNkUDJUdndibEg2Q3liV0hXSVZ2SE5R?=
+ =?utf-8?B?WkhDOWhRSGtOUzE4Mmo5RmpSZW55ekRzRmQzYThjZ01BOWY0RHNaeVg2dkVV?=
+ =?utf-8?B?ZGJTa0hlMnAwcVZKNWpaS0xOMVRuNm1VaHpWVEVXZHErcERsYytNZmRBYjVX?=
+ =?utf-8?B?SUtKeVFnRjZCWE1iZWlHMDc3Slk3N2E0MDEvb2x0Qm9Qc2l5MU45ZDU1d01h?=
+ =?utf-8?B?Z21ldkNQNHFvMmlzMnowOGgrTVVEUHVKaUtFL1RZNEI5dlg2cXo5ZkxBZW1u?=
+ =?utf-8?B?dldQN3R0QUFyMkFuN01RdGJ5WjdnN1NqMW9ybzJKTUZWdFlxVTVRUT09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b0b73a3e-4801-4693-1468-08da1b9c45c3
+X-MS-Exchange-CrossTenant-AuthSource: SA0PR12MB4349.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2022 09:18:42.9212
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 88ZdKragvyE4J+ieyqhNZv2o5GSHEWdO3gqIFE9uCIhL+98uh30W4eaI5B0m7ujUgvsirBfYDFB8vvo7KTcNVQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5877
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -64,107 +143,75 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 4/5/22 14:08, Muchun Song wrote:
-> On Tue, Apr 5, 2022 at 12:44 PM Anshuman Khandual
-> <anshuman.khandual@arm.com> wrote:
+On 4/11/2022 1:05 PM, Dmitry Osipenko wrote:
+> External email: Use caution opening links or attachments
+> 
+> 
+> On 4/11/22 10:28, Ashish Mhetre wrote:
 >>
 >>
->>
->> On 3/31/22 12:26, Muchun Song wrote:
->>> 1st concern:
->>> '''
->>> But what happens when a hot remove section's vmemmap area (which is
->>> being teared down) is nearby another vmemmap area which is either created
->>> or being destroyed for HugeTLB alloc/free purpose. As you mentioned
->>> HugeTLB pages inside the hot remove section might be safe. But what about
->>> other HugeTLB areas whose vmemmap area shares page table entries with
->>> vmemmap entries for a section being hot removed ? Massive HugeTLB alloc
->>> /use/free test cycle using memory just adjacent to a memory hotplug area,
->>> which is always added and removed periodically, should be able to expose
->>> this problem.
->>> '''
+>> On 4/11/2022 12:03 PM, Dmitry Osipenko wrote:
+>>> External email: Use caution opening links or attachments
 >>>
->>> Answer: At the time memory is removed, all HugeTLB pages either have been
->>> migrated away or dissolved.  So there is no race between memory hot remove
->>> and free_huge_page_vmemmap().  Therefore, HugeTLB pages inside the hot
->>> remove section is safe.  Let's talk your question "what about other
->>
->> HugeTLB pages inside the memory range is safe but concern is about the
->> vmemmap mapping for the HugeTLB which might share intermediate entries
->> with vmemmap mapping for the memory range/section being removed.
-> 
-> The shared page table level only could be PMD, PUD and PGD, the PTE
-> page table cannot be shared with other sections, and we only exchange
-> PTEs for vmemmap mapping.
-
-Right, the shared entries (if any) are not at the leaf level.
-
-> 
->>
->>> HugeTLB areas whose vmemmap area shares page table entries with vmemmap
->>> entries for a section being hot removed ?", the question is not
->>
->> Right.
->>
->>> established.  The minimal granularity size of hotplug memory 128MB (on
->>> arm64, 4k base page), any HugeTLB smaller than 128MB is within a section,
->>> then, there is no share PTE page tables between HugeTLB in this section
->>
->> 128MB is the hot removable granularity but, its corresponding vmemmap
->> range is smaller i.e (128MB/4K) * sizeof(struct page). Memory section
->> getting hot removed (its vmemmap mapping being teared down) along with
->> HugeTLB (on another section) vmemmap remap operation, could not collide
->> while inside vmemmap mapping areas on init_mm ?
-> 
-> The boundary address of a section is aligned with 128MB and its
-> corresponding vmemmap boundary address is aligned with 2MB
-> which is mapped with a separated PTE page table (or a PMD entry).
-
-Even if these PMD entries split during HugeTLB remapping, they will not
-conflict with another memory section being removed simultaneously. Also
-any shared page table pages will not be freed, during memory hot remove
-operation as vmemmap remap does not delete any entries.
-
-But just wondering if during PMD slit and PTE page table page addition,
-these PMD entries could not be empty, even temporarily ?
-
-> Different sections do not share the same PTE, there are no conflicts
-> between a hot removed section and a remapping vmemmap section
-> since we are operating on different PTE. Right?
-> 
->>
->>> and ones in other sections and a HugeTLB page could not cross two
->>> sections.  In this case, the section cannot be freed.  Any HugeTLB bigger
->>
->> Right, they dont cross into two different sections.
->>
->>> than 128MB (section size) whose vmemmap pages is an integer multiple of
->>> 2MB (PMD-mapped).  As long as:
 >>>
->>>   1) HugeTLBs are naturally aligned, power-of-two sizes
->>>   2) The HugeTLB size >= the section size
->>>   3) The HugeTLB size >= the vmemmap leaf mapping size
+>>> On 4/11/22 09:05, Ashish Mhetre wrote:
+>>>>
+>>>>
+>>>> On 4/10/2022 7:48 PM, Dmitry Osipenko wrote:
+>>>>> External email: Use caution opening links or attachments
+>>>>>
+>>>>>
+>>>>> 06.04.2022 08:24, Ashish Mhetre пишет:
+>>>>>> +     num_dt_channels =
+>>>>>> of_property_count_elems_of_size(pdev->dev.of_node, "reg",
+>>>>>> +                                                       reg_cells *
+>>>>>> sizeof(u32));
+>>>>>> +     /*
+>>>>>> +      * On tegra186 onwards, memory controller support multiple
+>>>>>> channels.
+>>>>>> +      * Apart from regular memory controller channels, there is one
+>>>>>> broadcast
+>>>>>> +      * channel and one for stream-id registers.
+>>>>>> +      */
+>>>>>> +     if (num_dt_channels < mc->soc->num_channels + 2) {
+>>>>>> +             dev_warn(&pdev->dev, "MC channels are missing, please
+>>>>>> update memory controller DT node with MC channels\n");
+>>>>>> +             return 0;
+>>>>>> +     }
+>>>>>> +
+>>>>>> +     mc->bcast_ch_regs = devm_platform_ioremap_resource_byname(pdev,
+>>>>>> "mc-broadcast");
+>>>>>> +     if (IS_ERR(mc->bcast_ch_regs))
+>>>>>> +             return PTR_ERR(mc->bcast_ch_regs);
+>>>>>
+>>>>> Looks to me that you don't need to use
+>>>>> of_property_count_elems_of_size()
+>>>>> and could only check the "mc-broadcast" presence to decide whether this
+>>>>> is an older DT.
+>>>>>
+>>>> Now that we are using reg-names in new DT, yes it'd be fine to just
+>>>> check mc-broadcast to decide it's a new or old DT.
+>>>>
+>>>>> mc->bcast_ch_regs = devm_platform_ioremap_resource_byname(pdev,
+>>>>> "broadcast");
+>>>>> if (IS_ERR(mc->bcast_ch_regs)) {
+>>>>>            dev_warn(&pdev->dev, "Broadcast channel is missing, please
+>>>>> update your
+>>>>> device-tree\n");
+>>>>>            return PTR_ERR(mc->bcast_ch_regs);
+>>>>> }
+>>>>
+>>>> return 0;
+>>>>
+>>>> to avoid DT ABI break, right?
 >>>
->>> Then a HugeTLB will not share any leaf page table entries with *anything
->>> else*, but will share intermediate entries.  In this case, at the time memory
->>> is removed, all HugeTLB pages either have been migrated away or dissolved.
->>> So there is also no race between memory hot remove and
->>> free_huge_page_vmemmap().
+>>> Yes, it should be "return 0".
 >>
->> If they just share intermediate entries, free_empty_tables() will not free
->> up page table pages, as there will be valid non-zero entries in them. But
+>> But if we "return 0" from here, then what about the case when ioremap()
+>> actually fails with new DT i.e. when broadcast reg is present in DT?
+>> In that case error should be returned and probe should be failed, right?
 > 
-> Right.
-> 
->> the problem here is not UAF, its accessing wrong entries and crashing while
->> de-referncing the pointer. Hence I am wondering if no such scenario can be
->> possible.
->>
-> 
-> What's the wrong entries? You mean the reused vmemmap page entries?
-> If so, I think free_empty_tables() will not cause any crash.  The hot removed
-> operation couldn't reach those entries since those addresses mapped with
-> those reused entries are not included in the range of the hot removed section.
+> You should check for the -ENOENT.
 
-Fair enough. I guess if intermediate PMD entries during split, during HugeTLB
-vmemmap remap, cannot be empty (even temporarily), this should be fine.
+I checked __devm_ioremap_resource(), it returns -EINVAL if given
+resource is not present. So should we check for -EINVAL instead?

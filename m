@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8467B4FB199
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 04:09:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C78A4FB19B
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 04:09:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243468AbiDKCLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 22:11:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53514 "EHLO
+        id S244337AbiDKCLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 22:11:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239877AbiDKCLK (ORCPT
+        with ESMTP id S239877AbiDKCLa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 22:11:10 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9800C1AD89;
-        Sun, 10 Apr 2022 19:08:57 -0700 (PDT)
-Received: from canpemm500007.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KcC0W6PZwzgYZ2;
-        Mon, 11 Apr 2022 10:07:07 +0800 (CST)
+        Sun, 10 Apr 2022 22:11:30 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB521ADAE;
+        Sun, 10 Apr 2022 19:09:14 -0700 (PDT)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KcC2H6qNyz1HBJm;
+        Mon, 11 Apr 2022 10:08:39 +0800 (CST)
 Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
  (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 11 Apr
- 2022 10:08:55 +0800
+ 2022 10:09:12 +0800
 From:   YueHaibing <yuehaibing@huawei.com>
-To:     <kvalo@kernel.org>, <davem@davemloft.net>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <quic_cjhuang@quicinc.com>,
-        <quic_bqiang@quicinc.com>
-CC:     <ath11k@lists.infradead.org>, <linux-wireless@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH] ath11k: Fix build warning without CONFIG_IPV6
-Date:   Mon, 11 Apr 2022 10:08:43 +0800
-Message-ID: <20220411020843.10284-1-yuehaibing@huawei.com>
+To:     <lgirdwood@gmail.com>, <broonie@kernel.org>, <perex@perex.cz>,
+        <tiwai@suse.com>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>, <spujar@nvidia.com>,
+        <yuehaibing@huawei.com>
+CC:     <alsa-devel@alsa-project.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH -next] ASoC: tegra186_asrc: mark runtime-pm functions as __maybe_unused
+Date:   Mon, 11 Apr 2022 10:09:08 +0800
+Message-ID: <20220411020908.580-1-yuehaibing@huawei.com>
 X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
@@ -49,38 +49,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drivers/net/wireless/ath/ath11k/mac.c:8175:13: error: ‘ath11k_mac_op_ipv6_changed’ defined but not used [-Werror=unused-function]
- static void ath11k_mac_op_ipv6_changed(struct ieee80211_hw *hw,
-             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+sound/soc/tegra/tegra186_asrc.c:90:12: error: ‘tegra186_asrc_runtime_resume’ defined but not used [-Werror=unused-function]
+ static int tegra186_asrc_runtime_resume(struct device *dev)
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+sound/soc/tegra/tegra186_asrc.c:80:12: error: ‘tegra186_asrc_runtime_suspend’ defined but not used [-Werror=unused-function]
+ static int tegra186_asrc_runtime_suspend(struct device *dev)
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Wrap it with #ifdef block to fix this.
+Mark these functions as __maybe_unused to avoid this kind of warning.
 
-Fixes: c3c36bfe998b ("ath11k: support ARP and NS offload")
+Fixes: a2df8c2d5b36 ("ASoC: tegra: Add Tegra186 based ASRC driver")
 Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 ---
- drivers/net/wireless/ath/ath11k/mac.c | 2 ++
- 1 file changed, 2 insertions(+)
+ sound/soc/tegra/tegra186_asrc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/ath11k/mac.c b/drivers/net/wireless/ath/ath11k/mac.c
-index ca998fb13b62..18a2994b6d85 100644
---- a/drivers/net/wireless/ath/ath11k/mac.c
-+++ b/drivers/net/wireless/ath/ath11k/mac.c
-@@ -8151,6 +8151,7 @@ static void ath11k_mac_op_sta_statistics(struct ieee80211_hw *hw,
- 	}
+diff --git a/sound/soc/tegra/tegra186_asrc.c b/sound/soc/tegra/tegra186_asrc.c
+index 3c1e20cbb319..9f12faaa609d 100644
+--- a/sound/soc/tegra/tegra186_asrc.c
++++ b/sound/soc/tegra/tegra186_asrc.c
+@@ -77,7 +77,7 @@ static void tegra186_asrc_lock_stream(struct tegra186_asrc *asrc,
+ 		     1);
  }
  
-+#if IS_ENABLED(CONFIG_IPV6)
- static void ath11k_generate_ns_mc_addr(struct ath11k *ar,
- 				       struct ath11k_arp_ns_offload *offload)
+-static int tegra186_asrc_runtime_suspend(struct device *dev)
++static int __maybe_unused tegra186_asrc_runtime_suspend(struct device *dev)
  {
-@@ -8245,6 +8246,7 @@ static void ath11k_mac_op_ipv6_changed(struct ieee80211_hw *hw,
- 	/* generate ns multicast address */
- 	ath11k_generate_ns_mc_addr(ar, offload);
- }
-+#endif
+ 	struct tegra186_asrc *asrc = dev_get_drvdata(dev);
  
- static void ath11k_mac_op_set_rekey_data(struct ieee80211_hw *hw,
- 					 struct ieee80211_vif *vif,
+@@ -87,7 +87,7 @@ static int tegra186_asrc_runtime_suspend(struct device *dev)
+ 	return 0;
+ }
+ 
+-static int tegra186_asrc_runtime_resume(struct device *dev)
++static int __maybe_unused tegra186_asrc_runtime_resume(struct device *dev)
+ {
+ 	struct tegra186_asrc *asrc = dev_get_drvdata(dev);
+ 	int id;
 -- 
 2.17.1
 

@@ -2,127 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3A844FBD4B
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 15:38:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4CD34FBD51
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 15:38:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346593AbiDKNkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 09:40:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35080 "EHLO
+        id S1346590AbiDKNk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 09:40:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343774AbiDKNj7 (ORCPT
+        with ESMTP id S1343774AbiDKNkY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 09:39:59 -0400
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980CE21E15;
-        Mon, 11 Apr 2022 06:37:44 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-2ec0bb4b715so36924437b3.5;
-        Mon, 11 Apr 2022 06:37:44 -0700 (PDT)
+        Mon, 11 Apr 2022 09:40:24 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5861521E15
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 06:38:10 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id g18so5983382ejc.10
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 06:38:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yJY5oOKjorrHxmexlsMH/Hti9QwhC0oVd/Eyc2mbwG0=;
+        b=OmKUnwvfhDqcpiaKjTQbI6Qnu8Sf+6VZ9D9C9+11QRZJ8UM4bw5KC4TRF+VX2MyUlF
+         tjcQu6vqOm9Z7CfqQs46eZM9lBwaV/9IXtigcyYK6aTz2mXIUEvaBEQKyVtZFvwOhIdC
+         Qg5hbGJLnbUj4QPBxZJqO4hZPQyc+NFdJgUmE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=JRPXgS5rrx6sR3zmq2oBDmmbLAxRyhhEfq8PnmXGKOM=;
-        b=2AzEJp8uHtvEYuA30WTRhmiGMQsAY4eNTevitTDpewlCkigB8iwV2qtDfs+K9X3TeT
-         2RR2ybbdq8yvafWtzCoVmwXU8ZOe0hIvm91O+G1Ft7SCq33d4f7VGFPxHxcBWdB6bzru
-         uDuP6AerQ1edpcbprO1AR37UEnOnJxdYriMYrZhRbXj5umjHccHLof9tAEizeDovCKLq
-         DEBK1HfonCb215g2/OBUB+2axeGQgTemA6cZIN5ODtH4hSb/dzk/eis5R0TZBICH4sFL
-         v+Z9fNtjPWh0HwnO8bfDzRXzURhnWL4Jl2K0lq1Kh6OiOmb1xRNqT0Eq5afN0kB5SUcN
-         w0Zg==
-X-Gm-Message-State: AOAM531DhT4d0EMRwnP5pq0q5TG+Mmy/4VB7fipe5G9RvEsI8pKNIdPS
-        qMd2ew1Jzn3+yknmfkh36fbWPLagmSLaiCjaqpk=
-X-Google-Smtp-Source: ABdhPJyhw5qM8ctioGl3thWlFUF30jRwNh4wXQXwAC0cABjUGnWdrf7vIaM69biH2WE4vgddp60f9gD5LOtpkE9v3b8=
-X-Received: by 2002:a81:ece:0:b0:2ec:9f8:acba with SMTP id 197-20020a810ece000000b002ec09f8acbamr5286430ywo.149.1649684263810;
- Mon, 11 Apr 2022 06:37:43 -0700 (PDT)
+        bh=yJY5oOKjorrHxmexlsMH/Hti9QwhC0oVd/Eyc2mbwG0=;
+        b=fkWSBBfZach5PWIDH1PRLOdBf4P381GGKW43UazBi7e+WN2DYWPsiyad3Rt0aeINBp
+         0zSVGOcZIyIKG5nuXscu+1nE3oefysinlj5NzYnOcOksMZSgdqyByop5+3OmLTcA2yzE
+         S0xhCqGJ835BAAmV6R9kuyhzin7lTb9oWIP71uGAMwixJdsyurkeKlG5U4vlJmtk89Wk
+         Z+JKr1uSZMU2pSwyrdmgY8w5X7NR1Nqtg+PbGkTv2RyP/3WmGFIjBFzcigNm/JdBunSj
+         BCv0+Iyb34Nvx6IJR28eYM1c92H/mK0SaTIaD85v+e1mcprELMIzOqYq8NWDd9JaZXJE
+         zgkw==
+X-Gm-Message-State: AOAM531S/uRuiH/XfnG9Q4ejPf+WLCJs+fuP9fEYXlMjgTiytUbEE+8o
+        nw8Vqq8tdNCuZFFwrmVsezCBMy2JgtAJhg==
+X-Google-Smtp-Source: ABdhPJwxvnCnArbIARaV3PGor22jHvyjSaiIwSmQgqdrbOQY1B1vcrlQlpoNrrkJNYPcmYjt8ZpkWQ==
+X-Received: by 2002:a17:906:8301:b0:6e4:896d:59b1 with SMTP id j1-20020a170906830100b006e4896d59b1mr29099045ejx.396.1649684288662;
+        Mon, 11 Apr 2022 06:38:08 -0700 (PDT)
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com. [209.85.128.44])
+        by smtp.gmail.com with ESMTPSA id v2-20020a17090606c200b006a728f4a9bcsm12037526ejb.148.2022.04.11.06.38.07
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Apr 2022 06:38:07 -0700 (PDT)
+Received: by mail-wm1-f44.google.com with SMTP id u17-20020a05600c211100b0038eaf4cdaaeso3463938wml.1
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 06:38:07 -0700 (PDT)
+X-Received: by 2002:a05:600c:3ca4:b0:38e:54d0:406d with SMTP id
+ bg36-20020a05600c3ca400b0038e54d0406dmr28939846wmb.199.1649684286640; Mon, 11
+ Apr 2022 06:38:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <Yk7aeAcKIBrTupcq@debian-BULLSEYE-live-builder-AMD64> <708fb1ec-4e57-7a1d-b0a0-a3a10b3cacf3@redhat.com>
-In-Reply-To: <708fb1ec-4e57-7a1d-b0a0-a3a10b3cacf3@redhat.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 11 Apr 2022 15:37:32 +0200
-Message-ID: <CAJZ5v0g2UDOR3mYsdqnPcpYgmecY706YQcTKTWMRtezkK0sfaQ@mail.gmail.com>
-Subject: Re: [PATCH RESEND v6] platform: x86: Add ChromeOS ACPI device driver
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Mark Gross <markgross@kernel.org>,
-        Collabora Kernel ML <kernel@collabora.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Dmitry Torokhov <dtor@chromium.org>,
-        Gwendal Grignou <gwendal@chromium.org>, vbendeb@chromium.org,
-        Andy Shevchenko <andy@infradead.org>,
-        Ayman Bagabas <ayman.bagabas@gmail.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        =?UTF-8?Q?Bla=C5=BE_Hrastnik?= <blaz@mxxn.io>,
-        Darren Hart <dvhart@infradead.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jeremy Soller <jeremy@system76.com>,
-        Mattias Jacobsson <2pi@mok.nu>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Rajat Jain <rajatja@google.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Enric Balletbo i Serra <eballetbo@gmail.com>
+References: <20220409023628.2104952-1-dianders@chromium.org>
+ <20220408193536.RFC.1.I4182ae27e00792842cb86f1433990a0ef9c0a073@changeid> <87o818hvcn.fsf@intel.com>
+In-Reply-To: <87o818hvcn.fsf@intel.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 11 Apr 2022 06:37:54 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Uzp7wm3gs0pROw_e_-61tphTeXD_6wEP1AOs=Kfdgh7A@mail.gmail.com>
+Message-ID: <CAD=FV=Uzp7wm3gs0pROw_e_-61tphTeXD_6wEP1AOs=Kfdgh7A@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/6] drm/dp: Helpers to make it easier for drivers to
+ use DP AUX bus properly
+To:     Jani Nikula <jani.nikula@linux.intel.com>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Philip Chen <philipchen@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Robert Foss <robert.foss@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 3:26 PM Hans de Goede <hdegoede@redhat.com> wrote:
+Hi,
+
+On Mon, Apr 11, 2022 at 1:34 AM Jani Nikula <jani.nikula@linux.intel.com> wrote:
 >
-> Hi,
->
-> On 4/7/22 14:35, Muhammad Usama Anjum wrote:
-> > From: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+> On Fri, 08 Apr 2022, Douglas Anderson <dianders@chromium.org> wrote:
+> > As talked about in the kerneldoc for "struct dp_aux_ep_client" in this
+> > patch and also in the past in commit a1e3667a9835 ("drm/bridge:
+> > ti-sn65dsi86: Promote the AUX channel to its own sub-dev"), to use the
+> > DP AUX bus properly we really need two "struct device"s. One "struct
+> > device" is in charge of providing the DP AUX bus and the other is
+> > where we'll try to get a reference to the newly probed endpoint
+> > devices.
 > >
-> > The x86 Chromebooks have ChromeOS ACPI device. This driver attaches to
-> > the ChromeOS ACPI device and exports the values reported by ACPI in a
-> > sysfs directory. This data isn't present in ACPI tables when read
-> > through ACPI tools, hence a driver is needed to do it. The driver gets
-> > data from firmware using ACPI component of the kernel. The ACPI values
-> > are presented in string form (numbers as decimal values) or binary
-> > blobs, and can be accessed as the contents of the appropriate read only
-> > files in the standard ACPI device's sysfs directory tree. This data is
-> > consumed by the ChromeOS user space.
+> > In ti-sn65dsi86 this wasn't too difficult to accomplish. That driver
+> > is already broken up into several "struct devices" anyway because it
+> > also provides a PWM and some GPIOs. Adding one more wasn't that
+> > difficult / ugly.
 > >
-> > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> > Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
-> > Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> > When I tried to do the same solution in parade-ps8640, it felt like I
+> > was copying too much boilerplate code. I made the realization that I
+> > didn't _really_ need a separate "driver" for each person that wanted
+> > to do the same thing. By putting all the "driver" related code in a
+> > common place then we could save a bit of hassle. This change
+> > effectively adds a new "ep_client" driver that can be used by
+> > anyone. The devices instantiated by this driver will just call through
+> > to the probe/remove/shutdown calls provided.
+> >
+> > At the moment, the "ep_client" driver is backed by the Linux auxiliary
+> > bus (unfortunate naming--this has nothing to do with DP AUX). I didn't
+> > want to expose this to clients, though, so as far as clients are
+> > concerned they get a vanilla "struct device".
+> >
+> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
 >
->
-> Thanks overall this looks pretty good to me.  The only remark which
-> I have is that I would like to see the Kconfig symbol changed
-> from CONFIG_ACPI_CHROMEOS to CONFIG_CHROMEOS_ACPI to match the
-> filename.
->
-> CONFIG_ACPI_CHROMEOS to me suggests that this is an ACPI subsystem
-> Kconfig option which, with the driver living under
-> drivers/platform/x86 it is not.
->
-> There is no need to send a new version for this, if you agree
-> with the change let me know and I can change this while merging
-> the driver.
->
-> Rafael, before I merge this do you have any (more) remarks
-> about this driver?
+> What is an "EP" client or device?
 
-I'm not sure why it has to be an acpi_driver.
+The DP AUX EndPoint (or DP AUX EP) is just the generic name I called
+the thing on the other side of the DP AUX bus, AKA the "panel".
 
-I think that the generic enumeration code creates a platform device
-for this ACPI device object, so why can't it bind to that platform
-device?
+The "DP AUX EP client" (ep_client) is the code that needs a reference
+to the panel.
 
-Generally speaking, IMV we should avoid adding drivers binding
-directly to ACPI device objects, because that is confusing (it is kind
-of like binding directly to an of_node) and it should be entirely
-avoidable.
+I'll beef up the patch description and the comments around the
+structure to try to make this clearer.
+
+-Doug

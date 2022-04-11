@@ -2,90 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5D774FBA9D
+	by mail.lfdr.de (Postfix) with ESMTP id 50A474FBA9C
 	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 13:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345343AbiDKLN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 07:13:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43776 "EHLO
+        id S245452AbiDKLNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 07:13:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346023AbiDKLNA (ORCPT
+        with ESMTP id S1346044AbiDKLNB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 07:13:00 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2173BE34;
-        Mon, 11 Apr 2022 04:09:52 -0700 (PDT)
-X-UUID: 4d1ee65a5a024114b512a6064079f27b-20220411
-X-UUID: 4d1ee65a5a024114b512a6064079f27b-20220411
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1431660548; Mon, 11 Apr 2022 19:09:46 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 11 Apr 2022 19:09:45 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 11 Apr 2022 19:09:44 +0800
-Message-ID: <5c6dc5ed28c64f62b66e7b68b54c342b63e42d42.camel@mediatek.com>
-Subject: Re: [PATCH V2 15/15] cpufreq: mediatek: Use device print to show
- logs
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     <rafael@kernel.org>, <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
-        <matthias.bgg@gmail.com>, <jia-wei.chang@mediatek.com>,
-        <roger.lu@mediatek.com>, <hsinyi@google.com>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Mon, 11 Apr 2022 19:09:44 +0800
-In-Reply-To: <20220411032922.yj4p42is5ky6bgau@vireshk-i7>
-References: <20220408045908.21671-1-rex-bc.chen@mediatek.com>
-         <20220408045908.21671-16-rex-bc.chen@mediatek.com>
-         <20220411032922.yj4p42is5ky6bgau@vireshk-i7>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 11 Apr 2022 07:13:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71AB310F0;
+        Mon, 11 Apr 2022 04:10:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 112296158C;
+        Mon, 11 Apr 2022 11:10:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 60EE0C385A4;
+        Mon, 11 Apr 2022 11:10:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649675412;
+        bh=NdzH7Z5bNggGZpiDfqQ3KFHAwQuSlUL0BEoDL24vQro=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=bAwETcJYcGPDOlwL5zJbDY6X8QV7UnKxUY8Zpm2UKf+D36f7VvSctTpkWeyhg9/Y3
+         o8/yiIDKioALIR571GiByMulK0w3MIqSBu4mdELqnIs/8rL5+xQgK7UEsZlHCUR2pl
+         8656Q4DoTnHd3SvMbkzdRVeVNxOLmKHn6Hm1iLxQOepRfdAjVMz726jPr3/IRyd7P6
+         u26gW5+wnw1TQDmlrCbGrkcvBfoKbaSzncBnYZRhtG+eNkB0u7ktPcQe2PDBbTDhZw
+         L08IjhJsYdg6IInKtGt8yK92jDcgu7RrvA/LnoxY3hcMbK81dmc+7BUJHSP3Pi6mUX
+         7NNn81/oTOU3w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 457E2E7399B;
+        Mon, 11 Apr 2022 11:10:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] dpaa_eth: Fix missing of_node_put in dpaa_get_ts_info()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164967541228.25321.11252715015759028756.git-patchwork-notify@kernel.org>
+Date:   Mon, 11 Apr 2022 11:10:12 +0000
+References: <20220408094941.2494893-1-lv.ruyi@zte.com.cn>
+In-Reply-To: <20220408094941.2494893-1-lv.ruyi@zte.com.cn>
+To:     CGEL <cgel.zte@gmail.com>
+Cc:     madalin.bucur@nxp.com, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lv.ruyi@zte.com.cn, zealci@zte.com.cn
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-04-11 at 08:59 +0530, Viresh Kumar wrote:
-> On 08-04-22, 12:59, Rex-BC Chen wrote:
-> > Replace pr_* with dev_* to show logs.
-> > 
-> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> > ---
-> >  drivers/cpufreq/mediatek-cpufreq.c | 41 +++++++++++++++++---------
-> > ----
-> >  1 file changed, 23 insertions(+), 18 deletions(-)
-> 
-> One should always arrange the patches in this form:
-> 
-> - Fix bugs first (since they need to be applied first and need to go
->   to stable kernels too).
-> 
-> - Trivial fixes next, like this one which you chose to be present at
->   15/15. I would have applied this one right away, if it wasn't he
->   last one, because of which we have conflicts now.
-> 
-> - Non-trivial patches later, so reviews on them don't affect other
->   patches.
-> 
-Hello Viresh,
+Hello:
 
-Thanks for your review and suggestions.
-I will put this patch to first in next version.
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-BRs,
-Rex
+On Fri,  8 Apr 2022 09:49:41 +0000 you wrote:
+> From: Lv Ruyi <lv.ruyi@zte.com.cn>
+> 
+> Both of of_get_parent() and of_parse_phandle() return node pointer with
+> refcount incremented, use of_node_put() on it to decrease refcount
+> when done.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+> 
+> [...]
+
+Here is the summary with links:
+  - dpaa_eth: Fix missing of_node_put in dpaa_get_ts_info()
+    https://git.kernel.org/netdev/net/c/1a7eb80d170c
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

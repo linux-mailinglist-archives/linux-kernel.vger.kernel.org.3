@@ -2,140 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 623B24FB73B
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 11:20:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF2C74FB740
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 11:21:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344353AbiDKJW1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 11 Apr 2022 05:22:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45424 "EHLO
+        id S243213AbiDKJWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 05:22:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235213AbiDKJWT (ORCPT
+        with ESMTP id S1344367AbiDKJWa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 05:22:19 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D36326EA
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 02:20:06 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1ndqD4-0003hy-BW; Mon, 11 Apr 2022 11:19:46 +0200
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1ndqCz-002MLK-V5; Mon, 11 Apr 2022 11:19:40 +0200
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1ndqCx-00040Q-Qs; Mon, 11 Apr 2022 11:19:39 +0200
-Message-ID: <8470f6029703a29bd7c384f489da0c7936c44cc7.camel@pengutronix.de>
-Subject: Re: [PATCH RESEND v3 2/3] net: mdio: add reset control for Aspeed
- MDIO
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Andrew Jeffery <andrew@aj.id.au>,
-        Dylan Hung <dylan_hung@aspeedtech.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Joel Stanley <joel@jms.id.au>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, pabeni@redhat.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        netdev <netdev@vger.kernel.org>
-Cc:     BMC-SW@aspeedtech.com
-Date:   Mon, 11 Apr 2022 11:19:39 +0200
-In-Reply-To: <667280e7-526d-4002-9dff-389f6b35ac2f@www.fastmail.com>
-References: <20220407075734.19644-1-dylan_hung@aspeedtech.com>
-         <20220407075734.19644-3-dylan_hung@aspeedtech.com>
-         <667280e7-526d-4002-9dff-389f6b35ac2f@www.fastmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
+        Mon, 11 Apr 2022 05:22:30 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC49832EF9;
+        Mon, 11 Apr 2022 02:20:16 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 23B9K7Sx8027537, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 23B9K7Sx8027537
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Mon, 11 Apr 2022 17:20:07 +0800
+Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 11 Apr 2022 17:20:07 +0800
+Received: from localhost.localdomain (172.21.132.198) by
+ RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Mon, 11 Apr 2022 17:20:06 +0800
+From:   <max.chou@realtek.com>
+To:     <marcel@holtmann.org>
+CC:     <johan.hedberg@gmail.com>, <luiz.dentz@gmail.com>,
+        <linux-bluetooth@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <alex_lu@realsil.com.cn>, <hildawu@realtek.com>,
+        <karenhsu@realtek.com>, <kidman@realtek.com>,
+        <max.chou@realtek.com>, <hsinyu_chang@realtek.com>
+Subject: [PATCH] Bluetooth: btrtl: Add support for RTL8852C
+Date:   Mon, 11 Apr 2022 17:19:57 +0800
+Message-ID: <20220411091957.838-1-max.chou@realtek.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [172.21.132.198]
+X-ClientProxiedBy: RTEXH36505.realtek.com.tw (172.21.6.25) To
+ RTEXMBS03.realtek.com.tw (172.21.6.96)
+X-KSE-ServerInfo: RTEXMBS03.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: trusted connection
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Deterministic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 04/11/2022 08:58:00
+X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
+ rules found
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzQvMTEgpFekyCAwNzoyNjowMA==?=
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mo, 2022-04-11 at 09:50 +0930, Andrew Jeffery wrote:
-> 
-> On Thu, 7 Apr 2022, at 17:27, Dylan Hung wrote:
-> > Add reset assertion/deassertion for Aspeed MDIO.  There are 4 MDIO
-> > controllers embedded in Aspeed AST2600 SOC and share one reset control
-> > register SCU50[3].  To work with old DT blobs which don't have the reset
-> > property, devm_reset_control_get_optional_shared is used in this change.
-> > 
-> > Signed-off-by: Dylan Hung <dylan_hung@aspeedtech.com>
-> > Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-> > ---
-> >  drivers/net/mdio/mdio-aspeed.c | 15 ++++++++++++++-
-> >  1 file changed, 14 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/net/mdio/mdio-aspeed.c b/drivers/net/mdio/mdio-aspeed.c
-> > index e2273588c75b..1afb58ccc524 100644
-> > --- a/drivers/net/mdio/mdio-aspeed.c
-> > +++ b/drivers/net/mdio/mdio-aspeed.c
-> > @@ -3,6 +3,7 @@
-> > 
-> >  #include <linux/bitfield.h>
-> >  #include <linux/delay.h>
-> > +#include <linux/reset.h>
-> >  #include <linux/iopoll.h>
-> >  #include <linux/mdio.h>
-> >  #include <linux/module.h>
-> > @@ -37,6 +38,7 @@
-> > 
-> >  struct aspeed_mdio {
-> >  	void __iomem *base;
-> > +	struct reset_control *reset;
-> >  };
-> > 
-> >  static int aspeed_mdio_read(struct mii_bus *bus, int addr, int regnum)
-> > @@ -120,6 +122,12 @@ static int aspeed_mdio_probe(struct platform_device *pdev)
-> >  	if (IS_ERR(ctx->base))
-> >  		return PTR_ERR(ctx->base);
-> > 
-> > +	ctx->reset = devm_reset_control_get_optional_shared(&pdev->dev, NULL);
-> > +	if (IS_ERR(ctx->reset))
-> > +		return PTR_ERR(ctx->reset);
-> > +
-> > +	reset_control_deassert(ctx->reset);
-> > +
-> >  	bus->name = DRV_NAME;
-> >  	snprintf(bus->id, MII_BUS_ID_SIZE, "%s%d", pdev->name, pdev->id);
-> >  	bus->parent = &pdev->dev;
-> > @@ -129,6 +137,7 @@ static int aspeed_mdio_probe(struct platform_device *pdev)
-> >  	rc = of_mdiobus_register(bus, pdev->dev.of_node);
-> >  	if (rc) {
-> >  		dev_err(&pdev->dev, "Cannot register MDIO bus!\n");
-> > +		reset_control_assert(ctx->reset);
-> >  		return rc;
-> >  	}
-> > 
-> > @@ -139,7 +148,11 @@ static int aspeed_mdio_probe(struct platform_device *pdev)
-> > 
-> >  static int aspeed_mdio_remove(struct platform_device *pdev)
-> >  {
-> > -	mdiobus_unregister(platform_get_drvdata(pdev));
-> > +	struct mii_bus *bus = (struct mii_bus *)platform_get_drvdata(pdev);
-> > +	struct aspeed_mdio *ctx = bus->priv;
-> > +
-> > +	reset_control_assert(ctx->reset);
-> 
-> Isn't this unnecessary because you've used the devm_ variant to acquire 
-> the reset?
+From: Max Chou <max.chou@realtek.com>
 
-No, this is correct. deassert/assert needs to be balanced, and the
-reset_control_deassert() call in aspeed_mdio_probe() is not devres
-managed.
+Add the support for RTL8852C BT controller on USB interface.
+The necessary firmware file will be submitted to linux-firmware.
 
-regards
-Philipp
+Signed-off-by: Max Chou <max.chou@realtek.com>
+---
+ drivers/bluetooth/btrtl.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/drivers/bluetooth/btrtl.c b/drivers/bluetooth/btrtl.c
+index 481d488bca0f..47c28fd8f006 100644
+--- a/drivers/bluetooth/btrtl.c
++++ b/drivers/bluetooth/btrtl.c
+@@ -50,6 +50,7 @@ enum btrtl_chip_id {
+ 	CHIP_ID_8761B,
+ 	CHIP_ID_8852A = 18,
+ 	CHIP_ID_8852B = 20,
++	CHIP_ID_8852C = 25,
+ };
+ 
+ struct id_table {
+@@ -196,6 +197,14 @@ static const struct id_table ic_id_table[] = {
+ 	  .has_msft_ext = true,
+ 	  .fw_name  = "rtl_bt/rtl8852bu_fw.bin",
+ 	  .cfg_name = "rtl_bt/rtl8852bu_config" },
++
++	/* 8852C */
++	{ IC_INFO(RTL_ROM_LMP_8852A, 0xc, 0xc, HCI_USB),
++	  .config_needed = false,
++	  .has_rom_version = true,
++	  .has_msft_ext = true,
++	  .fw_name  = "rtl_bt/rtl8852cu_fw.bin",
++	  .cfg_name = "rtl_bt/rtl8852cu_config" },
+ 	};
+ 
+ static const struct id_table *btrtl_match_ic(u16 lmp_subver, u16 hci_rev,
+@@ -305,6 +314,7 @@ static int rtlbt_parse_firmware(struct hci_dev *hdev,
+ 		{ RTL_ROM_LMP_8761A, 14 },	/* 8761B */
+ 		{ RTL_ROM_LMP_8852A, 18 },	/* 8852A */
+ 		{ RTL_ROM_LMP_8852A, 20 },	/* 8852B */
++		{ RTL_ROM_LMP_8852A, 25 },	/* 8852C */
+ 	};
+ 
+ 	min_size = sizeof(struct rtl_epatch_header) + sizeof(extension_sig) + 3;
+@@ -768,6 +778,7 @@ void btrtl_set_quirks(struct hci_dev *hdev, struct btrtl_device_info *btrtl_dev)
+ 	case CHIP_ID_8822C:
+ 	case CHIP_ID_8852A:
+ 	case CHIP_ID_8852B:
++	case CHIP_ID_8852C:
+ 		set_bit(HCI_QUIRK_VALID_LE_STATES, &hdev->quirks);
+ 		set_bit(HCI_QUIRK_WIDEBAND_SPEECH_SUPPORTED, &hdev->quirks);
+ 		hci_set_aosp_capable(hdev);
+@@ -947,3 +958,5 @@ MODULE_FIRMWARE("rtl_bt/rtl8852au_fw.bin");
+ MODULE_FIRMWARE("rtl_bt/rtl8852au_config.bin");
+ MODULE_FIRMWARE("rtl_bt/rtl8852bu_fw.bin");
+ MODULE_FIRMWARE("rtl_bt/rtl8852bu_config.bin");
++MODULE_FIRMWARE("rtl_bt/rtl8852cu_fw.bin");
++MODULE_FIRMWARE("rtl_bt/rtl8852cu_config.bin");
+-- 
+2.17.1
+

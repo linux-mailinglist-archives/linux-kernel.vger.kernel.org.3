@@ -2,133 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEA3E4FBBDC
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 14:14:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 623464FBBE4
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 14:17:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345986AbiDKMRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 08:17:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46500 "EHLO
+        id S1345979AbiDKMTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 08:19:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240584AbiDKMQz (ORCPT
+        with ESMTP id S233946AbiDKMTN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 08:16:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1BFD40E4F;
-        Mon, 11 Apr 2022 05:14:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CC9E6163D;
-        Mon, 11 Apr 2022 12:14:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E600FC385A3;
-        Mon, 11 Apr 2022 12:14:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649679281;
-        bh=XcjtbKiDmNUDUzHcXtTHRMT/Hnm0TsOrSzVdisG0c7A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kajbelk+29WQC+TRn+sWzyafuwhgoynnn1Rw5qA6hxUmo3AO3Xkx53v0y+98gC8MQ
-         DKufahP1YjsM0Dq9qu8Ldd49kzEnPcueY3lVi+O7NeY0uSVgDJv1qI7xZfux+Csbxi
-         vmsv+bgKBB0uv0tstlgNOh7MvPzbmThtD5Vfscpv3EPB6MYDxOSpnzWStzO07so8Xt
-         BFTONgM5OH2hkDnOyMRpcRLjJyv/pg06VAnM/FCz1voEljK9mCGvAUzciEGWQepm7O
-         dOHO9FszOb9laPJXdh5bdt2tM7SoTMQuaZXBm4v2C+LGmp8H/deH06iQfmisbJh0lk
-         t60f0uPV+yVRA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1ndswE-0004oq-JI; Mon, 11 Apr 2022 14:14:34 +0200
-Date:   Mon, 11 Apr 2022 14:14:34 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Dongliang Mu <dzm91@hust.edu.cn>
-Cc:     Oliver Neukum <oliver@neukum.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
-        syzbot+eabbf2aaa999cc507108@syzkaller.appspotmail.com,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] driver: usb: nullify dangling pointer in cdc_ncm_free
-Message-ID: <YlQbqnYP/jcYinvz@hovoldconsulting.com>
-References: <20220409120901.267526-1-dzm91@hust.edu.cn>
+        Mon, 11 Apr 2022 08:19:13 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1046C27CD9;
+        Mon, 11 Apr 2022 05:16:59 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id c15so19824671ljr.9;
+        Mon, 11 Apr 2022 05:16:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=SwlzXZe5gV8+pFvJZHXYo05mqSjtl8vaF4Cm8yRdmF4=;
+        b=EqhE4evILFPuJAW/tZZdb5l3kkuSl2VPpas+U7WJiRz3rePHdobkUXUUfYoD7zRd3N
+         bfy2xD7eyepIebPuUZ+mGgZhMtsGj/oeb+Pv/QeVgZ8d4E7oyc+G5bCUBrs3NtNvGGCA
+         VdpmI4zBJXWbkbj6gIaDXn8vNPBIOXnLp7pcMpDoeNAo35LXkgqCBPDiFLsvV3Hlllkc
+         AQJtERViwG8Dku/9f0jDfltR6zaXtoTJuWH8cZ6PsBhK7XlLUa+T8+p+r1KJBpj+klrd
+         +ggN6mklstQiE+q/TltyHMq4fp868htmvnuKvmtiF4Y0k3iKYfwEKfYyvOKj6MAO9ZKe
+         1QiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=SwlzXZe5gV8+pFvJZHXYo05mqSjtl8vaF4Cm8yRdmF4=;
+        b=QubnabigrAHdsVwkBkbDGQKSUy//i0sXgZLOEqhy0J/ZyqE5JjB9v4GEV1WgmDadXq
+         q0qT+cquQW6tV2dxoSCQoTClDHuS8HPOq5FXryoCuaDLxTiJm91iCiQJfltwHJSWKbso
+         0AEBRAvK2v1mEAHhCnG80Ge1e+4A+wCTRMDVHIuUpDktZ1WuFyNIuHmGSJDEeUiTUKGB
+         uWRvPcjvG/n9jwkMkTPSekK8dR3kqFonzGfmOvj5neFRd0Lrk1h1a2xUGW0GAnlk1qej
+         D7csVOTWPieaH1LDxbx4zKgUS28Ujfi+mAARb1/5QtE3lRYfR6N7zqQPE0EeY7pQFVFZ
+         yUIQ==
+X-Gm-Message-State: AOAM531U3tq/OsD+WuSy6ZcYLJ3QlhD7UqvKXckKZjssWOV8l3UqB2zZ
+        dawEE+xojerGw6/fKqbbgExlPF78NCimZg==
+X-Google-Smtp-Source: ABdhPJz9nwi9knLMn0iSU+PoTmNxSzwRTgJoB66bIKUM2XJsrtI/A0vEgQCLxsVPNP+zsHSxx1KxLQ==
+X-Received: by 2002:a05:651c:54c:b0:249:9d06:24ef with SMTP id q12-20020a05651c054c00b002499d0624efmr20279739ljp.331.1649679417317;
+        Mon, 11 Apr 2022 05:16:57 -0700 (PDT)
+Received: from mobilestation ([95.79.134.149])
+        by smtp.gmail.com with ESMTPSA id g36-20020a0565123ba400b0044a2a1ccd99sm3314311lfv.20.2022.04.11.05.16.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Apr 2022 05:16:56 -0700 (PDT)
+Date:   Mon, 11 Apr 2022 15:16:55 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Rob Herring <robh+dt@kernel.org>, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 21/21] MAINTAINERS: Add maintainers for DWC AHCI SATA
+ driver
+Message-ID: <20220411121655.l5ft7r6bywg2nxcp@mobilestation>
+References: <20220324001628.13028-1-Sergey.Semin@baikalelectronics.ru>
+ <20220324001628.13028-22-Sergey.Semin@baikalelectronics.ru>
+ <eb79ee49-53aa-57eb-94af-90997aa6cbed@opensource.wdc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220409120901.267526-1-dzm91@hust.edu.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <eb79ee49-53aa-57eb-94af-90997aa6cbed@opensource.wdc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 09, 2022 at 08:09:00PM +0800, Dongliang Mu wrote:
-> From: Dongliang Mu <mudongliangabcd@gmail.com>
+On Thu, Mar 24, 2022 at 11:17:12AM +0900, Damien Le Moal wrote:
+> On 3/24/22 09:16, Serge Semin wrote:
+> > Add myself as a maintainer of the new DWC AHCI SATA driver and
+> > its DT-bindings schema.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > ---
+> >  MAINTAINERS | 9 +++++++++
+> >  1 file changed, 9 insertions(+)
+> > 
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index cd0f68d4a34a..19c9ea0758cc 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -10919,6 +10919,15 @@ F:	drivers/ata/ahci_platform.c
+> >  F:	drivers/ata/libahci_platform.c
+> >  F:	include/linux/ahci_platform.h
+> >  
+> > +LIBATA SATA AHCI SYNOPSYS DWC CONTROLLER DRIVER
+> > +M:	Serge Semin <fancer.lancer@gmail.com>
+> > +L:	linux-ide@vger.kernel.org
+> > +S:	Maintained
+> > +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git
 > 
-> cdc_ncm_bind calls cdc_ncm_bind_common and sets dev->data[0]
-> with ctx. However, in the unbind function - cdc_ncm_unbind,
-> it calls cdc_ncm_free and frees ctx, leaving dev->data[0] as
-> a dangling pointer. The following ioctl operation will trigger
-> the UAF in the function cdc_ncm_set_dgram_size.
+
+> Wrong tree. This should be libata tree.
+
+Got it. Thanks.
+
+-Sergey
+
 > 
-> Fix this by setting dev->data[0] as zero.
-
-This sounds like a poor band-aid. Please explain how this prevent the
-ioctl() from racing with unbind(). 
-
-Johan
-
-> ==================================================================
-> BUG: KASAN: use-after-free in cdc_ncm_set_dgram_size+0xc91/0xde0
-> Read of size 8 at addr ffff8880755210b0 by task dhcpcd/3174
+> > +F:	Documentation/devicetree/bindings/ata/baikal,bt1-ahci.yaml
+> > +F:	Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
+> > +F:	drivers/ata/ahci_dwc.c
+> > +
+> >  LIBATA SATA PROMISE TX2/TX4 CONTROLLER DRIVER
+> >  M:	Mikael Pettersson <mikpelinux@gmail.com>
+> >  L:	linux-ide@vger.kernel.org
 > 
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
->  print_address_description.constprop.0.cold+0xeb/0x495 mm/kasan/report.c:313
->  print_report mm/kasan/report.c:429 [inline]
->  kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
->  cdc_ncm_set_dgram_size+0xc91/0xde0 drivers/net/usb/cdc_ncm.c:608
->  cdc_ncm_change_mtu+0x10c/0x140 drivers/net/usb/cdc_ncm.c:798
->  __dev_set_mtu net/core/dev.c:8519 [inline]
->  dev_set_mtu_ext+0x352/0x5b0 net/core/dev.c:8572
->  dev_set_mtu+0x8e/0x120 net/core/dev.c:8596
->  dev_ifsioc+0xb87/0x1090 net/core/dev_ioctl.c:332
->  dev_ioctl+0x1b9/0xe30 net/core/dev_ioctl.c:586
->  sock_do_ioctl+0x15a/0x230 net/socket.c:1136
->  sock_ioctl+0x2f1/0x640 net/socket.c:1239
->  vfs_ioctl fs/ioctl.c:51 [inline]
->  __do_sys_ioctl fs/ioctl.c:870 [inline]
->  __se_sys_ioctl fs/ioctl.c:856 [inline]
->  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0x80 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> RIP: 0033:0x7f00859e70e7
-> RSP: 002b:00007ffedd503dd8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-> RAX: ffffffffffffffda RBX: 00007f00858f96c8 RCX: 00007f00859e70e7
-> RDX: 00007ffedd513fc8 RSI: 0000000000008922 RDI: 0000000000000018
-> RBP: 00007ffedd524178 R08: 00007ffedd513f88 R09: 00007ffedd513f38
-> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-> R13: 00007ffedd513fc8 R14: 0000000000000028 R15: 0000000000008922
->  </TASK>
-
-> Reported-by: syzbot+eabbf2aaa999cc507108@syzkaller.appspotmail.com
-> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-> ---
->  drivers/net/usb/cdc_ncm.c | 1 +
->  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
-> index 15f91d691bba..9fc2df9f0b63 100644
-> --- a/drivers/net/usb/cdc_ncm.c
-> +++ b/drivers/net/usb/cdc_ncm.c
-> @@ -1019,6 +1019,7 @@ void cdc_ncm_unbind(struct usbnet *dev, struct usb_interface *intf)
->  
->  	usb_set_intfdata(intf, NULL);
->  	cdc_ncm_free(ctx);
-> +	dev->data[0] = 0;
->  }
->  EXPORT_SYMBOL_GPL(cdc_ncm_unbind);
+> -- 
+> Damien Le Moal
+> Western Digital Research

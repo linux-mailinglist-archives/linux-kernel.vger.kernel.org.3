@@ -2,134 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B61924FB6FB
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 11:10:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54C7D4FB6F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 11:10:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344218AbiDKJLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 05:11:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39630 "EHLO
+        id S235850AbiDKJLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 05:11:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235850AbiDKJKd (ORCPT
+        with ESMTP id S244586AbiDKJL2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 05:10:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5365327FE9
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 02:08:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3B8260B28
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 09:08:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63613C385A4;
-        Mon, 11 Apr 2022 09:08:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649668099;
-        bh=PjAaPAS1kqnduWEYvYhiRAFq9XQRFpqrkGMMGfA0Yvc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aNdBXn+FNS2SydWNOKwwoT2TEz2C+YF9QXrXG4fp90CAA4r1a6VArMqDko2aC3YMy
-         xG5idyWZwcOBQFqKxsEWxanYSmnxusYBwOLOIjdBvfN6D0VdZdjP38NfKdDV9KmU3b
-         HymzZaYgXQg92U1Bse8Mqc8Rgkd+zIedAvLuM3P/RI6fm/08czSoxljCwKw9eYY1f3
-         sWh4V2kCNE88sajqBmlN1cD5FBLvn5PH+JjfDd9HP9wTU4qS7RM9FhzSECtjZiToei
-         OMlCLJELO2yt6JJ/0cjdTGKqyx7hYL6KHrzp6iUwBYg2YuwJUyW6wzELrdc0tCWVTc
-         N8vLTf0qajYHQ==
-From:   Oded Gabbay <ogabbay@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Moti Haimovski <mhaimovski@habana.ai>
-Subject: [PATCH 7/7] habanalabs: support debugfs Byte access to device DRAM
-Date:   Mon, 11 Apr 2022 12:08:05 +0300
-Message-Id: <20220411090805.1617112-7-ogabbay@kernel.org>
+        Mon, 11 Apr 2022 05:11:28 -0400
+Received: from EUR03-DB5-obe.outbound.protection.outlook.com (mail-eopbgr40086.outbound.protection.outlook.com [40.107.4.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE3CE18E2F;
+        Mon, 11 Apr 2022 02:09:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DM8NOgCNWMXnI/6Ecjo3M7NJ/ay74gdYChYVxnA9bb71yffXdEaqf5WcqUwanVvB8AZH1KLSQ17EiLlFwzGs9lFXEgEHLmL1IFB1DXg2n6NyoR6hcbexGth6psGRweIbJKrctXnFCai4GVlH7njCAysVW+QnCH115W6LtS3sJn3KrWqsP5j1zOtDYKcclHAXeST89h1YSka06Gs9kBe2zbBQKIkF9kD0GIbNAf0G5Ot45Wgr5x+TtAkEcl08rnPIqVIce0nJ5pg8/sKC+3xEC1h12jHPyPrH0i75LiwkdvgDkGEUCF4YMPQ7wbwJiyH4uPQ5ZQUUx8of5uDZKTFudw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YUADi41ZDTfh5duwPWmsT84Sa7Jpb5TIYLdvBZLnSlI=;
+ b=N9Yi0cKXTtIzHq34k7LD7JUb7/awcl/WNWt6p9XK9BpxG3vVHUYvxSdHUZoD99+DXX37trtXWbNbdnv3UP1BdHdyswf3Xuj9BQk52KHPafOfkce8dDgTfSgFvc2sSS+crViw+k34EYwg4MDlZUDUphUTYpyvzUUH7AOAQGV0lz3U8n+fCkKIoMMWmyTRrtjer32QE6PDVXQv/2ybRJxT8ZbAaNPejYLPpF1XsJym0Xe7Q6zhHB6KNBTHWQO6wkNx15zRbfK6iL7iDIjZ3VUxtJk0Zua8StfL9iHRAiocwqdpJxmZuup4AkAq8j00mTxYgnw9qaqHhhqLsEIRay63tw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YUADi41ZDTfh5duwPWmsT84Sa7Jpb5TIYLdvBZLnSlI=;
+ b=dCtbLnYeRPLUolXuG2NDwKFW2Xz4qvWW94/2mClutJffTt00eQKCmmfS4hJoo/QKgkepNaf/XEDcYYe/owf17kSzESHpWoORdzt1ZMRE2tX6l1xAPWkDV1H+v7B9F0W8EFqOwyRoFUqeJx1FcmnlHYZlkY/TkOwXKwmuYCFyj7Q=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VE1PR04MB6477.eurprd04.prod.outlook.com (2603:10a6:803:11e::14)
+ by AM7PR04MB6951.eurprd04.prod.outlook.com (2603:10a6:20b:10f::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Mon, 11 Apr
+ 2022 09:09:11 +0000
+Received: from VE1PR04MB6477.eurprd04.prod.outlook.com
+ ([fe80::60ad:e5ec:cdfd:1b01]) by VE1PR04MB6477.eurprd04.prod.outlook.com
+ ([fe80::60ad:e5ec:cdfd:1b01%3]) with mapi id 15.20.5144.029; Mon, 11 Apr 2022
+ 09:09:11 +0000
+From:   Changming Huang <jerry.huang@nxp.com>
+To:     robh+dt@kernel.org, krzk+dt@kernel.org, shawnguo@kernel.org,
+        festevam@gmail.com, l.stach@pengutronix.de,
+        alexander.stein@ew.tq-group.com, marcel.ziswiler@toradex.com,
+        tharvey@gateworks.com, linux@rempel-privat.de,
+        matthias.schiffer@ew.tq-group.com, cniedermaier@dh-electronics.com,
+        sebastian.reichel@collabora.com, leoyang.li@nxp.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        arnd@arndb.de, olof@lixom.net, soc@kernel.org
+Cc:     Changming Huang <jerry.huang@nxp.com>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH 1/2 v2] dt-bindings: arm: fsl: add ls1021a-iot board
+Date:   Mon, 11 Apr 2022 17:08:27 +0800
+Message-Id: <20220411090828.1965450-1-jerry.huang@nxp.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220411090805.1617112-1-ogabbay@kernel.org>
-References: <20220411090805.1617112-1-ogabbay@kernel.org>
-MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: AM9P193CA0023.EURP193.PROD.OUTLOOK.COM
+ (2603:10a6:20b:21e::28) To VE1PR04MB6477.eurprd04.prod.outlook.com
+ (2603:10a6:803:11e::14)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 486c4716-bafe-4d45-d232-08da1b9af0ce
+X-MS-TrafficTypeDiagnostic: AM7PR04MB6951:EE_
+X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+X-Microsoft-Antispam-PRVS: <AM7PR04MB695150F3D13F4DE8B9554709FEEA9@AM7PR04MB6951.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9roE/a404wa0idH0rTePNs36imbkXKMLwm89d4k0OJh5Se+Upc3ijmMlqMLoe7Ve7fKYxcCIHx/tClmjz/Pn5hQXbnKE8UTEz5h4uYmm1xJeeqGmTLQErgKnLl8/YkiTWrWbqfA/7SkmMZDnBexkZbrCkJ2XloLPwZG9eePAA+KMO63x4YnpqtEtn8EYDHzZ8q+y//wksc77q6W/08mJ3IO/mmWq6CtnRif/b9fEJgRxRzVE9MzADRDQHCVKdWZpudpq4mGQjCEkIUqylyAFAqG63jGrlJ5WS//cqbGj5FAKnxM9LwE6Dtl4DTNM1XZqZ5EuHO22NQXz06pOeEqy7ybthBEqQOVs5ilX8XaM1+mAiiJcbpXtClBEQwvWomBnV4+VvRj/PU45uRZcbbS+NdczDjRWwyZYDjWYqIIMFuN6WTthdFzjEWw4GsseWSD59x9LdmgF9ZZbAR8MUb2BwYIH3WPZ/CnwMgG2zsggVFqb26my/svt186jwL2cng+uHwRWnxBgA78yTO9lVdhaMNiGP9eJZdVb3c04FoN82OwNFL3wpAaZ3Kww4cOVMV2MHabOi1VkD6+itFFAJEGeRJn4ULH2kpm/cyuWaIvcFJ0Yq57ZQUQlRxVWN3n0hpQABlOVTZ9PGgG0Ah9VLvciGc/FCkauZKWHQl0F0Uv/hHS42n1UmgM3utc3Mt3RlBmeP1unCCbZa9NK16RXtHCcNQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6477.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(36756003)(7416002)(2616005)(1076003)(508600001)(186003)(26005)(4744005)(38100700002)(921005)(2906002)(38350700002)(86362001)(66476007)(66556008)(8936002)(316002)(6486002)(66946007)(8676002)(52116002)(6666004)(4326008)(6512007)(6506007)(5660300002)(54906003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?DDRnqfMp13RgJ1pnsD5D8vgEPndnxHqrtO0XsSj4mVIbMhcG9WaJG4SZMthO?=
+ =?us-ascii?Q?FKHXJhB8ZQgMj8Ua9ClhUaTmh7G/h9u+4zhVQkmc38O044sycwh/EL/OxlQh?=
+ =?us-ascii?Q?mFoKEn3Z288FrKZAP3a7X0W+WId02UTdK5ehgEzV3FX+Q7feFwiA+9vYeqdg?=
+ =?us-ascii?Q?i+VgiJIA03CbCD8QJl5TBG9cvhuRgLUq/GHquwj2Kr1B60C0KsD57SAgkhfa?=
+ =?us-ascii?Q?qhEIujD+C0Y5qcRzYJR1LU1Y1+FpnuCdvQXBPa7oMR17cO0YSvz8BVkoTJja?=
+ =?us-ascii?Q?q+feSzWeoNUsVO2BdKoFFzPFOv2uTzRbuO2C9fi5dxS5CRrpRXAUTBuKOJRt?=
+ =?us-ascii?Q?/UOaE9+GTWY8kj2+Qt9NoSlPBakOo1ACnHrZPhGbVQTxC5JEkjgwvkHcERpf?=
+ =?us-ascii?Q?mGbSAn7wyiHzhUficEUiFIMbx66B/uXc2VyZz7QKvcmrUXtRyl/JMNoA/m6o?=
+ =?us-ascii?Q?Aa2Gu9taFJmBQLPZTf7dEt0ct5jvZrwPPNVhWNJx5Ils7zQ4eHsOvZYrJrs8?=
+ =?us-ascii?Q?g07VapO6RxWrfpY149tJwSlDyzz+DJM9HyKp3xLdaaIODk1a0d1JerKz6nFi?=
+ =?us-ascii?Q?geuevw9PzrPEljxL63jx67nxW8HtqxhAS9SR4bNJKuGAoAmrRXXaR070x1wU?=
+ =?us-ascii?Q?AAbzC1G4tJvKDezFrylVRl5iFgz0bpVRvRjOhnFEUmwOyhpoLF0ms14/g9CZ?=
+ =?us-ascii?Q?omWlyvMKlNWkkE4qCLkiPMPBZxXRLTQPvx4F6HT6w7NQEI7eDH4Axdm4F/s1?=
+ =?us-ascii?Q?pKptC46CovgYvJvDBDIrEjhej0en5fOivG2vLjL167x8ij0DDc9S0r4PMkGN?=
+ =?us-ascii?Q?cjRAjmkB1BQFHpjCtYPKz9IXdPeI4tUIB9as24H1/oZPvAv3qXriLMW1NweD?=
+ =?us-ascii?Q?QqDP6fv4EfBvAKbccxtZtmbuf0YAKHMnAbmPHWbTjypI9yA9hNf1/ErMrMYV?=
+ =?us-ascii?Q?qGWc0UCOdj5u0/+x7RJ+tX2eLabWyPUX8NJ1iGu5lHcSQkksYE6IUQhnrZdc?=
+ =?us-ascii?Q?XQJN84zjQvi80uRF/LB0xwr2h3B2pV1/p1OSayxWHkPCSHgWAbHdW2mzrmV0?=
+ =?us-ascii?Q?FGlGHSO9ijonIxBnoyb8GEfGNrQ7sDoIYl9WWw1UNFsG7BAINPQGKEMtNYgs?=
+ =?us-ascii?Q?vA4Ypj4vABdx9LyampVecMBb1ZrFmrFI/kYy6hsMDpFRo1/LSKLwR4d6ohbZ?=
+ =?us-ascii?Q?qqGfG/hL2DevxYvJIy8wmkz4dT/s4fdckz8zGrpP1xQ5+ftUHH/XnNqz+Y/X?=
+ =?us-ascii?Q?IawJVH7BJ0uUD+vE15Ds0O/FitIXEuhdZEVcEMYkuEw7oA/EDEPaNCpaWuYz?=
+ =?us-ascii?Q?2BB0TWg96GlGhaZgc9QjQ79bBC2wbvM28K0GgjClrgVcmEaxu2qSk3ao5j5K?=
+ =?us-ascii?Q?rAIox4EcN0x2qP4fUay7Ogq8a/vtcU4IAj8LuN3VLfAI5OIy1Vhbxdkm7DZa?=
+ =?us-ascii?Q?wTJwfAo9SRYPPh28IRSGAGqEEMbuetYKwowzCDyMJLjR6DkiXdK4dLVWc/Bt?=
+ =?us-ascii?Q?8AHvJP+GAn7WCIfZFm49Asbn1nU2KBaLei+GoF603rVdZb6Aic8HG9IKMH3k?=
+ =?us-ascii?Q?zgeZGmuHRB9IJtGDPBosOeMV+y6yQFTJ0nl8GjtWTWr0LV/jLFw00kcWqenQ?=
+ =?us-ascii?Q?KkpBFA0unr0O5FIBqs7+G/PZ43N/OjV4q16yce+0+NqQS/SU6RJXr+DVr4pP?=
+ =?us-ascii?Q?gnH0t+C06vh9Y3E/0MMZyDeBWxSJUGO8UHQnnR51ECLd6zVBB6S3zvQzMtWG?=
+ =?us-ascii?Q?S/iiGVHl6A=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 486c4716-bafe-4d45-d232-08da1b9af0ce
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6477.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2022 09:09:10.9564
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gzWCuWzCiLJs45Q/Wbbn25hl6HtE0DJYq8RDYfbrdBW+9JCVqMZJ5tbyERwCkLWsHeINifOHlYTcxZrD5EF8iA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6951
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Moti Haimovski <mhaimovski@habana.ai>
+Add the board ls1021a-iot in the binding docuemnt.
 
-The habanalabs HW requires memory resources to be used by its
-internal hardware structures. These structures are allocated and
-initialized by the driver. We would like to use the device HBM for
-that purpose. This memory is io-remapped and accessed using the
-writel()/writeb()/writew() commands.
-Since some of the HW structures are one byte in size we need to
-add support for the  writeb() and readb() functions in the driver.
-
-Signed-off-by: Moti Haimovski <mhaimovski@habana.ai>
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
-Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
+Signed-off-by: Changming Huang <jerry.huang@nxp.com>
+Acked-by: Rob Herring <robh@kernel.org>
 ---
- drivers/misc/habanalabs/common/debugfs.c    |  3 +++
- drivers/misc/habanalabs/common/device.c     | 12 ++++++++++++
- drivers/misc/habanalabs/common/habanalabs.h |  2 ++
- 3 files changed, 17 insertions(+)
+ Documentation/devicetree/bindings/arm/fsl.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/misc/habanalabs/common/debugfs.c b/drivers/misc/habanalabs/common/debugfs.c
-index ffa613af6b0d..7c4a4d504e4c 100644
---- a/drivers/misc/habanalabs/common/debugfs.c
-+++ b/drivers/misc/habanalabs/common/debugfs.c
-@@ -688,6 +688,9 @@ static void hl_access_host_mem(struct hl_device *hdev, u64 addr, u64 *val,
- 	case DEBUGFS_WRITE64:
- 		*(u64 *) phys_to_virt(addr - offset) = *val;
- 		break;
-+	default:
-+		dev_err(hdev->dev, "hostmem access-type %d id not supported\n", acc_type);
-+		break;
- 	}
- }
- 
-diff --git a/drivers/misc/habanalabs/common/device.c b/drivers/misc/habanalabs/common/device.c
-index 0f4f7e538b61..9d2978e43e51 100644
---- a/drivers/misc/habanalabs/common/device.c
-+++ b/drivers/misc/habanalabs/common/device.c
-@@ -53,6 +53,14 @@ static int hl_access_sram_dram_region(struct hl_device *hdev, u64 addr, u64 *val
- 	}
- 
- 	switch (acc_type) {
-+	case DEBUGFS_READ8:
-+		*val = readb(hdev->pcie_bar[region->bar_id] +
-+			addr - region->region_base + region->offset_in_bar);
-+		break;
-+	case DEBUGFS_WRITE8:
-+		writeb(*val, hdev->pcie_bar[region->bar_id] +
-+			addr - region->region_base + region->offset_in_bar);
-+		break;
- 	case DEBUGFS_READ32:
- 		*val = readl(hdev->pcie_bar[region->bar_id] +
- 			addr - region->region_base + region->offset_in_bar);
-@@ -148,7 +156,11 @@ int hl_access_cfg_region(struct hl_device *hdev, u64 addr, u64 *val,
- 		WREG32(addr - cfg_region->region_base, lower_32_bits(*val));
- 		WREG32(addr + sizeof(u32) - cfg_region->region_base, upper_32_bits(*val));
- 		break;
-+	default:
-+		dev_err(hdev->dev, "access type %d is not supported\n", acc_type);
-+		return -EOPNOTSUPP;
- 	}
-+
- 	return 0;
- }
- 
-diff --git a/drivers/misc/habanalabs/common/habanalabs.h b/drivers/misc/habanalabs/common/habanalabs.h
-index 5f7e584d0f33..a8e6118c0fc7 100644
---- a/drivers/misc/habanalabs/common/habanalabs.h
-+++ b/drivers/misc/habanalabs/common/habanalabs.h
-@@ -1100,6 +1100,8 @@ enum div_select_defs {
- };
- 
- enum debugfs_access_type {
-+	DEBUGFS_READ8,
-+	DEBUGFS_WRITE8,
- 	DEBUGFS_READ32,
- 	DEBUGFS_WRITE32,
- 	DEBUGFS_READ64,
+diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
+index 08bdd30e511c..242dd99c272c 100644
+--- a/Documentation/devicetree/bindings/arm/fsl.yaml
++++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+@@ -999,6 +999,7 @@ properties:
+       - description: LS1021A based Boards
+         items:
+           - enum:
++              - fsl,ls1021a-iot
+               - fsl,ls1021a-moxa-uc-8410a
+               - fsl,ls1021a-qds
+               - fsl,ls1021a-tsn
 -- 
 2.25.1
 

@@ -2,101 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B90004FC03C
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:19:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A73AB4FC039
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:19:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347762AbiDKPUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 11:20:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33450 "EHLO
+        id S1347772AbiDKPV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 11:21:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347608AbiDKPUV (ORCPT
+        with ESMTP id S244274AbiDKPVT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 11:20:21 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5015326E4
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:18:06 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id p21so19110305ioj.4
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:18:06 -0700 (PDT)
+        Mon, 11 Apr 2022 11:21:19 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F8F136;
+        Mon, 11 Apr 2022 08:19:02 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id r13so31628537ejd.5;
+        Mon, 11 Apr 2022 08:19:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Qxxqdzsm5NNvKuddue8zfK73fgd0MVUdg9etiRzf7DY=;
-        b=gOztIOTJCTDJDS0gZRh6PiXx3DtEHbXV0VsbvU5swCYUaAQYltS3JN/06k00LN+Wfp
-         Q3AeuhuUlXCCgShBxW2ELxPF/Q20PTQpuLzhwQRCIdkti08VI+7tVafICMNE2B2P7Ysb
-         4hc3a2NrVX4muD6KhVlsiEhObJYy/cJUnJJtY=
+        bh=fej47CfixVgPG/8tAe3B68WAc9QzMj+LhfE1bf6mdHc=;
+        b=jD9MaBAIHx7E4aQHXu/BECkBObNtPbqFVEY9DF0mITyo+lkTI/fnGWkGJ/1BL+Gd4V
+         +tf/gFyTMBVLefBt+Jiy87iLc/GFyKWbPCvUUfr3YQuY3VHUzoWygchl5F4A2MQh2rZQ
+         iEjb7Ud1HMoayECdcHLn/eYbJ/qsaxEvc2kAujKqz2r4aFGF8ubWwUq/JS6QhU08MMmd
+         q4tLWyE9vtitTttFJXG6ZjAx9zAt/J4jU9iU0kuSD03+fdPx0AQOI5lTiFzZWwVxwy+E
+         xW3YlUSvtXo6zDtTJ0Sf6qNebJgGea2i+8p17GhGb3j2UhmcuVN0nOG7QudVBFIr5pm9
+         4AoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Qxxqdzsm5NNvKuddue8zfK73fgd0MVUdg9etiRzf7DY=;
-        b=hW5EHvyBCxbHmD/vTkzu316PLMUXB0ICaF94ycm2ZAcvIdHrNegD///brMKuvq++6Y
-         kmv1BzxR1GKXNX05lsAKWNiisEzDIyupzL+3/MM5AetQq2WrUYpgP22RiY+u6ykFPdGd
-         DTYYF7yHpJjfItKcrYZ6tA65uDYuPNbNdvPfQJFFTyaZi8WndNSI1kewe4XjeVWhNpx0
-         cqVmkzhd36VGXZ2cs6Yth4Y8LweOwide0wsjS8dWH5UTy6PjztiZFVFvZIO5FNc5LW60
-         FyWzlzUZd9Bhjq79l25ZZLuoxUNLIL9kGIKkx5T4Q6TJiNafgq8Dcf5Mbb6FVuYh619Y
-         4+2g==
-X-Gm-Message-State: AOAM531UIpQ0eN41aJnIJYQiWj0xvtvheXf239i9XhAiNfDTrbhHyeeR
-        aONyzQ2idlPtGoTwJHxhazUpUrxcoMZj0tRu7js/Sw==
-X-Google-Smtp-Source: ABdhPJyTacRRyhXpUmMsFf0hOhTvn/aPNyPMKJSLnnAgP89m51SL+egsDhPkNYhtboj1sxiUJnHKWrhMT7chg4SYG9s=
-X-Received: by 2002:a5d:94c2:0:b0:60b:bd34:bb6f with SMTP id
- y2-20020a5d94c2000000b0060bbd34bb6fmr13306775ior.32.1649690285953; Mon, 11
- Apr 2022 08:18:05 -0700 (PDT)
+        bh=fej47CfixVgPG/8tAe3B68WAc9QzMj+LhfE1bf6mdHc=;
+        b=aeBxXe9XWC0zwvPc+W3g5uJbMmAp6kF87XjpfoKRGE7SElKrNzv0NVKOso3XHJ+/vX
+         KIRA6nvx20hAwus+F16+oZxB2t9YWg7qVTSCgl2dAFcBf9vqDnIReKJ12lm+SOXcLy3U
+         /OdHSQXPgcTod/Ey+rXt5u8ZvZubBKrfjDL7fTOez8JEhuo5HQqEmvzW9byKAdCQD3nf
+         onUfzxotYwL5/0Q23tWXCz/b68uG9u5hluTdx1O6GytIAda7GcYrZgwMhKEopRGdpKu0
+         fwmkMtwU45fgqw6YAX8L3UJolNZZ/nTTnVEL6X51dlg4z0GGwy9FslmFBvGVaBygyt1S
+         xtDA==
+X-Gm-Message-State: AOAM533wy8Zc4VZ83WFHe/fAPTfWXkNcrjyH5vieN27zD1fdYafCjNpd
+        Ah7kwkuKBr7zeJfoAowAFYzCi26wOu9FVDN+dNk6V+xgqXw=
+X-Google-Smtp-Source: ABdhPJy+ii2nkk759zthtMe3RU2DqWHDHIqPX16lClgCQ18ZzQ5HFYN8xZzKc4Xaq3XAWkbK9F4qIhNPm6K1PIT6Gs8=
+X-Received: by 2002:a17:907:724a:b0:6e8:4f12:b6fd with SMTP id
+ ds10-20020a170907724a00b006e84f12b6fdmr14444674ejc.198.1649690340917; Mon, 11
+ Apr 2022 08:19:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220407210734.2548973-1-joel@joelfernandes.org> <YlQx0rZzrdWIA5w+@pc638.lan>
-In-Reply-To: <YlQx0rZzrdWIA5w+@pc638.lan>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Mon, 11 Apr 2022 11:17:56 -0400
-Message-ID: <CAEXW_YRu8z0tHn0nOpzd4PtsL0vKpgSuN86CgwXeWCEEiXbaog@mail.gmail.com>
-Subject: Re: [PATCH RFC] rcu/nocb: Provide default all-CPUs mask for RCU_NOCB_CPU=y
-To:     Uladzislau Rezki <urezki@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu <rcu@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
+References: <20220410193544.1745684-1-aford173@gmail.com> <6c4b6eac-86d8-eb93-37a5-d0fa9bf2a7d2@linaro.org>
+In-Reply-To: <6c4b6eac-86d8-eb93-37a5-d0fa9bf2a7d2@linaro.org>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Mon, 11 Apr 2022 10:18:49 -0500
+Message-ID: <CAHCN7xKpoCrLgFfM30ZgYCgTan7FymhopcMQE0=VkzNuYryu9w@mail.gmail.com>
+Subject: Re: [PATCH V4 1/3] dt-bindings: mmc: imx-esdhc: Update compatible fallbacks
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-mmc <linux-mmc@vger.kernel.org>,
+        Adam Ford-BE <aford@beaconembedded.com>,
+        Haibo Chen <haibo.chen@nxp.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 9:49 AM Uladzislau Rezki <urezki@gmail.com> wrote:
+On Mon, Apr 11, 2022 at 1:42 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
-> Hello, Joel.
->
-> > On systems with CONFIG_RCU_NOCB_CPU=y, there is no default mask provided
-> > which ends up not offloading any CPU. This patch removes yet another
-> > dependency from the bootloader having to know about RCU, about how many
-> > CPUs the system has, and about how to provide the mask. Basically, I
-> > think we should stop pretending that the user knows what they are doing :).
-> > In other words, if NO_CB_CPU is enabled, lets make use of it.
+> On 10/04/2022 21:35, Adam Ford wrote:
+> > The SDHC controller in the imx8mn and imx8mp have the same controller
+> > as the imx8mm which is slightly different than that of the imx7d.
 > >
-> Could you also please modify the documentation accordingly and send v2?
-
-Yes good point, I can go clean that up in v2.
-
- - Joel
-
-> <snip>
-> urezki@pc638:~/data/raid0/coding/linux-rcu.git$ grep -rn RCU_NOCB_CPU ./Documentation/
-> ./Documentation/timers/no_hz.rst:188:using the CONFIG_RCU_NOCB_CPU=y Kconfig option.  The specific CPUs to
-> ./Documentation/admin-guide/kernel-parameters.txt:4380:                 In kernels built with CONFIG_RCU_NOCB_CPU=y,
-> ./Documentation/admin-guide/kernel-parameters.txt:4507:                 When RCU_NOCB_CPU is set, also adjust the
-> ./Documentation/admin-guide/kernel-per-CPU-kthreads.rst:311:3.  Build with CONFIG_RCU_NOCB_CPU=y and boot with the rcu_nocbs=
-> ./Documentation/admin-guide/kernel-per-CPU-kthreads.rst:331:2.  Build with CONFIG_RCU_NOCB_CPU=n, which will prevent these
-> ./Documentation/RCU/Design/Requirements/Requirements.rst:1424:``CONFIG_RCU_NOCB_CPU=y`` and booted with ``rcu_nocbs=1-63``, where
-> urezki@pc638:~/data/raid0/coding/linux-rcu.git$ grep -rn RCU_NOCB_CPU ./kernel/rcu/
-> ...
-> ./kernel/rcu/Kconfig:198:config RCU_NOCB_CPU
-> ..
-> <snip>
+> > Using the fallback of the imx8mm enables the controllers to support
+> > HS400-ES which is not available on the imx7d. After discussion with NXP,
+> > it turns out that the imx8qm should fall back to the imx8qxp, because
+> > those have some additional flags not present in the imx8mm.
+> >
+> > Mark the current state of the fallbacks as deprecated, and add the
+> > proper fallbacks so in the future, the deprecated combination can be
+> > removed and prevent any future devices from using the wrong fallback.
+> >
+> > Suggested-by: haibo.chen@nxp.com
+> > Signed-off-by: Adam Ford <aford173@gmail.com>
 >
-> --
-> Uladzislau Rezki
+>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>
+Thanks for the help and guidance.  I always seem to struggle with the
+YAML syntax.
+
+>
+> Best regards,
+> Krzysztof

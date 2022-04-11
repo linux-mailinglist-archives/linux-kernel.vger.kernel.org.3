@@ -2,154 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D4BE4FC3E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 20:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A86234FC3E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 20:13:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349091AbiDKSPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 14:15:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49640 "EHLO
+        id S1349104AbiDKSQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 14:16:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240011AbiDKSP3 (ORCPT
+        with ESMTP id S240011AbiDKSQF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 14:15:29 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 556DADF95
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 11:13:14 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id k14so14935541pga.0
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 11:13:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=Jw2w5fc9s7LYCxNyjF4Anw/31mGnF1Xnlp2YCJojif4=;
-        b=zYUmChAbevCzMKAOteYpCt8iCZnXii2/ZAqbsWsSzdO+W6XUiXCDFOfEFJO4LuI29J
-         GRfLdTG71rNc/4fdqQ6qUxbUXZRjAg/2nBe3XM+bYVDggr68EsmbxVGph1uscr1XvI7I
-         H9thhM8YlDLthSuyIVx3oKcri5EMQCZNH7Nx7iBufxmFnXpJjfMSVZ1CC/4i58B1ZoSZ
-         pt68xA/6LSO9ec+sEYg8O1wBSGS4tPWSCfCz0lyB+uncZ0kG0QoNZkTTEmpHD+r/98yR
-         ppY5AdTcH52vSTE6T7ECEiu34gSQpmbib1ZrOqRGx9VPczLU12Rjrt+V9ksp8ODe2T0+
-         LRjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=Jw2w5fc9s7LYCxNyjF4Anw/31mGnF1Xnlp2YCJojif4=;
-        b=zmHeOb2bKJ0KC90igp+GI4HOlnuo8oZqZQn9OMY7oJGxBxmKKrLn1LMsRAbNbIr9vo
-         Ygxq1hCQnbdVf7UzZnKkgCubVFJj4nN/mfGVpyoVBKVEtP/B/IYAzp+QEBX/bbA1kjVk
-         e37Q8Z9qARhaRMPWmBNAJIxz1ioDHsK/gROhjIH/Vz3pZb8H+0C3s2UEhh2RHAQWHlqt
-         iZXE8MXQnf6qJBy9hxaP6LtGXTYwsy9mQmXKmwA95XjPVM3bZFlFP1keOZnBUB2FkId1
-         +VIODgNo0SqsVbx6c2nsuYKO7qsan1UkZKM93tYdL3iHJF67/Wj6vnZ2IsAikcYcoPwZ
-         xHBQ==
-X-Gm-Message-State: AOAM530jApJ2No6JgIIDxLqSrgjWOKDa7uSC8EKx/2YxfkJnzJAU4auk
-        2JLsZD6bPJ72Kdu2/CQRDlImQw==
-X-Google-Smtp-Source: ABdhPJwFnQOXCSv95jf3Mtp1Xp4D95v+w5pquv+GUaB8VSDncNnmKQidKvtg+7Fpe/4FvzhLFVMuQw==
-X-Received: by 2002:a63:6e07:0:b0:398:1337:d99e with SMTP id j7-20020a636e07000000b003981337d99emr27022351pgc.23.1649700793750;
-        Mon, 11 Apr 2022 11:13:13 -0700 (PDT)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id x5-20020aa79a45000000b00504a1c8b75asm17752885pfj.165.2022.04.11.11.13.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 11:13:13 -0700 (PDT)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org
-Cc:     matthias.bgg@gmail.com, jia-wei.chang@mediatek.com,
-        roger.lu@mediatek.com, hsinyi@google.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH V2 13/15] cpufreq: mediatek: Link CCI device to CPU
-In-Reply-To: <bc6dd020a1cc3f00f5be2bf2929046b9116bbeef.camel@mediatek.com>
-References: <20220408045908.21671-1-rex-bc.chen@mediatek.com>
- <20220408045908.21671-14-rex-bc.chen@mediatek.com>
- <7hfsmn5m9f.fsf@baylibre.com>
- <bc6dd020a1cc3f00f5be2bf2929046b9116bbeef.camel@mediatek.com>
-Date:   Mon, 11 Apr 2022 11:13:12 -0700
-Message-ID: <7hwnfv4hfr.fsf@baylibre.com>
+        Mon, 11 Apr 2022 14:16:05 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2086.outbound.protection.outlook.com [40.107.237.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6373712A87
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 11:13:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Wfg3ys8m0HtxLEXXcQEBJjnLE3/dtP4CwrGWCtwwwHxBJnRBHG/huHitVbPQvZEdYggNYcjvI8IbtXjmctxr63b74O5lVQF8EHd3FjOrz9L01+WRm/cTyHA1hdsamhCEmNLFQXLbyYFYHhJWXJiXtlmw8DufTFMqn+7EsXnjjRHSbVbqIUkfcfq+dAMugmotQ9U2WVbwFolfx0aX4UdIP+H2JOauwMmbiEafbtM93bH2s+1t09tuBgMQsBYS5FYx0NSHe6Tk2IVkx9ZvbCoMVI3j672zOSM4hEhHkm9yO0RZJX0n7o6+Kr4SqlXzelGz8hX1hEfn2YOJgfeOgfrdXQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+4zLgUssKzYY0rqWs1+oa5p0/baT1vYuXFwoB27zXJo=;
+ b=JxrF0cJEcHUGtL+QFtDmGdVqkhIILztNA9C3gQws1VBH3MZLse0ztGl2c1VeUxIPCoSQad6tU+31pkOzIx/Q3XfEFSLL/ukZTnz82NgYlHMd44Ui5wssip985C+YMq0GdYQnDmq3o/VcYHawA1863MHPQ/ij8TKs3L/7+mqRfybQfBVWCJKPnHI7U9BnJVAoWtkR0v+dSUd6qmYOB4AaAFM1yP7S8ChhM2Cuyd8/B4H/0NX6dT21DJ9TKlbOFQ1uaDKHLHfsVFdrI9WELmmB3WxDUHC8wI5aEqMUhL454zsQZFhsCtbv6on8DC9s/9RSWnLbtCdoyIKc/nAbza2MiQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+4zLgUssKzYY0rqWs1+oa5p0/baT1vYuXFwoB27zXJo=;
+ b=YpT31/pTQcG8XmMUUGrhKKiaVp2/HSqz+FvAdt0MIl/q72PZE/ldDQcufTow2RkF2qR6tLyYQFcj7TZJtzqAp4rpagReodA30qVIBZzI6TxoYZZ5CrDCY2kidzsF3q1SehkXwqNAb8Klb6nzMBffsI9atpnc7nGvpXb5nV4glT4ef0TckVNO6tuQoCdKDLySHDe5I7EinR6tbnWhXOT0p/iAv94h/lgkhMGCyO8eoczW0XQYUaWWKO9fvkW5UzOZayWXySsuellPWMTw6BjYvGyOMkFN+6MQptf9UobFfqGdVxuM35ORWQAAQSvaPiIxxIfyXYjAP6mzhlBSe7rSnA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by SJ0PR12MB5470.namprd12.prod.outlook.com (2603:10b6:a03:3bd::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Mon, 11 Apr
+ 2022 18:13:49 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::cdfb:f88e:410b:9374]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::cdfb:f88e:410b:9374%6]) with mapi id 15.20.5144.029; Mon, 11 Apr 2022
+ 18:13:49 +0000
+Date:   Mon, 11 Apr 2022 15:13:48 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        intel-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 23/34] drm/i915/gvt: remove struct intel_gvt_mpt
+Message-ID: <20220411181348.GY2120790@nvidia.com>
+References: <20220411141403.86980-1-hch@lst.de>
+ <20220411141403.86980-24-hch@lst.de>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220411141403.86980-24-hch@lst.de>
+X-ClientProxiedBy: BL0PR0102CA0029.prod.exchangelabs.com
+ (2603:10b6:207:18::42) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d7ebd11d-199b-4417-6698-08da1be7070e
+X-MS-TrafficTypeDiagnostic: SJ0PR12MB5470:EE_
+X-Microsoft-Antispam-PRVS: <SJ0PR12MB5470CFF9D204195BCA263752C2EA9@SJ0PR12MB5470.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: s/hhP2yqlnezcCpD0bzxe98KkT3+HI1bPNhPQGZC0stTCT0JCrvaY1mAXqfRzS3QG28IdIubqGd3U59zuGuKMalbDEUUEnQZneN4sqRIoZ5RCZi3WhFJjOelW/8S0Bj2SR0oQaCflfcF+/hn7jbfYpIjq5oTsAe8Nvj9qSXuQq8Mzv/tBNZAOeyLKMLyZIwhXi1eUu7JnKtXFc7nLBtj8mUV7rVzl2eYwDSKx6pC8qyNxr5vkS6i6vY0Tx0vSploNpyugo5T0mvaYfTVpjznbSXKCDbgHIgH46wuBK4oCFDJItmQT8VCaEINYgp7YYv7/7Vhvt+zytbeUx7BBz3zlf84tG1BDmoPy1S87QwhOpW7heAAAU0ySI/BN2DOd7ZCLr4a70O6CfJPLb78X0B/QN16yj4Sv7x9ln8EUzH0lEp2pZ7c18ZCLtDhtAZ/oXs1OM4jwsQ2Wi3Af2jVXK87X7CwGNBZIiMoOEg1xYDmUlg66mEob2GPuEwNC0ghjDk4OlHDgPd0cM4SzLg3zLx+ygM/YzTTOxyT/3MlKLpX/atHysB8oZAMRly8RF0N6kCmYORQqHPDEYp1pCGKhe8fwEu4C0pWoZQ0NtDdBhsJMm+fvj5hNRBye/PMG49BUZBxNF6snncN1T+PVwjA7RlqRw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(6506007)(36756003)(5660300002)(4744005)(6512007)(186003)(83380400001)(26005)(7416002)(316002)(86362001)(8676002)(6486002)(4326008)(66946007)(1076003)(38100700002)(508600001)(2616005)(66476007)(54906003)(6916009)(66556008)(33656002)(8936002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hP4EWR+N57YuPwzViubq0sxTDzs6ybFOOB+SkKrKpjL3EamgZyg2WU4lksA/?=
+ =?us-ascii?Q?Nt3I3ElPNCt+GDA7n+JWvq+xEp6Hf1v7xIy7k3FBlNnL4xvynh2TMKSzv3Q+?=
+ =?us-ascii?Q?GVaORf2NixRfZnvFrNLMLIIX8HtogR90zP3CQrHejZumuadY2PpWiW15hqoA?=
+ =?us-ascii?Q?2tGQppVPq8mrO5zQKFDniOda4tKjG3p8RsqfGX021V9BT8vIYeparSQnvo/I?=
+ =?us-ascii?Q?8yucgeFdriEjwvOXl3PlTTzSGl5oqq7tzZEdQDyvHoIvrmRIlVeuADYF6Au5?=
+ =?us-ascii?Q?ePXK8qEHPLUfzaUqXSuBgxaHm3zlCANJcavCy8X7JhKy469lf+AG6LZFnfs6?=
+ =?us-ascii?Q?dj/E9k2KMnopTC1fem/u5kUxQcf4h9CDQJSe6urEZ4fqB7TjkKyJKWc7I5gJ?=
+ =?us-ascii?Q?apnZJ9LQiHVoDNRP4WsqpYFJS2QDk5b1S21DUizc27Ax2ZjuG2VDAsiMmXAT?=
+ =?us-ascii?Q?f4LHcm+N30zl7PkcUDhR7LiQPC23BTDUzb3+yW51VWzUKYGJWuWC83YR7k9N?=
+ =?us-ascii?Q?yR27j5xqm0JBQ+ftUHFPfoEuGE7GaIMPMIb1H6NwGlNAM+LpTD0WIMhgxiwB?=
+ =?us-ascii?Q?t5NcMfWLPqd4SXPgCEBp6FOgnTnz5F9TP7SYunIBEN/YPMYumDIdyuK3E2W1?=
+ =?us-ascii?Q?V6rAsUgnT0oNgPJSEXjAZpH/1lXueScznW/rZ5zg+Ln7HQlaiD9B9cF5T9x7?=
+ =?us-ascii?Q?mYsaGtCirMt2S3WW5xY+qlzx4LxM55fJz2dHS50yiZ1IxJGEdj4KAYWVHCLe?=
+ =?us-ascii?Q?zNzY5isbPWXIJLBNCSMq+HSAItbTuWMroOBjFP6WBLWjjRcz+7+IM/ns/i7k?=
+ =?us-ascii?Q?2xgbr5OEoQp79zkiVlhw9+i++VcGNqp1jS+KrNHPFL/LP7WYI7izFTybP6W7?=
+ =?us-ascii?Q?TwMWGnF6bBR1iEplN5NCc+ryaCx3fpCAjxPvYltkPLp3PBwdHgmqAGgzQf1K?=
+ =?us-ascii?Q?GCJmqS1HFrB2NGna2XDB/W7pYPiGa1JL9UP0W5c7ExzPiRvPca6WLuTNTYUX?=
+ =?us-ascii?Q?U56VJ0k5Zuw8NwFmUiexKPhO6tfqddWteVFAWspXxyfcjAbtaKA2/0j41PhM?=
+ =?us-ascii?Q?VwVICL+py0PpY9BJHsZsHIBOxiByf39trYfT21U+mAhcPzj+j6K6IqLSQS4n?=
+ =?us-ascii?Q?mYofEWUd/Txf1DDbcLm8AB5lI4Sti/BPnmmLKAvdRFf6JUumBvRDrFrxQxGc?=
+ =?us-ascii?Q?15erHbSeQzm1zmIqe6XvHJIb17C06mkbo/XO9sbF5Ani/ngtF8qNVcbgEXVl?=
+ =?us-ascii?Q?AUkWh9BGcrt/kmKf9afnJbVjgyXjQe2I1kkzcJdLRIXy/V9kX6i9xSubZ5fq?=
+ =?us-ascii?Q?QiSH1r+xhTHZQT8z5cZG3EQ83NzDFsltjK8OW61NiCNYk0MrpLwIPA0VxN09?=
+ =?us-ascii?Q?UuTnCzsF1uBS0qHS5DnkOD4AxToRYHGw4ZN1zFS4fekoL2WBkJJ6X1s3yi6g?=
+ =?us-ascii?Q?ojwP0d+cyfXOE9+J5wKbewZQKq9hrDkPej1xDyuudMDDZ8/AI/sQAkhQPKtz?=
+ =?us-ascii?Q?Bjr1B8jbtz6YuzACG8eATGrvtz10VsAf7kznqPs7ld8kVDfzo4JmZj7h5Dbz?=
+ =?us-ascii?Q?+041KkuwlSvXt656jE9S7z1RA8joKdSOIUENVwik+p1I9vTzu5aPRczmrRF+?=
+ =?us-ascii?Q?bKxgGOCHRtfaoKGhJhDdi8iUoHmVtspVrRLY/9nBmcJqBHl4MkKNl+eQDVGi?=
+ =?us-ascii?Q?3slVBaCcYic2Q2Ss70JcCliqe1FQ4uOcSsrc/qlRiXxaX78vRqIr9OGlUHNN?=
+ =?us-ascii?Q?LxLTPxdq1g=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d7ebd11d-199b-4417-6698-08da1be7070e
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2022 18:13:49.7532
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AdSJ0bKFplr9ryJcRGswDhjY+ypKeDvWraELmqmVy8POoebQCzvcexR7r1590bwE
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5470
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
+On Mon, Apr 11, 2022 at 04:13:52PM +0200, Christoph Hellwig wrote:
+> Just call the initializion and exit functions directly and remove
+> this abstraction entirely.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  drivers/gpu/drm/i915/gvt/gvt.c       | 11 ++++-
+>  drivers/gpu/drm/i915/gvt/gvt.h       | 12 ++---
+>  drivers/gpu/drm/i915/gvt/hypercall.h | 50 -------------------
+>  drivers/gpu/drm/i915/gvt/kvmgt.c     | 39 ++-------------
+>  drivers/gpu/drm/i915/gvt/mpt.h       | 74 ----------------------------
+>  5 files changed, 17 insertions(+), 169 deletions(-)
+>  delete mode 100644 drivers/gpu/drm/i915/gvt/hypercall.h
+>  delete mode 100644 drivers/gpu/drm/i915/gvt/mpt.h
 
-> On Fri, 2022-04-08 at 13:54 -0700, Kevin Hilman wrote:
->> Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
->> 
->> > From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
->> > 
->> > In some MediaTek SoCs, like MT8183, CPU and CCI share the same
->> > power
->> > supplies. Cpufreq needs to check if CCI devfreq exists and wait
->> > until
->> > CCI devfreq ready before scaling frequency.
->> > 
->> > - Add is_ccifreq_ready() to link CCI device to CPI, and CPU will
->> > start
->> >   DVFS when CCI is ready.
->> > - Add platform data for MT8183.
->> > 
->> > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
->> 
->> The checks here are not enough, and will lead to unexpected behavior.
->> IIUC, before doing DVFS, you're checking:
->> 
->> 1) if the "cci" DT node is present and
->> 2) if the driver for that device is bound
->> 
->> If both those conditions are not met, you don't actually fail, you
->> just
->> silently do nothing in ->set_target().  As Angelo pointed out also,
->> this
->> is not a good idea, and will be rather confusing to users.
->> 
->> The same thing would happen if the cci DT node was present, but the
->> CCI
->> devfreq driver was disabled.  Silent failure would also be quite
->> unexpected behavior.  Similarily, if the cci DT node is not present
->> at
->> all (like it is in current upstream DT), this CPUfreq driver will
->> silently do nothing.  Not good.
->> 
->> So, this patch needs to handle several scenarios:
->> 
->> 1) CCI DT node not present
->> 
->> In this case, the driver should still operate normally.  With no CCI
->> node, or driver there's no conflict.
->> 
->> 2) CCI DT present/enabled but not yet bound
->> 
->> In this case, you could return -EAGAIN as suggested by Angelo, or
->> maybe
->> better, it should do a deferred probe.
->> 
->> 3) CCI DT present, but driver disabled
->> 
->> This case is similar to (1), this driver should continue to work.
->> 
->> Kevin
->
-> Hello Kevin and Angelo,
->
-> In my review, if we do not get the link or the link status is not
-> correct between cci and cpufreq in target_index, I think it will never
-> established again for this link.
-> Because it's not checked in probe stage.
->
-> So I think we just need to deal with the issue without cci device, and
-> don't expect the link between cci and cpufreq will be connected again.
->
-> If I am wrong, please correct me.
+That gvt_vgpu_type_groups stuff is pretty wonky, but it can be left
 
-I don't fully understand your questions, but I think what your getting
-at suggest that you might need to use deferred probe to handle the case
-where the ordering of CCI and cpufreq probing is not predictable.
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
-Kevin
+Jason

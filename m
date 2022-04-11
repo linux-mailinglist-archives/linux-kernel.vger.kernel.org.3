@@ -2,146 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E59914FC041
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:20:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC0A84FC04F
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347789AbiDKPW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 11:22:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38974 "EHLO
+        id S1347809AbiDKPXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 11:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347330AbiDKPWX (ORCPT
+        with ESMTP id S234633AbiDKPXe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 11:22:23 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A9065BE;
-        Mon, 11 Apr 2022 08:20:09 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id 17so20571160lji.1;
-        Mon, 11 Apr 2022 08:20:09 -0700 (PDT)
+        Mon, 11 Apr 2022 11:23:34 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730DE3B3FF
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:21:18 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id m67-20020a1ca346000000b0038e6a1b218aso10284561wme.2
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:21:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fwRs58ucT9BHBffcnjN/Epz6AjEi7FoOYtFJGRPRifA=;
-        b=Q3RSM0usi4SktvlLI8Zt7gDOwQl21dVSI38BL2S1gdbSZQReSFOx/5GL2ZL9ZIsHwf
-         JUWFD0EP5M/sQ1tCihLp9cjx8D0EPTGd7cNScXr83W3kKPvDTfZIWQ3iZckaWuMcIvyw
-         iF+EeY9xdlcyZkRxBEvdgJKBMQNL4eUfaW/VnxA5oezjE5PdHQQDQNzbG3k/DNJ4K/pn
-         9xHPL7yUQw7ukZvbcT0J3uC2k8eT0YtiqzA5mrAY+mNNYEgAyTc7Ej3wsCVLlzjpPC9M
-         LRgyUdy6pK6Q6PaNzub0upnexrrRYoj+tI996jCmwwNtEmMdpyiy6HXu8aGfEoEtQP3o
-         +3JA==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/VFG6EulH67RRWPIE71JJK8AZq6cWf3+aNSyjdrV2C8=;
+        b=f8FW30h1HbOZrWHAWLe1L6knIAO0lJCzBwigFR02VS5ig3PismUohmyDbYry74u0YC
+         UV5H7kw4tET6yKSP4M+ROchJBxSEI4tPWRE+9dUf4NNKvRls9SfSV+pJDH9H5jo177AX
+         S3p2Tb1K2+rBEP6VzhnsL5P5Oz4zNM4yZM/Ks=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fwRs58ucT9BHBffcnjN/Epz6AjEi7FoOYtFJGRPRifA=;
-        b=FQQQSZKhkTkXaGvycXvXpL0u500UNGjHHwmcJ7WTV3Y8VvHb5bj4rfxLV+rAy9UOrc
-         p+j932Sk9ZqC21Q5jNDfLVjLRNIWjMiJfcWyi49U9SNSEmZ1CPWg7Mf2o61qFq5gP3OL
-         RL70TpsGH97D2ff6WNP6cBBj254lpAHLZbbxLP19+mcX/Z+rV3HACnmMTCK5PX1e7gET
-         T3zNTUpEdcqu436ypyQXKjcGIn6pkIh8GVGPkMOb73njipLgIJoU/gz1YX/Xm2dE/a3Y
-         lPe+dhiAY3Hqs2HnSNknVfjIPX3OJewfksxEvz5Us90OzoVZ0czrMH21TRnBWTyuUlyv
-         YFpw==
-X-Gm-Message-State: AOAM5335Orz+q/8QWs1P+JoIf3PWcFCHEfApPrkPaqSEX0dzO7TJSdou
-        P76w1cQqusROwIgGfzHziSg=
-X-Google-Smtp-Source: ABdhPJzZgEQdQ9LUYDWLUNfekyt+uGoqDblZ5uQZLkrmmOrJMNg+8ntDYpwfvTo2ocv5PDzdr7VGqw==
-X-Received: by 2002:a2e:9e02:0:b0:249:7d50:bd8c with SMTP id e2-20020a2e9e02000000b002497d50bd8cmr20061814ljk.327.1649690407456;
-        Mon, 11 Apr 2022 08:20:07 -0700 (PDT)
-Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id s6-20020ac25fa6000000b0044313e88020sm3359928lfe.202.2022.04.11.08.20.06
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/VFG6EulH67RRWPIE71JJK8AZq6cWf3+aNSyjdrV2C8=;
+        b=OJnAcT2y1ThP1SEvpFEvoPdO1W5d9f+GVCw9BJV39wy1wad73ix154uuN6/642yCMF
+         sRLTOR+TZDrFUcq5Tid6gggNvXmemFb8cN78nczBC9W/FX7yJmV0pA6btxDqvdgC9B3Y
+         j8dPCLunAtgDwDh/mlO6pUWjqmxftInnoqZwVK8dTErfHjBMKJSv/nrG98aDXKRA7Q5B
+         BPNb4/CYfr0eyONGOiDgZMIxTUX1mVCtcloPj2N7XxpfHS4UeZttxI9Nj2GNOO++hhzQ
+         x4pRZHEFKTr0hGd2FnyToFTQjqKNQqR1EFsc0zwD2jhhXMkR0vXj9NJGQmVhELnRvt37
+         Norw==
+X-Gm-Message-State: AOAM532QGH2LGBduBcuf3IOrtog0HU5zs/FlnLANqGbm/wQ0gGD4DBdM
+        3HE3ZvqXNs66dyBw/QUo0CtjLA==
+X-Google-Smtp-Source: ABdhPJwbqNlCfR4VhfhDPHHdmhTKyU7+ZvArbU48oZz50iRIBTjWcOKUrdfpPb01ZRfsKygY1pculg==
+X-Received: by 2002:a7b:c5cd:0:b0:38c:8b1b:d220 with SMTP id n13-20020a7bc5cd000000b0038c8b1bd220mr28977405wmk.118.1649690476941;
+        Mon, 11 Apr 2022 08:21:16 -0700 (PDT)
+Received: from fabiobaltieri-linux.lan ([37.228.205.1])
+        by smtp.gmail.com with ESMTPSA id bk1-20020a0560001d8100b002061d6bdfd0sm19512832wrb.63.2022.04.11.08.21.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 08:20:06 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
-Date:   Mon, 11 Apr 2022 17:20:04 +0200
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Uladzislau Rezki <urezki@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        rcu <rcu@vger.kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
-        frederic@kernel.org
-Subject: Re: [PATCH RFC] rcu/nocb: Provide default all-CPUs mask for
- RCU_NOCB_CPU=y
-Message-ID: <YlRHJK6ldixwm8IR@pc638.lan>
-References: <20220408142232.GA4285@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YQWeqfcKdAKmCn4fFGyWXjOGd=29wvi6bL3k7s2bGkDJw@mail.gmail.com>
- <20220408155002.GF4285@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YQDgSO2XkkVhN3RBBz3vwYdAtTuPz-xYYsAPnwEnbYZPA@mail.gmail.com>
- <20220408174908.GK4285@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YQ+oE3xQ0tLnBMFxRXLqKZkT5UfjF+CULxnhf9F-dEA2g@mail.gmail.com>
- <CAEXW_YRK2t2JO4RyBTd8cR9sTVpgP7Z5Ywhb1g7CRz3HJ_kNQA@mail.gmail.com>
- <20220408205440.GL4285@paulmck-ThinkPad-P17-Gen-1>
- <YlCtJzlJDj1DBHQB@pc638.lan>
- <20220411140846.GA84069@paulmck-ThinkPad-P17-Gen-1>
+        Mon, 11 Apr 2022 08:21:16 -0700 (PDT)
+From:   Fabio Baltieri <fabiobaltieri@chromium.org>
+To:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        chrome-platform@lists.linux.dev, linux-pwm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Fabio Baltieri <fabiobaltieri@chromium.org>
+Subject: [PATCH v3 0/4] Add channel type support to pwm-cros-ec
+Date:   Mon, 11 Apr 2022 15:21:10 +0000
+Message-Id: <20220411152114.2165933-1-fabiobaltieri@chromium.org>
+X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220411140846.GA84069@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Fri, Apr 08, 2022 at 11:46:15PM +0200, Uladzislau Rezki wrote:
-> > > 
-> > > Here is what I believe you are proposing:
-> > > 
-> > > 
-> > > 				---	rcu_nocbs	rcu_nocbs=???
-> > > 
-> > > CONFIG_RCU_NOCB_CPU_ALL=n	[1]	[2]		[3]
-> > > 
-> > > CONFIG_RCU_NOCB_CPU_ALL=y	[4]	[4]		[3]
-> > > 
-> > > 
-> > > [1]	No CPUs are offloaded at boot.	CPUs cannot be offloaded at
-> > > 	runtime.
-> > > 
-> > > [2]	No CPUs are offloaded at boot, but any CPU can be offloaded
-> > > 	(and later de-offloaded) at runtime.
-> > > 
-> > > [3]	The set of CPUs that are offloaded at boot are specified by the
-> > > 	mask, represented above with "???".  The CPUs that are offloaded
-> > > 	at boot can be de-offloaded and offloaded at runtime.  The CPUs
-> > > 	not offloaded at boot cannot be offloaded at runtime.
-> > > 
-> > > [4]	All CPUs are offloaded at boot, and any CPU can be de-offloaded
-> > > 	and offloaded at runtime.  This is the same behavior that
-> > > 	you would currently get with CONFIG_RCU_NOCB_CPU_ALL=n and
-> > > 	rcu_nocbs=0-N.
-> > > 
-> > > 
-> > > I am adding Frederic on CC, who will not be shy about correcting any
-> > > confusion I be suffering from have with respect to the current code.
-> > > 
-> > > Either way, if this is not what you had in mind, what are you suggesting
-> > > instead?
-> > > 
-> > > I believe that Steve Rostedt's review would carry weight for ChromeOS,
-> > > however, I am suffering a senior moment on the right person for Android.
-> > > 
-> > We(in Sony) mark all CPUs as offloaded ones because of power reasons. The
-> > energy aware scheduler has a better knowledge where to place an rcuop/x
-> > task to invoke callbacks. The decision is taken based on many reason and
-> > the most important is to drain less power as a result of task placement.
-> > For example, power table, if OPP becomes higher or not, CPU is idle, etc.
-> > 
-> > What Joel does in this patch sounds natural to me at least from the first
-> > glance. I mean converting the RCU_NOCB_CPU=y to make all CPUs to do offloading.
-> 
-> Just to be very clear, given appropriate acks/reviews, adding something
-> like CONFIG_RCU_NOCB_CPU_ALL to get default rcu_nocbs=0-N is fine.
-> However, Joel's original patch would not be good for the enterprise
-> distros, which rely on the current default.
-> 
-Absolutely. It would be even easier in terms of changing the current concept
-of RCU_NOCB_CPU config. Having an extra CONFIG_RCU_NOCB_CPU_ALL would simplify 
-and get rid of a need of modifying the "rcu_nocbs=" boot parameter.
+Hi,
 
---
-Uladzislau Rezki
+The ChromiumOS EC PWM host command protocol supports specifying the
+requested PWM by type rather than channel. [1]
+
+This series adds support for specifying PWM by type rather than channel
+number in the pwm-cros-ec driver, which abstracts the node definitions
+from the actual hardware configuration from the kernel perspective,
+aligns the API with the one used by the bootloader, and allows removing
+some dtsi overrides.
+
+Tested on a sc7180-trogdor board.
+
+Changes from v2:
+(https://patchwork.kernel.org/project/chrome-platform/list/?series=627837)
+- reworded patch 2 commit description
+- reworked the driver and dt documentation to use a new compatible rather than
+  boolean property
+- dropped the comment about build test only, tested on actual hardware
+  (trogdor), build test on x86 (with CONFIG_OF=n).
+
+Changes from v1:
+(https://patchwork.kernel.org/project/chrome-platform/list/?series=625182)
+- fixed the dt include file license
+- fixed the property name (s/_/-/)
+- rebased on current linus tree (few dts files changed from a soc tree
+  pull, so patch 4 needs a recent base to apply correctly)
+
+[1] https://source.chromium.org/chromiumos/chromiumos/codesearch/+/main:src/platform/ec/common/pwm.c;l=24
+[2] https://source.chromium.org/chromiumos/chromiumos/codesearch/+/main:src/platform/depthcharge/src/drivers/ec/cros/ec.c;l=1271-1273
+
+Fabio Baltieri (4):
+  dt-bindings: add mfd/cros_ec definitions
+  drivers: pwm: pwm-cros-ec: add channel type support
+  dt-bindings: update google,cros-ec-pwm documentation
+  arm64: dts: address cros-ec-pwm channels by type
+
+ .../bindings/pwm/google,cros-ec-pwm.yaml      |   9 +-
+ .../mt8183-kukui-jacuzzi-fennel-sku1.dts      |   4 +-
+ .../dts/mediatek/mt8183-kukui-jacuzzi.dtsi    |   4 +-
+ .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |   1 +
+ .../boot/dts/qcom/sc7180-trogdor-coachz.dtsi  |   4 -
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  |   9 +-
+ .../qcom/sc7280-herobrine-herobrine-r0.dts    |   7 +-
+ .../arm64/boot/dts/qcom/sc7280-herobrine.dtsi |   7 +-
+ .../arm64/boot/dts/qcom/sc7280-idp-ec-h1.dtsi |   4 +-
+ arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi    |   7 +-
+ .../boot/dts/rockchip/rk3399-gru-bob.dts      |   4 -
+ .../dts/rockchip/rk3399-gru-chromebook.dtsi   |   5 +-
+ .../boot/dts/rockchip/rk3399-gru-kevin.dts    |   4 -
+ arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi  |   1 +
+ drivers/pwm/pwm-cros-ec.c                     | 109 ++++++++++++++----
+ include/dt-bindings/mfd/cros_ec.h             |  18 +++
+ 16 files changed, 140 insertions(+), 57 deletions(-)
+ create mode 100644 include/dt-bindings/mfd/cros_ec.h
+
+-- 
+2.35.1.1178.g4f1659d476-goog
+

@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C4624FB690
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 10:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B94754FB698
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 10:59:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343989AbiDKI7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 04:59:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39810 "EHLO
+        id S1343996AbiDKJBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 05:01:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231952AbiDKI7W (ORCPT
+        with ESMTP id S236336AbiDKJBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 04:59:22 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53AFA1FCC3;
-        Mon, 11 Apr 2022 01:57:08 -0700 (PDT)
+        Mon, 11 Apr 2022 05:01:47 -0400
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C5925C4F;
+        Mon, 11 Apr 2022 01:59:31 -0700 (PDT)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 617041C000E;
-        Mon, 11 Apr 2022 08:57:04 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 762EA100010;
+        Mon, 11 Apr 2022 08:59:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1649667426;
+        t=1649667570;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=N94CYxFySJWV4VTz8jcRQZhwRVn/OQKhsKV51XZEAU0=;
-        b=RIsgV0HihF5l10iOAlUFxswjPna2xqnCkS24ImR02PY/9BRka7FVhGpbBMDlFA+1LKaulc
-        kMF8P28DziXYcpQaO75+wm2W9c0vh9PBgZNtPLRLhRD+gDtwDcb9zgb5+gDUoSyKTUfZ2k
-        be7QSdpggLiRjMJ8maI24tfVemarUPC2iOVOzrRQSMJO8lQyJ4c6qW7vqMMQycaIt1hgZL
-        OltUOzfq7dVkGCX7q6NzEWkQ3s45rvweyMKDJ/b9EfIqnaW+ZabgL8GDRULRhwvxehm0zk
-        Oai8JOE2ZRjQmXzzN+0i7CSntfwEVoZC0fOg4nn78Cz3nrVixp5cdURGuLBUow==
+        bh=FHhGfgxL0S3jJMjJ9eWRoGXgfDat53Md5h9pfpllbBk=;
+        b=hUgcWSpQ8LygWqNmSFSaYQ/9wS/ZhdbQ/KhyoVXhioGge6FYFMWgsvU2FVjaONpYB9+QV7
+        q8Mq0VmJwvQ0Tvy3h8ylFoszzMx3LV0iCZg8o05/YUCVTBjx4PLqxpuqJbfRQNEagkvX5e
+        e46VxrinOS09rppBS7bBLTnmzV/EhhPnQSvJvvn5DxP+Avcnw/HSC4yOozsn8GyuMuu1U/
+        znMEsTEGTfc6ZAQ/B5q1xr0PQ1n8VtzVrleov4c5yZ0elX56U2IUtbXG9BTHV1DRwIj4fF
+        ViyOLILWIidJS1ZRdBP37G4D9DdYFVAHsHfp5SZWdkzj7kEPCi/Gn+KrRjJnfA==
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Michael Walle <michael@walle.cc>,
+To:     =?utf-8?b?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] dt-bindings: mtd: jedec, spi-nor: remove unneeded properties
-Date:   Mon, 11 Apr 2022 10:57:03 +0200
-Message-Id: <20220411085703.10796-1-miquel.raynal@bootlin.com>
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     Tom Rini <trini@konsulko.com>, linux-mtd@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        u-boot@lists.denx.de, devicetree@vger.kernel.org,
+        =?utf-8?b?UmFmYcWCIE1p?= =?utf-8?b?xYJlY2tp?= <rafal@milecki.pl>
+Subject: Re: [PATCH 2/2] nvmem: add driver handling U-Boot environment variables
+Date:   Mon, 11 Apr 2022 10:59:26 +0200
+Message-Id: <20220411085926.10925-1-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220408063720.12826-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220406143225.28107-2-zajec5@gmail.com>
 References: 
 MIME-Version: 1.0
 X-linux-mtd-patch-notification: thanks
-X-linux-mtd-patch-commit: b'36f83e2754f9d2d96182a5570a16f057ab5932e0'
+X-linux-mtd-patch-commit: b'06a39b4da6de04315c133eaca4c785ae6ebc930f'
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
@@ -62,15 +61,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-08 at 06:37:20 UTC, Krzysztof Kozlowski wrote:
-> After conversion the jedec,spi-nor DT schema to reference other schemas
-> (SPI and MTD) and use unevaluatedProperties, few properties are
-> redundant.
+On Wed, 2022-04-06 at 14:32:25 UTC, =?utf-8?b?UmFmYcWCIE1pxYJlY2tp?= wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Reviewed-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+> U-Boot stores its setup as environment variables. It's a list of
+> key-value pairs stored on flash device with a custom header.
+> 
+> This commit adds an NVMEM driver that:
+> 1. Provides NVMEM access to environment vars binary data
+> 2. Extracts variables as NVMEM cells
+> 
+> It can be used for:
+> 1. Accessing env variables from user-space
+> 2. Reading NVMEM cells by Linux drivers
+> 
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 
 Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/next, thanks.
 

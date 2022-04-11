@@ -2,112 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 694F54FC175
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 413104FC161
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348269AbiDKPwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 11:52:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59604 "EHLO
+        id S245375AbiDKPsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 11:48:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348265AbiDKPwH (ORCPT
+        with ESMTP id S1348211AbiDKPsr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 11:52:07 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 324AEF21;
-        Mon, 11 Apr 2022 08:49:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649692192; x=1681228192;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gyDoMc98GJmanTHsL9qK4pOeFXXJEueQFvdOn+5W79Q=;
-  b=amlsel1Uy9yIbiytLhirB8tp8mpgRstrJ90lUEyqAAmyFZLMARkfR7Eu
-   5d5QDnl+FkGSTqL5dkKbm/vlvEtuInXaYiY4q/VuK+2zlWgfi3Ob3S9yR
-   2ndh6do8c/9ap3JUZ7FESw0kYbojapUR/2kEKiKAcBLXUcF3x3C9MOM/O
-   grzHdNRIQShBOEWP5CZ6qv/NGEVCcr2SeRkIScHlJJs8/Nf1oM46Okvp0
-   nXe0sHDz244+uKrx1nYSlUeqGcJmgQVRlUU/EclKDOCjdVAV38ZKNtRlG
-   qnehE2fXfGC8g0fBajnryQDuFb1riB1olRaSiHt0hJveFsd+MPzPjFRaI
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="262326628"
-X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="262326628"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 08:49:51 -0700
-X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="660096199"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 08:49:47 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ndwEx-001J5c-Tx;
-        Mon, 11 Apr 2022 18:46:07 +0300
-Date:   Mon, 11 Apr 2022 18:46:07 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Rob Herring <robh@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Len Brown <lenb@kernel.org>,
-        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-        Michael Walle <michael@walle.cc>
-Subject: Re: [PATCH v6 1/5] device property: Allow error pointer to be passed
- to fwnode APIs
-Message-ID: <YlRNPyxHcNRQE/5A@smile.fi.intel.com>
-References: <20220408184844.22829-1-andriy.shevchenko@linux.intel.com>
- <YlQyEz3/J0rb2Hew@smile.fi.intel.com>
- <YlQ69jMduq/evgTt@kroah.com>
+        Mon, 11 Apr 2022 11:48:47 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8166B3B02B;
+        Mon, 11 Apr 2022 08:46:29 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id i20so10547419wrb.13;
+        Mon, 11 Apr 2022 08:46:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=PZNKQo2SMpTLuF/HCFLVZDh+KD8HhgUzI1E+iyuY28I=;
+        b=bXS+dS02vEsXF+Q1cnBUZsCHWHeL9Sh7sGdy6Dm3r0Te6wZQax7/tK9oCv6IiNHpsG
+         DFAKcPbuZFq9jVyWOU5FZLKUZrl+3cm3RdzJH7MtyUe1HyAvmaVGPdTDBdDYTjuStcyb
+         IUsUxIO93l/7j2Pc+y7I1+FSL55Cbq1L8zxgChDYcPXfBUWs4CHAk1Nj4wBfSB8Univ5
+         stFlVCyl2HMCXEYPg65a+UD6gnWZsf7ImTij7Dixm8XxWwwvC56rcll+J0MBYkQSNu+K
+         N8gzZzGKJgdHIapXevBGQfKlc66H/hFej2vpPzl81hHyCOplC7BVs/4JbxbGM6k+sWOS
+         dKHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=PZNKQo2SMpTLuF/HCFLVZDh+KD8HhgUzI1E+iyuY28I=;
+        b=OeCOggZbpz8qeu4JH+BnhItMXVn9NTze6xexIBFnNl+GOcU3Nh9EKVnfa33i0Q2vfR
+         l9Rp5v6cmEPZnbzXINHB+dwzmY5Y57O4EYVrVuQLXXa2txALQlg/XrCg0JIwTPH4qUht
+         adp5koy/CiOCMS4bTa+/lmZgLMQUxLFlmjUPzN6cnGVpjiWA16TPDTMLcIRRcy8ZH5ZJ
+         T17hLmOrDc5+AnMJPLyDtS13TwRs8chavwRMTngMjZMGj/qhEUzsPUxPQ8qbUZX8TCS+
+         szJaqtz0IqX0hXiu/ziDgiDCrpEswt4JNMdXyT7GOKCV4z6l6ArhO8CvLCu2zadBTJ+u
+         G/DA==
+X-Gm-Message-State: AOAM533XLgusYE1AQiuFBPSMoESkwEgAMkzCA469i4RB804wFz+RufEl
+        LUR7dycpW8krefiHgabBg7w=
+X-Google-Smtp-Source: ABdhPJy3L75SohiHlUZyctIqdH1tptcfYZRli0ILyyMM2zn0SdVVrK7HaM3/dAMYkL46guFeOj2hsQ==
+X-Received: by 2002:adf:ef10:0:b0:205:ce51:743e with SMTP id e16-20020adfef10000000b00205ce51743emr25707328wro.522.1649691988094;
+        Mon, 11 Apr 2022 08:46:28 -0700 (PDT)
+Received: from localhost (92.40.202.92.threembb.co.uk. [92.40.202.92])
+        by smtp.gmail.com with ESMTPSA id i31-20020adf90a2000000b00205ad559c87sm26483885wri.21.2022.04.11.08.46.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Apr 2022 08:46:27 -0700 (PDT)
+Date:   Mon, 11 Apr 2022 16:47:15 +0100
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     Zhou Yanjie <zhouyu@wanyeetech.com>
+Cc:     devicetree@vger.kernel.org, krzk+dt@kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        paul@crapouillou.net, robh+dt@kernel.org
+Subject: Re: [PATCH] mips: dts: ingenic: x1000: Add PWM device tree node
+Message-ID: <YlRNgyc6eMTgFjdH@localhost>
+References: <20220411100139.15672-1-aidanmacdonald.0x0@gmail.com>
+ <8a3f88d8-3e94-1388-b1c6-b0f71d59f34c@wanyeetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YlQ69jMduq/evgTt@kroah.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8a3f88d8-3e94-1388-b1c6-b0f71d59f34c@wanyeetech.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 04:28:06PM +0200, Greg Kroah-Hartman wrote:
-> On Mon, Apr 11, 2022 at 04:50:11PM +0300, Andy Shevchenko wrote:
-> > On Fri, Apr 08, 2022 at 09:48:40PM +0300, Andy Shevchenko wrote:
-> > > Some of the fwnode APIs might return an error pointer instead of NULL
-> > > or valid fwnode handle. The result of such API call may be considered
-> > > optional and hence the test for it is usually done in a form of
-> > > 
-> > > 	fwnode = fwnode_find_reference(...);
-> > > 	if (IS_ERR(fwnode))
-> > > 		...error handling...
-> > > 
-> > > Nevertheless the resulting fwnode may have bumped the reference count
-> > > and hence caller of the above API is obliged to call fwnode_handle_put().
-> > > Since fwnode may be not valid either as NULL or error pointer the check
-> > > has to be performed there. This approach uglifies the code and adds
-> > > a point of making a mistake, i.e. forgetting about error point case.
-> > > 
-> > > To prevent this, allow an error pointer to be passed to the fwnode APIs.
-> > 
-> > Rafael and Greg, if this okay for you, can the first three patches be
-> > applied, so we will have at least the fix in and consider constification
-> > a further work?
+On Mon, Apr 11, 2022 at 08:41:26PM +0800, Zhou Yanjie wrote:
+> Hi Aidan,
 > 
-> Give us a chance, you sent this on friday and are asking about it first
-> thing Monday morning?
+> On 2022/4/11 下午6:01, Aidan MacDonald wrote:
+> > Copied from the jz4740 devicetree and trimmed to 5 timers, which
+> > is what the hardware supports.
+> >
+> > Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> > ---
+> >   arch/mips/boot/dts/ingenic/x1000.dtsi | 13 +++++++++++++
+> >   1 file changed, 13 insertions(+)
+> >
+> > diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi b/arch/mips/boot/dts/ingenic/x1000.dtsi
+> > index 8bd27edef216..0dcf37527c8e 100644
+> > --- a/arch/mips/boot/dts/ingenic/x1000.dtsi
+> > +++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
+> > @@ -127,6 +127,19 @@ wdt: watchdog@0 {
+> >   			clocks = <&tcu TCU_CLK_WDT>;
+> >   			clock-names = "wdt";
+> >   		};
+> > +
+> > +		pwm: pwm@40 {
+> > +			compatible = "ingenic,x1000-pwm";
+> > +			reg = <0x40 0x80>;
 > 
-> Please go and review other patches sent on the list to help us catch up.
+> 
+> It seems more reasonable to use "reg = <0x40 0x80>" since the
+> X1000 has only 5 PWM channels.
 
-OK! Reviewed (actually commented on) a few patches so far.
+I think you mean "reg = <0x40 0x60>" but I'll do that, thanks!
 
--- 
-With Best Regards,
-Andy Shevchenko
+> > +
+> > +			#pwm-cells = <3>;
+> > +
+> > +			clocks = <&tcu TCU_CLK_TIMER0>, <&tcu TCU_CLK_TIMER1>,
+> > +				 <&tcu TCU_CLK_TIMER2>, <&tcu TCU_CLK_TIMER3>,
+> > +				 <&tcu TCU_CLK_TIMER4>;
+> > +			clock-names = "timer0", "timer1", "timer2",
+> > +				      "timer3", "timer4";
+> 
+> 
+> One line is now allowed to hold at most 100 characters,
+> so it is possible to use only one line like:
+> 
+>          clock-names = "timer0", "timer1", "timer2", "timer3", "timer4";
+> 
+> to reduce the number of lines in the dtsi file.
 
+Sounds good to me.
 
+> 
+> 
+> Thanks and best regards!
+> 
+> 
+> > +		};
+> >   	};
+> >   
+> >   	rtc: rtc@10003000 {
+
+Regards,
+Aidan

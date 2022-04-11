@@ -2,143 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D12D4FC20C
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 18:14:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64B8B4FC213
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 18:16:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348425AbiDKQQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 12:16:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56632 "EHLO
+        id S1348460AbiDKQSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 12:18:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348447AbiDKQQd (ORCPT
+        with ESMTP id S1348570AbiDKQRk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 12:16:33 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2050.outbound.protection.outlook.com [40.107.237.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D442E15A25
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 09:14:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Sqrv/ai3tUKVBUIroFZHW7xC00Ledf/WN7dRJj/IRCSHem2g+ypRC8IBUa4ZWSJ5mE/wf3hVh6IghHc3hVKMR4ygWGyxSagts83mquSC5RNJIQdy4/Fwl7ll5eKKtW1BBo5QBSKvBuMY0jXRYrOlGm353XbR6L5sK4sZ3Ne7WCIqrd6nAehME0ZiMfgMNKRyWwcxgughuYzv5AgDNRmgjN8yuJzpQRnUyOQNnEq2D07aUw5qVyEfz0GFmFuFFv2gEptFkNoty32Y3LY2OsnDiKrk1fHLSUpp5D3aaSHF/Qilm3Ubjn1KaS0bVQeIKpxTI2WKpj0qLigtDvkIOCro/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oxVjTdIP4shPCEt79KNt2AoJygaft0dTSmB5zW8kxn8=;
- b=X7u5ZQ+UnPFL9S5I/HVoVTUy2LMjhc/nLqrPmrWv6059oHG7+0NgW1HK35geHi2BPPpDFRw/2uki6osDQGktC8t4FZdiiYbG1Pc/rxsBqc1PmesvVHzidAJy1l/Da0YohQjN+QnbajU0TATrS7YsVf3TENwvIOyfP+I316092UVY1dZHMlOl0q/yD9l+jW+laSbJbXOb/D5JC0IPyzNhIf9ezrrAjiBgB2kUNK6AFYECRGOCWn/NDhi94/mrjlYD51ni3ZWAuSTKPUp6ayD8+Vlr4i6SjZwoKzOBAP1TOALfYNaGtG6I/ostfrIaM7/eee5WB2oDPlvAOG9A0Cv6oA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oxVjTdIP4shPCEt79KNt2AoJygaft0dTSmB5zW8kxn8=;
- b=dU7D2LYxteY2Y1PsZONSxK+qPJyiwJQpjZs9Y9U/p/xuPN/iW2kQ/O2iVOQdsAq7g2Y5S2Fk087ppheuD6W0HcDkFFbXU4l52rBMdHovAmxAlTgPo4At5/NYdK4bWGzeLmfpa+cq7rqeeOlCHdIVSctGhjcDtKlsyzz0A2ON3foMPjyztzWj14v7VWmYQeJ4oD5ZVyNZXjmffYWJ5DEzKvqGjgRvYJl8C0DTemckVo7eFl538kzwOgRSBhgqWdDTMv4JuMp49/9+qCMS6O1YCt82NRfhNk9flBvclKL9lCjBEcMlyqrZWqnkCekMcfY0JrjY1/4tZ92sCJqEvNyJfQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by DM6PR12MB4619.namprd12.prod.outlook.com (2603:10b6:5:7c::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Mon, 11 Apr
- 2022 16:14:17 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::cdfb:f88e:410b:9374]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::cdfb:f88e:410b:9374%6]) with mapi id 15.20.5144.029; Mon, 11 Apr 2022
- 16:14:17 +0000
-Date:   Mon, 11 Apr 2022 13:14:16 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        intel-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 12/34] drm/i915/gvt: remove vgpu->handle
-Message-ID: <20220411161416.GN2120790@nvidia.com>
-References: <20220411141403.86980-1-hch@lst.de>
- <20220411141403.86980-13-hch@lst.de>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220411141403.86980-13-hch@lst.de>
-X-ClientProxiedBy: MN2PR17CA0023.namprd17.prod.outlook.com
- (2603:10b6:208:15e::36) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Mon, 11 Apr 2022 12:17:40 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2653B1D0C0
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 09:15:25 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 641C11F38D;
+        Mon, 11 Apr 2022 16:15:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1649693724; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=j/MAjvOoM+LwIDjOo9den9iJlN4VetfFiptnTJxMjzM=;
+        b=iyt+/fvysba0/iOSAFRmUAfpBkCZMr5ksphc2cK3XmyuOuooF6sLddfeBF8pRkWObQ2LzV
+        4c+lo40uPkB3ya3WI0kE1aSB9WbR13wSlyNkOtTYqtLaPyYfq7grUF7fPwlqxQK/63aCPC
+        WG8JhAo6iqW4tkVklN6xZNP6sYXNvW8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1649693724;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=j/MAjvOoM+LwIDjOo9den9iJlN4VetfFiptnTJxMjzM=;
+        b=EHFkWa64pqqsIiJ9AuSNdJP49L4h76U1ndHeqoG8qsfMywOgRCdyxtKHmq+ulmvzqBgeC8
+        eYqETL3uCPlxTBCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E795E13A93;
+        Mon, 11 Apr 2022 16:15:23 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id c4bPNxtUVGJadQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 11 Apr 2022 16:15:23 +0000
+Message-ID: <1a0a56f6-ca2f-2724-6c45-d11372b81320@suse.cz>
+Date:   Mon, 11 Apr 2022 18:15:23 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a4dbbfc4-a057-49dd-7c9c-08da1bd653ff
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4619:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB4619859B7E7DFEA880D9CB39C2EA9@DM6PR12MB4619.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: a/3JezaX/TY6cFPtpfBv0RfEN5lLdLz5iA07MiZagl7CIdJhU5Z77CM8bgY5Blj+PzF4kU+c2/MRXXFWe2OZVKu02KeE7NU7qaM9eZrkrmCheBGBAFLAM/kl78bIgIGHJKcN8kHApbZ22Zv8b2L0xasDpkvnSin7SbAz9OQft73ap28gTjLKhB7DHMvDm1DFd1XyoXz2B4uFhrNK8yHVotICttiDUZ5GzcTkueppOz59U4rwmX/JlLGGakg0bBwVobZgh1HBLZBdTPGHUV3Wt8h637rlVmPAf38FKEBKnhI0d/hzKZPe6o0FEIRZZmkMpiFpkzjFjsos3z+amUK87scYZXkCWTbvcAX6uOOU8X47vg4xl9ZNGnVl5Qp75OV1z3QuTer9FX8VCtkPkt5KNdKm2jvMvdo0WkGUyAzXl0ePIA0Bf+hXl9i09zXQHHl0Jh7+lcybmrK7o5A8iJnwybkDC8+QfNz5GbSaf4m7OkVVs9E7aZVFeEcAfzYRN7uhwfxa+cpwJXqKuHIf4tK89WcPnhRTp61jYjKACV5OijYEZH2Mascuc8SqW0ZKE5s/dyR0UXKLCHUEnNkY23tnf0sUpl2hqvwp0t3fqkTlxTAjYeldsr9gQR2+qIU7QLekoxJlRnvF6o6aM2C6ojFE5w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4744005)(38100700002)(508600001)(6486002)(6916009)(86362001)(8936002)(66556008)(7416002)(5660300002)(4326008)(316002)(54906003)(8676002)(66946007)(66476007)(186003)(1076003)(26005)(83380400001)(6506007)(2616005)(6512007)(33656002)(36756003)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vGQM1zN2k9TaeD2J6HRKjcZ/gxIImoxbQ0yoqvIahE3aV7MZXpDNywNWJWnh?=
- =?us-ascii?Q?mHcHYuYd1Mhqy1G5HSy/MIc12+bqY5JY/g7bvdEPGvuAwlDW2EC1euL2mJUy?=
- =?us-ascii?Q?2VpHoabDfs++M+KTSZ9Fw+uR02h6Q+bFyB6/ush3TvQphLckiWyuOBbbyQNW?=
- =?us-ascii?Q?/TNeDnL9eG7xNPQ6yUYOp/+qtV1ivnilxX0HXTBKeUIclpjyxInb6/rwnUha?=
- =?us-ascii?Q?se66+hwPDyfCIefUD+ghdkusfPThee/DXmGk9HyH0goyHeI+T2UGpn/LP+xA?=
- =?us-ascii?Q?x+QSUYWfs1qm0JN8bw+aDPV+6T+V1p+BPdoggbkGdAoPplHkE6RevQ0cLosa?=
- =?us-ascii?Q?JIzFXPCd5VF79MmsBx5NIvmkY5xuIu3eJRR7XH6WvMFCQBEPv/6J+r7IlOOt?=
- =?us-ascii?Q?SYVBT4x913/ZgkTVD5f2sZD1vYOlObGmHqmI0EyHnP0AdZZcII5JIzrHr416?=
- =?us-ascii?Q?ca+drZNbIGlUnxoWrgoo6zpjP3fDI+HBYveuEj9M75MiFdTqym8xYi9YpoJl?=
- =?us-ascii?Q?a3T0LD5mNXJ2P+5EWvDnAr8V5DzEbF2cK5VOCTJ0WX8ixJhF9Wn3yOhy1K5Y?=
- =?us-ascii?Q?lIuPcCWbQ7JoPhaAu8apHAWk6FL1freuECna5nuJ2piDAluKzb1hME9IA9aC?=
- =?us-ascii?Q?fMr9iyMeWil/0tzve+Dj++CHPhJYrxe8qe1Fu2Gy1XOty1Ewz8HC87iKLNyc?=
- =?us-ascii?Q?HWmCgFyfJMlKVTcB4sabCMAWLlLOpcaqeZvyf4eDENyyqUqeKA/MiNXEXp4z?=
- =?us-ascii?Q?/qaiz4D0oUh14YogBoQbOq4OcMM1mU/ZQKqK/Zo+Uq8Kmb9UikRZnxvNq1TP?=
- =?us-ascii?Q?NlJ+n8JIw0soVdtzl/eQF2aIXthJOUYn0+OGtHkLJmKQ5VlJ4pCFTxo3OQ5J?=
- =?us-ascii?Q?o53JWQcFWLB3kWjBcVL0nBRRpbeqIHf7UptceURIz+AEroIn+5bE5ktzILb2?=
- =?us-ascii?Q?rIjZBDp3sdywVFzhc863IjWnrnI58qEi6aGI1g45DLzk1JynfFSb/3J4MNdD?=
- =?us-ascii?Q?40O2eFnTKzCQHPKTETPSgAboO5tv9ucLP01lNkKwZtX3grkB18/SRv02xl8e?=
- =?us-ascii?Q?iGWx1brarSMxnSBb2aGZRJJ61ZE8VBcZzRXJnrDw0yi8H9d6o3zG5ui5HkG9?=
- =?us-ascii?Q?ghJf3+L62JXKKDfcycItccFgO2pCn//WbgZ9x4X/WrfCp1JU1QnT7fQNzqV3?=
- =?us-ascii?Q?6OpTbmUuov4enw8r3+CQD9b1XtiBAI16s8EImVdJ8jynJbccLWfd91ZizGws?=
- =?us-ascii?Q?0B8IMLN2EUdvrQTiP88RL7U6h4P0y0R/xKvDuepsS+dhSDJbmoaSOadtqdlh?=
- =?us-ascii?Q?sd2YWFuiiKFZimAExeMpyB3ZsxL62o2OQxjI61zRPbmCeUH64bH9L79ZCLEc?=
- =?us-ascii?Q?4sA0z5rgnpwn9buWOXLvTydtIixfWqE665rkHRSqSNVfpTS6/B2nqLlkUVcn?=
- =?us-ascii?Q?4w/TcdRZdqH8hf0DNHoqqIX0tsUhGfD2ZvwZu2ZjdUnDruGLpBLhklgprB1U?=
- =?us-ascii?Q?EyqC1txa7Er/R3gy/sqtbzPCCIXvCrWixd+dJvMSGYpcHSkpSLJ2eDtLlCio?=
- =?us-ascii?Q?IbDgsWGcl0vq5htsbtNSqB/t8+8m3ZwNLcn03lmDFSsym8BrtJVxMkqsVNtQ?=
- =?us-ascii?Q?19C/z/RTW2aS5+v7GwAuxi6pqjVMBZq9PqEfCwZOEeb76B/V+9xkjjzvHhAF?=
- =?us-ascii?Q?Zb1ihg3Yf9wxw3/am5al4SwR2xq5t89A+1nGK9pinmaK1a8qex+5laZ2gCwd?=
- =?us-ascii?Q?r3f539v03A=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a4dbbfc4-a057-49dd-7c9c-08da1bd653ff
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2022 16:14:17.3487
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Uvuo6u1hbBVqLOp0lEKqV/lBDIP+Q29bniMUNGArwAsCItZHqUyEQcyFvpte9f9y
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4619
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 02/16] mm/hugetlb: take src_mm->write_protect_seq in
+ copy_hugetlb_page_range()
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jann Horn <jannh@google.com>, Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Liang Zhang <zhangliang5@huawei.com>,
+        Pedro Gomes <pedrodemargomes@gmail.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org
+References: <20220329160440.193848-1-david@redhat.com>
+ <20220329160440.193848-3-david@redhat.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20220329160440.193848-3-david@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 04:13:41PM +0200, Christoph Hellwig wrote:
-> Always pass the actual vgpu structure instead of encoding it as a
-> "handle" and add a bool flag to denote if a VGPU is attached.
+On 3/29/22 18:04, David Hildenbrand wrote:
+> Let's do it just like copy_page_range(), taking the seqlock and making
+> sure the mmap_lock is held in write mode.
 > 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->  drivers/gpu/drm/i915/gvt/gvt.h       |   3 +-
->  drivers/gpu/drm/i915/gvt/hypercall.h |  32 +++----
->  drivers/gpu/drm/i915/gvt/kvmgt.c     | 126 +++++++++------------------
->  drivers/gpu/drm/i915/gvt/mpt.h       |  20 ++---
->  drivers/gpu/drm/i915/gvt/vgpu.c      |   6 +-
->  5 files changed, 71 insertions(+), 116 deletions(-)
+> This allows for add a VM_BUG_ON to page_needs_cow_for_dma() and
+> properly synchronizes cocnurrent fork() with GUP-fast of hugetlb pages,
 
-Yay typesafety!
+			concurrent
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> which will be relevant for further changes.
+> 
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 
-Jason
+Acked-by: Vlastimil Babka <vbabka@suse.cz>

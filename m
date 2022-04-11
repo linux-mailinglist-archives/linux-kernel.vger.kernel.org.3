@@ -2,202 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E889B4FB5BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 10:16:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E7754FB5C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 10:17:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343639AbiDKISK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 04:18:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42312 "EHLO
+        id S1343645AbiDKITU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 04:19:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343627AbiDKIR2 (ORCPT
+        with ESMTP id S234457AbiDKITT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 04:17:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7CE3E0C3;
-        Mon, 11 Apr 2022 01:15:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 05D9C614F4;
-        Mon, 11 Apr 2022 08:15:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58AB1C385A5;
-        Mon, 11 Apr 2022 08:15:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649664913;
-        bh=ZkrVVBJyzLqA0b4DRvPuMQG1UraJ6mf+YO/MsQx5tiA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ov4epHJe6KspxTj0puzPzXFibZGfbziDhFCTvxbV5cA3pOOEDApR9dplIrRhRBhsv
-         bR/6VlXThk6DZVvFSbLx/0kMP2Pb75jR40qUWEH+K4gdX4db72O6RxoTTbj9UjYN58
-         OXP6trr5S8z8eLv0tzlWy0/T91vxL49mcOMK5Skz1Ghru6KvOA2eLqVI/nwUECC0kn
-         UjpReWycd1InJWzk1uM5UysEquOC/uIloDhl+yE7jxby81kktkPZH8/aLjOyB6fjQe
-         FADmJPtndWrPC+buW359USA0w8g5AmVdqRox7Eyr43sLgGgGM7fuGUpEed/VcwbWUL
-         C8iiecVWIdZGQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1ndpCU-0001zL-FB; Mon, 11 Apr 2022 10:15:06 +0200
-Date:   Mon, 11 Apr 2022 10:15:06 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     sven@svenschwermer.de
-Cc:     linux-usb@vger.kernel.org,
-        Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] usb: serial: option: Add Fibocom L610 modem
-Message-ID: <YlPjio75ekl1gL52@hovoldconsulting.com>
-References: <20220407074945.74449-1-sven@svenschwermer.de>
+        Mon, 11 Apr 2022 04:19:19 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8695133A05
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 01:17:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649665025; x=1681201025;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=0SDytKNgnjB/MYuzpOQtWNCMJGuAnFbCKVUTPOrWFeY=;
+  b=RO3sFwPVQVRIF8L48av81kqZXmHFcNfpeGJwzZgnj7dfWoEL506TAK0p
+   mzbsBaX/cogfc7JRAMAKUVKeZfwm2aFti+Oa923T/wW0kUgquwswsOqq9
+   E0JQNKgFoAwWJqTImycvOI0DaUQCTgos8wzbgoBYPeDiUqTihwgJF3Ukf
+   3yrznX4aLnQtYSN2DBJ6MKNz6re0gR3qaPN9qKf4Sd2cHDEDTvUusNyp8
+   vIiMdf7Z68R8jqF01+mT2NqSA5skZOFGI5wNmOQ219nb5ZzUmVQvsi2Zx
+   dMtCo2nG5dRoyLf53CCDLh6hJBAzej5iUfadEb7D8PGD0zvXMse5S6vfQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="249345902"
+X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
+   d="scan'208";a="249345902"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 01:17:05 -0700
+X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
+   d="scan'208";a="572023054"
+Received: from leichu-mobl1.ccr.corp.intel.com ([10.254.213.5])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 01:17:01 -0700
+Message-ID: <1c87afeb5fec688ca1921f2f50e4b9fd92f6ce01.camel@intel.com>
+Subject: Re: [PATCH 0/3] memory tiering: hot page selection
+From:   "ying.huang@intel.com" <ying.huang@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Mel Gorman <mgorman@techsingularity.net>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Michal Hocko <mhocko@suse.com>,
+        Rik van Riel <riel@surriel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Yang Shi <shy828301@gmail.com>, Zi Yan <ziy@nvidia.com>,
+        Wei Xu <weixugc@google.com>, osalvador <osalvador@suse.de>,
+        Shakeel Butt <shakeelb@google.com>,
+        Zhong Jiang <zhongjiang-ali@linux.alibaba.com>
+Date:   Mon, 11 Apr 2022 16:16:58 +0800
+In-Reply-To: <20220408210709.ce4ede3a9c778700dda0a292@linux-foundation.org>
+References: <20220408071222.219689-1-ying.huang@intel.com>
+         <20220408210709.ce4ede3a9c778700dda0a292@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220407074945.74449-1-sven@svenschwermer.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 09:49:44AM +0200, sven@svenschwermer.de wrote:
-> From: Sven Schwermer <sven.schwermer@disruptive-technologies.com>
+Hi, Andrew,
 
-Thanks for the patches.
+Thanks a lots for your comments!
 
-Could you add some introductory text here describing the three
-configurations?
-
-Do you know what the individual vendor interfaces are used for in each
-configuration?
-
-> +GTUSBMODE: 31
-> --------------
-> T:  Bus=03 Lev=01 Prnt=01 Port=06 Cnt=04 Dev#=124 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=1782 ProdID=4d10 Rev= 0.00
-> S:  Manufacturer=FIBOCOM
-> S:  Product=L610
-> C:* #Ifs= 7 Cfg#= 1 Atr=e0 MxPwr=400mA
-> I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+On Fri, 2022-04-08 at 21:07 -0700, Andrew Morton wrote:
+> On Fri,  8 Apr 2022 15:12:19 +0800 Huang Ying <ying.huang@intel.com>
+> wrote:
 > 
-> +GTUSBMODE: 32
-> --------------
-> T:  Bus=03 Lev=01 Prnt=01 Port=06 Cnt=04 Dev#=122 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=1782 ProdID=4d11 Rev= 0.00
-> S:  Manufacturer=FIBOCOM
-> S:  Product=L610
-> C:* #Ifs= 9 Cfg#= 1 Atr=e0 MxPwr=400mA
-> A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=06 Prot=00
-> I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=cdc_ether
-> E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
-> I:  If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-> I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 7 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 8 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=08(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > To optimize page placement in a memory tiering system with NUMA
+> > balancing, the hot pages in the slow memory node need to be
+> > identified.  Essentially, the original NUMA balancing
+> > implementation
+> > selects and promote the mostly recently accessed (MRU) pages.  But
+> > the
+> > recently accessed pages may be cold.
 > 
-> +GTUSBMODE: 33
-> --------------
-> T:  Bus=03 Lev=01 Prnt=01 Port=06 Cnt=04 Dev#=126 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=1782 ProdID=4d11 Rev= 0.00
-> S:  Manufacturer=FIBOCOM
-> S:  Product=L610
-> C:* #Ifs= 9 Cfg#= 1 Atr=e0 MxPwr=400mA
-> A:  FirstIf#= 0 IfCount= 2 Cls=e0(wlcon) Sub=01 Prot=03
-> I:* If#= 0 Alt= 0 #EPs= 1 Cls=e0(wlcon) Sub=01 Prot=03 Driver=rndis_host
-> E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=4096ms
-> I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 7 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 8 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=08(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> Wait.  What.  How on earth could the most recently accessed page be
+> considered "cold"?
 > 
-> Signed-off-by: Sven Schwermer <sven.schwermer@disruptive-technologies.com>
-> ---
->  drivers/usb/serial/option.c | 3 +++
->  1 file changed, 3 insertions(+)
+> Changelog needs work, please.
+
+Sorry for confusing.  What I really want to say is,
+
+The pages with low accessing frequency should be kept in slow memory
+node.  But these pages will still be accessed, so they may be selected
+and migrated to the fast memory node by the original NUMA balancing
+implementation upon accessing.
+
+Are the new words better?
+
+> > So in this patchset, we
+> > implement a new hot page identification algorithm based on the
+> > latency
+> > between NUMA balancing page table scanning and hint page fault.
 > 
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index e7755d9cfc61..75b62e08b82f 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -2111,6 +2111,9 @@ static const struct usb_device_id option_ids[] = {
->  	  .driver_info = RSVD(3) },
->  	{ USB_DEVICE(0x1508, 0x1001),						/* Fibocom NL668 (IOT version) */
->  	  .driver_info = RSVD(4) | RSVD(5) | RSVD(6) },
-> +	{ USB_DEVICE(0x1782, 0x4d10) },						/* Fibocom L610 (+GTUSBMODE=31) */
+> That sounds reasonable.
+> 
+> > And the hot page promotion can incur some overhead in the system. 
+> > To
+> > control the overhead a simple promotion rate limit mechanism is
+> > implemented.
+> 
+> That sounds like a hack to fix a problem you just added?  Maybe a
+> reasonable one..
 
-Perhaps use a short human readable description of the mode instead of
-the AT commands in the comments?
+Sorry again for confusing.  Try to reword it as follows,
 
-> +	{ USB_DEVICE(0x1782, 0x4d11),						/* Fibocom L610 (+GTUSBMODE={32,33}) */
-> +	  .driver_info = RSVD(0) | RSVD(1) },
+If there are hot pages in slow memory node and cold pages in fast
+memory node, we need to promote/demote hot/cold pages between the fast
+and cold memory nodes.
 
-Please use USB_DEVICE_INTERFACE_CLASS() here instead enumerating the
-non-vendor class interfaces as reserved.
+One choice is to promote/demote as fast as possible.  But the CPU
+cycles and memory bandwidth consumed by the fast promoting/demoting may
+hurt the performance of the workload, e.g., the workload latency.
 
->  	{ USB_DEVICE(0x2cb7, 0x0104),						/* Fibocom NL678 series */
->  	  .driver_info = RSVD(4) | RSVD(5) },
->  	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x0105, 0xff),			/* Fibocom NL678 series */
+One way to resolve this issue is to restrict the max promoting/demoting
+bandwidth.  It will take longer to finish the promoting/demoting.  But
+the workload latency may be better.  This is implemented in this
+patchset as the page promotion rate limit mechanism.
 
-Johan
+> > The hot threshold used to identify the hot pages is workload
+> > dependent
+> > usually.  So we also implemented a hot threshold automatic
+> > adjustment
+> > algorithm.  The basic idea is to increase/decrease the hot
+> > threshold
+> > to make the number of pages that pass the hot threshold (promote
+> > candidate) near the rate limit.
+> 
+> hot threshold is tweakable via debugfs.  So it's an unstable
+> interface,
+> undocumented, may be withdrawn at any time, etc.
+> 
+> Please justify this.  Is it intended that this interface be removed? 
+> If yes, please describe the plan for this in the changelog.  If no
+> then
+> this interface should be in sysfs, it should be fully documented in
+> the
+> kernel tree and it should be fully changelogged (preferably with
+> usage
+> examples) so that reviewers can best understand what is a permanent
+> extension to the kernel API which we must maintain for all time.
+
+Previously, I had added a hot threshold sysfs interface.  But later, I
+thought that it's hard for the users to determine right hot threshold
+value.  On the other hand, in patch [3/3], we implemented a hot
+threshold automatic adjustment algorithm, which make it not so
+important to set the hot threshold from the user space.  So I moved the
+hot threshold setting interface to debugfs just for users to
+experiment.  If it turns out that a formal interface is needed finally,
+I will add one.
+
+> Does this code build correctly if !LAST_CPUPID_NOT_IN_PAGE_FLAGS?
+> 
+
+I have relied on 0-Day kernel build service to capture the build bug of
+more configurations and architectures.  But I just tried i386
+architcture, and found that NUMA balancing isn't supported there, so I
+cannot build test that for i386 too.  Should I try more?
+
+> > TODO: Add ABI document for new sysctl knob.
+> 
+> um, yes.
+> 
+
+Sure.  Will do that in the next version.
+
+> check_cpupid() is a poor function name.  Check for what?  Liver
+> damage?
+> A better identifier would be cpupid_valid(), perhaps.  And perhaps it
+> should be implemented in mm.h.  And even documented.
+
+Yes.  cpupid_valid() is much better.  I will add document for it in the
+next version.
+
+> Oddly, the proposed changes do a decent job of documenting
+> intra-function changes but a poor job of documenting newly added
+> functions.  Please review every new function and decide whether it is
+> so simple and obvious that it can be added to Linux without any
+> inline
+> description at all.  
+> 
+> pgdat_free_space_enough() and  numa_hint_fault_latency().
+
+Sure.  Will check all new functions and add document if necessary.
+
+> numa_migration_check_rate_limit() particularly.  There's that "check"
+> word again.  Check for what?
+> 
+
+The original idea is to check whether the migration is ratelimited. 
+Will change this to numa_migration_rate_limit().  It will return true
+if migration rate exceed the limit.
+
+> 
+> The numa_balancing_rate_limit_mbps sysctl.  I assume "b" means
+> "bytes".
+> That's better than "pages", but still.  Machines vary a lot in how
+> many bytes they have and in the speed at which they process those
+> bytes.  Is there some metric which we can use here which at least
+> partially insulates us from this variability?  So that sysadmins
+> don't
+> need to set all their machines differently, based upon their size and
+> speed?
+
+Will change the sysctl to numb_balancing_promote_rate_limit_MBps to
+avoid possible confusing.
+
+The default rate limit is 64 GB/s, that is, no limitation.  As Mel
+Gorman suggested.
+
+To reduce the possible disturbing to the workload, A rule of thumb is
+to set it to be 10% of the max slow memory bandwidth.  But we don't
+know how to detect that automatically yet.
+
+> numa_threshold_ts is apparently in units of jiffies.  This was not
+> documented at the definition site, and it should be.  But jiffies can
+> vary between machines and configs.  Why add this inter-machine and
+> inter-config uncertainty/variability when we have
+> include/linux/ktime.h?
+> 
+
+We need to call cmpxchg() on it, so ktime_t may be not the best choice
+here.  But I got your idea.  I will use some more general time unit,
+e.g. milli-second.
+
+Best Regards,
+Huang, Ying
+
+

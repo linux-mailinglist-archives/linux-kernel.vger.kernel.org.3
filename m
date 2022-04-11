@@ -2,127 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F5834FB675
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 10:54:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 079074FB67B
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 10:54:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343965AbiDKI4M convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 11 Apr 2022 04:56:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57080 "EHLO
+        id S1343964AbiDKI4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 04:56:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240222AbiDKI4G (ORCPT
+        with ESMTP id S1343958AbiDKI43 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 04:56:06 -0400
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6558D3EAB6;
-        Mon, 11 Apr 2022 01:53:53 -0700 (PDT)
-Received: by mail-qk1-f171.google.com with SMTP id 75so7242547qkk.8;
-        Mon, 11 Apr 2022 01:53:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=rPZ/wvLlErvlmCophlU8VgOKZ6EBQYYUESc80mCcO8Y=;
-        b=WKQuIfRV4eKMiShrepznzCmzjrpBfTiQDksBx8noyr9MIdkktDKOZAajjvK1bwdorH
-         zdmu0MJhmphZv9BUJgyfvTX42+7uNj9BCdmSG7pqLygEuWhZzGPt7cXWB7n/swVs0AkU
-         o9/vV8+kvwkgWLyDwHW3E2ceE5rcYHF6aWseIZIOKdqgurfvzLa0IkFCJz2xnT0pzEYL
-         7G9RWlWgQUse55/zodxcExGJhnC9fVblMl25u9O0rDiwRNh6IGaAV/+o4j7QIG9oVNkM
-         FIRJXva/LjONLk/o5lmDfal1BEkXSczoHqD7G5/M/59PaG5jkNdet6dplH0DGqmQaPuc
-         kH8g==
-X-Gm-Message-State: AOAM531ws1zUpzA9UGbgzY0UAVrqTTp2FxA129OMTtMozoUDeH4TOXUu
-        B+BaSRJ7ELzoiN/ZFzXYxr5JGwHJCMf7/A==
-X-Google-Smtp-Source: ABdhPJyei55FF+NH/zkzl6endo+Q6+02jO8FYqS7UpSAKFPNUoJIqE9TdpCqTkm14tO5P9JpS4vOsw==
-X-Received: by 2002:a37:ac12:0:b0:69c:e9e:8c02 with SMTP id e18-20020a37ac12000000b0069c0e9e8c02mr4554437qkm.603.1649667232208;
-        Mon, 11 Apr 2022 01:53:52 -0700 (PDT)
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
-        by smtp.gmail.com with ESMTPSA id p13-20020a05622a048d00b002e1ce0c627csm25663550qtx.58.2022.04.11.01.53.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Apr 2022 01:53:51 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id k36so4538270ybj.11;
-        Mon, 11 Apr 2022 01:53:51 -0700 (PDT)
-X-Received: by 2002:a25:9e89:0:b0:63c:ad37:a5de with SMTP id
- p9-20020a259e89000000b0063cad37a5demr21296668ybq.342.1649667231109; Mon, 11
- Apr 2022 01:53:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220406201523.243733-1-laurent@vivier.eu> <20220406201523.243733-2-laurent@vivier.eu>
- <Yk5tNOPE4b2QbHLG@kroah.com> <198be9ea-a8c2-0f9e-6ae5-a7358035def4@vivier.eu> <Yk6CO11wyo86ylee@kroah.com>
-In-Reply-To: <Yk6CO11wyo86ylee@kroah.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 11 Apr 2022 10:53:39 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdW=-nnKSLRZbHGkQQ8zEBxjQ4T1XXyTfv5-fM-h-+fQQA@mail.gmail.com>
-Message-ID: <CAMuHMdW=-nnKSLRZbHGkQQ8zEBxjQ4T1XXyTfv5-fM-h-+fQQA@mail.gmail.com>
-Subject: Re: [PATCH v16 1/4] tty: goldfish: introduce gf_ioread32()/gf_iowrite32()
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Laurent Vivier <laurent@vivier.eu>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-rtc@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
+        Mon, 11 Apr 2022 04:56:29 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD87CDD
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 01:54:14 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 8D963210E5;
+        Mon, 11 Apr 2022 08:54:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1649667253; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=z3DynAgenAnKaL+njjN/VfMLQujLKBaeaS8Zr6cqcsY=;
+        b=F3S6Cs0jvF2qE/dmCLrwah/1u8VOjvexN9lhICmWPnOG4elSNPAPkFsyYtvR3TRYBflgYg
+        9+tJpbdI6SYLCmwC3FL1fOd2nT9uOlkX8XF6EG0hijuee3qse63BbYIaQpWCa1zoXQ01nK
+        NTikNrWe1m0NvgA/ixDC3B3d73q1D1E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1649667253;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=z3DynAgenAnKaL+njjN/VfMLQujLKBaeaS8Zr6cqcsY=;
+        b=Z63FYo3ONTeO4T2tikzY1J7ttYxVpibHVDtl4E7hScgrL8ARUH9W2o9h66/5nnCYYZDKJb
+        aHj4cdT+i8kjwdCA==
+Received: from kunlun.suse.cz (unknown [10.100.128.76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 14937A3BFE;
+        Mon, 11 Apr 2022 08:54:13 +0000 (UTC)
+Date:   Mon, 11 Apr 2022 10:54:11 +0200
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     Coiby Xu <coxu@redhat.com>
+Cc:     kexec@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+        Baoquan He <bhe@redhat.com>, Dave Young <dyoung@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 2/3] kexec, KEYS: make the code in
+ bzImage64_verify_sig generic
+Message-ID: <20220411085411.GZ163591@kunlun.suse.cz>
+References: <20220401013118.348084-1-coxu@redhat.com>
+ <20220401013118.348084-3-coxu@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220401013118.348084-3-coxu@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Fri, Apr 01, 2022 at 09:31:17AM +0800, Coiby Xu wrote:
+> The code in bzImage64_verify_sig could make use of system keyrings
+s/could make/makes/
+> including .buitin_trusted_keys, .secondary_trusted_keys and .platform
+> keyring to verify signed kernel image as PE file. Make it generic so
+> both x86_64 and arm64 can use it.
+> 
+> Signed-off-by: Coiby Xu <coxu@redhat.com>
+> ---
+>  arch/x86/kernel/kexec-bzimage64.c | 13 +------------
+>  include/linux/kexec.h             |  7 +++++++
+>  kernel/kexec_file.c               | 17 +++++++++++++++++
+>  3 files changed, 25 insertions(+), 12 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/kexec-bzimage64.c b/arch/x86/kernel/kexec-bzimage64.c
+> index 170d0fd68b1f..f73aab3fde33 100644
+> --- a/arch/x86/kernel/kexec-bzimage64.c
+> +++ b/arch/x86/kernel/kexec-bzimage64.c
+> @@ -17,7 +17,6 @@
+>  #include <linux/kernel.h>
+>  #include <linux/mm.h>
+>  #include <linux/efi.h>
+> -#include <linux/verification.h>
+>  
+>  #include <asm/bootparam.h>
+>  #include <asm/setup.h>
+> @@ -531,17 +530,7 @@ static int bzImage64_cleanup(void *loader_data)
+>  #ifdef CONFIG_KEXEC_BZIMAGE_VERIFY_SIG
+>  static int bzImage64_verify_sig(const char *kernel, unsigned long kernel_len)
+>  {
+> -	int ret;
+> -
+> -	ret = verify_pefile_signature(kernel, kernel_len,
+> -				      VERIFY_USE_SECONDARY_KEYRING,
+> -				      VERIFYING_KEXEC_PE_SIGNATURE);
+> -	if (ret == -ENOKEY && IS_ENABLED(CONFIG_INTEGRITY_PLATFORM_KEYRING)) {
+> -		ret = verify_pefile_signature(kernel, kernel_len,
+> -					      VERIFY_USE_PLATFORM_KEYRING,
+> -					      VERIFYING_KEXEC_PE_SIGNATURE);
+> -	}
+> -	return ret;
+> +	return kexec_kernel_verify_pe_sig(kernel, kernel_len);
+>  }
 
-On Thu, Apr 7, 2022 at 8:18 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> On Thu, Apr 07, 2022 at 08:00:08AM +0200, Laurent Vivier wrote:
-> > Le 07/04/2022 à 06:48, Greg KH a écrit :
-> > > On Wed, Apr 06, 2022 at 10:15:20PM +0200, Laurent Vivier wrote:
-> > > > Revert
-> > > > commit da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
-> > > >
-> > > > and define gf_ioread32()/gf_iowrite32() to be able to use accessors
-> > > > defined by the architecture.
-> > > >
-> > > > Cc: stable@vger.kernel.org # v5.11+
-> > > > Fixes: da31de35cd2f ("tty: goldfish: use __raw_writel()/__raw_readl()")
-> > > > Signed-off-by: Laurent Vivier <laurent@vivier.eu>
-> > > > Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> > > > ---
-> > > >   drivers/tty/goldfish.c   | 20 ++++++++++----------
-> > > >   include/linux/goldfish.h | 15 +++++++++++----
-> > > >   2 files changed, 21 insertions(+), 14 deletions(-)
-> > > >
-> > >
-> > > Why is this a commit for the stable trees?  What bug does it fix?  You
-> > > did not describe the problem in the changelog text at all, this looks
-> > > like a housekeeping change only.
-> >
-> > Arnd asked for that in:
-> >
-> >   Re: [PATCH v11 2/5] tty: goldfish: introduce gf_ioread32()/gf_iowrite32()
-> >   https://lore.kernel.org/lkml/CAK8P3a1oN8NrUjkh2X8jHQbyz42Xo6GSa=5n0gD6vQcXRjmq1Q@mail.gmail.com/
->
-> You did not provide a reason in this changelog to explain any of that :(
+Maybe you can completely eliminate bzImage64_verify_sig and directly
+assign kexec_kernel_verify_pe_sig to the fops?
 
-OK if I queue that patch with the rationale from Arnd's email added
-to the patch description?
+Other than that
 
-This series has been dragging out for way too long...
+Reviewed-by: Michal Suchanek <msuchanek@suse.de>
 
-Thanks!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+>  #endif
+>  
+> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+> index 755fed183224..2fe39e946988 100644
+> --- a/include/linux/kexec.h
+> +++ b/include/linux/kexec.h
+> @@ -19,6 +19,7 @@
+>  #include <asm/io.h>
+>  
+>  #include <uapi/linux/kexec.h>
+> +#include <linux/verification.h>
+>  
+>  #ifdef CONFIG_KEXEC_CORE
+>  #include <linux/list.h>
+> @@ -196,6 +197,12 @@ int arch_kexec_apply_relocations(struct purgatory_info *pi,
+>  				 const Elf_Shdr *relsec,
+>  				 const Elf_Shdr *symtab);
+>  int arch_kimage_file_post_load_cleanup(struct kimage *image);
+> +#ifdef CONFIG_KEXEC_SIG
+> +#ifdef CONFIG_SIGNED_PE_FILE_VERIFICATION
+> +int kexec_kernel_verify_pe_sig(const char *kernel,
+> +				    unsigned long kernel_len);
+> +#endif
+> +#endif
+>  int arch_kexec_locate_mem_hole(struct kexec_buf *kbuf);
+>  
+>  extern int kexec_add_buffer(struct kexec_buf *kbuf);
+> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+> index 3720435807eb..754885b96aab 100644
+> --- a/kernel/kexec_file.c
+> +++ b/kernel/kexec_file.c
+> @@ -165,6 +165,23 @@ void kimage_file_post_load_cleanup(struct kimage *image)
+>  }
+>  
+>  #ifdef CONFIG_KEXEC_SIG
+> +#ifdef CONFIG_SIGNED_PE_FILE_VERIFICATION
+> +int kexec_kernel_verify_pe_sig(const char *kernel, unsigned long kernel_len)
+> +{
+> +	int ret;
+> +
+> +	ret = verify_pefile_signature(kernel, kernel_len,
+> +				      VERIFY_USE_SECONDARY_KEYRING,
+> +				      VERIFYING_KEXEC_PE_SIGNATURE);
+> +	if (ret == -ENOKEY && IS_ENABLED(CONFIG_INTEGRITY_PLATFORM_KEYRING)) {
+> +		ret = verify_pefile_signature(kernel, kernel_len,
+> +					      VERIFY_USE_PLATFORM_KEYRING,
+> +					      VERIFYING_KEXEC_PE_SIGNATURE);
+> +	}
+> +	return ret;
+> +}
+> +#endif
+> +
+>  static int kexec_image_verify_sig(struct kimage *image, void *buf,
+>  		unsigned long buf_len)
+>  {
+> -- 
+> 2.34.1
+> 

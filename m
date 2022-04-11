@@ -2,88 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B74A4FB289
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 06:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18BB94FB28A
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 06:07:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242974AbiDKEDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 00:03:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44994 "EHLO
+        id S232666AbiDKEJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 00:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233614AbiDKEDN (ORCPT
+        with ESMTP id S230325AbiDKEJK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 00:03:13 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5796B18D
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 21:01:00 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id h10so1795745pfr.10
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 21:01:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qv+7Hl4RSuglMyoHnp4oUvoCdTwgerBcrHKS09aDebw=;
-        b=pfckYdUcNIyvu8Skv2MxHOHvHeke7kwM64kCROBJONypWCLcJPc4qA3eraClb2vSuk
-         U/I8SaKKJ7ic6/Pc5Pez8gyYHSRJa9XAlKe/mJj2pKSVBX+WU06nmXpP8YYURjot4eEB
-         V8yGSN7d16/7OLKzhZabhfMQ4pOiqp2822p1gyLuUPmxWsNPuXysTAezUfebBOzl02tt
-         PI9oXb61hAbBv18GhAtDTqMyyncmh3gzKaIDmBD3NVJh+EYyB+QsS/W88io2gHspvkso
-         jV3o20kK2EdaiYJGYHNtAVf7L9Uu5MSnkspSYrzzAcgIkc+qXVqztAF++ebvlBxc8kvo
-         W6NA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qv+7Hl4RSuglMyoHnp4oUvoCdTwgerBcrHKS09aDebw=;
-        b=nX7Wy8aTRDQqFLeinlBteVPZWK7b7dtVJR19F0Hnv1oYEkva1j2MjrTo/YBLcLb4gP
-         6uvhfMxDj2CbhOyxy3t/87iXAGV/bNIGeNicsiYAKB9gZwA5t2sZELnceKcl3flORTVr
-         8DPONfU1X0Z/1KDWs1/AP+qqZdMZK7R/42cG6sfNmkYlDT9TdJ7QhzD5lNTrnblznN0H
-         m/Vm44d/6Cvf42RPeHQTBbdUcqhTKOH9x3qTbtQWHNC7+4VLdLKo9c7cv8KWqz4fUsXp
-         36ioANB5tplPbA63Mlir21xhXrN8d29fxafY1V1c9GFM2CCbrnIlz4CUwvbm2H3nANFZ
-         V82A==
-X-Gm-Message-State: AOAM533tnZT0vN3gFu1zRCc3CbMdpe1yvg85jvusofj410Rh3IKRumZt
-        GAsctMrRErM3V9S1rXh1l73G1A==
-X-Google-Smtp-Source: ABdhPJxQEAqMDqqzt26Ds89IfS4APasNiBQZrqAD/35nAo6s+tB/SZmB/l1XG4JozFTGYHLcVfuGSA==
-X-Received: by 2002:a63:7c06:0:b0:398:31d5:f759 with SMTP id x6-20020a637c06000000b0039831d5f759mr24923035pgc.513.1649649659878;
-        Sun, 10 Apr 2022 21:00:59 -0700 (PDT)
-Received: from localhost ([139.177.225.229])
-        by smtp.gmail.com with ESMTPSA id hk16-20020a17090b225000b001ca00b81a95sm19269628pjb.22.2022.04.10.21.00.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Apr 2022 21:00:59 -0700 (PDT)
-Date:   Mon, 11 Apr 2022 12:00:55 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Jiyoup Kim <lakroforce@gmail.com>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Ohhoon Kwon <ohkwon1043@gmail.com>,
-        JaeSang Yoo <jsyoo5b@gmail.com>,
-        Wonhyuk Yang <vvghjk1234@gmail.com>,
-        Donghyeok Kim <dthex5d@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/slub: remove duplicate flag in allocate_slab()
-Message-ID: <YlOn97p0dFEcr+h9@FVFYT0MHHV2J.usts.net>
-References: <20220409150538.1264-1-lakroforce@gmail.com>
+        Mon, 11 Apr 2022 00:09:10 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24BBD1658C
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 21:06:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649650017; x=1681186017;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7a5L5pHh2qS6ch6/EmFZOA1nOfyVhZlxe5zhAixrEQM=;
+  b=FbwzDn+E1u5ED0OVEUi6nUlJ2L92lRmLYPLiDkTMwRvrbXX2v5/SHNot
+   sywVRQUujk4PrHfRos9olVGVEPqnKFGzTDEXc5NJ3gh0peagYe7QkRdbV
+   2EzeKRvam6RCyp+2zd4iIB8M+pMhp265Dl8wvGGOrkgJQdXzVJRz3tVOc
+   /XpqxyXzfViAqQNGxkMyfGV18F/uncZzwvLqJq6T7p24hX1ulyifdooJx
+   5snyAbgVR4qo71ZnZZgRn0zeOPX5K6DzYA0fMVHYPTC+iYHTZK8M3j6/A
+   K5BQ/1EfwescNROUeYE13b051++L9WkmjafqqXPvkZyTj0NtN9spRa2oA
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="261771899"
+X-IronPort-AV: E=Sophos;i="5.90,250,1643702400"; 
+   d="scan'208";a="261771899"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2022 21:06:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,250,1643702400"; 
+   d="scan'208";a="506950142"
+Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 10 Apr 2022 21:06:55 -0700
+Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ndlKI-0001UF-EK;
+        Mon, 11 Apr 2022 04:06:54 +0000
+Date:   Mon, 11 Apr 2022 12:06:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     James Hughes <JamesH65@users.noreply.github.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Dom Cobley <popcornmix@gmail.com>,
+        Matteo Croce <mcroce@redhat.com>
+Subject: [l1k:smsc95xx_5.17 85/888]
+ drivers/perf/raspberrypi_axi_monitor.c:139:1: warning: 'static' is not at
+ beginning of declaration
+Message-ID: <202204111229.bejmJhO0-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220409150538.1264-1-lakroforce@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 10, 2022 at 12:05:37AM +0900, Jiyoup Kim wrote:
-> In allocate_slab(), __GFP_NOFAIL flag is removed twice when trying
-> higher-order allocation. Remove it.
-> 
-> Signed-off-by: Jiyoup Kim <lakroforce@gmail.com>
+tree:   https://github.com/l1k/linux smsc95xx_5.17
+head:   240f56c27361c195cd502d95aba51c6b8e5b808c
+commit: 7903ec0612d5f7d32ca61206d5e3cbe0262d3c00 [85/888] AXI performance monitor driver (#2222)
+config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20220411/202204111229.bejmJhO0-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/l1k/linux/commit/7903ec0612d5f7d32ca61206d5e3cbe0262d3c00
+        git remote add l1k https://github.com/l1k/linux
+        git fetch --no-tags l1k smsc95xx_5.17
+        git checkout 7903ec0612d5f7d32ca61206d5e3cbe0262d3c00
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/char/broadcom/ drivers/perf/
 
-LGTM.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+All warnings (new ones prefixed by >>):
+
+>> drivers/perf/raspberrypi_axi_monitor.c:139:1: warning: 'static' is not at beginning of declaration [-Wold-style-declaration]
+     139 | const static char *bus_filter_strings[] = {
+         | ^~~~~
+   drivers/perf/raspberrypi_axi_monitor.c:176:1: warning: 'static' is not at beginning of declaration [-Wold-style-declaration]
+     176 | const static char *system_bus_string[] = {
+         | ^~~~~
+   drivers/perf/raspberrypi_axi_monitor.c:197:1: warning: 'static' is not at beginning of declaration [-Wold-style-declaration]
+     197 | const static char *vpu_bus_string[] = {
+         | ^~~~~
+   drivers/perf/raspberrypi_axi_monitor.c:218:1: warning: 'static' is not at beginning of declaration [-Wold-style-declaration]
+     218 | const static char *monitor_name[] = {
+         | ^~~~~
+
+
+vim +/static +139 drivers/perf/raspberrypi_axi_monitor.c
+
+   138	
+ > 139	const static char *bus_filter_strings[] = {
+   140		"",
+   141		"CORE0_V",
+   142		"ICACHE0",
+   143		"DCACHE0",
+   144		"CORE1_V",
+   145		"ICACHE1",
+   146		"DCACHE1",
+   147		"L2_MAIN",
+   148		"HOST_PORT",
+   149		"HOST_PORT2",
+   150		"HVS",
+   151		"ISP",
+   152		"VIDEO_DCT",
+   153		"VIDEO_SD2AXI",
+   154		"CAM0",
+   155		"CAM1",
+   156		"DMA0",
+   157		"DMA1",
+   158		"DMA2_VPU",
+   159		"JPEG",
+   160		"VIDEO_CME",
+   161		"TRANSPOSER",
+   162		"VIDEO_FME",
+   163		"CCP2TX",
+   164		"USB",
+   165		"V3D0",
+   166		"V3D1",
+   167		"V3D2",
+   168		"AVE",
+   169		"DEBUG",
+   170		"CPU",
+   171		"M30"
+   172	};
+   173	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

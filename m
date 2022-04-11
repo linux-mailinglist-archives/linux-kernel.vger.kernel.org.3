@@ -2,265 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CAC64FC484
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 21:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFB594FC482
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 21:02:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349313AbiDKTEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 15:04:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33168 "EHLO
+        id S1349325AbiDKTEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 15:04:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbiDKTEd (ORCPT
+        with ESMTP id S1349300AbiDKTEh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 15:04:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8263299A;
-        Mon, 11 Apr 2022 12:02:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED6036140D;
-        Mon, 11 Apr 2022 19:02:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 074E9C385A3;
-        Mon, 11 Apr 2022 19:02:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649703737;
-        bh=+tmcTmEhf/OADWe19T62/vDLGlq6GTerOSnvHZpMSKU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IpA0H2qTdjOmqQitGP/Gq/2QUre3o1/dPOUDz0kikY9X/7cVtTlNThddTnJcRO/0F
-         w0kIapxpyP4R8YJmW9hHeJN9L4n+HoWGWScA15BqG0ff//JMbhbrz/edmKuCYaScg8
-         ovKLiGr9o9PSHcXbk9SOnCVeZ+wD8vvseJgQ12BkBhRyii1RQfXFp320llmkGQTQgK
-         ynOA6djmKYHjhu5xq4c1VMPBGU+3wF2jq0PxW/jK0uz5s9Ei0m2WuvWTYO0PQLCt2G
-         DGLPE/lQ69qztf3iS3Ojq/5qvi5IHRxghIlTywOdn0rU1KAfAxpSDRxNq2mC1BXLYs
-         djtlrTDmF6N5w==
-Received: by pali.im (Postfix)
-        id B261A947; Mon, 11 Apr 2022 21:02:14 +0200 (CEST)
-Date:   Mon, 11 Apr 2022 21:02:14 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] PCI: Add function for parsing
- 'slot-power-limit-milliwatt' DT property
-Message-ID: <20220411190214.hmeau774tnrnbcod@pali>
-References: <20220325093827.4983-4-pali@kernel.org>
- <20220408152750.GA306189@bhelgaas>
- <20220411111407.7ycuoldxjvqnkoo4@pali>
+        Mon, 11 Apr 2022 15:04:37 -0400
+Received: from na01-obe.outbound.protection.outlook.com (mail-cusazon11020020.outbound.protection.outlook.com [52.101.61.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9230F3299A;
+        Mon, 11 Apr 2022 12:02:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=liyHtXHh4UGMjN5E2xfarnzJwY3x/gAoAAMs/hvMsbIcWWZ101LmGq25r+r8I6mDmf0ZhU1S9kAMVCPF7Hl0pyyowPMuH2Yk26koQCeY9w+MX9yY3owsLR9Rlqd4t6kp3LDbkYETFhsHK/r7rmtUaHkEVTn0Vs6hCQrDUjWXvoyRtsco3O4Q387G37vZ9CZV4YTIL3T3QG2zbrALB9cgldB3J7ai6fdhCosmuDWGiapXMhAsxQXLjstPtf8fJjE5EfVGyCJShUeXBFR1sj0vRQTvPaWDWY5vacLlpWrPeCLVd4rGJvWusiXLFXDJcO4aOIAzVKdxlGELpbj2eNfP7A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hrA1J2BPHMn7SDTpWE8P9ZUQTPeL71nU7WZJ/+AWd1w=;
+ b=m0rdDHaxC64W54Metb5J4IDZxONhjGuv7w/VC4M4Y1Kp+/ZNYosl3E8W6D72l2NN7s/Ci/py9iMamhn7FPeWPgfUqALfdm4l14T2P+0E9CCHovM4K/zDPSlUjGhLEIGxnHxLrqQMMF98C93oBTsKd8hs3T7hTwD3cNsXqPEk0SbdvAYVMlQGs51ELd/pe/jAzqPo37ebAHcu4ML6oVFgkM5F1heB5awTlAjp7vBUcDGsLM4RWZamHFH+9m4LL3EGFhcERRj8mn4ZYi8tk7anar8GxLiiv0lMEJRNFXLIuFgoTca4BklL0W+yHySi8mqaicog2QskX8EWt8yRFVTgaQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hrA1J2BPHMn7SDTpWE8P9ZUQTPeL71nU7WZJ/+AWd1w=;
+ b=PqYIaTdrRuMLooqYa7n88kid509nWlVNEY9PXsCziHDo6xVSEy928rkLR+A6Zwj+v80/YMpQYmxeudBwOuZ1xeRtDMVhRYsnpOXfRx2oOUlu94keLRz+U7oQ4md3DAHZWhhTI6vg/Wo660KyfNipXgp81gFOGzdGmWriDxtIwKw=
+Received: from DM6PR21MB1275.namprd21.prod.outlook.com (2603:10b6:5:16c::29)
+ by DM4PR21MB3322.namprd21.prod.outlook.com (2603:10b6:8:6b::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.6; Mon, 11 Apr
+ 2022 19:02:19 +0000
+Received: from DM6PR21MB1275.namprd21.prod.outlook.com
+ ([fe80::c61:de9c:1d42:2df9]) by DM6PR21MB1275.namprd21.prod.outlook.com
+ ([fe80::c61:de9c:1d42:2df9%7]) with mapi id 15.20.5186.006; Mon, 11 Apr 2022
+ 19:02:19 +0000
+From:   Dexuan Cui <decui@microsoft.com>
+To:     Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+CC:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        "drawat.floss@gmail.com" <drawat.floss@gmail.com>,
+        "airlied@linux.ie" <airlied@linux.ie>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Subject: RE: [PATCH v3] drm/hyperv: Added error message for fb size greater
+ than allocated
+Thread-Topic: [PATCH v3] drm/hyperv: Added error message for fb size greater
+ than allocated
+Thread-Index: AQHYTVqUmZIZ7yC1LEK4k8i5OfXuVazqPxYQgAAZWYCAAK65wA==
+Date:   Mon, 11 Apr 2022 19:02:19 +0000
+Message-ID: <DM6PR21MB1275F532C58CF5CE7F67D7E8BFEA9@DM6PR21MB1275.namprd21.prod.outlook.com>
+References: <1649650437-17977-1-git-send-email-ssengar@linux.microsoft.com>
+ <BYAPR21MB1270B3CFBE674EB0A7537180BFEA9@BYAPR21MB1270.namprd21.prod.outlook.com>
+ <20220411075555.GA15355@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+In-Reply-To: <20220411075555.GA15355@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=286e7364-8838-43da-9146-36e34e24236f;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-04-11T18:21:16Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: bfadb73a-2f13-463f-9994-08da1bedcd3e
+x-ms-traffictypediagnostic: DM4PR21MB3322:EE_
+x-ms-exchange-atpmessageproperties: SA|SL
+x-microsoft-antispam-prvs: <DM4PR21MB3322FF0DF3D902E902EB33D9BFEA9@DM4PR21MB3322.namprd21.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: MX6YHyqwydpyJSXriLzdjJGoyMlRK43KlkGqkkOdF2uQNP+j3LFjmdUvXP0emQAjCiStPXtf2M7bdngJV/rY/n4WkwABq/Pe44qUwB2Nq2ekla4VCwXprggOPNHb3b/sKgsK6u6EiWwC25DaTzj6rjAejE7Aj+JRDjymd69d39ve8J8msiCwZ0stgk/c+NciFOCeQQfzDJQVtMzzuBKVS6oIap2/bFKfE43CPn38ebg4n5iNmsI7P12ly/iZrHlc/yulMI6IUCPNO1DDsmaeExn6NPswzZj+lFZrXZOifGDm8frsruQn8XnKG8fXmxMXxsPusfi6xVRi6N8eVZvKkqKGp5A35WR0MQuLzipoBaHXawdgg9agFRxhA+8zOjXzMXdNlrtgNCbLEm3S+Ot0853h8/ywzwkE3IQtPYQ/otZ15m2QnlfBjlgo3oER5cZfipMxy1zo89rtfuz5qZe7CeiDff1wHM5EnQL8f9jqy9cPtK8y4rBa4WM+5rlGrsh7Wx6ymIvqAqtxYpKFgxR5EFa9Y+UcHssw3TXNpRuxbJSXg12bECrpeHxEAsOBL991azAUk++Zl4wAtvJPLqfPS1Yknh524dCwZWB/52R7AfZxKyGLM3sgrDxTaCC87Hxa3QHGYndcXum6Kv4akAsMzbB+6DHYt7Br9Dc4GQ8zxLadFsGj/7o7Zmo0Zos7tdMMFKMDPQwuDam3WiTEoUQQrM3EF70550Fa8H8wv+KwUG2pYagIXxs4R4QE7VjgqcNW9odSGRlCxZYtHoEVdwwldt4HuwxVtkQDkPNLEKV/nXqb0YbXwFMXvWnO8OkNF4psVNIF7jete5LfeCvMr8QXng==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR21MB1275.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(451199009)(9686003)(71200400001)(8936002)(316002)(52536014)(33656002)(82960400001)(82950400001)(107886003)(15650500001)(8990500004)(10290500003)(966005)(64756008)(66446008)(2906002)(76116006)(6506007)(122000001)(38070700005)(508600001)(86362001)(38100700002)(55016003)(7696005)(66946007)(66556008)(54906003)(186003)(83380400001)(26005)(66476007)(8676002)(5660300002)(6862004)(4326008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?hK/c2qYadRM7e05g5fEj0jQ8b+iZwBGcNlqNS5ZPNtucpss2tSM15/OJMse3?=
+ =?us-ascii?Q?HGxX7lfbAHf6Ty56z21geJZ3aeavPKaV9QUralCi8NjIjBvhZ0s0Q3ACiPhU?=
+ =?us-ascii?Q?5actJVE1ZgSuQIEWZfCDvqfRlRirYBXQ0MUkGhmpf2aMTb21Qp1MYhU23zaa?=
+ =?us-ascii?Q?k3dHRWh95D5vT092/7Gdk4v2HO55v9KLm+8zv+Ne6pGlwBP3zUg+SQ5CFrab?=
+ =?us-ascii?Q?mAkn3simMOfNZTMxQlWJABsyNZSYyvp9wMzeqO4dbb1UecvaQD7/OeV55H8E?=
+ =?us-ascii?Q?IDLyDS1W6lDh/s6nMyqEYtp+ki1+aJDt7Lcf3hk7ROg3uCWvkVuzoEOegiWE?=
+ =?us-ascii?Q?VTUDQPYY4FJh56NGNRQ6EsKfxDBD8dsF6rHddUqnclUK+vlkmxM8naCk5rX9?=
+ =?us-ascii?Q?+kokh8uhsbjCh4FzaSRDquPQgngJWtbJQyIDU9thwNgec8UvsyTH0mft+Wyc?=
+ =?us-ascii?Q?FGKNR+maHWxY3h3mhosXMcT281shuLTBNvSQCaVO7SdSTvEBdRtE6KwNm3P/?=
+ =?us-ascii?Q?Y0ssZByFAfKFSgVJNqfKaWvKr8S/C4jJve0Dby7Kh6UscTRjIkBJX+5j3j/H?=
+ =?us-ascii?Q?LW0r2F2x4LaOQB/to7ZXeQND9QWnH/gk7a1lSTr3G3of03ooUIHULN35v5X+?=
+ =?us-ascii?Q?sFykvJZ+l+zkNZb1g2zztrZffovG1dbzOME2vj+y35fXGs3UoaacGNO46G2r?=
+ =?us-ascii?Q?/wjvdrqf0VdHij06UzpkMc00Drhvpv8d0cDTdBLYr6cj1ZKycVPGmwdYcxv1?=
+ =?us-ascii?Q?MO30VABRO/MPLajO2YghsVTZ1mKAzv3yfGTxcHzROlfzkhEmKNSKKqoKbxlF?=
+ =?us-ascii?Q?8H/hAZJhPhFFOJfUP+qygbNAY7GpKU5mRpU0L55Mp8lTbPf5taY8y5XhU9eM?=
+ =?us-ascii?Q?dSXB+oyeG6xJ4k2PBxTL/UaZeV32oGjEfXxsnoCYDqlSsxSmmvsjemuNO1yQ?=
+ =?us-ascii?Q?OTQZJA/Wjtb16GtSXT+iTiUQQcDbrIzy05jF74B9jMLPiBvQ2vZ2vVIHiAo/?=
+ =?us-ascii?Q?hg2juWrgC4cgBfmONNEVn1qfZJFwHGCQ2IHQTFQuLNwMTmTkSYPZrDnDajKE?=
+ =?us-ascii?Q?szhjhY/tGAihYUqcCuQRCdn3gPcobHn9UqSQrGIRbj1xFbErThPEzNwWfEOo?=
+ =?us-ascii?Q?a6BuFOWq5eu5sNm+etrl+xKC8r23haSnOSNV9KABfbr5e8BlKk+ZYtyYUjT3?=
+ =?us-ascii?Q?2wL7KEHL00N7dLdaYcaqbTzITRZ/wIVADr92YinREXcqx+p40YMLK/NF8KNX?=
+ =?us-ascii?Q?Vf/d3/lEP2VHSDU7DDmfW6tu7oMGVkyfrohnMpck11gydIrRP7sYNV4nSA6l?=
+ =?us-ascii?Q?UYFgHz5Y6xvzzpXs63eTgcHy+W5ub/PXs/t7NziBR+O5OqpdgqxLvtyP0Uzo?=
+ =?us-ascii?Q?9Rx1hynGSmLP+1hwaqunrCnIJq+7w6VANPPRs3pu15qMaAT8dlNvRwM9opqj?=
+ =?us-ascii?Q?Fjfe4G/EigahJv/v3e1Ut6dXFd8pu3A3zgopjBNp/VMfJVOZFX+hgJw8u+bX?=
+ =?us-ascii?Q?KO3H5aSySEbR4XCKU2N89T1O8V1iNTKsQyn3ChQ0iKVBcZ+i5SbjoIDjJaCP?=
+ =?us-ascii?Q?wy6R4I10y/pirMlfReUu5M/kWJrcVb643EDlF1GZgO1Ju9XfLeervCSO7g2Y?=
+ =?us-ascii?Q?iOwoVK7gChopv5bo6fWLdqpqwwgUAcRED9UxXQydT1YgZxwpP12Vd9vhAFIZ?=
+ =?us-ascii?Q?0Bd6hfAPO8NoOWvrtRShend6gg3d7ajIUtuK65+IBk6QTYw+CVVufZ+8HQKw?=
+ =?us-ascii?Q?wDFJ7tETmQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220411111407.7ycuoldxjvqnkoo4@pali>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR21MB1275.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bfadb73a-2f13-463f-9994-08da1bedcd3e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Apr 2022 19:02:19.0627
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: jfeHqmkGwTyfhtpqUMCjPd4sO6gPXp7o5UPQBFWgBoKHWMGOZ7jERp6JgevcWOBWkogsJt7xpoGzocLpcCPc+Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR21MB3322
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Monday 11 April 2022 13:14:07 Pali Rohár wrote:
-> On Friday 08 April 2022 10:27:50 Bjorn Helgaas wrote:
-> > On Fri, Mar 25, 2022 at 10:38:26AM +0100, Pali Rohár wrote:
-> > > Add function of_pci_get_slot_power_limit(), which parses the
-> > > 'slot-power-limit-milliwatt' DT property, returning the value in
-> > > milliwatts and in format ready for the PCIe Slot Capabilities Register.
-> > > 
-> > > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > > Signed-off-by: Marek Behún <kabel@kernel.org>
-> > > Reviewed-by: Rob Herring <robh@kernel.org>
-> > > ---
-> > > Changes in v3:
-> > > * Set 600 W when DT slot-power-limit-milliwatt > 600 W
-> > > Changes in v2:
-> > > * Added support for PCIe 6.0 slot power limit encodings
-> > > * Round down slot power limit value
-> > > ---
-> > >  drivers/pci/of.c  | 64 +++++++++++++++++++++++++++++++++++++++++++++++
-> > >  drivers/pci/pci.h | 15 +++++++++++
-> > >  2 files changed, 79 insertions(+)
-> > > 
-> > > diff --git a/drivers/pci/of.c b/drivers/pci/of.c
-> > > index cb2e8351c2cc..5ebff26edd41 100644
-> > > --- a/drivers/pci/of.c
-> > > +++ b/drivers/pci/of.c
-> > > @@ -633,3 +633,67 @@ int of_pci_get_max_link_speed(struct device_node *node)
-> > >  	return max_link_speed;
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(of_pci_get_max_link_speed);
-> > > +
-> > > +/**
-> > > + * of_pci_get_slot_power_limit - Parses the "slot-power-limit-milliwatt"
-> > > + *				 property.
-> > > + *
-> > > + * @node: device tree node with the slot power limit information
-> > > + * @slot_power_limit_value: pointer where the value should be stored in PCIe
-> > > + *			    Slot Capabilities Register format
-> > > + * @slot_power_limit_scale: pointer where the scale should be stored in PCIe
-> > > + *			    Slot Capabilities Register format
-> > > + *
-> > > + * Returns the slot power limit in milliwatts and if @slot_power_limit_value
-> > > + * and @slot_power_limit_scale pointers are non-NULL, fills in the value and
-> > > + * scale in format used by PCIe Slot Capabilities Register.
-> > > + *
-> > > + * If the property is not found or is invalid, returns 0.
-> > > + */
-> > > +u32 of_pci_get_slot_power_limit(struct device_node *node,
-> > > +				u8 *slot_power_limit_value,
-> > > +				u8 *slot_power_limit_scale)
-> > > +{
-> > > +	u32 slot_power_limit_mw;
-> > > +	u8 value, scale;
-> > > +
-> > > +	if (of_property_read_u32(node, "slot-power-limit-milliwatt",
-> > > +				 &slot_power_limit_mw))
-> > > +		slot_power_limit_mw = 0;
-> > > +
-> > > +	/* Calculate Slot Power Limit Value and Slot Power Limit Scale */
-> > > +	if (slot_power_limit_mw == 0) {
-> > > +		value = 0x00;
-> > > +		scale = 0;
-> > > +	} else if (slot_power_limit_mw <= 255) {
-> > > +		value = slot_power_limit_mw;
-> > > +		scale = 3;
-> > > +	} else if (slot_power_limit_mw <= 255*10) {
-> > > +		value = slot_power_limit_mw / 10;
-> > > +		scale = 2;
-> > > +	} else if (slot_power_limit_mw <= 255*100) {
-> > > +		value = slot_power_limit_mw / 100;
-> > > +		scale = 1;
-> > > +	} else if (slot_power_limit_mw <= 239*1000) {
-> > > +		value = slot_power_limit_mw / 1000;
-> > > +		scale = 0;
-> > > +	} else if (slot_power_limit_mw <= 250*1000) {
-> > > +		value = 0xF0;
-> > > +		scale = 0;
-> > 
-> > I think the spec is poorly worded here.  PCIe r6.0, sec 7.5.3.9, says:
-> > 
-> >   F0h   > 239 W and <= 250 W Slot Power Limit
-> > 
-> > I don't think it's meaningful for the spec to include a range here.
-> > The amount of power the slot can supply has a single maximum.  I
-> > suspect the *intent* of F0h/00b is that a device in the slot may
-> > consume up to 250W.
-> > 
-> > Your code above would mean that slot_power_limit_mw == 245,000 would
-> > cause the slot to advertise F0h/00b (250W), which seems wrong.
-> 
-> So for slot_power_limit_mw == 245 W we should set following values?
-> 
->   slot_power_limit_mw = 239 W
->   value = 0xF0
->   scale = 0
+> From: Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+> Sent: Monday, April 11, 2022 12:56 AM
+> > >...
+> > > -	if (fb->pitches[0] * fb->height > hv->fb_size)
+> > > +	if (fb->pitches[0] * fb->height > hv->fb_size) {
+> > > +		drm_err(&hv->dev, "hv->hdev, fb size requested by process %s
+> > > for %d X %d (pitch %d) is greater than allocated size %ld\n",
+> > Should we use drm_err_ratelimited() instead of drm_err()?
+>=20
+> The error is not produced in good cases, for every resolution change whic=
+h is
+> violating this error should print once.
 
-I changed it in v4
+Thanks for the clarification! Then drm_err() looks good to me.
 
-> > I think we should do something like this instead:
-> > 
-> >   scale = 0;
-> >   if (slot_power_limit_mw >= 600*1000) {
-> >     value = 0xFE;
-> >     slot_power_limit_mw = 600*1000;
-> >   } else if (slot_power_limit_mw >= 575*1000) {
-> >     value = 0xFD;
-> >     slot_power_limit_mw = 575*1000;
-> >   } ...
-> 
-> This is already implemented in branch:
-> 
->   } else if (slot_power_limit_mw <= 600*1000) {
->   	value = 0xF0 + (slot_power_limit_mw / 1000 - 250) / 25;
->   	scale = 0;
-> 
-> I will just add reducing of final slot_power_limit_mw value.
-> 
-> > I raised an issue with the PCI SIG about this.
-> > 
-> > > +	} else if (slot_power_limit_mw <= 600*1000) {
-> > > +		value = 0xF0 + (slot_power_limit_mw / 1000 - 250) / 25;
-> > > +		scale = 0;
-> > > +	} else {
-> > > +		value = 0xFE;
-> > > +		scale = 0;
+> I suggest having it print every time some application tries to violate th=
+e policy
+> set at boot time.
+> If we use ratelimit many resolutions error change will be suppressed. Ple=
+ase let
+> me know your thoughts.
+=20
+> >
+> > The line exceeds 80 chars.
+>=20
+> At first I tried braking the line to respect 80 character boundary, but
+> checkpatch.pl reported it as a problem.
+> And these new lines are suggested by checkpatch.pl itself.
+> Looks the recent rule realted to 80 charachters are changed. Ref :
+> ...
+
+Good to know! Thanks for sharing the link!
+
+FYI, the default max_line_length in scripts/checkpatch.pl is 100 now:
+ https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/=
+?id=3Dbdc48fa11e46f
+
+"80-chars" is still preferred, but isn't a hard limit. I also noticed
+"never break user-visible strings such as printk messages ", so yes you're=
+=20
+correct. It's perfectly fine to have a not-too-long string that exceeds 80 =
+chars.
+
+> > > +		current->comm, fb->width, fb->height, fb->pitches[0], hv->fb_size)=
+;
+> > >  		return -EINVAL;
 > > > +	}
-> > > +
-> > > +	if (slot_power_limit_value)
-> > > +		*slot_power_limit_value = value;
-> > > +
-> > > +	if (slot_power_limit_scale)
-> > > +		*slot_power_limit_scale = scale;
-> > > +
-> > > +	return slot_power_limit_mw;
-> > 
-> > If the DT tells us 800W is available, we'll store (FEh/00b), which
-> > means the slot can advertise to a downstream device that 600W is
-> > available.  I think that's correct, since the current spec doesn't
-> > provide a way to encode any value larger than 600W.
-> > 
-> > But the function still returns 800,000 mW, which means the next patch will
-> > print:
-> > 
-> >   %s: Slot power limit 800.0W
-> > 
-> > even though it programs Slot Capabilities to advertise 600W.
-> > That's why I suggested setting slot_power_limit_mw = 600*1000 above.
-> 
-> Ok, I will update slot_power_limit_mw value in next patch version.
+> >
+> > Maybe we can use the below:
+> > 	drm_err_ratelimited(&hv->dev, "%s: requested %dX%d (pitch %d) "
+> >                      "exceeds fb_size %ld\n",
+> >                      current->comm, fb->width, fb->height,
+> >                      fb->pitches[0], hv->fb_size);
+> >
+> > Note: the first chars of last 3 lines should align with the "&" in the
+> > same column. Please run "scripts/checkpatch.pl" against the patch.
+>=20
+> I have tested checkpatch.pl before sending, for the current patch there i=
+s no
+> problem from checkpatch.pl
 
-And also fixed this in v4.
+The line is 138-char long, which seems a little longer to me :-)
+IMO we can make it shorter, e.g. be removing the part "hv->hdev as the
+"drm_err(&hv->dev," already tells us which device it's.
 
-Please review v4 if is is OK now.
+BTW, if we run the script with --strict, it reports the below:
 
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(of_pci_get_slot_power_limit);
-> > > diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
-> > > index 3d60cabde1a1..e10cdec6c56e 100644
-> > > --- a/drivers/pci/pci.h
-> > > +++ b/drivers/pci/pci.h
-> > > @@ -627,6 +627,9 @@ struct device_node;
-> > >  int of_pci_parse_bus_range(struct device_node *node, struct resource *res);
-> > >  int of_get_pci_domain_nr(struct device_node *node);
-> > >  int of_pci_get_max_link_speed(struct device_node *node);
-> > > +u32 of_pci_get_slot_power_limit(struct device_node *node,
-> > > +				u8 *slot_power_limit_value,
-> > > +				u8 *slot_power_limit_scale);
-> > >  void pci_set_of_node(struct pci_dev *dev);
-> > >  void pci_release_of_node(struct pci_dev *dev);
-> > >  void pci_set_bus_of_node(struct pci_bus *bus);
-> > > @@ -653,6 +656,18 @@ of_pci_get_max_link_speed(struct device_node *node)
-> > >  	return -EINVAL;
-> > >  }
-> > >  
-> > > +static inline u32
-> > > +of_pci_get_slot_power_limit(struct device_node *node,
-> > > +			    u8 *slot_power_limit_value,
-> > > +			    u8 *slot_power_limit_scale)
-> > > +{
-> > > +	if (slot_power_limit_value)
-> > > +		*slot_power_limit_value = 0;
-> > > +	if (slot_power_limit_scale)
-> > > +		*slot_power_limit_scale = 0;
-> > > +	return 0;
-> > > +}
-> > > +
-> > >  static inline void pci_set_of_node(struct pci_dev *dev) { }
-> > >  static inline void pci_release_of_node(struct pci_dev *dev) { }
-> > >  static inline void pci_set_bus_of_node(struct pci_bus *bus) { }
-> > > -- 
-> > > 2.20.1
-> > > 
-> > > 
-> > > _______________________________________________
-> > > linux-arm-kernel mailing list
-> > > linux-arm-kernel@lists.infradead.org
-> > > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+# scripts/checkpatch.pl --strict 0001-drm-hyperv-Added-error-message-for-fb=
+-size-greater-t.patch
+CHECK: Alignment should match open parenthesis
+#28: FILE: drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:127:
++               drm_err(&hv->dev, "hv->hdev, fb size requested by process %=
+s for %d X %d (pitch %d) is greater than allocated size %ld\n",
++               current->comm, fb->width, fb->height, fb->pitches[0], hv->f=
+b_size);

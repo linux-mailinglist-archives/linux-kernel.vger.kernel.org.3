@@ -2,124 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C55F4FC55D
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 22:01:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58C004FC56B
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 22:05:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349761AbiDKUDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 16:03:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59190 "EHLO
+        id S1349771AbiDKUHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 16:07:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244932AbiDKUDV (ORCPT
+        with ESMTP id S230306AbiDKUHu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 16:03:21 -0400
-Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72DDB1A074;
-        Mon, 11 Apr 2022 13:01:01 -0700 (PDT)
-Date:   Mon, 11 Apr 2022 20:00:49 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-        s=protonmail2; t=1649707256;
-        bh=/M7BzW/s7Vzq7EWhCycKAddwYFL6mUxNmXasegv2RH4=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID;
-        b=X8gG6RCKUyhRjECpDPWqnHxSZ4C8smmo8/Q+wT1xje58nBjiIhOryAIC6Odf2knlL
-         IwOyieEp/xBtQRdMRhlFNFFWTS5DeVhEFDbtbLZUM6wu74fHVC0IUjtNjT+zF8mEff
-         bpY3RGI1HYvgcsimqfPR/DxlIi2XBWi+a+Y9EpUNt6WYSD4j8U2djLjkQgz3IyNWeA
-         +KMVawUS55opL4z17k33WqvrpkWgcuBOEN936FrhyMdk7cv1hZtw0etI3BFs8J9Iit
-         yki/XCMX2R+eww5d7Ym6FtuuBsNayy8wQOkZwGl9jXY5BtSRIPq6IAd+NAeXKJNJ4n
-         14FvnFwPCt88Q==
-To:     Arnd Bergmann <arnd@arndb.de>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexander Lobakin <alobakin@pm.me>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: Re: [PATCH] asm-generic: fix __get_unaligned_be48() on 32 bit platforms
-Message-ID: <20220411195403.230899-1-alobakin@pm.me>
-In-Reply-To: <20220406233909.529613-1-alobakin@pm.me>
-References: <20220406233909.529613-1-alobakin@pm.me>
+        Mon, 11 Apr 2022 16:07:50 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D171CB32;
+        Mon, 11 Apr 2022 13:05:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649707536; x=1681243536;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=jhv6EkHDtQ4ltXXOFpDhNcSEV9W9C2fd4dh3zQjQ+Ew=;
+  b=ATLnV1hHO3j2PkiXGH3TrFOUZE4+l4oyTd4LO+nPN8s7D/P4xK0g01rp
+   fB/mOE1ufMo5ZzG/eW0qnaYR16wPIHmHHmaVZxvVQvXT4appyZ4rIMPOP
+   4NpRERJRK18Ek30Ye6/cdSrEJXrcvEVa/YuB/L/CD+cGumu09JE4irjZh
+   M=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 11 Apr 2022 13:05:35 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 13:05:35 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 11 Apr 2022 13:05:34 -0700
+Received: from hu-amelende-lv.qualcomm.com (10.49.16.6) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 11 Apr 2022 13:05:33 -0700
+From:   Anjelique Melendez <quic_amelende@quicinc.com>
+To:     <dmitry.torokhov@gmail.com>, <corbet@lwn.net>, <sre@kernel.org>,
+        <robh+dt@kernel.org>
+CC:     <linux-input@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <collinsd@codeaurora.org>,
+        <bjorn.andersson@linaro.org>, <swboyd@chromium.org>,
+        <skakit@codeaurora.org>, <linux-doc@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Anjelique Melendez <quic_amelende@quicinc.com>
+Subject: [PATCH v5 0/5] Extend pm8941-pwrkey driver
+Date:   Mon, 11 Apr 2022 13:05:01 -0700
+Message-ID: <20220411200506.22891-1-quic_amelende@quicinc.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Lobakin <alobakin@pm.me>
-Date: Wed, 06 Apr 2022 23:46:04 +0000
+Changes from v4:
+  - Added new dt-binding patch as 1/5
+ 
+Changes from v3:
+  - Fixed dereference issue in 2/4
+  - Added Stephen's reviewed by tag for 2/4
 
-> While testing the new macros for working with 48 bit containers,
-> I faced a weird problem:
->
-> 32 + 16: 0x2ef6e8da 0x79e60000
-> 48: 0xffffe8da + 0x79e60000
->
-> All the bits starting from the 32nd were getting 1d in 9/10 cases.
-> The debug showed:
->
-> p[0]: 0x00002e0000000000
-> p[1]: 0x00002ef600000000
-> p[2]: 0xffffffffe8000000
-> p[3]: 0xffffffffe8da0000
-> p[4]: 0xffffffffe8da7900
-> p[5]: 0xffffffffe8da79e6
->
-> that the value becomes a garbage after the third OR, i.e. on
-> `p[2] << 24`.
-> When the 31st bit is 1 and there's no explicit cast to an unsigned,
-> it's being considered as a signed int and getting sign-extended on
-> OR, so `e8000000` becomes `ffffffffe8000000` and messes up the
-> result.
-> Cast the @p[2] to u64 as well to avoid this. Now:
->
-> 32 + 16: 0x7ef6a490 0xddc10000
-> 48: 0x7ef6a490 + 0xddc10000
->
-> p[0]: 0x00007e0000000000
-> p[1]: 0x00007ef600000000
-> p[2]: 0x00007ef6a4000000
-> p[3]: 0x00007ef6a4900000
-> p[4]: 0x00007ef6a490dd00
-> p[5]: 0x00007ef6a490ddc1
->
-> Fixes: c2ea5fcf53d5 ("asm-generic: introduce be48 unaligned accessors")
-> Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+Changes from v2:
+  - Addressed Stephen's comments
+    - Add Stephen's reviewed by tag for 1/4
+    - Fixed style for 2/4
+    - Corrected function call to use correct function for 3/4
 
-Uhm, ping?
+Changes from v1:
+  - Removed Change-Id from all patches
+  - Updated subject line of cover letter
+  - Addressed Stephen's comments for v1 1/3
+    - Separated error message fix to own patch (v2 1/4)
+    - Separated PON GEN3 base address changes to own patch (v2 2/4)
+    - Added new variables and functions to make code more readable
+  - Removed v1 3/3 as per Bjorn's comments
 
-> ---
->  include/asm-generic/unaligned.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/include/asm-generic/unaligned.h b/include/asm-generic/unalig=
-n=3D
-> ed.h
-> index 8fc637379899..df30f11b4a46 100644
-> --- a/include/asm-generic/unaligned.h
-> +++ b/include/asm-generic/unaligned.h
-> @@ -143,7 +143,7 @@ static inline void put_unaligned_be48(const u64 val, =
-v=3D
-> oid *p)
->
->  static inline u64 __get_unaligned_be48(const u8 *p)
->  {
-> -=09return (u64)p[0] << 40 | (u64)p[1] << 32 | p[2] << 24 |
-> +=09return (u64)p[0] << 40 | (u64)p[1] << 32 | (u64)p[2] << 24 |
->  =09=09p[3] << 16 | p[4] << 8 | p[5];
->  }
->
-> --
-> 2.35.1
+Anjelique Melendez (2):
+  input: misc: pm8941-pwrkey: fix error message
+  input: misc: pm8941-pwrkey: add support for PON GEN3 base addresses
 
-Thanks,
-Al
+David Collins (3):
+  dt-bindings: power: reset: qcom-pon: update "reg" property details
+  input: misc: pm8941-pwrkey: add software key press debouncing support
+  input: misc: pm8941-pwrkey: simulate missed key press events
+
+ Documentation/devicetree/bindings/power/reset/qcom,pon.yaml | 20 +++++++++++++++++++-
+ drivers/input/misc/pm8941-pwrkey.c | 124 +++++++++++++++++++++++++----
+ 2 files changed, 129 insertions(+), 15 deletions(-)
+
+-- 
+2.35.1
 

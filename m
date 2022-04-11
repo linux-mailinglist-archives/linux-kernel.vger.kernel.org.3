@@ -2,128 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DFDC4FB90B
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 12:07:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE2764FB911
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 12:08:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345106AbiDKKJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 06:09:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41042 "EHLO
+        id S1345114AbiDKKKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 06:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243588AbiDKKJ4 (ORCPT
+        with ESMTP id S244123AbiDKKKD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 06:09:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33D620BD2;
-        Mon, 11 Apr 2022 03:07:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 859AEB81195;
-        Mon, 11 Apr 2022 10:07:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD17FC385A4;
-        Mon, 11 Apr 2022 10:07:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649671660;
-        bh=7d4Fz2YovE5nbd9DXkYQpMdwcvwOp0v8/bguDOqmFSY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BFtbQd/iq+rlCNPGaxfC3Ir2HvIQQgsq/Vp2+3JtHAGSDwgjp8Xd5w2caZTe8PAXA
-         eHsQqWA1+krPxZyVFaVbYdrqMp8DMvGob+k/4ZGEKf29Ahye/B2GdlV92VVfWYnr8m
-         l0ULaiEvF5/6bu/SR0XQZK85N7o0i8G8+zOPUcz2ilXYjPcdgecr+7alIM6T1xg4PH
-         zYWXQRqH1KSvIhFvCdaJkxSgZKH7wHaLOTRaePBuQBkjmpSc8p0VPiM5Bh9Ds4ELGd
-         g8uGUUGlAY7+59ndecOzR57Fv6XdUEPFsDhoy6VyqJ301LTYFhzVY8yH9yzSysRmHQ
-         GiefvKC1Z25dw==
-Date:   Mon, 11 Apr 2022 13:07:29 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        David Hildenbrand <david@redhat.com>, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>
-Subject: Re: [PATCHv4 1/8] mm: Add support for unaccepted memory
-Message-ID: <YlP94T1ACwxKTgep@kernel.org>
-References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
- <20220405234343.74045-2-kirill.shutemov@linux.intel.com>
- <767c2100-c171-1fd3-6a92-0af2e4bf3067@intel.com>
- <20220409155423.iv2arckmvavvpegt@box.shutemov.name>
- <6c976344-fdd6-95cd-2cb0-b0e817bf0392@intel.com>
+        Mon, 11 Apr 2022 06:10:03 -0400
+Received: from fuzzserver.tsinghua.edu.cn (unknown [166.111.139.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B170419A0
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 03:07:49 -0700 (PDT)
+Received: by fuzzserver.tsinghua.edu.cn (Postfix, from userid 1000)
+        id 9D3CAF434BE; Mon, 11 Apr 2022 18:07:48 +0800 (CST)
+From:   Zixuan Fu <r33s3n6@gmail.com>
+To:     shaggy@kernel.org
+Cc:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        baijiaju1990@gmail.com, Zixuan Fu <r33s3n6@gmail.com>,
+        TOTE Robot <oslab@tsinghua.edu.cn>
+Subject: [PATCH] fs: jfs: fix possible NULL pointer dereference in dbFree()
+Date:   Mon, 11 Apr 2022 18:07:47 +0800
+Message-Id: <20220411100747.691808-1-r33s3n6@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6c976344-fdd6-95cd-2cb0-b0e817bf0392@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: Yes, score=7.4 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_PBL,
+        RDNS_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,SPOOFED_FREEMAIL,
+        SPOOFED_FREEMAIL_NO_RDNS,SPOOF_GMAIL_MID,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
+        *      [166.111.139.106 listed in zen.spamhaus.org]
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        *  0.7 SPF_SOFTFAIL SPF: sender does not match SPF record (softfail)
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [fu[at]gmail.com]
+        *  0.0 DKIM_ADSP_CUSTOM_MED No valid author signature, adsp_override
+        *      is CUSTOM_MED
+        *  1.0 FORGED_GMAIL_RCVD 'From' gmail.com does not match 'Received'
+        *      headers
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.8 RDNS_NONE Delivered to internal network by a host with no rDNS
+        *  0.0 SPOOFED_FREEMAIL_NO_RDNS From SPOOFED_FREEMAIL and no rDNS
+        *  0.9 NML_ADSP_CUSTOM_MED ADSP custom_med hit, and not from a mailing
+        *       list
+        *  1.3 SPOOFED_FREEMAIL No description available.
+        *  1.4 SPOOF_GMAIL_MID From Gmail but it doesn't seem to be...
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 10, 2022 at 11:38:08PM -0700, Dave Hansen wrote:
-> On 4/9/22 08:54, Kirill A. Shutemov wrote:
-> > On Fri, Apr 08, 2022 at 11:55:43AM -0700, Dave Hansen wrote:
-> 
-> >>>  	if (fpi_flags & FPI_TO_TAIL)
-> >>>  		to_tail = true;
-> >>>  	else if (is_shuffle_order(order))
-> >>> @@ -1149,7 +1192,8 @@ static inline void __free_one_page(struct page *page,
-> >>>  static inline bool page_expected_state(struct page *page,
-> >>>  					unsigned long check_flags)
-> >>>  {
-> >>> -	if (unlikely(atomic_read(&page->_mapcount) != -1))
-> >>> +	if (unlikely(atomic_read(&page->_mapcount) != -1) &&
-> >>> +	    !PageUnaccepted(page))
-> >>>  		return false;
-> >>
-> >> That probably deserves a comment, and maybe its own if() statement.
-> > 
-> > Own if does not work. PageUnaccepted() is encoded in _mapcount.
-> > 
-> > What about this:
-> > 
-> > 	/*
-> > 	 * page->_mapcount is expected to be -1.
-> > 	 *
-> > 	 * There is an exception for PageUnaccepted(). The page type can be set
-> > 	 * for pages on free list. Page types are encoded in _mapcount.
-> > 	 *
-> > 	 * PageUnaccepted() will get cleared in post_alloc_hook().
-> > 	 */
-> > 	if (unlikely((atomic_read(&page->_mapcount) | PG_unaccepted) != -1))
+In our fault-injection testing, the variable "nblocks" in dbFree() can be
+zero when kmalloc_array() fails in dtSearch(). In this case, the variable
+ "mp" in dbFree() would be NULL and then it is dereferenced in 
+"write_metapage(mp)".
 
-Maybe I'm missing something, but isn't this true for any PageType?
+The failure log is listed as follows:
 
-> > 		return false;
-> > 
-> > ?
-> 
-> That's better.  But, aren't the PG_* names usually reserved for real
-> page->flags bits?  That naming might be part of my confusion.
+[   13.824137] BUG: kernel NULL pointer dereference, address: 0000000000000020
+...
+[   13.827416] RIP: 0010:dbFree+0x5f7/0x910 [jfs]
+[   13.834341] Call Trace:
+[   13.834540]  <TASK>
+[   13.834713]  txFreeMap+0x7b4/0xb10 [jfs]
+[   13.835038]  txUpdateMap+0x311/0x650 [jfs]
+[   13.835375]  jfs_lazycommit+0x5f2/0xc70 [jfs]
+[   13.835726]  ? sched_dynamic_update+0x1b0/0x1b0
+[   13.836092]  kthread+0x3c2/0x4a0
+[   13.836355]  ? txLockFree+0x160/0x160 [jfs]
+[   13.836763]  ? kthread_unuse_mm+0x160/0x160
+[   13.837106]  ret_from_fork+0x1f/0x30
+[   13.837402]  </TASK>
+...
 
-We use them for PageType as well like PG_buddy, PG_offline, PG_Table.
+This patch adds a NULL check of "mp" before "write_metapage(mp)" is called.
 
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
+---
+ fs/jfs/jfs_dmap.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/fs/jfs/jfs_dmap.c b/fs/jfs/jfs_dmap.c
+index d8502f4989d9..e75f31b81d63 100644
+--- a/fs/jfs/jfs_dmap.c
++++ b/fs/jfs/jfs_dmap.c
+@@ -385,7 +385,8 @@ int dbFree(struct inode *ip, s64 blkno, s64 nblocks)
+ 	}
+ 
+ 	/* write the last buffer. */
+-	write_metapage(mp);
++	if (mp)
++		write_metapage(mp);
+ 
+ 	IREAD_UNLOCK(ipbmap);
+ 
 -- 
-Sincerely yours,
-Mike.
+2.25.1
+

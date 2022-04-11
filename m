@@ -2,212 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 992464FC55A
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 22:00:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C55F4FC55D
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 22:01:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349754AbiDKUCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 16:02:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57200 "EHLO
+        id S1349761AbiDKUDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 16:03:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243241AbiDKUCu (ORCPT
+        with ESMTP id S244932AbiDKUDV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 16:02:50 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE535FB2;
-        Mon, 11 Apr 2022 13:00:31 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id h14so23441675lfl.2;
-        Mon, 11 Apr 2022 13:00:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ZezkdIQoJxr3FUS6ZgUv1QgR6XVz7LoPRwJNYEn+SLo=;
-        b=pHx1HShz+YL7+SrcmJDf7CmYoeDStArvZ1drztzWQGn0c1RI1cwYuLv3RWkJ3JARi0
-         wsoQQ3NOcyj4IJavheL7QKNX1huqRFIuDW/HaG8h/577m3fVcItja/urS+Jj7o26eQlb
-         YeDvp9eZ7lLdBT4zuLrS6CbjDU4R/qbhZ7FipUWFVlJa9AyOK9GuFdr8iFfxbGdV4jPM
-         443q0RMxMNuIQ/c2a3pA8JgChF6J3uY4kzFFrQhykf2ZTGgCwgBQuVUjiLBHognFj0kC
-         gbnv5jMdNkNOxx0XQODG2qFlQ9haoRKK4cgR33f415UV7xUXO7fE/bdx6X8snlG5wUx0
-         fmqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ZezkdIQoJxr3FUS6ZgUv1QgR6XVz7LoPRwJNYEn+SLo=;
-        b=iT5t7Wvgvw+SpWATUO4qRBxrkk+RbBTiPS90xAaCuDxRF5VS/YaovIaBEQ8P/KB+o8
-         AuFiYdQILyZKBFpxTQ+QU25qp9ImFXpAa3dKXeB1Snain/MLQyGWMANT8fNQPIrzH9kf
-         384HR3LFfLFV6YoHwfaQW8PWiAMpAEUAKQ/KFJTkRlT52LLYW990Btc2fFn6/XAADF+k
-         5Y2tMhv0MU0oM/4LjgaWX0Qa//eAiBtueuQAi0t/vUA3HQXdxHVhmVfRxrNCUA1MEddc
-         cWl2MzKtyIYtL96jFZ6a1qj/kWpcZoRd/lwq2Ao2aBeQw8AOrOiTEP6H14LGctowF2aq
-         O7AA==
-X-Gm-Message-State: AOAM532mIx4A+vw3z4ciUfFymoBK9pF5bP1ViZp02ha7xFP6H2wqhOS5
-        z8saQxAv3vXet8hqQs5q9XI=
-X-Google-Smtp-Source: ABdhPJxc9aEhflRAiUvc4xI3UADaDqAjKt7Bdkh6zvVnf3elCeWkg6x7xB2Uul+fg3SaEQlEzsB9Gg==
-X-Received: by 2002:a05:6512:68e:b0:44a:6594:3b9e with SMTP id t14-20020a056512068e00b0044a65943b9emr22350771lfe.623.1649707230072;
-        Mon, 11 Apr 2022 13:00:30 -0700 (PDT)
-Received: from mobilestation ([95.79.134.149])
-        by smtp.gmail.com with ESMTPSA id k7-20020a056512330700b0046b8e44be22sm942955lfe.83.2022.04.11.13.00.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 13:00:29 -0700 (PDT)
-Date:   Mon, 11 Apr 2022 23:00:27 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 16/21] dt-bindings: ata: ahci: Add DWC AHCI SATA
- controller DT schema
-Message-ID: <20220411200027.l5ph4lvw6dujbexg@mobilestation>
-References: <20220324001628.13028-1-Sergey.Semin@baikalelectronics.ru>
- <20220324001628.13028-17-Sergey.Semin@baikalelectronics.ru>
- <YkZCA08HZ6Nx1IqQ@robh.at.kernel.org>
+        Mon, 11 Apr 2022 16:03:21 -0400
+Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72DDB1A074;
+        Mon, 11 Apr 2022 13:01:01 -0700 (PDT)
+Date:   Mon, 11 Apr 2022 20:00:49 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+        s=protonmail2; t=1649707256;
+        bh=/M7BzW/s7Vzq7EWhCycKAddwYFL6mUxNmXasegv2RH4=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID;
+        b=X8gG6RCKUyhRjECpDPWqnHxSZ4C8smmo8/Q+wT1xje58nBjiIhOryAIC6Odf2knlL
+         IwOyieEp/xBtQRdMRhlFNFFWTS5DeVhEFDbtbLZUM6wu74fHVC0IUjtNjT+zF8mEff
+         bpY3RGI1HYvgcsimqfPR/DxlIi2XBWi+a+Y9EpUNt6WYSD4j8U2djLjkQgz3IyNWeA
+         +KMVawUS55opL4z17k33WqvrpkWgcuBOEN936FrhyMdk7cv1hZtw0etI3BFs8J9Iit
+         yki/XCMX2R+eww5d7Ym6FtuuBsNayy8wQOkZwGl9jXY5BtSRIPq6IAd+NAeXKJNJ4n
+         14FvnFwPCt88Q==
+To:     Arnd Bergmann <arnd@arndb.de>
+From:   Alexander Lobakin <alobakin@pm.me>
+Cc:     Alexander Lobakin <alobakin@pm.me>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Reply-To: Alexander Lobakin <alobakin@pm.me>
+Subject: Re: [PATCH] asm-generic: fix __get_unaligned_be48() on 32 bit platforms
+Message-ID: <20220411195403.230899-1-alobakin@pm.me>
+In-Reply-To: <20220406233909.529613-1-alobakin@pm.me>
+References: <20220406233909.529613-1-alobakin@pm.me>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YkZCA08HZ6Nx1IqQ@robh.at.kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 31, 2022 at 07:06:27PM -0500, Rob Herring wrote:
-> On Thu, Mar 24, 2022 at 03:16:23AM +0300, Serge Semin wrote:
-> > Synopsys AHCI SATA controller is mainly compatible with the generic AHCI
-> > SATA controller except a few peculiarities and the platform environment
-> > requirements. In particular it can have one or two reference clocks to
-> > feed up its AXI/AHB interface and SATA PHYs domain and at least one reset
-> > control for the application clock domain. In addition to that the DMA
-> > interface of each port can be tuned up to work with the predefined maximum
-> > data chunk size. Note unlike generic AHCI controller DWC AHCI can't have
-> > more than 8 ports. All of that is reflected in the new DWC AHCI SATA
-> > device DT binding.
-> > 
-> > Note the DWC AHCI SATA controller DT-schema has been created in a way so
-> > to be reused for the vendor-specific DT-schemas. One of which we are about
-> > to introduce.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > ---
-> >  .../bindings/ata/snps,dwc-ahci.yaml           | 121 ++++++++++++++++++
-> >  1 file changed, 121 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml b/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
-> > new file mode 100644
-> > index 000000000000..b443154b63aa
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
-> > @@ -0,0 +1,121 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/ata/snps,dwc-ahci.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Synopsys DWC AHCI SATA controller
-> > +
-> > +maintainers:
-> > +  - Serge Semin <fancer.lancer@gmail.com>
-> > +
-> > +description: |
-> > +  This document defines device tree bindings for the Synopsys DWC
-> > +  implementation of the AHCI SATA controller.
-> > +
-> > +allOf:
-> > +  - $ref: ahci-common.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    oneOf:
-> > +      - description: Synopsys AHCI SATA-compatible devices
-> > +        contains:
-> > +          const: snps,dwc-ahci
-> > +      - description: SPEAr1340 AHCI SATA device
-> > +        const: snps,spear-ahci
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    description:
-> > +      Basic DWC AHCI SATA clock sources like application AXI/AHB BIU clock
-> > +      and embedded PHYs reference clock together with vendor-specific set
-> > +      of clocks.
-> > +    minItems: 1
-> > +    maxItems: 4
-> > +
-> > +  clock-names:
-> > +    contains:
-> > +      anyOf:
-> > +        - description: Application AXI/AHB BIU clock source
-> > +          enum:
-> > +            - aclk
-> > +            - sata
-> > +        - description: SATA Ports reference clock
-> > +          enum:
-> > +            - ref
-> > +            - sata_ref
-> > +
-> > +  resets:
-> > +    description:
-> > +      At least basic core and application clock domains reset is normally
-> > +      supported by the DWC AHCI SATA controller. Some platform specific
-> > +      clocks can be also specified though.
-> > +
-> > +  reset-names:
-> > +    contains:
-> > +      description: Core and application clock domains reset control
-> > +      const: arst
-> > +
-> > +patternProperties:
-> > +  "^sata-port@[0-9a-e]$":
-> > +    type: object
-> > +
-> > +    properties:
-> > +      reg:
-> > +        minimum: 0
-> > +        maximum: 7
-> > +
-> > +      snps,tx-ts-max:
-> > +        $ref: /schemas/types.yaml#/definitions/uint32
-> > +        description: Maximal size of Tx DMA transactions in FIFO words
-> > +        minimum: 1
-> > +        maximum: 1024
-> > +
-> > +      snps,rx-ts-max:
-> > +        $ref: /schemas/types.yaml#/definitions/uint32
-> > +        description: Maximal size of Rx DMA transactions in FIFO words
-> > +        minimum: 1
-> > +        maximum: 1024
-> 
+From: Alexander Lobakin <alobakin@pm.me>
+Date: Wed, 06 Apr 2022 23:46:04 +0000
 
-> Are you reading these somewhere? 
+> While testing the new macros for working with 48 bit containers,
+> I faced a weird problem:
+>
+> 32 + 16: 0x2ef6e8da 0x79e60000
+> 48: 0xffffe8da + 0x79e60000
+>
+> All the bits starting from the 32nd were getting 1d in 9/10 cases.
+> The debug showed:
+>
+> p[0]: 0x00002e0000000000
+> p[1]: 0x00002ef600000000
+> p[2]: 0xffffffffe8000000
+> p[3]: 0xffffffffe8da0000
+> p[4]: 0xffffffffe8da7900
+> p[5]: 0xffffffffe8da79e6
+>
+> that the value becomes a garbage after the third OR, i.e. on
+> `p[2] << 24`.
+> When the 31st bit is 1 and there's no explicit cast to an unsigned,
+> it's being considered as a signed int and getting sign-extended on
+> OR, so `e8000000` becomes `ffffffffe8000000` and messes up the
+> result.
+> Cast the @p[2] to u64 as well to avoid this. Now:
+>
+> 32 + 16: 0x7ef6a490 0xddc10000
+> 48: 0x7ef6a490 + 0xddc10000
+>
+> p[0]: 0x00007e0000000000
+> p[1]: 0x00007ef600000000
+> p[2]: 0x00007ef6a4000000
+> p[3]: 0x00007ef6a4900000
+> p[4]: 0x00007ef6a490dd00
+> p[5]: 0x00007ef6a490ddc1
+>
+> Fixes: c2ea5fcf53d5 ("asm-generic: introduce be48 unaligned accessors")
+> Signed-off-by: Alexander Lobakin <alobakin@pm.me>
 
-Yes I do read them in the DWC AHCI driver and use ilog2() to get
-the corresponding power of two value.
+Uhm, ping?
 
-> 
-> Only powers of 2 are valid. (Guess what Calxeda's controller uses.)
+> ---
+>  include/asm-generic/unaligned.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/include/asm-generic/unaligned.h b/include/asm-generic/unalig=
+n=3D
+> ed.h
+> index 8fc637379899..df30f11b4a46 100644
+> --- a/include/asm-generic/unaligned.h
+> +++ b/include/asm-generic/unaligned.h
+> @@ -143,7 +143,7 @@ static inline void put_unaligned_be48(const u64 val, =
+v=3D
+> oid *p)
+>
+>  static inline u64 __get_unaligned_be48(const u8 *p)
+>  {
+> -=09return (u64)p[0] << 40 | (u64)p[1] << 32 | p[2] << 24 |
+> +=09return (u64)p[0] << 40 | (u64)p[1] << 32 | (u64)p[2] << 24 |
+>  =09=09p[3] << 16 | p[4] << 8 | p[5];
+>  }
+>
+> --
+> 2.35.1
 
-Right and is limited to be within [1; 1024]. Do you suggest to add a
-respective comment in the description or just manually enumerate the
-POW2 values? I don't believe there is a ready-to-use power-of-2 type in
-the /schemas/types.yaml file. BTW what about adding one seeing there are
-many cases where it could be useful?
+Thanks,
+Al
 
--Sergey
-
-> 
-> Rob

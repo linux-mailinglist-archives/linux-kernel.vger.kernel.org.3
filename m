@@ -2,205 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C38A84FC8FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 01:52:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54B214FC8FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 01:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236676AbiDKXyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 19:54:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49270 "EHLO
+        id S237484AbiDKXzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 19:55:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234047AbiDKXyM (ORCPT
+        with ESMTP id S234047AbiDKXzM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 19:54:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EE5F627155
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 16:51:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649721114;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=C2Yny/wdQGOLfSDXssmL5nGEynmk+Ee36fj4fjWkXdI=;
-        b=iiTxtzimJmPDjddPw/aESV9y2w02D14XUWycgih4Vs6TujoOCfo/s5s29ozn+1E5DnfJCM
-        PDvfv79jCwOGnVUcMx3PRJ6QtxeLTPil0Y213FMO05PbWk981DxXFiqbPXeEjg1hzaeWA1
-        1uUzMo//LhkUopqDM0cn79AredZi2TQ=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-280-M5Ffmg0lNSe2gViVhLa3lg-1; Mon, 11 Apr 2022 19:51:53 -0400
-X-MC-Unique: M5Ffmg0lNSe2gViVhLa3lg-1
-Received: by mail-qv1-f71.google.com with SMTP id fw9-20020a056214238900b0043522aa5b81so16929893qvb.21
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 16:51:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=C2Yny/wdQGOLfSDXssmL5nGEynmk+Ee36fj4fjWkXdI=;
-        b=E9WyjTedtlshVBKnwtFA2bcj0dFstiRWA66rgR1IgiTE4tSbKD98twC9BLSh8gmOgK
-         wxGjTGjMYZ1HeJ/45r9yb0RuMjFRcNCMI3v5F1IRD7Y0fC3xc+3HJdBYquygOr83UOti
-         1BA1uaVypqIQlbI2kyWt/f7cB9CQ3Q27u5D/qbvy43UQpRTEVdvnzcg90bf87roTZzoQ
-         18erm2F0me4nASNwxfTCVlJ3TTkyHCaCeupuaZCEqSho0yojMJ4etWIzAKzwFGF5kqIK
-         L17J/O7mgUeDO2rleDOWQYlK9BjVR+X9Z5Fw57bcCeRQzu41+qvsELQzr7xL5KyHXRgn
-         jH6Q==
-X-Gm-Message-State: AOAM5301jsd65Z8MM0R/U2Z4pJg99Vt5GfGOfP8FHL+W7rpEb6zq+k3N
-        XmD0lQJUOzjEg0oRSzKSdiDI9tPaxtM/kXP8uVk7Tf/64+bvFKnI4IARuRC8kxf1wE9z0JhIhJQ
-        rwC7X8kYkV6VtmzdW640QL3sl
-X-Received: by 2002:a05:6214:d87:b0:443:6f15:fe33 with SMTP id e7-20020a0562140d8700b004436f15fe33mr1575454qve.50.1649721112595;
-        Mon, 11 Apr 2022 16:51:52 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyrQG8u7aJ35wAwhhAtjuu9u/vtd70iPUCdYOEsCb2dpEct5qorprasylOONObrCtnpj/xA5w==
-X-Received: by 2002:a05:6214:d87:b0:443:6f15:fe33 with SMTP id e7-20020a0562140d8700b004436f15fe33mr1575435qve.50.1649721112407;
-        Mon, 11 Apr 2022 16:51:52 -0700 (PDT)
-Received: from [192.168.0.188] ([24.48.139.231])
-        by smtp.gmail.com with ESMTPSA id f15-20020a379c0f000000b0069bf3430cc4sm6119872qke.100.2022.04.11.16.51.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Apr 2022 16:51:51 -0700 (PDT)
-Message-ID: <1a7944c7-d717-d5af-f71d-92326f7bb7f6@redhat.com>
-Date:   Mon, 11 Apr 2022 19:51:50 -0400
+        Mon, 11 Apr 2022 19:55:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BACC27167;
+        Mon, 11 Apr 2022 16:52:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E1E3AB819B3;
+        Mon, 11 Apr 2022 23:52:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94439C385B0;
+        Mon, 11 Apr 2022 23:52:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649721174;
+        bh=MA2honiXWGeOzO9WdwjpEsoZG2CtJDXDu3X4YUBIiQc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=jdxbEG/cJ9bBPd0gnfltrog660KLU3COJSzzRSbWXk0ogQLHldVpvIsV35eeIAPq8
+         ulRhfQGXvvJPezfASRtce2+HmrpPTMIHbiSVMKVOt+QGSZ/AGS/Icda7n7BLqU3Nj8
+         dg9q7uGUmHZSoIlI9WttHJ+1tZjxSWtEX0nz+w0O2+XUWmLjpNqYD2aq56s0R9hX/7
+         Zqfwk9d8RFuZeLkafNhpc46EGa6nfi3rqTnc2vihzYdHGNxoqI7VO/b18TzLOsOqb9
+         8vZl9lfuDwzzS0yvHFYbJMI/xXlgZccHednOvnvhb6IwHus09/2iMAdod66G1iBTFq
+         QmthySP0p+TZg==
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-2ec42eae76bso34234617b3.10;
+        Mon, 11 Apr 2022 16:52:54 -0700 (PDT)
+X-Gm-Message-State: AOAM531pb5/lSEtlYb3HABuX+kYca0qHLlSa9dPRVRqySZKd4WJuwgQh
+        kdlyLGp6w114o5X1w28U/SI6X5v25o8TmJTYuGs=
+X-Google-Smtp-Source: ABdhPJy/zaZyKbdypj1Ir6pRoTfrzhUUja8HYbw1+PrL4w3DfKO/U2kKNazR+UqBBUv9umC/SnpgklvN3WCGaxXljB0=
+X-Received: by 2002:a81:14c8:0:b0:2eb:eb91:d88f with SMTP id
+ 191-20020a8114c8000000b002ebeb91d88fmr14373906ywu.148.1649721173532; Mon, 11
+ Apr 2022 16:52:53 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v8] oom_kill.c: futex: Don't OOM reap the VMA containing
- the robust_list_head
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Rafael Aquini <aquini@redhat.com>,
-        Waiman Long <longman@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Christoph von Recklinghausen <crecklin@redhat.com>,
-        Don Dutile <ddutile@redhat.com>,
-        "Herton R . Krzesinski" <herton@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
+References: <20220411233549.740157-1-song@kernel.org> <20220411233549.740157-4-song@kernel.org>
+In-Reply-To: <20220411233549.740157-4-song@kernel.org>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 11 Apr 2022 16:52:40 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW6Z1AM=AXtxP5Hk+Xa4yF8r2f0ckOTHDML5A1iRQS8t_w@mail.gmail.com>
+Message-ID: <CAPhsuW6Z1AM=AXtxP5Hk+Xa4yF8r2f0ckOTHDML5A1iRQS8t_w@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf 3/3] bpf: use module_alloc_huge for bpf_prog_pack
+To:     bpf <bpf@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Joel Savitz <jsavitz@redhat.com>,
-        Darren Hart <dvhart@infradead.org>, stable@kernel.org
-References: <20220408032809.3696798-1-npache@redhat.com>
- <20220408081549.GM2731@worktop.programming.kicks-ass.net>
- <ee07a31c-c514-4a88-599f-14a30e93f32e@redhat.com> <87k0bzk7e5.ffs@tglx>
-From:   Nico Pache <npache@redhat.com>
-In-Reply-To: <87k0bzk7e5.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        rick.p.edgecombe@intel.com, Christoph Hellwig <hch@infradead.org>,
+        imbrenda@linux.ibm.com, Luis Chamberlain <mcgrof@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Apr 11, 2022 at 4:41 PM Song Liu <song@kernel.org> wrote:
+>
+> module_alloc_huge for bpf_prog_pack so that BPF programs sit on PMD_SIZE
+> pages. This benefits system performance by reducing iTLB miss rate.
+>
+> Signed-off-by: Song Liu <song@kernel.org>
 
+I am really sorry for spamming the list twice. The first set
+experienced long lag,
+so I thought it didn't get through.
 
-On 4/8/22 09:54, Thomas Gleixner wrote:
-> On Fri, Apr 08 2022 at 04:41, Nico Pache wrote:
->> On 4/8/22 04:15, Peter Zijlstra wrote:
->>>>
->>>> The following case can still fail:
->>>> robust head (skipped) -> private lock (reaped) -> shared lock (skipped)
->>>
->>> This is still all sorts of confused.. it's a list head, the entries can
->>> be in any random other VMA. You must not remove *any* user memory before
->>> doing the robust thing. Not removing the VMA that contains the head is
->>> pointless in the extreme.
->> Not sure how its pointless if it fixes all the different reproducers we've
->> written for it. As for the private lock case we stated here, we havent been able
->> to reproduce it, but I could see how it can be a potential issue (which is why
->> its noted).
-> 
-> The below reproduces the problem nicely, i.e. the lock() in the parent
-> times out. So why would the OOM killer fail to cause the same problem
-> when it reaps the private anon mapping where the private futex sits?
-> 
-> If you revert the lock order in the child the robust muck works.
+I also updated the commit log of 3/3, and this one is the latest version.
 
-Thanks for the reproducer Thomas :)
+Thanks,
+Song
 
-I think I need to re-up my knowledge around COW and how it effects that stack.
-There are increased oddities when you add the pthread library that I cant fully
-wrap my head around at the moment.
-
-My confusion lies in how the parent/child share a robust list here, but they
-obviously do. In my mind the mut_s would be different in the child/parent after
-the fork and pthread_mutex_init (and friends) are done in the child.
-
-Thanks!
--- Nico
-> 
-> Thanks,
-> 
->         tglx
 > ---
-> #include <errno.h>
-> #include <fcntl.h>
-> #include <pthread.h>
-> #include <time.h>
-> #include <stdio.h>
-> #include <string.h>
-> #include <unistd.h>
-> 
-> #include <sys/types.h>
-> #include <sys/mman.h>
-> 
-> static char n[4096];
-> 
-> int main(void)
-> {
-> 	pthread_mutexattr_t mat_s, mat_p;
-> 	pthread_mutex_t *mut_s, *mut_p;
-> 	pthread_barrierattr_t ba;
-> 	pthread_barrier_t *b;
-> 	struct timespec to;
-> 	void *pri, *shr;
-> 	int r;
-> 
-> 	shr = mmap(NULL, sizeof(n), PROT_READ | PROT_WRITE,
-> 		   MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-> 
-> 	pthread_mutexattr_init(&mat_s);
-> 	pthread_mutexattr_setrobust(&mat_s, PTHREAD_MUTEX_ROBUST);
-> 	mut_s = shr;
-> 	pthread_mutex_init(mut_s, &mat_s);
-> 
-> 	pthread_barrierattr_init(&ba);
-> 	pthread_barrierattr_setpshared(&ba, PTHREAD_PROCESS_SHARED);
-> 	b = shr + 1024;
-> 	pthread_barrier_init(b, &ba, 2);
-> 
-> 	if (!fork()) {
-> 		pri = mmap(NULL, 1<<20, PROT_READ | PROT_WRITE,
-> 			   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-> 		pthread_mutexattr_init(&mat_p);
-> 		pthread_mutexattr_setpshared(&mat_p, PTHREAD_PROCESS_PRIVATE);
-> 		pthread_mutexattr_setrobust(&mat_p, PTHREAD_MUTEX_ROBUST);
-> 		mut_p = pri;
-> 		pthread_mutex_init(mut_p, &mat_p);
-> 
-> 		// With lock order s, p parent gets timeout
-> 		// With lock order p, s parent gets owner died
-> 		pthread_mutex_lock(mut_s);
-> 		pthread_mutex_lock(mut_p);
-> 		// Remove unmap and lock order does not matter
-> 		munmap(pri, sizeof(n));
-> 		pthread_barrier_wait(b);
-> 		printf("child gone\n");
-> 	} else {
-> 		pthread_barrier_wait(b);
-> 		printf("parent lock\n");
-> 		clock_gettime(CLOCK_REALTIME, &to);
-> 		to.tv_sec += 1;
-> 		r = pthread_mutex_timedlock(mut_s, &to);
-> 		printf("parent lock returned: %s\n", strerror(r));
-> 	}
-> 	return 0;
-> }
-> 
-
+>  kernel/bpf/core.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+>
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 13e9dbeeedf3..fd45bdd80a75 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -857,7 +857,7 @@ static size_t select_bpf_prog_pack_size(void)
+>         void *ptr;
+>
+>         size = BPF_HPAGE_SIZE * num_online_nodes();
+> -       ptr = module_alloc(size);
+> +       ptr = module_alloc_huge(size);
+>
+>         /* Test whether we can get huge pages. If not just use PAGE_SIZE
+>          * packs.
+> @@ -881,7 +881,7 @@ static struct bpf_prog_pack *alloc_new_pack(void)
+>                        GFP_KERNEL);
+>         if (!pack)
+>                 return NULL;
+> -       pack->ptr = module_alloc(bpf_prog_pack_size);
+> +       pack->ptr = module_alloc_huge(bpf_prog_pack_size);
+>         if (!pack->ptr) {
+>                 kfree(pack);
+>                 return NULL;
+> @@ -889,7 +889,6 @@ static struct bpf_prog_pack *alloc_new_pack(void)
+>         bitmap_zero(pack->bitmap, bpf_prog_pack_size / BPF_PROG_CHUNK_SIZE);
+>         list_add_tail(&pack->list, &pack_list);
+>
+> -       set_vm_flush_reset_perms(pack->ptr);
+>         set_memory_ro((unsigned long)pack->ptr, bpf_prog_pack_size / PAGE_SIZE);
+>         set_memory_x((unsigned long)pack->ptr, bpf_prog_pack_size / PAGE_SIZE);
+>         return pack;
+> @@ -970,7 +969,9 @@ static void bpf_prog_pack_free(struct bpf_binary_header *hdr)
+>         if (bitmap_find_next_zero_area(pack->bitmap, bpf_prog_chunk_count(), 0,
+>                                        bpf_prog_chunk_count(), 0) == 0) {
+>                 list_del(&pack->list);
+> -               module_memfree(pack->ptr);
+> +               set_memory_nx((unsigned long)pack->ptr, bpf_prog_pack_size / PAGE_SIZE);
+> +               set_memory_rw((unsigned long)pack->ptr, bpf_prog_pack_size / PAGE_SIZE);
+> +               vfree(pack->ptr);
+>                 kfree(pack);
+>         }
+>  out:
+> --
+> 2.30.2
+>
+>

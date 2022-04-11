@@ -2,105 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19C7B4FB216
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 04:57:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C0654FB21A
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 05:00:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244255AbiDKC7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 22:59:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46402 "EHLO
+        id S244449AbiDKDCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 23:02:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243836AbiDKC7G (ORCPT
+        with ESMTP id S234168AbiDKDCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 22:59:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CE31F1839C
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 19:56:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649645813;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=T/TxVJ8j7MEenFEqiqkbwv+oE0JIQvDaicMqp8AOqcI=;
-        b=jMyliiD3jEhh3sJJbptWNZ9WVvNMhxElHX2nw6dXkekOWUvDVkQcw44tq8+KVGQFVbP5bP
-        4/dKG1UwUAip0eLgRqlCEVQuU5AL+GGLTb6Z5nAt0sNiZrdPUw7Cno2DBm00VWjyvjFydw
-        Fno9aOULY/vuEKAMiMh+WmYw5k8k5b4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-361-H7MUrN6SN8WG-5xHhgUh7Q-1; Sun, 10 Apr 2022 22:56:47 -0400
-X-MC-Unique: H7MUrN6SN8WG-5xHhgUh7Q-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8FBE4811E75;
-        Mon, 11 Apr 2022 02:56:46 +0000 (UTC)
-Received: from localhost (ovpn-12-19.pek2.redhat.com [10.72.12.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5C3E3401E99;
-        Mon, 11 Apr 2022 02:56:45 +0000 (UTC)
-Date:   Mon, 11 Apr 2022 10:56:42 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        linux-kernel@vger.kernel.org, Dave Young <dyoung@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        kexec@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        John Donnelly <John.p.donnelly@oracle.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>
-Subject: Re: [PATCH v21 0/5] support reserving crashkernel above 4G on arm64
- kdump
-Message-ID: <YlOY6jGpl2EBs6zE@MiWiFi-R3L-srv>
-References: <20220227030717.1464-1-thunder.leizhen@huawei.com>
- <YlABRPBEaTldZwuL@MiWiFi-R3L-srv>
- <3a0bb9a9-c2a1-2e3a-8f23-16109ae1e525@huawei.com>
+        Sun, 10 Apr 2022 23:02:49 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A095FB7
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 20:00:33 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id f10so12704897plr.6
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 20:00:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=NsvfzGeEol9JMCZvR8qAUpetZ3eFv1g/vaks5It4CXI=;
+        b=FeiONeMfEmPzhMQUNqHY3YPc7caljS+ajmTS1XxQZu85GJQMTY3yM238/EGGfsNhpy
+         yWWv5IvrCLmmJJaOcYIpnIW7S/iRCZvKd7mP43qMxtacteESLPrr0/jS/TtzjJ1228mh
+         +n+DWkbXxjKkUiOGTNOcb+fDpo8mUyM1Zk2zccAi5qYgJjlkmFT4JZPoFYu9U7IazGxK
+         rDZcTcXLCrjJH2SfZPnvO6ri01ql5B7fyeuHWHGVUBuxZgkTtppiuopCqkK/dMovhILT
+         rc8Jai0TCPJSfrQ9RHsRFPsepMnfCSSUYt5cplUUdUPUMzN9P95JjqIVwAepLHlP8HyG
+         vIDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=NsvfzGeEol9JMCZvR8qAUpetZ3eFv1g/vaks5It4CXI=;
+        b=ejhEPzgbpYBk43akwM8QgL6iNCCFx+z/i6AKuvEB+wCJ/EoqtphHggf03xWFJC8gSs
+         MNXkeKblDxPF20ktFpr1UsDL65aV51TjYslVHZt6VWwseFrYGlVoCvtnddlwQwAoVOdv
+         TXloeVl8Dw9HPHJVfc9K3M8I3mC7PgU3vgEEEL3O3i3dRcXB6c+7pMdZ0ZwK9Xk+666+
+         7QoapmTKGRXQh19QcggqPvSejF5e26VGIYLhZSnZhMe7PJsgr2mUnR+wcq1nNF/nxXmP
+         4g9Da1e3oWOTZ73BEF8Qs7I2ahipUKiy4wqCgI6bniirtthnmVJUAOZtXl2Q+VLYr3Dn
+         50VA==
+X-Gm-Message-State: AOAM530XH9lYefqOFPm3NvPiZnYo/TyoZ2sMeUC/X7bFIUQXwUyZhIFp
+        1QU5o5ZukUU+bz30hFvs5tP86Q==
+X-Google-Smtp-Source: ABdhPJyn0uAbcnzlSZQYk17M60n6PnmWB/qODT42/eYir2XUp+Rm9EXWzkmA8vcNpN+lNI+FHiKbKA==
+X-Received: by 2002:a17:90a:430d:b0:1bc:f340:8096 with SMTP id q13-20020a17090a430d00b001bcf3408096mr33747085pjg.93.1649646033047;
+        Sun, 10 Apr 2022 20:00:33 -0700 (PDT)
+Received: from localhost ([223.184.83.228])
+        by smtp.gmail.com with ESMTPSA id o32-20020a635d60000000b0039cd48c7f6asm10016236pgm.32.2022.04.10.20.00.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Apr 2022 20:00:32 -0700 (PDT)
+Date:   Mon, 11 Apr 2022 08:30:30 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Sumit Gupta <sumitg@nvidia.com>
+Cc:     rafael@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        treding@nvidia.com, jonathanh@nvidia.com, linux-pm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ksitaraman@nvidia.com,
+        sanjayc@nvidia.com, bbasu@nvidia.com
+Subject: Re: [Patch v4 0/4] Tegra234 cpufreq driver support
+Message-ID: <20220411030030.eqq4a2xgidexowzq@vireshk-i7>
+References: <20220405130119.4697-1-sumitg@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3a0bb9a9-c2a1-2e3a-8f23-16109ae1e525@huawei.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220405130119.4697-1-sumitg@nvidia.com>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/08/22 at 05:47pm, Leizhen (ThunderTown) wrote:
-> 
-> 
-> On 2022/4/8 17:32, Baoquan He wrote:
-> > Hi, Lei
-> > 
-> > On 02/27/22 at 11:07am, Zhen Lei wrote:
-> >> Changes since [v20]:
-> >> 1. Check whether crashkernel=Y,low is incorrectly configured or not configured. Do different processing.
-> >> 2. Share the existing description of x86. The configuration of arm64 is the same as that of x86.
-> >> 3. Define the value of macro CRASH_ADDR_HIGH_MAX as memblock.current_limit, instead of MEMBLOCK_ALLOC_ACCESSIBLE.
-> >> 4. To improve readability, some lightweight code adjustments have been made to reserve_craskernel(), including comments.
-> >> 5. The defined value of DEFAULT_CRASH_KERNEL_LOW_SIZE reconsiders swiotlb, just like x86, to share documents.
-> > 
-> > 5.18 rc1 is already done, do you have plan to post a new version for
-> > reviewing?
-> 
-> Yes, v5.18-rc1 has added a new patch
-> commit  031495635b46 ("arm64: Do not defer reserve_crashkernel() for platforms with no DMA memory zones")
-> to allow block mapping again, so my patches need to be modified. It should be post next week.
+On 05-04-22, 18:31, Sumit Gupta wrote:
+> This patchset adds driver support for Tegra234 cpufreq.
+> Also, added soc data and ops to support multiple SoC's and variants
+> which have similar logic to {get|set} cpu frequency as Tegra194 in
+> the same driver.
+> >From cpufreq point, main difference between Tegra194 and Tegra234 are:
+>  1) Tegra234 uses MMIO for frequency requests and not sysreg like T194.
+>  2) MPIDR affinity info in Tegra234 is different from Tegra194.
+>  3) Register bits of pllp_clk_count and core_clk_count are swapped.
+> So, added ops hooks for Tegra234.
 
-Sounds great, thanks. Just a reminder, please take your time.
+Applied. Thanks.
 
+-- 
+viresh

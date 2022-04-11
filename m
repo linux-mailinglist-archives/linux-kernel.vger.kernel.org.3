@@ -2,93 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B3BF4FBFE2
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:09:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46B624FBFE1
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:09:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241839AbiDKPLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 11:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35606 "EHLO
+        id S1347559AbiDKPLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 11:11:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347644AbiDKPLR (ORCPT
+        with ESMTP id S234367AbiDKPLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 11:11:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9456356;
-        Mon, 11 Apr 2022 08:09:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4837661526;
-        Mon, 11 Apr 2022 15:09:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 431F1C385A3;
-        Mon, 11 Apr 2022 15:09:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649689741;
-        bh=22S2yrevAEeFE4scZEMGrxj+dH0qEXV6ljblsP2XRkk=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=rRBzsys0HqU8ZdjYOqL9oFRE7C+qqsTs9tSu6vKmX11f7BrV5Nz36ZSLjToT2hmtV
-         NOhG2S33MsOZukl20/yQcIjPu7zhmHndMyebTTpHpRK68IWzSTqmi1LGHsUkdmG5+w
-         l0Wza0vxiSNk45K8Rxz36u/9NoFv3LUGWJ8leHwDysacXK+urjOJqNTa8vLcIzENjc
-         KB4Zdh7lA+Lx7KrkFfipftAfRMJ1PvC6IuyoFp32OnuXB44xMeDhe/vJSGxyJgp7U9
-         q59j3H7uskuloY4e/FqCvsAapgNrp4F81KZ9bAcV6GtR1pm2s9seKlr7Rms/7cOAS0
-         OuqdXm6USUnTg==
-Date:   Mon, 11 Apr 2022 17:08:58 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Bastien Nocera <hadess@hadess.net>
-cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Ping Cheng <ping.cheng@wacom.com>,
-        Jason Gerecke <jason.gerecke@wacom.com>
-Subject: Re: [PATCH] HID: wacom: Correct power_supply type
-In-Reply-To: <20220407115406.115112-1-hadess@hadess.net>
-Message-ID: <nycvar.YFH.7.76.2204111708230.30217@cbobk.fhfr.pm>
-References: <20220407115406.115112-1-hadess@hadess.net>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Mon, 11 Apr 2022 11:11:08 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C4D2AE10
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:08:53 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id u7so10107508lfs.8
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:08:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=SZ3/Vx+1Q7uH45Ete1zY0f2BZJWVMOSE6BEs5zWCYbs=;
+        b=7DIUdDw1bDVY/1pX9CrYKqoUnxn4Af2165TByD3u5HZ0iXmIdkyeDLerqJVS4ILYb2
+         sr8EaHNWEoVQlow3SdmLYTkP5xN8dgvPftKQlE2GzWppJ9Nm1Jc8ZkbxJeZp/XQcv+bm
+         CkITSbBdcYbYkEIbRjUo+wMmeMYCl/ckl8Eyh5jpmDByZr90ijXMmjL2GuwmjJqoSc6X
+         41HpTTObRQn2DziTHtTZKAPeR3G4oO4JnMRiHaWm+nxgPN2SgqBjtuDslRAMsgbobCqJ
+         zrEUAd863LfUu4IdojsoK+HRzJ1QfBeJabFS3cJ9rTqFAAPFDxSzIUbnYMV1zoLxx+KI
+         BBkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=SZ3/Vx+1Q7uH45Ete1zY0f2BZJWVMOSE6BEs5zWCYbs=;
+        b=KlWQNPGdN91RHAvtUQnWjqh61mp3E9Pn4XT3vjIUNO4KkBTERV7+NNsu/IJOsZHzw3
+         d9QYondPWDPPAP8R7d8GROndfA33yHLU2/Zq6MyFeKvZi7DYLcHNSEULdlRC2j2YE2fo
+         k2dP5uLzgcONVDt/jpSB7SR8Q1Eg6OjoIheipOJe1IM8y5aIGFZ3zRArQuUtaLo1OgcV
+         jOfCzliMH2ZVYO4TJQBM0uRc7IrzoYzD3PJu6wdW5MCuSqZBJ0qfJwvRB2FXmtnHyffD
+         LbM0jSZTvN5NeSKaeTV0683PswwmiqmXI+nb4AEAqSChF+vIOlYM2/Tcr12rTd3aV8Dm
+         TK9A==
+X-Gm-Message-State: AOAM5334JXv9A/Pu8PqsFM5gexOhOrM35dBH0s6wHPjtfrh2i7bMF8wB
+        iDKqwhPXkOiYS3MvJr8YNSyJiw==
+X-Google-Smtp-Source: ABdhPJwVzRe0aqmUWVOSiTlNptfcMMnBCa3LaWdYU4CM/MHAyK3juuV+XEpH4cZF1tu2LetUDByrEw==
+X-Received: by 2002:a05:6512:3f29:b0:450:ac79:77dd with SMTP id y41-20020a0565123f2900b00450ac7977ddmr21705662lfa.301.1649689731304;
+        Mon, 11 Apr 2022 08:08:51 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id t2-20020a05651c204200b0024b4bc5d324sm1197193ljo.79.2022.04.11.08.08.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Apr 2022 08:08:50 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 41CC4103CE0; Mon, 11 Apr 2022 18:10:23 +0300 (+03)
+Date:   Mon, 11 Apr 2022 18:10:23 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com
+Subject: Re: [PATCH v5 01/13] mm/memfd: Introduce MFD_INACCESSIBLE flag
+Message-ID: <20220411151023.4nx34pxyg5amj44m@box.shutemov.name>
+References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
+ <20220310140911.50924-2-chao.p.peng@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220310140911.50924-2-chao.p.peng@linux.intel.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 7 Apr 2022, Bastien Nocera wrote:
-
-> POWER_SUPPLY_TYPE_USB seems to only ever be used by USB ports that are
-> used to charge the machine itself (so a "system" scope), like the
-> single USB port on a phone, rather than devices.
+On Thu, Mar 10, 2022 at 10:08:59PM +0800, Chao Peng wrote:
+> From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 > 
-> The wacom_sys driver is the only driver that sets its device battery as
-> being a USB type, which doesn't seem correct based on its usage, so
-> switch it to be a battery type like all the other USB-connected devices.
+> Introduce a new memfd_create() flag indicating the content of the
+> created memfd is inaccessible from userspace through ordinary MMU
+> access (e.g., read/write/mmap). However, the file content can be
+> accessed via a different mechanism (e.g. KVM MMU) indirectly.
 > 
-> Signed-off-by: Bastien Nocera <hadess@hadess.net>
+> It provides semantics required for KVM guest private memory support
+> that a file descriptor with this flag set is going to be used as the
+> source of guest memory in confidential computing environments such
+> as Intel TDX/AMD SEV but may not be accessible from host userspace.
+> 
+> Since page migration/swapping is not yet supported for such usages
+> so these pages are currently marked as UNMOVABLE and UNEVICTABLE
+> which makes them behave like long-term pinned pages.
+> 
+> The flag can not coexist with MFD_ALLOW_SEALING, future sealing is
+> also impossible for a memfd created with this flag.
+> 
+> At this time only shmem implements this flag.
+> 
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
 > ---
->  drivers/hid/wacom_sys.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  include/linux/shmem_fs.h   |  7 +++++
+>  include/uapi/linux/memfd.h |  1 +
+>  mm/memfd.c                 | 26 +++++++++++++++--
+>  mm/shmem.c                 | 57 ++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 88 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/hid/wacom_sys.c b/drivers/hid/wacom_sys.c
-> index 066c567dbaa2..620fe74f5676 100644
-> --- a/drivers/hid/wacom_sys.c
-> +++ b/drivers/hid/wacom_sys.c
-> @@ -1777,7 +1777,7 @@ static int __wacom_initialize_battery(struct wacom *wacom,
->  	bat_desc->get_property = wacom_battery_get_property;
->  	sprintf(battery->bat_name, "wacom_battery_%ld", n);
->  	bat_desc->name = battery->bat_name;
-> -	bat_desc->type = POWER_SUPPLY_TYPE_USB;
-> +	bat_desc->type = POWER_SUPPLY_TYPE_BATTERY;
->  	bat_desc->use_for_apm = 0;
+> diff --git a/include/linux/shmem_fs.h b/include/linux/shmem_fs.h
+> index e65b80ed09e7..2dde843f28ef 100644
+> --- a/include/linux/shmem_fs.h
+> +++ b/include/linux/shmem_fs.h
+> @@ -12,6 +12,9 @@
 >  
->  	ps_bat = devm_power_supply_register(dev, bat_desc, &psy_cfg);
+>  /* inode in-kernel data */
+>  
+> +/* shmem extended flags */
+> +#define SHM_F_INACCESSIBLE	0x0001  /* prevent ordinary MMU access (e.g. read/write/mmap) to file content */
+> +
+>  struct shmem_inode_info {
+>  	spinlock_t		lock;
+>  	unsigned int		seals;		/* shmem seals */
+> @@ -24,6 +27,7 @@ struct shmem_inode_info {
+>  	struct shared_policy	policy;		/* NUMA memory alloc policy */
+>  	struct simple_xattrs	xattrs;		/* list of xattrs */
+>  	atomic_t		stop_eviction;	/* hold when working on inode */
+> +	unsigned int		xflags;		/* shmem extended flags */
+>  	struct inode		vfs_inode;
+>  };
+>  
 
-Thanks Bastien, makes sense. CCing Jason and Ping (the Wacom driver 
-maintainers) to get their Ack.
+AFAICS, only two bits of 'flags' are used. And that's very strange that
+VM_ flags are used for the purpose. My guess that someone was lazy to
+introduce new constants for this.
+
+I think we should fix this: introduce SHM_F_LOCKED and SHM_F_NORESERVE
+alongside with SHM_F_INACCESSIBLE and stuff them all into info->flags.
+It also makes shmem_file_setup_xflags() go away.
 
 -- 
-Jiri Kosina
-SUSE Labs
-
+ Kirill A. Shutemov

@@ -2,88 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D3DB4FB277
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 05:51:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32AC74FB27C
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 05:59:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242556AbiDKDxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 23:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46686 "EHLO
+        id S242687AbiDKEBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 00:01:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235432AbiDKDxF (ORCPT
+        with ESMTP id S229908AbiDKEBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 23:53:05 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A1D537A26
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 20:50:52 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2db2add4516so151816007b3.1
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 20:50:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3zaQImLi0FzFBRmnFmLjG6HOawbZnSP9X2yOV3cxE4U=;
-        b=p0wYNrWXbajDvZhjMlVAkw/+L8hLevOGmZtPSYERL7Iy5/5Rm6lIL5TzW2HVTTocg1
-         Ov2DlGOZ3EofzM1oTCaPip+4Fo92sPsVTrhKfjyDwWUw8SxtkbDJNudCpCiplMt/1yhF
-         2iHSVUiRIJJv+PO8Mzt173Nhyk7tQDGc8ByCpN0jEKdOcOBArU9HhbEM5iyApL5nmOel
-         q3UrEU/5LTuWETFAwZteyJ8AY3j+XvMYrG9rBnUU2K0gO3otI5JYTxUTeAI2MED76wAe
-         qoh0rkZEobOKqNlUEYVtTzxJvxdwcHU+D+nBL5/T+PdqV+Rhhn7e9q5/FZy8yHEnCJGr
-         8grQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3zaQImLi0FzFBRmnFmLjG6HOawbZnSP9X2yOV3cxE4U=;
-        b=7ClYfRsbnVayYop9hfXQYDyJ0hdY2alf7hUsuxR+KuAKRJd+TGFX1klm7ufhzTinrs
-         NUjlqXxpNsDpVMZIL/B7OPrAr3qmbwa9RuxNr31IFhPaUSlj8WqqjSaSCuhFQx6BY/yI
-         FGagi27/QV5c+G+qE7R3f08FlRDcaweBbhi9J5vIz196xJ2CIYRHYYiBgrUQGRTV2Qc3
-         +7qWxceojqwZCgKqmaIgv9PIs0nkS3YYM1yL0uuwDSsHL4Xq28GKDby5FAL14DtMv+lk
-         eChmlVpcTq1jn9WN8D7N3aYntbqkOTLX/RPVedP0/YuvBsaNdPKJQ05K4oU1iiKqMiJr
-         rRIA==
-X-Gm-Message-State: AOAM531pjZvI9lv6S4kQLeVGsFwkHWDAMJyiZLH8epQRk6yPyFw6QCLt
-        MCdBVRuAP5nf9mnAj+M59p+uSIVElM/6SPPw+ki5BQ==
-X-Google-Smtp-Source: ABdhPJzhLxDy+AFwGDCZdKwANIGl4tMzfwmBe3gjOWrYkaQfibluIQLxEFevjriCH95pbr43GfpdL3R0UWbjNbuJs+s=
-X-Received: by 2002:a81:1c1:0:b0:2eb:7369:dd09 with SMTP id
- 184-20020a8101c1000000b002eb7369dd09mr25754598ywb.35.1649649051525; Sun, 10
- Apr 2022 20:50:51 -0700 (PDT)
+        Mon, 11 Apr 2022 00:01:08 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1277A2FFEC;
+        Sun, 10 Apr 2022 20:58:50 -0700 (PDT)
+X-UUID: 8557a3c71ad94995b451f8c39d3f439b-20220411
+X-UUID: 8557a3c71ad94995b451f8c39d3f439b-20220411
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1549471564; Mon, 11 Apr 2022 11:58:45 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Mon, 11 Apr 2022 11:58:44 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 11 Apr 2022 11:58:44 +0800
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     <chunkuang.hu@kernel.org>, <robh+dt@kernel.org>,
+        <krzk+dt@kernel.org>, <matthias.bgg@gmail.com>
+CC:     <p.zabel@pengutronix.de>, <airlied@linux.ie>,
+        <yongqiang.niu@mediatek.com>, <jason-jh.lin@mediatek.com>,
+        <nancy.lin@mediatek.com>, <allen-kh.cheng@mediatek.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>
+Subject: [PATCH V2 0/3] Update MediaTek disp_aal dt-binding
+Date:   Mon, 11 Apr 2022 11:58:40 +0800
+Message-ID: <20220411035843.19847-1-rex-bc.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-References: <20220409144239.2649257-1-jsyoo5b@gmail.com>
-In-Reply-To: <20220409144239.2649257-1-jsyoo5b@gmail.com>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Mon, 11 Apr 2022 11:50:14 +0800
-Message-ID: <CAMZfGtXH_AdzSea6eTJk==LQXB40iN0wFP6cry8=OpDGgY0dtg@mail.gmail.com>
-Subject: Re: [PATCH] mm/slub: remove meaningless node check in ___slab_alloc()
-To:     JaeSang Yoo <js.yoo.5b@gmail.com>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Ohhoon Kwon <ohkwon1043@gmail.com>,
-        Wonhyuk Yang <vvghjk1234@gmail.com>,
-        Jiyoup Kim <lakroforce@gmail.com>,
-        Donghyeok Kim <dthex5d@gmail.com>,
-        JaeSang Yoo <jsyoo5b@gmail.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 9, 2022 at 10:43 PM JaeSang Yoo <js.yoo.5b@gmail.com> wrote:
->
-> node_match() with node=NUMA_NO_NODE always returns 1.
-> Duplicate check by goto statement is meaningless. Remove it.
->
-> Signed-off-by: JaeSang Yoo <jsyoo5b@gmail.com>
+V2:
+1. Change to a proper subject.
+2. Update dt-binding for MT8195.
 
-LGTM.
+The disp_aal dt-binding needs to be updated for MT8183, MT8192 and MT8195.
+1. Update dt-binding and dts for MT8183.
+2. Update dt-binding for MT8192 and MT8195.
 
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+This series is based on this series:
+"add display support for MediaTek SoC MT8186":
+Message id: 20220406030009.2357-1-rex-bc.chen@mediatek.com
+
+Rex-BC Chen (3):
+  dt-bindings: display: mediatek: Update disp_aal binding for MT8183
+  arm64: dts: mt8183: Update disp_aal node compatible
+  dt-bindings: display: mediatek: Update disp_aal binding for MT8192 and MT8195
+
+ .../bindings/display/mediatek/mediatek,aal.yaml        | 10 +++++-----
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi               |  3 +--
+ 2 files changed, 6 insertions(+), 7 deletions(-)
+
+-- 
+2.18.0
+

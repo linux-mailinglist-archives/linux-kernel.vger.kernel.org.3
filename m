@@ -2,296 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD5B64FBDDB
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 15:53:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEF964FBDE2
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 15:55:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346786AbiDKNzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 09:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45862 "EHLO
+        id S1346790AbiDKN5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 09:57:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346773AbiDKNzq (ORCPT
+        with ESMTP id S240988AbiDKN5A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 09:55:46 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B610924F30;
-        Mon, 11 Apr 2022 06:53:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649685212; x=1681221212;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=tgpPo55v0hZMP1D9KLS+8Bk9D5L0sftc2mUdtFpjW8k=;
-  b=FotL7c2SP6A+WwNuPd/WFDDuGZ+uWFJ+pf3UF8GFzXHAu90WqaaYeYx3
-   PSWLIcmVH57CQIjmrriLbjHYLvVS7zfwn/gg+0AYiMzfB31H8rBiFPZOv
-   icRWyvNfGqy9FpggVMh+r0+Sb2wHF7sn5h+O2KzzwlplMmzKMjKUMvJQi
-   M=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 11 Apr 2022 06:53:32 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 06:53:32 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 11 Apr 2022 06:53:31 -0700
-Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 11 Apr 2022 06:53:27 -0700
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_rohkumar@quicinc.com>, <srinivas.kandagatla@linaro.org>,
-        <dianders@chromium.org>, <swboyd@chromium.org>,
-        <judyhsiao@chromium.org>
-CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        "Venkata Prasad Potturu" <quic_potturu@quicinc.com>
-Subject: [PATCH v7 2/2] arm64: dts: qcom: sc7280: add lpass lpi pin controller node
-Date:   Mon, 11 Apr 2022 19:23:04 +0530
-Message-ID: <1649685184-8448-3-git-send-email-quic_srivasam@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1649685184-8448-1-git-send-email-quic_srivasam@quicinc.com>
-References: <1649685184-8448-1-git-send-email-quic_srivasam@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 11 Apr 2022 09:57:00 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FCC3A194;
+        Mon, 11 Apr 2022 06:54:44 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23BBmNck029660;
+        Mon, 11 Apr 2022 13:54:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to; s=pp1;
+ bh=+Iy/HIohrX/LlMkpHMiv5rNz9NKrmXIlkCYkah9Ns6Q=;
+ b=g5DVZHFfL0lthgzhQSJPW1z0g+gINC+sgLKoGEnhMWzJC5ZCU7aoWJD6CjSBmiwPbnCi
+ gjsCR8ReSIvMAHGjlvfRbxFHGprCUBP3l2w0pVxaas+x4iNoMwlWxXdCGXdO1zu9LU6K
+ /MqDNy4ut4wC25sjIMgw4VO7AR8EV3oTX58g2zpJl37yhQXo5gNTwa+YGVpVoW8UQgnW
+ RQ5PAqqeofK7adUiVvbF/n2KJsJAYbG1arr7372teT3S6FPDCkyy/BNu3bO65nd0wAfl
+ xIUx+dCex5qafVdScGp+ImRl/gn+qls7f3oYMiYMkiDLopT/tiQgpML3KUiHO8Yr8ktV yg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fcks92qy0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 11 Apr 2022 13:54:34 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23BD3TGt023845;
+        Mon, 11 Apr 2022 13:54:33 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fcks92qxc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 11 Apr 2022 13:54:33 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23BDLNYH007810;
+        Mon, 11 Apr 2022 13:54:31 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 3fb1s8u7u9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 11 Apr 2022 13:54:31 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23BDsRhC38273346
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 11 Apr 2022 13:54:27 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CDD4EA405C;
+        Mon, 11 Apr 2022 13:54:27 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AEB05A4060;
+        Mon, 11 Apr 2022 13:54:22 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.211.96.87])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Mon, 11 Apr 2022 13:54:22 +0000 (GMT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
+Subject: Re: [PATCH v2 4/4] tools/perf: Fix perf bench numa testcase to check
+ if CPU used to bind task is online
+From:   Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+In-Reply-To: <YlGkVPyn2/tpUZl2@kernel.org>
+Date:   Mon, 11 Apr 2022 19:24:18 +0530
+Cc:     Jiri Olsa <jolsa@kernel.org>, disgoel@linux.vnet.ibm.com,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        maddy@linux.vnet.ibm.com,
+        Nageswara Sastry <rnsastry@linux.ibm.com>,
+        kajoljain <kjain@linux.ibm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        Ian Rogers <irogers@google.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <03FDBB52-5803-4254-81E5-875008E203A6@linux.vnet.ibm.com>
+References: <20220406175113.87881-1-atrajeev@linux.vnet.ibm.com>
+ <20220406175113.87881-5-atrajeev@linux.vnet.ibm.com>
+ <YlGkVPyn2/tpUZl2@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+X-Mailer: Apple Mail (2.3654.120.0.1.13)
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Sag1UoHIm_x-EVI_ndyEJwOcPsi4JjO5
+X-Proofpoint-ORIG-GUID: XnDDWDMkkMLdTzccFQfHpCohepFBLFZP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-11_05,2022-04-11_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ priorityscore=1501 suspectscore=0 mlxlogscore=999 mlxscore=0 phishscore=0
+ clxscore=1015 bulkscore=0 impostorscore=0 lowpriorityscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204110074
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add LPASS LPI pinctrl node required for Audio functionality on sc7280
-based platforms.
 
-Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sc7280-idp.dtsi |  84 ++++++++++++++++++++++++
- arch/arm64/boot/dts/qcom/sc7280.dtsi     | 107 +++++++++++++++++++++++++++++++
- 2 files changed, 191 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-index 4ba2274..ea751dc 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-@@ -238,6 +238,90 @@
- 	modem-init;
- };
- 
-+&dmic01 {
-+	clk {
-+		drive-strength = <8>;
-+	};
-+};
-+
-+&dmic01_sleep {
-+	clk {
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	data {
-+		pull-down;
-+	};
-+};
-+
-+&dmic23 {
-+	clk {
-+		drive-strength = <8>;
-+	};
-+};
-+
-+&dmic23_sleep {
-+	clk {
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
-+	data {
-+		pull-down;
-+	};
-+};
-+
-+&rx_swr {
-+	clk {
-+		drive-strength = <2>;
-+		slew-rate = <1>;
-+		bias-disable;
-+	};
-+
-+	data {
-+		drive-strength = <2>;
-+		slew-rate = <1>;
-+		bias-bus-hold;
-+	};
-+};
-+
-+&rx_swr_sleep {
-+	clk {
-+		drive-strength = <2>;
-+		bias-pull-down;
-+	};
-+
-+	data {
-+		drive-strength = <2>;
-+		bias-pull-down;
-+	};
-+};
-+
-+&tx_swr {
-+	clk {
-+		drive-strength = <2>;
-+		slew-rate = <1>;
-+		bias-disable;
-+	};
-+
-+	data {
-+		slew-rate = <1>;
-+		bias-bus-hold;
-+	};
-+};
-+
-+&tx_swr_sleep {
-+	clk {
-+		drive-strength = <2>;
-+		bias-pull-down;
-+	};
-+
-+	data {
-+		bias-bus-hold;
-+	};
-+};
-+
- &pcie1 {
- 	status = "okay";
- 	perst-gpio = <&tlmm 2 GPIO_ACTIVE_LOW>;
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 8099c80..c692420 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -1987,6 +1987,113 @@
- 			qcom,bcm-voters = <&apps_bcm_voter>;
- 		};
- 
-+		lpass_tlmm: pinctrl@33c0000 {
-+			compatible = "qcom,sc7280-lpass-lpi-pinctrl";
-+			reg = <0 0x033c0000 0x0 0x20000>,
-+				<0 0x03550000 0x0 0x10000>;
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			gpio-ranges = <&lpass_tlmm 0 0 15>;
-+
-+			#clock-cells = <1>;
-+
-+			dmic01: dmic01 {
-+				clk {
-+					pins = "gpio6";
-+					function = "dmic1_clk";
-+				};
-+
-+				data {
-+					pins = "gpio7";
-+					function = "dmic1_data";
-+				};
-+			};
-+
-+			dmic01_sleep: dmic01-sleep {
-+				clk {
-+					pins = "gpio6";
-+					function = "dmic1_clk";
-+				};
-+
-+				data {
-+					pins = "gpio7";
-+					function = "dmic1_data";
-+				};
-+			};
-+
-+			dmic23: dmic23 {
-+				clk {
-+					pins = "gpio8";
-+					function = "dmic2_clk";
-+				};
-+
-+				data {
-+					pins = "gpio9";
-+					function = "dmic2_data";
-+				};
-+			};
-+
-+			dmic23_sleep: dmic23_sleep {
-+				clk {
-+					pins = "gpio8";
-+					function = "dmic2_clk";
-+				};
-+
-+				data {
-+					pins = "gpio9";
-+					function = "dmic2_data";
-+				};
-+			};
-+
-+			rx_swr: rx-swr {
-+				clk {
-+					pins = "gpio3";
-+					function = "swr_rx_clk";
-+				};
-+
-+				data {
-+					pins = "gpio4", "gpio5";
-+					function = "swr_rx_data";
-+				};
-+			};
-+
-+			rx_swr_sleep: rx-swr-sleep {
-+				clk {
-+					pins = "gpio3";
-+					function = "swr_rx_clk";
-+				};
-+
-+				data {
-+					pins = "gpio4", "gpio5";
-+					function = "swr_rx_data";
-+				};
-+			};
-+
-+			tx_swr: tx-swr {
-+				clk {
-+					pins = "gpio0";
-+					function = "swr_tx_clk";
-+				};
-+
-+				data {
-+					pins = "gpio1", "gpio2", "gpio14";
-+					function = "swr_tx_data";
-+				};
-+			};
-+
-+			tx_swr_sleep: tx-swr-sleep {
-+				clk {
-+					pins = "gpio0";
-+					function = "swr_tx_clk";
-+				};
-+
-+				data {
-+					pins = "gpio1", "gpio2", "gpio14";
-+					function = "swr_tx_data";
-+				};
-+			};
-+		};
-+
- 		gpu: gpu@3d00000 {
- 			compatible = "qcom,adreno-635.0", "qcom,adreno";
- 			reg = <0 0x03d00000 0 0x40000>,
--- 
-2.7.4
+> On 09-Apr-2022, at 8:50 PM, Arnaldo Carvalho de Melo <acme@kernel.org> =
+wrote:
+>=20
+> Em Wed, Apr 06, 2022 at 11:21:13PM +0530, Athira Rajeev escreveu:
+>> Perf numa bench test fails with error:
+>>=20
+>> Testcase:
+>> ./perf bench numa mem -p 2 -t 1 -P 1024 -C 0,8 -M 1,0 -s 20 -zZq
+>> --thp  1 --no-data_rand_walk
+>>=20
+>> Failure snippet:
+>> <<>>
+>> Running 'numa/mem' benchmark:
+>>=20
+>> # Running main, "perf bench numa numa-mem -p 2 -t 1 -P 1024 -C 0,8
+>> -M 1,0 -s 20 -zZq --thp 1 --no-data_rand_walk"
+>>=20
+>> perf: bench/numa.c:333: bind_to_cpumask: Assertion `!(ret)' failed.
+>> <<>>
+>>=20
+>> The Testcases uses CPU=E2=80=99s 0 and 8. In function =
+"parse_setup_cpu_list",
+>> There is check to see if cpu number is greater than max cpu=E2=80=99s =
+possible
+>> in the system ie via "if (bind_cpu_0 >=3D g->p.nr_cpus ||
+>> bind_cpu_1 >=3D g->p.nr_cpus) {". But it could happen that system has
+>> say 48 CPU=E2=80=99s, but only number of online CPU=E2=80=99s is 0-7. =
+Other CPU=E2=80=99s
+>> are offlined. Since "g->p.nr_cpus" is 48, so function will go ahead
+>> and set bit for CPU 8 also in cpumask ( td->bind_cpumask).
+>>=20
+>> bind_to_cpumask function is called to set affinity using
+>> sched_setaffinity and the cpumask. Since the CPU8 is not present,
+>> set affinity will fail here with EINVAL. Fix this issue by adding a
+>> check to make sure that, CPU=E2=80=99s provided in the input argument =
+values
+>> are online before proceeding further and skip the test. For this,
+>> include new helper function "is_cpu_online" in
+>> "tools/perf/util/header.c".
+>>=20
+>> Since "BIT(x)" definition will get included from header.h, remove
+>> that from bench/numa.c
+>>=20
+>> Tested-by: Disha Goel <disgoel@linux.vnet.ibm.com>
+>> Signed-off-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+>> Reported-by: Disha Goel <disgoel@linux.vnet.ibm.com>
+>> ---
+>> tools/perf/bench/numa.c  |  8 ++++++--
+>> tools/perf/util/header.c | 43 =
+++++++++++++++++++++++++++++++++++++++++
+>> tools/perf/util/header.h |  1 +
+>> 3 files changed, 50 insertions(+), 2 deletions(-)
+>>=20
+>> diff --git a/tools/perf/bench/numa.c b/tools/perf/bench/numa.c
+>> index 29e41e32bd88..7992d79b3e41 100644
+>> --- a/tools/perf/bench/numa.c
+>> +++ b/tools/perf/bench/numa.c
+>> @@ -34,6 +34,7 @@
+>> #include <linux/numa.h>
+>> #include <linux/zalloc.h>
+>>=20
+>> +#include "../util/header.h"
+>> #include <numa.h>
+>> #include <numaif.h>
+>>=20
+>> @@ -616,6 +617,11 @@ static int parse_setup_cpu_list(void)
+>> 			return -1;
+>> 		}
+>>=20
+>> +		if (is_cpu_online(bind_cpu_0) !=3D 1 || =
+is_cpu_online(bind_cpu_1) !=3D 1) {
+>> +			printf("\nTest not applicable, bind_cpu_0 or =
+bind_cpu_1 is offline\n");
+>> +			return -1;
+>> +		}
+>> +
+>> 		BUG_ON(bind_cpu_0 < 0 || bind_cpu_1 < 0);
+>> 		BUG_ON(bind_cpu_0 > bind_cpu_1);
+>>=20
+>> @@ -786,8 +792,6 @@ static int parse_nodes_opt(const struct option =
+*opt __maybe_unused,
+>> 	return parse_node_list(arg);
+>> }
+>>=20
+>> -#define BIT(x) (1ul << x)
+>> -
+>> static inline uint32_t lfsr_32(uint32_t lfsr)
+>> {
+>> 	const uint32_t taps =3D BIT(1) | BIT(5) | BIT(6) | BIT(31);
+>> diff --git a/tools/perf/util/header.c b/tools/perf/util/header.c
+>> index 6da12e522edc..3f5fcf5d4b3f 100644
+>> --- a/tools/perf/util/header.c
+>> +++ b/tools/perf/util/header.c
+>> @@ -983,6 +983,49 @@ static int write_dir_format(struct feat_fd *ff,
+>> 	return do_write(ff, &data->dir.version, =
+sizeof(data->dir.version));
+>> }
+>>=20
+>> +#define SYSFS "/sys/devices/system/cpu/"
+>=20
+> Please use
+>=20
+> int sysfs__read_str(const char *entry, char **buf, size_t *sizep)
+
+Hi Arnaldo,
+
+Sure, I will send a V3 for this separately which uses =
+=E2=80=9Csysfs__read_str=E2=80=9D
+
+Thanks for the review
+Athira
+>=20
+> See how to use it in the smt_on() function at tools/perf/util/smt.c, =
+for
+> example.
+>=20
+> Now looking at the first patches in the series.
+>=20
+> - Arnaldo
+>=20
+>> +/*
+>> + * Check whether a CPU is online
+>> + *
+>> + * Returns:
+>> + *     1 -> if CPU is online
+>> + *     0 -> if CPU is offline
+>> + *    -1 -> error case
+>> + */
+>> +int is_cpu_online(unsigned int cpu)
+>> +{
+>> +	char sysfs_cpu[255];
+>> +	char buf[255];
+>> +	struct stat statbuf;
+>> +	size_t len;
+>> +	int fd;
+>> +
+>> +	snprintf(sysfs_cpu, sizeof(sysfs_cpu), SYSFS "cpu%u", cpu);
+>> +
+>> +	if (stat(sysfs_cpu, &statbuf) !=3D 0)
+>> +		return 0;
+>> +
+>> +	/*
+>> +	 * Check if /sys/devices/system/cpu/cpux/online file
+>> +	 * exists. In kernels without CONFIG_HOTPLUG_CPU, this
+>> +	 * file won't exist.
+>> +	 */
+>> +	snprintf(sysfs_cpu, sizeof(sysfs_cpu), SYSFS "cpu%u/online", =
+cpu);
+>> +	if (stat(sysfs_cpu, &statbuf) !=3D 0)
+>> +		return 1;
+>> +
+>> +	fd =3D open(sysfs_cpu, O_RDONLY);
+>> +	if (fd =3D=3D -1)
+>> +		return -1;
+>> +
+>> +	len =3D read(fd, buf, sizeof(buf) - 1);
+>> +	buf[len] =3D '\0';
+>> +	close(fd);
+>> +
+>> +	return strtoul(buf, NULL, 16);
+>> +}
+>> +
+>> #ifdef HAVE_LIBBPF_SUPPORT
+>> static int write_bpf_prog_info(struct feat_fd *ff,
+>> 			       struct evlist *evlist __maybe_unused)
+>> diff --git a/tools/perf/util/header.h b/tools/perf/util/header.h
+>> index c9e3265832d9..0eb4bc29a5a4 100644
+>> --- a/tools/perf/util/header.h
+>> +++ b/tools/perf/util/header.h
+>> @@ -158,6 +158,7 @@ int do_write(struct feat_fd *fd, const void *buf, =
+size_t size);
+>> int write_padded(struct feat_fd *fd, const void *bf,
+>> 		 size_t count, size_t count_aligned);
+>>=20
+>> +int is_cpu_online(unsigned int cpu);
+>> /*
+>>  * arch specific callback
+>>  */
+>> --=20
+>> 2.35.1
+>=20
+> --=20
+>=20
+> - Arnaldo
 

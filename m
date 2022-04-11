@@ -2,151 +2,710 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FB404FC2BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 18:51:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C4064FC2C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 18:56:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348627AbiDKQxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 12:53:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59856 "EHLO
+        id S1348715AbiDKQ5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 12:57:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348701AbiDKQxs (ORCPT
+        with ESMTP id S1345806AbiDKQ5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 12:53:48 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B87136B58
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 09:51:32 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id b16so19440382ioz.3
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 09:51:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=eiAYIK4eB9YpKVQY7uodlLNbKuIMZrkg3r+tUafoF+8=;
-        b=KZiBB6oG1FD1CE/9BBJANOo58MujeM4G+RO7m0j+T/VCQTn2cFaXrCMbVSBax+yoN7
-         zKDoOVZlUkLaZ3ztKLjDMlm48/fezbrjDjd8FinhGjO/FLRdb2WT+p4RV7ZQF1GSlEoM
-         zg/KHadgywEe+78idGiO1rJO41wOAmyIQaqmGm7D0TJo4fBqK0V5vxf7W2kNRvfSqWe/
-         n2dc0BeZUdc7FFx0l3CrIv4eLePLZWBHlARH5xY0AFfmWa0edY3kh4EDCa7ynSehK1oI
-         zgYYXZ46rdiFi8fAR7Y+nIkHgoyOShglax8UmPcZR49QbLOjlDvBow6HyZjIhs09/T8U
-         fh4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=eiAYIK4eB9YpKVQY7uodlLNbKuIMZrkg3r+tUafoF+8=;
-        b=fxHIj1ACFeVlDFgdub4iC2GgM9QsSGu7h1Kd++V+iIi4dKBI+tZEpcewc1Dg5vtwVU
-         E6qyN6Gf6DCjT6TMh1ubfhvnes2PX2Zy+WsAM2ZiCuAoSBMh7VcbLIDd1bAKDcEBZW0J
-         Dp/DU92bf+VqigpAMUMt1O4A/8vh0BH9+8i1gE34vBhw0FKN6gn2oy2xtT6YG6BWyYn3
-         jMOoyNIOgSv7e5PteMT6eVSPwv6RsFz6DJM+sW+zagne8uUinpcefa92hxQA2DmvF6vH
-         9zyCAmUgTa0nQt+1ULtNpdLnIq/tJAFo7m/DiICYvsP0Ujb4JwjBQ6Tx9m6/Cqc5FHlp
-         583g==
-X-Gm-Message-State: AOAM5337vYNPU+oYAACdhd1skTH+CNwEq6K88zUwfMVQvYFwXIep8GMF
-        DUdSzaYQn7mh4dKxOrxJymwjLw==
-X-Google-Smtp-Source: ABdhPJyrBJiJPWff548IHrGfcWxyvtBO+exqiqx6SfQ/bhIkV++JhY6PT88XFxSZLp9IJ3vkLBwX/Q==
-X-Received: by 2002:a05:6638:4984:b0:326:11b5:74fb with SMTP id cv4-20020a056638498400b0032611b574fbmr4965472jab.153.1649695891345;
-        Mon, 11 Apr 2022 09:51:31 -0700 (PDT)
-Received: from [192.168.1.172] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id s13-20020a6bdc0d000000b006408888551dsm20145509ioc.8.2022.04.11.09.51.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Apr 2022 09:51:30 -0700 (PDT)
-Message-ID: <226c4072-a3ca-a5a4-1b7f-f7104b43af03@kernel.dk>
-Date:   Mon, 11 Apr 2022 10:51:28 -0600
+        Mon, 11 Apr 2022 12:57:21 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D41D39828;
+        Mon, 11 Apr 2022 09:55:05 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4KcZj34cj6z9sTy;
+        Mon, 11 Apr 2022 18:55:03 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 61F94VjWjEuy; Mon, 11 Apr 2022 18:55:03 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4KcZj33MZkz9sTp;
+        Mon, 11 Apr 2022 18:55:03 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 5A8BB8B76E;
+        Mon, 11 Apr 2022 18:55:03 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id y4Zas72B7sRv; Mon, 11 Apr 2022 18:55:03 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.203.78])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id F21B58B763;
+        Mon, 11 Apr 2022 18:55:02 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 23BGssX2963379
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Mon, 11 Apr 2022 18:54:54 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 23BGsq78963377;
+        Mon, 11 Apr 2022 18:54:52 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     gregkh@linuxfoundation.org, stable@vger.kernel.org
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: [PATCH] [Rebased for 5.15,5.16,5.17] static_call: Don't make __static_call_return0 static
+Date:   Mon, 11 Apr 2022 18:54:43 +0200
+Message-Id: <155efe38aa611a362ed23a52cecc26371399ae7f.1649696042.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] cdrom: do not print info list when there is no cdrom
- device
-Content-Language: en-US
-To:     Enze Li <lienze@kylinos.cn>, Phillip Potter <phil@philpotter.co.uk>
-Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
-References: <20220408084221.1681592-1-lienze@kylinos.cn>
- <25390602-cfa0-dba3-bfbc-a35ed6b44bcf@kernel.dk>
- <20220409122530.60353fcd@asus> <YlFA7USiCtqsFvVD@equinox>
- <f74b6933-5357-6b2c-3127-7a3465dadbdf@kylinos.cn>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <f74b6933-5357-6b2c-3127-7a3465dadbdf@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1649696081; l=17316; s=20211009; h=from:subject:message-id; bh=/DHgkwn/xdgPqXzAajV4iOmm9Brrgp/DQUmEmX5jjYc=; b=av6qhceeacCXQ9P+H5Bt6HzBOw3urXxAaJ/jL9IzxrRKuxZdkek+DZSvYOZQxVtHOUTB5ktfEAPr 9wC1k+kXBHUgB9zgcFRWWDZlTPr4g9X3EPlHGoxla9IS/CywOuxY
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/11/22 2:41 AM, Enze Li wrote:
-> 
-> On 4/9/22 16:16, Phillip Potter wrote:
->> On Sat, Apr 09, 2022 at 12:25:30PM +0800, Enze Li wrote:
-> 
-> <snip>
-> 
->>> On Fri, 8 Apr 2022 06:34:04 -0600
->>> Jens Axboe <axboe@kernel.dk> wrote:
->>>> Will this potentially break applications that parse it?
->>>>
->>> I dunno, is there any way to confirm this thing?  And if this is really
->>> a possibility, does it mean that we cannot make changes?
->>>
->> Sorry, anything that can be parsed from userspace has the potential to
->> break userspace applications. For that reason, I would have to say I
->> don't think this patch is suitable. Sure there are times it's
->> appropriate to change userspace interfaces, but I'd rather err on the
->> side of caution here. Thanks for the patch though.
->>
->> Nacked-by: Phillip Potter <phil@philpotter.co.uk>
->>
->> Regards,
->> Phil
-> 
-> Hi Phil,
-> 
-> Thanks for your review.  I got what you said. ?
-> 
-> In addition, I noticed that in the source file[1], there is a Todo List there.  I'm quite
-> interested in it.  It says:
-> ================================================
->   17 To Do List:
->   18 ----------------------------------
->   19
->   20  -- Modify sysctl/proc interface. I plan on having one directory per                 
->   21  drive, with entries for outputing general drive information, and sysctl             
->   22  based tunable parameters such as whether the tray should auto-close for             
->   23  that drive. Suggestions (or patches) for this welcome!
-> ================================================
-> I'd like to know if the relevant patches are still welcome?
-> 
-> IIUC, the TODO List says that we need to implement a modification of the
-> following form:
-> ----------------------------------------------------------------------------------------------------------
-> $ tree /proc/sys/dev/cdrom
-> /proc/sys/dev/cdrom
-> |--sr0--autoclose
-> |       |-autoeject
-> |       |-check_media
-> |       |-debug
-> |       |-info
-> |       |-lock
-> |
-> |--sr1--autoclose
-> |       |-autoeject
-> |       |-check_media
-> |       |-debug
-> |       |-info
-> |       |-lock
-> |
-> |--sr2 ...
-> .
-> .
-> .
-> ----------------------------------------------------------------------------------------------------------
-> I would appreciate it if you could give me some advice.
+This is backport to 5.15,5.16,5.17
 
-Let's not do that, this advice is perhaps 20 years old. /proc isn't to
-be used for anything like that these days.
+(cherry picked from commit 8fd4ddda2f49a66bf5dd3d0c01966c4b1971308b)
 
+System.map shows that vmlinux contains several instances of
+__static_call_return0():
+
+	c0004fc0 t __static_call_return0
+	c0011518 t __static_call_return0
+	c00d8160 t __static_call_return0
+
+arch_static_call_transform() uses the middle one to check whether we are
+setting a call to __static_call_return0 or not:
+
+	c0011520 <arch_static_call_transform>:
+	c0011520:       3d 20 c0 01     lis     r9,-16383	<== r9 =  0xc001 << 16
+	c0011524:       39 29 15 18     addi    r9,r9,5400	<== r9 += 0x1518
+	c0011528:       7c 05 48 00     cmpw    r5,r9		<== r9 has value 0xc0011518 here
+
+So if static_call_update() is called with one of the other instances of
+__static_call_return0(), arch_static_call_transform() won't recognise it.
+
+In order to work properly, global single instance of __static_call_return0() is required.
+
+Fixes: 3f2a8fc4b15d ("static_call/x86: Add __static_call_return0()")
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
+Link: https://lkml.kernel.org/r/30821468a0e7d28251954b578e5051dc09300d04.1647258493.git.christophe.leroy@csgroup.eu
+---
+ include/linux/static_call.h                   |   5 +-
+ kernel/Makefile                               |   3 +-
+ kernel/static_call.c                          | 542 +-----------------
+ .../{static_call.c => static_call_inline.c}   |   5 -
+ 4 files changed, 4 insertions(+), 551 deletions(-)
+ copy kernel/{static_call.c => static_call_inline.c} (99%)
+
+diff --git a/include/linux/static_call.h b/include/linux/static_call.h
+index 3e56a9751c06..fcc5b48989b3 100644
+--- a/include/linux/static_call.h
++++ b/include/linux/static_call.h
+@@ -248,10 +248,7 @@ static inline int static_call_text_reserved(void *start, void *end)
+ 	return 0;
+ }
+ 
+-static inline long __static_call_return0(void)
+-{
+-	return 0;
+-}
++extern long __static_call_return0(void);
+ 
+ #define EXPORT_STATIC_CALL(name)					\
+ 	EXPORT_SYMBOL(STATIC_CALL_KEY(name));				\
+diff --git a/kernel/Makefile b/kernel/Makefile
+index 56f4ee97f328..a18d169732d2 100644
+--- a/kernel/Makefile
++++ b/kernel/Makefile
+@@ -113,7 +113,8 @@ obj-$(CONFIG_CPU_PM) += cpu_pm.o
+ obj-$(CONFIG_BPF) += bpf/
+ obj-$(CONFIG_KCSAN) += kcsan/
+ obj-$(CONFIG_SHADOW_CALL_STACK) += scs.o
+-obj-$(CONFIG_HAVE_STATIC_CALL_INLINE) += static_call.o
++obj-$(CONFIG_HAVE_STATIC_CALL) += static_call.o
++obj-$(CONFIG_HAVE_STATIC_CALL_INLINE) += static_call_inline.o
+ obj-$(CONFIG_CFI_CLANG) += cfi.o
+ 
+ obj-$(CONFIG_PERF_EVENTS) += events/
+diff --git a/kernel/static_call.c b/kernel/static_call.c
+index 43ba0b1e0edb..e9c3e69f3837 100644
+--- a/kernel/static_call.c
++++ b/kernel/static_call.c
+@@ -1,548 +1,8 @@
+ // SPDX-License-Identifier: GPL-2.0
+-#include <linux/init.h>
+ #include <linux/static_call.h>
+-#include <linux/bug.h>
+-#include <linux/smp.h>
+-#include <linux/sort.h>
+-#include <linux/slab.h>
+-#include <linux/module.h>
+-#include <linux/cpu.h>
+-#include <linux/processor.h>
+-#include <asm/sections.h>
+-
+-extern struct static_call_site __start_static_call_sites[],
+-			       __stop_static_call_sites[];
+-extern struct static_call_tramp_key __start_static_call_tramp_key[],
+-				    __stop_static_call_tramp_key[];
+-
+-static bool static_call_initialized;
+-
+-/* mutex to protect key modules/sites */
+-static DEFINE_MUTEX(static_call_mutex);
+-
+-static void static_call_lock(void)
+-{
+-	mutex_lock(&static_call_mutex);
+-}
+-
+-static void static_call_unlock(void)
+-{
+-	mutex_unlock(&static_call_mutex);
+-}
+-
+-static inline void *static_call_addr(struct static_call_site *site)
+-{
+-	return (void *)((long)site->addr + (long)&site->addr);
+-}
+-
+-static inline unsigned long __static_call_key(const struct static_call_site *site)
+-{
+-	return (long)site->key + (long)&site->key;
+-}
+-
+-static inline struct static_call_key *static_call_key(const struct static_call_site *site)
+-{
+-	return (void *)(__static_call_key(site) & ~STATIC_CALL_SITE_FLAGS);
+-}
+-
+-/* These assume the key is word-aligned. */
+-static inline bool static_call_is_init(struct static_call_site *site)
+-{
+-	return __static_call_key(site) & STATIC_CALL_SITE_INIT;
+-}
+-
+-static inline bool static_call_is_tail(struct static_call_site *site)
+-{
+-	return __static_call_key(site) & STATIC_CALL_SITE_TAIL;
+-}
+-
+-static inline void static_call_set_init(struct static_call_site *site)
+-{
+-	site->key = (__static_call_key(site) | STATIC_CALL_SITE_INIT) -
+-		    (long)&site->key;
+-}
+-
+-static int static_call_site_cmp(const void *_a, const void *_b)
+-{
+-	const struct static_call_site *a = _a;
+-	const struct static_call_site *b = _b;
+-	const struct static_call_key *key_a = static_call_key(a);
+-	const struct static_call_key *key_b = static_call_key(b);
+-
+-	if (key_a < key_b)
+-		return -1;
+-
+-	if (key_a > key_b)
+-		return 1;
+-
+-	return 0;
+-}
+-
+-static void static_call_site_swap(void *_a, void *_b, int size)
+-{
+-	long delta = (unsigned long)_a - (unsigned long)_b;
+-	struct static_call_site *a = _a;
+-	struct static_call_site *b = _b;
+-	struct static_call_site tmp = *a;
+-
+-	a->addr = b->addr  - delta;
+-	a->key  = b->key   - delta;
+-
+-	b->addr = tmp.addr + delta;
+-	b->key  = tmp.key  + delta;
+-}
+-
+-static inline void static_call_sort_entries(struct static_call_site *start,
+-					    struct static_call_site *stop)
+-{
+-	sort(start, stop - start, sizeof(struct static_call_site),
+-	     static_call_site_cmp, static_call_site_swap);
+-}
+-
+-static inline bool static_call_key_has_mods(struct static_call_key *key)
+-{
+-	return !(key->type & 1);
+-}
+-
+-static inline struct static_call_mod *static_call_key_next(struct static_call_key *key)
+-{
+-	if (!static_call_key_has_mods(key))
+-		return NULL;
+-
+-	return key->mods;
+-}
+-
+-static inline struct static_call_site *static_call_key_sites(struct static_call_key *key)
+-{
+-	if (static_call_key_has_mods(key))
+-		return NULL;
+-
+-	return (struct static_call_site *)(key->type & ~1);
+-}
+-
+-void __static_call_update(struct static_call_key *key, void *tramp, void *func)
+-{
+-	struct static_call_site *site, *stop;
+-	struct static_call_mod *site_mod, first;
+-
+-	cpus_read_lock();
+-	static_call_lock();
+-
+-	if (key->func == func)
+-		goto done;
+-
+-	key->func = func;
+-
+-	arch_static_call_transform(NULL, tramp, func, false);
+-
+-	/*
+-	 * If uninitialized, we'll not update the callsites, but they still
+-	 * point to the trampoline and we just patched that.
+-	 */
+-	if (WARN_ON_ONCE(!static_call_initialized))
+-		goto done;
+-
+-	first = (struct static_call_mod){
+-		.next = static_call_key_next(key),
+-		.mod = NULL,
+-		.sites = static_call_key_sites(key),
+-	};
+-
+-	for (site_mod = &first; site_mod; site_mod = site_mod->next) {
+-		bool init = system_state < SYSTEM_RUNNING;
+-		struct module *mod = site_mod->mod;
+-
+-		if (!site_mod->sites) {
+-			/*
+-			 * This can happen if the static call key is defined in
+-			 * a module which doesn't use it.
+-			 *
+-			 * It also happens in the has_mods case, where the
+-			 * 'first' entry has no sites associated with it.
+-			 */
+-			continue;
+-		}
+-
+-		stop = __stop_static_call_sites;
+-
+-		if (mod) {
+-#ifdef CONFIG_MODULES
+-			stop = mod->static_call_sites +
+-			       mod->num_static_call_sites;
+-			init = mod->state == MODULE_STATE_COMING;
+-#endif
+-		}
+-
+-		for (site = site_mod->sites;
+-		     site < stop && static_call_key(site) == key; site++) {
+-			void *site_addr = static_call_addr(site);
+-
+-			if (!init && static_call_is_init(site))
+-				continue;
+-
+-			if (!kernel_text_address((unsigned long)site_addr)) {
+-				/*
+-				 * This skips patching built-in __exit, which
+-				 * is part of init_section_contains() but is
+-				 * not part of kernel_text_address().
+-				 *
+-				 * Skipping built-in __exit is fine since it
+-				 * will never be executed.
+-				 */
+-				WARN_ONCE(!static_call_is_init(site),
+-					  "can't patch static call site at %pS",
+-					  site_addr);
+-				continue;
+-			}
+-
+-			arch_static_call_transform(site_addr, NULL, func,
+-						   static_call_is_tail(site));
+-		}
+-	}
+-
+-done:
+-	static_call_unlock();
+-	cpus_read_unlock();
+-}
+-EXPORT_SYMBOL_GPL(__static_call_update);
+-
+-static int __static_call_init(struct module *mod,
+-			      struct static_call_site *start,
+-			      struct static_call_site *stop)
+-{
+-	struct static_call_site *site;
+-	struct static_call_key *key, *prev_key = NULL;
+-	struct static_call_mod *site_mod;
+-
+-	if (start == stop)
+-		return 0;
+-
+-	static_call_sort_entries(start, stop);
+-
+-	for (site = start; site < stop; site++) {
+-		void *site_addr = static_call_addr(site);
+-
+-		if ((mod && within_module_init((unsigned long)site_addr, mod)) ||
+-		    (!mod && init_section_contains(site_addr, 1)))
+-			static_call_set_init(site);
+-
+-		key = static_call_key(site);
+-		if (key != prev_key) {
+-			prev_key = key;
+-
+-			/*
+-			 * For vmlinux (!mod) avoid the allocation by storing
+-			 * the sites pointer in the key itself. Also see
+-			 * __static_call_update()'s @first.
+-			 *
+-			 * This allows architectures (eg. x86) to call
+-			 * static_call_init() before memory allocation works.
+-			 */
+-			if (!mod) {
+-				key->sites = site;
+-				key->type |= 1;
+-				goto do_transform;
+-			}
+-
+-			site_mod = kzalloc(sizeof(*site_mod), GFP_KERNEL);
+-			if (!site_mod)
+-				return -ENOMEM;
+-
+-			/*
+-			 * When the key has a direct sites pointer, extract
+-			 * that into an explicit struct static_call_mod, so we
+-			 * can have a list of modules.
+-			 */
+-			if (static_call_key_sites(key)) {
+-				site_mod->mod = NULL;
+-				site_mod->next = NULL;
+-				site_mod->sites = static_call_key_sites(key);
+-
+-				key->mods = site_mod;
+-
+-				site_mod = kzalloc(sizeof(*site_mod), GFP_KERNEL);
+-				if (!site_mod)
+-					return -ENOMEM;
+-			}
+-
+-			site_mod->mod = mod;
+-			site_mod->sites = site;
+-			site_mod->next = static_call_key_next(key);
+-			key->mods = site_mod;
+-		}
+-
+-do_transform:
+-		arch_static_call_transform(site_addr, NULL, key->func,
+-				static_call_is_tail(site));
+-	}
+-
+-	return 0;
+-}
+-
+-static int addr_conflict(struct static_call_site *site, void *start, void *end)
+-{
+-	unsigned long addr = (unsigned long)static_call_addr(site);
+-
+-	if (addr <= (unsigned long)end &&
+-	    addr + CALL_INSN_SIZE > (unsigned long)start)
+-		return 1;
+-
+-	return 0;
+-}
+-
+-static int __static_call_text_reserved(struct static_call_site *iter_start,
+-				       struct static_call_site *iter_stop,
+-				       void *start, void *end, bool init)
+-{
+-	struct static_call_site *iter = iter_start;
+-
+-	while (iter < iter_stop) {
+-		if (init || !static_call_is_init(iter)) {
+-			if (addr_conflict(iter, start, end))
+-				return 1;
+-		}
+-		iter++;
+-	}
+-
+-	return 0;
+-}
+-
+-#ifdef CONFIG_MODULES
+-
+-static int __static_call_mod_text_reserved(void *start, void *end)
+-{
+-	struct module *mod;
+-	int ret;
+-
+-	preempt_disable();
+-	mod = __module_text_address((unsigned long)start);
+-	WARN_ON_ONCE(__module_text_address((unsigned long)end) != mod);
+-	if (!try_module_get(mod))
+-		mod = NULL;
+-	preempt_enable();
+-
+-	if (!mod)
+-		return 0;
+-
+-	ret = __static_call_text_reserved(mod->static_call_sites,
+-			mod->static_call_sites + mod->num_static_call_sites,
+-			start, end, mod->state == MODULE_STATE_COMING);
+-
+-	module_put(mod);
+-
+-	return ret;
+-}
+-
+-static unsigned long tramp_key_lookup(unsigned long addr)
+-{
+-	struct static_call_tramp_key *start = __start_static_call_tramp_key;
+-	struct static_call_tramp_key *stop = __stop_static_call_tramp_key;
+-	struct static_call_tramp_key *tramp_key;
+-
+-	for (tramp_key = start; tramp_key != stop; tramp_key++) {
+-		unsigned long tramp;
+-
+-		tramp = (long)tramp_key->tramp + (long)&tramp_key->tramp;
+-		if (tramp == addr)
+-			return (long)tramp_key->key + (long)&tramp_key->key;
+-	}
+-
+-	return 0;
+-}
+-
+-static int static_call_add_module(struct module *mod)
+-{
+-	struct static_call_site *start = mod->static_call_sites;
+-	struct static_call_site *stop = start + mod->num_static_call_sites;
+-	struct static_call_site *site;
+-
+-	for (site = start; site != stop; site++) {
+-		unsigned long s_key = __static_call_key(site);
+-		unsigned long addr = s_key & ~STATIC_CALL_SITE_FLAGS;
+-		unsigned long key;
+-
+-		/*
+-		 * Is the key is exported, 'addr' points to the key, which
+-		 * means modules are allowed to call static_call_update() on
+-		 * it.
+-		 *
+-		 * Otherwise, the key isn't exported, and 'addr' points to the
+-		 * trampoline so we need to lookup the key.
+-		 *
+-		 * We go through this dance to prevent crazy modules from
+-		 * abusing sensitive static calls.
+-		 */
+-		if (!kernel_text_address(addr))
+-			continue;
+-
+-		key = tramp_key_lookup(addr);
+-		if (!key) {
+-			pr_warn("Failed to fixup __raw_static_call() usage at: %ps\n",
+-				static_call_addr(site));
+-			return -EINVAL;
+-		}
+-
+-		key |= s_key & STATIC_CALL_SITE_FLAGS;
+-		site->key = key - (long)&site->key;
+-	}
+-
+-	return __static_call_init(mod, start, stop);
+-}
+-
+-static void static_call_del_module(struct module *mod)
+-{
+-	struct static_call_site *start = mod->static_call_sites;
+-	struct static_call_site *stop = mod->static_call_sites +
+-					mod->num_static_call_sites;
+-	struct static_call_key *key, *prev_key = NULL;
+-	struct static_call_mod *site_mod, **prev;
+-	struct static_call_site *site;
+-
+-	for (site = start; site < stop; site++) {
+-		key = static_call_key(site);
+-		if (key == prev_key)
+-			continue;
+-
+-		prev_key = key;
+-
+-		for (prev = &key->mods, site_mod = key->mods;
+-		     site_mod && site_mod->mod != mod;
+-		     prev = &site_mod->next, site_mod = site_mod->next)
+-			;
+-
+-		if (!site_mod)
+-			continue;
+-
+-		*prev = site_mod->next;
+-		kfree(site_mod);
+-	}
+-}
+-
+-static int static_call_module_notify(struct notifier_block *nb,
+-				     unsigned long val, void *data)
+-{
+-	struct module *mod = data;
+-	int ret = 0;
+-
+-	cpus_read_lock();
+-	static_call_lock();
+-
+-	switch (val) {
+-	case MODULE_STATE_COMING:
+-		ret = static_call_add_module(mod);
+-		if (ret) {
+-			WARN(1, "Failed to allocate memory for static calls");
+-			static_call_del_module(mod);
+-		}
+-		break;
+-	case MODULE_STATE_GOING:
+-		static_call_del_module(mod);
+-		break;
+-	}
+-
+-	static_call_unlock();
+-	cpus_read_unlock();
+-
+-	return notifier_from_errno(ret);
+-}
+-
+-static struct notifier_block static_call_module_nb = {
+-	.notifier_call = static_call_module_notify,
+-};
+-
+-#else
+-
+-static inline int __static_call_mod_text_reserved(void *start, void *end)
+-{
+-	return 0;
+-}
+-
+-#endif /* CONFIG_MODULES */
+-
+-int static_call_text_reserved(void *start, void *end)
+-{
+-	bool init = system_state < SYSTEM_RUNNING;
+-	int ret = __static_call_text_reserved(__start_static_call_sites,
+-			__stop_static_call_sites, start, end, init);
+-
+-	if (ret)
+-		return ret;
+-
+-	return __static_call_mod_text_reserved(start, end);
+-}
+-
+-int __init static_call_init(void)
+-{
+-	int ret;
+-
+-	if (static_call_initialized)
+-		return 0;
+-
+-	cpus_read_lock();
+-	static_call_lock();
+-	ret = __static_call_init(NULL, __start_static_call_sites,
+-				 __stop_static_call_sites);
+-	static_call_unlock();
+-	cpus_read_unlock();
+-
+-	if (ret) {
+-		pr_err("Failed to allocate memory for static_call!\n");
+-		BUG();
+-	}
+-
+-	static_call_initialized = true;
+-
+-#ifdef CONFIG_MODULES
+-	register_module_notifier(&static_call_module_nb);
+-#endif
+-	return 0;
+-}
+-early_initcall(static_call_init);
+ 
+ long __static_call_return0(void)
+ {
+ 	return 0;
+ }
+-
+-#ifdef CONFIG_STATIC_CALL_SELFTEST
+-
+-static int func_a(int x)
+-{
+-	return x+1;
+-}
+-
+-static int func_b(int x)
+-{
+-	return x+2;
+-}
+-
+-DEFINE_STATIC_CALL(sc_selftest, func_a);
+-
+-static struct static_call_data {
+-      int (*func)(int);
+-      int val;
+-      int expect;
+-} static_call_data [] __initdata = {
+-      { NULL,   2, 3 },
+-      { func_b, 2, 4 },
+-      { func_a, 2, 3 }
+-};
+-
+-static int __init test_static_call_init(void)
+-{
+-      int i;
+-
+-      for (i = 0; i < ARRAY_SIZE(static_call_data); i++ ) {
+-	      struct static_call_data *scd = &static_call_data[i];
+-
+-              if (scd->func)
+-                      static_call_update(sc_selftest, scd->func);
+-
+-              WARN_ON(static_call(sc_selftest)(scd->val) != scd->expect);
+-      }
+-
+-      return 0;
+-}
+-early_initcall(test_static_call_init);
+-
+-#endif /* CONFIG_STATIC_CALL_SELFTEST */
++EXPORT_SYMBOL_GPL(__static_call_return0);
+diff --git a/kernel/static_call.c b/kernel/static_call_inline.c
+similarity index 99%
+copy from kernel/static_call.c
+copy to kernel/static_call_inline.c
+index 43ba0b1e0edb..dc5665b62814 100644
+--- a/kernel/static_call.c
++++ b/kernel/static_call_inline.c
+@@ -499,11 +499,6 @@ int __init static_call_init(void)
+ }
+ early_initcall(static_call_init);
+ 
+-long __static_call_return0(void)
+-{
+-	return 0;
+-}
+-
+ #ifdef CONFIG_STATIC_CALL_SELFTEST
+ 
+ static int func_a(int x)
 -- 
-Jens Axboe
+2.35.1
 

@@ -2,69 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A6554FB322
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 07:06:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A3054FB325
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 07:12:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244698AbiDKFIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 01:08:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46902 "EHLO
+        id S244695AbiDKFOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 01:14:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230030AbiDKFIt (ORCPT
+        with ESMTP id S230030AbiDKFOt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 01:08:49 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD1873E5D2
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 22:06:36 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id t11so1420421eju.13
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 22:06:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=8YwA6QxP083/UCgyRAzMQGDlD5kZcDoyElaQeGpUgkE=;
-        b=L2+00FLogMppoFXHFg3E8356ujGOz3c9PzPvknX62TvrV3yADOQ3iduXpQ65HZ6NTP
-         bdHV/APDthmmVL35XIxLShGmCg/1CilV1e199jKpu88yq7qmMywK8FNagibdFYpAEY2d
-         Pc4aRsiSnr8miNFi/l7jh854vwqv1T/9riQNuQpxHrLzEcJ+42LHz2qg5J7b1Q2ONKdF
-         Vr3np310NqNIUZe12x3Rl0i2PXqqVFgFoRAirsRliKZCdr8jACAzmoKMMUTT9FOR2ZVS
-         6e3uqwfGh7dO5GZbXThTBbzQSGKqwrBLZd2EQTw2IwYhkHRire1+mrGQ2wgvp85RMe2S
-         hOJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=8YwA6QxP083/UCgyRAzMQGDlD5kZcDoyElaQeGpUgkE=;
-        b=sA8NREWvW725B+st4qdWnAslOl/JNsg80L+YI3eehk392GRK0ZJkejRdQJW7Eol/bH
-         JvFLG9+Gp4xjTmCw0ceYo+h3RpbK+BdACuwSdFIKC1gJNINHPCpAjWaGJjz2tV6SIfm1
-         qHYNfWwQDX1BMNJH6VCuoLU+K/T4xWip8/fZ9c5PFG0pswy/kX4bL1g8fVuWsM3Gj6Pe
-         0VjGFVKTEeXAxoH2xftoqktA60jqdcZSSYTKy74Yi8+CdE1hNETtmOyHHiMq5HgXz84+
-         viO2pa/a8st/F9joPXYvZcOUls0MvvhXdWwD6F/cStMCO0SH2gjbYIRgVyoIZWkMLXjS
-         L7QA==
-X-Gm-Message-State: AOAM530YSUPIX6+CtcafReA+ASsSytZT1jJbFBpaJUHs1ZKGS+5a6M5E
-        zn5Seup65auEAPh+EpDGqe3sxTPkSrN2E/5YjN0=
-X-Google-Smtp-Source: ABdhPJxyuZ7pyS7zfRraE4aR/p3QWt5REA4NQkHtEaZOUVcQL/yHATvFUd5zb7sTRztjATSXfjWfLtazljD7Hak0srs=
-X-Received: by 2002:a17:906:1be1:b0:6ce:b0a8:17d with SMTP id
- t1-20020a1709061be100b006ceb0a8017dmr28152658ejg.413.1649653595243; Sun, 10
- Apr 2022 22:06:35 -0700 (PDT)
+        Mon, 11 Apr 2022 01:14:49 -0400
+Received: from smtpbgbr2.qq.com (smtpbgbr2.qq.com [54.207.22.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E85C3EF03
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 22:12:25 -0700 (PDT)
+X-QQ-mid: bizesmtp73t1649653934thmrjuas
+Received: from localhost.localdomain ( [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 11 Apr 2022 13:12:08 +0800 (CST)
+X-QQ-SSF: 01400000002000E0J000B00A0000000
+X-QQ-FEAT: Ut0pB98mtT/gFdKHPfoA7at3zaJVoBJOhcyE/M+UJ2/MLKcSy/JQcggkV+Krt
+        0aRzpV2M0Uv+gUPWgYDcXS2fpy2S3WJj+/tBy6WnbI39Iax/LjjW0yveVGjCZBXsv2DkT3x
+        FkRxWIidJVwJyMWfk3AjKBLxU2fyMo2N4evxl2Vu2oTOVWEkwzffZsw0D/HU5kMSO9gYQj/
+        WX4KaiEdnL5CoNNCqTbuNLpNuzziJ+giSkcEFrSCRLPPVN69P8vzP9JllHI08QM8J6iVmIC
+        zevGiFs8i6YDMr4WdcDyRJ8pCVqgTkY8T9yJdv0xDnyVkJQ6mJuUnWBcXJpXZ6+cFWvvvv2
+        GW4eb4+0fioZMav/F9T2UX+KIGjQEtKFOgzJbXk
+X-QQ-GoodBg: 2
+From:   Meng Tang <tangmeng@uniontech.com>
+To:     mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
+        nixiaoming@huawei.com
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Meng Tang <tangmeng@uniontech.com>,
+        Davidlohr Bueso <dave@stgolabs.net>
+Subject: [PATCH] fs/proc: Introduce list_for_each_table_entry for proc sysctl
+Date:   Mon, 11 Apr 2022 13:12:05 +0800
+Message-Id: <20220411051205.6694-1-tangmeng@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20220408052207.209856-1-dzm91@hust.edu.cn> <f125ece9-872e-39d9-48a5-15b85508f6b6@kernel.org>
- <CAD-N9QV7RUfBreaVOmC0JUwVfieM3kOYigOav8=vpAoak6Uc6A@mail.gmail.com>
- <7e896205-027d-32e2-32b5-8951231132ac@kernel.org> <CAD-N9QXM_xds692Lh-QZc5aL01uRivLGrNnxJys41hiTUfKE5w@mail.gmail.com>
- <2f5b7291-da06-0895-8e75-c7a37251b47e@kernel.org>
-In-Reply-To: <2f5b7291-da06-0895-8e75-c7a37251b47e@kernel.org>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Mon, 11 Apr 2022 13:06:09 +0800
-Message-ID: <CAD-N9QX7wKN_x88w7p6t1KWeTGodeF-o0i-1d0Sq4Ja1OzPFoA@mail.gmail.com>
-Subject: Re: [f2fs-dev] [PATCH] fs: f2fs: remove WARN_ON in f2fs_is_valid_blkaddr
-To:     Chao Yu <chao@kernel.org>, Dmitry Vyukov <dvyukov@google.com>
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, Dongliang Mu <dzm91@hust.edu.cn>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        syzbot+763ae12a2ede1d99d4dc@syzkaller.appspotmail.com,
-        linux-f2fs-devel@lists.sourceforge.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign8
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,147 +51,218 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 11:10 AM Chao Yu <chao@kernel.org> wrote:
->
-> On 2022/4/9 14:42, Dongliang Mu wrote:
-> > On Sat, Apr 9, 2022 at 11:46 AM Chao Yu <chao@kernel.org> wrote:
-> >>
-> >> On 2022/4/9 9:34, Dongliang Mu wrote:
-> >>> On Sat, Apr 9, 2022 at 8:27 AM Chao Yu <chao@kernel.org> wrote:
-> >>>>
-> >>>> On 2022/4/8 13:22, Dongliang Mu wrote:
-> >>>>> From: Dongliang Mu <mudongliangabcd@gmail.com>
-> >>>>>
-> >>>>> In f2fs_is_valid_blkaddr, if type is DATA_GENERIC_ENHANCE or
-> >>>>> DATA_GENERIC_ENHANCE_READ, it invokes WARN_ON(1) not matter
-> >>>>> blkaddr is in the range or not.
-> >>>>
-> >>>> If we run into the path where we invoke WARN_ON(1) in f2fs_is_valid_=
-blkaddr(),
-> >>>> It means f2fs image may be broken, or there is a bug in f2fs.
-> >>>>
-> >>>> So, do you suffer any related issue in your environment?
-> >>>
-> >>> related issue? Can you explain a little?
-> >>>
-> >>> If you mean if this warning occurs, any other issues or crash
-> >>
-> >> I mean have you seen any warning info printed in the path of
-> >> f2fs_is_valid_blkaddr() before applying this patch, and if so, w/ what
-> >> reproducer? or you just figure out this patch from perspective of code
-> >> review?
-> >
-> > Yes, I have seen both warning information from Syzbot [1] and my local
-> > syzkaller instance.
-> >
-> > In f2fs_is_valid_blkaddr, if the following condition is satisfied,
-> > i.e., blkaddr is not in the right range [2], it will directly invoke
-> > one WARN_ON.
-> >
-> > if (unlikely(blkaddr >=3D MAX_BLKADDR(sbi) ||
-> >                   blkaddr < MAIN_BLKADDR(sbi))) {
-> >
-> > This is the case on Syzbot.
-> >
-> > Otherwise, it will jump into __is_bitmap_valid. And if the following
-> > condition is satisfied [3], it will trigger another WARN_ON.
-> >
-> > exist =3D f2fs_test_bit(offset, se->cur_valid_map);
-> > if (!exist && type =3D=3D DATA_GENERIC_ENHANCE) {
-> >
-> > This appears in my local syzbot instance, but unfortunately it does
-> > not get any reproducer.
->
-> Oh, it occurs in syzbot test, I guess it is possible that f2fs prints suc=
-h
-> warning info after blkaddr of node/data block was fuzzed to invalid one.
->
-> I prefer to keep WARN_ON() to catch more info of bugs found by non-fuzzed
-> type test.
->
-> Thoughts?
+Use the list_for_each_table_entry macro to optimize the scenario
+of traverse ctl_table. This make the code neater and easier to
+understand.
 
-I am fine with both options. I can remove the WARN_ON in my local
-syzkaller instance and continue fuzzing Linux kernel.
+Suggested-by: Davidlohr Bueso<dave@stgolabs.net>
+Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+---
+ fs/proc/proc_sysctl.c | 81 +++++++++++++++++++++++++------------------
+ 1 file changed, 47 insertions(+), 34 deletions(-)
 
-+Dmitry Vyukov how do you think? If WARN_ON is kept, this crash will
-occur on Syzbot from time to time.
+diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
+index fea2561d773b..4f31c68e8ed9 100644
+--- a/fs/proc/proc_sysctl.c
++++ b/fs/proc/proc_sysctl.c
+@@ -13,6 +13,9 @@
+ #include <linux/module.h>
+ #include "internal.h"
+ 
++#define list_for_each_table_entry(entry, table) \
++	for ((entry) = (table); (entry)->procname; (entry)++)
++
+ static const struct dentry_operations proc_sys_dentry_operations;
+ static const struct file_operations proc_sys_file_operations;
+ static const struct inode_operations proc_sys_inode_operations;
+@@ -170,15 +173,19 @@ static void init_header(struct ctl_table_header *head,
+ 	head->node = node;
+ 	if (node) {
+ 		struct ctl_table *entry;
+-		for (entry = table; entry->procname; entry++, node++)
++
++		list_for_each_table_entry(entry, table) {
+ 			node->header = head;
++			node++;
++		}
+ 	}
+ }
+ 
+ static void erase_header(struct ctl_table_header *head)
+ {
+ 	struct ctl_table *entry;
+-	for (entry = head->ctl_table; entry->procname; entry++)
++
++	list_for_each_table_entry(entry, head->ctl_table)
+ 		erase_entry(head, entry);
+ }
+ 
+@@ -192,7 +199,7 @@ static int insert_header(struct ctl_dir *dir, struct ctl_table_header *header)
+ 	err = insert_links(header);
+ 	if (err)
+ 		goto fail_links;
+-	for (entry = header->ctl_table; entry->procname; entry++) {
++	list_for_each_table_entry(entry, header->ctl_table) {
+ 		err = insert_entry(header, entry);
+ 		if (err)
+ 			goto fail;
+@@ -989,30 +996,32 @@ static int sysctl_err(const char *path, struct ctl_table *table, char *fmt, ...)
+ 
+ static int sysctl_check_table(const char *path, struct ctl_table *table)
+ {
++	struct ctl_table *entry;
+ 	int err = 0;
+-	for (; table->procname; table++) {
+-		if (table->child)
+-			err = sysctl_err(path, table, "Not a file");
+-
+-		if ((table->proc_handler == proc_dostring) ||
+-		    (table->proc_handler == proc_dointvec) ||
+-		    (table->proc_handler == proc_dointvec_minmax) ||
+-		    (table->proc_handler == proc_dointvec_jiffies) ||
+-		    (table->proc_handler == proc_dointvec_userhz_jiffies) ||
+-		    (table->proc_handler == proc_dointvec_ms_jiffies) ||
+-		    (table->proc_handler == proc_doulongvec_minmax) ||
+-		    (table->proc_handler == proc_doulongvec_ms_jiffies_minmax)) {
+-			if (!table->data)
+-				err = sysctl_err(path, table, "No data");
+-			if (!table->maxlen)
+-				err = sysctl_err(path, table, "No maxlen");
++
++	list_for_each_table_entry(entry, table) {
++		if (entry->child)
++			err = sysctl_err(path, entry, "Not a file");
++
++		if ((entry->proc_handler == proc_dostring) ||
++		    (entry->proc_handler == proc_dointvec) ||
++		    (entry->proc_handler == proc_dointvec_minmax) ||
++		    (entry->proc_handler == proc_dointvec_jiffies) ||
++		    (entry->proc_handler == proc_dointvec_userhz_jiffies) ||
++		    (entry->proc_handler == proc_dointvec_ms_jiffies) ||
++		    (entry->proc_handler == proc_doulongvec_minmax) ||
++		    (entry->proc_handler == proc_doulongvec_ms_jiffies_minmax)) {
++			if (!entry->data)
++				err = sysctl_err(path, entry, "No data");
++			if (!entry->maxlen)
++				err = sysctl_err(path, entry, "No maxlen");
+ 		}
+-		if (!table->proc_handler)
+-			err = sysctl_err(path, table, "No proc_handler");
++		if (!entry->proc_handler)
++			err = sysctl_err(path, entry, "No proc_handler");
+ 
+-		if ((table->mode & (S_IRUGO|S_IWUGO)) != table->mode)
+-			err = sysctl_err(path, table, "bogus .mode 0%o",
+-				table->mode);
++		if ((entry->mode & (S_IRUGO|S_IWUGO)) != entry->mode)
++			err = sysctl_err(path, entry, "bogus .mode 0%o",
++				entry->mode);
+ 	}
+ 	return err;
+ }
+@@ -1028,7 +1037,7 @@ static struct ctl_table_header *new_links(struct ctl_dir *dir, struct ctl_table
+ 
+ 	name_bytes = 0;
+ 	nr_entries = 0;
+-	for (entry = table; entry->procname; entry++) {
++	list_for_each_table_entry(entry, table) {
+ 		nr_entries++;
+ 		name_bytes += strlen(entry->procname) + 1;
+ 	}
+@@ -1045,14 +1054,16 @@ static struct ctl_table_header *new_links(struct ctl_dir *dir, struct ctl_table
+ 	node = (struct ctl_node *)(links + 1);
+ 	link_table = (struct ctl_table *)(node + nr_entries);
+ 	link_name = (char *)&link_table[nr_entries + 1];
++	link = link_table;
+ 
+-	for (link = link_table, entry = table; entry->procname; link++, entry++) {
++	list_for_each_table_entry(entry, table) {
+ 		int len = strlen(entry->procname) + 1;
+ 		memcpy(link_name, entry->procname, len);
+ 		link->procname = link_name;
+ 		link->mode = S_IFLNK|S_IRWXUGO;
+ 		link->data = link_root;
+ 		link_name += len;
++		link++;
+ 	}
+ 	init_header(links, dir->header.root, dir->header.set, node, link_table);
+ 	links->nreg = nr_entries;
+@@ -1067,7 +1078,7 @@ static bool get_links(struct ctl_dir *dir,
+ 	struct ctl_table *entry, *link;
+ 
+ 	/* Are there links available for every entry in table? */
+-	for (entry = table; entry->procname; entry++) {
++	list_for_each_table_entry(entry, table) {
+ 		const char *procname = entry->procname;
+ 		link = find_entry(&head, dir, procname, strlen(procname));
+ 		if (!link)
+@@ -1080,7 +1091,7 @@ static bool get_links(struct ctl_dir *dir,
+ 	}
+ 
+ 	/* The checks passed.  Increase the registration count on the links */
+-	for (entry = table; entry->procname; entry++) {
++	list_for_each_table_entry(entry, table) {
+ 		const char *procname = entry->procname;
+ 		link = find_entry(&head, dir, procname, strlen(procname));
+ 		head->nreg++;
+@@ -1183,7 +1194,7 @@ struct ctl_table_header *__register_sysctl_table(
+ 	struct ctl_node *node;
+ 	int nr_entries = 0;
+ 
+-	for (entry = table; entry->procname; entry++)
++	list_for_each_table_entry(entry, table)
+ 		nr_entries++;
+ 
+ 	header = kzalloc(sizeof(struct ctl_table_header) +
+@@ -1278,7 +1289,7 @@ static int count_subheaders(struct ctl_table *table)
+ 	if (!table || !table->procname)
+ 		return 1;
+ 
+-	for (entry = table; entry->procname; entry++) {
++	list_for_each_table_entry(entry, table) {
+ 		if (entry->child)
+ 			nr_subheaders += count_subheaders(entry->child);
+ 		else
+@@ -1297,7 +1308,7 @@ static int register_leaf_sysctl_tables(const char *path, char *pos,
+ 	int nr_dirs = 0;
+ 	int err = -ENOMEM;
+ 
+-	for (entry = table; entry->procname; entry++) {
++	list_for_each_table_entry(entry, table) {
+ 		if (entry->child)
+ 			nr_dirs++;
+ 		else
+@@ -1314,7 +1325,9 @@ static int register_leaf_sysctl_tables(const char *path, char *pos,
+ 			goto out;
+ 
+ 		ctl_table_arg = files;
+-		for (new = files, entry = table; entry->procname; entry++) {
++		new = files;
++
++		list_for_each_table_entry(entry, table) {
+ 			if (entry->child)
+ 				continue;
+ 			*new = *entry;
+@@ -1338,7 +1351,7 @@ static int register_leaf_sysctl_tables(const char *path, char *pos,
+ 	}
+ 
+ 	/* Recurse into the subdirectories. */
+-	for (entry = table; entry->procname; entry++) {
++	list_for_each_table_entry(entry, table) {
+ 		char *child_pos;
+ 
+ 		if (!entry->child)
+@@ -1483,7 +1496,7 @@ static void put_links(struct ctl_table_header *header)
+ 	if (IS_ERR(core_parent))
+ 		return;
+ 
+-	for (entry = header->ctl_table; entry->procname; entry++) {
++	list_for_each_table_entry(entry, header->ctl_table) {
+ 		struct ctl_table_header *link_head;
+ 		struct ctl_table *link;
+ 		const char *name = entry->procname;
+-- 
+2.20.1
 
->
-> Thanks,
->
-> >
-> > [1] https://apc01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2=
-Fsyzkaller.appspot.com%2Fbug%3Fextid%3D763ae12a2ede1d99d4dc&amp;data=3D04%7=
-C01%7Cchao.yu%40oppo.com%7Cff92e63621b24fc75a4908da19f45860%7Cf1905eb1c3534=
-1c5951662b4a54b5ee6%7C0%7C0%7C637850834521060840%7CUnknown%7CTWFpbGZsb3d8ey=
-JWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp=
-;sdata=3DUVSSS9IknYLJHzqqJAN5HmPgJ8GNczvi6%2FuQf2n3vlY%3D&amp;reserved=3D0
-> > [2] https://apc01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2=
-Felixir.bootlin.com%2Flinux%2Flatest%2Fsource%2Ffs%2Ff2fs%2Fcheckpoint.c%23=
-L187&amp;data=3D04%7C01%7Cchao.yu%40oppo.com%7Cff92e63621b24fc75a4908da19f4=
-5860%7Cf1905eb1c35341c5951662b4a54b5ee6%7C0%7C0%7C637850834521060840%7CUnkn=
-own%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXV=
-CI6Mn0%3D%7C3000&amp;sdata=3DSf%2Bx8WCAXf5c4%2Bins46saTsTN5uNTrnIceAP3oCWnQ=
-w%3D&amp;reserved=3D0
-> > [3] https://apc01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2=
-Felixir.bootlin.com%2Flinux%2Flatest%2Fsource%2Ffs%2Ff2fs%2Fcheckpoint.c%23=
-L135&amp;data=3D04%7C01%7Cchao.yu%40oppo.com%7Cff92e63621b24fc75a4908da19f4=
-5860%7Cf1905eb1c35341c5951662b4a54b5ee6%7C0%7C0%7C637850834521060840%7CUnkn=
-own%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXV=
-CI6Mn0%3D%7C3000&amp;sdata=3DLy%2FBL5oFAWZmXwbN6TaYCExroDE8%2Fsli1alaJwR4wv=
-U%3D&amp;reserved=3D0
-> >
-> >
-> >>
-> >> Thanks,
-> >>
-> >>> behaviors are generated? I tested on the syzbot. After removing the
-> >>> WARN_ON, there is no abnormal issue or crash behaviors followed with
-> >>> the corresponding reproducer.
-> >>>
-> >>>
-> >>>>
-> >>>> Thanks,
-> >>>>
-> >>>>>
-> >>>>> Fix this by removing WARN_ON.
-> >>>>>
-> >>>>> Note that, syzbot patch testing does not incur any further issues
-> >>>>>
-> >>>>> Reported-by: syzbot+763ae12a2ede1d99d4dc@syzkaller.appspotmail.com
-> >>>>> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-> >>>>> ---
-> >>>>>     fs/f2fs/checkpoint.c | 2 --
-> >>>>>     1 file changed, 2 deletions(-)
-> >>>>>
-> >>>>> diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
-> >>>>> index f5366feea82d..521498b2dd8c 100644
-> >>>>> --- a/fs/f2fs/checkpoint.c
-> >>>>> +++ b/fs/f2fs/checkpoint.c
-> >>>>> @@ -158,7 +158,6 @@ static bool __is_bitmap_valid(struct f2fs_sb_in=
-fo *sbi, block_t blkaddr,
-> >>>>>                 f2fs_err(sbi, "Inconsistent error blkaddr:%u, sit b=
-itmap:%d",
-> >>>>>                          blkaddr, exist);
-> >>>>>                 set_sbi_flag(sbi, SBI_NEED_FSCK);
-> >>>>> -             WARN_ON(1);
-> >>>>>         }
-> >>>>>         return exist;
-> >>>>>     }
-> >>>>> @@ -196,7 +195,6 @@ bool f2fs_is_valid_blkaddr(struct f2fs_sb_info =
-*sbi,
-> >>>>>                         f2fs_warn(sbi, "access invalid blkaddr:%u",
-> >>>>>                                   blkaddr);
-> >>>>>                         set_sbi_flag(sbi, SBI_NEED_FSCK);
-> >>>>> -                     WARN_ON(1);
-> >>>>>                         return false;
-> >>>>>                 } else {
-> >>>>>                         return __is_bitmap_valid(sbi, blkaddr, type=
-);
-> >
-> >
-> > _______________________________________________
-> > Linux-f2fs-devel mailing list
-> > Linux-f2fs-devel@lists.sourceforge.net
-> > https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
+
+

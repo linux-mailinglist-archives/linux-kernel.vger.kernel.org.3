@@ -2,51 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CF554FBCF2
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 15:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 224534FBCF5
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 15:22:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346430AbiDKNXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 09:23:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53938 "EHLO
+        id S1346443AbiDKNYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 09:24:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240292AbiDKNXj (ORCPT
+        with ESMTP id S240292AbiDKNY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 09:23:39 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA91C2DDD;
-        Mon, 11 Apr 2022 06:21:23 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id AA1D01F43EE0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649683282;
-        bh=2XhjOAxBOcasYg+yweGriOPt9i9ytqipWQNUM8ynUvs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=GlHY/c+UwUUnZic1hLXNOsUXuJA7JdhWK31rInpVFJM7ADsSviC67DbQh/KeHNaNu
-         04t0wWurRsxs+2JQKNd7i14Q4sd4/uHkz3zJDavOOz4Syu/ZJNXtxmIEY/ZWMlJFho
-         /v6ZSEMXjXaJ9f9j4DzFyJ7ma2hvTrw8WwCCcrZkpBTnheUvTnSmUiEAWAKZcUaoO4
-         /4v+p19Rrq/ymrpCOB/TcVhjEoJRPS0Ab46NJJWzP4L260hXYpUWho5k8OztDZijD0
-         Hwutt+gMqvqWurwlMKub8zVji6VZGmZqXtHAj69Kf9zZj0hnAxxcRtET80mtOvTjNd
-         QzflcQIQFOzFw==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     qii.wang@mediatek.com
-Cc:     matthias.bgg@gmail.com, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        wsa@kernel.org, nfraprado@collabora.com, kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v2] i2c: mediatek: Optimize master_xfer() and avoid circular locking
-Date:   Mon, 11 Apr 2022 15:21:07 +0200
-Message-Id: <20220411132107.136369-1-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 11 Apr 2022 09:24:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF0A2DDD;
+        Mon, 11 Apr 2022 06:22:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D9BE4B815E9;
+        Mon, 11 Apr 2022 13:22:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31369C385A4;
+        Mon, 11 Apr 2022 13:22:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649683330;
+        bh=wHmFp0VzOj0WHcJMekfPYEOiNkVMSATA9SGQpVR+GZ4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JSYjFG0gpJZTN3Jo3qs77DmP+DgFo+JR2G+YmePvrYdpeUdLvnrWCuI0HtyZXF/ts
+         cuHmbYDd+EOGSk3mol0ZBps5/p2gDlQSZHhFRCPd2ZkE8ih+FJIUAmZCeFmKB73t6t
+         Ddoq0lo4yLMkPTnvJWnTJYjOS87c2zur1BA8w4gY=
+Date:   Mon, 11 Apr 2022 15:22:07 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Qais Yousef <qais.yousef@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
+        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>, x86@kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [tip: sched/core] sched/tracing: Don't re-read p->state when
+ emitting sched_switch event
+Message-ID: <YlQrf1KDjlidLAHl@kroah.com>
+References: <20220120162520.570782-2-valentin.schneider@arm.com>
+ <164614827941.16921.4995078681021904041.tip-bot2@tip-bot2>
+ <20220308180240.qivyjdn4e3te3urm@wubuntu>
+ <YiecMTy8ckUdXTQO@kroah.com>
+ <20220308185138.ldxfqd242uxowymd@wubuntu>
+ <20220409233829.o2s6tffuzujkx6w2@airbuntu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220409233829.o2s6tffuzujkx6w2@airbuntu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,101 +61,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Especially (but not only) during probe, it may happen that multiple
-devices are communicating via i2c (or multiple i2c busses) and
-sometimes while others are probing asynchronously.
-For example, a Cr50 TPM may be filling entropy (or userspace may be
-reading random data) while the rt5682 (i2c) codec driver reads/sets
-some registers, like while getting/setting a clock's rate, which
-happens both during probe and during system operation.
+On Sun, Apr 10, 2022 at 12:38:29AM +0100, Qais Yousef wrote:
+> On 03/08/22 18:51, Qais Yousef wrote:
+> > On 03/08/22 19:10, Greg KH wrote:
+> > > On Tue, Mar 08, 2022 at 06:02:40PM +0000, Qais Yousef wrote:
+> > > > +CC stable
+> > > > 
+> > > > On 03/01/22 15:24, tip-bot2 for Valentin Schneider wrote:
+> > > > > The following commit has been merged into the sched/core branch of tip:
+> > > > > 
+> > > > > Commit-ID:     fa2c3254d7cfff5f7a916ab928a562d1165f17bb
+> > > > > Gitweb:        https://git.kernel.org/tip/fa2c3254d7cfff5f7a916ab928a562d1165f17bb
+> > > > > Author:        Valentin Schneider <valentin.schneider@arm.com>
+> > > > > AuthorDate:    Thu, 20 Jan 2022 16:25:19 
+> > > > > Committer:     Peter Zijlstra <peterz@infradead.org>
+> > > > > CommitterDate: Tue, 01 Mar 2022 16:18:39 +01:00
+> > > > > 
+> > > > > sched/tracing: Don't re-read p->state when emitting sched_switch event
+> > > > > 
+> > > > > As of commit
+> > > > > 
+> > > > >   c6e7bd7afaeb ("sched/core: Optimize ttwu() spinning on p->on_cpu")
+> > > > > 
+> > > > > the following sequence becomes possible:
+> > > > > 
+> > > > > 		      p->__state = TASK_INTERRUPTIBLE;
+> > > > > 		      __schedule()
+> > > > > 			deactivate_task(p);
+> > > > >   ttwu()
+> > > > >     READ !p->on_rq
+> > > > >     p->__state=TASK_WAKING
+> > > > > 			trace_sched_switch()
+> > > > > 			  __trace_sched_switch_state()
+> > > > > 			    task_state_index()
+> > > > > 			      return 0;
+> > > > > 
+> > > > > TASK_WAKING isn't in TASK_REPORT, so the task appears as TASK_RUNNING in
+> > > > > the trace event.
+> > > > > 
+> > > > > Prevent this by pushing the value read from __schedule() down the trace
+> > > > > event.
+> > > > > 
+> > > > > Reported-by: Abhijeet Dharmapurikar <adharmap@quicinc.com>
+> > > > > Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
+> > > > > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > > > > Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> > > > > Link: https://lore.kernel.org/r/20220120162520.570782-2-valentin.schneider@arm.com
+> > > > 
+> > > > Any objection to picking this for stable? I'm interested in this one for some
+> > > > Android users but prefer if it can be taken by stable rather than backport it
+> > > > individually.
+> > > > 
+> > > > I think it makes sense to pick the next one in the series too.
+> > > 
+> > > What commit does this fix in Linus's tree?
+> > 
+> > It should be this one: c6e7bd7afaeb ("sched/core: Optimize ttwu() spinning on p->on_cpu")
+> 
+> Should this be okay to be picked up by stable now? I can see AUTOSEL has picked
+> it up for v5.15+, but it impacts v5.10 too.
 
-In this driver, the mtk_i2c_transfer() function (which is the i2c
-.master_xfer() callback) was granularly managing the clocks by
-performing a clk_bulk_prepare_enable() to start them and its inverse.
-This is not only creating possible circular locking dependencies in
-the some cases (like former explanation), but it's also suboptimal,
-as clk_core prepare/unprepare operations are using mutex locking,
-which creates a bit of unwanted overhead (for example, i2c trackpads
-will call master_xfer() every few milliseconds!).
+It does not apply to 5.10 at all, how did you test this?
 
-With this commit, we avoid both the circular locking and additional
-overhead by changing how we handle the clocks in this driver:
-- Prepare the clocks during probe (and PM resume)
-- Enable/disable clocks in mtk_i2c_transfer()
-- Unprepare the clocks only for driver removal (and PM suspend)
+{sigh}
 
-For the sake of providing a full explanation: during probe, the
-clocks are not only prepared but also enabled, as this is needed
-for some hardware initialization but, after that, we are disabling
-but not unpreparing them, leaving an expected state for the
-aforementioned clock handling strategy.
+Again, if you want this applied to any stable trees, please test that it
+works and send the properly backported patches.
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
----
+thanks,
 
-v2: Fixed typos in commit description
-
- drivers/i2c/busses/i2c-mt65xx.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt65xx.c
-index f651d3e124d6..bdecb78bfc26 100644
---- a/drivers/i2c/busses/i2c-mt65xx.c
-+++ b/drivers/i2c/busses/i2c-mt65xx.c
-@@ -1177,7 +1177,7 @@ static int mtk_i2c_transfer(struct i2c_adapter *adap,
- 	int left_num = num;
- 	struct mtk_i2c *i2c = i2c_get_adapdata(adap);
- 
--	ret = clk_bulk_prepare_enable(I2C_MT65XX_CLK_MAX, i2c->clocks);
-+	ret = clk_bulk_enable(I2C_MT65XX_CLK_MAX, i2c->clocks);
- 	if (ret)
- 		return ret;
- 
-@@ -1231,7 +1231,7 @@ static int mtk_i2c_transfer(struct i2c_adapter *adap,
- 	ret = num;
- 
- err_exit:
--	clk_bulk_disable_unprepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
-+	clk_bulk_disable(I2C_MT65XX_CLK_MAX, i2c->clocks);
- 	return ret;
- }
- 
-@@ -1412,7 +1412,7 @@ static int mtk_i2c_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 	mtk_i2c_init_hw(i2c);
--	clk_bulk_disable_unprepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
-+	clk_bulk_disable(I2C_MT65XX_CLK_MAX, i2c->clocks);
- 
- 	ret = devm_request_irq(&pdev->dev, irq, mtk_i2c_irq,
- 			       IRQF_NO_SUSPEND | IRQF_TRIGGER_NONE,
-@@ -1439,6 +1439,8 @@ static int mtk_i2c_remove(struct platform_device *pdev)
- 
- 	i2c_del_adapter(&i2c->adap);
- 
-+	clk_bulk_unprepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
-+
- 	return 0;
- }
- 
-@@ -1448,6 +1450,7 @@ static int mtk_i2c_suspend_noirq(struct device *dev)
- 	struct mtk_i2c *i2c = dev_get_drvdata(dev);
- 
- 	i2c_mark_adapter_suspended(&i2c->adap);
-+	clk_bulk_unprepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
- 
- 	return 0;
- }
-@@ -1465,7 +1468,7 @@ static int mtk_i2c_resume_noirq(struct device *dev)
- 
- 	mtk_i2c_init_hw(i2c);
- 
--	clk_bulk_disable_unprepare(I2C_MT65XX_CLK_MAX, i2c->clocks);
-+	clk_bulk_disable(I2C_MT65XX_CLK_MAX, i2c->clocks);
- 
- 	i2c_mark_adapter_resumed(&i2c->adap);
- 
--- 
-2.35.1
-
+greg k-h

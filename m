@@ -2,118 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D38854FC420
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 20:33:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 186794FC423
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 20:33:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349162AbiDKSfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 14:35:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57558 "EHLO
+        id S1349166AbiDKSfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 14:35:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245664AbiDKSff (ORCPT
+        with ESMTP id S245664AbiDKSfl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 14:35:35 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0A92B0
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 11:33:20 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id o5-20020a17090ad20500b001ca8a1dc47aso150316pju.1
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 11:33:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=pKHcrKxjVBtrp4SSvxMbd0OqRyEIso/X6CPIJZBhm7w=;
-        b=EDAt+PRYKtGeBsZg3ywwi7TgejNiKcOENX6u3+MIwXd5ZUGubKsYXy58cIQpHqT14V
-         4PMudmo6PDjAyKKph0YkecIdZ3S6zzlXVQqa4xMrkjGFLkK/OiFdr9QbFH5RL3ddK0Hl
-         xU9GQez2PJAX6nqmxdGXeBJ6gBlVeFWthqpwr+SmvP1bgTdDRn+U6/AXk64HyzayNcu4
-         u+XT/Xk/lLOsMKU0q3Ag3LDptNijejcRcgEGS8aB6K+SozTIJ1BHqQ9rDzpu4co7wF1z
-         1swdyzxLyIM2vabKDmAK4ti8fkTFl20fOP7HIDyMKaqNxruTtqoAPqpoO7SuZFJF39y8
-         KFgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pKHcrKxjVBtrp4SSvxMbd0OqRyEIso/X6CPIJZBhm7w=;
-        b=nQsH3Kd6Jzi0MDXC897KE587SJJi6THYNhwt1vEGaOjK7KZ0NuwhSpn0u0J55NfBF7
-         OdB+aoDDlJsAMW8jY+6e4eI2oq+Y1D/q6Y2F6ly5O+/nKu9fWnngtxgPYhOn+rIngapD
-         hW2eHYTc6vcmhkA6jfLZAgkQktqzx8M1Tzo3bcVYG6dop0uSsgUzM/BscMlUBd4FK/dK
-         QKa1Zg9vvfvF1jM0JKshA7kvKm7sMh/xRQZfgujI4FsEMqxYlIf1uS3Jq3UH8/g/XWwI
-         r4JqKTiB+aiVsMz3YshraXanWGMX/AJVULyO6SXG3HCXjwifq9rbh0FnE02aJfbfOgfg
-         /aCg==
-X-Gm-Message-State: AOAM530Y7pDVWaWhZz45QjUyIFEvP2D8QYOF6OV6eyKrfbghVWPDKxGh
-        oGO8YsnJa1zXUb4TzVu6oKFFyw==
-X-Google-Smtp-Source: ABdhPJzI44uplT0Xftmm9vue7Q5rcTEg6DZVfpQdoP0/PHu496Ej9svyCCxQQK810UiZxX6zXoGtbQ==
-X-Received: by 2002:a17:90b:314b:b0:1c7:4a4f:6740 with SMTP id ip11-20020a17090b314b00b001c74a4f6740mr534298pjb.145.1649702000010;
-        Mon, 11 Apr 2022 11:33:20 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id h13-20020a056a00170d00b004fb1450229bsm38219057pfc.16.2022.04.11.11.33.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 11:33:19 -0700 (PDT)
-Date:   Mon, 11 Apr 2022 18:33:15 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/6] KVM: x86/mmu: Properly account NX huge page
- workaround for nonpaging MMUs
-Message-ID: <YlR0a4PG5xzweeMZ@google.com>
-References: <20220409003847.819686-1-seanjc@google.com>
- <20220409003847.819686-3-seanjc@google.com>
- <YlRn+8bYsHqNIbTU@google.com>
-MIME-Version: 1.0
+        Mon, 11 Apr 2022 14:35:41 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2066.outbound.protection.outlook.com [40.107.94.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6784021258
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 11:33:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HCbqnKpKFsiNktjry6rc7Zkg+8n6tzW4XBcFPxBt05lYWxhGxBZ/D2obUANR5i0+iZgQiMaA30XtizMrXBehuY1+7vCUpSoTEbjPUREerti8PvacX59kOTLYWVZZl/j0zl4szaQnfbnSQ80ofm2olSuikqI1Q4bvfIuHDXQygvHvpdbfsrrS1Tau2ylvv1CpPPEawxcXkObtX3ELSRR8jwnkPXNMxP6sKhHbU4PQvra0N6jxLW9lJFM9ezjJVxQWjkorQsi7iIS4sa4a8Dz/yIPA2Uc/xKpvx1B73f2r+xYCwbFTgCYtXVDOgswhGhP5HvW+CS+S+2CBvWFPvuHuIw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AdS/qw6gPYHWUH42rK5Or9ldGZUi/byFj1GsqkXCjIE=;
+ b=h1+Z2GJt8pwKjG+kZ21g8F+8DeDX8l0aZrmOEY4hgvq7VODSLDtPjmpMVxQV1HDOxD2kXj0+t9hHBRyT9JsPWYjzpMNkq7z2d3byfia9hKt1A45+nDqjxhbFVXWBDThvUfpj6Bww9rYyI7Y7Ua4H0LAiBKmZddqm1GgWqn4l1Lua+kUnTJpaPesO93cQr2MZ74pWxXummtxkqHPd43qDodYVZd+w9pVB1I6iKLjHnVqstvS4Yp56n/EU0C5FHGu+InqeQqZFvFt7n4+dlLaWzL0gA1IabDAt/e7rgMjqwPNLK2A7/9jymiEIM3taq87q2zsQ9f95ZeklnoCtgqsFgw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AdS/qw6gPYHWUH42rK5Or9ldGZUi/byFj1GsqkXCjIE=;
+ b=KiB52EfBXuC11q9YJjle72fkLk77CsrexMQH7ckTEmW1cjd0Bl780PfodoOLO9YU0rRKImrgkrcAuBUykaNC36Cdma6EdllJWsspGskMaHVe8w1+tBZEM7TaGvtuYbTkeXUN1VctJisBK1KtUtAACjXgbjeUAg2bNTk6tXdDDJzcYmiZI3sFMJdLPqyhPwxIIuCbYuYMxR0F0zVuXQTNl9qbAiQPL4FPHUhFZIJZ1qsjKH1tWihH0px+0rwDKQeZ4YbW1g6nPugBoUykNdyrib6DOFSQkLhud+/r11jUMNR/yDAT9ab+52hXRqYwZzKnHcZa1cu8TKVDcZxgK+JYVg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by DM8PR12MB5431.namprd12.prod.outlook.com (2603:10b6:8:34::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5144.29; Mon, 11 Apr 2022 18:33:23 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::cdfb:f88e:410b:9374]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::cdfb:f88e:410b:9374%6]) with mapi id 15.20.5144.029; Mon, 11 Apr 2022
+ 18:33:23 +0000
+Date:   Mon, 11 Apr 2022 15:33:22 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        intel-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 24/34] drm/i915/gvt: remove the extra vfio_device
+ refcounting for dmabufs
+Message-ID: <20220411183322.GZ2120790@nvidia.com>
+References: <20220411141403.86980-1-hch@lst.de>
+ <20220411141403.86980-25-hch@lst.de>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YlRn+8bYsHqNIbTU@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220411141403.86980-25-hch@lst.de>
+X-ClientProxiedBy: MN2PR14CA0021.namprd14.prod.outlook.com
+ (2603:10b6:208:23e::26) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f120345b-de1c-4b2f-472d-08da1be9c2c5
+X-MS-TrafficTypeDiagnostic: DM8PR12MB5431:EE_
+X-Microsoft-Antispam-PRVS: <DM8PR12MB5431DB881F4267A98F762A16C2EA9@DM8PR12MB5431.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: cHojHHW5H7GEyeHS+AYbe/pYuL8b/gQl0zb8rfNaH/MHzgWJJWR3xbDU56u4nm8DxbxddEuajpX3wMp6DclzB/nZ+EhhRPfs0EjwwriUCVrOjWhbbwPPYAr1lR4aGll3JV2LU+0m6iy/h3557V40xl107pLYAPvpLmH5kzvT85P4fB8AJeE45W93qjpk07GkQjXE3EiaQFYiqgyztfOGDEes3U1eC0yiQnll8bYFtld6x70IzvMQz0U9sh/krqlW5Fu4XQWAqO6q4aUBkJCPZCJ8UT6Vvwa6Uu4ADDZWm6ehELUVDBxSF6yI31QSo2xn7HgDxoWos8N8eP2uw5uh68XquoNyg1KdvS5BX61wQSjQ9CizB9SZvvKT1Te9T4XdGM6gUXtikoQEb7ag/ITK3itSsVpkKUoEdNu8g++dc2V+0L18wbQvQQUVfQ89t73T2rO5+XDzLME4aypWgKsgrC5B1gF5j6qJ0vbLU9xPKm8NVpdvBqzaobIbUpVy2yvnZj41n1Ew8STcTxByh+l28VrjWMzxjf2rLNFPCpoo1ZDuM6voGGs3gdxdyC9Mra/hZvYdFGTSCIfAI3g3P5YZwC3umXjTmVwU5/as6FJ3MXKC6A5yNAXkUOzaAQzOIRE7jub58pwYf9HqvWXh8VGsmw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(8936002)(7416002)(38100700002)(2616005)(66476007)(66946007)(66556008)(6512007)(1076003)(6506007)(186003)(26005)(33656002)(6486002)(508600001)(83380400001)(36756003)(2906002)(54906003)(86362001)(8676002)(4326008)(6916009)(316002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?AF4+NpPw8IjvmN31hN9uZPPag+qMSKKTEuXDUWIJeOvDpj2lTIx0c+rjrA5i?=
+ =?us-ascii?Q?bf9wrjRZ5v4DBsu77m041TgvUNtFt2jwLJAP/oJrFFs90AkdATChjxRA4bnA?=
+ =?us-ascii?Q?9F5SJlTsPgqqjON2H/MZ0JyNNQS0sU7j8CzfGDRECReK/jG29e/5dyc5SrV1?=
+ =?us-ascii?Q?xnMoDHnwoT6KlK/2AVkxZIvdmNshobYcqAtw28psZFDfVp0c1a0KOoxBpvr6?=
+ =?us-ascii?Q?cNZrKwfyBDtNQ+FVHLD04PDZp5Ldf++iAvMe454+ib3HE1BLiFkmoGTqM+WW?=
+ =?us-ascii?Q?+E+ETAZ66W9LbCuZatDssvwwtZARvJa/0inX8GQzyehkJ7xkLfq0Utd7ARvW?=
+ =?us-ascii?Q?TDjnnmHuOw/9tS9FPx0gPVAWkKbquzyz06lkw8VF9JFC2f//Si/0n8w1rfEh?=
+ =?us-ascii?Q?n9oA2+Aqb+8vH1t9sURUARj/hTIv64crN1vUwJJMUTkZUAnfnCYGgofF2gAs?=
+ =?us-ascii?Q?e0drZazgmhVVbzqabVtk87D3EnVEvEkoBjNLEeyV2B88hGYWJO6lv04MM3IA?=
+ =?us-ascii?Q?WWZhA3iCGxYXCe0dNqkVrK1cmJAessZb+XyGaWy7f7BrbppyxdbjQj2H8L39?=
+ =?us-ascii?Q?FarEkHWjptTIJh3ddJa/Jdxd/OUg+684gmSGLgoG3FDebCXKp3Uaq6yDOB8q?=
+ =?us-ascii?Q?+g2XkEMmNRw9aR37esud1DZ3zFTcs4F3PT448UDjy2uTw3HRxSB8OKnipZHU?=
+ =?us-ascii?Q?GBLOYxKTkCw53f7xdoa7VxUVHO6k2sRkuPTTtp3Jei7+ScCSen+xI++TKg5R?=
+ =?us-ascii?Q?WHzd1MVRCQmf03GTnSyVT0xajrJKnYFYLCftRUTYnrghz2/Oqpl9EMHJ9XvA?=
+ =?us-ascii?Q?8Huzw8IhUauzV8OeLwCylU1Yvef45MUvJzLlRaxYYJgibom38BOJY+3yl+wN?=
+ =?us-ascii?Q?rGXCwXpQAjMbWhqasvEujRWcU1D0Gx2ID3x7X1QmVbtK8FHY3WMbhttggt3K?=
+ =?us-ascii?Q?7rfqT4iudfk6KEuus7cLOtNd3/7XYFxfLO59eh3lQ4+MtUtHHx8qkCzhvgZ5?=
+ =?us-ascii?Q?vK7/goFwVr/85egLNpc8l165ftPwuQ2P/r6Is0Hih517UN5pZusa2KZZIu95?=
+ =?us-ascii?Q?BEvOgPmTA6NDO8AEcoAmWC/U5sb9HeWOF0BLSEBCRpeJBJ9lqMq7Mb+cpX6a?=
+ =?us-ascii?Q?Q/gwPpl788IyNhd8M4EfOUhhniWvsbvpko6OvOQ9oNCQSiXOMFECcDXG3zDc?=
+ =?us-ascii?Q?fULtM3fW9b8K8RT2U2ndqYRHc8etAyz9/kAptIMVxW7UGtVhT6it32Linkti?=
+ =?us-ascii?Q?WTXpFShtHxVwAOgx7pPTotf+/SA/vY7aMHa3TDbEm8NY4hIHbxaojup/kwU0?=
+ =?us-ascii?Q?CA4uSxwxe5Tmwu35ikDtkq1D8lumNz4hnlXcweRcPa56WlUXqpNhCZ+Z6LzU?=
+ =?us-ascii?Q?R75icblhMNBobDoS43Z/F8Knuuk82ZFoDxDpWU1Uh/RpAqOpp8GpcFdTgg27?=
+ =?us-ascii?Q?u+6bjNB1b7ACgrlrw9SWlIb9sELEAgNjAqFIA9hSiRS6ng1KlflQFwwv39ox?=
+ =?us-ascii?Q?J+m7gAZ4dgHkKw7PhznWsk50LJ3PirRjmUS9+ZZ/AkXvAdQiNU9dcYVOZ+Lw?=
+ =?us-ascii?Q?K6sIPzPW/EJc7QHJIjbCfq9C/pzSVBYDUAXOfxFrx47rAMTYRr8mFUa3yRS0?=
+ =?us-ascii?Q?37FNivAFK1uEds1vI/5xo3Bm2ZlMPuD9r17Ioi+JKJFxM31KHc/5O9dH6OPF?=
+ =?us-ascii?Q?vBNM+VaVYv/IXwo/iy2Y+acfPGXxFTeFiT8o954/lMCQvGMzKti/4K5VfsoZ?=
+ =?us-ascii?Q?n3vwLUmccQ=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f120345b-de1c-4b2f-472d-08da1be9c2c5
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2022 18:33:23.6791
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: R0S5fh8NLPgomI01/o2m5FJSEknjqrWgOtI9G5P6BV9Qs2XH/4Ch7ZyYig44anGJ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR12MB5431
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022, Mingwei Zhang wrote:
-> On Sat, Apr 09, 2022, Sean Christopherson wrote:
-> > diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
-> > index 671cfeccf04e..89df062d5921 100644
-> > --- a/arch/x86/kvm/mmu.h
-> > +++ b/arch/x86/kvm/mmu.h
-> > @@ -191,6 +191,15 @@ static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
-> >  		.user = err & PFERR_USER_MASK,
-> >  		.prefetch = prefetch,
-> >  		.is_tdp = likely(vcpu->arch.mmu->page_fault == kvm_tdp_page_fault),
-> > +
-> > +		/*
-> > +		 * Note, enforcing the NX huge page mitigation for nonpaging
-> > +		 * MMUs (shadow paging, CR0.PG=0 in the guest) is completely
-> > +		 * unnecessary.  The guest doesn't have any page tables to
-> > +		 * abuse and is guaranteed to switch to a different MMU when
-> > +		 * CR0.PG is toggled on (may not always be guaranteed when KVM
-> > +		 * is using TDP).  See make_spte() for details.
-> > +		 */
-> >  		.nx_huge_page_workaround_enabled = is_nx_huge_page_enabled(),
-> 
-> hmm. I think there could be a minor issue here (even in original code).
-> The nx_huge_page_workaround_enabled is attached here with page fault.
-> However, at the time of make_spte(), we call is_nx_huge_page_enabled()
-> again. Since this function will directly check the module parameter,
-> there might be a race condition here. eg., at the time of page fault,
-> the workround was 'true', while by the time we reach make_spte(), the
-> parameter was set to 'false'.
+On Mon, Apr 11, 2022 at 04:13:53PM +0200, Christoph Hellwig wrote:
+> All the dmabufs are torn down when th VGPU is released, so there is
+> no need for extra refcounting here.
 
-Toggling the mitigation invalidates and zaps all roots.  Any page fault acquires
-mmu_lock after the toggling is guaranteed to see the correct value, any page fault
-that completed before kvm_mmu_zap_all_fast() is guaranteed to be zapped.
+'th' -> 'the'
 
-> I have not figured out what the side effect is. But I feel like the
-> make_spte() should just follow the information in kvm_page_fault instead
-> of directly querying the global config.
+I think the specific argument is that intel_vgpu_query_plane() is only
+called from intel_vgpu_ioctl() which has to happen while the device is
+open so intel_vgpu_query_plane() has no issue.
 
-I started down this exact path :-)  The problem is that, even without Ben's series,
-KVM uses make_spte() for things other than page faults.
+dmabuf_gem_object_free() is OK because:
+ intel_vgpu_close_device
+  __intel_vgpu_release
+   intel_gvt_release_vgpu
+    intel_vgpu_dmabuf_cleanup
+
+Menaing dmabuf->vgpu was already NULL once close_device is passed, and
+the vfio_device reference is held automatically from open_device->close_device
+
+And similarly intel_vgpu_dmabuf_cleanup() is OK because it is called
+by the above.
+
+The other places that call intel_vgpu_dmabuf_cleanup() are redundant
+with the close_device path.
+
+Though the 'release_work' callpath is buggy, for many reasons, but not
+for this series.
+
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+
+> diff --git a/drivers/gpu/drm/i915/gvt/dmabuf.c b/drivers/gpu/drm/i915/gvt/dmabuf.c
+> index 90443306a9ad4..01e54b45c5c1b 100644
+> +++ b/drivers/gpu/drm/i915/gvt/dmabuf.c
+> @@ -139,7 +139,6 @@ static void dmabuf_gem_object_free(struct kref *kref)
+>  			dmabuf_obj = list_entry(pos, struct intel_vgpu_dmabuf_obj, list);
+>  			if (dmabuf_obj == obj) {
+
+Not for this series but it seems like there is something off about
+the locking here:
+
+	if (vgpu && vgpu->active && !list_empty(&vgpu->dmabuf_obj_list_head)) {
+
+This is called under the dmabuf lock but active is protected by the
+vgpu_lock.. It seems strange that vgpu->active could be false but the
+device is still open, so maybe it is not possible.
+
+Jason

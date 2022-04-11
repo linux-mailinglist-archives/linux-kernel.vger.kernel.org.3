@@ -2,382 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D63C94FC05B
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CCBA4FC070
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:23:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347857AbiDKPYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 11:24:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43740 "EHLO
+        id S1347852AbiDKPZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 11:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347810AbiDKPXh (ORCPT
+        with ESMTP id S241470AbiDKPY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 11:23:37 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E3A3B3FF
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:21:22 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id c7so23632692wrd.0
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:21:22 -0700 (PDT)
+        Mon, 11 Apr 2022 11:24:58 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94FC03A184;
+        Mon, 11 Apr 2022 08:22:43 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id v2so9861753wrv.6;
+        Mon, 11 Apr 2022 08:22:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=UBu9bKNpcsjBxVmcDi5TeRQJe5h4mzqRMvKt6Hs6yfk=;
-        b=KZQ1OwKLIJThuwjrnbXyMe/lbykmQB1HTeZdE0/lO7EMolpP+udEuy1jDaLgKfjIOU
-         O3iLTLrAODYzX7VmRAPCkpan/K3iYF2HqOs+D8Ym7Ui93sgqmTjrFG5QR/g4nVsI1K2K
-         R3LLIFk0pmPSfy4OCjq6ffYuhTry1WlgjiSsY=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bq4dIdtXKyheEXERu/dkokTXmvj3klAE4IhWeKTikkc=;
+        b=eEcwqL/0GMlDAli3FSZbUpl+NygNa18VLEwUBUq9iSth5Lqd/KsZ0V+ClTULeod8M+
+         Fu3jsyrAA1MGtPFvLBv3NGvuymp4aA22DKFtHEpZDRMsdgOMipPaU5XxnF8FL9nHGHiV
+         Wjnud9/NFYOoUAnI9QrwAc6bUCDm+/fLtHsPYOqwyVEQhtiXQZs5D8NYuFiatPtMqoIV
+         xmaY+1TY1jGEZ932auNCY8lsJ2HEB93AuzbUQEqpyLayPte77b6RRg1uQA9ZGXgLP/0S
+         88CHK3mgNy+NRl3nxa8KlhGs7rLzfsWGqUn5ExaLh65Eht8dVpeOHGS1leYCktxhUT5B
+         /SHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=UBu9bKNpcsjBxVmcDi5TeRQJe5h4mzqRMvKt6Hs6yfk=;
-        b=c+EEVZrUrtmm+vwV3AMeEgFyRNbA0jsx+dFYm2UfDgWlmV9BiVMJeBVY9GHyeSodGb
-         6K8WUaE6NjcqrZbXxlz0AvYfErlGMgHiFenAejFp9JbNgrfV3o8Gt2LwSk6yE0Zb/mWj
-         fkMscq41/FnwiQru+8vnlf7V4TmucvD20Q8zelPiOYcaDN3XZNu5sJQVlW6iX7C99exw
-         P/z8yGxQvwCH4SefmYohsT8TXZmeA5VH67IhlLZEW45dFjVpOSdnnuDyaq64kgKTZ95K
-         00AU7pVrDN6QCzEFwScU5dyAaqX8Tbsi4hxUD3UtUYHGELBn8F0RzKsqjjJaGoHFyOIy
-         iNBg==
-X-Gm-Message-State: AOAM5302CRtwJxGDcYzYRI6DcQ3MQCgS6eS2Ro/QY4JmW9OPenCC14Lt
-        ir2QsgVvu3dWBjCPbAmlj9sCHA==
-X-Google-Smtp-Source: ABdhPJzyRb0pgwW+hkvXgmD5vgI/yUy7mnPtvBOPR3Pc6/kt7iIkuJyE7VE61GhHoAJGTrQIdU9cvw==
-X-Received: by 2002:a05:6000:1681:b0:207:acc5:85f6 with SMTP id y1-20020a056000168100b00207acc585f6mr133502wrd.595.1649690480633;
-        Mon, 11 Apr 2022 08:21:20 -0700 (PDT)
-Received: from fabiobaltieri-linux.lan ([37.228.205.1])
-        by smtp.gmail.com with ESMTPSA id bk1-20020a0560001d8100b002061d6bdfd0sm19512832wrb.63.2022.04.11.08.21.19
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bq4dIdtXKyheEXERu/dkokTXmvj3klAE4IhWeKTikkc=;
+        b=zo/Yqrs1nyW6bkUd1rCxNYoNCDmOQHVoMG50cOIaZxBgCa7IQxc76/8KKgwJmgY6tR
+         tU2c/ZDQ4wCPa98kxWJDnPoDP7z2F+3UvP2YN8u9iodzKN0YkVITfFQ41Zk3u9+9n8QS
+         Ha6nAMOC2RwJ3XAxryeno0ix9Gh8qr2cVlzd78HgGbgBA9QpSAE37uywb3k1gAWsSoTg
+         tDVLBSHo28kYnRk03xkychIsHSb6CAoTyLQJcmZ0CjvHZNmTvhjI5wnVDqin3rByCrta
+         VRm02X0JlnJ6idSaOLK4jV+gjgS9g1Xs692aXZFa6XkH/jQA8Sdv+Kr1Qv3xRwksy63J
+         arkA==
+X-Gm-Message-State: AOAM531UrT0JWfj1txLPNm9MGAGqc795OxruGLlvhRqksaGKsR+Mcf1D
+        BrdMezXhnB0KC3TV+UD1Q+g=
+X-Google-Smtp-Source: ABdhPJzHLV5ITxizeFBwNp55Gv/lQjWoN2lKXUbEs96hO2MWAFI78oKQWP4tE+HZdnGCba3gg8YLOw==
+X-Received: by 2002:adf:e84a:0:b0:207:a697:462c with SMTP id d10-20020adfe84a000000b00207a697462cmr4511198wrn.312.1649690562040;
+        Mon, 11 Apr 2022 08:22:42 -0700 (PDT)
+Received: from linuxdev2.toradex.int (31-10-206-124.static.upc.ch. [31.10.206.124])
+        by smtp.gmail.com with ESMTPSA id a9-20020a7bc1c9000000b0038eb67e966esm5209374wmj.29.2022.04.11.08.22.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 08:21:20 -0700 (PDT)
-From:   Fabio Baltieri <fabiobaltieri@chromium.org>
-To:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Mon, 11 Apr 2022 08:22:41 -0700 (PDT)
+From:   Max Krummenacher <max.oss.09@gmail.com>
+To:     max.krummenacher@toradex.com
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Alistair Francis <alistair@alistair23.me>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Li Yang <leoyang.li@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Olof Johansson <olof@lixom.net>,
+        Otavio Salvador <otavio@ossystems.com.br>,
+        Pascal Zimmermann <pzimmermann@dh-electronics.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
         Rob Herring <robh+dt@kernel.org>,
-        chrome-platform@lists.linux.dev, linux-pwm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Fabio Baltieri <fabiobaltieri@chromium.org>
-Subject: [PATCH v3 4/4] arm64: dts: address cros-ec-pwm channels by type
-Date:   Mon, 11 Apr 2022 15:21:14 +0000
-Message-Id: <20220411152114.2165933-5-fabiobaltieri@chromium.org>
-X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
-In-Reply-To: <20220411152114.2165933-1-fabiobaltieri@chromium.org>
-References: <20220411152114.2165933-1-fabiobaltieri@chromium.org>
+        Russell King <linux@armlinux.org.uk>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Tim Harvey <tharvey@gateworks.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        soc@kernel.org
+Subject: [PATCH v2 00/14] ARM: dts: imx6dl-colibri: Misc improvements and newly added carriers
+Date:   Mon, 11 Apr 2022 17:22:20 +0200
+Message-Id: <20220411152234.12678-1-max.oss.09@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update various cros-ec-pwm board definitions to address the keyboard and
-screen backlight PWM channels by type rather than channel number. This
-makes the instance independent by the actual hardware configuration,
-relying on the EC firmware to pick the right channel, and allows
-dropping few dtsi overrides as a consequence.
+From: Max Krummenacher <max.krummenacher@toradex.com>
 
-Changed the node label used to cros_ec_pwm_type to avoid ambiguity about
-the pwm cell meaning.
 
-Signed-off-by: Fabio Baltieri <fabiobaltieri@chromium.org>
----
- .../dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku1.dts    | 4 ++--
- arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi   | 4 ++--
- arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi           | 1 +
- arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi      | 4 ----
- arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi             | 9 +++++----
- .../boot/dts/qcom/sc7280-herobrine-herobrine-r0.dts      | 7 ++++---
- arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi           | 7 ++++---
- arch/arm64/boot/dts/qcom/sc7280-idp-ec-h1.dtsi           | 4 ++--
- arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi               | 7 ++++---
- arch/arm64/boot/dts/rockchip/rk3399-gru-bob.dts          | 4 ----
- arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi  | 5 +++--
- arch/arm64/boot/dts/rockchip/rk3399-gru-kevin.dts        | 4 ----
- arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi             | 1 +
- 13 files changed, 28 insertions(+), 33 deletions(-)
+This is a general update of the Colibri iMX6 device tree files.
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku1.dts b/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku1.dts
-index dec11a4eb59e..e2554a313deb 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku1.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi-fennel-sku1.dts
-@@ -15,13 +15,13 @@ pwmleds {
- 		compatible = "pwm-leds";
- 		keyboard_backlight: keyboard-backlight {
- 			label = "cros_ec::kbd_backlight";
--			pwms = <&cros_ec_pwm 0>;
-+			pwms = <&cros_ec_pwm_type CROS_EC_PWM_DT_KB_LIGHT>;
- 			max-brightness = <1023>;
- 		};
- 	};
- };
- 
--&cros_ec_pwm {
-+&cros_ec_pwm_type {
- 	status = "okay";
- };
- 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi
-index 8f7bf33f607d..8474bd3af6eb 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui-jacuzzi.dtsi
-@@ -92,8 +92,8 @@ volume_up {
- };
- 
- &cros_ec {
--	cros_ec_pwm: ec-pwm {
--		compatible = "google,cros-ec-pwm";
-+	cros_ec_pwm_type: ec-pwm {
-+		compatible = "google,cros-ec-pwm-type";
- 		#pwm-cells = <1>;
- 		status = "disabled";
- 	};
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-index 0f9480f91261..ff54687ab8bf 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-@@ -7,6 +7,7 @@
- 
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/input/input.h>
-+#include <dt-bindings/mfd/cros_ec.h>
- #include "mt8183.dtsi"
- #include "mt6358.dtsi"
- 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
-index c81805ef2250..aea7c66d95e0 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
-@@ -77,10 +77,6 @@ &ap_spi_fp {
- 	status = "okay";
- };
- 
--&backlight {
--	pwms = <&cros_ec_pwm 0>;
--};
--
- &camcc {
- 	status = "okay";
- };
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-index 732e1181af48..6552e0025f84 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-@@ -8,6 +8,7 @@
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/input/gpio-keys.h>
- #include <dt-bindings/input/input.h>
-+#include <dt-bindings/mfd/cros_ec.h>
- #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
- #include <dt-bindings/sound/sc7180-lpass.h>
- 
-@@ -316,7 +317,7 @@ backlight: backlight {
- 		num-interpolated-steps = <64>;
- 		default-brightness-level = <951>;
- 
--		pwms = <&cros_ec_pwm 1>;
-+		pwms = <&cros_ec_pwm_type CROS_EC_PWM_DT_DISPLAY_LIGHT>;
- 		enable-gpios = <&tlmm 12 GPIO_ACTIVE_HIGH>;
- 		power-supply = <&ppvar_sys>;
- 		pinctrl-names = "default";
-@@ -354,7 +355,7 @@ pwmleds {
- 		keyboard_backlight: keyboard-backlight {
- 			status = "disabled";
- 			label = "cros_ec::kbd_backlight";
--			pwms = <&cros_ec_pwm 0>;
-+			pwms = <&cros_ec_pwm_type CROS_EC_PWM_DT_KB_LIGHT>;
- 			max-brightness = <1023>;
- 		};
- 	};
-@@ -637,8 +638,8 @@ cros_ec: ec@0 {
- 		pinctrl-0 = <&ap_ec_int_l>;
- 		spi-max-frequency = <3000000>;
- 
--		cros_ec_pwm: pwm {
--			compatible = "google,cros-ec-pwm";
-+		cros_ec_pwm_type: pwm {
-+			compatible = "google,cros-ec-pwm-type";
- 			#pwm-cells = <1>;
- 		};
- 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r0.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r0.dts
-index 1779d96c30f6..628ef990433b 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r0.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r0.dts
-@@ -11,6 +11,7 @@
- #include <dt-bindings/iio/qcom,spmi-adc7-pmr735a.h>
- #include <dt-bindings/input/gpio-keys.h>
- #include <dt-bindings/input/input.h>
-+#include <dt-bindings/mfd/cros_ec.h>
- #include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
- #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
- 
-@@ -336,7 +337,7 @@ pwmleds {
- 		keyboard_backlight: keyboard-backlight {
- 			status = "disabled";
- 			label = "cros_ec::kbd_backlight";
--			pwms = <&cros_ec_pwm 0>;
-+			pwms = <&cros_ec_pwm_type CROS_EC_PWM_DT_KB_LIGHT>;
- 			max-brightness = <1023>;
- 		};
- 	};
-@@ -705,8 +706,8 @@ cros_ec: ec@0 {
- 		pinctrl-0 = <&ap_ec_int_l>;
- 		spi-max-frequency = <3000000>;
- 
--		cros_ec_pwm: pwm {
--			compatible = "google,cros-ec-pwm";
-+		cros_ec_pwm_type: pwm {
-+			compatible = "google,cros-ec-pwm-type";
- 			#pwm-cells = <1>;
- 		};
- 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-index dc17f2079695..eb4b0e17adec 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-@@ -15,6 +15,7 @@
- 
- #include <dt-bindings/input/gpio-keys.h>
- #include <dt-bindings/input/input.h>
-+#include <dt-bindings/mfd/cros_ec.h>
- 
- #include "sc7280-qcard.dtsi"
- #include "sc7280-chrome-common.dtsi"
-@@ -288,7 +289,7 @@ pwmleds {
- 		keyboard_backlight: keyboard-backlight {
- 			status = "disabled";
- 			label = "cros_ec::kbd_backlight";
--			pwms = <&cros_ec_pwm 0>;
-+			pwms = <&cros_ec_pwm_type CROS_EC_PWM_DT_KB_LIGHT>;
- 			max-brightness = <1023>;
- 		};
- 	};
-@@ -421,8 +422,8 @@ cros_ec: ec@0 {
- 		pinctrl-0 = <&ap_ec_int_l>;
- 		spi-max-frequency = <3000000>;
- 
--		cros_ec_pwm: pwm {
--			compatible = "google,cros-ec-pwm";
-+		cros_ec_pwm_type: pwm {
-+			compatible = "google,cros-ec-pwm-type";
- 			#pwm-cells = <1>;
- 		};
- 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp-ec-h1.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp-ec-h1.dtsi
-index a7c346aa3b02..a797f09e1328 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-idp-ec-h1.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-idp-ec-h1.dtsi
-@@ -20,8 +20,8 @@ cros_ec: ec@0 {
- 		pinctrl-0 = <&ap_ec_int_l>;
- 		spi-max-frequency = <3000000>;
- 
--		cros_ec_pwm: pwm {
--			compatible = "google,cros-ec-pwm";
-+		cros_ec_pwm_type: pwm {
-+			compatible = "google,cros-ec-pwm-type";
- 			#pwm-cells = <1>;
- 		};
- 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi b/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi
-index e7e4cc5936aa..a57951a50cd6 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845-cheza.dtsi
-@@ -6,6 +6,7 @@
-  */
- 
- #include <dt-bindings/input/input.h>
-+#include <dt-bindings/mfd/cros_ec.h>
- #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
- #include "sdm845.dtsi"
- 
-@@ -27,7 +28,7 @@ chosen {
- 
- 	backlight: backlight {
- 		compatible = "pwm-backlight";
--		pwms = <&cros_ec_pwm 0>;
-+		pwms = <&cros_ec_pwm_type CROS_EC_PWM_DT_DISPLAY_LIGHT>;
- 		enable-gpios = <&tlmm 37 GPIO_ACTIVE_HIGH>;
- 		power-supply = <&ppvar_sys>;
- 		pinctrl-names = "default";
-@@ -708,8 +709,8 @@ cros_ec: ec@0 {
- 		pinctrl-0 = <&ec_ap_int_l>;
- 		spi-max-frequency = <3000000>;
- 
--		cros_ec_pwm: pwm {
--			compatible = "google,cros-ec-pwm";
-+		cros_ec_pwm_type: pwm {
-+			compatible = "google,cros-ec-pwm-type";
- 			#pwm-cells = <1>;
- 		};
- 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru-bob.dts b/arch/arm64/boot/dts/rockchip/rk3399-gru-bob.dts
-index 31ebb4e5fd33..5a076c2564f6 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-gru-bob.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-gru-bob.dts
-@@ -55,10 +55,6 @@ trackpad: trackpad@15 {
- 	};
- };
- 
--&backlight {
--	pwms = <&cros_ec_pwm 0>;
--};
--
- &cpu_alert0 {
- 	temperature = <65000>;
- };
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
-index 3355fb90fa54..28eda361dfe1 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
-@@ -198,6 +198,7 @@ backlight: backlight {
- 		power-supply = <&pp3300_disp>;
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&bl_en>;
-+		pwms = <&cros_ec_pwm_type CROS_EC_PWM_DT_DISPLAY_LIGHT>;
- 		pwm-delay-us = <10000>;
- 	};
- 
-@@ -462,8 +463,8 @@ ap_i2c_tp: &i2c5 {
- };
- 
- &cros_ec {
--	cros_ec_pwm: pwm {
--		compatible = "google,cros-ec-pwm";
-+	cros_ec_pwm_type: pwm {
-+		compatible = "google,cros-ec-pwm-type";
- 		#pwm-cells = <1>;
- 	};
- 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru-kevin.dts b/arch/arm64/boot/dts/rockchip/rk3399-gru-kevin.dts
-index 6863689df06f..e959a33af34b 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-gru-kevin.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-gru-kevin.dts
-@@ -84,10 +84,6 @@ thermistor_ppvar_litcpu: thermistor-ppvar-litcpu {
- 	};
- };
- 
--&backlight {
--	pwms = <&cros_ec_pwm 1>;
--};
--
- &gpio_keys {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&bt_host_wake_l>, <&cpu1_pen_eject>;
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi
-index 162f08bca0d4..181159e9982d 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-gru.dtsi
-@@ -6,6 +6,7 @@
-  */
- 
- #include <dt-bindings/input/input.h>
-+#include <dt-bindings/mfd/cros_ec.h>
- #include "rk3399.dtsi"
- #include "rk3399-op1-opp.dtsi"
- 
+The Toradex Colibri family is composed of a SoM that can be plugged on
+various carrier boards, with carrier boards allowing multiple optional
+accessories (e.g. display, camera, ...).
+
+The device tree sources are structured into a SoM dtsi and a carrier dts
+which then includes the SoM dtsi. The SoM dtsi defines and enables the
+functionality self contained on the SoM and prepares for functionality
+provided by the carrier HW or accessories, so that the carrier dts then
+can enable or amend nodes provided. Accessories are enabled in overlays
+depending on HW configuration.
+
+The series improves the existing Colibri Evaluation Board device tree and
+adds new device trees for the Aster, Iris, and Iris V2 carrier boards.
+
+Additionally it drops the dedicated device tree for SoM V1.1 HW used in a
+Evaluation board. The regular device tree works well in that combination.
+The higher SD card speed possible with SoM V1.1 would require HW
+modification on the carrier board.
+
+Improvements:
+- Specifies GPIO line names for use with libgpiod.
+- Disables optional accessories. They would be enabled in overlays
+  depending on HW configuration.
+- Lower power consumption after poweroff.
+- Move more functionality into the SoM dtsi file to reduce code
+  duplication.
+- General cleanup to adhere to dtbs bindings and missed alphabetically
+  ordering.
+
+Fixes:
+- Copy/paste error in i2c2 pinmuxing resulting in i2c2 being
+  nonfunctional.
+
+Adds:
+- imx6dl-colibri-aster.dtb: used for a Colibri iMX6 mated in an Aster
+  carrier board.
+- imx6dl-colibri-iris.dtb: used for a Colibri iMX6 mated in an
+  Iris V1.x carrier board.
+- imx6dl-colibri-iris-v2.dtb: used for a Colibri iMX6 mated in an
+  Iris V2.x carrier board.
+
+Drops:
+- imx6dl-colibri-v1_1-eval-v3.dtb, imx6dl-colibri-eval-v3.dtb is good
+  enough.
+
+Changes in v2:
+- Addressed 'From' address as reported by checkpatch / Shawn's feedback.
+- Added Rob's Ack to the 'dt-bindings' patches.
+
+Max Krummenacher (13):
+  dt-bindings: arm: fsl: imx6dl-colibri: Drop dedicated v1.1 bindings
+  dt-bindings: arm: fsl: Add carriers for toradex,colibri-imx6dl
+  ARM: dts: imx6dl-colibri: Drop dedicated v1.1 device tree
+  ARM: dts: imx6dl-colibri: Fix I2C pinmuxing
+  ARM: dts: imx6dl-colibri: Disable add-on accessories
+  ARM: dts: imx6dl-colibri: Command pmic to standby for poweroff
+  ARM: dts: imx6dl-colibri: Add additional pingroups
+  ARM: dts: imx6dl-colibri: Move common nodes to SoM dtsi
+  ARM: dts: imx6dl-colibri: Cleanup
+  ARM: dts: imx6dl-colibri: Add usdhc1 sleep pin configuration
+  ARM: dts: imx6dl-colibri: Add support for Toradex Iris carrier boards
+  ARM: dts: imx6dl-colibri: Add support for Toradex Aster carrier board
+  ARM: imx_v6_v7_defconfig: Enable the ADC part of the STMPE MFD
+
+Oleksandr Suvorov (1):
+  ARM: dts: imx6dl-colibri: Add gpio-line-names
+
+ .../devicetree/bindings/arm/fsl.yaml          |  11 +-
+ arch/arm/boot/dts/Makefile                    |   4 +-
+ arch/arm/boot/dts/imx6dl-colibri-aster.dts    | 113 +++
+ arch/arm/boot/dts/imx6dl-colibri-eval-v3.dts  | 110 +--
+ arch/arm/boot/dts/imx6dl-colibri-iris-v2.dts  |  46 ++
+ arch/arm/boot/dts/imx6dl-colibri-iris.dts     | 152 ++++
+ .../boot/dts/imx6dl-colibri-v1_1-eval-v3.dts  |  31 -
+ .../boot/dts/imx6qdl-colibri-v1_1-uhs.dtsi    |  44 -
+ arch/arm/boot/dts/imx6qdl-colibri.dtsi        | 771 ++++++++++++++----
+ arch/arm/configs/imx_v6_v7_defconfig          |   1 +
+ 10 files changed, 919 insertions(+), 364 deletions(-)
+ create mode 100644 arch/arm/boot/dts/imx6dl-colibri-aster.dts
+ create mode 100644 arch/arm/boot/dts/imx6dl-colibri-iris-v2.dts
+ create mode 100644 arch/arm/boot/dts/imx6dl-colibri-iris.dts
+ delete mode 100644 arch/arm/boot/dts/imx6dl-colibri-v1_1-eval-v3.dts
+ delete mode 100644 arch/arm/boot/dts/imx6qdl-colibri-v1_1-uhs.dtsi
+
 -- 
-2.35.1.1178.g4f1659d476-goog
+2.20.1
 

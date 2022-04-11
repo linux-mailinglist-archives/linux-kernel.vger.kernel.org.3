@@ -2,72 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4256A4FBB0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 13:35:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C09894FBB10
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 13:35:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245452AbiDKLhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 07:37:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52066 "EHLO
+        id S1345667AbiDKLh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 07:37:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238890AbiDKLhB (ORCPT
+        with ESMTP id S236405AbiDKLhY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 07:37:01 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCA9013DF9
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 04:34:46 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V9nhU4j_1649676883;
-Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0V9nhU4j_1649676883)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 11 Apr 2022 19:34:44 +0800
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-To:     akpm@linux-foundation.org
-Cc:     willy@infradead.org, baolin.wang@linux.alibaba.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] mm: migrate: Simplify the refcount validation when migrating hugetlb mapping
-Date:   Mon, 11 Apr 2022 19:34:30 +0800
-Message-Id: <eb2fbbeaef2b1714097b9dec457426d682ee0635.1649676424.git.baolin.wang@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 11 Apr 2022 07:37:24 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD1539D;
+        Mon, 11 Apr 2022 04:35:08 -0700 (PDT)
+X-UUID: dbd08abc811945b1993f258b3e75863a-20220411
+X-UUID: dbd08abc811945b1993f258b3e75863a-20220411
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1613410139; Mon, 11 Apr 2022 19:35:02 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Mon, 11 Apr 2022 19:35:01 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 11 Apr
+ 2022 19:35:01 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 11 Apr 2022 19:35:01 +0800
+Message-ID: <096e5da55313bb064575af4e64915fecb839a248.camel@mediatek.com>
+Subject: Re: [PATCH V2 06/15] cpufreq: mediatek: Record previous target
+ vproc value
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <robh+dt@kernel.org>,
+        <krzk+dt@kernel.org>
+CC:     <matthias.bgg@gmail.com>, <jia-wei.chang@mediatek.com>,
+        <roger.lu@mediatek.com>, <hsinyi@google.com>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "Andrew-sh . Cheng" <andrew-sh.cheng@mediatek.com>
+Date:   Mon, 11 Apr 2022 19:35:00 +0800
+In-Reply-To: <4cc24333-3985-5efe-cc5f-c7b8492f6c1e@collabora.com>
+References: <20220408045908.21671-1-rex-bc.chen@mediatek.com>
+         <20220408045908.21671-7-rex-bc.chen@mediatek.com>
+         <4cc24333-3985-5efe-cc5f-c7b8492f6c1e@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no need to validate the hugetlb page's refcount before trying
-to freeze the hugetlb page's expected refcount, instead we can just
-rely on the page_ref_freeze() to simplify the validation.
+On Fri, 2022-04-08 at 15:36 +0200, AngeloGioacchino Del Regno wrote:
+> Il 08/04/22 06:58, Rex-BC Chen ha scritto:
+> > From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> > 
+> > We found the buck voltage may not be exactly the same with what we
+> > set
+> > because CPU may share the same buck with other module.
+> > Therefore, we need to record the previous desired value instead of
+> > reading
+> > it from regulators.
+> > 
+> > Signed-off-by: Andrew-sh.Cheng <andrew-sh.cheng@mediatek.com>
+> > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> > ---
+> >   drivers/cpufreq/mediatek-cpufreq.c | 31 +++++++++++++++++++----
+> > -------
+> >   1 file changed, 20 insertions(+), 11 deletions(-)
+> > 
+> > diff --git a/drivers/cpufreq/mediatek-cpufreq.c
+> > b/drivers/cpufreq/mediatek-cpufreq.c
+> > index dc4a87e68940..472f4de29e5f 100644
+> > --- a/drivers/cpufreq/mediatek-cpufreq.c
+> > +++ b/drivers/cpufreq/mediatek-cpufreq.c
+> > @@ -40,6 +40,7 @@ struct mtk_cpu_dvfs_info {
+> >   	struct list_head list_head;
+> >   	int intermediate_voltage;
+> >   	bool need_voltage_tracking;
+> > +	int old_vproc;
+> >   };
+> >   
+> >   static LIST_HEAD(dvfs_info_list);
+> > @@ -190,11 +191,17 @@ static int
+> > mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
+> >   
+> >   static int mtk_cpufreq_set_voltage(struct mtk_cpu_dvfs_info
+> > *info, int vproc)
+> >   {
+> > +	int ret;
+> > +
+> >   	if (info->need_voltage_tracking)
+> > -		return mtk_cpufreq_voltage_tracking(info, vproc);
+> > +		ret = mtk_cpufreq_voltage_tracking(info, vproc);
+> >   	else
+> > -		return regulator_set_voltage(info->proc_reg, vproc,
+> > -					     vproc + VOLT_TOL);
+> > +		ret = regulator_set_voltage(info->proc_reg, vproc,
+> > +					    MAX_VOLT_LIMIT);
+> > +	if (!ret)
+> > +		info->old_vproc = vproc;
+> > +
+> > +	return ret;
+> >   }
+> >   
+> >   static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
+> > @@ -211,15 +218,7 @@ static int mtk_cpufreq_set_target(struct
+> > cpufreq_policy *policy,
+> >   
+> >   	inter_vproc = info->intermediate_voltage;
+> >   
+> > -	old_freq_hz = clk_get_rate(cpu_clk);
+> > -	old_vproc = regulator_get_voltage(info->proc_reg);
+> > -	if (old_vproc < 0) {
+> > -		pr_err("%s: invalid Vproc value: %d\n", __func__,
+> > old_vproc);
+> > -		return old_vproc;
+> > -	}
+> > -
+> >   	freq_hz = freq_table[index].frequency * 1000;
+> > -
+> >   	opp = dev_pm_opp_find_freq_ceil(cpu_dev, &freq_hz);
+> >   	if (IS_ERR(opp)) {
+> >   		pr_err("cpu%d: failed to find OPP for %ld\n",
+> > @@ -229,6 +228,16 @@ static int mtk_cpufreq_set_target(struct
+> > cpufreq_policy *policy,
+> >   	vproc = dev_pm_opp_get_voltage(opp);
+> >   	dev_pm_opp_put(opp);
+> >   
+> > +	old_freq_hz = clk_get_rate(cpu_clk);
+> > +	old_vproc = info->old_vproc;
+> > +	if (old_vproc == 0)
+> > +		old_vproc = regulator_get_voltage(info->proc_reg);
+> > +	if (old_vproc < 0) {
+> > +		dev_err(cpu_dev, "%s: invalid Vproc value: %d\n",
+> > +			__func__, old_vproc);
+> > +		return old_vproc;
+> > +	}
+> 
+>  From my understandment, if this fails once, it fails forever!
+> 
+> info->old_vproc is set only if info->need_voltage_tracking is true,
+> and only
+> in mtk_cpufreq_set_voltage(): this function is called only after the
+> checks
+> that you've introduced there, and that's on previously stored values.
+> While this was fine in the previous version, because it was always
+> calling
+> regulator_get_voltage(), here it's not.
+> 
+> I think that a good option here is to:
+> 
+> old_vproc = info->old_vproc;
+> if (old_vproc <= 0)
+> 	old_vproc = regulator_get_voltage(info->proc_reg);
+> if (old_vproc < 0) {
+> 	dev_err and return
+> }
+> 
+> ...or, if this is not applicable, we should still find another way to
+> not
+> let this driver to simply fail forever in case anything goes wrong.
+> 
+> Regards,
+> Angelo
 
-Moreover we are always under the page lock when migrating the hugetlb
-page mapping, which means nowhere else can remove it from the page cache,
-so we can remove the xas_load() validation under the i_pages lock.
+Hello Angelo,
 
-Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc: Matthew Wilcox <willy@infradead.org>
----
- mm/migrate.c | 5 -----
- 1 file changed, 5 deletions(-)
+Yes, your concern is right.
+I will add this in next version.
 
-diff --git a/mm/migrate.c b/mm/migrate.c
-index a3d8c2b..b267827 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -477,11 +477,6 @@ int migrate_huge_page_move_mapping(struct address_space *mapping,
- 
- 	xas_lock_irq(&xas);
- 	expected_count = 2 + page_has_private(page);
--	if (page_count(page) != expected_count || xas_load(&xas) != page) {
--		xas_unlock_irq(&xas);
--		return -EAGAIN;
--	}
--
- 	if (!page_ref_freeze(page, expected_count)) {
- 		xas_unlock_irq(&xas);
- 		return -EAGAIN;
--- 
-1.8.3.1
+if (old_vproc <= 0)
+	old_vproc = regulator_get_voltage(info->proc_reg);
+if (old_vproc < 0) {
+	dev_err and return
+}
+
+BRs,
+Rex
 

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8501B4FB96C
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 12:24:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3354FB973
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 12:24:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344159AbiDKK0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 06:26:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50288 "EHLO
+        id S1345472AbiDKK0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 06:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345494AbiDKKZY (ORCPT
+        with ESMTP id S1345373AbiDKKZ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 06:25:24 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17B344A31
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 03:22:09 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id 32so11663341pgl.4
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 03:22:09 -0700 (PDT)
+        Mon, 11 Apr 2022 06:25:26 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9664E45040
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 03:22:13 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id mp16-20020a17090b191000b001cb5efbcab6so5687626pjb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 03:22:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=pihteJgws3CPWC4SIMyqFCTdNFf4a7DVbmyRBkvm3cc=;
-        b=ozYrBwVoW8GtsA2LMBdHt6bDeJZtkGzYW2+K2uSshw5P4MKZPC6ecevfqXHrxlNoKX
-         TempNdL6Nw8L916q5BfA915Cha2mG1sTewnDh/g+NpQTeohWwR3/uvpoJNSDdnRY8ob5
-         RC5xWCYcKmls1v5W34MCI1hksCjg9tAKgI8xz6Rcu92eXDERMbIqHbx+p5Vk9K63ZQwu
-         5BvNrUsLDsWNg3nTIZpno1vecNM2rFLVclLCnUxPccXBkE7qs/5ta/37e1agqvoZJH4Z
-         yj2PL0FZ1RooB4GiTE1scRriMt54bZp1mVbRlFe4aMyhmay5cv1SOxqfmzzm16w68Pfn
-         r92g==
+        bh=u0Zrucn+WwL2muTuZbK71MP5TYNDykrOeiAojxdU0WI=;
+        b=Ch7QdJknQqzcOMoV8qxSf6WOdf7BNtp+gc2rzVO0jw+mSNFxtNzmw/zu72/nAI7tbw
+         u84t7t6no98vZm/up1Z8bUEbzFlFfeRkYmRPlwKjT+cscsV9eEHUZKNnBiuXUf3WhiT4
+         yPeU1K1tv8EeDkfGOupRpLBLT5r3GAPx9tkcLat/RfuI+z1KHRLY5mP3sBnpPbY5vGzV
+         ChatEL3m4Iv7smjU4LZfDieL8WwozJFtKPBJ53+kk4lVstpqd9bhbnUlPZBXGGVoKRHA
+         vS8onxkLGq1yq67MU22cpGaXBel69FYTvpn+BrITDN2uXhqbUtpOR2xOYOoCVC7saFlA
+         Xgjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=pihteJgws3CPWC4SIMyqFCTdNFf4a7DVbmyRBkvm3cc=;
-        b=dY85CtUb/w4mnvNu3MGu2iJS96Zp6N2vP+aRG1Tb8XTvkTVctFPd6QgWtVSA80cVLE
-         DqeFZGaV5d6d85cAz3JDakiyAi2KURGcYwA9hrN51GyWQSEJ72LzxvhxacCeBqpV8H4H
-         G8ESxUHKeL0N9BNYbg6c8gImHNAM58otrTBYMkOujb86IU2RFc/et4TmXAWIaRIy+eHS
-         0B9ASCx5pbHB4BZQaqnOcyyiRQXuwm2lJDwhDdG2q6bGgGQxIvzVIzPBlWcuxf72caQD
-         PYtGxyw+BgGF3Gev3UYKyK+EzPg7l0K7n7FX7EQg7bVPWRAhhCCKhQ+sEWQ239Nsj4WU
-         v0uA==
-X-Gm-Message-State: AOAM531qTrbF6cSAS3M6kzRBOcumRZ8EezMC3exObgFjmJ2ClX01Zz0l
-        u9Y+CGn9th174MZMPnLkMo1A5oHl3LRCZBT3
-X-Google-Smtp-Source: ABdhPJzlj6WhlOOW9qmB8onlQwlWiD/Ejx99i9RM2YVhF+dpyaVYOxXQA8UWKS+YVr80s/c5q77fVg==
-X-Received: by 2002:a63:35c1:0:b0:386:3620:3c80 with SMTP id c184-20020a6335c1000000b0038636203c80mr25577283pga.327.1649672529329;
-        Mon, 11 Apr 2022 03:22:09 -0700 (PDT)
+        bh=u0Zrucn+WwL2muTuZbK71MP5TYNDykrOeiAojxdU0WI=;
+        b=yTGuILQsFKwJGFTbRyMuDyk8fHSsrq96KrQLx2tXjV8IQFfSlnC6sechTrZwlRoENa
+         9nOyixrdaCKlu+83G4Yt7j2aR/Gf93OPynFWO5158WEqjDYbozS5DEC2obg4D19b5Jr6
+         p6hGcChBxQ1wz7QL5CGanqOZ0t1v3P1o+ZOIOneuOmhchSWRorPW5yZK+RQJIrzcAMn0
+         DJaFOZ0HI8CipCNwfgS51A6WlkR7P+WtKh+0yaXyyaPeMNMom0gO/wmX1ns1w+VLNB8T
+         UGxu8IwX5w9VOXVrAEPnCknYUT7PuScbHMpcxeXjQMaNRk8p9OUDYe9xR6KiGjokYkcI
+         zO5g==
+X-Gm-Message-State: AOAM531oYjsvskGKL3F7qDz0m4oD3ML+uRneZKOnS5eBDDBJogTdB5u2
+        6+DEPWoF6FlfQVc1W11nHoo=
+X-Google-Smtp-Source: ABdhPJxYWMg1MZfRhJeYN5uUBu1QegtEZehtCCABl6fPidSMXprTMg1jnpqCwnjSCiprkDJGzgMJQA==
+X-Received: by 2002:a17:90b:4c92:b0:1c7:a9a3:6274 with SMTP id my18-20020a17090b4c9200b001c7a9a36274mr35551149pjb.148.1649672532937;
+        Mon, 11 Apr 2022 03:22:12 -0700 (PDT)
 Received: from makvihas.localhost.com ([2405:201:202b:15:4376:c658:ae1e:1781])
-        by smtp.gmail.com with ESMTPSA id z14-20020a17090a170e00b001cb7e69ee5csm4886318pjd.54.2022.04.11.03.22.06
+        by smtp.gmail.com with ESMTPSA id z14-20020a17090a170e00b001cb7e69ee5csm4886318pjd.54.2022.04.11.03.22.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 03:22:09 -0700 (PDT)
+        Mon, 11 Apr 2022 03:22:12 -0700 (PDT)
 From:   Vihas Makwana <makvihas@gmail.com>
 To:     Larry Finger <Larry.Finger@lwfinger.net>,
         Phillip Potter <phil@philpotter.co.uk>,
@@ -57,9 +57,9 @@ Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Dan Carpenter <dan.carpenter@oracle.com>,
         Pavel Skripkin <paskripkin@gmail.com>,
         Vihas Makwana <makvihas@gmail.com>
-Subject: [PATCH v2 4/7] staging: r8188eu: drop unnecessary wrapper _rtw_init_mlme_priv
-Date:   Mon, 11 Apr 2022 15:51:33 +0530
-Message-Id: <20220411102136.14937-5-makvihas@gmail.com>
+Subject: [PATCH v2 5/7] staging: r8188eu: drop unnecessary wrapper _rtw_free_mlme_priv
+Date:   Mon, 11 Apr 2022 15:51:34 +0530
+Message-Id: <20220411102136.14937-6-makvihas@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220411102136.14937-1-makvihas@gmail.com>
 References: <20220411102136.14937-1-makvihas@gmail.com>
@@ -75,136 +75,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop unnecessary wrapper _rtw_init_mlme_priv and move its logic to
-_rtw_init_mlme_priv.
+Drop unnecessary wrapper _rtw_free_mlme_priv and move its logic to
+rtw_free_mlme_priv.
 
 Signed-off-by: Vihas Makwana <makvihas@gmail.com>
 ---
- drivers/staging/r8188eu/core/rtw_mlme.c | 103 +++++++++++-------------
- 1 file changed, 47 insertions(+), 56 deletions(-)
+ drivers/staging/r8188eu/core/rtw_mlme.c    | 17 +++++------------
+ drivers/staging/r8188eu/include/rtw_mlme.h |  2 --
+ 2 files changed, 5 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
-index c90f36dee..6b8c80fe9 100644
+index 6b8c80fe9..5584e1b84 100644
 --- a/drivers/staging/r8188eu/core/rtw_mlme.c
 +++ b/drivers/staging/r8188eu/core/rtw_mlme.c
-@@ -30,60 +30,6 @@ u8 rtw_to_roaming(struct adapter *adapter)
- 	return adapter->mlmepriv.to_roaming;
+@@ -53,17 +53,6 @@ void rtw_free_mlme_priv_ie_data(struct mlme_priv *pmlmepriv)
+ 	rtw_free_mlme_ie_data(&pmlmepriv->p2p_assoc_req_ie, &pmlmepriv->p2p_assoc_req_ie_len);
  }
  
--static int _rtw_init_mlme_priv(struct adapter *padapter)
+-void _rtw_free_mlme_priv(struct mlme_priv *pmlmepriv)
 -{
--	int	i;
--	u8	*pbuf;
--	struct wlan_network	*pnetwork;
--	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
--	int	res = _SUCCESS;
 -
--	/*  We don't need to memset padapter->XXX to zero, because adapter is allocated by vzalloc(). */
+-	rtw_free_mlme_priv_ie_data(pmlmepriv);
 -
--	pmlmepriv->nic_hdl = (u8 *)padapter;
--
--	pmlmepriv->pscanned = NULL;
--	pmlmepriv->fw_state = 0;
--	pmlmepriv->cur_network.network.InfrastructureMode = Ndis802_11AutoUnknown;
--	pmlmepriv->scan_mode = SCAN_ACTIVE;/*  1: active, 0: pasive. Maybe someday we should rename this varable to "active_mode" (Jeff) */
--
--	spin_lock_init(&pmlmepriv->lock);
--	rtw_init_queue(&pmlmepriv->free_bss_pool);
--	rtw_init_queue(&pmlmepriv->scanned_queue);
--
--	set_scanned_network_val(pmlmepriv, 0);
--
--	memset(&pmlmepriv->assoc_ssid, 0, sizeof(struct ndis_802_11_ssid));
--
--	pbuf = vzalloc(MAX_BSS_CNT * (sizeof(struct wlan_network)));
--
--	if (!pbuf) {
--		res = _FAIL;
--		goto exit;
--	}
--	pmlmepriv->free_bss_buf = pbuf;
--
--	pnetwork = (struct wlan_network *)pbuf;
--
--	for (i = 0; i < MAX_BSS_CNT; i++) {
--		INIT_LIST_HEAD(&pnetwork->list);
--
--		list_add_tail(&pnetwork->list, &pmlmepriv->free_bss_pool.queue);
--
--		pnetwork++;
+-	if (pmlmepriv) {
+-		vfree(pmlmepriv->free_bss_buf);
 -	}
 -
--	/* allocate DMA-able/Non-Page memory for cmd_buf and rsp_buf */
--
--	rtw_clear_scan_deny(padapter);
--
--	rtw_init_mlme_timer(padapter);
--
--exit:
--
--	return res;
 -}
 -
- static void rtw_free_mlme_ie_data(u8 **ppie, u32 *plen)
+ struct	wlan_network *_rtw_alloc_network(struct	mlme_priv *pmlmepriv)/* _queue *free_queue) */
  {
- 	kfree(*ppie);
-@@ -290,9 +236,54 @@ u8 *rtw_get_beacon_interval_from_ie(u8 *ie)
+ 	struct	wlan_network	*pnetwork;
+@@ -290,7 +279,11 @@ int rtw_init_mlme_priv(struct adapter *padapter)/* struct	mlme_priv *pmlmepriv)
  
- int rtw_init_mlme_priv(struct adapter *padapter)/* struct	mlme_priv *pmlmepriv) */
+ void rtw_free_mlme_priv(struct mlme_priv *pmlmepriv)
  {
--	int	res;
-+	int	i;
-+	u8	*pbuf;
-+	struct wlan_network	*pnetwork;
-+	struct mlme_priv		*pmlmepriv = &padapter->mlmepriv;
-+	int	res = _SUCCESS;
+-	_rtw_free_mlme_priv(pmlmepriv);
++	rtw_free_mlme_priv_ie_data(pmlmepriv);
 +
-+	/*  We don't need to memset padapter->XXX to zero, because adapter is allocated by vzalloc(). */
-+
-+	pmlmepriv->nic_hdl = (u8 *)padapter;
-+
-+	pmlmepriv->pscanned = NULL;
-+	pmlmepriv->fw_state = 0;
-+	pmlmepriv->cur_network.network.InfrastructureMode = Ndis802_11AutoUnknown;
-+	pmlmepriv->scan_mode = SCAN_ACTIVE;/*  1: active, 0: pasive. Maybe someday we should rename this varable to "active_mode" (Jeff) */
-+
-+	spin_lock_init(&pmlmepriv->lock);
-+	rtw_init_queue(&pmlmepriv->free_bss_pool);
-+	rtw_init_queue(&pmlmepriv->scanned_queue);
-+
-+	set_scanned_network_val(pmlmepriv, 0);
-+
-+	memset(&pmlmepriv->assoc_ssid, 0, sizeof(struct ndis_802_11_ssid));
- 
--	res = _rtw_init_mlme_priv(padapter);/*  (pmlmepriv); */
-+	pbuf = vzalloc(MAX_BSS_CNT * (sizeof(struct wlan_network)));
-+
-+	if (!pbuf) {
-+		res = _FAIL;
-+		goto exit;
++	if (pmlmepriv) {
++		vfree(pmlmepriv->free_bss_buf);
 +	}
-+	pmlmepriv->free_bss_buf = pbuf;
-+
-+	pnetwork = (struct wlan_network *)pbuf;
-+
-+	for (i = 0; i < MAX_BSS_CNT; i++) {
-+		INIT_LIST_HEAD(&pnetwork->list);
-+
-+		list_add_tail(&pnetwork->list, &pmlmepriv->free_bss_pool.queue);
-+
-+		pnetwork++;
-+	}
-+
-+	/* allocate DMA-able/Non-Page memory for cmd_buf and rsp_buf */
-+
-+	rtw_clear_scan_deny(padapter);
-+
-+	rtw_init_mlme_timer(padapter);
-+
-+exit:
- 
- 	return res;
  }
+ 
+ static struct wlan_network *rtw_alloc_network(struct mlme_priv *pmlmepriv)
+diff --git a/drivers/staging/r8188eu/include/rtw_mlme.h b/drivers/staging/r8188eu/include/rtw_mlme.h
+index 1dc1fbf04..fc30793f4 100644
+--- a/drivers/staging/r8188eu/include/rtw_mlme.h
++++ b/drivers/staging/r8188eu/include/rtw_mlme.h
+@@ -560,8 +560,6 @@ void rtw_scan_timeout_handler(struct adapter *adapter);
+ 
+ void rtw_free_mlme_priv_ie_data(struct mlme_priv *pmlmepriv);
+ 
+-void _rtw_free_mlme_priv(struct mlme_priv *pmlmepriv);
+-
+  struct wlan_network *_rtw_alloc_network(struct mlme_priv *pmlmepriv);
+ 
+ void _rtw_free_network(struct mlme_priv *pmlmepriv,
 -- 
 2.30.2
 

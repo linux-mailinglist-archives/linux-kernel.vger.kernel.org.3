@@ -2,103 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCA704FC273
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 18:33:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD25E4FC27A
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 18:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348607AbiDKQfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 12:35:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44452 "EHLO
+        id S229534AbiDKQhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 12:37:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232862AbiDKQfX (ORCPT
+        with ESMTP id S231448AbiDKQhI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 12:35:23 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9CEE31509
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 09:33:08 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-2ebf3746f87so77159937b3.6
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 09:33:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=1B6Q/eDwDgxOfcbU/QiQT+UVIvR/upb/mkptx4ZdaPw=;
-        b=dks4Fnmx1F77oppy9nSoBZKbA/E3bvi8liNue/MBgCWJiUcAKE04YtZCm6z8Mi8Wcg
-         xI7hfxusAcvntyNGh6Jojfhkhp/znIFsFqwEMRLZa2591sYhFoPwOrSIxQvsP2M+Pw1a
-         PwYk5RIkXhP5KJ2Qp2MVBvlnRGnR1jotuz2Dn99SBwMm+e3LiqjIq3KrNT1NecNAM4zK
-         YcycZhwXo9A14ksT3iLMbq5mq0/7r24n9SoQp7pP9xgcpXiAy8RDYaM8w8FmJWOsS0JH
-         lfywnXiYCeL5yM4I91WKZLa5hlhyr7vMyPdifmNdq0voAColXsQtlhXvnzLdVFp8T0Iy
-         oiog==
+        Mon, 11 Apr 2022 12:37:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D948511C0D
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 09:34:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649694893;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MuDooJV2r3lRDseKl98XLYOZNZXFlgTW6Icouk1a/rA=;
+        b=DpBpLW7aUHzruasUv3VGExdBqiBy815EtKyd+NplAMVuUwMQnM7tSq37UU65D6tDJQNfMC
+        W1A7+8MCvhbc5KuybnXXUrzL/POOzj22JwcTB4d3uU3/nJNRXXsGy4iStIKW5J+b344pdO
+        WMm0lPz58orZ9lZnTUusWds/a3ldqI8=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-622-NH5wNXUcPpCiJarDtH5yqQ-1; Mon, 11 Apr 2022 12:34:51 -0400
+X-MC-Unique: NH5wNXUcPpCiJarDtH5yqQ-1
+Received: by mail-qv1-f70.google.com with SMTP id kk17-20020a056214509100b00443cc96b7d5so16113717qvb.16
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 09:34:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=1B6Q/eDwDgxOfcbU/QiQT+UVIvR/upb/mkptx4ZdaPw=;
-        b=UVrNq600aIAiAlAoKKjzK8qWa0LXqY39DCqJWUe6Jlrzt3ylSQbyQCr0rqvy240gTU
-         nSdw52+C5HsNbLUbgZv1QcdfXDwCKX8KYsgNG1ZQKeEji7ulZzIn4QaX0gW9XY+wS/KC
-         EAzRlyHdrSZAT/cr4UKkAUkXXk5TIuHylVoKqo6ocTWcWicZx4JS1roYbVVAT06wn4iM
-         lYaxbH/Snf1LZH/Ptn/WESZyy1mnLCB+ViGB44KB5LUnmI2ivV/kPRxnB2LF2P5JHgGy
-         FfEoIcHb8QUkN/oy30Xviyf313AjgkysZuu6gZ83Sr64gpxpCfHytlgq1uiLzn4efQgE
-         FVrg==
-X-Gm-Message-State: AOAM530tWmaRziasb72fL1z5S4R1kP1RvgpZjP4w7dZxa8EleT+VC74V
-        M1nvRzcEgNiO6MzriR0S1F+b103mZQ4dNvb9NqE=
-X-Google-Smtp-Source: ABdhPJy+rd4ong8nDu+d0KBeoWdA1DL09+1UGF/JgbNZGi8Vx7LC+/BGHNPP+6m063I6d/O1UgAv7oeYRivW+qoMehk=
-X-Received: by 2002:a81:834e:0:b0:2ec:1a6:72d9 with SMTP id
- t75-20020a81834e000000b002ec01a672d9mr8100261ywf.478.1649694787995; Mon, 11
- Apr 2022 09:33:07 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MuDooJV2r3lRDseKl98XLYOZNZXFlgTW6Icouk1a/rA=;
+        b=tTZP+xPCWjChRIzUVnYqTcTJVkYzjDo4vOBg2WeGRYzr2SrO2tLVjbrVUOFiTyGmHd
+         BaFL8cW7ZCFbvNSzmR7C8lTOGUMSNpr6c6q5BAcHC5+EwS2CIu4+DZ3rSDTPN8A+Wi3b
+         gjdQRk23FU6FWGaXSW8y/eXfy3UZn/DRvE9on12dEeaSz0IiDAmNfF98/f1MwNNYNNiP
+         r92SIVXnXrmgSNxp2+SNaCV7VKGiDujzFo6pTWtspSZp8TZ43qDT/7RdYGIxMxcVzkWQ
+         y3xG1jlZ+bdk5Xp2nZL1xqMwc4jHM1F4uvCEnzKrnceiAjXGc0baVdAD5PP70muyZY4G
+         u5aQ==
+X-Gm-Message-State: AOAM532jCfzlISh2wAq+ZD2iuiLskWq+FwQgkIDNDA8gDx6lDI2b+w9q
+        T8olAx2ntVuqODyejtP1trZdNCIgU3YfjuZWig5Cf68rk58yLVEMlddl+BgMKvFECDn5p44Nno0
+        +KRMLSQSnqxxr+jZ7mgqrqJ6h
+X-Received: by 2002:a05:620a:4450:b0:69c:11f3:d3c9 with SMTP id w16-20020a05620a445000b0069c11f3d3c9mr160672qkp.378.1649694891173;
+        Mon, 11 Apr 2022 09:34:51 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyhubFLyDLek8KqhligvLIzm/0FG1M86oPwUSg1Uvoy1ilxqbTHCbbp3j0wcBH5MrzHOcEn1A==
+X-Received: by 2002:a05:620a:4450:b0:69c:11f3:d3c9 with SMTP id w16-20020a05620a445000b0069c11f3d3c9mr160653qkp.378.1649694890930;
+        Mon, 11 Apr 2022 09:34:50 -0700 (PDT)
+Received: from treble ([2600:1700:6e32:6c00::15])
+        by smtp.gmail.com with ESMTPSA id i184-20020a37b8c1000000b00699fa585088sm9289956qkf.46.2022.04.11.09.34.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Apr 2022 09:34:50 -0700 (PDT)
+Date:   Mon, 11 Apr 2022 09:34:46 -0700
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>, mark.rutland@arm.com,
+        broonie@kernel.org, ardb@kernel.org, nobuta.keiya@fujitsu.com,
+        sjitindarsingh@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        jmorris@namei.org, linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v1 0/9] arm64: livepatch: Use DWARF Call Frame
+ Information for frame pointer validation
+Message-ID: <20220411163446.o3el6pxxsla2564a@treble>
+References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
+ <20220407202518.19780-1-madvenka@linux.microsoft.com>
+ <YlAUj6w6fePEo7v+@hirez.programming.kicks-ass.net>
+ <93b08ed3-80ca-4171-aaed-1513ae7cb0e1@linux.microsoft.com>
 MIME-Version: 1.0
-Received: by 2002:a05:7000:a90a:0:0:0:0 with HTTP; Mon, 11 Apr 2022 09:33:07
- -0700 (PDT)
-Reply-To: rseth00391@gmail.com
-From:   Richard Seth <johnmomah16@gmail.com>
-Date:   Mon, 11 Apr 2022 16:33:07 +0000
-Message-ID: <CADo7566GS6+jkvxLvxZBYqUrUb4q0uw-RyJU_Fj93RvcraxjjQ@mail.gmail.com>
-Subject: Richard Seth
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1135 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4956]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [johnmomah16[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [rseth00391[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [johnmomah16[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <93b08ed3-80ca-4171-aaed-1513ae7cb0e1@linux.microsoft.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good day,
+On Sun, Apr 10, 2022 at 12:47:46PM -0500, Madhavan T. Venkataraman wrote:
+> 
+> 
+> On 4/8/22 05:55, Peter Zijlstra wrote:
+> > On Thu, Apr 07, 2022 at 03:25:09PM -0500, madvenka@linux.microsoft.com wrote:
+> > 
+> >> [-- application/octet-stream is unsupported (use 'v' to view this part) --]
+> > 
+> > Your emails are unreadable :-(
+> 
+> I am not sure why the emails are unreadable. Any suggestions? Should I resend? Please let me know.
+> Sorry about this.
 
-An email was sent sometimes last week with the expectation of having a
-mail back from you, but to my surprise you never bothered to
-answer.Kindly respond for a complete explanation.
+That was actually my (company's) fault when I bounced the patches to Peter.
 
-Yours Faithfully,
-Richard Seth.
+-- 
+Josh
+

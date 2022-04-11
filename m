@@ -2,106 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFD5E4FB9BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 12:34:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D49C44FB9C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 12:34:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345588AbiDKKfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 06:35:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58426 "EHLO
+        id S1345580AbiDKKfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 06:35:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242812AbiDKKfN (ORCPT
+        with ESMTP id S1345092AbiDKKfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 11 Apr 2022 06:35:13 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E4E043AC7;
-        Mon, 11 Apr 2022 03:33:00 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id AEF9D809F;
-        Mon, 11 Apr 2022 10:30:28 +0000 (UTC)
-Date:   Mon, 11 Apr 2022 13:32:58 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-serial@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Matwey V . Kornilov" <matwey@sai.msu.ru>,
-        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Subject: Re: [PATCH 1/2] serial: 8250: Fix runtime PM for start_tx() for RS485
-Message-ID: <YlQD2mZdorEAKfZ7@atomide.com>
-References: <20220411094805.45696-1-tony@atomide.com>
- <YlP7eArvvNWnbMF2@hovoldconsulting.com>
- <YlP+muZF1nDIU0t4@atomide.com>
- <YlQCJE4yQRsO8JPn@hovoldconsulting.com>
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5328D434B6;
+        Mon, 11 Apr 2022 03:32:59 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1F3BA169C;
+        Mon, 11 Apr 2022 03:32:59 -0700 (PDT)
+Received: from [192.168.1.11] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8B5CF3F5A1;
+        Mon, 11 Apr 2022 03:32:55 -0700 (PDT)
+Message-ID: <7e6c2393-8e24-2755-f3c7-16764f700880@arm.com>
+Date:   Mon, 11 Apr 2022 12:33:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YlQCJE4yQRsO8JPn@hovoldconsulting.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 3/3] cpufreq: CPPC: Register EM based on efficiency
+ class information
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, Ionela.Voinescu@arm.com,
+        Lukasz.Luba@arm.com, Morten.Rasmussen@arm.com,
+        Dietmar.Eggemann@arm.com, maz@kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Fuad Tabba <tabba@google.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+References: <20220407081620.1662192-1-pierre.gondois@arm.com>
+ <20220407081620.1662192-4-pierre.gondois@arm.com>
+ <20220411031231.noq5yprp5oui3lsx@vireshk-i7>
+From:   Pierre Gondois <pierre.gondois@arm.com>
+In-Reply-To: <20220411031231.noq5yprp5oui3lsx@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Johan Hovold <johan@kernel.org> [220411 10:23]:
-> On Mon, Apr 11, 2022 at 01:10:34PM +0300, Tony Lindgren wrote:
-> > * Johan Hovold <johan@kernel.org> [220411 09:54]:
-> > > On Mon, Apr 11, 2022 at 12:48:04PM +0300, Tony Lindgren wrote:
-> > > > diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-> > > > --- a/drivers/tty/serial/8250/8250_port.c
-> > > > +++ b/drivers/tty/serial/8250/8250_port.c
-> > > > @@ -1681,8 +1681,10 @@ static void serial8250_start_tx(struct uart_port *port)
-> > > >  		return;
-> > > >  
-> > > >  	if (em485 &&
-> > > > -	    em485->active_timer == &em485->start_tx_timer)
-> > > > +	    em485->active_timer == &em485->start_tx_timer) {
-> > > > +		serial8250_rpm_put_tx(up);
-> > > >  		return;
-> > > > +	}
-> > > 
-> > > I was just taking a quick look at your report about this and also
-> > > noticed this return statement.
-> > > 
-> > > The runtime PM implementation is a bit of mess as we've discussed
-> > > elsewhere, but the change you propose here doesn't look right.
-> > 
-> > Frankly "a bit of mess" applies "a bit more" than just the serial runtime
-> > PM :)
-> 
-> Heh. I'm afraid that's all too true. :)
-> 
-> > > start_tx() can be deferred in the rs485 case, but that doesn't mean you
-> > > should suspend the device here. In fact, that look like it would just
-> > > break runtime PM (the parts that may work to some extent).
-> > 
-> > AFAIK there's currently nothing paired with the serial8250_rpm_get_tx(up)
-> > call at the beginning of serial8250_start_tx() for the early exit cases
-> > if start_tx_rs485() or __start_tx() won't get called.
-> > 
-> > Care to clarify a bit more what you have in mind?
-> 
-> The problem is that that serial8250_rpm_put_tx() you're adding may
-> suspend the device unconditionally (i.e. regardless of any previous
-> calls to serial8250_rpm_get_tx()).
-> 
-> If rs485 tx is just being deferred you mustn't suspend the device before
-> it has had a chance to start transmitting.
+Hello Viresh,
 
-Hmm I'm pretty sure rs485 has the runtime PM usage count is currently
-unbalanced. To me it seems em485->start_tx_timer calls start_tx()
-again from serial8250_em485_handle_start_tx().
+On 4/11/22 05:12, Viresh Kumar wrote:
+> On 07-04-22, 10:16, Pierre Gondois wrote:
+>> +static void cppc_cpufreq_register_em(struct cpufreq_policy *policy)
+>> +{
+>> +	struct cppc_cpudata *cpu_data;
+>> +	struct em_data_callback em_cb =
+>> +		EM_ADV_DATA_CB(cppc_get_cpu_power, cppc_get_cpu_cost);
+>> +
+>> +	if (!efficiency_class_populated)
+> 
+> Instead of a new variable for this, what about setting
+> cppc_cpufreq_driver.register_em = cppc_cpufreq_register_em, only if
+> you were able to populate the efficiency class in the first place ?
+> 
 
-Anyways, let's deal with the regression patch first, this can wait a bit.
-
+Yes right, this would be better,
 Regards,
-
-Tony
+Pierre

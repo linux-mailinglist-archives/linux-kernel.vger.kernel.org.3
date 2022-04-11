@@ -2,254 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48ECD4FC662
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 23:11:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82EB94FC687
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 23:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350054AbiDKVNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 17:13:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39644 "EHLO
+        id S242010AbiDKVPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 17:15:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350081AbiDKVNQ (ORCPT
+        with ESMTP id S229692AbiDKVPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 17:13:16 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 949152B24F
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 14:10:55 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id b8-20020a17090a488800b001cb7eb98cbfso243497pjh.9
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 14:10:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=xIMnek+At8iLPkwADBkZ7XrRr/vdRBqsK9zci+WHfIA=;
-        b=C4dFQ0ocxToI8CY7sDWjXFzHFgdTdFWswyceRjb37yOLdjfoDBtbtvTmi5cGq1VEad
-         7w8VZnkp/JJLp1koNV5oGegMEnys1FuotSD/VT2E99+gGSCbtJHDbEHlaIItSlSUO+tb
-         eviNS42ugJl3zF5thORrX6+krLI00hAQmWFDh59sequdz26pxJLmn5eHdd2XQ8fEEaX1
-         GQK8xmTzvsluF8s4Zp/5sBH4besgH876R3NeNfZ7AHjIfn/OfaxNPDHjyeNmoIJo+rXM
-         h58xMxL76jasLP7j1ajCTOzysJml3k8TgVcV+noGb9bO3iSj+K1onUAcK60/t9nG3NuV
-         9XPA==
+        Mon, 11 Apr 2022 17:15:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A0A6C28989
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 14:12:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649711571;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=n0gtWVG0aimnuoPQwNXoXZOG0mpWKStMnE3++TkqLKY=;
+        b=ERHTTA/9vs5a8UrmVCQMG+cGbGNIlvH1yfEvV7E4PNR/QSF2ve/7K3K/rxUbBAfrY+v26/
+        9njcoGv5EQ4O69mxr7Xy6j7aBc44WdZ7pKpbJiqBaIud18NbcCe8pDznLVqVIK5slZ3RZv
+        ykPVhpBoJTR6CbLHy+wNXerhA2EwqWk=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-147-3X-P5kq1McCQbp3HHFoJGA-1; Mon, 11 Apr 2022 17:12:50 -0400
+X-MC-Unique: 3X-P5kq1McCQbp3HHFoJGA-1
+Received: by mail-wm1-f71.google.com with SMTP id l19-20020a05600c1d1300b0038e736f98faso5037488wms.4
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 14:12:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=xIMnek+At8iLPkwADBkZ7XrRr/vdRBqsK9zci+WHfIA=;
-        b=bc8A1nuY4t1wSRP1IRI6Cp0DVr5lHUxWv+6B9g9V1YPB9c4Pidk9JflO5gNScv0eD5
-         2cuuFSydacQX2ifojAQkU8tBjXAcXHSbWLmuNli/hlsIn8N9vOAo2YVJVJXjBJ1Ddrkn
-         QoEz7rUU00Qzn3Wh25vqosq90K6kWOaKqrKzIQMugLsDcaL1EDBWRjcivmsx+37eLDFq
-         zB3wET8wFdawhy+3drb83JcmFmDvm1WbOhhlKMPLjeOjd972Pi3zozXzVrDfwRLwK+2C
-         NrJhqY/cGig8Aqi7ApfrdWcWJutv8HLpAK/sv3njTzN/N/MtN3RuSeIR188Idm5ej0r/
-         KCTA==
-X-Gm-Message-State: AOAM533oIAybMdRq2lIPKY7c6Y4Ry1ELUxHa1jnyA/8NqZlrLD4SjQSC
-        sMqS+V28ImObDeHdNVU8vXzDBD5r9wRzDKxpfpGnBgTQqan8UQFJrR7NJGJx07y8PBJq89GFwvm
-        7IqZZIzkND8qPLmNU9tvLbrqJ6rLqjCny8RT8lvMVp5vdmAdBH5LqZtX2tZXF4ITe5gcDnGP0
-X-Google-Smtp-Source: ABdhPJy2WkMcnAC3gL8ghKY5MA9VSdRNJhjdAS3w/erZboLxL3Zrns0cwsriLs/zATnsIQVyFpAaL6sUNN0D
-X-Received: from bgardon.sea.corp.google.com ([2620:15c:100:202:a2d0:faec:7d8b:2e0b])
- (user=bgardon job=sendgmr) by 2002:a17:902:728f:b0:156:24d3:ae1a with SMTP id
- d15-20020a170902728f00b0015624d3ae1amr34419549pll.9.1649711454954; Mon, 11
- Apr 2022 14:10:54 -0700 (PDT)
-Date:   Mon, 11 Apr 2022 14:10:15 -0700
-In-Reply-To: <20220411211015.3091615-1-bgardon@google.com>
-Message-Id: <20220411211015.3091615-11-bgardon@google.com>
-Mime-Version: 1.0
-References: <20220411211015.3091615-1-bgardon@google.com>
-X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
-Subject: [PATCH v4 10/10] KVM: selftests: Test disabling NX hugepages on a VM
-From:   Ben Gardon <bgardon@google.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Peter Shier <pshier@google.com>,
-        David Dunn <daviddunn@google.com>,
-        Junaid Shahid <junaids@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Mingwei Zhang <mizhang@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Ben Gardon <bgardon@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=n0gtWVG0aimnuoPQwNXoXZOG0mpWKStMnE3++TkqLKY=;
+        b=bYVFPDpyWHlb1sWR5G9UKkueo/Ixre8nK8tdS5nxIMUed+9YoSr5Of9iuRKGXdNz93
+         iMb2MzIbeXcxoywcIMz6DdtbMl8HXcFpOlkeVDbRdz8UMglSnICcoOvtSCdTddzjp+YM
+         DIa2agxDzqdi/PKTs2IH+4fKnfiUSaFNLxj53GY8tU82wDK8OfB6R2MMOVmhCEAK61Wo
+         8cYjBi+dDzmTME2cgRPyTDwDarOxWT2g/q2rHAw1z1MSabaKGxF117Xw0+YZ6+tLGGDH
+         /UAcT8x3IZwf3gADfp1iNwEtZv42nMuWe5X2Qg8eE+Ry2O7P6Yj0aLDJzwCDaL8uNftd
+         pBhw==
+X-Gm-Message-State: AOAM531tsDrbjVEw7Q2iiyfoEePN/h5BMuaGJkrDXNkJFrbDI+sJuB97
+        wekyMBSqhYdxjpjUdC4WfmslOH5nvwEXzayueXS6+i37Pv0nhFblvq4tp0CWc0ElhrSP/9nblpj
+        VP0xM3lBD2vobU0V0O/74ckMVZXTYZ4a6MWg8MFMpP3FQ4xcot45W+lJt77q71Yxt7uJpfh7V7O
+        o=
+X-Received: by 2002:a05:600c:198f:b0:38c:a9e9:754a with SMTP id t15-20020a05600c198f00b0038ca9e9754amr985284wmq.146.1649711569499;
+        Mon, 11 Apr 2022 14:12:49 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzIG64xz0G/zDMtKH809CxNshjqiDFUCpZN0F0DuF+gDgN8/smhV2a82KJnAYzO7uRz0AUIkA==
+X-Received: by 2002:a05:600c:198f:b0:38c:a9e9:754a with SMTP id t15-20020a05600c198f00b0038ca9e9754amr985248wmq.146.1649711569194;
+        Mon, 11 Apr 2022 14:12:49 -0700 (PDT)
+Received: from minerva.home ([92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id l9-20020a5d6d89000000b00203d62072c4sm28723722wrs.43.2022.04.11.14.12.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Apr 2022 14:12:48 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Rob Herring <robh@kernel.org>, dri-devel@lists.freedesktop.org,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Chen-Yu Tsai <wens@kernel.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Chen-Yu Tsai <wens@csie.org>, Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>, devicetree@vger.kernel.org
+Subject: [PATCH v2 0/5] drm/solomon: Add SSD130x OLED displays SPI support
+Date:   Mon, 11 Apr 2022 23:12:38 +0200
+Message-Id: <20220411211243.11121-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add an argument to the NX huge pages test to test disabling the feature
-on a VM using the new capability.
+Hello,
 
-Signed-off-by: Ben Gardon <bgardon@google.com>
----
- .../selftests/kvm/include/kvm_util_base.h     |  2 +
- tools/testing/selftests/kvm/lib/kvm_util.c    | 19 ++++++-
- .../selftests/kvm/x86_64/nx_huge_pages_test.c | 53 +++++++++++++++----
- 3 files changed, 64 insertions(+), 10 deletions(-)
+This series adds a ssd130x-spi driver that provides a 4-wire SPI transport
+support for SSD130x OLED controllers that can be accessed through a SPI.
 
-diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-index f9c2ac0a5b97..15f24be6d93f 100644
---- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-@@ -412,4 +412,6 @@ uint64_t vm_get_single_stat(struct kvm_vm *vm, const char *stat_name);
- 
- uint32_t guest_get_vcpuid(void);
- 
-+int vm_disable_nx_huge_pages(struct kvm_vm *vm);
-+
- #endif /* SELFTEST_KVM_UTIL_BASE_H */
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 833c7e63d62d..5fa5608eef03 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -112,6 +112,15 @@ int vm_check_cap(struct kvm_vm *vm, long cap)
- 	return ret;
- }
- 
-+static int __vm_enable_cap(struct kvm_vm *vm, struct kvm_enable_cap *cap)
-+{
-+	int ret;
-+
-+	ret = ioctl(vm->fd, KVM_ENABLE_CAP, cap);
-+
-+	return ret;
-+}
-+
- /* VM Enable Capability
-  *
-  * Input Args:
-@@ -128,7 +137,7 @@ int vm_enable_cap(struct kvm_vm *vm, struct kvm_enable_cap *cap)
- {
- 	int ret;
- 
--	ret = ioctl(vm->fd, KVM_ENABLE_CAP, cap);
-+	ret = __vm_enable_cap(vm, cap);
- 	TEST_ASSERT(ret == 0, "KVM_ENABLE_CAP IOCTL failed,\n"
- 		"  rc: %i errno: %i", ret, errno);
- 
-@@ -2662,3 +2671,11 @@ uint64_t vm_get_single_stat(struct kvm_vm *vm, const char *stat_name)
- 		    stat_name, ret);
- 	return data;
- }
-+
-+int vm_disable_nx_huge_pages(struct kvm_vm *vm)
-+{
-+	struct kvm_enable_cap cap = { 0 };
-+
-+	cap.cap = KVM_CAP_VM_DISABLE_NX_HUGE_PAGES;
-+	return __vm_enable_cap(vm, &cap);
-+}
-diff --git a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
-index 3f21726b22c7..f8edf7910950 100644
---- a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
-@@ -13,6 +13,8 @@
- #include <fcntl.h>
- #include <stdint.h>
- #include <time.h>
-+#include <linux/reboot.h>
-+#include <sys/syscall.h>
- 
- #include <test_util.h>
- #include "kvm_util.h"
-@@ -77,14 +79,41 @@ static void check_split_count(struct kvm_vm *vm, int expected_splits)
- 		    expected_splits, actual_splits);
- }
- 
--int main(int argc, char **argv)
-+void run_test(bool disable_nx)
- {
- 	struct kvm_vm *vm;
- 	struct timespec ts;
- 	void *hva;
-+	int r;
- 
- 	vm = vm_create_default(0, 0, guest_code);
- 
-+	if (disable_nx) {
-+		kvm_check_cap(KVM_CAP_VM_DISABLE_NX_HUGE_PAGES);
-+
-+		/*
-+		 * Check if this process has the reboot permissions needed to
-+		 * disable NX huge pages on a VM.
-+		 *
-+		 * The reboot call below will never have any effect because
-+		 * the magic values are not set correctly, however the
-+		 * permission check is done before the magic value check.
-+		 */
-+		r = syscall(SYS_reboot, 0, 0, 0, NULL);
-+		if (errno == EPERM) {
-+			r = vm_disable_nx_huge_pages(vm);
-+			TEST_ASSERT(r == EPERM,
-+				    "This process should not have permission to disable NX huge pages");
-+			return;
-+		}
-+
-+		TEST_ASSERT(errno == EINVAL,
-+			    "Reboot syscall should fail with -EINVAL");
-+
-+		r = vm_disable_nx_huge_pages(vm);
-+		TEST_ASSERT(!r, "Disabling NX huge pages should not fail if process has reboot permissions");
-+	}
-+
- 	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS_HUGETLB,
- 				    HPAGE_GPA, HPAGE_SLOT,
- 				    HPAGE_SLOT_NPAGES, 0);
-@@ -118,21 +147,21 @@ int main(int argc, char **argv)
- 	 * to be remapped at 4k.
- 	 */
- 	vcpu_run(vm, 0);
--	check_2m_page_count(vm, 1);
--	check_split_count(vm, 1);
-+	check_2m_page_count(vm, disable_nx ? 2 : 1);
-+	check_split_count(vm, disable_nx ? 0 : 1);
- 
- 	/*
- 	 * Executing from the third huge page (previously unaccessed) will
- 	 * cause part to be mapped at 4k.
- 	 */
- 	vcpu_run(vm, 0);
--	check_2m_page_count(vm, 1);
--	check_split_count(vm, 2);
-+	check_2m_page_count(vm, disable_nx ? 3 : 1);
-+	check_split_count(vm, disable_nx ? 0 : 2);
- 
- 	/* Reading from the first huge page again should have no effect. */
- 	vcpu_run(vm, 0);
--	check_2m_page_count(vm, 1);
--	check_split_count(vm, 2);
-+	check_2m_page_count(vm, disable_nx ? 3 : 1);
-+	check_split_count(vm, disable_nx ? 0 : 2);
- 
- 	/*
- 	 * Give recovery thread time to run. The wrapper script sets
-@@ -145,7 +174,7 @@ int main(int argc, char **argv)
- 	/*
- 	 * Now that the reclaimer has run, all the split pages should be gone.
- 	 */
--	check_2m_page_count(vm, 1);
-+	check_2m_page_count(vm, disable_nx ? 3 : 1);
- 	check_split_count(vm, 0);
- 
- 	/*
-@@ -153,10 +182,16 @@ int main(int argc, char **argv)
- 	 * reading from it causes a huge page mapping to be installed.
- 	 */
- 	vcpu_run(vm, 0);
--	check_2m_page_count(vm, 2);
-+	check_2m_page_count(vm, disable_nx ? 3 : 2);
- 	check_split_count(vm, 0);
- 
- 	kvm_vm_free(vm);
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	run_test(false);
-+	run_test(true);
- 
- 	return 0;
- }
+The driver is quite similar to existing ssd130x-i2c driver that is used by
+I2C controllers, but there is a difference in the protocol used by SSD130x
+depending on the transport used. The details are in patch #4 description.
+
+Patch #1 just makes the current ssd130x-i2c compatible strings in the DT
+binding to be deprecated, and add new ones that don't have an "fb-i2c".
+
+Patch #2 extends the DT binding with the properties needed to support SPI.
+
+Patch #3 adds the new compatible strings to the OF device ID table in the
+ssd130x-i2c DRM driver and deprecate the old ones.
+
+Patch #4 moves the device info for the different SSD130x variants from
+the ssd130x-i2c transport driver to the ssd130x core driver.
+
+Finally patch #5 adds the ssd130x-spi DRM driver for the OLED controllers
+that come with a 4-wire SPI interface, instead of an I2C interface.
+
+This is a v2 that addresses the issues pointed out in v1.
+
+Best regards,
+Javier
+
+Changes in v2:
+- Drop the -i2c suffixes from the compatible strings too (Geert Uytterhoeven).
+- Don't add compatible strings with an "-spi" suffix (Geert Uytterhoeven).
+- Drop ssd13x_variant_to_info() and just use the array index (Neil Armstrong).
+- Add Mark Brown's Acked-by tag to all patches.
+
+Javier Martinez Canillas (5):
+  dt-bindings: display: ssd1307fb: Deprecate "-i2c" compatible strings
+  dt-bindings: display: ssd1307fb: Extend schema for SPI controllers
+  drm/solomon: Add ssd130x new compatible strings and deprecate old
+    ones.
+  drm/solomon: Move device info from ssd130x-i2c to the core driver
+  drm/solomon: Add SSD130x OLED displays SPI support
+
+ .../bindings/display/solomon,ssd1307fb.yaml   |  74 +++++--
+ drivers/gpu/drm/solomon/Kconfig               |   9 +
+ drivers/gpu/drm/solomon/Makefile              |   1 +
+ drivers/gpu/drm/solomon/ssd130x-i2c.c         |  64 +++---
+ drivers/gpu/drm/solomon/ssd130x-spi.c         | 184 ++++++++++++++++++
+ drivers/gpu/drm/solomon/ssd130x.c             |  45 ++++-
+ drivers/gpu/drm/solomon/ssd130x.h             |  12 ++
+ 7 files changed, 332 insertions(+), 57 deletions(-)
+ create mode 100644 drivers/gpu/drm/solomon/ssd130x-spi.c
+
 -- 
-2.35.1.1178.g4f1659d476-goog
+2.35.1
 

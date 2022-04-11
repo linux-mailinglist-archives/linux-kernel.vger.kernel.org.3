@@ -2,160 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B4174FC781
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 00:18:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC4724FC787
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 00:18:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232202AbiDKWT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 18:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40858 "EHLO
+        id S1350428AbiDKWVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 18:21:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348407AbiDKWTV (ORCPT
+        with ESMTP id S1345541AbiDKWVC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 18:19:21 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3812126E
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 15:17:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649715425; x=1681251425;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Y7Cx9pzV2mAhV9wxFTCwgQ4znRL5M48bIRps4r0v3pY=;
-  b=JsGrlsUCIa03kKK0FRT32xfroz81F5KEuk7xsDfo6Sf0/DL7zxFFbnKg
-   b0NVKa1CC0VjbnQZX7cMi2XyKy3okr0nGBJ2h2cebtffhgChbE5rv3Z8e
-   73uElngpjiLfiYPMWKiG9HkGVb31gFZZfoqbEY7ssokA14tzuIqpbgHzl
-   Nx6/ct09T9snrzTM1xXyJgZLS6eRgESnbhnITtOQ8o7GCM+yXFCo1En+y
-   mO/0YZ8EMGkpnBFbRM8UX3E0EszXJJEnr6YC/ovqDZf8EDriBSi5EBXq0
-   LgwhGzrNMp2zCPI1pIRQQDMneVEkuji+igU/BZfHylZapMhoIbM+XUvQp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="262407257"
-X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="262407257"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 15:17:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="724168061"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 11 Apr 2022 15:16:59 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ne2LC-0002Fi-CP;
-        Mon, 11 Apr 2022 22:16:58 +0000
-Date:   Tue, 12 Apr 2022 06:16:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Qinglin Pan <panqinglin2020@iscas.ac.cn>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: arch/riscv/mm/init.c:782:83: warning: suggest braces around empty
- body in an 'if' statement
-Message-ID: <202204120608.ZG1VLqBr-lkp@intel.com>
+        Mon, 11 Apr 2022 18:21:02 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 721D424BD3;
+        Mon, 11 Apr 2022 15:18:47 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 66so15354365pga.12;
+        Mon, 11 Apr 2022 15:18:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IEdQJBXmcjU6YEno39ozSPApIGPia4bKwlR7lkXebJY=;
+        b=KGEwF19//QJliPtuVAcd2Sw8+zMBSvTqjyCXsvJrN8dD+UKUVvqDlalD5d334nPdHt
+         +sLNBktVPNcMf8RFcOUmcV9cnXq4wPlYTFX7H9bo6R8i1IiYHwC1iR+q9EPxL3gKFAqP
+         8eAIwX6dQBAhecsXhOAxUl4k+Zo+n39P+XaxHlL2UPkURBYRjvDBGBguXi9yI2XWWInl
+         so6pZ7nNSFAQQxskPbYXyuZiKRm6fszqB1tY+I3WgLq/ImTlx6YKYxB9g48ykte6/YS7
+         hZ2z+5V2XqpaAapKnCEkLNoq0LZUwagyA8CmZMzsnBo0xSX8lbs+/GuvJKXnysI+G1jv
+         m1hA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IEdQJBXmcjU6YEno39ozSPApIGPia4bKwlR7lkXebJY=;
+        b=hdPwZJfRo4ZVBGBHUl+vm1Lt6H9ZUQN+qzDNNBuEN7+fXce+W971hxixxiNE863AkG
+         ltywNpPdN/cd+booDYyEf22+Gw0Aj3hzb14Wkibz943xFEth/6ZYr2TOP6fTs7P9XLmE
+         rf8OAoPtjdKF5kSuDcoB98CGndo2mxPf/S1mYQDXVjBFlbqw8I6bzAXip1kCbh5Tbh/a
+         KGZpp5spQKpNnAcVqfJj19j6XPlGR6tKODdDX/p3jwmngBw938W3V3/vc8PyJcbToC6l
+         UuL6fyNTwRc/fJqjgIPxm32VCtGQKrL2mTOQejYUG8JIL3Gp7irM5l0FZ2uMVEn/25WU
+         8xMw==
+X-Gm-Message-State: AOAM533F0Z95akCBDk47Yle/NkD6FPfjp/XNku3vvbJFkIQ2ujLbdEqR
+        zh/XDwl6IMEDWl1BkWEwfwDSurXfzF9mX1peOaI=
+X-Google-Smtp-Source: ABdhPJyd826K+dtQD2yJvH0FJzM9op75/X1x7qI8sPyAxDg0rgehWUGi6qLhTQxBBOMpKxwpjA5nZlgjnFUfK61ld6k=
+X-Received: by 2002:a05:6a00:8c8:b0:4fe:ecb:9b8f with SMTP id
+ s8-20020a056a0008c800b004fe0ecb9b8fmr34655402pfu.55.1649715526927; Mon, 11
+ Apr 2022 15:18:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220407125224.310255-1-jolsa@kernel.org> <20220408232922.mz2vi2oaxf2fvnvt@MBP-98dd607d3435.dhcp.thefacebook.com>
+ <YlHrdhkfz+IuGbZM@krava> <CAEf4BzYXHeM+m64cV6_5TU0_BjotDVo+iw_wpJEWLkU9gsvfXg@mail.gmail.com>
+In-Reply-To: <CAEf4BzYXHeM+m64cV6_5TU0_BjotDVo+iw_wpJEWLkU9gsvfXg@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Mon, 11 Apr 2022 22:18:35 +0000
+Message-ID: <CAADnVQLQj-ixQo5xEJEZaJavoNpVdhizDmkqFm+pDJq97_Ecpw@mail.gmail.com>
+Subject: Re: [RFC bpf-next 0/4] bpf: Speed up symbol resolving in kprobe multi link
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Jiri Olsa <olsajiri@gmail.com>, Jiri Olsa <jolsa@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Qinglin,
+On Mon, Apr 11, 2022 at 10:15 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Sat, Apr 9, 2022 at 1:24 PM Jiri Olsa <olsajiri@gmail.com> wrote:
+> >
+> > On Fri, Apr 08, 2022 at 04:29:22PM -0700, Alexei Starovoitov wrote:
+> > > On Thu, Apr 07, 2022 at 02:52:20PM +0200, Jiri Olsa wrote:
+> > > > hi,
+> > > > sending additional fix for symbol resolving in kprobe multi link
+> > > > requested by Alexei and Andrii [1].
+> > > >
+> > > > This speeds up bpftrace kprobe attachment, when using pure symbols
+> > > > (3344 symbols) to attach:
+> > > >
+> > > > Before:
+> > > >
+> > > >   # perf stat -r 5 -e cycles ./src/bpftrace -e 'kprobe:x* {  } i:ms:1 { exit(); }'
+> > > >   ...
+> > > >   6.5681 +- 0.0225 seconds time elapsed  ( +-  0.34% )
+> > > >
+> > > > After:
+> > > >
+> > > >   # perf stat -r 5 -e cycles ./src/bpftrace -e 'kprobe:x* {  } i:ms:1 { exit(); }'
+> > > >   ...
+> > > >   0.5661 +- 0.0275 seconds time elapsed  ( +-  4.85% )
+> > > >
+> > > >
+> > > > There are 2 reasons I'm sending this as RFC though..
+> > > >
+> > > >   - I added test that meassures attachment speed on all possible functions
+> > > >     from available_filter_functions, which is 48712 functions on my setup.
+> > > >     The attach/detach speed for that is under 2 seconds and the test will
+> > > >     fail if it's bigger than that.. which might fail on different setups
+> > > >     or loaded machine.. I'm not sure what's the best solution yet, separate
+> > > >     bench application perhaps?
+> > >
+> > > are you saying there is a bug in the code that you're still debugging?
+> > > or just worried about time?
+> >
+> > just the time, I can make the test fail (cross the 2 seconds limit)
+> > when the machine is loaded, like with running kernel build
+> >
+> > but I couldn't reproduce this with just paralel test_progs run
+> >
+> > >
+> > > I think it's better for it to be a part of selftest.
+> > > CI will take extra 2 seconds to run.
+> > > That's fine. It's a good stress test.
+>
+> I agree it's a good stress test, but I disagree on adding it as a
+> selftests. The speed will depend on actual host machine. In VMs it
+> will be slower, on busier machines it will be slower, etc. Generally,
+> depending on some specific timing just causes unnecessary maintenance
+> headaches. We can have this as a benchmark, if someone things it's
+> very important. I'm impartial to having this regularly executed as
+> it's extremely unlikely that we'll accidentally regress from NlogN
+> back to N^2. And if there is some X% slowdown such selftest is
+> unlikely to alarm us anyways. Sporadic failures will annoy us way
+> before that to the point of blacklisting this selftests in CI at the
+> very least.
 
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e
-commit: 677b9eb8810edc6c616a699018a83e24ed0cccab riscv: mm: Prepare pt_ops helper functions for sv57
-date:   8 weeks ago
-config: riscv-randconfig-r042-20220411 (https://download.01.org/0day-ci/archive/20220412/202204120608.ZG1VLqBr-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=677b9eb8810edc6c616a699018a83e24ed0cccab
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 677b9eb8810edc6c616a699018a83e24ed0cccab
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/mm/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   arch/riscv/mm/init.c: In function 'create_fdt_early_page_table':
->> arch/riscv/mm/init.c:782:83: warning: suggest braces around empty body in an 'if' statement [-Wempty-body]
-     782 |                                    (uintptr_t)early_dtb_pud, P4D_SIZE, PAGE_TABLE);
-         |                                                                                   ^
-   arch/riscv/mm/init.c:786:83: warning: suggest braces around empty body in an 'if' statement [-Wempty-body]
-     786 |                                    (uintptr_t)early_dtb_pmd, PUD_SIZE, PAGE_TABLE);
-         |                                                                                   ^
-   arch/riscv/mm/init.c: At top level:
-   arch/riscv/mm/init.c:813:13: warning: no previous prototype for 'pt_ops_set_early' [-Wmissing-prototypes]
-     813 | void __init pt_ops_set_early(void)
-         |             ^~~~~~~~~~~~~~~~
-   arch/riscv/mm/init.c:835:13: warning: no previous prototype for 'pt_ops_set_fixmap' [-Wmissing-prototypes]
-     835 | void __init pt_ops_set_fixmap(void)
-         |             ^~~~~~~~~~~~~~~~~
-   arch/riscv/mm/init.c:853:13: warning: no previous prototype for 'pt_ops_set_late' [-Wmissing-prototypes]
-     853 | void __init pt_ops_set_late(void)
-         |             ^~~~~~~~~~~~~~~
-
-
-vim +/if +782 arch/riscv/mm/init.c
-
-   764	
-   765	/*
-   766	 * Setup a 4MB mapping that encompasses the device tree: for 64-bit kernel,
-   767	 * this means 2 PMD entries whereas for 32-bit kernel, this is only 1 PGDIR
-   768	 * entry.
-   769	 */
-   770	static void __init create_fdt_early_page_table(pgd_t *pgdir, uintptr_t dtb_pa)
-   771	{
-   772	#ifndef CONFIG_BUILTIN_DTB
-   773		uintptr_t pa = dtb_pa & ~(PMD_SIZE - 1);
-   774	
-   775		create_pgd_mapping(early_pg_dir, DTB_EARLY_BASE_VA,
-   776				   IS_ENABLED(CONFIG_64BIT) ? early_dtb_pgd_next : pa,
-   777				   PGDIR_SIZE,
-   778				   IS_ENABLED(CONFIG_64BIT) ? PAGE_TABLE : PAGE_KERNEL);
-   779	
-   780		if (pgtable_l5_enabled)
-   781			create_p4d_mapping(early_dtb_p4d, DTB_EARLY_BASE_VA,
- > 782					   (uintptr_t)early_dtb_pud, P4D_SIZE, PAGE_TABLE);
-   783	
-   784		if (pgtable_l4_enabled)
-   785			create_pud_mapping(early_dtb_pud, DTB_EARLY_BASE_VA,
-   786					   (uintptr_t)early_dtb_pmd, PUD_SIZE, PAGE_TABLE);
-   787	
-   788		if (IS_ENABLED(CONFIG_64BIT)) {
-   789			create_pmd_mapping(early_dtb_pmd, DTB_EARLY_BASE_VA,
-   790					   pa, PMD_SIZE, PAGE_KERNEL);
-   791			create_pmd_mapping(early_dtb_pmd, DTB_EARLY_BASE_VA + PMD_SIZE,
-   792					   pa + PMD_SIZE, PMD_SIZE, PAGE_KERNEL);
-   793		}
-   794	
-   795		dtb_early_va = (void *)DTB_EARLY_BASE_VA + (dtb_pa & (PMD_SIZE - 1));
-   796	#else
-   797		/*
-   798		 * For 64-bit kernel, __va can't be used since it would return a linear
-   799		 * mapping address whereas dtb_early_va will be used before
-   800		 * setup_vm_final installs the linear mapping. For 32-bit kernel, as the
-   801		 * kernel is mapped in the linear mapping, that makes no difference.
-   802		 */
-   803		dtb_early_va = kernel_mapping_pa_to_va(XIP_FIXUP(dtb_pa));
-   804	#endif
-   805	
-   806		dtb_early_pa = dtb_pa;
-   807	}
-   808	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Such selftest shouldn't be measuring the speed, of course.
+The selftest will be about:
+1. not crashing
+2. succeeding to attach and getting some meaningful data back.

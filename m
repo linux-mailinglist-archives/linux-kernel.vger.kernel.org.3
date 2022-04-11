@@ -2,205 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 794634FC4C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 21:10:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A8A84FC4CB
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 21:14:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349504AbiDKTMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 15:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53622 "EHLO
+        id S1349520AbiDKTQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 15:16:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349545AbiDKTMi (ORCPT
+        with ESMTP id S235610AbiDKTQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 15:12:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 468261EECB;
-        Mon, 11 Apr 2022 12:10:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D37F56146F;
-        Mon, 11 Apr 2022 19:10:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE0A9C385A3;
-        Mon, 11 Apr 2022 19:10:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649704222;
-        bh=9O9lMuq+VYGLjiYdPSNFx3ZzewzReFiujsIsDEEGTOU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=KOyoiOYgtsPQe8CLrIxswda+TPXOcKCfpaMkl3lFMCDNhAtBBla+nNmSnMN5Ph/iV
-         HRA5OQ1/s5X1EaOBZ5+gbMXT1G9uHx2kN7W9T9oGzfxHIZCVflt7zl4fYbcqoTtgzj
-         KKzwOX5J6StC7+56BSJobiQcp0fgvaajyUu1j8knAcCSXmH1gC0ZRn1Ox3SJ93RtUg
-         7fzungoi4XlDv0qVAoag2X6Pg3ZrzLiIVnlSDVYHMO/W/HOcXyhq488Xcg3rDa6gsz
-         xTxx5fwn8wVq7i+J4KzN492eWKHRX0VD/qZoLu7mrH10sJ9EqmVfzZDLqcSv3mk6oF
-         x4iMEIhSR56MA==
-Date:   Mon, 11 Apr 2022 14:10:20 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Shlomo Pongratz <shlomopongratz@gmail.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andrew.maier@eideticom.com, logang@deltatee.com,
-        bhelgaas@google.com, jgg@nvidia.com,
-        Shlomo Pongratz <shlomop@pliops.com>
-Subject: Re: [PATCH V7 1/1] Intel Sky Lake-E host root ports check.
-Message-ID: <20220411191020.GA530971@bhelgaas>
+        Mon, 11 Apr 2022 15:16:10 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E17301EECB
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 12:13:53 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4KcdnD30bpz9sV5;
+        Mon, 11 Apr 2022 21:13:52 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 5gGs-u6Ay1cu; Mon, 11 Apr 2022 21:13:52 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4KcdnD1pbGz9sV4;
+        Mon, 11 Apr 2022 21:13:52 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 166C18B76E;
+        Mon, 11 Apr 2022 21:13:52 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id iGQeiEsNUe2J; Mon, 11 Apr 2022 21:13:51 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.203.78])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id B1E3F8B763;
+        Mon, 11 Apr 2022 21:13:51 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 23BJDeXM972781
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Mon, 11 Apr 2022 21:13:40 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 23BJDdYn972780;
+        Mon, 11 Apr 2022 21:13:39 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Kees Cook <keescook@chromium.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v2] lkdtm/bugs: Don't expect thread termination without CONFIG_UBSAN_TRAP
+Date:   Mon, 11 Apr 2022 21:13:39 +0200
+Message-Id: <363b58690e907c677252467a94fe49444c80ea76.1649704381.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220410105213.690-2-shlomop@pliops.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1649704418; l=2871; s=20211009; h=from:subject:message-id; bh=RLwexbMQAWzDpT+/wG8yGNeAAZhFmV03nOMJ5ww5lXc=; b=13GCUW2rr5U6kuQjAbew1WPESq+ym971NZs/YcOfavRAXzJpoV/hvf03fqbsNGKYiOPXls4d7RNV RiVKT4/NCCXrDGkOqCau+eo/aOKYCDmU2AGTGvPH4sLsO+cHZfj3
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 10, 2022 at 01:52:13PM +0300, Shlomo Pongratz wrote:
-> In commit 7b94b53db34f ("PCI/P2PDMA: Add Intel Sky Lake-E Root Ports B, C,
->  D to the whitelist")
-> Andrew Maier added the Sky Lake-E additional devices
-> 2031, 2032 and 2033 root ports to the already existing 2030 device.
-> 
-> The Intel devices 2030, 2031, 2032 and 2033 which are root ports A, B, C
-> and D, respectively and if all exist they will occupy slots 0 till 3 in
-> that order.
-> 
-> The original code handled only the case where the devices in the whitelist
-> are host bridges and assumed that they will be found on slot 0.
-> 
-> Since this assumption doesn't hold for root ports, add a test to cover this
-> case.
-> 
-> Signed-off-by: Shlomo Pongratz <shlomop@pliops.com>
+When you don't select CONFIG_UBSAN_TRAP, you get:
 
-Applied to pci/p2pdma as below, thanks!
+  # echo ARRAY_BOUNDS > /sys/kernel/debug/provoke-crash/DIRECT
+[  102.265827] ================================================================================
+[  102.278433] UBSAN: array-index-out-of-bounds in drivers/misc/lkdtm/bugs.c:342:16
+[  102.287207] index 8 is out of range for type 'char [8]'
+[  102.298722] ================================================================================
+[  102.313712] lkdtm: FAIL: survived array bounds overflow!
+[  102.318770] lkdtm: Unexpected! This kernel (5.16.0-rc1-s3k-dev-01884-g720dcf79314a ppc) was built with CONFIG_UBSAN_BOUNDS=y
 
-> ---
->  drivers/pci/p2pdma.c | 31 ++++++++++++++++++++++---------
->  1 file changed, 22 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/pci/p2pdma.c b/drivers/pci/p2pdma.c
-> index 30b1df3c9d2f..187047be83a0 100644
-> --- a/drivers/pci/p2pdma.c
-> +++ b/drivers/pci/p2pdma.c
-> @@ -327,15 +327,19 @@ static const struct pci_p2pdma_whitelist_entry {
->  
->  /*
->   * This lookup function tries to find the PCI device corresponding to a given
-> - * host bridge.
-> + * host bridge or a root port.
->   *
->   * It assumes the host bridge device is the first PCI device in the
-> - * bus->devices list and that the devfn is 00.0. These assumptions should hold
-> - * for all the devices in the whitelist above.
-> + * bus->devices list and that the devfn is 00.0. The first assumption should
-> + * hold for all the devices in the whitelist above, however the second
-> + * assumption doesn't always hold for root ports.
-> + * For example for Intel Skylake devices 2030, 2031, 2032 and 2033,
-> + * which are root ports (A, B, C and D respectively).
-> + * So the function checks explicitly that the device is a root port.
->   *
-> - * This function is equivalent to pci_get_slot(host->bus, 0), however it does
-> - * not take the pci_bus_sem lock seeing __host_bridge_whitelist() must not
-> - * sleep.
-> + * This function is equivalent to pci_get_slot(host->bus, 0) (except for
-> + * the root port test), however it does not take the pci_bus_sem lock seeing
-> + * __host_bridge_whitelist() must not sleep.
->   *
->   * For this to be safe, the caller should hold a reference to a device on the
->   * bridge, which should ensure the host_bridge device will not be freed
-> @@ -350,10 +354,19 @@ static struct pci_dev *pci_host_bridge_dev(struct pci_host_bridge *host)
->  
->  	if (!root)
->  		return NULL;
-> -	if (root->devfn != PCI_DEVFN(0, 0))
-> -		return NULL;
->  
-> -	return root;
-> +	/* Verify that the device is a host bridge or a root port
-> +	 * It is assumed that host bridges have a 0 devfn, (common practice)
-> +	 * but some of the entries in the whitelist are root ports that can
-> +	 * have any devfn
-> +	 */
-> +	if (root->devfn == PCI_DEVFN(0, 0))
-> +		return root;
-> +
-> +	if (pci_pcie_type(root) == PCI_EXP_TYPE_ROOT_PORT)
-> +		return root;
-> +
-> +	return NULL;
->  }
->  
->  static bool __host_bridge_whitelist(struct pci_host_bridge *host,
+It is not correct because when CONFIG_UBSAN_TRAP is not selected
+you can't expect array bounds overflow to kill the thread.
 
-commit 1af7c26c59eb ("PCI/P2PDMA: Whitelist Intel Skylake-E Root Ports at any devfn")
-Author: Shlomo Pongratz <shlomopongratz@gmail.com>
-Date:   Sun Apr 10 13:52:13 2022 +0300
+Modify the logic so that when the kernel is built with
+CONFIG_UBSAN_BOUNDS but without CONFIG_UBSAN_TRAP, you get a warning
+about CONFIG_UBSAN_TRAP not been selected instead.
 
-    PCI/P2PDMA: Whitelist Intel Skylake-E Root Ports at any devfn
-    
-    In 7b94b53db34f ("PCI/P2PDMA: Add Intel Sky Lake-E Root Ports B, C, D to
-    the whitelist"), Andrew Maier added Skylake-E 2031, 2032, and 2033 Root
-    Ports to the pci_p2pdma_whitelist[], so we assume P2PDMA between devices
-    below these ports works.
-    
-    Previously we only checked the whitelist for a device at devfn 00.0 on the
-    root bus, which is often a "host bridge".  But these Skylake Root Ports may
-    be at any devfn and there may be no "host bridge" device.
-    
-    Generalize pci_host_bridge_dev() so we check the first device on the root
-    bus, whether it is devfn 00.0 or a PCIe Root Port, against the whitelist.
-    
-    [bhelgaas: commit log, comment]
-    Link: https://lore.kernel.org/r/20220410105213.690-2-shlomop@pliops.com
-    Tested-by: Maor Gottlieb <maorg@nvidia.com>
-    Signed-off-by: Shlomo Pongratz <shlomop@pliops.com>
-    Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-    Cc: Andrew Maier <andrew.maier@eideticom.com>
+This also require a fix of pr_expected_config(), otherwise the
+following error is encountered.
 
-diff --git a/drivers/pci/p2pdma.c b/drivers/pci/p2pdma.c
-index 30b1df3c9d2f..462b429ad243 100644
---- a/drivers/pci/p2pdma.c
-+++ b/drivers/pci/p2pdma.c
-@@ -326,15 +326,16 @@ static const struct pci_p2pdma_whitelist_entry {
- };
- 
- /*
-- * This lookup function tries to find the PCI device corresponding to a given
-- * host bridge.
-+ * If the first device on host's root bus is either devfn 00.0 or a PCIe
-+ * Root Port, return it.  Otherwise return NULL.
-  *
-- * It assumes the host bridge device is the first PCI device in the
-- * bus->devices list and that the devfn is 00.0. These assumptions should hold
-- * for all the devices in the whitelist above.
-+ * We often use a devfn 00.0 "host bridge" in the pci_p2pdma_whitelist[]
-+ * (though there is no PCI/PCIe requirement for such a device).  On some
-+ * platforms, e.g., Intel Skylake, there is no such host bridge device, and
-+ * pci_p2pdma_whitelist[] may contain a Root Port at any devfn.
-  *
-- * This function is equivalent to pci_get_slot(host->bus, 0), however it does
-- * not take the pci_bus_sem lock seeing __host_bridge_whitelist() must not
-+ * This function is similar to pci_get_slot(host->bus, 0), but it does
-+ * not take the pci_bus_sem lock since __host_bridge_whitelist() must not
-  * sleep.
-  *
-  * For this to be safe, the caller should hold a reference to a device on the
-@@ -350,10 +351,14 @@ static struct pci_dev *pci_host_bridge_dev(struct pci_host_bridge *host)
- 
- 	if (!root)
- 		return NULL;
--	if (root->devfn != PCI_DEVFN(0, 0))
--		return NULL;
- 
--	return root;
-+	if (root->devfn == PCI_DEVFN(0, 0))
-+		return root;
-+
-+	if (pci_pcie_type(root) == PCI_EXP_TYPE_ROOT_PORT)
-+		return root;
-+
-+	return NULL;
+  CC      drivers/misc/lkdtm/bugs.o
+drivers/misc/lkdtm/bugs.c: In function 'lkdtm_ARRAY_BOUNDS':
+drivers/misc/lkdtm/bugs.c:351:2: error: 'else' without a previous 'if'
+  351 |  else
+      |  ^~~~
+
+Fixes: c75be56e35b2 ("lkdtm/bugs: Add ARRAY_BOUNDS to selftests")
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+v2: Fix pr_expected_config(), otherwise it can't be used in an if/else sequence.
+---
+ drivers/misc/lkdtm/bugs.c  | 5 ++++-
+ drivers/misc/lkdtm/lkdtm.h | 5 ++---
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/misc/lkdtm/bugs.c b/drivers/misc/lkdtm/bugs.c
+index f21854ac5cc2..0f4dd9621b75 100644
+--- a/drivers/misc/lkdtm/bugs.c
++++ b/drivers/misc/lkdtm/bugs.c
+@@ -346,7 +346,10 @@ void lkdtm_ARRAY_BOUNDS(void)
+ 	kfree(not_checked);
+ 	kfree(checked);
+ 	pr_err("FAIL: survived array bounds overflow!\n");
+-	pr_expected_config(CONFIG_UBSAN_BOUNDS);
++	if (IS_ENABLED(CONFIG_UBSAN_BOUNDS))
++		pr_expected_config(CONFIG_UBSAN_TRAP);
++	else
++		pr_expected_config(CONFIG_UBSAN_BOUNDS);
  }
  
- static bool __host_bridge_whitelist(struct pci_host_bridge *host,
+ void lkdtm_CORRUPT_LIST_ADD(void)
+diff --git a/drivers/misc/lkdtm/lkdtm.h b/drivers/misc/lkdtm/lkdtm.h
+index f508096e8fd9..9c21a4ca0482 100644
+--- a/drivers/misc/lkdtm/lkdtm.h
++++ b/drivers/misc/lkdtm/lkdtm.h
+@@ -8,15 +8,14 @@
+ 
+ extern char *lkdtm_kernel_info;
+ 
+-#define pr_expected_config(kconfig)				\
+-{								\
++#define pr_expected_config(kconfig)	do {			\
+ 	if (IS_ENABLED(kconfig)) 				\
+ 		pr_err("Unexpected! This %s was built with " #kconfig "=y\n", \
+ 			lkdtm_kernel_info);			\
+ 	else							\
+ 		pr_warn("This is probably expected, since this %s was built *without* " #kconfig "=y\n", \
+ 			lkdtm_kernel_info);			\
+-}
++} while (0)
+ 
+ #ifndef MODULE
+ int lkdtm_check_bool_cmdline(const char *param);
+-- 
+2.35.1
+

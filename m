@@ -2,127 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FD024FB9CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 12:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B1064FB9CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 12:36:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345624AbiDKKhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 06:37:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34636 "EHLO
+        id S1345616AbiDKKiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 06:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345613AbiDKKhV (ORCPT
+        with ESMTP id S1345733AbiDKKhv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 06:37:21 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 360686585
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 03:35:08 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id p25so7491932pfn.13
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 03:35:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=d+2f7Abc00wPGCUaOzHgs4cliFCaq+b85+1pgNfFOUw=;
-        b=nsP9/lNa1p6mkmttdJL8bAdKCkQhON94LcD76TtZTldX0FYDD2BRfgS2MCjrN40/G2
-         WOtJVsWLjqyT3hKJ4i7qVq4/Y8MHqZAKVLerLdIxJaM1xXX82rNtvrN9qmelsHjDTYrc
-         dDxt4EC+mHtiGGwQ8aKjybT9yZkzYLHexCc8s6zGZEJjxDDy/LxugtFytkWQ4eEggPWh
-         nboQjVoHg9RycawUFKLDoIZ27P1J+GKVxtQyj1XslNclAAzPAj0Afka/cKSxGWiPkBib
-         PEnhor6KZpHhYMhQAmiAY8aZqEXGthRnSA7qCdgD1DNjt4vfnGF71JECCV8DzQ0jcAMH
-         318g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=d+2f7Abc00wPGCUaOzHgs4cliFCaq+b85+1pgNfFOUw=;
-        b=O4hm6KD2HHvmAuF9c30/9rhcDNtxwt7IPSCN9YiDjmz3EysN1+Kg6C0hlBPImsa0Z4
-         YU2T8DYLVUkmOPIoMo9nUlqe5IE/Y454J0RRrL8aiQkpftFQQv0ra02zPRwGpY4s/HGK
-         oLnt9edxwKPUtCgtDF5ZIL8kzX2dZhm1rSNNpX+J4oEpwJXv3W3jyD2L+/6SEDnoBXG/
-         GobJkZ3iqOUAyl9ZuQiB3ARACzaCWwv9RWhul2tfJ8kN/Fd5tidRB3LgqRi2njtgm2d9
-         uLjGZPiR09JuPjHdpxKzt3EbW3Rky7Jbm8LmocuXuNfimvS1l/8KMZPcaaWhaEi2EajE
-         kPcQ==
-X-Gm-Message-State: AOAM533UbHbELXHNTlSVzyNT1wSoZGNjPn1PLcy016eM4KSnXW8b69PK
-        fp6ywhgASt2OZcAI6uFwtvrcX45/sBQkyFpgtg==
-X-Google-Smtp-Source: ABdhPJxG+CRHg/FH/WEFO7yrrptD7wJGkDoNJFoGqpXLMitue3imgpkMlqtC5Zwwf2F7U7XRqd0UBfwLEOXwUaq7O+M=
-X-Received: by 2002:a63:ce45:0:b0:399:1124:fbfe with SMTP id
- r5-20020a63ce45000000b003991124fbfemr26375616pgi.542.1649673307723; Mon, 11
- Apr 2022 03:35:07 -0700 (PDT)
+        Mon, 11 Apr 2022 06:37:51 -0400
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9729862E4
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 03:35:35 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:b509:6862:2557:437a])
+        by laurent.telenet-ops.be with bizsmtp
+        id HNbZ270181G7NMJ01NbZyc; Mon, 11 Apr 2022 12:35:33 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1ndrOL-0009tP-6w
+        for linux-kernel@vger.kernel.org; Mon, 11 Apr 2022 12:35:29 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1ndrOK-009BBZ-KX
+        for linux-kernel@vger.kernel.org; Mon, 11 Apr 2022 12:35:28 +0200
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     linux-kernel@vger.kernel.org
+Subject: Build regressions/improvements in v5.18-rc2
+Date:   Mon, 11 Apr 2022 12:35:28 +0200
+Message-Id: <20220411103528.2187797-1-geert@linux-m68k.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CAHk-=wh0+DYC2+Aeu2=vfUtGaDqVuKxKrxyhwQFoG89rcynzww@mail.gmail.com>
+References: <CAHk-=wh0+DYC2+Aeu2=vfUtGaDqVuKxKrxyhwQFoG89rcynzww@mail.gmail.com>
 MIME-Version: 1.0
-References: <CAMhUBjm2AdyEZ_-EgexdNDN7SvY4f89=4=FwAL+c0Mg0O+X50A@mail.gmail.com>
- <s5hk0bwcbjh.wl-tiwai@suse.de> <CAMhUBjmr_mHcz2G0tQ2qktGFw6XDLJiDTAHvM1yoRWzvtA6MYg@mail.gmail.com>
- <s5ha6csc7lq.wl-tiwai@suse.de> <s5h7d7wc75u.wl-tiwai@suse.de> <s5h35ijdiab.wl-tiwai@suse.de>
-In-Reply-To: <s5h35ijdiab.wl-tiwai@suse.de>
-From:   Zheyu Ma <zheyuma97@gmail.com>
-Date:   Mon, 11 Apr 2022 18:34:56 +0800
-Message-ID: <CAMhUBj=yiAtbYmGDuaBrSxNMrxz6S8DJotwTLihcs64JSOQuVg@mail.gmail.com>
-Subject: Re: [BUG] ALSA: echoaudio: warning when the driver fails to probe
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 6:30 PM Takashi Iwai <tiwai@suse.de> wrote:
->
-> On Mon, 11 Apr 2022 11:15:41 +0200,
-> Takashi Iwai wrote:
-> >
-> > On Mon, 11 Apr 2022 11:06:09 +0200,
-> > Takashi Iwai wrote:
-> > >
-> > > On Mon, 11 Apr 2022 10:49:53 +0200,
-> > > Zheyu Ma wrote:
-> > > >
-> > > > On Mon, Apr 11, 2022 at 3:41 PM Takashi Iwai <tiwai@suse.de> wrote:
-> > > > >
-> > > > > On Sun, 10 Apr 2022 11:13:55 +0200,
-> > > > > Zheyu Ma wrote:
-> > > > > >
-> > > > > > Hello,
-> > > > > >
-> > > > > > I found a bug in echoaudio.c.
-> > > > > > When the driver fails at the function snd_echo_create(), it should
-> > > > > > release resources requested before, otherwise we will get the
-> > > > > > following warning:
-> > > > > >
-> > > > > > [    3.262866] remove_proc_entry: removing non-empty directory
-> > > > > > 'irq/21', leaking at least 'snd_indigodj'
-> > > > > > [    3.263577] WARNING: CPU: 3 PID: 261 at fs/proc/generic.c:717
-> > > > > > remove_proc_entry+0x389/0x3f0
-> > > > > > [    3.267098] RIP: 0010:remove_proc_entry+0x389/0x3f0
-> > > > > > [    3.269976] Call Trace:
-> > > > > > [    3.269979]  <TASK>
-> > > > > > [    3.269988]  unregister_irq_proc+0x14c/0x170
-> > > > > > [    3.269997]  irq_free_descs+0x94/0xe0
-> > > > > > [    3.270004]  mp_unmap_irq+0xb6/0x100
-> > > > > > [    3.270011]  acpi_unregister_gsi_ioapic+0x27/0x40
-> > > > > > [    3.270017]  acpi_pci_irq_disable+0x1d3/0x320
-> > > > > > [    3.270025]  pci_disable_device+0x1ad/0x380
-> > > > > > [    3.270034]  pcim_release+0x566/0x6d0
-> > > > > > [    3.270046]  devres_release_all+0x1f1/0x2c0
-> > > > > > [    3.270057]  really_probe+0xe0/0x920
-> > > > >
-> > > > > Could you try the patch below?
-> > > >
-> > > > The following patch works for me, the previous warning disappears, thank you.
-> > > > But I got another error, I have no idea about it.
-> > >
-> > > OK, that's bad, it's basically the destructor order problem.
-> > > Could you try the patch below instead of the previous one?
-> >
-> > Sorry, the below one instead.
->
-> Err, scratch this one, too.  It's a deeper problem than I thought.
-> Will post a revised patch later.
+Below is the list of build error/warning regressions/improvements in
+v5.18-rc2[1] compared to v5.17[2].
 
-Yeah, you are right, these two patches do not work, I got the same
-error message.
-Thanks for your effort.
+Summarized:
+  - build errors: +37/-10
+  - build warnings: +6/-16
 
-Zheyu Ma
+JFYI, when comparing v5.18-rc2[1] to v5.18-rc1[3], the summaries are:
+  - build errors: +9/-3
+  - build warnings: +23/-0
+
+Happy fixing! ;-)
+
+Thanks to the linux-next team for providing the build service.
+
+[1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e/ (all 96 configs)
+[2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/f443e374ae131c168a065ea1748feac6b2e76613/ (all 96 configs)
+[3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/3123109284176b1532874591f7c81f3837bbdc17/ (all 96 configs)
+
+
+*** ERRORS ***
+
+37 error regressions:
+  + /kisskb/src/arch/m68k/include/asm/bitops.h: error: array subscript 2 is above array bounds of 'long unsigned int[1]' [-Werror=array-bounds]:  => 329:20
+  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: .cfi_endproc without corresponding .cfi_startproc:  => 32
+  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: bad or irreducible absolute expression:  => 16
+  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: junk at end of line, first unrecognized character is `:':  => 16
+  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: no such instruction: `be 0x100(%sr2,%r0)':  => 29
+  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: no such instruction: `ldi 0,%r20':  => 30
+  + /kisskb/src/arch/parisc/kernel/vdso32/restart_syscall.S: Error: no such instruction: `ldw 0(%sp),%r31':  => 26
+  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no such instruction: `ble 0x100(%sr2,%r0)':  => 51, 46
+  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no such instruction: `ldi 0,%r25':  => 44
+  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no such instruction: `ldi 1,%r25':  => 49
+  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: no such instruction: `ldi 173,%r20':  => 45, 50
+  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.callinfo':  => 40
+  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.entry':  => 41
+  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.exit':  => 54
+  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.proc':  => 39
+  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.procend':  => 55
+  + /kisskb/src/arch/parisc/kernel/vdso32/sigtramp.S: Error: unknown pseudo-op: `.stringz':  => 76
+  + /kisskb/src/arch/sparc/include/asm/cacheflush_32.h: error: 'struct page' declared inside parameter list [-Werror]:  => 38:37
+  + /kisskb/src/arch/sparc/include/asm/cacheflush_32.h: error: its scope is only this definition or declaration, which is probably not what you want [-Werror]:  => 38:37
+  + /kisskb/src/arch/sparc/kernel/irq_32.c: error: array subscript [16, 79] is outside array bounds of 'struct tt_entry[1]' [-Werror=array-bounds]:  => 258:14, 263:14, 262:14, 259:14, 261:46
+  + /kisskb/src/drivers/gpu/drm/r128/r128_cce.c: error: case label does not reduce to an integer constant:  => 417:2, 418:2
+  + /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'X86_VENDOR_AMD' undeclared (first use in this function):  => 149:37
+  + /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: 'struct cpuinfo_um' has no member named 'x86_vendor':  => 149:22
+  + /kisskb/src/drivers/infiniband/hw/qib/qib_wc_x86_64.c: error: control reaches end of non-void function [-Werror=return-type]:  => 150:1
+  + /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: 'struct cpuinfo_um' has no member named 'x86_cache_size':  => 88:22
+  + /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: control reaches end of non-void function [-Werror=return-type]:  => 89:1
+  + /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: implicit declaration of function '__copy_user_nocache' [-Werror=implicit-function-declaration]:  => 100:2
+  + /kisskb/src/drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c: error: case label does not reduce to an integer constant:  => 4917:4
+  + /kisskb/src/drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c: error: case label does not reduce to an integer constant:  => 3798:2, 3809:2
+  + /kisskb/src/drivers/scsi/aacraid/commsup.c: error: case label does not reduce to an integer constant:  => 1983:2
+  + /kisskb/src/drivers/usb/typec/tcpm/tcpm.c: error: case label does not reduce to an integer constant:  => 4724:3
+  + /kisskb/src/fs/xfs/xfs_buf.h: error: initializer element is not constant:  => 46:23
+  + /kisskb/src/include/linux/compiler_types.h: error: call to '__compiletime_assert_402' declared with attribute error: FIELD_PREP: mask is not constant:  => 352:38
+  + /kisskb/src/include/linux/compiler_types.h: error: call to '__compiletime_assert_404' declared with attribute error: FIELD_PREP: mask is not constant:  => 352:38
+  + /kisskb/src/include/linux/compiler_types.h: error: call to '__compiletime_assert_491' declared with attribute error: FIELD_PREP: mask is not constant:  => 352:38
+  + /kisskb/src/include/linux/compiler_types.h: error: call to '__compiletime_assert_520' declared with attribute error: FIELD_PREP: mask is not constant:  => 352:38
+  + /kisskb/src/sound/usb/midi.c: error: case label does not reduce to an integer constant:  => 1389:2
+
+10 error improvements:
+  - /kisskb/src/crypto/blake2b_generic.c: error: the frame size of 2288 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]: 109:1 => 
+  - /kisskb/src/drivers/vfio/pci/vfio_pci_rdwr.c: error: assignment makes pointer from integer without a cast [-Werror=int-conversion]: 317:9, 324:9 => 
+  - /kisskb/src/drivers/vfio/pci/vfio_pci_rdwr.c: error: implicit declaration of function 'ioport_map' [-Werror=implicit-function-declaration]: 317:11 => 
+  - /kisskb/src/drivers/vfio/pci/vfio_pci_rdwr.c: error: implicit declaration of function 'ioport_unmap' [-Werror=implicit-function-declaration]: 338:15 => 
+  - error: arch/powerpc/kvm/book3s_64_entry.o: relocation truncated to fit: R_PPC64_REL14 (stub) against symbol `machine_check_common' defined in .text section in arch/powerpc/kernel/head_64.o: (.text+0x3e4) => 
+  - error: arch/powerpc/kvm/book3s_64_entry.o: relocation truncated to fit: R_PPC64_REL14 (stub) against symbol `system_reset_common' defined in .text section in arch/powerpc/kernel/head_64.o: (.text+0x3ec) => 
+  - error: arch/sparc/kernel/head_32.o: relocation truncated to fit: R_SPARC_WDISP22 against `.init.text': (.head.text+0x5100), (.head.text+0x5040) => 
+  - error: arch/sparc/kernel/head_32.o: relocation truncated to fit: R_SPARC_WDISP22 against symbol `leon_smp_cpu_startup' defined in .text section in arch/sparc/kernel/trampoline_32.o: (.init.text+0xa4) => 
+  - error: arch/sparc/kernel/process_32.o: relocation truncated to fit: R_SPARC_WDISP22 against `.text': (.fixup+0xc), (.fixup+0x4) => 
+  - error: arch/sparc/kernel/signal_32.o: relocation truncated to fit: R_SPARC_WDISP22 against `.text': (.fixup+0x1c), (.fixup+0x28), (.fixup+0x10), (.fixup+0x34), (.fixup+0x4) => 
+
+
+*** WARNINGS ***
+
+6 warning regressions:
+  + /kisskb/src/arch/m68k/include/asm/string.h: warning: '__builtin_memset' offset [0, 11] is out of the bounds [0, 0] [-Warray-bounds]:  => 68:25
+  + /kisskb/src/arch/s390/kernel/machine_kexec.c: warning: 'memcpy' offset [0, 511] is out of the bounds [0, 0] [-Warray-bounds]:  => 57:9
+  + /kisskb/src/drivers/net/ethernet/i825xx/sun3_82586.c: warning: array subscript 1 is above array bounds of 'volatile struct transmit_cmd_struct *[1]' [-Warray-bounds]:  => 989:122, 989:108
+  + /kisskb/src/drivers/scsi/mpt3sas/mpt3sas_base.c: warning: array subscript 'Mpi2SasIOUnitPage1_t {aka struct _MPI2_CONFIG_PAGE_SASIOUNIT_1}[0]' is partly outside array bounds of 'unsigned char[20]' [-Warray-bounds]:  => 5396:40, 5400:40, 5403:43
+  + modpost: WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation failed, symbol will not be versioned.:  => N/A
+  + modpost: WARNING: modpost: vmlinux.o(.text.unlikely+0x45d4): Section mismatch in reference from the function __trace_event_discard_commit() to the variable .init.data:initcall_level_names:  => N/A
+
+16 warning improvements:
+  - modpost: WARNING: modpost: EXPORT symbol "___rw_read_enter" [vmlinux] version ...: N/A => 
+  - modpost: WARNING: modpost: EXPORT symbol "___rw_read_exit" [vmlinux] version ...: N/A => 
+  - modpost: WARNING: modpost: EXPORT symbol "___rw_read_try" [vmlinux] version ...: N/A => 
+  - modpost: WARNING: modpost: EXPORT symbol "___rw_write_enter" [vmlinux] version ...: N/A => 
+  - modpost: WARNING: modpost: EXPORT symbol "__ashldi3" [vmlinux] version ...: N/A => 
+  - modpost: WARNING: modpost: EXPORT symbol "__ashrdi3" [vmlinux] version ...: N/A => 
+  - modpost: WARNING: modpost: EXPORT symbol "__copy_1page" [vmlinux] version ...: N/A => 
+  - modpost: WARNING: modpost: EXPORT symbol "__divdi3" [vmlinux] version ...: N/A => 
+  - modpost: WARNING: modpost: EXPORT symbol "__lshrdi3" [vmlinux] version ...: N/A => 
+  - modpost: WARNING: modpost: EXPORT symbol "__muldi3" [vmlinux] version ...: N/A => 
+  - modpost: WARNING: modpost: EXPORT symbol "__ndelay" [vmlinux] version ...: N/A => 
+  - modpost: WARNING: modpost: EXPORT symbol "__udelay" [vmlinux] version ...: N/A => 
+  - modpost: WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version ...: N/A => 
+  - modpost: WARNING: modpost: EXPORT symbol "bzero_1page" [vmlinux] version ...: N/A => 
+  - modpost: WARNING: modpost: EXPORT symbol "empty_zero_page" [vmlinux] version ...: N/A => 
+  - modpost: WARNING: modpost: vmlinux.o(.text.unlikely+0x4530): Section mismatch in reference from the function __trace_event_discard_commit() to the variable .init.data:initcall_level_names: N/A => 
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds

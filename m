@@ -2,85 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CCBA4FC070
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:23:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 870744FC07A
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347852AbiDKPZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 11:25:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46012 "EHLO
+        id S1347902AbiDKPZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 11:25:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241470AbiDKPY6 (ORCPT
+        with ESMTP id S1347861AbiDKPZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 11:24:58 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94FC03A184;
-        Mon, 11 Apr 2022 08:22:43 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id v2so9861753wrv.6;
-        Mon, 11 Apr 2022 08:22:43 -0700 (PDT)
+        Mon, 11 Apr 2022 11:25:04 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017D43BBE4;
+        Mon, 11 Apr 2022 08:22:50 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id h126-20020a1c2184000000b0038eb17fb7d6so3751454wmh.2;
+        Mon, 11 Apr 2022 08:22:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bq4dIdtXKyheEXERu/dkokTXmvj3klAE4IhWeKTikkc=;
-        b=eEcwqL/0GMlDAli3FSZbUpl+NygNa18VLEwUBUq9iSth5Lqd/KsZ0V+ClTULeod8M+
-         Fu3jsyrAA1MGtPFvLBv3NGvuymp4aA22DKFtHEpZDRMsdgOMipPaU5XxnF8FL9nHGHiV
-         Wjnud9/NFYOoUAnI9QrwAc6bUCDm+/fLtHsPYOqwyVEQhtiXQZs5D8NYuFiatPtMqoIV
-         xmaY+1TY1jGEZ932auNCY8lsJ2HEB93AuzbUQEqpyLayPte77b6RRg1uQA9ZGXgLP/0S
-         88CHK3mgNy+NRl3nxa8KlhGs7rLzfsWGqUn5ExaLh65Eht8dVpeOHGS1leYCktxhUT5B
-         /SHA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=rJAJib2gJSjDFpJZLEr0WrYni5c/odHFzzzrK2oaLMs=;
+        b=qotKL6IwNlpMly192A7eHkVzVYvutYGSQcgUdjMNV/97YsLxHmix4aUzvDrXDgMBXa
+         hKddXJzfXtSH7HIs8Ge2u7bXMe6OjV2U6po97fO8sJOmXUMaDFAU0XwtMzFFR23BP1/x
+         WeDhWdBfNl8jF1Z18jGeoW06lS2JW9xYiW9Vn4cAh6lAd8Teb0kz2c35mT3VLnx6V/hd
+         vW1i2ndwMRdO1NqXhArld84EmC9k8FrXleg6kZGB6vFfSbW3N0EBlRJcZCfkaS4fiw4L
+         +1ICG2zwbsxeYPOD8lqgtzSHN+PiuqEY6dLzvYKzFCJn6tCVCd+8xvnKUApl/nHWe9w+
+         DQ4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bq4dIdtXKyheEXERu/dkokTXmvj3klAE4IhWeKTikkc=;
-        b=zo/Yqrs1nyW6bkUd1rCxNYoNCDmOQHVoMG50cOIaZxBgCa7IQxc76/8KKgwJmgY6tR
-         tU2c/ZDQ4wCPa98kxWJDnPoDP7z2F+3UvP2YN8u9iodzKN0YkVITfFQ41Zk3u9+9n8QS
-         Ha6nAMOC2RwJ3XAxryeno0ix9Gh8qr2cVlzd78HgGbgBA9QpSAE37uywb3k1gAWsSoTg
-         tDVLBSHo28kYnRk03xkychIsHSb6CAoTyLQJcmZ0CjvHZNmTvhjI5wnVDqin3rByCrta
-         VRm02X0JlnJ6idSaOLK4jV+gjgS9g1Xs692aXZFa6XkH/jQA8Sdv+Kr1Qv3xRwksy63J
-         arkA==
-X-Gm-Message-State: AOAM531UrT0JWfj1txLPNm9MGAGqc795OxruGLlvhRqksaGKsR+Mcf1D
-        BrdMezXhnB0KC3TV+UD1Q+g=
-X-Google-Smtp-Source: ABdhPJzHLV5ITxizeFBwNp55Gv/lQjWoN2lKXUbEs96hO2MWAFI78oKQWP4tE+HZdnGCba3gg8YLOw==
-X-Received: by 2002:adf:e84a:0:b0:207:a697:462c with SMTP id d10-20020adfe84a000000b00207a697462cmr4511198wrn.312.1649690562040;
-        Mon, 11 Apr 2022 08:22:42 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=rJAJib2gJSjDFpJZLEr0WrYni5c/odHFzzzrK2oaLMs=;
+        b=jVmN5ujLYv9ewE/QR6kyIVl7sgwAD3BRNC87hQ6FYYt7WjaEh2w6bexveS3I9Sb6nE
+         /s9VM+U9x3iZ4VGVU7pOrkTgLLeHd2RWofet0U/fSm8/EJLS/PvQ+NGDSyD42tb6zzFw
+         i2j8GfyDX0bKgtIGqCxZaIuB59a50pXZkAGt+3bj4IT/GQmB0EPnZ30HQbMa3A139oWz
+         ZQQFURHU47Ha8zmslQUSATbpwqs7e1+WedsYStXM8gZT64z8ek6IiJheIXlcviWHOjFu
+         CgMfRewPaEFdxJsLpOIapmiIrzAxYd5SrhDRaQEipZTqG43Z+nts+cWiP4f8OkItL4G0
+         KU1w==
+X-Gm-Message-State: AOAM530mpKYLH7woJbV2ZL62c1zEw5Yqjc1IcV20v1Yng7LHJwna+bcj
+        IDw9HXDB9pax6uVKNMA6yOI=
+X-Google-Smtp-Source: ABdhPJxsCe87T5NI+JgIiJE/qfCIQTcZi/H4ZY84pU191xklSL3JJ6mrYDzYZWFd0iknWdI1IEiIIA==
+X-Received: by 2002:a05:600c:4f87:b0:38c:adde:1d99 with SMTP id n7-20020a05600c4f8700b0038cadde1d99mr29149033wmq.16.1649690568265;
+        Mon, 11 Apr 2022 08:22:48 -0700 (PDT)
 Received: from linuxdev2.toradex.int (31-10-206-124.static.upc.ch. [31.10.206.124])
-        by smtp.gmail.com with ESMTPSA id a9-20020a7bc1c9000000b0038eb67e966esm5209374wmj.29.2022.04.11.08.22.40
+        by smtp.gmail.com with ESMTPSA id a9-20020a7bc1c9000000b0038eb67e966esm5209374wmj.29.2022.04.11.08.22.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 08:22:41 -0700 (PDT)
+        Mon, 11 Apr 2022 08:22:47 -0700 (PDT)
 From:   Max Krummenacher <max.oss.09@gmail.com>
 To:     max.krummenacher@toradex.com
-Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Alistair Francis <alistair@alistair23.me>,
-        Arnd Bergmann <arnd@arndb.de>,
+Cc:     Rob Herring <robh@kernel.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
         Christoph Niedermaier <cniedermaier@dh-electronics.com>,
-        Douglas Anderson <dianders@chromium.org>,
         Fabio Estevam <festevam@gmail.com>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
         Li Yang <leoyang.li@nxp.com>,
         Lucas Stach <l.stach@pengutronix.de>,
         Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
         Oleksij Rempel <linux@rempel-privat.de>,
-        Olof Johansson <olof@lixom.net>,
-        Otavio Salvador <otavio@ossystems.com.br>,
-        Pascal Zimmermann <pzimmermann@dh-electronics.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Philippe Schenker <philippe.schenker@toradex.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         Shawn Guo <shawnguo@kernel.org>,
         Tim Harvey <tharvey@gateworks.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        soc@kernel.org
-Subject: [PATCH v2 00/14] ARM: dts: imx6dl-colibri: Misc improvements and newly added carriers
-Date:   Mon, 11 Apr 2022 17:22:20 +0200
-Message-Id: <20220411152234.12678-1-max.oss.09@gmail.com>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 01/14] dt-bindings: arm: fsl: imx6dl-colibri: Drop dedicated v1.1 bindings
+Date:   Mon, 11 Apr 2022 17:22:21 +0200
+Message-Id: <20220411152234.12678-2-max.oss.09@gmail.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220411152234.12678-1-max.oss.09@gmail.com>
+References: <20220411152234.12678-1-max.oss.09@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -95,93 +85,46 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Max Krummenacher <max.krummenacher@toradex.com>
 
+The dedicated device tree for V1.1 modules has been dropped. Remove
+its bindings too.
 
-This is a general update of the Colibri iMX6 device tree files.
+Acked-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 
-The Toradex Colibri family is composed of a SoM that can be plugged on
-various carrier boards, with carrier boards allowing multiple optional
-accessories (e.g. display, camera, ...).
-
-The device tree sources are structured into a SoM dtsi and a carrier dts
-which then includes the SoM dtsi. The SoM dtsi defines and enables the
-functionality self contained on the SoM and prepares for functionality
-provided by the carrier HW or accessories, so that the carrier dts then
-can enable or amend nodes provided. Accessories are enabled in overlays
-depending on HW configuration.
-
-The series improves the existing Colibri Evaluation Board device tree and
-adds new device trees for the Aster, Iris, and Iris V2 carrier boards.
-
-Additionally it drops the dedicated device tree for SoM V1.1 HW used in a
-Evaluation board. The regular device tree works well in that combination.
-The higher SD card speed possible with SoM V1.1 would require HW
-modification on the carrier board.
-
-Improvements:
-- Specifies GPIO line names for use with libgpiod.
-- Disables optional accessories. They would be enabled in overlays
-  depending on HW configuration.
-- Lower power consumption after poweroff.
-- Move more functionality into the SoM dtsi file to reduce code
-  duplication.
-- General cleanup to adhere to dtbs bindings and missed alphabetically
-  ordering.
-
-Fixes:
-- Copy/paste error in i2c2 pinmuxing resulting in i2c2 being
-  nonfunctional.
-
-Adds:
-- imx6dl-colibri-aster.dtb: used for a Colibri iMX6 mated in an Aster
-  carrier board.
-- imx6dl-colibri-iris.dtb: used for a Colibri iMX6 mated in an
-  Iris V1.x carrier board.
-- imx6dl-colibri-iris-v2.dtb: used for a Colibri iMX6 mated in an
-  Iris V2.x carrier board.
-
-Drops:
-- imx6dl-colibri-v1_1-eval-v3.dtb, imx6dl-colibri-eval-v3.dtb is good
-  enough.
+---
 
 Changes in v2:
-- Addressed 'From' address as reported by checkpatch / Shawn's feedback.
-- Added Rob's Ack to the 'dt-bindings' patches.
+- Added Rob's Ack
 
-Max Krummenacher (13):
-  dt-bindings: arm: fsl: imx6dl-colibri: Drop dedicated v1.1 bindings
-  dt-bindings: arm: fsl: Add carriers for toradex,colibri-imx6dl
-  ARM: dts: imx6dl-colibri: Drop dedicated v1.1 device tree
-  ARM: dts: imx6dl-colibri: Fix I2C pinmuxing
-  ARM: dts: imx6dl-colibri: Disable add-on accessories
-  ARM: dts: imx6dl-colibri: Command pmic to standby for poweroff
-  ARM: dts: imx6dl-colibri: Add additional pingroups
-  ARM: dts: imx6dl-colibri: Move common nodes to SoM dtsi
-  ARM: dts: imx6dl-colibri: Cleanup
-  ARM: dts: imx6dl-colibri: Add usdhc1 sleep pin configuration
-  ARM: dts: imx6dl-colibri: Add support for Toradex Iris carrier boards
-  ARM: dts: imx6dl-colibri: Add support for Toradex Aster carrier board
-  ARM: imx_v6_v7_defconfig: Enable the ADC part of the STMPE MFD
+ Documentation/devicetree/bindings/arm/fsl.yaml | 8 --------
+ 1 file changed, 8 deletions(-)
 
-Oleksandr Suvorov (1):
-  ARM: dts: imx6dl-colibri: Add gpio-line-names
-
- .../devicetree/bindings/arm/fsl.yaml          |  11 +-
- arch/arm/boot/dts/Makefile                    |   4 +-
- arch/arm/boot/dts/imx6dl-colibri-aster.dts    | 113 +++
- arch/arm/boot/dts/imx6dl-colibri-eval-v3.dts  | 110 +--
- arch/arm/boot/dts/imx6dl-colibri-iris-v2.dts  |  46 ++
- arch/arm/boot/dts/imx6dl-colibri-iris.dts     | 152 ++++
- .../boot/dts/imx6dl-colibri-v1_1-eval-v3.dts  |  31 -
- .../boot/dts/imx6qdl-colibri-v1_1-uhs.dtsi    |  44 -
- arch/arm/boot/dts/imx6qdl-colibri.dtsi        | 771 ++++++++++++++----
- arch/arm/configs/imx_v6_v7_defconfig          |   1 +
- 10 files changed, 919 insertions(+), 364 deletions(-)
- create mode 100644 arch/arm/boot/dts/imx6dl-colibri-aster.dts
- create mode 100644 arch/arm/boot/dts/imx6dl-colibri-iris-v2.dts
- create mode 100644 arch/arm/boot/dts/imx6dl-colibri-iris.dts
- delete mode 100644 arch/arm/boot/dts/imx6dl-colibri-v1_1-eval-v3.dts
- delete mode 100644 arch/arm/boot/dts/imx6qdl-colibri-v1_1-uhs.dtsi
-
+diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
+index 08bdd30e511c..cf97171506ca 100644
+--- a/Documentation/devicetree/bindings/arm/fsl.yaml
++++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+@@ -411,7 +411,6 @@ properties:
+               - technologic,imx6dl-ts4900
+               - technologic,imx6dl-ts7970
+               - toradex,colibri_imx6dl      # Colibri iMX6 Modules
+-              - toradex,colibri_imx6dl-v1_1 # Colibri iMX6 V1.1 Modules
+               - udoo,imx6dl-udoo          # Udoo i.MX6 Dual-lite Board
+               - vdl,lanmcu                # Van der Laan LANMCU board
+               - wand,imx6dl-wandboard     # Wandboard i.MX6 Dual Lite Board
+@@ -492,13 +491,6 @@ properties:
+           - const: toradex,colibri_imx6dl           # Colibri iMX6DL/S Module
+           - const: fsl,imx6dl
+ 
+-      - description: i.MX6DL Boards with Toradex Colibri iMX6DL/S V1.1 Modules
+-        items:
+-          - enum:
+-              - toradex,colibri_imx6dl-v1_1-eval-v3 # Colibri iMX6DL/S V1.1 M. on Colibri Evaluation Board V3
+-          - const: toradex,colibri_imx6dl-v1_1      # Colibri iMX6DL/S V1.1 Module
+-          - const: fsl,imx6dl
+-
+       - description: i.MX6S DHCOM DRC02 Board
+         items:
+           - const: dh,imx6s-dhcom-drc02
 -- 
 2.20.1
 

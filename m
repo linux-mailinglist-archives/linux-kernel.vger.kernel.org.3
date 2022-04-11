@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C68A84FC744
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 00:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE3B24FC73C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 00:00:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350346AbiDKWDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 18:03:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38116 "EHLO
+        id S1350313AbiDKWC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 18:02:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350375AbiDKWCk (ORCPT
+        with ESMTP id S1350376AbiDKWCk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 11 Apr 2022 18:02:40 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A7F9E39
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 15:00:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43CDBC5
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 15:00:25 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id 81CE41F438CC
+        with ESMTPSA id 306EB1F43C86
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649714423;
-        bh=CWqvGLqMByoxyOodrX4VDvjOrVtokLSbI2qbVKtiRlE=;
+        s=mail; t=1649714424;
+        bh=H5TVWLdKQBunPI+41h2cAjj6IZ6UbyVtXydAliQEN5M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ohca8T9NknI5hVHqu9rr5ZgXYuOC9GXZJtDtkVbj/OxMg8xZc+KmY1YlqktGRzbvn
-         RHHj5zlXOhIHZ1svIKMTtBTL6ieioJoyny22GnBKVQyb1Ns6Mjx3MQaHCkf70/myPB
-         KV7fN6iulrVusmojzr5DBZ5ymQGAPvmIycGUAtmOgpqwparzpS98z+VKZ8l1tSULGF
-         rEyX4IQ/DaUNR82ij5YKRy6pVvkfdA6l4cBlsINwR3h6ITsWIKx4W5mLI8cFfnW3Pm
-         87J8ylqNdiZH2vkmXUjfuS7k/ZWAIfkvsVU8WDUz7Lsc5ulnU8BZMw0dBu2TBOo90J
-         zqjruRAl8rwdg==
+        b=ghRkbXF8rhL12mWU1KFreAJI9IWMEWq2ZRIsd90oRUbv2Hi22nfvWlGYPyx1iO2Im
+         lLepkN8foGV3yYTi/kthftgh9ENBp8b7zqRqle9F6fYOnHDfVSbhI8GzOT2hwaGSGS
+         /A9STdZ5CD57NoJuhmSH9+3wm4N/Rbnd3gwu2JHh/UaekEDaQbVEtZW2zIbMnuK+Ei
+         vJ9nKFF0g73jEi//GPA6LAidI0lgOOscDFiB2ovh753SJpGMgB78FCJdtcr6okk34Z
+         iERUQs1LXIUQrYCJxf7S+GhF4m+eVHXZ6hnye92nR2xg0sDYgozC5onFTpl7k71MfR
+         JkzMscCGSUXlg==
 From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
 To:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
         Gurchetan Singh <gurchetansingh@chromium.org>,
@@ -48,9 +48,9 @@ Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         virtualization@lists.linux-foundation.org,
         Dmitry Osipenko <digetx@gmail.com>,
         Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Subject: [PATCH v3 04/15] drm/virtio: Unlock reservations on dma_resv_reserve_fences() error
-Date:   Tue, 12 Apr 2022 00:59:26 +0300
-Message-Id: <20220411215937.281655-5-dmitry.osipenko@collabora.com>
+Subject: [PATCH v3 05/15] drm/virtio: Use appropriate atomic state in virtio_gpu_plane_cleanup_fb()
+Date:   Tue, 12 Apr 2022 00:59:27 +0300
+Message-Id: <20220411215937.281655-6-dmitry.osipenko@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220411215937.281655-1-dmitry.osipenko@collabora.com>
 References: <20220411215937.281655-1-dmitry.osipenko@collabora.com>
@@ -66,31 +66,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Unlock reservations on dma_resv_reserve_fences() error to fix recursive
-locking of the reservations when this error happens.
+Make virtio_gpu_plane_cleanup_fb() to clean the state which DRM core
+wants to clean up and not the current plane's state. Normally the older
+atomic state is cleaned up, but the newer state could also be cleaned up
+in case of aborted commits.
 
 Cc: stable@vger.kernel.org
 Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 ---
- drivers/gpu/drm/virtio/virtgpu_gem.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/virtio/virtgpu_plane.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/virtio/virtgpu_gem.c b/drivers/gpu/drm/virtio/virtgpu_gem.c
-index 580a78809836..7db48d17ee3a 100644
---- a/drivers/gpu/drm/virtio/virtgpu_gem.c
-+++ b/drivers/gpu/drm/virtio/virtgpu_gem.c
-@@ -228,8 +228,10 @@ int virtio_gpu_array_lock_resv(struct virtio_gpu_object_array *objs)
- 
- 	for (i = 0; i < objs->nents; ++i) {
- 		ret = dma_resv_reserve_fences(objs->objs[i]->resv, 1);
--		if (ret)
-+		if (ret) {
-+			virtio_gpu_array_unlock_resv(objs);
- 			return ret;
-+		}
- 	}
- 	return ret;
+diff --git a/drivers/gpu/drm/virtio/virtgpu_plane.c b/drivers/gpu/drm/virtio/virtgpu_plane.c
+index 6d3cc9e238a4..7148f3813d8b 100644
+--- a/drivers/gpu/drm/virtio/virtgpu_plane.c
++++ b/drivers/gpu/drm/virtio/virtgpu_plane.c
+@@ -266,14 +266,14 @@ static int virtio_gpu_plane_prepare_fb(struct drm_plane *plane,
  }
+ 
+ static void virtio_gpu_plane_cleanup_fb(struct drm_plane *plane,
+-					struct drm_plane_state *old_state)
++					struct drm_plane_state *state)
+ {
+ 	struct virtio_gpu_framebuffer *vgfb;
+ 
+-	if (!plane->state->fb)
++	if (!state->fb)
+ 		return;
+ 
+-	vgfb = to_virtio_gpu_framebuffer(plane->state->fb);
++	vgfb = to_virtio_gpu_framebuffer(state->fb);
+ 	if (vgfb->fence) {
+ 		dma_fence_put(&vgfb->fence->f);
+ 		vgfb->fence = NULL;
 -- 
 2.35.1
 

@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CDA54FB7DF
+	by mail.lfdr.de (Postfix) with ESMTP id 9431B4FB7E0
 	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 11:41:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344416AbiDKJlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 05:41:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39862 "EHLO
+        id S1344614AbiDKJlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 05:41:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbiDKJkz (ORCPT
+        with ESMTP id S237470AbiDKJk7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 05:40:55 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66E3403DB
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 02:38:41 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id h23-20020a17090a051700b001c9c1dd3acbso16225147pjh.3
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 02:38:41 -0700 (PDT)
+        Mon, 11 Apr 2022 05:40:59 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E5C403F4
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 02:38:45 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id y8so8954193pfw.0
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 02:38:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=D81f+bPtPMlxnVjBN4tpMYR04ACl9RkF3fcOQCuWauY=;
-        b=fqEDwhsixdy86x/SmP+7NM6MCA1flbTTyQsOVkWS1VjiU69v7mE9DKHLS0tLtmO7e0
-         rC+7wwVgUzV5eieAo9ygj0D2eB+CukRKLUGgO2yky/FKwrMeP7C3p8MYaSZpaPpgIIwJ
-         Bgp0KCfaY4Xjlzo62K2wMTnmLr6Dnwuf5uyC2J1giwC9P7lahH1Ff8cpnQamxg5LWEXr
-         aIpJhLBhzB+kQKUUls/h9G2vwvl1Jbzlv4stwpq+uJwZsjsCNwKxq8T+hTjNtnIpgbif
-         ePOO4Ws0HCaotvty3uwiS771v7xEOZdxd9R/jcQ8g3yU13FxKScHdL+acYMvkt3HO++1
-         S6yg==
+        bh=pRxuPWbMbs8wFhTVrK8n5N1s7DUnR1sc6NHEuW/6L+8=;
+        b=g8s7VFcKbOqu/DOejzeFd33BpWvyQsXaqxN/rrPuVMr7ZvNMm7e0a/ZZ7WoUBV673d
+         MGPQ+BME/ylqlGu2kCjKm4xjpbbxkClpaoK/mWxTaWpTUFvZbld/T1XsKrziOWFWIKpu
+         AS57pZ3PmFGpd2UvCZp3K552m2n/r3CrvI5IMdGKgFyVO0hYgcECzTxq4o8iX23fRh8s
+         RXhoPLd/T9oKaShXPO669WHdB+oOG7g/yR8IRTLffmnUcsQeviq+h6R/hZrDnmf+Fq3K
+         YJce/odBrH9SwxFB1qSbag7cEHi/1fbB3L1T0wx5rj6LRZPXI6mKIlpnp/aiotiRhYSB
+         Zwnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=D81f+bPtPMlxnVjBN4tpMYR04ACl9RkF3fcOQCuWauY=;
-        b=fSvU7JbH4y0TqtIjd/YpZj2ARwTGFrj+WsnYqWxaimCqlK1IzSdjuBUM1PUqWCACRR
-         CU33Yrf6FbccjVQOSsyqBRfDUkMGKDtkmOZaJJBJMTPqmQRt82UoMpo4Tugc0v05opan
-         rrwT4DQVWjy3lh4GuMppQpnWyK2SMjQJjXsOkQc1TxU46QZl7TYOeGanHJ1b1N0SDPJA
-         NYtxKEckQDu7pmRFn79hkQTWQ8KxqYMoQ0Wk4x1Q6ZlpENSM2EaG8+93rJBkngiet5aq
-         9K0AsjlzK1uwHs3iM0wvK310a3GkGBGlnMqxnSVYHnrOXAUfZMhQ706+Tg0iF+jgtv1p
-         Z7rA==
-X-Gm-Message-State: AOAM532yy8KqYX9P1RUXsHic4bSusQwFIHaAjotod3bBobf82tw9YlrE
-        WfXFgwKYza0n61nyPPrwjaXMGg==
-X-Google-Smtp-Source: ABdhPJwdcwxx2nrrbryx7J1x7Yjni6FEfyJrVoRlOd/dwN5lKnx3IK1TtEAf2IZEd4bbA/+KtyuSSg==
-X-Received: by 2002:a17:90a:558a:b0:1ca:a819:d2d1 with SMTP id c10-20020a17090a558a00b001caa819d2d1mr35891842pji.126.1649669921195;
-        Mon, 11 Apr 2022 02:38:41 -0700 (PDT)
+        bh=pRxuPWbMbs8wFhTVrK8n5N1s7DUnR1sc6NHEuW/6L+8=;
+        b=r9QBOZuyNL9nwecuBLkdX9b31qMF5UXFEg23i26saZbm504gvWS2Azw63M44O2dDEQ
+         SeHQtVcYyPlNgD86Ys2+elYKdWiZYf6kD0K6cHunAC/FmK6bH2X0bzBHQCtP6MEFNH6r
+         3JlQk7X/FZIzCD8BNMCUOKA1G+ybkw6RWDq7DFQA4TygJ1V53l4jBzYDXi4NqAiZWPzi
+         lMsGJnQAF0WsfnG0PpwITLupL/p7TZxX8ovZ/ujZY+VjqzhUFEX1j+mruxiqFmpDDtk9
+         a1YnF1A2gp3Z/Q0X5gND4tH206BOWwiPX6pEEMhUUF+DkZk1uxQvQ+L6iEjshgk08O/+
+         zsUQ==
+X-Gm-Message-State: AOAM532QgcquAy9qB7rIo5Kfav8Z/ljLfyOKOfBWs22RmOQNzHS1yURk
+        DKhaOziW+/Gim2CXzRWxjAFYVw==
+X-Google-Smtp-Source: ABdhPJye9XGge34NNFjlN/s6B3+vnbcVaF9KVWw5sHTCfdGHlIZlxSeDf2G7QsgO3cii2n4XzlFqrg==
+X-Received: by 2002:a05:6a00:10c2:b0:4fd:a140:d5a9 with SMTP id d2-20020a056a0010c200b004fda140d5a9mr31894021pfu.77.1649669925260;
+        Mon, 11 Apr 2022 02:38:45 -0700 (PDT)
 Received: from localhost.localdomain ([223.177.215.72])
-        by smtp.gmail.com with ESMTPSA id d6-20020a056a00244600b004f701135460sm36461596pfj.146.2022.04.11.02.38.37
+        by smtp.gmail.com with ESMTPSA id d6-20020a056a00244600b004f701135460sm36461596pfj.146.2022.04.11.02.38.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 02:38:40 -0700 (PDT)
+        Mon, 11 Apr 2022 02:38:45 -0700 (PDT)
 From:   Sumit Garg <sumit.garg@linaro.org>
 To:     linux-arm-kernel@lists.infradead.org, dianders@chromium.org,
         will@kernel.org, liwei391@huawei.com
 Cc:     catalin.marinas@arm.com, mark.rutland@arm.com, mhiramat@kernel.org,
         daniel.thompson@linaro.org, jason.wessel@windriver.com,
         linux-kernel@vger.kernel.org, Sumit Garg <sumit.garg@linaro.org>
-Subject: [PATCH 1/2] arm64: kgdb: Fix incorrect single stepping into the irq handler
-Date:   Mon, 11 Apr 2022 15:08:18 +0530
-Message-Id: <20220411093819.1012583-2-sumit.garg@linaro.org>
+Subject: [PATCH 2/2] arm64: kgdb: Set PSTATE.SS to 1 to re-enable single-step
+Date:   Mon, 11 Apr 2022 15:08:19 +0530
+Message-Id: <20220411093819.1012583-3-sumit.garg@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220411093819.1012583-1-sumit.garg@linaro.org>
 References: <20220411093819.1012583-1-sumit.garg@linaro.org>
@@ -72,112 +72,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PSTATE.I and PSTATE.D are very important for single step working.
+After fixing wrongly single-stepping into the irq handler, when we execute
+single-step in kdb/kgdb, we can see only the first step can work.
 
-Without disabling interrupt on local CPU, there is a chance of
-interrupt occurrence in the period of exception return and start of
-kgdb/kdb single-step, that result in wrongly single stepping into the
-interrupt handler. And if D bit is set then, it results into undefined
-exception and when it's handler enables dbg then single step exception
-is generated, not as expected.
+Refer to the ARM Architecture Reference Manual (ARM DDI 0487E.a) D2.12,
+i think PSTATE.SS=1 should be set each step for transferring the PE to the
+'Active-not-pending' state. The problem here is PSTATE.SS=1 is not set
+since the second single-step.
 
-Currently when we execute single step in kdb/kgdb, we may see it jumps
-to the irq_handler (where PSTATE.D is cleared) instead of the next
-instruction. And a resume after single stepping into interrupt handler
-sometimes leads to unbalanced locking:
+After the first single-step, the PE transferes to the 'Inactive' state,
+with PSTATE.SS=0 and MDSCR.SS=1, thus PSTATE.SS won't be set to 1 due to
+kernel_active_single_step()=true. Then the PE transferes to the
+'Active-pending' state when ERET and returns to the debugger by step
+exception.
 
-[  300.328300] WARNING: bad unlock balance detected!
-[  300.328608] 5.18.0-rc1-00016-g3e732ebf7316-dirty #6 Not tainted
-[  300.329058] -------------------------------------
-[  300.329298] sh/173 is trying to release lock (dbg_slave_lock) at:
-[  300.329718] [<ffffd57c951c016c>] kgdb_cpu_enter+0x7ac/0x820
-[  300.330029] but there are no more locks to release!
-[  300.330265]
-[  300.330265] other info that might help us debug this:
-[  300.330668] 4 locks held by sh/173:
-[  300.330891]  #0: ffff4f5e454d8438 (sb_writers#3){.+.+}-{0:0}, at: vfs_write+0x98/0x204
-[  300.331735]  #1: ffffd57c973bc2f0 (dbg_slave_lock){+.+.}-{2:2}, at: kgdb_cpu_enter+0x5b4/0x820
-[  300.332259]  #2: ffffd57c973a9460 (rcu_read_lock){....}-{1:2}, at: kgdb_cpu_enter+0xe0/0x820
-[  300.332717]  #3: ffffd57c973bc2a8 (dbg_master_lock){....}-{2:2}, at: kgdb_cpu_enter+0x1ec/0x820
+Before this patch:
+==================
+Entering kdb (current=0xffff3376039f0000, pid 1) on processor 0 due to Keyboard Entry
+[0]kdb>
 
-Add the save and restore work for single-step while enabling and
-disabling single stepping to maintain the PSTATE.I and PSTATE.D carefully.
+[0]kdb>
+[0]kdb> bp write_sysrq_trigger
+Instruction(i) BP #0 at 0xffffa45c13d09290 (write_sysrq_trigger)
+    is enabled   addr at ffffa45c13d09290, hardtype=0 installed=0
+
+[0]kdb> go
+$ echo h > /proc/sysrq-trigger
+
+Entering kdb (current=0xffff4f7e453f8000, pid 175) on processor 1 due to Breakpoint @ 0xffffad651a309290
+[1]kdb> ss
+
+Entering kdb (current=0xffff4f7e453f8000, pid 175) on processor 1 due to SS trap @ 0xffffad651a309294
+[1]kdb> ss
+
+Entering kdb (current=0xffff4f7e453f8000, pid 175) on processor 1 due to SS trap @ 0xffffad651a309294
+[1]kdb>
+
+After this patch:
+=================
+Entering kdb (current=0xffff6851c39f0000, pid 1) on processor 0 due to Keyboard Entry
+[0]kdb> bp write_sysrq_trigger
+Instruction(i) BP #0 at 0xffffc02d2dd09290 (write_sysrq_trigger)
+    is enabled   addr at ffffc02d2dd09290, hardtype=0 installed=0
+
+[0]kdb> go
+$ echo h > /proc/sysrq-trigger
+
+Entering kdb (current=0xffff6851c53c1840, pid 174) on processor 1 due to Breakpoint @ 0xffffc02d2dd09290
+[1]kdb> ss
+
+Entering kdb (current=0xffff6851c53c1840, pid 174) on processor 1 due to SS trap @ 0xffffc02d2dd09294
+[1]kdb> ss
+
+Entering kdb (current=0xffff6851c53c1840, pid 174) on processor 1 due to SS trap @ 0xffffc02d2dd09298
+[1]kdb> ss
+
+Entering kdb (current=0xffff6851c53c1840, pid 174) on processor 1 due to SS trap @ 0xffffc02d2dd0929c
+[1]kdb>
 
 Fixes: 44679a4f142b ("arm64: KGDB: Add step debugging support")
 Co-developed-by: Wei Li <liwei391@huawei.com>
 Signed-off-by: Wei Li <liwei391@huawei.com>
 Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
 ---
- arch/arm64/kernel/kgdb.c | 33 +++++++++++++++++++++++++++++++--
- 1 file changed, 31 insertions(+), 2 deletions(-)
+ arch/arm64/include/asm/debug-monitors.h | 1 +
+ arch/arm64/kernel/debug-monitors.c      | 5 +++++
+ arch/arm64/kernel/kgdb.c                | 2 ++
+ 3 files changed, 8 insertions(+)
 
+diff --git a/arch/arm64/include/asm/debug-monitors.h b/arch/arm64/include/asm/debug-monitors.h
+index 00c291067e57..9e1e864d6440 100644
+--- a/arch/arm64/include/asm/debug-monitors.h
++++ b/arch/arm64/include/asm/debug-monitors.h
+@@ -104,6 +104,7 @@ void user_regs_reset_single_step(struct user_pt_regs *regs,
+ void kernel_enable_single_step(struct pt_regs *regs);
+ void kernel_disable_single_step(void);
+ int kernel_active_single_step(void);
++void kernel_regs_reset_single_step(struct pt_regs *regs);
+ 
+ #ifdef CONFIG_HAVE_HW_BREAKPOINT
+ int reinstall_suspended_bps(struct pt_regs *regs);
+diff --git a/arch/arm64/kernel/debug-monitors.c b/arch/arm64/kernel/debug-monitors.c
+index 4f3661eeb7ec..ea3f410aa385 100644
+--- a/arch/arm64/kernel/debug-monitors.c
++++ b/arch/arm64/kernel/debug-monitors.c
+@@ -438,6 +438,11 @@ int kernel_active_single_step(void)
+ }
+ NOKPROBE_SYMBOL(kernel_active_single_step);
+ 
++void kernel_regs_reset_single_step(struct pt_regs *regs)
++{
++	set_regs_spsr_ss(regs);
++}
++
+ /* ptrace API */
+ void user_enable_single_step(struct task_struct *task)
+ {
 diff --git a/arch/arm64/kernel/kgdb.c b/arch/arm64/kernel/kgdb.c
-index 2aede780fb80..653ad0d19f2f 100644
+index 653ad0d19f2f..783484a3a831 100644
 --- a/arch/arm64/kernel/kgdb.c
 +++ b/arch/arm64/kernel/kgdb.c
-@@ -15,6 +15,7 @@
- #include <linux/kprobes.h>
- #include <linux/sched/task_stack.h>
- 
-+#include <asm/daifflags.h>
- #include <asm/debug-monitors.h>
- #include <asm/insn.h>
- #include <asm/patching.h>
-@@ -171,6 +172,30 @@ static void kgdb_arch_update_addr(struct pt_regs *regs,
- 	compiled_break = 0;
- }
- 
-+/*
-+ * Interrupts need to be disabled before single-step mode is set, and not
-+ * re-enabled until after single-step mode ends. Without disabling interrupt
-+ * on local CPU, there is a chance of interrupt occurrence in the period of
-+ * exception return and start of kgdb/kdb single-step, that result in wrongly
-+ * single stepping into the interrupt handler. Also, resume from single
-+ * stepping the interrupt handler is risky as it sometimes leads to unbalanced
-+ * locking.
-+ */
-+static DEFINE_PER_CPU(unsigned long, kgdb_ss_flags);
-+
-+static void kgdb_save_local_irqflag(struct pt_regs *regs)
-+{
-+	__this_cpu_write(kgdb_ss_flags, (regs->pstate & DAIF_MASK));
-+	regs->pstate |= PSR_I_BIT;
-+	regs->pstate &= ~PSR_D_BIT;
-+}
-+
-+static void kgdb_restore_local_irqflag(struct pt_regs *regs)
-+{
-+	regs->pstate &= ~DAIF_MASK;
-+	regs->pstate |= __this_cpu_read(kgdb_ss_flags);
-+}
-+
- int kgdb_arch_handle_exception(int exception_vector, int signo,
- 			       int err_code, char *remcom_in_buffer,
- 			       char *remcom_out_buffer,
-@@ -201,8 +226,10 @@ int kgdb_arch_handle_exception(int exception_vector, int signo,
- 		/*
- 		 * Received continue command, disable single step
- 		 */
--		if (kernel_active_single_step())
-+		if (kernel_active_single_step()) {
-+			kgdb_restore_local_irqflag(linux_regs);
- 			kernel_disable_single_step();
-+		}
- 
- 		err = 0;
- 		break;
-@@ -222,8 +249,10 @@ int kgdb_arch_handle_exception(int exception_vector, int signo,
- 		/*
- 		 * Enable single step handling
- 		 */
--		if (!kernel_active_single_step())
-+		if (!kernel_active_single_step()) {
-+			kgdb_save_local_irqflag(linux_regs);
+@@ -252,6 +252,8 @@ int kgdb_arch_handle_exception(int exception_vector, int signo,
+ 		if (!kernel_active_single_step()) {
+ 			kgdb_save_local_irqflag(linux_regs);
  			kernel_enable_single_step(linux_regs);
-+		}
++		} else {
++			kernel_regs_reset_single_step(linux_regs);
+ 		}
  		err = 0;
  		break;
- 	default:
 -- 
 2.25.1
 

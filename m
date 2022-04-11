@@ -2,175 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF5FF4FB3FF
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 08:50:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78B274FB444
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 08:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245070AbiDKGwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 02:52:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
+        id S234672AbiDKHAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 03:00:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231206AbiDKGwC (ORCPT
+        with ESMTP id S245186AbiDKG7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 02:52:02 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E4118B13;
-        Sun, 10 Apr 2022 23:49:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649659789; x=1681195789;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=Im18RwYdvETKIFnmTzUmsr5SNvinw0XNRdaj7/G9hPU=;
-  b=nahHGn8CB8nwBoomeylnzecH4kkM2bHE4szTEDm3ePuuo/gahsbgWve7
-   xNDLJb9SlFijIGdBXMqIrupJu8JkhGwfYpF16hiQxeo/wVXzg6DTSk5bi
-   uNwosBm1hYTDsTzHRddJz6CKjWgHiVdJpTFAPDsoKMPnosaNqiGhxncWP
-   yXZCbxXTFAdz1WvyrkpHVCVM7UjDW2ZkgHJFSf9Idefb2qhlTAh/PWyqH
-   R/1Wk8T7S/sch3mHV6O+/aj/26POc2LVBsw7E8xYzSAuyBUYKSZlbGBpU
-   fBbjd13zDwJHDtTpf1BLGku8OYRt+KBo7bFPeUJc2Z03/8E6nUOub4Rwc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="324959680"
-X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
-   d="scan'208";a="324959680"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2022 23:49:49 -0700
-X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
-   d="scan'208";a="525318292"
-Received: from srkondle-mobl.amr.corp.intel.com (HELO [10.212.113.6]) ([10.212.113.6])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2022 23:49:47 -0700
-Message-ID: <a8e79d89-ec91-8f04-88b5-be932e9fb020@intel.com>
-Date:   Sun, 10 Apr 2022 23:49:52 -0700
+        Mon, 11 Apr 2022 02:59:54 -0400
+Received: from mx1.cqplus1.com (unknown [113.204.237.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B50B3DDC1
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 23:57:12 -0700 (PDT)
+X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
+        LIVER,40,3)
+Received: from 172.28.114.216
+        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(1173:0:AUTH_RELAY)
+        (envelope-from <qinjian@cqplus1.com>); Mon, 11 Apr 2022 14:49:04 +0800 (CST)
+From:   Qin Jian <qinjian@cqplus1.com>
+To:     krzysztof.kozlowski@linaro.org
+Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        tglx@linutronix.de, maz@kernel.org, p.zabel@pengutronix.de,
+        linux@armlinux.org.uk, arnd@arndb.de,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Qin Jian <qinjian@cqplus1.com>
+Subject: [PATCH v13 2/9] dt-bindings: reset: Add bindings for SP7021 reset driver
+Date:   Mon, 11 Apr 2022 14:49:52 +0800
+Message-Id: <11b8f60a7f19f25d2fdaa7a2ed770e9383cec3ba.1649659095.git.qinjian@cqplus1.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <cover.1649659095.git.qinjian@cqplus1.com>
+References: <cover.1649659095.git.qinjian@cqplus1.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
- <20220405234343.74045-5-kirill.shutemov@linux.intel.com>
- <043469ae-427c-b2bb-89ff-db8975894266@intel.com>
- <20220409202035.plaiekzuihov4kvq@box.shutemov.name>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCHv4 4/8] x86/boot/compressed: Handle unaccepted memory
-In-Reply-To: <20220409202035.plaiekzuihov4kvq@box.shutemov.name>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/9/22 13:20, Kirill A. Shutemov wrote:
-> On Fri, Apr 08, 2022 at 10:57:17AM -0700, Dave Hansen wrote:
-...
->> It's a real shame that we have to duplicate this code.  Is there
->> anything crazy we could do here like
->>
->> #include "../../../lib/find_bit.c"
->>
->> ?
-> 
-> Well, it would require fracturing source files on the kernel side.
-> 
-> __bitmap_set() and __bitmap_clear() are now in lib/bitmap.c.
-> 
-> _find_next_bit() is in lib/find_bit.c.
-> 
-> Both lib/bitmap.c and lib/find_bit.c have a lot of stuff that are not used
-> here. I guess we would need to split them into few pieces to make it in
-> sane way. Do you want me to go this path?
+Add documentation to describe Sunplus SP7021 reset driver bindings.
 
-I'd be curious if others have any sane ideas for how to do it.
+Signed-off-by: Qin Jian <qinjian@cqplus1.com>
+---
+Move HW mapping from dt-binding header to driver.
+---
+ .../bindings/reset/sunplus,reset.yaml         | 38 ++++++++
+ MAINTAINERS                                   |  2 +
+ include/dt-bindings/reset/sp-sp7021.h         | 87 +++++++++++++++++++
+ 3 files changed, 127 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/reset/sunplus,reset.yaml
+ create mode 100644 include/dt-bindings/reset/sp-sp7021.h
 
-One idea would be to stick most of the implementation in a header that
-we can #include.  Then, lib/find_bit.c #includes that header and does
-something simple like:
-
-#include "header.h"
-int _find_next_bit(...)
-{
-	return _find_next_bit_from_header();
-}
-EXPORT_SYMBOL(_find_next_bit);
-
-
->>> diff --git a/arch/x86/boot/compressed/misc.c b/arch/x86/boot/compressed/misc.c
->>> index fa8969fad011..c1d9d71a6615 100644
->>> --- a/arch/x86/boot/compressed/misc.c
->>> +++ b/arch/x86/boot/compressed/misc.c
->>> @@ -18,6 +18,7 @@
->>>  #include "../string.h"
->>>  #include "../voffset.h"
->>>  #include <asm/bootparam_utils.h>
->>> +#include <asm/unaccepted_memory.h>
->>>  
->>>  /*
->>>   * WARNING!!
->>> @@ -43,6 +44,9 @@
->>>  void *memmove(void *dest, const void *src, size_t n);
->>>  #endif
->>>  
->>> +#undef __pa
->>> +#define __pa(x)	((unsigned long)(x))
->>
->> Those #undef's always worry me.  Why is this one needed?
-> 
-> arch/x86/boot/compressed/misc.c:47:9: warning: '__pa' macro redefined [-Wmacro-redefined]
-> #define __pa(x) ((unsigned long)(x))
->         ^
-> arch/x86/include/asm/page.h:47:9: note: previous definition is here
-> #define __pa(x)         __phys_addr((unsigned long)(x))
-> 
-> Note that sev.c does the same. At least we are consistent :)
-
-Ugh.  Please do look into fixing this properly.  The SEV folks will
-thank you. :)
-
->>> +void accept_memory(phys_addr_t start, phys_addr_t end)
->>> +{
->>> +	unsigned long *unaccepted_memory;
->>> +	unsigned int rs, re;
->>> +
->>> +	unaccepted_memory = (unsigned long *)boot_params->unaccepted_memory;
->>> +	rs = start / PMD_SIZE;
->>
->> OK, so start is a physical address, PMD_SIZE is 2^21, and 'rs' is an
->> unsigned int.  That means 'rs' can, at most, represent a physical
->> address at 2^(21+32), or 2^53.  That's cutting it a *bit* close, don't
->> you think?
->>
->> Could we please just give 'rs' and 're' real names and make them
->> 'unsigned long's, please?  It will surely save at least one other person
->> from doing math.  The find_next_bit() functions seem to take ulongs anyway.
-> 
-> Okay. 'range_start' and 'range_end' are good enough names?
-
-Yep, works for me.
+diff --git a/Documentation/devicetree/bindings/reset/sunplus,reset.yaml b/Documentation/devicetree/bindings/reset/sunplus,reset.yaml
+new file mode 100644
+index 000000000..f24646ba9
+--- /dev/null
++++ b/Documentation/devicetree/bindings/reset/sunplus,reset.yaml
+@@ -0,0 +1,38 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (C) Sunplus Co., Ltd. 2021
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/reset/sunplus,reset.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: Sunplus SoC Reset Controller
++
++maintainers:
++  - Qin Jian <qinjian@cqplus1.com>
++
++properties:
++  compatible:
++    const: sunplus,sp7021-reset
++
++  reg:
++    maxItems: 1
++
++  "#reset-cells":
++    const: 1
++
++required:
++  - compatible
++  - reg
++  - "#reset-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    rstc: reset@9c000054 {
++      compatible = "sunplus,sp7021-reset";
++      reg = <0x9c000054 0x28>;
++      #reset-cells = <1>;
++    };
++
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8b5e2e639..a8be86b25 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2744,6 +2744,8 @@ L:	linux-arm-kernel@lists.infradead.org (moderated for mon-subscribers)
+ S:	Maintained
+ W:	https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+ F:	Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
++F:	Documentation/devicetree/bindings/reset/sunplus,reset.yaml
++F:	include/dt-bindings/reset/sp-sp7021.h
+ 
+ ARM/Synaptics SoC support
+ M:	Jisheng Zhang <jszhang@kernel.org>
+diff --git a/include/dt-bindings/reset/sp-sp7021.h b/include/dt-bindings/reset/sp-sp7021.h
+new file mode 100644
+index 000000000..ab4867073
+--- /dev/null
++++ b/include/dt-bindings/reset/sp-sp7021.h
+@@ -0,0 +1,87 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++/*
++ * Copyright (C) Sunplus Technology Co., Ltd.
++ *       All rights reserved.
++ */
++#ifndef _DT_BINDINGS_RST_SUNPLUS_SP7021_H
++#define _DT_BINDINGS_RST_SUNPLUS_SP7021_H
++
++#define RST_SYSTEM              0
++#define RST_RTC                 1
++#define RST_IOCTL               2
++#define RST_IOP                 3
++#define RST_OTPRX               4
++#define RST_NOC                 5
++#define RST_BR                  6
++#define RST_RBUS_L00            7
++#define RST_SPIFL               8
++#define RST_SDCTRL0             9
++#define RST_PERI0               10
++#define RST_A926                11
++#define RST_UMCTL2              12
++#define RST_PERI1               13
++#define RST_DDR_PHY0            14
++#define RST_ACHIP               15
++#define RST_STC0                16
++#define RST_STC_AV0             17
++#define RST_STC_AV1             18
++#define RST_STC_AV2             19
++#define RST_UA0                 20
++#define RST_UA1                 21
++#define RST_UA2                 22
++#define RST_UA3                 23
++#define RST_UA4                 24
++#define RST_HWUA                25
++#define RST_DDC0                26
++#define RST_UADMA               27
++#define RST_CBDMA0              28
++#define RST_CBDMA1              29
++#define RST_SPI_COMBO_0         30
++#define RST_SPI_COMBO_1         31
++#define RST_SPI_COMBO_2         32
++#define RST_SPI_COMBO_3         33
++#define RST_AUD                 34
++#define RST_USBC0               35
++#define RST_USBC1               36
++#define RST_UPHY0               37
++#define RST_UPHY1               38
++#define RST_I2CM0               39
++#define RST_I2CM1               40
++#define RST_I2CM2               41
++#define RST_I2CM3               42
++#define RST_PMC                 43
++#define RST_CARD_CTL0           44
++#define RST_CARD_CTL1           45
++#define RST_CARD_CTL4           46
++#define RST_BCH                 47
++#define RST_DDFCH               48
++#define RST_CSIIW0              49
++#define RST_CSIIW1              50
++#define RST_MIPICSI0            51
++#define RST_MIPICSI1            52
++#define RST_HDMI_TX             53
++#define RST_VPOST               54
++#define RST_TGEN                55
++#define RST_DMIX                56
++#define RST_TCON                57
++#define RST_INTERRUPT           58
++#define RST_RGST                59
++#define RST_GPIO                60
++#define RST_RBUS_TOP            61
++#define RST_MAILBOX             62
++#define RST_SPIND               63
++#define RST_I2C2CBUS            64
++#define RST_SEC                 65
++#define RST_DVE                 66
++#define RST_GPOST0              67
++#define RST_OSD0                68
++#define RST_DISP_PWM            69
++#define RST_UADBG               70
++#define RST_DUMMY_MASTER        71
++#define RST_FIO_CTL             72
++#define RST_FPGA                73
++#define RST_L2SW                74
++#define RST_ICM                 75
++#define RST_AXI_GLOBAL          76
++
++#endif
+-- 
+2.33.1
 

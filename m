@@ -2,111 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2141D4FC756
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 00:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80DFE4FC767
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 00:13:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348541AbiDKWJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 18:09:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51884 "EHLO
+        id S1350267AbiDKWPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 18:15:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344427AbiDKWJh (ORCPT
+        with ESMTP id S229678AbiDKWPa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 18:09:37 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0F321265
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 15:07:21 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id bx5so16486859pjb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 15:07:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uGTALhbZONK07EnTqNzLb5OFo7sOJ1WnH/JS/fksxZ4=;
-        b=qW44w090em7gPbYvbMftkAX4Kvke2EP4xsZopvyQYxJet+uD2q9FrkvME10M9tUtmO
-         X0ArALnU4GOM4RpFLYtr4bx0MpBZA554kHWbufBfTUNaqHhLHDjr51XHQdOPMxkQgCXg
-         NV0mdNXOuzxeZUNmauE//Xw4ily3/UjO/MvX7UN7+CVRdmJUV6HF15N4VgrrGumDREwQ
-         mQr7NBQxJVjAKI7QuaN+TbxUCnrDwve7/GDCashxgzsy+utUcS00v8RMdQzi18ZQO+sj
-         C3gytJIJs+P+LCAmm5F7B8ZgvVAvSUSOeGPK1NcM/2jE17EGM2aXjbAO22u5NH5fWlQJ
-         NrxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uGTALhbZONK07EnTqNzLb5OFo7sOJ1WnH/JS/fksxZ4=;
-        b=Dp9nXl5+xrAgJfUHnjK8vN+ltIjXO/8ALXoVavTgIfL8jn2jEFRcWAa0BoEO7IB4Hn
-         pby6GeUQ6ap1+pwlOWyOZnjmJE6WX343NO6UJUooABQpczxu9lYLGb2jiqXV5dnZ7NeM
-         wiLhbL7N9/fzgYXNEPPySP3+Rr+oRphue0+XLMeMZd5/fnSJSuiWKyEO73qNOURy+lHJ
-         kf1RD4uv0mzpnVV9xJ6qFvYyqizN/LPgrX1WaSkPWh/lsej+Lh0BRWHhVy/Qd56uWr9W
-         tbwVUYK8D5ZTTNvig5TgxTSWwL3dV3SmljSmRiTeCMUol4clKbwDg9L+tDAnIwF3yUrF
-         9BIg==
-X-Gm-Message-State: AOAM532CnENh5UNYCXYZ6+X89SPUv7iVPWDM6MlS4aN0Zu7UWFUQy150
-        lRVMbc3Dx7Sc4Jy3EgV4UBA3uYjVZAb4iRfh0kVTXQ==
-X-Google-Smtp-Source: ABdhPJynx2l3cB2Gnxdh26yL6kd+AAVfXhzzqC3Ft2s9qeSNSOaR3yfL83lS+0+wlt4mWc4yp2miJE+sHJq1HcNQSls=
-X-Received: by 2002:a17:902:eb92:b0:158:4cc9:698e with SMTP id
- q18-20020a170902eb9200b001584cc9698emr11070951plg.147.1649714840717; Mon, 11
- Apr 2022 15:07:20 -0700 (PDT)
+        Mon, 11 Apr 2022 18:15:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B49162E8;
+        Mon, 11 Apr 2022 15:13:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 97EE76173E;
+        Mon, 11 Apr 2022 22:13:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C231C385A3;
+        Mon, 11 Apr 2022 22:13:13 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="KybX01zY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1649715191;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gSudnh1FVwn/cRuaWERLZCgg6VCPqB/kIypq5KjigTQ=;
+        b=KybX01zYWKByBGHHcfMAmavnP7L0p3jg7aV2fmW50XiFpz7B1LAEyJXHq3V4iRh7NnrsVG
+        WlIHJ9f0wTZy8WOOgmyYrCIi8QNK9nY17FyQTt9LA8IcFXu4dkJkUI/J2c7LyuJha0Ot6K
+        tj5LHYp+jIpnZFZ/H9s4FciDdH7BJ7o=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 43c1faab (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Mon, 11 Apr 2022 22:13:10 +0000 (UTC)
+Received: by mail-yb1-xb2a.google.com with SMTP id p65so11704866ybp.9;
+        Mon, 11 Apr 2022 15:13:10 -0700 (PDT)
+X-Gm-Message-State: AOAM531o3aMtHXCKOjNg5ZH62+QRpI2yDLO1zJgtX3N5nGdsMGVgt6jA
+        1CxTuqgqwJRJjIifKG5V2sqCHa2KYEntwdUMm64=
+X-Google-Smtp-Source: ABdhPJyrbHcZ7X1J23rQnANqA3RR06u0ZM3R7CT8etsKwGDR+r4LAk7JuXL3JmvpUSxPvBr0OEr8z3kykwSI+XeJazE=
+X-Received: by 2002:a5b:6cf:0:b0:61e:1371:3cda with SMTP id
+ r15-20020a5b06cf000000b0061e13713cdamr24066153ybq.235.1649714889427; Mon, 11
+ Apr 2022 15:08:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220405194747.2386619-1-jane.chu@oracle.com> <20220405194747.2386619-2-jane.chu@oracle.com>
-In-Reply-To: <20220405194747.2386619-2-jane.chu@oracle.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Mon, 11 Apr 2022 15:07:10 -0700
-Message-ID: <CAPcyv4gr7YzrmqNhA-S8h-nRhpr8OHhUkn16c8jiL1U3ypp1wQ@mail.gmail.com>
-Subject: Re: [PATCH v7 1/6] x86/mm: fix comment
-To:     Jane Chu <jane.chu@oracle.com>
-Cc:     david <david@fromorbit.com>, "Darrick J. Wong" <djwong@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Vishal L Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>,
-        device-mapper development <dm-devel@redhat.com>,
-        "Weiny, Ira" <ira.weiny@intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux NVDIMM <nvdimm@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-xfs <linux-xfs@vger.kernel.org>, X86 ML <x86@kernel.org>
+References: <20220410214951.55294-1-Jason@zx2c4.com> <20220410214951.55294-4-Jason@zx2c4.com>
+ <87sfqkf2y1.ffs@tglx>
+In-Reply-To: <87sfqkf2y1.ffs@tglx>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Tue, 12 Apr 2022 00:07:58 +0200
+X-Gmail-Original-Message-ID: <CAHmME9qU7x3=KsjfH0qDW=isdcGxTweHbssvshYxkV5iHpamGw@mail.gmail.com>
+Message-ID: <CAHmME9qU7x3=KsjfH0qDW=isdcGxTweHbssvshYxkV5iHpamGw@mail.gmail.com>
+Subject: Re: [PATCH v2 03/11] m68k: use ktime_read_raw_clock() for
+ random_get_entropy() instead of zero
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, "Theodore Ts'o" <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "David S . Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        X86 ML <x86@kernel.org>, linux-xtensa@linux-xtensa.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 12:48 PM Jane Chu <jane.chu@oracle.com> wrote:
->
-> There is no _set_memory_prot internal helper, while coming across
-> the code, might as well fix the comment.
+Hi Thomas,
 
-Looks good,
+On Mon, Apr 11, 2022 at 10:18 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+> > diff --git a/arch/m68k/include/asm/timex.h b/arch/m68k/include/asm/timex.h
+> > index 6a21d9358280..5351b10e1b18 100644
+> > --- a/arch/m68k/include/asm/timex.h
+> > +++ b/arch/m68k/include/asm/timex.h
+> > @@ -35,7 +35,7 @@ static inline unsigned long random_get_entropy(void)
+> >  {
+> >       if (mach_random_get_entropy)
+> >               return mach_random_get_entropy();
+> > -     return 0;
+> > +     return ktime_read_raw_clock();
+>
+> I'd rather do something like this in a common header:
+>
+> unsigned long random_get_entropy_fallback(void);
+>
+> and use random_get_entropy_fallback() in the architecture specific
+> files.
+>
+> That way you can encapsulate the fallback implementation in the random
+> code and if it turns out that ktime_read_raw_clock() is a stupid idea or
+> someone has a better idea then you have to change exactly one place and
+> not patch the whole tree again.
 
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Absolutely. That's a good idea. I'll do that for v3.
 
->
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> Signed-off-by: Jane Chu <jane.chu@oracle.com>
-> ---
->  arch/x86/mm/pat/set_memory.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-> index abf5ed76e4b7..38af155aaba9 100644
-> --- a/arch/x86/mm/pat/set_memory.c
-> +++ b/arch/x86/mm/pat/set_memory.c
-> @@ -1816,7 +1816,7 @@ static inline int cpa_clear_pages_array(struct page **pages, int numpages,
->  }
->
->  /*
-> - * _set_memory_prot is an internal helper for callers that have been passed
-> + * __set_memory_prot is an internal helper for callers that have been passed
->   * a pgprot_t value from upper layers and a reservation has already been taken.
->   * If you want to set the pgprot to a specific page protocol, use the
->   * set_memory_xx() functions.
-> --
-> 2.18.4
->
+Jason

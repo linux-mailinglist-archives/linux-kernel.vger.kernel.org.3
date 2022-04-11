@@ -2,155 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F5A54FC118
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 378604FC119
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:41:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348084AbiDKPnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 11:43:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38100 "EHLO
+        id S1348097AbiDKPna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 11:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348186AbiDKPm4 (ORCPT
+        with ESMTP id S1344484AbiDKPn0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 11:42:56 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603A93A727;
-        Mon, 11 Apr 2022 08:40:41 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id t1so5932266wra.4;
-        Mon, 11 Apr 2022 08:40:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=kURCqWE8pomFkfYFiXr4O15/fAJHColFs2BDAs5/sSY=;
-        b=JtoaVvLTXvRhY3gYKm77KhSxq+xb1+GNAnVO3CZFzO9gm8QRx1cDg3BS7TrSiYd6sP
-         NQJFtUPhw9/KvCsKvJv+9LmViJLY1/vOcRqH9UVoS4nrkacZGUr+QMzjX9vSzAKYT0r/
-         ZNwbY1n6vQCPWLPbZgQ2PmigGmGzuglGmfX8wxSMW6sFPo6+ad/HNxr1nObKLDhVznyw
-         14BVrHCXdbAZ6CIUMpFt7lClsNf5WkZxiL41emF5hIIzgbI82zNPcubfwP2ZcJc9SHJ7
-         QOXzF2p5wih7tlA+wCqGhR0sbcXPQZVO9BMe10mNM+OhIG9BAjICICEStMJA0HeXCIls
-         HPTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=kURCqWE8pomFkfYFiXr4O15/fAJHColFs2BDAs5/sSY=;
-        b=eXUOY8cKN3+a1xuX3W2PUhGikfdRBmjOe8RaJNI4N1J4lQFbVWsIF7lLAPszxEruSX
-         Pi3GQnoEO/VcXzkPifPqHs3rkN/vxU6d0/80rohXwAWM2p19oUeUdv8lgJ72of5aMz+W
-         a+1T3j1aNGUH0fSRQgf7yXhlzpe2d9vES++RnrR0ti2g7KmnE2fzvgRpm50i2D9c6UtI
-         rQG/4oAasvmqr2HcUHdc8tZRFuxK50zr5tgdKf6Chfn+71sRjrjbQcs/DJnJMpcW3Cu0
-         yiTfDEvlbOzB/MamnM3puXq8vSZGOGC6ZI8ezisE4WAGUcVr2oBwctS6a0XuzHAlYgoE
-         bvBQ==
-X-Gm-Message-State: AOAM5334AIRwtnGYFQzvWAptMZNjunGNQGnHHXPLrCTZwcWAXRfqebtm
-        ewqd/ABu/QSv3cODkGBmp/c=
-X-Google-Smtp-Source: ABdhPJw+7iaYzPWSZQx3m2FbTZmDAGdYmIThnu0ups3wQnpV0ymEdmrs+11yOe3CNNLF+7H6a6WQwQ==
-X-Received: by 2002:adf:dd8a:0:b0:207:9e5f:fd0a with SMTP id x10-20020adfdd8a000000b002079e5ffd0amr9290217wrl.94.1649691639887;
-        Mon, 11 Apr 2022 08:40:39 -0700 (PDT)
-Received: from kista.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
-        by smtp.gmail.com with ESMTPSA id g8-20020a5d4888000000b00207a49fa6a1sm4710207wrq.81.2022.04.11.08.40.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 08:40:39 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Chen-Yu Tsai <wens@csie.org>, Maxime Ripard <mripard@kernel.org>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 05/10] drm/sun4i: csc: Add support for the new MMIO layout
-Date:   Mon, 11 Apr 2022 17:40:38 +0200
-Message-ID: <21425699.EfDdHjke4D@kista>
-In-Reply-To: <20220411043423.37333-6-samuel@sholland.org>
-References: <20220411043423.37333-1-samuel@sholland.org> <20220411043423.37333-6-samuel@sholland.org>
+        Mon, 11 Apr 2022 11:43:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA713A727;
+        Mon, 11 Apr 2022 08:41:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F30FFB816C8;
+        Mon, 11 Apr 2022 15:41:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C66DC385A9;
+        Mon, 11 Apr 2022 15:41:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649691669;
+        bh=npFtzkXL9USbwxc64uUOhv5ZdsUEMzFWqJDnGZ7iBGw=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=HH3/N7+vsaNjto7aVHZmveOHTYoh/M8ahb1OZiT0kA6zuSWE8N+vITBUo2NMABJsD
+         3guCebWhcV7Ppvw3uSR5E4yg/1UiQRKpZJZeUTzi9F8MYkBoNiwWejcsZUP0DhHIZi
+         nudCOsM0n/EK3PR+7R16NBa4MWHQgvU2lFcKoBf10SDCRX8CNDF8GNGNZJfVwTYKZF
+         WCfAqeG9UrTaP7vMnLHl7Fhoe8r7C6BK8Ha6pFFGzNnJMnSLYpLKZgtnByPfwYvVaz
+         Llzs5E+O0fSczABA8nHpn3l7fbXFAvj/jtuaP/gZ8qed9FW4c4pu0t8imDp78W0ohn
+         DRGeuwpqOEUVQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 3F9165C03AE; Mon, 11 Apr 2022 08:41:09 -0700 (PDT)
+Date:   Mon, 11 Apr 2022 08:41:09 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        rcu <rcu@vger.kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: Re: [PATCH RFC] rcu/nocb: Provide default all-CPUs mask for
+ RCU_NOCB_CPU=y
+Message-ID: <20220411154109.GX4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220407210734.2548973-1-joel@joelfernandes.org>
+ <20220408142232.GA4285@paulmck-ThinkPad-P17-Gen-1>
+ <CAEXW_YQWeqfcKdAKmCn4fFGyWXjOGd=29wvi6bL3k7s2bGkDJw@mail.gmail.com>
+ <20220408155002.GF4285@paulmck-ThinkPad-P17-Gen-1>
+ <CAEXW_YQDgSO2XkkVhN3RBBz3vwYdAtTuPz-xYYsAPnwEnbYZPA@mail.gmail.com>
+ <20220408174908.GK4285@paulmck-ThinkPad-P17-Gen-1>
+ <CAEXW_YQ+oE3xQ0tLnBMFxRXLqKZkT5UfjF+CULxnhf9F-dEA2g@mail.gmail.com>
+ <CAEXW_YRK2t2JO4RyBTd8cR9sTVpgP7Z5Ywhb1g7CRz3HJ_kNQA@mail.gmail.com>
+ <20220408205440.GL4285@paulmck-ThinkPad-P17-Gen-1>
+ <CAEXW_YTunj5j7cxT3VYGGmJwcQowpDiyqmewiwHjyXP-zJd4FA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEXW_YTunj5j7cxT3VYGGmJwcQowpDiyqmewiwHjyXP-zJd4FA@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne ponedeljek, 11. april 2022 ob 06:34:17 CEST je Samuel Holland napisal(a):
-> D1 changes the MMIO address offset for the CSC blocks in the first
-> mixer. The ccsc field value is used as an index into the ccsc_base
-> array; allocate the next available value to represent the new variant.
+On Mon, Apr 11, 2022 at 11:17:02AM -0400, Joel Fernandes wrote:
+> Hi Paul,
 > 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
+> On Fri, Apr 8, 2022 at 4:54 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> [...]
+> > > > > > > > > And is it really all -that- hard to specify an additional boot parameter
+> > > > > > > > > across ChromeOS devices?  Android seems to manage it.  ;-)
+> > > > > > > >
+> > > > > > > > That's not the hard part I think. The hard part is to make sure a
+> > > > > > > > future Linux user who is not an RCU expert does not forget to turn it
+> > > > > > > > on. ChromeOS is not the only OS that I've seen someone forget to do it
+> > > > > > > > ;-D. AFAIR, there were Android devices too in the past where I saw
+> > > > > > > > this forgotten. I don't think we should rely on the users doing the
+> > > > > > > > right thing (as much as possible).
+> > > > > > > >
+> > > > > > > > The single kernel binary point makes sense but in this case, I think
+> > > > > > > > the bigger question that I'd have is what is the default behavior and
+> > > > > > > > what do *most* users of RCU want. So we can keep sane defaults for the
+> > > > > > > > majority and reduce human errors related to configuration.
+> > > > > > >
+> > > > > > > If both the ChromeOS and Android guys need it, I could reinstate the
+> > > > > > > old RCU_NOCB_CPU_ALL Kconfig option.  This was removed due to complaints
+> > > > > > > about RCU Kconfig complexity, but I believe that Reviewed-by from ChromeOS
+> > > > > > > and Android movers and shakers would overcome lingering objections.
+> > > > > > >
+> > > > > > > Would that help?
+> > > > > >
+> > > > > > Yes, I think I would love for such a change. I am planning to add a
+> > > > > > test to ChromeOS to check whether config options were correctly set
+> > > > > > up. So I can test for both the RCU_NOCB_CPU options.
+> > > > >
+> > > > > Very good!
+> > > > >
+> > > > > Do you love such a change enough to create the patch and to collect
+> > > > > convincing Reviewed-by tags?
+> > > >
+> > > > Yes sure, just so I understand - basically I have to make the code in
+> > > > my patch run when RCU_NOCB_CPU_ALL option is passed (and keep the
+> > > > option default disabled), but otherwise default to the current
+> > > > behavior, right?
+> > >
+> > > Sorry rephrasing, "make the code in my patch run when the new
+> > > CONFIG_RCU_NOCB_CPU_ALL is enabled".
+> >
+> > Here is what I believe you are proposing:
+> >
+> >
+> >                                 ---     rcu_nocbs       rcu_nocbs=???
+> >
+> > CONFIG_RCU_NOCB_CPU_ALL=n       [1]     [2]             [3]
+> >
+> > CONFIG_RCU_NOCB_CPU_ALL=y       [4]     [4]             [3]
 > 
->  drivers/gpu/drm/sun4i/sun8i_csc.c   | 3 ++-
->  drivers/gpu/drm/sun4i/sun8i_csc.h   | 1 +
->  drivers/gpu/drm/sun4i/sun8i_mixer.h | 6 ++++--
->  3 files changed, 7 insertions(+), 3 deletions(-)
+> It is always a pleasure to read your well thought out emails ;-)
 > 
-> diff --git a/drivers/gpu/drm/sun4i/sun8i_csc.c b/drivers/gpu/drm/sun4i/
-sun8i_csc.c
-> index 9bd62de0c288..1ed10c6447a3 100644
-> --- a/drivers/gpu/drm/sun4i/sun8i_csc.c
-> +++ b/drivers/gpu/drm/sun4i/sun8i_csc.c
-> @@ -8,9 +8,10 @@
->  #include "sun8i_csc.h"
->  #include "sun8i_mixer.h"
->  
-> -static const u32 ccsc_base[2][2] = {
-> +static const u32 ccsc_base[][2] = {
->  	{CCSC00_OFFSET, CCSC01_OFFSET},
->  	{CCSC10_OFFSET, CCSC11_OFFSET},
-> +	{CCSC00_OFFSET, CCSC01_OFFSET_D1},
->  };
->  
->  /*
-> diff --git a/drivers/gpu/drm/sun4i/sun8i_csc.h b/drivers/gpu/drm/sun4i/
-sun8i_csc.h
-> index 022cafa6c06c..bd54166b2bcc 100644
-> --- a/drivers/gpu/drm/sun4i/sun8i_csc.h
-> +++ b/drivers/gpu/drm/sun4i/sun8i_csc.h
-> @@ -13,6 +13,7 @@ struct sun8i_mixer;
->  /* VI channel CSC units offsets */
->  #define CCSC00_OFFSET 0xAA050
->  #define CCSC01_OFFSET 0xFA050
-> +#define CCSC01_OFFSET_D1 0xFA000
->  #define CCSC10_OFFSET 0xA0000
->  #define CCSC11_OFFSET 0xF0000
->  
-> diff --git a/drivers/gpu/drm/sun4i/sun8i_mixer.h b/drivers/gpu/drm/sun4i/
-sun8i_mixer.h
-> index 5b3fbee18671..22f1b7ef9225 100644
-> --- a/drivers/gpu/drm/sun4i/sun8i_mixer.h
-> +++ b/drivers/gpu/drm/sun4i/sun8i_mixer.h
-> @@ -151,8 +151,10 @@
->   *	scaler and 2 UI channels with scaler, bitmask would be 0xC.
->   * @ccsc: select set of CCSC base addresses
->   *	Set value to 0 if this is first mixer or second mixer with VEP 
-support.
-> - *	Set value to 1 if this is second mixer without VEP support. Other 
-values
-> - *	are invalid.
-> + *	Set value to 1 if this is second mixer without VEP support.
-> + *	Set value to 2 if this is first mixer or second mixer with VEP 
-support,
-> + *	and the SoC uses the MMIO layout found in the D1 SoC.
-> + *	Other values are invalid.
-
-It would be better to introduce some kind of enum. Number 2 is completely 
-arbitrary.
-
-Best regards,
-Jernej
-
->   * @mod_rate: module clock rate that needs to be set in order to have
->   *	a functional block.
->   * @is_de3: true, if this is next gen display engine 3.0, false otherwise.
-> -- 
-> 2.35.1
+> >
+> > [1]     No CPUs are offloaded at boot.  CPUs cannot be offloaded at
+> >         runtime.
+> >
+> > [2]     No CPUs are offloaded at boot, but any CPU can be offloaded
+> >         (and later de-offloaded) at runtime.
+> >
+> > [3]     The set of CPUs that are offloaded at boot are specified by the
+> >         mask, represented above with "???".  The CPUs that are offloaded
+> >         at boot can be de-offloaded and offloaded at runtime.  The CPUs
+> >         not offloaded at boot cannot be offloaded at runtime.
 > 
+> Hmm, in other words you are saying that in current code, if only
+> select CPUs are offloaded at boot - then only those can be toggled,
+> but the others are deemed not offload-able? I am happy to leave that
+> quirk/behavior alone as I don't care much right now (for our use
+> cases) for runtime toggling.
+
+That is intentional behavior.  To see why, suppose that only CPU 0 was
+offloaded at boot.  Now try offloading some other CPU.  A large quantity
+of previously read-only data becomes read-write.  Synchronization is
+not pretty.
+
+On the other hand, default-enabling (de-)offloading on all CPUs creates
+lots of unneeded rcuo kthreads.
+
+So we didn't get here by accident.  ;-)
+
+If this becomes a problem, I would be thinking in terms of an additional
+kernel-boot parameter that made all CPUs offloadable by default.  But if
+you have a better idea, please do not keep it a secret!
+
+> > [4]     All CPUs are offloaded at boot, and any CPU can be de-offloaded
+> >         and offloaded at runtime.  This is the same behavior that
+> >         you would currently get with CONFIG_RCU_NOCB_CPU_ALL=n and
+> >         rcu_nocbs=0-N.
 > 
+> Yes, this is the behavior I intend. So then there would not be a need
+> to pass a mask (and I suspect for a large number of users, it
+> simplifies boot params).
 
+Very good, and from what I can see, this should work for everyone.
 
+> > I believe that Steve Rostedt's review would carry weight for ChromeOS,
+> > however, I am suffering a senior moment on the right person for Android.
+> 
+> I think for Android, Kalesh Singh is in the kernel team and Tim Murray
+> is the performance lead. They could appropriately represent their RCU
+> needs.
+
+Sounds good!  Please collect a Reviewed-by from one or both of them.
+
+							Thanx, Paul

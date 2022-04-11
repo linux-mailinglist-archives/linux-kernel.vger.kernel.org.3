@@ -2,127 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 863E54FBE74
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 16:13:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AE314FBECD
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 16:17:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347001AbiDKOP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 10:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41834 "EHLO
+        id S1347085AbiDKORC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 10:17:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232828AbiDKOPz (ORCPT
+        with ESMTP id S1347053AbiDKOQt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 10:15:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A4ECF32068
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 07:13:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649686419;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0SNHqyoujE1GhBLe1zLEQWUOV0WCvLfbwgxIMJwWNvQ=;
-        b=QrQNfVUiiT84RBbUzp2UlM0cZMJWVYi6QDxzh8NOWffWx+dKQ0avqor1oFULW21/kgyyDH
-        ksswtFffDdpjwcuV/nQfccInglRPT1iCKz2+cjyh8B8gfW0RIiZ36KGzmJqJVbW7jLUyea
-        f0FuP5vH3u/vaZjVHF7sSVniKvPRztc=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-624-OfKBIF1ROASMFS3oImhQVA-1; Mon, 11 Apr 2022 10:13:38 -0400
-X-MC-Unique: OfKBIF1ROASMFS3oImhQVA-1
-Received: by mail-wr1-f69.google.com with SMTP id s8-20020adfc548000000b00207a28e0583so883737wrf.23
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 07:13:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=0SNHqyoujE1GhBLe1zLEQWUOV0WCvLfbwgxIMJwWNvQ=;
-        b=pHewt4SyMHVyEHQB4kCpHXvQgs0QssHvvuiWB+ua7RQbFOGI0j5fLMyRTY4uRJEVdI
-         qGE0sSaIjVRf6DsWzsT8LBAo6HycQaTML4Y0S/EnBbHfbutLStVZIFnIwHBOfHV36hhe
-         EnSrYFg2m2iQuGjOScIQsdZaYqq5stcGtmUkThj3t0cpBHKTXvU1LhVIM1+YQYfa8zLc
-         xfVDe89Bi2Gha4r5YsHD8jNq8Q05At4lpSFlCpW8Z4rCI9Kas7oCjHAyYJ6MoCDvzCba
-         Ddh7z6FYwkBTxF3XVvaasW0J0/gX8wg1wzwmkruw5WIXnubGcfCE3Pr8mefHtYUna5VX
-         nKsw==
-X-Gm-Message-State: AOAM531E/PD+k924k0GqVDKOYoSJ4jsZNW3xBCUI48W+Ry5E6TgpGvQl
-        mHtc41GJjFLOC2tofx4rT29rulX8sZgtTwga37SkMLCT8DioYmPOjsQjOjCdnbATN4GcjHLrZcN
-        r5wFTsGgbl0sbdxK+X81enudd
-X-Received: by 2002:a1c:721a:0:b0:38e:c24d:7b8d with SMTP id n26-20020a1c721a000000b0038ec24d7b8dmr1682798wmc.83.1649686416942;
-        Mon, 11 Apr 2022 07:13:36 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJypN8mGgqi50Hob/p+VhbodRxqFTy9Fb8P7XpksOj9p2Bu5RgSHmeLyVffabHvq+u9lP8hzqA==
-X-Received: by 2002:a1c:721a:0:b0:38e:c24d:7b8d with SMTP id n26-20020a1c721a000000b0038ec24d7b8dmr1682771wmc.83.1649686416724;
-        Mon, 11 Apr 2022 07:13:36 -0700 (PDT)
-Received: from [192.168.1.102] ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id q17-20020adff951000000b00205c1b97ac4sm26117938wrr.20.2022.04.11.07.13.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Apr 2022 07:13:36 -0700 (PDT)
-Message-ID: <5c00d6cf-ab0c-850b-821c-36413d894773@redhat.com>
+        Mon, 11 Apr 2022 10:16:49 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AFA911A2A
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 07:14:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
+        :Reply-To:Content-Type:Content-ID:Content-Description;
+        bh=s8xuUGjwcKo5fWROZ9CmBLT3xMVuKw5Sj08i33D+KcM=; b=MY1b4YSDZGZ9Q9TqIxwgVvghVQ
+        iA8Cj/jHUFOiezYD+xWSfY0GnNre0lwRR34bTjvx2ve6mqmAFjc3apVTuajyAp0FYnSJ89uif2mDW
+        mRD1DfLmNqMXIEmZxnH/CcMxIdPRPI8Wp3wCuKtkowBmtEt+J4jJqbpR6puxR1mt3xLsBzFXk6OXJ
+        +F3IsnaxsXuVP/VTtkDFbm+p6RrBVvBRQSOWBWwYef8x35D8bpgqk2yQzBiGFRNBYPXyKyZhvTRFi
+        0wodZ6fOz6AjSgQaTY+Y0Vm03M9tJl34otwLRzlT9EfZheCFauNNUWV31tBOk5bWkMAUJ1aUBuxvz
+        BQ6Wb4ug==;
+Received: from [2001:4bb8:18e:76f5:3747:ef85:d03d:53e4] (helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nduoB-009KM5-Gv; Mon, 11 Apr 2022 14:14:24 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>, intel-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 05/34] drm/i915/gvt: cleanup the Makefile
 Date:   Mon, 11 Apr 2022 16:13:34 +0200
+Message-Id: <20220411141403.86980-6-hch@lst.de>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220411141403.86980-1-hch@lst.de>
+References: <20220411141403.86980-1-hch@lst.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 2/4] dt-bindings: display: ssd1307fb: Add entry for
- SINO WEALTH SH1106
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Chen-Yu Tsai <wens@kernel.org>
-Cc:     Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Chen-Yu Tsai <wens@csie.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220406172956.3953-1-wens@kernel.org>
- <20220406172956.3953-3-wens@kernel.org>
- <CAMuHMdUMc35MrWwbDXvsRNx9qSRf1bACNrhsGpeFcLCETsL4dw@mail.gmail.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <CAMuHMdUMc35MrWwbDXvsRNx9qSRf1bACNrhsGpeFcLCETsL4dw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Geert,
+Match the style of the main i915 Makefile in the gvt-specfic one and
+remove the GVT_DIR and GVT_SOURCE variables.
 
-On 4/11/22 15:35, Geert Uytterhoeven wrote:
-> Hi Chen-Yu,
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+---
+ drivers/gpu/drm/i915/gvt/Makefile | 29 +++++++++++++++++++++++------
+ 1 file changed, 23 insertions(+), 6 deletions(-)
 
-[snip]
-
->> --- a/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
->> +++ b/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
->> @@ -13,6 +13,7 @@ maintainers:
->>  properties:
->>    compatible:
->>      enum:
->> +      - sinowealth,sh1106-i2c
-> 
-> Please don't introduce new compatible values including the bus type.
-> There is no need for that, and this will only lead to more deprecated
-> compatible values soon...
-> 
-> Oops, this is already commit 97a40c23cda5d64a ("dt-bindings:
-> display: ssd1307fb: Add entry for SINO WEALTH SH1106") in
-> drm-misc/for-linux-next...
-> 
-
-Yeah, too late :/ I didn't think it would be controversial at the time.
-
+diff --git a/drivers/gpu/drm/i915/gvt/Makefile b/drivers/gpu/drm/i915/gvt/Makefile
+index 4d70f4689479c..f2f6ea02714ec 100644
+--- a/drivers/gpu/drm/i915/gvt/Makefile
++++ b/drivers/gpu/drm/i915/gvt/Makefile
+@@ -1,8 +1,25 @@
+ # SPDX-License-Identifier: GPL-2.0
+-GVT_DIR := gvt
+-GVT_SOURCE := gvt.o aperture_gm.o handlers.o vgpu.o trace_points.o firmware.o \
+-	interrupt.o gtt.o cfg_space.o opregion.o mmio.o display.o edid.o \
+-	execlist.o scheduler.o sched_policy.o mmio_context.o cmd_parser.o debugfs.o \
+-	fb_decoder.o dmabuf.o page_track.o
+ 
+-i915-y					+= $(addprefix $(GVT_DIR)/, $(GVT_SOURCE))
++i915-y += \
++	gvt/gvt.o \
++	gvt/aperture_gm.o \
++	gvt/handlers.o \
++	gvt/vgpu.o \
++	gvt/trace_points.o \
++	gvt/firmware.o \
++	gvt/interrupt.o \
++	gvt/gtt.o \
++	gvt/cfg_space.o \
++	gvt/opregion.o \
++	gvt/mmio.o \
++	gvt/display.o \
++	gvt/edid.o \
++	gvt/execlist.o \
++	gvt/scheduler.o \
++	gvt/sched_policy.o \
++	gvt/mmio_context.o \
++	gvt/cmd_parser.o \
++	gvt/debugfs.o \
++	gvt/fb_decoder.o \
++	gvt/dmabuf.o \
++	gvt/page_track.o
 -- 
-Best regards,
-
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+2.30.2
 

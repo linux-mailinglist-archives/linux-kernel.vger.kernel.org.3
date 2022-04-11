@@ -2,31 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A82B4FB554
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 09:50:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 086774FB558
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 09:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245715AbiDKHwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 03:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60698 "EHLO
+        id S245703AbiDKHwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 03:52:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245668AbiDKHvw (ORCPT
+        with ESMTP id S245660AbiDKHvv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 03:51:52 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC52255A8;
-        Mon, 11 Apr 2022 00:49:38 -0700 (PDT)
-X-UUID: a25e712806c84ffe8ddf1064f0a29c74-20220411
-X-UUID: a25e712806c84ffe8ddf1064f0a29c74-20220411
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        Mon, 11 Apr 2022 03:51:51 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEDE9252B5;
+        Mon, 11 Apr 2022 00:49:37 -0700 (PDT)
+X-UUID: e7428d9d7db747f09e04bc49ee094a46-20220411
+X-UUID: e7428d9d7db747f09e04bc49ee094a46-20220411
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
         (envelope-from <moudy.ho@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1670533866; Mon, 11 Apr 2022 15:49:28 +0800
+        with ESMTP id 1210792058; Mon, 11 Apr 2022 15:49:29 +0800
 Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 11 Apr 2022 15:49:26 +0800
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Mon, 11 Apr 2022 15:49:27 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 11 Apr 2022 15:49:26 +0800
+ Transport; Mon, 11 Apr 2022 15:49:27 +0800
 From:   Moudy Ho <moudy.ho@mediatek.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -45,201 +46,105 @@ CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
+        "daoyuan huang" <daoyuan.huang@mediatek.com>,
         Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
         <allen-kh.cheng@mediatek.com>, <xiandong.wang@mediatek.com>,
         <randy.wu@mediatek.com>, <moudy.ho@mediatek.com>,
         <jason-jh.lin@mediatek.com>, <roy-cw.yeh@mediatek.com>,
         <river.cheng@mediatek.com>, <srv_heupstream@mediatek.com>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v15 1/6] soc: mediatek: mutex: add common interface to accommodate multiple modules operationg MUTEX
-Date:   Mon, 11 Apr 2022 15:49:20 +0800
-Message-ID: <20220411074925.25539-2-moudy.ho@mediatek.com>
+Subject: [PATCH v15 2/6] soc: mediatek: mutex: add 8183 MUTEX MOD settings for MDP
+Date:   Mon, 11 Apr 2022 15:49:21 +0800
+Message-ID: <20220411074925.25539-3-moudy.ho@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220411074925.25539-1-moudy.ho@mediatek.com>
 References: <20220411074925.25539-1-moudy.ho@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,UPPERCASE_50_75
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to allow multiple modules to operate MUTEX hardware through
-a common interfrace, a flexible index "mtk_mutex_table_index" needs to
-be added to replace original component ID so that like DDP and MDP
-can add their own MUTEX table settings independently.
-
-In addition, 4 generic interface "mtk_mutex_set_mod", "mtk_mutex_set_sof",
-"mtk_mutex_clear_mod" and "mtk_mutex_clear_sof" have been added, which is
-expected to replace the "mtk_mutex_add_comp" and "mtk_mutex_remove_comp"
-pair originally dedicated to DDP in the future.
+For the purpose of module independence, related settings should be moved
+from MDP to the corresponding driver.
+This patch adds 8183 MUTEX MOD settings for MDP.
 
 Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
 ---
- drivers/soc/mediatek/mtk-mutex.c       | 89 ++++++++++++++++++++++++++
- include/linux/soc/mediatek/mtk-mutex.h | 21 ++++++
- 2 files changed, 110 insertions(+)
+ drivers/soc/mediatek/mtk-mutex.c | 33 ++++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
 diff --git a/drivers/soc/mediatek/mtk-mutex.c b/drivers/soc/mediatek/mtk-mutex.c
-index aaf8fc1abb43..48a04dce50d5 100644
+index 48a04dce50d5..fc9ba2749946 100644
 --- a/drivers/soc/mediatek/mtk-mutex.c
 +++ b/drivers/soc/mediatek/mtk-mutex.c
-@@ -156,6 +156,8 @@ struct mtk_mutex_data {
- 	const unsigned int *mutex_sof;
- 	const unsigned int mutex_mod_reg;
- 	const unsigned int mutex_sof_reg;
-+	const unsigned int *mutex_table_mod;
-+	const unsigned int *mutex_table_sof;
- 	const bool no_clk;
+@@ -80,6 +80,15 @@
+ #define MT8183_MUTEX_MOD_DISP_GAMMA0		16
+ #define MT8183_MUTEX_MOD_DISP_DITHER0		17
+ 
++#define MT8183_MUTEX_MOD_MDP_RDMA0		2
++#define MT8183_MUTEX_MOD_MDP_RSZ0		4
++#define MT8183_MUTEX_MOD_MDP_RSZ1		5
++#define MT8183_MUTEX_MOD_MDP_TDSHP0		6
++#define MT8183_MUTEX_MOD_MDP_WROT0		7
++#define MT8183_MUTEX_MOD_MDP_WDMA		8
++#define MT8183_MUTEX_MOD_MDP_AAL0		23
++#define MT8183_MUTEX_MOD_MDP_CCORR0		24
++
+ #define MT8173_MUTEX_MOD_DISP_OVL0		11
+ #define MT8173_MUTEX_MOD_DISP_OVL1		12
+ #define MT8173_MUTEX_MOD_DISP_RDMA0		13
+@@ -245,6 +254,17 @@ static const unsigned int mt8183_mutex_mod[DDP_COMPONENT_ID_MAX] = {
+ 	[DDP_COMPONENT_WDMA0] = MT8183_MUTEX_MOD_DISP_WDMA0,
  };
  
-@@ -445,6 +447,54 @@ void mtk_mutex_add_comp(struct mtk_mutex *mutex,
- }
- EXPORT_SYMBOL_GPL(mtk_mutex_add_comp);
- 
-+void mtk_mutex_set_mod(struct mtk_mutex *mutex,
-+		       enum mtk_mutex_table_index idx)
-+{
-+	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
-+						 mutex[mutex->id]);
-+	unsigned int reg;
-+	unsigned int offset;
-+
-+	WARN_ON(&mtx->mutex[mutex->id] != mutex);
-+
-+	if (idx < MUTEX_TABLE_IDX_MDP_RDMA0 ||
-+	    idx >= MUTEX_TABLE_IDX_MAX) {
-+		dev_err(mtx->dev, "Not supported MOD table index : %d", idx);
-+		return;
-+	}
-+
-+	offset = DISP_REG_MUTEX_MOD(mtx->data->mutex_mod_reg,
-+				    mutex->id);
-+
-+	reg = readl_relaxed(mtx->regs + offset);
-+	reg |= 1 << mtx->data->mutex_table_mod[idx];
-+	writel_relaxed(reg, mtx->regs + offset);
-+}
-+EXPORT_SYMBOL_GPL(mtk_mutex_set_mod);
-+
-+void mtk_mutex_set_sof(struct mtk_mutex *mutex,
-+		       enum mtk_mutex_table_index idx)
-+{
-+	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
-+						 mutex[mutex->id]);
-+	unsigned int sof_id;
-+
-+	WARN_ON(&mtx->mutex[mutex->id] != mutex);
-+
-+	if (idx < MUTEX_TABLE_IDX_MDP_RDMA0 ||
-+	    idx >= MUTEX_TABLE_IDX_MAX) {
-+		dev_err(mtx->dev, "Not supported SOF table index : %d", idx);
-+		return;
-+	}
-+
-+	sof_id = mtx->data->mutex_table_sof[idx];
-+
-+	writel_relaxed(mtx->data->mutex_sof[sof_id],
-+		       mtx->regs +
-+		       DISP_REG_MUTEX_SOF(mtx->data->mutex_sof_reg, mutex->id));
-+}
-+EXPORT_SYMBOL_GPL(mtk_mutex_set_sof);
-+
- void mtk_mutex_remove_comp(struct mtk_mutex *mutex,
- 			   enum mtk_ddp_comp_id id)
- {
-@@ -485,6 +535,45 @@ void mtk_mutex_remove_comp(struct mtk_mutex *mutex,
- }
- EXPORT_SYMBOL_GPL(mtk_mutex_remove_comp);
- 
-+void mtk_mutex_clear_mod(struct mtk_mutex *mutex,
-+			 enum mtk_mutex_table_index idx)
-+{
-+	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
-+						 mutex[mutex->id]);
-+	unsigned int reg;
-+	unsigned int offset;
-+
-+	WARN_ON(&mtx->mutex[mutex->id] != mutex);
-+
-+	if (idx < MUTEX_TABLE_IDX_MDP_RDMA0 ||
-+	    idx >= MUTEX_TABLE_IDX_MAX) {
-+		dev_err(mtx->dev, "Not supported MOD table index : %d", idx);
-+		return;
-+	}
-+
-+	offset = DISP_REG_MUTEX_MOD(mtx->data->mutex_mod_reg,
-+				    mutex->id);
-+
-+	reg = readl_relaxed(mtx->regs + offset);
-+	reg &= ~(1 << mtx->data->mutex_table_mod[idx]);
-+	writel_relaxed(reg, mtx->regs + offset);
-+}
-+EXPORT_SYMBOL_GPL(mtk_mutex_clear_mod);
-+
-+void mtk_mutex_clear_sof(struct mtk_mutex *mutex)
-+{
-+	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
-+						 mutex[mutex->id]);
-+
-+	WARN_ON(&mtx->mutex[mutex->id] != mutex);
-+
-+	writel_relaxed(MUTEX_SOF_SINGLE_MODE,
-+		       mtx->regs +
-+		       DISP_REG_MUTEX_SOF(mtx->data->mutex_sof_reg,
-+					  mutex->id));
-+}
-+EXPORT_SYMBOL_GPL(mtk_mutex_clear_sof);
-+
- void mtk_mutex_enable(struct mtk_mutex *mutex)
- {
- 	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
-diff --git a/include/linux/soc/mediatek/mtk-mutex.h b/include/linux/soc/mediatek/mtk-mutex.h
-index 6fe4ffbde290..200f4365c950 100644
---- a/include/linux/soc/mediatek/mtk-mutex.h
-+++ b/include/linux/soc/mediatek/mtk-mutex.h
-@@ -10,14 +10,35 @@ struct regmap;
- struct device;
- struct mtk_mutex;
- 
-+enum mtk_mutex_table_index {
-+	/* MDP table index */
-+	MUTEX_TABLE_IDX_MDP_RDMA0,
-+	MUTEX_TABLE_IDX_MDP_RSZ0,
-+	MUTEX_TABLE_IDX_MDP_RSZ1,
-+	MUTEX_TABLE_IDX_MDP_TDSHP0,
-+	MUTEX_TABLE_IDX_MDP_WROT0,
-+	MUTEX_TABLE_IDX_MDP_WDMA,
-+	MUTEX_TABLE_IDX_MDP_AAL0,
-+	MUTEX_TABLE_IDX_MDP_CCORR0,
-+
-+	MUTEX_TABLE_IDX_MAX		/* ALWAYS keep at the end */
++static const unsigned int mt8183_mutex_table_mod[MUTEX_TABLE_IDX_MAX] = {
++	[MUTEX_TABLE_IDX_MDP_RDMA0] = MT8183_MUTEX_MOD_MDP_RDMA0,
++	[MUTEX_TABLE_IDX_MDP_RSZ0] = MT8183_MUTEX_MOD_MDP_RSZ0,
++	[MUTEX_TABLE_IDX_MDP_RSZ1] = MT8183_MUTEX_MOD_MDP_RSZ1,
++	[MUTEX_TABLE_IDX_MDP_TDSHP0] = MT8183_MUTEX_MOD_MDP_TDSHP0,
++	[MUTEX_TABLE_IDX_MDP_WROT0] = MT8183_MUTEX_MOD_MDP_WROT0,
++	[MUTEX_TABLE_IDX_MDP_WDMA] = MT8183_MUTEX_MOD_MDP_WDMA,
++	[MUTEX_TABLE_IDX_MDP_AAL0] = MT8183_MUTEX_MOD_MDP_AAL0,
++	[MUTEX_TABLE_IDX_MDP_CCORR0] = MT8183_MUTEX_MOD_MDP_CCORR0,
 +};
 +
- struct mtk_mutex *mtk_mutex_get(struct device *dev);
- int mtk_mutex_prepare(struct mtk_mutex *mutex);
- void mtk_mutex_add_comp(struct mtk_mutex *mutex,
- 			enum mtk_ddp_comp_id id);
-+void mtk_mutex_set_mod(struct mtk_mutex *mutex,
-+		       enum mtk_mutex_table_index idx);
-+void mtk_mutex_set_sof(struct mtk_mutex *mutex,
-+		       enum mtk_mutex_table_index idx);
- void mtk_mutex_enable(struct mtk_mutex *mutex);
- void mtk_mutex_disable(struct mtk_mutex *mutex);
- void mtk_mutex_remove_comp(struct mtk_mutex *mutex,
- 			   enum mtk_ddp_comp_id id);
-+void mtk_mutex_clear_mod(struct mtk_mutex *mutex,
-+			 enum mtk_mutex_table_index idx);
-+void mtk_mutex_clear_sof(struct mtk_mutex *mutex);
- void mtk_mutex_unprepare(struct mtk_mutex *mutex);
- void mtk_mutex_put(struct mtk_mutex *mutex);
- void mtk_mutex_acquire(struct mtk_mutex *mutex);
+ static const unsigned int mt8186_mutex_mod[DDP_COMPONENT_ID_MAX] = {
+ 	[DDP_COMPONENT_AAL0] = MT8186_MUTEX_MOD_DISP_AAL0,
+ 	[DDP_COMPONENT_CCORR] = MT8186_MUTEX_MOD_DISP_CCORR0,
+@@ -296,6 +316,17 @@ static const unsigned int mt8183_mutex_sof[MUTEX_SOF_DSI3 + 1] = {
+ 	[MUTEX_SOF_DPI0] = MT8183_MUTEX_SOF_DPI0 | MT8183_MUTEX_EOF_DPI0,
+ };
+ 
++static const unsigned int mt8183_mutex_table_sof[MUTEX_TABLE_IDX_MAX] = {
++	[MUTEX_TABLE_IDX_MDP_RDMA0] = MUTEX_SOF_SINGLE_MODE,
++	[MUTEX_TABLE_IDX_MDP_RSZ0] = MUTEX_SOF_SINGLE_MODE,
++	[MUTEX_TABLE_IDX_MDP_RSZ1] = MUTEX_SOF_SINGLE_MODE,
++	[MUTEX_TABLE_IDX_MDP_TDSHP0] = MUTEX_SOF_SINGLE_MODE,
++	[MUTEX_TABLE_IDX_MDP_WROT0] = MUTEX_SOF_SINGLE_MODE,
++	[MUTEX_TABLE_IDX_MDP_WDMA] = MUTEX_SOF_SINGLE_MODE,
++	[MUTEX_TABLE_IDX_MDP_AAL0] = MUTEX_SOF_SINGLE_MODE,
++	[MUTEX_TABLE_IDX_MDP_CCORR0] = MUTEX_SOF_SINGLE_MODE,
++};
++
+ static const unsigned int mt8186_mutex_sof[MUTEX_SOF_DSI3 + 1] = {
+ 	[MUTEX_SOF_SINGLE_MODE] = MUTEX_SOF_SINGLE_MODE,
+ 	[MUTEX_SOF_DSI0] = MT8186_MUTEX_SOF_DSI0 | MT8186_MUTEX_EOF_DSI0,
+@@ -336,6 +367,8 @@ static const struct mtk_mutex_data mt8183_mutex_driver_data = {
+ 	.mutex_sof = mt8183_mutex_sof,
+ 	.mutex_mod_reg = MT8183_MUTEX0_MOD0,
+ 	.mutex_sof_reg = MT8183_MUTEX0_SOF0,
++	.mutex_table_mod = mt8183_mutex_table_mod,
++	.mutex_table_sof = mt8183_mutex_table_sof,
+ 	.no_clk = true,
+ };
+ 
 -- 
 2.18.0
 

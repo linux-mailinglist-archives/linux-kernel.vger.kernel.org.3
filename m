@@ -2,233 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EC584FC7EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 01:01:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 374CD4FC7F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 01:08:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231579AbiDKXDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 19:03:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52920 "EHLO
+        id S231128AbiDKXKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 19:10:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiDKXDM (ORCPT
+        with ESMTP id S229540AbiDKXKk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 19:03:12 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD2F1C120
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 16:00:56 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id h5so14511172pgc.7
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 16:00:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rdzr/cKB3yUSg51zMS1T2tJHNR+gYeObGbybld3vA4k=;
-        b=hq5oG4UUfizVn0A+6bpeJF1V822lw28w9dFQYijxN7p1yXxb0enTZ4vW79jwq8A2Xr
-         ESxrgCs9Jb2vyo3p6d/SPvL577BWICLOXoBAAaplL/109O5qNzd7WSzwSPj7hAhKsMIm
-         EhDy/RlsO+Nkzgw0LzDbwGz0+iw6+ewvuVX5bMoD6OMXqNIONdwhls31q8QUsBMb2cYe
-         Ulv0BCQb5gNJaco3PkYpZ5x2b40wOkinqvMKxDnpdQok8ad03d8sQnhVyeMehBjvUVA8
-         Jvbv9ZjjJmp1+Z2xSUxRvTANgnmUHjSYQCNwdHj0nTnpYtctFQXxN3buLDKS2n7/NDPy
-         OYiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rdzr/cKB3yUSg51zMS1T2tJHNR+gYeObGbybld3vA4k=;
-        b=nwDcj9x/hpxLaRPKj+wCADvQkPKgPeALKpqln0ufbuMYTEfHhgMsoyIb2+csXBUVaf
-         P4wGJgE7xmColde8mphaL5sMGUvOF8mihuyoRX3uSSfjugqUq9UdDAfY6SF16zFv6xH0
-         dLhhwUv6Zdu+twrvSRgotepah8asxxH0pqC9mdAxA/MjgcnS5hwTQJInxMwLnRg0lsuf
-         NGtGS+lprB1m4mcAWclP1jm0yJ86nXAKKw8IUxf+gNteTO/otXPFHgBlQr94eeNNgVM+
-         VzTvRN1CCf4gxutX1SGIPl/g9zpUuI16P1OdSUGPWU1QvxtWzIXXzJkm/Afl7kADGMM4
-         Ta2Q==
-X-Gm-Message-State: AOAM532BPC2zVYL9AGPFJFW3ZhEWRuKXy/+UQoW+duWDy3b4P+spkhA3
-        zB2jcLiS683tQp1zIjRt+DTNzQ==
-X-Google-Smtp-Source: ABdhPJyTrzBW3UQC1QEkNqeOxb87DeV8J0oCZSgheovHaxl4CdUPb2nO17folfSeFQOYHpU6zwC4EQ==
-X-Received: by 2002:a63:6645:0:b0:382:65eb:1215 with SMTP id a66-20020a636645000000b0038265eb1215mr28200476pgc.337.1649718055804;
-        Mon, 11 Apr 2022 16:00:55 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id m2-20020a17090a4d8200b001cb41f25148sm524749pjh.17.2022.04.11.16.00.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 16:00:55 -0700 (PDT)
-Date:   Mon, 11 Apr 2022 23:00:51 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        David Dunn <daviddunn@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Junaid Shahid <junaids@google.com>
-Subject: Re: [PATCH v2 7/9] KVM: x86/mmu: Add try_get_mt_mask to x86_ops
-Message-ID: <YlSzI9ZfzPQZhPqj@google.com>
-References: <20220321224358.1305530-1-bgardon@google.com>
- <20220321224358.1305530-8-bgardon@google.com>
+        Mon, 11 Apr 2022 19:10:40 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E6911C18;
+        Mon, 11 Apr 2022 16:08:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649718505; x=1681254505;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=z5H/rq03nkgQAfI8+PdRAbFO8Il2m/4sGggc2QYRUUE=;
+  b=DXPMRnfvtAKQK0kUOMbdVDe82oYxQPcKPKxPCVMdXs+xfSTGLq4CYTM2
+   K/nPvm9AXWZCAg0y+WEPMVXy9WWQ7ES/R9M2GkMQJyl0k5ntYiD6QDL1V
+   SSxyzSo6zAI+pm9tc/k+l9l9DVIcc/7Oo/RBTOF7gGokspjX1TZcs3UbF
+   t+SuI/RYKPEGqZPLjI3oIwcdhiCQ0F1mO7VOAXqqdSgoSM3phekUDkS/n
+   sZAR/3r+PSdfwYYeLFxLlZ0U4fl+e6Knke46U50ritHQzh/uu8/rT1ec1
+   OCfMrMwoFpnssKhTWq5uJa5N08M28nBtDtQDsSmm7QsEBeDltuUH81X/q
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="325146697"
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="325146697"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 16:08:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="644468203"
+Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 11 Apr 2022 16:08:21 -0700
+Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ne38u-0002IQ-M6;
+        Mon, 11 Apr 2022 23:08:20 +0000
+Date:   Tue, 12 Apr 2022 07:08:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     =?utf-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
+        <zhouyanjie@wanyeetech.com>, daniel.lezcano@linaro.org,
+        tglx@linutronix.de, robh+dt@kernel.org, krzk+dt@kernel.org
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        sernia.zhou@foxmail.com, zhenwenjin@gmail.com, reimu@sudomaker.com
+Subject: Re: [PATCH v4 3/3] clocksource: Ingenic: Add SMP/SMT support for
+ sysost driver.
+Message-ID: <202204120622.OSuTgle5-lkp@intel.com>
+References: <1649687597-74219-4-git-send-email-zhouyanjie@wanyeetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220321224358.1305530-8-bgardon@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1649687597-74219-4-git-send-email-zhouyanjie@wanyeetech.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 21, 2022, Ben Gardon wrote:
-> Add another function for getting the memory type mask to x86_ops.
-> This version of the function can fail, but it does not require a vCPU
-> pointer. It will be used in a subsequent commit for in-place large page
-> promotion when disabling dirty logging.
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Ben Gardon <bgardon@google.com>
-> ---
->  arch/x86/include/asm/kvm-x86-ops.h | 1 +
->  arch/x86/include/asm/kvm_host.h    | 2 ++
->  arch/x86/kvm/svm/svm.c             | 9 +++++++++
->  arch/x86/kvm/vmx/vmx.c             | 1 +
->  4 files changed, 13 insertions(+)
-> 
-> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-> index 29affccb353c..29880363b5ed 100644
-> --- a/arch/x86/include/asm/kvm-x86-ops.h
-> +++ b/arch/x86/include/asm/kvm-x86-ops.h
-> @@ -88,6 +88,7 @@ KVM_X86_OP_OPTIONAL(sync_pir_to_irr)
->  KVM_X86_OP_OPTIONAL_RET0(set_tss_addr)
->  KVM_X86_OP_OPTIONAL_RET0(set_identity_map_addr)
->  KVM_X86_OP_OPTIONAL_RET0(get_mt_mask)
-> +KVM_X86_OP(try_get_mt_mask)
->  KVM_X86_OP(load_mmu_pgd)
->  KVM_X86_OP(has_wbinvd_exit)
->  KVM_X86_OP(get_l2_tsc_offset)
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index f72e80178ffc..a114e4782702 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1422,6 +1422,8 @@ struct kvm_x86_ops {
->  	int (*set_tss_addr)(struct kvm *kvm, unsigned int addr);
->  	int (*set_identity_map_addr)(struct kvm *kvm, u64 ident_addr);
->  	u64 (*get_mt_mask)(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio);
-> +	bool (*try_get_mt_mask)(struct kvm *kvm, gfn_t gfn,
-> +				bool is_mmio, u64 *mask);
+Hi "周琰杰,
 
-There's an old saying in Tennessee - I know it's in Texas, probably in Tennessee -
-that says, fool me once, shame on... shame on you. Fool me... you can't get fooled again.
+Thank you for the patch! Perhaps something to improve:
 
-Thou shalt not trick me again by using a bool for pass/fail!  Though this one
-doesn't have same potential for pain as the TDP MMU's atomic operations.
+[auto build test WARNING on tip/timers/core]
+[also build test WARNING on robh/for-next v5.18-rc2 next-20220411]
+[cannot apply to daniel-lezcano/clockevents/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-And as a bonus, if we use 0/-errno, then we can use KVM_X86_OP_OPTIONAL_RET0()
-and SVM doesn't need to provide an implementation.
+url:    https://github.com/intel-lab-lkp/linux/commits/Zhou-Yanjie/Add-SMP-SMT-support-for-Ingenic-sysost-driver/20220411-223537
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git 8afbcaf8690dac19ebf570a4e4fef9c59c75bf8e
+config: openrisc-randconfig-s032-20220411 (https://download.01.org/0day-ci/archive/20220412/202204120622.OSuTgle5-lkp@intel.com/config)
+compiler: or1k-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/facdbd1eb8f72863d589c575577f6130d8cf6ed1
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Zhou-Yanjie/Add-SMP-SMT-support-for-Ingenic-sysost-driver/20220411-223537
+        git checkout facdbd1eb8f72863d589c575577f6130d8cf6ed1
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=openrisc SHELL=/bin/bash drivers/clocksource/
 
-Tangentially related to the return type, what about naming it something like
-get_vm_wide_mt_mask() to convey exactly what it's doing?  The @kvm param kinda
-does that, but IMO it doesn't do a good of capturing why the function can fail.
-Adding "vm_wide" helps explain why it can, i.e. that there may not be a VM-wide
-memtype established for the gfn.
-
-As penance for your boolean sin, can you slot this in earlier in your series?
-It's obviously not a hard dependency, but using a u64 for the mask here and then
-undoing the whole thing is rather silly.  Compile tested only at this point, I'll
-test on an actual system ASAP and let you know if I did something stupid.
-
-From: Sean Christopherson <seanjc@google.com>
-Date: Mon, 11 Apr 2022 15:12:16 -0700
-Subject: [PATCH] KVM: x86: Restrict get_mt_mask() to a u8, use
- KVM_X86_OP_OPTIONAL_RET0
-
-Restrict get_mt_mask() to a u8 and reintroduce using a RET0 static_call
-for the SVM implementation.  EPT stores the memtype information in the
-lower 8 bits (bits 6:3 to be precise), and even returns a shifted u8
-without an explicit cast to a larger type; there's no need to return a
-full u64.
-
-Note, RET0 doesn't play nice with a u64 return on 32-bit kernels, see
-commit bf07be36cd88 ("KVM: x86: do not use KVM_X86_OP_OPTIONAL_RET0 for
-get_mt_mask").
-
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/include/asm/kvm-x86-ops.h | 2 +-
- arch/x86/include/asm/kvm_host.h    | 2 +-
- arch/x86/kvm/svm/svm.c             | 6 ------
- arch/x86/kvm/vmx/vmx.c             | 2 +-
- 4 files changed, 3 insertions(+), 9 deletions(-)
-
-diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-index 96e4e9842dfc..0d16f21a6203 100644
---- a/arch/x86/include/asm/kvm-x86-ops.h
-+++ b/arch/x86/include/asm/kvm-x86-ops.h
-@@ -87,7 +87,7 @@ KVM_X86_OP(deliver_interrupt)
- KVM_X86_OP_OPTIONAL(sync_pir_to_irr)
- KVM_X86_OP_OPTIONAL_RET0(set_tss_addr)
- KVM_X86_OP_OPTIONAL_RET0(set_identity_map_addr)
--KVM_X86_OP(get_mt_mask)
-+KVM_X86_OP_OPTIONAL_RET0(get_mt_mask)
- KVM_X86_OP(load_mmu_pgd)
- KVM_X86_OP(has_wbinvd_exit)
- KVM_X86_OP(get_l2_tsc_offset)
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 2c20f715f009..dc4d34f1bcf9 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1421,7 +1421,7 @@ struct kvm_x86_ops {
- 	int (*sync_pir_to_irr)(struct kvm_vcpu *vcpu);
- 	int (*set_tss_addr)(struct kvm *kvm, unsigned int addr);
- 	int (*set_identity_map_addr)(struct kvm *kvm, u64 ident_addr);
--	u64 (*get_mt_mask)(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio);
-+	u8 (*get_mt_mask)(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio);
-
- 	void (*load_mmu_pgd)(struct kvm_vcpu *vcpu, hpa_t root_hpa,
- 			     int root_level);
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index fc1725b7d05f..56f03eafe421 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -4011,11 +4011,6 @@ static bool svm_has_emulated_msr(struct kvm *kvm, u32 index)
- 	return true;
- }
-
--static u64 svm_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
--{
--	return 0;
--}
--
- static void svm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
- {
- 	struct vcpu_svm *svm = to_svm(vcpu);
-@@ -4673,7 +4668,6 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
- 	.check_apicv_inhibit_reasons = avic_check_apicv_inhibit_reasons,
- 	.apicv_post_state_restore = avic_apicv_post_state_restore,
-
--	.get_mt_mask = svm_get_mt_mask,
- 	.get_exit_info = svm_get_exit_info,
-
- 	.vcpu_after_set_cpuid = svm_vcpu_after_set_cpuid,
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index cf8581978bce..646fa609aa0d 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -7142,7 +7142,7 @@ static int __init vmx_check_processor_compat(void)
- 	return 0;
- }
-
--static u64 vmx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
-+static u8 vmx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
- {
- 	u8 cache;
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
 
-base-commit: 59d9e75d641565603e7c293f4cec182d86db8586
---
+sparse warnings: (new ones prefixed by >>)
+>> drivers/clocksource/ingenic-sysost.c:703:65: sparse: sparse: incorrect type in argument 5 (different address spaces) @@     expected void *dev @@     got struct ingenic_ost_timer [noderef] __percpu *timers @@
+   drivers/clocksource/ingenic-sysost.c:703:65: sparse:     expected void *dev
+   drivers/clocksource/ingenic-sysost.c:703:65: sparse:     got struct ingenic_ost_timer [noderef] __percpu *timers
 
+vim +703 drivers/clocksource/ingenic-sysost.c
 
+   678	
+   679	static int __init ingenic_ost_init(struct device_node *np)
+   680	{
+   681		struct ingenic_ost *ost;
+   682		unsigned long rate;
+   683		int ret;
+   684	
+   685		ret = ingenic_ost_probe(np);
+   686		if (ret) {
+   687			pr_crit("%s: Failed to initialize OST clocks: %d\n", __func__, ret);
+   688			return ret;
+   689		}
+   690	
+   691		of_node_clear_flag(np, OF_POPULATED);
+   692	
+   693		ost = ingenic_ost;
+   694		if (IS_ERR(ost))
+   695			return PTR_ERR(ost);
+   696	
+   697		if (ost->soc_info->has_event_timer) {
+   698			if (ost->soc_info->version >= ID_X2000)
+   699				ret = request_percpu_irq(ost->irq, ingenic_ost_cevt_cb,
+   700						  "OST event timer", ost->timers);
+   701			else
+   702				ret = request_irq(ost->irq, ingenic_ost_cevt_cb, IRQF_TIMER,
+ > 703						  "OST event timer", ost->timers);
+   704	
+   705			if (ret) {
+   706				pr_crit("%s: Unable to request IRQ: %d\n", __func__, ret);
+   707				goto err_free_ingenic_ost;
+   708			}
+   709	
+   710			/* Setup clock events on each CPU core */
+   711			ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "Ingenic XBurst: online",
+   712						ingenic_ost_setup_cevt, NULL);
+   713			if (ret < 0) {
+   714				pr_crit("%s: Unable to init event timers: %d\n", __func__, ret);
+   715				goto err_free_ingenic_ost;
+   716			}
+   717		}
+   718	
+   719		if (ost->soc_info->has_global_timer) {
+   720			ret = ingenic_ost_global_timer_init(np, ost);
+   721			if (ret) {
+   722				pr_crit("%s: Unable to init global timer: %d\n", __func__, ret);
+   723	
+   724				if (!ost->soc_info->has_event_timer)
+   725					goto err_free_ingenic_ost;
+   726			}
+   727	
+   728			/* Register the sched_clock at the end as there's no way to undo it */
+   729			rate = clk_get_rate(ost->global_timer_clk);
+   730			sched_clock_register(ingenic_ost_global_timer_read_cntl, 32, rate);
+   731		}
+   732	
+   733		return 0;
+   734	
+   735	err_free_ingenic_ost:
+   736		kfree(ost);
+   737		return ret;
+   738	}
+   739	
 
-
-
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

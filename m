@@ -2,104 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41BCC4FBDC2
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 15:49:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2A2F4FBDC5
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 15:50:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346728AbiDKNve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 09:51:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34546 "EHLO
+        id S1346719AbiDKNwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 09:52:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346713AbiDKNv3 (ORCPT
+        with ESMTP id S1346661AbiDKNwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 09:51:29 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 748BBE9E;
-        Mon, 11 Apr 2022 06:49:11 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id j9so18674166lfe.9;
-        Mon, 11 Apr 2022 06:49:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=PkN/YPLKEZdAM9V2FBeosmLHfRbFWABiz3XxuNQjD+Q=;
-        b=SUa8CsoXr03RR4kN8/AInlQTgRpEOGYqWTb9Zxb7/5p/yEUdMM2fjjjPyPAKoIpIJg
-         EV9HX17csYvmT0J64+tSBnfWSnykGRbwpwYRn1EcXEM/xcsIILq+mtPCUzoZSx4iKYPM
-         GjsVzngnHmg++K80BJyPFdTYu5pOQv4JHK3rjB3mlfnqMrFicLj5TZccQthnyfeKJd38
-         KAQ77FFjemO+SqXEmCupiq829SKgmu9eh/Rwed1izkYr1hDhuR9OYmaTm3xHUdblIkEy
-         a1KVa+8thyl4t6inpPBxz31Pi5XfiyDfnCMdd3PWd9DDAwUNLHZEE4Rt1lLp1LYgCauN
-         rv/w==
+        Mon, 11 Apr 2022 09:52:08 -0400
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066D9237F0
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 06:49:52 -0700 (PDT)
+Received: by mail-qv1-f51.google.com with SMTP id ke15so13232505qvb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 06:49:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PkN/YPLKEZdAM9V2FBeosmLHfRbFWABiz3XxuNQjD+Q=;
-        b=0YK49eyfXeWpyAkel+NmVAb5kpcdgEgljus4Eq/mwxrJSVqZWJzvOKUwfCGIUMKJL7
-         qc8/gLQWwzWluvbGg5EQUpeNQBATNKMNxh/cZHb7gC8wUlpBMfjb9jJsYUSETZPCTFOJ
-         SBon+ssnjELpEnCwu+hujTbRcOH6rkYKthZOdvdTUKtzh+bOcKiqhP5KLfyZbQ6eE93v
-         qqaKnBAZ1DCGyR4bEg+Z8zVfnl226s59SNr5K4bEYQ9D6cf5lYPag5EnrGML0JqJ8Rah
-         e0hDSTgczF985K20P1E2T+C1+bDi+FWwHMcwCLzf23rIAreOx4bNXJHRgO6iZgcms/Q+
-         CA8w==
-X-Gm-Message-State: AOAM531Saa2HaW5VwyD7QQHEOrgvqrI7iwf+Bbk84ULj2xIl25KrAVPJ
-        v+rgjClaRc4e7f6bJvB7vFJ46ZRofxFOqQ==
-X-Google-Smtp-Source: ABdhPJxYxVWC7yPU+iEIvG36S2hNqTVv6gc7ajosdoq3FqOkz7lrnRoqMCiDKXtlA1Yql4QYfLl1cQ==
-X-Received: by 2002:a05:6512:13a3:b0:44a:6ac3:754d with SMTP id p35-20020a05651213a300b0044a6ac3754dmr20912101lfa.92.1649684949553;
-        Mon, 11 Apr 2022 06:49:09 -0700 (PDT)
-Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id f20-20020a056512229400b0044a6ac1af69sm3323340lfu.181.2022.04.11.06.49.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 06:49:08 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
-Date:   Mon, 11 Apr 2022 15:49:06 +0200
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH RFC] rcu/nocb: Provide default all-CPUs mask for
- RCU_NOCB_CPU=y
-Message-ID: <YlQx0rZzrdWIA5w+@pc638.lan>
-References: <20220407210734.2548973-1-joel@joelfernandes.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vVG2fXlBh+awI+zoG5EckE/Z3Lioiux+cIKRFlmEU0g=;
+        b=D3xdY1OK8KmdjzH6LG9W0CVm9zLNajVHJANYnYi0hjA1PDtLKVezFmtkosul9b2pKn
+         GsEPQQsPu5BIILcIbuBYGi6tZHpuy/7LDD2Rq7op4LmELRU0DzVkPQeHl8yM+ugauu6i
+         y44U3rfTSF9mprSn+z3elpnWwsdWy7hGrxjGDgNbAp2c6jmoRuncHagnCeAPyuOBIxm6
+         i2irYgiP+p/IphTv0DuGN58JRRsCrBOHcfYdTs4KYbqtH0MkUsm73Q/VMbHok+OAid+V
+         f+fzBZCtppKJ1U/zBBFKvZClAk39Y0w8298ut0xIBVdEwH088XURmXP9eNP9baY4N3jZ
+         x2nA==
+X-Gm-Message-State: AOAM53057OYrpEq4VlbXc2e6zAL3e1cdwJP81DwqCh+LPkQHD5Hl4VVr
+        qSRWAM8uHmeAjy8SXeXruVfdKTk6EtZxuQ==
+X-Google-Smtp-Source: ABdhPJxF3a0VlW6VCxyXpcYmmOM+U4cwZPOZS2+Qt3rxtXJBR0gUT7fFMAVggrd9tNbfSxjGe8VUxw==
+X-Received: by 2002:a0c:c788:0:b0:444:2c7f:4126 with SMTP id k8-20020a0cc788000000b004442c7f4126mr10856160qvj.50.1649684990576;
+        Mon, 11 Apr 2022 06:49:50 -0700 (PDT)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
+        by smtp.gmail.com with ESMTPSA id c7-20020a37e107000000b0069c126c5107sm2537458qkm.39.2022.04.11.06.49.50
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Apr 2022 06:49:50 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id t12so7072215ybt.10
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 06:49:49 -0700 (PDT)
+X-Received: by 2002:a25:29c2:0:b0:641:224f:17d6 with SMTP id
+ p185-20020a2529c2000000b00641224f17d6mr7405779ybp.546.1649684989768; Mon, 11
+ Apr 2022 06:49:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220407210734.2548973-1-joel@joelfernandes.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220312063437.19160-1-yuehaibing@huawei.com> <08e81f07-99d2-62a3-8eea-b2c0432b4d18@redhat.com>
+In-Reply-To: <08e81f07-99d2-62a3-8eea-b2c0432b4d18@redhat.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 11 Apr 2022 15:49:38 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVYtV9KHYqjcXS05XM+QqbCgPKB_uZCCAN0eAqHUmoeTg@mail.gmail.com>
+Message-ID: <CAMuHMdVYtV9KHYqjcXS05XM+QqbCgPKB_uZCCAN0eAqHUmoeTg@mail.gmail.com>
+Subject: Re: [PATCH -next] drm/solomon: Make DRM_SSD130X depends on MMU
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     YueHaibing <yuehaibing@huawei.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, Joel.
+Hi Javier,
 
-> On systems with CONFIG_RCU_NOCB_CPU=y, there is no default mask provided
-> which ends up not offloading any CPU. This patch removes yet another
-> dependency from the bootloader having to know about RCU, about how many
-> CPUs the system has, and about how to provide the mask. Basically, I
-> think we should stop pretending that the user knows what they are doing :).
-> In other words, if NO_CB_CPU is enabled, lets make use of it.
-> 
-Could you also please modify the documentation accordingly and send v2?
+On Tue, Mar 15, 2022 at 12:28 PM Javier Martinez Canillas
+<javierm@redhat.com> wrote:
+> On 3/12/22 07:34, YueHaibing wrote:
+> > WARNING: unmet direct dependencies detected for DRM_GEM_SHMEM_HELPER
+> >   Depends on [n]: HAS_IOMEM [=y] && DRM [=m] && MMU [=n]
+> >   Selected by [m]:
+> >   - DRM_SSD130X [=m] && HAS_IOMEM [=y] && DRM [=m]
+> >
+> > DRM_GEM_SHMEM_HELPER depends on MMU, DRM_SSD130X should also depends on MMU.
+> >
+> > Fixes: a61732e80867 ("drm: Add driver for Solomon SSD130x OLED displays")
+> > Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> > ---
+>
+> Indeed. All the DRM drivers that select DRM_GEM_SHMEM_HELPER depend on MMU.
 
-<snip>
-urezki@pc638:~/data/raid0/coding/linux-rcu.git$ grep -rn RCU_NOCB_CPU ./Documentation/
-./Documentation/timers/no_hz.rst:188:using the CONFIG_RCU_NOCB_CPU=y Kconfig option.  The specific CPUs to
-./Documentation/admin-guide/kernel-parameters.txt:4380:                 In kernels built with CONFIG_RCU_NOCB_CPU=y,
-./Documentation/admin-guide/kernel-parameters.txt:4507:                 When RCU_NOCB_CPU is set, also adjust the
-./Documentation/admin-guide/kernel-per-CPU-kthreads.rst:311:3.  Build with CONFIG_RCU_NOCB_CPU=y and boot with the rcu_nocbs=
-./Documentation/admin-guide/kernel-per-CPU-kthreads.rst:331:2.  Build with CONFIG_RCU_NOCB_CPU=n, which will prevent these
-./Documentation/RCU/Design/Requirements/Requirements.rst:1424:``CONFIG_RCU_NOCB_CPU=y`` and booted with ``rcu_nocbs=1-63``, where
-urezki@pc638:~/data/raid0/coding/linux-rcu.git$ grep -rn RCU_NOCB_CPU ./kernel/rcu/
-...
-./kernel/rcu/Kconfig:198:config RCU_NOCB_CPU
-..
-<snip>
+That's very unfortunate. Is there no way around this?
+
+Else fbdev can never be deprecated in favor of DRM.
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 --
-Uladzislau Rezki
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

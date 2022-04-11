@@ -2,95 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE8A94FBE69
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 16:11:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B95F04FBE6E
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 16:12:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346977AbiDKONZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 10:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38140 "EHLO
+        id S1346985AbiDKOOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 10:14:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346961AbiDKONW (ORCPT
+        with ESMTP id S232828AbiDKOO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 10:13:22 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35CF1BE03
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 07:11:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=nzg4iE1+vDnobxL+x/8BGospZE26iFX69h+xdGnSEJQ=; b=DaawSJGn0Xk4L9uUaRoIE2f2Ed
-        kYFvwL2L61aKJblxMt6UbsV/mr9PdaRqA2kABIayXFjk+qb5OxxLWndAtd7vRxR8/hn9T51yHnL2P
-        N7F+UGOjY7P7WnY3Sja164ZbV5JuB5mr11vexOz0EUvwLyzXAhZj7IxpRzp3Ds+IQ+wdtzCCFStb3
-        RhDm8AczOzESjdEQ2MzljewU76Hgz+wFYcF0Ncrc9G8vi020Ro34/UBDG2U0jaAkJIIIVzCOZ6NZL
-        3LhH5+Ounv1yTOvJhxJtzItzgcYS+QE2ZvCqJSc1IlKqiQEcf8LpkqEZG/xnrpyn0FHAvaOaYeLL/
-        iAqRxzlA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ndukk-009JZ3-EY; Mon, 11 Apr 2022 14:10:50 +0000
-Date:   Mon, 11 Apr 2022 07:10:50 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
-        shy828301@gmail.com, willy@infradead.org, ying.huang@intel.com,
-        ziy@nvidia.com, minchan@kernel.org, apopple@nvidia.com,
-        dave.hansen@linux.intel.com, o451686892@gmail.com,
-        jhubbard@nvidia.com, peterx@redhat.com, naoya.horiguchi@nec.com,
-        mhocko@suse.com, riel@redhat.com, osalvador@suse.de,
-        david@redhat.com, sfr@canb.auug.org.au, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] mm/migration: return errno when isolate_huge_page
- failed
-Message-ID: <YlQ26kP8zpCLWqwW@infradead.org>
-References: <20220409073846.22286-1-linmiaohe@huawei.com>
- <20220409073846.22286-4-linmiaohe@huawei.com>
+        Mon, 11 Apr 2022 10:14:29 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07266BE03;
+        Mon, 11 Apr 2022 07:12:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649686335; x=1681222335;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=sEqr5NzmV2oXNmNmssDJtCF3OtxLa8r79e2gV3hq7uM=;
+  b=RFevFbGFTNB7kVl7u6FEvSYg4i+7y5ryM8DUYfs4NKYnjVLLlhuIfJi/
+   RJRcJH/amlQYUi5BvbSDy0ga8lygfn36XSj6v4R7P/7BtNHHw+vI2WtKY
+   hjwIjXYECO/9nRV9Qd7uqybbwxjXtzyrvoQ0ce22tQB/Auy1o68A3VQu1
+   A=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 11 Apr 2022 07:12:15 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 07:12:15 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 11 Apr 2022 07:12:14 -0700
+Received: from [10.216.15.65] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 11 Apr
+ 2022 07:12:09 -0700
+Message-ID: <4dae4e8c-4b77-8fa9-dec3-20f48f84b68e@quicinc.com>
+Date:   Mon, 11 Apr 2022 19:42:06 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220409073846.22286-4-linmiaohe@huawei.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v6 3/3] arm64: dts: qcom: sc7280: Add dt nodes for sound
+ card
+Content-Language: en-US
+To:     Matthias Kaehlcke <mka@chromium.org>
+CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <srinivas.kandagatla@linaro.org>, <dianders@chromium.org>,
+        <swboyd@chromium.org>, <judyhsiao@chromium.org>,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>,
+        <quic_rohkumar@quicinc.com>
+References: <1649157220-29304-1-git-send-email-quic_srivasam@quicinc.com>
+ <1649157220-29304-4-git-send-email-quic_srivasam@quicinc.com>
+ <Yk3736Av338XoLH/@google.com>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <Yk3736Av338XoLH/@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 09, 2022 at 03:38:45PM +0800, Miaohe Lin wrote:
-> We might fail to isolate huge page due to e.g. the page is under migration
-> which cleared HPageMigratable. So we should return -EBUSY in this case
-> rather than always return 1 which could confuse the user.
-> 
-> Fixes: e8db67eb0ded ("mm: migrate: move_pages() supports thp migration")
-> Reviewed-by: Muchun Song <songmuchun@bytedance.com>
-> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> ---
->  mm/migrate.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index 381963231a62..044656a14ae2 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -1632,10 +1632,8 @@ static int add_page_for_migration(struct mm_struct *mm, unsigned long addr,
->  		goto out_putpage;
->  
->  	if (PageHuge(page)) {
-> -		if (PageHead(page)) {
-> -			isolate_huge_page(page, pagelist);
-> -			err = 1;
-> -		}
-> +		if (PageHead(page))
-> +			err = isolate_huge_page(page, pagelist) ? 1 : -EBUSY;
 
-I think a:
-
-			err = isolate_huge_page(page, pagelist);
-			if (!err)
-				err = 1;
-
-would be a lot more readable here.
-
+On 4/7/2022 2:15 AM, Matthias Kaehlcke wrote:
+Thanks for your time Matthias!!!
+> On Tue, Apr 05, 2022 at 04:43:40PM +0530, Srinivasa Rao Mandadapu wrote:
+>> Add dt nodes for sound card support, which is using WCD938x headset
+>> playback, capture, I2S speaker playback and DMICs via VA macro.
+>>
+>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+>> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+>> ---
+>>   arch/arm64/boot/dts/qcom/sc7280-crd.dts  |  8 +++
+>>   arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 93 ++++++++++++++++++++++++++++++++
+>>   2 files changed, 101 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
+>> index 224a82d..b1b968a 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc7280-crd.dts
+>> +++ b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
+>> @@ -90,6 +90,14 @@ ap_ts_pen_1v8: &i2c13 {
+>>   	us-euro-gpios = <&tlmm 81 GPIO_ACTIVE_HIGH>;
+>>   };
+>>   
+>> +&sound {
+>> +	audio-routing =
+>> +		"VA DMIC0", "MIC BIAS1",
+>> +		"VA DMIC1", "MIC BIAS1",
+>> +		"VA DMIC2", "MIC BIAS3",
+>> +		"VA DMIC3", "MIC BIAS3";
+>> +};
+>> +
+>>   &tlmm {
+>>   	tp_int_odl: tp-int-odl {
+>>   		pins = "gpio7";
+>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+>> index e3d8cbf..45e1d82 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+>> @@ -84,6 +84,99 @@
+>>   		pinctrl-names = "default";
+>>   		pinctrl-0 = <&nvme_pwren>;
+>>   	};
+>> +
+>> +	sound: sound {
+>> +		compatible = "google,sc7280-herobrine";
+>> +		model = "sc7280-wcd938x-max98360a-1mic";
+>> +
+>> +		audio-routing =
+>> +				"IN1_HPHL", "HPHL_OUT",
+>> +				"IN2_HPHR", "HPHR_OUT",
+>> +				"AMIC1", "MIC BIAS1",
+>> +				"AMIC2", "MIC BIAS2",
+>> +				"VA DMIC0", "MIC BIAS3",
+>> +				"VA DMIC1", "MIC BIAS3",
+>> +				"VA DMIC2", "MIC BIAS1",
+>> +				"VA DMIC3", "MIC BIAS1",
+>> +				"TX SWR_ADC0", "ADC1_OUTPUT",
+>> +				"TX SWR_ADC1", "ADC2_OUTPUT",
+>> +				"TX SWR_ADC2", "ADC3_OUTPUT",
+>> +				"TX SWR_DMIC0", "DMIC1_OUTPUT",
+>> +				"TX SWR_DMIC1", "DMIC2_OUTPUT",
+>> +				"TX SWR_DMIC2", "DMIC3_OUTPUT",
+>> +				"TX SWR_DMIC3", "DMIC4_OUTPUT",
+>> +				"TX SWR_DMIC4", "DMIC5_OUTPUT",
+>> +				"TX SWR_DMIC5", "DMIC6_OUTPUT",
+>> +				"TX SWR_DMIC6", "DMIC7_OUTPUT",
+>> +				"TX SWR_DMIC7", "DMIC8_OUTPUT";
+>> +
+>> +		qcom,msm-mbhc-hphl-swh = <1>;
+>> +		qcom,msm-mbhc-gnd-swh = <1>;
+>> +
+>> +		#address-cells = <1>;
+>> +		#size-cells = <0>;
+>> +		#sound-dai-cells = <0>;
+>> +
+>> +		dai-link@1 {
+>> +			link-name = "Secondary MI2S Playback";
+> The other link names provide information about the other end
+> of the link (DP, WCD, DMIC), while this one describes the SoC side.
+> Shouldn't this be "MAX98360A"? Not sure about the 'Playback' part,
+> it seems 'link-name' is used as stream name, judging from a few
+> samples of peeking into '/proc/asound/pcm' on different devices
+> it seems that 'Playback' or 'Capture' is ususally not part of the
+> stream name.
+Okay. will change accordingly.
+>
+>> +			reg = <MI2S_SECONDARY>;
+>> +			cpu {
+>> +				sound-dai = <&lpass_cpu MI2S_SECONDARY>;
+>> +			};
+>> +
+>> +			codec {
+>> +				sound-dai = <&max98360a>;
+>> +			};
+>> +		};
+>> +
+>> +		dai-link@5 {
+>> +			link-name = "DP Playback";
+> See comment above about 'Playback'. Just 'DP' is maybe a bit short, how
+> about 'DisplayPort'?
+Okay. Will change accordingly.
+>
+>> +			reg = <LPASS_DP_RX>;
+>> +			cpu {
+>> +				sound-dai = <&lpass_cpu LPASS_DP_RX>;
+>> +			};
+>> +
+>> +			codec {
+>> +				sound-dai = <&mdss_dp>;
+>> +			};
+>> +		};
+>> +
+>> +		dai-link@6 {
+>> +			link-name = "WCD Playback";
+> Most instances I found spell out the codec name. It seems here we need
+> the 'Playback'/'Capture' info (or something else) to not end up with
+> duplicate link names. So my suggestion here would be "WCD9385 Playback".
+Okay. Will  update accordingly.
+>
+>> +			reg = <LPASS_CDC_DMA_RX0>;
+>> +			cpu {
+>> +				sound-dai = <&lpass_cpu LPASS_CDC_DMA_RX0>;
+>> +			};
+>> +
+>> +			codec {
+>> +				sound-dai = <&wcd938x 0>, <&swr0 0>, <&rxmacro 0>;
+>> +			};
+>> +		};
+>> +
+>> +		dai-link@19 {
+>> +			link-name = "WCD Capture";
+> "WCD9385 Capture"?
+Okay.
+>
+>> +			reg = <LPASS_CDC_DMA_TX3>;
+>> +			cpu {
+>> +				sound-dai = <&lpass_cpu LPASS_CDC_DMA_TX3>;
+>> +			};
+>> +
+>> +			codec {
+>> +				sound-dai = <&wcd938x 1>, <&swr1 0>, <&txmacro 0>;
+>> +			};
+>> +		};
+>> +
+>> +		dai-link@25 {
+>> +			link-name = "DMIC Capture";
+>
+> just "DMIC"?
+Okay.

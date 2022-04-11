@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABF574FBEDD
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 16:18:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C68014FBEDA
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 16:18:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231993AbiDKOUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 10:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47666 "EHLO
+        id S1347188AbiDKOTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 10:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347389AbiDKORu (ORCPT
+        with ESMTP id S1347396AbiDKORw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 10:17:50 -0400
+        Mon, 11 Apr 2022 10:17:52 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DAF41400A
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 07:15:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E1EE11167
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 07:15:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=ASljIUWIHiTXYjmM17qEdn1C3LcLuyAvAktAU946bZI=; b=tUiqn6/T8fn5C2z8lNgbfJaYxQ
-        3Xq65LwI9iUTRtoQXB2u3JuHreDjWlRYkAgDYwIJE7/42viYCioc7mwQBzOLpp46r4OtVdWaRG0Mu
-        m/mxBSCHmrORIqaHLn9PMgozxY+8vGp0CkQKYcnWIZNmrH/FT7r66EBVLYXKewLO0dHQSAUKZOyOG
-        si12UWdomEIH2AaLBiDYxO+1tWnfh8G3cmP5LaY/IGjq0dLT230hiX3ag4VINaTqUGZ+232Zj4EMX
-        2kEl6t44utQxp/m7iN21xNeHjm43lzM3RXVQm+PzddakE+pWum5IWl6SfaLrz0YKgD9rywNC7CqJb
-        Lwin9ZBg==;
+        bh=2cAXYgfkaKv+y7PWW8GrzYNlHBqE7Cb62MDOweEByZ4=; b=ph/YkhjfM5t5gRQRA9sJKGgiwV
+        2/sKduIbd0Jp/5oo0eXyVSPqSmhEcBBzsZo1UrV36/yn/yjjHGa0vobEGmbIigCOTnHwSnK7VGfx8
+        iSmSUniMXXk+jB3gGwO44oOwcgtlap1U3mCgdNjexL+noaYUjEES/l0yjcw+rY7wLK3AmOgHvtyUp
+        MF149K9bVbHN98JHjRGZ5UttSOz6L3h+bUZ7QQz9pXf2U0sLtX4SXfEbMk1Al+3FgyAYVcZXvd+R1
+        VSQqD2sodN6CmgV789eFT1KEqwMCA30aAxOTcb6RnDJIrh8EnXwYUu51Toxvg+lQ019JWU/lyus1s
+        WuHW9C8w==;
 Received: from [2001:4bb8:18e:76f5:3747:ef85:d03d:53e4] (helo=localhost)
         by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ndupE-009Kuh-DO; Mon, 11 Apr 2022 14:15:28 +0000
+        id 1ndupH-009Kvl-6u; Mon, 11 Apr 2022 14:15:31 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Jani Nikula <jani.nikula@linux.intel.com>,
         Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
@@ -37,9 +37,9 @@ To:     Jani Nikula <jani.nikula@linux.intel.com>,
 Cc:     Jason Gunthorpe <jgg@nvidia.com>, intel-gfx@lists.freedesktop.org,
         intel-gvt-dev@lists.freedesktop.org,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 27/34] drm/i915/gvt: remove kvmgt_guest_{init,exit}
-Date:   Mon, 11 Apr 2022 16:13:56 +0200
-Message-Id: <20220411141403.86980-28-hch@lst.de>
+Subject: [PATCH 28/34] drm/i915/gvt: convert to use vfio_register_emulated_iommu_dev
+Date:   Mon, 11 Apr 2022 16:13:57 +0200
+Message-Id: <20220411141403.86980-29-hch@lst.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220411141403.86980-1-hch@lst.de>
 References: <20220411141403.86980-1-hch@lst.de>
@@ -56,194 +56,376 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Merge these into their only callers.
+This is straightforward conversion, the intel_vgpu already has a pointer
+to the vfio_dev, which can be replaced with the embedded structure and
+we can replace all the mdev_get_drvdata() with a simple container_of().
+
+Based on an patch from Jason Gunthorpe.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 ---
- drivers/gpu/drm/i915/gvt/kvmgt.c | 129 ++++++++++++++-----------------
- 1 file changed, 60 insertions(+), 69 deletions(-)
+ drivers/gpu/drm/i915/gvt/gvt.h   |   2 +-
+ drivers/gpu/drm/i915/gvt/kvmgt.c | 190 ++++++++++++++++---------------
+ 2 files changed, 102 insertions(+), 90 deletions(-)
 
+diff --git a/drivers/gpu/drm/i915/gvt/gvt.h b/drivers/gpu/drm/i915/gvt/gvt.h
+index 8565189e0c0dd..c32e8eb199f10 100644
+--- a/drivers/gpu/drm/i915/gvt/gvt.h
++++ b/drivers/gpu/drm/i915/gvt/gvt.h
+@@ -211,7 +211,7 @@ struct intel_vgpu {
+ 
+ 	u32 scan_nonprivbb;
+ 
+-	struct mdev_device *mdev;
++	struct vfio_device vfio_device;
+ 	struct vfio_region *region;
+ 	int num_regions;
+ 	struct eventfd_ctx *intx_trigger;
 diff --git a/drivers/gpu/drm/i915/gvt/kvmgt.c b/drivers/gpu/drm/i915/gvt/kvmgt.c
-index 5db74b6fe5137..38629ab4c9bf2 100644
+index 38629ab4c9bf2..4113f850bf92d 100644
 --- a/drivers/gpu/drm/i915/gvt/kvmgt.c
 +++ b/drivers/gpu/drm/i915/gvt/kvmgt.c
-@@ -100,6 +100,13 @@ struct gvt_dma {
+@@ -100,6 +100,9 @@ struct gvt_dma {
  	struct kref ref;
  };
  
-+static void kvmgt_page_track_write(struct kvm_vcpu *vcpu, gpa_t gpa,
-+		const u8 *val, int len,
-+		struct kvm_page_track_notifier_node *node);
-+static void kvmgt_page_track_flush_slot(struct kvm *kvm,
-+		struct kvm_memory_slot *slot,
-+		struct kvm_page_track_notifier_node *node);
++#define vfio_dev_to_vgpu(vfio_dev) \
++	container_of((vfio_dev), struct intel_vgpu, vfio_device)
 +
- static ssize_t available_instances_show(struct mdev_type *mtype,
- 					struct mdev_type_attribute *attr,
- 					char *buf)
-@@ -213,9 +220,7 @@ void intel_gvt_cleanup_vgpu_type_groups(struct intel_gvt *gvt)
- 	}
+ static void kvmgt_page_track_write(struct kvm_vcpu *vcpu, gpa_t gpa,
+ 		const u8 *val, int len,
+ 		struct kvm_page_track_notifier_node *node);
+@@ -723,44 +726,6 @@ int intel_gvt_set_edid(struct intel_vgpu *vgpu, int port_num)
+ 	return ret;
  }
  
--static int kvmgt_guest_init(struct mdev_device *mdev);
- static void intel_vgpu_release_work(struct work_struct *work);
--static bool kvmgt_guest_exit(struct intel_vgpu *info);
- 
- static void gvt_unpin_guest_page(struct intel_vgpu *vgpu, unsigned long gfn,
- 		unsigned long size)
-@@ -803,6 +808,27 @@ static int intel_vgpu_group_notifier(struct notifier_block *nb,
- 	return NOTIFY_OK;
- }
- 
-+static bool __kvmgt_vgpu_exist(struct intel_vgpu *vgpu)
-+{
-+	struct intel_vgpu *itr;
-+	int id;
-+	bool ret = false;
-+
-+	mutex_lock(&vgpu->gvt->lock);
-+	for_each_active_vgpu(vgpu->gvt, itr, id) {
-+		if (!itr->attached)
-+			continue;
-+
-+		if (vgpu->kvm == itr->kvm) {
-+			ret = true;
-+			goto out;
-+		}
-+	}
-+out:
-+	mutex_unlock(&vgpu->gvt->lock);
-+	return ret;
-+}
-+
- static int intel_vgpu_open_device(struct mdev_device *mdev)
- {
- 	struct intel_vgpu *vgpu = mdev_get_drvdata(mdev);
-@@ -847,14 +873,37 @@ static int intel_vgpu_open_device(struct mdev_device *mdev)
- 		goto undo_group;
- 	}
- 
--	ret = kvmgt_guest_init(mdev);
--	if (ret)
-+	ret = -EEXIST;
-+	if (vgpu->attached)
-+		goto undo_group;
-+
-+	ret = -ESRCH;
-+	if (!vgpu->kvm || vgpu->kvm->mm != current->mm) {
-+		gvt_vgpu_err("KVM is required to use Intel vGPU\n");
-+		goto undo_group;
-+	}
-+
-+	ret = -EEXIST;
-+	if (__kvmgt_vgpu_exist(vgpu))
- 		goto undo_group;
- 
-+	vgpu->attached = true;
-+	kvm_get_kvm(vgpu->kvm);
-+
-+	kvmgt_protect_table_init(vgpu);
-+	gvt_cache_init(vgpu);
-+
-+	vgpu->track_node.track_write = kvmgt_page_track_write;
-+	vgpu->track_node.track_flush_slot = kvmgt_page_track_flush_slot;
-+	kvm_page_track_register_notifier(vgpu->kvm, &vgpu->track_node);
-+
-+	debugfs_create_ulong(KVMGT_DEBUGFS_FILENAME, 0444, vgpu->debugfs,
-+			     &vgpu->nr_cache_entries);
-+
- 	intel_gvt_activate_vgpu(vgpu);
- 
- 	atomic_set(&vgpu->released, 0);
--	return ret;
-+	return 0;
- 
- undo_group:
- 	vfio_group_put_external_user(vgpu->vfio_group);
-@@ -908,7 +957,12 @@ static void __intel_vgpu_release(struct intel_vgpu *vgpu)
- 	/* dereference module reference taken at open */
- 	module_put(THIS_MODULE);
- 
--	kvmgt_guest_exit(vgpu);
-+	debugfs_remove(debugfs_lookup(KVMGT_DEBUGFS_FILENAME, vgpu->debugfs));
-+
-+	kvm_page_track_unregister_notifier(vgpu->kvm, &vgpu->track_node);
-+	kvm_put_kvm(vgpu->kvm);
-+	kvmgt_protect_table_destroy(vgpu);
-+	gvt_cache_destroy(vgpu);
- 
- 	intel_vgpu_release_msi_eventfd_ctx(vgpu);
- 	vfio_group_put_external_user(vgpu->vfio_group);
-@@ -1763,69 +1817,6 @@ static void kvmgt_page_track_flush_slot(struct kvm *kvm,
- 	write_unlock(&kvm->mmu_lock);
- }
- 
--static bool __kvmgt_vgpu_exist(struct intel_vgpu *vgpu, struct kvm *kvm)
+-static int intel_vgpu_create(struct mdev_device *mdev)
 -{
--	struct intel_vgpu *itr;
--	int id;
--	bool ret = false;
+-	struct device *pdev = mdev_parent_dev(mdev);
+-	struct intel_gvt *gvt = kdev_to_i915(pdev)->gvt;
+-	struct intel_vgpu_type *type;
+-	struct intel_vgpu *vgpu;
 -
--	mutex_lock(&vgpu->gvt->lock);
--	for_each_active_vgpu(vgpu->gvt, itr, id) {
--		if (!itr->attached)
--			continue;
+-	type = &gvt->types[mdev_get_type_group_id(mdev)];
+-	if (!type)
+-		return -EINVAL;
 -
--		if (kvm && kvm == itr->kvm) {
--			ret = true;
--			goto out;
--		}
--	}
--out:
--	mutex_unlock(&vgpu->gvt->lock);
--	return ret;
--}
--
--static int kvmgt_guest_init(struct mdev_device *mdev)
--{
--	struct intel_vgpu *vgpu = mdev_get_drvdata(mdev);
--	struct kvm *kvm = vgpu->kvm;
--
--	if (vgpu->attached)
--		return -EEXIST;
--
--	if (!kvm || kvm->mm != current->mm) {
--		gvt_vgpu_err("KVM is required to use Intel vGPU\n");
--		return -ESRCH;
+-	vgpu = intel_gvt_create_vgpu(gvt, type);
+-	if (IS_ERR(vgpu)) {
+-		gvt_err("failed to create intel vgpu: %ld\n", PTR_ERR(vgpu));
+-		return PTR_ERR(vgpu);
 -	}
 -
--	if (__kvmgt_vgpu_exist(vgpu, kvm))
--		return -EEXIST;
+-	INIT_WORK(&vgpu->release_work, intel_vgpu_release_work);
 -
--	vgpu->attached = true;
--	kvm_get_kvm(vgpu->kvm);
+-	vgpu->mdev = mdev;
+-	mdev_set_drvdata(mdev, vgpu);
 -
--	kvmgt_protect_table_init(vgpu);
--	gvt_cache_init(vgpu);
--
--	vgpu->track_node.track_write = kvmgt_page_track_write;
--	vgpu->track_node.track_flush_slot = kvmgt_page_track_flush_slot;
--	kvm_page_track_register_notifier(kvm, &vgpu->track_node);
--
--	debugfs_create_ulong(KVMGT_DEBUGFS_FILENAME, 0444, vgpu->debugfs,
--			     &vgpu->nr_cache_entries);
+-	gvt_dbg_core("intel_vgpu_create succeeded for mdev: %s\n",
+-		     dev_name(mdev_dev(mdev)));
 -	return 0;
 -}
 -
--static bool kvmgt_guest_exit(struct intel_vgpu *info)
+-static int intel_vgpu_remove(struct mdev_device *mdev)
 -{
--	debugfs_remove(debugfs_lookup(KVMGT_DEBUGFS_FILENAME, info->debugfs));
+-	struct intel_vgpu *vgpu = mdev_get_drvdata(mdev);
 -
--	kvm_page_track_unregister_notifier(info->kvm, &info->track_node);
--	kvm_put_kvm(info->kvm);
--	kvmgt_protect_table_destroy(info);
--	gvt_cache_destroy(info);
--	return true;
+-	if (vgpu->attached)
+-		return -EBUSY;
+-
+-	intel_gvt_destroy_vgpu(vgpu);
+-	return 0;
 -}
 -
- void intel_vgpu_detach_regions(struct intel_vgpu *vgpu)
+ static int intel_vgpu_iommu_notifier(struct notifier_block *nb,
+ 				     unsigned long action, void *data)
  {
- 	int i;
+@@ -829,9 +794,9 @@ static bool __kvmgt_vgpu_exist(struct intel_vgpu *vgpu)
+ 	return ret;
+ }
+ 
+-static int intel_vgpu_open_device(struct mdev_device *mdev)
++static int intel_vgpu_open_device(struct vfio_device *vfio_dev)
+ {
+-	struct intel_vgpu *vgpu = mdev_get_drvdata(mdev);
++	struct intel_vgpu *vgpu = vfio_dev_to_vgpu(vfio_dev);
+ 	unsigned long events;
+ 	int ret;
+ 	struct vfio_group *vfio_group;
+@@ -840,7 +805,7 @@ static int intel_vgpu_open_device(struct mdev_device *mdev)
+ 	vgpu->group_notifier.notifier_call = intel_vgpu_group_notifier;
+ 
+ 	events = VFIO_IOMMU_NOTIFY_DMA_UNMAP;
+-	ret = vfio_register_notifier(mdev_dev(mdev), VFIO_IOMMU_NOTIFY, &events,
++	ret = vfio_register_notifier(vfio_dev->dev, VFIO_IOMMU_NOTIFY, &events,
+ 				&vgpu->iommu_notifier);
+ 	if (ret != 0) {
+ 		gvt_vgpu_err("vfio_register_notifier for iommu failed: %d\n",
+@@ -849,7 +814,7 @@ static int intel_vgpu_open_device(struct mdev_device *mdev)
+ 	}
+ 
+ 	events = VFIO_GROUP_NOTIFY_SET_KVM;
+-	ret = vfio_register_notifier(mdev_dev(mdev), VFIO_GROUP_NOTIFY, &events,
++	ret = vfio_register_notifier(vfio_dev->dev, VFIO_GROUP_NOTIFY, &events,
+ 				&vgpu->group_notifier);
+ 	if (ret != 0) {
+ 		gvt_vgpu_err("vfio_register_notifier for group failed: %d\n",
+@@ -857,7 +822,8 @@ static int intel_vgpu_open_device(struct mdev_device *mdev)
+ 		goto undo_iommu;
+ 	}
+ 
+-	vfio_group = vfio_group_get_external_user_from_dev(mdev_dev(mdev));
++	vfio_group =
++		vfio_group_get_external_user_from_dev(vgpu->vfio_device.dev);
+ 	if (IS_ERR_OR_NULL(vfio_group)) {
+ 		ret = !vfio_group ? -EFAULT : PTR_ERR(vfio_group);
+ 		gvt_vgpu_err("vfio_group_get_external_user_from_dev failed\n");
+@@ -865,14 +831,6 @@ static int intel_vgpu_open_device(struct mdev_device *mdev)
+ 	}
+ 	vgpu->vfio_group = vfio_group;
+ 
+-	/* Take a module reference as mdev core doesn't take
+-	 * a reference for vendor driver.
+-	 */
+-	if (!try_module_get(THIS_MODULE)) {
+-		ret = -ENODEV;
+-		goto undo_group;
+-	}
+-
+ 	ret = -EEXIST;
+ 	if (vgpu->attached)
+ 		goto undo_group;
+@@ -910,11 +868,11 @@ static int intel_vgpu_open_device(struct mdev_device *mdev)
+ 	vgpu->vfio_group = NULL;
+ 
+ undo_register:
+-	vfio_unregister_notifier(mdev_dev(mdev), VFIO_GROUP_NOTIFY,
++	vfio_unregister_notifier(vfio_dev->dev, VFIO_GROUP_NOTIFY,
+ 					&vgpu->group_notifier);
+ 
+ undo_iommu:
+-	vfio_unregister_notifier(mdev_dev(mdev), VFIO_IOMMU_NOTIFY,
++	vfio_unregister_notifier(vfio_dev->dev, VFIO_IOMMU_NOTIFY,
+ 					&vgpu->iommu_notifier);
+ out:
+ 	return ret;
+@@ -944,19 +902,16 @@ static void __intel_vgpu_release(struct intel_vgpu *vgpu)
+ 
+ 	intel_gvt_release_vgpu(vgpu);
+ 
+-	ret = vfio_unregister_notifier(mdev_dev(vgpu->mdev), VFIO_IOMMU_NOTIFY,
++	ret = vfio_unregister_notifier(vgpu->vfio_device.dev, VFIO_IOMMU_NOTIFY,
+ 					&vgpu->iommu_notifier);
+ 	drm_WARN(&i915->drm, ret,
+ 		 "vfio_unregister_notifier for iommu failed: %d\n", ret);
+ 
+-	ret = vfio_unregister_notifier(mdev_dev(vgpu->mdev), VFIO_GROUP_NOTIFY,
++	ret = vfio_unregister_notifier(vgpu->vfio_device.dev, VFIO_GROUP_NOTIFY,
+ 					&vgpu->group_notifier);
+ 	drm_WARN(&i915->drm, ret,
+ 		 "vfio_unregister_notifier for group failed: %d\n", ret);
+ 
+-	/* dereference module reference taken at open */
+-	module_put(THIS_MODULE);
+-
+ 	debugfs_remove(debugfs_lookup(KVMGT_DEBUGFS_FILENAME, vgpu->debugfs));
+ 
+ 	kvm_page_track_unregister_notifier(vgpu->kvm, &vgpu->track_node);
+@@ -971,11 +926,9 @@ static void __intel_vgpu_release(struct intel_vgpu *vgpu)
+ 	vgpu->attached = false;
+ }
+ 
+-static void intel_vgpu_close_device(struct mdev_device *mdev)
++static void intel_vgpu_close_device(struct vfio_device *vfio_dev)
+ {
+-	struct intel_vgpu *vgpu = mdev_get_drvdata(mdev);
+-
+-	__intel_vgpu_release(vgpu);
++	__intel_vgpu_release(vfio_dev_to_vgpu(vfio_dev));
+ }
+ 
+ static void intel_vgpu_release_work(struct work_struct *work)
+@@ -1127,10 +1080,10 @@ static bool gtt_entry(struct intel_vgpu *vgpu, loff_t *ppos)
+ 			true : false;
+ }
+ 
+-static ssize_t intel_vgpu_read(struct mdev_device *mdev, char __user *buf,
++static ssize_t intel_vgpu_read(struct vfio_device *vfio_dev, char __user *buf,
+ 			size_t count, loff_t *ppos)
+ {
+-	struct intel_vgpu *vgpu = mdev_get_drvdata(mdev);
++	struct intel_vgpu *vgpu = vfio_dev_to_vgpu(vfio_dev);
+ 	unsigned int done = 0;
+ 	int ret;
+ 
+@@ -1201,11 +1154,11 @@ static ssize_t intel_vgpu_read(struct mdev_device *mdev, char __user *buf,
+ 	return -EFAULT;
+ }
+ 
+-static ssize_t intel_vgpu_write(struct mdev_device *mdev,
++static ssize_t intel_vgpu_write(struct vfio_device *vfio_dev,
+ 				const char __user *buf,
+ 				size_t count, loff_t *ppos)
+ {
+-	struct intel_vgpu *vgpu = mdev_get_drvdata(mdev);
++	struct intel_vgpu *vgpu = vfio_dev_to_vgpu(vfio_dev);
+ 	unsigned int done = 0;
+ 	int ret;
+ 
+@@ -1275,13 +1228,14 @@ static ssize_t intel_vgpu_write(struct mdev_device *mdev,
+ 	return -EFAULT;
+ }
+ 
+-static int intel_vgpu_mmap(struct mdev_device *mdev, struct vm_area_struct *vma)
++static int intel_vgpu_mmap(struct vfio_device *vfio_dev,
++		struct vm_area_struct *vma)
+ {
++	struct intel_vgpu *vgpu = vfio_dev_to_vgpu(vfio_dev);
+ 	unsigned int index;
+ 	u64 virtaddr;
+ 	unsigned long req_size, pgoff, req_start;
+ 	pgprot_t pg_prot;
+-	struct intel_vgpu *vgpu = mdev_get_drvdata(mdev);
+ 
+ 	index = vma->vm_pgoff >> (VFIO_PCI_OFFSET_SHIFT - PAGE_SHIFT);
+ 	if (index >= VFIO_PCI_ROM_REGION_INDEX)
+@@ -1404,10 +1358,10 @@ static int intel_vgpu_set_irqs(struct intel_vgpu *vgpu, u32 flags,
+ 	return func(vgpu, index, start, count, flags, data);
+ }
+ 
+-static long intel_vgpu_ioctl(struct mdev_device *mdev, unsigned int cmd,
++static long intel_vgpu_ioctl(struct vfio_device *vfio_dev, unsigned int cmd,
+ 			     unsigned long arg)
+ {
+-	struct intel_vgpu *vgpu = mdev_get_drvdata(mdev);
++	struct intel_vgpu *vgpu = vfio_dev_to_vgpu(vfio_dev);
+ 	unsigned long minsz;
+ 
+ 	gvt_dbg_core("vgpu%d ioctl, cmd: %d\n", vgpu->id, cmd);
+@@ -1682,14 +1636,9 @@ static ssize_t
+ vgpu_id_show(struct device *dev, struct device_attribute *attr,
+ 	     char *buf)
+ {
+-	struct mdev_device *mdev = mdev_from_dev(dev);
++	struct intel_vgpu *vgpu = dev_get_drvdata(dev);
+ 
+-	if (mdev) {
+-		struct intel_vgpu *vgpu = (struct intel_vgpu *)
+-			mdev_get_drvdata(mdev);
+-		return sprintf(buf, "%d\n", vgpu->id);
+-	}
+-	return sprintf(buf, "\n");
++	return sprintf(buf, "%d\n", vgpu->id);
+ }
+ 
+ static DEVICE_ATTR_RO(vgpu_id);
+@@ -1709,19 +1658,72 @@ static const struct attribute_group *intel_vgpu_groups[] = {
+ 	NULL,
+ };
+ 
+-const struct mdev_parent_ops intel_vgpu_mdev_ops = {
+-	.mdev_attr_groups       = intel_vgpu_groups,
+-	.supported_type_groups	= gvt_vgpu_type_groups,
+-	.create			= intel_vgpu_create,
+-	.remove			= intel_vgpu_remove,
++static const struct vfio_device_ops intel_vgpu_dev_ops = {
++	.open_device	= intel_vgpu_open_device,
++	.close_device	= intel_vgpu_close_device,
++	.read		= intel_vgpu_read,
++	.write		= intel_vgpu_write,
++	.mmap		= intel_vgpu_mmap,
++	.ioctl		= intel_vgpu_ioctl,
++};
+ 
+-	.open_device		= intel_vgpu_open_device,
+-	.close_device		= intel_vgpu_close_device,
++static int intel_vgpu_probe(struct mdev_device *mdev)
++{
++	struct device *pdev = mdev_parent_dev(mdev);
++	struct intel_gvt *gvt = kdev_to_i915(pdev)->gvt;
++	struct intel_vgpu_type *type;
++	struct intel_vgpu *vgpu;
++	int ret;
++
++	type = &gvt->types[mdev_get_type_group_id(mdev)];
++	if (!type)
++		return -EINVAL;
++
++	vgpu = intel_gvt_create_vgpu(gvt, type);
++	if (IS_ERR(vgpu)) {
++		gvt_err("failed to create intel vgpu: %ld\n", PTR_ERR(vgpu));
++		return PTR_ERR(vgpu);
++	}
+ 
+-	.read			= intel_vgpu_read,
+-	.write			= intel_vgpu_write,
+-	.mmap			= intel_vgpu_mmap,
+-	.ioctl			= intel_vgpu_ioctl,
++	INIT_WORK(&vgpu->release_work, intel_vgpu_release_work);
++	vfio_init_group_dev(&vgpu->vfio_device, &mdev->dev,
++			    &intel_vgpu_dev_ops);
++
++	dev_set_drvdata(&mdev->dev, vgpu);
++	ret = vfio_register_emulated_iommu_dev(&vgpu->vfio_device);
++	if (ret) {
++		intel_gvt_destroy_vgpu(vgpu);
++		return ret;
++	}
++
++	gvt_dbg_core("intel_vgpu_create succeeded for mdev: %s\n",
++		     dev_name(mdev_dev(mdev)));
++	return 0;
++}
++
++static void intel_vgpu_remove(struct mdev_device *mdev)
++{
++	struct intel_vgpu *vgpu = dev_get_drvdata(&mdev->dev);
++
++	if (WARN_ON_ONCE(vgpu->attached))
++		return;
++	intel_gvt_destroy_vgpu(vgpu);
++}
++
++static struct mdev_driver intel_vgpu_mdev_driver = {
++	.driver = {
++		.name		= "intel_vgpu_mdev",
++		.owner		= THIS_MODULE,
++		.dev_groups	= intel_vgpu_groups,
++	},
++	.probe		= intel_vgpu_probe,
++	.remove		= intel_vgpu_remove,
++};
++
++const struct mdev_parent_ops intel_vgpu_mdev_ops = {
++	.owner			= THIS_MODULE,
++	.supported_type_groups	= gvt_vgpu_type_groups,
++	.device_driver		= &intel_vgpu_mdev_driver,
+ };
+ 
+ int intel_gvt_page_track_add(struct intel_vgpu *info, u64 gfn)
+@@ -1925,11 +1927,21 @@ void intel_gvt_dma_unmap_guest_page(struct intel_vgpu *vgpu,
+ 
+ static int __init kvmgt_init(void)
+ {
+-	return intel_gvt_set_ops(&intel_gvt_vgpu_ops);
++	int ret;
++
++	ret = intel_gvt_set_ops(&intel_gvt_vgpu_ops);
++	if (ret)
++		return ret;
++
++	ret = mdev_register_driver(&intel_vgpu_mdev_driver);
++	if (ret)
++		intel_gvt_clear_ops(&intel_gvt_vgpu_ops);
++	return ret;
+ }
+ 
+ static void __exit kvmgt_exit(void)
+ {
++	mdev_unregister_driver(&intel_vgpu_mdev_driver);
+ 	intel_gvt_clear_ops(&intel_gvt_vgpu_ops);
+ }
+ 
 -- 
 2.30.2
 

@@ -2,139 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C245A4FBA48
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 12:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E235F4FBA4B
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 12:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345806AbiDKLAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 07:00:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41020 "EHLO
+        id S1345809AbiDKLAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 07:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345792AbiDKLAa (ORCPT
+        with ESMTP id S1345830AbiDKLAv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 07:00:30 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE70443C0;
-        Mon, 11 Apr 2022 03:58:17 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id be5so7542106plb.13;
-        Mon, 11 Apr 2022 03:58:17 -0700 (PDT)
+        Mon, 11 Apr 2022 07:00:51 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2757A443F8;
+        Mon, 11 Apr 2022 03:58:35 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id t12so1156050pll.7;
+        Mon, 11 Apr 2022 03:58:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=neoL93v1FQD5PO80zVIlusq7TF65khnb+nEiJ+ZIYps=;
-        b=R9dZYFdq5yVATZ3XJWwUNTdExd0FgQO0ZWtoF3o/RTLOgbXtd/p28qzp8AF1rWiU3Z
-         3+NERWN2Unkhyp29TALZSF5cSg9c29zKrhyL7hNGKn7vLPrtRCQyjKKLka4RMtJMNpZ4
-         ahnLWm9t48XUL17kzCe/oj2MGlnQYHzSD1ua7Nc9kDdlYe/juPFYNbudF13yPa6sOyYe
-         piBAUqD5vZJQxTRC0twsLW+bJnFtJy3aqcLbPyZ7cEQtitfeD6OVpqwRMrYRM0cDxoh7
-         Vk1qg0PX5inW0esw3QT16R7w/FHp3O59LXqUAWeoni56LY2A8uun9WVELgqKfp6CbZ0o
-         bgkg==
+        h=from:to:subject:date:message-id;
+        bh=MUZhH5+lYnSoRrE3JIvwECmXrCGL/rgXBwstSStdnjs=;
+        b=cjkwgxHrumAGnfdqLql3/kNBpZ4A4FtzBxNUskw4YzNjL8GDB4FF9Wjza2z28ylDRQ
+         pK7Wz7r1m6nO7yZ5D4ixHxBWB6HaSeZX4SznQQjMQgLwgEEHkKrkWlSMHygttmAruHvg
+         gF84XDiItWwtPv/ugaIncpZa/L8Hdn116YQps3gKiiVkrTLSQkyxfK9bp38UrC1wT2ZV
+         inviFkmNUhsLSCy+oD555uJ7wDhHJDAWA9H2c9fI3gGp8ETL1yH5ekiaSaM93lL52eMW
+         +0dOQUFDSRDnlHS+7cBDase4Ln/3ZIPq1YHB4S6KFh3slIvAiFG6Bp4EL2W/AeTIp48q
+         mr3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=neoL93v1FQD5PO80zVIlusq7TF65khnb+nEiJ+ZIYps=;
-        b=qP3Quj+Dm7fNDcQKloYf1QWcT+EQlwhDIDiADDI6wgjfAVLkRqrDSlGe2anjRGu86o
-         bXduBCV1NJERPJ3acNtFNaAlWOjCIuxqRI/SeEfFUwGhFexzv+AyogoFj6LsO4D8LdIC
-         zSjjd/kpXTtkY0jY2ickJdQS+yU805tE4SHc/RT825OdbYUVhX+3Adgmaagr7sGDN6R8
-         IwA8QvUxk1lkOo3Je8P/l5iPGa+NPj6eCQQ8llnkbd3uhtPsPWgxklbVPsofvA21E5I0
-         m8MCuIZmGbtt22HWjUkkHTg2xjFtQ7UA8iH9ix6rTsyNImxWBCVG621VTjsGLdGry6Au
-         EcOw==
-X-Gm-Message-State: AOAM532FBAnI2eJ9uqTdTaEUX8W8NFMkbJzTYPnv+ntwKbvLUmxszyxy
-        2zCgQhqq8qW0Av/E0EwqwtA=
-X-Google-Smtp-Source: ABdhPJwElaEn7PLRh27DOpDoDhP3DZRKy/HNPr6mpB/9WKganP7ARt5gUovKBlaaB7+VXEnReHIgwQ==
-X-Received: by 2002:a17:90b:4c44:b0:1c7:109c:b419 with SMTP id np4-20020a17090b4c4400b001c7109cb419mr36082262pjb.113.1649674696515;
-        Mon, 11 Apr 2022 03:58:16 -0700 (PDT)
-Received: from 9a2d8922b8f1 ([122.161.51.18])
-        by smtp.gmail.com with ESMTPSA id p9-20020a17090a74c900b001cb8d6b5c47sm4233182pjl.46.2022.04.11.03.58.13
+        h=x-gm-message-state:from:to:subject:date:message-id;
+        bh=MUZhH5+lYnSoRrE3JIvwECmXrCGL/rgXBwstSStdnjs=;
+        b=MUHxzIk3SGBI1CLZLL5IGmic9y+htJHXfwc9Va3285BohWCT32JUZb7tFCQD2U4ZyJ
+         KuWtS7WDwGlP97eClByc1W1+7W/Mxpbjtm0AJd4+e2vx/JlReYeoN/Ykh0yfZcPpRya3
+         ECv3VM587dJuWvoOsiiBAhLcTlw1WDbRG1ofGeqSj9G0xBaVssSLb9ADHVJG9qM65Yv/
+         5vZ124B68oMocVqcMXWuQhzh3TQNFBBpjoqg94VhAAVigk4OrRqCA4sE7oR5sLs4xYFJ
+         kW7/D6CkpqjjDLWkbrCterHlmRDrIxoN5WveEyL+65FgbWSICm6sP1m5rtmzowemiNlt
+         S5lQ==
+X-Gm-Message-State: AOAM533x5/fE5B1WysY1HdvfZR4MBuOJMDxRA3MEbnjDS0mrXza9Q6jF
+        qBap02MjPZ4PwwoTySK25kymPeveJVPFSJOz
+X-Google-Smtp-Source: ABdhPJxhFwlyqW5gZibUN5PvDb9BqwH3NdKvo3zZpiVVytIj4ah70hqQPecJsH8Z/wGcA4y76dqsgw==
+X-Received: by 2002:a17:902:8ec8:b0:154:5ecb:eb05 with SMTP id x8-20020a1709028ec800b001545ecbeb05mr31594185plo.56.1649674714603;
+        Mon, 11 Apr 2022 03:58:34 -0700 (PDT)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id k27-20020aa79d1b000000b005059ad6b943sm7996386pfp.166.2022.04.11.03.58.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 03:58:16 -0700 (PDT)
-Date:   Mon, 11 Apr 2022 16:28:10 +0530
-From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        dmaengine@vger.kernel.org
-Subject: Re: [PATCH v2 6/6] dt-bindings: dma: Convert Qualcomm BAM DMA
- binding to json format
-Message-ID: <20220411105810.GB33220@9a2d8922b8f1>
-References: <20220410175056.79330-1-singh.kuldeep87k@gmail.com>
- <20220410175056.79330-7-singh.kuldeep87k@gmail.com>
- <14ecb746-56f0-2d3b-2f93-1af9407de4b7@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <14ecb746-56f0-2d3b-2f93-1af9407de4b7@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 11 Apr 2022 03:58:34 -0700 (PDT)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Input: exc3000 - Fix return value check of wait_for_completion_timeout
+Date:   Mon, 11 Apr 2022 10:58:23 +0000
+Message-Id: <20220411105828.22140-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> This is something new and it seems only one SoC defines it (not even one
-> BAM version). I wonder whether this is actually correct or this
-> particular version of BAM is slightly different. Maybe someone could
-> clarify it, but if no - looks ok.
+wait_for_completion_timeout() returns unsigned long not int.
+It returns 0 if timed out, and positive if completed.
+The check for <= 0 is ambiguous and should be == 0 here
+indicating timeout which is the only error case.
 
-Yes, sdm845.dtsi uses 4 entries and rest 1.
+Fixes: 102feb1ddfd0 ("Input: exc3000 - factor out vendor data request")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/input/touchscreen/exc3000.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-> 
-> > +
-> > +  num-channels:
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    description:
-> > +      Indicates supported number of DMA channels in a remotely controlled bam.
-> > +
-> > +  qcom,controlled-remotely:
-> > +    $ref: /schemas/types.yaml#/definitions/flag
-> 
-> type: boolean
+diff --git a/drivers/input/touchscreen/exc3000.c b/drivers/input/touchscreen/exc3000.c
+index cbe0dd412912..b290a0bb26cf 100644
+--- a/drivers/input/touchscreen/exc3000.c
++++ b/drivers/input/touchscreen/exc3000.c
+@@ -220,6 +220,7 @@ static int exc3000_vendor_data_request(struct exc3000_data *data, u8 *request,
+ {
+ 	u8 buf[EXC3000_LEN_VENDOR_REQUEST] = { 0x67, 0x00, 0x42, 0x00, 0x03 };
+ 	int ret;
++	unsigned long time_left;
+ 
+ 	mutex_lock(&data->query_lock);
+ 
+@@ -233,9 +234,9 @@ static int exc3000_vendor_data_request(struct exc3000_data *data, u8 *request,
+ 		goto out_unlock;
+ 
+ 	if (response) {
+-		ret = wait_for_completion_timeout(&data->wait_event,
++		time_left = wait_for_completion_timeout(&data->wait_event,
+ 						  timeout * HZ);
+-		if (ret <= 0) {
++		if (time_left == 0) {
+ 			ret = -ETIMEDOUT;
+ 			goto out_unlock;
+ 		}
+-- 
+2.17.1
 
-Boolean comes under flag in types.yaml
-
-definitions:
-  flag:
-    oneOf:
-      - type: boolean
-        const: true
-      - type: 'null'
-
-I have seen other boolean properties(spi-cpol, spi-cpha and bunch of
-others) using type flag. I think we should keep flag here.
-
-> 
-> > +    description:
-> > +      Indicates that the bam is controlled by remote proccessor i.e. execution
-> > +      environment.
-> > +
-> > +  qcom,ee:
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    description:
-> > +      Indicates the active Execution Environment identifier (0-7) used in the
-> > +      secure world.
-> 
-> maximum: 7
-
-ok.
-
-> > +required:
-> > +  - compatible
-> > +  - "#dma-cells"
-> > +  - interrupts
-> > +  - reg
-> 
-> clocks, clock-names, qcom-ee - these are required according to old bindings.
-
-I missed qcom,ee. Will add in v3.
-
-For clocks and clock-names , there are two platforms(msm8996.dtsi,
-sdm845.dtsi) where these properties are missing. And I don't want to add
-some random values. Shall I skip them here? and let board owners add
-them later.

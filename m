@@ -2,65 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B2554FC319
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 19:24:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C74CC4FC31C
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 19:24:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244581AbiDKR0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 13:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33824 "EHLO
+        id S1348831AbiDKR1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 13:27:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232374AbiDKR03 (ORCPT
+        with ESMTP id S1348817AbiDKR1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 13:26:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90617140E4;
-        Mon, 11 Apr 2022 10:24:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A66B61760;
-        Mon, 11 Apr 2022 17:24:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3AF6C385A4;
-        Mon, 11 Apr 2022 17:24:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649697853;
-        bh=5TsoD2KB4qgZvsvSKTKSMDHat49KB49G9h0SnwNGm+I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cKWNOUgUP/YiI+pD5FAAZHFGBdRgf/6ZGWo2Dx4XmJbORxoFQbgAn6OPtlpM8AYO5
-         gfVB5p1uGlWJb1Pr9UYb37MnAJXrJYhoL3spWMDZib8pPnoQmKwQtAe0hubOekeL1n
-         znP4QJuaFTw4DLJwCoSrITUJeIifc9Z4rwFoaYDEdFQbueDVxbOi9QXH+VWMZpj7nI
-         rk+gGbH3MLs8c2kevf/f8MOHfZhri4XZw8+VvEUlZHFNqex4d0vmMqvvcu/Z+kOa1X
-         +cbWWw0dC0dbcFUUw52q7sYjpiAlgrpJzxsYCJthf2V8EYufGe77fy2WqjH21z3uDD
-         /1Vj11nOKqhFA==
-Date:   Mon, 11 Apr 2022 22:54:09 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Jianjun Wang <jianjun.wang@mediatek.com>
-Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
+        Mon, 11 Apr 2022 13:27:02 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CC615A06
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 10:24:46 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id w4so23998788wrg.12
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 10:24:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=bO+BsNy1FuaSIt/iszQlx7cNNV6R1RPoXlTl3HVm+SU=;
+        b=Ef23PlWCxktDuXJojezEz7rTy41ev5OFZTSYEluyUMFaMBN5r3VkoTROanB9xCAs+7
+         r2momPwTkkAPaDDS6xRjwJ5+LzLxZWnr/0zlAiYEROFcxuv1v8GXUee6yWyu87ZPUg8F
+         w/vYU/1YlIqQcJQap4eIO0Q4+JPnLrJsb8F9o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bO+BsNy1FuaSIt/iszQlx7cNNV6R1RPoXlTl3HVm+SU=;
+        b=Vp9qNzYwSlTg7aAVUt6X6LPCczT0FLhgZEAGiVm4EPImCvKG13kI61xJycUs3OcGuY
+         PtWg5iDT9tmM5hw3ARGQN98tr87ytLAUoi7TwQRGLcf9wmftuKMDfgfipiVOyqvk53i6
+         Uzh7RQdKXfOjVrBpnPot/7Gk+rv39NHQ7d2Pwc63lXqZW93Rt0Y56Nt+f0k+P4LYg257
+         TTKWLGpYXKBPTDkP7/ngYH8RcO7t+M2ELSv/jPMvzYlkL5y2cnyl3o4w1VokOlQfM4/5
+         MFCWdJM78RaJp/HYunbbg2SPBlWyFebs8IEV3MuBrfrEnCtb5SLt0ufx1CxEDPVFqUsC
+         KWtA==
+X-Gm-Message-State: AOAM530BfIozJ7+OyGRFmCmSTHI07qLM09HYff2bso/Py5kxeUVX+ALS
+        938Mkcb6JllAoy9OMNq96rljJQ==
+X-Google-Smtp-Source: ABdhPJyVwSrN9QTx39nQx4YTCuMJy+ixVzZdD7j27qLoaF+61nhle+4/lc6ixo13tBZnovp5oT0hgg==
+X-Received: by 2002:a05:6000:1689:b0:204:19f5:541f with SMTP id y9-20020a056000168900b0020419f5541fmr25763937wrd.704.1649697884800;
+        Mon, 11 Apr 2022 10:24:44 -0700 (PDT)
+Received: from google.com ([37.228.205.1])
+        by smtp.gmail.com with ESMTPSA id p125-20020a1c2983000000b0038e6c62f527sm130326wmp.14.2022.04.11.10.24.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Apr 2022 10:24:44 -0700 (PDT)
+Date:   Mon, 11 Apr 2022 17:24:42 +0000
+From:   Fabio Baltieri <fabiobaltieri@chromium.org>
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Wei-Shun Chang <weishunc@google.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
+        chrome-platform@lists.linux.dev, linux-pwm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rex-bc.chen@mediatek.com, randy.wu@mediatek.com,
-        jieyy.yang@mediatek.com, chuanjia.liu@mediatek.com,
-        qizhong.cheng@mediatek.com, jian.yang@mediatek.com
-Subject: Re: [PATCH v5 2/2] phy: mediatek: Add PCIe PHY driver
-Message-ID: <YlRkOU/w8X57SAIj@matsya>
-References: <20220326022728.2969-1-jianjun.wang@mediatek.com>
- <20220326022728.2969-3-jianjun.wang@mediatek.com>
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>
+Subject: Re: [PATCH v3 2/4] drivers: pwm: pwm-cros-ec: add channel type
+ support
+Message-ID: <YlRkWnVKp1ZBZEo8@google.com>
+References: <20220411152114.2165933-1-fabiobaltieri@chromium.org>
+ <20220411152114.2165933-3-fabiobaltieri@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220326022728.2969-3-jianjun.wang@mediatek.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220411152114.2165933-3-fabiobaltieri@chromium.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,339 +75,259 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26-03-22, 10:27, Jianjun Wang wrote:
-> Add PCIe GEN3 PHY driver support on MediaTek chipsets.
+On Mon, Apr 11, 2022 at 03:21:12PM +0000, Fabio Baltieri wrote:
+> Add support for EC_PWM_TYPE_DISPLAY_LIGHT and EC_PWM_TYPE_KB_LIGHT pwm
+> types to the PWM cros_ec_pwm driver. This allows specifying one of these
+> PWM channel by functionality, and let the EC firmware pick the correct
+> channel, thus abstracting the hardware implementation from the kernel
+> driver.
 > 
-> Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> To use it, define the node with the "google,cros-ec-pwm-type"
+> compatible.
+> 
+> Signed-off-by: Fabio Baltieri <fabiobaltieri@chromium.org>
+
+Hey Tzung-Bi, ended up not adding your "Reviewed-by" tag since I changed
+a chunk of this patch after Rob's comment and there's few options for
+handling the DT compatibles, feel free to take another look.
+
+Thanks
+Fabio
+
 > ---
->  drivers/phy/mediatek/Kconfig        |  11 ++
->  drivers/phy/mediatek/Makefile       |   1 +
->  drivers/phy/mediatek/phy-mtk-pcie.c | 272 ++++++++++++++++++++++++++++
->  3 files changed, 284 insertions(+)
->  create mode 100644 drivers/phy/mediatek/phy-mtk-pcie.c
+>  drivers/pwm/pwm-cros-ec.c | 109 ++++++++++++++++++++++++++++++--------
+>  1 file changed, 86 insertions(+), 23 deletions(-)
 > 
-> diff --git a/drivers/phy/mediatek/Kconfig b/drivers/phy/mediatek/Kconfig
-> index 55f8e6c048ab..387ed1b3f2cc 100644
-> --- a/drivers/phy/mediatek/Kconfig
-> +++ b/drivers/phy/mediatek/Kconfig
-> @@ -55,3 +55,14 @@ config PHY_MTK_MIPI_DSI
->  	select GENERIC_PHY
->  	help
->  	  Support MIPI DSI for Mediatek SoCs.
-> +
-> +config PHY_MTK_PCIE
-> +	tristate "MediaTek PCIe-PHY Driver"
-> +	depends on ARCH_MEDIATEK || COMPILE_TEST
-> +	depends on OF
-> +	select GENERIC_PHY
-> +	help
-> +	  Say 'Y' here to add support for MediaTek PCIe PHY driver.
-> +	  This driver create the basic PHY instance and provides initialize
-> +	  callback for PCIe GEN3 port, it supports software efuse
-> +	  initialization.
-> diff --git a/drivers/phy/mediatek/Makefile b/drivers/phy/mediatek/Makefile
-> index ace660fbed3a..788c13147f63 100644
-> --- a/drivers/phy/mediatek/Makefile
-> +++ b/drivers/phy/mediatek/Makefile
-> @@ -6,6 +6,7 @@
->  obj-$(CONFIG_PHY_MTK_TPHY)		+= phy-mtk-tphy.o
->  obj-$(CONFIG_PHY_MTK_UFS)		+= phy-mtk-ufs.o
->  obj-$(CONFIG_PHY_MTK_XSPHY)		+= phy-mtk-xsphy.o
-> +obj-$(CONFIG_PHY_MTK_PCIE)		+= phy-mtk-pcie.o
+> diff --git a/drivers/pwm/pwm-cros-ec.c b/drivers/pwm/pwm-cros-ec.c
+> index 5e29d9c682c3..83c33958d52b 100644
+> --- a/drivers/pwm/pwm-cros-ec.c
+> +++ b/drivers/pwm/pwm-cros-ec.c
+> @@ -6,23 +6,30 @@
+>   */
 >  
->  phy-mtk-hdmi-drv-y			:= phy-mtk-hdmi.o
->  phy-mtk-hdmi-drv-y			+= phy-mtk-hdmi-mt2701.o
-> diff --git a/drivers/phy/mediatek/phy-mtk-pcie.c b/drivers/phy/mediatek/phy-mtk-pcie.c
-> new file mode 100644
-> index 000000000000..d288655b6cff
-> --- /dev/null
-> +++ b/drivers/phy/mediatek/phy-mtk-pcie.c
-> @@ -0,0 +1,272 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2022 MediaTek Inc.
-> + * Author: Jianjun Wang <jianjun.wang@mediatek.com>
-> + */
-> +
-> +#include <linux/bits.h>
-> +#include <linux/compiler_types.h>
-
-Why do you need this header
-
-> +#include <linux/module.h>
-> +#include <linux/nvmem-consumer.h>
+>  #include <linux/module.h>
 > +#include <linux/of_device.h>
-> +#include <linux/phy/phy.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/slab.h>
+>  #include <linux/platform_data/cros_ec_commands.h>
+>  #include <linux/platform_data/cros_ec_proto.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/pwm.h>
+>  #include <linux/slab.h>
+>  
+> +#include <dt-bindings/mfd/cros_ec.h>
 > +
-> +#include "phy-mtk-io.h"
+> +#define OF_CROS_EC_PWM_TYPE ((void *)1)
 > +
-> +#define PEXTP_ANA_GLB_00_REG		0x9000
-> +#define PEXTP_ANA_LN0_TRX_REG		0xa000
-> +#define PEXTP_ANA_TX_OFFSET		0x04
-> +#define PEXTP_ANA_RX_OFFSET		0x3c
-> +#define PEXTP_ANA_LANE_OFFSET		0x100
-> +
-> +/* PEXTP_GLB_00_REG[28:24] Internal Resistor Selection of TX Bias Current */
-> +#define EFUSE_GLB_INTR_SEL		GENMASK(28, 24)
-> +#define EFUSE_GLB_INTR_VAL(x)		((0x1f & (x)) << 24)
-
-There are nice macros in bitfield.h which you can use to set/get value
-
-> +
-> +/* PEXTP_ANA_LN_RX_REG[3:0] RX impedance selection */
-> +#define EFUSE_LN_RX_SEL			GENMASK(3, 0)
-> +#define EFUSE_LN_RX_VAL(x)		(0xf & (x))
-> +
-> +/* PEXTP_ANA_LN_TX_REG[5:2] TX PMOS impedance selection */
-> +#define EFUSE_LN_TX_PMOS_SEL		GENMASK(5, 2)
-> +#define EFUSE_LN_TX_PMOS_VAL(x)		((0xf & (x)) << 2)
-> +
-> +/* PEXTP_ANA_LN_TX_REG[11:8] TX NMOS impedance selection */
-> +#define EFUSE_LN_TX_NMOS_SEL		GENMASK(11, 8)
-> +#define EFUSE_LN_TX_NMOS_VAL(x)		((0xf & (x)) << 8)
-> +
-> +/**
-> + * struct mtk_pcie_lane_efuse - eFuse data for each lane
-> + * @tx_pmos: TX PMOS impedance selection data
-> + * @tx_nmos: TX NMOS impedance selection data
-> + * @rx_data: RX impedance selection data
-> + * @lane_efuse_supported: software eFuse data is supported for this lane
-> + */
-> +struct mtk_pcie_lane_efuse {
-> +	u32 tx_pmos;
-> +	u32 tx_nmos;
-> +	u32 rx_data;
-> +	bool lane_efuse_supported;
-> +};
-> +
-> +/**
-> + * struct mtk_pcie_phy_data - phy data for each SoC
-> + * @num_lanes: supported lane numbers
-> + * @sw_efuse_supported: support software to load eFuse data
-> + */
-> +struct mtk_pcie_phy_data {
-> +	int num_lanes;
-> +	bool sw_efuse_supported;
-> +};
-> +
-> +/**
-> + * struct mtk_pcie_phy - PCIe phy driver main structure
-> + * @dev: pointer to device
-> + * @phy: pointer to generic phy
-> + * @sif_base: IO mapped register base address of system interface
-> + * @data: pointer to SoC dependent data
-> + * @sw_efuse_en: software eFuse enable status
-> + * @efuse_glb_intr: internal resistor selection of TX bias current data
-> + * @efuse: pointer to eFuse data for each lane
-> + */
-> +struct mtk_pcie_phy {
-> +	struct device *dev;
-> +	struct phy *phy;
-> +	void __iomem *sif_base;
-> +	const struct mtk_pcie_phy_data *data;
-> +
-> +	bool sw_efuse_en;
-> +	u32 efuse_glb_intr;
-> +	struct mtk_pcie_lane_efuse *efuse;
-> +};
-> +
-> +static void mtk_pcie_efuse_set_lane(struct mtk_pcie_phy *pcie_phy,
-> +				    unsigned int lane)
-> +{
-> +	struct mtk_pcie_lane_efuse *data = &pcie_phy->efuse[lane];
-> +	void __iomem *addr;
-> +
-> +	if (!data->lane_efuse_supported)
-> +		return;
-> +
-> +	addr = pcie_phy->sif_base + PEXTP_ANA_LN0_TRX_REG +
-> +	       lane * PEXTP_ANA_LANE_OFFSET;
-> +
-> +	mtk_phy_update_bits(addr + PEXTP_ANA_TX_OFFSET, EFUSE_LN_TX_PMOS_SEL,
-> +			    EFUSE_LN_TX_PMOS_VAL(data->tx_pmos));
-> +
-> +	mtk_phy_update_bits(addr + PEXTP_ANA_TX_OFFSET, EFUSE_LN_TX_NMOS_SEL,
-> +			    EFUSE_LN_TX_NMOS_VAL(data->tx_nmos));
-> +
-> +	mtk_phy_update_bits(addr + PEXTP_ANA_RX_OFFSET, EFUSE_LN_RX_SEL,
-> +			    EFUSE_LN_RX_VAL(data->rx_data));
-> +}
-> +
-> +/**
-> + * mtk_pcie_phy_init() - Initialize the phy
-> + * @phy: the phy to be initialized
-> + *
-> + * Initialize the phy by setting the efuse data.
-> + * The hardware settings will be reset during suspend, it should be
-> + * reinitialized when the consumer calls phy_init() again on resume.
-> + */
-> +static int mtk_pcie_phy_init(struct phy *phy)
-> +{
-> +	struct mtk_pcie_phy *pcie_phy = phy_get_drvdata(phy);
-> +	int i;
-> +
-> +	if (!pcie_phy->sw_efuse_en)
+>  /**
+>   * struct cros_ec_pwm_device - Driver data for EC PWM
+>   *
+>   * @dev: Device node
+>   * @ec: Pointer to EC device
+>   * @chip: PWM controller chip
+> + * @use_pwm_type: Use PWM types instead of generic channels
+>   */
+>  struct cros_ec_pwm_device {
+>  	struct device *dev;
+>  	struct cros_ec_device *ec;
+>  	struct pwm_chip chip;
+> +	bool use_pwm_type;
+>  };
+>  
+>  /**
+> @@ -58,14 +65,31 @@ static void cros_ec_pwm_free(struct pwm_chip *chip, struct pwm_device *pwm)
+>  	kfree(channel);
+>  }
+>  
+> -static int cros_ec_pwm_set_duty(struct cros_ec_device *ec, u8 index, u16 duty)
+> +static int cros_ec_dt_type_to_pwm_type(u8 dt_index, u8 *pwm_type)
+>  {
+> +	switch (dt_index) {
+> +	case CROS_EC_PWM_DT_KB_LIGHT:
+> +		*pwm_type = EC_PWM_TYPE_KB_LIGHT;
 > +		return 0;
-> +
-> +	/* Set global data */
-> +	mtk_phy_update_bits(pcie_phy->sif_base + PEXTP_ANA_GLB_00_REG,
-> +			    EFUSE_GLB_INTR_SEL,
-> +			    EFUSE_GLB_INTR_VAL(pcie_phy->efuse_glb_intr));
-> +
-> +	for (i = 0; i < pcie_phy->data->num_lanes; i++)
-> +		mtk_pcie_efuse_set_lane(pcie_phy, i);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct phy_ops mtk_pcie_phy_ops = {
-> +	.init	= mtk_pcie_phy_init,
-
-Only init for this phy? no power up/down either??
-
-
-> +	.owner	= THIS_MODULE,
-> +};
-> +
-> +static int mtk_pcie_efuse_read_for_lane(struct mtk_pcie_phy *pcie_phy,
-> +					unsigned int lane)
-> +{
-> +	struct mtk_pcie_lane_efuse *efuse = &pcie_phy->efuse[lane];
-> +	struct device *dev = pcie_phy->dev;
-> +	char efuse_id[16];
-> +	int ret;
-> +
-> +	snprintf(efuse_id, sizeof(efuse_id), "tx_ln%d_pmos", lane);
-> +	ret = nvmem_cell_read_variable_le_u32(dev, efuse_id, &efuse->tx_pmos);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Failed to read %s\n", efuse_id);
-> +
-> +	snprintf(efuse_id, sizeof(efuse_id), "tx_ln%d_nmos", lane);
-> +	ret = nvmem_cell_read_variable_le_u32(dev, efuse_id, &efuse->tx_nmos);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Failed to read %s\n", efuse_id);
-> +
-> +	snprintf(efuse_id, sizeof(efuse_id), "rx_ln%d", lane);
-> +	ret = nvmem_cell_read_variable_le_u32(dev, efuse_id, &efuse->rx_data);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Failed to read %s\n", efuse_id);
-> +
-> +	if (!(efuse->tx_pmos || efuse->tx_nmos || efuse->rx_data))
-> +		return dev_err_probe(dev, -EINVAL,
-> +				     "No eFuse data found for lane%d, but dts enable it\n",
-> +				     lane);
-> +
-> +	efuse->lane_efuse_supported = true;
-> +
-> +	return 0;
-> +}
-> +
-> +static int mtk_pcie_read_efuse(struct mtk_pcie_phy *pcie_phy)
-> +{
-> +	struct device *dev = pcie_phy->dev;
-> +	bool nvmem_enabled;
-> +	int ret, i;
-> +
-> +	/* nvmem data is optional */
-> +	nvmem_enabled = device_property_read_bool(dev, "nvmem-cells");
-> +	if (!nvmem_enabled)
+> +	case CROS_EC_PWM_DT_DISPLAY_LIGHT:
+> +		*pwm_type = EC_PWM_TYPE_DISPLAY_LIGHT;
 > +		return 0;
-> +
-> +	ret = nvmem_cell_read_variable_le_u32(dev, "glb_intr",
-> +					      &pcie_phy->efuse_glb_intr);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Failed to read glb_intr\n");
-> +
-> +	pcie_phy->sw_efuse_en = true;
-> +
-> +	pcie_phy->efuse = devm_kzalloc(dev, pcie_phy->data->num_lanes *
-> +				       sizeof(*pcie_phy->efuse), GFP_KERNEL);
-> +	if (!pcie_phy->efuse)
-> +		return -ENOMEM;
-> +
-> +	for (i = 0; i < pcie_phy->data->num_lanes; i++) {
-> +		ret = mtk_pcie_efuse_read_for_lane(pcie_phy, i);
-> +		if (ret)
-> +			return ret;
+> +	default:
+> +		return -EINVAL;
 > +	}
-> +
-> +	return 0;
 > +}
 > +
-> +static int mtk_pcie_phy_probe(struct platform_device *pdev)
+> +static int cros_ec_pwm_set_duty(struct cros_ec_pwm_device *ec_pwm, u8 index,
+> +				u16 duty)
 > +{
-> +	struct device *dev = &pdev->dev;
-> +	struct phy_provider *provider;
-> +	struct mtk_pcie_phy *pcie_phy;
+> +	struct cros_ec_device *ec = ec_pwm->ec;
+>  	struct {
+>  		struct cros_ec_command msg;
+>  		struct ec_params_pwm_set_duty params;
+>  	} __packed buf;
+>  	struct ec_params_pwm_set_duty *params = &buf.params;
+>  	struct cros_ec_command *msg = &buf.msg;
 > +	int ret;
+>  
+>  	memset(&buf, 0, sizeof(buf));
+>  
+> @@ -75,14 +99,25 @@ static int cros_ec_pwm_set_duty(struct cros_ec_device *ec, u8 index, u16 duty)
+>  	msg->outsize = sizeof(*params);
+>  
+>  	params->duty = duty;
+> -	params->pwm_type = EC_PWM_TYPE_GENERIC;
+> -	params->index = index;
 > +
-> +	pcie_phy = devm_kzalloc(dev, sizeof(*pcie_phy), GFP_KERNEL);
-> +	if (!pcie_phy)
-> +		return -ENOMEM;
-> +
-> +	pcie_phy->sif_base = devm_platform_ioremap_resource_byname(pdev, "sif");
-> +	if (IS_ERR(pcie_phy->sif_base))
-> +		return dev_err_probe(dev, PTR_ERR(pcie_phy->sif_base),
-> +				     "Failed to map phy-sif base\n");
-> +
-> +	pcie_phy->phy = devm_phy_create(dev, dev->of_node, &mtk_pcie_phy_ops);
-> +	if (IS_ERR(pcie_phy->phy))
-> +		return dev_err_probe(dev, PTR_ERR(pcie_phy->phy),
-> +				     "Failed to create PCIe phy\n");
-> +
-> +	pcie_phy->dev = dev;
-> +	pcie_phy->data = of_device_get_match_data(dev);
-> +	if (!pcie_phy->data)
-> +		return dev_err_probe(dev, -EINVAL, "Failed to get phy data\n");
-> +
-> +	if (pcie_phy->data->sw_efuse_supported) {
-> +		/*
-> +		 * Failed to read the efuse data is not a fatal problem,
-> +		 * ignore the failure and keep going.
-> +		 */
-> +		ret = mtk_pcie_read_efuse(pcie_phy);
-> +		if (ret == -EPROBE_DEFER)
+> +	if (ec_pwm->use_pwm_type) {
+> +		ret = cros_ec_dt_type_to_pwm_type(index, &params->pwm_type);
+> +		if (ret) {
+> +			dev_err(ec->dev, "Invalid PWM type index: %d\n", index);
 > +			return ret;
+> +		}
+> +		params->index = 0;
+> +	} else {
+> +		params->pwm_type = EC_PWM_TYPE_GENERIC;
+> +		params->index = index;
 > +	}
-> +
-> +	phy_set_drvdata(pcie_phy->phy, pcie_phy);
-> +
-> +	provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
-> +	if (IS_ERR(provider))
-> +		return dev_err_probe(dev, PTR_ERR(provider),
-> +				     "PCIe phy probe failed\n");
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct mtk_pcie_phy_data mt8195_data = {
-> +	.num_lanes = 2,
-> +	.sw_efuse_supported = true,
-> +};
-> +
-> +static const struct of_device_id mtk_pcie_phy_of_match[] = {
-> +	{ .compatible = "mediatek,mt8195-pcie-phy", .data = &mt8195_data },
-> +	{ },
-> +};
-> +MODULE_DEVICE_TABLE(of, mtk_pcie_phy_of_match);
-> +
-> +static struct platform_driver mtk_pcie_phy_driver = {
-> +	.probe	= mtk_pcie_phy_probe,
-> +	.driver	= {
-> +		.name = "mtk-pcie-phy",
-> +		.of_match_table = mtk_pcie_phy_of_match,
+>  
+>  	return cros_ec_cmd_xfer_status(ec, msg);
+>  }
+>  
+> -static int cros_ec_pwm_get_duty(struct cros_ec_device *ec, u8 index)
+> +static int cros_ec_pwm_get_duty(struct cros_ec_pwm_device *ec_pwm, u8 index)
+>  {
+> +	struct cros_ec_device *ec = ec_pwm->ec;
+>  	struct {
+>  		struct cros_ec_command msg;
+>  		union {
+> @@ -102,8 +137,17 @@ static int cros_ec_pwm_get_duty(struct cros_ec_device *ec, u8 index)
+>  	msg->insize = sizeof(*resp);
+>  	msg->outsize = sizeof(*params);
+>  
+> -	params->pwm_type = EC_PWM_TYPE_GENERIC;
+> -	params->index = index;
+> +	if (ec_pwm->use_pwm_type) {
+> +		ret = cros_ec_dt_type_to_pwm_type(index, &params->pwm_type);
+> +		if (ret) {
+> +			dev_err(ec->dev, "Invalid PWM type index: %d\n", index);
+> +			return ret;
+> +		}
+> +		params->index = 0;
+> +	} else {
+> +		params->pwm_type = EC_PWM_TYPE_GENERIC;
+> +		params->index = index;
+> +	}
+>  
+>  	ret = cros_ec_cmd_xfer_status(ec, msg);
+>  	if (ret < 0)
+> @@ -133,7 +177,7 @@ static int cros_ec_pwm_apply(struct pwm_chip *chip, struct pwm_device *pwm,
+>  	 */
+>  	duty_cycle = state->enabled ? state->duty_cycle : 0;
+>  
+> -	ret = cros_ec_pwm_set_duty(ec_pwm->ec, pwm->hwpwm, duty_cycle);
+> +	ret = cros_ec_pwm_set_duty(ec_pwm, pwm->hwpwm, duty_cycle);
+>  	if (ret < 0)
+>  		return ret;
+>  
+> @@ -149,7 +193,7 @@ static void cros_ec_pwm_get_state(struct pwm_chip *chip, struct pwm_device *pwm,
+>  	struct cros_ec_pwm *channel = pwm_get_chip_data(pwm);
+>  	int ret;
+>  
+> -	ret = cros_ec_pwm_get_duty(ec_pwm->ec, pwm->hwpwm);
+> +	ret = cros_ec_pwm_get_duty(ec_pwm, pwm->hwpwm);
+>  	if (ret < 0) {
+>  		dev_err(chip->dev, "error getting initial duty: %d\n", ret);
+>  		return;
+> @@ -204,13 +248,13 @@ static const struct pwm_ops cros_ec_pwm_ops = {
+>   * of PWMs it supports directly, so we have to read the pwm duty cycle for
+>   * subsequent channels until we get an error.
+>   */
+> -static int cros_ec_num_pwms(struct cros_ec_device *ec)
+> +static int cros_ec_num_pwms(struct cros_ec_pwm_device *ec_pwm)
+>  {
+>  	int i, ret;
+>  
+>  	/* The index field is only 8 bits */
+>  	for (i = 0; i <= U8_MAX; i++) {
+> -		ret = cros_ec_pwm_get_duty(ec, i);
+> +		ret = cros_ec_pwm_get_duty(ec_pwm, i);
+>  		/*
+>  		 * We look for SUCCESS, INVALID_COMMAND, or INVALID_PARAM
+>  		 * responses; everything else is treated as an error.
+> @@ -232,10 +276,27 @@ static int cros_ec_num_pwms(struct cros_ec_device *ec)
+>  	return U8_MAX;
+>  }
+>  
+> +#ifdef CONFIG_OF
+> +static const struct of_device_id cros_ec_pwm_of_match[] = {
+> +	{
+> +		.compatible = "google,cros-ec-pwm",
 > +	},
+> +	{
+> +		.compatible = "google,cros-ec-pwm-type",
+> +		.data = OF_CROS_EC_PWM_TYPE,
+> +	},
+> +	{},
 > +};
-> +module_platform_driver(mtk_pcie_phy_driver);
+> +MODULE_DEVICE_TABLE(of, cros_ec_pwm_of_match);
+> +#else
+> +#define cros_ec_pwm_of_match NULL
+> +#endif
 > +
-> +MODULE_DESCRIPTION("MediaTek PCIe PHY driver");
-> +MODULE_AUTHOR("Jianjun Wang <jianjun.wang@mediatek.com>");
-> +MODULE_LICENSE("GPL v2");
+>  static int cros_ec_pwm_probe(struct platform_device *pdev)
+>  {
+>  	struct cros_ec_device *ec = dev_get_drvdata(pdev->dev.parent);
+>  	struct device *dev = &pdev->dev;
+> +	const struct of_device_id *id;
+>  	struct cros_ec_pwm_device *ec_pwm;
+>  	struct pwm_chip *chip;
+>  	int ret;
+> @@ -251,17 +312,27 @@ static int cros_ec_pwm_probe(struct platform_device *pdev)
+>  	chip = &ec_pwm->chip;
+>  	ec_pwm->ec = ec;
+>  
+> +	id = of_match_device(cros_ec_pwm_of_match, dev);
+> +	if (id && id->data == OF_CROS_EC_PWM_TYPE)
+> +		ec_pwm->use_pwm_type = true;
+> +
+>  	/* PWM chip */
+>  	chip->dev = dev;
+>  	chip->ops = &cros_ec_pwm_ops;
+>  	chip->of_xlate = cros_ec_pwm_xlate;
+>  	chip->of_pwm_n_cells = 1;
+> -	ret = cros_ec_num_pwms(ec);
+> -	if (ret < 0) {
+> -		dev_err(dev, "Couldn't find PWMs: %d\n", ret);
+> -		return ret;
+> +
+> +	if (ec_pwm->use_pwm_type) {
+> +		chip->npwm = CROS_EC_PWM_DT_COUNT;
+> +	} else {
+> +		ret = cros_ec_num_pwms(ec_pwm);
+> +		if (ret < 0) {
+> +			dev_err(dev, "Couldn't find PWMs: %d\n", ret);
+> +			return ret;
+> +		}
+> +		chip->npwm = ret;
+>  	}
+> -	chip->npwm = ret;
+> +
+>  	dev_dbg(dev, "Probed %u PWMs\n", chip->npwm);
+>  
+>  	ret = pwmchip_add(chip);
+> @@ -285,14 +356,6 @@ static int cros_ec_pwm_remove(struct platform_device *dev)
+>  	return 0;
+>  }
+>  
+> -#ifdef CONFIG_OF
+> -static const struct of_device_id cros_ec_pwm_of_match[] = {
+> -	{ .compatible = "google,cros-ec-pwm" },
+> -	{},
+> -};
+> -MODULE_DEVICE_TABLE(of, cros_ec_pwm_of_match);
+> -#endif
+> -
+>  static struct platform_driver cros_ec_pwm_driver = {
+>  	.probe = cros_ec_pwm_probe,
+>  	.remove = cros_ec_pwm_remove,
 > -- 
-> 2.18.0
+> 2.35.1.1178.g4f1659d476-goog
+> 
 
 -- 
-~Vinod
+Fabio Baltieri

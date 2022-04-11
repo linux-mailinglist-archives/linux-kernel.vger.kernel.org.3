@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E56A44FC801
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 01:11:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 394684FC802
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 01:11:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232063AbiDKXN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 19:13:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38794 "EHLO
+        id S232177AbiDKXNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 19:13:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230399AbiDKXNU (ORCPT
+        with ESMTP id S231752AbiDKXNW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 19:13:20 -0400
+        Mon, 11 Apr 2022 19:13:22 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5959D12ACD
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 16:11:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8BFC212ACD
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 16:11:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649718664;
+        s=mimecast20190719; t=1649718665;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=4qxd8LkJbqRmTlrpNwb0bYhE4UOJkR+dpIlYlWKMwvE=;
-        b=Se0FeB65wqRD572r5aAdQMnP+R/q9sivkgbiGxzYc1zcI5R98uG95B5XZse+ZR7miD2/pt
-        Uu+lGCVMi0IM0uGJ/Oq2V5V7zNr1Xi/FbOknsZt3JB13IxQmTktSDQxBLOoW9l88K9lLsB
-        yqogFxa2jhSdmfDc1fu1zOG17pPNyGY=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=0ZCQd9ke2KAWwc19bl0zzlVfHby01VezJ6qx5ncoRec=;
+        b=WQIMFIZxcJN/KX+OdPdpSmYw1iDX3Rgz+/jmZnjPAdpPcM7YTDy60CS7Y9EXlY7vVQO4yp
+        kbvLOg6BYc6d2vdO3UU7hIxC4NjtFiVxiVNGmkhcxjYRsgELl9SDg5BMyOjeCuOV3aLdNc
+        Jr3iL8SkeBWoa/N5dUxFCDJsPOzgps4=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-610-E-tkDJwnNwyOklcKMgeH_A-1; Mon, 11 Apr 2022 19:11:03 -0400
-X-MC-Unique: E-tkDJwnNwyOklcKMgeH_A-1
-Received: by mail-qt1-f197.google.com with SMTP id bt12-20020ac8690c000000b002ee65af14d0so2814013qtb.22
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 16:11:03 -0700 (PDT)
+ us-mta-184-_SeYdMwzN0ubioKLE2ifIA-1; Mon, 11 Apr 2022 19:11:04 -0400
+X-MC-Unique: _SeYdMwzN0ubioKLE2ifIA-1
+Received: by mail-qv1-f69.google.com with SMTP id ke15-20020a056214300f00b00443efe3fe65so16908304qvb.14
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 16:11:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4qxd8LkJbqRmTlrpNwb0bYhE4UOJkR+dpIlYlWKMwvE=;
-        b=33Y16/RbI0UFJZnG8Oe1dPTucuBL3ix4fJ1xiZfVkjZR9IO7Y9/oXhCsQMqoUwIgpj
-         ms+jgDcIQC3uVqw+akugEtXDyDXf9Z3XM3qR6hW5ZtDio6yop8ORlH/zfShfXXYgh6mR
-         5KLGDZ7VknesQ2dtXsDUsr2nDHy/3lM0YzWM/GCfqlrwQfVQGeRc98EVwhCtFY9Q5h7s
-         t8AddfoFzV54z4VJacLMs9JskRdeJAhrsOcGnBK0CcrzlQl/uo2bq+C62wLFdte3tLbC
-         1l5icVopP58mfmL/GmVxAbGgKoojGOJNyfY03RNd+ImuCFMeBJR9RFMTJhCneucxodU3
-         3OzA==
-X-Gm-Message-State: AOAM532G2ZjjLAfGX3ntC+N4hyv73H3VSZ8XiAVt9+5DrW+W3LsTsoFx
-        65+UGdztMyPObUdrvovtlgoEyc1Ihq2nCi/Ga6IC++7jRzIRbFPFVAm+eDTj87IBEp2CIn8KJZh
-        ByIo45+FECJTxUvyttWTkwoq/
-X-Received: by 2002:a05:6214:c85:b0:441:2bb9:92fa with SMTP id r5-20020a0562140c8500b004412bb992famr28637612qvr.21.1649718662588;
-        Mon, 11 Apr 2022 16:11:02 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy63Vwyu9MBCFvXLU0Sen/ZfLPul69mtbVqD6AuObTlGEj1Z+4I0OXSSDVjydPBmpXqzoz82w==
-X-Received: by 2002:a05:6214:c85:b0:441:2bb9:92fa with SMTP id r5-20020a0562140c8500b004412bb992famr28637593qvr.21.1649718662285;
-        Mon, 11 Apr 2022 16:11:02 -0700 (PDT)
+        bh=0ZCQd9ke2KAWwc19bl0zzlVfHby01VezJ6qx5ncoRec=;
+        b=lNkJnDf0FJ3G7bFwFMbcKnUhSc2b0rOgI7LiE0nmBkFQU8vOiWjwvK7ZK1x3mpgvNK
+         K6KwSde5CgZAREkMo5v+inPjSrNLYo7PZ3ZrR6sh6CggKzPMB9lWBvsmoZl5JM7t3bU+
+         0Z4QSpS1Kp1M344PYaqXgA+LMh+KpCmoqNH3BHyZyFYWntdWAiGhB4lputwekhniG51A
+         FPqwtXNbxO9ANJophKZJPF5Akr5nzeMhlGh6pLqjMEZ/04G/jQUz392GKQBEXYRd2lBu
+         tfzlQ7OsgTw2fO9/jIznutiBJNyyn+77PPteHaA5vt4ddxXJHxDUvcTepoVGEPVtIeBk
+         DzvQ==
+X-Gm-Message-State: AOAM531O3exl+a6NLx7Ne1hfpcF859i8WUTebGxgR5JyXjWO3L6qm/vE
+        HqDUG1dJ7auUBejVXfrao6LDAIAoCG4HJXsnbA7tJnrkbP6fMN/xTiagUpYtao4Pg47YguVIReX
+        THlJtgbDjcW1nnJT7O4G2LVEu
+X-Received: by 2002:ac8:4c9a:0:b0:2ed:f0a:77c4 with SMTP id j26-20020ac84c9a000000b002ed0f0a77c4mr1350331qtv.376.1649718663874;
+        Mon, 11 Apr 2022 16:11:03 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwyDp3MjtsqHgRu/Usu7o4b+HfnrxhC+MSZPW3gRfG7MKn4igSsZZTAsstnRNG/fRkx69Vwrw==
+X-Received: by 2002:ac8:4c9a:0:b0:2ed:f0a:77c4 with SMTP id j26-20020ac84c9a000000b002ed0f0a77c4mr1350318qtv.376.1649718663554;
+        Mon, 11 Apr 2022 16:11:03 -0700 (PDT)
 Received: from treble.redhat.com ([2600:1700:6e32:6c00::15])
-        by smtp.gmail.com with ESMTPSA id c3-20020ac87d83000000b002e1d1b3df15sm27243500qtd.44.2022.04.11.16.11.01
+        by smtp.gmail.com with ESMTPSA id c3-20020ac87d83000000b002e1d1b3df15sm27243500qtd.44.2022.04.11.16.11.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 16:11:01 -0700 (PDT)
+        Mon, 11 Apr 2022 16:11:03 -0700 (PDT)
 From:   Josh Poimboeuf <jpoimboe@redhat.com>
 To:     x86@kernel.org
 Cc:     Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/4] objtool: Don't set 'jump_dest' for sibling calls
-Date:   Mon, 11 Apr 2022 16:10:30 -0700
-Message-Id: <8737d6b9d1691831aed73375f444f0f42da3e2c9.1649718562.git.jpoimboe@redhat.com>
+Subject: [PATCH 3/4] objtool: Fix sibling call detection in alternatives
+Date:   Mon, 11 Apr 2022 16:10:31 -0700
+Message-Id: <c02e0a0a2a4286b5f848d17c77fdcb7e0caf709c.1649718562.git.jpoimboe@redhat.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1649718562.git.jpoimboe@redhat.com>
 References: <cover.1649718562.git.jpoimboe@redhat.com>
@@ -77,92 +77,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For most sibling calls, 'jump_dest' is NULL because objtool treats the
-jump like a call and sets 'call_dest'.  But there are a few edge cases
-where that's not true.  Make it consistent to avoid unexpected behavior.
+In add_jump_destinations(), sibling call detection requires 'insn->func'
+to be valid.  But alternative instructions get their 'func' set in
+handle_group_alt(), which runs *after* add_jump_destinations().  So
+sibling calls in alternatives code don't get properly detected.
+
+Fix that by changing the initialization order: call
+add_special_section_alts() *before* add_jump_destinations().
+
+This also means the special case for a missing 'jump_dest' in
+add_jump_destinations() can be removed, as it has already been dealt
+with.
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
 ---
- tools/objtool/check.c | 35 ++++++++++++++++++++++-------------
- 1 file changed, 22 insertions(+), 13 deletions(-)
+ tools/objtool/check.c | 36 +++++++++++++++++-------------------
+ 1 file changed, 17 insertions(+), 19 deletions(-)
 
 diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index bd0c2c828940..6f492789c8c0 100644
+index 6f492789c8c0..0f5d3de30e0d 100644
 --- a/tools/objtool/check.c
 +++ b/tools/objtool/check.c
-@@ -1271,7 +1271,7 @@ static bool is_first_func_insn(struct objtool_file *file, struct instruction *in
-  */
- static int add_jump_destinations(struct objtool_file *file)
- {
--	struct instruction *insn;
-+	struct instruction *insn, *jump_dest;
- 	struct reloc *reloc;
- 	struct section *dest_sec;
+@@ -1277,6 +1277,13 @@ static int add_jump_destinations(struct objtool_file *file)
  	unsigned long dest_off;
-@@ -1291,7 +1291,10 @@ static int add_jump_destinations(struct objtool_file *file)
- 			add_retpoline_call(file, insn);
- 			continue;
- 		} else if (insn->func) {
--			/* internal or external sibling call (with reloc) */
+ 
+ 	for_each_insn(file, insn) {
++		if (insn->jump_dest) {
 +			/*
-+			 * External sibling call or internal sibling call with
-+			 * STT_FUNC reloc.
++			 * handle_group_alt() may have previously set
++			 * 'jump_dest' for some alternatives.
 +			 */
- 			add_call_dest(file, insn, reloc->sym, true);
++			continue;
++		}
+ 		if (!is_static_jump(insn))
  			continue;
- 		} else if (reloc->sym->sec->idx) {
-@@ -1303,8 +1306,8 @@ static int add_jump_destinations(struct objtool_file *file)
- 			continue;
- 		}
  
--		insn->jump_dest = find_insn(file, dest_sec, dest_off);
+@@ -1308,15 +1315,6 @@ static int add_jump_destinations(struct objtool_file *file)
+ 
+ 		jump_dest = find_insn(file, dest_sec, dest_off);
+ 		if (!jump_dest) {
+-
+-			/*
+-			 * This is a special case where an alt instruction
+-			 * jumps past the end of the section.  These are
+-			 * handled later in handle_group_alt().
+-			 */
+-			if (!strcmp(insn->sec->name, ".altinstr_replacement"))
+-				continue;
+-
+ 			WARN_FUNC("can't find jump dest instruction at %s+0x%lx",
+ 				  insn->sec, insn->offset, dest_sec->name,
+ 				  dest_off);
+@@ -1549,13 +1547,13 @@ static int handle_group_alt(struct objtool_file *file,
+ 			continue;
+ 
+ 		dest_off = arch_jump_destination(insn);
+-		if (dest_off == special_alt->new_off + special_alt->new_len)
++		if (dest_off == special_alt->new_off + special_alt->new_len) {
+ 			insn->jump_dest = next_insn_same_sec(file, last_orig_insn);
+-
 -		if (!insn->jump_dest) {
-+		jump_dest = find_insn(file, dest_sec, dest_off);
-+		if (!jump_dest) {
- 
- 			/*
- 			 * This is a special case where an alt instruction
-@@ -1323,8 +1326,8 @@ static int add_jump_destinations(struct objtool_file *file)
- 		/*
- 		 * Cross-function jump.
- 		 */
--		if (insn->func && insn->jump_dest->func &&
--		    insn->func != insn->jump_dest->func) {
-+		if (insn->func && jump_dest->func &&
-+		    insn->func != jump_dest->func) {
- 
- 			/*
- 			 * For GCC 8+, create parent/child links for any cold
-@@ -1342,16 +1345,22 @@ static int add_jump_destinations(struct objtool_file *file)
- 			 * subfunction is through a jump table.
- 			 */
- 			if (!strstr(insn->func->name, ".cold") &&
--			    strstr(insn->jump_dest->func->name, ".cold")) {
--				insn->func->cfunc = insn->jump_dest->func;
--				insn->jump_dest->func->pfunc = insn->func;
-+			    strstr(jump_dest->func->name, ".cold")) {
-+				insn->func->cfunc = jump_dest->func;
-+				jump_dest->func->pfunc = insn->func;
- 
--			} else if (!same_function(insn, insn->jump_dest) &&
--				   is_first_func_insn(file, insn->jump_dest)) {
--				/* internal sibling call (without reloc) */
--				add_call_dest(file, insn, insn->jump_dest->func, true);
-+			} else if (!same_function(insn, jump_dest) &&
-+				   is_first_func_insn(file, jump_dest)) {
-+				/*
-+				 * Internal sibling call without reloc or with
-+				 * STT_SECTION reloc.
-+				 */
-+				add_call_dest(file, insn, jump_dest->func, true);
-+				continue;
- 			}
+-			WARN_FUNC("can't find alternative jump destination",
+-				  insn->sec, insn->offset);
+-			return -1;
++			if (!insn->jump_dest) {
++				WARN_FUNC("can't find alternative jump destination",
++					  insn->sec, insn->offset);
++				return -1;
++			}
  		}
-+
-+		insn->jump_dest = jump_dest;
  	}
  
- 	return 0;
+@@ -2254,14 +2252,14 @@ static int decode_sections(struct objtool_file *file)
+ 		return ret;
+ 
+ 	/*
+-	 * Must be before add_special_section_alts() as that depends on
+-	 * jump_dest being set.
++	 * Must be before add_jump_destinations(), which depends on 'func'
++	 * being set for alternatives, to enable proper sibling call detection.
+ 	 */
+-	ret = add_jump_destinations(file);
++	ret = add_special_section_alts(file);
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = add_special_section_alts(file);
++	ret = add_jump_destinations(file);
+ 	if (ret)
+ 		return ret;
+ 
 -- 
 2.34.1
 

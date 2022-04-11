@@ -2,52 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 960E04FBD0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 15:28:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30BDC4FBD0F
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 15:29:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346380AbiDKNaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 09:30:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41220 "EHLO
+        id S1346474AbiDKNbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 09:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233050AbiDKNau (ORCPT
+        with ESMTP id S1346401AbiDKNbG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 09:30:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01843A18F;
-        Mon, 11 Apr 2022 06:28:36 -0700 (PDT)
+        Mon, 11 Apr 2022 09:31:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB51A18F;
+        Mon, 11 Apr 2022 06:28:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B05A8B815E9;
-        Mon, 11 Apr 2022 13:28:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCE23C385A3;
-        Mon, 11 Apr 2022 13:28:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649683714;
-        bh=wY2kkpkdJta5VZ4YNiEH8OvoR3YdYHuwo0F1OuTyYj8=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BCE2260BBF;
+        Mon, 11 Apr 2022 13:28:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8FEEC385A4;
+        Mon, 11 Apr 2022 13:28:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649683732;
+        bh=TC0ZJSe2oB1L9uNa7i44bNF7FkAH5NEshanSOSJVJSE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IvvY1WzzHSzYXvYnOKCFUjS4UgpB0CDgJmIrACaNIhTZY3PhF79b3OVRp1LoGpM/S
-         VfI6g2m25yIelLafewradRDZlul1qbeZi2n1gHeCxqVv0iI/j4m4tDna18EzJzZt1N
-         oiL73LjDk9SZ3rq9bC850P0LNimGAlYr8l8IXMPb1k7Mu/ePKVusAM8SE8THQXtH6y
-         PGrK8cpM4ZRpqQsqjP8bLqhX2SLgorBNfJMpF9D4l0FM9Qw2O4/aU684TuO3s8aRwj
-         x2InZKP4gHKMtgNPOmZYhiTKuOlfPs0tAOKNNumVUZlDVeIz5TDikSjo4m7KR3flqr
-         3TwceEzvkDKsA==
-Date:   Mon, 11 Apr 2022 18:58:30 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Amelie Delaunay <amelie.delaunay@foss.st.com>
-Cc:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        dmaengine@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dmaengine: stm32-mdma: check the channel availability
- (secure or not)
-Message-ID: <YlQs/rPFnRWP6W6D@matsya>
-References: <20220330103645.99969-1-amelie.delaunay@foss.st.com>
+        b=BqCOa22gpra/JymKzjlJApCj3Ua7TxkeuayMdEOYjhzs6GMr26HGCAdbHwZt7xMFK
+         mORd49l7ua9Nfb1+hSoKmFa7famg4xUU6kmE6yP6P1RKdstrU/YlzPNFBzNfwZQw+a
+         xo/ruWE3Q64CAZ9W4RZiXsN140lD8HSzOjk+e9vQ=
+Date:   Mon, 11 Apr 2022 15:28:49 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>
+Cc:     stable@vger.kernel.org, yang.zhong@intel.com, bonzini@gnu.org,
+        tglx@linutronix.de, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][Rebased for 5.16] x86/fpu/xstate: Fix the
+ ARCH_REQ_XCOMP_PERM implementation
+Message-ID: <YlQtEVLZpPQata7q@kroah.com>
+References: <164905801910825@kroah.com>
+ <20220405110456.24877-1-chang.seok.bae@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220330103645.99969-1-amelie.delaunay@foss.st.com>
+In-Reply-To: <20220405110456.24877-1-chang.seok.bae@intel.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,16 +53,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30-03-22, 12:36, Amelie Delaunay wrote:
-> STM32_MDMA_CCR bit[8] is used to enable Secure Mode (SM). If this bit is
-> set, it means that all the channel registers are write-protected. So the
-> channel is not available for Linux use.
+On Tue, Apr 05, 2022 at 04:04:56AM -0700, Chang S. Bae wrote:
+> From: Yang Zhong <yang.zhong@intel.com>
 > 
-> Add stm32_mdma_filter_fn() callback filter and give it to
-> __dma_request_chan (instead of dma_get_any_slave_channel()), to exclude the
-> channel if it is marked Secure.
+> This is backport for 5.16
+> 
+> Upstream commit 063452fd94d153d4eb38ad58f210f3d37a09cca4
+> 
+> ARCH_REQ_XCOMP_PERM is supposed to add the requested feature to the
+> permission bitmap of thread_group_leader()->fpu. But the code overwrites
+> the bitmap with the requested feature bit only rather than adding it.
+> 
+> Fix the code to add the requested feature bit to the master bitmask.
+> 
+> Fixes: db8268df0983 ("x86/arch_prctl: Add controls for dynamic XSTATE components")
+> Signed-off-by: Yang Zhong <yang.zhong@intel.com>
+> Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Paolo Bonzini <bonzini@gnu.org>
+> Cc: stable@vger.kernel.org
+> Link: https://lore.kernel.org/r/20220129173647.27981-2-chang.seok.bae@intel.com
+> [chang: Backport for 5.16]
+> Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+> ---
+>  arch/x86/kernel/fpu/xstate.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied, thanks
+Now queued up, thanks.
 
--- 
-~Vinod
+greg k-h

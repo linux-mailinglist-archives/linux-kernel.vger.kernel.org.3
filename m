@@ -2,132 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2C74FB740
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 11:21:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C35934FB743
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 11:21:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243213AbiDKJWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 05:22:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46384 "EHLO
+        id S1344330AbiDKJXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 05:23:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344367AbiDKJWa (ORCPT
+        with ESMTP id S243879AbiDKJXL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 05:22:30 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC49832EF9;
-        Mon, 11 Apr 2022 02:20:16 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 23B9K7Sx8027537, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 23B9K7Sx8027537
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 11 Apr 2022 17:20:07 +0800
-Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 11 Apr 2022 17:20:07 +0800
-Received: from localhost.localdomain (172.21.132.198) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 11 Apr 2022 17:20:06 +0800
-From:   <max.chou@realtek.com>
-To:     <marcel@holtmann.org>
-CC:     <johan.hedberg@gmail.com>, <luiz.dentz@gmail.com>,
-        <linux-bluetooth@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <alex_lu@realsil.com.cn>, <hildawu@realtek.com>,
-        <karenhsu@realtek.com>, <kidman@realtek.com>,
-        <max.chou@realtek.com>, <hsinyu_chang@realtek.com>
-Subject: [PATCH] Bluetooth: btrtl: Add support for RTL8852C
-Date:   Mon, 11 Apr 2022 17:19:57 +0800
-Message-ID: <20220411091957.838-1-max.chou@realtek.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 11 Apr 2022 05:23:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1414D33361
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 02:20:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649668857;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EZDoaVa70ApFuJrDzsMYwod+in/0E4Gf7YVjPfVb2rU=;
+        b=eSQBgF351jcmnKmz8T0dqPYEIfqbn7SybGAmg75cvmBt/XzD1kMatN+tB545s/x28UEW4A
+        0Wt9ikrCTUMdrW4D6LrlRyCVv1iX3bDGhXYR1d2rMzPtcUErCKoDmaEO9fMfk+BUaZIQVm
+        2tWvlqHjXn3BCY7NBR/8DbnH/4Ii3Xw=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-204-wVCAF6TKPLK2-iOO08wXxw-1; Mon, 11 Apr 2022 05:20:53 -0400
+X-MC-Unique: wVCAF6TKPLK2-iOO08wXxw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EC2EA29DD9A3;
+        Mon, 11 Apr 2022 09:20:52 +0000 (UTC)
+Received: from localhost (ovpn-12-19.pek2.redhat.com [10.72.12.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E47241400C2B;
+        Mon, 11 Apr 2022 09:20:51 +0000 (UTC)
+Date:   Mon, 11 Apr 2022 17:20:48 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Eric DeVolder <eric.devolder@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
+Subject: Re: [PATCH v6 4/8] crash: add generic infrastructure for crash
+ hotplug support
+Message-ID: <YlPy8CKU4zHsx6Bc@MiWiFi-R3L-srv>
+References: <20220401183040.1624-1-eric.devolder@oracle.com>
+ <20220401183040.1624-5-eric.devolder@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.21.132.198]
-X-ClientProxiedBy: RTEXH36505.realtek.com.tw (172.21.6.25) To
- RTEXMBS03.realtek.com.tw (172.21.6.96)
-X-KSE-ServerInfo: RTEXMBS03.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: trusted connection
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Deterministic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 04/11/2022 08:58:00
-X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
- rules found
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzQvMTEgpFekyCAwNzoyNjowMA==?=
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220401183040.1624-5-eric.devolder@oracle.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Max Chou <max.chou@realtek.com>
+Hi Eric,
 
-Add the support for RTL8852C BT controller on USB interface.
-The necessary firmware file will be submitted to linux-firmware.
+On 04/01/22 at 02:30pm, Eric DeVolder wrote:
+... ...
 
-Signed-off-by: Max Chou <max.chou@realtek.com>
----
- drivers/bluetooth/btrtl.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+> +static void crash_hotplug_handler(unsigned int hp_action,
+> +	unsigned long a, unsigned long b)
 
-diff --git a/drivers/bluetooth/btrtl.c b/drivers/bluetooth/btrtl.c
-index 481d488bca0f..47c28fd8f006 100644
---- a/drivers/bluetooth/btrtl.c
-+++ b/drivers/bluetooth/btrtl.c
-@@ -50,6 +50,7 @@ enum btrtl_chip_id {
- 	CHIP_ID_8761B,
- 	CHIP_ID_8852A = 18,
- 	CHIP_ID_8852B = 20,
-+	CHIP_ID_8852C = 25,
- };
- 
- struct id_table {
-@@ -196,6 +197,14 @@ static const struct id_table ic_id_table[] = {
- 	  .has_msft_ext = true,
- 	  .fw_name  = "rtl_bt/rtl8852bu_fw.bin",
- 	  .cfg_name = "rtl_bt/rtl8852bu_config" },
-+
-+	/* 8852C */
-+	{ IC_INFO(RTL_ROM_LMP_8852A, 0xc, 0xc, HCI_USB),
-+	  .config_needed = false,
-+	  .has_rom_version = true,
-+	  .has_msft_ext = true,
-+	  .fw_name  = "rtl_bt/rtl8852cu_fw.bin",
-+	  .cfg_name = "rtl_bt/rtl8852cu_config" },
- 	};
- 
- static const struct id_table *btrtl_match_ic(u16 lmp_subver, u16 hci_rev,
-@@ -305,6 +314,7 @@ static int rtlbt_parse_firmware(struct hci_dev *hdev,
- 		{ RTL_ROM_LMP_8761A, 14 },	/* 8761B */
- 		{ RTL_ROM_LMP_8852A, 18 },	/* 8852A */
- 		{ RTL_ROM_LMP_8852A, 20 },	/* 8852B */
-+		{ RTL_ROM_LMP_8852A, 25 },	/* 8852C */
- 	};
- 
- 	min_size = sizeof(struct rtl_epatch_header) + sizeof(extension_sig) + 3;
-@@ -768,6 +778,7 @@ void btrtl_set_quirks(struct hci_dev *hdev, struct btrtl_device_info *btrtl_dev)
- 	case CHIP_ID_8822C:
- 	case CHIP_ID_8852A:
- 	case CHIP_ID_8852B:
-+	case CHIP_ID_8852C:
- 		set_bit(HCI_QUIRK_VALID_LE_STATES, &hdev->quirks);
- 		set_bit(HCI_QUIRK_WIDEBAND_SPEECH_SUPPORTED, &hdev->quirks);
- 		hci_set_aosp_capable(hdev);
-@@ -947,3 +958,5 @@ MODULE_FIRMWARE("rtl_bt/rtl8852au_fw.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8852au_config.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8852bu_fw.bin");
- MODULE_FIRMWARE("rtl_bt/rtl8852bu_config.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8852cu_fw.bin");
-+MODULE_FIRMWARE("rtl_bt/rtl8852cu_config.bin");
--- 
-2.17.1
+I am still struggling to consider if these unused parameters should be
+kept or removed. Do you foresee or feel on which ARCH they could be used?
+
+Considering our elfcorehdr updating method, once memory or cpu changed,
+we will update elfcorehdr and cpu notes to reflect all existing memory
+regions and cpu in the current system. We could end up with having them
+but never being used. Then we may finally need to clean them up.
+
+If you have investigated and foresee or feel they could be used on a
+certain architecture, we can keep them for the time being.
+
+> +{
+> +	/* Obtain lock while changing crash information */
+> +	if (!mutex_trylock(&kexec_mutex))
+> +		return;
+> +
+> +	/* Check kdump is loaded */
+> +	if (kexec_crash_image) {
+> +		pr_debug("crash hp: hp_action %u, a %lu, b %lu", hp_action,
+> +			a, b);
+> +
+> +		/* Needed in order for the segments to be updated */
+> +		arch_kexec_unprotect_crashkres();
+> +
+> +		/* Flag to differentiate between normal load and hotplug */
+> +		kexec_crash_image->hotplug_event = true;
+> +
+> +		/* Now invoke arch-specific update handler */
+> +		arch_crash_hotplug_handler(kexec_crash_image, hp_action, a, b);
+> +
+> +		/* No longer handling a hotplug event */
+> +		kexec_crash_image->hotplug_event = false;
+> +
+> +		/* Change back to read-only */
+> +		arch_kexec_protect_crashkres();
+> +	}
+> +
+> +	/* Release lock now that update complete */
+> +	mutex_unlock(&kexec_mutex);
+> +}
+> +
+> +#if defined(CONFIG_MEMORY_HOTPLUG)
+> +static int crash_memhp_notifier(struct notifier_block *nb,
+> +	unsigned long val, void *v)
+> +{
+> +	struct memory_notify *mhp = v;
+> +	unsigned long start, end;
+> +
+> +	start = mhp->start_pfn << PAGE_SHIFT;
+> +	end = ((mhp->start_pfn + mhp->nr_pages) << PAGE_SHIFT) - 1;
+> +
+> +	switch (val) {
+> +	case MEM_ONLINE:
+> +		crash_hotplug_handler(KEXEC_CRASH_HP_ADD_MEMORY,
+> +			start, end-start);
+> +		break;
+> +
+> +	case MEM_OFFLINE:
+> +		crash_hotplug_handler(KEXEC_CRASH_HP_REMOVE_MEMORY,
+> +			start, end-start);
+> +		break;
+> +	}
+> +	return NOTIFY_OK;
+> +}
+> +
+> +static struct notifier_block crash_memhp_nb = {
+> +	.notifier_call = crash_memhp_notifier,
+> +	.priority = 0
+> +};
+> +#endif
+> +
+> +#if defined(CONFIG_HOTPLUG_CPU)
+> +static int crash_cpuhp_online(unsigned int cpu)
+> +{
+> +	crash_hotplug_handler(KEXEC_CRASH_HP_ADD_CPU, cpu, 0);
+> +	return 0;
+> +}
+> +
+> +static int crash_cpuhp_offline(unsigned int cpu)
+> +{
+> +	crash_hotplug_handler(KEXEC_CRASH_HP_REMOVE_CPU, cpu, 0);
+> +	return 0;
+> +}
+> +#endif
+> +
+> +static int __init crash_hotplug_init(void)
+> +{
+> +	int result = 0;
+> +
+> +#if defined(CONFIG_MEMORY_HOTPLUG)
+> +	register_memory_notifier(&crash_memhp_nb);
+> +#endif
+> +
+> +#if defined(CONFIG_HOTPLUG_CPU)
+> +	result = cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
+> +				"crash/cpuhp",
+> +				crash_cpuhp_online, crash_cpuhp_offline);
+> +#endif
+> +
+> +	return result;
+> +}
+> +
+> +subsys_initcall(crash_hotplug_init);
+> +#endif /* CONFIG_CRASH_HOTPLUG */
+> -- 
+> 2.27.0
+> 
 

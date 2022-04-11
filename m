@@ -2,195 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D70AF4FC7B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 00:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAF604FC7BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 00:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348601AbiDKWj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 18:39:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46658 "EHLO
+        id S1350465AbiDKWju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 18:39:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbiDKWj0 (ORCPT
+        with ESMTP id S229573AbiDKWjq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 18:39:26 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9492E9F3
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 15:37:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649716631; x=1681252631;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2eR85BMYnRz5kchIsdg13csHJIvsf2Bn4c9LJIBnfRY=;
-  b=YgQQXm3iSbgp/UqhXIwx32dLosD0Im6CJMlTxXme/vQr4kEHrVhy1M5Q
-   Yq+O0eGFg8t4tQM0mXj6qCqaNkXZ27Ha1+FGKnfgTQfiWyNpZ0Bhzd1UP
-   9kenjXf3eJZXnvTiHyTIDoOLyvsq+CVIREYHsh5fHIL2EAnoOAx3tZoEw
-   NaaWONJlerYe3Skjpg4rIgXQ51J0aHYGs9L52D/X9UiWCNwvtIz5N1iV7
-   eKWoLzCT+m1xbzEVvWFOXp1sz/4ljqbJHC74naxMv7B8+XPfl2DfT7+dW
-   /AaCuizwi/dyTOBMRlqqPvXgQS5UT2rDrlUp1XrzUj2OGJO2LdJqEo3jI
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="261668446"
-X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="261668446"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 15:37:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="525754348"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 11 Apr 2022 15:37:08 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ne2eh-0002Gc-Sg;
-        Mon, 11 Apr 2022 22:37:07 +0000
-Date:   Tue, 12 Apr 2022 06:36:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [krzk-github:n/qcom-ufs-opp-v2 14/16] drivers/opp/core.c:1177:4:
- warning: variable 'ret' is used uninitialized whenever 'if' condition is
- false
-Message-ID: <202204120601.Szg8qx1B-lkp@intel.com>
+        Mon, 11 Apr 2022 18:39:46 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B19602E9F3
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 15:37:30 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id r18so6260218ljp.0
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 15:37:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QrGrjFARyK3ZA9nCZV7h5wEeBeAmrUW/GLDl2oKo2fA=;
+        b=rRVbEE/gyJt83c9WZThZz5+fBdQ4MARLsuyRyjf+xMbIAmTMfFrkLJKe2yJNXW1Grb
+         AVBRve2tLIU+xWeYnOLIF+HJnd4B/7z/C4gD/eZQixX5Z3TGpNIoF/Um2YM3ENqNaPMl
+         DGoGqEl+QVl36k/FEmSpZjyUsOjVfxIZsge2ajcT1KSXJuvAvD7dd/SLUdDQA+TgqQPQ
+         1Pj6Sa6L7R+lib1yEsGQUXhTpTyZwX7uCi8P7tvwCEbTn1r/PG//8skjaunKN+cUUbBJ
+         Ss7J3uY+TPir54okXYABhAbuaIIU3VeymlHiKbDW+7/FqmhZnrcYp+yKETaVd8iL/gSB
+         v6ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QrGrjFARyK3ZA9nCZV7h5wEeBeAmrUW/GLDl2oKo2fA=;
+        b=PmsSwvANP0a3POcREhJ0la8tHpS396oR2xuwV5BVVQOQqtw00bRBaj04owKqrKuSZi
+         L9EiK2m/rJetUZJrhq1aIcNwwmuYqvWVI1Y4bp5guAHpW93pVJCy+21eHA+YixweFTr8
+         h1V/8Zr3N7Fa1Q9pyVYKHWt62RmePXbwYyf3Nd2O8sSxq0uA/z2VtZGcduW4k7NDC2r7
+         c5T4PjmQndwszQwJgGSkQ50TjhzcrAJdG6D+mshQ2J8aSI7uUkwrj51cnb3UXwfOmo3j
+         RdY7SHFMY8uqqKejpaPBE+aAwTrX5dZG52BbATGr018dkJ3IpGwX4tgNkKIqwrjq2hfu
+         J8nA==
+X-Gm-Message-State: AOAM530OTBxtsnnM2Bq9aT698uud0GcAWsOHKN+DLhDqz8Spc5VaNP+G
+        En2FVd8vQp72Knyq3wO9Md5yjBfW/Vy9vD5FiBpETQ==
+X-Google-Smtp-Source: ABdhPJxEnPNx3y8ibz7gBh5nQQPcSkBNcHIKnyOMAAxMAdgYpjjVIDCGFY7ZPeAxejNQlpldM2gkkDXJCn/+pYIN8ds=
+X-Received: by 2002:a2e:390c:0:b0:248:1b88:d6c4 with SMTP id
+ g12-20020a2e390c000000b002481b88d6c4mr21065587lja.49.1649716648790; Mon, 11
+ Apr 2022 15:37:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220411211015.3091615-1-bgardon@google.com> <20220411211015.3091615-11-bgardon@google.com>
+In-Reply-To: <20220411211015.3091615-11-bgardon@google.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Mon, 11 Apr 2022 15:37:02 -0700
+Message-ID: <CALzav=difpgKq3X1OGiDPF+5z8AY9wB1sLFrEJ_V7VvuA9_fVA@mail.gmail.com>
+Subject: Re: [PATCH v4 10/10] KVM: selftests: Test disabling NX hugepages on a VM
+To:     Ben Gardon <bgardon@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Peter Shier <pshier@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Junaid Shahid <junaids@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Jing Zhang <jingzhangos@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/krzk/linux n/qcom-ufs-opp-v2
-head:   bf7d30c9329c87f06dff42b303a9bcfd2e1f54eb
-commit: be46c855d54f763bfb95424e5204fe7496e2ee5f [14/16] PM: opp: allow control of multiple clocks
-config: arm-buildonly-randconfig-r001-20220411 (https://download.01.org/0day-ci/archive/20220412/202204120601.Szg8qx1B-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c6e83f560f06cdfe8aa47b248d8bdc58f947274b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/krzk/linux/commit/be46c855d54f763bfb95424e5204fe7496e2ee5f
-        git remote add krzk-github https://github.com/krzk/linux
-        git fetch --no-tags krzk-github n/qcom-ufs-opp-v2
-        git checkout be46c855d54f763bfb95424e5204fe7496e2ee5f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/opp/
+On Mon, Apr 11, 2022 at 2:10 PM Ben Gardon <bgardon@google.com> wrote:
+>
+> Add an argument to the NX huge pages test to test disabling the feature
+> on a VM using the new capability.
+>
+> Signed-off-by: Ben Gardon <bgardon@google.com>
+> ---
+>  .../selftests/kvm/include/kvm_util_base.h     |  2 +
+>  tools/testing/selftests/kvm/lib/kvm_util.c    | 19 ++++++-
+>  .../selftests/kvm/x86_64/nx_huge_pages_test.c | 53 +++++++++++++++----
+>  3 files changed, 64 insertions(+), 10 deletions(-)
+>
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> index f9c2ac0a5b97..15f24be6d93f 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> @@ -412,4 +412,6 @@ uint64_t vm_get_single_stat(struct kvm_vm *vm, const char *stat_name);
+>
+>  uint32_t guest_get_vcpuid(void);
+>
+> +int vm_disable_nx_huge_pages(struct kvm_vm *vm);
+> +
+>  #endif /* SELFTEST_KVM_UTIL_BASE_H */
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index 833c7e63d62d..5fa5608eef03 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -112,6 +112,15 @@ int vm_check_cap(struct kvm_vm *vm, long cap)
+>         return ret;
+>  }
+>
+> +static int __vm_enable_cap(struct kvm_vm *vm, struct kvm_enable_cap *cap)
+> +{
+> +       int ret;
+> +
+> +       ret = ioctl(vm->fd, KVM_ENABLE_CAP, cap);
+> +
+> +       return ret;
+> +}
+> +
+>  /* VM Enable Capability
+>   *
+>   * Input Args:
+> @@ -128,7 +137,7 @@ int vm_enable_cap(struct kvm_vm *vm, struct kvm_enable_cap *cap)
+>  {
+>         int ret;
+>
+> -       ret = ioctl(vm->fd, KVM_ENABLE_CAP, cap);
+> +       ret = __vm_enable_cap(vm, cap);
+>         TEST_ASSERT(ret == 0, "KVM_ENABLE_CAP IOCTL failed,\n"
+>                 "  rc: %i errno: %i", ret, errno);
+>
+> @@ -2662,3 +2671,11 @@ uint64_t vm_get_single_stat(struct kvm_vm *vm, const char *stat_name)
+>                     stat_name, ret);
+>         return data;
+>  }
+> +
+> +int vm_disable_nx_huge_pages(struct kvm_vm *vm)
+> +{
+> +       struct kvm_enable_cap cap = { 0 };
+> +
+> +       cap.cap = KVM_CAP_VM_DISABLE_NX_HUGE_PAGES;
+> +       return __vm_enable_cap(vm, &cap);
+> +}
+> diff --git a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
+> index 3f21726b22c7..f8edf7910950 100644
+> --- a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
+> +++ b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
+> @@ -13,6 +13,8 @@
+>  #include <fcntl.h>
+>  #include <stdint.h>
+>  #include <time.h>
+> +#include <linux/reboot.h>
+> +#include <sys/syscall.h>
+>
+>  #include <test_util.h>
+>  #include "kvm_util.h"
+> @@ -77,14 +79,41 @@ static void check_split_count(struct kvm_vm *vm, int expected_splits)
+>                     expected_splits, actual_splits);
+>  }
+>
+> -int main(int argc, char **argv)
+> +void run_test(bool disable_nx)
+>  {
+>         struct kvm_vm *vm;
+>         struct timespec ts;
+>         void *hva;
+> +       int r;
+>
+>         vm = vm_create_default(0, 0, guest_code);
+>
+> +       if (disable_nx) {
+> +               kvm_check_cap(KVM_CAP_VM_DISABLE_NX_HUGE_PAGES);
+> +
+> +               /*
+> +                * Check if this process has the reboot permissions needed to
+> +                * disable NX huge pages on a VM.
+> +                *
+> +                * The reboot call below will never have any effect because
+> +                * the magic values are not set correctly, however the
+> +                * permission check is done before the magic value check.
+> +                */
+> +               r = syscall(SYS_reboot, 0, 0, 0, NULL);
+> +               if (errno == EPERM) {
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Should this be:
 
-All warnings (new ones prefixed by >>):
+if (r && errno == EPERM) {
 
->> drivers/opp/core.c:1177:4: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-                           if (opp_table->clks)
-                           ^~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:28: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:58:30: note: expanded from macro '__trace_if_var'
-   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/opp/core.c:1215:9: note: uninitialized use occurs here
-           return ret;
-                  ^~~
-   drivers/opp/core.c:1177:4: note: remove the 'if' if its condition is always true
-                           if (opp_table->clks)
-                           ^~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:56:23: note: expanded from macro 'if'
-   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-                         ^
-   drivers/opp/core.c:1160:9: note: initialize the variable 'ret' to silence this warning
-           int ret;
-                  ^
-                   = 0
-   1 warning generated.
+?
 
+Otherwise errno might contain a stale value.
 
-vim +1177 drivers/opp/core.c
+> +                       r = vm_disable_nx_huge_pages(vm);
+> +                       TEST_ASSERT(r == EPERM,
 
-  1143	
-  1144	/**
-  1145	 * dev_pm_opp_set_rate() - Configure new OPP based on frequency
-  1146	 * @dev:	 device for which we do this operation
-  1147	 * @target_freq: frequency to achieve
-  1148	 *
-  1149	 * This configures the power-supplies to the levels specified by the OPP
-  1150	 * corresponding to the target_freq, and programs the clock to a value <=
-  1151	 * target_freq, as rounded by clk_round_rate(). Device wanting to run at fmax
-  1152	 * provided by the opp, should have already rounded to the target OPP's
-  1153	 * frequency.
-  1154	 */
-  1155	int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
-  1156	{
-  1157		struct opp_table *opp_table;
-  1158		unsigned long freq = 0, temp_freq;
-  1159		struct dev_pm_opp *opp = NULL;
-  1160		int ret;
-  1161	
-  1162		opp_table = _find_opp_table(dev);
-  1163		if (IS_ERR(opp_table)) {
-  1164			dev_err(dev, "%s: device's opp table doesn't exist\n", __func__);
-  1165			return PTR_ERR(opp_table);
-  1166		}
-  1167	
-  1168		if (target_freq) {
-  1169			/*
-  1170			 * For IO devices which require an OPP on some platforms/SoCs
-  1171			 * while just needing to scale the clock on some others
-  1172			 * we look for empty OPP tables with just a clock handle and
-  1173			 * scale only the clk. This makes dev_pm_opp_set_rate()
-  1174			 * equivalent to a clk_set_rate()
-  1175			 */
-  1176			if (!_get_opp_count(opp_table)) {
-> 1177				if (opp_table->clks)
-  1178					ret = _generic_set_opp_clk_only(dev,
-  1179									opp_table->clks[0],
-  1180									target_freq);
-  1181				goto put_opp_table;
-  1182			}
-  1183	
-  1184			if (opp_table->clks)
-  1185				freq = clk_round_rate(opp_table->clks[0], target_freq);
-  1186			if ((long)freq <= 0)
-  1187				freq = target_freq;
-  1188	
-  1189			/*
-  1190			 * The clock driver may support finer resolution of the
-  1191			 * frequencies than the OPP table, don't update the frequency we
-  1192			 * pass to clk_set_rate() here.
-  1193			 */
-  1194			temp_freq = freq;
-  1195			opp = _find_freq_ceil(opp_table, &temp_freq);
-  1196			if (IS_ERR(opp)) {
-  1197				ret = PTR_ERR(opp);
-  1198				dev_err(dev, "%s: failed to find OPP for freq %lu (%d)\n",
-  1199					__func__, freq, ret);
-  1200				goto put_opp_table;
-  1201			}
-  1202			/*
-  1203			 * opp->rates are used for scaling clocks, so be sure accurate
-  1204			 * 'freq' is used, instead what was defined via e.g. Devicetree.
-  1205			 */
-  1206			opp->rates[0] = freq;
-  1207		}
-  1208	
-  1209		ret = _set_opp(dev, opp_table, opp, freq);
-  1210	
-  1211		if (target_freq)
-  1212			dev_pm_opp_put(opp);
-  1213	put_opp_table:
-  1214		dev_pm_opp_put_opp_table(opp_table);
-  1215		return ret;
-  1216	}
-  1217	EXPORT_SYMBOL_GPL(dev_pm_opp_set_rate);
-  1218	
+TEST_ASSERT(r && errno == EPERM,
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> +                                   "This process should not have permission to disable NX huge pages");
+> +                       return;
+> +               }
+> +
+> +               TEST_ASSERT(errno == EINVAL,
+
+r && errno == EINVAL ?
+
+> +                           "Reboot syscall should fail with -EINVAL");
+> +
+> +               r = vm_disable_nx_huge_pages(vm);
+> +               TEST_ASSERT(!r, "Disabling NX huge pages should not fail if process has reboot permissions");
+
+nit: s/not fail/succeed/
+
+> +       }
+> +
+>         vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS_HUGETLB,
+>                                     HPAGE_GPA, HPAGE_SLOT,
+>                                     HPAGE_SLOT_NPAGES, 0);
+> @@ -118,21 +147,21 @@ int main(int argc, char **argv)
+>          * to be remapped at 4k.
+>          */
+>         vcpu_run(vm, 0);
+> -       check_2m_page_count(vm, 1);
+> -       check_split_count(vm, 1);
+> +       check_2m_page_count(vm, disable_nx ? 2 : 1);
+> +       check_split_count(vm, disable_nx ? 0 : 1);
+>
+>         /*
+>          * Executing from the third huge page (previously unaccessed) will
+>          * cause part to be mapped at 4k.
+>          */
+>         vcpu_run(vm, 0);
+> -       check_2m_page_count(vm, 1);
+> -       check_split_count(vm, 2);
+> +       check_2m_page_count(vm, disable_nx ? 3 : 1);
+> +       check_split_count(vm, disable_nx ? 0 : 2);
+>
+>         /* Reading from the first huge page again should have no effect. */
+>         vcpu_run(vm, 0);
+> -       check_2m_page_count(vm, 1);
+> -       check_split_count(vm, 2);
+> +       check_2m_page_count(vm, disable_nx ? 3 : 1);
+> +       check_split_count(vm, disable_nx ? 0 : 2);
+>
+>         /*
+>          * Give recovery thread time to run. The wrapper script sets
+> @@ -145,7 +174,7 @@ int main(int argc, char **argv)
+>         /*
+>          * Now that the reclaimer has run, all the split pages should be gone.
+>          */
+> -       check_2m_page_count(vm, 1);
+> +       check_2m_page_count(vm, disable_nx ? 3 : 1);
+>         check_split_count(vm, 0);
+>
+>         /*
+> @@ -153,10 +182,16 @@ int main(int argc, char **argv)
+>          * reading from it causes a huge page mapping to be installed.
+>          */
+>         vcpu_run(vm, 0);
+> -       check_2m_page_count(vm, 2);
+> +       check_2m_page_count(vm, disable_nx ? 3 : 2);
+>         check_split_count(vm, 0);
+>
+>         kvm_vm_free(vm);
+> +}
+> +
+> +int main(int argc, char **argv)
+> +{
+> +       run_test(false);
+> +       run_test(true);
+>
+>         return 0;
+>  }
+> --
+> 2.35.1.1178.g4f1659d476-goog
+>

@@ -2,117 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE7544FB8C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 11:58:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EC1B4FB8D7
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 12:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344954AbiDKKAC convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 11 Apr 2022 06:00:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44312 "EHLO
+        id S1344991AbiDKKEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 06:04:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344944AbiDKJ77 (ORCPT
+        with ESMTP id S1344953AbiDKKC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 05:59:59 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 79D3641621
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 02:57:45 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-60-NdxDbdFkOjqgxG8xxJVvzQ-1; Mon, 11 Apr 2022 10:57:42 +0100
-X-MC-Unique: NdxDbdFkOjqgxG8xxJVvzQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.32; Mon, 11 Apr 2022 10:57:39 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.033; Mon, 11 Apr 2022 10:57:39 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Steven Rostedt' <rostedt@goodmis.org>
-CC:     'Qais Yousef' <qais.yousef@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "juri.lelli@redhat.com" <juri.lelli@redhat.com>,
-        "bsegall@google.com" <bsegall@google.com>,
-        "mgorman@suse.de" <mgorman@suse.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "parth@linux.ibm.com" <parth@linux.ibm.com>,
-        "chris.hyser@oracle.com" <chris.hyser@oracle.com>,
-        "pkondeti@codeaurora.org" <pkondeti@codeaurora.org>,
-        "Valentin.Schneider@arm.com" <Valentin.Schneider@arm.com>,
-        "patrick.bellasi@matbug.net" <patrick.bellasi@matbug.net>,
-        "pjt@google.com" <pjt@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
-        "tj@kernel.org" <tj@kernel.org>,
-        "qperret@google.com" <qperret@google.com>,
-        "tim.c.chen@linux.intel.com" <tim.c.chen@linux.intel.com>,
-        Wei Wang <wvw@google.com>
-Subject: RE: Scheduling tasks on idle cpu
-Thread-Topic: Scheduling tasks on idle cpu
-Thread-Index: AdhNfEgLjonPVH3ESQeb3O9OCn/HMQAAZaqAAAMHdiA=
-Date:   Mon, 11 Apr 2022 09:57:39 +0000
-Message-ID: <d95654bac3244397bf4aae581f35834a@AcuMS.aculab.com>
-References: <030aacb0c1304e43ab917924dcf4f138@AcuMS.aculab.com>
- <20220411052641.5370437f@rorschach.local.home>
-In-Reply-To: <20220411052641.5370437f@rorschach.local.home>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 11 Apr 2022 06:02:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5734710FC;
+        Mon, 11 Apr 2022 03:00:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 15CAAB81195;
+        Mon, 11 Apr 2022 10:00:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A1C24C385AA;
+        Mon, 11 Apr 2022 10:00:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649671212;
+        bh=4nuUzdrxqSSsR55oPV2LrNCSys89L6G+BR+aPdjjn/U=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=HFPMkS7Ms++roW8K7wA4DvHI5eZuZ8MglV6NxgaCElM/QPz7Pmv66xE/BIj/O5LaH
+         LBx9HrQ9PNro0DUDHtZ0IY57qHFFrJlUIJSPlfNZXp52CERKhdIeWYqtSFTqoKYjZE
+         sWshr+a0wcIR9KqXFX3DtYBqQg8YhcVLslE7Txxq+RI69Cb65OeWpI+t5PlDCvcxj8
+         Zo5ZtPiCHFv7HTvfpl9OwQfAa97xbWYMGpU5x3HLDlgSFVrFW80i465PjgnLny518p
+         qsrA937xru5VRE/xipLPzJzuJUdNZqqJ+7qXVQrwxZA39lKdhLwrnw3kwpmDAKIukr
+         rR8PD1Hrn8FIQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8369CE8DD63;
+        Mon, 11 Apr 2022 10:00:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: ethernet: stmmac: fix altr_tse_pcs function when using a
+ fixed-link
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <164967121253.20630.17401758441100611076.git-patchwork-notify@kernel.org>
+Date:   Mon, 11 Apr 2022 10:00:12 +0000
+References: <20220407132521.579713-1-dinguyen@kernel.org>
+In-Reply-To: <20220407132521.579713-1-dinguyen@kernel.org>
+To:     Dinh Nguyen <dinguyen@kernel.org>
+Cc:     davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, peppe.cavallaro@st.com,
+        alexandre.torgue@foss.st.com, joabreu@synopsys.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steven Rostedt
-> Sent: 11 April 2022 10:27
-> 
-> On Mon, 11 Apr 2022 08:26:33 +0000
-> David Laight <David.Laight@ACULAB.COM> wrote:
-> 
-> > Does that actually happen?
-> > I've seen the following:
-> >   34533 [017]: sys_futex(uaddr: 1049104, op: 85, val: 1, utime: 1, uaddr2: 1049100, val3: 4000001)
-> >   34533 [017]: sched_migrate_task: pid=34512 prio=120 orig_cpu=14 dest_cpu=17
-> >   34533 [017]: sched_wakeup: pid=34512 prio=120 success=1 target_cpu=017
-> > and pid 34512 doesn't get scheduled until pid 34533 finally sleeps.
-> > This is in spite of there being 5 idle cpu.
-> 
-> What's the topology? I believe the scheduler will refrain from
-> migrating tasks to idle CPUs that are on other NUMA nodes as much as
-> possible. Were those other 5 idle CPUs on another node?
+Hello:
 
-There are two physical cpu with 20 cores each (with hyperthreading).
-16, 18, 34, 36 and 38 were idle.
-So both 16 and 18 should be on the same NUMA node.
-All the others are running the same RT thread code.
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-	David
+On Thu,  7 Apr 2022 08:25:21 -0500 you wrote:
+> When using a fixed-link, the altr_tse_pcs driver crashes
+> due to null-pointer dereference as no phy_device is provided to
+> tse_pcs_fix_mac_speed function. Fix this by adding a check for
+> phy_dev before calling the tse_pcs_fix_mac_speed() function.
+> 
+> Also clean up the tse_pcs_fix_mac_speed function a bit. There is
+> no need to check for splitter_base and sgmii_adapter_base
+> because the driver will fail if these 2 variables are not
+> derived from the device tree.
+> 
+> [...]
 
-> 
-> -- Steve
-> 
-> 
-> > cpu 14 is busy running a RT thread, but migrating to cpu 17 seems wrong.
-> >
-> > This is on a RHEL7 kernel, I've not replicated it on anything recent.
-> > But I've very much like a RT thread to be able to schedule a non-RT
-> > thread to run on an idle cpu.
+Here is the summary with links:
+  - net: ethernet: stmmac: fix altr_tse_pcs function when using a fixed-link
+    https://git.kernel.org/netdev/net/c/a6aaa0032424
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

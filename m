@@ -2,357 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45A144FC2E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 19:07:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 946EB4FC2EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 19:08:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348745AbiDKRJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 13:09:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58892 "EHLO
+        id S1348750AbiDKRKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 13:10:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiDKRJV (ORCPT
+        with ESMTP id S235105AbiDKRKe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 13:09:21 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062EB1FCD6;
-        Mon, 11 Apr 2022 10:07:05 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: shreeya)
-        with ESMTPSA id B492E1F43742
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649696823;
-        bh=ObQYeh86iXVw5tZUjsEQEzqaRIl8zOWwS5sgStC7qVU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=KNDeqnFKXxqc3CsWA9PiRey+bECP9FBmTAobtO00PlsxLRw67zAQePoDSBklUm9cj
-         5JwZwB9D4rMqHL5o2lvgTd8wB/bdCrgahwDeBsNnACC217G7jcHsxXxpsP0jzUjxAv
-         Ai1R56YLr2GlS0M70Hva5EG05+XR1h/UgvKOKaFJsH0hmTEDvkd+uVHUxGxFOnVqab
-         6/u7OgUuPY8+l27NymDdUyPMsPYzcejYDFDPOPQ6DHy3A17SIPTs1YKBChbWTLPzs/
-         WXyq11agykZ2soxMz3+IOVTp+2fLBKqGSvl9E4ufrg4QFxf1RvFV0P83VoYgUX66m7
-         vTg6nk5/stnqw==
-Message-ID: <d5de6b56-ad90-feec-c65a-53699c8ddbe9@collabora.com>
-Date:   Mon, 11 Apr 2022 22:36:56 +0530
+        Mon, 11 Apr 2022 13:10:34 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42EF31FCD8
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 10:08:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=+iXwtVZvUdEhLEVqNt7D0roMyUFGILOUPB/s//8bFdU=; b=pSTkAwRoffNrDT+tQEQnmaFNcG
+        Sl/WcFSGdTIFNjO553AgubZybJn+IKvIMGq4kJ/laKrhFs05W7UjJ+vTDrldkJVgPdPupmLJddwaR
+        s02MC63I+H4D8yggIONijJk+i3bk5gGYqbQLJqoBT+KwUaI/96ZijYq8DeA9dzkSB6mUGPxEmjdoE
+        QH4zNUA+6BXcJMQPh6veFUs5UHzDm0SJAxyMfmGKXt+oBB7b3SEK0z4aXObZACA+fJNkC3/UM/1X5
+        xAxD5PbpntJoe6Vo/imVayj6iMK5WTcDf7qOQ9apedjCqLWnqcZ0As6KHTM/QEKoSZzGyw6Ij3S6+
+        P3Fb28aw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ndxW6-0042Q1-Da; Mon, 11 Apr 2022 17:07:55 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7781F300212;
+        Mon, 11 Apr 2022 19:07:53 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 33F082D2B129D; Mon, 11 Apr 2022 19:07:53 +0200 (CEST)
+Date:   Mon, 11 Apr 2022 19:07:53 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Oleg Nesterov <oleg@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-kernel@vger.kernel.org, Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: Re: [PATCH v2] ptrace: fix ptrace vs tasklist_lock race on
+ PREEMPT_RT.
+Message-ID: <YlRgaZnJp2YONKhS@hirez.programming.kicks-ass.net>
+References: <20220405101026.GB34954@worktop.programming.kicks-ass.net>
+ <20220405102849.GA2708@redhat.com>
+ <Ykwn0MpcrZ/N+LOG@hirez.programming.kicks-ass.net>
+ <20220407121340.GA2762@worktop.programming.kicks-ass.net>
+ <87v8vk8q4g.fsf@email.froward.int.ebiederm.org>
+ <20220408090908.GO2731@worktop.programming.kicks-ass.net>
+ <874k332wjp.fsf@email.froward.int.ebiederm.org>
+ <YlCVxlTVL1pyBF08@hirez.programming.kicks-ass.net>
+ <YlQSe6m2tidxwHt0@hirez.programming.kicks-ass.net>
+ <87ee23zqdj.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 3/3] iio: light: Add support for ltrf216a sensor
-Content-Language: en-US
-To:     Jonathan Cameron <jic23@kernel.org>, krzk@kernel.org
-Cc:     lars@metafoo.de, robh+dt@kernel.org, Zhigang.Shi@liteon.com,
-        krisman@collabora.com, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, alvaro.soliverez@collabora.com
-References: <20220325103014.6597-1-shreeya.patel@collabora.com>
- <20220325103014.6597-4-shreeya.patel@collabora.com>
- <20220327153049.10e525e9@jic23-huawei>
-From:   Shreeya Patel <shreeya.patel@collabora.com>
-In-Reply-To: <20220327153049.10e525e9@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87ee23zqdj.fsf@email.froward.int.ebiederm.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 27/03/22 20:00, Jonathan Cameron wrote:
+On Mon, Apr 11, 2022 at 08:44:24AM -0500, Eric W. Biederman wrote:
+> Peter Zijlstra <peterz@infradead.org> writes:
+> 
+> > On Fri, Apr 08, 2022 at 10:06:30PM +0200, Peter Zijlstra wrote:
+> >
+> >> I'll ponder if wait_task_inactive() can simplify things..
+> >
+> > This,.. so ptrace_check_attach(), which does ptrace_freeze_traced()
+> > already does wait_task_inactive(), but on the 'wrong' side of things.
+> >
+> > AFAICT, if we move that up, we're almost there, except that opens up a
+> > detach+attach race. That could be fixed by doing another
+> > wait_task_inactive(), but we can't due to locking :/
+> >
+> > Let's see if I can make that work without making a mess of things.
+> > Because ensuring the task is stuck in schedule() makes the whole
+> > saved_state thing go away -- as you noted.
+> 
+> The code can perhaps synchronize on a bit using the the full locking and
+> then drop the locks and call the wait_task_inactive or whatever.
+> 
+> The challenge as I see it is after the traced task is inactive to allow
+> "wake_up_state(t, TASK_WAKEKILL)" on the traced task, have the traced
+> tasks state change to TASK_RUNNING and not allow the traced task to run
+> until what is today ptrace_unfreeze_task is called.
+> 
+> I just don't know how to get something stuck and not allow it to run.
 
-Hi Jonathan,
+Same as today? Clear TASK_WAKEKILL from __state and check
+__fatal_signal_pending() before putting it back again.
 
-I have a question inline related to one of your comments.
+The thing is, once we hit schedule() with TASK_TRACED, there's only two
+possible ways for that task to wake up:
 
-> On Fri, 25 Mar 2022 16:00:14 +0530
-> Shreeya Patel <shreeya.patel@collabora.com> wrote:
->
-> Hi Zhigang, Shreeya,
->
-> Comments inline.
->
-> Thanks,
->
-> Jonathan
->> From: Zhigang Shi <Zhigang.Shi@liteon.com>
->>
->> Add initial support for ltrf216a ambient light sensor.
->>
->> Datasheet :-
->> https://gitlab.steamos.cloud/shreeya/iio/-/blob/main/LTR-F216A-QT.pdf
-> We now have a Datasheet tag, so make this part of the tag block so automated
-> tools can find it easily:
->>
-> Datasheet: https://gitlab.steamos.cloud/shreeya/iio/-/blob/main/LTR-F216A-QT.pdf
->> Co-developed-by: Shreeya Patel <shreeya.patel@collabora.com>
->> Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
->> Signed-off-by: Zhigang Shi <Zhigang.Shi@liteon.com>
->> ---
->>   drivers/iio/light/Kconfig    |  10 ++
->>   drivers/iio/light/Makefile   |   1 +
->>   drivers/iio/light/ltrf216a.c | 334 +++++++++++++++++++++++++++++++++++
->>   3 files changed, 345 insertions(+)
->>   create mode 100644 drivers/iio/light/ltrf216a.c
->>
->> diff --git a/drivers/iio/light/Kconfig b/drivers/iio/light/Kconfig
->> index a62c7b4b8678..08fa383a8ca7 100644
->> --- a/drivers/iio/light/Kconfig
->> +++ b/drivers/iio/light/Kconfig
->> @@ -318,6 +318,16 @@ config SENSORS_LM3533
->>   	  changes. The ALS-control output values can be set per zone for the
->>   	  three current output channels.
->>   
->> +config LTRF216A
->> +        tristate "Liteon LTRF216A Light Sensor"
->> +        depends on I2C
->> +        help
->> +          If you say Y or M here, you get support for Liteon LTRF216A
->> +          Ambient Light Sensor.
->> +
->> +          If built as a dynamically linked module, it will be called
->> +          ltrf216a.
->> +
->>   config LTR501
->>   	tristate "LTR-501ALS-01 light sensor"
->>   	depends on I2C
->> diff --git a/drivers/iio/light/Makefile b/drivers/iio/light/Makefile
->> index d10912faf964..8fa91b9fe5b6 100644
->> --- a/drivers/iio/light/Makefile
->> +++ b/drivers/iio/light/Makefile
->> @@ -30,6 +30,7 @@ obj-$(CONFIG_SENSORS_ISL29028)	+= isl29028.o
->>   obj-$(CONFIG_ISL29125)		+= isl29125.o
->>   obj-$(CONFIG_JSA1212)		+= jsa1212.o
->>   obj-$(CONFIG_SENSORS_LM3533)	+= lm3533-als.o
->> +obj-$(CONFIG_LTRF216A)		+= ltrf216a.o
->>   obj-$(CONFIG_LTR501)		+= ltr501.o
->>   obj-$(CONFIG_LV0104CS)		+= lv0104cs.o
->>   obj-$(CONFIG_MAX44000)		+= max44000.o
->> diff --git a/drivers/iio/light/ltrf216a.c b/drivers/iio/light/ltrf216a.c
->> new file mode 100644
->> index 000000000000..99295358a7fe
->> --- /dev/null
->> +++ b/drivers/iio/light/ltrf216a.c
->> @@ -0,0 +1,334 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * LTRF216A Ambient Light Sensor
->> + *
->> + * Copyright (C) 2021 Lite-On Technology Corp (Singapore)
->> + * Author: Shi Zhigang <Zhigang.Shi@liteon.com>
->> + *
->> + * IIO driver for LTRF216A (7-bit I2C slave address 0x53).
->> + */
->> +
->> +#include <linux/module.h>
->> +#include <linux/init.h>
->> +#include <linux/i2c.h>
->> +#include <linux/mutex.h>
->> +#include <linux/iio/iio.h>
->> +#include <linux/iio/sysfs.h>
-> mod_devicetable.h for the id tables
->
->> +#include <linux/pm.h>
->> +#include <linux/delay.h>
->> +
->> +#define LTRF216A_DRV_NAME "ltrf216a"
->> +
->> +#define LTRF216A_MAIN_CTRL		0x00
->> +
->> +#define LTRF216A_ALS_MEAS_RATE		0x04
-> MEAS_RES seems more appropriate from datasheet.
-> As mentioned below, also add defines for all the fields
-> of the registers you will access and where the fields are
-> obvious numerical things, add defines for the values they
-> can take.
->
->
->> +#define LTRF216A_MAIN_STATUS		0x07
->> +#define LTRF216A_CLEAR_DATA_0		0x0A
->> +
->> +#define LTRF216A_ALS_DATA_0		0x0D
->> +
->> +static const int int_time_mapping[] = { 400000, 200000, 100000 };
->> +
->> +struct ltrf216a_data {
->> +	struct i2c_client *client;
->> +	u32			int_time;
->> +	u8			int_time_fac;
->> +	u8			als_gain_fac;
->> +	struct mutex mutex;
-> All locks need a comment to say exactly what they are protecting.
->
->> +};
->> +
->> +/* open air. need to update based on TP transmission rate. */
->> +#define WIN_FAC	1
->> +
->> +static const struct iio_chan_spec ltrf216a_channels[] = {
->> +	{
->> +		.type = IIO_LIGHT,
->> +		.info_mask_separate =
->> +			BIT(IIO_CHAN_INFO_PROCESSED) |
->> +			BIT(IIO_CHAN_INFO_INT_TIME),
->> +	}
->> +};
->> +
->> +static IIO_CONST_ATTR_INT_TIME_AVAIL("0.1 0.2 0.4");
->> +
->> +static struct attribute *ltrf216a_attributes[] = {
->> +	&iio_const_attr_integration_time_available.dev_attr.attr,
-> please use the read_avail callback and set the appropriate
-> _available bit.
->
-> That allows in kernel access to this information + is probably
-> shorter in this case as you won't have an attribute group etc
-> to deal wtih.
->
->> +	NULL
->> +};
->> +
->> +static const struct attribute_group ltrf216a_attribute_group = {
->> +	.attrs = ltrf216a_attributes,
->> +};
->> +
->> +static int ltrf216a_init(struct iio_dev *indio_dev)
->> +{
->> +	int ret;
->> +	struct ltrf216a_data *data = iio_priv(indio_dev);
->> +
->> +	ret = i2c_smbus_read_byte_data(data->client, LTRF216A_MAIN_CTRL);
->> +	if (ret < 0) {
->> +		dev_err(&data->client->dev, "Error reading LTRF216A_MAIN_CTRL\n");
->> +		return ret;
->> +	}
->> +
->> +	/* enable sensor */
->> +	ret |= 0x02;
-> Needs a #define and preferably use
-> 	ret |= FIELD_PREP()...
->
->> +	ret = i2c_smbus_write_byte_data(data->client, LTRF216A_MAIN_CTRL, ret);
->> +	if (ret < 0) {
->> +		dev_err(&data->client->dev, "Error writing LTRF216A_MAIN_CTRL\n");
->> +		return ret;
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static int ltrf216a_disable(struct iio_dev *indio_dev)
->> +{
->> +	int ret;
->> +	struct ltrf216a_data *data = iio_priv(indio_dev);
->> +
->> +	ret = i2c_smbus_write_byte_data(data->client, LTRF216A_MAIN_CTRL, 0);
->> +	if (ret < 0)
->> +		dev_err(&data->client->dev, "Error writing LTRF216A_MAIN_CTRL\n");
->> +
->> +	return ret;
->> +}
->> +
->> +static int ltrf216a_set_it_time(struct ltrf216a_data *data, int itime)
->> +{
->> +	int i, ret, index = -1;
->> +	u8 reg;
->> +
->> +	for (i = 0; i < ARRAY_SIZE(int_time_mapping); i++) {
->> +		if (int_time_mapping[i] == itime) {
->> +			index = i;
->> +			break;
->> +		}
->> +	}
->> +	/* Make sure integration time index is valid */
->> +	if (index < 0)
->> +		return -EINVAL;
->> +
->> +	if (index == 0) {
-> Switch statement seems more appropriate than this stack of if else
->
->> +		reg = 0x03;
-> reg isn't a great name as I assume this is the value, not the address
-> which was my first thought... Perhaps reg_val?
->
->> +		data->int_time_fac = 4;
->> +	} else if (index == 1) {
->> +		reg = 0x13;
->> +		data->int_time_fac = 2;
->> +	} else {
->> +		reg = (index << 4) | 0x02;
-> Unless I'm missing something index == 2 if we get here.
-> So why the calculation?  I'd suggest defining the two fields and using
-> FIELD_PREP() to set up each part probably to one of a set of
-> #define LTRF216A_ALS_MEAS_RATE_
->
->> +		data->int_time_fac = 1;
->> +	}
->> +
->> +	ret = i2c_smbus_write_byte_data(data->client, LTRF216A_ALS_MEAS_RATE, reg);
-> Called MEAS_RES on the datasheet, why this name for the register?
->
->> +	if (ret < 0)
->> +		return ret;
->> +
->> +	data->int_time = itime;
->> +
->> +	return 0;
->> +}
->> +
->> +static int ltrf216a_get_it_time(struct ltrf216a_data *data, int *val, int *val2)
->> +{
->> +	*val = 0;
->> +	*val2 = data->int_time;
-> I'd put this inline as it avoids a question I had at the call site on why
-> you passed *val in as it would always be 0.
->
->> +
->> +	return IIO_VAL_INT_PLUS_MICRO;
->> +}
->> +
->> +static int ltrf216a_read_data(struct ltrf216a_data *data, u8 addr)
->> +{
->> +	int ret;
->> +	int tries = 25;
->> +	int val_0, val_1, val_2;
->> +
->> +	while (tries--) {
->> +		ret = i2c_smbus_read_byte_data(data->client, LTRF216A_MAIN_STATUS);
->> +		if (ret < 0)
->> +			return ret;
->> +		if (ret & 0x08)
-> That 0x08 is a magic number and also better defined using BIT(3)
-> Anyhow, use a define for that.
->
->> +			break;
->> +		msleep(20);
->> +	}
->> +
->> +	val_0 = i2c_smbus_read_byte_data(data->client, addr);
-> All of these can return errors so you should check.
-> Device doesn't support any larger reads?
->
->> +	val_1 = i2c_smbus_read_byte_data(data->client, addr + 1);
->> +	val_2 = i2c_smbus_read_byte_data(data->client, addr + 2);
->> +	ret = (val_2 << 16) + (val_1 << 8) + val_0;
-> This is a le24_to_cpu() conversion.
-> Preferred choice would be to use something like
-> 	u8 buf[3];
-> 	int i;
->
-> 	for (i = 0; i < 3; i++) {
-> 		ret = i2c_smbus_read_byte_data(data->client, addr);
-> 		if (ret < 0)
-> 			return ret;
-> 		buf[i] = ret;
-> 	}
-> 	return le24_to_cpu(buf);
->
+  wake_up_state(t, TASK_WAKEKILL)
 
-We do not have any le24_to_cpu() function in current kernel source code.
-I was thinking to use le32_to_cpu() instead but it requires an argument of
-type __le32 and our case we storing the values in u8 buf[3] so I'm not
-really sure if it's possible to use le32_to_cpu() or any other function.
+and
+
+  wake_up_state(t, __TASK_TRACED)
+
+both are issued while holding sighand lock, so provided we hold sighand
+lock, we can actually frob __state as we do today, we just need to know
+the task really has scheduled out first.
+
+That is, the problem today, for PREEMPT_RT, is:
+
+ptrace_stop():					ptrace_freeze_traced()
+
+  set_special_state(TASK_TRACING)
+
+  ...
+
+  spin_lock(&foo)
+    current->saved_state = current->__state;
+    current->__state = TASK_RTLOCK_WAIT
+
+						READ_ONCE(t->__state)
+						  // whoopsie, not
+						  // TRACED
+
+  ...
+
+  schedule()
 
 
+But if wait_task_inactive() ensures our @t is actually in schedule(),
+we're good again, nothing will then ever change __state as long as we
+hold sighand lock.
 
-Thanks,
-Shreeya Patel
+The only fun bit is that wait_task_inactive() likes to schedule so we
+want do that with sighand lock held. What we need to do is call it
+first, and then re-check stuff is still sane once we (re)acquire all the
+locks.
+
+This is certainly possible -- and not in fact too hard; the only thing
+I'm really concerned about is not making it more ugly than dealing with
+saved_state in the first place (and *that* is turning out to be somewhat
+hard).
+
+But while going over all this I think there might be an additional
+problem; wait_task_inactive() is stubbed for SMP=n...
+
 

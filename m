@@ -2,76 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52EE64FBB8A
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 14:01:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B84DD4FBB88
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 14:01:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345028AbiDKMDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 08:03:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41982 "EHLO
+        id S1345754AbiDKMDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 08:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344731AbiDKMDl (ORCPT
+        with ESMTP id S1345661AbiDKMDp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 08:03:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D7F6F36692
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 05:01:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649678485;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=oHGyKmJZVMoFrBzXud4AimrT6QwZEdA9Ks3IPXNEVBU=;
-        b=eYHjHS2hLf+60OVwOaiVejiKL6YhLi9+9lJg1iyVcpLoul8wjg4h/80Jqmmf2h51bGS9jO
-        6Pi5Zv+QioCH4pOjAD1qzNkzUbWh7iDhJq451QAYygzXGBeVVXZadrl2X4mpsreYJhcpJ/
-        ytl/Ofw0IulP2vW/c+yHM1UTB8DvrXI=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-418-QiJ0oSiOMNyccLMz7nB7CQ-1; Mon, 11 Apr 2022 08:01:24 -0400
-X-MC-Unique: QiJ0oSiOMNyccLMz7nB7CQ-1
-Received: by mail-ed1-f71.google.com with SMTP id dm27-20020a05640222db00b0041d76d4f795so2586512edb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 05:01:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:content-language:content-transfer-encoding;
-        bh=oHGyKmJZVMoFrBzXud4AimrT6QwZEdA9Ks3IPXNEVBU=;
-        b=s8JfF2izJZzuYSVOr5gp38BXiYNGUEVK88Sh2+VJr4SLIXJh3f/l/qAQrK/dBXUATV
-         1UqTl1EK0pJz7Eog23948BmpA3WKYqaxIMwYfSWMUOiTuJgYbSTKVHnC+hBq5RPes/x/
-         QxhUJQmq8t0sMtlrbkBYIn3Mn5I3s9AKLRiD4miqCBJCPhRnZ+BaW+Wp9qUBuBdESoWT
-         vgFd7fo5JoxHC6UdFvTgrSmc625dWDlKBA5gA/KijFUvIfQ23w6lwyBq36bAiQLFxL8H
-         jDtoqlOnctboEABKASlegjHif5MKPzdcDQYZPfntA4+aUsI1DTxgNBd68PqhZHgGwWwb
-         LPkg==
-X-Gm-Message-State: AOAM533PZyFFKTKv173bIWo+17xBZXlBlzHzpuQbDwG07bA1ZWi6DQF6
-        XUxGO5XS8H3qXC8WrFhnzTg8j5H6lBrImf03a0bZNevJ2i1EWvoVH7NeOOwX6FolWwqstWZTRDc
-        +5YTg4WMNdAwvP4uLv8W89ENv
-X-Received: by 2002:a17:906:5cb:b0:6cf:954:d84d with SMTP id t11-20020a17090605cb00b006cf0954d84dmr29359059ejt.560.1649678483341;
-        Mon, 11 Apr 2022 05:01:23 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzAzevc7YgXQoRZAFeD6m2YmOHnxMAYgHzARZwizrJD7wNzEHCmCMxAormMD9mR37tj7rM9Jg==
-X-Received: by 2002:a17:906:5cb:b0:6cf:954:d84d with SMTP id t11-20020a17090605cb00b006cf0954d84dmr29359039ejt.560.1649678483134;
-        Mon, 11 Apr 2022 05:01:23 -0700 (PDT)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id s4-20020a170906a18400b006db0a78bde8sm11920348ejy.87.2022.04.11.05.01.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Apr 2022 05:01:22 -0700 (PDT)
-Message-ID: <90de8805-387b-70f7-6e9d-ef353d1d3f60@redhat.com>
-Date:   Mon, 11 Apr 2022 14:01:22 +0200
+        Mon, 11 Apr 2022 08:03:45 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0EDDF369FB;
+        Mon, 11 Apr 2022 05:01:31 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id E6373809F;
+        Mon, 11 Apr 2022 11:58:59 +0000 (UTC)
+Date:   Mon, 11 Apr 2022 15:01:29 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-serial@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Matwey V . Kornilov" <matwey@sai.msu.ru>,
+        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Subject: Re: [PATCH 1/2] serial: 8250: Fix runtime PM for start_tx() for RS485
+Message-ID: <YlQYmTIFCbk/hEZY@atomide.com>
+References: <20220411094805.45696-1-tony@atomide.com>
+ <YlP7eArvvNWnbMF2@hovoldconsulting.com>
+ <YlP+muZF1nDIU0t4@atomide.com>
+ <YlQCJE4yQRsO8JPn@hovoldconsulting.com>
+ <YlQD2mZdorEAKfZ7@atomide.com>
+ <YlQXUpNGo8JSppF+@hovoldconsulting.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-From:   Hans de Goede <hdegoede@redhat.com>
-Subject: [GIT PULL] platform-drivers-x86 for 5.18-2
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Mark Gross <mgross@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        platform-driver-x86@vger.kernel.org
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YlQXUpNGo8JSppF+@hovoldconsulting.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,88 +53,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+* Johan Hovold <johan@kernel.org> [220411 11:53]:
+> On Mon, Apr 11, 2022 at 01:32:58PM +0300, Tony Lindgren wrote:
+> > * Johan Hovold <johan@kernel.org> [220411 10:23]:
+> > > On Mon, Apr 11, 2022 at 01:10:34PM +0300, Tony Lindgren wrote:
+> > > > * Johan Hovold <johan@kernel.org> [220411 09:54]:
+> > > > > On Mon, Apr 11, 2022 at 12:48:04PM +0300, Tony Lindgren wrote:
+> > > > > > diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+> > > > > > --- a/drivers/tty/serial/8250/8250_port.c
+> > > > > > +++ b/drivers/tty/serial/8250/8250_port.c
+> > > > > > @@ -1681,8 +1681,10 @@ static void serial8250_start_tx(struct uart_port *port)
+> > > > > >  		return;
+> > > > > >  
+> > > > > >  	if (em485 &&
+> > > > > > -	    em485->active_timer == &em485->start_tx_timer)
+> > > > > > +	    em485->active_timer == &em485->start_tx_timer) {
+> > > > > > +		serial8250_rpm_put_tx(up);
+> > > > > >  		return;
+> > > > > > +	}
+> 
+> > > The problem is that that serial8250_rpm_put_tx() you're adding may
+> > > suspend the device unconditionally (i.e. regardless of any previous
+> > > calls to serial8250_rpm_get_tx()).
+> > > 
+> > > If rs485 tx is just being deferred you mustn't suspend the device before
+> > > it has had a chance to start transmitting.
+> > 
+> > Hmm I'm pretty sure rs485 has the runtime PM usage count is currently
+> > unbalanced. To me it seems em485->start_tx_timer calls start_tx()
+> > again from serial8250_em485_handle_start_tx().
+> 
+> It appears to call __start_tx(), but note that the only call to
+> serial8250_rpm_get_tx() is in serial8250_start_tx() which this patch
+> would have cancelled out.
 
-Here is the first round of fixes for platform-drivers-x86 for 5.18.
+OK
 
-This consists of various doc and code build- and warning-fixes
-as well as a few small cleanups.
+> Also note that the serial8250_rpm_get/set_tx() calls aren't supposed to
+> be balanced. get() can be called multiple times and will only increment
+> the PM usage counter once, while put() will decrement the counter
+> whenever get() has been called once (and hence potentially suspend the
+> device immediately).
+> 
+> Messy indeed.
+
+Yeah that is not nice.
+
+I'll send a patch to prepare things for runtime PM that will hopefully
+make things a bit easier as discussed earlier.
 
 Regards,
 
-Hans
-
-
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
-
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v5.18-2
-
-for you to fetch changes up to 753ee989f7cf0c0a76a7f56956827a8863a60f97:
-
-  platform/x86: amd-pmc: Fix compilation without CONFIG_SUSPEND (2022-04-04 16:26:09 +0200)
-
-----------------------------------------------------------------
-platform-drivers-x86 for v5.18-2
-
-Highlights:
-- Doc + compilation warning fixes
-- Kconfig dep fixes
-- Misc. small code cleanups
-
-The following is an automated git shortlog grouped by driver:
-
-Documentation/ABI:
- -  sysfs-class-firmware-attributes: Misc. cleanups
- -  sysfs-class-firmware-attributes: Fix Sphinx errors
- -  sysfs-driver-intel_sdsi: Fix sphinx warnings
-
-acerhdf:
- -  Cleanup str_starts_with()
-
-amd-pmc:
- -  Fix compilation without CONFIG_SUSPEND
-
-barco-p50-gpio:
- -  Fix duplicate included linux/io.h
-
-samsung-laptop:
- -  Fix an unsigned comparison which can never be negative
-
-think-lmi:
- -  certificate support clean ups
-
-----------------------------------------------------------------
-Hans de Goede (3):
-      Documentation/ABI: sysfs-driver-intel_sdsi: Fix sphinx warnings
-      Documentation/ABI: sysfs-class-firmware-attributes: Fix Sphinx errors
-      Documentation/ABI: sysfs-class-firmware-attributes: Misc. cleanups
-
-Haowen Bai (1):
-      platform/x86: barco-p50-gpio: Fix duplicate included linux/io.h
-
-Jiapeng Chong (1):
-      platform/x86: samsung-laptop: Fix an unsigned comparison which can never be negative
-
-Mario Limonciello (1):
-      platform/x86: amd-pmc: Fix compilation without CONFIG_SUSPEND
-
-Mark Pearson (1):
-      platform/x86: think-lmi: certificate support clean ups
-
-Wei Li (1):
-      platform/x86: acerhdf: Cleanup str_starts_with()
-
- .../ABI/testing/sysfs-class-firmware-attributes    | 48 ++++++++++++----------
- Documentation/ABI/testing/sysfs-driver-intel_sdsi  | 18 ++++----
- drivers/platform/x86/acerhdf.c                     | 21 ++--------
- drivers/platform/x86/amd-pmc.c                     | 14 ++++++-
- drivers/platform/x86/barco-p50-gpio.c              |  1 -
- drivers/platform/x86/samsung-laptop.c              |  2 -
- drivers/platform/x86/think-lmi.c                   | 44 +++++++-------------
- drivers/platform/x86/think-lmi.h                   |  1 -
- 8 files changed, 67 insertions(+), 82 deletions(-)
-
+Tony

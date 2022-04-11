@@ -2,160 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9FA24FC15A
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:45:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 694F54FC175
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:50:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348290AbiDKPrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 11:47:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44824 "EHLO
+        id S1348269AbiDKPwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 11:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348205AbiDKPq3 (ORCPT
+        with ESMTP id S1348265AbiDKPwH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 11:46:29 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 898D6B7C0
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:44:13 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id w18so18918524edi.13
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:44:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=fU0hWQzn7l8dJNLIMz5BIxCZUns693+M8CLZSpbHGLA=;
-        b=TMn/tnTA+w5TRa4vNuxS5vEJFOk5yiXG5dLIwTHI+6D9zp71rfgpAnjTEpO4zmD3di
-         hSiK6prSo1T1hrLP4OM47zkcxCeGCa5N71/Mh043fmIZmyoawgPhb9oyqm0hnNcttIgq
-         eo8c0K35dQmvk2Xi29V4HadfSMbrnFl0dnIKXUtPyuve7F32+GnsbY8KZUlrIxV8NU3K
-         ON+HX/M+XVMrMprIQ/U1GhyrBbFH5yKRUhju/TgdlQUnk5iI7nSaznj2TIZXRmxYRGdg
-         qYa+8sxevq25oPSMmILdZRNnK7rSZKDE3eEbIYoFm0jHR1/SjtBBdQosvohu0P5PBLY6
-         fI4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=fU0hWQzn7l8dJNLIMz5BIxCZUns693+M8CLZSpbHGLA=;
-        b=oCY1pT0lxDWjkSiY+i8Xvkxq6MsR0W5P+eu1fGcixXgNKIbEh72Lbbfr5gDkBvFML7
-         BHi0w/iXBmtowWAxY94Hh2yuWabcHzvgyDWllydoQyv6TS28yDCgJemGEj310qReKrKf
-         K6F3s5DuM6IVb49pLlDn1CYyLn2QWkDIs5aXoSAseIXgHu+eUStnFd/ZP5gN1JWPZ+ih
-         TUXUDc3nRD/VoIx81oGU0I+vDoPoX4Lui1pDsJbi8mITuZ3Y23B0EQVL4JUgFytHo3jU
-         0oH91Ae3ciGwVv5NPn6S5jcNcQUbtq8+DN9mpfUlYRcHvMdHahpbrp34TPNAzD4CdZda
-         Cr9A==
-X-Gm-Message-State: AOAM5338Ix1MehepZoB5jxX6qVglKSK15ZWYglqvI1YXCA6aR/0VVL0a
-        AQa/koHVxVK2q9I6VWvbyPzjqA==
-X-Google-Smtp-Source: ABdhPJyBq4Yl6LDEdydbHJ5/4b8uC0V4SNm/51/Z48/ZlLGb4PTPG74I33M/AeumvQmbioftCHhorw==
-X-Received: by 2002:a05:6402:11cf:b0:41c:dbc7:79d2 with SMTP id j15-20020a05640211cf00b0041cdbc779d2mr34495460edw.50.1649691851702;
-        Mon, 11 Apr 2022 08:44:11 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id t14-20020a170906608e00b006d1455acc62sm12173177ejj.74.2022.04.11.08.44.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 08:44:11 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Mon, 11 Apr 2022 11:52:07 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 324AEF21;
+        Mon, 11 Apr 2022 08:49:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649692192; x=1681228192;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gyDoMc98GJmanTHsL9qK4pOeFXXJEueQFvdOn+5W79Q=;
+  b=amlsel1Uy9yIbiytLhirB8tp8mpgRstrJ90lUEyqAAmyFZLMARkfR7Eu
+   5d5QDnl+FkGSTqL5dkKbm/vlvEtuInXaYiY4q/VuK+2zlWgfi3Ob3S9yR
+   2ndh6do8c/9ap3JUZ7FESw0kYbojapUR/2kEKiKAcBLXUcF3x3C9MOM/O
+   grzHdNRIQShBOEWP5CZ6qv/NGEVCcr2SeRkIScHlJJs8/Nf1oM46Okvp0
+   nXe0sHDz244+uKrx1nYSlUeqGcJmgQVRlUU/EclKDOCjdVAV38ZKNtRlG
+   qnehE2fXfGC8g0fBajnryQDuFb1riB1olRaSiHt0hJveFsd+MPzPjFRaI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="262326628"
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="262326628"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 08:49:51 -0700
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="660096199"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 08:49:47 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ndwEx-001J5c-Tx;
+        Mon, 11 Apr 2022 18:46:07 +0300
+Date:   Mon, 11 Apr 2022 18:46:07 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Rob Herring <robh@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [RFC PATCH v2 6/6] arm64: dts: qcom: sdm845: control RPMHPD performance states with UFS
-Date:   Mon, 11 Apr 2022 17:43:47 +0200
-Message-Id: <20220411154347.491396-7-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
-References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Len Brown <lenb@kernel.org>,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        Michael Walle <michael@walle.cc>
+Subject: Re: [PATCH v6 1/5] device property: Allow error pointer to be passed
+ to fwnode APIs
+Message-ID: <YlRNPyxHcNRQE/5A@smile.fi.intel.com>
+References: <20220408184844.22829-1-andriy.shevchenko@linux.intel.com>
+ <YlQyEz3/J0rb2Hew@smile.fi.intel.com>
+ <YlQ69jMduq/evgTt@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YlQ69jMduq/evgTt@kroah.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-UFS, when scaling gears, should choose appropriate performance state of
-RPMHPD power domain controller.  Since UFS belongs to UFS_PHY_GDSC power
-domain, add necessary parent power domain to GCC.
+On Mon, Apr 11, 2022 at 04:28:06PM +0200, Greg Kroah-Hartman wrote:
+> On Mon, Apr 11, 2022 at 04:50:11PM +0300, Andy Shevchenko wrote:
+> > On Fri, Apr 08, 2022 at 09:48:40PM +0300, Andy Shevchenko wrote:
+> > > Some of the fwnode APIs might return an error pointer instead of NULL
+> > > or valid fwnode handle. The result of such API call may be considered
+> > > optional and hence the test for it is usually done in a form of
+> > > 
+> > > 	fwnode = fwnode_find_reference(...);
+> > > 	if (IS_ERR(fwnode))
+> > > 		...error handling...
+> > > 
+> > > Nevertheless the resulting fwnode may have bumped the reference count
+> > > and hence caller of the above API is obliged to call fwnode_handle_put().
+> > > Since fwnode may be not valid either as NULL or error pointer the check
+> > > has to be performed there. This approach uglifies the code and adds
+> > > a point of making a mistake, i.e. forgetting about error point case.
+> > > 
+> > > To prevent this, allow an error pointer to be passed to the fwnode APIs.
+> > 
+> > Rafael and Greg, if this okay for you, can the first three patches be
+> > applied, so we will have at least the fix in and consider constification
+> > a further work?
+> 
+> Give us a chance, you sent this on friday and are asking about it first
+> thing Monday morning?
+> 
+> Please go and review other patches sent on the list to help us catch up.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sdm845.dtsi | 43 +++++++++++++++++++++-------
- 1 file changed, 33 insertions(+), 10 deletions(-)
+OK! Reviewed (actually commented on) a few patches so far.
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index b31bf62e8680..920e4b0c71cf 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -1078,6 +1078,7 @@ gcc: clock-controller@100000 {
- 			#clock-cells = <1>;
- 			#reset-cells = <1>;
- 			#power-domain-cells = <1>;
-+			power-domains = <&rpmhpd SDM845_CX>;
- 		};
- 
- 		qfprom@784000 {
-@@ -2326,18 +2327,40 @@ ufs_mem_hc: ufshc@1d84000 {
- 				<&gcc GCC_UFS_PHY_RX_SYMBOL_0_CLK>,
- 				<&gcc GCC_UFS_PHY_RX_SYMBOL_1_CLK>,
- 				<&gcc GCC_UFS_PHY_ICE_CORE_CLK>;
--			freq-table-hz =
--				<50000000 200000000>,
--				<0 0>,
--				<0 0>,
--				<37500000 150000000>,
--				<0 0>,
--				<0 0>,
--				<0 0>,
--				<0 0>,
--				<0 300000000>;
- 
-+			operating-points-v2 = <&ufs_opp_table>;
- 			status = "disabled";
-+
-+			ufs_opp_table: opp-table {
-+				compatible = "operating-points-v2";
-+
-+				opp-50000000 {
-+					opp-hz = /bits/ 64 <50000000
-+						 0
-+						 0
-+						 37500000
-+						 0
-+						 0
-+						 0
-+						 0
-+						 // FIXME: value 0 copied from freq-table-hz
-+						 0>;
-+					required-opps = <&rpmhpd_opp_svs>;
-+				};
-+
-+				opp-200000000 {
-+					opp-hz = /bits/ 64 <200000000
-+						 0
-+						 0
-+						 150000000
-+						 0
-+						 0
-+						 0
-+						 0
-+						 300000000>;
-+					required-opps = <&rpmhpd_opp_nom>;
-+				};
-+			};
- 		};
- 
- 		ufs_mem_phy: phy@1d87000 {
 -- 
-2.32.0
+With Best Regards,
+Andy Shevchenko
+
 

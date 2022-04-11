@@ -2,95 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66D174FB252
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 05:27:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D3EF4FB25A
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 05:28:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244537AbiDKD27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 23:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38028 "EHLO
+        id S244553AbiDKD3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 23:29:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244539AbiDKD2z (ORCPT
+        with ESMTP id S244539AbiDKD3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 23:28:55 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6CFF2CE10
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 20:26:40 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KcDgM3p7zzBsCY;
-        Mon, 11 Apr 2022 11:22:23 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 11 Apr 2022 11:26:38 +0800
-Subject: Re: [PATCH v2 3/9] mm/vmscan: introduce helper function
- reclaim_page_list()
-To:     Matthew Wilcox <willy@infradead.org>
-CC:     <akpm@linux-foundation.org>, <ying.huang@intel.com>,
-        <songmuchun@bytedance.com>, <hch@infradead.org>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-References: <20220409093500.10329-1-linmiaohe@huawei.com>
- <20220409093500.10329-4-linmiaohe@huawei.com>
- <YlGNvn3cu2TftNRN@casper.infradead.org>
- <18ac3908-d162-f1ea-e91f-1da203272b74@huawei.com>
- <YlOd1Lvw6ia1vul2@casper.infradead.org>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <b9578dbf-f393-6eed-789a-267da296a413@huawei.com>
-Date:   Mon, 11 Apr 2022 11:26:38 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Sun, 10 Apr 2022 23:29:15 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A796A2ED73
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 20:26:57 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id h19so13466766pfv.1
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 20:26:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=iePzAY4s9oNe9r1gZgKsDyZfLq/xq3Wu66mTe2SS1a8=;
+        b=cz2urYf9dwqT9+3vV4unBRv44lrda5K2NgGGJn4QFKGmycwHI0lX7CAWFGlSTGL9rL
+         OS5fKMUOfs5PnPiPLC/5Z/VnUHIz9oxxdWbBFX9GiK5KFhzeJ0KWDTpxXy3Roj7JDKdC
+         JmqiKdOmnmX6dQc4/pkvI+tfj7bMmwGDFjIuPuLS72FmeMk5Yv+cn7rMXGnkVA5LjBAe
+         x1o7U2a9JLUPC9brFZGJAnUW1o7504pH7MES2SsFkuDbViqIw9n+Pk7I91+fQEbqEYz+
+         bhXhQctiOrrQxVvLNuDmKsQqZpDo99D6u7fxoKouWxtGTcmH5SRGgVtxouIKlOtsH1c1
+         jTDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=iePzAY4s9oNe9r1gZgKsDyZfLq/xq3Wu66mTe2SS1a8=;
+        b=VwvXVTWMqQI8J+4whGOeZnswLpndvgZyuyYqDcpQA/ApJ3bsHLn/HLxwu+qbtpqDm5
+         WfAIqap2lrvONwmKfpsS+h1qTjzB6QzR2pH2Eo9dNxRkPMsOY2FhuA6fACe9/XO9/sd0
+         pgWwmRERO6v/hsubjkZX/WEoBzrXE//lDh5q8dhiu1cpkXe/wNsHxZ3dBlcgy36mkXrN
+         dwRxUmyGte70PzcwpwlBsrOexsog3i5RA2roGcaY9sjBNcwbrcZFvrPzF63hZC0drCWC
+         nPjO/198LSGpk7TVRROlQ7rWKIVakmkSCq/MH0cRzivRGH9AscSDEKBZQ1v2mJeOOYdr
+         12Mw==
+X-Gm-Message-State: AOAM532ur2DiyibmsPHnN5LQ6F34TjmsO+JXjd4a7L1EV2RAGEyBGMEU
+        LV/g8TyaDhiTaji2QmfV2shkSuw6T6hvTw==
+X-Google-Smtp-Source: ABdhPJy7iOPr39nrGVdmH8I35PUMwel6TcCkay2LmFP7c9ln6hx9kug3RyhDMEv5UH3EOIemmlc0zA==
+X-Received: by 2002:a63:2a92:0:b0:398:a420:4faa with SMTP id q140-20020a632a92000000b00398a4204faamr24765350pgq.222.1649647617063;
+        Sun, 10 Apr 2022 20:26:57 -0700 (PDT)
+Received: from localhost ([223.184.83.228])
+        by smtp.gmail.com with ESMTPSA id u5-20020a17090a3fc500b001cb3fec230bsm8849985pjm.14.2022.04.10.20.26.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Apr 2022 20:26:56 -0700 (PDT)
+Date:   Mon, 11 Apr 2022 08:56:54 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
+Cc:     rafael@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        matthias.bgg@gmail.com, jia-wei.chang@mediatek.com,
+        roger.lu@mediatek.com, hsinyi@google.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        "Andrew-sh . Cheng" <andrew-sh.cheng@mediatek.com>
+Subject: Re: [PATCH V2 06/15] cpufreq: mediatek: Record previous target vproc
+ value
+Message-ID: <20220411032654.5tqqivmstqkojfj5@vireshk-i7>
+References: <20220408045908.21671-1-rex-bc.chen@mediatek.com>
+ <20220408045908.21671-7-rex-bc.chen@mediatek.com>
 MIME-Version: 1.0
-In-Reply-To: <YlOd1Lvw6ia1vul2@casper.infradead.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220408045908.21671-7-rex-bc.chen@mediatek.com>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/11 11:17, Matthew Wilcox wrote:
-> On Mon, Apr 11, 2022 at 09:53:15AM +0800, Miaohe Lin wrote:
->> On 2022/4/9 21:44, Matthew Wilcox wrote:
->>> On Sat, Apr 09, 2022 at 05:34:54PM +0800, Miaohe Lin wrote:
->>>> +	nr_reclaimed = shrink_page_list(page_list, pgdat, &sc, &dummy_stat, false);
->>>> +	while (!list_empty(page_list)) {
->>>> +		folio = lru_to_folio(page_list);
->>>> +		list_del(&folio->lru);
->>>> +		putback_lru_page(&folio->page);
->>>
->>> folio_putback_lru()
->>
->> I thought folio_putback_lru is deliberately not to use because there is no caller of folio_putback_lru now.
->> But it seems I was wrong. Will do it in next version.
+On 08-04-22, 12:58, Rex-BC Chen wrote:
+> From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
 > 
-> Looks like all of the uses of it that I mooted during the last merge
-> window ended up going away.
+> We found the buck voltage may not be exactly the same with what we set
+> because CPU may share the same buck with other module.
+> Therefore, we need to record the previous desired value instead of reading
+> it from regulators.
 > 
-> https://lore.kernel.org/all/20220204195852.1751729-47-willy@infradead.org/
-> was obsoleted by commit b109b87050df
+> Signed-off-by: Andrew-sh.Cheng <andrew-sh.cheng@mediatek.com>
+> Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> ---
+>  drivers/cpufreq/mediatek-cpufreq.c | 31 +++++++++++++++++++-----------
+>  1 file changed, 20 insertions(+), 11 deletions(-)
 > 
-> https://lore.kernel.org/all/20220204195852.1751729-48-willy@infradead.org/
-> and
-> https://lore.kernel.org/all/20220204195852.1751729-50-willy@infradead.org/
-> were also obsoleted by Hugh's mlock changes
-> 
-> I also sent
-> https://lore.kernel.org/all/YjJJIrENYb1qFHzl@casper.infradead.org/
-> 
-> but never quite got it up to submittable quality.
+> diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
+> index dc4a87e68940..472f4de29e5f 100644
+> --- a/drivers/cpufreq/mediatek-cpufreq.c
+> +++ b/drivers/cpufreq/mediatek-cpufreq.c
+> @@ -40,6 +40,7 @@ struct mtk_cpu_dvfs_info {
+>  	struct list_head list_head;
+>  	int intermediate_voltage;
+>  	bool need_voltage_tracking;
+> +	int old_vproc;
 
-I see. This is really a pity. Many thanks for clarifying. :)
+I like prev_vproc better somehow, but it is up to you to name it :)
 
-> 
-> .
-> 
+>  };
+>  
+>  static LIST_HEAD(dvfs_info_list);
+> @@ -190,11 +191,17 @@ static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
+>  
+>  static int mtk_cpufreq_set_voltage(struct mtk_cpu_dvfs_info *info, int vproc)
+>  {
+> +	int ret;
+> +
+>  	if (info->need_voltage_tracking)
+> -		return mtk_cpufreq_voltage_tracking(info, vproc);
+> +		ret = mtk_cpufreq_voltage_tracking(info, vproc);
+>  	else
+> -		return regulator_set_voltage(info->proc_reg, vproc,
+> -					     vproc + VOLT_TOL);
+> +		ret = regulator_set_voltage(info->proc_reg, vproc,
+> +					    MAX_VOLT_LIMIT);
+> +	if (!ret)
+> +		info->old_vproc = vproc;
+> +
+> +	return ret;
+>  }
+>  
+>  static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
+> @@ -211,15 +218,7 @@ static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
+>  
+>  	inter_vproc = info->intermediate_voltage;
+>  
+> -	old_freq_hz = clk_get_rate(cpu_clk);
+> -	old_vproc = regulator_get_voltage(info->proc_reg);
+> -	if (old_vproc < 0) {
+> -		pr_err("%s: invalid Vproc value: %d\n", __func__, old_vproc);
+> -		return old_vproc;
+> -	}
+> -
 
+Why did you move it down from here? I think it was fine to error out
+early if voltage isn't available.
+
+>  	freq_hz = freq_table[index].frequency * 1000;
+> -
+>  	opp = dev_pm_opp_find_freq_ceil(cpu_dev, &freq_hz);
+>  	if (IS_ERR(opp)) {
+>  		pr_err("cpu%d: failed to find OPP for %ld\n",
+> @@ -229,6 +228,16 @@ static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
+>  	vproc = dev_pm_opp_get_voltage(opp);
+>  	dev_pm_opp_put(opp);
+>  
+> +	old_freq_hz = clk_get_rate(cpu_clk);
+> +	old_vproc = info->old_vproc;
+> +	if (old_vproc == 0)
+> +		old_vproc = regulator_get_voltage(info->proc_reg);
+> +	if (old_vproc < 0) {
+> +		dev_err(cpu_dev, "%s: invalid Vproc value: %d\n",
+> +			__func__, old_vproc);
+> +		return old_vproc;
+> +	}
+> +
+>  	/*
+>  	 * If the new voltage or the intermediate voltage is higher than the
+>  	 * current voltage, scale up voltage first.
+> -- 
+> 2.18.0
+
+-- 
+viresh

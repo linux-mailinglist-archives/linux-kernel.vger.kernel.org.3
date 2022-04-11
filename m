@@ -2,78 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB84D4FB25B
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 05:28:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E67A94FB25E
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 05:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243906AbiDKDaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 23:30:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42752 "EHLO
+        id S241820AbiDKDbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 23:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235054AbiDKDaD (ORCPT
+        with ESMTP id S237514AbiDKDbh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 23:30:03 -0400
-Received: from relay4.hostedemail.com (relay4.hostedemail.com [64.99.140.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F8FC326D9
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 20:27:50 -0700 (PDT)
-Received: from omf16.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay11.hostedemail.com (Postfix) with ESMTP id 9C01A80E02;
-        Mon, 11 Apr 2022 03:27:49 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf16.hostedemail.com (Postfix) with ESMTPA id EF0F620013;
-        Mon, 11 Apr 2022 03:27:47 +0000 (UTC)
-Message-ID: <c855ba7ca204b948c59c9fd966c154e5505b3d77.camel@perches.com>
-Subject: Re: [PATCH] btrfs: remove unnecessary conditional
-From:   Joe Perches <joe@perches.com>
-To:     cgel.zte@gmail.com, dsterba@suse.com
-Cc:     clm@fb.com, josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lv Ruyi <lv.ruyi@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Date:   Sun, 10 Apr 2022 20:27:47 -0700
-In-Reply-To: <20220411032252.2517399-1-lv.ruyi@zte.com.cn>
-References: <20220411032252.2517399-1-lv.ruyi@zte.com.cn>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Sun, 10 Apr 2022 23:31:37 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F8E32EE3
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 20:29:25 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id b2-20020a17090a010200b001cb0c78db57so12216974pjb.2
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 20:29:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=glLri0Q5hoPnF9CltB+t3SBRTbSb2KsDjT5cGpcgnl4=;
+        b=Lor8cKaxWULoOS+gC8IfE1E+zWobSXFdYdQ9MXCEDM5Br0l/Tc33DpFnB6jfVj9xyD
+         RUrlBC9h+YNKwOeF4Bx2uUT3fsAHfeYHJlYDwZWkPQscuKVkwGUionPVKQp3py42IdhN
+         sXRAd2yNMYUk+s7wECCWeXGm9ITePH7DEKtMqoIUdqiK1T3VpVkmLMtlSWTT/lr9567F
+         b/SXpYq2KVpDDRTy+d6vpGkwepq/NWVmIgGMoQPOEAqw31oMVfCjq5rIzRfaevRaxCKB
+         eV037276lxgv3hAQPHBHDPjExa/mKjVtAc4voYESLlWIS9ldT4c6DkVHoQ3Y75V7d87W
+         Z95A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=glLri0Q5hoPnF9CltB+t3SBRTbSb2KsDjT5cGpcgnl4=;
+        b=wlp79V7ajH10BITYxd2xEPX5BWhyl3yxXjGOASCkyMSvd9ZsuNp5KgylB+qeu8MNbo
+         lkack00WLWxQq8DThvByb9rIXvQSuUdJWbQjvI27ftT22YdCf+Pb/am3/lMONXSH8FCB
+         sHuhl/8yi66R8fsd9T3mncEbtZPjmFFSvfXrkUu0vWcCU6vsMigsJBX7pzosR3/f6aaO
+         GemMtOlYfadLHrvvSBwJ0XxyE4P2hrTksyVkWnXxKUG1mDMyGS6L75jhUyOkY7A4HpyC
+         e6gVSdTWFg87D317msnCVcYGUgxDJOujluRBTg9kPrMLvMwBb8oUWqQEVIeu4qa3I0hP
+         70nA==
+X-Gm-Message-State: AOAM530Ox8jiUT/S5talUTPn0Mwz+9+ItJz362Blc6/KR6CRWP8InTxi
+        ZGJd+FpvIh/MA2scOuaSaVI/O9EuwZYISw==
+X-Google-Smtp-Source: ABdhPJzTnmE6XXA7umU2v3xHJBcEhDF7Ru93TRyQrYWdHHOoifJtCYP/hQCVMVgRLXA7Zb4apPNhYw==
+X-Received: by 2002:a17:90a:8405:b0:1bc:d521:b2c9 with SMTP id j5-20020a17090a840500b001bcd521b2c9mr34455774pjn.119.1649647764750;
+        Sun, 10 Apr 2022 20:29:24 -0700 (PDT)
+Received: from localhost ([223.184.83.228])
+        by smtp.gmail.com with ESMTPSA id s3-20020a056a00194300b004f6664d26eesm35381725pfk.88.2022.04.10.20.29.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Apr 2022 20:29:24 -0700 (PDT)
+Date:   Mon, 11 Apr 2022 08:59:22 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
+Cc:     rafael@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        matthias.bgg@gmail.com, jia-wei.chang@mediatek.com,
+        roger.lu@mediatek.com, hsinyi@google.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH V2 15/15] cpufreq: mediatek: Use device print to show logs
+Message-ID: <20220411032922.yj4p42is5ky6bgau@vireshk-i7>
+References: <20220408045908.21671-1-rex-bc.chen@mediatek.com>
+ <20220408045908.21671-16-rex-bc.chen@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout07
-X-Rspamd-Queue-Id: EF0F620013
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220408045908.21671-16-rex-bc.chen@mediatek.com>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Stat-Signature: x9zcho6otzoqyaap4jsuow1knk4szspy
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/JE10KGuUKttvL2rS3dxE7Klpi/bq+qqs=
-X-HE-Tag: 1649647667-178116
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-04-11 at 03:22 +0000, cgel.zte@gmail.com wrote:
-> iput() has already handled null and non-null parameter, so it is no
-> need to use if().
-[]
-> diff --git a/fs/btrfs/relocation.c b/fs/btrfs/relocation.c
-[]
-> @@ -3846,8 +3846,7 @@ struct inode *create_reloc_inode(struct btrfs_fs_info *fs_info,
->  	btrfs_end_transaction(trans);
->  	btrfs_btree_balance_dirty(fs_info);
->  	if (err) {
-> -		if (inode)
-> -			iput(inode);
-> +		iput(inode);
->  		inode = ERR_PTR(err);
->  	}
->  	return inode;
+On 08-04-22, 12:59, Rex-BC Chen wrote:
+> Replace pr_* with dev_* to show logs.
+> 
+> Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> ---
+>  drivers/cpufreq/mediatek-cpufreq.c | 41 +++++++++++++++++-------------
+>  1 file changed, 23 insertions(+), 18 deletions(-)
 
-I think a direct return would be easier to understand.
+One should always arrange the patches in this form:
 
-	if (err) {
-		iput(inode);
-		return ERR_PTR(err);
-	}
+- Fix bugs first (since they need to be applied first and need to go
+  to stable kernels too).
 
-	return inode;
+- Trivial fixes next, like this one which you chose to be present at
+  15/15. I would have applied this one right away, if it wasn't he
+  last one, because of which we have conflicts now.
 
+- Non-trivial patches later, so reviews on them don't affect other
+  patches.
 
+-- 
+viresh

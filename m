@@ -2,143 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C0BB4FB8E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 12:04:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7777E4FB8E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 12:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243853AbiDKKF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 06:05:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56486 "EHLO
+        id S1345017AbiDKKGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 06:06:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243614AbiDKKFt (ORCPT
+        with ESMTP id S235283AbiDKKGg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 06:05:49 -0400
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F65419B6;
-        Mon, 11 Apr 2022 03:03:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1649671416;
-  x=1681207416;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=FsUXYvruHmfAYwT/pxCNMHOLQLwKXMVdaCSrwdxakXs=;
-  b=GHYzfOhYX95p6WjeQUYBrujp9HTiOT9AlerokasZ8sE1tR2CzfmWaHO4
-   GttnICN1p5sDmKepuGl5QGdlHPLJSRyTvixXNMC/uS1k3f1Hxzb1C6en/
-   VezY01vKsinhxTd4YqEx7PqRVFo388oFLXATXri/my9pn8pgJ9YyGM7dB
-   E6NCI3RVXiv+UmWGtWJf8+uY4pIJXOGzz0LqOzLgQET/r1VFCaxEkGUCZ
-   lWEhR0yCHF4VGrnLnF84TbGefc1L2x/VSk0oP62bLMajgKjSvAfuvwf0C
-   Hs1UB+X/qmBYM8QedKFzrAGYODUh+u9lxZI7LphfX4wuZNAUBsTMNTgNP
-   g==;
-From:   Camel Guo <camel.guo@axis.com>
-To:     <linux@roeck-us.net>, <jdelvare@suse.com>, <robh+dt@kernel.org>,
-        <krzk+dt@kernel.org>
-CC:     <kernel@axis.com>, Camel Guo <camel.guo@axis.com>,
-        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/2] hwmon: (tmp401) Add support of three advanced features
-Date:   Mon, 11 Apr 2022 12:03:29 +0200
-Message-ID: <20220411100329.1783432-3-camel.guo@axis.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220411100329.1783432-1-camel.guo@axis.com>
-References: <20220411100329.1783432-1-camel.guo@axis.com>
+        Mon, 11 Apr 2022 06:06:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9432E643C
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 03:04:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 58521B80F97
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 10:04:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1A8AC385A3;
+        Mon, 11 Apr 2022 10:04:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649671459;
+        bh=xHZRDomLmwqSfuPknWUMoWKn9F/EZqlM+28KfOsbDSU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=u/AFkPDRUktcC5iIrFpT6pN6ARlP3YbRvEv/E8RoG/gXZygPiZeLs+Zj6V0u7UZwn
+         W9Xfdfk36XgZOZrNATIHmrM/pK7tx8kU6wCe/ULfb6Lm7Ev4CJ2CnO/YUuhurOnKgZ
+         hdn0iFZh3kIAgSjWNGsJJtdWcI+oxJQqLfhX/7EBCF+V7ZMPZnwyXOINQWNb0ZtqYP
+         cwvi2o946+7rWgm6zT/VgaRC40RPHwJt1L7mXUyXz++DX8x9prh/uP23qzHzWkdbp4
+         aRoUPKi4I5rDZFSwGDi8sWzB+T48Lk+wqUy9b4x01qgMgl1XbERIDbOIG9PMD6MRs1
+         IqVI7yEStu/XA==
+Message-ID: <778b1f04-a71b-a226-f7a7-4833fc9bf7c2@kernel.org>
+Date:   Mon, 11 Apr 2022 18:04:14 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [f2fs-dev] [PATCH 4/5] f2fs: get rid of stale fault injection
+ code
+Content-Language: en-US
+To:     Yufen Yu <yuyufen@huawei.com>, jaegeuk@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+References: <20220401071909.505086-1-yuyufen@huawei.com>
+ <20220401071909.505086-5-yuyufen@huawei.com>
+ <0c134e0e-b2d0-0bc0-42fc-cd220ff77e72@kernel.org>
+ <25a24259-3ac3-81ab-1c28-f2a4886888b5@huawei.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <25a24259-3ac3-81ab-1c28-f2a4886888b5@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tmp401 driver supports TMP401, TMP411 and TMP43X temperature sensors.
-According to their datasheet:
-- all of them support extended temperature range feature;
-- TMP411 and TPM43X support n-factor correction feature;
-- TMP43X support beta compensation feature.
+On 2022/4/6 11:01, Yufen Yu via Linux-f2fs-devel wrote:
+> Hi,
+> 
+> On 2022/4/1 16:28, Chao Yu wrote:
+>> On 2022/4/1 15:19, Yufen Yu via Linux-f2fs-devel wrote:
+>>> Nowly, we can use new fault injection framework. Just delete the
+>>> stale fault injection code.
+>>>
+>>> Signed-off-by: Yufen Yu <yuyufen@huawei.com>
+>>> ---
+>>>   fs/f2fs/checkpoint.c |  2 +-
+>>>   fs/f2fs/f2fs.h       | 51 ++----------------------------------------
+>>>   fs/f2fs/super.c      | 53 --------------------------------------------
+>>>   fs/f2fs/sysfs.c      | 23 -------------------
+>>>   4 files changed, 3 insertions(+), 126 deletions(-)
+>>>
+> 
+> ...
+> 
+>>>               break;
+>>> @@ -1963,14 +1920,6 @@ static int f2fs_show_options(struct seq_file *seq, struct dentry *root)
+>>>       if (F2FS_IO_SIZE_BITS(sbi))
+>>>           seq_printf(seq, ",io_bits=%u",
+>>>                   F2FS_OPTION(sbi).write_io_size_bits);
+>>> -#ifdef CONFIG_F2FS_FAULT_INJECTION
+>>> -    if (test_opt(sbi, FAULT_INJECTION)) {
+>>> -        seq_printf(seq, ",fault_injection=%u",
+>>> -                F2FS_OPTION(sbi).fault_info.inject_rate);
+>>> -        seq_printf(seq, ",fault_type=%u",
+>>> -                F2FS_OPTION(sbi).fault_info.inject_type);
+>>> -    }
+>>> -#endif
+>>
+>> This will cause regression due to it breaks application usage w/ -o
+>> fault_* mountoption..., I don't think this is the right way.
+> 
+> 
+> Thanks for catching this. I admit it's a problem. But, IMO fault_* mount
+> option are mostly been used in test, not in actual product. So, I think
+> it may just affect some test applications. With the common fault injection
+> framework, it can be more easy and flexible to do fault injection test.
+> Therefore, I want to remove the two mount options directly.
+> 
+> If you really worried about compatibility, how about just reserving the
+> two inject_* options but without doing any thing for them. We actually
+> configure fault injections by debugfs in this patch.
+> 
+> Or do you have more better suggestion?
 
-In order to support setting them during bootup, this commit reads
-ti,extended-range-enable, ti,n-factor and ti,beta-compensation and set
-the corresponding registers during probing.
+Could you please consider to keep original logic of f2fs fault injection
+if user use inject_* options, otherwise following common fault injection
+framework?
 
-Signed-off-by: Camel Guo <camel.guo@axis.com>
----
- drivers/hwmon/tmp401.c | 43 +++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 42 insertions(+), 1 deletion(-)
+Thoughts?
 
-diff --git a/drivers/hwmon/tmp401.c b/drivers/hwmon/tmp401.c
-index b86d9df7105d..75cdf5d2907e 100644
---- a/drivers/hwmon/tmp401.c
-+++ b/drivers/hwmon/tmp401.c
-@@ -41,6 +41,8 @@ enum chips { tmp401, tmp411, tmp431, tmp432, tmp435 };
- #define TMP401_STATUS				0x02
- #define TMP401_CONFIG				0x03
- #define TMP401_CONVERSION_RATE			0x04
-+#define TMP4XX_N_FACTOR_REG			0x18
-+#define TMP43X_BETA_RANGE			0x25
- #define TMP401_TEMP_CRIT_HYST			0x21
- #define TMP401_MANUFACTURER_ID_REG		0xFE
- #define TMP401_DEVICE_ID_REG			0xFF
-@@ -543,6 +545,7 @@ static int tmp401_init_client(struct tmp401_data *data)
- 	struct regmap *regmap = data->regmap;
- 	u32 config, config_orig;
- 	int ret;
-+	u32 val = 0;
- 
- 	/* Set conversion rate to 2 Hz */
- 	ret = regmap_write(regmap, TMP401_CONVERSION_RATE, 5);
-@@ -557,10 +560,48 @@ static int tmp401_init_client(struct tmp401_data *data)
- 	config_orig = config;
- 	config &= ~TMP401_CONFIG_SHUTDOWN;
- 
-+	if (of_property_read_bool(data->client->dev.of_node, "ti,extended-range-enable")) {
-+		/* Enable measurement over extended temperature range */
-+		config |= TMP401_CONFIG_RANGE;
-+	}
-+
- 	data->extended_range = !!(config & TMP401_CONFIG_RANGE);
- 
--	if (config != config_orig)
-+	if (config != config_orig) {
- 		ret = regmap_write(regmap, TMP401_CONFIG, config);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
-+	ret = of_property_read_u32(data->client->dev.of_node, "ti,n-factor", &val);
-+	if (!ret) {
-+		if (data->kind == tmp401) {
-+			dev_err(&data->client->dev, "ti,tmp401 does not support n-factor correction\n");
-+			return -EINVAL;
-+		}
-+		if (val > 255) {
-+			dev_err(&data->client->dev, "n-factor is invalid (%u)\n", val);
-+			return -EINVAL;
-+		}
-+		ret = regmap_write(regmap, TMP4XX_N_FACTOR_REG, val);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
-+	ret = of_property_read_u32(data->client->dev.of_node, "ti,beta-compensation", &val);
-+	if (!ret) {
-+		if (data->kind == tmp401 || data->kind == tmp411) {
-+			dev_err(&data->client->dev, "ti,tmp401 or ti,tmp411 does not support beta compensation\n");
-+			return -EINVAL;
-+		}
-+		if (val > 15) {
-+			dev_err(&data->client->dev, "beta-compensation is invalid (%u)\n", val);
-+			return -EINVAL;
-+		}
-+		ret = regmap_write(regmap, TMP43X_BETA_RANGE, val);
-+		if (ret < 0)
-+			return ret;
-+	}
- 
- 	return ret;
- }
--- 
-2.30.2
+Thanks,
 
+> 
+> Thanks,
+> Yufen
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> _______________________________________________
+> Linux-f2fs-devel mailing list
+> Linux-f2fs-devel@lists.sourceforge.net
+> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel

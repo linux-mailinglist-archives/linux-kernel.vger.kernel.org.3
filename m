@@ -2,239 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5017A4FC80A
+	by mail.lfdr.de (Postfix) with ESMTP id 97C854FC80B
 	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 01:25:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232482AbiDKX1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 19:27:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58126 "EHLO
+        id S229812AbiDKX1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 19:27:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbiDKX1W (ORCPT
+        with ESMTP id S232063AbiDKX1h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 19:27:22 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05CF2125F
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 16:25:05 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2eba37104a2so184411137b3.0
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 16:25:05 -0700 (PDT)
+        Mon, 11 Apr 2022 19:27:37 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4627D25EAB
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 16:25:22 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id z6so20618115iot.0
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 16:25:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Ya3YKd5y6IepYaUPt1QYjg4a14IW27FChnQ2Rm/dnOo=;
-        b=jIX3CSth4/ROeETd+zz/rnkRQZLeX2FFvt7Jgbq2zA3yj4RnxbaMoDxwRZa/jKjTpB
-         idTosO5hqkFhJ6tqTZO1JFvUb+fGWxW28T8Fag6zBMy5mY9ae9yBXOo/4nh4qe2W2JA/
-         wBfxW4tkSb/9ea9DXj4TT16x2GrUXAhxHoEGOjdYdPVlZU3WPrFVGf1oPmHZqpZaBJr2
-         CN2rew8D8yoUq1CSNKnq/8jP034ukwAU4rgvucSqx9mQFaRvPmH9236d7P5PyIsp4oze
-         J1nc+qbptuCSIRr8vQpMXatxcQrxJxQl8Lfg71HGaACENZK9vIP58taLpdARBINrueAc
-         YQeQ==
+        bh=ZMH2dd4dVn+sN1LqPK8n3ci7MR968dRhguypuScj1CQ=;
+        b=ijlqLq1r5A5qgzxLGR/tGje43sMc4riYXtrunxa/mGx8f4zKJEFIf05RsL5cjMGewb
+         VJZ2x/gZ72iq00W0xsklSEyD8uxS4AmHHHCnMhTXShKF3y97oKuk3nJimNiE4EA2RsDF
+         Qcp0uGmDhPpr4bQjm4OMVo+tlEsLlBhw5kNXQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Ya3YKd5y6IepYaUPt1QYjg4a14IW27FChnQ2Rm/dnOo=;
-        b=qIoJHQ2BW2kd53fPwiJdLKk55CH/ArddjL7no813k6p+y40kiyQ6g0lBAMMfUaddSN
-         1wqU2/ifmoRWHR6+Kc6kICr+NxDjwyT39YbncQRrGju6lwL+DrNqRIwg8NJq1H7nDHE/
-         pUAhGs7nXbtyQn3ZIbKAfXONKiulCRD+ZjHw4H2F0Yv7NxouJObeYgHMswc14MEDQnBF
-         RssBi0dPBmKXVuhe/9wF98rcRlF0tCvzVOhrYCBXMeWs0UmcKTxbXu+rTOymsWkCZQbw
-         EOKE9h6UhiIG0p/mxDcWBksqaUlqGckdTZPoWUCPBF+KN1sK9uLTGd42ZdVyBy6tQz7s
-         QyHg==
-X-Gm-Message-State: AOAM532DN9j+AOA1417KhXtWIGmNYXMx+ascwyhDSnwrrRTKe65W6jDp
-        L+drjblvwM0ZDn63HhcufBnia0pKIMZt0yLgvKlNtg==
-X-Google-Smtp-Source: ABdhPJyBFJfDrlEG5OjDhpGsudkU7Ns3awL++PcO1zZ3vE/oJmBHHlxI3g3q2Vi9eFDhPd7aRBTxl46Vd5DavnARJB8=
-X-Received: by 2002:a81:ab51:0:b0:2eb:f5d7:f4bc with SMTP id
- d17-20020a81ab51000000b002ebf5d7f4bcmr10861706ywk.42.1649719504653; Mon, 11
- Apr 2022 16:25:04 -0700 (PDT)
+        bh=ZMH2dd4dVn+sN1LqPK8n3ci7MR968dRhguypuScj1CQ=;
+        b=QCxv13DG0xG6Sz5e5FgoyTsj+BjbSl2rOEkSvpcOwVARikgIiUBjEQNS+e43dyIgv6
+         WXmp0gljS0x5AOZ+TD6XvCcvdDcLu3oKF8XSAFz9qi6A9onxg6RAhSV+P9pgiMTJ/PPh
+         RkLNwk72wGnEpg7v/FWYhaSPmmfsXE6DHPcE3P/gwnjeptJZanyvYDL+aQdz7TrzLr4L
+         kDFHziV9c9LkOC5zeN54WWXuFEbYvDQ/pWYQi4kdTz1/eyke9YVdiMBtx6akmWWe4+VM
+         +BQ2QUsmisY4XDHvn08Ah2+uTGPRSTh6fyE6HRrsylb4yI4vUIqUNaSs4JqxaO6jd02Y
+         rjGA==
+X-Gm-Message-State: AOAM532r++qySWKe/Kp/1jkXtSv4X4++2YQ+qfI0hhHiwe+0tIFIKiZf
+        yO4Xt54t1JAxANb+CXq7zhtzeYouj/8PJuuT6VJ/YxFBzHsCdw==
+X-Google-Smtp-Source: ABdhPJymNLhei+3dXAexxhqaNraz8xNcaGrsEziyPA34FmXI+XSwyqsdE2qSztrB1S+TZxsnyQinZIyNAhyA3Y54alQ=
+X-Received: by 2002:a05:6602:1682:b0:63d:cac5:fd0a with SMTP id
+ s2-20020a056602168200b0063dcac5fd0amr14271798iow.132.1649719521434; Mon, 11
+ Apr 2022 16:25:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220321224358.1305530-1-bgardon@google.com> <20220321224358.1305530-8-bgardon@google.com>
- <YlSzI9ZfzPQZhPqj@google.com>
-In-Reply-To: <YlSzI9ZfzPQZhPqj@google.com>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Mon, 11 Apr 2022 16:24:52 -0700
-Message-ID: <CANgfPd8PsV3AGF=dMWWo6McMzPYsj-Sh+Udgy9WDeF5xy3DJEg@mail.gmail.com>
-Subject: Re: [PATCH v2 7/9] KVM: x86/mmu: Add try_get_mt_mask to x86_ops
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        David Dunn <daviddunn@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Junaid Shahid <junaids@google.com>
+References: <20220107200417.1.Ie4dcc45b0bf365077303c596891d460d716bb4c5@changeid>
+ <CAD=FV=W5fHP8K-PcoYWxYHiDWnPUVQQzOzw=REbuJSSqGeVVfg@mail.gmail.com>
+ <87sfrqqfzy.fsf@kernel.org> <CAD=FV=U0Qw-OnKJg8SWk9=e=B0qgqnaTHpuR0cRA0WCmSHSJYQ@mail.gmail.com>
+In-Reply-To: <CAD=FV=U0Qw-OnKJg8SWk9=e=B0qgqnaTHpuR0cRA0WCmSHSJYQ@mail.gmail.com>
+From:   Abhishek Kumar <kuabhs@chromium.org>
+Date:   Mon, 11 Apr 2022 16:25:10 -0700
+Message-ID: <CACTWRwtpYBokTehRE0_zSdSjio6Ga1yqdCfj1TNck7SqOT8o_Q@mail.gmail.com>
+Subject: Re: [PATCH 1/2] ath10k: search for default BDF name provided in DT
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Kalle Valo <kvalo@kernel.org>,
+        Rakesh Pillai <pillair@codeaurora.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        ath10k <ath10k@lists.infradead.org>,
+        netdev <netdev@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 4:00 PM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Mon, Mar 21, 2022, Ben Gardon wrote:
-> > Add another function for getting the memory type mask to x86_ops.
-> > This version of the function can fail, but it does not require a vCPU
-> > pointer. It will be used in a subsequent commit for in-place large page
-> > promotion when disabling dirty logging.
-> >
-> > No functional change intended.
-> >
-> > Signed-off-by: Ben Gardon <bgardon@google.com>
-> > ---
-> >  arch/x86/include/asm/kvm-x86-ops.h | 1 +
-> >  arch/x86/include/asm/kvm_host.h    | 2 ++
-> >  arch/x86/kvm/svm/svm.c             | 9 +++++++++
-> >  arch/x86/kvm/vmx/vmx.c             | 1 +
-> >  4 files changed, 13 insertions(+)
-> >
-> > diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-> > index 29affccb353c..29880363b5ed 100644
-> > --- a/arch/x86/include/asm/kvm-x86-ops.h
-> > +++ b/arch/x86/include/asm/kvm-x86-ops.h
-> > @@ -88,6 +88,7 @@ KVM_X86_OP_OPTIONAL(sync_pir_to_irr)
-> >  KVM_X86_OP_OPTIONAL_RET0(set_tss_addr)
-> >  KVM_X86_OP_OPTIONAL_RET0(set_identity_map_addr)
-> >  KVM_X86_OP_OPTIONAL_RET0(get_mt_mask)
-> > +KVM_X86_OP(try_get_mt_mask)
-> >  KVM_X86_OP(load_mmu_pgd)
-> >  KVM_X86_OP(has_wbinvd_exit)
-> >  KVM_X86_OP(get_l2_tsc_offset)
-> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> > index f72e80178ffc..a114e4782702 100644
-> > --- a/arch/x86/include/asm/kvm_host.h
-> > +++ b/arch/x86/include/asm/kvm_host.h
-> > @@ -1422,6 +1422,8 @@ struct kvm_x86_ops {
-> >       int (*set_tss_addr)(struct kvm *kvm, unsigned int addr);
-> >       int (*set_identity_map_addr)(struct kvm *kvm, u64 ident_addr);
-> >       u64 (*get_mt_mask)(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio);
-> > +     bool (*try_get_mt_mask)(struct kvm *kvm, gfn_t gfn,
-> > +                             bool is_mmio, u64 *mask);
->
-> There's an old saying in Tennessee - I know it's in Texas, probably in Tennessee -
-> that says, fool me once, shame on... shame on you. Fool me... you can't get fooled again.
+Hi All,
 
-Haha shoot here I was saying it wrong all these years and getting
-fooled too many times.
+Apologies for the late reply, too many things at the same time. Just a
+quick note, Qcomm provided a new BDF file with support for
+'bus=snoc,qmi-board-id=ff' as well, so even without this patch, the
+non-programmed devices(with board-id=0xff) would work. However, for
+optimization of the BDF search strategy, the above mentioned strategy
+would still not work:
+- The stripping of full Board name would not work if board-id itself
+is not programmed i.e. =0xff
+e.g. for
+ 'bus=snoc,qmi-board-id=ff,qmi-chip-id=320,variant=GO_LAZOR' => no match
+ 'bus=snoc,qmi-board-id=ff,qmi-chip-id=320' => no match
+ 'bus=snoc,qmi-board-id=ff' => no match
+ 'bus=snoc' => no match
+because all the BDFs contains board-id=67
 
-Paolo, did you already queue this series or should I send out a v3? I
-thought I saw the "queued,thanks" come through at some point, but
-maybe I'm mis-remembering.
+So with this DT patch specifically for case 'bus=snoc,qmi-board-id=ff'
+=> no match, we fallback to default case ( the one provided in DT)
+i.e. 'bus=snoc,qmi-board-id=67' => match . I do not see how exactly
+the driver can know that it should check for a board-id of 67.
 
+However, to still remove dependency on the DT, we can make the
+board-id as no-op if it is not programmed i.e. if the board-id=ff then
+we would pick any BDF that match 'bus=snoc,qmi-board-id=<XX>' where XX
+can be any arbitrary number. Thoughts ?
+
+-Abhishek
+
+On Thu, Mar 10, 2022 at 4:28 PM Doug Anderson <dianders@chromium.org> wrote:
 >
-> Thou shalt not trick me again by using a bool for pass/fail!  Though this one
-> doesn't have same potential for pain as the TDP MMU's atomic operations.
+> Hi,
 >
-> And as a bonus, if we use 0/-errno, then we can use KVM_X86_OP_OPTIONAL_RET0()
-> and SVM doesn't need to provide an implementation.
+> On Thu, Mar 10, 2022 at 2:06 AM Kalle Valo <kvalo@kernel.org> wrote:
+> >
+> > Doug Anderson <dianders@chromium.org> writes:
+> >
+> > > Hi,
+> > >
+> > > On Fri, Jan 7, 2022 at 12:05 PM Abhishek Kumar <kuabhs@chromium.org> wrote:
+> > >>
+> > >> There can be cases where the board-2.bin does not contain
+> > >> any BDF matching the chip-id+board-id+variant combination.
+> > >> This causes the wlan probe to fail and renders wifi unusable.
+> > >> For e.g. if the board-2.bin has default BDF as:
+> > >> bus=snoc,qmi-board-id=67 but for some reason the board-id
+> > >> on the wlan chip is not programmed and read 0xff as the
+> > >> default value. In such cases there won't be any matching BDF
+> > >> because the board-2.bin will be searched with following:
+> > >> bus=snoc,qmi-board-id=ff
+> >
+> > I just checked, in ath10k-firmware WCN3990/hw1.0/board-2.bin we have
+> > that entry:
+> >
+> > BoardNames[1]: 'bus=snoc,qmi-board-id=ff'
+> >
+> > >> To address these scenarios, there can be an option to provide
+> > >> fallback default BDF name in the device tree. If none of the
+> > >> BDF names match then the board-2.bin file can be searched with
+> > >> default BDF names assigned in the device tree.
+> > >>
+> > >> The default BDF name can be set as:
+> > >> wifi@a000000 {
+> > >>         status = "okay";
+> > >>         qcom,ath10k-default-bdf = "bus=snoc,qmi-board-id=67";
+> > >
+> > > Rather than add a new device tree property, wouldn't it be good enough
+> > > to leverage the existing variant?
+> >
+> > I'm not thrilled either adding this to Device Tree, we should keep the
+> > bindings as simple as possible.
+> >
+> > > Right now I think that the board file contains:
+> > >
+> > > 'bus=snoc,qmi-board-id=67.bin'
+> > > 'bus=snoc,qmi-board-id=67,qmi-chip-id=320,variant=GO_LAZOR.bin'
+> > > 'bus=snoc,qmi-board-id=67,qmi-chip-id=320,variant=GO_POMPOM.bin'
+> > > 'bus=snoc,qmi-board-id=67,qmi-chip-id=4320,variant=GO_LAZOR.bin'
+> > > 'bus=snoc,qmi-board-id=67,qmi-chip-id=4320,variant=GO_POMPOM.bin'
+> > >
+> > > ...and, on lazor for instance, we have:
+> > >
+> > > qcom,ath10k-calibration-variant = "GO_LAZOR";
+> > >
+> > > The problem you're trying to solve is that on some early lazor
+> > > prototype hardware we didn't have the "board-id" programmed we could
+> > > get back 0xff from the hardware. As I understand it 0xff always means
+> > > "unprogrammed".
+> > >
+> > > It feels like you could just have a special case such that if the
+> > > hardware reports board ID of 0xff and you don't get a "match" that you
+> > > could just treat 0xff as a wildcard. That means that you'd see the
+> > > "variant" in the device tree and pick one of the "GO_LAZOR" entries.
+> > >
+> > > Anyway, I guess it's up to the people who spend more time in this file
+> > > which they'd prefer, but that seems like it'd be simple and wouldn't
+> > > require a bindings addition...
+> >
+> > In ath11k we need something similar for that I have been thinking like
+> > this:
+> >
+> > 'bus=snoc,qmi-board-id=67,qmi-chip-id=320,variant=GO_LAZOR'
+> >
+> > 'bus=snoc,qmi-board-id=67,qmi-chip-id=320'
+> >
+> > 'bus=snoc,qmi-board-id=67'
+> >
+> > 'bus=snoc'
+> >
+> > Ie. we drop one attribute at a time and try to find a suitable board
+> > file. Though I'm not sure if it's possible to find a board file which
+> > works with many different hardware, but the principle would be at least
+> > that. Would something like that work in your case?
 >
-> Tangentially related to the return type, what about naming it something like
-> get_vm_wide_mt_mask() to convey exactly what it's doing?  The @kvm param kinda
-> does that, but IMO it doesn't do a good of capturing why the function can fail.
-> Adding "vm_wide" helps explain why it can, i.e. that there may not be a VM-wide
-> memtype established for the gfn.
+> I'll leave it for Abhishek to comment for sure since he's been the one
+> actively involved in keeping track of our board-2.bin file. As far as
+> I know:
 >
-> As penance for your boolean sin, can you slot this in earlier in your series?
-> It's obviously not a hard dependency, but using a u64 for the mask here and then
-> undoing the whole thing is rather silly.  Compile tested only at this point, I'll
-> test on an actual system ASAP and let you know if I did something stupid.
+> * Mostly we need this for pre-production hardware that developers
+> inside Google and Qualcomm still have sitting around on their desks. I
+> guess some people are even still using this pre-production hardware to
+> surf the web?
 >
-> From: Sean Christopherson <seanjc@google.com>
-> Date: Mon, 11 Apr 2022 15:12:16 -0700
-> Subject: [PATCH] KVM: x86: Restrict get_mt_mask() to a u8, use
->  KVM_X86_OP_OPTIONAL_RET0
+> * In the ideal world, we think that the best calibration would be to
+> use the board-specific one in these cases. AKA if board_id is 0xff
+> (unprogrammed) and variant is "GO_LAZOR" then the best solution would
+> be to use the settings for board id 0x67 and variant "GO_LAZOR". This
+> _ought_ to be better settings than the default 0xff settings without
+> the "GO_LAZOR".
 >
-> Restrict get_mt_mask() to a u8 and reintroduce using a RET0 static_call
-> for the SVM implementation.  EPT stores the memtype information in the
-> lower 8 bits (bits 6:3 to be precise), and even returns a shifted u8
-> without an explicit cast to a larger type; there's no need to return a
-> full u64.
->
-> Note, RET0 doesn't play nice with a u64 return on 32-bit kernels, see
-> commit bf07be36cd88 ("KVM: x86: do not use KVM_X86_OP_OPTIONAL_RET0 for
-> get_mt_mask").
->
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/include/asm/kvm-x86-ops.h | 2 +-
->  arch/x86/include/asm/kvm_host.h    | 2 +-
->  arch/x86/kvm/svm/svm.c             | 6 ------
->  arch/x86/kvm/vmx/vmx.c             | 2 +-
->  4 files changed, 3 insertions(+), 9 deletions(-)
->
-> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
-> index 96e4e9842dfc..0d16f21a6203 100644
-> --- a/arch/x86/include/asm/kvm-x86-ops.h
-> +++ b/arch/x86/include/asm/kvm-x86-ops.h
-> @@ -87,7 +87,7 @@ KVM_X86_OP(deliver_interrupt)
->  KVM_X86_OP_OPTIONAL(sync_pir_to_irr)
->  KVM_X86_OP_OPTIONAL_RET0(set_tss_addr)
->  KVM_X86_OP_OPTIONAL_RET0(set_identity_map_addr)
-> -KVM_X86_OP(get_mt_mask)
-> +KVM_X86_OP_OPTIONAL_RET0(get_mt_mask)
->  KVM_X86_OP(load_mmu_pgd)
->  KVM_X86_OP(has_wbinvd_exit)
->  KVM_X86_OP(get_l2_tsc_offset)
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 2c20f715f009..dc4d34f1bcf9 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1421,7 +1421,7 @@ struct kvm_x86_ops {
->         int (*sync_pir_to_irr)(struct kvm_vcpu *vcpu);
->         int (*set_tss_addr)(struct kvm *kvm, unsigned int addr);
->         int (*set_identity_map_addr)(struct kvm *kvm, u64 ident_addr);
-> -       u64 (*get_mt_mask)(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio);
-> +       u8 (*get_mt_mask)(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio);
->
->         void (*load_mmu_pgd)(struct kvm_vcpu *vcpu, hpa_t root_hpa,
->                              int root_level);
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index fc1725b7d05f..56f03eafe421 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -4011,11 +4011,6 @@ static bool svm_has_emulated_msr(struct kvm *kvm, u32 index)
->         return true;
->  }
->
-> -static u64 svm_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
-> -{
-> -       return 0;
-> -}
-> -
->  static void svm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
->  {
->         struct vcpu_svm *svm = to_svm(vcpu);
-> @@ -4673,7 +4668,6 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
->         .check_apicv_inhibit_reasons = avic_check_apicv_inhibit_reasons,
->         .apicv_post_state_restore = avic_apicv_post_state_restore,
->
-> -       .get_mt_mask = svm_get_mt_mask,
->         .get_exit_info = svm_get_exit_info,
->
->         .vcpu_after_set_cpuid = svm_vcpu_after_set_cpuid,
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index cf8581978bce..646fa609aa0d 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -7142,7 +7142,7 @@ static int __init vmx_check_processor_compat(void)
->         return 0;
->  }
->
-> -static u64 vmx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
-> +static u8 vmx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
->  {
->         u8 cache;
->
->
-> base-commit: 59d9e75d641565603e7c293f4cec182d86db8586
-> --
->
->
->
->
->
->
+> * In reality, we're probably OK as long as _some_ reasonable settings
+> get picked. WiFi might not be super range optimized but at least it
+> will still come up and work.

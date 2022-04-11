@@ -2,106 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7FC14FB390
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 08:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A45E4FB3AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 08:20:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244882AbiDKGUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 02:20:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55592 "EHLO
+        id S244901AbiDKGWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 02:22:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244879AbiDKGUS (ORCPT
+        with ESMTP id S244879AbiDKGWN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 02:20:18 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B4C3CFEE
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 23:18:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649657886; x=1681193886;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=WMqosNgxlZ7WImro7S0Sf8rdr2r7XjJad/ExirCdumY=;
-  b=bMiQxJ7j31V53XLf50mvWffiP7sH8EFx8Vg25bTQw7dRsoBoqwED+vvT
-   fx65Au6C1gfSlK9AQ8P2lJQ7cN9avjM1oRlanjCSYBR3h5hqmfQZY801k
-   Jj0GOuae9FzLfbexhr+xratlzjPyWCILq+QvAfao2NUlU4yNDxntFRtNV
-   jUJo02uFwROqrRmgYLfO4X2sHNotFH3IwNyNzuUlAiSNGnxKWKZWJ1Zti
-   TBlfW9qpqMqRw3NYTtjVE/a+Zv+Ul+rnVojoEP5vGT9Mhbhjj7WsQi54j
-   Eq3nmK/uHYMyTM3BbeQb1IW3JlL7ljZcNBq4RlVUBO/0keP5J8jZeF8BY
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="243927027"
-X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
-   d="scan'208";a="243927027"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2022 23:18:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
-   d="scan'208";a="723840352"
-Received: from ahunter-desktop.fi.intel.com ([10.237.72.92])
-  by orsmga005.jf.intel.com with ESMTP; 10 Apr 2022 23:17:59 -0700
-From:   Adrian Hunter <adrian.hunter@intel.com>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Ian Rogers <irogers@google.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] perf tools: Fix misleading add event pmu debug message
-Date:   Mon, 11 Apr 2022 09:17:58 +0300
-Message-Id: <20220411061758.2458417-1-adrian.hunter@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 11 Apr 2022 02:22:13 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49B23D1DF;
+        Sun, 10 Apr 2022 23:19:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1649657995;
+        bh=sfEMxueHlINxP3Ft9h3uCgQL3x0NL57EBnCByLr9WHw=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=LXG4o5IDHO3ef5fr2tCKvvAdmWy6WIOep7bK3zPAw1v0pOte4O2KeD1jEN7hX5ct4
+         IcwhR6sh4VZBXqQfqgaSM9+8BW5vCFjVtyaGLZZVttgDs/8q7oGwGLU+PTHciFrDh2
+         adcuO0ETsyF73Pz5sk0MlqsJzWhDmnmrfh/Fm57M=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.145.57]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MvK0R-1nuukM0DMv-00rHOG; Mon, 11
+ Apr 2022 08:19:55 +0200
+Message-ID: <f68dde85-5ead-3c5c-3bf3-3e6bd7458f2e@gmx.de>
+Date:   Mon, 11 Apr 2022 08:18:09 +0200
 MIME-Version: 1.0
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/7] video: fbdev: i740fb: Error out if 'pixclock' equals
+ zero
+Content-Language: en-US
+To:     Ondrej Zary <linux@zary.sk>, Zheyu Ma <zheyuma97@gmail.com>
+Cc:     Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220404084723.79089-1-zheyuma97@gmail.com>
+ <eb2edc5a-afad-f0c9-012f-9b9f226d2e5a@gmx.de>
+ <CAMhUBjmm6ADp2Fr89CCQNX5FnhmBBrwFE0EQ3sq7CLER0J3ZEg@mail.gmail.com>
+ <202204101102.13505.linux@zary.sk>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <202204101102.13505.linux@zary.sk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:7UMRgaQGw+lmVxgdw35JNxFmQ8/erZc7B2ZAznUL56KFExbyAyL
+ eozhZDqrTS640g+EG/wkbxyUl8tATZwLYGBClGzFD5kDMy1zVp8ncsOPrHKCShmztq59eXl
+ 43nNT+8gxU1B2smqyyhJrXqFFnQ5TDJsLNhcWI8Uh+nsFWnporQ37jdkOTraCUBwf05DeQm
+ egEJBdtNlJbsWoNHbWn6w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:wz+exaJD4EU=:qCbHUBMR0eECdtBeg75SJM
+ U4Thoi+oZ8fwwOrWoG2hwwJ07nadK6Jm03W7VVGxZEYRgPFh1iZpPDRgvRM4S1oB+TVrN9IvV
+ 2B/S4Lm21lqV9vwhXQK66Xc2YQjR6DxQkm+FeMVWdsOFDjTS7G+UwlxQB0NRUQ6h0s5oHTTkp
+ n5U9MdMRoHHf/JfpRgPLBvCb55hXzHbbI6NmoZFjCjTuJe+eglBElNT0Eowp/LxqMnkWwoPjA
+ 8osGq39Rah3GpUONk5awjJHiR0pe8C1iesARwQNu42byJ9Nmip0nh+CD0XtGK/VnPiEEPdPeO
+ yEINGfEAHdyYvn8ccLQjcA/JSZMDulF9dLFb2iKZfw7cYuKkmsOQrvCseLVzAESqVhX1vCM3L
+ /FmPOOKieZ+6bzZPYAV/+OvsyHCjCTaKtv44feUrok68MrLiZZCGGzva5twG/e7uq+PW+hx0O
+ xdnlq8hgdkIYmK+BJaubWb097/CLjtgw4jSbVfq+yuEQiT0GwaWTGHSJVRtcUDANHqLwv0h7q
+ x1D+bzOomHGx8kmiP5uPq4zNlDBrhfAtNBuUQGj9gbIsLdyZnz1tjRBDdCUWvSisNnY0B8eE+
+ 6Pmq4EUmauZY5MlJX/4iY5w1vaBC6pzHjVqf35fQ+S/6aJtDqeRfa0Nx69h+K86yhJYH+A2sA
+ +/QN+JQ6a1q19QElMcOywTVCoJ3AM25ThZ2RZ16wm9/km/K0wzAeSwgpa+Z/iQ7YIokH6hu0j
+ Gw4Dpl8Kc1PBaWHrLjfiSDOqjP3gpgZL13w6YCXxx9j9d7qhHvkvPDYnyneSiMxwVCxMCfaw9
+ Yiri1Y6qZK/6IFrCN/bMuipbcuCY0YGu2/QUgAo8CJ663SYVSIgXH0cL8A/E+uqCm1pO+shqM
+ MTAWAP0JDcXSgUWFJsEuZqigyKLSLudz+57FTgBGqa25uA432PzWSgdJEoEPFG0eAJq6JT+UH
+ 98pFXzf3KPz4EK5SrFBm8/CICP60rHasqehg7bFe+VWjJXWONFwdcXUM2zNkLUKj2hy4rxMaj
+ hCO6AlqijlgG+syyV4ATSMQ+NlLKZ9t3qfSu+PGqucClxai+BNEoqpVuk8noaVYKyCKBV76Bi
+ iV/iWoQhb/7Iw0=
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix incorrect debug message:
+On 4/10/22 11:02, Ondrej Zary wrote:
+> On Friday 08 April 2022 03:58:10 Zheyu Ma wrote:
+>> On Fri, Apr 8, 2022 at 3:50 AM Helge Deller <deller@gmx.de> wrote:
+>>>
+>>> On 4/4/22 10:47, Zheyu Ma wrote:
+>>>> The userspace program could pass any values to the driver through
+>>>> ioctl() interface. If the driver doesn't check the value of 'pixclock=
+',
+>>>> it may cause divide error.
+>>>>
+>>>> Fix this by checking whether 'pixclock' is zero in the function
+>>>> i740fb_check_var().
+>>>>
+>>>> The following log reveals it:
+>>>>
+>>>> divide error: 0000 [#1] PREEMPT SMP KASAN PTI
+>>>> RIP: 0010:i740fb_decode_var drivers/video/fbdev/i740fb.c:444 [inline]
+>>>> RIP: 0010:i740fb_set_par+0x272f/0x3bb0 drivers/video/fbdev/i740fb.c:7=
+39
+>>>> Call Trace:
+>>>>     fb_set_var+0x604/0xeb0 drivers/video/fbdev/core/fbmem.c:1036
+>>>>     do_fb_ioctl+0x234/0x670 drivers/video/fbdev/core/fbmem.c:1112
+>>>>     fb_ioctl+0xdd/0x130 drivers/video/fbdev/core/fbmem.c:1191
+>>>>     vfs_ioctl fs/ioctl.c:51 [inline]
+>>>>     __do_sys_ioctl fs/ioctl.c:874 [inline]
+>>>>
+>>>> Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+>>>
+>>> Hello Zheyu,
+>>>
+>>> I've applied the patches #2-#7 of this series, but left
+>>> out this specific patch (for now).
+>>> As discussed on the mailing list we can try to come up with a
+>>> better fix (to round up the pixclock when it's invalid).
+>>> If not, I will apply this one later.
+>>
+>> I'm also looking forward to a more appropriate patch for this driver!
+>
+> I was not able to reproduce it at first but finally found it: the
+> monitor must be unplugged. If a valid EDID is present,
+> fb_validate_mode() call in i740fb_check_var() will refuse zero
+> pixclock.
+>
+> Haven't found any obvious way to correct zero pixclock value. Most other=
+ drivers simply return -EINVAL.
 
-   Attempting to add event pmu 'intel_pt' with '' that may result in
-   non-fatal errors
+Thanks for checking, Ondrej!
 
-which always appears with perf record -vv and intel_pt e.g.
+So, I'll apply the EINVAL-patch from Zheyu for now.
 
-    perf record -vv -e intel_pt//u uname
-
-The message is incorrect because there will never be non-fatal errors.
-
-Suppress the message if the pmu is 'selectable' i.e. meant to be selected
-directly as an event.
-
-Fixes: 4ac22b484d4c79 ("perf parse-events: Make add PMU verbose output clearer")
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
----
- tools/perf/util/parse-events.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
-index 24997925ae00..dd84fed698a3 100644
---- a/tools/perf/util/parse-events.c
-+++ b/tools/perf/util/parse-events.c
-@@ -1523,7 +1523,9 @@ int parse_events_add_pmu(struct parse_events_state *parse_state,
- 	bool use_uncore_alias;
- 	LIST_HEAD(config_terms);
- 
--	if (verbose > 1) {
-+	pmu = parse_state->fake_pmu ?: perf_pmu__find(name);
-+
-+	if (verbose > 1 && !(pmu && pmu->selectable)) {
- 		fprintf(stderr, "Attempting to add event pmu '%s' with '",
- 			name);
- 		if (head_config) {
-@@ -1536,7 +1538,6 @@ int parse_events_add_pmu(struct parse_events_state *parse_state,
- 		fprintf(stderr, "' that may result in non-fatal errors\n");
- 	}
- 
--	pmu = parse_state->fake_pmu ?: perf_pmu__find(name);
- 	if (!pmu) {
- 		char *err_str;
- 
--- 
-2.25.1
-
+Helge

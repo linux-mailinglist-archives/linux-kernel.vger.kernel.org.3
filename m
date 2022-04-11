@@ -2,54 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BFD14FB13C
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 03:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA45C4FB13E
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 03:04:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240807AbiDKBEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 21:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51638 "EHLO
+        id S244219AbiDKBGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 21:06:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiDKBEN (ORCPT
+        with ESMTP id S229492AbiDKBGv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 21:04:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8E6A5;
-        Sun, 10 Apr 2022 18:01:59 -0700 (PDT)
+        Sun, 10 Apr 2022 21:06:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B555B02;
+        Sun, 10 Apr 2022 18:04:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A701EB80ED6;
-        Mon, 11 Apr 2022 01:01:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D737C385A4;
-        Mon, 11 Apr 2022 01:01:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FEEF60F2B;
+        Mon, 11 Apr 2022 01:04:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D70BC385A4;
+        Mon, 11 Apr 2022 01:04:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649638917;
-        bh=dJPdSEIt6ybe5JLJYd0CgJVb5MPO9KkLpDoosd80+FE=;
+        s=k20201202; t=1649639078;
+        bh=7QJJSZyCBpHfoYkNWrOMYRfkaDkXvb2Tgsoch+Pp1DA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KUsTcZof8OIhlBr6wdF0c07aORCVlGoJD7dEvJL8DUHamM1YyaNEZo+NN03iJuuJq
-         9l5LCKQKM/Uq16fUtdPyZuQzG4OvdDt5umWOrc9C8rYI40Sdj3Cq6MPGHbpwJPG1Ib
-         DDTl3SUh4fm8PgKJejKa7rycB5YofglrE/fIJT+criSaKrHy8xULEJR6RiXusV2rDY
-         XJci2Ss8yyO5u91McYvp1+IqcqFE5fceR/ZyHaDVxG5hXmzOi7LYbRLGfK5j7p59oJ
-         cXe3tatYE6zwCDReStnLaX6+5gt9vBPc6vPub1lJLRwqfSoj/NxNC5vegz3xsRVt5v
-         1q8GPw0a8j6kg==
-Date:   Mon, 11 Apr 2022 09:01:50 +0800
+        b=qSt4mL6CVa4I1dtd8eO0FqmPiNHjgvwFYPubmbrnIU93EesV7BRlLbDqF6L/iz4fY
+         NkwgX/QIeWqOx0QXMPKXQ5tpTET32b2BmmTUdMXNOyoXx8MaEYhWoTsseGfnXiFo4y
+         oW9FOqqL7rWDQONH51IeX7DNU5Cm/5hc0nboZBkQzKJ4O+l9N4kj6RquAD34k5CIq3
+         ur+H4VRd12LkLLTiFhaNuNBrFIH80yRdJ7o8aGir7rvncvVhir9L1svYJZ2Bz0Eulg
+         6wV0TRbIB7gfaK6gwBhnW3h6+FPjTTc1a53uAh0V3YQqhUemCptGEQY6nRoiESmPk2
+         MnOlJ9ikzLVsQ==
+Date:   Mon, 11 Apr 2022 09:04:33 +0800
 From:   Shawn Guo <shawnguo@kernel.org>
-To:     Tim Harvey <tharvey@gateworks.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] ARM: dts: imx8mm-venice-gw{72xx,73xx}: fix OTG
- controller OC mode
-Message-ID: <20220411010150.GX129381@dragon>
-References: <20220401174249.10252-1-tharvey@gateworks.com>
+To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>
+Cc:     Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: lx2160a: Update can node property
+Message-ID: <20220411010433.GY129381@dragon>
+References: <20220402190855.35530-1-singh.kuldeep87k@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220401174249.10252-1-tharvey@gateworks.com>
+In-Reply-To: <20220402190855.35530-1-singh.kuldeep87k@gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,19 +56,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 01, 2022 at 10:42:49AM -0700, Tim Harvey wrote:
-> Both the GW72xx and GW73xx boards have USB1 routed to a USB OTG
-> connector and USB2 routed to a USB hub.
+On Sun, Apr 03, 2022 at 12:38:55AM +0530, Kuldeep Singh wrote:
+> fsl,clk-source property is of type uint8 and need to be defined as
+> "/bits/ 8 <0>". Simply setting value to 0 raise warning:
+> can@2180000: fsl,clk-source:0: [0, 0, 0, 0] is too long
 > 
-> The OTG connector has over-current protection with an active-low
-> pin and the USB1 to HUB connection has no over-current protection (as
-> the HUB itself implements this for its downstream ports).
-> 
-> Add proper dt nodes to specify the over-current pin polarity for USB1
-> and disable over-current protection for USB2.
-> 
-> Fixes: 6f30b27c5ef5 ("arm64: dts: imx8mm: Add Gateworks i.MX 8M Mini Development Kits")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+> Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
 
 Applied, thanks!

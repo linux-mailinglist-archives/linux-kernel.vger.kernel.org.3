@@ -2,143 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D93E4FBD48
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 15:37:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35C264FBD3B
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 15:34:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346464AbiDKNj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 09:39:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35048 "EHLO
+        id S1346557AbiDKNhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 09:37:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343774AbiDKNjz (ORCPT
+        with ESMTP id S1346539AbiDKNgz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 09:39:55 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72B472180D;
-        Mon, 11 Apr 2022 06:37:40 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 2083D215FF;
-        Mon, 11 Apr 2022 13:37:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1649684259;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=11KZMTEDGr7Y36I2Hveh49be2Dvb2g0aFWQxmVrJlYI=;
-        b=eDK1BZE9UndY5Nm9Y1Q59yBMO963EEGxBP0S38+VGGctz+x2Fb0yJXLQjsEeMpv39fol/F
-        UxqWru6Qnx8Qla0tyL+dE2espoSNyvL6V3VCh/Bnu15mMpRhx1IJxNESIv93US4PeeDFwJ
-        03qWuC61jirABqrbJF1paxcbuKv7YK4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1649684259;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=11KZMTEDGr7Y36I2Hveh49be2Dvb2g0aFWQxmVrJlYI=;
-        b=LGdulimxNbMm/rpsEUldDVRgpVU3DBCKIiIk43EGsCiab+bFLyjHVXUmCAKOSIv6ZgDjzV
-        zspTx+zQhFykusBA==
-Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
-        by relay2.suse.de (Postfix) with ESMTP id C20BBA3B82;
-        Mon, 11 Apr 2022 13:37:38 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-        id 69163DA7DA; Mon, 11 Apr 2022 15:33:34 +0200 (CEST)
-Date:   Mon, 11 Apr 2022 15:33:34 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Naohiro Aota <Naohiro.Aota@wdc.com>
-Cc:     Sweet Tea Dorminy <sweettea-kernel@dorminy.me>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-        "kernel-team@fb.com" <kernel-team@fb.com>
-Subject: Re: [PATCH] btrfs: wait between incomplete batch allocations
-Message-ID: <20220411133334.GF15609@suse.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz, Naohiro Aota <Naohiro.Aota@wdc.com>,
-        Sweet Tea Dorminy <sweettea-kernel@dorminy.me>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-        "kernel-team@fb.com" <kernel-team@fb.com>
-References: <07d6dbf34243b562287e953c44a70cbb6fca15a1.1649268923.git.sweettea-kernel@dorminy.me>
- <20220411071124.zwtcarqngqqkdd6q@naota-xeon>
+        Mon, 11 Apr 2022 09:36:55 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADC1643D
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 06:34:38 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id s14-20020a17090a880e00b001caaf6d3dd1so18392186pjn.3
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 06:34:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rau6ikLWDvZ3H5Rxeor37L0yr1H0C2rH637cdeZ/OEw=;
+        b=EcsKlULhqSIURak13xFODrD8tjy0rdmIMa8n+/G3m2f+SMKxpBpm+DPWoo/UQr0Fvg
+         l2A0lVR9hkxlkTxwondEhCgwoWXnMP7zzT4I20eNXLBuIF892aJOqFAFb1g2+5/ruJuo
+         SFU2eMVbPiDLIRWtJM9+w4uYmG3g5p9bBxX5+MiSwRI5v/6d3D8euduzdZ/PxOmaMNNT
+         77m6ou9HfzFkLKvyZn/ataeEYhEhQjkDIbpqAbSad6ECJVHCWokGt5rXavbyQxzyXkBJ
+         8nU2z2JqdE09n3ma3XuscmCcI38HQDAOrVzwKJJ1g/8tRFOwzXDkXjbiec+1rmwuO14k
+         W1bQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rau6ikLWDvZ3H5Rxeor37L0yr1H0C2rH637cdeZ/OEw=;
+        b=S1OzvBDQSW3/YG+u70RVfzWQgLTv9WjX7zGmgH1Xin7hGn5fVArUP+dKYs+1hsD1mE
+         WixurA/zs0Q5LrEv2DLvKxs8aYLnH1+spTz5o85QQ6PVvPdBWDijOn4jexRvYyVogwjM
+         Ma59BntjBYnUvdsNk7Ad78V4L6rqDif9zZlfiNnzrjoq3J8dqCnAHMgfWk/knCq3EhUA
+         yYwHY1z/QWRVcEFItf3OMYsrFeWho1yBGZAwnFNKmDBhlvaO0DJW6J1v+mtffE9of+UM
+         LEdaFwCNPHRwepo+1zethmgMzrS7G4bnEtxstu+N+jjmXYRS8xhr8wNNIRJzc/zWayhw
+         16lw==
+X-Gm-Message-State: AOAM530V6H8R1Pru3xsqPJyngdhvacGEBseEukNxpmqwCRNupHVd698g
+        LQ91USCgwW0M1NOL6VF6TK+U
+X-Google-Smtp-Source: ABdhPJzD+D2eOcZy8zFeHEt8TITM9KS6UhjpgS7YATdQRKhIivWnns/ATZL4rrHpOhDjSQRgZev4pg==
+X-Received: by 2002:a17:902:b189:b0:14d:6f87:7c25 with SMTP id s9-20020a170902b18900b0014d6f877c25mr32803825plr.31.1649684077788;
+        Mon, 11 Apr 2022 06:34:37 -0700 (PDT)
+Received: from localhost.localdomain ([117.217.182.106])
+        by smtp.gmail.com with ESMTPSA id q15-20020a056a00150f00b004fb28ea8d9fsm37390195pfu.171.2022.04.11.06.34.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Apr 2022 06:34:37 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     mhi@lists.linux.dev
+Cc:     quic_hemantk@quicinc.com, quic_bbhatt@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loic.poulain@linaro.org, dnlplm@gmail.com,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v2] bus: mhi: host: pci_generic: Sort mhi_pci_id_table based on the PID
+Date:   Mon, 11 Apr 2022 19:04:28 +0530
+Message-Id: <20220411133428.42165-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220411071124.zwtcarqngqqkdd6q@naota-xeon>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 07:11:24AM +0000, Naohiro Aota wrote:
-> On Wed, Apr 06, 2022 at 02:24:18PM -0400, Sweet Tea Dorminy wrote:
-> > When allocating memory in a loop, each iteration should call
-> > memalloc_retry_wait() in order to prevent starving memory-freeing
-> > processes (and to mark where allcoation loops are). ext4, f2fs, and xfs
-> > all use this function at present for their allocation loops; btrfs ought
-> > also.
-> > 
-> > The bulk page allocation is the only place in btrfs with an allocation
-> > retry loop, so add an appropriate call to it.
-> > 
-> > Suggested-by: David Sterba <dsterba@suse.cz>
-> > Signed-off-by: Sweet Tea Dorminy <sweettea-kernel@dorminy.me>
-> 
-> The fstests btrfs/187 becomes incredibly slow with this patch applied.
-> 
-> For example, on a nvme ZNS SSD (zoned) device, it takes over 10 hours to
-> finish the test case. It only takes 765 seconds if I revert this commit
-> from the misc-next branch.
-> 
-> I also confirmed the same slowdown occurs on regular btrfs. For the
-> baseline, with this commit reverted, it takes 335 seconds on 8GB ZRAM
-> device running on QEMU (8GB RAM), and takes 768 seconds on a (non-zoned)
-> HDD running on a real machine (128GB RAM). The tests on misc-next with the
-> same setup above is still running, but it already took 2 hours.
-> 
-> The test case runs full btrfs sending 5 times and incremental btrfs sending
-> 10 times at the same time. Also, dedupe loop and balance loop is running
-> simultaneously while all the send commands finish.
-> 
-> The slowdown of the test case basically comes from slow "btrfs send"
-> command. On the HDD run, it takes 25 minutes to run a full btrfs sending
-> command and 1 hour 18 minutes to run a incremental btrfs sending
-> command. Thus, we will need 78 minutes x 5 = 6.5 hours to finish all the
-> send commands, making the test case incredibly slow.
-> 
-> > ---
-> >  fs/btrfs/extent_io.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/fs/btrfs/extent_io.c b/fs/btrfs/extent_io.c
-> > index 9f2ada809dea..4bcc182744e4 100644
-> > --- a/fs/btrfs/extent_io.c
-> > +++ b/fs/btrfs/extent_io.c
-> > @@ -6,6 +6,7 @@
-> >  #include <linux/mm.h>
-> >  #include <linux/pagemap.h>
-> >  #include <linux/page-flags.h>
-> > +#include <linux/sched/mm.h>
-> >  #include <linux/spinlock.h>
-> >  #include <linux/blkdev.h>
-> >  #include <linux/swap.h>
-> > @@ -3159,6 +3160,8 @@ int btrfs_alloc_page_array(unsigned int nr_pages, struct page **page_array)
-> >  		 */
-> >  		if (allocated == last)
-> >  			return -ENOMEM;
-> > +
-> > +		memalloc_retry_wait(GFP_NOFS);
-> 
-> And, I just noticed this is because we are waiting for the retry even if we
-> successfully allocated all the pages. We should exit the loop if (allocated
-> == nr_pages).
+Sorting this way helps in identifying the products of vendors. There is no
+sorting required for VID and the new VID should be added as the last entry.
 
-Can you please test if the fixup restores the run time? This looks like
-a mistake and the delays are not something we'd observe otherwise. If it
-does not fix the problem then the last option is to revert the patch.
+Let's also add a note clarifying this.
+
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
+
+Changes in v2:
+
+* Fixup the 0x0306 entry by moving it after subid
+
+ drivers/bus/mhi/host/pci_generic.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
+index 541ced27d941..8858f3bf4f04 100644
+--- a/drivers/bus/mhi/host/pci_generic.c
++++ b/drivers/bus/mhi/host/pci_generic.c
+@@ -446,20 +446,21 @@ static const struct mhi_pci_dev_info mhi_sierra_em919x_info = {
+ 	.sideband_wake = false,
+ };
+ 
++/* Keep the list sorted based on the PID. New VID should be added as the last entry */
+ static const struct pci_device_id mhi_pci_id_table[] = {
++	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, 0x0304),
++		.driver_data = (kernel_ulong_t) &mhi_qcom_sdx24_info },
+ 	/* EM919x (sdx55), use the same vid:pid as qcom-sdx55m */
+ 	{ PCI_DEVICE_SUB(PCI_VENDOR_ID_QCOM, 0x0306, 0x18d7, 0x0200),
+ 		.driver_data = (kernel_ulong_t) &mhi_sierra_em919x_info },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, 0x0306),
+ 		.driver_data = (kernel_ulong_t) &mhi_qcom_sdx55_info },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, 0x0304),
+-		.driver_data = (kernel_ulong_t) &mhi_qcom_sdx24_info },
++	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, 0x0308),
++		.driver_data = (kernel_ulong_t) &mhi_qcom_sdx65_info },
+ 	{ PCI_DEVICE(0x1eac, 0x1001), /* EM120R-GL (sdx24) */
+ 		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
+ 	{ PCI_DEVICE(0x1eac, 0x1002), /* EM160R-GL (sdx24) */
+ 		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, 0x0308),
+-		.driver_data = (kernel_ulong_t) &mhi_qcom_sdx65_info },
+ 	/* T99W175 (sdx55), Both for eSIM and Non-eSIM */
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0ab),
+ 		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx55_info },
+-- 
+2.25.1
+

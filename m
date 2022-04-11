@@ -2,97 +2,434 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 604B24FB3D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 08:38:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E82414FB3DA
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 08:39:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244997AbiDKGko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 02:40:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46456 "EHLO
+        id S245000AbiDKGld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 02:41:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244988AbiDKGkh (ORCPT
+        with ESMTP id S232626AbiDKGl3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 02:40:37 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A48FB23143
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 23:38:23 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id c6so1916913edn.8
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 23:38:23 -0700 (PDT)
+        Mon, 11 Apr 2022 02:41:29 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C776A1705B
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 23:39:14 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id z6so17645235iot.0
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 23:39:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=2WmKSNoZ9cWKL6JDASWnjI9NvSq7+tORNGnSjM+acks=;
-        b=ODfe/DkGj1RuBxSc5J0EXQFnY/vL7RySjU4xh9bzSJOuWwZ4VAsC9/m4/eaLQ6CJl9
-         QyrdjToejG5d1Qb/An1jX6vmjM2PDYFSJ9r+/5+rBxbn27zdhA/UNDf4zatsjZb2NBUh
-         AbnvBXsf3y7KxVV7kVCuECnSxjbsZrs2szLVjgo8CohvcUfKrDT83QYnDYXfXQyaqJlH
-         E33P1hJJjjxMEloiqUY9gxOFUCSsABl4hT7x7CUdyDYHqJD4eG9lJegQSh04Fwur0G4B
-         8KGgJu0DtZN1p/FreHJOKXR9EhlgXXQ/wvLc4s5uuw5HufDXrQhq46vZWpzlqJu60raR
-         Vbgg==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=p+HydzgIXHeI1vefF1YoQdcQvx1dAkPd1mtjqjlF/RM=;
+        b=ZMlNb8cYR0JRMtapTONu6GS+ZPwJFMZEhpYT/+WfOKqiSA8s7g1zwLetkBhAAvuKZX
+         D9m1nVGkQ37pXFJnZRo+wTx7+e66xywHcyuSL/M/h05JxpWRD6Xxu21zeLYfque7Uiis
+         fC8wK804/IRzgUs3KNTE/Hk7DgZWDsZHFASogFRz9BtjcwDCr5x19DoJnDZGV7Y0VX0G
+         LO7DFASd/lvEfF51bApBKSWO0vptVNwWg83fa7trfeCzpd38qva6lJqgJ/yjxF9jVy2d
+         J/ODRvlzvUxUZTe6qNe3rReOLl21gW9PTQMxaV9d6YtjQ7Nkb/FDOrVTaMjie8YX1h6n
+         kRog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2WmKSNoZ9cWKL6JDASWnjI9NvSq7+tORNGnSjM+acks=;
-        b=3IkMnShl4ISTpZCgk04qgeukBBKhlhfhVrkqXEnxXE5pKVfmXo1JZXTsJCr4/xC5RG
-         FyJXk5rjv2hV8pESV3T0S/e+788DBLR1+H+tJHE8B+OQZNwRec+c5Te4IQe5Mq29Aaly
-         /cMYXY5nJjirDDliyJDt9ihyXQ0MiIRZknjfuodotOVElxH1CMIZOAod8reg+gmckxJ6
-         0M16Ox2AVQ24eRv2xXNoVbI1wlhH4O/6941GKzmXOawSU6R5zBcF+CCIvdAnpVPfj+YR
-         8bLdkZkCkQBYDCiyTWvZRc6ur+YH0xjeqLeoIqMGn7rpfdw77oZSdEnckL4Ju4OL3zyH
-         9+PA==
-X-Gm-Message-State: AOAM533EHzMIp+MWbXX0JLQNMUSihO5n460XL9a/DLzkNmKlyK2j9fv4
-        GcE/n0Y1H+oRXgvifA2g5tdXUA==
-X-Google-Smtp-Source: ABdhPJzXMCIHpbGK3+ThRU7zl6dOmK1ntfsv7TgaQBc60TypCniiSSzMFXl5kMoMEEbKtARXkujolQ==
-X-Received: by 2002:a05:6402:ca9:b0:41d:76b5:d17a with SMTP id cn9-20020a0564020ca900b0041d76b5d17amr6338713edb.259.1649659102201;
-        Sun, 10 Apr 2022 23:38:22 -0700 (PDT)
-Received: from [192.168.0.191] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id o18-20020a1709064f9200b006e7f229b332sm8337293eju.36.2022.04.10.23.38.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Apr 2022 23:38:21 -0700 (PDT)
-Message-ID: <2693ad68-c31f-1151-88fd-0b18a4249bd3@linaro.org>
-Date:   Mon, 11 Apr 2022 08:38:20 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=p+HydzgIXHeI1vefF1YoQdcQvx1dAkPd1mtjqjlF/RM=;
+        b=qvSeJqB580k61o9EYgKoYTUimHHV8R16rRdvwjSW/jq+eTSH2uZJFxWjmR0bp31q0I
+         KICU2/pxk5c+QVeS80PgWLT2912GKTI+LxAzjBEY2m7rq8Z7ox0/2u5zxYqMGTy2ycBX
+         Up/wMcsQwJGMgl9z7nrsnOApBG6okar/XOkoyLMxAma40EEkVEVdOdhaisOIemsWF90g
+         Ghpbcau3sYrezPWAyvqCqpn1ZhKWHpx9B1jTba9NpOKGgN5av5U1f6fzKhA0XpzU++sb
+         hQkJxl04GsJ/a50l137FHyYyMDBRiRPPKIwtY5AI9JAJmotDzrVqjHqX9BN1VBYLj0x9
+         A3+g==
+X-Gm-Message-State: AOAM531BSjHH1+UJnI6Ks0YSfTuejn3EpyxS/eI4NX1LOMUfIIANSjCj
+        UrXBK+bMDOIrWmJrZepLrN2AF2/kPDqTOS0C+LQ=
+X-Google-Smtp-Source: ABdhPJztO5fdl/wLv265y6bzfrJGz/Ws8VlUDjCZJJFc9cO2JctnSuQo3I2kZ0irkErRFtPzlsgDPvBAgLZUw4N5L2Q=
+X-Received: by 2002:a05:6638:a3a:b0:323:5c6d:ae20 with SMTP id
+ 26-20020a0566380a3a00b003235c6dae20mr15343346jao.80.1649659154007; Sun, 10
+ Apr 2022 23:39:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 02/10] dt-bindings: display: Add D1 display engine
- compatibles
-Content-Language: en-US
-To:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-References: <20220411043423.37333-1-samuel@sholland.org>
- <20220411043423.37333-3-samuel@sholland.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220411043423.37333-3-samuel@sholland.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <YktYX2OnLtyobRYD@kernel.org> <Ykto1FgmPMMCysbI@dev-arch.thelio-3990X>
+ <YkxWcYzph5pC1EK8@kernel.org> <CA+icZUVMtrqRA-a3k8N0fVcszm=Sn2Jb9nMfF8mXqvSTu2HUhw@mail.gmail.com>
+ <Ykyfzn6Z8Wkf1Ccl@kernel.org> <Yky4TjOLiVvOcLYN@kernel.org>
+ <YlBLh6Y0WWEVuN1F@kernel.org> <CA+icZUUnj-CjG3AsypSdJ3szx93mx49uD7MaBCeSbHqa50QYuw@mail.gmail.com>
+In-Reply-To: <CA+icZUUnj-CjG3AsypSdJ3szx93mx49uD7MaBCeSbHqa50QYuw@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Mon, 11 Apr 2022 08:38:37 +0200
+Message-ID: <CA+icZUUix_Hv+nx5MCQo7YeDftWO=gURxCQnK0Me-ED-te4ODA@mail.gmail.com>
+Subject: Re: Build perf with clang, failure with libperf
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Sasha Levin <sashal@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Fangrui Song <maskray@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        John Keeping <john@metanate.com>, Leo Yan <leo.yan@linaro.org>,
+        Michael Petlan <mpetlan@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NUMERIC_HTTP_ADDR,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/04/2022 06:34, Samuel Holland wrote:
-> Allwinner D1 contains a display engine 2.0. It features two mixers, a
-> TCON TOP (with DSI and HDMI), one TCON LCD, and one TCON TV.
-> 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
-> 
+On Fri, Apr 8, 2022 at 5:30 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>
+> On Fri, Apr 8, 2022 at 4:49 PM Arnaldo Carvalho de Melo
+> <arnaldo.melo@gmail.com> wrote:
+> >
+> > Em Tue, Apr 05, 2022 at 06:44:46PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > > Em Tue, Apr 05, 2022 at 05:00:14PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > > > Em Tue, Apr 05, 2022 at 05:46:00PM +0200, Sedat Dilek escreveu:
+> > > > > So, we should include scripts/Makefile.clang or enhance
+> > > > > tools/scripts/Makefile.include where LLVM/Clang stuff is defined (and
+> > > > > can be overridden).
+> > > >
+> > > > > Jiri pointed out he needed two options (when I recall correctly):
+> > > > >
+> > > > > [1] -Wno-unused-command-line-argument
+> > >
+> > > I didn't see this one so far, but this one, and for the python case,
+> > > appears on clang 13 on:
+> > >
+> > >   22    45.02 archlinux:base                : FAIL clang version 13.0.1
+> > >
+> > >   CC      /tmp/build/perf/arch/x86/util/pmu.o
+> > > clang-13: error: optimization flag '-ffat-lto-objects' is not supported [-Werror,-Wignored-optimization-argument]
+> > > error: command '/usr/sbin/clang' failed with exit code 1
+> > >   MKDIR   /tmp/build/perf/ui/stdio/
+> > > cp: cannot stat '/tmp/build/perf/python_ext_build/lib/perf*.so': No such file or directory
+> > >   CC      /tmp/build/perf/arch/x86/util/kvm-stat.o
+> > > make[2]: *** [Makefile.perf:639: /tmp/build/perf/python/perf.so] Error 1
+> > > make[2]: *** Waiting for unfinished jobs....
+> >
+> > So this one is more involved, see the two patches below, the first fixes
+> > the clang command option probing mechanism used and the second filters
+> > out -ffat-lto-objects.
+> >
+> > Its all in my tmp.perf/urgent branch at
+> > git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git.
+> >
+> > The full test suite is still running, but so far the failures are
+> > unrelated to the problems in this thread:
+> >
+> > [perfbuilder@five ~]$ export BUILD_TARBALL=http://192.168.100.2/perf/perf-5.18.0-rc1.tar.xz
+> > [perfbuilder@five ~]$ time dm
+> >    1   115.87 almalinux:8                   : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4) , clang version 12.0.1 (Red Hat 12.0.1-4.module_el8.5.0+1025+93159d6c)
+> >    2    74.26 alpine:3.4                    : Ok   gcc (Alpine 5.3.0) 5.3.0 , clang version 3.8.0 (tags/RELEASE_380/final)
+> >    3    67.82 alpine:3.5                    : Ok   gcc (Alpine 6.2.1) 6.2.1 20160822 , clang version 3.8.1 (tags/RELEASE_381/final)
+> >    4    71.32 alpine:3.6                    : Ok   gcc (Alpine 6.3.0) 6.3.0 , clang version 4.0.0 (tags/RELEASE_400/final)
+> >    5    77.05 alpine:3.7                    : Ok   gcc (Alpine 6.4.0) 6.4.0 , Alpine clang version 5.0.0 (tags/RELEASE_500/final) (based on LLVM 5.0.0)
+> >    6    76.76 alpine:3.8                    : Ok   gcc (Alpine 6.4.0) 6.4.0 , Alpine clang version 5.0.1 (tags/RELEASE_501/final) (based on LLVM 5.0.1)
+> >    7    79.36 alpine:3.9                    : Ok   gcc (Alpine 8.3.0) 8.3.0 , Alpine clang version 5.0.1 (tags/RELEASE_502/final) (based on LLVM 5.0.1)
+> >    8   111.26 alpine:3.10                   : Ok   gcc (Alpine 8.3.0) 8.3.0 , Alpine clang version 8.0.0 (tags/RELEASE_800/final) (based on LLVM 8.0.0)
+> >    9   118.37 alpine:3.11                   : Ok   gcc (Alpine 9.3.0) 9.3.0 , Alpine clang version 9.0.0 (https://git.alpinelinux.org/aports f7f0d2c2b8bcd6a5843401a9a702029556492689) (based on LLVM 9.0.0)
+> >   10   124.39 alpine:3.12                   : Ok   gcc (Alpine 9.3.0) 9.3.0 , Alpine clang version 10.0.0 (https://gitlab.alpinelinux.org/alpine/aports.git 7445adce501f8473efdb93b17b5eaf2f1445ed4c)
+> >   11   135.45 alpine:3.13                   : Ok   gcc (Alpine 10.2.1_pre1) 10.2.1 20201203 , Alpine clang version 10.0.1
+> >   12   129.24 alpine:3.14                   : Ok   gcc (Alpine 10.3.1_git20210424) 10.3.1 20210424 , Alpine clang version 11.1.0
+> >   13   124.49 alpine:3.15                   : Ok   gcc (Alpine 10.3.1_git20211027) 10.3.1 20211027 , Alpine clang version 12.0.1
+> >   14   115.27 alpine:edge                   : Ok   gcc (Alpine 11.2.1_git20220219) 11.2.1 20220219 , Alpine clang version 13.0.1
+> >   15    62.59 alt:p8                        : Ok   x86_64-alt-linux-gcc (GCC) 5.3.1 20151207 (ALT p8 5.3.1-alt3.M80P.1) , clang version 3.8.0 (tags/RELEASE_380/final)
+> >   16    90.90 alt:p9                        : Ok   x86_64-alt-linux-gcc (GCC) 8.4.1 20200305 (ALT p9 8.4.1-alt0.p9.1) , clang version 10.0.0
+> >   17    89.19 alt:p10                       : Ok   x86_64-alt-linux-gcc (GCC) 10.3.1 20210703 (ALT Sisyphus 10.3.1-alt2) , clang version 11.0.1
+> >   18    90.50 alt:sisyphus                  : Ok   x86_64-alt-linux-gcc (GCC) 11.2.1 20211202 (ALT Sisyphus 11.2.1-alt2) , ALT Linux Team clang version 12.0.1
+> >   19    64.00 amazonlinux:1                 : Ok   gcc (GCC) 7.2.1 20170915 (Red Hat 7.2.1-2) , clang version 3.6.2 (tags/RELEASE_362/final)
+> >   20   100.13 amazonlinux:2                 : Ok   gcc (GCC) 7.3.1 20180712 (Red Hat 7.3.1-13) , clang version 11.1.0 (Amazon Linux 2 11.1.0-1.amzn2.0.2)
+> >   21   116.67 amazonlinux:devel             : Ok   gcc (GCC) 11.2.1 20210728 (Red Hat 11.2.1-2) , clang version 12.0.1 (Fedora 12.0.1-1.amzn2022)
+> >   22   105.61 archlinux:base                : Ok   gcc (GCC) 11.2.0 , clang version 13.0.1
+> >   23    98.90 centos:8                      : Ok   gcc (GCC) 8.4.1 20200928 (Red Hat 8.4.1-1) , clang version 11.0.1 (Red Hat 11.0.1-1.module_el8.4.0+966+2995ef20)
+> >   24   112.45 centos:stream                 : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-10) , clang version 13.0.0 (Red Hat 13.0.0-3.module_el8.6.0+1074+380cef3f)
+> >   25    51.53 clearlinux:latest             : Ok   gcc (Clear Linux OS for Intel Architecture) 11.2.1 20220330 releases/gcc-11.2.0-949-g511e8b6122 , clang version 13.0.0
+> >   26    79.15 debian:9                      : Ok   gcc (Debian 6.3.0-18+deb9u1) 6.3.0 20170516 , clang version 3.8.1-24 (tags/RELEASE_381/final)
+> >   27    84.48 debian:10                     : Ok   gcc (Debian 8.3.0-6) 8.3.0 , Debian clang version 11.0.1-2~deb10u1
+> >   28    98.81 debian:11                     : Ok   gcc (Debian 10.2.1-6) 10.2.1 20210110 , Debian clang version 11.0.1-2
+> >   29   115.79 debian:experimental           : Ok   gcc (Debian 11.2.0-19) 11.2.0 , Debian clang version 13.0.1-3+b2
+> >   30    24.66 debian:experimental-x-arm64   : Ok   aarch64-linux-gnu-gcc (Debian 11.2.0-18) 11.2.0
+> >   31    20.25 debian:experimental-x-mips    : Ok   mips-linux-gnu-gcc (Debian 11.2.0-18) 11.2.0
+> >   32    22.06 debian:experimental-x-mips64  : Ok   mips64-linux-gnuabi64-gcc (Debian 10.2.1-6) 10.2.1 20210110
+> >   33    22.76 debian:experimental-x-mipsel  : Ok   mipsel-linux-gnu-gcc (Debian 11.2.0-18) 11.2.0
+> >   34    22.55 fedora:22                     : Ok   gcc (GCC) 5.3.1 20160406 (Red Hat 5.3.1-6) , clang version 3.5.0 (tags/RELEASE_350/final)
+> >   35    68.41 fedora:23                     : Ok   gcc (GCC) 5.3.1 20160406 (Red Hat 5.3.1-6) , clang version 3.7.0 (tags/RELEASE_370/final)
+> >   36    80.65 fedora:24                     : Ok   gcc (GCC) 6.3.1 20161221 (Red Hat 6.3.1-1) , clang version 3.8.1 (tags/RELEASE_381/final)
+> >   37    18.13 fedora:24-x-ARC-uClibc        : Ok   arc-linux-gcc (ARCompact ISA Linux uClibc toolchain 2017.09-rc2) 7.1.1 20170710
+> >   38    81.54 fedora:25                     : Ok   gcc (GCC) 6.4.1 20170727 (Red Hat 6.4.1-1) , clang version 3.9.1 (tags/RELEASE_391/final)
+> >   39    95.09 fedora:26                     : Ok   gcc (GCC) 7.3.1 20180130 (Red Hat 7.3.1-2) , clang version 4.0.1 (tags/RELEASE_401/final)
+> >   40    97.18 fedora:27                     : Ok   gcc (GCC) 7.3.1 20180712 (Red Hat 7.3.1-6) , clang version 5.0.2 (tags/RELEASE_502/final)
+> >   41   109.33 fedora:28                     : Ok   gcc (GCC) 8.3.1 20190223 (Red Hat 8.3.1-2) , clang version 6.0.1 (tags/RELEASE_601/final)
+> >   42   115.85 fedora:29                     : Ok   gcc (GCC) 8.3.1 20190223 (Red Hat 8.3.1-2) , clang version 7.0.1 (Fedora 7.0.1-6.fc29)
+> >   43   118.65 fedora:30                     : Ok   gcc (GCC) 9.3.1 20200408 (Red Hat 9.3.1-2) , clang version 8.0.0 (Fedora 8.0.0-3.fc30)
+> >   44   111.13 fedora:31                     : Ok   gcc (GCC) 9.3.1 20200408 (Red Hat 9.3.1-2) , clang version 9.0.1 (Fedora 9.0.1-4.fc31)
+> >   45   105.95 fedora:32                     : Ok   gcc (GCC) 10.3.1 20210422 (Red Hat 10.3.1-1) , clang version 10.0.1 (Fedora 10.0.1-3.fc32)
+> >   46   104.95 fedora:33                     : Ok   gcc (GCC) 10.3.1 20210422 (Red Hat 10.3.1-1) , clang version 11.0.0 (Fedora 11.0.0-3.fc33)
+> >   47   112.06 fedora:34                     : Ok   gcc (GCC) 11.2.1 20220127 (Red Hat 11.2.1-9) , clang version 12.0.1 (Fedora 12.0.1-1.fc34)
+> >   48    20.44 fedora:34-x-ARC-glibc         : Ok   arc-linux-gcc (ARC HS GNU/Linux glibc toolchain 2019.03-rc1) 8.3.1 20190225
+> >   49    18.44 fedora:34-x-ARC-uClibc        : Ok   arc-linux-gcc (ARCv2 ISA Linux uClibc toolchain 2019.03-rc1) 8.3.1 20190225
+> >   50   113.69 fedora:35                     : Ok   gcc (GCC) 11.2.1 20220127 (Red Hat 11.2.1-9) , clang version 13.0.0 (Fedora 13.0.0-3.fc35)
+> >   51    30.08 fedora:36                     : FAIL gcc version 12.0.1 20220308 (Red Hat 12.0.1-0) (GCC)
+> >       + make PYTHON=python3 ARCH= CROSS_COMPILE= EXTRA_CFLAGS= LIBTRACEEVENT_DYNAMIC=1 -C tools/perf O=/tmp/build/perf
+> >     make: Entering directory '/git/perf-5.18.0-rc1/tools/perf'
+> >       BUILD:   Doing 'make -j32' parallel build
+> >     Makefile.config:728: No libcrypto.h found, disables jitted code injection, please install openssl-devel or libssl-dev
+> >     Makefile.config:1011: No libbabeltrace found, disables 'perf data' CTF format support, please install libbabeltrace-dev[el]/libbabeltrace-ctf-dev
+> >     Makefile.config:1118: *** Error: No libtraceevent devel library found, please install libtraceevent-devel.  Stop.
+> >     make[1]: *** [Makefile.perf:240: sub-make] Error 2
+> >
+> >   52   126.52 fedora:rawhide                : Ok   gcc (GCC) 12.0.1 20220308 (Red Hat 12.0.1-0) , clang version 14.0.0 (Fedora 14.0.0-1.fc37)
+> >   53    96.02 gentoo-stage3:latest          : Ok   gcc (Gentoo 11.2.0 p1) 11.2.0 , clang version 13.0.0
+> >   54    82.86 mageia:6                      : Ok   gcc (Mageia 5.5.0-1.mga6) 5.5.0 , clang version 3.9.1 (tags/RELEASE_391/final)
+> >   55    43.11 mageia:7                      : FAIL clang version 8.0.0 (Mageia 8.0.0-1.mga7)
+> >           yychar = yylex (&yylval, &yylloc, scanner);
+> >                    ^
+> >     #define yylex           parse_events_lex
+> >                             ^
+> >     1 error generated.
+> >     make[3]: *** [/git/perf-5.18.0-rc1/tools/build/Makefile.build:139: util] Error 2
+> >   56   107.45 manjaro:base                  : Ok   gcc (GCC) 11.1.0 , clang version 13.0.0
+> >   57     6.58 openmandriva:4.2              : FAIL gcc version 11.2.0 20210728 (OpenMandriva) (GCC)
+> >     In file included from builtin-bench.c:22:
+> >     bench/bench.h:66:19: error: conflicting types for 'pthread_attr_setaffinity_np'; have 'int(pthread_attr_t *, size_t,  cpu_set_t *)' {aka 'int(pthread_attr_t *, long unsigned int,  cpu_set_t *)'}
+> >        66 | static inline int pthread_attr_setaffinity_np(pthread_attr_t *attr __maybe_unused,
+> >           |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >     In file included from bench/bench.h:64,
+> >                      from builtin-bench.c:22:
+> >     /usr/include/pthread.h:394:12: note: previous declaration of 'pthread_attr_setaffinity_np' with type 'int(pthread_attr_t *, size_t,  const cpu_set_t *)' {aka 'int(pthread_attr_t *, long unsigned int,  const cpu_set_t *)'}
+> >       394 | extern int pthread_attr_setaffinity_np (pthread_attr_t *__attr,
+> >           |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >     ld: warning: -r and --gc-sections may not be used together, disabling --gc-sections
+> >     ld: warning: -r and --icf may not be used together, disabling --icf
+> >     ld: warning: -r and --gc-sections may not be used together, disabling --gc-sections
+> >     ld: warning: -r and --icf may not be used together, disabling --icf
+> >     ld: warning: -r and --gc-sections may not be used together, disabling --gc-sections
+> >     ld: warning: -r and --icf may not be used together, disabling --icf
+> >   58     6.48 openmandriva:cooker           : FAIL gcc version 11.2.0 20210728 (OpenMandriva) (GCC)
+> >     In file included from builtin-bench.c:22:
+> >     bench/bench.h:66:19: error: conflicting types for 'pthread_attr_setaffinity_np'; have 'int(pthread_attr_t *, size_t,  cpu_set_t *)' {aka 'int(pthread_attr_t *, long unsigned int,  cpu_set_t *)'}
+> >        66 | static inline int pthread_attr_setaffinity_np(pthread_attr_t *attr __maybe_unused,
+> >           |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >     In file included from bench/bench.h:64,
+> >                      from builtin-bench.c:22:
+> >     /usr/include/pthread.h:394:12: note: previous declaration of 'pthread_attr_setaffinity_np' with type 'int(pthread_attr_t *, size_t,  const cpu_set_t *)' {aka 'int(pthread_attr_t *, long unsigned int,  const cpu_set_t *)'}
+> >       394 | extern int pthread_attr_setaffinity_np (pthread_attr_t *__attr,
+> >           |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >     ld: warning: -r and --gc-sections may not be used together, disabling --gc-sections
+> >     ld: warning: -r and --icf may not be used together, disabling --icf
+> >     ld: warning: -r and --gc-sections may not be used together, disabling --gc-sections
+> >     ld: warning: -r and --icf may not be used together, disabling --icf
+> >     ld: warning: -r and --gc-sections may not be used together, disabling --gc-sections
+> >     ld: warning: -r and --icf may not be used together, disabling --icf
+> >   59   118.04 opensuse:15.0                 : Ok   gcc (SUSE Linux) 7.4.1 20190905 [gcc-7-branch revision 275407] , clang version 5.0.1 (tags/RELEASE_501/final 312548)
+> >   60   127.98 opensuse:15.1                 : Ok   gcc (SUSE Linux) 7.5.0 , clang version 7.0.1 (tags/RELEASE_701/final 349238)
+> >   61   122.86 opensuse:15.2                 : Ok   gcc (SUSE Linux) 7.5.0 , clang version 9.0.1
+> >   62   133.70 opensuse:15.3                 : Ok   gcc (SUSE Linux) 7.5.0 , clang version 11.0.1
+> >   63   133.30 opensuse:15.4                 : Ok   gcc (SUSE Linux) 7.5.0 , clang version 11.0.1
+> >   64   158.92 opensuse:tumbleweed           : Ok   gcc (SUSE Linux) 11.2.1 20211124 [revision 7510c23c1ec53aa4a62705f0384079661342ff7b] , clang version 13.0.0
+> >   65   114.77 oraclelinux:8                 : Ok   gcc (GCC) 8.5.0 20210514 (Red Hat 8.5.0-4.0.1) , clang version 12.0.1 (Red Hat 12.0.1-4.0.1.module+el8.5.0+20428+2b4ecd47)
+> >   66: rockylinux:8
+> >
+> > - Arnaldo
+> >
+> > From 73fb827d72906bd2d78c6ca091b0c74f90183a95 Mon Sep 17 00:00:00 2001
+> > From: Arnaldo Carvalho de Melo <acme@redhat.com>
+> > Date: Fri, 8 Apr 2022 10:08:07 -0300
+> > Subject: [PATCH 1/2] perf python: Fix probing for some clang command line
+> >  options
+> >
+> > The clang compiler complains about some options even without a source
+> > file being available, while others require one, so use the simple
+> > tools/build/feature/test-hello.c file.
+> >
+> > Then check for the "is not supported" string in its output, in addition
+> > to the "unknown argument" already being looked for.
+> >
+> > This was noticed when building with clang-13 where -ffat-lto-objects
+> > isn't supported and since we were looking just for "unknown argument"
+> > and not providing a source code to clang, was mistakenly assumed as
+> > being available and not being filtered to set of command line options
+> > provided to clang, leading to a build failure.
+> >
+> > Cc: Adrian Hunter <adrian.hunter@intel.com>
+> > Cc: Fangrui Song <maskray@google.com>
+> > Cc: Florian Fainelli <f.fainelli@gmail.com>
+> > Cc: Ian Rogers <irogers@google.com>
+> > Cc: Jiri Olsa <jolsa@kernel.org>
+> > Cc: John Keeping <john@metanate.com>
+> > Cc: Leo Yan <leo.yan@linaro.org>
+> > Cc: Michael Petlan <mpetlan@redhat.com>
+> > Cc: Namhyung Kim <namhyung@kernel.org>
+> > Cc: Nathan Chancellor <nathan@kernel.org>
+> > Cc: Nick Desaulniers <ndesaulniers@google.com>
+> > Cc: Sedat Dilek <sedat.dilek@gmail.com>
+> > Link: http://lore.kernel.org/lkml/
+> > Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+> > ---
+> >  tools/perf/util/setup.py | 6 ++++--
+> >  1 file changed, 4 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/tools/perf/util/setup.py b/tools/perf/util/setup.py
+> > index 483f05004e682081..6156bb87ee3e34cf 100644
+> > --- a/tools/perf/util/setup.py
+> > +++ b/tools/perf/util/setup.py
+> > @@ -1,12 +1,14 @@
+> > -from os import getenv
+> > +from os import getenv, path
+> >  from subprocess import Popen, PIPE
+> >  from re import sub
+> >
+> >  cc = getenv("CC")
+> >  cc_is_clang = b"clang version" in Popen([cc.split()[0], "-v"], stderr=PIPE).stderr.readline()
+> > +src_feature_tests  = getenv('srctree') + '/tools/build/feature'
+> >
+> >  def clang_has_option(option):
+> > -    return [o for o in Popen([cc, option], stderr=PIPE).stderr.readlines() if b"unknown argument" in o] == [ ]
+> > +    cc_output = Popen([cc, option, path.join(src_feature_tests, "test-hello.c") ], stderr=PIPE).stderr.readlines()
+> > +    return [o for o in cc_output if ((b"unknown argument" in o) or (b"is not supported" in o))] == [ ]
+> >
+> >  if cc_is_clang:
+> >      from distutils.sysconfig import get_config_vars
+> > --
+> > 2.35.1
+> >
+> > From e807abf709ee26af99588bd13e725fb45011b167 Mon Sep 17 00:00:00 2001
+> > From: Arnaldo Carvalho de Melo <acme@redhat.com>
+> > Date: Thu, 7 Apr 2022 11:04:20 -0300
+> > Subject: [PATCH 2/2] perf build: Don't use -ffat-lto-objects in the python
+> >  feature test when building with clang-13
+> >
+> > Using -ffat-lto-objects in the python feature test when building with
+> > clang-13 results in:
+> >
+> >   clang-13: error: optimization flag '-ffat-lto-objects' is not supported [-Werror,-Wignored-optimization-argument]
+> >   error: command '/usr/sbin/clang' failed with exit code 1
+> >   cp: cannot stat '/tmp/build/perf/python_ext_build/lib/perf*.so': No such file or directory
+> >   make[2]: *** [Makefile.perf:639: /tmp/build/perf/python/perf.so] Error 1
+> >
+> > Noticed when building on a docker.io/library/archlinux:base container.
+> >
+> > Cc: Adrian Hunter <adrian.hunter@intel.com>
+> > Cc: Fangrui Song <maskray@google.com>
+> > Cc: Florian Fainelli <f.fainelli@gmail.com>
+> > Cc: Ian Rogers <irogers@google.com>
+> > Cc: Jiri Olsa <jolsa@kernel.org>
+> > Cc: John Keeping <john@metanate.com>
+> > Cc: Leo Yan <leo.yan@linaro.org>
+> > Cc: Michael Petlan <mpetlan@redhat.com>
+> > Cc: Namhyung Kim <namhyung@kernel.org>
+> > Cc: Nathan Chancellor <nathan@kernel.org>
+> > Cc: Nick Desaulniers <ndesaulniers@google.com>
+> > Cc: Sedat Dilek <sedat.dilek@gmail.com>
+> > Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+> > ---
+> >  tools/perf/Makefile.config | 3 +++
+> >  tools/perf/util/setup.py   | 2 ++
+> >  2 files changed, 5 insertions(+)
+> >
+> > diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+> > index 5b5ba475a5c00c0f..f3bf9297bcc03c5e 100644
+> > --- a/tools/perf/Makefile.config
+> > +++ b/tools/perf/Makefile.config
+> > @@ -272,6 +272,9 @@ ifdef PYTHON_CONFIG
+> >    PYTHON_EMBED_LIBADD := $(call grep-libs,$(PYTHON_EMBED_LDOPTS)) -lutil
+> >    PYTHON_EMBED_CCOPTS := $(shell $(PYTHON_CONFIG_SQ) --includes 2>/dev/null)
+> >    FLAGS_PYTHON_EMBED := $(PYTHON_EMBED_CCOPTS) $(PYTHON_EMBED_LDOPTS)
+> > +  ifeq ($(CC_NO_CLANG), 0)
+> > +    PYTHON_EMBED_CCOPTS := $(filter-out -ffat-lto-objects, $(PYTHON_EMBED_CCOPTS))
+> > +  endif
+> >  endif
+> >
+> >  FEATURE_CHECK_CFLAGS-libpython := $(PYTHON_EMBED_CCOPTS)
+> > diff --git a/tools/perf/util/setup.py b/tools/perf/util/setup.py
+> > index 6156bb87ee3e34cf..c255a2c90cd672b1 100644
+> > --- a/tools/perf/util/setup.py
+> > +++ b/tools/perf/util/setup.py
+> > @@ -25,6 +25,8 @@ if cc_is_clang:
+> >              vars[var] = sub("-fstack-protector-strong", "", vars[var])
+> >          if not clang_has_option("-fno-semantic-interposition"):
+> >              vars[var] = sub("-fno-semantic-interposition", "", vars[var])
+> > +        if not clang_has_option("-ffat-lto-objects"):
+> > +            vars[var] = sub("-ffat-lto-objects", "", vars[var])
+> >
+> >  from distutils.core import setup, Extension
+> >
+> > --
+> > 2.35.1
+> >
+>
+> Thanks for the followup patches.
+>
+> I have tested with the last 4 commits from [1].
+>
+> [ INSTRUCTIONS ]
+>
+> 1103  2022-04-08 17:14:40 LLVM_MVER="14"
+> 1104  2022-04-08 17:14:40 LLVM_TOOLCHAIN_PATH="/usr/lib/llvm-${LLVM_MVER}/bin"
+> 1105  2022-04-08 17:14:40 ##LLVM_TOOLCHAIN_PATH="/opt/llvm-toolchain/bin"
+> 1106  2022-04-08 17:14:40 if [ -d ${LLVM_TOOLCHAIN_PATH} ]; then
+> export PATH="${LLVM_TOOLCHAIN_PATH}:${PATH}"; fi
+> 1107  2022-04-08 17:14:40 echo $PATH
+> 1108  2022-04-08 17:14:40 PYTHON_VER="3.10"
+> 1109  2022-04-08 17:14:40 MAKE="make"
+> 1110  2022-04-08 17:14:40 MAKE_OPTS="V=1 -j4 HOSTCC=clang
+> HOSTLD=ld.lld HOSTAR=llvm-ar CC=clang LD=ld.lld AR=llvm-ar
+> STRIP=llvm-strip"
+> 1111  2022-04-08 17:14:40 echo $PYTHON_VER $MAKE $MAKE_OPTS
+>
+> 3.10 make V=1 -j4 HOSTCC=clang HOSTLD=ld.lld HOSTAR=llvm-ar CC=clang
+> LD=ld.lld AR=llvm-ar STRIP=llvm-strip
+>
+> 1112  2022-04-08 17:14:50 LC_ALL=C $MAKE $MAKE_OPTS -C tools/perf
+> clean 2>&1 | tee ../make-log_perf-clean.txt
+> 1113  2022-04-08 17:15:43 LC_ALL=C $MAKE $MAKE_OPTS -C tools/perf
+> PYTHON=python${PYTHON_VER} install-bin 2>&1 | tee
+> ../make-log_perf-python${PYTHON_VER}-install_bin_debian-llvm14_perf-urgent-acme-20220408.txt
+>
+> Please feel free to add my...
+>
+> Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # LLVM/Clang v14 (x86-64)
+>
+> My perf build-log is attached.
+>
+> - sed@ -
+>
+> P.S.: I requested to bump perl to version 5.34.1 (see [2]) plus diff from [3].
+>
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/log/?h=tmp.perf/urgent
+> [2] https://bugs.debian.org/1009170
+> [3] https://bugs.debian.org/1009149
 
+[ To: GregKH and Sasha L. ]
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+I have seen the linux-stable team is taking perf patches for queue-5.17.
 
+I have reported build problems with perf + clang + libperl (perl v5.34).
+My original report was against Linux v5.17-rc6 (see [1]).
 
-Best regards,
-Krzysztof
+So, I would like to see at least the 4 commits I have tested with to
+be in Linux v5.17.y.
+They are now in upstream means Linux v5.18-rc2.
+
+Here are the upstream commit-ids:
+
+3a8a0475861a perf build: Don't use -ffat-lto-objects in the python
+feature test when building with clang-13
+dd6e1fe91cdd perf python: Fix probing for some clang command line options
+41caff459a5b tools build: Filter out options and warnings not supported by clang
+541f695cbcb6 tools build: Use $(shell ) instead of `` to get embedded
+libperl's ccopts
+
+@Arnaldo: If you agree, the linux-stable team should include them in
+the next Linux v5.17.y series.
+( I can NOT speak for other linux-stable releases. )
+
+Thanks.
+
+- sed@ -
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/log/?h=queue/5.17
+[2] https://marc.info/?t=164646683300002&r=1&w=2

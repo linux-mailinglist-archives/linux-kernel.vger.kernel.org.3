@@ -2,117 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46CDE4FB353
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 07:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF8084FB355
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 07:48:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244794AbiDKFrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 01:47:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53658 "EHLO
+        id S244790AbiDKFux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 01:50:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244783AbiDKFrq (ORCPT
+        with ESMTP id S239132AbiDKFuv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 01:47:46 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CCD9E6391;
-        Sun, 10 Apr 2022 22:45:33 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 86FE1ED1;
-        Sun, 10 Apr 2022 22:45:33 -0700 (PDT)
-Received: from [10.163.38.140] (unknown [10.163.38.140])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A9EEF3F5A1;
-        Sun, 10 Apr 2022 22:45:27 -0700 (PDT)
-Message-ID: <f469f253-9ccc-d55b-731d-3ecc8d685104@arm.com>
-Date:   Mon, 11 Apr 2022 11:16:02 +0530
+        Mon, 11 Apr 2022 01:50:51 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59CC2CE1A
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 22:48:38 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id md4so5925138pjb.4
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 22:48:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=asidVsxyIkB3smI5tvjWUtq2ho7mLzVkVUHx4rAV13g=;
+        b=TX4X6X/uYWWocZgV5W3leK3OmupcigwdvvTggqX3gQipGKG22EMA233dKAMFrMbnMc
+         wfE9zwMrIjs+i/7p9Rp5QuyRmmA97ZtigFNiseX9J0GUgeSn25sUcwUk0NgfX1fLypII
+         Hzwv+xCn2sUUy3UR6ZjQGobzrGkgSG4Kzf2WtieJvCQWYEjgzihoxCbUVlh3cIbxMI/V
+         dpVX6hY0/46eAobG0qP2xS1r3Lpna948/bdZecvhR4pDZjiDQTxP2AjDLk+6SGlLiVOL
+         daWyKJrsM1uEls9AWwZVH48rsx3GmNZqAJ/OZeBOUTVmps+5Ec9qN2aEx94McA/UmtpD
+         wplQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=asidVsxyIkB3smI5tvjWUtq2ho7mLzVkVUHx4rAV13g=;
+        b=E99MHPh/hViP/HXn8eNB6hLvaFI8hpq7Al/ANGDK4YfUhRabcaf7ZOrWf8yNGV7QI/
+         XZCht3c9HguTZKV3A3Zp+Cj2/skjCkH41i+EUy3YjzFcBnuZUOyVBzQZJjxtUYQOD99b
+         OUETBpjWGCO6PYv6CXMMORskj2/8pV+ZRZBQmUgY0XUeil88c2n5c4oNO2Y+Qjebzgnc
+         +f0sZRrWcQ3I+VCFEgH8C6vctn0R1riRa6sYGyZFkdRhRlkYVajP2X5Ixk+fPqVu1oTY
+         P2Uo4/InzvfSqEr7yUgBd1m1G+/9mYUvLKQsDYuiV/ADE2dc+RDFlLTAGH398qE6zQss
+         083Q==
+X-Gm-Message-State: AOAM530sT+dj8CLQyfJwOdQtnJ/J1WkABerCHzWXXLzzByr5VgpVg68h
+        1tfJzHBk/uy6hsYFVxmZk1aq
+X-Google-Smtp-Source: ABdhPJwbmgBsIdc8j5+HgdEMIiEjceFzXitMX8DNRPYWXDDLDm0k+Q8F8j3z5VDeACyosEuB+rj2sg==
+X-Received: by 2002:a17:90a:39c3:b0:1ca:88b9:eb4a with SMTP id k3-20020a17090a39c300b001ca88b9eb4amr35334445pjf.96.1649656118376;
+        Sun, 10 Apr 2022 22:48:38 -0700 (PDT)
+Received: from localhost.localdomain ([117.217.182.106])
+        by smtp.gmail.com with ESMTPSA id o4-20020a625a04000000b004fdf5419e41sm25961728pfb.36.2022.04.10.22.48.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Apr 2022 22:48:37 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     mhi@lists.linux.dev
+Cc:     quic_hemantk@quicinc.com, quic_bbhatt@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loic.poulain@linaro.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH] bus: mhi: host: pci_generic: Sort mhi_pci_id_table based on the PID
+Date:   Mon, 11 Apr 2022 11:18:31 +0530
+Message-Id: <20220411054831.16344-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH V5 0/8] perf: Expand perf_branch_entry
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        peterz@infradead.org, acme@kernel.org
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        James Clark <james.clark@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-References: <20220404045046.634522-1-anshuman.khandual@arm.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20220404045046.634522-1-anshuman.khandual@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Sorting this way helps in identifying the products of vendors. There is no
+sorting required for VID and the new VID should be added as the last entry.
 
+Let's also add a note clarifying this.
 
-On 4/4/22 10:20, Anshuman Khandual wrote:
-> Branch Record Buffer Extension (BRBE) implementation on arm64 captures more
-> branch type classification which cannot be accommodated in the current perf
-> branch record format via perf_branch_entry.type element (4 bit field). Also
-> it captures privilege information which does not have a corresponding slot
-> in perf_branch_entry. This series expands struct perf_branch_entry, to meet
-> both these requirements without breaking the existing user space ABI for
-> perf tools.
-> 
-> All architecture specific branch types added via perf_branch_entry.new_type
-> field in [PATCH 3/4] will be used in BRBE implementation on arm64 platform
-> later on with the following map.
-> 
-> #ifdef CONFIG_ARM64
-> #define PERF_BR_FIQ		PERF_BR_NEW_ARCH_1
-> #define PERF_BR_DEBUG_HALT	PERF_BR_NEW_ARCH_2
-> #define PERF_BR_DEBUG_EXIT	PERF_BR_NEW_ARCH_3
-> #define PERF_BR_DEBUG_INST	PERF_BR_NEW_ARCH_4
-> #define PERF_BR_DEBUG_DATA	PERF_BR_NEW_ARCH_5
-> #endif
-> 
-> This actually combines following patches and series into a single series.
-> 
-> - https://lore.kernel.org/all/1642998653-21377-12-git-send-email-anshuman.khandual@arm.com/
-> - https://lore.kernel.org/all/1643348653-24367-1-git-send-email-anshuman.khandual@arm.com/
-> - https://lore.kernel.org/all/1645681014-3346-1-git-send-email-anshuman.khandual@arm.com/
-> 
-> This series applies on v5.18-rc1
-> 
-> perf API
-> 
-> The series being applied
-> 
-> - Clean : tools/perf/check-headers.sh
-> - Clean : diff -u tools/include/uapi/linux/perf_event.h include/uapi/linux/perf_event.h
-> 
-> Todo
-> 
-> - Update perf report tool to process PERF_BR_EXTEND_ABI (when available),
->   then fetch and report branch types from perf_branch_entry.new_type field.
-> 
-> References
-> 
-> - BRBE captured branch record information
-> 
-> https://developer.arm.com/documentation/ddi0601/2021-12/AArch64-Registers/BRBINF-n--EL1--Branch-Record-Buffer-Information-Register--n-?lang=en
-> 
-> - BRBE based perf branch stack implementation on arm64 platform
-> 
-> https://lore.kernel.org/all/1642998653-21377-1-git-send-email-anshuman.khandual@arm.com/
-> 
-> Changes in V5:
-> 
-> - Dropped patches [PATCH 1/10] and [PATCH 6/10] related to PERF_BR_[RET|IRQ] - merged
->   via the commit cedd3614e5d9c809 ("perf: Add irq and exception return branch types")
-> 
-> - Rebased series on v5.18-rc1
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
+ drivers/bus/mhi/host/pci_generic.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-Gentle ping, any updates on this series ?
+diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
+index 9527b7d63840..55e96aa15566 100644
+--- a/drivers/bus/mhi/host/pci_generic.c
++++ b/drivers/bus/mhi/host/pci_generic.c
+@@ -446,20 +446,21 @@ static const struct mhi_pci_dev_info mhi_sierra_em919x_info = {
+ 	.sideband_wake = false,
+ };
+ 
++/* Keep the list sorted based on the PID. New VID should be added as the last entry */
+ static const struct pci_device_id mhi_pci_id_table[] = {
++	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, 0x0304),
++		.driver_data = (kernel_ulong_t) &mhi_qcom_sdx24_info },
++	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, 0x0306),
++		.driver_data = (kernel_ulong_t) &mhi_qcom_sdx55_info },
+ 	/* EM919x (sdx55), use the same vid:pid as qcom-sdx55m */
+ 	{ PCI_DEVICE_SUB(PCI_VENDOR_ID_QCOM, 0x0306, 0x18d7, 0x0200),
+ 		.driver_data = (kernel_ulong_t) &mhi_sierra_em919x_info },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, 0x0306),
+-		.driver_data = (kernel_ulong_t) &mhi_qcom_sdx55_info },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, 0x0304),
+-		.driver_data = (kernel_ulong_t) &mhi_qcom_sdx24_info },
++	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, 0x0308),
++		.driver_data = (kernel_ulong_t) &mhi_qcom_sdx65_info },
+ 	{ PCI_DEVICE(0x1eac, 0x1001), /* EM120R-GL (sdx24) */
+ 		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
+ 	{ PCI_DEVICE(0x1eac, 0x1002), /* EM160R-GL (sdx24) */
+ 		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, 0x0308),
+-		.driver_data = (kernel_ulong_t) &mhi_qcom_sdx65_info },
+ 	/* T99W175 (sdx55), Both for eSIM and Non-eSIM */
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0ab),
+ 		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx55_info },
+-- 
+2.25.1
+

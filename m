@@ -2,72 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2A484FB403
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 08:51:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 139C24FB406
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 08:52:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245093AbiDKGxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 02:53:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52862 "EHLO
+        id S245084AbiDKGyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 02:54:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245084AbiDKGx2 (ORCPT
+        with ESMTP id S236025AbiDKGyl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 02:53:28 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6132A1901A
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 23:51:14 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id bg10so28819863ejb.4
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 23:51:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=7Slat8Otwi8YD3f2O6U1F4skSs07T3wtKnKLozauCy4=;
-        b=QzqlKicApRIj3OGzoU/T4/bSMF3g+AW/WIQtjjBt7B4rsk7m7Vroa7SEnODkM7EMxM
-         F9B37vxcvZEYzX700IdMdxOfFB0V66SdSCTWEfFS12nu7GFDe2sYGopdLqcK48xpXY9h
-         YG+LQMQkHZ8vtBhG35qailH/T6VLkRhQaN5El5AaX9oLut8RcJKBomnMuweQ00XQv4J9
-         H++a+vQvcXMXayQi73jUwIE4IXLk6qqEaakWxq9zu93++DpNV75jSdMBvz57O6G8kI5/
-         Wbia7Hgu5cbECPCw3C1ZacNCQBg+CgUJaO3nfWtv1O4oPjuiBnejVC99V/HjiEThYbPi
-         B1Gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7Slat8Otwi8YD3f2O6U1F4skSs07T3wtKnKLozauCy4=;
-        b=Si5BrKfcU4b102Px9Ilc6Iqg3FyRwL4xLcP3eVNwdarPd4EajlrXAOtjwCv7NwkPDU
-         iSVgHdGVvXI4DI9MeyngwzrLQX5Fczvsf54BPP4wMlFuqJYFijKBv/L24B9dzBlUNdbn
-         LIqCNWXISvyWM3VpJc5dfWzlKn501CqHJ4NnLV04B5yb4JGycvX+44tEByjs/zkqRrIk
-         BzMOW4FgyS4L9yCmWADRTK7/HBos3RjwBPVc8y5XsbrtYaLrIrVqCdaA/+NdDmAyEq1D
-         QK4JBks55hDMC/BTjC1D0Re0SoDcn8ZsUpPstSvCxWWopoOYQgvUMoRpINR9y56U4YDd
-         jb8Q==
-X-Gm-Message-State: AOAM530UUAgMtlNO2ak7d4sOeLcfYfN1TCO8nTkBSLd4/IbiiVmM+JZl
-        yzmnzQ8um5OSIuky6sdMnddAKg==
-X-Google-Smtp-Source: ABdhPJw80eetpL8taacvAB0OdQVHJpvJav6Fqk5macXwWAZsg+WzBeBsLYL6FxbP/u6/35PkMUcTiw==
-X-Received: by 2002:a17:907:1623:b0:6e8:8678:640d with SMTP id hb35-20020a170907162300b006e88678640dmr5011923ejc.189.1649659872995;
-        Sun, 10 Apr 2022 23:51:12 -0700 (PDT)
-Received: from [192.168.0.191] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id m10-20020a17090679ca00b006e888606ce3sm1489235ejo.16.2022.04.10.23.51.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Apr 2022 23:51:12 -0700 (PDT)
-Message-ID: <37416e93-5ccc-79c9-b340-356fcac0ec51@linaro.org>
-Date:   Mon, 11 Apr 2022 08:51:11 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH V2] drivers: nfc: nfcmrvl: fix double free bug in
- nfcmrvl_nci_unregister_dev()
-Content-Language: en-US
-To:     Duoming Zhou <duoming@zju.edu.cn>, linux-kernel@vger.kernel.org
-Cc:     netdev@vger.kernel.org, akpm@linux-foundation.org,
-        davem@davemloft.net, gregkh@linuxfoundation.org,
-        alexander.deucher@amd.com, broonie@kernel.org
-References: <20220410135214.74216-1-duoming@zju.edu.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220410135214.74216-1-duoming@zju.edu.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Mon, 11 Apr 2022 02:54:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43AF319015
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 23:52:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA347B8110C
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 06:52:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D403C385A4;
+        Mon, 11 Apr 2022 06:52:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649659945;
+        bh=yx+UeJ53L3lrvtA6p4tTHO/FMgJTGtQyiFwwhfFKWNQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=gDIXmFyXrkR/rHm8QEzS45Ezv6GyBt67dtUAkfRbVWrZ49RFcn1v69Nk/5nx7jk/p
+         AkNx7mNb9CEtEZD8E7jtKspLrW20g1lCL7kJrpYAEFHSYbQgFtHBHF55B6DWxYqJge
+         bZ9ZysQZ3XB0YIDd5+emhql2nfe2mY4PL3R4YA0F0XVL9LOtG+z84z10kcKCV2FTI4
+         GSSnugljbqUt32dfKl+1ucBUj+9JSHK4AtRmCZouswsmPwg5gq3IyKq/C3uk5umTAI
+         8rUvGMTj82q00kBEXQvvqeTQycnDw8Re6pX2BJR2fn0I5xHG692ko9sCY15VUNN7UU
+         a09spn+vX4c6A==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=billy-the-mountain.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1ndnuP-003FOL-JJ; Mon, 11 Apr 2022 07:52:22 +0100
+Date:   Mon, 11 Apr 2022 07:52:07 +0100
+Message-ID: <87bkx8cdt4.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     will@kernel.org, qperret@google.com, tabba@google.com,
+        surenb@google.com, kernel-team@android.com,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Changbin Du <changbin.du@intel.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 1/6] KVM: arm64: Introduce hyp_alloc_private_va_range()
+In-Reply-To: <20220408200349.1529080-2-kaleshsingh@google.com>
+References: <20220408200349.1529080-1-kaleshsingh@google.com>
+        <20220408200349.1529080-2-kaleshsingh@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: kaleshsingh@google.com, will@kernel.org, qperret@google.com, tabba@google.com, surenb@google.com, kernel-team@android.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, catalin.marinas@arm.com, mark.rutland@arm.com, yuzenghui@huawei.com, masahiroy@kernel.org, ndesaulniers@google.com, changbin.du@intel.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,36 +77,177 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/04/2022 15:52, Duoming Zhou wrote:
-> There is a potential double bug in nfcmrvl usb driver between
-> unregister and resume operation.
+On Fri, 08 Apr 2022 21:03:24 +0100,
+Kalesh Singh <kaleshsingh@google.com> wrote:
 > 
-> The race that cause that double free bug can be shown as below:
+> hyp_alloc_private_va_range() can be used to reserve private VA ranges
+> in the nVHE hypervisor. Allocations are aligned based on the order of
+> the requested size.
 > 
->    (FREE)                   |      (USE)
->                             | nfcmrvl_resume
->                             |  nfcmrvl_submit_bulk_urb
->                             |   nfcmrvl_bulk_complete
->                             |    nfcmrvl_nci_recv_frame
->                             |     nfcmrvl_fw_dnld_recv_frame
->                             |      queue_work
->                             |       fw_dnld_rx_work
->                             |        fw_dnld_over
->                             |         release_firmware
->                             |          kfree(fw); //(1)
-> nfcmrvl_disconnect          |
->  nfcmrvl_nci_unregister_dev |
->   nfcmrvl_fw_dnld_abort     |
->    fw_dnld_over             |         ...
->     if (priv->fw_dnld.fw)   |
->     release_firmware        |
->      kfree(fw); //(2)       |
->      ...                    |         priv->fw_dnld.fw = NULL;
+> This will be used to implement stack guard pages for KVM nVHE hypervisor
+> (nVHE Hyp mode / not pKVM), in a subsequent patch in the series.
 > 
+> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> Tested-by: Fuad Tabba <tabba@google.com>
+> Reviewed-by: Fuad Tabba <tabba@google.com>
+> ---
+> 
+> Changes in v7:
+>   - Add Fuad's Reviewed-by and Tested-by tags.
+> 
+> Changes in v6:
+>   - Update kernel-doc for hyp_alloc_private_va_range()
+>     and add return description, per Stephen
+>   - Update hyp_alloc_private_va_range() to return an int error code,
+>     per Stephen
+>   - Replace IS_ERR() checks with IS_ERR_VALUE() check, per Stephen
+>   - Clean up goto, per Stephen
+> 
+> Changes in v5:
+>   - Align private allocations based on the order of their size, per Marc
+> 
+> Changes in v4:
+>   - Handle null ptr in hyp_alloc_private_va_range() and replace
+>     IS_ERR_OR_NULL checks in callers with IS_ERR checks, per Fuad
+>   - Fix kernel-doc comments format, per Fuad
+> 
+> Changes in v3:
+>   - Handle null ptr in IS_ERR_OR_NULL checks, per Mark
+> 
+> 
+>  arch/arm64/include/asm/kvm_mmu.h |  1 +
+>  arch/arm64/kvm/mmu.c             | 66 +++++++++++++++++++++-----------
+>  2 files changed, 45 insertions(+), 22 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/kvm_mmu.h b/arch/arm64/include/asm/kvm_mmu.h
+> index 74735a864eee..a50cbb5ba402 100644
+> --- a/arch/arm64/include/asm/kvm_mmu.h
+> +++ b/arch/arm64/include/asm/kvm_mmu.h
+> @@ -154,6 +154,7 @@ static __always_inline unsigned long __kern_hyp_va(unsigned long v)
+>  int kvm_share_hyp(void *from, void *to);
+>  void kvm_unshare_hyp(void *from, void *to);
+>  int create_hyp_mappings(void *from, void *to, enum kvm_pgtable_prot prot);
+> +int hyp_alloc_private_va_range(size_t size, unsigned long *haddr);
+>  int create_hyp_io_mappings(phys_addr_t phys_addr, size_t size,
+>  			   void __iomem **kaddr,
+>  			   void __iomem **haddr);
+> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> index 0d19259454d8..3d3efea4e991 100644
+> --- a/arch/arm64/kvm/mmu.c
+> +++ b/arch/arm64/kvm/mmu.c
+> @@ -457,23 +457,22 @@ int create_hyp_mappings(void *from, void *to, enum kvm_pgtable_prot prot)
+>  	return 0;
+>  }
+>  
+> -static int __create_hyp_private_mapping(phys_addr_t phys_addr, size_t size,
+> -					unsigned long *haddr,
+> -					enum kvm_pgtable_prot prot)
+> +
+> +/**
+> + * hyp_alloc_private_va_range - Allocates a private VA range.
+> + * @size:	The size of the VA range to reserve.
+> + * @haddr:	The hypervisor virtual start address of the allocation.
+> + *
+> + * The private virtual address (VA) range is allocated below io_map_base
+> + * and aligned based on the order of @size.
+> + *
+> + * Return: 0 on success or negative error code on failure.
+> + */
+> +int hyp_alloc_private_va_range(size_t size, unsigned long *haddr)
+>  {
+>  	unsigned long base;
+>  	int ret = 0;
+>  
+> -	if (!kvm_host_owns_hyp_mappings()) {
+> -		base = kvm_call_hyp_nvhe(__pkvm_create_private_mapping,
+> -					 phys_addr, size, prot);
+> -		if (IS_ERR_OR_NULL((void *)base))
+> -			return PTR_ERR((void *)base);
+> -		*haddr = base;
+> -
+> -		return 0;
+> -	}
+> -
+>  	mutex_lock(&kvm_hyp_pgd_mutex);
+>  
+>  	/*
+> @@ -484,30 +483,53 @@ static int __create_hyp_private_mapping(phys_addr_t phys_addr, size_t size,
+>  	 *
+>  	 * The allocated size is always a multiple of PAGE_SIZE.
+>  	 */
+> -	size = PAGE_ALIGN(size + offset_in_page(phys_addr));
+> -	base = io_map_base - size;
+> +	base = io_map_base - PAGE_ALIGN(size);
+> +
+> +	/* Align the allocation based on the order of its size */
+> +	base = ALIGN_DOWN(base, PAGE_SIZE << get_order(size));
+>  
+>  	/*
+>  	 * Verify that BIT(VA_BITS - 1) hasn't been flipped by
+>  	 * allocating the new area, as it would indicate we've
+>  	 * overflowed the idmap/IO address range.
+>  	 */
+> -	if ((base ^ io_map_base) & BIT(VA_BITS - 1))
+> +	if (!base || (base ^ io_map_base) & BIT(VA_BITS - 1))
 
+I don't get this '!base' check. Why isn't it encompassed by the
+'VA_BITS - 1' flip check?
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>  		ret = -ENOMEM;
+>  	else
+> -		io_map_base = base;
+> +		*haddr = io_map_base = base;
+>  
+>  	mutex_unlock(&kvm_hyp_pgd_mutex);
+>  
+> +	return ret;
+> +}
+> +
+> +static int __create_hyp_private_mapping(phys_addr_t phys_addr, size_t size,
+> +					unsigned long *haddr,
+> +					enum kvm_pgtable_prot prot)
+> +{
+> +	unsigned long addr;
+> +	int ret = 0;
+> +
+> +	if (!kvm_host_owns_hyp_mappings()) {
+> +		addr = kvm_call_hyp_nvhe(__pkvm_create_private_mapping,
+> +					 phys_addr, size, prot);
+> +		if (IS_ERR_VALUE(addr))
+> +			return addr;
+> +		*haddr = addr;
+> +
+> +		return 0;
+> +	}
+> +
+> +	size += offset_in_page(phys_addr);
 
+This hardly makes any sense on its own. I get it that it is still
+doing the right thing as hyp_alloc_private_va_range() will fix it up,
+but I'd rather you keep the PAGE_ALIGN() here, even if it ends up
+being duplicated.
 
-Best regards,
-Krzysztof
+> +	ret = hyp_alloc_private_va_range(size, &addr);
+>  	if (ret)
+> -		goto out;
+> +		return ret;
+>  
+> -	ret = __create_hyp_mappings(base, size, phys_addr, prot);
+> +	ret = __create_hyp_mappings(addr, size, phys_addr, prot);
+>  	if (ret)
+> -		goto out;
+> +		return ret;
+>  
+> -	*haddr = base + offset_in_page(phys_addr);
+> -out:
+> +	*haddr = addr + offset_in_page(phys_addr);
+>  	return ret;
+>  }
+>  
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

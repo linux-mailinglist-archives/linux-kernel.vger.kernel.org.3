@@ -2,99 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 657944FBA79
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 13:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A1754FBA80
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 13:06:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344758AbiDKLGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 07:06:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59446 "EHLO
+        id S1345895AbiDKLIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 07:08:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345868AbiDKLGI (ORCPT
+        with ESMTP id S1345897AbiDKLGu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 07:06:08 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E9F44761
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 04:03:54 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id bv19so7048628ejb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 04:03:54 -0700 (PDT)
+        Mon, 11 Apr 2022 07:06:50 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42EAC13D18;
+        Mon, 11 Apr 2022 04:04:34 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id j21so16027900qta.0;
+        Mon, 11 Apr 2022 04:04:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=mLZ9QFNTOo+e+4B3gFn1AL6Uth7YED0Q2wsCtU1CceQ=;
-        b=apM2h1ms5c+iI/NSYW3yyfH81cEjMRDAnDYfuDCWwG+CkJbHHtJ9BlBeGWDh5ZQb6E
-         1UNZVL+969e58TvdEsH6dwakbcbEXRfAmSdbIUQ+wZOAgassczKahWx5K4wTfYcig1ZV
-         QW6N1HrY0/Pg639vIev2F7sB4N1aSBCgkf1wSSzcQdbkX96/KLwYMgSY+pXa37/Mjd9O
-         7or+dmYzX0vrgIooU5m0z+eKFcCpB3pDEBCQZ52gN7TtfvZpyUuQ3oTgl54+fgM/puKv
-         PyDBsRR3rD/UVUs96QkjqCZHWvSz2ED0aI6n0hcL1Is6BQN45aGr7p8ED70GsmBVNLrR
-         GwCA==
+        bh=vB5rzbkUXQOgEVOAQ+oj0ZM8y30roPESpDd5/oevwT4=;
+        b=dq2RZU8F9nASFtU6zsvVxtuqChAwSl9U0XGqSO2w8YLwBgwFnR718DdsGFlqRdjIx5
+         OdMVR4X+mOHY4U9b+QsCuXBNrqRPvmJqYB1knORI/H6LCrGFKkFZ/LV+r110UEansjxA
+         ayEN2BgYZRYo8ife16WPQNYnMvYEEM69DJqdHeXXM9CyUSi3o1TZ0Ks73XQmunaqJkrs
+         eXXTcy7p4fUyRdScmlt8tXAnfTHIHUjf3sS+Yvwj2XfWLtGB1XAYzGRUSkH5hAk8tMRF
+         2WSf+p7CHJkEwTroLFa4cRhbHfhXpRWjlGpgsQjmfd1KetWMVyyRi+awE7pHIA0CpyyV
+         TaxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=mLZ9QFNTOo+e+4B3gFn1AL6Uth7YED0Q2wsCtU1CceQ=;
-        b=qUdyNHjDu9kfceV3au+aPYdH8s1UYe3bZObzXFzLo5h2t9w+IbYrT8G++CS6wm9HE6
-         XGsboTbZPTdsQsUDR6Os6wUXOkGdeJKgL/ttn1OXQ2kkYW+JhrDGhNw/1xSYQOuKIPfT
-         szppjMzsUnPFk/FmT2piKCQjV8F+KWpbM9z9laFvlB5bc7yq61qQB6kwjvJ3wjs0bRto
-         tJf/CwzvnC/bDH7w2nTmF+Du0sdfZjGkvuC7/OSfPenVQFRZTho2CSIlGwcj7H4qvrMv
-         X3bBodzzpf7r8881MGKrZaBynwu5rgSukfV8Pxz01s0N9SZob+19UV0WXFG59c/YnoTk
-         rkJw==
-X-Gm-Message-State: AOAM532l77UxwfRBYb5LChd4RX927phpoMf5RaHJ1mOPposnSiSbR8ik
-        QJoHs5KaG4b6bcr7aWS8ZXM9DA==
-X-Google-Smtp-Source: ABdhPJzOFbGMPqgKmzqRB7SXP1KsdleWb89TPTqiFSR+KZ7uozFAHd0F3yhLU9CzFeARCrylPJtzUw==
-X-Received: by 2002:a17:906:3144:b0:6ce:de5d:5e3b with SMTP id e4-20020a170906314400b006cede5d5e3bmr29463811eje.689.1649675033144;
-        Mon, 11 Apr 2022 04:03:53 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id j12-20020a50e0cc000000b0041cd813ac01sm11074074edl.28.2022.04.11.04.03.52
+        bh=vB5rzbkUXQOgEVOAQ+oj0ZM8y30roPESpDd5/oevwT4=;
+        b=T7ZhoSMus8o3g0+IT3iEzKzHQAqelCcSsDh6ud2hP/z38WnUNI+torvIpLNSB1LJTo
+         qtmtd/fbK7WoC//iTpXkhOJl7sjTe3BcqS7PtN9kN9Nr/Hhc+mHWw7tBM4fBdh34MUgz
+         L57PZn1Ryeq7OcYFS3vkIzetwyq5VwU2MshvZDTSZ7wlIuDzWAhKpRxqJvmWqCLAmOHE
+         MHC5WAe4+TIMZks9ntu4pHM1RSLMG072kqrj0RzpAu+WeOJ0zbcnN8Y6djbDvOJF2sSs
+         4d7oUAnM1A27pgKKhfTnZXzixcRrtNA7Oc2jJtKkgqCrhfsh3OCiw/lNnrKjcnfYP+xP
+         gqCQ==
+X-Gm-Message-State: AOAM532Dnt6T5JB3p26Tm/Xs0KYpiFOlz14YlY/LZI6tUipfJnexQ9nO
+        Gfz7hoMyFJS3AGIe1PzfBK8=
+X-Google-Smtp-Source: ABdhPJxJP+E6DLnG6gqXLhNmiNDBEfJrnnebGQIoZFEahUYEkQ3U3LsvhFfvRMQP4/HrYf5MIBv35A==
+X-Received: by 2002:ac8:5442:0:b0:2ed:7e3a:17f7 with SMTP id d2-20020ac85442000000b002ed7e3a17f7mr4573276qtq.48.1649675072970;
+        Mon, 11 Apr 2022 04:04:32 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id l18-20020a05622a051200b002e1e5e57e0csm25140194qtx.11.2022.04.11.04.04.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 04:03:52 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [RFC PATCH 2/2] regulator: dt-bindings: qcom,rpmh: document vdd-l7-bob-supply on PMR735A
-Date:   Mon, 11 Apr 2022 13:03:44 +0200
-Message-Id: <20220411110344.231903-3-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220411110344.231903-1-krzysztof.kozlowski@linaro.org>
-References: <20220411110344.231903-1-krzysztof.kozlowski@linaro.org>
+        Mon, 11 Apr 2022 04:04:32 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: lv.ruyi@zte.com.cn
+To:     joe@perches.com
+Cc:     cgel.zte@gmail.com, clm@fb.com, dsterba@suse.com,
+        josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lv.ruyi@zte.com.cn,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH v2] btrfs: remove unnecessary conditional
+Date:   Mon, 11 Apr 2022 11:04:26 +0000
+Message-Id: <20220411110426.2521783-1-lv.ruyi@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <c855ba7ca204b948c59c9fd966c154e5505b3d77.camel@perches.com>
+References: <c855ba7ca204b948c59c9fd966c154e5505b3d77.camel@perches.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PMR735A comes with vdd-l7-bob-supply supply.
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+iput() has already handled null and non-null parameter, so it is no
+need to use if().
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
 ---
- .../bindings/regulator/qcom,rpmh-regulator-supplies.yaml         | 1 +
- 1 file changed, 1 insertion(+)
+v2: return error value directly 
+---
+ fs/btrfs/relocation.c | 5 ++---
+ fs/btrfs/tree-log.c   | 3 +--
+ 2 files changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator-supplies.yaml b/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator-supplies.yaml
-index 26baa6f2edc7..df50fcefb3e5 100644
---- a/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator-supplies.yaml
-+++ b/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator-supplies.yaml
-@@ -223,6 +223,7 @@ allOf:
-         vdd-l3-supply: true
-         vdd-l4-supply: true
-         vdd-l5-l6-supply: true
-+        vdd-l7-bob-supply: true
+diff --git a/fs/btrfs/relocation.c b/fs/btrfs/relocation.c
+index 50bdd82682fa..75051963ffc7 100644
+--- a/fs/btrfs/relocation.c
++++ b/fs/btrfs/relocation.c
+@@ -3846,9 +3846,8 @@ struct inode *create_reloc_inode(struct btrfs_fs_info *fs_info,
+ 	btrfs_end_transaction(trans);
+ 	btrfs_btree_balance_dirty(fs_info);
+ 	if (err) {
+-		if (inode)
+-			iput(inode);
+-		inode = ERR_PTR(err);
++		iput(inode);
++		return ERR_PTR(err);
+ 	}
+ 	return inode;
+ }
+diff --git a/fs/btrfs/tree-log.c b/fs/btrfs/tree-log.c
+index 273998153fcc..c46696896f03 100644
+--- a/fs/btrfs/tree-log.c
++++ b/fs/btrfs/tree-log.c
+@@ -894,8 +894,7 @@ static noinline int replay_one_extent(struct btrfs_trans_handle *trans,
+ 	btrfs_update_inode_bytes(BTRFS_I(inode), nbytes, drop_args.bytes_found);
+ 	ret = btrfs_update_inode(trans, root, BTRFS_I(inode));
+ out:
+-	if (inode)
+-		iput(inode);
++	iput(inode);
+ 	return ret;
+ }
  
-   - if:
-       properties:
 -- 
-2.32.0
+2.25.1
 

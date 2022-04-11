@@ -2,268 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B8384FBA68
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 13:02:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 532174FBA6F
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 13:03:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344155AbiDKLE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 07:04:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55408 "EHLO
+        id S245270AbiDKLFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 07:05:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345182AbiDKLEB (ORCPT
+        with ESMTP id S244759AbiDKLFM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 07:04:01 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D804F10FED;
-        Mon, 11 Apr 2022 04:01:46 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 97FF721600;
-        Mon, 11 Apr 2022 11:01:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1649674905; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BcZJ5/5ZjR47/kkn8TU+auFkri3paVZXIw4igHA+bA8=;
-        b=Xq2XbxNsyLrA1uxRpVkuyRA6Uf6eYXKjnyi06UthMVpzOy/JowuAGgDN+BU2Qwm8t08Njl
-        nDMPwfBvzy75QDoXMhlP/pATQ42vVGaFVHcQiHYYsX3bvyyOTc7GjTWHDdjeOkp7ExeEWB
-        Z84Wz2Xw+NNJtqyryGywJU5FqBShWg0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1649674905;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BcZJ5/5ZjR47/kkn8TU+auFkri3paVZXIw4igHA+bA8=;
-        b=TZ1UanC7y32seFAhi0KNvvH4j2Q0Q5MyivHFJdqnWUgJjFQflAKEG8vyHQEpmH80wFA2bO
-        M/YPWIEbuU2axuCQ==
-Received: from localhost.localdomain (unknown [10.100.208.98])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 6C6A6A3B87;
-        Mon, 11 Apr 2022 11:01:45 +0000 (UTC)
-From:   Jiri Slaby <jslaby@suse.cz>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiri Slaby <jslaby@suse.cz>
-Subject: [PATCH 6/6] Documentation: tty: n_gsm, use power of ReST
-Date:   Mon, 11 Apr 2022 13:01:43 +0200
-Message-Id: <20220411110143.10019-7-jslaby@suse.cz>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220411110143.10019-1-jslaby@suse.cz>
-References: <20220411110143.10019-1-jslaby@suse.cz>
+        Mon, 11 Apr 2022 07:05:12 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C6E443CD
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 04:02:57 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id p15so30047068ejc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 04:02:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NrhjMPDWVMpnH0vGXH4JML8AsEUrRppRhTIbZkMHMtg=;
+        b=q1AEI5QMqWZueRnKCNAHimfoWg6UCP9Lk1hEQEEaN2ub7v0Eajkt0P2lExv6gx/IEX
+         AH3uYloLfAb8KySJP4wayKgaeRV8eqAjlsxzVSFpV/nPl4Bd9HEc3vaBa513BlsAcJvM
+         SeJlsBUJsXCKWgoT8OhDcfybWtY8ix2Da9fUm/KXudI3nq2Kp4+5Vo7Jp/B3OpKAA8iz
+         s3/q/u/itZS9+slHeFvkO7BaC+I85xtSx3g5bpunXKchMaSF3eTq7m9OhcXdfH65d14c
+         LCLGU2RxHE2z0nCFXgnNdn/euRRLNjES3fBvFBIpuXazsk+JtjkQKSCS1FonVuLH3s3Z
+         4g2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NrhjMPDWVMpnH0vGXH4JML8AsEUrRppRhTIbZkMHMtg=;
+        b=r54F5U0dpsDGQjQY2k8x1eJWNTRHiITs/FUUBN3mMSk7wuLnyxwtfLwQDZeAAEXcZL
+         RcgzKmfR+dJDr5ZhHDd6Gdg3pW27ZcpdhYeDXmyvGaFP4lN0NH5K5kMHXdtKKghvSev5
+         2RwTp7w0HtuLL6KGLdsN2dPrJ5mgs1C4yGVWq6SpKSF9UyPcm2U6m3aeq3QnaFvIEYX2
+         T22t3fsMd7t3QJNbFzYQo6YKrsXNPdO0MN7kCkF2DZjGgP2sZ++Qn/RC1hUjpgh+z32M
+         7bwSFMZmoCJRrLHQBvbbHhJlTxsyu8tAVcBm4YXXwn5aaUFOLMYxlNrzqLqWAkoIbXHT
+         N/wg==
+X-Gm-Message-State: AOAM533rzZk4lGoPxTZlu9dKmab3cTSpeNmxz/je2INf3BGRmFlUmKT+
+        8nxhj5Rgc725v8k7W2lWroDuNA==
+X-Google-Smtp-Source: ABdhPJzs5WUk5RcgDGjmx05qg1LQX8CHENqcYVHEYQ8+118ck5dW3vjDXr/APWGQaUFxBkmhW0L6cQ==
+X-Received: by 2002:a17:906:4795:b0:6e8:7121:3c80 with SMTP id cw21-20020a170906479500b006e871213c80mr9235700ejc.352.1649674976100;
+        Mon, 11 Apr 2022 04:02:56 -0700 (PDT)
+Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id fq6-20020a1709069d8600b006e891c0b7e0sm1231664ejc.129.2022.04.11.04.02.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Apr 2022 04:02:55 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] regulator: dt-bindings: qcom,rpmh: update maintainers
+Date:   Mon, 11 Apr 2022 13:02:53 +0200
+Message-Id: <20220411110253.231745-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reformat the whole document, so that automatic numbering and TOC is
-properly generated.
+David Collins' email bounces ("Recipient address rejected: undeliverable
+address: No such user here").
 
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- Documentation/driver-api/tty/n_gsm.rst | 144 +++++++++++++------------
- 1 file changed, 74 insertions(+), 70 deletions(-)
+ .../devicetree/bindings/regulator/qcom,rpmh-regulator.yaml     | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/driver-api/tty/n_gsm.rst b/Documentation/driver-api/tty/n_gsm.rst
-index 04308a7a194a..35d7381515b0 100644
---- a/Documentation/driver-api/tty/n_gsm.rst
-+++ b/Documentation/driver-api/tty/n_gsm.rst
-@@ -2,6 +2,8 @@
- GSM 0710 tty multiplexor HOWTO
- ==============================
+diff --git a/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
+index 2714a790ff83..842ccef691b8 100644
+--- a/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/qcom,rpmh-regulator.yaml
+@@ -7,7 +7,8 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Qualcomm Technologies, Inc. RPMh Regulators
  
-+.. contents:: :local:
-+
- This line discipline implements the GSM 07.10 multiplexing protocol
- detailed in the following 3GPP document:
+ maintainers:
+-  - David Collins <collinsd@codeaurora.org>
++  - Bjorn Andersson <bjorn.andersson@linaro.org>
++  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
  
-@@ -11,79 +13,81 @@ This document give some hints on how to use this driver with GPRS and 3G
- modems connected to a physical serial port.
- 
- How to use it
---------------
--1. config initiator
--^^^^^^^^^^^^^^^^^^^^^
-+=============
- 
--1.1 initialize the modem in 0710 mux mode (usually AT+CMUX= command) through
--    its serial port. Depending on the modem used, you can pass more or less
--    parameters to this command.
-+Config Initiator
-+----------------
- 
--1.2 switch the serial line to using the n_gsm line discipline by using
--    TIOCSETD ioctl.
-+#. Initialize the modem in 0710 mux mode (usually ``AT+CMUX=`` command) through
-+   its serial port. Depending on the modem used, you can pass more or less
-+   parameters to this command.
- 
--1.3 configure the mux using GSMIOC_GETCONF / GSMIOC_SETCONF ioctl.
-+#. Switch the serial line to using the n_gsm line discipline by using
-+   ``TIOCSETD`` ioctl.
- 
--1.4 obtain base gsmtty number for the used serial port.
-+#. Configure the mux using ``GSMIOC_GETCONF``/``GSMIOC_SETCONF`` ioctl.
- 
--Major parts of the initialization program :
--(a good starting point is util-linux-ng/sys-utils/ldattach.c)::
-+#. Obtain base gsmtty number for the used serial port.
- 
--  #include <stdio.h>
--  #include <stdint.h>
--  #include <linux/gsmmux.h>
--  #include <linux/tty.h>
--  #define DEFAULT_SPEED	B115200
--  #define SERIAL_PORT	/dev/ttyS0
-+   Major parts of the initialization program
-+   (a good starting point is util-linux-ng/sys-utils/ldattach.c)::
- 
--	int ldisc = N_GSM0710;
--	struct gsm_config c;
--	struct termios configuration;
--	uint32_t first;
-+      #include <stdio.h>
-+      #include <stdint.h>
-+      #include <linux/gsmmux.h>
-+      #include <linux/tty.h>
- 
--	/* open the serial port connected to the modem */
--	fd = open(SERIAL_PORT, O_RDWR | O_NOCTTY | O_NDELAY);
-+      #define DEFAULT_SPEED	B115200
-+      #define SERIAL_PORT	/dev/ttyS0
- 
--	/* configure the serial port : speed, flow control ... */
-+      int ldisc = N_GSM0710;
-+      struct gsm_config c;
-+      struct termios configuration;
-+      uint32_t first;
- 
--	/* send the AT commands to switch the modem to CMUX mode
--	   and check that it's successful (should return OK) */
--	write(fd, "AT+CMUX=0\r", 10);
-+      /* open the serial port connected to the modem */
-+      fd = open(SERIAL_PORT, O_RDWR | O_NOCTTY | O_NDELAY);
- 
--	/* experience showed that some modems need some time before
--	   being able to answer to the first MUX packet so a delay
--	   may be needed here in some case */
--	sleep(3);
-+      /* configure the serial port : speed, flow control ... */
- 
--	/* use n_gsm line discipline */
--	ioctl(fd, TIOCSETD, &ldisc);
-+      /* send the AT commands to switch the modem to CMUX mode
-+         and check that it's successful (should return OK) */
-+      write(fd, "AT+CMUX=0\r", 10);
- 
--	/* get n_gsm configuration */
--	ioctl(fd, GSMIOC_GETCONF, &c);
--	/* we are initiator and need encoding 0 (basic) */
--	c.initiator = 1;
--	c.encapsulation = 0;
--	/* our modem defaults to a maximum size of 127 bytes */
--	c.mru = 127;
--	c.mtu = 127;
--	/* set the new configuration */
--	ioctl(fd, GSMIOC_SETCONF, &c);
--	/* get first gsmtty device node */
--	ioctl(fd, GSMIOC_GETFIRST, &first);
--	printf("first muxed line: /dev/gsmtty%i\n", first);
-+      /* experience showed that some modems need some time before
-+         being able to answer to the first MUX packet so a delay
-+         may be needed here in some case */
-+      sleep(3);
- 
--	/* and wait for ever to keep the line discipline enabled */
--	daemon(0,0);
--	pause();
-+      /* use n_gsm line discipline */
-+      ioctl(fd, TIOCSETD, &ldisc);
-+
-+      /* get n_gsm configuration */
-+      ioctl(fd, GSMIOC_GETCONF, &c);
-+      /* we are initiator and need encoding 0 (basic) */
-+      c.initiator = 1;
-+      c.encapsulation = 0;
-+      /* our modem defaults to a maximum size of 127 bytes */
-+      c.mru = 127;
-+      c.mtu = 127;
-+      /* set the new configuration */
-+      ioctl(fd, GSMIOC_SETCONF, &c);
-+      /* get first gsmtty device node */
-+      ioctl(fd, GSMIOC_GETFIRST, &first);
-+      printf("first muxed line: /dev/gsmtty%i\n", first);
-+
-+      /* and wait for ever to keep the line discipline enabled */
-+      daemon(0,0);
-+      pause();
- 
--1.5 use these devices as plain serial ports.
-+#. Use these devices as plain serial ports.
- 
--   for example, it's possible:
-+   For example, it's possible:
- 
--   - and to use gnokii to send / receive SMS on ttygsm1
--   - to use ppp to establish a datalink on ttygsm2
-+   - to use *gnokii* to send / receive SMS on ``ttygsm1``
-+   - to use *ppp* to establish a datalink on ``ttygsm2``
- 
--1.6 first close all virtual ports before closing the physical port.
-+#. First close all virtual ports before closing the physical port.
- 
-    Note that after closing the physical port the modem is still in multiplexing
-    mode. This may prevent a successful re-opening of the port later. To avoid
-@@ -91,27 +95,27 @@ Major parts of the initialization program :
-    a disconnect command frame manually before initializing the multiplexing mode
-    for the second time. The byte sequence for the disconnect command frame is::
- 
--      0xf9, 0x03, 0xef, 0x03, 0xc3, 0x16, 0xf9.
-+      0xf9, 0x03, 0xef, 0x03, 0xc3, 0x16, 0xf9
- 
--2. config requester
--^^^^^^^^^^^^^^^^^^^^^
-+Config Requester
-+----------------
- 
--2.1 receive string "AT+CMUX= command" through its serial port,initialize
--    mux mode config
-+#. Receive ``AT+CMUX=`` command through its serial port, initialize mux mode
-+   config.
- 
--2.2 switch the serial line to using the n_gsm line discipline by using
--    TIOCSETD ioctl.
-+#. Switch the serial line to using the *n_gsm* line discipline by using
-+   ``TIOCSETD`` ioctl.
- 
--2.3 configure the mux using GSMIOC_GETCONF / GSMIOC_SETCONF ioctl.
-+#. Configure the mux using ``GSMIOC_GETCONF``/``GSMIOC_SETCONF`` ioctl.
- 
--2.4 obtain base gsmtty number for the used serial port::
-+#. Obtain base gsmtty number for the used serial port::
- 
--  #include <stdio.h>
--  #include <stdint.h>
--  #include <linux/gsmmux.h>
--  #include <linux/tty.h>
--  #define DEFAULT_SPEED	B115200
--  #define SERIAL_PORT	/dev/ttyS0
-+        #include <stdio.h>
-+        #include <stdint.h>
-+        #include <linux/gsmmux.h>
-+        #include <linux/tty.h>
-+        #define DEFAULT_SPEED	B115200
-+        #define SERIAL_PORT	/dev/ttyS0
- 
- 	int ldisc = N_GSM0710;
- 	struct gsm_config c;
+ description: |
+     rpmh-regulator devices support PMIC regulator management via the Voltage
 -- 
-2.35.1
+2.32.0
 

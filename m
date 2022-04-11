@@ -2,107 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC8A44FB35D
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 07:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7654D4FB35F
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 07:57:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244803AbiDKF5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 01:57:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52144 "EHLO
+        id S244808AbiDKF7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 01:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235110AbiDKF5q (ORCPT
+        with ESMTP id S229637AbiDKF73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 01:57:46 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A999C33A26;
-        Sun, 10 Apr 2022 22:55:33 -0700 (PDT)
+        Mon, 11 Apr 2022 01:59:29 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEDE9255A4;
+        Sun, 10 Apr 2022 22:57:16 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id j17so12204915pfi.9;
+        Sun, 10 Apr 2022 22:57:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649656533; x=1681192533;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=p9HXYw/ALt+MopqQNrusnXpB/e7Lu7tHls88nUVRk1Q=;
-  b=QcRVSt6R79v20L1QwpL+LLtsoOjO3j2CEb+SeUma3+6sIc3r9+LCt0+s
-   1Vt1Tv+YUbBauWnaIeMlHIM1uteoM2s7g6tzgWBo8vRr9jUYMfSTT+6FD
-   DLRo28e/5YPsa4oOkHixAUL1m+n6G+/HDTk2/gBCjLEVTFESB0SYpDtzg
-   4=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 10 Apr 2022 22:55:33 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2022 22:55:32 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Sun, 10 Apr 2022 22:55:31 -0700
-Received: from [10.111.167.150] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Sun, 10 Apr
- 2022 22:55:29 -0700
-Message-ID: <adb5b728-d1e3-022d-62fa-1f7278e63e41@quicinc.com>
-Date:   Sun, 10 Apr 2022 22:55:27 -0700
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=H/wt1Dqohp8jVPvDDRc0KxiJo8crSPIUF9LEUiFGtwI=;
+        b=LI5XL5iOur9GxwX+qAbAH1+jRaw7e/ACmUQKrKqUeQgWQwjStd0MJajPReby0Hjdfv
+         RJODZZ0a1lprRYycDrkiB3IKrecMv+S3SdufQC11+XXrGXiD1rYdbB4vQZ/kLI2Cqa92
+         r00KfnHOWGs4TvuW/Q3u3j27s4IbbtFHJLz1JjzjancwofZpaAwDUOzb68WN3eQeEOgP
+         VLnxsPYJm7xueeAI8Loq8cZ33Ji7qosrZZ4ddlgBKVWx0qYFOeQxxyrKoYtN0Ntus/Bg
+         q8rl1AlHWG4kwPuVznHJe0k2LkF9IFC0XI9swAIa97FF3Ouxn9UuxqXOAIw1IzjRfY4G
+         n7fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=H/wt1Dqohp8jVPvDDRc0KxiJo8crSPIUF9LEUiFGtwI=;
+        b=7dvaAy9cx7oJBZTvky3304PujG4dnGdlM65koakaX5hhYPzrS1Ts1gjakreJeJQPHM
+         IDH62wOe7X5BOTSD5zTfC2K7S+opqH4i3C3MUJa/NscLsDkeIaF/EG+ZRJSTO4NzXj6n
+         6YxW+s4r0LC7QxdAqk/QfzKa0IlLlIW7PufNi8etHhTRUA2ezoZwQ6xqkWv4OrrJSmLC
+         HtO0rjccg8moDjLbLXv7R8J3yguZfzA2iwfAhLLa2S7eRaeTPSHw2AXuAGAHjY2cI5KR
+         KrKQ4+XynPIuTENDV/nnjWCIpNZbkWRYCx787bFkle1g4opMiMCdFENy3nc/E3XtWQ/W
+         jjLA==
+X-Gm-Message-State: AOAM531DXexZu+xbrBKHVC5doyC7zpE38L7uIh1zeLo+nVnQg+wm2yaL
+        XFcpLazZP7Zb3NlNteTZCupvfknN4V56GMVcxCBwwBuVP0K5
+X-Google-Smtp-Source: ABdhPJw+2kcN0wShNiGOmkptbcJh3nW6L86otjXm6ZDOL02fONP92h3/kqcJdxHX2uqQ7kiejzaZ9WKFjXCX7wd78to=
+X-Received: by 2002:a63:610:0:b0:39d:300c:ad9b with SMTP id
+ 16-20020a630610000000b0039d300cad9bmr6144210pgg.113.1649656636463; Sun, 10
+ Apr 2022 22:57:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH] drm/msm/dsi: Use connector directly in
- msm_dsi_manager_connector_init()
-Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Rob Clark <robdclark@gmail.com>, "Sean Paul" <sean@poorly.run>
-CC:     <linux-kernel@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
-        Sean Paul <seanpaul@chromium.org>
-References: <20220318000731.2823718-1-swboyd@chromium.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20220318000731.2823718-1-swboyd@chromium.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220409034849.3717231-1-zheyuma97@gmail.com> <20220409034849.3717231-2-zheyuma97@gmail.com>
+ <20220410170127.058fc942@jic23-huawei>
+In-Reply-To: <20220410170127.058fc942@jic23-huawei>
+From:   Zheyu Ma <zheyuma97@gmail.com>
+Date:   Mon, 11 Apr 2022 13:57:05 +0800
+Message-ID: <CAMhUBjkctv-8kvGvdEt0nakyt9EXGwgzey=gQxYbesYrXbW6yQ@mail.gmail.com>
+Subject: Re: [PATCH] iio: magnetometer: ak8975: Fix the error handling in ak8975_power_on()
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     lars@metafoo.de, linux-iio@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linus.walleij@linaro.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Apr 10, 2022 at 11:53 PM Jonathan Cameron <jic23@kernel.org> wrote:
+>
+> On Sat,  9 Apr 2022 11:48:49 +0800
+> Zheyu Ma <zheyuma97@gmail.com> wrote:
+>
+> > When the driver fails to enable the regulator 'vid', we will get the
+> > following splat:
+> >
+> > [   79.955610] WARNING: CPU: 5 PID: 441 at drivers/regulator/core.c:2257 _regulator_put+0x3ec/0x4e0
+> > [   79.959641] RIP: 0010:_regulator_put+0x3ec/0x4e0
+> > [   79.967570] Call Trace:
+> > [   79.967773]  <TASK>
+> > [   79.967951]  regulator_put+0x1f/0x30
+> > [   79.968254]  devres_release_group+0x319/0x3d0
+> > [   79.968608]  i2c_device_probe+0x766/0x940
+> >
+> > Fix this by disabling the 'vdd' regulator when failing to enable 'vid'
+> > regulator.
+> >
+> > Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+> This driver doesn't really have a maintainer any more, though Linus W actually
+> last touched this bit of code. So +CC.
+>
+> However, it's pretty obviously correct so applied to the fixes-togreg branch of iio.git.
+>
+> For future reference, please don't send one fix as reply to a fix on a different driver.
+> Makes a mess of thread handling and tracking in patchwork etc.
 
+Sorry for the confusion, I will take care of it next time.
 
-On 3/17/2022 5:07 PM, Stephen Boyd wrote:
-> The member 'msm_dsi->connector' isn't assigned until
-> msm_dsi_manager_connector_init() returns (see msm_dsi_modeset_init() and
-> how it assigns the return value). Therefore this pointer is going to be
-> NULL here. Let's use 'connector' which is what was intended.
-> 
-> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Cc: Sean Paul <seanpaul@chromium.org>
-> Fixes: 6d5e78406991 ("drm/msm/dsi: Move dsi panel init into modeset init path")
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-> ---
-> 
-> I don't know if this is superseeded by something else but I found this
-> while trying to use the connector from msm_dsi in this function.
-> 
->   drivers/gpu/drm/msm/dsi/dsi_manager.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_manager.c b/drivers/gpu/drm/msm/dsi/dsi_manager.c
-> index 0c1b7dde377c..9f6af0f0fe00 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_manager.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_manager.c
-> @@ -638,7 +638,7 @@ struct drm_connector *msm_dsi_manager_connector_init(u8 id)
->   	return connector;
->   
->   fail:
-> -	connector->funcs->destroy(msm_dsi->connector);
-> +	connector->funcs->destroy(connector);
->   	return ERR_PTR(ret);
->   }
->   
-> 
-> base-commit: 05afd57f4d34602a652fdaf58e0a2756b3c20fd4
+> Ideally also please provide a fixes tag.  For this one I have applied with out it
+> because it was a long time back and looks like the bug predates a bunch of refactoring
+> of this code.
+
+Thanks for your reminder, I will add the fixes tag in the next submission.
+
+Regards,
+Zheyu Ma

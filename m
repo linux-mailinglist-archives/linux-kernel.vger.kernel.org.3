@@ -2,247 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17E664FB3D6
+	by mail.lfdr.de (Postfix) with ESMTP id 604B24FB3D7
 	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 08:38:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244989AbiDKGkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 02:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46410 "EHLO
+        id S244997AbiDKGko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 02:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244963AbiDKGke (ORCPT
+        with ESMTP id S244988AbiDKGkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 02:40:34 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 973EE23159;
+        Mon, 11 Apr 2022 02:40:37 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A48FB23143
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 23:38:23 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id c6so1916913edn.8
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 23:38:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=2WmKSNoZ9cWKL6JDASWnjI9NvSq7+tORNGnSjM+acks=;
+        b=ODfe/DkGj1RuBxSc5J0EXQFnY/vL7RySjU4xh9bzSJOuWwZ4VAsC9/m4/eaLQ6CJl9
+         QyrdjToejG5d1Qb/An1jX6vmjM2PDYFSJ9r+/5+rBxbn27zdhA/UNDf4zatsjZb2NBUh
+         AbnvBXsf3y7KxVV7kVCuECnSxjbsZrs2szLVjgo8CohvcUfKrDT83QYnDYXfXQyaqJlH
+         E33P1hJJjjxMEloiqUY9gxOFUCSsABl4hT7x7CUdyDYHqJD4eG9lJegQSh04Fwur0G4B
+         8KGgJu0DtZN1p/FreHJOKXR9EhlgXXQ/wvLc4s5uuw5HufDXrQhq46vZWpzlqJu60raR
+         Vbgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=2WmKSNoZ9cWKL6JDASWnjI9NvSq7+tORNGnSjM+acks=;
+        b=3IkMnShl4ISTpZCgk04qgeukBBKhlhfhVrkqXEnxXE5pKVfmXo1JZXTsJCr4/xC5RG
+         FyJXk5rjv2hV8pESV3T0S/e+788DBLR1+H+tJHE8B+OQZNwRec+c5Te4IQe5Mq29Aaly
+         /cMYXY5nJjirDDliyJDt9ihyXQ0MiIRZknjfuodotOVElxH1CMIZOAod8reg+gmckxJ6
+         0M16Ox2AVQ24eRv2xXNoVbI1wlhH4O/6941GKzmXOawSU6R5zBcF+CCIvdAnpVPfj+YR
+         8bLdkZkCkQBYDCiyTWvZRc6ur+YH0xjeqLeoIqMGn7rpfdw77oZSdEnckL4Ju4OL3zyH
+         9+PA==
+X-Gm-Message-State: AOAM533EHzMIp+MWbXX0JLQNMUSihO5n460XL9a/DLzkNmKlyK2j9fv4
+        GcE/n0Y1H+oRXgvifA2g5tdXUA==
+X-Google-Smtp-Source: ABdhPJzXMCIHpbGK3+ThRU7zl6dOmK1ntfsv7TgaQBc60TypCniiSSzMFXl5kMoMEEbKtARXkujolQ==
+X-Received: by 2002:a05:6402:ca9:b0:41d:76b5:d17a with SMTP id cn9-20020a0564020ca900b0041d76b5d17amr6338713edb.259.1649659102201;
+        Sun, 10 Apr 2022 23:38:22 -0700 (PDT)
+Received: from [192.168.0.191] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
+        by smtp.gmail.com with ESMTPSA id o18-20020a1709064f9200b006e7f229b332sm8337293eju.36.2022.04.10.23.38.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Sun, 10 Apr 2022 23:38:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649659101; x=1681195101;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=uARV/jTosTxQq4l76DhMLrvvCZEgajnIMtFFAQBCWU4=;
-  b=TnSPO/QFHt8JaGtULlxH99Mrplq0LJoovPQJABI8LhQci1zQm9P010Su
-   bk3ztbF+tHAGXvljw9pYZS7y36hRjEs5R2X55CXTwYWPhrgJ3eWtZY/ZQ
-   s8XlZ614zqX41mf96XZx/yEsQBpokF+XhkxAPijxhRUJxrr0dD+6G6v1M
-   BE9GDclly5GcfXS75Y3oZ6+UllUnj5RPh/WGzwi32R3X3llwNVGdSfQEU
-   KAqGdeF2lVwta5cNvmj2KJ2D6WJrytriUihPJLF1VYdHb/V2xxSD8R9Fq
-   StKJ7x+zPFhxS8Olvp8/+SoHmGhwRG7p8j8L9mGJReqEWeDTA14OeeKkd
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="322489526"
-X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
-   d="scan'208";a="322489526"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2022 23:38:21 -0700
-X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
-   d="scan'208";a="525311978"
-Received: from srkondle-mobl.amr.corp.intel.com (HELO [10.212.113.6]) ([10.212.113.6])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2022 23:38:03 -0700
-Message-ID: <6c976344-fdd6-95cd-2cb0-b0e817bf0392@intel.com>
-Date:   Sun, 10 Apr 2022 23:38:08 -0700
+Message-ID: <2693ad68-c31f-1151-88fd-0b18a4249bd3@linaro.org>
+Date:   Mon, 11 Apr 2022 08:38:20 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
+Subject: Re: [PATCH 02/10] dt-bindings: display: Add D1 display engine
+ compatibles
 Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>
-References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
- <20220405234343.74045-2-kirill.shutemov@linux.intel.com>
- <767c2100-c171-1fd3-6a92-0af2e4bf3067@intel.com>
- <20220409155423.iv2arckmvavvpegt@box.shutemov.name>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCHv4 1/8] mm: Add support for unaccepted memory
-In-Reply-To: <20220409155423.iv2arckmvavvpegt@box.shutemov.name>
+To:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>
+Cc:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+References: <20220411043423.37333-1-samuel@sholland.org>
+ <20220411043423.37333-3-samuel@sholland.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220411043423.37333-3-samuel@sholland.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/9/22 08:54, Kirill A. Shutemov wrote:
-> On Fri, Apr 08, 2022 at 11:55:43AM -0700, Dave Hansen wrote:
->>> The page allocator is modified to accept pages on the first allocation.
->>> PageUnaccepted() is used to indicate that the page requires acceptance.
->>
->> Does this consume an actual page flag or is it aliased?
+On 11/04/2022 06:34, Samuel Holland wrote:
+> Allwinner D1 contains a display engine 2.0. It features two mixers, a
+> TCON TOP (with DSI and HDMI), one TCON LCD, and one TCON TV.
 > 
-> It is encoded as a page type in mapcount of unallocated memory. It is not
-> aliased with PageOffline() as I did before.
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
 > 
-> I will mention that it is a new page type.
 
-Guess I should have looked at the code. :)
 
-Are we just increasingly using the StudlyNames() for anything to do with
-pages?
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
->>> + /*
->>> +  * PageUnaccepted() indicates that the page has to be "accepted" before it can
->>> +  * be used. Page allocator has to call accept_page() before returning the page
->>> +  * to the caller.
->>> +  */
->>
->> Let's talk about "used" with a bit more detail.  Maybe:
->>
->> /*
->>  * PageUnaccepted() indicates that the page has to be "accepted" before
->>  * it can be read or written.  The page allocator must to call
->>  * accept_page() before touching the page or returning it to the caller.
->>  */
-> 
-> I guess s/must to call/must call/, right?
 
-Yep.
-
-...
->>> +	/*
->>> +	 * Check if the page needs to be marked as PageUnaccepted().
->>> +	 * Used for the new pages added to the buddy allocator for the first
->>> +	 * time.
->>> +	 */
->>> +	if (!unaccepted && (fpi_flags & FPI_UNACCEPTED))
->>> +		unaccepted = page_is_unaccepted(page, order);
->>
->> 	if (page_needs_acceptance && (fpi_flags & FPI_UNACCEPTED))
->> 		page_needs_acceptance = page_is_unaccepted(page, order);
->>
->>> +	if (unaccepted)
->>> +		__SetPageUnaccepted(page);
->>
->> This is getting hard for me to follow.
->>
->> There are:
->> 1. Pages that come in here with PageUnaccepted()==1
->> 2. Pages that come in here with PageUnaccepted()==0, but a buddy that
->>    was PageUnaccepted()==1
->>
->> In either of those cases, the bitmap will be consulted to see if the
->> page is *truly* unaccepted or not.  But, I'm struggling to figure out
->> how a page could end up in one of those scenarios and *not* be
->> page_is_unaccepted().
->>
->> There are three pieces of information that come in:
->> 1. PageUnaccepted(page)
->> 2. PageUnaccepted(buddies[])
->> 3. the bitmap
-> 
-> 1 and 2 are the same conceptionally: merged-in pieces of the resulting page.
-> 
->>
->> and one piece of information going out:
->>
->> PageUnaccepted(page);
->>
->> I think I need a more coherent description of how those four things fit
->> together.
-> 
-> The page gets marked as PageUnaccepted() if any of merged-in pages is
-> PageUnaccepted().
-> 
-> For new pages, just being added to buddy allocator, consult
-> page_is_unaccepted(). FPI_UNACCEPTED indicates that the page is new and
-> page_is_unaccepted() check is required.
-> 
-> Avoid calling page_is_unaccepted() if it is known that the page needs
-> acceptance anyway. It can be costly.
-> 
-> Is it good enough explanation?
-
-Yeah, elaborating on the slow and fast paths makes a lot of sense.
-
-> FPI_UNACCEPTED is not a good name. Any help with a better one?
-> FPI_CHECK_UNACCEPTED?
-
-Maybe even something like FPI_UNACCEPTED_SLOWPATH.  Then you can say
-that when this is passed in the pages might not have PageUnaccepted()
-set and the slow bitmap needs to be consulted.
-
->>>  	if (fpi_flags & FPI_TO_TAIL)
->>>  		to_tail = true;
->>>  	else if (is_shuffle_order(order))
->>> @@ -1149,7 +1192,8 @@ static inline void __free_one_page(struct page *page,
->>>  static inline bool page_expected_state(struct page *page,
->>>  					unsigned long check_flags)
->>>  {
->>> -	if (unlikely(atomic_read(&page->_mapcount) != -1))
->>> +	if (unlikely(atomic_read(&page->_mapcount) != -1) &&
->>> +	    !PageUnaccepted(page))
->>>  		return false;
->>
->> That probably deserves a comment, and maybe its own if() statement.
-> 
-> Own if does not work. PageUnaccepted() is encoded in _mapcount.
-> 
-> What about this:
-> 
-> 	/*
-> 	 * page->_mapcount is expected to be -1.
-> 	 *
-> 	 * There is an exception for PageUnaccepted(). The page type can be set
-> 	 * for pages on free list. Page types are encoded in _mapcount.
-> 	 *
-> 	 * PageUnaccepted() will get cleared in post_alloc_hook().
-> 	 */
-> 	if (unlikely((atomic_read(&page->_mapcount) | PG_unaccepted) != -1))
-> 		return false;
-> 
-> ?
-
-That's better.  But, aren't the PG_* names usually reserved for real
-page->flags bits?  That naming might be part of my confusion.
-
->>>  		add_to_free_list(&page[size], zone, high, migratetype);
->>>  		set_buddy_order(&page[size], high);
->>>  	}
->>> @@ -2396,6 +2446,9 @@ inline void post_alloc_hook(struct page *page, unsigned int order,
->>>  	 */
->>>  	kernel_unpoison_pages(page, 1 << order);
->>>  
->>> +	if (PageUnaccepted(page))
->>> +		accept_page(page, order);
->>> +
->>>  	/*
->>>  	 * As memory initialization might be integrated into KASAN,
->>>  	 * KASAN unpoisoning and memory initializion code must be
->>
->> Is accepted memory guaranteed to be zeroed?  Do we want to skip the
->> __GFP_ZERO behavior later in this function?  Or is that just a silly
->> over-optimization?
-> 
-> For TDX, it is true that the memory gets cleared on acceptance, but I
-> don't we can say the same for any possible implementation.
-> 
-> I would rather leave __GFP_ZERO for peace of mind. Clearing the cache-hot
-> page for the second time shouldn't be a big deal comparing to acceptance
-> cost.
-
-Sure, fair enough.
+Best regards,
+Krzysztof

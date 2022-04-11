@@ -2,142 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBC914FC23F
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 18:26:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDE734FC241
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 18:27:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348376AbiDKQ2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 12:28:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58988 "EHLO
+        id S1348469AbiDKQ3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 12:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348415AbiDKQ2t (ORCPT
+        with ESMTP id S244728AbiDKQ3T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 12:28:49 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE802AC63
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 09:26:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KuWA7cVnrE75YwaCwEbSNlTSUfsIzm++kL0UnMZKnYQq69Z/OoyzR3oYK7YQst1gE4DeMd+li4d8J5bzMAl0DSnGJTEVRUXcl0/iM5Ob+juxkJ1iStshOXeVo5FuRVE40Oghv+tng1a7uWX6Ah6XZ5znNeZc+U9DzcVngiGyoyLMf+lN6qdU0x76IEuaHieyyWdASq2KEg9tr6AT4yx+Leg5up6vcaXzAJRtlZGtAhk8u0zERMHruaxjEMFNn4lQiPVm3xAs5GEI8fablPByW0hFw5iOTMKEzWk7mzOOwRi0Ruapd4WT+k7pOu5eqUXW8Ov75Z2Gy2U5qwrYX86Gow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=p9lMdZAEWtGWcaUpaq+QIyKpxqEa0tXWVZR8GI1VbhM=;
- b=b+9uU8JgtTZpZaA1gcfEhBH5FaNtsWC2uVh2MAyxTDv5EVtLaCPy2x8FAlKD7/aVnMU0V/IxGDRCp6n5Ri77a/ax3sIRo/GJkbo2ZBM2vaEppV3zqkuO7aZyHGXz8vaDOdRfwfovY78cMx5SDE9y2qFbAQi26LL4GviUxfZzb2M3Fd6QofMVQMc7ZjArwG8Ax7oPiKqajjzn+4JM1wxYB9ZYl2iG+5xgZjbCbKA9jobNFqoZaHTRY0o7sKmiIl3dIOOGt3M0GHvL91kRva5Vi6GdQs4FHTp/kdjbjQ33+Tqou9d7uqAwXS/gFXm6n4YGwFIsknSj6GtHigDcpWNKUg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=p9lMdZAEWtGWcaUpaq+QIyKpxqEa0tXWVZR8GI1VbhM=;
- b=NzoDNT9GXwVQp8ppnti3nAsjBR3u8fAgzEeLPrXHjEvVji3Xap3xCWMdMW44mIeTqyiOGakO+PtvbJsaZORq+Em/SoiO0NF0I2wt44fBD5klZVCdTALvB836TUPWW48BnfDalCDFxXtAQ9AOm4hyTofEcErBKYoIr5Dg6n5rB2266b6lTY2K0zN9uwWVZPeK8xFPL1sIyJHFMfwD6mzWqEG8KztV6zqttCH/zvCx/++8VZ9YFeqXj9nHVtrM5BKT9CZvK/0PoVp6DDXw9ICLOF7s1wxPsxnrOt6rBY9NiJqfwD3FcqSA+D+8IF5BGSOaWyUE/5q7ffM9mH/mhQOd9A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by CH2PR12MB4908.namprd12.prod.outlook.com (2603:10b6:610:6b::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Mon, 11 Apr
- 2022 16:26:33 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::cdfb:f88e:410b:9374]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::cdfb:f88e:410b:9374%6]) with mapi id 15.20.5144.029; Mon, 11 Apr 2022
- 16:26:33 +0000
-Date:   Mon, 11 Apr 2022 13:26:32 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        intel-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 14/34] drm/i915/gvt: devirtualize ->{get,put}_vfio_device
-Message-ID: <20220411162632.GP2120790@nvidia.com>
-References: <20220411141403.86980-1-hch@lst.de>
- <20220411141403.86980-15-hch@lst.de>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220411141403.86980-15-hch@lst.de>
-X-ClientProxiedBy: BLAPR03CA0137.namprd03.prod.outlook.com
- (2603:10b6:208:32e::22) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Mon, 11 Apr 2022 12:29:19 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F372CF2E;
+        Mon, 11 Apr 2022 09:27:04 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id k22so5281454wrd.2;
+        Mon, 11 Apr 2022 09:27:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ITFeuhIISg+UteX7JWYJlJzAHiy1YXAVNDcS4HitlFk=;
+        b=CAknTVts7FZNNCh/mOgu+gKhOEu2Y/aqwVxaNM0kHSWyY/glJTkWs+t1hBDlOYMwO0
+         vOsyAg3ZWt9rKSAYirIRS9YT7GKTIfpwgmj5Hix7tNeNxE5B0sr0C7kyaVIDuiswO/of
+         zvBfzsRABDC/kZAqs7mvbcGUVODaUwnvPUpGan18XlyFAk8QPfIcDjfIw8IX5o1PVYVy
+         NslaqRGIMKHic8ecpxpeEOtp04GwzBPfFbNBtcqWbLMjbaasnYYpRIHG15hGH0Za+K+P
+         hXSyvoeoRbwPciFOiPEojsJL+/Ym8Bq5E5fvF47Dy0DuJsUn0kJ6p+VixB6iykcjd18x
+         wKXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ITFeuhIISg+UteX7JWYJlJzAHiy1YXAVNDcS4HitlFk=;
+        b=XxcNZUfgBSi70q+8npK8/PQ7gS18J/OmYe3ze+4cZ3PYpvrlOcafVizCfq39GpsPuY
+         z2UcirEcqSPisfh71l3abE7PCDHSZ9PNbUrv1stgDuPNErOg8B4jdTwlKboO6TeoK23k
+         2hKI2cJqXAzECuEibo1ydsiK9unQkk3ONgtY7dQB41NIektY0bCQOCjxy/9tffw0UyP6
+         Qqj1bHXzrhhEPiCQUcbkWORFsIkn3IRTX0BSBm78lv3FLMswvj6azanHDoqz6fXIB30x
+         Zk0IM3CF66wXNpC7Wsd72Q9qWePB3PYAtbTEmYR1rtiyAmhWrHB3RRlaJadT0+UsGOv7
+         z50Q==
+X-Gm-Message-State: AOAM532dP1ibiBfxY9my1bKs/w3XY3ayRTd3oGmVzw3M2pcldcxMvLgs
+        fQe02uZ+WNFWVjgpSu38i5zOFhRq722Ufw==
+X-Google-Smtp-Source: ABdhPJyn/l/yymgrincqx9jqS6snjtWym7mz9/5OBTtPWM1cOAUYev+ht24Ox443KlRM9ef/kyV1Kw==
+X-Received: by 2002:a5d:64aa:0:b0:206:d0e:14a5 with SMTP id m10-20020a5d64aa000000b002060d0e14a5mr25308152wrp.705.1649694423153;
+        Mon, 11 Apr 2022 09:27:03 -0700 (PDT)
+Received: from [192.168.1.122] (cpc159313-cmbg20-2-0-cust161.5-4.cable.virginm.net. [82.0.78.162])
+        by smtp.gmail.com with ESMTPSA id n65-20020a1c2744000000b003862bfb509bsm18065887wmn.46.2022.04.11.09.27.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Apr 2022 09:27:02 -0700 (PDT)
+Subject: Re: [PATCH V2] sfc: ef10: Fix assigning negative value to unsigned
+ variable
+To:     Haowen Bai <baihaowen@meizu.com>,
+        Martin Habets <habetsm.xilinx@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1649640757-30041-1-git-send-email-baihaowen@meizu.com>
+From:   Edward Cree <ecree.xilinx@gmail.com>
+Message-ID: <1912936d-14b5-f6af-c927-c46fabc72da5@gmail.com>
+Date:   Mon, 11 Apr 2022 17:27:01 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d808e852-e09e-4a47-032d-08da1bd80acf
-X-MS-TrafficTypeDiagnostic: CH2PR12MB4908:EE_
-X-Microsoft-Antispam-PRVS: <CH2PR12MB49080BD1B942DBD812134CEBC2EA9@CH2PR12MB4908.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: AidimZTxgearZCDRfo5h8koL9BES0xOK9aHAR8AMytqWT+vj2ilR9fFGRKqCU+0qaAxjYLFes1N0YWbamHSn5lYK7yhsM/3o6Yb9oqHyXsOmKZ2xB7DWmZwbO3KoHWeVb2mcme9gBpYjqexmc/c0PAp5xugcRAr3ctbsARnLEwOURdSa17ciummexVkjftmdTQQ4bUCZOkP6RLSAQwdlw3cMnULj93hPV4/BRgCrimuwUC9ZoeGM6sDezE30Odb1CmMSL2tomhhMqLUG1uR2FGTxKRuqCA8yq2NW0oGcoxcKlCpHPgvPRq8wHJu9FYhpnY954lJbczOJy41LFxm2VQE8b2QdryR/H62sOLOVgxs5sQyGhxaOEqRkrSMrpcEbn7WBzDparvAGn1GXHDhlrxhwB9Obd7roE5L10c969dtkTXQNr0NK/ZAhYgNtl2r7YHDwXbdHyxllmkkVYC9m0GLLnGY91u2zlRUhh/wAWrRhOE3pgmVmvbNXzkgOVJ0wK27P3HA0j0OQzhKMCVsAiF83cEdh+UkzM+DZlH3nb3Ijmsn2ED5W2d5jGP31ZT2h0c1ijzhxevfXSbQGHX3CICqphVVbA7lbuTT+kqeSQ03xbREHRR2U9IT67WMimx4EO8xfkPWzFC4Ga1bhyyR7Og==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(316002)(6916009)(54906003)(6506007)(6486002)(83380400001)(33656002)(36756003)(86362001)(38100700002)(2616005)(6512007)(1076003)(2906002)(5660300002)(7416002)(4744005)(26005)(186003)(66476007)(66556008)(66946007)(8676002)(8936002)(4326008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Z4r2AH92XI++qMVD4Th0P/LEsrfWKBzp54FSsfqng6IctUO5p+1+LBeLgg0V?=
- =?us-ascii?Q?i773bGWM4es9ADuDIW1epl2DIdpEdhRJpGwKTsZuJlRFcoLML1oUeu0Z6OAs?=
- =?us-ascii?Q?hG3+VrSTx5ag43b0/WQ81AttzA5Par6MyPCglK4aGrbyHImxRY0DuHTUCbKS?=
- =?us-ascii?Q?+NvdHm26wQc6pDrm5XDzzmkzRZz6ciyybYbX7BYxfWkgqo54GYSLThJlRSIP?=
- =?us-ascii?Q?vAx2hAhLACH/XkA2ASP5mzzyoVpr+Ho9IR1SOcB679gHj7G901xRJTG8FtJs?=
- =?us-ascii?Q?2TcP2VMI1hDhhh7GJpXja+VxLa2yTTzdiUeQ5VRafhvhMQ8ydQGcV13TsJpe?=
- =?us-ascii?Q?kqOBrc0iA1pXE9hSvX3tuQGjVBZZ8Q64WdYW18nrwYPKyBZka2J2eeX+KHuW?=
- =?us-ascii?Q?Hnlbekyn4SopWCyKILO3e6oiyrVgDyXcbEDB/BzV9kJ0fzYEZ0dqORx0EHTo?=
- =?us-ascii?Q?VEzVboVby27VilyqnrwBKLZl1N9qIdpcAI0JDiR0xT/Yt8x48flQPuDR9cWL?=
- =?us-ascii?Q?aJsXbyJ6U0BA2+2yrOmbb3G9ZdMCZp3Kjv1NQbOgkfvx1e3KbaaiZ75NxT6g?=
- =?us-ascii?Q?2bhO+TFRPc9U2Kcc/oWtC/KnV8gV5xYklf438IBSPfOTWvlh6d0D+t3zq8Yn?=
- =?us-ascii?Q?t7iIHMe+P5WB0bA6i71oSks0evLlP5gJV1YKohogOqyeSiJRMFW5JPtdPbbK?=
- =?us-ascii?Q?VaBNRPTUwxT04LUtn/Pk8mlK70dRg3ElB6db30wEXocdnYbCaAYzDMedn5l8?=
- =?us-ascii?Q?J74+k8XdYuAQDXSBM9tNKqROw/x0GyBJoL2ssMMu3AI+e7GKQJpudEsf6Clw?=
- =?us-ascii?Q?o3E2djG3UNaiihASQivOrIX7QZPP+o1fTtDPwX6rByIL+v2ig+9UoPZwSQzt?=
- =?us-ascii?Q?sxNZv3MNv6Jo4TX667e+9zSdJoP72OoEyAfkijw8NHozLXikbijcOeTH9A65?=
- =?us-ascii?Q?PbCvWfvbzPljtP101op35DBfcmH7RWJXu3491Y1Ngc20kGsITMi1sWg3UMUW?=
- =?us-ascii?Q?28JTvcOS8cVNAszztUNaO2dzStnT6GvEDMlOuOPGr7WHRQ+zKeizrAdjyfku?=
- =?us-ascii?Q?gg/3I+NKAy8GWvxqWuwbfljU5BNHqSz9fpeG/9DHSPOVfDYZW85u5xXAemZE?=
- =?us-ascii?Q?uNsJ2vewXohQV9nyypPyXHPOAHT6s/IEZwTHb4n3xFnNQYhbilh0z2ZONE5J?=
- =?us-ascii?Q?nxvGzIZhbUaCftvuwUzefWlCYGLXAg5qXftgW8rtqU7/pXDZZk2Oy3dR3ZjA?=
- =?us-ascii?Q?HRgQAmdBQbn0odJa3YfMQQemIFCn2Ei8itHPw62KHQKchQVO0NYAFRSh9cHN?=
- =?us-ascii?Q?mBeNoRzBnD8018+cGCqlf6TXfIMZBx8SzvLrO/7Dg4wBOqaI/4ruGL+es2nK?=
- =?us-ascii?Q?djIuKSADqrjL/r0uZ9P0TE0dvwBnL7SDrqSrrOomcO6mxKYKnz/MUpjTzs0X?=
- =?us-ascii?Q?yCaELrgjuHR571jH0f8yZgD1wRQLhBs13scegQW/Z7PMm1L1ENoT+H3yJiVt?=
- =?us-ascii?Q?6NHCr+JvQSPSthsv+BK+kgl2UvaGK57R25MGVRxVW8wGRip2bnzF7YzcM4/C?=
- =?us-ascii?Q?0vMFn14P5knUv26Ou7qrzSchpTG8ZaIPDPrCfrbUBufZTQ6VaNXFi8heY+qy?=
- =?us-ascii?Q?P/wm++qSaZPC7SsfqA0qPJtnBL7iNK/oz9sHGLpFINRhKCsqObbarED0mg4M?=
- =?us-ascii?Q?8o7RklberLv15GRLU3AvtY40vjgV7CfV3kyfxqZNCDLetAicW+Zg5IbKq9y3?=
- =?us-ascii?Q?Dr+JqGo55w=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d808e852-e09e-4a47-032d-08da1bd80acf
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2022 16:26:33.6148
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dtCUoqeXHuol6SAwMAuJwMSc4r4t7Rz7x1qXVmMrSiMY/vTe7fNgF1JILJ5+3CDh
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4908
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <1649640757-30041-1-git-send-email-baihaowen@meizu.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 04:13:43PM +0200, Christoph Hellwig wrote:
-> Just open code the calls to the VFIO APIs.
+On 11/04/2022 02:32, Haowen Bai wrote:
+> fix warning reported by smatch:
+> 251 drivers/net/ethernet/sfc/ef10.c:2259 efx_ef10_tx_tso_desc()
+> warn: assigning (-208) to unsigned variable 'ip_tot_len'
 > 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
 > ---
->  drivers/gpu/drm/i915/gvt/dmabuf.c    | 12 ++++++-----
->  drivers/gpu/drm/i915/gvt/hypercall.h |  2 --
->  drivers/gpu/drm/i915/gvt/kvmgt.c     | 22 --------------------
->  drivers/gpu/drm/i915/gvt/mpt.h       | 30 ----------------------------
->  4 files changed, 7 insertions(+), 59 deletions(-)
+Acked-by: Edward Cree <ecree.xilinx@gmail.com>
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> V1->V2: to assign "0x10000 - EFX_TSO2_MAX_HDRLEN" is the actual 
+> semantics of the value.
+> 
+>  drivers/net/ethernet/sfc/ef10.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/sfc/ef10.c b/drivers/net/ethernet/sfc/ef10.c
+> index 50d535981a35..c9ee5011803f 100644
+> --- a/drivers/net/ethernet/sfc/ef10.c
+> +++ b/drivers/net/ethernet/sfc/ef10.c
+> @@ -2256,7 +2256,7 @@ int efx_ef10_tx_tso_desc(struct efx_tx_queue *tx_queue, struct sk_buff *skb,
+>  	 * guaranteed to satisfy the second as we only attempt TSO if
+>  	 * inner_network_header <= 208.
+>  	 */
+> -	ip_tot_len = -EFX_TSO2_MAX_HDRLEN;
+> +	ip_tot_len = 0x10000 - EFX_TSO2_MAX_HDRLEN;
+>  	EFX_WARN_ON_ONCE_PARANOID(mss + EFX_TSO2_MAX_HDRLEN +
+>  				  (tcp->doff << 2u) > ip_tot_len);
+>  
+> 
 
-Had to look ahead in the series to see that the
-vfio_device_get_from_dev() was removed too :)
-
-Jason

@@ -2,267 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A3054FB325
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 07:12:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DFA24FB327
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 07:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244695AbiDKFOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 01:14:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34516 "EHLO
+        id S244712AbiDKFPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 01:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230030AbiDKFOt (ORCPT
+        with ESMTP id S244706AbiDKFPR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 01:14:49 -0400
-Received: from smtpbgbr2.qq.com (smtpbgbr2.qq.com [54.207.22.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E85C3EF03
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 22:12:25 -0700 (PDT)
-X-QQ-mid: bizesmtp73t1649653934thmrjuas
-Received: from localhost.localdomain ( [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 11 Apr 2022 13:12:08 +0800 (CST)
-X-QQ-SSF: 01400000002000E0J000B00A0000000
-X-QQ-FEAT: Ut0pB98mtT/gFdKHPfoA7at3zaJVoBJOhcyE/M+UJ2/MLKcSy/JQcggkV+Krt
-        0aRzpV2M0Uv+gUPWgYDcXS2fpy2S3WJj+/tBy6WnbI39Iax/LjjW0yveVGjCZBXsv2DkT3x
-        FkRxWIidJVwJyMWfk3AjKBLxU2fyMo2N4evxl2Vu2oTOVWEkwzffZsw0D/HU5kMSO9gYQj/
-        WX4KaiEdnL5CoNNCqTbuNLpNuzziJ+giSkcEFrSCRLPPVN69P8vzP9JllHI08QM8J6iVmIC
-        zevGiFs8i6YDMr4WdcDyRJ8pCVqgTkY8T9yJdv0xDnyVkJQ6mJuUnWBcXJpXZ6+cFWvvvv2
-        GW4eb4+0fioZMav/F9T2UX+KIGjQEtKFOgzJbXk
-X-QQ-GoodBg: 2
-From:   Meng Tang <tangmeng@uniontech.com>
-To:     mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
-        nixiaoming@huawei.com
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Meng Tang <tangmeng@uniontech.com>,
-        Davidlohr Bueso <dave@stgolabs.net>
-Subject: [PATCH] fs/proc: Introduce list_for_each_table_entry for proc sysctl
-Date:   Mon, 11 Apr 2022 13:12:05 +0800
-Message-Id: <20220411051205.6694-1-tangmeng@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Mon, 11 Apr 2022 01:15:17 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5083EF09
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 22:13:04 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id bu29so24655494lfb.0
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 22:13:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wQM8A4m7f13EJQA8KjIVGrIa54cJcgZ+Jxj0k/6mei0=;
+        b=P3EDqa+upFKTQO2q4GrPv45ACRIqEs+l15hrSi37m7t5SzWr1zZb2mRRRTsxMVEPLA
+         EEQBLMqWCus/npkQ91kb0T05Fq+ihkPNKP8ElruN61UliwD1LurKcHDu1VdaF7TlWNtN
+         ysp+mQ/i1yfmhijrvss3UTgyRwvzZ6zOVt3Es=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wQM8A4m7f13EJQA8KjIVGrIa54cJcgZ+Jxj0k/6mei0=;
+        b=Uv3ugoRNTctEzJOx0E956gg72sWulVK4HhChgwSatemL+MPLiY1xQ3HnwKk83J0ZMV
+         vI6FHHgDwAeqzzVtvAWDVfjnqeRxel3mHn6pTB54ApMQc5f1fH0wzAVEv1UlSZV8Okxt
+         q45NDA4ZI7ZNFOSpK05jqS/9hqOx3hCU5o+3TxqanBuYxiNbsSSEjocv8JvzNI5p7dwm
+         M5xwtFT2ru/QEQUiXuq3L48yhQkLwEE0KCErrGFbUC5B9mBUCRT4UoFoFgFJ98JtH0ue
+         Elj1WBKUIDGoKpLYSWlZcO4yXSY/PHMP3j/3TmZ5evp+JjJRLC40D/He+gGaWkWBV1na
+         XS9A==
+X-Gm-Message-State: AOAM530kunHQtVZkcWGDooTnXG7LXJo8PN8Tcwwk/PY1JCs3v2P8Ujfs
+        SESEqier/oUaULQhPCwPB5/0mW+2p5cRI/wd
+X-Google-Smtp-Source: ABdhPJxRCfVJw71RSsDRrBmvCM9U2X/2U+mu89CsCACMoZSgH0m8Pydn/WLH6Dy0IeNjMoG01oWwOw==
+X-Received: by 2002:a05:6512:39c8:b0:46b:9aed:389f with SMTP id k8-20020a05651239c800b0046b9aed389fmr5519670lfu.194.1649653982071;
+        Sun, 10 Apr 2022 22:13:02 -0700 (PDT)
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com. [209.85.208.171])
+        by smtp.gmail.com with ESMTPSA id b43-20020a05651c0b2b00b0024b5f54f483sm395435ljr.28.2022.04.10.22.13.01
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 10 Apr 2022 22:13:01 -0700 (PDT)
+Received: by mail-lj1-f171.google.com with SMTP id c15so18640760ljr.9
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 22:13:01 -0700 (PDT)
+X-Received: by 2002:a2e:9041:0:b0:24a:ce83:dcb4 with SMTP id
+ n1-20020a2e9041000000b0024ace83dcb4mr19664640ljg.291.1649653981116; Sun, 10
+ Apr 2022 22:13:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign8
-X-QQ-Bgrelay: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CAHk-=wh0+DYC2+Aeu2=vfUtGaDqVuKxKrxyhwQFoG89rcynzww@mail.gmail.com>
+ <20220411045822.GA295401@roeck-us.net>
+In-Reply-To: <20220411045822.GA295401@roeck-us.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 10 Apr 2022 19:12:44 -1000
+X-Gmail-Original-Message-ID: <CAHk-=wg_=3qE9E5ynDukzZzieKUABoEwJuBJzthRhwRo=s-1vQ@mail.gmail.com>
+Message-ID: <CAHk-=wg_=3qE9E5ynDukzZzieKUABoEwJuBJzthRhwRo=s-1vQ@mail.gmail.com>
+Subject: Re: Linux 5.18-rc2
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the list_for_each_table_entry macro to optimize the scenario
-of traverse ctl_table. This make the code neater and easier to
-understand.
+On Sun, Apr 10, 2022 at 6:58 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> Build results:
+>         total: 151 pass: 151 fail: 0
+> Qemu test results:
+>         total: 488 pass: 488 fail: 0
 
-Suggested-by: Davidlohr Bueso<dave@stgolabs.net>
-Signed-off-by: Meng Tang <tangmeng@uniontech.com>
----
- fs/proc/proc_sysctl.c | 81 +++++++++++++++++++++++++------------------
- 1 file changed, 47 insertions(+), 34 deletions(-)
+Lovely. It seems we got them all sorted out quickly this time. Thanks.
 
-diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
-index fea2561d773b..4f31c68e8ed9 100644
---- a/fs/proc/proc_sysctl.c
-+++ b/fs/proc/proc_sysctl.c
-@@ -13,6 +13,9 @@
- #include <linux/module.h>
- #include "internal.h"
- 
-+#define list_for_each_table_entry(entry, table) \
-+	for ((entry) = (table); (entry)->procname; (entry)++)
-+
- static const struct dentry_operations proc_sys_dentry_operations;
- static const struct file_operations proc_sys_file_operations;
- static const struct inode_operations proc_sys_inode_operations;
-@@ -170,15 +173,19 @@ static void init_header(struct ctl_table_header *head,
- 	head->node = node;
- 	if (node) {
- 		struct ctl_table *entry;
--		for (entry = table; entry->procname; entry++, node++)
-+
-+		list_for_each_table_entry(entry, table) {
- 			node->header = head;
-+			node++;
-+		}
- 	}
- }
- 
- static void erase_header(struct ctl_table_header *head)
- {
- 	struct ctl_table *entry;
--	for (entry = head->ctl_table; entry->procname; entry++)
-+
-+	list_for_each_table_entry(entry, head->ctl_table)
- 		erase_entry(head, entry);
- }
- 
-@@ -192,7 +199,7 @@ static int insert_header(struct ctl_dir *dir, struct ctl_table_header *header)
- 	err = insert_links(header);
- 	if (err)
- 		goto fail_links;
--	for (entry = header->ctl_table; entry->procname; entry++) {
-+	list_for_each_table_entry(entry, header->ctl_table) {
- 		err = insert_entry(header, entry);
- 		if (err)
- 			goto fail;
-@@ -989,30 +996,32 @@ static int sysctl_err(const char *path, struct ctl_table *table, char *fmt, ...)
- 
- static int sysctl_check_table(const char *path, struct ctl_table *table)
- {
-+	struct ctl_table *entry;
- 	int err = 0;
--	for (; table->procname; table++) {
--		if (table->child)
--			err = sysctl_err(path, table, "Not a file");
--
--		if ((table->proc_handler == proc_dostring) ||
--		    (table->proc_handler == proc_dointvec) ||
--		    (table->proc_handler == proc_dointvec_minmax) ||
--		    (table->proc_handler == proc_dointvec_jiffies) ||
--		    (table->proc_handler == proc_dointvec_userhz_jiffies) ||
--		    (table->proc_handler == proc_dointvec_ms_jiffies) ||
--		    (table->proc_handler == proc_doulongvec_minmax) ||
--		    (table->proc_handler == proc_doulongvec_ms_jiffies_minmax)) {
--			if (!table->data)
--				err = sysctl_err(path, table, "No data");
--			if (!table->maxlen)
--				err = sysctl_err(path, table, "No maxlen");
-+
-+	list_for_each_table_entry(entry, table) {
-+		if (entry->child)
-+			err = sysctl_err(path, entry, "Not a file");
-+
-+		if ((entry->proc_handler == proc_dostring) ||
-+		    (entry->proc_handler == proc_dointvec) ||
-+		    (entry->proc_handler == proc_dointvec_minmax) ||
-+		    (entry->proc_handler == proc_dointvec_jiffies) ||
-+		    (entry->proc_handler == proc_dointvec_userhz_jiffies) ||
-+		    (entry->proc_handler == proc_dointvec_ms_jiffies) ||
-+		    (entry->proc_handler == proc_doulongvec_minmax) ||
-+		    (entry->proc_handler == proc_doulongvec_ms_jiffies_minmax)) {
-+			if (!entry->data)
-+				err = sysctl_err(path, entry, "No data");
-+			if (!entry->maxlen)
-+				err = sysctl_err(path, entry, "No maxlen");
- 		}
--		if (!table->proc_handler)
--			err = sysctl_err(path, table, "No proc_handler");
-+		if (!entry->proc_handler)
-+			err = sysctl_err(path, entry, "No proc_handler");
- 
--		if ((table->mode & (S_IRUGO|S_IWUGO)) != table->mode)
--			err = sysctl_err(path, table, "bogus .mode 0%o",
--				table->mode);
-+		if ((entry->mode & (S_IRUGO|S_IWUGO)) != entry->mode)
-+			err = sysctl_err(path, entry, "bogus .mode 0%o",
-+				entry->mode);
- 	}
- 	return err;
- }
-@@ -1028,7 +1037,7 @@ static struct ctl_table_header *new_links(struct ctl_dir *dir, struct ctl_table
- 
- 	name_bytes = 0;
- 	nr_entries = 0;
--	for (entry = table; entry->procname; entry++) {
-+	list_for_each_table_entry(entry, table) {
- 		nr_entries++;
- 		name_bytes += strlen(entry->procname) + 1;
- 	}
-@@ -1045,14 +1054,16 @@ static struct ctl_table_header *new_links(struct ctl_dir *dir, struct ctl_table
- 	node = (struct ctl_node *)(links + 1);
- 	link_table = (struct ctl_table *)(node + nr_entries);
- 	link_name = (char *)&link_table[nr_entries + 1];
-+	link = link_table;
- 
--	for (link = link_table, entry = table; entry->procname; link++, entry++) {
-+	list_for_each_table_entry(entry, table) {
- 		int len = strlen(entry->procname) + 1;
- 		memcpy(link_name, entry->procname, len);
- 		link->procname = link_name;
- 		link->mode = S_IFLNK|S_IRWXUGO;
- 		link->data = link_root;
- 		link_name += len;
-+		link++;
- 	}
- 	init_header(links, dir->header.root, dir->header.set, node, link_table);
- 	links->nreg = nr_entries;
-@@ -1067,7 +1078,7 @@ static bool get_links(struct ctl_dir *dir,
- 	struct ctl_table *entry, *link;
- 
- 	/* Are there links available for every entry in table? */
--	for (entry = table; entry->procname; entry++) {
-+	list_for_each_table_entry(entry, table) {
- 		const char *procname = entry->procname;
- 		link = find_entry(&head, dir, procname, strlen(procname));
- 		if (!link)
-@@ -1080,7 +1091,7 @@ static bool get_links(struct ctl_dir *dir,
- 	}
- 
- 	/* The checks passed.  Increase the registration count on the links */
--	for (entry = table; entry->procname; entry++) {
-+	list_for_each_table_entry(entry, table) {
- 		const char *procname = entry->procname;
- 		link = find_entry(&head, dir, procname, strlen(procname));
- 		head->nreg++;
-@@ -1183,7 +1194,7 @@ struct ctl_table_header *__register_sysctl_table(
- 	struct ctl_node *node;
- 	int nr_entries = 0;
- 
--	for (entry = table; entry->procname; entry++)
-+	list_for_each_table_entry(entry, table)
- 		nr_entries++;
- 
- 	header = kzalloc(sizeof(struct ctl_table_header) +
-@@ -1278,7 +1289,7 @@ static int count_subheaders(struct ctl_table *table)
- 	if (!table || !table->procname)
- 		return 1;
- 
--	for (entry = table; entry->procname; entry++) {
-+	list_for_each_table_entry(entry, table) {
- 		if (entry->child)
- 			nr_subheaders += count_subheaders(entry->child);
- 		else
-@@ -1297,7 +1308,7 @@ static int register_leaf_sysctl_tables(const char *path, char *pos,
- 	int nr_dirs = 0;
- 	int err = -ENOMEM;
- 
--	for (entry = table; entry->procname; entry++) {
-+	list_for_each_table_entry(entry, table) {
- 		if (entry->child)
- 			nr_dirs++;
- 		else
-@@ -1314,7 +1325,9 @@ static int register_leaf_sysctl_tables(const char *path, char *pos,
- 			goto out;
- 
- 		ctl_table_arg = files;
--		for (new = files, entry = table; entry->procname; entry++) {
-+		new = files;
-+
-+		list_for_each_table_entry(entry, table) {
- 			if (entry->child)
- 				continue;
- 			*new = *entry;
-@@ -1338,7 +1351,7 @@ static int register_leaf_sysctl_tables(const char *path, char *pos,
- 	}
- 
- 	/* Recurse into the subdirectories. */
--	for (entry = table; entry->procname; entry++) {
-+	list_for_each_table_entry(entry, table) {
- 		char *child_pos;
- 
- 		if (!entry->child)
-@@ -1483,7 +1496,7 @@ static void put_links(struct ctl_table_header *header)
- 	if (IS_ERR(core_parent))
- 		return;
- 
--	for (entry = header->ctl_table; entry->procname; entry++) {
-+	list_for_each_table_entry(entry, header->ctl_table) {
- 		struct ctl_table_header *link_head;
- 		struct ctl_table *link;
- 		const char *name = entry->procname;
--- 
-2.20.1
+> The only issue left in my testing is the warning in nosmp parisc code.
+>
+> WARNING: CPU: 0 PID: 1 at fs/sysfs/group.c:115 internal_create_group+0x360/0x394
+>
+> This problem is fixed in linux-next with
+> https://lore.kernel.org/all/20220401203114.348053-1-deller@gmx.de/
+> which should hopefully find its way into mainline soon.
 
+Sounds good.
 
-
+               Linus

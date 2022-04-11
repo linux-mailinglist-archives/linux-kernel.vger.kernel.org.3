@@ -2,85 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 192C24FC0A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:27:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C674E4FC09E
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:26:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347985AbiDKP2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 11:28:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46468 "EHLO
+        id S233976AbiDKP2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 11:28:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348363AbiDKP2A (ORCPT
+        with ESMTP id S1348435AbiDKP2F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 11:28:00 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 95E3F18E2B;
-        Mon, 11 Apr 2022 08:25:00 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 613B01570;
-        Mon, 11 Apr 2022 08:25:00 -0700 (PDT)
-Received: from lpieralisi (unknown [10.57.6.174])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 46CAE3F73B;
-        Mon, 11 Apr 2022 08:24:57 -0700 (PDT)
-Date:   Mon, 11 Apr 2022 16:25:01 +0100
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>
-Cc:     l.stach@pengutronix.de, hongxing.zhu@nxp.com, robh@kernel.org,
-        bhelgaas@google.com, helgaas@kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, linux-imx@nxp.com,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linus.walleij@linaro.org
-Subject: Re: [PATCH v3] PCI: imx6: Replace legacy gpio interface for gpiod
- interface
-Message-ID: <YlRITQq650DCWg75@lpieralisi>
-References: <YYCOTx68LXu1Tn1i@fedora>
- <YlBFa46v5NtWxGLt@lpieralisi>
- <YlBKyBtbxMpvauLv@fedora>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+        Mon, 11 Apr 2022 11:28:05 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2077.outbound.protection.outlook.com [40.107.237.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E15C1A825
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:25:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GP6kBY4NttOr763IOv23kOtjg3mmxWoYVn7R+qGNhyAEuEbcF9/eUQl8aV+XOWEHPyEacaJwkM983Zv8wF7vXAwe3Eslae9lRgj8pBnxQMZCpUoryX6E6JWPEE/UtyAJThtpcvVB1KN57pv/sLYdsGSX1zdRpm6/ks13KtaMlfeElkC+YIsxYZHy85HRNxe2UcLkDekn6Za2ZwI/w5tBZoaDm+nNejfMYKnRIsw2w/hoK3wLAiPyGE1FcB3IN+dws8QZO8Pz+/GDn7345qSksNaDY6EElxgobcsIByJVbGAH2MeCBqg7jbB1/lMSUYFr/hVRHR09wAeebl5M6nIwIA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LBeCZyekL/Bh6F3m9Ep8MTxKb/TuGMUWVRh0hVdmxtw=;
+ b=VaSie8CbH8ePyXpHjVz+ekgSTi3VrHZCXdkbkWjBuJzhKHL9KLygc722IYA9UYTVpMP6WhOwt6oo9YVp9cWwwD2Gmz1Av5PL6+EjniolORpM2zE9M0yXr+WgSo6zPJqPncmYJtDMYYS/Qn+vsU/orjD1w6rbdwAtiy7m/b+fRC1fAICTKd+pXAULOpnP6zo4wMiiiocxDZlOFVp202Txg0ztEy+pcu5UIoeS+tDanfIvzD6HmpOkWVgA5m0QCitKZ4idQ+S+pdKr/rdY/vA0EKuzrW7bO1fRF1OFoIPjT0y8KzgQKL1qG5MhRQZTMwoMjF363HCemSfwq/j+qIHBLA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LBeCZyekL/Bh6F3m9Ep8MTxKb/TuGMUWVRh0hVdmxtw=;
+ b=O3ddQrFQtp0MadR/OuZqtVcSNK5FoeNky94r8JoG1daHk4SnWVwA3CJELJ9b+Kd+epmytTkFWgrrORptg9xJC36BrfJIwq1QMSTp99vlbvatRWGLEbYRlAwKKQSImJ8eM0Gx2uTYah+wi7pUWkAVXQS0BginCuRtQ4elV4sjdBl7DVVTOm0H7nhlik0di2OpXcYdWKBsh3BN/xOyikWLeWEIkMuNWLJF5691eEFT3hFp6f6m1qDGJN3WOGU0kvWKRaqNaqKqkmMgF2zqQbMyBZf6lCH+OJCaIjoneg3Ze4C4GnSW039YgdaEKYYn5VmfW1phVbcIans3BH9aztJ5Dw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by DM6PR12MB4105.namprd12.prod.outlook.com (2603:10b6:5:217::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Mon, 11 Apr
+ 2022 15:25:09 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::cdfb:f88e:410b:9374]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::cdfb:f88e:410b:9374%6]) with mapi id 15.20.5144.029; Mon, 11 Apr 2022
+ 15:25:09 +0000
+Date:   Mon, 11 Apr 2022 12:25:08 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        intel-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 05/34] drm/i915/gvt: cleanup the Makefile
+Message-ID: <20220411152508.GH2120790@nvidia.com>
+References: <20220411141403.86980-1-hch@lst.de>
+ <20220411141403.86980-6-hch@lst.de>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YlBKyBtbxMpvauLv@fedora>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220411141403.86980-6-hch@lst.de>
+X-ClientProxiedBy: BL1P221CA0027.NAMP221.PROD.OUTLOOK.COM
+ (2603:10b6:208:2c5::8) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7ac77500-be48-4060-84f4-08da1bcf76bc
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4105:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB41051494B767182F996E1FF7C2EA9@DM6PR12MB4105.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zLTA+W7pVna2QQzdYOg6C9inNU7CEGqqUlMXw6oRknkPTa4al3IN7vp6jfothVjQ1wuBQlKQc4IRkAalde0Km+x1IJwUb+InRg8UhxgA1JNOFb5nV9aS8+EJ9MkbLt/5aXABo4ZlszdrUJ1/BB6BzzlCounvQ6OgLTLbqSbBEn2vqZD/w/GXOqzEtqvqxFT8auCm91XGRqQnaXgDxsCndI8e+SuP80i7N6Ps7X+V7eUzu1uSLrRJqp6IVTSCsQ3bZ48tRo0ZM4O1sSznSQX9DY3AAFhDW2jpSOc2Soi6PN83F168doO8ulTYl1zhGoAbste7KFeffgxn2ovoGO+omHHCoi32BwEXxASeRahwp/1wsUinmnUOPnkso0QMkrbwJEZjeOHK9SRwCNP2pl8cwZPM9CKaaXaD7FNSp/ECsUN0bf+gKO+1KO4uxh1n4l2Eg7E0A+k/TujRcqCpr9q65VsHqXsCP4K2UYP7MmGsAUxKZwiNjLqxRrUwzmZlIB81w3ZlzChW8gIC2HxzVxeIix9C8NsxxtcOmWZ4/lsNrl+DdCedOSxypBbaK5+ktH4EQuWwERmBgip6Id0SJ8iXSfgaAM/IXxxUWKS31OC70osLne4RA3cP5SDHJZr//Lc5lu+Hxe1YTHTqU01OLr+sVg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(186003)(26005)(66946007)(6486002)(83380400001)(86362001)(8676002)(66476007)(36756003)(66556008)(1076003)(2616005)(38100700002)(508600001)(316002)(6916009)(7416002)(5660300002)(8936002)(54906003)(6506007)(6512007)(33656002)(4326008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?wzPuRw6mQbvzxJOnLSVLJBXySCi6aPKnLEoLxoLpaFcAAkvcSXaoowrQ7RtB?=
+ =?us-ascii?Q?zakniJXVB2ZFsoj/tQdeLqMvmC/Z50EaI9ibuyVQ8v11cqhLULELEE/7oAnh?=
+ =?us-ascii?Q?fwOcJBrJDVQGUvifd2MYOFn8HEZmtpAqQljn/0r2H3BBb1n6cHMdfL7MYaFo?=
+ =?us-ascii?Q?TSwJd+LheC4nY8dxTVvIp2gaUMqVGDTDn3TAxjouh/c3+3yiI4u36WvjiPZ0?=
+ =?us-ascii?Q?hdmeQxrKSFa+QS1Y6e7rgVovsHGs4B+G/+fLXdSGRuTnY6coVFKg2FPWlWnU?=
+ =?us-ascii?Q?wZUWm/Pv8Q8HTzbuV84ZnrN32NsT3UpzmAmBXy5yx5i3YZnORTAHY5QtSxg+?=
+ =?us-ascii?Q?kRWufAdcDni5jN2fiIMXpYDA8stzhoaVrLDiSyT/sH6hqeliX8F0VkX6WXrh?=
+ =?us-ascii?Q?dBGnNxSNcc59+l3EPkCNRLf/ooqV62ifZd1ER8+Z2CQfH+TsDUtFdI9rZiGR?=
+ =?us-ascii?Q?yS7CE7lfuRPN1Xmd8iWCNPd5Fbg67N/wP06WhJsa+5aV4sRq4wLqzEBjp65W?=
+ =?us-ascii?Q?igBZOjgeJbHZcHyBgs9ppaxWQHx+l/TNkBIrPUPIzvdmPtRURpNJBoUWsk3u?=
+ =?us-ascii?Q?NFZuIWrDnnZNtP3gdA1qXZ3O4nbPgACA3BrdVOb76wQ2Z0xGA+DgyB4LDkRP?=
+ =?us-ascii?Q?pchIXYyeJkJ95ZOVFizr5lqEyU2cJeDEuPjIhVYvzwPY1mQLsmnvTmPXrm1G?=
+ =?us-ascii?Q?xvvLQAd58IQXgm7TWDZuj0T87kxS9dtHAaAhsNfAu3wilZos7Sk1nzbdCNhv?=
+ =?us-ascii?Q?coUgMH68DDDMKIfQzqnxLn6fNAtDxQfkUQU8Z38DowPNPFCugjRNXFzpOq7q?=
+ =?us-ascii?Q?m3z5XJZmv4AH2zo+WKfWBVCGwO+kKntGwflNbCI6EU1qmaJPVlfCmOqVhfNq?=
+ =?us-ascii?Q?R0Nn8+PZNkavLEJd6iLNlCEP1yCLNWBIohjlgKQujAqAgVRJxvmZNMuCGwmV?=
+ =?us-ascii?Q?tUVVb2wNKH4yTCKSILHOmwv0h/XdCyW3oPKBUm1hMDGdUy3niH3wsg3pp+Ao?=
+ =?us-ascii?Q?MbgA9gFNzSkmzBpCL4WBDIAhBy7ducPl41kre6YD5qL9ybHo2bQNrFYJzUzj?=
+ =?us-ascii?Q?oiB74CgBBQ+Iku/6RGMqUKFScHNQntqtMEV96ueEOPPcSOF1o6K8+ZWoM/ZC?=
+ =?us-ascii?Q?wQIfvte/4/axw7GZbctVsOO8GnD2xXfcicsPkcpGMkVbvpcD7KoJdWD3uy00?=
+ =?us-ascii?Q?I8RpH5dcGhh1Kdt/E5zFNk8bpdKuX1XYPZ1egUmlRfDSuULdf7E/h0QCCpRg?=
+ =?us-ascii?Q?AW/MY9aKckXszeXJIXMNflD/+84jlt6EjnRVBtl+BMEHCiE0u2QERlx0q0aL?=
+ =?us-ascii?Q?Ag6z4VFzfEmdPdydLMHDpZ4GGHO2OP66L23FrCQeVw+hxXwZuHn3BxGSCAOc?=
+ =?us-ascii?Q?nXHgS6Dazi9TsG6VmEE74PwuEaRAJvOo4F+osqg4a0IVd2YqP9BGHM+XFsa8?=
+ =?us-ascii?Q?/BR0gggs9EYndlIN7K/YzYDBb3naWVqFr7Eymksd3E6xCHeMr01UELXx5k7c?=
+ =?us-ascii?Q?vRjMsj6bJY29WpSDjjjBTMcnWXSXEOtYexMn3PzYFAvioRPS6QiVVInuh5ff?=
+ =?us-ascii?Q?9oVTjpa4pYJhG82HwEXlplTijBP3bT42EE26M3F9lBypwtSyNbfHB58985ee?=
+ =?us-ascii?Q?DRiZS3DNmJ6ThDUD297GF0cvyCHXBZQSUyOVWNw7jMFtvVwfbqmLfdkom9jS?=
+ =?us-ascii?Q?nIbEvcwC9OJXKH71GqN2a8L9NlljukAMGFdedbSIWIlYUJDiKwyKR0SxNp+k?=
+ =?us-ascii?Q?gpGryeQ5MA=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7ac77500-be48-4060-84f4-08da1bcf76bc
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2022 15:25:09.1374
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: KNImqD7L5nX6ia+s+3n3m6fZLbSw2hi43IqDcMF8T2N+DNq6U6k5SaoXx78El1Iw
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4105
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+Linus]
-
-On Fri, Apr 08, 2022 at 11:46:32AM -0300, Maíra Canal wrote:
-> On Fri, Apr 08, 2022 at 03:23:39PM +0100, Lorenzo Pieralisi wrote:
-> > On Mon, Nov 01, 2021 at 10:03:11PM -0300, Maíra Canal wrote:
-> > > Considering the current transition of the GPIO subsystem, remove all
-> > > dependencies of the legacy GPIO interface (linux/gpio.h and linux
-> > > /of_gpio.h) and replace it with the descriptor-based GPIO approach.
-> > > 
-> > > Signed-off-by: Maíra Canal <maira.canal@usp.br>
-> > > ---
-> > > V1 -> V2: Rewrite commit log and subject line to match PCI subsystem standard
-> > > V2 -> v3: Change gpiod_set_value_cansleep for gpiod_set_raw_value_cansleep
-> > > ---
-> > >  drivers/pci/controller/dwc/pci-imx6.c | 30 +++++++++------------------
-> > >  1 file changed, 10 insertions(+), 20 deletions(-)
-> > 
-> > Maira, Lucas,
-> > 
-> > what's this patch status ? Please let me know.
+On Mon, Apr 11, 2022 at 04:13:34PM +0200, Christoph Hellwig wrote:
+> Match the style of the main i915 Makefile in the gvt-specfic one and
+> remove the GVT_DIR and GVT_SOURCE variables.
 > 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+>  drivers/gpu/drm/i915/gvt/Makefile | 29 +++++++++++++++++++++++------
+>  1 file changed, 23 insertions(+), 6 deletions(-)
 > 
-> Lorenzo,
-> 
-> Thank you for the feedback. Since I sent v3, I didn't get any feedback from the community.
-> 
-> If you have any feedback, I would gladly work on it.
+> diff --git a/drivers/gpu/drm/i915/gvt/Makefile b/drivers/gpu/drm/i915/gvt/Makefile
+> index 4d70f4689479c..f2f6ea02714ec 100644
+> +++ b/drivers/gpu/drm/i915/gvt/Makefile
+> @@ -1,8 +1,25 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> -GVT_DIR := gvt
+> -GVT_SOURCE := gvt.o aperture_gm.o handlers.o vgpu.o trace_points.o firmware.o \
+> -	interrupt.o gtt.o cfg_space.o opregion.o mmio.o display.o edid.o \
+> -	execlist.o scheduler.o sched_policy.o mmio_context.o cmd_parser.o debugfs.o \
+> -	fb_decoder.o dmabuf.o page_track.o
+>  
+> -i915-y					+= $(addprefix $(GVT_DIR)/, $(GVT_SOURCE))
+> +i915-y += \
+> +	gvt/gvt.o \
+> +	gvt/aperture_gm.o \
+> +	gvt/handlers.o \
+> +	gvt/vgpu.o \
+> +	gvt/trace_points.o \
+> +	gvt/firmware.o \
+> +	gvt/interrupt.o \
+> +	gvt/gtt.o \
+> +	gvt/cfg_space.o \
+> +	gvt/opregion.o \
+> +	gvt/mmio.o \
+> +	gvt/display.o \
+> +	gvt/edid.o \
+> +	gvt/execlist.o \
+> +	gvt/scheduler.o \
+> +	gvt/sched_policy.o \
+> +	gvt/mmio_context.o \
+> +	gvt/cmd_parser.o \
+> +	gvt/debugfs.o \
+> +	gvt/fb_decoder.o \
+> +	gvt/dmabuf.o \
+> +	gvt/page_track.o
 
-I would ask Linus to have a look please given that it is GPIO code.
+Up to you but I usually sort these lists
 
-Original thread:
-https://lore.kernel.org/linux-pci/YYCOTx68LXu1Tn1i@fedora
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
-Thanks,
-Lorenzo
+Jason

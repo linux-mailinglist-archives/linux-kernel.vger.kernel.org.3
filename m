@@ -2,115 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E12854FB725
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 11:14:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF114FB728
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 11:16:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245017AbiDKJQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 05:16:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58370 "EHLO
+        id S1344286AbiDKJSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 05:18:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232831AbiDKJQv (ORCPT
+        with ESMTP id S1344381AbiDKJR4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 05:16:51 -0400
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7D312759;
-        Mon, 11 Apr 2022 02:14:37 -0700 (PDT)
-Received: by mail-qt1-f176.google.com with SMTP id 10so15672309qtz.11;
-        Mon, 11 Apr 2022 02:14:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1A09GWjhbeERq4BfjM2T1+KKpyEI7+/x9EtzCaW3UdQ=;
-        b=51O6B8zX3oRWwEDRtLKMhMHVmiRvpXcuafUSYr66fYz3YpA1nmbl98mu5YvQcqoFc5
-         CnXqIweRrTQn1PZZ8i2z1xE6u7pzLp4BNzk/qhmAYhC8/QkjHNfFeHAfGlRYaFKkQU8/
-         o4roKQPKDMThIPdzv4dzyqdMIy8k3t3zu8l5VOMpKQwcmKTjAFjmndv1R9jns8xIrQKG
-         h2twv5gy5r41qswTispPaGBfU6/4OAfvqIdWaZMAAOz13/rojeEcPiAJF6hFv5+xpKVP
-         nMujpjsXpIBBRw3css1OwNWhKFkIs0a9RpcmGI7xs2hACnzz70/7oLbZyhgxwIgqKPfh
-         BNfg==
-X-Gm-Message-State: AOAM533dhzdTDpJB0ZPxiwuLQ9TbFjl7mcnkVNtG4JfcjuYmV56TMNO5
-        YZlnBA09w9QZOf2/rkQrv2PSor1uzcQZRQ==
-X-Google-Smtp-Source: ABdhPJz93Swv1VzUHOXCVA3JYyMm5K3cGJvRv28UmpZVX05z6QH+aiIODJb4oG9mHTpjh83UFbY/Rg==
-X-Received: by 2002:ac8:674c:0:b0:2eb:dd80:6442 with SMTP id n12-20020ac8674c000000b002ebdd806442mr13538941qtp.458.1649668477010;
-        Mon, 11 Apr 2022 02:14:37 -0700 (PDT)
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
-        by smtp.gmail.com with ESMTPSA id bp40-20020a05622a1ba800b002ed0e8e7e03sm6469430qtb.66.2022.04.11.02.14.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Apr 2022 02:14:36 -0700 (PDT)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2ebf3746f87so62698117b3.6;
-        Mon, 11 Apr 2022 02:14:36 -0700 (PDT)
-X-Received: by 2002:a81:3d81:0:b0:2eb:8069:5132 with SMTP id
- k123-20020a813d81000000b002eb80695132mr25080083ywa.438.1649668476257; Mon, 11
- Apr 2022 02:14:36 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220407193542.17230-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220407193542.17230-1-krzysztof.kozlowski@linaro.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 11 Apr 2022 11:14:25 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWXLiTKDpXydKQh-fmyHOHb8WpCe9oetNrs2GGNGZqRCg@mail.gmail.com>
-Message-ID: <CAMuHMdWXLiTKDpXydKQh-fmyHOHb8WpCe9oetNrs2GGNGZqRCg@mail.gmail.com>
-Subject: Re: [RESEND PATCH] dt-bindings: power: renesas,rcar-sysc: drop
- useless consumer example
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
+        Mon, 11 Apr 2022 05:17:56 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8257125E98
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 02:15:42 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 2AB2B1F37D;
+        Mon, 11 Apr 2022 09:15:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1649668541; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Yh1GNW6gU42sVXZoPHtYENnDyIjgUm1nwQNJwCgjCEA=;
+        b=EqakTEAZ2mph5kkYg7YPFnK/6MbnQaNyEMO0t1MYwoCiHgeEWB1VzJm0dCR3lfI7AOjgTy
+        Czlbe7F7Vonev3BSZ2kRTGB0raY0i/ifY0kGVokdGFSJvnMMXnFMiLQb2G7mcFFke1ixXI
+        Murr6SvWAEEXL4jxkVZo2E706tkONbk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1649668541;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Yh1GNW6gU42sVXZoPHtYENnDyIjgUm1nwQNJwCgjCEA=;
+        b=0RA8IxeJaW5gSq73ZxHKtdAmN9TxWTh1C5zAVhO/d8Lche3QpsdC7LKPh8U9vse27yiAXZ
+        SAhmIHXljILWBwBA==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 21DBFA3B87;
+        Mon, 11 Apr 2022 09:15:41 +0000 (UTC)
+Date:   Mon, 11 Apr 2022 11:15:41 +0200
+Message-ID: <s5h7d7wc75u.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Zheyu Ma <zheyuma97@gmail.com>
+Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Subject: Re: [BUG] ALSA: echoaudio: warning when the driver fails to probe
+In-Reply-To: <s5ha6csc7lq.wl-tiwai@suse.de>
+References: <CAMhUBjm2AdyEZ_-EgexdNDN7SvY4f89=4=FwAL+c0Mg0O+X50A@mail.gmail.com>
+        <s5hk0bwcbjh.wl-tiwai@suse.de>
+        <CAMhUBjmr_mHcz2G0tQ2qktGFw6XDLJiDTAHvM1yoRWzvtA6MYg@mail.gmail.com>
+        <s5ha6csc7lq.wl-tiwai@suse.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On Mon, 11 Apr 2022 11:06:09 +0200,
+Takashi Iwai wrote:
+> 
+> On Mon, 11 Apr 2022 10:49:53 +0200,
+> Zheyu Ma wrote:
+> > 
+> > On Mon, Apr 11, 2022 at 3:41 PM Takashi Iwai <tiwai@suse.de> wrote:
+> > >
+> > > On Sun, 10 Apr 2022 11:13:55 +0200,
+> > > Zheyu Ma wrote:
+> > > >
+> > > > Hello,
+> > > >
+> > > > I found a bug in echoaudio.c.
+> > > > When the driver fails at the function snd_echo_create(), it should
+> > > > release resources requested before, otherwise we will get the
+> > > > following warning:
+> > > >
+> > > > [    3.262866] remove_proc_entry: removing non-empty directory
+> > > > 'irq/21', leaking at least 'snd_indigodj'
+> > > > [    3.263577] WARNING: CPU: 3 PID: 261 at fs/proc/generic.c:717
+> > > > remove_proc_entry+0x389/0x3f0
+> > > > [    3.267098] RIP: 0010:remove_proc_entry+0x389/0x3f0
+> > > > [    3.269976] Call Trace:
+> > > > [    3.269979]  <TASK>
+> > > > [    3.269988]  unregister_irq_proc+0x14c/0x170
+> > > > [    3.269997]  irq_free_descs+0x94/0xe0
+> > > > [    3.270004]  mp_unmap_irq+0xb6/0x100
+> > > > [    3.270011]  acpi_unregister_gsi_ioapic+0x27/0x40
+> > > > [    3.270017]  acpi_pci_irq_disable+0x1d3/0x320
+> > > > [    3.270025]  pci_disable_device+0x1ad/0x380
+> > > > [    3.270034]  pcim_release+0x566/0x6d0
+> > > > [    3.270046]  devres_release_all+0x1f1/0x2c0
+> > > > [    3.270057]  really_probe+0xe0/0x920
+> > >
+> > > Could you try the patch below?
+> > 
+> > The following patch works for me, the previous warning disappears, thank you.
+> > But I got another error, I have no idea about it.
+> 
+> OK, that's bad, it's basically the destructor order problem.
+> Could you try the patch below instead of the previous one?
 
-On Thu, Apr 7, 2022 at 9:35 PM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> Consumer examples in the bindings of resource providers are trivial,
-> useless and duplication of code.  Remove the example code for consumer.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Sorry, the below one instead.
 
-Thanks for your patch, which is now commit 981a340540381532
-("dt-bindings: power: renesas,rcar-sysc: drop useless consumer
-example") in dt-rh/for-next.
 
-> --- a/Documentation/devicetree/bindings/power/renesas,rcar-sysc.yaml
-> +++ b/Documentation/devicetree/bindings/power/renesas,rcar-sysc.yaml
-> @@ -10,9 +10,11 @@ maintainers:
->    - Geert Uytterhoeven <geert+renesas@glider.be>
->    - Magnus Damm <magnus.damm@gmail.com>
->
-> -description:
-> +description: |
->    The R-Car (RZ/G) System Controller provides power management for the CPU
->    cores and various coprocessors.
-> +  The power domain IDs for consumers are defined in header files::
-> +  include.dt-bindings/power/r8*-sysc.h
+Takashi
 
-include/dt-bindings/power/r8*-sysc.h?
-
-Or does the period have a special meaning here?
-
->
->  properties:
->    compatible:
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+---
+--- a/sound/pci/echoaudio/echoaudio.c
++++ b/sound/pci/echoaudio/echoaudio.c
+@@ -1889,13 +1889,20 @@ static void snd_echo_free(struct snd_card *card)
+ 	if (chip->comm_page)
+ 		rest_in_peace(chip);
+ 
+-	if (chip->irq >= 0)
+-		free_irq(chip->irq, chip);
+-
+ 	/* release chip data */
+ 	free_firmware_cache(chip);
+ }
+ 
++static void do_free_irq(void *p)
++{
++	struct echoaudio *chip = p;
++
++	if (chip->irq >= 0) {
++		free_irq(chip->irq, chip);
++		chip->irq = -1;
++	}
++}
++
+ /* <--snd_echo_probe() */
+ static int snd_echo_create(struct snd_card *card,
+ 			   struct pci_dev *pci)
+@@ -1936,6 +1943,9 @@ static int snd_echo_create(struct snd_card *card,
+ 		return -ENOMEM;
+ 	}
+ 
++	err = devm_add_action(card->dev, do_free_irq, chip);
++	if (err < 0)
++		return err;
+ 	if (request_irq(pci->irq, snd_echo_interrupt, IRQF_SHARED,
+ 			KBUILD_MODNAME, chip)) {
+ 		dev_err(chip->card->dev, "cannot grab irq\n");
+@@ -1946,8 +1956,6 @@ static int snd_echo_create(struct snd_card *card,
+ 	dev_dbg(card->dev, "pci=%p irq=%d subdev=%04x Init hardware...\n",
+ 		chip->pci, chip->irq, chip->pci->subsystem_device);
+ 
+-	card->private_free = snd_echo_free;
+-
+ 	/* Create the DSP comm page - this is the area of memory used for most
+ 	of the communication with the DSP, which accesses it via bus mastering */
+ 	chip->commpage_dma_buf =
+@@ -1957,6 +1965,7 @@ static int snd_echo_create(struct snd_card *card,
+ 		return -ENOMEM;
+ 	chip->comm_page_phys = chip->commpage_dma_buf->addr;
+ 	chip->comm_page = (struct comm_page *)chip->commpage_dma_buf->area;
++	card->private_free = snd_echo_free;
+ 
+ 	err = init_hw(chip, chip->pci->device, chip->pci->subsystem_device);
+ 	if (err >= 0)

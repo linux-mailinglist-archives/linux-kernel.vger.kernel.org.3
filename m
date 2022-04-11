@@ -2,85 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 605E84FBF2A
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 16:34:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 232754FBF54
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 16:36:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347296AbiDKOgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 10:36:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40586 "EHLO
+        id S1347223AbiDKOiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 10:38:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347292AbiDKOgP (ORCPT
+        with ESMTP id S1345751AbiDKOiT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 10:36:15 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FEBF3B2A3;
-        Mon, 11 Apr 2022 07:33:59 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id 048c88d2ce66b26f; Mon, 11 Apr 2022 16:33:57 +0200
-Received: from kreacher.localnet (unknown [213.134.175.113])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id CF32266BDED;
-        Mon, 11 Apr 2022 16:33:56 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PCI <linux-pci@vger.kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH v2 0/9] PCI/PM: Improvements related to device transitions into D0
-Date:   Mon, 11 Apr 2022 16:33:44 +0200
-Message-ID: <8108357.NyiUUSuA9g@kreacher>
-In-Reply-To: <11975904.O9o76ZdvQC@kreacher>
-References: <4419002.LvFx2qVVIh@kreacher> <11975904.O9o76ZdvQC@kreacher>
+        Mon, 11 Apr 2022 10:38:19 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A0F082BDD;
+        Mon, 11 Apr 2022 07:36:02 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4C4761570;
+        Mon, 11 Apr 2022 07:36:02 -0700 (PDT)
+Received: from [10.1.30.132] (e127744.cambridge.arm.com [10.1.30.132])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4BBF43F73B;
+        Mon, 11 Apr 2022 07:35:58 -0700 (PDT)
+Subject: Re: [PATCH v5 3/5] perf tools: sync addition of PERF_MEM_SNOOPX_PEER
+From:   German Gomez <german.gomez@arm.com>
+To:     Ali Saidi <alisaidi@amazon.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, leo.yan@linaro.org,
+        acme@kernel.org
+Cc:     benh@kernel.crashing.org, Nick.Forrington@arm.com,
+        alexander.shishkin@linux.intel.com, andrew.kilroy@arm.com,
+        james.clark@arm.com, john.garry@huawei.com, jolsa@kernel.org,
+        kjain@linux.ibm.com, lihuafei1@huawei.com, mark.rutland@arm.com,
+        mathieu.poirier@linaro.org, mingo@redhat.com, namhyung@kernel.org,
+        peterz@infradead.org, will@kernel.org
+References: <20220408195344.32764-1-alisaidi@amazon.com>
+ <20220408195344.32764-4-alisaidi@amazon.com>
+ <39448754-adf5-f1ba-25e7-8ee3d76f0159@arm.com>
+Message-ID: <47ec29fe-75ea-62ef-447b-1164569616de@arm.com>
+Date:   Mon, 11 Apr 2022 15:35:52 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.175.113
-X-CLIENT-HOSTNAME: 213.134.175.113
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudekiedgjeelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeetgefgleetgeduheeugeeikeevudelueelvdeufeejfeffgeefjedugfetfeehhfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedvudefrddufeegrddujeehrdduudefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudejhedruddufedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdhptghisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohephhgvlhhgrggrshes
- khgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhhikhgrrdifvghsthgvrhgsvghrgheslhhinhhugidrihhnthgvlhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <39448754-adf5-f1ba-25e7-8ee3d76f0159@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Monday, April 11, 2022 4:17:41 PM CEST Rafael J. Wysocki wrote:
-> Hi All,
-> 
-> On Saturday, April 9, 2022 3:03:14 PM CEST Rafael J. Wysocki wrote:
-> > Hi All,
-> > 
-> > This series supersedes the one at
-> > 
-> > https://lore.kernel.org/linux-pm/4198163.ejJDZkT8p0@kreacher
-> > 
-> > It addresses some potential issues related to PCI device transitions from
-> > low-power states into D0 and makes the related code more straightforward
-> > and so easier to follow.
-> > 
-> > Please refer to the patch changelogs for details.
-> 
-> Here's a v2 of this patch series which is being sent, because I realized that
-> one of the checks in pci_power_up()
 
-This should be pci_set_low_power_state(), sorry for the confusion.
+On 11/04/2022 11:26, German Gomez wrote:
+> On 08/04/2022 20:53, Ali Saidi wrote:
+>> Add a flag to the perf mem data struct to signal that a request caused a
+>> cache-to-cache transfer of a line from a peer of the requestor and
+>> wasn't sourced from a lower cache level.  The line being moved from one
+>> peer cache to another has latency and performance implications. On Arm64
+>> Neoverse systems the data source can indicate a cache-to-cache transfer
+>> but not if the line is dirty or clean, so instead of overloading HITM
+>> define a new flag that indicates this type of transfer.
+> I think it's fine to merge this and the previous commit rather than have
+> two commits with the same msg.
+>
 
-> added by patch [4/7] in v1 was redundant
-> and can be dropped, but that affected the last 3 patches in the series and
-> then I noticed that more improvements were possible and hence the new patches
-> [2/9].
-> 
-> Thanks!
-> 
-
-
-
+I take it back. It has been pointed out to me that having the separation
+is normal/ok. So my comment doesn't apply.

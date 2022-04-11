@@ -2,61 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E056B4FBC8D
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 14:54:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC9914FBC88
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 14:54:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346283AbiDKM4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 08:56:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33524 "EHLO
+        id S1346248AbiDKM4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 08:56:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346257AbiDKM4L (ORCPT
+        with ESMTP id S1346237AbiDKM4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 08:56:11 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB0F3DA5C
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 05:53:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1649681638; x=1681217638;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=06+0IGi/qVCaEzVy2orxTRzRoyFh8SISzaLVMzQyQHQ=;
-  b=NywRFozrZLaeBjnxQz/QgoyceoD8S8/tfgwQxP9VBXdexy869DoroM+t
-   IdIPgov/LOtkqzACTZDTuOyod+D0nPCMHfQ+ByuKx/B4CRiVEB0ILvGsx
-   LjPtnuHJHRSufHWexUraYFTtbWo7ZWIC4D/sx+u2SNb59xvbdpRJzPNeK
-   GP7tq9HTE6dyRtQgD/Bg35QSkyh43NNDbX8/1vteDaXoKzC+oo01objaT
-   M6pf5IMafSuOQ9aYzjg0+0Vi9odK0kSKgwg5ySmP7+V8DSzIqfsvrsmmy
-   ewtLKvi1cOzxdMl3zJdsdCrA6AlhVNmWM87Yf4OSFtYucUnlRZhCCo0K8
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.90,251,1643698800"; 
-   d="scan'208";a="152228217"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Apr 2022 05:53:57 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 11 Apr 2022 05:53:56 -0700
-Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Mon, 11 Apr 2022 05:53:53 -0700
-From:   Tudor Ambarus <tudor.ambarus@microchip.com>
-To:     <p.yadav@ti.com>, <michael@walle.cc>
-CC:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <nicolas.ferre@microchip.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>
-Subject: [PATCH v3 2/3] mtd: spi-nor: Update name and description of the set_4byte_addr_mode BFPT methods
-Date:   Mon, 11 Apr 2022 15:53:45 +0300
-Message-ID: <20220411125346.118274-3-tudor.ambarus@microchip.com>
+        Mon, 11 Apr 2022 08:56:05 -0400
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A82AC338AD
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 05:53:50 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:b509:6862:2557:437a])
+        by laurent.telenet-ops.be with bizsmtp
+        id HQto270031G7NMJ01Qtoiv; Mon, 11 Apr 2022 14:53:49 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1ndtYB-000ARL-DF; Mon, 11 Apr 2022 14:53:47 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1ndtYA-009JGV-J1; Mon, 11 Apr 2022 14:53:46 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Duc Nguyen <duc.nguyen.ub@renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        linux-renesas-soc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH v4] memory: renesas-rpc-if: Fix HF/OSPI data transfer in Manual Mode
+Date:   Mon, 11 Apr 2022 14:53:45 +0200
+Message-Id: <cde9bfacf704c81865f57b15d1b48a4793da4286.1649681476.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220411125346.118274-1-tudor.ambarus@microchip.com>
-References: <20220411125346.118274-1-tudor.ambarus@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,189 +51,179 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-BFPT defines some standard methods to enter and exit the 4-Byte Address
-Mode. Use generic names for these methods and update their description.
+HyperFlash devices fail to probe:
 
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
+    rpc-if-hyperflash rpc-if-hyperflash: probing of hyperbus device failed
+
+In HyperFlash or Octal-SPI Flash mode, the Transfer Data Enable bits
+(SPIDE) in the Manual Mode Enable Setting Register (SMENR) are derived
+from half of the transfer size, cfr. the rpcif_bits_set() helper
+function.  However, rpcif_reg_{read,write}() does not take the bus size
+into account, and does not double all Manual Mode Data Register access
+sizes when communicating with a HyperFlash or Octal-SPI Flash device.
+
+Fix this, and avoid the back-and-forth conversion between transfer size
+and Transfer Data Enable bits, by explicitly storing the transfer size
+in struct rpcif, and using that value to determine access size in
+rpcif_reg_{read,write}().
+
+Enforce that the "high" Manual Mode Read/Write Data Registers
+(SM[RW]DR1) are only used for 8-byte data accesses.
+While at it, forbid writing to the Manual Mode Read Data Registers,
+as they are read-only.
+
+Fixes: fff53a551db50f5e ("memory: renesas-rpc-if: Correct QSPI data transfer in Manual mode")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Tested-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> [QSPI]
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Tested-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
-v3: no changes
+v4:
+  - Add Reviewed-by, Tested-by,
 
- drivers/mtd/spi-nor/core.c      |  2 +-
- drivers/mtd/spi-nor/macronix.c  |  3 ++-
- drivers/mtd/spi-nor/micron-st.c |  3 ++-
- drivers/mtd/spi-nor/sfdp.c      | 32 ++++++++++++++++++++------------
- drivers/mtd/spi-nor/sfdp.h      |  7 ++++---
- drivers/mtd/spi-nor/winbond.c   |  2 +-
- 6 files changed, 30 insertions(+), 19 deletions(-)
+v3:
+  - Add Tested-by,
+  - Update comments to match changed code,
+  - Add explicit {read,write}l() for the 4/8 byte case, to increase
+    readability,
+  - Remove redundant break statements,
+  - Tested HyperFlash on more boards and SoCs.
 
-diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-index 2b26a8cef0c3..4d45cda4f9d3 100644
---- a/drivers/mtd/spi-nor/core.c
-+++ b/drivers/mtd/spi-nor/core.c
-@@ -2490,7 +2490,7 @@ static void spi_nor_init_default_params(struct spi_nor *nor)
- 	struct device_node *np = spi_nor_get_flash_node(nor);
+v2:
+  - Use rpc->xfer_size instead of SPIDE register reads and
+    rpc->bus_size.
+      Note: Alternatively, rpcif_manual_xfer() could bypass regmap and
+      use {read,write}[bwl]() directly, cfr. commit 0d37f69cacb33435
+      ("memory: renesas-rpc-if: Correct QSPI data transfer in Manual
+      mode") in the BSP.
+  - HF dirmap reads are confirmed to work on R-Car M3-W,
+  - Drop RFC.
+---
+ drivers/memory/renesas-rpc-if.c | 60 +++++++++++++++++++++++++--------
+ include/memory/renesas-rpc-if.h |  1 +
+ 2 files changed, 47 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/memory/renesas-rpc-if.c b/drivers/memory/renesas-rpc-if.c
+index 2e545f473cc68fb3..019a0822bde0e413 100644
+--- a/drivers/memory/renesas-rpc-if.c
++++ b/drivers/memory/renesas-rpc-if.c
+@@ -164,25 +164,39 @@ static const struct regmap_access_table rpcif_volatile_table = {
  
- 	params->quad_enable = spi_nor_sr2_bit1_quad_enable;
--	params->set_4byte_addr_mode = spansion_set_4byte_addr_mode;
-+	params->set_4byte_addr_mode = spi_nor_set_4byte_addr_mode_brwr;
- 	params->otp.org = &info->otp_org;
  
- 	/* Default to 16-bit Write Status (01h) Command */
-diff --git a/drivers/mtd/spi-nor/macronix.c b/drivers/mtd/spi-nor/macronix.c
-index d81a4cb2812b..85e8655d362c 100644
---- a/drivers/mtd/spi-nor/macronix.c
-+++ b/drivers/mtd/spi-nor/macronix.c
-@@ -105,7 +105,8 @@ static const struct flash_info macronix_nor_parts[] = {
- static void macronix_nor_default_init(struct spi_nor *nor)
- {
- 	nor->params->quad_enable = spi_nor_sr1_bit6_quad_enable;
--	nor->params->set_4byte_addr_mode = spi_nor_set_4byte_addr_mode;
-+	nor->params->set_4byte_addr_mode =
-+		spi_nor_set_4byte_addr_mode_en4b_ex4b;
- }
- 
- static const struct spi_nor_fixups macronix_nor_fixups = {
-diff --git a/drivers/mtd/spi-nor/micron-st.c b/drivers/mtd/spi-nor/micron-st.c
-index d2903c5b5b87..2d1cbb1f37c8 100644
---- a/drivers/mtd/spi-nor/micron-st.c
-+++ b/drivers/mtd/spi-nor/micron-st.c
-@@ -414,7 +414,8 @@ static void micron_st_nor_default_init(struct spi_nor *nor)
- 	nor->flags |= SNOR_F_HAS_LOCK;
- 	nor->flags &= ~SNOR_F_HAS_16BIT_SR;
- 	nor->params->quad_enable = NULL;
--	nor->params->set_4byte_addr_mode = micron_st_nor_set_4byte_addr_mode;
-+	nor->params->set_4byte_addr_mode =
-+		spi_nor_set_4byte_addr_mode_wren_en4b_ex4b;
- }
- 
- static void micron_st_nor_late_init(struct spi_nor *nor)
-diff --git a/drivers/mtd/spi-nor/sfdp.c b/drivers/mtd/spi-nor/sfdp.c
-index 2e40eba3744d..c5dd79ef75c8 100644
---- a/drivers/mtd/spi-nor/sfdp.c
-+++ b/drivers/mtd/spi-nor/sfdp.c
-@@ -402,15 +402,20 @@ static void spi_nor_regions_sort_erase_types(struct spi_nor_erase_map *map)
- }
- 
- /**
-- * spansion_set_4byte_addr_mode() - Set 4-byte address mode for Spansion
-- * flashes.
-+ * spi_nor_set_4byte_addr_mode_brwr() - Set 4-byte address mode using
-+ * SPINOR_OP_BRWR.
-  * @nor:	pointer to 'struct spi_nor'.
-  * @enable:	true to enter the 4-byte address mode, false to exit the 4-byte
-  *		address mode.
-  *
-+ * 8-bit volatile bank register used to define A[30:A24] bits. MSB (bit[7]) is
-+ * used to enable/disable 4-byte address mode. When MSB is set to ‘1’, 4-byte
-+ * address mode is active and A[30:24] bits are don’t care. Write instruction is
-+ * SPINOR_OP_BRWR(17h) with 1 byte of data.
-+ *
-  * Return: 0 on success, -errno otherwise.
+ /*
+- * Custom accessor functions to ensure SMRDR0 and SMWDR0 are always accessed
+- * with proper width. Requires SMENR_SPIDE to be correctly set before!
++ * Custom accessor functions to ensure SM[RW]DR[01] are always accessed with
++ * proper width.  Requires rpcif.xfer_size to be correctly set before!
   */
--int spansion_set_4byte_addr_mode(struct spi_nor *nor, bool enable)
-+int spi_nor_set_4byte_addr_mode_brwr(struct spi_nor *nor, bool enable)
+ static int rpcif_reg_read(void *context, unsigned int reg, unsigned int *val)
  {
- 	int ret;
+ 	struct rpcif *rpc = context;
  
-@@ -434,14 +439,15 @@ int spansion_set_4byte_addr_mode(struct spi_nor *nor, bool enable)
- }
+-	if (reg == RPCIF_SMRDR0 || reg == RPCIF_SMWDR0) {
+-		u32 spide = readl(rpc->base + RPCIF_SMENR) & RPCIF_SMENR_SPIDE(0xF);
+-
+-		if (spide == 0x8) {
++	switch (reg) {
++	case RPCIF_SMRDR0:
++	case RPCIF_SMWDR0:
++		switch (rpc->xfer_size) {
++		case 1:
+ 			*val = readb(rpc->base + reg);
+ 			return 0;
+-		} else if (spide == 0xC) {
++
++		case 2:
+ 			*val = readw(rpc->base + reg);
+ 			return 0;
+-		} else if (spide != 0xF) {
++
++		case 4:
++		case 8:
++			*val = readl(rpc->base + reg);
++			return 0;
++
++		default:
+ 			return -EILSEQ;
+ 		}
++
++	case RPCIF_SMRDR1:
++	case RPCIF_SMWDR1:
++		if (rpc->xfer_size != 8)
++			return -EILSEQ;
++		break;
+ 	}
  
- /**
-- * spi_nor_set_4byte_addr_mode() - Enter/Exit 4-byte address mode.
-+ * spi_nor_set_4byte_addr_mode_en4b_ex4b() - Enter/Exit 4-byte address mode
-+ * using SPINOR_OP_EN4B/SPINOR_OP_EX4B.
-  * @nor:	pointer to 'struct spi_nor'.
-  * @enable:	true to enter the 4-byte address mode, false to exit the 4-byte
-  *		address mode.
-  *
-  * Return: 0 on success, -errno otherwise.
-  */
--int spi_nor_set_4byte_addr_mode(struct spi_nor *nor, bool enable)
-+int spi_nor_set_4byte_addr_mode_en4b_ex4b(struct spi_nor *nor, bool enable)
+ 	*val = readl(rpc->base + reg);
+@@ -193,18 +207,34 @@ static int rpcif_reg_write(void *context, unsigned int reg, unsigned int val)
  {
- 	int ret;
+ 	struct rpcif *rpc = context;
  
-@@ -465,15 +471,15 @@ int spi_nor_set_4byte_addr_mode(struct spi_nor *nor, bool enable)
- }
+-	if (reg == RPCIF_SMRDR0 || reg == RPCIF_SMWDR0) {
+-		u32 spide = readl(rpc->base + RPCIF_SMENR) & RPCIF_SMENR_SPIDE(0xF);
+-
+-		if (spide == 0x8) {
++	switch (reg) {
++	case RPCIF_SMWDR0:
++		switch (rpc->xfer_size) {
++		case 1:
+ 			writeb(val, rpc->base + reg);
+ 			return 0;
+-		} else if (spide == 0xC) {
++
++		case 2:
+ 			writew(val, rpc->base + reg);
+ 			return 0;
+-		} else if (spide != 0xF) {
++
++		case 4:
++		case 8:
++			writel(val, rpc->base + reg);
++			return 0;
++
++		default:
+ 			return -EILSEQ;
+ 		}
++
++	case RPCIF_SMWDR1:
++		if (rpc->xfer_size != 8)
++			return -EILSEQ;
++		break;
++
++	case RPCIF_SMRDR0:
++	case RPCIF_SMRDR1:
++		return -EPERM;
+ 	}
  
- /**
-- * micron_st_nor_set_4byte_addr_mode() - Set 4-byte address mode for ST and
-- * Micron flashes.
-+ * spi_nor_set_4byte_addr_mode_wren_en4b_ex4b() - Set 4-byte address mode usingf
-+ * SPINOR_OP_WREN followed by SPINOR_OP_EN4B or SPINOR_OP_EX4B.
-  * @nor:	pointer to 'struct spi_nor'.
-  * @enable:	true to enter the 4-byte address mode, false to exit the 4-byte
-  *		address mode.
-  *
-  * Return: 0 on success, -errno otherwise.
-  */
--int micron_st_nor_set_4byte_addr_mode(struct spi_nor *nor, bool enable)
-+int spi_nor_set_4byte_addr_mode_wren_en4b_ex4b(struct spi_nor *nor, bool enable)
- {
- 	int ret;
+ 	writel(val, rpc->base + reg);
+@@ -469,6 +499,7 @@ int rpcif_manual_xfer(struct rpcif *rpc)
  
-@@ -481,7 +487,7 @@ int micron_st_nor_set_4byte_addr_mode(struct spi_nor *nor, bool enable)
- 	if (ret)
- 		return ret;
+ 			smenr |= RPCIF_SMENR_SPIDE(rpcif_bits_set(rpc, nbytes));
+ 			regmap_write(rpc->regmap, RPCIF_SMENR, smenr);
++			rpc->xfer_size = nbytes;
  
--	ret = spi_nor_set_4byte_addr_mode(nor, enable);
-+	ret = spi_nor_set_4byte_addr_mode_en4b_ex4b(nor, enable);
- 	if (ret)
- 		return ret;
- 
-@@ -695,15 +701,17 @@ static int spi_nor_parse_bfpt(struct spi_nor *nor,
- 
- 	switch (bfpt.dwords[BFPT_DWORD(16)] & BFPT_DWORD16_4B_ADDR_MODE_MASK) {
- 	case BFPT_DWORD16_4B_ADDR_MODE_BRWR:
--		params->set_4byte_addr_mode = spansion_set_4byte_addr_mode;
-+		params->set_4byte_addr_mode = spi_nor_set_4byte_addr_mode_brwr;
- 		break;
- 
- 	case BFPT_DWORD16_4B_ADDR_MODE_WREN_EN4B_EX4B:
--		params->set_4byte_addr_mode = micron_st_nor_set_4byte_addr_mode;
-+		params->set_4byte_addr_mode =
-+			spi_nor_set_4byte_addr_mode_wren_en4b_ex4b;
- 		break;
- 
- 	case BFPT_DWORD16_4B_ADDR_MODE_EN4B_EX4B:
--		params->set_4byte_addr_mode = spi_nor_set_4byte_addr_mode;
-+		params->set_4byte_addr_mode =
-+			spi_nor_set_4byte_addr_mode_en4b_ex4b;
- 		break;
- 
- 	default:
-diff --git a/drivers/mtd/spi-nor/sfdp.h b/drivers/mtd/spi-nor/sfdp.h
-index 3a3744da78ba..9606610569e0 100644
---- a/drivers/mtd/spi-nor/sfdp.h
-+++ b/drivers/mtd/spi-nor/sfdp.h
-@@ -133,9 +133,10 @@ struct sfdp_parameter_header {
- 	u8		id_msb;
- };
- 
--int spansion_set_4byte_addr_mode(struct spi_nor *nor, bool enable);
--int spi_nor_set_4byte_addr_mode(struct spi_nor *nor, bool enable);
--int micron_st_nor_set_4byte_addr_mode(struct spi_nor *nor, bool enable);
-+int spi_nor_set_4byte_addr_mode_brwr(struct spi_nor *nor, bool enable);
-+int spi_nor_set_4byte_addr_mode_en4b_ex4b(struct spi_nor *nor, bool enable);
-+int spi_nor_set_4byte_addr_mode_wren_en4b_ex4b(struct spi_nor *nor,
-+					       bool enable);
- int spi_nor_parse_sfdp(struct spi_nor *nor);
- 
- #endif /* __LINUX_MTD_SFDP_H */
-diff --git a/drivers/mtd/spi-nor/winbond.c b/drivers/mtd/spi-nor/winbond.c
-index 374ba82bff49..590e4d2c99d7 100644
---- a/drivers/mtd/spi-nor/winbond.c
-+++ b/drivers/mtd/spi-nor/winbond.c
-@@ -142,7 +142,7 @@ static int winbond_nor_set_4byte_addr_mode(struct spi_nor *nor, bool enable)
- {
- 	int ret;
- 
--	ret = spi_nor_set_4byte_addr_mode(nor, enable);
-+	ret = spi_nor_set_4byte_addr_mode_en4b_ex4b(nor, enable);
- 	if (ret || enable)
- 		return ret;
- 
+ 			memcpy(data, rpc->buffer + pos, nbytes);
+ 			if (nbytes == 8) {
+@@ -533,6 +564,7 @@ int rpcif_manual_xfer(struct rpcif *rpc)
+ 			regmap_write(rpc->regmap, RPCIF_SMENR, smenr);
+ 			regmap_write(rpc->regmap, RPCIF_SMCR,
+ 				     rpc->smcr | RPCIF_SMCR_SPIE);
++			rpc->xfer_size = nbytes;
+ 			ret = wait_msg_xfer_end(rpc);
+ 			if (ret)
+ 				goto err_out;
+diff --git a/include/memory/renesas-rpc-if.h b/include/memory/renesas-rpc-if.h
+index 7c93f5177532f187..9c0ad64b8d292d49 100644
+--- a/include/memory/renesas-rpc-if.h
++++ b/include/memory/renesas-rpc-if.h
+@@ -72,6 +72,7 @@ struct rpcif {
+ 	enum rpcif_type type;
+ 	enum rpcif_data_dir dir;
+ 	u8 bus_size;
++	u8 xfer_size;
+ 	void *buffer;
+ 	u32 xferlen;
+ 	u32 smcr;
 -- 
 2.25.1
 

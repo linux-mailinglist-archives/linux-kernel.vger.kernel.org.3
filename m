@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD5444FBDD8
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 15:53:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD5B64FBDDB
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 15:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346775AbiDKNzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 09:55:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45758 "EHLO
+        id S1346786AbiDKNzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 09:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346739AbiDKNzm (ORCPT
+        with ESMTP id S1346773AbiDKNzq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 09:55:42 -0400
+        Mon, 11 Apr 2022 09:55:46 -0400
 Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF2323BEE;
-        Mon, 11 Apr 2022 06:53:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B610924F30;
+        Mon, 11 Apr 2022 06:53:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649685208; x=1681221208;
+  t=1649685212; x=1681221212;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=bAACJ7tqQfMx1qJuqthn7gV9D9pAYKRyEqrw72myxlE=;
-  b=VTm3WXvcNZqJEr2moPJGhjZPzvdoYZP6yFBIUobT4qUOA2jxOXX8A3Cw
-   DbZNU+sN+5jbYtwqjVFgbd9stK/nFE+uUY04ONI9aGLCP1uzVVJvZWK6E
-   dC/GxU7QhFyc/7/cR5IuIlUDrTRU9iqQF7Cik4VEq4MfNVHtFM/KOlkiu
-   g=;
+  bh=tgpPo55v0hZMP1D9KLS+8Bk9D5L0sftc2mUdtFpjW8k=;
+  b=FotL7c2SP6A+WwNuPd/WFDDuGZ+uWFJ+pf3UF8GFzXHAu90WqaaYeYx3
+   PSWLIcmVH57CQIjmrriLbjHYLvVS7zfwn/gg+0AYiMzfB31H8rBiFPZOv
+   icRWyvNfGqy9FpggVMh+r0+Sb2wHF7sn5h+O2KzzwlplMmzKMjKUMvJQi
+   M=;
 Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 11 Apr 2022 06:53:28 -0700
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 11 Apr 2022 06:53:32 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 06:53:27 -0700
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 06:53:32 -0700
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 11 Apr 2022 06:53:27 -0700
+ 15.2.986.22; Mon, 11 Apr 2022 06:53:31 -0700
 Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 11 Apr 2022 06:53:23 -0700
+ 15.2.986.22; Mon, 11 Apr 2022 06:53:27 -0700
 From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
 To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
         <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
@@ -47,9 +47,9 @@ To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
         <judyhsiao@chromium.org>
 CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
         "Venkata Prasad Potturu" <quic_potturu@quicinc.com>
-Subject: [PATCH v7 1/2] arm64: dts: qcom: sc7280: Add pinmux for I2S speaker and Headset
-Date:   Mon, 11 Apr 2022 19:23:03 +0530
-Message-ID: <1649685184-8448-2-git-send-email-quic_srivasam@quicinc.com>
+Subject: [PATCH v7 2/2] arm64: dts: qcom: sc7280: add lpass lpi pin controller node
+Date:   Mon, 11 Apr 2022 19:23:04 +0530
+Message-ID: <1649685184-8448-3-git-send-email-quic_srivasam@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1649685184-8448-1-git-send-email-quic_srivasam@quicinc.com>
 References: <1649685184-8448-1-git-send-email-quic_srivasam@quicinc.com>
@@ -68,100 +68,230 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add pinmux nodes for primary and secondary I2S for SC7280 based platforms.
+Add LPASS LPI pinctrl node required for Audio functionality on sc7280
+based platforms.
 
 Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
 Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
 Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
 ---
- arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 14 +++++++++++
- arch/arm64/boot/dts/qcom/sc7280.dtsi     | 41 ++++++++++++++++++++++++++++++++
- 2 files changed, 55 insertions(+)
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi |  84 ++++++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi     | 107 +++++++++++++++++++++++++++++++
+ 2 files changed, 191 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-index ecbf2b8..4ba2274 100644
+index 4ba2274..ea751dc 100644
 --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-@@ -462,6 +462,20 @@
- 	drive-strength = <10>;
+@@ -238,6 +238,90 @@
+ 	modem-init;
  };
  
-+&mi2s1_data0 {
-+	drive-strength = <6>;
-+	bias-disable;
++&dmic01 {
++	clk {
++		drive-strength = <8>;
++	};
 +};
 +
-+&mi2s1_sclk {
-+	drive-strength = <6>;
-+	bias-disable;
++&dmic01_sleep {
++	clk {
++		drive-strength = <2>;
++		bias-disable;
++	};
++
++	data {
++		pull-down;
++	};
 +};
 +
-+&mi2s1_ws {
-+	drive-strength = <6>;
++&dmic23 {
++	clk {
++		drive-strength = <8>;
++	};
 +};
 +
- &tlmm {
- 	bt_en: bt-en {
- 		pins = "gpio85";
++&dmic23_sleep {
++	clk {
++		drive-strength = <2>;
++		bias-disable;
++	};
++
++	data {
++		pull-down;
++	};
++};
++
++&rx_swr {
++	clk {
++		drive-strength = <2>;
++		slew-rate = <1>;
++		bias-disable;
++	};
++
++	data {
++		drive-strength = <2>;
++		slew-rate = <1>;
++		bias-bus-hold;
++	};
++};
++
++&rx_swr_sleep {
++	clk {
++		drive-strength = <2>;
++		bias-pull-down;
++	};
++
++	data {
++		drive-strength = <2>;
++		bias-pull-down;
++	};
++};
++
++&tx_swr {
++	clk {
++		drive-strength = <2>;
++		slew-rate = <1>;
++		bias-disable;
++	};
++
++	data {
++		slew-rate = <1>;
++		bias-bus-hold;
++	};
++};
++
++&tx_swr_sleep {
++	clk {
++		drive-strength = <2>;
++		bias-pull-down;
++	};
++
++	data {
++		bias-bus-hold;
++	};
++};
++
+ &pcie1 {
+ 	status = "okay";
+ 	perst-gpio = <&tlmm 2 GPIO_ACTIVE_LOW>;
 diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index f0b64be..8099c80 100644
+index 8099c80..c692420 100644
 --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -3527,6 +3527,31 @@
- 				function = "pcie1_clkreqn";
- 			};
- 
-+			mi2s0_data0: mi2s0-data0 {
-+				pins = "gpio98";
-+				function = "mi2s0_data0";
-+			};
-+
-+			mi2s0_data1: mi2s0-data1 {
-+				pins = "gpio99";
-+				function = "mi2s0_data1";
-+			};
-+
-+			mi2s0_mclk: mi2s0-mclk {
-+				pins = "gpio96";
-+				function = "pri_mi2s";
-+			};
-+
-+			mi2s0_sclk: mi2s0-sclk {
-+				pins = "gpio97";
-+				function = "mi2s0_sck";
-+			};
-+
-+			mi2s0_ws: mi2s0-ws {
-+				pins = "gpio100";
-+				function = "mi2s0_ws";
-+			};
-+
- 			qspi_clk: qspi-clk {
- 				pins = "gpio14";
- 				function = "qspi_clk";
-@@ -4261,6 +4286,22 @@
- 				drive-strength = <2>;
- 				bias-bus-hold;
- 			};
-+
-+			mi2s1_data0: mi2s1-data0 {
-+				pins = "gpio107";
-+				function = "mi2s1_data0";
-+			};
-+
-+			mi2s1_sclk: mi2s1-sclk {
-+				pins = "gpio106";
-+				function = "mi2s1_sck";
-+			};
-+
-+			mi2s1_ws: mi2s1-ws {
-+				pins = "gpio108";
-+				function = "mi2s1_ws";
-+			};
-+
+@@ -1987,6 +1987,113 @@
+ 			qcom,bcm-voters = <&apps_bcm_voter>;
  		};
  
- 		imem@146a5000 {
++		lpass_tlmm: pinctrl@33c0000 {
++			compatible = "qcom,sc7280-lpass-lpi-pinctrl";
++			reg = <0 0x033c0000 0x0 0x20000>,
++				<0 0x03550000 0x0 0x10000>;
++			gpio-controller;
++			#gpio-cells = <2>;
++			gpio-ranges = <&lpass_tlmm 0 0 15>;
++
++			#clock-cells = <1>;
++
++			dmic01: dmic01 {
++				clk {
++					pins = "gpio6";
++					function = "dmic1_clk";
++				};
++
++				data {
++					pins = "gpio7";
++					function = "dmic1_data";
++				};
++			};
++
++			dmic01_sleep: dmic01-sleep {
++				clk {
++					pins = "gpio6";
++					function = "dmic1_clk";
++				};
++
++				data {
++					pins = "gpio7";
++					function = "dmic1_data";
++				};
++			};
++
++			dmic23: dmic23 {
++				clk {
++					pins = "gpio8";
++					function = "dmic2_clk";
++				};
++
++				data {
++					pins = "gpio9";
++					function = "dmic2_data";
++				};
++			};
++
++			dmic23_sleep: dmic23_sleep {
++				clk {
++					pins = "gpio8";
++					function = "dmic2_clk";
++				};
++
++				data {
++					pins = "gpio9";
++					function = "dmic2_data";
++				};
++			};
++
++			rx_swr: rx-swr {
++				clk {
++					pins = "gpio3";
++					function = "swr_rx_clk";
++				};
++
++				data {
++					pins = "gpio4", "gpio5";
++					function = "swr_rx_data";
++				};
++			};
++
++			rx_swr_sleep: rx-swr-sleep {
++				clk {
++					pins = "gpio3";
++					function = "swr_rx_clk";
++				};
++
++				data {
++					pins = "gpio4", "gpio5";
++					function = "swr_rx_data";
++				};
++			};
++
++			tx_swr: tx-swr {
++				clk {
++					pins = "gpio0";
++					function = "swr_tx_clk";
++				};
++
++				data {
++					pins = "gpio1", "gpio2", "gpio14";
++					function = "swr_tx_data";
++				};
++			};
++
++			tx_swr_sleep: tx-swr-sleep {
++				clk {
++					pins = "gpio0";
++					function = "swr_tx_clk";
++				};
++
++				data {
++					pins = "gpio1", "gpio2", "gpio14";
++					function = "swr_tx_data";
++				};
++			};
++		};
++
+ 		gpu: gpu@3d00000 {
+ 			compatible = "qcom,adreno-635.0", "qcom,adreno";
+ 			reg = <0 0x03d00000 0 0x40000>,
 -- 
 2.7.4
 

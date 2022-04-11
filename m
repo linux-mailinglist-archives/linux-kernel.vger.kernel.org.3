@@ -2,163 +2,352 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3C274FBF07
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 16:26:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 512344FBF49
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 16:35:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347264AbiDKO1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 10:27:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48444 "EHLO
+        id S1344816AbiDKOg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 10:36:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347249AbiDKO1C (ORCPT
+        with ESMTP id S1347371AbiDKOgl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 10:27:02 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2090.outbound.protection.outlook.com [40.107.243.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFFC137A34;
-        Mon, 11 Apr 2022 07:24:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DEUyZgifXytqpPr8BjyX9B+1BGQmEMRpuehaqung61LptUJjza2twowEBYhuPyJQazy7MO3gP7ROFSUCQo2M012dHwJJUNLlJ6AQOW9mvL+sUH+Tl92/XOlK3o4NyBWlg9KLuSXuoyRfgrhuDchzJH3eRh3f152O3eE/ZEL2MocnbL0cdJbjFqJArrTaFJXT0WPWUG8xWWrJRxQnlorHJyNv1VI4WSLqbwmX3BRW4W9eJ3oziCCWwd6V4+qFEoKfPlJH7tY7qJSVuGITOZsjjg19UivmuxTDV4KGxFLN94O4FYBKzVU4kEluDlnFxrsh+WTy9Z9eKynjDPY7QeTVcA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LGY/OgviN541B9JiqXcu8SEHu3xDesauNT2z+H1CwCw=;
- b=AoK3iK78b6rvyB47N0STT8XlkrYL/42zrRvgIEce3Q3EVZDB1uHKTgOTmO1PmR/JjJesrZk/Re+YU8A9U7X78x/dQJDGOwyQdQIK4F2sNd27RPeTfWMB7Ehi/PSD8Mo2Zqc4e+KstEt7bVN5goEgrCKcs+pL7lEaebyP6sWzQAVeIplSUDldv6Lg2r7l/86BGc0JMHmTDgePaTAhpZyWA1ZC+Izc1RGPxeV8EMA7rm8RnY7BqdR6N0unmT+9mmKvELuGy3E8ppMc0n0K3Fn5F2gH8xoLje16ttsAy7vL3FSFpWG0BplktMKJf9kqVnZO895Fro6gNJQdGBZiijISRg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cornelisnetworks.com; dmarc=pass action=none
- header.from=cornelisnetworks.com; dkim=pass header.d=cornelisnetworks.com;
- arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornelisnetworks.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LGY/OgviN541B9JiqXcu8SEHu3xDesauNT2z+H1CwCw=;
- b=ObP1cnyL1Utg354GuD7Ylt2sKDZY8oW5gRVNCEBnkcKwHKg2+JuCmc628FZPCXVIEjW9LnrLwNw+witt4AFocQ5azl/1CDeMvid6FyUq6eM3+Y1sxMZ9/q0BoL6WUX6a/Wqb4BLZ5Lf++OXZwPP5Ji5N3rpWOqbzsGjmioK+Vl3asT6xBLwOOd41Gjm4Uh47PulVnkfQce2eaOD6lujkuej2iTg1ECnM1I1jHdKOiTlZS3Tcs98qv4IaAzQmbm/mCU0g+5meBMNg8V/6pLqXgMAR/0pxuFw/jDZ2sHO/xyYgdWJQu/WbYP1f+OYn2ipOYz0PpRO4SS5XbBpXag8xGg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=cornelisnetworks.com;
-Received: from PH0PR01MB6439.prod.exchangelabs.com (2603:10b6:510:d::22) by
- BYAPR01MB5288.prod.exchangelabs.com (2603:10b6:a03:91::19) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5144.27; Mon, 11 Apr 2022 14:24:44 +0000
-Received: from PH0PR01MB6439.prod.exchangelabs.com ([fe80::98bd:3eac:d0e:875])
- by PH0PR01MB6439.prod.exchangelabs.com ([fe80::98bd:3eac:d0e:875%6]) with
- mapi id 15.20.5144.029; Mon, 11 Apr 2022 14:24:44 +0000
-Message-ID: <dcac5131-f46f-5e92-efe5-3862da9a2678@cornelisnetworks.com>
-Date:   Mon, 11 Apr 2022 10:24:40 -0400
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [BUG] IB/hfi1: Warning when the driver fails to probe
-Content-Language: en-US
-To:     Zheyu Ma <zheyuma97@gmail.com>, jgg@ziepe.ca
-Cc:     linux-rdma@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <CAMhUBjnc1rCoE5G8MPHO-nzMdQs=O3=YLH1QnuF7mbKbds2QMQ@mail.gmail.com>
-From:   Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
-In-Reply-To: <CAMhUBjnc1rCoE5G8MPHO-nzMdQs=O3=YLH1QnuF7mbKbds2QMQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BL0PR0102CA0043.prod.exchangelabs.com
- (2603:10b6:208:25::20) To PH0PR01MB6439.prod.exchangelabs.com
- (2603:10b6:510:d::22)
+        Mon, 11 Apr 2022 10:36:41 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA6525EB;
+        Mon, 11 Apr 2022 07:34:09 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id f6b720034a47478b; Mon, 11 Apr 2022 16:34:08 +0200
+Received: from kreacher.localnet (unknown [213.134.175.113])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 6E9B866BDD4;
+        Mon, 11 Apr 2022 16:34:07 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PCI <linux-pci@vger.kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH v2 4/9] PCI/PM: Rework changing power states of PCI devices
+Date:   Mon, 11 Apr 2022 16:25:12 +0200
+Message-ID: <13011315.uLZWGnKmhe@kreacher>
+In-Reply-To: <11975904.O9o76ZdvQC@kreacher>
+References: <4419002.LvFx2qVVIh@kreacher> <11975904.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 873ffb81-69c5-4029-53db-08da1bc705fe
-X-MS-TrafficTypeDiagnostic: BYAPR01MB5288:EE_
-X-Microsoft-Antispam-PRVS: <BYAPR01MB528846088948EC04AE5B8BC7F4EA9@BYAPR01MB5288.prod.exchangelabs.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Vchpg5JqxGffSZ6NIbazA8MjetSC0MGHXjwYKb43v4ENPWAhznc/8iKOW7S1pgC7MqlNSdP5jxS3eIRpu2mstuTBcZlfHfsaXUQtlGDPTj1nwvi5dIcRpZlZ3UBOG62creAe6IVHkQyHmakGaujQ8PZt4ALSwUY8nBWXQIx3G6v2zN1vU3rNfjQKGpvTYNt1JX462599PS5jecc1F7Prdb+ri2WT/l/+DW/F/3hk3cwXFSJ/EU/42BLgul+DxCjdnfP4bxSdtdT0yx9Am/IpdJ/u4VM7SzV2JZ1GkWCPDiQen8Pqd0fpazfzZPpLJ8YJ9r9tXek0MRI/NgAnbv5jQrnLEOo0xvBGoZ1L1/KnFFkoZGvPy1KrXgOxfjE66Lq5lYq8qcFUUJWGe9rpGRnJ3tx8BKm0ILFhKaYPoCO1LcwRbKOYLN45g1Ie2+5iGqDGKjpvPrUeMEo0DN1bb6ZQhLgXJvfMfGteg1oxaop8pNxnyUnyKUAk/cYGGAiBJ4cUWfZymVIG8XlOLt3sgeTIRk7RUga1bHd9A9KKdNuXjMMpazRA0lz6ybJrSkrHlb/I3RYhRbWBY7me8h2B9YoFBmrrj87gnLLPFfDiDIk5btArJLIOt//hHfXA2UFAysIKIIrVDGlHovrWhOygKcYpfTUg+rnIlLcnJL9+MYdKcoXTF6h1ODacPNjl+MhrEHv9rQwzaml8uncTuq7b84JJnjPVNOAEUIUpJIyWlHGxhYM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR01MB6439.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(39830400003)(376002)(396003)(366004)(136003)(346002)(31696002)(38350700002)(8676002)(66946007)(38100700002)(31686004)(4326008)(6486002)(508600001)(8936002)(5660300002)(36756003)(66476007)(2616005)(86362001)(66556008)(186003)(26005)(6666004)(44832011)(316002)(6512007)(52116002)(83380400001)(53546011)(6506007)(2906002)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?enNud1JDRGI4aWkvZk10MVhpMkltejlzMGNzU29rWUFnNkV0UVZXWFIrZnJv?=
- =?utf-8?B?YlJSUkdDMllRT0RUUUZ6NHZ0T1VaY0ZzN2R3aHRzVGVtV0w1Q0xtL0RDZW5R?=
- =?utf-8?B?WlkvTHg3YWtKdUdsK1NiYVhIeldrOE1iYzZPWlJsQmVQSlRuZTR4RlRVcHVP?=
- =?utf-8?B?OXFMWEQvZldDVTFjNm5BcXV2N2gwUjkvbXZBYndmN1hWNHFvY0VHWGNEbGNL?=
- =?utf-8?B?bnUvUWY5aDNvbFBxTWJ2UE1rM251ZGVLM0FzcnBVNHNSQzlqMm9aTTZVRk9E?=
- =?utf-8?B?NDg4dHdFdURoSS9YZ2wxdTZLUXMxcE1vZTNEU1R0dGhtUFh4UUI2WTdGQzZz?=
- =?utf-8?B?N1h6M0Y1MVN6SzVzbGZwZ2gzeWZZTHdpK0dFZzVrd3JFWTZ4RHFZOW02bDRs?=
- =?utf-8?B?UGdKNVZZWVZucXpnS0l0eFlJVkZvNURnSXpxei9wWENMcnA0Qlk1MFJPNld3?=
- =?utf-8?B?Tm82dUNlOHAvcHk0YVBxMExLZlUwUjNYMVdMc2ZaRHVjZkswM09jOWRld0ow?=
- =?utf-8?B?aHJKeXE2aENORE0wQzZ2b2xWN2k3R3VyNVZSNWt3N1p0andLYVlaR08xa2Iv?=
- =?utf-8?B?MnhjZ2VVcEpuMFo1ZEYxeUtqcnoreWorbjFCeWlzc29WK1VFY2ZzNENiNXFk?=
- =?utf-8?B?bXpFampDOUVFV0M4cXhWTGk5VkJsMkJnbktWY01MRm5Ba01hb1pJYjFEUjdU?=
- =?utf-8?B?bCtoWm02WGZiTk1XeURTK0tYUEtCQzgrTHgzVHhiVll0djhQdU9OMVJpRmth?=
- =?utf-8?B?aGxxaTBVRGhIK2hWVVc2ZTlSVnE3TUxUT3Fqa3RiMGdlNlRqVzZjVTY3Z0dT?=
- =?utf-8?B?cHllb2FMZk12Y0o0WEh1Zkh0R0l2MkJHWDRyZ0k5RXE1NHlDbktFQUxJN1ZW?=
- =?utf-8?B?ZE1KYkJuNitOM2ZDZDhYbDNOZ1JJR21zR2JZNDh1VHFBMzNOZTdZazBSOWVa?=
- =?utf-8?B?UVZKa1RHQi9rK25Wc3luVy9NRUVNM0QwVklZYWVGbFpCWkgrSG4xRk9kL3or?=
- =?utf-8?B?eWxxa3g1b0MvT0FxcmtxM2N5emZsQzRIS21XS25SMDUvR1dlK3JDY2kvUGpu?=
- =?utf-8?B?eTdYNitBR0drQmZyTC9YL0VYNXI0c0lGSko2WnR3NVF1Y0s2SUJVU0R1ZXVH?=
- =?utf-8?B?VnlCSkI1bWpwa3owSTZydjQxZm4vaCs1UWxJcDRwdENEY3gxcFlVTmpacEJQ?=
- =?utf-8?B?UkM2MkVRQ2RtRkZEejZXMlhYN3VnVzI1cndmTkIxL0o5VFY1NXlyRWZ2WFg1?=
- =?utf-8?B?dm4wUVFUa0M1MUVhSExoczREM09QOFB0cVAxdFNnZldweEpNU25PT08vTU9H?=
- =?utf-8?B?WXVPdlJ6R0wvVmRwcjdKY2Frb2ZkT3hOVkpYcW9pZ1o2WURFOXRhSURmMSsv?=
- =?utf-8?B?MzB3UlpqTHZoRytLY0NvVllvNTBzaFh4ayszNUxoNDdUbDVaR3ZkSHB6cDA2?=
- =?utf-8?B?d1A3M294dDBGRTQ5ZFdHeTdCM0xLQ2IxRWpJME5ZTGZTcGJkb1VYaGJQYjFu?=
- =?utf-8?B?WVhyNUdjS01LcGdPcXh0UFFJczlzeXVtMXF4SGtxZ3kxWXZwdVIvdjVaM1h0?=
- =?utf-8?B?aVZIdHNsdnF6R3c2a0NTYmcyZkFFRVFpNytycjB2bnEzbGI2RmwxSjkzU3BO?=
- =?utf-8?B?LzZ2UHVvRjVLcUFtN2V0TzIxMjF3dkp4TUVuZit1amJDSkdBMUxqSFc3M2JU?=
- =?utf-8?B?eStvVXRneHkvMnhGNkJZSjRCUVhwUDFPVFRWYS9ZNU1tZURqdnRoYVpscThV?=
- =?utf-8?B?V04zUzZXU0NlUVhKeDZiTmhTY3lrRFowaGV3OWFGL1ZSanh2ZWJ4M0lKVkVE?=
- =?utf-8?B?QzJ4Skt1WlJMSVQzcGN4K2thUHI1MllOcXJUa1UydTZHWTU3M0VqUmpOQ0RH?=
- =?utf-8?B?anF2Tm1ZNytVOHhNckRSU3BKaFh4T2tNUmdDbFU3QkdtbXBlMnc2TmJ4dDQx?=
- =?utf-8?B?LzR6a0xmNzFwcmRnZHRJKzRoTWZuejQzdmQ4OVdhTitOc0xDbkNvWDU1eFNk?=
- =?utf-8?B?cGE4dXhzdnlGeENHbzU0WXNXeUwxYmJocjZneGtEUHloQTlkMjdka1F5Wmwz?=
- =?utf-8?B?amR1WmNyYUxKaDZyLzE3MnRGL0ExbmR1d0E3eXB0MUZlSVZUYXhKUGM0a1lm?=
- =?utf-8?B?RkFHWWxvejVmN1hCY1JqMnIyQ1hFblgrV0RLeVV0NXVNM01rZjYvZVR3ZWc2?=
- =?utf-8?B?SHp1KzhyRVNBQW9KcW9NVE96dXJxeEJPN3MweHN3MUk4ajVZV2h6UVNhNDJZ?=
- =?utf-8?B?MVlxcUFwY2RtSTRXN0FqelVjbWZZVy9nQkdUZGV4cnFYVDJ0Umx5MEpLL3Rr?=
- =?utf-8?B?b3pwYWpsaUpCcDFFdGxZU0RuWlphZFk3MlBmdmVtaHBpNW8rcXdzSE53UStJ?=
- =?utf-8?Q?xUinhda+ST5FAdAjw5ZX+oDhnIxCrQ4m5Wndb?=
-X-OriginatorOrg: cornelisnetworks.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 873ffb81-69c5-4029-53db-08da1bc705fe
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR01MB6439.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2022 14:24:44.1372
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4dbdb7da-74ee-4b45-8747-ef5ce5ebe68a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OUerBNfhvxZ4tm4GuXbmFI0HxL75uvJlKe31ik3hj1BKC8ACoOR3+O7I6j+QZhboXZN+3ExqRlTl1Ozbwagzc9mHpW89bElaIdFpeWZRs4nv+3MOjYZHM6kRufaT7AvU
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR01MB5288
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.175.113
+X-CLIENT-HOSTNAME: 213.134.175.113
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudekiedgjeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvjeelgffhiedukedtleekkedvudfggefhgfegjefgueekjeelvefggfdvledutdenucfkphepvddufedrudefgedrudejhedruddufeenucevlhhushhtvghrufhiiigvpedvnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddujeehrdduudefpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphgtihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehm
+ ihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/10/22 3:08 AM, Zheyu Ma wrote:
-> Hello,
-> 
-> I found a bug at the init_one() function in the hfi driver.
-> When the function xa_alloc_irq() fails, the driver executes the error
-> handling function sdma_clean(), and this function uses the lock '
-> dd->sde_map_lock'. But this lock is initialized after executing the
-> function xa_alloc_irq(), which causes the following warning:
-> 
-> [   23.257762] hfi1 0000:00:05.0: Could not allocate unit ID: error 1
-> [   23.269915] INFO: trying to register non-static key.
-> [   23.270318] The code is fine but needs lockdep annotation, or maybe
-> [   23.270808] you didn't initialize this object before use?
-> [   23.271229] turning off the locking correctness validator.
-> [   23.273198] Call Trace:
-> [   23.274185]  register_lock_class+0x11b/0x880
-> [   23.274525]  __lock_acquire+0xf3/0x7930
-> [   23.275769]  lock_acquire+0xff/0x2d0
-> [   23.276053]  ? sdma_clean+0x42a/0x660 [hfi1]
-> [   23.276485]  ? lock_release+0x472/0x710
-> [   23.276789]  _raw_spin_lock_irq+0x46/0x60
-> [   23.277105]  ? sdma_clean+0x42a/0x660 [hfi1]
-> [   23.277530]  sdma_clean+0x42a/0x660 [hfi1]
-> [   23.277945]  ? trace_kfree+0x28/0xc0
-> [   23.278232]  hfi1_free_devdata+0x3a7/0x420 [hfi1]
-> [   23.278688]  init_one+0x867/0x11a0 [hfi1]
-> [   23.279090]  ? _raw_spin_unlock_irqrestore+0x3d/0x60
-> [   23.279482]  ? rcu_lock_release+0x20/0x20 [hfi1]
-> [   23.279930]  pci_device_probe+0x40e/0x8d0
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Thanks for the report. Will fix.
+There are some issues related to changing power states of PCI
+devices, mostly related to carrying out unnecessary actions in some
+places, and the code is generally hard to follow.
 
--Denny
+ 1. pci_power_up() has two callers, pci_set_power_state() and
+    pci_pm_default_resume_early().  The latter updates the current
+    power state of the device right after calling pci_power_up()
+    and it restores the entire config space of the device right
+    after that, so pci_power_up() itself need not read the
+    PCI_PM_CTRL register or restore the BARs after programming the
+    device into D0 in that case.
+ 
+ 2. It is generally hard to get a clear view of the pci_power_up()
+    code flow, especially in some corner cases, due to all of the
+    involved PCI_PM_CTRL register reads and writes occurring in
+    pci_platform_power_transition() and in pci_raw_set_power_state(),
+    some of which are redundant.
+
+ 3. The transitions from low-power states to D0 and the other way
+    around are unnecessarily tangled in pci_raw_set_power_state()
+    which causes it to use a redundant local variable and makes it
+    rather hard to follow.
+
+To address the above shortcomings, make the following changes:
+
+ a. Remove the code handling transitions into D0
+    from pci_raw_set_power_state() and rename it as
+    pci_set_low_power_state().
+
+ b. Add the code handling transitions into D0 directly
+    to pci_power_up() and to a new wrapper function
+    pci_set_full_power_state() calling it internally that is
+    only used in pci_set_power_state().
+
+ c. Make pci_power_up() avoid redundant PCI_PM_CTRL register reads
+    and make it work in the same way for transitions from any
+    low-power states (transitions from D1 and D2 are handled
+    slightly differently before the change).
+
+ d. Put the restoration of the BARs and the PCI_PM_CTRL
+    register read confirming the power state change into
+    pci_set_full_power_state() to avoid doing that in
+    pci_pm_default_resume_early() unnecessarily.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+v1 -> v2:
+   * Do not add a redundant check to pci_set_low_power_state().
+
+---
+ drivers/pci/pci.c |  154 +++++++++++++++++++++++++++++++++++-------------------
+ 1 file changed, 101 insertions(+), 53 deletions(-)
+
+Index: linux-pm/drivers/pci/pci.c
+===================================================================
+--- linux-pm.orig/drivers/pci/pci.c
++++ linux-pm/drivers/pci/pci.c
+@@ -1068,10 +1068,9 @@ static inline bool platform_pci_bridge_d
+ }
+ 
+ /**
+- * pci_raw_set_power_state - Use PCI PM registers to set the power state of
+- *			     given PCI device
++ * pci_set_low_power_state - Program the given device into a low-power state
+  * @dev: PCI device to handle.
+- * @state: PCI power state (D0, D1, D2, D3hot) to put the device into.
++ * @state: PCI power state (D1, D2, D3hot) to put the device into.
+  *
+  * RETURN VALUE:
+  * -EINVAL if the requested state is invalid.
+@@ -1080,10 +1079,9 @@ static inline bool platform_pci_bridge_d
+  * 0 if device already is in the requested state.
+  * 0 if device's power state has been successfully changed.
+  */
+-static int pci_raw_set_power_state(struct pci_dev *dev, pci_power_t state)
++static int pci_set_low_power_state(struct pci_dev *dev, pci_power_t state)
+ {
+ 	u16 pmcsr;
+-	bool need_restore = false;
+ 
+ 	/* Check if we're already there */
+ 	if (dev->current_state == state)
+@@ -1092,7 +1090,7 @@ static int pci_raw_set_power_state(struc
+ 	if (!dev->pm_cap)
+ 		return -EIO;
+ 
+-	if (state < PCI_D0 || state > PCI_D3hot)
++	if (state < PCI_D1 || state > PCI_D3hot)
+ 		return -EINVAL;
+ 
+ 	/*
+@@ -1101,8 +1099,7 @@ static int pci_raw_set_power_state(struc
+ 	 * we can go from D1 to D3, but we can't go directly from D3 to D1;
+ 	 * we'd have to go from D3 to D0, then to D1.
+ 	 */
+-	if (state != PCI_D0 && dev->current_state <= PCI_D3cold
+-	    && dev->current_state > state) {
++	if (dev->current_state <= PCI_D3cold && dev->current_state > state) {
+ 		pci_err(dev, "invalid power transition (from %s to %s)\n",
+ 			pci_power_name(dev->current_state),
+ 			pci_power_name(state));
+@@ -1122,29 +1119,8 @@ static int pci_raw_set_power_state(struc
+ 		return -EIO;
+ 	}
+ 
+-	/*
+-	 * If we're (effectively) in D3, force entire word to 0.
+-	 * This doesn't affect PME_Status, disables PME_En, and
+-	 * sets PowerState to 0.
+-	 */
+-	switch (dev->current_state) {
+-	case PCI_D0:
+-	case PCI_D1:
+-	case PCI_D2:
+-		pmcsr &= ~PCI_PM_CTRL_STATE_MASK;
+-		pmcsr |= state;
+-		break;
+-	case PCI_D3hot:
+-	case PCI_D3cold:
+-	case PCI_UNKNOWN: /* Boot-up */
+-		if ((pmcsr & PCI_PM_CTRL_STATE_MASK) == PCI_D3hot
+-		 && !(pmcsr & PCI_PM_CTRL_NO_SOFT_RESET))
+-			need_restore = true;
+-		fallthrough;	/* force to D0 */
+-	default:
+-		pmcsr = 0;
+-		break;
+-	}
++	pmcsr &= ~PCI_PM_CTRL_STATE_MASK;
++	pmcsr |= state;
+ 
+ 	/* Enter specified state */
+ 	pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL, pmcsr);
+@@ -1153,9 +1129,9 @@ static int pci_raw_set_power_state(struc
+ 	 * Mandatory power management transition delays; see PCI PM 1.1
+ 	 * 5.6.1 table 18
+ 	 */
+-	if (state == PCI_D3hot || dev->current_state == PCI_D3hot)
++	if (state == PCI_D3hot)
+ 		pci_dev_d3_sleep(dev);
+-	else if (state == PCI_D2 || dev->current_state == PCI_D2)
++	else if (state == PCI_D2)
+ 		udelay(PCI_PM_D2_DELAY);
+ 
+ 	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+@@ -1165,22 +1141,6 @@ static int pci_raw_set_power_state(struc
+ 			 pci_power_name(dev->current_state),
+ 			 pci_power_name(state));
+ 
+-	/*
+-	 * According to section 5.4.1 of the "PCI BUS POWER MANAGEMENT
+-	 * INTERFACE SPECIFICATION, REV. 1.2", a device transitioning
+-	 * from D3hot to D0 _may_ perform an internal reset, thereby
+-	 * going to "D0 Uninitialized" rather than "D0 Initialized".
+-	 * For example, at least some versions of the 3c905B and the
+-	 * 3c556B exhibit this behaviour.
+-	 *
+-	 * At least some laptop BIOSen (e.g. the Thinkpad T21) leave
+-	 * devices in a D3hot state at boot.  Consequently, we need to
+-	 * restore at least the BARs so that the device will be
+-	 * accessible to its driver.
+-	 */
+-	if (need_restore)
+-		pci_restore_bars(dev);
+-
+ 	if (dev->bus->self)
+ 		pcie_aspm_pm_state_change(dev->bus->self);
+ 
+@@ -1312,8 +1272,54 @@ static int pci_dev_wait(struct pci_dev *
+  */
+ int pci_power_up(struct pci_dev *dev)
+ {
+-	pci_platform_power_transition(dev, PCI_D0);
+-	return pci_raw_set_power_state(dev, PCI_D0);
++	int ret;
++
++	ret = pci_platform_power_transition(dev, PCI_D0);
++	if (ret) {
++		u16 pmcsr;
++
++		/*
++		 * The PCI_PM_CTRL register has not been read above, so read it
++		 * now and bail out if that fails.
++		 */
++		pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
++		if (PCI_POSSIBLE_ERROR(pmcsr)) {
++			dev->current_state = PCI_D3cold;
++			goto fail;
++		}
++		dev->current_state = pmcsr & PCI_PM_CTRL_STATE_MASK;
++	} else if (dev->current_state == PCI_D3cold) {
++		/*
++		 * Since current_state is PCI_D3cold here, the power state seen
++		 * by the platform is still D3cold or the PCI_PM_CTRL register
++		 * read in pci_update_current_state() has failed, so assume the
++		 * device to be inaccessible.
++		 */
++		goto fail;
++	}
++
++	/* There's nothing more to do if current_state is D0 at this point. */
++	if (dev->current_state == PCI_D0)
++		return 0;
++
++	/*
++	 * Program the device into PCI_D0 by forcing the entire word to 0 (this
++	 * doesn't affect PME_Status, disables PME_En, and sets PowerState to 0)
++	 * and wait for the prescribed amount of time.  Assume success.
++	 */
++	pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL, 0);
++
++	if (dev->current_state == PCI_D3hot)
++		pci_dev_d3_sleep(dev);
++	else if (dev->current_state == PCI_D2)
++		udelay(PCI_PM_D2_DELAY);
++
++	dev->current_state = PCI_D0;
++	return 0;
++
++fail:
++	pci_err(dev, "Unable to change power state to D0, device inaccessible\n");
++	return -ENODEV;
+ }
+ 
+ /**
+@@ -1340,6 +1346,48 @@ void pci_bus_set_current_state(struct pc
+ 		pci_walk_bus(bus, __pci_dev_set_current_state, &state);
+ }
+ 
++static int pci_set_full_power_state(struct pci_dev *dev)
++{
++	pci_power_t old_state = dev->current_state;
++	u16 pmcsr;
++	int ret;
++
++	ret = pci_power_up(dev);
++	if (ret)
++		return ret;
++
++	if (!dev->pm_cap)
++		return 0;
++
++	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
++
++	dev->current_state = pmcsr & PCI_PM_CTRL_STATE_MASK;
++	if (dev->current_state != PCI_D0) {
++		pci_info_ratelimited(dev, "Refused to change power state from %s to D0\n",
++				     pci_power_name(dev->current_state));
++	} else if (old_state >= PCI_D3hot && !(pmcsr & PCI_PM_CTRL_NO_SOFT_RESET)) {
++		/*
++		 * According to section 5.4.1 of the "PCI BUS POWER MANAGEMENT
++		 * INTERFACE SPECIFICATION, REV. 1.2", a device transitioning
++		 * from D3hot to D0 _may_ perform an internal reset, thereby
++		 * going to "D0 Uninitialized" rather than "D0 Initialized". For
++		 * example, at least some versions of the 3c905B and the 3c556B
++		 * exhibit this behaviour.
++		 *
++		 * At least some laptop BIOSen (e.g. the Thinkpad T21) leave
++		 * devices in a D3hot state at boot. Consequently, we need to
++		 * restore at least the BARs so that the device will be
++		 * accessible to its driver.
++		 */
++		pci_restore_bars(dev);
++	}
++
++	if (dev->bus->self)
++		pcie_aspm_pm_state_change(dev->bus->self);
++
++	return 0;
++}
++
+ /**
+  * pci_set_power_state - Set the power state of a PCI device
+  * @dev: PCI device to handle.
+@@ -1381,7 +1429,7 @@ int pci_set_power_state(struct pci_dev *
+ 		return 0;
+ 
+ 	if (state == PCI_D0)
+-		return pci_power_up(dev);
++		return pci_set_full_power_state(dev);
+ 
+ 	/*
+ 	 * This device is quirked not to be put into D3, so don't put it in
+@@ -1394,7 +1442,7 @@ int pci_set_power_state(struct pci_dev *
+ 	 * To put device in D3cold, we put device into D3hot in native
+ 	 * way, then put device into D3cold with platform ops
+ 	 */
+-	error = pci_raw_set_power_state(dev, state > PCI_D3hot ?
++	error = pci_set_low_power_state(dev, state > PCI_D3hot ?
+ 					PCI_D3hot : state);
+ 
+ 	if (pci_platform_power_transition(dev, state))
+
+
+

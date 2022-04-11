@@ -2,111 +2,270 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B99C4FB1A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 04:15:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50AE24FB1A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 04:28:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244335AbiDKCRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 22:17:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44194 "EHLO
+        id S240735AbiDKC3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 22:29:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238514AbiDKCRc (ORCPT
+        with ESMTP id S229622AbiDKC3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 22:17:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4500760E2;
-        Sun, 10 Apr 2022 19:15:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BD86A61034;
-        Mon, 11 Apr 2022 02:15:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27AAAC385A4;
-        Mon, 11 Apr 2022 02:15:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649643318;
-        bh=HrfWFfTOe6j154rTRQZaqm2rUNiKm4IP07T469feT/M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nFFEDTg+4TToywMjDQAyVK4Sm6uES5N8uq0ECkFg/s59aFORXQIraYALz/8TEzIVj
-         2LKpDmWyJX42tlLPtiEr4I9Gt7yc8yDIt2EpwKTHQeBbNsU7KdDZeZZi1ca7j9kMub
-         PxnufUDnVkOkQrq5Mn/IPKAHohFINKwiLsBCovPwYGff4p+9BC9gYT6aoiszmeqs5N
-         I9UvPgOZrkmmfwUpWQ7ZY0q0j+Hqhj9j5absFY6WL+NJAE5eiDI6x1Xguwt+BLW+ev
-         RuUGzJhoennVgSVLYmMDdytVCXjQZNkwzgRDQGK6xoe7TVO/ShrPZA9M31BFLyoxT6
-         b1iA6lN9O98IQ==
-Date:   Mon, 11 Apr 2022 10:15:07 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Marcel Ziswiler <marcel@ziswiler.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Alex Marginean <alexandru.marginean@nxp.com>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Fabio Estevam <festevam@gmail.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Heiko Schocher <hs@denx.de>, Jacky Bai <ping.bai@nxp.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Kuldeep Singh <kuldeep.singh@nxp.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Matthias Schiffer <matthias.schiffer@tq-group.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Olof Johansson <olof@lixom.net>, Peng Fan <peng.fan@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Reinhold Mueller <reinhold.mueller@emtrion.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/3] arm64: prepare and add verdin imx8m plus support
-Message-ID: <20220411021507.GG129381@dragon>
-References: <20220408145725.812566-1-marcel@ziswiler.com>
+        Sun, 10 Apr 2022 22:29:00 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4773878A
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 19:26:46 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KcCP51JbKzgYNb;
+        Mon, 11 Apr 2022 10:24:57 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 11 Apr 2022 10:26:44 +0800
+Received: from [127.0.0.1] (10.67.108.67) by dggpemm500013.china.huawei.com
+ (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 11 Apr
+ 2022 10:26:44 +0800
+Message-ID: <310f6866-93a4-c24e-4b18-67b9f1bfb84e@huawei.com>
+Date:   Mon, 11 Apr 2022 10:26:40 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220408145725.812566-1-marcel@ziswiler.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v4] ARM: module: Add all unwind tables when load module
+Content-Language: en-US
+To:     <linux@armlinux.org.uk>
+CC:     <alexander.sverdlin@nokia.com>, <ardb@kernel.org>,
+        <linus.walleij@linaro.org>, <nico@fluxnic.net>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220401131534.241205-1-chenzhongjin@huawei.com>
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+In-Reply-To: <20220401131534.241205-1-chenzhongjin@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.108.67]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 04:57:22PM +0200, Marcel Ziswiler wrote:
-> From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-> 
-> 
-> Add DMA properties to uart2 node of the base i.MX 8M Plus device tree,
-> add toradex,verdin-imx8mp et al. to dt-bindings and finally, add
-> initial support for Verdin iMX8M Plus.
-> 
-> Changes in v3:
-> - Add missing audio codec todo on development board as well.
-> - Actually define scl/sda-gpios for Verdin I2C_2_DSI aka i2c2. Also
->   pointed out by Laurent. Thanks!
-> - Update PMIC LDO4 and I2C level shifter enablement comment.
-> - Fix USDHC2_VSELECT sleep pinctrl value and add a comment.
-> - Add comment about lowering frequency on Verdin I2C_2_DSI as suggested
->   by Laurent.
-> - Re-based on top of Shawn's latest for-next based on 5.18-rc1.
-> 
-> Changes in v2:
-> - Add Laurent's reviewed-by tag.
-> - Add Krzysztof's reviewed-by tag.
-> - Fix capitalisation of verdin in comments as reported by Laurent.
-> - Add/modify todo comments as suggested by Laurent.
-> - Add Laurent's reviewed- and tested-by tags.
-> 
-> Marcel Ziswiler (3):
->   arm64: dts: imx8mp: add uart2 dma
->   dt-bindings: arm: fsl: add toradex,verdin-imx8mp et al.
->   arm64: dts: freescale: add initial support for verdin imx8m plus
+Just remind for review. Thanks!
 
-Applied all, thanks!
+On 2022/4/1 21:15, Chen Zhongjin wrote:
+> For EABI stack unwinding, when loading .ko module
+> the EXIDX sections will be added to a unwind_table list.
+>
+> However not all EXIDX sections are added because EXIDX
+> sections are searched by hardcoded section names.
+>
+> For functions in other sections such as .ref.text
+> or .kprobes.text, gcc generates seprated EXIDX sections
+> (such as .ARM.exidx.ref.text or .ARM.exidx.kprobes.text).
+>
+> These extra EXIDX sections are not loaded, so when unwinding
+> functions in these sections, we will failed with:
+>
+> 	unwind: Index not found xxx
+>
+> To fix that, I refactor the code for searching and adding
+> EXIDX sections:
+>
+> - Check section type to search EXIDX tables (0x70000001)
+> instead of strcmp() the hardcoded names. Then find the
+> corresponding text sections by their section names.
+>
+> - Add a unwind_table list in module->arch to save their own
+> unwind_table instead of the fixed-lenth array.
+>
+> - Save .ARM.exidx.init.text section ptr, because it should
+> be cleaned after module init.
+>
+> Now all EXIDX sections of .ko can be added correctly.
+>
+> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+> ---
+> Changes v3 -> v4:
+> - Fix indent by replace tab with code.
+>
+> Changes v2 -> v3:
+> - Unwind "txtname" and add some blank, to make code more clear.
+>
+> Changes v1 -> v2:
+> - Rename "table_list" to "unwind_list" for consistency.
+> - Drop unnecessary locals variable "txtname" and "sectype".
+> - Merge condition checks for sh_flags and sh_type.
+> ---
+>   arch/arm/include/asm/module.h | 17 ++------
+>   arch/arm/include/asm/unwind.h |  1 +
+>   arch/arm/kernel/module.c      | 78 ++++++++++++++++++-----------------
+>   3 files changed, 45 insertions(+), 51 deletions(-)
+>
+> diff --git a/arch/arm/include/asm/module.h b/arch/arm/include/asm/module.h
+> index cfffae67c04e..8139b6a33a22 100644
+> --- a/arch/arm/include/asm/module.h
+> +++ b/arch/arm/include/asm/module.h
+> @@ -3,20 +3,10 @@
+>   #define _ASM_ARM_MODULE_H
+>   
+>   #include <asm-generic/module.h>
+> -
+> -struct unwind_table;
+> +#include <asm/unwind.h>
+>   
+>   #ifdef CONFIG_ARM_UNWIND
+> -enum {
+> -	ARM_SEC_INIT,
+> -	ARM_SEC_DEVINIT,
+> -	ARM_SEC_CORE,
+> -	ARM_SEC_EXIT,
+> -	ARM_SEC_DEVEXIT,
+> -	ARM_SEC_HOT,
+> -	ARM_SEC_UNLIKELY,
+> -	ARM_SEC_MAX,
+> -};
+> +#define ELF_SECTION_UNWIND 0x70000001
+>   #endif
+>   
+>   #define PLT_ENT_STRIDE		L1_CACHE_BYTES
+> @@ -36,7 +26,8 @@ struct mod_plt_sec {
+>   
+>   struct mod_arch_specific {
+>   #ifdef CONFIG_ARM_UNWIND
+> -	struct unwind_table *unwind[ARM_SEC_MAX];
+> +	struct unwind_table unwind_list;
+> +	struct unwind_table *init_table;
+>   #endif
+>   #ifdef CONFIG_ARM_MODULE_PLTS
+>   	struct mod_plt_sec	core;
+> diff --git a/arch/arm/include/asm/unwind.h b/arch/arm/include/asm/unwind.h
+> index 0f8a3439902d..b51f85417f58 100644
+> --- a/arch/arm/include/asm/unwind.h
+> +++ b/arch/arm/include/asm/unwind.h
+> @@ -24,6 +24,7 @@ struct unwind_idx {
+>   
+>   struct unwind_table {
+>   	struct list_head list;
+> +	struct list_head mod_list;
+>   	const struct unwind_idx *start;
+>   	const struct unwind_idx *origin;
+>   	const struct unwind_idx *stop;
+> diff --git a/arch/arm/kernel/module.c b/arch/arm/kernel/module.c
+> index 549abcedf795..b98bcb47e337 100644
+> --- a/arch/arm/kernel/module.c
+> +++ b/arch/arm/kernel/module.c
+> @@ -459,46 +459,41 @@ int module_finalize(const Elf32_Ehdr *hdr, const Elf_Shdr *sechdrs,
+>   #ifdef CONFIG_ARM_UNWIND
+>   	const char *secstrs = (void *)hdr + sechdrs[hdr->e_shstrndx].sh_offset;
+>   	const Elf_Shdr *sechdrs_end = sechdrs + hdr->e_shnum;
+> -	struct mod_unwind_map maps[ARM_SEC_MAX];
+> -	int i;
+> +	struct unwind_table *unwind_list = &mod->arch.unwind_list;
+>   
+> -	memset(maps, 0, sizeof(maps));
+> +	INIT_LIST_HEAD(&unwind_list->mod_list);
+> +	mod->arch.init_table = NULL;
+>   
+>   	for (s = sechdrs; s < sechdrs_end; s++) {
+>   		const char *secname = secstrs + s->sh_name;
+> +		const char *txtname;
+> +		const Elf_Shdr *txt_sec;
+>   
+> -		if (!(s->sh_flags & SHF_ALLOC))
+> +		if (!strcmp(".ARM.exidx", secname))
+> +			txtname = ".text";
+> +		else
+> +			txtname = secname + strlen(".ARM.exidx");
+> +
+> +		txt_sec = find_mod_section(hdr, sechdrs, txtname);
+> +
+> +		if (!(s->sh_flags & SHF_ALLOC) ||
+> +		    s->sh_type != ELF_SECTION_UNWIND)
+>   			continue;
+>   
+> -		if (strcmp(".ARM.exidx.init.text", secname) == 0)
+> -			maps[ARM_SEC_INIT].unw_sec = s;
+> -		else if (strcmp(".ARM.exidx", secname) == 0)
+> -			maps[ARM_SEC_CORE].unw_sec = s;
+> -		else if (strcmp(".ARM.exidx.exit.text", secname) == 0)
+> -			maps[ARM_SEC_EXIT].unw_sec = s;
+> -		else if (strcmp(".ARM.exidx.text.unlikely", secname) == 0)
+> -			maps[ARM_SEC_UNLIKELY].unw_sec = s;
+> -		else if (strcmp(".ARM.exidx.text.hot", secname) == 0)
+> -			maps[ARM_SEC_HOT].unw_sec = s;
+> -		else if (strcmp(".init.text", secname) == 0)
+> -			maps[ARM_SEC_INIT].txt_sec = s;
+> -		else if (strcmp(".text", secname) == 0)
+> -			maps[ARM_SEC_CORE].txt_sec = s;
+> -		else if (strcmp(".exit.text", secname) == 0)
+> -			maps[ARM_SEC_EXIT].txt_sec = s;
+> -		else if (strcmp(".text.unlikely", secname) == 0)
+> -			maps[ARM_SEC_UNLIKELY].txt_sec = s;
+> -		else if (strcmp(".text.hot", secname) == 0)
+> -			maps[ARM_SEC_HOT].txt_sec = s;
+> -	}
+> +		if (txt_sec) {
+> +			struct unwind_table *table =
+> +				unwind_table_add(s->sh_addr,
+> +						s->sh_size,
+> +						txt_sec->sh_addr,
+> +						txt_sec->sh_size);
+> +
+> +			list_add(&table->mod_list, &unwind_list->mod_list);
+>   
+> -	for (i = 0; i < ARM_SEC_MAX; i++)
+> -		if (maps[i].unw_sec && maps[i].txt_sec)
+> -			mod->arch.unwind[i] =
+> -				unwind_table_add(maps[i].unw_sec->sh_addr,
+> -					         maps[i].unw_sec->sh_size,
+> -					         maps[i].txt_sec->sh_addr,
+> -					         maps[i].txt_sec->sh_size);
+> +			/* save init table for module_arch_freeing_init */
+> +			if (strcmp(".ARM.exidx.init.text", secname) == 0)
+> +				mod->arch.init_table = table;
+> +		}
+> +	}
+>   #endif
+>   #ifdef CONFIG_ARM_PATCH_PHYS_VIRT
+>   	s = find_mod_section(hdr, sechdrs, ".pv_table");
+> @@ -519,11 +514,13 @@ void
+>   module_arch_cleanup(struct module *mod)
+>   {
+>   #ifdef CONFIG_ARM_UNWIND
+> -	int i;
+> +	struct unwind_table *tmp;
+> +	struct unwind_table *n;
+>   
+> -	for (i = 0; i < ARM_SEC_MAX; i++) {
+> -		unwind_table_del(mod->arch.unwind[i]);
+> -		mod->arch.unwind[i] = NULL;
+> +	list_for_each_entry_safe(tmp, n,
+> +			&mod->arch.unwind_list.mod_list, mod_list) {
+> +		list_del(&tmp->mod_list);
+> +		unwind_table_del(tmp);
+>   	}
+>   #endif
+>   }
+> @@ -531,7 +528,12 @@ module_arch_cleanup(struct module *mod)
+>   void __weak module_arch_freeing_init(struct module *mod)
+>   {
+>   #ifdef CONFIG_ARM_UNWIND
+> -	unwind_table_del(mod->arch.unwind[ARM_SEC_INIT]);
+> -	mod->arch.unwind[ARM_SEC_INIT] = NULL;
+> +	struct unwind_table *init = mod->arch.init_table;
+> +
+> +	if (init) {
+> +		mod->arch.init_table = NULL;
+> +		list_del(&init->mod_list);
+> +		unwind_table_del(init);
+> +	}
+>   #endif
+>   }
+

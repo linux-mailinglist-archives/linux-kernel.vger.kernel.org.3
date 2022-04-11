@@ -2,252 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C31A4FB272
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 05:42:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B48A4FB274
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 05:43:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243963AbiDKDoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 23:44:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54968 "EHLO
+        id S244581AbiDKDp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 23:45:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237969AbiDKDoG (ORCPT
+        with ESMTP id S235432AbiDKDp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 23:44:06 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E2E377CB;
-        Sun, 10 Apr 2022 20:41:51 -0700 (PDT)
-X-UUID: 1bdc9532674f41acb378a374a5405c85-20220411
-X-UUID: 1bdc9532674f41acb378a374a5405c85-20220411
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1561306308; Mon, 11 Apr 2022 11:41:47 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 11 Apr 2022 11:41:46 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 11 Apr
- 2022 11:41:45 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 11 Apr 2022 11:41:44 +0800
-Message-ID: <0f385e6e2d0687c3e6de12a576d1617af9504cee.camel@mediatek.com>
-Subject: Re: [PATCH v8, 00/15] media: mtk-vcodec: support for M8192 decoder
-From:   "yunfei.dong@mediatek.com" <yunfei.dong@mediatek.com>
-To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-CC:     George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        "Fritz Koenig" <frkoenig@chromium.org>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Mon, 11 Apr 2022 11:41:44 +0800
-In-Reply-To: <fbfe4572296a133492310f13e3f41db56218fc17.camel@ndufresne.ca>
-References: <20220331024801.29229-1-yunfei.dong@mediatek.com>
-         <fbfe4572296a133492310f13e3f41db56218fc17.camel@ndufresne.ca>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Sun, 10 Apr 2022 23:45:26 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22940377CE
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 20:43:14 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id x200so1513891ybe.13
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 20:43:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=GZhe697/HvKmHr7ntqH6OYJuaAm1dy3g/Lk5HgBeAfU=;
+        b=Bf/3uRC3a/bwx7+tbSpefoY+6oNTuPpCsIxV6Bwif5c8tX/I8S/ILWgLF7UBGxV538
+         18wHEmmH89kh93o1ZkWITXkGmn/r3I6xzKvS1cC1k7Fj9DdT1mXdrA9OpIFaG6QyKck9
+         ytc4eA3+QIMwx1Jv2vQ1znBL4Sl2uLQJifDcBM6TujeqGqlJwVeyFUN4/MplC8k7ed9Y
+         Edq0H+BV1hFz2GeUs1SN77yMjN6Qo1WygPGPFPMOG/lssc9oIM2e3ZjpXdjemLMHiXi0
+         dqaUVh+r3aIb7griJdJdmEJ3DJf8LqWDHsJ8jw2ZioyuGiiGiDGmK1RcMB+qtc4VjsN3
+         O/NQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=GZhe697/HvKmHr7ntqH6OYJuaAm1dy3g/Lk5HgBeAfU=;
+        b=cpdms5giavrkOtZxkpZCpPno/nUAbymkNfZ4V6PVbBHeUzFdiAMVpoJkRfQX5xN1fG
+         RhlFrFj5/+Kb13tBnR/l+OkSqlYrh3AzyNpHGyfVkCpP+XT+ns9nsKBOcmDohKmTkHc4
+         dMD8wfXgbfGp1iYdU0pkHBueNu+uoJKwrr8LOv885YprbXPu1KtTR154x7fsvn3DCKNJ
+         jGUtpX7YfbbTGu26uW63zLBvGOF4etZwlbjdyw+JCBYyITCGuiYG7Qw39v+D//RyTJSL
+         kMnQ1/4hPZz3Lb9h2TcjuccILWSmWLgS88uUez7YMa+RbDJ97xHZQo3/xtGO0wieibp3
+         WREg==
+X-Gm-Message-State: AOAM532kUQYv98sdepRhenOe1cWljflMBkpeg7bgTU5t4aO0S72n0uu2
+        va/rU57lG7HPv7oiQ5OqUcmTNqf3csdeaxJ/1fo=
+X-Google-Smtp-Source: ABdhPJyfGV0aJA4dugz4g4/Z0qE0ZrJBR68iSXF5sM/hq9xTmxNuCEsp8kwO27IUeCdkDIyRf7UyQpZmzatXjfGIFf8=
+X-Received: by 2002:a25:2e02:0:b0:641:3772:6f7a with SMTP id
+ u2-20020a252e02000000b0064137726f7amr4012597ybu.526.1649648593229; Sun, 10
+ Apr 2022 20:43:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:7000:ad9a:0:0:0:0 with HTTP; Sun, 10 Apr 2022 20:43:12
+ -0700 (PDT)
+Reply-To: ahmednasserkhalifa001@gmail.com
+From:   Nasser <wernermrthomas@gmail.com>
+Date:   Mon, 11 Apr 2022 04:43:12 +0100
+Message-ID: <CAB58LbXZksOFOrZCL+g5Rm0XSMeN_yENZSZVur9U_g5xSiZ-Qg@mail.gmail.com>
+Subject: Hello sir
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:b36 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [wernermrthomas[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [ahmednasserkhalifa001[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nicolas,
+-- 
+My name is Ahmed Sultan Al-Suwaidi from United Arab Emirates, i want us to
+be partners in business.
 
-On Thu, 2022-03-31 at 16:48 -0400, Nicolas Dufresne wrote:
-> Hi Yunfei,
-> 
-> thanks for the update, I should be testing this really soon.
-> 
-> Le jeudi 31 mars 2022 à 10:47 +0800, Yunfei Dong a écrit :
-> > This series adds support for mt8192 h264/vp8/vp9 decoder drivers.
-> > Firstly, refactor
-> > power/clock/interrupt interfaces for mt8192 is lat and core
-> > architecture.
-> 
-> Similarly to MT8173 and MT8183, a shared* firmware is needed for this
-> CODEC to
-> work (scp.img). I looked into linux-firmware[1] it has not been added
-> for mt8192
-> yet. As your patches are getting close to be ready, it would be
-> important to
-> look into this so the patchset does not get blocked due to that.
-> 
-> best regards,
-> Nicolas
-> 
-> [1] 
-> https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/tree/mediatek
-> * Shared at least between MDP3 and MTK VCODEC from my knowledge
-> 
+What did you think?
 
-Thanks for your remind.
+Best regards,
 
-I have already sent mt8192 scp.img to github.
-
-https://github.com/yunfeidongmediatek/linux_fw_scp_8192/commit/3ac2fc85bc7dfcebdb92b5b5808b0268cdfb772d
-
-Waiting for to be merged.
-
-Best Regards,
-Yunfei Dong
-
-> > 
-> > Secondly, add new functions to get frame buffer size and resolution
-> > according
-> > to decoder capability from scp side. Then add callback function to
-> > get/put
-> > capture buffer in order to enable lat and core decoder in parallel,
-> > need to
-> > adjust GStreamer at the same time. 
-> > 
-> > Then add to support MT21C compressed mode and fix v4l2-compliance
-> > fail.
-> > 
-> > Next, extract H264 request api driver to let mt8183 and mt8192 use
-> > the same
-> > code, and adds mt8192 frame based h264 driver for stateless
-> > decoder.
-> > 
-> > Lastly, add vp8 and vp9 stateless decoder drivers.
-> > 
-> > Patches 1 refactor power/clock/interrupt interface.
-> > Patches 2~4 get frame buffer size and resolution according to
-> > decoder capability.
-> > Patches 5 set capture queue bytesused.
-> > Patches 6 adjust GStreamer.
-> > Patch 7~11 add to support MT21C compressed mode and fix v4l2-
-> > compliance fail.
-> > patch 12 record capture queue format type.
-> > Patch 13~14 extract h264 driver and add mt8192 frame based driver
-> > for h264 decoder.
-> > Patch 15~16 add vp8 and vp9 stateless decoder drivers.
-> > Patch 17 prevent kernel crash when rmmod mtk-vcodec-dec.ko
-> > ---
-> > changes compared with v6:
-> > - adjust GStreamer, separate src buffer done with
-> > v4l2_ctrl_request_complete for patch 6.
-> > - remove v4l2_m2m_set_dst_buffered.
-> > - add new patch to set each plane bytesused in buf prepare for
-> > patch 5.
-> > - using upstream interface to update vp9 prob tables for patch 16.
-> > - fix maintainer comments.
-> > - test the driver with chrome VD and GStreamer(H264/VP9/VP8/AV1).
-> > changes compared with v6:
-> > - rebase to the latest media stage and fix conficts
-> > - fix memcpy to memcpy_fromio or memcpy_toio
-> > - fix h264 crash when test field bitstream
-> > changes compared with v5:
-> > - fix vp9 comments for patch 15
-> > - fix vp8 comments for patch 14.
-> > - fix comments for patch 12.
-> > - fix build errors.
-> > changes compared with v4:
-> > - fix checkpatch.pl fail.
-> > - fix kernel-doc fail.
-> > - rebase to the latest media codec driver.
-> > changes compared with v3:
-> > - remove enum mtk_chip for patch 2.
-> > - add vp8 stateless decoder drivers for patch 14.
-> > - add vp9 stateless decoder drivers for patch 15.
-> > changes compared with v2:
-> > - add new patch 11 to record capture queue format type.
-> > - separate patch 4 according to tzung-bi's suggestion.
-> > - re-write commit message for patch 5 according to tzung-bi's
-> > suggestion.
-> > changes compared with v1:
-> > - rewrite commit message for patch 12.
-> > - rewrite cover-letter message.
-> > ---
-> > Yunfei Dong (17):
-> >   media: mediatek: vcodec: Add vdec enable/disable hardware helpers
-> >   media: mediatek: vcodec: Using firmware type to separate
-> > different
-> >     firmware architecture
-> >   media: mediatek: vcodec: get capture queue buffer size from scp
-> >   media: mediatek: vcodec: Read max resolution from dec_capability
-> >   media: mediatek: vcodec: set each plane bytesused in buf prepare
-> >   media: mediatek: vcodec: Refactor get and put capture buffer flow
-> >   media: mediatek: vcodec: Refactor supported vdec formats and
-> >     framesizes
-> >   media: mediatek: vcodec: Getting supported decoder format types
-> >   media: mediatek: vcodec: Add format to support MT21C
-> >   media: mediatek: vcodec: disable vp8 4K capability
-> >   media: mediatek: vcodec: Fix v4l2-compliance fail
-> >   media: mediatek: vcodec: record capture queue format type
-> >   media: mediatek: vcodec: Extract H264 common code
-> >   media: mediatek: vcodec: support stateless H.264 decoding for
-> > mt8192
-> >   media: mediatek: vcodec: support stateless VP8 decoding
-> >   media: mediatek: vcodec: support stateless VP9 decoding
-> >   media: mediatek: vcodec: prevent kernel crash when rmmod
-> >     mtk-vcodec-dec.ko
-> > 
-> >  .../media/platform/mediatek/vcodec/Makefile   |    4 +
-> >  .../platform/mediatek/vcodec/mtk_vcodec_dec.c |   62 +-
-> >  .../mediatek/vcodec/mtk_vcodec_dec_drv.c      |    8 +-
-> >  .../mediatek/vcodec/mtk_vcodec_dec_pm.c       |  166 +-
-> >  .../mediatek/vcodec/mtk_vcodec_dec_pm.h       |    6 +-
-> >  .../mediatek/vcodec/mtk_vcodec_dec_stateful.c |   19 +-
-> >  .../vcodec/mtk_vcodec_dec_stateless.c         |  257 +-
-> >  .../platform/mediatek/vcodec/mtk_vcodec_drv.h |   41 +-
-> >  .../mediatek/vcodec/mtk_vcodec_enc_drv.c      |    5 -
-> >  .../platform/mediatek/vcodec/mtk_vcodec_fw.c  |    6 +
-> >  .../platform/mediatek/vcodec/mtk_vcodec_fw.h  |    1 +
-> >  .../vcodec/vdec/vdec_h264_req_common.c        |  310 +++
-> >  .../vcodec/vdec/vdec_h264_req_common.h        |  272 +++
-> >  .../mediatek/vcodec/vdec/vdec_h264_req_if.c   |  438 +---
-> >  .../vcodec/vdec/vdec_h264_req_multi_if.c      |  619 +++++
-> >  .../mediatek/vcodec/vdec/vdec_vp8_req_if.c    |  437 ++++
-> >  .../vcodec/vdec/vdec_vp9_req_lat_if.c         | 2072
-> > +++++++++++++++++
-> >  .../platform/mediatek/vcodec/vdec_drv_if.c    |   37 +-
-> >  .../platform/mediatek/vcodec/vdec_drv_if.h    |    3 +
-> >  .../platform/mediatek/vcodec/vdec_ipi_msg.h   |   36 +
-> >  .../platform/mediatek/vcodec/vdec_msg_queue.c |    2 +
-> >  .../platform/mediatek/vcodec/vdec_msg_queue.h |    2 +
-> >  .../platform/mediatek/vcodec/vdec_vpu_if.c    |   53 +-
-> >  .../platform/mediatek/vcodec/vdec_vpu_if.h    |   15 +
-> >  .../platform/mediatek/vcodec/venc_vpu_if.c    |    2 +-
-> >  include/linux/remoteproc/mtk_scp.h            |    2 +
-> >  26 files changed, 4274 insertions(+), 601 deletions(-)
-> >  create mode 100644
-> > drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.c
-> >  create mode 100644
-> > drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_common.h
-> >  create mode 100644
-> > drivers/media/platform/mediatek/vcodec/vdec/vdec_h264_req_multi_if.
-> > c
-> >  create mode 100644
-> > drivers/media/platform/mediatek/vcodec/vdec/vdec_vp8_req_if.c
-> >  create mode 100644
-> > drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
-> > 
-> 
-> 
-
+Ahmed.

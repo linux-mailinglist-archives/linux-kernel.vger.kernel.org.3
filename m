@@ -2,95 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCC474FC2E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 19:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 535154FC2EE
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 19:10:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348739AbiDKRGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 13:06:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51348 "EHLO
+        id S1348753AbiDKRMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 13:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244412AbiDKRGX (ORCPT
+        with ESMTP id S1348739AbiDKRMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 13:06:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35EE438E;
-        Mon, 11 Apr 2022 10:04:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E31A1B81717;
-        Mon, 11 Apr 2022 17:04:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BEC9C385A3;
-        Mon, 11 Apr 2022 17:04:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649696642;
-        bh=frZ/qMfauBfztraKieX1XcHWLdV0Dc/40AGkHPNQZVE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HBq0buwJVJYQCcSglb5aK/veFAkmgoM6jxovsN5bQhtdYSYDanDbS6C1dHNeBxUDh
-         HG+3pIvGm7mpqy6hhA/DIT6F8XzMyh5lBKzRhVjik0bYAgFVD/00Nk3aaFYIxPGqkn
-         GYZe3biU8w8n0UoKSyPpoPmxla6I1WBfyHupEPjc=
-Date:   Mon, 11 Apr 2022 19:04:00 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: [PATCH] [Rebased for 5.15,5.16,5.17] static_call: Don't make
- __static_call_return0 static
-Message-ID: <YlRfgBe7AeAyoLlr@kroah.com>
-References: <155efe38aa611a362ed23a52cecc26371399ae7f.1649696042.git.christophe.leroy@csgroup.eu>
+        Mon, 11 Apr 2022 13:12:51 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD4EDE9F;
+        Mon, 11 Apr 2022 10:10:36 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id g20so19270874edw.6;
+        Mon, 11 Apr 2022 10:10:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gXYI7jas27KXQFWzQAqCjxbvW9SNZ9FrO2KKjkUfn0k=;
+        b=VTXUTMM8/MVPRxc7Dj8tuvwskdeJ2OL3vjFhCYJjaL7PT8yjgolt0IrOwBQF4CIuaV
+         1QvMjeVI+WJvJ/RpGs/CnsXytir4GHRcHL6zapzw+8WocEdElNfeWnm9dwNq/qCfXAty
+         ntyM2100cVWknYXIFfPG8PNxs81t4Jxe+pi2t65vgrrpUQrlGGFvMvGUam1h3QCAIRdF
+         rxn1S9XmmDq7K2Y3V7IoVjLooqMxNYqYTCTcF7BHlpEaSDc0xPGiOHFW0FstDB8B+uAO
+         zop20r0dXRU5zORi5/uArwPzcq9xNJPejLFvLFl09Dly+Ua/D0Q+C+10QOQQn0djfvqz
+         lDXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gXYI7jas27KXQFWzQAqCjxbvW9SNZ9FrO2KKjkUfn0k=;
+        b=VDyVwgucSf+VQsBR+4ljtjdi045cXxNFhFl2agGD6meKd5OGTmEULVsCjS7sjp7/0r
+         zEROMVAVFgeeSJgrjjP1ZbMna9dlmltHdMQRzJEPpupsc/bLSCMGcjAB9SWz2G+FIVOB
+         kegTuCnH82KOaQpZnR3FQoVXBZX+KxGj6OC9//ujWDIO81Cvc+fqcBiSyTraVPRvBpvS
+         /j/qlPxn5Gq744VG+tj+EZ7sEQPzxidct1ZFCbYcECOYEV7I7cTdpPupV0V3IMbq+yy/
+         jbZ5nMqGUloumYybVOMsMUVj9Q1NzUqTpO8Iulo8wPyD6RQtc4LNfS1QUqH2ySEl1y3l
+         wdJg==
+X-Gm-Message-State: AOAM531Wa8ObLNFepjlz/c+q1qyAHY2Up4V8rL/+XMVQrXakPwrObbg7
+        HTZFhx8ezyGXZpXpm+Ab2xidyLhGIFobyIGk05M=
+X-Google-Smtp-Source: ABdhPJw9xLUS4WGM4zeOtEBtedr4s97anadMlmsyHgl4E+GO4fVj7RlJfDmCSp5DWYDyKqMJeEW6PPURDHgW7jz33ZU=
+X-Received: by 2002:a05:6402:27d1:b0:419:1b02:4a04 with SMTP id
+ c17-20020a05640227d100b004191b024a04mr34275976ede.218.1649697034913; Mon, 11
+ Apr 2022 10:10:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <155efe38aa611a362ed23a52cecc26371399ae7f.1649696042.git.christophe.leroy@csgroup.eu>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220411162033.39613-1-eajames@linux.ibm.com>
+In-Reply-To: <20220411162033.39613-1-eajames@linux.ibm.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 11 Apr 2022 20:06:21 +0300
+Message-ID: <CAHp75VeXCMobbcpvcWPt2eeDXeHs5caB=fsAFC0xy4_0DT2miA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/4] leds: pca955x: Add HW blink support
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, patrick@stwcx.xyz,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Joel Stanley <joel@jms.id.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 06:54:43PM +0200, Christophe Leroy wrote:
-> This is backport to 5.15,5.16,5.17
-> 
-> (cherry picked from commit 8fd4ddda2f49a66bf5dd3d0c01966c4b1971308b)
-> 
-> System.map shows that vmlinux contains several instances of
-> __static_call_return0():
-> 
-> 	c0004fc0 t __static_call_return0
-> 	c0011518 t __static_call_return0
-> 	c00d8160 t __static_call_return0
-> 
-> arch_static_call_transform() uses the middle one to check whether we are
-> setting a call to __static_call_return0 or not:
-> 
-> 	c0011520 <arch_static_call_transform>:
-> 	c0011520:       3d 20 c0 01     lis     r9,-16383	<== r9 =  0xc001 << 16
-> 	c0011524:       39 29 15 18     addi    r9,r9,5400	<== r9 += 0x1518
-> 	c0011528:       7c 05 48 00     cmpw    r5,r9		<== r9 has value 0xc0011518 here
-> 
-> So if static_call_update() is called with one of the other instances of
-> __static_call_return0(), arch_static_call_transform() won't recognise it.
-> 
-> In order to work properly, global single instance of __static_call_return0() is required.
-> 
-> Fixes: 3f2a8fc4b15d ("static_call/x86: Add __static_call_return0()")
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
-> Link: https://lkml.kernel.org/r/30821468a0e7d28251954b578e5051dc09300d04.1647258493.git.christophe.leroy@csgroup.eu
-> ---
->  include/linux/static_call.h                   |   5 +-
->  kernel/Makefile                               |   3 +-
->  kernel/static_call.c                          | 542 +-----------------
->  .../{static_call.c => static_call_inline.c}   |   5 -
->  4 files changed, 4 insertions(+), 551 deletions(-)
->  copy kernel/{static_call.c => static_call_inline.c} (99%)
+On Mon, Apr 11, 2022 at 7:20 PM Eddie James <eajames@linux.ibm.com> wrote:
+>
+> This series adds support for blinking using the PCA955x chip, falling
+> back to software blinking if another LED on the chip is already blinking
+> at a different rate, or if the requested rate isn't representable with
+> the PCA955x.
+> Also included are some minor clean up and optimization changes that make
+> the HW blinking a bit easier.
 
-Thanks for this, now queued up!
+Don't see any big issues here, FWIW,
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-greg k-h
+But please consider two things for the future improvements:
+1) switching to regmap API;
+2) switching to bitmap API.
+
+You may find some code in drivers/gpio/gpio-pca953x.c. It might be
+that some common code can be split to the generic bitmap/regmap
+operations.
+
+> Changes since v2:
+>  - Split the cleanup patch
+>  - Prettier dev_err calls
+>  - Include units for blink period and use defined unit translations
+>    rather than just a number.
+>  - Use positive conditionals.
+>
+> Changes since v1:
+>  - Rework the blink function to fallback to software blinking if the
+>    period is out of range of the chip's capabilities or if another LED
+>    on the chip is already blinking at a different rate.
+>  - Add the cleanup patch
+>
+> Eddie James (4):
+>   leds: pca955x: Refactor with helper functions and renaming
+>   leds: pca955x: Use pointers to driver data rather than I2C client
+>   leds: pca955x: Optimize probe led selection
+>   leds: pca955x: Add HW blink support
+>
+>  drivers/leds/leds-pca955x.c | 341 ++++++++++++++++++++++++------------
+>  1 file changed, 232 insertions(+), 109 deletions(-)
+>
+> --
+> 2.27.0
+>
+
+
+-- 
+With Best Regards,
+Andy Shevchenko

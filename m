@@ -2,97 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C50874FB4E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 09:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 483504FB4ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 09:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245477AbiDKHej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 03:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51806 "EHLO
+        id S245479AbiDKHer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 03:34:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245471AbiDKHeg (ORCPT
+        with ESMTP id S243368AbiDKHeo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 03:34:36 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2047.outbound.protection.outlook.com [40.107.93.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4566EBF45;
-        Mon, 11 Apr 2022 00:32:23 -0700 (PDT)
+        Mon, 11 Apr 2022 03:34:44 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2053.outbound.protection.outlook.com [40.107.220.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F7733D4B5;
+        Mon, 11 Apr 2022 00:32:31 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Jq/H0UkFslAdKMhg4dN+qT8RGhloyzAuMUumGD3O2KTfR4bw9+CFryRWxedRQaFl6d1bgWb/B+INfbFcdfUXjEXeiJlH5TxqW3QldhuAFShkq0+QRITObzy/x+NY3b/tQ9v7feCmJKBsrFZvB+9KFqnNXccpgV6I6aXX2eIqDt6yyYnTN70LFR4c2H//2MscWtF4lCgdJk8U14P/EI+Xlv8hcRwwJL30f+FPyOiPfF2JzkaOTS1qyW/vJ9S5p5HwvY1PcJofq3wuMmG6xV8bA6c0ukdJYw76YSUFvH/lHYHcGS1T1bu/UBlu27hy5r3jjVPO4fLAIUR4AX4drCYAZA==
+ b=NyCIUup4Nbumtu7X0AephfjpAumzJaGqPpd63pMGtYm/HO0VC935YEneTEHCJkukRaack8NzyPYavj6Hbh8ZV4spo9+Cj25aLOdvNBZ8/G241hrLrSM378uGubARluLQz0+hAiZh+3+dFOQ1x27zLYxJ8RmCMx/QUSqH/74d4B7dk6pLDGm7iYiHJVyzJiIBRUJv1S97ZRCO1RW+laffuQLRRXn9WyUHcfBtRRBPYLwTduHZcpGrTDW0xDw50OdSurt36g23POtK01hZJZKfHPVW6vrYrmX0s42IWOERsV7LuOOj4KbK/lFeH9rYG8aKPGGb99QbCbMf2oTfDmd4vw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=F+xxEjQUDXHiRorLLG1tGaaeekrSk+5vyK8N9IogFPI=;
- b=g3VjtSrc7UyD1ohbvzhrBDDnyAU9BGoeJMeigAgE8BRq7HfFdw1OctU5CMsVHhmv+MbhQqMyK98oNNfbZ9QJZRfVIxpg411d+DP8VfJWj0Dj8/C+n5V98q1/oAT/g4C64P8tdwJRZR8P/lfUCvtuXPkGmJk6CblzQFCY43e2C17nknKqIA068fDCbcu2q0rElIKM+bMqeaal0ABYBJN4wl0j0ehqjTfVGQg7kBWbawP2wXUSpjXSIFS+1DvZ7ZArFqfkCPqjPgkvWsmrCt4tL/Aaa4Jj7Z5fXB3YNZAm544CgM4sXO5wszSdC4tPjrCPRYn2Svdc/y/EoocoRzbY3A==
+ bh=sQY2mDcCoEHbExmTKoMgpvuZKlYuh9PHw1QFWoZ1TR0=;
+ b=WGl4zr4kqNGeka5xsNsggY5wkbVgElCVVfS+UlGlaZ7EbmL92gSEPxkmGQU+4DWrhlPQ88J1v9ElIBNui1tK/gM7VjK9H0FX2AmbqoK9o/lR9CAg2hoOLfHT6d4mHdNJOV4+xCIZLlshWAqI9Xj3EoHWitRCeyz23PbwTjGKSUiTsx+B1B1lqxnekn7zldQ5VuWxF8legtF8TreN2CdUxdE+/T60FT6FAoJbMYIkPWr2DIZNSUVjBON4lVHAcjlmQBUjtrh2XvdHLqV/pOm1GgYg1hbZ4w+9LHOcdngFdIqV/tZ03udgdjeaf3LG7+ypKY/DjN1tbnwL4TSRx/Fqvw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.235) smtp.rcpttodomain=alsa-project.org smtp.mailfrom=nvidia.com;
+ 12.22.5.238) smtp.rcpttodomain=alsa-project.org smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=F+xxEjQUDXHiRorLLG1tGaaeekrSk+5vyK8N9IogFPI=;
- b=XgEwldK6AOvcU/eSE0dPePUbOe+txLVkBN5Enomw6qas1pUN5ivL6Wqd4wnLRS5TjHvVriuTV3iaSKV0fBxvyS4yq05MqG2wX1sc/ulq/VWLntbFKQVmyukLJebFM3A/nIC7mpPztctf5nU2DGGteIZwAeNaJIhtjy78hB79oAaV6TnW6tuvEUKebYGRlW4k8/sbLuVYv++INMjaiHS5Jpb9oGwBEsNZUJKadgwuDUDKE0wGJw+JI34qhWFJF+hp6/6cPvwk+BAKE88kxtPyTFZKo6AiZtd4cks34CTxXLRvYLrUnn+XpCUin/mtK9RrHfMNAsL/lm3Ijcxi6/NDXg==
-Received: from BN6PR12CA0046.namprd12.prod.outlook.com (2603:10b6:405:70::32)
- by MN2PR12MB3392.namprd12.prod.outlook.com (2603:10b6:208:cb::19) with
+ bh=sQY2mDcCoEHbExmTKoMgpvuZKlYuh9PHw1QFWoZ1TR0=;
+ b=Q7VHdD6/eRtJFhduvorHtaBekyuoa/PGGR0lTMOz2pljAF5ju4QKPHOrCJXfMrzjpEVVGWV0QE640m0NgTwO/yal16f3EDeWIAbCVa3QCYBqpbJy6xUip25keTEQeEcrRTz0QFzk51NJCgT+SFIgjtm0a3qrvlbNEXwWSLr6pHS8eLVC0XFM/GORGmfgR8fK0bKoNW/9Sg+uTOd//bp/EoVGlJXdzsM2V247bJbeWq8hwCjfMdYpqmAm7OOTwbpxzvXLFJvqe3VXfUduO4+JcJ7McILLX67FqTw12ZIoXa2QlG7yHoPsotT62l9oietMQHAGFV8lTrEVR2lnVoeOgg==
+Received: from BN9PR03CA0269.namprd03.prod.outlook.com (2603:10b6:408:ff::34)
+ by SA0PR12MB4589.namprd12.prod.outlook.com (2603:10b6:806:92::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Mon, 11 Apr
- 2022 07:32:21 +0000
-Received: from BN8NAM11FT027.eop-nam11.prod.protection.outlook.com
- (2603:10b6:405:70:cafe::71) by BN6PR12CA0046.outlook.office365.com
- (2603:10b6:405:70::32) with Microsoft SMTP Server (version=TLS1_2,
+ 2022 07:32:29 +0000
+Received: from BN8NAM11FT011.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:ff:cafe::68) by BN9PR03CA0269.outlook.office365.com
+ (2603:10b6:408:ff::34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29 via Frontend
- Transport; Mon, 11 Apr 2022 07:32:21 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
+ Transport; Mon, 11 Apr 2022 07:32:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.238)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.235; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.235) by
- BN8NAM11FT027.mail.protection.outlook.com (10.13.177.96) with Microsoft SMTP
+ 12.22.5.238 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.238; helo=mail.nvidia.com;
+Received: from mail.nvidia.com (12.22.5.238) by
+ BN8NAM11FT011.mail.protection.outlook.com (10.13.176.140) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5144.20 via Frontend Transport; Mon, 11 Apr 2022 07:32:20 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Mon, 11 Apr
- 2022 07:32:19 +0000
+ 15.20.5144.20 via Frontend Transport; Mon, 11 Apr 2022 07:32:28 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by DRHQMAIL105.nvidia.com
+ (10.27.9.14) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Mon, 11 Apr
+ 2022 07:32:27 +0000
 Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail202.nvidia.com
  (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 11 Apr
- 2022 00:32:19 -0700
+ 2022 00:32:26 -0700
 Received: from mkumard.nvidia.com (10.127.8.13) by mail.nvidia.com
  (10.129.68.7) with Microsoft SMTP Server id 15.2.986.22 via Frontend
- Transport; Mon, 11 Apr 2022 00:32:16 -0700
+ Transport; Mon, 11 Apr 2022 00:32:24 -0700
 From:   Mohan Kumar <mkumard@nvidia.com>
 To:     <tiwai@suse.com>, <perex@perex.cz>
 CC:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
         <spujar@nvidia.com>, <alsa-devel@alsa-project.org>,
         <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Mohan Kumar <mkumard@nvidia.com>
-Subject: [PATCH 0/2] Add support for HDA Jack poll in suspend state
-Date:   Mon, 11 Apr 2022 13:02:08 +0530
-Message-ID: <20220411073210.23445-1-mkumard@nvidia.com>
+Subject: [PATCH 1/2] ALSA: hda: Jack detection poll in suspend state
+Date:   Mon, 11 Apr 2022 13:02:09 +0530
+Message-ID: <20220411073210.23445-2-mkumard@nvidia.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220411073210.23445-1-mkumard@nvidia.com>
+References: <20220411073210.23445-1-mkumard@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 200810bc-e28a-474f-4527-08da1b8d69dc
-X-MS-TrafficTypeDiagnostic: MN2PR12MB3392:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR12MB33924BD2B45D0DD9E7B7D949C1EA9@MN2PR12MB3392.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: ccceeb4f-e7ca-4e9b-8775-08da1b8d6ecb
+X-MS-TrafficTypeDiagnostic: SA0PR12MB4589:EE_
+X-Microsoft-Antispam-PRVS: <SA0PR12MB458929BEA3733FFE896E2B2AC1EA9@SA0PR12MB4589.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bUvPO7SEJIkTq0rU+Q48LY9hyFH4UBjaJt6xqNezGb8/DxQWZH44gTuFrp3wlsz6ZWa3b2xWiU+Col3hRipXjK4v/EhRxxPhs1a5ouf46+KQE54UH2oF5XRISpiWerxYd//p9Qo5ojKpeagWKQn6Y85SGnyxP95bOq85OaQQf1s0IqmSUasyyPTR7ZtmPcUd/4jiM1u7zjehrRUWBb2DB4rgv8/hfiBjdpGnlMJSc1db+88tPLi9n4ma1D1y0atHN6F9rRggxoOCyR/Ku7Q1B3qHL5d81QZV8BVyxnxb1qJK/pUSsHNI6xtA+AXZR1jXczFHKI7WEWy1A6smAH/r8q28KQc49iOTloe5BrsAq1nR31Pot4AU4T9Weo/1Z76BdC9LS/XrD8sCFmVbg3xhRRaE17ud2S++TfFAwJ/GIMA4LRf/uhou1CJPD4SJnqiFThPusq42b1PRUqMSn3RuFykH5vJn5duBxNxWM40WvEABivVOJ4etM5iTfdmtVaPXFuToRaPmhrdMkmoS0gp5I/Vso1asRi3uy/G/onC7Sv+Q7n3jnc0Tj7cbcihwWRbpYYiMC5m65JB7GWe4BBVgc4wuL4clySDyY33ESJIjSllpKKP8cM0HLVa9LJqW3dZc6riqoJKxr6J+M9yM/syfZzQRu3R7c5B1OKyQgkcySJNJv39Bv7WP7EtXWCzl+YdRulzz8Pj5QKqdnKPmc3iZEQ==
-X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(107886003)(70206006)(2616005)(4326008)(86362001)(54906003)(110136005)(8676002)(426003)(1076003)(316002)(336012)(70586007)(81166007)(356005)(6666004)(7696005)(8936002)(83380400001)(15650500001)(2906002)(40460700003)(36756003)(36860700001)(186003)(82310400005)(26005)(5660300002)(47076005)(4744005)(508600001)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 7wJ7GbXbY9MUk7L2fQym7rnpQFO/puKJD/d986WH/WV0HW0s4/6IclFGH5ZLA6wZPgygzcI7YO8BztVa0ayyLquBZJ5OziQ+oc1MKtzeETXY7NoG1HeyEWNcGCpdX4FY2mBZFvPTS0oHZzp7hRYomDLzxb53zPv87ehcxsOGJY27zjMc/BjapY0QPpLhbrUvO2DqE9qM/rg31aOllXLssFGOjVDIOe2iU6EC1Q0pBUCmjUzpkIgsivzMrL5RyRpb+vfrPmqMT+X4tpvzrgYRFKkqN83XG7QUIYTkIDLoyZR+748gHrRkfWnjSp5zSs/bnR3WEOr+16tJFODIdqjiIF7xnV10xBCxt1EWAJGbzsO5XFBmRCt4WHpu8W7bhKecmLDM4C4aM4yvnaQbpzxFNBH/YipZv/Jdwn5pzXjXMmB9Of72CjBCyHTP1rfI6vEYH1CMwbtQl1xwJr4nHcGNEjiO9t0of8szqgPfhzON8EF+Qad2UfgElj2iIOOZNY2+FSXvHrGimZ2UvdtlP/ohj6/DaVwbhBQdTDaq3pdEJzHpgf8OtZUtrT57pv1makFMs8m/oT85fmJhqW5BCZbA4MMj26XiOtDq5fdKeC1sFEf4uicq1zvg+nu0dD/fRrIobdcE7eN8/go+B7Dk+IL8LTTiwrYk8firc35QWg7h3tO05yQ+1PGtM1zIWAP6Au/gN9sDdxJHK3Ji65dermnj4w==
+X-Forefront-Antispam-Report: CIP:12.22.5.238;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(46966006)(36840700001)(15650500001)(316002)(110136005)(7696005)(83380400001)(36860700001)(86362001)(26005)(186003)(336012)(6666004)(36756003)(426003)(47076005)(54906003)(4326008)(8676002)(5660300002)(70206006)(70586007)(40460700003)(2906002)(81166007)(107886003)(356005)(2616005)(82310400005)(8936002)(508600001)(1076003)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2022 07:32:20.5009
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2022 07:32:28.7798
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 200810bc-e28a-474f-4527-08da1b8d69dc
+X-MS-Exchange-CrossTenant-Network-Message-Id: ccceeb4f-e7ca-4e9b-8775-08da1b8d6ecb
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT027.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.238];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT011.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3392
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4589
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -103,19 +105,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series is to add HDA jack polling support to update the Jack mixer control
-status properly even during runtime suspended state, as unsol event won't be
-triggered during D3 state.
+HDA Jack detection logic doesn't work when the HDACODEC
+in runtime suspended state as unsol event won't be triggered
+during D3 state. As pulseaudio server in userspace rely on the
+jack mixer control status to show the audio devices in gui and
+any display sink device hotplug event during D3 state will never
+updates the jack status which will result in no audio device option
+available in userspace settings.
 
-Mohan Kumar (2):
-  ALSA: hda: Jack detection poll in suspend state
-  ALSA: hda/tegra: Enable Jack poll for tegra
+The possible option available to resolve this issue is to run Jack
+polling worker thread even after codec suspend state. The choice can
+be made based on compromise between power saving or Jack detection in
+suspend state.
 
+Signed-off-by: Mohan Kumar <mkumard@nvidia.com>
+---
  include/sound/hda_codec.h |  3 +++
  sound/pci/hda/hda_codec.c | 11 ++++++++++-
- sound/pci/hda/hda_tegra.c |  2 ++
- 3 files changed, 15 insertions(+), 1 deletion(-)
+ 2 files changed, 13 insertions(+), 1 deletion(-)
 
+diff --git a/include/sound/hda_codec.h b/include/sound/hda_codec.h
+index 77426ff58338..b7be300b6b18 100644
+--- a/include/sound/hda_codec.h
++++ b/include/sound/hda_codec.h
+@@ -59,6 +59,9 @@ struct hda_bus {
+ 	unsigned int no_response_fallback:1; /* don't fallback at RIRB error */
+ 	unsigned int bus_probing :1;	/* during probing process */
+ 	unsigned int keep_power:1;	/* keep power up for notification */
++	unsigned int jackpoll_in_suspend:1; /* keep jack polling during
++					     * runtime suspend
++					     */
+ 
+ 	int primary_dig_out_type;	/* primary digital out PCM type */
+ 	unsigned int mixer_assigned;	/* codec addr for mixer name */
+diff --git a/sound/pci/hda/hda_codec.c b/sound/pci/hda/hda_codec.c
+index 5cbac315dbe1..7579a6982f47 100644
+--- a/sound/pci/hda/hda_codec.c
++++ b/sound/pci/hda/hda_codec.c
+@@ -2935,7 +2935,9 @@ static int hda_codec_runtime_suspend(struct device *dev)
+ 	if (!codec->card)
+ 		return 0;
+ 
+-	cancel_delayed_work_sync(&codec->jackpoll_work);
++	if (!codec->bus->jackpoll_in_suspend)
++		cancel_delayed_work_sync(&codec->jackpoll_work);
++
+ 	state = hda_call_codec_suspend(codec);
+ 	if (codec->link_down_at_suspend ||
+ 	    (codec_has_clkstop(codec) && codec_has_epss(codec) &&
+@@ -2984,6 +2986,9 @@ static void hda_codec_pm_complete(struct device *dev)
+ 
+ static int hda_codec_pm_suspend(struct device *dev)
+ {
++	struct hda_codec *codec = dev_to_hda_codec(dev);
++
++	cancel_delayed_work_sync(&codec->jackpoll_work);
+ 	dev->power.power_state = PMSG_SUSPEND;
+ 	return pm_runtime_force_suspend(dev);
+ }
+@@ -2996,6 +3001,9 @@ static int hda_codec_pm_resume(struct device *dev)
+ 
+ static int hda_codec_pm_freeze(struct device *dev)
+ {
++	struct hda_codec *codec = dev_to_hda_codec(dev);
++
++	cancel_delayed_work_sync(&codec->jackpoll_work);
+ 	dev->power.power_state = PMSG_FREEZE;
+ 	return pm_runtime_force_suspend(dev);
+ }
+@@ -3038,6 +3046,7 @@ void snd_hda_codec_shutdown(struct hda_codec *codec)
+ 	if (!codec->registered)
+ 		return;
+ 
++	cancel_delayed_work_sync(&codec->jackpoll_work);
+ 	list_for_each_entry(cpcm, &codec->pcm_list_head, list)
+ 		snd_pcm_suspend_all(cpcm->pcm);
+ 
 -- 
 2.17.1
 

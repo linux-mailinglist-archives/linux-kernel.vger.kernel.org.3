@@ -2,83 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B2654FB196
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 04:08:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8467B4FB199
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 04:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240424AbiDKCKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 22:10:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53126 "EHLO
+        id S243468AbiDKCLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 22:11:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239877AbiDKCKa (ORCPT
+        with ESMTP id S239877AbiDKCLK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 22:10:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558721AD8B;
-        Sun, 10 Apr 2022 19:08:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB08A61034;
-        Mon, 11 Apr 2022 02:08:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BA4BC385A4;
-        Mon, 11 Apr 2022 02:08:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649642893;
-        bh=A2X4Ggu+fzkw8crm6TaebmjPFV7+g5bq3xcZ2A4fLCg=;
-        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
-        b=hgQ+OykPY+Sg8QF74TEL66QxdMP9rL89DLwn/OGuJgZIv41KC0hOlu8XGNTcJFVJy
-         0lLkjeb+x5lhH7+/QWwqc+rBa/4Qb6+lmNKzW7SIZS4YyahuLFWu86OopgmLhSmBqZ
-         UJHQk4JIKazosTkqQuhtK/ZM3NbhVnL5ITv67ovHuDSS6T8t3IOu5H4Isi/At15E6l
-         kt7SHJOxo100Rd/NLAQY3p2AVlCAzN0oPgy0AQVCd21CEn6wkQZLbsgQEanb82Au3n
-         o8DcYCLAqpTnR5KPBrclyx0/MlR4X8yW0aQ5p6gHLGJAR+phPlj3W59HA0JOuBRomj
-         awo5/ZM2N37Fg==
-Received: by mail-wr1-f41.google.com with SMTP id e8so4494118wra.7;
-        Sun, 10 Apr 2022 19:08:13 -0700 (PDT)
-X-Gm-Message-State: AOAM531qquvfUn5kt4tGcygYI+L9yUkFeFhMbdYHNVOTTz8wql1m94dr
-        gHuwmfRSXzrIrktf1TPmwl5Dz8MORLdhJpNSg4Y=
-X-Google-Smtp-Source: ABdhPJzxPJ+baW4cPTMyPKAV7kJwIZWzzyNnjB6PMm6df6YwIOiySr98tevUGgyHNUJ5ejCBTJdQb6GzaezF6x7EsFQ=
-X-Received: by 2002:adf:f78a:0:b0:207:a5a4:5043 with SMTP id
- q10-20020adff78a000000b00207a5a45043mr3114901wrp.229.1649642891494; Sun, 10
- Apr 2022 19:08:11 -0700 (PDT)
+        Sun, 10 Apr 2022 22:11:10 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9800C1AD89;
+        Sun, 10 Apr 2022 19:08:57 -0700 (PDT)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KcC0W6PZwzgYZ2;
+        Mon, 11 Apr 2022 10:07:07 +0800 (CST)
+Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
+ (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 11 Apr
+ 2022 10:08:55 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <kvalo@kernel.org>, <davem@davemloft.net>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <quic_cjhuang@quicinc.com>,
+        <quic_bqiang@quicinc.com>
+CC:     <ath11k@lists.infradead.org>, <linux-wireless@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH] ath11k: Fix build warning without CONFIG_IPV6
+Date:   Mon, 11 Apr 2022 10:08:43 +0800
+Message-ID: <20220411020843.10284-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
-Received: by 2002:a05:6000:2c1:0:0:0:0 with HTTP; Sun, 10 Apr 2022 19:08:10
- -0700 (PDT)
-In-Reply-To: <Yk/DpSwR8kGKWJYl@infradead.org>
-References: <HK2PR04MB3891FCECADD7AECEEF5DD63081E99@HK2PR04MB3891.apcprd04.prod.outlook.com>
- <Yk/DpSwR8kGKWJYl@infradead.org>
-From:   Namjae Jeon <linkinjeon@kernel.org>
-Date:   Mon, 11 Apr 2022 11:08:10 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd9NAUjdxT2GOWGoPvH5nOXSFtD7u0t_9rCiZx7hSGC0PA@mail.gmail.com>
-Message-ID: <CAKYAXd9NAUjdxT2GOWGoPvH5nOXSFtD7u0t_9rCiZx7hSGC0PA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] block: add sync_blockdev_range()
-To:     Christoph Hellwig <hch@infradead.org>, Jens Axboe <axboe@kernel.dk>
-Cc:     "Yuezhang.Mo@sony.com" <Yuezhang.Mo@sony.com>,
-        "sj1557.seo@samsung.com" <sj1557.seo@samsung.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "Andy.Wu@sony.com" <Andy.Wu@sony.com>,
-        "Wataru.Aoyama@sony.com" <Wataru.Aoyama@sony.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500007.china.huawei.com (7.192.104.62)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2022-04-08 14:09 GMT+09:00, Christoph Hellwig <hch@infradead.org>:
-> Looks good:
->
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-Thanks for your review!
+drivers/net/wireless/ath/ath11k/mac.c:8175:13: error: ‘ath11k_mac_op_ipv6_changed’ defined but not used [-Werror=unused-function]
+ static void ath11k_mac_op_ipv6_changed(struct ieee80211_hw *hw,
+             ^~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Hi Jens,
+Wrap it with #ifdef block to fix this.
 
-Can I apply this patch with your Ack to exfat #dev ?
+Fixes: c3c36bfe998b ("ath11k: support ARP and NS offload")
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+ drivers/net/wireless/ath/ath11k/mac.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thanks!
+diff --git a/drivers/net/wireless/ath/ath11k/mac.c b/drivers/net/wireless/ath/ath11k/mac.c
+index ca998fb13b62..18a2994b6d85 100644
+--- a/drivers/net/wireless/ath/ath11k/mac.c
++++ b/drivers/net/wireless/ath/ath11k/mac.c
+@@ -8151,6 +8151,7 @@ static void ath11k_mac_op_sta_statistics(struct ieee80211_hw *hw,
+ 	}
+ }
+ 
++#if IS_ENABLED(CONFIG_IPV6)
+ static void ath11k_generate_ns_mc_addr(struct ath11k *ar,
+ 				       struct ath11k_arp_ns_offload *offload)
+ {
+@@ -8245,6 +8246,7 @@ static void ath11k_mac_op_ipv6_changed(struct ieee80211_hw *hw,
+ 	/* generate ns multicast address */
+ 	ath11k_generate_ns_mc_addr(ar, offload);
+ }
++#endif
+ 
+ static void ath11k_mac_op_set_rekey_data(struct ieee80211_hw *hw,
+ 					 struct ieee80211_vif *vif,
+-- 
+2.17.1
 
->

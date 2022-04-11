@@ -2,302 +2,310 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49BCA4FC30E
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 19:18:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D404FC311
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 19:20:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348817AbiDKRUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 13:20:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51532 "EHLO
+        id S1348823AbiDKRWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 13:22:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236896AbiDKRUa (ORCPT
+        with ESMTP id S243938AbiDKRWK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 13:20:30 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 36CDA140CC;
-        Mon, 11 Apr 2022 10:18:15 -0700 (PDT)
-Received: from [192.168.254.32] (unknown [47.189.24.195])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 2D60C2058429;
-        Mon, 11 Apr 2022 10:18:14 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2D60C2058429
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1649697494;
-        bh=SRABqxxMrPUtYUfC//emiCJG95l/1g2I/XdMEDuiPFA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=gI37Vw71esQb4U4C9cq+pdD9SzSoINM+NvqWqGhNJtwvR7qVzB9mKV1RWcfpCMipd
-         YZ+yIYUlUYKZc+ImazpQo8fNBBB3dzrcX8jLT0OO1DB4qciJkQHu8Y3k+TRB3/pjLL
-         vzjdtj5ZrCNYNVuSp3k0Pl32RnS1q3u0x82YPEno=
-Message-ID: <15a22f4b-f04a-15e1-8f54-5b3147d8df7d@linux.microsoft.com>
-Date:   Mon, 11 Apr 2022 12:18:13 -0500
+        Mon, 11 Apr 2022 13:22:10 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D3B625C4F;
+        Mon, 11 Apr 2022 10:19:55 -0700 (PDT)
+Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4KcbCL6d6gz688pK;
+        Tue, 12 Apr 2022 01:17:50 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 11 Apr 2022 19:19:52 +0200
+Received: from [10.47.91.197] (10.47.91.197) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 11 Apr
+ 2022 18:19:51 +0100
+Message-ID: <276c24d2-daf5-5eba-26b9-55edd4a45537@huawei.com>
+Date:   Mon, 11 Apr 2022 18:19:48 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v1 0/9] arm64: livepatch: Use DWARF Call Frame
- Information for frame pointer validation
-Content-Language: en-US
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     mark.rutland@arm.com, broonie@kernel.org, ardb@kernel.org,
-        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
-        linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
- <20220407202518.19780-1-madvenka@linux.microsoft.com>
- <20220408002147.pk7clzruj6sawj7z@treble>
-From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-In-Reply-To: <20220408002147.pk7clzruj6sawj7z@treble>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v7 5/7] perf tool: Add support for HiSilicon PCIe Tune and
+ Trace device driver
+To:     Yicong Yang <yangyicong@hisilicon.com>,
+        <gregkh@linuxfoundation.org>, <helgaas@kernel.org>,
+        <alexander.shishkin@linux.intel.com>, <lorenzo.pieralisi@arm.com>,
+        <will@kernel.org>, <mark.rutland@arm.com>,
+        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
+        <mike.leach@linaro.org>, <leo.yan@linaro.org>,
+        <jonathan.cameron@huawei.com>, <daniel.thompson@linaro.org>,
+        <joro@8bytes.org>, <shameerali.kolothum.thodi@huawei.com>,
+        <robin.murphy@arm.com>, <peterz@infradead.org>, <mingo@redhat.com>,
+        <acme@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <coresight@lists.linaro.org>, <linux-pci@vger.kernel.org>,
+        <linux-perf-users@vger.kernel.org>,
+        <iommu@lists.linux-foundation.org>
+CC:     <prime.zeng@huawei.com>, <liuqi115@huawei.com>,
+        <zhangshaokun@hisilicon.com>, <linuxarm@huawei.com>
+References: <20220407125841.3678-1-yangyicong@hisilicon.com>
+ <20220407125841.3678-6-yangyicong@hisilicon.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <20220407125841.3678-6-yangyicong@hisilicon.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-21.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.47.91.197]
+X-ClientProxiedBy: lhreml725-chm.china.huawei.com (10.201.108.76) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Josh,
+On 07/04/2022 13:58, Yicong Yang wrote:
+> From: Qi Liu <liuqi115@huawei.com>
+> 
+> 'perf record' and 'perf report --dump-raw-trace' supported in this
+> patch.
+> 
+> Example usage:
+> 
+> Output will contain raw PTT data and its textual representation, such
+> as:
+> 
+> 0 0 0x5810 [0x30]: PERF_RECORD_AUXTRACE size: 0x400000  offset: 0
+> ref: 0xa5d50c725  idx: 0  tid: -1  cpu: 0
+> .
+> . ... HISI PTT data: size 4194304 bytes
+> .  00000000: 00 00 00 00                                 Prefix
+> .  00000004: 08 20 00 60                                 Header DW0
+> .  00000008: ff 02 00 01                                 Header DW1
+> .  0000000c: 20 08 00 00                                 Header DW2
+> .  00000010: 10 e7 44 ab                                 Header DW3
+> .  00000014: 2a a8 1e 01                                 Time
+> .  00000020: 00 00 00 00                                 Prefix
+> .  00000024: 01 00 00 60                                 Header DW0
+> .  00000028: 0f 1e 00 01                                 Header DW1
+> .  0000002c: 04 00 00 00                                 Header DW2
+> .  00000030: 40 00 81 02                                 Header DW3
+> .  00000034: ee 02 00 00                                 Time
+> ....
+> 
+> Signed-off-by: Qi Liu <liuqi115@huawei.com>
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+> ---
+>   tools/perf/arch/arm/util/auxtrace.c           |  76 +++++-
+>   tools/perf/arch/arm/util/pmu.c                |   3 +
+>   tools/perf/arch/arm64/util/Build              |   2 +-
+>   tools/perf/arch/arm64/util/hisi_ptt.c         | 195 ++++++++++++++++
+>   tools/perf/util/Build                         |   2 +
+>   tools/perf/util/auxtrace.c                    |   4 +
+>   tools/perf/util/auxtrace.h                    |   1 +
+>   tools/perf/util/hisi-ptt-decoder/Build        |   1 +
+>   .../hisi-ptt-decoder/hisi-ptt-pkt-decoder.c   | 170 ++++++++++++++
+>   .../hisi-ptt-decoder/hisi-ptt-pkt-decoder.h   |  28 +++
+>   tools/perf/util/hisi_ptt.c                    | 218 ++++++++++++++++++
+>   tools/perf/util/hisi_ptt.h                    |  28 +++
+>   12 files changed, 724 insertions(+), 4 deletions(-)
+>   create mode 100644 tools/perf/arch/arm64/util/hisi_ptt.c
+>   create mode 100644 tools/perf/util/hisi-ptt-decoder/Build
+>   create mode 100644 tools/perf/util/hisi-ptt-decoder/hisi-ptt-pkt-decoder.c
+>   create mode 100644 tools/perf/util/hisi-ptt-decoder/hisi-ptt-pkt-decoder.h
+>   create mode 100644 tools/perf/util/hisi_ptt.c
+>   create mode 100644 tools/perf/util/hisi_ptt.h
+> 
+> diff --git a/tools/perf/arch/arm/util/auxtrace.c b/tools/perf/arch/arm/util/auxtrace.c
+> index 5fc6a2a3dbc5..393f5757c039 100644
+> --- a/tools/perf/arch/arm/util/auxtrace.c
+> +++ b/tools/perf/arch/arm/util/auxtrace.c
+> @@ -4,9 +4,11 @@
+>    * Author: Mathieu Poirier <mathieu.poirier@linaro.org>
+>    */
+>   
+> +#include <dirent.h>
+>   #include <stdbool.h>
+>   #include <linux/coresight-pmu.h>
+>   #include <linux/zalloc.h>
+> +#include <api/fs/fs.h>
+>   
+>   #include "../../../util/auxtrace.h"
+>   #include "../../../util/debug.h"
+> @@ -14,6 +16,7 @@
+>   #include "../../../util/pmu.h"
+>   #include "cs-etm.h"
+>   #include "arm-spe.h"
+> +#include "hisi_ptt.h"
+>   
+>   static struct perf_pmu **find_all_arm_spe_pmus(int *nr_spes, int *err)
+>   {
+> @@ -50,6 +53,58 @@ static struct perf_pmu **find_all_arm_spe_pmus(int *nr_spes, int *err)
+>   	return arm_spe_pmus;
+>   }
+>   
+> +static struct perf_pmu **find_all_hisi_ptt_pmus(int *nr_ptts, int *err)
+> +{
+> +	const char *sysfs = sysfs__mountpoint();
+> +	struct perf_pmu **hisi_ptt_pmus = NULL;
+> +	struct dirent *dent;
+> +	char path[PATH_MAX];
+> +	DIR *dir = NULL;
+> +	int idx = 0;
+> +
+> +	snprintf(path, PATH_MAX, "%s" EVENT_SOURCE_DEVICE_PATH, sysfs);
+> +	dir = opendir(path);
+> +	if (!dir) {
+> +		pr_err("can't read directory '%s'\n", EVENT_SOURCE_DEVICE_PATH);
+> +		*err = -EINVAL;
+> +		goto out;
+> +	}
+> +
+> +	while ((dent = readdir(dir))) {
+> +		if (strstr(dent->d_name, HISI_PTT_PMU_NAME))
+> +			(*nr_ptts)++;
+> +	}
+> +
+> +	if (!(*nr_ptts))
+> +		goto out;
+> +
+> +	hisi_ptt_pmus = zalloc(sizeof(struct perf_pmu *) * (*nr_ptts));
+> +	if (!hisi_ptt_pmus) {
+> +		pr_err("hisi_ptt alloc failed\n");
+> +		*err = -ENOMEM;
 
-On 4/7/22 19:21, Josh Poimboeuf wrote:
-> On Thu, Apr 07, 2022 at 03:25:09PM -0500, madvenka@linux.microsoft.com wrote:
->> The solution
->> ============
->>
->> The goal here is to use the absolute minimum CFI needed to compute the FP at
->> every instruction address. The unwinder can compute the FP in each frame,
->> compare the actual FP with the computed one and validate the actual FP.
->>
->> Objtool is enhanced to parse the CFI, extract just the rules required,
->> encode them in compact data structures and create special sections for
->> the rules. The unwinder uses the special sections to find the rules for
->> a given instruction address and compute the FP.
->>
->> Objtool can be invoked as follows:
->>
->> 	objtool dwarf generate <object-file>
-> 
-> Hi Madhaven,
-> 
-> This is quite interesting.  And it's exactly the kind of crazy idea I
-> can appreciate ;-)
-> 
+using PTR_ERR seems better, if possible
 
-A little crazy is a good thing sometimes.
+> +		goto out;
+> +	}
+> +
+> +	rewinddir(dir);
+> +	while ((dent = readdir(dir))) {
+> +		if (strstr(dent->d_name, HISI_PTT_PMU_NAME) && idx < (*nr_ptts)) {
+> +			hisi_ptt_pmus[idx] = perf_pmu__find(dent->d_name);
+> +			if (hisi_ptt_pmus[idx]) {
+> +				pr_debug2("%s %d: hisi_ptt_pmu %d type %d name %s\n",
 
-> Some initial thoughts:
-> 
-> 
-> 1)
-> 
-> I have some concerns about DWARF's reliability, especially considering
-> a) inline asm, b) regular asm, and c) the kernel's tendency to push
-> compilers to their limits.
-> 
+do you really need this?
 
-I am thinking of implementing a DWARF verifier to make sure that the DWARF information
-in .debug_frame is correct. I am still in the process of designing this. I will keep
-you posted on that. This should address (a) and (c).
+> +					__func__, __LINE__, idx,
+> +					hisi_ptt_pmus[idx]->type,
+> +					hisi_ptt_pmus[idx]->name);
+> +					idx++;
+> +			}
+> +
+> +		}
+> +	}
+> +
+> +out:
+> +	closedir(dir);
+> +	return hisi_ptt_pmus;
+> +}
+> +
+>   struct auxtrace_record
+>   *auxtrace_record__init(struct evlist *evlist, int *err)
+>   {
+> @@ -57,8 +112,12 @@ struct auxtrace_record
+>   	struct evsel *evsel;
+>   	bool found_etm = false;
+>   	struct perf_pmu *found_spe = NULL;
+> +	struct perf_pmu *found_ptt = NULL;
+>   	struct perf_pmu **arm_spe_pmus = NULL;
+> +	struct perf_pmu **hisi_ptt_pmus = NULL;
+> +
+>   	int nr_spes = 0;
+> +	int nr_ptts = 0;
+>   	int i = 0;
+>   
+>   	if (!evlist)
+> @@ -66,13 +125,14 @@ struct auxtrace_record
+>   
+>   	cs_etm_pmu = perf_pmu__find(CORESIGHT_ETM_PMU_NAME);
+>   	arm_spe_pmus = find_all_arm_spe_pmus(&nr_spes, err);
+> +	hisi_ptt_pmus = find_all_hisi_ptt_pmus(&nr_ptts, err);
+>   
+>   	evlist__for_each_entry(evlist, evsel) {
+>   		if (cs_etm_pmu &&
+>   		    evsel->core.attr.type == cs_etm_pmu->type)
+>   			found_etm = true;
+>   
+> -		if (!nr_spes || found_spe)
+> +		if ((!nr_spes || found_spe) && (!nr_ptts || found_ptt))
+>   			continue;
+>   
+>   		for (i = 0; i < nr_spes; i++) {
+> @@ -81,11 +141,18 @@ struct auxtrace_record
+>   				break;
+>   			}
+>   		}
+> +
+> +		for (i = 0; i < nr_ptts; i++) {
+> +			if (evsel->core.attr.type == hisi_ptt_pmus[i]->type) {
+> +				found_ptt = hisi_ptt_pmus[i];
+> +				break;
+> +			}
+> +		}
+>   	}
+>   	free(arm_spe_pmus);
 
-As for (b), the compiler does not generate any DWARF rules for ASM code. DWARF
-annotations are a PITA to maintain. So, in my current design regular ASM functions are 
-considered unreliable from an unwind perspective except the places that have unwind
-hints. Unwind hints are only needed for places that tend to occur frequently in stack
-traces. So, it would be just a handful of unwind hints which can be maintained.
+do you need to do something similar for hisi ptt?
 
-As you know, ASM functions come in two flavors - SYM_CODE() functions and SYM_FUNC()
-functions. SYM_CODE functions are, by definition, unreliable from an unwind perspective
-because they don't follow ABI rules and they don't set up any frame pointer. In my
-reliable stack trace patch series, I have a patch based on the opinion of the reviewers
-to mark these functions so the unwinder can recognize them and declare the stack trace
-unreliable. So, the only ASM functions that matter in (b) are the SYM_FUNC functions.
-For now, I have considered them to be unreliable. But I will analyze those functions to
-see if any of them can occur frequently in stack traces. If some of these functions
-can occur frequently in stack traces, I need to address them. I will see if unwind hints
-are a good fit. I will get back to you on this.
+>   
+> -	if (found_etm && found_spe) {
+> -		pr_err("Concurrent ARM Coresight ETM and SPE operation not currently supported\n");
+> +	if (found_etm && found_spe && found_ptt) {
+> +		pr_err("Concurrent ARM Coresight ETM ,SPE and HiSilicon PCIe Trace operation not currently supported\n");
+>   		*err = -EOPNOTSUPP;
+>   		return NULL;
+>   	}
+> @@ -96,6 +163,9 @@ struct auxtrace_record
+>   #if defined(__aarch64__)
+>   	if (found_spe)
+>   		return arm_spe_recording_init(err, found_spe);
+> +
+> +	if (found_ptt)
+> +		return hisi_ptt_recording_init(err, found_ptt);
+>   #endif
+>   
+>   	/*
+> diff --git a/tools/perf/arch/arm/util/pmu.c b/tools/perf/arch/arm/util/pmu.c
+> index b8b23b9dc598..89a3cedb4557 100644
+> --- a/tools/perf/arch/arm/util/pmu.c
+> +++ b/tools/perf/arch/arm/util/pmu.c
+> @@ -10,6 +10,7 @@
+>   #include <linux/string.h>
+>   
+>   #include "arm-spe.h"
+> +#include "hisi_ptt.h"
+>   #include "../../../util/pmu.h"
+>   
+>   struct perf_event_attr
+> @@ -22,6 +23,8 @@ struct perf_event_attr
+>   #if defined(__aarch64__)
+>   	} else if (strstarts(pmu->name, ARM_SPE_PMU_NAME)) {
+>   		return arm_spe_pmu_default_config(pmu);
+> +	} else if (strstarts(pmu->name, HISI_PTT_PMU_NAME)) {
+> +		pmu->selectable = true;
+>   #endif
+>   	}
+>   
+> diff --git a/tools/perf/arch/arm64/util/Build b/tools/perf/arch/arm64/util/Build
+> index 9fcb4e68add9..8b7fd1dc9f37 100644
+> --- a/tools/perf/arch/arm64/util/Build
+> +++ b/tools/perf/arch/arm64/util/Build
+> @@ -11,4 +11,4 @@ perf-$(CONFIG_LIBDW_DWARF_UNWIND) += unwind-libdw.o
+>   perf-$(CONFIG_AUXTRACE) += ../../arm/util/pmu.o \
+>   			      ../../arm/util/auxtrace.o \
+>   			      ../../arm/util/cs-etm.o \
+> -			      arm-spe.o mem-events.o
+> +			      arm-spe.o mem-events.o hisi_ptt.o
 
-> BUT, supplementing the frame pointer unwinding with DWARF, rather than
-> just relying on DWARF alone, does help a LOT.
-> 
-
-Yes.
-
-> I guess the hope is that cross-checking two "mostly reliable" things
-> against each other (frame pointers and DWARF) will give a reliable
-> result ;-)
-> 
-
-Yes!
-
-> In a general sense, I've never looked at DWARF's reliability, even for
-> just normal C code.  It would be good to have some way of knowing that
-> DWARF looks mostly sane for both GCC and Clang.  For example, maybe
-> somehow cross-checking it with objtool's knowledge.  And then of course
-> we'd have to hope that it stays bug-free in future compilers.
-> 
-
-This is a valid point. So far, I find that gcc generates reliable DWARF information.
-But there are two bugs in what Clang generates. I have added workarounds in my
-parser to compensate.
-
-So, I think a DWARF verifier is an option that architectures can use. At this point,
-I don't want to mandate a verifier on every architecture. But that is a discussion
-that we can have once I have a verifier ready.
-
-> I'd also be somewhat concerned about assembly.  Since there's nothing
-> ensuring the unwind hints are valid, and will stay valid over time, I
-> wonder how likely it would be for that to break, and what the
-> implications would be.  Most likely I guess it would break silently, but
-> then get caught by the frame pointer cross-checking.  So a broken hint
-> might not get noticed for a long time, but at least it (hopefully)
-> wouldn't break reliable unwinding.
-> 
-
-Yes. That is my thinking as well. When the unwinder checks the actual FP with the
-computed FP, any mismatch will be treated as unreliable code for unwind. So,
-apart from some retries during the livepatch process, this is most probably not
-a problem.
-
-Now,  I set a flag for an unwind hint so that the unwinder knows that it is
-processing an unwind hint. I could generate a warning if an unwind hint does not
-result in a reliable unwind of the frame. This would bring the broken hint
-to people's attention.
+nit: others use '-' in the name
 
 
-> Also, inline asm can sometimes do stack hacks like
-> "push;do_something;pop" which isn't visible to the toolchain.  But
-> again, hopefully the frame pointer checking would fail and mark it
-> unreliable.
-> 
-> So I do have some worries about DWARF, but the fact that it's getting
-> "fact checked" by frame pointers might be sufficient.
-> 
-
-Exactly.
-
-> 
-> 2)
-> 
-> If I understand correctly, objtool is converting parts of DWARF to a new
-> format which can then be read by the kernel.  In that case, please don't
-> call it DWARF as that will cause a lot of confusion.
-> 
-
-OK. I will rename it.
-
-> There are actually several similarities between your new format and ORC,
-> which is also an objtool-created DWARF alternative.  It would be
-> interesting to see if they could be combined somehow.
-> 
-
-I will certainly look into it. So, if I decide to merge the two, I might want
-to make a minor change to the ORC structure. Would that be OK with you?
-
-> 
-> 3)
-> 
-> Objtool has become an integral part of x86-64, due to security and
-> performance features and toolchain workarounds.
-> 
-> Not *all* of its features require the full "branch validation" which
-> follows all code paths -- and was the hardest part to get right -- but
-> several features *do* need that: stack validation, ORC, uaccess
-> validation, noinstr validation.
-> 
-> Objtool has been picking up a lot of steam (and features) lately, with
-> more features currently in active development.  And lately there have
-> been renewed patches for porting it to powerpc and arm64 (and rumors of
-> s390).
-> 
-> If arm64 ever wants one of those features -- particularly a "branch
-> validation" based feature -- I think it would make more sense to just do
-> the stack validation in objtool, rather than the DWARF supplementation
-> approach.
-> 
-
-First off, I think that objtool does a great job for X64. I only want to implement
-frame pointer validation in a different way. All the other features of objtool
-(listed below) are great. I have admired the amount of work you guys have put into
-the X64 part.
-
-These are the reasons why I tried the DWARF based method:
-
-- My implementation is largely architecture independent. There are a couple of
-  minor pieces that are architecture-specific, but they are minor in nature.
-  So, if an architecture wanted to support the livepatch feature but did not
-  want to do a heavy weight objtool implementation, then it has an option.
-  There has been some debate about whether static analysis should be mandated
-  for livepatch. My patch series is an attempt to provide an option.
-
-- To get an objtool static analysis implementation working for an architecture
-  as reliably as X64 and getting it reviewed and upstreamed can take years. It took
-  years for X64, am I right? I mean, it has been quite a while since the original
-  patch series for arm64 was posted. There have been only one or two minor comments
-  so far. I am sure arm64 linux users would very much want to have livepatch available
-  ASAP to be able to install security fixes without downtime. This is an immediate need.
-
-- No software is bug free. So, even if static analysis is implemented for an architecture,
-  it would be good to have another method of verifying the unwind rules generated from
-  the static analysis. DWARF can provide that additional verification.
-
-> Just to give an idea of what objtool already supports and how useful it
-> has become for x86, here's an excerpt from some documentation I've been
-> working on, since I'm in the middle of rewriting the interface to make
-> it more modular.  This is a list of all its current features:
-> 
-> 
-> Features
-> --------
-> 
-> Objtool has the following features:
-> 
-> 
-> - Stack unwinding metadata validation -- useful for helping to ensure
->   stack traces are reliable for live patching
-> 
-> - ORC unwinder metadata generation -- a faster and more precise
->   alternative to frame pointer based unwinding
-> 
-> - Retpoline validation -- ensures that all indirect calls go through
->   retpoline thunks, for Spectre v2 mitigations
-> 
-> - Retpoline call site annotation -- annotates all retpoline thunk call
->   sites, enabling the kernel to patch them inline, to prevent "thunk
->   funneling" for both security and performance reasons
-> 
-> - Non-instrumentation validation -- validates non-instrumentable
->   ("noinstr") code rules, preventing unexpected instrumentation in
->   low-level C entry code
-> 
-> - Static call annotation -- annotates static call sites, enabling the
->   kernel to implement inline static calls, a faster alternative to some
->   indirect branches
-> 
-> - Uaccess validation -- validates uaccess rules for a proper safe
->   implementation of Supervisor Mode Access Protection (SMAP)
-> 
-> - Straight Line Speculation validation -- validates certain SLS
->   mitigations
-> 
-> - Indirect Branch Tracking validation -- validates Intel CET IBT rules
->   to ensure that all functions referenced by function pointers have
->   corresponding ENDBR instructions
-> 
-> - Indirect Branch Tracking annotation -- annotates unused ENDBR
->   instruction sites, enabling the kernel to "seal" them (replace them
->   with NOPs) to further harden IBT
-> 
-> - Function entry annotation -- annotates function entries, enabling
->   kernel function tracing
-> 
-> - Other toolchain hacks which will go unmentioned at this time...
-> 
-
-I completely agree.
-
-So, it is just frame pointer validation for livepatch I am trying to look at.
-
-Thanks!
-
-Madhavan
+I'll check the rest tomorrow.

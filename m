@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AB3A4FC125
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:42:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E840F4FC12D
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:42:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348119AbiDKPoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 11:44:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42032 "EHLO
+        id S241853AbiDKPoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 11:44:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346555AbiDKPoR (ORCPT
+        with ESMTP id S1348114AbiDKPoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 11:44:17 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BC613A72E;
-        Mon, 11 Apr 2022 08:42:02 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id o20-20020a05600c511400b0038ebbbb2ad8so2033799wms.0;
-        Mon, 11 Apr 2022 08:42:02 -0700 (PDT)
+        Mon, 11 Apr 2022 11:44:18 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18BE53A72E;
+        Mon, 11 Apr 2022 08:42:04 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id v64-20020a1cac43000000b0038cfd1b3a6dso12386200wme.5;
+        Mon, 11 Apr 2022 08:42:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=h7h7zW/g4PfNAudy66iCt4m1NQqQSgys4bZrKB4uCGY=;
-        b=hddp6YLKjumuwdP+E7FPKw3TWZatgjRIUfjSzdGB8Q4hCF3v3f/iGzSKZtmueeHU+e
-         KRIjtMmkUIlCaYgBKrigky3sXmK+1n6pZl7vLztd/ZgsSwOpvPEujhntCfWQR9qcnhPc
-         VkB5DeAHmXAu/ZCeXh+YrFLnj9cPVKP+MXWT7nVIF1v300s1bMwkLnN/RSlDKfLecOQm
-         nyq27Dqo+y0xSK0kARblTC4y5OhcvN05eSMZpXVaQVXNhyz+DA0xUt65jGzjaiTkYjp/
-         CLLyuf+5rYkDm0HHN/oihR0PvaBXcS944k7Nw4vgRp974kangH2W9jFuqIw+LOtEFdUL
-         1NYA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=2qRlr8ZfTQ3raGd+E44T5DsXd8r35uC0pnPSIlIhBAM=;
+        b=V3C7xQeOR3CSb1V0/I+e4R9iEaktHAqeKhhVjzxFUPZ1HebGtBSYM/LuQS3IzTbwgC
+         4nzGBwlvzmlBOAAX3IWAMUk+JLmGhtns94OVRpVALquCJ0ipSeXQHUJCyqF4m9ePebst
+         S5M5/nqMrjQ8cejdpo4/A7KVChJSRS5r7ehFgsk7rdbBr2yFEi+gy/lpiWQI3zjQKxL6
+         r+LvkzrvM2afyIHNfKssBWV3eErgRHIuF0qyAdspn8cGRy+Vy4UIByfdJPoqrgqNmbC2
+         wbeOgR/v1XMW5BNM/UYamOMMaMzdGksxkmotKeVawt8tRYavsiiJJ1uEIDwU+zSrjT7A
+         Hz7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=h7h7zW/g4PfNAudy66iCt4m1NQqQSgys4bZrKB4uCGY=;
-        b=YGSF26FuVo7MoVOCSh7GVc2WGNcmbXler8ia5/ZGnlJbR9oPf9GmaDWw0Y4CTi1jhk
-         jzcp8qi0tiXCijAjs0peNZMTbLVyg4qlfiW6M0QB2dasnWunvSAVJ+BM0HySEeTSwSve
-         FDqQqnnn8KgGLbZlaQzFGnIGCsgy5zXUIXL+fmjh2326pxhyLQH05R4lrXcS0isSM6pk
-         ky9eIncMY/3A11uvO2GqwyDnVj3Xo+7egvBgbBOyXOHMLczfa+uLf4rjolHYmwyhcSFb
-         +1nvw2O3jBrsjz/JyNZ35MtrR4vPHQV2OH43L5g0MHb1rpsGtKAIr/r+UgJp6YryqvDl
-         ZX8g==
-X-Gm-Message-State: AOAM533xLdTe1MYL/I0BYDt4Wiw/RKlFCzzut9M7YwXbjS6Y5DhDOn3F
-        NqKRX4gsZx7xKa3Sb8zbVFI=
-X-Google-Smtp-Source: ABdhPJwo3xdsBcI3wA3ZfKhrcy46qcsEsn4nWlhyOstZp2cVG1Ht+akGpDoqKdZU73H3xKiWTaOlaw==
-X-Received: by 2002:a05:600c:a45:b0:346:5e67:cd54 with SMTP id c5-20020a05600c0a4500b003465e67cd54mr30122018wmq.127.1649691721232;
-        Mon, 11 Apr 2022 08:42:01 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=2qRlr8ZfTQ3raGd+E44T5DsXd8r35uC0pnPSIlIhBAM=;
+        b=BpmQq0SrTmi7OxKAl4a2ljkgmmIp5cnqKCqIF5QeFoAcJ1ZomBZZChDRhc6hjZly2a
+         dxAWGCDcvbjO7Mz8a6Jru9rEihco+xT9PnuZ1vEaVAtQ8/FILeoqSac/fM85lX7159if
+         jwmrFhgjch+PfUp1RRII+Rg9vj3cuQWlzwS5021wMDqW19ks3yhJH0193xwskXr+9YBv
+         xV3HbUIHxAHGIrQ7UNqSmobN4RMsWDbGce6MOd0bRLRyBHsdWK+k89lMkuq5oV8dvNkO
+         jQvxtWFFGiKle8W2Ou5KKMGhhvFvRDW4bHrL7VEEP6d0A4TeTx1O6iVqzzd++4Wr+Ome
+         FMhw==
+X-Gm-Message-State: AOAM533XWx8jMNMJcAFdf+wK/Odl1+KzA77wirF3fLzgdlU86OPcQUvh
+        G/OHKgP0ETmHQCVCYzyJOwM=
+X-Google-Smtp-Source: ABdhPJyVsB4t3DoK+e84eXlXXtUqWrV6hCqBJHPlpgCG1/hDc7vuBwj10fyw4GAH9Qinrhd5+3Wz9Q==
+X-Received: by 2002:a05:600c:6019:b0:38d:fbc:7988 with SMTP id az25-20020a05600c601900b0038d0fbc7988mr29612654wmb.100.1649691722754;
+        Mon, 11 Apr 2022 08:42:02 -0700 (PDT)
 Received: from localhost (92.40.202.92.threembb.co.uk. [92.40.202.92])
-        by smtp.gmail.com with ESMTPSA id f15-20020a0560001a8f00b002078f74ccd2sm12314323wry.36.2022.04.11.08.41.59
+        by smtp.gmail.com with ESMTPSA id f15-20020a0560001a8f00b002078f74ccd2sm12314323wry.36.2022.04.11.08.42.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 08:42:00 -0700 (PDT)
+        Mon, 11 Apr 2022 08:42:02 -0700 (PDT)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     paul@crapouillou.net, robh+dt@kernel.org, krzk+dt@kernel.org,
         tsbogend@alpha.franken.de, mturquette@baylibre.com,
         sboyd@kernel.org
 Cc:     linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH v4 0/2] Fix missing TCU clock for X1000/X1830 SoCs
-Date:   Mon, 11 Apr 2022 16:42:39 +0100
-Message-Id: <20220411154241.50834-1-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH v4 1/2] mips: dts: ingenic: Add TCU clock to x1000/x1830 tcu device node
+Date:   Mon, 11 Apr 2022 16:42:40 +0100
+Message-Id: <20220411154241.50834-2-aidanmacdonald.0x0@gmail.com>
+In-Reply-To: <20220411154241.50834-1-aidanmacdonald.0x0@gmail.com>
+References: <20220411154241.50834-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,20 +71,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is basically a resend of v3, except the device tree patches are
-now combined into one patch.
+This clock is a gate for the TCU hardware block on these SoCs, but
+it wasn't included in the device tree since the ingenic-tcu driver
+erroneously did not request it.
 
-v3: https://lore.kernel.org/linux-mips/20220224150326.525707-1-aidanmacdonald.0x0@gmail.com/
+Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+---
+ arch/mips/boot/dts/ingenic/x1000.dtsi | 5 +++--
+ arch/mips/boot/dts/ingenic/x1830.dtsi | 5 +++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-Aidan MacDonald (2):
-  mips: dts: ingenic: Add TCU clock to x1000/x1830 tcu device node
-  clk: ingenic-tcu: Fix missing TCU clock for X1000 SoCs
-
- arch/mips/boot/dts/ingenic/x1000.dtsi |  5 ++--
- arch/mips/boot/dts/ingenic/x1830.dtsi |  5 ++--
- drivers/clk/ingenic/tcu.c             | 38 ++++++++++++++++++---------
- 3 files changed, 32 insertions(+), 16 deletions(-)
-
+diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi b/arch/mips/boot/dts/ingenic/x1000.dtsi
+index 8bd27edef216..c69df8eb158e 100644
+--- a/arch/mips/boot/dts/ingenic/x1000.dtsi
++++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
+@@ -111,8 +111,9 @@ tcu: timer@10002000 {
+ 
+ 		clocks = <&cgu X1000_CLK_RTCLK>,
+ 			 <&cgu X1000_CLK_EXCLK>,
+-			 <&cgu X1000_CLK_PCLK>;
+-		clock-names = "rtc", "ext", "pclk";
++			 <&cgu X1000_CLK_PCLK>,
++			 <&cgu X1000_CLK_TCU>;
++		clock-names = "rtc", "ext", "pclk", "tcu";
+ 
+ 		interrupt-controller;
+ 		#interrupt-cells = <1>;
+diff --git a/arch/mips/boot/dts/ingenic/x1830.dtsi b/arch/mips/boot/dts/ingenic/x1830.dtsi
+index 2595df8671c7..4408df24ca98 100644
+--- a/arch/mips/boot/dts/ingenic/x1830.dtsi
++++ b/arch/mips/boot/dts/ingenic/x1830.dtsi
+@@ -104,8 +104,9 @@ tcu: timer@10002000 {
+ 
+ 		clocks = <&cgu X1830_CLK_RTCLK>,
+ 			 <&cgu X1830_CLK_EXCLK>,
+-			 <&cgu X1830_CLK_PCLK>;
+-		clock-names = "rtc", "ext", "pclk";
++			 <&cgu X1830_CLK_PCLK>,
++			 <&cgu X1830_CLK_TCU>;
++		clock-names = "rtc", "ext", "pclk", "tcu";
+ 
+ 		interrupt-controller;
+ 		#interrupt-cells = <1>;
 -- 
 2.35.1
 

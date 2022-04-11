@@ -2,122 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7A624FB6AB
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 11:00:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BA754FB6AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 11:01:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344051AbiDKJC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 05:02:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45342 "EHLO
+        id S244201AbiDKJC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 05:02:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237360AbiDKJCV (ORCPT
+        with ESMTP id S1344035AbiDKJCv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 05:02:21 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567BA286C8;
-        Mon, 11 Apr 2022 02:00:08 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23B8Bcn7031098;
-        Mon, 11 Apr 2022 08:59:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=DjsrJjeJ8PHIWKaYX2vmwZHvDlbQvCEm9gFHkKk8TzU=;
- b=Tj8DOsKzr7OcwPkmDy/gVtIhuFcMwLPimdeKWYf+GM+d8Sn13yMb37ydeDGO5CxwazXH
- TuFIRzDcF+bp801ir3l4wtbk3TsWt6W6EdqWFmkz2OyYx6dl8B1iST+avN1aZXvlkfEG
- hG3yKrnrNq1yAtkKNuABQL5OxXSSc4uOC6jJeEgiVONocoQ9cyeoU7ujbrMszoXflTNK
- o+SxrOg5po5lzt4eAF9c4VzJBFUtvCM7ujXAoQGYBOhxCxwQDrJyYo6QiP5ZFZLgddZH
- tQxibRM47OOONHtajRZZ3Cu4HjAaEoUlH4gVHge/FMqEd2WnbBV1Zz0OVF+EyhxYFLqk vA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fcgknruya-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 11 Apr 2022 08:59:46 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23B8xkxr007655;
-        Mon, 11 Apr 2022 08:59:46 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fcgknruxr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 11 Apr 2022 08:59:46 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23B8vW1r012240;
-        Mon, 11 Apr 2022 08:59:44 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma06ams.nl.ibm.com with ESMTP id 3fb1dj2sen-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 11 Apr 2022 08:59:43 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23B8lETk42729854
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 11 Apr 2022 08:47:14 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 86C81AE04D;
-        Mon, 11 Apr 2022 08:59:41 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 20497AE045;
-        Mon, 11 Apr 2022 08:59:41 +0000 (GMT)
-Received: from osiris (unknown [9.145.53.187])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Mon, 11 Apr 2022 08:59:41 +0000 (GMT)
-Date:   Mon, 11 Apr 2022 10:59:39 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     akpm@linux-foundation.org, willy@infradead.org,
-        linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
-        hch@lst.de, yangtiezhu@loongson.cn, amit.kachhap@arm.com,
-        linux-fsdevel@vger.kernel.org, viro@zeniv.linux.org.uk
-Subject: Re: [PATCH v5 RESEND 0/3] Convert vmcore to use an iov_iter
-Message-ID: <YlPt+3R63XYP22um@osiris>
-References: <20220408090636.560886-1-bhe@redhat.com>
- <Yk//TCkucXiVD3s0@MiWiFi-R3L-srv>
+        Mon, 11 Apr 2022 05:02:51 -0400
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B583ED22;
+        Mon, 11 Apr 2022 02:00:37 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 74E3E10000F;
+        Mon, 11 Apr 2022 09:00:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1649667636;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=b1b/5r0hiBwYr4bmOdiIkgr/ZliNLKoDFGo5f0X63v8=;
+        b=No6A7EikmV/wH3y1TzfZiAGtZX8l7LnFQ25DnT4l1NiYchK/kTAM9lUyQTmi1sD/upFNl4
+        k9fsqf+A1aaiA6jNsQJTGLq6KFLmt5XQlm8wYoAD+us6GezgudMNpXmkDCJvXmptL34wLM
+        DMLYzItwmerLMkSXTtcs3DMqDyR+5x0RHQr7ChBiRAZgaRAJx45bxzx45uNVr0yi30H6Ng
+        fq/5Qq84mJTF/AJ8FDawWCeInwy5WcrvoEd04lrgI46M1/UF2FA7y47V1/SY7vAWz5IlOn
+        Q16zBvoqebQg1hAMSd98KPgXhCOO4TxNDrHVRR0MdQnXrRck3+tfGWItuz5uMA==
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     =?utf-8?b?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     Tom Rini <trini@konsulko.com>, linux-mtd@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        u-boot@lists.denx.de, devicetree@vger.kernel.org,
+        =?utf-8?b?UmFmYcWCIE1p?= =?utf-8?b?xYJlY2tp?= <rafal@milecki.pl>
+Subject: Re: [PATCH 1/2] mtd: call of_platform_populate() for MTD partitions
+Date:   Mon, 11 Apr 2022 11:00:32 +0200
+Message-Id: <20220411090032.10999-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220406143225.28107-1-zajec5@gmail.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yk//TCkucXiVD3s0@MiWiFi-R3L-srv>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: UwAkwTCwA_DPTuZqkd-6Xyzh1WuIQ_Du
-X-Proofpoint-GUID: PT7yF1MGQ2mrCaJ_IUd3C1QfRpgQV42P
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-11_03,2022-04-08_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- bulkscore=0 spamscore=0 lowpriorityscore=0 priorityscore=1501
- suspectscore=0 mlxscore=0 impostorscore=0 clxscore=1011 mlxlogscore=758
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204110045
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-linux-mtd-patch-notification: thanks
+X-linux-mtd-patch-commit: b'68471517e883902cdff6ea399d043b17f803b1a8'
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 05:24:28PM +0800, Baoquan He wrote:
-> Add Heiko to CC.
+On Wed, 2022-04-06 at 14:32:24 UTC, =?utf-8?b?UmFmYcWCIE1pxYJlY2tp?= wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
 > 
-> On 04/08/22 at 05:06pm, Baoquan He wrote:
-> > Copy the description of v3 cover letter from Willy:
-> > ===
-> > For some reason several people have been sending bad patches to fix
-> > compiler warnings in vmcore recently.  Here's how it should be done.
-> > Compile-tested only on x86.  As noted in the first patch, s390 should
-> > take this conversion a bit further, but I'm not inclined to do that
-> > work myself.
+> Until this change MTD subsystem supported handling partitions only with
+> MTD partitions parsers. That's a specific / limited API designed around
+> partitions.
 > 
-> Forgot adding Heiko to CC again.
+> Some MTD partitions may however require different handling. They may
+> contain specific data that needs to be parsed and somehow extracted. For
+> that purpose MTD subsystem should allow binding of standard platform
+> drivers.
 > 
-> Hi Heiko,
+> An example can be U-Boot (sub)partition with environment variables.
+> There exist a "u-boot,env" DT binding for MTD (sub)partition that
+> requires an NVMEM driver.
 > 
-> Andrew worried you may miss the note, "As noted in the first patch,
-> s390 should take this conversion a bit further, but I'm not inclined
-> to do that work myself." written in cover letter from willy.
-> 
-> I told him you had already known this in v1 discussion. So add you in CC
-> list as Andrew required. Adding words to explain, just in case confusion.
+> Ref: 5db1c2dbc04c ("dt-bindings: nvmem: add U-Boot environment variables binding")
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 
-Thanks for letting me know again. I'm still aware of this, but would
-appreciate if I could be added to cc in the first patch of this
-series, so I get notified when Andrew sends this Linus.
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/next, thanks.
 
-Thanks a lot!
+Miquel

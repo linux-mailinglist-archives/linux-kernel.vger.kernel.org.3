@@ -2,49 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 482CE4FB7F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 11:46:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 293844FB7F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 11:46:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344671AbiDKJsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 05:48:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57190 "EHLO
+        id S1344681AbiDKJsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 05:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344667AbiDKJr3 (ORCPT
+        with ESMTP id S1344733AbiDKJrx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 05:47:29 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E44043B2AA
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 02:45:14 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A26B0169C;
-        Mon, 11 Apr 2022 02:45:14 -0700 (PDT)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A25483F73B;
-        Mon, 11 Apr 2022 02:45:12 -0700 (PDT)
-Date:   Mon, 11 Apr 2022 10:45:06 +0100
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     James Morse <james.morse@arm.com>
-Cc:     20220217182110.7176-1-james.morse@arm.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        shameerali.kolothum.thodi@huawei.com,
-        Jamie Iles <jamie@nuviainc.com>,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        lcherian@marvell.com, bobo.shaobowang@huawei.com
-Subject: Re: [PATCH v3 00/21] x86/resctrl: Make resctrl_arch_rmid_read()
- return values in bytes
-Message-ID: <YlP4oisJjuVu9Ptx@e120937-lin>
-References: <YjCCQpLkkMaJys2d@e120937-lin>
- <a9d3aceb-c9b5-b269-a440-c65b8b983bf0@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a9d3aceb-c9b5-b269-a440-c65b8b983bf0@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        Mon, 11 Apr 2022 05:47:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADA83B2A6;
+        Mon, 11 Apr 2022 02:45:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A99746116C;
+        Mon, 11 Apr 2022 09:45:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F43EC385AA;
+        Mon, 11 Apr 2022 09:45:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649670339;
+        bh=/RAQFJr+K4PpHLLB41KdKOfbIHgWBUDaHpo+GIY4Jf4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Bi+OzNKz0k9mm8PsKRDLKvHTvHZA16uvfJGsWqtEoPl/wopBZUg+9T9xuNHdQ7ZmX
+         PPJEV7hEjrDG6BgFN0rlJ98Hebzk0giXDYCotP/eXbI4egnCp1te8EHXwN0AyTiEPY
+         59pNkdRf58V8/086MsqYRQgevytVKqguikRIoimoMViXjQNMv7U81xliQ1sq+8B68V
+         pBihOvxkshskhPfvCwxvWhOwvV5IG4iApV5q3kQj5gTvRToFiDForLTN6yphHNvyEu
+         7iu+tNokxFOE0O3F+wVuDHj1X1Kz2Iczoub/2IukCfr6UIE0Or55uunTaQ76W835Au
+         061CiseqLjbaw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1ndqc4-003Hmr-F6; Mon, 11 Apr 2022 10:45:36 +0100
+Date:   Mon, 11 Apr 2022 10:45:35 +0100
+Message-ID: <87czhoar7k.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Peter Gonda <pgonda@google.com>, kvm@vger.kernel.org,
+        Sean Christopherson <seanjc@google.com>,
+        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v4.1] KVM, SEV: Add KVM_EXIT_SHUTDOWN metadata for SEV-ES
+In-Reply-To: <20220408165641.469961-1-pbonzini@redhat.com>
+References: <20220407210233.782250-1-pgonda@google.com>
+        <20220408165641.469961-1-pbonzini@redhat.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: pbonzini@redhat.com, pgonda@google.com, kvm@vger.kernel.org, seanjc@google.com, linux-kernel@vger.kernel.org, will@kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,47 +67,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 06:30:40PM +0100, James Morse wrote:
-> Hi Cristian,
+On Fri, 08 Apr 2022 17:56:42 +0100,
+Paolo Bonzini <pbonzini@redhat.com> wrote:
 > 
-> On 15/03/2022 12:10, Cristian Marussi wrote:
-> > I tested this on an Intel(R) Xeon(R) Gold 5120T trying to compare gathered
-> > resctrl monitor data with and without your series and see if results
-> > were consistent.
-> > 
-> > I started from this paper [0] from Intel itself for my basic setup with
-> > some minor variations:
+> Queued, thanks.  But documentation was missing:
 > 
-> [..]
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index e7a0dfdc0178..72183ae628f7 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -6088,8 +6088,12 @@ should put the acknowledged interrupt vector into the 'epr' field.
+>    #define KVM_SYSTEM_EVENT_SHUTDOWN       1
+>    #define KVM_SYSTEM_EVENT_RESET          2
+>    #define KVM_SYSTEM_EVENT_CRASH          3
+> +  #define KVM_SYSTEM_EVENT_SEV_TERM       4
+> +  #define KVM_SYSTEM_EVENT_NDATA_VALID    (1u << 31)
+>  			__u32 type;
+> +                        __u32 ndata;
+>  			__u64 flags;
+> +                        __u64 data[16];
+>  		} system_event;
 > 
-> > While doing that I collect in background (and out of node1 processors) all
-> > the mon_data from the lc_cos group every 100ms and dump those in a file one
-> > for each cache allocation mask. (mondata_LC_7f0_00f.txt etc)
-> > 
-> > I tested first against a v5.17-rc1 mainline without your series (named as
-> > 5.17.0-rc1-mainline in the results) and then again with your series on top
-> > (named as 5.17.0-rc1-00021-g21c69a5706a5). Got your series from [1].
-> > 
-> > Then I used gnuplot to see what was the 'profile' of this data with and
-> > without your series by plotting the LC process llc_occupancy data against
-> > time for each one of the runs with the differerent cache allocated.
-> > (each colored graphs represent a different run with a different
-> > cache allocation as reported)
+>  If exit_reason is KVM_EXIT_SYSTEM_EVENT then the vcpu has triggered
+> @@ -6099,7 +6103,7 @@ HVC instruction based PSCI call from the vcpu. The 'type' field describes
+>  the system-level event type. The 'flags' field describes architecture
+>  specific flags for the system-level event.
 > 
-> > Hope this helps...
+> -Valid values for 'type' are:
+> +Valid values for bits 30:0 of 'type' are:
 > 
+>   - KVM_SYSTEM_EVENT_SHUTDOWN -- the guest has requested a shutdown of the
+>     VM. Userspace is not obliged to honour this, and if it does honour
+> @@ -6112,12 +6116,18 @@ Valid values for 'type' are:
+>     has requested a crash condition maintenance. Userspace can choose
+>     to ignore the request, or to gather VM memory core dump and/or
+>     reset/shutdown of the VM.
+> + - KVM_SYSTEM_EVENT_SEV_TERM -- an AMD SEV guest requested termination.
+> +   The guest physical address of the guest's GHCB is stored in `data[0]`.
+> 
+>  Valid flags are:
+> 
+>   - KVM_SYSTEM_EVENT_RESET_FLAG_PSCI_RESET2 (arm64 only) -- the guest issued
+>     a SYSTEM_RESET2 call according to v1.1 of the PSCI specification.
+> 
+> +Extra data for this event is stored in the `data[]` array, up to index
+> +`ndata-1` included, if bit 31 is set in `type`.  The data depends on the
+> +`type` field.  There is no extra data if bit 31 is clear or `ndata` is zero.
+> +
 
-Hi James,
+This has the potential to break userspace as it expects a strict match
+on the whole of 'type', and does not expect to treat it as a bitfield.
 
-> This is great, thanks!
-> 
-> Can I take this as a Tested-by?
-> 
+Case in point, QEMU:
 
-Sure, sorry to have forgot that :D
+accel/kvm/kvm-all.c::kvm_cpu_exec()
 
-Tested-by: Cristian Marussi <cristian.marussi@arm.com>
+        case KVM_EXIT_SYSTEM_EVENT:
+            switch (run->system_event.type) {
 
-Thanks,
-Cristian
+CrosVM and kvmtool have similar constructs, and will break as soon as
+KVM_SYSTEM_EVENT_NDATA_VALID is or'ed into 'type'.
 
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

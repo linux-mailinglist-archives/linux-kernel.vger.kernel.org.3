@@ -2,72 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F944FC553
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 21:53:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 607A34FC555
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 21:54:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349745AbiDKTz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 15:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43202 "EHLO
+        id S1349747AbiDKT47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 15:56:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349743AbiDKTzy (ORCPT
+        with ESMTP id S238175AbiDKT4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 15:55:54 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955FD36E0B
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 12:53:36 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id a21so586491pfv.10
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 12:53:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=HQW6p5XHkDmFdXcFFMAKSTMR7c12bQrCmTxneppa4IY=;
-        b=XvKXaBY0+FG1tmG2ZLkX8lj/1RrGPbuWStt06IKqgUgYXG7WbsoyWzr/CPktw6vaSt
-         9u8QllcxrheruT/2xpSBgn5YwZTJCIq6Er+X7a0dVcaWxTy7gOiWb/kZsyeqW6kXI4XK
-         g4M4l8yBaZLKP85vov6kQkDBpdgna/tx6D9HQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HQW6p5XHkDmFdXcFFMAKSTMR7c12bQrCmTxneppa4IY=;
-        b=n3mC9w6K3ibBoHrQ8UzwwHTpus7JGktasd1XgaQh69NPehz/Kp90t0/uxrsqIsBHZt
-         bPriYsP51eaNEBstsrxboFVgSFAQO/hj0/cjvbzXGxMgJRPx4h0rt05ggEURCewUyhsc
-         06HIM4LzlZp1zjGebwLg5GZGgvBtlD+YAroaDGRoRsvErUeUIv05Th4YOefVTGxHEBHt
-         J9Y/7zVa2MrfaVM633ugtdadPjK5JwxboQFnwkomOWDzArudO3LacsMYGQQ6GlpnGQKE
-         K8jJ2tnU19ghBx1p6smo+eYJgENJYUbW7sdYAZRN+M834K5HXtwuyQik9va7QdUlcVIT
-         Y18Q==
-X-Gm-Message-State: AOAM531aJ2I5TvuuFsVYbrqgeWKWYZ659pBnT2B/Eus7GxPlEl/zZ7/K
-        /CLxeJzHe0XWWTEPzB5foVy6HA==
-X-Google-Smtp-Source: ABdhPJy46Nb67XtLDVVS/w6pd6omc5Ct5ml3k8IojyyCxOY1LCYD4hjqOd6yvjcWEYJbLnmUIjJs1A==
-X-Received: by 2002:a65:614e:0:b0:380:bfd9:d4ea with SMTP id o14-20020a65614e000000b00380bfd9d4eamr27582317pgv.92.1649706816054;
-        Mon, 11 Apr 2022 12:53:36 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:eb96:76ba:e2a1:2442])
-        by smtp.gmail.com with UTF8SMTPSA id nv11-20020a17090b1b4b00b001c71b0bf18bsm292189pjb.11.2022.04.11.12.53.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Apr 2022 12:53:35 -0700 (PDT)
-Date:   Mon, 11 Apr 2022 12:53:33 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, srinivas.kandagatla@linaro.org,
-        dianders@chromium.org, swboyd@chromium.org, judyhsiao@chromium.org,
-        Venkata Prasad Potturu <quic_potturu@quicinc.com>,
-        quic_rohkumar@quicinc.com
-Subject: Re: [PATCH v6 1/3] arm64: dts: qcom: sc7280: Add nodes for va tx and
- rx macros and external codecs
-Message-ID: <YlSHPU7XITS2dju/@google.com>
-References: <1649157220-29304-1-git-send-email-quic_srivasam@quicinc.com>
- <1649157220-29304-2-git-send-email-quic_srivasam@quicinc.com>
- <Yky2Iwt+tvxvu4/S@google.com>
- <8fea1165-c8b6-6ce2-86dc-82274af8c43d@quicinc.com>
+        Mon, 11 Apr 2022 15:56:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6171DA43;
+        Mon, 11 Apr 2022 12:54:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6253BB81896;
+        Mon, 11 Apr 2022 19:54:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C01EBC385A3;
+        Mon, 11 Apr 2022 19:54:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649706876;
+        bh=bOc/33Z7+1jn2eHnVDtC0HCa/hvdIrrV1vtEJE1e728=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=V6+ZhQQJ0FpA3JTLhfNdMXpuSewBXjtopDEltHhlXbZSpO78QxEP1ZcpA53xrUGsh
+         JZIgs+nnioj5B5rZ6ZYyOhb7PDCoD7KmnK/a9wN3yFN+gEevKq5C7FKAGKVSdCXq5Y
+         OyOxDtW+tcvHx+oApyxc1n3O0GdcPQcKVQnC4aO+t4AYiy/7D5M4rDnBXkLUpIdGcF
+         Mn1DGUs5kOloLRJHvN8s17W01fSA3P9CNLtNXxfP1Wp5sxhX29Q5fOgOnp+bAuGyJV
+         H1WckifF0+jHHfVPXfJsIFHHTscgId3sxp4qkX7Zoj7qKahszAXlbLGHQ5S4ktxgJV
+         SPyfAAuKNR0Sw==
+Date:   Mon, 11 Apr 2022 14:54:34 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/4] PCI: Add function for parsing
+ 'slot-power-limit-milliwatt' DT property
+Message-ID: <20220411195434.GA531670@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <8fea1165-c8b6-6ce2-86dc-82274af8c43d@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220411111407.7ycuoldxjvqnkoo4@pali>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,72 +62,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 07:32:33PM +0530, Srinivasa Rao Mandadapu wrote:
-> 
-> On 4/6/2022 3:05 AM, Matthias Kaehlcke wrote:
-> Thanks for your time Matthias!!!
-> > On Tue, Apr 05, 2022 at 04:43:38PM +0530, Srinivasa Rao Mandadapu wrote:
-> > > SC7280 has VA, TX and RX macros with SoundWire Controllers to attach with
-> > > codecs like WCD938x, max98360a using soundwire masters and i2s bus.
-> > > Add these nodes for sc7280 based platforms audio use case.
-> > > Add tlmm gpio property in wcd938x node for switching CTIA/OMTP Headset.
+On Mon, Apr 11, 2022 at 01:14:07PM +0200, Pali Rohár wrote:
+> On Friday 08 April 2022 10:27:50 Bjorn Helgaas wrote:
+> > On Fri, Mar 25, 2022 at 10:38:26AM +0100, Pali Rohár wrote:
+> > > Add function of_pci_get_slot_power_limit(), which parses the
+> > > 'slot-power-limit-milliwatt' DT property, returning the value in
+> > > milliwatts and in format ready for the PCIe Slot Capabilities Register.
 > > > 
-> > > Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> > > Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-> > > Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> > > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > > Signed-off-by: Marek Behún <kabel@kernel.org>
+> > > Reviewed-by: Rob Herring <robh@kernel.org>
 > > > ---
-> > A change log would be helpful for reviewers
-> Change log added in cover letter.
-
-From my perspective as a reviewer I find it more practical to have a
-change log per patch.
-
-> > > diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-> > > index de646d9..c6a04c3 100644
-> > > --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-> > > +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
-> > > @@ -20,6 +20,14 @@
-> > >   #include "sc7280-chrome-common.dtsi"
-> > >   / {
-> > > +	max98360a: audio-codec-0 {
-> > > +		compatible = "maxim,max98360a";
-> > > +		pinctrl-names = "default";
-> > > +		pinctrl-0 = <&amp_en>;
-> > > +		sdmode-gpios = <&tlmm 63 GPIO_ACTIVE_HIGH>;
-> > > +		#sound-dai-cells = <0>;
-> > > +	};
+> > > Changes in v3:
+> > > * Set 600 W when DT slot-power-limit-milliwatt > 600 W
+> > > Changes in v2:
+> > > * Added support for PCIe 6.0 slot power limit encodings
+> > > * Round down slot power limit value
+> > > ---
+> > >  drivers/pci/of.c  | 64 +++++++++++++++++++++++++++++++++++++++++++++++
+> > >  drivers/pci/pci.h | 15 +++++++++++
+> > >  2 files changed, 79 insertions(+)
+> > > 
+> > > diff --git a/drivers/pci/of.c b/drivers/pci/of.c
+> > > index cb2e8351c2cc..5ebff26edd41 100644
+> > > --- a/drivers/pci/of.c
+> > > +++ b/drivers/pci/of.c
+> > > @@ -633,3 +633,67 @@ int of_pci_get_max_link_speed(struct device_node *node)
+> > >  	return max_link_speed;
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(of_pci_get_max_link_speed);
 > > > +
-> > This node shouldn't be at top but with the other device nodes, in
-> > alphabetical order, i.e. before 'pwmleds'.
+> > > +/**
+> > > + * of_pci_get_slot_power_limit - Parses the "slot-power-limit-milliwatt"
+> > > + *				 property.
+> > > + *
+> > > + * @node: device tree node with the slot power limit information
+> > > + * @slot_power_limit_value: pointer where the value should be stored in PCIe
+> > > + *			    Slot Capabilities Register format
+> > > + * @slot_power_limit_scale: pointer where the scale should be stored in PCIe
+> > > + *			    Slot Capabilities Register format
+> > > + *
+> > > + * Returns the slot power limit in milliwatts and if @slot_power_limit_value
+> > > + * and @slot_power_limit_scale pointers are non-NULL, fills in the value and
+> > > + * scale in format used by PCIe Slot Capabilities Register.
+> > > + *
+> > > + * If the property is not found or is invalid, returns 0.
+> > > + */
+> > > +u32 of_pci_get_slot_power_limit(struct device_node *node,
+> > > +				u8 *slot_power_limit_value,
+> > > +				u8 *slot_power_limit_scale)
+> > > +{
+> > > +	u32 slot_power_limit_mw;
+> > > +	u8 value, scale;
+> > > +
+> > > +	if (of_property_read_u32(node, "slot-power-limit-milliwatt",
+> > > +				 &slot_power_limit_mw))
+> > > +		slot_power_limit_mw = 0;
+> > > +
+> > > +	/* Calculate Slot Power Limit Value and Slot Power Limit Scale */
+> > > +	if (slot_power_limit_mw == 0) {
+> > > +		value = 0x00;
+> > > +		scale = 0;
+> > > +	} else if (slot_power_limit_mw <= 255) {
+> > > +		value = slot_power_limit_mw;
+> > > +		scale = 3;
+> > > +	} else if (slot_power_limit_mw <= 255*10) {
+> > > +		value = slot_power_limit_mw / 10;
+> > > +		scale = 2;
+> > > +	} else if (slot_power_limit_mw <= 255*100) {
+> > > +		value = slot_power_limit_mw / 100;
+> > > +		scale = 1;
+> > > +	} else if (slot_power_limit_mw <= 239*1000) {
+> > > +		value = slot_power_limit_mw / 1000;
+> > > +		scale = 0;
+> > > +	} else if (slot_power_limit_mw <= 250*1000) {
+> > > +		value = 0xF0;
+> > > +		scale = 0;
+> > 
+> > I think the spec is poorly worded here.  PCIe r6.0, sec 7.5.3.9, says:
+> > 
+> >   F0h   > 239 W and <= 250 W Slot Power Limit
+> > 
+> > I don't think it's meaningful for the spec to include a range here.
+> > The amount of power the slot can supply has a single maximum.  I
+> > suspect the *intent* of F0h/00b is that a device in the slot may
+> > consume up to 250W.
+> > 
+> > Your code above would mean that slot_power_limit_mw == 245,000 would
+> > cause the slot to advertise F0h/00b (250W), which seems wrong.
 > 
-> Actually we are sorting as per node name. Hence kept it here. As per
-> previous reviewer comments, sorted accordingly.
+> So for slot_power_limit_mw == 245 W we should set following values?
 > 
-> Please suggest better approach.
+>   slot_power_limit_mw = 239 W
+>   value = 0xF0
+>   scale = 0
 
-True, I forgot the node names are used for sorting, not the labels.
+I think Slot Cap should never advertise more power than the slot can
+supply.  So if the DT tells us the slot can supply 245 W, I don't
+think Slot Cap should advertise that it can supply 250 W.  I think we
+should drop down to the next lower possible value, which is 239 W
+(value 0xEF, scale 0).  I think this is what your v4 does.
 
-> > > diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> > > index db74fc3..78ec84c 100644
-> > > --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> > > +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> > > @@ -822,6 +822,127 @@
-> > >   			#power-domain-cells = <1>;
-> > >   		};
-> > > +		rxmacro: codec@3200000 {
-> > These node are not at the correct position. They should be sorted by
-> > address and hence be inserted between 'lpasscc@3000000' and
-> > 'interconnect@3c40000'.
+> > I think we should do something like this instead:
+> > 
+> >   scale = 0;
+> >   if (slot_power_limit_mw >= 600*1000) {
+> >     value = 0xFE;
+> >     slot_power_limit_mw = 600*1000;
+> >   } else if (slot_power_limit_mw >= 575*1000) {
+> >     value = 0xFD;
+> >     slot_power_limit_mw = 575*1000;
+> >   } ...
 > 
-> Actually we are sorting as per node(codec) name. Hence kept it here. As per
-> previous reviewer comments, sorted accordingly.
+> This is already implemented in branch:
+> 
+>   } else if (slot_power_limit_mw <= 600*1000) {
+>   	value = 0xF0 + (slot_power_limit_mw / 1000 - 250) / 25;
+>   	scale = 0;
 
-Could you provide a pointer to those comments?
+OK, I was thinking there was a hole here, but I guess not.  I think do
+think it's easier to read and verify if it's structured as "the slot
+can supply at least X, so advertise X", as opposed to "the slot can
+supply X or less, so advertise Y".
 
-My understanding is that we are sorting by node name when nodes don't have
-addresses or for overrides in board files/snippets, however the nodes under
-'soc@0' are sorted by address.
-
-Another nit: 'rx_macro, tx_macro, va_macro' instead of the labels without
-underscore? Not really important, but maybe slightly more readable and
-would match the 'spelling' of the compatible strings.
+Bjorn

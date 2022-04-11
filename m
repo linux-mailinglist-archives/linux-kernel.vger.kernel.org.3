@@ -2,87 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A9624FB50D
+	by mail.lfdr.de (Postfix) with ESMTP id A230C4FB50E
 	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 09:37:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245526AbiDKHjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 03:39:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37124 "EHLO
+        id S245532AbiDKHjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 03:39:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236539AbiDKHja (ORCPT
+        with ESMTP id S245524AbiDKHjc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 03:39:30 -0400
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28ABE3969E
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 00:37:16 -0700 (PDT)
-Received: from [192.168.0.2] (ip5f5ae91f.dynamic.kabel-deutschland.de [95.90.233.31])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 7D59561EA1923;
-        Mon, 11 Apr 2022 09:37:13 +0200 (CEST)
-Message-ID: <76171e7d-43f0-fb7b-6e58-8a09c8f43e88@molgen.mpg.de>
-Date:   Mon, 11 Apr 2022 09:37:13 +0200
+        Mon, 11 Apr 2022 03:39:32 -0400
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [IPv6:2001:4b98:dc4:8::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A97CC3969E
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 00:37:18 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 8AA23200009;
+        Mon, 11 Apr 2022 07:37:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1649662637;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=f23x7rYso3qTtUKAOasLEySA7B77wZVwGhNXdFZuxHo=;
+        b=hGiVuSiLd/yF1F9sGVaGV3TxN+/os56t3b2ohQUvEcKulmovYXMLRn49geBtJ65Xp7U1Np
+        k0UzNgF63evz6fKL5gc8ec0EKUQQ0gOPS5+eT1647Tu9I91FdPvM6TAuuldGXSZr4Cj82m
+        A1Fl5lDruqsNNkzW/pzDdmCdDtB06VeCXMivDozWq0kbm2YLKIYDYOCWFX8Jf7v6M5/f++
+        cPO+0JAlJ50lG7ZrHtb7suOrw9uZRx4136LorPHWNxSAJxAPTqM5LcBcZ/Dj8BZLFIFTxx
+        F9QiIR4VoG6WtJVi3tFpViLJz1SU25BUGNhR5qsl2w6D2r2nX+WUp8XqEguAbg==
+Date:   Mon, 11 Apr 2022 09:37:15 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Zheyu Ma <zheyuma97@gmail.com>
+Cc:     richard@nod.at, vigneshr@ti.com, linux-mtd@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [BUG] mtd: rawnand: denali_pci: page fault when probing fails
+Message-ID: <20220411093715.4cecc280@xps13>
+In-Reply-To: <CAMhUBjn40pO7A=icudFKOoiMrckcH_o7mdi-uCmgCFHi6Ueuzw@mail.gmail.com>
+References: <CAMhUBjn40pO7A=icudFKOoiMrckcH_o7mdi-uCmgCFHi6Ueuzw@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCHv2] drm/amdgpu: disable ASPM on Intel AlderLake based
- systems
-Content-Language: en-US
-To:     Richard Gong <richard.gong@amd.com>
-Cc:     airlied@linux.ie, dri-devel@lists.freedesktop.org,
-        xinhui.pan@amd.com, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, mario.limonciello@amd.com,
-        daniel@ffwll.ch, alexander.deucher@amd.com,
-        christian.koenig@amd.com
-References: <20220408190502.4103670-1-richard.gong@amd.com>
- <44354d78-b340-fbc4-fd6c-060d7ad3404e@molgen.mpg.de>
- <cacb177f-20e2-b50a-806f-777837fba693@amd.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <cacb177f-20e2-b50a-806f-777837fba693@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Richard,
+Hi Zheyu,
 
+zheyuma97@gmail.com wrote on Sun, 10 Apr 2022 22:17:35 +0800:
 
-Thank you for your response, but please reply to your own reply next time.
+> Hello,
+>=20
+> I found a bug in the denali_pci module.
+> When the driver fails to probe, we will get the following splat:
+>=20
+> [    4.472703] denali-nand-pci 0000:00:05.0: timeout while waiting for
+> irq 0x1000
+> [    4.474071] denali-nand-pci: probe of 0000:00:05.0 failed with error -5
+> [    4.473538] nand: No NAND device found
+> [    4.474068] BUG: unable to handle page fault for address:
+> ffffc90005000410
+> [    4.475169] #PF: supervisor write access in kernel mode
+> [    4.475579] #PF: error_code(0x0002) - not-present page
+> [    4.478362] RIP: 0010:iowrite32+0x9/0x50
+> [    4.486068] Call Trace:
+> [    4.486269]  <IRQ>
+> [    4.486443]  denali_isr+0x15b/0x300 [denali]
+> [    4.486788]  ? denali_direct_write+0x50/0x50 [denali]
+> [    4.487189]  __handle_irq_event_percpu+0x161/0x3b0
+> [    4.487571]  handle_irq_event+0x7d/0x1b0
+> [    4.487884]  handle_fasteoi_irq+0x2b0/0x770
+> [    4.488219]  __common_interrupt+0xc8/0x1b0
+> [    4.488549]  common_interrupt+0x9a/0xc0
+>=20
+> It seems that the driver unmap the memory region before disabling the irq.
 
-Am 11.04.22 um 02:37 schrieb Gong, Richard:
-> 
-> On 4/8/2022 7:19 PM, Paul Menzel wrote:
+Thanks for the report! The mapping is done with devm_ helpers and so is
+the IRQ registration, so it's slightly more complicated that just
+moving a function call in the remove path, apparently. Would you mind
+investigating and proposing a patch?
 
->> Thank you for your patch.
->>
->> Am 08.04.22 um 21:05 schrieb Richard Gong:
->>> Active State Power Management (ASPM) feature is enabled since kernel 
->>> 5.14.
->>> There are some AMD GFX cards (such as WX3200 and RX640) that cannot be
->>> used with Intel AlderLake based systems to enable ASPM. Using these GFX
->>
->> Alder Lake
-> Actually there are 2 formats (one with space, another is w/o space) in 
-> the upstream sources, so I will keep that unchanged and use the format 
-> w/o space.
-
-Do you mean the Linux kernel sources? Anyway, please use the correct 
-spelling [1].
-
-
-Kind regards,
-
-Paul
-
-
-[1]: 
-https://ark.intel.com/content/www/us/en/ark/products/codename/147470/products-formerly-alder-lake.html
-[2]: https://en.wikipedia.org/wiki/Alder_Lake
+Thanks,
+Miqu=C3=A8l

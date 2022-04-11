@@ -2,128 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8BFC4FC654
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 23:08:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD3164FC657
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 23:10:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237036AbiDKVKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 17:10:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59794 "EHLO
+        id S1350026AbiDKVM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 17:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbiDKVKd (ORCPT
+        with ESMTP id S230076AbiDKVMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 17:10:33 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39242AC79;
-        Mon, 11 Apr 2022 14:08:17 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id b19so24802746wrh.11;
-        Mon, 11 Apr 2022 14:08:17 -0700 (PDT)
+        Mon, 11 Apr 2022 17:12:54 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC9F186E7
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 14:10:37 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id w187-20020a6282c4000000b00505dfdb4613so509719pfd.0
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 14:10:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=cuLSn1q/GBIKSgoYE18mr+8Xjjh5E8wzIDAnZC3Kor4=;
-        b=hYlw6pRtzMxtWsAkiIgcWRN+12HL1xIob5XMpA/zejat696Pcxo2DTP/KTwXMKS5vc
-         AYM9+XGhuKlU7EDDi1uqFnQu2pOwhlsxi8Oeo5eht/OrbJqKU5dIe58xJaUA8X8yQbu8
-         PR7Qokl1dStZXC5NNgVAu3P6fnvTw99NVCzlCUbUvvQVVs337EylT+eOp82FHHa+zVMv
-         yFl2NMF+vdPZdVdTIok+zCLZjhXPyHEwKiUjmbxz/FNoWnxVDRczfXn2Z3VqZLANRnY9
-         xM/N3XpVqA7Qv2xRTZEmiK4Wi/3eKNG2M/huJi7rS2Qd/FCzAifUKrzhrQ47KIHXn2vf
-         2dow==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=7qBaTJN2H+g/K/DS2lTxTRvLIX27mizCmUOglWLHolA=;
+        b=JW7DNpPBC9cjt7/GIl6CWQZ2uG8WI7MOXojylaEdw2qWgK0g5u4UIfErnd/i3N5ZCx
+         xiEIgP8+nHN0zVYQWKhIRObeLpq4UNPEWen8c8mUwCZpVkW0rAi1TMDC3qOLePsWiauB
+         oCk/HS3Oil1MmU98re9HIP0zaDF5lEa+xIRBdCCEytjX1tEjbAX1H3mLFTShBiG1QQ1v
+         2NmeHng8cWZtPsqLwdAojX/pKXPy1ikWLYL0W/3utB9JmNylFruKyIUvpqXVYpglaTIt
+         gORD3GgvVW4YOnWPOugdSdCUXgOL89lxkqgBPvpN9+SzCMGLl1lRkN9VkQQC6p2z2IZ/
+         3zPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=cuLSn1q/GBIKSgoYE18mr+8Xjjh5E8wzIDAnZC3Kor4=;
-        b=vuXmHHnGbVb1cjQxtEa0XBoYXrx8To/0vuOawE8Lq5+eBPvTyKz4t1I7Qylns8SOEM
-         h34ZA6U3O+yuNHjXSxaJsMU0p9YiozJ1hAuLJiFKkVhR5RL4dDGsP+MRUl3O5jBOVCm1
-         wJ29+8+JXO6KftL8XGEhQsDyqo7NgcBYVI675692RnfTuZ4XXIiviksKGK72vhQUVzD6
-         xcEukZC4361+QFloRZ0jpPLCri92kGq2c6KNXF3WsAJlzWScpNQqMWDGmdJcoa8fPtem
-         cPyCIVwec1//egV6Ks/dAk+s7gN4Osxlm/MHZH+yPzgsykOUzFp77jCN+8VLSYcn++tj
-         qwbQ==
-X-Gm-Message-State: AOAM533IiD/0OB6UpsM7UpxtJW6O+oTum4fF6Z8sS/37+ICUz8p9+aPn
-        QsoXdnMnI6ynZxmE+ejcLyU=
-X-Google-Smtp-Source: ABdhPJz/VITA/P7SQx1zn0TZYnR++acV4H+Y3dJMoss7AHPZDuvdhr4i36KcTLujykxZPwaT/jxkPg==
-X-Received: by 2002:adf:eb4d:0:b0:1ed:c1f7:a951 with SMTP id u13-20020adfeb4d000000b001edc1f7a951mr26150009wrn.454.1649711296330;
-        Mon, 11 Apr 2022 14:08:16 -0700 (PDT)
-Received: from nz.home (host81-147-8-147.range81-147.btcentralplus.com. [81.147.8.147])
-        by smtp.gmail.com with ESMTPSA id 3-20020a5d47a3000000b0020412ba45f6sm32624942wrb.8.2022.04.11.14.08.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 14:08:15 -0700 (PDT)
-Received: by nz.home (Postfix, from userid 1000)
-        id 300222C6C320B; Mon, 11 Apr 2022 22:08:15 +0100 (BST)
-Date:   Mon, 11 Apr 2022 22:08:15 +0100
-From:   Sergei Trofimovich <slyich@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     amd-gfx@lists.freedesktop.org, Joe Perches <joe@perches.com>,
-        linux-kbuild@vger.kernel.org, Jakub Jelinek <jakub@redhat.com>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>
-Subject: gcc inserts __builtin_popcount, causes 'modpost: "__popcountdi2" ...
- amdgpu.ko] undefined'
-Message-ID: <YlSYv3d9a5cZR9KE@nz>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=7qBaTJN2H+g/K/DS2lTxTRvLIX27mizCmUOglWLHolA=;
+        b=OqAR711SzkMTjkov4fSn9/nGqX2rEX07PCPPKBEgexYeZo8Hv9FCPx6ytfCuO9wl7O
+         QabEpOSv8/M8G/89gaIM7ZhR0Jd3VG0m9AFhVrpl3iX3ESotW5j6r6Jn+Fyi8K39HehC
+         BaskFvk047HntCIDV0S/UfR7dXyMs5vSPpq4gda5yhIxeV2VYO0AROmFKkavzLuQSqJe
+         YJGf7nn+goIkU+E9SZyCIoqw/64sfEy+4HNJSy8WuI9GrhWZfYNOLocIO4tsiqZiP9Kf
+         tpdyV+2aA9dmBQsE1Pl4t1T63h/vn3yuVPCWXgrYPpetPHUdBKTZG6Z1FZRVHTWtV65D
+         DnIw==
+X-Gm-Message-State: AOAM530NkPbf9iS+QAlAvXfrl/kfV3KHVrXM2mSWMLzFXFM3nZpcJyAO
+        p6Lx1Jyk3mUx/bn++HYlaAGvwUSUBjEY7myTGxUA+Xucr5qI9ipArA/aG2JH1E9zq3FUQ/RR0i4
+        LP6DrkjgJildw+Gb2lDmanVsHLdO3MSkyNXiOQWZdQcn/+vD7FqYty8NQ4Eqvz0qwav2GuQut
+X-Google-Smtp-Source: ABdhPJzppFEe6VuNVq2cF+WZ1BCsPDQ1oyrsyYTVmJUmNOa+IV+fQJ3IXjUhsGRpGyXc1MHRmTlFywRKaGLN
+X-Received: from bgardon.sea.corp.google.com ([2620:15c:100:202:a2d0:faec:7d8b:2e0b])
+ (user=bgardon job=sendgmr) by 2002:a17:90b:3650:b0:1ca:a667:b17c with SMTP id
+ nh16-20020a17090b365000b001caa667b17cmr1215356pjb.180.1649711436331; Mon, 11
+ Apr 2022 14:10:36 -0700 (PDT)
+Date:   Mon, 11 Apr 2022 14:10:05 -0700
+Message-Id: <20220411211015.3091615-1-bgardon@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
+Subject: [PATCH v4 00/10] KVM: x86: Add a cap to disable NX hugepages on a VM
+From:   Ben Gardon <bgardon@google.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Peter Shier <pshier@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Junaid Shahid <junaids@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current linux-5.17.1 on fresh gcc-12 fails to build with errors like:
+Given the high cost of NX hugepages in terms of TLB performance, it may
+be desirable to disable the mitigation on a per-VM basis. In the case of public
+cloud providers with many VMs on a single host, some VMs may be more trusted
+than others. In order to maximize performance on critical VMs, while still
+providing some protection to the host from iTLB Multihit, allow the mitigation
+to be selectively disabled.
 
-    ERROR: modpost: "__popcountdi2" [drivers/net/ethernet/broadcom/bnx2x/bnx2x.ko] undefined!
-    ERROR: modpost: "__popcountdi2" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+Disabling NX hugepages on a VM is relatively straightforward, but I took this
+as an opportunity to add some NX hugepages test coverage and clean up selftests
+infrastructure a bit.
 
-It is occasionally seen by others on previous gcc versions as well:
+This series was tested with the new selftest and the rest of the KVM selftests
+on an Intel Haswell machine.
 
-    https://lkml.org/lkml/2021/7/11/261
-    https://lkml.org/lkml/2018/10/24/403
+The following tests failed, but I do not believe that has anything to do with
+this series:
+	userspace_io_test
+	vmx_nested_tsc_scaling_test
+	vmx_preemption_timer_test
 
-'__popcountdi2' are inserted by gcc for code like the following
-from 'drivers/gpu/drm/amd/display/modules/hdcp/hdcp1_execution.c':
+Changelog:
+v1->v2:
+	Dropped the complicated memslot refactor in favor of Ricardo Koller's
+	patch with a similar effect.
+	Incorporated David Dunn's feedback and reviewed by tag: shortened waits
+	to speed up test.
+v2->v3:
+	Incorporated a suggestion from David on how to build the NX huge pages
+	test.
+	Fixed a build breakage identified by David.
+	Dropped the per-vm nx_huge_pages field in favor of simply checking the
+	global + per-VM disable override.
+	Documented the new capability
+	Separated out the commit to test disabling NX huge pages
+	Removed permission check when checking if the disable NX capability is
+	supported.
+	Added test coverage for the permission check.
+v3->v4:
+	Collected RB's from Jing and David
+	Modified stat collection to reduce a memory allocation [David]
+	Incorporated various improvments to the NX test [David]
+	Changed the NX disable test to run by default [David]
+	Removed some now unnecessary commits
+	Dropped the code to dump KVM stats from the binary stats test, and
+	factor out parts of the existing test to library functions instead.
+	[David, Jing, Sean]
+	Dropped the improvement to a debugging log message as it's no longer
+	relevant to this series.
 
-    static inline enum mod_hdcp_status validate_bksv(struct mod_hdcp *hdcp)
-    {
-        uint64_t n = 0;
-        uint8_t count = 0;
-        u8 bksv[sizeof(n)] = { };
+Ben Gardon (10):
+  KVM: selftests: Remove dynamic memory allocation for stats header
+  KVM: selftests: Read binary stats header in lib
+  KVM: selftests: Read binary stats desc in lib
+  KVM: selftests: Read binary stat data in lib
+  KVM: selftests: Add NX huge pages test
+  KVM: x86/MMU: Factor out updating NX hugepages state for a VM
+  KVM: x86/MMU: Allow NX huge pages to be disabled on a per-vm basis
+  KVM: x86: Fix errant brace in KVM capability handling
+  KVM: x86/MMU: Require reboot permission to disable NX hugepages
+  KVM: selftests: Test disabling NX hugepages on a VM
 
-        memcpy(bksv, hdcp->auth.msg.hdcp1.bksv, sizeof(hdcp->auth.msg.hdcp1.bksv));
-        n = *(uint64_t *)bksv;
-
-        /* Here gcc inserts 'count = __builtin_popcount(n);' */
-        while (n) {
-                count++;
-                n &= (n - 1);
-        }
-
-        return (count == 20) ? MOD_HDCP_STATUS_SUCCESS :
-                               MOD_HDCP_STATUS_HDCP1_INVALID_BKSV;
-    }
-
-Note that gcc can insert it regardless of -mno-* options.
-
-How should linux.git handle it? A few options come to mind:
-
-- Perhaps use libgcc.a directly.
-- Just implement '__popcountdi2'. Example definition from libgcc:
-  https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=libgcc/libgcc2.c;hb=HEAD#l846
-- Or workaround it with -fno-builtin-popcount in Makefiles.
-
-CCing people who can help routing it and/or deciding on the fix:
-amd-gfx@lists.freedesktop.org, Joe Perches, linux-kbuild@vger.kernel.org,
-Jakub Jelinek, Segher Boessenkool, Thomas Gleixner,Peter Zijlstra, Andy
-Lutomirski.
-
-WDYT?
-
-Thanks!
+ Documentation/virt/kvm/api.rst                |  13 ++
+ arch/x86/include/asm/kvm_host.h               |   2 +
+ arch/x86/kvm/mmu.h                            |  10 +-
+ arch/x86/kvm/mmu/mmu.c                        |  17 +-
+ arch/x86/kvm/mmu/spte.c                       |   7 +-
+ arch/x86/kvm/mmu/spte.h                       |   3 +-
+ arch/x86/kvm/mmu/tdp_mmu.c                    |   3 +-
+ arch/x86/kvm/x86.c                            |  17 +-
+ include/uapi/linux/kvm.h                      |   1 +
+ tools/testing/selftests/kvm/Makefile          |  10 +
+ .../selftests/kvm/include/kvm_util_base.h     |  11 +
+ .../selftests/kvm/kvm_binary_stats_test.c     |  75 +++----
+ tools/testing/selftests/kvm/lib/kvm_util.c    | 125 ++++++++++-
+ .../selftests/kvm/x86_64/nx_huge_pages_test.c | 198 ++++++++++++++++++
+ .../kvm/x86_64/nx_huge_pages_test.sh          |  25 +++
+ 15 files changed, 453 insertions(+), 64 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
+ create mode 100755 tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
 
 -- 
+2.35.1.1178.g4f1659d476-goog
 
-  Sergei

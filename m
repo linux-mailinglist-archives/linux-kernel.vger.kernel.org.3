@@ -2,131 +2,405 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A218D4FC313
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 19:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B2554FC319
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 19:24:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348827AbiDKRWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 13:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56658 "EHLO
+        id S244581AbiDKR0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 13:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348828AbiDKRW3 (ORCPT
+        with ESMTP id S232374AbiDKR03 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 13:22:29 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 701CE25E8F
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 10:20:14 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id z128so14782236pgz.2
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 10:20:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ONFEOnrVZ9bjjIY7JAyb4o3HO+WCsKL7A8xVivcrZIE=;
-        b=lq39LnDuprsBafq43PI2TmKx4kPt9ZRqRHn5SGyOwZQWSkktfBs6dbau5X8h4LkySX
-         lwXi+mwKMQbfCtBoYOxPX8GG0eLr0X2dRcemnpC9gx7NbfYwQRK6rcCXSqFAUuOWM8vS
-         a8RVF0eiMB3zpr7lu05GLKlBbhNnQ9QIhzYNXTs0qHVZPl/xttZGomiL6AzBOtOTOIpE
-         1WySjGo0KWMbPeNQ2BGvuSpz4z+PsWZLkU9kiJLoeCjcJvbHy0yc+y2/fgEJpcok7yhG
-         xBrqAM6YwZB1rg9h7JDHzGwqJp8rmclbU19wbuvpPJ+7T6COX3kYIE6AAmJNg0/xXFWk
-         Ckvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ONFEOnrVZ9bjjIY7JAyb4o3HO+WCsKL7A8xVivcrZIE=;
-        b=eNmU2KVaKTy9A9hYGExFJBdNuMtxEXLfPQ7jrzq8QaSjKsqR1rxmzi0kuVJvvgZIUj
-         85clHfUPfb8fa4qDjHyxtDsKUJn2Q+HqsuddgnBHWNlAYBCW2rAhkXyOfn3YJUmUA0Ev
-         itIBP7m88ta73zkzm2mRsu9PPmA8f5MzG4WlaYRbIli5M6lKzzH5f3NPHam5Sk0L9b5p
-         UyNQaUkACTJ90H8k6ibpugh/gIb+F2b9KOevL1w8xnBZ1Vj2HnVr/I2VC88u2p0izWsP
-         yuVggeofmTqHlxX2nrLe5Q1oacqC6zryww2aWRWt5ZZzOv3iFSzC/tIIFSw+m7FLLlQ/
-         vlmQ==
-X-Gm-Message-State: AOAM531FN/AmGP1LD4XHG6jSBfh4ThmRjb2i2ZhmAd6ktm+XeHsls3Un
-        ivRKmGcCbBxt9sUlTr50wOw6u/G6P3XYVRA9ZQs=
-X-Google-Smtp-Source: ABdhPJwvRZq3s06VUhs7xehfpg19fW+KHV2DMPoc52Ja6WHgi/kvliBGxPSxxEfk8WCuq1bfMfSi3treL1rPgaq7MI4=
-X-Received: by 2002:a63:7c06:0:b0:398:31d5:f759 with SMTP id
- x6-20020a637c06000000b0039831d5f759mr27248005pgc.513.1649697613767; Mon, 11
- Apr 2022 10:20:13 -0700 (PDT)
+        Mon, 11 Apr 2022 13:26:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90617140E4;
+        Mon, 11 Apr 2022 10:24:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A66B61760;
+        Mon, 11 Apr 2022 17:24:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3AF6C385A4;
+        Mon, 11 Apr 2022 17:24:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649697853;
+        bh=5TsoD2KB4qgZvsvSKTKSMDHat49KB49G9h0SnwNGm+I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cKWNOUgUP/YiI+pD5FAAZHFGBdRgf/6ZGWo2Dx4XmJbORxoFQbgAn6OPtlpM8AYO5
+         gfVB5p1uGlWJb1Pr9UYb37MnAJXrJYhoL3spWMDZib8pPnoQmKwQtAe0hubOekeL1n
+         znP4QJuaFTw4DLJwCoSrITUJeIifc9Z4rwFoaYDEdFQbueDVxbOi9QXH+VWMZpj7nI
+         rk+gGbH3MLs8c2kevf/f8MOHfZhri4XZw8+VvEUlZHFNqex4d0vmMqvvcu/Z+kOa1X
+         +cbWWw0dC0dbcFUUw52q7sYjpiAlgrpJzxsYCJthf2V8EYufGe77fy2WqjH21z3uDD
+         /1Vj11nOKqhFA==
+Date:   Mon, 11 Apr 2022 22:54:09 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Jianjun Wang <jianjun.wang@mediatek.com>
+Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Wei-Shun Chang <weishunc@google.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rex-bc.chen@mediatek.com, randy.wu@mediatek.com,
+        jieyy.yang@mediatek.com, chuanjia.liu@mediatek.com,
+        qizhong.cheng@mediatek.com, jian.yang@mediatek.com
+Subject: Re: [PATCH v5 2/2] phy: mediatek: Add PCIe PHY driver
+Message-ID: <YlRkOU/w8X57SAIj@matsya>
+References: <20220326022728.2969-1-jianjun.wang@mediatek.com>
+ <20220326022728.2969-3-jianjun.wang@mediatek.com>
 MIME-Version: 1.0
-References: <20220411150555.26023-1-anna-maria@linutronix.de> <YlRNwV3jlikHfu/v@smile.fi.intel.com>
-In-Reply-To: <YlRNwV3jlikHfu/v@smile.fi.intel.com>
-From:   Yury Norov <yury.norov@gmail.com>
-Date:   Mon, 11 Apr 2022 10:20:02 -0700
-Message-ID: <CAAH8bW9hvKA_q8eS-QpMkU3EhD7kM5heuQjbtd4A=tVhAznioQ@mail.gmail.com>
-Subject: Re: [PATCH] include/linux/find: Fix documentation
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220326022728.2969-3-jianjun.wang@mediatek.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 8:52 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Mon, Apr 11, 2022 at 05:05:55PM +0200, Anna-Maria Behnsen wrote:
-> > The order of the arguments in function documentation doesn't fit the
-> > implementation. Change the documentation so that it corresponds to the
-> > code. This prevent people to get confused when reading the documentation.
->
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On 26-03-22, 10:27, Jianjun Wang wrote:
+> Add PCIe GEN3 PHY driver support on MediaTek chipsets.
+> 
+> Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  drivers/phy/mediatek/Kconfig        |  11 ++
+>  drivers/phy/mediatek/Makefile       |   1 +
+>  drivers/phy/mediatek/phy-mtk-pcie.c | 272 ++++++++++++++++++++++++++++
+>  3 files changed, 284 insertions(+)
+>  create mode 100644 drivers/phy/mediatek/phy-mtk-pcie.c
+> 
+> diff --git a/drivers/phy/mediatek/Kconfig b/drivers/phy/mediatek/Kconfig
+> index 55f8e6c048ab..387ed1b3f2cc 100644
+> --- a/drivers/phy/mediatek/Kconfig
+> +++ b/drivers/phy/mediatek/Kconfig
+> @@ -55,3 +55,14 @@ config PHY_MTK_MIPI_DSI
+>  	select GENERIC_PHY
+>  	help
+>  	  Support MIPI DSI for Mediatek SoCs.
+> +
+> +config PHY_MTK_PCIE
+> +	tristate "MediaTek PCIe-PHY Driver"
+> +	depends on ARCH_MEDIATEK || COMPILE_TEST
+> +	depends on OF
+> +	select GENERIC_PHY
+> +	help
+> +	  Say 'Y' here to add support for MediaTek PCIe PHY driver.
+> +	  This driver create the basic PHY instance and provides initialize
+> +	  callback for PCIe GEN3 port, it supports software efuse
+> +	  initialization.
+> diff --git a/drivers/phy/mediatek/Makefile b/drivers/phy/mediatek/Makefile
+> index ace660fbed3a..788c13147f63 100644
+> --- a/drivers/phy/mediatek/Makefile
+> +++ b/drivers/phy/mediatek/Makefile
+> @@ -6,6 +6,7 @@
+>  obj-$(CONFIG_PHY_MTK_TPHY)		+= phy-mtk-tphy.o
+>  obj-$(CONFIG_PHY_MTK_UFS)		+= phy-mtk-ufs.o
+>  obj-$(CONFIG_PHY_MTK_XSPHY)		+= phy-mtk-xsphy.o
+> +obj-$(CONFIG_PHY_MTK_PCIE)		+= phy-mtk-pcie.o
+>  
+>  phy-mtk-hdmi-drv-y			:= phy-mtk-hdmi.o
+>  phy-mtk-hdmi-drv-y			+= phy-mtk-hdmi-mt2701.o
+> diff --git a/drivers/phy/mediatek/phy-mtk-pcie.c b/drivers/phy/mediatek/phy-mtk-pcie.c
+> new file mode 100644
+> index 000000000000..d288655b6cff
+> --- /dev/null
+> +++ b/drivers/phy/mediatek/phy-mtk-pcie.c
+> @@ -0,0 +1,272 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2022 MediaTek Inc.
+> + * Author: Jianjun Wang <jianjun.wang@mediatek.com>
+> + */
+> +
+> +#include <linux/bits.h>
+> +#include <linux/compiler_types.h>
 
-Thanks, applied here:
-https://github.com/norov/linux.git
-branch: bitmap-for-next
+Why do you need this header
+
+> +#include <linux/module.h>
+> +#include <linux/nvmem-consumer.h>
+> +#include <linux/of_device.h>
+> +#include <linux/phy/phy.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/slab.h>
+> +
+> +#include "phy-mtk-io.h"
+> +
+> +#define PEXTP_ANA_GLB_00_REG		0x9000
+> +#define PEXTP_ANA_LN0_TRX_REG		0xa000
+> +#define PEXTP_ANA_TX_OFFSET		0x04
+> +#define PEXTP_ANA_RX_OFFSET		0x3c
+> +#define PEXTP_ANA_LANE_OFFSET		0x100
+> +
+> +/* PEXTP_GLB_00_REG[28:24] Internal Resistor Selection of TX Bias Current */
+> +#define EFUSE_GLB_INTR_SEL		GENMASK(28, 24)
+> +#define EFUSE_GLB_INTR_VAL(x)		((0x1f & (x)) << 24)
+
+There are nice macros in bitfield.h which you can use to set/get value
+
+> +
+> +/* PEXTP_ANA_LN_RX_REG[3:0] RX impedance selection */
+> +#define EFUSE_LN_RX_SEL			GENMASK(3, 0)
+> +#define EFUSE_LN_RX_VAL(x)		(0xf & (x))
+> +
+> +/* PEXTP_ANA_LN_TX_REG[5:2] TX PMOS impedance selection */
+> +#define EFUSE_LN_TX_PMOS_SEL		GENMASK(5, 2)
+> +#define EFUSE_LN_TX_PMOS_VAL(x)		((0xf & (x)) << 2)
+> +
+> +/* PEXTP_ANA_LN_TX_REG[11:8] TX NMOS impedance selection */
+> +#define EFUSE_LN_TX_NMOS_SEL		GENMASK(11, 8)
+> +#define EFUSE_LN_TX_NMOS_VAL(x)		((0xf & (x)) << 8)
+> +
+> +/**
+> + * struct mtk_pcie_lane_efuse - eFuse data for each lane
+> + * @tx_pmos: TX PMOS impedance selection data
+> + * @tx_nmos: TX NMOS impedance selection data
+> + * @rx_data: RX impedance selection data
+> + * @lane_efuse_supported: software eFuse data is supported for this lane
+> + */
+> +struct mtk_pcie_lane_efuse {
+> +	u32 tx_pmos;
+> +	u32 tx_nmos;
+> +	u32 rx_data;
+> +	bool lane_efuse_supported;
+> +};
+> +
+> +/**
+> + * struct mtk_pcie_phy_data - phy data for each SoC
+> + * @num_lanes: supported lane numbers
+> + * @sw_efuse_supported: support software to load eFuse data
+> + */
+> +struct mtk_pcie_phy_data {
+> +	int num_lanes;
+> +	bool sw_efuse_supported;
+> +};
+> +
+> +/**
+> + * struct mtk_pcie_phy - PCIe phy driver main structure
+> + * @dev: pointer to device
+> + * @phy: pointer to generic phy
+> + * @sif_base: IO mapped register base address of system interface
+> + * @data: pointer to SoC dependent data
+> + * @sw_efuse_en: software eFuse enable status
+> + * @efuse_glb_intr: internal resistor selection of TX bias current data
+> + * @efuse: pointer to eFuse data for each lane
+> + */
+> +struct mtk_pcie_phy {
+> +	struct device *dev;
+> +	struct phy *phy;
+> +	void __iomem *sif_base;
+> +	const struct mtk_pcie_phy_data *data;
+> +
+> +	bool sw_efuse_en;
+> +	u32 efuse_glb_intr;
+> +	struct mtk_pcie_lane_efuse *efuse;
+> +};
+> +
+> +static void mtk_pcie_efuse_set_lane(struct mtk_pcie_phy *pcie_phy,
+> +				    unsigned int lane)
+> +{
+> +	struct mtk_pcie_lane_efuse *data = &pcie_phy->efuse[lane];
+> +	void __iomem *addr;
+> +
+> +	if (!data->lane_efuse_supported)
+> +		return;
+> +
+> +	addr = pcie_phy->sif_base + PEXTP_ANA_LN0_TRX_REG +
+> +	       lane * PEXTP_ANA_LANE_OFFSET;
+> +
+> +	mtk_phy_update_bits(addr + PEXTP_ANA_TX_OFFSET, EFUSE_LN_TX_PMOS_SEL,
+> +			    EFUSE_LN_TX_PMOS_VAL(data->tx_pmos));
+> +
+> +	mtk_phy_update_bits(addr + PEXTP_ANA_TX_OFFSET, EFUSE_LN_TX_NMOS_SEL,
+> +			    EFUSE_LN_TX_NMOS_VAL(data->tx_nmos));
+> +
+> +	mtk_phy_update_bits(addr + PEXTP_ANA_RX_OFFSET, EFUSE_LN_RX_SEL,
+> +			    EFUSE_LN_RX_VAL(data->rx_data));
+> +}
+> +
+> +/**
+> + * mtk_pcie_phy_init() - Initialize the phy
+> + * @phy: the phy to be initialized
+> + *
+> + * Initialize the phy by setting the efuse data.
+> + * The hardware settings will be reset during suspend, it should be
+> + * reinitialized when the consumer calls phy_init() again on resume.
+> + */
+> +static int mtk_pcie_phy_init(struct phy *phy)
+> +{
+> +	struct mtk_pcie_phy *pcie_phy = phy_get_drvdata(phy);
+> +	int i;
+> +
+> +	if (!pcie_phy->sw_efuse_en)
+> +		return 0;
+> +
+> +	/* Set global data */
+> +	mtk_phy_update_bits(pcie_phy->sif_base + PEXTP_ANA_GLB_00_REG,
+> +			    EFUSE_GLB_INTR_SEL,
+> +			    EFUSE_GLB_INTR_VAL(pcie_phy->efuse_glb_intr));
+> +
+> +	for (i = 0; i < pcie_phy->data->num_lanes; i++)
+> +		mtk_pcie_efuse_set_lane(pcie_phy, i);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct phy_ops mtk_pcie_phy_ops = {
+> +	.init	= mtk_pcie_phy_init,
+
+Only init for this phy? no power up/down either??
 
 
-> > Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
-> > ---
-> >  include/linux/find.h | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/include/linux/find.h b/include/linux/find.h
-> > index 5bb6db213bcb..424ef67d4a42 100644
-> > --- a/include/linux/find.h
-> > +++ b/include/linux/find.h
-> > @@ -21,8 +21,8 @@ extern unsigned long _find_last_bit(const unsigned long *addr, unsigned long siz
-> >  /**
-> >   * find_next_bit - find the next set bit in a memory region
-> >   * @addr: The address to base the search on
-> > - * @offset: The bitnumber to start searching at
-> >   * @size: The bitmap size in bits
-> > + * @offset: The bitnumber to start searching at
-> >   *
-> >   * Returns the bit number for the next set bit
-> >   * If no bits are set, returns @size.
-> > @@ -50,8 +50,8 @@ unsigned long find_next_bit(const unsigned long *addr, unsigned long size,
-> >   * find_next_and_bit - find the next set bit in both memory regions
-> >   * @addr1: The first address to base the search on
-> >   * @addr2: The second address to base the search on
-> > - * @offset: The bitnumber to start searching at
-> >   * @size: The bitmap size in bits
-> > + * @offset: The bitnumber to start searching at
-> >   *
-> >   * Returns the bit number for the next set bit
-> >   * If no bits are set, returns @size.
-> > @@ -79,8 +79,8 @@ unsigned long find_next_and_bit(const unsigned long *addr1,
-> >  /**
-> >   * find_next_zero_bit - find the next cleared bit in a memory region
-> >   * @addr: The address to base the search on
-> > - * @offset: The bitnumber to start searching at
-> >   * @size: The bitmap size in bits
-> > + * @offset: The bitnumber to start searching at
-> >   *
-> >   * Returns the bit number of the next zero bit
-> >   * If no bits are zero, returns @size.
-> > --
-> > 2.20.1
-> >
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
+> +	.owner	= THIS_MODULE,
+> +};
+> +
+> +static int mtk_pcie_efuse_read_for_lane(struct mtk_pcie_phy *pcie_phy,
+> +					unsigned int lane)
+> +{
+> +	struct mtk_pcie_lane_efuse *efuse = &pcie_phy->efuse[lane];
+> +	struct device *dev = pcie_phy->dev;
+> +	char efuse_id[16];
+> +	int ret;
+> +
+> +	snprintf(efuse_id, sizeof(efuse_id), "tx_ln%d_pmos", lane);
+> +	ret = nvmem_cell_read_variable_le_u32(dev, efuse_id, &efuse->tx_pmos);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Failed to read %s\n", efuse_id);
+> +
+> +	snprintf(efuse_id, sizeof(efuse_id), "tx_ln%d_nmos", lane);
+> +	ret = nvmem_cell_read_variable_le_u32(dev, efuse_id, &efuse->tx_nmos);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Failed to read %s\n", efuse_id);
+> +
+> +	snprintf(efuse_id, sizeof(efuse_id), "rx_ln%d", lane);
+> +	ret = nvmem_cell_read_variable_le_u32(dev, efuse_id, &efuse->rx_data);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Failed to read %s\n", efuse_id);
+> +
+> +	if (!(efuse->tx_pmos || efuse->tx_nmos || efuse->rx_data))
+> +		return dev_err_probe(dev, -EINVAL,
+> +				     "No eFuse data found for lane%d, but dts enable it\n",
+> +				     lane);
+> +
+> +	efuse->lane_efuse_supported = true;
+> +
+> +	return 0;
+> +}
+> +
+> +static int mtk_pcie_read_efuse(struct mtk_pcie_phy *pcie_phy)
+> +{
+> +	struct device *dev = pcie_phy->dev;
+> +	bool nvmem_enabled;
+> +	int ret, i;
+> +
+> +	/* nvmem data is optional */
+> +	nvmem_enabled = device_property_read_bool(dev, "nvmem-cells");
+> +	if (!nvmem_enabled)
+> +		return 0;
+> +
+> +	ret = nvmem_cell_read_variable_le_u32(dev, "glb_intr",
+> +					      &pcie_phy->efuse_glb_intr);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Failed to read glb_intr\n");
+> +
+> +	pcie_phy->sw_efuse_en = true;
+> +
+> +	pcie_phy->efuse = devm_kzalloc(dev, pcie_phy->data->num_lanes *
+> +				       sizeof(*pcie_phy->efuse), GFP_KERNEL);
+> +	if (!pcie_phy->efuse)
+> +		return -ENOMEM;
+> +
+> +	for (i = 0; i < pcie_phy->data->num_lanes; i++) {
+> +		ret = mtk_pcie_efuse_read_for_lane(pcie_phy, i);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int mtk_pcie_phy_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct phy_provider *provider;
+> +	struct mtk_pcie_phy *pcie_phy;
+> +	int ret;
+> +
+> +	pcie_phy = devm_kzalloc(dev, sizeof(*pcie_phy), GFP_KERNEL);
+> +	if (!pcie_phy)
+> +		return -ENOMEM;
+> +
+> +	pcie_phy->sif_base = devm_platform_ioremap_resource_byname(pdev, "sif");
+> +	if (IS_ERR(pcie_phy->sif_base))
+> +		return dev_err_probe(dev, PTR_ERR(pcie_phy->sif_base),
+> +				     "Failed to map phy-sif base\n");
+> +
+> +	pcie_phy->phy = devm_phy_create(dev, dev->of_node, &mtk_pcie_phy_ops);
+> +	if (IS_ERR(pcie_phy->phy))
+> +		return dev_err_probe(dev, PTR_ERR(pcie_phy->phy),
+> +				     "Failed to create PCIe phy\n");
+> +
+> +	pcie_phy->dev = dev;
+> +	pcie_phy->data = of_device_get_match_data(dev);
+> +	if (!pcie_phy->data)
+> +		return dev_err_probe(dev, -EINVAL, "Failed to get phy data\n");
+> +
+> +	if (pcie_phy->data->sw_efuse_supported) {
+> +		/*
+> +		 * Failed to read the efuse data is not a fatal problem,
+> +		 * ignore the failure and keep going.
+> +		 */
+> +		ret = mtk_pcie_read_efuse(pcie_phy);
+> +		if (ret == -EPROBE_DEFER)
+> +			return ret;
+> +	}
+> +
+> +	phy_set_drvdata(pcie_phy->phy, pcie_phy);
+> +
+> +	provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
+> +	if (IS_ERR(provider))
+> +		return dev_err_probe(dev, PTR_ERR(provider),
+> +				     "PCIe phy probe failed\n");
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct mtk_pcie_phy_data mt8195_data = {
+> +	.num_lanes = 2,
+> +	.sw_efuse_supported = true,
+> +};
+> +
+> +static const struct of_device_id mtk_pcie_phy_of_match[] = {
+> +	{ .compatible = "mediatek,mt8195-pcie-phy", .data = &mt8195_data },
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, mtk_pcie_phy_of_match);
+> +
+> +static struct platform_driver mtk_pcie_phy_driver = {
+> +	.probe	= mtk_pcie_phy_probe,
+> +	.driver	= {
+> +		.name = "mtk-pcie-phy",
+> +		.of_match_table = mtk_pcie_phy_of_match,
+> +	},
+> +};
+> +module_platform_driver(mtk_pcie_phy_driver);
+> +
+> +MODULE_DESCRIPTION("MediaTek PCIe PHY driver");
+> +MODULE_AUTHOR("Jianjun Wang <jianjun.wang@mediatek.com>");
+> +MODULE_LICENSE("GPL v2");
+> -- 
+> 2.18.0
+
+-- 
+~Vinod

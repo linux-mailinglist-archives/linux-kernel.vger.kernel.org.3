@@ -2,182 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49B2F4FC0B6
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:29:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B21434FC0CB
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:32:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345224AbiDKPcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 11:32:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37064 "EHLO
+        id S1347956AbiDKPe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 11:34:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244647AbiDKPcA (ORCPT
+        with ESMTP id S1348269AbiDKPdo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 11:32:00 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6A623BF2
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:29:45 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id g18so7329617wrb.10
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:29:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XGNIRWliO2h0rV5PJMq5A+wGOUta4TqvuZt8zvkwu8U=;
-        b=TpHauy7PnsdLuuoGkLIj6iiH+z0/m2Rs/b15ngcsmm/hRwGVcrC3imcH4EQMHmqNCD
-         TthqDhpL4cL1zHuRq1OXllmEvH8Pk9QfRXe54AzlFpBpcW7pC0MEeIgE1FrOFwDLkpul
-         seLjX+n7fLZJ8VZv+lDLJXetTqMKg8chqckgAM/tAP95+DvG507REoAH5x0kkSRFVYcv
-         2G8YxOFElb7sa6gVYzEY4hFUFMdOcE8442RBWFqIqLCtFKG8MkktKaOBZuihIwZMjgZC
-         LIlj24AA3KmyNezXVp6t4rK4JALr0+bsbr1ikVHr5S6t9piQbddklZuaSlZMeNO0xWFe
-         ZISw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XGNIRWliO2h0rV5PJMq5A+wGOUta4TqvuZt8zvkwu8U=;
-        b=DrxFvQUdMTo56/nTAOtVhOpJJyJD4Q0Vx8/xfY48Hw39Zo/OIwfAWvDmuN3Iu2PdAa
-         //lzuRz7ovKk7tiZYVztwiKUwletCf5/H5SX+tBVQdCWrmJZwsTLN9NiKv00BGWz3Q7I
-         HXViaCCObB+n5ElWUZ0+uJEeQ27tCtRLeLYNuYoGE/EClxcAoFV6LrzMg+VPQVq5wGnI
-         eGngKHq91q5e31wqA7zxC29bUzdvjdKaHWnEhqEY76aG1KzmfWljvkfmJP6DGihCcIb8
-         W7vn1atOvRbLdpXv92xNJz0USQFVZkRC4168hW2lY6JH9RPmUkzcRffol8YkbA0IPtfG
-         NJgQ==
-X-Gm-Message-State: AOAM533kKDglofk5HbTb07zR/gK5rtPv0TNKBK7oR6ahL/ECRFEOP56t
-        Yzd39EY6kW8NFg2PQ2QU0VFOd5MbPTQaETTjShb1eg==
-X-Google-Smtp-Source: ABdhPJyvWXyQyxMKgjcPcX5Czb41yXvstd8O/7lilCQ0wJLap9p1elt+zFg/coXZrQRfng4blMF+eucPkgzZiOCg2RY=
-X-Received: by 2002:a5d:6241:0:b0:207:ac0e:3549 with SMTP id
- m1-20020a5d6241000000b00207ac0e3549mr1040376wrv.343.1649690982963; Mon, 11
- Apr 2022 08:29:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <69656438-8b9a-000b-0702-02dc480639f9@linux.intel.com>
- <20220407085721.3289414-1-florian.fischer@muhq.space> <20220407085721.3289414-3-florian.fischer@muhq.space>
- <CAP-5=fWC5e9PTs9PVttVDdNbCzYQVeqyuf95q181Vkg4NqJxqg@mail.gmail.com> <20220410164136.bxqtpbrmfbqxdx4n@pasture>
-In-Reply-To: <20220410164136.bxqtpbrmfbqxdx4n@pasture>
-From:   Ian Rogers <irogers@google.com>
-Date:   Mon, 11 Apr 2022 08:29:30 -0700
-Message-ID: <CAP-5=fXuR2tK_4FDnRA88a9wQkndbqyeN6G2muppaMhV5mAQ=A@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] perf stat: add rusage utime and stime events
-To:     Florian Fischer <florian.fischer@muhq.space>
-Cc:     Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Florian Schmaus <flow@cs.fau.de>
+        Mon, 11 Apr 2022 11:33:44 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE8F35DE1;
+        Mon, 11 Apr 2022 08:31:29 -0700 (PDT)
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23BDm2x4016697;
+        Mon, 11 Apr 2022 15:30:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=l9AB7GVsGiap+WlF670Iih31yy9cSLCunm8PRyeTp6U=;
+ b=XrfFDWagaHFjztFzzu9hrdCXa0WLKGJsLQTB1fzwS2psGipuokfNbAQEJ487Y+C3RHtb
+ mn+ujeaVQZ8tFiw226o1Q22vTesrh3QiItMmFfEFY+GsDT/url56kLbhusWUddW/5g1k
+ 21f6+Pzq9i9KFJYf4N4H3H+A7qZhq+pZWJt8/e5au1xowI6/c4xO01hfat5VfLrkKmJV
+ vgC7zO7E1eZQjkh9DewNxEPqZlJBWkb4nSDvnKO+sut5tEBtzFVY53u2XbF8AbhU/McU
+ QOVNZrR1V3fqQH8IOFGrCZY9flNkbrVitneY7ehgrFqXxbmGB5jUpflKxFH5v2vwYn8G gQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3fcnhhaced-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 11 Apr 2022 15:30:58 +0000
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23BEKrsx014370;
+        Mon, 11 Apr 2022 15:30:55 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3fcnhhacdd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 11 Apr 2022 15:30:55 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23BFMCs0024027;
+        Mon, 11 Apr 2022 15:30:53 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04ams.nl.ibm.com with ESMTP id 3fb1s8ucdf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 11 Apr 2022 15:30:53 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23BFUpN745154646
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 11 Apr 2022 15:30:51 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2069F52050;
+        Mon, 11 Apr 2022 15:30:51 +0000 (GMT)
+Received: from sig-9-65-89-227.ibm.com (unknown [9.65.89.227])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id B72E95204F;
+        Mon, 11 Apr 2022 15:30:48 +0000 (GMT)
+Message-ID: <6798c67d748ecdc92455a8be8c63fb55e243368a.camel@linux.ibm.com>
+Subject: Re: [PATCH 4/7] KEYS: Introduce a builtin root of trust key flag
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Snowberg <eric.snowberg@oracle.com>
+Cc:     David Howells <dhowells@redhat.com>,
+        "dwmw2@infradead.org" <dwmw2@infradead.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        "pvorel@suse.cz" <pvorel@suse.cz>, "tiwai@suse.de" <tiwai@suse.de>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Date:   Mon, 11 Apr 2022 11:30:48 -0400
+In-Reply-To: <BFA04505-F4BC-4CF8-B813-EE81DBD90E09@oracle.com>
+References: <20220406015337.4000739-1-eric.snowberg@oracle.com>
+         <20220406015337.4000739-5-eric.snowberg@oracle.com>
+         <4fbef0889d6f286c7fcd317db099b4857e1b2fa3.camel@linux.ibm.com>
+         <EF1544D5-54E8-4D47-82F8-F9337CA7AEA0@oracle.com>
+         <b8965652274b49ba7c6f67cad6d42965cf984b42.camel@linux.ibm.com>
+         <16DDA7F1-95BA-4279-BE4E-9F713A905B36@oracle.com>
+         <986199739ff8bd730b9aabe8882e245946d3d9e9.camel@linux.ibm.com>
+         <BFA04505-F4BC-4CF8-B813-EE81DBD90E09@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Onkk5hMhE7Dop4lPIT_dAQZd5PBFSuf7
+X-Proofpoint-ORIG-GUID: f9XCZDuQK4ykRc0vIg5oq3JqbAZx1R-l
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-11_06,2022-04-11_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ mlxlogscore=999 spamscore=0 mlxscore=0 lowpriorityscore=0 suspectscore=0
+ phishscore=0 impostorscore=0 clxscore=1015 priorityscore=1501 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204110085
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 10, 2022 at 9:41 AM Florian Fischer
-<florian.fischer@muhq.space> wrote:
->
-> > > This patch adds two new tool internal events 'rusage_user_time'
-> > > and 'rusage_system_time' as well as their aliases 'ru_utime' and
-> > > 'ru_stime', similarly to the already present 'duration_time' event.
-> > >
-> > > Both events use the already collected rusage information obtained by wait4
-> > > and tracked in the global ru_stats.
-> > >
-> > > Examples presenting cache-misses and rusage information in both human and
-> > > machine-readable form:
-> > >
-> > > $ ./perf stat -e duration_time,ru_utime,ru_stime,cache-misses -- grep -q -r duration_time .
-> > >
-> > >  Performance counter stats for 'grep -q -r duration_time .':
-> > >
-> > >         67,422,542 ns   duration_time:u
-> > >         50,517,000 ns   ru_utime:u
-> > >         16,839,000 ns   ru_stime:u
-> > >             30,937      cache-misses:u
-> > >
-> > >        0.067422542 seconds time elapsed
-> > >
-> > >        0.050517000 seconds user
-> > >        0.016839000 seconds sys
-> > >
-> > > $ ./perf stat -x, -e duration_time,ru_utime,ru_stime,cache-misses -- grep -q -r duration_time .
-> > > 72134524,ns,duration_time:u,72134524,100.00,,
-> > > 65225000,ns,ru_utime:u,65225000,100.00,,
-> > > 6865000,ns,ru_stime:u,6865000,100.00,,
-> > > 38705,,cache-misses:u,71189328,100.00,,
-> >
-> > This is really nice. For metric code we currently handle duration_time
-> > in a special way, for example:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/metricgroup.c?h=perf/core#n745
-> > https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/metricgroup.c?h=perf/core#n1131
-> > We will need to do something similar with these tool events, but I'm
-> > happy that it can be follow-up work.
-> >
-> > I'm not a huge fan of the names ru_utime and ru_stime, two thoughts
-> > here we could do duration_time:u and duration_time:k but I don't think
-> > that really makes sense. My preference would be to just call ru_utime
-> > user_time and ru_stime system_time.
->
-> I considered ru_{u,s}_time only as aliases because those are the field names in
-> the rusage struct filled by wait4 and are probably known by perf users.
-> The "official" names are currently rusage_{user,system}_time.
-> I could change them to only {user,system}_time because those names are more in line
-> with the already present duration_time and are independent of the rusage
-> implementation detail.
->
-> What do you think of?
+On Fri, 2022-04-08 at 21:59 +0000, Eric Snowberg wrote:
+> > On Apr 8, 2022, at 12:49 PM, Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > 
+> > On Fri, 2022-04-08 at 17:34 +0000, Eric Snowberg wrote:
+> >> 
+> >>> On Apr 8, 2022, at 10:55 AM, Mimi Zohar <zohar@linux.ibm.com> wrote:
+> >>> 
+> >>> On Fri, 2022-04-08 at 15:27 +0000, Eric Snowberg wrote:
+> >>>> 
+> >>>>> On Apr 8, 2022, at 8:40 AM, Mimi Zohar <zohar@linux.ibm.com> wrote:
+> >>>>> 
+> >>>>> On Tue, 2022-04-05 at 21:53 -0400, Eric Snowberg wrote:
+> >>>>>> 
+> >>>>>> The first type of key to use this is X.509.  When a X.509 certificate
+> >>>>>> is self signed, has the kernCertSign Key Usage set and contains the
+> >>>>>> CA bit set this new flag is set.
+> >>>>>> 
+> >>>>>> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+> >>>>>> 
+> >>>>>> diff --git a/include/linux/key.h b/include/linux/key.h
+> >>>>>> index 7febc4881363..97f6a1f86a27 100644
+> >>>>>> --- a/include/linux/key.h
+> >>>>>> +++ b/include/linux/key.h
+> >>>>>> @@ -230,6 +230,7 @@ struct key {
+> >>>>>> #define KEY_FLAG_ROOT_CAN_INVAL  7       /* set if key can be invalidated by root without permission */
+> >>>>>> #define KEY_FLAG_KEEP            8       /* set if key should not be removed */
+> >>>>>> #define KEY_FLAG_UID_KEYRING     9       /* set if key is a user or user session keyring */
+> >>>>>> +#define KEY_FLAG_BUILTIN_ROT    10      /* set if key is a builtin Root of Trust key */
+> >>>>>> 
+> >>>>>>  /* the key type and key description string
+> >>>>>>   * - the desc is used to match a key against search criteria
+> >>>>>> @@ -290,6 +291,7 @@ extern struct key *key_alloc(struct key_type *type,
+> >>>>>> #define KEY_ALLOC_BYPASS_RESTRICTION     0x0008  /* Override the check on restricted keyrings */
+> >>>>>> #define KEY_ALLOC_UID_KEYRING            0x0010  /* allocating a user or user session keyring */
+> >>>>>> #define KEY_ALLOC_SET_KEEP               0x0020  /* Set the KEEP flag on the key/keyring */
+> >>>>>> +#define KEY_ALLOC_BUILT_IN_ROT          0x0040  /* Add builtin root of trust key */
+> >>>>> 
+> >>>>> Since the concept of root of trust is not generic, but limited to
+> >>>>> specific keyrings, the root CA certificate signing keys on the
+> >>>>> "machine" keyring need to be identified.  Similar to the
+> >>>>> KEY_ALLOC_BUILT_IN/KEY_FLAG_BUILTIN, new flags
+> >>>>> KEY_ALLOC_MACHINE/KEY_FLAG_MACHINE should be defined instead.
+> >>>> 
+> >>>> I’m open to renaming these, however this name change seems confusing to me.  
+> >>>> This flag gets set when the X.509 certificate contains the three CA requirements 
+> >>>> identified above.  The remaining keys in the machine keyring can be used for 
+> >>>> anything else.
+> >>> 
+> >>> Renaming the flag to KEY_ALLOC_MACHINE/KEY_FLAG_MACHINE differentiates
+> >>> between the "builtin" keys from the "machine" keys.  The trust models
+> >>> are very different.
+> >> 
+> >> Isn’t the trust model the same for machine and secondary keys?  Both are supplied by 
+> >> the end-user. That is why I’m confused by naming something _MACHINE when it applies 
+> >> to more than one keyring.
+> > 
+> > True both are supplied by the end-user, but the trust models are
+> > different.
+> 
+> I think I need more information here, I’m not seeing how they are different trust 
+> models.
 
-I like user_time and system_time, short and to the point [1] while
-satisfying being intention-revealing. The aliases, ru_utime and
-ru_stime, are fine but a bit of an acronym soup. They mean we need to
-special case more names in the metric code. I don't know how others
-feel but I'd stick to just user_time and system_time.
+In order to discuss trust models, we need to understand the different
+use-cases that are being discussed here without ever having been
+explicitly stated.  Here are a few:
+- Allow users to sign their own kernel modules.
+- Allow users to selectively authorize 3rd party certificates to verify
+kernel modules.
+- From an IMA perspective, allow users to sign files within their own
+software packages.
 
-Thanks,
-Ian
+Each of the above use-cases needs to be independently configurable,
+thoroughly explained, and enforced.
+
+thanks,
+
+Mimi
 
 
-[1] https://www.kernel.org/doc/html/v4.10/process/coding-style.html#naming
+> 
+> >  In one case the certificates are coming indirectly from
+> > firmware,
 
-> ---
->  tools/perf/util/parse-events.c | 4 ++--
->  tools/perf/util/parse-events.l | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
-> index c232ab79d434..afcba6671748 100644
-> --- a/tools/perf/util/parse-events.c
-> +++ b/tools/perf/util/parse-events.c
-> @@ -160,11 +160,11 @@ struct event_symbol event_symbols_tool[PERF_TOOL_LAST] = {
->                 .alias  = "",
->         },
->         [PERF_TOOL_RU_UTIME] = {
-> -               .symbol = "rusage_user_time",
-> +               .symbol = "user_time",
->                 .alias  = "ru_utime",
->         },
->         [PERF_TOOL_RU_STIME] = {
-> -               .symbol = "rusage_system_time",
-> +               .symbol = "system_time",
->                 .alias  = "ru_stime",
->         },
->  };
-> diff --git a/tools/perf/util/parse-events.l b/tools/perf/util/parse-events.l
-> index 3c7227b8035c..7ee8613b6011 100644
-> --- a/tools/perf/util/parse-events.l
-> +++ b/tools/perf/util/parse-events.l
-> @@ -353,8 +353,8 @@ alignment-faults                            { return sym(yyscanner, PERF_TYPE_SOFTWARE, PERF_COUNT_SW_AL
->  emulation-faults                               { return sym(yyscanner, PERF_TYPE_SOFTWARE, PERF_COUNT_SW_EMULATION_FAULTS); }
->  dummy                                          { return sym(yyscanner, PERF_TYPE_SOFTWARE, PERF_COUNT_SW_DUMMY); }
->  duration_time                                  { return tool(yyscanner, PERF_TOOL_DURATION_TIME); }
-> -rusage_user_time|ru_utime      { return tool(yyscanner, PERF_TOOL_RU_UTIME); }
-> -rusage_system_time|ru_stime    { return tool(yyscanner, PERF_TOOL_RU_STIME); }
-> +user_time|ru_utime     { return tool(yyscanner, PERF_TOOL_RU_UTIME); }
-> +system_time|ru_stime   { return tool(yyscanner, PERF_TOOL_RU_STIME); }
->  bpf-output                                     { return sym(yyscanner, PERF_TYPE_SOFTWARE, PERF_COUNT_SW_BPF_OUTPUT); }
->  cgroup-switches                                        { return sym(yyscanner, PERF_TYPE_SOFTWARE, PERF_COUNT_SW_CGROUP_SWITCHES); }
->
-> --
-> 2.35.1
->
-> Florian Fischer

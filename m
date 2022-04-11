@@ -2,102 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 702164FBFD1
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:06:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 554184FBFD6
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:07:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347616AbiDKPIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 11:08:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59900 "EHLO
+        id S1347626AbiDKPJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 11:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242472AbiDKPIV (ORCPT
+        with ESMTP id S1343773AbiDKPJT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 11:08:21 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D3A26AC9
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:06:02 -0700 (PDT)
-From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649689560;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=0SpnBUNYF7IdMykaPknEWXlhXxtB3Szs3zjTPH9JYdo=;
-        b=PbAYyuPoBduMJ19YSTPzj9A2Gvz5vsQgcCKAWM6Qoxq+pR+NvhdrAmMJ3SYVjwuCFp7cuM
-        7iS+grK0BeRrbzPES145R2S4pNPb3mIv8vDkH5jEAnsWvwB1gS2jIY6jkCFb14hiq1TFx0
-        8mH3bNeoVPvov0ufXIVjq7wWcqiBv5qGl0O0JBJq6o7ibE/GVirsTdNHM3k1Am2xhyOokF
-        /S8rbwLejiB3II9RRB+GKnUQ44a/QtjM3e9XP7aEZwg4MRdPiwiWD4lMLsaX6Ln0r6Fkit
-        uotwOTRjjZZynh/PfcCbCMu/hk1DqUBugPqjG5WeCaS+Qywq0Ah7m9ZTdpuK0w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649689560;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=0SpnBUNYF7IdMykaPknEWXlhXxtB3Szs3zjTPH9JYdo=;
-        b=5/yKKDhzWh3KVs5E5CvoSqXM8e4bIzDIfkmR9Zp/g1VNZgrmU77N/vRPQjOwuQUKkolqql
-        IOXi8pi+Ee3WLvDQ==
-To:     linux-kernel@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: [PATCH] include/linux/find: Fix documentation
-Date:   Mon, 11 Apr 2022 17:05:55 +0200
-Message-Id: <20220411150555.26023-1-anna-maria@linutronix.de>
+        Mon, 11 Apr 2022 11:09:19 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD20DEE8
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:07:03 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id nt14-20020a17090b248e00b001ca601046a4so18715128pjb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:07:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=dPdu8Eiipa0SimY9s3UtwwUyWmEESIKixwaOvVsXgGk=;
+        b=fPoN4PzXw5Nx0S16GH9zAA+N8qLMX77QH+IQL+Zro+uR5vWA6DYNpt+eA/Uykb4APB
+         WvP+K888IGg5bWeBYo6xzTQUKqqbVBwoJjbblyalY/8FU2uumMLDW8eZA4DNwiGrkcYp
+         iq7Vxnwr81oH96Y2xMlPpU+ssf9D9N8k900dgevGPB1KYn8kjhx0falLkyj/lzxmvgoc
+         i3gBzCLTJeK+qdWEh1ISMXL+z3Vq3FFQM5qu3fYLKHoQ5zj4BCfAcZGDIFUvQT4VerGo
+         54eAV4pI3R1ZM+kOS04YHmgAPR16sp8rrRKH1sxuY+UWhexKq7ksyNxSGhPNLKglRrxP
+         ZKDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dPdu8Eiipa0SimY9s3UtwwUyWmEESIKixwaOvVsXgGk=;
+        b=tQispa1qK5TvCMxkGPXMJrQcGRfCLF3j9Zlbi35LipTOWmO0XJAPj724v5ENOUx/Jo
+         U8ZCOpsyX0tJ18TGWAednWf2e9NNdy91Rp7LiQcyqwKLgqRydZxDZzog097UTl5C4qQA
+         EgNKFqouRHIqN4S5KWXCyUds8bfQYPcOLDAwYA21E97/Lp8Fodd8cjrdWcznsze3e0Ej
+         MD/ANCavik8c7qRiEMLNXo//GeGRA/mn5ASnHmLkEjQkfZiIl7tg5+aI1ogjkxcTI+gU
+         lL/LUGlUzo21pKd8QCK87yF33buPsOZ7eIDZbmiGgkV+5CyljaRDLvCWIbSQwMjVrMTD
+         KdFg==
+X-Gm-Message-State: AOAM533NsOQk196AMJwvZG5LL3yVsQCLjzj2Ev2WQzUCwFdU3wPsS2fM
+        eoJuVj+gYyEjGzRW5ik25W8Qbg==
+X-Google-Smtp-Source: ABdhPJwWxloJ5ZjN13tMopqeMsu31rcmrfB0Bx9G2376e9G0Y6ZGn5Fd+LcgqDo3n2MDJMXUzAYw6A==
+X-Received: by 2002:a17:90a:7004:b0:1cb:55d6:9f23 with SMTP id f4-20020a17090a700400b001cb55d69f23mr16547316pjk.187.1649689622903;
+        Mon, 11 Apr 2022 08:07:02 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id a9-20020aa78649000000b004fe3d6c1731sm22743924pfo.175.2022.04.11.08.07.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Apr 2022 08:07:02 -0700 (PDT)
+Date:   Mon, 11 Apr 2022 15:06:58 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Alexandru Elisei <alexandru.elisei@arm.com>
+Cc:     Will Deacon <will@kernel.org>, Peter Gonda <pgonda@google.com>,
+        kvm list <kvm@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Anup Patel <anup@brainfault.org>, maz@kernel.org
+Subject: Re: [PATCH v4.1] KVM, SEV: Add KVM_EXIT_SHUTDOWN metadata for SEV-ES
+Message-ID: <YlREEillLRjevKA2@google.com>
+References: <20220407210233.782250-1-pgonda@google.com>
+ <Yk+kNqJjzoJ9TWVH@google.com>
+ <CAMkAt6oc=SOYryXu+_w+WZR+VkMZfLR3_nd=hDvMU_cmOjJ0Xg@mail.gmail.com>
+ <YlBqYcXFiwur3zmo@google.com>
+ <20220411091213.GA2120@willie-the-truck>
+ <YlQ0LZyAgjGr7qX7@e121798.cambridge.arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YlQ0LZyAgjGr7qX7@e121798.cambridge.arm.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The order of the arguments in function documentation doesn't fit the
-implementation. Change the documentation so that it corresponds to the
-code. This prevent people to get confused when reading the documentation.
+On Mon, Apr 11, 2022, Alexandru Elisei wrote:
+> Hi,
+>
+> On Mon, Apr 11, 2022 at 10:12:13AM +0100, Will Deacon wrote:
+> > Hi Sean,
+> >
+> > Cheers for the heads-up.
+> >
+> > [+Marc and Alex as this looks similar to [1]]
+> >
+> > On Fri, Apr 08, 2022 at 05:01:21PM +0000, Sean Christopherson wrote:
+> > > system_event.flags is broken (at least on x86) due to the prior 'type' field not
+> > > being propery padded, e.g. userspace will read/write garbage if the userspace
+> > > and kernel compilers pad structs differently.
+> > >
+> > >           struct {
+> > >                   __u32 type;
+> > >                   __u64 flags;
+> > >           } system_event;
+> >
+> > On arm64, I think the compiler is required to put the padding between type
+> > and flags so that both the struct and 'flags' are 64-bit aligned [2]. Does
+> > x86 not offer any guarantees on the overall structure alignment?
+>
+> This is also my understanding. The "Procedure Call Standard for the Arm
+> 64-bit Architecture" [1] has these rules for structs (called "aggregates"):
 
-Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
----
- include/linux/find.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+AFAIK, all x86 compilers will pad structures accordingly, but a 32-bit userspace
+running against a 64-bit kernel will have different alignment requirements, i.e.
+won't pad, and x86 supports CONFIG_KVM_COMPAT=y.  And I have no idea what x86's
+bizarre x32 ABI does.
 
-diff --git a/include/linux/find.h b/include/linux/find.h
-index 5bb6db213bcb..424ef67d4a42 100644
---- a/include/linux/find.h
-+++ b/include/linux/find.h
-@@ -21,8 +21,8 @@ extern unsigned long _find_last_bit(const unsigned long *addr, unsigned long siz
- /**
-  * find_next_bit - find the next set bit in a memory region
-  * @addr: The address to base the search on
-- * @offset: The bitnumber to start searching at
-  * @size: The bitmap size in bits
-+ * @offset: The bitnumber to start searching at
-  *
-  * Returns the bit number for the next set bit
-  * If no bits are set, returns @size.
-@@ -50,8 +50,8 @@ unsigned long find_next_bit(const unsigned long *addr, unsigned long size,
-  * find_next_and_bit - find the next set bit in both memory regions
-  * @addr1: The first address to base the search on
-  * @addr2: The second address to base the search on
-- * @offset: The bitnumber to start searching at
-  * @size: The bitmap size in bits
-+ * @offset: The bitnumber to start searching at
-  *
-  * Returns the bit number for the next set bit
-  * If no bits are set, returns @size.
-@@ -79,8 +79,8 @@ unsigned long find_next_and_bit(const unsigned long *addr1,
- /**
-  * find_next_zero_bit - find the next cleared bit in a memory region
-  * @addr: The address to base the search on
-- * @offset: The bitnumber to start searching at
-  * @size: The bitmap size in bits
-+ * @offset: The bitnumber to start searching at
-  *
-  * Returns the bit number of the next zero bit
-  * If no bits are zero, returns @size.
--- 
-2.20.1
+> > > Our plan to unhose this is to change the struct as follows and use bit 31 in the
+> > > 'type' to indicate that ndata+data are valid.
+> > >
+> > >           struct {
+> > >                         __u32 type;
+> > >                   __u32 ndata;
+> > >                   __u64 data[16];
+> > >                 } system_event;
+> > >
+> > > Any objection to updating your architectures to use a helper to set the bit and
+> > > populate ndata+data accordingly?  It'll require a userspace update, but v5.18
+> > > hasn't officially released yet so it's not kinda sort not ABI breakage.
+> >
+> > It's a bit annoying, as we're using the current structure in Android 13 :/
+> > Obviously, if there's no choice then upstream shouldn't worry, but it means
+> > we'll have to carry a delta in crosvm. Specifically, the new 'ndata' field
+> > is going to be unusable for us because it coincides with the padding.
 
+Yeah, it'd be unusuable for existing types.  One idea is that we could define the
+ABI to be that the RESET and SHUTDOWN types have an implicit ndata=1 on arm64 and
+RISC-V.  That would allow keeping the flags interpretation and so long as crosvm
+doesn't do something stupid like compile with "pragma pack" (does clang even support
+that?), there's no delta necessary for Android.
+
+> Just a thought, but wouldn't such a drastical change be better implemented
+> as a new exit_reason and a new associated struct?
+
+Maybe?  I wasn't aware that arm64/RISC-V picked up usage of "flags" when I
+suggested this, but I'm not sure it would have changed anything.  We could add
+SYSTEM_EVENT2 or whatever, but since there's no official usage of flags, it seems
+a bit gratutious.

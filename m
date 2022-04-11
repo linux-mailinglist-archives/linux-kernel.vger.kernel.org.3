@@ -2,101 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 636D94FBDDC
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 15:54:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B7DC4FBDC8
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 15:50:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346788AbiDKN4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 09:56:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46404 "EHLO
+        id S1346735AbiDKNxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 09:53:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238419AbiDKN4I (ORCPT
+        with ESMTP id S1346748AbiDKNwc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 09:56:08 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC4624F2C;
-        Mon, 11 Apr 2022 06:53:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649685235; x=1681221235;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ietpjAH2T/bkGKzP1TWlkHX10R1PiEwOjSTCOSWzC/E=;
-  b=dAwO6bDG/YC9ESQmMFpbbD2uW3ozKtW/UAk9hNSrEh6oULLuFVY/b7gp
-   upLGbcLRNqZVtbqPfnbLi+0uwhoaLDd7DGTMxNl7Cf6urzEOEgIYEkn5S
-   ecIhMWQbVqITvMd09HFmWZLSOfj7NwRjcrlw6tc+ICML7XSb7CFQzyasH
-   6xptn2gJUfdBN+bPWimaffjXBFO1W38G2qexqN/QmS0fVusLqgNY4gsSj
-   vO8MB+xP58VBHN6UGy2jdH7NA/L4rZqZWT96HRh1CRKw8ykm4AGOuB9BL
-   PvgPymyAKxotzAeKIsYcAKxAF4wb1vi8q4Eh13bRcI9YN4s3y5cjoxigW
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="242057827"
-X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="242057827"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 06:53:54 -0700
-X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="654627742"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 06:53:51 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1nduQl-001Dys-JD;
-        Mon, 11 Apr 2022 16:50:11 +0300
-Date:   Mon, 11 Apr 2022 16:50:11 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Rob Herring <robh@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Mon, 11 Apr 2022 09:52:32 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A42424090
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 06:50:17 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id b189so10631401qkf.11
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 06:50:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :content-transfer-encoding:user-agent:mime-version;
+        bh=Ee9cHL3O4lr4TWLTa3s8ofVsmmXbJuEmkg2vJR97Q5M=;
+        b=geFfMqZanAauvixw04TDDWB3pMYfZF9YMaeCNuqqMuK6YkEaHIg4N1WFuR4NOYrm81
+         Pnib5t96sONoKMMf4N2OqlROMFFoiaxYbCYq9KUk8X8jYh0bKYEEf1ICMCVk2Lk8FqCZ
+         our+s6P0g2iNTgCFt4oOnsN5lCEbmpTor8e88Q/R7VFbajcUFp0qRQpP8PDJeeNeKSEJ
+         xG7PiCjQxlk31z+0y3byT95S9aQMc63CjYB2et+CwkcHyz71p9OP9B46ysKxDT4uVMLO
+         qx7c9aVlQGJZqNabQWdONLPve3Qyk/SnHsB3Y9Ss3uFaQ7M4665lJcaTjUuG/MNrw0ln
+         myXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:content-transfer-encoding:user-agent:mime-version;
+        bh=Ee9cHL3O4lr4TWLTa3s8ofVsmmXbJuEmkg2vJR97Q5M=;
+        b=sFnOSgGfdGBNXPU3IbXPdZEvIArPFwAJ64yyCKeu9puF8HwdVdOpPoHHQAUxwMwCml
+         F1ESLkjU/LB1tP90LXv1MZO6AeL/TXnj3OGrMQfX0+X54wNYaUNkm3daTzYxLHG+tl4I
+         hNOavOx5OOhV/herFx01Vk72m9c3mt4SdtvlTOM2LzsABPqdmV53mvnADm19zOGwcACa
+         QXjpdf8IFTumglZnJUUY+WQO7wpFnc4dCmwrEX2ZfUARDZaUjY5cID8mPgI9qeS/nk4r
+         doPVwHGYMUO1ZRgSCbuVI6xrPMBdKJOroEMhIEdH2DB0RdVXqz6CiWJSJbBCf4ug6L5j
+         6zIQ==
+X-Gm-Message-State: AOAM530hg9TFg/GgtNzXnzZxk/yIW9kK9oIdQ1E+OgF6GGUR9DNbveRM
+        CS77ufstIh8XwAo2lwIk+sN+3w==
+X-Google-Smtp-Source: ABdhPJzTPsAEpa9EYwweA9WGhebfnIttjIU58Yz6eHg0zov/iI3h1PCXca6xczQJyN45UetI2l6wKg==
+X-Received: by 2002:a05:620a:121c:b0:67d:da02:19e3 with SMTP id u28-20020a05620a121c00b0067dda0219e3mr21500316qkj.173.1649685016543;
+        Mon, 11 Apr 2022 06:50:16 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
+        by smtp.gmail.com with ESMTPSA id p8-20020a05620a15e800b0069c1006a883sm3162930qkm.2.2022.04.11.06.50.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Apr 2022 06:50:16 -0700 (PDT)
+Message-ID: <854cc6172735360f73d5a93ddadbb3030cc1a57b.camel@ndufresne.ca>
+Subject: Re: [PATCH v2 2/2] media: v4l: Add H265 pixel format
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     James_Lin <Ping-lei.Lin@mediatek.com>, linux-kernel@vger.kernel.org
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        Ming Qian <ming.qian@nxp.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
         Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Len Brown <lenb@kernel.org>,
-        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-        Michael Walle <michael@walle.cc>
-Subject: Re: [PATCH v6 1/5] device property: Allow error pointer to be passed
- to fwnode APIs
-Message-ID: <YlQyEz3/J0rb2Hew@smile.fi.intel.com>
-References: <20220408184844.22829-1-andriy.shevchenko@linux.intel.com>
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, lecopzer.chen@mediatek.com,
+        max.yan@mediatek.com, sherlock.chang@mediatek.com,
+        tm.wu@mediatek.com
+Date:   Mon, 11 Apr 2022 09:50:14 -0400
+In-Reply-To: <20220411080120.26008-3-Ping-lei.Lin@mediatek.com>
+References: <20220411080120.26008-1-Ping-lei.Lin@mediatek.com>
+         <20220411080120.26008-3-Ping-lei.Lin@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220408184844.22829-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 09:48:40PM +0300, Andy Shevchenko wrote:
-> Some of the fwnode APIs might return an error pointer instead of NULL
-> or valid fwnode handle. The result of such API call may be considered
-> optional and hence the test for it is usually done in a form of
-> 
-> 	fwnode = fwnode_find_reference(...);
-> 	if (IS_ERR(fwnode))
-> 		...error handling...
-> 
-> Nevertheless the resulting fwnode may have bumped the reference count
-> and hence caller of the above API is obliged to call fwnode_handle_put().
-> Since fwnode may be not valid either as NULL or error pointer the check
-> has to be performed there. This approach uglifies the code and adds
-> a point of making a mistake, i.e. forgetting about error point case.
-> 
-> To prevent this, allow an error pointer to be passed to the fwnode APIs.
+Le lundi 11 avril 2022 =C3=A0 16:01 +0800, James_Lin a =C3=A9crit=C2=A0:
+> Add H265 pixel format.
+> So driver can recognize external camera devices=20
+> whom use h265 to describe High Efficiency Video Coding method.
+>=20
+> Signed-off-by: James_Lin <Ping-lei.Lin@mediatek.com>
+> ---
+>  .../userspace-api/media/v4l/pixfmt-compressed.rst      | 10 ++++++++++
+>  drivers/media/v4l2-core/v4l2-ioctl.c                   |  1 +
+>  include/uapi/linux/videodev2.h                         |  1 +
+>  3 files changed, 12 insertions(+)
+>=20
+> diff --git a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst =
+b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
+> index 967fc803ef94..75292aafe2eb 100644
+> --- a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
+> +++ b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
+> @@ -36,6 +36,16 @@ Compressed Formats
+>        - MPEG multiplexed stream. The actual format is determined by
+>  	extended control ``V4L2_CID_MPEG_STREAM_TYPE``, see
+>  	:ref:`mpeg-control-id`.
+> +    * .. _V4L2-PIX-FMT-H265:
+> +
+> +      - ``V4L2_PIX_FMT_H265``
 
-Rafael and Greg, if this okay for you, can the first three patches be
-applied, so we will have at least the fix in and consider constification
-a further work?
+Please name this V4L2_PIX_FMT_HEVC. This has been discussed few years ago,
+related to the staging V4L2_PIX_FMT_HEVC_SLICE format (which is being worke=
+d on
+to be taken out of staging). HEVC was preferred over H.265, so lets be
+consistent now that decision has been made.
 
--- 
-With Best Regards,
-Andy Shevchenko
-
+> +      - 'H265'
+> +      - H.265 Access Unit.
+> +	The decoder expects one Access Unit per buffer.
+> +	The encoder generates one Access Unit per buffer.
+> +	If :ref:`VIDIOC_ENUM_FMT` reports ``V4L2_FMT_FLAG_CONTINUOUS_BYTESTREAM=
+``
+> +	then the decoder has no	requirements since it can parse all the
+> +	information from the raw bytestream.
+>      * .. _V4L2-PIX-FMT-H264:
+> =20
+>        - ``V4L2_PIX_FMT_H264``
+> diff --git a/drivers/media/v4l2-core/v4l2-ioctl.c b/drivers/media/v4l2-co=
+re/v4l2-ioctl.c
+> index 96e307fe3aab..aeaeb29307a4 100644
+> --- a/drivers/media/v4l2-core/v4l2-ioctl.c
+> +++ b/drivers/media/v4l2-core/v4l2-ioctl.c
+> @@ -1402,6 +1402,7 @@ static void v4l_fill_fmtdesc(struct v4l2_fmtdesc *f=
+mt)
+>  		case V4L2_PIX_FMT_JPEG:		descr =3D "JFIF JPEG"; break;
+>  		case V4L2_PIX_FMT_DV:		descr =3D "1394"; break;
+>  		case V4L2_PIX_FMT_MPEG:		descr =3D "MPEG-1/2/4"; break;
+> +		case V4L2_PIX_FMT_H265:		descr =3D "H.265"; break;
+>  		case V4L2_PIX_FMT_H264:		descr =3D "H.264"; break;
+>  		case V4L2_PIX_FMT_H264_NO_SC:	descr =3D "H.264 (No Start Codes)"; brea=
+k;
+>  		case V4L2_PIX_FMT_H264_MVC:	descr =3D "H.264 MVC"; break;
+> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev=
+2.h
+> index 3768a0a80830..636e4236bfb8 100644
+> --- a/include/uapi/linux/videodev2.h
+> +++ b/include/uapi/linux/videodev2.h
+> @@ -691,6 +691,7 @@ struct v4l2_pix_format {
+>  #define V4L2_PIX_FMT_JPEG     v4l2_fourcc('J', 'P', 'E', 'G') /* JFIF JP=
+EG     */
+>  #define V4L2_PIX_FMT_DV       v4l2_fourcc('d', 'v', 's', 'd') /* 1394   =
+       */
+>  #define V4L2_PIX_FMT_MPEG     v4l2_fourcc('M', 'P', 'E', 'G') /* MPEG-1/=
+2/4 Multiplexed */
+> +#define V4L2_PIX_FMT_H265     v4l2_fourcc('H', '2', '6', '5') /* H265 wi=
+th start codes */
+>  #define V4L2_PIX_FMT_H264     v4l2_fourcc('H', '2', '6', '4') /* H264 wi=
+th start codes */
+>  #define V4L2_PIX_FMT_H264_NO_SC v4l2_fourcc('A', 'V', 'C', '1') /* H264 =
+without start codes */
+>  #define V4L2_PIX_FMT_H264_MVC v4l2_fourcc('M', '2', '6', '4') /* H264 MV=
+C */
 

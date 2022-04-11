@@ -2,83 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 409334FC204
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 18:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 513904FC208
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 18:14:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347519AbiDKQQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 12:16:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55018 "EHLO
+        id S1348376AbiDKQQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 12:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231284AbiDKQQC (ORCPT
+        with ESMTP id S1348447AbiDKQQO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 12:16:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93BC2B8;
-        Mon, 11 Apr 2022 09:13:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6EDA0B81704;
-        Mon, 11 Apr 2022 16:13:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76885C385A3;
-        Mon, 11 Apr 2022 16:13:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649693626;
-        bh=S4RgEBNrSyI+ophc0QVA8uNOdYjwnqrns4P7akRNFaI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=u6j2TNukG/Ye5tRQPNUxnV2SOuyDUoYoChUBMIbom+cpoQ0Zn/BEGeeQb3x33QKy6
-         iLS44nfmiV0iqUPciH14pEgtnMGByPaiINkJeyDpGpE+rhUC7ge4KRijekqh1TjRGA
-         qseaDRToWLTReU/pvUu+81XSxrsu93EoG7ecEWegxNmMpJAo8bZYHuyA0fs3ZClIGW
-         QzpjAN1iraiktH0G3WnTmK5oRfuB+thCM6cL9rMJ9OUBvGgu/C7i2Vi8x1wU7eFlw1
-         TZJwZzLxneElwllZsXdw3TPhhi3Xwhrvud+o0n4UdYwgYcQteqaYVLZoaENV7abKUm
-         IqFJ2fHTiw4MA==
-Message-ID: <1d595632-ae6d-39f0-b624-7dfc5bfc1ea7@kernel.org>
-Date:   Mon, 11 Apr 2022 10:13:44 -0600
+        Mon, 11 Apr 2022 12:16:14 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2073.outbound.protection.outlook.com [40.107.237.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F391C20BF2
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 09:13:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lNT4rtWqupdIohfLw7NtkvzBiv1C+3RTjU3IbVybXgj8PTLBpWt9Nm3iWmfaxvzauDk6BzqSdtj+bNawJNpWNwt22jVA46yMHIrLCrPUP42EfCQAdsiS56qizsCMTPDQC6Twh7IyxiPgzBagDeQ8YPobVHyXZZdKfAckO1s1ta7/ZqQF0oIOuMROrwNyFQune9hYtue3w+EnuqAj7rwFLMOFtbLWoBsrNvvXke/OL65rBHacbSbWf5skk8u/vDfv/x35/UuDxiRRmF2ofk7iuMntq7urp9WviFaLxPu00m3QNx67sPqBY1ZHGlcvnY1xYALNaDDEvl9bWc2BbAxgyw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iITXhDYtu1FB6SNXWz2hjHUWSMFNTY+zkMbH67WDAQA=;
+ b=IxCPSU4p4bXxQjWLWKiq+2425UIttPUiOs8zD8TZsrqQ4VhO0T9meL+Jcb3OILR2EL7BXj5cufG8OEp9aK+EO5TxLIgCMtHh3lehTOCg9Ai69d+Vnf2fmNC/Tago5CG2Hb1/ePwWbmjeU5bVaCL+G6A8s+CU++ZaWlhaqk4B1uS4NdyVlOEJBtB3Glw0v402nbtg9ARkvEWt6dAMnmUByTVObBiau+fQmYy/DUBDcdYrpkUIQ3sE25/gWbkMbICTWBmt0Fs6F30YeYrScYT+GGztfcYZo112TGlGvGr/g2FvYeNX+QO3LrbBU1zQCTGCqAFmzLtBUIOHajNrnMLEpg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iITXhDYtu1FB6SNXWz2hjHUWSMFNTY+zkMbH67WDAQA=;
+ b=nYz5DTOvsSp6I4FJN5c/8sVzjBsZ3T76hSsWflosdVFTvRgEomvZ+vVy/SEN6l7Wk/EiuUxz2kE12UmkDxPt8BMs92Z5a6s+knRyHPz8T7e8YxvixXMiXU5IjsqGAivNVP2UBm8k7dFsRK2roLY6I6DO7Jl9HeDuNNAogSF59XxXuVlGO+qpy12rJr0hlNryJB1j0nSN0iiNxTnvCN0dy26op3MLM7BuIgsNRdiZKU/0puiFSMU4lFXrTR9QwFkIx2zN4s1mmFoHNHCT9b/U0nRjdESm9rxr+mqGBMDkQbhsORSHW+lFgUFZHeVAFYJxFZJ42dJnUjyM6b3QEu1Hsw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by DM6PR12MB4619.namprd12.prod.outlook.com (2603:10b6:5:7c::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Mon, 11 Apr
+ 2022 16:13:56 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::cdfb:f88e:410b:9374]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::cdfb:f88e:410b:9374%6]) with mapi id 15.20.5144.029; Mon, 11 Apr 2022
+ 16:13:56 +0000
+Date:   Mon, 11 Apr 2022 13:13:55 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        intel-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 11/34] drm/i915/gvt: merge struct kvmgt_guest_info into
+ strut intel_vgpu
+Message-ID: <20220411161355.GM2120790@nvidia.com>
+References: <20220411141403.86980-1-hch@lst.de>
+ <20220411141403.86980-12-hch@lst.de>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220411141403.86980-12-hch@lst.de>
+X-ClientProxiedBy: MN2PR02CA0025.namprd02.prod.outlook.com
+ (2603:10b6:208:fc::38) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [PATCH net-next v2] net/ipv6: Introduce accept_unsolicited_na
- knob to implement router-side changes for RFC9131
-Content-Language: en-US
-To:     Arun Ajith S <aajith@arista.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        yoshfuji@linux-ipv6.org, kuba@kernel.org, pabeni@redhat.com,
-        corbet@lwn.net, prestwoj@gmail.com, gilligan@arista.com,
-        noureddine@arista.com, gk@arista.com
-References: <20220407074428.1623-1-aajith@arista.com>
- <d7a85a29-0d7f-b5e2-c908-4aa9f89bb476@kernel.org>
- <CAOvjArQcH1KRV3B1V9urYEV+6i3ZL6NbmkYjbu1icFBJZ3JVOQ@mail.gmail.com>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <CAOvjArQcH1KRV3B1V9urYEV+6i3ZL6NbmkYjbu1icFBJZ3JVOQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7c753088-26f1-4204-d7f1-08da1bd647b0
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4619:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB4619F28C79C472AB9AFD3E8EC2EA9@DM6PR12MB4619.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1XHWrV5aICV3CNatpoQUbpZtSRKRgEneO1AsREd+1Ov+/sR9APlcVSh6knX/ek+/oF7K65woxBeROpdPvBR0RQSA6orP+laxmyn2DD0e3I2q57zIJpI8tWO27c4u6BL8cvKxDaX6LoX0rbI6Ksa8Ei/Gd6s96ldnJkwUPxfvWNAnSXOowCk+ZWGCC1/ZGtsKIZOfA2llevdnBrIbpR5M99xrP2FE7gYky5Hy704lMO+a++0qZ8lbt+eaR88mBGAkJ/t/LIjDTd4iHLcZXFW2UhEjd+6Y/jRaRiy225IX9ZHAOAHxSJoCgOktot5wkGdH6SDBeKEZgKU2Ax98vYByVps0Max1m8lBsXEVC2RCLXKOIbXeUX566F1u8G8rt+PZ2U2VUy+pGPfhtyyd7DZ1SCjXHPTcBiUXNWueQ2pa4p2J9dPgLrL3LuwiG6LC/SyJordBx+MPSx2MhCZLpJcMdHlVKo3WgoFJppWNLEhRXHEU/PQ7ul2SW2Uso0ne9s+ymW59EHyy4h1bMBy5CfbDAxB4OLn6+BNGJBMD2djn4CLl7Wtc3pIJUxREivFzQ6UOYvnWZLi+zwEyALAVB8+Xlrq1GS87HvDYjYsLWNA6kPDYJZs1nKnzFJT/POwRrmbqjQEW/dkzCSWiuLEWIA5KUw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(4744005)(38100700002)(508600001)(6486002)(6916009)(86362001)(8936002)(66556008)(7416002)(5660300002)(4326008)(316002)(54906003)(8676002)(66946007)(66476007)(186003)(1076003)(26005)(83380400001)(6506007)(2616005)(6512007)(33656002)(36756003)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Sx46m3dzqIn1jtQme67/prDWldSz8EzE8Dl/IJ/xsAhxNTQ+t1RmTAciJ2JQ?=
+ =?us-ascii?Q?/PpbqtArZlJNw3mSEPGtue4jGboBmSclDPP3Ywi6IxXGn+Xmx+3sr5mNkF2H?=
+ =?us-ascii?Q?EnJwaAPUWGoD9vrOzaGj4v9H5ZcJ0Uu/+V3ISIpHlJwDupCbhtAIMAZGohjD?=
+ =?us-ascii?Q?VSueNi0nOtFcK3bDWxGEkG//fcJyd9NGBif8Gt/ruVF9KuvS9barAwcZjZ/V?=
+ =?us-ascii?Q?Rk+ZVt0iOP1IAWxBbWCjPPK3lUJcLvHk11Q+TuB7BRgb+z1V2I5c1yLEi7gj?=
+ =?us-ascii?Q?g1HisxkcwnmFNQvbuqwhNsy0pCpdSUw/OtqIanb29FHrvVJB+kZMNRYTiHSD?=
+ =?us-ascii?Q?5WRbmcOi4dJDYne1JthYUGPhBXoPKiiPU1wa8YJwQhbBwLldiDhCF7f6naOY?=
+ =?us-ascii?Q?C/PD4mQ1owVXxaevLG3UKa02Uq0ocLu8YgoS3Qw3Hagi2+I4RpZf076aZyLm?=
+ =?us-ascii?Q?kkAvz2y717OjWnglnvaj+HEzJxoPWr333gZLdZARepEKIQf0YqzLVd8LmXt/?=
+ =?us-ascii?Q?2mq8ir88npMN0+Asp37vxOGG2c6v8ECTUvXSu3OnCM1rKxdNZG0rJuJ25QJQ?=
+ =?us-ascii?Q?L6+bz/YrnHR1nH/lwOQIPxZ/TOLn8Ranbv4zeCcF4oVsUSPE30+h3Q7HoSbm?=
+ =?us-ascii?Q?GcMHHY340sDkABQoIP6dYFIHLCoFQpo0I0o1lhbJ4QBy8WGVLHKxgYKS0XoZ?=
+ =?us-ascii?Q?da4TmqSY6LKPr6smq2lz+2qlxTYiVRfTfw5UhuWyki8BkK14i+3ukyXNo56F?=
+ =?us-ascii?Q?ncCgfkb3g0WFspjjSZFo0yiV1VvKq07WWogbLSeURC4lJ3fgoI3FoInN1El2?=
+ =?us-ascii?Q?O90R8TwEGCK0HJggZWmPRE4HCjkBRYM1F8SSWeJomuw5MF8SS1WToULxonMP?=
+ =?us-ascii?Q?C11hnGnVr28iPKH6Q+qUJaOaB1FcTLShJq0gaN2WYZWNu3ecLVFoYpGtsekG?=
+ =?us-ascii?Q?AmKtxMUQpGk8UQjGx5Uk3pi6fNJXjrfv3icIbjZNWCMm4CrKYYE3IiFeCNM9?=
+ =?us-ascii?Q?hDbLeTrtE0ocPwWDZ/WtdFfnPtyLVyntzn2LowSp+2O4PUVlKrxdjDfh7zt9?=
+ =?us-ascii?Q?g7KgQfRE1iKVD9kVBTU0e/y3DGYeZGr28Efc+1xwMXALxdQ4fEd6XIgJ656k?=
+ =?us-ascii?Q?rJERUMWb4R/PhHn8pxMbCHEdv1xafs2yuUrHJaTBS0VMyXXB+aGNvvF4Ou7x?=
+ =?us-ascii?Q?bgImFT4kLFhLsLwq61GosfeVeVYytSwNLLkP3N8SXcXWA0NZsPuoP3nD/eBo?=
+ =?us-ascii?Q?kVXzsmfF8LI82kq8J33Vh8ygGm5WPAxd9NfI79RKsx+lh6hBIiE04oKFQwKq?=
+ =?us-ascii?Q?ilbWyAE2gncPSamFRGoNoy9XgFTO8R1ox5eo6cfzktZ03UlsGzugavKIaq+s?=
+ =?us-ascii?Q?vSTgsVW9lBVXKc8GuKNyhPAJcC/TvTscwcdKxaO5ky2WyY/gm+3i2HESy3HO?=
+ =?us-ascii?Q?zCoFkodyMqRoppE6o3s0O42aFuYPLvbGKH6jvxQ9jA+1Yyd+PM27Efpur9Zo?=
+ =?us-ascii?Q?FMnaB2tnmT3rlfFFIJtW0nzFhxtrDoEq39F8X/zfZUpPofaksiwJwZ1vooiI?=
+ =?us-ascii?Q?87DhT9U707t46x22z1n31ZNtqXF8YdUIZIXOUaqlKzrZEPMb/ds0swyb3k5/?=
+ =?us-ascii?Q?kbPAtyEMs4/km/ZjrpzKUKVEADisgbvCqrUTm4/5UYKFH1ljHQ2h2cX5Wvwy?=
+ =?us-ascii?Q?hRRGud8OaWuhcPkMoFu+gtUwmeB+Q13O3yGks802t0rxV7KxfRMtnsYpJ37C?=
+ =?us-ascii?Q?58lQGbnDvw=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7c753088-26f1-4204-d7f1-08da1bd647b0
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2022 16:13:56.7475
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vVg2qnYAPKmdKKYaf9yRbrOuJRWB0PKbMee2pTspBbCmvg6tcooXfks5Gum+VWwC
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4619
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/11/22 9:41 AM, Arun Ajith S wrote:
+On Mon, Apr 11, 2022 at 04:13:40PM +0200, Christoph Hellwig wrote:
+> Consolidate the per-VGPU structures into a single one.
 > 
-> mausezahn doesn't have good support for ICMPv6.
-> I tried using --type icmp6 -t icmp6 "type=136, payload=<HEX-PAYLOAD>"
-> to manually craft a NA packet with  the target address and the target
-> ll addr option.
-> But it still doesn't allow me to set the flags to mark it as an
-> unsolicited advertisement.
-> 
-> How about this alternative for a test:
-> 1. Setup a veth tunnel across two namespaces, one end being the host
-> and the other the router.
-> 2. On the host side, I can configure
-> net.ipv6.conf.<interface>.ndisc_notify to send out unsolicited NAs.
-> 3. On the router side, I can try out various combinations of
-> (accept_unsolicited_na, drop_unsolicted_na and forwarding)
-> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  drivers/gpu/drm/i915/gvt/gvt.h   |   8 +++
+>  drivers/gpu/drm/i915/gvt/kvmgt.c | 117 ++++++++++++-------------------
+>  2 files changed, 52 insertions(+), 73 deletions(-)
 
-that works too. even simpler.
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+ 
+> @@ -236,6 +239,11 @@ struct intel_vgpu {
+>  	atomic_t released;
+>  	struct vfio_device *vfio_device;
+>  	struct vfio_group *vfio_group;
+> +
+> +	struct kvm_page_track_notifier_node track_node;
+> +#define NR_BKT (1 << 18)
+> +	struct hlist_head ptable[NR_BKT];
+> +#undef NR_BKT
+
+It is what was there before, but it sure read oddly..
+
+Jason

@@ -2,117 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0B804FB570
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 09:58:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 974F24FB574
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 09:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244029AbiDKIAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 04:00:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55838 "EHLO
+        id S1343497AbiDKIAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 04:00:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241381AbiDKIAP (ORCPT
+        with ESMTP id S231816AbiDKIAt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 04:00:15 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2256183B8;
-        Mon, 11 Apr 2022 00:58:01 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id c15so19022336ljr.9;
-        Mon, 11 Apr 2022 00:58:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=IMcasM2PXwFO3pPL8keGLKPAAlGEHPxLC32XHN34NLQ=;
-        b=U0XUaMQ5tt4vKUweVNbljOWAJtiPEYBd5YlbplTVAuToU4xiavT1C7ARxnf1EBCCBH
-         MnCHlB+ZkZ4JAj7CG2Tiq+1QdnUZ1NTVZykJlt4ODm9pni0CXwlVCm5LSiSAp/bHWbJb
-         lgjQaPDDBcRYPYta5T4ctVgKgHPH3zMoA75HjCQGNvXkS4UFJxPS8BpyEXvhEsYWxxAx
-         kZb82CUVQZmolyF8OzFEVGi+zJA/0afLmLRwjU49E2VfP8YNrL7555POqrnHeod7ep8b
-         MNq6N0nC/7fhFg3KvgJ25aIiUqaLgzlE+J7Go3kwC+hJtJVRIuda9asI1ZEfjVqB28/a
-         X1Rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=IMcasM2PXwFO3pPL8keGLKPAAlGEHPxLC32XHN34NLQ=;
-        b=ZJRb5TCMJ60djHy5ghdYrRrf7yGNkb2m51ayeGuB0Jt920RbUXz7Fk1Zzfmtr+4BSt
-         JXbVOTI0AJBPZ2zaoQrjRVY9D8EvkvuP+A8c5YSSOzDLzUoyT1itd6SSPXgLOl8MF4f+
-         5VHzcnIyMPbaaA9JJwX4aouj5ylEdWG1BwcZokkhILOaOthmrpDy+Itl0d7+UptASlBu
-         E7Bwu9cK2YsV1LfqgE6jU1l2sCApjvsR+VXXfChXzYafaqT7hRJ/gvxYpw5fre0GFG/Y
-         9EYNiyQhisC8XcpAYKqB14gXBcrtVRKUwEk0O9rlY2saEY26NsTp6XAfeZKvyplQyITU
-         3chw==
-X-Gm-Message-State: AOAM533NyS9ruIf3w8fVlWzLtdcTqmJRurz5EmXmrFWDbPouO0as0pM0
-        KmdIMA53tSwUh65mXELzsc+IhWwy6L6igZ/7f5/g35NT46azeA==
-X-Google-Smtp-Source: ABdhPJyPAAdguzOq292jJl/qwqyh/fbTfn44rqQap5nOluCafw7d/O4zQ36Mqdux7bn5CWzO66s3VyAKwZ5+TQdv6jo=
-X-Received: by 2002:a2e:9b18:0:b0:24b:61f3:7beb with SMTP id
- u24-20020a2e9b18000000b0024b61f37bebmr3100487lji.487.1649663879833; Mon, 11
- Apr 2022 00:57:59 -0700 (PDT)
+        Mon, 11 Apr 2022 04:00:49 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA98186DC;
+        Mon, 11 Apr 2022 00:58:35 -0700 (PDT)
+Received: from kwepemi500003.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KcLly17S1zgYcm;
+        Mon, 11 Apr 2022 15:56:46 +0800 (CST)
+Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
+ kwepemi500003.china.huawei.com (7.221.188.51) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 11 Apr 2022 15:58:33 +0800
+Received: from [127.0.0.1] (10.67.101.149) by kwepemm600017.china.huawei.com
+ (7.193.23.234) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 11 Apr
+ 2022 15:58:33 +0800
+Subject: Re: [PATCH net-next 1/3] net: ethtool: extend ringparam set/get APIs
+ for tx_push
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Guangbin Huang <huangguangbin2@huawei.com>
+References: <20220408071245.40554-1-huangguangbin2@huawei.com>
+ <20220408071245.40554-2-huangguangbin2@huawei.com>
+ <20220408145544.141c0799@kernel.org>
+CC:     <davem@davemloft.net>, <pabeni@redhat.com>, <mkubecek@suse.cz>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <lipeng321@huawei.com>, <chenhao288@hisilicon.com>
+From:   "wangjie (L)" <wangjie125@huawei.com>
+Message-ID: <3747f29a-a869-f934-648f-5fa7288223c2@huawei.com>
+Date:   Mon, 11 Apr 2022 15:58:32 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-References: <20220322030152.19018-1-ctcchien@nuvoton.com> <20220322030152.19018-3-ctcchien@nuvoton.com>
- <YlBrbV2rstunqrW6@zn.tnic>
-In-Reply-To: <YlBrbV2rstunqrW6@zn.tnic>
-From:   Medad Young <medadyoung@gmail.com>
-Date:   Mon, 11 Apr 2022 15:57:48 +0800
-Message-ID: <CAHpyw9eR9tcg9TSXnecOgJJsxSm=B=FyqKV9kOXd9We=o+RjKA@mail.gmail.com>
-Subject: Re: [PATCH v6 2/3] dt-bindings: edac: nuvoton: add NPCM memory controller
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     rric@kernel.org, James Morse <james.morse@arm.com>,
-        tony.luck@intel.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Patrick Venture <venture@google.com>, KWLIU@nuvoton.com,
-        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING <KFTING@nuvoton.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>, ctcchien@nuvoton.com,
-        linux-edac <linux-edac@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220408145544.141c0799@kernel.org>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.101.149]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Borislav,
 
-thanks for your comment
-I will revise it
 
-B.R.
-Medad
+On 2022/4/9 5:55, Jakub Kicinski wrote:
+> On Fri, 8 Apr 2022 15:12:43 +0800 Guangbin Huang wrote:
+>> From: Jie Wang <wangjie125@huawei.com>
+>>
+>> Currently tx push is a standard driver feature which controls use of a fast
+>> path descriptor push. So this patch extends the ringparam APIs and data
+>> structures to support set/get tx push by ethtool -G/g.
+>>
+>> Signed-off-by: Jie Wang <wangjie125@huawei.com>
+>> Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
+>
+>> +``ETHTOOL_A_RINGS_TX_PUSH`` flag is used to choose the ordinary path or the fast
+>> +path to send packets. In ordinary path, driver fills BDs to DDR memory and
+>> +notifies NIC hardware. In fast path, driver pushes BDs to the device memory
+>> +directly and thus reducing the sending latencies. Setting tx push attribute "on"
+>> +will enable tx push mode and send packets in fast path if packet size matches.
+>> +For those not supported hardwares, this attributes is "off" by default settings.
+>
+> Since you need to respin to fix the kdoc warning - could you also add
+> a mention that enabling this feature may increase CPU cost? Unless it's
+> not the case for your implementation, I thought it usually is..
+>
+ok, i will add it in v2
+>>  RINGS_SET
+>>  =========
+>> @@ -887,6 +894,7 @@ Request contents:
+>>    ``ETHTOOL_A_RINGS_TX``                u32     size of TX ring
+>>    ``ETHTOOL_A_RINGS_RX_BUF_LEN``        u32     size of buffers on the ring
+>>    ``ETHTOOL_A_RINGS_CQE_SIZE``          u32     Size of TX/RX CQE
+>> +  ``ETHTOOL_A_RINGS_TX_PUSH``           u8      flag of TX Push mode
+>>    ====================================  ======  ===========================
+>>
+>>  Kernel checks that requested ring sizes do not exceed limits reported by
+>> diff --git a/include/linux/ethtool.h b/include/linux/ethtool.h
+>> index 4af58459a1e7..ede4f9154cd2 100644
+>> --- a/include/linux/ethtool.h
+>> +++ b/include/linux/ethtool.h
+>> @@ -71,11 +71,13 @@ enum {
+>>   * struct kernel_ethtool_ringparam - RX/TX ring configuration
+>>   * @rx_buf_len: Current length of buffers on the rx ring.
+>>   * @tcp_data_split: Scatter packet headers and data to separate buffers
+>> + * @tx_push: The flag of tx push mode
+>>   * @cqe_size: Size of TX/RX completion queue event
+>>   */
+>>  struct kernel_ethtool_ringparam {
+>>  	u32	rx_buf_len;
+>>  	u8	tcp_data_split;
+>> +	u8	tx_push;
+>>  	u32	cqe_size;
+>>  };
+>>
+>> @@ -87,6 +89,7 @@ struct kernel_ethtool_ringparam {
+>>  enum ethtool_supported_ring_param {
+>>  	ETHTOOL_RING_USE_RX_BUF_LEN = BIT(0),
+>>  	ETHTOOL_RING_USE_CQE_SIZE   = BIT(1),
+>> +	ETHTOOL_RING_USE_TX_PUSH    = BIT(2),
+>
+> include/linux/ethtool.h:94: warning: Enum value 'ETHTOOL_RING_USE_TX_PUSH' not described in enum 'ethtool_supported_ring_param'
+thx, I will fix it in v2
+>
+>
+> .
+>
 
-Borislav Petkov <bp@alien8.de> =E6=96=BC 2022=E5=B9=B44=E6=9C=889=E6=97=A5 =
-=E9=80=B1=E5=85=AD =E4=B8=8A=E5=8D=881:05=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On Tue, Mar 22, 2022 at 11:01:51AM +0800, Medad CChien wrote:
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +    ahb {
-> > +        #address-cells =3D <2>;
-> > +        #size-cells =3D <2>;
-> > +        mc: memory-controller@f0824000 {
-> > +            compatible =3D "nuvoton,npcm750-memory-controller";
-> > +            reg =3D <0x0 0xf0824000 0x0 0x1000>;
-> > +            interrupts =3D <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
-> > +        };
-> > +    };
-> > +
->
-> .git/rebase-apply/patch:73: new blank line at EOF.
-> +
-> warning: 1 line adds whitespace errors.
->
->
-> --
-> Regards/Gruss,
->     Boris.
->
-> https://people.kernel.org/tglx/notes-about-netiquette

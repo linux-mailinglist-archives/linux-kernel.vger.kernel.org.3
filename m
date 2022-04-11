@@ -2,201 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 891364FC7B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 00:33:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D70AF4FC7B9
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 00:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347232AbiDKWfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 18:35:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40006 "EHLO
+        id S1348601AbiDKWj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 18:39:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbiDKWfh (ORCPT
+        with ESMTP id S229573AbiDKWj0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 18:35:37 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 255E62C65D;
-        Mon, 11 Apr 2022 15:33:22 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id c199so10687232qkg.4;
-        Mon, 11 Apr 2022 15:33:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=go1l0tqex0Qft61QYmHIHUcH+wHFMmQ9Fo+yUGTUQKI=;
-        b=ClLF+INkGmffHtS2rHS1XziJTntk52Ng9ae07N9zDNHk6nz4zQZB15Gr4Gb592N+Sv
-         5iAvYGvTf2GyrdJQ6hNWfwB9wSlVNh7M/siVVxQiJtaEKOyZVhEpmSzdGVSOvH4MSc1Z
-         wv4KSyuQH1jJzIrO260fZxpTz2pV7IYdG7ZijfEWdw0nwZT+9WaOQQIkMs8i9mASoRqG
-         eySm5++qBPhDZ9RBTlGW96ACp3UV93EkTLq+S69ru6TLFYWR9rsqb395ota/qk78AvnP
-         ii4YJZ+48mQzWvUo/JAl7bWd4bbyKseoLu/ZRp5nF5vCRw3Hl/9E7oN+uGp07ajBzRA+
-         wgEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=go1l0tqex0Qft61QYmHIHUcH+wHFMmQ9Fo+yUGTUQKI=;
-        b=MQojQ8p3dd3QWwgzYWeBUfMAHSctI5A2Kp53zTE+ZP8wk2UTkO629tvTD09U+1hLpE
-         4D817NPZ5QP7DtZQa9QeDkCZ5eXPZijaUBcF57rVQ5soCnBeOaz8rZiCbXNDLYw3mT3D
-         2HCcbDhrv9v9fnD0XJI9MSTFd9MMYXk5EBuADdHZO0xYC36vENFmn6JeQkd384v3r2rW
-         0yzvob9tandNlLbBwn/1tklhdLh7dYIWTzuQ63uUGsSXMNxV4UYhlU9KkbCNjvtwzI7p
-         yE5fX+ZEVMUcJ5s5e09XJgz19HwbE3J3n5xiSmx4iRZvKWOyLAC4fs/pYzxPZQsE7RKf
-         3ucQ==
-X-Gm-Message-State: AOAM533aqPB70kvsHt9XNzubyhqf46qnjGKx8EKcqK4jYMvKDEeP6Zvf
-        u5/AtiN7plHgeFhNwcpngg==
-X-Google-Smtp-Source: ABdhPJw1bcvJYclIimih/psF7uDoIhUD9CfnLPSS/CEDcmU8fywZcQVExJ2xcivcD5/sWMDpzqU5Ng==
-X-Received: by 2002:a37:9dc1:0:b0:69c:2932:503f with SMTP id g184-20020a379dc1000000b0069c2932503fmr1181476qke.49.1649716401289;
-        Mon, 11 Apr 2022 15:33:21 -0700 (PDT)
-Received: from bytedance.attlocal.net (ec2-3-231-65-244.compute-1.amazonaws.com. [3.231.65.244])
-        by smtp.gmail.com with ESMTPSA id u187-20020a3792c4000000b0067e679cfe5asm20013345qkd.59.2022.04.11.15.33.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 15:33:20 -0700 (PDT)
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Peilin Ye <peilin.ye@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Peilin Ye <yepeilin.cs@gmail.com>
-Subject: [PATCH net 2/2] ip6_gre: Fix skb_under_panic in __gre6_xmit()
-Date:   Mon, 11 Apr 2022 15:33:00 -0700
-Message-Id: <9cd9ca4ac2c19be288cb8734a86eb30e4d9e2050.1649715555.git.peilin.ye@bytedance.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <c5b7dc6020c93a1e7b40bc472fcdb6429999473e.1649715555.git.peilin.ye@bytedance.com>
-References: <c5b7dc6020c93a1e7b40bc472fcdb6429999473e.1649715555.git.peilin.ye@bytedance.com>
+        Mon, 11 Apr 2022 18:39:26 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9492E9F3
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 15:37:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649716631; x=1681252631;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2eR85BMYnRz5kchIsdg13csHJIvsf2Bn4c9LJIBnfRY=;
+  b=YgQQXm3iSbgp/UqhXIwx32dLosD0Im6CJMlTxXme/vQr4kEHrVhy1M5Q
+   Yq+O0eGFg8t4tQM0mXj6qCqaNkXZ27Ha1+FGKnfgTQfiWyNpZ0Bhzd1UP
+   9kenjXf3eJZXnvTiHyTIDoOLyvsq+CVIREYHsh5fHIL2EAnoOAx3tZoEw
+   NaaWONJlerYe3Skjpg4rIgXQ51J0aHYGs9L52D/X9UiWCNwvtIz5N1iV7
+   eKWoLzCT+m1xbzEVvWFOXp1sz/4ljqbJHC74naxMv7B8+XPfl2DfT7+dW
+   /AaCuizwi/dyTOBMRlqqPvXgQS5UT2rDrlUp1XrzUj2OGJO2LdJqEo3jI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="261668446"
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="261668446"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 15:37:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="525754348"
+Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 11 Apr 2022 15:37:08 -0700
+Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ne2eh-0002Gc-Sg;
+        Mon, 11 Apr 2022 22:37:07 +0000
+Date:   Tue, 12 Apr 2022 06:36:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [krzk-github:n/qcom-ufs-opp-v2 14/16] drivers/opp/core.c:1177:4:
+ warning: variable 'ret' is used uninitialized whenever 'if' condition is
+ false
+Message-ID: <202204120601.Szg8qx1B-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peilin Ye <peilin.ye@bytedance.com>
+tree:   https://github.com/krzk/linux n/qcom-ufs-opp-v2
+head:   bf7d30c9329c87f06dff42b303a9bcfd2e1f54eb
+commit: be46c855d54f763bfb95424e5204fe7496e2ee5f [14/16] PM: opp: allow control of multiple clocks
+config: arm-buildonly-randconfig-r001-20220411 (https://download.01.org/0day-ci/archive/20220412/202204120601.Szg8qx1B-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c6e83f560f06cdfe8aa47b248d8bdc58f947274b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/krzk/linux/commit/be46c855d54f763bfb95424e5204fe7496e2ee5f
+        git remote add krzk-github https://github.com/krzk/linux
+        git fetch --no-tags krzk-github n/qcom-ufs-opp-v2
+        git checkout be46c855d54f763bfb95424e5204fe7496e2ee5f
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/opp/
 
-Feng reported an skb_under_panic BUG triggered by running
-test_ip6gretap() in tools/testing/selftests/bpf/test_tunnel.sh:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-[   82.492551] skbuff: skb_under_panic: text:ffffffffb268bb8e len:403 put:12 head:ffff9997c5480000 data:ffff9997c547fff8 tail:0x18b end:0x2c0 dev:ip6gretap11
-<...>
-[   82.607380] Call Trace:
-[   82.609389]  <TASK>
-[   82.611136]  skb_push.cold.109+0x10/0x10
-[   82.614289]  __gre6_xmit+0x41e/0x590
-[   82.617169]  ip6gre_tunnel_xmit+0x344/0x3f0
-[   82.620526]  dev_hard_start_xmit+0xf1/0x330
-[   82.623882]  sch_direct_xmit+0xe4/0x250
-[   82.626961]  __dev_queue_xmit+0x720/0xfe0
-<...>
-[   82.633431]  packet_sendmsg+0x96a/0x1cb0
-[   82.636568]  sock_sendmsg+0x30/0x40
-<...>
+All warnings (new ones prefixed by >>):
 
-Reproducer:
+>> drivers/opp/core.c:1177:4: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                           if (opp_table->clks)
+                           ^~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:56:28: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:58:30: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/opp/core.c:1215:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/opp/core.c:1177:4: note: remove the 'if' if its condition is always true
+                           if (opp_table->clks)
+                           ^~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:56:23: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                         ^
+   drivers/opp/core.c:1160:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   1 warning generated.
 
-  OBJ=$LINUX/tools/testing/selftests/bpf/test_tunnel_kern.o
 
-  ip netns add at_ns0
-  ip link add veth0 type veth peer name veth1
-  ip link set veth0 netns at_ns0
-  ip netns exec at_ns0 ip addr add 172.16.1.100/24 dev veth0
-  ip netns exec at_ns0 ip link set dev veth0 up
-  ip link set dev veth1 up mtu 1500
-  ip addr add dev veth1 172.16.1.200/24
+vim +1177 drivers/opp/core.c
 
-  ip netns exec at_ns0 ip addr add ::11/96 dev veth0
-  ip netns exec at_ns0 ip link set dev veth0 up
-  ip addr add dev veth1 ::22/96
-  ip link set dev veth1 up
+  1143	
+  1144	/**
+  1145	 * dev_pm_opp_set_rate() - Configure new OPP based on frequency
+  1146	 * @dev:	 device for which we do this operation
+  1147	 * @target_freq: frequency to achieve
+  1148	 *
+  1149	 * This configures the power-supplies to the levels specified by the OPP
+  1150	 * corresponding to the target_freq, and programs the clock to a value <=
+  1151	 * target_freq, as rounded by clk_round_rate(). Device wanting to run at fmax
+  1152	 * provided by the opp, should have already rounded to the target OPP's
+  1153	 * frequency.
+  1154	 */
+  1155	int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
+  1156	{
+  1157		struct opp_table *opp_table;
+  1158		unsigned long freq = 0, temp_freq;
+  1159		struct dev_pm_opp *opp = NULL;
+  1160		int ret;
+  1161	
+  1162		opp_table = _find_opp_table(dev);
+  1163		if (IS_ERR(opp_table)) {
+  1164			dev_err(dev, "%s: device's opp table doesn't exist\n", __func__);
+  1165			return PTR_ERR(opp_table);
+  1166		}
+  1167	
+  1168		if (target_freq) {
+  1169			/*
+  1170			 * For IO devices which require an OPP on some platforms/SoCs
+  1171			 * while just needing to scale the clock on some others
+  1172			 * we look for empty OPP tables with just a clock handle and
+  1173			 * scale only the clk. This makes dev_pm_opp_set_rate()
+  1174			 * equivalent to a clk_set_rate()
+  1175			 */
+  1176			if (!_get_opp_count(opp_table)) {
+> 1177				if (opp_table->clks)
+  1178					ret = _generic_set_opp_clk_only(dev,
+  1179									opp_table->clks[0],
+  1180									target_freq);
+  1181				goto put_opp_table;
+  1182			}
+  1183	
+  1184			if (opp_table->clks)
+  1185				freq = clk_round_rate(opp_table->clks[0], target_freq);
+  1186			if ((long)freq <= 0)
+  1187				freq = target_freq;
+  1188	
+  1189			/*
+  1190			 * The clock driver may support finer resolution of the
+  1191			 * frequencies than the OPP table, don't update the frequency we
+  1192			 * pass to clk_set_rate() here.
+  1193			 */
+  1194			temp_freq = freq;
+  1195			opp = _find_freq_ceil(opp_table, &temp_freq);
+  1196			if (IS_ERR(opp)) {
+  1197				ret = PTR_ERR(opp);
+  1198				dev_err(dev, "%s: failed to find OPP for freq %lu (%d)\n",
+  1199					__func__, freq, ret);
+  1200				goto put_opp_table;
+  1201			}
+  1202			/*
+  1203			 * opp->rates are used for scaling clocks, so be sure accurate
+  1204			 * 'freq' is used, instead what was defined via e.g. Devicetree.
+  1205			 */
+  1206			opp->rates[0] = freq;
+  1207		}
+  1208	
+  1209		ret = _set_opp(dev, opp_table, opp, freq);
+  1210	
+  1211		if (target_freq)
+  1212			dev_pm_opp_put(opp);
+  1213	put_opp_table:
+  1214		dev_pm_opp_put_opp_table(opp_table);
+  1215		return ret;
+  1216	}
+  1217	EXPORT_SYMBOL_GPL(dev_pm_opp_set_rate);
+  1218	
 
-  ip netns exec at_ns0 \
-  	ip link add dev ip6gretap00 type ip6gretap seq flowlabel 0xbcdef key 2 \
-  	local ::11 remote ::22
-
-  ip netns exec at_ns0 ip addr add dev ip6gretap00 10.1.1.100/24
-  ip netns exec at_ns0 ip addr add dev ip6gretap00 fc80::100/96
-  ip netns exec at_ns0 ip link set dev ip6gretap00 up
-
-  ip link add dev ip6gretap11 type ip6gretap external
-  ip addr add dev ip6gretap11 10.1.1.200/24
-  ip addr add dev ip6gretap11 fc80::200/24
-  ip link set dev ip6gretap11 up
-
-  tc qdisc add dev ip6gretap11 clsact
-  tc filter add dev ip6gretap11 egress bpf da obj $OBJ sec ip6gretap_set_tunnel
-  tc filter add dev ip6gretap11 ingress bpf da obj $OBJ sec ip6gretap_get_tunnel
-
-  ping6 -c 3 -w 10 -q ::11
-
-The following sequence of events caused the BUG:
-
-1. During ip6gretap device initialization, tunnel->tun_hlen (e.g. 4) is
-   calculated based on old flags (see ip6gre_calc_hlen());
-2. packet_snd() reserves header room for skb A, assuming
-   tunnel->tun_hlen is 4;
-3. Later (in clsact Qdisc), the eBPF program sets a new tunnel key for
-   skb A using bpf_skb_set_tunnel_key() (see _ip6gretap_set_tunnel());
-4. __gre6_xmit() detects the new tunnel key, and recalculates
-   "tun_hlen" (e.g. 12) based on new flags (e.g. TUNNEL_KEY and
-   TUNNEL_SEQ);
-5. gre_build_header() calls skb_push() with insufficient reserved header
-   room, triggering the BUG.
-
-As sugguested by Cong, fix it by moving the call to skb_cow_head() after
-the recalculation of tun_hlen.
-
-Reported-by: Feng Zhou <zhoufeng.zf@bytedance.com>
-Co-developed-by: Cong Wang <cong.wang@bytedance.com>
-Signed-off-by: Cong Wang <cong.wang@bytedance.com>
-Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
----
-Hi all,
-
-I couldn't find a proper Fixes: tag for this fix; please comment if you
-have any sugguestions.  Thanks!
-
-Peilin Ye
-
- net/ipv6/ip6_gre.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/net/ipv6/ip6_gre.c b/net/ipv6/ip6_gre.c
-index b43a46449130..976236736146 100644
---- a/net/ipv6/ip6_gre.c
-+++ b/net/ipv6/ip6_gre.c
-@@ -733,9 +733,6 @@ static netdev_tx_t __gre6_xmit(struct sk_buff *skb,
- 	else
- 		fl6->daddr = tunnel->parms.raddr;
- 
--	if (skb_cow_head(skb, dev->needed_headroom ?: tunnel->hlen))
--		return -ENOMEM;
--
- 	/* Push GRE header. */
- 	protocol = (dev->type == ARPHRD_ETHER) ? htons(ETH_P_TEB) : proto;
- 
-@@ -763,6 +760,9 @@ static netdev_tx_t __gre6_xmit(struct sk_buff *skb,
- 			(TUNNEL_CSUM | TUNNEL_KEY | TUNNEL_SEQ);
- 		tun_hlen = gre_calc_hlen(flags);
- 
-+		if (skb_cow_head(skb, dev->needed_headroom ?: tun_hlen + tunnel->encap_hlen))
-+			return -ENOMEM;
-+
- 		gre_build_header(skb, tun_hlen,
- 				 flags, protocol,
- 				 tunnel_id_to_key32(tun_info->key.tun_id),
-@@ -773,6 +773,9 @@ static netdev_tx_t __gre6_xmit(struct sk_buff *skb,
- 		if (tunnel->parms.o_flags & TUNNEL_SEQ)
- 			tunnel->o_seqno++;
- 
-+		if (skb_cow_head(skb, dev->needed_headroom ?: tunnel->hlen))
-+			return -ENOMEM;
-+
- 		gre_build_header(skb, tunnel->tun_hlen, tunnel->parms.o_flags,
- 				 protocol, tunnel->parms.o_key,
- 				 htonl(tunnel->o_seqno));
 -- 
-2.20.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

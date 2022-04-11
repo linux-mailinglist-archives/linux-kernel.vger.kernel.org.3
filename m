@@ -2,133 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B214FC8FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 01:53:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C1294FC901
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 01:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237484AbiDKXzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 19:55:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49732 "EHLO
+        id S238123AbiDKX62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 19:58:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234047AbiDKXzM (ORCPT
+        with ESMTP id S233251AbiDKX6Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 19:55:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BACC27167;
-        Mon, 11 Apr 2022 16:52:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E1E3AB819B3;
-        Mon, 11 Apr 2022 23:52:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94439C385B0;
-        Mon, 11 Apr 2022 23:52:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649721174;
-        bh=MA2honiXWGeOzO9WdwjpEsoZG2CtJDXDu3X4YUBIiQc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=jdxbEG/cJ9bBPd0gnfltrog660KLU3COJSzzRSbWXk0ogQLHldVpvIsV35eeIAPq8
-         ulRhfQGXvvJPezfASRtce2+HmrpPTMIHbiSVMKVOt+QGSZ/AGS/Icda7n7BLqU3Nj8
-         dg9q7uGUmHZSoIlI9WttHJ+1tZjxSWtEX0nz+w0O2+XUWmLjpNqYD2aq56s0R9hX/7
-         Zqfwk9d8RFuZeLkafNhpc46EGa6nfi3rqTnc2vihzYdHGNxoqI7VO/b18TzLOsOqb9
-         8vZl9lfuDwzzS0yvHFYbJMI/xXlgZccHednOvnvhb6IwHus09/2iMAdod66G1iBTFq
-         QmthySP0p+TZg==
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-2ec42eae76bso34234617b3.10;
-        Mon, 11 Apr 2022 16:52:54 -0700 (PDT)
-X-Gm-Message-State: AOAM531pb5/lSEtlYb3HABuX+kYca0qHLlSa9dPRVRqySZKd4WJuwgQh
-        kdlyLGp6w114o5X1w28U/SI6X5v25o8TmJTYuGs=
-X-Google-Smtp-Source: ABdhPJy/zaZyKbdypj1Ir6pRoTfrzhUUja8HYbw1+PrL4w3DfKO/U2kKNazR+UqBBUv9umC/SnpgklvN3WCGaxXljB0=
-X-Received: by 2002:a81:14c8:0:b0:2eb:eb91:d88f with SMTP id
- 191-20020a8114c8000000b002ebeb91d88fmr14373906ywu.148.1649721173532; Mon, 11
- Apr 2022 16:52:53 -0700 (PDT)
+        Mon, 11 Apr 2022 19:58:25 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D452B271
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 16:56:09 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id 2so16720656pjw.2
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 16:56:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=u4J7Bf/GotxjJfY4hYTghw/TTioM2LYvPTAkJWjY17E=;
+        b=HQ+2vciUuGFcRUAADBBBewhLLxx/n8IwutVwi9bDSH5UBx/sMIz11gFenVTKEO5i2V
+         Z3KkkM9CsYrzCcapeOzqAPFCFARrC/nGi7vHH0YUZMEyTwShG2fVEKyBuJ+b4TCzPDd6
+         szbu08LY1PXwGtFdjtHzkI48ZOaN1iB6bh793hvWxqcO0deFyRSoPQt9LUnPAXwTeeVl
+         Tb/JasLYg9PNiFlSaZ65haBXwam6yS94qYrcv5vEzr4MKjqx1+yFqkfPGe4cwK/rfrsj
+         +9U3IHhasFilk7p3D90KspNTXQykty6L7GEhgqlF9JxHABSU3bCtlbzBEt8Xnh/InXLg
+         0JMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=u4J7Bf/GotxjJfY4hYTghw/TTioM2LYvPTAkJWjY17E=;
+        b=7vLYqmF8RbWm+fAaYYARn+2vRYvfJI7liJ+ZGPrzIuaIpWmmc44CMoum7gPKhFLmjB
+         UWJbrT+jRnTE22OueW+xmbejjhrPtkuKyk0IkcbHho2/mNqTqMg3jtd/JtZOwyciOkOc
+         jm8cE44VDW2PowjQ1eCV02Yq7bpMgoejJFx+suxgnezxbRvAq/MEOhE1D4YP4owgKurh
+         zVTsohRaxKxtJe4MOjrHy4IcjzMBycQV6Hwxl1Xl5xlBl/NbORYqZz3iSIUcJLQF4Lss
+         QqRm0g++22BvPxSbsTm5LIFAeVr0MZCS4GFdsZXIqvvDJr0WODQt2td6qJ5Gs7plWdso
+         2hFg==
+X-Gm-Message-State: AOAM530+hnqtrU/ZvxKGFF0aw2YAdl2kmCV8pqtnF6nNXZeLn26cmnF+
+        XhLB1dn2LaW2KUje6WJn679hVc/pZkQoD+CtfwprOA==
+X-Google-Smtp-Source: ABdhPJwz526LJSdeFPj6/c7PsF49maypY+wjW8NyQ8pIICoB0k38/TF9Lk5dkB3kd2++yFgVX8lzKCKbNtcxf9v/5dw=
+X-Received: by 2002:a17:902:7296:b0:14b:4bc6:e81 with SMTP id
+ d22-20020a170902729600b0014b4bc60e81mr34383349pll.132.1649721368525; Mon, 11
+ Apr 2022 16:56:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220411233549.740157-1-song@kernel.org> <20220411233549.740157-4-song@kernel.org>
-In-Reply-To: <20220411233549.740157-4-song@kernel.org>
-From:   Song Liu <song@kernel.org>
-Date:   Mon, 11 Apr 2022 16:52:40 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW6Z1AM=AXtxP5Hk+Xa4yF8r2f0ckOTHDML5A1iRQS8t_w@mail.gmail.com>
-Message-ID: <CAPhsuW6Z1AM=AXtxP5Hk+Xa4yF8r2f0ckOTHDML5A1iRQS8t_w@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf 3/3] bpf: use module_alloc_huge for bpf_prog_pack
-To:     bpf <bpf@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        rick.p.edgecombe@intel.com, Christoph Hellwig <hch@infradead.org>,
-        imbrenda@linux.ibm.com, Luis Chamberlain <mcgrof@kernel.org>
+References: <20220405194747.2386619-1-jane.chu@oracle.com> <20220405194747.2386619-5-jane.chu@oracle.com>
+ <Yk0i/pODntZ7lbDo@infradead.org> <196d51a3-b3cc-02ae-0d7d-ee6fbb4d50e4@oracle.com>
+ <Yk52415cnFa39qil@infradead.org>
+In-Reply-To: <Yk52415cnFa39qil@infradead.org>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Mon, 11 Apr 2022 16:55:58 -0700
+Message-ID: <CAPcyv4gfF4AhxD_vqCS9CTRraj8GAMDYQ7Zb411+FvxhF4ccOw@mail.gmail.com>
+Subject: Re: [PATCH v7 4/6] dax: add DAX_RECOVERY flag and .recovery_write dev_pgmap_ops
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Jane Chu <jane.chu@oracle.com>,
+        "david@fromorbit.com" <david@fromorbit.com>,
+        "djwong@kernel.org" <djwong@kernel.org>,
+        "vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
+        "dave.jiang@intel.com" <dave.jiang@intel.com>,
+        "agk@redhat.com" <agk@redhat.com>,
+        "snitzer@redhat.com" <snitzer@redhat.com>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>,
+        "ira.weiny@intel.com" <ira.weiny@intel.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "vgoyal@redhat.com" <vgoyal@redhat.com>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 4:41 PM Song Liu <song@kernel.org> wrote:
+On Wed, Apr 6, 2022 at 10:31 PM Christoph Hellwig <hch@infradead.org> wrote:
 >
-> module_alloc_huge for bpf_prog_pack so that BPF programs sit on PMD_SIZE
-> pages. This benefits system performance by reducing iTLB miss rate.
+> On Wed, Apr 06, 2022 at 05:32:31PM +0000, Jane Chu wrote:
+> > Yes, I believe Dan was motivated by avoiding the dm dance as a result of
+> > adding .recovery_write to dax_operations.
+> >
+> > I understand your point about .recovery_write is device specific and
+> > thus not something appropriate for device agnostic ops.
+> >
+> > I can see 2 options so far -
+> >
+> > 1)  add .recovery_write to dax_operations and do the dm dance to hunt
+> > down to the base device that actually provides the recovery action
 >
-> Signed-off-by: Song Liu <song@kernel.org>
+> That would be my preference.  But I'll wait for Dan to chime in.
 
-I am really sorry for spamming the list twice. The first set
-experienced long lag,
-so I thought it didn't get through.
+Yeah, so the motivation was avoiding plumbing recovery through stacked
+lookups when the recovery is specific to a pfn and the provider of
+that pfn, but I also see it from Christoph's perspective that the only
+agent that cares about recovery is the fsdax I/O path. Certainly
+having ->dax_direct_access() take a DAX_RECOVERY flag and the op
+itself go through the pgmap is a confusing split that I did not
+anticipate when I made the suggestion. Since that flag must be there,
+then the ->recovery_write() should also stay relative to a dax device.
 
-I also updated the commit log of 3/3, and this one is the latest version.
+Apologies for the thrash Jane.
 
-Thanks,
-Song
-
-> ---
->  kernel/bpf/core.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
->
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 13e9dbeeedf3..fd45bdd80a75 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -857,7 +857,7 @@ static size_t select_bpf_prog_pack_size(void)
->         void *ptr;
->
->         size = BPF_HPAGE_SIZE * num_online_nodes();
-> -       ptr = module_alloc(size);
-> +       ptr = module_alloc_huge(size);
->
->         /* Test whether we can get huge pages. If not just use PAGE_SIZE
->          * packs.
-> @@ -881,7 +881,7 @@ static struct bpf_prog_pack *alloc_new_pack(void)
->                        GFP_KERNEL);
->         if (!pack)
->                 return NULL;
-> -       pack->ptr = module_alloc(bpf_prog_pack_size);
-> +       pack->ptr = module_alloc_huge(bpf_prog_pack_size);
->         if (!pack->ptr) {
->                 kfree(pack);
->                 return NULL;
-> @@ -889,7 +889,6 @@ static struct bpf_prog_pack *alloc_new_pack(void)
->         bitmap_zero(pack->bitmap, bpf_prog_pack_size / BPF_PROG_CHUNK_SIZE);
->         list_add_tail(&pack->list, &pack_list);
->
-> -       set_vm_flush_reset_perms(pack->ptr);
->         set_memory_ro((unsigned long)pack->ptr, bpf_prog_pack_size / PAGE_SIZE);
->         set_memory_x((unsigned long)pack->ptr, bpf_prog_pack_size / PAGE_SIZE);
->         return pack;
-> @@ -970,7 +969,9 @@ static void bpf_prog_pack_free(struct bpf_binary_header *hdr)
->         if (bitmap_find_next_zero_area(pack->bitmap, bpf_prog_chunk_count(), 0,
->                                        bpf_prog_chunk_count(), 0) == 0) {
->                 list_del(&pack->list);
-> -               module_memfree(pack->ptr);
-> +               set_memory_nx((unsigned long)pack->ptr, bpf_prog_pack_size / PAGE_SIZE);
-> +               set_memory_rw((unsigned long)pack->ptr, bpf_prog_pack_size / PAGE_SIZE);
-> +               vfree(pack->ptr);
->                 kfree(pack);
->         }
->  out:
-> --
-> 2.30.2
->
->
+One ask though, please separate plumbing the new flag argument to
+->dax_direct_access() and plumbing the new operation into preparation
+patches before filling them in with the new goodness.

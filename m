@@ -2,147 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADF404FC540
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 21:44:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FD3D4FC545
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 21:47:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349713AbiDKTqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 15:46:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56220 "EHLO
+        id S1349724AbiDKTtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 15:49:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349685AbiDKTqv (ORCPT
+        with ESMTP id S232918AbiDKTtL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 15:46:51 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE3913DF0
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 12:44:35 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id z128so15103522pgz.2
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 12:44:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=L5zxsoCIC2GpilLCrO46c2SjLv4QY7bGAV9knagNys8=;
-        b=SoJiypDQOPX8j2ruN1UvWPz3ZXfxYooNw78Sj8hVwp7hS2T4l+c19y7hkh33iu+CWN
-         pMMAQ+van2ku0XhY/2EANqEfbTKq8hrOZKIGLHNMiKGvXQ7YNG5FmzvODEOTm4Kzw69J
-         W8U/l17YFjJ7Zkz5BXIwnO5qTACHvKZCvmSP9CrD6+wQSXnUCE/pos9MQL/nZGGbI+8s
-         dbcDKVnNjFAfyH/XqoOh959dbOJxWZP9jADIi6VFRCxoyk446aEaZ3ygTknFPqhTQIc3
-         M7UEt3j8656Y6/PEUB/p4wwjMnTRqJA5rVB0uSz1p2Qyc5oe06ltuOPe5b4Z3g0R/N3e
-         tKew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=L5zxsoCIC2GpilLCrO46c2SjLv4QY7bGAV9knagNys8=;
-        b=UkZ7VbymibqAHDnT+kNuMNBImjQ2Mchz1ZGlhbptMpxVgkLpLANdw9YjszkMLybQ0B
-         OQHzujKtHTcfvd3AtszKcs0ZBejQufkLOLGc9HiCTylFnuQvb9CLl7R2IozG+bXuXxoF
-         g1Vb8UDAb3xi3A7HBoCgksSxy9adTFQ4W59e5686eCDE6kH1m67SHHE82acHHst/d1mw
-         ZXnBqltgsM9+4ENHAG+jnb4cPhWexJAmemvfz3WZ0nTQvcHPREOUwY03lc5Ye1fFE5kQ
-         RfWIwjk93kbsP62/DcED/vmYaqp8gNHrdq8DpT0k+aIvf+k0I/Nw7Srj5DHvyDsbbxax
-         hoNw==
-X-Gm-Message-State: AOAM530FC7wU8+yGbnaOL4BpyfmWwcGo6d0v/mqk2PH3pfMe5ky7Mh+3
-        KgIoBhDFjTMxkmhI/J0ytwVFg8xicBa05B4GSV5jPQ==
-X-Google-Smtp-Source: ABdhPJxcwxU1FsEJQWMka18EWe5GntoUEKLckNmYE3iHDoPhoLJGWCP4/jL+YXX0/f/YmQw8mPpWUp3Ko4mWHmrHxL4=
-X-Received: by 2002:a63:6d06:0:b0:39d:6cba:9058 with SMTP id
- i6-20020a636d06000000b0039d6cba9058mr3157068pgc.440.1649706275011; Mon, 11
- Apr 2022 12:44:35 -0700 (PDT)
+        Mon, 11 Apr 2022 15:49:11 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC4C329A2
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 12:46:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649706416; x=1681242416;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ir2NIVvvnTNgKnGMmdSyj+0GhpxbCTN2HPFDqTd5SeE=;
+  b=P+j/hwhQ+/0hGVT2u9sX6AyvnL1yg1tnDq8kT5WVBgXsmG1lnz3CDlEg
+   ucvXdx+QAcss57nMhN4T3X5TIOSdY5W9JzEBmL3BvJz6GbfSOhuQUjsVi
+   zMcziI4DuI3bAxxTyerq77s/VRlV43AgfQWK/A7cKgot50wE7gwhw1npi
+   ZHB+pYWnixcVhYglGRdQQkesE+eTuAZYrPiHvRsL/eHP4Xi5zv4gvnnoc
+   HV0w3hARmqLuIov2kSTZMqFxk3Px1H0UqNvUhaTX5xCaeCrJHanSnt0cm
+   uVPIAl2L2bim2inQGV7KhwBJK9+hZRKzldtIFsbaoGbGcKwZdg5st2WWV
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="261048747"
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="261048747"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 12:46:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="611114413"
+Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 11 Apr 2022 12:46:42 -0700
+Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ndzzl-00027x-BC;
+        Mon, 11 Apr 2022 19:46:41 +0000
+Date:   Tue, 12 Apr 2022 03:46:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [jirislaby:devel 46/48] include/linux/module.h:131:49: error:
+ redefinition of '__inittest'
+Message-ID: <202204120330.GKLJmA9r-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220405200625.19359-1-tharvey@gateworks.com> <20220411013106.GD129381@dragon>
-In-Reply-To: <20220411013106.GD129381@dragon>
-From:   Tim Harvey <tharvey@gateworks.com>
-Date:   Mon, 11 Apr 2022 12:44:23 -0700
-Message-ID: <CAJ+vNU0VVpDGDXivz=r8C4U8dYjA08SqnzPXwmtOv4ujvc3=Zg@mail.gmail.com>
-Subject: Re: [PATCH] imx8mm-venice-gw7902: update pci refclk
-To:     Shawn Guo <shawnguo@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Device Tree Mailing List <devicetree@vger.kernel.org>,
-        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 10, 2022 at 6:31 PM Shawn Guo <shawnguo@kernel.org> wrote:
->
-> On Tue, Apr 05, 2022 at 01:06:25PM -0700, Tim Harvey wrote:
-> > Use the correct PCI clock bindings.
->
-> Please improve the commit log to explain why clock "pcie_phy" can be
-> dropped.
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
+head:   c196e3b15cddb539135de6a3c6bcf32b89213b4c
+commit: cb7e9edf8651c8c3a50dcba57659fac27bf30e3d [46/48] tty: serial: allow COMPILE_TEST for some drivers
+config: mips-allmodconfig (https://download.01.org/0day-ci/archive/20220412/202204120330.GKLJmA9r-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?id=cb7e9edf8651c8c3a50dcba57659fac27bf30e3d
+        git remote add jirislaby https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
+        git fetch --no-tags jirislaby devel
+        git checkout cb7e9edf8651c8c3a50dcba57659fac27bf30e3d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash drivers/tty/serial/
 
-Shawn,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-The original PCIe bindings for this board were wrong - they were from
-a version of the bindings that was not yet approved (my mistake) and
-I'm just trying to bring them up to date.
+All errors (new ones prefixed by >>):
 
-That said, I looked at the latest fsl,imx6q-pcie.yaml dt-bindings [1]
-and see that there should be a min of 3 clocks called 'pcie',
-'pcie_bus', and 'pcie_phy'. However I notice that all of the current
-imx8mm boards that enable PCI have clock-names of 'pcie', 'pcie_aux',
-and 'pcie_bus'. It seems like all the imx8mm boards having pcie have
-clock-names this way:
+   In file included from include/linux/device/driver.h:21,
+                    from include/linux/device.h:32,
+                    from include/linux/platform_device.h:13,
+                    from drivers/tty/serial/pic32_uart.c:12:
+>> include/linux/module.h:131:49: error: redefinition of '__inittest'
+     131 |         static inline initcall_t __maybe_unused __inittest(void)                \
+         |                                                 ^~~~~~~~~~
+   include/linux/module.h:112:41: note: in expansion of macro 'module_init'
+     112 | #define core_initcall(fn)               module_init(fn)
+         |                                         ^~~~~~~~~~~
+   drivers/tty/serial/pic32_uart.c:782:1: note: in expansion of macro 'core_initcall'
+     782 | core_initcall(pic32_late_console_init);
+         | ^~~~~~~~~~~~~
+   include/linux/module.h:131:49: note: previous definition of '__inittest' with type 'int (*(void))(void)'
+     131 |         static inline initcall_t __maybe_unused __inittest(void)                \
+         |                                                 ^~~~~~~~~~
+   include/linux/module.h:127:41: note: in expansion of macro 'module_init'
+     127 | #define console_initcall(fn)            module_init(fn)
+         |                                         ^~~~~~~~~~~
+   drivers/tty/serial/pic32_uart.c:769:1: note: in expansion of macro 'console_initcall'
+     769 | console_initcall(pic32_console_init);
+         | ^~~~~~~~~~~~~~~~
+>> include/linux/module.h:133:13: error: redefinition of 'init_module'
+     133 |         int init_module(void) __copy(initfn)                    \
+         |             ^~~~~~~~~~~
+   include/linux/module.h:112:41: note: in expansion of macro 'module_init'
+     112 | #define core_initcall(fn)               module_init(fn)
+         |                                         ^~~~~~~~~~~
+   drivers/tty/serial/pic32_uart.c:782:1: note: in expansion of macro 'core_initcall'
+     782 | core_initcall(pic32_late_console_init);
+         | ^~~~~~~~~~~~~
+   include/linux/module.h:133:13: note: previous definition of 'init_module' with type 'int(void)'
+     133 |         int init_module(void) __copy(initfn)                    \
+         |             ^~~~~~~~~~~
+   include/linux/module.h:127:41: note: in expansion of macro 'module_init'
+     127 | #define console_initcall(fn)            module_init(fn)
+         |                                         ^~~~~~~~~~~
+   drivers/tty/serial/pic32_uart.c:769:1: note: in expansion of macro 'console_initcall'
+     769 | console_initcall(pic32_console_init);
+         | ^~~~~~~~~~~~~~~~
+>> include/linux/module.h:131:49: error: redefinition of '__inittest'
+     131 |         static inline initcall_t __maybe_unused __inittest(void)                \
+         |                                                 ^~~~~~~~~~
+   include/linux/module.h:116:41: note: in expansion of macro 'module_init'
+     116 | #define arch_initcall(fn)               module_init(fn)
+         |                                         ^~~~~~~~~~~
+   drivers/tty/serial/pic32_uart.c:939:1: note: in expansion of macro 'arch_initcall'
+     939 | arch_initcall(pic32_uart_init);
+         | ^~~~~~~~~~~~~
+   include/linux/module.h:131:49: note: previous definition of '__inittest' with type 'int (*(void))(void)'
+     131 |         static inline initcall_t __maybe_unused __inittest(void)                \
+         |                                                 ^~~~~~~~~~
+   include/linux/module.h:112:41: note: in expansion of macro 'module_init'
+     112 | #define core_initcall(fn)               module_init(fn)
+         |                                         ^~~~~~~~~~~
+   drivers/tty/serial/pic32_uart.c:782:1: note: in expansion of macro 'core_initcall'
+     782 | core_initcall(pic32_late_console_init);
+         | ^~~~~~~~~~~~~
+>> include/linux/module.h:133:13: error: redefinition of 'init_module'
+     133 |         int init_module(void) __copy(initfn)                    \
+         |             ^~~~~~~~~~~
+   include/linux/module.h:116:41: note: in expansion of macro 'module_init'
+     116 | #define arch_initcall(fn)               module_init(fn)
+         |                                         ^~~~~~~~~~~
+   drivers/tty/serial/pic32_uart.c:939:1: note: in expansion of macro 'arch_initcall'
+     939 | arch_initcall(pic32_uart_init);
+         | ^~~~~~~~~~~~~
+   include/linux/module.h:133:13: note: previous definition of 'init_module' with type 'int(void)'
+     133 |         int init_module(void) __copy(initfn)                    \
+         |             ^~~~~~~~~~~
+   include/linux/module.h:127:41: note: in expansion of macro 'module_init'
+     127 | #define console_initcall(fn)            module_init(fn)
+         |                                         ^~~~~~~~~~~
+   drivers/tty/serial/pic32_uart.c:769:1: note: in expansion of macro 'console_initcall'
+     769 | console_initcall(pic32_console_init);
+         | ^~~~~~~~~~~~~~~~
 
-arch/arm64/boot/dts/freescale/imx8mm-beacon-baseboard.dtsi
-arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi
-arch/arm64/boot/dts/freescale/imx8mm-tqma8mqml-mba8mx.dts
-arch/arm64/boot/dts/freescale/imx8mm-venice-gw71xx.dtsi
-arch/arm64/boot/dts/freescale/imx8mm-venice-gw72xx.dtsi
-arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx.dtsi
-arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts
-arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts
-arch/arm64/boot/dts/freescale/imx8mm-venice-gw7903.dts
 
-Does the binding need to change or do the clock names need to change
-in the above?
+vim +/__inittest +131 include/linux/module.h
 
-Best Regards,
+0fd972a7d91d6e Paul Gortmaker 2015-05-01  128  
+0fd972a7d91d6e Paul Gortmaker 2015-05-01  129  /* Each module must use one module_init(). */
+0fd972a7d91d6e Paul Gortmaker 2015-05-01  130  #define module_init(initfn)					\
+1f318a8bafcfba Arnd Bergmann  2017-02-01 @131  	static inline initcall_t __maybe_unused __inittest(void)		\
+0fd972a7d91d6e Paul Gortmaker 2015-05-01  132  	{ return initfn; }					\
+cf68fffb66d60d Sami Tolvanen  2021-04-08 @133  	int init_module(void) __copy(initfn)			\
+cf68fffb66d60d Sami Tolvanen  2021-04-08  134  		__attribute__((alias(#initfn)));		\
+cf68fffb66d60d Sami Tolvanen  2021-04-08  135  	__CFI_ADDRESSABLE(init_module, __initdata);
+0fd972a7d91d6e Paul Gortmaker 2015-05-01  136  
 
-Tim
-[1]
+:::::: The code at line 131 was first introduced by commit
+:::::: 1f318a8bafcfba9f0d623f4870c4e890fd22e659 modules: mark __inittest/__exittest as __maybe_unused
 
-> Shawn
->
-> >
-> > Signed-off-by: Tim Harvey <tharvey@gateworks.com>
-> > ---
-> >  arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts
-> > index 6aa0eb463647..f71416be29a7 100644
-> > --- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts
-> > +++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts
-> > @@ -595,7 +595,7 @@
-> >  &pcie_phy {
-> >       fsl,refclk-pad-mode = <IMX8_PCIE_REFCLK_PAD_INPUT>;
-> >       fsl,clkreq-unsupported;
-> > -     clocks = <&clk IMX8MM_CLK_DUMMY>;
-> > +     clocks = <&pcie0_refclk>;
-> >       status = "okay";
-> >  };
-> >
-> > @@ -604,8 +604,8 @@
-> >       pinctrl-0 = <&pinctrl_pcie0>;
-> >       reset-gpio = <&gpio4 5 GPIO_ACTIVE_LOW>;
-> >       clocks = <&clk IMX8MM_CLK_PCIE1_ROOT>, <&clk IMX8MM_CLK_PCIE1_AUX>,
-> > -              <&clk IMX8MM_CLK_DUMMY>, <&pcie0_refclk>;
-> > -     clock-names = "pcie", "pcie_aux", "pcie_phy", "pcie_bus";
-> > +              <&pcie0_refclk>;
-> > +     clock-names = "pcie", "pcie_aux", "pcie_bus";
-> >       assigned-clocks = <&clk IMX8MM_CLK_PCIE1_AUX>,
-> >                         <&clk IMX8MM_CLK_PCIE1_CTRL>;
-> >       assigned-clock-rates = <10000000>, <250000000>;
-> > --
-> > 2.17.1
-> >
+:::::: TO: Arnd Bergmann <arnd@arndb.de>
+:::::: CC: Jessica Yu <jeyu@redhat.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

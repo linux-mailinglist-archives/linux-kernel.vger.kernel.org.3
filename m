@@ -2,340 +2,303 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED334FB452
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 09:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DBDB4FB455
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 09:01:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237230AbiDKHCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 03:02:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49338 "EHLO
+        id S244573AbiDKHDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 03:03:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234071AbiDKHCf (ORCPT
+        with ESMTP id S241525AbiDKHDr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 03:02:35 -0400
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [IPv6:2001:4b98:dc4:8::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A084329A4;
-        Mon, 11 Apr 2022 00:00:20 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id A54D120000C;
-        Mon, 11 Apr 2022 07:00:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1649660419;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zwcdMhW28wSivY+7fR+VgYm0ZsDvKLkmMB9zTX/7Twc=;
-        b=eHBEm4eFgXZYhS4aOfM2riVwE98eeUJbjZQ32w12NSM0Xy2kfG4UIWQmX+xVCGNSG6UVp0
-        RV3gddhZmXH8llj0f+++FYaik+cfuwWN5Bm8Iwim2ntyT/1kAbDCskkbIGBq4m+e+pIoIv
-        yDu0a73bBA34D+n3jJ9Hl9+9KkSMAZbeboOutSMZsZDKmxLEjbtnP4sPdLns3xWtOLYeR5
-        isXRSDEwDSEviVG+3Oges3NqxNSIqTWsvgNzmOachxPQiCgln2Lvv/LG35lmirrvEnbn2m
-        GcpFWCyQixeNRljWoCgDmoGOAYq5aBHF3CGPXSlSGC5IWQPBoG0NHHnQLlP5IA==
-Date:   Mon, 11 Apr 2022 09:00:15 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Liang Yang <liang.yang@amlogic.com>
-Cc:     <linux-mtd@lists.infradead.org>, Rob Herring <robh+dt@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        XianWei Zhao <xianwei.zhao@amlogic.com>,
-        Kelvin Zhang <kelvin.zhang@amlogic.com>,
-        BiChao Zheng <bichao.zheng@amlogic.com>,
-        YongHui Yu <yonghui.yu@amlogic.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v4 1/2] mtd: rawnand: meson: discard the common MMC sub
- clock framework
-Message-ID: <20220411090015.6290b0b0@xps13>
-In-Reply-To: <50105d6b-8ced-1b72-30cb-a709c4a4dd26@amlogic.com>
-References: <20220402074921.13316-1-liang.yang@amlogic.com>
-        <20220402074921.13316-2-liang.yang@amlogic.com>
-        <20220404103034.48ec16b1@xps13>
-        <50105d6b-8ced-1b72-30cb-a709c4a4dd26@amlogic.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 11 Apr 2022 03:03:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B36338AB
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 00:01:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 59603B8110D
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 07:01:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4108C385A3;
+        Mon, 11 Apr 2022 07:01:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649660491;
+        bh=cxD1gCVpaTwEnw4DYmwzSkEurW1pIoOIegTf4Hv68nU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=A5oNtOX1wUbKrmh15uLVC7/DHYNAWa/4JA8FQbsaAC7R7KEEKIRFgBc3xokfCoiZq
+         wZRA5oe9o4Xst2G1dh7brWDaj+nVosJyJVLliYlIERpMm6/JUzx2mQUC3Fe08aa7TU
+         53Y9hlSyCZWufpNZ6wr/NhuvEGwb9v7U391mevLVnhnCx/LrMbkFCKyKgcqkdDMbGi
+         Jz1p+CipBcRvfHI6RQpqKvhTcC4RbQkvAf9S96pPFpbAnyGwIeuBfzmymgKgWcT3gK
+         IrXbB1TpNpccY9iGI/NTJW3FHkB6x4fDNbZHW1BsaDwdQO6rMbCo+H1Nx+Kch8p8Su
+         6PbrhFImpwJxw==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=billy-the-mountain.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1ndo3E-003Fa0-IO; Mon, 11 Apr 2022 08:01:28 +0100
+Date:   Mon, 11 Apr 2022 08:01:25 +0100
+Message-ID: <87a6cscddm.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     will@kernel.org, qperret@google.com, tabba@google.com,
+        surenb@google.com, kernel-team@android.com,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Changbin Du <changbin.du@intel.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 2/6] KVM: arm64: Introduce pkvm_alloc_private_va_range()
+In-Reply-To: <20220408200349.1529080-3-kaleshsingh@google.com>
+References: <20220408200349.1529080-1-kaleshsingh@google.com>
+        <20220408200349.1529080-3-kaleshsingh@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: kaleshsingh@google.com, will@kernel.org, qperret@google.com, tabba@google.com, surenb@google.com, kernel-team@android.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, catalin.marinas@arm.com, mark.rutland@arm.com, ardb@kernel.org, yuzenghui@huawei.com, ndesaulniers@google.com, masahiroy@kernel.org, changbin.du@intel.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Liang,
+On Fri, 08 Apr 2022 21:03:25 +0100,
+Kalesh Singh <kaleshsingh@google.com> wrote:
+> 
+> pkvm_hyp_alloc_private_va_range() can be used to reserve private VA ranges
+> in the pKVM nVHE hypervisor. Allocations are aligned based on the order of
+> the requested size.
+> 
+> This will be used to implement stack guard pages for pKVM nVHE hypervisor
+> (in a subsequent patch in the series).
+> 
+> Credits to Quentin Perret <qperret@google.com> for the idea of moving
+> private VA allocation out of __pkvm_create_private_mapping()
+> 
+> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> Tested-by: Fuad Tabba <tabba@google.com>
+> Reviewed-by: Fuad Tabba <tabba@google.com>
+> ---
+> 
+> Changes in v7:
+>   - Add Fuad's Reviewed-by and Tested-by tags.
+> 
+> Changes in v6:
+>   - Update kernel-doc for pkvm_alloc_private_va_range() and add
+>     return description, per Stephen
+>   - Update pkvm_alloc_private_va_range() to return an int error code,
+>     per Stephen
+>   - Update __pkvm_create_private_mapping to return an in error code,
+>     per Quentin
+>   - Update callers of __pkvm_create_private_mapping() to handle new
+>     return value and params.
+> 
+> Changes in v5:
+>   - Align private allocations based on the order of their size, per Marc
+> 
+> Changes in v4:
+>   - Handle null ptr in pkvm_alloc_private_va_range() and replace
+>     IS_ERR_OR_NULL checks in callers with IS_ERR checks, per Fuad
+>   - Fix kernel-doc comments format, per Fuad
+>   - Format __pkvm_create_private_mapping() prototype args (< 80 col), per Fuad
+> 
+> Changes in v3:
+>   - Handle null ptr in IS_ERR_OR_NULL checks, per Mark
+> 
+> Changes in v2:
+>   - Allow specifying an alignment for the private VA allocations, per Marc
+> 
+> 
+>  arch/arm64/kvm/hyp/include/nvhe/mm.h |  6 ++-
+>  arch/arm64/kvm/hyp/nvhe/hyp-main.c   | 18 ++++++-
+>  arch/arm64/kvm/hyp/nvhe/mm.c         | 78 ++++++++++++++++++----------
+>  3 files changed, 72 insertions(+), 30 deletions(-)
+> 
+> diff --git a/arch/arm64/kvm/hyp/include/nvhe/mm.h b/arch/arm64/kvm/hyp/include/nvhe/mm.h
+> index 2d08510c6cc1..42d8eb9bfe72 100644
+> --- a/arch/arm64/kvm/hyp/include/nvhe/mm.h
+> +++ b/arch/arm64/kvm/hyp/include/nvhe/mm.h
+> @@ -19,8 +19,10 @@ int hyp_back_vmemmap(phys_addr_t phys, unsigned long size, phys_addr_t back);
+>  int pkvm_cpu_set_vector(enum arm64_hyp_spectre_vector slot);
+>  int pkvm_create_mappings(void *from, void *to, enum kvm_pgtable_prot prot);
+>  int pkvm_create_mappings_locked(void *from, void *to, enum kvm_pgtable_prot prot);
+> -unsigned long __pkvm_create_private_mapping(phys_addr_t phys, size_t size,
+> -					    enum kvm_pgtable_prot prot);
+> +int __pkvm_create_private_mapping(phys_addr_t phys, size_t size,
+> +				  enum kvm_pgtable_prot prot,
+> +				  unsigned long *haddr);
+> +int pkvm_alloc_private_va_range(size_t size, unsigned long *haddr);
+>  
+>  static inline void hyp_vmemmap_range(phys_addr_t phys, unsigned long size,
+>  				     unsigned long *start, unsigned long *end)
+> diff --git a/arch/arm64/kvm/hyp/nvhe/hyp-main.c b/arch/arm64/kvm/hyp/nvhe/hyp-main.c
+> index 5e2197db0d32..3cea4b6ac23e 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/hyp-main.c
+> +++ b/arch/arm64/kvm/hyp/nvhe/hyp-main.c
+> @@ -160,7 +160,23 @@ static void handle___pkvm_create_private_mapping(struct kvm_cpu_context *host_ct
+>  	DECLARE_REG(size_t, size, host_ctxt, 2);
+>  	DECLARE_REG(enum kvm_pgtable_prot, prot, host_ctxt, 3);
+>  
+> -	cpu_reg(host_ctxt, 1) = __pkvm_create_private_mapping(phys, size, prot);
+> +	/*
+> +	 * __pkvm_create_private_mapping() populates a pointer with the
+> +	 * hypervisor start address of the allocation.
+> +	 *
+> +	 * However, handle___pkvm_create_private_mapping() hypercall crosses the
+> +	 * EL1/EL2 boundary so the pointer would not be valid in this context.
+> +	 *
+> +	 * Instead pass the allocation address as the return value (or return
+> +	 * ERR_PTR() on failure).
+> +	 */
+> +	unsigned long haddr;
+> +	int err = __pkvm_create_private_mapping(phys, size, prot, &haddr);
+> +
+> +	if (err)
+> +		haddr = (unsigned long)ERR_PTR(err);
+> +
+> +	cpu_reg(host_ctxt, 1) = haddr;
+>  }
+>  
+>  static void handle___pkvm_prot_finalize(struct kvm_cpu_context *host_ctxt)
+> diff --git a/arch/arm64/kvm/hyp/nvhe/mm.c b/arch/arm64/kvm/hyp/nvhe/mm.c
+> index cdbe8e246418..670f11349070 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/mm.c
+> +++ b/arch/arm64/kvm/hyp/nvhe/mm.c
+> @@ -37,36 +37,60 @@ static int __pkvm_create_mappings(unsigned long start, unsigned long size,
+>  	return err;
+>  }
+>  
+> -unsigned long __pkvm_create_private_mapping(phys_addr_t phys, size_t size,
+> -					    enum kvm_pgtable_prot prot)
+> +/**
+> + * pkvm_alloc_private_va_range - Allocates a private VA range.
+> + * @size:	The size of the VA range to reserve.
+> + * @haddr:	The hypervisor virtual start address of the allocation.
+> + *
+> + * The private virtual address (VA) range is allocated above __io_map_base
+> + * and aligned based on the order of @size.
+> + *
+> + * Return: 0 on success or negative error code on failure.
+> + */
+> +int pkvm_alloc_private_va_range(size_t size, unsigned long *haddr)
+>  {
+> -	unsigned long addr;
+> -	int err;
+> +	unsigned long base, addr;
+> +	int ret = 0;
+>  
+>  	hyp_spin_lock(&pkvm_pgd_lock);
+>  
+> -	size = PAGE_ALIGN(size + offset_in_page(phys));
+> -	addr = __io_map_base;
+> -	__io_map_base += size;
+> +	/* Align the allocation based on the order of its size */
+> +	addr = ALIGN(__io_map_base, PAGE_SIZE << get_order(size));
+>  
+> -	/* Are we overflowing on the vmemmap ? */
+> -	if (__io_map_base > __hyp_vmemmap) {
+> -		__io_map_base -= size;
+> -		addr = (unsigned long)ERR_PTR(-ENOMEM);
+> -		goto out;
+> -	}
+> +	/* The allocated size is always a multiple of PAGE_SIZE */
+> +	base = addr + PAGE_ALIGN(size);
+>  
+> -	err = kvm_pgtable_hyp_map(&pkvm_pgtable, addr, size, phys, prot);
+> -	if (err) {
+> -		addr = (unsigned long)ERR_PTR(err);
+> -		goto out;
+> +	/* Are we overflowing on the vmemmap ? */
+> +	if (!addr || base > __hyp_vmemmap)
+> +		ret = -ENOMEM;
+> +	else {
+> +		__io_map_base = base;
+> +		*haddr = addr;
+>  	}
+>  
+> -	addr = addr + offset_in_page(phys);
+> -out:
+>  	hyp_spin_unlock(&pkvm_pgd_lock);
+>  
+> -	return addr;
+> +	return ret;
+> +}
+> +
+> +int __pkvm_create_private_mapping(phys_addr_t phys, size_t size,
+> +				  enum kvm_pgtable_prot prot,
+> +				  unsigned long *haddr)
+> +{
+> +	unsigned long addr;
+> +	int err;
+> +
+> +	size += offset_in_page(phys);
 
-liang.yang@amlogic.com wrote on Mon, 11 Apr 2022 10:40:15 +0800:
+I have the same comment as for the previous patch. Keep the ALIGN()
+here in order to make the code readable (it is just an add+and on a
+slow path).
 
-> Hi Miquel,
->=20
-> On 2022/4/4 16:30, Miquel Raynal wrote:
-> > [ EXTERNAL EMAIL ]
-> >=20
-> > Hi Liang,
-> >=20
-> > liang.yang@amlogic.com wrote on Sat, 2 Apr 2022 15:49:19 +0800:
-> >  =20
-> >> EMMC and NAND have the same clock control register named 'SD_EMMC_CLOC=
-K' which is
-> >> defined in EMMC port internally. bit0~5 of 'SD_EMMC_CLOCK' is the divi=
-der and
-> >> bit6~7 is the mux for fix pll and xtal.A common MMC and NAND sub-clock=
- has been
-> >> implemented and can be used by the eMMC and NAND controller (which are=
- mutually
-> >> exclusive anyway). Let's use this new clock.
-> >>
-> >> Signed-off-by: Liang Yang <liang.yang@amlogic.com>
-> >> ---
-> >>   drivers/mtd/nand/raw/meson_nand.c | 89 +++++++++++++++--------------=
---
-> >>   1 file changed, 42 insertions(+), 47 deletions(-)
-> >>
-> >> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/=
-meson_nand.c
-> >> index ac3be92872d0..1b1a9407fb2f 100644
-> >> --- a/drivers/mtd/nand/raw/meson_nand.c
-> >> +++ b/drivers/mtd/nand/raw/meson_nand.c
-> >> @@ -10,6 +10,7 @@
-> >>   #include <linux/dma-mapping.h>
-> >>   #include <linux/interrupt.h>
-> >>   #include <linux/clk.h>
-> >> +#include <linux/clk-provider.h>
-> >>   #include <linux/mtd/rawnand.h>
-> >>   #include <linux/mtd/mtd.h>
-> >>   #include <linux/mfd/syscon.h>
-> >> @@ -19,6 +20,7 @@
-> >>   #include <linux/iopoll.h>
-> >>   #include <linux/of.h>
-> >>   #include <linux/of_device.h>
-> >> +#include <linux/of_address.h>
-> >>   #include <linux/sched/task_stack.h> =20
-> >>   >>   #define NFC_REG_CMD		0x00 =20
-> >> @@ -104,6 +106,9 @@ =20
-> >>   >>   #define PER_INFO_BYTE		8
-> >>   >> +#define CLK_DIV_SHIFT		0 =20
-> >> +#define CLK_DIV_WIDTH		6
-> >> +
-> >>   struct meson_nfc_nand_chip {
-> >>   	struct list_head node;
-> >>   	struct nand_chip nand;
-> >> @@ -151,15 +156,15 @@ struct meson_nfc {
-> >>   	struct nand_controller controller;
-> >>   	struct clk *core_clk;
-> >>   	struct clk *device_clk;
-> >> -	struct clk *phase_tx;
-> >> -	struct clk *phase_rx;
-> >> +	struct clk *nand_clk;
-> >> +	struct clk_divider nand_divider; =20
-> >>   >>   	unsigned long clk_rate; =20
-> >>   	u32 bus_timing; =20
-> >>   >>   	struct device *dev; =20
-> >>   	void __iomem *reg_base;
-> >> -	struct regmap *reg_clk;
-> >> +	void __iomem *sd_emmc_clock;
-> >>   	struct completion completion;
-> >>   	struct list_head chips;
-> >>   	const struct meson_nfc_data *data;
-> >> @@ -235,7 +240,7 @@ static void meson_nfc_select_chip(struct nand_chip=
- *nand, int chip)
-> >>   	nfc->timing.tbers_max =3D meson_chip->tbers_max; =20
-> >>   >>   	if (nfc->clk_rate !=3D meson_chip->clk_rate) { =20
-> >> -		ret =3D clk_set_rate(nfc->device_clk, meson_chip->clk_rate);
-> >> +		ret =3D clk_set_rate(nfc->nand_clk, meson_chip->clk_rate);
-> >>   		if (ret) {
-> >>   			dev_err(nfc->dev, "failed to set clock rate\n");
-> >>   			return;
-> >> @@ -406,7 +411,6 @@ static int meson_nfc_queue_rb(struct meson_nfc *nf=
-c, int timeout_ms)
-> >>   	cmd =3D NFC_CMD_RB | NFC_CMD_RB_INT
-> >>   		| nfc->param.chip_select | nfc->timing.tbers_max;
-> >>   	writel(cmd, nfc->reg_base + NFC_REG_CMD);
-> >> - =20
-> >=20
-> > Please avoid these spacing changes in the middle of a commit. =20
->=20
-> ok, i will fix it.
-> >  =20
-> >>   	ret =3D wait_for_completion_timeout(&nfc->completion,
-> >>   					  msecs_to_jiffies(timeout_ms));
-> >>   	if (ret =3D=3D 0)
-> >> @@ -985,9 +989,11 @@ static const struct mtd_ooblayout_ops meson_oobla=
-yout_ops =3D {
-> >>   	.free =3D meson_ooblayout_free,
-> >>   }; =20
-> >>   >> +struct clk_parent_data nfc_divider_parent_data[1]; =20
-> >>   static int meson_nfc_clk_init(struct meson_nfc *nfc)
-> >>   {
-> >>   	int ret;
-> >> +	struct clk_init_data init =3D {0}; =20
-> >>   >>   	/* request core clock */ =20
-> >>   	nfc->core_clk =3D devm_clk_get(nfc->dev, "core");
-> >> @@ -1002,21 +1008,26 @@ static int meson_nfc_clk_init(struct meson_nfc=
- *nfc)
-> >>   		return PTR_ERR(nfc->device_clk);
-> >>   	} =20
-> >>   >> -	nfc->phase_tx =3D devm_clk_get(nfc->dev, "tx"); =20
-> >> -	if (IS_ERR(nfc->phase_tx)) {
-> >> -		dev_err(nfc->dev, "failed to get TX clk\n");
-> >> -		return PTR_ERR(nfc->phase_tx);
-> >> -	}
-> >> -
-> >> -	nfc->phase_rx =3D devm_clk_get(nfc->dev, "rx");
-> >> -	if (IS_ERR(nfc->phase_rx)) {
-> >> -		dev_err(nfc->dev, "failed to get RX clk\n");
-> >> -		return PTR_ERR(nfc->phase_rx);
-> >> -	}
-> >> +	init.name =3D devm_kstrdup(nfc->dev, "nfc#div", GFP_KERNEL);
-> >> +	init.ops =3D &clk_divider_ops;
-> >> +	nfc_divider_parent_data[0].fw_name =3D "device";
-> >> +	init.parent_data =3D nfc_divider_parent_data;
-> >> +	init.num_parents =3D 1;
-> >> +	nfc->nand_divider.reg =3D nfc->sd_emmc_clock;
-> >> +	nfc->nand_divider.shift =3D CLK_DIV_SHIFT;
-> >> +	nfc->nand_divider.width =3D CLK_DIV_WIDTH;
-> >> +	nfc->nand_divider.hw.init =3D &init;
-> >> +	nfc->nand_divider.flags =3D CLK_DIVIDER_ONE_BASED |
-> >> +				  CLK_DIVIDER_ROUND_CLOSEST |
-> >> +				  CLK_DIVIDER_ALLOW_ZERO;
-> >> +
-> >> +	nfc->nand_clk =3D devm_clk_register(nfc->dev, &nfc->nand_divider.hw);
-> >> +	if (IS_ERR(nfc->nand_clk))
-> >> +		return PTR_ERR(nfc->nand_clk); =20
-> >>   >>   	/* init SD_EMMC_CLOCK to sane defaults w/min clock rate */ =20
-> >> -	regmap_update_bits(nfc->reg_clk,
-> >> -			   0, CLK_SELECT_NAND, CLK_SELECT_NAND);
-> >> +	writel(CLK_SELECT_NAND | readl(nfc->sd_emmc_clock),
-> >> +	       nfc->sd_emmc_clock); =20
-> >>   >>   	ret =3D clk_prepare_enable(nfc->core_clk); =20
-> >>   	if (ret) {
-> >> @@ -1030,29 +1041,21 @@ static int meson_nfc_clk_init(struct meson_nfc=
- *nfc)
-> >>   		goto err_device_clk;
-> >>   	} =20
-> >>   >> -	ret =3D clk_prepare_enable(nfc->phase_tx); =20
-> >> +	ret =3D clk_prepare_enable(nfc->nand_clk);
-> >>   	if (ret) {
-> >> -		dev_err(nfc->dev, "failed to enable TX clock\n");
-> >> -		goto err_phase_tx;
-> >> +		dev_err(nfc->dev, "pre enable NFC divider fail\n");
-> >> +		goto err_nand_clk;
-> >>   	} =20
-> >>   >> -	ret =3D clk_prepare_enable(nfc->phase_rx); =20
-> >> -	if (ret) {
-> >> -		dev_err(nfc->dev, "failed to enable RX clock\n");
-> >> -		goto err_phase_rx;
-> >> -	}
-> >> -
-> >> -	ret =3D clk_set_rate(nfc->device_clk, 24000000);
-> >> +	ret =3D clk_set_rate(nfc->nand_clk, 24000000); =20
-> >=20
-> > Is this rename really useful? =20
->=20
-> yes, it works.
-
-I understand it works, but if this is just a name change of a variable
-in your driver that has implications everywhere in this driver, then
-it's probably best to do it in a separate commit to ease the review.
-
->=20
-> >  =20
-> >>   	if (ret)
-> >> -		goto err_disable_rx;
-> >> +		goto err_disable_clk; =20
-> >>   >>   	return 0;
-> >>   >> -err_disable_rx: =20
-> >> -	clk_disable_unprepare(nfc->phase_rx);
-> >> -err_phase_rx:
-> >> -	clk_disable_unprepare(nfc->phase_tx);
-> >> -err_phase_tx:
-> >> +err_disable_clk:
-> >> +	clk_disable_unprepare(nfc->nand_clk);
-> >> +err_nand_clk:
-> >>   	clk_disable_unprepare(nfc->device_clk);
-> >>   err_device_clk:
-> >>   	clk_disable_unprepare(nfc->core_clk);
-> >> @@ -1061,8 +1064,7 @@ static int meson_nfc_clk_init(struct meson_nfc *=
-nfc) =20
-> >>   >>   static void meson_nfc_disable_clk(struct meson_nfc *nfc) =20
-> >>   {
-> >> -	clk_disable_unprepare(nfc->phase_rx);
-> >> -	clk_disable_unprepare(nfc->phase_tx);
-> >> +	clk_disable_unprepare(nfc->nand_clk);
-> >>   	clk_disable_unprepare(nfc->device_clk);
-> >>   	clk_disable_unprepare(nfc->core_clk);
-> >>   }
-> >> @@ -1374,7 +1376,6 @@ static int meson_nfc_probe(struct platform_devic=
-e *pdev)
-> >>   {
-> >>   	struct device *dev =3D &pdev->dev;
-> >>   	struct meson_nfc *nfc;
-> >> -	struct resource *res;
-> >>   	int ret, irq; =20
-> >>   >>   	nfc =3D devm_kzalloc(dev, sizeof(*nfc), GFP_KERNEL); =20
-> >> @@ -1388,21 +1389,15 @@ static int meson_nfc_probe(struct platform_dev=
-ice *pdev)
-> >>   	nand_controller_init(&nfc->controller);
-> >>   	INIT_LIST_HEAD(&nfc->chips);
-> >>   	init_completion(&nfc->completion);
-> >> - =20
-> >=20
-> > Please don't modify spacing in this commit.
-> >ok =20
->=20
-> >>   	nfc->dev =3D dev; =20
-> >>   >> -	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0); =20
-> >> -	nfc->reg_base =3D devm_ioremap_resource(dev, res);
-> >> +	nfc->reg_base =3D devm_platform_ioremap_resource_byname(pdev, "nfc")=
-; =20
-> >=20
-> > This change seems unrelated. =20
->=20
-> To be consistent with the following devm_platform_ioremap_resource_byname=
-(pdev, "emmc"). do you mean that we don't need it?>
-
-So indeed it should not be in this commit. You can do that as a
-preparation patch if you wish.
-
-> >>   	if (IS_ERR(nfc->reg_base))
-> >>   		return PTR_ERR(nfc->reg_base); =20
-> >>   >> -	nfc->reg_clk =3D =20
-> >> -		syscon_regmap_lookup_by_phandle(dev->of_node,
-> >> -						"amlogic,mmc-syscon");
-> >> -	if (IS_ERR(nfc->reg_clk)) {
-> >> -		dev_err(dev, "Failed to lookup clock base\n");
-> >> -		return PTR_ERR(nfc->reg_clk);
-> >> -	}
-> >> +	nfc->sd_emmc_clock =3D devm_platform_ioremap_resource_byname(pdev, "=
-emmc");
-> >> +	if (IS_ERR(nfc->sd_emmc_clock))
-> >> +		return PTR_ERR(nfc->sd_emmc_clock); =20
-> >=20
-> > While I agree this is much better than the previous solution, we cannot
-> > break DT compatibility, so you need to try getting the emmc clock, but
-> > if it fails you should fallback to the regmap lookup. =20
->=20
-> ok, i will fix it next version. thanks.
->=20
-> >  =20
-> >>   >>   	irq =3D platform_get_irq(pdev, 0); =20
-> >>   	if (irq < 0) =20
-> >=20
-> >=20
-> > Thanks,
-> > Miqu=C3=A8l
-> >=20
-> > . =20
-
+> +	err = pkvm_alloc_private_va_range(size, &addr);
+> +	if (err)
+> +		return err;
+> +
+> +	err = __pkvm_create_mappings(addr, size, phys, prot);
+> +	if (err)
+> +		return err;
+> +
+> +	*haddr = addr + offset_in_page(phys);
+> +	return err;
+>  }
+>  
+>  int pkvm_create_mappings_locked(void *from, void *to, enum kvm_pgtable_prot prot)
+> @@ -146,7 +170,8 @@ int pkvm_cpu_set_vector(enum arm64_hyp_spectre_vector slot)
+>  int hyp_map_vectors(void)
+>  {
+>  	phys_addr_t phys;
+> -	void *bp_base;
+> +	unsigned long bp_base;
+> +	int ret;
+>  
+>  	if (!kvm_system_needs_idmapped_vectors()) {
+>  		__hyp_bp_vect_base = __bp_harden_hyp_vecs;
+> @@ -154,13 +179,12 @@ int hyp_map_vectors(void)
+>  	}
+>  
+>  	phys = __hyp_pa(__bp_harden_hyp_vecs);
+> -	bp_base = (void *)__pkvm_create_private_mapping(phys,
+> -							__BP_HARDEN_HYP_VECS_SZ,
+> -							PAGE_HYP_EXEC);
+> -	if (IS_ERR_OR_NULL(bp_base))
+> -		return PTR_ERR(bp_base);
+> +	ret = __pkvm_create_private_mapping(phys, __BP_HARDEN_HYP_VECS_SZ,
+> +					    PAGE_HYP_EXEC, &bp_base);
+> +	if (ret)
+> +		return ret;
+>  
+> -	__hyp_bp_vect_base = bp_base;
+> +	__hyp_bp_vect_base = (void *)bp_base;
+>  
+>  	return 0;
+>  }
 
 Thanks,
-Miqu=C3=A8l
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

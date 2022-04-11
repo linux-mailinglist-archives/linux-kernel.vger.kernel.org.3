@@ -2,119 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63ACB4FC3EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 20:14:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4BE4FC3E6
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 20:13:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349106AbiDKSQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 14:16:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51856 "EHLO
+        id S1349091AbiDKSPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 14:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349108AbiDKSQr (ORCPT
+        with ESMTP id S240011AbiDKSP3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 14:16:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A116E64C6;
-        Mon, 11 Apr 2022 11:14:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 57DEAB817F3;
-        Mon, 11 Apr 2022 18:14:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71BB7C385A4;
-        Mon, 11 Apr 2022 18:14:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649700870;
-        bh=tlaHWLebE/3fsbDzy1BqRre1Irq1Ran1Bo9T0hGhvGY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=T9/mL/lo9AfzCcQZyV5d4/4yQD9AJkqaGdOY7ydKCtbFM4+z4bwIW1pnqtSJTYeqR
-         ZN+ufL7BMWqyV4PXIBxosC03wnUvfOvArTrsLteuhtGKIcUSSGqlIVDGDboMmzxYL6
-         PeiB9VMOrghGCFwBGqo2+gEcjBlvgDYKu2j4pF8LlRzWGcdYvJU5vE6W3w551LVFeK
-         RMQGNmr7YjLuKJfHg+a8AJQZm2NNVV2uZz/oPr8rZr1HJMBzY5dgO/sCFUfUAzwAvI
-         1vslHFnt8ooVpwPSBzfi+zKaOYfzK4zNfCpwWHlNnX2GwQ5Hd+oBfWfil9CouMqi2g
-         otMkvwrjvUz1A==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>
-Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH v2] drm/msm/gpu: Avoid -Wunused-function with !CONFIG_PM_SLEEP
-Date:   Mon, 11 Apr 2022 11:12:50 -0700
-Message-Id: <20220411181249.2758344-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        Mon, 11 Apr 2022 14:15:29 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 556DADF95
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 11:13:14 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id k14so14935541pga.0
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 11:13:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=Jw2w5fc9s7LYCxNyjF4Anw/31mGnF1Xnlp2YCJojif4=;
+        b=zYUmChAbevCzMKAOteYpCt8iCZnXii2/ZAqbsWsSzdO+W6XUiXCDFOfEFJO4LuI29J
+         GRfLdTG71rNc/4fdqQ6qUxbUXZRjAg/2nBe3XM+bYVDggr68EsmbxVGph1uscr1XvI7I
+         H9thhM8YlDLthSuyIVx3oKcri5EMQCZNH7Nx7iBufxmFnXpJjfMSVZ1CC/4i58B1ZoSZ
+         pt68xA/6LSO9ec+sEYg8O1wBSGS4tPWSCfCz0lyB+uncZ0kG0QoNZkTTEmpHD+r/98yR
+         ppY5AdTcH52vSTE6T7ECEiu34gSQpmbib1ZrOqRGx9VPczLU12Rjrt+V9ksp8ODe2T0+
+         LRjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=Jw2w5fc9s7LYCxNyjF4Anw/31mGnF1Xnlp2YCJojif4=;
+        b=zmHeOb2bKJ0KC90igp+GI4HOlnuo8oZqZQn9OMY7oJGxBxmKKrLn1LMsRAbNbIr9vo
+         Ygxq1hCQnbdVf7UzZnKkgCubVFJj4nN/mfGVpyoVBKVEtP/B/IYAzp+QEBX/bbA1kjVk
+         e37Q8Z9qARhaRMPWmBNAJIxz1ioDHsK/gROhjIH/Vz3pZb8H+0C3s2UEhh2RHAQWHlqt
+         iZXE8MXQnf6qJBy9hxaP6LtGXTYwsy9mQmXKmwA95XjPVM3bZFlFP1keOZnBUB2FkId1
+         +VIODgNo0SqsVbx6c2nsuYKO7qsan1UkZKM93tYdL3iHJF67/Wj6vnZ2IsAikcYcoPwZ
+         xHBQ==
+X-Gm-Message-State: AOAM530jApJ2No6JgIIDxLqSrgjWOKDa7uSC8EKx/2YxfkJnzJAU4auk
+        2JLsZD6bPJ72Kdu2/CQRDlImQw==
+X-Google-Smtp-Source: ABdhPJwFnQOXCSv95jf3Mtp1Xp4D95v+w5pquv+GUaB8VSDncNnmKQidKvtg+7Fpe/4FvzhLFVMuQw==
+X-Received: by 2002:a63:6e07:0:b0:398:1337:d99e with SMTP id j7-20020a636e07000000b003981337d99emr27022351pgc.23.1649700793750;
+        Mon, 11 Apr 2022 11:13:13 -0700 (PDT)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
+        by smtp.gmail.com with ESMTPSA id x5-20020aa79a45000000b00504a1c8b75asm17752885pfj.165.2022.04.11.11.13.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Apr 2022 11:13:13 -0700 (PDT)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, rafael@kernel.org,
+        viresh.kumar@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org
+Cc:     matthias.bgg@gmail.com, jia-wei.chang@mediatek.com,
+        roger.lu@mediatek.com, hsinyi@google.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH V2 13/15] cpufreq: mediatek: Link CCI device to CPU
+In-Reply-To: <bc6dd020a1cc3f00f5be2bf2929046b9116bbeef.camel@mediatek.com>
+References: <20220408045908.21671-1-rex-bc.chen@mediatek.com>
+ <20220408045908.21671-14-rex-bc.chen@mediatek.com>
+ <7hfsmn5m9f.fsf@baylibre.com>
+ <bc6dd020a1cc3f00f5be2bf2929046b9116bbeef.camel@mediatek.com>
+Date:   Mon, 11 Apr 2022 11:13:12 -0700
+Message-ID: <7hwnfv4hfr.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building with CONFIG_PM=y and CONFIG_PM_SLEEP=n (such as ARCH=riscv
-allmodconfig), the following warnings/errors occur:
+Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
 
-  drivers/gpu/drm/msm/adreno/adreno_device.c:679:12: error: 'adreno_system_resume' defined but not used [-Werror=unused-function]
-    679 | static int adreno_system_resume(struct device *dev)
-        |            ^~~~~~~~~~~~~~~~~~~~
-  drivers/gpu/drm/msm/adreno/adreno_device.c:655:12: error: 'adreno_system_suspend' defined but not used [-Werror=unused-function]
-    655 | static int adreno_system_suspend(struct device *dev)
-        |            ^~~~~~~~~~~~~~~~~~~~~
-  cc1: all warnings being treated as errors
+> On Fri, 2022-04-08 at 13:54 -0700, Kevin Hilman wrote:
+>> Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
+>> 
+>> > From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+>> > 
+>> > In some MediaTek SoCs, like MT8183, CPU and CCI share the same
+>> > power
+>> > supplies. Cpufreq needs to check if CCI devfreq exists and wait
+>> > until
+>> > CCI devfreq ready before scaling frequency.
+>> > 
+>> > - Add is_ccifreq_ready() to link CCI device to CPI, and CPU will
+>> > start
+>> >   DVFS when CCI is ready.
+>> > - Add platform data for MT8183.
+>> > 
+>> > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+>> 
+>> The checks here are not enough, and will lead to unexpected behavior.
+>> IIUC, before doing DVFS, you're checking:
+>> 
+>> 1) if the "cci" DT node is present and
+>> 2) if the driver for that device is bound
+>> 
+>> If both those conditions are not met, you don't actually fail, you
+>> just
+>> silently do nothing in ->set_target().  As Angelo pointed out also,
+>> this
+>> is not a good idea, and will be rather confusing to users.
+>> 
+>> The same thing would happen if the cci DT node was present, but the
+>> CCI
+>> devfreq driver was disabled.  Silent failure would also be quite
+>> unexpected behavior.  Similarily, if the cci DT node is not present
+>> at
+>> all (like it is in current upstream DT), this CPUfreq driver will
+>> silently do nothing.  Not good.
+>> 
+>> So, this patch needs to handle several scenarios:
+>> 
+>> 1) CCI DT node not present
+>> 
+>> In this case, the driver should still operate normally.  With no CCI
+>> node, or driver there's no conflict.
+>> 
+>> 2) CCI DT present/enabled but not yet bound
+>> 
+>> In this case, you could return -EAGAIN as suggested by Angelo, or
+>> maybe
+>> better, it should do a deferred probe.
+>> 
+>> 3) CCI DT present, but driver disabled
+>> 
+>> This case is similar to (1), this driver should continue to work.
+>> 
+>> Kevin
+>
+> Hello Kevin and Angelo,
+>
+> In my review, if we do not get the link or the link status is not
+> correct between cci and cpufreq in target_index, I think it will never
+> established again for this link.
+> Because it's not checked in probe stage.
+>
+> So I think we just need to deal with the issue without cci device, and
+> don't expect the link between cci and cpufreq will be connected again.
+>
+> If I am wrong, please correct me.
 
-These functions are only used in SET_SYSTEM_SLEEP_PM_OPS(), which
-evaluates to empty when CONFIG_PM_SLEEP is not set, making these
-functions unused.
+I don't fully understand your questions, but I think what your getting
+at suggest that you might need to use deferred probe to handle the case
+where the ordering of CCI and cpufreq probing is not predictable.
 
-To resolve this, use the SYSTEM_SLEEP_PM_OPS() and RUNTIME_PM_OPS()
-macros, which were introduced in commit 1a3c7bb08826 ("PM: core: Add new
-*_PM_OPS macros, deprecate old ones"). They are designed to avoid these
-compiler warnings while still guarding their use on
-CONFIG_PM{,_SLEEP}=y.
-
-Fixes: 7e4167c9e021 ("drm/msm/gpu: Park scheduler threads for system suspend")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-
-v1 -> v2: https://lore.kernel.org/20220330180541.62250-1-nathan@kernel.org/
-
-* Avoid using #ifdef altogether by using new PM macros.
-
- drivers/gpu/drm/msm/adreno/adreno_device.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
-index 661dfa7681fb..8706bcdd1472 100644
---- a/drivers/gpu/drm/msm/adreno/adreno_device.c
-+++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
-@@ -599,7 +599,6 @@ static const struct of_device_id dt_match[] = {
- 	{}
- };
- 
--#ifdef CONFIG_PM
- static int adreno_runtime_resume(struct device *dev)
- {
- 	struct msm_gpu *gpu = dev_to_gpu(dev);
-@@ -682,11 +681,9 @@ static int adreno_system_resume(struct device *dev)
- 	return pm_runtime_force_resume(dev);
- }
- 
--#endif
--
- static const struct dev_pm_ops adreno_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(adreno_system_suspend, adreno_system_resume)
--	SET_RUNTIME_PM_OPS(adreno_runtime_suspend, adreno_runtime_resume, NULL)
-+	SYSTEM_SLEEP_PM_OPS(adreno_system_suspend, adreno_system_resume)
-+	RUNTIME_PM_OPS(adreno_runtime_suspend, adreno_runtime_resume, NULL)
- };
- 
- static struct platform_driver adreno_driver = {
-
-base-commit: 0fe35b8dcb8b3c4b751a1a44f1e128b690af71e4
--- 
-2.35.1
-
+Kevin

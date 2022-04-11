@@ -2,116 +2,362 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C70484FBD3E
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 15:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AE3E4FBD43
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 15:36:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346546AbiDKNiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 09:38:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58870 "EHLO
+        id S1346570AbiDKNiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 09:38:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230506AbiDKNiD (ORCPT
+        with ESMTP id S234161AbiDKNiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 09:38:03 -0400
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACFD19C32;
-        Mon, 11 Apr 2022 06:35:49 -0700 (PDT)
-Received: by mail-qk1-f171.google.com with SMTP id b33so10595010qkp.13;
-        Mon, 11 Apr 2022 06:35:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6S8S+a0YX9xrAM7ZLPpu+Eb5jo+Pr1Yp9P1ijuzXncc=;
-        b=rq0LA6dl809CA45g6UnZEmOMAgXLjFJ38JBd8iE1m13fF7LZorRYJUu0Ah8y/1ntoD
-         jkVtiCqLu32wIl4/C2fr6+IOSIHoFiWLDPeW/C+0RMaQulgK5pYLyAKOYyBH64ZfqTGj
-         NbNFDOjRCUUMutAItvZ5PtOWHt4Di5tIGpM7NziEraigAqSnMVYQKucUcX4cas2MTMk0
-         bURbEHDZVAQkiS30Y3G1cRLGFIyy5/ej/CDe8iWuUchZvMTcCceRMx//vn2sf+Dy8gB/
-         kqoWNUoRf/7v1vh+xyuMTINiqAiuDyXYbzOMbcC1cT2lcfeCkyrjEFptLUY5fbhecLjo
-         13iw==
-X-Gm-Message-State: AOAM532/O2mvglTFcoPtISYwoIQDbfILACWJE1cOrarDrF/nJbGw6sEz
-        VnE6yRvyvQpP45o5AlScH6MVTwF4f03VAA==
-X-Google-Smtp-Source: ABdhPJzMWbiPHJzD5E/tJf58XoC7dnkFOUfvfYVfnqs00RzsVK0ywczkbe+JqVy07bLaQ5IMZ7599A==
-X-Received: by 2002:a05:620a:424e:b0:67e:4c1b:baef with SMTP id w14-20020a05620a424e00b0067e4c1bbaefmr22077478qko.778.1649684147723;
-        Mon, 11 Apr 2022 06:35:47 -0700 (PDT)
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
-        by smtp.gmail.com with ESMTPSA id s12-20020a05622a018c00b002e1cd88645dsm25399711qtw.74.2022.04.11.06.35.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Apr 2022 06:35:47 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-2ec05db3dfbso44230457b3.7;
-        Mon, 11 Apr 2022 06:35:47 -0700 (PDT)
-X-Received: by 2002:a0d:e743:0:b0:2eb:3106:9b32 with SMTP id
- q64-20020a0de743000000b002eb31069b32mr26595858ywe.512.1649684146995; Mon, 11
- Apr 2022 06:35:46 -0700 (PDT)
+        Mon, 11 Apr 2022 09:38:24 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F4A81D32C;
+        Mon, 11 Apr 2022 06:36:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649684170; x=1681220170;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=vf9KvKCIrwXoSxZz+cBXcuhdAg4uSjtRtBgWIQcM4RM=;
+  b=TPEX5Hd7IzMOZS9jHyJRDlLzd48qgpHw95fnt2bw+zOuYxB87AhVdw+M
+   UHdK+rNcbsf7bmbffppYRbFgeaMWeqrPLg7tLHMlhPx0pBXWQi8t5+Ku2
+   7YTqrEvsc1KEE87cAEi1w/IyEjcy0Bq4xAoznvgFNU1NxV0SDp/oh7rWo
+   s=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 11 Apr 2022 06:36:09 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 06:36:08 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 11 Apr 2022 06:36:08 -0700
+Received: from [10.216.15.65] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 11 Apr
+ 2022 06:36:04 -0700
+Message-ID: <c3a6c56b-0206-27ea-e972-9ce1c17d2ca6@quicinc.com>
+Date:   Mon, 11 Apr 2022 19:06:00 +0530
 MIME-Version: 1.0
-References: <20220406172956.3953-1-wens@kernel.org> <20220406172956.3953-3-wens@kernel.org>
-In-Reply-To: <20220406172956.3953-3-wens@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 11 Apr 2022 15:35:36 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUMc35MrWwbDXvsRNx9qSRf1bACNrhsGpeFcLCETsL4dw@mail.gmail.com>
-Message-ID: <CAMuHMdUMc35MrWwbDXvsRNx9qSRf1bACNrhsGpeFcLCETsL4dw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] dt-bindings: display: ssd1307fb: Add entry for
- SINO WEALTH SH1106
-To:     Chen-Yu Tsai <wens@kernel.org>
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Chen-Yu Tsai <wens@csie.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v6 2/2] arm64: dts: qcom: sc7280: add lpass lpi pin
+ controller node
+Content-Language: en-US
+To:     Matthias Kaehlcke <mka@chromium.org>
+CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_rohitkr@quicinc.com>, <srinivas.kandagatla@linaro.org>,
+        <dianders@chromium.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+References: <1649157167-29106-1-git-send-email-quic_srivasam@quicinc.com>
+ <1649157167-29106-3-git-send-email-quic_srivasam@quicinc.com>
+ <Ykx47AlGYa8s5FTa@google.com> <Ykz32cMNG8PhN2c+@google.com>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <Ykz32cMNG8PhN2c+@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chen-Yu,
 
-On Wed, Apr 6, 2022 at 10:13 PM Chen-Yu Tsai <wens@kernel.org> wrote:
-> From: Chen-Yu Tsai <wens@csie.org>
+On 4/6/2022 7:45 AM, Matthias Kaehlcke wrote:
+Thanks Matthias for your time and Valuable inputs!!!
+> On Tue, Apr 05, 2022 at 10:14:20AM -0700, Matthias Kaehlcke wrote:
+>> On Tue, Apr 05, 2022 at 04:42:47PM +0530, Srinivasa Rao Mandadapu wrote:
+>>> Add LPASS LPI pinctrl node required for Audio functionality on sc7280
+>>> based platforms.
+>>>
+>>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>>> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+>>> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+>>> ---
+>>>   arch/arm64/boot/dts/qcom/sc7280-idp.dtsi |  98 ++++++++++++++++++++++++++++
+>>>   arch/arm64/boot/dts/qcom/sc7280.dtsi     | 107 +++++++++++++++++++++++++++++++
+>>>   2 files changed, 205 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+>>> index 2afbbe3..f912a89 100644
+>>> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+>>> @@ -238,6 +238,104 @@
+>>>   	modem-init;
+>>>   };
+>>>   
+>>> +&lpass_tlmm {
+>>> +	dmic01_active: dmic01-active {
+>>> +		clk {
+>>> +			drive-strength = <8>;
+>>> +		};
+>>> +
+>>> +		data {
+>>> +			drive-strength = <8>;
+>> The DMIC data pins are input pins, right? Why does an input pin need a drive
+>> strength? Same for other input pins.
+Okay. Will remove this.
+>>
+>>> +		};
+>>> +	};
+>> There's no need to reference 'lpass_tlmm' nor to repeat $label: $node.
+>> Instead just use phandles:
+Okay. Will change accordingly.
+>>
+>> &dmic01_active {
+>> 	clk {
+>> 		drive-strength = <8>;
+>> 	};
+>>
+>> 	data {
+>> 		drive-strength = <8>;
+>> 	};
+>> };
+>>
+>> Rather than replicating the node hierarchy you could also just give each pin a
+>> label, and then:
+>>
+>> &dmic01_clk_active {
+>> 	drive-strength = <8>;
+>> };
+>>
+>> &dmic01_data_active {
+>> 	drive-strength = <8>;
+>> };
+>>
+>> I don't have a strong preference, but wonder if the grouping adds any value.
+> One more thing: please also drop the '_active' suffix, it is not needed. With
+> that I think it's clearer to get rid of the grouping.
+For now will continue as it's.  Anyway we are removing dmic01_data_active.
 >
-> The SINO WEALTH SH1106 is an OLED display driver that is somewhat
-> compatible with the SSD1306. It supports a slightly wider display,
-> at 132 instead of 128 pixels. The basic commands are the same, but
-> the SH1106 doesn't support the horizontal or vertical address modes.
->
-> Add a compatible string for it.
->
-> Signed-off-by: Chen-Yu Tsai <wens@csie.org>
-
-Thanks for your patch!
-
-> --- a/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
-> +++ b/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
-> @@ -13,6 +13,7 @@ maintainers:
->  properties:
->    compatible:
->      enum:
-> +      - sinowealth,sh1106-i2c
-
-Please don't introduce new compatible values including the bus type.
-There is no need for that, and this will only lead to more deprecated
-compatible values soon...
-
-Oops, this is already commit 97a40c23cda5d64a ("dt-bindings:
-display: ssd1307fb: Add entry for SINO WEALTH SH1106") in
-drm-misc/for-linux-next...
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+>>> +
+>>> +	dmic01_sleep: dmic01-sleep {
+>>> +		clk {
+>>> +			drive-strength = <2>;
+>>> +			bias-disable;
+>>> +		};
+>>> +
+>>> +		data {
+>>> +			drive-strength = <2>;
+>>> +			pull-down;
+>>> +		};
+>>> +	};
+>>> +
+>>> +	dmic23_active: dmic02-active {
+>>> +		clk {
+>>> +			drive-strength = <8>;
+>>> +		};
+>>> +
+>>> +		data {
+>>> +			drive-strength = <8>;
+>>> +		};
+>>> +	};
+>>> +
+>>> +	dmic23_sleep: dmic02-sleep {
+>>> +		clk {
+>>> +			drive-strength = <2>;
+>>> +			bias-disable;
+>>> +		};
+>>> +
+>>> +		data {
+>>> +			drive-strength = <2>;
+>>> +			pull-down;
+>>> +		};
+>>> +	};
+>>> +
+>>> +	rx_swr_active: rx-swr-active {
+>>> +		clk {
+>>> +			drive-strength = <2>;
+>>> +			slew-rate = <1>;
+>>> +			bias-disable;
+>>> +		};
+>>> +
+>>> +		data {
+>>> +			drive-strength = <2>;
+>>> +			slew-rate = <1>;
+>>> +			bias-bus-hold;
+>>> +		};
+>>> +	};
+>>> +
+>>> +	rx_swr_sleep: rx-swr-sleep {
+>>> +		clk {
+>>> +			drive-strength = <2>;
+>>> +			bias-pull-down;
+>>> +		};
+>>> +
+>>> +		data {
+>>> +			drive-strength = <2>;
+>>> +			bias-pull-down;
+>>> +		};
+>>> +	};
+>>> +
+>>> +	tx_swr_active: tx-swr-active {
+>>> +		clk {
+>>> +			drive-strength = <2>;
+>>> +			slew-rate = <1>;
+>>> +			bias-disable;
+>>> +		};
+>>> +
+>>> +		data {
+>>> +			drive-strength = <2>;
+>>> +			slew-rate = <1>;
+>>> +			bias-bus-hold;
+>>> +		};
+>>> +	};
+>>> +
+>>> +	tx_swr_sleep: tx-swr-sleep {
+>>> +		clk {
+>>> +			drive-strength = <2>;
+>>> +			bias-pull-down;
+>>> +		};
+>>> +
+>>> +		data {
+>>> +			drive-strength = <2>;
+>>> +			bias-bus-hold;
+>>> +		};
+>>> +	};
+>>> +};
+>>> +
+>>>   &pcie1 {
+>>>   	status = "okay";
+>>>   	perst-gpio = <&tlmm 2 GPIO_ACTIVE_LOW>;
+>>> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>>> index 8d8cec5..db74fc3 100644
+>>> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>>> @@ -1987,6 +1987,113 @@
+>>>   			qcom,bcm-voters = <&apps_bcm_voter>;
+>>>   		};
+>>>   
+>>> +		lpass_tlmm: pinctrl@33c0000 {
+>>> +			compatible = "qcom,sc7280-lpass-lpi-pinctrl";
+>>> +			reg = <0 0x33c0000 0x0 0x20000>,
+>>> +				<0 0x3550000 0x0 0x10000>;
+>> Pad addresses to 8 digits.
+Okay.
+>>
+>>> +			gpio-controller;
+>>> +			#gpio-cells = <2>;
+>>> +			gpio-ranges = <&lpass_tlmm 0 0 15>;
+>>> +
+>>> +			#clock-cells = <1>;
+>>> +
+>>> +			dmic01_active: dmic01-active {
+>>> +				clk {
+>>> +					pins = "gpio6";
+>>> +					function = "dmic1_clk";
+>>> +				};
+>>> +
+>>> +				data {
+>>> +					pins = "gpio7";
+>>> +					function = "dmic1_data";
+>>> +				};
+>>> +			};
+>>> +
+>>> +			dmic01_sleep: dmic01-sleep {
+>>> +				clk {
+>>> +					pins = "gpio6";
+>>> +					function = "dmic1_clk";
+>>> +				};
+>>> +
+>>> +				data {
+>>> +					pins = "gpio7";
+>>> +					function = "dmic1_data";
+>>> +				};
+>>> +			};
+>>> +
+>>> +			dmic23_active: dmic02-active {
+>> is it intentional that the node name is 'dmic02*', but the label 'dmic23*'?
+typo error. will fix it.
+>>
+>>> +				clk {
+>>> +					pins = "gpio8";
+>>> +					function = "dmic2_clk";
+>>> +				};
+>>> +
+>>> +				data {
+>>> +					pins = "gpio9";
+>>> +					function = "dmic2_data";
+>>> +				};
+>>> +			};
+>>> +
+>>> +			dmic23_sleep: dmic02-sleep {
+>> ditto
+Okay.
+>>
+>>> +				clk {
+>>> +					pins = "gpio8";
+>>> +					function = "dmic2_clk";
+>>> +				};
+>>> +
+>>> +				data {
+>>> +					pins = "gpio9";
+>>> +					function = "dmic2_data";
+>>> +				};
+>>> +			};
+>>> +
+>>> +			rx_swr_active: rx-swr-active {
+>>> +				clk {
+>>> +					pins = "gpio3";
+>>> +					function = "swr_rx_clk";
+>>> +				};
+>>> +
+>>> +				data {
+>>> +					pins = "gpio4", "gpio5";
+>>> +					function = "swr_rx_data";
+>>> +				};
+>>> +			};
+>>> +
+>>> +			rx_swr_sleep: rx-swr-sleep {
+>>> +				clk {
+>>> +					pins = "gpio3";
+>>> +					function = "swr_rx_clk";
+>>> +				};
+>>> +
+>>> +				data {
+>>> +					pins = "gpio4", "gpio5";
+>>> +					function = "swr_rx_data";
+>>> +				};
+>>> +			};
+>>> +
+>>> +			tx_swr_active: tx-swr-active {
+>>> +				clk {
+>>> +					pins = "gpio0";
+>>> +					function = "swr_tx_clk";
+>>> +				};
+>>> +
+>>> +				data {
+>>> +					pins = "gpio1", "gpio2", "gpio14";
+>>> +					function = "swr_tx_data";
+>>> +				};
+>>> +			};
+>>> +
+>>> +			tx_swr_sleep: tx-swr-sleep {
+>>> +				clk {
+>>> +					pins = "gpio0";
+>>> +					function = "swr_tx_clk";
+>>> +				};
+>>> +
+>>> +				data {
+>>> +					pins = "gpio1", "gpio2", "gpio14";
+>>> +					function = "swr_tx_data";
+>>> +				};
+>>> +			};
+>>> +		};
+>>> +
+>>>   		gpu: gpu@3d00000 {
+>>>   			compatible = "qcom,adreno-635.0", "qcom,adreno";
+>>>   			reg = <0 0x03d00000 0 0x40000>,

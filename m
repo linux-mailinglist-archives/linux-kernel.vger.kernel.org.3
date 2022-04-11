@@ -2,156 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C32144FC320
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 19:25:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BE114FC337
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 19:27:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348840AbiDKR1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 13:27:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36248 "EHLO
+        id S1348870AbiDKR3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 13:29:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348835AbiDKR1J (ORCPT
+        with ESMTP id S245656AbiDKR3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 13:27:09 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55B5115FF4;
-        Mon, 11 Apr 2022 10:24:54 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id DCF9C21606;
-        Mon, 11 Apr 2022 17:24:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1649697892; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PECqf0nEO5GbSIx3g8O+KBj0GWVwxGq+FKiYdeazjRg=;
-        b=biUJyy87RgJUmRdy4kFrI7/f9uix+to50p9xpy143vPw0UBkNoG3V6iIdaw8LWl49wK4BP
-        TW0izLj7LeY4CssxvCxx9RFTfLFGTnpy50RUm9uzM9m4z1DSPkWBuElBaUO/3c2/VVufoU
-        SA7yn9HWGft/bIgJ2+PuIzpEGzgi7eI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1649697892;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PECqf0nEO5GbSIx3g8O+KBj0GWVwxGq+FKiYdeazjRg=;
-        b=sHxv0MRjI9JoElivSlBO8zbQFGmH8KfRgd6JYuZSZ6jzhxLy9tRg86s/egEj5dHwyesFNy
-        FmxE8/h3MI9rmeCw==
-Received: from kunlun.suse.cz (unknown [10.100.128.76])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 2298EA3B83;
-        Mon, 11 Apr 2022 17:24:52 +0000 (UTC)
-Date:   Mon, 11 Apr 2022 19:24:50 +0200
-From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     David Howells <dhowells@redhat.com>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "nayna@linux.ibm.com" <nayna@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "weiyongjun1@huawei.com" <weiyongjun1@huawei.com>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "James.Bottomley@hansenpartnership.com" 
-        <James.Bottomley@hansenpartnership.com>,
-        "pjones@redhat.com" <pjones@redhat.com>,
-        Konrad Wilk <konrad.wilk@oracle.com>
-Subject: Re: [PATCH v10 8/8] integrity: Only use machine keyring when
- uefi_check_trust_mok_keys is true
-Message-ID: <20220411172450.GD163591@kunlun.suse.cz>
-References: <20220126025834.255493-1-eric.snowberg@oracle.com>
- <20220126025834.255493-9-eric.snowberg@oracle.com>
- <20220411110640.GC163591@kunlun.suse.cz>
- <C970A5DB-0238-4B5A-9935-588DF9B1DDEF@oracle.com>
+        Mon, 11 Apr 2022 13:29:14 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F0ECF2982C;
+        Mon, 11 Apr 2022 10:26:59 -0700 (PDT)
+Received: from [192.168.254.32] (unknown [47.189.24.195])
+        by linux.microsoft.com (Postfix) with ESMTPSA id CD55E205657E;
+        Mon, 11 Apr 2022 10:26:58 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CD55E205657E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1649698019;
+        bh=Mei3s3yDUS+9zxe+0qZt8C43Ggn9lmrQW4qcJGZZlwA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=JMYBm4uzf6bjPUV0Wi4hm+EKCJrhuhaL5dyYD/N6YhK6MOEYtBosuhVNagbXZ+BZM
+         AS70BGPNl1j5OgkYdtvWPte0hjC9ISqXL1i8iM+kg1KgRGurJYzCuhYUZKmLUIKFzF
+         s9i6QyH0SlNLKjUIW3nSLlnaOysfCboCKLHO8FQM=
+Message-ID: <ad2bf0c6-e3e4-097b-4d4f-39cfe4c3a580@linux.microsoft.com>
+Date:   Mon, 11 Apr 2022 12:26:58 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <C970A5DB-0238-4B5A-9935-588DF9B1DDEF@oracle.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH v1 0/9] arm64: livepatch: Use DWARF Call Frame
+ Information for frame pointer validation
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     mark.rutland@arm.com, broonie@kernel.org, ardb@kernel.org,
+        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
+        linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        chenzhongjin@huawei.com
+References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
+ <20220407202518.19780-1-madvenka@linux.microsoft.com>
+ <20220408002147.pk7clzruj6sawj7z@treble>
+ <20220408114133.GP2731@worktop.programming.kicks-ass.net>
+From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+In-Reply-To: <20220408114133.GP2731@worktop.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-21.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 04:39:42PM +0000, Eric Snowberg wrote:
+
+
+On 4/8/22 06:41, Peter Zijlstra wrote:
 > 
+> Right; so not having seen the patches due to Madhaven's email being
+> broken, I can perhaps less appreciated the crazy involved.
 > 
-> > On Apr 11, 2022, at 5:06 AM, Michal Suchánek <msuchanek@suse.de> wrote:
-> > 
-> > Hello,
-> > 
-> > On Tue, Jan 25, 2022 at 09:58:34PM -0500, Eric Snowberg wrote:
-> >> With the introduction of uefi_check_trust_mok_keys, it signifies the end-
-> > 
-> > What value does such flag have?
-> > 
-> > The user is as much in control of the flag as the MOK keys.
+
+Crazy like a fox.
+
+> On Thu, Apr 07, 2022 at 05:21:51PM -0700, Josh Poimboeuf wrote:
+>> 2)
+>>
+>> If I understand correctly, objtool is converting parts of DWARF to a new
+>> format which can then be read by the kernel.  In that case, please don't
+>> call it DWARF as that will cause a lot of confusion.
+>>
+>> There are actually several similarities between your new format and ORC,
+>> which is also an objtool-created DWARF alternative.  It would be
+>> interesting to see if they could be combined somehow.
 > 
-> The flag allows the system owner (not root) the ability to determine 
-> if they want to load MOKList into the machine keyring.  Keys contained 
-> in the machine keyring are then linked to the secondary.  The flag is no 
-> different than the '—ignore-db' currently available in shim, which then 
-> gets propagated to Linux (uefi_check_ignore_db).  These flags can be 
-> set by the system owner, who can prove physical presence.  
-
-Managing the MOK keys requires physical presence equally.
-
-Moreover, these keys are trusted for running code at ring0, in fact the
-running kernel is expected to be signed by one of them, and can be
-signed by any of them.
-
-Then what exact purpose does this extra flag serve?
-
-If such compile-time flag exists in the kernel it cannot be overriden by
-the root once the kernel is signed, either.
-
-> >> user wants to trust the machine keyring as trusted keys.  If they have
-> >> chosen to trust the machine keyring, load the qualifying keys into it
-> >> during boot, then link it to the secondary keyring .  If the user has not
-> >> chosen to trust the machine keyring, it will be empty and not linked to
-> >> the secondary keyring.
-> > 
-> > Why is importing the keys and using them linked together?
-> > 
-> > If later we get, say, machine keyring on powerpc managed by secvarctl
-> > then it has its value to import the keyring and be able to list the
-> > content with the same tools on EFI and powerpc.
+> What Josh said; please use/extend ORC.
 > 
-> The machine keyring is linked to the secondary keyring, exactly the same way 
-> the builtin is linked to it.  Linking this way should eliminate the need to change 
-> any user space tools to list the contents. 
 
-That's answer to a completely different question, though.
+Yes. I am looking into it.
 
-You either import the keys and use them, or you don't use them and don't
-import them. The option to import and not use is not available.
-
-> > It also makes sense to be able to configure the kernel to import the
-> > keys and not use them. I don't see any value in configuring that in
-> > shim, though. shim is both source of the key material and the flag so
-> > the flag is redundant, it does not exist on existing shim versions
-> > installed on user systems, and it's unlikely to exist on other
-> > plaltforms, either.
+> I really don't understand where all this crazy is coming from; why does
+> objtool need to do something radically weird for ARM64?
 > 
-> I’m sure other solutions to enable it will be accepted as well.  I know Mimi was testing 
-> without shim using a different method.
+> There are existing ARM64 patches for objtool; in fact they have recently
+> been re-posted:
+> 
+>  https://lkml.kernel.org/r/20220407120141.43801-1-chenzhongjin@huawei.com
+> 
+> The only tricky bit seems to be the whole jump-table issue. Using DWARF
+> as input to deal with jump-tables should be possible -- exceedingly
+> overkill, but possible I suppose. Mandating DWARF sucks though, compile
+> times are so much worse with DWARVES on :/
+> 
+> Once objtool can properly follow/validate ARM64 code, it should be
+> fairly straight forward to have it generate ORC data just like it does
+> on x86_64.
+> 
 
-Like not using that extra flag at all?
+My reasons for attempting the DWARF based implementation:
 
-Thanks
+- My implementation is largely architecture independent. There are a couple of
+  minor pieces that are architecture-specific, but they are minor in nature.
+  So, if an architecture wanted to support the livepatch feature but did not
+  want to do a heavy weight objtool implementation, then it has an option.
+  There has been some debate about whether static analysis should be mandated
+  for livepatch. My patch series is an attempt to provide an option.
 
-Michal
+- To get an objtool static analysis implementation working for an architecture
+  as reliably as X64 and getting it reviewed and upstreamed can take years. It took
+  years for X64, am I right? I mean, it has been quite a while since the original
+  patch series for arm64 was posted. There have been only one or two minor comments
+  so far. I am sure arm64 linux users would very much want to have livepatch available
+  ASAP to be able to install security fixes without downtime. This is an immediate need.
+
+- No software is bug free. So, even if static analysis is implemented for an architecture,
+  it would be good to have another method of verifying the unwind rules generated from
+  the static analysis. DWARF can provide that additional verification.
+
+Madhavan

@@ -2,197 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBC384FC5EB
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 22:37:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0D754FC5ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 22:37:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349766AbiDKUjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 16:39:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36080 "EHLO
+        id S1349920AbiDKUjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 16:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233704AbiDKUjN (ORCPT
+        with ESMTP id S1349875AbiDKUjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 16:39:13 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9819B1B7BF
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 13:36:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649709418; x=1681245418;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=t8OiC6LZ2wY2YwFTSPuNWQYDUf+dIPHJPm8kqYWxVEQ=;
-  b=kML67WN56BjbsLNQMbrHDYE8XLszvdMR9aJx891gr3QHV7rMlpdTVC34
-   9PUhlp9IMmax62eBSaV0XaMearpAZM6Fi526qyJBjUgM9s7uZYwj/erF8
-   /fG03qoB3MNSX0pBErRoL5VmZ7kNu7CQGaF0P8vThEWteSEikBuLQQF9h
-   +jkusAxFRYfGYtqjxUAAiofH1j4e6s9NLGTzUwTfriK3ShvJ/swoulK+i
-   2UFX7JkBfxK62y7j9+0nYm+yR+wlFD9ZZJrIHut7szw+xvD8RNGwa/3lu
-   XTLajhemKqvqup7ynM2HahH6ooO043JAMSgFGPDrw6qx3th/HXziTlcKn
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="242150084"
-X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="242150084"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 13:36:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="525717120"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 11 Apr 2022 13:36:53 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ne0mK-0002Ba-KJ;
-        Mon, 11 Apr 2022 20:36:52 +0000
-Date:   Tue, 12 Apr 2022 04:35:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/tdx] BUILD SUCCESS
- adb5680b8dfdd09756f13450bfc1ed874d895935
-Message-ID: <6254912a.3ye77f/sI3iUSmZq%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Mon, 11 Apr 2022 16:39:42 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2799A1BEA0
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 13:37:27 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id bo5so15610197pfb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 13:37:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=AYKc8ZeDRNtBCWJwQpHr7JcieMpfMfOkAMNDb3v8MjY=;
+        b=hWfvTE+5RKFSbpiLlmi4b5/iTRF1eQULyL8xZLRHFm/u7l3Rwd4oaMM4vBtwvH50/k
+         Rfbpsu+k4nTnFXBMH8k1khmANVJhl97UDy89rTpe+kU+G8brFoXwN2GDFh66yJIEa7ck
+         YIySXZvImVcfXLw6QOukQllDrCv0GF9RZ3uOrD9fFcE4AqJvZ4Z2ow7aIeEeDfCl6ZJe
+         0/F+KgoA7GWxPW4Of9ImDmNwgX4rvnLAquVYP2o4DKwx8UHlS89VOeCAjdPlb1TXUSSd
+         0p3CLTXgdOmzPrXX38+m5G5kLFldgONBUfWxwC6td0eDBUq+BccnCu/0m4WPZ+GAL4Tw
+         u/NQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AYKc8ZeDRNtBCWJwQpHr7JcieMpfMfOkAMNDb3v8MjY=;
+        b=P0FYOEa4xY4G59iaIijgaJ0oWQhWRUnlGRegbMbN6C06Z5Qge+zy4ip02eKihaz6/n
+         tztbINMcwkU4dRkly/wOcNd6ZLmPdj2DDWl4PQGkfSBUD1HWkGDU+QX+0rOy/kpgh2+y
+         cTT8pVhesPZ1nDp7fz648M9WI9KeVvz50LWO2DUQLVNTv4WGe67AYVLDlSFHGnBTL7qj
+         ZRwWIMCfYghPXli0ylczDg6TW6WQ3jHio4mvz9lCvhvey4Z32re1p5ERn/M8NKBinHA5
+         5BuM2BcHojnhjrBgkE106/WvFMIOPejT78mIOaneY/GM0lZLh6s59vgSSqRHd+zpRv2J
+         Z16w==
+X-Gm-Message-State: AOAM533Tg+CFPv8wWjyazZt3iT3H+2phXSDCadwOFYlLs+OCR8cbOzo6
+        /iU/HfQHir3+r1e0yHGPdnYcZA==
+X-Google-Smtp-Source: ABdhPJzZ64CwOXnrawiJRiNmvAMK3O1eLGBgCgolpctZJ4DZKuhTsSiJwt0g7J+Rh+QifwXJbj/jXQ==
+X-Received: by 2002:a63:2263:0:b0:399:561e:810b with SMTP id t35-20020a632263000000b00399561e810bmr27472837pgm.615.1649709446436;
+        Mon, 11 Apr 2022 13:37:26 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id gt14-20020a17090af2ce00b001c701e0a129sm327234pjb.38.2022.04.11.13.37.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Apr 2022 13:37:25 -0700 (PDT)
+Date:   Mon, 11 Apr 2022 20:37:22 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 03/31] KVM: x86: hyper-v: Handle
+ HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls gently
+Message-ID: <YlSRgiKPkNZTBpl+@google.com>
+References: <20220407155645.940890-1-vkuznets@redhat.com>
+ <20220407155645.940890-4-vkuznets@redhat.com>
+ <Yk8i+A3E9/JL96A2@google.com>
+ <87a6cr7t5k.fsf@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <87a6cr7t5k.fsf@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/tdx
-branch HEAD: adb5680b8dfdd09756f13450bfc1ed874d895935  x86/kaslr: Fix build warning in KASLR code in boot stub
+On Mon, Apr 11, 2022, Vitaly Kuznetsov wrote:
+> Sean Christopherson <seanjc@google.com> writes:
+> 
+> > On Thu, Apr 07, 2022, Vitaly Kuznetsov wrote:
+> >> @@ -1840,15 +1891,47 @@ void kvm_hv_vcpu_flush_tlb(struct kvm_vcpu *vcpu)
+> >>  {
+> >>  	struct kvm_vcpu_hv_tlbflush_ring *tlb_flush_ring;
+> >>  	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
+> >> -
+> >> -	kvm_vcpu_flush_tlb_guest(vcpu);
+> >> -
+> >> -	if (!hv_vcpu)
+> >> +	struct kvm_vcpu_hv_tlbflush_entry *entry;
+> >> +	int read_idx, write_idx;
+> >> +	u64 address;
+> >> +	u32 count;
+> >> +	int i, j;
+> >> +
+> >> +	if (!tdp_enabled || !hv_vcpu) {
+> >> +		kvm_vcpu_flush_tlb_guest(vcpu);
+> >>  		return;
+> >> +	}
+> >>  
+> >>  	tlb_flush_ring = &hv_vcpu->tlb_flush_ring;
+> >> +	read_idx = READ_ONCE(tlb_flush_ring->read_idx);
+> >> +	write_idx = READ_ONCE(tlb_flush_ring->write_idx);
+> >> +
+> >> +	/* Pairs with smp_wmb() in hv_tlb_flush_ring_enqueue() */
+> >> +	smp_rmb();
+> >>  
+> >> -	tlb_flush_ring->read_idx = tlb_flush_ring->write_idx;
+> >> +	for (i = read_idx; i != write_idx; i = (i + 1) % KVM_HV_TLB_FLUSH_RING_SIZE) {
+> >> +		entry = &tlb_flush_ring->entries[i];
+> >> +
+> >> +		if (entry->flush_all)
+> >> +			goto out_flush_all;
+> >> +
+> >> +		/*
+> >> +		 * Lower 12 bits of 'address' encode the number of additional
+> >> +		 * pages to flush.
+> >> +		 */
+> >> +		address = entry->addr & PAGE_MASK;
+> >> +		count = (entry->addr & ~PAGE_MASK) + 1;
+> >> +		for (j = 0; j < count; j++)
+> >> +			static_call(kvm_x86_flush_tlb_gva)(vcpu, address + j * PAGE_SIZE);
+> >> +	}
+> >> +	++vcpu->stat.tlb_flush;
+> >> +	goto out_empty_ring;
+> >> +
+> >> +out_flush_all:
+> >> +	kvm_vcpu_flush_tlb_guest(vcpu);
+> >> +
+> >> +out_empty_ring:
+> >> +	tlb_flush_ring->read_idx = write_idx;
+> >
+> > Does this need WRITE_ONCE?  My usual "I suck at memory ordering" disclaimer applies.
+> >
+> 
+> Same here) I *think* we're fine for 'read_idx' as it shouldn't matter at
+> which point in this function 'tlb_flush_ring->read_idx' gets modified
+> (relative to other things, e.g. actual TLB flushes) and there's no
+> concurency as we only have one reader (the vCPU which needs its TLB
+> flushed). On the other hand, I'm not against adding WRITE_ONCE() here
+> even if just to aid an unprepared reader (thinking myself couple years
+> in the future).
 
-elapsed time: 750m
-
-configs tested: 115
-configs skipped: 75
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                 randconfig-c001-20220411
-arm                            lart_defconfig
-arc                           tb10x_defconfig
-arm                          gemini_defconfig
-sh                               alldefconfig
-arm                       omap2plus_defconfig
-arc                          axs101_defconfig
-arm                      footbridge_defconfig
-sh                          rsk7269_defconfig
-um                             i386_defconfig
-powerpc                     tqm8548_defconfig
-mips                        vocore2_defconfig
-arm                       imx_v6_v7_defconfig
-arm                          pxa3xx_defconfig
-m68k                       m5475evb_defconfig
-sh                 kfr2r09-romimage_defconfig
-xtensa                          iss_defconfig
-arm                         s3c6400_defconfig
-sh                          r7780mp_defconfig
-m68k                       bvme6000_defconfig
-powerpc                     ep8248e_defconfig
-arm                        realview_defconfig
-sh                          sdk7780_defconfig
-parisc64                         alldefconfig
-m68k                         apollo_defconfig
-m68k                          sun3x_defconfig
-powerpc                   currituck_defconfig
-microblaze                          defconfig
-mips                    maltaup_xpa_defconfig
-x86_64               randconfig-c001-20220411
-arm                  randconfig-c002-20220411
-ia64                             allmodconfig
-ia64                             allyesconfig
-ia64                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-sparc                               defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-x86_64               randconfig-a016-20220411
-x86_64               randconfig-a012-20220411
-x86_64               randconfig-a013-20220411
-x86_64               randconfig-a014-20220411
-x86_64               randconfig-a015-20220411
-x86_64               randconfig-a011-20220411
-i386                 randconfig-a015-20220411
-i386                 randconfig-a011-20220411
-i386                 randconfig-a016-20220411
-i386                 randconfig-a012-20220411
-i386                 randconfig-a013-20220411
-i386                 randconfig-a014-20220411
-riscv                randconfig-r042-20220411
-arc                  randconfig-r043-20220411
-s390                 randconfig-r044-20220411
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-um                           x86_64_defconfig
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                         rhel-8.3-kunit
-x86_64                               rhel-8.3
-
-clang tested configs:
-powerpc                 mpc8272_ads_defconfig
-mips                malta_qemu_32r6_defconfig
-i386                 randconfig-a004-20220411
-i386                 randconfig-a001-20220411
-i386                 randconfig-a003-20220411
-i386                 randconfig-a005-20220411
-i386                 randconfig-a006-20220411
-i386                 randconfig-a002-20220411
-x86_64               randconfig-a003-20220411
-x86_64               randconfig-a001-20220411
-x86_64               randconfig-a002-20220411
-x86_64               randconfig-a004-20220411
-x86_64               randconfig-a005-20220411
-x86_64               randconfig-a006-20220411
-hexagon              randconfig-r041-20220411
-hexagon              randconfig-r045-20220411
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Ah, read_idx == tail and write_idx == head.  I didn't look at the structure very
+closely, or maybe not at all :-)  And IIUC, only the vCPU itself ever writes to
+tail?  In that case, I would omit the READ_ONCE() from both the write to tail here
+and the read above, and probably add a brief comment stating that the flush must
+be performed on the target vCPU, i.e. must hold vcpu->mutex, and so it's safe for
+the compiler to re-read tlb_flush_ring->read_idx in the loop because it cannot
+change.

@@ -2,177 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D620C4FBAEF
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 13:31:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE8C74FBAF9
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 13:32:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344569AbiDKLdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 07:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42188 "EHLO
+        id S1344196AbiDKLeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 07:34:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345736AbiDKLdS (ORCPT
+        with ESMTP id S233448AbiDKLeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 07:33:18 -0400
-Received: from smtp11.infineon.com (smtp11.infineon.com [IPv6:2a00:18f0:1e00:4::5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0CC4578F;
-        Mon, 11 Apr 2022 04:31:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=infineon.com; i=@infineon.com; q=dns/txt; s=IFXMAIL;
-  t=1649676665; x=1681212665;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=gugPxkZRoxMXAphUXKAPVO6SK72+rb+7kZN6teQ7Gwk=;
-  b=Zkyhyzv4p1U84NEwsOQa5GX3OVm2asMwuLEcjLxx5ii2FYAoIXFNqC5i
-   O5mZ88DoNUO8+EZu87C8Bb9CtFnKgUOlPDEJhziNfONk7JCJ0KCgjaKfA
-   i9cWHEjyA7oA4qngy3lPxzghCpc3WCLJthXqPLV25MvVlhlQxoR/GcJiL
-   U=;
-X-SBRS: None
-X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="289851380"
-X-IronPort-AV: E=Sophos;i="5.90,251,1643670000"; 
-   d="scan'208";a="289851380"
-Received: from unknown (HELO mucxv001.muc.infineon.com) ([172.23.11.16])
-  by smtp11.infineon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 13:30:55 +0200
-Received: from MUCSE819.infineon.com (MUCSE819.infineon.com [172.23.29.45])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mucxv001.muc.infineon.com (Postfix) with ESMTPS;
-        Mon, 11 Apr 2022 13:30:54 +0200 (CEST)
-Received: from [10.160.241.183] (172.23.8.247) by MUCSE819.infineon.com
- (172.23.29.45) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 11 Apr
- 2022 13:30:54 +0200
-Message-ID: <52cfa5fc-9fc5-dee4-6d53-70d241510269@infineon.com>
-Date:   Mon, 11 Apr 2022 13:30:53 +0200
+        Mon, 11 Apr 2022 07:34:02 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0AD6427E7;
+        Mon, 11 Apr 2022 04:31:48 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id z6-20020a17090a398600b001cb9fca3210so2646733pjb.1;
+        Mon, 11 Apr 2022 04:31:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5V9gANNP78HNk46P8d3IKzU6YI+VocisWdMkFLXxFjQ=;
+        b=CVQ3e85XziFIEiQW6RqB5TnDiKtN9UtIw/6JmrZ01HhRNhtc0hbECRF8Pc0Hub0xOa
+         5jenQYTb0bOhWTF6FWmZWdY0upF1exYK0dF862UKo+yBIDEMJsY+fpdaNVGpnePbW3Oz
+         KTAYAO2rkqmrfPBtCBahSN1DSWSn9RHCRjWxh81NhvnSeIMozQLcrPDOyMUVOgMkGHka
+         PzojPx8aXXtiyQ/ZKnaZMRzxgpVPwlkqetzg9HGhUWHQViUbCtStQzp5tdRpB5dGQmpe
+         k19IzVMc8+xbzKqiRBHpLBAPk02vOuUSMirNNJob2X8DvD/cauXhArMjqPzH3+Xo8s5L
+         Wr1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5V9gANNP78HNk46P8d3IKzU6YI+VocisWdMkFLXxFjQ=;
+        b=MbhTFe4vu3u8b393mBpwSdd3U4TqDqPB62oWw2tC+D2fqMmnTk3yVZX8nTjnUwlu/N
+         Jgnpz0EM8vFtQlZzEshyQwUlX2Tb0Lzv2f5cLZMjbu4r/aBKPE96N1KNXIUo4dd/BlRR
+         IZF3Sw8wQvvGamG6BHKYagpV3QL+u5EpEa59H7PmbWB4KVULuafsMIqBws5mwHavIpD/
+         M5W80ZnwRdBcEmHfSSEov/VoReON6VU2G4euKRhGpVOx+79J/WfrcVkFwk3MrgvHykKt
+         aCwiJpp49D+Pw29AKmm4ZPbZyR/a0ixPEifP/Pm3uicOPEvWt4semPczMigNHTnwvw2m
+         fsNg==
+X-Gm-Message-State: AOAM532uTv5cwXuaXNMgYRf0i6rR1gnMu4on0NG6bMxQY6TCEwW4JC5S
+        5njnJlCUcjO03duT3I42s10=
+X-Google-Smtp-Source: ABdhPJzCRcCgGhH5kklWc3sLB+hpcv6p1s2+3KaE2JXE4OHXf/WVQLhmducaPpJKwulC0f9FBxm2Dg==
+X-Received: by 2002:a17:90a:d083:b0:1c9:94bb:732d with SMTP id k3-20020a17090ad08300b001c994bb732dmr36393061pju.106.1649676708426;
+        Mon, 11 Apr 2022 04:31:48 -0700 (PDT)
+Received: from localhost ([166.111.139.106])
+        by smtp.gmail.com with ESMTPSA id y30-20020a056a001c9e00b004fa9246adcbsm33587529pfw.144.2022.04.11.04.31.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Apr 2022 04:31:47 -0700 (PDT)
+From:   Zixuan Fu <r33s3n6@gmail.com>
+To:     djwong@kernel.org
+Cc:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        baijiaju1990@gmail.com, Zixuan Fu <r33s3n6@gmail.com>,
+        TOTE Robot <oslab@tsinghua.edu.cn>
+Subject: [PATCH] fs: xfs: fix possible NULL pointer dereference in xfs_rw_bdev()
+Date:   Mon, 11 Apr 2022 19:31:45 +0800
+Message-Id: <20220411113145.797121-1-r33s3n6@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 4/4] tpm: Add YAML schema for the TPM TIS I2C options
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-CC:     <peterhuewe@gmx.de>, <jarkko@kernel.org>, <jgg@ziepe.ca>,
-        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <amirmizi6@gmail.com>
-References: <20220404081835.495-1-johannes.holland@infineon.com>
- <20220404081835.495-4-johannes.holland@infineon.com>
- <YksaVw74Eotowyse@robh.at.kernel.org>
-From:   Johannes Holland <johannes.holland@infineon.com>
-In-Reply-To: <YksaVw74Eotowyse@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.23.8.247]
-X-ClientProxiedBy: MUCSE816.infineon.com (172.23.29.42) To
- MUCSE819.infineon.com (172.23.29.45)
-X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04.04.2022 18:18, Rob Herring wrote:
-> On Mon, Apr 04, 2022 at 10:18:35AM +0200, Johannes Holland wrote:
->> Add a YAML schema to support device tree bindings for the generic I2C
->> physical layer. Refer to the TCG PC Client Platform TPM Profile (PTP)
->> Specification for TPM 2.0 v1.04 Revision 14.
->
-> Bindings are for devices. A protocol layer does not make a device.
+In our fault-injection testing, bio_alloc() may fail with low memory and
+return NULL. In this case, the variable "bio" in xfs_rw_bdev() would be
+NULL and then it is dereferenced in "bio_set_dev(bio, bdev)".
 
-Agreed. I will change this in my next patch.
+The failure log is listed as follows:
 
->
->>
->> Signed-off-by: Johannes Holland <johannes.holland@infineon.com>
->> ---
->>  .../bindings/security/tpm/tpm-tis-i2c.yaml    | 48 +++++++++++++++++++
->>  1 file changed, 48 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
->
-> We already have a binding for I2C TPM. That one should be converted.
+[   16.009947] BUG: kernel NULL pointer dereference, address: 0000000000000015
+...
+[   16.012406] RIP: 0010:bio_set_dev+0x76/0x160 [xfs]
+...
+[   16.017773] Call Trace:
+[   16.017925]  <TASK>
+[   16.018065]  xfs_rw_bdev+0x29e/0x9f0 [xfs]
+[   16.018396]  ? _raw_spin_unlock_irqrestore+0x3c/0x70
+[   16.018697]  xlog_do_io+0x183/0x4a0 [xfs]
+[   16.019019]  xlog_bwrite+0x73/0xc0 [xfs]
+[   16.019333]  xlog_write_log_records+0x457/0x5c0 [xfs]
+[   16.019723]  xlog_clear_stale_blocks+0x2d1/0x430 [xfs]
+[   16.020107]  xlog_find_tail+0x63d/0xb60 [xfs]
+[   16.020447]  xlog_recover+0x77/0x650 [xfs]
+[   16.021101]  xfs_log_mount+0x720/0xcf0 [xfs]
+[   16.021437]  xfs_mountfs+0xf0c/0x2440 [xfs]
+[   16.021767]  xfs_fs_fill_super+0x1eaa/0x21e0 [xfs]
+[   16.022132]  get_tree_bdev+0x3c3/0x5f0
+[   16.022361]  ? xfs_fs_warn_deprecated+0x100/0x100 [xfs]
+[   16.022750]  xfs_fs_get_tree+0x68/0xb0 [xfs]
+[   16.023090]  vfs_get_tree+0x81/0x220
+[   16.023308]  path_mount+0x1061/0x2340
+[   16.023532]  ? kasan_quarantine_put+0x2c/0x1a0
+[   16.023804]  ? slab_free_freelist_hook+0xde/0x160
+[   16.024087]  ? mark_mounts_for_expiry+0x410/0x410
+[   16.024370]  ? user_path_at_empty+0xf6/0x160
+[   16.024629]  ? kmem_cache_free+0xb8/0x1a0
+[   16.024876]  ? user_path_at_empty+0xf6/0x160
+[   16.025134]  __se_sys_mount+0x217/0x2b0
+[   16.025367]  ? __x64_sys_mount+0xd0/0xd0
+[   16.025605]  ? exit_to_user_mode_prepare+0x32/0x130
+[   16.025899]  do_syscall_64+0x41/0x90
+[   16.026116]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+...
+[   16.030310]  </TASK>
 
-Will do. There are two required properties which are in fact not needed
-by any I2C driver. If that is ok with you, I would like to turn them
-optional.
+This patch adds a NULL check of "bio" and return -ENOMEM if it's NULL.
 
-- linux,sml-base
-- linux,sml-size
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
+---
+ fs/xfs/xfs_bio_io.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
->>>
->> diff --git a/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml b/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
->> new file mode 100644
->> index 000000000000..7948867ff3f7
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/security/tpm/tpm-tis-i2c.yaml
->> @@ -0,0 +1,48 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/security/tpm/tpm-tis-i2c.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: I2C PTP based TPM Device Tree Bindings
->> +
->> +maintainers:
->> +  - Johannes Holland <johannes.holland@infineon.com>
->> +
->> +description:
->> +  Device Tree Bindings for I2C based Trusted Platform Module (TPM).
->> +
->> +properties:
->> +  compatible:
->> +    items:
->> +      - enum:
->> +          # Infineon's Trusted Platform Module (TPM) (SLB9673)
->> +          - infineon,slb9673
->> +          # Nuvoton's Trusted Platform Module (TPM) (NPCT75x)
->> +          - nuvoton,npct75x
->
-> I see this is already used, but in general wildcards should not be used
-> in device compatibles.
+diff --git a/fs/xfs/xfs_bio_io.c b/fs/xfs/xfs_bio_io.c
+index ae4345b37621..37887029a6c7 100644
+--- a/fs/xfs/xfs_bio_io.c
++++ b/fs/xfs/xfs_bio_io.c
+@@ -28,6 +28,8 @@ xfs_rw_bdev(
+ 
+ 	bio = bio_alloc(bdev, bio_max_vecs(left), op | REQ_META | REQ_SYNC,
+ 			GFP_KERNEL);
++	if (!bio)
++		return -ENOMEM;
+ 	bio->bi_iter.bi_sector = sector;
+ 
+ 	do {
+-- 
+2.25.1
 
-Ok, I took this over from a previous patch. Since I am not familiar with
-Nuvoton products, so I am going to remove this for now.
-
->
->> +      - const: tcg,tpm-tis-i2c
->
-> Pretty sure I killed this off when originally reviewing the TPM I2C
-> binding.
->
-
-Sorry, I did not see any discussion related to this.
-
-IMHO, the TPM is a open standard device. That should allow for plug
-and play, regardless of the manufacturer. For SPI, we also have
-tcg,tpm_tis-spi. However, if you want it removed, I can do that.
-
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  interrupt:
->> +    maxItems: 1
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    i2c {
->> +      #address-cells = <1>;
->> +      #size-cells = <0>;
->> +
->> +      tpm@2e {
->> +        compatible = "infineon,slb9673", "nuvoton,npct75x", "tcg,tpm-tis-i2c";
->> +        reg = <0x2e>;
->> +      };
->> +    };
->> +...
->> --
->> 2.31.1.windows.1
->>
->>

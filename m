@@ -2,197 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FD514FC281
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 18:36:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 563054FC289
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 18:37:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348647AbiDKQiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 12:38:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55446 "EHLO
+        id S1348660AbiDKQjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 12:39:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348290AbiDKQis (ORCPT
+        with ESMTP id S1345985AbiDKQjd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 12:38:48 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 431E62DAB8;
-        Mon, 11 Apr 2022 09:36:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1649694991; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JKIdiPCa6AdKy3aeZWJmLncBvmV88ceUe5XNIR3UBxQ=;
-        b=pzqHrTBTxMmTIZ2GuBCvRERJgNhDuydhqoWEJh9pjC/YFx/WdQ2znC6qX+HJ4MkXnZdJQJ
-        /7Tnsvmm9KSay0Z3MifEH9QGPldSI3yD30YYVDzv4N/mXkxXRA6/ld2KpqKHfMybdo9XWa
-        bDvgPhryvUsMzLNiOkoSikXrus7yb10=
-Date:   Mon, 11 Apr 2022 17:36:21 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v4 2/2] clk: ingenic-tcu: Fix missing TCU clock for X1000
- SoCs
-To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, tsbogend@alpha.franken.de,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Message-Id: <LSO6AR.0DFDW2C6UEWT@crapouillou.net>
-In-Reply-To: <YlRSiUkdFkNoPMaH@localhost>
-References: <20220411154241.50834-1-aidanmacdonald.0x0@gmail.com>
-        <20220411154241.50834-3-aidanmacdonald.0x0@gmail.com>
-        <FKM6AR.T3U5W4W42W2R3@crapouillou.net> <YlRSiUkdFkNoPMaH@localhost>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 11 Apr 2022 12:39:33 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07FE31DCD;
+        Mon, 11 Apr 2022 09:37:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649695039; x=1681231039;
+  h=from:to:cc:subject:date:message-id;
+  bh=mtE2O+IGOhI4fPN3hDjLHvmi5++/ZnWEsB0kf034Y9I=;
+  b=LSh62J8jXJldwdnVXs3z+EkBiZrkapSELJXcaBNjNlzhukwYKuuGtWJZ
+   dXzjTWrhC5xMtZBWl+b763iVCOMs9O1ooKCOzgTnfM502zVVc9lGLNECv
+   7Z2SS+2G4QYtWSlmOPiWv+cMctP5/e7nG4ttl//O85ZOzHYN6WNFhMyAo
+   8=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 11 Apr 2022 09:37:18 -0700
+X-QCInternal: smtphost
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 11 Apr 2022 09:37:17 -0700
+X-QCInternal: smtphost
+Received: from vpolimer-linux.qualcomm.com ([10.204.67.235])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 11 Apr 2022 22:07:04 +0530
+Received: by vpolimer-linux.qualcomm.com (Postfix, from userid 463814)
+        id 75AC655E9; Mon, 11 Apr 2022 22:07:03 +0530 (IST)
+From:   Vinod Polimera <quic_vpolimer@quicinc.com>
+To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
+Cc:     Vinod Polimera <quic_vpolimer@quicinc.com>,
+        linux-kernel@vger.kernel.org, robdclark@gmail.com,
+        dmitry.baryshkov@linaro.org, dianders@chromium.org,
+        quic_kalyant@quicinc.com
+Subject: [PATCH v8 0/2] Add inline rotation support for sc7280 
+Date:   Mon, 11 Apr 2022 22:06:59 +0530
+Message-Id: <1649695021-19132-1-git-send-email-quic_vpolimer@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Aidan,
+Changes in RFC:
+- Rebase changes to the latest code base.
+- Append rotation config variables with v2 and
+remove unused variables.(Dmitry)
+- Move pixel_ext setup separately from scaler3 config.(Dmitry)
+- Add 270 degree rotation to supported rotation list.(Dmitry)
 
-Le lun., avril 11 2022 at 17:08:41 +0100, Aidan MacDonald=20
-<aidanmacdonald.0x0@gmail.com> a =E9crit :
-> On Mon, Apr 11, 2022 at 04:48:15PM +0100, Paul Cercueil wrote:
->>  Hi Aidan,
->>=20
->>  Le lun., avril 11 2022 at 16:42:41 +0100, Aidan MacDonald
->>  <aidanmacdonald.0x0@gmail.com> a =E9crit :
->>  > The TCU clock gate on X1000 wasn't requested by the driver and=20
->> could
->>  > be gated automatically later on in boot, which prevents timers=20
->> from
->>  > running and breaks PWM.
->>  >
->>  > Add a workaround to support old device trees that don't specify=20
->> the
->>  > "tcu" clock gate. In this case the kernel will print a warning and
->>  > attempt to continue without the clock, which is wrong, but it=20
->> could
->>  > work if "clk_ignore_unused" is in the kernel arguments.
->>  >
->>  > Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
->>  > ---
->>  >  drivers/clk/ingenic/tcu.c | 38=20
->> ++++++++++++++++++++++++++------------
->>  >  1 file changed, 26 insertions(+), 12 deletions(-)
->>  >
->>  > diff --git a/drivers/clk/ingenic/tcu.c b/drivers/clk/ingenic/tcu.c
->>  > index 77acfbeb4830..ce8c768db997 100644
->>  > --- a/drivers/clk/ingenic/tcu.c
->>  > +++ b/drivers/clk/ingenic/tcu.c
->>  > @@ -31,6 +31,7 @@ struct ingenic_soc_info {
->>  >  	unsigned int num_channels;
->>  >  	bool has_ost;
->>  >  	bool has_tcu_clk;
->>  > +	bool allow_missing_tcu_clk;
->>  >  };
->>  >
->>  >  struct ingenic_tcu_clk_info {
->>  > @@ -320,7 +321,8 @@ static const struct ingenic_soc_info
->>  > jz4770_soc_info =3D {
->>  >  static const struct ingenic_soc_info x1000_soc_info =3D {
->>  >  	.num_channels =3D 8,
->>  >  	.has_ost =3D false, /* X1000 has OST, but it not belong TCU */
->>  > -	.has_tcu_clk =3D false,
->>  > +	.has_tcu_clk =3D true,
->>  > +	.allow_missing_tcu_clk =3D true,
->>  >  };
->>  >
->>  >  static const struct of_device_id __maybe_unused
->>  > ingenic_tcu_of_match[] __initconst =3D {
->>  > @@ -354,15 +356,27 @@ static int __init ingenic_tcu_probe(struct
->>  > device_node *np)
->>  >  	if (tcu->soc_info->has_tcu_clk) {
->>  >  		tcu->clk =3D of_clk_get_by_name(np, "tcu");
->>  >  		if (IS_ERR(tcu->clk)) {
->>  > -			ret =3D PTR_ERR(tcu->clk);
->>  > -			pr_crit("Cannot get TCU clock\n");
->>  > -			goto err_free_tcu;
->>  > -		}
->>  > -
->>  > -		ret =3D clk_prepare_enable(tcu->clk);
->>  > -		if (ret) {
->>  > -			pr_crit("Unable to enable TCU clock\n");
->>  > -			goto err_put_clk;
->>  > +			/*
->>  > +			 * Old device trees for some SoCs did not include the
->>  > +			 * TCU clock because this driver (incorrectly) didn't
->>  > +			 * use it. In this case we complain loudly and attempt
->>  > +			 * to continue without the clock, which might work if
->>  > +			 * booting with workarounds like "clk_ignore_unused".
->>  > +			 */
->>=20
->>  Why not unconditionally enable it instead? Then it would boot=20
->> without
->>  clk_ignore_unused.
->>=20
->>  Cheers,
->>  -Paul
->=20
-> I could, but why add essentially dead code to the kernel? Maintaining=20
-> the
-> old behavior has the "advantage" that it remains broken in the same=20
-> way as
-> before, so any workarounds anyone was using will continue to work the=20
-> same.
-> And if they were not using workarounds and got a broken kernel, this=20
-> patch
-> will not make anything *more* broken, in fact it will not cause any=20
-> change
-> in behavior in that case (aside from the warning message).
+Changes in V2:
+- Remove unused macros and fix indentation.
+- Add check if 90 rotation is supported and
+add supported rotations to rot_cfg.
 
-OK.
+Changes in V3:
+- Fix indentation.
+- Move rot_supported to sspp capabilities. (Dmitry)
+- Config pixel_ext based on src_h/src_w directly. (Dmitry)
+- Misc changes.
 
--Paul
+Changes in V4:
+- Pass boolean value to sspp blk based on supported rotations for each hw.
 
-> But if you think it's best to just enable the clock anyway, let me=20
-> know
-> and I'll send a new patch.
->=20
-> Regards,
-> Aidan
->=20
->>=20
->>  > +			if (tcu->soc_info->allow_missing_tcu_clk &&
->>  > +			    PTR_ERR(tcu->clk) =3D=3D -EINVAL) {
->>  > +				pr_warn("TCU clock missing from device tree, please update=20
->> your
->>  > device tree\n");
->>  > +				tcu->clk =3D NULL;
->>  > +			} else {
->>  > +				pr_crit("Cannot get TCU clock from device tree\n");
->>  > +				goto err_free_tcu;
->>  > +			}
->>  > +		} else {
->>  > +			ret =3D clk_prepare_enable(tcu->clk);
->>  > +			if (ret) {
->>  > +				pr_crit("Unable to enable TCU clock\n");
->>  > +				goto err_put_clk;
->>  > +			}
->>  >  		}
->>  >  	}
->>  >
->>  > @@ -432,10 +446,10 @@ static int __init ingenic_tcu_probe(struct
->>  > device_node *np)
->>  >  			clk_hw_unregister(tcu->clocks->hws[i]);
->>  >  	kfree(tcu->clocks);
->>  >  err_clk_disable:
->>  > -	if (tcu->soc_info->has_tcu_clk)
->>  > +	if (tcu->clk)
->>  >  		clk_disable_unprepare(tcu->clk);
->>  >  err_put_clk:
->>  > -	if (tcu->soc_info->has_tcu_clk)
->>  > +	if (tcu->clk)
->>  >  		clk_put(tcu->clk);
->>  >  err_free_tcu:
->>  >  	kfree(tcu);
->>  > --
->>  > 2.35.1
->>  >
->>=20
->>=20
+Changes in V5:
+- Update boolean value to true/false and add it for qcm2290.
 
+Changes in V6:
+- Add changes that are missed as part of v5.
+- Add dpu_find_format inline function to find valid format. (Dmitry)
+
+Changes in V7:
+- Move dpu_find_format inline function to separate commit. (Dmitry)
+- Remove rot_cfg from SSPP_BLK and use DPU_SSPP_INLINE_ROTATION caps
+to append supported rotations. (Dmitry)
+- Misc Changes.
+
+Changes in V8:
+- Misc changes.
+
+Co-developed-by: Kalyan Thota <quic_kalyant@quicinc.com>
+Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
+Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
+
+Vinod Polimera (2):
+  drm/msm/disp/dpu1: add inline function to validate format support
+  drm/msm/disp/dpu1: add inline rotation support for sc7280
+
+ drivers/gpu/drm/msm/disp/dpu1/dpu_formats.h    |  22 ++++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c |  43 +++++++-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h |  16 +++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c      | 139 +++++++++++++++++++------
+ drivers/gpu/drm/msm/disp/dpu1/dpu_plane.h      |   2 +
+ 5 files changed, 186 insertions(+), 36 deletions(-)
+
+-- 
+2.7.4
 

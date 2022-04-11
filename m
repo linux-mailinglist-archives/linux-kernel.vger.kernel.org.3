@@ -2,110 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B46AD4FB8C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 11:58:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82E214FB8BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 11:57:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239404AbiDKKAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 06:00:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44898 "EHLO
+        id S1344917AbiDKJ7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 05:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238270AbiDKKAc (ORCPT
+        with ESMTP id S235994AbiDKJ6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 06:00:32 -0400
-X-Greylist: delayed 81 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 11 Apr 2022 02:58:18 PDT
-Received: from fuzzserver.tsinghua.edu.cn (unknown [166.111.139.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487614132F
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 02:58:17 -0700 (PDT)
-Received: by fuzzserver.tsinghua.edu.cn (Postfix, from userid 1000)
-        id B5906F40E15; Mon, 11 Apr 2022 17:56:53 +0800 (CST)
-From:   Zixuan Fu <r33s3n6@gmail.com>
-To:     shaggy@kernel.org
-Cc:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        baijiaju1990@gmail.com, Zixuan Fu <r33s3n6@gmail.com>,
-        TOTE Robot <oslab@tsinghua.edu.cn>
-Subject: [PATCH] fs: jfs: fix possible NULL pointer dereference in dbFree()
-Date:   Mon, 11 Apr 2022 17:56:23 +0800
-Message-Id: <20220411095623.678040-1-r33s3n6@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 11 Apr 2022 05:58:53 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E1B4132F;
+        Mon, 11 Apr 2022 02:56:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1649670999;
+  x=1681206999;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=c+CrCB3jSesuxm+UkvkLWNLlRUO9xSMBS+b8dMwF3PA=;
+  b=QyIe7OCRSMcAsqUbaa8O58WhCvigFyiSxb67W0PHbg9MReXk3MltTnMB
+   oIyDZT0L2KITsd89dpLFqLsOW4oeE3gkEDdK8IP7yEmaTWxt8rUqyu93g
+   wVYljRI3oJFIU7BEQ+vSoscnrPiBiIelb75ojvahPvQx5rMcMejDrkXtp
+   q10aR7gHplbAykMo2PX9iJHI65QkCgK+rcuU7HkKJhzruYD3UNKu92pDi
+   OHsT8mlJ55HNi1Og6yAjra2nsR91jdcvucDm1mOUNf17KlFIqetUIIqI6
+   XZqKDHNYTXxx8gpEtubVt2TP/5aoX5Q4cTfNPB1J6k/uML3cQLTPO8ct0
+   Q==;
+From:   Camel Guo <camel.guo@axis.com>
+To:     <inux@roeck-us.net>, <jdelvare@suse.com>, <robh+dt@kernel.org>,
+        <krzk+dt@kernel.org>
+CC:     <kernel@axis.com>, Camel Guo <camel.guo@axis.com>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/2] hwmon/tmp401: add support of three advanced features
+Date:   Mon, 11 Apr 2022 11:56:32 +0200
+Message-ID: <20220411095634.1782732-1-camel.guo@axis.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: Yes, score=7.4 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_PBL,
-        RDNS_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,SPOOFED_FREEMAIL,
-        SPOOFED_FREEMAIL_NO_RDNS,SPOOF_GMAIL_MID,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
-        *      [166.111.139.106 listed in zen.spamhaus.org]
-        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        *  0.7 SPF_SOFTFAIL SPF: sender does not match SPF record (softfail)
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [r33s3n6[at]gmail.com]
-        *  0.0 DKIM_ADSP_CUSTOM_MED No valid author signature, adsp_override
-        *      is CUSTOM_MED
-        *  1.0 FORGED_GMAIL_RCVD 'From' gmail.com does not match 'Received'
-        *      headers
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.8 RDNS_NONE Delivered to internal network by a host with no rDNS
-        *  0.0 SPOOFED_FREEMAIL_NO_RDNS From SPOOFED_FREEMAIL and no rDNS
-        *  0.9 NML_ADSP_CUSTOM_MED ADSP custom_med hit, and not from a mailing
-        *       list
-        *  1.3 SPOOFED_FREEMAIL No description available.
-        *  1.4 SPOOF_GMAIL_MID From Gmail but it doesn't seem to be...
-X-Spam-Level: *******
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In our fault-injection testing, the variable "nblocks" in dbFree() can be
-zero when kmalloc_array() fails in dtSearch(). In this case, the variable
- "mp" in dbFree() would be NULL and then it is dereferenced in 
-"write_metapage(mp)".
+According the their datasheets:
+- TMP401, TMP411 and TMP43x support extended temperature range;
+- TMP411 and TMP43x support n-factor correction;
+- TMP43x support beta compensation.
 
-The failure log is listed as follows:
+In order to make it possible for users to enable these features and set up them
+based on their needs, this patch series adds the following devicetree bindings:
+- ti,extended-range-enable;
+- ti,n-factor;
+- ti,beta-compensation.
+In the meanwhile, tmp401 driver reads them and configures the coressponding
+registers accordingly.
 
-[   13.824137] BUG: kernel NULL pointer dereference, address: 0000000000000020
-...
-[   13.827416] RIP: 0010:dbFree+0x5f7/0x910 [jfs]
-[   13.834341] Call Trace:
-[   13.834540]  <TASK>
-[   13.834713]  txFreeMap+0x7b4/0xb10 [jfs]
-[   13.835038]  txUpdateMap+0x311/0x650 [jfs]
-[   13.835375]  jfs_lazycommit+0x5f2/0xc70 [jfs]
-[   13.835726]  ? sched_dynamic_update+0x1b0/0x1b0
-[   13.836092]  kthread+0x3c2/0x4a0
-[   13.836355]  ? txLockFree+0x160/0x160 [jfs]
-[   13.836763]  ? kthread_unuse_mm+0x160/0x160
-[   13.837106]  ret_from_fork+0x1f/0x30
-[   13.837402]  </TASK>
-...
+Cc: linux-hwmon@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
-This patch adds a NULL check of "mp" before "write_metapage(mp)" is called.
+Camel Guo (2):
+  dt-bindings: hwmon: Add TMP401, TMP411 and TMP43x
+  hwmon: (tmp401) Add support of three advanced features
 
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
----
- fs/jfs/jfs_dmap.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ .../devicetree/bindings/hwmon/ti,tmp401.yaml  | 111 ++++++++++++++++++
+ MAINTAINERS                                   |   1 +
+ drivers/hwmon/tmp401.c                        |  43 ++++++-
+ 3 files changed, 154 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
 
-diff --git a/fs/jfs/jfs_dmap.c b/fs/jfs/jfs_dmap.c
-index d8502f4989d9..e75f31b81d63 100644
---- a/fs/jfs/jfs_dmap.c
-+++ b/fs/jfs/jfs_dmap.c
-@@ -385,7 +385,8 @@ int dbFree(struct inode *ip, s64 blkno, s64 nblocks)
- 	}
- 
- 	/* write the last buffer. */
--	write_metapage(mp);
-+	if (mp)
-+		write_metapage(mp);
- 
- 	IREAD_UNLOCK(ipbmap);
- 
+
+base-commit: ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e
 -- 
-2.25.1
+2.30.2
 

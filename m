@@ -2,153 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0D754FC5ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 22:37:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4B024FC5F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 22:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349920AbiDKUjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 16:39:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36374 "EHLO
+        id S1349929AbiDKUlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 16:41:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349875AbiDKUjm (ORCPT
+        with ESMTP id S237305AbiDKUlv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 16:39:42 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2799A1BEA0
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 13:37:27 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id bo5so15610197pfb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 13:37:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=AYKc8ZeDRNtBCWJwQpHr7JcieMpfMfOkAMNDb3v8MjY=;
-        b=hWfvTE+5RKFSbpiLlmi4b5/iTRF1eQULyL8xZLRHFm/u7l3Rwd4oaMM4vBtwvH50/k
-         Rfbpsu+k4nTnFXBMH8k1khmANVJhl97UDy89rTpe+kU+G8brFoXwN2GDFh66yJIEa7ck
-         YIySXZvImVcfXLw6QOukQllDrCv0GF9RZ3uOrD9fFcE4AqJvZ4Z2ow7aIeEeDfCl6ZJe
-         0/F+KgoA7GWxPW4Of9ImDmNwgX4rvnLAquVYP2o4DKwx8UHlS89VOeCAjdPlb1TXUSSd
-         0p3CLTXgdOmzPrXX38+m5G5kLFldgONBUfWxwC6td0eDBUq+BccnCu/0m4WPZ+GAL4Tw
-         u/NQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AYKc8ZeDRNtBCWJwQpHr7JcieMpfMfOkAMNDb3v8MjY=;
-        b=P0FYOEa4xY4G59iaIijgaJ0oWQhWRUnlGRegbMbN6C06Z5Qge+zy4ip02eKihaz6/n
-         tztbINMcwkU4dRkly/wOcNd6ZLmPdj2DDWl4PQGkfSBUD1HWkGDU+QX+0rOy/kpgh2+y
-         cTT8pVhesPZ1nDp7fz648M9WI9KeVvz50LWO2DUQLVNTv4WGe67AYVLDlSFHGnBTL7qj
-         ZRwWIMCfYghPXli0ylczDg6TW6WQ3jHio4mvz9lCvhvey4Z32re1p5ERn/M8NKBinHA5
-         5BuM2BcHojnhjrBgkE106/WvFMIOPejT78mIOaneY/GM0lZLh6s59vgSSqRHd+zpRv2J
-         Z16w==
-X-Gm-Message-State: AOAM533Tg+CFPv8wWjyazZt3iT3H+2phXSDCadwOFYlLs+OCR8cbOzo6
-        /iU/HfQHir3+r1e0yHGPdnYcZA==
-X-Google-Smtp-Source: ABdhPJzZ64CwOXnrawiJRiNmvAMK3O1eLGBgCgolpctZJ4DZKuhTsSiJwt0g7J+Rh+QifwXJbj/jXQ==
-X-Received: by 2002:a63:2263:0:b0:399:561e:810b with SMTP id t35-20020a632263000000b00399561e810bmr27472837pgm.615.1649709446436;
-        Mon, 11 Apr 2022 13:37:26 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id gt14-20020a17090af2ce00b001c701e0a129sm327234pjb.38.2022.04.11.13.37.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 13:37:25 -0700 (PDT)
-Date:   Mon, 11 Apr 2022 20:37:22 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 03/31] KVM: x86: hyper-v: Handle
- HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls gently
-Message-ID: <YlSRgiKPkNZTBpl+@google.com>
-References: <20220407155645.940890-1-vkuznets@redhat.com>
- <20220407155645.940890-4-vkuznets@redhat.com>
- <Yk8i+A3E9/JL96A2@google.com>
- <87a6cr7t5k.fsf@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87a6cr7t5k.fsf@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 11 Apr 2022 16:41:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E47641CFF1;
+        Mon, 11 Apr 2022 13:39:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A56B615EB;
+        Mon, 11 Apr 2022 20:39:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 314E0C385A4;
+        Mon, 11 Apr 2022 20:39:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649709572;
+        bh=XLIf4zoqUn/vAcbQLvEyIomVh9fJYy3IUmn8vUBhetA=;
+        h=Subject:From:To:Date:From;
+        b=J5E7YfYaR5U1J54qJE2g691tLqK48j3Ttas2G85bFEVC92rnVtengnTz5r0Y/ET1/
+         YYT8v7XqE3h41GULEO35ERO/6JALdBSF/bwLmhgIsNNKP/q/mrN66KYkG2a+q2IQ+L
+         5eGOMuA5oRgrjfbUkw7anik1zHgLTclg4gap4h6AHZjcnOrQmW6DHYNzIN5Za8vDgE
+         +i3pDASqomMeA9q3fsHzryeKotAfRr8cou5ccrn5b3fJ8RE85M+crfhTVBrUs0oc6s
+         KjnneLDMdW5dGG1J8Oh8kJC724iib2DEBBMroDVhyU57htz67TWeHM9n+DsSt4utOW
+         mcjZFC9lMPlfA==
+Message-ID: <eeb57bbe5f26a437260ff9032928c4d7edc83fbb.camel@kernel.org>
+Subject: [ANNOUNCE] 5.4.188-rt73
+From:   Tom Zanussi <zanussi@kernel.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        John Kacur <jkacur@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Wagner <wagi@monom.org>,
+        Clark Williams <williams@redhat.com>,
+        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
+        Tom Zanussi <zanussi@kernel.org>
+Date:   Mon, 11 Apr 2022 15:39:29 -0500
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022, Vitaly Kuznetsov wrote:
-> Sean Christopherson <seanjc@google.com> writes:
-> 
-> > On Thu, Apr 07, 2022, Vitaly Kuznetsov wrote:
-> >> @@ -1840,15 +1891,47 @@ void kvm_hv_vcpu_flush_tlb(struct kvm_vcpu *vcpu)
-> >>  {
-> >>  	struct kvm_vcpu_hv_tlbflush_ring *tlb_flush_ring;
-> >>  	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
-> >> -
-> >> -	kvm_vcpu_flush_tlb_guest(vcpu);
-> >> -
-> >> -	if (!hv_vcpu)
-> >> +	struct kvm_vcpu_hv_tlbflush_entry *entry;
-> >> +	int read_idx, write_idx;
-> >> +	u64 address;
-> >> +	u32 count;
-> >> +	int i, j;
-> >> +
-> >> +	if (!tdp_enabled || !hv_vcpu) {
-> >> +		kvm_vcpu_flush_tlb_guest(vcpu);
-> >>  		return;
-> >> +	}
-> >>  
-> >>  	tlb_flush_ring = &hv_vcpu->tlb_flush_ring;
-> >> +	read_idx = READ_ONCE(tlb_flush_ring->read_idx);
-> >> +	write_idx = READ_ONCE(tlb_flush_ring->write_idx);
-> >> +
-> >> +	/* Pairs with smp_wmb() in hv_tlb_flush_ring_enqueue() */
-> >> +	smp_rmb();
-> >>  
-> >> -	tlb_flush_ring->read_idx = tlb_flush_ring->write_idx;
-> >> +	for (i = read_idx; i != write_idx; i = (i + 1) % KVM_HV_TLB_FLUSH_RING_SIZE) {
-> >> +		entry = &tlb_flush_ring->entries[i];
-> >> +
-> >> +		if (entry->flush_all)
-> >> +			goto out_flush_all;
-> >> +
-> >> +		/*
-> >> +		 * Lower 12 bits of 'address' encode the number of additional
-> >> +		 * pages to flush.
-> >> +		 */
-> >> +		address = entry->addr & PAGE_MASK;
-> >> +		count = (entry->addr & ~PAGE_MASK) + 1;
-> >> +		for (j = 0; j < count; j++)
-> >> +			static_call(kvm_x86_flush_tlb_gva)(vcpu, address + j * PAGE_SIZE);
-> >> +	}
-> >> +	++vcpu->stat.tlb_flush;
-> >> +	goto out_empty_ring;
-> >> +
-> >> +out_flush_all:
-> >> +	kvm_vcpu_flush_tlb_guest(vcpu);
-> >> +
-> >> +out_empty_ring:
-> >> +	tlb_flush_ring->read_idx = write_idx;
-> >
-> > Does this need WRITE_ONCE?  My usual "I suck at memory ordering" disclaimer applies.
-> >
-> 
-> Same here) I *think* we're fine for 'read_idx' as it shouldn't matter at
-> which point in this function 'tlb_flush_ring->read_idx' gets modified
-> (relative to other things, e.g. actual TLB flushes) and there's no
-> concurency as we only have one reader (the vCPU which needs its TLB
-> flushed). On the other hand, I'm not against adding WRITE_ONCE() here
-> even if just to aid an unprepared reader (thinking myself couple years
-> in the future).
+Hello RT Folks!
 
-Ah, read_idx == tail and write_idx == head.  I didn't look at the structure very
-closely, or maybe not at all :-)  And IIUC, only the vCPU itself ever writes to
-tail?  In that case, I would omit the READ_ONCE() from both the write to tail here
-and the read above, and probably add a brief comment stating that the flush must
-be performed on the target vCPU, i.e. must hold vcpu->mutex, and so it's safe for
-the compiler to re-read tlb_flush_ring->read_idx in the loop because it cannot
-change.
+I'm pleased to announce the 5.4.188-rt73 stable release.
+
+This release is just an update to the new stable 5.4.188
+version and no RT specific changes have been made.
+
+You can get this release via the git tree at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
+
+  branch: v5.4-rt
+  Head SHA1: a643cd5066c215e4454b4b5d7d5707cbd778908b
+
+Or to build 5.4.188-rt73 directly, the following patches should be applied:
+
+  https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.4.tar.xz
+
+  https://www.kernel.org/pub/linux/kernel/v5.x/patch-5.4.188.xz
+
+  https://www.kernel.org/pub/linux/kernel/projects/rt/5.4/patch-5.4.188-rt73.patch.xz
+
+Enjoy!
+
+   Tom
+

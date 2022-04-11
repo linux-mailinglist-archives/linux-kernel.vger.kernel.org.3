@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEA474FBE88
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 16:14:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1618E4FBE89
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 16:14:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347011AbiDKOQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 10:16:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42992 "EHLO
+        id S1347030AbiDKOQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 10:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347006AbiDKOQb (ORCPT
+        with ESMTP id S1347008AbiDKOQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 10:16:31 -0400
+        Mon, 11 Apr 2022 10:16:34 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014142DF3
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 07:14:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E5F2BF68
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 07:14:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=C8NDoDyqZvQBoGqfHeb040RcvsP4vUZqRpM2TBpIVh8=; b=eiX8fUOyFg6kzfTVNVUmza6+Wx
-        fBpDqSkeDwGoweT9Gegf39Lu+hcA9AEK7M0rJjLjDJ/0P++isIIMCySrNTfdDemwdSYiGsoyTKse+
-        3vU/9Rt1cgUtBDEL89e+7IT2rKSvVrMeExsmLo0OVnp1doIS5kW3FZ4Ct5EvZo+Pu5dNTUBDrsh98
-        rLHkxtElLCRXdxm8gcx1WjtoLuZELubYs+3Wik8Z+DrpeOF5VOSiFNRzamhJaLi9ktGhu0sm8FR/t
-        S5fz45rALbWHMNr/VHE9IuLEIDAtp9FyMbgEWWay7tIy3fzPObh/g0KODsowLXaOsXhzdfp58N9o+
-        UZnXs90g==;
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
+        :Reply-To:Content-Type:Content-ID:Content-Description;
+        bh=dAUUHwptIFdrrfi6cWIpxk8Sd8oMGmhzP5h1ggglDjs=; b=aM3WBRHazlkCh4F74OK5TsFET4
+        xJM7CW1jqTb8D57hDiB5j5Quq267T3Jwlehy2FrobIMKRdV7WnmXE1LN0Njtk7aFnWILeRqOKe10h
+        3B7ty6TESpt88/t7VdRvzsdW1W0m615OuUz6l2rDEhzay8uf60jEZ7bPD5O5VlJXVVSVvlvj2QEon
+        D2z89usVuDaR4ndoQVKHp066+VimdQGlosLIcXozidTGcVMU6q2rUdYPi43hOSXRMuWRd+HbiTf48
+        FRUHBId6b40F0sc3BkhSnrNScf3DciYwRwdYdxgqLAj2FHSC2L3WPA/GOUDp9n6EVVdizDAsaGlhO
+        7EUPnW8w==;
 Received: from [2001:4bb8:18e:76f5:3747:ef85:d03d:53e4] (helo=localhost)
         by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ndunw-009KHC-IW; Mon, 11 Apr 2022 14:14:09 +0000
+        id 1ndunz-009KHo-HZ; Mon, 11 Apr 2022 14:14:11 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Jani Nikula <jani.nikula@linux.intel.com>,
         Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
@@ -37,10 +37,12 @@ To:     Jani Nikula <jani.nikula@linux.intel.com>,
 Cc:     Jason Gunthorpe <jgg@nvidia.com>, intel-gfx@lists.freedesktop.org,
         intel-gvt-dev@lists.freedesktop.org,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: refactor the i915 GVT support and move to the modern mdev API v3
-Date:   Mon, 11 Apr 2022 16:13:29 +0200
-Message-Id: <20220411141403.86980-1-hch@lst.de>
+Subject: [PATCH 01/34] drm/i915/gvt: remove module refcounting in intel_gvt_{,un}register_hypervisor
+Date:   Mon, 11 Apr 2022 16:13:30 +0200
+Message-Id: <20220411141403.86980-2-hch@lst.de>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220411141403.86980-1-hch@lst.de>
+References: <20220411141403.86980-1-hch@lst.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
@@ -54,64 +56,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+THIS_MODULE always is reference when a symbol called by it is used, so
+don't bother with the additional reference.
 
-the GVT code in the i915 is a bit of a mess right now due to strange
-abstractions and lots of indirect calls.  This series refactors various
-bits to clean that up.  The main user visible change is that almost all
-of the GVT code moves out of the main i915 driver and into the kvmgt
-module.
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+---
+ drivers/gpu/drm/i915/gvt/gvt.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-Tested on my Thinkpad with a Kaby Lake CPU and integrated graphics.
+diff --git a/drivers/gpu/drm/i915/gvt/gvt.c b/drivers/gpu/drm/i915/gvt/gvt.c
+index f0b69e4dcb525..623424766c359 100644
+--- a/drivers/gpu/drm/i915/gvt/gvt.c
++++ b/drivers/gpu/drm/i915/gvt/gvt.c
+@@ -308,10 +308,6 @@ intel_gvt_register_hypervisor(const struct intel_gvt_mpt *m)
+ 	    m->type != INTEL_GVT_HYPERVISOR_XEN)
+ 		return -EINVAL;
+ 
+-	/* Get a reference for device model module */
+-	if (!try_module_get(THIS_MODULE))
+-		return -ENODEV;
+-
+ 	intel_gvt_host.mpt = m;
+ 	intel_gvt_host.hypervisor_type = m->type;
+ 	gvt = (void *)kdev_to_i915(intel_gvt_host.dev)->gvt;
+@@ -321,7 +317,6 @@ intel_gvt_register_hypervisor(const struct intel_gvt_mpt *m)
+ 	if (ret < 0) {
+ 		gvt_err("Failed to init %s hypervisor module\n",
+ 			supported_hypervisors[intel_gvt_host.hypervisor_type]);
+-		module_put(THIS_MODULE);
+ 		return -ENODEV;
+ 	}
+ 	gvt_dbg_core("Running with hypervisor %s in host mode\n",
+@@ -335,6 +330,5 @@ intel_gvt_unregister_hypervisor(void)
+ {
+ 	void *gvt = (void *)kdev_to_i915(intel_gvt_host.dev)->gvt;
+ 	intel_gvt_hypervisor_host_exit(intel_gvt_host.dev, gvt);
+-	module_put(THIS_MODULE);
+ }
+ EXPORT_SYMBOL_GPL(intel_gvt_unregister_hypervisor);
+-- 
+2.30.2
 
-Git tree:
-
-    git://git.infradead.org/users/hch/misc.git i915-gvt
-
-Gitweb:
-
-    http://git.infradead.org/users/hch/misc.git/shortlog/refs/heads/i915-gvt
-
-Changes since v2:
- - rebased on top of Linx 5.18-rc +
-   "Refactor GVT-g MMIO tracking table and handlers"
- - don't fold the gvt Makefile into the main Makefile
- - add the mdev patches to remove the legacy interface that is now
-   unused to the end of the series
-
-Changes since v1:
- - rebased on Linux 5.15
- - allow the kvmgvt module to be loaded at any time and thus solve
-   the deadlock when both i915 amd kvmgvt are modular
- - include the conversion to the modern mdev API
-
-Note that I do expect to rebased this again against 5.16-rc1 once
-released, but I'd like to get this out for review ASAP.
-
-Diffstat:
- b/drivers/gpu/drm/i915/Kconfig          |   33 
- b/drivers/gpu/drm/i915/Makefile         |   31 
- b/drivers/gpu/drm/i915/gvt/cfg_space.c  |   89 --
- b/drivers/gpu/drm/i915/gvt/cmd_parser.c |    4 
- b/drivers/gpu/drm/i915/gvt/dmabuf.c     |   36 -
- b/drivers/gpu/drm/i915/gvt/execlist.c   |   12 
- b/drivers/gpu/drm/i915/gvt/gtt.c        |   55 +
- b/drivers/gpu/drm/i915/gvt/gvt.h        |  125 ++-
- b/drivers/gpu/drm/i915/gvt/interrupt.c  |   38 +
- b/drivers/gpu/drm/i915/gvt/kvmgt.c      | 1099 +++++++++++++++-----------------
- b/drivers/gpu/drm/i915/gvt/mmio.c       |    4 
- b/drivers/gpu/drm/i915/gvt/opregion.c   |  148 ----
- b/drivers/gpu/drm/i915/gvt/page_track.c |    8 
- b/drivers/gpu/drm/i915/gvt/scheduler.c  |   37 -
- b/drivers/gpu/drm/i915/gvt/trace.h      |    2 
- b/drivers/gpu/drm/i915/gvt/vgpu.c       |   22 
- b/drivers/gpu/drm/i915/i915_drv.c       |    7 
- b/drivers/gpu/drm/i915/i915_drv.h       |    1 
- b/drivers/gpu/drm/i915/i915_trace.h     |    1 
- b/drivers/gpu/drm/i915/intel_gvt.c      |  162 +++-
- b/drivers/gpu/drm/i915/intel_gvt.h      |   17 
- drivers/gpu/drm/i915/gvt/Makefile       |    9 
- drivers/gpu/drm/i915/gvt/gvt.c          |  340 ---------
- drivers/gpu/drm/i915/gvt/hypercall.h    |   82 --
- drivers/gpu/drm/i915/gvt/mpt.h          |  400 -----------
- 25 files changed, 929 insertions(+), 1833 deletions(-)

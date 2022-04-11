@@ -2,118 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9F694FC782
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 00:18:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC684FC77C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 00:16:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350385AbiDKWS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 18:18:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39316 "EHLO
+        id S1350487AbiDKWSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 18:18:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350490AbiDKWSl (ORCPT
+        with ESMTP id S1347793AbiDKWSN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 18:18:41 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7AC026553
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 15:16:20 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id 5B7181F43242
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649715379;
-        bh=5ktnqTbMMHX7JjM1x4kfTyCzWU6VswdmB+oOmMaUXzQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=SCUxpvTtvSXqWaPUjB3p6PQUx4FhVyGZ2c0qihVCWw4EXMUU5j3o95Y/RI6FRxFVO
-         DRjJgN/kCr0Usnvzt93xXLas9CWlovnKwvQp3JpoLcuEcym9B8hdhjyfy43sPMIQr7
-         iGpJ/+gqx5X8CoFxuPrO0V+rHA00TUWgF7pYNjPv86KUR87oAAJ7A8BO5a0PTtRo8M
-         4ECAJ66QYoyj40TCXeH+E2vl1XoktxGH138Wb2KyjuYN/LIXy3Sts1Ze/FJD73peMr
-         yTV97BwBjuFGGizXBz5ovkCxFnHvoSrfufsH2Vq2jnKWqPr3oXqrNRJo8UVj8J0BW9
-         9EEBpICe2zp0Q==
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Steven Price <steven.price@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>
-Subject: [PATCH v1] drm/scheduler: Don't kill jobs in interrupt context
-Date:   Tue, 12 Apr 2022 01:15:36 +0300
-Message-Id: <20220411221536.283312-1-dmitry.osipenko@collabora.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 11 Apr 2022 18:18:13 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4B01C904;
+        Mon, 11 Apr 2022 15:15:51 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id y16so12432203ilc.7;
+        Mon, 11 Apr 2022 15:15:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pah6dFtB/Pcvu2zEarTnB8ifwqo0zAZEes1j6yd9fhk=;
+        b=JiKEWMYkgn3YjUMQx4zQiB6kahNGD0Gk33yc9QezXtWNdkNYTcQi5wgf9FpUMGs537
+         0eFlYsSaqgYKDtqcM/vqzuBoHYx1DWzFzWOB4h6Bsztbb8jzaYTaLmlcqPDGcvsNyTlr
+         ZvtasycqGjeTF4Kaer0KecO6GO1aZ/pPt7V8Hl/6+1GdfxdKfU9UPih0qLYqv5yVJptW
+         DyQf6CIKP7tv7WGBD6MZ0BD/+14bFTL5Gi1t3iJZwynw+8FO86jl1rTvFeIaLOBQMG5c
+         I1b8eqqxr+yMdJahqCAUA8tLQykm3fwUT7+N3+c35IrrxiI/pgRhX24W9JSeRs+eHkLo
+         Tfxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pah6dFtB/Pcvu2zEarTnB8ifwqo0zAZEes1j6yd9fhk=;
+        b=CGBMp/ymp0m+7vXSGw0zN40EEm291UA9Mjj9+FRq+gMTY5JzrCm5ePdPVn9TZ4AWE/
+         AGSQz7hj03PAfxikRAOs4ETmjREqxLtV5GLPu31AuwC2i6gkYszE/mtiAFPFAE2AMZB3
+         HQtUwgrkg7UzF2LAw6m1YYRy3TXoCaUG8gqFdsvVvNmAFCbaGUbeHdnrSw8eItQrLlOi
+         vCSgbDTzJvUkj8qeOhyFqylsnu4S1wPLXkApJI9Ti2T8gsZdZPV79WsXlNIyQqY7DFub
+         +tMta+r3kGXTkCPWiwnyMVmz4t3cK/2zgayX9MN6Tef0V8HT/xGbJzxrj+J+9uaNVHyS
+         hHVQ==
+X-Gm-Message-State: AOAM530P5dWMuDbK4XfTYJr4o+f3lijEYXRM1HfxoyJvCLlpzuRaXHyZ
+        kweAmbsABmcCUL5Ybd7vVEXrrKYFe6Ur6U0wBvc=
+X-Google-Smtp-Source: ABdhPJwhjKyj8AP3Dy0Z8ofMvk6opi9uZuOY/4ga06sHxxrYu4iaNSIXqLXkM+Z4Cqt/pAkyLg1mYJwIK0LpBSo0eJY=
+X-Received: by 2002:a05:6e02:1562:b0:2ca:50f1:72f3 with SMTP id
+ k2-20020a056e02156200b002ca50f172f3mr14496482ilu.71.1649715350871; Mon, 11
+ Apr 2022 15:15:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220407125224.310255-1-jolsa@kernel.org> <20220407125224.310255-5-jolsa@kernel.org>
+In-Reply-To: <20220407125224.310255-5-jolsa@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 11 Apr 2022 15:15:40 -0700
+Message-ID: <CAEf4BzbE1n3Lie+tWTzN69RQUWgjxePorxRr9J8CuiQVUfy-kA@mail.gmail.com>
+Subject: Re: [RFC bpf-next 4/4] selftests/bpf: Add attach bench test
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Interrupt context can't sleep. Drivers like Panfrost and MSM are taking
-mutex when job is released, and thus, that code can sleep. This results
-into "BUG: scheduling while atomic" if locks are contented while job is
-freed. There is no good reason for releasing scheduler's jobs in IRQ
-context, hence use normal context to fix the trouble.
+On Thu, Apr 7, 2022 at 5:53 AM Jiri Olsa <jolsa@kernel.org> wrote:
+>
+> Adding test that reads all functions from ftrace available_filter_functions
+> file and attach them all through kprobe_multi API.
+>
+> It checks that the attach and detach times is under 2 seconds
+> and printf stats info with -v option, like on my setup:
+>
+>   test_bench_attach: found 48712 functions
+>   test_bench_attach: attached in   1.069s
+>   test_bench_attach: detached in   0.373s
+>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  .../bpf/prog_tests/kprobe_multi_test.c        | 141 ++++++++++++++++++
+>  .../selftests/bpf/progs/kprobe_multi_empty.c  |  12 ++
+>  2 files changed, 153 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/progs/kprobe_multi_empty.c
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> index b9876b55fc0c..6798b54416de 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> @@ -2,6 +2,9 @@
+>  #include <test_progs.h>
+>  #include "kprobe_multi.skel.h"
+>  #include "trace_helpers.h"
+> +#include "kprobe_multi_empty.skel.h"
+> +#include "bpf/libbpf_internal.h"
+> +#include "bpf/hashmap.h"
+>
+>  static void kprobe_multi_test_run(struct kprobe_multi *skel, bool test_return)
+>  {
+> @@ -301,6 +304,142 @@ static void test_attach_api_fails(void)
+>         kprobe_multi__destroy(skel);
+>  }
+>
+> +static inline __u64 get_time_ns(void)
+> +{
+> +       struct timespec t;
+> +
+> +       clock_gettime(CLOCK_MONOTONIC, &t);
+> +       return (__u64) t.tv_sec * 1000000000 + t.tv_nsec;
+> +}
+> +
+> +static size_t symbol_hash(const void *key, void *ctx __maybe_unused)
+> +{
+> +       return str_hash((const char *) key);
+> +}
+> +
+> +static bool symbol_equal(const void *key1, const void *key2, void *ctx __maybe_unused)
+> +{
+> +       return strcmp((const char *) key1, (const char *) key2) == 0;
+> +}
+> +
+> +#define DEBUGFS "/sys/kernel/debug/tracing/"
+> +
+> +static int get_syms(char ***symsp, size_t *cntp)
+> +{
+> +       size_t cap = 0, cnt = 0, i;
+> +       char *name, **syms = NULL;
+> +       struct hashmap *map;
+> +       char buf[256];
+> +       FILE *f;
+> +       int err;
+> +
+> +       /*
+> +        * The available_filter_functions contains many duplicates,
+> +        * but other than that all symbols are usable in kprobe multi
+> +        * interface.
+> +        * Filtering out duplicates by using hashmap__add, which won't
+> +        * add existing entry.
+> +        */
+> +       f = fopen(DEBUGFS "available_filter_functions", "r");
 
-Cc: stable@vger.kernel.org
-Fixes: 542cff7893a3 ("drm/sched: Avoid lockdep spalt on killing a processes")
-Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
----
- drivers/gpu/drm/scheduler/sched_entity.c | 6 +++---
- include/drm/gpu_scheduler.h              | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+I'm really curious how did you manage to attach to everything in
+available_filter_functions because when I'm trying to do that I fail.
+available_filter_functions has a bunch of functions that should not be
+attachable (e.g., notrace functions). Look just at __bpf_tramp_exit:
 
-diff --git a/drivers/gpu/drm/scheduler/sched_entity.c b/drivers/gpu/drm/scheduler/sched_entity.c
-index 191c56064f19..6b25b2f4f5a3 100644
---- a/drivers/gpu/drm/scheduler/sched_entity.c
-+++ b/drivers/gpu/drm/scheduler/sched_entity.c
-@@ -190,7 +190,7 @@ long drm_sched_entity_flush(struct drm_sched_entity *entity, long timeout)
- }
- EXPORT_SYMBOL(drm_sched_entity_flush);
- 
--static void drm_sched_entity_kill_jobs_irq_work(struct irq_work *wrk)
-+static void drm_sched_entity_kill_jobs_work(struct work_struct *wrk)
- {
- 	struct drm_sched_job *job = container_of(wrk, typeof(*job), work);
- 
-@@ -207,8 +207,8 @@ static void drm_sched_entity_kill_jobs_cb(struct dma_fence *f,
- 	struct drm_sched_job *job = container_of(cb, struct drm_sched_job,
- 						 finish_cb);
- 
--	init_irq_work(&job->work, drm_sched_entity_kill_jobs_irq_work);
--	irq_work_queue(&job->work);
-+	INIT_WORK(&job->work, drm_sched_entity_kill_jobs_work);
-+	schedule_work(&job->work);
- }
- 
- static struct dma_fence *
-diff --git a/include/drm/gpu_scheduler.h b/include/drm/gpu_scheduler.h
-index 0fca8f38bee4..addb135eeea6 100644
---- a/include/drm/gpu_scheduler.h
-+++ b/include/drm/gpu_scheduler.h
-@@ -28,7 +28,7 @@
- #include <linux/dma-fence.h>
- #include <linux/completion.h>
- #include <linux/xarray.h>
--#include <linux/irq_work.h>
-+#include <linux/workqueue.h>
- 
- #define MAX_WAIT_SCHED_ENTITY_Q_EMPTY msecs_to_jiffies(1000)
- 
-@@ -295,7 +295,7 @@ struct drm_sched_job {
- 	 */
- 	union {
- 		struct dma_fence_cb		finish_cb;
--		struct irq_work 		work;
-+		struct work_struct 		work;
- 	};
- 
- 	uint64_t			id;
--- 
-2.35.1
+  void notrace __bpf_tramp_exit(struct bpf_tramp_image *tr);
 
+So first, curious what I am doing wrong or rather why it succeeds in
+your case ;)
+
+But second, just wanted to plea to "fix" available_filter_functions to
+not list stuff that should not be attachable. Can you please take a
+look and checks what's going on there and why do we have notrace
+functions (and what else should *NOT* be there)?
+
+
+> +       if (!f)
+> +               return -EINVAL;
+> +
+> +       map = hashmap__new(symbol_hash, symbol_equal, NULL);
+> +       err = libbpf_get_error(map);
+> +       if (err)
+> +               goto error;
+> +
+
+[...]
+
+> +
+> +       attach_delta_ns = (attach_end_ns - attach_start_ns) / 1000000000.0;
+> +       detach_delta_ns = (detach_end_ns - detach_start_ns) / 1000000000.0;
+> +
+> +       fprintf(stderr, "%s: found %lu functions\n", __func__, cnt);
+> +       fprintf(stderr, "%s: attached in %7.3lfs\n", __func__, attach_delta_ns);
+> +       fprintf(stderr, "%s: detached in %7.3lfs\n", __func__, detach_delta_ns);
+> +
+> +       if (attach_delta_ns > 2.0)
+> +               PRINT_FAIL("attach time above 2 seconds\n");
+> +       if (detach_delta_ns > 2.0)
+> +               PRINT_FAIL("detach time above 2 seconds\n");
+
+see my reply on the cover letter, any such "2 second" assumption are
+guaranteed to bite us. We've dealt with a lot of timing issues due to
+CI being slower and more unpredictable in terms of performance, I'd
+like to avoid dealing with one more case like that.
+
+
+> +
+> +cleanup:
+> +       kprobe_multi_empty__destroy(skel);
+> +       if (syms) {
+> +               for (i = 0; i < cnt; i++)
+> +                       free(syms[i]);
+> +               free(syms);
+> +       }
+> +}
+> +
+>  void test_kprobe_multi_test(void)
+>  {
+>         if (!ASSERT_OK(load_kallsyms(), "load_kallsyms"))
+> @@ -320,4 +459,6 @@ void test_kprobe_multi_test(void)
+>                 test_attach_api_syms();
+>         if (test__start_subtest("attach_api_fails"))
+>                 test_attach_api_fails();
+> +       if (test__start_subtest("bench_attach"))
+> +               test_bench_attach();
+>  }
+> diff --git a/tools/testing/selftests/bpf/progs/kprobe_multi_empty.c b/tools/testing/selftests/bpf/progs/kprobe_multi_empty.c
+> new file mode 100644
+> index 000000000000..be9e3d891d46
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/kprobe_multi_empty.c
+> @@ -0,0 +1,12 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <linux/bpf.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +
+> +char _license[] SEC("license") = "GPL";
+> +
+> +SEC("kprobe.multi/*")
+> +int test_kprobe_empty(struct pt_regs *ctx)
+> +{
+> +       return 0;
+> +}
+> --
+> 2.35.1
+>

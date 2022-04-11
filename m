@@ -2,97 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 510024FC22A
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 18:22:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBC914FC23F
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 18:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344730AbiDKQZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 12:25:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48664 "EHLO
+        id S1348376AbiDKQ2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 12:28:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234414AbiDKQZD (ORCPT
+        with ESMTP id S1348415AbiDKQ2t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 12:25:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E247930560;
-        Mon, 11 Apr 2022 09:22:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 80896616E2;
-        Mon, 11 Apr 2022 16:22:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FBF9C385A4;
-        Mon, 11 Apr 2022 16:22:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649694167;
-        bh=etgszlvRZe6jojRqGriaxOztspw5uhvdBS80CxJB4SE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=DRwqaBaSdxFQPkzjCeJI8eG2gb9bLFdGYzApUjcRzrefej9I+JDefq+Z257Xoq/Gy
-         I3DuZpWqrikk/H693LqgH5bEK7stEfmszvlFO3t+5hk58k7Ir+LaXzuIBwT/KMU8Rf
-         ku+OY/D3ZleeOzkc+LeYswSL7WLyV0bo5XgdLB66DdZS/4ij5lsNOIlt2ej2CFQBxF
-         ZhQKGbdT8lwj8+AKrjMr4ZLz+GLX8MHxvW5g0DfBodzYeJ6FHQBHQYimZaZUweqIUt
-         Q4UI7i7TQP7AdaJ9lOl+mRak/VKhFNlLakve0Str0CpestWRzaWmF5d7SaX/QNISqb
-         8sfQT4VqeTD0w==
-Date:   Mon, 11 Apr 2022 11:22:46 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Stefan Gottwald <gottwald@igel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] PCI: PM: Quirk bridge D3 on Elo i2
-Message-ID: <20220411162246.GA519922@bhelgaas>
-MIME-Version: 1.0
+        Mon, 11 Apr 2022 12:28:49 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE802AC63
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 09:26:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KuWA7cVnrE75YwaCwEbSNlTSUfsIzm++kL0UnMZKnYQq69Z/OoyzR3oYK7YQst1gE4DeMd+li4d8J5bzMAl0DSnGJTEVRUXcl0/iM5Ob+juxkJ1iStshOXeVo5FuRVE40Oghv+tng1a7uWX6Ah6XZ5znNeZc+U9DzcVngiGyoyLMf+lN6qdU0x76IEuaHieyyWdASq2KEg9tr6AT4yx+Leg5up6vcaXzAJRtlZGtAhk8u0zERMHruaxjEMFNn4lQiPVm3xAs5GEI8fablPByW0hFw5iOTMKEzWk7mzOOwRi0Ruapd4WT+k7pOu5eqUXW8Ov75Z2Gy2U5qwrYX86Gow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=p9lMdZAEWtGWcaUpaq+QIyKpxqEa0tXWVZR8GI1VbhM=;
+ b=b+9uU8JgtTZpZaA1gcfEhBH5FaNtsWC2uVh2MAyxTDv5EVtLaCPy2x8FAlKD7/aVnMU0V/IxGDRCp6n5Ri77a/ax3sIRo/GJkbo2ZBM2vaEppV3zqkuO7aZyHGXz8vaDOdRfwfovY78cMx5SDE9y2qFbAQi26LL4GviUxfZzb2M3Fd6QofMVQMc7ZjArwG8Ax7oPiKqajjzn+4JM1wxYB9ZYl2iG+5xgZjbCbKA9jobNFqoZaHTRY0o7sKmiIl3dIOOGt3M0GHvL91kRva5Vi6GdQs4FHTp/kdjbjQ33+Tqou9d7uqAwXS/gFXm6n4YGwFIsknSj6GtHigDcpWNKUg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=p9lMdZAEWtGWcaUpaq+QIyKpxqEa0tXWVZR8GI1VbhM=;
+ b=NzoDNT9GXwVQp8ppnti3nAsjBR3u8fAgzEeLPrXHjEvVji3Xap3xCWMdMW44mIeTqyiOGakO+PtvbJsaZORq+Em/SoiO0NF0I2wt44fBD5klZVCdTALvB836TUPWW48BnfDalCDFxXtAQ9AOm4hyTofEcErBKYoIr5Dg6n5rB2266b6lTY2K0zN9uwWVZPeK8xFPL1sIyJHFMfwD6mzWqEG8KztV6zqttCH/zvCx/++8VZ9YFeqXj9nHVtrM5BKT9CZvK/0PoVp6DDXw9ICLOF7s1wxPsxnrOt6rBY9NiJqfwD3FcqSA+D+8IF5BGSOaWyUE/5q7ffM9mH/mhQOd9A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by CH2PR12MB4908.namprd12.prod.outlook.com (2603:10b6:610:6b::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Mon, 11 Apr
+ 2022 16:26:33 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::cdfb:f88e:410b:9374]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::cdfb:f88e:410b:9374%6]) with mapi id 15.20.5144.029; Mon, 11 Apr 2022
+ 16:26:33 +0000
+Date:   Mon, 11 Apr 2022 13:26:32 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        intel-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 14/34] drm/i915/gvt: devirtualize ->{get,put}_vfio_device
+Message-ID: <20220411162632.GP2120790@nvidia.com>
+References: <20220411141403.86980-1-hch@lst.de>
+ <20220411141403.86980-15-hch@lst.de>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2d6981fd-c75a-ccb0-9299-65625963a9e3@leemhuis.info>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220411141403.86980-15-hch@lst.de>
+X-ClientProxiedBy: BLAPR03CA0137.namprd03.prod.outlook.com
+ (2603:10b6:208:32e::22) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d808e852-e09e-4a47-032d-08da1bd80acf
+X-MS-TrafficTypeDiagnostic: CH2PR12MB4908:EE_
+X-Microsoft-Antispam-PRVS: <CH2PR12MB49080BD1B942DBD812134CEBC2EA9@CH2PR12MB4908.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: AidimZTxgearZCDRfo5h8koL9BES0xOK9aHAR8AMytqWT+vj2ilR9fFGRKqCU+0qaAxjYLFes1N0YWbamHSn5lYK7yhsM/3o6Yb9oqHyXsOmKZ2xB7DWmZwbO3KoHWeVb2mcme9gBpYjqexmc/c0PAp5xugcRAr3ctbsARnLEwOURdSa17ciummexVkjftmdTQQ4bUCZOkP6RLSAQwdlw3cMnULj93hPV4/BRgCrimuwUC9ZoeGM6sDezE30Odb1CmMSL2tomhhMqLUG1uR2FGTxKRuqCA8yq2NW0oGcoxcKlCpHPgvPRq8wHJu9FYhpnY954lJbczOJy41LFxm2VQE8b2QdryR/H62sOLOVgxs5sQyGhxaOEqRkrSMrpcEbn7WBzDparvAGn1GXHDhlrxhwB9Obd7roE5L10c969dtkTXQNr0NK/ZAhYgNtl2r7YHDwXbdHyxllmkkVYC9m0GLLnGY91u2zlRUhh/wAWrRhOE3pgmVmvbNXzkgOVJ0wK27P3HA0j0OQzhKMCVsAiF83cEdh+UkzM+DZlH3nb3Ijmsn2ED5W2d5jGP31ZT2h0c1ijzhxevfXSbQGHX3CICqphVVbA7lbuTT+kqeSQ03xbREHRR2U9IT67WMimx4EO8xfkPWzFC4Ga1bhyyR7Og==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(316002)(6916009)(54906003)(6506007)(6486002)(83380400001)(33656002)(36756003)(86362001)(38100700002)(2616005)(6512007)(1076003)(2906002)(5660300002)(7416002)(4744005)(26005)(186003)(66476007)(66556008)(66946007)(8676002)(8936002)(4326008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Z4r2AH92XI++qMVD4Th0P/LEsrfWKBzp54FSsfqng6IctUO5p+1+LBeLgg0V?=
+ =?us-ascii?Q?i773bGWM4es9ADuDIW1epl2DIdpEdhRJpGwKTsZuJlRFcoLML1oUeu0Z6OAs?=
+ =?us-ascii?Q?hG3+VrSTx5ag43b0/WQ81AttzA5Par6MyPCglK4aGrbyHImxRY0DuHTUCbKS?=
+ =?us-ascii?Q?+NvdHm26wQc6pDrm5XDzzmkzRZz6ciyybYbX7BYxfWkgqo54GYSLThJlRSIP?=
+ =?us-ascii?Q?vAx2hAhLACH/XkA2ASP5mzzyoVpr+Ho9IR1SOcB679gHj7G901xRJTG8FtJs?=
+ =?us-ascii?Q?2TcP2VMI1hDhhh7GJpXja+VxLa2yTTzdiUeQ5VRafhvhMQ8ydQGcV13TsJpe?=
+ =?us-ascii?Q?kqOBrc0iA1pXE9hSvX3tuQGjVBZZ8Q64WdYW18nrwYPKyBZka2J2eeX+KHuW?=
+ =?us-ascii?Q?Hnlbekyn4SopWCyKILO3e6oiyrVgDyXcbEDB/BzV9kJ0fzYEZ0dqORx0EHTo?=
+ =?us-ascii?Q?VEzVboVby27VilyqnrwBKLZl1N9qIdpcAI0JDiR0xT/Yt8x48flQPuDR9cWL?=
+ =?us-ascii?Q?aJsXbyJ6U0BA2+2yrOmbb3G9ZdMCZp3Kjv1NQbOgkfvx1e3KbaaiZ75NxT6g?=
+ =?us-ascii?Q?2bhO+TFRPc9U2Kcc/oWtC/KnV8gV5xYklf438IBSPfOTWvlh6d0D+t3zq8Yn?=
+ =?us-ascii?Q?t7iIHMe+P5WB0bA6i71oSks0evLlP5gJV1YKohogOqyeSiJRMFW5JPtdPbbK?=
+ =?us-ascii?Q?VaBNRPTUwxT04LUtn/Pk8mlK70dRg3ElB6db30wEXocdnYbCaAYzDMedn5l8?=
+ =?us-ascii?Q?J74+k8XdYuAQDXSBM9tNKqROw/x0GyBJoL2ssMMu3AI+e7GKQJpudEsf6Clw?=
+ =?us-ascii?Q?o3E2djG3UNaiihASQivOrIX7QZPP+o1fTtDPwX6rByIL+v2ig+9UoPZwSQzt?=
+ =?us-ascii?Q?sxNZv3MNv6Jo4TX667e+9zSdJoP72OoEyAfkijw8NHozLXikbijcOeTH9A65?=
+ =?us-ascii?Q?PbCvWfvbzPljtP101op35DBfcmH7RWJXu3491Y1Ngc20kGsITMi1sWg3UMUW?=
+ =?us-ascii?Q?28JTvcOS8cVNAszztUNaO2dzStnT6GvEDMlOuOPGr7WHRQ+zKeizrAdjyfku?=
+ =?us-ascii?Q?gg/3I+NKAy8GWvxqWuwbfljU5BNHqSz9fpeG/9DHSPOVfDYZW85u5xXAemZE?=
+ =?us-ascii?Q?uNsJ2vewXohQV9nyypPyXHPOAHT6s/IEZwTHb4n3xFnNQYhbilh0z2ZONE5J?=
+ =?us-ascii?Q?nxvGzIZhbUaCftvuwUzefWlCYGLXAg5qXftgW8rtqU7/pXDZZk2Oy3dR3ZjA?=
+ =?us-ascii?Q?HRgQAmdBQbn0odJa3YfMQQemIFCn2Ei8itHPw62KHQKchQVO0NYAFRSh9cHN?=
+ =?us-ascii?Q?mBeNoRzBnD8018+cGCqlf6TXfIMZBx8SzvLrO/7Dg4wBOqaI/4ruGL+es2nK?=
+ =?us-ascii?Q?djIuKSADqrjL/r0uZ9P0TE0dvwBnL7SDrqSrrOomcO6mxKYKnz/MUpjTzs0X?=
+ =?us-ascii?Q?yCaELrgjuHR571jH0f8yZgD1wRQLhBs13scegQW/Z7PMm1L1ENoT+H3yJiVt?=
+ =?us-ascii?Q?6NHCr+JvQSPSthsv+BK+kgl2UvaGK57R25MGVRxVW8wGRip2bnzF7YzcM4/C?=
+ =?us-ascii?Q?0vMFn14P5knUv26Ou7qrzSchpTG8ZaIPDPrCfrbUBufZTQ6VaNXFi8heY+qy?=
+ =?us-ascii?Q?P/wm++qSaZPC7SsfqA0qPJtnBL7iNK/oz9sHGLpFINRhKCsqObbarED0mg4M?=
+ =?us-ascii?Q?8o7RklberLv15GRLU3AvtY40vjgV7CfV3kyfxqZNCDLetAicW+Zg5IbKq9y3?=
+ =?us-ascii?Q?Dr+JqGo55w=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d808e852-e09e-4a47-032d-08da1bd80acf
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2022 16:26:33.6148
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dtCUoqeXHuol6SAwMAuJwMSc4r4t7Rz7x1qXVmMrSiMY/vTe7fNgF1JILJ5+3CDh
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4908
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 02:10:30PM +0200, Thorsten Leemhuis wrote:
+On Mon, Apr 11, 2022 at 04:13:43PM +0200, Christoph Hellwig wrote:
+> Just open code the calls to the VFIO APIs.
 > 
-> 
-> On 11.04.22 13:35, Rafael J. Wysocki wrote:
-> > On Sun, Apr 10, 2022 at 11:16 AM Thorsten Leemhuis
-> > <regressions@leemhuis.info> wrote:
-> >>
-> >> On 09.04.22 15:35, Rafael J. Wysocki wrote:
-> >>> On Fri, Apr 8, 2022 at 9:53 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> >>>>
-> >>>> On Mon, Apr 04, 2022 at 04:46:14PM +0200, Rafael J. Wysocki wrote:
-> >>>>> On Fri, Apr 1, 2022 at 1:34 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >>>>>> On Thu, Mar 31, 2022 at 11:57 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> >>>>>>> On Thu, Mar 31, 2022 at 07:38:51PM +0200, Rafael J. Wysocki wrote:
-> >>>>>>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >>>>>>>>
-> >>>>>>>> If one of the PCIe root ports on Elo i2 is put into D3cold and then
-> >>>>>>>> back into D0, the downstream device becomes permanently inaccessible,
-> >>>>>>>> so add a bridge D3 DMI quirk for that system.
-> >>>>>>>>
-> >>>>>>>> This was exposed by commit 14858dcc3b35 ("PCI: Use
-> >>>>>>>> pci_update_current_state() in pci_enable_device_flags()"), but before
-> >>>>>>>> that commit the root port in question had never been put into D3cold
-> >>>>>>>> for real due to a mismatch between its power state retrieved from the
-> >>>>>>>> PCI_PM_CTRL register (which was accessible even though the platform
-> >>>>>>>> firmware indicated that the port was in D3cold) and the state of an
-> >>>>>>>> ACPI power resource involved in its power management.
-> >>>>>>>> ...
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  drivers/gpu/drm/i915/gvt/dmabuf.c    | 12 ++++++-----
+>  drivers/gpu/drm/i915/gvt/hypercall.h |  2 --
+>  drivers/gpu/drm/i915/gvt/kvmgt.c     | 22 --------------------
+>  drivers/gpu/drm/i915/gvt/mpt.h       | 30 ----------------------------
+>  4 files changed, 7 insertions(+), 59 deletions(-)
 
-> >>>> I don't understand all that's going on here, but I applied it to
-> >>>> pci/pm for v5.19, thanks!
-> >>> Thank you!
-> >>
-> >> Sorry, but this made me wonder: why v5.19? It's a regression exposed in
-> >> v5.15, so it afaics would be good to get this in this cycle -- and also
-> >> backported to v5.15.y, but it seem a tag to take care of that is
-> >> missing. :-/
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
-I moved it to for-linus for v5.18 and added a stable tag for v5.15+.
+Had to look ahead in the series to see that the
+vfio_device_get_from_dev() was removed too :)
+
+Jason

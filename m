@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B163E4FB970
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 12:24:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1124B4FB974
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 12:24:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345370AbiDKKZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 06:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55136 "EHLO
+        id S1345350AbiDKKZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 06:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345418AbiDKKZO (ORCPT
+        with ESMTP id S1345444AbiDKKZO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 11 Apr 2022 06:25:14 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D5844761
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 03:21:56 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id a16-20020a17090a6d9000b001c7d6c1bb13so16318069pjk.4
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 03:21:55 -0700 (PDT)
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC8144769
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 03:21:59 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id k14so13821603pga.0
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 03:21:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qqzor9pjG1TYg9IdQuC1oJUUk90Bi3aWHzEMNZOgNWI=;
-        b=GRj2XJmEuxLk9MuNfXIRBqtrYPZlM3M/2wbiZGetnbNVwtKr5R+ul55qIFUxO1UzCP
-         jE8ojn/a/ow7SB0XAeheQ9sZ6q+z1I1U6jdjtDvQJJicUSTu72neFcI92SEe9hcdeIxr
-         Y5YVns+azOlep1psaVSX8tU7QuUpWk9OPtY6YWHqFQaE6qJI+ZS8pcvfC2AtBURE4I7R
-         7Kz01riZEdAS5QlTP3FTBn2rL5fenLNNT78MzxWHLOEhofgD+JG/pLxjxlZTYR9Mt9nv
-         CcDCVrwk187XWOtacwyNGWc1dTkgC1SACn8kjlprh1kKIh5XJaxWlvi2ORjCzO3+vdWP
-         srog==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ioOLOPRMwxuocGQiKn3ZypvnZg8gicvD1hlKV7CC/G0=;
+        b=WScTtEoPg8rfuBUuUvYtHKVp0wwTmhBMdvNJ3OF1NaBNKpunV+yblivfIzRpwSEYLO
+         TC41U82zJnuLIx/l60Ou+clbet6SWmkwv3PDiX46bnipEQ588owetbfOSiDDxftyt+zd
+         Dbp+0eWhV54Hs1gwrQ6aOFn9aZAmpjAt9ek/qzC66ynoDPt+YF31lN5hMsIcIbygMizh
+         DBrDu4qbfylwp04MCHBSXuZK4yy+DLfI+TNGr4sOzl+OK3qfFz/3yXzICxlLCYA0Mqs9
+         1k40WYjdwGckv3bWdF8GvCp3GX2bK/0muGVGJC3KYH8i9v/gQ5BFRvigKCscFqmTuaFD
+         oUGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qqzor9pjG1TYg9IdQuC1oJUUk90Bi3aWHzEMNZOgNWI=;
-        b=hQBa63l7UUY7++h7PH34N/vRIS6PSJyPvu0RsOW4NPSEowa6Lv9MUPDhMgDAxo+80i
-         Q4brRiwqkNJmthrxQUoXxCJ5IEepVkTb2sA6V0CFkMBkLJmnAVcCcKvi4h8OTO2re+P3
-         Euc3Z8HGgALw9VtWbG8TIhdXW9DW/H0ylb2dwvcFLwqKqTDPyjY5VnJHE79LbyGS3uus
-         KYhE1TsIWWPMPfKHzTJO5TvFfACVEuwwoOYAF64hxPNU3VbAAiDczEz6G3Hfr3yg+IW6
-         X0ox8+MOqN+/7/Huk6Nw7YEEk9fttJOY7yfW7iKs0SPU4i7HkyAfEG7dhVB3Qc9jCcLF
-         CVkQ==
-X-Gm-Message-State: AOAM530As1rBJCJiyABof9/cXuwHkPaXYCTgGn6/yQZt3/jizcZ4ymyp
-        QPkf57VeSIQcFUL6YoSxpr4=
-X-Google-Smtp-Source: ABdhPJwMtswdD8i5LKlqTZJu3XXMLQxkxOHfBS/uTn6eZ686k+5+si56IuMF5pcbwT9b2nvBEdG+KA==
-X-Received: by 2002:a17:902:e154:b0:158:71b7:ca8 with SMTP id d20-20020a170902e15400b0015871b70ca8mr1851201pla.21.1649672515341;
-        Mon, 11 Apr 2022 03:21:55 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ioOLOPRMwxuocGQiKn3ZypvnZg8gicvD1hlKV7CC/G0=;
+        b=7STpGDSl6oRAZQuXi7Hi25Gi6xbEg0mAeaq19QShh3da0Am7u2oxPeYoMglk4ESSco
+         X2PbUkvQQxLRTWDEGLylzmodUOPf6ML+53mZBxkrGkO44fi2HSgdhXN3GT7CKjryyGZF
+         GlWYeXxJ5WIpURuYTqI26HZpbsApFUCO4fY8T2h26zcC29ki99QJJ57HTOQT5f7KN646
+         b2WOIkp0yLVsH1v8pregkSjpA0RWOzY2O56ZI0h+4dL7SXzh3cGlkgmXyNEmZE6GPBJH
+         GPi7PHrKn16krgCC3sOUDvptrGsr6Hr+5oSWNqCwdGoqm41OE0AjA0eDimI3X2qxW+0l
+         rAkg==
+X-Gm-Message-State: AOAM530bdWukEHPBO38ei4qb8lNCyTAXIBh9XyQ16w3vLpwPFBjX35EQ
+        FV6iEwTf3Bi3P6qws5v/nR8=
+X-Google-Smtp-Source: ABdhPJxWW43ktUsUtlSzuScY28viShh0aFgK9c2HjNrjsN6GhUbKT3q7NqL0ND9Nn5oRS3U56JX9yQ==
+X-Received: by 2002:a65:47c4:0:b0:39d:4f85:40e0 with SMTP id f4-20020a6547c4000000b0039d4f8540e0mr4041654pgs.309.1649672518843;
+        Mon, 11 Apr 2022 03:21:58 -0700 (PDT)
 Received: from makvihas.localhost.com ([2405:201:202b:15:4376:c658:ae1e:1781])
-        by smtp.gmail.com with ESMTPSA id z14-20020a17090a170e00b001cb7e69ee5csm4886318pjd.54.2022.04.11.03.21.52
+        by smtp.gmail.com with ESMTPSA id z14-20020a17090a170e00b001cb7e69ee5csm4886318pjd.54.2022.04.11.03.21.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 03:21:55 -0700 (PDT)
+        Mon, 11 Apr 2022 03:21:58 -0700 (PDT)
 From:   Vihas Makwana <makvihas@gmail.com>
 To:     Larry Finger <Larry.Finger@lwfinger.net>,
         Phillip Potter <phil@philpotter.co.uk>,
@@ -57,10 +57,12 @@ Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Dan Carpenter <dan.carpenter@oracle.com>,
         Pavel Skripkin <paskripkin@gmail.com>,
         Vihas Makwana <makvihas@gmail.com>
-Subject: [PATCH v2 0/7] drop some unnecessary wrappers
-Date:   Mon, 11 Apr 2022 15:51:29 +0530
-Message-Id: <20220411102136.14937-1-makvihas@gmail.com>
+Subject: [PATCH v2 1/7] staging: r8188eu: drop unnecessary wrapper _rtw_free_cmd_priv
+Date:   Mon, 11 Apr 2022 15:51:30 +0530
+Message-Id: <20220411102136.14937-2-makvihas@gmail.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220411102136.14937-1-makvihas@gmail.com>
+References: <20220411102136.14937-1-makvihas@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,27 +75,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop some unnecessary wrappers and update all the references
-accordingly.
-Tested on Comfast CF-WU810N RTL8188EUS wireless adapter.
+Drop unnecessary wrapper _rtw_free_cmd_priv and move its logic to
+rtw_free_cmd_priv.
 
-v1 -> v2:
-Drop the wrapper functions with underscores prefixed.
+Signed-off-by: Vihas Makwana <makvihas@gmail.com>
+---
+ drivers/staging/r8188eu/core/rtw_cmd.c | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
-Vihas Makwana (7):
-  staging: r8188eu: drop unnecessary wrapper _rtw_free_cmd_priv
-  staging: r8188eu: drop unnecessary wrapper _rtw_init_cmd_priv
-  staging: r8188eu: drop unnecessary wrapper _rtw_init_evt_priv
-  staging: r8188eu: drop unnecessary wrapper _rtw_init_mlme_priv
-  staging: r8188eu: drop unnecessary wrapper _rtw_free_mlme_priv
-  staging: r8188eu: drop unnecessary wrapper _rtw_alloc_network
-  staging: r8188eu: drop unnecessary wrapper _rtw_dequeue_cmd
-
- drivers/staging/r8188eu/core/rtw_cmd.c     | 145 +++++++----------
- drivers/staging/r8188eu/core/rtw_mlme.c    | 179 +++++++++------------
- drivers/staging/r8188eu/include/rtw_mlme.h |   4 +-
- 3 files changed, 135 insertions(+), 193 deletions(-)
-
+diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
+index f036a980e..d53217900 100644
+--- a/drivers/staging/r8188eu/core/rtw_cmd.c
++++ b/drivers/staging/r8188eu/core/rtw_cmd.c
+@@ -87,14 +87,6 @@ void rtw_free_evt_priv(struct	evt_priv *pevtpriv)
+ 	}
+ }
+ 
+-static void _rtw_free_cmd_priv(struct cmd_priv *pcmdpriv)
+-{
+-	if (pcmdpriv) {
+-		kfree(pcmdpriv->cmd_allocated_buf);
+-		kfree(pcmdpriv->rsp_allocated_buf);
+-	}
+-}
+-
+ /* Calling Context:
+  *
+  * rtw_enqueue_cmd can only be called between kernel thread,
+@@ -159,7 +151,10 @@ u32 rtw_init_evt_priv(struct evt_priv *pevtpriv)
+ 
+ void rtw_free_cmd_priv(struct	cmd_priv *pcmdpriv)
+ {
+-	_rtw_free_cmd_priv(pcmdpriv);
++	if (pcmdpriv) {
++		kfree(pcmdpriv->cmd_allocated_buf);
++		kfree(pcmdpriv->rsp_allocated_buf);
++	}
+ }
+ 
+ static int rtw_cmd_filter(struct cmd_priv *pcmdpriv, struct cmd_obj *cmd_obj)
 -- 
 2.30.2
 

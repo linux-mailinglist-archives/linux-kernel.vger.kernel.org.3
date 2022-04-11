@@ -2,109 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F9394FB9BD
+	by mail.lfdr.de (Postfix) with ESMTP id EFD5E4FB9BF
 	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 12:34:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345567AbiDKKep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 06:34:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58176 "EHLO
+        id S1345588AbiDKKfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 06:35:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242812AbiDKKem (ORCPT
+        with ESMTP id S242812AbiDKKfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 06:34:42 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4152543AC1
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 03:32:29 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id EB43521112;
-        Mon, 11 Apr 2022 10:32:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1649673147; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=F7yn14Y/CNyAPNmn1Vk4CncuqQ7yIwJ/m/NWdKk6AwE=;
-        b=SHIFLTG4fxP64tFjsmBTuKW0xZaXURXx4OYOA89r2RKiKxJYta/2cGgn+YEzmneyLPYPaz
-        f3+wUrbivyqaIIY8WQe0YbouLIfFxBsamLsw1gsvp3xhqJzkLU23ETGXOB2RzHmgOyrmI+
-        7QjOAnL77o0eCKq1cNnt5pCT6Q1c9QU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1649673147;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=F7yn14Y/CNyAPNmn1Vk4CncuqQ7yIwJ/m/NWdKk6AwE=;
-        b=phA3f4AM9CXr/rcsh4h12IH/EqBtuKqQwnwM0eNcSFQpqqgZI4StWaBfSJ4TzVTN0y4f/N
-        UXwzQxc0PNJL0gAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C3C3013AB5;
-        Mon, 11 Apr 2022 10:32:27 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id aUP+LrsDVGL0YQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 11 Apr 2022 10:32:27 +0000
-Message-ID: <78656e93-fc52-5ae1-4da3-b779dac4d779@suse.cz>
-Date:   Mon, 11 Apr 2022 12:32:27 +0200
+        Mon, 11 Apr 2022 06:35:13 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E4E043AC7;
+        Mon, 11 Apr 2022 03:33:00 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id AEF9D809F;
+        Mon, 11 Apr 2022 10:30:28 +0000 (UTC)
+Date:   Mon, 11 Apr 2022 13:32:58 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-serial@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Matwey V . Kornilov" <matwey@sai.msu.ru>,
+        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Subject: Re: [PATCH 1/2] serial: 8250: Fix runtime PM for start_tx() for RS485
+Message-ID: <YlQD2mZdorEAKfZ7@atomide.com>
+References: <20220411094805.45696-1-tony@atomide.com>
+ <YlP7eArvvNWnbMF2@hovoldconsulting.com>
+ <YlP+muZF1nDIU0t4@atomide.com>
+ <YlQCJE4yQRsO8JPn@hovoldconsulting.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] mm/slub: remove duplicate flag in allocate_slab()
-Content-Language: en-US
-To:     Jiyoup Kim <lakroforce@gmail.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Ohhoon Kwon <ohkwon1043@gmail.com>,
-        JaeSang Yoo <jsyoo5b@gmail.com>,
-        Wonhyuk Yang <vvghjk1234@gmail.com>,
-        Donghyeok Kim <dthex5d@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20220409150538.1264-1-lakroforce@gmail.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20220409150538.1264-1-lakroforce@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YlQCJE4yQRsO8JPn@hovoldconsulting.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/9/22 17:05, Jiyoup Kim wrote:
-> In allocate_slab(), __GFP_NOFAIL flag is removed twice when trying
-> higher-order allocation. Remove it.
+* Johan Hovold <johan@kernel.org> [220411 10:23]:
+> On Mon, Apr 11, 2022 at 01:10:34PM +0300, Tony Lindgren wrote:
+> > * Johan Hovold <johan@kernel.org> [220411 09:54]:
+> > > On Mon, Apr 11, 2022 at 12:48:04PM +0300, Tony Lindgren wrote:
+> > > > diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+> > > > --- a/drivers/tty/serial/8250/8250_port.c
+> > > > +++ b/drivers/tty/serial/8250/8250_port.c
+> > > > @@ -1681,8 +1681,10 @@ static void serial8250_start_tx(struct uart_port *port)
+> > > >  		return;
+> > > >  
+> > > >  	if (em485 &&
+> > > > -	    em485->active_timer == &em485->start_tx_timer)
+> > > > +	    em485->active_timer == &em485->start_tx_timer) {
+> > > > +		serial8250_rpm_put_tx(up);
+> > > >  		return;
+> > > > +	}
+> > > 
+> > > I was just taking a quick look at your report about this and also
+> > > noticed this return statement.
+> > > 
+> > > The runtime PM implementation is a bit of mess as we've discussed
+> > > elsewhere, but the change you propose here doesn't look right.
+> > 
+> > Frankly "a bit of mess" applies "a bit more" than just the serial runtime
+> > PM :)
 > 
-> Signed-off-by: Jiyoup Kim <lakroforce@gmail.com>
-
-Thanks, added.
-
-> ---
->  mm/slub.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Heh. I'm afraid that's all too true. :)
 > 
-> diff --git a/mm/slub.c b/mm/slub.c
-> index 74d92aa4a3a2..a0e605ab3036 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -1939,7 +1939,7 @@ static struct slab *allocate_slab(struct kmem_cache *s, gfp_t flags, int node)
->  	 */
->  	alloc_gfp = (flags | __GFP_NOWARN | __GFP_NORETRY) & ~__GFP_NOFAIL;
->  	if ((alloc_gfp & __GFP_DIRECT_RECLAIM) && oo_order(oo) > oo_order(s->min))
-> -		alloc_gfp = (alloc_gfp | __GFP_NOMEMALLOC) & ~(__GFP_RECLAIM|__GFP_NOFAIL);
-> +		alloc_gfp = (alloc_gfp | __GFP_NOMEMALLOC) & ~__GFP_RECLAIM;
->  
->  	slab = alloc_slab_page(alloc_gfp, node, oo);
->  	if (unlikely(!slab)) {
+> > > start_tx() can be deferred in the rs485 case, but that doesn't mean you
+> > > should suspend the device here. In fact, that look like it would just
+> > > break runtime PM (the parts that may work to some extent).
+> > 
+> > AFAIK there's currently nothing paired with the serial8250_rpm_get_tx(up)
+> > call at the beginning of serial8250_start_tx() for the early exit cases
+> > if start_tx_rs485() or __start_tx() won't get called.
+> > 
+> > Care to clarify a bit more what you have in mind?
+> 
+> The problem is that that serial8250_rpm_put_tx() you're adding may
+> suspend the device unconditionally (i.e. regardless of any previous
+> calls to serial8250_rpm_get_tx()).
+> 
+> If rs485 tx is just being deferred you mustn't suspend the device before
+> it has had a chance to start transmitting.
 
+Hmm I'm pretty sure rs485 has the runtime PM usage count is currently
+unbalanced. To me it seems em485->start_tx_timer calls start_tx()
+again from serial8250_em485_handle_start_tx().
+
+Anyways, let's deal with the regression patch first, this can wait a bit.
+
+Regards,
+
+Tony

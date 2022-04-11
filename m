@@ -2,352 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 512344FBF49
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 16:35:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BF924FBF06
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 16:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344816AbiDKOg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 10:36:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42086 "EHLO
+        id S1347261AbiDKO2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 10:28:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347371AbiDKOgl (ORCPT
+        with ESMTP id S1347183AbiDKO2E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 10:36:41 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA6525EB;
-        Mon, 11 Apr 2022 07:34:09 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id f6b720034a47478b; Mon, 11 Apr 2022 16:34:08 +0200
-Received: from kreacher.localnet (unknown [213.134.175.113])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 6E9B866BDD4;
-        Mon, 11 Apr 2022 16:34:07 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PCI <linux-pci@vger.kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH v2 4/9] PCI/PM: Rework changing power states of PCI devices
-Date:   Mon, 11 Apr 2022 16:25:12 +0200
-Message-ID: <13011315.uLZWGnKmhe@kreacher>
-In-Reply-To: <11975904.O9o76ZdvQC@kreacher>
-References: <4419002.LvFx2qVVIh@kreacher> <11975904.O9o76ZdvQC@kreacher>
+        Mon, 11 Apr 2022 10:28:04 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7553D38181
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 07:25:50 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id r66so14342140pgr.3
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 07:25:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Sns/MvLMLn0yGtKjZZVTM2sMuhywLDT5QG/H5jOX8eU=;
+        b=Z3Ux/44QgNYQkA0TED9DfN8/3CH/FV74I6O6NHbIbPpLIM757WSxs5b36VLT+8MFGQ
+         lmpNzUl0GuiEQTTe25IVQtdbXCUKE5yiEABr6Qo9UPYTp0YUAN6GBWsjxOcL/9Z1MKfV
+         1pGsENHotN1eR/QFZx1GZZcqdX/SPBKrizub/ahbCxvxaDbvBhgu6+UTE/FpWNaCp10A
+         txb9lPoI1Co6ZtPP58xkVPEifFwiXhQqT9GFBFmH67RTmpO1FmDqRQbWNAqAIJyxfg02
+         NeWL7OaNNUPWTwLLo365zXcz1exjmqe9KMFawEdhZo+QoRpkPnJS4dhxH7Va7+kyZv+9
+         PiKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Sns/MvLMLn0yGtKjZZVTM2sMuhywLDT5QG/H5jOX8eU=;
+        b=u+YQWO+EdpRpQF+BHcP8onLe5fxNBnaDqo+Jrk17DGwWwjbFfROQ4/ERMgm7RE6epp
+         HyKGXT5fLL9nMb01A1zteTyWLLGGFQNppI6oJJAM0CN8gIF2iFaWgCs8QJRS4emNvk8y
+         Ow69t8l51eMeLV94aC2+XkDR3tE/LrB+akMUhhycp5tn8GNi+a5P2zpiSOtUtmP+5qQV
+         xmOeQeiTXMN2QJE2nSmBd3Mdu72a2yA0UV2LuH/kTLMQwp+cx5YklY5J64nrbeMKBeYm
+         i7tPsCqd7WjivYjxK3I6+XXzGZVUxzVr4oeq6syYnyg2zH7XacdIDwnvx2eQCED6IjG7
+         L9lw==
+X-Gm-Message-State: AOAM532Rd1vP38BneswLKp8oP52ISZTWgZv/ATD7/dcHe8zPa7DaOU7d
+        puWCu3cf9GAfgY5XkhoXJDz0Cw==
+X-Google-Smtp-Source: ABdhPJw7Gknjju8PCnagcxI8t3XHkB5GkXIJH8Fsh2IFs/OjXu5dbyJCeKZJ6MSc6BjOaa0Yg47aJw==
+X-Received: by 2002:a63:6c8a:0:b0:398:5208:220a with SMTP id h132-20020a636c8a000000b003985208220amr26701346pgc.176.1649687149751;
+        Mon, 11 Apr 2022 07:25:49 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id s10-20020a63a30a000000b003987eaef296sm5653pge.44.2022.04.11.07.25.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Apr 2022 07:25:49 -0700 (PDT)
+Date:   Mon, 11 Apr 2022 14:25:45 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Gonda <pgonda@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v4.1] KVM, SEV: Add KVM_EXIT_SHUTDOWN metadata for SEV-ES
+Message-ID: <YlQ6afg11dVGhUBB@google.com>
+References: <20220407210233.782250-1-pgonda@google.com>
+ <20220408165641.469961-1-pbonzini@redhat.com>
+ <87czhoar7k.wl-maz@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.175.113
-X-CLIENT-HOSTNAME: 213.134.175.113
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudekiedgjeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvjeelgffhiedukedtleekkedvudfggefhgfegjefgueekjeelvefggfdvledutdenucfkphepvddufedrudefgedrudejhedruddufeenucevlhhushhtvghrufhiiigvpedvnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddujeehrdduudefpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphgtihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehm
- ihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87czhoar7k.wl-maz@kernel.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Mon, Apr 11, 2022, Marc Zyngier wrote:
+> On Fri, 08 Apr 2022 17:56:42 +0100,
+> Paolo Bonzini <pbonzini@redhat.com> wrote:
+> > 
+> > Queued, thanks.  But documentation was missing:
+> > 
+> > diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> > index e7a0dfdc0178..72183ae628f7 100644
+> > --- a/Documentation/virt/kvm/api.rst
+> > +++ b/Documentation/virt/kvm/api.rst
+> > @@ -6088,8 +6088,12 @@ should put the acknowledged interrupt vector into the 'epr' field.
+> >    #define KVM_SYSTEM_EVENT_SHUTDOWN       1
+> >    #define KVM_SYSTEM_EVENT_RESET          2
+> >    #define KVM_SYSTEM_EVENT_CRASH          3
+> > +  #define KVM_SYSTEM_EVENT_SEV_TERM       4
+> > +  #define KVM_SYSTEM_EVENT_NDATA_VALID    (1u << 31)
+> >  			__u32 type;
+> > +                        __u32 ndata;
+> >  			__u64 flags;
+> > +                        __u64 data[16];
+> >  		} system_event;
+> > 
+> >  If exit_reason is KVM_EXIT_SYSTEM_EVENT then the vcpu has triggered
+> > @@ -6099,7 +6103,7 @@ HVC instruction based PSCI call from the vcpu. The 'type' field describes
+> >  the system-level event type. The 'flags' field describes architecture
+> >  specific flags for the system-level event.
+> > 
+> > -Valid values for 'type' are:
+> > +Valid values for bits 30:0 of 'type' are:
+> > 
+> >   - KVM_SYSTEM_EVENT_SHUTDOWN -- the guest has requested a shutdown of the
+> >     VM. Userspace is not obliged to honour this, and if it does honour
+> > @@ -6112,12 +6116,18 @@ Valid values for 'type' are:
+> >     has requested a crash condition maintenance. Userspace can choose
+> >     to ignore the request, or to gather VM memory core dump and/or
+> >     reset/shutdown of the VM.
+> > + - KVM_SYSTEM_EVENT_SEV_TERM -- an AMD SEV guest requested termination.
+> > +   The guest physical address of the guest's GHCB is stored in `data[0]`.
+> > 
+> >  Valid flags are:
+> > 
+> >   - KVM_SYSTEM_EVENT_RESET_FLAG_PSCI_RESET2 (arm64 only) -- the guest issued
+> >     a SYSTEM_RESET2 call according to v1.1 of the PSCI specification.
+> > 
+> > +Extra data for this event is stored in the `data[]` array, up to index
+> > +`ndata-1` included, if bit 31 is set in `type`.  The data depends on the
+> > +`type` field.  There is no extra data if bit 31 is clear or `ndata` is zero.
+> > +
+> 
+> This has the potential to break userspace as it expects a strict match
+> on the whole of 'type', and does not expect to treat it as a bitfield.
+> 
+> Case in point, QEMU:
+> 
+> accel/kvm/kvm-all.c::kvm_cpu_exec()
+> 
+>         case KVM_EXIT_SYSTEM_EVENT:
+>             switch (run->system_event.type) {
+> 
+> CrosVM and kvmtool have similar constructs, and will break as soon as
+> KVM_SYSTEM_EVENT_NDATA_VALID is or'ed into 'type'.
 
-There are some issues related to changing power states of PCI
-devices, mostly related to carrying out unnecessary actions in some
-places, and the code is generally hard to follow.
-
- 1. pci_power_up() has two callers, pci_set_power_state() and
-    pci_pm_default_resume_early().  The latter updates the current
-    power state of the device right after calling pci_power_up()
-    and it restores the entire config space of the device right
-    after that, so pci_power_up() itself need not read the
-    PCI_PM_CTRL register or restore the BARs after programming the
-    device into D0 in that case.
- 
- 2. It is generally hard to get a clear view of the pci_power_up()
-    code flow, especially in some corner cases, due to all of the
-    involved PCI_PM_CTRL register reads and writes occurring in
-    pci_platform_power_transition() and in pci_raw_set_power_state(),
-    some of which are redundant.
-
- 3. The transitions from low-power states to D0 and the other way
-    around are unnecessarily tangled in pci_raw_set_power_state()
-    which causes it to use a redundant local variable and makes it
-    rather hard to follow.
-
-To address the above shortcomings, make the following changes:
-
- a. Remove the code handling transitions into D0
-    from pci_raw_set_power_state() and rename it as
-    pci_set_low_power_state().
-
- b. Add the code handling transitions into D0 directly
-    to pci_power_up() and to a new wrapper function
-    pci_set_full_power_state() calling it internally that is
-    only used in pci_set_power_state().
-
- c. Make pci_power_up() avoid redundant PCI_PM_CTRL register reads
-    and make it work in the same way for transitions from any
-    low-power states (transitions from D1 and D2 are handled
-    slightly differently before the change).
-
- d. Put the restoration of the BARs and the PCI_PM_CTRL
-    register read confirming the power state change into
-    pci_set_full_power_state() to avoid doing that in
-    pci_pm_default_resume_early() unnecessarily.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
-v1 -> v2:
-   * Do not add a redundant check to pci_set_low_power_state().
-
----
- drivers/pci/pci.c |  154 +++++++++++++++++++++++++++++++++++-------------------
- 1 file changed, 101 insertions(+), 53 deletions(-)
-
-Index: linux-pm/drivers/pci/pci.c
-===================================================================
---- linux-pm.orig/drivers/pci/pci.c
-+++ linux-pm/drivers/pci/pci.c
-@@ -1068,10 +1068,9 @@ static inline bool platform_pci_bridge_d
- }
- 
- /**
-- * pci_raw_set_power_state - Use PCI PM registers to set the power state of
-- *			     given PCI device
-+ * pci_set_low_power_state - Program the given device into a low-power state
-  * @dev: PCI device to handle.
-- * @state: PCI power state (D0, D1, D2, D3hot) to put the device into.
-+ * @state: PCI power state (D1, D2, D3hot) to put the device into.
-  *
-  * RETURN VALUE:
-  * -EINVAL if the requested state is invalid.
-@@ -1080,10 +1079,9 @@ static inline bool platform_pci_bridge_d
-  * 0 if device already is in the requested state.
-  * 0 if device's power state has been successfully changed.
-  */
--static int pci_raw_set_power_state(struct pci_dev *dev, pci_power_t state)
-+static int pci_set_low_power_state(struct pci_dev *dev, pci_power_t state)
- {
- 	u16 pmcsr;
--	bool need_restore = false;
- 
- 	/* Check if we're already there */
- 	if (dev->current_state == state)
-@@ -1092,7 +1090,7 @@ static int pci_raw_set_power_state(struc
- 	if (!dev->pm_cap)
- 		return -EIO;
- 
--	if (state < PCI_D0 || state > PCI_D3hot)
-+	if (state < PCI_D1 || state > PCI_D3hot)
- 		return -EINVAL;
- 
- 	/*
-@@ -1101,8 +1099,7 @@ static int pci_raw_set_power_state(struc
- 	 * we can go from D1 to D3, but we can't go directly from D3 to D1;
- 	 * we'd have to go from D3 to D0, then to D1.
- 	 */
--	if (state != PCI_D0 && dev->current_state <= PCI_D3cold
--	    && dev->current_state > state) {
-+	if (dev->current_state <= PCI_D3cold && dev->current_state > state) {
- 		pci_err(dev, "invalid power transition (from %s to %s)\n",
- 			pci_power_name(dev->current_state),
- 			pci_power_name(state));
-@@ -1122,29 +1119,8 @@ static int pci_raw_set_power_state(struc
- 		return -EIO;
- 	}
- 
--	/*
--	 * If we're (effectively) in D3, force entire word to 0.
--	 * This doesn't affect PME_Status, disables PME_En, and
--	 * sets PowerState to 0.
--	 */
--	switch (dev->current_state) {
--	case PCI_D0:
--	case PCI_D1:
--	case PCI_D2:
--		pmcsr &= ~PCI_PM_CTRL_STATE_MASK;
--		pmcsr |= state;
--		break;
--	case PCI_D3hot:
--	case PCI_D3cold:
--	case PCI_UNKNOWN: /* Boot-up */
--		if ((pmcsr & PCI_PM_CTRL_STATE_MASK) == PCI_D3hot
--		 && !(pmcsr & PCI_PM_CTRL_NO_SOFT_RESET))
--			need_restore = true;
--		fallthrough;	/* force to D0 */
--	default:
--		pmcsr = 0;
--		break;
--	}
-+	pmcsr &= ~PCI_PM_CTRL_STATE_MASK;
-+	pmcsr |= state;
- 
- 	/* Enter specified state */
- 	pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL, pmcsr);
-@@ -1153,9 +1129,9 @@ static int pci_raw_set_power_state(struc
- 	 * Mandatory power management transition delays; see PCI PM 1.1
- 	 * 5.6.1 table 18
- 	 */
--	if (state == PCI_D3hot || dev->current_state == PCI_D3hot)
-+	if (state == PCI_D3hot)
- 		pci_dev_d3_sleep(dev);
--	else if (state == PCI_D2 || dev->current_state == PCI_D2)
-+	else if (state == PCI_D2)
- 		udelay(PCI_PM_D2_DELAY);
- 
- 	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
-@@ -1165,22 +1141,6 @@ static int pci_raw_set_power_state(struc
- 			 pci_power_name(dev->current_state),
- 			 pci_power_name(state));
- 
--	/*
--	 * According to section 5.4.1 of the "PCI BUS POWER MANAGEMENT
--	 * INTERFACE SPECIFICATION, REV. 1.2", a device transitioning
--	 * from D3hot to D0 _may_ perform an internal reset, thereby
--	 * going to "D0 Uninitialized" rather than "D0 Initialized".
--	 * For example, at least some versions of the 3c905B and the
--	 * 3c556B exhibit this behaviour.
--	 *
--	 * At least some laptop BIOSen (e.g. the Thinkpad T21) leave
--	 * devices in a D3hot state at boot.  Consequently, we need to
--	 * restore at least the BARs so that the device will be
--	 * accessible to its driver.
--	 */
--	if (need_restore)
--		pci_restore_bars(dev);
--
- 	if (dev->bus->self)
- 		pcie_aspm_pm_state_change(dev->bus->self);
- 
-@@ -1312,8 +1272,54 @@ static int pci_dev_wait(struct pci_dev *
-  */
- int pci_power_up(struct pci_dev *dev)
- {
--	pci_platform_power_transition(dev, PCI_D0);
--	return pci_raw_set_power_state(dev, PCI_D0);
-+	int ret;
-+
-+	ret = pci_platform_power_transition(dev, PCI_D0);
-+	if (ret) {
-+		u16 pmcsr;
-+
-+		/*
-+		 * The PCI_PM_CTRL register has not been read above, so read it
-+		 * now and bail out if that fails.
-+		 */
-+		pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
-+		if (PCI_POSSIBLE_ERROR(pmcsr)) {
-+			dev->current_state = PCI_D3cold;
-+			goto fail;
-+		}
-+		dev->current_state = pmcsr & PCI_PM_CTRL_STATE_MASK;
-+	} else if (dev->current_state == PCI_D3cold) {
-+		/*
-+		 * Since current_state is PCI_D3cold here, the power state seen
-+		 * by the platform is still D3cold or the PCI_PM_CTRL register
-+		 * read in pci_update_current_state() has failed, so assume the
-+		 * device to be inaccessible.
-+		 */
-+		goto fail;
-+	}
-+
-+	/* There's nothing more to do if current_state is D0 at this point. */
-+	if (dev->current_state == PCI_D0)
-+		return 0;
-+
-+	/*
-+	 * Program the device into PCI_D0 by forcing the entire word to 0 (this
-+	 * doesn't affect PME_Status, disables PME_En, and sets PowerState to 0)
-+	 * and wait for the prescribed amount of time.  Assume success.
-+	 */
-+	pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL, 0);
-+
-+	if (dev->current_state == PCI_D3hot)
-+		pci_dev_d3_sleep(dev);
-+	else if (dev->current_state == PCI_D2)
-+		udelay(PCI_PM_D2_DELAY);
-+
-+	dev->current_state = PCI_D0;
-+	return 0;
-+
-+fail:
-+	pci_err(dev, "Unable to change power state to D0, device inaccessible\n");
-+	return -ENODEV;
- }
- 
- /**
-@@ -1340,6 +1346,48 @@ void pci_bus_set_current_state(struct pc
- 		pci_walk_bus(bus, __pci_dev_set_current_state, &state);
- }
- 
-+static int pci_set_full_power_state(struct pci_dev *dev)
-+{
-+	pci_power_t old_state = dev->current_state;
-+	u16 pmcsr;
-+	int ret;
-+
-+	ret = pci_power_up(dev);
-+	if (ret)
-+		return ret;
-+
-+	if (!dev->pm_cap)
-+		return 0;
-+
-+	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
-+
-+	dev->current_state = pmcsr & PCI_PM_CTRL_STATE_MASK;
-+	if (dev->current_state != PCI_D0) {
-+		pci_info_ratelimited(dev, "Refused to change power state from %s to D0\n",
-+				     pci_power_name(dev->current_state));
-+	} else if (old_state >= PCI_D3hot && !(pmcsr & PCI_PM_CTRL_NO_SOFT_RESET)) {
-+		/*
-+		 * According to section 5.4.1 of the "PCI BUS POWER MANAGEMENT
-+		 * INTERFACE SPECIFICATION, REV. 1.2", a device transitioning
-+		 * from D3hot to D0 _may_ perform an internal reset, thereby
-+		 * going to "D0 Uninitialized" rather than "D0 Initialized". For
-+		 * example, at least some versions of the 3c905B and the 3c556B
-+		 * exhibit this behaviour.
-+		 *
-+		 * At least some laptop BIOSen (e.g. the Thinkpad T21) leave
-+		 * devices in a D3hot state at boot. Consequently, we need to
-+		 * restore at least the BARs so that the device will be
-+		 * accessible to its driver.
-+		 */
-+		pci_restore_bars(dev);
-+	}
-+
-+	if (dev->bus->self)
-+		pcie_aspm_pm_state_change(dev->bus->self);
-+
-+	return 0;
-+}
-+
- /**
-  * pci_set_power_state - Set the power state of a PCI device
-  * @dev: PCI device to handle.
-@@ -1381,7 +1429,7 @@ int pci_set_power_state(struct pci_dev *
- 		return 0;
- 
- 	if (state == PCI_D0)
--		return pci_power_up(dev);
-+		return pci_set_full_power_state(dev);
- 
- 	/*
- 	 * This device is quirked not to be put into D3, so don't put it in
-@@ -1394,7 +1442,7 @@ int pci_set_power_state(struct pci_dev *
- 	 * To put device in D3cold, we put device into D3hot in native
- 	 * way, then put device into D3cold with platform ops
- 	 */
--	error = pci_raw_set_power_state(dev, state > PCI_D3hot ?
-+	error = pci_set_low_power_state(dev, state > PCI_D3hot ?
- 					PCI_D3hot : state);
- 
- 	if (pci_platform_power_transition(dev, state))
-
-
-
+Yeah, if we go this route, we'd have to make sure to document that only new types
+can use the flag.

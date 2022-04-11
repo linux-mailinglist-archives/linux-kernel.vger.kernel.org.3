@@ -2,64 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E13044FB655
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 10:50:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3F44FB659
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 10:51:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239522AbiDKIwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 04:52:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48548 "EHLO
+        id S241830AbiDKIxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 04:53:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234364AbiDKIwT (ORCPT
+        with ESMTP id S232178AbiDKIxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 04:52:19 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24467EA6
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 01:50:05 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id s14so3662366plk.8
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 01:50:05 -0700 (PDT)
+        Mon, 11 Apr 2022 04:53:19 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3968E25D4
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 01:51:05 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id ay36-20020a05600c1e2400b0038ebc885115so646978wmb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 01:51:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sus1ijjnwPPCnYQ+nnL26keJCikVTpXCEs0tGfvDY+c=;
-        b=m87SqfcXEo1wITNT0zsEMApqinJ/eME2w9uxi3fBMnAgFLeUvFE89erTEVKqTM+5Zh
-         jOfOx0MfB01iEc/YOMYt42WFNzOWIRKA7TxVVmbHS/cOO+BoOJ16P9OwI3ERjF9ZPJna
-         Jfid7p3vxTRNERj/EFBoT2HZMO1e2Q+Crq22/mcaO7fILST0bpBHt0XB/H8hkQjFkxat
-         kX7h5aZOu9nJiFXpkDpuFEqE5QGNdwC0K++U5lgIKO+pQKc3aNQHWqr6zhporcOuFaYO
-         eWTR/zFWJxBBq8wyrLoxmxAAxL2ikJpeBWz5iflukpR/0wTUlpJ+Qbbm587hUQsypbed
-         5jTg==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=m6Rr8Q+wNYGD2XdkMJAOXQ4QLeHTvBKuFe3IakxIc9o=;
+        b=2gVvFevmuFI4scv9tPcT0ePc8WClLdpec0D+yRT76NvO+/jTUBuB7nKNKaEFf3CxdE
+         CGbQ95TQ/n2nlj8YRwk4C9VCNtLpzQCq3aTdJX0v/dcXGrha8M6VKP9w6E7RQPdgpIsh
+         kGNtFSEet6RuGe6lEIJDpOJJyElFcJyoUugHM6G2aASpuVUwHdE5CdhruhL/q76Mr3X+
+         KcVlCtjv97fQvopOKNhnYs6MSyeQnfejmbQKu6rKu6ewpVbnMid8Iw7AOn1izrVfVUqe
+         DjUK2fNVVlLU6tLTBGSYgeTxiIqQQfFCLaHGooEwdL9OBhA3zn9eqv1yBOJEt81WKSBp
+         Crvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sus1ijjnwPPCnYQ+nnL26keJCikVTpXCEs0tGfvDY+c=;
-        b=G92dh+NHPGnxbt3cSCnIJpDVVNuHkTUJs900DhhlpwYH+OJad2RACSzSotxK23SRDp
-         krKdOHgSHTdb85LX+RibU4MJFGApRemGpsdk0UOey8uAavqFyl7hgMaib+JSJG04aQJ+
-         +TCrneD44R4ZRJ8h8R5YRKNYP5gGZKM1QydRmOKrEVViYGOVb+oeWbtCeFwMfV51J2aq
-         NBqfibEzJjqo+iN9+7T8VsO4NhEPv943oZdSZ1Y4Ip0f8dEmwqizqyMHV8w97wzewRSF
-         9HebB5qJJRw732cj9N4QrpfEXlUHhKaMDbr938g806IEPbvfNv2te9L7jvCyc2fVYDt2
-         IUgA==
-X-Gm-Message-State: AOAM531oF3J5pq1OpbCN4bBjI67pxU2oao9wpno5Vb+CqKzQ66fsGfQl
-        cjS+71+ttfR1fzU+D3zN2rjL4Wtrq41yJXqHSw==
-X-Google-Smtp-Source: ABdhPJx6DRw4IDsGYrLBmw6A9PqReHiO6wvi0esUQduYsRKc96s6AxX0ib2LtF+QvbSEOr3QJvhDocMOSY7cBJF89Ao=
-X-Received: by 2002:a17:90a:5407:b0:1bf:43ce:f11b with SMTP id
- z7-20020a17090a540700b001bf43cef11bmr35665065pjh.31.1649667004582; Mon, 11
- Apr 2022 01:50:04 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=m6Rr8Q+wNYGD2XdkMJAOXQ4QLeHTvBKuFe3IakxIc9o=;
+        b=nqHAZ9/KEewaOmzwBYzhwjsqkliVvxUuBj19k5jRqafm21ZoY4CkUzzIfX9fFk5vzO
+         h+lQvNG7+I7PLoP0ibmi3Y9ZgKSFtbcXnWWfjd1o0Vz9UOTbCKKTXQiZ3nJazDYKBxhU
+         Yy6aRPKOO9ls51gV8L8AZG54Ra3csPxCn7LsfSaOnx2Kf0ufjC4FSOQTGKAD9qHSNTs4
+         8OcirqQS/fNWNcRQrIM4Rg1y/nV2JlTi566aWcN2UdjJC/ixdFVZpDIUpz73lEkLlxfE
+         7Vx/ziapE/uO2HhrUp/m+gRc+sQVa9ViCrrfSJCe6nn8luFuXtcKUxlm65BfnkPe4P/F
+         Yj7g==
+X-Gm-Message-State: AOAM532wMdCckCQXH+QxG/U87IPHbM92pk2Dlknxo0fc+pc+0X837QbE
+        /1+T4UmJxw8z1unt8IQ0ZLJsCg==
+X-Google-Smtp-Source: ABdhPJxWXrwR4K9SIIL0U56pGlKvwNYLYLRcg+MDZygJPCmSwC0yOOXBgd65Dx2bXtovwHAtjIDEig==
+X-Received: by 2002:a05:600c:2306:b0:38e:bf1a:a669 with SMTP id 6-20020a05600c230600b0038ebf1aa669mr1381664wmo.11.1649667063694;
+        Mon, 11 Apr 2022 01:51:03 -0700 (PDT)
+Received: from ?IPV6:2001:861:44c0:66c0:d1:e096:d183:1bc5? ([2001:861:44c0:66c0:d1:e096:d183:1bc5])
+        by smtp.gmail.com with ESMTPSA id n2-20020adfb742000000b00205eda3b3c1sm27276509wre.34.2022.04.11.01.51.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Apr 2022 01:51:03 -0700 (PDT)
+Message-ID: <d6ef87bd-8721-effd-8d26-13cd6d674cce@baylibre.com>
+Date:   Mon, 11 Apr 2022 10:51:02 +0200
 MIME-Version: 1.0
-References: <CAMhUBjm2AdyEZ_-EgexdNDN7SvY4f89=4=FwAL+c0Mg0O+X50A@mail.gmail.com>
- <s5hk0bwcbjh.wl-tiwai@suse.de>
-In-Reply-To: <s5hk0bwcbjh.wl-tiwai@suse.de>
-From:   Zheyu Ma <zheyuma97@gmail.com>
-Date:   Mon, 11 Apr 2022 16:49:53 +0800
-Message-ID: <CAMhUBjmr_mHcz2G0tQ2qktGFw6XDLJiDTAHvM1yoRWzvtA6MYg@mail.gmail.com>
-Subject: Re: [BUG] ALSA: echoaudio: warning when the driver fails to probe
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] arm64: dts: meson-sm1-bananapi-m5: fix wrong GPIO pin
+ labeling for CON1
+Content-Language: en-US
+To:     Guillaume Giraudon <ggiraudon@prism19.com>, kernel-dev@prism19.com
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220410205624.14295-1-ggiraudon@prism19.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+In-Reply-To: <20220410205624.14295-1-ggiraudon@prism19.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,69 +81,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 3:41 PM Takashi Iwai <tiwai@suse.de> wrote:
->
-> On Sun, 10 Apr 2022 11:13:55 +0200,
-> Zheyu Ma wrote:
-> >
-> > Hello,
-> >
-> > I found a bug in echoaudio.c.
-> > When the driver fails at the function snd_echo_create(), it should
-> > release resources requested before, otherwise we will get the
-> > following warning:
-> >
-> > [    3.262866] remove_proc_entry: removing non-empty directory
-> > 'irq/21', leaking at least 'snd_indigodj'
-> > [    3.263577] WARNING: CPU: 3 PID: 261 at fs/proc/generic.c:717
-> > remove_proc_entry+0x389/0x3f0
-> > [    3.267098] RIP: 0010:remove_proc_entry+0x389/0x3f0
-> > [    3.269976] Call Trace:
-> > [    3.269979]  <TASK>
-> > [    3.269988]  unregister_irq_proc+0x14c/0x170
-> > [    3.269997]  irq_free_descs+0x94/0xe0
-> > [    3.270004]  mp_unmap_irq+0xb6/0x100
-> > [    3.270011]  acpi_unregister_gsi_ioapic+0x27/0x40
-> > [    3.270017]  acpi_pci_irq_disable+0x1d3/0x320
-> > [    3.270025]  pci_disable_device+0x1ad/0x380
-> > [    3.270034]  pcim_release+0x566/0x6d0
-> > [    3.270046]  devres_release_all+0x1f1/0x2c0
-> > [    3.270057]  really_probe+0xe0/0x920
->
-> Could you try the patch below?
+Hi,
 
-The following patch works for me, the previous warning disappears, thank you.
-But I got another error, I have no idea about it.
+On 10/04/2022 22:56, Guillaume Giraudon wrote:
+> The labels for lines 61 through 84 on the periphs-banks were offset by 2.
+> Realigned them to match the Banana Pi M5 schematics.
+> 
+> Signed-off-by: Guillaume Giraudon <ggiraudon@prism19.com>
+> ---
+>   arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts b/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
+> index 5751c48620ed..754c3d43ef0b 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
+> @@ -448,7 +448,7 @@
+>   		"",
+>   		/* GPIOA */
+>   		"", "", "", "", "", "", "", "",
+> -		"", "", "", "", "", "",
+> +		"", "", "", "", "", "", "", "",
+>   		"CON1-P27", /* GPIOA_14 */
+>   		"CON1-P28", /* GPIOA_15 */
+>   		/* GPIOX */
 
-[    3.326686] snd_indigodj 0000:00:05.0: Direct firmware load for
-ea/indigo_dj_dsp.fw failed with error -2
-[    3.327474] snd_indigodj 0000:00:05.0: get_firmware(): Firmware not
-available (-2)
-[    3.328077] snd_indigodj 0000:00:05.0: init_hw err=-2
-[    3.328496] snd_indigodj: probe of 0000:00:05.0 failed with error -2
-[    3.329965] ==================================================================
-[    3.330525] BUG: KASAN: use-after-free in stop_transport+0xa5/0x4c0
-[snd_indigodj]
-[    3.331122] Read of size 4 at addr ffff88800943f010 by task systemd-udevd/255
-[    3.333226] Call Trace:
-[    3.333426]  <TASK>
-[    3.333595]  dump_stack_lvl+0x5a/0x74
-[    3.333888]  print_address_description+0x7b/0x440
-[    3.334264]  print_report+0x101/0x200
-[    3.334558]  ? _printk+0x54/0x6e
-[    3.334818]  ? stop_transport+0xa5/0x4c0 [snd_indigodj]
-[    3.335231]  kasan_report+0xc1/0xf0
-[    3.335513]  ? stop_transport+0xa5/0x4c0 [snd_indigodj]
-[    3.335938]  stop_transport+0xa5/0x4c0 [snd_indigodj]
-[    3.336346]  snd_echo_free+0x8c/0x410 [snd_indigodj]
-[    3.336741]  ? snd_echo_interrupt+0x4b0/0x4b0 [snd_indigodj]
-[    3.337183]  release_card_device+0x7d/0x190
-[    3.337519]  ? snd_power_wait+0x80/0x80
-[    3.337829]  device_release+0x97/0x1c0
-[    3.338127]  kobject_put+0x144/0x1c0
-[    3.338417]  __snd_card_release+0xe4/0x140
-[    3.338744]  devres_release_all+0x1f1/0x2c0
-[    3.339079]  really_probe+0xe0/0x920
+Can you repost with a Fixes tag ?
 
-Regards,
-Zheyu Ma
+Thanks,
+Neil

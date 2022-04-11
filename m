@@ -2,119 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 335434FB352
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 07:45:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46CDE4FB353
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 07:45:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244782AbiDKFro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 01:47:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53104 "EHLO
+        id S244794AbiDKFrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 01:47:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236240AbiDKFrg (ORCPT
+        with ESMTP id S244783AbiDKFrq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 01:47:36 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4249CAE51;
-        Sun, 10 Apr 2022 22:45:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649655923; x=1681191923;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bdbH2FaVrBqCdnW9LxmRejKeF5dA7ZPqvPUJPAhh18w=;
-  b=U2puirQwe7wze31noIcWiFYpGb3u2Ism/5jeGSs9J7DO2axsBlgoeLbF
-   +GIvZrKxkkO8Tw3F/H3nozO+VgpOwrR+yCCBqLgDemLWAUheGY+2DgHfs
-   CMuOi1NEtXq6KJiGfMjl9REVXr9bkAlMKoPBUaz/2B1CRypvZQjguC8oF
-   4=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 10 Apr 2022 22:45:22 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2022 22:45:22 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Sun, 10 Apr 2022 22:45:21 -0700
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Sun, 10 Apr 2022 22:45:16 -0700
-Date:   Mon, 11 Apr 2022 11:15:12 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-CC:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        "Matthias Kaehlcke" <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
-        <quic_kriskura@quicinc.com>, <quic_vpulyala@quicinc.com>
-Subject: Re: [PATCH v12 1/6] usb: dwc3: core: Host wake up support from
- system suspend
-Message-ID: <20220411054512.GA19703@hu-pkondeti-hyd.qualcomm.com>
-References: <1649321104-31322-1-git-send-email-quic_c_sanm@quicinc.com>
- <1649321104-31322-2-git-send-email-quic_c_sanm@quicinc.com>
+        Mon, 11 Apr 2022 01:47:46 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CCD9E6391;
+        Sun, 10 Apr 2022 22:45:33 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 86FE1ED1;
+        Sun, 10 Apr 2022 22:45:33 -0700 (PDT)
+Received: from [10.163.38.140] (unknown [10.163.38.140])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A9EEF3F5A1;
+        Sun, 10 Apr 2022 22:45:27 -0700 (PDT)
+Message-ID: <f469f253-9ccc-d55b-731d-3ecc8d685104@arm.com>
+Date:   Mon, 11 Apr 2022 11:16:02 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1649321104-31322-2-git-send-email-quic_c_sanm@quicinc.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH V5 0/8] perf: Expand perf_branch_entry
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        peterz@infradead.org, acme@kernel.org
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        James Clark <james.clark@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+References: <20220404045046.634522-1-anshuman.khandual@arm.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20220404045046.634522-1-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 02:14:59PM +0530, Sandeep Maheswaram wrote:
-> During suspend read the status of all port and set hs phy mode
-> based on current speed. Use this hs phy mode to configure wakeup
-> interrupts in qcom glue driver.
-> 
-> Also check during suspend if any wakeup capable devices are
-> connected to the controller (directly or through hubs), if there
-> are none set a flag to indicate that the PHY is powered
-> down during suspend.
-> 
-> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> ---
->  drivers/usb/dwc3/core.c | 29 ++++++++++++++++++++---------
->  drivers/usb/dwc3/core.h |  4 ++++
->  drivers/usb/dwc3/host.c | 25 +++++++++++++++++++++++++
->  3 files changed, 49 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 1170b80..b102a22 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -32,6 +32,7 @@
->  #include <linux/usb/gadget.h>
->  #include <linux/usb/of.h>
->  #include <linux/usb/otg.h>
-> +#include <linux/usb/hcd.h>
->  
->  #include "core.h"
->  #include "gadget.h"
-> @@ -1723,6 +1724,7 @@ static int dwc3_probe(struct platform_device *pdev)
->  
->  	platform_set_drvdata(pdev, dwc);
->  	dwc3_cache_hwparams(dwc);
-> +	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
 
-The current code calls device_init_wakeup(true) in runtime suspend and calls
-device_init_wakeup(false) in runtime resume. We don't want that right now
-given that we have a this new dT property. can you fix this please?
 
-Thanks,
-Pavan
+On 4/4/22 10:20, Anshuman Khandual wrote:
+> Branch Record Buffer Extension (BRBE) implementation on arm64 captures more
+> branch type classification which cannot be accommodated in the current perf
+> branch record format via perf_branch_entry.type element (4 bit field). Also
+> it captures privilege information which does not have a corresponding slot
+> in perf_branch_entry. This series expands struct perf_branch_entry, to meet
+> both these requirements without breaking the existing user space ABI for
+> perf tools.
+> 
+> All architecture specific branch types added via perf_branch_entry.new_type
+> field in [PATCH 3/4] will be used in BRBE implementation on arm64 platform
+> later on with the following map.
+> 
+> #ifdef CONFIG_ARM64
+> #define PERF_BR_FIQ		PERF_BR_NEW_ARCH_1
+> #define PERF_BR_DEBUG_HALT	PERF_BR_NEW_ARCH_2
+> #define PERF_BR_DEBUG_EXIT	PERF_BR_NEW_ARCH_3
+> #define PERF_BR_DEBUG_INST	PERF_BR_NEW_ARCH_4
+> #define PERF_BR_DEBUG_DATA	PERF_BR_NEW_ARCH_5
+> #endif
+> 
+> This actually combines following patches and series into a single series.
+> 
+> - https://lore.kernel.org/all/1642998653-21377-12-git-send-email-anshuman.khandual@arm.com/
+> - https://lore.kernel.org/all/1643348653-24367-1-git-send-email-anshuman.khandual@arm.com/
+> - https://lore.kernel.org/all/1645681014-3346-1-git-send-email-anshuman.khandual@arm.com/
+> 
+> This series applies on v5.18-rc1
+> 
+> perf API
+> 
+> The series being applied
+> 
+> - Clean : tools/perf/check-headers.sh
+> - Clean : diff -u tools/include/uapi/linux/perf_event.h include/uapi/linux/perf_event.h
+> 
+> Todo
+> 
+> - Update perf report tool to process PERF_BR_EXTEND_ABI (when available),
+>   then fetch and report branch types from perf_branch_entry.new_type field.
+> 
+> References
+> 
+> - BRBE captured branch record information
+> 
+> https://developer.arm.com/documentation/ddi0601/2021-12/AArch64-Registers/BRBINF-n--EL1--Branch-Record-Buffer-Information-Register--n-?lang=en
+> 
+> - BRBE based perf branch stack implementation on arm64 platform
+> 
+> https://lore.kernel.org/all/1642998653-21377-1-git-send-email-anshuman.khandual@arm.com/
+> 
+> Changes in V5:
+> 
+> - Dropped patches [PATCH 1/10] and [PATCH 6/10] related to PERF_BR_[RET|IRQ] - merged
+>   via the commit cedd3614e5d9c809 ("perf: Add irq and exception return branch types")
+> 
+> - Rebased series on v5.18-rc1
+
+Gentle ping, any updates on this series ?

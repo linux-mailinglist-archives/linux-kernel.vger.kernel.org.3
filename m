@@ -2,115 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C834FC19D
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5C884FC1A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:54:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348323AbiDKP4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 11:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39670 "EHLO
+        id S1348318AbiDKP4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 11:56:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348315AbiDKP4h (ORCPT
+        with ESMTP id S1348320AbiDKP4n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 11:56:37 -0400
+        Mon, 11 Apr 2022 11:56:43 -0400
 Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC6B163B1
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:54:21 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id ay36-20020a05600c1e2400b0038ebc885115so207976wmb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:54:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752296459;
+        Mon, 11 Apr 2022 08:54:29 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id r206-20020a1c44d7000000b0038ccb70e239so4876051wma.3;
+        Mon, 11 Apr 2022 08:54:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=tlR52mYiE9r7eSIRLMcwLn8IMEON/6GE7sgWO6ZBnBk=;
-        b=wa0W+SMBcn4p5tTd/xN9SHSkxbSIdpuOoKk4xWg0YXMi8qwrcsoPTfMVZqmkYEw+Xh
-         Ysps6vXjV065zNiOuFdsaB9zzDAsiKS/7cB3dqKpAjXeJxAN1h+YDN89MB1QdI5+8Y5a
-         g6MNrkqtFK9AJO4c70tr6wAxiEwfdKiCPBXYG2IUOCBFH0ZWjbSP0rowK2Gcdg9J8e6f
-         OqotiZu8cDdALhicKUKT6TTTnulhk6TKjr48lXRlpSwSY0UK8qutQNm+/bMsgj+ZzQZ4
-         dk0IbKg6vG2Thyw90kfGRk9KjNhf229PxMpJKl9F6w56Zua2ScgLG3frlvzFbszR32tn
-         VMow==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=nmuYtqAwEElb8nxVd+fxQ89gGHmXquxvJjVsYoqHv2Y=;
+        b=keocVt8ryOJFNtu5Az/dug++DkTAI4OLWaFHkX4cvSsY1xV/Wskbcl5ImhbUzHtCaE
+         4OMIC3t4sUW/61SlvymjUxxHekkkGk8zMK66fM3+/Ff7PxoGkiTMizk0GgsSIZLo/faB
+         kLIO1o1ZFqcHSMwQjOHxjyHcqO6AYi7MqD6XDvPzTCtq0xAgBohx+LNW4dE7cbKZg7js
+         WdIJ2O1rpMwswpbjOOCj2iLMgUeClP+tOnqgOJc6YJeAyfnjPl7nyIpmEYi7YQvceh2V
+         q8elVAXixGrrTSNmOmBdmnykQ14lXvMlgHWhHaASaJrj6SOf2cOsJHVG1CQKSGJ1JfCK
+         IUJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=tlR52mYiE9r7eSIRLMcwLn8IMEON/6GE7sgWO6ZBnBk=;
-        b=TdWuyRm/P2nlelM3x31pchnDvYiccLDnNkKJ6opZ0W5eFzp4Zp5yyJeElmYnljdMn5
-         E1q8+HLcGxWx36ycGlF7VH92IYUi7KtBvT3JZm8PRwfl4mK/6uQ7dJjhM08kHZUt23iI
-         IBkHzhyUO7E1uDA3I4LLRAMp8cyTfuFSboDv9Q00Ed8Orv00DtGr8RBNWYAsLrQUGl+F
-         asoIg9ZaRsNJtWRqjI7UZURqSaHbjGlnzu1PR0jxX8iFAXTj2gkiurZJRT90NIMsiXzJ
-         ymWZUAwEuovW8CN+68hrWujpo5TEjxkjpSOm1lWms12aZrtt4pPgPWQMCs7296z9NbXv
-         vxYA==
-X-Gm-Message-State: AOAM531gBqziT3n1JAXf+iaLELRsXwAcBqN51dtNXSjQ9ixFIO/d/p3K
-        1Osghw/tTFLAmXBpxVczdkG1hw==
-X-Google-Smtp-Source: ABdhPJyuzEkE7dFzuOWFDkdd4xVdCuj8DDoi39proBdkUw6lKXK5xnrf67uJ25lDoXqZUJvxQLdYFA==
-X-Received: by 2002:a05:600c:34c4:b0:38e:b628:da95 with SMTP id d4-20020a05600c34c400b0038eb628da95mr9011973wmq.150.1649692460341;
-        Mon, 11 Apr 2022 08:54:20 -0700 (PDT)
-Received: from ?IPV6:2001:861:44c0:66c0:d1:e096:d183:1bc5? ([2001:861:44c0:66c0:d1:e096:d183:1bc5])
-        by smtp.gmail.com with ESMTPSA id j16-20020a05600c191000b0038ca3500494sm26066633wmq.27.2022.04.11.08.54.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Apr 2022 08:54:19 -0700 (PDT)
-Message-ID: <a4bc92f8-1d10-84bf-00d9-fd2c22dacd55@baylibre.com>
-Date:   Mon, 11 Apr 2022 17:54:18 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2] arm64: dts: meson-sm1-bananapi-m5: fix wrong GPIO pin
- labeling for CON1
-Content-Language: en-US
-To:     Guillaume Giraudon <ggiraudon@prism19.com>, kernel-dev@prism19.com
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=nmuYtqAwEElb8nxVd+fxQ89gGHmXquxvJjVsYoqHv2Y=;
+        b=YFOuq/rJLcb6mP4CgGEFKA5mo2vmTI7gEko7hkS+cgrAEgPNZs6ifvvXDSVg9HpW2P
+         TKoM+Pt92l59LhiSrGFv01xk+aFI1iefjOx5JD4aafIZdtMKkdNUaygjSwSxE04ooRTj
+         ejpZBleUJu5iY/KRdB/W2JacdnXYavgBh3KzkJhegO5rd99+jfJSFxh3aN/g173RCcHf
+         /VPdHSkFz2pI98BRLnij2dAItxetKV5vV4JnLWb9C7bB3ko1KP1/N15gD0jMmasCwISs
+         UDuhUmR2Heqgjvgo+sQqfIlQLaMdROlI9XDqdgwG6hrv2htgPa0jqsDzTTRDBR0HLMSw
+         kICg==
+X-Gm-Message-State: AOAM5303+DYc5GU/1I1TOCN0m0NIGc031UWL9/z+HhFFUGwuPJRPkV2v
+        20m11gSnErUd/2KrXBxWl7o=
+X-Google-Smtp-Source: ABdhPJwKMQkKpncM2rJZD2K2/Z9LaMxbxU3HY7D5aMcEWRGUB8rsH5POeRJ5rWtiP9HOlGX7T5u88w==
+X-Received: by 2002:a05:600c:4ecc:b0:38e:354d:909 with SMTP id g12-20020a05600c4ecc00b0038e354d0909mr30666672wmq.33.1649692467942;
+        Mon, 11 Apr 2022 08:54:27 -0700 (PDT)
+Received: from kista.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
+        by smtp.gmail.com with ESMTPSA id b1-20020a05600018a100b00207ab2305d5sm1569272wri.16.2022.04.11.08.54.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Apr 2022 08:54:27 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Chen-Yu Tsai <wens@csie.org>, Maxime Ripard <mripard@kernel.org>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220411144427.874-1-ggiraudon@prism19.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <20220411144427.874-1-ggiraudon@prism19.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,WEIRD_QUOTING autolearn=ham autolearn_force=no
-        version=3.4.6
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 10/10] drm/sun4i: Add compatible for D1 display engine
+Date:   Mon, 11 Apr 2022 17:54:26 +0200
+Message-ID: <1908291.usQuhbGJ8B@kista>
+In-Reply-To: <20220411043423.37333-11-samuel@sholland.org>
+References: <20220411043423.37333-1-samuel@sholland.org> <20220411043423.37333-11-samuel@sholland.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/04/2022 16:44, Guillaume Giraudon wrote:
-> The labels for lines 61 through 84 on the periphs-banks were offset by 2.
-> 2 lines are missing in the BOOT GPIO lines (contains 14, should be 16)
-> Added 2 empty entries in BOOT to realigned the rest of GPIO labels
-> to match the Banana Pi M5 schematics.
+Dne ponedeljek, 11. april 2022 ob 06:34:22 CEST je Samuel Holland napisal(a):
+> Now that the various blocks in the D1 display engine pipeline are
+> supported, we can enable the overall engine.
 > 
-> (Thanks to Neil Armstrong for the heads up on the position of the missing pins)
-> 
-> Fixes: 976e920183e4 ("arm64: dts: meson-sm1: add Banana PI BPI-M5 board dts")
-> 
-> Signed-off-by: Guillaume Giraudon <ggiraudon@prism19.com>
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+
+Best regards,
+Jernej
+
 > ---
->   arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts | 1 +
->   1 file changed, 1 insertion(+)
 > 
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts b/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
-> index 5751c48620ed..84489525c75f 100644
-> --- a/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
-> +++ b/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi-m5.dts
-> @@ -437,6 +437,7 @@
->   		"",
->   		"eMMC_RST#", /* BOOT_12 */
->   		"eMMC_DS", /* BOOT_13 */
-> +		"","",
+>  drivers/gpu/drm/sun4i/sun4i_drv.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/gpu/drm/sun4i/sun4i_drv.c b/drivers/gpu/drm/sun4i/
+sun4i_drv.c
+> index 6a9ba8a77c77..275f7e4a03ae 100644
+> --- a/drivers/gpu/drm/sun4i/sun4i_drv.c
+> +++ b/drivers/gpu/drm/sun4i/sun4i_drv.c
+> @@ -418,6 +418,7 @@ static const struct of_device_id sun4i_drv_of_table[] = 
+{
+>  	{ .compatible = "allwinner,sun8i-r40-display-engine" },
+>  	{ .compatible = "allwinner,sun8i-v3s-display-engine" },
+>  	{ .compatible = "allwinner,sun9i-a80-display-engine" },
+> +	{ .compatible = "allwinner,sun20i-d1-display-engine" },
+>  	{ .compatible = "allwinner,sun50i-a64-display-engine" },
+>  	{ .compatible = "allwinner,sun50i-h6-display-engine" },
+>  	{ }
+> -- 
+> 2.35.1
+> 
+> 
 
-Missing space after first comma, will add while applying.
 
->   		/* GPIOC */
->   		"SD_D0_B", /* GPIOC_0 */
->   		"SD_D1_B", /* GPIOC_1 */
-
-Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>

@@ -2,115 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7F244FBCC0
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 15:06:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 210894FBCC5
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 15:07:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbiDKNIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 09:08:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45254 "EHLO
+        id S1346350AbiDKNJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 09:09:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233939AbiDKNIs (ORCPT
+        with ESMTP id S233939AbiDKNJp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 09:08:48 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF552C11A;
-        Mon, 11 Apr 2022 06:06:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649682394; x=1681218394;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=G48YFPLPhxeYJHK7qa1GRWu7rsF5S8ysdDrLe+CJRjM=;
-  b=BKCRxreZ+VtuKj/bcQI0ZKeNpGCq+tKwv0Y21jo5Ony50O/0mMO9Eu7q
-   zLX9yzlRrjJBvS4udiXkUjWiJKAqc1bK6I1dZdeBK3NS6GHSquFX1xzlz
-   1IE61c+bvo5/xJapmfD0ewg+2/+WdWoVPHEv5OFFKHZy04SVbxc05Vr0t
-   K/azzWo+gjPwVMgm0l7piDDLsVZMLEIicNOsVW9fqwVa1ai5IwLmPGzCc
-   sB+JepWxFhvgTbNvvpw2WFlvzztMF1EGkmwdg3JbV5OG/4CbQKmXxWCEk
-   nW6rXQ11hPCri/1wPXPEnPMINpgk/ZTgsrWFCEoqLOWzCeUXdM9lA7cLB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="243994341"
-X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
-   d="scan'208";a="243994341"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 06:06:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
-   d="scan'208";a="589871491"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 11 Apr 2022 06:06:08 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ndtk7-0001rf-Tg;
-        Mon, 11 Apr 2022 13:06:07 +0000
-Date:   Mon, 11 Apr 2022 21:05:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/marvell/mmp-driver.c:364:34: warning: unused
- variable 'mmpcam_of_match'
-Message-ID: <202204112131.girigduB-lkp@intel.com>
+        Mon, 11 Apr 2022 09:09:45 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70058.outbound.protection.outlook.com [40.107.7.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189692AE26;
+        Mon, 11 Apr 2022 06:07:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=H0IihfWmZPYQcn4IA+AgQ2KYOHcjvnm9C+SKp/Ioo4osNG0TPCCiobSJYo/gueg+udDgD0ga7ohz5Ho1/njQ9Eqeda9sUd65+sRdsYpOS1GxVcCQyd3LGRrZKIy/p6A65CjD806KckclYbzrxgPHtATu7okeZghLAe8EAwsojW1oAp4FPPJDaYj/0mdPwZ3o75ER8DZwJc5KuqtVTeaLw0EHwyD1x1mjtb3OyvER1HBzJawfShLHuoZ6HzBF/kFJ8vsdJUsRNY00xur0PamGu0VYVKBQB4BsKFRM30Zd2NPmf+b5oIWxhfaxsW43kYF5w2YEQl2G+6ouyXQmqr5zoA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pJ2YSeVKPRv1lqIPMxfBuVxLc+lWT6tigCQOHdFpXZQ=;
+ b=nB37mLmm4/UIznnLVcec0+mzkY0F5Fj9IPCWdyWHl7zmY6BDanFhZ3tmRUwwHfwQgpYbc1RFPvuPW5NseajHGN7P2tlKB1nZ07WhIWNTKQg2VLPhuXfODmwmksA54CtR2RBCsugjnFDUH6Drae/+bBsgfLq16Qjzi85c0a3QZh6HttQNGKtdogZhX/QCj7YZe91DUdVGw9LUjDjDiY/7FJFgxzljjGzhecB1IwMylJ/n7qFKd1UtqNOdtpzlKad3oSSGJb8xpfaMSqc6dSio4XnFex1oFkV+0Czsi4oWrHHAHfEkOORyTf6YcXGukPb3HnwAOj9KVJ6K3Zgk4/YGww==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=peak-system.com; dmarc=pass action=none
+ header.from=peak-system.com; dkim=pass header.d=peak-system.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=itpeak.onmicrosoft.com; s=selector2-itpeak-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pJ2YSeVKPRv1lqIPMxfBuVxLc+lWT6tigCQOHdFpXZQ=;
+ b=cduNSBGtCowyVAoiPCiLkt8dJUTEDPcUYCXPs1cD86h+GoPiZ3M+dsvB8vYAlr9qZfD9p+jJLK+8bEu6hHWVewR2XrtdVEZ1fZpxWq0NxoxNvRzJzU2xVzEwg9K7F7kSS8Tip48yTX6aEGa1JLaUBTtGrGyZyO4j9/hqZy/CAX0=
+Received: from DB6PR0301MB2518.eurprd03.prod.outlook.com (2603:10a6:4:61::9)
+ by PAXPR03MB8115.eurprd03.prod.outlook.com (2603:10a6:102:229::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Mon, 11 Apr
+ 2022 13:07:25 +0000
+Received: from DB6PR0301MB2518.eurprd03.prod.outlook.com
+ ([fe80::b1c6:eb02:7f81:8e3a]) by DB6PR0301MB2518.eurprd03.prod.outlook.com
+ ([fe80::b1c6:eb02:7f81:8e3a%6]) with mapi id 15.20.5144.029; Mon, 11 Apr 2022
+ 13:07:24 +0000
+From:   =?iso-8859-1?Q?St=E9phane_Grosjean?= <s.grosjean@peak-system.com>
+To:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        Paul Thomas <pthomas8589@gmail.com>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>
+CC:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        PEAK-System support <support@peak-system.com>
+Subject: RE: peak_usb: urb aborted
+Thread-Topic: peak_usb: urb aborted
+Thread-Index: AQHYS2jrY5s4vBY7Lk+LYv4om2VVRazmWrAAgARYVFU=
+Date:   Mon, 11 Apr 2022 13:07:24 +0000
+Message-ID: <DB6PR0301MB2518B82AEDB9FCE31A47E3E5D6EA9@DB6PR0301MB2518.eurprd03.prod.outlook.com>
+References: <CAD56B7dMg073f56vfaxp38=dZiAFU0iCn6kmDGiNcNtCijyFoA@mail.gmail.com>
+ <c2e2c7b0-cdfb-8eb0-9550-0fb59b5cd10c@hartkopp.net>
+In-Reply-To: <c2e2c7b0-cdfb-8eb0-9550-0fb59b5cd10c@hartkopp.net>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=peak-system.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e9146083-17af-46d7-2930-08da1bbc38f8
+x-ms-traffictypediagnostic: PAXPR03MB8115:EE_
+x-microsoft-antispam-prvs: <PAXPR03MB8115D60C3F5A4810CB6091B6D6EA9@PAXPR03MB8115.eurprd03.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: eSD0u22yMxEHLFhYNwN3Ivj+/iQfO+nSUfXgcQaWjlpgBDpmWujDRrrCn/rC8Z8adtBdLbVsBVFFySuZmd9/OgGdpmUEMMfazn+HpGbQaU40mlMCB955dm2emMDYONwL6mAdqmAk8DdX1k1VCNMtaXuIKcE5XPiNHOp0It9nCZ7WT0ncnFiY8qhMEzskyGkFBs0ztaXIGbcKvpe4nlYY52UDx6+K8UE9Pf475SXSOMjTlJCQ8guccThjIsd2wWhMg1bokNf+fEZfPXtlP/T1FbjgGpU/0eEn9G3l5HVLVJP9+EnikvXjXm5RLSurAnBOPdn6yGvOwTbxoKD5dvgav3NeVQzCH0cuWlIwZbkF4aHI2VfrxXloullv9iOdwjviASv1dccFxIMONCL1cCcXMQFxem3XgqkOX2shW/NRoAWBVAHYnMo4nzGPy4zszvT8FIwWX7GdbWbejf06dZAJXLfZoVHL4/+zJz+Ez/f+BRnz97QtfWOueR/3CrsatFGGZedBtVpM1UMonwtp+gshRI9K0+ip7bICUM7J8LH++Ap8+XEMQxhmt65UojJcE7PN4lpcAX6qCtt6FSaHLzpWD89S03NmM2g3kcj1DrSQt7zU8ySoUTFrKYbyETIBH4wr+76BcE/sxjdHqmt92wFHpHm9C/RGOxp6l0xDBHsiRDmDtAsZ221Ytb1O7cxm+2kP5CMe6A1UWaycZlSipyU5/g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR0301MB2518.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(376002)(346002)(136003)(396003)(39840400004)(15974865002)(86362001)(5660300002)(66446008)(122000001)(66556008)(8676002)(66476007)(64756008)(38100700002)(38070700005)(55016003)(316002)(4326008)(76116006)(91956017)(71200400001)(54906003)(110136005)(52536014)(66574015)(2906002)(66946007)(26005)(8936002)(186003)(107886003)(83380400001)(508600001)(33656002)(9686003)(6506007)(53546011)(7696005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?4bazH9BlaWRl0WjsR6BWcX4/vwdR+YJ2sKGHyO8Ds1dDyG8MDwJl8w1RWv?=
+ =?iso-8859-1?Q?+1SNUeOvXmBIKt7PTh6nCz7OT4DxDZvPNCBKbM4CT1Cf1qKziFexhSW9Jk?=
+ =?iso-8859-1?Q?HI0Cq2RFSNFIU5TXNjCT1ciAr425L+nttQ0FTuDgYE2cJa/itBSMxjrzQt?=
+ =?iso-8859-1?Q?SF0YOUwR1k6Iys2ESZ/4/GwRhYXt3zaTO6xwXkQlNR7dU+sa1vOvTnGbwX?=
+ =?iso-8859-1?Q?patBbPuvcij12Z/j6LQfkxDAkLr4rNQ+5+HNmkrfX17w/v1WxDf3sur0m2?=
+ =?iso-8859-1?Q?4VQIjlx8xa/BqTaxfwA4tHbpJxMzqnaGP39k9+9ls9AF/JWJKXCP+ZJ8se?=
+ =?iso-8859-1?Q?MxHiP5PQhwVtbd6wdNHdPMQTVmE6SyB4UGyZp+Y6/1BfdVgBVvXcoWA2sg?=
+ =?iso-8859-1?Q?0hhCGQdStXMMCUp8VhaucSk0LvUGnoIlcRkpImW+mD/Zf2s2CzkYN/LQ1j?=
+ =?iso-8859-1?Q?2xSyXTSHTJMgwy1uhtSuVpxd0xTZxlgn5sf7x/45HH6kLpIDOG8z7rekhv?=
+ =?iso-8859-1?Q?A/Awpfg0j8i1iX6HLWTtVoMv4A6yvoX1QgX0MuhzC1gcjzSxtoD56WGrGV?=
+ =?iso-8859-1?Q?mT0uc42Tv4OqJocvQi5OTSZHVxEn7vuCzIg4wQ6osinentnE1nAH3kL5eG?=
+ =?iso-8859-1?Q?Et3IcpGJqiYENjGM75qCxObJ3sONoxIneUhEyfMyKBQGdmVQiqkDiWQagI?=
+ =?iso-8859-1?Q?TnAcHM3+thnRSO5RhvFDsAh3ILqtsF9o7UeLvUFCT3VbKbJYjf2T1ymzWu?=
+ =?iso-8859-1?Q?ujwFaCnGQ761hRZXxAlpD1H1nh4mVybBFLpHsVze9UlxgiO0K9CkXQieI8?=
+ =?iso-8859-1?Q?282+NM2GXuUH2klyrDDlWarpUzlre8qmZe68aXIcbthRPDaVkizOuHoZyn?=
+ =?iso-8859-1?Q?u+AIJ/FIIX26Z82lBcYuU80Ng32UHQKuFIzYJgK00t+xe75HIUFw45usVK?=
+ =?iso-8859-1?Q?AvNgq+syt3Rk22mqI7gHexbY784oOycKsWgk8oFP26sqif3aYI3hDrKDTR?=
+ =?iso-8859-1?Q?NRZeaYMZheNxmo0Lh+aHEvkoUVQJQfYRajsj36DzMS9CT8nB5x3waET9Yl?=
+ =?iso-8859-1?Q?bcVldbl6Kik5r+p90NEr9ENAR1prDV79m4UDS3ABdTWJufeLRnQ8//jJrm?=
+ =?iso-8859-1?Q?kg3hqPRik63aln1nGrkdtLmVmVw4UCTF0jPiejOrRjFw1TGkS7E8U9TA+R?=
+ =?iso-8859-1?Q?JVdzEvsCB6FPMynqgPiIauiIRt2cd+c5Z3hbzMAaO3Gxn7mR3Cytrm1AOi?=
+ =?iso-8859-1?Q?PrqVOhMvKzCy2+dDF7wpQSAPUZxel12xxScyphj1AxADL+tWD7ZJ/dmwkp?=
+ =?iso-8859-1?Q?DrVYj9D2eLh0I5jTrFcS9Uh4FmxCONVThA+khBGe5IJWZeSVSiT/iL2wc0?=
+ =?iso-8859-1?Q?u9mpBUIUVOlTxvXxyLYQuFnMHdrfWaWqmiqnSunJ64xIYwAOBPyJeZJGUd?=
+ =?iso-8859-1?Q?WdG6B+LLf+1UTmOzBkYXr9+oeY+ntYR6Jr8vEhspjoOrT2LFNkRJvtqt2K?=
+ =?iso-8859-1?Q?pBLYvd+RhaaJp5eQSm8IbnCGKWcqIaRPmfEunh+vGJ4igDqAMlCo6vKqQv?=
+ =?iso-8859-1?Q?4bWryJ8Yj6nbYEwsFc5XtoRA+XLFdZxzI5E31CUNV6VXil1Gd3CCX7joSA?=
+ =?iso-8859-1?Q?aTQR+NjKvZZQp5EZonCeeRUoB9zLXL4nznEXVZQ2j23FHSKElsTwc22h2x?=
+ =?iso-8859-1?Q?lY3gCl9hmE8LyjJAOKKLOo+Tnmc8lGE9QA7ErpYM+V2lQ5JXiL86qxramU?=
+ =?iso-8859-1?Q?YZJ9xbzOKt0Zu1IApSMlHv4oB8kwlGW0Nhtd5IpSU89HUTGLe9Wv0bEL2a?=
+ =?iso-8859-1?Q?KDonLpVQ6PAO7PVTDkWGdktk0oiptuk=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: peak-system.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB6PR0301MB2518.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e9146083-17af-46d7-2930-08da1bbc38f8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Apr 2022 13:07:24.8373
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: e31dcbd8-3f8b-4c5c-8e73-a066692b30a1
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: MhNI9bR2JWrDK8br0OnqcVgfucVK8UsUUtuoZZnKUjcU7jVaSw0ZEDQSZbVJEEJglq/YNjjcm/2Li8CjrsECl6XMgvalkEIN3XuHoC8ET+Y=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR03MB8115
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mauro,
+Hi,
 
-First bad commit (maybe != root cause):
+Thank you Oliver for taking care of this request.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e
-commit: dc7bbea90075b57772e9a28043061bf71d96f06f media: platform: rename marvell-ccic/ to marvell/
-date:   3 weeks ago
-config: hexagon-randconfig-r012-20220411 (https://download.01.org/0day-ci/archive/20220411/202204112131.girigduB-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c6e83f560f06cdfe8aa47b248d8bdc58f947274b)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dc7bbea90075b57772e9a28043061bf71d96f06f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout dc7bbea90075b57772e9a28043061bf71d96f06f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/media/platform/marvell/
+These errors can also be caused by a lack of power being supplied to the de=
+vice itself. Being connected to a USB hub with insufficient power can also =
+be an explanation for these sporadic errors.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Regards,
 
-All warnings (new ones prefixed by >>):
-
->> drivers/media/platform/marvell/mmp-driver.c:364:34: warning: unused variable 'mmpcam_of_match' [-Wunused-const-variable]
-   static const struct of_device_id mmpcam_of_match[] = {
-                                    ^
-   1 warning generated.
+-- Stephane
 
 
-vim +/mmpcam_of_match +364 drivers/media/platform/marvell/mmp-driver.c
+De : Oliver Hartkopp <socketcan@hartkopp.net>
+Envoy=E9 : vendredi 8 avril 2022 20:45
+=C0 : Paul Thomas <pthomas8589@gmail.com>; linux-can@vger.kernel.org <linux=
+-can@vger.kernel.org>; St=E9phane Grosjean <s.grosjean@peak-system.com>
+Cc : Wolfgang Grandegger <wg@grandegger.com>; Marc Kleine-Budde <mkl@pengut=
+ronix.de>; David S. Miller <davem@davemloft.net>; Jakub Kicinski <kuba@kern=
+el.org>; netdev@vger.kernel.org <netdev@vger.kernel.org>; linux-kernel <lin=
+ux-kernel@vger.kernel.org>; PEAK-System support <support@peak-system.com>
+Objet : Re: peak_usb: urb aborted
 
-bb0a896e3d5083 drivers/media/video/marvell-ccic/mmp-driver.c    Jonathan Corbet 2011-12-30  363  
-83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28 @364  static const struct of_device_id mmpcam_of_match[] = {
-83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28  365  	{ .compatible = "marvell,mmp2-ccic", },
-83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28  366  	{},
-83c40e6611ec1e drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-05-28  367  };
-08aac0e32fe44b drivers/media/platform/marvell-ccic/mmp-driver.c Lubomir Rintel  2019-07-22  368  MODULE_DEVICE_TABLE(of, mmpcam_of_match);
-67a8dbbc4e04cd drivers/media/video/marvell-ccic/mmp-driver.c    Jonathan Corbet 2011-06-11  369  
 
-:::::: The code at line 364 was first introduced by commit
-:::::: 83c40e6611ec1e548ece34f6940f516333abc16a media: marvell-ccic/mmp: add devicetree support
 
-:::::: TO: Lubomir Rintel <lkundrak@v3.sk>
-:::::: CC: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+On 08.04.22 18:35, Paul Thomas wrote:
+> Folks,
+>
+> I'm using a PCAN-USB adapter, and it seems to have a lot of trouble
+> under medium load. I'm getting these urb aborted messages.
+> [125054.082248] peak_usb 3-2.4.4:1.0 can0: Rx urb aborted (-71)
+> [125077.886850] peak_usb 3-2.4.4:1.0 can0: Rx urb aborted (-32)
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+As I run the same hardware here it is very likely that you have a faulty
+CAN bus setup with
+
+- wrong bitrate setting / sample points / etc
+- wrong or no termination
+- missing or wrong configured (other) CAN nodes
+
+I added the maintainer of the PEAK USB adapter (Stephane) to the
+recipient list.
+
+Having the linux-can mailing list and Stephane in the recipient list is
+sufficient to answer the above details.
+
+Regards,
+Oliver
+
+>
+> Is there anything that can be done about this? This is very
+> frustrating because it makes the USB adapter very difficult to use as
+> a reliable partner of an embedded CAN device.
+>
+> I'm using Ubuntu with 5.4.0-107-generic. Any help would be appreciated.
+>
+> -Paul
+
+--
+PEAK-System Technik GmbH
+Sitz der Gesellschaft Darmstadt - HRB 9183
+Geschaeftsfuehrung: Alexander Gach / Uwe Wilhelm
+Unsere Datenschutzerklaerung mit wichtigen Hinweisen
+zur Behandlung personenbezogener Daten finden Sie unter
+www.peak-system.com/Datenschutz.483.0.html

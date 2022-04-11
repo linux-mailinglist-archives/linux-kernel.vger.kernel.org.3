@@ -2,220 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B213D4FC78B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 00:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA5594FC791
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 00:20:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350443AbiDKWVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 18:21:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43038 "EHLO
+        id S240754AbiDKWWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 18:22:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350450AbiDKWV1 (ORCPT
+        with ESMTP id S1350437AbiDKWWh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 18:21:27 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921BC616E
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 15:19:10 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id p65so11744967ybp.9
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 15:19:10 -0700 (PDT)
+        Mon, 11 Apr 2022 18:22:37 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB9F644F
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 15:20:22 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id e8-20020a17090a118800b001cb13402ea2so779697pja.0
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 15:20:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=g9meaVk2eU1Ub1J/lh8wpOzsDGLcFnkv//kNBJa8QEk=;
-        b=B7UMhev78NYH9YuneasYHK3IzX9KrUAa7GGU2PEGUPfHn5SIGyfMYdkalMGitGaDW+
-         9zVhjvWnNRDTOFmmEDfHWrVhYgaFTSqRVXav13yTykadccac6yTPeY3Ag/fzLUT2n3mx
-         +iPa75DAlbyb5saxZcXHPjAHg+xHtZTpokeRQ=
+        bh=ilC4hsjkYuKv6ebyejb/hqupiLMdVX0htffDOmrd7F4=;
+        b=FxqMOl+LQRjm4xHV3WMTnaWUoHHNIwNG2iGvDbblMfZ8JddwTKg3ZpTCrlFkBB6rBu
+         rSWbPPe9GjWLrChgxM3IBRCmVz5THofbIx0GGXctZmol6NievamWm9zkyAkJ24Cm0K9A
+         DCtKBvlvzxZRb7YquzNbT2PdlI832d7CHnSCwf1bN5nHFuq8QnFM4JqEliGFJoIQQMbh
+         jlPIO+ne9Hb8R7Ba1ZEnAjMWmLA+Qo6v4RY8WcEEkyOVuQrUjq+FZs7b6JFMuvp4LYVK
+         7gQv7b3itG0nRglCi6Aiz7vPQL4cblVgmQ9M0dGACks264GbH5DuU0YIA9ydPmcdahOM
+         Hryw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=g9meaVk2eU1Ub1J/lh8wpOzsDGLcFnkv//kNBJa8QEk=;
-        b=Rq9pv7TguIJbXrKu0bug7498hd6cSRsyL2nsWk5isXOmzMfDNXvplw1SDM0CwAGtOI
-         fIE1w8eh3W7G5BDxJXJtTW/sLPmW/oYm+0J2WoDqyWQn4ChrcmWSvYi/8RDAcPAs3R1h
-         qNtk53LFadzjHpMRwJ453j7Vnd9EcT8MgiU7nwhpb42sOTP6QXFP3SJIyw0wWH4NeC1d
-         wleGUoyDp8DV9UPSHYn889v2lKYET+BHNbG45qoRquLcFL6bELjvEwXd+oWxOaSVQahb
-         vI5lNqW+tl+sYuT1iS4sGOGojEcYDnTkVW8sPEjKGhfUv5UgSyFcJhe+JbvLGKmx5IDu
-         KXRQ==
-X-Gm-Message-State: AOAM532haD+Mt4nIfkBGqd8vYitMm+doLPYvDF2YsecOFFP9P/kydZml
-        mJ/DUJJa9ReKXPwSRNxIy36wj+TUs2mep/iKoR0o
-X-Google-Smtp-Source: ABdhPJz3ewEbsMRLR8QG8tn8aHMoHRDhURqXevWUL4e9Co13fWrYNcAp15z54+WjrA5pEnSP9/rc0a1KOOjfae6qbuI=
-X-Received: by 2002:a25:7102:0:b0:63d:91db:c29d with SMTP id
- m2-20020a257102000000b0063d91dbc29dmr23903612ybc.405.1649715549799; Mon, 11
- Apr 2022 15:19:09 -0700 (PDT)
+        bh=ilC4hsjkYuKv6ebyejb/hqupiLMdVX0htffDOmrd7F4=;
+        b=LT/U4C2cF5+F93ZqYrJvCO/oosSn4OL5M8TL/zKZBShZwwSFUek2aJ+u1eH81hOzCg
+         QhLsKAYRfDNrvyprriwL8gzDLQa8VmUr4CXznbmp/pelzTjcGUc8Mq/T7Yldb9m5JY0y
+         cmVM4u0lnBFUzeXdoP92HRgNdBs/Ic6nMYG8pJygSUicDs7QKx1uhcROfRwWURb47bx5
+         tcdVL5zusaRY7gnZnDtBwb52i6hHfFRflQAho7WRDlX5gpJLZN6PXrV190UX9Wd0OD1a
+         u7XL8JkCiVqn/pOMywV6+z1tRea7tW+ucCGXIWqYFR5ZzcJlqLceIbah9qrE12CqEvzx
+         8r2w==
+X-Gm-Message-State: AOAM5321JSYV3HD7CuLLJidkkcwVCw7tIVc6+3iCdtj+R/Uhj4TCuzky
+        USwetIQpGYDULnszJCjgow2BC86QTOq8ehEwmLTmBA==
+X-Google-Smtp-Source: ABdhPJwobl8Twz9/+FJGw8iwZ7aqkX15fxktugOjY8lPoNQzuoJOzcOfQ2MMC/mpkqomhSOO2S1HZ/lhTWtwo8KT1ZQ=
+X-Received: by 2002:a17:90a:ca:b0:1ca:5253:b625 with SMTP id
+ v10-20020a17090a00ca00b001ca5253b625mr1484772pjd.220.1649715621869; Mon, 11
+ Apr 2022 15:20:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <mhng-9cbb2a46-8bcb-4bfe-b927-0ed469dbd3a6@palmer-mbp2014>
- <cd8d6641-4a29-7deb-49ae-a80baab0344f@canonical.com> <CAK9=C2Xh_DQ3ybj7nAE-LNrSc9sPy0H8jq_FU09io+wE_yypRg@mail.gmail.com>
- <b907f6c8-968b-7e1e-bc83-1d54c7e0b448@canonical.com> <CAAhSdy1ovEziSSu6x2kESYTbimDLXCHmmOqMLyGKzsj1DHLrLg@mail.gmail.com>
-In-Reply-To: <CAAhSdy1ovEziSSu6x2kESYTbimDLXCHmmOqMLyGKzsj1DHLrLg@mail.gmail.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Mon, 11 Apr 2022 15:18:59 -0700
-Message-ID: <CAOnJCUJWVERXCW02LfMBBMQNSPgNoNHExm8PeaUnongXgHkBAA@mail.gmail.com>
-Subject: Re: [PATCH v2] RISC-V: Increase range and default value of NR_CPUS
-To:     Anup Patel <anup@brainfault.org>
-Cc:     Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+References: <20220405194747.2386619-1-jane.chu@oracle.com> <20220405194747.2386619-3-jane.chu@oracle.com>
+In-Reply-To: <20220405194747.2386619-3-jane.chu@oracle.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Mon, 11 Apr 2022 15:20:10 -0700
+Message-ID: <CAPcyv4iUWLsZRV4StCzHuVUhEsOB5WURD2r_w3L+LEjoQEheog@mail.gmail.com>
+Subject: Re: [PATCH v7 2/6] x86/mce: relocate set{clear}_mce_nospec() functions
+To:     Jane Chu <jane.chu@oracle.com>
+Cc:     david <david@fromorbit.com>, "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Vishal L Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@redhat.com>,
+        device-mapper development <dm-devel@redhat.com>,
+        "Weiny, Ira" <ira.weiny@intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>, X86 ML <x86@kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 8, 2022 at 9:45 AM Anup Patel <anup@brainfault.org> wrote:
+I notice that none of the folks from "X86 MM" are on the cc, added.
+
+On Tue, Apr 5, 2022 at 12:49 PM Jane Chu <jane.chu@oracle.com> wrote:
 >
-> On Fri, Apr 8, 2022 at 10:08 PM Heinrich Schuchardt
-> <heinrich.schuchardt@canonical.com> wrote:
-> >
-> > On 4/6/22 12:10, Anup Patel wrote:
-> > > On Wed, Apr 6, 2022 at 3:25 PM Heinrich Schuchardt
-> > > <heinrich.schuchardt@canonical.com> wrote:
-> > >>
-> > >> On 3/31/22 21:42, Palmer Dabbelt wrote:
-> > >>> On Sat, 19 Mar 2022 05:12:06 PDT (-0700), apatel@ventanamicro.com wrote:
-> > >>>> Currently, the range and default value of NR_CPUS is too restrictive
-> > >>>> for high-end RISC-V systems with large number of HARTs. The latest
-> > >>>> QEMU virt machine supports upto 512 CPUs so the current NR_CPUS is
-> > >>>> restrictive for QEMU as well. Other major architectures (such as
-> > >>>> ARM64, x86_64, MIPS, etc) have a much higher range and default
-> > >>>> value of NR_CPUS.
-> > >>>>
-> > >>>> This patch increases NR_CPUS range to 2-512 and default value to
-> > >>>> XLEN (i.e. 32 for RV32 and 64 for RV64).
-> > >>>>
-> > >>>> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> > >>>> ---
-> > >>>> Changes since v1:
-> > >>>>   - Updated NR_CPUS range to 2-512 which reflects maximum number of
-> > >>>>     CPUs supported by QEMU virt machine.
-> > >>>> ---
-> > >>>>   arch/riscv/Kconfig | 7 ++++---
-> > >>>>   1 file changed, 4 insertions(+), 3 deletions(-)
-> > >>>>
-> > >>>> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > >>>> index 5adcbd9b5e88..423ac17f598c 100644
-> > >>>> --- a/arch/riscv/Kconfig
-> > >>>> +++ b/arch/riscv/Kconfig
-> > >>>> @@ -274,10 +274,11 @@ config SMP
-> > >>>>         If you don't know what to do here, say N.
-> > >>>>
-> > >>>>   config NR_CPUS
-> > >>>> -    int "Maximum number of CPUs (2-32)"
-> > >>>> -    range 2 32
-> > >>>> +    int "Maximum number of CPUs (2-512)"
-> > >>>> +    range 2 512
-> > >>
-> > >> For SBI_V01=y there seems to be a hard constraint to XLEN bits.
-> > >> See __sbi_v01_cpumask_to_hartmask() in rch/riscv/kernel/sbi.c.
-> > >>
-> > >> So shouldn't this be something like:
-> > >>
-> > >> range 2 512 !SBI_V01
-> > >> range 2 32 SBI_V01 && 32BIT
-> > >> range 2 64 SBI_V01 && 64BIT
-> > >
-> > > This is just making it unnecessarily complicated for supporting
-> > > SBI v0.1
-> > >
-> > > How about removing SBI v0.1 support and the spin-wait CPU
-> > > operations from arch/riscv ?
-> >
-> > The SBI v0.1 specification was only a draft. Only the v1.0 version has
-> > ever been ratified.
-> >
-> > It would be good to remove this legacy code from Linux and U-Boot.
-> >
-> > By the way, why does upstream OpenSBI claim to be conformant to SBI v0.3
-> > and not to v1.0?
+> Relocate the twin mce functions to arch/x86/mm/pat/set_memory.c
+> file where they belong.
 >
-> The ratification process for SBI v1.0 was in early stages when OpenSBI v1.0
-> was being released so we decided to keep the SBI v0.3 spec version. The
-> next OpenSBI v1.1 release (due in June 2022) will change to SBI v1.0
+> Signed-off-by: Jane Chu <jane.chu@oracle.com>
+> ---
+>  arch/x86/include/asm/set_memory.h | 52 -------------------------------
+>  arch/x86/mm/pat/set_memory.c      | 47 ++++++++++++++++++++++++++++
+>  include/linux/set_memory.h        |  9 +++---
+>  3 files changed, 52 insertions(+), 56 deletions(-)
 >
-
-Yes. We are in the final stages of the official ratification of SBI
-v1.0. Once that ratified version is released,
-OpenSBI will be upgraded to support that.
-
-> Regards,
-> Anup
+> diff --git a/arch/x86/include/asm/set_memory.h b/arch/x86/include/asm/set_memory.h
+> index 78ca53512486..b45c4d27fd46 100644
+> --- a/arch/x86/include/asm/set_memory.h
+> +++ b/arch/x86/include/asm/set_memory.h
+> @@ -86,56 +86,4 @@ bool kernel_page_present(struct page *page);
 >
-> >
-> > include/sbi/sbi_ecall.h:16:
-> >
-> > #define SBI_ECALL_VERSION_MAJOR 0
-> > #define SBI_ECALL_VERSION_MINOR 3
-> >
-> > Best regards
-> >
-> > Heinrich
-> >
-> > >
-> > >>
-> > >>>>       depends on SMP
-> > >>>> -    default "8"
-> > >>>> +    default "32" if 32BIT
-> > >>>> +    default "64" if 64BIT
-> > >>>>
-> > >>>>   config HOTPLUG_CPU
-> > >>>>       bool "Support for hot-pluggable CPUs"
-> > >>>
-> > >>> I'm getting all sorts of boot issues with more than 32 CPUs, even on the
-> > >>> latest QEMU master.  I'm not opposed to increasing the CPU count in
-> > >>> theory, but if we're going to have a setting that goes up to a huge
-> > >>> number it needs to at least boot.  I've got 64 host threads, so it
-> > >>> shouldn't just be a scheduling thing.
-> > >>
-> > >> Currently high performing hardware for RISC-V is missing. So it makes
-> > >> sense to build software via QEMU on x86_64 or arm64 with as many
-> > >> hardware threads as available (128 is not uncommon).
-> > >>
-> > >> OpenSBI currently is limited to 128 threads:
-> > >> include/sbi/sbi_hartmask.h:22:
-> > >> #define SBI_HARTMASK_MAX_BITS 128
-> > >> This is just an arbitrary value we can be modified.
-> > >
-> > > Yes, this limit will be gradually increased with some improvements
-> > > to optimize runtime memory used by OpenSBI.
-> > >
-> > >>
-> > >> U-Boot v2022.04 qemu-riscv64_smode_defconfig has a value of
-> > >> CONFIG_SYS_MALLOC_F_LEN that is to low. This leads to a boot failure for
-> > >> more than 16 harts. A patch to correct this is pending:
-> > >> [PATCH v2 1/1] riscv: alloc space exhausted
-> > >> https://lore.kernel.org/u-boot/CAN5B=eKt=tFLZ2z3aNHJqsnJzpdA0oikcrC2i1_=ZDD=f+M0jA@mail.gmail.com/T/#t
-> > >>
-> > >> With QEMU 7.0 and the U-Boot fix booting into a 5.17 defconfig kernel
-> > >> with 64 virtual cores worked fine for me.
-> > >
-> > > Thanks for trying this patch.
-> > >
-> > > Regards,
-> > > Anup
-> > >
-> > >>
-> > >> Best regards
-> > >>
-> > >> Heinrich
-> > >>
-> > >>>
-> > >>> If there was some hardware that actually boots on these I'd be happy to
-> > >>> take it, but given that it's just QEMU I'd prefer to sort out the bugs
-> > >>> first.  It's probably just latent bugs somewhere, but allowing users to
-> > >>> turn on configs we know don't work just seems like the wrong way to go.
-> > >>>
+>  extern int kernel_set_to_readonly;
+>
+> -#ifdef CONFIG_X86_64
+> -/*
+> - * Prevent speculative access to the page by either unmapping
+> - * it (if we do not require access to any part of the page) or
+> - * marking it uncacheable (if we want to try to retrieve data
+> - * from non-poisoned lines in the page).
+> - */
+> -static inline int set_mce_nospec(unsigned long pfn, bool unmap)
+> -{
+> -       unsigned long decoy_addr;
+> -       int rc;
+> -
+> -       /* SGX pages are not in the 1:1 map */
+> -       if (arch_is_platform_page(pfn << PAGE_SHIFT))
+> -               return 0;
+> -       /*
+> -        * We would like to just call:
+> -        *      set_memory_XX((unsigned long)pfn_to_kaddr(pfn), 1);
+> -        * but doing that would radically increase the odds of a
+> -        * speculative access to the poison page because we'd have
+> -        * the virtual address of the kernel 1:1 mapping sitting
+> -        * around in registers.
+> -        * Instead we get tricky.  We create a non-canonical address
+> -        * that looks just like the one we want, but has bit 63 flipped.
+> -        * This relies on set_memory_XX() properly sanitizing any __pa()
+> -        * results with __PHYSICAL_MASK or PTE_PFN_MASK.
+> -        */
+> -       decoy_addr = (pfn << PAGE_SHIFT) + (PAGE_OFFSET ^ BIT(63));
+> -
+> -       if (unmap)
+> -               rc = set_memory_np(decoy_addr, 1);
+> -       else
+> -               rc = set_memory_uc(decoy_addr, 1);
+> -       if (rc)
+> -               pr_warn("Could not invalidate pfn=0x%lx from 1:1 map\n", pfn);
+> -       return rc;
+> -}
+> -#define set_mce_nospec set_mce_nospec
+> -
+> -/* Restore full speculative operation to the pfn. */
+> -static inline int clear_mce_nospec(unsigned long pfn)
+> -{
+> -       return set_memory_wb((unsigned long) pfn_to_kaddr(pfn), 1);
+> -}
+> -#define clear_mce_nospec clear_mce_nospec
+> -#else
+> -/*
+> - * Few people would run a 32-bit kernel on a machine that supports
+> - * recoverable errors because they have too much memory to boot 32-bit.
+> - */
+> -#endif
+> -
+>  #endif /* _ASM_X86_SET_MEMORY_H */
+> diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+> index 38af155aaba9..93dde949f224 100644
+> --- a/arch/x86/mm/pat/set_memory.c
+> +++ b/arch/x86/mm/pat/set_memory.c
+> @@ -1925,6 +1925,53 @@ int set_memory_wb(unsigned long addr, int numpages)
+>  }
+>  EXPORT_SYMBOL(set_memory_wb);
+>
+> +#ifdef CONFIG_X86_64
 
+It seems like the only X86_64 dependency in this routine is the
+address bit 63 usage, so how about:
 
+if (!IS_ENABLED(CONFIG_64BIT))
+    return 0;
 
--- 
-Regards,
-Atish
+...and drop the ifdef?
+
+Other than that you can add:
+
+Reviewed-by: Dan Williams <dan.j.williams@intel.com>

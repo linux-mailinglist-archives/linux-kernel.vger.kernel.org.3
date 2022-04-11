@@ -2,117 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0125C4FBFA1
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 16:53:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F8F74FBFA0
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 16:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347524AbiDKOzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 10:55:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57386 "EHLO
+        id S1347528AbiDKOzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 10:55:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343551AbiDKOzI (ORCPT
+        with ESMTP id S1344802AbiDKOzi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 10:55:08 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0371319C28
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 07:52:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649688774; x=1681224774;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=mB8NNTw44eMZUF35h4h29n6vL38O8wnd1LwLHFK4xHE=;
-  b=ds8Fxd4t4VU9DhRM3P/TaXNSPd0EfUWJUBbQ/yz17x044xPYIaqYOwr7
-   MHpht+QkzWbjuubFwzj8f0y/XQxu8vCqFPHPwu/NsgAh4Yv/m37qShndH
-   fypoO6Qdld6HH2LVWtVEOCqhw7D8Cae+Cgj+2gKAekPMZ2PrH6HagW7sX
-   brtcXNskZXJtZkc2ZuUELhJNOw2cP78M2BvAoRus61ot2ycvjd5VmKcgL
-   uhsXapDvBNogHU2pQ8WV+iOM2oa1FT4VGVJR4GA1gZvJlHtU8/77VH4a6
-   TbnQ7FqaGeM6LHV4d6o4aQqoCNwEh7F9ShW0oQC5NZg+iBuvkUQFvgp3s
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="325045641"
-X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="325045641"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 07:52:53 -0700
-X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="525561650"
-Received: from srkondle-mobl.amr.corp.intel.com (HELO [10.212.113.6]) ([10.212.113.6])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 07:52:51 -0700
-Message-ID: <a139dbad-2f42-913b-677c-ef35f1eebfed@intel.com>
-Date:   Mon, 11 Apr 2022 07:52:57 -0700
+        Mon, 11 Apr 2022 10:55:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A365393E4;
+        Mon, 11 Apr 2022 07:53:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 35DC6B81648;
+        Mon, 11 Apr 2022 14:53:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C330FC385A4;
+        Mon, 11 Apr 2022 14:53:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649688801;
+        bh=z+iaqACZOMYq+KfwoqlZ14jVOrSAnBe4zNrk5E5x3tM=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=C5lom0tFugZ7uy9aV8pAZBrEsPg7YO8nZHDxTJ9TFovoa7EEpnfwtVZKyz/NQVD2H
+         2O+y9qksscikk11jWxTrBh0NaVILUZOCvtk2XDTCrMGCioQBFVwiDinf2ANCHinDHB
+         N1Ktvdqd6CzsCOlL8LIAMVLB8pMTHnTNm67V4qsK6kzLP6t4vHJvj/fgWRrhREGr17
+         DY2ghU2WEo7WbYL/ajiXNhq/WUNVtDpo2HrsTVApY8/Dst805wyvPKDH3XHmkB8DMy
+         utxpAK9J0SGSlukpE6uwBbmU7cL4KQ0WMkPtZmxdWhEYryRFHj5HFA12WbxZkuD0gw
+         HTs7PFCWv/o0g==
+Date:   Mon, 11 Apr 2022 16:53:12 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     =?ISO-8859-15?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
+cc:     benjamin.tissoires@redhat.com, spbnick@gmail.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH for-5.18/uclogic 0/4] DIGImend patches, part III
+In-Reply-To: <20220303074734.7235-1-jose.exposito89@gmail.com>
+Message-ID: <nycvar.YFH.7.76.2204111653000.30217@cbobk.fhfr.pm>
+References: <20220303074734.7235-1-jose.exposito89@gmail.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     "zhangfei.gao@foxmail.com" <zhangfei.gao@foxmail.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        jean-philippe <jean-philippe@linaro.org>
-Cc:     Ravi V Shankar <ravi.v.shankar@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86 <x86@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        iommu <iommu@lists.linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-References: <20220207230254.3342514-1-fenghua.yu@intel.com>
- <20220207230254.3342514-6-fenghua.yu@intel.com> <Ygt4h0PgYzKOiB38@8bytes.org>
- <tencent_F6830A1196DB4C6A904D7C691F0D961D1108@qq.com>
- <56ed509d-a7cf-1fde-676c-a28eb204989b@intel.com>
- <tencent_9920B633D50E9B80D3A41A723BCE06972309@qq.com>
- <f439dde5-0eaa-52e4-9cf7-2ed1f62ea07f@intel.com>
- <tencent_F73C11A7DBAC6AF24D3369DF0DCA1D7E8308@qq.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
- allocation and free it on mm exit
-In-Reply-To: <tencent_F73C11A7DBAC6AF24D3369DF0DCA1D7E8308@qq.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 3 Mar 2022, José Expósito wrote:
 
-On 4/11/22 07:44, zhangfei.gao@foxmail.com wrote:
-> On 2022/4/11 下午10:36, Dave Hansen wrote:
->> On 4/11/22 07:20, zhangfei.gao@foxmail.com wrote:
->>>> Is there nothing before this call trace?  Usually there will be at least
->>>> some warning text.
->>> I added dump_stack() in ioasid_free.
->> Hold on a sec, though...
->>
->> What's the *problem* here?  Did something break or are you just saying
->> that something looks weird to _you_?
+> Hi everyone,
 > 
-> After this, nginx is not working at all, and hardware reports error.
-> Suppose the the master use the ioasid for init, but got freed.
+> This series is a follow up to [1] and [2], kindly reviewed and applied
+> by Jiří in hid.git#for-5.18/uclogic.
 > 
-> hardware reports:
-> [  152.731869] hisi_sec2 0000:76:00.0: qm_acc_do_task_timeout [error status=0x20] found
-> [  152.739657] hisi_sec2 0000:76:00.0: qm_acc_wb_not_ready_timeout [error status=0x40] found
-> [  152.747877] hisi_sec2 0000:76:00.0: sec_fsm_hbeat_rint [error status=0x20] found
-> [  152.755340] hisi_sec2 0000:76:00.0: Controller resetting...
-> [  152.762044] hisi_sec2 0000:76:00.0: QM mailbox operation timeout!
-> [  152.768198] hisi_sec2 0000:76:00.0: Failed to dump sqc!
-> [  152.773490] hisi_sec2 0000:76:00.0: Failed to drain out data for stopping!
-> [  152.781426] hisi_sec2 0000:76:00.0: QM mailbox is busy to start!
-> [  152.787468] hisi_sec2 0000:76:00.0: Failed to dump sqc!
-> [  152.792753] hisi_sec2 0000:76:00.0: Failed to drain out data for stopping!
-> [  152.800685] hisi_sec2 0000:76:00.0: QM mailbox is busy to start!
-> [  152.806730] hisi_sec2 0000:76:00.0: Failed to dump sqc!
-> [  152.812017] hisi_sec2 0000:76:00.0: Failed to drain out data for stopping!
-> [  152.819946] hisi_sec2 0000:76:00.0: QM mailbox is busy to start!
-> [  152.825992] hisi_sec2 0000:76:00.0: Failed to dump sqc!
+> It adds support for touch rings in order handle the Huion HS610 tablet.
+> 
+> Thank you very much to Nikolai for the patches a to the maintaners for
+> the quick reviews,
+> José Expósito
+> 
+> [1] https://lore.kernel.org/linux-input/nycvar.YFH.7.76.2202161642180.11721@cbobk.fhfr.pm/T/
+> [2] https://lore.kernel.org/linux-input/56454560-5f62-05b9-1a24-3f51a305140e@gmail.com/T/
+> 
+> Nikolai Kondrashov (4):
+>   HID: uclogic: Add support for touch ring reports
+>   HID: uclogic: Support custom device suffix for frames
+>   HID: uclogic: Allow three frame parameter sets
+>   HID: uclogic: Add support for Huion touch ring reports
+> 
+>  drivers/hid/hid-uclogic-core.c   | 83 +++++++++++++++++++++--------
+>  drivers/hid/hid-uclogic-params.c | 40 +++++++++++---
+>  drivers/hid/hid-uclogic-params.h | 90 +++++++++++++++++++++++++++++---
+>  drivers/hid/hid-uclogic-rdesc.c  | 65 ++++++++++++++++++++---
+>  drivers/hid/hid-uclogic-rdesc.h  | 20 +++++--
+>  5 files changed, 250 insertions(+), 48 deletions(-)
 
-That would have been awfully handy information to have in an initial bug report. :)
-Is there a chance you could dump out that ioasid alloc *and* free information in ioasid_alloc/free()?  This could be some kind of problem with the allocator, or with copying the ioasid at fork.
+Now in hid.git#for-5.19/uclogic. Thanks,
+
+-- 
+Jiri Kosina
+SUSE Labs
+

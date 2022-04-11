@@ -2,56 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 939DC4FC6A5
+	by mail.lfdr.de (Postfix) with ESMTP id 1D6DF4FC6A4
 	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 23:21:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350007AbiDKVXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 17:23:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60188 "EHLO
+        id S241778AbiDKVXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 17:23:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350236AbiDKVXA (ORCPT
+        with ESMTP id S1350251AbiDKVXF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 17:23:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10AB2E9CB
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 14:20:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6B093616DC
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 21:20:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AEE5C385A3;
-        Mon, 11 Apr 2022 21:20:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649712043;
-        bh=VcMY/lkJl6v3hVQXFaFT0pm0LPne9KUAFAaE6uCrta0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gU4CC3bzYJkTVyk5PqY3DOzknRj13nibImxJjft8FbJbyS+aLxlVtUwOON/Po4SJ8
-         1Nnj4WqU27WloPkpnT4RsEw7Pg+Rywitynfvqajwo5azIlfgkTvpOaJ3D2G/K135xf
-         08Hc9/hizjG+MWuzpeYgtVElI4IIOkrGhttw5/dBjT3iDUxdfFvYxEKZ9gTsC37iuN
-         9bF0E3aSAbXTZkwhJt27n2ic8fUT7psT32uuWFV/hkAPLSxtnxAicvNSXH/8pGSJri
-         QB0MaD/DOcNZiy4eMJos4MO8DNmO6+zVJvWs+mDADGKXFsjhOo3yKuj2DfWALgFPqs
-         C1ToNl9rNCKHA==
-Date:   Mon, 11 Apr 2022 14:20:41 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     Yufen Yu <yuyufen@huawei.com>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Subject: Re: [f2fs-dev] [PATCH 4/5] f2fs: get rid of stale fault injection
- code
-Message-ID: <YlSbqay8y6oaCxR6@google.com>
-References: <20220401071909.505086-1-yuyufen@huawei.com>
- <20220401071909.505086-5-yuyufen@huawei.com>
- <0c134e0e-b2d0-0bc0-42fc-cd220ff77e72@kernel.org>
- <25a24259-3ac3-81ab-1c28-f2a4886888b5@huawei.com>
- <778b1f04-a71b-a226-f7a7-4833fc9bf7c2@kernel.org>
+        Mon, 11 Apr 2022 17:23:05 -0400
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B59352ED57;
+        Mon, 11 Apr 2022 14:20:50 -0700 (PDT)
+Received: by mail-pl1-f174.google.com with SMTP id s14so5364863plk.8;
+        Mon, 11 Apr 2022 14:20:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9+KXQz4AgAAaQRzQM2YK2R02WQKfgHNx/VOWl4V0PaA=;
+        b=1oPPT+iExtkBTKo2HxfhiQ/rc/pAatBu7AYU6CuIMI/ceuVzDRiv2aXE9W7DE2tZdA
+         hxNxGfyjLtD0jtrM8Fk7OnP9+obcDqui8v8UilWhWvW/gxnv4RWyn2t/21k3EtdFEfyp
+         8b9W8tq6fbdG2xPzbaC1T3ysrxu+9FPloPRTiXr8gPh1Dz/3Doa1P9YbYP+lOcLuPodJ
+         YQtTaM9IVRnqEH/fDY9w26hC2xs10Q37Hw6GWsVSuEwpjRomoYAn/xJmBHC+xIzyhw4k
+         9+kFJ/UIOcCFy4s9mSeL+NNZFc8sA7DfRIG+BYtL8586+I79NZbpcxGhYeKhRlDzjI9b
+         A7Uw==
+X-Gm-Message-State: AOAM531pI6Y17OqFiY9+0s0gJy8HF4/Qchv2hRxPtW7zkPNSsuF9OUbv
+        35FgwsKqKsNCKNzh0jV9Ies=
+X-Google-Smtp-Source: ABdhPJwMQ4QcZZ4omhtshFNnao7W4LvQ5dY8Q00SlCWpvG1OUohcRikoWl0Ht9jN0ylJbCQoEV490A==
+X-Received: by 2002:a17:90b:3a87:b0:1c9:9eef:7a9 with SMTP id om7-20020a17090b3a8700b001c99eef07a9mr1222767pjb.103.1649712050142;
+        Mon, 11 Apr 2022 14:20:50 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:ec99:44ba:c45c:cd3e? ([2620:15c:211:201:ec99:44ba:c45c:cd3e])
+        by smtp.gmail.com with ESMTPSA id md4-20020a17090b23c400b001cb66e3e1f8sm401333pjb.0.2022.04.11.14.20.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Apr 2022 14:20:49 -0700 (PDT)
+Message-ID: <32c07164-ae1a-a135-2d1f-3b660cbcf107@acm.org>
+Date:   Mon, 11 Apr 2022 14:20:47 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <778b1f04-a71b-a226-f7a7-4833fc9bf7c2@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] asm-generic: fix __get_unaligned_be48() on 32 bit
+ platforms
+Content-Language: en-US
+To:     Alexander Lobakin <alobakin@pm.me>, Arnd Bergmann <arnd@arndb.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220406233909.529613-1-alobakin@pm.me>
+ <20220411195403.230899-1-alobakin@pm.me>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220411195403.230899-1-alobakin@pm.me>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,82 +69,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/11, Chao Yu wrote:
-> On 2022/4/6 11:01, Yufen Yu via Linux-f2fs-devel wrote:
-> > Hi,
-> > 
-> > On 2022/4/1 16:28, Chao Yu wrote:
-> > > On 2022/4/1 15:19, Yufen Yu via Linux-f2fs-devel wrote:
-> > > > Nowly, we can use new fault injection framework. Just delete the
-> > > > stale fault injection code.
-> > > > 
-> > > > Signed-off-by: Yufen Yu <yuyufen@huawei.com>
-> > > > ---
-> > > >   fs/f2fs/checkpoint.c |  2 +-
-> > > >   fs/f2fs/f2fs.h       | 51 ++----------------------------------------
-> > > >   fs/f2fs/super.c      | 53 --------------------------------------------
-> > > >   fs/f2fs/sysfs.c      | 23 -------------------
-> > > >   4 files changed, 3 insertions(+), 126 deletions(-)
-> > > > 
-> > 
-> > ...
-> > 
-> > > >               break;
-> > > > @@ -1963,14 +1920,6 @@ static int f2fs_show_options(struct seq_file *seq, struct dentry *root)
-> > > >       if (F2FS_IO_SIZE_BITS(sbi))
-> > > >           seq_printf(seq, ",io_bits=%u",
-> > > >                   F2FS_OPTION(sbi).write_io_size_bits);
-> > > > -#ifdef CONFIG_F2FS_FAULT_INJECTION
-> > > > -    if (test_opt(sbi, FAULT_INJECTION)) {
-> > > > -        seq_printf(seq, ",fault_injection=%u",
-> > > > -                F2FS_OPTION(sbi).fault_info.inject_rate);
-> > > > -        seq_printf(seq, ",fault_type=%u",
-> > > > -                F2FS_OPTION(sbi).fault_info.inject_type);
-> > > > -    }
-> > > > -#endif
-> > > 
-> > > This will cause regression due to it breaks application usage w/ -o
-> > > fault_* mountoption..., I don't think this is the right way.
-> > 
-> > 
-> > Thanks for catching this. I admit it's a problem. But, IMO fault_* mount
-> > option are mostly been used in test, not in actual product. So, I think
-> > it may just affect some test applications. With the common fault injection
-> > framework, it can be more easy and flexible to do fault injection test.
-> > Therefore, I want to remove the two mount options directly.
-> > 
-> > If you really worried about compatibility, how about just reserving the
-> > two inject_* options but without doing any thing for them. We actually
-> > configure fault injections by debugfs in this patch.
-> > 
-> > Or do you have more better suggestion?
-> 
-> Could you please consider to keep original logic of f2fs fault injection
-> if user use inject_* options, otherwise following common fault injection
-> framework?
-> 
-> Thoughts?
+On 4/11/22 13:00, Alexander Lobakin wrote:
+> Uhm, ping?
 
-I think it'd be useful to test roll-forward recovery flow by using those mount
-options, since runtime fault injection cannot enable it during mount.
+What happened with the plan to move this function into the block layer?
+I'm asking this because if that function is moved your patch will conflict
+with the patch that moves that function.
 
-BTW, what is the real benefit to use the fault injection framework?
+Thanks,
 
-> 
-> Thanks,
-> 
-> > 
-> > Thanks,
-> > Yufen
-> > 
-> > 
-> > 
-> > 
-> > 
-> > 
-> > 
-> > 
-> > _______________________________________________
-> > Linux-f2fs-devel mailing list
-> > Linux-f2fs-devel@lists.sourceforge.net
-> > https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
+Bart.

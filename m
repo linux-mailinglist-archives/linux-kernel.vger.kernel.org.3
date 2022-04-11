@@ -2,166 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDFBB4FB5A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 10:11:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F29A4FB5AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 10:11:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343587AbiDKINN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 04:13:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59522 "EHLO
+        id S1343596AbiDKINu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 04:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233866AbiDKINL (ORCPT
+        with ESMTP id S1343588AbiDKINo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 04:13:11 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3C03DDFB;
-        Mon, 11 Apr 2022 01:10:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649664657; x=1681200657;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hPb1P11BoaRdswU6QxaSdbDYm7MHWgRDtXX/XYA3XRg=;
-  b=i170sgS0bk+zZa8v8TygcpcPlpzgZdg7SZPHD+Q/VoKNuFRUl7Iwn5Dg
-   kp9TVOc6vmSBFvJq/f+BYzXgXjwHaW+RkpNt/O6eDCofJALfyXZhRIoSv
-   8J6CEl1ZwCgkhcDobWhU4O48PLscnWtT60jSjxCMoSBHHZrc8QfxrIv/I
-   u8dJc+wgyKHHF6aXC7KWA61xHASSrTJmDVJqSTzDY+fKkWYNxM8GMKLha
-   KQgyv3bTqF3EmOQ8pc9E6YDBuu1edplVkgS8n2JCq3CRKubF0idSTc2Nu
-   m6GNoyuZ0ENGENqguIbqYexTpbtf3aWttEVVfzoYpIQ4KbZvtkCnPDliT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="322508171"
-X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
-   d="scan'208";a="322508171"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 01:10:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
-   d="scan'208";a="853838324"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 11 Apr 2022 01:10:53 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ndp8O-0001fn-Pn;
-        Mon, 11 Apr 2022 08:10:52 +0000
-Date:   Mon, 11 Apr 2022 16:10:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Samuel Holland <samuel@sholland.org>,
-        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Samuel Holland <samuel@sholland.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v2 2/4] dmaengine: sun6i: Do not use virt_to_phys
-Message-ID: <202204111614.kGz2adbh-lkp@intel.com>
-References: <20220411044633.39014-3-samuel@sholland.org>
+        Mon, 11 Apr 2022 04:13:44 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9907C3E0CB;
+        Mon, 11 Apr 2022 01:11:30 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9F06F596;
+        Mon, 11 Apr 2022 10:11:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1649664688;
+        bh=MLYkgbpD54iW6+0JAiuvwZl8Q20HOOXZR9m9Prv7njw=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=ce7Bg1cdNzrLNOY6mAtdqI87+BAgT7n8mBUFY0XyebE2eW45SUhW8XDpVvj4tN3a4
+         3ef+02Z4PslMY6wGlvA2hVC7ePDBbiC7o1d2cw2EGLIwSuowcvwKxFd7AomrjMMdU3
+         9yK4dmUoLp+IQ9WJUdmdLA2kUQFb4GTuYAEyqgc0=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220411044633.39014-3-samuel@sholland.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220411080120.26008-2-Ping-lei.Lin@mediatek.com>
+References: <20220411080120.26008-1-Ping-lei.Lin@mediatek.com> <20220411080120.26008-2-Ping-lei.Lin@mediatek.com>
+Subject: Re: [PATCH v2 1/2] media: usb: uvc: Add H265 pixel format
+From:   Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        Ming Qian <ming.qian@nxp.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, ping-lei.lin@mediatek.com,
+        lecopzer.chen@mediatek.com, max.yan@mediatek.com,
+        sherlock.chang@mediatek.com, tm.wu@mediatek.com,
+        James_Lin <Ping-lei.Lin@mediatek.com>
+To:     James_Lin <Ping-lei.Lin@mediatek.com>, linux-kernel@vger.kernel.org
+Date:   Mon, 11 Apr 2022 09:11:25 +0100
+Message-ID: <164966468564.22830.10326597921182135832@Monstersaurus>
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Samuel,
+Quoting James_Lin (2022-04-11 09:01:19)
+> Add H265 pixel format.
+> So driver can recognize external camera devices=20
+> whom use h265 to describe High Efficiency Video Coding method.
+>=20
+> Signed-off-by: James_Lin <Ping-lei.Lin@mediatek.com>
+> ---
+>  drivers/media/usb/uvc/uvc_driver.c | 5 +++++
+>  drivers/media/usb/uvc/uvcvideo.h   | 3 +++
+>  2 files changed, 8 insertions(+)
+>=20
+> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/u=
+vc_driver.c
+> index dda0f0aa78b8..ebb807c33e57 100644
+> --- a/drivers/media/usb/uvc/uvc_driver.c
+> +++ b/drivers/media/usb/uvc/uvc_driver.c
+> @@ -154,6 +154,11 @@ static struct uvc_format_desc uvc_fmts[] =3D {
+>                 .guid           =3D UVC_GUID_FORMAT_H264,
+>                 .fcc            =3D V4L2_PIX_FMT_H264,
+>         },
+> +       {
+> +               .name           =3D "H.265",
+> +               .guid           =3D UVC_GUID_FORMAT_H265,
+> +               .fcc            =3D V4L2_PIX_FMT_H265,
 
-I love your patch! Perhaps something to improve:
+This is not yet defined I believe, so this patch needs to be 2/2 in this
+series - with your following patch first so that they can both compile
+independently.
 
-[auto build test WARNING on vkoul-dmaengine/next]
-[also build test WARNING on sunxi/sunxi/for-next v5.18-rc2 next-20220411]
-[cannot apply to mripard/sunxi/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Samuel-Holland/dmaengine-sun6i-Allwinner-D1-support/20220411-124826
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
-config: microblaze-buildonly-randconfig-r004-20220411 (https://download.01.org/0day-ci/archive/20220411/202204111614.kGz2adbh-lkp@intel.com/config)
-compiler: microblaze-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/280420721fd264a03a3d3f9fbe2b4e6bfddd0f79
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Samuel-Holland/dmaengine-sun6i-Allwinner-D1-support/20220411-124826
-        git checkout 280420721fd264a03a3d3f9fbe2b4e6bfddd0f79
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=microblaze SHELL=/bin/bash drivers/dma/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/linux/device.h:15,
-                    from include/linux/dmaengine.h:8,
-                    from drivers/dma/sun6i-dma.c:12:
-   drivers/dma/sun6i-dma.c: In function 'sun6i_dma_dump_chan_regs':
->> drivers/dma/sun6i-dma.c:244:34: warning: format '%lx' expects argument of type 'long unsigned int', but argument 5 has type 'int' [-Wformat=]
-     244 |         dev_dbg(sdev->slave.dev, "Chan %d reg: 0x%lx\n"
-         |                                  ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:129:41: note: in definition of macro 'dev_printk'
-     129 |                 _dev_printk(level, dev, fmt, ##__VA_ARGS__);            \
-         |                                         ^~~
-   include/linux/dev_printk.h:163:45: note: in expansion of macro 'dev_fmt'
-     163 |                 dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
-         |                                             ^~~~~~~
-   drivers/dma/sun6i-dma.c:244:9: note: in expansion of macro 'dev_dbg'
-     244 |         dev_dbg(sdev->slave.dev, "Chan %d reg: 0x%lx\n"
-         |         ^~~~~~~
-   drivers/dma/sun6i-dma.c:244:52: note: format string is defined here
-     244 |         dev_dbg(sdev->slave.dev, "Chan %d reg: 0x%lx\n"
-         |                                                  ~~^
-         |                                                    |
-         |                                                    long unsigned int
-         |                                                  %x
-
-
-vim +244 drivers/dma/sun6i-dma.c
-
-   240	
-   241	static inline void sun6i_dma_dump_chan_regs(struct sun6i_dma_dev *sdev,
-   242						    struct sun6i_pchan *pchan)
-   243	{
- > 244		dev_dbg(sdev->slave.dev, "Chan %d reg: 0x%lx\n"
-   245			"\t___en(%04x): \t0x%08x\n"
-   246			"\tpause(%04x): \t0x%08x\n"
-   247			"\tstart(%04x): \t0x%08x\n"
-   248			"\t__cfg(%04x): \t0x%08x\n"
-   249			"\t__src(%04x): \t0x%08x\n"
-   250			"\t__dst(%04x): \t0x%08x\n"
-   251			"\tcount(%04x): \t0x%08x\n"
-   252			"\t_para(%04x): \t0x%08x\n\n",
-   253			pchan->idx, pchan->base - sdev->base,
-   254			DMA_CHAN_ENABLE,
-   255			readl(pchan->base + DMA_CHAN_ENABLE),
-   256			DMA_CHAN_PAUSE,
-   257			readl(pchan->base + DMA_CHAN_PAUSE),
-   258			DMA_CHAN_LLI_ADDR,
-   259			readl(pchan->base + DMA_CHAN_LLI_ADDR),
-   260			DMA_CHAN_CUR_CFG,
-   261			readl(pchan->base + DMA_CHAN_CUR_CFG),
-   262			DMA_CHAN_CUR_SRC,
-   263			readl(pchan->base + DMA_CHAN_CUR_SRC),
-   264			DMA_CHAN_CUR_DST,
-   265			readl(pchan->base + DMA_CHAN_CUR_DST),
-   266			DMA_CHAN_CUR_CNT,
-   267			readl(pchan->base + DMA_CHAN_CUR_CNT),
-   268			DMA_CHAN_CUR_PARA,
-   269			readl(pchan->base + DMA_CHAN_CUR_PARA));
-   270	}
-   271	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> +       },
+>         {
+>                 .name           =3D "Greyscale 8 L/R (Y8I)",
+>                 .guid           =3D UVC_GUID_FORMAT_Y8I,
+> diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/uvc/uvc=
+video.h
+> index 143230b3275b..41f4d8c33f2a 100644
+> --- a/drivers/media/usb/uvc/uvcvideo.h
+> +++ b/drivers/media/usb/uvc/uvcvideo.h
+> @@ -139,6 +139,9 @@
+>  #define UVC_GUID_FORMAT_H264 \
+>         { 'H',  '2',  '6',  '4', 0x00, 0x00, 0x10, 0x00, \
+>          0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
+> +#define UVC_GUID_FORMAT_H265 \
+> +       { 'H',  '2',  '6',  '5', 0x00, 0x00, 0x10, 0x00, \
+> +        0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
+>  #define UVC_GUID_FORMAT_Y8I \
+>         { 'Y',  '8',  'I',  ' ', 0x00, 0x00, 0x10, 0x00, \
+>          0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
+> --=20
+> 2.18.0
+>

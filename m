@@ -2,106 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05ACA4FC3CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 20:07:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 283474FC3D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 20:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349034AbiDKSJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 14:09:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40834 "EHLO
+        id S1349067AbiDKSKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 14:10:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232992AbiDKSJw (ORCPT
+        with ESMTP id S1349049AbiDKSKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 14:09:52 -0400
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881CB26FF;
-        Mon, 11 Apr 2022 11:07:37 -0700 (PDT)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-2ec05db3dfbso54020767b3.7;
-        Mon, 11 Apr 2022 11:07:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UdFqlnyS6znWMBHrBHznevziGrO6hgWnoxAL9D9H1BY=;
-        b=ZfxQtfuv/EMHqa1vjDU0OkLWr52lNFYIngBIdGjeUfyQyUqxor0NcS8m1JjkNUJRaG
-         YsQsm9AgHGycVehWaBHS6p/eCrJOs/HrrUvjhCFKkUNbKnneu9p/2ilmhdhUtYtTklpH
-         BItFJxGqKVwzY7yPrG4PyLPG78DwFS2DeoNJkp0oAmQCdzHciF510aDvv+BDq9Fr6wbH
-         QShiTZ1Uc73uTs6V/C68TK4dsVNZuQTLrtVio3MzV09WOAGZ/QED14wsO5SCq4efwFsO
-         LDnyyFI/5WVcka7q+rqBWXAPTy8WiVQo+7cg3repaG6+5dV9feb50vx0sqzHMemnoVk9
-         MnPQ==
-X-Gm-Message-State: AOAM533RFOFm1hOGUimTs1/8bbDeMHohzoIhwt0sbUxaLXCrqoxUWp3Z
-        AA71hanQwx1VZQmPxR4fN9h164OMoM5S3m1ClPM=
-X-Google-Smtp-Source: ABdhPJx81h6PmVq/sT/eLgk2/wfWI9xiNZCKOS3KYYmWH0UBz+3LrS91oBTVKXNo9iQ/lO56OkmE6SfaH+M3PjpKYGE=
-X-Received: by 2002:a81:b89:0:b0:2eb:e9e6:470a with SMTP id
- 131-20020a810b89000000b002ebe9e6470amr13058043ywl.7.1649700456794; Mon, 11
- Apr 2022 11:07:36 -0700 (PDT)
+        Mon, 11 Apr 2022 14:10:15 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 807B537A87;
+        Mon, 11 Apr 2022 11:08:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649700480; x=1681236480;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=YUx+7TS3T7WKp9bH0u+RWM0zj399AI31rwxf9iB4yJU=;
+  b=gYj52TCeUaYHJ3+bGTqJeWM9k8sv/Cy0sIZjkynO8ogngoZicXW3Agp7
+   +/9aBy3KC7g4SNH64RbdzIzUhkd2Y+zXcXiARuJerSmXrihagLpwsbgxT
+   1h2pFLbufLOGKrxyHa6QMHB3+VFgba3gs3rSQQ5Hs5RgOXiNIp+HFgbnG
+   jdiED7eLYGdGLtL7PUx7BjwKZWlhhOHpSedTF+ceLqCrKr9+znpaaQEfd
+   Z4S5w9TNQI+ZQalEElbODBrlSHyQGvmuuHYUk2+aZPu2wIS+j7MhJ0g4p
+   9C+2Fag0r1asCXeEMt2po9sE2D6mc71R+fVGR2imDykwTJmaRgnnIsKFk
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="322625777"
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="322625777"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 11:07:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="654732505"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 11 Apr 2022 11:07:57 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 350DA144; Mon, 11 Apr 2022 21:07:56 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jakub Kicinski <kuba@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/2] i2c: dev: check return value when calling dev_set_name()
+Date:   Mon, 11 Apr 2022 21:07:51 +0300
+Message-Id: <20220411180752.36920-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <1836398.tdWV9SEqCh@kreacher> <CAHp75Vc2Lci4ewdosqX4Thm6ME7pKjKw+C+wtUsq2esRM-eXjg@mail.gmail.com>
- <CAJZ5v0hCPG0_4MUW5bt+FLtPmnFZ9NUxsEiFpd-6+wOmYxPm5A@mail.gmail.com> <CAHp75VeS+3-N9rV3CfTLHKKD_pzTHrz4Lnv5XsEbd22CoCJeKw@mail.gmail.com>
-In-Reply-To: <CAHp75VeS+3-N9rV3CfTLHKKD_pzTHrz4Lnv5XsEbd22CoCJeKw@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 11 Apr 2022 20:07:25 +0200
-Message-ID: <CAJZ5v0h-hB918OxUjHQCypyR8JKNEV8FxR7LRYaraoq+Mazfhw@mail.gmail.com>
-Subject: Re: [PATCH v1] PM: runtime: Avoid device usage count underflows
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 6:53 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Mon, Apr 11, 2022 at 6:17 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > On Mon, Apr 11, 2022 at 5:09 PM Andy Shevchenko
-> > <andy.shevchenko@gmail.com> wrote:
-> > > On Wed, Apr 6, 2022 at 11:49 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
->
-> ...
->
-> > > > +               retval = rpm_drop_usage_count(dev);
-> > > > +               if (retval > 0) {
-> > > >                         trace_rpm_usage_rcuidle(dev, rpmflags);
-> > > >                         return 0;
-> > > > +               } else if (retval < 0) {
-> > > > +                       return retval;
-> > > >                 }
-> > >
-> > > Can be written in a form
-> > >
-> > >                if (retval < 0)
-> > >                        return retval;
-> > >                if (retval > 0) {
-> > >                        trace_rpm_usage_rcuidle(dev, rpmflags);
-> > >                        return 0;
-> > >                }
-> > >
-> >
-> > I know.
-> >
-> > And why would it be better?
->
-> Depends on the perception:
+If dev_set_name() fails, the dev_name() is null, check the return
+value of dev_set_name() to avoid the null-ptr-deref.
 
-Well, exactly.
+Fixes: 1413ef638aba ("i2c: dev: Fix the race between the release of i2c_dev and cdev")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/i2c/i2c-dev.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-> a) less characters to parse (no 'else');
+diff --git a/drivers/i2c/i2c-dev.c b/drivers/i2c/i2c-dev.c
+index cf5d049342ea..6fd2b6718b08 100644
+--- a/drivers/i2c/i2c-dev.c
++++ b/drivers/i2c/i2c-dev.c
+@@ -668,16 +668,21 @@ static int i2cdev_attach_adapter(struct device *dev, void *dummy)
+ 	i2c_dev->dev.class = i2c_dev_class;
+ 	i2c_dev->dev.parent = &adap->dev;
+ 	i2c_dev->dev.release = i2cdev_dev_release;
+-	dev_set_name(&i2c_dev->dev, "i2c-%d", adap->nr);
++
++	res = dev_set_name(&i2c_dev->dev, "i2c-%d", adap->nr);
++	if (res)
++		goto err_put_i2c_dev;
+ 
+ 	res = cdev_device_add(&i2c_dev->cdev, &i2c_dev->dev);
+-	if (res) {
+-		put_i2c_dev(i2c_dev, false);
+-		return res;
+-	}
++	if (res)
++		goto err_put_i2c_dev;
+ 
+ 	pr_debug("adapter [%s] registered as minor %d\n", adap->name, adap->nr);
+ 	return 0;
++
++err_put_i2c_dev:
++	put_i2c_dev(i2c_dev, false);
++	return res;
+ }
+ 
+ static int i2cdev_detach_adapter(struct device *dev, void *dummy)
+-- 
+2.35.1
 
-But to me, with the "else" it is clear that the conditionals are
-related to each other which is not so clear otherwise at first sight.
-YMMV
-
-> b) checking for errors first, which seems more or less standard pattern.
-
-So the checks can be reversed no problem, but this is such a minor point ,,,

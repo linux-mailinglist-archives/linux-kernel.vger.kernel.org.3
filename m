@@ -2,119 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86354FC6B3
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 23:24:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 170BD4FC6B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 23:25:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245098AbiDKV0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 17:26:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36688 "EHLO
+        id S235112AbiDKV1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 17:27:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233286AbiDKV0j (ORCPT
+        with ESMTP id S235727AbiDKV1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 17:26:39 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A7611C1B;
-        Mon, 11 Apr 2022 14:24:22 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id y32so28905409lfa.6;
-        Mon, 11 Apr 2022 14:24:22 -0700 (PDT)
+        Mon, 11 Apr 2022 17:27:33 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1962FFEA
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 14:25:18 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id a11so17652332qtb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 14:25:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=W07LTDRQTymKjPFZm77aBEtSzK9heBCBPkTFYPnHBGQ=;
-        b=D8N5US+NdVQZMy2EJ5v7Xz6ZD9q6Hd5yAEmkIT4EjBlI0MaZvgipuDjOLIecaMhXEY
-         EPVbV7avstzga0x2QyLBumJ/04DfAUQSdyj3v5SXyvrkb0s8Gcq4t3qDiKy1AVAwny81
-         A993XTEO/cta909Ukxl4q/I11MBtdqzEmTc5DIG/lG1CikSYsOoo33+h5yfriq2u18Ss
-         Cor/q+sD/AOxpslaUcgNiimjWsOtmflglBAD7ztg2QG/HCml5nmZ1/DmXDzvZr6/eB3B
-         hPSpxGSZ6Az6UwlvRlUuN3Nr4jzHfUmmTlwgrd/TNsCDZysrXgwMHElqz+nV23MAxEmC
-         xLHg==
+        h=date:from:to:subject:message-id:mime-version:content-disposition;
+        bh=sEEO1a9gpg66HFf13zmhoKxUPpsxt/WYjEBH7Mta+38=;
+        b=fUqMBkoKzef3RisQA1sUZojBghR4Vv1ytVm3k7JG8Xk1pRApJTqIcviBhfUKzadIwH
+         SSvyJ3u4de/OQ96L15TYxpf5ictDfgiLTTXmvsiamW1eVgISuP/C4Ypwu/yJB3v3GXz1
+         hlh3LonXPcIBsg9oVjvgcmUTYqOMMIrC1xGw2KOhYxGjIXq92mwktFtxSms2Rfwrah8D
+         vWPsNxxYN+d104ogLLvOMh7IowdB/qKPsrNOlGQbP/Hwct4dHgLvowJfg6hM5elnPNMY
+         N0iddWazs/3sQNSNRSme9eByZh25T1oWOfLAGuaBAP8Uxzytux0nHpe6E2ChV/AAI/+G
+         jDiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=W07LTDRQTymKjPFZm77aBEtSzK9heBCBPkTFYPnHBGQ=;
-        b=ti+8Mc6L+Je3nmpqqCt3byVNLb/6tggF6eMp4LG/533PzPkBgfmqZBXY8q2dkI4OC+
-         RDEq/n4EaoMOPVI6tbzItxMkT6rFkxPFeCj0y2Gi/mqzr/3rFMlHMVMIA8vdh+XTb7EI
-         Ml8Y3kgsNsOAw91ibBlpkuehVyIp2QSLXmNeIAE+z0UQObT8nvOvusYRtCL6JPJJRG3C
-         SwCwbZ039AHk+asXWIp6/g19V1xe4LAAsfAJUnjbBDXqlNNrEJdVEmdtKQfjgfONgSJR
-         2IQsORtFV53LgmdwNVtVfN5GkfZNsTmVpYZha5DDje9SBLmkGCk8wEKR+8t05eNCsbb4
-         o+Sw==
-X-Gm-Message-State: AOAM532zr4jwkBByQQqj+TQFqdeLJlVQvDFzpvg+yvcLzn1n9IRVJQjf
-        7CadpWt2eU+7l07D1tuvGFI=
-X-Google-Smtp-Source: ABdhPJw1EDfVylJkSFMhb+KePBf/A0pmLkpS8KaCP2Pczay4AqN39f+VBLDlVnKx/RkXKgLfQXkupw==
-X-Received: by 2002:a05:6512:2292:b0:46b:a65c:91b9 with SMTP id f18-20020a056512229200b0046ba65c91b9mr4597915lfu.663.1649712261053;
-        Mon, 11 Apr 2022 14:24:21 -0700 (PDT)
-Received: from mobilestation ([95.79.134.149])
-        by smtp.gmail.com with ESMTPSA id w10-20020a2e9bca000000b0024b598ff427sm830391ljj.73.2022.04.11.14.24.19
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition;
+        bh=sEEO1a9gpg66HFf13zmhoKxUPpsxt/WYjEBH7Mta+38=;
+        b=5HL0h/UkGMpSEv/v5NlRygwDmi4KGm5AYRQJ4a+86rg4WuQFle23sOOKkFEcjQFMmS
+         rYp/PQd+P36Y6H19ylCXe2ls2KNHRkRZgY6LpPWwqyd5SBvlJaZnHVMDlduO4SDGoqvE
+         rXbbPzeUc2d/Y6CLasYHx6UjIvdlFTlS5N9kt++2Rrlxy20ovUkhazZBe+kcLsqOK7IO
+         Mamz3stPDhmjAR9B6+VSl6J9OOAt46GfTYsJF/1O4uu2eT8TnZdtLZn4VxjLMhehuSJE
+         NQ5Fg5IalV8ikYXaXcw1ub6l7vpww4Bh7ECbwrOLn4f/h6BRlnvJ93ZjrCn6pxEz493H
+         s+iw==
+X-Gm-Message-State: AOAM531o6S0gz06qPf9BPy1PwGgeMUOWFhD3W7+XBUgXXYeMqHkm6xXK
+        9m4O7ZAPAie9K1tCOZ2tza/L+EX3WnQ3PCiR
+X-Google-Smtp-Source: ABdhPJxoaAOAT3J6wBlu9H4yGWw6bUYYlgQ+wLghgi86o+hmgv6kpZAYytWEwUVB+aUW18LO9op+ng==
+X-Received: by 2002:ac8:7f01:0:b0:2e1:e86f:fd59 with SMTP id f1-20020ac87f01000000b002e1e86ffd59mr1083297qtk.448.1649712317458;
+        Mon, 11 Apr 2022 14:25:17 -0700 (PDT)
+Received: from jaehee-ThinkPad-X1-Extreme ([4.34.18.218])
+        by smtp.gmail.com with ESMTPSA id o66-20020a375a45000000b0069be238e5e3sm6853883qkb.48.2022.04.11.14.25.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 14:24:20 -0700 (PDT)
-Date:   Tue, 12 Apr 2022 00:24:18 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Brad Larson <brad@pensando.io>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Mark Brown <broonie@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Olof Johansson <olof@lixom.net>,
-        David Clear <dac2@pensando.io>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 01/11] dt-bindings: arm: add Pensando boards
-Message-ID: <20220411212418.44p3dvqiez4romqz@mobilestation>
-References: <20220406233648.21644-1-brad@pensando.io>
- <20220406233648.21644-2-brad@pensando.io>
- <05febd3f-bfdb-13c2-8cce-b9dc422c5eae@linaro.org>
- <CAK9rFnyRrS_LvoZ_j66cKDHgecqcqzJN5krSxdCquBanViKyHg@mail.gmail.com>
- <49c1d200-8c07-b306-a400-86ee6a637bb4@linaro.org>
+        Mon, 11 Apr 2022 14:25:16 -0700 (PDT)
+Date:   Mon, 11 Apr 2022 17:25:12 -0400
+From:   Jaehee Park <jhpark1013@gmail.com>
+To:     Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev,
+        Jaehee Park <jhpark1013@gmail.com>
+Subject: [PATCH 1/2] staging: greybus: correct typo in comment 'Atleast' to
+ 'At least'
+Message-ID: <20220411212512.GA2797956@jaehee-ThinkPad-X1-Extreme>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <49c1d200-8c07-b306-a400-86ee6a637bb4@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 09, 2022 at 12:39:59PM +0200, Krzysztof Kozlowski wrote:
-> On 09/04/2022 04:19, Brad Larson wrote:
-> > On Thu, Apr 7, 2022 at 11:45 AM Krzysztof Kozlowski
-> > <krzysztof.kozlowski@linaro.org> wrote:
-> >>> Change from V3:
-> >>> - Add description and board compatible
-> >>
-> >> That's a bit confusing... the subject is for v1.
-> > 
-> > Goal was to identify in the cover letter patch the key changes from
-> > the V3 patchset to this V4 patchset.  Then in each patch that had a
-> > material change highlight that in the patch itself.  Will try and make
-> > it more clear.
-> 
+Correct spelling typo.
 
-> This is fine, I am talking about the subject - it is marked as a v1, so
-> it's confusing to see a changelog.
-> 
-> One way to achieve this is: "git format-patch -v4 -11 ..."
+Signed-off-by: Jaehee Park <jhpark1013@gmail.com>
+---
+ drivers/staging/greybus/arche-apb-ctrl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-v2 was submitted by Brad one year ago:
-https://patches.linaro.org/project/linux-spi/cover/20210329015938.20316-1-brad@pensando.io/
-most likely he has just forgotten to add the proper suffix.
+diff --git a/drivers/staging/greybus/arche-apb-ctrl.c b/drivers/staging/greybus/arche-apb-ctrl.c
+index bbf3ba744fc4..45afa208d004 100644
+--- a/drivers/staging/greybus/arche-apb-ctrl.c
++++ b/drivers/staging/greybus/arche-apb-ctrl.c
+@@ -445,7 +445,7 @@ static int __maybe_unused arche_apb_ctrl_suspend(struct device *dev)
+ static int __maybe_unused arche_apb_ctrl_resume(struct device *dev)
+ {
+ 	/*
+-	 * Atleast for ES2 we have to meet the delay requirement between
++	 * At least for ES2 we have to meet the delay requirement between
+ 	 * unipro switch and AP bridge init, depending on whether bridge is in
+ 	 * OFF state or standby state.
+ 	 *
+-- 
+2.25.1
 
--Sergey
-
-> 
-> Best regards,
-> Krzysztof

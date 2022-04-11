@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1E9D4FBDA8
+	by mail.lfdr.de (Postfix) with ESMTP id 56D6D4FBDA7
 	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 15:46:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346684AbiDKNsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 09:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54386 "EHLO
+        id S1346692AbiDKNsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 09:48:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346721AbiDKNrh (ORCPT
+        with ESMTP id S1346727AbiDKNri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 09:47:37 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2080.outbound.protection.outlook.com [40.107.93.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55C613DDC
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 06:45:19 -0700 (PDT)
+        Mon, 11 Apr 2022 09:47:38 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2068.outbound.protection.outlook.com [40.107.243.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD5C12622
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 06:45:21 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WoZbyfXSryiTATKYUEGCa7j7K4Rs0rtwNVZ5KTuq+ysoVX/RONHhFCxuKQMcgzWHB+TqYpLfLGDb4joRdWMJkLjdSPPWoAJgafrqIrsj4KGZLQlSwWlVIjLZU+V9kP04FqLWuePmYUk5sU9ctsB4UpOTIlnBwtBrHEylv86x+v8hgCg7zRt5q/uYI1MD2lpdSC9FNmgrdTEkHT2Z3toQjMK61y6GqpmQp3BL3nJS7bYJ3x8QVo8I7dLNbPQCFx/myS6hPVec2VHFU+diY7LBYQ1xmQa3sO/IP/T9qUKD+5MQ5hPTIu8FrcDqKaesklJSzOQmLP9PkrNIocEqELRUTQ==
+ b=R775j2g95y/zQoB7q8Ft4PSSndRZuRlr8XplAQuCO6W1QK5shNpszKtdI5SBspsqjdDK64934EoBOhyvrpK8e+FIPPvMg5KJppvrwXLoyKsEnsTDSaSo6nghL1lAX3zMiMyfVN5Ryig/UAbWuXL4xn9T0x5Hoc61o2bnEklXu7JrWHaYJZNXuiKqTrxesiHt8YnxPJCOHeyutPekkDUpP8F566ML/uMcpQvlXEJ+K5E49viHhYMRnaWUK4M6X9HDmGBhNQJtz9BLWK0+7ZXE+fmg/kZRDrmzVJQUXFZJj0zyrw/m2CUY6UROgou3g5RbeUjYHHjIJ8i2nKCkGmcsig==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tvLQymGLA9IKpWZj6MYe7GrfQ54t8h2BDCAITOkzCWQ=;
- b=e2xERpRKrZ3T77z5IvNj81YIuKq3Hqjo6wjNV5vs/ueiS7isrzl/JkTlHWGgwCgHwhp23TqxkZ3aokqmJzAC+YJv6UxEQhMbuZ62WWiJsJunhwKfYFyZLdr6C4LtvokSaUgShAKgR7t9uAzgTaGQCvkrsU3kqB2jYC1D6ck1xVhur9Txk8xKfd4RTmnFEcCDF4knluV11tEVupDk3hAKBZn8D6T1JjvlFNBKEqnkhJoPrjQYTUeD/sDbAB5CLN6To0sKIHzX+s5PmgbkwgVg4EhnSmljrU5bUgZ7A0eu2C98ihtayyGqjfcSMV2+J8qxhfO82aD8mDJ93F0xVzuLdw==
+ bh=I9MquOv/ee4K45MQQQHs0409tnPKYdvItVoSqTwKB/Q=;
+ b=YaeQ39fkfQRo4xE0wcQ9nbcxW19vkT0B4uE6oEnvG30qKeEeF5IXfSugfuIdpSqfIeNcd4DCX89uVtmTX7jTfptQ0sEUYPCkutuTzg3R3CuZEXlALbfRNjAWNm+9KZIBr8Zd0BM6VJYVrBfeENdWDgj91t6H0qC2cg+iuvLdgfhL5oBpbqIy8nAIuZI34k/hV4P3l6sfgeHXLHOYMf/Wd6mPylpTJx1Zk3FpABOsoX02+sb0csUyZRyDpT1Es5Zi8/uL3St4gbA6DxwBcRZAhWN33Ppq4Hnz8u8kFQUm6rIpi3sfCljqM8IvXz1zAI3v4OLfKklYp/ldgM/pn/PTlg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tvLQymGLA9IKpWZj6MYe7GrfQ54t8h2BDCAITOkzCWQ=;
- b=lnqNqE0X4GZqvaPx5qIgMCK8jGrjmU+CjHb+g7/Q3hgwteUCWdpFcf9xzWH6dbpT9IAnoodrdbcQOylOeuIv/25OiYKuyi5nGfSagbdCpL1mKKgTnW2+gXCHJOrUvq7HeAj8mJAjrB/9zki0+IXB5dfU0BqC+1mzOPSLT8yG8Tc=
-Received: from MW2PR16CA0002.namprd16.prod.outlook.com (2603:10b6:907::15) by
- BN8PR12MB4771.namprd12.prod.outlook.com (2603:10b6:408:a5::23) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5144.29; Mon, 11 Apr 2022 13:45:17 +0000
+ bh=I9MquOv/ee4K45MQQQHs0409tnPKYdvItVoSqTwKB/Q=;
+ b=YAT95n2M3T12ZoHr42rRr9kNmEfRD0PdYcCeSnJymRpguY7l3R+uVjc4NUK+j1YXNrAvAv/7/cxTXQrRCXxhaoUUvCinILvR1apBhrYwCAQsGQBdrs/j8ynu50bLK+YvfCeJnG+0aUMg/jGt8fCuOe/QQUG57bkF8ZrwibXQgDc=
+Received: from MW2PR16CA0001.namprd16.prod.outlook.com (2603:10b6:907::14) by
+ MN2PR12MB4469.namprd12.prod.outlook.com (2603:10b6:208:268::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Mon, 11 Apr
+ 2022 13:45:18 +0000
 Received: from CO1NAM11FT027.eop-nam11.prod.protection.outlook.com
- (2603:10b6:907:0:cafe::c5) by MW2PR16CA0002.outlook.office365.com
- (2603:10b6:907::15) with Microsoft SMTP Server (version=TLS1_2,
+ (2603:10b6:907:0:cafe::53) by MW2PR16CA0001.outlook.office365.com
+ (2603:10b6:907::14) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29 via Frontend
- Transport; Mon, 11 Apr 2022 13:45:17 +0000
+ Transport; Mon, 11 Apr 2022 13:45:18 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -48,11 +49,11 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
  CO1NAM11FT027.mail.protection.outlook.com (10.13.174.224) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5144.20 via Frontend Transport; Mon, 11 Apr 2022 13:45:17 +0000
+ 15.20.5144.20 via Frontend Transport; Mon, 11 Apr 2022 13:45:18 +0000
 Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 11 Apr
- 2022 08:45:15 -0500
+ 2022 08:45:16 -0500
 From:   Mario Limonciello <mario.limonciello@amd.com>
 To:     Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
         "Jaroslav Kysela" <perex@perex.cz>,
@@ -61,9 +62,9 @@ To:     Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
 CC:     Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
         open list <linux-kernel@vger.kernel.org>,
         Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH 1/2] ASoC: amd: Add driver data to acp6x machine driver
-Date:   Mon, 11 Apr 2022 08:45:31 -0500
-Message-ID: <20220411134532.13538-2-mario.limonciello@amd.com>
+Subject: [PATCH 2/2]  ASoC: amd: Add support for enabling DMIC on acp6x via _DSD
+Date:   Mon, 11 Apr 2022 08:45:32 -0500
+Message-ID: <20220411134532.13538-3-mario.limonciello@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220411134532.13538-1-mario.limonciello@amd.com>
 References: <20220411134532.13538-1-mario.limonciello@amd.com>
@@ -75,24 +76,24 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 51e69060-e45d-48ce-1ec7-08da1bc18384
-X-MS-TrafficTypeDiagnostic: BN8PR12MB4771:EE_
-X-Microsoft-Antispam-PRVS: <BN8PR12MB47710FAABEE01A68D7E075EFE2EA9@BN8PR12MB4771.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 44b9be03-2805-4d20-792a-08da1bc18402
+X-MS-TrafficTypeDiagnostic: MN2PR12MB4469:EE_
+X-Microsoft-Antispam-PRVS: <MN2PR12MB4469085F78259EC429B3DB9CE2EA9@MN2PR12MB4469.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IH9P6tZiDW3q6gm+qwxAN8UYh7EFOsdWlprVwpYVjr+ijQJ3en/rS1qyaZt4Qzxa76P0Tm7pEUMZxXeP2MSidXH01A5oZjjQRrelWWcx9uocXPpP2JaJ7FXlzQWgenf9YRlRwF2Ykd1tN7Lt8vF550XTy98Kqm91X+etX0QrZOI4xirEzzTWzu0ccS4aHn1uY0YF2EA+VqXI3Uf/3JTXwMKvPa7AWVzdvWOJlknjx26lKn77v51Cw20PC5OvsIIROXRjh+v/Xzs+CigowkYjEyPxrrMF0wxdM+Wujpz5MKznk4SR/WVV9MhwObAcIdAlpTFqMYZ0KGazlnrFZ3+YosUjG0iVC/lFA3Io/sWCgJfht0EbUwMRRQL3iypazMySpczVZr7ts79mrqnuYtwx5UK1arA8QSgeF5iv6j/XzKmLdhktIu0h4I3tFvBlyc2xBytiW6EG8KuB+tL1LPcbo+5gLSxsIysBo3HfselwZKPXrNYSLsjIbWhUMoIzLVmFQPDgR7qvswkPhYuU0VbsAy0b2VA5YmdmIOZAUctylCW8Q/XB3LwN0nGL6YiKCCyxTQx5JtTa6cI/GpssVSHdTe7G7W+k8oZ5EZ/9bsp+qKha85H8ueb0OE2BsaGNKlKIIAMCH2pZsdkk0QzaW6BgRvj3nQlMTIEZ+oRA3PSQjIiSp9HXYPIFitN4elDsaTArKCamyVmQTS9a2QUlNOcJMqJPAqZRqZecCSudjeqtXBQ=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(356005)(81166007)(5660300002)(1076003)(26005)(86362001)(40460700003)(316002)(508600001)(110136005)(7696005)(54906003)(2906002)(6666004)(2616005)(336012)(4326008)(44832011)(36756003)(426003)(82310400005)(47076005)(8676002)(70206006)(70586007)(83380400001)(8936002)(16526019)(186003)(36860700001)(32563001)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: sl4XoV2bba5rflRjAloj3vS3HlFE1dhzUa7ugG875u68j4vMJIk6MrWtC5MZ1ZQLIbq6merlrLlv786jAnAKsdfi29gpjs4EM40JN+fBfUx9ut1HTohJOFRuOzbmQfB90K2e8kPfFfIzvFdD8eclnjHlXJ9DQzNCLsmY724ndfRIuC6MmOrY92Lk+ImxI8dhtENeCXkKnmEEjtDLtkxmdN0rcF7XrvbVfBn50x6YXD/x6ZYWMCTCu9Pvw6QoOaZB2H91RmH3KgI3CGtSXttj4hJsfBS9H2y3Zz1Hdx+nIBev0zv1nsgpGXr4DI25mo3H9uuLMLDPdpSszaFTdynhozK5DSPGp0mjIr/Yz4jfxUFl7Xpv07DRjHyjunHUCumgaXNXwkRLq1lshdqr7PjxQjdDdixdfoExIPQuZAq5gL90hp/d7JXuJkhYWyqTZ2btiW0IvYHOdhvlqy99U8yg0W5y4SyS5AZcQIfjPayEeVP+WikkpjSQrXbt8xVMRzfKQnqbcUNpgNZ3Ufb0J0fXCi9pp2vIsgZDIhFY+CCCrKdq+Ng1RtS/FbG2Yg4fvX9cJ3EOaJwmZcRLPvs+zfRhUkbG/m0m7qeErzBYI92O7YqIV2pVlSBsrHl+c3ug2nzI8FYoBq7w2fnOA1KhjKweiP3DuL2k6Swx89MaYBL+cdYSB8VlP/DUPolU3R9YTxjM3iviVWhjcTgKho9J+NHcS72ZR721MMeRACRf/wNZodw=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(356005)(5660300002)(40460700003)(82310400005)(70586007)(110136005)(70206006)(54906003)(8676002)(508600001)(81166007)(4326008)(426003)(44832011)(316002)(1076003)(2616005)(2906002)(336012)(36860700001)(186003)(16526019)(26005)(47076005)(86362001)(6666004)(7696005)(36756003)(8936002)(32563001)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2022 13:45:17.3583
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2022 13:45:18.1864
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 51e69060-e45d-48ce-1ec7-08da1bc18384
+X-MS-Exchange-CrossTenant-Network-Message-Id: 44b9be03-2805-4d20-792a-08da1bc18402
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT027.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB4771
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4469
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -103,175 +104,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently all of the quirked systems use the same card and so the
-DMI quirk list doesn't contain driver data.
+Currently the acp6x machine driver requires a hardcoded list of systems
+that physically have DMIC connected.
 
-Add driver data to these quirks and then check the data was present
-or not.  This will allow potentially setting quirks for systems with
-faulty firmware that claims to have a DMIC but doesn't really.
+To avoid having to continually add to an evergrowing list of systems add
+support for a _DSD that can advertise this.
+
+OEMs can add this _DSD to their BIOS under the ACP device to automatically
+add the device to this driver without requiring any driver modifications.
 
 Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 ---
- sound/soc/amd/yc/acp6x-mach.c | 29 +++++++++++++++++++++++++----
- 1 file changed, 25 insertions(+), 4 deletions(-)
+ sound/soc/amd/yc/acp6x-mach.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
 diff --git a/sound/soc/amd/yc/acp6x-mach.c b/sound/soc/amd/yc/acp6x-mach.c
-index 9a767f47b89f..959b70e8baf2 100644
+index 959b70e8baf2..f06e6c1a7799 100644
 --- a/sound/soc/amd/yc/acp6x-mach.c
 +++ b/sound/soc/amd/yc/acp6x-mach.c
-@@ -45,108 +45,126 @@ static struct snd_soc_card acp6x_card = {
+@@ -12,6 +12,7 @@
+ #include <sound/pcm_params.h>
+ #include <linux/io.h>
+ #include <linux/dmi.h>
++#include <linux/acpi.h>
  
- static const struct dmi_system_id yc_acp_quirk_table[] = {
- 	{
-+		.driver_data = &acp6x_card,
- 		.matches = {
- 			DMI_MATCH(DMI_BOARD_VENDOR, "LENOVO"),
- 			DMI_MATCH(DMI_PRODUCT_NAME, "21D2"),
- 		}
- 	},
- 	{
-+		.driver_data = &acp6x_card,
- 		.matches = {
- 			DMI_MATCH(DMI_BOARD_VENDOR, "LENOVO"),
- 			DMI_MATCH(DMI_PRODUCT_NAME, "21D3"),
- 		}
- 	},
- 	{
-+		.driver_data = &acp6x_card,
- 		.matches = {
- 			DMI_MATCH(DMI_BOARD_VENDOR, "LENOVO"),
- 			DMI_MATCH(DMI_PRODUCT_NAME, "21D4"),
- 		}
- 	},
- 	{
-+		.driver_data = &acp6x_card,
- 		.matches = {
- 			DMI_MATCH(DMI_BOARD_VENDOR, "LENOVO"),
- 			DMI_MATCH(DMI_PRODUCT_NAME, "21D5"),
- 		}
- 	},
- 	{
-+		.driver_data = &acp6x_card,
- 		.matches = {
- 			DMI_MATCH(DMI_BOARD_VENDOR, "LENOVO"),
- 			DMI_MATCH(DMI_PRODUCT_NAME, "21CF"),
- 		}
- 	},
- 	{
-+		.driver_data = &acp6x_card,
- 		.matches = {
- 			DMI_MATCH(DMI_BOARD_VENDOR, "LENOVO"),
- 			DMI_MATCH(DMI_PRODUCT_NAME, "21CG"),
- 		}
- 	},
- 	{
-+		.driver_data = &acp6x_card,
- 		.matches = {
- 			DMI_MATCH(DMI_BOARD_VENDOR, "LENOVO"),
- 			DMI_MATCH(DMI_PRODUCT_NAME, "21CQ"),
- 		}
- 	},
- 	{
-+		.driver_data = &acp6x_card,
- 		.matches = {
- 			DMI_MATCH(DMI_BOARD_VENDOR, "LENOVO"),
- 			DMI_MATCH(DMI_PRODUCT_NAME, "21CR"),
- 		}
- 	},
- 	{
-+		.driver_data = &acp6x_card,
- 		.matches = {
- 			DMI_MATCH(DMI_BOARD_VENDOR, "LENOVO"),
- 			DMI_MATCH(DMI_PRODUCT_NAME, "21AW"),
- 		}
- 	},
- 	{
-+		.driver_data = &acp6x_card,
- 		.matches = {
- 			DMI_MATCH(DMI_BOARD_VENDOR, "LENOVO"),
- 			DMI_MATCH(DMI_PRODUCT_NAME, "21AX"),
- 		}
- 	},
- 	{
-+		.driver_data = &acp6x_card,
- 		.matches = {
- 			DMI_MATCH(DMI_BOARD_VENDOR, "LENOVO"),
- 			DMI_MATCH(DMI_PRODUCT_NAME, "21BN"),
- 		}
- 	},
- 	{
-+		.driver_data = &acp6x_card,
- 		.matches = {
- 			DMI_MATCH(DMI_BOARD_VENDOR, "LENOVO"),
- 			DMI_MATCH(DMI_PRODUCT_NAME, "21BQ"),
- 		}
- 	},
- 	{
-+		.driver_data = &acp6x_card,
- 		.matches = {
- 			DMI_MATCH(DMI_BOARD_VENDOR, "LENOVO"),
- 			DMI_MATCH(DMI_PRODUCT_NAME, "21CH"),
- 		}
- 	},
- 	{
-+		.driver_data = &acp6x_card,
- 		.matches = {
- 			DMI_MATCH(DMI_BOARD_VENDOR, "LENOVO"),
- 			DMI_MATCH(DMI_PRODUCT_NAME, "21CJ"),
- 		}
- 	},
- 	{
-+		.driver_data = &acp6x_card,
- 		.matches = {
- 			DMI_MATCH(DMI_BOARD_VENDOR, "LENOVO"),
- 			DMI_MATCH(DMI_PRODUCT_NAME, "21CK"),
- 		}
- 	},
- 	{
-+		.driver_data = &acp6x_card,
- 		.matches = {
- 			DMI_MATCH(DMI_BOARD_VENDOR, "LENOVO"),
- 			DMI_MATCH(DMI_PRODUCT_NAME, "21CL"),
- 		}
- 	},
- 	{
-+		.driver_data = &acp6x_card,
- 		.matches = {
- 			DMI_MATCH(DMI_BOARD_VENDOR, "LENOVO"),
- 			DMI_MATCH(DMI_PRODUCT_NAME, "21D8"),
- 		}
- 	},
- 	{
-+		.driver_data = &acp6x_card,
- 		.matches = {
- 			DMI_MATCH(DMI_BOARD_VENDOR, "LENOVO"),
- 			DMI_MATCH(DMI_PRODUCT_NAME, "21D9"),
-@@ -157,18 +175,21 @@ static const struct dmi_system_id yc_acp_quirk_table[] = {
+ #include "acp6x.h"
  
- static int acp6x_probe(struct platform_device *pdev)
- {
-+	const struct dmi_system_id *dmi_id;
+@@ -178,8 +179,19 @@ static int acp6x_probe(struct platform_device *pdev)
+ 	const struct dmi_system_id *dmi_id;
  	struct acp6x_pdm *machine = NULL;
  	struct snd_soc_card *card;
++	struct acpi_device *adev;
  	int ret;
--	const struct dmi_system_id *dmi_id;
  
-+	/* check for any DMI overrides */
- 	dmi_id = dmi_first_match(yc_acp_quirk_table);
--	if (!dmi_id)
-+	if (dmi_id)
-+		platform_set_drvdata(pdev, dmi_id->driver_data);
++	/* check the parent device's firmware node has _DSD or not */
++	adev = ACPI_COMPANION(pdev->dev.parent);
++	if (adev) {
++		const union acpi_object *obj;
 +
-+	card = platform_get_drvdata(pdev);
-+	if (!card)
++		if (!acpi_dev_get_property(adev, "AcpDmicConnected", ACPI_TYPE_INTEGER, &obj) &&
++		    obj->integer.value == 1)
++			platform_set_drvdata(pdev, &acp6x_card);
++	}
++
+ 	/* check for any DMI overrides */
+ 	dmi_id = dmi_first_match(yc_acp_quirk_table);
+ 	if (dmi_id)
+@@ -188,6 +200,7 @@ static int acp6x_probe(struct platform_device *pdev)
+ 	card = platform_get_drvdata(pdev);
+ 	if (!card)
  		return -ENODEV;
--	card = &acp6x_card;
++	dev_info(&pdev->dev, "Enabling ACP DMIC support via %s", dmi_id ? "DMI" : "ACPI");
  	acp6x_card.dev = &pdev->dev;
  
--	platform_set_drvdata(pdev, card);
  	snd_soc_card_set_drvdata(card, machine);
- 	ret = devm_snd_soc_register_card(&pdev->dev, card);
- 	if (ret) {
 -- 
 2.34.1
 

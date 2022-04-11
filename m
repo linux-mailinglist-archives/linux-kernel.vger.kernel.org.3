@@ -2,55 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE76A4FB127
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 02:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E8544FB12B
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 02:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234137AbiDKAxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 20:53:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50426 "EHLO
+        id S237448AbiDKAzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 20:55:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233951AbiDKAxe (ORCPT
+        with ESMTP id S237000AbiDKAzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 20:53:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDBD35A97;
-        Sun, 10 Apr 2022 17:51:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 68E8BB80E61;
-        Mon, 11 Apr 2022 00:51:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BC1BC385A4;
-        Mon, 11 Apr 2022 00:51:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649638279;
-        bh=Ycpdp14bx0RRRmkHQGJeM0fAdXUvQ5hx27l91yFjGWg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Qq6FBQoH1aujh0fWe2tsMZONWLf9KZrbhAhp/3wTmsmvIMrtlTX4nKE7eicbjbyDA
-         GcamPLVUcd+CAWeDJ3pbPkzr3EiNp5rozkNss0KOeBmjuxxNNlqNdl4c3drxlaOYHW
-         UBFg7tB5Eo6xBzyT/3WR9m3UQau6WMPqiwhAXGEYKJVbpA0du2v0/wWSErlzH5sSzi
-         JDr2C0I5xUteky1jYxUuWPSx+k+CTaw/4/3h7a0rGkINphs91pVrMwVieqd/34bxoA
-         9YSkai0iNTRWMf0BslM2dqaGRQ1SCkyWuNl21atyzdMjuB1t5hqmGQZKSl3Uk94nJS
-         Ujbj2YJTyu5Rg==
-Date:   Mon, 11 Apr 2022 08:51:12 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: ls1028a: sl28: use ocelot-8021q tagging by
- default
-Message-ID: <20220411005112.GU129381@dragon>
-References: <20220330113329.3402438-1-michael@walle.cc>
+        Sun, 10 Apr 2022 20:55:17 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 493B220BD0
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 17:53:05 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id u19so8633988ljd.11
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 17:53:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=CXm5mSwaFzwzu++u9kIOHnOh36g7ghfH6gNr3++uBxs=;
+        b=ZgLIKzQad+UIXhvwSf+OMYFQR95XXCDgfdbZbmLSyUys+coUKRAZFrBx8CJTb7acPK
+         EAmY9lUFYaQxjPK6n1LWaGz4pFdLyuMJRDHAGbJka9iw0H+aQxw0+FY4ioxWAzwRo1NI
+         ZEG66HRw5csV2NRgVpWBRHvsX75LVPB35CPQwiD1mTcZwdvvFkd7MAR5xlF03CgSqhCW
+         u2o+VXQwphHxMRN+dUEWK7qJ9Rj9S72czNdxi9o8ZaKeKx9HCbKuPN5VR5TEgg3AKy3a
+         xWTX4BRCxouPVrUGXQtPMRx8IldlPOWXpZA3sSf/Ix60phSyRcJ2GkI0yMjPEDHzTEU9
+         HebQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=CXm5mSwaFzwzu++u9kIOHnOh36g7ghfH6gNr3++uBxs=;
+        b=RxkmF6zH89oyHeaNeblenYV4CDIa+NBynmZ2yHb+Et07EuAICSs55neaFj1i3KHorX
+         SoDk7uacxagGd39GMY4CClhz43hQmydyqLGmNMbdGorxsm6SAx1SN5Ra/wONIuk6fLvg
+         77M0jcS0oDxlA0qC7nazLWz2F/+3yIfAgnIC/MgYPksCsatGsL0Fpvk0vUvObIhAU4yW
+         FbiKGDywXvVeuaL1v0gh0bpmClCixmZVXfbIAqGFhOXYICYm9kRhE97h1OE1nKcR2oWV
+         obb5s6QMAKu2QLtHB69gtInqv8MX77PQyNvdfjtJGxBhVXzWyebZP/6/i8r2X5IDBWMm
+         OMvA==
+X-Gm-Message-State: AOAM530Uo5A1Ex2XUfws7DuZ0NxXwwf8TivNFBUEYtqDcA6E8ckUL9Zz
+        mqi7oKV9p6U7Q+5juJySuipITA==
+X-Google-Smtp-Source: ABdhPJxyt0wopKX7fx+Gbcpumbb1jU9zmGiIFPN4SS2c3gNFlQccFPOBLZ8BD2gFf85jsGnoRSBT0g==
+X-Received: by 2002:a05:651c:1046:b0:24a:edc2:d107 with SMTP id x6-20020a05651c104600b0024aedc2d107mr18796586ljm.285.1649638383435;
+        Sun, 10 Apr 2022 17:53:03 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id m5-20020a197105000000b0046bab1edfddsm47552lfc.264.2022.04.10.17.53.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 10 Apr 2022 17:53:02 -0700 (PDT)
+Message-ID: <4deb0930-b244-677a-9f97-3730686eff5a@linaro.org>
+Date:   Mon, 11 Apr 2022 03:53:01 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220330113329.3402438-1-michael@walle.cc>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] drm/msm/gpu: Avoid -Wunused-function with
+ !CONFIG_PM_SLEEP
+Content-Language: en-GB
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>
+Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+References: <20220330180541.62250-1-nathan@kernel.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220330180541.62250-1-nathan@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,15 +78,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 01:33:29PM +0200, Michael Walle wrote:
-> Enable the ocelot-8021q tagger by default which supports ethernet flow
-> control.
+On 30/03/2022 21:05, Nathan Chancellor wrote:
+> When building with CONFIG_PM=y and CONFIG_PM_SLEEP=n (such as ARCH=riscv
+> allmodconfig), the following warnings/errors occur:
 > 
-> The new default is set in the common board dtsi. The actual switch
-> node is enabled on a per board variant basis. Because of this we
-> set the new tagger default for both internal ports and a particular
-> variant is free to choose among the two port.
+>    drivers/gpu/drm/msm/adreno/adreno_device.c:679:12: error: 'adreno_system_resume' defined but not used [-Werror=unused-function]
+>      679 | static int adreno_system_resume(struct device *dev)
+>          |            ^~~~~~~~~~~~~~~~~~~~
+>    drivers/gpu/drm/msm/adreno/adreno_device.c:655:12: error: 'adreno_system_suspend' defined but not used [-Werror=unused-function]
+>      655 | static int adreno_system_suspend(struct device *dev)
+>          |            ^~~~~~~~~~~~~~~~~~~~~
+>    cc1: all warnings being treated as errors
 > 
-> Signed-off-by: Michael Walle <michael@walle.cc>
+> These functions are only used in SET_SYSTEM_SLEEP_PM_OPS(), which
+> evaluates to empty when CONFIG_PM_SLEEP is not set, making these
+> functions unused.
+> 
+> Traditionally, these functions are marked as __maybe_unused but in this
+> case, there is already an '#ifdef CONFIG_PM' in the code, so just do the
+> same thing with CONFIG_PM_SLEEP to resolve the warning.
+> 
+> Fixes: 7e4167c9e021 ("drm/msm/gpu: Park scheduler threads for system suspend")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-Applied, thanks!
+I'd suggest using __maybe_unused instead (and maybe even sending the 
+followup patch changing the #ifdef CONFIG_PM to __maybe_unused too):
+
+If the code is included into the compilation, it means it's more widely 
+compile tested. Which tends to reveal obscure bugs, dependencies, etc.
+
+
+> ---
+>   drivers/gpu/drm/msm/adreno/adreno_device.c | 5 +++--
+>   1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm/msm/adreno/adreno_device.c
+> index 661dfa7681fb..b25915230bab 100644
+> --- a/drivers/gpu/drm/msm/adreno/adreno_device.c
+> +++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
+> @@ -621,6 +621,7 @@ static int adreno_runtime_suspend(struct device *dev)
+>   	return gpu->funcs->pm_suspend(gpu);
+>   }
+>   
+> +#ifdef CONFIG_PM_SLEEP
+>   static void suspend_scheduler(struct msm_gpu *gpu)
+>   {
+>   	int i;
+> @@ -681,8 +682,8 @@ static int adreno_system_resume(struct device *dev)
+>   	resume_scheduler(dev_to_gpu(dev));
+>   	return pm_runtime_force_resume(dev);
+>   }
+> -
+> -#endif
+> +#endif /* CONFIG_PM_SLEEP */
+> +#endif /* CONFIG_PM */
+>   
+>   static const struct dev_pm_ops adreno_pm_ops = {
+>   	SET_SYSTEM_SLEEP_PM_OPS(adreno_system_suspend, adreno_system_resume)
+> 
+> base-commit: 05241de1f69eb7f56b0a5e0bec96a7752fad1b2f
+
+
+-- 
+With best wishes
+Dmitry

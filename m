@@ -2,54 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C918B4FBEE1
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 16:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFFB34FBEEA
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 16:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346222AbiDKOUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 10:20:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47330 "EHLO
+        id S1347179AbiDKOU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 10:20:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347293AbiDKORh (ORCPT
+        with ESMTP id S1347280AbiDKOUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 10:17:37 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C16167D0;
-        Mon, 11 Apr 2022 07:15:13 -0700 (PDT)
-Received: from kwepemi500011.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KcW5q5pJjzFpmJ;
-        Mon, 11 Apr 2022 22:12:47 +0800 (CST)
-Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
- kwepemi500011.china.huawei.com (7.221.188.124) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 11 Apr 2022 22:15:11 +0800
-Received: from [10.174.176.52] (10.174.176.52) by
- kwepemm600015.china.huawei.com (7.193.23.52) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 11 Apr 2022 22:15:10 +0800
-Message-ID: <87c0dae7-972a-3c83-dfa6-e1dfab1e1877@huawei.com>
-Date:   Mon, 11 Apr 2022 22:15:09 +0800
+        Mon, 11 Apr 2022 10:20:48 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9E03DA5C
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 07:17:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=EoFq52mSAifW7hmuVJnEyfr/qKi5kNzEY/xR+93cmVg=; b=ZYGRV0W++ZoliBjPm8B/gRwIu4
+        yAha5BgUDGee0KMNCZBqDJOA+BzqF0ms9akjt1wPKXlqpSMGBLVI4icLCVOaijECDLG42o9pwoSXo
+        o0hMZnSSZl3f8HP7oXjaF8INUytI/Y7TV/z6CFTuiWgHcnlOOjj9E87a0rNQMqXkpgz3o0MpldTiC
+        ZIzDNVxdScS0OqZipt3YNOzaUVI7ItPQdX96u7P7w0w058N3KnvSc9BB3VtrVZVgVn+0zqPTuoUaM
+        +EtgkgmNXDrUQ2v3YZbMTJKlgwbSB5U/aWpsktKKjYazh5AsR2WUGg+PIKa6xxIDx50xZrC2pXiRj
+        0oyLBqtg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nduqg-009Lde-5Y; Mon, 11 Apr 2022 14:16:58 +0000
+Date:   Mon, 11 Apr 2022 07:16:58 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     akpm@linux-foundation.org, ying.huang@intel.com,
+        songmuchun@bytedance.com, hch@infradead.org, willy@infradead.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/9] mm/vmscan: add a comment about MADV_FREE pages
+ check in folio_check_dirty_writeback
+Message-ID: <YlQ4WkQ1CMYNtted@infradead.org>
+References: <20220409093500.10329-1-linmiaohe@huawei.com>
+ <20220409093500.10329-2-linmiaohe@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.1
-Subject: Re: [PATCH -next,v2 0/3] nfs: handle writeback errors correctly
-From:   "chenxiaosong (A)" <chenxiaosong2@huawei.com>
-To:     <trond.myklebust@hammerspace.com>, <anna@kernel.org>,
-        <smayhew@redhat.com>
-CC:     <linux-nfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <liuyongqiang13@huawei.com>, <yi.zhang@huawei.com>,
-        <zhangxiaoxu5@huawei.com>
-References: <20220401034409.256770-1-chenxiaosong2@huawei.com>
- <3381d7df-7254-e0ba-648c-6e763bda2ea4@huawei.com>
-In-Reply-To: <3381d7df-7254-e0ba-648c-6e763bda2ea4@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.52]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600015.china.huawei.com (7.193.23.52)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220409093500.10329-2-linmiaohe@huawei.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,63 +53,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ping ...
+On Sat, Apr 09, 2022 at 05:34:52PM +0800, Miaohe Lin wrote:
+> The MADV_FREE pages check in folio_check_dirty_writeback is a bit hard to
+> follow. Add a comment to make the code clear.
+> 
+> Suggested-by: Huang, Ying <ying.huang@intel.com>
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
+>  mm/vmscan.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index c77d5052f230..4a76be47bed1 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -1436,6 +1436,9 @@ static void folio_check_dirty_writeback(struct folio *folio,
+>  	/*
+>  	 * Anonymous pages are not handled by flushers and must be written
+>  	 * from reclaim context. Do not stall reclaim based on them
 
-在 2022/4/1 15:03, chenxiaosong (A) 写道:
-> 在 2022/4/1 11:44, ChenXiaoSong 写道:
->> v1:
->> cover letter: (nfs: check writeback errors correctly)
->>
->> v2:
->> - return more nuanced writeback errors in nfs_file_write().
->> - return writeback error in close()->flush() without consumed it.
->> - fix: nfs_file_write() will always call nfs_wb_all() even if there is no
->> new writeback error.
->>
->>
->> ChenXiaoSong (3):
->>    NFS: return more nuanced writeback errors in nfs_file_write()
->>    NFS: nfs{,4}_file_flush() return correct writeback errors
->>    Revert "nfs: nfs_file_write() should check for writeback errors"
->>
->>   fs/nfs/file.c     | 23 ++++++++++-------------
->>   fs/nfs/nfs4file.c |  8 ++++----
->>   fs/nfs/write.c    |  5 +----
->>   3 files changed, 15 insertions(+), 21 deletions(-)
->>
-> 
-> It is not a good idea to modify error sequence mechanism, as the 
-> `lib/errseq.c` described:
-> 
->      22  * Note that there is a risk of collisions if new errors are 
-> being recorded
->      23  * frequently, since we have so few bits to use as a counter.
->      24  *
->      25  * To mitigate this, one bit is used as a flag to tell whether 
-> the value has
->      26  * been sampled since a new value was recorded. That allows us 
-> to avoid bumping
->      27  * the counter if no one has sampled it since the last time an 
-> error was
->      28  * recorded.
-> 
-> 
-> So, if we want to report nuanced writeback error, it is better to detect 
-> wb error from filemap_check_errors(), and then return 
-> -(file->f_mapping->wb_err & MAX_ERRNO) to userspace without consume it.
-> 
->    nfs_mapping_set_error
->      mapping_set_error
->        __filemap_set_wb_err // record error sequence
->          errseq_set
->        set_bit(..., &mapping->flags) // record address_space flag
-> 
->    // it is not used to be reported, just used to detect
->    error = filemap_check_errors // -ENOSPC or -EIO
->      test_and_clear_bit(..., &mapping->flags) // error bit cleared
-> 
->    // now we try to return nuanced writeback error
->    if (error)
->    return filemap_check_wb_err(file->f_mapping, 0);
->      return -(file->f_mapping->wb_err & MAX_ERRNO)
-> 
+While you touch this please add a period at the end of the above
+sentence.
+
+Otherwise looks good:
+
+Reviewed-by: Christoph Hellwig <hch@lst.de>

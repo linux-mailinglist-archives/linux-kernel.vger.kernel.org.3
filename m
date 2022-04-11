@@ -2,48 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA19E4FBC94
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 14:56:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03CBA4FBC9C
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 14:58:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241844AbiDKM55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 08:57:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39596 "EHLO
+        id S1346228AbiDKNAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 09:00:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346330AbiDKM5s (ORCPT
+        with ESMTP id S1345215AbiDKNAh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 08:57:48 -0400
-Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E671228
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 05:55:34 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:b509:6862:2557:437a])
-        by baptiste.telenet-ops.be with bizsmtp
-        id HQvX2700U1G7NMJ01QvXyl; Mon, 11 Apr 2022 14:55:32 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1ndtZr-000ARl-6C; Mon, 11 Apr 2022 14:55:31 +0200
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1ndtZq-009JJB-OB; Mon, 11 Apr 2022 14:55:30 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Duc Nguyen <duc.nguyen.ub@renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
-        linux-renesas-soc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] memory: renesas-rpc-if: Simplify single/double data register access
-Date:   Mon, 11 Apr 2022 14:55:29 +0200
-Message-Id: <19358863deae03b1b26f473e878305a1c6e40d19.1649681638.git.geert+renesas@glider.be>
+        Mon, 11 Apr 2022 09:00:37 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94CD1B0E
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 05:58:23 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id s14so4166273plk.8
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 05:58:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jvUy3wIA8cnoCdKDgRF9Rlg0AmSDmCIJ2fGS8gSJyKQ=;
+        b=I8y5+JbyW76cCP6O8qlJOLg03kSxK+3z369dcJgu9adPP48NC7SmFG6tQjO5xp4YVB
+         Jr1wvb+gjTco969BZGPZXf1WDRAvBRUsPoHruBZ7wmfSKBC1ensacAw67p7Q3FWEnpRY
+         8/otECbNyY6cnknmopXTi7Prd4bGFv8JSjjAxvKHAYcoqI9imWDSeyyfjpPOVWpIRwmH
+         bUYCThkS7Es0rw0kqXKUIhaMysho6Wdo6MWxN6zrBLOmjhN10xQCxBENpN/BfkkaUlKZ
+         jEZHE2p1C/zTVt8UQorHTkKfBuavz5M/a7XzIX7HcRkix74Pt6vn8caDLKkKmiO82VEb
+         H7yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jvUy3wIA8cnoCdKDgRF9Rlg0AmSDmCIJ2fGS8gSJyKQ=;
+        b=LzOSg03Vh37pM9V/L66ubUdhgQBUDIxcwQgMbYPejnbpc4zh3Poum/U+1wClWa7QKR
+         6riQEprhkCyaW/FXHPtCbj2nFARNdCnj/H/1B3FkqvnDD6MOYqPnrKFcbnE5cqzbBXUH
+         RbwxrjW80bT5mtR0Yr+dZ5EndRDbdhnLHKlt5ojLo/fi1tGepfLrfml1CL42KmJnG9Pp
+         RF2EQbuuoDPUTbfI4Ot8JUJuWEHd2pb8rbc42GZIj3XX3pInGuWQLNTd4d6746HHxaEx
+         T9SW26lPZmTrr63LLGgJyK9hYlXsb1gwmJ4ojTwb9jacAXuw1WJf4PS0sWsVhDu8ueSe
+         cQ5w==
+X-Gm-Message-State: AOAM533dXogEYLLsWwf/U4QTLoSW5Q2/tP/oDrTXBBcvIqK5tVmuh6X+
+        n5BYK69BeHA/2Zq5vS/iUA==
+X-Google-Smtp-Source: ABdhPJxlriaAILwrx11gZma2WuB92Mcj2z3Z++NBQ6RIWaRXbMxrHv4+XQQTW6MZ4MBxx4n1vGU81Q==
+X-Received: by 2002:a17:90a:8591:b0:1b9:da10:2127 with SMTP id m17-20020a17090a859100b001b9da102127mr36488496pjn.13.1649681903018;
+        Mon, 11 Apr 2022 05:58:23 -0700 (PDT)
+Received: from localhost.localdomain ([144.202.91.207])
+        by smtp.gmail.com with ESMTPSA id e6-20020a63aa06000000b00380c8bed5a6sm29314668pgf.46.2022.04.11.05.58.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Apr 2022 05:58:22 -0700 (PDT)
+From:   Zheyu Ma <zheyuma97@gmail.com>
+To:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com
+Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Zheyu Ma <zheyuma97@gmail.com>
+Subject: [PATCH v2] mtd: rawnand: denali: Use managed device resources
+Date:   Mon, 11 Apr 2022 20:58:08 +0800
+Message-Id: <20220411125808.958276-1-zheyuma97@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,74 +68,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For manual write and read, factor out the common access to the first
-data register by keeping track of the current data pointer.
+All of the resources used by this driver has managed interfaces, so use
+them. Otherwise we will get the following splat:
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+[    4.472703] denali-nand-pci 0000:00:05.0: timeout while waiting for irq 0x1000
+[    4.474071] denali-nand-pci: probe of 0000:00:05.0 failed with error -5
+[    4.473538] nand: No NAND device found
+[    4.474068] BUG: unable to handle page fault for address: ffffc90005000410
+[    4.475169] #PF: supervisor write access in kernel mode
+[    4.475579] #PF: error_code(0x0002) - not-present page
+[    4.478362] RIP: 0010:iowrite32+0x9/0x50
+[    4.486068] Call Trace:
+[    4.486269]  <IRQ>
+[    4.486443]  denali_isr+0x15b/0x300 [denali]
+[    4.486788]  ? denali_direct_write+0x50/0x50 [denali]
+[    4.487189]  __handle_irq_event_percpu+0x161/0x3b0
+[    4.487571]  handle_irq_event+0x7d/0x1b0
+[    4.487884]  handle_fasteoi_irq+0x2b0/0x770
+[    4.488219]  __common_interrupt+0xc8/0x1b0
+[    4.488549]  common_interrupt+0x9a/0xc0
+
+Fixes: 93db446a424c ("mtd: nand: move raw NAND related code to the raw/ subdir")
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
 ---
- drivers/memory/renesas-rpc-if.c | 28 ++++++++--------------------
- 1 file changed, 8 insertions(+), 20 deletions(-)
+Changes in v2:
+    - Change the prefix
+    - Delete the extra space
+---
+ drivers/mtd/nand/raw/denali_pci.c | 15 ++++-----------
+ 1 file changed, 4 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/memory/renesas-rpc-if.c b/drivers/memory/renesas-rpc-if.c
-index 019a0822bde0e413..fb2a507ca2badc70 100644
---- a/drivers/memory/renesas-rpc-if.c
-+++ b/drivers/memory/renesas-rpc-if.c
-@@ -488,7 +488,7 @@ int rpcif_manual_xfer(struct rpcif *rpc)
- 	case RPCIF_DATA_OUT:
- 		while (pos < rpc->xferlen) {
- 			u32 bytes_left = rpc->xferlen - pos;
--			u32 nbytes, data[2];
-+			u32 nbytes, data[2], *p = data;
+diff --git a/drivers/mtd/nand/raw/denali_pci.c b/drivers/mtd/nand/raw/denali_pci.c
+index 20c085a30adc..de7e722d3826 100644
+--- a/drivers/mtd/nand/raw/denali_pci.c
++++ b/drivers/mtd/nand/raw/denali_pci.c
+@@ -74,22 +74,21 @@ static int denali_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 		return ret;
+ 	}
  
- 			smcr = rpc->smcr | RPCIF_SMCR_SPIE;
+-	denali->reg = ioremap(csr_base, csr_len);
++	denali->reg = devm_ioremap(denali->dev, csr_base, csr_len);
+ 	if (!denali->reg) {
+ 		dev_err(&dev->dev, "Spectra: Unable to remap memory region\n");
+ 		return -ENOMEM;
+ 	}
  
-@@ -502,15 +502,9 @@ int rpcif_manual_xfer(struct rpcif *rpc)
- 			rpc->xfer_size = nbytes;
+-	denali->host = ioremap(mem_base, mem_len);
++	denali->host = devm_ioremap(denali->dev, mem_base, mem_len);
+ 	if (!denali->host) {
+ 		dev_err(&dev->dev, "Spectra: ioremap failed!");
+-		ret = -ENOMEM;
+-		goto out_unmap_reg;
++		return -ENOMEM;
+ 	}
  
- 			memcpy(data, rpc->buffer + pos, nbytes);
--			if (nbytes == 8) {
--				regmap_write(rpc->regmap, RPCIF_SMWDR1,
--					     data[0]);
--				regmap_write(rpc->regmap, RPCIF_SMWDR0,
--					     data[1]);
--			} else {
--				regmap_write(rpc->regmap, RPCIF_SMWDR0,
--					     data[0]);
--			}
-+			if (nbytes == 8)
-+				regmap_write(rpc->regmap, RPCIF_SMWDR1, *p++);
-+			regmap_write(rpc->regmap, RPCIF_SMWDR0, *p++);
+ 	ret = denali_init(denali);
+ 	if (ret)
+-		goto out_unmap_host;
++		return ret;
  
- 			regmap_write(rpc->regmap, RPCIF_SMCR, smcr);
- 			ret = wait_msg_xfer_end(rpc);
-@@ -552,7 +546,7 @@ int rpcif_manual_xfer(struct rpcif *rpc)
- 		}
- 		while (pos < rpc->xferlen) {
- 			u32 bytes_left = rpc->xferlen - pos;
--			u32 nbytes, data[2];
-+			u32 nbytes, data[2], *p = data;
+ 	nsels = denali->nbanks;
  
- 			/* nbytes may only be 1, 2, 4, or 8 */
- 			nbytes = bytes_left >= max ? max : (1 << ilog2(bytes_left));
-@@ -569,15 +563,9 @@ int rpcif_manual_xfer(struct rpcif *rpc)
- 			if (ret)
- 				goto err_out;
+@@ -117,10 +116,6 @@ static int denali_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
  
--			if (nbytes == 8) {
--				regmap_read(rpc->regmap, RPCIF_SMRDR1,
--					    &data[0]);
--				regmap_read(rpc->regmap, RPCIF_SMRDR0,
--					    &data[1]);
--			} else {
--				regmap_read(rpc->regmap, RPCIF_SMRDR0,
--					    &data[0]);
--			}
-+			if (nbytes == 8)
-+				regmap_read(rpc->regmap, RPCIF_SMRDR1, p++);
-+			regmap_read(rpc->regmap, RPCIF_SMRDR0, p++);
- 			memcpy(rpc->buffer + pos, data, nbytes);
+ out_remove_denali:
+ 	denali_remove(denali);
+-out_unmap_host:
+-	iounmap(denali->host);
+-out_unmap_reg:
+-	iounmap(denali->reg);
+ 	return ret;
+ }
  
- 			pos += nbytes;
+@@ -129,8 +124,6 @@ static void denali_pci_remove(struct pci_dev *dev)
+ 	struct denali_controller *denali = pci_get_drvdata(dev);
+ 
+ 	denali_remove(denali);
+-	iounmap(denali->reg);
+-	iounmap(denali->host);
+ }
+ 
+ static struct pci_driver denali_pci_driver = {
 -- 
 2.25.1
 

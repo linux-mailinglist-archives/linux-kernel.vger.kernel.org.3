@@ -2,84 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D11FB4FB23C
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 05:18:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A26024FB23B
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 05:18:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244492AbiDKDUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 23:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41464 "EHLO
+        id S244486AbiDKDUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 23:20:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241621AbiDKDUL (ORCPT
+        with ESMTP id S241621AbiDKDUA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 23:20:11 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D9819036
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 20:17:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=zDQnIfuqccyfN2gbdNU5wS381S9cn2QMm9VzwK2eiK0=; b=XIJnU+2REbCnNo37VYNqYr4uMC
-        QI+gOWbr9ORxTTOGHy6CyFQyNu7x4zgJACYTDu8xzxBdfR2vcQ9bHAf2L5o0EPTsl4iJOw/KdW3b+
-        85Qv/iMHDmSTNCCuhIo0Qos0CgxpA1kdeNlkFzw1zlFspbJHC4grQ0jwRR1BWkBBygYVS7uSUFz8j
-        tml0SXnu5HAoby5c9CgkiDnje58za7WD7pJz8dfwjKxfSuWwZrMtIeoHiscowyfvtLRD72tSlXV3m
-        WNeeSWw8vz+6F5ssetqIxFzjAQaJftnaDks1997sZ6svd01T9sexygmqLw907Mm/TMynxc9jTxw7z
-        hu94XzdA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ndkYe-00Byas-Co; Mon, 11 Apr 2022 03:17:40 +0000
-Date:   Mon, 11 Apr 2022 04:17:40 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     akpm@linux-foundation.org, ying.huang@intel.com,
-        songmuchun@bytedance.com, hch@infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/9] mm/vmscan: introduce helper function
- reclaim_page_list()
-Message-ID: <YlOd1Lvw6ia1vul2@casper.infradead.org>
-References: <20220409093500.10329-1-linmiaohe@huawei.com>
- <20220409093500.10329-4-linmiaohe@huawei.com>
- <YlGNvn3cu2TftNRN@casper.infradead.org>
- <18ac3908-d162-f1ea-e91f-1da203272b74@huawei.com>
+        Sun, 10 Apr 2022 23:20:00 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44FB19034
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 20:17:47 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id n18so12732026plg.5
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 20:17:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Dc09Mr/cRd+6iXXPVvE/h653BCcb5B6zFZqdYQ/noeA=;
+        b=rzMBqfjbH13GjkNd1tBmKo8aloT92MH7r8uQkdBA376vb9LAQ0PHIrhQbqJkYk5siW
+         qETuqVGhOBNPDjVkS55FB1P6dcHmapNUBDi9MJ5mE/YdpnNxwZ08J93t2/I31LjcdVWz
+         xapIz9qLKpPnsXJ/On+QC8ZN8VL2nCh6e11OcpggkVKa+4009UNF5LxyjOoz3XRfUZYM
+         4A983aYwACy9/4W3EUdP4eHBa/bg/ElgS7VMWJhew/XQDk+HaTDb39opLgiHsajsHNLF
+         287aoOu1OEIuevlxZKmCEafIbE+fMwRYw42aARJMeYcKbqIPKX/9u1i7CNns2cBkuHI9
+         F51Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Dc09Mr/cRd+6iXXPVvE/h653BCcb5B6zFZqdYQ/noeA=;
+        b=ZWS5auMuX+QarjAsWMY+6zi8TpyFwUWtwaDeLtotEAJ1TM1VgZQCLxr9zPPOeKoAe5
+         krBWNQIL7ofRGtk8vuFwdGkoNo+PLLgjrH+/4rq4PXr2JdhQkdZbKfcdZVDtBb/kd1Dd
+         mNbYL6UoWsW6XXQ0u08YiSWORVbLTb+CTR9wa5tXlAfG+H3qgGpiGVr/BQGdQh/1VNO2
+         JB7rYGH70jdOjTlRWoXxEXxxCdgQ7SkJlsxVBaHqYcVqD8IhDHDE+MgjFrQqkupYWpS0
+         MLSg3OZFmQQ+4hIO2kEA8l/LPp3zc7yfKchjDnMGzWHJngBTs9KvfsddyBCc5omnMdLS
+         +a2Q==
+X-Gm-Message-State: AOAM530JIO+4mPD5/ri73QPaLCxdKx3Q//fGjTo8wuGASntCvB9jT9pl
+        0rfidvhDmjZ3ocmjZZpYKNgYQQ==
+X-Google-Smtp-Source: ABdhPJyZOTvJy00/iB836UyFTnhof3BtvKwJ4OR28/djCJgk7YRRuAcgMOQaw3eMSXkioq1mIoheSA==
+X-Received: by 2002:a17:903:41c9:b0:158:52e6:343d with SMTP id u9-20020a17090341c900b0015852e6343dmr5509730ple.146.1649647067276;
+        Sun, 10 Apr 2022 20:17:47 -0700 (PDT)
+Received: from localhost ([223.184.83.228])
+        by smtp.gmail.com with ESMTPSA id p4-20020a637404000000b00375948e63d6sm27214717pgc.91.2022.04.10.20.17.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Apr 2022 20:17:46 -0700 (PDT)
+Date:   Mon, 11 Apr 2022 08:47:45 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Rex-BC Chen <rex-bc.chen@mediatek.com>, rafael@kernel.org,
+        robh+dt@kernel.org, krzk+dt@kernel.org, matthias.bgg@gmail.com,
+        jia-wei.chang@mediatek.com, roger.lu@mediatek.com,
+        hsinyi@google.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH V2 02/15] cpufreq: mediatek: Use module_init and add
+ module_exit
+Message-ID: <20220411031745.eumhltqjldryp6rb@vireshk-i7>
+References: <20220408045908.21671-1-rex-bc.chen@mediatek.com>
+ <20220408045908.21671-3-rex-bc.chen@mediatek.com>
+ <1e3338a6-d1db-6ae1-2cd2-d45a4babc844@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <18ac3908-d162-f1ea-e91f-1da203272b74@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <1e3338a6-d1db-6ae1-2cd2-d45a4babc844@collabora.com>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 09:53:15AM +0800, Miaohe Lin wrote:
-> On 2022/4/9 21:44, Matthew Wilcox wrote:
-> > On Sat, Apr 09, 2022 at 05:34:54PM +0800, Miaohe Lin wrote:
-> >> +	nr_reclaimed = shrink_page_list(page_list, pgdat, &sc, &dummy_stat, false);
-> >> +	while (!list_empty(page_list)) {
-> >> +		folio = lru_to_folio(page_list);
-> >> +		list_del(&folio->lru);
-> >> +		putback_lru_page(&folio->page);
+On 08-04-22, 15:36, AngeloGioacchino Del Regno wrote:
+> Il 08/04/22 06:58, Rex-BC Chen ha scritto:
+> > From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
 > > 
-> > folio_putback_lru()
+> > - Use module_init instead of device_initcall.
+> > - Add a function for module_exit to unregister driver.
+> > 
+> > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
 > 
-> I thought folio_putback_lru is deliberately not to use because there is no caller of folio_putback_lru now.
-> But it seems I was wrong. Will do it in next version.
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Looks like all of the uses of it that I mooted during the last merge
-window ended up going away.
+Applied. Thanks.
 
-https://lore.kernel.org/all/20220204195852.1751729-47-willy@infradead.org/
-was obsoleted by commit b109b87050df
-
-https://lore.kernel.org/all/20220204195852.1751729-48-willy@infradead.org/
-and
-https://lore.kernel.org/all/20220204195852.1751729-50-willy@infradead.org/
-were also obsoleted by Hugh's mlock changes
-
-I also sent
-https://lore.kernel.org/all/YjJJIrENYb1qFHzl@casper.infradead.org/
-
-but never quite got it up to submittable quality.
+-- 
+viresh

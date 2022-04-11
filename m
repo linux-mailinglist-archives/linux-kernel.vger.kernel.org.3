@@ -2,89 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 987D94FC51D
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 21:26:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDE4B4FC515
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 21:25:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349651AbiDKT2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 15:28:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52654 "EHLO
+        id S1349623AbiDKT2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 15:28:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349663AbiDKT1o (ORCPT
+        with ESMTP id S1349550AbiDKT1Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 15:27:44 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573DD19006
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 12:25:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649705129; x=1681241129;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qVII6WCIx6urEHUvPWa41zc/m5lMhoAb+7gCWYfPbVg=;
-  b=iz/7QqgIyQEIKy8GDiUTvMaBZFR6HuWqQlKXe6qeZ+dYbLfQQHDq1PeO
-   x6Gyh+agUfytdUm7R4Kh6jAfE8SDq+rpNZEn83gFyaZJlL/E4rs2Ub3mU
-   FQilVWNXy7W50f4hqDSHgT5zR86gxYoTJQPPtepSFKbixWkCF3Lv0qhuu
-   9SlmpCQ5pqCeanCiHMXe/XB43FzjeGIQzB1iA3p8v9UlyQ8FZFjhCJlGo
-   aHM1QaYALXj2K1YB+oJcgdywIf9O/ZgK91tDk3Davg21fCCGsthBv5+yK
-   wAHOfe84WUS6DeADux2uXUh0IYev+D9UpdrV0VPAQ59c2bu/KBINYZFpH
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="261636842"
-X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="261636842"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 12:25:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="507235347"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 11 Apr 2022 12:25:27 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ndzfC-00026s-U1;
-        Mon, 11 Apr 2022 19:25:26 +0000
-Date:   Tue, 12 Apr 2022 03:24:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Keith Busch <keith.busch@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Rajat Jain <rajatja@google.com>,
-        Gwendal Grignou <gwendal@chromium.org>
-Subject: [RFC PATCH jsarha] BACKPORT: FROMGIT: nvme-pci: nvme_dev_pm_ops can
- be static
-Message-ID: <YlSAffL1A6Q6BCZ0@efd45e54f7c9>
-References: <202204120348.5EvqQlqc-lkp@intel.com>
+        Mon, 11 Apr 2022 15:27:25 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F5413E9D
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 12:25:10 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: bbeckett)
+        with ESMTPSA id 6AE271F43CA7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649705108;
+        bh=4lkEaK+tGV/Iygaw6i15VKgZAMgQnTCuG7b9sgm7nuo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=EzKp1sX/V4bn9TINNuY+5Kfkuk9fH9pDG9PqhGXEjgWgHpZAxoJroy0vjFcNNoxHs
+         CgDdmWtQWTZbT7hcW/Yzq3y7Gg6v7CQoH/JMGl8QMv6pmPD7w0pmAxzkrBLVlZPEaq
+         5FF652+3zOH6bKrWGr3Ns1oiZ/WdB76RMJ5Q+VCRIQ7Z6T084ig2PHiuMPpEciJzuI
+         r1ZWhPUU71rW6dizjQp55cVGpqZlG3UUrUoB6f5O275ZMjHcUEkfjEKgq1iTH2jmY1
+         hI4DhVM+rUV69znXtrE1H386mi2l3ME0lf379auzeMkj3zD9JldiFHaJSmKEbo2jsa
+         IUuMpyXMEuy7w==
+From:   Robert Beckett <bob.beckett@collabora.com>
+To:     dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Robert Beckett <bob.beckett@collabora.com>,
+        Matthew Auld <matthew.auld@intel.com>,
+        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
+        <thomas.hellstrom@linux.intel.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/5] drm/i915: instantiate ttm ranger manager for stolen memory
+Date:   Mon, 11 Apr 2022 19:24:49 +0000
+Message-Id: <20220411192453.1000147-2-bob.beckett@collabora.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220411192453.1000147-1-bob.beckett@collabora.com>
+References: <20220411192453.1000147-1-bob.beckett@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202204120348.5EvqQlqc-lkp@intel.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drivers/nvme/host/pci.c:2705:25: warning: symbol 'nvme_dev_pm_ops' was not declared. Should it be static?
+prepare for ttm based stolen region by using ttm range manager
+as the resource manager for stolen region.
 
-Fixes: bc7304877066 ("BACKPORT: FROMGIT: nvme-pci: Use host managed power state for suspend")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
 ---
- drivers/nvme/host/pci.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c |  6 ++--
+ drivers/gpu/drm/i915/intel_region_ttm.c      | 31 +++++++++++++++-----
+ 2 files changed, 27 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
-index 23f999fef88bcb..a33a32e6787799 100644
---- a/drivers/nvme/host/pci.c
-+++ b/drivers/nvme/host/pci.c
-@@ -2702,7 +2702,7 @@ static int nvme_suspend(struct device *dev)
- 		nvme_simple_suspend(dev) : nvme_deep_state(ndev);
- }
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c b/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
+index a10716f4e717..358f8a1a30ce 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
+@@ -58,11 +58,13 @@ i915_ttm_region(struct ttm_device *bdev, int ttm_mem_type)
+ 	struct drm_i915_private *i915 = container_of(bdev, typeof(*i915), bdev);
  
--const struct dev_pm_ops nvme_dev_pm_ops = {
-+static const struct dev_pm_ops nvme_dev_pm_ops = {
- 	.suspend = nvme_suspend,
- 	.resume = nvme_resume,
- 	.freeze = nvme_simple_suspend,
+ 	/* There's some room for optimization here... */
+-	GEM_BUG_ON(ttm_mem_type != I915_PL_SYSTEM &&
+-		   ttm_mem_type < I915_PL_LMEM0);
++	GEM_BUG_ON(ttm_mem_type == I915_PL_GGTT);
++
+ 	if (ttm_mem_type == I915_PL_SYSTEM)
+ 		return intel_memory_region_lookup(i915, INTEL_MEMORY_SYSTEM,
+ 						  0);
++	if (ttm_mem_type == I915_PL_STOLEN)
++		return i915->mm.stolen_region;
+ 
+ 	return intel_memory_region_lookup(i915, INTEL_MEMORY_LOCAL,
+ 					  ttm_mem_type - I915_PL_LMEM0);
+diff --git a/drivers/gpu/drm/i915/intel_region_ttm.c b/drivers/gpu/drm/i915/intel_region_ttm.c
+index 62ff77445b01..7d49ea72e33f 100644
+--- a/drivers/gpu/drm/i915/intel_region_ttm.c
++++ b/drivers/gpu/drm/i915/intel_region_ttm.c
+@@ -49,7 +49,7 @@ void intel_region_ttm_device_fini(struct drm_i915_private *dev_priv)
+ 
+ /*
+  * Map the i915 memory regions to TTM memory types. We use the
+- * driver-private types for now, reserving TTM_PL_VRAM for stolen
++ * driver-private types for now, reserving I915_PL_STOLEN for stolen
+  * memory and TTM_PL_TT for GGTT use if decided to implement this.
+  */
+ int intel_region_to_ttm_type(const struct intel_memory_region *mem)
+@@ -58,11 +58,17 @@ int intel_region_to_ttm_type(const struct intel_memory_region *mem)
+ 
+ 	GEM_BUG_ON(mem->type != INTEL_MEMORY_LOCAL &&
+ 		   mem->type != INTEL_MEMORY_MOCK &&
+-		   mem->type != INTEL_MEMORY_SYSTEM);
++		   mem->type != INTEL_MEMORY_SYSTEM &&
++		   mem->type != INTEL_MEMORY_STOLEN_SYSTEM &&
++		   mem->type != INTEL_MEMORY_STOLEN_LOCAL);
+ 
+ 	if (mem->type == INTEL_MEMORY_SYSTEM)
+ 		return TTM_PL_SYSTEM;
+ 
++	if (mem->type == INTEL_MEMORY_STOLEN_SYSTEM ||
++	    mem->type == INTEL_MEMORY_STOLEN_LOCAL)
++		return I915_PL_STOLEN;
++
+ 	type = mem->instance + TTM_PL_PRIV;
+ 	GEM_BUG_ON(type >= TTM_NUM_MEM_TYPES);
+ 
+@@ -86,10 +92,16 @@ int intel_region_ttm_init(struct intel_memory_region *mem)
+ 	int mem_type = intel_region_to_ttm_type(mem);
+ 	int ret;
+ 
+-	ret = i915_ttm_buddy_man_init(bdev, mem_type, false,
+-				      resource_size(&mem->region),
+-				      mem->io_size,
+-				      mem->min_page_size, PAGE_SIZE);
++	if (mem_type == I915_PL_STOLEN) {
++		ret = ttm_range_man_init(bdev, mem_type, false,
++					 resource_size(&mem->region) >> PAGE_SHIFT);
++		mem->is_range_manager = true;
++	} else {
++		ret = i915_ttm_buddy_man_init(bdev, mem_type, false,
++					      resource_size(&mem->region),
++					      mem->io_size,
++					      mem->min_page_size, PAGE_SIZE);
++	}
+ 	if (ret)
+ 		return ret;
+ 
+@@ -109,6 +121,7 @@ int intel_region_ttm_init(struct intel_memory_region *mem)
+ int intel_region_ttm_fini(struct intel_memory_region *mem)
+ {
+ 	struct ttm_resource_manager *man = mem->region_private;
++	int mem_type = intel_region_to_ttm_type(mem);
+ 	int ret = -EBUSY;
+ 	int count;
+ 
+@@ -139,8 +152,10 @@ int intel_region_ttm_fini(struct intel_memory_region *mem)
+ 	if (ret || !man)
+ 		return ret;
+ 
+-	ret = i915_ttm_buddy_man_fini(&mem->i915->bdev,
+-				      intel_region_to_ttm_type(mem));
++	if (mem_type == I915_PL_STOLEN)
++		ret = ttm_range_man_fini(&mem->i915->bdev, mem_type);
++	else
++		ret = i915_ttm_buddy_man_fini(&mem->i915->bdev, mem_type);
+ 	GEM_WARN_ON(ret);
+ 	mem->region_private = NULL;
+ 
+-- 
+2.25.1
+

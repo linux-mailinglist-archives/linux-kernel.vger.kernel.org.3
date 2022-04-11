@@ -2,67 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CAA74FC08C
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:24:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0ED74FC093
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:24:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348015AbiDKP0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 11:26:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47174 "EHLO
+        id S243375AbiDKP0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 11:26:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347937AbiDKPZ2 (ORCPT
+        with ESMTP id S1347950AbiDKPZ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 11:25:28 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9B83CA57;
-        Mon, 11 Apr 2022 08:23:01 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id t1so5848500wra.4;
-        Mon, 11 Apr 2022 08:23:01 -0700 (PDT)
+        Mon, 11 Apr 2022 11:25:29 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A133CA6C
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:23:02 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id h16so10155981wmd.0
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:23:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ekfMytrXwLVzydWFQD06PuCm7n67RUjTXkiwu4FLXvs=;
-        b=aPxWMdR75gd/4D6Lsy6bAdNv0SFjCryWfPLl0w8KOOFtNAf6s1SZSqbCXAVbLWd+pJ
-         2tTqjN3kozCFtNuc/PN8hFZqutlTtsh/gHPGftDNhxG4JPtbZST4fWvNiuo+T7gD7RQl
-         KzfBE/DA1IKlP/reHOiDpH6HeD4XrFZgxm6ac22fWqoXeEOMZTRosDaETGcLRg3unKWL
-         nPJPPc9qkiYLpcE8KqrfdhRDPcvA0xdrlinX/RGxfnIhohqNJhhXaIosDMuDTcIrZmff
-         cnE6kGmOQ/AqZcsskhOq8ko0TJ0mREy2BZKs/dkcFGqKYi22PK4Jy2ayKpnUdP+CNRy0
-         cSDg==
+        bh=6tIzMDmEoNcDD+2BtKiLkK7oNwkjSU9e9gIp9qy7KOQ=;
+        b=IlWfHjo0c3mj6Uyuu2TBZ7xyNyDp6o2n2U7Tteo3kdMh4IYxL1H4V/I72rQAYoXwb6
+         Kjezj9pJpqKoWUzefw/w6U1XcrqwB+V2ED5odZ4+wkaJBSMK/uZgPX2b6MrBz26YWEqe
+         +fakxkRcdEucrleJhlPkbzGnHIcG/wBLzFvRyhVRDb0qoMai7BGU5oMqkKDUDUJfqt/2
+         2PYZUuOXC1t0cDomJ/vCGYSVckeXNlD5G50WTCSXflJGxvpPqkAIw/fh8kXlHDgySRUh
+         lYhB3sGHvyILjSTeQJW29d8OjWTUy5PQkaDPPWcigXhEEgJ6QPXu2bxQ7AI5tRMjdkyk
+         xBbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ekfMytrXwLVzydWFQD06PuCm7n67RUjTXkiwu4FLXvs=;
-        b=390Nc54jA22Pr3FC2wvTTDR+XOwAVNgM5Zdg261Sy9zuJ/5e5iyyG7h5wCCYPtsc44
-         HYarHlA02kTOCEimcPrEnsIEb+swwsf7gNq5C8vDh50lPjkh0t9ofHI1Uox0B7geoHRY
-         BVDyQ4SkEmutINrKGZH54bmazINu6O0u1lrqrpyCq22M3RbWAK/xY/tIT7msar3Vv+oW
-         gfTzk+Jh9MZgy2fxnagG0hMM8UuJzFnDwKIBpRiG8P4sxJlQYb2clKbsWyHtK/DqXtYN
-         3InLYSjfP1FJhmwqp8MX9G3c2TnZ6NU73LSeQc3hdAhyLk1BAj74ujRFiqFpdoQu5Wg1
-         xoLA==
-X-Gm-Message-State: AOAM531B/5JgOprIaDDnX1TASxNj0Lwga+0szJFu7M59EG1WzjHHF7Jw
-        RpYFiYHgmYKVo3MOQbDUkLA=
-X-Google-Smtp-Source: ABdhPJw5in+mLmhkhW+3PfyFB6K3625bOXc51YWBV1OlklZNsIStdVNwB/LtUZwhDul2D2AeAHJ4vQ==
-X-Received: by 2002:a05:6000:18ae:b0:204:62a:20f4 with SMTP id b14-20020a05600018ae00b00204062a20f4mr26767163wri.640.1649690580241;
-        Mon, 11 Apr 2022 08:23:00 -0700 (PDT)
+        bh=6tIzMDmEoNcDD+2BtKiLkK7oNwkjSU9e9gIp9qy7KOQ=;
+        b=45KK4En8FTSiSU71D5wADQHHt/uGCsbwBNdZ9TGxd7TOw4eDA27HX5k9zhb33yCpxq
+         5vnJjXuX0hz9ETl781Vyig5wjFDuCl2P3u3HrLRHp81/KJRN1/D2jv7xEKBaXBJB7gnT
+         nQaMZY8RP42GOSS7CVaAzef2ekBwZ/tQLXopPcP31mponR+Vt0w2v9QMl1sXiF5VkuXu
+         E/u/eFwjndfLdZQwmFrNSIqJUDfAuUCgJ83LH2c3mTOPSSDC7057wiBHeVI7mzO2TTOr
+         O221opDE6M6YgTUvRSkV12/GtvYUhrp0k5DR+Y1Jp7c6l3nOSJE4k0bq+6kjSDjsaYL8
+         xj8g==
+X-Gm-Message-State: AOAM5331H+aEp0gkI4cDvTcFZm6Jwyh2+H7yi5ypZJi0+f5hpblgaKki
+        +olTY4BR7iOeIbUhN/j1oNw=
+X-Google-Smtp-Source: ABdhPJwxwQceQZlnxuSy4C3lfI9cmMFbbFFvMQAUsnOMvqm20+VFI/DZ4u1iM1ekYC+fPv6NjzuRjg==
+X-Received: by 2002:a7b:ce11:0:b0:38e:c257:4c76 with SMTP id m17-20020a7bce11000000b0038ec2574c76mr1870639wmc.151.1649690581211;
+        Mon, 11 Apr 2022 08:23:01 -0700 (PDT)
 Received: from linuxdev2.toradex.int (31-10-206-124.static.upc.ch. [31.10.206.124])
-        by smtp.gmail.com with ESMTPSA id a9-20020a7bc1c9000000b0038eb67e966esm5209374wmj.29.2022.04.11.08.22.59
+        by smtp.gmail.com with ESMTPSA id a9-20020a7bc1c9000000b0038eb67e966esm5209374wmj.29.2022.04.11.08.23.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 08:22:59 -0700 (PDT)
+        Mon, 11 Apr 2022 08:23:00 -0700 (PDT)
 From:   Max Krummenacher <max.oss.09@gmail.com>
 To:     max.krummenacher@toradex.com
-Cc:     Arnd Bergmann <arnd@arndb.de>, Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+Cc:     Alistair Francis <alistair@alistair23.me>,
+        Douglas Anderson <dianders@chromium.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         NXP Linux Team <linux-imx@nxp.com>,
-        Olof Johansson <olof@lixom.net>,
+        Otavio Salvador <otavio@ossystems.com.br>,
+        Pascal Zimmermann <pzimmermann@dh-electronics.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Sam Ravnborg <sam@ravnborg.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        soc@kernel.org
-Subject: [PATCH v2 13/14] ARM: dts: imx6dl-colibri: Add support for Toradex Aster carrier board
-Date:   Mon, 11 Apr 2022 17:22:33 +0200
-Message-Id: <20220411152234.12678-14-max.oss.09@gmail.com>
+        Shawn Guo <shawnguo@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 14/14] ARM: imx_v6_v7_defconfig: Enable the ADC part of the STMPE MFD
+Date:   Mon, 11 Apr 2022 17:22:34 +0200
+Message-Id: <20220411152234.12678-15-max.oss.09@gmail.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20220411152234.12678-1-max.oss.09@gmail.com>
 References: <20220411152234.12678-1-max.oss.09@gmail.com>
@@ -80,153 +83,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Max Krummenacher <max.krummenacher@toradex.com>
 
-Add support for Toradex Aster, small form-factor with header compatible
-with Arduino Uno and Raspberry Pi (RPi) maker boards.
-
-Additional detail available at
-https://www.toradex.com/products/carrier-boards/aster-carrier-board
+The SoM Apalis/Colibri iMX6 use the ADC of a STMPE 811. Enable
+its driver.
 
 Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+
 ---
 
-(no changes since v1)
+Changes in v2:
+- Addressed 'From' address as reported by checkpatch / Shawn's feedback.
+- Added Rob's Ack to the 'dt-bindings' patches.
 
- arch/arm/boot/dts/Makefile                 |   1 +
- arch/arm/boot/dts/imx6dl-colibri-aster.dts | 113 +++++++++++++++++++++
- 2 files changed, 114 insertions(+)
- create mode 100644 arch/arm/boot/dts/imx6dl-colibri-aster.dts
+ arch/arm/configs/imx_v6_v7_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index cb4cf5453a9f..f0e5fc7e5274 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -458,6 +458,7 @@ dtb-$(CONFIG_SOC_IMX6Q) += \
- 	imx6dl-aristainetos_7.dtb \
- 	imx6dl-aristainetos2_4.dtb \
- 	imx6dl-aristainetos2_7.dtb \
-+	imx6dl-colibri-aster.dtb \
- 	imx6dl-colibri-eval-v3.dtb \
- 	imx6dl-colibri-iris.dtb \
- 	imx6dl-colibri-iris-v2.dtb \
-diff --git a/arch/arm/boot/dts/imx6dl-colibri-aster.dts b/arch/arm/boot/dts/imx6dl-colibri-aster.dts
-new file mode 100644
-index 000000000000..74e8a6cd8bed
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6dl-colibri-aster.dts
-@@ -0,0 +1,113 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
-+/*
-+ * Copyright 2022 Toradex
-+ */
-+
-+/dts-v1/;
-+
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
-+#include "imx6dl.dtsi"
-+#include "imx6qdl-colibri.dtsi"
-+
-+/ {
-+	model = "Toradex Colibri iMX6DL/S on Colibri Aster Board";
-+	compatible = "toradex,colibri_imx6dl-aster", "toradex,colibri_imx6dl",
-+		     "fsl,imx6dl";
-+
-+	aliases {
-+		i2c0 = &i2c2;
-+		i2c1 = &i2c3;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+};
-+
-+/* Colibri SSP */
-+&ecspi4 {
-+	cs-gpios = <
-+		&gpio5 2 GPIO_ACTIVE_HIGH
-+		&gpio5 4 GPIO_ACTIVE_HIGH
-+	>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_ecspi4 &pinctrl_csi_gpio_2>;
-+	status = "okay";
-+};
-+
-+/* Colibri I2C: I2C3_SDA/SCL on SODIMM 194/196 */
-+&i2c3 {
-+	status = "okay";
-+};
-+
-+&iomuxc {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <
-+		&pinctrl_csi_gpio_1
-+		&pinctrl_gpio_2
-+		&pinctrl_gpio_aster
-+		&pinctrl_usbh_oc_1
-+		&pinctrl_usbc_id_1
-+		&pinctrl_weim_gpio_5
-+	>;
-+
-+	pinctrl_gpio_aster: gpioaster {
-+		fsl,pins = <
-+			MX6QDL_PAD_KEY_COL2__GPIO4_IO10		0x1b0b0
-+			MX6QDL_PAD_KEY_ROW2__GPIO4_IO11		0x1b0b0
-+			MX6QDL_PAD_KEY_ROW4__GPIO4_IO15		0x1b0b0
-+			MX6QDL_PAD_NANDF_D1__GPIO2_IO01		0x1b0b0
-+			MX6QDL_PAD_NANDF_D3__GPIO2_IO03		0x1b0b0
-+			MX6QDL_PAD_NANDF_D6__GPIO2_IO06		0x1b0b0
-+			MX6QDL_PAD_SD4_DAT0__GPIO2_IO08		0x1b0b0
-+			MX6QDL_PAD_SD4_DAT3__GPIO2_IO11		0x1b0b0
-+		>;
-+	};
-+};
-+
-+&pwm1 {
-+	status = "okay";
-+};
-+
-+&pwm2 {
-+	status = "okay";
-+};
-+
-+&pwm3 {
-+	status = "okay";
-+};
-+
-+&pwm4 {
-+	status = "okay";
-+};
-+
-+&reg_usb_host_vbus {
-+	status = "okay";
-+};
-+
-+&uart1 {
-+	status = "okay";
-+};
-+
-+&uart2 {
-+	status = "okay";
-+};
-+
-+&uart3 {
-+	status = "okay";
-+};
-+
-+&usbh1 {
-+	vbus-supply = <&reg_usb_host_vbus>;
-+	status = "okay";
-+};
-+
-+&usbotg {
-+	status = "okay";
-+};
-+
-+/* Colibri MMC */
-+&usdhc1 {
-+	status = "okay";
-+};
+diff --git a/arch/arm/configs/imx_v6_v7_defconfig b/arch/arm/configs/imx_v6_v7_defconfig
+index f7498df08dfe..88a3602c4e58 100644
+--- a/arch/arm/configs/imx_v6_v7_defconfig
++++ b/arch/arm/configs/imx_v6_v7_defconfig
+@@ -402,6 +402,7 @@ CONFIG_IIO=y
+ CONFIG_MMA8452=y
+ CONFIG_IMX7D_ADC=y
+ CONFIG_RN5T618_ADC=y
++CONFIG_STMPE_ADC=y
+ CONFIG_VF610_ADC=y
+ CONFIG_SENSORS_ISL29018=y
+ CONFIG_MAG3110=y
 -- 
 2.20.1
 

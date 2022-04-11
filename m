@@ -2,134 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ECAA4FC803
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 01:11:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5017A4FC80A
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 01:25:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232198AbiDKXNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 19:13:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38854 "EHLO
+        id S232482AbiDKX1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 19:27:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231964AbiDKXNX (ORCPT
+        with ESMTP id S229812AbiDKX1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 19:13:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 394891D309
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 16:11:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649718667;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zufRQemY0tMoebS+JfwFg0YIcxjRVmfAUD4mEizZNlQ=;
-        b=HpxB/47uPNBhYAJSMQ50n+0rE6T9IA15C9biVB/BuhzZbkFAfUvX1rlVVYBFbOkYB+XziX
-        1EIVsxtTFX2DGM+lf0M2M4JY5x9UxKDE79aRhcnkjaYgdhTzUZ9WEYeCPc5dDGlKcdhPBH
-        qAhalL1Som9zJIQ6kPFOVGFSY8WmaVQ=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-672-uKoFZ2jCN8qEWiLK1GVCEg-1; Mon, 11 Apr 2022 19:11:06 -0400
-X-MC-Unique: uKoFZ2jCN8qEWiLK1GVCEg-1
-Received: by mail-qt1-f199.google.com with SMTP id a24-20020ac81098000000b002e1e06a72aeso13690850qtj.6
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 16:11:06 -0700 (PDT)
+        Mon, 11 Apr 2022 19:27:22 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05CF2125F
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 16:25:05 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2eba37104a2so184411137b3.0
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 16:25:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ya3YKd5y6IepYaUPt1QYjg4a14IW27FChnQ2Rm/dnOo=;
+        b=jIX3CSth4/ROeETd+zz/rnkRQZLeX2FFvt7Jgbq2zA3yj4RnxbaMoDxwRZa/jKjTpB
+         idTosO5hqkFhJ6tqTZO1JFvUb+fGWxW28T8Fag6zBMy5mY9ae9yBXOo/4nh4qe2W2JA/
+         wBfxW4tkSb/9ea9DXj4TT16x2GrUXAhxHoEGOjdYdPVlZU3WPrFVGf1oPmHZqpZaBJr2
+         CN2rew8D8yoUq1CSNKnq/8jP034ukwAU4rgvucSqx9mQFaRvPmH9236d7P5PyIsp4oze
+         J1nc+qbptuCSIRr8vQpMXatxcQrxJxQl8Lfg71HGaACENZK9vIP58taLpdARBINrueAc
+         YQeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=zufRQemY0tMoebS+JfwFg0YIcxjRVmfAUD4mEizZNlQ=;
-        b=UbA/9yBoXoZfPoxRiCZSTyaHawaCxShnJLvOdPB4PxD86wVssMbKVVahspM6Q9gZHd
-         2NOyuPZJ4hRJ2sb5mG23g1mSg3ZQ7T/l0cUMpZVUsqfW/BpepMUMxiOft391mKTyVqYn
-         qKre6D+qJ8xOC/ZSe3FfP/OxR8MiLAKcNzmsfpcth/0hRHSpZMZJAg0MF4H3AKYb/3Q+
-         Sp57QuyWZimFcM+X871QdKC0U/za+FBBb+RTAEPs+1y0dwsIqZMmPTb5Vb9taTeygAD3
-         NyvpJxgTJk/buzJ8BJl3krgtteS1UADnL99fSqqWTOwKXbnAsNXQu3jriT277MPwKIwR
-         r4Rw==
-X-Gm-Message-State: AOAM5300oAGKmFXjE8KltE7ckEf8h5g5K2L6Xf2RJ/1arkGTEoAARFGt
-        +X74omMm2Z9SLbGX9bTHKiUG+KgA0dNCq9IJsJVZKsyji3OF9aUbsGXKjpxoHzR7qm5s9CBO3T6
-        e5S0HMuGvcrQupa3q/+l7VBtV
-X-Received: by 2002:a05:622a:1990:b0:2e1:a7bf:9222 with SMTP id u16-20020a05622a199000b002e1a7bf9222mr1349199qtc.230.1649718665431;
-        Mon, 11 Apr 2022 16:11:05 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyOChGI1LFSjIQBIXC7Y4dhktK0iomYjZxyQ1lT6EauFoXAynzxuFpju/Kdc7JhFpP3U56Naw==
-X-Received: by 2002:a05:622a:1990:b0:2e1:a7bf:9222 with SMTP id u16-20020a05622a199000b002e1a7bf9222mr1349187qtc.230.1649718665180;
-        Mon, 11 Apr 2022 16:11:05 -0700 (PDT)
-Received: from treble.redhat.com ([2600:1700:6e32:6c00::15])
-        by smtp.gmail.com with ESMTPSA id c3-20020ac87d83000000b002e1d1b3df15sm27243500qtd.44.2022.04.11.16.11.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 16:11:04 -0700 (PDT)
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     x86@kernel.org
-Cc:     Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] objtool: Fix function fallthrough detection for vmlinux
-Date:   Mon, 11 Apr 2022 16:10:32 -0700
-Message-Id: <b434cff98eca3a60dcc64c620d7d5d405a0f441c.1649718562.git.jpoimboe@redhat.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1649718562.git.jpoimboe@redhat.com>
-References: <cover.1649718562.git.jpoimboe@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ya3YKd5y6IepYaUPt1QYjg4a14IW27FChnQ2Rm/dnOo=;
+        b=qIoJHQ2BW2kd53fPwiJdLKk55CH/ArddjL7no813k6p+y40kiyQ6g0lBAMMfUaddSN
+         1wqU2/ifmoRWHR6+Kc6kICr+NxDjwyT39YbncQRrGju6lwL+DrNqRIwg8NJq1H7nDHE/
+         pUAhGs7nXbtyQn3ZIbKAfXONKiulCRD+ZjHw4H2F0Yv7NxouJObeYgHMswc14MEDQnBF
+         RssBi0dPBmKXVuhe/9wF98rcRlF0tCvzVOhrYCBXMeWs0UmcKTxbXu+rTOymsWkCZQbw
+         EOKE9h6UhiIG0p/mxDcWBksqaUlqGckdTZPoWUCPBF+KN1sK9uLTGd42ZdVyBy6tQz7s
+         QyHg==
+X-Gm-Message-State: AOAM532DN9j+AOA1417KhXtWIGmNYXMx+ascwyhDSnwrrRTKe65W6jDp
+        L+drjblvwM0ZDn63HhcufBnia0pKIMZt0yLgvKlNtg==
+X-Google-Smtp-Source: ABdhPJyBFJfDrlEG5OjDhpGsudkU7Ns3awL++PcO1zZ3vE/oJmBHHlxI3g3q2Vi9eFDhPd7aRBTxl46Vd5DavnARJB8=
+X-Received: by 2002:a81:ab51:0:b0:2eb:f5d7:f4bc with SMTP id
+ d17-20020a81ab51000000b002ebf5d7f4bcmr10861706ywk.42.1649719504653; Mon, 11
+ Apr 2022 16:25:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220321224358.1305530-1-bgardon@google.com> <20220321224358.1305530-8-bgardon@google.com>
+ <YlSzI9ZfzPQZhPqj@google.com>
+In-Reply-To: <YlSzI9ZfzPQZhPqj@google.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Mon, 11 Apr 2022 16:24:52 -0700
+Message-ID: <CANgfPd8PsV3AGF=dMWWo6McMzPYsj-Sh+Udgy9WDeF5xy3DJEg@mail.gmail.com>
+Subject: Re: [PATCH v2 7/9] KVM: x86/mmu: Add try_get_mt_mask to x86_ops
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Objtool's function fallthrough detection only works on C objects.
-The distinction between C and assembly objects no longer makes sense
-with objtool running on vmlinux.o.
+On Mon, Apr 11, 2022 at 4:00 PM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Mon, Mar 21, 2022, Ben Gardon wrote:
+> > Add another function for getting the memory type mask to x86_ops.
+> > This version of the function can fail, but it does not require a vCPU
+> > pointer. It will be used in a subsequent commit for in-place large page
+> > promotion when disabling dirty logging.
+> >
+> > No functional change intended.
+> >
+> > Signed-off-by: Ben Gardon <bgardon@google.com>
+> > ---
+> >  arch/x86/include/asm/kvm-x86-ops.h | 1 +
+> >  arch/x86/include/asm/kvm_host.h    | 2 ++
+> >  arch/x86/kvm/svm/svm.c             | 9 +++++++++
+> >  arch/x86/kvm/vmx/vmx.c             | 1 +
+> >  4 files changed, 13 insertions(+)
+> >
+> > diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+> > index 29affccb353c..29880363b5ed 100644
+> > --- a/arch/x86/include/asm/kvm-x86-ops.h
+> > +++ b/arch/x86/include/asm/kvm-x86-ops.h
+> > @@ -88,6 +88,7 @@ KVM_X86_OP_OPTIONAL(sync_pir_to_irr)
+> >  KVM_X86_OP_OPTIONAL_RET0(set_tss_addr)
+> >  KVM_X86_OP_OPTIONAL_RET0(set_identity_map_addr)
+> >  KVM_X86_OP_OPTIONAL_RET0(get_mt_mask)
+> > +KVM_X86_OP(try_get_mt_mask)
+> >  KVM_X86_OP(load_mmu_pgd)
+> >  KVM_X86_OP(has_wbinvd_exit)
+> >  KVM_X86_OP(get_l2_tsc_offset)
+> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> > index f72e80178ffc..a114e4782702 100644
+> > --- a/arch/x86/include/asm/kvm_host.h
+> > +++ b/arch/x86/include/asm/kvm_host.h
+> > @@ -1422,6 +1422,8 @@ struct kvm_x86_ops {
+> >       int (*set_tss_addr)(struct kvm *kvm, unsigned int addr);
+> >       int (*set_identity_map_addr)(struct kvm *kvm, u64 ident_addr);
+> >       u64 (*get_mt_mask)(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio);
+> > +     bool (*try_get_mt_mask)(struct kvm *kvm, gfn_t gfn,
+> > +                             bool is_mmio, u64 *mask);
+>
+> There's an old saying in Tennessee - I know it's in Texas, probably in Tennessee -
+> that says, fool me once, shame on... shame on you. Fool me... you can't get fooled again.
 
-Now that copy_user_64.S has been fixed up, and an objtool sibling call
-detection bug has been fixed, the asm code is in "compliance" and this
-hack is no longer needed.  Remove it.
+Haha shoot here I was saying it wrong all these years and getting
+fooled too many times.
 
-Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
----
- tools/objtool/check.c                   | 2 +-
- tools/objtool/include/objtool/objtool.h | 2 +-
- tools/objtool/objtool.c                 | 1 -
- 3 files changed, 2 insertions(+), 3 deletions(-)
+Paolo, did you already queue this series or should I send out a v3? I
+thought I saw the "queued,thanks" come through at some point, but
+maybe I'm mis-remembering.
 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 0f5d3de30e0d..5f10653eb5c2 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -3310,7 +3310,7 @@ static int validate_branch(struct objtool_file *file, struct symbol *func,
- 	while (1) {
- 		next_insn = next_insn_to_validate(file, insn);
- 
--		if (file->c_file && func && insn->func && func != insn->func->pfunc) {
-+		if (func && insn->func && func != insn->func->pfunc) {
- 			WARN("%s() falls through to next function %s()",
- 			     func->name, insn->func->name);
- 			return 1;
-diff --git a/tools/objtool/include/objtool/objtool.h b/tools/objtool/include/objtool/objtool.h
-index 7a5c13a78f87..a6e72d916807 100644
---- a/tools/objtool/include/objtool/objtool.h
-+++ b/tools/objtool/include/objtool/objtool.h
-@@ -27,7 +27,7 @@ struct objtool_file {
- 	struct list_head static_call_list;
- 	struct list_head mcount_loc_list;
- 	struct list_head endbr_list;
--	bool ignore_unreachables, c_file, hints, rodata;
-+	bool ignore_unreachables, hints, rodata;
- 
- 	unsigned int nr_endbr;
- 	unsigned int nr_endbr_int;
-diff --git a/tools/objtool/objtool.c b/tools/objtool/objtool.c
-index b09946f4e1d6..843ff3c2f28e 100644
---- a/tools/objtool/objtool.c
-+++ b/tools/objtool/objtool.c
-@@ -129,7 +129,6 @@ struct objtool_file *objtool_open_read(const char *_objname)
- 	INIT_LIST_HEAD(&file.static_call_list);
- 	INIT_LIST_HEAD(&file.mcount_loc_list);
- 	INIT_LIST_HEAD(&file.endbr_list);
--	file.c_file = !vmlinux && find_section_by_name(file.elf, ".comment");
- 	file.ignore_unreachables = no_unreachable;
- 	file.hints = false;
- 
--- 
-2.34.1
-
+>
+> Thou shalt not trick me again by using a bool for pass/fail!  Though this one
+> doesn't have same potential for pain as the TDP MMU's atomic operations.
+>
+> And as a bonus, if we use 0/-errno, then we can use KVM_X86_OP_OPTIONAL_RET0()
+> and SVM doesn't need to provide an implementation.
+>
+> Tangentially related to the return type, what about naming it something like
+> get_vm_wide_mt_mask() to convey exactly what it's doing?  The @kvm param kinda
+> does that, but IMO it doesn't do a good of capturing why the function can fail.
+> Adding "vm_wide" helps explain why it can, i.e. that there may not be a VM-wide
+> memtype established for the gfn.
+>
+> As penance for your boolean sin, can you slot this in earlier in your series?
+> It's obviously not a hard dependency, but using a u64 for the mask here and then
+> undoing the whole thing is rather silly.  Compile tested only at this point, I'll
+> test on an actual system ASAP and let you know if I did something stupid.
+>
+> From: Sean Christopherson <seanjc@google.com>
+> Date: Mon, 11 Apr 2022 15:12:16 -0700
+> Subject: [PATCH] KVM: x86: Restrict get_mt_mask() to a u8, use
+>  KVM_X86_OP_OPTIONAL_RET0
+>
+> Restrict get_mt_mask() to a u8 and reintroduce using a RET0 static_call
+> for the SVM implementation.  EPT stores the memtype information in the
+> lower 8 bits (bits 6:3 to be precise), and even returns a shifted u8
+> without an explicit cast to a larger type; there's no need to return a
+> full u64.
+>
+> Note, RET0 doesn't play nice with a u64 return on 32-bit kernels, see
+> commit bf07be36cd88 ("KVM: x86: do not use KVM_X86_OP_OPTIONAL_RET0 for
+> get_mt_mask").
+>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/include/asm/kvm-x86-ops.h | 2 +-
+>  arch/x86/include/asm/kvm_host.h    | 2 +-
+>  arch/x86/kvm/svm/svm.c             | 6 ------
+>  arch/x86/kvm/vmx/vmx.c             | 2 +-
+>  4 files changed, 3 insertions(+), 9 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+> index 96e4e9842dfc..0d16f21a6203 100644
+> --- a/arch/x86/include/asm/kvm-x86-ops.h
+> +++ b/arch/x86/include/asm/kvm-x86-ops.h
+> @@ -87,7 +87,7 @@ KVM_X86_OP(deliver_interrupt)
+>  KVM_X86_OP_OPTIONAL(sync_pir_to_irr)
+>  KVM_X86_OP_OPTIONAL_RET0(set_tss_addr)
+>  KVM_X86_OP_OPTIONAL_RET0(set_identity_map_addr)
+> -KVM_X86_OP(get_mt_mask)
+> +KVM_X86_OP_OPTIONAL_RET0(get_mt_mask)
+>  KVM_X86_OP(load_mmu_pgd)
+>  KVM_X86_OP(has_wbinvd_exit)
+>  KVM_X86_OP(get_l2_tsc_offset)
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 2c20f715f009..dc4d34f1bcf9 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1421,7 +1421,7 @@ struct kvm_x86_ops {
+>         int (*sync_pir_to_irr)(struct kvm_vcpu *vcpu);
+>         int (*set_tss_addr)(struct kvm *kvm, unsigned int addr);
+>         int (*set_identity_map_addr)(struct kvm *kvm, u64 ident_addr);
+> -       u64 (*get_mt_mask)(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio);
+> +       u8 (*get_mt_mask)(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio);
+>
+>         void (*load_mmu_pgd)(struct kvm_vcpu *vcpu, hpa_t root_hpa,
+>                              int root_level);
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index fc1725b7d05f..56f03eafe421 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -4011,11 +4011,6 @@ static bool svm_has_emulated_msr(struct kvm *kvm, u32 index)
+>         return true;
+>  }
+>
+> -static u64 svm_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
+> -{
+> -       return 0;
+> -}
+> -
+>  static void svm_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+>  {
+>         struct vcpu_svm *svm = to_svm(vcpu);
+> @@ -4673,7 +4668,6 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
+>         .check_apicv_inhibit_reasons = avic_check_apicv_inhibit_reasons,
+>         .apicv_post_state_restore = avic_apicv_post_state_restore,
+>
+> -       .get_mt_mask = svm_get_mt_mask,
+>         .get_exit_info = svm_get_exit_info,
+>
+>         .vcpu_after_set_cpuid = svm_vcpu_after_set_cpuid,
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index cf8581978bce..646fa609aa0d 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -7142,7 +7142,7 @@ static int __init vmx_check_processor_compat(void)
+>         return 0;
+>  }
+>
+> -static u64 vmx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
+> +static u8 vmx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
+>  {
+>         u8 cache;
+>
+>
+> base-commit: 59d9e75d641565603e7c293f4cec182d86db8586
+> --
+>
+>
+>
+>
+>
+>

@@ -2,163 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A18B4FB964
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 12:22:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B163E4FB970
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 12:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237851AbiDKKYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 06:24:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
+        id S1345370AbiDKKZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 06:25:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345287AbiDKKXG (ORCPT
+        with ESMTP id S1345418AbiDKKZO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 06:23:06 -0400
-Received: from mail.meizu.com (edge07.meizu.com [112.91.151.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0AE73F898
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 03:20:50 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail11.meizu.com
- (172.16.1.15) with Microsoft SMTP Server (TLS) id 14.3.487.0; Mon, 11 Apr
- 2022 18:20:49 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Mon, 11 Apr
- 2022 18:20:48 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     <akpm@linux-foundation.org>, <seanga2@gmail.com>,
-        <sfr@canb.auug.org.au>
-CC:     <linux-kernel@vger.kernel.org>, Haowen Bai <baihaowen@meizu.com>
-Subject: [PATCH] tools/vm/page_owner: support debug log to avoid huge log print
-Date:   Mon, 11 Apr 2022 18:20:46 +0800
-Message-ID: <1649672446-5685-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: git-send-email 2.7.4
+        Mon, 11 Apr 2022 06:25:14 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D5844761
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 03:21:56 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id a16-20020a17090a6d9000b001c7d6c1bb13so16318069pjk.4
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 03:21:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qqzor9pjG1TYg9IdQuC1oJUUk90Bi3aWHzEMNZOgNWI=;
+        b=GRj2XJmEuxLk9MuNfXIRBqtrYPZlM3M/2wbiZGetnbNVwtKr5R+ul55qIFUxO1UzCP
+         jE8ojn/a/ow7SB0XAeheQ9sZ6q+z1I1U6jdjtDvQJJicUSTu72neFcI92SEe9hcdeIxr
+         Y5YVns+azOlep1psaVSX8tU7QuUpWk9OPtY6YWHqFQaE6qJI+ZS8pcvfC2AtBURE4I7R
+         7Kz01riZEdAS5QlTP3FTBn2rL5fenLNNT78MzxWHLOEhofgD+JG/pLxjxlZTYR9Mt9nv
+         CcDCVrwk187XWOtacwyNGWc1dTkgC1SACn8kjlprh1kKIh5XJaxWlvi2ORjCzO3+vdWP
+         srog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qqzor9pjG1TYg9IdQuC1oJUUk90Bi3aWHzEMNZOgNWI=;
+        b=hQBa63l7UUY7++h7PH34N/vRIS6PSJyPvu0RsOW4NPSEowa6Lv9MUPDhMgDAxo+80i
+         Q4brRiwqkNJmthrxQUoXxCJ5IEepVkTb2sA6V0CFkMBkLJmnAVcCcKvi4h8OTO2re+P3
+         Euc3Z8HGgALw9VtWbG8TIhdXW9DW/H0ylb2dwvcFLwqKqTDPyjY5VnJHE79LbyGS3uus
+         KYhE1TsIWWPMPfKHzTJO5TvFfACVEuwwoOYAF64hxPNU3VbAAiDczEz6G3Hfr3yg+IW6
+         X0ox8+MOqN+/7/Huk6Nw7YEEk9fttJOY7yfW7iKs0SPU4i7HkyAfEG7dhVB3Qc9jCcLF
+         CVkQ==
+X-Gm-Message-State: AOAM530As1rBJCJiyABof9/cXuwHkPaXYCTgGn6/yQZt3/jizcZ4ymyp
+        QPkf57VeSIQcFUL6YoSxpr4=
+X-Google-Smtp-Source: ABdhPJwMtswdD8i5LKlqTZJu3XXMLQxkxOHfBS/uTn6eZ686k+5+si56IuMF5pcbwT9b2nvBEdG+KA==
+X-Received: by 2002:a17:902:e154:b0:158:71b7:ca8 with SMTP id d20-20020a170902e15400b0015871b70ca8mr1851201pla.21.1649672515341;
+        Mon, 11 Apr 2022 03:21:55 -0700 (PDT)
+Received: from makvihas.localhost.com ([2405:201:202b:15:4376:c658:ae1e:1781])
+        by smtp.gmail.com with ESMTPSA id z14-20020a17090a170e00b001cb7e69ee5csm4886318pjd.54.2022.04.11.03.21.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Apr 2022 03:21:55 -0700 (PDT)
+From:   Vihas Makwana <makvihas@gmail.com>
+To:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Straube <straube.linux@gmail.com>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Vihas Makwana <makvihas@gmail.com>
+Subject: [PATCH v2 0/7] drop some unnecessary wrappers
+Date:   Mon, 11 Apr 2022 15:51:29 +0530
+Message-Id: <20220411102136.14937-1-makvihas@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        NO_RDNS_DOTCOM_HELO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As normal usage, tool will print huge parser log and spend a lot of
-time printing, so it would be preferable add "-d" debug control to avoid
-this problem.
+Drop some unnecessary wrappers and update all the references
+accordingly.
+Tested on Comfast CF-WU810N RTL8188EUS wireless adapter.
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
----
- tools/vm/page_owner_sort.c | 28 ++++++++++++++++++++--------
- 1 file changed, 20 insertions(+), 8 deletions(-)
+v1 -> v2:
+Drop the wrapper functions with underscores prefixed.
 
-diff --git a/tools/vm/page_owner_sort.c b/tools/vm/page_owner_sort.c
-index beca990707fb..a32e446e5bb2 100644
---- a/tools/vm/page_owner_sort.c
-+++ b/tools/vm/page_owner_sort.c
-@@ -87,6 +87,7 @@ static int list_size;
- static int max_size;
- static int cull;
- static int filter;
-+static bool debug_on;
- 
- int read_block(char *buf, int buf_size, FILE *fin)
- {
-@@ -211,7 +212,8 @@ static int search_pattern(regex_t *pattern, char *pattern_str, char *buf)
- 
- 	err = regexec(pattern, buf, 2, pmatch, REG_NOTBOL);
- 	if (err != 0 || pmatch[1].rm_so == -1) {
--		fprintf(stderr, "no matching pattern in %s\n", buf);
-+		if (debug_on)
-+			fprintf(stderr, "no matching pattern in %s\n", buf);
- 		return -1;
- 	}
- 	val_len = pmatch[1].rm_eo - pmatch[1].rm_so;
-@@ -276,7 +278,8 @@ static int get_page_num(char *buf)
- 	errno = 0;
- 	order_val = strtol(order_str, &endptr, 10);
- 	if (order_val > 64 || errno != 0 || endptr == order_str || *endptr != '\0') {
--		fprintf(stderr, "wrong order in follow buf:\n%s\n", buf);
-+		if (debug_on)
-+			fprintf(stderr, "wrong order in follow buf:\n%s\n", buf);
- 		return 0;
- 	}
- 
-@@ -293,7 +296,8 @@ static pid_t get_pid(char *buf)
- 	errno = 0;
- 	pid = strtol(pid_str, &endptr, 10);
- 	if (errno != 0 || endptr == pid_str || *endptr != '\0') {
--		fprintf(stderr, "wrong/invalid pid in follow buf:\n%s\n", buf);
-+		if (debug_on)
-+			fprintf(stderr, "wrong/invalid pid in follow buf:\n%s\n", buf);
- 		return -1;
- 	}
- 
-@@ -311,7 +315,8 @@ static pid_t get_tgid(char *buf)
- 	errno = 0;
- 	tgid = strtol(tgid_str, &endptr, 10);
- 	if (errno != 0 || endptr == tgid_str || *endptr != '\0') {
--		fprintf(stderr, "wrong/invalid tgid in follow buf:\n%s\n", buf);
-+		if (debug_on)
-+			fprintf(stderr, "wrong/invalid tgid in follow buf:\n%s\n", buf);
- 		return -1;
- 	}
- 
-@@ -329,7 +334,8 @@ static __u64 get_ts_nsec(char *buf)
- 	errno = 0;
- 	ts_nsec = strtoull(ts_nsec_str, &endptr, 10);
- 	if (errno != 0 || endptr == ts_nsec_str || *endptr != '\0') {
--		fprintf(stderr, "wrong ts_nsec in follow buf:\n%s\n", buf);
-+		if (debug_on)
-+			fprintf(stderr, "wrong ts_nsec in follow buf:\n%s\n", buf);
- 		return -1;
- 	}
- 
-@@ -346,7 +352,8 @@ static __u64 get_free_ts_nsec(char *buf)
- 	errno = 0;
- 	free_ts_nsec = strtoull(free_ts_nsec_str, &endptr, 10);
- 	if (errno != 0 || endptr == free_ts_nsec_str || *endptr != '\0') {
--		fprintf(stderr, "wrong free_ts_nsec in follow buf:\n%s\n", buf);
-+		if (debug_on)
-+			fprintf(stderr, "wrong free_ts_nsec in follow buf:\n%s\n", buf);
- 		return -1;
- 	}
- 
-@@ -362,7 +369,8 @@ static char *get_comm(char *buf)
- 	search_pattern(&comm_pattern, comm_str, buf);
- 	errno = 0;
- 	if (errno != 0) {
--		fprintf(stderr, "wrong comm in follow buf:\n%s\n", buf);
-+		if (debug_on)
-+			fprintf(stderr, "wrong comm in follow buf:\n%s\n", buf);
- 		return NULL;
- 	}
- 
-@@ -594,6 +602,7 @@ static void usage(void)
- 		"-a\t\tSort by memory allocate time.\n"
- 		"-r\t\tSort by memory release time.\n"
- 		"-f\t\tFilter out the information of blocks whose memory has been released.\n"
-+		"-d\t\tPrint debug information.\n"
- 		"--pid <pidlist>\tSelect by pid. This selects the information of blocks whose process ID numbers appear in <pidlist>.\n"
- 		"--tgid <tgidlist>\tSelect by tgid. This selects the information of blocks whose Thread Group ID numbers appear in <tgidlist>.\n"
- 		"--name <cmdlist>\n\t\tSelect by command name. This selects the information of blocks whose command name appears in <cmdlist>.\n"
-@@ -618,11 +627,14 @@ int main(int argc, char **argv)
- 		{ 0, 0, 0, 0},
- 	};
- 
--	while ((opt = getopt_long(argc, argv, "afmnprstP", longopts, NULL)) != -1)
-+	while ((opt = getopt_long(argc, argv, "adfmnprstP", longopts, NULL)) != -1)
- 		switch (opt) {
- 		case 'a':
- 			set_single_cmp(compare_ts, SORT_ASC);
- 			break;
-+		case 'd':
-+			debug_on = true;
-+			break;
- 		case 'f':
- 			filter = filter | FILTER_UNRELEASE;
- 			break;
+Vihas Makwana (7):
+  staging: r8188eu: drop unnecessary wrapper _rtw_free_cmd_priv
+  staging: r8188eu: drop unnecessary wrapper _rtw_init_cmd_priv
+  staging: r8188eu: drop unnecessary wrapper _rtw_init_evt_priv
+  staging: r8188eu: drop unnecessary wrapper _rtw_init_mlme_priv
+  staging: r8188eu: drop unnecessary wrapper _rtw_free_mlme_priv
+  staging: r8188eu: drop unnecessary wrapper _rtw_alloc_network
+  staging: r8188eu: drop unnecessary wrapper _rtw_dequeue_cmd
+
+ drivers/staging/r8188eu/core/rtw_cmd.c     | 145 +++++++----------
+ drivers/staging/r8188eu/core/rtw_mlme.c    | 179 +++++++++------------
+ drivers/staging/r8188eu/include/rtw_mlme.h |   4 +-
+ 3 files changed, 135 insertions(+), 193 deletions(-)
+
 -- 
-2.7.4
+2.30.2
 

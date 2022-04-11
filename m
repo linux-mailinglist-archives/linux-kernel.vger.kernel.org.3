@@ -2,162 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C55A74FB4CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 09:29:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F8B84FB4CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 09:29:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245413AbiDKHbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 03:31:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39326 "EHLO
+        id S241055AbiDKHbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 03:31:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245409AbiDKHbY (ORCPT
+        with ESMTP id S245402AbiDKHbW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 03:31:24 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6D4BF51
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 00:29:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1649662152; x=1681198152;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=EAHUYmasKONgASPAdCuuk9HglTm/zmEr+zPN2FNrPX0=;
-  b=zH+vpVYBIqghRaXJ88NlkUGMHpmCG1VpeObysPl+AidyANGRbY6drudu
-   eUliB/C0jOkvaE4S/3zo4a2vGf2E/xdnKB4Ql7Fi4ONZ+QS7s16Z1O+gW
-   IjOTZdySVPZwVuiVm/ctAY0mqzgl4uQlK2r2JpDjnHvYxmAwcy8ISJRln
-   RI8Mi1wrToPJEOaERKF4MF8SWdC9o8R8weK7NhGRJku5vfaiLl9xgPh5W
-   x0SUv0HyhFus8aSc9BdCSxFz/iFVjX5K2HHOQ6YW0cUbkDvFbqB944HIL
-   so/i5rw5KQDGSLpL3SgYK07h5dXAyCTQw9JRaSq1kVu8OL9GR82DQQnBk
-   g==;
-X-IronPort-AV: E=Sophos;i="5.90,251,1643698800"; 
-   d="scan'208";a="159614222"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Apr 2022 00:29:11 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 11 Apr 2022 00:29:10 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
- Transport; Mon, 11 Apr 2022 00:29:10 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=I/p/ON5xYQL2RbEEPRSBK51YC1kDVAyCceTtu8Lm/ebK24ZepBQiK3NlmdXK9ZcHocgQp2VTk7kKPARJAQjgmYC63yk+eTHGtPhoSRe7h1n/rV82UJktsc3GORwSBmlz/1YPe/gqkVOm8bjkKZ8M9gm8rCfBlFMAvCh/9xteuCqW6/hYi/pG7ffs8kuKK4ONWT1zecfQVd0ykZaTDUAtGYsQT7sgTBZNGX3Mz0yHxIY1BeKo6AVH6WTb7Flz56jq9iNuUnKLV/+vppM0V00wMdBlYTzlnSuRXgSmtqMjNRb1ouy3LCTROynA+B6CLwJXMLbFKe80XVI8Yp+P/dUMSA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EAHUYmasKONgASPAdCuuk9HglTm/zmEr+zPN2FNrPX0=;
- b=jpBAf4BIRrQ+0Qs0n+1j4sUsS6k+pIE7NbCWK8ZJjJPs1yBK16zZN/2jsKWJrd05ARrVDFfuNYueHN1LsjRDXLVIRr5OnJLMQUZl4k/WQxNZR5jirsfdezdSrgbEBog91ooe8fpT5U+KcgizmgTMoQZ0mOyokj+iYlaCVrfppLEMWN8WLg9KXSKALUr8lbS74rjy7RaVtUVema/aB4lz7KlFF2kxb7eA77U4cOSt1FLwzaKVmnQZtdcFmxv11eQZJWJQhY3smxGlpUeo/HRrFNGtHUPdcP8guHt8KWVmxofgd20xUjvTDLYRNWH6ZHwTgHUDyEIw0wfT068vwczWYg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+        Mon, 11 Apr 2022 03:31:22 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5695026DE
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 00:29:09 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id x3so1409384wmj.5
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 00:29:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EAHUYmasKONgASPAdCuuk9HglTm/zmEr+zPN2FNrPX0=;
- b=lwFNHA9lYAQX3btfnRJRCS2l3zdISanSrqyDya+fMu10aJHiBPMnLadXhui8UV3hngf1vRaRB/myNNpm2odHoh35HApDOJ1Mt9x47A8DdCJJZ9ZMmONDcLGdFUBtA0AIM4z0XTW6d1LAeG7cSwJtQhTxz9BnmDRC+/I22mZ6tl0=
-Received: from SA2PR11MB4874.namprd11.prod.outlook.com (2603:10b6:806:f9::23)
- by BL1PR11MB5253.namprd11.prod.outlook.com (2603:10b6:208:310::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Mon, 11 Apr
- 2022 07:29:00 +0000
-Received: from SA2PR11MB4874.namprd11.prod.outlook.com
- ([fe80::39c7:55bc:f22f:ac8a]) by SA2PR11MB4874.namprd11.prod.outlook.com
- ([fe80::39c7:55bc:f22f:ac8a%5]) with mapi id 15.20.5144.029; Mon, 11 Apr 2022
- 07:29:00 +0000
-From:   <Tudor.Ambarus@microchip.com>
-To:     <michael@walle.cc>
-CC:     <p.yadav@ti.com>, <miquel.raynal@bootlin.com>, <richard@nod.at>,
-        <vigneshr@ti.com>, <linux-mtd@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <Nicolas.Ferre@microchip.com>,
-        <Takahiro.Kuwano@infineon.com>
-Subject: Re: [PATCH v2 6/8] mtd: spi-nor: core: Add helpers to read/write any
- register
-Thread-Topic: [PATCH v2 6/8] mtd: spi-nor: core: Add helpers to read/write any
- register
-Thread-Index: AQHYTXXPP+gcsTgSmEelpS0kVpg8Pw==
-Date:   Mon, 11 Apr 2022 07:29:00 +0000
-Message-ID: <c4dacc1b-d7c5-91d4-8162-2ef4db03f285@microchip.com>
-References: <20220228111712.111737-1-tudor.ambarus@microchip.com>
- <20220228111712.111737-7-tudor.ambarus@microchip.com>
- <f3dcb594fbf512faa33361b8bfc7b98f@walle.cc>
-In-Reply-To: <f3dcb594fbf512faa33361b8bfc7b98f@walle.cc>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 4cac4695-4b60-45c1-5861-08da1b8cf292
-x-ms-traffictypediagnostic: BL1PR11MB5253:EE_
-x-microsoft-antispam-prvs: <BL1PR11MB52536A9BAA48608C3738DCA4F0EA9@BL1PR11MB5253.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: EsW4MGcReU32o3iwkYkeruqJq4nL93mAo17FDntv1WCEViSuJyfPmuLVvr16dKYa4oTx73RM3F8oJ/SRjtndTQemIh8FnZYLMmDOfR4rqN8d7bVQTdEj6kT3w0VX4GZvKaOibCKmi4+794IwlRn5EpP4vlKb7rNg0PJPgs8DcObjSVvMFs+jMRMxyszRCVQ3/uZ7s2iud8kLq8SsXlfPbCcBuBnfXyVvLB/bGCAqCMRk9PpoOAZSAh78HIKrvdY3PwnLIZog+qblq2rIOuJ9KCjIrmeaw5Xj8JPdnf0GYzWshhWgmHIOPuSqwFteJmVdpvkgRM1VTvgMJ9U5a+ERMuySi+Az133tT34hF9QQ3m6uhEMvTtXqXrstqHpzzytUZSnOk9mElulyU3JutSSGeJookdzXFOIJkEaSuqOD9EwKqUZrBXjMXO551+e+5VhyJnjrKNkCncWDN9HB89w0icrVofEYKIazTSz4BqdNPELBDMSiLPtvadHPTobLxg7hmIbo7GTmhTvce5XfyApO/C2iWNXfz0n7RlKS55AOlkjCKV7x4B1+bRoJIRdlZRC/1xvuMzByPRq9Nta8V4NGeSLv8pLqgwKdq08rEeMmg6AJ1haFxcCxqCwh6Ob/DMlQumEtQUdVFxVTLj+gfXkrHFIsQzURNskJsWBc2VX/aTCNtW2aT5rMLP1O6bPuan2kY+PGWc6jKGll67M1ltdL4qAxkspx8y4XrLOe916JNXAN5miKzTqENe9IocekQ35KJTSaQY/9Lyhobc6xXXBBHw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR11MB4874.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(2906002)(6512007)(6486002)(8936002)(6506007)(4326008)(2616005)(186003)(31696002)(53546011)(86362001)(26005)(5660300002)(83380400001)(38070700005)(38100700002)(31686004)(122000001)(8676002)(36756003)(54906003)(66946007)(66556008)(66476007)(6916009)(66446008)(508600001)(316002)(91956017)(76116006)(64756008)(71200400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SlB2QTRUSUtRa0hlSzRMbjJhV0xFK0t2cGs1VWhmaHRkbkVrVmY4RnA5Kzdr?=
- =?utf-8?B?TUlQczRyVkpxSHh2VytML3dTVWpDZHNhcmJKT3JTVjFIUEh4K2JZKzhrOUVV?=
- =?utf-8?B?UW5CUGFYWUhmUkxUbHlZR1JUMUVFRUJWSE1WWU94OFRiVlF0aDRzeUdQWS8y?=
- =?utf-8?B?eVpucGF4Q0JCckNTV08vUnhuOW1HcEFmR0FlMnBUM3huT2dLSG5zbGFWcFNK?=
- =?utf-8?B?R3NuWGxZRzdYV0Z5cGVTcEFlVmZJRW1zQkxYY1luOFJnbGl2dHNKTHhQSUF5?=
- =?utf-8?B?d2kySTFPS2k5V2FOVEQyQnRYcDdrY1FCNVdLcHY5M0lzQjRyUjQ5ZVNncyt2?=
- =?utf-8?B?bUdQK1BrUTA1ZDc4SkNaUWE2NUZpa0pmQ25aWHJUYUlnRHpHNW9ZNXgwalQr?=
- =?utf-8?B?MUlyUFVhV05raWcrTytRcUFacTl6NnFlWDZOdDR5bUh3YkdURDFWeE9MSE9a?=
- =?utf-8?B?QUYvbGlNZ1grSkZNOEthSmpsVWFQaUFHVytaNGNBRCtFY0lyeWFWMUROekRx?=
- =?utf-8?B?MmFFeGdVOERuQmdXMm9qT2cxRy8vcTh1bVo0N0x1S0p3SE5sQnR6bzN0VWxD?=
- =?utf-8?B?aks2cWt4UkowSzBvMnltVkx1SzVnTU5jYXQwdWtld1ZwRVBhOEw3NStyZG90?=
- =?utf-8?B?K0Fyam1nMzdIMnJBdmtFaTZ0ZkM1TnlEY1czbjM5Nm5PdnF5dE81RG4zQ2lV?=
- =?utf-8?B?WE85V1FLY2JnNlhKL20rN3VzY0NkdVlieERuendvcURGYXpMMndnSnZYYXNZ?=
- =?utf-8?B?bDNHd2p6N3A5Z0pqOXR0a04xUHpRc0VrdjJvNU1scDFTbVBzdU1VV2NkRkZo?=
- =?utf-8?B?WUdicDlLMXRUb2tLV0dSL2kvOTZwSkFwSXlCNFF4S2xCTVZpQ0xpZWtsczdv?=
- =?utf-8?B?NHp4MUk4M3lIY2I0T0tpUlNCL00zVCtIVWh4YlFCUEJTMElrNmVheFA2WmhN?=
- =?utf-8?B?RGU5NUN5ZFMraHpYQXV2SGxaU3JXQWY4VXVUdFA4MmtEMUduNkVUZnI2aTNZ?=
- =?utf-8?B?eTlEb1VjMG9jNndwNFhDZHJicEtTNWZVY3NCZlF6b0ZTY1pubTA3WEpGY1kr?=
- =?utf-8?B?UnpLd0xXS3Zyck93anNSK01XMjNTN21ZMDNQWm1LYmhja0d4UHRBMExsRVhs?=
- =?utf-8?B?RlFncXBnMm1NU3lwWHVWSVFSVE1RWmZTc0FDLzF6YllzMmVqbFM2SU5NeXdQ?=
- =?utf-8?B?YWdFZUNHby9YLzJobG0yKzNrbEtWY3ZudHRoQ3ZPYkQrMFBHTGJQR2ZBNkcw?=
- =?utf-8?B?V2wvK2hmMGthUTJkRnlEUUhjYVp3TkhBNnhRcFoyb2tNenpIeURCUVE3YW84?=
- =?utf-8?B?RmNsbmJZV2tUSEpjRzNEc3JZZzE2S3V1MXg3eU00NVJqcElUVHgvNmkwUHNI?=
- =?utf-8?B?dUhHTndxendCSE1xbEVoS2RNNXY2UjBpS25rYXBQU2xCL0V2RUdaRzVlbHQz?=
- =?utf-8?B?RVBGY2lFZDBaVjJ3VzZ0Znhnd3Y1MWxLalc2RVlHYTc3OTVQdUY1ZHNiZFZB?=
- =?utf-8?B?WTgzQVo3WXhHRGYwTFIwOXdCSlkwY0xUakRsWjZseGYzSDRSOXhmcjluMlo2?=
- =?utf-8?B?Vy8zMCtSWExXLzRJdTQvZVExZU4wWkxqTk1qdVFZcU9JbHU0M0ZKOXlIbHpR?=
- =?utf-8?B?Y3lrV0FNSWRXTmppUTFHRjN5L0h6UWFod2VQeUpIWkpQZ2UyQWo2WkFKalZV?=
- =?utf-8?B?N0kxUWVvTDB4cU9JblhjMFdMRnlFSkV1RDdmQ0VKZFhLVUpDWlVzdkppZ1VN?=
- =?utf-8?B?c0YyWndNNFp1cWJNbzR2VzZqYloxc0ltU2Y4NWdXdVViL0xqck5sWU94VWlH?=
- =?utf-8?B?TVJuUU9WaE13dkRiY3d3d1lrbzRWUmNHR0dEUGJnaWtYSlFqa1Q0TVZPY3Uv?=
- =?utf-8?B?T0lvSlQ4T0c5NTd4RXc4aEtRSTJnaXNYM2Z4QzFDSCs3SEVqSTYrSDUzd2l5?=
- =?utf-8?B?SjFMTnVnSlBQVUltSEtDN3JrczJ3UzZMSnpNc0FubFVUUzRlajc5ZUhBRTlw?=
- =?utf-8?B?U0YvV0d3QmxhYno2N2lVaVNIMitnY1I4bGk1VUVWV0QzZy9mSEhZNFNFd2RS?=
- =?utf-8?B?VnpSTVpPb2pGSk1YN25wMFQ1RFBTRVRnVGhnM01BVmYwcTF2Q0VtNmQ4dGs2?=
- =?utf-8?B?RkFuTDhsWEtsanRRaHFzRjFROFd4aDVxbkNoakJ6b29FV2ZDY1FuanZ3bXhG?=
- =?utf-8?B?VHhGbHdra3d0amhVVnVRbWZlZTZVcDRkR1I1SDdsWExUY2lucDdWaUNyeXhj?=
- =?utf-8?B?czNlMEU5RzdoZHVQTm9qR2s3M3N3ZlhGNTdFaG9uZldOcHo0dmhmT0pMNk1s?=
- =?utf-8?B?TWtEZDBWSTNTdkdESmdMQWlJYkxkeVIrS0M4SmlDSStMY2k1RnBEUEpBd2RH?=
- =?utf-8?Q?8TUu6dEhBTgHGD+Q=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <64140DA8EFF3444386A9458D7C319E91@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=BjIUIVHFRbARmdqJRe7JFcL0nh+4wGOuv41+r40fWdI=;
+        b=MuLfQOFk/KAOARiT/isjKEZQH3RO9g/f2PwC4L1MEy1HX5VN2i+1JchNxj/7//NHDI
+         5FZjHGf5bAGnHqpBIlpYlxF0Tsaa6xrD7BqcpF+WLnes4Mwjioohb2J+nbj2r5221gHi
+         CnLYsVA3qKZz+Rl5IprSZPYiygSlElE8OWzgBcrOJubleRMgITm2vtSthqHwoXc0PWIJ
+         dxbxUQlRplARqIyVNT8nnNtzPTNRdhR2eS6pE3N/xa8exOwcKl4rQ+mZ/rhFx2zA8yrT
+         NNSINcsWrnVYOp2du2V2SVaPCKoKzgTnZpgvuJBZGFfmYNWMyEdwx7Ra8dFl1z1X3tWX
+         Ts6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=BjIUIVHFRbARmdqJRe7JFcL0nh+4wGOuv41+r40fWdI=;
+        b=P5MFK4zRqvm0vqG40ElAVz9viTOFPl0Ld7f7vX3IrKEkL5P/71HN97SGPykGRyE0DS
+         HtZwKr/7unPwwjQID/iIBNmA9oKia88cyE8EG2NtkTAjHyFrsWT3Ol3hIEpBwqNGIk4h
+         cnLgThHNYU2wHqqM1Qjw52QQs+b1HhUzXmT8DBg+UOOxoTRzSzva6RXZAJ2YQkfYf4FC
+         D5kIMc0+wpQYs+I59lruFvf0V2dgkSKhFL+vAdU9NQlkQYw0vCMe0165JDNsxbf2J9tX
+         QfGRXzysyVGzWW45AFSr2mUy2g2TmkP+SawO67FfzvKQbyg7spStY+VlS0jXq9XuyM4g
+         RkEg==
+X-Gm-Message-State: AOAM533i+hb74wZOjSbM3QJn5Hffk1TLe5kR8uq1sIzDHsfNXYFUsvh4
+        +WnI1v15EsYPDgkbFow36EgzIw==
+X-Google-Smtp-Source: ABdhPJzmfll2qXYcZqhlizr+zOKwVsn5I9nhVKuGkB89gKjHT4X7JIp8cZT8MNzxRKbCeRL3pocFww==
+X-Received: by 2002:a7b:c382:0:b0:388:2e76:49ed with SMTP id s2-20020a7bc382000000b003882e7649edmr27994701wmj.195.1649662147772;
+        Mon, 11 Apr 2022 00:29:07 -0700 (PDT)
+Received: from ?IPV6:2001:861:44c0:66c0:d1:e096:d183:1bc5? ([2001:861:44c0:66c0:d1:e096:d183:1bc5])
+        by smtp.gmail.com with ESMTPSA id v5-20020adfe4c5000000b001edc1e5053esm25261851wrm.82.2022.04.11.00.29.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Apr 2022 00:29:07 -0700 (PDT)
+Message-ID: <d6fabb26-8a29-fd5a-c03e-c059b28c9407@baylibre.com>
+Date:   Mon, 11 Apr 2022 09:29:09 +0200
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA2PR11MB4874.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4cac4695-4b60-45c1-5861-08da1b8cf292
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Apr 2022 07:29:00.3989
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vBYYlRL6xMfhsUVkoMNtLKCqwsQCQF9kxoGZVzsg7uKRCJOfFo2/4QXKAIhNxQdXS/xjHYdJzkq1blo/xo89rlcbYicIB5ql1qt5leSLAgE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5253
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 2/2] i2c: meson: Use 50% duty cycle for I2C clock
+Content-Language: en-US
+To:     Lucas Tanure <tanure@linux.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220409164334.157664-1-tanure@linux.com>
+ <20220409164334.157664-3-tanure@linux.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+In-Reply-To: <20220409164334.157664-3-tanure@linux.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -165,81 +79,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMy8yMi8yMiAwMToxMywgTWljaGFlbCBXYWxsZSB3cm90ZToNCj4gQW0gMjAyMi0wMi0yOCAx
-MjoxNywgc2NocmllYiBUdWRvciBBbWJhcnVzOg0KPj4gVGhlcmUgYXJlIG1hbnVmYWN0dXJlcnMg
-dGhhdCB1c2UgcmVnaXN0ZXJzIGluZGV4ZWQgYnkgYWRkcmVzcy4gU29tZSBvZg0KPj4gdGhlbSBz
-dXBwb3J0ICJyZWFkL3dyaXRlIGFueSByZWdpc3RlciIgb3Bjb2Rlcy4gUHJvdmlkZSBjb3JlIG1l
-dGhvZHMgdGhhdA0KPj4gY2FuIGJlIHVzZWQgYnkgYWxsIG1hbnVmYWN0dXJlcnMuIFNQSSBOT1Ig
-Y29udHJvbGxlciBvcHMgYXJlIGludGVudGlvbmFsbHkNCj4+IG5vdCBzdXBwb3J0ZWQgYXMgd2Ug
-aW50ZW5kIHRvIG1vdmUgYWxsIHRoZSBTUEkgTk9SIGNvbnRyb2xsZXIgZHJpdmVycw0KPj4gdW5k
-ZXIgdGhlIFNQSSBzdWJzeXN0ZW0uDQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogVHVkb3IgQW1iYXJ1
-cyA8dHVkb3IuYW1iYXJ1c0BtaWNyb2NoaXAuY29tPg0KPj4gVGVzdGVkLWJ5OiBUYWthaGlybyBL
-dXdhbm8gPFRha2FoaXJvLkt1d2Fub0BpbmZpbmVvbi5jb20+DQo+PiBSZXZpZXdlZC1ieTogUHJh
-dHl1c2ggWWFkYXYgPHAueWFkYXZAdGkuY29tPg0KPj4gLS0tDQo+PiDCoGRyaXZlcnMvbXRkL3Nw
-aS1ub3IvY29yZS5jIHwgNDEgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysN
-Cj4+IMKgZHJpdmVycy9tdGQvc3BpLW5vci9jb3JlLmggfMKgIDQgKysrKw0KPj4gwqAyIGZpbGVz
-IGNoYW5nZWQsIDQ1IGluc2VydGlvbnMoKykNCj4+DQo+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9t
-dGQvc3BpLW5vci9jb3JlLmMgYi9kcml2ZXJzL210ZC9zcGktbm9yL2NvcmUuYw0KPj4gaW5kZXgg
-MjgxZTNkMjVmNzRjLi5mMWFhMWUyZWE3YzkgMTAwNjQ0DQo+PiAtLS0gYS9kcml2ZXJzL210ZC9z
-cGktbm9yL2NvcmUuYw0KPj4gKysrIGIvZHJpdmVycy9tdGQvc3BpLW5vci9jb3JlLmMNCj4+IEBA
-IC0zMDcsNiArMzA3LDQ3IEBAIHNzaXplX3Qgc3BpX25vcl93cml0ZV9kYXRhKHN0cnVjdCBzcGlf
-bm9yICpub3IsDQo+PiBsb2ZmX3QgdG8sIHNpemVfdCBsZW4sDQo+PiDCoMKgwqDCoCByZXR1cm4g
-bm9yLT5jb250cm9sbGVyX29wcy0+d3JpdGUobm9yLCB0bywgbGVuLCBidWYpOw0KPj4gwqB9DQo+
-Pg0KPj4gKy8qKg0KPj4gKyAqIHNwaV9ub3JfcmVhZF9yZWcoKSAtIHJlYWQgcmVnaXN0ZXIgdG8g
-Zmxhc2ggbWVtb3J5DQo+PiArICogQG5vcjrCoMKgwqDCoMKgwqDCoCBwb2ludGVyIHRvICdzdHJ1
-Y3Qgc3BpX25vcicuDQo+PiArICogQG9wOsKgwqDCoMKgwqDCoMKgIFNQSSBtZW1vcnkgb3BlcmF0
-aW9uLiBvcC0+ZGF0YS5idWYgbXVzdCBiZSBETUEtYWJsZS4NCj4+ICsgKiBAcHJvdG86wqDCoMKg
-IFNQSSBwcm90b2NvbCB0byB1c2UgZm9yIHRoZSByZWdpc3RlciBvcGVyYXRpb24uDQo+PiArICoN
-Cj4+ICsgKiBSZXR1cm46IHplcm8gb24gc3VjY2VzcywgLWVycm5vIG90aGVyd2lzZQ0KPj4gKyAq
-Lw0KPj4gK2ludCBzcGlfbm9yX3JlYWRfcmVnKHN0cnVjdCBzcGlfbm9yICpub3IsIHN0cnVjdCBz
-cGlfbWVtX29wICpvcCwNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZW51bSBzcGlfbm9y
-X3Byb3RvY29sIHByb3RvKQ0KPj4gK3sNCj4+ICvCoMKgwqAgaWYgKCFub3ItPnNwaW1lbSkNCj4+
-ICvCoMKgwqDCoMKgwqDCoCByZXR1cm4gLUVPUE5PVFNVUFA7DQo+PiArDQo+PiArwqDCoMKgIHNw
-aV9ub3Jfc3BpbWVtX3NldHVwX29wKG5vciwgb3AsIHByb3RvKTsNCj4+ICvCoMKgwqAgcmV0dXJu
-IHNwaV9ub3Jfc3BpbWVtX2V4ZWNfb3Aobm9yLCBvcCk7DQo+PiArfQ0KPj4gKw0KPj4gKy8qKg0K
-Pj4gKyAqIHNwaV9ub3Jfd3JpdGVfcmVnKCkgLSB3cml0ZSByZWdpc3RlciB0byBmbGFzaCBtZW1v
-cnkNCj4+ICsgKiBAbm9yOsKgwqDCoMKgwqDCoMKgIHBvaW50ZXIgdG8gJ3N0cnVjdCBzcGlfbm9y
-Jw0KPj4gKyAqIEBvcDrCoMKgwqDCoMKgwqDCoCBTUEkgbWVtb3J5IG9wZXJhdGlvbi4gb3AtPmRh
-dGEuYnVmIG11c3QgYmUgRE1BLWFibGUuDQo+PiArICogQHByb3RvOsKgwqDCoCBTUEkgcHJvdG9j
-b2wgdG8gdXNlIGZvciB0aGUgcmVnaXN0ZXIgb3BlcmF0aW9uLg0KPj4gKyAqDQo+PiArICogUmV0
-dXJuOiB6ZXJvIG9uIHN1Y2Nlc3MsIC1lcnJubyBvdGhlcndpc2UNCj4+ICsgKi8NCj4+ICtpbnQg
-c3BpX25vcl93cml0ZV9yZWcoc3RydWN0IHNwaV9ub3IgKm5vciwgc3RydWN0IHNwaV9tZW1fb3Ag
-Km9wLA0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGVudW0gc3BpX25vcl9wcm90b2Nv
-bCBwcm90bykNCj4+ICt7DQo+PiArwqDCoMKgIGludCByZXQ7DQo+PiArDQo+PiArwqDCoMKgIGlm
-ICghbm9yLT5zcGltZW0pDQo+PiArwqDCoMKgwqDCoMKgwqAgcmV0dXJuIC1FT1BOT1RTVVBQOw0K
-Pj4gKw0KPj4gK8KgwqDCoCByZXQgPSBzcGlfbm9yX3dyaXRlX2VuYWJsZShub3IpOw0KPj4gK8Kg
-wqDCoCBpZiAocmV0KQ0KPj4gK8KgwqDCoMKgwqDCoMKgIHJldHVybiByZXQ7DQo+PiArwqDCoMKg
-IHNwaV9ub3Jfc3BpbWVtX3NldHVwX29wKG5vciwgb3AsIHByb3RvKTsNCj4+ICvCoMKgwqAgcmV0
-dXJuIHNwaV9ub3Jfc3BpbWVtX2V4ZWNfb3Aobm9yLCBvcCk7DQo+PiArfQ0KPj4gKw0KPj4gwqAv
-KioNCj4+IMKgICogc3BpX25vcl93cml0ZV9lbmFibGUoKSAtIFNldCB3cml0ZSBlbmFibGUgbGF0
-Y2ggd2l0aCBXcml0ZSBFbmFibGUgY29tbWFuZC4NCj4+IMKgICogQG5vcjrCoMKgwqAgcG9pbnRl
-ciB0byAnc3RydWN0IHNwaV9ub3InLg0KPj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvbXRkL3NwaS1u
-b3IvY29yZS5oIGIvZHJpdmVycy9tdGQvc3BpLW5vci9jb3JlLmgNCj4+IGluZGV4IGY5NTIwNjFk
-NWMyNC4uN2M3MDQ0NzU5NDZkIDEwMDY0NA0KPj4gLS0tIGEvZHJpdmVycy9tdGQvc3BpLW5vci9j
-b3JlLmgNCj4+ICsrKyBiL2RyaXZlcnMvbXRkL3NwaS1ub3IvY29yZS5oDQo+PiBAQCAtNTU0LDYg
-KzU1NCwxMCBAQCBzc2l6ZV90IHNwaV9ub3JfcmVhZF9kYXRhKHN0cnVjdCBzcGlfbm9yICpub3Is
-DQo+PiBsb2ZmX3QgZnJvbSwgc2l6ZV90IGxlbiwNCj4+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqAgdTggKmJ1Zik7DQo+PiDCoHNzaXplX3Qgc3BpX25vcl93cml0ZV9kYXRhKHN0cnVjdCBz
-cGlfbm9yICpub3IsIGxvZmZfdCB0bywgc2l6ZV90IGxlbiwNCj4+IMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoCBjb25zdCB1OCAqYnVmKTsNCj4+ICtpbnQgc3BpX25vcl9yZWFkX3JlZyhz
-dHJ1Y3Qgc3BpX25vciAqbm9yLCBzdHJ1Y3Qgc3BpX21lbV9vcCAqb3AsDQo+PiArwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgIGVudW0gc3BpX25vcl9wcm90b2NvbCBwcm90byk7DQo+PiAraW50IHNw
-aV9ub3Jfd3JpdGVfcmVnKHN0cnVjdCBzcGlfbm9yICpub3IsIHN0cnVjdCBzcGlfbWVtX29wICpv
-cCwNCj4+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBlbnVtIHNwaV9ub3JfcHJvdG9jb2wg
-cHJvdG8pOw0KPiANCj4gVGhlc2UgbG9vayByYXRoZXIgb2RkLiBJJ2QgZXhwZWN0IHRvIHNlZSBh
-biBhZGRyZXNzIGFuZCBzdWNoIGZvcg0KPiBzdWNoIGEgInJhbmRvbSByZWdpc3RlciByZWFkL3dy
-aXRlIi4gTG9va3MgbGlrZSB0aGVzZSBmdW5jdGlvbnMNCg0KVGhlcmUgYXJlIGF0IGxlYXN0IDYg
-ZnVuY3Rpb24gcGFyYW1ldGVycyBpZiB3ZSB3YW50IHRvIGV4cGxpY2l0bHkgcGFzcyBmdW5jdGlv
-bg0KYXJndW1lbnRzOiBwb2ludGVyIHRvIG5vciwgb3Bjb2RlLCBhZGRyLm5ieXRlcywgYWRkciwg
-YnVmLm5ieXRlcywgYnVmLiBOb3QgdG8NCm1lbnRpb24gbmR1bW15IGZvciByZWFkcy4gQSBiaXQg
-dG9vIG11Y2ggZm9yIG1lLCBzbyBJIHByZWZlcnJlZCBwYXNzaW5nIHNwaV9tZW1fb3ANCmRpcmVj
-dGx5Lg0KDQo+IGRvbid0IGRvIG11Y2ggZXhjZXB0IGNhbGxpbmcgc3BpX25vcl9zcGltZW1fc2V0
-dXBfb3AoKSBhbmQNCj4gZXhlY19vcCgpIGFuZCBkb24ndCBoYXZlIGFueXRoaW5nIHRvIGRvIHdp
-dGggcmVnaXN0ZXIgYWNjZXNzDQo+IChleGNlcHQgbWF5YmUgZm9yIHRoZSB3cml0ZSBlbmFibGUp
-LiBDYW4ndCB3ZSBoYXZlIGEgYml0IG1vcmUNCj4gc29waGlzdGljYXRlZCBpbnRlcmZhY2UgaW4g
-dGhlIGNvcmU/IFNvbWV0aGluZyB0aGF0IGNhbGxzIGludG8NCj4gdGhlIGZsYXNoIGRyaXZlciB0
-byBhc3NlbWJsZSB0aGUgc3BpX21lbV9vcCBhdXRvbWF0aWNhbGx5PyBBc3N1bWluZw0KDQpMb29r
-cyBsaWtzIHNvbWUgcGluZy1wb25nLCBwYXNzaW5nIHNwaV9tZW1fb3AgZGlyZWN0bHkgaXMgc3Ry
-YWlnaHQgZm9yd2FyZA0KYW5kIGNhbiBhZGRyZXNzIGFsbCBtYW51ZmFjdHVyZXIgdmFyaWV0aWVz
-Lg0KDQpTbyBJIHByZWZlciBrZWVwaW5nIHRoZXNlIGdlbmVyaWMgbWV0aG9kcywgaXQgd2lsbCBy
-ZWR1Y2UgY29kZSBkdXBsaWNhdGlvbi4NCg0KVGhhbmtzLA0KdGENCg==
+On 09/04/2022 18:43, Lucas Tanure wrote:
+> The duty cycle of 33% is less than the required
+> by the I2C specs for the LOW period of the SCL
+> clock.
+> 
+> Move the duty cyle to 50% for 100Khz or lower
+> clocks, and (40% High SCL / 60% Low SCL) duty
+> cycle for clocks above 100Khz.
+> 
+> Signed-off-by: Lucas Tanure <tanure@linux.com>
+> ---
+>   drivers/i2c/busses/i2c-meson.c | 70 +++++++++++++++++++++++++++++-----
+>   1 file changed, 60 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-meson.c b/drivers/i2c/busses/i2c-meson.c
+> index 4b4a5b2d77ab..50dab123380a 100644
+> --- a/drivers/i2c/busses/i2c-meson.c
+> +++ b/drivers/i2c/busses/i2c-meson.c
+> @@ -65,10 +65,6 @@ enum {
+>   	STATE_WRITE,
+>   };
+>   
+> -struct meson_i2c_data {
+> -	unsigned char div_factor;
+> -};
+> -
+>   /**
+>    * struct meson_i2c - Meson I2C device private data
+>    *
+> @@ -109,6 +105,10 @@ struct meson_i2c {
+>   	const struct meson_i2c_data *data;
+>   };
+>   
+> +struct meson_i2c_data {
+> +	void (*set_clk_div)(struct meson_i2c *i2c, unsigned int freq);
+> +};
+> +
+>   static void meson_i2c_set_mask(struct meson_i2c *i2c, int reg, u32 mask,
+>   			       u32 val)
+>   {
+> @@ -137,14 +137,62 @@ static void meson_i2c_add_token(struct meson_i2c *i2c, int token)
+>   	i2c->num_tokens++;
+>   }
+>   
+> -static void meson_i2c_set_clk_div(struct meson_i2c *i2c, unsigned int freq)
+> +static void meson_gxbb_axg_i2c_set_clk_div(struct meson_i2c *i2c, unsigned int freq)
+> +{
+> +	unsigned long clk_rate = clk_get_rate(i2c->clk);
+> +	unsigned int div_h, div_l;
+> +
+> +	/* According to I2C-BUS Spec 2.1, in FAST-MODE, the minimum LOW period is 1.3uS, and
+> +	 * minimum HIGH is least 0.6us.
+> +	 * For 400000 freq, the period is 2.5us. To keep within the specs, give 40% of period to
+> +	 * HIGH and 60% to LOW. This means HIGH at 1.0us and LOW 1.5us.
+> +	 * The same applies for Fast-mode plus, where LOW is 0.5us and HIGH is 0.26us.
+> +	 * Duty = H/(H + L) = 2/5
+> +	 */
+> +	if (freq <= I2C_MAX_STANDARD_MODE_FREQ) {
+> +		div_h = DIV_ROUND_UP(clk_rate, freq);
+> +		div_l = DIV_ROUND_UP(div_h, 4);
+> +		div_h = DIV_ROUND_UP(div_h, 2) - FILTER_DELAY;
+> +	} else {
+> +		div_h = DIV_ROUND_UP(clk_rate * 2, freq * 5) - FILTER_DELAY;
+> +		div_l = DIV_ROUND_UP(clk_rate * 3, freq * 5 * 2);
+> +	}
+> +
+> +	/* clock divider has 12 bits */
+> +	if (div_h > GENMASK(11, 0)) {
+> +		dev_err(i2c->dev, "requested bus frequency too low\n");
+> +		div_h = GENMASK(11, 0);
+> +	}
+> +	if (div_l > GENMASK(11, 0)) {
+> +		dev_err(i2c->dev, "requested bus frequency too low\n");
+> +		div_l = GENMASK(11, 0);
+> +	}
+> +
+> +	meson_i2c_set_mask(i2c, REG_CTRL, REG_CTRL_CLKDIV_MASK,
+> +			   FIELD_PREP(REG_CTRL_CLKDIV_MASK, div_h & GENMASK(9, 0)));
+> +
+> +	meson_i2c_set_mask(i2c, REG_CTRL, REG_CTRL_CLKDIVEXT_MASK,
+> +			   FIELD_PREP(REG_CTRL_CLKDIVEXT_MASK, div_h >> 10));
+> +
+> +	/* set SCL low delay */
+> +	meson_i2c_set_mask(i2c, REG_SLAVE_ADDR, REG_SLV_SCL_LOW_MASK,
+> +			   FIELD_PREP(REG_SLV_SCL_LOW_MASK, div_l));
+> +
+> +	/* Enable HIGH/LOW mode */
+> +	meson_i2c_set_mask(i2c, REG_SLAVE_ADDR, REG_SLV_SCL_LOW_EN, REG_SLV_SCL_LOW_EN);
+> +
+> +	dev_dbg(i2c->dev, "%s: clk %lu, freq %u, divh %u, divl %u\n", __func__,
+> +		clk_rate, freq, div_h, div_l);
+> +}
+> +
+> +static void meson6_i2c_set_clk_div(struct meson_i2c *i2c, unsigned int freq)
+>   {
+>   	unsigned long clk_rate = clk_get_rate(i2c->clk);
+>   	unsigned int div;
+>   
+>   	div = DIV_ROUND_UP(clk_rate, freq);
+>   	div -= FILTER_DELAY;
+> -	div = DIV_ROUND_UP(div, i2c->data->div_factor);
+> +	div = DIV_ROUND_UP(div, 4);
+>   
+>   	/* clock divider has 12 bits */
+>   	if (div > GENMASK(11, 0)) {
+> @@ -472,7 +520,9 @@ static int meson_i2c_probe(struct platform_device *pdev)
+>   	meson_i2c_set_mask(i2c, REG_SLAVE_ADDR,
+>   			   REG_SLV_SDA_FILTER_MASK | REG_SLV_SCL_FILTER_MASK, 0);
+>   
+> -	meson_i2c_set_clk_div(i2c, timings.bus_freq_hz);
+> +	if (!i2c->data->set_clk_div)
+> +		return -EINVAL;
+> +	i2c->data->set_clk_div(i2c, timings.bus_freq_hz);
+>   
+>   	ret = i2c_add_adapter(&i2c->adap);
+>   	if (ret < 0) {
+> @@ -494,15 +544,15 @@ static int meson_i2c_remove(struct platform_device *pdev)
+>   }
+>   
+>   static const struct meson_i2c_data i2c_meson6_data = {
+> -	.div_factor = 4,
+> +	.set_clk_div = meson6_i2c_set_clk_div,
+>   };
+>   
+>   static const struct meson_i2c_data i2c_gxbb_data = {
+> -	.div_factor = 4,
+> +	.set_clk_div = meson_gxbb_axg_i2c_set_clk_div,
+>   };
+>   
+>   static const struct meson_i2c_data i2c_axg_data = {
+> -	.div_factor = 3,
+> +	.set_clk_div = meson_gxbb_axg_i2c_set_clk_div,
+>   };
+>   
+>   static const struct of_device_id meson_i2c_match[] = {
+
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>

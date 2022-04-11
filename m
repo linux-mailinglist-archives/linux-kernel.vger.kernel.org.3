@@ -2,163 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 938504FC43D
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 20:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ECAF4FC440
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 20:41:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349210AbiDKSnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 14:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47550 "EHLO
+        id S244376AbiDKSnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 14:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349204AbiDKSnL (ORCPT
+        with ESMTP id S1348234AbiDKSnh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 14:43:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B318411161
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 11:40:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649702454;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iST1JCeDfb6wVIu/vYvu8a0R4dF4ChWv1KEudThOes8=;
-        b=ZC9kfnFUL8G2SEDsZ/xZriGQFhKqYGVdlvpaO5hbqK4/c7ZE7JUDT8XSllTNsU/iQnDfxY
-        m0xiX8m1+gpnOeI6tdwAtplw6zqmSlOGWo7QjLBfPccI/DJjmySsFHR4nfYf+0dbowOLBb
-        4PrG63RXK+xIcpG0ev/Alj7I66BdIf4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-97-hHUTFYQpNaCZV7iWB-ciXQ-1; Mon, 11 Apr 2022 14:40:46 -0400
-X-MC-Unique: hHUTFYQpNaCZV7iWB-ciXQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4CE461C05EAA;
-        Mon, 11 Apr 2022 18:40:45 +0000 (UTC)
-Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5140A145BA41;
-        Mon, 11 Apr 2022 18:40:44 +0000 (UTC)
-Message-ID: <e873727e-22db-3330-015d-bd6581a2937a@redhat.com>
-Date:   Mon, 11 Apr 2022 14:40:44 -0400
+        Mon, 11 Apr 2022 14:43:37 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08on2079.outbound.protection.outlook.com [40.107.100.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414C511161
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 11:41:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VYZp8+sed5Fjz62B5CS5nKugy9a91amSoSZB8npME8zex+0PkVqjL5QWK+sy6zv+uz5ypK+JCtIQME7NpJjO0sqT6K9ruq0QzYDuvcugY0F0ih6F+cS6PSfDIMNB2l2T6v6wZIUTm+3dRmJPp4mK36WETSmCn1hSjP3NYj3ZyMhPEeIFZMPAMJ/FtF/kUgmf3AC97xW40TpVyz29umsWo87U2UEfA9Vu34odu+uRPzTY1tRqlvUTQPV8xo9I0R/jDtQxbf5rXRiK2T/SJL57ROPLy4iWlN8xV5FDpNqi+UMhfJlYZbdGJOe3Pwerh5hijLp7HqFE2cAvRKTd7B7ylQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OrQkmR1tuAfcRtXFufLUeGoEXQcxXdgqbubCVg4IMUc=;
+ b=JCK0Rl4QSBc7pbmQnRSFTB2NHTQY08fkCobKUbmod1HiMPMWxgdHjjm9I5CM4KCWmihHAzKv78uX44gc+t9k8ApKY1ubo+2hGzJF/uWhu0UjSRSpQrk6RiVf2MLksIzvG7hMORDE18Jnww40xQ2wf3ikUMdD9Hvk93Qne3akgAfRV/m3+ofOaknroUnIrPXsmtx5WS4EPyiJWq7SZM8hHal2uZ6R0ZNR76Ot8+yYt0DIpKkjWb8dmbCDqsU0NdaJPep3SYeGALXFoodn3LjWDN2g1IzwWO3mEyJLJZ7YooTTYWmdc+IBHoRzCfq4+IKIOjQmI9UkjYiKYtXLU9DE7A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OrQkmR1tuAfcRtXFufLUeGoEXQcxXdgqbubCVg4IMUc=;
+ b=ni8Htv5VaOCYO/5mg9GNRLPfvLlz7h/LURXsBUmdavfx0YP7TVJvWk34/jHN3qw4E9TsOZHs7Ib3vR+FKiBh0tUgcwDItwdQ0Fc7Yx+aFGTUR2HWvlXBbiaNFhrzE7NqLPloO4cctIj5BMqd04ADhxNg+9tWwDn76mf4c5rQS+LeGnRe5Vf1WhRfRbn+WbOWrRNpUTK+OjPfiS2DxVqiNruLOhg/vQ5lVVT3YtDKiP/7KZRVcFPUQqVBCoMKMRBSNWWUw41rB7GySmiClfpXmLpwoAd1Yc6VaEvAJ9tHodFKDKKrDH2A17Ul6uflMlgL+Grz5tGPMQbz2n6KRGvEkg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by DM6PR12MB3913.namprd12.prod.outlook.com (2603:10b6:5:1cc::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Mon, 11 Apr
+ 2022 18:41:20 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::cdfb:f88e:410b:9374]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::cdfb:f88e:410b:9374%6]) with mapi id 15.20.5144.029; Mon, 11 Apr 2022
+ 18:41:20 +0000
+Date:   Mon, 11 Apr 2022 15:41:19 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        intel-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 27/34] drm/i915/gvt: remove kvmgt_guest_{init,exit}
+Message-ID: <20220411184119.GD2120790@nvidia.com>
+References: <20220411141403.86980-1-hch@lst.de>
+ <20220411141403.86980-28-hch@lst.de>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220411141403.86980-28-hch@lst.de>
+X-ClientProxiedBy: MN2PR20CA0007.namprd20.prod.outlook.com
+ (2603:10b6:208:e8::20) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v5] locking/rwsem: Make handoff bit handling more
- consistent
-Content-Language: en-US
-To:     john.p.donnelly@oracle.com,
-        chenguanyou <chenguanyou9338@gmail.com>,
-        gregkh@linuxfoundation.org
-Cc:     dave@stgolabs.net, hdanton@sina.com, linux-kernel@vger.kernel.org,
-        mazhenhua@xiaomi.com, mingo@redhat.com, peterz@infradead.org,
-        quic_aiquny@quicinc.com, will@kernel.org, sashal@kernel.org
-References: <20211116012912.723980-1-longman@redhat.com>
- <20220214154741.12399-1-chenguanyou@xiaomi.com>
- <3f02975c-1a9d-be20-32cf-f1d8e3dfafcc@oracle.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <3f02975c-1a9d-be20-32cf-f1d8e3dfafcc@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2ccb4e33-e74d-4f34-0d73-08da1beadee9
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3913:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB3913F72880F02C5DBC1D9AA1C2EA9@DM6PR12MB3913.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nV155tWZMkGVeBB2R1XG55pZcP7YnFxlHbwE9c0bNRdXS8QJyQWppLsxpNm1+pTxhRi/CUXru1EsW8dM9y23MP61MKfSBe4xL374abHuPY3o4Umuild7K+UJDXFRXu++An5a9j0EaNGNUHReQUTzxsqp3yVzMc7XmtP5dh4UzhFaqnpGttL/kKbbZ4LtYhXz+WpZIDSx3Wbnosy3us6WTReK9HnnK2ydumTcbgivmlRadW8UvFuisLJgLXPYUBDeZ/S4h6gGt8MltvNSA529vsYVHPJpJXAI5xlyRHlbjO1CyLlxps8OM5RWN2Pk0AL6773xkV0Zqn5ZuZUd/Hz+lCV7CA00KD25hpHlrmi8VX1mNIVRiCH1k0GzWNm6+84WXbJYeILxjvgEtaT0odJ3sMD9j9iOWCkI5gQ9bEBwkXYHlIoqqGA/9I+u4xc2hkp+iJKIdaYVLCieAC1MHajV9j8BhdA/sQmOPDQJqr8f1OC+pGa6IrxYmrHQkLBewdxlea0h58zH9+qEAjpL5YAHeykDKHq87pvOfXfi0pSTiV7F6Tm98K41bEOcYD+wDbwJzYyDJbWlzN6NS4LkDYrmwyCBgaD/5ZECEYI8K/PwrPqCpyxbwuXj0ApnrHW0QSg5nc8JcDIDAvBWd/gNhA48Gg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(5660300002)(6486002)(7416002)(33656002)(54906003)(6916009)(66556008)(508600001)(8676002)(66946007)(4326008)(4744005)(38100700002)(66476007)(316002)(2906002)(2616005)(83380400001)(186003)(26005)(86362001)(1076003)(6512007)(6506007)(36756003)(8936002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WY+MS+2HAaxnscBoy/g2FIfPLGxJfO5oO9p6eoA+MVWlNgzxVrtVqEuVEybh?=
+ =?us-ascii?Q?8ALZmQ8iRTIo1r4BXVxLyisiSDgJGHPg4RIKiJB5u+/mHTgeJlQVZkEpyj0I?=
+ =?us-ascii?Q?06M4LfHXjCzkB+C0wkSu+3NX0wgkO4SlxM6mt+nnsPg7Kou5Tegy6XS6tMmP?=
+ =?us-ascii?Q?duMp7jsaEUuayfRgZI6xyCpKqML0BPoCJCJvLL0kNQih9yITkW7PeM+yb/vs?=
+ =?us-ascii?Q?y2+d4PObMoW9D6ZsX7H0Q449iFmLSF7aS9bEmEwwEVr8EOFrs4P/LJwE3GUn?=
+ =?us-ascii?Q?bbTf1kzeQKLKxpRSrGjM6FAxLjmx7QjDpbzWrSWFgO7DSOfeFJ978v1h3EyE?=
+ =?us-ascii?Q?J8fogT38uBoJ9OQ/GrgnTSAyykmDVsgNfvr9//HeekVRCPRtFrroWGcsr49I?=
+ =?us-ascii?Q?EIc4RbIKpYGLvzcTKP4iU0LsIdvtxuSZ7VqFyDREtoaSjGI6IPVDnKRaibmO?=
+ =?us-ascii?Q?mbBWMJ2zw9HrjK8kf4Q1r6dsr5yodVYOmqbLvlSur5e711rc/kkl7hRlonia?=
+ =?us-ascii?Q?F7vwsudKouk0H+UndGG0yWOItsox3sn0h/PAQ1NOnZYOGmRnMFgcGjJpGH9Q?=
+ =?us-ascii?Q?C4ehbG2ABoBzdosGBlrIScdXbOjVfsUgzv3jY3lXw51frJQh+hjoD6p72Ohc?=
+ =?us-ascii?Q?+VUhFJztdPMzaoSBZyNl+C/TN+7YidtsHd4dUunrd7H44JRDf/i6opjfCScl?=
+ =?us-ascii?Q?C6yCMnjEOzpMsC5PPh9Xmv79gb9vESaiCNpyUISG9jUhVnSwMnKiRMEb3k41?=
+ =?us-ascii?Q?b3th5ApSFIyVKM4kwgjul0YkU1uaVQE6ZVCdRtjQXLlOZWcC2A+B/Latbk6B?=
+ =?us-ascii?Q?yalwIMhOYkzLdYbE2zQMb8cLNDLKxLtN14OIASyqnzrIW0tu7PDpD3FopcIw?=
+ =?us-ascii?Q?HYRsrZTLIZOvRm5yY1xo80cse4F9DVeIihSwYVRIMMZie2Yx5FLcrgI/GeQv?=
+ =?us-ascii?Q?KaNAvgHTh3xNTF2DIeSmZaBy/wFwfcQdnbNzo3RMGps9rfe2MC5GdUf2uLRE?=
+ =?us-ascii?Q?7iI0vmo99xEGm7OMXdL75bian+8orRzpIF9kCVlbOzBoMn07QlfCi+lPQ9wT?=
+ =?us-ascii?Q?0GgZJcxZOSx/FGjx4laFi9DJkLLq1ONKZUbXIz81GkKrZssgkx+jqM99PxzH?=
+ =?us-ascii?Q?JZO3+nVBfFOmo1uPUWVECpNKasFitSar8LUT2H20ov2RngLg+pvt/5mlDB07?=
+ =?us-ascii?Q?ARHYP0d2SY1TMXkwk3+oHQwH/rtQLpXDyKMrsZbEH4jK2h/c8jrDdcB2/lUU?=
+ =?us-ascii?Q?pSpZNB2MeofxChC5VIbVhOBwMrCHX6KpRJbF4ubBVUghB+BOU7znCyOuUes7?=
+ =?us-ascii?Q?zcd8LqFgWgWE9tzerM40NEQ/IbJafkwcuIyUTtQfHa0kPIMBq3xPmneoRxBK?=
+ =?us-ascii?Q?EKjiKIbdiE7eFGq47e0aP1jtuImZl0CuAEtuRwrMBjgXVjwOCsDsBt7lQDbz?=
+ =?us-ascii?Q?P/gB+SJrdHn07mBloYVag6hMt864yQWlcIlbHhPkmKd0FcS66bnCE+MsPgL+?=
+ =?us-ascii?Q?zPMd5jjWi+tFH/qzGSw1SsVwHBxSWfcPvrip4OdhNcxpFhdwvtvGeiLceBPI?=
+ =?us-ascii?Q?RRZqN8xOPmKRJsSbpidhGHnLa/Hert5HruSm6M8EI5MuqLCOq6/1R9OpnWnL?=
+ =?us-ascii?Q?qOYxEocguHNXcRiedxNr+8GAGhZkax8kSOLvspFx2s7VpcDUbGtLvY+M3sm9?=
+ =?us-ascii?Q?HJ4shoohSPLILnhEHmk8jrG4RgPDsMJ4Pj7cVXNwaIxJ222OcEh/FuIZ2KmT?=
+ =?us-ascii?Q?GuUZlqdXdQ=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2ccb4e33-e74d-4f34-0d73-08da1beadee9
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2022 18:41:20.3552
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: znHoo1RCVHKXvFF/3vqPrhtToRKRV0543E1G3Ip7qt9z5D6ujKCd0SfrYW9esorE
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3913
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/11/22 14:26, john.p.donnelly@oracle.com wrote:
-> On 2/14/22 9:47 AM, chenguanyou wrote:
->> Hi Waiman, Greg,
->> This patch has been merged in branch linux-5.16.y.
->> Can we take it to the linux-5.10.y LTS version?
->>
->> thanks,
->
-> Hi,
->
-> As a FYI:
->
-> We have observed that following lockup with this commit added to 
-> 5.15.LTS:
->
-> d257cc8cb8d5 - locking/rwsem: Make handoff bit handling more 
-> consistent (4 months ago) <Waiman Long>
->
-> The "fio" test suit fails with LVM devices composed of four NVME 
-> devices with these observed lockup, panic.
->
->
->
-> ext4:
->
-> PID: 3682   TASK: ffff8f489ae34bc0  CPU: 2   COMMAND: "dio/dm-0"
->  #0 [fffffe0000083e50] crash_nmi_callback at ffffffff828772b3
->  #1 [fffffe0000083e58] nmi_handle at ffffffff82840778
->  #2 [fffffe0000083ea0] default_do_nmi at ffffffff8337a1e2
->  #3 [fffffe0000083ec8] exc_nmi at ffffffff8337a48d
->  #4 [fffffe0000083ef0] end_repeat_nmi at ffffffff8340153b
->     [exception RIP: _raw_spin_lock_irq+23]
->     RIP: ffffffff8338b2e7  RSP: ffff9c4409b47c78  RFLAGS: 00000046
->     RAX: 0000000000000000  RBX: ffff8f489ae34bc0  RCX: 0000000000000000
->     RDX: 0000000000000001  RSI: 0000000000000000  RDI: ffff8f47f7b90104
->     RBP: ffff9c4409b47d20   R8: 0000000000000000   R9: 0000000000000000
->     R10: 0000000000000000  R11: 0000000000000000  R12: ffff8f47f7b90104
->     R13: ffff9c4409b47cb0  R14: ffff8f47f7b900f0  R15: 0000000000000000
->     ORIG_RAX: ffffffffffffffff  CS: 0010  SS: 0018
->     <NMI exception stack> ---
->  #5 [ffff9c4409b47c78] _raw_spin_lock_irq at ffffffff8338b2e7
->  #6 [ffff9c4409b47c78] rwsem_down_write_slowpath at ffffffff82925be9
->  #7 [ffff9c4409b47d28] ext4_map_blocks at ffffffffc11c26dc [ext4]
->  #8 [ffff9c4409b47d98] ext4_convert_unwritten_extents at
-> ffffffffc11ad9e0 [ext4]
->  #9 [ffff9c4409b47df0] ext4_dio_write_end_io at ffffffffc11b22aa [ext4]
->
-> xfs:
->
-> PID: 3719   TASK: ffff9f81d2d74bc0  CPU: 37  COMMAND: "dio/dm-0"
->  #0 [fffffe0000894e50] crash_nmi_callback at ffffffffad6772b3
->  #1 [fffffe0000894e58] nmi_handle at ffffffffad640778
->  #2 [fffffe0000894ea0] default_do_nmi at ffffffffae17a1e2
->  #3 [fffffe0000894ec8] exc_nmi at ffffffffae17a48d
->  #4 [fffffe0000894ef0] end_repeat_nmi at ffffffffae20153b
->     [exception RIP: _raw_spin_lock_irq+23]
->     RIP: ffffffffae18b2e7  RSP: ffffbb7ec9637c48  RFLAGS: 00000046
->     RAX: 0000000000000000  RBX: ffff9f81d2d74bc0  RCX: 0000000000000000
->     RDX: 0000000000000001  RSI: 0000000000000000  RDI: ffff9f81c04a918c
->     RBP: ffffbb7ec9637ce8   R8: 0000000000000000   R9: 0000000000000000
->     R10: 0000000000000000  R11: 0000000000000000  R12: ffff9f81c04a918c
->     R13: ffffbb7ec9637c80  R14: ffff9f81c04a9178  R15: 0000000000000000
->     ORIG_RAX: ffffffffffffffff  CS: 0010  SS: 0018
->     <NMI exception stack> ---
->  #5 [ffffbb7ec9637c48] _raw_spin_lock_irq at ffffffffae18b2e7
->  #6 [ffffbb7ec9637c48] rwsem_down_write_slowpath at ffffffffad725be9
->  #7 [ffffbb7ec9637cf0] xfs_trans_alloc_inode at ffffffffc074f2bd [xfs]
->  #8 [ffffbb7ec9637d50] xfs_iomap_write_unwritten at ffffffffc073ad15
-> [xfs]
->  #9 [ffffbb7ec9637dd0] xfs_dio_write_end_io at ffffffffc072db62 [xfs]
->
->
-> I have reached out to Waiman and he suggested this for our next test 
-> pass:
->
->
-> 1ee326196c6658 locking/rwsem: Always try to wake waiters in out_nolock 
-> path
+On Mon, Apr 11, 2022 at 04:13:56PM +0200, Christoph Hellwig wrote:
+> Merge these into their only callers.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  drivers/gpu/drm/i915/gvt/kvmgt.c | 129 ++++++++++++++-----------------
+>  1 file changed, 60 insertions(+), 69 deletions(-)
 
-Does this commit help to avoid the lockup problem?
+It is nice
 
-Commit 1ee326196c6658 fixes a potential missed wakeup problem when a 
-reader first in the wait queue is interrupted out without acquiring the 
-lock. It is actually not a fix for commit d257cc8cb8d5. However, this 
-commit changes the out_nolock path behavior of writers by leaving the 
-handoff bit set when the wait queue isn't empty. That likely makes the 
-missed wakeup problem easier to reproduce.
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
-Cheers,
-Longman
+> @@ -847,14 +873,37 @@ static int intel_vgpu_open_device(struct mdev_device *mdev)
+>  		goto undo_group;
+>  	}
+>  
+> -	ret = kvmgt_guest_init(mdev);
+> -	if (ret)
+> +	ret = -EEXIST;
+> +	if (vgpu->attached)
+> +		goto undo_group;
+> +
+> +	ret = -ESRCH;
+> +	if (!vgpu->kvm || vgpu->kvm->mm != current->mm) {
 
+For instance once all the obfuscation is stripped away it is easy to
+see how the vgpu->kvm access here is unlocked against the notifier and
+racy.
+
+Jason

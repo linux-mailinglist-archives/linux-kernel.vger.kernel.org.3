@@ -2,329 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F05364FC403
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 20:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F16D64FC414
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 20:27:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349135AbiDKSYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 14:24:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39140 "EHLO
+        id S1346436AbiDKS3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 14:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347575AbiDKSYA (ORCPT
+        with ESMTP id S230483AbiDKS3T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 14:24:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4BB2AD0;
-        Mon, 11 Apr 2022 11:21:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 83EE0B817FD;
-        Mon, 11 Apr 2022 18:21:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4691FC385A4;
-        Mon, 11 Apr 2022 18:21:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649701302;
-        bh=PiNuPNk+6l26kgsR8fDzAxyPFcRQN+JgTZLJVWwDBYE=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=noOI5ZLjGQD7hoyTo16tgnjCgJouFmSZ63y24DCLm9z2eLrf6gclO4hSIRYLxcRGy
-         nzm5MaqsbovJtDGsDzoRWxx2KFE3gaDNMsVBxRNx2qpXmCN9TvmQfiv8iT1xHEwXOZ
-         0Df90tz/qQUHJ/p5FeQKXS/GALQiSu/jUR90j04kKDRRWibWJt2qYGBL4vGQVgEOCM
-         gezfbD2EylBDJKxiHlike2ZGNVWZclIEcISmRz6Lvy2Ct+tU+5kyZ2r2qrKWIsKcaw
-         gJcTwlFlF8QDKJaWynKcLc1fz7F4LDdnxKliEy5g9N07PCS1lgwUMDlhj6onHR4IdZ
-         OlGFgTjC3wnuw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id EBCF05C03AE; Mon, 11 Apr 2022 11:21:41 -0700 (PDT)
-Date:   Mon, 11 Apr 2022 11:21:41 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        llvm@lists.linux.dev, Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>
-Subject: Re: Dangerous addr to ctrl dependency transformation in
- fs/nfs/delegation.c::nfs_server_return_marked_delegations()?
-Message-ID: <20220411182141.GZ4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <Yk7/T8BJITwz+Og1@Pauls-MacBook-Pro.local>
+        Mon, 11 Apr 2022 14:29:19 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97EE5DF5E
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 11:27:04 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23BHV0og018804;
+        Mon, 11 Apr 2022 18:26:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2021-07-09;
+ bh=U8q+N6tnqPGDmYMi99qBhen9pUTbn+p8VAWi7AKRrtY=;
+ b=df59AWHvXfujoPLIUlKnhPkIxZMkTq6IP0ipFF7GxABXj37rciRi8uAUqFeYJNMcwfQ6
+ cGhcW0daS8Kn/u8Y34IZL7BdCc3QYQ5RRXdrUwtAUDtGgLC2gt8oUpR1ZtahcWFFt8S5
+ G26utA7d7vfFUZL/VwFEbztXwqWKufR3/oi/Gp7HpYcNsr/FcLp6tP6LYPmY9EEIWOQr
+ h4lAMv6RLyhhFq+Slpo7MTR4GXN1KvqdpjrVMwVILyVswGTeg9KC6vlY7ggeNAYYntbm
+ z5mc5aeSd+Avn7bf8c6LUcFh7YRYWitxO35KPg7ZpAiB4MLyfvMxMam+7YhFT+uTK/wk XQ== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3fb0r1cmgq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 11 Apr 2022 18:26:35 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23BIGMmC017501;
+        Mon, 11 Apr 2022 18:26:34 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2046.outbound.protection.outlook.com [104.47.66.46])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3fck11w20j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 11 Apr 2022 18:26:34 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Cb6TR/TpgeTnhNjZBsbnPeVaRq20tAn7iWvMiTS2U0n0Izd5B9qEHDrRefjJjfNoSx2r9xHCqu3tB9ovcuSx1LjINp/JQ6M5oeavNKIOj8O4IvJt0w1UQcu2BKAbaBu69UT8pg9ypopDVHSn643oe1SdgG9aJHENBV+Qywzrn+L2HWEBy+Jgxj8PfFf5AxXji3q4fh/eXZdppiEKVRnA/E+6GLlSEqcsIy9p7aeDA3UIAQYu+Kpnxp6wslhEJ6pfbXrBG41VMmrnBZkGcJAiOyaHpiruXNuSgwFv+rPm5eONHmDBKrr4OWT1DkJ+eNnjQ3VckmqqjNXyZuK7Q8YmWQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=U8q+N6tnqPGDmYMi99qBhen9pUTbn+p8VAWi7AKRrtY=;
+ b=LABXGRVBFpvXZ2uBxq3XXY6VppSX217S4FPznDJ1BxrYoUO3LlyhdVyRKVagnbSJtQe8KVbJLomiaK9SjLCVsab/SmqWBnFcK1Oelf1yKI62kGugcQQq2UfbWXhV8ea1HFdtGh3eyZZjbhIZ1q41UOPc+IRF+fnJNV0kNSuHekXN5rLtMiTE7rHnffqOiWM7PvwKl4/F3DwUttnqWZN5ub6ToUqulvF1QzRa/IqVwHfJ9xWE0WLt/+J08+XKOKWV01V0KOb92UtMLlZGAIz+cEHrPJu4xOetiQZVI6NJlVHa0yxFvH0WL5kpKj6RhECujiwlUDpj/j+hlh7UwN2Agw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=U8q+N6tnqPGDmYMi99qBhen9pUTbn+p8VAWi7AKRrtY=;
+ b=hMGc0CvHhEO/A7VW0NPMrTl1xp42xSUOBNOyDtkGuipzL80AyBewAM2guhUhoP6eautrm01rMRlAtqyLBFw11HvU9Of1w+WuIJiVleEfj0fxheEAkYwCMAPe/ssglBIlGNiaUwLpx4/BRIJ43eKZafLWIfg5/ldiTW5UQNIJ/WU=
+Received: from CO1PR10MB4722.namprd10.prod.outlook.com (2603:10b6:303:9e::12)
+ by BN6PR1001MB2145.namprd10.prod.outlook.com (2603:10b6:405:2d::38) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Mon, 11 Apr
+ 2022 18:26:31 +0000
+Received: from CO1PR10MB4722.namprd10.prod.outlook.com
+ ([fe80::4427:92a2:50a5:50b6]) by CO1PR10MB4722.namprd10.prod.outlook.com
+ ([fe80::4427:92a2:50a5:50b6%6]) with mapi id 15.20.5144.029; Mon, 11 Apr 2022
+ 18:26:31 +0000
+Message-ID: <3f02975c-1a9d-be20-32cf-f1d8e3dfafcc@oracle.com>
+Date:   Mon, 11 Apr 2022 13:26:22 -0500
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.6.1
+Subject: Re: [PATCH v5] locking/rwsem: Make handoff bit handling more
+ consistent
+Content-Language: en-US
+To:     chenguanyou <chenguanyou9338@gmail.com>, longman@redhat.com,
+        gregkh@linuxfoundation.org
+Cc:     dave@stgolabs.net, hdanton@sina.com, linux-kernel@vger.kernel.org,
+        mazhenhua@xiaomi.com, mingo@redhat.com, peterz@infradead.org,
+        quic_aiquny@quicinc.com, will@kernel.org,
+        John Donnelly <john.p.donnelly@oracle.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, sashal@kernel.org
+References: <20211116012912.723980-1-longman@redhat.com>
+ <20220214154741.12399-1-chenguanyou@xiaomi.com>
+From:   john.p.donnelly@oracle.com
+In-Reply-To: <20220214154741.12399-1-chenguanyou@xiaomi.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SN7PR04CA0219.namprd04.prod.outlook.com
+ (2603:10b6:806:127::14) To CO1PR10MB4722.namprd10.prod.outlook.com
+ (2603:10b6:303:9e::12)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yk7/T8BJITwz+Og1@Pauls-MacBook-Pro.local>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 64217f09-fd1d-4443-d14e-08da1be8cd06
+X-MS-TrafficTypeDiagnostic: BN6PR1001MB2145:EE_
+X-Microsoft-Antispam-PRVS: <BN6PR1001MB21455296C4F760F646AFB138C7EA9@BN6PR1001MB2145.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1cbRUhnDc9dw255LOPUlFuf3/Y5CF0AkJhqPXtPS8PHQM3eHi0gUiQ/NSmKkZLOND11bN8f6OClBBZCa7jOimvr0u9XdRRYl2sTdtKCglefewzzBCMDM3hD8zGy6CYLn/+4w2N2cY76MuK/VUHYsDvMquxiLbeU9yOe3sd7X+izK/e+O8BFjfgdhnfg04fls9qIIJMIQEG34/UcCWF+ZnOOzM3rkuYTstTHiLwV8tRNYwFx34b7L3igNG4DtdTfQSFkKLb2Lkxbq51KtdtuuH72j0zlDsukWKOiQlT7rir5PiiUhIgwETl8dcUfdFUBDgaU3gtRbV7Z86CgzodaSl8T1Rx2jxqFXqFrTLbtVIsmBBzSm/ax9SOYRZ4BFq+Wpp7FeQlXvaaAKTSMdHsceil737oJR+gze8Ym/RP75H8j4RBT6H56QhSeVx3f3qDvnJq0QV/XbmAMd/k2mhnjBoG2OImTNEtXw0+li7ErGpDwu95rNUvwJxXYOh12x4jCQvHQ/gsHONtHzC7hkAoLlkHgwmIehWF/zejN/wepRIVv44AegElqK+t8a8jBWiGuZRg7t7/+E3JTxIG+WWYS7OS4EIgKFddVD1pAUTGePwo7JwHeWYOEj16F3sY6Z75gLUnD3XG0EJllTx+ZtjgU/TCtL9FetJfy3Epd/JysetrvFO5XScEnri+Ey1qgNurzd5c1F+23SfrFvjHj1OkfJpw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4722.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(8936002)(31686004)(5660300002)(7416002)(2906002)(508600001)(83380400001)(66556008)(66476007)(36756003)(66946007)(4326008)(31696002)(86362001)(8676002)(38100700002)(6666004)(54906003)(316002)(53546011)(6486002)(9686003)(26005)(186003)(6512007)(6506007)(2616005)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TjhXdTZobEZHbjlSQU9mRmN5TnFmUGozYzFXNUJOWU1vcWtNVHNweWlhR3Rz?=
+ =?utf-8?B?TnJzZ3AxVFVlU294NzIrUzVHeUx4eXIrV0t1VmE5RVZQMVZySExwcjZ0SEp4?=
+ =?utf-8?B?Z3BmOFcycDVDOVN4VVNMSDhnNkd6SVBFMXJwVkFvc1JPTVhRNlM5OW1peHlT?=
+ =?utf-8?B?VVYyKy96K1RUTVNFOWpqWERhankxUkxqSTBWMUdjcG93VlF1eWlhZlJOV3RN?=
+ =?utf-8?B?K1JucmtPQ0hHd1JWYzU4a0paZ2M2SXR4KysxbmdGa1FHRFlYd1hncTlMbWxy?=
+ =?utf-8?B?d2hESTJCWXdBZFJjbFIrWjB1TytLYVdIVmpud1NlTXdmMnRWMytqblhkOXZT?=
+ =?utf-8?B?SjNTVTJEMVJBTVcrdlJvZTNHenAzNnMyQWRUOGxtbGlGaklxTTJOdkNRd1pk?=
+ =?utf-8?B?dEpJKzZDd3ZhMi9CMGFzMFdJNEdBb1pyYTk2SFNJSEwwQ092Tys2UnFlS1M0?=
+ =?utf-8?B?Q2V3RzJyYkdScmtWR1NZcXVPV0w0YUJqT08yZXQzbzdJbVM0RDlvRFBJRm8r?=
+ =?utf-8?B?TUcxNUpaUWNhQlRQSllQNjU1cFNua0JTeUlHYnFHbVYzeXY3cVF3elc1V3B2?=
+ =?utf-8?B?aGFnQmxZdDFOS08xTFVDazc0clRNNEJ5ZHd6VnRiWmdGcHppRnNsVVlrN1ZL?=
+ =?utf-8?B?ZzlJMVdGWkl0VzdwMVRwaWFKRHA4MUk4R3dmaFdEMW1mSEc4UmJ0cWpTd2VY?=
+ =?utf-8?B?WEljSWJRZmNyR2RmWmFSc0pQZGUrbTBZcDVXWG9UdXl0ZUpZYVZxUUczK3dj?=
+ =?utf-8?B?aEhnM0xqVmpVdjViMHo3WXBxZDBaZ0NvRVNIWndkZ05mYWZlRlRkaXpxNWNm?=
+ =?utf-8?B?OGpUN0FKak1vODBrMzA5bkMxQXkrZlljUkpmcW0zR0YxVUFlK3IydTRQMjNt?=
+ =?utf-8?B?d2dwT1NUYVZ4RTRkd1JOTTZCdklZay9xWGdad256VC9WL0I1MXBHOTQ3ZllC?=
+ =?utf-8?B?VldWTHVsZXNWK1dQVDVlZ1NFSzloaEYwZFFDTG81WDRtOUMyOXpka0lKaVpr?=
+ =?utf-8?B?L0JYT3RuekhMSEhuT1BjNkY0RS9HamdnMmdhd29qVzltU1FSOTlLZkNmVjdZ?=
+ =?utf-8?B?eENJYmplUFFPWTdPTElhend5RG8zdXhNdG82amJwaEkzUEZFcXk0cGJ0NG9W?=
+ =?utf-8?B?VVNEcEZLQm9vMTJqeTc0UkNTdks0YS9CZkZJbm9TRjVTbDE5RDcxV0FPU2li?=
+ =?utf-8?B?RVZERVlqR3V5a2JxclF1RWRZazlQUzZCb0RsVSs3OEtXZ21MOXJUS2o2QlBp?=
+ =?utf-8?B?UG1WNUNpWDIvdzM4UkMrZGxWbmlZMmgyc2svdjRwSS9WbW5TcUVzSTQwWnZl?=
+ =?utf-8?B?amRWZFo1NHl3TEdVeXBhaStmOU1tbkpLSjMxbENPZWsrYWxJbUJJTTZuQkZU?=
+ =?utf-8?B?RHVNMUFXSm9ndEFGNmpCeFZtTFdZcEs3cDAyYUlMQjlsVGdoS2dxcmZGa3dZ?=
+ =?utf-8?B?dFFKaGRPdFV6YlFsOHJVdDdEdmRmenFvc3FCVXFrOHdJS1loVTZnaU1rR2Zo?=
+ =?utf-8?B?VmxoTWdwY2JyZzkreDBUSmd6TjZNa0hJWnp2Zmo0OFVHRkFZY0M1ODhCK0tM?=
+ =?utf-8?B?TUh1Mm9saFY3SDRIK0xDeDI4NWk1MzhjeGNtRks4d28wQVdKei9zem9SZm1y?=
+ =?utf-8?B?WVUvTkI4ZXVzMURQVS9ib0F2MFE0bTlGYWNHV0dXbTVNT050YWNuQUk3QTFS?=
+ =?utf-8?B?QnpGS1VXK2VycUpldDhsVGJra0xISmkrdDNYclQxU1JWeXlRa1FkVzdwTytU?=
+ =?utf-8?B?d1pIUUVSUXFySXZjVENLaE9zYUk5N3hSMTlRdTBvc1MwdWRNMWhFeDB5aE42?=
+ =?utf-8?B?czhRcHlNUXgrd1ZQcjUrZDdLTTZDWUZSZGR6enUzUEVJNklvMTQxOXRBSzNz?=
+ =?utf-8?B?T0RwUHNvcWpsTnY3ZFZPdG42K1BFWU9tR0xabmJIeElIZ3FmZFozcVRxYmpw?=
+ =?utf-8?B?Y2FIN1FEOUZyeU5iN2p3ZFZFQkY2VkVKWTJNclV4N2J2cjhtWmh6N28xRDdJ?=
+ =?utf-8?B?QmVrV05ZdGtVVXhmWTdiZGVOa2lnZzZLc3ZEWlA1WmNyL1pLQU5KMVQvSm9j?=
+ =?utf-8?B?U0I4dmVUcDJmQVBQclZaYzBjVWNHaFFEMWhFb2VvMEdTVk5STHNVK3ZwTlN3?=
+ =?utf-8?B?NVFMV2g1QUtRVEZNQWJReGxzVTRpLzJFdHoxZUFlcDdpK1Rnc1FGczVDNkxy?=
+ =?utf-8?B?N0NpWktKalo0dC9QRGRpbjhKMmpGWG1Wdi8xMWNwY2FuTm1mcjBsSkVjTXRo?=
+ =?utf-8?B?cUlGOWs2SEhQcmhXZFhYYTA4RThzRG8wZm1rcmRMWXpNTEZ5RHdFbDV5OWMy?=
+ =?utf-8?B?Y0kwR1M2UmFDNTF2M3o5dktiK3dDZi9ubHZmR21UNTlJS1RyeFlBcnluRHB3?=
+ =?utf-8?Q?r1Er83uUkzkIbtUk=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 64217f09-fd1d-4443-d14e-08da1be8cd06
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4722.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2022 18:26:31.3735
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NEE9lgxizM4FTomJzdlVRVOoQIA32Iiyi8i+MlIrlYQVfDSNc7a8TjvOdLyGQ6bNrZ442sHRvXaG/VGP5Hlrq8UDoogRHcfNOnRpgi4uULM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR1001MB2145
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.858
+ definitions=2022-04-11_07:2022-04-11,2022-04-11 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 adultscore=0
+ phishscore=0 mlxscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204110102
+X-Proofpoint-GUID: C62m2TLrgeiY9mVI2USkb1JPYWMyh3k8
+X-Proofpoint-ORIG-GUID: C62m2TLrgeiY9mVI2USkb1JPYWMyh3k8
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 05:12:15PM +0200, Paul Heidekrüger wrote:
-> Hi all,
+On 2/14/22 9:47 AM, chenguanyou wrote:
+> Hi Waiman, Greg,
+> This patch has been merged in branch linux-5.16.y.
+> Can we take it to the linux-5.10.y LTS version?
 > 
-> work on my dependency checker tool is progressing nicely, and it is
-> flagging, what I believe is, a harmful addr to ctrl dependency
-> transformation. For context, see [1] and [2]. I'm using the Clang
-> compiler.
-> 
-> The dependency in question runs from line 618 into the for loop
-> increment, i.e. the third expresion in the for loop condition, in line
-> 622 of fs/nfs/delegation.c::nfs_server_return_marked_delegations().
-> 
-> I did my best to reverse-engineer some pseudocode from Clang's IR for
-> showing what I think is going on.
+> thanks,
 
-First, thank you very much for doing this work!
+Hi,
 
-> Clang's unoptimised version:
-> 
-> > restart:
-> > 	if(place_holder != NULL)
-> > 		delegation = rcu_dereference(place_holder->delegation); /* 618 */
-> > 	if(delegation != NULL)
-> > 		if(delegation != place_holder_deleg)
-> > 			delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list); /* 620 */
-> > 
-> > 	for( ; &(delegation)->super_list != &server->delegations; delegation = list_entry_rcu(delegation->super_list.next, typeof(*(delegation)), super_list)) { /* 622 */
-> > 		/*
-> > 		 * Can continue, "goto restart" or "goto break" (after loop). 
-> > 		 * Can reassign "delegation", "place_holder", "place_holder_deleg".
-> > 		 * "delegation" might be assigned either a value depending on 
-> > 		 * "delegation" itself, i.e. it is part of the dependency chain, 
-> > 		 * or NULL.
-> > 		 * Can modifiy fields of the "nfs_delegation" struct "delegation" 
-> > 		 * points to.
-> > 		 * Assume line 618 has been executed and line 620 hasn't. Then, 
-> > 		 * there exists a path s.t. "delegation" isn't reassigned NULL 
-> > 		 * and the for loop's increment is executed.
-> > 		 */
-> > 	}
-> 
-> Clang's optimised version:
-> 
-> > restart:
-> > 	if(place_holder == NULL) {
-> > 		delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list);
-> > 	} else {
-> > 		cmp = rcu_dereference(place_holder->delegation); /* 618 */
-> > 		if(cmp != NULL) { /* Transformation to ctrl dep */
-> > 			if(cmp == place_holder_deleg) {
-> > 				delegation = place_holder_deleg;
-> > 			} else {
-> > 				delegation = list_entry_rcu(server->delegations.nex, struct nfs_delegation, super_list);
-> > 			}
-> > 		} else {
-> > 			delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list);
-> > 		}
-> > 	}
-> > 
-> > 	for( ; &(delegation)->super_list != &server->delegations; delegation = list_entry_rcu(delegation->super_list.next, typeof(*(delegation)), super_list)) {
-> > 		/*
-> > 		 * At this point, "delegation" cannot depend on line 618 anymore
-> > 		 * since the "rcu_dereference()" was only used for an assignment
-> > 		 * to "cmp" and a subsequent comparison (ctrl dependency).
-> > 		 * Therefore, the loop increment cannot depend on the
-> > 		 * "rcu_dereference()" either. The dependency chain has been
-> > 		 * broken.
-> > 		 */
-> >         }
-> 
-> The above is an abstraction of the following control flow path in
-> "nfs_server_return_marked_delegations()":
-> 
-> 1. When "nfs_server_return_marked_delegations()" gets called, it has no
-> choice but to skip the dependency beginning in line 620, since
-> "place_holder" is NULL the first time round.
-> 
-> 2. Now take a path until "place_holder", the condition for the
-> dependency beginning, becomes true and "!delegation || delegation !=
-> place_holder_deleg", the condition for the assignment in line 620,
-> becomes false. Then, enter the loop again and take a path to one of the
-> "goto restart" statements without reassigning to "delegation".
-> 
-> 3. After going back to "restart", since the condition for line 618
-> became true, "rcu_dereference()" into "delegation".
-> 
-> 4. Enter the for loop again, but avoid the "goto restart" statements in
-> the first iteration and ensure that "&(delegation)->super_list !=
-> &server->delegations", the loop condition, remains true and "delegation"
-> isn't assigned NULL.
-> 
-> 5. When the for loop condition is reached for the second time, the loop
-> increment is executed and there is an address dependency.
-> 
-> Now, why would the compiler decide to assign "place_holder_deleg" to
-> "delegation" instead of what "rcu_dereference()" returned? Here's my
-> attempt at explaining.
-> 
-> In the pseudo code above, i.e. in the optimised IR, the assignment of
-> "place_holder_deleg" is guarded by two conditions. It is executed iff
-> "place_holder" isn't NULL and the "rcu_dereference()" didn't return
-> NULL. In other words, iff "place_holder != NULL && rcu_dereference() !=
-> NULL" holds at line 617, then "delegation == rcu_dereference() ==
-> place_holder_deleg" must hold at line 622. Otherwise, the optimisation
-> would be wrong.
-> 
-> Assume control flow has just reached the first if, i.e. line 617, in
-> source code. Since "place_holder" isn't NULL, it will execute the first
-> if's body and "rcu_dereference()" into "delegation" (618). Now it has
-> reached the second if. Per our aussmption, "rcu_dereference()" returned
-> something that wasn't NULL. Therefore, "!delegation", the first part of
-> the second if condition's OR, will be false.
-> 
-> However, if we want "rcu_dereference() == delegation" to hold after the
-> two if's, we can't enter the second if anyway, as it will overwrite
-> "delegation" with a value that might not be equal to what
-> "rcu_dereference()" returned. So, we want the second part of the second
-> if condition's OR, i.e.  "delegation != place_holder_deleg" to be false
-> as well.
-> 
-> When is that the case? It is the case when "delegation ==
-> place_holder_deleg" holds.
-> 
-> So, if we want "delegation == rcu_dereference() == place_holder_deleg"
-> to hold after the two if's, "place_holder != NULL && rcu_dereference()
-> != NULL" must hold before the two if's, which is what we wanted to show
-> and what the compiler figured out too.
-> 
-> TL;DR: it appears the compiler optimisation is plausible, yet it still
-> breaks the address dependency.
-> 
-> For those interested, I have made the unoptimised and optimised IR CFGs
-> available. In the optimised one, the interesting part is the transition
-> from "if.end" to "if.end13".
-> 
-> Unoptimised: https://raw.githubusercontent.com/gist/PBHDK/700bf7bdf968fe25c82506de58143bbe/raw/54bf2c1e1a72fb30120f7e812f05ef01ca86b78f/O0-nfs_server_return_marked_delegations.svg
-> 
-> Optimised: https://raw.githubusercontent.com/gist/PBHDK/700bf7bdf968fe25c82506de58143bbe/raw/54bf2c1e1a72fb30120f7e812f05ef01ca86b78f/O2-nfs_server_return_marked_delegations.svg
-> 
-> What do you think?
-> 
-> Many thanks,
-> Paul
-> 
-> [1]: https://linuxplumbersconf.org/event/7/contributions/821/attachments/598/1075/LPC_2020_--_Dependency_ordering.pdf
-> [2]: https://lore.kernel.org/llvm/YXknxGFjvaB46d%2Fp@Pauls-MacBook-Pro/T/#u
+As a FYI:
 
-If I understand this correctly (rather unlikely), this stems from
-violating the following rule in Documentation/RCU/rcu_dereference.rst:
+We have observed that following lockup with this commit added to 5.15.LTS:
 
-------------------------------------------------------------------------
+d257cc8cb8d5 - locking/rwsem: Make handoff bit handling more consistent 
+(4 months ago) <Waiman Long>
 
--	Be very careful about comparing pointers obtained from
-	rcu_dereference() against non-NULL values.  As Linus Torvalds
-	explained, if the two pointers are equal, the compiler could
-	substitute the pointer you are comparing against for the pointer
-	obtained from rcu_dereference().  For example::
+The "fio" test suit fails with LVM devices composed of four NVME devices 
+with these observed lockup, panic.
 
-		p = rcu_dereference(gp);
-		if (p == &default_struct)
-			do_default(p->a);
 
-	Because the compiler now knows that the value of "p" is exactly
-	the address of the variable "default_struct", it is free to
-	transform this code into the following::
 
-		p = rcu_dereference(gp);
-		if (p == &default_struct)
-			do_default(default_struct.a);
+ext4:
 
-	On ARM and Power hardware, the load from "default_struct.a"
-	can now be speculated, such that it might happen before the
-	rcu_dereference().  This could result in bugs due to misordering.
+PID: 3682   TASK: ffff8f489ae34bc0  CPU: 2   COMMAND: "dio/dm-0"
+  #0 [fffffe0000083e50] crash_nmi_callback at ffffffff828772b3
+  #1 [fffffe0000083e58] nmi_handle at ffffffff82840778
+  #2 [fffffe0000083ea0] default_do_nmi at ffffffff8337a1e2
+  #3 [fffffe0000083ec8] exc_nmi at ffffffff8337a48d
+  #4 [fffffe0000083ef0] end_repeat_nmi at ffffffff8340153b
+     [exception RIP: _raw_spin_lock_irq+23]
+     RIP: ffffffff8338b2e7  RSP: ffff9c4409b47c78  RFLAGS: 00000046
+     RAX: 0000000000000000  RBX: ffff8f489ae34bc0  RCX: 0000000000000000
+     RDX: 0000000000000001  RSI: 0000000000000000  RDI: ffff8f47f7b90104
+     RBP: ffff9c4409b47d20   R8: 0000000000000000   R9: 0000000000000000
+     R10: 0000000000000000  R11: 0000000000000000  R12: ffff8f47f7b90104
+     R13: ffff9c4409b47cb0  R14: ffff8f47f7b900f0  R15: 0000000000000000
+     ORIG_RAX: ffffffffffffffff  CS: 0010  SS: 0018
+     <NMI exception stack> ---
+  #5 [ffff9c4409b47c78] _raw_spin_lock_irq at ffffffff8338b2e7
+  #6 [ffff9c4409b47c78] rwsem_down_write_slowpath at ffffffff82925be9
+  #7 [ffff9c4409b47d28] ext4_map_blocks at ffffffffc11c26dc [ext4]
+  #8 [ffff9c4409b47d98] ext4_convert_unwritten_extents at
+ffffffffc11ad9e0 [ext4]
+  #9 [ffff9c4409b47df0] ext4_dio_write_end_io at ffffffffc11b22aa [ext4]
 
-	However, comparisons are OK in the following cases:
+xfs:
 
-	-	The comparison was against the NULL pointer.  If the
-		compiler knows that the pointer is NULL, you had better
-		not be dereferencing it anyway.  If the comparison is
-		non-equal, the compiler is none the wiser.  Therefore,
-		it is safe to compare pointers from rcu_dereference()
-		against NULL pointers.
+PID: 3719   TASK: ffff9f81d2d74bc0  CPU: 37  COMMAND: "dio/dm-0"
+  #0 [fffffe0000894e50] crash_nmi_callback at ffffffffad6772b3
+  #1 [fffffe0000894e58] nmi_handle at ffffffffad640778
+  #2 [fffffe0000894ea0] default_do_nmi at ffffffffae17a1e2
+  #3 [fffffe0000894ec8] exc_nmi at ffffffffae17a48d
+  #4 [fffffe0000894ef0] end_repeat_nmi at ffffffffae20153b
+     [exception RIP: _raw_spin_lock_irq+23]
+     RIP: ffffffffae18b2e7  RSP: ffffbb7ec9637c48  RFLAGS: 00000046
+     RAX: 0000000000000000  RBX: ffff9f81d2d74bc0  RCX: 0000000000000000
+     RDX: 0000000000000001  RSI: 0000000000000000  RDI: ffff9f81c04a918c
+     RBP: ffffbb7ec9637ce8   R8: 0000000000000000   R9: 0000000000000000
+     R10: 0000000000000000  R11: 0000000000000000  R12: ffff9f81c04a918c
+     R13: ffffbb7ec9637c80  R14: ffff9f81c04a9178  R15: 0000000000000000
+     ORIG_RAX: ffffffffffffffff  CS: 0010  SS: 0018
+     <NMI exception stack> ---
+  #5 [ffffbb7ec9637c48] _raw_spin_lock_irq at ffffffffae18b2e7
+  #6 [ffffbb7ec9637c48] rwsem_down_write_slowpath at ffffffffad725be9
+  #7 [ffffbb7ec9637cf0] xfs_trans_alloc_inode at ffffffffc074f2bd [xfs]
+  #8 [ffffbb7ec9637d50] xfs_iomap_write_unwritten at ffffffffc073ad15
+[xfs]
+  #9 [ffffbb7ec9637dd0] xfs_dio_write_end_io at ffffffffc072db62 [xfs]
 
-	-	The pointer is never dereferenced after being compared.
-		Since there are no subsequent dereferences, the compiler
-		cannot use anything it learned from the comparison
-		to reorder the non-existent subsequent dereferences.
-		This sort of comparison occurs frequently when scanning
-		RCU-protected circular linked lists.
 
-		Note that if checks for being within an RCU read-side
-		critical section are not required and the pointer is never
-		dereferenced, rcu_access_pointer() should be used in place
-		of rcu_dereference().
+I have reached out to Waiman and he suggested this for our next test pass:
 
-	-	The comparison is against a pointer that references memory
-		that was initialized "a long time ago."  The reason
-		this is safe is that even if misordering occurs, the
-		misordering will not affect the accesses that follow
-		the comparison.  So exactly how long ago is "a long
-		time ago"?  Here are some possibilities:
 
-		-	Compile time.
+1ee326196c6658 locking/rwsem: Always try to wake waiters in out_nolock path
 
-		-	Boot time.
+-- 
 
-		-	Module-init time for module code.
-
-		-	Prior to kthread creation for kthread code.
-
-		-	During some prior acquisition of the lock that
-			we now hold.
-
-		-	Before mod_timer() time for a timer handler.
-
-		There are many other possibilities involving the Linux
-		kernel's wide array of primitives that cause code to
-		be invoked at a later time.
-
-	-	The pointer being compared against also came from
-		rcu_dereference().  In this case, both pointers depend
-		on one rcu_dereference() or another, so you get proper
-		ordering either way.
-
-		That said, this situation can make certain RCU usage
-		bugs more likely to happen.  Which can be a good thing,
-		at least if they happen during testing.  An example
-		of such an RCU usage bug is shown in the section titled
-		"EXAMPLE OF AMPLIFIED RCU-USAGE BUG".
-
-	-	All of the accesses following the comparison are stores,
-		so that a control dependency preserves the needed ordering.
-		That said, it is easy to get control dependencies wrong.
-		Please see the "CONTROL DEPENDENCIES" section of
-		Documentation/memory-barriers.txt for more details.
-
-	-	The pointers are not equal *and* the compiler does
-		not have enough information to deduce the value of the
-		pointer.  Note that the volatile cast in rcu_dereference()
-		will normally prevent the compiler from knowing too much.
-
-		However, please note that if the compiler knows that the
-		pointer takes on only one of two values, a not-equal
-		comparison will provide exactly the information that the
-		compiler needs to deduce the value of the pointer.
-
-------------------------------------------------------------------------
-
-But it would be good to support this use case, for example, by having
-the compiler provide some way of marking the "delegation" variable as
-carrying a full dependency.
-
-Or did I miss a turn in here somewhere?
-
-							Thanx, Paul
+Thank you.

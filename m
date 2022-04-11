@@ -2,90 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C78A4FB19B
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 04:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B99C4FB1A4
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 04:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244337AbiDKCLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 22:11:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54420 "EHLO
+        id S244335AbiDKCRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 22:17:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239877AbiDKCLa (ORCPT
+        with ESMTP id S238514AbiDKCRc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 22:11:30 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB521ADAE;
-        Sun, 10 Apr 2022 19:09:14 -0700 (PDT)
-Received: from canpemm500007.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KcC2H6qNyz1HBJm;
-        Mon, 11 Apr 2022 10:08:39 +0800 (CST)
-Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
- (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 11 Apr
- 2022 10:09:12 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <lgirdwood@gmail.com>, <broonie@kernel.org>, <perex@perex.cz>,
-        <tiwai@suse.com>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <spujar@nvidia.com>,
-        <yuehaibing@huawei.com>
-CC:     <alsa-devel@alsa-project.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next] ASoC: tegra186_asrc: mark runtime-pm functions as __maybe_unused
-Date:   Mon, 11 Apr 2022 10:09:08 +0800
-Message-ID: <20220411020908.580-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        Sun, 10 Apr 2022 22:17:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4500760E2;
+        Sun, 10 Apr 2022 19:15:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD86A61034;
+        Mon, 11 Apr 2022 02:15:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27AAAC385A4;
+        Mon, 11 Apr 2022 02:15:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649643318;
+        bh=HrfWFfTOe6j154rTRQZaqm2rUNiKm4IP07T469feT/M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nFFEDTg+4TToywMjDQAyVK4Sm6uES5N8uq0ECkFg/s59aFORXQIraYALz/8TEzIVj
+         2LKpDmWyJX42tlLPtiEr4I9Gt7yc8yDIt2EpwKTHQeBbNsU7KdDZeZZi1ca7j9kMub
+         PxnufUDnVkOkQrq5Mn/IPKAHohFINKwiLsBCovPwYGff4p+9BC9gYT6aoiszmeqs5N
+         I9UvPgOZrkmmfwUpWQ7ZY0q0j+Hqhj9j5absFY6WL+NJAE5eiDI6x1Xguwt+BLW+ev
+         RuUGzJhoennVgSVLYmMDdytVCXjQZNkwzgRDQGK6xoe7TVO/ShrPZA9M31BFLyoxT6
+         b1iA6lN9O98IQ==
+Date:   Mon, 11 Apr 2022 10:15:07 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Marcel Ziswiler <marcel@ziswiler.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Alex Marginean <alexandru.marginean@nxp.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Fabio Estevam <festevam@gmail.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Heiko Schocher <hs@denx.de>, Jacky Bai <ping.bai@nxp.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Kuldeep Singh <kuldeep.singh@nxp.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Matthias Schiffer <matthias.schiffer@tq-group.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Olof Johansson <olof@lixom.net>, Peng Fan <peng.fan@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Reinhold Mueller <reinhold.mueller@emtrion.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/3] arm64: prepare and add verdin imx8m plus support
+Message-ID: <20220411021507.GG129381@dragon>
+References: <20220408145725.812566-1-marcel@ziswiler.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.215]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500007.china.huawei.com (7.192.104.62)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220408145725.812566-1-marcel@ziswiler.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sound/soc/tegra/tegra186_asrc.c:90:12: error: ‘tegra186_asrc_runtime_resume’ defined but not used [-Werror=unused-function]
- static int tegra186_asrc_runtime_resume(struct device *dev)
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-sound/soc/tegra/tegra186_asrc.c:80:12: error: ‘tegra186_asrc_runtime_suspend’ defined but not used [-Werror=unused-function]
- static int tegra186_asrc_runtime_suspend(struct device *dev)
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+On Fri, Apr 08, 2022 at 04:57:22PM +0200, Marcel Ziswiler wrote:
+> From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+> 
+> 
+> Add DMA properties to uart2 node of the base i.MX 8M Plus device tree,
+> add toradex,verdin-imx8mp et al. to dt-bindings and finally, add
+> initial support for Verdin iMX8M Plus.
+> 
+> Changes in v3:
+> - Add missing audio codec todo on development board as well.
+> - Actually define scl/sda-gpios for Verdin I2C_2_DSI aka i2c2. Also
+>   pointed out by Laurent. Thanks!
+> - Update PMIC LDO4 and I2C level shifter enablement comment.
+> - Fix USDHC2_VSELECT sleep pinctrl value and add a comment.
+> - Add comment about lowering frequency on Verdin I2C_2_DSI as suggested
+>   by Laurent.
+> - Re-based on top of Shawn's latest for-next based on 5.18-rc1.
+> 
+> Changes in v2:
+> - Add Laurent's reviewed-by tag.
+> - Add Krzysztof's reviewed-by tag.
+> - Fix capitalisation of verdin in comments as reported by Laurent.
+> - Add/modify todo comments as suggested by Laurent.
+> - Add Laurent's reviewed- and tested-by tags.
+> 
+> Marcel Ziswiler (3):
+>   arm64: dts: imx8mp: add uart2 dma
+>   dt-bindings: arm: fsl: add toradex,verdin-imx8mp et al.
+>   arm64: dts: freescale: add initial support for verdin imx8m plus
 
-Mark these functions as __maybe_unused to avoid this kind of warning.
-
-Fixes: a2df8c2d5b36 ("ASoC: tegra: Add Tegra186 based ASRC driver")
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- sound/soc/tegra/tegra186_asrc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/sound/soc/tegra/tegra186_asrc.c b/sound/soc/tegra/tegra186_asrc.c
-index 3c1e20cbb319..9f12faaa609d 100644
---- a/sound/soc/tegra/tegra186_asrc.c
-+++ b/sound/soc/tegra/tegra186_asrc.c
-@@ -77,7 +77,7 @@ static void tegra186_asrc_lock_stream(struct tegra186_asrc *asrc,
- 		     1);
- }
- 
--static int tegra186_asrc_runtime_suspend(struct device *dev)
-+static int __maybe_unused tegra186_asrc_runtime_suspend(struct device *dev)
- {
- 	struct tegra186_asrc *asrc = dev_get_drvdata(dev);
- 
-@@ -87,7 +87,7 @@ static int tegra186_asrc_runtime_suspend(struct device *dev)
- 	return 0;
- }
- 
--static int tegra186_asrc_runtime_resume(struct device *dev)
-+static int __maybe_unused tegra186_asrc_runtime_resume(struct device *dev)
- {
- 	struct tegra186_asrc *asrc = dev_get_drvdata(dev);
- 	int id;
--- 
-2.17.1
-
+Applied all, thanks!

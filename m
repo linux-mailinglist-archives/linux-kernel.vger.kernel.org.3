@@ -2,163 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D59B94FBCE8
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 15:19:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD9144FBCEE
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 15:20:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346409AbiDKNVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 09:21:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46490 "EHLO
+        id S1346424AbiDKNWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 09:22:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232655AbiDKNVp (ORCPT
+        with ESMTP id S1346456AbiDKNWb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 09:21:45 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B731CF9
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 06:19:29 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KcTvf40Bqz1HBL3;
-        Mon, 11 Apr 2022 21:18:54 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 11 Apr 2022 21:19:27 +0800
-Subject: Re: [PATCH 1/3] mm/memory-failure.c: avoid false-postive
- PageSwapCache test
-To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
-        <naoya.horiguchi@nec.com>
-CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "shy828301@gmail.com" <shy828301@gmail.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220407130352.15618-1-linmiaohe@huawei.com>
- <20220407130352.15618-2-linmiaohe@huawei.com>
- <20220411063520.GA3175313@hori.linux.bs1.fc.nec.co.jp>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <792748d6-3b41-d118-27bd-75e79390ba1a@huawei.com>
-Date:   Mon, 11 Apr 2022 21:19:26 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 11 Apr 2022 09:22:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935B03B54E;
+        Mon, 11 Apr 2022 06:20:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 303D160C97;
+        Mon, 11 Apr 2022 13:20:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96CA6C385AC;
+        Mon, 11 Apr 2022 13:20:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649683216;
+        bh=OcuAr1GyreyhXIjEC+zFg2u+H+LlTNXbW2xcHQviwNo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=LHpLidWDKMn62IY5RtSLIcvb5iTdhAE3IkUmKRZVYovRANbKuUZ7uNQ82ooYELuMp
+         uvnkBumUXMwoq5giJoO/Srly4V6s9XuycpJEa6nA4ht8+qAoH4kJNBtG6lBXMyfecr
+         dIM+ZZaGYoXRkLhSPRIVv15j84+cBkMjrByQXrw+YPNNTANE/4cg5t3b5L7+XzStlc
+         DFrcSJuCBRcQNjHUKp3YW/m1qQy8PxxP1PW5HXwuS9Ue4X+oxgHa+qoXPdYAQ57QNx
+         5sLxj2YuNgirEfqnlGVjBeQqARm9SSfaAfJcl6k9KJ4OjxgzhJpXGQprsOQzz+dhKt
+         i96/9/D/h1/jw==
+Received: by mail-vk1-f172.google.com with SMTP id e2so2664418vkn.4;
+        Mon, 11 Apr 2022 06:20:16 -0700 (PDT)
+X-Gm-Message-State: AOAM5316mipcJ2rDMhOYI9a2USW4yBhatEDiMGdvgN50VY0Pel/dRsND
+        PMsuG+B6K29ZvDgt0zZclCrvDGQV/T+tgUGucG8=
+X-Google-Smtp-Source: ABdhPJwsSThv12gIf4xS7sRqeyXoiBFfR3mAsFsOo3kX+636iDMKX1X+qwTN1V7goEmYj6lIwX+DaE06dkRkvgW27Sk=
+X-Received: by 2002:a05:6122:2016:b0:345:99ff:7151 with SMTP id
+ l22-20020a056122201600b0034599ff7151mr1365843vkd.2.1649683215477; Mon, 11 Apr
+ 2022 06:20:15 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220411063520.GA3175313@hori.linux.bs1.fc.nec.co.jp>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220406120405.660354-1-guoren@kernel.org> <YlP2PIPrUS89LuFR@FVFF77S0Q05N>
+In-Reply-To: <YlP2PIPrUS89LuFR@FVFF77S0Q05N>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 11 Apr 2022 21:20:04 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSAxpAi=LbAdu7jntZRUa=-dJwL0VfmDfBV5MHB=rcZ-w@mail.gmail.com>
+Message-ID: <CAJF2gTSAxpAi=LbAdu7jntZRUa=-dJwL0VfmDfBV5MHB=rcZ-w@mail.gmail.com>
+Subject: Re: [PATCH] riscv: Optimize AMO acquire/release usage
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/11 14:35, HORIGUCHI NAOYA(堀口 直也) wrote:
-> On Thu, Apr 07, 2022 at 09:03:50PM +0800, Miaohe Lin wrote:
->> PageSwapCache is only reliable when PageAnon is true because PG_swapcache
->> serves as PG_owner_priv_1 which can be used by fs if it's pagecache page.
->> So we should test PageAnon to distinguish pagecache page from swapcache
->> page to avoid false-postive PageSwapCache test.
->>
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->> ---
->>  mm/memory-failure.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
->> index ef402b490663..2e97302d62e4 100644
->> --- a/mm/memory-failure.c
->> +++ b/mm/memory-failure.c
->> @@ -2262,7 +2262,7 @@ static int __soft_offline_page(struct page *page)
->>  		return 0;
->>  	}
->>  
->> -	if (!PageHuge(page) && PageLRU(page) && !PageSwapCache(page))
->> +	if (!PageHuge(page) && PageLRU(page) && !PageAnon(page))
->>  		/*
->>  		 * Try to invalidate first. This should work for
->>  		 * non dirty unmapped page cache pages.
->> -- 
-> 
-> I foudn that with this change the following VM_BUG_ON_FOLIO() is triggered
-> when calling soft-offline for a swapcache.  Maybe we need check both of
-> PageAnon and PageSwapCache instead of either?
-> 
+Hi Mark,
 
-Many thanks for your test! This is my overlook. Sorry about it! :( The root cause is that the page is
-added into swapcache and lru( so that it can pass the HWPoisonHandlable check) but page anon is not
-set yet due to page lock is held by __soft_offline_page. So we have the below core dump:
+On Mon, Apr 11, 2022 at 5:35 PM Mark Rutland <mark.rutland@arm.com> wrote:
+>
+> Hi Guo,
+>
+> On Wed, Apr 06, 2022 at 08:04:05PM +0800, guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > Using RISCV_ACQUIRE/RELEASE_BARRIER is over expensive for
+> > xchg/cmpxchg_acquire/release than nature instructions' .aq/rl.
+> > The patch fixed these issues under RISC-V Instruction Set Manual,
+> > Volume I: RISC-V User-Level ISA =E2=80=9CA=E2=80=9D Standard Extension =
+for Atomic
+> > Instructions, Version 2.1.
+> >
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> > ---
+> >  arch/riscv/include/asm/atomic.h  | 70 ++++++++++++++++++++++++++++++--
+> >  arch/riscv/include/asm/cmpxchg.h | 30 +++++---------
+> >  2 files changed, 76 insertions(+), 24 deletions(-)
+>
+> I'll leave the bulk of this to Palmer, but I spotted something below whic=
+h
+> doesn't look right.
+>
+> > @@ -315,12 +379,11 @@ static __always_inline int arch_atomic_sub_if_pos=
+itive(atomic_t *v, int offset)
+> >         int prev, rc;
+> >
+> >       __asm__ __volatile__ (
+> > -             "0:     lr.w     %[p],  %[c]\n"
+> > +             "0:     lr.w.aq  %[p],  %[c]\n"
+> >               "       sub      %[rc], %[p], %[o]\n"
+> >               "       bltz     %[rc], 1f\n"
+> >               "       sc.w.rl  %[rc], %[rc], %[c]\n"
+> >               "       bnez     %[rc], 0b\n"
+> > -             "       fence    rw, rw\n"
+> >               "1:\n"
+> >               : [p]"=3D&r" (prev), [rc]"=3D&r" (rc), [c]"+A" (v->counte=
+r)
+> >               : [o]"r" (offset)
+>
+> I believe in this case the existing code here is correct, and this optimi=
+zation
+> is broken.
+Yes, you are right, My patch would break the memory consistency of
+riscv between acquire & release. Thx for your corrections.
 
-[   41.232172] page:0000000033d8a20c refcount:0 mapcount:0 mapping:00000000bc103d88 index:0x36d pfn:0x14359b
-										^^^ page is not anon
+>
+> I believe the existing code is using RELEASE + FULL-BARRIER to ensure ful=
+l
+> ordering, since separate ACQUIRE+RELEASE cannot. For a description of the
+> problem, see the commit message for:
+I've another question: The RELEASE(prevent ACCESS-A after stlxr) +
+FULL-BARRIER is for arm64 because there is no "stlaxr" for arm64,
+right? We could use sc.w.aqrl directly for riscv to reduce a release
+fence.
 
-[   41.236576] flags: 0x57ffffc0080415(locked|uptodate|lru|owner_priv_1|swapbacked|node=1|zone=2|lastcpupid=0x1fffff)
-								^^^^^^^^^^^^^^^^^^ page is in swapcache
+New patch:
+       __asm__ __volatile__ (
+              "0:     lr.w     %[p],  %[c]\n"
+               "       sub      %[rc], %[p], %[o]\n"
+               "       bltz     %[rc], 1f\n"
+-              "       sc.w.rl  %[rc], %[rc], %[c]\n"
++              "       sc.w.aqrl  %[rc], %[rc], %[c]\n"
+               "       bnez     %[rc], 0b\n"
+ -             "       fence    rw, rw\n"
+               "1:\n"
+               : [p]"=3D&r" (prev), [rc]"=3D&r" (rc), [c]"+A" (v->counter)
+               : [o]"r" (offset)
 
-It seems we can check !PageAnon(page) && !PageSwapCache(page), as you suggested, to fix this issue. But maybe I
-should drop this patch because invalidate_inode_page will always return 0 for PageAnon due to folio_mapping == NULL.
-So nothing is really done for anonymous page here. And the origin !PageSwapCache(page) check should do the right work.
-Or we shouldn't even try to call invalidate_inode_page with anonymous page in principle?
+(It surprises me that seems lr.w.aq is useless for the real world.)
 
-BTW: PageSwapCache should be reliable here as folio_test_swapbacked is checked implicitly inside it. In such case, PG_swapcache
-can't serve as PG_owner_priv_1 as pagecache page shouldn't set PG_swapbacked (shmem will set PG_swapbacked but PG_owner_priv_1
-is not used anyway). Or am I miss something again?
+>
+>   8e86f0b409a44193 ("arm64: atomics: fix use of acquire + release for ful=
+l barrier semantics")
+>
+> The gist is that HW can re-order:
+>
+>         ACCESS-A
+>         ACQUIRE
+>         RELEASE
+>         ACCESS-B
+>
+> ... to:
+>
+>         ACQUIRE
+>         ACCESS-B
+>         ACCESS-A
+>         RELEASE
+>
+> ... violating FULL ordering semantics.
+>
+> This will apply for *any* operation where FULL orderingis required, which=
+ I
+> suspect applies to some more cases below.
 
+
+>
+> > @@ -337,12 +400,11 @@ static __always_inline s64 arch_atomic64_sub_if_p=
+ositive(atomic64_t *v, s64 offs
+> >         long rc;
+> >
+> >       __asm__ __volatile__ (
+> > -             "0:     lr.d     %[p],  %[c]\n"
+> > +             "0:     lr.d.aq  %[p],  %[c]\n"
+> >               "       sub      %[rc], %[p], %[o]\n"
+> >               "       bltz     %[rc], 1f\n"
+> >               "       sc.d.rl  %[rc], %[rc], %[c]\n"
+> >               "       bnez     %[rc], 0b\n"
+> > -             "       fence    rw, rw\n"
+> >               "1:\n"
+> >               : [p]"=3D&r" (prev), [rc]"=3D&r" (rc), [c]"+A" (v->counte=
+r)
+> >               : [o]"r" (offset)
+>
+> My comment for arch_atomic_sub_if_positive() applies here too.
+>
+>
+> [...]
+>
+> > @@ -309,11 +301,10 @@
+> >       switch (size) {                                                 \
+> >       case 4:                                                         \
+> >               __asm__ __volatile__ (                                  \
+> > -                     "0:     lr.w %0, %2\n"                          \
+> > +                     "0:     lr.w.aq %0, %2\n"                       \
+> >                       "       bne  %0, %z3, 1f\n"                     \
+> >                       "       sc.w.rl %1, %z4, %2\n"                  \
+> >                       "       bnez %1, 0b\n"                          \
+> > -                     "       fence rw, rw\n"                         \
+> >                       "1:\n"                                          \
+> >                       : "=3D&r" (__ret), "=3D&r" (__rc), "+A" (*__ptr) =
+   \
+> >                       : "rJ" ((long)__old), "rJ" (__new)              \
+> > @@ -321,11 +312,10 @@
+> >               break;                                                  \
+> >       case 8:                                                         \
+> >               __asm__ __volatile__ (                                  \
+> > -                     "0:     lr.d %0, %2\n"                          \
+> > +                     "0:     lr.d.aq %0, %2\n"                       \
+> >                       "       bne %0, %z3, 1f\n"                      \
+> >                       "       sc.d.rl %1, %z4, %2\n"                  \
+> >                       "       bnez %1, 0b\n"                          \
+> > -                     "       fence rw, rw\n"                         \
+> >                       "1:\n"                                          \
+> >                       : "=3D&r" (__ret), "=3D&r" (__rc), "+A" (*__ptr) =
+   \
+> >                       : "rJ" (__old), "rJ" (__new)                    \
+>
+> I don't have enough context to say for sure, but I suspect these are expe=
+cting
+> FULL ordering too, and would be broken, as above.
+>
 > Thanks,
-> Naoya Horiguchi
+> Mark.
 
-Thanks a lot!
 
-> 
-> [   41.232172] page:0000000033d8a20c refcount:0 mapcount:0 mapping:00000000bc103d88 index:0x36d pfn:0x14359b
-> [   41.234931] memcg:ffff8c2f84d72000
-> [   41.235850] aops:swap_aops
-> [   41.236576] flags: 0x57ffffc0080415(locked|uptodate|lru|owner_priv_1|swapbacked|node=1|zone=2|lastcpupid=0x1fffff)
-> [   41.239221] raw: 0057ffffc0080415 ffffef2c050eda48 ffffef2c050dbe08 0000000000000000
-> [   41.241216] raw: 000000000000036d 000000000000036e 00000000ffffffff ffff8c2f84d72000
-> [   41.243184] page dumped because: VM_BUG_ON_FOLIO(folio_test_lru(folio))
-> [   41.244872] ------------[ cut here ]------------
-> [   41.246074] kernel BUG at mm/memcontrol.c:7062!
-> [   41.247248] invalid opcode: 0000 [#1] PREEMPT SMP PTI
-> [   41.248539] CPU: 5 PID: 1036 Comm: bash Tainted: G            E     5.18.0-rc1-v5.18-rc1-220408-2310-012-gf501f+ #11
-> [   41.251844] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1.fc35 04/01/2014
-> [   41.254087] RIP: 0010:mem_cgroup_swapout+0x181/0x2c0
-> [   41.255399] Code: 03 0f 85 37 01 00 00 65 48 ff 08 48 83 c4 08 5b 5d 41 5c 41 5d 41 5e 41 5f e9 8b a3 e0 ff 48 c7 c6 88 b7 5a aa e8 3f 26 f7 ff <0f> 0b 48 c7 c6 d0 ec 5a aa e8 31 26 f7 ff 0f 0b 66 90 8b 45 5c 48
-> [   41.260408] RSP: 0018:ffffa9340218fce0 EFLAGS: 00010082
-> [   41.261780] RAX: 000000000000003b RBX: ffff8c2fc180a000 RCX: 0000000000000000
-> [   41.263604] RDX: 0000000000000002 RSI: ffffffffaa599561 RDI: 00000000ffffffff
-> [   41.265435] RBP: ffffef2c050d66c0 R08: 0000000000000000 R09: 00000000ffffdfff
-> [   41.267266] R10: ffffa9340218fad0 R11: ffffffffaa940d08 R12: 000000000000036e
-> [   41.269094] R13: 0000000000000000 R14: 0000000000000000 R15: ffff8c2fc180a008
-> [   41.270911] FS:  00007f00259d3740(0000) GS:ffff8c30bbc80000(0000) knlGS:0000000000000000
-> [   41.272975] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [   41.274422] CR2: 0000561d1325a973 CR3: 00000001452c2001 CR4: 0000000000170ee0
-> [   41.276253] Call Trace:
-> [   41.277013]  <TASK>
-> [   41.277561]  __remove_mapping+0xce/0x300
-> [   41.278604]  remove_mapping+0x12/0xe0
-> [   41.279571]  soft_offline_page+0x834/0x8b0
-> [   41.280972]  soft_offline_page_store+0x43/0x70
-> [   41.282171]  kernfs_fop_write_iter+0x11c/0x1b0
-> [   41.283292]  new_sync_write+0xf9/0x160
-> [   41.284310]  vfs_write+0x209/0x290
-> [   41.285174]  ksys_write+0x4f/0xc0
-> [   41.286049]  do_syscall_64+0x3b/0x90
-> [   41.286991]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> [   41.288328] RIP: 0033:0x7f00257018b7
-> [   41.289232] Code: 0f 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb b7 0f 1f 00 f3 0f 1e fa 64 8b 04 25 18 00 00 00 85 c0 75 10 b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 51 c3 48 83 ec 28 48 89 54 24 18 48 89 74 24
-> [   41.294001] RSP: 002b:00007fff3dc50748 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-> [   41.295937] RAX: ffffffffffffffda RBX: 000000000000000c RCX: 00007f00257018b7
-> [   41.297767] RDX: 000000000000000c RSI: 0000561d1325a970 RDI: 0000000000000001
-> [   41.299600] RBP: 0000561d1325a970 R08: 0000000000000000 R09: 00007f00257b64e0
-> [   41.301418] R10: 00007f00257b63e0 R11: 0000000000000246 R12: 000000000000000c
-> [   41.303305] R13: 00007f00257fb5a0 R14: 000000000000000c R15: 00007f00257fb7a0
-> [   41.305179]  </TASK>
-> 
 
+--=20
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

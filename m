@@ -2,74 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77D7A4FB5B6
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 10:14:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5D744FB5AE
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 10:12:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343615AbiDKIQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 04:16:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40044 "EHLO
+        id S1343599AbiDKIOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 04:14:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234288AbiDKIQ4 (ORCPT
+        with ESMTP id S231967AbiDKIOs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 04:16:56 -0400
-X-Greylist: delayed 128 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 11 Apr 2022 01:14:36 PDT
-Received: from unicom145.biz-email.net (unicom145.biz-email.net [210.51.26.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D1D33A05;
-        Mon, 11 Apr 2022 01:14:34 -0700 (PDT)
-Received: from ([60.208.111.195])
-        by unicom145.biz-email.net ((D)) with ASMTP (SSL) id GEY00121;
-        Mon, 11 Apr 2022 16:12:21 +0800
-Received: from localhost.localdomain (10.200.104.97) by
- jtjnmail201604.home.langchao.com (10.100.2.4) with Microsoft SMTP Server id
- 15.1.2308.21; Mon, 11 Apr 2022 16:12:20 +0800
-From:   Bo Liu <liubo03@inspur.com>
-To:     <pbonzini@redhat.com>, <seanjc@google.com>, <vkuznets@redhat.com>,
-        <wanpengli@tencent.com>, <jmattson@google.com>, <joro@8bytes.org>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>
-CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Bo Liu <liubo03@inspur.com>
-Subject: [PATCH] KVM: x86: fix the return type of kvm_age_rmapp
-Date:   Mon, 11 Apr 2022 04:12:18 -0400
-Message-ID: <20220411081218.2296-1-liubo03@inspur.com>
-X-Mailer: git-send-email 2.18.2
+        Mon, 11 Apr 2022 04:14:48 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0BB3DDFA;
+        Mon, 11 Apr 2022 01:12:34 -0700 (PDT)
+Received: from [192.168.0.2] (ip5f5ae91f.dynamic.kabel-deutschland.de [95.90.233.31])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 7A71061EA1923;
+        Mon, 11 Apr 2022 10:12:32 +0200 (CEST)
+Message-ID: <ccf4d29e-9efb-23ea-b706-f00cde7ead4b@molgen.mpg.de>
+Date:   Mon, 11 Apr 2022 10:12:32 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.200.104.97]
-tUid:   2022411161221e79c7889c96454f924143db2f61e5534
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v6 1/3] ARM: dts: nuvoton: Add memory controller node
+Content-Language: en-US
+To:     Medad Young <medadyoung@gmail.com>
+Cc:     rric@kernel.org, James Morse <james.morse@arm.com>,
+        tony.luck@intel.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Patrick Venture <venture@google.com>, KWLIU@nuvoton.com,
+        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING@nuvoton.com,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>, ctcchien@nuvoton.com,
+        devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
+        LKML <linux-kernel@vger.kernel.org>, linux-edac@vger.kernel.org
+References: <20220322030152.19018-1-ctcchien@nuvoton.com>
+ <20220322030152.19018-2-ctcchien@nuvoton.com>
+ <c73bf178-f5bd-01c6-209d-051706112877@molgen.mpg.de>
+ <CAHpyw9ckLUNe8biEFSjHBndG_WD-7O-QsHO8Rr0eoXbROH0dUQ@mail.gmail.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <CAHpyw9ckLUNe8biEFSjHBndG_WD-7O-QsHO8Rr0eoXbROH0dUQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change the return type of kvm_age_rmapp to "bool"
+Dear Medad,
 
-Signed-off-by: Bo Liu <liubo03@inspur.com>
----
- arch/x86/kvm/mmu/mmu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index c623019929a7..799ab899f552 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -1572,7 +1572,7 @@ static bool kvm_age_rmapp(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
- {
- 	u64 *sptep;
- 	struct rmap_iterator iter;
--	int young = 0;
-+	bool young = false;
- 
- 	for_each_rmap_spte(rmap_head, &iter, sptep)
- 		young |= mmu_spte_age(sptep);
--- 
-2.27.0
+Thank you for your reply.
 
+Am 11.04.22 um 09:56 schrieb Medad Young:
+
+[…]
+
+> Paul Menzel 於 2022年4月9日 週六 下午1:57寫道：
+
+>> Thank you for the patch.
+>>
+>> Am 22.03.22 um 04:01 schrieb Medad CChien:
+>>> ECC must be configured in the BootBlock header.
+>>
+>> bootblock
+>>
+>> I search for *bootblock* in Linux and the git commit messages, and does
+>> not seem to be a common term. Is that term used in the datasheet?
+> 
+> Yes, bootblock is a bootloader of our SOC
+
+Nice. Never heard of it before. Maybe add the project URL as reference 
+for the ignorant like me.
+
+>>> Then, you can read error counts via
+>>> the EDAC kernel framework.
+>>
+>> Please reflow for 75 characters per line. (Also, there is no need to
+>> break lines after a sentence, unless 75 characters are reached or a new
+>> paragraph starts.)
+>>
+>> Tested on what board?
+> 
+> I tested this on Nuvoton's BMC board
+
+It would be nice to have that with the model number documented in the 
+commit message.
+
+>>> Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
+>>
+>> Out of curiosity, is the first C in CChien the letter of your middle
+>> name, or the last name really spelled with two capital letters in the
+>> beginning?
+> 
+> this is a special last name in chinese.
+> my last name does really spell with two capital letters in the beginning.
+
+Interesting. Thank you for teaching me new things.
+
+
+Kind regards,
+
+Paul

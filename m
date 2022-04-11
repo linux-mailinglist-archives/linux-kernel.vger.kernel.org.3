@@ -2,65 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D6DF4FC6A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 23:21:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73F724FC6AA
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 23:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241778AbiDKVXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 17:23:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60516 "EHLO
+        id S1350165AbiDKVYJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 17:24:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350251AbiDKVXF (ORCPT
+        with ESMTP id S245205AbiDKVYD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 17:23:05 -0400
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B59352ED57;
-        Mon, 11 Apr 2022 14:20:50 -0700 (PDT)
-Received: by mail-pl1-f174.google.com with SMTP id s14so5364863plk.8;
-        Mon, 11 Apr 2022 14:20:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=9+KXQz4AgAAaQRzQM2YK2R02WQKfgHNx/VOWl4V0PaA=;
-        b=1oPPT+iExtkBTKo2HxfhiQ/rc/pAatBu7AYU6CuIMI/ceuVzDRiv2aXE9W7DE2tZdA
-         hxNxGfyjLtD0jtrM8Fk7OnP9+obcDqui8v8UilWhWvW/gxnv4RWyn2t/21k3EtdFEfyp
-         8b9W8tq6fbdG2xPzbaC1T3ysrxu+9FPloPRTiXr8gPh1Dz/3Doa1P9YbYP+lOcLuPodJ
-         YQtTaM9IVRnqEH/fDY9w26hC2xs10Q37Hw6GWsVSuEwpjRomoYAn/xJmBHC+xIzyhw4k
-         9+kFJ/UIOcCFy4s9mSeL+NNZFc8sA7DfRIG+BYtL8586+I79NZbpcxGhYeKhRlDzjI9b
-         A7Uw==
-X-Gm-Message-State: AOAM531pI6Y17OqFiY9+0s0gJy8HF4/Qchv2hRxPtW7zkPNSsuF9OUbv
-        35FgwsKqKsNCKNzh0jV9Ies=
-X-Google-Smtp-Source: ABdhPJwMQ4QcZZ4omhtshFNnao7W4LvQ5dY8Q00SlCWpvG1OUohcRikoWl0Ht9jN0ylJbCQoEV490A==
-X-Received: by 2002:a17:90b:3a87:b0:1c9:9eef:7a9 with SMTP id om7-20020a17090b3a8700b001c99eef07a9mr1222767pjb.103.1649712050142;
-        Mon, 11 Apr 2022 14:20:50 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:ec99:44ba:c45c:cd3e? ([2620:15c:211:201:ec99:44ba:c45c:cd3e])
-        by smtp.gmail.com with ESMTPSA id md4-20020a17090b23c400b001cb66e3e1f8sm401333pjb.0.2022.04.11.14.20.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Apr 2022 14:20:49 -0700 (PDT)
-Message-ID: <32c07164-ae1a-a135-2d1f-3b660cbcf107@acm.org>
-Date:   Mon, 11 Apr 2022 14:20:47 -0700
+        Mon, 11 Apr 2022 17:24:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9812FE5C
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 14:21:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 08C1BB815C8
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 21:21:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EB4EC385A3;
+        Mon, 11 Apr 2022 21:21:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649712105;
+        bh=KMidD+w99wAIiwGhewAltcaEDYwfTgwuH9rySlM7owU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=lk9VWBICFXjGKTnI22r2ysF69//hMym+TGv5xnjmfAAu0maDn0rXzdvqNYHyGD9Ev
+         RiQerYKR1ioyJJQTrAY1ZTljIQNFs1HVWIt3TSrCoF+w+MKXoep1FwVmVhecdcINvc
+         10EzMt5SIL63+xwx2HwNTQnREAZSAn3phmSwvqo6cvy67kjQk9S3YKNQzWeaFWau29
+         hrvuOxMiQ2hfb6IYm4wfIdvz9iDDCLKkVbQFQLTRsDIcgfKT8HjqL7Z8m2+8A/Jw1V
+         Z0Az20XQUp24kxfdlJ3QylhQTbzxq7LCUj4XRjqTSNmQ1p77v9OmpcBhYFDMwBsWCw
+         N5TO3c0Q9UPWg==
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [PATCH 1/2] f2fs: fix wrong condition check when failing metapage read
+Date:   Mon, 11 Apr 2022 14:21:40 -0700
+Message-Id: <20220411212141.1775589-1-jaegeuk@kernel.org>
+X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] asm-generic: fix __get_unaligned_be48() on 32 bit
- platforms
-Content-Language: en-US
-To:     Alexander Lobakin <alobakin@pm.me>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220406233909.529613-1-alobakin@pm.me>
- <20220411195403.230899-1-alobakin@pm.me>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220411195403.230899-1-alobakin@pm.me>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,13 +52,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/11/22 13:00, Alexander Lobakin wrote:
-> Uhm, ping?
+This patch fixes wrong initialization.
 
-What happened with the plan to move this function into the block layer?
-I'm asking this because if that function is moved your patch will conflict
-with the patch that moves that function.
+Fixes: 50c63009f6ab ("f2fs: avoid an infinite loop in f2fs_sync_dirty_inodes")
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+---
+ fs/f2fs/checkpoint.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Thanks,
+diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
+index aba1b8a1ce66..ed61ac99a3cf 100644
+--- a/fs/f2fs/checkpoint.c
++++ b/fs/f2fs/checkpoint.c
+@@ -98,9 +98,9 @@ static struct page *__get_meta_page(struct f2fs_sb_info *sbi, pgoff_t index,
+ 	}
+ 
+ 	if (unlikely(!PageUptodate(page))) {
+-		if (page->index == sbi->metapage_eio_ofs &&
+-			sbi->metapage_eio_cnt++ == MAX_RETRY_META_PAGE_EIO) {
+-			set_ckpt_flags(sbi, CP_ERROR_FLAG);
++		if (page->index == sbi->metapage_eio_ofs) {
++			if (sbi->metapage_eio_cnt++ == MAX_RETRY_META_PAGE_EIO)
++				set_ckpt_flags(sbi, CP_ERROR_FLAG);
+ 		} else {
+ 			sbi->metapage_eio_ofs = page->index;
+ 			sbi->metapage_eio_cnt = 0;
+-- 
+2.35.1.1178.g4f1659d476-goog
 
-Bart.

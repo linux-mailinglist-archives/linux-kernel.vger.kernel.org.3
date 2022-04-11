@@ -2,85 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B56E4FB97D
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 12:24:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A9614FB98A
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 12:27:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244058AbiDKK06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 06:26:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50052 "EHLO
+        id S1345465AbiDKK3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 06:29:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345474AbiDKK0a (ORCPT
+        with ESMTP id S1345438AbiDKK3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 06:26:30 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 12E7143AC6;
-        Mon, 11 Apr 2022 03:22:58 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CDBF7169C;
-        Mon, 11 Apr 2022 03:22:57 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.9.30])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 407723F5A1;
-        Mon, 11 Apr 2022 03:22:55 -0700 (PDT)
-Date:   Mon, 11 Apr 2022 11:22:51 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, gcc@gcc.gnu.org,
-        catalin.marinas@arm.com, will@kernel.org, marcan@marcan.st,
-        maz@kernel.org, szabolcs.nagy@arm.com, f.fainelli@gmail.com,
-        opendmb@gmail.com, Andrew Pinski <pinskia@gmail.com>,
-        Ard Biesheuvel <ardb@kernel.org>, x86@kernel.org,
-        andrew.cooper3@citrix.com, Jeremy Linton <jeremy.linton@arm.com>
-Subject: Re: GCC 12 miscompilation of volatile asm (was: Re: [PATCH]
- arm64/io: Remind compiler that there is a memory side effect)
-Message-ID: <YlQBe5KbKogNU4vt@FVFF77S0Q05N>
-References: <20220401164406.61583-1-jeremy.linton@arm.com>
- <Ykc0xrLv391/jdJj@FVFF77S0Q05N>
- <Ykw7UnlTnx63z/Ca@FVFF77S0Q05N>
- <YkxMov3qpHxFa/n3@hirez.programming.kicks-ass.net>
+        Mon, 11 Apr 2022 06:29:00 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336473DDEB;
+        Mon, 11 Apr 2022 03:26:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649672807; x=1681208807;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=w/B9OC3B9ubhCDDuz61ASu2Hiu/rM8Lrj6qHHNYq32U=;
+  b=PEkdTgVIBKpikfPJb9nnVxnlA7BOopgtITPDU0Q2kruQ2xYupDh9yJQ6
+   qfP5fAyJwj3rYVAByYgqb7SUqe9BwckDUuSwI/Dqvyv17zU4iY1KOx3I0
+   Vm5eRey3DGlFnO4zf9RWCvGEyIekG+YMytSUVy5ckG/QnBXCUWjA76yB6
+   U4uN9DJSM8vn3vXJrjDT9slo6xRKaVfktAoTPsgzMHBzEeljNLVcjIIiz
+   8rtG/5hweZad0kRBqP5wBm4MgZlSe1DXFDEu4PC+ZzxwNy28x7pnLmZyv
+   77d5ytlLVp2y4KJJaFSOjRmPtIM/wakOiehx+X3kYmepRGuvFcWmh139E
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="348521541"
+X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
+   d="scan'208";a="348521541"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 03:26:46 -0700
+X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
+   d="scan'208";a="644032222"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 03:26:40 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ndrCE-001BAf-W7;
+        Mon, 11 Apr 2022 13:22:58 +0300
+Date:   Mon, 11 Apr 2022 13:22:58 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Tom Rix <trix@redhat.com>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, joel@jms.id.au,
+        andrew@aj.id.au, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        alcooperx@gmail.com, christophe.jaillet@wanadoo.fr,
+        cai.huoqing@linux.dev, benh@kernel.crashing.org,
+        neal_liu@aspeedtech.com, miles.chen@mediatek.com,
+        balamanikandan.gunasundar@microchip.com, macpaul.lin@mediatek.com,
+        s.shtylyov@omp.ru, jakobkoschel@gmail.com,
+        stern@rowland.harvard.edu, quic_wcheng@quicinc.com,
+        yashsri421@gmail.com, rdunlap@infradead.org,
+        linux-geode@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org,
+        bcm-kernel-feedback-list@broadcom.com
+Subject: Re: [PATCH] usb: gadget: udc: clean up comments
+Message-ID: <YlQBgnjpkSurf9PZ@smile.fi.intel.com>
+References: <20220410150828.1891123-1-trix@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YkxMov3qpHxFa/n3@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220410150828.1891123-1-trix@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 05, 2022 at 04:05:22PM +0200, Peter Zijlstra wrote:
-> On Tue, Apr 05, 2022 at 01:51:30PM +0100, Mark Rutland wrote:
-> > Hi all,
-> > 
-> > [adding kernel folk who work on asm stuff]
-> > 
-> > As a heads-up, GCC 12 (not yet released) appears to erroneously optimize away
-> > calls to functions with volatile asm. Szabolcs has raised an issue on the GCC
-> > bugzilla:  
-> > 
-> >   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105160
-> > 
-> > ... which is a P1 release blocker, and is currently being investigated.
-> > 
-> > Jemery originally reported this as an issue with {readl,writel}_relaxed(), but
-> > the underlying problem doesn't have anything to do with those specifically.
-> > 
-> > I'm dumping a bunch of info here largely for posterity / archival, and to find
-> > out who (from the kernel side) is willing and able to test proposed compiler
-> > fixes, once those are available.
-> > 
-> > I'm happy to do so for aarch64; Peter, I assume you'd be happy to look at the
-> > x86 side?
+On Sun, Apr 10, 2022 at 11:08:28AM -0400, Tom Rix wrote:
+> SPDX
+> *.h use /* */ style comments
 > 
-> Sure..
+> For double words, remove
+> with, also
+> 
+> Spelling replacements
+> wayt to way
+> wakup to wakeup
+> Contrl to Control
+> cheks to checks
+> initiaization to initialization
+> dyanmic to dynamic
 
-FWIW, compiler explorer now have a trunk build with the fix, and my x86-64
-example now gets compiled to something which looks correct:
+Something really wrong with indentation above.
 
-  https://godbolt.org/z/cveff9hq5
+...
 
-Thanks,
-Mark.
+>  drivers/usb/gadget/udc/amd5536udc.h       | 2 +-
+>  drivers/usb/gadget/udc/aspeed-vhub/core.c | 2 +-
+>  drivers/usb/gadget/udc/aspeed-vhub/ep0.c  | 2 +-
+>  drivers/usb/gadget/udc/aspeed-vhub/hub.c  | 2 +-
+>  drivers/usb/gadget/udc/aspeed-vhub/vhub.h | 4 ++--
+>  drivers/usb/gadget/udc/at91_udc.c         | 2 +-
+>  drivers/usb/gadget/udc/bdc/bdc_core.c     | 4 ++--
+>  drivers/usb/gadget/udc/core.c             | 4 ++--
+>  drivers/usb/gadget/udc/trace.h            | 2 +-
+
+I believe that Greg's bot asks to split on per-driver basis.
+OTOH I don't see anything that can be problematic if in one
+change. So, it's up to maintainers then.
+
+...
+
+> --- a/drivers/usb/gadget/udc/amd5536udc.h
+> +++ b/drivers/usb/gadget/udc/amd5536udc.h
+
+>   * amd5536.h -- header for AMD 5536 UDC high/full speed USB device controller
+
+At the same time you may drop the filename(s) from the file(s) as this very
+one shows why it's good not to have a filename inside file.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

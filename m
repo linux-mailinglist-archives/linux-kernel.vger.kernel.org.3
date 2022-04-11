@@ -2,121 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A1754FBA80
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 13:06:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 097464FBA8C
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 13:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345895AbiDKLIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 07:08:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33418 "EHLO
+        id S244058AbiDKLLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 07:11:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345897AbiDKLGu (ORCPT
+        with ESMTP id S1345897AbiDKLJI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 07:06:50 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42EAC13D18;
-        Mon, 11 Apr 2022 04:04:34 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id j21so16027900qta.0;
-        Mon, 11 Apr 2022 04:04:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=vB5rzbkUXQOgEVOAQ+oj0ZM8y30roPESpDd5/oevwT4=;
-        b=dq2RZU8F9nASFtU6zsvVxtuqChAwSl9U0XGqSO2w8YLwBgwFnR718DdsGFlqRdjIx5
-         OdMVR4X+mOHY4U9b+QsCuXBNrqRPvmJqYB1knORI/H6LCrGFKkFZ/LV+r110UEansjxA
-         ayEN2BgYZRYo8ife16WPQNYnMvYEEM69DJqdHeXXM9CyUSi3o1TZ0Ks73XQmunaqJkrs
-         eXXTcy7p4fUyRdScmlt8tXAnfTHIHUjf3sS+Yvwj2XfWLtGB1XAYzGRUSkH5hAk8tMRF
-         2WSf+p7CHJkEwTroLFa4cRhbHfhXpRWjlGpgsQjmfd1KetWMVyyRi+awE7pHIA0CpyyV
-         TaxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=vB5rzbkUXQOgEVOAQ+oj0ZM8y30roPESpDd5/oevwT4=;
-        b=T7ZhoSMus8o3g0+IT3iEzKzHQAqelCcSsDh6ud2hP/z38WnUNI+torvIpLNSB1LJTo
-         qtmtd/fbK7WoC//iTpXkhOJl7sjTe3BcqS7PtN9kN9Nr/Hhc+mHWw7tBM4fBdh34MUgz
-         L57PZn1Ryeq7OcYFS3vkIzetwyq5VwU2MshvZDTSZ7wlIuDzWAhKpRxqJvmWqCLAmOHE
-         MHC5WAe4+TIMZks9ntu4pHM1RSLMG072kqrj0RzpAu+WeOJ0zbcnN8Y6djbDvOJF2sSs
-         4d7oUAnM1A27pgKKhfTnZXzixcRrtNA7Oc2jJtKkgqCrhfsh3OCiw/lNnrKjcnfYP+xP
-         gqCQ==
-X-Gm-Message-State: AOAM532Dnt6T5JB3p26Tm/Xs0KYpiFOlz14YlY/LZI6tUipfJnexQ9nO
-        Gfz7hoMyFJS3AGIe1PzfBK8=
-X-Google-Smtp-Source: ABdhPJxJP+E6DLnG6gqXLhNmiNDBEfJrnnebGQIoZFEahUYEkQ3U3LsvhFfvRMQP4/HrYf5MIBv35A==
-X-Received: by 2002:ac8:5442:0:b0:2ed:7e3a:17f7 with SMTP id d2-20020ac85442000000b002ed7e3a17f7mr4573276qtq.48.1649675072970;
-        Mon, 11 Apr 2022 04:04:32 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id l18-20020a05622a051200b002e1e5e57e0csm25140194qtx.11.2022.04.11.04.04.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 04:04:32 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: lv.ruyi@zte.com.cn
-To:     joe@perches.com
-Cc:     cgel.zte@gmail.com, clm@fb.com, dsterba@suse.com,
-        josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lv.ruyi@zte.com.cn,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH v2] btrfs: remove unnecessary conditional
-Date:   Mon, 11 Apr 2022 11:04:26 +0000
-Message-Id: <20220411110426.2521783-1-lv.ruyi@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <c855ba7ca204b948c59c9fd966c154e5505b3d77.camel@perches.com>
-References: <c855ba7ca204b948c59c9fd966c154e5505b3d77.camel@perches.com>
+        Mon, 11 Apr 2022 07:09:08 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E169A5FF9;
+        Mon, 11 Apr 2022 04:06:43 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 9F969215FC;
+        Mon, 11 Apr 2022 11:06:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1649675202; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=G8l3FS8YFsk/OqORAn3rxQjestKsacMckcsHSATHBZE=;
+        b=RpGdQP6AE8ApZkRf+wiTqgUy7XiIRUzzA242TdudFTdWxPJ1SJuJIXa+7c/j7bnwsyK0hs
+        c6CKFY+G8yjB4D/JTMIP9VO4kBSBhE9sdI+JAEW2RZxA/dlB/cg+HR9/I7N9u2iKfEQb/Y
+        O3NsJO7kukxFtJedjsk0nJDSJCccm8U=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1649675202;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=G8l3FS8YFsk/OqORAn3rxQjestKsacMckcsHSATHBZE=;
+        b=VuqUqLw4Phk6BXBhmJokHyII+BVnZFEpZ8ILrFTtCiBX7Vu4aNQiwDiCKwqxZGqzSqVXIV
+        aUszz5eFJFXmkwAw==
+Received: from kunlun.suse.cz (unknown [10.100.128.76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id CD12AA3B82;
+        Mon, 11 Apr 2022 11:06:41 +0000 (UTC)
+Date:   Mon, 11 Apr 2022 13:06:40 +0200
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     Eric Snowberg <eric.snowberg@oracle.com>
+Cc:     dhowells@redhat.com, dwmw2@infradead.org, ardb@kernel.org,
+        jarkko@kernel.org, jmorris@namei.org, serge@hallyn.com,
+        nayna@linux.ibm.com, zohar@linux.ibm.com, keescook@chromium.org,
+        torvalds@linux-foundation.org, weiyongjun1@huawei.com,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-security-module@vger.kernel.org,
+        James.Bottomley@hansenpartnership.com, pjones@redhat.com,
+        konrad.wilk@oracle.com
+Subject: Re: [PATCH v10 8/8] integrity: Only use machine keyring when
+ uefi_check_trust_mok_keys is true
+Message-ID: <20220411110640.GC163591@kunlun.suse.cz>
+References: <20220126025834.255493-1-eric.snowberg@oracle.com>
+ <20220126025834.255493-9-eric.snowberg@oracle.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220126025834.255493-9-eric.snowberg@oracle.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+Hello,
 
-iput() has already handled null and non-null parameter, so it is no
-need to use if().
+On Tue, Jan 25, 2022 at 09:58:34PM -0500, Eric Snowberg wrote:
+> With the introduction of uefi_check_trust_mok_keys, it signifies the end-
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
----
-v2: return error value directly 
----
- fs/btrfs/relocation.c | 5 ++---
- fs/btrfs/tree-log.c   | 3 +--
- 2 files changed, 3 insertions(+), 5 deletions(-)
+What value does such flag have?
 
-diff --git a/fs/btrfs/relocation.c b/fs/btrfs/relocation.c
-index 50bdd82682fa..75051963ffc7 100644
---- a/fs/btrfs/relocation.c
-+++ b/fs/btrfs/relocation.c
-@@ -3846,9 +3846,8 @@ struct inode *create_reloc_inode(struct btrfs_fs_info *fs_info,
- 	btrfs_end_transaction(trans);
- 	btrfs_btree_balance_dirty(fs_info);
- 	if (err) {
--		if (inode)
--			iput(inode);
--		inode = ERR_PTR(err);
-+		iput(inode);
-+		return ERR_PTR(err);
- 	}
- 	return inode;
- }
-diff --git a/fs/btrfs/tree-log.c b/fs/btrfs/tree-log.c
-index 273998153fcc..c46696896f03 100644
---- a/fs/btrfs/tree-log.c
-+++ b/fs/btrfs/tree-log.c
-@@ -894,8 +894,7 @@ static noinline int replay_one_extent(struct btrfs_trans_handle *trans,
- 	btrfs_update_inode_bytes(BTRFS_I(inode), nbytes, drop_args.bytes_found);
- 	ret = btrfs_update_inode(trans, root, BTRFS_I(inode));
- out:
--	if (inode)
--		iput(inode);
-+	iput(inode);
- 	return ret;
- }
- 
--- 
-2.25.1
+The user is as much in control of the flag as the MOK keys.
 
+> user wants to trust the machine keyring as trusted keys.  If they have
+> chosen to trust the machine keyring, load the qualifying keys into it
+> during boot, then link it to the secondary keyring .  If the user has not
+> chosen to trust the machine keyring, it will be empty and not linked to
+> the secondary keyring.
+
+Why is importing the keys and using them linked together?
+
+If later we get, say, machine keyring on powerpc managed by secvarctl
+then it has its value to import the keyring and be able to list the
+content with the same tools on EFI and powerpc.
+
+It also makes sense to be able to configure the kernel to import the
+keys and not use them. I don't see any value in configuring that in
+shim, though. shim is both source of the key material and the flag so
+the flag is redundant, it does not exist on existing shim versions
+installed on user systems, and it's unlikely to exist on other
+plaltforms, either.
+
+Thanks
+
+Michal
+
+> 
+> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> ---
+> v4: Initial version
+> v5: Rename to machine keyring
+> v6: Unmodified from v5
+> v7: Made trust_mok static
+> v8: Unmodified from v7
+> v10: Added Jarkko's Reviewed-by
+> ---
+>  security/integrity/digsig.c                      |  2 +-
+>  security/integrity/integrity.h                   |  5 +++++
+>  .../integrity/platform_certs/keyring_handler.c   |  2 +-
+>  .../integrity/platform_certs/machine_keyring.c   | 16 ++++++++++++++++
+>  4 files changed, 23 insertions(+), 2 deletions(-)
+> 
+> diff --git a/security/integrity/digsig.c b/security/integrity/digsig.c
+> index 7b719aa76188..c8c8a4a4e7a0 100644
+> --- a/security/integrity/digsig.c
+> +++ b/security/integrity/digsig.c
+> @@ -112,7 +112,7 @@ static int __init __integrity_init_keyring(const unsigned int id,
+>  	} else {
+>  		if (id == INTEGRITY_KEYRING_PLATFORM)
+>  			set_platform_trusted_keys(keyring[id]);
+> -		if (id == INTEGRITY_KEYRING_MACHINE)
+> +		if (id == INTEGRITY_KEYRING_MACHINE && trust_moklist())
+>  			set_machine_trusted_keys(keyring[id]);
+>  		if (id == INTEGRITY_KEYRING_IMA)
+>  			load_module_cert(keyring[id]);
+> diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
+> index 730771eececd..2e214c761158 100644
+> --- a/security/integrity/integrity.h
+> +++ b/security/integrity/integrity.h
+> @@ -287,9 +287,14 @@ static inline void __init add_to_platform_keyring(const char *source,
+>  
+>  #ifdef CONFIG_INTEGRITY_MACHINE_KEYRING
+>  void __init add_to_machine_keyring(const char *source, const void *data, size_t len);
+> +bool __init trust_moklist(void);
+>  #else
+>  static inline void __init add_to_machine_keyring(const char *source,
+>  						  const void *data, size_t len)
+>  {
+>  }
+> +static inline bool __init trust_moklist(void)
+> +{
+> +	return false;
+> +}
+>  #endif
+> diff --git a/security/integrity/platform_certs/keyring_handler.c b/security/integrity/platform_certs/keyring_handler.c
+> index 4872850d081f..1db4d3b4356d 100644
+> --- a/security/integrity/platform_certs/keyring_handler.c
+> +++ b/security/integrity/platform_certs/keyring_handler.c
+> @@ -83,7 +83,7 @@ __init efi_element_handler_t get_handler_for_db(const efi_guid_t *sig_type)
+>  __init efi_element_handler_t get_handler_for_mok(const efi_guid_t *sig_type)
+>  {
+>  	if (efi_guidcmp(*sig_type, efi_cert_x509_guid) == 0) {
+> -		if (IS_ENABLED(CONFIG_INTEGRITY_MACHINE_KEYRING))
+> +		if (IS_ENABLED(CONFIG_INTEGRITY_MACHINE_KEYRING) && trust_moklist())
+>  			return add_to_machine_keyring;
+>  		else
+>  			return add_to_platform_keyring;
+> diff --git a/security/integrity/platform_certs/machine_keyring.c b/security/integrity/platform_certs/machine_keyring.c
+> index 09fd8f20c756..7aaed7950b6e 100644
+> --- a/security/integrity/platform_certs/machine_keyring.c
+> +++ b/security/integrity/platform_certs/machine_keyring.c
+> @@ -8,6 +8,8 @@
+>  #include <linux/efi.h>
+>  #include "../integrity.h"
+>  
+> +static bool trust_mok;
+> +
+>  static __init int machine_keyring_init(void)
+>  {
+>  	int rc;
+> @@ -59,3 +61,17 @@ static __init bool uefi_check_trust_mok_keys(void)
+>  
+>  	return false;
+>  }
+> +
+> +bool __init trust_moklist(void)
+> +{
+> +	static bool initialized;
+> +
+> +	if (!initialized) {
+> +		initialized = true;
+> +
+> +		if (uefi_check_trust_mok_keys())
+> +			trust_mok = true;
+> +	}
+> +
+> +	return trust_mok;
+> +}
+> -- 
+> 2.18.4
+> 

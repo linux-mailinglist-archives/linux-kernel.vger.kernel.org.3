@@ -2,125 +2,475 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34BCB4FC397
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 19:40:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64B4B4FC39E
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 19:43:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348977AbiDKRnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 13:43:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43342 "EHLO
+        id S1348879AbiDKRpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 13:45:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348974AbiDKRmn (ORCPT
+        with ESMTP id S235152AbiDKRpS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 13:42:43 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECCDF23168;
-        Mon, 11 Apr 2022 10:40:27 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id t1so6414438wra.4;
-        Mon, 11 Apr 2022 10:40:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=4ivQhWEzq6X6JM0iImOYzzpeGiLK4rWSbQZzZkOjImc=;
-        b=bI1xid7tiQrX4zd5Nj73bxPYQAG/YY2NOIje3xFLTs+QnT4L1GY2rATZ+FGFPMvX4+
-         Q8FKeps2sPEO1yekXoE5nZrnkvaqN8pp+NM8dttXUVZRsoWPNSw7UEJXVV/sfmCKd6MV
-         b0a+xxIIImoko1fAR8ucP20NQVk21/bjCRzZkSkuI1DPd3KNli6vscJdi2HgVEA1OCSp
-         Fb7pmQJfgrRYKOaswgd9SDg6W5Pf7vRhylQoFaGQU1P8ZQV14yKO/ZoU9a7tK40S5yT5
-         qYWGbkz/kvDl8x+3P4IOAMUuBZVtW6BhMyqIlKt8zv4NV+eHt/EYzqDVTHvqWPO8SOxn
-         Qumw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=4ivQhWEzq6X6JM0iImOYzzpeGiLK4rWSbQZzZkOjImc=;
-        b=nc1/77uwk8tvAAQXioQLUnJRFCmnAGBEivxIfCDm8OOvgmfbD3n9Xubvk5H3psUxJb
-         /dgkoDqmWUpSkxjW7XWu7wa87loImgYbRUxy/qcBZ9xSeRNLroLfbOiuqldACDglZJOR
-         EWRHXsrz2nXrpm3mRilz3xE0tVfoNmLe9q+qA+lJjpqvvFR8saaydkckSYjOuXIzxSBM
-         kj0GCNQ/zNZ8s9GHsh6r3TNsU7IOQ0+cgMH6ixggEoEqyN5Hzoth86alE6tFAdRmoI9b
-         Bq2uNfjKI5g8n4SkCdLwkkyucvJkIBrmBZDV8gUYviDJcRfXTtylSoQdyb6cnIPNWcHB
-         1cAg==
-X-Gm-Message-State: AOAM530WmYd3oyc/4oWwqDPMrtSGJkXskAHEmh609nZ8sHvvU83wSZe6
-        9rBYc3v8NzV1mXrW2W6f4KU=
-X-Google-Smtp-Source: ABdhPJxs2IGhtxSJfey8fh4t8P7MmC/11nqyVMpiEKpkRDi2bx+8V2KP+doLY1n4O5yPgFLbfq7wBA==
-X-Received: by 2002:a5d:47a1:0:b0:204:9f5:e72f with SMTP id 1-20020a5d47a1000000b0020409f5e72fmr26919305wrb.656.1649698826395;
-        Mon, 11 Apr 2022 10:40:26 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
-        by smtp.googlemail.com with ESMTPSA id e9-20020a5d6d09000000b00203ecdca5b7sm30055582wrq.33.2022.04.11.10.40.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Apr 2022 10:40:26 -0700 (PDT)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <a7d28775-2dbe-7d97-7053-e182bd5be51c@redhat.com>
-Date:   Mon, 11 Apr 2022 19:40:25 +0200
+        Mon, 11 Apr 2022 13:45:18 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F02C9275C9;
+        Mon, 11 Apr 2022 10:43:00 -0700 (PDT)
+Date:   Mon, 11 Apr 2022 17:42:57 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649698978;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xq7ENFImsn1B/4vlxphAHpdbprSAFi7mDMNQuHD/nas=;
+        b=NGNx76xXX3/xzBmlHl4zCMKCvwT84D678BA7nHrxCMtuZ5FydpWHcZ0RzB/WXm63i0uXbi
+        utACzGdThl2yheGXkbwBSFKFpb8O4Cr2hD6X3CwAcKkVAhX+WFhxzl1TMcgGB0jLln/T3T
+        9qqAINP+bgqxr34oB6diEW8wQNojZIJ2bwDKnfuhe6lkvsMuyeSv+9toPeNkgzGRBa8oPP
+        q04A3d09MtLty8XfoQ5BFTOvnxRBLgEm61VtFc3opvrYzZBGSIMVebX2qZbsRTg94Ip6KY
+        SOnzN7arFtkGiX87IT97soPbWFUu1Ulnb2T+uSNyL+c6k/btYX0WsW6gZAvj/g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649698978;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xq7ENFImsn1B/4vlxphAHpdbprSAFi7mDMNQuHD/nas=;
+        b=2jPRQLNOh4GWmQ1eUwX5nrQErfoz2KORAW1DGDGfnpqNx/1bmbOkhpj6Z5r8WIxiE+moMX
+        cvndYvJ0g6BK0DDQ==
+From:   "tip-bot2 for Borislav Petkov" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cleanups] x86: Remove a.out support
+Cc:     Borislav Petkov <bp@suse.de>, Kees Cook <keescook@chromium.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20220113160115.5375-1-bp@alien8.de>
+References: <20220113160115.5375-1-bp@alien8.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v5 092/104] KVM: TDX: Handle TDX PV HLT hypercall
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Isaku Yamahata <isaku.yamahata@gmail.com>,
-        isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jim Mattson <jmattson@google.com>,
-        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <6da55adb2ddb6f287ebd46aad02cfaaac2088415.1646422845.git.isaku.yamahata@intel.com>
- <282d4cd1-d1f7-663c-a965-af587f77ee5a@redhat.com>
- <Yk79A4EdiZoVQMsV@google.com>
- <8e0280ab-c7aa-5d01-a36f-93d0d0d79e25@redhat.com>
- <20220408045842.GI2864606@ls.amr.corp.intel.com>
- <27a59f1a-ea74-2d75-0739-5521e7638c68@redhat.com>
- <YlBL+0mDzuTMYGV9@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YlBL+0mDzuTMYGV9@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-ID: <164969897728.4207.5926342065358854318.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/8/22 16:51, Sean Christopherson wrote:
->> It also documents how it has to be used.  So this looks more or less okay,
->> just rename "vmxip" to "interrupt_pending_delivery".
-> 
-> If we're keeping the call back into SEAM, then this belongs in the path of
-> apic_has_interrupt_for_ppr(), not in the HLT-exit path.  To avoid multiple SEAMCALLS
-> in a single exit, VCPU_EXREG_RVI can be added.
+The following commit has been merged into the x86/cleanups branch of tip:
 
-But apic_has_interrupt_for_ppr takes a PPR argument and that is not 
-available.
+Commit-ID:     c7bda0dca98cca351a9bc852b3df8b9b99ffd400
+Gitweb:        https://git.kernel.org/tip/c7bda0dca98cca351a9bc852b3df8b9b99ffd400
+Author:        Borislav Petkov <bp@suse.de>
+AuthorDate:    Thu, 13 Jan 2022 14:26:10 +01:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Mon, 11 Apr 2022 18:04:27 +02:00
 
-So I suppose you mean kvm_apic_has_interrupt?  You would change that to 
-a callback, like
+x86: Remove a.out support
 
-         if (!kvm_apic_present(vcpu))
-                 return -1;
+Commit
 
-	return static_call(kvm_x86_apic_has_interrupt)(vcpu);
-}
+  eac616557050 ("x86: Deprecate a.out support")
 
-and the default version would also be inlined in kvm_get_apic_interrupt, 
-like
+deprecated a.out support with the promise to remove it a couple of
+releases later. That commit landed in v5.1.
 
--       int vector = kvm_apic_has_interrupt(vcpu);
-         struct kvm_lapic *apic = vcpu->arch.apic;
-         u32 ppr;
+Now it is more than a couple of releases later, no one has complained so
+remove it.
 
--       if (vector == -1)
-+       if (!kvm_apic_present(vcpu))
-                 return -1;
-+       __apic_update_ppr(apic, &ppr);
-+	vector = apic_has_interrupt_for_ppr(apic, ppr);
+Fold in a hunk removing the reference to arch/x86/ia32/ia32_aout.c in
+MAINTAINERS:
 
-Checking the SEAM state (which would likewise not be VCPU_EXREG_RVI, but 
-more like VCPU_EXREG_INTR_PENDING) would be done in the tdx case of 
-kvm_x86_apic_has_interrupt.
+  https://lore.kernel.org/r/20220316050828.17255-1-lukas.bulwahn@gmail.com
 
-Paolo
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/20220113160115.5375-1-bp@alien8.de
+---
+ MAINTAINERS               |   1 +-
+ arch/x86/Kconfig          |   7 +-
+ arch/x86/ia32/Makefile    |   2 +-
+ arch/x86/ia32/ia32_aout.c | 325 +-------------------------------------
+ 4 files changed, 335 deletions(-)
+ delete mode 100644 arch/x86/ia32/ia32_aout.c
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index fd768d4..795e4c7 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -7378,7 +7378,6 @@ L:	linux-mm@kvack.org
+ S:	Supported
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/execve
+ F:	arch/alpha/kernel/binfmt_loader.c
+-F:	arch/x86/ia32/ia32_aout.c
+ F:	fs/*binfmt_*.c
+ F:	fs/exec.c
+ F:	include/linux/binfmts.h
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index b0142e0..69231f6 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -2838,13 +2838,6 @@ config IA32_EMULATION
+ 	  64-bit kernel. You should likely turn this on, unless you're
+ 	  100% sure that you don't have any 32-bit programs left.
+ 
+-config IA32_AOUT
+-	tristate "IA32 a.out support"
+-	depends on IA32_EMULATION
+-	depends on BROKEN
+-	help
+-	  Support old a.out binaries in the 32bit emulation.
+-
+ config X86_X32_ABI
+ 	bool "x32 ABI for 64-bit mode"
+ 	depends on X86_64
+diff --git a/arch/x86/ia32/Makefile b/arch/x86/ia32/Makefile
+index 8e4d039..e481056 100644
+--- a/arch/x86/ia32/Makefile
++++ b/arch/x86/ia32/Makefile
+@@ -5,7 +5,5 @@
+ 
+ obj-$(CONFIG_IA32_EMULATION) := ia32_signal.o
+ 
+-obj-$(CONFIG_IA32_AOUT) += ia32_aout.o
+-
+ audit-class-$(CONFIG_AUDIT) := audit.o
+ obj-$(CONFIG_IA32_EMULATION) += $(audit-class-y)
+diff --git a/arch/x86/ia32/ia32_aout.c b/arch/x86/ia32/ia32_aout.c
+deleted file mode 100644
+index 9bd1524..0000000
+--- a/arch/x86/ia32/ia32_aout.c
++++ /dev/null
+@@ -1,325 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- *  a.out loader for x86-64
+- *
+- *  Copyright (C) 1991, 1992, 1996  Linus Torvalds
+- *  Hacked together by Andi Kleen
+- */
+-
+-#include <linux/module.h>
+-
+-#include <linux/time.h>
+-#include <linux/kernel.h>
+-#include <linux/mm.h>
+-#include <linux/mman.h>
+-#include <linux/a.out.h>
+-#include <linux/errno.h>
+-#include <linux/signal.h>
+-#include <linux/string.h>
+-#include <linux/fs.h>
+-#include <linux/file.h>
+-#include <linux/stat.h>
+-#include <linux/fcntl.h>
+-#include <linux/ptrace.h>
+-#include <linux/user.h>
+-#include <linux/binfmts.h>
+-#include <linux/personality.h>
+-#include <linux/init.h>
+-#include <linux/jiffies.h>
+-#include <linux/perf_event.h>
+-#include <linux/sched/task_stack.h>
+-
+-#include <linux/uaccess.h>
+-#include <asm/cacheflush.h>
+-#include <asm/user32.h>
+-#include <asm/ia32.h>
+-
+-#undef WARN_OLD
+-
+-static int load_aout_binary(struct linux_binprm *);
+-static int load_aout_library(struct file *);
+-
+-static struct linux_binfmt aout_format = {
+-	.module		= THIS_MODULE,
+-	.load_binary	= load_aout_binary,
+-	.load_shlib	= load_aout_library,
+-};
+-
+-static int set_brk(unsigned long start, unsigned long end)
+-{
+-	start = PAGE_ALIGN(start);
+-	end = PAGE_ALIGN(end);
+-	if (end <= start)
+-		return 0;
+-	return vm_brk(start, end - start);
+-}
+-
+-
+-/*
+- * create_aout_tables() parses the env- and arg-strings in new user
+- * memory and creates the pointer tables from them, and puts their
+- * addresses on the "stack", returning the new stack pointer value.
+- */
+-static u32 __user *create_aout_tables(char __user *p, struct linux_binprm *bprm)
+-{
+-	u32 __user *argv, *envp, *sp;
+-	int argc = bprm->argc, envc = bprm->envc;
+-
+-	sp = (u32 __user *) ((-(unsigned long)sizeof(u32)) & (unsigned long) p);
+-	sp -= envc+1;
+-	envp = sp;
+-	sp -= argc+1;
+-	argv = sp;
+-	put_user((unsigned long) envp, --sp);
+-	put_user((unsigned long) argv, --sp);
+-	put_user(argc, --sp);
+-	current->mm->arg_start = (unsigned long) p;
+-	while (argc-- > 0) {
+-		char c;
+-
+-		put_user((u32)(unsigned long)p, argv++);
+-		do {
+-			get_user(c, p++);
+-		} while (c);
+-	}
+-	put_user(0, argv);
+-	current->mm->arg_end = current->mm->env_start = (unsigned long) p;
+-	while (envc-- > 0) {
+-		char c;
+-
+-		put_user((u32)(unsigned long)p, envp++);
+-		do {
+-			get_user(c, p++);
+-		} while (c);
+-	}
+-	put_user(0, envp);
+-	current->mm->env_end = (unsigned long) p;
+-	return sp;
+-}
+-
+-/*
+- * These are the functions used to load a.out style executables and shared
+- * libraries.  There is no binary dependent code anywhere else.
+- */
+-static int load_aout_binary(struct linux_binprm *bprm)
+-{
+-	unsigned long error, fd_offset, rlim;
+-	struct pt_regs *regs = current_pt_regs();
+-	struct exec ex;
+-	int retval;
+-
+-	ex = *((struct exec *) bprm->buf);		/* exec-header */
+-	if ((N_MAGIC(ex) != ZMAGIC && N_MAGIC(ex) != OMAGIC &&
+-	     N_MAGIC(ex) != QMAGIC && N_MAGIC(ex) != NMAGIC) ||
+-	    N_TRSIZE(ex) || N_DRSIZE(ex) ||
+-	    i_size_read(file_inode(bprm->file)) <
+-	    ex.a_text+ex.a_data+N_SYMSIZE(ex)+N_TXTOFF(ex)) {
+-		return -ENOEXEC;
+-	}
+-
+-	fd_offset = N_TXTOFF(ex);
+-
+-	/* Check initial limits. This avoids letting people circumvent
+-	 * size limits imposed on them by creating programs with large
+-	 * arrays in the data or bss.
+-	 */
+-	rlim = rlimit(RLIMIT_DATA);
+-	if (rlim >= RLIM_INFINITY)
+-		rlim = ~0;
+-	if (ex.a_data + ex.a_bss > rlim)
+-		return -ENOMEM;
+-
+-	/* Flush all traces of the currently running executable */
+-	retval = begin_new_exec(bprm);
+-	if (retval)
+-		return retval;
+-
+-	/* OK, This is the point of no return */
+-	set_personality(PER_LINUX);
+-	set_personality_ia32(false);
+-
+-	setup_new_exec(bprm);
+-
+-	regs->cs = __USER32_CS;
+-	regs->r8 = regs->r9 = regs->r10 = regs->r11 = regs->r12 =
+-		regs->r13 = regs->r14 = regs->r15 = 0;
+-
+-	current->mm->end_code = ex.a_text +
+-		(current->mm->start_code = N_TXTADDR(ex));
+-	current->mm->end_data = ex.a_data +
+-		(current->mm->start_data = N_DATADDR(ex));
+-	current->mm->brk = ex.a_bss +
+-		(current->mm->start_brk = N_BSSADDR(ex));
+-
+-	retval = setup_arg_pages(bprm, IA32_STACK_TOP, EXSTACK_DEFAULT);
+-	if (retval < 0)
+-		return retval;
+-
+-	if (N_MAGIC(ex) == OMAGIC) {
+-		unsigned long text_addr, map_size;
+-
+-		text_addr = N_TXTADDR(ex);
+-		map_size = ex.a_text+ex.a_data;
+-
+-		error = vm_brk(text_addr & PAGE_MASK, map_size);
+-
+-		if (error)
+-			return error;
+-
+-		error = read_code(bprm->file, text_addr, 32,
+-				  ex.a_text + ex.a_data);
+-		if ((signed long)error < 0)
+-			return error;
+-	} else {
+-#ifdef WARN_OLD
+-		static unsigned long error_time, error_time2;
+-		if ((ex.a_text & 0xfff || ex.a_data & 0xfff) &&
+-		    (N_MAGIC(ex) != NMAGIC) &&
+-				time_after(jiffies, error_time2 + 5*HZ)) {
+-			printk(KERN_NOTICE "executable not page aligned\n");
+-			error_time2 = jiffies;
+-		}
+-
+-		if ((fd_offset & ~PAGE_MASK) != 0 &&
+-			    time_after(jiffies, error_time + 5*HZ)) {
+-			printk(KERN_WARNING
+-			       "fd_offset is not page aligned. Please convert "
+-			       "program: %pD\n",
+-			       bprm->file);
+-			error_time = jiffies;
+-		}
+-#endif
+-
+-		if (!bprm->file->f_op->mmap || (fd_offset & ~PAGE_MASK) != 0) {
+-			error = vm_brk(N_TXTADDR(ex), ex.a_text+ex.a_data);
+-			if (error)
+-				return error;
+-
+-			read_code(bprm->file, N_TXTADDR(ex), fd_offset,
+-					ex.a_text+ex.a_data);
+-			goto beyond_if;
+-		}
+-
+-		error = vm_mmap(bprm->file, N_TXTADDR(ex), ex.a_text,
+-				PROT_READ | PROT_EXEC,
+-				MAP_FIXED | MAP_PRIVATE | MAP_32BIT,
+-				fd_offset);
+-
+-		if (error != N_TXTADDR(ex))
+-			return error;
+-
+-		error = vm_mmap(bprm->file, N_DATADDR(ex), ex.a_data,
+-				PROT_READ | PROT_WRITE | PROT_EXEC,
+-				MAP_FIXED | MAP_PRIVATE | MAP_32BIT,
+-				fd_offset + ex.a_text);
+-		if (error != N_DATADDR(ex))
+-			return error;
+-	}
+-
+-beyond_if:
+-	error = set_brk(current->mm->start_brk, current->mm->brk);
+-	if (error)
+-		return error;
+-
+-	set_binfmt(&aout_format);
+-
+-	current->mm->start_stack =
+-		(unsigned long)create_aout_tables((char __user *)bprm->p, bprm);
+-	/* start thread */
+-	loadsegment(fs, 0);
+-	loadsegment(ds, __USER32_DS);
+-	loadsegment(es, __USER32_DS);
+-	load_gs_index(0);
+-	(regs)->ip = ex.a_entry;
+-	(regs)->sp = current->mm->start_stack;
+-	(regs)->flags = 0x200;
+-	(regs)->cs = __USER32_CS;
+-	(regs)->ss = __USER32_DS;
+-	regs->r8 = regs->r9 = regs->r10 = regs->r11 =
+-	regs->r12 = regs->r13 = regs->r14 = regs->r15 = 0;
+-	return 0;
+-}
+-
+-static int load_aout_library(struct file *file)
+-{
+-	unsigned long bss, start_addr, len, error;
+-	int retval;
+-	struct exec ex;
+-	loff_t pos = 0;
+-
+-	retval = -ENOEXEC;
+-	error = kernel_read(file, &ex, sizeof(ex), &pos);
+-	if (error != sizeof(ex))
+-		goto out;
+-
+-	/* We come in here for the regular a.out style of shared libraries */
+-	if ((N_MAGIC(ex) != ZMAGIC && N_MAGIC(ex) != QMAGIC) || N_TRSIZE(ex) ||
+-	    N_DRSIZE(ex) || ((ex.a_entry & 0xfff) && N_MAGIC(ex) == ZMAGIC) ||
+-	    i_size_read(file_inode(file)) <
+-	    ex.a_text+ex.a_data+N_SYMSIZE(ex)+N_TXTOFF(ex)) {
+-		goto out;
+-	}
+-
+-	if (N_FLAGS(ex))
+-		goto out;
+-
+-	/* For  QMAGIC, the starting address is 0x20 into the page.  We mask
+-	   this off to get the starting address for the page */
+-
+-	start_addr =  ex.a_entry & 0xfffff000;
+-
+-	if ((N_TXTOFF(ex) & ~PAGE_MASK) != 0) {
+-#ifdef WARN_OLD
+-		static unsigned long error_time;
+-		if (time_after(jiffies, error_time + 5*HZ)) {
+-			printk(KERN_WARNING
+-			       "N_TXTOFF is not page aligned. Please convert "
+-			       "library: %pD\n",
+-			       file);
+-			error_time = jiffies;
+-		}
+-#endif
+-		retval = vm_brk(start_addr, ex.a_text + ex.a_data + ex.a_bss);
+-		if (retval)
+-			goto out;
+-
+-		read_code(file, start_addr, N_TXTOFF(ex),
+-			  ex.a_text + ex.a_data);
+-		retval = 0;
+-		goto out;
+-	}
+-	/* Now use mmap to map the library into memory. */
+-	error = vm_mmap(file, start_addr, ex.a_text + ex.a_data,
+-			PROT_READ | PROT_WRITE | PROT_EXEC,
+-			MAP_FIXED | MAP_PRIVATE | MAP_32BIT,
+-			N_TXTOFF(ex));
+-	retval = error;
+-	if (error != start_addr)
+-		goto out;
+-
+-	len = PAGE_ALIGN(ex.a_text + ex.a_data);
+-	bss = ex.a_text + ex.a_data + ex.a_bss;
+-	if (bss > len) {
+-		retval = vm_brk(start_addr + len, bss - len);
+-		if (retval)
+-			goto out;
+-	}
+-	retval = 0;
+-out:
+-	return retval;
+-}
+-
+-static int __init init_aout_binfmt(void)
+-{
+-	register_binfmt(&aout_format);
+-	return 0;
+-}
+-
+-static void __exit exit_aout_binfmt(void)
+-{
+-	unregister_binfmt(&aout_format);
+-}
+-
+-module_init(init_aout_binfmt);
+-module_exit(exit_aout_binfmt);
+-MODULE_LICENSE("GPL");

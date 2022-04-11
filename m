@@ -2,175 +2,615 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD1244FB5CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 10:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF3944FB59D
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 10:06:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244160AbiDKITp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 04:19:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51350 "EHLO
+        id S1343561AbiDKII7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 04:08:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343666AbiDKITg (ORCPT
+        with ESMTP id S235172AbiDKIIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 04:19:36 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 074913E0FC
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 01:17:20 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23B7bjgY012649;
-        Mon, 11 Apr 2022 08:17:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=ZuFOHhAi+h5+3TwZqC8OrAhNilb4+6be+K64cvHbR4w=;
- b=HK8J2yJXNonyOjlbiJwTi/MEXWdjLP/qZ+4PX8pcnv4osqLCMhr4Ebu9oPEnav0yd3E6
- FyVrYw301SPjLq6beGHQFOF7m4vBbLAKcx3DAHIbsgsnNeAKEj8b2B5w3c/4opiyyIi5
- GmSJNhmSAA1rnL3UcPCMsUBrhriJQCZkcV9s1rH8BdlU9e8RRKSxFXv80fNgrAecrYT4
- cDycJaUv/ZIvUzURSsTEOf6f5w5LLaqdI9BZ8BKosaBCEyWXJjR3pVem8GIKoJySMCiJ
- Y0egneoWw6pfIkAuF7/5cNpzzs4KHkjz7V8/tN5P+lJweqZTxIshWb8Wo32vUg1IuCkD 1A== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3fb2ptttby-8
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 11 Apr 2022 08:17:02 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23B866Po002532;
-        Mon, 11 Apr 2022 08:06:47 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2173.outbound.protection.outlook.com [104.47.56.173])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3fcg9g0cny-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 11 Apr 2022 08:06:47 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AOsWpvh5u0YRelTFNqp+oMXaJ0/V8LTqatq2n4+AvyhhY1F1KkARgech1YFxMhnuixXtQXBqDsJZmMzKXafalctHhWF5ujxPFpRycb2sVnq0zR/emlioNBeyd6v/gFShlt+AIGJb2v9Y1vccaYfzHOM7kh2UDvUo32TeC/tBoa9HRz9ExS1675zd9rUwqPIWjXkZ2TsZ7eHR2KuWtdZkizQx96AFcQ+998mzaRVUqdsksYo06aubBaaK0Ebor08gURHdBgcQYQWM+EJL0iY/i0fUsx9Ik+bfdza/JQKRfIH/XPVlTdS1fqGzJFs6vPSiP4IHkkb8xqJYYLGJ2PNdRQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZuFOHhAi+h5+3TwZqC8OrAhNilb4+6be+K64cvHbR4w=;
- b=k1w0PfXlNMgAt6q505z/M9C3qc6fk7Pp++9VjeD8xSP5XHRUiVZDZ3yz/mvTVuDbhNRkRzk/1T1wQrMwwjmbm5LEcABH94Ad51ps1YqwqVdx8czEhDf/B4HlWjz/0ZfUXiDg5HoGvS2Gig7JMpPvwhp7VmoeLmhRIr1O1Uh11f1hZGzoH1ixUuO9M6+4zEYkSPVHIQ3aw2k6aXhUQ/QywZegNZf9y+0kfmh2ST5tl+Xw5QIoKjboyzh3e4o3ldc8hw4AEOcEwPi6PlkUKaeUPRE5BUal+TZH64w8kg0bP0X+82k2HFtoI7t2VH+jlb1CaDKZ7YcebFNcJEYDHLjoMA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Mon, 11 Apr 2022 04:08:55 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3CB32CCA7;
+        Mon, 11 Apr 2022 01:06:40 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id q189so2485987ljb.13;
+        Mon, 11 Apr 2022 01:06:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZuFOHhAi+h5+3TwZqC8OrAhNilb4+6be+K64cvHbR4w=;
- b=RW/3oxKbpDQEMljsmOnFrrNoBW4KQDuXwPP2SHBmu+L58vyt8U1uFk8UvJ9R55GBmfRjWqnqH2tZdosmPJcMf/cq4iJc6Ruoa/n5kD8oRVyb7Y7XJt1W0EY04cs78MXTOuXrbg8r+7JCPm9V4/f8OnGITXFw47CJ2NUIF25bbP8=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by DS7PR10MB4832.namprd10.prod.outlook.com
- (2603:10b6:5:3a6::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Mon, 11 Apr
- 2022 08:06:45 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::b5d5:7b39:ca2d:1b87]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::b5d5:7b39:ca2d:1b87%5]) with mapi id 15.20.5144.022; Mon, 11 Apr 2022
- 08:06:45 +0000
-Date:   Mon, 11 Apr 2022 11:06:23 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Vihas Makwana <makvihas@gmail.com>
-Cc:     Joe Perches <joe@perches.com>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Straube <straube.linux@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Pavel Skripkin <paskripkin@gmail.com>
-Subject: Re: [PATCH 1/6] staging: r8188eu: drop unnecessary wrapper
- rtw_free_cmd_priv
-Message-ID: <20220411080623.GB12805@kadam>
-References: <20220410163117.3964-1-makvihas@gmail.com>
- <20220410163117.3964-2-makvihas@gmail.com>
- <783d850ce7778e9d8f203155034e432910553b1b.camel@perches.com>
- <CAH1kMwTPkPV=gLg38m=yq=n1U2Mqa4+1XNtB_5Kc2y7O0mpMpQ@mail.gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAH1kMwTPkPV=gLg38m=yq=n1U2Mqa4+1XNtB_5Kc2y7O0mpMpQ@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: JNXP275CA0045.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:18::33)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=CB65felTOGiAe7eo39tkCkLATEM2cmqHyqMzQIIeteI=;
+        b=jHKldoe3tG5w4+CdHHPyxKvzmx7uL0/oIFhaJZ8wC+zFO56hDCgC2OQSWQZ0YUN026
+         Diqznl/Oy4LY7WggrGlKcgGwhCISmKGA13DnAFhQQWf62y5/WwluG/kL3flwd0PsWLT3
+         QeIcixPbirmukkdz8nNyUmp5bpnfQBarly6uwAulI6yb8oCnsiti44quMuXMw0tFcctv
+         JWDmCd+S6TbotuBkmM6mWf4w5Jv8nJe43+H2KPMYjO6Ph0ItQDcm2ArsgwOVcOlgK5CA
+         bkZAD6vZq7VbYsEOGRyQVX8Ve/miblCw4ImE43ZTTgNajZpoPOIiKmeIhhjo/hAPuHdV
+         hw8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=CB65felTOGiAe7eo39tkCkLATEM2cmqHyqMzQIIeteI=;
+        b=L5IzLOP9NFJ6iBOIqt91k5feV8JNg+ocBawLOZaMBUfqQCm8SFGAjdg8cIJKn2+JlT
+         rQ43sR4BEVz5m2XpkNQ0KIBZY0/Nd4Uk+9F7pxMVERBxSM15gnsvJbsO+hrgU6BOYNwa
+         KLgAwgpkvT+J1XDkgLeLfydnF0gOa1UbVRKzDr4X/3kqwHdkE6o7EczIfU5Q8g1S6hz+
+         XH2v3LBwa5pTD67SIMKr1t9cCf9qifQXiYZHEEb2Q+jLKW0RlMLiaRAgSVWOkYZt1jbY
+         Fr8SKyev+PYHEIktl+OxE5BIdH1yKBD3msTKZsfKOcXJtweITRHV83ISkMIkPGh1HrVr
+         pUSg==
+X-Gm-Message-State: AOAM5305sDyC/wHNNZ110/3H1zBz/Ch1+zC6gkSJwBJ/Fe6Nsz9rG/Ag
+        bEmfBIE2DA0g8HoK1cBkNdya5w0O4dHm59GvWeQ=
+X-Google-Smtp-Source: ABdhPJwvOOgp9MdRm10nT9p7No8wJLFt29wbxIYTFh8dOstGwdebdAGL2zg017wIegivkw51qjhOJsDWbeL/KAoJw2o=
+X-Received: by 2002:a2e:9b18:0:b0:24b:61f3:7beb with SMTP id
+ u24-20020a2e9b18000000b0024b61f37bebmr3117380lji.487.1649664399019; Mon, 11
+ Apr 2022 01:06:39 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a51bf6e7-1313-4010-eb3e-08da1b92384e
-X-MS-TrafficTypeDiagnostic: DS7PR10MB4832:EE_
-X-Microsoft-Antispam-PRVS: <DS7PR10MB4832CE0A697D74BA5C9FA84D8EEA9@DS7PR10MB4832.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nEcQwFaCHa/4v/nZwVpTJKY0sso8OiEPto4hBj4dPEEPYPrDMO7MjG28C5PdllsWNopcLdizQbpsoU8bWMxII9xY91rZlHXjzSrV8rqeqbGuj1gj+rIF4vIuI0B4rEY6o10lpDF3uNgMndckPMzl5q7KR/2EPhDjirTqkKty1+JaPr6mg8gHApD+J5BtC9Umc9Z7oewfERnL6xbqGtO4L1sIzhOhMRWpdFvwLYLR08PR6iYBw9O5VzuwQ6xIgYR/ew4iaXnhnX+a2iiXXq63qnZwaUnlbhMGBCYXpke/qcGZZovk3FFGNIAn/O6mIsP5mdjwSD/9N5XRVvq4E7Gijkzi9lnOHNKRxUH4w9kwFfN4rZOpWMgekd4LkLe5LkGuCm4LP1RtYMxadwRzPYnG2a7PspOpiTdQ/TzYdy1GOHlnVu+/Ko4ifnVJLu2Rjkh2lK9pysWAAf+iKaykxP01G7D1Z4EBHvuWwPedbXQNINGjEMvCfkHQ4fgWAETSbhqUbe4stQCoo8s6pF8oAPsfwJZIpiw73dDHs69deREZdVL/QrKnMs/3qem48RUlyKiyOk5jgCuoVYuqAD82nHg0sOHR5jE7YdTaGKKQzXYNrV2mNvVxbGx09UngPypZaE147A3GSkT27rD/TC/6muc0s7YgY5SAMpArep2NJzrcd3noZ4AxXBSbPrkYt73Kimoot2H67NIAWQvJm9VNzS5hEw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(33656002)(6486002)(8936002)(26005)(186003)(4744005)(5660300002)(2906002)(33716001)(316002)(508600001)(44832011)(4326008)(66946007)(6916009)(86362001)(1076003)(8676002)(66556008)(66476007)(54906003)(9686003)(6506007)(6512007)(38350700002)(52116002)(6666004)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Q37i9PORp2IQ1a1Yxsv84JTdwv5QjwUhJyixuLztDCmxRnfrWndXgQ61+ZY/?=
- =?us-ascii?Q?wd8WKSFoUzHYan/V3+On6tqH7d8C5mGOD0i/ZCXTiMQpNazoPc57oFzyW6kM?=
- =?us-ascii?Q?qPTq7e7b9b4Lsue11y02T6fiflhy/Vg3GmtyePfURQ6R6siGv1dOlVjr69Ov?=
- =?us-ascii?Q?2MD8jhLrrUF7TlUUuyLKDvx8zraJZEzmKa6JDK7sj9mxsgSTABw7J+IBSYG5?=
- =?us-ascii?Q?t8wb31Eh467MwZTLVqjS85Ptf3dMUm0qNCMQhLM5M6uDcpvQmg94Slb1mxx9?=
- =?us-ascii?Q?gJbJl39Ygt9+v6pI27Evw5U4X3Rfsp81K7blVYpHgZ4zvJQ+jToAVWy9PQfL?=
- =?us-ascii?Q?77arcrFpiQcaUluV9PFMIF3vZyAMZRYkjlxC44lU+LmWNpWqSlRYbAaj0wLe?=
- =?us-ascii?Q?LIrarKAbVqwm/dRD5Hp4NfajbyK+e+qYo7yaOYiC4zVFIb1dDqAHNlIda54I?=
- =?us-ascii?Q?gM5ElOwZyztEpMibCHGJuQvucrjpQ5madNX9lXHZV63WbGOFqgLTqCw5i1gd?=
- =?us-ascii?Q?0jK2ks2KDhPWCoxzMMhxGXoI4Ys3wPKxt9Hjt9YEw9QBbTCzgSmUj7+oJ3bH?=
- =?us-ascii?Q?coMtRmpVOCBTKx1C2ltDG1JIUyt11wTL9o40XFCziYeRk+G/vS97Esr1yEqc?=
- =?us-ascii?Q?WRqz6fTQK8Ufd49do14Vg+P6jeBtUyH4WV8tOqmo5gagx0ni2k9lHqDry5Cf?=
- =?us-ascii?Q?138Hb8+sxY+bE2q9zT8uDpvMkjR1AfqrEA4jnyiGfrHCO/I0B8ImHtO+xAUo?=
- =?us-ascii?Q?T99XO8gW/3pDbSVq1yH/keGWMOE3RkG5N5XWOqW1b8jVzpgXytq7ZQHPea6f?=
- =?us-ascii?Q?CEq7TlnucSP8paqR9VfgA3z6ZGHiniXLZIcCq+LbSCKkcbCjBkE3nmuu2S/n?=
- =?us-ascii?Q?oc1pOubp0tTeZli6gFmK2zyw52+BqWNZCjNs1RZoy+kB1QDUd3/3mc70y0bx?=
- =?us-ascii?Q?bwSJhnyRfAztJmptPlYApnlMQUdsMx1RqPxspzS0bMuqWYdGHJ7P5A+01W1x?=
- =?us-ascii?Q?Jadf8Ak955rEx8hFfGChxesruimI0cbtRgXzRLWbOLX2UowCO/T+mR5D1gPR?=
- =?us-ascii?Q?sq/9reC3opgmSDgDpxkJ81fn4nu9ln9qZSUIs6Yjt2LKG34A4gIb2d43sMyC?=
- =?us-ascii?Q?TCTQxE3/V8TxoE3cf1ln97E1u9tkn2sDyExu4SfXEQOQsEq15b2TUzS8rjwG?=
- =?us-ascii?Q?IQ9RYlUh4YFAJyLY3pIQaA1hbmvUHA7U69zliu1dreaJ1rICQoz3a3A2NubA?=
- =?us-ascii?Q?2RZJ0HNeiXxc5CQUiCuCkv4B+jNDMWA4mEp0ypO+aG2j+FNv0Yd38lkGBJVi?=
- =?us-ascii?Q?K4+f8y/lxFASRUPzhDE+l11u7osmqO0FZ2fwGts5pQh/RNyoaolFak63v2vB?=
- =?us-ascii?Q?KQUm7aN8b0gWho2y7lfGU1ymqccCKDPuQPlIu9YHVJRoNKe8pZGsPJXFISZ6?=
- =?us-ascii?Q?asxp6FLtL3pTFourr0V66uq6ed/a8Ur2ycpQdL6rp5+YyCSzFg/d2sXkx+/3?=
- =?us-ascii?Q?9d7QpsupqptCKgKHmHo00hzcuGGPlPAsLv3JR9dXkkUA6xtrAH6monkumRnk?=
- =?us-ascii?Q?stV/3kxctN8xNWd0MjXNYjdckO6Uwo3orb6xuxxgr/vj+jTkVUafMWTJumOm?=
- =?us-ascii?Q?2D6dQVgb29W/QRkozenNjQjPRAOOvbmyqBAYa+OdWLI54tgbfJwLt5AZXvVG?=
- =?us-ascii?Q?XLNH5TdaefWb/UgN3R053D5XtX1MBwGa8IfxfwKXNm+fZSj21ZUduSg0MfsE?=
- =?us-ascii?Q?7sVfrHIUAvXHPd+RjHjD7bXVqBQ2Bbo=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a51bf6e7-1313-4010-eb3e-08da1b92384e
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2022 08:06:45.4436
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zZP88WLjg79gfSWDHjJcc12qHk40Xn3bbmJMQe3wq0TvDG5/S+c4qX1z70p/pk/edRpvQ1hRLKdE4/LCZJQ8gryE4MBVrT/DutxeisMfutQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB4832
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.858
- definitions=2022-04-11_02:2022-04-08,2022-04-11 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxlogscore=842
- spamscore=0 suspectscore=0 malwarescore=0 adultscore=0 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204110045
-X-Proofpoint-ORIG-GUID: 5Pjo6Mha_zrXsFyv4CR8qs9c_gjLyFsk
-X-Proofpoint-GUID: 5Pjo6Mha_zrXsFyv4CR8qs9c_gjLyFsk
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220322030152.19018-1-ctcchien@nuvoton.com> <20220322030152.19018-4-ctcchien@nuvoton.com>
+ <YlCHVen0zv/ujEYN@zn.tnic>
+In-Reply-To: <YlCHVen0zv/ujEYN@zn.tnic>
+From:   Medad Young <medadyoung@gmail.com>
+Date:   Mon, 11 Apr 2022 16:06:27 +0800
+Message-ID: <CAHpyw9dgGU8aNxHz++RTj_pH+We8voS7kSjD4mwqLniV3pEGaQ@mail.gmail.com>
+Subject: Re: [PATCH v6 3/3] EDAC: nuvoton: Add NPCM memory controller driver
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     rric@kernel.org, James Morse <james.morse@arm.com>,
+        tony.luck@intel.com, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Patrick Venture <venture@google.com>, KWLIU@nuvoton.com,
+        YSCHU@nuvoton.com, JJLIU0@nuvoton.com, KFTING <KFTING@nuvoton.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>, ctcchien@nuvoton.com,
+        linux-edac <linux-edac@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 10, 2022 at 11:08:02PM +0530, Vihas Makwana wrote:
-> > On Sun, 2022-04-10 at 22:01 +0530, Vihas Makwana wrote:
-> > > Remove the unnecessary wrapper. The logic of rtw_free_cmd_priv can
-> > > be moved to _rtw_free_cmd_priv.
+Dear Borislav,
+
+thanks for your comments
+
+
+Borislav Petkov <bp@alien8.de> =E6=96=BC 2022=E5=B9=B44=E6=9C=889=E6=97=A5 =
+=E9=80=B1=E5=85=AD =E4=B8=8A=E5=8D=883:05=E5=AF=AB=E9=81=93=EF=BC=9A
+>
+> On Tue, Mar 22, 2022 at 11:01:52AM +0800, Medad CChien wrote:
+> > Add support for Nuvoton NPCM SoC.
 > >
-> > If you are going to drop wrappers, my preference would be
-> > to drop the underscore prefixed ones.
+> > Signed-off-by: Medad CChien <ctcchien@nuvoton.com>
 > >
-> Yes, that was my initial thought too. But there are already some init
-> and free functions in the module with underscores prefixed.
-> So I didn't do it that way. Maybe the developers kept it that way for
-> some reason.
+> > Reported-by: kernel test robot <lkp@intel.com>
+> >
+> > All errors (new ones prefixed by >>):
+>
+> I'm sure you can summarize this in one sentence instead of pasting all
+> the warnings in the commit message where they don't belong.
 
-Yeah, no.  There is no reason.  Get rid of the underscores.
+OK
 
-regards,
-dan carpenter
+>
+> ...
+>
+> > diff --git a/drivers/edac/npcm_edac.c b/drivers/edac/npcm_edac.c
+> > new file mode 100644
+> > index 000000000000..9dd05bec0b7f
+> > --- /dev/null
+> > +++ b/drivers/edac/npcm_edac.c
+> > @@ -0,0 +1,706 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +// Copyright (c) 2022 Nuvoton Technology corporation.
+> > +
+> > +#include <linux/delay.h>
+> > +#include <linux/of_device.h>
+> > +
+> > +#include "edac_module.h"
+> > +
+> > +#define NPCM_EDAC_MOD_NAME "npcm-edac"
+> > +#define FORCED_ECC_ERR_EVENT_SUPPORT BIT(1)
+> > +#define EDAC_MSG_SIZE                  256
+> > +/* Granularity of reported error in bytes */
+> > +#define NPCM_EDAC_ERR_GRAIN          1
+> > +
+> > +#define MEM_TYPE_DDR4                        0xA
+> > +
+> > +#define NPCM8XX_CHIP                 0x800
+> > +#define NPCM7XX_CHIP                 0x700
+> > +
+> > +/* Control register width definitions */
+> > +#define WDTH_16                              (2)
+> > +#define WDTH_32                              (1)
+> > +#define WDTH_64                              (0)
+> > +#define CTL_MEM_MAX_WIDTH_MASK               GENMASK(4, 0)
+> > +#define CTL_REG_WIDTH_SHIFT          (32)
+> > +#define XOR_CHECK_BIT_SPLIT_WIDTH            (16)
+> > +#define CTL_CONTROLLER_BUSY_FLAG     BIT(0)
+> > +#define NPCM_ECC_CTL_FORCE_WC                BIT(8)
+> > +#define NPCM_ECC_CTL_AUTO_WRITEBACK_EN       BIT(24)
+> > +#define NPCM_ECC_CTL_XOR_BITS_MASK           GENMASK(23, 16)
+> > +#define NPCM_ECC_CTL_MTYPE_MASK                      GENMASK(11, 8)
+> > +#define NPCM_ECC_CTL_GLOBAL_INT_DISABLE      BIT(31)
+>
+> Align those values vertically pls.
+
+Ok
+
+>
+> > +
+> > +#ifdef CONFIG_EDAC_DEBUG
+> > +
+> > +/* Syndrome values */
+> > +#define ECC_DOUBLE_MULTI_ERR_SYND    0x03
+> > +
+> > +static char data_synd[] =3D {
+> > +                     0xf4, 0xf1, 0xec, 0xea, 0xe9, 0xe6, 0xe5, 0xe3,
+> > +                     0xdc, 0xda, 0xd9, 0xd6, 0xd5, 0xd3, 0xce, 0xcb,
+> > +                     0xb5, 0xb0, 0xad, 0xab, 0xa8, 0xa7, 0xa4, 0xa2,
+> > +                     0x9d, 0x9b, 0x98, 0x97, 0x94, 0x92, 0x8f, 0x8a,
+> > +                     0x75, 0x70, 0x6d, 0x6b, 0x68, 0x67, 0x64, 0x62,
+> > +                     0x5e, 0x5b, 0x58, 0x57, 0x54, 0x52, 0x4f, 0x4a,
+> > +                     0x34, 0x31, 0x2c, 0x2a, 0x29, 0x26, 0x25, 0x23,
+> > +                     0x1c, 0x1a, 0x19, 0x16, 0x15, 0x13, 0x0e, 0x0b
+> > +               };
+> > +
+> > +static char check_synd[] =3D {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40=
+, 0x80};
+> > +#endif
+> > +
+> > +struct npcm_edac_platform_data {
+> > +     /* force ECC event */
+> > +     u32 ip_features;
+> > +     u32 ddr_ctl_controller_busy_reg;
+> > +     u32 ecc_ctl_xor_check_bits_reg;
+> > +
+> > +     u32 chip;
+> > +
+> > +     /* DDR4 Controller Registers */
+> > +     u32 ddr_ctl_mem_type_reg;
+> > +     u32 ddr_ctl_mem_width_reg;
+> > +
+> > +     u32 ecc_ctl_en_reg;
+> > +     u32 ecc_ctl_int_mask;
+> > +     u32 ecc_ctl_int_status;
+> > +     u32 ecc_ctl_int_ack;
+> > +     u32 ecc_ctl_int_mask_master;
+> > +     u32 ecc_ctl_int_mask_ecc;
+> > +
+> > +     u32 ecc_sig_ecc_c_addr_l;
+> > +     u32 ecc_sig_ecc_c_addr_h;
+> > +     u32 ecc_sig_ecc_c_data_l;
+> > +     u32 ecc_sig_ecc_c_data_h;
+> > +     u32 ecc_sig_ecc_c_id;
+> > +     u32 ecc_sig_ecc_c_synd;
+> > +
+> > +     u32 ecc_sig_ecc_u_addr_l;
+> > +     u32 ecc_sig_ecc_u_addr_h;
+> > +     u32 ecc_sig_ecc_u_data_l;
+> > +     u32 ecc_sig_ecc_u_data_h;
+> > +     u32 ecc_sig_ecc_u_id;
+> > +     u32 ecc_sig_ecc_u_synd;
+> > +
+> > +     /* MASK */
+> > +     u32 ecc_ctl_ecc_enable_mask;
+> > +     u32 ecc_ctl_en_int_master_mask;
+> > +     u32 ecc_ctl_en_int_ecc_mask;
+> > +
+> > +     /* ECC IRQ Macros */
+> > +     u32 ecc_int_ce_event;
+> > +     u32 ecc_int_second_ce_event;
+> > +     u32 ecc_int_ue_event;
+> > +     u32 ecc_int_second_ue_event;
+> > +     u32 ecc_int_ce_ue_mask;
+> > +     u32 ecc_ce_intr_mask;
+> > +     u32 ecc_ue_intr_mask;
+> > +
+> > +     /* ECC Signature Macros */
+> > +     u32 ecc_sig_ecc_c_id_shift;
+> > +     u32 ecc_sig_ecc_c_synd_shift;
+> > +     u32 ecc_sig_ecc_c_addr_h_mask;
+> > +     u32 ecc_sig_ecc_c_id_mask;
+> > +     u32 ecc_sig_ecc_c_synd_mask;
+> > +
+> > +     u32 ecc_sig_ecc_u_id_shift;
+> > +     u32 ecc_sig_ecc_u_synd_shift;
+> > +     u32 ecc_sig_ecc_u_addr_h_mask;
+> > +     u32 ecc_sig_ecc_u_id_mask;
+> > +     u32 ecc_sig_ecc_u_synd_mask;
+>
+> I'd try to shorten those if I were you - "ecc_sig_" could go, "ecc_int_"
+> too. Then the code accessing them would become more readable and you
+> won't have to break long lines.
+
+OK
+
+>
+> > +};
+> > +
+> > +struct priv_data {
+> > +     void __iomem *reg;
+> > +     u32 ce_cnt;
+> > +     u32 ue_cnt;
+> > +     char message[EDAC_MSG_SIZE];
+> > +     const struct npcm_edac_platform_data *npcm_chip;
+> > +};
+> > +
+> > +#ifdef CONFIG_EDAC_DEBUG
+>
+> Move that ifdeffery...
+>
+> > +static void init_mem_layout(struct mem_ctl_info *mci)
+> > +{
+>
+> ... here and then you won't need the ifdeffery at the call site below.
+>
+
+OK
 
 
+> > +     struct priv_data *priv =3D mci->pvt_info;
+> > +     const struct npcm_edac_platform_data *npcm_chip =3D priv->npcm_ch=
+ip;
+> > +     struct csrow_info *csi;
+> > +     struct dimm_info *dimm;
+> > +     struct sysinfo inf;
+> > +     enum mem_type mtype;
+> > +     u32 val, width;
+> > +     u32 size, row;
+> > +     u8 j;
+> > +
+> > +     dimm =3D edac_get_dimm(mci, 0, 0, 0);
+> > +     if (!dimm) {
+>
+> Save an indentation level:
+>
+
+OK
+
+>         if (dimm)
+>                 return;
+>
+>         si_meminfo(&inf);
+>         ...
+>
+> > +             si_meminfo(&inf);
+> > +             for (row =3D 0; row < mci->nr_csrows; row++) {
+> > +                     csi =3D mci->csrows[row];
+> > +                     size =3D inf.totalram * inf.mem_unit;
+> > +
+> > +                     for (j =3D 0; j < csi->nr_channels; j++) {
+> > +                             dimm            =3D csi->channels[j]->dim=
+m;
+> > +                             dimm->edac_mode =3D EDAC_FLAG_SECDED;
+> > +                             /* Get memory type by reading hw register=
+s*/
+> > +                             val =3D readl(priv->reg + npcm_chip->ddr_=
+ctl_mem_type_reg);
+> > +                             mtype =3D val & NPCM_ECC_CTL_MTYPE_MASK;
+> > +
+> > +                             if (mtype =3D=3D MEM_TYPE_DDR4)
+> > +                                     dimm->mtype =3D MEM_DDR4;
+> > +                             else
+> > +                                     dimm->mtype =3D MEM_EMPTY;
+> > +
+> > +                             /*Get EDAC devtype width for the current =
+mc*/
+>
+> Put spaces between the * and the text. There are other comments who have
+> this, pls fix them all.
+>
+
+OK
+
+> > +                             width =3D readl(priv->reg + npcm_chip->dd=
+r_ctl_mem_width_reg)
+> > +                                           & CTL_MEM_MAX_WIDTH_MASK;
+> > +                             switch (width) {
+> > +                             case WDTH_16:
+> > +                                     dimm->dtype  =3D DEV_X2;
+> > +                                     break;
+> > +                             case WDTH_32:
+> > +                                     dimm->dtype  =3D DEV_X4;
+> > +                                     break;
+> > +                             case WDTH_64:
+> > +                                     dimm->dtype  =3D DEV_X8;
+> > +                                     break;
+> > +                             default:
+> > +                                     dimm->dtype =3D DEV_UNKNOWN;
+> > +                             }
+> > +
+> > +                             dimm->nr_pages  =3D (size >> PAGE_SHIFT) =
+/
+> > +                                     csi->nr_channels;
+> > +                             dimm->grain     =3D NPCM_EDAC_ERR_GRAIN;
+> > +                     }
+> > +             }
+> > +     }
+> > +}
+> > +#endif
+> > +
+> > +static void handle_ce(struct mem_ctl_info *mci)
+> > +{
+> > +     struct priv_data *priv =3D mci->pvt_info;
+> > +     const struct npcm_edac_platform_data *npcm_chip =3D priv->npcm_ch=
+ip;
+> > +     u64 err_c_addr =3D 0x0;
+> > +     u64 err_c_data =3D 0x0;
+> > +     u32 err_c_synd, err_c_id;
+> > +     u32 sig_val_l, sig_val_h;
+> > +
+> > +     sig_val_l =3D readl(priv->reg + npcm_chip->ecc_sig_ecc_c_addr_l);
+> > +
+> > +     if (npcm_chip->chip =3D=3D NPCM8XX_CHIP)
+> > +             sig_val_h =3D (readl(priv->reg + npcm_chip->ecc_sig_ecc_c=
+_addr_h) &
+> > +                             npcm_chip->ecc_sig_ecc_c_addr_h_mask);
+> > +     else
+> > +             sig_val_h =3D 0x0;
+>
+> assign those vars to 0 at declaration time and you won't need the else
+> branch here...
+>
+
+OK
+
+> > +
+> > +     err_c_addr =3D (((err_c_addr | sig_val_h) <<
+> > +                             CTL_REG_WIDTH_SHIFT) | sig_val_l);
+> > +
+> > +     sig_val_l =3D readl(priv->reg + npcm_chip->ecc_sig_ecc_c_data_l);
+> > +
+> > +     if (npcm_chip->chip =3D=3D NPCM8XX_CHIP)
+> > +             sig_val_h =3D readl(priv->reg + npcm_chip->ecc_sig_ecc_c_=
+data_h);
+> > +     else
+> > +             sig_val_h =3D 0x0;
+>
+> ... and here.
+>
+> Ditto for handle_ue() below.
+
+OK
+
+>
+> > +     err_c_data =3D (((err_c_data | sig_val_h) <<
+> > +                             CTL_REG_WIDTH_SHIFT) | sig_val_l);
+> > +
+> > +     err_c_id =3D ((readl(priv->reg + npcm_chip->ecc_sig_ecc_c_id) &
+> > +                             npcm_chip->ecc_sig_ecc_c_id_mask) >>
+> > +                             npcm_chip->ecc_sig_ecc_c_id_shift);
+> > +
+> > +     err_c_synd =3D ((readl(priv->reg + npcm_chip->ecc_sig_ecc_c_synd)=
+ &
+> > +                             npcm_chip->ecc_sig_ecc_c_synd_mask) >>
+> > +                             npcm_chip->ecc_sig_ecc_c_synd_shift);
+> > +
+> > +     priv->ce_cnt =3D priv->ce_cnt + 1;
+> > +
+> > +     snprintf(priv->message,
+> > +              EDAC_MSG_SIZE, "DDR ECC %s: data=3D0x%llx source_id=3D%#=
+08x",
+> > +              mci->ctl_name, err_c_data, err_c_id);
+> > +
+> > +     edac_mc_handle_error(HW_EVENT_ERR_CORRECTED, mci,
+> > +                          1,
+> > +                          err_c_addr >> PAGE_SHIFT,
+> > +                          err_c_addr & ~PAGE_MASK,
+> > +                          err_c_synd, 0, 0, -1,
+> > +                          priv->message, "");
+> > +}
+> >
+>
+> ...
+>
+> > +static ssize_t forced_ecc_error_store(struct device *dev,
+> > +                                   struct device_attribute *mattr,
+> > +                                   const char *data, size_t count)
+> > +{
+> > +     struct mem_ctl_info *mci =3D to_mci(dev);
+> > +     struct priv_data *priv =3D mci->pvt_info;
+> > +     const struct npcm_edac_platform_data *npcm_chip =3D priv->npcm_ch=
+ip;
+> > +     int     args_cnt;
+> > +     int     ret;
+> > +     char    **args;
+> > +     u32     regval;
+> > +     u8      bit_no;
+> > +
+> > +     /* Split string buffer into separate parameters */
+> > +     args =3D argv_split(GFP_KERNEL, data, &args_cnt);
+>
+> Move that args splitting...
+>
+> > +
+> > +     /* Check ecc enabled */
+> > +     if (!(readl(priv->reg + npcm_chip->ecc_ctl_en_reg) & npcm_chip->e=
+cc_ctl_ecc_enable_mask))
+> > +             return count;
+> > +
+> > +     /* Check no write operation pending to controller*/
+> > +     while (readl(priv->reg + npcm_chip->ddr_ctl_controller_busy_reg) =
+&
+> > +                     CTL_CONTROLLER_BUSY_FLAG) {
+> > +             usleep_range(1000, 10000);
+> > +     }
+>
+> ... here.
+>
+
+OK
+
+
+> > +
+> > +     /* Write appropriate syndrome to xor_check_bit*/
+>
+> Any documentation about the string being written to debugfs here? I
+> wouldn't want to read the source each time :)
+>
+> > +     if (!strcmp(args[0], "CE") && args_cnt =3D=3D 3) {
+> > +             ret =3D kstrtou8(args[2], 0, &bit_no);
+> > +             if (ret)
+> > +                     return ret;
+> > +             if (!strcmp(args[1], "checkcode")) {
+> > +                     if (bit_no > 7) {
+> > +                             edac_printk(KERN_INFO, NPCM_EDAC_MOD_NAME=
+, "bit_no for checkcode must be 0~7\n");
+> > +                             return count;
+> > +                     }
+> > +                     regval =3D readl(priv->reg + npcm_chip->ecc_ctl_x=
+or_check_bits_reg);
+> > +                     regval =3D (regval & ~(NPCM_ECC_CTL_XOR_BITS_MASK=
+)) |
+> > +                             (check_synd[bit_no] << XOR_CHECK_BIT_SPLI=
+T_WIDTH);
+> > +                     writel(regval, priv->reg + npcm_chip->ecc_ctl_xor=
+_check_bits_reg);
+> > +             } else if (!strcmp(args[1], "data")) {
+> > +                     if (bit_no > 63) {
+> > +                             edac_printk(KERN_INFO, NPCM_EDAC_MOD_NAME=
+, "bit_no for data must be 0~63\n");
+> > +                             return count;
+> > +                     }
+> > +                     regval =3D readl(priv->reg + npcm_chip->ecc_ctl_x=
+or_check_bits_reg);
+> > +                     regval =3D (regval & ~(NPCM_ECC_CTL_XOR_BITS_MASK=
+)) |
+> > +                                      (data_synd[bit_no] << XOR_CHECK_=
+BIT_SPLIT_WIDTH);
+> > +                     writel(regval, priv->reg + npcm_chip->ecc_ctl_xor=
+_check_bits_reg);
+> > +             }
+> > +             /* Enable the ECC writeback_en for corrected error */
+> > +             regval =3D readl(priv->reg + npcm_chip->ecc_ctl_xor_check=
+_bits_reg);
+> > +             writel((regval | NPCM_ECC_CTL_AUTO_WRITEBACK_EN),
+> > +                    priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg)=
+;
+> > +     } else if (!strcmp(args[0], "UE")) {
+> > +             regval =3D readl(priv->reg + npcm_chip->ecc_ctl_xor_check=
+_bits_reg);
+> > +             regval =3D (regval & ~(NPCM_ECC_CTL_XOR_BITS_MASK)) |
+> > +                              (ECC_DOUBLE_MULTI_ERR_SYND << XOR_CHECK_=
+BIT_SPLIT_WIDTH);
+> > +             writel(regval, priv->reg + npcm_chip->ecc_ctl_xor_check_b=
+its_reg);
+> > +     }
+> > +
+> > +     /* Assert fwc */
+> > +     writel((NPCM_ECC_CTL_FORCE_WC | readl(priv->reg + npcm_chip->ecc_=
+ctl_xor_check_bits_reg)),
+> > +            priv->reg + npcm_chip->ecc_ctl_xor_check_bits_reg);
+> > +
+> > +     return count;
+> > +}
+>
+> ...
+>
+> > +#ifdef CONFIG_EDAC_DEBUG
+> > +     if ((npcm_chip->ip_features & FORCED_ECC_ERR_EVENT_SUPPORT) &&
+> > +         npcm_chip->chip =3D=3D NPCM8XX_CHIP) {
+> > +             if (create_sysfs_attributes(mci)) {
+> > +                     edac_printk(KERN_ERR, NPCM_EDAC_MOD_NAME,
+> > +                                 "Failed to create sysfs entries\n");
+> > +                     goto err1;
+> > +             }
+> > +     }
+> > +#endif
+> > +
+> > +     /* Only enable MC interrupts with ECC - clear global int mask bit=
+ and ecc bit */
+> > +     writel(npcm_chip->ecc_ctl_en_int_master_mask,
+> > +            priv_data->reg + npcm_chip->ecc_ctl_int_mask_master);
+> > +
+> > +     if (npcm_chip->chip =3D=3D NPCM8XX_CHIP) {
+> > +             /* clear single and multi for ce and ue */
+> > +             writel(npcm_chip->ecc_ctl_en_int_ecc_mask,
+> > +                    priv_data->reg + npcm_chip->ecc_ctl_int_mask_ecc);
+> > +     }
+> > +
+> > +     return 0;
+> > +
+> > +#ifdef CONFIG_EDAC_DEBUG
+> > +err1:
+> > +#endif
+>
+> This is just silly. Why should loading of the driver fail when it cannot
+> create a couple of sysfs debugging helpers? I think you're fine if you
+> simply issue the error message but continue.
+
+I will revise it
+
+>
+> > +
+> > +     edac_mc_del_mc(&pdev->dev);
+> > +
+> > +err:
+> > +     edac_mc_free(mci);
+> > +     return ret;
+> > +}
+> > +
+> > +static int npcm_edac_mc_remove(struct platform_device *pdev)
+> > +{
+> > +     struct mem_ctl_info *mci =3D platform_get_drvdata(pdev);
+> > +     struct priv_data *priv =3D mci->pvt_info;
+> > +     const struct npcm_edac_platform_data *npcm_chip =3D priv->npcm_ch=
+ip;
+> > +
+> > +     writel(NPCM_ECC_CTL_GLOBAL_INT_DISABLE, priv->reg + npcm_chip->ec=
+c_ctl_int_mask_master);
+> > +
+> > +     /* Disable ecc feature before removing driver by writing 0 */
+> > +     writel((unsigned int)(~(npcm_chip->ecc_ctl_ecc_enable_mask)),
+> > +            priv->reg + npcm_chip->ecc_ctl_en_reg);
+> > +
+> > +#ifdef CONFIG_EDAC_DEBUG
+> > +     remove_sysfs_attributes(mci);
+> > +#endif
+> > +     edac_mc_del_mc(&pdev->dev);
+> > +     edac_mc_free(mci);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static struct platform_driver npcm_edac_mc_driver =3D {
+> > +     .driver =3D {
+> > +                .name =3D "npcm-edac",
+> > +                .of_match_table =3D npcm_edac_of_match,
+> > +     },
+> > +     .probe =3D npcm_edac_mc_probe,
+> > +     .remove =3D npcm_edac_mc_remove,
+> > +};
+> > +
+> > +module_platform_driver(npcm_edac_mc_driver);
+> > +
+> > +MODULE_AUTHOR("Medad <ctcchien@nuvoton.com>");
+>                         ^^
+>
+> Your surname too pls.
+>
+
+Got it
+
+> > +MODULE_DESCRIPTION("Nuvoton NPCM EDAC Driver");
+> > +MODULE_LICENSE("GPL v2");
+> > --
+> > 2.17.1
+> >
+>
+> --
+> Regards/Gruss,
+>     Boris.
+>
+> https://people.kernel.org/tglx/notes-about-netiquette

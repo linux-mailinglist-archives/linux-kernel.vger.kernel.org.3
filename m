@@ -2,135 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 501B44FB71F
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 11:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E12854FB725
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 11:14:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344244AbiDKJOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 05:14:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54558 "EHLO
+        id S245017AbiDKJQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 05:16:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344275AbiDKJOi (ORCPT
+        with ESMTP id S232831AbiDKJQv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 05:14:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056933FBD2;
-        Mon, 11 Apr 2022 02:12:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 97DAFB8112D;
-        Mon, 11 Apr 2022 09:12:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB315C385A4;
-        Mon, 11 Apr 2022 09:12:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649668339;
-        bh=gHtJO44c4D/gohjY60yF1myOEq2+2TFmuEq1mIQdKs8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jlO1rJC0L2Sco80vrOPrUtn/qGvFa4maFijqjeQQySAugORVnJGPbD4SUipWEuDzz
-         FzYJAniBKI8qbDZVrcxfNYhmvz7iywYzVSsLm29HmogQZvz/OAbRKL1NohJC6JueLd
-         MJDB9mDGYrZL9sdarC0O1F6aYDF8XzD5Fu1PJLAy1BwgPMCqyM9X4T/6CaPAmR9eo2
-         cDAA0EGwdicvF0/dJaUxLEdPYy4Wv1PQBL2x9YWypf5G3BbgNPP9fYXDQ2IKoArwbb
-         ANkBarNOm00mMet0/3WzKUgsAv27RY1WvqipI1XEmXBOHBIe0XUO+UVlGij21AvaEG
-         3BRhTAzh/ZB1g==
-Date:   Mon, 11 Apr 2022 10:12:13 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Peter Gonda <pgonda@google.com>, kvm list <kvm@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Anup Patel <anup@brainfault.org>, maz@kernel.org,
-        alexandru.elisei@arm.com
-Subject: Re: [PATCH v4.1] KVM, SEV: Add KVM_EXIT_SHUTDOWN metadata for SEV-ES
-Message-ID: <20220411091213.GA2120@willie-the-truck>
-References: <20220407210233.782250-1-pgonda@google.com>
- <Yk+kNqJjzoJ9TWVH@google.com>
- <CAMkAt6oc=SOYryXu+_w+WZR+VkMZfLR3_nd=hDvMU_cmOjJ0Xg@mail.gmail.com>
- <YlBqYcXFiwur3zmo@google.com>
+        Mon, 11 Apr 2022 05:16:51 -0400
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7D312759;
+        Mon, 11 Apr 2022 02:14:37 -0700 (PDT)
+Received: by mail-qt1-f176.google.com with SMTP id 10so15672309qtz.11;
+        Mon, 11 Apr 2022 02:14:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1A09GWjhbeERq4BfjM2T1+KKpyEI7+/x9EtzCaW3UdQ=;
+        b=51O6B8zX3oRWwEDRtLKMhMHVmiRvpXcuafUSYr66fYz3YpA1nmbl98mu5YvQcqoFc5
+         CnXqIweRrTQn1PZZ8i2z1xE6u7pzLp4BNzk/qhmAYhC8/QkjHNfFeHAfGlRYaFKkQU8/
+         o4roKQPKDMThIPdzv4dzyqdMIy8k3t3zu8l5VOMpKQwcmKTjAFjmndv1R9jns8xIrQKG
+         h2twv5gy5r41qswTispPaGBfU6/4OAfvqIdWaZMAAOz13/rojeEcPiAJF6hFv5+xpKVP
+         nMujpjsXpIBBRw3css1OwNWhKFkIs0a9RpcmGI7xs2hACnzz70/7oLbZyhgxwIgqKPfh
+         BNfg==
+X-Gm-Message-State: AOAM533dhzdTDpJB0ZPxiwuLQ9TbFjl7mcnkVNtG4JfcjuYmV56TMNO5
+        YZlnBA09w9QZOf2/rkQrv2PSor1uzcQZRQ==
+X-Google-Smtp-Source: ABdhPJz93Swv1VzUHOXCVA3JYyMm5K3cGJvRv28UmpZVX05z6QH+aiIODJb4oG9mHTpjh83UFbY/Rg==
+X-Received: by 2002:ac8:674c:0:b0:2eb:dd80:6442 with SMTP id n12-20020ac8674c000000b002ebdd806442mr13538941qtp.458.1649668477010;
+        Mon, 11 Apr 2022 02:14:37 -0700 (PDT)
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
+        by smtp.gmail.com with ESMTPSA id bp40-20020a05622a1ba800b002ed0e8e7e03sm6469430qtb.66.2022.04.11.02.14.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Apr 2022 02:14:36 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-2ebf3746f87so62698117b3.6;
+        Mon, 11 Apr 2022 02:14:36 -0700 (PDT)
+X-Received: by 2002:a81:3d81:0:b0:2eb:8069:5132 with SMTP id
+ k123-20020a813d81000000b002eb80695132mr25080083ywa.438.1649668476257; Mon, 11
+ Apr 2022 02:14:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YlBqYcXFiwur3zmo@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220407193542.17230-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220407193542.17230-1-krzysztof.kozlowski@linaro.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 11 Apr 2022 11:14:25 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWXLiTKDpXydKQh-fmyHOHb8WpCe9oetNrs2GGNGZqRCg@mail.gmail.com>
+Message-ID: <CAMuHMdWXLiTKDpXydKQh-fmyHOHb8WpCe9oetNrs2GGNGZqRCg@mail.gmail.com>
+Subject: Re: [RESEND PATCH] dt-bindings: power: renesas,rcar-sysc: drop
+ useless consumer example
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sean,
+Hi Krzysztof,
 
-Cheers for the heads-up.
+On Thu, Apr 7, 2022 at 9:35 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> Consumer examples in the bindings of resource providers are trivial,
+> useless and duplication of code.  Remove the example code for consumer.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-[+Marc and Alex as this looks similar to [1]]
+Thanks for your patch, which is now commit 981a340540381532
+("dt-bindings: power: renesas,rcar-sysc: drop useless consumer
+example") in dt-rh/for-next.
 
-On Fri, Apr 08, 2022 at 05:01:21PM +0000, Sean Christopherson wrote:
-> On Fri, Apr 08, 2022, Peter Gonda wrote:
-> > On Thu, Apr 7, 2022 at 8:55 PM Sean Christopherson <seanjc@google.com> wrote:
-> > > On Thu, Apr 07, 2022, Peter Gonda wrote:
-> > > > If an SEV-ES guest requests termination, exit to userspace with
-> > > > KVM_EXIT_SYSTEM_EVENT and a dedicated SEV_TERM type instead of -EINVAL
-> > > > so that userspace can take appropriate action.
-> > > >
-> > > > See AMD's GHCB spec section '4.1.13 Termination Request' for more details.
-> > >
-> > > Maybe it'll be obvious by the lack of compilation errors, but the changelog should
-> > > call out the flags => ndata+data shenanigans, otherwise this looks like ABI breakage.
-> > 
-> > Hmm I am not sure we can do this change anymore given that we have two
-> > call sites using 'flags'
-> > 
-> > arch/arm64/kvm/psci.c:184
-> > arch/riscv/kvm/vcpu_sbi.c:97
-> > 
-> > I am not at all familiar with ARM and RISC-V but some quick reading
-> > tells me these archs also require 64-bit alignment on their 64-bit
-> > accesses. If thats correct, should I fix this call sites up by
-> > proceeding with this ndata + data[] change and move whatever they are
-> > assigning to flags into data[0] like I am doing here? It looks like
-> > both of these changes are not in a kernel release so IIUC we can still
-> > fix the ABI here?
-> 
-> Yeah, both came in for v5.18.  Given that there will be multiple paths that need
-> to set data, it's worth adding a common helper to the dirty work.
-> 
-> Anup and Will,
-> 
-> system_event.flags is broken (at least on x86) due to the prior 'type' field not
-> being propery padded, e.g. userspace will read/write garbage if the userspace
-> and kernel compilers pad structs differently.
-> 
-> 		struct {
-> 			__u32 type;
-> 			__u64 flags;
-> 		} system_event;
+> --- a/Documentation/devicetree/bindings/power/renesas,rcar-sysc.yaml
+> +++ b/Documentation/devicetree/bindings/power/renesas,rcar-sysc.yaml
+> @@ -10,9 +10,11 @@ maintainers:
+>    - Geert Uytterhoeven <geert+renesas@glider.be>
+>    - Magnus Damm <magnus.damm@gmail.com>
+>
+> -description:
+> +description: |
+>    The R-Car (RZ/G) System Controller provides power management for the CPU
+>    cores and various coprocessors.
+> +  The power domain IDs for consumers are defined in header files::
+> +  include.dt-bindings/power/r8*-sysc.h
 
-On arm64, I think the compiler is required to put the padding between type
-and flags so that both the struct and 'flags' are 64-bit aligned [2]. Does
-x86 not offer any guarantees on the overall structure alignment?
+include/dt-bindings/power/r8*-sysc.h?
 
-> Our plan to unhose this is to change the struct as follows and use bit 31 in the
-> 'type' to indicate that ndata+data are valid.
-> 
-> 		struct {
->                         __u32 type;
-> 			__u32 ndata;
-> 			__u64 data[16];
->                 } system_event;
-> 
-> Any objection to updating your architectures to use a helper to set the bit and
-> populate ndata+data accordingly?  It'll require a userspace update, but v5.18
-> hasn't officially released yet so it's not kinda sort not ABI breakage.
+Or does the period have a special meaning here?
 
-It's a bit annoying, as we're using the current structure in Android 13 :/
-Obviously, if there's no choice then upstream shouldn't worry, but it means
-we'll have to carry a delta in crosvm. Specifically, the new 'ndata' field
-is going to be unusable for us because it coincides with the padding.
+>
+>  properties:
+>    compatible:
 
-Will
+Gr{oetje,eeting}s,
 
-[1] https://lore.kernel.org/r/20220407162327.396183-6-alexandru.elisei@arm.com
-[2] https://github.com/ARM-software/abi-aa/blob/60a8eb8c55e999d74dac5e368fc9d7e36e38dda4/aapcs64/aapcs64.rst#composite-types
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

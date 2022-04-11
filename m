@@ -2,104 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FB704FB16A
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 03:36:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1B2C4FB17A
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 03:44:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244260AbiDKBiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 21:38:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57208 "EHLO
+        id S244306AbiDKBqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 21:46:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbiDKBiX (ORCPT
+        with ESMTP id S235432AbiDKBqb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 21:38:23 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF2543EEB;
-        Sun, 10 Apr 2022 18:36:10 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id e22so12133277qvf.9;
-        Sun, 10 Apr 2022 18:36:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=e4GkgwH8Cf5+Xk57d8WjJ96d7p3KRonjzQ3FCZd7W90=;
-        b=H3H6brXvjJkdtmxaq5yq+JtfipPNGEp5xhxyLrzDZGHtfM2M4F0x//PiDTwU1MFYg8
-         GyoSYDU69O5c0DQivLQr7QUUdlTKqC0COELV0NJdlSMXzKyF3Psc6fbXio6hsPezCBZT
-         DbtTe6BvGE6l0VdHKc9T9FlQ1TjBQ5c0B6uGudeiz6bPHB+CBd8TAIEzLw1eTgxEiVdW
-         FiHweF+vmHx5UAOd48Gg/OwW4UY6/7qm01ArhPS6V9XQSc9HcpFKnVgbfgz0tPOgQcr2
-         gFXKFfafhbCjRl0iEIrjPhimGeT2IaSsjewEmHsYLBkrfmfdVfxZRfQVOoR/+5E1XOpf
-         fa5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=e4GkgwH8Cf5+Xk57d8WjJ96d7p3KRonjzQ3FCZd7W90=;
-        b=HVnTN/XMbYliZP/HsnFbxKnmFNJfHMKUhJzsUW4yoSVUUzLpI9b4/8kESGBB6mdUNW
-         19oVQG8OdkzGV5G3Ndibumf5XION3yS1ITkrJ3/mE+GJXctDBcQHkRtVoI9FWShgt/6i
-         zQLEg2ZthTh0Dz6/dHyKUcBMyaNzrTmZGiYVDKOJ30VeqWdsoSTxaczCOkQEv6zpi7TW
-         mBfjV/BWChg4G2r9qNWkkw+oO85q6bFzQJAucNlZsVCJ919wb3/0gQRo2W5AieGwB4jj
-         jp57tqYl+bE0kQ90C3+M8IqMo7XRXT9524N5UCdvFL12F2XnPBYk7oNlBjBs6ychAxIA
-         YT1Q==
-X-Gm-Message-State: AOAM533PpQrk6CPvqyUeu+D9sA12pOzwwGd2uDuqM24p37YATMCFRKf2
-        cgSPRG6w4WwUBzHnoD2hH6iCKlih3js=
-X-Google-Smtp-Source: ABdhPJybI46Cuunj2Qqdpk7JajdoBLPu6o8OSbbeo/0MMW1NkzzSrVFw18O8k532OEnnoZUYXh9WNA==
-X-Received: by 2002:a05:6214:e4a:b0:444:28a7:9fb7 with SMTP id o10-20020a0562140e4a00b0044428a79fb7mr10580217qvc.30.1649640969374;
-        Sun, 10 Apr 2022 18:36:09 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id u5-20020a05622a198500b002ee933faf83sm1101121qtc.73.2022.04.10.18.36.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Apr 2022 18:36:08 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     merez@codeaurora.org
-Cc:     kvalo@kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-wireless@vger.kernel.org, wil6210@qti.qualcomm.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] wil6210: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-Date:   Mon, 11 Apr 2022 01:36:02 +0000
-Message-Id: <20220411013602.2517086-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Sun, 10 Apr 2022 21:46:31 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80EFBBC88;
+        Sun, 10 Apr 2022 18:44:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649641459; x=1681177459;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MD7Q42ZDoqyehGhEpCAOlWo7PUck1hpDtCMUuvaoFGc=;
+  b=MoagKVTstWYjEzC/Lam5BlWX7zH5eFMaz6egQ/MlGQvXOt5FfSfqBtsV
+   7toVcuHWGvAMlIsI6xnzTGdJAVFh2XWF7iPv46yimEedJeDG4pHjy4fYY
+   0khK9IB71d+hPcCy8zgA6GSqd9ylHLOtssNugJhnPzkCO/cbQy95nNH3M
+   dawIIUJ+WPT0OE4VdvHjclrjLi5/DsTKwYYXo5eEFxunkghc0He5QtGqj
+   TpAUPNLfhh50FhFgr4H3gjy9PJoEpVx1nDDyuq9GveeIarlViXpm+ezhs
+   B3G/NoxIYHTh0wuaMBLJLpx2BA4Al5lEOinNOPU88HOEH/rF28waXZwWg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="241946643"
+X-IronPort-AV: E=Sophos;i="5.90,250,1643702400"; 
+   d="scan'208";a="241946643"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2022 18:44:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,250,1643702400"; 
+   d="scan'208";a="571899959"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
+  by orsmga008.jf.intel.com with ESMTP; 10 Apr 2022 18:44:16 -0700
+Date:   Mon, 11 Apr 2022 09:36:50 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
+        conor.dooley@microchip.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, system@metrotek.ru,
+        linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v9 1/3] fpga: fpga-mgr: support bitstream offset in image
+  buffer
+Message-ID: <20220411013650.GA271264@yilunxu-OptiPlex-7050>
+References: <20220407133658.15699-1-i.bornyakov@metrotek.ru>
+ <20220407133658.15699-2-i.bornyakov@metrotek.ru>
+ <20220409050423.GA265355@yilunxu-OptiPlex-7050>
+ <20220409123851.tcjflctnuurag2yb@x260>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220409123851.tcjflctnuurag2yb@x260>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+On Sat, Apr 09, 2022 at 03:38:51PM +0300, Ivan Bornyakov wrote:
+> On Sat, Apr 09, 2022 at 01:04:23PM +0800, Xu Yilun wrote:
+> > On Thu, Apr 07, 2022 at 04:36:56PM +0300, Ivan Bornyakov wrote:
+> > > 
+> > > ... snip ...
+> > > 
+> > > @@ -148,12 +149,10 @@ static int fpga_mgr_write_init_buf(struct fpga_manager *mgr,
+> > >  	int ret;
+> > >  
+> > >  	mgr->state = FPGA_MGR_STATE_WRITE_INIT;
+> > > -	if (!mgr->mops->initial_header_size)
+> > > -		ret = fpga_mgr_write_init(mgr, info, NULL, 0);
+> > > -	else
+> > > -		ret = fpga_mgr_write_init(
+> > > -		    mgr, info, buf, min(mgr->mops->initial_header_size, count));
+> > > +	if (mgr->mops->initial_header_size)
+> > > +		count = min(mgr->mops->initial_header_size, count);
+> > >  
+> > > +	ret = fpga_mgr_write_init(mgr, info, buf, count);
+> > 
+> > Here we pass the whole buffer for write_init(). Maybe it works for mapped buf,
+> > but still doesn't work for sg buf.
+> > 
+> > It is also inefficient if we change to map and copy all sg buffers just for
+> > write_init().
+> > 
+> > We could discuss on the solution.
+> > 
+> > My quick mind is we introduce an optional fpga_manager_ops.parse_header()
+> > callback, and a header_size (dynamic header size) field in
+> > fpga_image_info. FPGA core starts with mapping a buf of initial_header_size
+> > for parse_header(), let the drivers decide the dynamic header_size.
+> > 
+> > The parse_header() could be called several times with updated dynamic
+> > header_size, if drivers doesn't get enough buffer for final decision and
+> > return -EAGAIN.
+> > 
+> > Then write_init() be called with the final dynamic header size.
+> > 
+> > For mapped buffer, just passing the whole buffer for write_init() is
+> > fine.
+> > 
+> 
+> Ok, that's sounds reasonable. Should we pass PAGE_SIZE of a buffer to
+> the parse_header() if initial_header_size is not set? The other option
 
-Using pm_runtime_resume_and_get is more appropriate
-for simplifing code
+I think it is not necessary, no initial_header_size means no need to
+parse image header.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
----
- drivers/net/wireless/ath/wil6210/pm.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+> would be to make initial_header_size to be mandatory for usage of
+> parse_header().
 
-diff --git a/drivers/net/wireless/ath/wil6210/pm.c b/drivers/net/wireless/ath/wil6210/pm.c
-index ed4df561e5c5..f521af575e9b 100644
---- a/drivers/net/wireless/ath/wil6210/pm.c
-+++ b/drivers/net/wireless/ath/wil6210/pm.c
-@@ -445,10 +445,9 @@ int wil_pm_runtime_get(struct wil6210_priv *wil)
- 	int rc;
- 	struct device *dev = wil_to_dev(wil);
- 
--	rc = pm_runtime_get_sync(dev);
-+	rc = pm_runtime_resume_and_get(dev);
- 	if (rc < 0) {
--		wil_err(wil, "pm_runtime_get_sync() failed, rc = %d\n", rc);
--		pm_runtime_put_noidle(dev);
-+		wil_err(wil, "pm_runtime_resume_and_get() failed, rc = %d\n", rc);
- 		return rc;
- 	}
- 
--- 
-2.25.1
+That's a good idea. If parse_header() is provided, initial_header_size
+is mandatory.
 
+Thanks,
+Yilun
+
+> 
+> > > 
+> > > ... snip ...
+> > > 
+> > > @@ -98,6 +101,8 @@ struct fpga_image_info {
+> > >  	struct sg_table *sgt;
+> > >  	const char *buf;
+> > >  	size_t count;
+> > > +	size_t bitstream_start;
+> > 
+> > How about we name it header_size?
+> > 
+> > > +	size_t bitstream_size;
+> > 
+> > And how about data_size?
+> > 
+> 
+> Sure, I don't mind.

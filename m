@@ -2,55 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A2774FBDF7
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 15:59:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D6C84FBE00
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 16:00:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346775AbiDKOBo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 11 Apr 2022 10:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60706 "EHLO
+        id S1346832AbiDKOCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 10:02:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346788AbiDKOBk (ORCPT
+        with ESMTP id S1346827AbiDKOCW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 10:01:40 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD262BB08
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 06:59:25 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nduZY-0008MD-Ft; Mon, 11 Apr 2022 15:59:16 +0200
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nduZW-002OkN-Bq; Mon, 11 Apr 2022 15:59:12 +0200
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1nduZU-000CHv-8G; Mon, 11 Apr 2022 15:59:12 +0200
-Message-ID: <2a8732442ffab2ca03fbc0153c1cdfd1f8dc1233.camel@pengutronix.de>
-Subject: Re: [PATCH 09/14] dt-bindings: reset: snps,dw-reset: Convert to yaml
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Rob Herring <robh@kernel.org>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>
-Cc:     devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-kernel@vger.kernel.org
-Date:   Mon, 11 Apr 2022 15:59:12 +0200
-In-Reply-To: <YlB+Hd6IGdM8SD8X@robh.at.kernel.org>
-References: <20220407154338.4190674-1-p.zabel@pengutronix.de>
-         <20220407154338.4190674-9-p.zabel@pengutronix.de>
-         <YlB+Hd6IGdM8SD8X@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
+        Mon, 11 Apr 2022 10:02:22 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9053F3056C;
+        Mon, 11 Apr 2022 07:00:07 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 58F061570;
+        Mon, 11 Apr 2022 07:00:07 -0700 (PDT)
+Received: from e121798.cambridge.arm.com (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F2D483F73B;
+        Mon, 11 Apr 2022 07:00:05 -0700 (PDT)
+Date:   Mon, 11 Apr 2022 15:00:04 +0100
+From:   Alexandru Elisei <alexandru.elisei@arm.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Peter Gonda <pgonda@google.com>,
+        kvm list <kvm@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Anup Patel <anup@brainfault.org>, maz@kernel.org
+Subject: Re: [PATCH v4.1] KVM, SEV: Add KVM_EXIT_SHUTDOWN metadata for SEV-ES
+Message-ID: <YlQ0LZyAgjGr7qX7@e121798.cambridge.arm.com>
+References: <20220407210233.782250-1-pgonda@google.com>
+ <Yk+kNqJjzoJ9TWVH@google.com>
+ <CAMkAt6oc=SOYryXu+_w+WZR+VkMZfLR3_nd=hDvMU_cmOjJ0Xg@mail.gmail.com>
+ <YlBqYcXFiwur3zmo@google.com>
+ <20220411091213.GA2120@willie-the-truck>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220411091213.GA2120@willie-the-truck>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,79 +50,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fr, 2022-04-08 at 13:25 -0500, Rob Herring wrote:
-> On Thu, Apr 07, 2022 at 05:43:33PM +0200, Philipp Zabel wrote:
-> > Convert the device tree bindings for the Synopsys DesignWare reset
-> > controller to YAML schema to allow participating in DT validation.
-> > 
-> > Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
-> > Cc: Luis Oliveira <Luis.Oliveira@synopsys.com>
+Hi,
 
-Cc: Gustavo Pimentel <gustavo.pimentel@synopsys.com>
-
-> > ---
-> >  .../bindings/reset/snps,dw-reset.txt          | 30 -------------
-> >  .../bindings/reset/snps,dw-reset.yaml         | 44 +++++++++++++++++++
-> >  2 files changed, 44 insertions(+), 30 deletions(-)
-> >  delete mode 100644 Documentation/devicetree/bindings/reset/snps,dw-reset.txt
-> >  create mode 100644 Documentation/devicetree/bindings/reset/snps,dw-reset.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/reset/snps,dw-reset.txt b/Documentation/devicetree/bindings/reset/snps,dw-reset.txt
-> > deleted file mode 100644
-> > index 0c241d4aae76..000000000000
-> > --- a/Documentation/devicetree/bindings/reset/snps,dw-reset.txt
-> > +++ /dev/null
-> > @@ -1,30 +0,0 @@
-> > -Synopsys DesignWare Reset controller
-> > -=======================================
-> > -
-> > -Please also refer to reset.txt in this directory for common reset
-> > -controller binding usage.
-> > -
-> > -Required properties:
-> > -
-> > -- compatible: should be one of the following.
-> > -	"snps,dw-high-reset" - for active high configuration
-> > -	"snps,dw-low-reset" - for active low configuration
-> > -
-> > -- reg: physical base address of the controller and length of memory mapped
-> > -	region.
-> > -
-> > -- #reset-cells: must be 1.
-> > -
-> > -example:
-> > -
-> > -	dw_rst_1: reset-controller@0000 {
-> > -		compatible = "snps,dw-high-reset";
-> > -		reg = <0x0000 0x4>;
-> > -		#reset-cells = <1>;
-> > -	};
-> > -
-> > -	dw_rst_2: reset-controller@1000 {
-> > -		compatible = "snps,dw-low-reset";
-> > -		reg = <0x1000 0x8>;
-> > -		#reset-cells = <1>;
-> > -	};
-> > diff --git a/Documentation/devicetree/bindings/reset/snps,dw-reset.yaml b/Documentation/devicetree/bindings/reset/snps,dw-reset.yaml
-> > new file mode 100644
-> > index 000000000000..f9b36ddc0ea1
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/reset/snps,dw-reset.yaml
-> > @@ -0,0 +1,44 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/reset/snps,dw-reset.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Synopsys DesignWare Reset controller
-> > +
-> > +maintainers:
-> > +  - Luis Oliveira <Luis.Oliveira@synopsys.com>
+On Mon, Apr 11, 2022 at 10:12:13AM +0100, Will Deacon wrote:
+> Hi Sean,
 > 
-> Mail bounces, needs a new one.
+> Cheers for the heads-up.
+> 
+> [+Marc and Alex as this looks similar to [1]]
+> 
+> On Fri, Apr 08, 2022 at 05:01:21PM +0000, Sean Christopherson wrote:
+> > On Fri, Apr 08, 2022, Peter Gonda wrote:
+> > > On Thu, Apr 7, 2022 at 8:55 PM Sean Christopherson <seanjc@google.com> wrote:
+> > > > On Thu, Apr 07, 2022, Peter Gonda wrote:
+> > > > > If an SEV-ES guest requests termination, exit to userspace with
+> > > > > KVM_EXIT_SYSTEM_EVENT and a dedicated SEV_TERM type instead of -EINVAL
+> > > > > so that userspace can take appropriate action.
+> > > > >
+> > > > > See AMD's GHCB spec section '4.1.13 Termination Request' for more details.
+> > > >
+> > > > Maybe it'll be obvious by the lack of compilation errors, but the changelog should
+> > > > call out the flags => ndata+data shenanigans, otherwise this looks like ABI breakage.
+> > > 
+> > > Hmm I am not sure we can do this change anymore given that we have two
+> > > call sites using 'flags'
+> > > 
+> > > arch/arm64/kvm/psci.c:184
+> > > arch/riscv/kvm/vcpu_sbi.c:97
+> > > 
+> > > I am not at all familiar with ARM and RISC-V but some quick reading
+> > > tells me these archs also require 64-bit alignment on their 64-bit
+> > > accesses. If thats correct, should I fix this call sites up by
+> > > proceeding with this ndata + data[] change and move whatever they are
+> > > assigning to flags into data[0] like I am doing here? It looks like
+> > > both of these changes are not in a kernel release so IIUC we can still
+> > > fix the ABI here?
+> > 
+> > Yeah, both came in for v5.18.  Given that there will be multiple paths that need
+> > to set data, it's worth adding a common helper to the dirty work.
+> > 
+> > Anup and Will,
+> > 
+> > system_event.flags is broken (at least on x86) due to the prior 'type' field not
+> > being propery padded, e.g. userspace will read/write garbage if the userspace
+> > and kernel compilers pad structs differently.
+> > 
+> > 		struct {
+> > 			__u32 type;
+> > 			__u64 flags;
+> > 		} system_event;
+> 
+> On arm64, I think the compiler is required to put the padding between type
+> and flags so that both the struct and 'flags' are 64-bit aligned [2]. Does
+> x86 not offer any guarantees on the overall structure alignment?
 
-Gustavo, would you take on maintainership of this file?
+This is also my understanding. The "Procedure Call Standard for the Arm
+64-bit Architecture" [1] has these rules for structs (called "aggregates"):
 
-regards
-Philipp
+"An aggregate, where the members are laid out sequentially in memory
+(possibly with inter-member padding)" => the field "type" is at offset 0 in
+the struct.
+
+"The member alignment of an element of a composite type is the alignment of
+that member after the application of any language alignment modifiers to
+that member" => "flags" is 8-byte aligned and "type" is 4-byte aligned.
+
+"The alignment of an aggregate shall be the alignment of its most-aligned
+member." => struct system_event is 8-byte aligned.
+
+and finally:
+
+"The size of an aggregate shall be the smallest multiple of its alignment
+that is sufficient to hold all of its members."
+
+I think this is the only possible layout that satisfies all the above
+conditions:
+
+offset 0-3: type (at an 8-byte aligned address in memory)
+offset 4-7: padding
+offset 8-15: flags
+
+so under all compilers that correctly implement the architecture the struct
+will have the same layout.
+
+[1] https://github.com/ARM-software/abi-aa/releases/download/2021Q3/aapcs64.pdf
+
+> 
+> > Our plan to unhose this is to change the struct as follows and use bit 31 in the
+> > 'type' to indicate that ndata+data are valid.
+> > 
+> > 		struct {
+> >                         __u32 type;
+> > 			__u32 ndata;
+> > 			__u64 data[16];
+> >                 } system_event;
+> > 
+> > Any objection to updating your architectures to use a helper to set the bit and
+> > populate ndata+data accordingly?  It'll require a userspace update, but v5.18
+> > hasn't officially released yet so it's not kinda sort not ABI breakage.
+> 
+> It's a bit annoying, as we're using the current structure in Android 13 :/
+> Obviously, if there's no choice then upstream shouldn't worry, but it means
+> we'll have to carry a delta in crosvm. Specifically, the new 'ndata' field
+> is going to be unusable for us because it coincides with the padding.
+
+Just a thought, but wouldn't such a drastical change be better implemented
+as a new exit_reason and a new associated struct?
+
+Thanks,
+Alex
+
+> 
+> Will
+> 
+> [1] https://lore.kernel.org/r/20220407162327.396183-6-alexandru.elisei@arm.com
+> [2] https://github.com/ARM-software/abi-aa/blob/60a8eb8c55e999d74dac5e368fc9d7e36e38dda4/aapcs64/aapcs64.rst#composite-types

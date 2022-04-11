@@ -2,170 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E37584FBD95
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 15:44:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3996E4FBD83
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 15:43:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346661AbiDKNqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 09:46:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51226 "EHLO
+        id S1346632AbiDKNpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 09:45:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346664AbiDKNqr (ORCPT
+        with ESMTP id S230488AbiDKNo6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 09:46:47 -0400
-Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B74BF5D;
-        Mon, 11 Apr 2022 06:44:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-        Content-ID:Content-Description;
-        bh=K7iqjzEKodptiKfvuoGAMKfPEDKK9H4ydTx0zlRIMKY=; b=qcK9XJ8Q2+wciYd8XEvPaxKZnp
-        UwQgcpEJ7ZkTnx+UrI37FNE0fCsVoqAWvkDeSDv9dZKFVuPS/MjQ6ShGeOgPZam/2qLZ3GMuyYecG
-        /kiXOq6dLZIC9TX74OsTLuMw6D/bBqCn6Qe/4za6at/biJANLw7M5/3wGfKVDWAHJH0bLomI/B2G5
-        T505keIvdngq7ChrVG6p8l3xIoOCy224mEs6xVnzQVgkcYJleaCJmi/pE9C/3ZkeSBy+3q6aD/L+P
-        lx9RTKE0O5E0nk6SF/DJKQ6X8O29U4l5GnRF+pFb2emmZpWalwtFWuWpQAbdy3ii4v+8R39z3Z0Qc
-        3AIGVmHrh+0h0r59nuOWsUFBq/ZJBKV/xYhj7NgWUcYAvhRr2X7p3w0kbhLcn2jPQPAUBzCZ6w6mN
-        +FK0cgvJ1CIwVcYOjcIWg+Y6MaC+zIg8G5aFZiKuvZm4O+6bqo0WdwUK0PMR/ALvVKEJjW/08zmui
-        Yj7wlw+y2FKuRKchgUJE28ourWKJnfggV3IcrMGfLVuoFJllRgMUw73U/qKpICZp4ADZN9PVqUcTU
-        V82Nu1C4+hgBcFz5qZDAvF7Tj+98MPLBDPAnXmLWaOoS/P2U04Vc5Abr7GzeZyyWd0Ewy05tIdjEI
-        SJR/vXXb5TVHXPkGF3an3AHefyZQ4MxER1Mnbb37s=;
-From:   Christian Schoenebeck <linux_oss@crudebyte.com>
-To:     asmadeus@codewreck.org
-Cc:     David Kahurani <k.kahurani@gmail.com>, davem@davemloft.net,
-        ericvh@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        lucho@ionkov.net, netdev@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        David Howells <dhowells@redhat.com>, Greg Kurz <groug@kaod.org>
-Subject: Re: 9p fs-cache tests/benchmark (was: 9p fscache Duplicate cookie detected)
-Date:   Mon, 11 Apr 2022 15:41:45 +0200
-Message-ID: <3119964.Qa6D4ExsIi@silver>
-In-Reply-To: <YlNgN5f1KnT1walD@codewreck.org>
-References: <CAAZOf26g-L2nSV-Siw6mwWQv1nv6on8c0fWqB4bKmX73QAFzow@mail.gmail.com>
- <1966295.VQPMLLWD4E@silver> <YlNgN5f1KnT1walD@codewreck.org>
+        Mon, 11 Apr 2022 09:44:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8F9F121
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 06:42:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649684563;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=SeAW1i7bP5vwPIJRU4t8M7oOEg6okFb42IgET/Pn4rE=;
+        b=hO6FCDJjZl8ZJ/bjj9J0c6ROlrD9YudLtBNMNTyIDmbZRS1KO7EaeyJhPCY5qLvH+PQY4S
+        8EwvuBEWmyDEsvYPsd1GsXHfjWJRcIg2BsixezbnhCFRd4uuxXlu+BQKxGD84Ze/yy2wKo
+        WYoz+gsfXofZ17ctJFMlgwWgH5tjqAs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-576-1qS3aKYwOQyo5eXJq_KINw-1; Mon, 11 Apr 2022 09:42:38 -0400
+X-MC-Unique: 1qS3aKYwOQyo5eXJq_KINw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 16249811E78;
+        Mon, 11 Apr 2022 13:42:37 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.37.45])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C3071492D42;
+        Mon, 11 Apr 2022 13:42:34 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <542f749c-b0f1-1de6-cb41-26e296afb2df@linux.alibaba.com>
+References: <542f749c-b0f1-1de6-cb41-26e296afb2df@linux.alibaba.com> <20220406075612.60298-5-jefflexu@linux.alibaba.com> <20220406075612.60298-1-jefflexu@linux.alibaba.com> <1091405.1649680508@warthog.procyon.org.uk>
+To:     JeffleXu <jefflexu@linux.alibaba.com>
+Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        willy@infradead.org, linux-fsdevel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
+        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
+        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
+        fannaihao@baidu.com
+Subject: Re: [PATCH v8 04/20] cachefiles: notify user daemon when withdrawing cookie
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-ID: <1094492.1649684554.1@warthog.procyon.org.uk>
+Date:   Mon, 11 Apr 2022 14:42:34 +0100
+Message-ID: <1094493.1649684554@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Montag, 11. April 2022 00:54:47 CEST asmadeus@codewreck.org wrote:
-> Thanks for keeping it up!
-> 
-> Christian Schoenebeck wrote on Sun, Apr 10, 2022 at 06:18:38PM +0200:
-> > > I used git-bisect to identify the commit that broke 9p behaviour, and it
-> > > is
-> > > indeed this one:
-> > > 
-> > > commit eb497943fa215897f2f60fd28aa6fe52da27ca6c (HEAD, refs/bisect/bad)
-> > > Author: David Howells <dhowells@redhat.com>
-> > > Date:   Tue Nov 2 08:29:55 2021 +0000
-> > > 
-> > >     9p: Convert to using the netfs helper lib to do reads and caching
-> 
-> Yes, quite a few things changed with that.
-> 
-> > I looked into the errors I get, and as far as I can see it, all
-> > misbehaviours that I see, boil down to "Bad file descriptor" (EBADF)
-> > errors being the originating cause.
+JeffleXu <jefflexu@linux.alibaba.com> wrote:
+
 > > 
-> > The easiest misbehaviours on the guest system I can look into, are errors
+> >> +	if (fd == 0)
+> >> +		return -ENOENT;
+> > 
+> > 0 is a valid fd.
 > 
-> > with the git client. For instance 'git fetch origin' fails this way:
-> FWIW I didn't report but did try to reproduce, on my machines (tried a
-> couple) booting on a small alpine rootfs over 9p works, and I tried some
-> git clone/git fetch of variying sizes of local repo (tmpfs in VM -> 9p
-> mount of tmpfs on host) to no avail.
+> Yeah, but IMHO fd 0 is always for stdin? I think the allocated anon_fd
+> won't install at fd 0. Please correct me if I'm wrong.
 
-I get more convinced that it's a bug on Linux kernel side. When guest is
-booted I always immediately get a read("/var/log/wtmp") = EBADF error on
-guest. And the 9p command sequence sent to QEMU 9p server were:
+If someone has closed 0, then you'll get 0 next, I'm pretty sure.  Try it and
+see.
 
-...
-v9fs_clunk tag 0 id 120 fid 568
-v9fs_walk tag 0 id 110 fid 1 newfid 568 nwnames 1
-v9fs_rerror tag 0 id 110 err 2
-v9fs_walk tag 0 id 110 fid 26 newfid 568 nwnames 1
-v9fs_rerror tag 0 id 110 err 2
-v9fs_readlink tag 0 id 22 fid 474
-v9fs_readlink_return tag 0 id 22 name /run
-v9fs_readlink tag 0 id 22 fid 474
-v9fs_readlink_return tag 0 id 22 name /run
-v9fs_readlink tag 0 id 22 fid 474
-v9fs_readlink_return tag 0 id 22 name /run
-v9fs_readlink tag 0 id 22 fid 474
-v9fs_readlink_return tag 0 id 22 name /run
-v9fs_walk tag 0 id 110 fid 633 newfid 568 nwnames 1
-v9fs_rerror tag 0 id 110 err 2
-v9fs_walk tag 0 id 110 fid 875 newfid 568 nwnames 0
-v9fs_walk_return tag 0 id 110 nwnames 0 qids (nil)
-v9fs_open tag 0 id 12 fid 568 mode 32769
-v9fs_open_return tag 0 id 12 qid={type 0 version 0 path 820297} iounit 507904
-v9fs_walk tag 0 id 110 fid 875 newfid 900 nwnames 0
-v9fs_walk_return tag 0 id 110 nwnames 0 qids (nil)
-v9fs_open tag 0 id 12 fid 900 mode 2
-v9fs_open_return tag 0 id 12 qid={type 0 version 0 path 820297} iounit 507904
-v9fs_lock tag 0 id 52 fid 568 type 1 start 0 length 0
-v9fs_lock_return tag 0 id 52 status 0
-v9fs_xattrwalk tag 0 id 30 fid 568 newfid 901 name security.capability
-v9fs_rerror tag 0 id 30 err 95
-v9fs_read tag 0 id 116 fid 568 off 192512 max_count 256
+> In fact I wanna use "fd == 0" as the initial state as struct
+> cachefiles_object is allocated with kmem_cache_zalloc().
 
-So guest opens /var/log/wtmp with fid=568 mode=32769, which is write-only
-mode, and then it tries to read that fid 568, which eventually causes the
-read() call on host to error with EBADF. Which makes sense, as the file was
-opened in write-only mode, hence read() is not possible with that file
-descriptor.
+I would suggest presetting it to something like -2 to avoid confusion.
 
-The other things I noticed when looking at the 9p command sequence above:
-there is a Twalk on fid 568 before, which is not clunked before reusing fid
-568 with Topen later. And before that Twalk on fid 568 there is a Tclunk on
-fid 568, but apparently that fid was not used before.
-
-> Perhaps backing filesystem dependant? qemu version? virtfs access options?
-
-I tried with different hardware and different file systems (ext4, btrfs), same
-misbehaviours.
-
-QEMU is latest git version. I also tried several different QEMU versions, same
-thing.
-
-QEMU command line used:
-
-~/git/qemu/build/qemu-system-x86_64 \
--machine pc,accel=kvm,usb=off,dump-guest-core=off -m 16384 \
--smp 8,sockets=8,cores=1,threads=1 -rtc base=utc -boot strict=on \
--kernel ~/vm/bullseye/boot/vmlinuz \
--initrd ~/vm/bullseye/boot/initrd.img \
--append 'root=fsRoot rw rootfstype=9p rootflags=trans=virtio,version=9p2000.L,msize=4186112,cache=loose console=ttyS0' \
--fsdev local,security_model=mapped,multidevs=remap,id=fsdev-fs0,path=$HOME/vm/bullseye/ \
--device virtio-9p-pci,id=fs0,fsdev=fsdev-fs0,mount_tag=fsRoot \
--sandbox on,obsolete=deny,elevateprivileges=deny,spawn=deny,resourcecontrol=deny \
--nographic
-
-Important for reproducing this issue:
-
-  * cache=loose
-  * -smp N (with N>1)
-  * Guest booted with Linux kernel containing commit eb497943fa21
-    (uname >= 5.16)
-
-I'm pretty sure that you can reproduce this issue with the QEMU 9p rootfs
-setup HOWTO linked before.
-
-> It's all extremely slow though... like the final checkout counting files
-> at less than 10/s
-
-It is VERY slow. And the weird thing is that cache=loose got much slower than
-cache=mmap. My worst case expactation would be cache=loose at least not
-performing worse than cache=mmap.
-
-Best regards,
-Christian Schoenebeck
-
+David
 

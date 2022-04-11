@@ -2,106 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B00784FB7BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 11:37:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D703D4FB7C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 11:38:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344608AbiDKJjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 05:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38186 "EHLO
+        id S1344567AbiDKJkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 05:40:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344579AbiDKJjW (ORCPT
+        with ESMTP id S1344599AbiDKJkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 05:39:22 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DBE4403F5
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 02:36:53 -0700 (PDT)
-Received: from zn.tnic (p2e55dff8.dip0.t-ipconnect.de [46.85.223.248])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 279091EC0202;
-        Mon, 11 Apr 2022 11:36:48 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1649669808;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=yubHAmQOKFXQzNV5jAier9r1b9P81adyeJrEjeDlCUw=;
-        b=nfLCSOmQv2gPFZSwZuwH56Qf9el3EYe27Hk7ra/Ew/a7m4WWcNkNcsL+tlVZzjQJTZXRNQ
-        aK9DUOCdSHffKLAGMoITCXitPXd5oRivKEAx3MifA8ViS0TArYo3smilmacnmURCPNFgJc
-        KU6b3SmlaDskKkiIQkDPJcxgNcZJz+0=
-Date:   Mon, 11 Apr 2022 11:36:51 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Thomas Tai <thomas.tai@oracle.com>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH V4 1/7] x86/traps: Move pt_regs only in fixup_bad_iret()
-Message-ID: <YlP2s5pbY0YcibAC@zn.tnic>
-References: <20220318143016.124387-1-jiangshanlai@gmail.com>
- <20220318143016.124387-2-jiangshanlai@gmail.com>
+        Mon, 11 Apr 2022 05:40:08 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E099240921;
+        Mon, 11 Apr 2022 02:37:53 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AA5AE143D;
+        Mon, 11 Apr 2022 02:37:53 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.9.30])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 68CBA3F73B;
+        Mon, 11 Apr 2022 02:37:52 -0700 (PDT)
+Date:   Mon, 11 Apr 2022 10:37:48 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     guoren@kernel.org
+Cc:     arnd@arndb.de, peterz@infradead.org, linux-csky@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH] csky: cmpxchg: Optimize with acquire & release
+Message-ID: <YlP27GT05DdyFjlY@FVFF77S0Q05N>
+References: <20220406124056.684117-1-guoren@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220318143016.124387-2-jiangshanlai@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220406124056.684117-1-guoren@kernel.org>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 10:30:10PM +0800, Lai Jiangshan wrote:
-> diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-> index 1563fb995005..9fe9cd9d3eeb 100644
-> --- a/arch/x86/kernel/traps.c
-> +++ b/arch/x86/kernel/traps.c
-> @@ -892,13 +892,8 @@ asmlinkage __visible noinstr struct pt_regs *vc_switch_off_ist(struct pt_regs *r
->  }
->  #endif
->  
-> -struct bad_iret_stack {
-> -	void *error_entry_ret;
-> -	struct pt_regs regs;
-> -};
-> -
->  asmlinkage __visible noinstr
-> -struct bad_iret_stack *fixup_bad_iret(struct bad_iret_stack *s)
-> +struct pt_regs *fixup_bad_iret(struct pt_regs *bad_regs)
->  {
->  	/*
->  	 * This is called from entry_64.S early in handling a fault
+Hi Guo,
 
-While at it, unbreak that line:
+On Wed, Apr 06, 2022 at 08:40:56PM +0800, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+> 
+> Optimize arch_xchg|cmpxchg|cmpxchg_local with  ASM acquire|release
+> instructions instead of previous C based.
+> 
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> ---
+>  arch/csky/include/asm/barrier.h |   8 +-
+>  arch/csky/include/asm/cmpxchg.h | 173 ++++++++++++++++++++++++++++++--
+>  2 files changed, 172 insertions(+), 9 deletions(-)
+> 
+> diff --git a/arch/csky/include/asm/barrier.h b/arch/csky/include/asm/barrier.h
+> index f4045dd53e17..a075f17d02dd 100644
+> --- a/arch/csky/include/asm/barrier.h
+> +++ b/arch/csky/include/asm/barrier.h
+> @@ -37,6 +37,9 @@
+>   * bar.brar
+>   * bar.bwaw
+>   */
+> +#define ACQUIRE_FENCE		".long 0x8427c000\n"
+> +#define RELEASE_FENCE		".long 0x842ec000\n"
 
-diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-index 9fe9cd9d3eeb..28591132e885 100644
---- a/arch/x86/kernel/traps.c
-+++ b/arch/x86/kernel/traps.c
-@@ -892,8 +892,7 @@ asmlinkage __visible noinstr struct pt_regs *vc_switch_off_ist(struct pt_regs *r
- }
- #endif
- 
--asmlinkage __visible noinstr
--struct pt_regs *fixup_bad_iret(struct pt_regs *bad_regs)
-+asmlinkage __visible noinstr struct pt_regs *fixup_bad_iret(struct pt_regs *bad_regs)
- {
- 	/*
- 	 * This is called from entry_64.S early in handling a fault
+[...]
 
--- 
-Regards/Gruss,
-    Boris.
+> +#define __xchg(new, ptr, size)					\
+> +({								\
+> +	__typeof__(ptr) __ptr = (ptr);				\
+> +	__typeof__(new) __new = (new);				\
+> +	__typeof__(*(ptr)) __ret;				\
+> +	unsigned long tmp;					\
+> +	switch (size) {						\
+> +	case 4:							\
+> +		asm volatile (					\
+> +		"1:	ldex.w		%0, (%3) \n"		\
+> +		ACQUIRE_FENCE					\
+> +		"	mov		%1, %2   \n"		\
+> +		RELEASE_FENCE					\
+> +		"	stex.w		%1, (%3) \n"		\
+> +		"	bez		%1, 1b   \n"		\
+> +			: "=&r" (__ret), "=&r" (tmp)		\
+> +			: "r" (__new), "r"(__ptr)		\
+> +			:);					\
 
-https://people.kernel.org/tglx/notes-about-netiquette
+As with the riscv case, I believe this suffers the problem described in:
+
+  8e86f0b409a44193 ("arm64: atomics: fix use of acquire + release for full barrier semantics")
+
+... and does not provide FULL ordering semantics.
+
+[...]
+
+> +#define __cmpxchg(ptr, old, new, size)				\
+> +({								\
+> +	__typeof__(ptr) __ptr = (ptr);				\
+> +	__typeof__(new) __new = (new);				\
+> +	__typeof__(new) __tmp;					\
+> +	__typeof__(old) __old = (old);				\
+> +	__typeof__(*(ptr)) __ret;				\
+> +	switch (size) {						\
+> +	case 4:							\
+> +		asm volatile (					\
+> +		"1:	ldex.w		%0, (%3) \n"		\
+> +		ACQUIRE_FENCE					\
+> +		"	cmpne		%0, %4   \n"		\
+> +		"	bt		2f       \n"		\
+> +		"	mov		%1, %2   \n"		\
+> +		RELEASE_FENCE					\
+> +		"	stex.w		%1, (%3) \n"		\
+> +		"	bez		%1, 1b   \n"		\
+> +		"2:				 \n"		\
+> +			: "=&r" (__ret), "=&r" (__tmp)		\
+> +			: "r" (__new), "r"(__ptr), "r"(__old)	\
+> +			:);					\
+
+Likewise.
+
+Thanks,
+Mark.

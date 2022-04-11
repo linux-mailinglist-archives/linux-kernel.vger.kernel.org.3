@@ -2,237 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC174FC7D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 00:51:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D12424FC7EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 00:58:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350465AbiDKWxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 18:53:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38392 "EHLO
+        id S236305AbiDKXAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 19:00:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232959AbiDKWxR (ORCPT
+        with ESMTP id S230083AbiDKXAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 18:53:17 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CAB2F01C
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 15:51:02 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id s2so15845858pfh.6
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 15:51:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FcTYvvhN5dtue7MzX/+Ct7GWZzfdtrfomwfg98GsSrQ=;
-        b=hCcpz68XSqFN0GmAt/laN0bCPIcM3eZc7r4Aoq3sqv1AIAWECh5CAA5MqFbNugpj5a
-         VPUs/CZN7juttqOlZxDo1iHJ4GA1ScWYzKQrJ1GmMhY/2AbJs6RpD4H03ij9R+pD4lYQ
-         ZhJy/t5DYTW7NRrZpiLU+bGMxaTBBd/mnoNgE7rfG/D7bTAEWyeiZykzE7SbYt1RQw5i
-         yK4bg8XNj2tfbtBvUyp4VeU8/T8MlG15kqDb+3DQNWaWcj6XfBsvW+VlYGL88AUCS4WL
-         CQEn5IooNK4QdLnPeiR5OVbdOHpo9Rq8sDWHKTUiYhAb0s6L8ZHpxaPzvgCRoKRdhBrs
-         ACUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FcTYvvhN5dtue7MzX/+Ct7GWZzfdtrfomwfg98GsSrQ=;
-        b=Yb+GmtwSqBvTgn+kPhWKXvlovAPoIFhoVxxDYxlVfg/9olMpjt2lHbVkxtKmm8wjJi
-         jLQPpAYkj0FOsflMNKCpWnvRaaGLh+uprwqGwfszexZA3aXE38zTthYqNl983rh6sKoM
-         Bcgkeb7Dfns1xmjNMzGEiq3z9jLSTFAtVobXZY59B+cj55IacCn9coHBfKQYQ4fYr/Y2
-         4Rs3mABJzvKgVf/kzSUbACG8IzXIn1eDpcB+JwYB4nQxQmJb37GDV79yDWj3FlIr3arJ
-         Bt5iso1h96AX3LvD87YqiRRmSTB5HjfVzzQcPrrv9ULz9VmcOLcqgBs0fRrxylWcbk6L
-         2aqw==
-X-Gm-Message-State: AOAM532helZdJSBrHxTjIMmSrVJcmOiU2ldmYQ0HeIyCKwcDeEcsFYFC
-        JGKakrnpRXCjcFGeQKm38vgXRA==
-X-Google-Smtp-Source: ABdhPJxjHamZfjze6EDpUv2KPHV1RVw6Gyy/Qvc+kNL4xIcjX0N3BIoDtwHAto5L4YIXPC0QHz7OTQ==
-X-Received: by 2002:a05:6a00:a15:b0:4fb:4112:870e with SMTP id p21-20020a056a000a1500b004fb4112870emr34896218pfh.11.1649717461805;
-        Mon, 11 Apr 2022 15:51:01 -0700 (PDT)
-Received: from google.com (226.75.127.34.bc.googleusercontent.com. [34.127.75.226])
-        by smtp.gmail.com with ESMTPSA id nv11-20020a17090b1b4b00b001c71b0bf18bsm510761pjb.11.2022.04.11.15.51.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 15:51:01 -0700 (PDT)
-Date:   Mon, 11 Apr 2022 22:50:57 +0000
-From:   Mingwei Zhang <mizhang@google.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     Ben Gardon <bgardon@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Peter Shier <pshier@google.com>,
-        David Dunn <daviddunn@google.com>,
-        Junaid Shahid <junaids@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Jing Zhang <jingzhangos@google.com>
-Subject: Re: [PATCH v4 01/10] KVM: selftests: Remove dynamic memory
- allocation for stats header
-Message-ID: <YlSw0UXTYqgx4wa3@google.com>
-References: <20220411211015.3091615-1-bgardon@google.com>
- <20220411211015.3091615-2-bgardon@google.com>
- <CALzav=d_DB+onkMZmZwEj7yd_gDqg_phqQJpTw0g9ahe3WmvqA@mail.gmail.com>
+        Mon, 11 Apr 2022 19:00:38 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23581A392
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 15:58:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649717902; x=1681253902;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4Z9VI6tEyTt8ATI/3X1UsbKKq6JOuVqvsq8x+y0yhEY=;
+  b=l7SERkq6TNh66heLunYPzVxeZZDeD18TiJanQNUoTzCtf6UrF4syYxmg
+   OMXrbi9v8gBOzYgFb0qxoiqnZitNUE2q35EvAUBeScZbwMf8gBnFLkkzw
+   MkrrArHLuTE3D2a+8py3t+FVkNocZQg0IQ5fezJtAgE8BAnVLAgDtMPAZ
+   wlN8aCGYBTZGOW68rH16I7cRE+2+g9aoVNJNtlgU6AL9egTbDzq7ZtzoX
+   mLQnl9fV3f1E7fV4zNjezjXeIrQRcpdndDlZVdDWggWujrBx5/W+phBjt
+   fMisIVMEMsOF/n9ueb3Axme4I1KCyvk2G2nlQXPphv1fdLzSUgwpGBe1T
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="325144854"
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="325144854"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 15:58:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="525761722"
+Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 11 Apr 2022 15:58:19 -0700
+Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ne2zC-0002IA-Ba;
+        Mon, 11 Apr 2022 22:58:18 +0000
+Date:   Tue, 12 Apr 2022 06:57:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Richard Gong <richard.gong@amd.com>, alexander.deucher@amd.com,
+        christian.koenig@amd.com, xinhui.pan@amd.com, airlied@linux.ie,
+        daniel@ffwll.ch
+Cc:     kbuild-all@lists.01.org, mario.limonciello@amd.com,
+        richard.gong@amd.com, dri-devel@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv2] drm/amdgpu: disable ASPM on Intel AlderLake based
+ systems
+Message-ID: <202204120618.4I6dOUw9-lkp@intel.com>
+References: <20220408190502.4103670-1-richard.gong@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CALzav=d_DB+onkMZmZwEj7yd_gDqg_phqQJpTw0g9ahe3WmvqA@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220408190502.4103670-1-richard.gong@amd.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022, David Matlack wrote:
-> On Mon, Apr 11, 2022 at 2:10 PM Ben Gardon <bgardon@google.com> wrote:
-> >
-> > There's no need to allocate dynamic memory for the stats header since
-> > its size is known at compile time.
-> >
-> > Signed-off-by: Ben Gardon <bgardon@google.com>
-> 
-> Reviewed-by: David Matlack <dmatlack@google.com>
-> 
-Reviewed-by: Mingwei Zhang <mizhang@google.com>
-> > ---
-> >  .../selftests/kvm/kvm_binary_stats_test.c     | 58 +++++++++----------
-> >  1 file changed, 27 insertions(+), 31 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/kvm/kvm_binary_stats_test.c b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-> > index 17f65d514915..dad34d8a41fe 100644
-> > --- a/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-> > +++ b/tools/testing/selftests/kvm/kvm_binary_stats_test.c
-> > @@ -26,56 +26,53 @@ static void stats_test(int stats_fd)
-> >         int i;
-> >         size_t size_desc;
-> >         size_t size_data = 0;
-> > -       struct kvm_stats_header *header;
-> > +       struct kvm_stats_header header;
-> >         char *id;
-> >         struct kvm_stats_desc *stats_desc;
-> >         u64 *stats_data;
-> >         struct kvm_stats_desc *pdesc;
-> >
-> >         /* Read kvm stats header */
-> > -       header = malloc(sizeof(*header));
-> > -       TEST_ASSERT(header, "Allocate memory for stats header");
-> > -
-> > -       ret = read(stats_fd, header, sizeof(*header));
-> > -       TEST_ASSERT(ret == sizeof(*header), "Read stats header");
-> > -       size_desc = sizeof(*stats_desc) + header->name_size;
-> > +       ret = read(stats_fd, &header, sizeof(header));
-> > +       TEST_ASSERT(ret == sizeof(header), "Read stats header");
-> > +       size_desc = sizeof(*stats_desc) + header.name_size;
-> >
-> >         /* Read kvm stats id string */
-> > -       id = malloc(header->name_size);
-> > +       id = malloc(header.name_size);
-> >         TEST_ASSERT(id, "Allocate memory for id string");
-> > -       ret = read(stats_fd, id, header->name_size);
-> > -       TEST_ASSERT(ret == header->name_size, "Read id string");
-> > +       ret = read(stats_fd, id, header.name_size);
-> > +       TEST_ASSERT(ret == header.name_size, "Read id string");
-> >
-> >         /* Check id string, that should start with "kvm" */
-> > -       TEST_ASSERT(!strncmp(id, "kvm", 3) && strlen(id) < header->name_size,
-> > +       TEST_ASSERT(!strncmp(id, "kvm", 3) && strlen(id) < header.name_size,
-> >                                 "Invalid KVM stats type, id: %s", id);
-> >
-> >         /* Sanity check for other fields in header */
-> > -       if (header->num_desc == 0) {
-> > +       if (header.num_desc == 0) {
-> >                 printf("No KVM stats defined!");
-> >                 return;
-> >         }
-> >         /* Check overlap */
-> > -       TEST_ASSERT(header->desc_offset > 0 && header->data_offset > 0
-> > -                       && header->desc_offset >= sizeof(*header)
-> > -                       && header->data_offset >= sizeof(*header),
-> > +       TEST_ASSERT(header.desc_offset > 0 && header.data_offset > 0
-> > +                       && header.desc_offset >= sizeof(header)
-> > +                       && header.data_offset >= sizeof(header),
-> >                         "Invalid offset fields in header");
-> > -       TEST_ASSERT(header->desc_offset > header->data_offset ||
-> > -                       (header->desc_offset + size_desc * header->num_desc <=
-> > -                                                       header->data_offset),
-> > +       TEST_ASSERT(header.desc_offset > header.data_offset ||
-> > +                       (header.desc_offset + size_desc * header.num_desc <=
-> > +                                                       header.data_offset),
-> >                         "Descriptor block is overlapped with data block");
-> >
-> >         /* Allocate memory for stats descriptors */
-> > -       stats_desc = calloc(header->num_desc, size_desc);
-> > +       stats_desc = calloc(header.num_desc, size_desc);
-> >         TEST_ASSERT(stats_desc, "Allocate memory for stats descriptors");
-> >         /* Read kvm stats descriptors */
-> >         ret = pread(stats_fd, stats_desc,
-> > -                       size_desc * header->num_desc, header->desc_offset);
-> > -       TEST_ASSERT(ret == size_desc * header->num_desc,
-> > +                       size_desc * header.num_desc, header.desc_offset);
-> > +       TEST_ASSERT(ret == size_desc * header.num_desc,
-> >                         "Read KVM stats descriptors");
-> >
-> >         /* Sanity check for fields in descriptors */
-> > -       for (i = 0; i < header->num_desc; ++i) {
-> > +       for (i = 0; i < header.num_desc; ++i) {
-> >                 pdesc = (void *)stats_desc + i * size_desc;
-> >                 /* Check type,unit,base boundaries */
-> >                 TEST_ASSERT((pdesc->flags & KVM_STATS_TYPE_MASK)
-> > @@ -104,7 +101,7 @@ static void stats_test(int stats_fd)
-> >                         break;
-> >                 }
-> >                 /* Check name string */
-> > -               TEST_ASSERT(strlen(pdesc->name) < header->name_size,
-> > +               TEST_ASSERT(strlen(pdesc->name) < header.name_size,
-> >                                 "KVM stats name(%s) too long", pdesc->name);
-> >                 /* Check size field, which should not be zero */
-> >                 TEST_ASSERT(pdesc->size, "KVM descriptor(%s) with size of 0",
-> > @@ -124,14 +121,14 @@ static void stats_test(int stats_fd)
-> >                 size_data += pdesc->size * sizeof(*stats_data);
-> >         }
-> >         /* Check overlap */
-> > -       TEST_ASSERT(header->data_offset >= header->desc_offset
-> > -               || header->data_offset + size_data <= header->desc_offset,
-> > +       TEST_ASSERT(header.data_offset >= header.desc_offset
-> > +               || header.data_offset + size_data <= header.desc_offset,
-> >                 "Data block is overlapped with Descriptor block");
-> >         /* Check validity of all stats data size */
-> > -       TEST_ASSERT(size_data >= header->num_desc * sizeof(*stats_data),
-> > +       TEST_ASSERT(size_data >= header.num_desc * sizeof(*stats_data),
-> >                         "Data size is not correct");
-> >         /* Check stats offset */
-> > -       for (i = 0; i < header->num_desc; ++i) {
-> > +       for (i = 0; i < header.num_desc; ++i) {
-> >                 pdesc = (void *)stats_desc + i * size_desc;
-> >                 TEST_ASSERT(pdesc->offset < size_data,
-> >                         "Invalid offset (%u) for stats: %s",
-> > @@ -142,15 +139,15 @@ static void stats_test(int stats_fd)
-> >         stats_data = malloc(size_data);
-> >         TEST_ASSERT(stats_data, "Allocate memory for stats data");
-> >         /* Read kvm stats data as a bulk */
-> > -       ret = pread(stats_fd, stats_data, size_data, header->data_offset);
-> > +       ret = pread(stats_fd, stats_data, size_data, header.data_offset);
-> >         TEST_ASSERT(ret == size_data, "Read KVM stats data");
-> >         /* Read kvm stats data one by one */
-> >         size_data = 0;
-> > -       for (i = 0; i < header->num_desc; ++i) {
-> > +       for (i = 0; i < header.num_desc; ++i) {
-> >                 pdesc = (void *)stats_desc + i * size_desc;
-> >                 ret = pread(stats_fd, stats_data,
-> >                                 pdesc->size * sizeof(*stats_data),
-> > -                               header->data_offset + size_data);
-> > +                               header.data_offset + size_data);
-> >                 TEST_ASSERT(ret == pdesc->size * sizeof(*stats_data),
-> >                                 "Read data of KVM stats: %s", pdesc->name);
-> >                 size_data += pdesc->size * sizeof(*stats_data);
-> > @@ -159,7 +156,6 @@ static void stats_test(int stats_fd)
-> >         free(stats_data);
-> >         free(stats_desc);
-> >         free(id);
-> > -       free(header);
-> >  }
-> >
-> >
-> > --
-> > 2.35.1.1178.g4f1659d476-goog
-> >
+Hi Richard,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on drm/drm-next]
+[also build test ERROR on v5.18-rc2 next-20220411]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Richard-Gong/drm-amdgpu-disable-ASPM-on-Intel-AlderLake-based-systems/20220409-030656
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20220412/202204120618.4I6dOUw9-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/bb9a037cafa91918c2ece823591d1d04b812ae17
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Richard-Gong/drm-amdgpu-disable-ASPM-on-Intel-AlderLake-based-systems/20220409-030656
+        git checkout bb9a037cafa91918c2ece823591d1d04b812ae17
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=um SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/x86/um/asm/processor.h:41,
+                    from include/linux/mutex.h:19,
+                    from include/linux/kernfs.h:11,
+                    from include/linux/sysfs.h:16,
+                    from include/linux/kobject.h:20,
+                    from include/linux/pci.h:35,
+                    from drivers/gpu/drm/amd/amdgpu/vi.c:24:
+   drivers/gpu/drm/amd/amdgpu/vi.c: In function 'intel_core_apsm_chk':
+   arch/um/include/asm/processor-generic.h:103:19: error: called object is not a function or function pointer
+     103 | #define cpu_data (&boot_cpu_data)
+         |                  ~^~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/vi.c:1144:34: note: in expansion of macro 'cpu_data'
+    1144 |         struct cpuinfo_x86 *c = &cpu_data(0);
+         |                                  ^~~~~~~~
+>> drivers/gpu/drm/amd/amdgpu/vi.c:1146:18: error: invalid use of undefined type 'struct cpuinfo_x86'
+    1146 |         return (c->x86 == 6 && c->x86_model == INTEL_FAM6_ALDERLAKE);
+         |                  ^~
+   drivers/gpu/drm/amd/amdgpu/vi.c:1146:33: error: invalid use of undefined type 'struct cpuinfo_x86'
+    1146 |         return (c->x86 == 6 && c->x86_model == INTEL_FAM6_ALDERLAKE);
+         |                                 ^~
+   drivers/gpu/drm/amd/amdgpu/vi.c:1150:1: error: control reaches end of non-void function [-Werror=return-type]
+    1150 | }
+         | ^
+   cc1: some warnings being treated as errors
+
+
+vim +1146 drivers/gpu/drm/amd/amdgpu/vi.c
+
+  1140	
+  1141	static bool intel_core_apsm_chk(void)
+  1142	{
+  1143	#if IS_ENABLED(CONFIG_X86_64)
+  1144		struct cpuinfo_x86 *c = &cpu_data(0);
+  1145	
+> 1146		return (c->x86 == 6 && c->x86_model == INTEL_FAM6_ALDERLAKE);
+  1147	#else
+  1148		return false;
+  1149	#endif
+  1150	}
+  1151	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

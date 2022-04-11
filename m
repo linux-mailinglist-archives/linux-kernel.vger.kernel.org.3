@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80EF94FBEE0
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 16:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D9E04FBED3
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 16:17:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347228AbiDKOUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 10:20:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47236 "EHLO
+        id S1347113AbiDKOSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 10:18:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347217AbiDKORb (ORCPT
+        with ESMTP id S1347259AbiDKORd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 10:17:31 -0400
+        Mon, 11 Apr 2022 10:17:33 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8FB15739
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 07:15:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01AE815FCF
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 07:15:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=goHHpI3WnE67v8nanm/rENsJPIStZtr1Ul7m3vMBtJ0=; b=2NAGCqhdgB8b4F/2Rwvj+R/2vh
-        FDxGE8GIqEc3iEY9AGV6dI/c27YINZkmGyuMub2dU57o44VOhfs2RGgGZ+CJwz2JGxneizChac1gt
-        BIQKnvuJTeKYTPNIS7d6enp6drlcqJYS1gP0zy58pcvDCwnwMDbZsXzELvbxlOcu1MrZCfE3YnhBk
-        DcJyHlbEH4UfK6zxgVEhjfdbir2jrWPuL45lx2psjwiEnA27ypUHqC9d/+cMNo74/DmRfuK9pdu8M
-        jF6duHGQTNyShG++26BoAr28sufIcfCl4JK0IkdGPpKjQbq3XmsUElsS9K3YdbzlSIjJY1DRIldkr
-        fffkfBrA==;
+        bh=eTapU+qb2KEkjsgj15J8pI3EkVyVl4s2YNf0gK+0O7U=; b=ns+Mibr21ehnGbN7J0eHMDIali
+        0DiusLOZ7u9CNVlvwGnRjbsJc1ZiXWu3ReRVS+ip3JQDRfNdZLuknnoAs8+0R+N/JFzQrxC2AoSvb
+        /cKwSoMuNrgM16+Kj1/QVT6QlnmFCwxrEyjHaWKo+nZ6evX16osYY3ujTfCowO+gNuUmGVsqpnUMY
+        riw91L9KUDHIBD3KbL52gXdXF5br4D4fvWxgPhwo9LNFOr+vz97Vkw374CZ6OcCAwmOmeV8ik5B61
+        +ORrXNg5E7iGQRVMKMnXkhcKQT3l9xVEa2+MTIJOU/TdlrY2Sq6F5xNIGZlB/KGKMhvsTME7oz7Nh
+        EHVP+Pcg==;
 Received: from [2001:4bb8:18e:76f5:3747:ef85:d03d:53e4] (helo=localhost)
         by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nduoo-009Ki9-Ao; Mon, 11 Apr 2022 14:15:02 +0000
+        id 1nduor-009Kjf-34; Mon, 11 Apr 2022 14:15:05 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Jani Nikula <jani.nikula@linux.intel.com>,
         Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
@@ -37,9 +37,9 @@ To:     Jani Nikula <jani.nikula@linux.intel.com>,
 Cc:     Jason Gunthorpe <jgg@nvidia.com>, intel-gfx@lists.freedesktop.org,
         intel-gvt-dev@lists.freedesktop.org,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 18/34] drm/i915/gvt: devirtualize ->is_valid_gfn
-Date:   Mon, 11 Apr 2022 16:13:47 +0200
-Message-Id: <20220411141403.86980-19-hch@lst.de>
+Subject: [PATCH 19/34] drm/i915/gvt: devirtualize ->gfn_to_mfn
+Date:   Mon, 11 Apr 2022 16:13:48 +0200
+Message-Id: <20220411141403.86980-20-hch@lst.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220411141403.86980-1-hch@lst.de>
 References: <20220411141403.86980-1-hch@lst.de>
@@ -56,134 +56,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just call the code directly and move towards the callers.
+Just open code it in the only caller.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 ---
- drivers/gpu/drm/i915/gvt/gtt.c       | 20 ++++++++++++++++++--
+ drivers/gpu/drm/i915/gvt/gtt.c       |  9 +++++----
  drivers/gpu/drm/i915/gvt/hypercall.h |  1 -
- drivers/gpu/drm/i915/gvt/kvmgt.c     | 17 -----------------
- drivers/gpu/drm/i915/gvt/mpt.h       | 17 -----------------
- 4 files changed, 18 insertions(+), 37 deletions(-)
+ drivers/gpu/drm/i915/gvt/kvmgt.c     | 16 ----------------
+ drivers/gpu/drm/i915/gvt/mpt.h       | 14 --------------
+ 4 files changed, 5 insertions(+), 35 deletions(-)
 
 diff --git a/drivers/gpu/drm/i915/gvt/gtt.c b/drivers/gpu/drm/i915/gvt/gtt.c
-index 9b696e5705eb7..1360412f8ef8a 100644
+index 1360412f8ef8a..f6f3b22a70d26 100644
 --- a/drivers/gpu/drm/i915/gvt/gtt.c
 +++ b/drivers/gpu/drm/i915/gvt/gtt.c
-@@ -49,6 +49,22 @@
- static bool enable_out_of_sync = false;
- static int preallocated_oos_pages = 8192;
+@@ -1178,15 +1178,16 @@ static int is_2MB_gtt_possible(struct intel_vgpu *vgpu,
+ 	struct intel_gvt_gtt_entry *entry)
+ {
+ 	const struct intel_gvt_gtt_pte_ops *ops = vgpu->gvt->gtt.pte_ops;
+-	unsigned long pfn;
++	kvm_pfn_t pfn;
  
-+static bool intel_gvt_is_valid_gfn(struct intel_vgpu *vgpu, unsigned long gfn)
-+{
-+	struct kvm *kvm = vgpu->kvm;
-+	int idx;
-+	bool ret;
-+
+ 	if (!HAS_PAGE_SIZES(vgpu->gvt->gt->i915, I915_GTT_PAGE_SIZE_2M))
+ 		return 0;
+ 
+-	pfn = intel_gvt_hypervisor_gfn_to_mfn(vgpu, ops->get_pfn(entry));
+-	if (pfn == INTEL_GVT_INVALID_ADDR)
 +	if (!vgpu->attached)
-+		return false;
-+
-+	idx = srcu_read_lock(&kvm->srcu);
-+	ret = kvm_is_visible_gfn(kvm, gfn);
-+	srcu_read_unlock(&kvm->srcu, idx);
-+
-+	return ret;
-+}
-+
- /*
-  * validate a gm address and related range size,
-  * translate it to host gm address
-@@ -1331,7 +1347,7 @@ static int ppgtt_populate_spt(struct intel_vgpu_ppgtt_spt *spt)
- 			ppgtt_set_shadow_entry(spt, &se, i);
- 		} else {
- 			gfn = ops->get_pfn(&ge);
--			if (!intel_gvt_hypervisor_is_valid_gfn(vgpu, gfn)) {
-+			if (!intel_gvt_is_valid_gfn(vgpu, gfn)) {
- 				ops->set_pfn(&se, gvt->gtt.scratch_mfn);
- 				ppgtt_set_shadow_entry(spt, &se, i);
- 				continue;
-@@ -2315,7 +2331,7 @@ static int emulate_ggtt_mmio_write(struct intel_vgpu *vgpu, unsigned int off,
- 		/* one PTE update may be issued in multiple writes and the
- 		 * first write may not construct a valid gfn
- 		 */
--		if (!intel_gvt_hypervisor_is_valid_gfn(vgpu, gfn)) {
-+		if (!intel_gvt_is_valid_gfn(vgpu, gfn)) {
- 			ops->set_pfn(&m, gvt->gtt.scratch_mfn);
- 			goto out;
- 		}
-diff --git a/drivers/gpu/drm/i915/gvt/hypercall.h b/drivers/gpu/drm/i915/gvt/hypercall.h
-index de63bd8dd05ba..c1a9eeed04607 100644
---- a/drivers/gpu/drm/i915/gvt/hypercall.h
-+++ b/drivers/gpu/drm/i915/gvt/hypercall.h
-@@ -55,7 +55,6 @@ struct intel_gvt_mpt {
- 				dma_addr_t dma_addr);
- 
- 	int (*dma_pin_guest_page)(struct intel_vgpu *vgpu, dma_addr_t dma_addr);
--	bool (*is_valid_gfn)(struct intel_vgpu *vgpu, unsigned long gfn);
- };
- 
- #endif /* _GVT_HYPERCALL_H_ */
-diff --git a/drivers/gpu/drm/i915/gvt/kvmgt.c b/drivers/gpu/drm/i915/gvt/kvmgt.c
-index 1d1c026fd8258..93fd7f997c8a1 100644
---- a/drivers/gpu/drm/i915/gvt/kvmgt.c
-+++ b/drivers/gpu/drm/i915/gvt/kvmgt.c
-@@ -1980,22 +1980,6 @@ static void kvmgt_dma_unmap_guest_page(struct intel_vgpu *vgpu,
- 	mutex_unlock(&vgpu->cache_lock);
++		return -EINVAL;
++	pfn = gfn_to_pfn(vgpu->kvm, ops->get_pfn(entry));
++	if (is_error_noslot_pfn(pfn))
+ 		return -EINVAL;
+-
+ 	return PageTransHuge(pfn_to_page(pfn));
  }
  
--static bool kvmgt_is_valid_gfn(struct intel_vgpu *vgpu, unsigned long gfn)
+diff --git a/drivers/gpu/drm/i915/gvt/hypercall.h b/drivers/gpu/drm/i915/gvt/hypercall.h
+index c1a9eeed04607..dbde492cafc84 100644
+--- a/drivers/gpu/drm/i915/gvt/hypercall.h
++++ b/drivers/gpu/drm/i915/gvt/hypercall.h
+@@ -47,7 +47,6 @@ struct intel_gvt_mpt {
+ 	void (*host_exit)(struct device *dev, void *gvt);
+ 	int (*enable_page_track)(struct intel_vgpu *vgpu, u64 gfn);
+ 	int (*disable_page_track)(struct intel_vgpu *vgpu, u64 gfn);
+-	unsigned long (*gfn_to_mfn)(struct intel_vgpu *vgpu, unsigned long gfn);
+ 
+ 	int (*dma_map_guest_page)(struct intel_vgpu *vgpu, unsigned long gfn,
+ 				  unsigned long size, dma_addr_t *dma_addr);
+diff --git a/drivers/gpu/drm/i915/gvt/kvmgt.c b/drivers/gpu/drm/i915/gvt/kvmgt.c
+index 93fd7f997c8a1..6d4c67270172a 100644
+--- a/drivers/gpu/drm/i915/gvt/kvmgt.c
++++ b/drivers/gpu/drm/i915/gvt/kvmgt.c
+@@ -1874,21 +1874,6 @@ void intel_vgpu_detach_regions(struct intel_vgpu *vgpu)
+ 	vgpu->region = NULL;
+ }
+ 
+-static unsigned long kvmgt_gfn_to_pfn(struct intel_vgpu *vgpu,
+-		unsigned long gfn)
 -{
--	struct kvm *kvm = vgpu->kvm;
--	int idx;
--	bool ret;
+-	kvm_pfn_t pfn;
 -
 -	if (!vgpu->attached)
--		return false;
+-		return INTEL_GVT_INVALID_ADDR;
 -
--	idx = srcu_read_lock(&kvm->srcu);
--	ret = kvm_is_visible_gfn(kvm, gfn);
--	srcu_read_unlock(&kvm->srcu, idx);
+-	pfn = gfn_to_pfn(vgpu->kvm, gfn);
+-	if (is_error_noslot_pfn(pfn))
+-		return INTEL_GVT_INVALID_ADDR;
 -
--	return ret;
+-	return pfn;
 -}
 -
- static const struct intel_gvt_mpt kvmgt_mpt = {
- 	.host_init = kvmgt_host_init,
+ static int kvmgt_dma_map_guest_page(struct intel_vgpu *vgpu, unsigned long gfn,
+ 		unsigned long size, dma_addr_t *dma_addr)
+ {
+@@ -1985,7 +1970,6 @@ static const struct intel_gvt_mpt kvmgt_mpt = {
  	.host_exit = kvmgt_host_exit,
-@@ -2005,7 +1989,6 @@ static const struct intel_gvt_mpt kvmgt_mpt = {
+ 	.enable_page_track = kvmgt_page_track_add,
+ 	.disable_page_track = kvmgt_page_track_remove,
+-	.gfn_to_mfn = kvmgt_gfn_to_pfn,
  	.dma_map_guest_page = kvmgt_dma_map_guest_page,
  	.dma_unmap_guest_page = kvmgt_dma_unmap_guest_page,
  	.dma_pin_guest_page = kvmgt_dma_pin_guest_page,
--	.is_valid_gfn = kvmgt_is_valid_gfn,
- };
- 
- struct intel_gvt_host intel_gvt_host = {
 diff --git a/drivers/gpu/drm/i915/gvt/mpt.h b/drivers/gpu/drm/i915/gvt/mpt.h
-index 59369e8b3b692..1a796f2181ba8 100644
+index 1a796f2181ba8..2d4bb6eaa08e3 100644
 --- a/drivers/gpu/drm/i915/gvt/mpt.h
 +++ b/drivers/gpu/drm/i915/gvt/mpt.h
-@@ -157,21 +157,4 @@ intel_gvt_hypervisor_dma_pin_guest_page(struct intel_vgpu *vgpu,
- 	return intel_gvt_host.mpt->dma_pin_guest_page(vgpu, dma_addr);
+@@ -99,20 +99,6 @@ static inline int intel_gvt_hypervisor_disable_page_track(
+ 	return intel_gvt_host.mpt->disable_page_track(vgpu, gfn);
  }
  
 -/**
-- * intel_gvt_hypervisor_is_valid_gfn - check if a visible gfn
+- * intel_gvt_hypervisor_gfn_to_mfn - translate a GFN to MFN
 - * @vgpu: a vGPU
-- * @gfn: guest PFN
+- * @gpfn: guest pfn
 - *
 - * Returns:
-- * true on valid gfn, false on not.
+- * MFN on success, INTEL_GVT_INVALID_ADDR if failed.
 - */
--static inline bool intel_gvt_hypervisor_is_valid_gfn(
+-static inline unsigned long intel_gvt_hypervisor_gfn_to_mfn(
 -		struct intel_vgpu *vgpu, unsigned long gfn)
 -{
--	if (!intel_gvt_host.mpt->is_valid_gfn)
--		return true;
--
--	return intel_gvt_host.mpt->is_valid_gfn(vgpu, gfn);
+-	return intel_gvt_host.mpt->gfn_to_mfn(vgpu, gfn);
 -}
 -
- #endif /* _GVT_MPT_H_ */
+ /**
+  * intel_gvt_hypervisor_dma_map_guest_page - setup dma map for guest page
+  * @vgpu: a vGPU
 -- 
 2.30.2
 

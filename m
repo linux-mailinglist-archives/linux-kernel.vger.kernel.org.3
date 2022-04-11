@@ -2,92 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1292F4FC4B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 21:06:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AF4A4FC458
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 20:47:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349496AbiDKTIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 15:08:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36768 "EHLO
+        id S1349243AbiDKStg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 14:49:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349499AbiDKTHk (ORCPT
+        with ESMTP id S231283AbiDKStc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 15:07:40 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942103467B;
-        Mon, 11 Apr 2022 12:04:49 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id 0df72b2669e94012; Mon, 11 Apr 2022 21:04:47 +0200
-Received: from kreacher.localnet (unknown [213.134.175.113])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id B7DD166BDFC;
-        Mon, 11 Apr 2022 21:04:46 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bob Moore <robert.moore@intel.com>
-Subject: [PATCH 01/20] ACPICA: Add support for the Windows 11 _OSI string
-Date:   Mon, 11 Apr 2022 20:47:00 +0200
-Message-ID: <4750716.31r3eYUQgx@kreacher>
-In-Reply-To: <5578328.DvuYhMxLoT@kreacher>
-References: <5578328.DvuYhMxLoT@kreacher>
+        Mon, 11 Apr 2022 14:49:32 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF8BE1FCDB;
+        Mon, 11 Apr 2022 11:47:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649702838; x=1681238838;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=BlRY1ucylwTHwi1CNLdV5Rmu+hVaqB1rWV9jwjmzSX0=;
+  b=P4Xo9NxwM93wYkwdmYF5ClJ2wcrKxV3yaAeBTtGumzZuDMHyQJqdQJdP
+   qsV0bS1nJYOKp1CU7byxOr6Y4Ichl7YMutLkSrGv09YFQOjFG/K34M0v8
+   g4C5/hW5PdrwPmxTwW3zj5yU1ugZX6uUa/6+bddgXpvGOpheDNO6dqH/6
+   DBfZUMcB3uGBlD/7dERT9fxFXqal5WHDjDYXpYbIZvtzwDbgmPR3VOIhk
+   xJfrNCq2mdaG+7OZE8zwRxvAdKVVRSiEC/OMLaQWOpwG7b0aYLooLCpIn
+   LISDZfuQJTAmhqQv0e4ApksQGXWkuKKEd4O8JSWYOEt6lKoBjxHg/I43q
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="322633693"
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="322633693"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 11:47:17 -0700
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="572338003"
+Received: from minhjohn-mobl.amr.corp.intel.com (HELO [10.212.44.201]) ([10.212.44.201])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 11:47:15 -0700
+Message-ID: <d473d25a-8119-3f17-7c56-c1686b0fe17c@intel.com>
+Date:   Mon, 11 Apr 2022 11:47:20 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.175.113
-X-CLIENT-HOSTNAME: 213.134.175.113
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudekiedgudefgecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepgfektdehueehteffueelleehhfffgfejtdehvddtfeetjeffveetheehvdejgfdunecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepvddufedrudefgedrudejhedruddufeenucevlhhushhtvghrufhiiigvpeefnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddujeehrdduudefpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeefpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosggvrhhtrdhmohhorhgvsehinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Khalid Aziz <khalid.aziz@oracle.com>, akpm@linux-foundation.org,
+        willy@infradead.org
+Cc:     aneesh.kumar@linux.ibm.com, arnd@arndb.de, 21cnbao@gmail.com,
+        corbet@lwn.net, dave.hansen@linux.intel.com, david@redhat.com,
+        ebiederm@xmission.com, hagen@jauu.net, jack@suse.cz,
+        keescook@chromium.org, kirill@shutemov.name, kucharsk@gmail.com,
+        linkinjeon@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        longpeng2@huawei.com, luto@kernel.org, markhemm@googlemail.com,
+        pcc@google.com, rppt@kernel.org, sieberf@amazon.com,
+        sjpark@amazon.de, surenb@google.com, tst@schoebel-theuer.de,
+        yzaikin@google.com
+References: <cover.1649370874.git.khalid.aziz@oracle.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH v1 00/14] Add support for shared PTEs across processes
+In-Reply-To: <cover.1649370874.git.khalid.aziz@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+On 4/11/22 09:05, Khalid Aziz wrote:
+> PTEs are shared at pgdir level and hence it imposes following
+> requirements on the address and size given to the mshare():
+> 
+> - Starting address must be aligned to pgdir size (512GB on x86_64).
+>   This alignment value can be looked up in /proc/sys/vm//mshare_size
+> - Size must be a multiple of pgdir size
+> - Any mappings created in this address range at any time become
+>   shared automatically
+> - Shared address range can have unmapped addresses in it. Any access
+>   to unmapped address will result in SIGBUS
+> 
+> Mappings within this address range behave as if they were shared
+> between threads, so a write to a MAP_PRIVATE mapping will create a
+> page which is shared between all the sharers. The first process that
+> declares an address range mshare'd can continue to map objects in
+> the shared area. All other processes that want mshare'd access to
+> this memory area can do so by calling mshare(). After this call, the
+> address range given by mshare becomes a shared range in its address
+> space. Anonymous mappings will be shared and not COWed.
 
-ACPICA commit f2e9fb8345b9146a67f8c63474b65ccfc06d962a
-
-See https://github.com/microsoft_docs/windows-driver-docs/commit/a061e31fd77c20cc8e6eb0234e5d3a83e417f48
-
-Link: https://github.com/acpica/acpica/commit/f2e9fb83
-Signed-off-by: Bob Moore <robert.moore@intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/acpica/utosi.c |    1 +
- include/acpi/actypes.h      |    1 +
- 2 files changed, 2 insertions(+)
-
-Index: linux-pm/drivers/acpi/acpica/utosi.c
-===================================================================
---- linux-pm.orig/drivers/acpi/acpica/utosi.c
-+++ linux-pm/drivers/acpi/acpica/utosi.c
-@@ -74,6 +74,7 @@ static struct acpi_interface_info acpi_d
- 	{"Windows 2018.2", NULL, 0, ACPI_OSI_WIN_10_RS5},	/* Windows 10 version 1809 - Added 11/2018 */
- 	{"Windows 2019", NULL, 0, ACPI_OSI_WIN_10_19H1},	/* Windows 10 version 1903 - Added 08/2019 */
- 	{"Windows 2020", NULL, 0, ACPI_OSI_WIN_10_20H1},	/* Windows 10 version 2004 - Added 08/2021 */
-+	{"Windows 2021", NULL, 0, ACPI_OSI_WIN_11},	/* Windows 11 - Added 01/2022 */
- 
- 	/* Feature Group Strings */
- 
-Index: linux-pm/include/acpi/actypes.h
-===================================================================
---- linux-pm.orig/include/acpi/actypes.h
-+++ linux-pm/include/acpi/actypes.h
-@@ -1303,6 +1303,7 @@ typedef enum {
- #define ACPI_OSI_WIN_10_RS5             0x13
- #define ACPI_OSI_WIN_10_19H1            0x14
- #define ACPI_OSI_WIN_10_20H1            0x15
-+#define ACPI_OSI_WIN_11                 0x16
- 
- /* Definitions of getopt */
- 
-
-
-
+What does this mean in practice?

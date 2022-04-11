@@ -2,108 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7172C4FBF30
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 16:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 006CA4FBF21
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 16:33:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347338AbiDKOgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 10:36:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40956 "EHLO
+        id S1347286AbiDKOfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 10:35:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347323AbiDKOgQ (ORCPT
+        with ESMTP id S240433AbiDKOfx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 10:36:16 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6151622F;
-        Mon, 11 Apr 2022 07:34:01 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id ff377b1e03ebb21c; Mon, 11 Apr 2022 16:33:59 +0200
-Received: from kreacher.localnet (unknown [213.134.175.113])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 6136366BDED;
-        Mon, 11 Apr 2022 16:33:58 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PCI <linux-pci@vger.kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH v2 9/9] PCI/PM: Replace pci_set_power_state() in pci_pm_thaw_noirq()
-Date:   Mon, 11 Apr 2022 16:33:02 +0200
-Message-ID: <5729914.MhkbZ0Pkbq@kreacher>
-In-Reply-To: <11975904.O9o76ZdvQC@kreacher>
-References: <4419002.LvFx2qVVIh@kreacher> <11975904.O9o76ZdvQC@kreacher>
+        Mon, 11 Apr 2022 10:35:53 -0400
+Received: from out28-146.mail.aliyun.com (out28-146.mail.aliyun.com [115.124.28.146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446D0245BA;
+        Mon, 11 Apr 2022 07:33:37 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1603941|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0169187-0.00675149-0.97633;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047205;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=12;RT=12;SR=0;TI=SMTPD_---.NOa6aYH_1649687597;
+Received: from zhouyanjie-virtual-machine.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.NOa6aYH_1649687597)
+          by smtp.aliyun-inc.com(33.40.31.76);
+          Mon, 11 Apr 2022 22:33:33 +0800
+From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
+        <zhouyanjie@wanyeetech.com>
+To:     daniel.lezcano@linaro.org, tglx@linutronix.de, robh+dt@kernel.org,
+        krzk+dt@kernel.org
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
+        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
+        zhenwenjin@gmail.com, reimu@sudomaker.com
+Subject: [PATCH v4 0/3] Add SMP/SMT support for Ingenic sysost driver.
+Date:   Mon, 11 Apr 2022 22:33:14 +0800
+Message-Id: <1649687597-74219-1-git-send-email-zhouyanjie@wanyeetech.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.175.113
-X-CLIENT-HOSTNAME: 213.134.175.113
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudekiedgjeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvjeelgffhiedukedtleekkedvudfggefhgfegjefgueekjeelvefggfdvledutdenucfkphepvddufedrudefgedrudejhedruddufeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddujeehrdduudefpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphgtihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehm
- ihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+1.On the hardware of X2000 SoC, the OST has been split into
+  two parts, two 32bit timers for clockevent and one 64bit
+  timer for clocksource (with different addresses), so it
+  not appropriate to use only one "ingenic,x2000-ost", just
+  remove it, then introduce "ingenic,x2000-ost32" and
+  "ingenic,x2000-ost64".
+2.The OST in Ingenic XBurst®2 SoCs has a global timer and
+  up to 16 event timers, add support for the event timers.
+3.Add dt-bindings and compatible strings for the X1600 SoC,
+  the X1700 SoC, the X1830 SoC, the X2000 SoC, the X2500 SoC.
 
-Calling pci_set_power_state() to put the given device into D0 in
-pci_pm_thaw_noirq() may cause it to restore the device's BARs, which
-is redundant before calling pci_restore_state(), so replace it with
-a direct pci_power_up() call followed by pci_update_current_state()
-if it returns a nonzeor value, in analogy with
-pci_pm_default_resume_early().
+周琰杰 (Zhou Yanjie) (3):
+  dt-bindings: timer: Remove unreasonable binding.
+  dt-bindings: timer: Add bindings for new Ingenic SoCs.
+  clocksource: Ingenic: Add SMP/SMT support for sysost driver.
 
-Avoid code duplication by introducing a wrapper function to contain
-the repeating pattern and calling it in both places.
+ .../devicetree/bindings/timer/ingenic,sysost.yaml  |   8 +-
+ drivers/clocksource/ingenic-sysost.c               | 405 ++++++++++++++++-----
+ 2 files changed, 313 insertions(+), 100 deletions(-)
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
-New patch in v2.
-
----
- drivers/pci/pci-driver.c |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-Index: linux-pm/drivers/pci/pci-driver.c
-===================================================================
---- linux-pm.orig/drivers/pci/pci-driver.c
-+++ linux-pm/drivers/pci/pci-driver.c
-@@ -551,11 +551,15 @@ static void pci_pm_default_resume(struct
- 	pci_enable_wake(pci_dev, PCI_D0, false);
- }
- 
--static void pci_pm_default_resume_early(struct pci_dev *pci_dev)
-+static void pci_pm_power_up_and_verify_state(struct pci_dev *pci_dev)
- {
- 	if (pci_power_up(pci_dev))
- 		pci_update_current_state(pci_dev, PCI_D0);
-+}
- 
-+static void pci_pm_default_resume_early(struct pci_dev *pci_dev)
-+{
-+	pci_pm_power_up_and_verify_state(pci_dev);
- 	pci_restore_state(pci_dev);
- 	pci_pme_restore(pci_dev);
- }
-@@ -1080,7 +1084,7 @@ static int pci_pm_thaw_noirq(struct devi
- 	 * in case the driver's "freeze" callbacks put it into a low-power
- 	 * state.
- 	 */
--	pci_set_power_state(pci_dev, PCI_D0);
-+	pci_pm_power_up_and_verify_state(pci_dev);
- 	pci_restore_state(pci_dev);
- 
- 	if (pci_has_legacy_pm_support(pci_dev))
-
-
+-- 
+2.7.4
 

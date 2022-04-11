@@ -2,114 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB9364FC3A6
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 19:48:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E4554FC3A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 19:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348981AbiDKRu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 13:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57648 "EHLO
+        id S1348986AbiDKRvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 13:51:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232952AbiDKRuz (ORCPT
+        with ESMTP id S232952AbiDKRvL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 13:50:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF9630559
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 10:48:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 11 Apr 2022 13:51:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 732EB3055C
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 10:48:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649699336;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=UXGTLOLxPKH1dXoFSUyD0fwtbtBqRvFEJetBpSUAEP4=;
+        b=YAf8v2Bz4Znl/MXT9Yl0wtWgo5Xp1BjGloe4B6adgieK4aHS2geBuLZIc4ClZ3H0/+X3L9
+        XLyDczIaaT8XkDOwuMT4sVujmE2aqeE+ej+hGBLG2f3SumfzBiRgJxqChFAfu7NZWCjECR
+        YhVOUq+t/c0adgFcGEdK73B2P/GJDoo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-277-iCY_hqHFMlKSArpmE8Z_zA-1; Mon, 11 Apr 2022 13:48:53 -0400
+X-MC-Unique: iCY_hqHFMlKSArpmE8Z_zA-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ADE48B81190
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 17:48:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF972C385A3;
-        Mon, 11 Apr 2022 17:48:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649699318;
-        bh=mCeBQOom8NlCqItQrm9XkYJs+WtEQ7iDURD9UYCLHig=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ir/2lHuJv7zwqFbKoSPNY+qIWk9ERT5Mml9ZcphpRERQegxuRqmiywJ7CkwOv6iYX
-         5AGYTBi4GJjXlmfB0KqxW9Ld6ACpKkHUMo2p3FvusvVDBkO/ighSmQZj9YVd1bw8Cx
-         /yrXAaWmJk1R5FtavTvDOdcc75FEr4rRjSLV3iA7BQfs7h0juJg9ZV0tYw/NEXLq4o
-         OVNkrRvqAbmVvwXDr/Jdgcy4a9ycDQn1HdCzxuklCx6dmDjAEICt4jkb8PFsR4gPma
-         QoLcRkvezyV+J9xLLaXjs6gpMeamBRJNzEmX4czA5wn8loX6V1XsXe/ye0FTgpRbLQ
-         C+QJTZdq+bnyg==
-Date:   Mon, 11 Apr 2022 10:48:36 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Richard Weinberger <richard@nod.at>
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        anton ivanov <anton.ivanov@cambridgegreys.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Eduard-Gabriel Munteanu <maxdamage@aladin.ro>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        regressions@lists.linux.dev
-Subject: Re: [PATCH 1/1] um: fix error return code in winch_tramp()
-Message-ID: <YlRp9KR1mp3/4Txo@thelio-3990X>
-References: <20210508032239.2177-1-thunder.leizhen@huawei.com>
- <Yjt31seiNv18HYrf@dev-arch.thelio-3990X>
- <1b03d888-cea3-3e6f-087f-daeb5642a975@leemhuis.info>
- <1087614384.239493.1649583213699.JavaMail.zimbra@nod.at>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 44AFB80159B;
+        Mon, 11 Apr 2022 17:48:52 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.22.33.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B203640BAE6;
+        Mon, 11 Apr 2022 17:48:48 +0000 (UTC)
+From:   Wander Lairson Costa <wander@redhat.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lukas Wunner <lukas@wunner.de>,
+        Wander Lairson Costa <wander@redhat.com>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        linux-serial@vger.kernel.org (open list:SERIAL DRIVERS),
+        linux-kernel@vger.kernel.org (open list)
+Cc:     ilpo.jarvinen@linux.intel.com, rostedt@goodmis.org,
+        senozhatsky@chromium.org, andre.goddard@gmail.com,
+        sudipm.mukherjee@gmail.com, andy.shevchenko@gmail.com,
+        David.Laight@aculab.com, jonathanh@nvidia.com, phil@raspberrypi.com
+Subject: [PATCH v6 0/1] serial/8250: Use fifo in 8250 console driver
+Date:   Mon, 11 Apr 2022 14:48:38 -0300
+Message-Id: <20220411174841.34936-1-wander@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1087614384.239493.1649583213699.JavaMail.zimbra@nod.at>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Richard,
+This is v7 of the serial fifo patch. In relation to the previous
+reverted patch, I describe the main changes in the "What changed from
+v3" section.
 
-On Sun, Apr 10, 2022 at 11:33:33AM +0200, Richard Weinberger wrote:
-> ----- Ursprüngliche Mail -----
-> > Von: "Thorsten Leemhuis" <regressions@leemhuis.info>
-> > Hi, this is your Linux kernel regression tracker. Top-posting for once,
-> > to make this easily accessible to everyone.
-> > 
-> > Zhen Lei, Richard, what's up here? Below regression report is more than
-> > two weeks old now and afaics didn't even get a single reply.
-> 
-> Sorry, but UML is leisure pursuit, so I can only work on it when my
-> schedule permits it.
+What changed from v6
+--------------------
 
-No worries, it is easy enough to work around for our use case.
+* Add a comment on why we are using tx_loadsz instead of fifosize.
 
-> > Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-> > 
-> > P.S.: As the Linux kernel's regression tracker I'm getting a lot of
-> > reports on my table. I can only look briefly into most of them and lack
-> > knowledge about most of the areas they concern. I thus unfortunately
-> > will sometimes get things wrong or miss something important. I hope
-> > that's not the case here; if you think it is, don't hesitate to tell me
-> > in a public reply, it's in everyone's interest to set the public record
-> > straight.
-> > 
-> > 
-> > 
-> > On 23.03.22 20:41, Nathan Chancellor wrote:
-> 
-> [...]
-> 
-> >> in case it helps. I am happy to provide more information or test patches
-> >> as necessary.
-> 
-> Nathan, can you provide me the error code from os_set_fd_block()?
-> My best guess is that setting the fd is optional here and UML does
-> not expect failure here.
+What changed from v5
+--------------------
 
-I attempted to print out the error code but it seems like there is no
-output in the console after "reboot: System halted". If I add an
-unconditional print right before the call to os_set_fd_block(), I see it
-during start up but I do not see it during shutdown. Is there some way
-to see that console output during shutdown?
+* Fixed a typo in patch patch "port-state" becomes "port->state".
 
-Cheers,
-Nathan
+What changed from v4
+--------------------
+
+* It squashes all the patches in a single patch
+* It adds `port-state &&` check in the `use_fifo` condition as a
+* preventive measure.
+
+What changed from v3
+--------------------
+
+* Reads the FCR value from the port struct. The earlier patch
+erroneously read the value from the controller, but FCR is a write-only
+register. Thanks to Jiri Slaby for point this out.
+
+* Use tx_loadsz as the transmitter fifo size. We previously used the
+port->fifosize field, which caused data loss in some controllers. Thanks
+Jon Hunter for the bug report.
+
+* Exclude the BCM283x from fifo write. This is based on Phil Elwell's
+original patch [1].
+
+* Check if the port is initialized before write through fifo.
+The serial driver set the value of uart_8250_port.fcr in the function
+serial8250_config_port, but only writes the value to the controller
+register later in the initalization code. That opens a small window in
+which is not safe to use the fifo for console write. Unfortunately, I
+lost track of who originally reported the issue. If s/he is reading
+this, please speak up so I can give you the due credit.
+
+[1] https://lore.kernel.org/all/20220126141124.4086065-1-phil@raspberrypi.com/
+
+Wander Lairson Costa (1):
+  serial/8250: Use fifo in 8250 console driver
+
+ drivers/tty/serial/8250/8250_port.c | 68 ++++++++++++++++++++++++++---
+ 1 file changed, 62 insertions(+), 6 deletions(-)
+
+-- 
+2.35.1
+

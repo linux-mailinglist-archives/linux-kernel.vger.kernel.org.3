@@ -2,49 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE8454FBFAB
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 16:55:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3DC64FBFB0
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 16:57:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347559AbiDKO5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 10:57:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34572 "EHLO
+        id S1347563AbiDKO7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 10:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347547AbiDKO53 (ORCPT
+        with ESMTP id S235240AbiDKO7B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 10:57:29 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6296167F7;
-        Mon, 11 Apr 2022 07:55:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=tyW8OjGHVsmy+4/pM+unxwF6ndD9L4IorupExZYMsoM=; b=mJVQPCF4DdjMPE9i4Ff8tniU8Y
-        jD1nadxvHSMVFxH9OzPSkihbfM+E9Erku6wdyZwZOVurmjAXDkO1viQNwAiAZLpu1Vrv0tgzfJyJu
-        dOiuC8GnSO1GeVM+7Wn8qlNdugBC8alqZ/w/tlewhIZTtEx5gNdvKxbw6HCZaeDlG+pk7GJWznKd7
-        Gdyon5Nk+lzhwo7qP5vysjqft7Zogjke621Kw16we20NQmDRWRYTDwHmwtUZTfEsO8SkJOAEttkTz
-        sOZ79i0DafUmImsxSBE7FSXfioIm597BLKHtAKAfAt2kDjTPVtrs0boB5wQOYWzummUorSWQP39vf
-        +TcCW22w==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ndvRg-009S79-Qb; Mon, 11 Apr 2022 14:55:12 +0000
-Date:   Mon, 11 Apr 2022 07:55:12 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Zixuan Fu <r33s3n6@gmail.com>
-Cc:     djwong@kernel.org, linux-xfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, baijiaju1990@gmail.com,
-        TOTE Robot <oslab@tsinghua.edu.cn>
-Subject: Re: [PATCH] fs: xfs: fix possible NULL pointer dereference in
- xfs_rw_bdev()
-Message-ID: <YlRBULlBDO7LnbVi@infradead.org>
-References: <20220411113145.797121-1-r33s3n6@gmail.com>
+        Mon, 11 Apr 2022 10:59:01 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DDBB17059
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 07:56:45 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4KcX4X0kSMz9sTy;
+        Mon, 11 Apr 2022 16:56:44 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id C4HA8KL1UI-r; Mon, 11 Apr 2022 16:56:44 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4KcX4W74KJz9sTw;
+        Mon, 11 Apr 2022 16:56:43 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id E091A8B76E;
+        Mon, 11 Apr 2022 16:56:43 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id gVNm8j7ZB0BX; Mon, 11 Apr 2022 16:56:43 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id CA9488B763;
+        Mon, 11 Apr 2022 16:56:43 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 23BEuYej960585
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Mon, 11 Apr 2022 16:56:34 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 23BEuY1X960584;
+        Mon, 11 Apr 2022 16:56:34 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Kees Cook <keescook@chromium.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH] lkdtm/bugs: Don't expect thread termination without CONFIG_UBSAN_TRAP
+Date:   Mon, 11 Apr 2022 16:56:33 +0200
+Message-Id: <7c2d2a48034223a95cf4346c5a2255a0b9b25670.1649688637.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220411113145.797121-1-r33s3n6@gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1649688992; l=1739; s=20211009; h=from:subject:message-id; bh=jwwWohV7yXLmpOMeCedag6V2XJ7SIl+kvTa8YLVpcy8=; b=tWrWBXicWW82s2WSQlaOA1OwPXdEW/U0fcBhz5uqRFwK1Hvc7kA0rD8I3YSFAvnQ5ZnV6LXW3qXB PGObulx9CejDfOP37YFauBxdJ9Bd+fQvjp2QybAKjPHOc8E9WHy4
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,10 +65,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 07:31:45PM +0800, Zixuan Fu wrote:
-> In our fault-injection testing, bio_alloc() may fail with low memory and
-> return NULL.
+When you don't select CONFIG_UBSAN_TRAP, you get:
 
-Well, in that case your fault injection seems to be completely broken.
-Please take a closer look at how bio_alloc is implemented and
-documented.
+  # echo ARRAY_BOUNDS > /sys/kernel/debug/provoke-crash/DIRECT
+[  102.265827] ================================================================================
+[  102.278433] UBSAN: array-index-out-of-bounds in drivers/misc/lkdtm/bugs.c:342:16
+[  102.287207] index 8 is out of range for type 'char [8]'
+[  102.298722] ================================================================================
+[  102.313712] lkdtm: FAIL: survived array bounds overflow!
+[  102.318770] lkdtm: Unexpected! This kernel (5.16.0-rc1-s3k-dev-01884-g720dcf79314a ppc) was built with CONFIG_UBSAN_BOUNDS=y
+
+It is not correct because when CONFIG_UBSAN_TRAP is not selected
+you can't expect array bounds overflow to kill the thread.
+
+Modify the logic so that when the kernel is built with
+CONFIG_UBSAN_BOUNDS but without CONFIG_UBSAN_TRAP, you get a warning
+about CONFIG_UBSAN_TRAP not been selected instead.
+
+Fixes: c75be56e35b2 ("lkdtm/bugs: Add ARRAY_BOUNDS to selftests")
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ drivers/misc/lkdtm/bugs.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/misc/lkdtm/bugs.c b/drivers/misc/lkdtm/bugs.c
+index f21854ac5cc2..0f4dd9621b75 100644
+--- a/drivers/misc/lkdtm/bugs.c
++++ b/drivers/misc/lkdtm/bugs.c
+@@ -346,7 +346,10 @@ void lkdtm_ARRAY_BOUNDS(void)
+ 	kfree(not_checked);
+ 	kfree(checked);
+ 	pr_err("FAIL: survived array bounds overflow!\n");
+-	pr_expected_config(CONFIG_UBSAN_BOUNDS);
++	if (IS_ENABLED(CONFIG_UBSAN_BOUNDS))
++		pr_expected_config(CONFIG_UBSAN_TRAP);
++	else
++		pr_expected_config(CONFIG_UBSAN_BOUNDS);
+ }
+ 
+ void lkdtm_CORRUPT_LIST_ADD(void)
+-- 
+2.35.1
+

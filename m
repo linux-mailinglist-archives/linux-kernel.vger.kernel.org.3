@@ -2,71 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1102C4FC468
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 20:51:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C77A4FC49F
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 21:06:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349276AbiDKSyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 14:54:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40596 "EHLO
+        id S1349474AbiDKTHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 15:07:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349257AbiDKSx6 (ORCPT
+        with ESMTP id S1349416AbiDKTHN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 14:53:58 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD9612616;
-        Mon, 11 Apr 2022 11:51:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649703104; x=1681239104;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=3NS2IckigsYPCW6uvTWzWoNogEPw6kTBCLQLlVDSA/w=;
-  b=YFXU9kPUXNfX1I14Q3ebQ8+2Q+SxHCltlnTKIRqQFUQ2pjTfpCtqZQa3
-   JslkjZl9IqTHI0a0c+flDNstM4PH1BgLgbJPVXBTyUYjhLVPiE87I5idB
-   YoW0bH++cgXQoBizvKRZHYRnBAXY3NYH0oI1w/zMXoXYQGSZiDU/PtEHs
-   qYZGJJ1qsyt8iTd7OiCTnqGpv9f6ez+TPxpy6uonMrv8asnKHeEuz4n/E
-   eVFvBIMPSEIRw1iGIjrpyooizzQ/4Y4mFIhfHYs5Sa/Z9J17trebwm/Am
-   70JsreTJQjb7X5okrZAKYMP+JZzdt8hA03z5Oq3G7zVZ49n1my/TOH9Da
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="249471959"
-X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="249471959"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 11:51:43 -0700
-X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="572339167"
-Received: from minhjohn-mobl.amr.corp.intel.com (HELO [10.212.44.201]) ([10.212.44.201])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 11:51:41 -0700
-Message-ID: <dbd8a627-ce8d-8265-289d-30e0399a66e2@intel.com>
-Date:   Mon, 11 Apr 2022 11:51:46 -0700
+        Mon, 11 Apr 2022 15:07:13 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1EF33E25;
+        Mon, 11 Apr 2022 12:04:36 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id 985912d5c9d862fb; Mon, 11 Apr 2022 21:04:35 +0200
+Received: from kreacher.localnet (unknown [213.134.175.113])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 7A3E966BDFC;
+        Mon, 11 Apr 2022 21:04:34 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Bob Moore <robert.moore@intel.com>
+Subject: [PATCH 07/20] ACPICA: Add new ACPI 6.4 semantics for LoadTable() operator
+Date:   Mon, 11 Apr 2022 20:52:26 +0200
+Message-ID: <2200163.iZASKD2KPV@kreacher>
+In-Reply-To: <5578328.DvuYhMxLoT@kreacher>
+References: <5578328.DvuYhMxLoT@kreacher>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>,
-        Khalid Aziz <khalid.aziz@oracle.com>
-Cc:     akpm@linux-foundation.org, aneesh.kumar@linux.ibm.com,
-        arnd@arndb.de, 21cnbao@gmail.com, corbet@lwn.net,
-        dave.hansen@linux.intel.com, david@redhat.com,
-        ebiederm@xmission.com, hagen@jauu.net, jack@suse.cz,
-        keescook@chromium.org, kirill@shutemov.name, kucharsk@gmail.com,
-        linkinjeon@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        longpeng2@huawei.com, luto@kernel.org, markhemm@googlemail.com,
-        pcc@google.com, rppt@kernel.org, sieberf@amazon.com,
-        sjpark@amazon.de, surenb@google.com, tst@schoebel-theuer.de,
-        yzaikin@google.com
-References: <cover.1649370874.git.khalid.aziz@oracle.com>
- <YlRnPstOywJzxUib@casper.infradead.org>
-From:   Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH v1 00/14] Add support for shared PTEs across processes
-In-Reply-To: <YlRnPstOywJzxUib@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.175.113
+X-CLIENT-HOSTNAME: 213.134.175.113
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudekiedgudefhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepgfektdehueehteffueelleehhfffgfejtdehvddtfeetjeffveetheehvdejgfdunecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepvddufedrudefgedrudejhedruddufeenucevlhhushhtvghrufhiiigvpeefnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddujeehrdduudefpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeefpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosggvrhhtrdhmohhorhgvsehinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,11 +50,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/11/22 10:37, Matthew Wilcox wrote:
-> Another argument that MM developers find compelling is that we can reduce
-> some of the complexity in hugetlbfs where it has the ability to share
-> page tables between processes.
+From: Bob Moore <robert.moore@intel.com>
 
-When could this complexity reduction actually happen in practice?  Can
-this mshare thingy be somehow dropped in underneath the existing
-hugetlbfs implementation?  Or would userspace need to change?
+ACPICA commit b32dde35e26a63a85d78d4dc0a7260b61e626ac1
+
+DDB_HANDLE is gone, now LoadTable() returns a pass/fail integer.
+
+Link: https://github.com/acpica/acpica/commit/b32dde35
+Signed-off-by: Bob Moore <robert.moore@intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ exconfig.c |   24 +++++++++++++++++-------
+ 1 file changed, 17 insertions(+), 7 deletions(-)
+
+diff -Nurp linux.before_name/drivers/acpi/acpica/exconfig.c linux.after_name/drivers/acpi/acpica/exconfig.c
+--- linux.before_name/drivers/acpi/acpica/exconfig.c	2022-04-01 18:23:55.873311880 +0200
++++ linux.after_name/drivers/acpi/acpica/exconfig.c	2022-04-01 18:23:52.190359143 +0200
+@@ -87,11 +87,21 @@ acpi_ex_load_table_op(struct acpi_walk_s
+ 	struct acpi_namespace_node *parent_node;
+ 	struct acpi_namespace_node *start_node;
+ 	struct acpi_namespace_node *parameter_node = NULL;
++	union acpi_operand_object *return_obj;
+ 	union acpi_operand_object *ddb_handle;
+ 	u32 table_index;
+ 
+ 	ACPI_FUNCTION_TRACE(ex_load_table_op);
+ 
++	/* Create the return object */
++
++	return_obj = acpi_ut_create_integer_object((u64)0);
++	if (!return_obj) {
++		return_ACPI_STATUS(AE_NO_MEMORY);
++	}
++
++	*return_desc = return_obj;
++
+ 	/* Find the ACPI table in the RSDT/XSDT */
+ 
+ 	acpi_ex_exit_interpreter();
+@@ -106,12 +116,6 @@ acpi_ex_load_table_op(struct acpi_walk_s
+ 
+ 		/* Table not found, return an Integer=0 and AE_OK */
+ 
+-		ddb_handle = acpi_ut_create_integer_object((u64) 0);
+-		if (!ddb_handle) {
+-			return_ACPI_STATUS(AE_NO_MEMORY);
+-		}
+-
+-		*return_desc = ddb_handle;
+ 		return_ACPI_STATUS(AE_OK);
+ 	}
+ 
+@@ -198,7 +202,13 @@ acpi_ex_load_table_op(struct acpi_walk_s
+ 		}
+ 	}
+ 
+-	*return_desc = ddb_handle;
++	/* Remove the reference to ddb_handle created by acpi_ex_add_table above */
++
++	acpi_ut_remove_reference(ddb_handle);
++
++	/* Return -1 (non-zero) indicates success */
++
++	return_obj->integer.value = 0xFFFFFFFFFFFFFFFF;
+ 	return_ACPI_STATUS(status);
+ }
+ 
+
+
+

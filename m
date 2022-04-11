@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4DEF4FC081
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:23:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC8644FC072
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:23:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237076AbiDKP0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 11:26:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46186 "EHLO
+        id S1347942AbiDKPZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 11:25:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347884AbiDKPZL (ORCPT
+        with ESMTP id S1347890AbiDKPZL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 11 Apr 2022 11:25:11 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA233BFA4;
-        Mon, 11 Apr 2022 08:22:53 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id i7-20020a1c3b07000000b0038eb92fa965so782603wma.4;
-        Mon, 11 Apr 2022 08:22:53 -0700 (PDT)
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E1E3BA40;
+        Mon, 11 Apr 2022 08:22:55 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id r64so10128870wmr.4;
+        Mon, 11 Apr 2022 08:22:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=wJPCXAKMSBI9bB7dpXYU1TNs7HyHYJtWYzm6jjkJbH8=;
-        b=oK9V8fvQp7WnwWL4hDuqJlLxWSoYGgWJziVaXbcsEjuaUkugBO6Lw00ibA+xEXAJDD
-         E+Z0TheQTN04J1cTHeZ1KW7cGsOO8jqMEYH/yscI7sxrlYjn889LrUODVE17+jnBfqST
-         rh5X/qW4g8ZDL5lfHU+267IYyj0Cfka9c0o+D3+Tt42Ge5QiJWFmLtRLWc6BK66TGMW/
-         LirraLuyx30zpdCxlnW6lurtOQ0xlHuNfjgCwOxjhFXWSXVwLpk4UnBP6SA1io1LWvZC
-         vwSOGhyMTxHZ2uRn1zGAZ2oEhNugTx2QnuRb0YYiJZetqq4UtDtWpWp5uS2sonH1gbV2
-         22ug==
+        bh=azh5l951MpFAgYPR/Hx/XxEuebGMoFjq0h/SwKZyYXM=;
+        b=E5XiMCiOjM5Y+RDysiNnT7H9f4qVHFz9s41YpQX9mW6u6EevPWoEHW5weNOVqbFghG
+         +bQKQ1JaGIBLc9l9zkol20WiFbddOTMJ24tLPIioIGunewweqRjBdQE0Zm35n8XMvYsH
+         5RPjAzoIZewvZ2HuEk+OEtK8K0q3yP2sZHFVlV4gwOPQZn17j5+XFOm2GH2xUsX73U2A
+         Pkt25zPQNBAln6ZWCp8KX47gaouKk1sxXZUdyauCtyiMg2GK2X2Ps2yoppneRHHG2kpZ
+         w8Bxib7Z1+qKXiWWEooIWjNLE2dylf3q9YyQkiaeSZK4/WSqCSYg4HQ0CgdQ0SaJEN2/
+         D6gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wJPCXAKMSBI9bB7dpXYU1TNs7HyHYJtWYzm6jjkJbH8=;
-        b=FWx5JkdLN7cYQ/bhisGcp00H70MnTucUIBIcT+ScEMxBV4sUNuFE8IB3uDkQnPYexV
-         oqGS0W6JhgnbBX3wBIac6rcUZwdwIlWdyxiZTljp7X5Wy70OaeF4CvpbrP9FZmC/kNF5
-         MTNQ+RQfnfZjVevGmPsZCwE9TC82YJxlqLLQCqbTe4bXpZb2WiZCJ6R322JWL/7ElS7e
-         rjMFZVegmvedDHydzJXBulxYYRwWrFbsLyQDs4Xasef2zjtmM6pBKqVfEo8aPe0NYbnU
-         dQrXcvYHXp+btmnfOmtkwHRD4WU/wUyTGageMEYmNM+929z2B3h6kMubPU7ihHt53ELm
-         fr/w==
-X-Gm-Message-State: AOAM530rj5OI6LaWXBXpcJFc86ixomMpbU4/sVOCbnwD6JM9M0ZUUEqJ
-        LS4X1QncJ/edj+d5YyAH+gA=
-X-Google-Smtp-Source: ABdhPJzwUS+inNWZQxQfoRNGcraCOObrjnH562CDpAkYLOMfrWrdBRKgIXBZB4Qp/zuz15Y8Z3Zdxw==
-X-Received: by 2002:a05:600c:4f46:b0:38c:d4cd:ee31 with SMTP id m6-20020a05600c4f4600b0038cd4cdee31mr29567542wmq.16.1649690572210;
-        Mon, 11 Apr 2022 08:22:52 -0700 (PDT)
+        bh=azh5l951MpFAgYPR/Hx/XxEuebGMoFjq0h/SwKZyYXM=;
+        b=k/mgE7uIFBEtzm4MIZunSVhwAncPtYg97Bds8bN7VO/LMwum2gqXO4YLUrp6Ml7wTG
+         s4AinyJVh5YknneF06sBxJ8xK7RPQ9X0dI/NNYyfKHYJ1g/6is37vUbpWxtq7M8b4Ov3
+         mLSOhCmcmfoJNX+6QPkO39RhvTiTPDBo8do2RKMmQyoRgfFXPHAHlZ/A4DsJ83h1KdMY
+         WEpMzl32BU9JH1guqB88fLVwE/UFYPMyIaTcCIUyJkI5tniRFYLVWYBwrqSuUcqscx2J
+         +4JuYgd7fb1gt3gaSVmkMutid5iyZyLgjqB0W+iXgXP+zOTeTdBDBmlY/QTBrH4YwI9+
+         fi8Q==
+X-Gm-Message-State: AOAM533oqDyrRajfvah/5sU1eRwcLVf1SLEE1Vsz01qTwVeuuWwrCEM0
+        zYZ0ZhomQGwdkcqEb6QnQKs=
+X-Google-Smtp-Source: ABdhPJzrMUBwKjKDyTGhhVauBr3xDo7CRNie0uLfMBJmPjbqXY7M9qQhj2400Nmxvd6dm7J7NpLaWA==
+X-Received: by 2002:a05:600c:1994:b0:38c:95b5:bbfa with SMTP id t20-20020a05600c199400b0038c95b5bbfamr29920378wmq.0.1649690573125;
+        Mon, 11 Apr 2022 08:22:53 -0700 (PDT)
 Received: from linuxdev2.toradex.int (31-10-206-124.static.upc.ch. [31.10.206.124])
-        by smtp.gmail.com with ESMTPSA id a9-20020a7bc1c9000000b0038eb67e966esm5209374wmj.29.2022.04.11.08.22.51
+        by smtp.gmail.com with ESMTPSA id a9-20020a7bc1c9000000b0038eb67e966esm5209374wmj.29.2022.04.11.08.22.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 08:22:51 -0700 (PDT)
+        Mon, 11 Apr 2022 08:22:52 -0700 (PDT)
 From:   Max Krummenacher <max.oss.09@gmail.com>
 To:     max.krummenacher@toradex.com
-Cc:     Oleksandr Suvorov <oleksandr.suvorov@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
+Cc:     Fabio Estevam <festevam@gmail.com>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
         NXP Linux Team <linux-imx@nxp.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
@@ -59,9 +58,9 @@ Cc:     Oleksandr Suvorov <oleksandr.suvorov@toradex.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 05/14] ARM: dts: imx6dl-colibri: Add gpio-line-names
-Date:   Mon, 11 Apr 2022 17:22:25 +0200
-Message-Id: <20220411152234.12678-6-max.oss.09@gmail.com>
+Subject: [PATCH v2 06/14] ARM: dts: imx6dl-colibri: Disable add-on accessories
+Date:   Mon, 11 Apr 2022 17:22:26 +0200
+Message-Id: <20220411152234.12678-7-max.oss.09@gmail.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20220411152234.12678-1-max.oss.09@gmail.com>
 References: <20220411152234.12678-1-max.oss.09@gmail.com>
@@ -77,251 +76,232 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oleksandr Suvorov <oleksandr.suvorov@toradex.com>
+From: Max Krummenacher <max.krummenacher@toradex.com>
 
-Add GPIO line names on module level. Those are all GPIOs which a user
-might use on his custom carrier board. If more meaningful names are
-available on the carrier board, the user can overwrite the line names
-in the carrier board level device tree.
+The Toradex Colibri family is composed of SoM that can be plugged in
+various carrier board, with carrier boards allowing multiple optional
+add-on (e.g. display, camera, ...).
 
-Signed-off-by: Oleksandr Suvorov <oleksandr.suvorov@toradex.com>
+Keep all the SoM specific part into the module .dtsi, disabling
+everything that is not self-contained on the board. The carrier board
+dts can reuse/enable anything that is defined in the module dtsi.
+Additional device tree overlays can be used for any accessories that
+are plugged in the carrier board.
+
+Disable parallel RGB:
+The parallel RGB interface (lcd_display) and all related nodes can
+be enabled in an overlay if used. Keep all nodes disabled in the
+module-level device tree.
+Rename display interface node to match imx6qdl-apalis
+to make it easier to use overlays.
+The pwm-backlight binding now requires the power-supply property,
+add it.
+
+Disable stmpe touchscreen:
+The touchscreen can be enabled in an overlay if used.
+Add labels to the stmpe sub nodes.
+
+Disable hdmi interface:
+HDMI can be enabled in an overlay if used.
+
+Update SPDX-License spelling to latest convention.
+Update Copyright year.
+
 Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 ---
 
 (no changes since v1)
 
- arch/arm/boot/dts/imx6qdl-colibri.dtsi | 218 +++++++++++++++++++++++++
- 1 file changed, 218 insertions(+)
+ arch/arm/boot/dts/imx6dl-colibri-eval-v3.dts | 59 +-------------------
+ arch/arm/boot/dts/imx6qdl-colibri.dtsi       | 57 ++++++++++++++++++-
+ 2 files changed, 56 insertions(+), 60 deletions(-)
 
-diff --git a/arch/arm/boot/dts/imx6qdl-colibri.dtsi b/arch/arm/boot/dts/imx6qdl-colibri.dtsi
-index c6112b1bffd4..c92887f6af61 100644
---- a/arch/arm/boot/dts/imx6qdl-colibri.dtsi
-+++ b/arch/arm/boot/dts/imx6qdl-colibri.dtsi
-@@ -118,6 +118,224 @@
+diff --git a/arch/arm/boot/dts/imx6dl-colibri-eval-v3.dts b/arch/arm/boot/dts/imx6dl-colibri-eval-v3.dts
+index 7da74e6f46d9..535b5c156229 100644
+--- a/arch/arm/boot/dts/imx6dl-colibri-eval-v3.dts
++++ b/arch/arm/boot/dts/imx6dl-colibri-eval-v3.dts
+@@ -1,6 +1,6 @@
+-// SPDX-License-Identifier: GPL-2.0+ OR MIT
++// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+ /*
+- * Copyright 2014-2020 Toradex
++ * Copyright 2014-2022 Toradex
+  * Copyright 2012 Freescale Semiconductor, Inc.
+  * Copyright 2011 Linaro Ltd.
+  */
+@@ -58,53 +58,6 @@
+ 			wakeup-source;
+ 		};
+ 	};
+-
+-	lcd_display: disp0 {
+-		compatible = "fsl,imx-parallel-display";
+-		#address-cells = <1>;
+-		#size-cells = <0>;
+-		interface-pix-fmt = "bgr666";
+-		pinctrl-names = "default";
+-		pinctrl-0 = <&pinctrl_ipu1_lcdif>;
+-		status = "okay";
+-
+-		port@0 {
+-			reg = <0>;
+-
+-			lcd_display_in: endpoint {
+-				remote-endpoint = <&ipu1_di0_disp0>;
+-			};
+-		};
+-
+-		port@1 {
+-			reg = <1>;
+-
+-			lcd_display_out: endpoint {
+-				remote-endpoint = <&lcd_panel_in>;
+-			};
+-		};
+-	};
+-
+-	panel: panel {
+-		/*
+-		 * edt,et057090dhu: EDT 5.7" LCD TFT
+-		 * edt,et070080dh6: EDT 7.0" LCD TFT
+-		 */
+-		compatible = "edt,et057090dhu";
+-		backlight = <&backlight>;
+-
+-		port {
+-			lcd_panel_in: endpoint {
+-				remote-endpoint = <&lcd_display_out>;
+-			};
+-		};
+-	};
+-};
+-
+-&backlight {
+-	brightness-levels = <0 127 191 223 239 247 251 255>;
+-	default-brightness-level = <1>;
+-	status = "okay";
+ };
+ 
+ /* Colibri SSP */
+@@ -122,10 +75,6 @@
  	};
  };
  
-+&gpio1 {
-+	gpio-line-names = "",
-+			  "SODIMM_67",
-+			  "SODIMM_180",
-+			  "SODIMM_196",
-+			  "SODIMM_174",
-+			  "SODIMM_176",
-+			  "SODIMM_194",
-+			  "SODIMM_55",
-+			  "SODIMM_63",
-+			  "SODIMM_28",
-+			  "SODIMM_93",
-+			  "SODIMM_69",
-+			  "SODIMM_99",
-+			  "SODIMM_130",
-+			  "SODIMM_106",
-+			  "SODIMM_98",
-+			  "SODIMM_192",
-+			  "SODIMM_49",
-+			  "SODIMM_190",
-+			  "SODIMM_51",
-+			  "SODIMM_47",
-+			  "SODIMM_53",
-+			  "",
-+			  "SODIMM_22";
+-&hdmi {
+-	status = "okay";
+-};
+-
+ /*
+  * Colibri I2C: I2C3_SDA/SCL on SODIMM 194/196 (e.g. RTC on carrier board)
+  */
+@@ -178,10 +127,6 @@
+ 	};
+ };
+ 
+-&ipu1_di0_disp0 {
+-	remote-endpoint = <&lcd_display_in>;
+-};
+-
+ &pwm1 {
+ 	status = "okay";
+ };
+diff --git a/arch/arm/boot/dts/imx6qdl-colibri.dtsi b/arch/arm/boot/dts/imx6qdl-colibri.dtsi
+index c92887f6af61..f6243762e918 100644
+--- a/arch/arm/boot/dts/imx6qdl-colibri.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-colibri.dtsi
+@@ -13,13 +13,59 @@
+ 
+ 	backlight: backlight {
+ 		compatible = "pwm-backlight";
++		brightness-levels = <0 127 191 223 239 247 251 255>;
++		default-brightness-level = <1>;
++		enable-gpios = <&gpio3 26 GPIO_ACTIVE_HIGH>; /* Colibri BL_ON */
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_gpio_bl_on>;
++		power-supply = <&reg_module_3v3>;
+ 		pwms = <&pwm3 0 5000000>;
+-		enable-gpios = <&gpio3 26 GPIO_ACTIVE_HIGH>; /* Colibri BL_ON */
+ 		status = "disabled";
+ 	};
+ 
++	lcd_display: disp0 {
++		compatible = "fsl,imx-parallel-display";
++		interface-pix-fmt = "bgr666";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_ipu1_lcdif>;
++		status = "disabled";
++
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		port@0 {
++			reg = <0>;
++
++			lcd_display_in: endpoint {
++				remote-endpoint = <&ipu1_di0_disp0>;
++			};
++		};
++
++		port@1 {
++			reg = <1>;
++
++			lcd_display_out: endpoint {
++				remote-endpoint = <&lcd_panel_in>;
++			};
++		};
++	};
++
++	panel_dpi: panel-dpi {
++		/*
++		 * edt,et057090dhu: EDT 5.7" LCD TFT
++		 * edt,et070080dh6: EDT 7.0" LCD TFT
++		 */
++		compatible = "edt,et057090dhu";
++		backlight = <&backlight>;
++		status = "disabled";
++
++		port {
++			lcd_panel_in: endpoint {
++				remote-endpoint = <&lcd_display_out>;
++			};
++		};
++	};
++
+ 	reg_module_3v3: regulator-module-3v3 {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "+V3.3";
+@@ -476,7 +522,7 @@
+ 		/* ADC converstion time: 80 clocks */
+ 		st,sample-time = <4>;
+ 
+-		stmpe_touchscreen {
++		stmpe_ts: stmpe_touchscreen {
+ 			compatible = "st,stmpe-ts";
+ 			/* 8 sample average control */
+ 			st,ave-ctrl = <3>;
+@@ -491,9 +537,10 @@
+ 			st,settling = <3>;
+ 			/* 5 ms touch detect interrupt delay */
+ 			st,touch-det-delay = <5>;
++			status = "disabled";
+ 		};
+ 
+-		stmpe_adc {
++		stmpe_adc: stmpe_adc {
+ 			compatible = "st,stmpe-adc";
+ 			/* forbid to use ADC channels 3-0 (touch) */
+ 			st,norequest-mask = <0x0F>;
+@@ -514,6 +561,10 @@
+ 	status = "disabled";
+ };
+ 
++&ipu1_di0_disp0 {
++	remote-endpoint = <&lcd_display_in>;
 +};
 +
-+&gpio2 {
-+	gpio-line-names = "SODIMM_132",
-+			  "SODIMM_134",
-+			  "SODIMM_135",
-+			  "SODIMM_133",
-+			  "SODIMM_102",
-+			  "SODIMM_43",
-+			  "SODIMM_127",
-+			  "SODIMM_37",
-+			  "SODIMM_104",
-+			  "SODIMM_59",
-+			  "SODIMM_30",
-+			  "SODIMM_100",
-+			  "SODIMM_38",
-+			  "SODIMM_34",
-+			  "SODIMM_32",
-+			  "SODIMM_36",
-+			  "SODIMM_59",
-+			  "SODIMM_67",
-+			  "SODIMM_97",
-+			  "SODIMM_79",
-+			  "SODIMM_103",
-+			  "SODIMM_101",
-+			  "SODIMM_45",
-+			  "SODIMM_105",
-+			  "SODIMM_107",
-+			  "SODIMM_91",
-+			  "SODIMM_89",
-+			  "SODIMM_150",
-+			  "SODIMM_126",
-+			  "SODIMM_128",
-+			  "",
-+			  "SODIMM_94";
-+};
-+
-+&gpio3 {
-+	gpio-line-names = "SODIMM_111",
-+			  "SODIMM_113",
-+			  "SODIMM_115",
-+			  "SODIMM_117",
-+			  "SODIMM_119",
-+			  "SODIMM_121",
-+			  "SODIMM_123",
-+			  "SODIMM_125",
-+			  "SODIMM_110",
-+			  "SODIMM_112",
-+			  "SODIMM_114",
-+			  "SODIMM_116",
-+			  "SODIMM_118",
-+			  "SODIMM_120",
-+			  "SODIMM_122",
-+			  "SODIMM_124",
-+			  "",
-+			  "SODIMM_96",
-+			  "SODIMM_77",
-+			  "SODIMM_25",
-+			  "SODIMM_27",
-+			  "SODIMM_88",
-+			  "SODIMM_90",
-+			  "SODIMM_31",
-+			  "SODIMM_23",
-+			  "SODIMM_29",
-+			  "SODIMM_71",
-+			  "SODIMM_73",
-+			  "SODIMM_92",
-+			  "SODIMM_81",
-+			  "SODIMM_131",
-+			  "SODIMM_129";
-+};
-+
-+&gpio4 {
-+	gpio-line-names = "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "SODIMM_168",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "SODIMM_184",
-+			  "SODIMM_186",
-+			  "HDMI_15",
-+			  "HDMI_16",
-+			  "SODIMM_178",
-+			  "SODIMM_188",
-+			  "SODIMM_56",
-+			  "SODIMM_44",
-+			  "SODIMM_68",
-+			  "SODIMM_82",
-+			  "SODIMM_24",
-+			  "SODIMM_76",
-+			  "SODIMM_70",
-+			  "SODIMM_60",
-+			  "SODIMM_58",
-+			  "SODIMM_78",
-+			  "SODIMM_72",
-+			  "SODIMM_80",
-+			  "SODIMM_46",
-+			  "SODIMM_62",
-+			  "SODIMM_48",
-+			  "SODIMM_74";
-+};
-+
-+&gpio5 {
-+	gpio-line-names = "SODIMM_95",
-+			  "",
-+			  "SODIMM_86",
-+			  "",
-+			  "SODIMM_65",
-+			  "SODIMM_50",
-+			  "SODIMM_52",
-+			  "SODIMM_54",
-+			  "SODIMM_66",
-+			  "SODIMM_64",
-+			  "SODIMM_57",
-+			  "SODIMM_61",
-+			  "SODIMM_136",
-+			  "SODIMM_138",
-+			  "SODIMM_140",
-+			  "SODIMM_142",
-+			  "SODIMM_144",
-+			  "SODIMM_146",
-+			  "SODIMM_172",
-+			  "SODIMM_170",
-+			  "SODIMM_149",
-+			  "SODIMM_151",
-+			  "SODIMM_153",
-+			  "SODIMM_155",
-+			  "SODIMM_157",
-+			  "SODIMM_159",
-+			  "SODIMM_161",
-+			  "SODIMM_163",
-+			  "SODIMM_33",
-+			  "SODIMM_35",
-+			  "SODIMM_165",
-+			  "SODIMM_167";
-+};
-+
-+&gpio6 {
-+	gpio-line-names = "SODIMM_169",
-+			  "SODIMM_171",
-+			  "SODIMM_173",
-+			  "SODIMM_175",
-+			  "SODIMM_177",
-+			  "SODIMM_179",
-+			  "SODIMM_85",
-+			  "SODIMM_166",
-+			  "SODIMM_160",
-+			  "SODIMM_162",
-+			  "SODIMM_158",
-+			  "SODIMM_164",
-+			  "",
-+			  "",
-+			  "SODIMM_156",
-+			  "SODIMM_75",
-+			  "SODIMM_154",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "SODIMM_152";
-+};
-+
-+&gpio7 {
-+	gpio-line-names = "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "SODIMM_19",
-+			  "SODIMM_21",
-+			  "",
-+			  "SODIMM_137";
-+};
-+
- &hdmi {
+ /* Colibri PWM<B> */
+ &pwm1 {
  	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_hdmi_ddc>;
 -- 
 2.20.1
 

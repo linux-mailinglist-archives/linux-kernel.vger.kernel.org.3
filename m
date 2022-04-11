@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4084FC8AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 01:42:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D10884FC8C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 01:42:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231704AbiDKXoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 19:44:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52908 "EHLO
+        id S236625AbiDKXo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 19:44:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240554AbiDKXnB (ORCPT
+        with ESMTP id S241118AbiDKXnD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 19:43:01 -0400
+        Mon, 11 Apr 2022 19:43:03 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD1D965B0;
-        Mon, 11 Apr 2022 16:39:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 077C31AD92;
+        Mon, 11 Apr 2022 16:39:57 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id BFDD81F43D2C
+        with ESMTPSA id C22131F43D41
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649720392;
-        bh=8DI/pNc1jm1iacYnzYdS4F0mtDCAezqY1CKyhFh83pw=;
+        s=mail; t=1649720396;
+        bh=q9Yf4GNWQPgB4nxS09DeBdyHcEPdoAJWJbky4/Jndjk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fS0vsdoKA3qVdtkvxx6egdlyVBefRJJa46jHeytiuTAjNPQUBJMF62vPUdGtisFwS
-         qjzC5P4vm9t5HPl6XIK606FQTz2W1iczXe2hK1eUx5sJ8oPsz2i0llPMjwphKSznxD
-         yf+DUB+FsRolLvqURjnT0+EqjmQmrEN7Ddzm8dBJLMnAlTFqfSJBAq6HbPOxu03hKS
-         kVHAfsAgZcO/GIyeo95AaDCgaJEyINKOFXU5yKVE69NHRt4KmyfIjKBeZVC+A88xMt
-         6sOQ55lrq1POSM6qN3Jpff5rofgLRYh8EMxCe8D5kB1qjKD/WlIBuBKk37qrnk6rxr
-         AS5GTvCeO4CqA==
+        b=je3kexK773qB+4WpfzyIaOS9CgDMJs107rHeLhbbXQaPz+2ZNqz8DsKQWs23dL/6w
+         aALYOeT9nixOO/CUWFE4fEDW+ZmLW8gn6Gfh+8qf8jH4kvav4N+gd3WoBnAsSrBfgz
+         HYoq1pOUkrElMMer+9+6WC8VG0ArCBAo4YPZjenknw80lsJRT8UeuUar7vprf/dtrc
+         2Juz+3EjLXTLUe8kIITLEyVn267yLf+8ZWtzKhly8RHfHmQK/b/owv6jZ5Y2HirTYT
+         s6amgwxvVYqfsPq9HkmgzjL/JhQgStFmW7KxiCeVTc56Fip0EJ8iqlHMojz/ZZWJWe
+         TvR0bqk4J0+yQ==
 From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -79,9 +79,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
         linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
         xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH v7 14/20] x86: Use do_kernel_power_off()
-Date:   Tue, 12 Apr 2022 02:38:26 +0300
-Message-Id: <20220411233832.391817-15-dmitry.osipenko@collabora.com>
+Subject: [PATCH v7 15/20] ia64: Use do_kernel_power_off()
+Date:   Tue, 12 Apr 2022 02:38:27 +0300
+Message-Id: <20220411233832.391817-16-dmitry.osipenko@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220411233832.391817-1-dmitry.osipenko@collabora.com>
 References: <20220411233832.391817-1-dmitry.osipenko@collabora.com>
@@ -104,26 +104,31 @@ be converted to the new power-off API.
 
 Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 ---
- arch/x86/kernel/reboot.c | 4 ++--
+ arch/ia64/kernel/process.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/kernel/reboot.c b/arch/x86/kernel/reboot.c
-index fa700b46588e..c3636ea4aa71 100644
---- a/arch/x86/kernel/reboot.c
-+++ b/arch/x86/kernel/reboot.c
-@@ -739,10 +739,10 @@ static void native_machine_halt(void)
- 
- static void native_machine_power_off(void)
+diff --git a/arch/ia64/kernel/process.c b/arch/ia64/kernel/process.c
+index d7a256bd9d6b..89025e3b3f61 100644
+--- a/arch/ia64/kernel/process.c
++++ b/arch/ia64/kernel/process.c
+@@ -19,6 +19,7 @@
+ #include <linux/module.h>
+ #include <linux/notifier.h>
+ #include <linux/personality.h>
++#include <linux/reboot.h>
+ #include <linux/sched.h>
+ #include <linux/sched/debug.h>
+ #include <linux/sched/hotplug.h>
+@@ -599,8 +600,7 @@ machine_halt (void)
+ void
+ machine_power_off (void)
  {
--	if (pm_power_off) {
-+	if (kernel_can_power_off()) {
- 		if (!reboot_force)
- 			machine_shutdown();
+-	if (pm_power_off)
 -		pm_power_off();
-+		do_kernel_power_off();
- 	}
- 	/* A fallback in case there is no PM info available */
- 	tboot_shutdown(TB_SHUTDOWN_HALT);
++	do_kernel_power_off();
+ 	machine_halt();
+ }
+ 
 -- 
 2.35.1
 

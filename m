@@ -2,188 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E6234FB4A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 09:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 596354FB4BB
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 09:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245351AbiDKH1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 03:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53914 "EHLO
+        id S242944AbiDKH2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 03:28:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245328AbiDKH0e (ORCPT
+        with ESMTP id S244009AbiDKH2N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 03:26:34 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 071F115A15;
-        Mon, 11 Apr 2022 00:24:18 -0700 (PDT)
-X-UUID: 493af11560844203903c37df24f89464-20220411
-X-UUID: 493af11560844203903c37df24f89464-20220411
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <moudy.ho@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 823411995; Mon, 11 Apr 2022 15:24:08 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Mon, 11 Apr 2022 15:24:07 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 11 Apr 2022 15:24:06 +0800
-From:   Moudy Ho <moudy.ho@mediatek.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jernej Skrabec <jernej.skrabec@siol.net>
-CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Landley <rob@landley.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        <tfiga@chromium.org>, <drinkcat@chromium.org>,
-        <pihsun@chromium.org>, <hsinyi@google.com>,
-        "Benjamin Gaignard" <benjamin.gaignard@collabora.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        <allen-kh.cheng@mediatek.com>, <xiandong.wang@mediatek.com>,
-        <randy.wu@mediatek.com>, <moudy.ho@mediatek.com>,
-        <jason-jh.lin@mediatek.com>, <roy-cw.yeh@mediatek.com>,
-        <river.cheng@mediatek.com>, <srv_heupstream@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v14 6/6] soc: mediatek: mutex: add functions that operate registers by CMDQ
-Date:   Mon, 11 Apr 2022 15:24:03 +0800
-Message-ID: <20220411072403.24016-7-moudy.ho@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220411072403.24016-1-moudy.ho@mediatek.com>
-References: <20220411072403.24016-1-moudy.ho@mediatek.com>
+        Mon, 11 Apr 2022 03:28:13 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41BD03A71F
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 00:25:42 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id s10so5589358plg.9
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 00:25:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Bh2DzyN58v9sjiKDaPQqaLzWWkYE7+ay/uZ6IfCvCxQ=;
+        b=nOWJnwIlswvCbzCOlCXxNOcBrWbKLNT64P909otnZtJ7LJ6EhnAKunQIn0+eSfZNAu
+         7dRlwFzq84Fi4wbJVVKUoUpvUZjsUXD5Oc2xo5/58d/2TcSzuVHC4FyORaGXmYqZrRBP
+         3e1CTcRSFBQA5TpR0fOe64ny9MRHY+oXpBdxSL0t4A+DSCFczdjwNKRWTEyKNOKem+Ti
+         zXqMn1CKHCa02LCXvJNGsDSDkk/QPottZWg+RbkZEBj7r0//A8RnqoicDU2FWgNCBxEi
+         4J2amMOV5+XxrwhITqROjMPz9HvjBlMNHMNQZnLOpQyvG958bNnQaSMMJbovG97IpMXE
+         WyDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Bh2DzyN58v9sjiKDaPQqaLzWWkYE7+ay/uZ6IfCvCxQ=;
+        b=xIHZP3n3M3t3Aa7JL2OglcTyEsURfMa7DTbK9pV06L6VO48Dk9eUW3xVvkTpewXcTd
+         2hk1axTjmF+caoVsKPHPR0gg69eEJ7NQniFI23293QZetFMfNNMqQShkSSSPne5YB6YU
+         RX/DdndTvaOlBvOuPkiOFiIsBD+1Bx3kJKsAuZ0fJonppOMByhw0YS27LVUwTGAx9sqS
+         GuzU8HI2vw2DzAfqgGseD5b36Xomy/OKLKsPoSIsjjjR707diPbJdtv4M9/wu/pFXhRh
+         GTjTHilV9TL931OIql7ckx5o+4UWPguhVVCWl8NSHH9oFpDcuLwsaqevSsaJEsmt9NKG
+         QaOQ==
+X-Gm-Message-State: AOAM532EF4RmYTSTfgo+psKlRTvKXD+zP+347Gk2JlPdOftndCQTMOI7
+        XXyA4YpVrRBv1cdwlwZj+Q==
+X-Google-Smtp-Source: ABdhPJzd2DwMb8CiNDtt27JzEGa23aU8WaY1BEHvp7t0AkiNpPxQqrjGQMeKP/+7CEwBU/KkipvddA==
+X-Received: by 2002:a17:90a:da02:b0:1bf:3919:f2a with SMTP id e2-20020a17090ada0200b001bf39190f2amr35483524pjv.208.1649661941617;
+        Mon, 11 Apr 2022 00:25:41 -0700 (PDT)
+Received: from localhost.localdomain ([121.165.123.189])
+        by smtp.gmail.com with ESMTPSA id g6-20020a056a001a0600b004f7bd56cc08sm33708527pfv.123.2022.04.11.00.25.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Apr 2022 00:25:41 -0700 (PDT)
+From:   JaeSang Yoo <js.yoo.5b@gmail.com>
+X-Google-Original-From: JaeSang Yoo <jsyoo5b@gmail.com>
+To:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Ohhoon Kwon <ohkwon1043@gmail.com>,
+        Wonhyuk Yang <vvghjk1234@gmail.com>,
+        Jiyoup Kim <lakroforce@gmail.com>,
+        Donghyeok Kim <dthex5d@gmail.com>,
+        Christoph Lameter <clameter@sgi.com>,
+        JaeSang Yoo <jsyoo5b@gmail.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] mm/slub: remove unused parameter in setup_object*()
+Date:   Mon, 11 Apr 2022 16:25:34 +0900
+Message-Id: <20220411072534.3372768-1-jsyoo5b@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Due to HW limitations, MDP3 is necessary to enable MUTEX in each frame
-for SOF triggering and cooperate with CMDQ control to reduce the amount
-of interrupts generated(also, reduce frame latency).
+setup_object_debug() and setup_object() has unused parameter, "struct
+slab *slab". Remove it.
 
-In response to the above situation, a new interface
-"mtk_mutex_enable_by_cmdq" has been added to achieve the purpose.
+By the commit 3ec0974210fe ("SLUB: Simplify debug code"),
+setup_object_debug() were introduced to refactor previous code blocks
+in the setup_object(). Previous code used SlabDebug() to init_object()
+and init_tracking(). As the SlabDebug() takes "struct page *page" as
+argument, the setup_object_debug() checks flag of "struct kmem_cache *s"
+which doesn't require "struct page *page".
+As the struct page were changed into struct slab by commit bb192ed9aa719
+("mm/slub: Convert most struct page to struct slab by spatch"), but it's
+still unused parameter.
 
-Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+Suggested-by: Ohhoon Kwon <ohkwon1043@gmail.com>
+Signed-off-by: JaeSang Yoo <jsyoo5b@gmail.com>
 ---
- drivers/soc/mediatek/mtk-mutex.c       | 42 +++++++++++++++++++++++++-
- include/linux/soc/mediatek/mtk-mutex.h |  2 ++
- 2 files changed, 43 insertions(+), 1 deletion(-)
+ mm/slub.c | 19 ++++++++-----------
+ 1 file changed, 8 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/soc/mediatek/mtk-mutex.c b/drivers/soc/mediatek/mtk-mutex.c
-index fc9ba2749946..1811beaf399d 100644
---- a/drivers/soc/mediatek/mtk-mutex.c
-+++ b/drivers/soc/mediatek/mtk-mutex.c
-@@ -7,10 +7,12 @@
- #include <linux/iopoll.h>
- #include <linux/module.h>
- #include <linux/of_device.h>
-+#include <linux/of_address.h>
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
- #include <linux/soc/mediatek/mtk-mmsys.h>
- #include <linux/soc/mediatek/mtk-mutex.h>
-+#include <linux/soc/mediatek/mtk-cmdq.h>
- 
- #define MT2701_MUTEX0_MOD0			0x2c
- #define MT2701_MUTEX0_SOF0			0x30
-@@ -176,6 +178,9 @@ struct mtk_mutex_ctx {
- 	void __iomem			*regs;
- 	struct mtk_mutex		mutex[10];
- 	const struct mtk_mutex_data	*data;
-+	phys_addr_t			addr;
-+	struct cmdq_client_reg		cmdq_reg;
-+	bool				has_gce_client_reg;
- };
- 
- static const unsigned int mt2701_mutex_mod[DDP_COMPONENT_ID_MAX] = {
-@@ -618,6 +623,28 @@ void mtk_mutex_enable(struct mtk_mutex *mutex)
+diff --git a/mm/slub.c b/mm/slub.c
+index 9fe000fd19ca..273bbba74ca1 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -1264,8 +1264,7 @@ static inline void dec_slabs_node(struct kmem_cache *s, int node, int objects)
  }
- EXPORT_SYMBOL_GPL(mtk_mutex_enable);
  
-+void mtk_mutex_enable_by_cmdq(struct mtk_mutex *mutex, void *pkt)
-+{
-+#if IS_REACHABLE(CONFIG_MTK_CMDQ)
-+	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
-+						 mutex[mutex->id]);
-+	struct cmdq_pkt *cmdq_pkt = (struct cmdq_pkt *)pkt;
-+
-+	WARN_ON(&mtx->mutex[mutex->id] != mutex);
-+
-+	if (!mtx->has_gce_client_reg) {
-+		dev_dbg(mtx->dev, "mediatek,gce-client-reg hasn't been set in dts");
-+		return;
-+	}
-+
-+	cmdq_pkt_write(cmdq_pkt, mtx->cmdq_reg.subsys,
-+		       mtx->addr + DISP_REG_MUTEX_EN(mutex->id), 1);
-+#else
-+	dev_err(mtx->dev, "Not support for enable MUTEX by CMDQ");
-+#endif
-+}
-+EXPORT_SYMBOL_GPL(mtk_mutex_enable_by_cmdq);
-+
- void mtk_mutex_disable(struct mtk_mutex *mutex)
+ /* Object debug checks for alloc/free paths */
+-static void setup_object_debug(struct kmem_cache *s, struct slab *slab,
+-								void *object)
++static void setup_object_debug(struct kmem_cache *s, void *object)
  {
- 	struct mtk_mutex_ctx *mtx = container_of(mutex, struct mtk_mutex_ctx,
-@@ -656,7 +683,7 @@ static int mtk_mutex_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct mtk_mutex_ctx *mtx;
--	struct resource *regs;
-+	struct resource *regs, addr;
- 	int i;
+ 	if (!kmem_cache_debug_flags(s, SLAB_STORE_USER|SLAB_RED_ZONE|__OBJECT_POISON))
+ 		return;
+@@ -1631,8 +1630,7 @@ slab_flags_t kmem_cache_flags(unsigned int object_size,
+ 	return flags | slub_debug_local;
+ }
+ #else /* !CONFIG_SLUB_DEBUG */
+-static inline void setup_object_debug(struct kmem_cache *s,
+-			struct slab *slab, void *object) {}
++static inline void setup_object_debug(struct kmem_cache *s, void *object) {}
+ static inline
+ void setup_slab_debug(struct kmem_cache *s, struct slab *slab, void *addr) {}
  
- 	mtx = devm_kzalloc(dev, sizeof(*mtx), GFP_KERNEL);
-@@ -677,6 +704,19 @@ static int mtk_mutex_probe(struct platform_device *pdev)
- 		}
+@@ -1775,10 +1773,9 @@ static inline bool slab_free_freelist_hook(struct kmem_cache *s,
+ 	return *head != NULL;
+ }
+ 
+-static void *setup_object(struct kmem_cache *s, struct slab *slab,
+-				void *object)
++static void *setup_object(struct kmem_cache *s, void *object)
+ {
+-	setup_object_debug(s, slab, object);
++	setup_object_debug(s, object);
+ 	object = kasan_init_slab_obj(s, object);
+ 	if (unlikely(s->ctor)) {
+ 		kasan_unpoison_object_data(s, object);
+@@ -1897,13 +1894,13 @@ static bool shuffle_freelist(struct kmem_cache *s, struct slab *slab)
+ 	/* First entry is used as the base of the freelist */
+ 	cur = next_freelist_entry(s, slab, &pos, start, page_limit,
+ 				freelist_count);
+-	cur = setup_object(s, slab, cur);
++	cur = setup_object(s, cur);
+ 	slab->freelist = cur;
+ 
+ 	for (idx = 1; idx < slab->objects; idx++) {
+ 		next = next_freelist_entry(s, slab, &pos, start, page_limit,
+ 			freelist_count);
+-		next = setup_object(s, slab, next);
++		next = setup_object(s, next);
+ 		set_freepointer(s, cur, next);
+ 		cur = next;
  	}
+@@ -1974,11 +1971,11 @@ static struct slab *allocate_slab(struct kmem_cache *s, gfp_t flags, int node)
  
-+	if (of_address_to_resource(dev->of_node, 0, &addr) < 0)
-+		mtx->addr = 0L;
-+	else
-+		mtx->addr = addr.start;
-+
-+#if IS_REACHABLE(CONFIG_MTK_CMDQ)
-+	ret = cmdq_dev_get_client_reg(dev, &mtx->cmdq_reg, 0);
-+	if (ret)
-+		dev_dbg(dev, "No mediatek,gce-client-reg!\n");
-+	else
-+		mtx->has_gce_client_reg = true;
-+#endif
-+
- 	regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	mtx->regs = devm_ioremap_resource(dev, regs);
- 	if (IS_ERR(mtx->regs)) {
-diff --git a/include/linux/soc/mediatek/mtk-mutex.h b/include/linux/soc/mediatek/mtk-mutex.h
-index 200f4365c950..17eea55b6809 100644
---- a/include/linux/soc/mediatek/mtk-mutex.h
-+++ b/include/linux/soc/mediatek/mtk-mutex.h
-@@ -33,6 +33,8 @@ void mtk_mutex_set_mod(struct mtk_mutex *mutex,
- void mtk_mutex_set_sof(struct mtk_mutex *mutex,
- 		       enum mtk_mutex_table_index idx);
- void mtk_mutex_enable(struct mtk_mutex *mutex);
-+void mtk_mutex_enable_by_cmdq(struct mtk_mutex *mutex,
-+			      void *pkt);
- void mtk_mutex_disable(struct mtk_mutex *mutex);
- void mtk_mutex_remove_comp(struct mtk_mutex *mutex,
- 			   enum mtk_ddp_comp_id id);
+ 	if (!shuffle) {
+ 		start = fixup_red_left(s, start);
+-		start = setup_object(s, slab, start);
++		start = setup_object(s, start);
+ 		slab->freelist = start;
+ 		for (idx = 0, p = start; idx < slab->objects - 1; idx++) {
+ 			next = p + s->size;
+-			next = setup_object(s, slab, next);
++			next = setup_object(s, next);
+ 			set_freepointer(s, p, next);
+ 			p = next;
+ 		}
 -- 
-2.18.0
+2.25.1
 

@@ -2,52 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A49384FC82A
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 01:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56B874FC833
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 01:39:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234058AbiDKXj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 19:39:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49494 "EHLO
+        id S234326AbiDKXlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 19:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233782AbiDKXjY (ORCPT
+        with ESMTP id S232902AbiDKXlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 19:39:24 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA4E25EB6
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 16:37:08 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id k20-20020a5e9314000000b00649d55ffa67so10514511iom.20
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 16:37:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=6wm6A4K1sXTgAaXWp98hFA37mMOc4f0Zo2VPNnmg3uI=;
-        b=TSGP0DLIWc9MOatgQ+70v95sU1krWHr27L/z3cVWiyWhDM6jejj1aTGnNcW21SCatU
-         8YeLhAJpXsitTHEHLCt+aCnXZK8N0Mzs0pg2I1Ic/cn0yqRuDXnSFu8lU99zGxrMtGd9
-         0LF/N4pNouzWpKxqKp+xoDothFAcs97GH6OW9kaYVTJXO0qZ4Ac3JXiiBBOKVvZ8Zh6v
-         fDW4bdG18ZwwRIyqO8GQTHYyJyAqBe2eHD/18T+zCG2dqVrb5qg80hgND+yXvtiuDoiq
-         6EUam4RhtMZH0RCIyRKiqVITNJv61UxHi3Zla6NSJ3VTST2HTJErG1r7guk1s+h/ArnE
-         VulQ==
-X-Gm-Message-State: AOAM532+WdcJ1mFYSJO2Mo+4Jdlr2J5lcfMROIPxz7afnBl6L/L1+p8q
-        ww47LbYzk1OssLjvZElgyh9XOGSn+/4CKQMjQf/RKTUMcmzn
-X-Google-Smtp-Source: ABdhPJwHgXWI9kMbXBwCc+BIF1olF6aLcRb1noI9LobRpsQpZ1GFT33gXam3z9lEH1gWcTJRpcYo9LUt0YCVGbJNCiIdUuiVY3kn
+        Mon, 11 Apr 2022 19:41:13 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C481EAEB;
+        Mon, 11 Apr 2022 16:38:57 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id 503051F4028B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649720335;
+        bh=FlE6aXeklkCK/AI2WoLzbfUrvXlLcjuPO9lE+MlTmGY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=j+6DZIwJdleyULy9bYi7IIrtEan9CdcwksRYcm5h8cT0CGnytw+oY1GsbHra8+mo7
+         WAj0RfHgJkhRuYgUcWavGMh9E1Hhu+tKsgei/htxQ+qjIqGrCN6t2+bWVHjWjj1Qpq
+         7b+zsXRmKixDrhr9fCidfruuyuPRyVyxJhbdKz2yHpOMugsFgMbuhM965aXmnaRDE+
+         LTiAdSCP8Lzw70g2GfuLwtuRh9M1mRUkgyo7Hnx1qgsL3EUKjP743t0hBs1pOf8lsU
+         zcikwcJL0GUjlp2ni/qBTGHc6jdc3APJ62532Pu4lcn3EW1rST4jSFE9stwZof/GVv
+         U1VMzfHvk+aag==
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee.jones@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
+Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: [PATCH v7 00/20] Introduce power-off+restart call chain API
+Date:   Tue, 12 Apr 2022 02:38:12 +0300
+Message-Id: <20220411233832.391817-1-dmitry.osipenko@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Received: by 2002:a02:2a0d:0:b0:321:35ab:9fe6 with SMTP id
- w13-20020a022a0d000000b0032135ab9fe6mr16583814jaw.173.1649720227560; Mon, 11
- Apr 2022 16:37:07 -0700 (PDT)
-Date:   Mon, 11 Apr 2022 16:37:07 -0700
-In-Reply-To: <20220411232710.6167-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000024829a05dc696c50@google.com>
-Subject: Re: [syzbot] possible deadlock in sco_conn_del
-From:   syzbot <syzbot+b825d87fe2d043e3e652@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-bluetooth@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,152 +96,218 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Problem
+-------
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-possible deadlock in sco_conn_del
+SoC devices require power-off call chaining functionality from kernel.
+We have a widely used restart chaining provided by restart notifier API,
+but nothing for power-off.
 
-======================================================
-WARNING: possible circular locking dependency detected
-5.18.0-rc1-next-20220411-syzkaller-dirty #0 Not tainted
-------------------------------------------------------
-syz-executor129/4082 is trying to acquire lock:
-ffff88807c11d130 (sk_lock-AF_BLUETOOTH-BTPROTO_SCO){+.+.}-{0:0}, at: lock_sock include/net/sock.h:1682 [inline]
-ffff88807c11d130 (sk_lock-AF_BLUETOOTH-BTPROTO_SCO){+.+.}-{0:0}, at: sco_conn_del+0x131/0x2c0 net/bluetooth/sco.c:197
+Solution
+--------
 
-but task is already holding lock:
-ffffffff8d777e08 (hci_cb_list_lock){+.+.}-{3:3}, at: hci_disconn_cfm include/net/bluetooth/hci_core.h:1580 [inline]
-ffffffff8d777e08 (hci_cb_list_lock){+.+.}-{3:3}, at: hci_conn_hash_flush+0xda/0x260 net/bluetooth/hci_conn.c:1458
+Introduce new API that provides both restart and power-off call chains.
 
-which lock already depends on the new lock.
+Why combine restart with power-off? Because drivers often do both.
+More practical to have API that provides both under the same roof.
 
+The new API is designed with simplicity and extensibility in mind.
+It's built upon the existing restart and reboot APIs. The simplicity
+is in new helper functions that are convenient for drivers. The
+extensibility is in the design that doesn't hardcode callback
+arguments, making easy to add new parameters and remove old.
 
-the existing dependency chain (in reverse order) is:
+This is a third attempt to introduce the new API. First was made by
+Guenter Roeck back in 2014, second was made by Thierry Reding in 2017.
+In fact the work didn't stop and recently arm_pm_restart() was removed
+from v5.14 kernel, which was a part of preparatory work started by
+Guenter Roeck. I took into account experience and ideas from the
+previous attempts, extended and polished them.
 
--> #2 (hci_cb_list_lock){+.+.}-{3:3}:
-       __mutex_lock_common kernel/locking/mutex.c:603 [inline]
-       __mutex_lock+0x12f/0x1350 kernel/locking/mutex.c:747
-       hci_connect_cfm+0x26/0x140 include/net/bluetooth/hci_core.h:1565
-       le_conn_complete_evt.part.0+0x145e/0x17e0 net/bluetooth/hci_event.c:5666
-       le_conn_complete_evt net/bluetooth/hci_event.c:5692 [inline]
-       hci_le_conn_complete_evt+0x2fd/0x390 net/bluetooth/hci_event.c:5692
-       hci_le_meta_evt+0x2bd/0x520 net/bluetooth/hci_event.c:6559
-       hci_event_func net/bluetooth/hci_event.c:6889 [inline]
-       hci_event_packet+0x5da/0xf60 net/bluetooth/hci_event.c:6941
-       hci_rx_work+0x522/0xd60 net/bluetooth/hci_core.c:3819
-       process_one_work+0x996/0x1610 kernel/workqueue.c:2289
-       worker_thread+0x665/0x1080 kernel/workqueue.c:2436
-       kthread+0x2e9/0x3a0 kernel/kthread.c:376
-       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
+Adoption plan
+-------------
 
--> #1 (&hdev->lock){+.+.}-{3:3}:
-       __mutex_lock_common kernel/locking/mutex.c:603 [inline]
-       __mutex_lock+0x12f/0x1350 kernel/locking/mutex.c:747
-       sco_sock_connect+0x1eb/0xa80 net/bluetooth/sco.c:593
-       __sys_connect_file+0x14f/0x190 net/socket.c:1900
-       __sys_connect+0x161/0x190 net/socket.c:1917
-       __do_sys_connect net/socket.c:1927 [inline]
-       __se_sys_connect net/socket.c:1924 [inline]
-       __x64_sys_connect+0x6f/0xb0 net/socket.c:1924
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x44/0xae
+This patchset introduces the new API. It also converts multiple drivers
+and arch code to the new API to demonstrate how it all looks in practice.
 
--> #0 (sk_lock-AF_BLUETOOTH-BTPROTO_SCO){+.+.}-{0:0}:
-       check_prev_add kernel/locking/lockdep.c:3095 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3214 [inline]
-       validate_chain kernel/locking/lockdep.c:3829 [inline]
-       __lock_acquire+0x2abe/0x5660 kernel/locking/lockdep.c:5053
-       lock_acquire kernel/locking/lockdep.c:5665 [inline]
-       lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5630
-       lock_sock_nested+0x36/0xf0 net/core/sock.c:3314
-       lock_sock include/net/sock.h:1682 [inline]
-       sco_conn_del+0x131/0x2c0 net/bluetooth/sco.c:197
-       sco_disconn_cfm+0x71/0xb0 net/bluetooth/sco.c:1379
-       hci_disconn_cfm include/net/bluetooth/hci_core.h:1583 [inline]
-       hci_conn_hash_flush+0x127/0x260 net/bluetooth/hci_conn.c:1458
-       hci_dev_close_sync+0x567/0x1140 net/bluetooth/hci_sync.c:4152
-       hci_dev_do_close+0x32/0x70 net/bluetooth/hci_core.c:553
-       hci_rfkill_set_block+0x19c/0x1d0 net/bluetooth/hci_core.c:935
-       rfkill_set_block+0x1f9/0x540 net/rfkill/core.c:345
-       rfkill_fop_write+0x2c3/0x570 net/rfkill/core.c:1286
-       vfs_write+0x269/0xac0 fs/read_write.c:589
-       ksys_write+0x1e8/0x250 fs/read_write.c:644
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x44/0xae
+The plan is:
 
-other info that might help us debug this:
+1. Merge the new API and convert arch code to use do_kernel_power_off().
+   For now the new API will co-exist with the older API.
 
-Chain exists of:
-  sk_lock-AF_BLUETOOTH-BTPROTO_SCO --> &hdev->lock --> hci_cb_list_lock
+2. Convert all drivers and platform code to the new API.
 
- Possible unsafe locking scenario:
+3. Remove obsoleted pm_power_off and pm_power_off_prepare variables.
 
-       CPU0                    CPU1
-       ----                    ----
-  lock(hci_cb_list_lock);
-                               lock(&hdev->lock);
-                               lock(hci_cb_list_lock);
-  lock(sk_lock-AF_BLUETOOTH-BTPROTO_SCO);
+4. Make restart-notifier API private to kernel/reboot.c once no users left.
 
- *** DEADLOCK ***
+5. Make unique-priority of the handlers' a mandatory requirement in the
+   new API.
 
-4 locks held by syz-executor129/4082:
- #0: ffffffff8d9583a8 (rfkill_global_mutex){+.+.}-{3:3}, at: rfkill_fop_write+0x15c/0x570 net/rfkill/core.c:1278
- #1: ffff88801f891048 (&hdev->req_lock){+.+.}-{3:3}, at: hci_dev_do_close+0x2a/0x70 net/bluetooth/hci_core.c:551
- #2: ffff88801f890078 (&hdev->lock){+.+.}-{3:3}, at: hci_dev_close_sync+0x26d/0x1140 net/bluetooth/hci_sync.c:4139
- #3: ffffffff8d777e08 (hci_cb_list_lock){+.+.}-{3:3}, at: hci_disconn_cfm include/net/bluetooth/hci_core.h:1580 [inline]
- #3: ffffffff8d777e08 (hci_cb_list_lock){+.+.}-{3:3}, at: hci_conn_hash_flush+0xda/0x260 net/bluetooth/hci_conn.c:1458
+The plan is fully implemented here:
 
-stack backtrace:
-CPU: 1 PID: 4082 Comm: syz-executor129 Not tainted 5.18.0-rc1-next-20220411-syzkaller-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2175
- check_prev_add kernel/locking/lockdep.c:3095 [inline]
- check_prevs_add kernel/locking/lockdep.c:3214 [inline]
- validate_chain kernel/locking/lockdep.c:3829 [inline]
- __lock_acquire+0x2abe/0x5660 kernel/locking/lockdep.c:5053
- lock_acquire kernel/locking/lockdep.c:5665 [inline]
- lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5630
- lock_sock_nested+0x36/0xf0 net/core/sock.c:3314
- lock_sock include/net/sock.h:1682 [inline]
- sco_conn_del+0x131/0x2c0 net/bluetooth/sco.c:197
- sco_disconn_cfm+0x71/0xb0 net/bluetooth/sco.c:1379
- hci_disconn_cfm include/net/bluetooth/hci_core.h:1583 [inline]
- hci_conn_hash_flush+0x127/0x260 net/bluetooth/hci_conn.c:1458
- hci_dev_close_sync+0x567/0x1140 net/bluetooth/hci_sync.c:4152
- hci_dev_do_close+0x32/0x70 net/bluetooth/hci_core.c:553
- hci_rfkill_set_block+0x19c/0x1d0 net/bluetooth/hci_core.c:935
- rfkill_set_block+0x1f9/0x540 net/rfkill/core.c:345
- rfkill_fop_write+0x2c3/0x570 net/rfkill/core.c:1286
- vfs_write+0x269/0xac0 fs/read_write.c:589
- ksys_write+0x1e8/0x250 fs/read_write.c:644
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fab5d4df609
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 d1 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fab5cc8e2f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 00007fab5d5684c0 RCX: 00007fab5d4df609
-RDX: 0000000000000008 RSI: 0000000020000080 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007ffeea3e1ffe
-R13: 00007ffeea3e1fff R14: 00007fab5d5684c8 R15: 0000000000022000
- </TASK>
+[1] https://gitlab.collabora.com/dmitry.osipenko/linux-kernel-rd/-/commits/sys-off-handler
 
+For now I'm sending the first 20 base patches out of ~180.
+Majority of drivers and platform patches depend on the base patches,
+hence the rest will come later on, once base will land.
 
-Tested on:
+All [1] patches are compile-tested. Tegra, Rockchip and x86 ACPI patches
+are tested on hardware.
 
-commit:         d12d7e1c Add linux-next specific files for 20220411
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/
-console output: https://syzkaller.appspot.com/x/log.txt?x=14908904f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=58fcaf7d8df169a6
-dashboard link: https://syzkaller.appspot.com/bug?extid=b825d87fe2d043e3e652
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=16223d2f700000
+Results
+-------
+
+1. Devices can be powered off properly.
+
+2. Global variables are removed from drivers.
+
+3. Global pm_power_off and pm_power_off_prepare callback variables are
+removed once all users are converted to the new API. The latter callback
+is removed by patch #25 of this series.
+
+4. Ambiguous call chain ordering is prohibited. See patch #4 which adds
+verification of restart handlers priorities, ensuring that they are unique.
+
+Changelog:
+
+v7: - Rebased on a recent linux-next. Dropped the recently removed
+      NDS32 architecture. Only SH and x86 arches left un-acked.
+
+    - Added acks from Thomas Bogendoerfer and Krzysztof Kozlowski
+      to the MIPS and memory/emif patches respectively.
+
+    - Made couple minor cosmetic improvements to the new API.
+
+    - A month ago I joined Collabora and continuing to work on this series
+      on the company's time, so changed my email address to collabora.com
+
+v6: - Rebased on a recent linux-next.
+
+    - Made minor couple cosmetic changes.
+
+v5: - Dropped patches which cleaned up notifier/reboot headers, as was
+      requested by Rafael Wysocki.
+
+    - Dropped WARN_ON() from the code, as was requested by Rafael Wysocki.
+      Replaced it with pr_err() appropriately.
+
+    - Dropped *_notifier_has_unique_priority() functions and added
+      *_notifier_chain_register_unique_prio() instead, as was suggested
+      by Michał Mirosław and Rafael Wysocki.
+
+    - Dropped export of blocking_notifier_call_chain_is_empty() symbol,
+      as was suggested by Rafael Wysocki.
+
+    - Michał Mirosław suggested that will be better to split up patch
+      that adds the new API to ease reviewing, but Rafael Wysocki asked
+      not add more patches, so I kept it as a single patch.
+
+    - Added temporary "weak" stub for pm_power_off() which fixes linkage
+      failure once symbol is removed from arch/* code. Previously I missed
+      this problem because was only compile-testing object files.
+
+v4: - Made a very minor improvement to doc comments, clarifying couple
+      default values.
+
+    - Corrected list of emails recipient by adding Linus, Sebastian,
+      Philipp and more NDS people. Removed bouncing emails.
+
+    - Added acks that were given to v3.
+
+v3: - Renamed power_handler to sys_off_handler as was suggested by
+      Rafael Wysocki.
+
+    - Improved doc-comments as was suggested by Rafael Wysocki. Added more
+      doc-comments.
+
+    - Implemented full set of 180 patches which convert whole kernel in
+      accordance to the plan, see link [1] above. Slightly adjusted API to
+      better suit for the remaining converted drivers.
+
+      * Added unregister_sys_off_handler() that is handy for a couple old
+        platform drivers.
+
+      * Dropped devm_register_trivial_restart_handler(), 'simple' variant
+        is enough to have.
+
+    - Improved "Add atomic/blocking_notifier_has_unique_priority()" patch,
+      as was suggested by Andy Shevchenko. Also replaced down_write() with
+      down_read() and factored out common notifier_has_unique_priority().
+
+    - Added stop_chain field to struct restart_data and reboot_prep_data
+      after discovering couple drivers wanting that feature.
+
+    - Added acks that were given to v2.
+
+v2: - Replaced standalone power-off call chain demo-API with the combined
+      power-off+restart API because this is what drivers want. It's a more
+      comprehensive solution.
+
+    - Converted multiple drivers and arch code to the new API. Suggested by
+      Andy Shevchenko. I skimmed through the rest of drivers, verifying that
+      new API suits them. The rest of the drivers will be converted once we
+      will settle on the new API, otherwise will be too many patches here.
+
+    - v2 API doesn't expose notifier to users and require handlers to
+      have unique priority. Suggested by Guenter Roeck.
+
+    - v2 API has power-off chaining disabled by default and require
+      drivers to explicitly opt-in to the chaining. This preserves old
+      behaviour for existing drivers once they are converted to the new
+      API.
+
+Dmitry Osipenko (20):
+  notifier: Add blocking_notifier_call_chain_is_empty()
+  notifier: Add atomic/blocking_notifier_chain_register_unique_prio()
+  reboot: Print error message if restart handler has duplicated priority
+  kernel: Add combined power-off+restart handler call chain API
+  ARM: Use do_kernel_power_off()
+  csky: Use do_kernel_power_off()
+  riscv: Use do_kernel_power_off()
+  arm64: Use do_kernel_power_off()
+  parisc: Use do_kernel_power_off()
+  xen/x86: Use do_kernel_power_off()
+  powerpc: Use do_kernel_power_off()
+  m68k: Switch to new sys-off handler API
+  sh: Use do_kernel_power_off()
+  x86: Use do_kernel_power_off()
+  ia64: Use do_kernel_power_off()
+  mips: Use do_kernel_power_off()
+  memory: emif: Use kernel_can_power_off()
+  ACPI: power: Switch to sys-off handler API
+  regulator: pfuze100: Use devm_register_sys_off_handler()
+  reboot: Remove pm_power_off_prepare()
+
+ arch/arm/kernel/reboot.c               |   4 +-
+ arch/arm64/kernel/process.c            |   3 +-
+ arch/csky/kernel/power.c               |   6 +-
+ arch/ia64/kernel/process.c             |   4 +-
+ arch/m68k/emu/natfeat.c                |   3 +-
+ arch/m68k/include/asm/machdep.h        |   1 -
+ arch/m68k/kernel/process.c             |   5 +-
+ arch/m68k/kernel/setup_mm.c            |   1 -
+ arch/m68k/kernel/setup_no.c            |   1 -
+ arch/m68k/mac/config.c                 |   4 +-
+ arch/mips/kernel/reset.c               |   3 +-
+ arch/parisc/kernel/process.c           |   4 +-
+ arch/powerpc/kernel/setup-common.c     |   4 +-
+ arch/powerpc/xmon/xmon.c               |   3 +-
+ arch/riscv/kernel/reset.c              |  12 +-
+ arch/sh/kernel/reboot.c                |   3 +-
+ arch/x86/kernel/reboot.c               |   4 +-
+ arch/x86/xen/enlighten_pv.c            |   4 +-
+ drivers/acpi/sleep.c                   |  25 +-
+ drivers/memory/emif.c                  |   2 +-
+ drivers/regulator/pfuze100-regulator.c |  38 +-
+ include/linux/notifier.h               |   7 +
+ include/linux/pm.h                     |   1 -
+ include/linux/reboot.h                 | 229 ++++++++-
+ kernel/notifier.c                      | 101 +++-
+ kernel/power/hibernate.c               |   2 +-
+ kernel/reboot.c                        | 622 ++++++++++++++++++++++++-
+ 27 files changed, 980 insertions(+), 116 deletions(-)
+
+-- 
+2.35.1
 

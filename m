@@ -2,64 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E7214FC011
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:14:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17FE94FC017
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:16:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347702AbiDKPQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 11:16:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47584 "EHLO
+        id S1346777AbiDKPQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 11:16:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347632AbiDKPQJ (ORCPT
+        with ESMTP id S1347695AbiDKPQc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 11:16:09 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FEF63153C;
-        Mon, 11 Apr 2022 08:13:54 -0700 (PDT)
-Date:   Mon, 11 Apr 2022 15:13:52 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649690033;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Mon, 11 Apr 2022 11:16:32 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69DFF286F1
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:14:17 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 2911B1F868;
+        Mon, 11 Apr 2022 15:14:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1649690056; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Pz/YgZN/i/6l5rzG54XHKTm1a05a/HnhHITJiOjyQXs=;
-        b=zuVNx6Bh8mjqIA5jxXXKyj/WUOYuMeU2nOiEqNzeZHhj3kAbSkkEwAAGjqKggH1UR7jSr+
-        f23NAyjFy/HRbp1sPyGvbuV9R9D3WMJA1LIg7aZumOFrQWqjiQuqX6H1arTvMqQa6rJ7X2
-        D+L1icm/AfYhk1MIZ9uZcPgYjFxzi0AM7B50uYC5ThXEisgV3ekK3os6fGWv8AwxQBHoNO
-        RFqKRRdxOerTli3vKMm0/HHgVwGoM4M0uz8RNGafZiD2kj6ULn7lBJFlKGg6SLeEFBeYAN
-        fmM7bqv0/u2AM6bk47djzEM/rmwcMMSMskrmH8SoTKEmbCiRP61DcIcxKAsHjQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649690033;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        bh=bYyWuGBryhvqK2tsPLce9K8YGWCuvS5YA97DnFXA4Z8=;
+        b=EauwTN4nsydagFeq6dRvkTovp3T+iJeKjfWWLPB6kqn3RvRNzAhMINqdCoikctMJ2EzpwO
+        2FG4AvhFn/Y0LkFe+5Imi5KITnk6UiLnRd+Uq4WoQzxWYaVfc+mL9kBJrYAJx4m8Vs+jYu
+        G4BU/YQRPxzbk7oHSoCSmxYX9A6HqvI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1649690056;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=Pz/YgZN/i/6l5rzG54XHKTm1a05a/HnhHITJiOjyQXs=;
-        b=/y9VSJ6ViuXbqXSjn/fAX2/3dv0SQXDtxHsira7P0iEXWpyIw+TLCrierDdBgZoKmUmBRZ
-        8bzeZWp2OnD7zwAg==
-From:   "tip-bot2 for Pawan Gupta" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/tsx: Use MSR_TSX_CTRL to clear CPUID bits
-Cc:     kernel test robot <lkp@intel.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Borislav Petkov <bp@suse.de>,
-        Neelima Krishnan <neelima.krishnan@intel.com>,
-        <stable@vger.kernel.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: =?utf-8?q?=3C5b323e77e251a9c8bcdda498c5cc0095be1e1d3c=2E16469?=
- =?utf-8?q?43780=2Egit=2Epawan=2Ekumar=2Egupta=40linux=2Eintel=2Ecom=3E?=
-References: =?utf-8?q?=3C5b323e77e251a9c8bcdda498c5cc0095be1e1d3c=2E164694?=
- =?utf-8?q?3780=2Egit=2Epawan=2Ekumar=2Egupta=40linux=2Eintel=2Ecom=3E?=
-MIME-Version: 1.0
-Message-ID: <164969003214.4207.13820079927003826597.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        bh=bYyWuGBryhvqK2tsPLce9K8YGWCuvS5YA97DnFXA4Z8=;
+        b=xhTEJM/zWjjSSmzCpVfvZD/zwYMgUfpSvsPpbyUpg1vE8Hf5vY2rb8BKhGJWANFeG/CWid
+        po07yp1ifha5nEBw==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 0E4EFA3B9C;
+        Mon, 11 Apr 2022 15:14:16 +0000 (UTC)
+Date:   Mon, 11 Apr 2022 17:14:16 +0200
+Message-ID: <s5hsfqjbqk7.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Zheyu Ma <zheyuma97@gmail.com>
+Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [BUG] ALSA: echoaudio: warning when the driver fails to probe
+In-Reply-To: <CAMhUBj=yiAtbYmGDuaBrSxNMrxz6S8DJotwTLihcs64JSOQuVg@mail.gmail.com>
+References: <CAMhUBjm2AdyEZ_-EgexdNDN7SvY4f89=4=FwAL+c0Mg0O+X50A@mail.gmail.com>
+        <s5hk0bwcbjh.wl-tiwai@suse.de>
+        <CAMhUBjmr_mHcz2G0tQ2qktGFw6XDLJiDTAHvM1yoRWzvtA6MYg@mail.gmail.com>
+        <s5ha6csc7lq.wl-tiwai@suse.de>
+        <s5h7d7wc75u.wl-tiwai@suse.de>
+        <s5h35ijdiab.wl-tiwai@suse.de>
+        <CAMhUBj=yiAtbYmGDuaBrSxNMrxz6S8DJotwTLihcs64JSOQuVg@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -70,131 +67,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+On Mon, 11 Apr 2022 12:34:56 +0200,
+Zheyu Ma wrote:
+> 
+> On Mon, Apr 11, 2022 at 6:30 PM Takashi Iwai <tiwai@suse.de> wrote:
+> >
+> > On Mon, 11 Apr 2022 11:15:41 +0200,
+> > Takashi Iwai wrote:
+> > >
+> > > On Mon, 11 Apr 2022 11:06:09 +0200,
+> > > Takashi Iwai wrote:
+> > > >
+> > > > On Mon, 11 Apr 2022 10:49:53 +0200,
+> > > > Zheyu Ma wrote:
+> > > > >
+> > > > > On Mon, Apr 11, 2022 at 3:41 PM Takashi Iwai <tiwai@suse.de> wrote:
+> > > > > >
+> > > > > > On Sun, 10 Apr 2022 11:13:55 +0200,
+> > > > > > Zheyu Ma wrote:
+> > > > > > >
+> > > > > > > Hello,
+> > > > > > >
+> > > > > > > I found a bug in echoaudio.c.
+> > > > > > > When the driver fails at the function snd_echo_create(), it should
+> > > > > > > release resources requested before, otherwise we will get the
+> > > > > > > following warning:
+> > > > > > >
+> > > > > > > [    3.262866] remove_proc_entry: removing non-empty directory
+> > > > > > > 'irq/21', leaking at least 'snd_indigodj'
+> > > > > > > [    3.263577] WARNING: CPU: 3 PID: 261 at fs/proc/generic.c:717
+> > > > > > > remove_proc_entry+0x389/0x3f0
+> > > > > > > [    3.267098] RIP: 0010:remove_proc_entry+0x389/0x3f0
+> > > > > > > [    3.269976] Call Trace:
+> > > > > > > [    3.269979]  <TASK>
+> > > > > > > [    3.269988]  unregister_irq_proc+0x14c/0x170
+> > > > > > > [    3.269997]  irq_free_descs+0x94/0xe0
+> > > > > > > [    3.270004]  mp_unmap_irq+0xb6/0x100
+> > > > > > > [    3.270011]  acpi_unregister_gsi_ioapic+0x27/0x40
+> > > > > > > [    3.270017]  acpi_pci_irq_disable+0x1d3/0x320
+> > > > > > > [    3.270025]  pci_disable_device+0x1ad/0x380
+> > > > > > > [    3.270034]  pcim_release+0x566/0x6d0
+> > > > > > > [    3.270046]  devres_release_all+0x1f1/0x2c0
+> > > > > > > [    3.270057]  really_probe+0xe0/0x920
+> > > > > >
+> > > > > > Could you try the patch below?
+> > > > >
+> > > > > The following patch works for me, the previous warning disappears, thank you.
+> > > > > But I got another error, I have no idea about it.
+> > > >
+> > > > OK, that's bad, it's basically the destructor order problem.
+> > > > Could you try the patch below instead of the previous one?
+> > >
+> > > Sorry, the below one instead.
+> >
+> > Err, scratch this one, too.  It's a deeper problem than I thought.
+> > Will post a revised patch later.
+> 
+> Yeah, you are right, these two patches do not work, I got the same
+> error message.
+> Thanks for your effort.
 
-Commit-ID:     258f3b8c3210b03386e4ad92b4bd8652b5c1beb3
-Gitweb:        https://git.kernel.org/tip/258f3b8c3210b03386e4ad92b4bd8652b5c1beb3
-Author:        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-AuthorDate:    Thu, 10 Mar 2022 14:00:59 -08:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Mon, 11 Apr 2022 09:54:34 +02:00
+Here we go, a revised patch.  Basically it enforces the call of
+snd_card_free() at the error path during probe.
 
-x86/tsx: Use MSR_TSX_CTRL to clear CPUID bits
+There are a bunch of similar patterns, and we need to address them
+all...
 
-tsx_clear_cpuid() uses MSR_TSX_FORCE_ABORT to clear CPUID.RTM and
-CPUID.HLE. Not all CPUs support MSR_TSX_FORCE_ABORT, alternatively use
-MSR_IA32_TSX_CTRL when supported.
 
-  [ bp: Document how and why TSX gets disabled. ]
+thanks,
 
-Fixes: 293649307ef9 ("x86/tsx: Clear CPUID bits when TSX always force aborts")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Tested-by: Neelima Krishnan <neelima.krishnan@intel.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/5b323e77e251a9c8bcdda498c5cc0095be1e1d3c.1646943780.git.pawan.kumar.gupta@linux.intel.com
+Takashi
+
 ---
- arch/x86/kernel/cpu/intel.c |  1 +-
- arch/x86/kernel/cpu/tsx.c   | 54 +++++++++++++++++++++++++++++++-----
- 2 files changed, 48 insertions(+), 7 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
-index 8321c43..8abf995 100644
---- a/arch/x86/kernel/cpu/intel.c
-+++ b/arch/x86/kernel/cpu/intel.c
-@@ -722,6 +722,7 @@ static void init_intel(struct cpuinfo_x86 *c)
- 	else if (tsx_ctrl_state == TSX_CTRL_DISABLE)
- 		tsx_disable();
- 	else if (tsx_ctrl_state == TSX_CTRL_RTM_ALWAYS_ABORT)
-+		/* See comment over that function for more details. */
- 		tsx_clear_cpuid();
+--- a/include/sound/core.h
++++ b/include/sound/core.h
+@@ -279,6 +279,7 @@ int snd_card_new(struct device *parent, int idx, const char *xid,
+ int snd_devm_card_new(struct device *parent, int idx, const char *xid,
+ 		      struct module *module, size_t extra_size,
+ 		      struct snd_card **card_ret);
++int snd_devm_probe_or_release(struct device *dev, int ret);
  
- 	split_lock_init();
-diff --git a/arch/x86/kernel/cpu/tsx.c b/arch/x86/kernel/cpu/tsx.c
-index 9c7a5f0..ec6ff80 100644
---- a/arch/x86/kernel/cpu/tsx.c
-+++ b/arch/x86/kernel/cpu/tsx.c
-@@ -58,7 +58,7 @@ void tsx_enable(void)
- 	wrmsrl(MSR_IA32_TSX_CTRL, tsx);
+ int snd_card_disconnect(struct snd_card *card);
+ void snd_card_disconnect_sync(struct snd_card *card);
+--- a/sound/core/init.c
++++ b/sound/core/init.c
+@@ -235,6 +235,19 @@ int snd_devm_card_new(struct device *parent, int idx, const char *xid,
+ }
+ EXPORT_SYMBOL_GPL(snd_devm_card_new);
+ 
++int snd_devm_probe_or_release(struct device *dev, int ret)
++{
++	struct snd_card *card;
++
++	if (!ret)
++		return 0;
++	card = devres_find(dev, __snd_card_release, NULL, NULL);
++	if (card)
++		snd_card_free(card);
++	return ret;
++}
++EXPORT_SYMBOL_GPL(snd_devm_probe_or_release);
++
+ static int snd_card_init(struct snd_card *card, struct device *parent,
+ 			 int idx, const char *xid, struct module *module,
+ 			 size_t extra_size)
+--- a/sound/pci/echoaudio/echoaudio.c
++++ b/sound/pci/echoaudio/echoaudio.c
+@@ -1970,8 +1970,8 @@ static int snd_echo_create(struct snd_card *card,
  }
  
--static bool __init tsx_ctrl_is_supported(void)
-+static bool tsx_ctrl_is_supported(void)
+ /* constructor */
+-static int snd_echo_probe(struct pci_dev *pci,
+-			  const struct pci_device_id *pci_id)
++static int __snd_echo_probe(struct pci_dev *pci,
++			    const struct pci_device_id *pci_id)
  {
- 	u64 ia32_cap = x86_read_arch_cap_msr();
- 
-@@ -84,6 +84,44 @@ static enum tsx_ctrl_states x86_get_tsx_auto_mode(void)
- 	return TSX_CTRL_ENABLE;
+ 	static int dev;
+ 	struct snd_card *card;
+@@ -2139,6 +2139,12 @@ static int snd_echo_probe(struct pci_dev *pci,
+ 	return 0;
  }
  
-+/*
-+ * Disabling TSX is not a trivial business.
-+ *
-+ * First of all, there's a CPUID bit: X86_FEATURE_RTM_ALWAYS_ABORT
-+ * which says that TSX is practically disabled (all transactions are
-+ * aborted by default). When that bit is set, the kernel unconditionally
-+ * disables TSX.
-+ *
-+ * In order to do that, however, it needs to dance a bit:
-+ *
-+ * 1. The first method to disable it is through MSR_TSX_FORCE_ABORT and
-+ * the MSR is present only when *two* CPUID bits are set:
-+ *
-+ * - X86_FEATURE_RTM_ALWAYS_ABORT
-+ * - X86_FEATURE_TSX_FORCE_ABORT
-+ *
-+ * 2. The second method is for CPUs which do not have the above-mentioned
-+ * MSR: those use a different MSR - MSR_IA32_TSX_CTRL and disable TSX
-+ * through that one. Those CPUs can also have the initially mentioned
-+ * CPUID bit X86_FEATURE_RTM_ALWAYS_ABORT set and for those the same strategy
-+ * applies: TSX gets disabled unconditionally.
-+ *
-+ * When either of the two methods are present, the kernel disables TSX and
-+ * clears the respective RTM and HLE feature flags.
-+ *
-+ * An additional twist in the whole thing presents late microcode loading
-+ * which, when done, may cause for the X86_FEATURE_RTM_ALWAYS_ABORT CPUID
-+ * bit to be set after the update.
-+ *
-+ * A subsequent hotplug operation on any logical CPU except the BSP will
-+ * cause for the supported CPUID feature bits to get re-detected and, if
-+ * RTM and HLE get cleared all of a sudden, but, userspace did consult
-+ * them before the update, then funny explosions will happen. Long story
-+ * short: the kernel doesn't modify CPUID feature bits after booting.
-+ *
-+ * That's why, this function's call in init_intel() doesn't clear the
-+ * feature flags.
-+ */
- void tsx_clear_cpuid(void)
- {
- 	u64 msr;
-@@ -97,6 +135,10 @@ void tsx_clear_cpuid(void)
- 		rdmsrl(MSR_TSX_FORCE_ABORT, msr);
- 		msr |= MSR_TFA_TSX_CPUID_CLEAR;
- 		wrmsrl(MSR_TSX_FORCE_ABORT, msr);
-+	} else if (tsx_ctrl_is_supported()) {
-+		rdmsrl(MSR_IA32_TSX_CTRL, msr);
-+		msr |= TSX_CTRL_CPUID_CLEAR;
-+		wrmsrl(MSR_IA32_TSX_CTRL, msr);
- 	}
- }
++static int snd_echo_probe(struct pci_dev *pci,
++			  const struct pci_device_id *pci_id)
++{
++	return snd_devm_probe_or_release(&pci->dev,
++					 __snd_echo_probe(pci, pci_id));
++}
  
-@@ -106,13 +148,11 @@ void __init tsx_init(void)
- 	int ret;
  
- 	/*
--	 * Hardware will always abort a TSX transaction if both CPUID bits
--	 * RTM_ALWAYS_ABORT and TSX_FORCE_ABORT are set. In this case, it is
--	 * better not to enumerate CPUID.RTM and CPUID.HLE bits. Clear them
--	 * here.
-+	 * Hardware will always abort a TSX transaction when the CPUID bit
-+	 * RTM_ALWAYS_ABORT is set. In this case, it is better not to enumerate
-+	 * CPUID.RTM and CPUID.HLE bits. Clear them here.
- 	 */
--	if (boot_cpu_has(X86_FEATURE_RTM_ALWAYS_ABORT) &&
--	    boot_cpu_has(X86_FEATURE_TSX_FORCE_ABORT)) {
-+	if (boot_cpu_has(X86_FEATURE_RTM_ALWAYS_ABORT)) {
- 		tsx_ctrl_state = TSX_CTRL_RTM_ALWAYS_ABORT;
- 		tsx_clear_cpuid();
- 		setup_clear_cpu_cap(X86_FEATURE_RTM);
+ #if defined(CONFIG_PM_SLEEP)

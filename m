@@ -2,76 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F7804FB4DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 09:31:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA7844FB4D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 09:31:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245440AbiDKHdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 03:33:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44650 "EHLO
+        id S245449AbiDKHdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 03:33:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245507AbiDKHcx (ORCPT
+        with ESMTP id S245551AbiDKHdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 03:32:53 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B19BF45
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 00:30:39 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id l9-20020a05600c4f0900b0038ccd1b8642so8450760wmq.0
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 00:30:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=uISV79NvLNC/cTXlwSWYKI9FmQgaA5KuUdHffG+BjtM=;
-        b=xtJTG2AyZ6TVnMvpiP9AMoK5zkE2H+zCJg/Qzf9fsJJ5h/R7PHZJ/Vh+O78/tzzdav
-         TsCBWxEN2UPcJNv8FVsNrnIzbzW/I0SoDjM3UCIDH+I5xr8VFlHXhKrJ+mznSvMWKP8v
-         jVALcDYUM8PZRLkZlr3FiizhOmdQv69f8PbY/FhL1dzfnHjptOlVuwvABUbYk4KbrFFD
-         jDLP3/zMWYap/myIa+OYEq2OeT44nB18NGMtSGz028/ppvYUV3xjKWoMnCdtemqITLa1
-         aZG8MnDrSLBMSF7OEhbXsSqKsdSxdHA0FYztkyicfofIZbUe7XNoaZaSWCc3lA2vAwhS
-         UGXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=uISV79NvLNC/cTXlwSWYKI9FmQgaA5KuUdHffG+BjtM=;
-        b=7w4IB0ej9JcijJ8hkQydApsptLsucxcncK3tyrqTBHkK2uBjU47R5A5ZfntKWRF3a+
-         yCFpYa8Dun2bUI8yor/7Rr0PTjNGvil9Prphh7qTd2DuzKB5WBqo/pRSN81vINjJIKQj
-         NaWywm167OLf/8QMAZQqKTCpif13VEOnvww9qvgmz00/8nmvA1GWRl+VU1akrsbyTRT5
-         uYSpF8fuHuMRqGrKE774RMtBjzxFxB/A9QNWfF8IOjc1pg7qBn+mue87HHA/hzYPya9t
-         bwXgDQdGDFjLWhD5kUdolgZlK3RGLRrUFTi/k3O4U3Ju4vRHnNtw0CwBwdzN3hg/TV5N
-         cJbg==
-X-Gm-Message-State: AOAM533KEivaO5sHV7twH623iJOaKr5eXf5MGV1tu4wycWvluXU5nF9Y
-        4m7fwEdVNNH4DeKwO6zEhkGo+w==
-X-Google-Smtp-Source: ABdhPJwOXW+WzVKvrz3aqfcwW9FTHjL6+X6jqzSqvA+Ks+EoDztLWLgGezxyGTYlTNb1sSKh7vawwA==
-X-Received: by 2002:a7b:c155:0:b0:38e:b840:c99e with SMTP id z21-20020a7bc155000000b0038eb840c99emr5336807wmi.201.1649662238098;
-        Mon, 11 Apr 2022 00:30:38 -0700 (PDT)
-Received: from ?IPV6:2001:861:44c0:66c0:d1:e096:d183:1bc5? ([2001:861:44c0:66c0:d1:e096:d183:1bc5])
-        by smtp.gmail.com with ESMTPSA id n8-20020a5d5888000000b002079f95ca87sm5593940wrf.68.2022.04.11.00.30.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Apr 2022 00:30:37 -0700 (PDT)
-Message-ID: <7458df77-2721-71a5-893f-8247f05be765@baylibre.com>
-Date:   Mon, 11 Apr 2022 09:30:39 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 0/2] Ensure High and Low periods of SCL are correct
-Content-Language: en-US
-To:     Lucas Tanure <tanure@linux.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220409164334.157664-1-tanure@linux.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-In-Reply-To: <20220409164334.157664-1-tanure@linux.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        Mon, 11 Apr 2022 03:33:08 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C20526E0
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 00:30:55 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id E9E1F1F38D;
+        Mon, 11 Apr 2022 07:30:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1649662253; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FkiUFak26W238IEF2QDnp+GxZTbgXdfnry5p+Bz72Q8=;
+        b=VaX/t9CkRQ8mJFi/T2qHw3HWMhL6QJZOQ3RJQivpldSfSPOBQ8LWYtSX1Qc+3qyB2ZX6lc
+        z1bS9ApZLX0XbF08sDIQ5fA5rN5UBiBX65Sk+9aJE6fZwFslcA9lxWTDG7hFNfI+oWMywz
+        xC/GEsbK6j/IvtPrrPXdUXxGhVXJvos=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1649662253;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FkiUFak26W238IEF2QDnp+GxZTbgXdfnry5p+Bz72Q8=;
+        b=HMPQ5Y8kPZMA+kiMsbHF/yVX7IGaILTy24ySHKbpCsb9GRvgFOq6XYW6ZFNcMXFgtW2Hk2
+        a464EOcjb9DoN6CA==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id CD0EDA3B8A;
+        Mon, 11 Apr 2022 07:30:53 +0000 (UTC)
+Date:   Mon, 11 Apr 2022 09:30:53 +0200
+Message-ID: <s5hr164cc0i.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+205eb15961852c2c5974@syzkaller.appspotmail.com
+Subject: Re: [PATCH] ALSA: pcm: Test for "silence" field in struct "pcm_format_data"
+In-Reply-To: <20220409012655.9399-1-fmdefrancesco@gmail.com>
+References: <20220409012655.9399-1-fmdefrancesco@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,64 +63,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sat, 09 Apr 2022 03:26:55 +0200,
+Fabio M. De Francesco wrote:
+> 
+> Syzbot reports "KASAN: null-ptr-deref Write in
+> snd_pcm_format_set_silence".[1]
+> 
+> It is due to missing validation of the "silence" field of struct
+> "pcm_format_data" in "pcm_formats" array.
+> 
+> Add a test for valid "pat" and, if it is not so, return -EINVAL.
+> 
+> [1] https://lore.kernel.org/lkml/000000000000d188ef05dc2c7279@google.com/
+> 
+> Reported-and-tested-by: syzbot+205eb15961852c2c5974@syzkaller.appspotmail.com
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
 
-On 09/04/2022 18:43, Lucas Tanure wrote:
-> The default duty cycle of 33% is less than the required
-> by the I2C specs for the LOW period of the SCL clock at
-> 100KHz bus speed.
-> 
-> So, for 100Khz or less, use 50%H/50%L duty cycle, and
-> for the clock above 100Khz, use 40%H/60%L duty cycle.
-> That ensures the low period of SCL is always more than
-> the minimum required by the specs at any given frequency.
-> 
-> I did a few measures on the Khadas Vim3 board:
-> 
-> i2c_AO (i2c@5000):
-> 
-> Before the patchset, I got:
-> - 100KHz: 3.338us HIGH, 6.746us LOW, 33%/67%, Freq 99KHz (Not Valid tHIGH < 4.0us)
-> - 400KHz: 860ns HIGH, 1.734us LOW, 33.15%/62.85%, Freq 385.505KHz (Valid)
-> - 1000KHz: 362ns HIGH, 732ns LOW, 33.09%/66.91%, Freq 914.077KHz (Valid)
-> 
-> With the patchset
-> - 100KHz: 4.952us HIGH, 5.134us LOW, 49%/51%, Freq 99KHz (Valid)
-> - 400KHz: 966ns HIGH, 1.628us LOW, 37.24%/62.76%, Freq 385.505KHz (Valid)
-> - 1000KHz: 372ns HIGH, 720ns LOW, 34.07%/65.93%, Freq 915.741KHz (Valid)
-> 
-> i2c3 (i2c@1c000):
-> 
-> Before the patchset, I got:
-> - 100KHz: 3.348us HIGH, 6.704us LOW, 33%/67%, Freq 99.5KHz (Not Valid tHIGH < 4.0us)
-> - 400KHz: 864ns HIGH, 1.69us LOW, 33.83%/62.17%, Freq 391.543KHz (Valid)
-> - 1000KHz: 360ns HIGH, 690ns LOW, 34.29%/65.71%, Freq 952.381KHz (Valid)
-> 
-> With the patchset
-> - 100KHz: 4.958us HIGH, 5.092us LOW, 49%/51%, Freq 99KHz (Valid)
-> - 400KHz: 970ns HIGH, 1.582us LOW, 38%/62%, Freq 391.85KHz (Valid)
-> - 1000KHz: 370ns HIGH, 680ns LOW, 35.24%/64.76%, Freq 952.57KHz (Valid)
-> 
-> v2 changelog:
->   - Keep the previous calculation for Meson6
->   - Use I2C_MAX_STANDARD_MODE_FREQ
->   - move the comment before the if()
->   - use FIELD_PREP for setting div_l
->   - Drop removal of meson_i2c_data
-> 
-> Previous versions:
->   V1: https://lkml.org/lkml/2022/3/26/109
-> 
-> Lucas Tanure (2):
->    i2c: meson: Use _SHIFT and _MASK for register definitions
->    i2c: meson: Use 50% duty cycle for I2C clock
-> 
->   drivers/i2c/busses/i2c-meson.c | 111 ++++++++++++++++++++++++---------
->   1 file changed, 82 insertions(+), 29 deletions(-)
-> 
+Thanks, applied now.
 
-Thanks a lot for the timings !
 
-I think it's ok to be applied,
+> ---
+> 
+> I wasn't able to figure out the commit for the "Fixes:" tag. If this patch
+> is good, can someone please help with providing this missing information?
 
-Neil
+That must be present from the very beginning.
+I just add Cc-to-stable for allowing backport to all releases.
+
+
+thanks,
+
+Takashi

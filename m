@@ -2,73 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 634324FC8EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 01:43:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1845D4FC8F5
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 01:46:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240473AbiDKXpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 19:45:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59850 "EHLO
+        id S232038AbiDKXtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 19:49:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237309AbiDKXn7 (ORCPT
+        with ESMTP id S239284AbiDKXsy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 19:43:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85EF72980C;
-        Mon, 11 Apr 2022 16:41:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A62A617A2;
-        Mon, 11 Apr 2022 23:41:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C82F8C385A4;
-        Mon, 11 Apr 2022 23:41:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649720502;
-        bh=PEQHj0ABD2UFUuM8DOQbLq2gwBnHLMWNFB0sN3kgmg0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=j2cdcHPkmrB1uUABiGGzKj5AUVYKZ+MrGqU8b1+YzrdEPnwYoDQt+AuCw+oEEad8a
-         a3F2rW67FfMynrBxJlqUd+w/uX5JjMdi3/SdEir2LbRohjTBYPFM6qXE1PCVF/STQm
-         3SV5ZzT4T+75W3pfMhLbnVz9omHsV7oRdZvMaDwLelS3gW0u+IehHYHfXQlGCkIOex
-         U/P+ZKx1StNt+iBEa+Nudcuj7jU4UCIHLfGWH+/yPCqgNacnVe1knYI/MWeykD8sPH
-         qA6tzOTyE5ipMR+ZtG4oXvYEzfGA+7ASqX1ccFBcHbR0M7CTaM8d0LL6pNkxEQFfiX
-         D4U+cIGJHqM1w==
-Date:   Mon, 11 Apr 2022 17:41:39 -0600
-From:   Keith Busch <kbusch@kernel.org>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     Alexander Lobakin <alobakin@pm.me>, Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] asm-generic: fix __get_unaligned_be48() on 32 bit
- platforms
-Message-ID: <YlS8swz1QScWdpke@kbusch-mbp.dhcp.thefacebook.com>
-References: <20220406233909.529613-1-alobakin@pm.me>
- <20220411195403.230899-1-alobakin@pm.me>
- <32c07164-ae1a-a135-2d1f-3b660cbcf107@acm.org>
+        Mon, 11 Apr 2022 19:48:54 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0FEB2D1C5;
+        Mon, 11 Apr 2022 16:45:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649720718; x=1681256718;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=M4z4Q955a3/4N9f2aOTjbxPXvTzaZ4umBszVHw38CKg=;
+  b=CmancUPI/I8iM0L0AXkcpheFS+U/ocFsKPF9vE+qRSg+nc5pz7VsJsYf
+   p3peL+7BWX5WJRzGDAmuzgZjXR6Pyb92QSdhNiLszc2yQ4JVJd9KHbMMZ
+   Gx+Ln1VtCyzCjRGdAVWc/wa6W2NpBGJZW/tQQ1O12nvFoRehOOjqm475x
+   hE7RGuUFZiM9EPRnbTlQhVflthwbvmsTFM1YBxwqR9ULbmjR3LZuli3r2
+   lb2eLP/0dq1LhaKNuFMpzaqKmiwGtVeTu1quU+qgRqIqmXdX0pDmIxWGV
+   B5wS5raeckW4CknlDsJI2i3W7q3/veSuanK7BPn4amt1bNmb5SAAGUGN7
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="322684314"
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="322684314"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 16:45:18 -0700
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="572472056"
+Received: from minhjohn-mobl.amr.corp.intel.com (HELO [10.212.44.201]) ([10.212.44.201])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 16:45:17 -0700
+Message-ID: <e800ba74-0ff6-8d98-8978-62c02cf1f8ea@intel.com>
+Date:   Mon, 11 Apr 2022 16:45:23 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <32c07164-ae1a-a135-2d1f-3b660cbcf107@acm.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] x86/tsx: fix KVM guest live migration for tsx=on
+Content-Language: en-US
+To:     Jon Kohler <jon@nutanix.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Neelima Krishnan <neelima.krishnan@intel.com>,
+        "kvm @ vger . kernel . org" <kvm@vger.kernel.org>
+References: <20220411180131.5054-1-jon@nutanix.com>
+ <41a3ca80-d3e2-47d2-8f1c-9235c55de8d1@intel.com>
+ <AE4621FC-0947-4CEF-A1B3-87D4E00C786D@nutanix.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <AE4621FC-0947-4CEF-A1B3-87D4E00C786D@nutanix.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 02:20:47PM -0700, Bart Van Assche wrote:
-> On 4/11/22 13:00, Alexander Lobakin wrote:
-> > Uhm, ping?
-> 
-> What happened with the plan to move this function into the block layer?
-> I'm asking this because if that function is moved your patch will conflict
-> with the patch that moves that function.
+On 4/11/22 12:35, Jon Kohler wrote:
+> Also, while I’ve got you, I’d also like to send out a patch to simply
+> force abort all transactions even when tsx=on, and just be done with
+> TSX. Now that we’ve had the patch that introduced this functionality
+> I’m patching for roughly a year, combined with the microcode going
+> out, it seems like TSX’s numbered days have come to an end. 
 
-I believe you're thinking of lower_48_bits() instead of this unaligned
-accessor. It appears that patch hasn't been picked up yet though, and I am
-assuming it should go through block.
+Could you elaborate a little more here?  Why would we ever want to force
+abort transactions that don't need to be aborted for some reason?

@@ -2,120 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B0E84FBAB8
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 13:18:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F31E4FBAC3
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 13:21:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345227AbiDKLUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 07:20:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37760 "EHLO
+        id S235869AbiDKLWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 07:22:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233870AbiDKLUq (ORCPT
+        with ESMTP id S232099AbiDKLWA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 07:20:46 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E6E427D6;
-        Mon, 11 Apr 2022 04:18:32 -0700 (PDT)
-X-UUID: db46d44347744253b0b066f3a07fb425-20220411
-X-UUID: db46d44347744253b0b066f3a07fb425-20220411
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 311027754; Mon, 11 Apr 2022 19:18:26 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 11 Apr 2022 19:18:25 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 11 Apr 2022 19:18:25 +0800
-Message-ID: <371c9a96e80faa26719e00b694e45d176105b6dc.camel@mediatek.com>
-Subject: Re: [PATCH V2 08/15] cpufreq: mediatek: Move voltage limits to
- platform data
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <robh+dt@kernel.org>,
-        <krzk+dt@kernel.org>
-CC:     <matthias.bgg@gmail.com>, <jia-wei.chang@mediatek.com>,
-        <roger.lu@mediatek.com>, <hsinyi@google.com>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Mon, 11 Apr 2022 19:18:25 +0800
-In-Reply-To: <3dade32c-4b46-351a-b3f9-d1fec16b603c@collabora.com>
-References: <20220408045908.21671-1-rex-bc.chen@mediatek.com>
-         <20220408045908.21671-9-rex-bc.chen@mediatek.com>
-         <3dade32c-4b46-351a-b3f9-d1fec16b603c@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 11 Apr 2022 07:22:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 224F642A01
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 04:19:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649675986;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FjKusdcXN/svcmlawOVsWWcBk1qRxJxq3tOJtjRM3qU=;
+        b=ftRKXN+XvisfzNy8U91BajPJPYQiEAV6fnnUcXp1df0R4ZKd9UNc9hVohGipOYV1xkFXrQ
+        JAyZ+qFyYJIyAt80oDSW2s3VUlkJ3nXwtC12lsr3udR+WWkakl5s2olkhUOlxZ/AKerzNP
+        zoiUZlz189PXmoOYXGuxadPuDgmC+xE=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-179-n5eqk-4nNo-D1zeECLfyPQ-1; Mon, 11 Apr 2022 07:19:45 -0400
+X-MC-Unique: n5eqk-4nNo-D1zeECLfyPQ-1
+Received: by mail-ej1-f71.google.com with SMTP id ga31-20020a1709070c1f00b006cec400422fso6791812ejc.22
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 04:19:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=FjKusdcXN/svcmlawOVsWWcBk1qRxJxq3tOJtjRM3qU=;
+        b=lm3bsSwCqsz438X4ZUFHYh0LseLzvlDk3GCykY/4BGZ9UI9VTBD+BwiGrao1Eq6jdP
+         +Nh4dZoFmofcsULH/KXGZkf7FM4HpFBU30gdW+BwrDJ0xlxpC3iE0wXgCIRN82AWB113
+         ocF3/gmmLlvz4S86V696fObn22g/GLE/YxKfqzdgOGtbSVrmo032lQ0DnvZ18oP2HjC2
+         hl1kqT5eiikAHF7mkWn4BtuWcnsl4kduo1ShK4R/uNN35hHCTL/rizOQkJgW8B4v/k2z
+         jQz9KYAY12j7oED90lIxx8hxa6jFe9KRaXGOndYNHFlB3TbFEdYFdTDmiwKgmsLjI9FM
+         FuWg==
+X-Gm-Message-State: AOAM531wjfvOh8p8mRjrebQoElHaHUeweivDEJYmdi5QGw/6QdG3/Bp+
+        tKsOsfHfaITVRsomU7vr3Up79lxG5ELG/hMlDGIu036a2kYuQj1HofAm4Iy2kJ4wSXhrSESl1lM
+        o4SnhliVH9xWk4w6zWSwbXzONzeOVaidbpTXpH6zN6P3YblNHXbVJz3qjExxXXOLeb/sY17ZSco
+        3n
+X-Received: by 2002:a17:906:7111:b0:6e8:973a:1515 with SMTP id x17-20020a170906711100b006e8973a1515mr2645576ejj.308.1649675984103;
+        Mon, 11 Apr 2022 04:19:44 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxUvNAro+h5LGDSH7dNHuSRzLrFf9n39vBmpdd1x4PS7yTMqCT5cnNc8/AomnXQVO2my3WO7w==
+X-Received: by 2002:a17:906:7111:b0:6e8:973a:1515 with SMTP id x17-20020a170906711100b006e8973a1515mr2645556ejj.308.1649675983900;
+        Mon, 11 Apr 2022 04:19:43 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id g2-20020a50bf42000000b0041cc5233252sm11955251edk.57.2022.04.11.04.19.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Apr 2022 04:19:43 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 16/31] KVM: nVMX: hyper-v: Direct TLB flush
+In-Reply-To: <Yk8x2rF/UkuXY/X2@google.com>
+References: <20220407155645.940890-1-vkuznets@redhat.com>
+ <20220407155645.940890-17-vkuznets@redhat.com>
+ <Yk8x2rF/UkuXY/X2@google.com>
+Date:   Mon, 11 Apr 2022 13:19:42 +0200
+Message-ID: <87czhn7tpt.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-08 at 15:36 +0200, AngeloGioacchino Del Regno wrote:
-> Il 08/04/22 06:59, Rex-BC Chen ha scritto:
-> > From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> > 
-> > Voltages and shifts are defined as macros originally.
-> > There are different requirements of these values for each MediaTek
-> > SoCs.
-> > Therefore, we add the platform data and move these values into it.
-> > 
-> > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> > ---
-> >   drivers/cpufreq/mediatek-cpufreq.c | 90 ++++++++++++++++++++-----
-> > -----
-> >   1 file changed, 61 insertions(+), 29 deletions(-)
-> > 
-> > diff --git a/drivers/cpufreq/mediatek-cpufreq.c
-> > b/drivers/cpufreq/mediatek-cpufreq.c
-> > index 1369da62780a..0be5609ee82e 100644
-> > --- a/drivers/cpufreq/mediatek-cpufreq.c
-> > +++ b/drivers/cpufreq/mediatek-cpufreq.c
-> 
-> ..snip..
-> 
-> > @@ -625,20 +649,27 @@ static struct platform_driver
-> > mtk_cpufreq_platdrv = {
-> >   	.probe		= mtk_cpufreq_probe,
-> >   };
-> >   
-> > +static const struct mtk_cpufreq_platform_data mtk_platform_data =
-> > {
-> 
-> I would prefer if you name this after the oldest SoC that is
-> supported in this
-> driver, or after the IP version.
-> 
-> Example: if the oldest one is mt7622, then this should be
-> mt7622_platform_data;
->           if newer SoCs have got a different cpu frequency control
-> IP, then we
->           should have here something like
->           mtk_v1_platform_data, mtk_v1_3_platform_data.
-> 
-> Please note that I didn't check release dates, so my reference to
-> mt7622 is
-> purely casual.
-> 
-> Regards,
-> Angelo
+Sean Christopherson <seanjc@google.com> writes:
 
-Hello Angelo,
+> On Thu, Apr 07, 2022, Vitaly Kuznetsov wrote:
+>> Enable Direct TLB flush feature on nVMX when:
+>> - Enlightened VMCS is in use.
+>> - Direct TLB flush flag is enabled in eVMCS.
+>> - Direct TLB flush is enabled in partition assist page.
+>
+> Yeah, KVM definitely needs a different name for "Direct TLB flush".  I don't have
+> any good ideas offhand, but honestly anything is better than "Direct".
+>
 
-Thanks for your review.
-I will rename it as mt2701_platform_data.
+I think we can get away without a name inside KVM, we'll be doing either
+'L1 TLB flush' or 'L2 TLB flush'. In QEMU we can still use 'Direct' I
+believe as it matches TLFS and doesn't intersect with KVM's MMU.
 
-BRs,
-Rex
+-- 
+Vitaly
 

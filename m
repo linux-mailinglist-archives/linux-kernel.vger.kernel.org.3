@@ -2,128 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3724FC7B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 00:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C715D4FC7B4
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 00:32:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350399AbiDKWbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 18:31:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59548 "EHLO
+        id S243496AbiDKWfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 18:35:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245082AbiDKWbB (ORCPT
+        with ESMTP id S229573AbiDKWfC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 18:31:01 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783C01EEC9;
-        Mon, 11 Apr 2022 15:28:46 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id 6D9F51F42D86
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649716125;
-        bh=j5s2z2+QvxX8/0HiqGbGTalMGZgMNOaInzlk8sVuvvM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=VSTxe5yFQejREqnCxyn4xGFXtinl0bR2ufB4zz1SZaJ7usao6xS3L9wJHaZi3U2be
-         B4He3EWlN9+YA6N1fUAxEk47YLZ7Xe1kdkqvnaWuHnD+xYl05xH/GEOKFxGviNmEFx
-         L3WlaYw81uQSL/OG3BikLy6vE/SfxdHTJj+71yDfFw8yWpmHLmZOReEPFmEPxzk/tH
-         Vg62v3DLlk+b19XtRR9d1se5Lhr34X7aiCI2MQ5UsTSCsbIZkh3xnjPrjuvKnTrx2W
-         +q9CJ4HKiIH9ddHCukgLctCERfXuGWhBJBtObN9sVgk1YA8fkg7bokj3r854VdsYYO
-         n9uWKar0Gs93Q==
-Message-ID: <3c80282b-0d63-1e1f-1036-1c8e79f1cbbc@collabora.com>
-Date:   Tue, 12 Apr 2022 01:28:41 +0300
+        Mon, 11 Apr 2022 18:35:02 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80EB22C65D;
+        Mon, 11 Apr 2022 15:32:45 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id n11so3967657qvl.0;
+        Mon, 11 Apr 2022 15:32:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QoG6vUiayFYqH1XXsHOZKFN1YxyIK1XRGOiWo3lp9DA=;
+        b=a6c5xNw5tCxYOgELJUdAKUj2HMuCVMvpnNM0/W0NVcs77tv88Agir7iC+NUiY9ZQDw
+         6eWidZA+cCkWe16j1WBh5rHzcA2xUGGcwpJWD/h/c1RoVzhBs6BZxAFtjv+oB1Xwu3Ad
+         ZrMdAsybnW1unQ8kePjzx1Nti2qLMlIZkFO1zjatonmBjM46XHdEot2JCtLZO8doJ4xi
+         KyWKF4f4eGUjBuQGev03inNBxhOGYN+Y+Wl5/JvSvebSrVtFWdDX4qF/Oliy9iexjeTq
+         hfRL+4TbNQrNOgzrj4g5yTWan/2NTUJmNx3H6RNffFM32/YNHga3euUQ7Gm/MCyQNGYY
+         FmJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QoG6vUiayFYqH1XXsHOZKFN1YxyIK1XRGOiWo3lp9DA=;
+        b=Ck6kAyNjJumnsMlh/3uyaO9Co900ZEe6cUlDpT0uTavrP9PY482K4ZVGRqtTDLr56j
+         euJkcwl3Yg7IuSYVj/Twauptts9Rg22aftL9hfjcICGl1jN84eTa/UaL0lvwAU7aYsXj
+         ojCGUCX2wa3UNVNZBcm2XkrmMjhIvsIsxGjCnbuq3zPsu8YtfncSymZr+MkcmRuyY6ko
+         EYoF7pdVPc8yR66v1uZQwGeOF4ba91wIICXD1BCCztd+s169JgXejU9M+zhjWGZ79X72
+         3bD1OYE7Frn/dmtfDEplb9WR4SVARD9jdKJEYcqX88OEfwu2mCk44MvPAvIs1wtoVsV8
+         ItgA==
+X-Gm-Message-State: AOAM533BAO+ETzVP5zNdtnWZUhayZSCfujD+yBKsvMRXHfKnH6H4Nzut
+        /1KHL+YRfOiH0VkfTAsZxkxnydDaWrOR
+X-Google-Smtp-Source: ABdhPJzz5EBOCdiUO1OyLAeAf3u5C2yxwxlVVQ0oWrnLye5QaFFrzzyR5b5/Yia6u3X9tMOs2g/Ibw==
+X-Received: by 2002:a05:6214:d8c:b0:441:6597:6da2 with SMTP id e12-20020a0562140d8c00b0044165976da2mr29143491qve.116.1649716364659;
+        Mon, 11 Apr 2022 15:32:44 -0700 (PDT)
+Received: from bytedance.attlocal.net (ec2-3-231-65-244.compute-1.amazonaws.com. [3.231.65.244])
+        by smtp.gmail.com with ESMTPSA id t7-20020a05622a180700b002e0ccf0aa49sm26733697qtc.62.2022.04.11.15.32.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Apr 2022 15:32:43 -0700 (PDT)
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Peilin Ye <peilin.ye@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Peilin Ye <yepeilin.cs@gmail.com>
+Subject: [PATCH net 1/2] ip6_gre: Avoid updating tunnel->tun_hlen in __gre6_xmit()
+Date:   Mon, 11 Apr 2022 15:32:28 -0700
+Message-Id: <c5b7dc6020c93a1e7b40bc472fcdb6429999473e.1649715555.git.peilin.ye@bytedance.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [Patch v6 3/4] dt-bindings: memory: Update reg maxitems for
- tegra186
-Content-Language: en-US
-To:     Ashish Mhetre <amhetre@nvidia.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        krzysztof.kozlowski@linaro.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     vdumpa@nvidia.com, Snikam@nvidia.com
-References: <20220406052459.10438-1-amhetre@nvidia.com>
- <20220406052459.10438-4-amhetre@nvidia.com>
- <3e044f9e-3200-bb26-897d-1977e3825c92@gmail.com>
- <81686bc4-c580-862b-1c29-51b34e419154@nvidia.com>
- <57825f4a-8cfa-ef00-6462-fea37cd4d7be@collabora.com>
- <8930bbfe-2c33-ea90-c48d-c6a00005b6a5@nvidia.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <8930bbfe-2c33-ea90-c48d-c6a00005b6a5@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/11/22 18:41, Ashish Mhetre wrote:
-> 
-> 
-> On 4/11/2022 8:59 PM, Dmitry Osipenko wrote:
->> External email: Use caution opening links or attachments
->>
->>
->> On 4/11/22 18:02, Ashish Mhetre wrote:
->>>
->>>
->>> On 4/10/2022 7:51 PM, Dmitry Osipenko wrote:
->>>> External email: Use caution opening links or attachments
->>>>
->>>>
->>>> 06.04.2022 08:24, Ashish Mhetre пишет:
->>>>>            memory-controller@2c00000 {
->>>>>                compatible = "nvidia,tegra186-mc";
->>>>> -            reg = <0x0 0x02c00000 0x0 0xb0000>;
->>>>> +            reg = <0x0 0x02c00000 0x0 0x10000>,    /* MC-SID */
->>>>> +                  <0x0 0x02c10000 0x0 0x10000>,    /* Broadcast
->>>>> channel */
->>>>> +                  <0x0 0x02c20000 0x0 0x10000>,    /* MC0 */
->>>>> +                  <0x0 0x02c30000 0x0 0x10000>,    /* MC1 */
->>>>> +                  <0x0 0x02c40000 0x0 0x10000>,    /* MC2 */
->>>>> +                  <0x0 0x02c50000 0x0 0x10000>;    /* MC3 */
->>>>> +            reg-names = "mc-sid", "mc-broadcast", "mc0", "mc1",
->>>>> "mc2", "mc3";
->>>>
->>>> The "mc-" prefix feels redundant to me, I'd name the regs like this:
->>>>
->>>>     "sid", "broadcast", "ch0", "ch1", "ch2", "ch3"
->>>>
->>>>
->>>> You should also add validation of the regs/reg-names to the yaml based
->>>> on SoC version. I.e. it's not enough to only bump the maxItems.
->>>
->>> Okay, I will add validation of reg-names as following:
->>>
->>>    reg-names:
->>>      minItems: 0
->>>      maxItems: 6
->>>      items:
->>>        - const: sid
->>>        - const: broadcast
->>>        - const: ch0
->>>        - const: ch1
->>>        - const: ch2
->>>        - const: ch3
->>>
->>>
->>> We will have to keep minItems to 0 in order to make it compatible with
->>> old DT, right?
->>
->> Bindings are about the latest DTs. In general older dtbs must be updated
->> and you must get error from the schema checker for older DTs. It's only
->> drivers that should care about older dtbs.
-> 
-> On v5 Krzysztof mentioned that old DTS will start failing with new
-> bindings https://lkml.org/lkml/2022/3/22/907.
-> So I just wanted to confirm whether it's fine if updated bindings
-> start to fail with old DTS?
+From: Peilin Ye <peilin.ye@bytedance.com>
 
-Since the older DT was incorrect, it's fine that the DT check will fail
-for it.
+Do not update tunnel->tun_hlen in data plane code.  Use a local variable
+instead, just like "tunnel_hlen" in net/ipv4/ip_gre.c:gre_fb_xmit().
+
+Co-developed-by: Cong Wang <cong.wang@bytedance.com>
+Signed-off-by: Cong Wang <cong.wang@bytedance.com>
+Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+---
+ net/ipv6/ip6_gre.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/net/ipv6/ip6_gre.c b/net/ipv6/ip6_gre.c
+index 8753e9cec326..b43a46449130 100644
+--- a/net/ipv6/ip6_gre.c
++++ b/net/ipv6/ip6_gre.c
+@@ -743,6 +743,7 @@ static netdev_tx_t __gre6_xmit(struct sk_buff *skb,
+ 		struct ip_tunnel_info *tun_info;
+ 		const struct ip_tunnel_key *key;
+ 		__be16 flags;
++		int tun_hlen;
+ 
+ 		tun_info = skb_tunnel_info_txcheck(skb);
+ 		if (IS_ERR(tun_info) ||
+@@ -760,9 +761,9 @@ static netdev_tx_t __gre6_xmit(struct sk_buff *skb,
+ 		dsfield = key->tos;
+ 		flags = key->tun_flags &
+ 			(TUNNEL_CSUM | TUNNEL_KEY | TUNNEL_SEQ);
+-		tunnel->tun_hlen = gre_calc_hlen(flags);
++		tun_hlen = gre_calc_hlen(flags);
+ 
+-		gre_build_header(skb, tunnel->tun_hlen,
++		gre_build_header(skb, tun_hlen,
+ 				 flags, protocol,
+ 				 tunnel_id_to_key32(tun_info->key.tun_id),
+ 				 (flags & TUNNEL_SEQ) ? htonl(tunnel->o_seqno++)
+-- 
+2.20.1
+

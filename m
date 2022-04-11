@@ -2,92 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA4694FBB13
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 13:35:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAFD54FBB14
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 13:36:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345914AbiDKLiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 07:38:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56588 "EHLO
+        id S1345994AbiDKLiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 07:38:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346054AbiDKLiD (ORCPT
+        with ESMTP id S244753AbiDKLiE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 07:38:03 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F57255A9
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 04:35:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=r3bnlJstcdyr89MnrBaCHYI2cIl+7UQCsfgoEyyWox4=; b=WNw2+XP6tvq9vXrZKduELNOXBc
-        XM1DMFIhvZD/It+LujIjohcSEIpGHuqB9Eg4nH3s/KDDGfshyUjt+dWktU2UhWvTOTNVCwMzzOmqu
-        CLdn73W7MfroREngspVNvOrQwqD8ikGYoJ6gC8inCGQkufSjtn0j7nxAgbcGWXQYtBCX7qU55SS2Z
-        xrmqvKWlBfQrZoDk6LFKFTv/1yJZAP0a1sOY36z/JYSVfya9DqxsPahYt9eEjxSC0ONFhlepMjOJh
-        ke+QNBh4frtWBz2AW00HeYomWhjCOfJmdXjWt09Easy0svTrY+smv+7o3HBrVHSGsYJ5V3m3jdfRn
-        3oYjftQw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ndsKM-00CHdR-Jc; Mon, 11 Apr 2022 11:35:26 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DEF09300212;
-        Mon, 11 Apr 2022 13:35:23 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8F75D2C7EA781; Mon, 11 Apr 2022 13:35:23 +0200 (CEST)
-Date:   Mon, 11 Apr 2022 13:35:23 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Oleg Nesterov <oleg@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-kernel@vger.kernel.org, Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: Re: [PATCH v2] ptrace: fix ptrace vs tasklist_lock race on
- PREEMPT_RT.
-Message-ID: <YlQSe6m2tidxwHt0@hirez.programming.kicks-ass.net>
-References: <20220315142944.GA22670@redhat.com>
- <YkW55u6u2fo5QmV7@linutronix.de>
- <20220405101026.GB34954@worktop.programming.kicks-ass.net>
- <20220405102849.GA2708@redhat.com>
- <Ykwn0MpcrZ/N+LOG@hirez.programming.kicks-ass.net>
- <20220407121340.GA2762@worktop.programming.kicks-ass.net>
- <87v8vk8q4g.fsf@email.froward.int.ebiederm.org>
- <20220408090908.GO2731@worktop.programming.kicks-ass.net>
- <874k332wjp.fsf@email.froward.int.ebiederm.org>
- <YlCVxlTVL1pyBF08@hirez.programming.kicks-ass.net>
+        Mon, 11 Apr 2022 07:38:04 -0400
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2454925C44;
+        Mon, 11 Apr 2022 04:35:50 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id t12so6406153ybt.10;
+        Mon, 11 Apr 2022 04:35:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TMz49T4NZ7ekqA/eiAiZiB+DR1IsAIl4w9+lK2bOVtw=;
+        b=lxhgU/4s5bF+LBkwvR9geAYA9rAqI9TMm9hbJn7MlZRSbilNLIo2LsngSda+nV39KZ
+         xdjpnSTOL7GXjDDMzrhU7bWIxcx2PAMVG2FCid3yGQZnbkFxz8nTiy0VgelsOQDN59MW
+         xBDWDUWNIvY1mnEeEvMebeuHZpQ2p5POWy8FrRr6qqnA9NYXsweACBBpIpJtfpQ3ABUf
+         S4nUXT6Fo/h7jenOLAIjX3q4eFXR4Ytzfl2JPogS97a7zfnoTMsvVOJHx3TSXkDO2bN7
+         5/NiGUVVcnAqQ3ZaTM/t6TV9v/Smg4r1R1nA/ymSiZw4LMCRQkkCroM9wsTp1FHz7znx
+         OISA==
+X-Gm-Message-State: AOAM531JfOtGLISa7qnD170TO3r9nIomb/EYWQJ2cykSaC1e+QZTzfEo
+        gQd0gwSROdvBNICgKggqtYXPb1THdzy7GiRo2u4=
+X-Google-Smtp-Source: ABdhPJzi2BqF8LJlJNZUqBn4zWkn5PaMnrIRgUBj81N0r1V0v1wO7ec9ytU4L77N8jEVykcMbE36jMJhxWJn6Qr/u+8=
+X-Received: by 2002:a05:6902:187:b0:63d:9c95:edca with SMTP id
+ t7-20020a056902018700b0063d9c95edcamr20774547ybh.81.1649676949327; Mon, 11
+ Apr 2022 04:35:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YlCVxlTVL1pyBF08@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CAJZ5v0g9cg=nJ0yr5-a_phNnJLiU74KrfsULsAEsWBKeRr7HCQ@mail.gmail.com>
+ <20220408195342.GA339430@bhelgaas> <CAJZ5v0g6ahvQrCKPXTgQANiUYJNByDUvJZ8Zsp7anqeM7EBAXw@mail.gmail.com>
+ <b24daa29-ae7c-6e24-ebdc-2fe8e0576a9d@leemhuis.info>
+In-Reply-To: <b24daa29-ae7c-6e24-ebdc-2fe8e0576a9d@leemhuis.info>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 11 Apr 2022 13:35:34 +0200
+Message-ID: <CAJZ5v0j=WVOAZQ=nR32OQLtMd4gpWhX0T2M-su+dNdOJ0KgbZw@mail.gmail.com>
+Subject: Re: [PATCH] PCI: PM: Quirk bridge D3 on Elo i2
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Stefan Gottwald <gottwald@igel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 10:06:30PM +0200, Peter Zijlstra wrote:
+On Sun, Apr 10, 2022 at 11:16 AM Thorsten Leemhuis
+<regressions@leemhuis.info> wrote:
+>
+> On 09.04.22 15:35, Rafael J. Wysocki wrote:
+> > On Fri, Apr 8, 2022 at 9:53 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> >>
+> >> On Mon, Apr 04, 2022 at 04:46:14PM +0200, Rafael J. Wysocki wrote:
+> >>> On Fri, Apr 1, 2022 at 1:34 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >>>> On Thu, Mar 31, 2022 at 11:57 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> >>>>> On Thu, Mar 31, 2022 at 07:38:51PM +0200, Rafael J. Wysocki wrote:
+> >>>>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >>>>>>
+> >>>>>> If one of the PCIe root ports on Elo i2 is put into D3cold and then
+> >>>>>> back into D0, the downstream device becomes permanently inaccessible,
+> >>>>>> so add a bridge D3 DMI quirk for that system.
+> >>>>>>
+> >>>>>> This was exposed by commit 14858dcc3b35 ("PCI: Use
+> >>>>>> pci_update_current_state() in pci_enable_device_flags()"), but before
+> >>>>>> that commit the root port in question had never been put into D3cold
+> >>>>>> for real due to a mismatch between its power state retrieved from the
+> >>>>>> PCI_PM_CTRL register (which was accessible even though the platform
+> >>>>>> firmware indicated that the port was in D3cold) and the state of an
+> >>>>>> ACPI power resource involved in its power management.
+> >>>>>
+> >>>>> In the bug report you suspect a firmware issue.  Any idea what that
+> >>>>> might be?  It looks like a Gemini Lake Root Port, so I wouldn't think
+> >>>>> it would be a hardware issue.
+> >>>>
+> >>>> The _ON method of the ACPI power resource associated with the root
+> >>>> port doesn't work correctly.
+> >>>>
+> >>>>> Weird how things come in clumps.  Was just looking at Mario's patch,
+> >>>>> which also has to do with bridges and D3.
+> >>>>>
+> >>>>> Do we need a Fixes line?  E.g.,
+> >>>>>
+> >>>>>   Fixes: 14858dcc3b35 ("PCI: Use pci_update_current_state() in pci_enable_device_flags()")
+> >>>>
+> >>>> Strictly speaking, it is not a fix for the above commit.
+> >>>>
+> >>>> It is a workaround for a firmware issue uncovered by it which wasn't
+> >>>> visible, because power management was not used correctly on the
+> >>>> affected system because of another firmware problem addressed by
+> >>>> 14858dcc3b35.  It wouldn't have worked anyway had it been attempted
+> >>>> AFAICS.
+> >>>>
+> >>>> I was thinking about CCing this change to -stable instead.
+> >>
+> >> Makes sense, thanks.
+> >>
+> >>>>>> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215715
+> >>>>>> Reported-by: Stefan Gottwald <gottwald@igel.com>
+> >>>>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >>>>>> ---
+> >>>>>>  drivers/pci/pci.c |   10 ++++++++++
+> >>>>>>  1 file changed, 10 insertions(+)
+> >>>>>>
+> >>>>>> Index: linux-pm/drivers/pci/pci.c
+> >>>>>> ===================================================================
+> >>>>>> --- linux-pm.orig/drivers/pci/pci.c
+> >>>>>> +++ linux-pm/drivers/pci/pci.c
+> >>>>>> @@ -2920,6 +2920,16 @@ static const struct dmi_system_id bridge
+> >>>>>>                       DMI_MATCH(DMI_BOARD_VENDOR, "Gigabyte Technology Co., Ltd."),
+> >>>>>>                       DMI_MATCH(DMI_BOARD_NAME, "X299 DESIGNARE EX-CF"),
+> >>>>>>               },
+> >>>>>> +             /*
+> >>>>>> +              * Downstream device is not accessible after putting a root port
+> >>>>>> +              * into D3cold and back into D0 on Elo i2.
+> >>>>>> +              */
+> >>>>>> +             .ident = "Elo i2",
+> >>>>>> +             .matches = {
+> >>>>>> +                     DMI_MATCH(DMI_SYS_VENDOR, "Elo Touch Solutions"),
+> >>>>>> +                     DMI_MATCH(DMI_PRODUCT_NAME, "Elo i2"),
+> >>>>>> +                     DMI_MATCH(DMI_PRODUCT_VERSION, "RevB"),
+> >>>>>> +             },
+> >>>>>
+> >>>>> Is this bridge_d3_blacklist[] similar to the PCI_DEV_FLAGS_NO_D3 bit?
+> >>>>
+> >>>> Not really.  The former applies to the entire platform and not to an
+> >>>> individual device.
+> >>>>
+> >>>>> Could they be folded together?  We have a lot of bits that seem
+> >>>>> similar but maybe not exactly the same (dev->bridge_d3,
+> >>>>> dev->no_d3cold, dev->d3cold_allowed, dev->runtime_d3cold,
+> >>>>> PCI_DEV_FLAGS_NO_D3, pci_bridge_d3_force, etc.)  Ugh.
+> >>>>
+> >>>> Yes, I agree that this needs to be cleaned up.
+> >>>>
+> >>>>> bridge_d3_blacklist[] itself was added by 85b0cae89d52 ("PCI:
+> >>>>> Blacklist power management of Gigabyte X299 DESIGNARE EX PCIe ports"),
+> >>>>> which honestly looks kind of random, i.e., it doesn't seem to be
+> >>>>> working around a hardware or even a firmware defect.
+> >>>>>
+> >>>>> Apparently the X299 issue is that 00:1c.4 is connected to a
+> >>>>> Thunderbolt controller, and the BIOS keeps the Thunderbolt controller
+> >>>>> powered off unless something is attached to it?  At least, 00:1c.4
+> >>>>> leads to bus 05, and in the dmesg log attached to [1] shows no devices
+> >>>>> on bus 05.
+> >>>>>
+> >>>>> It also says the platform doesn't support PCIe native hotplug, which
+> >>>>> matches what Mika said about it using ACPI hotplug.  If a system is
+> >>>>> using ACPI hotplug, it seems like maybe *that* should prevent us from
+> >>>>> putting things in D3cold?  How can we know whether ACPI hotplug
+> >>>>> depends on a certain power state?
+> >>>>
+> >>>> We have this check in pci_bridge_d3_possible():
+> >>>>
+> >>>> if (bridge->is_hotplug_bridge && !pciehp_is_native(bridge))
+> >>>>             return false;
+> >>>>
+> >>>> but this only applies to the case when the particular bridge itself is
+> >>>> a hotplug one using ACPI hotplug.
+> >>>>
+> >>>> If ACPI hotplug is used, it generally is unsafe to put PCIe ports into
+> >>>> D3cold, because in that case it is unclear what the platform
+> >>>> firmware's assumptions regarding control of the config space are.
+> >>>>
+> >>>> However, I'm not sure how this is related to the patch at hand.
+> >>>
+> >>> So I'm not sure how you want to proceed here.
+> >>>
+> >>> The platform is quirky, so the quirk for it will need to be added this
+> >>> way or another.  The $subject patch adds it using the existing
+> >>> mechanism, which is the least intrusive way.
+> >>>
+> >>> You seem to be thinking that the existing mechanism may not be
+> >>> adequate, but I'm not sure for what reason and anyway I think that it
+> >>> can be adjusted after adding the quirk.
+> >>>
+> >>> Please let me know what you think.
+> >>
+> >> I don't understand all that's going on here, but I applied it to
+> >> pci/pm for v5.19, thanks!
+> > Thank you!
+>
+> Sorry, but this made me wonder: why v5.19? It's a regression exposed in
+> v5.15, so it afaics would be good to get this in this cycle -- and also
+> backported to v5.15.y, but it seem a tag to take care of that is
+> missing. :-/
 
-> I'll ponder if wait_task_inactive() can simplify things..
-
-This,.. so ptrace_check_attach(), which does ptrace_freeze_traced()
-already does wait_task_inactive(), but on the 'wrong' side of things.
-
-AFAICT, if we move that up, we're almost there, except that opens up a
-detach+attach race. That could be fixed by doing another
-wait_task_inactive(), but we can't due to locking :/
-
-Let's see if I can make that work without making a mess of things.
-Because ensuring the task is stuck in schedule() makes the whole
-saved_state thing go away -- as you noted.
+Well, the patch is out there for everyone needing it.  The question is
+how urgent it is to get it into the mainline and -stable, which boils
+down to the question how many systems out there can be affected by it.
+Since it is a firmware defect exposed, hopefully not too many.

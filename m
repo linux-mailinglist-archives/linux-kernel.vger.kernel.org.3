@@ -2,132 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C31FA4FB230
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 05:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BD384FB233
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 05:13:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244478AbiDKDOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 23:14:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55142 "EHLO
+        id S244485AbiDKDPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 23:15:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241315AbiDKDOw (ORCPT
+        with ESMTP id S241552AbiDKDPe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 23:14:52 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FAB52F3A2
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 20:12:33 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id s2so13420732pfh.6
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 20:12:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=4FweITrSlHFF8T41iquggp7nE6Dquo+9YQPpdFHzPKU=;
-        b=GypPvonW5HGwxDqfRdhsoR1pu48eFklX/yZx/MWagF00T97pzhDJFsYlGg5f+KTFgh
-         WOfXaeIsWYi7uatvo49iSW4In4/Pfq8IRvB5tbHHsYynEFiHsRUtC+u4tGyICoCVYICo
-         VTSkgS3tIqAuuQFQGBYBoYKbdFGVeIvVfnfMGfCLNZDEPCt/FZi/fBJpEyLy1/gysQGr
-         rDS+p2nGWZnOmqj0i8MQvCh3wFZ9du22HrXFl0rg7LMubWskvX9nFQU9anCx2HasXbWe
-         mKhYebrkQ9d3tadepeR347AY/xF39yXmgyfjll5DsXS0L8ACKF6KPR5pA3PTeulyLsg0
-         eF4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=4FweITrSlHFF8T41iquggp7nE6Dquo+9YQPpdFHzPKU=;
-        b=0mGk9X0eAD4h8rv3LK4nGUI0YCtInHHYgFUYGhCJWHQ43vdZvi3KKqQAjx+Mmf1e+k
-         hsf9/A9I4Lv4BNXpK9CI6/qlOnDzS72pKvbaGgtnIx2/wWs4t8lBm2wsWS6YjFL5mLmo
-         KeSBUWJgDri0I11SIDc6jHk5ak9F1WBnR7adwtZngsxIb+sZ+YLAjTHBKqKwVDX0gtvf
-         ANck5cB70kkdSVdmzmsCJ7vDmvvY4oIOyXXO+Cr+J9z01b2w52FeQwBaIfnYZ9nJ3U6S
-         tiuEzZ5tqO37d3sfpCRqdiTqhmFdJCwqHoXKKcYlrug5+/PvIoH45DA+OmNx590MpjR2
-         6Kug==
-X-Gm-Message-State: AOAM532YictWgST+DAYEzE45s+O6QkOgFtsyzMJnkEBQyDYnddJsVChB
-        4r+tp59iD0kB9owjfYcvwhsD6w==
-X-Google-Smtp-Source: ABdhPJxsiF8kac/tEGtYUkxNeBvi1f3kf2zTQbgI7Om4gzBJmOXMynu40++VGaL6JdsziqdX0aE4Ng==
-X-Received: by 2002:a05:6a00:174a:b0:4fd:ac35:6731 with SMTP id j10-20020a056a00174a00b004fdac356731mr30705575pfc.71.1649646753375;
-        Sun, 10 Apr 2022 20:12:33 -0700 (PDT)
-Received: from localhost ([223.184.83.228])
-        by smtp.gmail.com with ESMTPSA id t69-20020a638148000000b0039822f39a40sm26348013pgd.25.2022.04.10.20.12.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Apr 2022 20:12:32 -0700 (PDT)
-Date:   Mon, 11 Apr 2022 08:42:31 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Pierre Gondois <pierre.gondois@arm.com>
-Cc:     linux-kernel@vger.kernel.org, Ionela.Voinescu@arm.com,
-        Lukasz.Luba@arm.com, Morten.Rasmussen@arm.com,
-        Dietmar.Eggemann@arm.com, maz@kernel.org,
+        Sun, 10 Apr 2022 23:15:34 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBBA72F3AE;
+        Sun, 10 Apr 2022 20:13:21 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0V9ggjyY_1649646797;
+Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0V9ggjyY_1649646797)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 11 Apr 2022 11:13:18 +0800
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Fuad Tabba <tabba@google.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] cpufreq: CPPC: Register EM based on efficiency
- class information
-Message-ID: <20220411031231.noq5yprp5oui3lsx@vireshk-i7>
-References: <20220407081620.1662192-1-pierre.gondois@arm.com>
- <20220407081620.1662192-4-pierre.gondois@arm.com>
+        "Jason A . Donenfeld" <Jason@zx2c4.com>,
+        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Subject: [PATCH] crypto: arm64/sm4 - Fix wrong dependency of NEON/CE implementation
+Date:   Mon, 11 Apr 2022 11:13:13 +0800
+Message-Id: <20220411031313.35449-1-tianjia.zhang@linux.alibaba.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220407081620.1662192-4-pierre.gondois@arm.com>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07-04-22, 10:16, Pierre Gondois wrote:
-> +static void cppc_cpufreq_register_em(struct cpufreq_policy *policy)
-> +{
-> +	struct cppc_cpudata *cpu_data;
-> +	struct em_data_callback em_cb =
-> +		EM_ADV_DATA_CB(cppc_get_cpu_power, cppc_get_cpu_cost);
-> +
-> +	if (!efficiency_class_populated)
+Commit d2825fa9365d ("crypto: sm3,sm4 - move into crypto directory")
+moved the sm4 library implementation from the lib/crypto directory to
+the crypto directory and configured the name as CRYPTO_SM4. The arm64
+SM4 NEON/CE implementation depends on this and needs to be modified
+uniformly.
 
-Instead of a new variable for this, what about setting
-cppc_cpufreq_driver.register_em = cppc_cpufreq_register_em, only if
-you were able to populate the efficiency class in the first place ?
+Fixes: 4f1aef9b806f ("crypto: arm64/sm4 - add ARMv8 NEON implementation")
+Fixes: 5b33e0ec881c ("crypto: arm64/sm4 - add ARMv8 Crypto Extensions implementation")
+Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+---
+ arch/arm64/crypto/Kconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> +		return;
-> +
-> +	cpu_data = cppc_cpufreq_search_cpu_data(policy->cpu);
-> +	em_dev_register_perf_domain(get_cpu_device(policy->cpu),
-> +			get_perf_level_count(policy), &em_cb,
-> +			cpu_data->shared_cpu_map, 0);
-> +}
-> +
->  #else
->  
->  static unsigned int cppc_cpufreq_get_transition_delay_us(unsigned int cpu)
-> @@ -471,6 +609,9 @@ static int populate_efficiency_class(void)
->  {
->  	return 0;
->  }
-> +static void cppc_cpufreq_register_em(struct cpufreq_policy *policy)
-> +{
-> +}
->  #endif
->  
->  
-> @@ -742,6 +883,7 @@ static struct cpufreq_driver cppc_cpufreq_driver = {
->  	.init = cppc_cpufreq_cpu_init,
->  	.exit = cppc_cpufreq_cpu_exit,
->  	.set_boost = cppc_cpufreq_set_boost,
-> +	.register_em = cppc_cpufreq_register_em,
->  	.attr = cppc_cpufreq_attr,
->  	.name = "cppc_cpufreq",
->  };
-> -- 
-> 2.25.1
-
+diff --git a/arch/arm64/crypto/Kconfig b/arch/arm64/crypto/Kconfig
+index 4fe7037d2347..ac85682c013c 100644
+--- a/arch/arm64/crypto/Kconfig
++++ b/arch/arm64/crypto/Kconfig
+@@ -57,13 +57,13 @@ config CRYPTO_SM4_ARM64_CE_BLK
+ 	tristate "SM4 in ECB/CBC/CFB/CTR modes using ARMv8 Crypto Extensions"
+ 	depends on KERNEL_MODE_NEON
+ 	select CRYPTO_SKCIPHER
+-	select CRYPTO_LIB_SM4
++	select CRYPTO_SM4
+ 
+ config CRYPTO_SM4_ARM64_NEON_BLK
+ 	tristate "SM4 in ECB/CBC/CFB/CTR modes using NEON instructions"
+ 	depends on KERNEL_MODE_NEON
+ 	select CRYPTO_SKCIPHER
+-	select CRYPTO_LIB_SM4
++	select CRYPTO_SM4
+ 
+ config CRYPTO_GHASH_ARM64_CE
+ 	tristate "GHASH/AES-GCM using ARMv8 Crypto Extensions"
 -- 
-viresh
+2.24.3 (Apple Git-128)
+

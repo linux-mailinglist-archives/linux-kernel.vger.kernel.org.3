@@ -2,164 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D7674FBDBC
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 15:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F41224FBDBA
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 15:47:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346632AbiDKNuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 09:50:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33680 "EHLO
+        id S1346627AbiDKNto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 09:49:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234271AbiDKNup (ORCPT
+        with ESMTP id S234271AbiDKNtk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 09:50:45 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43768237E4;
-        Mon, 11 Apr 2022 06:48:31 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id s8so14607511pfk.12;
-        Mon, 11 Apr 2022 06:48:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LLXZyvUQVDwQmlTRZYr8MZcRMt1y/BLKpRQAolu/Ffc=;
-        b=GFVc/seHJMlYRvfRtum43NA3xEtED7d6iAtbmPM31TpzWUfzIew0ASdlttqW7GMKfj
-         JxWHu59RLwzno9JG0EUDwiXmwtV/ZztR0dViQqwh1fOCgJ4LOxzQoAkxum1ypEhRnEkF
-         m+iFwRUIJRIIlEGbwaqEEINLlQlgdtInbjO1sM3Jf0oRVoppN9yb1oxm/uFPzkQDhGAx
-         LuB1hLpvYkQt4saPxjYULzekbSvXf5DOQBECMDOR/2KxaWydwD7RbN3xgSgDGyF6P+gk
-         LdePHXuMQpOLKeGDA2M8kv207UH/b2hRxFoPEo06Wu9lmfEDd1SwUnybolDIjWlKwyyY
-         SJlQ==
+        Mon, 11 Apr 2022 09:49:40 -0400
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A86C12090;
+        Mon, 11 Apr 2022 06:47:26 -0700 (PDT)
+Received: by mail-qk1-f180.google.com with SMTP id j6so10617243qkp.9;
+        Mon, 11 Apr 2022 06:47:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LLXZyvUQVDwQmlTRZYr8MZcRMt1y/BLKpRQAolu/Ffc=;
-        b=e2Bon6sy8F9y+F/0YqgdTaDjxzaEppd0/6Y8POV8MQK/AxaMPzV0+7fvCqR4y13DLp
-         rBKYXcFPAzl5gNaNxSB5P7apscIb3VWR6nTiC9JnirsAsZfM/VRTYJPlw523CBQIxJzN
-         zC4yRrOqV8qBvQlqVrPY1rZs7Wh3dF55BbLx+lKuxoZyrZyoT0ZbL9cEBcwnmrI19mOk
-         Mz1HupRJRt+FPa7VabIjQqhWRjUpp2e4qDl5/DvNfKRADACLjVXQlCJnzVJXHDKxIPRE
-         K2q7eOsoA/cGbG1ZbtSa1XRkbuR0RK4/Xd96yw6jf8WYw3yAQJkQBKsmTkQSo9nn1a97
-         YO0g==
-X-Gm-Message-State: AOAM5325HRuDVddaDJfb78yhnUfSgG9ma/ioyBRNFno071xmdpivPMJ2
-        lM23DNP9Ssv/7+uatgUV/Co=
-X-Google-Smtp-Source: ABdhPJxQSywZezCyY3d8fX/H7SUBd9y2VY3EdITrK6hnk+ltd7Eo2Vis/1zCDmzPUsIg0pUGDnT2wg==
-X-Received: by 2002:a65:418b:0:b0:382:250b:4dda with SMTP id a11-20020a65418b000000b00382250b4ddamr27265124pgq.428.1649684910717;
-        Mon, 11 Apr 2022 06:48:30 -0700 (PDT)
-Received: from localhost.localdomain ([103.149.162.115])
-        by smtp.gmail.com with ESMTPSA id e6-20020a63aa06000000b00380c8bed5a6sm29420805pgf.46.2022.04.11.06.48.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 06:48:30 -0700 (PDT)
-From:   Dongli Si <kvmx86@gmail.com>
-X-Google-Original-From: Dongli Si <sidongli1997@gmail.com>
-To:     peterz@infradead.org, joro@8bytes.org, likexu@tencent.com
-Cc:     liam.merwick@oracle.com, kim.phillips@amd.com, mingo@kernel.org,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, tglx@linutronix.de, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        jmattson@google.com, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] perf/x86/amd: cpu_hw_events::perf_ctr_virt_mask should only be used on host
-Date:   Mon, 11 Apr 2022 21:46:51 +0800
-Message-Id: <20220411134651.740234-1-sidongli1997@gmail.com>
-X-Mailer: git-send-email 2.32.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tCnkeyoKwqeX0JN+o8L5AX58NLvdx+Oy98J9n9irz2I=;
+        b=QsVLZhstsbtqMWAt1NlGRARQ+RZOSXCHb/O1auvUcrzaapQ3Saig1NckFJsTSxuiH1
+         ELayZrTpkO9f7Gm85athQjc0jKGdS8eRAtWq9Yxz7++0jlorRG6q4tmWwPrvknqZ8w7P
+         uqf2Woifk/Xc8qkmPLqYT7/91YKx8Pb/gIItGXqtK/+aCpkS7bK3M66epXLmT6FPGWgc
+         oOM7++jylqUC2HF32ajb/30YPmEg2S06gXHGI7l9m4rhyJT4ecVkox2CAcOzD4vmV8ir
+         ldKtBd9WVXDcyWihgydhychncmS67Vn1UXyHSSE2BRyBaKJsOrvW0lib4E66E+oDWPvO
+         TDaA==
+X-Gm-Message-State: AOAM532qtX7tcyKDcZcp7GNLKIBaINU6T5IdZw+wawZs5m941pHp29BC
+        NgWpyE/yw0BCHYr2ZgfatdNZp/3t4F1x8w==
+X-Google-Smtp-Source: ABdhPJwSgjjIb1LGvAWUwyssIO5dX9zuTvPIMgcCKNCDgMB4ayCF+GdyosCA7XeSglqIP0Ln4BqYqQ==
+X-Received: by 2002:a37:aec7:0:b0:69b:f27b:8784 with SMTP id x190-20020a37aec7000000b0069bf27b8784mr8783717qke.464.1649684845151;
+        Mon, 11 Apr 2022 06:47:25 -0700 (PDT)
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
+        by smtp.gmail.com with ESMTPSA id y20-20020a05622a121400b002eefd7bf5basm1519967qtx.63.2022.04.11.06.47.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Apr 2022 06:47:24 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id g34so7639127ybj.1;
+        Mon, 11 Apr 2022 06:47:24 -0700 (PDT)
+X-Received: by 2002:a5b:984:0:b0:63f:8c38:676c with SMTP id
+ c4-20020a5b0984000000b0063f8c38676cmr11998194ybq.393.1649684844325; Mon, 11
+ Apr 2022 06:47:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+References: <20220407200205.28838-1-javierm@redhat.com> <20220407200205.28838-2-javierm@redhat.com>
+In-Reply-To: <20220407200205.28838-2-javierm@redhat.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 11 Apr 2022 15:47:13 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUGQ6qabs_xD6kQeDruQLG-OX17UEVrgeGu3Eo6C2dEgw@mail.gmail.com>
+Message-ID: <CAMuHMdUGQ6qabs_xD6kQeDruQLG-OX17UEVrgeGu3Eo6C2dEgw@mail.gmail.com>
+Subject: Re: [PATCH 1/5] dt-bindings: display: ssd1307fb: Deprecate fbdev
+ compatible strings
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Chen-Yu Tsai <wens@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dongli Si <sidongli1997@gmail.com>
+Hi Javier,
 
-perf_ctr_virt_mask is used to mask Host-Only bit when SVM is disabled,
-Using it on a guest doesn't make sense and make things obscure.
+On Thu, Apr 7, 2022 at 10:03 PM Javier Martinez Canillas
+<javierm@redhat.com> wrote:
+> The current compatible strings for SSD130x I2C controllers contain an -fb
+> suffix, this seems to indicate that are for a fbdev driver. But the DT is
+> supposed to describe the hardware and not Linux implementation details.
+>
+> Let's deprecate those compatible strings and add a new enum that contains
+> compatible strings that don't have a -fb suffix. These will be matched by
+> the ssd130x-i2c DRM driver.
+>
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
 
-Revert commit df51fe7ea1c1c
-("perf/x86/amd: Don't touch the AMD64_EVENTSEL_HOSTONLY bit inside the guest"),
-Because it make things a little obscure and this #GP has been fixed in KVM.
+> --- a/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
+> +++ b/Documentation/devicetree/bindings/display/solomon,ssd1307fb.yaml
+> @@ -12,12 +12,24 @@ maintainers:
+>
+>  properties:
+>    compatible:
+> -    enum:
+> -      - sinowealth,sh1106-i2c
+> -      - solomon,ssd1305fb-i2c
+> -      - solomon,ssd1306fb-i2c
+> -      - solomon,ssd1307fb-i2c
+> -      - solomon,ssd1309fb-i2c
+> +    oneOf:
+> +      # Deprecated compatible strings
+> +      - items:
+> +          - enum:
+> +              - solomon,ssd1305fb-i2c
+> +              - solomon,ssd1306fb-i2c
+> +              - solomon,ssd1307fb-i2c
+> +              - solomon,ssd1309fb-i2c
 
-Fixes: 1018faa6cf23 ("perf/x86/kvm: Fix Host-Only/Guest-Only counting with SVM disabled")
-Signed-off-by: Dongli Si <sidongli1997@gmail.com>
----
- arch/x86/events/amd/core.c   | 19 ++++++++++++++++++-
- arch/x86/events/perf_event.h |  3 +--
- 2 files changed, 19 insertions(+), 3 deletions(-)
+Please drop the "-i2c" suffixes, too.
+We already have plenty of IIO sensors and audio codecs using the
+same compatible value for spi and i2c, cfr.
+'git grep compatible -- "*-[si][p2][ic].c"'
 
-diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
-index 9687a8aef01c..5ac7d9410d36 100644
---- a/arch/x86/events/amd/core.c
-+++ b/arch/x86/events/amd/core.c
-@@ -533,7 +533,12 @@ static void amd_pmu_cpu_starting(int cpu)
- 	struct amd_nb *nb;
- 	int i, nb_id;
- 
--	cpuc->perf_ctr_virt_mask = AMD64_EVENTSEL_HOSTONLY;
-+	/*
-+	 * When SVM is disabled, set the Host-Only bit will cause the
-+	 * performance counter to not work.
-+	 */
-+	if (!boot_cpu_has(X86_FEATURE_HYPERVISOR))
-+		cpuc->perf_ctr_virt_mask = AMD64_EVENTSEL_HOSTONLY;
- 
- 	if (!x86_pmu.amd_nb_constraints)
- 		return;
-@@ -1023,10 +1028,16 @@ __init int amd_pmu_init(void)
- 	return 0;
- }
- 
-+/*
-+ * Unmask the Host-only bit when SVM is enabled on the Host Hypervisor
-+ */
- void amd_pmu_enable_virt(void)
- {
- 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
- 
-+	if (boot_cpu_has(X86_FEATURE_HYPERVISOR))
-+		return;
-+
- 	cpuc->perf_ctr_virt_mask = 0;
- 
- 	/* Reload all events */
-@@ -1035,10 +1046,16 @@ void amd_pmu_enable_virt(void)
- }
- EXPORT_SYMBOL_GPL(amd_pmu_enable_virt);
- 
-+/*
-+ * Mask the Host-only bit when SVM is disabled on the Host Hypervisor
-+ */
- void amd_pmu_disable_virt(void)
- {
- 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
- 
-+	if (boot_cpu_has(X86_FEATURE_HYPERVISOR))
-+		return;
-+
- 	/*
- 	 * We only mask out the Host-only bit so that host-only counting works
- 	 * when SVM is disabled. If someone sets up a guest-only counter when
-diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
-index 150261d929b9..fa1428ca60b6 100644
---- a/arch/x86/events/perf_event.h
-+++ b/arch/x86/events/perf_event.h
-@@ -1138,10 +1138,9 @@ void x86_pmu_stop(struct perf_event *event, int flags);
- 
- static inline void x86_pmu_disable_event(struct perf_event *event)
- {
--	u64 disable_mask = __this_cpu_read(cpu_hw_events.perf_ctr_virt_mask);
- 	struct hw_perf_event *hwc = &event->hw;
- 
--	wrmsrl(hwc->config_base, hwc->config & ~disable_mask);
-+	wrmsrl(hwc->config_base, hwc->config);
- 
- 	if (is_counter_pair(hwc))
- 		wrmsrl(x86_pmu_config_addr(hwc->idx + 1), 0);
--- 
-2.32.0
+Gr{oetje,eeting}s,
 
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

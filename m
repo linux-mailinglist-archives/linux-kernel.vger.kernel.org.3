@@ -2,109 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E19224FB4C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 09:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E45E74FB4BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 09:27:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245394AbiDKHaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 03:30:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37732 "EHLO
+        id S242933AbiDKHaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 03:30:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243598AbiDKHaF (ORCPT
+        with ESMTP id S233473AbiDKHaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 03:30:05 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3523CFD9
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 00:27:52 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id a16-20020a17090a6d9000b001c7d6c1bb13so15895168pjk.4
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 00:27:52 -0700 (PDT)
+        Mon, 11 Apr 2022 03:30:00 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C00D3980C
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 00:27:46 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id h126-20020a1c2184000000b0038eb17fb7d6so2872358wmh.2
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 00:27:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=dPQb2XUhCwirAl6RZqcjJK++gcgif/8kvwh+CadUz3I=;
-        b=vk8tSK2SuBtu1pR68M+NpcoBAAxowa3wJlU3AMOY72md1Hscl+QNeJNVcx10ejkuuV
-         NKZxxgnF1yldlX2MkwYMlndhvYLdVpauINzM1OJe7Gm4Ja0ONJJ+moREvoB2tju7IFxG
-         S2uciJD12fnvlOYAOjli/Oc0252AsxXr19m7FjVkfEfVt7d+4W8EhVfPiayUUIK55VO2
-         1OYinPvHp8r7yCmeTFS6M61kgx9Sby11bwnsIxYHeJC71r9vlPUoCggPbNqj876PY8KC
-         MZ55RMC5eFxv0ZOnQF7zxi+0Nfwm8wE7DR3hGUQhMy9kF/pIKmngY7NXMpyUPOcxegs5
-         ID2g==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=wZSkW98SEIEbhV4Bb3TdcBneRqZQZaCTVUrWB9hDT8Y=;
+        b=3Z2fp/lJWPWwBIqHvvH46BbrRC4X+hrEY4HIiAKeFD9N15+Pc3LOXwkx4z0mRgKKQQ
+         CgXnBts5V8ZDutpV8FgRN864w9S4ovq/11FilejtVOsXAmKd3Btdspx7GjkuiUnkaEpo
+         R454Pw4SnbuZNQJGZC4dK5Hk7dGM+bbWc2wuSSgKQXFaCQeFy3ecS7/9rrQYdK2XC8St
+         q/3goMA8YgwrLBY+UnAa7f6FMeiiWGmDsmTBzcqL4uBRk2SyvbUsbxL83FLSNbQnHNbs
+         wWyuWMajKX4GDhdvMBafAFkfxzk76BE4txrb4M/yPl9BEcJT4R2GK8Tyf3dKHwadSFHm
+         2cRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dPQb2XUhCwirAl6RZqcjJK++gcgif/8kvwh+CadUz3I=;
-        b=KxVvwktG7HlIqMkxW99BZHc06TNUZ/8bLM1auyXoYql5Zxh5yAkWjRCh16mJvkI6cE
-         F7wORCE2BHGPsVQ4hjEvA4X0cFnVO74l6oIIeAwyXHTUqOISdDJscaXCMZgiKh9mYUj+
-         eJ906AX/Uf6fOyfXv/wkDYtX/xKygeFgzMkKvD2pu3QvXAP+KAtlTYWNTVy72Cp3+e9m
-         7/PDI80pCUFJbqS9kwVUMbmcLwJQ8LHWFvAuPPALhhCA0yrA2aOpxeh58yx+EEXp9YbT
-         gUgy1/fpy9CU3iFufauBSWlVOYFbjA1yBSgrew+6MMct7nHPOZyxLoOCfoNMM4ZQFNUK
-         IysQ==
-X-Gm-Message-State: AOAM533yhlYkTMqGhrp30nbUcc77hMkl4/Sc+OrdHDOp/m2fBw+qtscv
-        UKOk3CxI72wlvs2NdXj9KkvH
-X-Google-Smtp-Source: ABdhPJwfZOmz7bn126D73jA4tU3ELBxulz6f/9h9UuNvv751oKovp9R+buhc7tnYmqMckMjra91bgA==
-X-Received: by 2002:a17:902:f68e:b0:154:6518:69ba with SMTP id l14-20020a170902f68e00b00154651869bamr31399663plg.60.1649662072219;
-        Mon, 11 Apr 2022 00:27:52 -0700 (PDT)
-Received: from thinkpad ([117.217.182.106])
-        by smtp.gmail.com with ESMTPSA id m1-20020a17090ade0100b001cb3feaddfcsm8828185pjv.2.2022.04.11.00.27.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 00:27:51 -0700 (PDT)
-Date:   Mon, 11 Apr 2022 12:57:43 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Rohit Agarwal <quic_rohiagar@quicinc.com>
-Cc:     will@kernel.org, robin.murphy@arm.com, joro@8bytes.org,
-        robh+dt@kernel.org, krzk+dt@kernel.org, ulf.hansson@linaro.org,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux-foundation.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 0/7] SDX65 devicetree updates
-Message-ID: <20220411072743.GA24975@thinkpad>
-References: <1649660143-22400-1-git-send-email-quic_rohiagar@quicinc.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=wZSkW98SEIEbhV4Bb3TdcBneRqZQZaCTVUrWB9hDT8Y=;
+        b=To699AHpJo/9+08pooc1xyYQlqpnQXW2m/sfjuJeaZt0jAm6wqur8tdWoFVfcQ2QRL
+         C0wzxMFpxEzlwsc8a/8bkBd+i3l1hmLLBHd/WWYrvV+tTuCNEoq6TkyyGhjDRALg+x5q
+         c5Vg9AZDgminaICBEhTpFEz1zRDB6YSGaZ2CfOXsRFq4idLdDiUv0LpY45vhpLAYIWGP
+         3V8eGhh+DqRsVQcq9kL4SWFxiITy3G3I0qeAIO9aTgZUtxbqiCu5HFfwDMX24Jh9BS67
+         DsHd6z6VWIqnAYo3Q5RgmvMKBEuVj8uB94q6+sL8bgROUXpaeG1NPbQ7YxNJjHbGNSIT
+         cr8Q==
+X-Gm-Message-State: AOAM531+yOeTd7W7+AfCzgXJQkdU/dcv8wCpfQ0ngZjKmMf7Qv0QtwAV
+        XhrgS9+FGomXxTKEuIkUBODiYQ==
+X-Google-Smtp-Source: ABdhPJxK439eNBYeBmj50odYBDMozzwt8V7STzblGIDkD8wftNkCQ+v5AbP0Ddx/I7IqteBxuzC+aA==
+X-Received: by 2002:a1c:f413:0:b0:37b:d1de:5762 with SMTP id z19-20020a1cf413000000b0037bd1de5762mr27942434wma.108.1649662064710;
+        Mon, 11 Apr 2022 00:27:44 -0700 (PDT)
+Received: from ?IPV6:2001:861:44c0:66c0:d1:e096:d183:1bc5? ([2001:861:44c0:66c0:d1:e096:d183:1bc5])
+        by smtp.gmail.com with ESMTPSA id k124-20020a1ca182000000b0038eb706c030sm4031206wme.39.2022.04.11.00.27.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Apr 2022 00:27:44 -0700 (PDT)
+Message-ID: <5d5d4590-18fc-1d94-08e3-7ffde8d9146d@baylibre.com>
+Date:   Mon, 11 Apr 2022 09:27:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1649660143-22400-1-git-send-email-quic_rohiagar@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 1/2] i2c: meson: Use _SHIFT and _MASK for register
+ definitions
+Content-Language: en-US
+To:     Lucas Tanure <tanure@linux.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220409164334.157664-1-tanure@linux.com>
+ <20220409164334.157664-2-tanure@linux.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+In-Reply-To: <20220409164334.157664-2-tanure@linux.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 12:25:36PM +0530, Rohit Agarwal wrote:
-> Hello,
+On 09/04/2022 18:43, Lucas Tanure wrote:
+> Differentiate between masks and shifts
 > 
-> This series adds devicetree nodes for SDX65. It adds
-> reserved memory nodes, SDHCI, smmu and tcsr mutex support.
+> Signed-off-by: Lucas Tanure <tanure@linux.com>
+> ---
+>   drivers/i2c/busses/i2c-meson.c | 41 ++++++++++++++++++----------------
+>   1 file changed, 22 insertions(+), 19 deletions(-)
 > 
+> diff --git a/drivers/i2c/busses/i2c-meson.c b/drivers/i2c/busses/i2c-meson.c
+> index 07eb819072c4..4b4a5b2d77ab 100644
+> --- a/drivers/i2c/busses/i2c-meson.c
+> +++ b/drivers/i2c/busses/i2c-meson.c
+> @@ -30,18 +30,21 @@
+>   #define REG_TOK_RDATA1		0x1c
+>   
+>   /* Control register fields */
+> -#define REG_CTRL_START		BIT(0)
+> -#define REG_CTRL_ACK_IGNORE	BIT(1)
+> -#define REG_CTRL_STATUS		BIT(2)
+> -#define REG_CTRL_ERROR		BIT(3)
+> -#define REG_CTRL_CLKDIV		GENMASK(21, 12)
+> -#define REG_CTRL_CLKDIVEXT	GENMASK(29, 28)
+> -
+> -#define REG_SLV_ADDR		GENMASK(7, 0)
+> -#define REG_SLV_SDA_FILTER	GENMASK(10, 8)
+> -#define REG_SLV_SCL_FILTER	GENMASK(13, 11)
+> -#define REG_SLV_SCL_LOW		GENMASK(27, 16)
+> -#define REG_SLV_SCL_LOW_EN	BIT(28)
+> +#define REG_CTRL_START			BIT(0)
+> +#define REG_CTRL_ACK_IGNORE		BIT(1)
+> +#define REG_CTRL_STATUS			BIT(2)
+> +#define REG_CTRL_ERROR			BIT(3)
+> +#define REG_CTRL_CLKDIV_SHIFT		12
+> +#define REG_CTRL_CLKDIV_MASK		GENMASK(21, REG_CTRL_CLKDIV_SHIFT)
+> +#define REG_CTRL_CLKDIVEXT_SHIFT	28
+> +#define REG_CTRL_CLKDIVEXT_MASK		GENMASK(29, REG_CTRL_CLKDIVEXT_SHIFT)
+> +
+> +#define REG_SLV_ADDR_MASK		GENMASK(7, 0)
+> +#define REG_SLV_SDA_FILTER_MASK		GENMASK(10, 8)
+> +#define REG_SLV_SCL_FILTER_MASK		GENMASK(13, 11)
+> +#define REG_SLV_SCL_LOW_SHIFT		16
+> +#define REG_SLV_SCL_LOW_MASK		GENMASK(27, REG_SLV_SCL_LOW_SHIFT)
+> +#define REG_SLV_SCL_LOW_EN		BIT(28)
+>   
+>   #define I2C_TIMEOUT_MS		500
+>   #define FILTER_DELAY		15
+> @@ -149,11 +152,11 @@ static void meson_i2c_set_clk_div(struct meson_i2c *i2c, unsigned int freq)
+>   		div = GENMASK(11, 0);
+>   	}
+>   
+> -	meson_i2c_set_mask(i2c, REG_CTRL, REG_CTRL_CLKDIV,
+> -			   FIELD_PREP(REG_CTRL_CLKDIV, div & GENMASK(9, 0)));
+> +	meson_i2c_set_mask(i2c, REG_CTRL, REG_CTRL_CLKDIV_MASK,
+> +			   FIELD_PREP(REG_CTRL_CLKDIV_MASK, div & GENMASK(9, 0)));
+>   
+> -	meson_i2c_set_mask(i2c, REG_CTRL, REG_CTRL_CLKDIVEXT,
+> -			   FIELD_PREP(REG_CTRL_CLKDIVEXT, div >> 10));
+> +	meson_i2c_set_mask(i2c, REG_CTRL, REG_CTRL_CLKDIVEXT_MASK,
+> +			   FIELD_PREP(REG_CTRL_CLKDIVEXT_MASK, div >> 10));
+>   
+>   	/* Disable HIGH/LOW mode */
+>   	meson_i2c_set_mask(i2c, REG_SLAVE_ADDR, REG_SLV_SCL_LOW_EN, 0);
+> @@ -292,8 +295,8 @@ static void meson_i2c_do_start(struct meson_i2c *i2c, struct i2c_msg *msg)
+>   		TOKEN_SLAVE_ADDR_WRITE;
+>   
+>   
+> -	meson_i2c_set_mask(i2c, REG_SLAVE_ADDR, REG_SLV_ADDR,
+> -			   FIELD_PREP(REG_SLV_ADDR, msg->addr << 1));
+> +	meson_i2c_set_mask(i2c, REG_SLAVE_ADDR, REG_SLV_ADDR_MASK,
+> +			   FIELD_PREP(REG_SLV_ADDR_MASK, msg->addr << 1));
+>   
+>   	meson_i2c_add_token(i2c, TOKEN_START);
+>   	meson_i2c_add_token(i2c, token);
+> @@ -467,7 +470,7 @@ static int meson_i2c_probe(struct platform_device *pdev)
+>   
+>   	/* Disable filtering */
+>   	meson_i2c_set_mask(i2c, REG_SLAVE_ADDR,
+> -			   REG_SLV_SDA_FILTER | REG_SLV_SCL_FILTER, 0);
+> +			   REG_SLV_SDA_FILTER_MASK | REG_SLV_SCL_FILTER_MASK, 0);
+>   
+>   	meson_i2c_set_clk_div(i2c, timings.bus_freq_hz);
+>   
 
-Please CC me to all SDX65 related patches as I'd like to review them.
-
-Thanks,
-Mani
-
-> Thanks,
-> Rohit.
-> 
-> Rohit Agarwal (7):
->   ARM: dts: qcom: sdx65: Add reserved memory nodes
->   dt-bindings: mmc: sdhci-msm: Document the SDX65 compatible
->   ARM: dts: qcom: sdx65: Add support for SDHCI controller
->   dt-bindings: arm-smmu: Add binding for SDX65 SMMU
->   ARM: dts: qcom: sdx65: Enable ARM SMMU
->   ARM: dts: qcom: sdx65: Add support for TCSR Mutex
->   ARM: dts: qcom: sdx65: Add Shared memory manager support
-> 
->  .../devicetree/bindings/iommu/arm,smmu.yaml        |   1 +
->  .../devicetree/bindings/mmc/sdhci-msm.txt          |   1 +
->  arch/arm/boot/dts/qcom-sdx65-mtp.dts               |  21 ++++
->  arch/arm/boot/dts/qcom-sdx65.dtsi                  | 110 +++++++++++++++++++++
->  4 files changed, 133 insertions(+)
-> 
-> -- 
-> 2.7.4
-> 
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>

@@ -2,105 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 079454FBFB8
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 16:58:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F36224FBFBC
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 16:59:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347581AbiDKPA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 11:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41402 "EHLO
+        id S1347586AbiDKPBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 11:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347580AbiDKPAr (ORCPT
+        with ESMTP id S1347580AbiDKPBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 11:00:47 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B69911EAE5
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 07:58:32 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23BEwP8j036059;
-        Mon, 11 Apr 2022 09:58:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1649689105;
-        bh=dj6CfkKKT+UoMmHhDMzXNUWRTVBPwxkriT6HERhWaq4=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=a9pL1b7N/DMin1ujWokjfWTbRdfMgjAnKA92+OIbMwbRugglNu2qUPKvcCnTLsIy6
-         M+zWxGZfMiuh8zs6FDExgMofzz65xvETuNFRCn1/+FyattIMOku+HibJNrQl/dVjwa
-         M18gKUjSRerqBirqg32aPA9SO7ygURY/QOb8ujm8=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23BEwPT1021324
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 11 Apr 2022 09:58:25 -0500
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 11
- Apr 2022 09:58:25 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 11 Apr 2022 09:58:25 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23BEwP0T119964;
-        Mon, 11 Apr 2022 09:58:25 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     <cgel.zte@gmail.com>
-CC:     Nishanth Menon <nm@ti.com>, <ssantosh@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        <linux-kernel@vger.kernel.org>, Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] soc: ti: pruss: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-Date:   Mon, 11 Apr 2022 09:58:25 -0500
-Message-ID: <164968909300.29224.373851351948580159.b4-ty@ti.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220408080853.2494292-1-chi.minghao@zte.com.cn>
-References: <20220408080853.2494292-1-chi.minghao@zte.com.cn>
+        Mon, 11 Apr 2022 11:01:41 -0400
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6A221E06;
+        Mon, 11 Apr 2022 07:59:27 -0700 (PDT)
+Received: by mail-qk1-f172.google.com with SMTP id b33so10825289qkp.13;
+        Mon, 11 Apr 2022 07:59:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yUq/l2eFC4o7PuogV4g6ysQ8qWlSny+TA+UhI++mHfU=;
+        b=E7Oydqafp1Ye+7rSEheT3Vk8E2s7P4xfcCMvF6l3vwuMytFrvtmifUva0C35539irM
+         Fict1Oe6lNXZgadclQFLxjSj1afwS2WC+vkUeL5yUaAbZsN/TIS3s4k2jREpb/U0wILm
+         Y2iZSGBzR9UPZos/Q5DcoWv+CEnZgObdhUhT5TOpJt2YYEOkUFd71h7E24UqOW8sFAqq
+         qxNoFl9Ga3vYzC6Fyh5Ig8Cl5F1qm3pdzmR38hIQgbalWXSDZ2CzmuFUu6KdGnlU03tc
+         Iw6gIjLj4hiEVXudZvTq8ymnVhQqXr4ZQn1+yKqoH//FFVFoCad/gHpH0YrGzveo4GIW
+         k9NA==
+X-Gm-Message-State: AOAM533eA1ubrQ5IYBKfA8ETn+LDp5FWcN+CluMV1nKUpjuEYiHDwNej
+        CELkE+tk9H1B8yvxwhLUSOkcqHeeGYkI4g==
+X-Google-Smtp-Source: ABdhPJwXXobat+RR5zXQ9srHJH7D9PuWKPe705W1XxLfwdseXxqXdskAH/9lU59ySFm5QRhp9togFQ==
+X-Received: by 2002:a05:620a:a57:b0:69c:2bc2:6579 with SMTP id j23-20020a05620a0a5700b0069c2bc26579mr1916343qka.455.1649689165887;
+        Mon, 11 Apr 2022 07:59:25 -0700 (PDT)
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
+        by smtp.gmail.com with ESMTPSA id g4-20020ac87d04000000b002e06b4674a1sm25478505qtb.61.2022.04.11.07.59.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Apr 2022 07:59:25 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-2db2add4516so168862767b3.1;
+        Mon, 11 Apr 2022 07:59:25 -0700 (PDT)
+X-Received: by 2002:a81:3d81:0:b0:2eb:8069:5132 with SMTP id
+ k123-20020a813d81000000b002eb80695132mr26323646ywa.438.1649689164877; Mon, 11
+ Apr 2022 07:59:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220408122636.505737-1-valentin.caron@foss.st.com> <20220408122636.505737-4-valentin.caron@foss.st.com>
+In-Reply-To: <20220408122636.505737-4-valentin.caron@foss.st.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 11 Apr 2022 16:59:13 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWD8fxeqPUaT_CwnYdq02aaTsnQM_G-YyOGWooS5epCeQ@mail.gmail.com>
+Message-ID: <CAMuHMdWD8fxeqPUaT_CwnYdq02aaTsnQM_G-YyOGWooS5epCeQ@mail.gmail.com>
+Subject: Re: [PATCH V2 3/3] serial: stm32: add earlycon support
+To:     Valentin Caron <valentin.caron@foss.st.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Erwan Le Ray <erwan.leray@foss.st.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi cgel.zte@gmail.com,
+Hi Valentin,
 
-On Fri, 8 Apr 2022 08:08:53 +0000, cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
-> 
-> Using pm_runtime_resume_and_get is more appropriate
-> for simplifing code
-> 
-> 
+On Fri, Apr 8, 2022 at 3:14 PM Valentin Caron
+<valentin.caron@foss.st.com> wrote:
+> Add early console support in stm32 uart driver.
+>
+> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
+> Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
 
-I have applied the following to branch ti-drivers-soc-next on [1].
-Thank you!
+Thanks for your patch!
 
-[1/1] soc: ti: pruss: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-      commit: f25d2b2b554133b935e72c61deb40d82287a6f75
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -1264,6 +1264,12 @@
+>                         address must be provided, and the serial port must
+>                         already be setup and configured.
+>
+> +               stm32,<addr>
+> +                       Use early console provided by ST Microelectronics
+> +                       serial driver for STM32 SoCs. A valid base address
+> +                       must be provided, and the serial port must already
+> +                       be setup and configured.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent up the chain during
-the next merge window (or sooner if it is a relevant bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Why do you need this parameter?
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Given this driver uses DT, can't it figure out the serial port address
+from chosen/stdout-path?
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
++OF_EARLYCON_DECLARE(stm32, "st,stm32h7-uart", early_stm32_h7_serial_setup);
++OF_EARLYCON_DECLARE(stm32, "st,stm32f7-uart", early_stm32_f7_serial_setup);
++OF_EARLYCON_DECLARE(stm32, "st,stm32-uart", early_stm32_f4_serial_setup);
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+Gr{oetje,eeting}s,
 
-[1] git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

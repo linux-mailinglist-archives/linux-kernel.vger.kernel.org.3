@@ -2,56 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFDA34FB20D
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 04:53:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B19D04FB20E
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 04:53:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244010AbiDKCzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 22:55:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35218 "EHLO
+        id S244461AbiDKCzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 22:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234062AbiDKCzm (ORCPT
+        with ESMTP id S244449AbiDKCzq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 22:55:42 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA11E0B3;
-        Sun, 10 Apr 2022 19:53:28 -0700 (PDT)
-X-UUID: 376ffa70e2ca4549b02cd5f05a78d908-20220411
-X-UUID: 376ffa70e2ca4549b02cd5f05a78d908-20220411
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <xinlei.lee@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 68587967; Mon, 11 Apr 2022 10:53:22 +0800
-Received: from MTKMBS34N1.mediatek.inc (172.27.4.172) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 11 Apr 2022 10:53:21 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS34N1.mediatek.inc
- (172.27.4.172) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 11 Apr
- 2022 10:53:20 +0800
-Received: from mszsdaap41.gcn.mediatek.inc (10.16.6.141) by
- MTKCAS36.mediatek.inc (172.27.4.170) with Microsoft SMTP Server id
- 15.0.1497.2 via Frontend Transport; Mon, 11 Apr 2022 10:53:17 +0800
-From:   <xinlei.lee@mediatek.com>
-To:     <chunkuang.hu@kernel.org>, <p.zabel@pengutronix.de>,
-        <airlied@linux.ie>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <matthias.bgg@gmail.com>
-CC:     <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <rex-bc.chen@mediatek.com>,
-        <jitao.shi@mediatek.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Xinlei Lee <xinlei.lee@mediatek.com>
-Subject: [PATCH v4,2/2] drm/mediatek: Add mt8186 dpi compatible to mtk_dpi.c
-Date:   Mon, 11 Apr 2022 10:53:04 +0800
-Message-ID: <1649645584-13186-3-git-send-email-xinlei.lee@mediatek.com>
-X-Mailer: git-send-email 2.6.4
-In-Reply-To: <1649645584-13186-1-git-send-email-xinlei.lee@mediatek.com>
-References: <1649645584-13186-1-git-send-email-xinlei.lee@mediatek.com>
+        Sun, 10 Apr 2022 22:55:46 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE64110FD7
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 19:53:33 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id e8-20020a17090a118800b001cb13402ea2so10878480pja.0
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 19:53:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=mwYIjlJt8zbN56INdAix21qgimZ3+ODm37YcFq9UmAU=;
+        b=p6ilP60cadhsOoFS3+EMGPtfazxAC1eFmqnVF08ggj518PBEd12kRbqaZ8knXIXW/J
+         BzhgcZ7wIpaZUju56TfIhybWt5b0KtTtQux4iazdwEkAn5AL0dysAzh1p9A43PEYUBmp
+         V49SEnJBLVlCX7qypUqbjsQUsW+L/BFERs4g0mGmOxc/DrJysnS8VCYUeChLbzKdG6Pu
+         8mJPF25Kzoxt+Aw3tiZ8WKVZjmbyv5fDkzgQBfkSK6u2k3djz1SeP/yz4c/ljulp85tb
+         FYHQuOYwRVJXuR2iscaO9pPztBrAFtr86sFJ8KtD5aRRM6Ya76CYz6S1X3I1v4siI/ZN
+         l/uA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=mwYIjlJt8zbN56INdAix21qgimZ3+ODm37YcFq9UmAU=;
+        b=stIUIJ9iKrH6F4Vb8tixuIL+9p6Uc0tjNKhgMZHtlaVTLu85/rIDrA0pO91uctlzdf
+         KfLJCIj/do6Inqu6ZKdoxDv/iVEyWGVkbGtbhbFZKxZ5vywQpOrAYUJ16kGf228xTkID
+         nhkryRWXJoxOkuVeqvMJ/pplcuLTVu0OVeejRGmicbiLL5InOjF7sCO65rxz/DRNS+dP
+         to/RpAD7gaALhagDZGGDy/KmG8+/Xwsk0OS+EhB82d7PdBJgVbHmMEoHJuI32udR42ry
+         DHfW/9O206JUgIhevdxzSC1EWOXGUMVskl8qqCHj96lQxSc6otVmhIgmN6JwVpMmQtjl
+         0YBw==
+X-Gm-Message-State: AOAM532Y2/X1j4FidxYQ0BJysaY+FVggytJcPSwAuxKnMSQj7si8OF0O
+        uxiSpspuUx3HzNdPgpL8WVaOlw==
+X-Google-Smtp-Source: ABdhPJwEQQIubFxoIGWk2V8I9cAgfxjQheMjhYPv/nFlI5GwVfXYSu+RtST1yuQq6FuNUSCto9E3ew==
+X-Received: by 2002:a17:90b:4b84:b0:1cb:6cf5:d2ff with SMTP id lr4-20020a17090b4b8400b001cb6cf5d2ffmr9051371pjb.41.1649645613281;
+        Sun, 10 Apr 2022 19:53:33 -0700 (PDT)
+Received: from localhost ([223.184.83.228])
+        by smtp.gmail.com with ESMTPSA id z24-20020aa79f98000000b0050564c90916sm13339084pfr.200.2022.04.10.19.53.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Apr 2022 19:53:32 -0700 (PDT)
+Date:   Mon, 11 Apr 2022 08:23:31 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PM: opp: simplify with dev_err_probe()
+Message-ID: <20220411025331.pog2flqxicrnz7jv@vireshk-i7>
+References: <20220408111052.381603-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220408111052.381603-1-krzysztof.kozlowski@linaro.org>
+User-Agent: NeoMutt/20180716-391-311a52
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,44 +72,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xinlei Lee <xinlei.lee@mediatek.com>
+On 08-04-22, 13:10, Krzysztof Kozlowski wrote:
+> Common pattern of handling deferred probe can be simplified with
+> dev_err_probe().  Less code and the error value gets printed.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  drivers/opp/core.c | 14 +++++---------
+>  1 file changed, 5 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index 0b5357b9d342..ed72df835f8c 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -2030,10 +2030,9 @@ struct opp_table *dev_pm_opp_set_regulators(struct device *dev,
+>  	for (i = 0; i < count; i++) {
+>  		reg = regulator_get_optional(dev, names[i]);
+>  		if (IS_ERR(reg)) {
+> -			ret = PTR_ERR(reg);
+> -			if (ret != -EPROBE_DEFER)
+> -				dev_err(dev, "%s: no regulator (%s) found: %d\n",
+> -					__func__, names[i], ret);
+> +			ret = dev_err_probe(dev, PTR_ERR(reg),
+> +					    "%s: no regulator (%s) found\n",
+> +					    __func__, names[i]);
+>  			goto free_regulators;
+>  		}
+>  
+> @@ -2179,11 +2178,8 @@ struct opp_table *dev_pm_opp_set_clkname(struct device *dev, const char *name)
+>  	/* Find clk for the device */
+>  	opp_table->clk = clk_get(dev, name);
+>  	if (IS_ERR(opp_table->clk)) {
+> -		ret = PTR_ERR(opp_table->clk);
+> -		if (ret != -EPROBE_DEFER) {
+> -			dev_err(dev, "%s: Couldn't find clock: %d\n", __func__,
+> -				ret);
+> -		}
+> +		ret = dev_err_probe(dev, PTR_ERR(opp_table->clk),
+> +				    "%s: Couldn't find clock\n", __func__);
+>  		goto err;
+>  	}
 
-Add the compatible because use different .data in mt8186.
+Applied. Thanks.
 
-Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
----
- drivers/gpu/drm/mediatek/mtk_dpi.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
-index 4554e2de1430..824d7da41c6a 100644
---- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-+++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-@@ -815,6 +815,14 @@ static const struct mtk_dpi_conf mt8183_conf = {
- 	.num_output_fmts = ARRAY_SIZE(mt8183_output_fmts),
- };
- 
-+static const struct mtk_dpi_conf mt8186_conf = {
-+	.cal_factor =  mt8183_calculate_factor,
-+	.reg_h_fre_con = 0xe0,
-+	.max_clock_khz = 150000,
-+	.output_fmts = mt8183_output_fmts,
-+	.num_output_fmts = ARRAY_SIZE(mt8183_output_fmts),
-+};
-+
- static const struct mtk_dpi_conf mt8192_conf = {
- 	.cal_factor = mt8183_calculate_factor,
- 	.reg_h_fre_con = 0xe0,
-@@ -942,6 +950,9 @@ static const struct of_device_id mtk_dpi_of_ids[] = {
- 	{ .compatible = "mediatek,mt8183-dpi",
- 	  .data = &mt8183_conf,
- 	},
-+	{ .compatible = "mediatek,mt8186-dpi",
-+	  .data = &mt8186_conf,
-+	},
- 	{ .compatible = "mediatek,mt8192-dpi",
- 	  .data = &mt8192_conf,
- 	},
 -- 
-2.18.0
-
+viresh

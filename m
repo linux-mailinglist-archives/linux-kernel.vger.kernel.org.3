@@ -2,139 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E0EF4FC259
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 18:29:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B5BB4FC260
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 18:30:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348593AbiDKQbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 12:31:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33230 "EHLO
+        id S1348606AbiDKQcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 12:32:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbiDKQbR (ORCPT
+        with ESMTP id S1348610AbiDKQcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 12:31:17 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08on2065.outbound.protection.outlook.com [40.107.100.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 379631FB
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 09:29:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X1T5fTGCWeaL8sSy4kxKABoZCGuYdOG6D32PoNrEEIrTtjDB5eAkllFlr0zBGCiHJpmseervhBK0YiNIvDiZUeHdndcUjHSDiHbrct7YowqlnxEMiiNBZk7A7NF0fzJqjOOAaO2qW7iw5BfY3PpEnQd8UAR2ZmLsCIh1BseuoCb16gBTTjKc7DUdz+nLYGBTrR5FQMwA0Hhi8KXufSviHTNI/2fygYywh5LsU1wsssLhkg/AmVNRmK+2Iraq+ZHsRKe280igjeJYLisiQAQ/4fKWQdOhgviXYkyN3z5nBHFNqGCmHkVhbM4aWo+QJCNlWRj8CTKRyNJ/mpHTrCaWIg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JJjcBFxBjc/ujdSuqNuTGtyWtJLruW7TrZs2Ej6Xa+8=;
- b=VGjk5B6hZgU5nM7qkywhmzEoaiCol1uro/vPUcglZeEIHUz0QbVR1L2qH1D25N4m9YY3oJszdV/bkYYYLgKvMPTL9dagpR1R6BBipt2Kt656qCwSae2J/1WfMk20rhimuQYu68vQOv4sbEw+ICWcWmn2hv8GNPgJXnq8SprdmEBkWWrAfPRSm0TeXHD5vjzA4TYg3XYxipU4cc+TNQtT3kD3SL2SX0p+Oge3rz+sAK7JUivD2w5uyHKMk1vCRGLEW36m+fzokAjplE8qpdZFg3GqBZ+upFGOuCAtU2sL7YbIlzvYZbR7pI/eKfyxLeFsV4CIirIYMIFt4TH9pBO2ow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JJjcBFxBjc/ujdSuqNuTGtyWtJLruW7TrZs2Ej6Xa+8=;
- b=GaurF5ZnT+Ie7bmCfdtnTQjwJTw41clthqcD2VpBQ3eBTB8g7kE4/4OI8AGPb9IibtZjAQ9gUF8H4Pq+rJSClnrBJfko7+SB+xkLb/JMEV8WrNrjClibai/WbNJ+kNpFFt6ANV8T+QvjvzmxiVmzj8Zpj+AlhtMTWOvgcb3hDyvryS3Kv8OC7C8cJPwXGG9tzJGVxbTIlA2I5vLuL0gQsJ8yFgxAalqqBvEwowvbRTZo3aAK9EW5xyhRalb9wm9nN9/E+Ttmf75pWyeKzhlBnZsFh6QNb0lbqXz/oPPIQDBzj0HuHfVFiceItdbVajjOoFx7+55WY7BzNXyHYI1v4w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by CH2PR12MB4038.namprd12.prod.outlook.com (2603:10b6:610:7b::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Mon, 11 Apr
- 2022 16:29:01 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::cdfb:f88e:410b:9374]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::cdfb:f88e:410b:9374%6]) with mapi id 15.20.5144.029; Mon, 11 Apr 2022
- 16:29:01 +0000
-Date:   Mon, 11 Apr 2022 13:29:00 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        intel-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 18/34] drm/i915/gvt: devirtualize ->is_valid_gfn
-Message-ID: <20220411162900.GT2120790@nvidia.com>
-References: <20220411141403.86980-1-hch@lst.de>
- <20220411141403.86980-19-hch@lst.de>
+        Mon, 11 Apr 2022 12:32:06 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC8730F41
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 09:29:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649694591; x=1681230591;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=77oPR4LmE7Bt119yuWsMyORGZb3xw2RvMXnIBUrecwE=;
+  b=iQ8d9GTRxKXqE63iQJZuY3KijPWZf/NgGuvZk1rilWpQRa8HRd7FNeiw
+   p3lpEMfot1kGARYRwdrKDLpW9V/BU6oFOLiotjcdN8OrOY2OrXWt8Od0G
+   3wjnsqt+ia10ov1tBo5sbxyvOFwgRjPX1qIt6ZRyqpgkN/i4Xg3tOLHXV
+   fJzlFyhDVbujtGB0KaMUOpgBws/IcgDfUGYLR/dGmuU+98p/+LWkDmaMT
+   TccjMar7evhxdKvCSGs4Gxs35JLaAXyCFu8J1hAxVC6ax7BFUfBBAHlxR
+   5zEuUYWhNrRr2SoK8CK4OlPmy+IsV/sUV/F/phzJi7jOzsiHqas1SzK9t
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="325069196"
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="325069196"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 09:29:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="589943900"
+Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 11 Apr 2022 09:29:48 -0700
+Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ndwvE-0001yl-5R;
+        Mon, 11 Apr 2022 16:29:48 +0000
+Date:   Tue, 12 Apr 2022 00:29:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [jirislaby:devel 48/48] drivers/tty/serial/atmel_serial.c:985:13:
+ warning: variable 'sg_len' is uninitialized when used here
+Message-ID: <202204120034.naMtjHQQ-lkp@intel.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220411141403.86980-19-hch@lst.de>
-X-ClientProxiedBy: BLAP220CA0010.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:208:32c::15) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 91d4120a-1f25-44e6-4745-08da1bd8631c
-X-MS-TrafficTypeDiagnostic: CH2PR12MB4038:EE_
-X-Microsoft-Antispam-PRVS: <CH2PR12MB4038895549A7756068E6AC70C2EA9@CH2PR12MB4038.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: V0adME/8xK24qNqL6dMxw2OUgUWscRS9pSVQrAAtTgOuqG+S51Yr1xMuxPUJy1DmsB4MbZwbojxq1FBs1Z2jNF9Cn+Abo/pmA8HXV9ubu1zodC5mXnrJkfLAtCTq0oTGZC+mYey/3xtlrsOsa1PG1r/wLLCLqcdmPG5r+LLB3K3UAnMOLbifhy5PACng9lpYAwpTV1YY/5O/utg00pbuIQM816ganm1XJbv7q1zIQESiGqxtVc4S7lW14KGuRAYJ8s0sO1eyFHvYDQH/ScyDlHqiVTCXcol5L9rFBlFYVS7J8hwNG4e3D4GnAMKqHkw9esVOKxlsif3gl44UzdihZk6Pg5rx2k3PGHLfF/iqoBX6jms5jYdZmIJx4bhOJXjm7BSZfDYBYZZWsYe7kNhlCUKPoqbEOxntvRsjTxcn3fiDYQ8RntA5duW257xGpKL52bFN4Cuhyg9cWpTY/yFXeQrRsPoc07Rsm+fIyMmHCpzbH9ZwRWhU2Eus4JnYkxGr2gHHysksyetINzgheh9SzRn38JWUr8PqVJFiD/ADPg6CB7BVY2Oi2veHKYvmSjZfo+tsuuKDV+40SlTfZ97XwMjM7T3oGSdY4RLWVMRvTLCg8E9MGwQXjl0/+twem3c5PgE/74lLPafLAv5cq6aaPw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(6506007)(36756003)(5660300002)(4744005)(6512007)(186003)(83380400001)(26005)(7416002)(316002)(8676002)(86362001)(6486002)(508600001)(66946007)(4326008)(2616005)(1076003)(38100700002)(66476007)(54906003)(6916009)(66556008)(8936002)(33656002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?F0HX7VQ3ofM/zyzFqZHspNzh1fFJDrUWtJ2CAG//ZyUjqu5WC8iNqoo6l5Hf?=
- =?us-ascii?Q?GhcsFJXsqo8+U1kqyRBTOtZ80Bu3LG16wPqyp6XsTSu/psbAMSVxUnRx+nAE?=
- =?us-ascii?Q?0gitJMTCULWg3XpYjE4xei7AO3LTqvN7EiInwf+FHo28rf7ssITxkS/JypM7?=
- =?us-ascii?Q?BA4sZbbNerBzyyIuGSaK1BGtp4zcFwsrBcjKJalS8C/CbfJir1DcVelF0kVW?=
- =?us-ascii?Q?1EoacFgeDYn0ZTT8LSykYDP5LRK1sorLVEAo4Y1pvoYLt4k7apjGPw4/Nqqh?=
- =?us-ascii?Q?4m2X145Gq8kJMMnQYKDxdPqB4WJxzbJHFNtPy4k9x1slqyces7RjemfBZj6D?=
- =?us-ascii?Q?G4l+tHfhHFMWq08r6e9VBogt1DJ1Y1AXtVQN3fDYB0O35c/utOUqENfGD9bV?=
- =?us-ascii?Q?rT1JzvjS7wG39KzYUyniFa0Sri6z9qenhZGKQkkaudM45BTQAJbTEOJIHxLR?=
- =?us-ascii?Q?zFhOaGRcDGHrwv6QsGyE5Uq2F3T35MBUCGSaqjxxYga64nHgKc5Jer9pJBDp?=
- =?us-ascii?Q?HRf2L0mXRK7JeyPZwDrzIdxUV+NF5h+od9lrGyRW4crZ49hsVpmUgvNVlt+a?=
- =?us-ascii?Q?08IRNJcTwovCe8HN34U2HL+eyNiKj13DCB91/syLs1nXPxQMBVJjK2XBaTwi?=
- =?us-ascii?Q?blhmU13hkqDwz+o38lBj3ZwNHeA1raaexu4EyEfz9R2LaILJxCNe4FqDVW8d?=
- =?us-ascii?Q?BzgDNZD3VspkdntqnekLCL1+dj9Br6D3gMJXeaFhPsxffg9Ei4ldoy86bcXO?=
- =?us-ascii?Q?M6Vk6soQsLk/JeQ01TRacC1ZQF3xqNwD5uwwZMuam9I8npV7T3nA1IJzxhat?=
- =?us-ascii?Q?6qG+I9b/5+FtnHg2LcHmw3A1+cT6hl6v6QHkENrVu28qXH+EHDXrf2BDuhPW?=
- =?us-ascii?Q?3RstKoS5Azp7D8tQKdHr7HXFSPoCfhq8LB1uF5CCsKd7Lo9nG/rsgJw3fzft?=
- =?us-ascii?Q?YU51xDwqhUnQliq2uWg+S1t0o5xgCSSo5XcOnfjOBN5bq0reFEHdTQNvNTZe?=
- =?us-ascii?Q?xMHFnSqK8aFI6lm6Y8GIl7UulGNG+wTvf88PnqUVN4BeZ4teMAPPlfkQmxj0?=
- =?us-ascii?Q?2DOHdgOGjBlida8l1Ifc/PHA4KPF1ecfx5Vn02Mq22AMddm5aCi8KO5flw3a?=
- =?us-ascii?Q?BCXsxsHkIEN9Ox5L+PRrOEi+iYXIDWVkiiKEuxB6VueEd3MMxWFmNz6X/JCY?=
- =?us-ascii?Q?VEZaf5r7+iTbjmb6F1wAMbyV68KTwe9JFhRbT5rBxLYrmKqxMXU9WLWzHC2H?=
- =?us-ascii?Q?8YB0R9ZaXptgp1wGqDXwh9Sgz61g7FqpzB3sSluGBN8JBPnpZofL20s5KTrA?=
- =?us-ascii?Q?MBPyPBBZB6I+cye01VF1HippEAV7a4yAq4bvJUMp8IR67QKvbimBf+c75O06?=
- =?us-ascii?Q?Zmnl3EbjpTfGTsAR8UzvdSaN/kpmuN3WcODZsZOPUc1xLg1hOv2aiPg6Xa4n?=
- =?us-ascii?Q?I2pZsTscabc04WHWryCmqC4uheGlUtKytoMZw9cHGuhg3uq4Gx0Y/yuHPN2b?=
- =?us-ascii?Q?WO92qmgpMchms7ySTkw7buQG40bLWIdppnILWDR9wDxcTq1OD9FRfZy07vFK?=
- =?us-ascii?Q?C53K9j1ZuqDfMg0UL6QpEfF65aIOjiRPXsCJuz0ic0kDXFH6Ey6/Utf5Eb9T?=
- =?us-ascii?Q?zyhOOzeF22IOMmoohwEwBvNwwRdL/PvquSEHS8gZ0u98ugHVOBRRtGq+/czj?=
- =?us-ascii?Q?iw8lQPs67+5cPWQLm9+Ow/bN4ntpdgJWYmoEiPdP5xsFbS+UB0sphs609ZGi?=
- =?us-ascii?Q?Xpiy9xds+g=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 91d4120a-1f25-44e6-4745-08da1bd8631c
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2022 16:29:01.7592
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: a27KlNHeL/uEXpqUG9EhgdFVGQ0THXJHm7ZbQ0wTSNq2tENIE8Z4KVva4Cdertaa
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4038
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 04:13:47PM +0200, Christoph Hellwig wrote:
-> Just call the code directly and move towards the callers.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->  drivers/gpu/drm/i915/gvt/gtt.c       | 20 ++++++++++++++++++--
->  drivers/gpu/drm/i915/gvt/hypercall.h |  1 -
->  drivers/gpu/drm/i915/gvt/kvmgt.c     | 17 -----------------
->  drivers/gpu/drm/i915/gvt/mpt.h       | 17 -----------------
->  4 files changed, 18 insertions(+), 37 deletions(-)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git devel
+head:   c196e3b15cddb539135de6a3c6bcf32b89213b4c
+commit: c196e3b15cddb539135de6a3c6bcf32b89213b4c [48/48] tty: serial, use kfifo
+config: hexagon-randconfig-r045-20220411 (https://download.01.org/0day-ci/archive/20220412/202204120034.naMtjHQQ-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c6e83f560f06cdfe8aa47b248d8bdc58f947274b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git/commit/?id=c196e3b15cddb539135de6a3c6bcf32b89213b4c
+        git remote add jirislaby https://git.kernel.org/pub/scm/linux/kernel/git/jirislaby/linux.git
+        git fetch --no-tags jirislaby devel
+        git checkout c196e3b15cddb539135de6a3c6bcf32b89213b4c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/tty/serial/
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Jason
+All warnings (new ones prefixed by >>):
+
+   drivers/tty/serial/atmel_serial.c:927:23: warning: variable 'part1_len' set but not used [-Wunused-but-set-variable]
+           unsigned int tx_len, part1_len, part2_len, sg_len;
+                                ^
+   drivers/tty/serial/atmel_serial.c:927:34: warning: variable 'part2_len' set but not used [-Wunused-but-set-variable]
+           unsigned int tx_len, part1_len, part2_len, sg_len;
+                                           ^
+>> drivers/tty/serial/atmel_serial.c:985:13: warning: variable 'sg_len' is uninitialized when used here [-Wuninitialized]
+                                                  sg_len,
+                                                  ^~~~~~
+   drivers/tty/serial/atmel_serial.c:927:51: note: initialize the variable 'sg_len' to silence this warning
+           unsigned int tx_len, part1_len, part2_len, sg_len;
+                                                            ^
+                                                             = 0
+   3 warnings generated.
+--
+>> drivers/tty/serial/serial-tegra.c:584:25: warning: variable 'count' is uninitialized when used here [-Wuninitialized]
+           if (tup->use_tx_pio || count < TEGRA_UART_MIN_DMA)
+                                  ^~~~~
+   drivers/tty/serial/serial-tegra.c:571:21: note: initialize the variable 'count' to silence this warning
+           unsigned long count;
+                              ^
+                               = 0
+>> drivers/tty/serial/serial-tegra.c:586:26: warning: variable 'tail' is uninitialized when used here [-Wuninitialized]
+           else if (BYTES_TO_ALIGN(tail) > 0)
+                                   ^~~~
+   drivers/tty/serial/serial-tegra.c:39:46: note: expanded from macro 'BYTES_TO_ALIGN'
+   #define BYTES_TO_ALIGN(x)                       ((unsigned long)(x) & 0x3)
+                                                                    ^
+   drivers/tty/serial/serial-tegra.c:570:20: note: initialize the variable 'tail' to silence this warning
+           unsigned long tail;
+                             ^
+                              = 0
+>> drivers/tty/serial/serial-tegra.c:1188:26: warning: variable 'dma_buf' is uninitialized when used here [-Wuninitialized]
+                   tup->tx_dma_buf_virt = dma_buf;
+                                          ^~~~~~~
+   drivers/tty/serial/serial-tegra.c:1140:24: note: initialize the variable 'dma_buf' to silence this warning
+           unsigned char *dma_buf;
+                                 ^
+                                  = NULL
+>> drivers/tty/serial/serial-tegra.c:1189:26: warning: variable 'dma_phys' is uninitialized when used here [-Wuninitialized]
+                   tup->tx_dma_buf_phys = dma_phys;
+                                          ^~~~~~~~
+   drivers/tty/serial/serial-tegra.c:1141:21: note: initialize the variable 'dma_phys' to silence this warning
+           dma_addr_t dma_phys;
+                              ^
+                               = 0
+   4 warnings generated.
+
+
+vim +/sg_len +985 drivers/tty/serial/atmel_serial.c
+
+08f738be88bb7a Elen Song       2013-07-22   916  
+08f738be88bb7a Elen Song       2013-07-22   917  /*
+08f738be88bb7a Elen Song       2013-07-22   918   * Called from tasklet with TXRDY interrupt is disabled.
+08f738be88bb7a Elen Song       2013-07-22   919   */
+08f738be88bb7a Elen Song       2013-07-22   920  static void atmel_tx_dma(struct uart_port *port)
+08f738be88bb7a Elen Song       2013-07-22   921  {
+08f738be88bb7a Elen Song       2013-07-22   922  	struct atmel_uart_port *atmel_port = to_atmel_uart_port(port);
+c196e3b15cddb5 Jiri Slaby      2022-01-05   923  	struct tty_port *tport = &port->state->port;
+08f738be88bb7a Elen Song       2013-07-22   924  	struct dma_chan *chan = atmel_port->chan_tx;
+08f738be88bb7a Elen Song       2013-07-22   925  	struct dma_async_tx_descriptor *desc;
+c196e3b15cddb5 Jiri Slaby      2022-01-05   926  	struct scatterlist sgl[2], /**sg,*/ *sg_tx = &atmel_port->sg_tx;
+5f258b3e3d223b Cyrille Pitchen 2015-07-02  @927  	unsigned int tx_len, part1_len, part2_len, sg_len;
+c196e3b15cddb5 Jiri Slaby      2022-01-05   928  	//dma_addr_t phys_addr;
+08f738be88bb7a Elen Song       2013-07-22   929  
+08f738be88bb7a Elen Song       2013-07-22   930  	/* Make sure we have an idle channel */
+08f738be88bb7a Elen Song       2013-07-22   931  	if (atmel_port->desc_tx != NULL)
+08f738be88bb7a Elen Song       2013-07-22   932  		return;
+08f738be88bb7a Elen Song       2013-07-22   933  
+c196e3b15cddb5 Jiri Slaby      2022-01-05   934  	if (!kfifo_is_empty(&tport->xmit_fifo) && !uart_tx_stopped(port)) {
+08f738be88bb7a Elen Song       2013-07-22   935  		/*
+08f738be88bb7a Elen Song       2013-07-22   936  		 * DMA is idle now.
+08f738be88bb7a Elen Song       2013-07-22   937  		 * Port xmit buffer is already mapped,
+08f738be88bb7a Elen Song       2013-07-22   938  		 * and it is one page... Just adjust
+08f738be88bb7a Elen Song       2013-07-22   939  		 * offsets and lengths. Since it is a circular buffer,
+08f738be88bb7a Elen Song       2013-07-22   940  		 * we have to transmit till the end, and then the rest.
+08f738be88bb7a Elen Song       2013-07-22   941  		 * Take the port lock to get a
+08f738be88bb7a Elen Song       2013-07-22   942  		 * consistent xmit buffer state.
+08f738be88bb7a Elen Song       2013-07-22   943  		 */
+c196e3b15cddb5 Jiri Slaby      2022-01-05   944  		tx_len = 0;/*CIRC_CNT_TO_END(xmit->head,
+08f738be88bb7a Elen Song       2013-07-22   945  					 xmit->tail,
+c196e3b15cddb5 Jiri Slaby      2022-01-05   946  					 UART_XMIT_SIZE);*/
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   947  
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   948  		if (atmel_port->fifo_size) {
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   949  			/* multi data mode */
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   950  			part1_len = (tx_len & ~0x3); /* DWORD access */
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   951  			part2_len = (tx_len & 0x3); /* BYTE access */
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   952  		} else {
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   953  			/* single data (legacy) mode */
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   954  			part1_len = 0;
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   955  			part2_len = tx_len; /* BYTE access only */
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   956  		}
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   957  
+c196e3b15cddb5 Jiri Slaby      2022-01-05   958  #if 0
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   959  		sg_init_table(sgl, 2);
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   960  		sg_len = 0;
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   961  		phys_addr = sg_dma_address(sg_tx) + xmit->tail;
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   962  		if (part1_len) {
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   963  			sg = &sgl[sg_len++];
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   964  			sg_dma_address(sg) = phys_addr;
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   965  			sg_dma_len(sg) = part1_len;
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   966  
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   967  			phys_addr += part1_len;
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   968  		}
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   969  
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   970  		if (part2_len) {
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   971  			sg = &sgl[sg_len++];
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   972  			sg_dma_address(sg) = phys_addr;
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   973  			sg_dma_len(sg) = part2_len;
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   974  		}
+c196e3b15cddb5 Jiri Slaby      2022-01-05   975  #endif
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   976  
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   977  		/*
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   978  		 * save tx_len so atmel_complete_tx_dma() will increase
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   979  		 * xmit->tail correctly
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   980  		 */
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   981  		atmel_port->tx_len = tx_len;
+08f738be88bb7a Elen Song       2013-07-22   982  
+08f738be88bb7a Elen Song       2013-07-22   983  		desc = dmaengine_prep_slave_sg(chan,
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   984  					       sgl,
+5f258b3e3d223b Cyrille Pitchen 2015-07-02  @985  					       sg_len,
+08f738be88bb7a Elen Song       2013-07-22   986  					       DMA_MEM_TO_DEV,
+08f738be88bb7a Elen Song       2013-07-22   987  					       DMA_PREP_INTERRUPT |
+08f738be88bb7a Elen Song       2013-07-22   988  					       DMA_CTRL_ACK);
+08f738be88bb7a Elen Song       2013-07-22   989  		if (!desc) {
+08f738be88bb7a Elen Song       2013-07-22   990  			dev_err(port->dev, "Failed to send via dma!\n");
+08f738be88bb7a Elen Song       2013-07-22   991  			return;
+08f738be88bb7a Elen Song       2013-07-22   992  		}
+08f738be88bb7a Elen Song       2013-07-22   993  
+5f258b3e3d223b Cyrille Pitchen 2015-07-02   994  		dma_sync_sg_for_device(port->dev, sg_tx, 1, DMA_TO_DEVICE);
+08f738be88bb7a Elen Song       2013-07-22   995  
+08f738be88bb7a Elen Song       2013-07-22   996  		atmel_port->desc_tx = desc;
+08f738be88bb7a Elen Song       2013-07-22   997  		desc->callback = atmel_complete_tx_dma;
+08f738be88bb7a Elen Song       2013-07-22   998  		desc->callback_param = atmel_port;
+08f738be88bb7a Elen Song       2013-07-22   999  		atmel_port->cookie_tx = dmaengine_submit(desc);
+1e67bd2b8cb90b Tudor Ambarus   2021-11-25  1000  		if (dma_submit_error(atmel_port->cookie_tx)) {
+1e67bd2b8cb90b Tudor Ambarus   2021-11-25  1001  			dev_err(port->dev, "dma_submit_error %d\n",
+1e67bd2b8cb90b Tudor Ambarus   2021-11-25  1002  				atmel_port->cookie_tx);
+1e67bd2b8cb90b Tudor Ambarus   2021-11-25  1003  			return;
+1e67bd2b8cb90b Tudor Ambarus   2021-11-25  1004  		}
+4f4b9b5895614e Tudor Ambarus   2021-11-25  1005  
+4f4b9b5895614e Tudor Ambarus   2021-11-25  1006  		dma_async_issue_pending(chan);
+08f738be88bb7a Elen Song       2013-07-22  1007  	}
+08f738be88bb7a Elen Song       2013-07-22  1008  
+c196e3b15cddb5 Jiri Slaby      2022-01-05  1009  	if (kfifo_len(&tport->xmit_fifo) < WAKEUP_CHARS)
+08f738be88bb7a Elen Song       2013-07-22  1010  		uart_write_wakeup(port);
+08f738be88bb7a Elen Song       2013-07-22  1011  }
+08f738be88bb7a Elen Song       2013-07-22  1012  
+
+:::::: The code at line 985 was first introduced by commit
+:::::: 5f258b3e3d223b5cb6d1753b2f9b821ba4455f81 tty/serial: at91: use 32bit writes into TX FIFO when DMA is enabled
+
+:::::: TO: Cyrille Pitchen <cyrille.pitchen@atmel.com>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

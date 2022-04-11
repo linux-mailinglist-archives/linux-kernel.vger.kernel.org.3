@@ -2,73 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09CFC4FC67C
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 23:14:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E7EB4FC683
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 23:14:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350088AbiDKVPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 17:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42758 "EHLO
+        id S231789AbiDKVQ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 17:16:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350147AbiDKVPp (ORCPT
+        with ESMTP id S243237AbiDKVQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 17:15:45 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F259A2BB1F
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 14:13:26 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id z128so15275900pgz.2
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 14:13:26 -0700 (PDT)
+        Mon, 11 Apr 2022 17:16:20 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 588EBDF7
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 14:14:03 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id bg24so3986605pjb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 14:14:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=YKAYMKKcSN6w/x99fPnQm5TkOR6xo+gMRiTH6ZYG4Ro=;
-        b=EhR7QpOZ0HnE4rK5R9d0GxRj98mteeaRTItJIa6EJKU2EEGKdAvwcfi6lrILXJYsHJ
-         Fe+doXlqcFFqdNwpAUThfV36GNrU385i6+ZEIurapg8Hf5gEChmCWLZkWC0AdlETBoIE
-         nb8QW/fT0q6lxGQJ3Zit+MVsN33ry+N1Lmuo8=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4LQ/8VtR++pOTKS99I5nITVdUZ5toGmL4DHfcAO4/LM=;
+        b=U+bo3SZsL14bvWcPVBQY+xLk7xbTI3Otdr/nLKHIXOUdLYzyVRDKJTKZ8B+XPKkLzL
+         +qaEnaL6OHMFQ7jSqesVMq13V4uLsEUQxd1XFVXlWoVF+fFzAg2gCCsrs9tHnkU9fWBv
+         eoU0KYaeaa1EGdGlzF2mxbohqlc3x70eICS/E=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YKAYMKKcSN6w/x99fPnQm5TkOR6xo+gMRiTH6ZYG4Ro=;
-        b=hSm1z6Az63lcHYt0+/jF0MvLQk03kgGq3zBSMln9MAXTtaMWLBPkC6N1uGgHPow2+u
-         PLqXD25ycfV6PBxtQ4UH1u81+uMNTm5HV9eFJegJvxl3IYOZaEVAklzUdg6nMgikAvgv
-         xsk36MX8v4alkxSUt0qVZ6H+9nNWKG2cOo2TdrQ5HzVGKqV0IDqE37Z5dJoKttKf2A5m
-         7rE4hrPip3RRCxxrSjQEZhxeZ8LGViqGDAj/qT7ZmG5r9ZjDZgXeSUBpnbTkpuQ27SYt
-         ufr9lTbypUBu9N9h1UzEE+0msvAK8N/0qLKvYodJDMGXCzhib0HPGm2F8GSutWRF724I
-         0TLA==
-X-Gm-Message-State: AOAM532R5NR8QxqjziTjQdjjc/PwDcgabdI5Z/JWgDagdVZXaDJPB/Fr
-        9h6OaoCp6UhRN69Nc8iRnFAkpg==
-X-Google-Smtp-Source: ABdhPJzl8rfg8ySS5Ytnevu8E/f/F9vTdYrGegE0Oef11S5yT3t9PqIHOQ2qCbAfFdF2WkI3wjs0Nw==
-X-Received: by 2002:a63:e5c:0:b0:39d:8460:4708 with SMTP id 28-20020a630e5c000000b0039d84604708mr1977629pgo.401.1649711604530;
-        Mon, 11 Apr 2022 14:13:24 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:eb96:76ba:e2a1:2442])
-        by smtp.gmail.com with UTF8SMTPSA id d4-20020a17090ad3c400b001c65ba76911sm392429pjw.3.2022.04.11.14.13.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Apr 2022 14:13:24 -0700 (PDT)
-Date:   Mon, 11 Apr 2022 14:13:22 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4LQ/8VtR++pOTKS99I5nITVdUZ5toGmL4DHfcAO4/LM=;
+        b=w+yRgrdVQR6kCDP7yBbvKuwR/QUwC2amDi5Uy1bmHV2xKbWb3McvRCjyWOZSJAxD4P
+         lz358U4mWx9DxCzF+vwZUp9NdgAW3ZjKDAskUgy9nFgcefQqSgzaz2i5SiaKHmTiDSFK
+         GTjYVrLR9Su68j/J4D9HCPOTe6o9sqWY2Aqm1BU/kHQdOjHK2EVBevfuKLJ23InKjfA8
+         0wSkDF6juTelJ7rgxC1WoKXqyDKMk+GNYa8LTy1wSbd+z1JWVxhUekEfxPVQNIOsAMaP
+         zlGYkystc4RTEmFbpzExx4X+OCM6NF//YTN8tIxQS7mZXQsL8vDRazFMPZhzD3aIVvfY
+         WLWg==
+X-Gm-Message-State: AOAM531Qfxa+Ua+WIIPEo6osorCJiMLezsGNxIDAjr3NLBB9DxPDzt+o
+        Nwa8Sg3E1Cr0Pa0TRS7nl58hlrzX8sLSJzicpME=
+X-Google-Smtp-Source: ABdhPJxrgWI77cr1NsJ2EfQIA7LONQNga1X6frY82M6wZw/cWAvTjul1d0YLqjbaG0QteyWU9TtQSA==
+X-Received: by 2002:a17:90b:380e:b0:1c7:74f6:ae60 with SMTP id mq14-20020a17090b380e00b001c774f6ae60mr1179619pjb.5.1649711643388;
+        Mon, 11 Apr 2022 14:14:03 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:3b2:2da6:38d1:3ff])
+        by smtp.gmail.com with ESMTPSA id p10-20020a056a0026ca00b004fb266fb186sm36841341pfw.73.2022.04.11.14.14.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Apr 2022 14:14:02 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
         Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
-        quic_kriskura@quicinc.com, quic_vpulyala@quicinc.com
-Subject: Re: [PATCH v13 5/6] usb: dwc3: qcom: Keep power domain on to retain
- controller status
-Message-ID: <YlSZ8uk8MjygY7uf@google.com>
-References: <1649704614-31518-1-git-send-email-quic_c_sanm@quicinc.com>
- <1649704614-31518-6-git-send-email-quic_c_sanm@quicinc.com>
+        Judy Hsiao <judyhsiao@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] arm64: dts: qcom: sc7280-herobrine: Audio codec wants 1.8V, not 1.62V
+Date:   Mon, 11 Apr 2022 14:13:39 -0700
+Message-Id: <20220411141332.v2.1.I9f06fec63b978699fe62591fec9e5ac31bb3a69d@changeid>
+X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1649704614-31518-6-git-send-email-quic_c_sanm@quicinc.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -79,72 +71,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 12:46:53AM +0530, Sandeep Maheswaram wrote:
-> Keep the power domain always on during runtime suspend or if the
-> controller supports wakeup in order to retain controller status
-> and to support wakeup from devices.
-> 
-> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> ---
->  drivers/usb/dwc3/dwc3-qcom.c | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 9804a19..9747be6 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -17,6 +17,7 @@
->  #include <linux/of_platform.h>
->  #include <linux/platform_device.h>
->  #include <linux/phy/phy.h>
-> +#include <linux/pm_domain.h>
->  #include <linux/usb/of.h>
->  #include <linux/reset.h>
->  #include <linux/iopoll.h>
-> @@ -724,6 +725,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->  	struct resource		*res, *parent_res = NULL;
->  	int			ret, i;
->  	bool			ignore_pipe_clk;
-> +	struct generic_pm_domain *genpd;
+The L2C rail on herobrine boards is intended to go to the audio
+codec. Let's override the 1.62V specified in the qcard.dtsi file to be
+1.8V.
 
-nit: I'm not really a fan of gazillions of whitespaces between the type
-and the variable name, but if they are kept all variable names above
-should move a tab to the right. In any case the style in this file isn't
-consistent, so an alternative would be to just get rid of the alignment
-completely.
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
 
->  	qcom = devm_kzalloc(&pdev->dev, sizeof(*qcom), GFP_KERNEL);
->  	if (!qcom)
-> @@ -732,6 +734,8 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->  	platform_set_drvdata(pdev, qcom);
->  	qcom->dev = &pdev->dev;
->  
-> +	genpd = pd_to_genpd(qcom->dev->pm_domain);
-> +
->  	if (has_acpi_companion(dev)) {
->  		qcom->acpi_pdata = acpi_device_get_match_data(dev);
->  		if (!qcom->acpi_pdata) {
-> @@ -839,7 +843,12 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->  	if (ret)
->  		goto interconnect_exit;
->  
-> -	device_init_wakeup(&pdev->dev, 1);
-> +	genpd->flags |= GENPD_FLAG_RPM_ALWAYS_ON;
-> +
-> +	if (device_may_wakeup(&qcom->dwc3->dev))
-> +		genpd->flags |= GENPD_FLAG_ALWAYS_ON;
+Changes in v2:
+- Adjust Qcard regulator override section heading
 
-In v12 only GENPD_FLAG_ALWAYS_ON was set, not GENPD_FLAG_RPM_ALWAYS_ON.
-I asked a few times for a change log, in this instance it would be
-useful to explain why GENPD_FLAG_RPM_ALWAYS_ON is now set.
+ arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
-> +
-> +	device_init_wakeup(&pdev->dev, device_may_wakeup(&qcom->dwc3->dev));
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+index 10de5e104b4f..d58045dd7334 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
+@@ -308,7 +308,10 @@ keyboard_backlight: keyboard-backlight {
+ };
+ 
+ /*
+- * BOARD-LOCAL NAMES FOR REGULATORS THAT CONNECT TO QCARD
++ * ADJUSTMENTS TO QCARD REGULATORS
++ *
++ * Mostly this is just board-local names for regulators that come from
++ * Qcard, but this also has some minor regulator overrides.
+  *
+  * Names are only listed here if regulators go somewhere other than a
+  * testpoint.
+@@ -352,6 +355,16 @@ keyboard_backlight: keyboard-backlight {
+ ts_avdd:      &pp3300_left_in_mlb {};
+ vreg_edp_3p3: &pp3300_left_in_mlb {};
+ 
++/* Regulator overrides from Qcard */
++
++/*
++ * Herobrine boards only use l2c to power an external audio codec (like
++ * alc5682) and we want that to be at 1.8V, not at some slightly lower voltage.
++ */
++&vreg_l2c_1p8 {
++	regulator-min-microvolt = <1800000>;
++};
++
+ /* ADDITIONS TO NODES DEFINED IN PARENT DEVICE TREE FILES */
+ 
+ ap_sar_sensor_i2c: &i2c1 {
+-- 
+2.35.1.1178.g4f1659d476-goog
 
-device_may_wakeup() isn't an expensive operation, but it's still not nice to
-call it twice in three lines of code. Instead you could do this:
-
-	if (device_may_wakeup(&qcom->dwc3->dev)) {
-		genpd->flags |= GENPD_FLAG_ALWAYS_ON;
-		device_init_wakeup(&pdev->dev, true);
-	}

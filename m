@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E834FC87A
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 01:41:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1F7B4FC86C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 01:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237304AbiDKXmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 19:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51244 "EHLO
+        id S233308AbiDKXm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 19:42:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236988AbiDKXlo (ORCPT
+        with ESMTP id S237722AbiDKXlp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 19:41:44 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 958A51A81C;
-        Mon, 11 Apr 2022 16:39:25 -0700 (PDT)
+        Mon, 11 Apr 2022 19:41:45 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722CD1B7A6;
+        Mon, 11 Apr 2022 16:39:29 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id 364501F42DB6
+        with ESMTPSA id 4951B1F43AED
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649720364;
-        bh=4rdbLD2+Iag77JMwmchrPYamych2367V1MeouFpjB0E=;
+        s=mail; t=1649720368;
+        bh=OM3Edh5ei8PPhfOzgq1DQOJZnmNFXz0QDZstiZwMgss=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WrJUgpTL2mz0b1tdWs+lbZHp4sOmPNiAkwDR5byRZ/kPUsqROAg+WnoC5wo3UwSA9
-         he3WggK2Db9XGe0m3cnXP4wqgvFZ5RxXFLPP7ysL4VVRXmA+1VzIhk0tnONuLD9Hk0
-         oIfdUC4QinyWbAv9M6Fb9K0d9xMo7zMuZxdgFPU73e8EMh+hwR/NoQjJwKd+ps+mD6
-         1raKm3fvYtzK7w7vIsIFJ5wwOqDnth413yqDdNteedrYUgskO9lJ7+yeTYwNSWnc8d
-         kOFPQB6PLs2P7T4PDuqwUxE99sUZoWWJRfixny2gvzijMd3lw/0qSUxi9UuueN4qPA
-         2Sw8FUE8ZkpNQ==
+        b=eR1V7YO4JiaZSZMv3eZYlIpEUuUXjf21t+dvWtRjQf6T5Gxu1B6+nqlmc3aIC8C1u
+         FTuhGsjmx3UOLCwau+wmuP7tVw92HREgB4lUkQAIF7SuLhUnddwvPIECdC6PNwUpQv
+         yOYER5E9xlmRzW6LvzA5fm7uQg9QcsDjzpsRSlw+PtUEF+Rt/pbWBDvnfy/My61fny
+         k7p7330Nf8JbpcM8NVf/iD54I18oOGaYH3oXM0vVb2DCV8HdIzp3CrK/TPOz76BB0r
+         TCV55Kh/0CrBvHEwPXUdTDUgVuVkScp+Ntja5VWo+K8YlzCu+ZmIKHO6ha1kFwr5j/
+         QT0evUqt+/l5A==
 From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -79,9 +79,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
         linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
         xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH v7 07/20] riscv: Use do_kernel_power_off()
-Date:   Tue, 12 Apr 2022 02:38:19 +0300
-Message-Id: <20220411233832.391817-8-dmitry.osipenko@collabora.com>
+Subject: [PATCH v7 08/20] arm64: Use do_kernel_power_off()
+Date:   Tue, 12 Apr 2022 02:38:20 +0300
+Message-Id: <20220411233832.391817-9-dmitry.osipenko@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220411233832.391817-1-dmitry.osipenko@collabora.com>
 References: <20220411233832.391817-1-dmitry.osipenko@collabora.com>
@@ -102,37 +102,26 @@ that invokes chained power-off handlers. It also invokes legacy
 pm_power_off() for now, which will be removed once all drivers will
 be converted to the new power-off API.
 
-Acked-by: Palmer Dabbelt <palmer@dabbelt.com>
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 ---
- arch/riscv/kernel/reset.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+ arch/arm64/kernel/process.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/riscv/kernel/reset.c b/arch/riscv/kernel/reset.c
-index 9c842c41684a..912288572226 100644
---- a/arch/riscv/kernel/reset.c
-+++ b/arch/riscv/kernel/reset.c
-@@ -23,16 +23,12 @@ void machine_restart(char *cmd)
- 
- void machine_halt(void)
+diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
+index 7fa97df55e3a..26d1b0a4329a 100644
+--- a/arch/arm64/kernel/process.c
++++ b/arch/arm64/kernel/process.c
+@@ -111,8 +111,7 @@ void machine_power_off(void)
  {
--	if (pm_power_off != NULL)
+ 	local_irq_disable();
+ 	smp_send_stop();
+-	if (pm_power_off)
 -		pm_power_off();
--	else
--		default_power_off();
 +	do_kernel_power_off();
-+	default_power_off();
  }
  
- void machine_power_off(void)
- {
--	if (pm_power_off != NULL)
--		pm_power_off();
--	else
--		default_power_off();
-+	do_kernel_power_off();
-+	default_power_off();
- }
+ /*
 -- 
 2.35.1
 

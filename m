@@ -2,249 +2,423 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 565674FC6B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 23:26:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 758504FC6BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 23:29:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350049AbiDKV2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 17:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42488 "EHLO
+        id S1350177AbiDKVbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 17:31:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244205AbiDKV2P (ORCPT
+        with ESMTP id S244205AbiDKVbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 17:28:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B07132064
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 14:26:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F1EDBB818BA
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 21:25:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DBE5C385A3;
-        Mon, 11 Apr 2022 21:25:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649712357;
-        bh=oaC6xPOA91VUGaoXvosYsO/Y5SsYoSLeukkWMf5PPWo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gYTlHPebD2S8HWRv1gwLvHb3cRiKNtmbJohllz5TUEs8seoCehj7aDTXfgxceZ7mr
-         E7jxCNrF7cDJDvXdlyqZ3g7f44hgyzKwptbzV25l0v9Su8Bf8gZUzZVGM9yxLAXDjj
-         Z8CgC2nf5+xTP/qV5irizDIFmBKir6KyBNUYy40YTLF2oPBhGVeY42ABm9XVr3+MBP
-         bghS2bQb2QdC6sX84lyLjzc5KKPD3ae9kgvOLAzVSV++KOHftLt1kg4wr+sh53Goh8
-         V751MLHQn1yQ3O+EsO/hDg0wueXLqFuoOEihFW3UACC4AggxmYzm8Zpro8RBGmTTag
-         YahvyE5GZlH3w==
-Date:   Mon, 11 Apr 2022 14:25:55 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Subject: Re: [f2fs-dev] [PATCH v3] f2fs: give priority to select unpinned
- section for foreground GC
-Message-ID: <YlSc4xJ54jE43VPp@google.com>
-References: <20220406152651.5142-1-chao@kernel.org>
- <YlSNjgQwoiENx5EK@google.com>
+        Mon, 11 Apr 2022 17:31:18 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E45CC32
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 14:29:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649712542; x=1681248542;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=LozqbnMQqq/uEMKU2NJxMaLaC7f+9ZqYfs5lq8dK7gg=;
+  b=PjOErL/s2O/6wyV0Pe7L9z6N7zew3LTOnvGnuQuPAzggR3n8JJ2djbFC
+   WZF9KnZsQtMpXvDnzUrNZXOTcY8sputr+JkzOVB5b1tNzReT5htMFxHhq
+   vrTEdD8JxOKHv6UnqId7hqnxGUUauOfzVd29Ho/ernmMcgO12XMZ3ZT9i
+   OWYza5iLKCW7bKRKbONa5eQoP/Ha7g87+hFzfQ9dzWprAIuVz1wD4qvkr
+   4dOImC/PxYrf2kggqLyHte7nL/8aeDk4nzwSzQIKWitUn28lXPg38Veau
+   aMhupxCgPSHqEmmXsn0GdCOVR+1JzGX95P+VCNo78pJfat2rRxHULMOoG
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="259815158"
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="259815158"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 14:28:53 -0700
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="559054456"
+Received: from djiang5-mobl1.amr.corp.intel.com (HELO [10.212.119.199]) ([10.212.119.199])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 14:28:53 -0700
+Message-ID: <c5fc1685-b1cc-7cfa-1ddd-e2f93105c2a5@intel.com>
+Date:   Mon, 11 Apr 2022 14:28:52 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YlSNjgQwoiENx5EK@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] staging: r8188eu: correct multiple misspellings in driver
+ r8188eu
+Content-Language: en-US
+To:     Mahak Gupta <mahak_g@cs.iitr.ac.in>, Larry.Finger@lwfinger.net,
+        phil@philpotter.co.uk, gregkh@linuxfoundation.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+References: <20220411205321.13109-1-mahak_g@cs.iitr.ac.in>
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20220411205321.13109-1-mahak_g@cs.iitr.ac.in>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/11, Jaegeuk Kim wrote:
-> On 04/06, Chao Yu wrote:
-> > Previously, during foreground GC, if victims contain data of pinned file,
-> > it will fail migration of the data, and meanwhile i_gc_failures of that
-> > pinned file may increase, and when it exceeds threshold, GC will unpin
-> > the file, result in breaking pinfile's semantics.
-> > 
-> > In order to mitigate such condition, let's record and skip section which
-> > has pinned file's data and give priority to select unpinned one.
-> > 
-> > Signed-off-by: Chao Yu <chao.yu@oppo.com>
-> > ---
-> > v3:
-> > - check pin status before pinning section in pin_section().
-> >  fs/f2fs/gc.c      | 56 ++++++++++++++++++++++++++++++++++++++++++++---
-> >  fs/f2fs/segment.c |  7 ++++++
-> >  fs/f2fs/segment.h |  2 ++
-> >  3 files changed, 62 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
-> > index 6a7e4148ff9d..df23824ae3c2 100644
-> > --- a/fs/f2fs/gc.c
-> > +++ b/fs/f2fs/gc.c
-> > @@ -646,6 +646,37 @@ static void release_victim_entry(struct f2fs_sb_info *sbi)
-> >  	f2fs_bug_on(sbi, !list_empty(&am->victim_list));
-> >  }
-> >  
-> > +static void pin_section(struct f2fs_sb_info *sbi, unsigned int segno)
-> 
-> Need f2fs_...?
-> 
-> > +{
-> > +	struct dirty_seglist_info *dirty_i = DIRTY_I(sbi);
-> > +	unsigned int secno = GET_SEC_FROM_SEG(sbi, segno);
-> > +
-> > +	if (test_bit(secno, dirty_i->pinned_secmap))
-> > +		return;
-> > +	set_bit(secno, dirty_i->pinned_secmap);
-> > +	dirty_i->pinned_secmap_cnt++;
-> > +}
-> > +
-> > +static bool pinned_section_exists(struct dirty_seglist_info *dirty_i)
-> > +{
-> > +	return dirty_i->pinned_secmap_cnt;
-> > +}
-> > +
-> > +static bool section_is_pinned(struct dirty_seglist_info *dirty_i,
-> > +						unsigned int secno)
-> > +{
-> > +	return pinned_section_exists(dirty_i) &&
-> > +			test_bit(secno, dirty_i->pinned_secmap);
-> > +}
-> > +
-> > +static void unpin_all_sections(struct f2fs_sb_info *sbi)
-> > +{
-> > +	unsigned int bitmap_size = f2fs_bitmap_size(MAIN_SECS(sbi));
-> > +
-> > +	memset(DIRTY_I(sbi)->pinned_secmap, 0, bitmap_size);
-> > +	DIRTY_I(sbi)->pinned_secmap_cnt = 0;
-> > +}
-> > +
-> >  /*
-> >   * This function is called from two paths.
-> >   * One is garbage collection and the other is SSR segment selection.
-> > @@ -787,6 +818,9 @@ static int get_victim_by_default(struct f2fs_sb_info *sbi,
-> >  		if (gc_type == BG_GC && test_bit(secno, dirty_i->victim_secmap))
-> >  			goto next;
-> >  
-> > +		if (gc_type == FG_GC && section_is_pinned(dirty_i, secno))
-> > +			goto next;
-> > +
-> >  		if (is_atgc) {
-> >  			add_victim_entry(sbi, &p, segno);
-> >  			goto next;
-> > @@ -1202,8 +1236,10 @@ static int move_data_block(struct inode *inode, block_t bidx,
-> >  	}
-> >  
-> >  	if (f2fs_is_pinned_file(inode)) {
-> > -		if (gc_type == FG_GC)
-> > +		if (gc_type == FG_GC) {
-> >  			f2fs_pin_file_control(inode, true);
-> > +			pin_section(F2FS_I_SB(inode), segno);
-> 
-> Do we need to check unpinning the inode?
-> 			if (!f2fs_pin_file_control())
-> 				f2fs_set_pin_section();
-> 
-> > +		}
-> >  		err = -EAGAIN;
-> >  		goto out;
-> >  	}
-> > @@ -1352,8 +1388,10 @@ static int move_data_page(struct inode *inode, block_t bidx, int gc_type,
-> >  		goto out;
-> >  	}
-> >  	if (f2fs_is_pinned_file(inode)) {
-> > -		if (gc_type == FG_GC)
-> > +		if (gc_type == FG_GC) {
-> >  			f2fs_pin_file_control(inode, true);
-> > +			pin_section(F2FS_I_SB(inode), segno);
-> > +		}
-> >  		err = -EAGAIN;
-> >  		goto out;
-> >  	}
-> > @@ -1485,6 +1523,7 @@ static int gc_data_segment(struct f2fs_sb_info *sbi, struct f2fs_summary *sum,
-> >  							gc_type == FG_GC) {
-> >  				f2fs_pin_file_control(inode, true);
-> >  				iput(inode);
-> > +				pin_section(sbi, segno);
-> 
-> We don't have this code.
 
-Ok, you added this in other patch.
+On 4/11/2022 1:53 PM, Mahak Gupta wrote:
+> Reported by checkpatch.
 
-> 
-> >  				return submitted;
-> >  			}
-> >  
-> > @@ -1766,9 +1805,17 @@ int f2fs_gc(struct f2fs_sb_info *sbi, bool sync,
-> >  		ret = -EINVAL;
-> >  		goto stop;
-> >  	}
-> > +retry:
-> >  	ret = __get_victim(sbi, &segno, gc_type);
-> > -	if (ret)
-> > +	if (ret) {
-> > +		/* allow to search victim from sections has pinned data */
-> > +		if (ret == -ENODATA && gc_type == FG_GC &&
-> > +				pinned_section_exists(DIRTY_I(sbi))) {
-> > +			unpin_all_sections(sbi);
-> > +			goto retry;
-> > +		}
-> >  		goto stop;
-> > +	}
-> >  
-> >  	seg_freed = do_garbage_collect(sbi, segno, &gc_list, gc_type, force);
-> >  	if (gc_type == FG_GC &&
-> > @@ -1811,6 +1858,9 @@ int f2fs_gc(struct f2fs_sb_info *sbi, bool sync,
-> >  	SIT_I(sbi)->last_victim[ALLOC_NEXT] = 0;
-> >  	SIT_I(sbi)->last_victim[FLUSH_DEVICE] = init_segno;
-> >  
-> > +	if (gc_type == FG_GC && pinned_section_exists(DIRTY_I(sbi)))
-> > +		unpin_all_sections(sbi);
-> > +
-> >  	trace_f2fs_gc_end(sbi->sb, ret, total_freed, sec_freed,
-> >  				get_pages(sbi, F2FS_DIRTY_NODES),
-> >  				get_pages(sbi, F2FS_DIRTY_DENTS),
-> > diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-> > index 012524db7437..1c20d7c9eca3 100644
-> > --- a/fs/f2fs/segment.c
-> > +++ b/fs/f2fs/segment.c
-> > @@ -4736,6 +4736,12 @@ static int init_victim_secmap(struct f2fs_sb_info *sbi)
-> >  	dirty_i->victim_secmap = f2fs_kvzalloc(sbi, bitmap_size, GFP_KERNEL);
-> >  	if (!dirty_i->victim_secmap)
-> >  		return -ENOMEM;
-> > +
-> > +	dirty_i->pinned_secmap = f2fs_kvzalloc(sbi, bitmap_size, GFP_KERNEL);
-> > +	if (!dirty_i->pinned_secmap)
-> > +		return -ENOMEM;
-> > +
-> > +	dirty_i->pinned_secmap_cnt = 0;
-> >  	return 0;
-> >  }
-> >  
-> > @@ -5324,6 +5330,7 @@ static void destroy_victim_secmap(struct f2fs_sb_info *sbi)
-> >  {
-> >  	struct dirty_seglist_info *dirty_i = DIRTY_I(sbi);
-> >  
-> > +	kvfree(dirty_i->pinned_secmap);
-> >  	kvfree(dirty_i->victim_secmap);
-> >  }
-> >  
-> > diff --git a/fs/f2fs/segment.h b/fs/f2fs/segment.h
-> > index 5c94caf0c0a1..fd6f246e649c 100644
-> > --- a/fs/f2fs/segment.h
-> > +++ b/fs/f2fs/segment.h
-> > @@ -294,6 +294,8 @@ struct dirty_seglist_info {
-> >  	struct mutex seglist_lock;		/* lock for segment bitmaps */
-> >  	int nr_dirty[NR_DIRTY_TYPE];		/* # of dirty segments */
-> >  	unsigned long *victim_secmap;		/* background GC victims */
-> > +	unsigned long *pinned_secmap;		/* pinned victims from foreground GC */
-> > +	unsigned int pinned_secmap_cnt;		/* count of victims which has pinned data */
-> >  };
-> >  
-> >  /* victim selection function for cleaning and SSR */
-> > -- 
-> > 2.32.0
-> 
-> 
-> _______________________________________________
-> Linux-f2fs-devel mailing list
-> Linux-f2fs-devel@lists.sourceforge.net
-> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel
+Subject:
+
+staging: r8188eu: fix multiple spelling errors in driver source
+
+Given that it already annotated that it's the r8188eu driver, no need to 
+add "in driver r8188eu".
+
+Maybe the log can be something less terse:
+
+Fix multiple spelling errors reported by checkpatch.
+
+
+Probably doesn't hurt to fix other issues on the same line while you are 
+at it. See below...
+
+
+>
+> Signed-off-by: Mahak Gupta <mahak_g@cs.iitr.ac.in>
+> ---
+>   drivers/staging/r8188eu/core/rtw_ioctl_set.c |  2 +-
+>   drivers/staging/r8188eu/core/rtw_mlme.c      | 10 +++---
+>   drivers/staging/r8188eu/core/rtw_mlme_ext.c  | 36 ++++++++++----------
+>   drivers/staging/r8188eu/core/rtw_recv.c      |  8 ++---
+>   drivers/staging/r8188eu/core/rtw_xmit.c      |  8 ++---
+>   5 files changed, 32 insertions(+), 32 deletions(-)
+>
+> diff --git a/drivers/staging/r8188eu/core/rtw_ioctl_set.c b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
+> index 4b78e42d180d..9df6fb122bc5 100644
+> --- a/drivers/staging/r8188eu/core/rtw_ioctl_set.c
+> +++ b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
+> @@ -290,7 +290,7 @@ u8 rtw_set_802_11_infrastructure_mode(struct adapter *padapter,
+>   
+>   		if ((*pold_state == Ndis802_11Infrastructure) || (*pold_state == Ndis802_11IBSS)) {
+>   			if (check_fwstate(pmlmepriv, _FW_LINKED))
+> -				rtw_indicate_disconnect(padapter); /* will clr Linked_state; before this function, we must have chked whether  issue dis-assoc_cmd or not */
+> +				rtw_indicate_disconnect(padapter); /* will clr Linked_state; before this function, we must have checked whether  issue dis-
+
+Extra space after "checked whether"
+
+
+> assoc_cmd or not */
+>   	       }
+>   
+>   		*pold_state = networktype;
+> diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
+> index c90f36dee1ea..a2b42779bc87 100644
+> --- a/drivers/staging/r8188eu/core/rtw_mlme.c
+> +++ b/drivers/staging/r8188eu/core/rtw_mlme.c
+> @@ -193,7 +193,7 @@ void _rtw_free_network_nolock(struct	mlme_priv *pmlmepriv, struct wlan_network *
+>   /*
+>   	return the wlan_network with the matching addr
+>   
+> -	Shall be calle under atomic context... to avoid possible racing condition...
+> +	Shall be called under atomic context... to avoid possible racing condition...
+>   */
+>   struct wlan_network *_rtw_find_network(struct __queue *scanned_queue, u8 *addr)
+>   {
+> @@ -329,7 +329,7 @@ void rtw_free_network_queue(struct adapter *dev, u8 isfreeall)
+>   /*
+>   	return the wlan_network with the matching addr
+>   
+> -	Shall be calle under atomic context... to avoid possible racing condition...
+> +	Shall be called under atomic context... to avoid possible racing condition...
+>   */
+>   struct	wlan_network *rtw_find_network(struct __queue *scanned_queue, u8 *addr)
+>   {
+> @@ -912,7 +912,7 @@ static struct sta_info *rtw_joinbss_update_stainfo(struct adapter *padapter, str
+>   		}
+>   		/* 	Commented by Albert 2012/07/21 */
+>   		/* 	When doing the WPS, the wps_ie_len won't equal to 0 */
+> -		/* 	And the Wi-Fi driver shouldn't allow the data packet to be tramsmitted. */
+> +		/* 	And the Wi-Fi driver shouldn't allow the data packet to be transmitted. */
+>   		if (padapter->securitypriv.wps_ie_len != 0) {
+>   			psta->ieee8021x_blocked = true;
+>   			padapter->securitypriv.wps_ie_len = 0;
+> @@ -1304,7 +1304,7 @@ void rtw_stadel_event_callback(struct adapter *adapter, u8 *pbuf)
+>   }
+>   
+>   /*
+> -* _rtw_join_timeout_handler - Timeout/faliure handler for CMD JoinBss
+> +* _rtw_join_timeout_handler - Timeout/failure handler for CMD JoinBss
+>   * @adapter: pointer to struct adapter structure
+>   */
+>   void _rtw_join_timeout_handler (struct adapter *adapter)
+> @@ -1339,7 +1339,7 @@ void _rtw_join_timeout_handler (struct adapter *adapter)
+>   }
+>   
+>   /*
+> -* rtw_scan_timeout_handler - Timeout/Faliure handler for CMD SiteSurvey
+> +* rtw_scan_timeout_handler - Timeout/Failure handler for CMD SiteSurvey
+>   * @adapter: pointer to struct adapter structure
+>   */
+>   void rtw_scan_timeout_handler (struct adapter *adapter)
+> diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+> index 474391bf7cb5..fd445aa09377 100644
+> --- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+> +++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+> @@ -156,7 +156,7 @@ static struct rt_channel_plan_map	RTW_ChannelPlanMap[RT_CHANNEL_DOMAIN_MAX] = {
+>   	{0x03},	/* 0x41, RT_CHANNEL_DOMAIN_GLOBAL_DOAMIN_2G */
+>   };
+>   
+> -static struct rt_channel_plan_map RTW_CHANNEL_PLAN_MAP_REALTEK_DEFINE = {0x03}; /* use the conbination for max channel numbers */
+> +static struct rt_channel_plan_map RTW_CHANNEL_PLAN_MAP_REALTEK_DEFINE = {0x03}; /* use the combination for max channel numbers */
+>   
+>   /*
+>    * Search the @param channel_num in given @param channel_set
+> @@ -1733,7 +1733,7 @@ void issue_p2p_GO_request(struct adapter *padapter, u8 *raddr)
+>   	p2pie[p2pielen++] = 0x09;	/*	WFA P2P v1.0 */
+>   
+>   	/*	Commented by Albert 20110306 */
+> -	/*	According to the P2P Specification, the group negoitation request frame should contain 9 P2P attributes */
+> +	/*	According to the P2P Specification, the group negotiation request frame should contain 9 P2P attributes */
+>   	/*	1. P2P Capability */
+>   	/*	2. Group Owner Intent */
+>   	/*	3. Configuration Timeout */
+> @@ -2088,7 +2088,7 @@ static void issue_p2p_GO_response(struct adapter *padapter, u8 *raddr, u8 *frame
+>   	p2pie[p2pielen++] = 0x09;	/*	WFA P2P v1.0 */
+>   
+>   	/*	Commented by Albert 20100908 */
+> -	/*	According to the P2P Specification, the group negoitation response frame should contain 9 P2P attributes */
+> +	/*	According to the P2P Specification, the group negotiation response frame should contain 9 P2P attributes */
+>   	/*	1. Status */
+>   	/*	2. P2P Capability */
+>   	/*	3. Group Owner Intent */
+> @@ -2384,7 +2384,7 @@ static void issue_p2p_GO_confirm(struct adapter *padapter, u8 *raddr, u8 result)
+>   	p2pie[p2pielen++] = 0x09;	/*	WFA P2P v1.0 */
+>   
+>   	/*	Commented by Albert 20110306 */
+> -	/*	According to the P2P Specification, the group negoitation request frame should contain 5 P2P attributes */
+> +	/*	According to the P2P Specification, the group negotiation request frame should contain 5 P2P attributes */
+>   	/*	1. Status */
+>   	/*	2. P2P Capability */
+>   	/*	3. Operating Channel */
+> @@ -4009,7 +4009,7 @@ struct xmit_frame *alloc_mgtxmitframe(struct xmit_priv *pxmitpriv)
+>   
+>   /****************************************************************************
+>   
+> -Following are some TX fuctions for WiFi MLME
+> +Following are some TX functions for WiFi MLME
+>   
+>   *****************************************************************************/
+>   
+> @@ -4611,7 +4611,7 @@ int issue_probereq_ex(struct adapter *padapter, struct ndis_802_11_ssid *pssid,
+>   	return ret;
+>   }
+>   
+> -/*  if psta == NULL, indiate we are station(client) now... */
+> +/*  if psta == NULL, indicate we are station(client) now... */
+Extra space after /*
+>   void issue_auth(struct adapter *padapter, struct sta_info *psta, unsigned short status)
+>   {
+>   	struct xmit_frame *pmgntframe;
+> @@ -5010,7 +5010,7 @@ void issue_assocreq(struct adapter *padapter)
+>   				if (!padapter->registrypriv.wifi_spec) {
+>   					/* Commented by Kurt 20110629 */
+>   					/* In some older APs, WPS handshake */
+> -					/* would be fail if we append vender extensions informations to AP */
+> +					/* would be fail if we append vender extensions information to AP */
+>   					if (!memcmp(pIE->data, WPS_OUI, 4))
+>   						pIE->Length = 14;
+>   				}
+> @@ -5165,7 +5165,7 @@ void issue_assocreq(struct adapter *padapter)
+>   		kfree(pmlmepriv->assoc_req);
+>   }
+>   
+> -/* when wait_ack is ture, this function shoule be called at process context */
+> +/* when wait_ack is true, this function should be called at process context */
+>   static int _issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned int power_mode, int wait_ack)
+>   {
+>   	int ret = _FAIL;
+> @@ -5234,7 +5234,7 @@ static int _issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned
+>   	return ret;
+>   }
+>   
+> -/* when wait_ms > 0 , this function shoule be called at process context */
+> +/* when wait_ms > 0 , this function should be called at process context */
+
+Extra space before ','
+
+
+>   /* da == NULL for station mode */
+>   int issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned int power_mode, int try_cnt, int wait_ms)
+>   {
+> @@ -5243,7 +5243,7 @@ int issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned int pow
+>   	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
+>   	struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
+>   
+> -	/* da == NULL, assum it's null data for sta to ap*/
+> +	/* da == NULL, assume it's null data for sta to ap*/
+
+Need a space before */
+
+
+>   	if (!da)
+>   		da = get_my_bssid(&pmlmeinfo->network);
+>   
+> @@ -5267,7 +5267,7 @@ int issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned int pow
+>   	return ret;
+>   }
+>   
+> -/* when wait_ack is ture, this function shoule be called at process context */
+> +/* when wait_ack is true, this function should be called at process context */
+>   static int _issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16 tid, int wait_ack)
+>   {
+>   	int ret = _FAIL;
+> @@ -5340,7 +5340,7 @@ static int _issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16
+>   	return ret;
+>   }
+>   
+> -/* when wait_ms > 0 , this function shoule be called at process context */
+> +/* when wait_ms > 0 , this function should be called at process context */
+
+Extra space before ','
+
+
+>   /* da == NULL for station mode */
+>   int issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16 tid, int try_cnt, int wait_ms)
+>   {
+> @@ -5349,7 +5349,7 @@ int issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16 tid, int
+>   	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
+>   	struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
+>   
+> -	/* da == NULL, assum it's null data for sta to ap*/
+> +	/* da == NULL, assume it's null data for sta to ap*/
+Need a space before */
+>   	if (!da)
+>   		da = get_my_bssid(&pmlmeinfo->network);
+>   
+> @@ -5790,7 +5790,7 @@ void clear_beacon_valid_bit(struct adapter *adapter)
+>   
+>   /****************************************************************************
+>   
+> -Following are some utitity fuctions for WiFi MLME
+> +Following are some utility functions for WiFi MLME
+>   
+>   *****************************************************************************/
+>   
+> @@ -5888,7 +5888,7 @@ void site_survey(struct adapter *padapter)
+>   		} else {
+>   			/*  20100721:Interrupt scan operation here. */
+>   			/*  For SW antenna diversity before link, it needs to switch to another antenna and scan again. */
+> -			/*  It compares the scan result and select beter one to do connection. */
+> +			/*  It compares the scan result and select better one to do connection. */
+>   			if (AntDivBeforeLink8188E(padapter)) {
+>   				pmlmeext->sitesurvey_res.bss_cnt = 0;
+>   				pmlmeext->sitesurvey_res.channel_idx = -1;
+> @@ -6109,7 +6109,7 @@ void start_create_ibss(struct adapter *padapter)
+>   	/* update wireless mode */
+>   	update_wireless_mode(padapter);
+>   
+> -	/* udpate capability */
+> +	/* update capability */
+>   	caps = rtw_get_capability((struct wlan_bssid_ex *)pnetwork);
+>   	update_capinfo(padapter, caps);
+>   	if (caps & cap_IBSS) {/* adhoc master */
+> @@ -6160,7 +6160,7 @@ void start_clnt_join(struct adapter *padapter)
+>   	/* update wireless mode */
+>   	update_wireless_mode(padapter);
+>   
+> -	/* udpate capability */
+> +	/* update capability */
+>   	caps = rtw_get_capability((struct wlan_bssid_ex *)pnetwork);
+>   	update_capinfo(padapter, caps);
+>   	if (caps & cap_ESS) {
+> @@ -6740,7 +6740,7 @@ void mlmeext_joinbss_event_callback(struct adapter *padapter, int join_res)
+>   	/* BCN interval */
+>   	rtw_write16(padapter, REG_BCN_INTERVAL, pmlmeinfo->bcn_interval);
+>   
+> -	/* udpate capability */
+> +	/* update capability */
+>   	update_capinfo(padapter, pmlmeinfo->capability);
+>   
+>   	/* WMM, Update EDCA param */
+> diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
+> index 91a6e0f035f4..a3f71697f6d7 100644
+> --- a/drivers/staging/r8188eu/core/rtw_recv.c
+> +++ b/drivers/staging/r8188eu/core/rtw_recv.c
+> @@ -877,7 +877,7 @@ static void validate_recv_ctrl_frame(struct adapter *padapter,
+>   			if (psta->sleepq_len == 0) {
+>   				pstapriv->tim_bitmap &= ~BIT(psta->aid);
+>   
+> -				/* upate BCN for TIM IE */
+> +				/* update BCN for TIM IE */
+>   				/* update_BCNTIM(padapter); */
+>   				update_beacon(padapter, _TIM_IE_, NULL, false);
+>   			}
+> @@ -891,7 +891,7 @@ static void validate_recv_ctrl_frame(struct adapter *padapter,
+>   
+>   				pstapriv->tim_bitmap &= ~BIT(psta->aid);
+>   
+> -				/* upate BCN for TIM IE */
+> +				/* update BCN for TIM IE */
+>   				/* update_BCNTIM(padapter); */
+>   				update_beacon(padapter, _TIM_IE_, NULL, false);
+>   			}
+> @@ -1810,13 +1810,13 @@ void rtw_signal_stat_timer_hdl(struct timer_list *t)
+>   	} else {
+>   		if (recvpriv->signal_strength_data.update_req == 0) {/*  update_req is clear, means we got rx */
+>   			avg_signal_strength = recvpriv->signal_strength_data.avg_val;
+> -			/*  after avg_vals are accquired, we can re-stat the signal values */
+> +			/*  after avg_vals are acquired, we can re-stat the signal values */
+Extra space after /*
+>   			recvpriv->signal_strength_data.update_req = 1;
+>   		}
+>   
+>   		if (recvpriv->signal_qual_data.update_req == 0) {/*  update_req is clear, means we got rx */
+>   			avg_signal_qual = recvpriv->signal_qual_data.avg_val;
+> -			/*  after avg_vals are accquired, we can re-stat the signal values */
+> +			/*  after avg_vals are acquired, we can re-stat the signal values */
+Extra space after /*
+>   			recvpriv->signal_qual_data.update_req = 1;
+>   		}
+>   
+> diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
+> index 029b994e1b71..2a686b5c65b1 100644
+> --- a/drivers/staging/r8188eu/core/rtw_xmit.c
+> +++ b/drivers/staging/r8188eu/core/rtw_xmit.c
+> @@ -958,7 +958,7 @@ s32 rtw_xmitframe_coalesce(struct adapter *padapter, struct sk_buff *pkt, struct
+>   		}
+>   
+>   		if (bmcst) {
+> -			/*  don't do fragment to broadcat/multicast packets */
+> +			/*  don't do fragment to broadcast/multicast packets */
+Extra space after /*
+>   			mem_sz = _rtw_pktfile_read(&pktfile, pframe, pattrib->pktlen);
+>   		} else {
+>   			mem_sz = _rtw_pktfile_read(&pktfile, pframe, mpdu_len);
+> @@ -1768,7 +1768,7 @@ int xmitframe_enqueue_for_sleeping_sta(struct adapter *padapter, struct xmit_fra
+>   			pstapriv->tim_bitmap |= BIT(0);/*  */
+>   			pstapriv->sta_dz_bitmap |= BIT(0);
+>   
+> -			update_beacon(padapter, _TIM_IE_, NULL, false);/* tx bc/mc packets after upate bcn */
+> +			update_beacon(padapter, _TIM_IE_, NULL, false);/* tx bc/mc packets after update bcn */
+>   
+>   			ret = true;
+>   		}
+> @@ -1818,7 +1818,7 @@ int xmitframe_enqueue_for_sleeping_sta(struct adapter *padapter, struct xmit_fra
+>   				pstapriv->tim_bitmap |= BIT(psta->aid);
+>   
+>   				if (psta->sleepq_len == 1) {
+> -					/* upate BCN for TIM IE */
+> +					/* update BCN for TIM IE */
+>   					update_beacon(padapter, _TIM_IE_, NULL, false);
+>   				}
+>   			}
+> @@ -2087,7 +2087,7 @@ void xmit_delivery_enabled_frames(struct adapter *padapter, struct sta_info *pst
+>   		if ((psta->sleepq_ac_len == 0) && (!psta->has_legacy_ac) && (wmmps_ac)) {
+>   			pstapriv->tim_bitmap &= ~BIT(psta->aid);
+>   
+> -			/* upate BCN for TIM IE */
+> +			/* update BCN for TIM IE */
+>   			update_beacon(padapter, _TIM_IE_, NULL, false);
+>   		}
+>   	}

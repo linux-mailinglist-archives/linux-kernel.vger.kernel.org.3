@@ -2,68 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B4894FC3CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 20:04:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05ACA4FC3CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 20:07:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349055AbiDKSGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 14:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34224 "EHLO
+        id S1349034AbiDKSJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 14:09:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349050AbiDKSGw (ORCPT
+        with ESMTP id S232992AbiDKSJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 14:06:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8FB437BE8;
-        Mon, 11 Apr 2022 11:04:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 54BA160FD2;
-        Mon, 11 Apr 2022 18:04:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 275CEC385A4;
-        Mon, 11 Apr 2022 18:04:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649700273;
-        bh=MuQab/xaawBX0nLDyPNsiNOXlr4TZ0C1l+8XGJX/Rzk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AMWzoBKSQFwn5Xn+Jo9g5l8lpG/gy5gTwOoLzQnS34q7A5xpbxHssn9jFccKe6Zfh
-         QxWkxp3QcgstyPxAmpblD2IVLfvLjOPCMehsLYCld6BjnfLm/i9Oahdks1S8ca0DPT
-         s2KpeXE9p4/wiDNBOsFwzjRUP36Vdevb4hPEz0/RB38ZBKrJ6QFgLzo6FDlJbJI4xL
-         dZj+0q7zLT7BsVlGqjZQ1e6xC3cPu4gHJQ+t0wlDHzL8ihsgruWyAlAoJ7gGe2jLly
-         2pUd3K4Ye5piIXxsnOZgApkiUZ9ZIQsb1xAafiEk0I8Glog+Byk9zDhC1QOZHVPbxa
-         DDBFYu8QTxCdQ==
-Date:   Mon, 11 Apr 2022 23:34:29 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Luca Weiss <luca.weiss@fairphone.com>
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/6] phy: qcom-qmp: Add SM6350 UFS PHY support
-Message-ID: <YlRtra5AZAw2NWMT@matsya>
-References: <20220321133318.99406-1-luca.weiss@fairphone.com>
- <20220321133318.99406-4-luca.weiss@fairphone.com>
+        Mon, 11 Apr 2022 14:09:52 -0400
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881CB26FF;
+        Mon, 11 Apr 2022 11:07:37 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-2ec05db3dfbso54020767b3.7;
+        Mon, 11 Apr 2022 11:07:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UdFqlnyS6znWMBHrBHznevziGrO6hgWnoxAL9D9H1BY=;
+        b=ZfxQtfuv/EMHqa1vjDU0OkLWr52lNFYIngBIdGjeUfyQyUqxor0NcS8m1JjkNUJRaG
+         YsQsm9AgHGycVehWaBHS6p/eCrJOs/HrrUvjhCFKkUNbKnneu9p/2ilmhdhUtYtTklpH
+         BItFJxGqKVwzY7yPrG4PyLPG78DwFS2DeoNJkp0oAmQCdzHciF510aDvv+BDq9Fr6wbH
+         QShiTZ1Uc73uTs6V/C68TK4dsVNZuQTLrtVio3MzV09WOAGZ/QED14wsO5SCq4efwFsO
+         LDnyyFI/5WVcka7q+rqBWXAPTy8WiVQo+7cg3repaG6+5dV9feb50vx0sqzHMemnoVk9
+         MnPQ==
+X-Gm-Message-State: AOAM533RFOFm1hOGUimTs1/8bbDeMHohzoIhwt0sbUxaLXCrqoxUWp3Z
+        AA71hanQwx1VZQmPxR4fN9h164OMoM5S3m1ClPM=
+X-Google-Smtp-Source: ABdhPJx81h6PmVq/sT/eLgk2/wfWI9xiNZCKOS3KYYmWH0UBz+3LrS91oBTVKXNo9iQ/lO56OkmE6SfaH+M3PjpKYGE=
+X-Received: by 2002:a81:b89:0:b0:2eb:e9e6:470a with SMTP id
+ 131-20020a810b89000000b002ebe9e6470amr13058043ywl.7.1649700456794; Mon, 11
+ Apr 2022 11:07:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220321133318.99406-4-luca.weiss@fairphone.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1836398.tdWV9SEqCh@kreacher> <CAHp75Vc2Lci4ewdosqX4Thm6ME7pKjKw+C+wtUsq2esRM-eXjg@mail.gmail.com>
+ <CAJZ5v0hCPG0_4MUW5bt+FLtPmnFZ9NUxsEiFpd-6+wOmYxPm5A@mail.gmail.com> <CAHp75VeS+3-N9rV3CfTLHKKD_pzTHrz4Lnv5XsEbd22CoCJeKw@mail.gmail.com>
+In-Reply-To: <CAHp75VeS+3-N9rV3CfTLHKKD_pzTHrz4Lnv5XsEbd22CoCJeKw@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 11 Apr 2022 20:07:25 +0200
+Message-ID: <CAJZ5v0h-hB918OxUjHQCypyR8JKNEV8FxR7LRYaraoq+Mazfhw@mail.gmail.com>
+Subject: Re: [PATCH v1] PM: runtime: Avoid device usage count underflows
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21-03-22, 14:33, Luca Weiss wrote:
-> The SM6350 UFS PHY is compatible with the one from SDM845. Add a
-> compatible for that.
+On Mon, Apr 11, 2022 at 6:53 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+>
+> On Mon, Apr 11, 2022 at 6:17 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > On Mon, Apr 11, 2022 at 5:09 PM Andy Shevchenko
+> > <andy.shevchenko@gmail.com> wrote:
+> > > On Wed, Apr 6, 2022 at 11:49 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+>
+> ...
+>
+> > > > +               retval = rpm_drop_usage_count(dev);
+> > > > +               if (retval > 0) {
+> > > >                         trace_rpm_usage_rcuidle(dev, rpmflags);
+> > > >                         return 0;
+> > > > +               } else if (retval < 0) {
+> > > > +                       return retval;
+> > > >                 }
+> > >
+> > > Can be written in a form
+> > >
+> > >                if (retval < 0)
+> > >                        return retval;
+> > >                if (retval > 0) {
+> > >                        trace_rpm_usage_rcuidle(dev, rpmflags);
+> > >                        return 0;
+> > >                }
+> > >
+> >
+> > I know.
+> >
+> > And why would it be better?
+>
+> Depends on the perception:
 
-Applied, thanks
+Well, exactly.
 
--- 
-~Vinod
+> a) less characters to parse (no 'else');
+
+But to me, with the "else" it is clear that the conditionals are
+related to each other which is not so clear otherwise at first sight.
+YMMV
+
+> b) checking for errors first, which seems more or less standard pattern.
+
+So the checks can be reversed no problem, but this is such a minor point ,,,

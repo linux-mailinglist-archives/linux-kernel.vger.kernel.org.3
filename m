@@ -2,153 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 347174FC44A
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 20:43:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0EAF4FC44C
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 20:44:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349224AbiDKSp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 14:45:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49636 "EHLO
+        id S1345072AbiDKSrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 14:47:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241957AbiDKSp0 (ORCPT
+        with ESMTP id S244376AbiDKSrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 14:45:26 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2088.outbound.protection.outlook.com [40.107.92.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B322D1F9
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 11:43:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IkvVTjdr2kWFwo1n9nmQd1CLABTLOFV7813jri9yQ0YkLLfVT9dK8rAdUMC8otfnc7JHwxa1r3UhCBZ6EAty7TlPQdMsKfxylRRpKOBwq+2ipcXZG/sAaoeFIFqa1vRtK/FN9qc+9hV1uaL55UAkg26M9RAbftimFNKNakaXvdd6HJ5vM0On5DEFZGIETKJatFWMah6cpovoUXth4Dq29CY8/75B3+vGOgSsUh/jovtoSxHDOdvSutiRX3f/DnRU38flZGp269eG9cimg1jfJ+3BrOyBeIhk0BGnGAEkeDFx85RGGdfnBtfBfit5XSPkSZJV2H9Y4XMvxXN0y22Kqw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q5SLHBKh96sDYwSj50vo2N/E08E4SKejJOxBlLhKb5U=;
- b=g9kFVFQ6Mgq/2+zRpR2KihAGA6qZkA8NWRFiNQcwkfhDO9SgIrEMqrEvKkywTSMvr6cZWdLOA53DP8iU+mLlWiXYoF4VJz6FULKXzn+gqTmT+UWdw9Z50wE8oklm9sVWj7n63S1eiYJ83C7PmEg4gorJETBRY6gNiSiipUC3txBYybKdlNrCxEpXUaxGKqXvYWCCSl45an8jl+r26yN1qxdxoo3VVsnXnAOE9HvArwraBzy1HEq/CGf9PCS2XYdS4wk62qtwLSczSUc5EveHJsQbHtliQPM2Mxs0oC+fqYWu4wo2CFh9cV5kdQPtYpQTIwuXHezTbiPaXvkUfTrtJw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q5SLHBKh96sDYwSj50vo2N/E08E4SKejJOxBlLhKb5U=;
- b=ZG1hXP+Xjadrj2jOKlPGWWD64yvZ+pHLDrgsTh90OU93zwE10/RzlOhBZphmA1gahDHLMdD2SjrcNJyHAntBQ6LMN0mcRnpeOXaUD/f46uqC5+/YerxxEU5yVP1KX4HRi2B/CW70fL+rBQ7yjtCVDDKxBq6DKF0Nf1lNcJW0hNeAOG3dF/cVruPhvD8usvBZGXvnXXxTLuEXikH/mNldBt7Pi8rr0Uki8L6Dx7AU7eAzM8j+5OnI3oQ7BNZ+OixiHnwb7DUtnJE9U4Nlixg2+2163/Kzo5N8SG3Jw+JuTA6SY5dNJ04lyI2vz2mPrIBoJC+vMXzRYKAKkpsHpTnIew==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by DM5PR12MB1610.namprd12.prod.outlook.com (2603:10b6:4:3::12) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5144.29; Mon, 11 Apr 2022 18:43:09 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::cdfb:f88e:410b:9374]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::cdfb:f88e:410b:9374%6]) with mapi id 15.20.5144.029; Mon, 11 Apr 2022
- 18:43:09 +0000
-Date:   Mon, 11 Apr 2022 15:43:08 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        intel-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 06/34] drm/i915/gvt: move the gvt code into kvmgt.ko
-Message-ID: <20220411184308.GF2120790@nvidia.com>
-References: <20220411141403.86980-1-hch@lst.de>
- <20220411141403.86980-7-hch@lst.de>
+        Mon, 11 Apr 2022 14:47:07 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA38252A4
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 11:44:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649702692; x=1681238692;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=P+8m35ft841B/+Q+j3lxElw6g+hJYxxjCWj4A+qeHQw=;
+  b=Q0e98u41qvSlA5rS57zoWajgx0zYgjWjuT2OrKy9AKbS32zouee5adU3
+   J1+lOUz78XbckG/yqNMcRx/n49VFPYZHbYZ0JcygqBnfStUlGlReWBStH
+   nQddcnBSYlDkXn6D8hyM7NhLJC7+/W9urEeVv48gN3Mbkj0L3GDj9n00U
+   SJntRUAbwPrmYwZ3aXTIsj2UMfqufXvdSXCVGKmsXg547ZmHERmG3X9jq
+   IvIndE0DoaGcC0cFGKWbL4zCYNF0a8O7uc3ZAiLTAs15WppWU/DUnyrJi
+   cUO/uuzc8rj/JID62vCFoTGkax8klULwXx3Zz8upKlVZj9v0RgsU6L7z3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="261933643"
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="261933643"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 11:44:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="724101796"
+Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 11 Apr 2022 11:44:50 -0700
+Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ndz1t-00024M-NP;
+        Mon, 11 Apr 2022 18:44:49 +0000
+Date:   Tue, 12 Apr 2022 02:44:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: [ammarfaizi2-block:paulmck/linux-rcu/dev 83/131]
+ kernel/rcu/tree.c:3778:13: error: implicit declaration of function
+ 'preempt_mode_full'; did you mean 'preempt_model_full'?
+Message-ID: <202204120207.7OoY1hZZ-lkp@intel.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220411141403.86980-7-hch@lst.de>
-X-ClientProxiedBy: MN2PR14CA0022.namprd14.prod.outlook.com
- (2603:10b6:208:23e::27) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 76dee174-4330-4059-60fe-08da1beb1ffd
-X-MS-TrafficTypeDiagnostic: DM5PR12MB1610:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR12MB161037F238CD4AFDC106387EC2EA9@DM5PR12MB1610.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Mmuy3W70GzT2FrrGuL5QiPEIL7SGSn3+yZcllgMaLpN0pDvZEZVy0zap8f/Eublk44Cn/siJcVqf656mc7qqvoD1vkC8Zz5+nqYt+rqU8k0YIzph18EIwLtfauyuhV2M2CWh0TQcLSk0gelV3vBvcaJWjfu8X1d0G0h1MJufo1Uz6sserh5ynmrXHUc+qHLb0VZ/QaWUOsT4b8x4Jsd+wzSSYAaChziw4jn4wpHflEaL7F8WcUn0JSPerXOlCoxK0PHQD0LE327vzim+5qH288M9Poo0DsalMRIFQ+ZpA8pyDlpJBlJVoHvGiNVYdRMh3Qd/I7Ls/y8n0s4HjnTmR8pCATHK2Isy9XJLnXFcOaDbYxPqBkGLL0IN4HYDrQafCRVyeOGen++KFf5UonIOVPerEx60DUkPyOXIeO5cEW8vMmC94G8S80q4n+YiXwbFRvHrqSmcdj6/95aA0s/G2/zKlfJ6or4u8IjUZn9YBnMpg1F4M8128d6TGF352CutmYYvsanoCfWXmwnOm3pUxGVCh8acxcYuH4hIzsRVZg0JtOc4vpx4jf9qyfUt6Hi1p9HsaE3vjXGp/1JgJ8DB9xPSnU6aoJM12X6K7SynzibZeSWxVXF0g9/WD3CRy3YHFAdVz4HrZdpJyDkSUNSfWA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(26005)(186003)(66946007)(4326008)(6486002)(83380400001)(86362001)(8676002)(38100700002)(36756003)(1076003)(2616005)(66476007)(66556008)(508600001)(6916009)(316002)(7416002)(5660300002)(8936002)(54906003)(6506007)(33656002)(6512007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2T3E2PVcPBByBOX+9dxFNNijrpPBa+jPRfawL7jOeqzYx1MD86mSKASlZeGn?=
- =?us-ascii?Q?hqYgQJ0TnY/XHpqBy3P7K1W4ec2KZCCSUQ5uZtYwZvoPqgC0JBywddPXyEa4?=
- =?us-ascii?Q?/ZlMnkpZgwyd6grHbawZTbYthtjVLgxlbNdK4HzX/tiJ08N80c464kFVure9?=
- =?us-ascii?Q?3Qp6HeMXgSY+LXbOY3YRSWmrjVen4UwlMGsOEaFR6OAj6DRDH8dGTMfbkUhB?=
- =?us-ascii?Q?l0q4aHZVTvDn62A2R/3+o5+X7ncIPJooFD9I/iLQ6wdp12D2dhckTue6htQi?=
- =?us-ascii?Q?vbGjXB4gxk/HWi+AeblwwD4x8B2gqmxv9r+tl0uVWLR3JLy3731wzpYh/ve5?=
- =?us-ascii?Q?i6tE34JkgcxotzR6S+GsLaMmjraxhYp37SFnNqPGZOiv7ld1qIXkzp/fn2t/?=
- =?us-ascii?Q?7iOfHW58uL6xBA5Pv2aOF8E1mpEO/8GUDViyWnXdtWZUTWoza0bkDrf6glQN?=
- =?us-ascii?Q?xMVnj/rRh8SBjBd+trGKrEGZ4W2U4au/1v8JQnC7DLeZOyd7lnBJQ7zYyPnP?=
- =?us-ascii?Q?kT2Rc9emeM0kna86H6r56e3tj1btrQTb7Bt5L51lgKV1v5KAcex0TVWQ7m10?=
- =?us-ascii?Q?+cP5z64OHsszmL6kbkrewd5DyKSZgdwlk4v8vUW2RGaPtVJufKE3uLycWTiI?=
- =?us-ascii?Q?6xjR1yNaQ7DNVCJQVyQn3zkL5VvjijZB0JkFYDVp2r81WOSlBAPf+X806k4u?=
- =?us-ascii?Q?4CtMarbUmAaw0valZL8TQOswVqysI5qxm2ZIQBDAGz2U8WySghqNMUfBne/a?=
- =?us-ascii?Q?kzkULZKF/BUA1LsFIlON6zM1rZNesLMUQ4xaEyfmvNswsxXdrxaVpj9dUZ97?=
- =?us-ascii?Q?NFx7YFBlC/aDbfH0eteUofApsVTKv6GijtAxe99hlhuC5k5cgSDVOthhn9Gs?=
- =?us-ascii?Q?8KC09r0IZ0JWl5Ge+2CbIOUmsfQTpTdfIcHaMfw4VMjw/ixhQqXzduccSS5U?=
- =?us-ascii?Q?4RjQieSETNuhNjCsjMsPu9/xPqYY+gfWXWYQ+vGr5MB+3NMLSZCbOQ2CqVIQ?=
- =?us-ascii?Q?Hv8oJIt8J9UHYzRlz8++Px4IsYjr3rpyBLHzhPqFUBpo5wXWtZHWxUUo0tKJ?=
- =?us-ascii?Q?f05Ji4/suWFSrcAWrlhaPUO0QT4TxyAQXyYotna45Lpzv75cGlchkg8T97bp?=
- =?us-ascii?Q?B44+FkMDuNyw7ItT1Paw8eOx8C2gzKZInlmrLeDFWCpML4uGrD/SCAsMjEmx?=
- =?us-ascii?Q?plcrG5BVsGJwR5DKYdQkZte5aaE2LWrlCLJtBrgrrqDqaKKlxxxahErBbE0R?=
- =?us-ascii?Q?+W712Sh4bS6/waMV9yxaue+pBeg5Oty0q13MkGUaGbGlP5HnLmtFCVv8riWy?=
- =?us-ascii?Q?wFJ4B4y/+DLbH6w10XGNM9wKFJXRhvmWRl9qQIxSuDlx6hxBikV+7Zs2HPnx?=
- =?us-ascii?Q?7Rxw8foQCYCwlNl3B+jR/4pks0GjsAtvjF/cM5/k4djfDiszaB5RMNkaFAO/?=
- =?us-ascii?Q?L3DtUFFDQPxYez/S5lYEWayis1Av/aXaV5MoYQ0H23vC1GeKN2+1Xs63W2wG?=
- =?us-ascii?Q?fKI/P2xAYNCTqPzByfeE3E6WXR2kbJLr0xa1DwABxuxDyvnZxOlEqf2fp244?=
- =?us-ascii?Q?Ds4u3pguqCUMOK2f+Fbc98qalYBThlkdM2QEQ+mi3n4FJskb/j46HkOCR5EB?=
- =?us-ascii?Q?sZOjitdZh4PoY2u50tvl5ZfpmZcO3mMw1Iand3HlySz8fBtgM7FPK1oNyBOO?=
- =?us-ascii?Q?yB6rghKRUQywKAL5N6o+Omk++IUVovkF7Dq+d6nvpEnYn8/eDMvJ83z0CBCr?=
- =?us-ascii?Q?suKIYq9Y8A=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 76dee174-4330-4059-60fe-08da1beb1ffd
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2022 18:43:09.5547
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /3Cx/2EatSnMclBlDLI2rzGFiaKUi3i+3+DPOLxtM5aU0P1w6KFkaYswMm/+nrK/
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1610
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 04:13:35PM +0200, Christoph Hellwig wrote:
-> Instead of having an option to build the gvt code into the main i915
-> module, just move it into the kvmgt.ko module.  This only requires
-> a new struct with three entries that the KVMGT modules needs to register
-> with the main i915 module, and a proper list of GVT-enabled devices
-> instead of global device pointer.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->  drivers/gpu/drm/i915/Kconfig                |  36 ++--
->  drivers/gpu/drm/i915/Makefile               |   2 +-
->  drivers/gpu/drm/i915/gvt/Makefile           |   5 +-
->  drivers/gpu/drm/i915/gvt/gvt.c              |  55 ++----
->  drivers/gpu/drm/i915/gvt/gvt.h              |   6 +-
->  drivers/gpu/drm/i915/gvt/kvmgt.c            |  14 +-
->  drivers/gpu/drm/i915/gvt/mpt.h              |   3 -
->  drivers/gpu/drm/i915/i915_driver.c          |   7 -
->  drivers/gpu/drm/i915/i915_drv.h             |   1 +
->  drivers/gpu/drm/i915/intel_gvt.c            | 200 +++++++++++++-------
->  drivers/gpu/drm/i915/intel_gvt.h            |  17 +-
->  drivers/gpu/drm/i915/intel_gvt_mmio_table.c |   1 +
->  12 files changed, 193 insertions(+), 154 deletions(-)
+tree:   https://github.com/ammarfaizi2/linux-block paulmck/linux-rcu/dev
+head:   96d35f716a63bc46750d66a5daec804997ff7cc6
+commit: 78b49c815a11d5541a7492b483eb20ec6377cafe [83/131] rcu: Fix preemption mode check on synchronize_rcu[_expedited]()
+config: xtensa-buildonly-randconfig-r003-20220411 (https://download.01.org/0day-ci/archive/20220412/202204120207.7OoY1hZZ-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/78b49c815a11d5541a7492b483eb20ec6377cafe
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block paulmck/linux-rcu/dev
+        git checkout 78b49c815a11d5541a7492b483eb20ec6377cafe
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=xtensa SHELL=/bin/bash
 
-There is a few things going on in here, I looked a few times and
-didn't spot anything..
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+Note: the ammarfaizi2-block/paulmck/linux-rcu/dev HEAD 96d35f716a63bc46750d66a5daec804997ff7cc6 builds fine.
+      It only hurts bisectability.
 
-Jason
+All errors (new ones prefixed by >>):
+
+   kernel/rcu/tree.c: In function 'rcu_blocking_is_gp':
+>> kernel/rcu/tree.c:3778:13: error: implicit declaration of function 'preempt_mode_full'; did you mean 'preempt_model_full'? [-Werror=implicit-function-declaration]
+    3778 |         if (preempt_mode_full() || preempt_mode_rt())
+         |             ^~~~~~~~~~~~~~~~~
+         |             preempt_model_full
+>> kernel/rcu/tree.c:3778:36: error: implicit declaration of function 'preempt_mode_rt'; did you mean 'preempt_model_rt'? [-Werror=implicit-function-declaration]
+    3778 |         if (preempt_mode_full() || preempt_mode_rt())
+         |                                    ^~~~~~~~~~~~~~~
+         |                                    preempt_model_rt
+   cc1: some warnings being treated as errors
+
+
+vim +3778 kernel/rcu/tree.c
+
+  3761	
+  3762	/*
+  3763	 * During early boot, any blocking grace-period wait automatically
+  3764	 * implies a grace period.  Later on, this is never the case for PREEMPTION.
+  3765	 *
+  3766	 * However, because a context switch is a grace period for !PREEMPTION, any
+  3767	 * blocking grace-period wait automatically implies a grace period if
+  3768	 * there is only one CPU online at any point time during execution of
+  3769	 * either synchronize_rcu() or synchronize_rcu_expedited().  It is OK to
+  3770	 * occasionally incorrectly indicate that there are multiple CPUs online
+  3771	 * when there was in fact only one the whole time, as this just adds some
+  3772	 * overhead: RCU still operates correctly.
+  3773	 */
+  3774	static int rcu_blocking_is_gp(void)
+  3775	{
+  3776		int ret;
+  3777	
+> 3778		if (preempt_mode_full() || preempt_mode_rt())
+  3779			return rcu_scheduler_active == RCU_SCHEDULER_INACTIVE;
+  3780		might_sleep();  /* Check for RCU read-side critical section. */
+  3781		preempt_disable();
+  3782		/*
+  3783		 * If the rcu_state.n_online_cpus counter is equal to one,
+  3784		 * there is only one CPU, and that CPU sees all prior accesses
+  3785		 * made by any CPU that was online at the time of its access.
+  3786		 * Furthermore, if this counter is equal to one, its value cannot
+  3787		 * change until after the preempt_enable() below.
+  3788		 *
+  3789		 * Furthermore, if rcu_state.n_online_cpus is equal to one here,
+  3790		 * all later CPUs (both this one and any that come online later
+  3791		 * on) are guaranteed to see all accesses prior to this point
+  3792		 * in the code, without the need for additional memory barriers.
+  3793		 * Those memory barriers are provided by CPU-hotplug code.
+  3794		 */
+  3795		ret = READ_ONCE(rcu_state.n_online_cpus) <= 1;
+  3796		preempt_enable();
+  3797		return ret;
+  3798	}
+  3799	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

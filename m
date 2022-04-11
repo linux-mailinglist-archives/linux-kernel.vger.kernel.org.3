@@ -2,102 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2A2F4FBDC5
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 15:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 636D94FBDDC
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 15:54:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346719AbiDKNwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 09:52:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37088 "EHLO
+        id S1346788AbiDKN4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 09:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346661AbiDKNwI (ORCPT
+        with ESMTP id S238419AbiDKN4I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 09:52:08 -0400
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066D9237F0
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 06:49:52 -0700 (PDT)
-Received: by mail-qv1-f51.google.com with SMTP id ke15so13232505qvb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 06:49:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vVG2fXlBh+awI+zoG5EckE/Z3Lioiux+cIKRFlmEU0g=;
-        b=D3xdY1OK8KmdjzH6LG9W0CVm9zLNajVHJANYnYi0hjA1PDtLKVezFmtkosul9b2pKn
-         GsEPQQsPu5BIILcIbuBYGi6tZHpuy/7LDD2Rq7op4LmELRU0DzVkPQeHl8yM+ugauu6i
-         y44U3rfTSF9mprSn+z3elpnWwsdWy7hGrxjGDgNbAp2c6jmoRuncHagnCeAPyuOBIxm6
-         i2irYgiP+p/IphTv0DuGN58JRRsCrBOHcfYdTs4KYbqtH0MkUsm73Q/VMbHok+OAid+V
-         f+fzBZCtppKJ1U/zBBFKvZClAk39Y0w8298ut0xIBVdEwH088XURmXP9eNP9baY4N3jZ
-         x2nA==
-X-Gm-Message-State: AOAM53057OYrpEq4VlbXc2e6zAL3e1cdwJP81DwqCh+LPkQHD5Hl4VVr
-        qSRWAM8uHmeAjy8SXeXruVfdKTk6EtZxuQ==
-X-Google-Smtp-Source: ABdhPJxF3a0VlW6VCxyXpcYmmOM+U4cwZPOZS2+Qt3rxtXJBR0gUT7fFMAVggrd9tNbfSxjGe8VUxw==
-X-Received: by 2002:a0c:c788:0:b0:444:2c7f:4126 with SMTP id k8-20020a0cc788000000b004442c7f4126mr10856160qvj.50.1649684990576;
-        Mon, 11 Apr 2022 06:49:50 -0700 (PDT)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
-        by smtp.gmail.com with ESMTPSA id c7-20020a37e107000000b0069c126c5107sm2537458qkm.39.2022.04.11.06.49.50
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Apr 2022 06:49:50 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id t12so7072215ybt.10
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 06:49:49 -0700 (PDT)
-X-Received: by 2002:a25:29c2:0:b0:641:224f:17d6 with SMTP id
- p185-20020a2529c2000000b00641224f17d6mr7405779ybp.546.1649684989768; Mon, 11
- Apr 2022 06:49:49 -0700 (PDT)
+        Mon, 11 Apr 2022 09:56:08 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC4624F2C;
+        Mon, 11 Apr 2022 06:53:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649685235; x=1681221235;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ietpjAH2T/bkGKzP1TWlkHX10R1PiEwOjSTCOSWzC/E=;
+  b=dAwO6bDG/YC9ESQmMFpbbD2uW3ozKtW/UAk9hNSrEh6oULLuFVY/b7gp
+   upLGbcLRNqZVtbqPfnbLi+0uwhoaLDd7DGTMxNl7Cf6urzEOEgIYEkn5S
+   ecIhMWQbVqITvMd09HFmWZLSOfj7NwRjcrlw6tc+ICML7XSb7CFQzyasH
+   6xptn2gJUfdBN+bPWimaffjXBFO1W38G2qexqN/QmS0fVusLqgNY4gsSj
+   vO8MB+xP58VBHN6UGy2jdH7NA/L4rZqZWT96HRh1CRKw8ykm4AGOuB9BL
+   PvgPymyAKxotzAeKIsYcAKxAF4wb1vi8q4Eh13bRcI9YN4s3y5cjoxigW
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="242057827"
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="242057827"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 06:53:54 -0700
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="654627742"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 06:53:51 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1nduQl-001Dys-JD;
+        Mon, 11 Apr 2022 16:50:11 +0300
+Date:   Mon, 11 Apr 2022 16:50:11 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Rob Herring <robh@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Len Brown <lenb@kernel.org>,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        Michael Walle <michael@walle.cc>
+Subject: Re: [PATCH v6 1/5] device property: Allow error pointer to be passed
+ to fwnode APIs
+Message-ID: <YlQyEz3/J0rb2Hew@smile.fi.intel.com>
+References: <20220408184844.22829-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-References: <20220312063437.19160-1-yuehaibing@huawei.com> <08e81f07-99d2-62a3-8eea-b2c0432b4d18@redhat.com>
-In-Reply-To: <08e81f07-99d2-62a3-8eea-b2c0432b4d18@redhat.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 11 Apr 2022 15:49:38 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVYtV9KHYqjcXS05XM+QqbCgPKB_uZCCAN0eAqHUmoeTg@mail.gmail.com>
-Message-ID: <CAMuHMdVYtV9KHYqjcXS05XM+QqbCgPKB_uZCCAN0eAqHUmoeTg@mail.gmail.com>
-Subject: Re: [PATCH -next] drm/solomon: Make DRM_SSD130X depends on MMU
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     YueHaibing <yuehaibing@huawei.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220408184844.22829-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Javier,
+On Fri, Apr 08, 2022 at 09:48:40PM +0300, Andy Shevchenko wrote:
+> Some of the fwnode APIs might return an error pointer instead of NULL
+> or valid fwnode handle. The result of such API call may be considered
+> optional and hence the test for it is usually done in a form of
+> 
+> 	fwnode = fwnode_find_reference(...);
+> 	if (IS_ERR(fwnode))
+> 		...error handling...
+> 
+> Nevertheless the resulting fwnode may have bumped the reference count
+> and hence caller of the above API is obliged to call fwnode_handle_put().
+> Since fwnode may be not valid either as NULL or error pointer the check
+> has to be performed there. This approach uglifies the code and adds
+> a point of making a mistake, i.e. forgetting about error point case.
+> 
+> To prevent this, allow an error pointer to be passed to the fwnode APIs.
 
-On Tue, Mar 15, 2022 at 12:28 PM Javier Martinez Canillas
-<javierm@redhat.com> wrote:
-> On 3/12/22 07:34, YueHaibing wrote:
-> > WARNING: unmet direct dependencies detected for DRM_GEM_SHMEM_HELPER
-> >   Depends on [n]: HAS_IOMEM [=y] && DRM [=m] && MMU [=n]
-> >   Selected by [m]:
-> >   - DRM_SSD130X [=m] && HAS_IOMEM [=y] && DRM [=m]
-> >
-> > DRM_GEM_SHMEM_HELPER depends on MMU, DRM_SSD130X should also depends on MMU.
-> >
-> > Fixes: a61732e80867 ("drm: Add driver for Solomon SSD130x OLED displays")
-> > Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-> > ---
->
-> Indeed. All the DRM drivers that select DRM_GEM_SHMEM_HELPER depend on MMU.
+Rafael and Greg, if this okay for you, can the first three patches be
+applied, so we will have at least the fix in and consider constification
+a further work?
 
-That's very unfortunate. Is there no way around this?
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Else fbdev can never be deprecated in favor of DRM.
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

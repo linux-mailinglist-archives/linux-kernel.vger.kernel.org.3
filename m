@@ -2,121 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D99F04FBA26
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 12:53:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7B184FBA2E
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 12:54:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345754AbiDKKzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 06:55:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56754 "EHLO
+        id S1345779AbiDKK4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 06:56:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231562AbiDKKzM (ORCPT
+        with ESMTP id S240251AbiDKK4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 06:55:12 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56FDC3F891
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 03:52:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649674379; x=1681210379;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=TY0gfpltESOQpALtYNIpJ+ufLKm19PGcf0G2k2M0WBM=;
-  b=FXsY41rBWuu3CEwI2NKeVztPs3p9bDyL8bitfzT1l2W75cjx4fQTsf7l
-   vfbcyRci5mEfFJjQT0qK2AjRP8c73X6rAGHNOYe8VXQLgPZeVaTfgTJew
-   Ij9UvFdGQ8GUB6e+5yjJQVedMS8dUg/4V9IJet08v/56GMY2ME5o5NyAV
-   wSWFSBG9IdtXisVz6ljhbdLrEjA8XZgv+LmpWpWt30Ogs92iWL7biA7YN
-   BSo96iD0CTEQZ0krrFXaW1k8z5nOxPEBn26V100CizJ1TDsep+DV8vT4Q
-   bylaMZEqKnkMJCUUlXXiz+k9M7RGjRzJjMqxEyJPvg2xiCiKQY9eFp+4w
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="261831493"
-X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
-   d="scan'208";a="261831493"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 03:52:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
-   d="scan'208";a="507063099"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 11 Apr 2022 03:52:57 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ndrfE-0001mx-LE;
-        Mon, 11 Apr 2022 10:52:56 +0000
-Date:   Mon, 11 Apr 2022 18:52:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>
-Subject: [drm-drm-intel:topic/core-for-CI 16/30]
- arch/powerpc/platforms/embedded6xx/Kconfig:2:error: recursive dependency
- detected!
-Message-ID: <202204111804.vHPI2rqO-lkp@intel.com>
+        Mon, 11 Apr 2022 06:56:25 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5A0B12;
+        Mon, 11 Apr 2022 03:54:08 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 8BED81F38D;
+        Mon, 11 Apr 2022 10:54:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1649674447; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=j1s/ljyl7zRa3Wwc8LKTq4IIoQmYHWi7pP4k8x7uAGE=;
+        b=UTiDDmUHwjaSsgqSy4T6CE3RTR8l+AnaXBjXW2ap/oDIsan5ZsvNBm2HM/XMMiOftaqqrK
+        A8lEUQKIGeOmYFOU9L4oju9eMuMTurRmqIStodrOOkwJh4c/F3KHeJKmDOUh4E0DAMmp3A
+        8iKjxbiu1viVQPm3c0vm7LW//vNl1Q0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1649674447;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=j1s/ljyl7zRa3Wwc8LKTq4IIoQmYHWi7pP4k8x7uAGE=;
+        b=91vAcOt5z+ytrUcuWk8bvmToYhRU/F6vOBRZ9r7aVzeI9ni048a5Le5rVB3bf0VrRSxahD
+        rYPIYAwSuBxUe4Bg==
+Received: from localhost.localdomain (unknown [10.100.208.98])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id F00D2A3B87;
+        Mon, 11 Apr 2022 10:54:05 +0000 (UTC)
+From:   Jiri Slaby <jslaby@suse.cz>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiri Slaby <jslaby@suse.cz>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Kevin Cernekee <cernekee@gmail.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH 0/3] tty: TX helpers
+Date:   Mon, 11 Apr 2022 12:54:02 +0200
+Message-Id: <20220411105405.9519-1-jslaby@suse.cz>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Joonas,
+First, this series depends on "tty: various cleanups"
+(20220411104506.8990-1-jslaby@suse.cz).
 
-FYI, the error/warning still remains.
+This series introduces uart_port_tx{,_limit}() TX helpers. See PATCH
+1/3 for the details. Comments welcome.
 
-tree:   git://anongit.freedesktop.org/drm/drm-intel topic/core-for-CI
-head:   0dc2696a4623d55f40e925e9185a0fcd4d34e568
-commit: 039b696fcec3683d54246858378741854944417a [16/30] Revert "drm/i915: Don't select BROKEN"
-config: powerpc-allnoconfig
-compiler: powerpc-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add drm-drm-intel git://anongit.freedesktop.org/drm/drm-intel
-        git fetch --no-tags drm-drm-intel topic/core-for-CI
-        git checkout 039b696fcec3683d54246858378741854944417a
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross ARCH=powerpc  allnoconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross ARCH=powerpc 
+Then it switches drivers to use them. First, uart_port_tx() in 2/3 and
+then uart_port_tx_limit() in 3/3.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+The diffstat of patches 2+3 is as follows:
+ 27 files changed, 330 insertions(+), 883 deletions(-)
+which appears to be nice.
 
-All errors (new ones prefixed by >>):
+Cc: Tobias Klauser <tklauser@distanz.ch>
+Cc: Richard Genoud <richard.genoud@gmail.com>
+Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc: Vladimir Zapolskiy <vz@mleia.com>
+Cc: Liviu Dudau <liviu.dudau@arm.com>
+Cc: Sudeep Holla <sudeep.holla@arm.com>
+Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: "Andreas Färber" <afaerber@suse.de>
+Cc: Manivannan Sadhasivam <mani@kernel.org>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: bcm-kernel-feedback-list@broadcom.com
+Cc: "Pali Rohár" <pali@kernel.org>
+Cc: Kevin Cernekee <cernekee@gmail.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Orson Zhai <orsonzhai@gmail.com>
+Cc: Baolin Wang <baolin.wang7@gmail.com>
+Cc: Chunyan Zhang <zhang.lyra@gmail.com>
+Cc: Patrice Chotard <patrice.chotard@foss.st.com>
+Cc: linux-riscv@lists.infradead.org
 
->> arch/powerpc/platforms/embedded6xx/Kconfig:2:error: recursive dependency detected!
-   arch/powerpc/platforms/embedded6xx/Kconfig:2: symbol EMBEDDED6xx depends on BROKEN_ON_SMP
-   init/Kconfig:113: symbol BROKEN_ON_SMP depends on BROKEN
-   init/Kconfig:110: symbol BROKEN is selected by DRM_I915_DEBUG
-   drivers/gpu/drm/i915/Kconfig.debug:19: symbol DRM_I915_DEBUG depends on DRM_I915
-   drivers/gpu/drm/i915/Kconfig:2: symbol DRM_I915 depends on DRM
-   drivers/gpu/drm/Kconfig:8: symbol DRM depends on AGP
-   drivers/char/agp/Kconfig:2: symbol AGP depends on PCI
-   drivers/pci/Kconfig:16: symbol PCI depends on HAVE_PCI
-   drivers/pci/Kconfig:7: symbol HAVE_PCI is selected by FORCE_PCI
-   drivers/pci/Kconfig:11: symbol FORCE_PCI is selected by MVME5100
-   arch/powerpc/platforms/embedded6xx/Kconfig:51: symbol MVME5100 depends on EMBEDDED6xx
-   For a resolution refer to Documentation/kbuild/kconfig-language.rst
-   subsection "Kconfig recursive dependency limitations"
+Jiri Slaby (3):
+  tty: serial: introduce uart_port_tx{,_limit}() helpers
+  tty: serial: use uart_port_tx() helper
+  tty: serial: use uart_port_tx_limit() helper
 
-
-vim +2 arch/powerpc/platforms/embedded6xx/Kconfig
-
-a35e370cfd2ddf Arnd Bergmann    2007-08-30 @2  config EMBEDDED6xx
-a35e370cfd2ddf Arnd Bergmann    2007-08-30  3  	bool "Embedded 6xx/7xx/7xxx-based boards"
-be34fff07c3755 Christophe Leroy 2018-11-17  4  	depends on PPC_BOOK3S_32 && BROKEN_ON_SMP
-14cf11af6cf608 Paul Mackerras   2005-09-26  5  
-
-:::::: The code at line 2 was first introduced by commit
-:::::: a35e370cfd2ddfb5d2f0ceae376ffeda273b357c [POWERPC] Move embedded6xx into multiplatform
-
-:::::: TO: Arnd Bergmann <arnd@arndb.de>
-:::::: CC: Paul Mackerras <paulus@samba.org>
+ Documentation/driver-api/serial/driver.rst | 28 +++++++++++
+ drivers/tty/serial/21285.c                 | 40 ++++++----------
+ drivers/tty/serial/altera_jtaguart.c       | 43 +++++------------
+ drivers/tty/serial/altera_uart.c           | 47 ++++++-------------
+ drivers/tty/serial/amba-pl010.c            | 40 +++-------------
+ drivers/tty/serial/apbuart.c               | 37 +++------------
+ drivers/tty/serial/atmel_serial.c          | 37 ++++++---------
+ drivers/tty/serial/bcm63xx_uart.c          | 48 ++++---------------
+ drivers/tty/serial/fsl_lpuart.c            | 49 +++++++-------------
+ drivers/tty/serial/lantiq.c                | 50 +++++++-------------
+ drivers/tty/serial/lpc32xx_hs.c            | 53 +++++++--------------
+ drivers/tty/serial/mcf.c                   | 35 ++++++--------
+ drivers/tty/serial/mpc52xx_uart.c          | 54 +++++++---------------
+ drivers/tty/serial/mps2-uart.c             | 44 ++++++------------
+ drivers/tty/serial/mux.c                   | 48 ++++++-------------
+ drivers/tty/serial/mvebu-uart.c            | 47 ++++++-------------
+ drivers/tty/serial/mxs-auart.c             | 43 ++++++++---------
+ drivers/tty/serial/omap-serial.c           | 53 ++++++---------------
+ drivers/tty/serial/owl-uart.c              | 47 ++++++-------------
+ drivers/tty/serial/pxa.c                   | 43 ++++-------------
+ drivers/tty/serial/rp2.c                   | 36 ++++-----------
+ drivers/tty/serial/sa1100.c                | 50 ++++++++------------
+ drivers/tty/serial/serial_core.c           | 53 +++++++++++++++++++++
+ drivers/tty/serial/serial_txx9.c           | 40 +++-------------
+ drivers/tty/serial/sifive.c                | 48 +++----------------
+ drivers/tty/serial/sprd_serial.c           | 41 +++-------------
+ drivers/tty/serial/st-asc.c                | 51 +++-----------------
+ drivers/tty/serial/vr41xx_siu.c            | 42 +++--------------
+ drivers/tty/serial/vt8500_serial.c         | 47 ++++++-------------
+ include/linux/serial_core.h                |  9 ++++
+ 30 files changed, 420 insertions(+), 883 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+

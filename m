@@ -2,187 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 607A34FC555
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 21:54:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 992464FC55A
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 22:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349747AbiDKT47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 15:56:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45994 "EHLO
+        id S1349754AbiDKUCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 16:02:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238175AbiDKT4z (ORCPT
+        with ESMTP id S243241AbiDKUCu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 15:56:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6171DA43;
-        Mon, 11 Apr 2022 12:54:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6253BB81896;
-        Mon, 11 Apr 2022 19:54:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C01EBC385A3;
-        Mon, 11 Apr 2022 19:54:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649706876;
-        bh=bOc/33Z7+1jn2eHnVDtC0HCa/hvdIrrV1vtEJE1e728=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=V6+ZhQQJ0FpA3JTLhfNdMXpuSewBXjtopDEltHhlXbZSpO78QxEP1ZcpA53xrUGsh
-         JZIgs+nnioj5B5rZ6ZYyOhb7PDCoD7KmnK/a9wN3yFN+gEevKq5C7FKAGKVSdCXq5Y
-         OyOxDtW+tcvHx+oApyxc1n3O0GdcPQcKVQnC4aO+t4AYiy/7D5M4rDnBXkLUpIdGcF
-         Mn1DGUs5kOloLRJHvN8s17W01fSA3P9CNLtNXxfP1Wp5sxhX29Q5fOgOnp+bAuGyJV
-         H1WckifF0+jHHfVPXfJsIFHHTscgId3sxp4qkX7Zoj7qKahszAXlbLGHQ5S4ktxgJV
-         SPyfAAuKNR0Sw==
-Date:   Mon, 11 Apr 2022 14:54:34 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] PCI: Add function for parsing
- 'slot-power-limit-milliwatt' DT property
-Message-ID: <20220411195434.GA531670@bhelgaas>
+        Mon, 11 Apr 2022 16:02:50 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAE535FB2;
+        Mon, 11 Apr 2022 13:00:31 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id h14so23441675lfl.2;
+        Mon, 11 Apr 2022 13:00:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZezkdIQoJxr3FUS6ZgUv1QgR6XVz7LoPRwJNYEn+SLo=;
+        b=pHx1HShz+YL7+SrcmJDf7CmYoeDStArvZ1drztzWQGn0c1RI1cwYuLv3RWkJ3JARi0
+         wsoQQ3NOcyj4IJavheL7QKNX1huqRFIuDW/HaG8h/577m3fVcItja/urS+Jj7o26eQlb
+         YeDvp9eZ7lLdBT4zuLrS6CbjDU4R/qbhZ7FipUWFVlJa9AyOK9GuFdr8iFfxbGdV4jPM
+         443q0RMxMNuIQ/c2a3pA8JgChF6J3uY4kzFFrQhykf2ZTGgCwgBQuVUjiLBHognFj0kC
+         gbnv5jMdNkNOxx0XQODG2qFlQ9haoRKK4cgR33f415UV7xUXO7fE/bdx6X8snlG5wUx0
+         fmqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZezkdIQoJxr3FUS6ZgUv1QgR6XVz7LoPRwJNYEn+SLo=;
+        b=iT5t7Wvgvw+SpWATUO4qRBxrkk+RbBTiPS90xAaCuDxRF5VS/YaovIaBEQ8P/KB+o8
+         AuFiYdQILyZKBFpxTQ+QU25qp9ImFXpAa3dKXeB1Snain/MLQyGWMANT8fNQPIrzH9kf
+         384HR3LFfLFV6YoHwfaQW8PWiAMpAEUAKQ/KFJTkRlT52LLYW990Btc2fFn6/XAADF+k
+         5Y2tMhv0MU0oM/4LjgaWX0Qa//eAiBtueuQAi0t/vUA3HQXdxHVhmVfRxrNCUA1MEddc
+         cWl2MzKtyIYtL96jFZ6a1qj/kWpcZoRd/lwq2Ao2aBeQw8AOrOiTEP6H14LGctowF2aq
+         O7AA==
+X-Gm-Message-State: AOAM532mIx4A+vw3z4ciUfFymoBK9pF5bP1ViZp02ha7xFP6H2wqhOS5
+        z8saQxAv3vXet8hqQs5q9XI=
+X-Google-Smtp-Source: ABdhPJxc9aEhflRAiUvc4xI3UADaDqAjKt7Bdkh6zvVnf3elCeWkg6x7xB2Uul+fg3SaEQlEzsB9Gg==
+X-Received: by 2002:a05:6512:68e:b0:44a:6594:3b9e with SMTP id t14-20020a056512068e00b0044a65943b9emr22350771lfe.623.1649707230072;
+        Mon, 11 Apr 2022 13:00:30 -0700 (PDT)
+Received: from mobilestation ([95.79.134.149])
+        by smtp.gmail.com with ESMTPSA id k7-20020a056512330700b0046b8e44be22sm942955lfe.83.2022.04.11.13.00.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Apr 2022 13:00:29 -0700 (PDT)
+Date:   Mon, 11 Apr 2022 23:00:27 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 16/21] dt-bindings: ata: ahci: Add DWC AHCI SATA
+ controller DT schema
+Message-ID: <20220411200027.l5ph4lvw6dujbexg@mobilestation>
+References: <20220324001628.13028-1-Sergey.Semin@baikalelectronics.ru>
+ <20220324001628.13028-17-Sergey.Semin@baikalelectronics.ru>
+ <YkZCA08HZ6Nx1IqQ@robh.at.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220411111407.7ycuoldxjvqnkoo4@pali>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YkZCA08HZ6Nx1IqQ@robh.at.kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 01:14:07PM +0200, Pali Rohár wrote:
-> On Friday 08 April 2022 10:27:50 Bjorn Helgaas wrote:
-> > On Fri, Mar 25, 2022 at 10:38:26AM +0100, Pali Rohár wrote:
-> > > Add function of_pci_get_slot_power_limit(), which parses the
-> > > 'slot-power-limit-milliwatt' DT property, returning the value in
-> > > milliwatts and in format ready for the PCIe Slot Capabilities Register.
-> > > 
-> > > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > > Signed-off-by: Marek Behún <kabel@kernel.org>
-> > > Reviewed-by: Rob Herring <robh@kernel.org>
-> > > ---
-> > > Changes in v3:
-> > > * Set 600 W when DT slot-power-limit-milliwatt > 600 W
-> > > Changes in v2:
-> > > * Added support for PCIe 6.0 slot power limit encodings
-> > > * Round down slot power limit value
-> > > ---
-> > >  drivers/pci/of.c  | 64 +++++++++++++++++++++++++++++++++++++++++++++++
-> > >  drivers/pci/pci.h | 15 +++++++++++
-> > >  2 files changed, 79 insertions(+)
-> > > 
-> > > diff --git a/drivers/pci/of.c b/drivers/pci/of.c
-> > > index cb2e8351c2cc..5ebff26edd41 100644
-> > > --- a/drivers/pci/of.c
-> > > +++ b/drivers/pci/of.c
-> > > @@ -633,3 +633,67 @@ int of_pci_get_max_link_speed(struct device_node *node)
-> > >  	return max_link_speed;
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(of_pci_get_max_link_speed);
-> > > +
-> > > +/**
-> > > + * of_pci_get_slot_power_limit - Parses the "slot-power-limit-milliwatt"
-> > > + *				 property.
-> > > + *
-> > > + * @node: device tree node with the slot power limit information
-> > > + * @slot_power_limit_value: pointer where the value should be stored in PCIe
-> > > + *			    Slot Capabilities Register format
-> > > + * @slot_power_limit_scale: pointer where the scale should be stored in PCIe
-> > > + *			    Slot Capabilities Register format
-> > > + *
-> > > + * Returns the slot power limit in milliwatts and if @slot_power_limit_value
-> > > + * and @slot_power_limit_scale pointers are non-NULL, fills in the value and
-> > > + * scale in format used by PCIe Slot Capabilities Register.
-> > > + *
-> > > + * If the property is not found or is invalid, returns 0.
-> > > + */
-> > > +u32 of_pci_get_slot_power_limit(struct device_node *node,
-> > > +				u8 *slot_power_limit_value,
-> > > +				u8 *slot_power_limit_scale)
-> > > +{
-> > > +	u32 slot_power_limit_mw;
-> > > +	u8 value, scale;
-> > > +
-> > > +	if (of_property_read_u32(node, "slot-power-limit-milliwatt",
-> > > +				 &slot_power_limit_mw))
-> > > +		slot_power_limit_mw = 0;
-> > > +
-> > > +	/* Calculate Slot Power Limit Value and Slot Power Limit Scale */
-> > > +	if (slot_power_limit_mw == 0) {
-> > > +		value = 0x00;
-> > > +		scale = 0;
-> > > +	} else if (slot_power_limit_mw <= 255) {
-> > > +		value = slot_power_limit_mw;
-> > > +		scale = 3;
-> > > +	} else if (slot_power_limit_mw <= 255*10) {
-> > > +		value = slot_power_limit_mw / 10;
-> > > +		scale = 2;
-> > > +	} else if (slot_power_limit_mw <= 255*100) {
-> > > +		value = slot_power_limit_mw / 100;
-> > > +		scale = 1;
-> > > +	} else if (slot_power_limit_mw <= 239*1000) {
-> > > +		value = slot_power_limit_mw / 1000;
-> > > +		scale = 0;
-> > > +	} else if (slot_power_limit_mw <= 250*1000) {
-> > > +		value = 0xF0;
-> > > +		scale = 0;
+On Thu, Mar 31, 2022 at 07:06:27PM -0500, Rob Herring wrote:
+> On Thu, Mar 24, 2022 at 03:16:23AM +0300, Serge Semin wrote:
+> > Synopsys AHCI SATA controller is mainly compatible with the generic AHCI
+> > SATA controller except a few peculiarities and the platform environment
+> > requirements. In particular it can have one or two reference clocks to
+> > feed up its AXI/AHB interface and SATA PHYs domain and at least one reset
+> > control for the application clock domain. In addition to that the DMA
+> > interface of each port can be tuned up to work with the predefined maximum
+> > data chunk size. Note unlike generic AHCI controller DWC AHCI can't have
+> > more than 8 ports. All of that is reflected in the new DWC AHCI SATA
+> > device DT binding.
 > > 
-> > I think the spec is poorly worded here.  PCIe r6.0, sec 7.5.3.9, says:
+> > Note the DWC AHCI SATA controller DT-schema has been created in a way so
+> > to be reused for the vendor-specific DT-schemas. One of which we are about
+> > to introduce.
 > > 
-> >   F0h   > 239 W and <= 250 W Slot Power Limit
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > ---
+> >  .../bindings/ata/snps,dwc-ahci.yaml           | 121 ++++++++++++++++++
+> >  1 file changed, 121 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
 > > 
-> > I don't think it's meaningful for the spec to include a range here.
-> > The amount of power the slot can supply has a single maximum.  I
-> > suspect the *intent* of F0h/00b is that a device in the slot may
-> > consume up to 250W.
-> > 
-> > Your code above would mean that slot_power_limit_mw == 245,000 would
-> > cause the slot to advertise F0h/00b (250W), which seems wrong.
+> > diff --git a/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml b/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
+> > new file mode 100644
+> > index 000000000000..b443154b63aa
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
+> > @@ -0,0 +1,121 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/ata/snps,dwc-ahci.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Synopsys DWC AHCI SATA controller
+> > +
+> > +maintainers:
+> > +  - Serge Semin <fancer.lancer@gmail.com>
+> > +
+> > +description: |
+> > +  This document defines device tree bindings for the Synopsys DWC
+> > +  implementation of the AHCI SATA controller.
+> > +
+> > +allOf:
+> > +  - $ref: ahci-common.yaml#
+> > +
+> > +properties:
+> > +  compatible:
+> > +    oneOf:
+> > +      - description: Synopsys AHCI SATA-compatible devices
+> > +        contains:
+> > +          const: snps,dwc-ahci
+> > +      - description: SPEAr1340 AHCI SATA device
+> > +        const: snps,spear-ahci
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    description:
+> > +      Basic DWC AHCI SATA clock sources like application AXI/AHB BIU clock
+> > +      and embedded PHYs reference clock together with vendor-specific set
+> > +      of clocks.
+> > +    minItems: 1
+> > +    maxItems: 4
+> > +
+> > +  clock-names:
+> > +    contains:
+> > +      anyOf:
+> > +        - description: Application AXI/AHB BIU clock source
+> > +          enum:
+> > +            - aclk
+> > +            - sata
+> > +        - description: SATA Ports reference clock
+> > +          enum:
+> > +            - ref
+> > +            - sata_ref
+> > +
+> > +  resets:
+> > +    description:
+> > +      At least basic core and application clock domains reset is normally
+> > +      supported by the DWC AHCI SATA controller. Some platform specific
+> > +      clocks can be also specified though.
+> > +
+> > +  reset-names:
+> > +    contains:
+> > +      description: Core and application clock domains reset control
+> > +      const: arst
+> > +
+> > +patternProperties:
+> > +  "^sata-port@[0-9a-e]$":
+> > +    type: object
+> > +
+> > +    properties:
+> > +      reg:
+> > +        minimum: 0
+> > +        maximum: 7
+> > +
+> > +      snps,tx-ts-max:
+> > +        $ref: /schemas/types.yaml#/definitions/uint32
+> > +        description: Maximal size of Tx DMA transactions in FIFO words
+> > +        minimum: 1
+> > +        maximum: 1024
+> > +
+> > +      snps,rx-ts-max:
+> > +        $ref: /schemas/types.yaml#/definitions/uint32
+> > +        description: Maximal size of Rx DMA transactions in FIFO words
+> > +        minimum: 1
+> > +        maximum: 1024
 > 
-> So for slot_power_limit_mw == 245 W we should set following values?
+
+> Are you reading these somewhere? 
+
+Yes I do read them in the DWC AHCI driver and use ilog2() to get
+the corresponding power of two value.
+
 > 
->   slot_power_limit_mw = 239 W
->   value = 0xF0
->   scale = 0
+> Only powers of 2 are valid. (Guess what Calxeda's controller uses.)
 
-I think Slot Cap should never advertise more power than the slot can
-supply.  So if the DT tells us the slot can supply 245 W, I don't
-think Slot Cap should advertise that it can supply 250 W.  I think we
-should drop down to the next lower possible value, which is 239 W
-(value 0xEF, scale 0).  I think this is what your v4 does.
+Right and is limited to be within [1; 1024]. Do you suggest to add a
+respective comment in the description or just manually enumerate the
+POW2 values? I don't believe there is a ready-to-use power-of-2 type in
+the /schemas/types.yaml file. BTW what about adding one seeing there are
+many cases where it could be useful?
 
-> > I think we should do something like this instead:
-> > 
-> >   scale = 0;
-> >   if (slot_power_limit_mw >= 600*1000) {
-> >     value = 0xFE;
-> >     slot_power_limit_mw = 600*1000;
-> >   } else if (slot_power_limit_mw >= 575*1000) {
-> >     value = 0xFD;
-> >     slot_power_limit_mw = 575*1000;
-> >   } ...
+-Sergey
+
 > 
-> This is already implemented in branch:
-> 
->   } else if (slot_power_limit_mw <= 600*1000) {
->   	value = 0xF0 + (slot_power_limit_mw / 1000 - 250) / 25;
->   	scale = 0;
-
-OK, I was thinking there was a hole here, but I guess not.  I think do
-think it's easier to read and verify if it's structured as "the slot
-can supply at least X, so advertise X", as opposed to "the slot can
-supply X or less, so advertise Y".
-
-Bjorn
+> Rob

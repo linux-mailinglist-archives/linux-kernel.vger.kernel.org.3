@@ -2,60 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 132704FBFB7
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 16:58:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 079454FBFB8
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 16:58:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347577AbiDKPA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 11:00:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41086 "EHLO
+        id S1347581AbiDKPA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 11:00:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244142AbiDKPA1 (ORCPT
+        with ESMTP id S1347580AbiDKPAr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 11:00:27 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF491AD83
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 07:58:13 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23BEw67i092233;
-        Mon, 11 Apr 2022 09:58:06 -0500
+        Mon, 11 Apr 2022 11:00:47 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B69911EAE5
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 07:58:32 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23BEwP8j036059;
+        Mon, 11 Apr 2022 09:58:25 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1649689086;
-        bh=dw681I1yslqUMjB2/eotxXfGJMuy77gFm406LHAxoZY=;
+        s=ti-com-17Q1; t=1649689105;
+        bh=dj6CfkKKT+UoMmHhDMzXNUWRTVBPwxkriT6HERhWaq4=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=gtBAtG+mJwUnuCyQsB7zDvjSunPsFR3atB7v6cXWbZzYwrfyx8TfoYQx3tXa3gB5K
-         54ejmRjBkVGZ25OCeD1OqdyR1Pp6Cdix4lCtjoyWdXxPVSSLCOGMd3RqlFDGZb/X1h
-         Oj67U3C6fSn9CwTRiwHunXgVlfhppKyVKEjaux8g=
-Received: from DFLE107.ent.ti.com (dfle107.ent.ti.com [10.64.6.28])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23BEw6mZ073878
+        b=a9pL1b7N/DMin1ujWokjfWTbRdfMgjAnKA92+OIbMwbRugglNu2qUPKvcCnTLsIy6
+         M+zWxGZfMiuh8zs6FDExgMofzz65xvETuNFRCn1/+FyattIMOku+HibJNrQl/dVjwa
+         M18gKUjSRerqBirqg32aPA9SO7ygURY/QOb8ujm8=
+Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23BEwPT1021324
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 11 Apr 2022 09:58:06 -0500
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 11
- Apr 2022 09:58:06 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE103.ent.ti.com
+        Mon, 11 Apr 2022 09:58:25 -0500
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE103.ent.ti.com
  (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 11
+ Apr 2022 09:58:25 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 11 Apr 2022 09:58:06 -0500
+ Frontend Transport; Mon, 11 Apr 2022 09:58:25 -0500
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23BEw6Jf016381;
-        Mon, 11 Apr 2022 09:58:06 -0500
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23BEwP0T119964;
+        Mon, 11 Apr 2022 09:58:25 -0500
 From:   Nishanth Menon <nm@ti.com>
-To:     Jakob Koschel <jakobkoschel@gmail.com>
-CC:     Nishanth Menon <nm@ti.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        Mike Rapoport <rppt@kernel.org>,
+To:     <cgel.zte@gmail.com>
+CC:     Nishanth Menon <nm@ti.com>, <ssantosh@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: Re: [PATCH] soc: ti: replace usage of found with dedicated list iterator variable
-Date:   Mon, 11 Apr 2022 09:58:06 -0500
-Message-ID: <164968906243.29063.1232418858102294654.b4-ty@ti.com>
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        <linux-kernel@vger.kernel.org>, Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] soc: ti: pruss: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
+Date:   Mon, 11 Apr 2022 09:58:25 -0500
+Message-ID: <164968909300.29224.373851351948580159.b4-ty@ti.com>
 X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220324072503.63244-1-jakobkoschel@gmail.com>
-References: <20220324072503.63244-1-jakobkoschel@gmail.com>
+In-Reply-To: <20220408080853.2494292-1-chi.minghao@zte.com.cn>
+References: <20220408080853.2494292-1-chi.minghao@zte.com.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -70,24 +66,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jakob Koschel,
+Hi cgel.zte@gmail.com,
 
-On Thu, 24 Mar 2022 08:25:03 +0100, Jakob Koschel wrote:
-> To move the list iterator variable into the list_for_each_entry_*()
-> macro in the future it should be avoided to use the list iterator
-> variable after the loop body.
+On Fri, 8 Apr 2022 08:08:53 +0000, cgel.zte@gmail.com wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
 > 
-> To *never* use the list iterator variable after the loop it was
-> concluded to use a separate iterator variable instead of a
-> found boolean [1].
+> Using pm_runtime_resume_and_get is more appropriate
+> for simplifing code
 > 
-> [...]
+> 
 
 I have applied the following to branch ti-drivers-soc-next on [1].
 Thank you!
 
-[1/1] soc: ti: replace usage of found with dedicated list iterator variable
-      commit: d281a982c2693c6a7bffaa1ae1ff3b400d6e6c74
+[1/1] soc: ti: pruss: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
+      commit: f25d2b2b554133b935e72c61deb40d82287a6f75
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent up the chain during

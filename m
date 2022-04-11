@@ -2,101 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CFEE4FB2F3
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 06:37:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2E644FB2F8
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 06:40:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235460AbiDKEi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 00:38:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46910 "EHLO
+        id S236462AbiDKEmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 00:42:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241098AbiDKEib (ORCPT
+        with ESMTP id S229938AbiDKEmS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 00:38:31 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3350625E8C;
-        Sun, 10 Apr 2022 21:36:05 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KcGJM5pvnz4xQq;
-        Mon, 11 Apr 2022 14:36:02 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1649651764;
-        bh=YoxPSRCfaNi8+d6J43vTyxCyG6mcuvx7SvTGzsQcrPs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=rtAJR2Y8Xib6wW66AhjROymGWOJv3SwA29HOmP6yq/tkO4onZphvPMMMws4XyOP8h
-         UHQr7vHyYGDLkILSumAZxZZxnkk2QFkO+oWH8hGFlBXxRZuoKfYjCKefw4VKx6q2+/
-         0h2DcZTAWkzy2J6F9DABCDQ0zBLHCzcWyZvXrwVzFPzmV4+Nq/WR4+3GxqYSKRFMCP
-         QtHDu84JuGwEMruP+6eROucnj7LrHyiM8Ouz6Jsi98CckXqyEJP+lEM7O0s+2dnMwG
-         JrvzCF+zZJZnS5LfDeGNQ4M+LV7TYv1APeqH2Y0TYfHr6POq6+itjBwNGY2aNKfedx
-         kY0yeR9vwvh8A==
-Date:   Mon, 11 Apr 2022 14:36:02 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the net tree
-Message-ID: <20220411143602.24aa559b@canb.auug.org.au>
+        Mon, 11 Apr 2022 00:42:18 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475EE3389F;
+        Sun, 10 Apr 2022 21:40:05 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 05C1A3201EA6;
+        Mon, 11 Apr 2022 00:40:03 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Mon, 11 Apr 2022 00:40:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm2; t=1649652003; x=1649738403; bh=xY/wsEH93CLjHX3lnrlxC12c9
+        aUtKmnweAqaU5N4rg4=; b=oDJTDlLyoCJ6TK2o2LA6TDMjl2y1IFBrqBIo5liCY
+        z5D8lsP9oZST5sJLYswUakSVeaTtVEovvvypqNXuoe1KoyABrcacM8KgOo3sP14G
+        hR1uP1z6OZ8PSVi6K+pfKNZjojgX75GXKbtjSNEcBMzLJCuqqGpkjGXeJ06GZBKc
+        wNVNofa9UL4TqmPlxrr7zdKUlSlqPWVm2D3BbJdsTk/Tyj1dgzgvIaaRJ9SpYYY6
+        kzMFIXJrA9sMau7OsTDnH3UA0qYYR3ljEP5PAkKpOX5WOOv4DYZIvqzjvf8LvVm3
+        sx/1CCh4VdW14RGl7VxWUuCj7OVhqTxe1gbyNduRvWy3g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm3; t=1649652003; x=1649738403; bh=x
+        Y/wsEH93CLjHX3lnrlxC12c9aUtKmnweAqaU5N4rg4=; b=kxypa8Bcw88WgH1mY
+        hrzyrTfSkVLdlWckbs/+tl52gBlES/ZiLqrzIAN1mNNv2muSEkzAYfFbtERwqH4X
+        sBaEckUA8cNkgqpNhQT+lbsyCq7cY9ppFoohvPeIaRAStl35ez4s7SdNExd9mGCi
+        uQz95t0vMmHuGr/I6oa4bEUt5EjaO7vzywT9XaWMXArSVvG/0jSp84wFMwGOun3W
+        LyFEBy5j9Ws6kQc6EdgNhP8J7dl4YPVa4R+YyrPpIGvog+JQkltPB4FoIcuXvf4J
+        1H6I92AC+3mGn3WCqs6o47ocbjXEQ5jSeoWB7w0oC41+qn0tk+FyNe6Jhv1IzTdX
+        Gbang==
+X-ME-Sender: <xms:I7FTYvxm9BuHpOEKbTkZA_xx6OPK6mEAH1I0etIyzDYV9tq2Czl3NA>
+    <xme:I7FTYnRd3DukF-oLIhlp6qr8cEFXGy2iZqZQayLXJ7JjrXqvAU9ywbzebbSmjaVNR
+    k1qgoVwDJXeRYe03A>
+X-ME-Received: <xmr:I7FTYpVaGi_oinM-rauqXvW186CY71ZvnlBSepKZ13sZkb5RpGJKfgQpAAWisqIS2Q4oAeVW4CYq_TyOEDwSg9yREHvewGU65H-8sYa8a1VfxS-YIoQiy5jLDyVYToLAagSL7A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudekhedgkedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgvlhcu
+    jfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtffrrg
+    htthgvrhhnpeeiteekhfehuddugfeltddufeejjeefgeevheekueffhffhjeekheeiffdt
+    vedtveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:I7FTYpjb2bcmFeoexQvKnNA-aP9vHa7tkDRLQ9vNKTTm2bZ-ICXxuQ>
+    <xmx:I7FTYhDUcH-S-U0hnOaBH_wEvXw2xG_tbXMh6oCeRK1gADyYfKBxpA>
+    <xmx:I7FTYiJHN4EJ6x6qVj4Q3mdFWuJdT8qR09C1eUrmFT_oiP79mnBJdA>
+    <xmx:I7FTYmJmlXcfPGgRkDVHsNGzh1a1hR_FSequw1vfqDM4Tom2qgKlNg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 11 Apr 2022 00:40:02 -0400 (EDT)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: [PATCH] dt-bindings: clock: Add compatible for D1 DE2 clocks
+Date:   Sun, 10 Apr 2022 23:40:01 -0500
+Message-Id: <20220411044002.37579-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/UuNFG+i=/HTjAVRJ9jwzvpL";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/UuNFG+i=/HTjAVRJ9jwzvpL
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Allwinner D1 contains a display engine 2.0. Its clock controller
+matches the layout of the H5 DE2 clocks (2 mixers, no rotation engine,
+and separate resets), so use that compatible as a fallback.
 
-Hi all,
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
 
-After merging the net tree, today's linux-next build (htmldocs) produced
-these warnings:
+ .../bindings/clock/allwinner,sun8i-a83t-de2-clk.yaml           | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Documentation/driver-api/infrastructure:35: drivers/base/dd.c:280: WARNING:=
- Unexpected indentation.
-Documentation/driver-api/infrastructure:35: drivers/base/dd.c:281: WARNING:=
- Block quote ends without a blank line; unexpected unindent.
+diff --git a/Documentation/devicetree/bindings/clock/allwinner,sun8i-a83t-de2-clk.yaml b/Documentation/devicetree/bindings/clock/allwinner,sun8i-a83t-de2-clk.yaml
+index e79eeac5f086..17caf78f0ccf 100644
+--- a/Documentation/devicetree/bindings/clock/allwinner,sun8i-a83t-de2-clk.yaml
++++ b/Documentation/devicetree/bindings/clock/allwinner,sun8i-a83t-de2-clk.yaml
+@@ -28,6 +28,9 @@ properties:
+       - items:
+           - const: allwinner,sun8i-r40-de2-clk
+           - const: allwinner,sun8i-h3-de2-clk
++      - items:
++          - const: allwinner,sun20i-d1-de2-clk
++          - const: allwinner,sun50i-h5-de2-clk
+ 
+   reg:
+     maxItems: 1
+-- 
+2.35.1
 
-Introduced by commit
-
-  c8c43cee29f6 ("driver core: Fix driver_deferred_probe_check_state() logic=
-")
-
-Exposed by commit
-
-  74befa447e68 ("net: mdio: don't defer probe forever if PHY IRQ provider i=
-s missing")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/UuNFG+i=/HTjAVRJ9jwzvpL
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJTsDIACgkQAVBC80lX
-0Gwd/gf/V81l2NZLvWXXf/P8QkLznXhiabQ5aLmcrFVGDXj5ezYqxY8+8yPnRsCa
-uKSO/KnxdzimhxJHCQX0yS3mK0Jvcluwdp3psvvN9bAUc6jYa4bBuoKOIsBimXGJ
-ag9Or0w3MDb3R2C4MQZw0PRiD8AkCYituZaKr4QOKwrtD52ilywAZWYXu/eDjirg
-qHmrLjzN2/nfFQcB5R1d4YO3Vg+K4VCS8+g/RMldGm87VzSBEa0s6DoSMOeGM5Lk
-N10cA1f1IIPrpbET+QROdvSmJvA4//VPJyeZkF8sRFkkTurXWhwnoI2sgoblmv1W
-O8L+yv7ueBZKhxxtxDW2ucXYdFFIyw==
-=QCY1
------END PGP SIGNATURE-----
-
---Sig_/UuNFG+i=/HTjAVRJ9jwzvpL--

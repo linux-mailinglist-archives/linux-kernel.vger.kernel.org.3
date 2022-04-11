@@ -2,49 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B84DD4FBB88
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 14:01:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C8E14FBB97
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 14:03:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345754AbiDKMDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 08:03:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42346 "EHLO
+        id S1345895AbiDKMFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 08:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345661AbiDKMDp (ORCPT
+        with ESMTP id S1343710AbiDKMFO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 08:03:45 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0EDDF369FB;
-        Mon, 11 Apr 2022 05:01:31 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id E6373809F;
-        Mon, 11 Apr 2022 11:58:59 +0000 (UTC)
-Date:   Mon, 11 Apr 2022 15:01:29 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-serial@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Matwey V . Kornilov" <matwey@sai.msu.ru>,
-        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Subject: Re: [PATCH 1/2] serial: 8250: Fix runtime PM for start_tx() for RS485
-Message-ID: <YlQYmTIFCbk/hEZY@atomide.com>
-References: <20220411094805.45696-1-tony@atomide.com>
- <YlP7eArvvNWnbMF2@hovoldconsulting.com>
- <YlP+muZF1nDIU0t4@atomide.com>
- <YlQCJE4yQRsO8JPn@hovoldconsulting.com>
- <YlQD2mZdorEAKfZ7@atomide.com>
- <YlQXUpNGo8JSppF+@hovoldconsulting.com>
+        Mon, 11 Apr 2022 08:05:14 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404B33878C;
+        Mon, 11 Apr 2022 05:03:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649678581; x=1681214581;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9kbQrXBy9DVbHOYLkpvDDmu+4Dwl0husw8ro+88KO44=;
+  b=Udb9ZPMuvaTVss/zPcH2La4doztWcJTF6UWdhE6cR1Miv8fRiUB5TjOn
+   CrQQDXBuBWnepQIiFxs8ReGeim2MKmzcZ1zVeRaRZ2q6ZtwJVDpUp/L+S
+   53cZ6GwtWsKqc8yrsdTdX6XRRbIfVsPbWeLbvlhwKnmcWWxj7o34t2F9A
+   /aLAltZmUqziI9LJJixnmd/ufVljBN2IzbYpbeSXDGWwKGrvWmRZPMq+j
+   rriVJHuET3CgElppTrADxU3JVNpCT/5q0gGdQwctfOgFnw/rUaQlActMX
+   oz0nkXgJo4qILRZ2e7AU3paQ8L4c9JO4LVZ9Kbi6HRBzOo8hHfViVPWWY
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="261842043"
+X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
+   d="scan'208";a="261842043"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 05:02:59 -0700
+X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
+   d="scan'208";a="654594670"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 05:02:51 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ndshK-001CUl-He;
+        Mon, 11 Apr 2022 14:59:10 +0300
+Date:   Mon, 11 Apr 2022 14:59:10 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Qianggui Song <qianggui.song@amlogic.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Subject: Re: [PATCH v4 00/13] gpiolib: Two new helpers and way toward fwnode
+Message-ID: <YlQYDnCNuTibuVi1@smile.fi.intel.com>
+References: <20220401103604.8705-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YlQXUpNGo8JSppF+@hovoldconsulting.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+In-Reply-To: <20220401103604.8705-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,55 +92,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Johan Hovold <johan@kernel.org> [220411 11:53]:
-> On Mon, Apr 11, 2022 at 01:32:58PM +0300, Tony Lindgren wrote:
-> > * Johan Hovold <johan@kernel.org> [220411 10:23]:
-> > > On Mon, Apr 11, 2022 at 01:10:34PM +0300, Tony Lindgren wrote:
-> > > > * Johan Hovold <johan@kernel.org> [220411 09:54]:
-> > > > > On Mon, Apr 11, 2022 at 12:48:04PM +0300, Tony Lindgren wrote:
-> > > > > > diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-> > > > > > --- a/drivers/tty/serial/8250/8250_port.c
-> > > > > > +++ b/drivers/tty/serial/8250/8250_port.c
-> > > > > > @@ -1681,8 +1681,10 @@ static void serial8250_start_tx(struct uart_port *port)
-> > > > > >  		return;
-> > > > > >  
-> > > > > >  	if (em485 &&
-> > > > > > -	    em485->active_timer == &em485->start_tx_timer)
-> > > > > > +	    em485->active_timer == &em485->start_tx_timer) {
-> > > > > > +		serial8250_rpm_put_tx(up);
-> > > > > >  		return;
-> > > > > > +	}
+On Fri, Apr 01, 2022 at 01:35:51PM +0300, Andy Shevchenko wrote:
+> This is a spin-off of the previous work of switching GPIO library
+> to use fwnode instead of of_node. Here we introduce a couple of
+> a new macro helpers, which allows to switch some of the drivers
+> to use fwnode and partially fwnode APIs. As a result of this cleanup
+> a few drivers switched to use GPIO fwnode instead of of_node.
 > 
-> > > The problem is that that serial8250_rpm_put_tx() you're adding may
-> > > suspend the device unconditionally (i.e. regardless of any previous
-> > > calls to serial8250_rpm_get_tx()).
-> > > 
-> > > If rs485 tx is just being deferred you mustn't suspend the device before
-> > > it has had a chance to start transmitting.
-> > 
-> > Hmm I'm pretty sure rs485 has the runtime PM usage count is currently
-> > unbalanced. To me it seems em485->start_tx_timer calls start_tx()
-> > again from serial8250_em485_handle_start_tx().
-> 
-> It appears to call __start_tx(), but note that the only call to
-> serial8250_rpm_get_tx() is in serial8250_start_tx() which this patch
-> would have cancelled out.
+> Bart, Linus, I can take it thru my tree with an immutable branch if
+> it's the way you prefer, otherwise please suggest on how to proceed.
 
-OK
+I'm going to push this, without samsung patch(es), but addresing latest
+Geert's comment, to my for-next branch pending for PR to GPIO subsystem.
 
-> Also note that the serial8250_rpm_get/set_tx() calls aren't supposed to
-> be balanced. get() can be called multiple times and will only increment
-> the PM usage counter once, while put() will decrement the counter
-> whenever get() has been called once (and hence potentially suspend the
-> device immediately).
-> 
-> Messy indeed.
+Please inform me within a few hours, if something should be postponed /
+dropped / etc.
 
-Yeah that is not nice.
+Thanks!
 
-I'll send a patch to prepare things for runtime PM that will hopefully
-make things a bit easier as discussed earlier.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Regards,
 
-Tony

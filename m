@@ -2,118 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8C454FC751
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 00:05:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2141D4FC756
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 00:07:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241545AbiDKWHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 18:07:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49212 "EHLO
+        id S1348541AbiDKWJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 18:09:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350416AbiDKWHg (ORCPT
+        with ESMTP id S1344427AbiDKWJh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 18:07:36 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F78E1FA58
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 15:05:20 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id e10so10721125qka.6
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 15:05:20 -0700 (PDT)
+        Mon, 11 Apr 2022 18:09:37 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C0F321265
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 15:07:21 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id bx5so16486859pjb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 15:07:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Mub+V7xFFXRdwh5J41falSS4UullJ6qzBmVcOTDmxgk=;
-        b=egT0WxHMUqej3A8vHlkTMS6AVjxNKvBf6Y1To2j4V/eq0V3F15Z1gz1VdYUe5p2tDD
-         g+7HNELN8XvasTyhABrdYBH428t5oP3Gl1PkoOdscRBajL9C0r7l6HqJ1UkJQUbIY//c
-         8DZpqcQX7PA9vGb5UsEDkUqZm44FXCLmXrU5QWnHyXQqM5n83XFzz77HbtgzwQge/L6K
-         ZzTML2RMfp7YqX434QpEkz1bOaQC0czADaX889KqDqojI05S/6DR0jWipvTnha5MdAdf
-         VC0NFvviRjL/+zYhL5u5HMep13eg9LjgfHZxln/RcJg91Oh8WIVMwNXoS86TE04PZxlb
-         xXtw==
+        bh=uGTALhbZONK07EnTqNzLb5OFo7sOJ1WnH/JS/fksxZ4=;
+        b=qW44w090em7gPbYvbMftkAX4Kvke2EP4xsZopvyQYxJet+uD2q9FrkvME10M9tUtmO
+         X0ArALnU4GOM4RpFLYtr4bx0MpBZA554kHWbufBfTUNaqHhLHDjr51XHQdOPMxkQgCXg
+         NV0mdNXOuzxeZUNmauE//Xw4ily3/UjO/MvX7UN7+CVRdmJUV6HF15N4VgrrGumDREwQ
+         mQr7NBQxJVjAKI7QuaN+TbxUCnrDwve7/GDCashxgzsy+utUcS00v8RMdQzi18ZQO+sj
+         C3gytJIJs+P+LCAmm5F7B8ZgvVAvSUSOeGPK1NcM/2jE17EGM2aXjbAO22u5NH5fWlQJ
+         NrxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Mub+V7xFFXRdwh5J41falSS4UullJ6qzBmVcOTDmxgk=;
-        b=yVWHJ7ZBI6nvxmJjnrT/Snw+/Jj2d4XM//rd99TMQpAlH7IyZtnXSzWBhydIjRPPuE
-         tEZPsvKUJ10PYM3K+Wxp/rPnmarRpgWKPUleVBeAKFaNn0bF4vtUH9agoqvOLyqPItnC
-         xXpCBOkMggb4QbpD9I6F7nRIuK1vXqPJHuwIzfab2DzqN1r8TJUeIweUtVNMA2dJ2uaz
-         GPtOwIP/aTz+KejL/LRptZVDxaiSL7lv7zEQvq9rqfpQPbMw82YAJq8wJfEDLR/CnQ8d
-         R/1n+kutXXPl7PIq5QzFzWxBcVTdQROMEPaiEoXBtQD6uDhYqb+uSlyQGRcqQadojCS3
-         xwBg==
-X-Gm-Message-State: AOAM532h5F/9VqCOtI3Y8u2nIZpKg2fcbwJRT3WO7Ut99Jp1IZQkDPcO
-        yysBQygHwiMkqvXWjahiJOXVsTsjjINXfYemDOrKIw==
-X-Google-Smtp-Source: ABdhPJxcmDQu+qNfZ6YKxOWUrvyXbXfbcHHU+1f8W+SrYJM0YDz/aCKCEh8LI+RA4P/WqT3wIO8LeJ9U7ZBZDexkpew=
-X-Received: by 2002:a37:aec2:0:b0:69a:4a5:925 with SMTP id x185-20020a37aec2000000b0069a04a50925mr1112459qke.292.1649714719525;
- Mon, 11 Apr 2022 15:05:19 -0700 (PDT)
+        bh=uGTALhbZONK07EnTqNzLb5OFo7sOJ1WnH/JS/fksxZ4=;
+        b=Dp9nXl5+xrAgJfUHnjK8vN+ltIjXO/8ALXoVavTgIfL8jn2jEFRcWAa0BoEO7IB4Hn
+         pby6GeUQ6ap1+pwlOWyOZnjmJE6WX343NO6UJUooABQpczxu9lYLGb2jiqXV5dnZ7NeM
+         wiLhbL7N9/fzgYXNEPPySP3+Rr+oRphue0+XLMeMZd5/fnSJSuiWKyEO73qNOURy+lHJ
+         kf1RD4uv0mzpnVV9xJ6qFvYyqizN/LPgrX1WaSkPWh/lsej+Lh0BRWHhVy/Qd56uWr9W
+         tbwVUYK8D5ZTTNvig5TgxTSWwL3dV3SmljSmRiTeCMUol4clKbwDg9L+tDAnIwF3yUrF
+         9BIg==
+X-Gm-Message-State: AOAM532CnENh5UNYCXYZ6+X89SPUv7iVPWDM6MlS4aN0Zu7UWFUQy150
+        lRVMbc3Dx7Sc4Jy3EgV4UBA3uYjVZAb4iRfh0kVTXQ==
+X-Google-Smtp-Source: ABdhPJynx2l3cB2Gnxdh26yL6kd+AAVfXhzzqC3Ft2s9qeSNSOaR3yfL83lS+0+wlt4mWc4yp2miJE+sHJq1HcNQSls=
+X-Received: by 2002:a17:902:eb92:b0:158:4cc9:698e with SMTP id
+ q18-20020a170902eb9200b001584cc9698emr11070951plg.147.1649714840717; Mon, 11
+ Apr 2022 15:07:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220409003847.819686-1-seanjc@google.com> <20220409003847.819686-3-seanjc@google.com>
- <YlRn+8bYsHqNIbTU@google.com> <YlR0a4PG5xzweeMZ@google.com>
-In-Reply-To: <YlR0a4PG5xzweeMZ@google.com>
-From:   Mingwei Zhang <mizhang@google.com>
-Date:   Mon, 11 Apr 2022 15:05:08 -0700
-Message-ID: <CAL715WL-ji6V8BdCGsjLQ80V658_P0ccymtJgsmXGh+x-wM2Yw@mail.gmail.com>
-Subject: Re: [PATCH 2/6] KVM: x86/mmu: Properly account NX huge page
- workaround for nonpaging MMUs
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20220405194747.2386619-1-jane.chu@oracle.com> <20220405194747.2386619-2-jane.chu@oracle.com>
+In-Reply-To: <20220405194747.2386619-2-jane.chu@oracle.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Mon, 11 Apr 2022 15:07:10 -0700
+Message-ID: <CAPcyv4gr7YzrmqNhA-S8h-nRhpr8OHhUkn16c8jiL1U3ypp1wQ@mail.gmail.com>
+Subject: Re: [PATCH v7 1/6] x86/mm: fix comment
+To:     Jane Chu <jane.chu@oracle.com>
+Cc:     david <david@fromorbit.com>, "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Vishal L Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@redhat.com>,
+        device-mapper development <dm-devel@redhat.com>,
+        "Weiny, Ira" <ira.weiny@intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>, X86 ML <x86@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 11:33 AM Sean Christopherson <seanjc@google.com> wrote:
+On Tue, Apr 5, 2022 at 12:48 PM Jane Chu <jane.chu@oracle.com> wrote:
 >
-> On Mon, Apr 11, 2022, Mingwei Zhang wrote:
-> > On Sat, Apr 09, 2022, Sean Christopherson wrote:
-> > > diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
-> > > index 671cfeccf04e..89df062d5921 100644
-> > > --- a/arch/x86/kvm/mmu.h
-> > > +++ b/arch/x86/kvm/mmu.h
-> > > @@ -191,6 +191,15 @@ static inline int kvm_mmu_do_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
-> > >             .user = err & PFERR_USER_MASK,
-> > >             .prefetch = prefetch,
-> > >             .is_tdp = likely(vcpu->arch.mmu->page_fault == kvm_tdp_page_fault),
-> > > +
-> > > +           /*
-> > > +            * Note, enforcing the NX huge page mitigation for nonpaging
-> > > +            * MMUs (shadow paging, CR0.PG=0 in the guest) is completely
-> > > +            * unnecessary.  The guest doesn't have any page tables to
-> > > +            * abuse and is guaranteed to switch to a different MMU when
-> > > +            * CR0.PG is toggled on (may not always be guaranteed when KVM
-> > > +            * is using TDP).  See make_spte() for details.
-> > > +            */
-> > >             .nx_huge_page_workaround_enabled = is_nx_huge_page_enabled(),
-> >
-> > hmm. I think there could be a minor issue here (even in original code).
-> > The nx_huge_page_workaround_enabled is attached here with page fault.
-> > However, at the time of make_spte(), we call is_nx_huge_page_enabled()
-> > again. Since this function will directly check the module parameter,
-> > there might be a race condition here. eg., at the time of page fault,
-> > the workround was 'true', while by the time we reach make_spte(), the
-> > parameter was set to 'false'.
->
-> Toggling the mitigation invalidates and zaps all roots.  Any page fault acquires
-> mmu_lock after the toggling is guaranteed to see the correct value, any page fault
-> that completed before kvm_mmu_zap_all_fast() is guaranteed to be zapped.
+> There is no _set_memory_prot internal helper, while coming across
+> the code, might as well fix the comment.
 
-hmm. ok.
->
-> > I have not figured out what the side effect is. But I feel like the
-> > make_spte() should just follow the information in kvm_page_fault instead
-> > of directly querying the global config.
->
-> I started down this exact path :-)  The problem is that, even without Ben's series,
-> KVM uses make_spte() for things other than page faults.
+Looks good,
 
-Reviewed-by: Mingwei Zhang <mizhang@google.com>
+Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+
+>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> Signed-off-by: Jane Chu <jane.chu@oracle.com>
+> ---
+>  arch/x86/mm/pat/set_memory.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
+> index abf5ed76e4b7..38af155aaba9 100644
+> --- a/arch/x86/mm/pat/set_memory.c
+> +++ b/arch/x86/mm/pat/set_memory.c
+> @@ -1816,7 +1816,7 @@ static inline int cpa_clear_pages_array(struct page **pages, int numpages,
+>  }
+>
+>  /*
+> - * _set_memory_prot is an internal helper for callers that have been passed
+> + * __set_memory_prot is an internal helper for callers that have been passed
+>   * a pgprot_t value from upper layers and a reservation has already been taken.
+>   * If you want to set the pgprot to a specific page protocol, use the
+>   * set_memory_xx() functions.
+> --
+> 2.18.4
+>

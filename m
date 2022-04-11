@@ -2,136 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3C0E4FC1C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 18:00:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B4DF4FC22C
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 18:23:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348369AbiDKQCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 12:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55032 "EHLO
+        id S1346321AbiDKQZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 12:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348384AbiDKQCn (ORCPT
+        with ESMTP id S234414AbiDKQZy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 12:02:43 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2049.outbound.protection.outlook.com [40.107.243.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB8A2BB36
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 09:00:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lQuaz7Bqlam37SLW6bW7g2YvClhGiw5dpX3+mH5VoLaAXVkzILS/o6uEOev7L+zEl2m1gfina+sCIkmltJty8LWOTkahp2IXDl/j6j786JPsSNwJ0S0+X+8xrVjYY1cJrxWsVN4tZ6jHEMJeDOrLj/3R8OmWXIEMRITkQShk1lQCgtu5T2pP9kwn59DLxqqUlFu4PFybG/Lu6oCwTP75UMg/ggTzOOyseh1Z8RJP6wYOQstFeJmbvW+pRugbyol4+h3eX5QFHuWLdiwa32QhMd+C41g+T+nmc9M3+TlnwLhsbzCzycXDb3tJ7DHzqp0WrqPyDAIaKJ7rz256iU/Vuw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2iI6kcpaMTRYbGey6MEi49l2UOUNclB7CVwCk/tLptA=;
- b=IPN7wQDwF8qy+8TP51DpWakNltcdxJo3ftQAyB8xWbg7c8uPdYFWP+bBbVATG5LJ0j0hldRC7lA77yUpoma7PriUWH3qF8CSA2OEcT+lMP2YDrE9IMdtOrASy5oRtOgyMYu7QTip/mvsvEfshyydaIHlRGJDKKW+Y1Zcoon4YCoOMOroGUfX1BFGFPNG9s5nJ/f5OxMJSA/HhWpL5q0ljyCr8qoo/qFgMfEDk9QsdfpEgudOGUwiQbGlDtfYo61+SA3FbMkf6mKQOikyDw1g19aSrAyeFrABGYZ7qh4IZ2MtN6sX7jnNcr/c7OBxf1cu3Qrr5lSPaCnd5g0KAZDkDQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2iI6kcpaMTRYbGey6MEi49l2UOUNclB7CVwCk/tLptA=;
- b=l9ip/jGprLNuSB71DKOJCFwODa9SlrOZSS57RPEwiEta/rQ/BgcLypbegN7N84FMGuQNfbD8EYu/n97I1YVUHvNHEe6RTwrfg0wx+X4VL1kxvjKThikpa3BdvB/k9XVrsZrpmteReqNnJjkOkTSQt80wWcEyrFag27vT4k60dmXYS0pUW7qR5SGVEFhP/cXjz3KTgzzlyJC/92mzVq/zbja2W1DiSwfQ+qsHGp1514z23CHIfXo8o/yYK3wyPtn1DLJMV7PonBkb0YwtfLJXsN4T2eD39Kd5RmY8+kxcFIuNiVQqqkkORKeOdtUu00hbUzg0RexLvnKgRt/wLuz0MA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by SN6PR12MB4765.namprd12.prod.outlook.com (2603:10b6:805:e4::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Mon, 11 Apr
- 2022 16:00:26 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::cdfb:f88e:410b:9374]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::cdfb:f88e:410b:9374%6]) with mapi id 15.20.5144.029; Mon, 11 Apr 2022
- 16:00:26 +0000
-Date:   Mon, 11 Apr 2022 13:00:25 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        intel-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 09/34] drm/i915/gvt: remove the unused from_virt_to_mfn op
-Message-ID: <20220411160025.GK2120790@nvidia.com>
-References: <20220411141403.86980-1-hch@lst.de>
- <20220411141403.86980-10-hch@lst.de>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220411141403.86980-10-hch@lst.de>
-X-ClientProxiedBy: MN2PR16CA0023.namprd16.prod.outlook.com
- (2603:10b6:208:134::36) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Mon, 11 Apr 2022 12:25:54 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C758A30555
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 09:23:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649694219; x=1681230219;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ltUQurSEf7syUrN+loaIb4/tJxXmlbA0TKblHJomdWg=;
+  b=ahi4SHTqSKN+zFW1wGR5yRQoIz4yi5z+WFFITKrcewGIr49tzqZr21JX
+   juDlPzHuCEflPetmSQV/ZKX6keSpLiSSNib0UBeSF3pVuAPZv4B2NaGUq
+   ufpcgD2lckxl9rj5pu1pWccK7UX7hSeMZOnQK6vVGmFn9HotZniKZn0IS
+   Cz2yiUjukw8TRc/iCPq3s2QNG1F7BETsdlUMBdalKER/sapXPUHhT0qV6
+   N3+GZIJLdzb9KhZive3E5zGBdjGky8HD2Wktlp453PvWxCl21CvWFxC+G
+   fTs4R6DVe7ZNzm5qQpx9oi1rtsVf8te0Z6y2pl7ThH0RLUbWjgz6h3By/
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="244039394"
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="244039394"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 09:23:39 -0700
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="572279148"
+Received: from prposam-mobl.amr.corp.intel.com (HELO [10.212.162.151]) ([10.212.162.151])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 09:23:26 -0700
+Message-ID: <18cb711a-de2a-69e3-d753-7012a67bf2a7@linux.intel.com>
+Date:   Mon, 11 Apr 2022 10:28:11 -0500
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 679c8fed-98c5-427d-17ad-08da1bd464de
-X-MS-TrafficTypeDiagnostic: SN6PR12MB4765:EE_
-X-Microsoft-Antispam-PRVS: <SN6PR12MB47653D4AA5B0B17431B02714C2EA9@SN6PR12MB4765.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wjbYaDfMtFxGk0+e6G2PdTVFU3hwUAk49suefNU9JLwoTZyXlZGA96H+7mIB3HWWu0KjvR8AwiD490ST3Q6S2kC+ILog/9bdBB9pdKSsv1HDSemoFMg8/0NhmVDy+6zuFqFpfNGftc9KetWQD4SuGlqqhBjskWH3Nn7EPIk9Nlt+ZIaF4e+lNSEulHc/8XTZNZ1gt8J2gpqoPSmyoRCzka97qZIhAshcXKHwkhpKb88x9bx+3bjGYzorUSuwKlSyibPPfLxTmJzZzVoUojPjDfrJ+ua5rSdlo+P1I0otaXrOi2M7Oxfb3BewdOu2Np6h5NarLrrwSnmNqL7wWnCvl5mxQQdZo2lXXqNHsku9dlWdmDNcxcDTcv/ox5/qI1rIMIwqEuLtmgwesm3Rf+4JomVtvfEgC9ujqjZzFw4m/wUG/C6c/YneeKpvgfT0qf2vIDXDF60IRD8xlYGLGd0yhWcbJpEynH/DYSsXwWmC/0kGUczVOkBIpduqcPeBukPmAvsMVgtxrI9KsOC8Gg69sbmf8Bzro6PV+yV2+aMU0PeHgZHVLOTA1mAaR5qjnJaHeMKdNShx/UIyKv4rl62zUfSoMcjxeP2fhqX7f7IG6Lpxo071JuQ8lWCrJKswC0kgEk0A3xiV5E0mo53UjYRhRw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(1076003)(66476007)(66946007)(6506007)(7416002)(6486002)(5660300002)(33656002)(4744005)(66556008)(26005)(8676002)(2616005)(508600001)(6512007)(86362001)(4326008)(2906002)(186003)(38100700002)(8936002)(6916009)(54906003)(36756003)(316002)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8eiygvzlfKVz8PRBZzYMf2pXqc7lM5qnKwBkRh24c9KN48t4eySUdUeO5KL0?=
- =?us-ascii?Q?irOslucJOd87n/saE9Z7mYjyrLV+ADWv/HJu6gXv2aYKvjcNEO99+ktmVjg7?=
- =?us-ascii?Q?k0VFinnM3vh2o/Z7mNGYl8LWsga+3h0rNoJaoIxQH3uTkPa7LoQ58MFWOFWj?=
- =?us-ascii?Q?Lc7TryfRy0lp4LTYyNTY0d0ZnNLhZHsZu5yfKadx/jGtgWopvvRVSW6e6xx7?=
- =?us-ascii?Q?uIFrQjtZ8MF51Bf+ZRisjHKDfbBAWhaSeRwQVXD9BTysPG4Q62Nw0TFZ8Gie?=
- =?us-ascii?Q?Zq5vmUpa/2z6vjGr0oO1/6ZRLILGV3mJirj38sHEt8j+hdGCd9AaD59m6Ycc?=
- =?us-ascii?Q?+QaXMqYf5W9PTa07JTC94H7w2vqqdG26uq7PUdbC9UtROzF8mIlBr0dAW+rg?=
- =?us-ascii?Q?2O/9/PQoLRVT6dy53hgITuX+35Zu/8DAEjv8qTvDOglW+UGPZoOs+F0ywLFj?=
- =?us-ascii?Q?lCBeNAETb5V/tSXOEQGrqvcn3htq1MPyNTRvmTNJZkF4M7BcQBU1BprjqXMR?=
- =?us-ascii?Q?jXjReB+CLE8eUjI2MjCC5TwyRlyL4ZdAZOwmwLxrFrQ2MiNuOuV70VyrCPKn?=
- =?us-ascii?Q?pEln+q2mOpWR7Z3JpDY2koD1odj/TMReGA2RYYWDETWFNvamz19OOPctL8z/?=
- =?us-ascii?Q?e0h/tTA3v5rNdBCkN6kKUGMjQ+Zbpy5OjC5N3MoIehFvHxB/D07aHbXFO81l?=
- =?us-ascii?Q?yrLmRDDLwqSnAxfl0JVdQzTBWbP1r6xTFpjRMzqmed8AslUactoJPnRMyfFH?=
- =?us-ascii?Q?ZdBOLrCMdgAMDKpZqsmPpQIyfVoC4p9vse6kGot5F3jsCilazaivmKPctWxJ?=
- =?us-ascii?Q?NllQu4l0dKwmqGuvar0s9lW4/KSIS0hNVaEOzWbAkq7ZFmdIJhJcqN6aPEJ2?=
- =?us-ascii?Q?Kg9Z3CXk/9B9S92Lwv+uoMVQwWzGM6ayNc2it3hi1ss2G0pOTczCdw8EzegL?=
- =?us-ascii?Q?rVHIrKJOEMRIWWBcw1SJ/b87LP4ctTOhIUT4gDthDnG6r0aTgUmFYS7g4cMs?=
- =?us-ascii?Q?2xqxXFVyOWMc9NcyuPwEfclofyV2Zj6uq1cX6ul6enmfF2tjXtlMgxsuetuO?=
- =?us-ascii?Q?Sio6fdmmdGXjKyECztBpCl9DwB/VQg6JbAlratUZgvNJfyDeSRqtxDda4Ffc?=
- =?us-ascii?Q?M2uk3DHhnvj3lbWqWZWPPOzziPvfHYHnosQi5hR/i0fdvDjoMVF5qyFK9TC3?=
- =?us-ascii?Q?r8g7ns+p9WPmaaRv80N+x1MVpnwmxfxFde2MPmU9fDri6ETae2QHy3mTLS1J?=
- =?us-ascii?Q?SmhJo2RITwrrqv08WnCrRNpfudpTV2bQeLJFgM7iVH2md8LT8QGQ2FQsC1cE?=
- =?us-ascii?Q?M80olwJUgMQIDZGqIsET8D8dTF9BQ8Y0SlpffifmlCyuDX5bE3q3t80hydDD?=
- =?us-ascii?Q?NHEwvnlKs9m0Tr1K+JALW3pKjz09FYqxRql7POu/nNpVmJAnB03bF3k6DkTL?=
- =?us-ascii?Q?Z0TXpUpVBpplfE73vSJcPC55sxgJK6nSZj+CuYWyKfhInTXKgFujkqtBe9aN?=
- =?us-ascii?Q?2GrXaKr3/rGX20sJmAsTVXWunLU7Otv2Zb1mRqN9/oofSmJujbUbqudDiK+5?=
- =?us-ascii?Q?xTqr9g4w4wtfba+Iqq/Z5mZQPhbK11lhwantQYgU5PMj5+n0jxDz5JkXppl5?=
- =?us-ascii?Q?JzP/lp4h2HpxSE6fxFDzCEQP3RJ4RS4oPh4+QYxNEJ2VSFqltnsKgEL8z4Mi?=
- =?us-ascii?Q?lSm2f1kMYvL4sXs39Eeh1/Hl+delRVioiQCY8EyejPLpf6VqOvRFhZRBQ0/K?=
- =?us-ascii?Q?9DPAkwGnmg=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 679c8fed-98c5-427d-17ad-08da1bd464de
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2022 16:00:26.6420
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OMPYpNUIqJ7LlNUpuu3by0aWjCt0FW5VWH4n9jSdsDP0Fr3vB4CUnwUDjm24uv4v
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB4765
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.5.0
+Subject: Re: [PATCH] ASoC: SOF: Intel: Check the bar size before remapping
+Content-Language: en-US
+To:     Zheyu Ma <zheyuma97@gmail.com>, lgirdwood@gmail.com,
+        ranjani.sridharan@linux.intel.com, kai.vehmanen@linux.intel.com,
+        broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
+        peter.ujfalusi@linux.intel.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        sound-open-firmware@alsa-project.org
+References: <20220409143950.2570186-1-zheyuma97@gmail.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20220409143950.2570186-1-zheyuma97@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 04:13:38PM +0200, Christoph Hellwig wrote:
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+
+
+On 4/9/22 09:39, Zheyu Ma wrote:
+> The driver should use the pci_resource_len() to get the actual length of
+> pci bar, and compare it with the expect value. If the bar size is too
+> small (such as a broken device), the driver should return an error.
+> 
+> Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
 > ---
->  drivers/gpu/drm/i915/gvt/hypercall.h |  1 -
->  drivers/gpu/drm/i915/gvt/kvmgt.c     |  6 ------
->  drivers/gpu/drm/i915/gvt/mpt.h       | 12 ------------
->  3 files changed, 19 deletions(-)
+>  sound/soc/sof/intel/pci-tng.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/sound/soc/sof/intel/pci-tng.c b/sound/soc/sof/intel/pci-tng.c
+> index 6efef225973f..7d502cc3ca80 100644
+> --- a/sound/soc/sof/intel/pci-tng.c
+> +++ b/sound/soc/sof/intel/pci-tng.c
+> @@ -75,7 +75,11 @@ static int tangier_pci_probe(struct snd_sof_dev *sdev)
+>  
+>  	/* LPE base */
+>  	base = pci_resource_start(pci, desc->resindex_lpe_base) - IRAM_OFFSET;
+> -	size = PCI_BAR_SIZE;
+> +	size = pci_resource_len(pci, desc->resindex_lpe_base);
+> +	if (size < PCI_BAR_SIZE) {
+> +		dev_err(sdev->dev, "error: I/O region is too small.\n");
+> +		return -ENODEV;
+> +	}
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+May I ask how you found this issue?
 
-Jason
+I am not clear on why there's a patch dedicated for a single device, but the same pattern in hda.c and in the HDaudio legacy driver exists.
+
+>  
+>  	dev_dbg(sdev->dev, "LPE PHY base at 0x%x size 0x%x", base, size);
+>  	sdev->bar[DSP_BAR] = devm_ioremap(sdev->dev, base, size);

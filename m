@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24BA54FB702
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 11:11:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 181B24FB708
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 11:11:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344240AbiDKJNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 05:13:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49246 "EHLO
+        id S1344253AbiDKJNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 05:13:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344225AbiDKJNE (ORCPT
+        with ESMTP id S1344232AbiDKJNF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 05:13:04 -0400
+        Mon, 11 Apr 2022 05:13:05 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA633F890
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 02:10:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47DC73F8A5
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 02:10:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1649668249; x=1681204249;
+  t=1649668252; x=1681204252;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=FaSy9U5U+AEHbmgDOBzFDdOgKxxIaWmtEqSMPmVYvZk=;
-  b=xyn464mc37Op8CDRZLAObfestFp92U18wwVb91QDGWmYUw5k8oiLypID
-   28aQJpWDcjcccwPtc/gK3R2CQ1Ek4rYf/lx5xSLTct/P4sxPggdk3bwTU
-   +FE97jrpmzCh4qheUvOPmDrEcJ4paN4C0nxCqMq6zDAkBNF0HpUPdICGY
-   AF9q3uI1Prd8VvBie/sjnVdnrUhV5yWGBv+QoMJz+XyQVLrBsKqy7AWSh
-   bsnRuA7WVEJF7jS59WIUPUKCLJV1IytF4EN0dCnfuSQ4sNBaiC9rBATO2
-   SUJf95ZeqArUWYP5FxMGoHCZEY39WtORiYD0cAP+b+uOwtReujXTe6QZa
-   Q==;
+  bh=jVLs0VMdy87pwdYOVp23Oa29PG2nVUXRK6hmPmk2eqs=;
+  b=bIBZde8gRszyv50+LukS7+tjeCjr4E+od6niH60QkmT9C8TL24FyCw7F
+   v456uNHJAEopnb0Ka3auXE60x5/DRtVgmy/c2Cb8PYKPLcRqknMmbkdQo
+   Pyi2XcZ1hl5G0gC1Z0vnNVoVUbIo38qFwpIZh/YgNTHi8U2NX+QvCF7Ss
+   iWjstBlvD0fPTYP7syiThGwWk48jo0j9ZMA2rsxrmwQHoLtXRQLosWbBL
+   a+FTPm93WItOSb3lGFXjM03Ri7GPSTWsHzExgDHSNf/xLc/N5kGRWYaFf
+   Tg9rI13oW8MzIB6x05kmAuWgPWJei8NLM5PdqZ3U5fMyl8kXyGxIrJaug
+   A==;
 X-IronPort-AV: E=Sophos;i="5.90,251,1643698800"; 
-   d="scan'208";a="160048736"
+   d="scan'208";a="159624253"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Apr 2022 02:10:49 -0700
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Apr 2022 02:10:52 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 11 Apr 2022 02:10:48 -0700
+ 15.1.2375.17; Mon, 11 Apr 2022 02:10:51 -0700
 Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Mon, 11 Apr 2022 02:10:46 -0700
+ 15.1.2375.17 via Frontend Transport; Mon, 11 Apr 2022 02:10:49 -0700
 From:   Tudor Ambarus <tudor.ambarus@microchip.com>
 To:     <p.yadav@ti.com>, <michael@walle.cc>
 CC:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
         <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
         <nicolas.ferre@microchip.com>,
         Tudor Ambarus <tudor.ambarus@microchip.com>
-Subject: [PATCH v3 4/9] mtd: spi-nor: core: Introduce method for RDID op
-Date:   Mon, 11 Apr 2022 12:10:28 +0300
-Message-ID: <20220411091033.98754-5-tudor.ambarus@microchip.com>
+Subject: [PATCH v3 5/9] mtd: spi-nor: manufacturers: Use spi_nor_read_id() core method
+Date:   Mon, 11 Apr 2022 12:10:29 +0300
+Message-ID: <20220411091033.98754-6-tudor.ambarus@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220411091033.98754-1-tudor.ambarus@microchip.com>
 References: <20220411091033.98754-1-tudor.ambarus@microchip.com>
@@ -64,134 +64,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RDID is used in the core to auto detect the flash, but also by some
-manufacturer drivers that contain flashes that support Octal DTR mode,
-so that they can read the flash ID after the switch to Octal DTR was made
-to test if the switch was successful. Introduce a core method for RDID op
-to avoid code duplication.
+Use spi_nor_read_id() core method to avoid duplication of code. Now the ID
+is read on the full SPI_NOR_MAX_ID_LEN instead of
+round_up(nor->info->id_len, 2), but it doesn't harm to read more ID bytes,
+so the change comes with no secondary effects. dev_dbg messages in case
+spi_nor_read_id() fails, will be added in a further patch after we split
+the octal DTR enable/disable methods.
 
 Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
+Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
 ---
-v3: s/reg_proto/proto
+v3: collect R-b, update commit message
 
- drivers/mtd/spi-nor/core.c | 50 ++++++++++++++++++++++++++------------
- drivers/mtd/spi-nor/core.h |  9 +++++++
- 2 files changed, 44 insertions(+), 15 deletions(-)
+ drivers/mtd/spi-nor/micron-st.c | 13 +++----------
+ drivers/mtd/spi-nor/spansion.c  | 13 +++----------
+ 2 files changed, 6 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-index b55d922d46dd..6165dc7bfd17 100644
---- a/drivers/mtd/spi-nor/core.c
-+++ b/drivers/mtd/spi-nor/core.c
-@@ -369,6 +369,37 @@ int spi_nor_write_disable(struct spi_nor *nor)
- 	return ret;
- }
+diff --git a/drivers/mtd/spi-nor/micron-st.c b/drivers/mtd/spi-nor/micron-st.c
+index 8a20475ce77a..41b87868ecf9 100644
+--- a/drivers/mtd/spi-nor/micron-st.c
++++ b/drivers/mtd/spi-nor/micron-st.c
+@@ -91,17 +91,10 @@ static int micron_st_nor_octal_dtr_enable(struct spi_nor *nor, bool enable)
+ 		return ret;
  
-+/**
-+ * spi_nor_read_id() - Read the JEDEC ID.
-+ * @nor:	pointer to 'struct spi_nor'.
-+ * @naddr:	number of address bytes to send. Can be zero if the operation
-+ *		does not need to send an address.
-+ * @ndummy:	number of dummy bytes to send after an opcode or address. Can
-+ *		be zero if the operation does not require dummy bytes.
-+ * @id:		pointer to a DMA-able buffer where the value of the JEDEC ID
-+ *		will be written.
-+ * @proto:	the SPI protocol for register operation.
-+ *
-+ * Return: 0 on success, -errno otherwise.
-+ */
-+int spi_nor_read_id(struct spi_nor *nor, u8 naddr, u8 ndummy, u8 *id,
-+		    enum spi_nor_protocol proto)
-+{
-+	int ret;
-+
-+	if (nor->spimem) {
-+		struct spi_mem_op op =
-+			SPI_NOR_READID_OP(naddr, ndummy, id, SPI_NOR_MAX_ID_LEN);
-+
-+		spi_nor_spimem_setup_op(nor, &op, proto);
-+		ret = spi_mem_exec_op(nor->spimem, &op);
-+	} else {
-+		ret = nor->controller_ops->read_reg(nor, SPINOR_OP_RDID, id,
-+						    SPI_NOR_MAX_ID_LEN);
-+	}
-+	return ret;
-+}
-+
- /**
-  * spi_nor_read_sr() - Read the Status Register.
-  * @nor:	pointer to 'struct spi_nor'.
-@@ -1649,24 +1680,13 @@ static const struct flash_info *spi_nor_match_id(struct spi_nor *nor,
- 	return NULL;
- }
- 
--static const struct flash_info *spi_nor_read_id(struct spi_nor *nor)
-+static const struct flash_info *spi_nor_detect(struct spi_nor *nor)
- {
- 	const struct flash_info *info;
- 	u8 *id = nor->bouncebuf;
- 	int ret;
- 
--	if (nor->spimem) {
--		struct spi_mem_op op =
--			SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_RDID, 1),
--				   SPI_MEM_OP_NO_ADDR,
--				   SPI_MEM_OP_NO_DUMMY,
--				   SPI_MEM_OP_DATA_IN(SPI_NOR_MAX_ID_LEN, id, 1));
+ 	/* Read flash ID to make sure the switch was successful. */
+-	op = (struct spi_mem_op)
+-		SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_RDID, 1),
+-			   SPI_MEM_OP_NO_ADDR,
+-			   SPI_MEM_OP_DUMMY(enable ? 8 : 0, 1),
+-			   SPI_MEM_OP_DATA_IN(round_up(nor->info->id_len, 2),
+-					      buf, 1));
 -
--		ret = spi_mem_exec_op(nor->spimem, &op);
--	} else {
--		ret = nor->controller_ops->read_reg(nor, SPINOR_OP_RDID, id,
--						    SPI_NOR_MAX_ID_LEN);
--	}
-+	ret = spi_nor_read_id(nor, 0, 0, id, nor->reg_proto);
- 	if (ret) {
- 		dev_dbg(nor->dev, "error %d reading JEDEC ID\n", ret);
- 		return ERR_PTR(ret);
-@@ -2903,7 +2923,7 @@ static const struct flash_info *spi_nor_get_flash_info(struct spi_nor *nor,
- 	}
- 	/* Try to auto-detect if chip name wasn't specified or not found */
- 	if (!info)
--		return spi_nor_read_id(nor);
-+		return spi_nor_detect(nor);
+ 	if (enable)
+-		spi_nor_spimem_setup_op(nor, &op, SNOR_PROTO_8_8_8_DTR);
+-
+-	ret = spi_mem_exec_op(nor->spimem, &op);
++		ret = spi_nor_read_id(nor, 0, 8, buf, SNOR_PROTO_8_8_8_DTR);
++	else
++		ret = spi_nor_read_id(nor, 0, 0, buf, SNOR_PROTO_1_1_1);
+ 	if (ret)
+ 		return ret;
  
- 	/*
- 	 * If caller has specified name of flash model that can normally be
-@@ -2912,7 +2932,7 @@ static const struct flash_info *spi_nor_get_flash_info(struct spi_nor *nor,
- 	if (name && info->id_len) {
- 		const struct flash_info *jinfo;
+diff --git a/drivers/mtd/spi-nor/spansion.c b/drivers/mtd/spi-nor/spansion.c
+index f24e546e04a5..c5988312cc91 100644
+--- a/drivers/mtd/spi-nor/spansion.c
++++ b/drivers/mtd/spi-nor/spansion.c
+@@ -98,17 +98,10 @@ static int cypress_nor_octal_dtr_enable(struct spi_nor *nor, bool enable)
+ 		return ret;
  
--		jinfo = spi_nor_read_id(nor);
-+		jinfo = spi_nor_detect(nor);
- 		if (IS_ERR(jinfo)) {
- 			return jinfo;
- 		} else if (jinfo != info) {
-diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
-index b7fd760e3b47..f952061d5c24 100644
---- a/drivers/mtd/spi-nor/core.h
-+++ b/drivers/mtd/spi-nor/core.h
-@@ -11,6 +11,13 @@
+ 	/* Read flash ID to make sure the switch was successful. */
+-	op = (struct spi_mem_op)
+-		SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_RDID, 1),
+-			   SPI_MEM_OP_ADDR(enable ? 4 : 0, 0, 1),
+-			   SPI_MEM_OP_DUMMY(enable ? 3 : 0, 1),
+-			   SPI_MEM_OP_DATA_IN(round_up(nor->info->id_len, 2),
+-					      buf, 1));
+-
+ 	if (enable)
+-		spi_nor_spimem_setup_op(nor, &op, SNOR_PROTO_8_8_8_DTR);
+-
+-	ret = spi_mem_exec_op(nor->spimem, &op);
++		ret = spi_nor_read_id(nor, 4, 3, buf, SNOR_PROTO_8_8_8_DTR);
++	else
++		ret = spi_nor_read_id(nor, 0, 0, buf, SNOR_PROTO_1_1_1);
+ 	if (ret)
+ 		return ret;
  
- #define SPI_NOR_MAX_ID_LEN	6
- 
-+/* Standard SPI NOR flash operations. */
-+#define SPI_NOR_READID_OP(naddr, ndummy, buf, len)			\
-+	SPI_MEM_OP(SPI_MEM_OP_CMD(SPINOR_OP_RDID, 0),			\
-+		   SPI_MEM_OP_ADDR(naddr, 0, 0),			\
-+		   SPI_MEM_OP_DUMMY(ndummy, 0),				\
-+		   SPI_MEM_OP_DATA_IN(len, buf, 0))
-+
- enum spi_nor_option_flags {
- 	SNOR_F_HAS_SR_TB	= BIT(0),
- 	SNOR_F_NO_OP_CHIP_ERASE	= BIT(1),
-@@ -534,6 +541,8 @@ void spi_nor_unlock_and_unprep(struct spi_nor *nor);
- int spi_nor_sr1_bit6_quad_enable(struct spi_nor *nor);
- int spi_nor_sr2_bit1_quad_enable(struct spi_nor *nor);
- int spi_nor_sr2_bit7_quad_enable(struct spi_nor *nor);
-+int spi_nor_read_id(struct spi_nor *nor, u8 naddr, u8 ndummy, u8 *id,
-+		    enum spi_nor_protocol reg_proto);
- int spi_nor_read_sr(struct spi_nor *nor, u8 *sr);
- int spi_nor_sr_ready(struct spi_nor *nor);
- int spi_nor_read_cr(struct spi_nor *nor, u8 *cr);
 -- 
 2.25.1
 

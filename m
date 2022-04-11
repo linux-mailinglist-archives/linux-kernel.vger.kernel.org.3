@@ -2,38 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 351CF4FBAB5
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 13:18:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A36A44FBA6D
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 13:02:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344408AbiDKLUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 07:20:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37396 "EHLO
+        id S1345835AbiDKLEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 07:04:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233870AbiDKLUN (ORCPT
+        with ESMTP id S230468AbiDKLD7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 07:20:13 -0400
-X-Greylist: delayed 1031 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 11 Apr 2022 04:17:59 PDT
-Received: from ganesha.gnumonks.org (ganesha.gnumonks.org [IPv6:2001:780:45:1d:225:90ff:fe52:c662])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBBED427D1
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 04:17:59 -0700 (PDT)
-Received: from uucp by ganesha.gnumonks.org with local-bsmtp (Exim 4.94.2)
-        (envelope-from <laforge@gnumonks.org>)
-        id 1ndrml-00DvDF-Aa; Mon, 11 Apr 2022 13:00:43 +0200
-Received: from laforge by localhost.localdomain with local (Exim 4.95)
-        (envelope-from <laforge@gnumonks.org>)
-        id 1ndrmf-004g5j-PN;
-        Mon, 11 Apr 2022 13:00:37 +0200
-Date:   Mon, 11 Apr 2022 13:00:37 +0200
-From:   Harald Welte <laforge@gnumonks.org>
-To:     netdev@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: Wanted: Old network/telecom data sheets + hardware manuals
-Message-ID: <YlQKVdw6iS7aKpbo@nataraja>
+        Mon, 11 Apr 2022 07:03:59 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1568DC47;
+        Mon, 11 Apr 2022 04:01:45 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id C10A4215FC;
+        Mon, 11 Apr 2022 11:01:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1649674903; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=TOslUvi/cDmQavLrpqh4QEcnpVMqxdKoJ62gjCK8ziE=;
+        b=JtBV4ZhgmdXf8dZaJA6HD71mXaHPDMZcSZy5VmAnLNCRnOt28GdDdSKadhIVhJxSuzINWk
+        p4WL1phACClTu4Ao11X3I6YMERR3cQ3eZmhA8VUHnHkwx5+o/jBmYeppN0rejqZtjKadJ7
+        H2fB4N0Re26OK4Hfl4pKxuEDeYO1vcE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1649674903;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=TOslUvi/cDmQavLrpqh4QEcnpVMqxdKoJ62gjCK8ziE=;
+        b=Sl7m5Js0SIxcFKOk2BZEI3qkI0fUIDCKPpEsQ84MF6629tN/T0zTGBZ01djLx2K8MiutZY
+        6F3xs+OBaqHJWWBQ==
+Received: from localhost.localdomain (unknown [10.100.208.98])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 9556FA3B88;
+        Mon, 11 Apr 2022 11:01:43 +0000 (UTC)
+From:   Jiri Slaby <jslaby@suse.cz>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiri Slaby <jslaby@suse.cz>
+Subject: [PATCH 0/6] tty: Documentation moves and updates.
+Date:   Mon, 11 Apr 2022 13:01:37 +0200
+Message-Id: <20220411110143.10019-1-jslaby@suse.cz>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_05,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -41,42 +57,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear netdev, LKML and friends,
+This moves tty to driver-api, move more tty documents there and updates
+them. Either to use ReST properly or update so that they correspond to
+the current state.
 
-as some of you may know, I've recently started to get involved in
-"retronetworking" as a hobby, i.e. collecting and running ancient
-data communications, telecommunications and computer networking technologies.
+Jiri Slaby (6):
+  Documentation: move tty to driver-api
+  Documentation: tty: introduce "Other Documentation"
+  Documentation: tty: move n_gsm to tty
+  Documentation: tty: move moxa-smartio.rst to tty
+  Documentation: tty: n_gsm, delete "Additional Documentation"
+  Documentation: tty: n_gsm, use power of ReST
 
-We're not just collecting/repairing/operating old hardware and ancient software
-stacks (FDDI, TokenRing, ATM, ISDN, ...) but also related hardware documentation,
-data sheets, specifications, ...
-
-I would like to call on all Linux network developers to donate any surplus
-old networking/telecom chipset documentation, specifications, etc. they may
-have.  We have a non-destructive book scanner for sizes up to A2, as well as
-a variety of other scanners at our disposal to digitize any paper manuals,
-as needed.
-
-More information about this 'call for manuals' can be found at
-	https://osmocom.org/projects/retronetworking/wiki/Call_for_old_Manuals
-
-In case anyone is interested, https://osmocom.org/projects/retronetworking/wiki
-contains a bit of info on parts of the collected equipment, and we've started
-to build a ISDN/TDM/PDH overlay network so people can operate their legacy ISDN
-equipment in times where public operators don't offer ISDN service anymore:
-https://osmocom.org/projects/octoi/wiki
-
-Some of the documents we already digitized and unearthed include the
-German "national ISDN" specs (FTZ 1TR6 etc) at
-https://osmocom.org/projects/retronetworking/wiki/German_FTZ_ISDN_Specifications
-
-Thanks in advance for any related document donations.
-
-Kind regards,
-	Harald
+ Documentation/driver-api/index.rst            |   1 +
+ Documentation/driver-api/serial/driver.rst    |   2 +-
+ Documentation/driver-api/serial/index.rst     |   2 -
+ Documentation/driver-api/serial/n_gsm.rst     | 159 ------------------
+ Documentation/{ => driver-api}/tty/index.rst  |  22 ++-
+ .../{serial => tty}/moxa-smartio.rst          |   0
+ Documentation/driver-api/tty/n_gsm.rst        | 153 +++++++++++++++++
+ Documentation/{ => driver-api}/tty/n_tty.rst  |   0
+ .../{ => driver-api}/tty/tty_buffer.rst       |   0
+ .../{ => driver-api}/tty/tty_driver.rst       |   0
+ .../{ => driver-api}/tty/tty_internals.rst    |   0
+ .../{ => driver-api}/tty/tty_ldisc.rst        |   0
+ .../{ => driver-api}/tty/tty_port.rst         |   0
+ .../{ => driver-api}/tty/tty_struct.rst       |   0
+ Documentation/index.rst                       |   1 -
+ 15 files changed, 171 insertions(+), 169 deletions(-)
+ delete mode 100644 Documentation/driver-api/serial/n_gsm.rst
+ rename Documentation/{ => driver-api}/tty/index.rst (81%)
+ rename Documentation/driver-api/{serial => tty}/moxa-smartio.rst (100%)
+ create mode 100644 Documentation/driver-api/tty/n_gsm.rst
+ rename Documentation/{ => driver-api}/tty/n_tty.rst (100%)
+ rename Documentation/{ => driver-api}/tty/tty_buffer.rst (100%)
+ rename Documentation/{ => driver-api}/tty/tty_driver.rst (100%)
+ rename Documentation/{ => driver-api}/tty/tty_internals.rst (100%)
+ rename Documentation/{ => driver-api}/tty/tty_ldisc.rst (100%)
+ rename Documentation/{ => driver-api}/tty/tty_port.rst (100%)
+ rename Documentation/{ => driver-api}/tty/tty_struct.rst (100%)
 
 -- 
-- Harald Welte <laforge@gnumonks.org>           http://laforge.gnumonks.org/
-============================================================================
-"Privacy in residential applications is a desirable marketing option."
-                                                  (ETSI EN 300 175-7 Ch. A6)
+2.35.1
+

@@ -2,68 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B19D04FB20E
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 04:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 918104FB213
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 04:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244461AbiDKCzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 22:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35380 "EHLO
+        id S241351AbiDKC6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 22:58:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244449AbiDKCzq (ORCPT
+        with ESMTP id S232344AbiDKC6L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 22:55:46 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE64110FD7
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 19:53:33 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id e8-20020a17090a118800b001cb13402ea2so10878480pja.0
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 19:53:33 -0700 (PDT)
+        Sun, 10 Apr 2022 22:58:11 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54FDD1837A;
+        Sun, 10 Apr 2022 19:55:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=mwYIjlJt8zbN56INdAix21qgimZ3+ODm37YcFq9UmAU=;
-        b=p6ilP60cadhsOoFS3+EMGPtfazxAC1eFmqnVF08ggj518PBEd12kRbqaZ8knXIXW/J
-         BzhgcZ7wIpaZUju56TfIhybWt5b0KtTtQux4iazdwEkAn5AL0dysAzh1p9A43PEYUBmp
-         V49SEnJBLVlCX7qypUqbjsQUsW+L/BFERs4g0mGmOxc/DrJysnS8VCYUeChLbzKdG6Pu
-         8mJPF25Kzoxt+Aw3tiZ8WKVZjmbyv5fDkzgQBfkSK6u2k3djz1SeP/yz4c/ljulp85tb
-         FYHQuOYwRVJXuR2iscaO9pPztBrAFtr86sFJ8KtD5aRRM6Ya76CYz6S1X3I1v4siI/ZN
-         l/uA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=mwYIjlJt8zbN56INdAix21qgimZ3+ODm37YcFq9UmAU=;
-        b=stIUIJ9iKrH6F4Vb8tixuIL+9p6Uc0tjNKhgMZHtlaVTLu85/rIDrA0pO91uctlzdf
-         KfLJCIj/do6Inqu6ZKdoxDv/iVEyWGVkbGtbhbFZKxZ5vywQpOrAYUJ16kGf228xTkID
-         nhkryRWXJoxOkuVeqvMJ/pplcuLTVu0OVeejRGmicbiLL5InOjF7sCO65rxz/DRNS+dP
-         to/RpAD7gaALhagDZGGDy/KmG8+/Xwsk0OS+EhB82d7PdBJgVbHmMEoHJuI32udR42ry
-         DHfW/9O206JUgIhevdxzSC1EWOXGUMVskl8qqCHj96lQxSc6otVmhIgmN6JwVpMmQtjl
-         0YBw==
-X-Gm-Message-State: AOAM532Y2/X1j4FidxYQ0BJysaY+FVggytJcPSwAuxKnMSQj7si8OF0O
-        uxiSpspuUx3HzNdPgpL8WVaOlw==
-X-Google-Smtp-Source: ABdhPJwEQQIubFxoIGWk2V8I9cAgfxjQheMjhYPv/nFlI5GwVfXYSu+RtST1yuQq6FuNUSCto9E3ew==
-X-Received: by 2002:a17:90b:4b84:b0:1cb:6cf5:d2ff with SMTP id lr4-20020a17090b4b8400b001cb6cf5d2ffmr9051371pjb.41.1649645613281;
-        Sun, 10 Apr 2022 19:53:33 -0700 (PDT)
-Received: from localhost ([223.184.83.228])
-        by smtp.gmail.com with ESMTPSA id z24-20020aa79f98000000b0050564c90916sm13339084pfr.200.2022.04.10.19.53.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Apr 2022 19:53:32 -0700 (PDT)
-Date:   Mon, 11 Apr 2022 08:23:31 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PM: opp: simplify with dev_err_probe()
-Message-ID: <20220411025331.pog2flqxicrnz7jv@vireshk-i7>
-References: <20220408111052.381603-1-krzysztof.kozlowski@linaro.org>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649645758; x=1681181758;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=o9PyONh5kKN5lsZKeCWL128gzOV0T80G46wNVOCj6Kc=;
+  b=vUtW15qM7RYYIquoAnXRe0JwIx61ktSRaOevt01lP5gGLsJ0Y0Vs0ymL
+   B/OplSuXDSPXI91bxpaOcLyOGhFCU3rQwIIQHUenWO4S6C0K41YBHt7MM
+   PiouepOKb3Zp5TaQGY4xRZugjo0sLAk4ROLhZIiQsrcHDEjcaFPFxQylr
+   M=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 10 Apr 2022 19:55:58 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2022 19:55:57 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Sun, 10 Apr 2022 19:55:56 -0700
+Received: from [10.239.133.9] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Sun, 10 Apr
+ 2022 19:55:53 -0700
+Message-ID: <059d74ef-78c2-57f2-4c14-4b20526c984c@quicinc.com>
+Date:   Mon, 11 Apr 2022 10:55:50 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220408111052.381603-1-krzysztof.kozlowski@linaro.org>
-User-Agent: NeoMutt/20180716-391-311a52
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v4 01/10] Use IDR to maintain all the enabled sources'
+ paths.
+Content-Language: en-US
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>
+References: <20220324121734.21531-1-quic_jinlmao@quicinc.com>
+ <20220324121734.21531-2-quic_jinlmao@quicinc.com>
+ <YjxjXnXAXVXfZqr/@kroah.com>
+ <e78ff137-fc5e-ff00-0e57-91304288d860@quicinc.com>
+ <7d571b9d-2066-8217-5485-da0e6ace65eb@arm.com>
+ <8698dc76-613e-a00d-340b-220c752d9449@quicinc.com>
+ <CANLsYkwZxqYMtx-v=OZoZAYshFHW2s_7isUq1UgUV18pVvSB8w@mail.gmail.com>
+ <b4d4ca6f-13ae-8050-debe-57e6c8be6254@quicinc.com>
+ <ff1931d7-61b4-4362-7e3b-45c64c0211fc@arm.com>
+From:   Jinlong Mao <quic_jinlmao@quicinc.com>
+In-Reply-To: <ff1931d7-61b4-4362-7e3b-45c64c0211fc@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,48 +86,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08-04-22, 13:10, Krzysztof Kozlowski wrote:
-> Common pattern of handling deferred probe can be simplified with
-> dev_err_probe().  Less code and the error value gets printed.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  drivers/opp/core.c | 14 +++++---------
->  1 file changed, 5 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index 0b5357b9d342..ed72df835f8c 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -2030,10 +2030,9 @@ struct opp_table *dev_pm_opp_set_regulators(struct device *dev,
->  	for (i = 0; i < count; i++) {
->  		reg = regulator_get_optional(dev, names[i]);
->  		if (IS_ERR(reg)) {
-> -			ret = PTR_ERR(reg);
-> -			if (ret != -EPROBE_DEFER)
-> -				dev_err(dev, "%s: no regulator (%s) found: %d\n",
-> -					__func__, names[i], ret);
-> +			ret = dev_err_probe(dev, PTR_ERR(reg),
-> +					    "%s: no regulator (%s) found\n",
-> +					    __func__, names[i]);
->  			goto free_regulators;
->  		}
->  
-> @@ -2179,11 +2178,8 @@ struct opp_table *dev_pm_opp_set_clkname(struct device *dev, const char *name)
->  	/* Find clk for the device */
->  	opp_table->clk = clk_get(dev, name);
->  	if (IS_ERR(opp_table->clk)) {
-> -		ret = PTR_ERR(opp_table->clk);
-> -		if (ret != -EPROBE_DEFER) {
-> -			dev_err(dev, "%s: Couldn't find clock: %d\n", __func__,
-> -				ret);
-> -		}
-> +		ret = dev_err_probe(dev, PTR_ERR(opp_table->clk),
-> +				    "%s: Couldn't find clock\n", __func__);
->  		goto err;
->  	}
 
-Applied. Thanks.
+On 3/30/2022 5:05 PM, Suzuki K Poulose wrote:
+> On 30/03/2022 03:10, Jinlong Mao wrote:
+>>
+>> On 3/29/2022 10:36 PM, Mathieu Poirier wrote:
+>>> On Tue, 29 Mar 2022 at 07:56, Jinlong Mao<quic_jinlmao@quicinc.com>  
+>>> wrote:
+>>>> Hi Suzuki,
+>>>>
+>>>> On 3/28/2022 4:33 PM, Suzuki K Poulose wrote:
+>>>>> On 24/03/2022 14:23, Jinlong Mao wrote:
+>>>>>> Hi Greg,
+>>>>>>
+>>>>>> Thanks for your review.
+>>>>>>
+>>>>>> On 3/24/2022 8:26 PM, Greg Kroah-Hartman wrote:
+>>>>>>> On Thu, Mar 24, 2022 at 08:17:25PM +0800, Mao Jinlong wrote:
+>>>>>>>> Use hash length of the source's device name to map to the pointer
+>>>>>>>> of the enabled path. Using IDR will be more efficient than using
+>>>>>>>> the list. And there could be other sources except STM and CPU etms
+>>>>>>>> in the new HWs. It is better to maintain all the paths together.
+>>>>>>>>
+>>>>>>>> Signed-off-by: Mao Jinlong<quic_jinlmao@quicinc.com>
+>>>>>>>> ---
+>>>>>>>>    drivers/hwtracing/coresight/coresight-core.c | 75
+>>>>>>>> +++++++-------------
+>>>>>>>>    1 file changed, 26 insertions(+), 49 deletions(-)
+>>>>>>> Your subject line is odd.  Please put back the driver subsystem 
+>>>>>>> in the
+>>>>>>> subject line so that it makes more sense.
+>>>>>> I will update the subject in next version.
+>>>>>>> And how have you measured "more efficient"?
+>>>>>> Using IDR would be better than doing a sequential search as there
+>>>>>> will be much more device  in future.
+>>>>> Where do we use sequential search now ? For non-CPU bound sources, 
+>>>>> yes
+>>>>> we may need something. But CPU case is straight forward, and could be
+>>>>> retained as it is. i.e., per-cpu list of paths.
+>>>>>
+>>>> We use list to store the paths for both ETM and non-CPU bound 
+>>>> sources in
+>>>> patch below.
+>>>>
+>>>> “[PATCH 01/10] coresight: add support to enable more coresight paths”
+>>>>
+>>>> According to Mathieu's comments, IDR is used now.  So i added 
+>>>> "Using IDR
+>>>> will be more efficient than using
+>>>> the list" this message in my commit message. I think we need to use 
+>>>> one
+>>>> mechanism to store ETM and
+>>>> non-CPU bound sources.
+>>>>
+>>>>
+>>>> Mathieu's comments:
+>>>>
+>>>> So many TPDM and many ETMs...  That is definitely a reason to do 
+>>>> better than a
+>>>> sequential search.
+>>>>
+>>>> If an IDR (or some other kind of mechanism) is used then we can use 
+>>>> that to
+>>>> store paths associated with ETMs as well.  That way everything 
+>>>> works the same
+>>>> way and access time is constant for any kind of source.
+>>> As per my last sentence above, the goal of  my comment was to simplify
+>>> things so that we don't have two different ways of managing sources.
+>>> But if that ends up causing more trouble than benefit then it should
+>>> be avoided.
+>>
+>> Hi Mathieu,
+>>
+>> I didn't see any disadvantage to use IDR to store both ETM source and 
+>> non-CPU bound sources.
+>>
+>> Benefits:
+>>
+>>   * Only need to maintain one way of managing sources.
+>>   * Less time to search the path
+>
+> My preference is to keep the ETM source paths per-CPU. For the reasons
+> below :
+>   - It is straight forward for an ETM. per_cpu(paths, cpu)
+>   - It is faster than the IDR.
+>   - Makes the debugging easier. Simply lookup the per_cpu variable.
+>
+> I agree that the IDR is required for the non ETM sources. And I am fine
+> with that.
+>
+> Suzuki
 
--- 
-viresh
+Hi Suzuki,
+
+I will address your comments in next version.
+
+Could you please help to review other patches ?
+
+Thanks
+
+Jinlong Mao
+
+>
+>>
+>> Thanks
+>> Jinlong Mao
+>>>> Thanks
+>>>>
+>>>> Jinlong Mao
+>>>>
+>>>>> Cheers
+>>>>> Suzuki
+>>>>>
+>>>>>
+>>>>>>> thanks,
+>>>>>>>
+>>>>>>> greg k-h
+>>>>>> Thanks
+>>>>>>
+>>>>>> Jinlong Mao
+>>>>>>
+>>> _______________________________________________
+>>> CoreSight mailing list --coresight@lists.linaro.org
+>>> To unsubscribe send an email tocoresight-leave@lists.linaro.org
+>

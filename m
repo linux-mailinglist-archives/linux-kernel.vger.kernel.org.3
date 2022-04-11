@@ -2,67 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25D4C4FB185
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 03:52:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C051E4FB18B
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 03:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244318AbiDKBy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 10 Apr 2022 21:54:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35150 "EHLO
+        id S244323AbiDKBzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 10 Apr 2022 21:55:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244390AbiDKBwk (ORCPT
+        with ESMTP id S232575AbiDKBzb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 10 Apr 2022 21:52:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E302BC8;
-        Sun, 10 Apr 2022 18:50:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5ECFA60FD2;
-        Mon, 11 Apr 2022 01:50:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80FA9C385A1;
-        Mon, 11 Apr 2022 01:50:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649641826;
-        bh=scU/wt9Y7hTgr9P069KO0dFurEObKBwZx5KXA8rxJGw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CHElk7Wf5pPUAZI0hAcgnkgBApY3HQZNLwHmI4PXeix6YDvD/GZWUl2WIh0lO2Xol
-         rKN3fMT9151oDT8VD0EY0u3IUi1SxPEFheRHcYzlaIoHNilC6gbgenYPv89/YqolM9
-         vVUtZ4Xj552A16gGsiLfpCxNLk1Lk8Sc8QvAzawKQv2+sqWCcVp9FEoiiJmSM9IaH4
-         /6yKfM2tOiWU5iw3oqrHDRqqXy+iRiBQ5ToDJtr+sUvfdAd6kV5pS2rBqSOoUp2R+B
-         UlbN64YXhwPQ22YpLMX+VHfIhianJJpHg/P0AHAGeH56h1zuBav9pEDL0bYCO5rWS7
-         Jvokf2Cuo2tUg==
-Date:   Mon, 11 Apr 2022 09:50:18 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Li Yang <leoyang.li@nxp.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] ARM: dts: imx: align SPI NOR node name with dtschema
-Message-ID: <20220411015018.GE129381@dragon>
-References: <20220407143155.295187-1-krzysztof.kozlowski@linaro.org>
+        Sun, 10 Apr 2022 21:55:31 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B4796179
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 18:53:18 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KcBdn50mxzFpc3;
+        Mon, 11 Apr 2022 09:50:53 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 11 Apr 2022 09:53:16 +0800
+Subject: Re: [PATCH v2 3/9] mm/vmscan: introduce helper function
+ reclaim_page_list()
+To:     Matthew Wilcox <willy@infradead.org>
+CC:     <akpm@linux-foundation.org>, <ying.huang@intel.com>,
+        <songmuchun@bytedance.com>, <hch@infradead.org>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+References: <20220409093500.10329-1-linmiaohe@huawei.com>
+ <20220409093500.10329-4-linmiaohe@huawei.com>
+ <YlGNvn3cu2TftNRN@casper.infradead.org>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <18ac3908-d162-f1ea-e91f-1da203272b74@huawei.com>
+Date:   Mon, 11 Apr 2022 09:53:15 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220407143155.295187-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YlGNvn3cu2TftNRN@casper.infradead.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 07, 2022 at 04:31:54PM +0200, Krzysztof Kozlowski wrote:
-> The node names should be generic and SPI NOR dtschema expects "flash".
+On 2022/4/9 21:44, Matthew Wilcox wrote:
+> On Sat, Apr 09, 2022 at 05:34:54PM +0800, Miaohe Lin wrote:
+>> +	nr_reclaimed = shrink_page_list(page_list, pgdat, &sc, &dummy_stat, false);
+>> +	while (!list_empty(page_list)) {
+>> +		folio = lru_to_folio(page_list);
+>> +		list_del(&folio->lru);
+>> +		putback_lru_page(&folio->page);
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> folio_putback_lru()
 
-Applied both, thanks!
+I thought folio_putback_lru is deliberately not to use because there is no caller of folio_putback_lru now.
+But it seems I was wrong. Will do it in next version.
+
+Thanks a lot!
+
+> 
+> .
+> 
+

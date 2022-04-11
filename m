@@ -2,132 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82F094FC651
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 23:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A96D24FC652
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 23:07:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350007AbiDKVIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 17:08:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58910 "EHLO
+        id S1346486AbiDKVKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 17:10:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbiDKVIa (ORCPT
+        with ESMTP id S230074AbiDKVKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 17:08:30 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B2D9BB1C3;
-        Mon, 11 Apr 2022 14:06:15 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 602241570;
-        Mon, 11 Apr 2022 14:06:15 -0700 (PDT)
-Received: from airbuntu (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2A6473F70D;
-        Mon, 11 Apr 2022 14:06:14 -0700 (PDT)
-Date:   Mon, 11 Apr 2022 22:06:04 +0100
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
-        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>, x86@kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [tip: sched/core] sched/tracing: Don't re-read p->state when
- emitting sched_switch event
-Message-ID: <20220411210604.jskouzqxmi7oe7il@airbuntu>
-References: <20220120162520.570782-2-valentin.schneider@arm.com>
- <164614827941.16921.4995078681021904041.tip-bot2@tip-bot2>
- <20220308180240.qivyjdn4e3te3urm@wubuntu>
- <YiecMTy8ckUdXTQO@kroah.com>
- <20220308185138.ldxfqd242uxowymd@wubuntu>
- <20220409233829.o2s6tffuzujkx6w2@airbuntu>
- <YlQrf1KDjlidLAHl@kroah.com>
+        Mon, 11 Apr 2022 17:10:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4A2212AC70
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 14:07:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649711265;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jemOUKtsQjTBQP4/G5H2AE4psd90cYA8xWnRCL9lC8M=;
+        b=OuAzSa0kpB1s5fZB7f6neiEH/p/wh6Sb3jmcnkFUh60hwmClCUDkBy8mpVH6h4xgx8mlKD
+        EEu8X4w8gSVU8iHuWCHgl9TKL0nF+AZdOmfDqnyz6pDZLPB1FaPrxgMjLPgOIdvdsMBrkB
+        +dFPYuuPF8tYf+5qCaU7ETnqI9842Yw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-524-DJT_zkMEMjKrYjRkkS4JcQ-1; Mon, 11 Apr 2022 17:07:40 -0400
+X-MC-Unique: DJT_zkMEMjKrYjRkkS4JcQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5B49D85A5A8;
+        Mon, 11 Apr 2022 21:07:39 +0000 (UTC)
+Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D8FBE40CF914;
+        Mon, 11 Apr 2022 21:07:38 +0000 (UTC)
+Message-ID: <161c2e25-3d26-4dd7-d378-d1741f7bcca8@redhat.com>
+Date:   Mon, 11 Apr 2022 17:07:38 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YlQrf1KDjlidLAHl@kroah.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v5] locking/rwsem: Make handoff bit handling more
+ consistent
+Content-Language: en-US
+To:     john.p.donnelly@oracle.com,
+        chenguanyou <chenguanyou9338@gmail.com>,
+        gregkh@linuxfoundation.org
+Cc:     dave@stgolabs.net, hdanton@sina.com, linux-kernel@vger.kernel.org,
+        mazhenhua@xiaomi.com, mingo@redhat.com, peterz@infradead.org,
+        quic_aiquny@quicinc.com, will@kernel.org, sashal@kernel.org
+References: <20211116012912.723980-1-longman@redhat.com>
+ <20220214154741.12399-1-chenguanyou@xiaomi.com>
+ <3f02975c-1a9d-be20-32cf-f1d8e3dfafcc@oracle.com>
+ <e873727e-22db-3330-015d-bd6581a2937a@redhat.com>
+ <31178c33-e25c-c3e8-35e2-776b5211200c@oracle.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <31178c33-e25c-c3e8-35e2-776b5211200c@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/11/22 15:22, Greg KH wrote:
-> On Sun, Apr 10, 2022 at 12:38:29AM +0100, Qais Yousef wrote:
-> > On 03/08/22 18:51, Qais Yousef wrote:
-> > > On 03/08/22 19:10, Greg KH wrote:
-> > > > On Tue, Mar 08, 2022 at 06:02:40PM +0000, Qais Yousef wrote:
-> > > > > +CC stable
-> > > > > 
-> > > > > On 03/01/22 15:24, tip-bot2 for Valentin Schneider wrote:
-> > > > > > The following commit has been merged into the sched/core branch of tip:
-> > > > > > 
-> > > > > > Commit-ID:     fa2c3254d7cfff5f7a916ab928a562d1165f17bb
-> > > > > > Gitweb:        https://git.kernel.org/tip/fa2c3254d7cfff5f7a916ab928a562d1165f17bb
-> > > > > > Author:        Valentin Schneider <valentin.schneider@arm.com>
-> > > > > > AuthorDate:    Thu, 20 Jan 2022 16:25:19 
-> > > > > > Committer:     Peter Zijlstra <peterz@infradead.org>
-> > > > > > CommitterDate: Tue, 01 Mar 2022 16:18:39 +01:00
-> > > > > > 
-> > > > > > sched/tracing: Don't re-read p->state when emitting sched_switch event
-> > > > > > 
-> > > > > > As of commit
-> > > > > > 
-> > > > > >   c6e7bd7afaeb ("sched/core: Optimize ttwu() spinning on p->on_cpu")
-> > > > > > 
-> > > > > > the following sequence becomes possible:
-> > > > > > 
-> > > > > > 		      p->__state = TASK_INTERRUPTIBLE;
-> > > > > > 		      __schedule()
-> > > > > > 			deactivate_task(p);
-> > > > > >   ttwu()
-> > > > > >     READ !p->on_rq
-> > > > > >     p->__state=TASK_WAKING
-> > > > > > 			trace_sched_switch()
-> > > > > > 			  __trace_sched_switch_state()
-> > > > > > 			    task_state_index()
-> > > > > > 			      return 0;
-> > > > > > 
-> > > > > > TASK_WAKING isn't in TASK_REPORT, so the task appears as TASK_RUNNING in
-> > > > > > the trace event.
-> > > > > > 
-> > > > > > Prevent this by pushing the value read from __schedule() down the trace
-> > > > > > event.
-> > > > > > 
-> > > > > > Reported-by: Abhijeet Dharmapurikar <adharmap@quicinc.com>
-> > > > > > Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
-> > > > > > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > > > > > Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> > > > > > Link: https://lore.kernel.org/r/20220120162520.570782-2-valentin.schneider@arm.com
-> > > > > 
-> > > > > Any objection to picking this for stable? I'm interested in this one for some
-> > > > > Android users but prefer if it can be taken by stable rather than backport it
-> > > > > individually.
-> > > > > 
-> > > > > I think it makes sense to pick the next one in the series too.
-> > > > 
-> > > > What commit does this fix in Linus's tree?
-> > > 
-> > > It should be this one: c6e7bd7afaeb ("sched/core: Optimize ttwu() spinning on p->on_cpu")
-> > 
-> > Should this be okay to be picked up by stable now? I can see AUTOSEL has picked
-> > it up for v5.15+, but it impacts v5.10 too.
-> 
-> It does not apply to 5.10 at all, how did you test this?
-> 
-> {sigh}
-> 
-> Again, if you want this applied to any stable trees, please test that it
-> works and send the properly backported patches.
 
-Sorry. I'm picking up pieces after a colleague left and was under the
-impression that 5.10 Android users already use as-is, but due to GKI just need
-it formally in stable. Few things got lost in translation, I am very sorry!
+On 4/11/22 17:03, john.p.donnelly@oracle.com wrote:
+>
+>>>
+>>> I have reached out to Waiman and he suggested this for our next test 
+>>> pass:
+>>>
+>>>
+>>> 1ee326196c6658 locking/rwsem: Always try to wake waiters in 
+>>> out_nolock path
+>>
+>> Does this commit help to avoid the lockup problem?
+>>
+>> Commit 1ee326196c6658 fixes a potential missed wakeup problem when a 
+>> reader first in the wait queue is interrupted out without acquiring 
+>> the lock. It is actually not a fix for commit d257cc8cb8d5. However, 
+>> this commit changes the out_nolock path behavior of writers by 
+>> leaving the handoff bit set when the wait queue isn't empty. That 
+>> likely makes the missed wakeup problem easier to reproduce.
+>>
+>> Cheers,
+>> Longman
+>>
+>
+> Hi,
+>
+>
+> We are testing now
+>
+> ETA for fio soak test completion is  ~15hr from now.
+>
+> I wanted to share the stack traces for future reference + occurrences.
+>
+I am looking forward to your testing results tomorrow.
 
-Let me sort all of this out properly including the testing part for 5.15 too.
+Cheers,
+Longman
 
-Thanks!
-
---
-Qais Yousef

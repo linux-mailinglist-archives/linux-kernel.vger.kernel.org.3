@@ -2,174 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C674E4FC09E
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F09194FC0AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:27:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233976AbiDKP2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 11:28:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46274 "EHLO
+        id S1348013AbiDKP3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 11:29:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348435AbiDKP2F (ORCPT
+        with ESMTP id S1348001AbiDKP2i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 11:28:05 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2077.outbound.protection.outlook.com [40.107.237.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E15C1A825
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:25:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GP6kBY4NttOr763IOv23kOtjg3mmxWoYVn7R+qGNhyAEuEbcF9/eUQl8aV+XOWEHPyEacaJwkM983Zv8wF7vXAwe3Eslae9lRgj8pBnxQMZCpUoryX6E6JWPEE/UtyAJThtpcvVB1KN57pv/sLYdsGSX1zdRpm6/ks13KtaMlfeElkC+YIsxYZHy85HRNxe2UcLkDekn6Za2ZwI/w5tBZoaDm+nNejfMYKnRIsw2w/hoK3wLAiPyGE1FcB3IN+dws8QZO8Pz+/GDn7345qSksNaDY6EElxgobcsIByJVbGAH2MeCBqg7jbB1/lMSUYFr/hVRHR09wAeebl5M6nIwIA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LBeCZyekL/Bh6F3m9Ep8MTxKb/TuGMUWVRh0hVdmxtw=;
- b=VaSie8CbH8ePyXpHjVz+ekgSTi3VrHZCXdkbkWjBuJzhKHL9KLygc722IYA9UYTVpMP6WhOwt6oo9YVp9cWwwD2Gmz1Av5PL6+EjniolORpM2zE9M0yXr+WgSo6zPJqPncmYJtDMYYS/Qn+vsU/orjD1w6rbdwAtiy7m/b+fRC1fAICTKd+pXAULOpnP6zo4wMiiiocxDZlOFVp202Txg0ztEy+pcu5UIoeS+tDanfIvzD6HmpOkWVgA5m0QCitKZ4idQ+S+pdKr/rdY/vA0EKuzrW7bO1fRF1OFoIPjT0y8KzgQKL1qG5MhRQZTMwoMjF363HCemSfwq/j+qIHBLA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LBeCZyekL/Bh6F3m9Ep8MTxKb/TuGMUWVRh0hVdmxtw=;
- b=O3ddQrFQtp0MadR/OuZqtVcSNK5FoeNky94r8JoG1daHk4SnWVwA3CJELJ9b+Kd+epmytTkFWgrrORptg9xJC36BrfJIwq1QMSTp99vlbvatRWGLEbYRlAwKKQSImJ8eM0Gx2uTYah+wi7pUWkAVXQS0BginCuRtQ4elV4sjdBl7DVVTOm0H7nhlik0di2OpXcYdWKBsh3BN/xOyikWLeWEIkMuNWLJF5691eEFT3hFp6f6m1qDGJN3WOGU0kvWKRaqNaqKqkmMgF2zqQbMyBZf6lCH+OJCaIjoneg3Ze4C4GnSW039YgdaEKYYn5VmfW1phVbcIans3BH9aztJ5Dw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by DM6PR12MB4105.namprd12.prod.outlook.com (2603:10b6:5:217::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Mon, 11 Apr
- 2022 15:25:09 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::cdfb:f88e:410b:9374]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::cdfb:f88e:410b:9374%6]) with mapi id 15.20.5144.029; Mon, 11 Apr 2022
- 15:25:09 +0000
-Date:   Mon, 11 Apr 2022 12:25:08 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        intel-gfx@lists.freedesktop.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 05/34] drm/i915/gvt: cleanup the Makefile
-Message-ID: <20220411152508.GH2120790@nvidia.com>
-References: <20220411141403.86980-1-hch@lst.de>
- <20220411141403.86980-6-hch@lst.de>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220411141403.86980-6-hch@lst.de>
-X-ClientProxiedBy: BL1P221CA0027.NAMP221.PROD.OUTLOOK.COM
- (2603:10b6:208:2c5::8) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Mon, 11 Apr 2022 11:28:38 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566D53D1CE;
+        Mon, 11 Apr 2022 08:26:23 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id v2so9879344wrv.6;
+        Mon, 11 Apr 2022 08:26:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=RWQkTK3rSopa+8qydH4cKynBwojuwyz5cLnIhJAViHI=;
+        b=GRiTgBcRca6sECMacftvFpl+a0/eMYsWuTLi5kdaEw2MYVFiv/5dqE79gmrDQKHwDj
+         58ekxBYj4TauMYafu44BJOZgNuo5mVwdSkSMSFyCSsU9Wyu4SyXWHtCuKcLVFp16FKB7
+         D5cMqscqt2nHnXo77ZDFytCC9+fnpBpa90B5BGXEMhClQ+syz3b3P80bRbCdW8D8Di5t
+         YeotdxshhBo7GP4D1bzzUNA4IAYPTAO/RXFm8cL+eFsn/008Q/KWXMeqpm0f7y593NM+
+         CNhQsNbee7+21aSpHWz/ycVM3JETUX09vnxZvEQqsI/4zpebhFsy1qu3ecPyfS3NI9C8
+         DqAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=RWQkTK3rSopa+8qydH4cKynBwojuwyz5cLnIhJAViHI=;
+        b=HiGsVafaDCAladdQIpg6pGMhDwcZ04OLTr/oBbB7o+1/dFuhIryv7rat4n0EfyLwrC
+         q42ylD28G2pOeIXARWvMHjskf54pTk8KCnDAxn3uh24HI0f/b4+8gcsj5hxSuUYgdKuw
+         Vp/nlJ1oo8XtIHFROWCJRpAE67Za+fKycA7BsauZQ/fUgt8Mrazh1BggrukJ0CAfEXvH
+         rHn9wXLv0XALuD0h1dHZ+X53jARZDfou/+9VJQuJ/tSIV7fUxfK7aYA7qqNhxwXc0loR
+         0g48xuJ/he/CVDi2UJteGGJOfzYjEnLxcZih/cLcdnBdXwhxNxahA9gM9cB1s9sMnRDw
+         PwwQ==
+X-Gm-Message-State: AOAM531mt9iPwiWerhv17O2i0O1t7Fn707kOZZ9UjY0yMxJCySS81PIy
+        ZTab/AYcWV2CV6hNEtx6xAg=
+X-Google-Smtp-Source: ABdhPJwKM1YG/JgnOOVdHFFtRjVMNl3v2yETrecwEBgXJy9DyzKjATELxoXpvLb+SDzu5iGVkC3UJA==
+X-Received: by 2002:a5d:588b:0:b0:204:1c1a:965d with SMTP id n11-20020a5d588b000000b002041c1a965dmr25246909wrf.669.1649690781695;
+        Mon, 11 Apr 2022 08:26:21 -0700 (PDT)
+Received: from kista.localnet (cpe-86-58-32-107.static.triera.net. [86.58.32.107])
+        by smtp.gmail.com with ESMTPSA id c8-20020a056000184800b002040e925afasm31421816wri.59.2022.04.11.08.26.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Apr 2022 08:26:21 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Chen-Yu Tsai <wens@csie.org>, Maxime Ripard <mripard@kernel.org>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH] dt-bindings: clock: Add compatible for D1 DE2 clocks
+Date:   Mon, 11 Apr 2022 17:26:19 +0200
+Message-ID: <1811990.tdWV9SEqCh@kista>
+In-Reply-To: <20220411044002.37579-1-samuel@sholland.org>
+References: <20220411044002.37579-1-samuel@sholland.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7ac77500-be48-4060-84f4-08da1bcf76bc
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4105:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB41051494B767182F996E1FF7C2EA9@DM6PR12MB4105.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zLTA+W7pVna2QQzdYOg6C9inNU7CEGqqUlMXw6oRknkPTa4al3IN7vp6jfothVjQ1wuBQlKQc4IRkAalde0Km+x1IJwUb+InRg8UhxgA1JNOFb5nV9aS8+EJ9MkbLt/5aXABo4ZlszdrUJ1/BB6BzzlCounvQ6OgLTLbqSbBEn2vqZD/w/GXOqzEtqvqxFT8auCm91XGRqQnaXgDxsCndI8e+SuP80i7N6Ps7X+V7eUzu1uSLrRJqp6IVTSCsQ3bZ48tRo0ZM4O1sSznSQX9DY3AAFhDW2jpSOc2Soi6PN83F168doO8ulTYl1zhGoAbste7KFeffgxn2ovoGO+omHHCoi32BwEXxASeRahwp/1wsUinmnUOPnkso0QMkrbwJEZjeOHK9SRwCNP2pl8cwZPM9CKaaXaD7FNSp/ECsUN0bf+gKO+1KO4uxh1n4l2Eg7E0A+k/TujRcqCpr9q65VsHqXsCP4K2UYP7MmGsAUxKZwiNjLqxRrUwzmZlIB81w3ZlzChW8gIC2HxzVxeIix9C8NsxxtcOmWZ4/lsNrl+DdCedOSxypBbaK5+ktH4EQuWwERmBgip6Id0SJ8iXSfgaAM/IXxxUWKS31OC70osLne4RA3cP5SDHJZr//Lc5lu+Hxe1YTHTqU01OLr+sVg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(2906002)(186003)(26005)(66946007)(6486002)(83380400001)(86362001)(8676002)(66476007)(36756003)(66556008)(1076003)(2616005)(38100700002)(508600001)(316002)(6916009)(7416002)(5660300002)(8936002)(54906003)(6506007)(6512007)(33656002)(4326008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?wzPuRw6mQbvzxJOnLSVLJBXySCi6aPKnLEoLxoLpaFcAAkvcSXaoowrQ7RtB?=
- =?us-ascii?Q?zakniJXVB2ZFsoj/tQdeLqMvmC/Z50EaI9ibuyVQ8v11cqhLULELEE/7oAnh?=
- =?us-ascii?Q?fwOcJBrJDVQGUvifd2MYOFn8HEZmtpAqQljn/0r2H3BBb1n6cHMdfL7MYaFo?=
- =?us-ascii?Q?TSwJd+LheC4nY8dxTVvIp2gaUMqVGDTDn3TAxjouh/c3+3yiI4u36WvjiPZ0?=
- =?us-ascii?Q?hdmeQxrKSFa+QS1Y6e7rgVovsHGs4B+G/+fLXdSGRuTnY6coVFKg2FPWlWnU?=
- =?us-ascii?Q?wZUWm/Pv8Q8HTzbuV84ZnrN32NsT3UpzmAmBXy5yx5i3YZnORTAHY5QtSxg+?=
- =?us-ascii?Q?kRWufAdcDni5jN2fiIMXpYDA8stzhoaVrLDiSyT/sH6hqeliX8F0VkX6WXrh?=
- =?us-ascii?Q?dBGnNxSNcc59+l3EPkCNRLf/ooqV62ifZd1ER8+Z2CQfH+TsDUtFdI9rZiGR?=
- =?us-ascii?Q?yS7CE7lfuRPN1Xmd8iWCNPd5Fbg67N/wP06WhJsa+5aV4sRq4wLqzEBjp65W?=
- =?us-ascii?Q?igBZOjgeJbHZcHyBgs9ppaxWQHx+l/TNkBIrPUPIzvdmPtRURpNJBoUWsk3u?=
- =?us-ascii?Q?NFZuIWrDnnZNtP3gdA1qXZ3O4nbPgACA3BrdVOb76wQ2Z0xGA+DgyB4LDkRP?=
- =?us-ascii?Q?pchIXYyeJkJ95ZOVFizr5lqEyU2cJeDEuPjIhVYvzwPY1mQLsmnvTmPXrm1G?=
- =?us-ascii?Q?xvvLQAd58IQXgm7TWDZuj0T87kxS9dtHAaAhsNfAu3wilZos7Sk1nzbdCNhv?=
- =?us-ascii?Q?coUgMH68DDDMKIfQzqnxLn6fNAtDxQfkUQU8Z38DowPNPFCugjRNXFzpOq7q?=
- =?us-ascii?Q?m3z5XJZmv4AH2zo+WKfWBVCGwO+kKntGwflNbCI6EU1qmaJPVlfCmOqVhfNq?=
- =?us-ascii?Q?R0Nn8+PZNkavLEJd6iLNlCEP1yCLNWBIohjlgKQujAqAgVRJxvmZNMuCGwmV?=
- =?us-ascii?Q?tUVVb2wNKH4yTCKSILHOmwv0h/XdCyW3oPKBUm1hMDGdUy3niH3wsg3pp+Ao?=
- =?us-ascii?Q?MbgA9gFNzSkmzBpCL4WBDIAhBy7ducPl41kre6YD5qL9ybHo2bQNrFYJzUzj?=
- =?us-ascii?Q?oiB74CgBBQ+Iku/6RGMqUKFScHNQntqtMEV96ueEOPPcSOF1o6K8+ZWoM/ZC?=
- =?us-ascii?Q?wQIfvte/4/axw7GZbctVsOO8GnD2xXfcicsPkcpGMkVbvpcD7KoJdWD3uy00?=
- =?us-ascii?Q?I8RpH5dcGhh1Kdt/E5zFNk8bpdKuX1XYPZ1egUmlRfDSuULdf7E/h0QCCpRg?=
- =?us-ascii?Q?AW/MY9aKckXszeXJIXMNflD/+84jlt6EjnRVBtl+BMEHCiE0u2QERlx0q0aL?=
- =?us-ascii?Q?Ag6z4VFzfEmdPdydLMHDpZ4GGHO2OP66L23FrCQeVw+hxXwZuHn3BxGSCAOc?=
- =?us-ascii?Q?nXHgS6Dazi9TsG6VmEE74PwuEaRAJvOo4F+osqg4a0IVd2YqP9BGHM+XFsa8?=
- =?us-ascii?Q?/BR0gggs9EYndlIN7K/YzYDBb3naWVqFr7Eymksd3E6xCHeMr01UELXx5k7c?=
- =?us-ascii?Q?vRjMsj6bJY29WpSDjjjBTMcnWXSXEOtYexMn3PzYFAvioRPS6QiVVInuh5ff?=
- =?us-ascii?Q?9oVTjpa4pYJhG82HwEXlplTijBP3bT42EE26M3F9lBypwtSyNbfHB58985ee?=
- =?us-ascii?Q?DRiZS3DNmJ6ThDUD297GF0cvyCHXBZQSUyOVWNw7jMFtvVwfbqmLfdkom9jS?=
- =?us-ascii?Q?nIbEvcwC9OJXKH71GqN2a8L9NlljukAMGFdedbSIWIlYUJDiKwyKR0SxNp+k?=
- =?us-ascii?Q?gpGryeQ5MA=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7ac77500-be48-4060-84f4-08da1bcf76bc
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2022 15:25:09.1374
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KNImqD7L5nX6ia+s+3n3m6fZLbSw2hi43IqDcMF8T2N+DNq6U6k5SaoXx78El1Iw
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4105
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 04:13:34PM +0200, Christoph Hellwig wrote:
-> Match the style of the main i915 Makefile in the gvt-specfic one and
-> remove the GVT_DIR and GVT_SOURCE variables.
+Dne ponedeljek, 11. april 2022 ob 06:40:01 CEST je Samuel Holland napisal(a):
+> Allwinner D1 contains a display engine 2.0. Its clock controller
+> matches the layout of the H5 DE2 clocks (2 mixers, no rotation engine,
+> and separate resets), so use that compatible as a fallback.
 > 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
->  drivers/gpu/drm/i915/gvt/Makefile | 29 +++++++++++++++++++++++------
->  1 file changed, 23 insertions(+), 6 deletions(-)
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+
+Best regards,
+Jernej
+
+> ---
 > 
-> diff --git a/drivers/gpu/drm/i915/gvt/Makefile b/drivers/gpu/drm/i915/gvt/Makefile
-> index 4d70f4689479c..f2f6ea02714ec 100644
-> +++ b/drivers/gpu/drm/i915/gvt/Makefile
-> @@ -1,8 +1,25 @@
->  # SPDX-License-Identifier: GPL-2.0
-> -GVT_DIR := gvt
-> -GVT_SOURCE := gvt.o aperture_gm.o handlers.o vgpu.o trace_points.o firmware.o \
-> -	interrupt.o gtt.o cfg_space.o opregion.o mmio.o display.o edid.o \
-> -	execlist.o scheduler.o sched_policy.o mmio_context.o cmd_parser.o debugfs.o \
-> -	fb_decoder.o dmabuf.o page_track.o
+>  .../bindings/clock/allwinner,sun8i-a83t-de2-clk.yaml           | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/allwinner,sun8i-a83t-
+de2-clk.yaml b/Documentation/devicetree/bindings/clock/allwinner,sun8i-a83t-
+de2-clk.yaml
+> index e79eeac5f086..17caf78f0ccf 100644
+> --- a/Documentation/devicetree/bindings/clock/allwinner,sun8i-a83t-de2-
+clk.yaml
+> +++ b/Documentation/devicetree/bindings/clock/allwinner,sun8i-a83t-de2-
+clk.yaml
+> @@ -28,6 +28,9 @@ properties:
+>        - items:
+>            - const: allwinner,sun8i-r40-de2-clk
+>            - const: allwinner,sun8i-h3-de2-clk
+> +      - items:
+> +          - const: allwinner,sun20i-d1-de2-clk
+> +          - const: allwinner,sun50i-h5-de2-clk
 >  
-> -i915-y					+= $(addprefix $(GVT_DIR)/, $(GVT_SOURCE))
-> +i915-y += \
-> +	gvt/gvt.o \
-> +	gvt/aperture_gm.o \
-> +	gvt/handlers.o \
-> +	gvt/vgpu.o \
-> +	gvt/trace_points.o \
-> +	gvt/firmware.o \
-> +	gvt/interrupt.o \
-> +	gvt/gtt.o \
-> +	gvt/cfg_space.o \
-> +	gvt/opregion.o \
-> +	gvt/mmio.o \
-> +	gvt/display.o \
-> +	gvt/edid.o \
-> +	gvt/execlist.o \
-> +	gvt/scheduler.o \
-> +	gvt/sched_policy.o \
-> +	gvt/mmio_context.o \
-> +	gvt/cmd_parser.o \
-> +	gvt/debugfs.o \
-> +	gvt/fb_decoder.o \
-> +	gvt/dmabuf.o \
-> +	gvt/page_track.o
+>    reg:
+>      maxItems: 1
+> -- 
+> 2.35.1
+> 
+> 
 
-Up to you but I usually sort these lists
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-
-Jason

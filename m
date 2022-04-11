@@ -2,170 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BC954FBC8F
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 14:54:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9B224FBC91
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 14:54:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346303AbiDKM4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 08:56:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33656 "EHLO
+        id S1346270AbiDKM4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 08:56:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346273AbiDKM4O (ORCPT
+        with ESMTP id S1346316AbiDKM4i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 08:56:14 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C933EA8C
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 05:53:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1649681639; x=1681217639;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=TSw59bFX+PePbwORebeZ9+oAAG98COq920SoMVZze4g=;
-  b=QJHT9sY0+/sZAnM8Ej31ot3mwvjBhGuoPsOJCwXY47xdKDfin3EgfKYF
-   +5uxOPHNaS5npA2VkbkpvVAnC/yMg41COiVhMbLonVP6XYvZxWUvTYydL
-   rSnbQY19K6d6xpRtgyZTJMcTVd/8tN67rK7WUgacnLOK89fvsQywI1EOW
-   Pj8xvHVI20l0lWI/RajMmLNTe/r56sx/j93PH4oU6QeaiObUV4OhwOED5
-   vOzZx3z5la5IbpL0TTzzGZQdjrgP08+Hnr6l4rHKSExbdLh8FT400BWZw
-   w7bvVWN6yeBJwFqPbL5IMdNwKMvwUl2wo1Hv3bkwW4r4uEnIWueKntXYw
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.90,251,1643698800"; 
-   d="scan'208";a="155133690"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Apr 2022 05:53:58 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Mon, 11 Apr 2022 05:53:58 -0700
-Received: from ROB-ULT-M18064N.mchp-main.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Mon, 11 Apr 2022 05:53:56 -0700
-From:   Tudor Ambarus <tudor.ambarus@microchip.com>
-To:     <p.yadav@ti.com>, <michael@walle.cc>
-CC:     <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <nicolas.ferre@microchip.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>
-Subject: [PATCH v3 3/3] mtd: spi-nor: Favor the BFPT-parsed set_4byte_addr_mode method
-Date:   Mon, 11 Apr 2022 15:53:46 +0300
-Message-ID: <20220411125346.118274-4-tudor.ambarus@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220411125346.118274-1-tudor.ambarus@microchip.com>
-References: <20220411125346.118274-1-tudor.ambarus@microchip.com>
+        Mon, 11 Apr 2022 08:56:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F8C52CE0E
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 05:54:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649681648;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/1ACZnv4dSvd+7MrAGFUMxiOskXRQlu4NrC+OOGZ4+w=;
+        b=QB/xXUDsbSXdfjtJMmC8aC25UIgx3ADE6MsgEyjVAqyd6+lr6Ua0MKw7B0TB76rMCp2pwf
+        y/VtSUVg5QWASEg6CXGeSH/I85GzCvwedfDGu042XCD0uHSUh1Ovk0V0roePW827HwAJfZ
+        scPtxeC1oZcy625wIlJNQFyGojJFS6M=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-358-Z4l9bZrwOTKC8DfUqVLHHw-1; Mon, 11 Apr 2022 08:54:07 -0400
+X-MC-Unique: Z4l9bZrwOTKC8DfUqVLHHw-1
+Received: by mail-qv1-f71.google.com with SMTP id t12-20020a0cea2c000000b004443d7585f0so3654904qvp.19
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 05:54:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=/1ACZnv4dSvd+7MrAGFUMxiOskXRQlu4NrC+OOGZ4+w=;
+        b=GNKUNBStfXgev+SUTrxqMKgqyLiKFOqpHG9MMk8Oi1cECutXMHyUee8JJUnWCHGlvT
+         0lxfV4CfJEo+kX4y/HbqRF1Y5gagfXWcfE3CxpAlyfwFKq8ruJ3oB0rVK2JSv/rP+NsG
+         SOzD/IK7Yr7ZpGO6Ma4nnOFgBmNAhPhtri7y+Ge80dh2iB9cPYdyKCSgQN/uMHDKefSN
+         W4WtnSdVvQAR4Fj7yFc8nAcpw2vO5ketKRUIf8k5QIRM1mzjmA+9/9Pe6OmGmHyELvnC
+         jxT6gdAbQMZohvE10Vqdi4liPW79gbJxANjmuhAZ33NV5uezNkatlfdaou4ra34tc7Pi
+         DvBA==
+X-Gm-Message-State: AOAM530mv8DNh6xkzJgSwC9OOFjsoEv0+fQDduUNH4zPRqiicCiz+a/f
+        QJ7Qm2tBmZJVBRLllMaTLbuexF9MBb76DTnlmn8teOjPWzZy73uOCk2o3j0Ik2v1a0klnOma2RU
+        vRblY4J2FmqYIC1+8vvcVTy8v
+X-Received: by 2002:a05:622a:c3:b0:2e3:4bd0:16c2 with SMTP id p3-20020a05622a00c300b002e34bd016c2mr25226559qtw.575.1649681647013;
+        Mon, 11 Apr 2022 05:54:07 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxIV5iyeYsK7wzpSCFV5IpaPDdchJGJP14JRpC3RjdeYl2PVrL9nHiY7ZV4YJ2cEFBR1V74hQ==
+X-Received: by 2002:a05:622a:c3:b0:2e3:4bd0:16c2 with SMTP id p3-20020a05622a00c300b002e34bd016c2mr25226533qtw.575.1649681646673;
+        Mon, 11 Apr 2022 05:54:06 -0700 (PDT)
+Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id x82-20020a376355000000b0069b971c58c1sm6531215qkb.60.2022.04.11.05.54.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Apr 2022 05:54:06 -0700 (PDT)
+Subject: Re: [PATCH] usb: gadget: udc: clean up comments
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        balbi@kernel.org, joel@jms.id.au, andrew@aj.id.au,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.beznea@microchip.com, alcooperx@gmail.com,
+        christophe.jaillet@wanadoo.fr, cai.huoqing@linux.dev,
+        benh@kernel.crashing.org, neal_liu@aspeedtech.com,
+        miles.chen@mediatek.com, balamanikandan.gunasundar@microchip.com,
+        macpaul.lin@mediatek.com, s.shtylyov@omp.ru,
+        jakobkoschel@gmail.com, stern@rowland.harvard.edu,
+        quic_wcheng@quicinc.com, yashsri421@gmail.com,
+        rdunlap@infradead.org, linux-geode@lists.infradead.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org,
+        bcm-kernel-feedback-list@broadcom.com
+References: <20220410150828.1891123-1-trix@redhat.com>
+ <YlQBgnjpkSurf9PZ@smile.fi.intel.com>
+ <ecd8609b-2c52-5fb8-7820-191559d76011@redhat.com>
+ <YlQeEC41m3UeOeiE@kroah.com>
+From:   Tom Rix <trix@redhat.com>
+Message-ID: <2f22174f-8618-8f5a-6adf-3d2befa8450a@redhat.com>
+Date:   Mon, 11 Apr 2022 05:54:01 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+In-Reply-To: <YlQeEC41m3UeOeiE@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-JESD216 SFDP defines in the BFPT standard methods to enter and exit the
-4-Byte Address Mode. The flash parameters and settings that are retrieved
-from SFDP have higher precedence than the static initialized ones, because
-they should be more accurate and less error prone than those initialized
-statically. Favor the BFPT-parsed set_4byte_addr_mode method and use the
-generic core methods where possible.
-This patch may introduce regressions in case BFPT contains wrong data. The
-fix is to introduce a post_bfpt() fixup hook and update the wrong BFPT
-data.
 
-Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
----
-v3: no changes
+On 4/11/22 5:24 AM, Greg KH wrote:
+> On Mon, Apr 11, 2022 at 04:49:00AM -0700, Tom Rix wrote:
+>> On 4/11/22 3:22 AM, Andy Shevchenko wrote:
+>>> On Sun, Apr 10, 2022 at 11:08:28AM -0400, Tom Rix wrote:
+>>>> SPDX
+>>>> *.h use /* */ style comments
+>>>>
+>>>> For double words, remove
+>>>> with, also
+>>>>
+>>>> Spelling replacements
+>>>> wayt to way
+>>>> wakup to wakeup
+>>>> Contrl to Control
+>>>> cheks to checks
+>>>> initiaization to initialization
+>>>> dyanmic to dynamic
+>>> Something really wrong with indentation above.
+>>>
+>>> ...
+>>>
+>>>>    drivers/usb/gadget/udc/amd5536udc.h       | 2 +-
+>>>>    drivers/usb/gadget/udc/aspeed-vhub/core.c | 2 +-
+>>>>    drivers/usb/gadget/udc/aspeed-vhub/ep0.c  | 2 +-
+>>>>    drivers/usb/gadget/udc/aspeed-vhub/hub.c  | 2 +-
+>>>>    drivers/usb/gadget/udc/aspeed-vhub/vhub.h | 4 ++--
+>>>>    drivers/usb/gadget/udc/at91_udc.c         | 2 +-
+>>>>    drivers/usb/gadget/udc/bdc/bdc_core.c     | 4 ++--
+>>>>    drivers/usb/gadget/udc/core.c             | 4 ++--
+>>>>    drivers/usb/gadget/udc/trace.h            | 2 +-
+>>> I believe that Greg's bot asks to split on per-driver basis.
+>>> OTOH I don't see anything that can be problematic if in one
+>>> change. So, it's up to maintainers then.
+>> Yes, whatever folks want. I can split these.
+>>
+>> I have been cleaning up the comments in other areas and am trying to strike
+>> a balance between too big of a patch vs peppering with many single changes.
+> Patch series are much easier to review and is just as simple to apply as
+> a single patch, so that makes it overall better for you to do.
 
- drivers/mtd/spi-nor/core.c      |  7 ++++++-
- drivers/mtd/spi-nor/macronix.c  | 10 ++++++++--
- drivers/mtd/spi-nor/micron-st.c |  9 ++++++---
- 3 files changed, 20 insertions(+), 6 deletions(-)
+ok
 
-diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-index 4d45cda4f9d3..888516d98884 100644
---- a/drivers/mtd/spi-nor/core.c
-+++ b/drivers/mtd/spi-nor/core.c
-@@ -2416,6 +2416,8 @@ static void spi_nor_init_fixup_flags(struct spi_nor *nor)
-  */
- static void spi_nor_late_init_params(struct spi_nor *nor)
- {
-+	struct spi_nor_flash_parameter *params = nor->params;
-+
- 	if (nor->manufacturer && nor->manufacturer->fixups &&
- 	    nor->manufacturer->fixups->late_init)
- 		nor->manufacturer->fixups->late_init(nor);
-@@ -2423,6 +2425,10 @@ static void spi_nor_late_init_params(struct spi_nor *nor)
- 	if (nor->info->fixups && nor->info->fixups->late_init)
- 		nor->info->fixups->late_init(nor);
- 
-+	/* Default method kept for backward compatibility. */
-+	if (!params->set_4byte_addr_mode)
-+		params->set_4byte_addr_mode = spi_nor_set_4byte_addr_mode_brwr;
-+
- 	spi_nor_init_flags(nor);
- 	spi_nor_init_fixup_flags(nor);
- 
-@@ -2490,7 +2496,6 @@ static void spi_nor_init_default_params(struct spi_nor *nor)
- 	struct device_node *np = spi_nor_get_flash_node(nor);
- 
- 	params->quad_enable = spi_nor_sr2_bit1_quad_enable;
--	params->set_4byte_addr_mode = spi_nor_set_4byte_addr_mode_brwr;
- 	params->otp.org = &info->otp_org;
- 
- 	/* Default to 16-bit Write Status (01h) Command */
-diff --git a/drivers/mtd/spi-nor/macronix.c b/drivers/mtd/spi-nor/macronix.c
-index 85e8655d362c..c267cbcc7f1d 100644
---- a/drivers/mtd/spi-nor/macronix.c
-+++ b/drivers/mtd/spi-nor/macronix.c
-@@ -105,12 +105,18 @@ static const struct flash_info macronix_nor_parts[] = {
- static void macronix_nor_default_init(struct spi_nor *nor)
- {
- 	nor->params->quad_enable = spi_nor_sr1_bit6_quad_enable;
--	nor->params->set_4byte_addr_mode =
--		spi_nor_set_4byte_addr_mode_en4b_ex4b;
-+}
-+
-+static void macronix_nor_late_init(struct spi_nor *nor)
-+{
-+	if (!nor->params->set_4byte_addr_mode)
-+		nor->params->set_4byte_addr_mode =
-+			spi_nor_set_4byte_addr_mode_en4b_ex4b;
- }
- 
- static const struct spi_nor_fixups macronix_nor_fixups = {
- 	.default_init = macronix_nor_default_init,
-+	.late_init = macronix_nor_late_init,
- };
- 
- const struct spi_nor_manufacturer spi_nor_macronix = {
-diff --git a/drivers/mtd/spi-nor/micron-st.c b/drivers/mtd/spi-nor/micron-st.c
-index 2d1cbb1f37c8..9e9b107f2018 100644
---- a/drivers/mtd/spi-nor/micron-st.c
-+++ b/drivers/mtd/spi-nor/micron-st.c
-@@ -414,14 +414,17 @@ static void micron_st_nor_default_init(struct spi_nor *nor)
- 	nor->flags |= SNOR_F_HAS_LOCK;
- 	nor->flags &= ~SNOR_F_HAS_16BIT_SR;
- 	nor->params->quad_enable = NULL;
--	nor->params->set_4byte_addr_mode =
--		spi_nor_set_4byte_addr_mode_wren_en4b_ex4b;
- }
- 
- static void micron_st_nor_late_init(struct spi_nor *nor)
- {
-+	struct spi_nor_flash_parameter *params = nor->params;
-+
- 	if (nor->info->mfr_flags & USE_FSR)
--		nor->params->ready = micron_st_nor_ready;
-+		params->ready = micron_st_nor_ready;
-+	if (!params->set_4byte_addr_mode)
-+		params->set_4byte_addr_mode =
-+			spi_nor_set_4byte_addr_mode_wren_en4b_ex4b;
- }
- 
- static const struct spi_nor_fixups micron_st_nor_fixups = {
--- 
-2.25.1
+Tom
+
+>
+> thanks,
+>
+> greg k-h
+>
 

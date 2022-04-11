@@ -2,143 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18BB94FB28A
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 06:07:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A56B4FB28C
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 06:11:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232666AbiDKEJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 00:09:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33548 "EHLO
+        id S240523AbiDKENG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 00:13:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230325AbiDKEJK (ORCPT
+        with ESMTP id S233151AbiDKEND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 00:09:10 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24BBD1658C
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 21:06:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649650017; x=1681186017;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7a5L5pHh2qS6ch6/EmFZOA1nOfyVhZlxe5zhAixrEQM=;
-  b=FbwzDn+E1u5ED0OVEUi6nUlJ2L92lRmLYPLiDkTMwRvrbXX2v5/SHNot
-   sywVRQUujk4PrHfRos9olVGVEPqnKFGzTDEXc5NJ3gh0peagYe7QkRdbV
-   2EzeKRvam6RCyp+2zd4iIB8M+pMhp265Dl8wvGGOrkgJQdXzVJRz3tVOc
-   /XpqxyXzfViAqQNGxkMyfGV18F/uncZzwvLqJq6T7p24hX1ulyifdooJx
-   5snyAbgVR4qo71ZnZZgRn0zeOPX5K6DzYA0fMVHYPTC+iYHTZK8M3j6/A
-   K5BQ/1EfwescNROUeYE13b051++L9WkmjafqqXPvkZyTj0NtN9spRa2oA
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="261771899"
-X-IronPort-AV: E=Sophos;i="5.90,250,1643702400"; 
-   d="scan'208";a="261771899"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2022 21:06:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,250,1643702400"; 
-   d="scan'208";a="506950142"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 10 Apr 2022 21:06:55 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ndlKI-0001UF-EK;
-        Mon, 11 Apr 2022 04:06:54 +0000
-Date:   Mon, 11 Apr 2022 12:06:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     James Hughes <JamesH65@users.noreply.github.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Dom Cobley <popcornmix@gmail.com>,
-        Matteo Croce <mcroce@redhat.com>
-Subject: [l1k:smsc95xx_5.17 85/888]
- drivers/perf/raspberrypi_axi_monitor.c:139:1: warning: 'static' is not at
- beginning of declaration
-Message-ID: <202204111229.bejmJhO0-lkp@intel.com>
+        Mon, 11 Apr 2022 00:13:03 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D30CB273E;
+        Sun, 10 Apr 2022 21:10:50 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id ke15so12317365qvb.11;
+        Sun, 10 Apr 2022 21:10:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=O84u4g0rEMhiEbnfnW6weOWFhugAjRvAb7liky1i+SU=;
+        b=DneHJtvUWQgzhOZMeRyv/pSo0pxe+UFtg/MsQ1rVH5VYF1UxmxumkfkI9sbO0pO3YW
+         mLqbiQOwBibN4dPwSUNoqxw9l40OCyYRn6kSRLXm+OZPkLL19xfXYcgtR83ICfbZdoI8
+         dTbYZY4xMkBLKnCQSI5z8nUdu+w4FtqAqVpsPmmXR73HV5GdiXBqmsPscwvwi1VR0/jj
+         cQ2X3sh67++uXNGhhADPVGdCCQH33h+5AnIzpWxXNJqrYdkm7dKLn9aqyiD1RPZUpZi4
+         FyAHQWguvtperffgP7ByO/yxwLwYtv5CEpHYp6mYgvuRNGTPlXlU8SsXUFLN7nhyrWid
+         B21w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=O84u4g0rEMhiEbnfnW6weOWFhugAjRvAb7liky1i+SU=;
+        b=e0Erzy59O3DdJfPmGwfQpmKimH+3MFYwBHSWPWpObbEadl6brNHYYAM/yyr5M0f9K8
+         iiI7SnZpfse3UhPN74bqqg3Pv3/WN/rDITKqewV73fR5djKY2gczsdA+ATEV9cJ4bQqS
+         CHGq4g8F6WFX5V9tjKIFjDWq046SjQh3w7ZjD0oQoMn66ZalGDqxrOrJCUIoO+iNHCmM
+         ml8a8Bhde/kr1vo7O8vg/DrRzwvOnoB0kg0E6mB9b6D3Q5zWt7amLx7ikcVHgX2CiQQ8
+         wQgBi2Vm56MbHkUomm2rM+ztHK8k6Nm1P8dFV/nMKz7sRtMJmTqFTfNrjwak86K4kEle
+         ppJA==
+X-Gm-Message-State: AOAM5323uuDHXMX0BGu3zDPusoCAmyIdASobdCsdysGlLzTpADsy6/Uz
+        Flda+IJoiNrzQ9gM4Yq+MWo=
+X-Google-Smtp-Source: ABdhPJyz74QJW/R9APqpj6K9iL73Bp/NOoaWsAIgDb75ZRuEOyrAfpMzSLQTmgJpnfw0D72vdp5ufw==
+X-Received: by 2002:a0c:ea52:0:b0:444:330a:2f19 with SMTP id u18-20020a0cea52000000b00444330a2f19mr7304876qvp.32.1649650249725;
+        Sun, 10 Apr 2022 21:10:49 -0700 (PDT)
+Received: from ?IPV6:2600:1700:2442:6db0:91e2:dfcf:c904:aebc? ([2600:1700:2442:6db0:91e2:dfcf:c904:aebc])
+        by smtp.gmail.com with ESMTPSA id x138-20020a376390000000b0069bf27a8d26sm4568598qkb.47.2022.04.10.21.10.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 10 Apr 2022 21:10:49 -0700 (PDT)
+Message-ID: <a2679425-3486-2823-01f7-6b208d296564@gmail.com>
+Date:   Sun, 10 Apr 2022 23:10:48 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v2 0/2] of: overlay: rework overlay apply and remove
+ kfree()s
+Content-Language: en-US
+From:   Frank Rowand <frowand.list@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>, pantelis.antoniou@konsulko.com,
+        Slawomir Stepien <slawomir.stepien@nokia.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Slawomir Stepien <sst@poczta.fm>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Alan Tull <atull@kernel.org>,
+        Jan Kiszka <jan.kiszka@siemens.com>
+References: <20220410210833.441504-1-frowand.list@gmail.com>
+In-Reply-To: <20220410210833.441504-1-frowand.list@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/l1k/linux smsc95xx_5.17
-head:   240f56c27361c195cd502d95aba51c6b8e5b808c
-commit: 7903ec0612d5f7d32ca61206d5e3cbe0262d3c00 [85/888] AXI performance monitor driver (#2222)
-config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20220411/202204111229.bejmJhO0-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/l1k/linux/commit/7903ec0612d5f7d32ca61206d5e3cbe0262d3c00
-        git remote add l1k https://github.com/l1k/linux
-        git fetch --no-tags l1k smsc95xx_5.17
-        git checkout 7903ec0612d5f7d32ca61206d5e3cbe0262d3c00
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/char/broadcom/ drivers/perf/
+adding cc: Jan Kiszka <jan.kiszka@siemens.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On 4/10/22 16:08, frowand.list@gmail.com wrote:
+> From: Frank Rowand <frank.rowand@sony.com>
+> 
+> Fix various kfree() issues related to of_overlay_apply().
+> 
+> The fixes revealed inconsist variable names for the same variable
+> across functions, resulting in difficulty understanding the code
+> that was being modified.  Doing both variable renaming and the
+> fixes results in a hard to review patch, so split into two patches.
+> 
+> The first patch in the series contains only variable renaming.
+> The second patch contains the kfree() related fixes.
+> 
+> Frank Rowand (2):
+>   of: overlay: rename variables to be consistent
+>   of: overlay: rework overlay apply and remove kfree()s
+> 
+>  Documentation/devicetree/overlay-notes.rst |  23 ++-
+>  drivers/of/overlay.c                       | 175 +++++++++++----------
+>  2 files changed, 115 insertions(+), 83 deletions(-)
+> 
 
-All warnings (new ones prefixed by >>):
-
->> drivers/perf/raspberrypi_axi_monitor.c:139:1: warning: 'static' is not at beginning of declaration [-Wold-style-declaration]
-     139 | const static char *bus_filter_strings[] = {
-         | ^~~~~
-   drivers/perf/raspberrypi_axi_monitor.c:176:1: warning: 'static' is not at beginning of declaration [-Wold-style-declaration]
-     176 | const static char *system_bus_string[] = {
-         | ^~~~~
-   drivers/perf/raspberrypi_axi_monitor.c:197:1: warning: 'static' is not at beginning of declaration [-Wold-style-declaration]
-     197 | const static char *vpu_bus_string[] = {
-         | ^~~~~
-   drivers/perf/raspberrypi_axi_monitor.c:218:1: warning: 'static' is not at beginning of declaration [-Wold-style-declaration]
-     218 | const static char *monitor_name[] = {
-         | ^~~~~
-
-
-vim +/static +139 drivers/perf/raspberrypi_axi_monitor.c
-
-   138	
- > 139	const static char *bus_filter_strings[] = {
-   140		"",
-   141		"CORE0_V",
-   142		"ICACHE0",
-   143		"DCACHE0",
-   144		"CORE1_V",
-   145		"ICACHE1",
-   146		"DCACHE1",
-   147		"L2_MAIN",
-   148		"HOST_PORT",
-   149		"HOST_PORT2",
-   150		"HVS",
-   151		"ISP",
-   152		"VIDEO_DCT",
-   153		"VIDEO_SD2AXI",
-   154		"CAM0",
-   155		"CAM1",
-   156		"DMA0",
-   157		"DMA1",
-   158		"DMA2_VPU",
-   159		"JPEG",
-   160		"VIDEO_CME",
-   161		"TRANSPOSER",
-   162		"VIDEO_FME",
-   163		"CCP2TX",
-   164		"USB",
-   165		"V3D0",
-   166		"V3D1",
-   167		"V3D2",
-   168		"AVE",
-   169		"DEBUG",
-   170		"CPU",
-   171		"M30"
-   172	};
-   173	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

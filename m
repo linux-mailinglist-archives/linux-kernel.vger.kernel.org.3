@@ -2,137 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 084B84FBC1C
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 14:31:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 722A44FBC1F
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 14:32:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346013AbiDKMdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 08:33:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35872 "EHLO
+        id S1346048AbiDKMeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 08:34:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234322AbiDKMdw (ORCPT
+        with ESMTP id S243964AbiDKMeN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 08:33:52 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7DF26ED;
-        Mon, 11 Apr 2022 05:31:36 -0700 (PDT)
-X-UUID: c9bd375bd5254f299a47637b00ef07f7-20220411
-X-UUID: c9bd375bd5254f299a47637b00ef07f7-20220411
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1664485756; Mon, 11 Apr 2022 20:31:31 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Mon, 11 Apr 2022 20:31:31 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 11 Apr
- 2022 20:31:30 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 11 Apr 2022 20:31:30 +0800
-Message-ID: <bc6dd020a1cc3f00f5be2bf2929046b9116bbeef.camel@mediatek.com>
-Subject: Re: [PATCH V2 13/15] cpufreq: mediatek: Link CCI device to CPU
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Kevin Hilman <khilman@baylibre.com>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <robh+dt@kernel.org>,
-        <krzk+dt@kernel.org>
-CC:     <matthias.bgg@gmail.com>, <jia-wei.chang@mediatek.com>,
-        <roger.lu@mediatek.com>, <hsinyi@google.com>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Mon, 11 Apr 2022 20:31:30 +0800
-In-Reply-To: <7hfsmn5m9f.fsf@baylibre.com>
-References: <20220408045908.21671-1-rex-bc.chen@mediatek.com>
-         <20220408045908.21671-14-rex-bc.chen@mediatek.com>
-         <7hfsmn5m9f.fsf@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 11 Apr 2022 08:34:13 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE4C3ED08
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 05:31:59 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id r13so30561422ejd.5
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 05:31:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jBDZOUj40UCKpbLB7bFx1yBWu6QPK94DCYQV33996m4=;
+        b=j+A5ccabaUeeM3416rNwxeOecPOSkjCNrxnFAXpzerKo+LUtJ8+0sbgHxV1y1df7th
+         4tOgEILYkjiBedfexIvLZ3cgdeJhRbfOeXS2MpyJp1JNMkfSKWiIOK9JpGom6TGPhtBz
+         ilgZIqZCvGhSJGw6EwRNmAzDp77wy6FQ38oAI4IAI3cZi064EYq7c5WewoXrXZ5+OFP6
+         q1+VyVnGcX4NmukImCPV6WGpEr2P0i3EkAz/AGmBVn6kPjNq8dFeJ+SkDYyNEVgFbfKz
+         fJyrbXMc6RgNDrcopLi9sCoLOVeico0nmBL0blW9iUe8PUClcQePHmtnxfDL06wm4DxQ
+         EKJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jBDZOUj40UCKpbLB7bFx1yBWu6QPK94DCYQV33996m4=;
+        b=FehipvO87BSehVLprBlrWVydathRKeitx/pUtISXxlDVOrK1c4TPhOjqpgvApzFVoF
+         F3Zjv4ecwfc8SUplZC0PuXAwaqZxWTsF8khEXK4920IkYbsnAnxFBlhJHq9HnilbSzwV
+         mNyzCuAVJU4yPcUwyfk6gWWGsaMNp8uYa2EMqBZd9qaVVJLjDFDxT7oPM0DZ0W6dGZ8K
+         /lkj/kzxfkLIBeWRvx0goJOmyUWgMJf02zd5VtZSR4tGvxjfrdh0oWQy+Rpf9VXNx9YS
+         Q/OEl7LEPzLl1ozVJY7h77PIYky7Rp9UWT4EZwOVllP+Gr8gLDltG3P5uNlD46z5/sa/
+         GzjQ==
+X-Gm-Message-State: AOAM5313FfwjJPGaPgc8YRK3oDLAmzSQ1BSdMlM7QcDiXqiOYULa8iNg
+        tyVrDE8eLH7T0eHLVVaZHyqaV0aIvo0oaDIFFspTwVNLKEriKQ==
+X-Google-Smtp-Source: ABdhPJwNZv8N7FgL9z4krJ3g7caKEsfemJcG4eROygWQm1CPb3gR15iupplZRtc05YRM0cnB2/1iXvgiGp99Aaz/Qmo=
+X-Received: by 2002:a17:907:10ce:b0:6e7:116:10d0 with SMTP id
+ rv14-20020a17090710ce00b006e7011610d0mr29415404ejb.101.1649680317762; Mon, 11
+ Apr 2022 05:31:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1649533972.git.sander@svanheule.net>
+In-Reply-To: <cover.1649533972.git.sander@svanheule.net>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 11 Apr 2022 14:31:46 +0200
+Message-ID: <CAMRc=MeRMtm84ZyRgs9nxqWQ-LhkL0kejJA5UqrP1VHogFrccQ@mail.gmail.com>
+Subject: Re: [PATCH v1 0/6] Support for RTL930x/RTL931x GPIOs
+To:     Sander Vanheule <sander@svanheule.net>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Bert Vermeulen <bert@biot.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-08 at 13:54 -0700, Kevin Hilman wrote:
-> Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
-> 
-> > From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> > 
-> > In some MediaTek SoCs, like MT8183, CPU and CCI share the same
-> > power
-> > supplies. Cpufreq needs to check if CCI devfreq exists and wait
-> > until
-> > CCI devfreq ready before scaling frequency.
-> > 
-> > - Add is_ccifreq_ready() to link CCI device to CPI, and CPU will
-> > start
-> >   DVFS when CCI is ready.
-> > - Add platform data for MT8183.
-> > 
-> > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> 
-> The checks here are not enough, and will lead to unexpected behavior.
-> IIUC, before doing DVFS, you're checking:
-> 
-> 1) if the "cci" DT node is present and
-> 2) if the driver for that device is bound
-> 
-> If both those conditions are not met, you don't actually fail, you
-> just
-> silently do nothing in ->set_target().  As Angelo pointed out also,
-> this
-> is not a good idea, and will be rather confusing to users.
-> 
-> The same thing would happen if the cci DT node was present, but the
-> CCI
-> devfreq driver was disabled.  Silent failure would also be quite
-> unexpected behavior.  Similarily, if the cci DT node is not present
-> at
-> all (like it is in current upstream DT), this CPUfreq driver will
-> silently do nothing.  Not good.
-> 
-> So, this patch needs to handle several scenarios:
-> 
-> 1) CCI DT node not present
-> 
-> In this case, the driver should still operate normally.  With no CCI
-> node, or driver there's no conflict.
-> 
-> 2) CCI DT present/enabled but not yet bound
-> 
-> In this case, you could return -EAGAIN as suggested by Angelo, or
-> maybe
-> better, it should do a deferred probe.
-> 
-> 3) CCI DT present, but driver disabled
-> 
-> This case is similar to (1), this driver should continue to work.
-> 
-> Kevin
+On Sat, Apr 9, 2022 at 9:56 PM Sander Vanheule <sander@svanheule.net> wrote:
+>
+> This patch series adds support for the GPIO controllers as found on the
+> RTL930x and RTL931x SoC families of MIPS CPUs, used in managed NBase-T
+> ethernet switches.
+>
+> The RTL931x's GPIO controller behaves the same as the one in the older
+> RTL838x and RTL839x series. This controller is trivially supported.
+>
+> The RTL930x's controller has a reversed port order, and supports CPU
+> affinity settings for individual GPIO line IRQs, thus requiring two
+> additional changes to implement these features.
+>
+> Sander Vanheule (6):
+>   dt-bindings: gpio: realtek-otto: Add rtl9300 compatible
+>   gpio: realtek-otto: Support reversed port layouts
+>   gpio: realtek-otto: Support per-cpu interrupts
+>   gpio: realtek-otto: Add RTL930x support
+>   dt-bindings: gpio: realtek-otto: Add rtl9310 compatible
+>   gpio: realtek-otto: Add RTL931x support
+>
+>  .../bindings/gpio/realtek,otto-gpio.yaml      |  34 ++++-
+>  drivers/gpio/gpio-realtek-otto.c              | 137 +++++++++++++++++-
+>  2 files changed, 164 insertions(+), 7 deletions(-)
+>
+> --
+> 2.35.1
+>
 
-Hello Kevin and Angelo,
+Queued the entire series, thanks!
 
-In my review, if we do not get the link or the link status is not
-correct between cci and cpufreq in target_index, I think it will never
-established again for this link.
-Because it's not checked in probe stage.
-
-So I think we just need to deal with the issue without cci device, and
-don't expect the link between cci and cpufreq will be connected again.
-
-If I am wrong, please correct me.
-Thanks.
-
-BRs,
-Rex
-
+Bart

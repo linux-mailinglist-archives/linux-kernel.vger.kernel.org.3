@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 247B84FC517
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC0D4FC518
 	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 21:26:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349642AbiDKT2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 15:28:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51516 "EHLO
+        id S1349648AbiDKT2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 15:28:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349610AbiDKT1Z (ORCPT
+        with ESMTP id S1349616AbiDKT10 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 15:27:25 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4C513FB8
+        Mon, 11 Apr 2022 15:27:26 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980DF1400F
         for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 12:25:11 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: bbeckett)
-        with ESMTPSA id 988FC1F43CCC
+        with ESMTPSA id 338461F43CD1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649705109;
-        bh=W1xeNHFFi2xCQW+DSKNFK1fRoffazm4NeTwtpFvqJkc=;
+        s=mail; t=1649705110;
+        bh=yZDfYMtfaZRY0QUffB9LSGM0LIHt1Kf7UYxXwd7bE5k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BFtT30iW5ymMNLq/TNKy5KNfzD9fzG1lMnaxtGE2bW5d4Nr0FDQ2nGI1OhQFwfJbv
-         /x0lhwaH3NBICgOTh2zA3TsMg08rLth+EBMeVNgJ7oAdk/wmJLLWRvt/M1CEuBqoAR
-         2UoZbf91jGAZ9uqhEhEjTNsW/pNCyOQh9nKlFebY+4svlMD/HvLhAbLyk3zSNuyCwn
-         vIc1LTpx6I0G/AkEgMSGXOOUYXMYZ8VBwo5NIfYn1K3V20aGgqXNMML1Yq0B7yVkZB
-         QsyuaUaQFd9kXIL/0bGQ9tJ+XmTGDvrehIuMz7gPhf9oB2T+2UU2hn7ZIB0GVW2NVk
-         FESl26IrBl69g==
+        b=bsgfAQMuBcUec5kIPrh3W8eFfG7NSq8Fjs+q+NnVAFvt8MOz1VzIMCLkqUXY8mNrg
+         SbUOHsAvASeX8Q/sGdT7i9iveZm7Wmo+tB1dBIbACZyLFYsBZo5pKFGAVRNm5AaB7/
+         +Q2LNbGb9X2GOBtd3tD/zvEz0aZFwVHXCsGro8L6TYwqDT/p6y6bAd0mu97Iejzlbx
+         QynHcTj+Uy85sDvDz9/at8SDsvNTl46DoqhpFx1M/BQ2ODbux5/ey3xOqudph8NJO1
+         ILllXNz2bEjfFMIFDQk4mO9kPZFqjK28ml38pcnkSPHBCnuzsqifo/t1LyfiCUz6tT
+         05FjkOnda2klQ==
 From:   Robert Beckett <bob.beckett@collabora.com>
 To:     dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
         Jani Nikula <jani.nikula@linux.intel.com>,
@@ -40,14 +40,13 @@ Cc:     Robert Beckett <bob.beckett@collabora.com>,
         Matthew Auld <matthew.auld@intel.com>,
         =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
         <thomas.hellstrom@linux.intel.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/5] drm/i915: ttm move/clear logic fix
-Date:   Mon, 11 Apr 2022 19:24:51 +0000
-Message-Id: <20220411192453.1000147-4-bob.beckett@collabora.com>
+Subject: [PATCH 4/5] drm/i915: ttm backend dont provide mmap_offset for kernel buffers
+Date:   Mon, 11 Apr 2022 19:24:52 +0000
+Message-Id: <20220411192453.1000147-5-bob.beckett@collabora.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220411192453.1000147-1-bob.beckett@collabora.com>
 References: <20220411192453.1000147-1-bob.beckett@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
@@ -59,67 +58,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ttm managed buffers start off with system resource definitions and ttm_tt
-tracking structures allocated (though unpopulated).
-currently this prevents clearing of buffers on first move to desired
-placements.
-
-The desired behaviour is to clear user allocated buffers and any kernel
-buffers that specifically requests it only.
-Make the logic match the desired behaviour.
+stolen/kernel buffers should not be mmapable by userland.
+do not provide callbacks to facilitate this for these buffers.
 
 Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
 ---
- drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c | 22 +++++++++++++++++++-
- 1 file changed, 21 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/i915/gem/i915_gem_ttm.c | 32 +++++++++++++++++++++----
+ 1 file changed, 27 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c b/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
-index 9fe8132de3b2..9cf85f91edb5 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
-@@ -3,6 +3,7 @@
-  * Copyright © 2021 Intel Corporation
-  */
- 
-+#include "drm/ttm/ttm_tt.h"
- #include <drm/ttm/ttm_bo_driver.h>
- 
- #include "i915_deps.h"
-@@ -470,6 +471,25 @@ __i915_ttm_move(struct ttm_buffer_object *bo,
- 	return fence;
+diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+index a878910a563c..b20f81836c54 100644
+--- a/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm.c
+@@ -1092,8 +1092,8 @@ static void i915_ttm_unmap_virtual(struct drm_i915_gem_object *obj)
+ 	ttm_bo_unmap_virtual(i915_gem_to_ttm(obj));
  }
  
-+static bool
-+allow_clear(struct drm_i915_gem_object *obj, struct ttm_tt *ttm, struct ttm_resource *dst_mem)
-+{
-+	/* never clear stolen */
-+	if (dst_mem->mem_type == I915_PL_STOLEN)
-+		return false;
-+	/*
-+	 * we want to clear user buffers and any kernel buffers
-+	 * that specifically request clearing.
-+	 */
-+	if (obj->flags & I915_BO_ALLOC_USER)
-+		return true;
-+
-+	if (ttm && ttm->page_flags & TTM_TT_FLAG_ZERO_ALLOC)
-+		return true;
-+
-+	return false;
-+}
-+
- /**
-  * i915_ttm_move - The TTM move callback used by i915.
-  * @bo: The buffer object.
-@@ -520,7 +540,7 @@ int i915_ttm_move(struct ttm_buffer_object *bo, bool evict,
- 		return PTR_ERR(dst_rsgt);
+-static const struct drm_i915_gem_object_ops i915_gem_ttm_obj_ops = {
+-	.name = "i915_gem_object_ttm",
++static const struct drm_i915_gem_object_ops i915_gem_ttm_user_obj_ops = {
++	.name = "i915_gem_object_ttm_user",
+ 	.flags = I915_GEM_OBJECT_IS_SHRINKABLE |
+ 		 I915_GEM_OBJECT_SELF_MANAGED_SHRINK_LIST,
  
- 	clear = !i915_ttm_cpu_maps_iomem(bo->resource) && (!ttm || !ttm_tt_is_populated(ttm));
--	if (!(clear && ttm && !(ttm->page_flags & TTM_TT_FLAG_ZERO_ALLOC))) {
-+	if (!clear || allow_clear(obj, ttm, dst_mem)) {
- 		struct i915_deps deps;
+@@ -1111,6 +1111,21 @@ static const struct drm_i915_gem_object_ops i915_gem_ttm_obj_ops = {
+ 	.mmap_ops = &vm_ops_ttm,
+ };
  
- 		i915_deps_init(&deps, GFP_KERNEL | __GFP_NORETRY | __GFP_NOWARN);
++static const struct drm_i915_gem_object_ops i915_gem_ttm_kern_obj_ops = {
++	.name = "i915_gem_object_ttm_kern",
++	.flags = I915_GEM_OBJECT_IS_SHRINKABLE |
++		 I915_GEM_OBJECT_SELF_MANAGED_SHRINK_LIST,
++
++	.get_pages = i915_ttm_get_pages,
++	.put_pages = i915_ttm_put_pages,
++	.truncate = i915_ttm_truncate,
++	.shrink = i915_ttm_shrink,
++
++	.adjust_lru = i915_ttm_adjust_lru,
++	.delayed_free = i915_ttm_delayed_free,
++	.migrate = i915_ttm_migrate,
++};
++
+ void i915_ttm_bo_destroy(struct ttm_buffer_object *bo)
+ {
+ 	struct drm_i915_gem_object *obj = i915_ttm_to_gem(bo);
+@@ -1165,10 +1180,19 @@ int __i915_gem_ttm_object_init(struct intel_memory_region *mem,
+ 		.no_wait_gpu = false,
+ 	};
+ 	enum ttm_bo_type bo_type;
++	const struct drm_i915_gem_object_ops *ops;
+ 	int ret;
+ 
+ 	drm_gem_private_object_init(&i915->drm, &obj->base, size);
+-	i915_gem_object_init(obj, &i915_gem_ttm_obj_ops, &lock_class, flags);
++
++	if (flags & I915_BO_ALLOC_USER && intel_region_to_ttm_type(mem) != I915_PL_STOLEN) {
++		bo_type = ttm_bo_type_device;
++		ops = &i915_gem_ttm_user_obj_ops;
++	} else {
++		bo_type = ttm_bo_type_kernel;
++		ops = &i915_gem_ttm_kern_obj_ops;
++	}
++	i915_gem_object_init(obj, ops, &lock_class, flags);
+ 
+ 	obj->bo_offset = offset;
+ 
+@@ -1178,8 +1202,6 @@ int __i915_gem_ttm_object_init(struct intel_memory_region *mem,
+ 
+ 	INIT_RADIX_TREE(&obj->ttm.get_io_page.radix, GFP_KERNEL | __GFP_NOWARN);
+ 	mutex_init(&obj->ttm.get_io_page.lock);
+-	bo_type = (obj->flags & I915_BO_ALLOC_USER) ? ttm_bo_type_device :
+-		ttm_bo_type_kernel;
+ 
+ 	obj->base.vma_node.driver_private = i915_gem_to_ttm(obj);
+ 
 -- 
 2.25.1
 

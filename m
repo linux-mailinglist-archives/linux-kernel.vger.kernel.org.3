@@ -2,223 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B88CD4FC0CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BB3E4FBE5B
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 16:07:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347947AbiDKPfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 11:35:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47238 "EHLO
+        id S1346952AbiDKOJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 10:09:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348001AbiDKPfc (ORCPT
+        with ESMTP id S1346838AbiDKOJm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 11:35:32 -0400
-X-Greylist: delayed 5153 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 11 Apr 2022 08:33:16 PDT
-Received: from mx0a-0014ca01.pphosted.com (mx0b-0014ca01.pphosted.com [208.86.201.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53DE336B5B
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:33:16 -0700 (PDT)
-Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
-        by mx0b-0014ca01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23BC8RCZ026133;
-        Mon, 11 Apr 2022 07:07:11 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=proofpoint;
- bh=UatKVkxkfCPI1eM6LsEzbQ6C4PnqXjiSiPAMUYXKzxg=;
- b=RLTJ0YvpTd7naAP1qYAfEkIufpl12gVBKpmB9mK3j4+gNh/+rzoIHjWMqkssblh0LfrQ
- koJ2wbFH43yZEjJQ1rC6nW5vtd3nrhJoABH5lG1YuQsvHgvbD2EtYWZrKbvAdtISq1J1
- ESFqrVvtoiZrhoqUeZJeKPj71Hu+Km8Md500gPyUwSQXUuUErB9EVq+2AV6ZUAUnB+eM
- RLYBISAVpLoTCcyM2m5ddmeox60DKTMmqbkyFI7ObOnVBBIr9VR/2W+Shj2cptzJQoay
- JgzbmYX5p87LtfQwTHzEl66gue/+biP8tEwJTp4ylD565gGM5IHbL1z5RXzcKYzfiEMf bA== 
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2108.outbound.protection.outlook.com [104.47.55.108])
-        by mx0b-0014ca01.pphosted.com (PPS) with ESMTPS id 3fb6qvqkd1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 11 Apr 2022 07:07:10 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UghhPaFlOUI16P5rpZS7jB2FvuAO4VuU2W9ZqqujCxALOx643bInqTKBwCleDmPwHaNsaVsP97at9ppQ4bRI2lA78tLh3Tm6Ya8DGSK1yadHpgwrneynnh2IiQSNYRy3qlbMedz7jkaa0FGM24ADA/7cIGvK/HMiu0X3ROqIBe1QwP4kGbRNN30806Sn6DQnWYc7lwN+yXDEu/7CzVnuVPuTEME3k0U3ZlphAqCtK2OeZwbyXYEOt/5OtoW4RKS0gMKZ8YwqWNl00q/u7pwT0am9yGMHysh7tLJl73Z39yowa6yBTEACz3dtg7CnT6LczME7NNGoWhDVK4bfLdtaHA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UatKVkxkfCPI1eM6LsEzbQ6C4PnqXjiSiPAMUYXKzxg=;
- b=iktvMqmv5FOs3976GFbrk8R6CiDp9mD0tn9DjXQy12URi4f2YKCdM4UU3O6bwm25E6SMz5vUwG9dB4Lab2E8Cz65lgkc7FLBP9Q9QlzTuQAvISIsMyyMmE6CN1KOBvE8lZK0nIgz7ACqQkXa8BQg5yH68a6T3yzybOdl29HoRA1anZ6yHx69Z/0aouIiDR8WhwpGZKleU2ApHOX3oUYvT7BpArc4nIG/R9yEgvJ/362+Mjz/Ek3YNCw0RivFcTcwGvOOp18X8Nt8O7UtdBFTLqp/JhvOl1eOqdkFiOyhIS8xtAw+VXDGpsJLYyaZSbFh97yPpdEU86G/MdcbWJqOaA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 158.140.1.148) smtp.rcpttodomain=intel.com smtp.mailfrom=cadence.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=cadence.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UatKVkxkfCPI1eM6LsEzbQ6C4PnqXjiSiPAMUYXKzxg=;
- b=UCsAW2clLk/4zRq64hlXjFuVphiDWrhkyrsJggZdCUC9+nJABkdgGEtrUxmfoMjj6HPtR4rGBioIMS6HA0EIv7Ay1fcdQEGM5viiatW0vJs49RVJMXAnwUXE21xz5Kbh9tMALYwmvTRWrcq3KHpavBVzDu1Heexyofbx61MSgmg=
-Received: from BN1PR10CA0010.namprd10.prod.outlook.com (2603:10b6:408:e0::15)
- by MN2PR07MB7839.namprd07.prod.outlook.com (2603:10b6:208:3e::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Mon, 11 Apr
- 2022 14:07:06 +0000
-Received: from BN8NAM12FT041.eop-nam12.prod.protection.outlook.com
- (2603:10b6:408:e0:cafe::6c) by BN1PR10CA0010.outlook.office365.com
- (2603:10b6:408:e0::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29 via Frontend
- Transport; Mon, 11 Apr 2022 14:07:06 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 158.140.1.148)
- smtp.mailfrom=cadence.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=cadence.com;
-Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
- 158.140.1.148 as permitted sender) receiver=protection.outlook.com;
- client-ip=158.140.1.148; helo=sjmaillnx2.cadence.com;
-Received: from sjmaillnx2.cadence.com (158.140.1.148) by
- BN8NAM12FT041.mail.protection.outlook.com (10.13.182.172) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5164.8 via Frontend Transport; Mon, 11 Apr 2022 14:07:06 +0000
-Received: from maileu3.global.cadence.com (maileu3.cadence.com [10.160.88.99])
-        by sjmaillnx2.cadence.com (8.14.4/8.14.4) with ESMTP id 23BE70aR032352
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 11 Apr 2022 07:07:01 -0700
-X-CrossPremisesHeadersFilteredBySendConnector: maileu3.global.cadence.com
-Received: from maileu4.global.cadence.com (10.160.110.201) by
- maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
- 15.0.1497.32; Mon, 11 Apr 2022 16:06:54 +0200
-Received: from vleu-orange.cadence.com (10.160.88.83) by
- maileu4.global.cadence.com (10.160.110.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7
- via Frontend Transport; Mon, 11 Apr 2022 16:06:54 +0200
-Received: from vleu-orange.cadence.com (localhost.localdomain [127.0.0.1])
-        by vleu-orange.cadence.com (8.14.4/8.14.4) with ESMTP id 23BE6rEi015872;
-        Mon, 11 Apr 2022 16:06:53 +0200
-Received: (from jpawar@localhost)
-        by vleu-orange.cadence.com (8.14.4/8.14.4/Submit) id 23BE6qd7015869;
-        Mon, 11 Apr 2022 16:06:52 +0200
-From:   Jayshri Pawar <jpawar@cadence.com>
-To:     <dri-devel@lists.freedesktop.org>
-CC:     <daniel@ffwll.ch>, <airlied@linux.ie>, <andrzej.hajda@intel.com>,
-        <narmstrong@baylibre.com>, <robert.foss@linaro.org>,
-        <Laurent.pinchart@ideasonboard.com>, <jonas@kwiboo.se>,
-        <jernej.skrabec@gmail.com>, <linux-kernel@vger.kernel.org>,
-        <mparab@cadence.com>, <jpawar@cadence.com>, <sjakhade@cadence.com>,
-        <nm@ti.com>, <yogeshs@ti.com>, <kishon@ti.com>
-Subject: [PATCH] drm/bridge: cdns-dsi: Add support for pre_enable and post_enable control functions.
-Date:   Mon, 11 Apr 2022 16:06:06 +0200
-Message-ID: <20220411140606.15654-1-jpawar@cadence.com>
-X-Mailer: git-send-email 2.15.0
+        Mon, 11 Apr 2022 10:09:42 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8FE34329B8
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 07:07:28 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 48E2B1570;
+        Mon, 11 Apr 2022 07:07:28 -0700 (PDT)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4C6763F73B;
+        Mon, 11 Apr 2022 07:07:26 -0700 (PDT)
+Message-ID: <9bb00bcb-f984-1cf6-39aa-c11dcf7f07cb@arm.com>
+Date:   Mon, 11 Apr 2022 16:07:14 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-OrganizationHeadersPreserved: maileu3.global.cadence.com
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 08164740-3146-4c96-7251-08da1bc48fd7
-X-MS-TrafficTypeDiagnostic: MN2PR07MB7839:EE_
-X-Microsoft-Antispam-PRVS: <MN2PR07MB783937B5E45389D07DBCCF50C1EA9@MN2PR07MB7839.namprd07.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: c/I/PfTMF2S4lOtdbdRpXzKUBGzkDtMnvTBjb+0RckTjKFdOIX/Y+681VxVChUK5Xfl6qQkfy1yIgugEoHN8OXQ7Wcr2jB4h70fyYt5XweIOOIZATrIKzEp5k9289p6lffN7EEIcGMXZwRDf7X5M5wfcbkEHdxVLdOfd24WxgEdRexW1Ai2cbhEwla6UlXgDhD9OO/Bik8tOMFf5IeVWRf7+yTaT3b/Yj80XQPana2H2LAOOiPw2Q1ix+1ApQ4x8BeP75emCnCKYfpAbBNdVj419VgiRq4SSM22NlUarXbZHRJCBcg7SxHRWMgxeuEIZplH/cy+YECIJcIPFLVlx6KvWrmGvINwXg0ZNItgrkqiy1fGeopRjQn91keQwctp/YhxOExhVEpyVORLtlrhb23Y4vghSN5lbCk/Tg3G33SZkf0TEtrpRpSIvTvdqsMKI9kYj78J4sV/WVtfr89dcoI1G7wGQHbh2ygWSbTgZrGEUHbRGmEHmTKx0aAqg21TtezBzn9kmBbEX78m8dCRKoTEmYZoS1IS3k3OIr/C57/4pCQ2e6lTG/DzBHemJF25D0NojSf+vp13jcNFW8ZJOKtd/+DXnnftUONZUW6RtkMOc5AzxyEFtOmOSgFSWdBBYYEagQzm4YWVhR7hwKahjqsfeAiptxiuFZYH9IpDFBUIauibBqWUfqeTFdb733mPq
-X-Forefront-Antispam-Report: CIP:158.140.1.148;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:sjmaillnx2.cadence.com;PTR:unknown.Cadence.COM;CAT:NONE;SFS:(13230001)(4636009)(36092001)(36840700001)(40470700004)(46966006)(336012)(4326008)(47076005)(82310400005)(8676002)(426003)(36756003)(8936002)(186003)(36860700001)(7636003)(70586007)(83380400001)(70206006)(5660300002)(1076003)(2616005)(42186006)(7416002)(26005)(356005)(6916009)(54906003)(2906002)(6666004)(40460700003)(508600001)(86362001)(316002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Apr 2022 14:07:06.5897
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 08164740-3146-4c96-7251-08da1bc48fd7
-X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[158.140.1.148];Helo=[sjmaillnx2.cadence.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM12FT041.eop-nam12.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR07MB7839
-X-Proofpoint-GUID: 6BG7kzNuUxqNemMchu1gOn0haZTQrZCJ
-X-Proofpoint-ORIG-GUID: 6BG7kzNuUxqNemMchu1gOn0haZTQrZCJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-11_05,2022-04-11_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 mlxscore=0
- suspectscore=0 phishscore=0 priorityscore=1501 impostorscore=0 bulkscore=0
- adultscore=0 lowpriorityscore=0 mlxlogscore=999 clxscore=1011 spamscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204110078
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] sched: Take thermal pressure into account when determine
+ rt fits capacity
+Content-Language: en-US
+To:     Xuewen Yan <xuewen.yan94@gmail.com>
+Cc:     Xuewen Yan <xuewen.yan@unisoc.com>, Lukasz.Luba@arm.com,
+        rafael@kernel.org, viresh.kumar@linaro.org, mingo@redhat.com,
+        peterz@infradead.org, vincent.guittot@linaro.org,
+        rostedt@goodmis.org, linux-kernel@vger.kernel.org,
+        di.shen@unisoc.com
+References: <20220407051932.4071-1-xuewen.yan@unisoc.com>
+ <02350916-aa36-ea53-2c98-91b97f49d27e@arm.com>
+ <CAB8ipk-KenZaVWQwWqVMksQXLP5r19BQ1OGAdmwHRbjwv3qFHg@mail.gmail.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <CAB8ipk-KenZaVWQwWqVMksQXLP5r19BQ1OGAdmwHRbjwv3qFHg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: jpawar <jpawar@cadence.com>
+On 11/04/2022 10:52, Xuewen Yan wrote:
+> HI Dietmar
+> 
+> On Mon, Apr 11, 2022 at 4:21 PM Dietmar Eggemann
+> <dietmar.eggemann@arm.com> wrote:
+>>
+>> On 07/04/2022 07:19, Xuewen Yan wrote:
+>>> There are cases when the cpu max capacity might be reduced due to thermal.
+>>> Take into the thermal pressure into account when judge whether the rt task
+>>> fits the cpu. And when schedutil govnor get cpu util, the thermal pressure
+>>> also should be considered.
+>>>
+>>> Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
+>>> ---
+>>>  kernel/sched/cpufreq_schedutil.c | 1 +
+>>>  kernel/sched/rt.c                | 1 +
+>>>  2 files changed, 2 insertions(+)
+>>>
+>>> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+>>> index 3dbf351d12d5..285ad51caf0f 100644
+>>> --- a/kernel/sched/cpufreq_schedutil.c
+>>> +++ b/kernel/sched/cpufreq_schedutil.c
+>>> @@ -159,6 +159,7 @@ static void sugov_get_util(struct sugov_cpu *sg_cpu)
+>>>       struct rq *rq = cpu_rq(sg_cpu->cpu);
+>>>       unsigned long max = arch_scale_cpu_capacity(sg_cpu->cpu);
+>>>
+>>> +     max -= arch_scale_thermal_pressure(sg_cpu->cpu);
+>>
+>> max' = arch_scale_cpu_capacity() - arch_scale_thermal_pressure()
+>>
+>> For the energy part (A) we use max' in compute_energy() to cap sum_util
+>> and max_util at max' and to call em_cpu_energy(..., max_util, sum_util,
+>> max'). This was done to match (B)'s `policy->max` capping.
+>>
+>> For the frequency part (B) we have freq_qos_update_request() in:
+>>
+>> power_actor_set_power()
+>>   ...
+>>   cdev->ops->set_cur_state()
+>>
+>>     cpufreq_set_cur_state()
+>>       freq_qos_update_request()      <-- !
+>>       arch_update_thermal_pressure()
+>>
+>> restricting `policy->max` which then clamps `target_freq` in:
+>>
+>>   cpufreq_update_util()
+>>     ...
+>>     get_next_freq()
+>>       cpufreq_driver_resolve_freq()
+>>         __resolve_freq()
+>>
+> 
+> Do you mean that the "max" here will not affect the frequency
+> conversion, so there is no need to change it?
+> But is it better to reflect the influence of thermal here?
 
-Add support for pre_enable and post_enable drm bridge control functions.
-Making sure that host to be prepared before panel is powered up,
-for the panels like TC358762.
+I guess your point is that even though max' has no effect on frequency
+since QOS caps policy->max anyway, it is still easier to understand the
+dependency between schedutil and EAS/EM when it comes to the use of
+thermal pressure.
 
-Signed-off-by: jpawar <jpawar@cadence.com>
----
- drivers/gpu/drm/bridge/cdns-dsi.c | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+I agree. The way how the "hidden" policy->max capping guarantees that
+schedutil and EAS/EM are doing the same even when only the latter uses
+max' is not obvious.
 
-diff --git a/drivers/gpu/drm/bridge/cdns-dsi.c b/drivers/gpu/drm/bridge/cdns-dsi.c
-index 829e1a144656..20bece84ff8c 100644
---- a/drivers/gpu/drm/bridge/cdns-dsi.c
-+++ b/drivers/gpu/drm/bridge/cdns-dsi.c
-@@ -462,6 +462,7 @@ struct cdns_dsi {
- 	struct reset_control *dsi_p_rst;
- 	struct clk *dsi_sys_clk;
- 	bool link_initialized;
-+	bool phy_initialized;
- 	struct phy *dphy;
- };
- 
-@@ -711,11 +712,21 @@ static void cdns_dsi_bridge_disable(struct drm_bridge *bridge)
- 	pm_runtime_put(dsi->base.dev);
- }
- 
-+static void cdns_dsi_bridge_post_disable(struct drm_bridge *bridge)
-+{
-+	struct cdns_dsi_input *input = bridge_to_cdns_dsi_input(bridge);
-+	struct cdns_dsi *dsi = input_to_dsi(input);
-+
-+	pm_runtime_put(dsi->base.dev);
-+}
-+
- static void cdns_dsi_hs_init(struct cdns_dsi *dsi)
- {
- 	struct cdns_dsi_output *output = &dsi->output;
- 	u32 status;
- 
-+	if (dsi->phy_initialized)
-+		return;
- 	/*
- 	 * Power all internal DPHY blocks down and maintain their reset line
- 	 * asserted before changing the DPHY config.
-@@ -739,6 +750,7 @@ static void cdns_dsi_hs_init(struct cdns_dsi *dsi)
- 	writel(DPHY_CMN_PSO | DPHY_ALL_D_PDN | DPHY_C_PDN | DPHY_CMN_PDN |
- 	       DPHY_D_RSTB(output->dev->lanes) | DPHY_C_RSTB,
- 	       dsi->regs + MCTL_DPHY_CFG0);
-+	dsi->phy_initialized = true;
- }
- 
- static void cdns_dsi_init_link(struct cdns_dsi *dsi)
-@@ -914,11 +926,25 @@ static void cdns_dsi_bridge_enable(struct drm_bridge *bridge)
- 	writel(tmp, dsi->regs + MCTL_MAIN_EN);
- }
- 
-+static void cdns_dsi_bridge_pre_enable(struct drm_bridge *bridge)
-+{
-+	struct cdns_dsi_input *input = bridge_to_cdns_dsi_input(bridge);
-+	struct cdns_dsi *dsi = input_to_dsi(input);
-+
-+	if (WARN_ON(pm_runtime_get_sync(dsi->base.dev) < 0))
-+		return;
-+
-+	cdns_dsi_init_link(dsi);
-+	cdns_dsi_hs_init(dsi);
-+}
-+
- static const struct drm_bridge_funcs cdns_dsi_bridge_funcs = {
- 	.attach = cdns_dsi_bridge_attach,
- 	.mode_valid = cdns_dsi_bridge_mode_valid,
- 	.disable = cdns_dsi_bridge_disable,
-+	.pre_enable = cdns_dsi_bridge_pre_enable,
- 	.enable = cdns_dsi_bridge_enable,
-+	.post_disable = cdns_dsi_bridge_post_disable,
- };
- 
- static int cdns_dsi_attach(struct mipi_dsi_host *host,
--- 
-2.30.2
+I just wanted to mention the historical reason why the code looks like
+it does today.
 
+>> [...]
+>>
+>>> diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+>>> index a32c46889af8..d9982ebd4821 100644
+>>> --- a/kernel/sched/rt.c
+>>> +++ b/kernel/sched/rt.c
+>>> @@ -466,6 +466,7 @@ static inline bool rt_task_fits_capacity(struct task_struct *p, int cpu)
+>>>       max_cap = uclamp_eff_value(p, UCLAMP_MAX);
+>>>
+>>>       cpu_cap = capacity_orig_of(cpu);
+>>> +     cpu_cap -= arch_scale_thermal_pressure(cpu);
+>>>
+>>>       return cpu_cap >= min(min_cap, max_cap);
+>>>  }
+>>
+>> IMHO, this should follow what we do with rq->cpu_capacity
+>> (capacity_of(), the remaining capacity for CFS). E.g. we use
+>> capacity_of() in find_energy_efficient_cpu() and select_idle_capacity()
+>> to compare capacities. So we would need a function like
+>> scale_rt_capacity() for RT (minus the rq->avg_rt.util_avg) but then also
+>> one for DL (minus rq->avg_dl.util_avg and rq->avg_rt.util_avg).
+> 
+> It's a really good idea. And do you already have the corresponding patch?
+> If there is, can you tell me the corresponding link?
+
+No, I don't have any code for this. Should be trivial though. But the
+issue is that the update would probably have to be decoupled from CFS
+load_balance (update_group_capacity()) and the use cases in RT/DL are
+only valid for asymmetric CPU capacity systems.

@@ -2,96 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F3E84FB3BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 08:30:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 466D94FB3BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 08:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244923AbiDKGcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 02:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55400 "EHLO
+        id S244926AbiDKGdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 02:33:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244778AbiDKGcE (ORCPT
+        with ESMTP id S244109AbiDKGda (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 02:32:04 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D47E6C5E
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 23:29:47 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id i27so28697197ejd.9
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 23:29:47 -0700 (PDT)
+        Mon, 11 Apr 2022 02:33:30 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C9A2DD0;
+        Sun, 10 Apr 2022 23:31:16 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id d9so2831681qvm.4;
+        Sun, 10 Apr 2022 23:31:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=0yUNK3ZCKYDcOn5ZrB3/FxJrrtfEl7Fw4Ni9+59C8dU=;
-        b=jjzMGMubAeZ1lFmTxBh6mg17L9CLxZ6L/8g7R9OSx4TYbz/WOdXtuowKx72IFtfsqu
-         QzoJr3HWFtca8HIdbDFbdTZXW82MRdZMT2Ar6jcdDHsAnJGMC89ngSfFGQuCYwpDE14S
-         Ug6W90bCGgUXsKgnl7hZnmTtNIW8V6ndulmmzFdJt7rPureVDtky2zIP/53RouKx+KBx
-         6OtU8iOho9QoqPGcRqBrB7pmeU25YiRt5DMgy5Nea6yaNPRCUn1rUqGCMvt6qK9hPjh3
-         zx7MTwE56Sj806SWtRi5tsNGl9f73YQGm9ftjcgtWKXlyQ9Z4B8cJtBr1bvPk8UiAFBB
-         HhsA==
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=RFwUllTIRMIWM5Lf0IwA2ZRf8BL8H37QwlGOURioq/w=;
+        b=etJ5V57g5PfQnWDjf2F/i1XH8sxmr2Jk3ugaxBTtAVGVjDVnHkAL1Mzw22YXp/2pzW
+         hO1GF3KOqLc16q9C/ivy2/doYtAotkPkJZOyHb+vmYO9UqL26pL022gfRXz7w4Mt8vQd
+         udYVtAb+DdYiri7wm9pID8mMnp8izOZ4GSnc2ioC55nuUrU42hnfXyrOsPF/4wu08ZfV
+         /Hb+v/opc4JI6KRVIjas/N8iXUaWB9yu6zWrM2u4073EUu0y2tXwLjshzAe66AtyaVJw
+         mkmcvrc8NEjtRhqwR4r0l2C9C/uEsZEFLCO1+5yXckU5ykpMC3+/SjrxiRDzGTcUAatH
+         SqPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=0yUNK3ZCKYDcOn5ZrB3/FxJrrtfEl7Fw4Ni9+59C8dU=;
-        b=KztalS5k7tK/P6YnV/c4B9d0/ycrRnN4vOaiqy6I1UFo1vmEqGyJiEg5u0UKynLn2M
-         fRVwvp5EO7ctTgXta+zcMYy7SMFGwVkM4cf4CaxYo4tNMH0tzUxVN/ItBkrWZAy0kfK8
-         zICM+r5S4lId4u/4sQmvSodsG39+SFfWXt9Upzizf+1xU6WHjOEwHjrz4eAKX4loss2G
-         VpJ/RD8hiIhDnvvQzA40EMTD3ZElflRmKf3fI0oiKWtb2bic68fI7KfYvS1zTuBgS/Zv
-         ZriW096dEzs0G/WG6mKgXetJrE5s23TY13vyBCiEt133B3L3UwVEUgPMAgRwulRQ76na
-         bX4w==
-X-Gm-Message-State: AOAM5329AIb/9CD9F76fs0UmWudseSzy5IMqp6a1I67MGovZnaEyjwfX
-        LEO9WVDzrxf91T9S2g8MFx9U1g==
-X-Google-Smtp-Source: ABdhPJwwVLHMPhdrjMNvxkSMXTsMCzYn4URc8/tDzb9b69Ns+YnUQjJlGNFB2RHrq+LZwSrM92Us2g==
-X-Received: by 2002:a17:907:b98:b0:6e8:9335:1fca with SMTP id ey24-20020a1709070b9800b006e893351fcamr2990034ejc.123.1649658586482;
-        Sun, 10 Apr 2022 23:29:46 -0700 (PDT)
-Received: from [192.168.0.191] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id o3-20020a170906774300b006e79ea98369sm9276137ejn.151.2022.04.10.23.29.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Apr 2022 23:29:45 -0700 (PDT)
-Message-ID: <1f688a08-1e3f-363a-1442-4c6dd9251f11@linaro.org>
-Date:   Mon, 11 Apr 2022 08:29:44 +0200
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=RFwUllTIRMIWM5Lf0IwA2ZRf8BL8H37QwlGOURioq/w=;
+        b=ClOhqtRMJt/D0V53D4wRfJzevmc7gpXI27ePwAx0Cyb8dQcuTNddndYEsiWCVi95Kq
+         y30aIXFGgBukkLJDb9ZUVRyTRTcMXx51M1tWGIabSUBhpcX1mw7HgpOGjGBTiInIGHEa
+         XeyLF0kkKoxjLd3wGwMLyzPpNWQR1UVuY7LFebzKzIjwP3wURIOIlbT3SqzLhQEiUpPU
+         qwl1OZICaZWn6qWq+qEX7E/EmzojSuvErBt6BX/nBZVpemm6NtEVn+BMv9DZ62qZlW8F
+         zjFXOR+P29LX5IrTx9ILLpPcBI7DWLPnCmnnww6RN2mKoylK5kYaNygNJ6kLgxp9MI48
+         AjQg==
+X-Gm-Message-State: AOAM532tImpZ2+WgLDY2ixCzlCMnmpE157Ss2dnVb+ivQUgdrgWYz6q0
+        1M9znmbkKwjlnQArSZNDMQpJA8gIyiKZ83Y5adbND0sV2dDX3Q==
+X-Google-Smtp-Source: ABdhPJwl4L3Hs3yCGEEHY0TC1QZOnQmzJQUzs2+k+z+sE9vqwzSjaVBk1isZhK0UOkHwrDuK5CJCUQUktKDE+Q9gIc4=
+X-Received: by 2002:a05:6214:1d02:b0:444:263c:fa36 with SMTP id
+ e2-20020a0562141d0200b00444263cfa36mr11629953qvd.36.1649658675707; Sun, 10
+ Apr 2022 23:31:15 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] dt-bindings: clock: Add compatible for D1 DE2 clocks
-Content-Language: en-US
-To:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
-References: <20220411044002.37579-1-samuel@sholland.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220411044002.37579-1-samuel@sholland.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+From:   Vishnu Motghare <vishnumotghare@gmail.com>
+Date:   Mon, 11 Apr 2022 12:01:04 +0530
+Message-ID: <CADSz7_efMoSG9wYr_jaaXtG8YB0FkhB4862iL40Y-BeUw+UB+A@mail.gmail.com>
+Subject: gianfar ethernet driver losses Rx-Messages
+To:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Cc:     claudiu.manoil@nxp.com, davem@davemloft.net, kuba@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/04/2022 06:40, Samuel Holland wrote:
-> Allwinner D1 contains a display engine 2.0. Its clock controller
-> matches the layout of the H5 DE2 clocks (2 mixers, no rotation engine,
-> and separate resets), so use that compatible as a fallback.
-> 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
-> 
+I have Freescale LS1021A target with kernel version - 5.10.35-rt. The
+device has 3 ethernet ports & one of the ports is used for EtherCAT.
+The Samba service is running on the device, which configures on all
+interfaces by default. We have observed that EtherCAT master losses RX
+messages frequently. On analyzing the tcpdump messages, it is seen
+that loss of RX message is seen immediately after NetBIOS packets
+which are from the samba service. The loss of message counter reported
+by EtherCat Master & Kernel driver is the same. To get the missed RX
+error I've applied a patch from the mainline kernel -
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/patch/drivers/net/ethernet/freescale/gianfar.c?id=14870b75fe0be5c565339f008ba25326f86a7ce8
 
+How gianfar ethernet driver lose RX messages immediately after NetBios
+packets? Any help is appreciated.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ifconfig output:
 
-
-Best regards,
-Krzysztof
+ETH1 Link encap:Ethernet  HWaddr 70:B3:D5:AB:45:73
+          inet addr:192.168.137.248  Bcast:255.255.255.255  Mask:255.255.255.0
+          UP BROADCAST RUNNING PROMISC MULTICAST  MTU:1500  Metric:1
+          RX packets:737729 errors:0 dropped:8 overruns:0 frame:0
+          TX packets:737753 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:96268280 (91.8 MiB)  TX bytes:96273512 (91.8 MiB)
+          Base address:0x3000

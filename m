@@ -2,103 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E24224FB8B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 11:56:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B46AD4FB8C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 11:58:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344902AbiDKJ63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 05:58:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38142 "EHLO
+        id S239404AbiDKKAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 06:00:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235994AbiDKJ6X (ORCPT
+        with ESMTP id S238270AbiDKKAc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 05:58:23 -0400
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0193941334;
-        Mon, 11 Apr 2022 02:56:10 -0700 (PDT)
-Received: by mail-qt1-f182.google.com with SMTP id o18so8632424qtk.7;
-        Mon, 11 Apr 2022 02:56:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=O7QWdPF9wFARWEpFmkRlF+ejhR6FxhyYYT3eOvfg8Zw=;
-        b=5psvg43/DtqxhYLFwn3pBE+VGGcfDQw69MAipfDrQWasKB0xv6PzQLKEjdEktPN0U2
-         7uhzdyDefKxJGMH4huOf4tl8f2fNKewDWIdFsdnoO81DGmMdSZb39S6RNAB2vUS2i3G3
-         +yXwQ7y1p7TjYZjorUcgyl3whLHpfZ9WMXMX9qLxAzYcEA8+XP0xUR9k3kL1aWO6OqNh
-         GnEr31p5EVKTjDOYBT5GyX4Jwr5+V+H46/sUgdRw5s8vYuCqKW9LM7Lcx7mWQUCBbKSr
-         U+JILX+1FWMWDgvsn7OjY4GzxEqBNxrrHnIGTu14fOo3U/Bk7aYfmHEO7uWGIAuMCbyU
-         Z0AQ==
-X-Gm-Message-State: AOAM533+MmyEb8zvb5vFtTVAhi6BvLwqxrG5xHJDTw2VmUvj6pQ8J0pQ
-        m9v5DDRhisqi8UWNqxb4CFf+b4niX6NG/Q==
-X-Google-Smtp-Source: ABdhPJxJuL2ZWi0mhsTvs+bSBUdKPCu8byMUZlBikR/lfgTSX1IQwQQ5g9NnMVhSwN32zJmeU4jKWw==
-X-Received: by 2002:a05:622a:1896:b0:2ef:483b:16b9 with SMTP id v22-20020a05622a189600b002ef483b16b9mr785790qtc.610.1649670969057;
-        Mon, 11 Apr 2022 02:56:09 -0700 (PDT)
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
-        by smtp.gmail.com with ESMTPSA id z8-20020ac87f88000000b002e1cecad0e4sm24678071qtj.33.2022.04.11.02.56.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Apr 2022 02:56:08 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id p65so8226866ybp.9;
-        Mon, 11 Apr 2022 02:56:08 -0700 (PDT)
-X-Received: by 2002:a05:6902:101:b0:633:ccde:cfca with SMTP id
- o1-20020a056902010100b00633ccdecfcamr21144323ybh.207.1649670968330; Mon, 11
- Apr 2022 02:56:08 -0700 (PDT)
+        Mon, 11 Apr 2022 06:00:32 -0400
+X-Greylist: delayed 81 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 11 Apr 2022 02:58:18 PDT
+Received: from fuzzserver.tsinghua.edu.cn (unknown [166.111.139.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487614132F
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 02:58:17 -0700 (PDT)
+Received: by fuzzserver.tsinghua.edu.cn (Postfix, from userid 1000)
+        id B5906F40E15; Mon, 11 Apr 2022 17:56:53 +0800 (CST)
+From:   Zixuan Fu <r33s3n6@gmail.com>
+To:     shaggy@kernel.org
+Cc:     jfs-discussion@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        baijiaju1990@gmail.com, Zixuan Fu <r33s3n6@gmail.com>,
+        TOTE Robot <oslab@tsinghua.edu.cn>
+Subject: [PATCH] fs: jfs: fix possible NULL pointer dereference in dbFree()
+Date:   Mon, 11 Apr 2022 17:56:23 +0800
+Message-Id: <20220411095623.678040-1-r33s3n6@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220406201523.243733-1-laurent@vivier.eu>
-In-Reply-To: <20220406201523.243733-1-laurent@vivier.eu>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 11 Apr 2022 11:55:57 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWkPcHW3Ba19giDHJC6g-GNmQ7HnZAavutxh3q_ZF5y6Q@mail.gmail.com>
-Message-ID: <CAMuHMdWkPcHW3Ba19giDHJC6g-GNmQ7HnZAavutxh3q_ZF5y6Q@mail.gmail.com>
-Subject: Re: [PATCH v16 0/4] m68k: Add Virtual M68k Machine
-To:     Laurent Vivier <laurent@vivier.eu>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-rtc@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: Yes, score=7.4 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_PBL,
+        RDNS_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,SPOOFED_FREEMAIL,
+        SPOOFED_FREEMAIL_NO_RDNS,SPOOF_GMAIL_MID,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
+        *      [166.111.139.106 listed in zen.spamhaus.org]
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        *  0.7 SPF_SOFTFAIL SPF: sender does not match SPF record (softfail)
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [r33s3n6[at]gmail.com]
+        *  0.0 DKIM_ADSP_CUSTOM_MED No valid author signature, adsp_override
+        *      is CUSTOM_MED
+        *  1.0 FORGED_GMAIL_RCVD 'From' gmail.com does not match 'Received'
+        *      headers
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.8 RDNS_NONE Delivered to internal network by a host with no rDNS
+        *  0.0 SPOOFED_FREEMAIL_NO_RDNS From SPOOFED_FREEMAIL and no rDNS
+        *  0.9 NML_ADSP_CUSTOM_MED ADSP custom_med hit, and not from a mailing
+        *       list
+        *  1.3 SPOOFED_FREEMAIL No description available.
+        *  1.4 SPOOF_GMAIL_MID From Gmail but it doesn't seem to be...
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 6, 2022 at 10:15 PM Laurent Vivier <laurent@vivier.eu> wrote:
-> The most powerful m68k machine emulated by QEMU is a Quadra 800,
-> but this machine is very limited: only 1 GiB of memory and only some
-> specific interfaces, with no DMA.
->
-> The Virtual M68k Machine is based on Goldfish interfaces defined by Google
-> for Android simulator. It uses Goldfish-rtc (timer and RTC),
-> Goldfish-pic (PIC) and Goldfish-tty (for early tty).
->
-> The machine is created with 128 virtio-mmio buses, and they can
-> be used to add serial console, GPU, disk, NIC, HID, hwrng, 9PFS...
->
-> The virtual m68k machine has been merged in QEMU and will be available
-> with the release 6.0.
->
-> This series introduces the support of this new machine in the linux kernel.
+In our fault-injection testing, the variable "nblocks" in dbFree() can be
+zero when kmalloc_array() fails in dtSearch(). In this case, the variable
+ "mp" in dbFree() would be NULL and then it is dereferenced in 
+"write_metapage(mp)".
 
-Thanks, queued in the m68k for-v5.19 branch.
+The failure log is listed as follows:
 
-Gr{oetje,eeting}s,
+[   13.824137] BUG: kernel NULL pointer dereference, address: 0000000000000020
+...
+[   13.827416] RIP: 0010:dbFree+0x5f7/0x910 [jfs]
+[   13.834341] Call Trace:
+[   13.834540]  <TASK>
+[   13.834713]  txFreeMap+0x7b4/0xb10 [jfs]
+[   13.835038]  txUpdateMap+0x311/0x650 [jfs]
+[   13.835375]  jfs_lazycommit+0x5f2/0xc70 [jfs]
+[   13.835726]  ? sched_dynamic_update+0x1b0/0x1b0
+[   13.836092]  kthread+0x3c2/0x4a0
+[   13.836355]  ? txLockFree+0x160/0x160 [jfs]
+[   13.836763]  ? kthread_unuse_mm+0x160/0x160
+[   13.837106]  ret_from_fork+0x1f/0x30
+[   13.837402]  </TASK>
+...
 
-                        Geert
+This patch adds a NULL check of "mp" before "write_metapage(mp)" is called.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
+---
+ fs/jfs/jfs_dmap.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+diff --git a/fs/jfs/jfs_dmap.c b/fs/jfs/jfs_dmap.c
+index d8502f4989d9..e75f31b81d63 100644
+--- a/fs/jfs/jfs_dmap.c
++++ b/fs/jfs/jfs_dmap.c
+@@ -385,7 +385,8 @@ int dbFree(struct inode *ip, s64 blkno, s64 nblocks)
+ 	}
+ 
+ 	/* write the last buffer. */
+-	write_metapage(mp);
++	if (mp)
++		write_metapage(mp);
+ 
+ 	IREAD_UNLOCK(ipbmap);
+ 
+-- 
+2.25.1
+

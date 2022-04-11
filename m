@@ -2,89 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D6934FC4A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 21:06:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ED0E4FC466
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 20:51:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349439AbiDKTI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 15:08:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36832 "EHLO
+        id S1349268AbiDKSxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 14:53:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349400AbiDKTHN (ORCPT
+        with ESMTP id S1349257AbiDKSxg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 15:07:13 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B84A33E98;
-        Mon, 11 Apr 2022 12:04:39 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id 7d150ad2b4db76ad; Mon, 11 Apr 2022 21:04:38 +0200
-Received: from kreacher.localnet (unknown [213.134.175.113])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 770AB66BDFC;
-        Mon, 11 Apr 2022 21:04:37 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bob Moore <robert.moore@intel.com>
-Subject: [PATCH 05/20] ACPICA: iASL: NHLT: Rename linux specific strucures to device_info
-Date:   Mon, 11 Apr 2022 20:50:25 +0200
-Message-ID: <3184124.aeNJFYEL58@kreacher>
-In-Reply-To: <5578328.DvuYhMxLoT@kreacher>
-References: <5578328.DvuYhMxLoT@kreacher>
+        Mon, 11 Apr 2022 14:53:36 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B104312616
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 11:51:20 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id k2-20020a056e02134200b002caaa88e702so3309202ilr.0
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 11:51:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=krJm4vr1bgmJgUgNDyh6UBF5mJpXVx2anHtQTms+VBM=;
+        b=SHQOScBJa4C8E14sGSc3WUKgkzi4zhqx/rvtu/8Y9AbZGXvF496wXrWMbvf2wFC+GP
+         WzPgDmavYpmwC2MkjofGHDrTclf0osBs1NjEzyYoeyAXwQGJFhFQ6b+8nO+Y7tCC1tc4
+         /IffvVJBMFbElD2i7s26jIO149xily1YgiH+XU+UiAjlCylKpXFDjSqtKzMSYWj/6V+z
+         A1PK5FbChpgOslmsTwwPGBBF54kpmkrnX5reVw8HoC3nyY42iknKp7YihxRj0fAWm7Az
+         98stookfdd1/B4V/d4Qql4ppIMfwQJTFGvmW/CcCha7wn2r05GnNTWWhAGJpeoGBqiTC
+         BMNA==
+X-Gm-Message-State: AOAM531XR9eOGMwzSMhmN+wAOQ19SdsR+jq4+8wNbt7wLKBao9NSfLMV
+        eQwnu8lCZg59pWgp9XzE9vQy42FTGpEwxDVESjlCTgYF6N9W
+X-Google-Smtp-Source: ABdhPJw8NTvadcUpf18oM9LygklWpQS332IuVoJT6oX/kODIOc5pa5yL4UZsOqtqf4cT8wNtgpVfEaQYoMRtnv1bNUiHlxeaicDz
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+X-Received: by 2002:a05:6e02:1a81:b0:2c9:e6ac:49c with SMTP id
+ k1-20020a056e021a8100b002c9e6ac049cmr13877913ilv.281.1649703080065; Mon, 11
+ Apr 2022 11:51:20 -0700 (PDT)
+Date:   Mon, 11 Apr 2022 11:51:20 -0700
+In-Reply-To: <00000000000098289005dc17b71b@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000127d8305dc656e84@google.com>
+Subject: Re: [syzbot] possible deadlock in sco_conn_del
+From:   syzbot <syzbot+b825d87fe2d043e3e652@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, johan.hedberg@gmail.com, kuba@kernel.org,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        luiz.dentz@gmail.com, marcel@holtmann.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.175.113
-X-CLIENT-HOSTNAME: 213.134.175.113
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudekiedgudefgecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepgfektdehueehteffueelleehhfffgfejtdehvddtfeetjeffveetheehvdejgfdunecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepvddufedrudefgedrudejhedruddufeenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddujeehrdduudefpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeefpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosggvrhhtrdhmohhorhgvsehinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=3 Fuz1=3 Fuz2=3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Piotr Maziarz <piotrx.maziarz@linux.intel.com>
+syzbot has found a reproducer for the following issue on:
 
-ACPICA commit 68c7e542075319d57129467872fcbe98906f2b2c
+HEAD commit:    d12d7e1cfe38 Add linux-next specific files for 20220411
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=162e29a8f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=58fcaf7d8df169a6
+dashboard link: https://syzkaller.appspot.com/bug?extid=b825d87fe2d043e3e652
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16a2ff0f700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=149fd2df700000
 
-Those structures aren't used by Linux drivers, and in other NHLT related
-tools they are called device_info.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b825d87fe2d043e3e652@syzkaller.appspotmail.com
 
-Link: https://github.com/acpica/acpica/commit/68c7e542
-Signed-off-by: Bob Moore <robert.moore@intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- include/acpi/actbl2.h |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+======================================================
+WARNING: possible circular locking dependency detected
+5.18.0-rc1-next-20220411-syzkaller #0 Not tainted
+------------------------------------------------------
+syz-executor104/3623 is trying to acquire lock:
+ffff88807bd9b130 (sk_lock-AF_BLUETOOTH-BTPROTO_SCO){+.+.}-{0:0}, at: lock_sock include/net/sock.h:1682 [inline]
+ffff88807bd9b130 (sk_lock-AF_BLUETOOTH-BTPROTO_SCO){+.+.}-{0:0}, at: sco_conn_del+0x131/0x2c0 net/bluetooth/sco.c:197
 
-Index: linux-pm/include/acpi/actbl2.h
-===================================================================
---- linux-pm.orig/include/acpi/actbl2.h
-+++ linux-pm/include/acpi/actbl2.h
-@@ -1673,13 +1673,13 @@ struct acpi_nhlt_render_feedback_device_
- 	u16 feedback_valid_bits_per_sample;
- };
- 
--/* Linux-specific structures */
-+/* Non documented structures */
- 
--struct acpi_nhlt_linux_specific_count {
-+struct acpi_nhlt_device_info_count {
- 	u8 structure_count;
- };
- 
--struct acpi_nhlt_linux_specific_data {
-+struct acpi_nhlt_device_info {
- 	u8 device_id[16];
- 	u8 device_instance_id;
- 	u8 device_port_id;
+but task is already holding lock:
+ffffffff8d777e08 (hci_cb_list_lock){+.+.}-{3:3}, at: hci_disconn_cfm include/net/bluetooth/hci_core.h:1580 [inline]
+ffffffff8d777e08 (hci_cb_list_lock){+.+.}-{3:3}, at: hci_conn_hash_flush+0xda/0x260 net/bluetooth/hci_conn.c:1458
+
+which lock already depends on the new lock.
 
 
+the existing dependency chain (in reverse order) is:
+
+-> #2 (hci_cb_list_lock){+.+.}-{3:3}:
+       __mutex_lock_common kernel/locking/mutex.c:603 [inline]
+       __mutex_lock+0x12f/0x1350 kernel/locking/mutex.c:747
+       hci_connect_cfm include/net/bluetooth/hci_core.h:1565 [inline]
+       hci_remote_features_evt+0x62b/0xa20 net/bluetooth/hci_event.c:3736
+       hci_event_func net/bluetooth/hci_event.c:6890 [inline]
+       hci_event_packet+0x7c1/0xf60 net/bluetooth/hci_event.c:6939
+       hci_rx_work+0x522/0xd60 net/bluetooth/hci_core.c:3819
+       process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+       worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+       kthread+0x2e9/0x3a0 kernel/kthread.c:376
+       ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
+
+-> #1 (&hdev->lock){+.+.}-{3:3}:
+       __mutex_lock_common kernel/locking/mutex.c:603 [inline]
+       __mutex_lock+0x12f/0x1350 kernel/locking/mutex.c:747
+       sco_sock_connect+0x1eb/0xa80 net/bluetooth/sco.c:593
+       __sys_connect_file+0x14f/0x190 net/socket.c:1900
+       __sys_connect+0x161/0x190 net/socket.c:1917
+       __do_sys_connect net/socket.c:1927 [inline]
+       __se_sys_connect net/socket.c:1924 [inline]
+       __x64_sys_connect+0x6f/0xb0 net/socket.c:1924
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+-> #0 (sk_lock-AF_BLUETOOTH-BTPROTO_SCO){+.+.}-{0:0}:
+       check_prev_add kernel/locking/lockdep.c:3095 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3214 [inline]
+       validate_chain kernel/locking/lockdep.c:3829 [inline]
+       __lock_acquire+0x2abe/0x5660 kernel/locking/lockdep.c:5053
+       lock_acquire kernel/locking/lockdep.c:5665 [inline]
+       lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5630
+       lock_sock_nested+0x36/0xf0 net/core/sock.c:3314
+       lock_sock include/net/sock.h:1682 [inline]
+       sco_conn_del+0x131/0x2c0 net/bluetooth/sco.c:197
+       sco_disconn_cfm+0x71/0xb0 net/bluetooth/sco.c:1379
+       hci_disconn_cfm include/net/bluetooth/hci_core.h:1583 [inline]
+       hci_conn_hash_flush+0x127/0x260 net/bluetooth/hci_conn.c:1458
+       hci_dev_close_sync+0x567/0x1140 net/bluetooth/hci_sync.c:4152
+       hci_dev_do_close+0x32/0x70 net/bluetooth/hci_core.c:553
+       hci_rfkill_set_block+0x19c/0x1d0 net/bluetooth/hci_core.c:935
+       rfkill_set_block+0x1f9/0x540 net/rfkill/core.c:345
+       rfkill_fop_write+0x2c3/0x570 net/rfkill/core.c:1286
+       vfs_write+0x269/0xac0 fs/read_write.c:589
+       ksys_write+0x1e8/0x250 fs/read_write.c:644
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x44/0xae
+
+other info that might help us debug this:
+
+Chain exists of:
+  sk_lock-AF_BLUETOOTH-BTPROTO_SCO --> &hdev->lock --> hci_cb_list_lock
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(hci_cb_list_lock);
+                               lock(&hdev->lock);
+                               lock(hci_cb_list_lock);
+  lock(sk_lock-AF_BLUETOOTH-BTPROTO_SCO);
+
+ *** DEADLOCK ***
+
+4 locks held by syz-executor104/3623:
+ #0: ffffffff8d9583a8 (rfkill_global_mutex){+.+.}-{3:3}, at: rfkill_fop_write+0x15c/0x570 net/rfkill/core.c:1278
+ #1: ffff888022e89048 (&hdev->req_lock){+.+.}-{3:3}, at: hci_dev_do_close+0x2a/0x70 net/bluetooth/hci_core.c:551
+ #2: ffff888022e88078 (&hdev->lock){+.+.}-{3:3}, at: hci_dev_close_sync+0x26d/0x1140 net/bluetooth/hci_sync.c:4139
+ #3: ffffffff8d777e08 (hci_cb_list_lock){+.+.}-{3:3}, at: hci_disconn_cfm include/net/bluetooth/hci_core.h:1580 [inline]
+ #3: ffffffff8d777e08 (hci_cb_list_lock){+.+.}-{3:3}, at: hci_conn_hash_flush+0xda/0x260 net/bluetooth/hci_conn.c:1458
+
+stack backtrace:
+CPU: 0 PID: 3623 Comm: syz-executor104 Not tainted 5.18.0-rc1-next-20220411-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2175
+ check_prev_add kernel/locking/lockdep.c:3095 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3214 [inline]
+ validate_chain kernel/locking/lockdep.c:3829 [inline]
+ __lock_acquire+0x2abe/0x5660 kernel/locking/lockdep.c:5053
+ lock_acquire kernel/locking/lockdep.c:5665 [inline]
+ lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5630
+ lock_sock_nested+0x36/0xf0 net/core/sock.c:3314
+ lock_sock include/net/sock.h:1682 [inline]
+ sco_conn_del+0x131/0x2c0 net/bluetooth/sco.c:197
+ sco_disconn_cfm+0x71/0xb0 net/bluetooth/sco.c:1379
+ hci_disconn_cfm include/net/bluetooth/hci_core.h:1583 [inline]
+ hci_conn_hash_flush+0x127/0x260 net/bluetooth/hci_conn.c:1458
+ hci_dev_close_sync+0x567/0x1140 net/bluetooth/hci_sync.c:4152
+ hci_dev_do_close+0x32/0x70 net/bluetooth/hci_core.c:553
+ hci_rfkill_set_block+0x19c/0x1d0 net/bluetooth/hci_core.c:935
+ rfkill_set_block+0x1f9/0x540 net/rfkill/core.c:345
+ rfkill_fop_write+0x2c3/0x570 net/rfkill/core.c:1286
+ vfs_write+0x269/0xac0 fs/read_write.c:589
+ ksys_write+0x1e8/0x250 fs/read_write.c:644
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f841a998629
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 d1 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f841a1472f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 00007f841aa214c0 RCX: 00007f841a998629
+RDX: 0000000000000008 RSI: 0000000020000080 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fff20c0bcce
+R13: 00007fff20c0bccf R14: 00007f841aa214c8 R15: 0000000000022000
+ </TASK>
 

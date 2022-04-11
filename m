@@ -2,350 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E61554FC78A
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 00:18:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B213D4FC78B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 00:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350434AbiDKWVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 18:21:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41948 "EHLO
+        id S1350443AbiDKWVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 18:21:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350425AbiDKWVG (ORCPT
+        with ESMTP id S1350450AbiDKWV1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 18:21:06 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD89220C4
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 15:18:49 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id k14so15423410pga.0
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 15:18:49 -0700 (PDT)
+        Mon, 11 Apr 2022 18:21:27 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921BC616E
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 15:19:10 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id p65so11744967ybp.9
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 15:19:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
+        d=atishpatra.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=2okWBbdd+GCs1sDsnu9Mv4+fwXILXXZWcR79ZDoHwQU=;
-        b=biqaWyePuAawU6jsYMqM8KuJsCVep6+RaaiKpRwaLecLEq0UdoYKojzKiE8Ii9zaqx
-         BkqUEDg182qKNnBLFHBJbN+zAiAlN32U9IhDU8Frw489GSQGtyHawxpKHI4JfYYyTTqX
-         uI/1UQrGlmaU2KhdCMFVBFpXmmmVUDvPxcu4odFK5W/BCgVr2iWxFmOLfD+1cHmM21Rq
-         fCVIbHGUWR6vcnfdpY2RMQfc59qXjWEH2dWUHuSXhEH+7pe1bPl7iITmQYc+9OaqN2c0
-         Oz7kQe6mHVMzj/W3uxAm+6gaD3vmsVe6CjAiO87gLcFvCQ4rJeUxaHVQGJ06N2Eege4V
-         Ym/w==
+         :cc;
+        bh=g9meaVk2eU1Ub1J/lh8wpOzsDGLcFnkv//kNBJa8QEk=;
+        b=B7UMhev78NYH9YuneasYHK3IzX9KrUAa7GGU2PEGUPfHn5SIGyfMYdkalMGitGaDW+
+         9zVhjvWnNRDTOFmmEDfHWrVhYgaFTSqRVXav13yTykadccac6yTPeY3Ag/fzLUT2n3mx
+         +iPa75DAlbyb5saxZcXHPjAHg+xHtZTpokeRQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=2okWBbdd+GCs1sDsnu9Mv4+fwXILXXZWcR79ZDoHwQU=;
-        b=qhGDs+l8oWd4TLz5WLg2roY24CNQifVk7iwnOTCG7N0PdYOnqu3kyNFHCYxdJOV+7T
-         MHUroODmz7cVPdx74f/JeARKB0p2fwjjt17S4e5Xy5qmvz+T6ztq4e0Eweeq92zXpkfp
-         TFeKRimnIfbp5hLl0ybi+O3Vm0f8Zrb1LvKQcQo9lk32P+cJZPCtjpzPhYF1NnzDhmM2
-         wR9YCuUOLNomFL0xiv9WI++7w/jkpgi5zVlrUM2A3W78zsGKMfCfdWd+4pRkGdzLjNDu
-         kUdWtGRiYvO1seWkul17McsT/DbJuX6s3pyZmnL5YksT53RvcyNnogwmvlD+tAIdELGS
-         uSAA==
-X-Gm-Message-State: AOAM531BrJ5DPnduEYPrgWKLdI1P/qkZhzVVwKVCMUWMZMxnz867LLiz
-        J0ZMTgfImKH+ts5X8lMmR0hRj57+OnuT1AnIpkwbMZZjPC8=
-X-Google-Smtp-Source: ABdhPJzhNxZba8YXbYkY7VjRyY1TXOTWFfxQZBtgQ1b2sZYIp64yuu8OX+YzhonvjuA8EmIzXjHFX2DfMKubrejWNE0=
-X-Received: by 2002:a63:6d06:0:b0:39d:6cba:9058 with SMTP id
- i6-20020a636d06000000b0039d6cba9058mr3574443pgc.440.1649715528764; Mon, 11
- Apr 2022 15:18:48 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=g9meaVk2eU1Ub1J/lh8wpOzsDGLcFnkv//kNBJa8QEk=;
+        b=Rq9pv7TguIJbXrKu0bug7498hd6cSRsyL2nsWk5isXOmzMfDNXvplw1SDM0CwAGtOI
+         fIE1w8eh3W7G5BDxJXJtTW/sLPmW/oYm+0J2WoDqyWQn4ChrcmWSvYi/8RDAcPAs3R1h
+         qNtk53LFadzjHpMRwJ453j7Vnd9EcT8MgiU7nwhpb42sOTP6QXFP3SJIyw0wWH4NeC1d
+         wleGUoyDp8DV9UPSHYn889v2lKYET+BHNbG45qoRquLcFL6bELjvEwXd+oWxOaSVQahb
+         vI5lNqW+tl+sYuT1iS4sGOGojEcYDnTkVW8sPEjKGhfUv5UgSyFcJhe+JbvLGKmx5IDu
+         KXRQ==
+X-Gm-Message-State: AOAM532haD+Mt4nIfkBGqd8vYitMm+doLPYvDF2YsecOFFP9P/kydZml
+        mJ/DUJJa9ReKXPwSRNxIy36wj+TUs2mep/iKoR0o
+X-Google-Smtp-Source: ABdhPJz3ewEbsMRLR8QG8tn8aHMoHRDhURqXevWUL4e9Co13fWrYNcAp15z54+WjrA5pEnSP9/rc0a1KOOjfae6qbuI=
+X-Received: by 2002:a25:7102:0:b0:63d:91db:c29d with SMTP id
+ m2-20020a257102000000b0063d91dbc29dmr23903612ybc.405.1649715549799; Mon, 11
+ Apr 2022 15:19:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <1646644054-24421-1-git-send-email-hongxing.zhu@nxp.com>
- <CAJ+vNU0McZxj_74DC0wCUyHq-NaT14URnvUP+kvudz7YLQq7fg@mail.gmail.com> <AS8PR04MB86766041887E97E22B0AC8C48CE99@AS8PR04MB8676.eurprd04.prod.outlook.com>
-In-Reply-To: <AS8PR04MB86766041887E97E22B0AC8C48CE99@AS8PR04MB8676.eurprd04.prod.outlook.com>
-From:   Tim Harvey <tharvey@gateworks.com>
-Date:   Mon, 11 Apr 2022 15:18:37 -0700
-Message-ID: <CAJ+vNU3urzdR3i-VTWGfmJdW78guyG3EoHMcdNHn8kKjrFkZXA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/7] Add the iMX8MP PCIe support
-To:     Hongxing Zhu <hongxing.zhu@nxp.com>
-Cc:     Lucas Stach <l.stach@pengutronix.de>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        Device Tree Mailing List <devicetree@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>
+References: <mhng-9cbb2a46-8bcb-4bfe-b927-0ed469dbd3a6@palmer-mbp2014>
+ <cd8d6641-4a29-7deb-49ae-a80baab0344f@canonical.com> <CAK9=C2Xh_DQ3ybj7nAE-LNrSc9sPy0H8jq_FU09io+wE_yypRg@mail.gmail.com>
+ <b907f6c8-968b-7e1e-bc83-1d54c7e0b448@canonical.com> <CAAhSdy1ovEziSSu6x2kESYTbimDLXCHmmOqMLyGKzsj1DHLrLg@mail.gmail.com>
+In-Reply-To: <CAAhSdy1ovEziSSu6x2kESYTbimDLXCHmmOqMLyGKzsj1DHLrLg@mail.gmail.com>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Mon, 11 Apr 2022 15:18:59 -0700
+Message-ID: <CAOnJCUJWVERXCW02LfMBBMQNSPgNoNHExm8PeaUnongXgHkBAA@mail.gmail.com>
+Subject: Re: [PATCH v2] RISC-V: Increase range and default value of NR_CPUS
+To:     Anup Patel <anup@brainfault.org>
+Cc:     Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 7, 2022 at 8:14 PM Hongxing Zhu <hongxing.zhu@nxp.com> wrote:
+On Fri, Apr 8, 2022 at 9:45 AM Anup Patel <anup@brainfault.org> wrote:
 >
+> On Fri, Apr 8, 2022 at 10:08 PM Heinrich Schuchardt
+> <heinrich.schuchardt@canonical.com> wrote:
+> >
+> > On 4/6/22 12:10, Anup Patel wrote:
+> > > On Wed, Apr 6, 2022 at 3:25 PM Heinrich Schuchardt
+> > > <heinrich.schuchardt@canonical.com> wrote:
+> > >>
+> > >> On 3/31/22 21:42, Palmer Dabbelt wrote:
+> > >>> On Sat, 19 Mar 2022 05:12:06 PDT (-0700), apatel@ventanamicro.com wrote:
+> > >>>> Currently, the range and default value of NR_CPUS is too restrictive
+> > >>>> for high-end RISC-V systems with large number of HARTs. The latest
+> > >>>> QEMU virt machine supports upto 512 CPUs so the current NR_CPUS is
+> > >>>> restrictive for QEMU as well. Other major architectures (such as
+> > >>>> ARM64, x86_64, MIPS, etc) have a much higher range and default
+> > >>>> value of NR_CPUS.
+> > >>>>
+> > >>>> This patch increases NR_CPUS range to 2-512 and default value to
+> > >>>> XLEN (i.e. 32 for RV32 and 64 for RV64).
+> > >>>>
+> > >>>> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > >>>> ---
+> > >>>> Changes since v1:
+> > >>>>   - Updated NR_CPUS range to 2-512 which reflects maximum number of
+> > >>>>     CPUs supported by QEMU virt machine.
+> > >>>> ---
+> > >>>>   arch/riscv/Kconfig | 7 ++++---
+> > >>>>   1 file changed, 4 insertions(+), 3 deletions(-)
+> > >>>>
+> > >>>> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > >>>> index 5adcbd9b5e88..423ac17f598c 100644
+> > >>>> --- a/arch/riscv/Kconfig
+> > >>>> +++ b/arch/riscv/Kconfig
+> > >>>> @@ -274,10 +274,11 @@ config SMP
+> > >>>>         If you don't know what to do here, say N.
+> > >>>>
+> > >>>>   config NR_CPUS
+> > >>>> -    int "Maximum number of CPUs (2-32)"
+> > >>>> -    range 2 32
+> > >>>> +    int "Maximum number of CPUs (2-512)"
+> > >>>> +    range 2 512
+> > >>
+> > >> For SBI_V01=y there seems to be a hard constraint to XLEN bits.
+> > >> See __sbi_v01_cpumask_to_hartmask() in rch/riscv/kernel/sbi.c.
+> > >>
+> > >> So shouldn't this be something like:
+> > >>
+> > >> range 2 512 !SBI_V01
+> > >> range 2 32 SBI_V01 && 32BIT
+> > >> range 2 64 SBI_V01 && 64BIT
+> > >
+> > > This is just making it unnecessarily complicated for supporting
+> > > SBI v0.1
+> > >
+> > > How about removing SBI v0.1 support and the spin-wait CPU
+> > > operations from arch/riscv ?
+> >
+> > The SBI v0.1 specification was only a draft. Only the v1.0 version has
+> > ever been ratified.
+> >
+> > It would be good to remove this legacy code from Linux and U-Boot.
+> >
+> > By the way, why does upstream OpenSBI claim to be conformant to SBI v0.3
+> > and not to v1.0?
 >
-> > -----Original Message-----
-> > From: Tim Harvey <tharvey@gateworks.com>
-> > Sent: 2022=E5=B9=B44=E6=9C=888=E6=97=A5 4:42
-> > To: Hongxing Zhu <hongxing.zhu@nxp.com>; Lucas Stach
-> > <l.stach@pengutronix.de>
-> > Cc: Philipp Zabel <p.zabel@pengutronix.de>; bhelgaas@google.com; Lorenz=
-o
-> > Pieralisi <lorenzo.pieralisi@arm.com>; Rob Herring <robh@kernel.org>; S=
-hawn
-> > Guo <shawnguo@kernel.org>; Vinod Koul <vkoul@kernel.org>; Alexander Ste=
-in
-> > <alexander.stein@ew.tq-group.com>; linux-phy@lists.infradead.org; Devic=
-e
-> > Tree Mailing List <devicetree@vger.kernel.org>; linux-pci@vger.kernel.o=
-rg;
-> > Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>; open lis=
-t
-> > <linux-kernel@vger.kernel.org>; Sascha Hauer <kernel@pengutronix.de>;
-> > dl-linux-imx <linux-imx@nxp.com>
-> > Subject: Re: [PATCH v2 0/7] Add the iMX8MP PCIe support
-> >
-> > On Mon, Mar 7, 2022 at 1:18 AM Richard Zhu <hongxing.zhu@nxp.com>
-> > wrote:
-> > >
-> > > Based on the i.MX8MP GPC and blk-ctrl patch-set[1] issued by Lucas an=
-d
-> > > the following commits.
-> > >   - one codes refine patch-set[5].
-> > >   - two Fixes[2],[3].
-> > >   - one binding commit[4].
-> > >   - some dts changes in Shawn's git if you want to test PCIe on i.MX8=
-MM
-> > EVK.
-> > >     b4d36c10bf17 arm64: dts: imx8mm-evk: Add the pcie support on
-> > imx8mm evk board
-> > >     aaeba6a8e226 arm64: dts: imx8mm: Add the pcie support
-> > >     cfc5078432ca arm64: dts: imx8mm: Add the pcie phy support
-> > >
-> > > Sorry about that there may be some conflictions when do the codes mer=
-ge.
-> > > I'm waiting for the ack now, and will re-base them in a proper sequen=
-ce later.
-> > >
-> > > This series patches add the i.MX8MP PCIe support and tested on i.MX8M=
-M
-> > > EVK and i.MX8MP EVk boards. The PCIe NVME works fine on both boards.
-> > >
-> > > - i.MX8MP PCIe PHY has two resets refer to the i.MX8MM PCIe PHY.
-> > >   Add one more PHY reset for i.MX8MP PCIe PHY accordingly.
-> > > - Add the i.MX8MP PCIe PHY support in the i.MX8M PCIe PHY driver.
-> > >   And share as much as possible codes with i.MX8MM PCIe PHY.
-> > > - Add the i.MX8MP PCIe support in binding document, DTS files, and PC=
-Ie
-> > >   driver.
-> > >
-> > > Main changes v1-->v2:
-> > > - It's my fault forget including Vinod, re-send v2 after include Vino=
-d
-> > >   and linux-phy@lists.infradead.org.
-> > > - List the basements of this patch-set. The branch, codes changes and=
- so on.
-> > > - Clean up some useless register and bit definitions in #3 patch.
-> > >
-> > > [1]https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%=
-2Fp
-> > >
-> > atchwork.kernel.org%2Fproject%2Flinux-arm-kernel%2Fcover%2F2022022820
-> > 1
-> > >
-> > 731.3330192-1-l.stach%40pengutronix.de%2F&amp;data=3D04%7C01%7Chongx
-> > ing.
-> > >
-> > zhu%40nxp.com%7C19e85ae119bc47d3397e08da18d71007%7C686ea1d3bc
-> > 2b4c6fa92
-> > >
-> > cd99c5c301635%7C0%7C1%7C637849609225124527%7CUnknown%7CTWF
-> > pbGZsb3d8eyJ
-> > >
-> > WIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7
-> > C3000
-> > >
-> > &amp;sdata=3DnamjBp1ZpawS9s25%2FwS8aOnd2A7rHTK2rQRwG4V0Dt8%3D&
-> > amp;reserv
-> > > ed=3D0
-> > > [2]https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%=
-2Fp
-> > >
-> > atchwork.ozlabs.org%2Fproject%2Flinux-pci%2Fpatch%2F1646289275-17813-
-> > 1
-> > >
-> > -git-send-email-hongxing.zhu%40nxp.com%2F&amp;data=3D04%7C01%7Chongxi
-> > ng.
-> > >
-> > zhu%40nxp.com%7C19e85ae119bc47d3397e08da18d71007%7C686ea1d3bc
-> > 2b4c6fa92
-> > >
-> > cd99c5c301635%7C0%7C1%7C637849609225124527%7CUnknown%7CTWF
-> > pbGZsb3d8eyJ
-> > >
-> > WIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7
-> > C3000
-> > >
-> > &amp;sdata=3DdWr1ui7eIc92iWzvo8VKPXTkNel3NR9yNxD5CyHIuV0%3D&amp;r
-> > eserved
-> > > =3D0
-> > > [3]https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%=
-2Fp
-> > >
-> > atchwork.ozlabs.org%2Fproject%2Flinux-pci%2Fpatch%2F1645672013-8949-1
-> > -
-> > >
-> > git-send-email-hongxing.zhu%40nxp.com%2F&amp;data=3D04%7C01%7Chongxi
-> > ng.z
-> > >
-> > hu%40nxp.com%7C19e85ae119bc47d3397e08da18d71007%7C686ea1d3bc2
-> > b4c6fa92c
-> > >
-> > d99c5c301635%7C0%7C1%7C637849609225124527%7CUnknown%7CTWFp
-> > bGZsb3d8eyJW
-> > >
-> > IjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3
-> > 000&
-> > >
-> > amp;sdata=3DFCis4KE9KZqS8Ou6I0KTQu%2FayWSm%2Ftj%2Bcrd68EThsNs%3D
-> > &amp;res
-> > > erved=3D0
-> > > [4]https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%=
-2Fp
-> > >
-> > atchwork.ozlabs.org%2Fproject%2Flinux-pci%2Fpatch%2F1646293805-18248-
-> > 1
-> > >
-> > -git-send-email-hongxing.zhu%40nxp.com%2F&amp;data=3D04%7C01%7Chongxi
-> > ng.
-> > >
-> > zhu%40nxp.com%7C19e85ae119bc47d3397e08da18d71007%7C686ea1d3bc
-> > 2b4c6fa92
-> > >
-> > cd99c5c301635%7C0%7C1%7C637849609225124527%7CUnknown%7CTWF
-> > pbGZsb3d8eyJ
-> > >
-> > WIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7
-> > C3000
-> > >
-> > &amp;sdata=3DsbYuLpfBFUImVi7YLe%2FCYvQNxleK2tnHKfr%2FByoAJsA%3D&am
-> > p;rese
-> > > rved=3D0
-> > > [5]https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%=
-2Fp
-> > >
-> > atchwork.ozlabs.org%2Fproject%2Flinux-pci%2Fcover%2F1645760667-10510-
-> > 1
-> > >
-> > -git-send-email-hongxing.zhu%40nxp.com%2F&amp;data=3D04%7C01%7Chongxi
-> > ng.
-> > >
-> > zhu%40nxp.com%7C19e85ae119bc47d3397e08da18d71007%7C686ea1d3bc
-> > 2b4c6fa92
-> > >
-> > cd99c5c301635%7C0%7C1%7C637849609225124527%7CUnknown%7CTWF
-> > pbGZsb3d8eyJ
-> > >
-> > WIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7
-> > C3000
-> > >
-> > &amp;sdata=3DtRZQBUN4CleGFFbxqNn4W1kUwCgATERggfa8qEQyc9E%3D&am
-> > p;reserved
-> > > =3D0
-> > >
-> > > NOTE:
-> > > Based git
-> > > <git://git.kernel.org/pub/scm/linux/kernel/git/lpieralisi/pci.git>
-> > > Based branch <pci/imx6>
-> > >
-> > > Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml    |   1 +
-> > > Documentation/devicetree/bindings/phy/fsl,imx8-pcie-phy.yaml |   4 +-
-> > > arch/arm64/boot/dts/freescale/imx8mp-evk.dts                 |  55
-> > ++++++++++++++++++++++
-> > > arch/arm64/boot/dts/freescale/imx8mp.dtsi                    |  46
-> > ++++++++++++++++++-
-> > > drivers/pci/controller/dwc/pci-imx6.c                        |  19
-> > +++++++-
-> > > drivers/phy/freescale/phy-fsl-imx8m-pcie.c                   | 205
-> > +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-> > ++++-----------------
-> > > drivers/reset/reset-imx7.c                                   |   1 +
-> > > 7 files changed, 286 insertions(+), 45 deletions(-)
-> > >
-> > > [PATCH v2 1/7] reset: imx7: Add the iMX8MP PCIe PHY PERST support
-> > > [PATCH v2 2/7] dt-binding: phy: Add iMX8MP PCIe PHY binding [PATCH v2
-> > > 3/7] phy: freescale: imx8m-pcie: Add iMX8MP PCIe PHY [PATCH v2 4/7]
-> > > dt-bindings: imx6q-pcie: Add iMX8MP PCIe compatible [PATCH v2 5/7]
-> > > arm64: dts: imx8mp: add the iMX8MP PCIe support [PATCH v2 6/7] arm64:
-> > > dts: imx8mp-evk: Add PCIe support [PATCH v2 7/7] PCI: imx6: Add the
-> > > iMX8MP PCIe support
-> > >
-> >
-> > Richard,
-> >
-> > Thanks for working on this!
-> >
-> > Do you plan on submitting another version soon? I've tried to test this=
- with an
-> > imx8mp board I'm bringing up and while the host controller enumerates I=
- fail
-> > to get a link to a device. It's very likely I am missing something as t=
-his series
-> > depends on the IMX8MP blk-ctrl and gpc series which I also can't cleanl=
-y apply.
-> > Lucas just submitted a 'consolidated i.MX8MP HSIO/MEDIA/HDMI blk-ctrl
-> > series' [1] yet I can't find a repo/branch that applies to either.
-> >
-
-Richard,
-
-I found that I had an issue with PERST# on my board which was causing
-the link failure so I was able to get this series to work after
-figuring out which patches were needed.
-
-> > Perhaps you have a git repo somewhere I can look at while we wait for
-> > imx8mp blk-ctl/gpc to settle and you to submit a v3?
-> Hi Tim:
-> Thanks for your kindly help to do the tests.
-> I had listed the dependencies in the cover-letter log.
-> Alexander and I used to test this series commits based on the V5.17 kerne=
-l.
->
-> Lucas had provided some review comments and suggestions about the PLL bit=
-s
->  manipulations of HSIOMIX in i.MX8MP PCIe PHY driver #3 of this series.
-> And he suggested to let the HSIOMIX blk-ctrl make this PLL as a real cloc=
-k,
->  and used by i.MX8MP PCIe PHY driver later.
->
-> Although I have some confusions, it's better let's wating for the blk-ctr=
-l
-> settle down and get clear discussion with Lucas later.
-> How do you think about that?
+> The ratification process for SBI v1.0 was in early stages when OpenSBI v1.0
+> was being released so we decided to keep the SBI v0.3 spec version. The
+> next OpenSBI v1.1 release (due in June 2022) will change to SBI v1.0
 >
 
-Yes, I agree.
+Yes. We are in the final stages of the official ratification of SBI
+v1.0. Once that ratified version is released,
+OpenSBI will be upgraded to support that.
 
-Please Cc me on your next submission and I can test with the
-imx8mp-venice-gw74xx board which uses an external REFCLK and does not
-support CLKREQ.
-
-Best Regards,
-
-Tim
-
-> Best Regards
-> Richard Zhu
+> Regards,
+> Anup
+>
 > >
-> > Best Regards,
+> > include/sbi/sbi_ecall.h:16:
 > >
-> > Tim
-> > [1]
-> > https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fpat=
-chw
-> > ork.kernel.org%2Fproject%2Flinux-arm-kernel%2Flist%2F%3Fseries%3D62958
-> > 6&amp;data=3D04%7C01%7Chongxing.zhu%40nxp.com%7C19e85ae119bc47d3
-> > 397e08da18d71007%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C1%7
-> > C637849609225124527%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAw
-> > MDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sda
-> > ta=3DSUCCWtnCtTSCONfSoixOPgpMO4dnsBTW20x9qRdw4Fw%3D&amp;reserve
-> > d=3D0
+> > #define SBI_ECALL_VERSION_MAJOR 0
+> > #define SBI_ECALL_VERSION_MINOR 3
+> >
+> > Best regards
+> >
+> > Heinrich
+> >
+> > >
+> > >>
+> > >>>>       depends on SMP
+> > >>>> -    default "8"
+> > >>>> +    default "32" if 32BIT
+> > >>>> +    default "64" if 64BIT
+> > >>>>
+> > >>>>   config HOTPLUG_CPU
+> > >>>>       bool "Support for hot-pluggable CPUs"
+> > >>>
+> > >>> I'm getting all sorts of boot issues with more than 32 CPUs, even on the
+> > >>> latest QEMU master.  I'm not opposed to increasing the CPU count in
+> > >>> theory, but if we're going to have a setting that goes up to a huge
+> > >>> number it needs to at least boot.  I've got 64 host threads, so it
+> > >>> shouldn't just be a scheduling thing.
+> > >>
+> > >> Currently high performing hardware for RISC-V is missing. So it makes
+> > >> sense to build software via QEMU on x86_64 or arm64 with as many
+> > >> hardware threads as available (128 is not uncommon).
+> > >>
+> > >> OpenSBI currently is limited to 128 threads:
+> > >> include/sbi/sbi_hartmask.h:22:
+> > >> #define SBI_HARTMASK_MAX_BITS 128
+> > >> This is just an arbitrary value we can be modified.
+> > >
+> > > Yes, this limit will be gradually increased with some improvements
+> > > to optimize runtime memory used by OpenSBI.
+> > >
+> > >>
+> > >> U-Boot v2022.04 qemu-riscv64_smode_defconfig has a value of
+> > >> CONFIG_SYS_MALLOC_F_LEN that is to low. This leads to a boot failure for
+> > >> more than 16 harts. A patch to correct this is pending:
+> > >> [PATCH v2 1/1] riscv: alloc space exhausted
+> > >> https://lore.kernel.org/u-boot/CAN5B=eKt=tFLZ2z3aNHJqsnJzpdA0oikcrC2i1_=ZDD=f+M0jA@mail.gmail.com/T/#t
+> > >>
+> > >> With QEMU 7.0 and the U-Boot fix booting into a 5.17 defconfig kernel
+> > >> with 64 virtual cores worked fine for me.
+> > >
+> > > Thanks for trying this patch.
+> > >
+> > > Regards,
+> > > Anup
+> > >
+> > >>
+> > >> Best regards
+> > >>
+> > >> Heinrich
+> > >>
+> > >>>
+> > >>> If there was some hardware that actually boots on these I'd be happy to
+> > >>> take it, but given that it's just QEMU I'd prefer to sort out the bugs
+> > >>> first.  It's probably just latent bugs somewhere, but allowing users to
+> > >>> turn on configs we know don't work just seems like the wrong way to go.
+> > >>>
+
+
+
+-- 
+Regards,
+Atish

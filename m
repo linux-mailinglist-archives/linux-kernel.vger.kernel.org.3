@@ -2,143 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 554184FBFD6
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B0B74FBFDB
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:07:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347626AbiDKPJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 11:09:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34254 "EHLO
+        id S1347630AbiDKPKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 11:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343773AbiDKPJT (ORCPT
+        with ESMTP id S234367AbiDKPKC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 11:09:19 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD20DEE8
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:07:03 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id nt14-20020a17090b248e00b001ca601046a4so18715128pjb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:07:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=dPdu8Eiipa0SimY9s3UtwwUyWmEESIKixwaOvVsXgGk=;
-        b=fPoN4PzXw5Nx0S16GH9zAA+N8qLMX77QH+IQL+Zro+uR5vWA6DYNpt+eA/Uykb4APB
-         WvP+K888IGg5bWeBYo6xzTQUKqqbVBwoJjbblyalY/8FU2uumMLDW8eZA4DNwiGrkcYp
-         iq7Vxnwr81oH96Y2xMlPpU+ssf9D9N8k900dgevGPB1KYn8kjhx0falLkyj/lzxmvgoc
-         i3gBzCLTJeK+qdWEh1ISMXL+z3Vq3FFQM5qu3fYLKHoQ5zj4BCfAcZGDIFUvQT4VerGo
-         54eAV4pI3R1ZM+kOS04YHmgAPR16sp8rrRKH1sxuY+UWhexKq7ksyNxSGhPNLKglRrxP
-         ZKDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dPdu8Eiipa0SimY9s3UtwwUyWmEESIKixwaOvVsXgGk=;
-        b=tQispa1qK5TvCMxkGPXMJrQcGRfCLF3j9Zlbi35LipTOWmO0XJAPj724v5ENOUx/Jo
-         U8ZCOpsyX0tJ18TGWAednWf2e9NNdy91Rp7LiQcyqwKLgqRydZxDZzog097UTl5C4qQA
-         EgNKFqouRHIqN4S5KWXCyUds8bfQYPcOLDAwYA21E97/Lp8Fodd8cjrdWcznsze3e0Ej
-         MD/ANCavik8c7qRiEMLNXo//GeGRA/mn5ASnHmLkEjQkfZiIl7tg5+aI1ogjkxcTI+gU
-         lL/LUGlUzo21pKd8QCK87yF33buPsOZ7eIDZbmiGgkV+5CyljaRDLvCWIbSQwMjVrMTD
-         KdFg==
-X-Gm-Message-State: AOAM533NsOQk196AMJwvZG5LL3yVsQCLjzj2Ev2WQzUCwFdU3wPsS2fM
-        eoJuVj+gYyEjGzRW5ik25W8Qbg==
-X-Google-Smtp-Source: ABdhPJwWxloJ5ZjN13tMopqeMsu31rcmrfB0Bx9G2376e9G0Y6ZGn5Fd+LcgqDo3n2MDJMXUzAYw6A==
-X-Received: by 2002:a17:90a:7004:b0:1cb:55d6:9f23 with SMTP id f4-20020a17090a700400b001cb55d69f23mr16547316pjk.187.1649689622903;
-        Mon, 11 Apr 2022 08:07:02 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id a9-20020aa78649000000b004fe3d6c1731sm22743924pfo.175.2022.04.11.08.07.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 08:07:02 -0700 (PDT)
-Date:   Mon, 11 Apr 2022 15:06:58 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Alexandru Elisei <alexandru.elisei@arm.com>
-Cc:     Will Deacon <will@kernel.org>, Peter Gonda <pgonda@google.com>,
-        kvm list <kvm@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Anup Patel <anup@brainfault.org>, maz@kernel.org
-Subject: Re: [PATCH v4.1] KVM, SEV: Add KVM_EXIT_SHUTDOWN metadata for SEV-ES
-Message-ID: <YlREEillLRjevKA2@google.com>
-References: <20220407210233.782250-1-pgonda@google.com>
- <Yk+kNqJjzoJ9TWVH@google.com>
- <CAMkAt6oc=SOYryXu+_w+WZR+VkMZfLR3_nd=hDvMU_cmOjJ0Xg@mail.gmail.com>
- <YlBqYcXFiwur3zmo@google.com>
- <20220411091213.GA2120@willie-the-truck>
- <YlQ0LZyAgjGr7qX7@e121798.cambridge.arm.com>
+        Mon, 11 Apr 2022 11:10:02 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A2ADEE8;
+        Mon, 11 Apr 2022 08:07:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=kaOYbB7BPRuQaA6MSo+ry7RpxuhRfvVv8fz/JnNUxz8=; b=fjLiTm+vkn8ToPkhqxJ9r/2JHE
+        6PU6Us8m6sMsugih5LHYR/OmBND3Ay1ajeJE260aTCfKQvwHxemQNuMnvqQxCkCWKArY4fn5FA2hR
+        yWtB7EpN10msubpx9aFTZByz6VTehNutR3ZeLzOMHvsSgZVAC/qmbgYR3wNq6pwFS3TMTzSCbyQZL
+        AS98yxFPTUj6ehFKyE6VXPo2J1KacTIokYLZ/kTpsG3pD9SSU5MSHao55JfuLhiotMh6s52wcvFhC
+        oTisq+Mly46j02oPIv01FBg+El5Nee+170jKpTzvIO0huA/7xzC/jKNZMvjMFzGJVQ7f67NdnpV4S
+        qjqfMrFQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ndvdR-009UOP-4a; Mon, 11 Apr 2022 15:07:21 +0000
+Date:   Mon, 11 Apr 2022 08:07:21 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Tom Rix <trix@redhat.com>
+Cc:     tim@cyberelk.net, axboe@kernel.dk, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, nathan@kernel.org,
+        ndesaulniers@google.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH] security: do not leak information in ioctl
+Message-ID: <YlREKRb/xgAFsi97@infradead.org>
+References: <20220409145137.67592-1-trix@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YlQ0LZyAgjGr7qX7@e121798.cambridge.arm.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220409145137.67592-1-trix@redhat.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022, Alexandru Elisei wrote:
-> Hi,
->
-> On Mon, Apr 11, 2022 at 10:12:13AM +0100, Will Deacon wrote:
-> > Hi Sean,
-> >
-> > Cheers for the heads-up.
-> >
-> > [+Marc and Alex as this looks similar to [1]]
-> >
-> > On Fri, Apr 08, 2022 at 05:01:21PM +0000, Sean Christopherson wrote:
-> > > system_event.flags is broken (at least on x86) due to the prior 'type' field not
-> > > being propery padded, e.g. userspace will read/write garbage if the userspace
-> > > and kernel compilers pad structs differently.
-> > >
-> > >           struct {
-> > >                   __u32 type;
-> > >                   __u64 flags;
-> > >           } system_event;
-> >
-> > On arm64, I think the compiler is required to put the padding between type
-> > and flags so that both the struct and 'flags' are 64-bit aligned [2]. Does
-> > x86 not offer any guarantees on the overall structure alignment?
->
-> This is also my understanding. The "Procedure Call Standard for the Arm
-> 64-bit Architecture" [1] has these rules for structs (called "aggregates"):
+Wrong subject prefix, and this really should be split into one patch for
+pcd and one for sr.
 
-AFAIK, all x86 compilers will pad structures accordingly, but a 32-bit userspace
-running against a 64-bit kernel will have different alignment requirements, i.e.
-won't pad, and x86 supports CONFIG_KVM_COMPAT=y.  And I have no idea what x86's
-bizarre x32 ABI does.
+The sr prt looks sensible to me.  But for pcd why can't you just
+initialize buffer using
 
-> > > Our plan to unhose this is to change the struct as follows and use bit 31 in the
-> > > 'type' to indicate that ndata+data are valid.
-> > >
-> > >           struct {
-> > >                         __u32 type;
-> > >                   __u32 ndata;
-> > >                   __u64 data[16];
-> > >                 } system_event;
-> > >
-> > > Any objection to updating your architectures to use a helper to set the bit and
-> > > populate ndata+data accordingly?  It'll require a userspace update, but v5.18
-> > > hasn't officially released yet so it's not kinda sort not ABI breakage.
-> >
-> > It's a bit annoying, as we're using the current structure in Android 13 :/
-> > Obviously, if there's no choice then upstream shouldn't worry, but it means
-> > we'll have to carry a delta in crosvm. Specifically, the new 'ndata' field
-> > is going to be unusable for us because it coincides with the padding.
+	char buffer[32] = { };
 
-Yeah, it'd be unusuable for existing types.  One idea is that we could define the
-ABI to be that the RESET and SHUTDOWN types have an implicit ndata=1 on arm64 and
-RISC-V.  That would allow keeping the flags interpretation and so long as crosvm
-doesn't do something stupid like compile with "pragma pack" (does clang even support
-that?), there's no delta necessary for Android.
+and be done with it?
 
-> Just a thought, but wouldn't such a drastical change be better implemented
-> as a new exit_reason and a new associated struct?
-
-Maybe?  I wasn't aware that arm64/RISC-V picked up usage of "flags" when I
-suggested this, but I'm not sure it would have changed anything.  We could add
-SYSTEM_EVENT2 or whatever, but since there's no official usage of flags, it seems
-a bit gratutious.

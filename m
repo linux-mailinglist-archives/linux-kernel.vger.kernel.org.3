@@ -2,101 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 425734FB904
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 12:06:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96A644FB906
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 12:06:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345108AbiDKKI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 06:08:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36772 "EHLO
+        id S1345096AbiDKKIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 06:08:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345103AbiDKKIP (ORCPT
+        with ESMTP id S1345111AbiDKKIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 06:08:15 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B23F71A3B8;
-        Mon, 11 Apr 2022 03:05:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1649671553;
-  x=1681207553;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=lbYVKGbW07aYEwRdt01aTABZYLAnzpfCoaitAjLM7yg=;
-  b=OZMNn/tP/AXSr47gLZd3naYD00/hkhn66NqNYaQ5afLTrAO+NGatgj7E
-   FTwNR6mRv4qoHZC2X56G2g/Ly1EKo1pIZJ79DoKFhDdcPXFQWbo0204di
-   FTasEHCzH5G2RxZ1ifrGzibyuNhYInJgTi6wSmVt01H/tNUm9kdChLoxp
-   Kp3bvnQQtP5MQCf8b7yDajGeS0hmVCOe7ACZgSf+8r7ISvRlQSWc/Jp0C
-   yswf88xBnIm8fLr+ZOyi3q86NTPLZ3q8F43+ptoD1LzLOSHIiHSYVrnum
-   HCyDL73142PmIFAwhJIHyRH4i6JZCluRgFzpt0ojNki/ryyiXwoZ1ipxg
-   w==;
-Message-ID: <82a95ac7-7859-d57c-de1b-c47fdea1e93c@axis.com>
-Date:   Mon, 11 Apr 2022 12:05:50 +0200
+        Mon, 11 Apr 2022 06:08:37 -0400
+Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [IPv6:2001:4b98:dc4:8::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672312229E;
+        Mon, 11 Apr 2022 03:06:13 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 8191520000C;
+        Mon, 11 Apr 2022 10:06:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1649671572;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mUVyrpdb9S8/uhuD169w7kcW369lFxrHB2jY1Y7pK1c=;
+        b=eWsCo/Us7q7FEskR2pOfGJJOrnI6iRsXcCLmtBQBzBhBsRxwVAPA7vnTAXtOTeBFOiWoib
+        LFXgH3oO5JYWI0c3riv9PHk8gr+qYuDKm3NA9hEap8FeKV8My9GonikOu8N6Fi6YDMnsiJ
+        UiUCLV52XGdB/CGBl+9G6v31Ez1vjwHz1GBDyxDgBX5Mg8k+TuYXXT/9WK3+SVomZxSFRx
+        x458g6ZrNZLvSo+yLyv9WJS+teWNqea5OkLDk5SjLysPxvqrqGMlcPJsnaZnQOtdwXae1f
+        jO7ikOmnE0VON0neEJBLn++rBaEksPCDhBICZY/8cdrpn4jjbmWXsdYtUlNRdw==
+Date:   Mon, 11 Apr 2022 12:06:10 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Roger Quadros <rogerq@kernel.org>
+Cc:     krzk@kernel.org, tony@atomide.com, vigneshr@ti.com, kishon@ti.com,
+        nm@ti.com, linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] memory: omap-gpmc: Make OMAP_GPMC config visible
+ and selectable
+Message-ID: <20220411120610.2f0c3504@xps13>
+In-Reply-To: <20220411095516.24754-2-rogerq@kernel.org>
+References: <20220411095516.24754-1-rogerq@kernel.org>
+        <20220411095516.24754-2-rogerq@kernel.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH 0/2] hwmon/tmp401: add support of three advanced features
-Content-Language: en-US
-To:     Camel Guo <Camel.Guo@axis.com>,
-        "inux@roeck-us.net" <inux@roeck-us.net>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzk+dt@kernel.org" <krzk+dt@kernel.org>
-CC:     kernel <kernel@axis.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220411095634.1782732-1-camel.guo@axis.com>
-From:   Camel Guo <camelg@axis.com>
-In-Reply-To: <20220411095634.1782732-1-camel.guo@axis.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.0.5.60]
-X-ClientProxiedBy: se-mail08w.axis.com (10.20.40.14) To se-mail03w.axis.com
- (10.20.40.9)
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/11/22 11:56, Camel Guo wrote:
-> According the their datasheets:
-> - TMP401, TMP411 and TMP43x support extended temperature range;
-> - TMP411 and TMP43x support n-factor correction;
-> - TMP43x support beta compensation.
-> 
-> In order to make it possible for users to enable these features and set 
-> up them
-> based on their needs, this patch series adds the following devicetree 
-> bindings:
-> - ti,extended-range-enable;
-> - ti,n-factor;
-> - ti,beta-compensation.
-> In the meanwhile, tmp401 driver reads them and configures the coressponding
-> registers accordingly.
-> 
-> Cc: linux-hwmon@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> 
-> Camel Guo (2):
->    dt-bindings: hwmon: Add TMP401, TMP411 and TMP43x
->    hwmon: (tmp401) Add support of three advanced features
-> 
->   .../devicetree/bindings/hwmon/ti,tmp401.yaml  | 111 ++++++++++++++++++
->   MAINTAINERS                                   |   1 +
->   drivers/hwmon/tmp401.c                        |  43 ++++++-
->   3 files changed, 154 insertions(+), 1 deletion(-)
->   create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
-> 
-> 
-> base-commit: ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e
-> -- 
-> 2.30.2
-> 
+Hi Roger,
+
+rogerq@kernel.org wrote on Mon, 11 Apr 2022 12:55:15 +0300:
+
+> So far for armv7 TI platforms, GPMC was being selected by
+> arch/arm/mach-* architecture Kconfig files.
+>=20
+> For K3 platforms, GPMC is no longer required for basic boot
+> and cannot be always enabled by default by mach- Kconfig.
+>=20
+> We need a way for user (or board defconfig) to enable
+> it if required so ake OMAP_GPMC Kconfig option always visible.
+
+                    make
+
+Otherwise,
+Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
+
+>=20
+> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+> ---
+>  drivers/memory/Kconfig | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/memory/Kconfig b/drivers/memory/Kconfig
+> index 30bff6cb1b8d..da2af9c38fe3 100644
+> --- a/drivers/memory/Kconfig
+> +++ b/drivers/memory/Kconfig
+> @@ -103,8 +103,8 @@ config TI_EMIF
+>  	  temperature changes
+> =20
+>  config OMAP_GPMC
+> -	bool "Texas Instruments OMAP SoC GPMC driver" if COMPILE_TEST
+> -	depends on OF_ADDRESS
+> +	bool "Texas Instruments OMAP SoC GPMC driver"
+> +	depends on OF_ADDRESS || COMPILE_TEST
+>  	select GPIOLIB
+>  	help
+>  	  This driver is for the General Purpose Memory Controller (GPMC)
 
 
-Incorrect email address in --to. Please ignore this one.
+Thanks,
+Miqu=C3=A8l

@@ -2,95 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E694FC0D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:33:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4920F4FC0F6
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:36:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348000AbiDKPfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 11:35:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47056 "EHLO
+        id S1348034AbiDKPit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 11:38:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347947AbiDKPfS (ORCPT
+        with ESMTP id S1348032AbiDKPip (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 11:35:18 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C506E36B43
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:33:03 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id bn33so20595125ljb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:33:03 -0700 (PDT)
+        Mon, 11 Apr 2022 11:38:45 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123053A5E7;
+        Mon, 11 Apr 2022 08:36:31 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id ay36-20020a05600c1e2400b0038ebc885115so181707wmb.1;
+        Mon, 11 Apr 2022 08:36:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xnPakWPy2yT3pIDHfh65ar6g/dls1kfh8Fm485ETQ5M=;
-        b=dQKM0d07whgvlC9oDhJtSUhDkTW4MoFSVg0vfgfBTGbnyj/vLpwIRlpTJbwhAy5wXy
-         t4NvGLtrVnALpqzfCg7AJJXugL5G+gxtpmDu4P3kfUwP/PxlbMFsvAkSX6LdhPrmqMXT
-         qiLuU+fH5rX1P4bRYOwwYVvuKX3ABpSSlgtg6Az3/bkGGCuw7OQsN/ELNNrrh8dksm+L
-         jdUaWuAeAK2VUjv+c+38AFbQNMQ+BBRMEFHjUicyzn/UUqkyKZ+8hd7a357wBJLh/+Ai
-         HUBjhhdQSdLifDKyLGXJgEw/B/MdcmTILkWCG50hI08mI+XNVGIswEXj19aZoHfNzVBJ
-         crnw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SLNLIgAztxFLrjX98bBOPpDCgmeIBOw+sPwS1eWryvU=;
+        b=UOph7iwMAPryYJQM5t3httN8DjoAflSeCVstrwCvqUO6d7fjB9VplSFa6NFvbOzPpr
+         QLa/vpR5z6HKRgKYelEPmwdQ7cccpfROAOpDA3XkSj/Sl5A8T9Hoq8XcVaPQTR/ndlaY
+         fJg5/SdXmHJOGiGqIXBe+RljbcnYFoHkYbXl6SgcbnpgnZXoBWeNIQoDYOQ9qfkiqIpv
+         sVw1nx/1SL5InqcKHO9VF3Z9mm8vhqUyuGpdOuH2FUrSmE0R+rKcB5y42+LL8fuAwC8X
+         GdAcRbYhWsGkNAGIZAVhvPzqVnL4sBj9qTPhBTitpGHNHCr57/PPksimidd76wfMJmPa
+         irXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xnPakWPy2yT3pIDHfh65ar6g/dls1kfh8Fm485ETQ5M=;
-        b=ZLmxPsacJ9XxwiPXGxScYXjY3xk1d9elasmsuU8S3sQp8OVknf/kMZ8spTXM6sAQvc
-         3rEV3x/M7kFCYv6IQ7dcYXa+gXP5ommFcGrE/nehfGfdtB2R2enALa7RYGIFmfGeRndQ
-         zFM1uBbiavJRxWO9J3f/b4uiHex8CuA1Qu7/kRzCVJWtKHoJCv6REmVV7smV7d5UkDKI
-         V/mEikpMOAhrRbU9dIxdVkmNiyMUW6yz0Y3Md2xihFUVHOIu9EN9lknbcFpEH6DdJzzV
-         KFYHupfqw2Y9x7qv/sIQrfHfC9UBX0aS6jwH8WH1TVFIx21pvPxSg20xT3QOkQUDYZKo
-         mmuA==
-X-Gm-Message-State: AOAM5326+5JR8tJ15toVGIwG/Us3K/tIWIBBSri6JQWm6y5jFJceAATO
-        P81dz+20UZQFOdo2VEU5rj0c4w==
-X-Google-Smtp-Source: ABdhPJznGRs4U58z6UmE7zKZGIORoorFbfftosrGPlCNHfF3AfxicsXpipbZkrEfC0QnRLsaSTmPLw==
-X-Received: by 2002:a2e:3a02:0:b0:24b:6120:1be4 with SMTP id h2-20020a2e3a02000000b0024b61201be4mr4554362lja.451.1649691181857;
-        Mon, 11 Apr 2022 08:33:01 -0700 (PDT)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id c25-20020a2e6819000000b00247de61d3fdsm3162062lja.113.2022.04.11.08.33.01
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SLNLIgAztxFLrjX98bBOPpDCgmeIBOw+sPwS1eWryvU=;
+        b=62La/llz2/4u5ywz4EK1/Ds59azRxGj+iPD+qlQPq6BmF7ERwGzD2T+BJFdel220Bm
+         csnrp2pzP17PgJIVI/m55eWMzkECBG04gER5KEkVmC+1lxFxtXPRCqeza66tT2wU88pX
+         eQl9liduulV9Eg69obRQK9bX+6l6b4iLmdRhZ6h9w8FVJNpZaQSZNY/94ahLAwaF4KWP
+         YahzKmaD6tCxI/WwKkRdOpr/kIMniKkVT6bPTGWspI3reN/7vEnH7Z2+4xD2e9bpGCI9
+         EvurmB+q7fTICS3N/e7Ew+u4W3CCVB+eiBUpTwT3imGZclDYh+ulA06Lg42k5KEl04VB
+         6MBA==
+X-Gm-Message-State: AOAM530qEGeWyVTyY2/Jp8VD/eyQNoSu1XPh0JvV5hUFxjPOaTPBWfC1
+        J6KB8G5JPEZqRAJPRIN9qoM=
+X-Google-Smtp-Source: ABdhPJy2WtwqxmlMvBMosTiNoX/M+q/nLamP1ovzSDcok06XmYlFBZIDDLcyooBH1QPqt+ZF2Wdy0w==
+X-Received: by 2002:a1c:44c5:0:b0:38e:abd1:d894 with SMTP id r188-20020a1c44c5000000b0038eabd1d894mr13177203wma.40.1649691389591;
+        Mon, 11 Apr 2022 08:36:29 -0700 (PDT)
+Received: from localhost (92.40.202.92.threembb.co.uk. [92.40.202.92])
+        by smtp.gmail.com with ESMTPSA id p8-20020a5d4e08000000b002054b5437f2sm26232868wrt.115.2022.04.11.08.36.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 08:33:01 -0700 (PDT)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id E5DD4103CE0; Mon, 11 Apr 2022 18:34:33 +0300 (+03)
-Date:   Mon, 11 Apr 2022 18:34:33 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com
-Subject: Re: [PATCH v5 04/13] mm/shmem: Restrict MFD_INACCESSIBLE memory
- against RLIMIT_MEMLOCK
-Message-ID: <20220411153433.6sqqqd6vzhyfjee6@box.shutemov.name>
-References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
- <20220310140911.50924-5-chao.p.peng@linux.intel.com>
- <Yk8L0CwKpTrv3Rg3@google.com>
- <20220408130254.GB57095@chaop.bj.intel.com>
+        Mon, 11 Apr 2022 08:36:29 -0700 (PDT)
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     paul@crapouillou.net, vkoul@kernel.org
+Cc:     linux-mips@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dmaengine: jz4780: set DMA maximum segment size
+Date:   Mon, 11 Apr 2022 16:36:18 +0100
+Message-Id: <20220411153618.49876-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220408130254.GB57095@chaop.bj.intel.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,21 +67,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 09:02:54PM +0800, Chao Peng wrote:
-> > I think the correct approach is to not do the locking automatically for SHM_F_INACCESSIBLE,
-> > and instead require userspace to do shmctl(.., SHM_LOCK, ...) if userspace knows the
-> > consumers don't support migrate/swap.  That'd require wrapping migrate_page() and then
-> > wiring up notifier hooks for migrate/swap, but IMO that's a good thing to get sorted
-> > out sooner than later.  KVM isn't planning on support migrate/swap for TDX or SNP,
-> > but supporting at least migrate for a software-only implementation a la pKVM should
-> > be relatively straightforward.  On the notifiee side, KVM can terminate the VM if it
-> > gets an unexpected migrate/swap, e.g. so that TDX/SEV VMs don't die later with
-> > exceptions and/or data corruption (pre-SNP SEV guests) in the guest.
-> 
-> SHM_LOCK sounds like a good match.
+Set the maximum segment size, since the hardware can do transfers larger
+than the default 64 KiB returned by dma_get_max_seg_size().
 
-Emm, no. shmctl(2) and SHM_LOCK are SysV IPC thing. I don't see how they
-fit here.
+The maximum segment size is limited by the 24-bit transfer count field
+in DMA descriptors. The number of bytes is equal to the transfer count
+times the transfer size unit, which is selected by the driver based on
+the DMA buffer address and length of the transfer. The size unit can be
+as small as 1 byte, so set the maximum segment size to 2^24-1 bytes to
+ensure the transfer count will not overflow regardless of the size unit
+selected by the driver.
 
+Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+---
+ drivers/dma/dma-jz4780.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/drivers/dma/dma-jz4780.c b/drivers/dma/dma-jz4780.c
+index fc513eb2b289..e2ec540e6519 100644
+--- a/drivers/dma/dma-jz4780.c
++++ b/drivers/dma/dma-jz4780.c
+@@ -8,6 +8,7 @@
+ 
+ #include <linux/clk.h>
+ #include <linux/dmapool.h>
++#include <linux/dma-mapping.h>
+ #include <linux/init.h>
+ #include <linux/interrupt.h>
+ #include <linux/module.h>
+@@ -911,6 +912,14 @@ static int jz4780_dma_probe(struct platform_device *pdev)
+ 
+ 	dd = &jzdma->dma_device;
+ 
++	/*
++	 * The real segment size limit is dependent on the size unit selected
++	 * for the transfer. Because the size unit is selected automatically
++	 * and may be as small as 1 byte, use a safe limit of 2^24-1 bytes to
++	 * ensure the 24-bit transfer count in the descriptor cannot overflow.
++	 */
++	dma_set_max_seg_size(dev, 0xffffff);
++
+ 	dma_cap_set(DMA_MEMCPY, dd->cap_mask);
+ 	dma_cap_set(DMA_SLAVE, dd->cap_mask);
+ 	dma_cap_set(DMA_CYCLIC, dd->cap_mask);
 -- 
- Kirill A. Shutemov
+2.35.1
+

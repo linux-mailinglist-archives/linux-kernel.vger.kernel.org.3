@@ -2,177 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8304FBC09
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 14:29:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C86474FBC0D
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 14:29:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346055AbiDKMan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 08:30:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51318 "EHLO
+        id S1346068AbiDKMbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 08:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346053AbiDKMal (ORCPT
+        with ESMTP id S238144AbiDKMbR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 08:30:41 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F16039BA5
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 05:28:27 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id k14so14089298pga.0
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 05:28:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=e3rfORwlh+GfqoV3kM6mCVh4CbmOsNbVFGcxLf2a93Y=;
-        b=tUzS/ZzNqMYlIK7xIRTzMRkB0E+u5pTIJc5hG2P+LzCVsM81KuY0HBTxPxRMvXMkzv
-         oArvRyInh5BVoQ3NN8F1ULSlphST13oZQDkTAy7PISkJ/sw/GGwKDY73Ef1i6rS2/CQf
-         fnZ2blBUbpt4VRCKuMf03pLBSIH/fOsSYSBaG23dUmknp/oe7F0mizwZhCJKFo1n6rwq
-         sSIHsxmnjhbUHl3E/SkzJbB92zo11E2aDLbTndlxflxTwhBFLCLW0ELK+AXg30SA1Hhu
-         qqK2l7tOTMABUv5l157AdADgW2SkC1fNQrZtWK1B/mWqqgrL9GWxiBaAfpv5IhGPnjOM
-         gtVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=e3rfORwlh+GfqoV3kM6mCVh4CbmOsNbVFGcxLf2a93Y=;
-        b=R4z2q6PiEd6OpME49jQlZ9SxzDtwmB23rJkjxrIIWQY8Jz3cuveBrUER3fvtrlPRpg
-         DUOwWk3Icht9yKth0L79/8I6TuSgDfZywXo/mhiJQsLZ88MbM+aEfo4CUDsK2lavLwtu
-         6A3bieBg7S57pHk65KpHtPRhwLwwOHkuu6maZmBcxBXAITJz2YsCWc1VuXqajHGeAfpA
-         jyXAcLAA9zZlSmGTrTb1do9wBASZOQQsAn2cmE8128ZqzywdY65JblyCQ/M1Tq/OX/qB
-         SUYnSw327yN06/v6jqHr2MCDEZd9JjtmtzQvbetu4hv7TNEVvHhe0742Q4PYi4U0hlKq
-         7/Xg==
-X-Gm-Message-State: AOAM533Tr3PSTTwVK5iTmNoM9WXQbQSh3NSB5EP+QQa/NtR01mXKWl3H
-        Qp/frxQNN1jrRv+2K2fKLFWpp3N8LjjX8W0xBELuyw==
-X-Google-Smtp-Source: ABdhPJxYTTZYwoekbEmlJ9vg6MC9aSPPn1/GrkR9rhG/OcTek55aJldP+zAq4vHoJGXiv6FOT+/qDM9SUT15Z+BSqks=
-X-Received: by 2002:a65:6a97:0:b0:398:ae2:d207 with SMTP id
- q23-20020a656a97000000b003980ae2d207mr25656875pgu.197.1649680106538; Mon, 11
- Apr 2022 05:28:26 -0700 (PDT)
+        Mon, 11 Apr 2022 08:31:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4CA44BC7
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 05:29:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649680142;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZZxI4JpPALM+cig/mNfvr19ofAGALyaSEU5a24joVus=;
+        b=BKi3UdjrGrdygUh+G2Le7FFmeMeLU8k/VfDOIVyEk3txmxkRFdvKs9ibr18L3ZRO/xx4q2
+        ktQ892Vwb9iBq2R4Kz8g1GM9JUyVAuzQuOmjGVs510f+zC8bTGIEsotPOCSyzASZoNfOFA
+        iv50UOmio3q39QFy5mHDVoSYbGMjn74=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-562-cVdYnBS4P_6E-9tLZGI5oQ-1; Mon, 11 Apr 2022 08:29:01 -0400
+X-MC-Unique: cVdYnBS4P_6E-9tLZGI5oQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5DB8C185A7A4;
+        Mon, 11 Apr 2022 12:29:00 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.37.45])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B2EE741639E;
+        Mon, 11 Apr 2022 12:28:57 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20220406075612.60298-4-jefflexu@linux.alibaba.com>
+References: <20220406075612.60298-4-jefflexu@linux.alibaba.com> <20220406075612.60298-1-jefflexu@linux.alibaba.com>
+To:     Jeffle Xu <jefflexu@linux.alibaba.com>
+Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
+        chao@kernel.org, linux-erofs@lists.ozlabs.org,
+        torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
+        willy@infradead.org, linux-fsdevel@vger.kernel.org,
+        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
+        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
+        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
+        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
+        fannaihao@baidu.com
+Subject: Re: [PATCH v8 03/20] cachefiles: notify user daemon with anon_fd when looking up cookie
 MIME-Version: 1.0
-References: <20220321130341.935535-1-jens.wiklander@linaro.org> <20220321130341.935535-2-jens.wiklander@linaro.org>
-In-Reply-To: <20220321130341.935535-2-jens.wiklander@linaro.org>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Mon, 11 Apr 2022 17:58:15 +0530
-Message-ID: <CAFA6WYPJ5S0w3L8+PYGF474v+DqvSp8T=U2w=bjAKummrCuUBQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] optee: rename rpc_arg_count to rpc_param_count
-To:     Jens Wiklander <jens.wiklander@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1091117.1649680137.1@warthog.procyon.org.uk>
+Date:   Mon, 11 Apr 2022 13:28:57 +0100
+Message-ID: <1091118.1649680137@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 21 Mar 2022 at 18:33, Jens Wiklander <jens.wiklander@linaro.org> wrote:
->
-> Renames the field rpc_arg_count in struct optee to rpc_param_count.
-> Function parameter names and local variables are also renamed to match.
->
-> Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
-> ---
->  drivers/tee/optee/call.c          |  6 +++---
->  drivers/tee/optee/ffa_abi.c       | 10 +++++-----
->  drivers/tee/optee/optee_private.h |  4 ++--
->  3 files changed, 10 insertions(+), 10 deletions(-)
->
+Jeffle Xu <jefflexu@linux.alibaba.com> wrote:
 
-Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
+> +	  This permits on-demand read mode of cachefiles. In this mode, when
+> +	  cache miss, the cachefiles backend instead of netfs, is responsible
+> +          for fetching data, e.g. through user daemon.
 
--Sumit
+That third line should probably begin with a tab as the other two line do.
 
-> diff --git a/drivers/tee/optee/call.c b/drivers/tee/optee/call.c
-> index bd49ec934060..a9a237d20c61 100644
-> --- a/drivers/tee/optee/call.c
-> +++ b/drivers/tee/optee/call.c
-> @@ -113,12 +113,12 @@ struct tee_shm *optee_get_msg_arg(struct tee_context *ctx, size_t num_params,
->         struct optee_msg_arg *ma;
->
->         /*
-> -        * rpc_arg_count is set to the number of allocated parameters in
-> +        * rpc_param_count is set to the number of allocated parameters in
->          * the RPC argument struct if a second MSG arg struct is expected.
->          * The second arg struct will then be used for RPC.
->          */
-> -       if (optee->rpc_arg_count)
-> -               sz += OPTEE_MSG_GET_ARG_SIZE(optee->rpc_arg_count);
-> +       if (optee->rpc_param_count)
-> +               sz += OPTEE_MSG_GET_ARG_SIZE(optee->rpc_param_count);
->
->         shm = tee_shm_alloc_priv_buf(ctx, sz);
->         if (IS_ERR(shm))
-> diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
-> index a5eb4ef46971..7686f7020616 100644
-> --- a/drivers/tee/optee/ffa_abi.c
-> +++ b/drivers/tee/optee/ffa_abi.c
-> @@ -678,7 +678,7 @@ static bool optee_ffa_api_is_compatbile(struct ffa_device *ffa_dev,
->
->  static bool optee_ffa_exchange_caps(struct ffa_device *ffa_dev,
->                                     const struct ffa_dev_ops *ops,
-> -                                   unsigned int *rpc_arg_count)
-> +                                   unsigned int *rpc_param_count)
->  {
->         struct ffa_send_direct_data data = { OPTEE_FFA_EXCHANGE_CAPABILITIES };
->         int rc;
-> @@ -693,7 +693,7 @@ static bool optee_ffa_exchange_caps(struct ffa_device *ffa_dev,
->                 return false;
->         }
->
-> -       *rpc_arg_count = (u8)data.data1;
-> +       *rpc_param_count = (u8)data.data1;
->
->         return true;
->  }
-> @@ -772,7 +772,7 @@ static void optee_ffa_remove(struct ffa_device *ffa_dev)
->  static int optee_ffa_probe(struct ffa_device *ffa_dev)
->  {
->         const struct ffa_dev_ops *ffa_ops;
-> -       unsigned int rpc_arg_count;
-> +       unsigned int rpc_param_count;
->         struct tee_shm_pool *pool;
->         struct tee_device *teedev;
->         struct tee_context *ctx;
-> @@ -788,7 +788,7 @@ static int optee_ffa_probe(struct ffa_device *ffa_dev)
->         if (!optee_ffa_api_is_compatbile(ffa_dev, ffa_ops))
->                 return -EINVAL;
->
-> -       if (!optee_ffa_exchange_caps(ffa_dev, ffa_ops, &rpc_arg_count))
-> +       if (!optee_ffa_exchange_caps(ffa_dev, ffa_ops, &rpc_param_count))
->                 return -EINVAL;
->
->         optee = kzalloc(sizeof(*optee), GFP_KERNEL);
-> @@ -805,7 +805,7 @@ static int optee_ffa_probe(struct ffa_device *ffa_dev)
->         optee->ops = &optee_ffa_ops;
->         optee->ffa.ffa_dev = ffa_dev;
->         optee->ffa.ffa_ops = ffa_ops;
-> -       optee->rpc_arg_count = rpc_arg_count;
-> +       optee->rpc_param_count = rpc_param_count;
->
->         teedev = tee_device_alloc(&optee_ffa_clnt_desc, NULL, optee->pool,
->                                   optee);
-> diff --git a/drivers/tee/optee/optee_private.h b/drivers/tee/optee/optee_private.h
-> index e77765c78878..e80c5d9b62ec 100644
-> --- a/drivers/tee/optee/optee_private.h
-> +++ b/drivers/tee/optee/optee_private.h
-> @@ -143,7 +143,7 @@ struct optee_ops {
->   * @notif:             notification synchronization struct
->   * @supp:              supplicant synchronization struct for RPC to supplicant
->   * @pool:              shared memory pool
-> - * @rpc_arg_count:     If > 0 number of RPC parameters to make room for
-> + * @rpc_param_count:   If > 0 number of RPC parameters to make room for
->   * @scan_bus_done      flag if device registation was already done.
->   * @scan_bus_wq                workqueue to scan optee bus and register optee drivers
->   * @scan_bus_work      workq to scan optee bus and register optee drivers
-> @@ -161,7 +161,7 @@ struct optee {
->         struct optee_notif notif;
->         struct optee_supp supp;
->         struct tee_shm_pool *pool;
-> -       unsigned int rpc_arg_count;
-> +       unsigned int rpc_param_count;
->         bool   scan_bus_done;
->         struct workqueue_struct *scan_bus_wq;
->         struct work_struct scan_bus_work;
-> --
-> 2.31.1
->
+> +static inline void cachefiles_flush_reqs(struct cachefiles_cache *cache)
+
+If it's in a .c file, there's no need to mark it "inline".  The compiler will
+inline it anyway if it decides it should.
+
+> +#ifdef CONFIG_CACHEFILES_ONDEMAND
+> +	cachefiles_flush_reqs(cache);
+> +	xa_destroy(&cache->reqs);
+> +#endif
+
+If cachefiles_flush_reqs() is only used in this one place, the xa_destroy()
+should possibly be moved into it.
+
+David
+

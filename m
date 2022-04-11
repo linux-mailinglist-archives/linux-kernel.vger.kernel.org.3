@@ -2,107 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2B834FB3AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 08:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 777FA4FB38C
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 08:17:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244886AbiDKGUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 02:20:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55922 "EHLO
+        id S244864AbiDKGTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 02:19:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244322AbiDKGUi (ORCPT
+        with ESMTP id S235930AbiDKGTd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 02:20:38 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201393CFE1;
-        Sun, 10 Apr 2022 23:18:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1649657900;
-        bh=DEmNhBL/gohEUMJP8JibIxeatvMiK2dGmVjbuB97Fyc=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=DTYxIIxSrTbphxaZpPdNkGBdxIx4xgavKoAi0RQpMqIiaOpWpcmk5Z42kBtiauavl
-         b3y9WRPtqX8Rut1wKJXPtC3kyBZXNsWWHGXhkSnfwZoIM2stMvQUJdmeEMctK3Lnmx
-         8Ofp7p6LJYUWaEuESkPg+XwcEzuetajM+zfvZJiU=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.145.57]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MulqD-1nuMpD1OYl-00rsZa; Mon, 11
- Apr 2022 08:18:20 +0200
-Message-ID: <e0f26cb5-a67f-dbb0-46cf-441a19a82129@gmx.de>
-Date:   Mon, 11 Apr 2022 08:16:35 +0200
+        Mon, 11 Apr 2022 02:19:33 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 287033CFE1
+        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 23:17:15 -0700 (PDT)
+X-UUID: ef001d495bb64ac88490f754d25659d9-20220411
+X-UUID: ef001d495bb64ac88490f754d25659d9-20220411
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <kuyo.chang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 340244809; Mon, 11 Apr 2022 14:17:11 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Mon, 11 Apr 2022 14:17:09 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 11 Apr 2022 14:17:08 +0800
+From:   Kuyo Chang <kuyo.chang@mediatek.com>
+To:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        "Mel Gorman" <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <wsd_upstream@mediatek.com>, kuyo chang <kuyo.chang@mediatek.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH 1/1] sched/pelt: Refine the enqueue_load_avg calculate method
+Date:   Mon, 11 Apr 2022 14:16:56 +0800
+Message-ID: <20220411061702.22978-1-kuyo.chang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] fbdev: i740fb: use memset_io() to clear screen
-Content-Language: en-US
-To:     Ondrej Zary <linux@zary.sk>
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20220410202833.26608-1-linux@zary.sk>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20220410202833.26608-1-linux@zary.sk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:wDZTZbxfEuUfXVVlZgGev+nwA1g7MKEILesmHJFJP4UYp3fOPxV
- kWzG+kJJSU0aNzxkRa1b1qqPnAMDd/jWqhk9l9kkJpvVvjWTHNTck+l5ISZB6fKiobMXV4+
- aP2IFDjxT1BrluJrHO5ppdKmmzC2vX18Ati0IYPmbRz1zXFxxEOZanwyZXkgqYqDuqT0T2G
- TNF13pw59FCq/9OoG8Amg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:jYWVJBqjH/0=:yYvVfny61rLZJasumIHxC3
- wW2XCQSzcisl+0gcWX8hz1Om40LkQmMfGosY0XsbiPFADJJ6EnF4aNzvQg5egxeo+hPlwgO0H
- HubMC7f5Aff/nypweDl/u288F5XFfur80lXPUu+1qA8u1fsA8Xj5NqcDmOE0Wucg0i4IdFz3l
- 9y+EOuzMvq31aSFWACw0dtMy8OLkBXGqwWK7j1b67lOvjPUVlp4nFrXEKU4bXwFkjEuemiaIC
- c57j6FhR9Mv6p2SZNShshJ+SrgPn3lKwNbIT78EKF2d09BUsdKX5/PCQE6dO+6gD8wEfDR7YL
- cF7Vlvie1pZ/qkKhmBRHoeX8RCdpgAuWdtojqTQWqdu0utqCjVvlVsnXPRCk30OqcMPooRnxI
- KePaQufjtB3KdV9pcLTN8GAeo0RHXhw5wsJQmdEA3CFOFWFf2Z2KYJRavI3nRAgoJ9dLMVlEf
- RDzdnrr5LqFvW2dRqmLQhqCUIokrlYBrucABlk1obczZGxsF/wfij+NkHf00S5qqHodeUWe6V
- hcaWpXakqBa/HLBv8Lxxl5anxayH8lBxT5vQEGVpUCmD+zYLTsX0HF8EFRF/cmxqp0fHJwmLZ
- sn/w0HP2RwcR9FHcVcsJ1pL9H12STHj0yx4KGvOegB0NBi8X7Xy7aBSHw49ay8SA8QWJyX0me
- 0jRhxS+OPtCguuqpv6HiajLpUw5kgRTxc0i5YKgpbCfGH41CZ6OhP1Ve8eFsvqWIBjr391jMW
- BTljY+rkr0NHCYCptJ5Ok9JJJUpfP+R/MH8doFrkYW+DULuji8YpHmlN58gonxORW5H8hTSZy
- n9RByI80s9CjNb1KMgVljHV5ZInUOagTo6YogNA/46qB9eggZ9TwBrpCAaAPSkGMLPcejCpMJ
- JzjnqM+fyqc0kPXoUB6lPpa+t9WMmNmpqR80NQjJCcrqMNphnTzj3IxsGIYO4pEwFi2XqQNAz
- pTpF/V0R5TZC8TXcAVm2BcGRKoPfuP51l0pzN9yr4vitmT7PbIHHDqKxQioogPw8W3upskaLo
- PO5TcCr1HzgUIoeb28w4Ci6W7pCJvNnTZxaOufkGGgUZ7zN0WcDzB9qxOX4eQWA0BLPzsOs+j
- oZUgAjlooUUGqE=
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/10/22 22:28, Ondrej Zary wrote:
-> sparse complains that using memset() on __iomem pointer is wrong:
-> incorrect type in argument 1 (different address spaces)
->
-> Use memset_io() to clear screen instead.
->
-> Tested on real i740 cards.
->
-> Signed-off-by: Ondrej Zary <linux@zary.sk>
+From: kuyo chang <kuyo.chang@mediatek.com>
 
-applied.
-Thanks!
+I meet the warning message at cfs_rq_is_decayed at below code.
 
-Helge
+SCHED_WARN_ON(cfs_rq->avg.load_avg ||
+		    cfs_rq->avg.util_avg ||
+		    cfs_rq->avg.runnable_avg)
 
+Following is the calltrace.
 
-> ---
->  drivers/video/fbdev/i740fb.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/video/fbdev/i740fb.c b/drivers/video/fbdev/i740fb.c
-> index 52cce0db8bd3..dd45ea8203be 100644
-> --- a/drivers/video/fbdev/i740fb.c
-> +++ b/drivers/video/fbdev/i740fb.c
-> @@ -740,7 +740,7 @@ static int i740fb_set_par(struct fb_info *info)
->  	if (i)
->  		return i;
->
-> -	memset(info->screen_base, 0, info->screen_size);
-> +	memset_io(info->screen_base, 0, info->screen_size);
->
->  	vga_protect(par);
->
+Call trace:
+__update_blocked_fair
+update_blocked_averages
+newidle_balance
+pick_next_task_fair
+__schedule
+schedule
+pipe_read
+vfs_read
+ksys_read
+
+After code analyzing and some debug messages, I found it exits a corner
+case at attach_entity_load_avg which will cause load_sum is zero and
+load_avg is not.
+Consider se_weight is 88761 according by sched_prio_to_weight table.
+And assume the get_pelt_divider() is 47742, se->avg.load_avg is 1.
+By the calculating for se->avg.load_sum as following will become zero
+as following.
+se->avg.load_sum =
+	div_u64(se->avg.load_avg * se->avg.load_sum, se_weight(se));
+se->avg.load_sum = 1*47742/88761 = 0.
+
+After enqueue_load_avg code as below.
+cfs_rq->avg.load_avg += se->avg.load_avg;
+cfs_rq->avg.load_sum += se_weight(se) * se->avg.load_sum;
+
+Then the load_sum for cfs_rq will be 1 while the load_sum for cfs_rq is 0.
+So it will hit the warning message.
+
+After all, I refer the following commit patch to do the similar thing at
+enqueue_load_avg.
+sched/pelt: Relax the sync of load_sum with load_avg
+
+After long time testing, the kernel warning was gone and the system runs
+as well as before.
+
+Signed-off-by: kuyo chang <kuyo.chang@mediatek.com>
+---
+ kernel/sched/fair.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index d4bd299d67ab..30d8b6dba249 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -3074,8 +3074,10 @@ account_entity_dequeue(struct cfs_rq *cfs_rq, struct sched_entity *se)
+ static inline void
+ enqueue_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se)
+ {
+-	cfs_rq->avg.load_avg += se->avg.load_avg;
+-	cfs_rq->avg.load_sum += se_weight(se) * se->avg.load_sum;
++	add_positive(&cfs_rq->avg.load_avg, se->avg.load_avg);
++	add_positive(&cfs_rq->avg.load_sum, se_weight(se) * se->avg.load_sum);
++	cfs_rq->avg.load_sum = max_t(u32, cfs_rq->avg.load_sum,
++					  cfs_rq->avg.load_avg * PELT_MIN_DIVIDER);
+ }
+ 
+ static inline void
+-- 
+2.18.0
 

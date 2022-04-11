@@ -2,77 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 914054FB359
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 07:54:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC8A44FB35D
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 07:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244799AbiDKF4J convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 11 Apr 2022 01:56:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46836 "EHLO
+        id S244803AbiDKF5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 01:57:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235110AbiDKF4G (ORCPT
+        with ESMTP id S235110AbiDKF5q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 01:56:06 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2851911173;
-        Sun, 10 Apr 2022 22:53:49 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 23B5r4yD5025682, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 23B5r4yD5025682
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 11 Apr 2022 13:53:04 +0800
-Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 11 Apr 2022 13:53:04 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Mon, 11 Apr 2022 13:53:04 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::34e7:ab63:3da4:27c6]) by
- RTEXMBS04.realtek.com.tw ([fe80::34e7:ab63:3da4:27c6%5]) with mapi id
- 15.01.2308.021; Mon, 11 Apr 2022 13:53:04 +0800
-From:   Pkshih <pkshih@realtek.com>
-To:     "cgel.zte@gmail.com" <cgel.zte@gmail.com>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>
-CC:     "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "Larry.Finger@lwfinger.net" <Larry.Finger@lwfinger.net>,
-        "lv.ruyi@zte.com.cn" <lv.ruyi@zte.com.cn>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: RE: [PATCH] rtlwifi: rtl8192cu: Fix spelling mistake "writting" -> "writing"
-Thread-Topic: [PATCH] rtlwifi: rtl8192cu: Fix spelling mistake "writting" ->
- "writing"
-Thread-Index: AQHYTVPAcaHFVJtUjE6iVLOd9esOXqzqNhDg
-Date:   Mon, 11 Apr 2022 05:53:03 +0000
-Message-ID: <ceb64d890fc1466d945594c22051027b@realtek.com>
-References: <20220411032458.2517551-1-lv.ruyi@zte.com.cn>
-In-Reply-To: <20220411032458.2517551-1-lv.ruyi@zte.com.cn>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXMBS01.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/4/11_=3F=3F_03:30:00?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Mon, 11 Apr 2022 01:57:46 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A999C33A26;
+        Sun, 10 Apr 2022 22:55:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649656533; x=1681192533;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=p9HXYw/ALt+MopqQNrusnXpB/e7Lu7tHls88nUVRk1Q=;
+  b=QcRVSt6R79v20L1QwpL+LLtsoOjO3j2CEb+SeUma3+6sIc3r9+LCt0+s
+   1Vt1Tv+YUbBauWnaIeMlHIM1uteoM2s7g6tzgWBo8vRr9jUYMfSTT+6FD
+   DLRo28e/5YPsa4oOkHixAUL1m+n6G+/HDTk2/gBCjLEVTFESB0SYpDtzg
+   4=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 10 Apr 2022 22:55:33 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Apr 2022 22:55:32 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Sun, 10 Apr 2022 22:55:31 -0700
+Received: from [10.111.167.150] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Sun, 10 Apr
+ 2022 22:55:29 -0700
+Message-ID: <adb5b728-d1e3-022d-62fa-1f7278e63e41@quicinc.com>
+Date:   Sun, 10 Apr 2022 22:55:27 -0700
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] drm/msm/dsi: Use connector directly in
+ msm_dsi_manager_connector_init()
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Rob Clark <robdclark@gmail.com>, "Sean Paul" <sean@poorly.run>
+CC:     <linux-kernel@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
+        Sean Paul <seanpaul@chromium.org>
+References: <20220318000731.2823718-1-swboyd@chromium.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20220318000731.2823718-1-swboyd@chromium.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,23 +71,38 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-> -----Original Message-----
-> From: cgel.zte@gmail.com <cgel.zte@gmail.com>
-> Sent: Monday, April 11, 2022 11:25 AM
-> To: Pkshih <pkshih@realtek.com>; kvalo@kernel.org; davem@davemloft.net
-> Cc: kuba@kernel.org; pabeni@redhat.com; Larry.Finger@lwfinger.net; lv.ruyi@zte.com.cn;
-> linux-wireless@vger.kernel.org; netdev@vger.kernel.org; linux-kernel@vger.kernel.org; Zeal Robot
-> <zealci@zte.com.cn>
-> Subject: [PATCH] rtlwifi: rtl8192cu: Fix spelling mistake "writting" -> "writing"
+
+On 3/17/2022 5:07 PM, Stephen Boyd wrote:
+> The member 'msm_dsi->connector' isn't assigned until
+> msm_dsi_manager_connector_init() returns (see msm_dsi_modeset_init() and
+> how it assigns the return value). Therefore this pointer is going to be
+> NULL here. Let's use 'connector' which is what was intended.
 > 
-> From: Lv Ruyi <lv.ruyi@zte.com.cn>
+> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Cc: Sean Paul <seanpaul@chromium.org>
+> Fixes: 6d5e78406991 ("drm/msm/dsi: Move dsi panel init into modeset init path")
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> ---
 > 
-> There are some spelling mistakes in the comments. Fix it.
+> I don't know if this is superseeded by something else but I found this
+> while trying to use the connector from msm_dsi in this function.
 > 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
-
-Acked-by: Ping-Ke Shih <pkshih@realtek.com>
-
-
-
+>   drivers/gpu/drm/msm/dsi/dsi_manager.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/dsi/dsi_manager.c b/drivers/gpu/drm/msm/dsi/dsi_manager.c
+> index 0c1b7dde377c..9f6af0f0fe00 100644
+> --- a/drivers/gpu/drm/msm/dsi/dsi_manager.c
+> +++ b/drivers/gpu/drm/msm/dsi/dsi_manager.c
+> @@ -638,7 +638,7 @@ struct drm_connector *msm_dsi_manager_connector_init(u8 id)
+>   	return connector;
+>   
+>   fail:
+> -	connector->funcs->destroy(msm_dsi->connector);
+> +	connector->funcs->destroy(connector);
+>   	return ERR_PTR(ret);
+>   }
+>   
+> 
+> base-commit: 05afd57f4d34602a652fdaf58e0a2756b3c20fd4

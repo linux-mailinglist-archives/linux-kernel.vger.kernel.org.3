@@ -2,93 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C99C4FC3FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 20:18:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F05364FC403
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 20:21:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349124AbiDKSUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 14:20:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58986 "EHLO
+        id S1349135AbiDKSYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 14:24:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349104AbiDKSUq (ORCPT
+        with ESMTP id S1347575AbiDKSYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 14:20:46 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8ABE1EC62
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 11:18:31 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 11 Apr 2022 14:24:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4BB2AD0;
+        Mon, 11 Apr 2022 11:21:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 64B181F864;
-        Mon, 11 Apr 2022 18:18:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1649701110; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9rwmjqY/Hr1f5h6HYYWQymxcjH9AvmzShmJ/szJdFG8=;
-        b=rQDz49TQRDKjiHrsPtwvnSQfXrC45tSOp7KKgS2VJwBzntHE740J3ICE2oq0q1KK1PsP6n
-        Rsgy6K9oBChXkkDQrqX7BdYQENTWjTcZQ3tMTq288ju4q8IkhHnVedqDZzNnCvUXfTyMcc
-        I7eCrTyFazpcwQ62nauksU2lYEY0m5I=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1649701110;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9rwmjqY/Hr1f5h6HYYWQymxcjH9AvmzShmJ/szJdFG8=;
-        b=90vftVHB04f2xIV5eUZzqqFGsIDsAVhzcm+ncL7/U060hmQJpHXZ0zdh7p/6gw4Mr8YJJx
-        pDhKisIL4ZC4OjCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E5E6A13A93;
-        Mon, 11 Apr 2022 18:18:29 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id g+NuN/VwVGIXIQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 11 Apr 2022 18:18:29 +0000
-Message-ID: <bec1b401-fb2e-6672-d904-396402434890@suse.cz>
-Date:   Mon, 11 Apr 2022 20:18:29 +0200
+        by ams.source.kernel.org (Postfix) with ESMTPS id 83EE0B817FD;
+        Mon, 11 Apr 2022 18:21:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4691FC385A4;
+        Mon, 11 Apr 2022 18:21:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649701302;
+        bh=PiNuPNk+6l26kgsR8fDzAxyPFcRQN+JgTZLJVWwDBYE=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=noOI5ZLjGQD7hoyTo16tgnjCgJouFmSZ63y24DCLm9z2eLrf6gclO4hSIRYLxcRGy
+         nzm5MaqsbovJtDGsDzoRWxx2KFE3gaDNMsVBxRNx2qpXmCN9TvmQfiv8iT1xHEwXOZ
+         0Df90tz/qQUHJ/p5FeQKXS/GALQiSu/jUR90j04kKDRRWibWJt2qYGBL4vGQVgEOCM
+         gezfbD2EylBDJKxiHlike2ZGNVWZclIEcISmRz6Lvy2Ct+tU+5kyZ2r2qrKWIsKcaw
+         gJcTwlFlF8QDKJaWynKcLc1fz7F4LDdnxKliEy5g9N07PCS1lgwUMDlhj6onHR4IdZ
+         OlGFgTjC3wnuw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id EBCF05C03AE; Mon, 11 Apr 2022 11:21:41 -0700 (PDT)
+Date:   Mon, 11 Apr 2022 11:21:41 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        llvm@lists.linux.dev, Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+Subject: Re: Dangerous addr to ctrl dependency transformation in
+ fs/nfs/delegation.c::nfs_server_return_marked_delegations()?
+Message-ID: <20220411182141.GZ4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <Yk7/T8BJITwz+Og1@Pauls-MacBook-Pro.local>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jann Horn <jannh@google.com>, Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Pedro Gomes <pedrodemargomes@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org
-References: <20220329160440.193848-1-david@redhat.com>
- <20220329160440.193848-5-david@redhat.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v3 04/16] mm/rmap: split page_dup_rmap() into
- page_dup_file_rmap() and page_try_dup_anon_rmap()
-In-Reply-To: <20220329160440.193848-5-david@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Yk7/T8BJITwz+Og1@Pauls-MacBook-Pro.local>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -97,89 +73,258 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/29/22 18:04, David Hildenbrand wrote:
-> ... and move the special check for pinned pages into
-> page_try_dup_anon_rmap() to prepare for tracking exclusive anonymous
-> pages via a new pageflag, clearing it only after making sure that there
-> are no GUP pins on the anonymous page.
+On Thu, Apr 07, 2022 at 05:12:15PM +0200, Paul Heidekrüger wrote:
+> Hi all,
 > 
-> We really only care about pins on anonymous pages, because they are
-> prone to getting replaced in the COW handler once mapped R/O. For !anon
-> pages in cow-mappings (!VM_SHARED && VM_MAYWRITE) we shouldn't really
-> care about that, at least not that I could come up with an example.
+> work on my dependency checker tool is progressing nicely, and it is
+> flagging, what I believe is, a harmful addr to ctrl dependency
+> transformation. For context, see [1] and [2]. I'm using the Clang
+> compiler.
 > 
-> Let's drop the is_cow_mapping() check from page_needs_cow_for_dma(), as we
-> know we're dealing with anonymous pages. Also, drop the handling of
-> pinned pages from copy_huge_pud() and add a comment if ever supporting
-> anonymous pages on the PUD level.
+> The dependency in question runs from line 618 into the for loop
+> increment, i.e. the third expresion in the for loop condition, in line
+> 622 of fs/nfs/delegation.c::nfs_server_return_marked_delegations().
 > 
-> This is a preparation for tracking exclusivity of anonymous pages in
-> the rmap code, and disallowing marking a page shared (-> failing to
-> duplicate) if there are GUP pins on a page.
+> I did my best to reverse-engineer some pseudocode from Clang's IR for
+> showing what I think is going on.
+
+First, thank you very much for doing this work!
+
+> Clang's unoptimised version:
 > 
-> Signed-off-by: David Hildenbrand <david@redhat.com>
+> > restart:
+> > 	if(place_holder != NULL)
+> > 		delegation = rcu_dereference(place_holder->delegation); /* 618 */
+> > 	if(delegation != NULL)
+> > 		if(delegation != place_holder_deleg)
+> > 			delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list); /* 620 */
+> > 
+> > 	for( ; &(delegation)->super_list != &server->delegations; delegation = list_entry_rcu(delegation->super_list.next, typeof(*(delegation)), super_list)) { /* 622 */
+> > 		/*
+> > 		 * Can continue, "goto restart" or "goto break" (after loop). 
+> > 		 * Can reassign "delegation", "place_holder", "place_holder_deleg".
+> > 		 * "delegation" might be assigned either a value depending on 
+> > 		 * "delegation" itself, i.e. it is part of the dependency chain, 
+> > 		 * or NULL.
+> > 		 * Can modifiy fields of the "nfs_delegation" struct "delegation" 
+> > 		 * points to.
+> > 		 * Assume line 618 has been executed and line 620 hasn't. Then, 
+> > 		 * there exists a path s.t. "delegation" isn't reassigned NULL 
+> > 		 * and the for loop's increment is executed.
+> > 		 */
+> > 	}
+> 
+> Clang's optimised version:
+> 
+> > restart:
+> > 	if(place_holder == NULL) {
+> > 		delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list);
+> > 	} else {
+> > 		cmp = rcu_dereference(place_holder->delegation); /* 618 */
+> > 		if(cmp != NULL) { /* Transformation to ctrl dep */
+> > 			if(cmp == place_holder_deleg) {
+> > 				delegation = place_holder_deleg;
+> > 			} else {
+> > 				delegation = list_entry_rcu(server->delegations.nex, struct nfs_delegation, super_list);
+> > 			}
+> > 		} else {
+> > 			delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list);
+> > 		}
+> > 	}
+> > 
+> > 	for( ; &(delegation)->super_list != &server->delegations; delegation = list_entry_rcu(delegation->super_list.next, typeof(*(delegation)), super_list)) {
+> > 		/*
+> > 		 * At this point, "delegation" cannot depend on line 618 anymore
+> > 		 * since the "rcu_dereference()" was only used for an assignment
+> > 		 * to "cmp" and a subsequent comparison (ctrl dependency).
+> > 		 * Therefore, the loop increment cannot depend on the
+> > 		 * "rcu_dereference()" either. The dependency chain has been
+> > 		 * broken.
+> > 		 */
+> >         }
+> 
+> The above is an abstraction of the following control flow path in
+> "nfs_server_return_marked_delegations()":
+> 
+> 1. When "nfs_server_return_marked_delegations()" gets called, it has no
+> choice but to skip the dependency beginning in line 620, since
+> "place_holder" is NULL the first time round.
+> 
+> 2. Now take a path until "place_holder", the condition for the
+> dependency beginning, becomes true and "!delegation || delegation !=
+> place_holder_deleg", the condition for the assignment in line 620,
+> becomes false. Then, enter the loop again and take a path to one of the
+> "goto restart" statements without reassigning to "delegation".
+> 
+> 3. After going back to "restart", since the condition for line 618
+> became true, "rcu_dereference()" into "delegation".
+> 
+> 4. Enter the for loop again, but avoid the "goto restart" statements in
+> the first iteration and ensure that "&(delegation)->super_list !=
+> &server->delegations", the loop condition, remains true and "delegation"
+> isn't assigned NULL.
+> 
+> 5. When the for loop condition is reached for the second time, the loop
+> increment is executed and there is an address dependency.
+> 
+> Now, why would the compiler decide to assign "place_holder_deleg" to
+> "delegation" instead of what "rcu_dereference()" returned? Here's my
+> attempt at explaining.
+> 
+> In the pseudo code above, i.e. in the optimised IR, the assignment of
+> "place_holder_deleg" is guarded by two conditions. It is executed iff
+> "place_holder" isn't NULL and the "rcu_dereference()" didn't return
+> NULL. In other words, iff "place_holder != NULL && rcu_dereference() !=
+> NULL" holds at line 617, then "delegation == rcu_dereference() ==
+> place_holder_deleg" must hold at line 622. Otherwise, the optimisation
+> would be wrong.
+> 
+> Assume control flow has just reached the first if, i.e. line 617, in
+> source code. Since "place_holder" isn't NULL, it will execute the first
+> if's body and "rcu_dereference()" into "delegation" (618). Now it has
+> reached the second if. Per our aussmption, "rcu_dereference()" returned
+> something that wasn't NULL. Therefore, "!delegation", the first part of
+> the second if condition's OR, will be false.
+> 
+> However, if we want "rcu_dereference() == delegation" to hold after the
+> two if's, we can't enter the second if anyway, as it will overwrite
+> "delegation" with a value that might not be equal to what
+> "rcu_dereference()" returned. So, we want the second part of the second
+> if condition's OR, i.e.  "delegation != place_holder_deleg" to be false
+> as well.
+> 
+> When is that the case? It is the case when "delegation ==
+> place_holder_deleg" holds.
+> 
+> So, if we want "delegation == rcu_dereference() == place_holder_deleg"
+> to hold after the two if's, "place_holder != NULL && rcu_dereference()
+> != NULL" must hold before the two if's, which is what we wanted to show
+> and what the compiler figured out too.
+> 
+> TL;DR: it appears the compiler optimisation is plausible, yet it still
+> breaks the address dependency.
+> 
+> For those interested, I have made the unoptimised and optimised IR CFGs
+> available. In the optimised one, the interesting part is the transition
+> from "if.end" to "if.end13".
+> 
+> Unoptimised: https://raw.githubusercontent.com/gist/PBHDK/700bf7bdf968fe25c82506de58143bbe/raw/54bf2c1e1a72fb30120f7e812f05ef01ca86b78f/O0-nfs_server_return_marked_delegations.svg
+> 
+> Optimised: https://raw.githubusercontent.com/gist/PBHDK/700bf7bdf968fe25c82506de58143bbe/raw/54bf2c1e1a72fb30120f7e812f05ef01ca86b78f/O2-nfs_server_return_marked_delegations.svg
+> 
+> What do you think?
+> 
+> Many thanks,
+> Paul
+> 
+> [1]: https://linuxplumbersconf.org/event/7/contributions/821/attachments/598/1075/LPC_2020_--_Dependency_ordering.pdf
+> [2]: https://lore.kernel.org/llvm/YXknxGFjvaB46d%2Fp@Pauls-MacBook-Pro/T/#u
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+If I understand this correctly (rather unlikely), this stems from
+violating the following rule in Documentation/RCU/rcu_dereference.rst:
 
-Nit:
+------------------------------------------------------------------------
 
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -825,7 +825,8 @@ copy_nonpresent_pte(struct mm_struct *dst_mm, struct mm_struct *src_mm,
->  		 */
->  		get_page(page);
->  		rss[mm_counter(page)]++;
-> -		page_dup_rmap(page, false);
-> +		/* Cannot fail as these pages cannot get pinned. */
-> +		BUG_ON(page_try_dup_anon_rmap(page, false, src_vma));
+-	Be very careful about comparing pointers obtained from
+	rcu_dereference() against non-NULL values.  As Linus Torvalds
+	explained, if the two pointers are equal, the compiler could
+	substitute the pointer you are comparing against for the pointer
+	obtained from rcu_dereference().  For example::
 
-Should we just call __page_dup_rmap() here? This is block for the condition
-is_device_private_entry(), and page_try_dup_anon_rmap() can't return -EBUSY
-for is_device_private_page().
+		p = rcu_dereference(gp);
+		if (p == &default_struct)
+			do_default(p->a);
 
->  
->  		/*
->  		 * We do not preserve soft-dirty information, because so
-> @@ -921,18 +922,24 @@ copy_present_pte(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma,
->  	struct page *page;
->  
->  	page = vm_normal_page(src_vma, addr, pte);
-> -	if (page && unlikely(page_needs_cow_for_dma(src_vma, page))) {
-> +	if (page && PageAnon(page)) {
->  		/*
->  		 * If this page may have been pinned by the parent process,
->  		 * copy the page immediately for the child so that we'll always
->  		 * guarantee the pinned page won't be randomly replaced in the
->  		 * future.
->  		 */
-> -		return copy_present_page(dst_vma, src_vma, dst_pte, src_pte,
-> -					 addr, rss, prealloc, page);
-> +		get_page(page);
-> +		if (unlikely(page_try_dup_anon_rmap(page, false, src_vma))) {
-> +			/* Page maybe pinned, we have to copy. */
-> +			put_page(page);
-> +			return copy_present_page(dst_vma, src_vma, dst_pte, src_pte,
-> +						 addr, rss, prealloc, page);
-> +		}
-> +		rss[mm_counter(page)]++;
->  	} else if (page) {
->  		get_page(page);
-> -		page_dup_rmap(page, false);
-> +		page_dup_file_rmap(page, false);
->  		rss[mm_counter(page)]++;
->  	}
->  
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index 3d60823afd2d..97de2fc17f34 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -234,7 +234,7 @@ static bool remove_migration_pte(struct folio *folio,
->  			if (folio_test_anon(folio))
->  				hugepage_add_anon_rmap(new, vma, pvmw.address);
->  			else
-> -				page_dup_rmap(new, true);
-> +				page_dup_file_rmap(new, true);
->  			set_huge_pte_at(vma->vm_mm, pvmw.address, pvmw.pte, pte);
->  		} else
->  #endif
+	Because the compiler now knows that the value of "p" is exactly
+	the address of the variable "default_struct", it is free to
+	transform this code into the following::
 
+		p = rcu_dereference(gp);
+		if (p == &default_struct)
+			do_default(default_struct.a);
+
+	On ARM and Power hardware, the load from "default_struct.a"
+	can now be speculated, such that it might happen before the
+	rcu_dereference().  This could result in bugs due to misordering.
+
+	However, comparisons are OK in the following cases:
+
+	-	The comparison was against the NULL pointer.  If the
+		compiler knows that the pointer is NULL, you had better
+		not be dereferencing it anyway.  If the comparison is
+		non-equal, the compiler is none the wiser.  Therefore,
+		it is safe to compare pointers from rcu_dereference()
+		against NULL pointers.
+
+	-	The pointer is never dereferenced after being compared.
+		Since there are no subsequent dereferences, the compiler
+		cannot use anything it learned from the comparison
+		to reorder the non-existent subsequent dereferences.
+		This sort of comparison occurs frequently when scanning
+		RCU-protected circular linked lists.
+
+		Note that if checks for being within an RCU read-side
+		critical section are not required and the pointer is never
+		dereferenced, rcu_access_pointer() should be used in place
+		of rcu_dereference().
+
+	-	The comparison is against a pointer that references memory
+		that was initialized "a long time ago."  The reason
+		this is safe is that even if misordering occurs, the
+		misordering will not affect the accesses that follow
+		the comparison.  So exactly how long ago is "a long
+		time ago"?  Here are some possibilities:
+
+		-	Compile time.
+
+		-	Boot time.
+
+		-	Module-init time for module code.
+
+		-	Prior to kthread creation for kthread code.
+
+		-	During some prior acquisition of the lock that
+			we now hold.
+
+		-	Before mod_timer() time for a timer handler.
+
+		There are many other possibilities involving the Linux
+		kernel's wide array of primitives that cause code to
+		be invoked at a later time.
+
+	-	The pointer being compared against also came from
+		rcu_dereference().  In this case, both pointers depend
+		on one rcu_dereference() or another, so you get proper
+		ordering either way.
+
+		That said, this situation can make certain RCU usage
+		bugs more likely to happen.  Which can be a good thing,
+		at least if they happen during testing.  An example
+		of such an RCU usage bug is shown in the section titled
+		"EXAMPLE OF AMPLIFIED RCU-USAGE BUG".
+
+	-	All of the accesses following the comparison are stores,
+		so that a control dependency preserves the needed ordering.
+		That said, it is easy to get control dependencies wrong.
+		Please see the "CONTROL DEPENDENCIES" section of
+		Documentation/memory-barriers.txt for more details.
+
+	-	The pointers are not equal *and* the compiler does
+		not have enough information to deduce the value of the
+		pointer.  Note that the volatile cast in rcu_dereference()
+		will normally prevent the compiler from knowing too much.
+
+		However, please note that if the compiler knows that the
+		pointer takes on only one of two values, a not-equal
+		comparison will provide exactly the information that the
+		compiler needs to deduce the value of the pointer.
+
+------------------------------------------------------------------------
+
+But it would be good to support this use case, for example, by having
+the compiler provide some way of marking the "delegation" variable as
+carrying a full dependency.
+
+Or did I miss a turn in here somewhere?
+
+							Thanx, Paul

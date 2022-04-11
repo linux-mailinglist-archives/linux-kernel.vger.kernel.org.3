@@ -2,111 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EB8B4FB31D
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 06:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E971C4FB31F
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 07:01:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244686AbiDKFAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 01:00:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52736 "EHLO
+        id S244682AbiDKFDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 01:03:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244682AbiDKFAi (ORCPT
+        with ESMTP id S230030AbiDKFDR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 01:00:38 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 013F820F49
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 21:58:26 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so15983668fac.7
-        for <linux-kernel@vger.kernel.org>; Sun, 10 Apr 2022 21:58:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kJuexkGPihhCFQ9G7n/meJT/qMlsj0kY3mf4Csm4V5I=;
-        b=YHcJAvB1dfgRAPM9EDuJW3Y4fkyN/QmOLvdC7wKbBrF934rgBftVCaB03CtFQr9ZTk
-         dP17bmCKaXEDmjsr1g8Xm+06Aiym/H8ldW6u9cm7d3NtIu866lvFuiQMQAoRNqhGGlGw
-         1GNaVbY4ETJT4qC4phPSuKl3APU3aacWb0r4RBadTBIg68XEdaIvVlLlkgQ68RRc9Rux
-         udDdfg8BAZgQdvDR96bCK/fuayGd/fuUA9swKTnhgmZ+Z1je9ZYxycfL81305LB6pccj
-         MkPHHatC5x29BxRmZKudnoE+YSsrqrOatk48pLgKEZZDrY6RrhZYm3QBXuJkQn4DIvLn
-         iAOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=kJuexkGPihhCFQ9G7n/meJT/qMlsj0kY3mf4Csm4V5I=;
-        b=WOBVCpprf94jrzADfSaSgkoJ1E1skhMpqFdlNc87fFRsHVcSrsp1u06PGQ/yBV/N4l
-         mgDnxMeECLt6PgnbEFF6wK6EN4wS8L1xfijSA48v6rSivCgnrptQSkBnPLqFOQpHP3Ok
-         +B6WQ1WWYIIpUqP1dvgOeUGkzlQfi2TZAXGnMOEqAZQrTadaMnL7+FBiHHdFhes1U3Ok
-         QcKFZzFiJqspbUd9GD+VS7aiUY/c+VhRzrbWGU50yYHPabkP+/do4K5wtNDASS5o7DpB
-         RSTsAEf2rGG0amZ3db6hIaVJ7ke0Vz7EqyEYc8Lb4RACJvsRt4rsF4QWB1zU+1k4GraT
-         Sulw==
-X-Gm-Message-State: AOAM533k521DmqpGdgpsbs3Za91rnpUzxogTSNhNuVPK2c/sBkFxN6Iu
-        HbTjmhGg+8u5cUMOyw+Tk5+2XdQzagY=
-X-Google-Smtp-Source: ABdhPJws7oa/oOpuECwblcEiJV5PDdrhW1R1QHf9/dH6HuPrKawsUUA6C5M7QbkWLE5ylPOI2BWPbg==
-X-Received: by 2002:a05:6870:e388:b0:e1:fc4a:4f85 with SMTP id x8-20020a056870e38800b000e1fc4a4f85mr13736992oad.87.1649653104499;
-        Sun, 10 Apr 2022 21:58:24 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r35-20020a056870582300b000df0dc42ff5sm11604852oap.0.2022.04.10.21.58.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Apr 2022 21:58:23 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 10 Apr 2022 21:58:22 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Linux 5.18-rc2
-Message-ID: <20220411045822.GA295401@roeck-us.net>
-References: <CAHk-=wh0+DYC2+Aeu2=vfUtGaDqVuKxKrxyhwQFoG89rcynzww@mail.gmail.com>
+        Mon, 11 Apr 2022 01:03:17 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE893668A;
+        Sun, 10 Apr 2022 22:01:03 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 090853201DA0;
+        Mon, 11 Apr 2022 01:01:01 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 11 Apr 2022 01:01:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm2; t=1649653261; x=1649739661; bh=3FHnb4Cp18Y2LEkoS1WKw6+37
+        m2cFQoTwhF2MLKmC/w=; b=YQglM7b1OaG6yKb7vCNnryOcqE4cTBWx6iwlmHuDB
+        qCm1/CfTZH8tVCt6bBV4RAWOo9daFIJkg/6MbJobk1+v1vyAwmIRPUbJTptHzNvO
+        ihXTTvAlGltHyfvb9cnR4xNgxT9X9m8WyhAdiiHc132QqOHIOm7zFUoEEGo9RF1n
+        2p8RnfLjY0kFkP5NBSBO7LyVEpHpXxCE4HGHik9Den3zyVSKg0LY3CGpyyJv4gj+
+        RpJKHpzXm0x/ZCQcxw+nctOv3cZpeFpa5nwEOCBCDKQ1SuKPfLmD8aPQpY55KmeG
+        rcxqIsMf9wexUN6lET9Mz24Jcav2EQmmub72lc6cZiEZw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm3; t=1649653261; x=1649739661; bh=3
+        FHnb4Cp18Y2LEkoS1WKw6+37m2cFQoTwhF2MLKmC/w=; b=bnzl9FDRGFlxJ9fCC
+        CPx36tV1Qm6cl9vXlZ4sqrUqZpYKaEjn9Q1mguLUm5isG5DXAx2NOSd0HL0jGU9x
+        /qjHv7Q5vFLc8/iVaNvsDsgMWA3hj+GD0SMNj3Dfhdn9TGWhV/6+dnY4wvEVPTjx
+        mhOexhhBd/fqpR75MsBA7PlItZcJCeGtJq3LCkLaLL6JUZueWzjYi91yAjPYOm80
+        fsmWf2nJFQshQvDRSGy+FP1ADB5S4gmVSsrNu0vsK9v+oQaGxWYwARatK+1ExG4P
+        GxjiulwepTnmbSHiK07g3guWYlBvlMwQVsutBSQvHpj+spy2kHZJKIj/rAG6N3f2
+        HftpQ==
+X-ME-Sender: <xms:DbZTYrTZxqHBi12UjGcn0DxqPCHp1b_1B-AiuNkvkCgvG_SuVbWzMQ>
+    <xme:DbZTYsyFKJs5MzPI5yCn4uHRfBkzYHJQ4shNbMQEvcZB8IZES0l67OAdk-Njw4N0O
+    vuTHGSjkCgdtSQ4AA>
+X-ME-Received: <xmr:DbZTYg2Y5q8kOfZOFcam_ZABdcDps87WHIVsZCtgFgCF9uI87DOm0UeNIFl3AJ-Foe9_-kZzZuL9kANZKjcU8GLh2tbLh-Y6KmkGBwHuNqCAeOYRQGGCxYvPzruk_qKIfNKKgQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudekhedgkeehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgvlhcu
+    jfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtffrrg
+    htthgvrhhnpeeiteekhfehuddugfeltddufeejjeefgeevheekueffhffhjeekheeiffdt
+    vedtveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:DbZTYrDXqcjk8JATPB836J7RVkbL85HOYcdtMW-5oNQVQOIYt_PJOQ>
+    <xmx:DbZTYki6nLrQipo1VDNW2L3z_FcNSivDbexyHZJUK3ss3XwtCRumyw>
+    <xmx:DbZTYvqcXu97qR6Z2PnI_R7A2EVgqrXG5_evXmUGtyEIXBqiDZ54nw>
+    <xmx:DbZTYnNEpB-jgaQez46rBiXST_MzTOwfkH2ksu0kQKyCLfI4V_pBcw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 11 Apr 2022 01:01:00 -0400 (EDT)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc:     Andre Przywara <andre.przywara@arm.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: [PATCH] clk: sunxi-ng: sun6i-rtc: Mark rtc-32k as critical
+Date:   Mon, 11 Apr 2022 00:00:59 -0500
+Message-Id: <20220411050100.40964-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wh0+DYC2+Aeu2=vfUtGaDqVuKxKrxyhwQFoG89rcynzww@mail.gmail.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 10, 2022 at 02:54:27PM -1000, Linus Torvalds wrote:
-> It's Sunday afternoon for me, which means "rc release time". Things
-> look fairly normal here, although it's early in the release cycle so
-> it's a bit hard to say for sure. But at least it's not looking
-> particularly odd, and we have fixes all over.
-> 
-> Drivers is the bulk of it, and there's a little bit of everything
-> here, although the AMD GPU driver fixes are perhaps the most
-> noticeable. But there's also networking, scsi, rdma, block, you name
-> it...
-> 
-> On the non-driver side, we've got a bump in the diffstat for the
-> static call infrastructure, but that's really just code movement. The
-> actual changes are more spread out than that bump would imply, and are
-> generally pretty small. There's some filesystem fixes, core
-> networking, and obviously the usual architecture work.
-> 
-> And as has been the case lately, there's the usual tooling updates -
-> selftests and perf.
-> 
-> Full shortlog appended, it's not exactly tiny, but it's easy enough to
-> scroll through to get a feel for what's been going on.
-> 
-> Testing appreciated as always,
+Because some newer hardware variants have multiple possible parents for
+the RTC's timekeeping clock, this driver models it as a "rtc-32k" clock.
+However, it does not add any consumer for this clock. This causes the
+common clock framework to disable it, preventing RTC time access.
 
-Build results:
-	total: 151 pass: 151 fail: 0
-Qemu test results:
-	total: 488 pass: 488 fail: 0
+Since the RTC's timekeeping clock should always be enabled, regardless
+of which drivers are loaded, let's mark this clock as critical instead
+of adding a consumer in the RTC driver.
 
-The only issue left in my testing is the warning in nosmp parisc code.
+Fixes: d91612d7f01a ("clk: sunxi-ng: Add support for the sun6i RTC clocks")
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
 
-WARNING: CPU: 0 PID: 1 at fs/sysfs/group.c:115 internal_create_group+0x360/0x394
+ drivers/clk/sunxi-ng/ccu-sun6i-rtc.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-This problem is fixed in linux-next with
-https://lore.kernel.org/all/20220401203114.348053-1-deller@gmx.de/
-which should hopefully find its way into mainline soon.
+diff --git a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
+index 8a10bade7e0d..3d9c9ce5a3db 100644
+--- a/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
++++ b/drivers/clk/sunxi-ng/ccu-sun6i-rtc.c
+@@ -241,6 +241,7 @@ static struct clk_init_data rtc_32k_init_data = {
+ 	.ops		= &ccu_mux_ops,
+ 	.parent_hws	= rtc_32k_parents,
+ 	.num_parents	= ARRAY_SIZE(rtc_32k_parents), /* updated during probe */
++	.flags		= CLK_IS_CRITICAL,
+ };
+ 
+ static struct ccu_mux rtc_32k_clk = {
+-- 
+2.35.1
 
-Guenter

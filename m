@@ -2,164 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D9184FBFEC
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FFC24FC018
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 17:16:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347663AbiDKPN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 11:13:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
+        id S1347695AbiDKPSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 11:18:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235305AbiDKPNW (ORCPT
+        with ESMTP id S1347749AbiDKPRn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 11:13:22 -0400
+        Mon, 11 Apr 2022 11:17:43 -0400
 Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2442631522
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:11:07 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id bh17so31522307ejb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 08:11:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440861B1;
+        Mon, 11 Apr 2022 08:15:29 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id r13so31605194ejd.5;
+        Mon, 11 Apr 2022 08:15:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair;
-        h=mime-version:content-transfer-encoding:date:message-id:from:to:cc
-         :subject:references:in-reply-to;
-        bh=pCJjCOYD1pHvTfEkVbYg6ajc5I2hvGHciFb/sFyrlHY=;
-        b=gpXKT43tqtGTzEZYyVUu+KoI+Ti3B/PxcwEDJCLsPuyjVj05Rp2kVeLH4lDKz/v0IQ
-         FGC2lHgJcmFoDsWBaFhXQ6E805MJtsOtjLVLztpZo6cHtyHOb9Vb31mGUxRZJP0V4NM7
-         5dja41jjOCCg9xz49t+W/PIxhhuhBPAFHAzqgM3iRRXbN0dj5gH2/aofGsZgH0fOyjak
-         E0aOHfu7ip8UebMzNLGB9+XC8Gw7BZNP+VyQlD98g5X+dd4zFpG3dF4iNv4OGnM302vf
-         5VncVzRR6K2zlVASr9C7gH840TYvI6RvoB/T5AumJobdDYS7fdD7FzFGQGXcfQZMi83A
-         lUMQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ly8qeDVw7zF5NU0RjXFxoEFBwNsxc6leMxYfyV7Srm4=;
+        b=HhWEYM04cPm9rnN/yhveILDzOYkGL91YRYmt95vUt0Xgv++KwaofLEaM+QYcg1VQim
+         eI+8pQNXd05xIfuyLgsNNEIRoBfHBpm81KD1h9KGUNXdIidTIjE6gnQJF1fsgYdka6Ju
+         eDSXwT4zR9shC7vOcScpbX51j52JcYAxZVzsof3ujKii8CZ63XEujKBEgQA+cDmAoiEF
+         ZPqeex0+BC9vd3sSSnsu7Z+BphG/Rxxx2IK1tra+rv8ssyh3ViK3TvtaezpGues37FuD
+         djGUgqnavIroXqKNC5F7CcH0V0Fkv+6gZe2SaPp9o3MRi4T49ZUOZwP32XVOtHoHkG5f
+         U5Gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:content-transfer-encoding:date
-         :message-id:from:to:cc:subject:references:in-reply-to;
-        bh=pCJjCOYD1pHvTfEkVbYg6ajc5I2hvGHciFb/sFyrlHY=;
-        b=UGJ0epqydY35++iCEkUdOuvWgqeFtsjVkQqLWLvdMF2iB+b4zaEJqF8rLIn2oQmvs0
-         3tY+WQIFJRfYAB0FLBROkeQ72aKJB9jV/MEFtLoGXqzXtlGIVqZp1JFtuSOxBV2pUKem
-         CcTRy8mUlM0Q+NVLkIKG6iZumN6o9xd++vXAZlAHD8k+js6RDCX174QnIuzF1+un/eGY
-         Lt4t0eBSyUjDag1JCByRr2RXWu45dRD+XWAx8iJo+D35IpeyS4oZEdoBf0Qtat02rRJf
-         4K5EJgyPHOZWBfptD2JxHd4X6YEJuj7kZFWFqrRG/ittCbufYF0ZRKOYsfgrmrQmx7B/
-         ZxXQ==
-X-Gm-Message-State: AOAM530XW9AvjMOVaEG4JaAVIeiteuoEGAvjUnJmjIexRtbRJnsSUb7d
-        1/dczl+RjtJuIraZtBJ6xmQMFg==
-X-Google-Smtp-Source: ABdhPJwLC6bUCnaIFc6oW/Xq/0xCuw+godnXoSeE5FChrONf7ocIGLASLvPmRetx5nLXf3Im5q8Plw==
-X-Received: by 2002:a17:907:9803:b0:6db:ab21:738e with SMTP id ji3-20020a170907980300b006dbab21738emr29228455ejc.112.1649689865639;
-        Mon, 11 Apr 2022 08:11:05 -0700 (PDT)
-Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id x17-20020a170906297100b006e49a9535f3sm12047743ejd.114.2022.04.11.08.11.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Apr 2022 08:11:04 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 11 Apr 2022 17:11:04 +0200
-Message-Id: <CJ7I91AXGGCE.24GR11X2CBJ2J@otso>
-From:   "Luca Weiss" <luca.weiss@fairphone.com>
-To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        <linux-input@vger.kernel.org>
-Cc:     <~postmarketos/upstreaming@lists.sr.ht>,
-        <phone-devel@vger.kernel.org>,
-        "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/3] dt-bindings: input: Add bindings for Awinic AW8695
- haptics
-X-Mailer: aerc 0.9.0
-References: <20220408115311.237039-1-luca.weiss@fairphone.com>
- <1a45984a-752b-6bad-0320-f0946d83f2b9@linaro.org>
- <CJ79EIW9Z89J.YZTZ6AU91TGE@otso>
- <60402ff3-db73-5fc0-bc2a-942d664085ec@linaro.org>
-In-Reply-To: <60402ff3-db73-5fc0-bc2a-942d664085ec@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ly8qeDVw7zF5NU0RjXFxoEFBwNsxc6leMxYfyV7Srm4=;
+        b=xC7uQUS59FKcySJ5xwxG2m96rRCmozoJWHO81YK9k7SsXPXy6ifZLhV10XsqysI/2K
+         qp9wgjl5FhtFQ524msdGINg0rbPIoVvL+IyoYxH/le4Mut1ZKeHs/Pz1y6fGcNKqrvFj
+         8c34nv/DsKruSZFOZCWa2HSB0uKeNDelRejgnuBhoPpVm1INuC0AwoC4stV0hJM4bdUC
+         r+fNb0l88luKufha1h95eaBCzr0lRJOcC5r+Am+Qz2sWpcFPsTjmwJff1urjZRXWlzyI
+         XzrzgEGs8DJUhbB1LD18wPINMNqjfO4LoxggCIzVHnpcFMYEFmUh8t9xKOPiFfNBwHwl
+         P/Lg==
+X-Gm-Message-State: AOAM5321Azab5BTryhtLkcZpS8C3W1hNmvPpI5bh6rVLXP3KPJXvj7yO
+        ipnnKDPK2RyH1sdM87JGNsCSWUNFAyf2MFsRzU/c6Py8srs=
+X-Google-Smtp-Source: ABdhPJzEBVQ3sO6Q6oQG9NLtTLt17jGA872K66xLcQMJiFjD4HIZRf8vEChLi9Dy3MT+eDvoptY6zRn18WvVv8eAb78=
+X-Received: by 2002:a17:907:968e:b0:6db:aed5:43c8 with SMTP id
+ hd14-20020a170907968e00b006dbaed543c8mr30685289ejc.636.1649690127832; Mon, 11
+ Apr 2022 08:15:27 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220404151036.265901-1-k.kahurani@gmail.com> <6b6a8f5c-ceb9-ce97-bf79-d7634b433135@gmail.com>
+In-Reply-To: <6b6a8f5c-ceb9-ce97-bf79-d7634b433135@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 11 Apr 2022 18:11:14 +0300
+Message-ID: <CAHp75VdkPJuHLFfQzPS==G_K1fqai53eT-=Gh-kL9mTED1x2fw@mail.gmail.com>
+Subject: Re: [PATCH] net: ax88179: add proper error handling of usb read errors
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     David Kahurani <k.kahurani@gmail.com>,
+        netdev <netdev@vger.kernel.org>,
+        syzbot+d3dbdf31fbe9d8f5f311@syzkaller.appspotmail.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        USB <linux-usb@vger.kernel.org>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On Tue, Apr 5, 2022 at 3:05 AM Pavel Skripkin <paskripkin@gmail.com> wrote:
+> On 4/4/22 18:10, David Kahurani wrote:
+> > Reads that are lesser than the requested size lead to uninit-value bugs. Qualify
+> > such reads as errors and handle them correctly.
 
-On Mon Apr 11, 2022 at 2:52 PM CEST, Krzysztof Kozlowski wrote:
-> On 11/04/2022 10:15, Luca Weiss wrote:
+> I'd personally cut this log a bit and would add this part of the initial
+> report
 >
-> (...)
+> Local variable eeprom.i created at:
+>   ax88179_check_eeprom drivers/net/usb/ax88179_178a.c:1045 [inline]
+>   ax88179_led_setting+0x2e2/0x30b0 drivers/net/usb/ax88179_178a.c:1168
+>   ax88179_bind+0xe75/0x1990 drivers/net/usb/ax88179_178a.c:1411
 >
-> >>> +  awinic,f0-detection-play-time:
-> >>> +    $ref: /schemas/types.yaml#/definitions/uint32
-> >>> +    description: Drive waveform play times in the first period in th=
-e f0 detection
-> >>
-> >> Use standard unit suffixes for known units (e.g. time).
-> >=20
-> > While the datasheet doesn't mention any time unit, the value is used to
-> > calculate the f0_trace_ms variable (which is milliseconds) but the
-> > result also depends on the awinic,f0-preset value, so it's not a raw
-> > time value.
+> Since it shows exactly where problem comes from.
 >
-> I see, ok.
->
-> >=20
-> >>
-> >>> +
-> >>> +  awinic,f0-detection-wait-time:
-> >>> +    $ref: /schemas/types.yaml#/definitions/uint32
-> >>> +    description: Waveform wait times in the f0 detection
-> >>
-> >> Ditto.
-> >>
-> >>> +
-> >>> +  awinic,f0-detection-repeat:
-> >>> +    $ref: /schemas/types.yaml#/definitions/uint32
-> >>> +    description: Repeat times in the f0 detection
-> >>> +
-> >>> +  awinic,f0-detection-trace:
-> >>> +    $ref: /schemas/types.yaml#/definitions/uint32
-> >>> +    description: Drive waveform play times in the second period and =
-later in the f0 detection
-> >>> +
-> >>> +  awinic,boost-debug:
-> >>> +    $ref: /schemas/types.yaml#/definitions/uint8-array
-> >>> +    minItems: 3
-> >>> +    maxItems: 3
-> >>> +    description: Values for BSTDBG1-3 registers
-> >>
-> >> Do not encode device programming model (registers) into the binding. Y=
-ou
-> >> need to define it as a property related to hardware itself, not its
-> >> registers (e.g. boost value in mV).
-> >=20
-> > Unfortunately I couldn't figure the meaning for this and the two values
-> > below.
-> >=20
-> > The datasheet doesn't mention these registers at all and the downstream
-> > driver doesn't do anything meaningful with them (other than setting the=
-m)
-> > nor has any comment to indicate what they do.
-> > In the datasheet there's only BSTDBG4 mentioned where bits [5:1] mean
-> > PVDD output voltage setting so for these registers it could really be
-> > anthing :(
-> >=20
-> > Maybe someone with more knowledge about LRAs might be able to decipher
-> > what tset and r_spare is at least? I unfortunately didn't manage.
->
-> Do you have to define them in such case in DT? Maybe it should be part
-> of driver?
+> I do not insist, just IMO
 
-As these parameters are part of the dts downstream, I assume they differ
-per board or actual LRA used.
+I insist though. It will reduce the resource consumption (i.e. storage
+and network load on cloning / pulling) a lot (taking into account
+multiplier of how many Linux kernel source copies are around the
+globe) and hence become more environmentally friendly.
 
-But I also found other downstream dts examples on github (e.g.
-awinic,aw8697_haptic) and they also seemed to use the same values for
-these couple of registers (r_spare, tset and bstdbg). Maybe I can gather
-more info but it's unlikely I'll be able to get a concrete answer..
-
-Regards
-Luca
-
->
-> Best regards,
-> Krzysztof
-
+-- 
+With Best Regards,
+Andy Shevchenko

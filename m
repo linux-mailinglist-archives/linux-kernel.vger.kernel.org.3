@@ -2,116 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCB324FB2EF
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 06:36:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CFEE4FB2F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 06:37:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244688AbiDKEiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 00:38:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41958 "EHLO
+        id S235460AbiDKEi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 00:38:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244630AbiDKEhM (ORCPT
+        with ESMTP id S241098AbiDKEib (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 00:37:12 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67DD0DFB5;
-        Sun, 10 Apr 2022 21:34:59 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id E245F3201F73;
-        Mon, 11 Apr 2022 00:34:57 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Mon, 11 Apr 2022 00:34:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1649651697; x=1649738097; bh=GF
-        Mu8ARIAw6YIaqjRrMzqPr2bRnKZum/EaxSGb2uoFw=; b=cGwDPuZJS3qbvVn/oX
-        k9FXFB1MLBwzNcHIhTxFu14GcHW0JYkhAhhGTzZVJ94qWTPPcTDfa8p4FgURBmBD
-        QmxR3oUJ6mY69mIq+r2I0aOfFq8SA/GNuAVb6GQIAoVtE1SC2+4PcC+1xgcJA+KZ
-        ckR6HrD1hPJXJQT8trQBEsezoaLQqGNHvHcHCdrCQx5rLrScjbGxjF/jsNan9/ar
-        URO0OELpJfpyArFi4ULZ/Zu0B8U4mFHeFUMTHQpACUx+UGnrp1RRgFjAFLOwT/ll
-        YkpBeHTf5OB9WHyB2VDTFAIAPwcxPNr1tC1xpC71qkVr9wJJjYhD0qMa1wUZ3uBB
-        4BTg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1649651697; x=1649738097; bh=GFMu8ARIAw6YIaqjRrMzqPr2bRnKZum/Eax
-        SGb2uoFw=; b=fpKXoqZSYnH34Qv1kXpxO3HoynnoQRSCPcAJK76Tm4VxlMpvsqA
-        BxCIDplh344BnVHlOZ4RXjUiQgIzNe3njpps/1R7fr9DaqJo4qpuJFIxkA8y8ucT
-        mbS+vSF5vQwGq5D0T8z9P4n9PXunmOHAzjcVi1dQYw+n6IWuf0eF0hGM1hsH/4By
-        ojD1O58dMsdZxcv2uX1rp5AhqCWr9xJk6dHFENla/qiLn4g+qF0TtKzVm9V1lAIr
-        uK15+2PjOvnVT9oxqOTBlzPihu+pQOHms00AEqlM22HVqg/I8b7I2dpUl4ObnbXf
-        lYMo2BCWM7IIFHD+fh0vAIi3pTYkyhNs5LQ==
-X-ME-Sender: <xms:8a9TYna8qZUv_981JCmTrG84BHlm93qL3tr_pHVx-E69gMXM5NnG6w>
-    <xme:8a9TYmZeVZE7VXJgOUC6Et4HOT2HaDKrqOyyhEK-nuytHDStq8CeqSnFKi1a40CRe
-    VM2R00Nzs-SulNjSA>
-X-ME-Received: <xmr:8a9TYp8tkQVyBrgIAi2v1SpphBzmIpGyQuCPdyQHwe0fDQK23h-h94kghBddzjv3kYs0W70CzT4fb13_U21NgureVAYV7O6HkDrS7jqNXybCT2KU4bvx7ASWp4dgiY1RSgp3RA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudekhedgkedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
-    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
-    frrghtthgvrhhnpeduhfejfedvhffgfeehtefghfeiiefgfeehgfdvvdevfeegjeehjedv
-    gfejheeuieenucevlhhushhtvghrufhiiigvpedvnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:8a9TYtqyRAMy9Uu6utjRKlM_YTvOuXPeYhbO0FHGD3C2CtGx8TPjYA>
-    <xmx:8a9TYirHK0YOu0ACofDlRP57b63xkDCFoBmPicji6jKGxxX7xGpHgg>
-    <xmx:8a9TYjQlMr1hEBUhc7cXMQUA_qGPcHGK-dJV9YiEAgkRWZBTSGqUAQ>
-    <xmx:8a9TYvTsKwg_BpFHbys59XWdcKeKsbj9BBE72HjA3ojr81f7CyIsIQ>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 11 Apr 2022 00:34:56 -0400 (EDT)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-Subject: [PATCH 10/10] drm/sun4i: Add compatible for D1 display engine
-Date:   Sun, 10 Apr 2022 23:34:22 -0500
-Message-Id: <20220411043423.37333-11-samuel@sholland.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220411043423.37333-1-samuel@sholland.org>
-References: <20220411043423.37333-1-samuel@sholland.org>
+        Mon, 11 Apr 2022 00:38:31 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3350625E8C;
+        Sun, 10 Apr 2022 21:36:05 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KcGJM5pvnz4xQq;
+        Mon, 11 Apr 2022 14:36:02 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1649651764;
+        bh=YoxPSRCfaNi8+d6J43vTyxCyG6mcuvx7SvTGzsQcrPs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=rtAJR2Y8Xib6wW66AhjROymGWOJv3SwA29HOmP6yq/tkO4onZphvPMMMws4XyOP8h
+         UHQr7vHyYGDLkILSumAZxZZxnkk2QFkO+oWH8hGFlBXxRZuoKfYjCKefw4VKx6q2+/
+         0h2DcZTAWkzy2J6F9DABCDQ0zBLHCzcWyZvXrwVzFPzmV4+Nq/WR4+3GxqYSKRFMCP
+         QtHDu84JuGwEMruP+6eROucnj7LrHyiM8Ouz6Jsi98CckXqyEJP+lEM7O0s+2dnMwG
+         JrvzCF+zZJZnS5LfDeGNQ4M+LV7TYv1APeqH2Y0TYfHr6POq6+itjBwNGY2aNKfedx
+         kY0yeR9vwvh8A==
+Date:   Mon, 11 Apr 2022 14:36:02 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warnings after merge of the net tree
+Message-ID: <20220411143602.24aa559b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/UuNFG+i=/HTjAVRJ9jwzvpL";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that the various blocks in the D1 display engine pipeline are
-supported, we can enable the overall engine.
+--Sig_/UuNFG+i=/HTjAVRJ9jwzvpL
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
+Hi all,
 
- drivers/gpu/drm/sun4i/sun4i_drv.c | 1 +
- 1 file changed, 1 insertion(+)
+After merging the net tree, today's linux-next build (htmldocs) produced
+these warnings:
 
-diff --git a/drivers/gpu/drm/sun4i/sun4i_drv.c b/drivers/gpu/drm/sun4i/sun4i_drv.c
-index 6a9ba8a77c77..275f7e4a03ae 100644
---- a/drivers/gpu/drm/sun4i/sun4i_drv.c
-+++ b/drivers/gpu/drm/sun4i/sun4i_drv.c
-@@ -418,6 +418,7 @@ static const struct of_device_id sun4i_drv_of_table[] = {
- 	{ .compatible = "allwinner,sun8i-r40-display-engine" },
- 	{ .compatible = "allwinner,sun8i-v3s-display-engine" },
- 	{ .compatible = "allwinner,sun9i-a80-display-engine" },
-+	{ .compatible = "allwinner,sun20i-d1-display-engine" },
- 	{ .compatible = "allwinner,sun50i-a64-display-engine" },
- 	{ .compatible = "allwinner,sun50i-h6-display-engine" },
- 	{ }
--- 
-2.35.1
+Documentation/driver-api/infrastructure:35: drivers/base/dd.c:280: WARNING:=
+ Unexpected indentation.
+Documentation/driver-api/infrastructure:35: drivers/base/dd.c:281: WARNING:=
+ Block quote ends without a blank line; unexpected unindent.
 
+Introduced by commit
+
+  c8c43cee29f6 ("driver core: Fix driver_deferred_probe_check_state() logic=
+")
+
+Exposed by commit
+
+  74befa447e68 ("net: mdio: don't defer probe forever if PHY IRQ provider i=
+s missing")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/UuNFG+i=/HTjAVRJ9jwzvpL
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJTsDIACgkQAVBC80lX
+0Gwd/gf/V81l2NZLvWXXf/P8QkLznXhiabQ5aLmcrFVGDXj5ezYqxY8+8yPnRsCa
+uKSO/KnxdzimhxJHCQX0yS3mK0Jvcluwdp3psvvN9bAUc6jYa4bBuoKOIsBimXGJ
+ag9Or0w3MDb3R2C4MQZw0PRiD8AkCYituZaKr4QOKwrtD52ilywAZWYXu/eDjirg
+qHmrLjzN2/nfFQcB5R1d4YO3Vg+K4VCS8+g/RMldGm87VzSBEa0s6DoSMOeGM5Lk
+N10cA1f1IIPrpbET+QROdvSmJvA4//VPJyeZkF8sRFkkTurXWhwnoI2sgoblmv1W
+O8L+yv7ueBZKhxxtxDW2ucXYdFFIyw==
+=QCY1
+-----END PGP SIGNATURE-----
+
+--Sig_/UuNFG+i=/HTjAVRJ9jwzvpL--

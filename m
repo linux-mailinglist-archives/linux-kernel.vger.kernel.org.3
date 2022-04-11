@@ -2,112 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 107904FB72B
-	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 11:16:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF3E64FB6EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 11 Apr 2022 11:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344299AbiDKJS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 05:18:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32922 "EHLO
+        id S1344155AbiDKJJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 05:09:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344297AbiDKJRb (ORCPT
+        with ESMTP id S1344136AbiDKJJx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 05:17:31 -0400
-X-Greylist: delayed 408 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 11 Apr 2022 02:15:15 PDT
-Received: from mx2.securetransport.de (mx2.securetransport.de [IPv6:2a03:4000:13:6c7::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC111901D;
-        Mon, 11 Apr 2022 02:15:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
-        s=dhelectronicscom; t=1649668020;
-        bh=ZkjVgkAd7BPlW65AFkPh62JC4/Ltq0wEMyPc85IKACI=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=SL6bK6G+HmR/00NefWd1XD9Pl03YFODwgM0d+CYvOYcv6LM9GvBERBQa3ehx9V93X
-         b02Y6EFV7w/Lu1QSNBIXrpV0xM1u0DsU78FZLvvopN9jxX9smxdU1mpKfHLD388pUj
-         Dh2Dh4HZo+HyRFKGly6rTcEkUFEkNYX2PHWT7ngSYgpMsZIxUVMRys2bSBwdEdIn8j
-         VEXtJ6LudDcwgUJoETqTFYrZeAfgCKXjByKRE0cPHiKJIAIjC3uoguktNcXbuqhXdK
-         AfEqw59xeyaBmJhDXVyyZi7dRYhFRDF3iuaXfrJwvmNZFnjdtKxeS+Ur20rH5yloQU
-         x9BDWa1gRCtOw==
-X-secureTransport-forwarded: yes
-From:   Christoph Niedermaier <cniedermaier@dh-electronics.com>
-Complaints-To: abuse@cubewerk.de
-To:     Guenter Roeck <linux@roeck-us.net>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
-CC:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "linux-imx@nxp.com" <linux-imx@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Andrej Picej <andrej.picej@norik.com>,
-        Support Opensource <Support.Opensource@diasemi.com>
-Subject: RE: [PATCH v5 1/5] mfd: da9062: make register CONFIG_I writable
-Thread-Topic: [PATCH v5 1/5] mfd: da9062: make register CONFIG_I writable
-Thread-Index: AQHX6m0sEuT02omnTU6Bw4Z3mrvD4awlnAGAgAAHA4CAxYtwoA==
-Date:   Mon, 11 Apr 2022 09:06:46 +0000
-Message-ID: <3e49d99036cf4b5793d52891683b867f@dh-electronics.com>
-References: <20211206064732.280375-1-andrej.picej@norik.com>
- <DB9PR10MB4652F10355222D5DD1A65E50806D9@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
- <83fad886-541c-987c-1f38-7029aca41892@roeck-us.net>
-In-Reply-To: <83fad886-541c-987c-1f38-7029aca41892@roeck-us.net>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 11 Apr 2022 05:09:53 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1CA3EABA
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 02:07:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649668059; x=1681204059;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WSrbsnvdb9Q1ldyMCizYfWtdMa8raFmqP5cc0NVtLuI=;
+  b=TEEm6JNFy1b63PaA35Y6TC34ISgP8Fd+6edAbmpoeHTaJ0xvo2/K/IgJ
+   B4uEQ+dQNCGT0+OOfGNJehndCa9aLZAGegwlBXN57Y1g8fpjPipviQDHJ
+   Hn8Ekowj9lnFXT7em3bblDhsUMRel/4KIWuloCXFwUMOCbv1gV3fcBZRx
+   wW5Yf7Tko6uHlmSdELwhYIUn0vhIukYh76iX4Yrg6X1VQggUh866qzT4+
+   VNxKT6pyuU3JHthFBLDaY1J2GmVTmBkIWRgkXkD9EbaWZSWag7CWC4zRa
+   Faj+Jrujjv4Ma0ODTHU6r1QwTfCNZi3GZRWciyzKr07cMMLPS/sBJ5gtx
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10313"; a="260919009"
+X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
+   d="scan'208";a="260919009"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 02:07:39 -0700
+X-IronPort-AV: E=Sophos;i="5.90,251,1643702400"; 
+   d="scan'208";a="572040413"
+Received: from xsang-optiplex-9020.sh.intel.com (HELO xsang-OptiPlex-9020) ([10.239.159.143])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 02:07:34 -0700
+Date:   Mon, 11 Apr 2022 17:07:19 +0800
+From:   Oliver Sang <oliver.sang@intel.com>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>, lkp@lists.01.org,
+        lkp@intel.com, guobing.chen@intel.com, ming.a.chen@intel.com,
+        frank.du@intel.com, Shuhua.Fan@intel.com, wangyang.guo@intel.com,
+        Wenhuan.Huang@intel.com, jessica.ji@intel.com, shan.kang@intel.com,
+        guangli.li@intel.com, tiejun.li@intel.com, yu.ma@intel.com,
+        dapeng1.mi@intel.com, jiebin.sun@intel.com, gengxin.xie@intel.com,
+        fan.zhao@intel.com, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [ovl]  30f9ef9479: BUG:kernel_NULL_pointer_dereference,address
+Message-ID: <20220411090719.GA21954@xsang-OptiPlex-9020>
+References: <20220407094023.GA13500@xsang-OptiPlex-9020>
+ <20220407102605.ipstobkadq34gmzg@wittgenstein>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220407102605.ipstobkadq34gmzg@wittgenstein>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogR3VlbnRlciBSb2VjayBbbWFpbHRvOmdyb2VjazdAZ21haWwuY29tXSBPbiBCZWhhbGYg
-T2YgR3VlbnRlciBSb2Vjaw0KU2VudDogTW9uZGF5LCBEZWNlbWJlciA2LCAyMDIxIDY6MTIgUE0N
-Cj4gT24gMTIvNi8yMSA4OjQ2IEFNLCBBZGFtIFRob21zb24gd3JvdGU6DQo+PiBPbiAwNiBEZWNl
-bWJlciAyMDIxIDA2OjQ3LCBBbmRyZWogUGljZWogd3JvdGU6DQo+Pg0KPj4+IEZyb206IFN0ZWZh
-biBDaHJpc3QgPHMuY2hyaXN0QHBoeXRlYy5kZT4NCj4+Pg0KPj4+IE1ha2UgdGhlIGNvbmZpZyBy
-ZWdpc3RlciBDT05GSUdfSSB3cml0YWJsZSB0byBjaGFuZ2UgdGhlIHdhdGNoZG9nIG1vZGUuDQo+
-Pj4NCj4+PiBTaWduZWQtb2ZmLWJ5OiBTdGVmYW4gQ2hyaXN0IDxzLmNocmlzdEBwaHl0ZWMuZGU+
-DQo+Pj4gU2lnbmVkLW9mZi1ieTogQW5kcmVqIFBpY2VqIDxhbmRyZWoucGljZWpAbm9yaWsuY29t
-Pg0KPj4NCj4+IEkndmUgYWxyZWFkeSBwcm92aWRlZCAnUmV2aWV3ZWQtYnknIHRhZ3MgZm9yIHRo
-ZSBvdGhlciBwYXRjaGVzIGluIHRoaXMgc2V0LiBJbg0KPj4gdGhlIGZ1dHVyZSB5b3UgY2FuIGFk
-ZCBhbnkgcmVjZWl2ZWQgdGFncyBvbiB0byBwYXRjaCByZS1zdWJtaXNzaW9ucyB3aGVyZQ0KPj4g
-bm90aGluZyBoYXMgY2hhbmdlZCBzaW5jZSBsYXN0IHJldmlldy4NCj4+DQo+PiBBbnl3YXksIHRo
-YW5rcyBmb3IgdGhlIHdvcmsgb24gdGhpcywgYW5kIGZvciB0aGUgcGF0Y2ggc2V0Og0KPj4NCj4+
-IFJldmlld2VkLWJ5OiBBZGFtIFRob21zb24gPEFkYW0uVGhvbXNvbi5PcGVuc291cmNlQGRpYXNl
-bWkuY29tPg0KPj4NCj4gDQo+IEluIHRoaXMgY29udGV4dDoNCj4gDQo+IEkgZXhwZWN0IHRoYXQg
-dGFncyBhcmUgcHJlc2VudCBpbiBwYXRjaHdvcmsuIElmIGEgc3VibWl0dGVyIGRyb3BzIHRhZ3MN
-Cj4gaW4gYSBuZXcgcmV2aXNpb24gb2YgYSBwYXRjaCBzZXJpZXMsIHRob3NlIHdpbGwgZ2V0IGxv
-c3QuIFRoZSB1bmRlcmx5aW5nDQo+IGFzc3VtcHRpb24gaXMgdGhhdCB0aGUgc3VibWl0dGVyIGhh
-ZCBhIHJlYXNvbiB0byBkcm9wIHRhZ3MsIHN1Y2ggYXMNCj4gc3Vic3RhbnRpYWwgY2hhbmdlcyBp
-biBhbiBhZmZlY3RlZCBwYXRjaC4gSSBjYW4gbm90IGFzc3VtZSB0aGF0IHRoZQ0KPiBzdWJtaXR0
-ZXIgZHJvcHBlZCBhIHRhZyBhY2NpZGVudGFsbHkgYW5kIHJlLWFwcGx5IGl0LCB1bmxlc3MgdGhl
-IHJlYXNvbg0KPiB3YXMgZXhwbGljaXRseSBwcm92aWRlZCAob2J2aW91c2x5IHRoYXQgaXMgdHlw
-aWNhbGx5IG5vdCB0aGUgY2FzZSBzaW5jZQ0KPiBwZW9wbGUgZG9uJ3QgdXN1YWxseSBhZGQgImFj
-Y2lkZW50YWxseSBkcm9wcGVkIFJldmlld2VkLWJ5OiB0YWdzIiB0bw0KPiBjaGFuZ2UgbG9ncyku
-DQo+IA0KPiBBbHNvLCBJIGRvIG5vdCBsb29rIGludG8gb25lIHBhdGNoIG9mIGEgc2VyaWVzIGFu
-ZCBhcHBseSB0YWdzIHRvIG90aGVyDQo+IHBhdGNoZXMgb2YgdGhhdCBzZXJpZXMuIFNpbWlsYXIg
-cmVhc29uLCBvbmx5IGhlcmUgaXQgaXMgd29yc2UgYmVjYXVzZSBXaW0NCj4gbWF5IHB1bGwgYSBw
-YXRjaCBmcm9tIHBhdGNod29yaywgZnJvbSBhbiBlLW1haWwsIG9yIGZyb20gbXkgd2F0Y2hkb2ct
-bmV4dA0KPiBicmFuY2guIFdlIGNhbid0IGhhdmUgYWxsIG9mIHRoZW0gaGF2ZSBkaWZmZXJlbnQg
-dGFncywgc28gSSB0YWtlIHdoYXQgaXMNCj4gaW4gcGF0Y2h3b3JrIGFuZCBub3RoaW5nIGVsc2Ug
-KGFuZCB5b3VyIHVwZGF0ZWQgUmV2aWV3ZWQtYnk6IHRhZyB3aWxsDQo+IG5vdCBhcHBseSB0byBv
-dGhlciBwYXRjaGVzIG9mIHRoZSBzZXJpZXMgYmVjYXVzZSBpdCBpc24ndCBpbiBwYXRjaHdvcmsN
-Cj4gZm9yIHRob3NlKS4NCj4gDQo+IEkgYWxzbyBzZWUgdGhhdCBteSBvd24gUmV2aWV3ZWQtYnk6
-IHRhZyAob3IgdGFncywgSSBkaWRuJ3QgY2hlY2sgYWxsDQo+IG9mIHRoZW0pIHdhcy93ZXJlIGRy
-b3BwZWQgaW4gdjUgb2YgdGhpcyBzZXJpZXMuIFRoYXQgbWVhbnMgSSdsbCBoYXZlIHRvDQo+IHJl
-LXJldmlldyB0aGUgc2VyaWVzIHRvIHNlZSB3aGF0IGNoYW5nZWQsIHdoaWNoIHdpbGwgdGFrZSB0
-aW1lIGFuZCBtZWFucw0KPiB0aGF0IHRoZSBzZXJpZXMgd2lsbCBlbmQgdXAgYXQgdGhlIGJvdHRv
-bSBvZiBteSByZXZpZXcgcXVldWUuDQo+IFBsZWFzZSBrZWVwIHRoYXQgaW4gbWluZCB3aGVuIGRy
-b3BwaW5nIHRhZ3MuDQoNCg0KSGkgR3VlbnRlciwNCg0KSXMgdGhlcmUgYW55dGhpbmcgYWdhaW5z
-dCBhcHBseWluZyB0aGUgZmlyc3QgNCBwYXRjaGVzIG9mIHRoaXMgc2VyaWVzPw0KDQpUaGFua3Mg
-YW5kIHJlZ2FyZHMNCkNocmlzdG9waA0K
+hi, Christian,
+
+On Thu, Apr 07, 2022 at 12:26:05PM +0200, Christian Brauner wrote:
+> On Thu, Apr 07, 2022 at 05:40:23PM +0800, kernel test robot wrote:
+> > 
+> > 
+> > Greeting,
+> > 
+> > FYI, we noticed the following commit (built with gcc-11):
+> > 
+> > commit: 30f9ef94795008e5146f69d2eb043922a512bf85 ("ovl: support idmapped layers")
+> > https://github.com/ammarfaizi2/linux-block brauner/linux/fs.idmapped.overlayfs.v3
+> 
+> That's an old branch. :)
+> Anything that has a *.v<idx> appended is basically an old version in my
+> tree. The base branch is always the branch name without the *.v<idx>
+> suffix.
+
+got it. so there is no need to test these *.v<idx> branches, whatever build,
+boot or function, right? If so, we will disable it.
+
+> 
+> Thanks!
+> Christian

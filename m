@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A6164FD62B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:20:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F23074FD9E6
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:46:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234485AbiDLHTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:19:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46868 "EHLO
+        id S1384305AbiDLIkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:40:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352547AbiDLHFl (ORCPT
+        with ESMTP id S1357198AbiDLHjw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:05:41 -0400
+        Tue, 12 Apr 2022 03:39:52 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E727347AF9;
-        Mon, 11 Apr 2022 23:48:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D88140D1;
+        Tue, 12 Apr 2022 00:13:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F22B2B81B4F;
-        Tue, 12 Apr 2022 06:48:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F9D2C385B8;
-        Tue, 12 Apr 2022 06:48:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4F964B81895;
+        Tue, 12 Apr 2022 07:13:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92D71C385A6;
+        Tue, 12 Apr 2022 07:13:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746093;
-        bh=hvax7q1OiKH162ZRoc+OYNZtPQZj/OJtoAfxF2UYPKs=;
+        s=korg; t=1649747617;
+        bh=CeNnsAwWRiktZfe8Ev3NbZKEPZE7owzZjYfHqz/jVog=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZKJHnrHvpa9Jolc5C2OSuKeZ7meXodoCEo7sw/+t+IdE8V8OG4KHmShLQFRHmagjt
-         fS95gbCS3DovN2ragJYfevFoWEOFbH2vEH81sQzOic9k/xzS3Mbd2N9hxTX6FyJiVD
-         LMgCTO+spfuOzXDMl69A42U6hEaD5jZTRVDdQSK4=
+        b=PIs9AvLxhtdL2nWK2QenQiHoD/28H9SuWa7LerD2G/pcsrs51b+R2rfFeTZU59FlC
+         sX8ZXu6bfcERv56LGNi9/5hKQY4A8M8hNODKvajlhQRgun3Gn49W+eZ9GI1hTZ4rN+
+         4JHMRI/C9R0e/6ZDos45o65vGSuVqQ8Idr3BhS9I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Ziyang Xuan <william.xuanziyang@huawei.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 158/277] net/tls: fix slab-out-of-bounds bug in decrypt_internal
+Subject: [PATCH 5.17 143/343] xen/usb: harden xen_hcd against malicious backends
 Date:   Tue, 12 Apr 2022 08:29:21 +0200
-Message-Id: <20220412062946.611575422@linuxfoundation.org>
+Message-Id: <20220412062955.511302940@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,66 +54,167 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ziyang Xuan <william.xuanziyang@huawei.com>
+From: Juergen Gross <jgross@suse.com>
 
-[ Upstream commit 9381fe8c849cfbe50245ac01fc077554f6eaa0e2 ]
+[ Upstream commit aff477cb8f94613f501d386d10f20019e294bc35 ]
 
-The memory size of tls_ctx->rx.iv for AES128-CCM is 12 setting in
-tls_set_sw_offload(). The return value of crypto_aead_ivsize()
-for "ccm(aes)" is 16. So memcpy() require 16 bytes from 12 bytes
-memory space will trigger slab-out-of-bounds bug as following:
+Make sure a malicious backend can't cause any harm other than wrong
+I/O data.
 
-==================================================================
-BUG: KASAN: slab-out-of-bounds in decrypt_internal+0x385/0xc40 [tls]
-Read of size 16 at addr ffff888114e84e60 by task tls/10911
+Missing are verification of the request id in a response, sanitizing
+the reported actual I/O length, and protection against interrupt storms
+from the backend.
 
-Call Trace:
- <TASK>
- dump_stack_lvl+0x34/0x44
- print_report.cold+0x5e/0x5db
- ? decrypt_internal+0x385/0xc40 [tls]
- kasan_report+0xab/0x120
- ? decrypt_internal+0x385/0xc40 [tls]
- kasan_check_range+0xf9/0x1e0
- memcpy+0x20/0x60
- decrypt_internal+0x385/0xc40 [tls]
- ? tls_get_rec+0x2e0/0x2e0 [tls]
- ? process_rx_list+0x1a5/0x420 [tls]
- ? tls_setup_from_iter.constprop.0+0x2e0/0x2e0 [tls]
- decrypt_skb_update+0x9d/0x400 [tls]
- tls_sw_recvmsg+0x3c8/0xb50 [tls]
-
-Allocated by task 10911:
- kasan_save_stack+0x1e/0x40
- __kasan_kmalloc+0x81/0xa0
- tls_set_sw_offload+0x2eb/0xa20 [tls]
- tls_setsockopt+0x68c/0x700 [tls]
- __sys_setsockopt+0xfe/0x1b0
-
-Replace the crypto_aead_ivsize() with prot->iv_size + prot->salt_size
-when memcpy() iv value in TLS_1_3_VERSION scenario.
-
-Fixes: f295b3ae9f59 ("net/tls: Add support of AES128-CCM based ciphers")
-Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
-Reviewed-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Link: https://lore.kernel.org/r/20220311103509.12908-1-jgross@suse.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/tls/tls_sw.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/host/xen-hcd.c | 57 ++++++++++++++++++++++++++++----------
+ 1 file changed, 43 insertions(+), 14 deletions(-)
 
-diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-index bd96ec26f4f9..794ef3b3d7d4 100644
---- a/net/tls/tls_sw.c
-+++ b/net/tls/tls_sw.c
-@@ -1483,7 +1483,7 @@ static int decrypt_internal(struct sock *sk, struct sk_buff *skb,
- 	if (prot->version == TLS_1_3_VERSION ||
- 	    prot->cipher_type == TLS_CIPHER_CHACHA20_POLY1305)
- 		memcpy(iv + iv_offset, tls_ctx->rx.iv,
--		       crypto_aead_ivsize(ctx->aead_recv));
-+		       prot->iv_size + prot->salt_size);
- 	else
- 		memcpy(iv + iv_offset, tls_ctx->rx.iv, prot->salt_size);
+diff --git a/drivers/usb/host/xen-hcd.c b/drivers/usb/host/xen-hcd.c
+index 19b8c7ed74cb..4ed3ee328a4a 100644
+--- a/drivers/usb/host/xen-hcd.c
++++ b/drivers/usb/host/xen-hcd.c
+@@ -51,6 +51,7 @@ struct vdevice_status {
+ struct usb_shadow {
+ 	struct xenusb_urb_request req;
+ 	struct urb *urb;
++	bool in_flight;
+ };
+ 
+ struct xenhcd_info {
+@@ -722,6 +723,12 @@ static void xenhcd_gnttab_done(struct xenhcd_info *info, unsigned int id)
+ 	int nr_segs = 0;
+ 	int i;
+ 
++	if (!shadow->in_flight) {
++		xenhcd_set_error(info, "Illegal request id");
++		return;
++	}
++	shadow->in_flight = false;
++
+ 	nr_segs = shadow->req.nr_buffer_segs;
+ 
+ 	if (xenusb_pipeisoc(shadow->req.pipe))
+@@ -805,6 +812,7 @@ static int xenhcd_do_request(struct xenhcd_info *info, struct urb_priv *urbp)
+ 
+ 	info->urb_ring.req_prod_pvt++;
+ 	info->shadow[id].urb = urb;
++	info->shadow[id].in_flight = true;
+ 
+ 	RING_PUSH_REQUESTS_AND_CHECK_NOTIFY(&info->urb_ring, notify);
+ 	if (notify)
+@@ -933,10 +941,27 @@ static int xenhcd_unlink_urb(struct xenhcd_info *info, struct urb_priv *urbp)
+ 	return ret;
+ }
+ 
+-static int xenhcd_urb_request_done(struct xenhcd_info *info)
++static void xenhcd_res_to_urb(struct xenhcd_info *info,
++			      struct xenusb_urb_response *res, struct urb *urb)
++{
++	if (unlikely(!urb))
++		return;
++
++	if (res->actual_length > urb->transfer_buffer_length)
++		urb->actual_length = urb->transfer_buffer_length;
++	else if (res->actual_length < 0)
++		urb->actual_length = 0;
++	else
++		urb->actual_length = res->actual_length;
++	urb->error_count = res->error_count;
++	urb->start_frame = res->start_frame;
++	xenhcd_giveback_urb(info, urb, res->status);
++}
++
++static int xenhcd_urb_request_done(struct xenhcd_info *info,
++				   unsigned int *eoiflag)
+ {
+ 	struct xenusb_urb_response res;
+-	struct urb *urb;
+ 	RING_IDX i, rp;
+ 	__u16 id;
+ 	int more_to_do = 0;
+@@ -963,16 +988,12 @@ static int xenhcd_urb_request_done(struct xenhcd_info *info)
+ 			xenhcd_gnttab_done(info, id);
+ 			if (info->error)
+ 				goto err;
+-			urb = info->shadow[id].urb;
+-			if (likely(urb)) {
+-				urb->actual_length = res.actual_length;
+-				urb->error_count = res.error_count;
+-				urb->start_frame = res.start_frame;
+-				xenhcd_giveback_urb(info, urb, res.status);
+-			}
++			xenhcd_res_to_urb(info, &res, info->shadow[id].urb);
+ 		}
+ 
+ 		xenhcd_add_id_to_freelist(info, id);
++
++		*eoiflag = 0;
+ 	}
+ 	info->urb_ring.rsp_cons = i;
+ 
+@@ -990,7 +1011,7 @@ static int xenhcd_urb_request_done(struct xenhcd_info *info)
+ 	return 0;
+ }
+ 
+-static int xenhcd_conn_notify(struct xenhcd_info *info)
++static int xenhcd_conn_notify(struct xenhcd_info *info, unsigned int *eoiflag)
+ {
+ 	struct xenusb_conn_response res;
+ 	struct xenusb_conn_request *req;
+@@ -1035,6 +1056,8 @@ static int xenhcd_conn_notify(struct xenhcd_info *info)
+ 				       info->conn_ring.req_prod_pvt);
+ 		req->id = id;
+ 		info->conn_ring.req_prod_pvt++;
++
++		*eoiflag = 0;
+ 	}
+ 
+ 	if (rc != info->conn_ring.req_prod_pvt)
+@@ -1057,14 +1080,19 @@ static int xenhcd_conn_notify(struct xenhcd_info *info)
+ static irqreturn_t xenhcd_int(int irq, void *dev_id)
+ {
+ 	struct xenhcd_info *info = (struct xenhcd_info *)dev_id;
++	unsigned int eoiflag = XEN_EOI_FLAG_SPURIOUS;
+ 
+-	if (unlikely(info->error))
++	if (unlikely(info->error)) {
++		xen_irq_lateeoi(irq, XEN_EOI_FLAG_SPURIOUS);
+ 		return IRQ_HANDLED;
++	}
+ 
+-	while (xenhcd_urb_request_done(info) | xenhcd_conn_notify(info))
++	while (xenhcd_urb_request_done(info, &eoiflag) |
++	       xenhcd_conn_notify(info, &eoiflag))
+ 		/* Yield point for this unbounded loop. */
+ 		cond_resched();
+ 
++	xen_irq_lateeoi(irq, eoiflag);
+ 	return IRQ_HANDLED;
+ }
+ 
+@@ -1141,9 +1169,9 @@ static int xenhcd_setup_rings(struct xenbus_device *dev,
+ 		goto fail;
+ 	}
+ 
+-	err = bind_evtchn_to_irq(info->evtchn);
++	err = bind_evtchn_to_irq_lateeoi(info->evtchn);
+ 	if (err <= 0) {
+-		xenbus_dev_fatal(dev, err, "bind_evtchn_to_irq");
++		xenbus_dev_fatal(dev, err, "bind_evtchn_to_irq_lateeoi");
+ 		goto fail;
+ 	}
+ 
+@@ -1496,6 +1524,7 @@ static struct usb_hcd *xenhcd_create_hcd(struct xenbus_device *dev)
+ 	for (i = 0; i < XENUSB_URB_RING_SIZE; i++) {
+ 		info->shadow[i].req.id = i + 1;
+ 		info->shadow[i].urb = NULL;
++		info->shadow[i].in_flight = false;
+ 	}
+ 	info->shadow[XENUSB_URB_RING_SIZE - 1].req.id = 0x0fff;
  
 -- 
 2.35.1

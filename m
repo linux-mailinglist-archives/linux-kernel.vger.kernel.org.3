@@ -2,80 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D816A4FE3A6
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 16:23:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 081294FE3B9
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 16:26:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355912AbiDLOZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 10:25:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50694 "EHLO
+        id S1356500AbiDLO1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 10:27:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbiDLOZb (ORCPT
+        with ESMTP id S231205AbiDLO1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 10:25:31 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A489A4DF56;
-        Tue, 12 Apr 2022 07:23:13 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id mp16-20020a17090b191000b001cb5efbcab6so3044384pjb.4;
-        Tue, 12 Apr 2022 07:23:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=pqBu+E7smYUSARy4+yUB+2pUFzqvHGd4ssU0J/54lGM=;
-        b=oeZVA7/ncT728qQkNSolYfMcpssD8EI7eeISbBibEH5RP0Mm7fx2Rh+O9c2wJQKn3d
-         nIt/bbXJcu5zrP5mQ01MkPdld0MQipLuecVJ/xO6zApHoryWKlhExZaNAncl3lU3YjYL
-         DQqVHxSTR1JlY5StoLSHnKmHkj7Ac1DeZrff4BGHO2YLXEhehsfNIL06POtGhJ1zkYGJ
-         wijFki9sNjjLBm6EEhI+AGZHfu4E+f16+0LurlAZEZeHtPZPkkcmXZjWNhpiE7HOdaOj
-         CJqgplNqg20vWG0YAtjO2eS++LECJKrwh5JukbFAMV56J5cc2z8eqc15d5e9nuBtxmx0
-         HWEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
-         :content-transfer-encoding;
-        bh=pqBu+E7smYUSARy4+yUB+2pUFzqvHGd4ssU0J/54lGM=;
-        b=6eGR0lZtLHkg6K+L9eHTmQPPwTXPLX4aMxrjEnYgtp1WcB3/ywoy34IK7joH/KWEf3
-         bD6dbAUNpBU5MMkFZfpCEIfyRZk8Htu22vGk1XN3v2RRryn95CdkxQUWrtyaUFf/i919
-         LAYN/9nF2LAm8zcDxtXSkpq1KPF2Fm42ob6QgDno90kelJTcjNcM+PjzYvX3uFaM2SVr
-         mbGXNzzcMXjSsO83hTchzPAxHk8x9R2kITDe/zYv1HKO2PUlUaR+lHSiFG+GoGUtTlDZ
-         iKghvKqQIhVoW5Nz5F3U8MPSA4tx/NF/a4bRCqazBHZSTh2iqCEwrCMY389JO2IAynjc
-         nfgg==
-X-Gm-Message-State: AOAM532NAEvHUHF8hjsL7dgp6ylrlXtUaUFKPvqLBoV2en9Plem78K0m
-        nYCStVH9zpbI5WwCu2RhTMQ/QKBP0ev5t7fd6K8=
-X-Google-Smtp-Source: ABdhPJyLf1h+B8IN6FW6Fe+r5TKWOk2KzyIgdSWrf7gephV7IvI6oZttZqbsoleYmcqEu17gjf1Iwg==
-X-Received: by 2002:a17:903:2345:b0:158:87ed:ff87 with SMTP id c5-20020a170903234500b0015887edff87mr3558209plh.5.1649773392535;
-        Tue, 12 Apr 2022 07:23:12 -0700 (PDT)
-Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [71.19.144.195])
-        by smtp.gmail.com with ESMTPSA id z5-20020a056a00240500b004e15d39f15fsm39597945pfh.83.2022.04.12.07.23.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 07:23:11 -0700 (PDT)
-Message-ID: <62558b4f.1c69fb81.98ec7.56fd@mx.google.com>
-Date:   Tue, 12 Apr 2022 07:23:11 -0700 (PDT)
-X-Google-Original-Date: Tue, 12 Apr 2022 14:23:05 GMT
-From:   Fox Chen <foxhlchen@gmail.com>
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-Subject: RE: [PATCH 5.16 000/285] 5.16.20-rc1 review
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Fox Chen <foxhlchen@gmail.com>
-Content-Transfer-Encoding: 7bit
+        Tue, 12 Apr 2022 10:27:01 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B4DAE0ED;
+        Tue, 12 Apr 2022 07:24:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=nJ15T4c/j8gXqXWAc1bdFcvt372osymWsJ1i4KD/CTY=; b=29N82hv/6CXhxqVHGVE31I80I1
+        yWgYaEu66ftEyEdx7MW7lEQlt3dwTtXQl21uK12UnUWhM5jsCrkvLz8+udl9LiJomqFcmc5Hjxm+q
+        gPHz376EGKuArxWXJ6TTmbShOZ+kAtktK1ThIL8chtKfhCgMH0U9St14VOjTP9GDOwVE=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1neHRT-00FT8M-H9; Tue, 12 Apr 2022 16:24:27 +0200
+Date:   Tue, 12 Apr 2022 16:24:27 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Dylan Hung <dylan_hung@aspeedtech.com>
+Cc:     robh+dt@kernel.org, joel@jms.id.au, andrew@aj.id.au,
+        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com, p.zabel@pengutronix.de,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, krzk+dt@kernel.org, BMC-SW@aspeedtech.com
+Subject: Re: [PATCH v4 2/3] net: mdio: add reset control for Aspeed MDIO
+Message-ID: <YlWLm8mRfP07VkcP@lunn.ch>
+References: <20220412065611.8930-1-dylan_hung@aspeedtech.com>
+ <20220412065611.8930-3-dylan_hung@aspeedtech.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220412065611.8930-3-dylan_hung@aspeedtech.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Apr 2022 08:27:37 +0200, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+On Tue, Apr 12, 2022 at 02:56:10PM +0800, Dylan Hung wrote:
+> Add reset assertion/deassertion for Aspeed MDIO.  There are 4 MDIO
+> controllers embedded in Aspeed AST2600 SOC and share one reset control
+> register SCU50[3].  To work with old DT blobs which don't have the reset
+> property, devm_reset_control_get_optional_shared is used in this change.
+> 
+> Signed-off-by: Dylan Hung <dylan_hung@aspeedtech.com>
+> Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
 
-5.16.20-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
-                
-Tested-by: Fox Chen <foxhlchen@gmail.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
+    Andrew

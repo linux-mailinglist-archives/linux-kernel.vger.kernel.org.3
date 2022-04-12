@@ -2,83 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86F234FE872
+	by mail.lfdr.de (Postfix) with ESMTP id CF76B4FE873
 	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 21:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346928AbiDLTHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 15:07:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48822 "EHLO
+        id S1358177AbiDLTH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 15:07:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347018AbiDLTHt (ORCPT
+        with ESMTP id S1355179AbiDLTHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 15:07:49 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D18F37BEB
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 12:05:30 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id q3so6377789plg.3
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 12:05:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=hbZ2JvpVm4V1NyD3oXLkLoSzcUMh/DghNlMtHwYuWgc=;
-        b=VG5B71axV5BvnxL7YMW3ZsV1ox6/RJt6t0NDvJYaqQ0WweCjsw/UHzmPLgH2O66fOq
-         x2CiiSEwap+vAQkscai+ycUbO419wl4OJ++ulJuOGR/NI9BKGa9VxRKpxhw9c4eI9fMp
-         7ZumwSpchDiL27xeYtFROYvxv59wm62BEIk+A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=hbZ2JvpVm4V1NyD3oXLkLoSzcUMh/DghNlMtHwYuWgc=;
-        b=yuDoPR6x8ZugVjIxTfeEKB1ttRXVmZQRdXpNqKHmlU26hYkcfAwyEC5od96CUNIEac
-         Awn58+Y8/F4DKEFeehW3cZpiJs9qOotskBtvmTZ2LzHei//XkKU3fhsSZCcRiwsx5JIp
-         9vZseQqNXdVeufwrdbhAiEN1ZLoipk74IFmJ2/3kbWmX8g+9BVqF+81v4hl7MRaPGSTO
-         lj9lKL51ZWpQUYg1eVzDRbnfSqNY9QiyG3Cy7uIhuGrrbiUMVfaOm/TVQHTE8cakqtMA
-         IuPAH5Mc6xW29R5o5xpsfc4/AMeU+MCP5vcPZMAxbzz5fYQ4Hn/nfJuo1ovo2hV1Koyg
-         zTBQ==
-X-Gm-Message-State: AOAM530jQJxtavgxBlZPPKcKa3/S7PREZX2p3q/8l4wV+7OqAIdcg7w6
-        9M9X4JjFxxDA++TJVBzxtSZc/g==
-X-Google-Smtp-Source: ABdhPJz4PCizcuwzk/1XpOu3RqwYj8RkPLr5CQdo3ml5nHIuAx/hHfrJxCdiVEWg3ujcS7D4q8TaZA==
-X-Received: by 2002:a17:902:ce87:b0:156:5c6e:b6e4 with SMTP id f7-20020a170902ce8700b001565c6eb6e4mr38650268plg.12.1649790329681;
-        Tue, 12 Apr 2022 12:05:29 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:3a41:5079:6f1b:397c])
-        by smtp.gmail.com with UTF8SMTPSA id bh3-20020a056a02020300b00378b62df320sm3494308pgb.73.2022.04.12.12.05.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 12:05:29 -0700 (PDT)
-Date:   Tue, 12 Apr 2022 12:05:27 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     "Sandeep Maheswaram (Temp)" <quic_c_sanm@quicinc.com>
-Cc:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_ppratap@quicinc.com, quic_kriskura@quicinc.com,
-        quic_vpulyala@quicinc.com
-Subject: Re: [PATCH v13 2/6] usb: dwc3: core: Host wake up support from
- system suspend
-Message-ID: <YlXNd5YkAMW7cbYG@google.com>
-References: <1649704614-31518-1-git-send-email-quic_c_sanm@quicinc.com>
- <1649704614-31518-3-git-send-email-quic_c_sanm@quicinc.com>
- <YlSVec5+SpdMZWCz@google.com>
- <36d22ad7-7f11-2f63-cd68-5d564476161e@quicinc.com>
- <20220412050018.GB2627@hu-pkondeti-hyd.qualcomm.com>
- <259c9e87-a52e-c063-7901-2c6decd42675@quicinc.com>
+        Tue, 12 Apr 2022 15:07:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656C5419A0;
+        Tue, 12 Apr 2022 12:05:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC93561B5D;
+        Tue, 12 Apr 2022 19:05:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 092A1C385A5;
+        Tue, 12 Apr 2022 19:05:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649790335;
+        bh=ZbSkaC5MBfF62iamJnsXlTvwu8C3ghdAlvLgcGBAFjo=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=kqBrKtUiARnFtFQ4c56T+sZHxkMznV0/BHbnW0R3BzLCLsIwLkw/macH4R4XL6GGQ
+         cLSTuq75Gf0TfAXsz/nrYkfGBISUsBWa2jBuPDlhtJcWq2m4omI2LZQPnwR+wAp//r
+         VApgztD69V7jhEf1/4tUeve7dDegd1saJntevQn2zZZuOXx+is5a+sdjDJKvIRLAoS
+         nc74datHUPpbeHcgDQJuLcKpiWNPtPV+cSO+J3cOIrt3516Ke7TWMbzvzN/5NlFPFr
+         51ofQynDkxS8vMaj7x1ce/1c4l5ZK0/XG/sLysQP9eLi8PS/8yI/QJyO9RluiBtHSZ
+         CctreOpAWwA/Q==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <259c9e87-a52e-c063-7901-2c6decd42675@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220408224321.627126-2-bjorn.andersson@linaro.org>
+References: <20220408224321.627126-1-bjorn.andersson@linaro.org> <20220408224321.627126-2-bjorn.andersson@linaro.org>
+Subject: Re: [PATCH 2/2] clk: qcom: add sc8280xp GCC driver
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>
+Date:   Tue, 12 Apr 2022 12:05:33 -0700
+User-Agent: alot/0.10
+Message-Id: <20220412190535.092A1C385A5@smtp.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,152 +58,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 12:08:02PM +0530, Sandeep Maheswaram (Temp) wrote:
-> Hi Pavan,
-> 
-> On 4/12/2022 10:30 AM, Pavan Kondeti wrote:
-> > Hi Sandeep,
-> > 
-> > On Tue, Apr 12, 2022 at 10:16:39AM +0530, Sandeep Maheswaram (Temp) wrote:
-> > > Hi Matthias,
-> > > 
-> > > On 4/12/2022 2:24 AM, Matthias Kaehlcke wrote:
-> > > > On Tue, Apr 12, 2022 at 12:46:50AM +0530, Sandeep Maheswaram wrote:
-> > > > > During suspend read the status of all port and set hs phy mode
-> > > > > based on current speed. Use this hs phy mode to configure wakeup
-> > > > > interrupts in qcom glue driver.
-> > > > > 
-> > > > > Check wakep-source property for dwc3 core node to set the
-> > > > s/wakep/wakeup/
-> > > Okay. Will update in next version.
-> > > > > wakeup capability. Drop the device_init_wakeup call from
-> > > > > runtime suspend and resume.
-> > > > > 
-> > > > > Also check during suspend if any wakeup capable devices are
-> > > > > connected to the controller (directly or through hubs), if there
-> > > > > are none set a flag to indicate that the PHY is powered
-> > > > > down during suspend.
-> > > > > 
-> > > > > Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-> > > > > ---
-> > > > A per-patch change log would be really helpful for reviewers, even
-> > > > if it doesn't include older versions.
-> > > Okay. Will update in next version.
-> > > > >   drivers/usb/dwc3/core.c | 33 ++++++++++++++++++++-------------
-> > > > >   drivers/usb/dwc3/core.h |  4 ++++
-> > > > >   drivers/usb/dwc3/host.c | 25 +++++++++++++++++++++++++
-> > > > >   3 files changed, 49 insertions(+), 13 deletions(-)
-> > > > > 
-> > > > > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > > > > index 1170b80..effaa43 100644
-> > > > > --- a/drivers/usb/dwc3/core.c
-> > > > > +++ b/drivers/usb/dwc3/core.c
-> > > > > @@ -32,6 +32,7 @@
-> > > > >   #include <linux/usb/gadget.h>
-> > > > >   #include <linux/usb/of.h>
-> > > > >   #include <linux/usb/otg.h>
-> > > > > +#include <linux/usb/hcd.h>
-> > > > >   #include "core.h"
-> > > > >   #include "gadget.h"
-> > > > > @@ -1723,6 +1724,7 @@ static int dwc3_probe(struct platform_device *pdev)
-> > > > >   	platform_set_drvdata(pdev, dwc);
-> > > > >   	dwc3_cache_hwparams(dwc);
-> > > > > +	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, "wakeup-source"));
-> > > > >   	spin_lock_init(&dwc->lock);
-> > > > >   	mutex_init(&dwc->mutex);
-> > > > > @@ -1865,6 +1867,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> > > > >   {
-> > > > >   	unsigned long	flags;
-> > > > >   	u32 reg;
-> > > > > +	struct usb_hcd  *hcd = platform_get_drvdata(dwc->xhci);
-> > > > >   	switch (dwc->current_dr_role) {
-> > > > >   	case DWC3_GCTL_PRTCAP_DEVICE:
-> > > > > @@ -1877,10 +1880,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> > > > >   		dwc3_core_exit(dwc);
-> > > > >   		break;
-> > > > >   	case DWC3_GCTL_PRTCAP_HOST:
-> > > > > -		if (!PMSG_IS_AUTO(msg)) {
-> > > > > -			dwc3_core_exit(dwc);
-> > > > > -			break;
-> > > > > -		}
-> > > > > +		dwc3_check_phy_speed_mode(dwc);
-> > > > >   		/* Let controller to suspend HSPHY before PHY driver suspends */
-> > > > >   		if (dwc->dis_u2_susphy_quirk ||
-> > > > > @@ -1896,6 +1896,16 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> > > > >   		phy_pm_runtime_put_sync(dwc->usb2_generic_phy);
-> > > > >   		phy_pm_runtime_put_sync(dwc->usb3_generic_phy);
-> > > > > +
-> > > > > +		if (!PMSG_IS_AUTO(msg)) {
-> > > > > +			if (device_may_wakeup(dwc->dev) &&
-> > > > > +			    usb_wakeup_enabled_descendants(hcd->self.root_hub)) {
-> > > > You did not answer my question on v12, reposting it:
-> > > > 
-> > > >    Did you ever try whether you could use device_children_wakeup_capable() from
-> > > >    [1] instead of usb_wakeup_enabled_descendants()?
-> > > > 
-> > > >    [1] https://patchwork.kernel.org/project/linux-usb/patch/1635753224-23975-2-git-send-email-quic_c_sanm@quicinc.com/#24566065
-> > > Sorry ..I have replied in mail yesterday but it is not showing up in
-> > > patchwork link.
-> > > 
-> > > Tried with  device_children_wakeup_capable(dwc->dev) instead of
-> > > usb_wakeup_enabled_descendants and it always returns true even
-> > > 
-> > > when no devices are connected.
-> > > 
-> > What do you mean by when no devices are connected? There is always
-> > root hub connected and we should not power down the DWC3 here even
-> > when remote wakeup for root hub is enabled. Essentially
-> > usb_wakeup_enabled_descendants() returns true even without any
-> > physical devices connected.
-> > 
-> > What does device_children_wakeup_capable() do? Sorry, I could not
-> > find this function definition.
-> > 
-> > Thanks,
-> > Pavan
-> 
-> usb_wakeup_enabled_descendants() doesn't consider hubs. It only returns true if any devices
-> are connected with wakeup capability apart from hubs.
+Quoting Bjorn Andersson (2022-04-08 15:43:21)
+> diff --git a/drivers/clk/qcom/gcc-sc8280xp.c b/drivers/clk/qcom/gcc-sc828=
+0xp.c
+> new file mode 100644
+> index 000000000000..e621a25a4a40
+> --- /dev/null
+> +++ b/drivers/clk/qcom/gcc-sc8280xp.c
+> @@ -0,0 +1,7463 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2021, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2022, Linaro Ltd.
+> + */
+> +
+> +#include <linux/clk-provider.h>
+> +#include <linux/err.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/of.h>
+> +#include <linux/regmap.h>
+> +
+> +#include <dt-bindings/clock/qcom,gcc-sc8280xp.h>
+> +
+> +#include "clk-alpha-pll.h"
+> +#include "clk-branch.h"
+[...]
+> +
+> +static struct clk_alpha_pll gcc_gpll0 =3D {
+> +       .offset =3D 0x0,
+> +       .regs =3D clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_LUCID],
+> +       .clkr =3D {
+> +               .enable_reg =3D 0x52028,
+> +               .enable_mask =3D BIT(0),
+> +               .hw.init =3D &(struct clk_init_data){
 
-Actually it considers hubs:
+const
 
-unsigned usb_wakeup_enabled_descendants(struct usb_device *udev)
-{
-	struct usb_hub *hub = usb_hub_to_struct_hub(udev);
+> +                       .name =3D "gcc_gpll0",
+> +                       .parent_data =3D &(const struct clk_parent_data){
+> +                               .fw_name =3D "bi_tcxo",
 
-	return udev->do_remote_wakeup +
-		(hub ? hub->wakeup_enabled_descendants : 0);
-}
+This can't be shared for multiple PLLs?
 
-'udev' may or may not be a hub, if 'do_remote_wakeup' is set then the
-device is considered a wakeup enabled descendant.
-
-And for system suspebd 'do_remote_wakeup' is set based on the wakeup
-config of the device:
-
-static void choose_wakeup(struct usb_device *udev, pm_message_t msg)
-{
-	...
-	w = device_may_wakeup(&udev->dev);
-	...
-	udev->do_remote_wakeup = w;
-}
-
-I checked on three systems with different Linux distributions, on all of
-the wakeup flag of a connected hub is 'disabled'. Wakeup still works, so
-apparently that flag doesn't really have an impact for child ports.
-
-> If we consider hubs also dwc3 core exit and phy exit will never be called.
-> 
-> device_children_wakeup_capable() implementation was shared by Matthias in below thread
-> https://patchwork.kernel.org/project/linux-usb/patch/1635753224-23975-2-git-send-email-quic_c_sanm@quicinc.com/#24566065
-> 
-> Probably device_children_wakeup_capable() is returning true because it considers hubs also.
-
-I thought I did a basic test when I sent the patch, I did another (?) one
-with v13 of your patch set. In this tests with a hub connected the
-function returns true when an HID device is connected, and false when
-nothing is connected. The wakeup flag of the hub is disabled (default).
-
-Sandeep, are the wakeup flags of the child hub(s) set to 'enabled' on
-the system you tested on?
+> +                       },
+> +                       .num_parents =3D 1,
+> +                       .ops =3D &clk_alpha_pll_fixed_lucid_5lpe_ops,
+> +               },
+> +       },
+> +};
+> +

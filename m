@@ -2,151 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9C074FE2FF
+	by mail.lfdr.de (Postfix) with ESMTP id 139614FE2FD
 	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:46:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356224AbiDLNpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 09:45:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57548 "EHLO
+        id S1356199AbiDLNpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 09:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356132AbiDLNo4 (ORCPT
+        with ESMTP id S1356084AbiDLNoy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 09:44:56 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7044C4ECF1
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 06:42:39 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 298BC169C;
-        Tue, 12 Apr 2022 06:42:39 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.57.94.90])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E3E553F70D;
-        Tue, 12 Apr 2022 06:42:37 -0700 (PDT)
-From:   Vincent Donnefort <vincent.donnefort@arm.com>
-To:     peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org
-Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        morten.rasmussen@arm.com, chris.redpath@arm.com, qperret@google.com
-Subject: [PATCH v4 5/7] sched/fair: Use the same cpumask per-PD throughout find_energy_efficient_cpu()
-Date:   Tue, 12 Apr 2022 14:42:18 +0100
-Message-Id: <20220412134220.1588482-6-vincent.donnefort@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220412134220.1588482-1-vincent.donnefort@arm.com>
-References: <20220412134220.1588482-1-vincent.donnefort@arm.com>
+        Tue, 12 Apr 2022 09:44:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 33AA44ECF9
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 06:42:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649770955;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BBe8NJbB/NGE5hfWVeZ1eXc/XEjoOVUEazhRhSRRhFM=;
+        b=P647y1yAqB/7m8QEm5Rh1KbvIMRBn56AW4JW9fkYDcVBrnsFNupnaGVCVH0keNZtALyoD0
+        pz7K8CMcdeVdDtY+KxxtFKLixEZ5oYrq1TtaIkMZnj+sQ6V+7zvESQuAL/W2qTgk7lmykP
+        irbPTKU/1WZ0jKK3XR8lXvqRbNW8CFg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-649-g2xYTWatOzi0crlkhcxa7A-1; Tue, 12 Apr 2022 09:42:33 -0400
+X-MC-Unique: g2xYTWatOzi0crlkhcxa7A-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F15DD2999B4E;
+        Tue, 12 Apr 2022 13:42:32 +0000 (UTC)
+Received: from wtfbox.lan (unknown [10.40.192.9])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2BC0C9D6E;
+        Tue, 12 Apr 2022 13:42:20 +0000 (UTC)
+Date:   Tue, 12 Apr 2022 15:42:18 +0200
+From:   Artem Savkov <asavkov@redhat.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        netdev@vger.kernel.org, davem@davemloft.net,
+        yoshfuji@linux-ipv6.org, dsahern@kernel.org, asavkov@redhat.com,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] timer: add a function to adjust timeouts to be
+ upper bound
+Message-ID: <YlWBun1whllq2BDt@wtfbox.lan>
+References: <20220407075242.118253-2-asavkov@redhat.com>
+ <87zgkwjtq2.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <87zgkwjtq2.ffs@tglx>
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dietmar Eggemann <dietmar.eggemann@arm.com>
+On Fri, Apr 08, 2022 at 02:37:25AM +0200, Thomas Gleixner wrote:
+> On Thu, Apr 07 2022 at 09:52, Artem Savkov wrote:
+> > +	return -1;
+> > +}
+> > +
+> > +static int calc_wheel_index(unsigned long expires, unsigned long clk,
+> > +			    unsigned long *bucket_expiry)
+> > +{
+> > +	unsigned long delta = expires - clk;
+> > +	unsigned int idx;
+> > +	int lvl = get_wheel_lvl(delta);
+> > +
+> > +	if (lvl >= 0) {
+> > +		idx = calc_index(expires, lvl, bucket_expiry);
+> >  	} else if ((long) delta < 0) {
+> >  		idx = clk & LVL_MASK;
+> >  		*bucket_expiry = clk;
+> > @@ -545,6 +555,38 @@ static int calc_wheel_index(unsigned long expires, unsigned long clk,
+> >  	return idx;
+> >  }
+> 
+> This generates horrible code on various compilers. I ran that through a
+> couple of perf test scenarios and came up with the following, which
+> still is a tad slower for the level 0 case depending on the branch
+> predictor state. But it at least prevents the compilers from doing
+> stupid things and on average it's on par.
+> 
+> Though the level 0 case matters because of *drumroll* networking.
+> 
+> Just for the record. I told you last time that your patch creates a
+> measurable overhead and I explained you in depth why the performance of
+> this stupid thing matters. So why are you not providing a proper
+> analysis for that?
 
-The Perf Domain (PD) cpumask (struct em_perf_domain.cpus) stays
-invariant after Energy Model creation, i.e. it is not updated after
-CPU hotplug operations.
+I did do a simple check of measuring the time it takes for
+calc_wheel_index to execute and it turned out a tad lower after the
+patch. Your measurements are sure to be much more refined so would you
+give me any pointers on what to measure and which cases to check to have
+a better view on the impact of these patches?
 
-That's why the PD mask is used in conjunction with the cpu_online_mask
-(or Sched Domain cpumask). Thereby the cpu_online_mask is fetched
-multiple times (in compute_energy()) during a run-queue selection
-for a task.
+> > +/**
+> > + * upper_bound_timeout - return granularity-adjusted timeout
+> > + * @timeout: timeout value in jiffies
+> > + *
+> > + * This function return supplied timeout adjusted based on timer wheel
+> > + * granularity effectively making supplied value an upper bound at which the
+> > + * timer will expire. Due to the way timer wheel works timeouts smaller than
+> > + * LVL_GRAN on their respecrive levels will be _at least_
+> > + * LVL_GRAN(lvl) - LVL_GRAN(lvl -1)) jiffies early.
+> 
+> Contrary to the simple "timeout - timeout/8" this gives better accuracy
+> as it does not converge to the early side for long timeouts.
+> 
+> With the quirk that this cuts timeout=1 to 0, which means it expires
+> immediately. The wonders of integer math avoid that with the simple
+> timeout -= timeout >> 3 approach for timeouts up to 8 ticks. :)
+> 
+> But that want's to be properly documented.
+> 
+> > +unsigned long upper_bound_timeout(unsigned long timeout)
+> > +{
+> > +	int lvl = get_wheel_lvl(timeout);
+> 
+> which is equivalent to:
+> 
+>          lvl = calc_wheel_index(timeout, 0, &dummy) >> LVL_BITS;
+> 
+> Sorry, could not resist. :)
 
-cpu_online_mask may change during this time which can lead to wrong
-energy calculations.
+Right, but that would mean a significantly more overhead, right?
 
-To be able to avoid this, use the select_rq_mask per-cpu cpumask to
-create a cpumask out of PD cpumask and cpu_online_mask and pass it
-through the function calls of the EAS run-queue selection path.
+> The more interesting question is, how frequently this upper bounds
+> function is used. It's definitely not something which you want to
+> inflict onto a high frequency (re)arming timer.
 
-The PD cpumask for max_spare_cap_cpu/compute_prev_delta selection
-(find_energy_efficient_cpu()) is now ANDed not only with the SD mask
-but also with the cpu_online_mask. This is fine since this cpumask
-has to be in syc with the one used for energy computation
-(compute_energy()).
-An exclusive cpuset setup with at least one asymmetric CPU capacity
-island (hence the additional AND with the SD cpumask) is the obvious
-exception here.
+As of now not that frequent. Instead of re-arming the timer networking
+code allows it to expire and makes the decisions in the handler, so it
+shouldn't be a problem because keepalives are usually quite big.
 
-Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Did you analyse that? And if so, then why is that analysis missing from
+> the change log of the keepalive timer patch?
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index f1e78f6adc98..97eb8afb336c 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -6694,14 +6694,14 @@ static unsigned long cpu_util_next(int cpu, struct task_struct *p, int dst_cpu)
-  * task.
-  */
- static long
--compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
-+compute_energy(struct task_struct *p, int dst_cpu, struct cpumask *cpus,
-+	       struct perf_domain *pd)
- {
--	struct cpumask *pd_mask = perf_domain_span(pd);
- 	unsigned long max_util = 0, sum_util = 0, cpu_cap;
- 	int cpu;
- 
--	cpu_cap = arch_scale_cpu_capacity(cpumask_first(pd_mask));
--	cpu_cap -= arch_scale_thermal_pressure(cpumask_first(pd_mask));
-+	cpu_cap = arch_scale_cpu_capacity(cpumask_first(cpus));
-+	cpu_cap -= arch_scale_thermal_pressure(cpumask_first(cpus));
- 
- 	/*
- 	 * The capacity state of CPUs of the current rd can be driven by CPUs
-@@ -6712,7 +6712,7 @@ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
- 	 * If an entire pd is outside of the current rd, it will not appear in
- 	 * its pd list and will not be accounted by compute_energy().
- 	 */
--	for_each_cpu_and(cpu, pd_mask, cpu_online_mask) {
-+	for_each_cpu(cpu, cpus) {
- 		unsigned long util_freq = cpu_util_next(cpu, p, dst_cpu);
- 		unsigned long cpu_util, util_running = util_freq;
- 		struct task_struct *tsk = NULL;
-@@ -6799,6 +6799,7 @@ compute_energy(struct task_struct *p, int dst_cpu, struct perf_domain *pd)
-  */
- static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
- {
-+	struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_rq_mask);
- 	unsigned long prev_delta = ULONG_MAX, best_delta = ULONG_MAX;
- 	struct root_domain *rd = cpu_rq(smp_processor_id())->rd;
- 	int cpu, best_energy_cpu = prev_cpu, target = -1;
-@@ -6833,7 +6834,9 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
- 		unsigned long base_energy_pd;
- 		int max_spare_cap_cpu = -1;
- 
--		for_each_cpu_and(cpu, perf_domain_span(pd), sched_domain_span(sd)) {
-+		cpumask_and(cpus, perf_domain_span(pd), cpu_online_mask);
-+
-+		for_each_cpu_and(cpu, cpus, sched_domain_span(sd)) {
- 			if (!cpumask_test_cpu(cpu, p->cpus_ptr))
- 				continue;
- 
-@@ -6870,12 +6873,12 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
- 			continue;
- 
- 		/* Compute the 'base' energy of the pd, without @p */
--		base_energy_pd = compute_energy(p, -1, pd);
-+		base_energy_pd = compute_energy(p, -1, cpus, pd);
- 		base_energy += base_energy_pd;
- 
- 		/* Evaluate the energy impact of using prev_cpu. */
- 		if (compute_prev_delta) {
--			prev_delta = compute_energy(p, prev_cpu, pd);
-+			prev_delta = compute_energy(p, prev_cpu, cpus, pd);
- 			if (prev_delta < base_energy_pd)
- 				goto unlock;
- 			prev_delta -= base_energy_pd;
-@@ -6884,7 +6887,8 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
- 
- 		/* Evaluate the energy impact of using max_spare_cap_cpu. */
- 		if (max_spare_cap_cpu >= 0) {
--			cur_delta = compute_energy(p, max_spare_cap_cpu, pd);
-+			cur_delta = compute_energy(p, max_spare_cap_cpu, cpus,
-+						   pd);
- 			if (cur_delta < base_energy_pd)
- 				goto unlock;
- 			cur_delta -= base_energy_pd;
+I agree, this needs to be added.
+
+> Aside of that it clearly lacks any argument why the simple, stupid, but
+> fast approach of shortening the timeout by 12.5% is not good enough and
+> why we need yet another function which is just going to be another
+> source of 'optimizations' for the wrong reasons.
+
+I am just not used to this mode of thinking I guess. This will be more
+efficient at the cost of being less obvious and requiring to be
+remembered about in case the 12.5% figure changes.
+
+> Seriously, I apprecitate that you want to make this 'perfect', but it's
+> never going to be perfect and the real question is whether there is any
+> reasonable difference between 'good' and almost 'perfect'.
+> 
+> And this clearly resonates in your changelog of the network patch:
+> 
+>  "Make sure TCP keepalive timer does not expire late. Switching to upper
+>   bound timers means it can fire off early but in case of keepalive
+>   tcp_keepalive_timer() handler checks elapsed time and resets the timer
+>   if it was triggered early. This results in timer "cascading" to a
+>   higher precision and being just a couple of milliseconds off it's
+>   original mark."
+> 
+> Which reinvents the cascading effect of the original timer wheel just
+> with more overhead. Where is the justification for this?
+> 
+> Is this really true for all the reasons where the keep alive timers are
+> armed? I seriously doubt that. Why?
+> 
+> On the end which waits for the keep alive packet to arrive in time it
+> does not matter at all, whether the cutoff is a bit later than defined.
+> 
+>      So why do you want to let the timer fire early just to rearm it? 
+> 
+> But it matters a lot on the sender side. If that is late and the other
+> end is strict about the timeout then you lost. But does it matter
+> whether you send the packet too early? No, it does not matter at all
+> because the important point is that you send it _before_ the other side
+> decides to give up.
+> 
+>      So why do you want to let the timer fire precise?
+> 
+> You are solving the sender side problem by introducing a receiver side
+> problem and both suffer from the overhead for no reason.
+
+I was hoping to discuss this during the second patch review. Keepalive
+timer handler complexity makes me think that it handles a lot of cases I
+am not currently aware of and dropping the "cascading" code would result
+in problems in places not obvious to me.
+
+Josh's point also makes sense to me. For cases when keepalive is used to
+check for dead clients I don't think we want to be early.
+
+> Aside of the theoerical issue why this matters at all I have yet ot see
+> a reasonable argument what the practical problen is. If this would be a
+> real problem in the wild then why haven't we ssen a reassonable bug
+> report within 6 years?
+
+I think it is unusual for keepalive timers to be set so close to the
+timeout so it is not an easy problem to hit. But regardless of that from
+what I saw in related discussions nobody sees this keepalive timer behavior
+as normal let alone expected. If you think it is better to keep it as is
+this will need to be clearly described/justified somewhere, but I am not
+sure how one would approach that.
+
 -- 
-2.25.1
+Regards,
+  Artem
 

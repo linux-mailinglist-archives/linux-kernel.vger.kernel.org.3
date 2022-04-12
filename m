@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D044FD86B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A7B44FD451
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:02:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353899AbiDLHQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:16:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46954 "EHLO
+        id S1358766AbiDLJUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:20:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351836AbiDLHEU (ORCPT
+        with ESMTP id S1357040AbiDLHjn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:04:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5500D45ADC;
-        Mon, 11 Apr 2022 23:47:28 -0700 (PDT)
+        Tue, 12 Apr 2022 03:39:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F00417045;
+        Tue, 12 Apr 2022 00:10:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E56160A6A;
-        Tue, 12 Apr 2022 06:47:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83966C385A1;
-        Tue, 12 Apr 2022 06:47:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC8EF6103A;
+        Tue, 12 Apr 2022 07:10:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD78FC385A5;
+        Tue, 12 Apr 2022 07:10:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746046;
-        bh=X/XV6dqIM01stGb6muJgsi2Mox5PAsrFHhzqwvCyAKg=;
+        s=korg; t=1649747457;
+        bh=1eZQ2mG1B5Ze4BFKltM7j3jjf6Smhu+NEKul0MLnFVQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aedWuH1O7xzvI09iccHePxvCJJGRcjAmznJgwj3JDmxf66N4E5QZkcs3CkK/GiFmi
-         JMAEluMmY01+LqFa1pxwsvNtMGCCV2+U5NJq8drzlb3/5UQfFViDu86aqmOv6SX5lL
-         ZkdR3jIs+LfeQ8gyyzl8UrSncg712p20WFk9e2UA=
+        b=sQOxHtpUbRwbKrf7QwI1bs+38NvWrgs0OzMKJqxvaAie2VMfgw9FRvzprVCZ5G466
+         fDnWVinTEFKy/EEXY7osfD0cU7ZHjUjeXzXNXJOFpylOiasVd2EuOWLStLCDu0tyLv
+         n20PGga6cb7V5k7JHsy69HG9NJsu3eOuqNGsoJn8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>,
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 100/277] xtensa: fix DTC warning unit_address_format
-Date:   Tue, 12 Apr 2022 08:28:23 +0200
-Message-Id: <20220412062944.936601266@linuxfoundation.org>
+Subject: [PATCH 5.17 086/343] usb: dwc3: pci: Set the swnode from inside dwc3_pci_quirks()
+Date:   Tue, 12 Apr 2022 08:28:24 +0200
+Message-Id: <20220412062953.589206078@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,101 +54,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Max Filippov <jcmvbkbc@gmail.com>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit e85d29ba4b24f68e7a78cb85c55e754362eeb2de ]
+[ Upstream commit e285cb403994419e997749c9a52b9370884ae0c8 ]
 
-DTC issues the following warnings when building xtfpga device trees:
+The quirk handling may need to set some different properties
+which means using a different swnode, move the setting of the swnode
+to inside dwc3_pci_quirks() so that the quirk handling can choose
+a different swnode.
 
- /soc/flash@00000000/partition@0x0: unit name should not have leading "0x"
- /soc/flash@00000000/partition@0x6000000: unit name should not have leading "0x"
- /soc/flash@00000000/partition@0x6800000: unit name should not have leading "0x"
- /soc/flash@00000000/partition@0x7fe0000: unit name should not have leading "0x"
-
-Drop leading 0x from flash partition unit names.
-
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Link: https://lore.kernel.org/r/20220213130524.18748-4-hdegoede@redhat.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/xtensa/boot/dts/xtfpga-flash-128m.dtsi | 8 ++++----
- arch/xtensa/boot/dts/xtfpga-flash-16m.dtsi  | 8 ++++----
- arch/xtensa/boot/dts/xtfpga-flash-4m.dtsi   | 4 ++--
- 3 files changed, 10 insertions(+), 10 deletions(-)
+ drivers/usb/dwc3/dwc3-pci.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/arch/xtensa/boot/dts/xtfpga-flash-128m.dtsi b/arch/xtensa/boot/dts/xtfpga-flash-128m.dtsi
-index 9bf8bad1dd18..c33932568aa7 100644
---- a/arch/xtensa/boot/dts/xtfpga-flash-128m.dtsi
-+++ b/arch/xtensa/boot/dts/xtfpga-flash-128m.dtsi
-@@ -8,19 +8,19 @@
- 			reg = <0x00000000 0x08000000>;
- 			bank-width = <2>;
- 			device-width = <2>;
--			partition@0x0 {
-+			partition@0 {
- 				label = "data";
- 				reg = <0x00000000 0x06000000>;
- 			};
--			partition@0x6000000 {
-+			partition@6000000 {
- 				label = "boot loader area";
- 				reg = <0x06000000 0x00800000>;
- 			};
--			partition@0x6800000 {
-+			partition@6800000 {
- 				label = "kernel image";
- 				reg = <0x06800000 0x017e0000>;
- 			};
--			partition@0x7fe0000 {
-+			partition@7fe0000 {
- 				label = "boot environment";
- 				reg = <0x07fe0000 0x00020000>;
- 			};
-diff --git a/arch/xtensa/boot/dts/xtfpga-flash-16m.dtsi b/arch/xtensa/boot/dts/xtfpga-flash-16m.dtsi
-index 40c2f81f7cb6..7bde2ab2d6fb 100644
---- a/arch/xtensa/boot/dts/xtfpga-flash-16m.dtsi
-+++ b/arch/xtensa/boot/dts/xtfpga-flash-16m.dtsi
-@@ -8,19 +8,19 @@
- 			reg = <0x08000000 0x01000000>;
- 			bank-width = <2>;
- 			device-width = <2>;
--			partition@0x0 {
-+			partition@0 {
- 				label = "boot loader area";
- 				reg = <0x00000000 0x00400000>;
- 			};
--			partition@0x400000 {
-+			partition@400000 {
- 				label = "kernel image";
- 				reg = <0x00400000 0x00600000>;
- 			};
--			partition@0xa00000 {
-+			partition@a00000 {
- 				label = "data";
- 				reg = <0x00a00000 0x005e0000>;
- 			};
--			partition@0xfe0000 {
-+			partition@fe0000 {
- 				label = "boot environment";
- 				reg = <0x00fe0000 0x00020000>;
- 			};
-diff --git a/arch/xtensa/boot/dts/xtfpga-flash-4m.dtsi b/arch/xtensa/boot/dts/xtfpga-flash-4m.dtsi
-index fb8d3a9f33c2..0655b868749a 100644
---- a/arch/xtensa/boot/dts/xtfpga-flash-4m.dtsi
-+++ b/arch/xtensa/boot/dts/xtfpga-flash-4m.dtsi
-@@ -8,11 +8,11 @@
- 			reg = <0x08000000 0x00400000>;
- 			bank-width = <2>;
- 			device-width = <2>;
--			partition@0x0 {
-+			partition@0 {
- 				label = "boot loader area";
- 				reg = <0x00000000 0x003f0000>;
- 			};
--			partition@0x3f0000 {
-+			partition@3f0000 {
- 				label = "boot environment";
- 				reg = <0x003f0000 0x00010000>;
- 			};
+diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
+index 06d0e88ec8af..4d9608cc55f7 100644
+--- a/drivers/usb/dwc3/dwc3-pci.c
++++ b/drivers/usb/dwc3/dwc3-pci.c
+@@ -185,7 +185,8 @@ static const struct software_node dwc3_pci_amd_mr_swnode = {
+ 	.properties = dwc3_pci_mr_properties,
+ };
+ 
+-static int dwc3_pci_quirks(struct dwc3_pci *dwc)
++static int dwc3_pci_quirks(struct dwc3_pci *dwc,
++			   const struct software_node *swnode)
+ {
+ 	struct pci_dev			*pdev = dwc->pci;
+ 
+@@ -242,7 +243,7 @@ static int dwc3_pci_quirks(struct dwc3_pci *dwc)
+ 		}
+ 	}
+ 
+-	return 0;
++	return device_add_software_node(&dwc->dwc3->dev, swnode);
+ }
+ 
+ #ifdef CONFIG_PM
+@@ -307,11 +308,7 @@ static int dwc3_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
+ 	dwc->dwc3->dev.parent = dev;
+ 	ACPI_COMPANION_SET(&dwc->dwc3->dev, ACPI_COMPANION(dev));
+ 
+-	ret = device_add_software_node(&dwc->dwc3->dev, (void *)id->driver_data);
+-	if (ret < 0)
+-		goto err;
+-
+-	ret = dwc3_pci_quirks(dwc);
++	ret = dwc3_pci_quirks(dwc, (void *)id->driver_data);
+ 	if (ret)
+ 		goto err;
+ 
 -- 
 2.35.1
 

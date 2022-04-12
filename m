@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B7A04FD9DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCF934FD925
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:39:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354554AbiDLHSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46912 "EHLO
+        id S1384447AbiDLIlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:41:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352302AbiDLHFH (ORCPT
+        with ESMTP id S1357169AbiDLHju (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:05:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB38E473A2;
-        Mon, 11 Apr 2022 23:47:57 -0700 (PDT)
+        Tue, 12 Apr 2022 03:39:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51AE613F70;
+        Tue, 12 Apr 2022 00:13:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CC66A6103A;
-        Tue, 12 Apr 2022 06:47:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9248C385A1;
-        Tue, 12 Apr 2022 06:47:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC8B56153F;
+        Tue, 12 Apr 2022 07:13:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9B44C385A1;
+        Tue, 12 Apr 2022 07:13:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746077;
-        bh=Ur7rnRKD7I0yAumOWBGWGZkPPf4CPiK8FlaCdTnTWQw=;
+        s=korg; t=1649747603;
+        bh=YgBs7SCqNKxfkEo9PqweIDQmp3ZWSfZhb89F6s7+12c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n2zEoJgtvMD0uQnK4saqv9li92HUKdNk6w1mm2ZsogS8lqqBpZIpSd2jLLugrecHO
-         BRoodw03rs0lg7KH3EtWinLtY8FuQHHhZA93jyoRGNMPfRc43MDzXeKxLnzv/rlwxn
-         F+7ih7Pr5xa7JpLXupU7gEXTSigp9rNX63zgiUVo=
+        b=sxsGcLuYm28rCDJxFsUD5y1Fl756+A7c1xBH6gju3YtzwnF75m46NVzjNx2sgqVq1
+         7XQuxW4851Z+MlOY/7ZQesS10muEuMGvj69wSi6NoVboCNM+CVBHZpzdYNqVyQdcj9
+         eOAfVoa2AUkN8KEamicmGujyGweS3xhHBv6p3y7I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Geert Uytterhoeven <geert@linux-m68k.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Gal Pressman <gal@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 153/277] scsi: zorro7xx: Fix a resource leak in zorro7xx_remove_one()
+Subject: [PATCH 5.17 138/343] net/mlx5e: Remove overzealous validations in netlink EEPROM query
 Date:   Tue, 12 Apr 2022 08:29:16 +0200
-Message-Id: <20220412062946.467510352@linuxfoundation.org>
+Message-Id: <20220412062955.369912798@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,38 +57,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Gal Pressman <gal@nvidia.com>
 
-[ Upstream commit 16ed828b872d12ccba8f07bcc446ae89ba662f9c ]
+[ Upstream commit 970adfb76095fa719778d70a6b86030d2feb88dd ]
 
-The error handling path of the probe releases a resource that is not freed
-in the remove function. In some cases, a ioremap() must be undone.
+Unlike the legacy EEPROM callbacks, when using the netlink EEPROM query
+(get_module_eeprom_by_page) the driver should not try to validate the
+query parameters, but just perform the read requested by the userspace.
 
-Add the missing iounmap() call in the remove function.
+Recent discussion in the mailing list:
+https://lore.kernel.org/netdev/20220120093051.70845141@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net/
 
-Link: https://lore.kernel.org/r/247066a3104d25f9a05de8b3270fc3c848763bcc.1647673264.git.christophe.jaillet@wanadoo.fr
-Fixes: 45804fbb00ee ("[SCSI] 53c700: Amiga Zorro NCR53c710 SCSI")
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Gal Pressman <gal@nvidia.com>
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+Reviewed-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/zorro7xx.c | 2 ++
- 1 file changed, 2 insertions(+)
+ .../net/ethernet/mellanox/mlx5/core/port.c    | 23 -------------------
+ 1 file changed, 23 deletions(-)
 
-diff --git a/drivers/scsi/zorro7xx.c b/drivers/scsi/zorro7xx.c
-index 27b9e2baab1a..7acf9193a9e8 100644
---- a/drivers/scsi/zorro7xx.c
-+++ b/drivers/scsi/zorro7xx.c
-@@ -159,6 +159,8 @@ static void zorro7xx_remove_one(struct zorro_dev *z)
- 	scsi_remove_host(host);
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/port.c b/drivers/net/ethernet/mellanox/mlx5/core/port.c
+index 7b16a1188aab..fd79860de723 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/port.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/port.c
+@@ -433,35 +433,12 @@ int mlx5_query_module_eeprom_by_page(struct mlx5_core_dev *dev,
+ 				     struct mlx5_module_eeprom_query_params *params,
+ 				     u8 *data)
+ {
+-	u8 module_id;
+ 	int err;
  
- 	NCR_700_release(host);
-+	if (host->base > 0x01000000)
-+		iounmap(hostdata->base);
- 	kfree(hostdata);
- 	free_irq(host->irq, host);
- 	zorro_release_device(z);
+ 	err = mlx5_query_module_num(dev, &params->module_number);
+ 	if (err)
+ 		return err;
+ 
+-	err = mlx5_query_module_id(dev, params->module_number, &module_id);
+-	if (err)
+-		return err;
+-
+-	switch (module_id) {
+-	case MLX5_MODULE_ID_SFP:
+-		if (params->page > 0)
+-			return -EINVAL;
+-		break;
+-	case MLX5_MODULE_ID_QSFP:
+-	case MLX5_MODULE_ID_QSFP28:
+-	case MLX5_MODULE_ID_QSFP_PLUS:
+-		if (params->page > 3)
+-			return -EINVAL;
+-		break;
+-	case MLX5_MODULE_ID_DSFP:
+-		break;
+-	default:
+-		mlx5_core_err(dev, "Module ID not recognized: 0x%x\n", module_id);
+-		return -EINVAL;
+-	}
+-
+ 	if (params->i2c_address != MLX5_I2C_ADDR_HIGH &&
+ 	    params->i2c_address != MLX5_I2C_ADDR_LOW) {
+ 		mlx5_core_err(dev, "I2C address not recognized: 0x%x\n", params->i2c_address);
 -- 
 2.35.1
 

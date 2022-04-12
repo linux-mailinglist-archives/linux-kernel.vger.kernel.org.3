@@ -2,72 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B58774FE75D
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:39:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AA394FE766
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:41:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358509AbiDLRmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 13:42:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33694 "EHLO
+        id S1358407AbiDLRnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 13:43:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351704AbiDLRmC (ORCPT
+        with ESMTP id S238311AbiDLRnn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 13:42:02 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F2F4F9E8;
-        Tue, 12 Apr 2022 10:39:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-        In-Reply-To:References; bh=GqUPsB0RxV4YHXw9ZT+wqqKYjhpEzdwTZJ084YnLISw=; b=Dc
-        m0+jjljkXdImyjJiS9JfrITD9lPe5/d71jL/BoNmf/5IiInH1hpjaVmQiR8bfGMA4A8jnZbhG0ny7
-        sVb9cS3j9+MNPDNhRnbSKA154kAIRZT926ySypROSD2QgRdOmuCYH4QGYl3jYc8N+YFL6OIxP0GuA
-        J0okT0pid0LFka8=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1neKUI-00FUhA-Uz; Tue, 12 Apr 2022 19:39:34 +0200
-Date:   Tue, 12 Apr 2022 19:39:34 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] net: dsa: realtek: don't parse compatible string for
- RTL8366S
-Message-ID: <YlW5VsakqDCzTz9x@lunn.ch>
-References: <20220412155749.1835519-1-alvin@pqrs.dk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220412155749.1835519-1-alvin@pqrs.dk>
+        Tue, 12 Apr 2022 13:43:43 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C285DE47;
+        Tue, 12 Apr 2022 10:41:25 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id cw11so2049011pfb.1;
+        Tue, 12 Apr 2022 10:41:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=fMSQntlwd+/xbPrWRwO1YYSdjmQYi5eTkeCVnF/Cadg=;
+        b=aiSy9KZRb0TKtuYz0znkNffXbtaoR3PHZnVAvSrWZJBE6R6vksMRbuwvhCqYifQoDG
+         iPeBe9frvNFkcbmUff0piTtH3BQBoQSlDA4pvOLXyVQSmZHexvVxHxRFpUx0GQ9z3a8B
+         9mH/o2B/t9l4GQZndUHf0QPWKw2jJuBD4+AOAR6iGwtcnZUsFyM0y4NQLmvx16C+cdvn
+         uuUUtNifi+b5S/2EuG9MGZ86RMu9yWtPOyerGsrlH/BDJNLAieydFNiD5uqxpUcZkvnJ
+         jNVIs6iJxuhuoAxy7S6FyQFI+76gqDmb7SJ+4Sus571zpBKCXuD+LejBTtuifA0v+F2O
+         A/sQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=fMSQntlwd+/xbPrWRwO1YYSdjmQYi5eTkeCVnF/Cadg=;
+        b=WdhZI+FNI/rw4O+8Co1lW+UEeC9GGepQ40UskXEWhD4kKcB96QA8kGZ0Bt1GLYj2Ud
+         oScv3VaOLi7Lriwof1kI8N3YAO4hN++f1fNGim6yAHEZU7QFk05yj0U0XnN/ZCZAh+zj
+         wR81HTo8iYv3UIGK329eK4HxomAXWIBwAruBMIWAn8sCJhziO40+fsfL9TuSwRBNthUS
+         10IHrxWMJtzlpAm8O6+eYCbAd/eybENTl3NznVvUJ/VIdknCz+qKz1go79vsgZvzsfAz
+         nFTFLYWClUk9mS62xaMdQDy1LE6Z60i+M6GpKBfYwARiA1kpMker33bicqBVBDYqrw0i
+         z1iQ==
+X-Gm-Message-State: AOAM532P6taGHjlu7x/fSsq7yUAkds2yJaZfhojLnqsR1lev60I3iY0u
+        mcS+85Sq17oZYG+F3dJNmMXHb2TPri2ZWKmXAx4=
+X-Google-Smtp-Source: ABdhPJzomvD4HrQatnGG1J//pBwkFBGyXediAbaTEIEK8sH+/C8hH2cl6n7G9YJ+YoSGzULBg2yyRg==
+X-Received: by 2002:a63:af42:0:b0:39d:942c:504b with SMTP id s2-20020a63af42000000b0039d942c504bmr3838930pgo.453.1649785283927;
+        Tue, 12 Apr 2022 10:41:23 -0700 (PDT)
+Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [2605:2700:0:2:a800:ff:fed6:fc0d])
+        by smtp.gmail.com with ESMTPSA id fa11-20020a17090af0cb00b001ca6e27a684sm125247pjb.16.2022.04.12.10.41.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 10:41:23 -0700 (PDT)
+Message-ID: <6255b9c3.1c69fb81.7480e.0674@mx.google.com>
+Date:   Tue, 12 Apr 2022 10:41:23 -0700 (PDT)
+X-Google-Original-Date: Tue, 12 Apr 2022 17:41:21 GMT
+From:   Fox Chen <foxhlchen@gmail.com>
+In-Reply-To: <20220412062927.870347203@linuxfoundation.org>
+Subject: RE: [PATCH 5.10 000/171] 5.10.111-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Fox Chen <foxhlchen@gmail.com>
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 05:57:49PM +0200, Alvin Šipraga wrote:
-> From: Alvin Šipraga <alsi@bang-olufsen.dk>
+On Tue, 12 Apr 2022 08:28:11 +0200, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.10.111 release.
+> There are 171 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> This switch is not even supported, but if someone were to actually put
-> this compatible string "realtek,rtl8366s" in their device tree, they
-> would be greeted with a kernel panic because the probe function would
-> dereference NULL. So let's just remove it.
+> Responses should be made by Thu, 14 Apr 2022 06:28:59 +0000.
+> Anything received after that time might be too late.
 > 
-> Link: https://lore.kernel.org/all/CACRpkdYdKZs0WExXc3=0yPNOwP+oOV60HRz7SRoGjZvYHaT=1g@mail.gmail.com/
-> Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.111-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+5.10.111-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
+                
+Tested-by: Fox Chen <foxhlchen@gmail.com>
 
-    Andrew

@@ -2,118 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E1314FDEA7
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:56:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CDE44FDEB3
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234384AbiDLL47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 07:56:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59460 "EHLO
+        id S1344963AbiDLL5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 07:57:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344008AbiDLL4f (ORCPT
+        with ESMTP id S1345375AbiDLL4r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 07:56:35 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418AC5FF3F
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 03:39:35 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id s28so11158978wrb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 03:39:35 -0700 (PDT)
+        Tue, 12 Apr 2022 07:56:47 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E02160A8B;
+        Tue, 12 Apr 2022 03:40:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5j+DyYR0o6Q93d00EPxQZq+xzuIpOumJGj/flLY2ZXQ=;
-        b=XyeYRncEFduIhbzKjNRkk5jRGALM2S+GIQBdXaijG9//sHgGzzemlKCmqr1xWAfd5I
-         nrMjKXCZgnaFKdwclYnlI51qeUEhpI+FWyWTsjieqAgoerhfqWT9gacYjLq7uj/5I+4v
-         4ILKW5KZw6hKssD4TkWgDrluLpd+vWA6kWf0qmk1lZPovU/1rBUGK166hf9H5tRuxeYV
-         ukjPKzOhEYAYnyeiplSl2N3oB95Bngvd43/TN2+PogxL9FG4uVRpJZGII/k9DHUNCvkY
-         1uS0kplxMN1lNpD71tp1rPup1dfcS1MGJHOwk/wlYfmgxnWZeIw0wUEpnx1hQ+NbQuVL
-         v6BQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5j+DyYR0o6Q93d00EPxQZq+xzuIpOumJGj/flLY2ZXQ=;
-        b=o0hpWqKAQ5ndBT3xte8X8AoPicnI8yYfwFs1rxKpGsmYvVoJsOWkkBR+XIyd/9uku5
-         OaCguN8rESpAyb2A95ISeCtm5zfwHOJ5DFGJYkwfsXPqjwX4ut760pZAtyUqU5nEj49C
-         o88zmZb1BUpHPLx1dGMvuESjJObVNL1XxPuhLJm8JfrkU5mmDOn4CbegnROV+B40wwE7
-         G4cWlSEowJr1rvaQXlBXcCHxJFNiCUkav9RxBRpq/yJXMGpMPpOVvOMsYRko9zxxUN4p
-         6K3EyvzQ4LWwh6Gtbth/gU0lf5QdgPPDkclR1SUYhjz/um0e0K79BH6evyS9ajHvmtZ5
-         ya/A==
-X-Gm-Message-State: AOAM530M0y3Xc/VkT2AypyVmPQGRJDXKY0xvGAHK9H0MDwjC02RIyN85
-        EWPFysGGw8zDDpxT6I58SsAwbZkZvRMKgXjgvQSwFA==
-X-Google-Smtp-Source: ABdhPJxgPCMoovmuskyp4Di5ue29+LDcufEl00XCI6fpEE1DA39TMQXzYXAzWA70+Ozx57DE/0Isc/mTBKVToakkZh0=
-X-Received: by 2002:adf:cd87:0:b0:207:b0ad:6d8 with SMTP id
- q7-20020adfcd87000000b00207b0ad06d8mr1310311wrj.111.1649759974016; Tue, 12
- Apr 2022 03:39:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220304171913.2292458-1-james.clark@arm.com> <20220304171913.2292458-14-james.clark@arm.com>
-In-Reply-To: <20220304171913.2292458-14-james.clark@arm.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Tue, 12 Apr 2022 11:39:21 +0100
-Message-ID: <CAJ9a7Vhh1m1uAc441wqAZLyDSTh8pPrZ1pxvR_VNz_crnXdinA@mail.gmail.com>
-Subject: Re: [PATCH v3 13/15] coresight: etm4x: Cleanup TRCSSPCICRn register accesses
-To:     James Clark <James.Clark@arm.com>
-Cc:     suzuki.poulose@arm.com, coresight@lists.linaro.org,
-        Anshuman.Khandual@arm.com, mathieu.poirier@linaro.org,
-        leo.yan@linaro.com, Leo Yan <leo.yan@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649760010; x=1681296010;
+  h=from:to:cc:subject:date:message-id;
+  bh=374d2KEtS0jWsYeS7dQ6Ghuf7T7NoRUNsq5r7DmUasA=;
+  b=JPj7baWdlM9khb9S0P9mDFtxUU+xzqcHZgvvJcnrS42Y1kTzwGttG/LP
+   BSAB/PC8VrEbqB2dIj5unKZn/7h99bb7JwhpbZiA3hc2CwauEI8dqY80d
+   90XndUlcV9d10quzD3FIf5Q/1e/sZxG0oZfgq/WZMJW0fP1835/RnK/BL
+   M=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 12 Apr 2022 03:40:10 -0700
+X-QCInternal: smtphost
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 12 Apr 2022 03:40:08 -0700
+X-QCInternal: smtphost
+Received: from c-sbhanu-linux.qualcomm.com ([10.242.50.201])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 12 Apr 2022 16:09:46 +0530
+Received: by c-sbhanu-linux.qualcomm.com (Postfix, from userid 2344807)
+        id 395D45A26; Tue, 12 Apr 2022 16:09:45 +0530 (IST)
+From:   Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+To:     adrian.hunter@intel.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, ulf.hansson@linaro.org,
+        p.zabel@pengutronix.de, chris@printf.net, venkatg@codeaurora.org,
+        gdjakov@mm-sol.com, quic_asutoshd@quicinc.com
+Cc:     linux-mmc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_rampraka@quicinc.com,
+        quic_pragalla@quicinc.com, quic_sartgarg@quicinc.com,
+        quic_nitirawa@quicinc.com, quic_sayalil@quicinc.com,
+        Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+Subject: [PATCH V4] mmc: sdhci-msm: Reset GCC_SDCC_BCR register for SDHC
+Date:   Tue, 12 Apr 2022 16:09:43 +0530
+Message-Id: <1649759983-22035-1-git-send-email-quic_c_sbhanu@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 4 Mar 2022 at 17:19, James Clark <james.clark@arm.com> wrote:
->
-> This is a no-op change for style and consistency and has no effect on
-> the binary output by the compiler. In sysreg.h fields are defined as
-> the register name followed by the field name and then _MASK. This
-> allows for grepping for fields by name rather than using magic numbers.
->
-> Signed-off-by: James Clark <james.clark@arm.com>
-> ---
->  drivers/hwtracing/coresight/coresight-etm4x-sysfs.c | 2 +-
->  drivers/hwtracing/coresight/coresight-etm4x.h       | 2 ++
->  2 files changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c b/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-> index 7dd7636fc2a7..25f76a656308 100644
-> --- a/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-> +++ b/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-> @@ -1842,7 +1842,7 @@ static ssize_t sshot_pe_ctrl_store(struct device *dev,
->
->         spin_lock(&drvdata->spinlock);
->         idx = config->ss_idx;
-> -       config->ss_pe_cmp[idx] = val & GENMASK(7, 0);
-> +       config->ss_pe_cmp[idx] = FIELD_PREP(TRCSSPCICRn_PC_MASK, val);
->         /* must clear bit 31 in related status register on programming */
->         config->ss_status[idx] &= ~TRCSSCSRn_STATUS;
->         spin_unlock(&drvdata->spinlock);
-> diff --git a/drivers/hwtracing/coresight/coresight-etm4x.h b/drivers/hwtracing/coresight/coresight-etm4x.h
-> index b4217eaab450..3b81c104a44b 100644
-> --- a/drivers/hwtracing/coresight/coresight-etm4x.h
-> +++ b/drivers/hwtracing/coresight/coresight-etm4x.h
-> @@ -218,6 +218,8 @@
->  #define TRCSSCSRn_STATUS                       BIT(31)
->  #define TRCSSCCRn_SAC_ARC_RST_MASK             GENMASK(24, 0)
->
-> +#define TRCSSPCICRn_PC_MASK                    GENMASK(7, 0)
-> +
->  /*
->   * System instructions to access ETM registers.
->   * See ETMv4.4 spec ARM IHI0064F section 4.3.6 System instructions
-> --
-> 2.28.0
->
+Reset GCC_SDCC_BCR register before every fresh initilazation. This will
+reset whole SDHC-msm controller, clears the previous power control
+states and avoids, software reset timeout issues as below.
 
-Reviewed-by: Mike Leach <mike.leach@linaro.org>
+[ 5.458061][ T262] mmc1: Reset 0x1 never completed.
+[ 5.462454][ T262] mmc1: sdhci: ============ SDHCI REGISTER DUMP ===========
+[ 5.469065][ T262] mmc1: sdhci: Sys addr: 0x00000000 | Version: 0x00007202
+[ 5.475688][ T262] mmc1: sdhci: Blk size: 0x00000000 | Blk cnt: 0x00000000
+[ 5.482315][ T262] mmc1: sdhci: Argument: 0x00000000 | Trn mode: 0x00000000
+[ 5.488927][ T262] mmc1: sdhci: Present: 0x01f800f0 | Host ctl: 0x00000000
+[ 5.495539][ T262] mmc1: sdhci: Power: 0x00000000 | Blk gap: 0x00000000
+[ 5.502162][ T262] mmc1: sdhci: Wake-up: 0x00000000 | Clock: 0x00000003
+[ 5.508768][ T262] mmc1: sdhci: Timeout: 0x00000000 | Int stat: 0x00000000
+[ 5.515381][ T262] mmc1: sdhci: Int enab: 0x00000000 | Sig enab: 0x00000000
+[ 5.521996][ T262] mmc1: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000000
+[ 5.528607][ T262] mmc1: sdhci: Caps: 0x362dc8b2 | Caps_1: 0x0000808f
+[ 5.535227][ T262] mmc1: sdhci: Cmd: 0x00000000 | Max curr: 0x00000000
+[ 5.541841][ T262] mmc1: sdhci: Resp[0]: 0x00000000 | Resp[1]: 0x00000000
+[ 5.548454][ T262] mmc1: sdhci: Resp[2]: 0x00000000 | Resp[3]: 0x00000000
+[ 5.555079][ T262] mmc1: sdhci: Host ctl2: 0x00000000
+[ 5.559651][ T262] mmc1: sdhci_msm: ----------- VENDOR REGISTER DUMP-----------
+[ 5.566621][ T262] mmc1: sdhci_msm: DLL sts: 0x00000000 | DLL cfg: 0x6000642c | DLL cfg2: 0x0020a000
+[ 5.575465][ T262] mmc1: sdhci_msm: DLL cfg3: 0x00000000 | DLL usr ctl: 0x00010800 | DDR cfg: 0x80040873
+[ 5.584658][ T262] mmc1: sdhci_msm: Vndr func: 0x00018a9c | Vndr func2 : 0xf88218a8 Vndr func3: 0x02626040
 
+Fixes: 0eb0d9f4de34 ("mmc: sdhci-msm: Initial support for Qualcomm chipsets")
+Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+---
+ drivers/mmc/host/sdhci-msm.c | 38 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+
+diff --git a/drivers/mmc/host/sdhci-msm.c b/drivers/mmc/host/sdhci-msm.c
+index 50c71e0..0e5fb62 100644
+--- a/drivers/mmc/host/sdhci-msm.c
++++ b/drivers/mmc/host/sdhci-msm.c
+@@ -17,6 +17,7 @@
+ #include <linux/regulator/consumer.h>
+ #include <linux/interconnect.h>
+ #include <linux/pinctrl/consumer.h>
++#include <linux/reset.h>
+ 
+ #include "sdhci-pltfm.h"
+ #include "cqhci.h"
+@@ -2482,6 +2483,39 @@ static inline void sdhci_msm_get_of_property(struct platform_device *pdev,
+ 	of_property_read_u32(node, "qcom,dll-config", &msm_host->dll_config);
+ }
+ 
++static int sdhci_msm_gcc_reset(struct device *dev, struct sdhci_host *host)
++{
++	struct reset_control *reset;
++	int ret = 0;
++
++	reset = reset_control_get_optional_exclusive(dev, NULL);
++	if (IS_ERR(reset))
++		return dev_err_probe(dev, PTR_ERR(reset),
++				"unable to acquire core_reset\n");
++
++	if (!reset)
++		return ret;
++
++	ret = reset_control_assert(reset);
++	if (ret)
++		return dev_err_probe(dev, ret, "core_reset assert failed\n");
++
++	/*
++	 * The hardware requirement for delay between assert/deassert
++	 * is at least 3-4 sleep clock (32.7KHz) cycles, which comes to
++	 * ~125us (4/32768). To be on the safe side add 200us delay.
++	 */
++	usleep_range(200, 210);
++
++	ret = reset_control_deassert(reset);
++	if (ret)
++		return dev_err_probe(dev, ret, "core_reset deassert failed\n");
++
++	usleep_range(200, 210);
++	reset_control_put(reset);
++
++	return ret;
++}
+ 
+ static int sdhci_msm_probe(struct platform_device *pdev)
+ {
+@@ -2529,6 +2563,10 @@ static int sdhci_msm_probe(struct platform_device *pdev)
+ 
+ 	msm_host->saved_tuning_phase = INVALID_TUNING_PHASE;
+ 
++	ret = sdhci_msm_gcc_reset(&pdev->dev, host);
++	if (ret)
++		goto pltfm_free;
++
+ 	/* Setup SDCC bus voter clock. */
+ 	msm_host->bus_clk = devm_clk_get(&pdev->dev, "bus");
+ 	if (!IS_ERR(msm_host->bus_clk)) {
 -- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member 
+of Code Aurora Forum, hosted by The Linux Foundation
+

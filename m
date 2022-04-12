@@ -2,117 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D91DA4FE4AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:24:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDAEA4FE4B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356975AbiDLP03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 11:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49700 "EHLO
+        id S1354358AbiDLP10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 11:27:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346458AbiDLP0X (ORCPT
+        with ESMTP id S1351692AbiDLP1U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 11:26:23 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830A4E2;
-        Tue, 12 Apr 2022 08:24:01 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id 15so9687902ljw.8;
-        Tue, 12 Apr 2022 08:24:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=VStffjPSoNuLVmgDL/ileLhw4nppALw1IFNpnjw+ytU=;
-        b=BSrsVveb2Ov8wixMuMVEF0afp0t9GItWPOTZos5ZRGOn853uCe9L80l6HaT2uoI+PZ
-         dnHRW8B+/F0Sd7bg/sTthP04nX1KwcfAOL56k2+KMbjyeYLsg73rBvNISTLBaGgRHsCj
-         qXLus9ixicO3LD1Jqd+lgKZrsqX7YMX3jKZQM2Qbv67Vx2nvzT93b8R2oq8FJrmt+Qzk
-         bLEwY6oHS8k4dWdTg/DZ6gNtfD+p4KTG4hfq/f7cG0GJOS0abEpiu7NF/roFpvTzDH5k
-         yMuJZ29VRGw4x8NAGwc+lBpY0x+47fLIRfyAbG3+Ert2383Es+T7wYv83OScKUWw8sMy
-         qgVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=VStffjPSoNuLVmgDL/ileLhw4nppALw1IFNpnjw+ytU=;
-        b=2jMYbO9J+XMMX98uLlS6KIfH/4F4XtlUxfNqjI62kdj3dlOfOjfMoTr9oRPnnftDUr
-         3X68ARnPxYrfS+yy/KZrfGhKNlOL4SlV1GSkW1i032VYDe8utImvFqM010hBh5KM1Giu
-         k/rphYyTzQqGfLTb4hKh70eVzBTkreMo4qE5LRku7edVP9qLc8odH4hNV9ot+2EqCjcq
-         uU1seI1QcY5A3LconvZWZPrtFz1w0WF6XrhCg0MGyFzIFmgGBhhkHMR+lgB7ZvYGgxCL
-         NPp6gYZPHg2lxkWRo91cUWBujmVl3WZHB2OzJ+YktbBl1TEO5HR4mxPXXE2YFiy0Dzrd
-         qqPg==
-X-Gm-Message-State: AOAM530iwpAgNR/NF1b+eWGefZ1fmFzlTzNUONy4wR0Ay9L7HxFiXI1G
-        3xNKX9TqtCCFmo/fBywSmX0=
-X-Google-Smtp-Source: ABdhPJx8ntIZ64Ep+1//eaVIjzbkY6UpyEKqOwRsH3Vumux5OXak8LEcuT8NThTvX5bZM+fbF/uzDA==
-X-Received: by 2002:a2e:381a:0:b0:24b:68ae:4169 with SMTP id f26-20020a2e381a000000b0024b68ae4169mr5020616lja.208.1649777039712;
-        Tue, 12 Apr 2022 08:23:59 -0700 (PDT)
-Received: from [192.168.31.104] (static-91-225-135-18.devs.futuro.pl. [91.225.135.18])
-        by smtp.gmail.com with ESMTPSA id o26-20020a198c1a000000b0046bc20821f6sm126079lfd.115.2022.04.12.08.23.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 08:23:59 -0700 (PDT)
-Message-ID: <1c8fa321-d91e-c906-a7da-c252a112191b@gmail.com>
-Date:   Tue, 12 Apr 2022 17:23:57 +0200
+        Tue, 12 Apr 2022 11:27:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF60D1D0C1;
+        Tue, 12 Apr 2022 08:25:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7396C61681;
+        Tue, 12 Apr 2022 15:25:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCA35C385A1;
+        Tue, 12 Apr 2022 15:25:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649777101;
+        bh=qTHICTuekXrpH6b/BwbRVneUr43m2u13rD5wYaHb0tk=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=WfDqhk+fPIg5mcfjCE+N1SsIzxi1aotYZTuPp6JL9cTOpz6s6sXshi+atLVdIOaQI
+         RB08bc/c5kwvkqHTfwu4i4BBVR15DmO2vHeVcxV7RUF1Pj+8hmof+2+frADbYuhiUn
+         acQIjanYSd9qnxrNiFUmgOoTK32QC74rlYcCybUAZWCYiOEXnl7a45E5p2cg6t/NFZ
+         M+CuMg5tbTLVRdcH5hO95hF49+n3cZk2IJKpmhLmRSqYnNJMGdXd6ACIqvbAuIhWwH
+         BlpyfT87MseV5BPL86N3wLY0F+V0YXEy2LdyNBxgDfqjOPIgVGc9UuPV0C/z3nUy1/
+         5UQeobwrtfzHA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 685795C0E58; Tue, 12 Apr 2022 08:25:01 -0700 (PDT)
+Date:   Tue, 12 Apr 2022 08:25:01 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Benedikt Spranger <b.spranger@linutronix.de>
+Subject: Re: [PATCH] rcu/torture: Change order of warning and trace dump
+Message-ID: <20220412152501.GA2557395@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220411151903.28167-1-anna-maria@linutronix.de>
+ <20220411180915.GY4285@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] block: Remove redundant assignments
-Content-Language: en-US
-To:     Tom Rix <trix@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        "Richard Russon (FlatCap)" <ldm@flatcap.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ntfs-dev@lists.sourceforge.net, llvm@lists.linux.dev
-References: <20220409101933.207157-1-michalorzel.eng@gmail.com>
- <20220409101933.207157-2-michalorzel.eng@gmail.com>
- <a56d1184-d399-d5f8-765f-5a4f35dacd5e@redhat.com>
- <446a3e88-4c14-300d-862a-1279274c3760@gmail.com>
- <c2c40f00-777c-f19a-eb5f-6e978ddd6bcf@redhat.com>
-From:   Michal Orzel <michalorzel.eng@gmail.com>
-In-Reply-To: <c2c40f00-777c-f19a-eb5f-6e978ddd6bcf@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220411180915.GY4285@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tom,
+On Mon, Apr 11, 2022 at 11:09:15AM -0700, Paul E. McKenney wrote:
+> On Mon, Apr 11, 2022 at 05:19:03PM +0200, Anna-Maria Behnsen wrote:
+> > Dumping a big ftrace buffer could lead to a RCU stall. So there is the
+> > ftrace buffer and the stall information which needs to be printed. When
+> > there is additionaly a WARN_ON() which describes the reason for the ftrace
+> > buffer dump and the WARN_ON() is executed _after_ ftrace buffer dump, the
+> > information get lost in the middle of the RCU stall information.
+> > 
+> > Therefore print WARN_ON() message before dumping the ftrace buffer in
+> > rcu_torture_writer().
+> > 
+> > Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
+> > Reviewed-by: Benedikt Spranger <b.spranger@linutronix.de>
+> 
+> Hello, Anna-Maria!
+> 
+> Good point, but we get caught out either way.  Either we take the chance
+> of losing the WARN() message as you say, or we take the chance of the
+> activity in the WARN() message overwriting needed information in the
+> trace buffer.
+> 
+> Would it work to shut off tracing, do the WARN(), and only then do the
+> rcu_ftrace_dump()?
 
-On 09.04.2022 18:03, Tom Rix wrote:
-> 
-> On 4/9/22 6:20 AM, Michal Orzel wrote:
->> Hi Tom,
->>
->>> On 4/9/22 3:19 AM, Michal Orzel wrote:
->>>> Get rid of redundant assignments which end up in values not being
->>>> read either because they are overwritten or the function ends.
->>> This log is the same as your last patch.
->>>
->>> Instead of a general statement on deadstores, a more specific
->>>
->>> analysis of the setting being removed would be helpful.
->>>
->>> This will mean splitting the patch to match the analysis.
->>>
->>> Tom
->>>
->> I think that this explanation in a commit is enough for such a trivial patch.
->> It informs that we are fixing clang-tidy findings related to deadstores
->> in a block subsystem. What analysis would you want to see?
->> Something like "Remove deadstore assignment ret = -EINVAL  in a function bio_map_user_iov" ?
->> I think that it will create too much of not needed overhead.
-> 
-> The compiler should remove these already.  All of the static analyzers produce false positives, if you do not provide analysis the reviewer has to assume you have not done any and has to do the false positive analysis themselves. This burdens the reviewer for something of small value that can be dismissed as churn.
-> 
-> Tom
-> 
+And presumably you are looking at this because your testing is
+triggering it.  This WARN() assumes that the system running rcutorture
+is otherwise idle.  If you are (say) running kernel builds while also
+running rcutorture, then this WARN() is expected behavior.  So if you need
+this sort of testing, we need do something like adding another rcutorture
+module parameter (background_load?) that suppresses this warning.
 
-Ok, I will split the patch into series in v2 and I will add some analysis into commit msg.
+							Thanx, Paul
 
-Cheers,
-Michal
+> > ---
+> >  kernel/rcu/rcutorture.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
+> > index 55d049c39608..cbbe37d7701e 100644
+> > --- a/kernel/rcu/rcutorture.c
+> > +++ b/kernel/rcu/rcutorture.c
+> > @@ -1287,8 +1287,8 @@ rcu_torture_writer(void *arg)
+> >  				if (list_empty(&rcu_tortures[i].rtort_free) &&
+> >  				    rcu_access_pointer(rcu_torture_current) !=
+> >  				    &rcu_tortures[i]) {
+> > -					rcu_ftrace_dump(DUMP_ALL);
+> >  					WARN(1, "%s: rtort_pipe_count: %d\n", __func__, rcu_tortures[i].rtort_pipe_count);
+> > +					rcu_ftrace_dump(DUMP_ALL);
+> >  				}
+> >  		if (stutter_waited)
+> >  			sched_set_normal(current, oldnice);
+> > -- 
+> > 2.20.1
+> > 

@@ -2,152 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C35D24FE79E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 20:06:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 479144FE79C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 20:06:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358593AbiDLSI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 14:08:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56152 "EHLO
+        id S1358589AbiDLSIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 14:08:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239431AbiDLSI4 (ORCPT
+        with ESMTP id S1344185AbiDLSIR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 14:08:56 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E85E4CD5C
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 11:06:38 -0700 (PDT)
+        Tue, 12 Apr 2022 14:08:17 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA1321D0CE
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 11:05:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649786798; x=1681322798;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IeaSKSuXPhVpXFM/OGOekdHqEQjfF86SwDcNvu0ysGk=;
-  b=nggviThdHYwy2EYrznEuH+LirmSCGdvzQWuh9LdWXX2dDajsy+lUNYgS
-   kMErNyHoIR90U0JLjDvRdHVl5G3CzUxx6Y5u6/51M7aY89H8YebASj/+6
-   yYW+pMgyy2N0je3SZkWwG8mLzBwIw2/8XMVUpvYostnb2xM34WYyvddVK
-   D98cpNkUWaz4Jfc1UJb4As1/T5iBSi4ATs8c1brkvwAKex20liBxqvuIt
-   Tnn2lPXjKmhf4BvfwZeZHT7yMHsC37kcuync3BvPHqWi+4O6kE7howvqY
-   3Nc7FEvGYuVHkIcVEUu2h8FQp3VIFMb40OQMdwPNKeM1gbNKsQT/lydLf
+  t=1649786758; x=1681322758;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7+F4+3vWCiXQjDPuKWpXlZsF/ykcIVtUkKbDuT5EO/8=;
+  b=epdhb/rHZrjJKyLmyu8yVbVtQol3xoTzco4rhCKmSiPVNCt+Cmdoj5v0
+   sMOaNNLZdwRh4QqAJ0WwT26nUJwL3a0GH9xyAZqSBqV8TECjNnAePgSQw
+   MZnFNLU8Q9bP75BYqQd8zvJIzJ0OIQL938vejblVbnPvrKCwD6N3j9iLP
+   1m9GTGknlsdELPBbKf64scSHC4vL/V13pJ5a2TgWM6vS0jBM+78lBTjAJ
+   n9OdlWTxhGELVkiRt/889KgIasjhk3gwshFJPyxEBXdHbNAKMb/RD40Xu
+   FBYm0HPXoNTHDZ9cxgAYGPdYLpJMNUyxduIL7Y3e3uebHLg7ic1IJ2s/O
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="244347985"
+X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="287484027"
 X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
-   d="scan'208";a="244347985"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 10:57:25 -0700
+   d="scan'208";a="287484027"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 11:00:05 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
-   d="scan'208";a="724563522"
-Received: from alison-desk.jf.intel.com (HELO alison-desk) ([10.54.74.41])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 10:57:23 -0700
-Date:   Tue, 12 Apr 2022 10:59:17 -0700
-From:   Alison Schofield <alison.schofield@intel.com>
-To:     Bruno Moreira-Guedes <codeagain@codeagain.dev>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Martyn Welch <martyn@welchs.me.uk>,
-        Manohar Vanga <manohar.vanga@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev,
-        Bruno's Patch Watchbox <patch-reply@codeagain.dev>
-Subject: Re: [PATCH v2 1/3] staging: vme: Adjusted VME_USER in Kconfig
-Message-ID: <20220412175917.GA1236898@alison-desk>
-References: <cover.1649721450.git.codeagain@codeagain.dev>
- <cfd7014e7f70cb928aa957f56bb31d8f514c2446.1649721450.git.codeagain@codeagain.dev>
+   d="scan'208";a="644845506"
+Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 12 Apr 2022 11:00:03 -0700
+Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1neKo6-00031w-I7;
+        Tue, 12 Apr 2022 18:00:02 +0000
+Date:   Wed, 13 Apr 2022 01:59:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ingo Molnar <mingo@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [linux-stable-rc:queue/4.19 3886/9999]
+ arch/ia64/kernel/kprobes.c:414:24: error: implicit declaration of function
+ '__kretprobe_trampoline_handler'; did you mean 'kretprobe_trampoline'?
+Message-ID: <202204130102.JZPa6KCQ-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cfd7014e7f70cb928aa957f56bb31d8f514c2446.1649721450.git.codeagain@codeagain.dev>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 03:55:21AM -0300, Bruno Moreira-Guedes wrote:
+Hi Masami,
 
-'Adjusted' is unecessarily vague. In the commit msg try to say
-exactly what the patch did. Write in the imperative tense, like
-you are issuing commands.
+FYI, the error/warning still remains.
 
-Something like 'Move VME staging driver to staging Kconfig' , or
-'Source vme driver from staging Kconfig'.  
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/4.19
+head:   bdfbd5df0daf1748bef4501ce255ce594ee8d55f
+commit: d3380de483d55d904fb94a241406b34ed2fada7d [3886/9999] ia64: kprobes: Use generic kretprobe trampoline handler
+config: ia64-allyesconfig (https://download.01.org/0day-ci/archive/20220413/202204130102.JZPa6KCQ-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=d3380de483d55d904fb94a241406b34ed2fada7d
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc queue/4.19
+        git checkout d3380de483d55d904fb94a241406b34ed2fada7d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=ia64 SHELL=/bin/bash
 
-> Currently, the VME_USER driver is in the staging tree Kconfig, unlike
-> other VME drivers already moved to the main portions of the kernel tree.
-> Its configuration is, however, nested into the VME_BUS config option,
-> which might be misleading.
-> 
-> Since the staging tree "[...] is used to hold stand-alone[1] drivers and
-> filesystem that are not ready to be merged into the main portion of the
-> Linux kernel tree [...]"[1], IMHO all staging drivers should appear
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Skip the 'IMHO'. It's all your HO and if you state anything incorrectly,
-your reviewers should catch it. If you are truly making a wild guess
-about something, either look into it further, or not it in a question
-below the '---'.
+All errors (new ones prefixed by >>):
 
-This commit message is otherwise very well written. It explains the
-why of this patch nicely. 
+   arch/ia64/kernel/kprobes.c: In function 'get_kprobe_inst':
+   arch/ia64/kernel/kprobes.c:338:22: warning: variable 'template' set but not used [-Wunused-but-set-variable]
+     338 |         unsigned int template;
+         |                      ^~~~~~~~
+   arch/ia64/kernel/kprobes.c: At top level:
+   arch/ia64/kernel/kprobes.c:412:15: warning: no previous prototype for 'trampoline_probe_handler' [-Wmissing-prototypes]
+     412 | int __kprobes trampoline_probe_handler(struct kprobe *p, struct pt_regs *regs)
+         |               ^~~~~~~~~~~~~~~~~~~~~~~~
+   arch/ia64/kernel/kprobes.c: In function 'trampoline_probe_handler':
+>> arch/ia64/kernel/kprobes.c:414:24: error: implicit declaration of function '__kretprobe_trampoline_handler'; did you mean 'kretprobe_trampoline'? [-Werror=implicit-function-declaration]
+     414 |         regs->cr_iip = __kretprobe_trampoline_handler(regs, kretprobe_trampoline, NULL);
+         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                        kretprobe_trampoline
+   At top level:
+   arch/ia64/kernel/kprobes.c:928:13: warning: 'ia64_get_bsp_cfm' defined but not used [-Wunused-function]
+     928 | static void ia64_get_bsp_cfm(struct unw_frame_info *info, void *arg)
+         |             ^~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
-Again, for this set, perhaps the changelog in the cover letter only.
-
-> nested into the Main Menu -> Device Drivers -> Staging Drivers to make
-> sure the user don't pick it without being fully aware of its staging
-> status as it could be the case in Menu -> Device Drivers -> VME bridge
-> support (the current location).
-> 
-> With this change menuconfig users will clearly know this is not a driver
-> in the main portion of the kernel tree and decide whether to build it or
-> not with that clearly in mind.
-> 
-> This change goes into the same direction of commit 4b4cdf3979c3
-> ("STAGING: Move staging drivers back to staging-specific menu")
-> 
-> CHANGELOG
-> v1:
->  - Sourced "drivers/staging/vme/devices/Kconfig" in
->    "drivers/staging/Kconfig" and unsourced in "drivers/vme/Kconfig".
-> 
-> v2:
-> - Turned into a patchset to (1) fix missing "depends on" missing entry
->   in config VME_USER at "drivers/staging/vme/devices/Kconfig",
->   affecting the behavior of this patch, and (2) fix unnecessary
->   remaining files from the time the whole vme subtree was in staging.
-> 
-> REFERENCES
-> [1] https://lkml.org/lkml/2009/3/18/314
-> 
-> Signed-off-by: Bruno Moreira-Guedes <codeagain@codeagain.dev>
-> ---
->  drivers/staging/Kconfig | 2 ++
->  drivers/vme/Kconfig     | 2 --
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/staging/Kconfig b/drivers/staging/Kconfig
-> index 932acb4e8cbc..0545850eb2ff 100644
-> --- a/drivers/staging/Kconfig
-> +++ b/drivers/staging/Kconfig
-> @@ -88,4 +88,6 @@ source "drivers/staging/qlge/Kconfig"
->  
->  source "drivers/staging/wfx/Kconfig"
->  
-> +source "drivers/staging/vme/devices/Kconfig"
-> +
->  endif # STAGING
-> diff --git a/drivers/vme/Kconfig b/drivers/vme/Kconfig
-> index 936392ca3c8c..c13dd9d2a604 100644
-> --- a/drivers/vme/Kconfig
-> +++ b/drivers/vme/Kconfig
-> @@ -15,6 +15,4 @@ source "drivers/vme/bridges/Kconfig"
->  
->  source "drivers/vme/boards/Kconfig"
->  
-> -source "drivers/staging/vme/devices/Kconfig"
-> -
->  endif # VME
-> -- 
-> 2.35.1
-> 
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for FRAME_POINTER
+   Depends on DEBUG_KERNEL && (M68K || UML || SUPERH) || ARCH_WANT_FRAME_POINTERS
+   Selected by
+   - FAULT_INJECTION_STACKTRACE_FILTER && FAULT_INJECTION_DEBUG_FS && STACKTRACE_SUPPORT && !X86_64 && !MIPS && !PPC && !S390 && !MICROBLAZE && !ARM_UNWIND && !ARC && !X86
 
 
+vim +414 arch/ia64/kernel/kprobes.c
+
+   333	
+   334	static void __kprobes get_kprobe_inst(bundle_t *bundle, uint slot,
+   335		       	unsigned long *kprobe_inst, uint *major_opcode)
+   336	{
+   337		unsigned long kprobe_inst_p0, kprobe_inst_p1;
+ > 338		unsigned int template;
+   339	
+   340		template = bundle->quad0.template;
+   341	
+   342		switch (slot) {
+   343		  case 0:
+   344			*major_opcode = (bundle->quad0.slot0 >> SLOT0_OPCODE_SHIFT);
+   345			*kprobe_inst = bundle->quad0.slot0;
+   346			  break;
+   347		  case 1:
+   348			*major_opcode = (bundle->quad1.slot1_p1 >> SLOT1_p1_OPCODE_SHIFT);
+   349			kprobe_inst_p0 = bundle->quad0.slot1_p0;
+   350			kprobe_inst_p1 = bundle->quad1.slot1_p1;
+   351			*kprobe_inst = kprobe_inst_p0 | (kprobe_inst_p1 << (64-46));
+   352			break;
+   353		  case 2:
+   354			*major_opcode = (bundle->quad1.slot2 >> SLOT2_OPCODE_SHIFT);
+   355			*kprobe_inst = bundle->quad1.slot2;
+   356			break;
+   357		}
+   358	}
+   359	
+   360	/* Returns non-zero if the addr is in the Interrupt Vector Table */
+   361	static int __kprobes in_ivt_functions(unsigned long addr)
+   362	{
+   363		return (addr >= (unsigned long)__start_ivt_text
+   364			&& addr < (unsigned long)__end_ivt_text);
+   365	}
+   366	
+   367	static int __kprobes valid_kprobe_addr(int template, int slot,
+   368					       unsigned long addr)
+   369	{
+   370		if ((slot > 2) || ((bundle_encoding[template][1] == L) && slot > 1)) {
+   371			printk(KERN_WARNING "Attempting to insert unaligned kprobe "
+   372					"at 0x%lx\n", addr);
+   373			return -EINVAL;
+   374		}
+   375	
+   376		if (in_ivt_functions(addr)) {
+   377			printk(KERN_WARNING "Kprobes can't be inserted inside "
+   378					"IVT functions at 0x%lx\n", addr);
+   379			return -EINVAL;
+   380		}
+   381	
+   382		return 0;
+   383	}
+   384	
+   385	static void __kprobes save_previous_kprobe(struct kprobe_ctlblk *kcb)
+   386	{
+   387		unsigned int i;
+   388		i = atomic_add_return(1, &kcb->prev_kprobe_index);
+   389		kcb->prev_kprobe[i-1].kp = kprobe_running();
+   390		kcb->prev_kprobe[i-1].status = kcb->kprobe_status;
+   391	}
+   392	
+   393	static void __kprobes restore_previous_kprobe(struct kprobe_ctlblk *kcb)
+   394	{
+   395		unsigned int i;
+   396		i = atomic_read(&kcb->prev_kprobe_index);
+   397		__this_cpu_write(current_kprobe, kcb->prev_kprobe[i-1].kp);
+   398		kcb->kprobe_status = kcb->prev_kprobe[i-1].status;
+   399		atomic_sub(1, &kcb->prev_kprobe_index);
+   400	}
+   401	
+   402	static void __kprobes set_current_kprobe(struct kprobe *p,
+   403				struct kprobe_ctlblk *kcb)
+   404	{
+   405		__this_cpu_write(current_kprobe, p);
+   406	}
+   407	
+   408	static void kretprobe_trampoline(void)
+   409	{
+   410	}
+   411	
+   412	int __kprobes trampoline_probe_handler(struct kprobe *p, struct pt_regs *regs)
+   413	{
+ > 414		regs->cr_iip = __kretprobe_trampoline_handler(regs, kretprobe_trampoline, NULL);
+   415		/*
+   416		 * By returning a non-zero value, we are telling
+   417		 * kprobe_handler() that we don't want the post_handler
+   418		 * to run (and have re-enabled preemption)
+   419		 */
+   420		return 1;
+   421	}
+   422	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

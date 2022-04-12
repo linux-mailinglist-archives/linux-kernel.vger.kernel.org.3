@@ -2,48 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A9654FD412
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:01:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 794DF4FD3A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 11:59:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242672AbiDLIB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42848 "EHLO
+        id S1388497AbiDLJWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353643AbiDLHZv (ORCPT
+        with ESMTP id S1358378AbiDLHla (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:25:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A7B643EC3;
-        Tue, 12 Apr 2022 00:02:46 -0700 (PDT)
+        Tue, 12 Apr 2022 03:41:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57BC24991C;
+        Tue, 12 Apr 2022 00:17:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98CA5615B4;
-        Tue, 12 Apr 2022 07:02:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1DECC385A1;
-        Tue, 12 Apr 2022 07:02:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EF5A1B81B58;
+        Tue, 12 Apr 2022 07:17:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5352AC385A5;
+        Tue, 12 Apr 2022 07:17:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746965;
-        bh=cK5XG9/wD9csGt9BDkyE+vq4CVXvZjL5MTLufJbB8FI=;
+        s=korg; t=1649747871;
+        bh=dgM8Q+aXLKtjfC1k5I0vZOUMijAJe+ijlT5S4O9WlF8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WJX1roaY2Cl0Dx+eQlERVOsIgfV+HIqMaut/ql0YbYl+5aaoXJ/x1QLCkKH0AGnxq
-         YJAt9vRJ8+qZ0ITIjeN/9CUUX1axNTIDVxcqKCi3Z7TJHucCzt8mbEQCxEYQmAzwik
-         VBRQtNnzuRfx3xRzsTeZpj279hvqU6dwBsRJ9Yp0=
+        b=eOhnmg1DiuQZ9agv9/lsGViJByEtOYSCUsvhqEQjyfPsmTaAcCHQjzXG1Ei3GBY1E
+         ZxArLu55zlOLKYDd+R1sM1QhfIXfaBz0rDACoWui0U8071LhAC0G/Hn/TehuDnxXSa
+         DIpidGG6iiVoEoinysc78v2a1NInv6P51VFfSLRc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?St=C3=A9phane=20Graber?= <stgraber@ubuntu.com>,
-        Ilya Maximets <i.maximets@ovn.org>,
-        Aaron Conole <aconole@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>,
+        Konrad Jankowski <konrad0.jankowski@intel.com>,
+        Alice Michael <alice.michael@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 193/285] net: openvswitch: fix leak of nested actions
-Date:   Tue, 12 Apr 2022 08:30:50 +0200
-Message-Id: <20220412062949.231080858@linuxfoundation.org>
+Subject: [PATCH 5.17 234/343] ice: Do not skip not enabled queues in ice_vc_dis_qs_msg
+Date:   Tue, 12 Apr 2022 08:30:52 +0200
+Message-Id: <20220412062958.089838285@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,179 +59,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ilya Maximets <i.maximets@ovn.org>
+From: Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>
 
-[ Upstream commit 1f30fb9166d4f15a1aa19449b9da871fe0ed4796 ]
+[ Upstream commit 05ef6813b234db3196f083b91db3963f040b65bb ]
 
-While parsing user-provided actions, openvswitch module may dynamically
-allocate memory and store pointers in the internal copy of the actions.
-So this memory has to be freed while destroying the actions.
+Disable check for queue being enabled in ice_vc_dis_qs_msg, because
+there could be a case when queues were created, but were not enabled.
+We still need to delete those queues.
 
-Currently there are only two such actions: ct() and set().  However,
-there are many actions that can hold nested lists of actions and
-ovs_nla_free_flow_actions() just jumps over them leaking the memory.
+Normal workflow for VF looks like:
+Enable path:
+VIRTCHNL_OP_ADD_ETH_ADDR (opcode 10)
+VIRTCHNL_OP_CONFIG_VSI_QUEUES (opcode 6)
+VIRTCHNL_OP_ENABLE_QUEUES (opcode 8)
 
-For example, removal of the flow with the following actions will lead
-to a leak of the memory allocated by nf_ct_tmpl_alloc():
+Disable path:
+VIRTCHNL_OP_DISABLE_QUEUES (opcode 9)
+VIRTCHNL_OP_DEL_ETH_ADDR (opcode 11)
 
-  actions:clone(ct(commit),0)
+The issue appears only in stress conditions when VF is enabled and
+disabled very fast.
+Eventually there will be a case, when queues are created by
+VIRTCHNL_OP_CONFIG_VSI_QUEUES, but are not enabled by
+VIRTCHNL_OP_ENABLE_QUEUES.
+In turn, these queues are not deleted by VIRTCHNL_OP_DISABLE_QUEUES,
+because there is a check whether queues are enabled in
+ice_vc_dis_qs_msg.
 
-Non-freed set() action may also leak the 'dst' structure for the
-tunnel info including device references.
+When we bring up the VF again, we will see the "Failed to set LAN Tx queue
+context" error during VIRTCHNL_OP_CONFIG_VSI_QUEUES step. This
+happens because old 16 queues were not deleted and VF requests to create
+16 more, but ice_sched_get_free_qparent in ice_ena_vsi_txq would fail to
+find a parent node for first newly requested queue (because all nodes
+are allocated to 16 old queues).
 
-Under certain conditions with a high rate of flow rotation that may
-cause significant memory leak problem (2MB per second in reporter's
-case).  The problem is also hard to mitigate, because the user doesn't
-have direct control over the datapath flows generated by OVS.
+Testing Hints:
 
-Fix that by iterating over all the nested actions and freeing
-everything that needs to be freed recursively.
+Just enable and disable VF fast enough, so it would be disabled before
+reaching VIRTCHNL_OP_ENABLE_QUEUES.
 
-New build time assertion should protect us from this problem if new
-actions will be added in the future.
+while true; do
+        ip link set dev ens785f0v0 up
+        sleep 0.065 # adjust delay value for you machine
+        ip link set dev ens785f0v0 down
+done
 
-Unfortunately, openvswitch module doesn't use NLA_F_NESTED, so all
-attributes has to be explicitly checked.  sample() and clone() actions
-are mixing extra attributes into the user-provided action list.  That
-prevents some code generalization too.
-
-Fixes: 34ae932a4036 ("openvswitch: Make tunnel set action attach a metadata dst")
-Link: https://mail.openvswitch.org/pipermail/ovs-dev/2022-March/392922.html
-Reported-by: Stéphane Graber <stgraber@ubuntu.com>
-Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
-Acked-by: Aaron Conole <aconole@redhat.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 77ca27c41705 ("ice: add support for virtchnl_queue_select.[tx|rx]_queues bitmap")
+Signed-off-by: Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>
+Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
+Signed-off-by: Alice Michael <alice.michael@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/openvswitch/flow_netlink.c | 95 ++++++++++++++++++++++++++++++++--
- 1 file changed, 90 insertions(+), 5 deletions(-)
+ drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/net/openvswitch/flow_netlink.c b/net/openvswitch/flow_netlink.c
-index 2679007f8aeb..c591b923016a 100644
---- a/net/openvswitch/flow_netlink.c
-+++ b/net/openvswitch/flow_netlink.c
-@@ -2288,6 +2288,62 @@ static struct sw_flow_actions *nla_alloc_flow_actions(int size)
- 	return sfa;
- }
+diff --git a/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c b/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c
+index 1be3cd4b2bef..2bee8f10ad89 100644
+--- a/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c
++++ b/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c
+@@ -3351,9 +3351,9 @@ static int ice_vc_dis_qs_msg(struct ice_vf *vf, u8 *msg)
+ 				goto error_param;
+ 			}
  
-+static void ovs_nla_free_nested_actions(const struct nlattr *actions, int len);
-+
-+static void ovs_nla_free_check_pkt_len_action(const struct nlattr *action)
-+{
-+	const struct nlattr *a;
-+	int rem;
-+
-+	nla_for_each_nested(a, action, rem) {
-+		switch (nla_type(a)) {
-+		case OVS_CHECK_PKT_LEN_ATTR_ACTIONS_IF_LESS_EQUAL:
-+		case OVS_CHECK_PKT_LEN_ATTR_ACTIONS_IF_GREATER:
-+			ovs_nla_free_nested_actions(nla_data(a), nla_len(a));
-+			break;
-+		}
-+	}
-+}
-+
-+static void ovs_nla_free_clone_action(const struct nlattr *action)
-+{
-+	const struct nlattr *a = nla_data(action);
-+	int rem = nla_len(action);
-+
-+	switch (nla_type(a)) {
-+	case OVS_CLONE_ATTR_EXEC:
-+		/* The real list of actions follows this attribute. */
-+		a = nla_next(a, &rem);
-+		ovs_nla_free_nested_actions(a, rem);
-+		break;
-+	}
-+}
-+
-+static void ovs_nla_free_dec_ttl_action(const struct nlattr *action)
-+{
-+	const struct nlattr *a = nla_data(action);
-+
-+	switch (nla_type(a)) {
-+	case OVS_DEC_TTL_ATTR_ACTION:
-+		ovs_nla_free_nested_actions(nla_data(a), nla_len(a));
-+		break;
-+	}
-+}
-+
-+static void ovs_nla_free_sample_action(const struct nlattr *action)
-+{
-+	const struct nlattr *a = nla_data(action);
-+	int rem = nla_len(action);
-+
-+	switch (nla_type(a)) {
-+	case OVS_SAMPLE_ATTR_ARG:
-+		/* The real list of actions follows this attribute. */
-+		a = nla_next(a, &rem);
-+		ovs_nla_free_nested_actions(a, rem);
-+		break;
-+	}
-+}
-+
- static void ovs_nla_free_set_action(const struct nlattr *a)
- {
- 	const struct nlattr *ovs_key = nla_data(a);
-@@ -2301,25 +2357,54 @@ static void ovs_nla_free_set_action(const struct nlattr *a)
- 	}
- }
+-			/* Skip queue if not enabled */
+ 			if (!test_bit(vf_q_id, vf->txq_ena))
+-				continue;
++				dev_dbg(ice_pf_to_dev(vsi->back), "Queue %u on VSI %u is not enabled, but stopping it anyway\n",
++					vf_q_id, vsi->vsi_num);
  
--void ovs_nla_free_flow_actions(struct sw_flow_actions *sf_acts)
-+static void ovs_nla_free_nested_actions(const struct nlattr *actions, int len)
- {
- 	const struct nlattr *a;
- 	int rem;
- 
--	if (!sf_acts)
-+	/* Whenever new actions are added, the need to update this
-+	 * function should be considered.
-+	 */
-+	BUILD_BUG_ON(OVS_ACTION_ATTR_MAX != 23);
-+
-+	if (!actions)
- 		return;
- 
--	nla_for_each_attr(a, sf_acts->actions, sf_acts->actions_len, rem) {
-+	nla_for_each_attr(a, actions, len, rem) {
- 		switch (nla_type(a)) {
--		case OVS_ACTION_ATTR_SET:
--			ovs_nla_free_set_action(a);
-+		case OVS_ACTION_ATTR_CHECK_PKT_LEN:
-+			ovs_nla_free_check_pkt_len_action(a);
-+			break;
-+
-+		case OVS_ACTION_ATTR_CLONE:
-+			ovs_nla_free_clone_action(a);
- 			break;
-+
- 		case OVS_ACTION_ATTR_CT:
- 			ovs_ct_free_action(a);
- 			break;
-+
-+		case OVS_ACTION_ATTR_DEC_TTL:
-+			ovs_nla_free_dec_ttl_action(a);
-+			break;
-+
-+		case OVS_ACTION_ATTR_SAMPLE:
-+			ovs_nla_free_sample_action(a);
-+			break;
-+
-+		case OVS_ACTION_ATTR_SET:
-+			ovs_nla_free_set_action(a);
-+			break;
- 		}
- 	}
-+}
-+
-+void ovs_nla_free_flow_actions(struct sw_flow_actions *sf_acts)
-+{
-+	if (!sf_acts)
-+		return;
- 
-+	ovs_nla_free_nested_actions(sf_acts->actions, sf_acts->actions_len);
- 	kfree(sf_acts);
- }
+ 			ice_fill_txq_meta(vsi, ring, &txq_meta);
  
 -- 
 2.35.1

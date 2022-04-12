@@ -2,105 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAA814FE577
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A42F4FE57B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:58:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357433AbiDLQAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 12:00:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33642 "EHLO
+        id S1357473AbiDLQAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 12:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354266AbiDLQAP (ORCPT
+        with ESMTP id S1354266AbiDLQAl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 12:00:15 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E272CE3B
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:57:55 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id r13so28343365wrr.9
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:57:55 -0700 (PDT)
+        Tue, 12 Apr 2022 12:00:41 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C427F5C642;
+        Tue, 12 Apr 2022 08:58:20 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id h4so5557657ilq.8;
+        Tue, 12 Apr 2022 08:58:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pqrs.dk; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=oXU3hwiMfKY80GD9UAyVjvKh2iumJni0metDCTcR0Zs=;
-        b=gyITdjS2U9I7emTve761Mhyp4rm1MvbYmGDM5K/9Gdw3Sh21Hakr6ivPa8gXU0wDAC
-         a4ZbjQmq0C7UU8g1ejYaBfbE0RV1tuhBAtEhgm4wY7b8WBO/IosxZImvbSEmXPt65t9/
-         G8EcZFQOlfN4oD+mTSgYBJkiJD9Xv10UQPABA=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=RNQurpwxbSDB/GNvCzbmKeS9pihN4PulfOu76DM56U0=;
+        b=hfUuDSUM1HmeElzHTjmqNg8yECgIBWMKYO2tgw6orqHdm2pjE6bnmFmvnBiBBLnUIY
+         63APZnd2B6nRDr9EqfH7Wi0qWtkOnC4KqXUeu7HBCCg7owdrnAIoZbYmwCxzuxodR/XG
+         wMu34I9Tkvlo//uZzZVjhEHgAQxLYm4sR6kid0QwYWh1oS/LWts2e3RL53RTYhHBnrlY
+         ppiG19Va/ZEd1G9y8+7q9ThgA1bFVcE78ChrRokDnar6yHnrDiobPdnz+q+2vOCNJi/j
+         TxUT/MOh6IC/z1GYhyPfNtoHbNQCsyukqgO5+x9cP4UCpL+YVWWHGAyfn36/IS5qucie
+         WOMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=oXU3hwiMfKY80GD9UAyVjvKh2iumJni0metDCTcR0Zs=;
-        b=SXwq+CvcU6tlbxN5O8beXi2rQBXao+ZqN/HCUB5KHFRBfwvpRL8w7ew9doce1gRnkY
-         mjA7e82NWlyJonOWw1Hg/VQ8lRDXfF9wd30jds3bE3cKN3IVGE9hXxZD1zjSkWrcMpRu
-         Y43UaspdRVCYzylZ0ys3TvZxLGUgt+XCSps1myJJueI4duYaPgmHJjEOvofzdqGlY34o
-         pbKRK2bCisxFmmkx5UjXU15Hd4wjr2bN5RZzmqW41p0YnWsxUGd7CrVKP4pRGwRWYCnr
-         QxmrYq7g1YEc5AgYLE2L2vpylIJ/yla1y1Mc8kzSXelk9kH/vSSmJCuT7kuJKPMZfCNd
-         LVpg==
-X-Gm-Message-State: AOAM5333LpQE3dX6YJpsR7Qhv6hGjYVg33guUO/mOq46Iu71W2tHhFhk
-        dbVNT8tz8wDU/xQl2ztZ1fKhMg==
-X-Google-Smtp-Source: ABdhPJzvB91kCZ6vPMivEWQNfWetW2FsTs2voeYmQzoe8Ic2OtqbXJZBPqn5lmO8qcT4wpU+wAv99Q==
-X-Received: by 2002:a05:6000:118f:b0:206:81d:c030 with SMTP id g15-20020a056000118f00b00206081dc030mr29130004wrx.169.1649779074464;
-        Tue, 12 Apr 2022 08:57:54 -0700 (PDT)
-Received: from capella.. (80.71.142.18.ipv4.parknet.dk. [80.71.142.18])
-        by smtp.gmail.com with ESMTPSA id n15-20020a5d6b8f000000b00207ab69284csm3497155wrx.23.2022.04.12.08.57.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 08:57:53 -0700 (PDT)
-From:   =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alvin@pqrs.dk>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net] net: dsa: realtek: don't parse compatible string for RTL8366S
-Date:   Tue, 12 Apr 2022 17:57:49 +0200
-Message-Id: <20220412155749.1835519-1-alvin@pqrs.dk>
-X-Mailer: git-send-email 2.35.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=RNQurpwxbSDB/GNvCzbmKeS9pihN4PulfOu76DM56U0=;
+        b=vKT9duTIhSIN2s4t699hGTrfFN31zxsABYNuuJTh+OKuT/tRWm+BoC7m60KsWdj1M8
+         aBX01JsQyaiEzaoHrmv36WytKy/Jl1wsqQmK2wJv4maMqIvnSyiPiR4jd+FrNhju2kUx
+         diCKdR15D4C1mW4rXOaYDNxKRVaF5tNs66SOEZZE6ToHHxPUKHOM8tlV0mAFSUW1BPJh
+         hpYyhpPCvwfZvvxlijZwFhM/AuX6vVuJ2xil0ETovJ8CCl7eV6JcgRvFfvHBl8Thn5v5
+         Z0AgdpvNPCqAufZZtnfVUABQ4a9DEdJSlbEwdmCWUq9Lwl58uO/dqUM2I/bfn9D0RSZB
+         HVwQ==
+X-Gm-Message-State: AOAM531dnuzxBfyfRZUAWVhqXn5fZ/kxX2Qbo7u++dF5id5qV9dvL9en
+        cMGsPCfLu5Pmowm+mHTa4UirwMad4a3JLAJgQ4Q=
+X-Google-Smtp-Source: ABdhPJxbAXF/WsPH07smVA7+Wx9lrm5oWtBWjRMHZN8Cb8yL0AoL6xNsLkjrlwKfwh+UcvWUU226qk3bdpDJXqf/2RY=
+X-Received: by 2002:a92:cdad:0:b0:2c6:7b76:a086 with SMTP id
+ g13-20020a92cdad000000b002c67b76a086mr16973527ild.5.1649779099710; Tue, 12
+ Apr 2022 08:58:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220412153906.428179-1-mic@digikod.net>
+In-Reply-To: <20220412153906.428179-1-mic@digikod.net>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 12 Apr 2022 17:58:08 +0200
+Message-ID: <CANiq72=ogSxwz8iJLZaYD4nSkE71sBhT4dZyDv1HYyo5R43=pw@mail.gmail.com>
+Subject: Re: [PATCH v1] clang-format: Update and extend the for_each list with tools/
+To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, bpf <bpf@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alvin Šipraga <alsi@bang-olufsen.dk>
+Hi Micka=C3=ABl,
 
-This switch is not even supported, but if someone were to actually put
-this compatible string "realtek,rtl8366s" in their device tree, they
-would be greeted with a kernel panic because the probe function would
-dereference NULL. So let's just remove it.
+On Tue, Apr 12, 2022 at 5:39 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
+wrote:
+>
+> Add tools/ to the shell fragment generating the for_each list and update
+> it.  This is useful to format files in the tools directory (e.g.
+> selftests) with the same coding style as the kernel.
 
-Link: https://lore.kernel.org/all/CACRpkdYdKZs0WExXc3=0yPNOwP+oOV60HRz7SRoGjZvYHaT=1g@mail.gmail.com/
-Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
----
- drivers/net/dsa/realtek/realtek-smi.c | 5 -----
- 1 file changed, 5 deletions(-)
+Sounds good to me. There have been discussions about doing it for the
+entire tree too, so we can start with this.
 
-diff --git a/drivers/net/dsa/realtek/realtek-smi.c b/drivers/net/dsa/realtek/realtek-smi.c
-index 2243d3da55b2..6cec559c90ce 100644
---- a/drivers/net/dsa/realtek/realtek-smi.c
-+++ b/drivers/net/dsa/realtek/realtek-smi.c
-@@ -546,11 +546,6 @@ static const struct of_device_id realtek_smi_of_match[] = {
- 		.data = &rtl8366rb_variant,
- 	},
- #endif
--	{
--		/* FIXME: add support for RTL8366S and more */
--		.compatible = "realtek,rtl8366s",
--		.data = NULL,
--	},
- #if IS_ENABLED(CONFIG_NET_DSA_REALTEK_RTL8365MB)
- 	{
- 		.compatible = "realtek,rtl8365mb",
--- 
-2.35.1
-
+Cheers,
+Miguel

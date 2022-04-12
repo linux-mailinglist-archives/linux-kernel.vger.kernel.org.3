@@ -2,47 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D05F4FE74E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:38:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 234FE4FE751
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:38:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358419AbiDLRkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 13:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57564 "EHLO
+        id S1358483AbiDLRkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 13:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358338AbiDLRkc (ORCPT
+        with ESMTP id S1358478AbiDLRke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 13:40:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789F362A25;
-        Tue, 12 Apr 2022 10:38:13 -0700 (PDT)
+        Tue, 12 Apr 2022 13:40:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2556662BDD
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 10:38:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2FFF8B81F61;
-        Tue, 12 Apr 2022 17:38:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E32F1C385A1;
-        Tue, 12 Apr 2022 17:38:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DA10BB81F62
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 17:38:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5614CC385A5;
+        Tue, 12 Apr 2022 17:38:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649785090;
-        bh=zZkQCYesF/sm5DoAVfI8r+QbjE7oMDeDYotH3+XpDaU=;
+        s=k20201202; t=1649785093;
+        bh=TZTX+w/+zW7qddMqOIK0hPgH/PbZ/aVnw54OFqAFprU=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=s0NFGWHc5QAgTBSymp29uk7oQhEMqGisqfHn4x1/xF9xqYlm5JMsTxRA89yI00uPL
-         rHvTifL97r26jNMjXlDwvsFUTNbPcbknnhm16iVxHcEgAfc2KC/i93gS+XOx7TdEnh
-         z/0t6h9hCb/uHkNDg4LQnfipwYVRxQUApuf3A6SRs03Qpxba5eKIAOWFeez3PyWUVg
-         iQThjtzcxRxMbIH8mY9QnYLF0tUCm3RHdgf96vkJeSnrcKvnOIRWRf4T7fJXHFp2RH
-         euZQUtMZWgA+85Fd/DpOI0l3476J+qCfb3gv4F1ql4QtBktXYvVuBgF67rvxBOoUPC
-         nFC9C4o9CRRtg==
+        b=qk14KPFhxSpUtSDDpUrQPtmZKHEA8QRq9okCEXCsHg7m5qRx9Tl19b6P4UV0kjHN+
+         za0ptCA2WKxtEBh/kq/2dh3a2OTm4Ik70VdQNLgGzXMesS0HljfDMg5G0aFMmdiPoG
+         DZzLJ2y0JhfoEQPVjC1mwsWJK1nqO1in92GR7ByI9Dwq1UBP8AA2W5y6y9M/DPsd2t
+         qX4ifT9/av9A/kwhrASs4L97lM2Gx6IO7EurkfutQOVtK36zievHtBaK0HTpxPzdoR
+         ybQJmXHCw42SSGwgg9mZmvCYtLDvA0x8XViMREzYB/ALeUybnEP4IFiDEbwvIXW2gc
+         f3bSF/fKG82uQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     thierry.reding@gmail.com, lgirdwood@gmail.com,
-        jonathanh@nvidia.com, perex@perex.cz, tiwai@suse.com,
-        spujar@nvidia.com, yuehaibing@huawei.com
-Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-tegra@vger.kernel.org
-In-Reply-To: <20220411020908.580-1-yuehaibing@huawei.com>
-References: <20220411020908.580-1-yuehaibing@huawei.com>
-Subject: Re: [PATCH -next] ASoC: tegra186_asrc: mark runtime-pm functions as __maybe_unused
-Message-Id: <164978508863.404572.4357231774639790524.b4-ty@kernel.org>
-Date:   Tue, 12 Apr 2022 18:38:08 +0100
+To:     Vijendar.Mukunda@amd.com, alsa-devel@alsa-project.org
+Cc:     Basavaraj.Hiregoudar@amd.com, Richard.Gong@amd.com,
+        lgirdwood@gmail.com, Alexander.Deucher@amd.com,
+        Takashi Iwai <tiwai@suse.com>, Mario.Limonciello@amd.com,
+        open list <linux-kernel@vger.kernel.org>,
+        dan.carpenter@oracle.com, Jaroslav Kysela <perex@perex.cz>,
+        Sunil-kumar.Dommati@amd.com
+In-Reply-To: <20220411134119.1767646-1-Vijendar.Mukunda@amd.com>
+References: <20220411134119.1767646-1-Vijendar.Mukunda@amd.com>
+Subject: Re: [PATCH] ASoC: amd: yc: add new YC platform varaint support
+Message-Id: <164978509107.404572.15074301323548091062.b4-ty@kernel.org>
+Date:   Tue, 12 Apr 2022 18:38:11 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,15 +58,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 11 Apr 2022 10:09:08 +0800, YueHaibing wrote:
-> sound/soc/tegra/tegra186_asrc.c:90:12: error: ‘tegra186_asrc_runtime_resume’ defined but not used [-Werror=unused-function]
->  static int tegra186_asrc_runtime_resume(struct device *dev)
->             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> sound/soc/tegra/tegra186_asrc.c:80:12: error: ‘tegra186_asrc_runtime_suspend’ defined but not used [-Werror=unused-function]
->  static int tegra186_asrc_runtime_suspend(struct device *dev)
->             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+On Mon, 11 Apr 2022 19:11:15 +0530, Vijendar Mukunda wrote:
+> Update PCI revision id check for the new YC platform varaint.
 > 
-> [...]
+> 
 
 Applied to
 
@@ -72,8 +69,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: tegra186_asrc: mark runtime-pm functions as __maybe_unused
-      commit: dc7680ca7ac6c32b8c18aff36bca728a2f83e2a0
+[1/1] ASoC: amd: yc: add new YC platform varaint support
+      commit: b1630fcbfde6c071d964b1c475871db0ebc96048
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

@@ -2,150 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF3014FD627
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:20:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4B994FDA2B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:48:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355376AbiDLIIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42860 "EHLO
+        id S1355294AbiDLIHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:07:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355164AbiDLH1M (ORCPT
+        with ESMTP id S1354931AbiDLH1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:27:12 -0400
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A0A48310;
-        Tue, 12 Apr 2022 00:07:07 -0700 (PDT)
-Received: by mail-oi1-f170.google.com with SMTP id q129so18154845oif.4;
-        Tue, 12 Apr 2022 00:07:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=G5mglcYZA42FcZWexfT//Na3N8U+QShWNDx9HhSMVxo=;
-        b=kKJ3nUEWMsvrLSEjjffpnmiZNTAKv4on5YariZdK09oUTFOOJbZgu5tA8vQBAtZ18r
-         E6+Qe32az2p2EwxkK9oA6ePWtoGjE9TH4px3ydOd0WeV+0op0Bd5IGPncnasrC2wKODI
-         XAVk01tIA0D4Nf6u79H0lCf8YKJLt4ka3SqsukAN5aBC6LlNhYZYF8EQNWa2+HxY1EV8
-         cyQmoiJUPBvSfAp1f93p+HrJEHl3CPPt/YpcmaEwE8NROh4cxi7nTZYnY2NdvgO4eQBW
-         EwBgsDhtUy0/k+Oqkn6ck6Nes7LsIXLcms7SD81Cl41lekQ+RqseMzrcZRKQi3GL7BLY
-         UBNA==
-X-Gm-Message-State: AOAM532Gum91u170rACXcmlIBzrzy9KmXNpCRz3aU0vGcRwzZEMgiOSG
-        z2ER9oFvaFzXpGSJ43yLVTvkqZpwxi9zAxu9
-X-Google-Smtp-Source: ABdhPJyY2799smUiwIFdgvJoeCM6WpcXcNi2SOOE90czIXyqPS95bARZpvHXARvzQOeftsWIVQC/BQ==
-X-Received: by 2002:a05:6808:bc2:b0:2ec:e1c2:bd3f with SMTP id o2-20020a0568080bc200b002ece1c2bd3fmr1212821oik.161.1649747226236;
-        Tue, 12 Apr 2022 00:07:06 -0700 (PDT)
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com. [209.85.210.50])
-        by smtp.gmail.com with ESMTPSA id p16-20020a05680811d000b002d72ec3a921sm12272220oiv.21.2022.04.12.00.07.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 00:07:05 -0700 (PDT)
-Received: by mail-ot1-f50.google.com with SMTP id a17-20020a9d3e11000000b005cb483c500dso12828738otd.6;
-        Tue, 12 Apr 2022 00:07:05 -0700 (PDT)
-X-Received: by 2002:a25:c049:0:b0:634:6751:e8d2 with SMTP id
- c70-20020a25c049000000b006346751e8d2mr25945732ybf.6.1649747214062; Tue, 12
- Apr 2022 00:06:54 -0700 (PDT)
+        Tue, 12 Apr 2022 03:27:00 -0400
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C03134BBE
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:06:54 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id D03D2100006;
+        Tue, 12 Apr 2022 07:06:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1649747213;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hHE9xZlRw6yCvZ9NF+G39h3IwPXo9JEMBwpXiVM9BZY=;
+        b=pop483FddIsrAJGnsnh4fpMhHQtW9fV5e+RCouMqROZqVSvYzfxHBAg/OdfnS6aIQJPDL6
+        Xa8gFv8mzozSV0dnTOAn/eKoVLCEAuf34G2l+3xQsuQPvxb2EJYhpjqD2yQKN+HBB2/XDz
+        BEcUjiLn3nvM6XkRdIHOBmnjCdH8J2lJ/3jL3c4kRweGp8ZWuKOto11K4N5ZN2cnJnuJsf
+        lip2hfwR/6V6rcfKo9PhxpU3G7o/S/5cotLqIAwMNKMo89eRFLwl5tBInVnQlUtACV017C
+        j0cEVktrqX1+sHtiCaIBbUg2ZuJqN0+EV3LqRQVZlUWkctqlRo9GvuicB4L5Og==
+Date:   Tue, 12 Apr 2022 09:06:49 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Bastian Hecht <hechtb@googlemail.com>,
+        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+        Guennadi Liakhovetski <g.liakhovetski@gmx.de>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] mtd: rawnand: Fix return value check of
+ wait_for_completion_timeout
+Message-ID: <20220412090649.33bb3f8b@xps13>
+In-Reply-To: <20220412063703.8537-1-linmq006@gmail.com>
+References: <202204121253.NcZifMQi-lkp@intel.com>
+        <20220412063703.8537-1-linmq006@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220411233832.391817-1-dmitry.osipenko@collabora.com>
-In-Reply-To: <20220411233832.391817-1-dmitry.osipenko@collabora.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 12 Apr 2022 09:06:42 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVfOpGvF5FR6vFD-3a1h-7Kc_yAKQzWV71PD6mDy6BmZw@mail.gmail.com>
-Message-ID: <CAMuHMdVfOpGvF5FR6vFD-3a1h-7Kc_yAKQzWV71PD6mDy6BmZw@mail.gmail.com>
-Subject: Re: [PATCH v7 00/20] Introduce power-off+restart call chain API
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee.jones@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-csky@vger.kernel.org,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        xen-devel@lists.xenproject.org,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
+Hi Miaoqian,
 
-On Tue, Apr 12, 2022 at 1:38 AM Dmitry Osipenko
-<dmitry.osipenko@collabora.com> wrote:
-> Problem
-> -------
->
-> SoC devices require power-off call chaining functionality from kernel.
-> We have a widely used restart chaining provided by restart notifier API,
-> but nothing for power-off.
+linmq006@gmail.com wrote on Tue, 12 Apr 2022 06:36:52 +0000:
 
-> Changelog:
->
-> v7: - Rebased on a recent linux-next. Dropped the recently removed
->       NDS32 architecture. Only SH and x86 arches left un-acked.
->
->     - Added acks from Thomas Bogendoerfer and Krzysztof Kozlowski
->       to the MIPS and memory/emif patches respectively.
+> wait_for_completion_timeout() returns unsigned long not int.
+> It returns 0 if timed out, and positive if completed.
+> The check for <=3D 0 is ambiguous and should be =3D=3D 0 here
+> indicating timeout which is the only error case.
+>=20
+> Fixes: 83738d87e3a0 ("mtd: sh_flctl: Add DMA capabilty")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+> change in v2:
+> - initialize ret to 1.
+> ---
+>  drivers/mtd/nand/raw/sh_flctl.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/mtd/nand/raw/sh_flctl.c b/drivers/mtd/nand/raw/sh_fl=
+ctl.c
+> index b85b9c6fcc42..2373251f585b 100644
+> --- a/drivers/mtd/nand/raw/sh_flctl.c
+> +++ b/drivers/mtd/nand/raw/sh_flctl.c
+> @@ -384,7 +384,8 @@ static int flctl_dma_fifo0_transfer(struct sh_flctl *=
+flctl, unsigned long *buf,
+>  	dma_addr_t dma_addr;
+>  	dma_cookie_t cookie;
+>  	uint32_t reg;
+> -	int ret;
+> +	int ret =3D 1;
 
-Looks like you forgot to add the actual acks?
+Does not look right. I know this function returns > 0 on positive
+outcomes but this does not make any sense in the first place.
 
-Gr{oetje,eeting}s,
+This function is static and only called twice, please turn it into
+something like:
 
-                        Geert
+if (dma_fifo_transfer())
+	error
+else
+	ok
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> +	unsigned long time_left;
+> =20
+>  	if (dir =3D=3D DMA_FROM_DEVICE) {
+>  		chan =3D flctl->chan_fifo0_rx;
+> @@ -425,13 +426,14 @@ static int flctl_dma_fifo0_transfer(struct sh_flctl=
+ *flctl, unsigned long *buf,
+>  		goto out;
+>  	}
+> =20
+> -	ret =3D
+> +	time_left =3D
+>  	wait_for_completion_timeout(&flctl->dma_complete,
+>  				msecs_to_jiffies(3000));
+> =20
+> -	if (ret <=3D 0) {
+> +	if (time_left =3D=3D 0) {
+>  		dmaengine_terminate_all(chan);
+>  		dev_err(&flctl->pdev->dev, "wait_for_completion_timeout\n");
+> +		ret =3D -ETIMEDOUT;
+>  	}
+> =20
+>  out:
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+
+Thanks,
+Miqu=C3=A8l

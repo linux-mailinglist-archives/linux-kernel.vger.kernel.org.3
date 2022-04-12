@@ -2,181 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 744924FD4C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:09:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB3164FD80B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1391720AbiDLJgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:36:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50164 "EHLO
+        id S1347725AbiDLJlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:41:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389359AbiDLJXm (ORCPT
+        with ESMTP id S1389932AbiDLJYW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 05:23:42 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565EE13FBC
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 01:34:45 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id r64so11459701wmr.4
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 01:34:45 -0700 (PDT)
+        Tue, 12 Apr 2022 05:24:22 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9482926ADB;
+        Tue, 12 Apr 2022 01:39:52 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id v15so11409831edb.12;
+        Tue, 12 Apr 2022 01:39:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=PLvQK6u8X6MxfdwfZzKW+9KXgJVePbdHxyWV6mszZ8g=;
-        b=th4EwU35I/WC+kzFgnRoRVuC+hKI7r5MJPm20JcujjTPKrbF3S3gnRKb95FPMWRIKg
-         ljAxbCLqbmuWFCSAWRgTGgDxFDmCVyNYTPWjo4XfZLnpH2nzQx5y4BtVUhIZiHkRFi+2
-         bVRiA2UGJi3oAUaNttTb2RwBOZxzvbC4h0vqPeLQyUNDeg+p/e+OWK9lcL96OxpwG8Wy
-         xdvmxwI1NJbomJYlyAlFNCxafqaextmBQXpA344trYnChiW0MFaLCaX8uha6Ij+0g/79
-         9Gqu1HoPgM7v+C/SHeQt89Pfx0hlIIKdOV3Y7OskdJiJbRMXPVsfzHjvHCatGhq5Ou5b
-         iaRw==
+        bh=/h7cVVserNqUb3YyYC9xHnLSaItStAPV1/7k0c5Uc38=;
+        b=oG8NoJx4rLD9iGB0rQxfTkpmikuRl+uEX+dLf92eoRrPh4Q24PCaTFMW1AFyeeivWy
+         FE8UrS0Hw5PfWqz8a0nGjS9cgQm/FJEanbo+cymkkBhKyN3LGfhZd8lQzwmV0CG0QlLu
+         JaZSRc9WIH0ciykVTxVkrKBd//oOTyAtMTswBUBR6JLNfN6luY49Bkr+2dEdP7ZBncjT
+         IfGB3ZL+tu35IfSPKXgXin7U6TV9E4mDRav9UxXaR9yjfqesOHZpqwKf/5simE2mXwvY
+         4Ra4OolPViSeDmqopUG8JLhPBFFHA9DQiQYclEksF+R2QtzOiUaErAL/FUHzWBGMGiHg
+         JhJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=PLvQK6u8X6MxfdwfZzKW+9KXgJVePbdHxyWV6mszZ8g=;
-        b=XLr/YzA/ZI25nx1J8B4QCPPyhSERX9U0+o+2zCXkjI9LfVYNdPWkCyR+upmakhw6rg
-         WbHxr7XEFxZzTWDQsmEBugKCybryl5i8+6rEL2PfkggY5ywFS79ARXfo/fOh6zRa6zX3
-         5P60bNNOuFdG3tz1R8zT1Jd1qO8gBxldItGVRGvmUebaM8Wa/aJfkkfaQd1rBO7uJbkI
-         R2nffS6V5zmPPWN9vUqOt0+yR8g02fXmsJ5nRpx6SCuI866QE1yKzoFlR8sqBfaepBjq
-         gHecbfJqHI344vZgaznGGaOHk+HrmM41zr3PwmmKmWtI4oP8g/NKGAYBAb+0LAzbnm1L
-         pLtQ==
-X-Gm-Message-State: AOAM531ctW2AcfiQxSu/pa6EBPKMzndtWvqgku7y0L3KSGWxcH8g8Nnr
-        JEzepyAR7CnB4XQ56sI+ECQgzWFBC0U4sCD20nhUUQ==
-X-Google-Smtp-Source: ABdhPJw8zmRDxrpZAdkBdzVjqtih7cNCZUz/vPFDsylF1MB9TPzx3d4cMoyMoVwr/UPzvdzSxcj5zDYUAA1FPpNrn1I=
-X-Received: by 2002:a05:600c:2b8d:b0:38e:9cb8:5d24 with SMTP id
- j13-20020a05600c2b8d00b0038e9cb85d24mr2975294wmc.149.1649752483914; Tue, 12
- Apr 2022 01:34:43 -0700 (PDT)
+        bh=/h7cVVserNqUb3YyYC9xHnLSaItStAPV1/7k0c5Uc38=;
+        b=CoZj2IN6JjeFsqA4rhQt4e4OAjUi0VZvcdQXjWy0EwoAhAJYOLWNL2Bj5ZAregy8im
+         hWbxN2QlOXbXSBc6IcajWb8dWL90eYxEAX9W+SXzaCqJA/CzU5m3j79t34wp/F4PyUAp
+         Zn/Lbzx9egHOh3GmqvdtINRW/hXCxL+hH4hThXiV677O20b4sGprgDayTSLc8o4f3qP0
+         dWeq6HPlKwNs+mm3SKAwIDQbIrj0ZpzNHaPKVUzJ/ApXQo0zvgpDh2Grt4/p7+lQ15he
+         7aLCQesDBSlbQKBf8Tbt/Uuwk8CuisoTESLXjbas4lHh3+8mNmTaeS1pt3oYnLgEUOyy
+         cqPA==
+X-Gm-Message-State: AOAM531ks29yoY4nUmdtqDf+cf1OutsDnY+naNPyj3TcDrZoTe/C7835
+        2+9CmCafO1sSj9g9Juo+SGl6cXqmx1P78ZGDIKo=
+X-Google-Smtp-Source: ABdhPJz9T3JpupKlqRf7GpnslB1SuvXlu2IUplRT6C7G/KJGAAneW539NGav1r0nAc5Zm8hYK3IeM1NR9WozbXE5Nzs=
+X-Received: by 2002:a50:fe19:0:b0:41d:84be:6541 with SMTP id
+ f25-20020a50fe19000000b0041d84be6541mr6395337edt.270.1649752790968; Tue, 12
+ Apr 2022 01:39:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220304171913.2292458-1-james.clark@arm.com> <20220304171913.2292458-4-james.clark@arm.com>
-In-Reply-To: <20220304171913.2292458-4-james.clark@arm.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Tue, 12 Apr 2022 09:34:32 +0100
-Message-ID: <CAJ9a7Vi-u75aoNXwFf75JfZhkJk5M0emiuFRXL8RfywqEX+gWQ@mail.gmail.com>
-Subject: Re: [PATCH v3 03/15] coresight: etm4x: Cleanup TRCIDR3 register accesses
-To:     James Clark <James.Clark@arm.com>
-Cc:     suzuki.poulose@arm.com, coresight@lists.linaro.org,
-        Anshuman.Khandual@arm.com, mathieu.poirier@linaro.org,
-        leo.yan@linaro.com, Leo Yan <leo.yan@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <CAHp75VePiCm6wH7aXcbnrt-4nntqx99s45wYk3+C2AKs=Usang@mail.gmail.com>
+ <20220412070355.139507-1-andrei.lalaev@emlid.com>
+In-Reply-To: <20220412070355.139507-1-andrei.lalaev@emlid.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 12 Apr 2022 11:35:38 +0300
+Message-ID: <CAHp75VceMuo8u5FpMvtg_YgZwEYbSJ2JCa4DXLvBRfC7c-ZAkg@mail.gmail.com>
+Subject: Re: [PATCH] gpiolib: of: fix bounds check for valid mask
+To:     Andrei Lalaev <andrei.lalaev@emlid.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 4 Mar 2022 at 17:19, James Clark <james.clark@arm.com> wrote:
->
-> This is a no-op change for style and consistency and has no effect on
-> the binary output by the compiler. In sysreg.h fields are defined as
-> the register name followed by the field name and then _MASK. This
-> allows for grepping for fields by name rather than using magic numbers.
->
-> Signed-off-by: James Clark <james.clark@arm.com>
-> ---
->  .../coresight/coresight-etm4x-core.c          | 40 +++++--------------
->  drivers/hwtracing/coresight/coresight-etm4x.h | 10 +++++
->  2 files changed, 20 insertions(+), 30 deletions(-)
->
-> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> index fd44231e9d8a..1b377f6b31bf 100644
-> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
-> @@ -1124,53 +1124,33 @@ static void etm4_init_arch_data(void *info)
->
->         etmidr3 = etm4x_relaxed_read32(csa, TRCIDR3);
->         /* CCITMIN, bits[11:0] minimum threshold value that can be programmed */
-> -       drvdata->ccitmin = BMVAL(etmidr3, 0, 11);
-> +       drvdata->ccitmin = FIELD_GET(TRCIDR3_CCITMIN_MASK, etmidr3);
->         /* EXLEVEL_S, bits[19:16] Secure state instruction tracing */
-> -       drvdata->s_ex_level = BMVAL(etmidr3, 16, 19);
-> +       drvdata->s_ex_level = FIELD_GET(TRCIDR3_EXLEVEL_S_MASK, etmidr3);
->         drvdata->config.s_ex_level = drvdata->s_ex_level;
->         /* EXLEVEL_NS, bits[23:20] Non-secure state instruction tracing */
-> -       drvdata->ns_ex_level = BMVAL(etmidr3, 20, 23);
-> -
-> +       drvdata->ns_ex_level = FIELD_GET(TRCIDR3_EXLEVEL_NS_MASK, etmidr3);
->         /*
->          * TRCERR, bit[24] whether a trace unit can trace a
->          * system error exception.
->          */
-> -       if (BMVAL(etmidr3, 24, 24))
-> -               drvdata->trc_error = true;
-> -       else
-> -               drvdata->trc_error = false;
-> -
-> +       drvdata->trc_error = !!(etmidr3 & TRCIDR3_TRCERR);
->         /* SYNCPR, bit[25] implementation has a fixed synchronization period? */
-> -       if (BMVAL(etmidr3, 25, 25))
-> -               drvdata->syncpr = true;
-> -       else
-> -               drvdata->syncpr = false;
-> -
-> +       drvdata->syncpr = !!(etmidr3 & TRCIDR3_SYNCPR);
->         /* STALLCTL, bit[26] is stall control implemented? */
-> -       if (BMVAL(etmidr3, 26, 26))
-> -               drvdata->stallctl = true;
-> -       else
-> -               drvdata->stallctl = false;
-> -
-> +       drvdata->stallctl = !!(etmidr3 & TRCIDR3_STALLCTL);
->         /* SYSSTALL, bit[27] implementation can support stall control? */
-> -       if (BMVAL(etmidr3, 27, 27))
-> -               drvdata->sysstall = true;
-> -       else
-> -               drvdata->sysstall = false;
-> -
-> +       drvdata->sysstall = !!(etmidr3 & TRCIDR3_SYSSTALL);
->         /*
->          * NUMPROC - the number of PEs available for tracing, 5bits
->          *         = TRCIDR3.bits[13:12]bits[30:28]
->          *  bits[4:3] = TRCIDR3.bits[13:12] (since etm-v4.2, otherwise RES0)
->          *  bits[3:0] = TRCIDR3.bits[30:28]
->          */
-> -       drvdata->nr_pe = (BMVAL(etmidr3, 12, 13) << 3) | BMVAL(etmidr3, 28, 30);
-> -
-> +       drvdata->nr_pe =  (FIELD_GET(TRCIDR3_NUMPROC_HI_MASK, etmidr3) << 3) |
-> +                          FIELD_GET(TRCIDR3_NUMPROC_LO_MASK, etmidr3);
->         /* NOOVERFLOW, bit[31] is trace overflow prevention supported */
-> -       if (BMVAL(etmidr3, 31, 31))
-> -               drvdata->nooverflow = true;
-> -       else
-> -               drvdata->nooverflow = false;
-> +       drvdata->nooverflow = !!(etmidr3 & TRCIDR3_NOOVERFLOW);
->
->         /* number of resources trace unit supports */
->         etmidr4 = etm4x_relaxed_read32(csa, TRCIDR4);
-> diff --git a/drivers/hwtracing/coresight/coresight-etm4x.h b/drivers/hwtracing/coresight/coresight-etm4x.h
-> index cfdf966016b7..1b95c63938f0 100644
-> --- a/drivers/hwtracing/coresight/coresight-etm4x.h
-> +++ b/drivers/hwtracing/coresight/coresight-etm4x.h
-> @@ -147,6 +147,16 @@
->  #define TRCIDR2_VMIDSIZE_MASK                  GENMASK(14, 10)
->  #define TRCIDR2_CCSIZE_MASK                    GENMASK(28, 25)
->
-> +#define TRCIDR3_CCITMIN_MASK                   GENMASK(11, 0)
-> +#define TRCIDR3_EXLEVEL_S_MASK                 GENMASK(19, 16)
-> +#define TRCIDR3_EXLEVEL_NS_MASK                        GENMASK(23, 20)
-> +#define TRCIDR3_TRCERR                         BIT(24)
-> +#define TRCIDR3_SYNCPR                         BIT(25)
-> +#define TRCIDR3_STALLCTL                       BIT(26)
-> +#define TRCIDR3_SYSSTALL                       BIT(27)
-> +#define TRCIDR3_NUMPROC_LO_MASK                        GENMASK(30, 28)
-> +#define TRCIDR3_NUMPROC_HI_MASK                        GENMASK(13, 12)
-> +#define TRCIDR3_NOOVERFLOW                     BIT(31)
->  /*
->   * System instructions to access ETM registers.
->   * See ETMv4.4 spec ARM IHI0064F section 4.3.6 System instructions
-> --
-> 2.28.0
->
+On Tue, Apr 12, 2022 at 10:13 AM Andrei Lalaev <andrei.lalaev@emlid.com> wrote:
+> On Mon, Apr 11, 2022 at 7:55 PM Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
 
+...
 
-Reviewed-by: Mike Leach <mike.leach@linaro.org>
+> > On top of that, it would be nice to be sure that at least all current
+> > in-kernel users (meaning all DTS provided so far by the kernel) do
+> > interpret it as start,size.
+>
+> I checked the DTS and only 36 of them use "gpio-reserved-ranges".
+> The 33 of them use tuple with the second element that is less than the first.
+> So it means that the maintainers interpreted it as "start,size".
+>
+> And only 3 of them use one tuple with the second element is greater than the first.
+> The list of this DTS:
+>     1. arch/arm64/boot/dts/qcom/msm8996-sony-xperia-tone.dtsi
+>         AngeloGioacchino Del Regno added it in the commit 9da65e441d4d
+>         ("arm64: dts: qcom: Add support for SONY Xperia X Performance / XZ / XZs (msm8996, Tone platform)")
+>         But in another commit 8b36c824b9a77 ("arm64: dts: qcom: sdm630-xperia-nile: Add all RPM and fixed regulators")
+>         he clearly interpreted it as "start,size" because the second element
+>         is less than the first.
+>
+>     2. arch/arm64/boot/dts/qcom/msm8998-fxtec-pro1.dts
+>         The same maintainer as for the previous DTS.
+>         He added "reserved-range" in the commit 122d2c5f31b6e
+>         ("arm64: dts: qcom: Add support for MSM8998 F(x)tec Pro1 QX1000")
+>
+>     3. arch/arm64/boot/dts/qcom/sa8155p-adp.dts
+>         Bhupesh Sharma added it in the commit 12dd4ebda47ab
+>         ("arm64: dts: qcom: Fix usb entries for SA8155p adp board")
+>
+> Should I ask these maintainers how they interpreted this property?
+
+Ideally it would be nice to have their responses. Meanwhile...
+
+> > Otherwise this will be an (unacceptable) ABI change and hence documentation
+> > would need to be fixed with variable names in the code
+>
+> I want you to notice that "of_gpiochip_init_valid_mask" uses "bitmap_clear"
+> that clears "nbits" bits starting from the "start". So it can't be interpreted
+> as "start,end". That's why I think everyone interprets it as "start,size" because
+> it works like "start,size" and the documentation tells it is "start,size".
+
+...meanwhile try to compress above into a few sentences and put it to
+the commit message explaining that the de facto use of the values
+seems as start,size and questioned DTSes have been asked for an
+explanation from the current maintainers.
+
+I'm now 99% confident that your patch is correct.
+Thanks for doing all this analysis.
+
 -- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
+With Best Regards,
+Andy Shevchenko

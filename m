@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C4B34FD9AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:41:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 576774FDAF0
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:54:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355795AbiDLH3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:29:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57352 "EHLO
+        id S230484AbiDLI1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351777AbiDLHM4 (ORCPT
+        with ESMTP id S1353657AbiDLHZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:12:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72EB7E55;
-        Mon, 11 Apr 2022 23:52:31 -0700 (PDT)
+        Tue, 12 Apr 2022 03:25:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB73626ADE;
+        Tue, 12 Apr 2022 00:02:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FF0D6149D;
-        Tue, 12 Apr 2022 06:52:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2004DC385A6;
-        Tue, 12 Apr 2022 06:52:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C75A60B65;
+        Tue, 12 Apr 2022 07:02:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42204C385A6;
+        Tue, 12 Apr 2022 07:02:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746350;
-        bh=FCi1zb4GbbR20Yat8e/QaOYMtXuyUyOOWTtWNybjKNE=;
+        s=korg; t=1649746978;
+        bh=c9H0xarlSK5BkS/J8jrXSzFkHfywxLYBfSAVlHGdtAY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xdiPfj9+JfMjOutM6L8E+cJwvRqdkSZVixdBes+lycCx/E7spR3fTemcto6arxBV3
-         c0lOzTHmS3LPYn90p0lP5DBwpnELiYCjGSRoP7MJpgo3pnZvco9mAWDwZxcUDOUUuj
-         ZUNGL/cGmELXcRG/b+tyQn4dQ+511QnC7irKE+us=
+        b=rxRj8S082UFAC0S6yI1mUe0iSklmzUBnzP8yWmOIEf5oyYVm2s1YMp46u0EXCRcfB
+         qNQuoYexweCP2mWF/o4Fd21pwwq6h3zZr0BPoQPFeBNyelzB1KC0SEQHRM5JBURxKl
+         piTuavp+MIqK7Boh1JyIXrJo7Lo5A8Y8lkxb+CRU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Jakub Sitnicki <jakub@cloudflare.com>
-Subject: [PATCH 5.15 251/277] bpf: Make remote_port field in struct bpf_sk_lookup 16-bit wide
+        stable@vger.kernel.org,
+        Jamie Bainbridge <jamie.bainbridge@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 197/285] qede: confirm skb is allocated before using
 Date:   Tue, 12 Apr 2022 08:30:54 +0200
-Message-Id: <20220412062949.306806264@linuxfoundation.org>
+Message-Id: <20220412062949.347714322@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,79 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Sitnicki <jakub@cloudflare.com>
+From: Jamie Bainbridge <jamie.bainbridge@gmail.com>
 
-commit 9a69e2b385f443f244a7e8b8bcafe5ccfb0866b4 upstream.
+[ Upstream commit 4e910dbe36508654a896d5735b318c0b88172570 ]
 
-remote_port is another case of a BPF context field documented as a 32-bit
-value in network byte order for which the BPF context access converter
-generates a load of a zero-padded 16-bit integer in network byte order.
+qede_build_skb() assumes build_skb() always works and goes straight
+to skb_reserve(). However, build_skb() can fail under memory pressure.
+This results in a kernel panic because the skb to reserve is NULL.
 
-First such case was dst_port in bpf_sock which got addressed in commit
-4421a582718a ("bpf: Make dst_port field in struct bpf_sock 16-bit wide").
+Add a check in case build_skb() failed to allocate and return NULL.
 
-Loading 4-bytes from the remote_port offset and converting the value with
-bpf_ntohl() leads to surprising results, as the expected value is shifted
-by 16 bits.
+The NULL return is handled correctly in callers to qede_build_skb().
 
-Reduce the confusion by splitting the field in two - a 16-bit field holding
-a big-endian integer, and a 16-bit zero-padding anonymous field that
-follows it.
-
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/bpf/20220209184333.654927-2-jakub@cloudflare.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 8a8633978b842 ("qede: Add build_skb() support.")
+Signed-off-by: Jamie Bainbridge <jamie.bainbridge@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/uapi/linux/bpf.h |    3 ++-
- net/bpf/test_run.c       |    4 ++--
- net/core/filter.c        |    3 ++-
- 3 files changed, 6 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/qlogic/qede/qede_fp.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -6223,7 +6223,8 @@ struct bpf_sk_lookup {
- 	__u32 protocol;		/* IP protocol (IPPROTO_TCP, IPPROTO_UDP) */
- 	__u32 remote_ip4;	/* Network byte order */
- 	__u32 remote_ip6[4];	/* Network byte order */
--	__u32 remote_port;	/* Network byte order */
-+	__be16 remote_port;	/* Network byte order */
-+	__u16 :16;		/* Zero padding */
- 	__u32 local_ip4;	/* Network byte order */
- 	__u32 local_ip6[4];	/* Network byte order */
- 	__u32 local_port;	/* Host byte order */
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -954,7 +954,7 @@ int bpf_prog_test_run_sk_lookup(struct b
- 	if (!range_is_zero(user_ctx, offsetofend(typeof(*user_ctx), local_port), sizeof(*user_ctx)))
- 		goto out;
+diff --git a/drivers/net/ethernet/qlogic/qede/qede_fp.c b/drivers/net/ethernet/qlogic/qede/qede_fp.c
+index 999abcfe3310..17f895250e04 100644
+--- a/drivers/net/ethernet/qlogic/qede/qede_fp.c
++++ b/drivers/net/ethernet/qlogic/qede/qede_fp.c
+@@ -747,6 +747,9 @@ qede_build_skb(struct qede_rx_queue *rxq,
+ 	buf = page_address(bd->data) + bd->page_offset;
+ 	skb = build_skb(buf, rxq->rx_buf_seg_size);
  
--	if (user_ctx->local_port > U16_MAX || user_ctx->remote_port > U16_MAX) {
-+	if (user_ctx->local_port > U16_MAX) {
- 		ret = -ERANGE;
- 		goto out;
- 	}
-@@ -962,7 +962,7 @@ int bpf_prog_test_run_sk_lookup(struct b
- 	ctx.family = (u16)user_ctx->family;
- 	ctx.protocol = (u16)user_ctx->protocol;
- 	ctx.dport = (u16)user_ctx->local_port;
--	ctx.sport = (__force __be16)user_ctx->remote_port;
-+	ctx.sport = user_ctx->remote_port;
++	if (unlikely(!skb))
++		return NULL;
++
+ 	skb_reserve(skb, pad);
+ 	skb_put(skb, len);
  
- 	switch (ctx.family) {
- 	case AF_INET:
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -10540,7 +10540,8 @@ static bool sk_lookup_is_valid_access(in
- 	case bpf_ctx_range(struct bpf_sk_lookup, local_ip4):
- 	case bpf_ctx_range_till(struct bpf_sk_lookup, remote_ip6[0], remote_ip6[3]):
- 	case bpf_ctx_range_till(struct bpf_sk_lookup, local_ip6[0], local_ip6[3]):
--	case bpf_ctx_range(struct bpf_sk_lookup, remote_port):
-+	case offsetof(struct bpf_sk_lookup, remote_port) ...
-+	     offsetof(struct bpf_sk_lookup, local_ip4) - 1:
- 	case bpf_ctx_range(struct bpf_sk_lookup, local_port):
- 		bpf_ctx_record_field_size(info, sizeof(__u32));
- 		return bpf_ctx_narrow_access_ok(off, size, sizeof(__u32));
+-- 
+2.35.1
+
 
 

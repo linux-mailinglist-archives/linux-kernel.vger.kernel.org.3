@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F27404FD778
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:29:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49D044FD86B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:36:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357449AbiDLHkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45766 "EHLO
+        id S1353899AbiDLHQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:16:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353042AbiDLHOq (ORCPT
+        with ESMTP id S1351836AbiDLHEU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:14:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3995326F8;
-        Mon, 11 Apr 2022 23:55:51 -0700 (PDT)
+        Tue, 12 Apr 2022 03:04:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5500D45ADC;
+        Mon, 11 Apr 2022 23:47:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4AFABB81B47;
-        Tue, 12 Apr 2022 06:55:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9374CC385A1;
-        Tue, 12 Apr 2022 06:55:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E56160A6A;
+        Tue, 12 Apr 2022 06:47:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83966C385A1;
+        Tue, 12 Apr 2022 06:47:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746549;
-        bh=G5HzDmpTK5B5BsDc7TocjU19nK3HJljZop0AW9Jw7UQ=;
+        s=korg; t=1649746046;
+        bh=X/XV6dqIM01stGb6muJgsi2Mox5PAsrFHhzqwvCyAKg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v+HGPJO8K4AgeZcMBpMP9TFR4udCr84Q3F1rmfcYeLMRdkdgJ+A1GSgmEXxwxOONg
-         MRXzm3N7mRF5suwpHNH/2PEEcuGaC9lBUzN5ECm0trvfPxereLLrOlpOUcBowLsV0B
-         unljpOO9gXzoWR5fLSGycVON0KPtJf2g5ydAzXvI=
+        b=aedWuH1O7xzvI09iccHePxvCJJGRcjAmznJgwj3JDmxf66N4E5QZkcs3CkK/GiFmi
+         JMAEluMmY01+LqFa1pxwsvNtMGCCV2+U5NJq8drzlb3/5UQfFViDu86aqmOv6SX5lL
+         ZkdR3jIs+LfeQ8gyyzl8UrSncg712p20WFk9e2UA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        stable@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 046/285] PCI: aardvark: Fix support for MSI interrupts
+Subject: [PATCH 5.15 100/277] xtensa: fix DTC warning unit_address_format
 Date:   Tue, 12 Apr 2022 08:28:23 +0200
-Message-Id: <20220412062945.004536344@linuxfoundation.org>
+Message-Id: <20220412062944.936601266@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,79 +54,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Max Filippov <jcmvbkbc@gmail.com>
 
-[ Upstream commit b0b0b8b897f8e12b2368e868bd7cdc5742d5c5a9 ]
+[ Upstream commit e85d29ba4b24f68e7a78cb85c55e754362eeb2de ]
 
-Aardvark hardware supports Multi-MSI and MSI_FLAG_MULTI_PCI_MSI is already
-set for the MSI chip. But when allocating MSI interrupt numbers for
-Multi-MSI, the numbers need to be properly aligned, otherwise endpoint
-devices send MSI interrupt with incorrect numbers.
+DTC issues the following warnings when building xtfpga device trees:
 
-Fix this issue by using function bitmap_find_free_region() instead of
-bitmap_find_next_zero_area().
+ /soc/flash@00000000/partition@0x0: unit name should not have leading "0x"
+ /soc/flash@00000000/partition@0x6000000: unit name should not have leading "0x"
+ /soc/flash@00000000/partition@0x6800000: unit name should not have leading "0x"
+ /soc/flash@00000000/partition@0x7fe0000: unit name should not have leading "0x"
 
-To ensure that aligned MSI interrupt numbers are used by endpoint devices,
-we cannot use Linux virtual irq numbers (as they are random and not
-properly aligned). Instead we need to use the aligned hwirq numbers.
+Drop leading 0x from flash partition unit names.
 
-This change fixes receiving MSI interrupts on Armada 3720 boards and
-allows using NVMe disks which use Multi-MSI feature with 3 interrupts.
-
-Without this NVMe disks freeze booting as linux nvme-core.c is waiting
-60s for an interrupt.
-
-Link: https://lore.kernel.org/r/20220110015018.26359-4-kabel@kernel.org
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/controller/pci-aardvark.c | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
+ arch/xtensa/boot/dts/xtfpga-flash-128m.dtsi | 8 ++++----
+ arch/xtensa/boot/dts/xtfpga-flash-16m.dtsi  | 8 ++++----
+ arch/xtensa/boot/dts/xtfpga-flash-4m.dtsi   | 4 ++--
+ 3 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/pci/controller/pci-aardvark.c b/drivers/pci/controller/pci-aardvark.c
-index a924564fdbbc..6277b3f3031a 100644
---- a/drivers/pci/controller/pci-aardvark.c
-+++ b/drivers/pci/controller/pci-aardvark.c
-@@ -1179,7 +1179,7 @@ static void advk_msi_irq_compose_msi_msg(struct irq_data *data,
- 
- 	msg->address_lo = lower_32_bits(msi_msg);
- 	msg->address_hi = upper_32_bits(msi_msg);
--	msg->data = data->irq;
-+	msg->data = data->hwirq;
- }
- 
- static int advk_msi_set_affinity(struct irq_data *irq_data,
-@@ -1196,15 +1196,11 @@ static int advk_msi_irq_domain_alloc(struct irq_domain *domain,
- 	int hwirq, i;
- 
- 	mutex_lock(&pcie->msi_used_lock);
--	hwirq = bitmap_find_next_zero_area(pcie->msi_used, MSI_IRQ_NUM,
--					   0, nr_irqs, 0);
--	if (hwirq >= MSI_IRQ_NUM) {
--		mutex_unlock(&pcie->msi_used_lock);
--		return -ENOSPC;
--	}
--
--	bitmap_set(pcie->msi_used, hwirq, nr_irqs);
-+	hwirq = bitmap_find_free_region(pcie->msi_used, MSI_IRQ_NUM,
-+					order_base_2(nr_irqs));
- 	mutex_unlock(&pcie->msi_used_lock);
-+	if (hwirq < 0)
-+		return -ENOSPC;
- 
- 	for (i = 0; i < nr_irqs; i++)
- 		irq_domain_set_info(domain, virq + i, hwirq + i,
-@@ -1222,7 +1218,7 @@ static void advk_msi_irq_domain_free(struct irq_domain *domain,
- 	struct advk_pcie *pcie = domain->host_data;
- 
- 	mutex_lock(&pcie->msi_used_lock);
--	bitmap_clear(pcie->msi_used, d->hwirq, nr_irqs);
-+	bitmap_release_region(pcie->msi_used, d->hwirq, order_base_2(nr_irqs));
- 	mutex_unlock(&pcie->msi_used_lock);
- }
- 
+diff --git a/arch/xtensa/boot/dts/xtfpga-flash-128m.dtsi b/arch/xtensa/boot/dts/xtfpga-flash-128m.dtsi
+index 9bf8bad1dd18..c33932568aa7 100644
+--- a/arch/xtensa/boot/dts/xtfpga-flash-128m.dtsi
++++ b/arch/xtensa/boot/dts/xtfpga-flash-128m.dtsi
+@@ -8,19 +8,19 @@
+ 			reg = <0x00000000 0x08000000>;
+ 			bank-width = <2>;
+ 			device-width = <2>;
+-			partition@0x0 {
++			partition@0 {
+ 				label = "data";
+ 				reg = <0x00000000 0x06000000>;
+ 			};
+-			partition@0x6000000 {
++			partition@6000000 {
+ 				label = "boot loader area";
+ 				reg = <0x06000000 0x00800000>;
+ 			};
+-			partition@0x6800000 {
++			partition@6800000 {
+ 				label = "kernel image";
+ 				reg = <0x06800000 0x017e0000>;
+ 			};
+-			partition@0x7fe0000 {
++			partition@7fe0000 {
+ 				label = "boot environment";
+ 				reg = <0x07fe0000 0x00020000>;
+ 			};
+diff --git a/arch/xtensa/boot/dts/xtfpga-flash-16m.dtsi b/arch/xtensa/boot/dts/xtfpga-flash-16m.dtsi
+index 40c2f81f7cb6..7bde2ab2d6fb 100644
+--- a/arch/xtensa/boot/dts/xtfpga-flash-16m.dtsi
++++ b/arch/xtensa/boot/dts/xtfpga-flash-16m.dtsi
+@@ -8,19 +8,19 @@
+ 			reg = <0x08000000 0x01000000>;
+ 			bank-width = <2>;
+ 			device-width = <2>;
+-			partition@0x0 {
++			partition@0 {
+ 				label = "boot loader area";
+ 				reg = <0x00000000 0x00400000>;
+ 			};
+-			partition@0x400000 {
++			partition@400000 {
+ 				label = "kernel image";
+ 				reg = <0x00400000 0x00600000>;
+ 			};
+-			partition@0xa00000 {
++			partition@a00000 {
+ 				label = "data";
+ 				reg = <0x00a00000 0x005e0000>;
+ 			};
+-			partition@0xfe0000 {
++			partition@fe0000 {
+ 				label = "boot environment";
+ 				reg = <0x00fe0000 0x00020000>;
+ 			};
+diff --git a/arch/xtensa/boot/dts/xtfpga-flash-4m.dtsi b/arch/xtensa/boot/dts/xtfpga-flash-4m.dtsi
+index fb8d3a9f33c2..0655b868749a 100644
+--- a/arch/xtensa/boot/dts/xtfpga-flash-4m.dtsi
++++ b/arch/xtensa/boot/dts/xtfpga-flash-4m.dtsi
+@@ -8,11 +8,11 @@
+ 			reg = <0x08000000 0x00400000>;
+ 			bank-width = <2>;
+ 			device-width = <2>;
+-			partition@0x0 {
++			partition@0 {
+ 				label = "boot loader area";
+ 				reg = <0x00000000 0x003f0000>;
+ 			};
+-			partition@0x3f0000 {
++			partition@3f0000 {
+ 				label = "boot environment";
+ 				reg = <0x003f0000 0x00010000>;
+ 			};
 -- 
 2.35.1
 

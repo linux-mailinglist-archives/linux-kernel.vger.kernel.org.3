@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F4734FD645
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:21:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4916B4FD9E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:46:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352747AbiDLHOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:14:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48028 "EHLO
+        id S1358023AbiDLHlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:41:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352569AbiDLG4C (ORCPT
+        with ESMTP id S1353104AbiDLHOu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:56:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF4E2459E;
-        Mon, 11 Apr 2022 23:46:04 -0700 (PDT)
+        Tue, 12 Apr 2022 03:14:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8556E33880;
+        Mon, 11 Apr 2022 23:56:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F32CDB81B35;
-        Tue, 12 Apr 2022 06:46:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B66DC385A1;
-        Tue, 12 Apr 2022 06:46:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 26E2AB81B4D;
+        Tue, 12 Apr 2022 06:56:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 788AAC385A8;
+        Tue, 12 Apr 2022 06:56:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649745961;
-        bh=4TWGRJv8HlUR+1x0f+DXKIMrlw7QUer9TgpIaFSYZkw=;
+        s=korg; t=1649746584;
+        bh=vR3xn3UUL4cNvK9tr7Bh+SGk76tQsNint0Z8rvY4k/4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hp+0OzTtWRPhOfku0cEfTNsvKGI3R+iKUC9H+xo0AMc/K5KhHR8TUjcZ42+afik76
-         XOhFhsD8hoCEBi/7Ii4JrW255jXJPCTRpOXGw8gpomempqhmor+waGWcuGWwvkUS0N
-         iZk744zC5+SqMdl6rh+YLMGJ0XxuhxyQYdL3FLoU=
+        b=EVxjrmtlo1Z4I5tWLYyYv05sljBDTsvGMTUzefvyKeuPzas+sg3Id3vot2VPi70t8
+         /f/SZtV4GxSU0YBQblnB6/+HYbl3pJNslCCCEiE14sWTcNIgee6now6rKQ7usN8/8K
+         AZb7ge5OzmEoMQIAj0wsbXMhb2JtBDoXfBOcJ+mY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
+        stable@vger.kernel.org,
+        Meenakshikumar Somasundaram <Meenakshikumar.Somasundaram@amd.com>,
+        Jun Lei <Jun.Lei@amd.com>, Jasdeep Dhillon <jdhillon@amd.com>,
+        Sung Joon Kim <sungkim@amd.com>,
+        Daniel Wheeler <daniel.wheeler@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 111/277] staging: vchiq_arm: Avoid NULL ptr deref in vchiq_dump_platform_instances
+Subject: [PATCH 5.16 057/285] drm/amd/display: reset lane settings after each PHY repeater LT
 Date:   Tue, 12 Apr 2022 08:28:34 +0200
-Message-Id: <20220412062945.252364034@linuxfoundation.org>
+Message-Id: <20220412062945.316287675@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +59,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Wahren <stefan.wahren@i2se.com>
+From: Sung Joon Kim <sungkim@amd.com>
 
-[ Upstream commit aa899e686d442c63d50f4d369cc02dbbf0941cb0 ]
+[ Upstream commit 3b853c316c9321e195414a6fb121d1c2d45b1e87 ]
 
-vchiq_get_state() can return a NULL pointer. So handle this cases and
-avoid a NULL pointer derefence in vchiq_dump_platform_instances.
+[why]
+In LTTPR non-transparent mode, we need
+to reset the cached lane settings before performing
+link training on the next PHY repeater. Otherwise,
+the cached lane settings will be used for the next
+clock recovery e.g. VS = MAX (3) which should not be
+the case according to the DP specs. We expect to use
+minimum lane settings on each clock recovery sequence.
 
-Reviewed-by: Nicolas Saenz Julienne <nsaenz@kernel.org>
-Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-Link: https://lore.kernel.org/r/1642968143-19281-17-git-send-email-stefan.wahren@i2se.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+[how]
+Reset DPCD and HW lane settings on each repeater LT.
+Set training pattern to 0 for the repeater that failed LT
+at the proper place.
+
+Reviewed-by: Meenakshikumar Somasundaram <Meenakshikumar.Somasundaram@amd.com>
+Reviewed-by: Jun Lei <Jun.Lei@amd.com>
+Acked-by: Jasdeep Dhillon <jdhillon@amd.com>
+Signed-off-by: Sung Joon Kim <sungkim@amd.com>
+Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-index ea9a53bdb417..099359fc0115 100644
---- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-+++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-@@ -1189,6 +1189,9 @@ int vchiq_dump_platform_instances(void *dump_context)
- 	int len;
- 	int i;
+diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
+index 135ea1c422f2..f46aa7f8c35d 100644
+--- a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
++++ b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
+@@ -2124,21 +2124,26 @@ static enum link_training_result dp_perform_8b_10b_link_training(
+ 				repeater_id--) {
+ 			status = perform_clock_recovery_sequence(link, lt_settings, repeater_id);
  
-+	if (!state)
-+		return -ENOTCONN;
+-			if (status != LINK_TRAINING_SUCCESS)
++			if (status != LINK_TRAINING_SUCCESS) {
++				repeater_training_done(link, repeater_id);
+ 				break;
++			}
+ 
+ 			status = perform_channel_equalization_sequence(link,
+ 					lt_settings,
+ 					repeater_id);
+ 
++			repeater_training_done(link, repeater_id);
 +
- 	/*
- 	 * There is no list of instances, so instead scan all services,
- 	 * marking those that have been dumped.
+ 			if (status != LINK_TRAINING_SUCCESS)
+ 				break;
+ 
+-			repeater_training_done(link, repeater_id);
++			for (lane = 0; lane < LANE_COUNT_DP_MAX; lane++) {
++				lt_settings->dpcd_lane_settings[lane].raw = 0;
++				lt_settings->hw_lane_settings[lane].VOLTAGE_SWING = 0;
++				lt_settings->hw_lane_settings[lane].PRE_EMPHASIS = 0;
++			}
+ 		}
+-
+-		for (lane = 0; lane < (uint8_t)lt_settings->link_settings.lane_count; lane++)
+-			lt_settings->dpcd_lane_settings[lane].raw = 0;
+ 	}
+ 
+ 	if (status == LINK_TRAINING_SUCCESS) {
 -- 
 2.35.1
 

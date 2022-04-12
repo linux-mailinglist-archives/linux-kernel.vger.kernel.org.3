@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73FBA4FDA37
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:49:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 502FC4FD44E
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:02:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238479AbiDLI7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:59:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49164 "EHLO
+        id S1353285AbiDLHPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:15:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357094AbiDLHjq (ORCPT
+        with ESMTP id S1351419AbiDLG6a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:39:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD35EAE42;
-        Tue, 12 Apr 2022 00:11:53 -0700 (PDT)
+        Tue, 12 Apr 2022 02:58:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B35427ED;
+        Mon, 11 Apr 2022 23:46:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5680C61701;
-        Tue, 12 Apr 2022 07:11:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B8CCC385A1;
-        Tue, 12 Apr 2022 07:11:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4B3B3B81B49;
+        Tue, 12 Apr 2022 06:46:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEC20C385A1;
+        Tue, 12 Apr 2022 06:46:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747512;
-        bh=zA0v4Qy4WXC0LcGcBZlWZQSSdhxr+jTwE52o+vhjBOk=;
+        s=korg; t=1649745989;
+        bh=f5WP94l2ij7cAQc6yP2J2xfY3E3FBE12z8liPEMYcEg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wwPEUSnV3xAiUFwZuPIIfkj76wk8PLLhWRZCHvBZbgkSaMjlKLu78NDTwPj3uOF0n
-         +bPPHPPVpqTno366WtyPXce9cM6ltRn6B+u467Ji9i+DzgZJXjG6lwvhwTuAu91sRM
-         vRyIeRt+FXWk/MuRrloB0C8p2LAX4S/ubMJzconc=
+        b=EJf5Xw1zkd/tqEH+3cRzzmE4f6y8VFb9ok9pmWHvt5GoVzxs31F8nkbiGOruwwChe
+         QiCYQAMx89L4gptiuS12ElgDo3+WtA7gTRZ3RYHFEi4Hx4Qt7EFRwwTLyctxvfD3A2
+         S/2z7det8ofuCWd41lrIbH1kEyHiqlfSNieVap9o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John Garry <john.garry@huawei.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Lucas Denefle <lucas.denefle@converge.io>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 104/343] scsi: pm8001: Fix task leak in pm8001_send_abort_all()
-Date:   Tue, 12 Apr 2022 08:28:42 +0200
-Message-Id: <20220412062954.099450979@linuxfoundation.org>
+Subject: [PATCH 5.15 120/277] w1: w1_therm: fixes w1_seq for ds28ea00 sensors
+Date:   Tue, 12 Apr 2022 08:28:43 +0200
+Message-Id: <20220412062945.514037140@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,58 +54,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+From: Lucas Denefle <lucas.denefle@converge.io>
 
-[ Upstream commit f90a74892f3acf0cdec5844e90fc8686ca13e7d7 ]
+[ Upstream commit 41a92a89eee819298f805c40187ad8b02bb53426 ]
 
-In pm8001_send_abort_all(), make sure to free the allocated sas task
-if pm8001_tag_alloc() or pm8001_mpi_build_cmd() fail.
+w1_seq was failing due to several devices responding to the
+CHAIN_DONE at the same time. Now properly selects the current
+device in the chain with MATCH_ROM. Also acknowledgment was
+read twice.
 
-Link: https://lore.kernel.org/r/20220220031810.738362-21-damien.lemoal@opensource.wdc.com
-Reviewed-by: John Garry <john.garry@huawei.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Lucas Denefle <lucas.denefle@converge.io>
+Link: https://lore.kernel.org/r/20220223113558.232750-1-lucas.denefle@converge.io
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/pm8001/pm8001_hwi.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/w1/slaves/w1_therm.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
-index d244231e62f9..5ec429cf1e20 100644
---- a/drivers/scsi/pm8001/pm8001_hwi.c
-+++ b/drivers/scsi/pm8001/pm8001_hwi.c
-@@ -1765,7 +1765,6 @@ static void pm8001_send_abort_all(struct pm8001_hba_info *pm8001_ha,
+diff --git a/drivers/w1/slaves/w1_therm.c b/drivers/w1/slaves/w1_therm.c
+index ca70c5f03206..9cbeeb4923ec 100644
+--- a/drivers/w1/slaves/w1_therm.c
++++ b/drivers/w1/slaves/w1_therm.c
+@@ -2090,16 +2090,20 @@ static ssize_t w1_seq_show(struct device *device,
+ 		if (sl->reg_num.id == reg_num->id)
+ 			seq = i;
+ 
++		if (w1_reset_bus(sl->master))
++			goto error;
++
++		/* Put the device into chain DONE state */
++		w1_write_8(sl->master, W1_MATCH_ROM);
++		w1_write_block(sl->master, (u8 *)&rn, 8);
+ 		w1_write_8(sl->master, W1_42_CHAIN);
+ 		w1_write_8(sl->master, W1_42_CHAIN_DONE);
+ 		w1_write_8(sl->master, W1_42_CHAIN_DONE_INV);
+-		w1_read_block(sl->master, &ack, sizeof(ack));
+ 
+ 		/* check for acknowledgment */
+ 		ack = w1_read_8(sl->master);
+ 		if (ack != W1_42_SUCCESS_CONFIRM_BYTE)
+ 			goto error;
+-
  	}
  
- 	task = sas_alloc_slow_task(GFP_ATOMIC);
--
- 	if (!task) {
- 		pm8001_dbg(pm8001_ha, FAIL, "cannot allocate task\n");
- 		return;
-@@ -1774,8 +1773,10 @@ static void pm8001_send_abort_all(struct pm8001_hba_info *pm8001_ha,
- 	task->task_done = pm8001_task_done;
- 
- 	res = pm8001_tag_alloc(pm8001_ha, &ccb_tag);
--	if (res)
-+	if (res) {
-+		sas_free_task(task);
- 		return;
-+	}
- 
- 	ccb = &pm8001_ha->ccb_info[ccb_tag];
- 	ccb->device = pm8001_ha_dev;
-@@ -1792,8 +1793,10 @@ static void pm8001_send_abort_all(struct pm8001_hba_info *pm8001_ha,
- 
- 	ret = pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &task_abort,
- 			sizeof(task_abort), 0);
--	if (ret)
-+	if (ret) {
-+		sas_free_task(task);
- 		pm8001_tag_free(pm8001_ha, ccb_tag);
-+	}
- 
- }
- 
+ 	/* Exit from CHAIN state */
 -- 
 2.35.1
 

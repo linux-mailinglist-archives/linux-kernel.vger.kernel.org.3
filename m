@@ -2,117 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D8EC4FCBA8
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 03:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 093124FCAEC
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 03:00:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344660AbiDLBGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 21:06:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59914 "EHLO
+        id S244902AbiDLBCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 21:02:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345105AbiDLA62 (ORCPT
+        with ESMTP id S245667AbiDLA4n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 20:58:28 -0400
+        Mon, 11 Apr 2022 20:56:43 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3EB30F71;
-        Mon, 11 Apr 2022 17:50:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FF41FCC0;
+        Mon, 11 Apr 2022 17:49:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0A0A9B819B4;
-        Tue, 12 Apr 2022 00:50:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44CE5C385AB;
-        Tue, 12 Apr 2022 00:50:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A0B09B8198C;
+        Tue, 12 Apr 2022 00:49:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6DC5C385AB;
+        Tue, 12 Apr 2022 00:49:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649724639;
-        bh=ftcoYDX4lSTjIY+xR9BpC/tIkm4h6JHMIQXWmz8MeKo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DqwZ63dfEGv42Jlr8+/3Hh+EOFEYtTAm9sZIKPyhwQDeluvgHb+GfOstZX7iH9xrq
-         etFSecncctugWY7AaUx60VsruLF1crs6WSuyqVSuOiQeca3NNS+1La7ThDS1gkphfE
-         1jV8kesE2HK6xgdg8YEhCBVhkjOc66hVquAYZ1bhE5q8Pd8u3q7NyIPMINn3H7Z9n0
-         HCAn/BOsaH1T84x6f1zlHnB7aVHrmh8g+ik5mOvnYwUdjNp1AsKDO6mpbg0ETWUQk8
-         cFuLxmxMexaHj44DY0GP0raMhJq8bHsUtrgif/BKFzqNojkyHrc3Rr9/NXwIeMMbZS
-         soT2aWaWSrMCg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Borislav Petkov <bp@suse.de>, Frank Li <Frank.li@nxp.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 5.10 30/30] perf/imx_ddr: Fix undefined behavior due to shift overflowing the constant
-Date:   Mon, 11 Apr 2022 20:49:04 -0400
-Message-Id: <20220412004906.350678-30-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412004906.350678-1-sashal@kernel.org>
-References: <20220412004906.350678-1-sashal@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        s=k20201202; t=1649724569;
+        bh=bUn5MsT2K3tXiL4OUAHoHpu6WGSu0PQnC8Qt/TN43SE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ViCn0Y6LM+yv0btIMrHmlN+58EMx9MaXxxgCwKhNVwVOxuIGaKehJl/ZLscRhnQJ4
+         mJ7lLRBHAgazX8B77zxLgrABdwYaIefAtrLOI4/52lNZv6Zx7nVnc4Pj3Huyu3F35f
+         kHg7hiF5+AdmI3BRZTSyJWhLXYe6Jvk2Qw49+XyCjhOnI1yx1y2U4F/JrX9rH4s1as
+         JjqNeKBJRlY7dTDblK05yNU7Bp5KPimltOU5ziXBZKlFCnPwICA7lEag1Pl9TdGHbv
+         p6RKbqYj3pLBihxkZscNumNxW4BMAGw2c028jnQipUQUJjAibgIzUsKd1kzgSMe50o
+         dPSG4eTamKURw==
+Date:   Tue, 12 Apr 2022 09:49:23 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Subject: Re: [RFC bpf-next 4/4] selftests/bpf: Add attach bench test
+Message-Id: <20220412094923.0abe90955e5db486b7bca279@kernel.org>
+In-Reply-To: <CAEf4BzbE1n3Lie+tWTzN69RQUWgjxePorxRr9J8CuiQVUfy-kA@mail.gmail.com>
+References: <20220407125224.310255-1-jolsa@kernel.org>
+        <20220407125224.310255-5-jolsa@kernel.org>
+        <CAEf4BzbE1n3Lie+tWTzN69RQUWgjxePorxRr9J8CuiQVUfy-kA@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+On Mon, 11 Apr 2022 15:15:40 -0700
+Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
 
-[ Upstream commit d02b4dd84e1a90f7f1444d027c0289bf355b0d5a ]
+> > +#define DEBUGFS "/sys/kernel/debug/tracing/"
+> > +
+> > +static int get_syms(char ***symsp, size_t *cntp)
+> > +{
+> > +       size_t cap = 0, cnt = 0, i;
+> > +       char *name, **syms = NULL;
+> > +       struct hashmap *map;
+> > +       char buf[256];
+> > +       FILE *f;
+> > +       int err;
+> > +
+> > +       /*
+> > +        * The available_filter_functions contains many duplicates,
+> > +        * but other than that all symbols are usable in kprobe multi
+> > +        * interface.
+> > +        * Filtering out duplicates by using hashmap__add, which won't
+> > +        * add existing entry.
+> > +        */
+> > +       f = fopen(DEBUGFS "available_filter_functions", "r");
+> 
+> I'm really curious how did you manage to attach to everything in
+> available_filter_functions because when I'm trying to do that I fail.
+> available_filter_functions has a bunch of functions that should not be
+> attachable (e.g., notrace functions). Look just at __bpf_tramp_exit:
+> 
+>   void notrace __bpf_tramp_exit(struct bpf_tramp_image *tr);
 
-Fix:
+Hmm, this sounds like a bug in ftrace side. IIUC, the
+"available_filter_functions" only shows the functions which is NOT
+instrumented by mcount, we should not see any notrace functions on it.
 
-  In file included from <command-line>:0:0:
-  In function ‘ddr_perf_counter_enable’,
-      inlined from ‘ddr_perf_irq_handler’ at drivers/perf/fsl_imx8_ddr_perf.c:651:2:
-  ././include/linux/compiler_types.h:352:38: error: call to ‘__compiletime_assert_729’ \
-	declared with attribute error: FIELD_PREP: mask is not constant
-    _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-...
+Technically, this is done by __no_instrument_function__ attribute.
 
-See https://lore.kernel.org/r/YkwQ6%2BtIH8GQpuct@zn.tnic for the gory
-details as to why it triggers with older gccs only.
+#if defined(CC_USING_HOTPATCH)
+#define notrace                 __attribute__((hotpatch(0, 0)))
+#elif defined(CC_USING_PATCHABLE_FUNCTION_ENTRY)
+#define notrace                 __attribute__((patchable_function_entry(0, 0)))
+#else
+#define notrace                 __attribute__((__no_instrument_function__))
+#endif
 
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: Frank Li <Frank.li@nxp.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Acked-by: Will Deacon <will@kernel.org>
-Link: https://lore.kernel.org/r/20220405151517.29753-10-bp@alien8.de
-Signed-off-by: Will Deacon <will@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/perf/fsl_imx8_ddr_perf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> So first, curious what I am doing wrong or rather why it succeeds in
+> your case ;)
+> 
+> But second, just wanted to plea to "fix" available_filter_functions to
+> not list stuff that should not be attachable. Can you please take a
+> look and checks what's going on there and why do we have notrace
+> functions (and what else should *NOT* be there)?
 
-diff --git a/drivers/perf/fsl_imx8_ddr_perf.c b/drivers/perf/fsl_imx8_ddr_perf.c
-index 7f7bc0993670..e09bbf3890c4 100644
---- a/drivers/perf/fsl_imx8_ddr_perf.c
-+++ b/drivers/perf/fsl_imx8_ddr_perf.c
-@@ -29,7 +29,7 @@
- #define CNTL_OVER_MASK		0xFFFFFFFE
- 
- #define CNTL_CSV_SHIFT		24
--#define CNTL_CSV_MASK		(0xFF << CNTL_CSV_SHIFT)
-+#define CNTL_CSV_MASK		(0xFFU << CNTL_CSV_SHIFT)
- 
- #define EVENT_CYCLES_ID		0
- #define EVENT_CYCLES_COUNTER	0
+Can you share how did you reproduce the issue? I'll check it.
+
+Thank you,
+
+
 -- 
-2.35.1
-
+Masami Hiramatsu <mhiramat@kernel.org>

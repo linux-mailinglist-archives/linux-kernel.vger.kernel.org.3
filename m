@@ -2,74 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB3C54FCE5C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 06:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E22F4FCE65
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 06:59:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233084AbiDLFAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 01:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44094 "EHLO
+        id S244932AbiDLFCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 01:02:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241228AbiDLFAT (ORCPT
+        with ESMTP id S231631AbiDLFCD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 01:00:19 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C11AA33EAF;
-        Mon, 11 Apr 2022 21:58:02 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 4103168AA6; Tue, 12 Apr 2022 06:57:58 +0200 (CEST)
-Date:   Tue, 12 Apr 2022 06:57:57 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Chuck Lever III <chuck.lever@oracle.com>,
-        Mark Hemment <markhemm@googlemail.com>,
-        Patrice CHOTARD <patrice.chotard@foss.st.com>,
-        Mikulas Patocka <mpatocka@redhat.com>,
-        Lukas Czerner <lczerner@redhat.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Borislav Petkov <bp@alien8.de>, linux-mm@kvack.org,
-        linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com, viro@zeniv.linux.org.uk,
-        x86@kernel.org
-Subject: making x86 clear_user not suck, was Re: [PATCH] tmpfs: fix
- regressions from wider use of ZERO_PAGE
-Message-ID: <20220412045757.GA5131@lst.de>
-References: <9a978571-8648-e830-5735-1f4748ce2e30@google.com> <20220409050638.GB17755@lst.de> <f73cfd56-35d2-53a3-3a59-4ff9495d7d34@google.com>
+        Tue, 12 Apr 2022 01:02:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552B33335E
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 21:59:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1238AB818C8
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 04:59:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66164C385A6;
+        Tue, 12 Apr 2022 04:59:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649739584;
+        bh=7GTblpVpSQYcAVhFqTpBAzjm8SimTPaUHKg0ETvVUI0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bxXrb3FNHbJBnyOCUDOz2Y+T89PrBH/HRtU3ykwISXCaDAPkHd7OOsNnkZT9CkX4/
+         x1ZnFXoudcryTVI0Ny+Tc6dlwwI/QiuphrVkXnuViw23GzN7J+Z07UICJSDp9jI4Uq
+         VMG/Qs5IJMOXZIkBOokMJjAQnZq4pQfzqQcoRwnU=
+Date:   Tue, 12 Apr 2022 06:59:42 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jaehee Park <jhpark1013@gmail.com>
+Cc:     =?iso-8859-1?B?Suly9G1l?= Pouiller <jerome.pouiller@silabs.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev, Stefano Brivio <sbrivio@redhat.com>
+Subject: Re: [PATCH V3] wfx: use container_of() to get vif
+Message-ID: <YlUHPjw2mbhnuZCM@kroah.com>
+References: <20220412041218.GA2859599@jaehee-ThinkPad-X1-Extreme>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f73cfd56-35d2-53a3-3a59-4ff9495d7d34@google.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220412041218.GA2859599@jaehee-ThinkPad-X1-Extreme>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 11:08:29PM -0700, Hugh Dickins wrote:
-> > 
-> > Either way I'd rather do this optimization in iov_iter_zero rather
-> > than hiding it in tmpfs.
+On Tue, Apr 12, 2022 at 12:12:18AM -0400, Jaehee Park wrote:
+> Currently, upon virtual interface creation, wfx_add_interface() stores
+> a reference to the corresponding struct ieee80211_vif in private data,
+> for later usage. This is not needed when using the container_of
+> construct. This construct already has all the info it needs to retrieve
+> the reference to the corresponding struct from the offset that is
+> already available, inherent in container_of(), between its type and
+> member inputs (struct ieee80211_vif and drv_priv, respectively).
+> Remove vif (which was previously storing the reference to the struct
+> ieee80211_vif) from the struct wfx_vif, define a macro
+> wvif_to_vif(wvif) for container_of(), and replace all wvif->vif with
+> the newly defined container_of construct.
 > 
-> Let's see what others say.  I think we would all prefer clear_user() to be
-> enhanced, and hack around it neither here in tmpfs nor in iov_iter_zero().
-> But that careful work won't get done by magic, nor by me.
+> Signed-off-by: Jaehee Park <jhpark1013@gmail.com>
+> ---
+> 
+> Changes in v3:
+> - Made edits to the commit message.
+> - Shortened the macro name from wvif_to_vif to to_vif.
+> - For functions that had more than one instance of vif, defined one 
+> reference vif at the beginning of the function and used that instead.
+> - Broke the if-statements that ran long into two lines.
+> (There are 3 lines that exceed 80 by less than 4 characters. Two of 
+> those lines of code could be shorted but it involved defining two more 
+> variables, and could potentially make the code less readable.)
+> 
+> Note: I will mail this patch to the wireless-next tree after testing.
+> 
+> 
+>  drivers/staging/wfx/wfx.h     |  2 +-
 
-I agree with that.
+This file is not in linux-next anymore.
 
-> And iov_iter_zero() has to deal with a wider range of possibilities,
-> when pulling in cache lines of ZERO_PAGE(0) will be less advantageous,
-> than in tmpfs doing a large dd - the case I'm aiming not to regress here
-> (tmpfs has been copying ZERO_PAGE(0) like this for years).
-
-Maybe.  OTOH I'd hate to have iov_iter_zero not used much because it
-sucks too much.
-
-So how can we entice someone with the right knowledge to implement a
-decent clear_user for x86?

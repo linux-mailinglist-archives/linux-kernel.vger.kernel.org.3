@@ -2,108 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F28F24FE3CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 16:29:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6F3E4FE3DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 16:31:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356529AbiDLObr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 10:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35042 "EHLO
+        id S1356559AbiDLOdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 10:33:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351937AbiDLObi (ORCPT
+        with ESMTP id S1356534AbiDLOdW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 10:31:38 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D0627CDF
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 07:29:18 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-de3eda6b5dso20973969fac.0
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 07:29:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=GxA+wuzS2VTnaCpw8/DQnNsOeYcblk4406tgOs1kPrI=;
-        b=MH0U2Ei66jCCDx0swymTSyZNk3sqbf2rY3WLX5Pwrwu1nh4V8Y30+ZB3CqJ1LQTgYF
-         RW6NfbBcMkKOLWwftzRLiHSJBGsZD7uVe1vSQ4XPpr3C+w9StxSqyq39xfujlxaCzZEA
-         jh1nYCzV2j1fN0bitFi8h9P9jpzUWygVsUE/JfpK8emwb9gw7IGIrpA+ga80zMSiiJbk
-         sQ4E87/XQxmcKR07uUxArDcPJ/l4LmYlza7SP9SO5H2V9EjHZpBqti6iDGJM1tNIsN5P
-         QrJVCvwLMoVMNAFUcdQCeKSfHTQHoV+PtB0amwIE5Sy4AN4cRWRSiiMauKoIpfpZshw/
-         4iBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GxA+wuzS2VTnaCpw8/DQnNsOeYcblk4406tgOs1kPrI=;
-        b=zfXdbxtCQbDLPoBbrH3tZTnkyw0AUx2ttKCi/rg1A1EDPPfvCVWwRnwWz0d8ogMtxK
-         Cm0ZjT6EnzWQ+rjmOozKAviv7lSGTYE4sQuU+31qeNfpZ/ffi+X7FlH2SPDm3D9QMTjs
-         SzfxgMzI8W3jrqhXUKGvXgjHCcP3MlTUfoFWqcGeSVb/z911NFZc3hr/3ID8JquacQ9/
-         GKtkXusejKOGZRc2f8IcSogtwGnRd+yjfAXSQ2hq0DpXL9o9KlpC4y1/trl4ws/Kj7Vy
-         2Jl131xRC5/uL33fAyzBSJTkDfLm38HlHcFoGfxLKY4E/aFI5GETESslcFM/JXao4rHx
-         +Q+w==
-X-Gm-Message-State: AOAM531mTFIFhTsPcdhl3m7I9DLzzCbM46gsKNf8c/5/3FY52q8JrJpO
-        Q0LGWsJMm2JAL0Gp3fh7GUXgjJ+n8QNgmkHr
-X-Google-Smtp-Source: ABdhPJxZW+yVNF/lJYAiuoC2KDAAc81y2wKm3Y8r2ObfycQAn7jcAdHMNb2ptE++bS1LUV+uIg2qCw==
-X-Received: by 2002:a05:6870:b40a:b0:d7:5c87:64ab with SMTP id x10-20020a056870b40a00b000d75c8764abmr2204624oap.168.1649773758139;
-        Tue, 12 Apr 2022 07:29:18 -0700 (PDT)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id r82-20020aca5d55000000b002ecaaa13cafsm12579555oib.8.2022.04.12.07.29.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 07:29:17 -0700 (PDT)
-Date:   Tue, 12 Apr 2022 09:29:15 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     cgel.zte@gmail.com
-Cc:     agross@kernel.org, srinivas.kandagatla@linaro.org,
-        gregkh@linuxfoundation.org, sdharia@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, Lv Ruyi <lv.ruyi@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH] slimbus: qcom: fix error check return value of
- platform_get_irq()
-Message-ID: <YlWMu9D/6nVl5tqV@builder.lan>
-References: <20220412090259.2533316-1-lv.ruyi@zte.com.cn>
+        Tue, 12 Apr 2022 10:33:22 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD53F4A3CB
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 07:31:03 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b584e329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:584e:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8282A1EC0554;
+        Tue, 12 Apr 2022 16:30:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1649773858;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=azouk53nbJymdhnkRXMO6BvyBEYbFc3lbiaLs5eBsUo=;
+        b=qKintlyHvkAAcSiK+ECfAX1eM0lC6K5OjVhRUZA0wnDi+m8L+W73NmNoYzh9bJnT4j63oH
+        3tzcGGjCJMswwztIXC3B4p83VGVzZmAWoFYzEFjyOf2W0+GZUkbryEC9gtMj99x8k99jhF
+        VhHbZFBR/fJZAH9wj64QnxjWQPmCapA=
+Date:   Tue, 12 Apr 2022 16:30:58 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, X86 ML <x86@kernel.org>,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH V5 3/7] x86/entry: Move PUSH_AND_CLEAR_REGS out of
+ error_entry()
+Message-ID: <YlWNIj198mKM3hMG@zn.tnic>
+References: <20220412121541.4595-1-jiangshanlai@gmail.com>
+ <20220412121541.4595-4-jiangshanlai@gmail.com>
+ <YlV+B8faRD2lDoO3@zn.tnic>
+ <CAJhGHyAsPZAeXUoOa5LJ5bxuMOWzg=cvYNYPVT9kpBM7Tsf3xA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220412090259.2533316-1-lv.ruyi@zte.com.cn>
+In-Reply-To: <CAJhGHyAsPZAeXUoOa5LJ5bxuMOWzg=cvYNYPVT9kpBM7Tsf3xA@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 12 Apr 04:02 CDT 2022, cgel.zte@gmail.com wrote:
+On Tue, Apr 12, 2022 at 09:52:44PM +0800, Lai Jiangshan wrote:
+> The mapped size for the text is always 2M when the kernel is booted
+> since it is 2M-aligned.  So I don't think the size is a concern.
 
-> From: Lv Ruyi <lv.ruyi@zte.com.cn>
-> 
-> platform_get_irq() return negative value on failure, so null check of
-> ctrl->irq is incorrect. Fix it by comparing whether it is less than zero.
-> 
-> Fixes: ad7fcbc308b0 ("slimbus: qcom: Add Qualcomm Slimbus controller driver")
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+This is not how this argumentation works: you add 0.01% size increase
+here, 0.01% slowdown there and it all soon adds up into a bloated
+kernel. Besides, nowadays the kernel runs a lot as a guest and guest
+kernel size does matter.
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+So no, just because you want to turn error_entry() into C code and for
+that you'll add some bloat doesn't justify it in my book. All changes to
+core code need to be absolutely needed and justifiable.
 
-> ---
->  drivers/slimbus/qcom-ctrl.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/slimbus/qcom-ctrl.c b/drivers/slimbus/qcom-ctrl.c
-> index f04b961b96cd..b2f01e155d77 100644
-> --- a/drivers/slimbus/qcom-ctrl.c
-> +++ b/drivers/slimbus/qcom-ctrl.c
-> @@ -510,7 +510,7 @@ static int qcom_slim_probe(struct platform_device *pdev)
->  	}
->  
->  	ctrl->irq = platform_get_irq(pdev, 0);
-> -	if (!ctrl->irq) {
-> +	if (ctrl->irq < 0) {
->  		dev_err(&pdev->dev, "no slimbus IRQ\n");
->  		return -ENODEV;
->  	}
-> -- 
-> 2.25.1
-> 
+> For example, a heavy page fault and IPI or timer at the same time.
+> I'm not sure if it is a real case.
+
+I wouldn't be surprised if it shows in some perf profiles.
+
+> I'm Okay with asm_error_entry().  And also we can use an ASM function
+> containing PUSH_AND_CLEAR_REGS only.
+
+Just do the necessary and minimal thing - this is core code and in asm
+for that matter, so be conservative pls. This is not some random driver.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,139 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ECB74FE45B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19B114FE475
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:16:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356846AbiDLPM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 11:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56894 "EHLO
+        id S1356916AbiDLPSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 11:18:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241366AbiDLPM4 (ORCPT
+        with ESMTP id S1356891AbiDLPSd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 11:12:56 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D2C5D654
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:10:38 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id e8so11767532wra.7
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:10:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=dEtehde5cjGV9pdbeDZJ5mEUZSUw1tlthJqoKML+g0Y=;
-        b=s8XYPFWdR/OTPJ6iEZkbBH/vpqPUQtbWi53fsalJbS859W1hri0trBZxuGteCEYa+i
-         yy+syBRWikaBvxxDHOjBHYOaH/4JLGAETkbrCESo9iBj3GZi64wKtbfrViJ6egTOpQJi
-         JUB9ZzMp6x7pza38q9oZ61TQrEeiXBBXFhKrd6nitj2xpI2tOoaWqG3UnsQC0oknQmVe
-         PUYBNANDe28bVNmPEVgLFbVxK6SuLDBwsRgtCXcJRLJJNb2biW3TG/KISgWWHLyqdEH6
-         oZ82VifUj+zzzeGeV+76S1jOksa4ffRMIP31I7YQzYWcffdhE/cvx6JxVqj9uN5P3a+b
-         jsCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=dEtehde5cjGV9pdbeDZJ5mEUZSUw1tlthJqoKML+g0Y=;
-        b=jKYADLe4RFPO0/nNCT996aLpwQo5cl6TyR8GsDxoMKp6Yugnz5cTnTMaY7SBTcm2GT
-         /macxk7sF9Y4piOfSDfDYSP9SNY/8VG8bcyVFnKCo94/1JUc2pq4dWoXD4uFfOabLajT
-         ghYf2zQodeS82yypU2sVaV69Fqbs8bpFRznXPEQGe0NPDXE3uVonn3MO+XSc5PJyB3tY
-         2lJtX6jhdv6ELAy1V3ShHw5s8n368gqkwzBBphfV8y4CNfhea/YbpIXkv/68BHIHZ+Ik
-         bSQgPsP0dY/5hERHfz95i8n+p6DM3u36GYYolVjYqi3wZFC9MN+vOu2hBm/9Fn/SjYEq
-         RhVw==
-X-Gm-Message-State: AOAM531Tr9dbK5WMpJkt5SZr638bY7tlpnDmun/azE+rdDikHlXK5Pvk
-        2z3rJXsPCwBKVdYsdCKwqde4Sw==
-X-Google-Smtp-Source: ABdhPJxARVef1Vp4HZQigFUbuclyFy1JIKJ4EXgGWuOZuSSbfh2u5nsKVKaKRtyYqKkM3QIJpO8maQ==
-X-Received: by 2002:a5d:434f:0:b0:205:f514:8955 with SMTP id u15-20020a5d434f000000b00205f5148955mr30114394wrr.73.1649776237535;
-        Tue, 12 Apr 2022 08:10:37 -0700 (PDT)
-Received: from larix (2a02-8428-1671-f801-d2dc-0c7f-2134-46d0.rev.sfr.net. [2a02:8428:1671:f801:d2dc:c7f:2134:46d0])
-        by smtp.gmail.com with ESMTPSA id s1-20020adfb781000000b002060d4a8bd9sm24787772wre.17.2022.04.12.08.10.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 08:10:36 -0700 (PDT)
-Date:   Tue, 12 Apr 2022 16:10:34 +0100
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "zhangfei.gao@foxmail.com" <zhangfei.gao@foxmail.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86 <x86@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        iommu <iommu@lists.linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
- allocation and free it on mm exit
-Message-ID: <YlWWavIDMNpbD3Ye@larix>
-References: <20220207230254.3342514-6-fenghua.yu@intel.com>
- <Ygt4h0PgYzKOiB38@8bytes.org>
- <tencent_F6830A1196DB4C6A904D7C691F0D961D1108@qq.com>
- <56ed509d-a7cf-1fde-676c-a28eb204989b@intel.com>
- <tencent_9920B633D50E9B80D3A41A723BCE06972309@qq.com>
- <f439dde5-0eaa-52e4-9cf7-2ed1f62ea07f@intel.com>
- <tencent_F73C11A7DBAC6AF24D3369DF0DCA1D7E8308@qq.com>
- <a139dbad-2f42-913b-677c-ef35f1eebfed@intel.com>
- <tencent_B683AC1146DB6A6ABB4D73697C0D6A1D7608@qq.com>
- <41ed3405-66d9-0cde-fc01-b3eacb85a081@intel.com>
+        Tue, 12 Apr 2022 11:18:33 -0400
+X-Greylist: delayed 326 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 12 Apr 2022 08:16:13 PDT
+Received: from nibbler.cm4all.net (nibbler.cm4all.net [82.165.145.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7215E74C
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:16:13 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by nibbler.cm4all.net (Postfix) with ESMTP id 8A3ABC007D
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 17:10:45 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at nibbler.cm4all.net
+Received: from nibbler.cm4all.net ([127.0.0.1])
+        by localhost (nibbler.cm4all.net [127.0.0.1]) (amavisd-new, port 10024)
+        with LMTP id lI6n_RWVLLF0 for <linux-kernel@vger.kernel.org>;
+        Tue, 12 Apr 2022 17:10:38 +0200 (CEST)
+Received: from zero.intern.cm-ag (zero.intern.cm-ag [172.30.16.10])
+        by nibbler.cm4all.net (Postfix) with SMTP id 5F1FDC00A5
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 17:10:38 +0200 (CEST)
+Received: (qmail 29504 invoked from network); 12 Apr 2022 20:59:24 +0200
+Received: from unknown (HELO rabbit.intern.cm-ag) (172.30.3.1)
+  by zero.intern.cm-ag with SMTP; 12 Apr 2022 20:59:24 +0200
+Received: by rabbit.intern.cm-ag (Postfix, from userid 1023)
+        id 329E3460C77; Tue, 12 Apr 2022 17:10:38 +0200 (CEST)
+Date:   Tue, 12 Apr 2022 17:10:38 +0200
+From:   Max Kellermann <mk@cm4all.com>
+To:     dhowells@redhat.com
+Cc:     linux-cachefs@redhat.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: fscache corruption in Linux 5.17?
+Message-ID: <YlWWbpW5Foynjllo@rabbit.intern.cm-ag>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <41ed3405-66d9-0cde-fc01-b3eacb85a081@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_05,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi David,
 
-On Tue, Apr 12, 2022 at 07:36:21AM -0700, Dave Hansen wrote:
-> On 4/12/22 00:04, zhangfei.gao@foxmail.com wrote:
-> > master process quit, mmput ->  mm_pasid_drop->ioasid_free
-> > But this ignore driver's iommu_sva_unbind_device function,
-> > iommu_sva_bind_device and iommu_sva_unbind_device are not pair,  So
-> > driver does not know ioasid is freed.
-> > 
-> > Any suggestion?
-> 
-> It sounds like you're saying that the device is still abound to the
-> PASID even though the mm has exited and freed the PASID.  This is
-> essentially a use-after-free for the PASID.  Right?
-> 
-> The right thing to do here is to have the PASID code hold a reference on
-> the mm.  The mm "owns" the PASID for its entire lifetime and if anything
-> needs the PASID to live longer, its only recourse for doing that is via
-> an mmget().  I _think_ mmget() is the right thing as opposed to mmgrab()
-> because the PASID users actually need the page tables to be around.
-> 
-> This would still be nice to confirm with some traces of fork()/exit()
-> and the iommu_sva_{bind,unbind} and ioasid_{alloc,free} functions.
-> 
-> I wonder if the Intel and ARM IOMMU code differ in the way they keep
-> references to the mm, or if this affects Intel as well, but we just
-> haven't tested the code enough.
+two weeks ago, I updated a cluster of web servers to Linux kernel
+5.17.1 (5.16.x previously) which includes your rewrite of the fscache
+code.
 
-The Arm code was written expecting the PASID to be freed on unbind(), not
-mm exit. I missed the change of behavior, sorry (I thought your plan was
-to extend PASID lifetime, not shorten it?) but as is it seems very broken.
-For example in the iommu_sva_unbind_device(), we have
-arm_smmu_mmu_notifier_put() clearing the PASID table entry for
-"mm->pasid", which is going to end badly if the PASID has been cleared or
-reallocated. We can't clear the PASID entry in mm exit because at that
-point the device may still be issuing DMA for that PASID and we need to
-quiesce the entry rather than deactivate it. We can only deactivate it
-once the device driver has properly stopped the device, at which point it
-can call unbind(). There may be other issues but I can't check it
-thoroughly until next week.
+In the last few days, there were numerous complaints about broken
+WordPress installations after WordPress was updated.  There were
+PHP syntax errors everywhere.
 
-Thanks,
-Jean
+Indeed there were broken PHP files, but the interesting part is: those
+corruptions were only on one of the web servers; the others were fine,
+the file contents were only broken on one of the servers.
+
+File size and time stamp and everyhing in "stat" is identical, just
+the file contents are corrupted; it looks like a mix of old and new
+contents.  The corruptions always started at multiples of 4096 bytes.
+
+An example diff:
+
+ --- ok/wp-includes/media.php    2022-04-06 05:51:50.000000000 +0200
+ +++ broken/wp-includes/media.php    2022-04-06 05:51:50.000000000 +0200
+ @@ -5348,7 +5348,7 @@
+                 /**
+                  * Filters the threshold for how many of the first content media elements to not lazy-load.
+                  *
+ -                * For these first content media elements, the `loading` attribute will be omitted. By default, this is the case
+ +                * For these first content media elements, the `loading` efault, this is the case
+                  * for only the very first content media element.
+                  *
+                  * @since 5.9.0
+ @@ -5377,3 +5377,4 @@
+  
+         return $content_media_count;
+  }
+ +^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@
+
+The corruption can be explained by WordPress commit
+https://github.com/WordPress/WordPress/commit/07855db0ee8d5cff2 which
+makes the file 31 bytes longer (185055 -> 185086).  The "broken" web
+server sees the new contents until offset 184320 (= 45 * 4096), but
+sees the old contents from there on; followed by 31 null bytes
+(because the kernel reads past the end of the cache?).
+
+All web servers mount a storage via NFSv3 with fscache.
+
+My suspicion is that this is caused by a fscache regression in Linux
+5.17.  What do you think?
+
+What can I do to debug this further, is there any information you
+need?  I don't know much about how fscache works internally and how to
+obtain information.
+
+Max
+

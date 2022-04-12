@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0C764FD61F
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:20:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 206114FD9DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:46:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376649AbiDLIuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:50:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50918 "EHLO
+        id S1355225AbiDLH1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357957AbiDLHk4 (ORCPT
+        with ESMTP id S1351696AbiDLHMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:40:56 -0400
+        Tue, 12 Apr 2022 03:12:51 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB93E3B023;
-        Tue, 12 Apr 2022 00:17:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52DAC15A30;
+        Mon, 11 Apr 2022 23:51:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F37F6171C;
-        Tue, 12 Apr 2022 07:17:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EAC4C385A1;
-        Tue, 12 Apr 2022 07:17:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E1EC56146F;
+        Tue, 12 Apr 2022 06:51:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0303C385A1;
+        Tue, 12 Apr 2022 06:51:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747827;
-        bh=LBlGdq6vz+9VNDx+bAUfEJCL60i/v7PjWpnupljX3dY=;
+        s=korg; t=1649746306;
+        bh=TtMFs0H5NU5r4p+2u4nzwSmLe/Zr4CUSnystOjjsI00=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YsvDVCX2/SN5A6ScWd1L/Km9b1SnzQplGLlcW/T1CzmEjBUuvnfbwfFuYkXv7Ee1U
-         GRRd2HGjZYu5/19Z63K6Q4oPw6o1vw90ZvaeuLPR3lQHlrJ08MgH07dVQtsRLToHMs
-         +2yZdNpjVyuc0tK+3vfNtgMyzSItfe3tqIBAeVjM=
+        b=Fkm23S0TsXgpmCsaJHJNMsISfj8s5TcySbXcCKQ8l9uw+YVHJf2mxzYmqTil42KW5
+         QaZmDPpwH7knTvtLyaZeZ3n8T1cOhNGGtjd8zwJqL8v6J3fP+/9QWzcINP1L92Cg5R
+         alOgflK1iHJGnlXb3Ep2t1O/IXxaB7YOyaudsTLA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Axel Lin <axel.lin@ingics.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 220/343] regulator: atc260x: Fix missing active_discharge_on setting
-Date:   Tue, 12 Apr 2022 08:30:38 +0200
-Message-Id: <20220412062957.690976788@linuxfoundation.org>
+        stable@vger.kernel.org, Namhyung Kim <namhyung@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Subject: [PATCH 5.15 236/277] perf/core: Inherit event_caps
+Date:   Tue, 12 Apr 2022 08:30:39 +0200
+Message-Id: <20220412062948.874087725@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +54,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Axel Lin <axel.lin@ingics.com>
+From: Namhyung Kim <namhyung@kernel.org>
 
-[ Upstream commit 2316f0fc0ad2aa87a568ceaf3d76be983ee555c3 ]
+commit e3265a4386428d3d157d9565bb520aabff8b4bf0 upstream.
 
-Without active_discharge_on setting, the SWITCH1 discharge enable control
-is always disabled. Fix it.
+It was reported that some perf event setup can make fork failed on
+ARM64.  It was the case of a group of mixed hw and sw events and it
+failed in perf_event_init_task() due to armpmu_event_init().
 
-Fixes: 3b15ccac161a ("regulator: Add regulator driver for ATC260x PMICs")
-Signed-off-by: Axel Lin <axel.lin@ingics.com>
-Link: https://lore.kernel.org/r/20220403132235.123727-1-axel.lin@ingics.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+The ARM PMU code checks if all the events in a group belong to the
+same PMU except for software events.  But it didn't set the event_caps
+of inherited events and no longer identify them as software events.
+Therefore the test failed in a child process.
+
+A simple reproducer is:
+
+  $ perf stat -e '{cycles,cs,instructions}' perf bench sched messaging
+  # Running 'sched/messaging' benchmark:
+  perf: fork(): Invalid argument
+
+The perf stat was fine but the perf bench failed in fork().  Let's
+inherit the event caps from the parent.
+
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Cc: <stable@vger.kernel.org>
+Link: https://lkml.kernel.org/r/20220328200112.457740-1-namhyung@kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/regulator/atc260x-regulator.c | 1 +
- 1 file changed, 1 insertion(+)
+ kernel/events/core.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/regulator/atc260x-regulator.c b/drivers/regulator/atc260x-regulator.c
-index 05147d2c3842..485e58b264c0 100644
---- a/drivers/regulator/atc260x-regulator.c
-+++ b/drivers/regulator/atc260x-regulator.c
-@@ -292,6 +292,7 @@ enum atc2603c_reg_ids {
- 	.bypass_mask = BIT(5), \
- 	.active_discharge_reg = ATC2603C_PMU_SWITCH_CTL, \
- 	.active_discharge_mask = BIT(1), \
-+	.active_discharge_on = BIT(1), \
- 	.owner = THIS_MODULE, \
- }
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -11596,6 +11596,9 @@ perf_event_alloc(struct perf_event_attr
  
--- 
-2.35.1
-
+ 	event->state		= PERF_EVENT_STATE_INACTIVE;
+ 
++	if (parent_event)
++		event->event_caps = parent_event->event_caps;
++
+ 	if (event->attr.sigtrap)
+ 		atomic_set(&event->event_limit, 1);
+ 
 
 

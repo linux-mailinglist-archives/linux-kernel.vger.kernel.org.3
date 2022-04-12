@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC70F4FE03C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:38:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 149FA4FE03E
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:38:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240594AbiDLMgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 08:36:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57576 "EHLO
+        id S235737AbiDLMgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 08:36:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348114AbiDLMft (ORCPT
+        with ESMTP id S1350979AbiDLMf6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 08:35:49 -0400
+        Tue, 12 Apr 2022 08:35:58 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 363E513FB4;
-        Tue, 12 Apr 2022 04:54:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF340387BB;
+        Tue, 12 Apr 2022 04:54:47 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3641A1424;
-        Tue, 12 Apr 2022 04:54:39 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9CE3B1424;
+        Tue, 12 Apr 2022 04:54:47 -0700 (PDT)
 Received: from a077893.arm.com (unknown [10.163.38.213])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E47C63F70D;
-        Tue, 12 Apr 2022 04:54:32 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E949A3F70D;
+        Tue, 12 Apr 2022 04:54:39 -0700 (PDT)
 From:   Anshuman Khandual <anshuman.khandual@arm.com>
 To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
@@ -33,10 +33,12 @@ Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
         Ingo Molnar <mingo@redhat.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         linux-perf-users@vger.kernel.org
-Subject: [RFC V2 0/8] arm64/perf: Enable branch stack sampling
-Date:   Tue, 12 Apr 2022 17:24:47 +0530
-Message-Id: <20220412115455.293119-1-anshuman.khandual@arm.com>
+Subject: [RFC V2 1/8] perf: Consolidate branch sample filter helpers
+Date:   Tue, 12 Apr 2022 17:24:48 +0530
+Message-Id: <20220412115455.293119-2-anshuman.khandual@arm.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220412115455.293119-1-anshuman.khandual@arm.com>
+References: <20220412115455.293119-1-anshuman.khandual@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
@@ -48,75 +50,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series enables perf branch stack sampling support on arm64 platform
-via a new arch feature called Branch Record Buffer Extension (BRBE). All
-relevant register definitions could be accessed here.
+Besides the branch type filtering requests, 'event.attr.branch_sample_type'
+also contains various flags indicating which additional information should
+be captured, along with the base branch record. These flags help configure
+the underlying hardware, and capture the branch records appropriately when
+required e.g after PMU interrupt. But first, this moves an existing helper
+perf_sample_save_hw_index() into the header before adding some more helpers
+for other branch sample filter flags.
 
-https://developer.arm.com/documentation/ddi0601/2021-12/AArch64-Registers
-
-This series applies on v5.18-rc1 after the BRBE related perf ABI changes series
-(V5) that was posted earlier.
-
-https://lore.kernel.org/all/20220404045046.634522-2-anshuman.khandual@arm.com/
-
-Following issues remain inconclusive
-
-- Jame's concerns regarding permission inadequacy related to perfmon_capable()
-- Jame's concerns regarding using perf_event_paranoid along with perfmon_capable()
-- Rob's concerns regarding the series structure, arm_pmu callbacks based framework
-
-Changes in RFC V2:
-
-- Added branch_sample_priv() while consolidating other branch sample filter helpers
-- Changed all SYS_BRBXXXN_EL1 register definition encodings per Marc
-- Changed the BRBE driver as per proposed BRBE related perf ABI changes (V5)
-- Added documentation for struct arm_pmu changes, updated commit message
-- Updated commit message for BRBE detection infrastructure patch
-- PERF_SAMPLE_BRANCH_KERNEL gets checked during arm event init (outside the driver)
-- Branch privilege state capture mechanism has now moved inside the driver
-
-Changes in RFC V1:
-
-https://lore.kernel.org/all/1642998653-21377-1-git-send-email-anshuman.khandual@arm.com/
-
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: James Clark <james.clark@arm.com>
-Cc: Rob Herring <robh@kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>
 Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: Ingo Molnar <mingo@redhat.com>
 Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org
 Cc: linux-perf-users@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+---
+ include/linux/perf_event.h | 24 ++++++++++++++++++++++++
+ kernel/events/core.c       |  9 ++-------
+ 2 files changed, 26 insertions(+), 7 deletions(-)
 
-Anshuman Khandual (8):
-  perf: Consolidate branch sample filter helpers
-  arm64/perf: Add register definitions for BRBE
-  arm64/perf: Update struct arm_pmu for BRBE
-  arm64/perf: Update struct pmu_hw_events for BRBE
-  driver/perf/arm_pmu_platform: Add support for BRBE attributes detection
-  arm64/perf: Drive BRBE from perf event states
-  arm64/perf: Add BRBE driver
-  arm64/perf: Enable branch stack sampling
-
- arch/arm64/include/asm/sysreg.h | 222 +++++++++++++++++
- arch/arm64/kernel/perf_event.c  |  48 ++++
- drivers/perf/Kconfig            |  11 +
- drivers/perf/Makefile           |   1 +
- drivers/perf/arm_pmu.c          |  72 +++++-
- drivers/perf/arm_pmu_brbe.c     | 425 ++++++++++++++++++++++++++++++++
- drivers/perf/arm_pmu_brbe.h     | 259 +++++++++++++++++++
- drivers/perf/arm_pmu_platform.c |  34 +++
- include/linux/perf/arm_pmu.h    |  63 +++++
- include/linux/perf_event.h      |  24 ++
- kernel/events/core.c            |   9 +-
- 11 files changed, 1158 insertions(+), 10 deletions(-)
- create mode 100644 drivers/perf/arm_pmu_brbe.c
- create mode 100644 drivers/perf/arm_pmu_brbe.h
-
+diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+index af97dd427501..07710ae148c7 100644
+--- a/include/linux/perf_event.h
++++ b/include/linux/perf_event.h
+@@ -1660,4 +1660,28 @@ typedef int (perf_snapshot_branch_stack_t)(struct perf_branch_entry *entries,
+ 					   unsigned int cnt);
+ DECLARE_STATIC_CALL(perf_snapshot_branch_stack, perf_snapshot_branch_stack_t);
+ 
++static inline bool branch_sample_no_flags(const struct perf_event *event)
++{
++	return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_NO_FLAGS;
++}
++
++static inline bool branch_sample_no_cycles(const struct perf_event *event)
++{
++	return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_NO_CYCLES;
++}
++
++static inline bool branch_sample_type(const struct perf_event *event)
++{
++	return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_TYPE_SAVE;
++}
++
++static inline bool branch_sample_hw_index(const struct perf_event *event)
++{
++	return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_HW_INDEX;
++}
++
++static inline bool branch_sample_priv(const struct perf_event *event)
++{
++	return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_PRIV_SAVE;
++}
+ #endif /* _LINUX_PERF_EVENT_H */
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index cfde994ce61c..3883bb7472b4 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -7058,11 +7058,6 @@ static void perf_output_read(struct perf_output_handle *handle,
+ 		perf_output_read_one(handle, event, enabled, running);
+ }
+ 
+-static inline bool perf_sample_save_hw_index(struct perf_event *event)
+-{
+-	return event->attr.branch_sample_type & PERF_SAMPLE_BRANCH_HW_INDEX;
+-}
+-
+ void perf_output_sample(struct perf_output_handle *handle,
+ 			struct perf_event_header *header,
+ 			struct perf_sample_data *data,
+@@ -7151,7 +7146,7 @@ void perf_output_sample(struct perf_output_handle *handle,
+ 			     * sizeof(struct perf_branch_entry);
+ 
+ 			perf_output_put(handle, data->br_stack->nr);
+-			if (perf_sample_save_hw_index(event))
++			if (branch_sample_hw_index(event))
+ 				perf_output_put(handle, data->br_stack->hw_idx);
+ 			perf_output_copy(handle, data->br_stack->entries, size);
+ 		} else {
+@@ -7445,7 +7440,7 @@ void perf_prepare_sample(struct perf_event_header *header,
+ 	if (sample_type & PERF_SAMPLE_BRANCH_STACK) {
+ 		int size = sizeof(u64); /* nr */
+ 		if (data->br_stack) {
+-			if (perf_sample_save_hw_index(event))
++			if (branch_sample_hw_index(event))
+ 				size += sizeof(u64);
+ 
+ 			size += data->br_stack->nr
 -- 
 2.25.1
 

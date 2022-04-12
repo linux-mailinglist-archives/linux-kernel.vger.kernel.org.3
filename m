@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E50E4FDDBD
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82BBB4FDDB2
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:43:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231859AbiDLLdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 07:33:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40258 "EHLO
+        id S230381AbiDLLdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 07:33:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352789AbiDLLb5 (ORCPT
+        with ESMTP id S1352795AbiDLLb5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Apr 2022 07:31:57 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F356870F49
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 03:10:56 -0700 (PDT)
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A14D70F57
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 03:10:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649758256; x=1681294256;
+  t=1649758257; x=1681294257;
   h=date:from:to:cc:subject:message-id:mime-version:
    content-transfer-encoding;
-  bh=5884kivJHQifT79otR8QDeDfSo9JqnHQwJVBugIosm0=;
-  b=PTLBcECerO6AD9DuK05k1X5M8jAOBoPkoaPykxx76fsuuG15izyKKEi2
-   ZOD1ZiHzLk1YCEzbAzTeMECT195FmM/uKrMkEvsJoKfg6TrwhOB/O/Yo1
-   dAs42crRDEQ5MTHKrD1hWZFLpk/ZQApdax4IBdQQ7c9lbj3cAQQYFpX1J
-   wMVEAJ32WR891yyO+u2AVBPNtx+YzxK/DJ0+G5Y4fJgx3OM5zmy1bjEjs
-   IjoFPPZPL+CJ5w4vuFH0blIrgnk2+tTNHsFriNUbr/KJVQdxJNpmf+7sI
-   4W5BKurj4cI00/Nz924LUq5b0MAufDvsNSpAl2egZawh2COwdzPRKaCup
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="242924524"
+  bh=L9nl1LE8wmXe0EioJqHYeRkDmNRZ+zce0uGC1pVxDU0=;
+  b=kLXeK8H85LdBs6zyw6gyv3VLkive0NMMJwNEsRCmPZsOtp1YmG0sI0/S
+   jmDPezmtDjDzqQ6HHtvwNcVjnF01qOV37DswVwEXJNOZhFNtbV40LfY9r
+   vjy1HpBXMSXUNxDnCdjo5y+rqqHHHjsg3WEmoLK6QPuDq1ydLEfQAlwLh
+   nVQL1dZnafoLYPRqDYqnbNd+D2aXt+CaAqmioT8lE9rygof0kJA8A+Pdc
+   2xtB0HhzkundLY9sBu0A8Q3sWh2KknJ85e9p8kMpWISW60sHEWWcqVQa6
+   pM8p7qI93q292zI66QjKJzqoArNPjhEcidxv9sjy+xkP0r/XpjwRj4efv
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="262517559"
 X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="242924524"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 03:10:56 -0700
+   d="scan'208";a="262517559"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 03:10:57 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="559269917"
+   d="scan'208";a="724383469"
 Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 12 Apr 2022 03:10:55 -0700
+  by orsmga005.jf.intel.com with ESMTP; 12 Apr 2022 03:10:55 -0700
 Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1neDU7-0002jq-0X;
+        id 1neDU7-0002jw-2m;
         Tue, 12 Apr 2022 10:10:55 +0000
-Date:   Tue, 12 Apr 2022 18:10:25 +0800
+Date:   Tue, 12 Apr 2022 18:10:31 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "x86-ml" <x86@kernel.org>
 Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/cleanups] BUILD SUCCESS
- c7bda0dca98cca351a9bc852b3df8b9b99ffd400
-Message-ID: <62555011.cAgNlbiQ86vTNQrF%lkp@intel.com>
+Subject: [tip:x86/sev] BUILD SUCCESS
+ e50abbf788c239d529f9ab81e325f8e8f8432c9d
+Message-ID: <62555017.xd1SRkcAmw+UGoMu%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,8 +63,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cleanups
-branch HEAD: c7bda0dca98cca351a9bc852b3df8b9b99ffd400  x86: Remove a.out support
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/sev
+branch HEAD: e50abbf788c239d529f9ab81e325f8e8f8432c9d  virt: sevguest: Fix return value check in alloc_shared_pages()
 
 elapsed time: 736m
 
@@ -154,8 +154,8 @@ i386                 randconfig-a014-20220411
 i386                          randconfig-a012
 i386                          randconfig-a014
 i386                          randconfig-a016
-arc                  randconfig-r043-20220411
 riscv                randconfig-r042-20220411
+arc                  randconfig-r043-20220411
 s390                 randconfig-r044-20220411
 riscv                    nommu_virt_defconfig
 riscv                          rv32_defconfig
@@ -163,8 +163,8 @@ riscv                    nommu_k210_defconfig
 riscv                             allnoconfig
 riscv                            allmodconfig
 riscv                            allyesconfig
-um                           x86_64_defconfig
 um                             i386_defconfig
+um                           x86_64_defconfig
 x86_64                          rhel-8.3-func
 x86_64                                  kexec
 x86_64                           allyesconfig
@@ -197,9 +197,9 @@ x86_64               randconfig-a005-20220411
 i386                 randconfig-a003-20220411
 i386                 randconfig-a001-20220411
 i386                 randconfig-a002-20220411
-i386                 randconfig-a005-20220411
 i386                 randconfig-a006-20220411
 i386                 randconfig-a004-20220411
+i386                 randconfig-a005-20220411
 hexagon              randconfig-r041-20220411
 hexagon              randconfig-r045-20220411
 

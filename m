@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 352704FD3B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 11:59:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A13144FD400
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353161AbiDLHdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:33:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57282 "EHLO
+        id S1382616AbiDLJMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:12:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351880AbiDLHNC (ORCPT
+        with ESMTP id S1358767AbiDLHmL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:13:02 -0400
+        Tue, 12 Apr 2022 03:42:11 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1839AE42;
-        Mon, 11 Apr 2022 23:54:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935F82BF7;
+        Tue, 12 Apr 2022 00:19:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 81F4CB81B44;
-        Tue, 12 Apr 2022 06:54:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAECDC385AA;
-        Tue, 12 Apr 2022 06:53:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DC523B81B66;
+        Tue, 12 Apr 2022 07:19:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A009C385A1;
+        Tue, 12 Apr 2022 07:19:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746439;
-        bh=e9O41xtZGrmCpXGoo/uLMcFr7AIxfezKsEgG2L32/xc=;
+        s=korg; t=1649747948;
+        bh=yFy9U19sXHN41q82kKN50sXNb/tbKR+J5nGyLCB4Wqg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ROKdipe2sUvSFRqUlxrdTsIK2SpPyvI//mSZAiVdvju1INn9+GRaEqEy1FqhRlW22
-         kDqx5Ng2ngZmjhd/Y3cLp3JbhhW2mxoikjFdrU4Wp+NVlCf/wQGfi1WeJjhH44DAQC
-         w3Gnw4zcN+A7HPYlm6KMxE0Im9Wxk6hAyNP9TAIY=
+        b=ZFsLax5C7HOguhpTtemEzkpxqHZ3AULTNg9f7Nw+kFk5CT3474Lm0ZYPmRdXdMZMm
+         DzbR4GFUKQ4eBvRHp/MrSL3iGR/GMrfgcSos7pn0+iKgtBOXTGahj79U6bqc0XGYif
+         1mGTBZbJtD+X8XVtN1ZY3vyN994LqTsMIqqCdR6Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andre Przywara <andre.przywara@arm.com>,
-        Marc Zyngier <maz@kernel.org>
-Subject: [PATCH 5.15 274/277] irqchip/gic, gic-v3: Prevent GSI to SGI translations
-Date:   Tue, 12 Apr 2022 08:31:17 +0200
-Message-Id: <20220412062949.970457710@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 5.17 264/343] scsi: mpt3sas: Fix use after free in _scsih_expander_node_remove()
+Date:   Tue, 12 Apr 2022 08:31:22 +0200
+Message-Id: <20220412062958.944329028@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,59 +56,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andre Przywara <andre.przywara@arm.com>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-commit 544808f7e21cb9ccdb8f3aa7de594c05b1419061 upstream.
+commit 87d663d40801dffc99a5ad3b0188ad3e2b4d1557 upstream.
 
-At the moment the GIC IRQ domain translation routine happily converts
-ACPI table GSI numbers below 16 to GIC SGIs (Software Generated
-Interrupts aka IPIs). On the Devicetree side we explicitly forbid this
-translation, actually the function will never return HWIRQs below 16 when
-using a DT based domain translation.
+The function mpt3sas_transport_port_remove() called in
+_scsih_expander_node_remove() frees the port field of the sas_expander
+structure, leading to the following use-after-free splat from KASAN when
+the ioc_info() call following that function is executed (e.g. when doing
+rmmod of the driver module):
 
-We expect SGIs to be handled in the first part of the function, and any
-further occurrence should be treated as a firmware bug, so add a check
-and print to report this explicitly and avoid lengthy debug sessions.
+[ 3479.371167] ==================================================================
+[ 3479.378496] BUG: KASAN: use-after-free in _scsih_expander_node_remove+0x710/0x750 [mpt3sas]
+[ 3479.386936] Read of size 1 at addr ffff8881c037691c by task rmmod/1531
+[ 3479.393524]
+[ 3479.395035] CPU: 18 PID: 1531 Comm: rmmod Not tainted 5.17.0-rc8+ #1436
+[ 3479.401712] Hardware name: Supermicro Super Server/H12SSL-NT, BIOS 2.1 06/02/2021
+[ 3479.409263] Call Trace:
+[ 3479.411743]  <TASK>
+[ 3479.413875]  dump_stack_lvl+0x45/0x59
+[ 3479.417582]  print_address_description.constprop.0+0x1f/0x120
+[ 3479.423389]  ? _scsih_expander_node_remove+0x710/0x750 [mpt3sas]
+[ 3479.429469]  kasan_report.cold+0x83/0xdf
+[ 3479.433438]  ? _scsih_expander_node_remove+0x710/0x750 [mpt3sas]
+[ 3479.439514]  _scsih_expander_node_remove+0x710/0x750 [mpt3sas]
+[ 3479.445411]  ? _raw_spin_unlock_irqrestore+0x2d/0x40
+[ 3479.452032]  scsih_remove+0x525/0xc90 [mpt3sas]
+[ 3479.458212]  ? mpt3sas_expander_remove+0x1d0/0x1d0 [mpt3sas]
+[ 3479.465529]  ? down_write+0xde/0x150
+[ 3479.470746]  ? up_write+0x14d/0x460
+[ 3479.475840]  ? kernfs_find_ns+0x137/0x310
+[ 3479.481438]  pci_device_remove+0x65/0x110
+[ 3479.487013]  __device_release_driver+0x316/0x680
+[ 3479.493180]  driver_detach+0x1ec/0x2d0
+[ 3479.498499]  bus_remove_driver+0xe7/0x2d0
+[ 3479.504081]  pci_unregister_driver+0x26/0x250
+[ 3479.510033]  _mpt3sas_exit+0x2b/0x6cf [mpt3sas]
+[ 3479.516144]  __x64_sys_delete_module+0x2fd/0x510
+[ 3479.522315]  ? free_module+0xaa0/0xaa0
+[ 3479.527593]  ? __cond_resched+0x1c/0x90
+[ 3479.532951]  ? lockdep_hardirqs_on_prepare+0x273/0x3e0
+[ 3479.539607]  ? syscall_enter_from_user_mode+0x21/0x70
+[ 3479.546161]  ? trace_hardirqs_on+0x1c/0x110
+[ 3479.551828]  do_syscall_64+0x35/0x80
+[ 3479.556884]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[ 3479.563402] RIP: 0033:0x7f1fc482483b
+...
+[ 3479.943087] ==================================================================
 
-Fixes: 64b499d8df40 ("irqchip/gic-v3: Configure SGIs as standard interrupts")
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220404110842.2882446-1-andre.przywara@arm.com
+Fix this by introducing the local variable port_id to store the port ID
+value before executing mpt3sas_transport_port_remove(). This local variable
+is then used in the call to ioc_info() instead of dereferencing the freed
+port structure.
+
+Link: https://lore.kernel.org/r/20220322055702.95276-1-damien.lemoal@opensource.wdc.com
+Fixes: 7d310f241001 ("scsi: mpt3sas: Get device objects using sas_address & portID")
+Cc: stable@vger.kernel.org
+Acked-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/irqchip/irq-gic-v3.c |    6 ++++++
- drivers/irqchip/irq-gic.c    |    6 ++++++
- 2 files changed, 12 insertions(+)
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---- a/drivers/irqchip/irq-gic-v3.c
-+++ b/drivers/irqchip/irq-gic-v3.c
-@@ -1466,6 +1466,12 @@ static int gic_irq_domain_translate(stru
- 		if(fwspec->param_count != 2)
- 			return -EINVAL;
+--- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
+@@ -11035,6 +11035,7 @@ _scsih_expander_node_remove(struct MPT3S
+ {
+ 	struct _sas_port *mpt3sas_port, *next;
+ 	unsigned long flags;
++	int port_id;
  
-+		if (fwspec->param[0] < 16) {
-+			pr_err(FW_BUG "Illegal GSI%d translation request\n",
-+			       fwspec->param[0]);
-+			return -EINVAL;
-+		}
+ 	/* remove sibling ports attached to this expander */
+ 	list_for_each_entry_safe(mpt3sas_port, next,
+@@ -11055,6 +11056,8 @@ _scsih_expander_node_remove(struct MPT3S
+ 			    mpt3sas_port->hba_port);
+ 	}
+ 
++	port_id = sas_expander->port->port_id;
 +
- 		*hwirq = fwspec->param[0];
- 		*type = fwspec->param[1];
+ 	mpt3sas_transport_port_remove(ioc, sas_expander->sas_address,
+ 	    sas_expander->sas_address_parent, sas_expander->port);
  
---- a/drivers/irqchip/irq-gic.c
-+++ b/drivers/irqchip/irq-gic.c
-@@ -1085,6 +1085,12 @@ static int gic_irq_domain_translate(stru
- 		if(fwspec->param_count != 2)
- 			return -EINVAL;
+@@ -11062,7 +11065,7 @@ _scsih_expander_node_remove(struct MPT3S
+ 	    "expander_remove: handle(0x%04x), sas_addr(0x%016llx), port:%d\n",
+ 	    sas_expander->handle, (unsigned long long)
+ 	    sas_expander->sas_address,
+-	    sas_expander->port->port_id);
++	    port_id);
  
-+		if (fwspec->param[0] < 16) {
-+			pr_err(FW_BUG "Illegal GSI%d translation request\n",
-+			       fwspec->param[0]);
-+			return -EINVAL;
-+		}
-+
- 		*hwirq = fwspec->param[0];
- 		*type = fwspec->param[1];
- 
+ 	spin_lock_irqsave(&ioc->sas_node_lock, flags);
+ 	list_del(&sas_expander->list);
 
 

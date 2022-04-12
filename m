@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E733C4FD7F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEDF74FD504
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:10:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355019AbiDLIGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42834 "EHLO
+        id S1386583AbiDLI6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:58:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354097AbiDLH0D (ORCPT
+        with ESMTP id S1359233AbiDLHmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:26:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01517183AF;
-        Tue, 12 Apr 2022 00:05:36 -0700 (PDT)
+        Tue, 12 Apr 2022 03:42:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E760355760;
+        Tue, 12 Apr 2022 00:20:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B6049B81B4E;
-        Tue, 12 Apr 2022 07:05:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 293B9C385A6;
-        Tue, 12 Apr 2022 07:05:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 910BAB81B60;
+        Tue, 12 Apr 2022 07:20:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6C08C385A5;
+        Tue, 12 Apr 2022 07:20:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747133;
-        bh=qVZQZO1froVUTZ6TwlksDchw3cHLrw0uS/UZVNIs+5k=;
+        s=korg; t=1649748033;
+        bh=jZ9OyGMlutFC7CgIcngmbcnEnIoe5Nr2Zego+PXvzVA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vrNMr9muHEC+CxZbM1H8mNNiqpHplYua50Y7dOSd7WWi2wiQhHF5rt4owBuLlyL3a
-         8FMg3VhakrAhIQXK5Bvz4bZhgw5xOMBWYbY3N+0WA7HekVRUMbLSf7yyXm7zeg0b4T
-         oYIY7EHYpX6VHteJg7V+tpwDuv6X/JC8aLOur/lI=
+        b=hmFFMdA1ccWYkLkoy1uDyxLsyp6HmLVuUuSiboCZFuLJXPyaWvbackcUh+TAOgf4O
+         Jm7/7apz+yza6oeSJIqOwHX8YI3dVE2LC7rbdV2dICgQ/3G0YLgLY3XET49SqUVpIJ
+         tnopJDfQRxu2MjgxAxSiw04yFDya2mXPAobNf3rM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        Lyude Paul <lyude@redhat.com>
-Subject: [PATCH 5.16 256/285] drm/nouveau/pmu: Add missing callbacks for Tegra devices
-Date:   Tue, 12 Apr 2022 08:31:53 +0200
-Message-Id: <20220412062951.049355968@linuxfoundation.org>
+        stable@vger.kernel.org, kernel test robot <oliver.sang@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@suse.de>, Nadav Amit <namit@vmware.com>
+Subject: [PATCH 5.17 296/343] x86/mm/tlb: Revert retpoline avoidance approach
+Date:   Tue, 12 Apr 2022 08:31:54 +0200
+Message-Id: <20220412062959.868855833@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,69 +55,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Karol Herbst <kherbst@redhat.com>
+From: Dave Hansen <dave.hansen@linux.intel.com>
 
-commit 38d4e5cf5b08798f093374e53c2f4609d5382dd5 upstream.
+commit d39268ad24c0fd0665d0c5cf55a7c1a0ebf94766 upstream.
 
-Fixes a crash booting on those platforms with nouveau.
+0day reported a regression on a microbenchmark which is intended to
+stress the TLB flushing path:
 
-Fixes: 4cdd2450bf73 ("drm/nouveau/pmu/gm200-: use alternate falcon reset sequence")
-Cc: Ben Skeggs <bskeggs@redhat.com>
-Cc: Karol Herbst <kherbst@redhat.com>
-Cc: dri-devel@lists.freedesktop.org
-Cc: nouveau@lists.freedesktop.org
-Cc: <stable@vger.kernel.org> # v5.17+
-Signed-off-by: Karol Herbst <kherbst@redhat.com>
-Reviewed-by: Lyude Paul <lyude@redhat.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220322124800.2605463-1-kherbst@redhat.com
+	https://lore.kernel.org/all/20220317090415.GE735@xsang-OptiPlex-9020/
+
+It pointed at a commit from Nadav which intended to remove retpoline
+overhead in the TLB flushing path by taking the 'cond'-ition in
+on_each_cpu_cond_mask(), pre-calculating it, and incorporating it into
+'cpumask'.  That allowed the code to use a bunch of earlier direct
+calls instead of later indirect calls that need a retpoline.
+
+But, in practice, threads can go idle (and into lazy TLB mode where
+they don't need to flush their TLB) between the early and late calls.
+It works in this direction and not in the other because TLB-flushing
+threads tend to hold mmap_lock for write.  Contention on that lock
+causes threads to _go_ idle right in this early/late window.
+
+There was not any performance data in the original commit specific
+to the retpoline overhead.  I did a few tests on a system with
+retpolines:
+
+	https://lore.kernel.org/all/dd8be93c-ded6-b962-50d4-96b1c3afb2b7@intel.com/
+
+which showed a possible small win.  But, that small win pales in
+comparison with the bigger loss induced on non-retpoline systems.
+
+Revert the patch that removed the retpolines.  This was not a
+clean revert, but it was self-contained enough not to be too painful.
+
+Fixes: 6035152d8eeb ("x86/mm/tlb: Open-code on_each_cpu_cond_mask() for tlb_is_not_lazy()")
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Acked-by: Nadav Amit <namit@vmware.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lkml.kernel.org/r/164874672286.389.7021457716635788197.tip-bot2@tip-bot2
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gm20b.c |    1 +
- drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gp102.c |    2 +-
- drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gp10b.c |    1 +
- drivers/gpu/drm/nouveau/nvkm/subdev/pmu/priv.h  |    1 +
- 4 files changed, 4 insertions(+), 1 deletion(-)
+ arch/x86/mm/tlb.c |   37 +++++--------------------------------
+ 1 file changed, 5 insertions(+), 32 deletions(-)
 
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gm20b.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gm20b.c
-@@ -216,6 +216,7 @@ gm20b_pmu = {
- 	.intr = gt215_pmu_intr,
- 	.recv = gm20b_pmu_recv,
- 	.initmsg = gm20b_pmu_initmsg,
-+	.reset = gf100_pmu_reset,
- };
+--- a/arch/x86/mm/tlb.c
++++ b/arch/x86/mm/tlb.c
+@@ -854,13 +854,11 @@ done:
+ 			nr_invalidate);
+ }
  
- #if IS_ENABLED(CONFIG_ARCH_TEGRA_210_SOC)
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gp102.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gp102.c
-@@ -23,7 +23,7 @@
-  */
- #include "priv.h"
- 
--static void
-+void
- gp102_pmu_reset(struct nvkm_pmu *pmu)
+-static bool tlb_is_not_lazy(int cpu)
++static bool tlb_is_not_lazy(int cpu, void *data)
  {
- 	struct nvkm_device *device = pmu->subdev.device;
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gp10b.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gp10b.c
-@@ -83,6 +83,7 @@ gp10b_pmu = {
- 	.intr = gt215_pmu_intr,
- 	.recv = gm20b_pmu_recv,
- 	.initmsg = gm20b_pmu_initmsg,
-+	.reset = gp102_pmu_reset,
- };
+ 	return !per_cpu(cpu_tlbstate_shared.is_lazy, cpu);
+ }
  
- #if IS_ENABLED(CONFIG_ARCH_TEGRA_210_SOC)
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/priv.h
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/priv.h
-@@ -41,6 +41,7 @@ int gt215_pmu_send(struct nvkm_pmu *, u3
+-static DEFINE_PER_CPU(cpumask_t, flush_tlb_mask);
+-
+ DEFINE_PER_CPU_SHARED_ALIGNED(struct tlb_state_shared, cpu_tlbstate_shared);
+ EXPORT_PER_CPU_SYMBOL(cpu_tlbstate_shared);
  
- bool gf100_pmu_enabled(struct nvkm_pmu *);
- void gf100_pmu_reset(struct nvkm_pmu *);
-+void gp102_pmu_reset(struct nvkm_pmu *pmu);
+@@ -889,36 +887,11 @@ STATIC_NOPV void native_flush_tlb_multi(
+ 	 * up on the new contents of what used to be page tables, while
+ 	 * doing a speculative memory access.
+ 	 */
+-	if (info->freed_tables) {
++	if (info->freed_tables)
+ 		on_each_cpu_mask(cpumask, flush_tlb_func, (void *)info, true);
+-	} else {
+-		/*
+-		 * Although we could have used on_each_cpu_cond_mask(),
+-		 * open-coding it has performance advantages, as it eliminates
+-		 * the need for indirect calls or retpolines. In addition, it
+-		 * allows to use a designated cpumask for evaluating the
+-		 * condition, instead of allocating one.
+-		 *
+-		 * This code works under the assumption that there are no nested
+-		 * TLB flushes, an assumption that is already made in
+-		 * flush_tlb_mm_range().
+-		 *
+-		 * cond_cpumask is logically a stack-local variable, but it is
+-		 * more efficient to have it off the stack and not to allocate
+-		 * it on demand. Preemption is disabled and this code is
+-		 * non-reentrant.
+-		 */
+-		struct cpumask *cond_cpumask = this_cpu_ptr(&flush_tlb_mask);
+-		int cpu;
+-
+-		cpumask_clear(cond_cpumask);
+-
+-		for_each_cpu(cpu, cpumask) {
+-			if (tlb_is_not_lazy(cpu))
+-				__cpumask_set_cpu(cpu, cond_cpumask);
+-		}
+-		on_each_cpu_mask(cond_cpumask, flush_tlb_func, (void *)info, true);
+-	}
++	else
++		on_each_cpu_cond_mask(tlb_is_not_lazy, flush_tlb_func,
++				(void *)info, 1, cpumask);
+ }
  
- void gk110_pmu_pgob(struct nvkm_pmu *, bool);
- 
+ void flush_tlb_multi(const struct cpumask *cpumask,
 
 

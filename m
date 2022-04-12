@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 531CD4FD411
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:01:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C493B4FD38A
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 11:58:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357689AbiDLHki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:40:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
+        id S1351488AbiDLHMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:12:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353062AbiDLHOr (ORCPT
+        with ESMTP id S1352475AbiDLGzw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:14:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73273298A;
-        Mon, 11 Apr 2022 23:56:02 -0700 (PDT)
+        Tue, 12 Apr 2022 02:55:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C18353B3E7;
+        Mon, 11 Apr 2022 23:45:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8001FB81B35;
-        Tue, 12 Apr 2022 06:56:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5F61C385A1;
-        Tue, 12 Apr 2022 06:55:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B933C60B2F;
+        Tue, 12 Apr 2022 06:45:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC33AC385A6;
+        Tue, 12 Apr 2022 06:45:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746560;
-        bh=YgdhlSMxeDCviAyj1bNwcZx0pm30/AJOk4lyrViDXrc=;
+        s=korg; t=1649745942;
+        bh=ZqlXdUHFwKSPIS8dpBAWhiyXJFdqK6peU9QQ/0n3vBQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DYtMInFJ6U1WuTPkvDD+YOsXvI7MA/yJedZIiacWs2rxVqeIbO0AQYaCUzMKl8pl+
-         nC7nXMISB6v0JNGrcbW3kBmQo6/8HycLW8LUeG6+fIOCjU66tsYSzN/NYUVy0Wpm3+
-         zwZuRaVH7mbF8fm9pFxIJVpBUcloMm29pk5SQ0gs=
+        b=kWrLGpFTFLPqrG98Ke89SixDk68bDWGur6Jke3jCg9gPT1jRwO+Jxo69ZGe0OupV6
+         gnmRy87dRoX8ebsjx8jdiJNH8VZUqw96+UqlMdldAmyoClo8mptYEQfUiVDhAolpqv
+         MWcDevWQZF76DCOPnhUWTBunamkGcRzAWJig3YR0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Wang Yufen <wangyufen@huawei.com>,
+        Paul Moore <paul@paul-moore.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 049/285] KVM: arm64: Do not change the PMU event filter after a VCPU has run
-Date:   Tue, 12 Apr 2022 08:28:26 +0200
-Message-Id: <20220412062945.088909500@linuxfoundation.org>
+Subject: [PATCH 5.15 104/277] netlabel: fix out-of-bounds memory accesses
+Date:   Tue, 12 Apr 2022 08:28:27 +0200
+Message-Id: <20220412062945.051586243@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,162 +57,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc Zyngier <maz@kernel.org>
+From: Wang Yufen <wangyufen@huawei.com>
 
-[ Upstream commit 5177fe91e4cf78a659aada2c9cf712db4d788481 ]
+[ Upstream commit f22881de730ebd472e15bcc2c0d1d46e36a87b9c ]
 
-Userspace can specify which events a guest is allowed to use with the
-KVM_ARM_VCPU_PMU_V3_FILTER attribute. The list of allowed events can be
-identified by a guest from reading the PMCEID{0,1}_EL0 registers.
+In calipso_map_cat_ntoh(), in the for loop, if the return value of
+netlbl_bitmap_walk() is equal to (net_clen_bits - 1), when
+netlbl_bitmap_walk() is called next time, out-of-bounds memory accesses
+of bitmap[byte_offset] occurs.
 
-Changing the PMU event filter after a VCPU has run can cause reads of the
-registers performed before the filter is changed to return different values
-than reads performed with the new event filter in place. The architecture
-defines the two registers as read-only, and this behaviour contradicts
-that.
+The bug was found during fuzzing. The following is the fuzzing report
+ BUG: KASAN: slab-out-of-bounds in netlbl_bitmap_walk+0x3c/0xd0
+ Read of size 1 at addr ffffff8107bf6f70 by task err_OH/252
 
-Keep track when the first VCPU has run and deny changes to the PMU event
-filter to prevent this from happening.
+ CPU: 7 PID: 252 Comm: err_OH Not tainted 5.17.0-rc7+ #17
+ Hardware name: linux,dummy-virt (DT)
+ Call trace:
+  dump_backtrace+0x21c/0x230
+  show_stack+0x1c/0x60
+  dump_stack_lvl+0x64/0x7c
+  print_address_description.constprop.0+0x70/0x2d0
+  __kasan_report+0x158/0x16c
+  kasan_report+0x74/0x120
+  __asan_load1+0x80/0xa0
+  netlbl_bitmap_walk+0x3c/0xd0
+  calipso_opt_getattr+0x1a8/0x230
+  calipso_sock_getattr+0x218/0x340
+  calipso_sock_getattr+0x44/0x60
+  netlbl_sock_getattr+0x44/0x80
+  selinux_netlbl_socket_setsockopt+0x138/0x170
+  selinux_socket_setsockopt+0x4c/0x60
+  security_socket_setsockopt+0x4c/0x90
+  __sys_setsockopt+0xbc/0x2b0
+  __arm64_sys_setsockopt+0x6c/0x84
+  invoke_syscall+0x64/0x190
+  el0_svc_common.constprop.0+0x88/0x200
+  do_el0_svc+0x88/0xa0
+  el0_svc+0x128/0x1b0
+  el0t_64_sync_handler+0x9c/0x120
+  el0t_64_sync+0x16c/0x170
 
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-[ Alexandru E: Added commit message, updated ioctl documentation ]
-Signed-off-by: Alexandru Elisei <alexandru.elisei@arm.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220127161759.53553-2-alexandru.elisei@arm.com
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Wang Yufen <wangyufen@huawei.com>
+Acked-by: Paul Moore <paul@paul-moore.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/virt/kvm/devices/vcpu.rst |  2 +-
- arch/arm64/include/asm/kvm_host.h       |  1 +
- arch/arm64/kvm/arm.c                    |  4 +++
- arch/arm64/kvm/pmu-emul.c               | 33 +++++++++++++++----------
- 4 files changed, 26 insertions(+), 14 deletions(-)
+ net/netlabel/netlabel_kapi.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/virt/kvm/devices/vcpu.rst b/Documentation/virt/kvm/devices/vcpu.rst
-index 60a29972d3f1..d063aaee5bb7 100644
---- a/Documentation/virt/kvm/devices/vcpu.rst
-+++ b/Documentation/virt/kvm/devices/vcpu.rst
-@@ -70,7 +70,7 @@ irqchip.
- 	 -ENODEV  PMUv3 not supported or GIC not initialized
- 	 -ENXIO   PMUv3 not properly configured or in-kernel irqchip not
- 	 	  configured as required prior to calling this attribute
--	 -EBUSY   PMUv3 already initialized
-+	 -EBUSY   PMUv3 already initialized or a VCPU has already run
- 	 -EINVAL  Invalid filter range
- 	 =======  ======================================================
+diff --git a/net/netlabel/netlabel_kapi.c b/net/netlabel/netlabel_kapi.c
+index beb0e573266d..54c083003947 100644
+--- a/net/netlabel/netlabel_kapi.c
++++ b/net/netlabel/netlabel_kapi.c
+@@ -885,6 +885,8 @@ int netlbl_bitmap_walk(const unsigned char *bitmap, u32 bitmap_len,
+ 	unsigned char bitmask;
+ 	unsigned char byte;
  
-diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-index d016f27af6da..8c7ba346d713 100644
---- a/arch/arm64/include/asm/kvm_host.h
-+++ b/arch/arm64/include/asm/kvm_host.h
-@@ -137,6 +137,7 @@ struct kvm_arch {
- 
- 	/* Memory Tagging Extension enabled for the guest */
- 	bool mte_enabled;
-+	bool ran_once;
- };
- 
- struct kvm_vcpu_fault_info {
-diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-index 1eadf9088880..6f3be4d44abe 100644
---- a/arch/arm64/kvm/arm.c
-+++ b/arch/arm64/kvm/arm.c
-@@ -629,6 +629,10 @@ static int kvm_vcpu_first_run_init(struct kvm_vcpu *vcpu)
- 	if (kvm_vm_is_protected(kvm))
- 		kvm_call_hyp_nvhe(__pkvm_vcpu_init_traps, vcpu);
- 
-+	mutex_lock(&kvm->lock);
-+	kvm->arch.ran_once = true;
-+	mutex_unlock(&kvm->lock);
-+
- 	return ret;
- }
- 
-diff --git a/arch/arm64/kvm/pmu-emul.c b/arch/arm64/kvm/pmu-emul.c
-index a5e4bbf5e68f..c996fc562da4 100644
---- a/arch/arm64/kvm/pmu-emul.c
-+++ b/arch/arm64/kvm/pmu-emul.c
-@@ -921,6 +921,8 @@ static bool pmu_irq_is_valid(struct kvm *kvm, int irq)
- 
- int kvm_arm_pmu_v3_set_attr(struct kvm_vcpu *vcpu, struct kvm_device_attr *attr)
- {
-+	struct kvm *kvm = vcpu->kvm;
-+
- 	if (!kvm_vcpu_has_pmu(vcpu))
- 		return -ENODEV;
- 
-@@ -938,7 +940,7 @@ int kvm_arm_pmu_v3_set_attr(struct kvm_vcpu *vcpu, struct kvm_device_attr *attr)
- 		int __user *uaddr = (int __user *)(long)attr->addr;
- 		int irq;
- 
--		if (!irqchip_in_kernel(vcpu->kvm))
-+		if (!irqchip_in_kernel(kvm))
- 			return -EINVAL;
- 
- 		if (get_user(irq, uaddr))
-@@ -948,7 +950,7 @@ int kvm_arm_pmu_v3_set_attr(struct kvm_vcpu *vcpu, struct kvm_device_attr *attr)
- 		if (!(irq_is_ppi(irq) || irq_is_spi(irq)))
- 			return -EINVAL;
- 
--		if (!pmu_irq_is_valid(vcpu->kvm, irq))
-+		if (!pmu_irq_is_valid(kvm, irq))
- 			return -EINVAL;
- 
- 		if (kvm_arm_pmu_irq_initialized(vcpu))
-@@ -963,7 +965,7 @@ int kvm_arm_pmu_v3_set_attr(struct kvm_vcpu *vcpu, struct kvm_device_attr *attr)
- 		struct kvm_pmu_event_filter filter;
- 		int nr_events;
- 
--		nr_events = kvm_pmu_event_mask(vcpu->kvm) + 1;
-+		nr_events = kvm_pmu_event_mask(kvm) + 1;
- 
- 		uaddr = (struct kvm_pmu_event_filter __user *)(long)attr->addr;
- 
-@@ -975,12 +977,17 @@ int kvm_arm_pmu_v3_set_attr(struct kvm_vcpu *vcpu, struct kvm_device_attr *attr)
- 		     filter.action != KVM_PMU_EVENT_DENY))
- 			return -EINVAL;
- 
--		mutex_lock(&vcpu->kvm->lock);
-+		mutex_lock(&kvm->lock);
-+
-+		if (kvm->arch.ran_once) {
-+			mutex_unlock(&kvm->lock);
-+			return -EBUSY;
-+		}
- 
--		if (!vcpu->kvm->arch.pmu_filter) {
--			vcpu->kvm->arch.pmu_filter = bitmap_alloc(nr_events, GFP_KERNEL_ACCOUNT);
--			if (!vcpu->kvm->arch.pmu_filter) {
--				mutex_unlock(&vcpu->kvm->lock);
-+		if (!kvm->arch.pmu_filter) {
-+			kvm->arch.pmu_filter = bitmap_alloc(nr_events, GFP_KERNEL_ACCOUNT);
-+			if (!kvm->arch.pmu_filter) {
-+				mutex_unlock(&kvm->lock);
- 				return -ENOMEM;
- 			}
- 
-@@ -991,17 +998,17 @@ int kvm_arm_pmu_v3_set_attr(struct kvm_vcpu *vcpu, struct kvm_device_attr *attr)
- 			 * events, the default is to allow.
- 			 */
- 			if (filter.action == KVM_PMU_EVENT_ALLOW)
--				bitmap_zero(vcpu->kvm->arch.pmu_filter, nr_events);
-+				bitmap_zero(kvm->arch.pmu_filter, nr_events);
- 			else
--				bitmap_fill(vcpu->kvm->arch.pmu_filter, nr_events);
-+				bitmap_fill(kvm->arch.pmu_filter, nr_events);
- 		}
- 
- 		if (filter.action == KVM_PMU_EVENT_ALLOW)
--			bitmap_set(vcpu->kvm->arch.pmu_filter, filter.base_event, filter.nevents);
-+			bitmap_set(kvm->arch.pmu_filter, filter.base_event, filter.nevents);
- 		else
--			bitmap_clear(vcpu->kvm->arch.pmu_filter, filter.base_event, filter.nevents);
-+			bitmap_clear(kvm->arch.pmu_filter, filter.base_event, filter.nevents);
- 
--		mutex_unlock(&vcpu->kvm->lock);
-+		mutex_unlock(&kvm->lock);
- 
- 		return 0;
- 	}
++	if (offset >= bitmap_len)
++		return -1;
+ 	byte_offset = offset / 8;
+ 	byte = bitmap[byte_offset];
+ 	bit_spot = offset;
 -- 
 2.35.1
 

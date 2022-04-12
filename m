@@ -2,124 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D6F14FE93B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 22:04:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8A944FE94D
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 22:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231506AbiDLUGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 16:06:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42082 "EHLO
+        id S233628AbiDLUIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 16:08:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232738AbiDLUGQ (ORCPT
+        with ESMTP id S232799AbiDLUH1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 16:06:16 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B79283009
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 12:57:28 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id c15so25411801ljr.9
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 12:57:28 -0700 (PDT)
+        Tue, 12 Apr 2022 16:07:27 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3A3606CD
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 12:59:23 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id 75so11831071qkk.8
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 12:59:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KPcbiORevCwEqMtvKJH++KF0drE74ilJoT8gFQ34EnA=;
-        b=TSKs9eKW1GlEw++EEPezIbQGa8d6xcrKEr3la4XqzpfJPISA+7b9KTTEm23XMMJ1YV
-         pcXKlpyq55urGdORKzGxmT1pTvZ/5QXhjKImBF6bFGimi25oLZDpt9M2DbzXX/bDQ+u3
-         9OTNzI18CY7dO2LOX4qCsPXJJ34xmRx72tFYZ9ATSXhsUXzw1klZnP3cX0EZtk+eprNZ
-         tCkMhSq3MAlnJi4/eKNm3VReaN0l0QUhoN+OmB8jE4MWy6cl5AMOOOgXwh+tCG2JI/WG
-         9+gYtMY/ams5vv8fDesBL9oYXhTRQRnTpXvK1Fa0yRuSW4SuRnnTGhhsM6HBGKFzDmOM
-         KMVw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OSSxqX8tPYg/tg3+HY2atLHtEG2+4vSWaPUPQtk8FFs=;
+        b=ME2rzraFEBzLQVyEICnGlhLGN3TYXUG40fsZvzk0YNOCUqDi+p+05CekzEMeh8zQJn
+         IOe43DpXusxGAK420y04rWTM7YGwlp9Z1NW5W2U5fVSOeG95xLGy0K5CZoXHG2XG5Rrn
+         Ci/TmgBDCP6sRQZtWU24HxbQg8FK8axzA8RvRss8FNfKxVojSWHjxNmIxUMZczaEpGjm
+         IurY4UMmCo5QwbcVGiI6ZWXP3aOlHNYAXBlAcefoDYaeNeptXyn68wV2oqFAjeeZKBnP
+         xpZOAPEeEx5U3NeK0IRuu8hqnfxwXJBRECsvswtiu1V4FZoYbi9y5BTZdgg6OwpKkdsn
+         Ltzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KPcbiORevCwEqMtvKJH++KF0drE74ilJoT8gFQ34EnA=;
-        b=2L7OzwCBgsOnkKhdNtMVfQxi0RBBzbwUSuHL3Y3ue/iQM3jbGP0bL/IeYK6u/algm6
-         aPcvRkbFZI5V/ZLlUJWII5eiShh0zU9av+t7Kc87y8SCDrzZxTBxs0/GFd4yXqfsyl2E
-         s1q+bbpIYEULGUKhnscs8yLVeqLg4GvYY6KIblKy+PjtpnXoukHML+SBC0nVbU5BRSfQ
-         3N2RAmK/zhbkyRm7D5rto7CowB0dQC5XlkrkqImYYZJfUn2ylETuv4+2yC7sKZKETsqJ
-         z9rY0bQG65CK0p1+stxLRtdze1mjJ7w8WSiOYdyaVeoBgo6w36EccFZvHJ/z5k+uGaea
-         RlQQ==
-X-Gm-Message-State: AOAM5319wfh1nOr0Zzt8yFysXQnlItpZtPj0AfYVlAUcrHoAsM4fV3gh
-        BhIkrrava0SlNGBbG4iwRn75ig==
-X-Google-Smtp-Source: ABdhPJzmo2kVaO0teoqOt46A1/R+kt5G8p3jezRBHquWD+rDhCqurcBAW6KPrG7h2kWuiHcT+suCXg==
-X-Received: by 2002:a2e:a795:0:b0:24c:7f68:b382 with SMTP id c21-20020a2ea795000000b0024c7f68b382mr1118017ljf.494.1649793446359;
-        Tue, 12 Apr 2022 12:57:26 -0700 (PDT)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id g4-20020ac24d84000000b00464f178c0bbsm1843697lfe.96.2022.04.12.12.57.25
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OSSxqX8tPYg/tg3+HY2atLHtEG2+4vSWaPUPQtk8FFs=;
+        b=1oRDchZw9IpvPFE+chRv67lh+Tv6JDUsTwYghCfZLsfBDfssEnJ9gR0UrhQUK8hoFE
+         XN1obD7/C15xdZOfJxRNL/BUxyr1r5ZZslBwbNeKKywohTjyMHax0MnQiUYmWEawvFdT
+         LjfRUibTPjTlCy5GfesncmKagI6oWDh12hTTGKmtNBAyVVadm/1TotZXlGoPqByVTGrX
+         JxZC8TyraJ6vYHWAukVTsUlKWuiJCGJEKpyA0JOkZ7vVSHaB+4//NAumTqB0vpzT4fXu
+         QheBzCrTAeTSCVbMVnrj1U0d4PAQcmQCLAbrWHCBI8W5X+30yGR9Dd3M5wJ9383i+/vA
+         VfaQ==
+X-Gm-Message-State: AOAM5328Lpk0eRg2m81U90YZA8R58Sjni6bdYm08BhWD8G0727biodVQ
+        AN38iTsJL+7XHu+YfkJDMsg=
+X-Google-Smtp-Source: ABdhPJzPGA2WvKxT8VEv/QVQmi6hhSwsxGpUOGCJCjo4PLAHqRM02+IDxZUA/gXJEnbYAbOmKtXTVQ==
+X-Received: by 2002:a05:620a:4689:b0:67d:4c03:651c with SMTP id bq9-20020a05620a468900b0067d4c03651cmr4343932qkb.475.1649793562350;
+        Tue, 12 Apr 2022 12:59:22 -0700 (PDT)
+Received: from jaehee-ThinkPad-X1-Extreme.wework.com ([4.34.18.218])
+        by smtp.gmail.com with ESMTPSA id t7-20020a05622a01c700b002e1b3555c2fsm27270744qtw.26.2022.04.12.12.59.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 12:57:25 -0700 (PDT)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 446751030D2; Tue, 12 Apr 2022 22:58:59 +0300 (+03)
-Date:   Tue, 12 Apr 2022 22:58:59 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>,
-        Wanpeng Li <wanpengli@tencent.com>, jun.nakajima@intel.com,
-        kvm@vger.kernel.org, david@redhat.com, qemu-devel@nongnu.org,
-        "J . Bruce Fields" <bfields@fieldses.org>, linux-mm@kvack.org,
-        "H . Peter Anvin" <hpa@zytor.com>, ak@linux.intel.com,
-        Jonathan Corbet <corbet@lwn.net>,
-        Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
-        Hugh Dickins <hughd@google.com>,
-        Steven Price <steven.price@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Jim Mattson <jmattson@google.com>, dave.hansen@intel.com,
-        linux-api@vger.kernel.org, Jeff Layton <jlayton@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-fsdevel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Mike Rapoport <rppt@kernel.org>
-Subject: Re: [PATCH v5 00/13] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-Message-ID: <20220412195859.gjklfw3fz2lehpb5@box.shutemov.name>
-References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
- <CALCETrWk1Y47JQC=V028A7Tmc9776Oo4AjgwqRtd9K=XDh6=TA@mail.gmail.com>
+        Tue, 12 Apr 2022 12:59:21 -0700 (PDT)
+From:   Jaehee Park <jhpark1013@gmail.com>
+To:     johan@kernel.org
+Cc:     elder@kernel.org, gregkh@linuxfoundation.org,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev,
+        jhpark1013@gmail.com
+Subject: [PATCH v2 0/2] staging: greybus: fix warnings reported by checkpatch
+Date:   Tue, 12 Apr 2022 15:59:13 -0400
+Message-Id: <cover.1649793138.git.jhpark1013@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALCETrWk1Y47JQC=V028A7Tmc9776Oo4AjgwqRtd9K=XDh6=TA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 01:16:48PM -0700, Andy Lutomirski wrote:
-> On Thu, Mar 10, 2022 at 6:09 AM Chao Peng <chao.p.peng@linux.intel.com> wrote:
-> >
-> > This is the v5 of this series which tries to implement the fd-based KVM
-> > guest private memory. The patches are based on latest kvm/queue branch
-> > commit:
-> >
-> >   d5089416b7fb KVM: x86: Introduce KVM_CAP_DISABLE_QUIRKS2
-> 
-> Can this series be run and a VM booted without TDX?  A feature like
-> that might help push it forward.
+The first patch corrects a typo in a comment. The second patch removes
+an unneeded return.
 
-It would require enlightenment of the guest code. We have two options.
+Changes in version 2:
+- edited the subject to be more concise.
+- edited the log message to be more descriptive.
 
-Simple one is to limit enabling to the guest kernel, but it would require
-non-destructive conversion between shared->private memory. This does not
-seem to be compatible with current design.
 
-Other option is get memory private from time 0 of VM boot, but it requires
-modification of virtual BIOS to setup shared ranges as needed. I'm not
-sure if anybody volunteer to work on BIOS code to make it happen.
+Jaehee Park (2):
+  staging: greybus: correct typo in comment
+  staging: greybus: remove unneeded return
 
-Hm.
+ drivers/staging/greybus/arche-apb-ctrl.c | 2 +-
+ drivers/staging/greybus/audio_codec.c    | 1 -
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
 -- 
- Kirill A. Shutemov
+2.25.1
+

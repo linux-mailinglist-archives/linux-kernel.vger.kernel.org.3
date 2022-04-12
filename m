@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79BAC4FD493
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:04:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB9584FDA20
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356665AbiDLHjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:39:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45786 "EHLO
+        id S1382845AbiDLIeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:34:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352755AbiDLHOV (ORCPT
+        with ESMTP id S1356166AbiDLHeh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:14:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9AC3057B;
-        Mon, 11 Apr 2022 23:55:07 -0700 (PDT)
+        Tue, 12 Apr 2022 03:34:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6BCBA5;
+        Tue, 12 Apr 2022 00:09:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0FB1EB81B58;
-        Tue, 12 Apr 2022 06:55:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 640CEC385A8;
-        Tue, 12 Apr 2022 06:55:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E15FCB81B4D;
+        Tue, 12 Apr 2022 07:09:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36AC9C385AD;
+        Tue, 12 Apr 2022 07:09:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746504;
-        bh=vybQH3WAbxLgOAVrLtEeY+o9UeXLxHV9W7C9J12Q6Sk=;
+        s=korg; t=1649747341;
+        bh=hta54ajdwmJh2NBKG/lZbC1dBvxycmRgwzA6FsJy5NI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d34eIitu/6UdqSlkN/fXbl+gEusAJ88MURYl0K67/2UXIqfchrsjVYDfawHxIQCrq
-         RGtRYwnt4IvTl9RoJNNIwKcxFfCs122Ojy7lI8ELmUzFOqPeGEhXMkOqejK7zpUfOy
-         qtyU6Xmtz/jD5hxkajT8ypgRO3puGxHyx6cr2H00=
+        b=sZqJ7Bf0an92O1vFqLLVmswGcCgcS7FbWfnrOjlpscMbteS9D8NFSHpd1/JMJBlcK
+         IdeTi2spABwLx2PzLWKRyqHz3ZRB6edg4m571gHOyFtqBhtkfWvCVZz50qu3zxSjis
+         F+iE1Qt84NbBuScf0Rra/CDeeebxF/2u81ygPo7w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
-        Peter Gonda <pgonda@google.com>,
+        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
+        Yang Guang <yang.guang5@zte.com.cn>,
+        David Yang <davidcomponentone@gmail.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 005/285] KVM: SVM: Fix kvm_cache_regs.h inclusions for is_guest_mode()
+Subject: [PATCH 5.17 044/343] scsi: mvsas: Replace snprintf() with sysfs_emit()
 Date:   Tue, 12 Apr 2022 08:27:42 +0200
-Message-Id: <20220412062943.829667081@linuxfoundation.org>
+Message-Id: <20220412062952.379075022@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,54 +57,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Gonda <pgonda@google.com>
+From: Yang Guang <yang.guang5@zte.com.cn>
 
-[ Upstream commit 4a9e7b9ea252842bc8b14d495706ac6317fafd5d ]
+[ Upstream commit 0ad3867b0f13e45cfee5a1298bfd40eef096116c ]
 
-Include kvm_cache_regs.h to pick up the definition of is_guest_mode(),
-which is referenced by nested_svm_virtualize_tpr() in svm.h. Remove
-include from svm_onhpyerv.c which was done only because of lack of
-include in svm.h.
+coccinelle report:
+./drivers/scsi/mvsas/mv_init.c:699:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/mvsas/mv_init.c:747:8-16:
+WARNING: use scnprintf or sprintf
 
-Fixes: 883b0a91f41ab ("KVM: SVM: Move Nested SVM Implementation to nested.c")
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Sean Christopherson <seanjc@google.com>
-Cc: kvm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Peter Gonda <pgonda@google.com>
-Message-Id: <20220304161032.2270688-1-pgonda@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Use sysfs_emit() instead of scnprintf() or sprintf().
+
+Link: https://lore.kernel.org/r/c1711f7cf251730a8ceb5bdfc313bf85662b3395.1643182948.git.yang.guang5@zte.com.cn
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
+Signed-off-by: David Yang <davidcomponentone@gmail.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kvm/svm/svm.h          | 2 ++
- arch/x86/kvm/svm/svm_onhyperv.c | 1 -
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ drivers/scsi/mvsas/mv_init.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-index 1b460e539926..01d35efaa646 100644
---- a/arch/x86/kvm/svm/svm.h
-+++ b/arch/x86/kvm/svm/svm.h
-@@ -22,6 +22,8 @@
- #include <asm/svm.h>
- #include <asm/sev-common.h>
+diff --git a/drivers/scsi/mvsas/mv_init.c b/drivers/scsi/mvsas/mv_init.c
+index dcae2d4464f9..44df7c03aab8 100644
+--- a/drivers/scsi/mvsas/mv_init.c
++++ b/drivers/scsi/mvsas/mv_init.c
+@@ -696,7 +696,7 @@ static struct pci_driver mvs_pci_driver = {
+ static ssize_t driver_version_show(struct device *cdev,
+ 				   struct device_attribute *attr, char *buffer)
+ {
+-	return snprintf(buffer, PAGE_SIZE, "%s\n", DRV_VERSION);
++	return sysfs_emit(buffer, "%s\n", DRV_VERSION);
+ }
  
-+#include "kvm_cache_regs.h"
-+
- #define __sme_page_pa(x) __sme_set(page_to_pfn(x) << PAGE_SHIFT)
+ static DEVICE_ATTR_RO(driver_version);
+@@ -744,7 +744,7 @@ static ssize_t interrupt_coalescing_store(struct device *cdev,
+ static ssize_t interrupt_coalescing_show(struct device *cdev,
+ 					 struct device_attribute *attr, char *buffer)
+ {
+-	return snprintf(buffer, PAGE_SIZE, "%d\n", interrupt_coalescing);
++	return sysfs_emit(buffer, "%d\n", interrupt_coalescing);
+ }
  
- #define	IOPM_SIZE PAGE_SIZE * 3
-diff --git a/arch/x86/kvm/svm/svm_onhyperv.c b/arch/x86/kvm/svm/svm_onhyperv.c
-index 98aa981c04ec..8cdc62c74a96 100644
---- a/arch/x86/kvm/svm/svm_onhyperv.c
-+++ b/arch/x86/kvm/svm/svm_onhyperv.c
-@@ -4,7 +4,6 @@
-  */
- 
- #include <linux/kvm_host.h>
--#include "kvm_cache_regs.h"
- 
- #include <asm/mshyperv.h>
- 
+ static DEVICE_ATTR_RW(interrupt_coalescing);
 -- 
 2.35.1
 

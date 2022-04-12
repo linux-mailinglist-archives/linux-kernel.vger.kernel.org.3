@@ -2,311 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 778CD4FD6E6
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:25:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AE534FD6AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:24:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242006AbiDLJeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:34:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48500 "EHLO
+        id S1353145AbiDLJnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:43:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356426AbiDLJNe (ORCPT
+        with ESMTP id S1355838AbiDLJT2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 05:13:34 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B83592E9ED
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 01:23:37 -0700 (PDT)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 3B177E0004;
-        Tue, 12 Apr 2022 08:23:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1649751816;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8/BUvdkEcJIRkkGqjqjfSEkXhbiW0if/BHm1OExvqGA=;
-        b=P9hyo6f3qtS5V49850/VVxAN9C6ND+mD+VPXg0F4wUi3QSUxHf1VkVETXtlFvbqWnK5NRI
-        RNYR/5GFcxw7PqVyrR2TOGD/0FQytBYI+U7URWyvg4lwJsD9ilIgnG6NWTgg0K9gcqUOVM
-        6BsdqJClAalYBKBirbsuQYd1p2hgVJSDZIoKZbB3kz3l44DVGS9WHEUCSICyYaP/rro2jM
-        tiMBaSZ/83l5ffSITSmvssg3HtS9qqWCJ3D+7bFZs7XALLIefz9oO9HUDr3c3kXHIurgVU
-        9XxGovWl0RAi8WQIa5GwfPmZVKHc/GZqTt3M/VNaMAIA96rA2XI7vMABe86jsw==
-Date:   Tue, 12 Apr 2022 10:23:34 +0200
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH] drm: of: Improve error handling in bridge/panel detection
-Message-ID: <YlU3BsARY6GB6/qC@aptenodytes>
-References: <20220407093408.1478769-1-paul.kocialkowski@bootlin.com>
- <YlD4235/tGsQqede@yoga.lan>
+        Tue, 12 Apr 2022 05:19:28 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3BDA237EA;
+        Tue, 12 Apr 2022 01:25:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649751919; x=1681287919;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=wa0dgOa2bUIhS6s5MOqyz5XHWr88Riy5FGtqVsg0X1c=;
+  b=X0DHIx6KhYh7SORGo/j/iTV+5MUNI4Pk/R6WjU9QHndUKMrtpaqRxdYd
+   7gu4Crbk2bQ0ZAgJoj2FE9Dr1JFx/8+Zu4CNi7Jora4goadkyzoV+EtQx
+   8H0pUzrN3i6+swButjW2gmmxgiyQttOW2wITU3a+ZTJ8kJJ9Fi6S+vVT1
+   oeX0TDZ5sx4B3g/+eiQF9mLWK67UcgipMdk4JjOc7YSvBQCUyWar8P7xo
+   +ngnAHAG4BbEReAUdkyOjcdEpA+VASjar4XoY6HT7jKdOfNlZKo6kS18w
+   WvLVCc7ekjUP8QvIzJiKsYzIDVG9e2If8kEMiDsCy/L31DNFmQM/EyHLu
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="262495645"
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="262495645"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 01:25:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="699728288"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
+  by fmsmga001.fm.intel.com with ESMTP; 12 Apr 2022 01:25:10 -0700
+Date:   Tue, 12 Apr 2022 16:25:00 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     "Nikunj A. Dadhania" <nikunj@amd.com>
+Cc:     Vishal Annapurve <vannapurve@google.com>, x86@kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
+        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        shauh@kernel.org, yang.zhong@intel.com, drjones@redhat.com,
+        ricarkol@google.com, aaronlewis@google.com, wei.w.wang@intel.com,
+        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
+        jlayton@kernel.org, bfields@fieldses.org,
+        akpm@linux-foundation.org, yu.c.zhang@linux.intel.com,
+        jun.nakajima@intel.com, dave.hansen@intel.com,
+        michael.roth@amd.com, qperret@google.com, steven.price@arm.com,
+        ak@linux.intel.com, david@redhat.com, luto@kernel.org,
+        vbabka@suse.cz, marcorr@google.com, erdemaktas@google.com,
+        pgonda@google.com, seanjc@google.com, diviness@google.com
+Subject: Re: [RFC V1 PATCH 0/5] selftests: KVM: selftests for fd-based
+ approach of supporting private memory
+Message-ID: <20220412082500.GA7309@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220408210545.3915712-1-vannapurve@google.com>
+ <0790131c-95af-676f-c475-addd1191eacd@amd.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="RsThgsWvuAuvhE8K"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YlD4235/tGsQqede@yoga.lan>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <0790131c-95af-676f-c475-addd1191eacd@amd.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Apr 11, 2022 at 05:31:09PM +0530, Nikunj A. Dadhania wrote:
+> On 4/9/2022 2:35 AM, Vishal Annapurve wrote:
+> > This series implements selftests targeting the feature floated by Chao
+> > via:
+> > https://lore.kernel.org/linux-mm/20220310140911.50924-1-chao.p.peng@linux.intel.com/
+> > 
+> 
+> Thanks for working on this.
+> 
+> > Below changes aim to test the fd based approach for guest private memory
+> > in context of normal (non-confidential) VMs executing on non-confidential
+> > platforms.
+> > 
+> > Confidential platforms along with the confidentiality aware software
+> > stack support a notion of private/shared accesses from the confidential
+> > VMs.
+> > Generally, a bit in the GPA conveys the shared/private-ness of the
+> > access. Non-confidential platforms don't have a notion of private or
+> > shared accesses from the guest VMs. To support this notion,
+> > KVM_HC_MAP_GPA_RANGE
+> > is modified to allow marking an access from a VM within a GPA range as
+> > always shared or private. Any suggestions regarding implementing this ioctl
+> > alternatively/cleanly are appreciated.
+> > 
+> > priv_memfd_test.c file adds a suite of two basic selftests to access private
+> > memory from the guest via private/shared access and checking if the contents
+> > can be leaked to/accessed by vmm via shared memory view.
+> > 
+> > Test results:
+> > 1) PMPAT - PrivateMemoryPrivateAccess test passes
+> > 2) PMSAT - PrivateMemorySharedAccess test fails currently and needs more
+> > analysis to understand the reason of failure.
+> 
+> That could be because of the return code (*r = -1) from the KVM_EXIT_MEMORY_ERROR. 
+> This gets interpreted as -EPERM in the VMM when the vcpu_run exits.
+> 
+> 	+	vcpu->run->exit_reason = KVM_EXIT_MEMORY_ERROR;
+> 	+	vcpu->run->memory.flags = flags;
+> 	+	vcpu->run->memory.padding = 0;
+> 	+	vcpu->run->memory.gpa = fault->gfn << PAGE_SHIFT;
+> 	+	vcpu->run->memory.size = PAGE_SIZE;
+> 	+	fault->pfn = -1;
+> 	+	*r = -1;
+> 	+	return true;
 
---RsThgsWvuAuvhE8K
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+That's true. The current private mem patch treats KVM_EXIT_MEMORY_ERROR as error
+for KVM_RUN. That behavior needs to be discussed, but right now (v5) it hits the
+ASSERT in tools/testing/selftests/kvm/lib/kvm_util.c before you have chance to
+handle KVM_EXIT_MEMORY_ERROR in this patch series.
 
-Hi Bjorn,
+void vcpu_run(struct kvm_vm *vm, uint32_t vcpuid)
+{
+        int ret = _vcpu_run(vm, vcpuid);
+        TEST_ASSERT(ret == 0, "KVM_RUN IOCTL failed, "
+                "rc: %i errno: %i", ret, errno);
+}
 
-with a question for Jagan at the end.
+Thanks,
+Chao
 
-On Fri 08 Apr 22, 22:09, Bjorn Andersson wrote:
-> On Thu 07 Apr 04:34 CDT 2022, Paul Kocialkowski wrote:
->=20
-> > With the previous rework of drm_of_find_panel_or_bridge only
-> > -EPROBE_DEFER is returned while previous behavior allowed -ENODEV
-> > to be returned when the port/endpoint is either missing or unavailable.
-> >=20
-> > Make the default return code of the function -ENODEV to handle this and
-> > only return -EPROBE_DEFER in find_panel_or_bridge when the of device is
-> > available but not yet registered. Also return the error code whenever
-> > the remote node exists to avoid checking for child nodes.
-> >=20
-> > Checking child nodes could result in -EPROBE_DEFER returned by
-> > find_panel_or_bridge with an unrelated child node that would overwrite
-> > a legitimate -ENODEV from find_panel_or_bridge if the remote node from
-> > the of graph is unavailable. This happens because find_panel_or_bridge
-> > has no way to distinguish between a legitimate panel/bridge node that
-> > isn't yet registered and an unrelated node.
-> >=20
-> > Add comments around to clarify this behavior.
-> >=20
-> > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> > Fixes: 67bae5f28c89 ("drm: of: Properly try all possible cases for brid=
-ge/panel detection")
-> > Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > Cc: Thierry Reding <thierry.reding@gmail.com>
-> > Cc: Linus Walleij <linus.walleij@linaro.org>
-> >=20
->=20
-> Thanks for your patch, this does seem to solve the first problem I
-> reported, where I have a DisplayPort bridge with the following content:
->=20
-> sn65dsi86: bridge@2c {
-> 	compatible =3D "ti,sn65dsi86";
-> 	...;
->=20
-> 	ports {
-> 		port@0 {
-> 			reg =3D <0>;
-> 			sn65dsi86_in_a: endpoint {
-> 				remote-endpoint =3D <&dsi0_out>;
-> 			};
-> 		};
->=20
-> 		port@1 {
-> 			reg =3D <1>;
-> 			sn65dsi86_out: endpoint {
-> 				remote-endpoint =3D <&panel_in_edp>;
-> 			};
-> 		};
-> 	};
->=20
-> 	aux-bus {
-> 		panel: panel {
-> 			compatible =3D "boe,nv133fhm-n61";
-> 			backlight =3D <&backlight>;
->=20
-> 			port {
-> 				panel_in_edp: endpoint {
-> 					remote-endpoint =3D <&sn65dsi86_out>;
-> 				};
-> 			};
-> 		};
-> 	};
-> };
->=20
-> The code now finds a match on of_graph_get_remote_node() and returns 0
-> or -EPROBE_DEFER from find_panel_or_bridge(?, 1, ?). And we return this,
-> before failing to resolve the "aux-bus" as a panel.
-
-Sounds good!
-
-> But my other case still doesn't work:
->=20
-> mdss_dp: displayport-controller@ae90000 {
-> 	compatible =3D "qcom,sm8350-dp";
-> 	...;
-> 	operating-points-v2 =3D <&dp_opp_table>;
->=20
-> 	ports {
-> 		port@0 {
-> 			reg =3D <0>;
-> 			dp_in: endpoint {
-> 				remote-endpoint =3D <&dpu_intf0_out>;
-> 			};
-> 		};
-> 	};
->=20
-> 	dp_opp_table: opp-table {
-> 		...
-> 	};
-> };
->=20
-> port@1 may be a reference to a DisplayPort panel, but in this particular
-> case the output is a USB Type-c connector (compatible
-> "usb-c-connector"). So I'm not able to specify this link, given that it
-> will not be a bridge or panel...ever...
-
-So in this case you have one port that can go either to a panel or a connec=
-tor.
-Using drm_of_find_panel_or_bridge will always return -EPROBE_DEFER for the
-connector (I suspect this was also the previous behavior) so I think you sh=
-ould
-first check (in the driver) if the remote is a type-c connector
-(of_graph_get_remote_node +  of_device_is_compatible) and use
-drm_of_find_panel_or_bridge if not.
-
-> So this does not find a match on of_graph_get_remote_node(np, 1, ?), so
-> we move ahead and look at all children not named "port" or "ports". We
-> find the opp-table and concludes that this not a panel. At this point
-> ret is overwritten and we end up returning -EPROBE_DEFER.
-
-So if I understand correctly, port@1 is not defined when the issue happens
-and it returns -EPROBE_DEFER like you described.
-
-We could step things up a notch and return -ENODEV if of_graph_is_present
-but of_graph_get_remote_node returns NULL. The idea would be that if the of
-graph is present, the child node mechanism cannot be used.
-
-> I think it's worth reverting back to the explicit of_graph link to the
-> panel, even in the case that it's an immediate child node. It avoids the
-> problem of specifying that all future display nodes must only have
-> children of type ports, port or panel. We might be able to come up with
-> something that works for my case, but it seems fragile and not very
-> future proof. The explicit port is a little bit clunky, but it doesn't
-> have this problem.
-
-I think in any case we really don't want to specify that display nodes cann=
-ot
-have any other child than ports, port or a direct panel/bridge. I know that
-a number of bindings already specify different types of child nodes.
-
-I am absolutly in favor of reverting the child node mechanism, but it might
-be too late already if a binding was already defined to work this way.
-Of course we should actively discourage anyone to use it in a new binding.
-
-Jagan, can you prove some insight on why this mechanism was needed in the f=
-irst
-place and if we can get rid of it without breaking any active binding?
-
-Cheers,
-
-Paul
-
-> Regards,
-> Bjorn
->=20
-> > ---
-> >  drivers/gpu/drm/drm_of.c | 23 ++++++++++++++++++-----
-> >  1 file changed, 18 insertions(+), 5 deletions(-)
-> >=20
-> > diff --git a/drivers/gpu/drm/drm_of.c b/drivers/gpu/drm/drm_of.c
-> > index 8716da6369a6..97ea9d2016ff 100644
-> > --- a/drivers/gpu/drm/drm_of.c
-> > +++ b/drivers/gpu/drm/drm_of.c
-> > @@ -223,6 +223,9 @@ static int find_panel_or_bridge(struct device_node =
-*node,
-> >  				struct drm_panel **panel,
-> >  				struct drm_bridge **bridge)
-> >  {
-> > +	if (!of_device_is_available(node))
-> > +		return -ENODEV;
-> > +
-> >  	if (panel) {
-> >  		*panel =3D of_drm_find_panel(node);
-> >  		if (!IS_ERR(*panel))
-> > @@ -265,7 +268,7 @@ int drm_of_find_panel_or_bridge(const struct device=
-_node *np,
-> >  				struct drm_bridge **bridge)
-> >  {
-> >  	struct device_node *node;
-> > -	int ret;
-> > +	int ret =3D -ENODEV;
-> > =20
-> >  	if (!panel && !bridge)
-> >  		return -EINVAL;
-> > @@ -282,8 +285,12 @@ int drm_of_find_panel_or_bridge(const struct devic=
-e_node *np,
-> >  			ret =3D find_panel_or_bridge(node, panel, bridge);
-> >  			of_node_put(node);
-> > =20
-> > -			if (!ret)
-> > -				return 0;
-> > +			/*
-> > +			 * If the graph/remote node is present we consider it
-> > +			 * to be the legitimate candidate here and return
-> > +			 * whatever code we got from find_panel_or_bridge.
-> > +			 */
-> > +			return ret;
-> >  		}
-> >  	}
-> > =20
-> > @@ -296,12 +303,18 @@ int drm_of_find_panel_or_bridge(const struct devi=
-ce_node *np,
-> >  		ret =3D find_panel_or_bridge(node, panel, bridge);
-> >  		of_node_put(node);
-> > =20
-> > -		/* Stop at the first found occurrence. */
-> > +		/*
-> > +		 * Note that an unrelated (available) child node will cause
-> > +		 * find_panel_or_bridge to return -EPROBE_DEFER because there
-> > +		 * is no way to distinguish the node from a legitimate
-> > +		 * panel/bridge that didn't register yet. Keep iterating nodes
-> > +		 * and only return on the first found occurrence.
-> > +		 */
-> >  		if (!ret)
-> >  			return 0;
-> >  	}
-> > =20
-> > -	return -EPROBE_DEFER;
-> > +	return ret;
-> >  }
-> >  EXPORT_SYMBOL_GPL(drm_of_find_panel_or_bridge);
-> > =20
-> > --=20
-> > 2.35.1
-> >=20
-
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
---RsThgsWvuAuvhE8K
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmJVNwYACgkQ3cLmz3+f
-v9En1ggAjUXTG2lHoEKBdruRe7Dd8kzQrav2FV13zPsiv7nYC1CennWfaAqPWUDU
-yqg5ae+zHwP3TMmhFqzp1eHfNJ1PQ5+XVW7ANDcig400QKeRuIMqVBVybFubJLP/
-oCB8oP1h3S6bMk7nDRM8oHsIUz8bHdxeBzGncKzMLNlUvFkAgTYyl0Yaj6HZ/S5E
-+VxjDArY4FpVz8GvOpf1UNZgTtfkSl1K+mQ6J0/mIifY0S/BAw70GosBsvGgSqM2
-AraPkUK3tcj8M6HZIs2sW5Q0FnNZiDIxmk9IClyBYCG9HHlmo9nV8su/lQ3Po+vz
-EFicWeA45ovXso3DlCt+lRQz4BQI/A==
-=FCXc
------END PGP SIGNATURE-----
-
---RsThgsWvuAuvhE8K--
+> 
+> 
+> Regards
+> Nikunj
+> 
+> [1] https://lore.kernel.org/all/20220310140911.50924-10-chao.p.peng@linux.intel.com/#t

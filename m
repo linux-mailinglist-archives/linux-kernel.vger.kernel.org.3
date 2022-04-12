@@ -2,72 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08B544FC943
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 02:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 676CA4FC95C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 02:41:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241355AbiDLAcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 20:32:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43642 "EHLO
+        id S241502AbiDLAnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 20:43:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbiDLAcA (ORCPT
+        with ESMTP id S229882AbiDLAnc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 20:32:00 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3173223BD5;
-        Mon, 11 Apr 2022 17:29:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649723384; x=1681259384;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=sTXpV5DW8lvf+IzZXjWtfGRdgfLj3MQBE9SGJw2TAZQ=;
-  b=Y/yrn0LLSx6CsqCRCOeF8pBJokYmVJA1Gi0LGH8d4oA1fchN877dnoP0
-   5Zptp/aUBnfuniTp+dSF/MO1XN/xf0prdP0HPvfbjcDrBylOaNq/fkL/n
-   HIT+wcBzLPND6XGSLa4sZmQosblV1qWkcfTMyN5QxKQ0rKNMFL1TloR5S
-   E=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 11 Apr 2022 17:29:44 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 17:29:43 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 11 Apr 2022 17:29:22 -0700
-Received: from [10.111.166.27] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 11 Apr
- 2022 17:29:19 -0700
-Message-ID: <dcdae9ca-1896-e632-17f3-ffd4de7c9c1b@quicinc.com>
-Date:   Mon, 11 Apr 2022 17:29:17 -0700
+        Mon, 11 Apr 2022 20:43:32 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6260CAE66
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 17:41:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649724076; x=1681260076;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NVIl9aheGBGH4Yb5cPFMiyNZl855rP0pfHbJJc7xNsQ=;
+  b=btjU6Lh7RSgzdpYmdKFwp6AcOQDbQLS2zw7LFwvvIIADjzOpBnK3dAbM
+   zvo2Wrb3TihdXbxKaSlGivqWXP2RD9bWOkCmVHrzR73DM+8f0HO9+l3IE
+   driRgJS7WCSFfcuyHjutH4Y6QG6XnPw735CP1p2AUntlfkwrSR23aUVu3
+   m0cZs3D7DDQNvLhI6wGX8A9zlh1gI0ojY/O4IdnD3g1dukfpgarx7gmCb
+   oLMcfGibGVAzegu8xnhSAS7d/JFI7ExAYFKrC9SaSbBGvF5+TKxCgRuiO
+   YId3xKOBWoBu2u/Joifgz+XfKEFKxi4OtTOS0m2AgA40x1By6Htbl7DK9
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="262426918"
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="262426918"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 17:41:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="526222961"
+Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 11 Apr 2022 17:41:14 -0700
+Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ne4an-0002NG-KW;
+        Tue, 12 Apr 2022 00:41:13 +0000
+Date:   Tue, 12 Apr 2022 08:41:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiri Pirko <jiri@nvidia.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [jpirko-mlxsw:jiri_devel_linecards 91/93]
+ drivers/net/netdevsim/dev.c:119:57: error: passing argument 4 of
+ 'devlink_linecard_device_create' from incompatible pointer type
+Message-ID: <202204120800.yyqLXueA-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH] drm/msm/dp: stop event kernel thread when DP unbind
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>, <agross@kernel.org>,
-        <airlied@linux.ie>, <bjorn.andersson@linaro.org>,
-        <daniel@ffwll.ch>, <robdclark@gmail.com>, <sean@poorly.run>,
-        <vkoul@kernel.org>
-CC:     <quic_aravindh@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1649722129-12542-1-git-send-email-quic_khsieh@quicinc.com>
- <CAE-0n53zYpqJL9GCoqZRwMptCne+4Dk4thz-7rCDac7H98dm=A@mail.gmail.com>
- <7529d921-0b12-d162-416d-3542933a0aed@linaro.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <7529d921-0b12-d162-416d-3542933a0aed@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,99 +63,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/jpirko/linux_mlxsw jiri_devel_linecards
+head:   e31049bc6a06f24c077e61e74b1bf1f137572726
+commit: ac7fd66c0d376eb5bfe801b1a2226598705a6b6d [91/93] TMP: devlink device type
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220412/202204120800.yyqLXueA-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/jpirko/linux_mlxsw/commit/ac7fd66c0d376eb5bfe801b1a2226598705a6b6d
+        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
+        git fetch --no-tags jpirko-mlxsw jiri_devel_linecards
+        git checkout ac7fd66c0d376eb5bfe801b1a2226598705a6b6d
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/net/netdevsim/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/net/netdevsim/dev.c: In function 'nsim_dev_linecard_devices_create':
+>> drivers/net/netdevsim/dev.c:119:57: error: passing argument 4 of 'devlink_linecard_device_create' from incompatible pointer type [-Werror=incompatible-pointer-types]
+     119 |                                                         nsim_dev_linecard);
+         |                                                         ^~~~~~~~~~~~~~~~~
+         |                                                         |
+         |                                                         struct nsim_dev_linecard *
+   In file included from drivers/net/netdevsim/dev.c:29:
+   include/net/devlink.h:1610:44: note: expected 'const char *' but argument is of type 'struct nsim_dev_linecard *'
+    1610 |                                const char *type, void *priv);
+         |                                ~~~~~~~~~~~~^~~~
+>> drivers/net/netdevsim/dev.c:117:26: error: too few arguments to function 'devlink_linecard_device_create'
+     117 |                 device = devlink_linecard_device_create(nsim_dev_linecard->devlink_linecard,
+         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/net/netdevsim/dev.c:29:
+   include/net/devlink.h:1607:1: note: declared here
+    1607 | devlink_linecard_device_create(struct devlink_linecard *linecard,
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/uapi/linux/posix_types.h:5,
+                    from include/uapi/linux/types.h:14,
+                    from include/linux/types.h:6,
+                    from include/linux/kasan-checks.h:5,
+                    from include/asm-generic/rwonce.h:26,
+                    from ./arch/powerpc/include/generated/asm/rwonce.h:1,
+                    from include/linux/compiler.h:248,
+                    from include/linux/build_bug.h:5,
+                    from include/linux/container_of.h:5,
+                    from include/linux/list.h:5,
+                    from include/linux/wait.h:7,
+                    from include/linux/wait_bit.h:8,
+                    from include/linux/fs.h:6,
+                    from include/linux/debugfs.h:15,
+                    from drivers/net/netdevsim/dev.c:18:
+   drivers/net/netdevsim/dev.c: In function 'nsim_esw_switchdev_enable':
+   include/linux/stddef.h:8:14: warning: passing argument 3 of '__nsim_dev_port_add' makes integer from pointer without a cast [-Wint-conversion]
+       8 | #define NULL ((void *)0)
+         |              ^~~~~~~~~~~
+         |              |
+         |              void *
+   drivers/net/netdevsim/dev.c:870:43: note: in expansion of macro 'NULL'
+     870 |                                           NULL, i);
+         |                                           ^~~~
+   drivers/net/netdevsim/dev.c:845:34: note: expected 'unsigned int' but argument is of type 'void *'
+     845 |                     unsigned int port_index);
+         |                     ~~~~~~~~~~~~~^~~~~~~~~~
+   drivers/net/netdevsim/dev.c:869:23: error: too many arguments to function '__nsim_dev_port_add'
+     869 |                 err = __nsim_dev_port_add(nsim_dev, NSIM_DEV_PORT_TYPE_VF,
+         |                       ^~~~~~~~~~~~~~~~~~~
+   drivers/net/netdevsim/dev.c:844:1: note: declared here
+     844 | __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
+         | ^~~~~~~~~~~~~~~~~~~
+   drivers/net/netdevsim/dev.c:883:25: error: too many arguments to function '__nsim_dev_port_del'
+     883 |                         __nsim_dev_port_del(nsim_dev_port, NULL, i);
+         |                         ^~~~~~~~~~~~~~~~~~~
+   drivers/net/netdevsim/dev.c:846:13: note: declared here
+     846 | static void __nsim_dev_port_del(struct nsim_dev_port *nsim_dev_port);
+         |             ^~~~~~~~~~~~~~~~~~~
+   drivers/net/netdevsim/dev.c: At top level:
+   drivers/net/netdevsim/dev.c:1625:12: error: conflicting types for '__nsim_dev_port_add'; have 'int(struct nsim_dev *, enum nsim_dev_port_type,  struct nsim_dev_linecard *, unsigned int)'
+    1625 | static int __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
+         |            ^~~~~~~~~~~~~~~~~~~
+   drivers/net/netdevsim/dev.c:844:1: note: previous declaration of '__nsim_dev_port_add' with type 'int(struct nsim_dev *, enum nsim_dev_port_type,  unsigned int)'
+     844 | __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
+         | ^~~~~~~~~~~~~~~~~~~
+   drivers/net/netdevsim/dev.c:844:1: warning: '__nsim_dev_port_add' used but never defined
+   cc1: some warnings being treated as errors
 
 
-On 4/11/2022 5:22 PM, Dmitry Baryshkov wrote:
-> On 12/04/2022 03:21, Stephen Boyd wrote:
->> Quoting Kuogee Hsieh (2022-04-11 17:08:49)
->>> Current DP driver implementation, event thread is kept running
->>> after DP display is unbind. This patch fix this problem by disabling
->>> DP irq and stop event thread to exit gracefully at dp_display_unbind().
->>>
->>> Fixes: e91e3065a806 ("drm/msm/dp: Add DP compliance tests on 
->>> Snapdragon Chipsets")
->>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->>
->> Should add a Reported-by tag from Dmitry here.
->>
->>> ---
->>>   drivers/gpu/drm/msm/dp/dp_display.c | 24 ++++++++++++++++++++++--
->>>   1 file changed, 22 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c 
->>> b/drivers/gpu/drm/msm/dp/dp_display.c
->>> index 01453db..fa1ef8e 100644
->>> --- a/drivers/gpu/drm/msm/dp/dp_display.c
->>> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
->>> @@ -273,6 +274,8 @@ static int dp_display_bind(struct device *dev, 
->>> struct device *master,
->>>          return rc;
->>>   }
->>>
->>> +static void dp_hpd_event_stop(struct dp_display_private *dp_priv);
->>
->> Why can't the function be defined here?
->>
->>> +
->>>   static void dp_display_unbind(struct device *dev, struct device 
->>> *master,
->>>                                void *data)
->>>   {
->>> @@ -280,6 +283,8 @@ static void dp_display_unbind(struct device *dev, 
->>> struct device *master,
->>>          struct drm_device *drm = dev_get_drvdata(master);
->>>          struct msm_drm_private *priv = drm->dev_private;
->>>
->>> +       disable_irq(dp->irq);
->>> +       dp_hpd_event_stop(dp);
->>>          dp_power_client_deinit(dp->power);
->>>          dp_aux_unregister(dp->aux);
->>>          priv->dp[dp->id] = NULL;
->>> @@ -1054,7 +1059,7 @@ static int hpd_event_thread(void *data)
->>>
->>>          dp_priv = (struct dp_display_private *)data;
->>>
->>> -       while (1) {
->>> +       while (!kthread_should_stop()) {
->>>                  if (timeout_mode) {
->>>                          wait_event_timeout(dp_priv->event_q,
->>>                                  (dp_priv->event_pndx == 
->>> dp_priv->event_gndx),
->>> @@ -1137,7 +1142,22 @@ static void dp_hpd_event_setup(struct 
->>> dp_display_private *dp_priv)
->>>          init_waitqueue_head(&dp_priv->event_q);
->>>          spin_lock_init(&dp_priv->event_lock);
->>>
->>> -       kthread_run(hpd_event_thread, dp_priv, "dp_hpd_handler");
->>> +       dp_priv->ev_tsk = kthread_run(hpd_event_thread, dp_priv, 
->>> "dp_hpd_handler");
->>> +
->>> +       if (IS_ERR(dp_priv->ev_tsk))
->>> +               DRM_ERROR("failed to create DP event thread\n");
->>
->> Why can't we error out? Why can't this kthread be started in probe?
-> 
-> Just my 2c. I don't think starting it in probe is a good idea. The 
-> driver uses components, so, in my opinion, the thread should be started 
-> from bind and stopped in unbind.
+vim +/devlink_linecard_device_create +119 drivers/net/netdevsim/dev.c
 
-Yes, I also agree it should be started in bind and stopped in unbind.
+18c8e54cc09123 Jiri Pirko 2021-05-05  100  
+18c8e54cc09123 Jiri Pirko 2021-05-05  101  static int
+18c8e54cc09123 Jiri Pirko 2021-05-05  102  nsim_dev_linecard_devices_create(struct nsim_dev_linecard *nsim_dev_linecard)
+18c8e54cc09123 Jiri Pirko 2021-05-05  103  {
+18c8e54cc09123 Jiri Pirko 2021-05-05  104  	struct devlink_linecard_device *device;
+18c8e54cc09123 Jiri Pirko 2021-05-05  105  	char *component_name;
+18c8e54cc09123 Jiri Pirko 2021-05-05  106  	int err;
+18c8e54cc09123 Jiri Pirko 2021-05-05  107  	int i;
+18c8e54cc09123 Jiri Pirko 2021-05-05  108  
+18c8e54cc09123 Jiri Pirko 2021-05-05  109  	snprintf(nsim_dev_linecard->device_component_name,
+18c8e54cc09123 Jiri Pirko 2021-05-05  110  		 sizeof(nsim_dev_linecard->device_component_name), "lc%u_dev0",
+18c8e54cc09123 Jiri Pirko 2021-05-05  111  		 nsim_dev_linecard->linecard_index);
+18c8e54cc09123 Jiri Pirko 2021-05-05  112  	component_name = nsim_dev_linecard->device_component_name;
+18c8e54cc09123 Jiri Pirko 2021-05-05  113  
+18c8e54cc09123 Jiri Pirko 2021-05-05  114  	for (i = 0; i < NSIM_DEV_LINECARD_DEVICE_COUNT; i++) {
+18c8e54cc09123 Jiri Pirko 2021-05-05  115  		if (i > 0)
+18c8e54cc09123 Jiri Pirko 2021-05-05  116  			component_name = NULL;
+18c8e54cc09123 Jiri Pirko 2021-05-05 @117  		device = devlink_linecard_device_create(nsim_dev_linecard->devlink_linecard,
+18c8e54cc09123 Jiri Pirko 2021-05-05  118  							i, component_name,
+18c8e54cc09123 Jiri Pirko 2021-05-05 @119  							nsim_dev_linecard);
+18c8e54cc09123 Jiri Pirko 2021-05-05  120  		if (IS_ERR(device)) {
+18c8e54cc09123 Jiri Pirko 2021-05-05  121  			err = PTR_ERR(device);
+18c8e54cc09123 Jiri Pirko 2021-05-05  122  			goto rollback;
+18c8e54cc09123 Jiri Pirko 2021-05-05  123  		}
+18c8e54cc09123 Jiri Pirko 2021-05-05  124  		nsim_dev_linecard->devlink_device[i] = device;
+18c8e54cc09123 Jiri Pirko 2021-05-05  125  	}
+18c8e54cc09123 Jiri Pirko 2021-05-05  126  	return 0;
+18c8e54cc09123 Jiri Pirko 2021-05-05  127  
+18c8e54cc09123 Jiri Pirko 2021-05-05  128  rollback:
+18c8e54cc09123 Jiri Pirko 2021-05-05  129  	for (i--; i >= 0; i--) {
+18c8e54cc09123 Jiri Pirko 2021-05-05  130  		device = nsim_dev_linecard->devlink_device[i];
+18c8e54cc09123 Jiri Pirko 2021-05-05  131  		devlink_linecard_device_destroy(nsim_dev_linecard->devlink_linecard,
+18c8e54cc09123 Jiri Pirko 2021-05-05  132  						device);
+18c8e54cc09123 Jiri Pirko 2021-05-05  133  	}
+18c8e54cc09123 Jiri Pirko 2021-05-05  134  	return err;
+18c8e54cc09123 Jiri Pirko 2021-05-05  135  }
+18c8e54cc09123 Jiri Pirko 2021-05-05  136  
 
-> 
->>
->>> +}
->>> +
->>> +static void dp_hpd_event_stop(struct dp_display_private *dp_priv)
->>> +{
->>> +       if (IS_ERR(dp_priv->ev_tsk))
->>> +               return;
->>> +
->>> +       kthread_stop(dp_priv->ev_tsk);
->>> +
->>> +       /* reset event q to empty */
->>> +       dp_priv->event_gndx = 0;
->>> +       dp_priv->event_pndx = 0;
->>>   }
->>>
-> 
-> 
+:::::: The code at line 119 was first introduced by commit
+:::::: 18c8e54cc09123e6810b00d12879e2428dc9fbb9 netdevsim: create couple of devices on each linecard
+
+:::::: TO: Jiri Pirko <jiri@nvidia.com>
+:::::: CC: Jiri Pirko <jiri@nvidia.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

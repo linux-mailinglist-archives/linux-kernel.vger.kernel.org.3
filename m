@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EAED4FCFE6
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 08:37:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8D0B4FCFE5
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 08:37:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350038AbiDLGjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 02:39:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50984 "EHLO
+        id S244684AbiDLGj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 02:39:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350300AbiDLGhz (ORCPT
+        with ESMTP id S1350277AbiDLGhw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:37:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C2E15806;
-        Mon, 11 Apr 2022 23:34:30 -0700 (PDT)
+        Tue, 12 Apr 2022 02:37:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46EA15721;
+        Mon, 11 Apr 2022 23:34:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 666CEB81B41;
-        Tue, 12 Apr 2022 06:34:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7922C385A1;
-        Tue, 12 Apr 2022 06:34:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5ABEE618D8;
+        Tue, 12 Apr 2022 06:34:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F575C385A6;
+        Tue, 12 Apr 2022 06:34:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649745268;
-        bh=enVvnMtcgg+Dhv+sSDmzEWyHaumiPA0dfrQnXBxHQJY=;
+        s=korg; t=1649745270;
+        bh=0l+amLxzSau1PGSEKccIi2vJU/eUeCG3dGGtp1SbA5o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LiFzEht6VLV4datqm2nWbKKODuF+wGh8Pw1Ezcq9q4Y6BqT1hCKEHy5Pg9w9OSvra
-         VCRX664e+M6gKFWcifUCI9n/ha6wjefYTYIonaRcJ3fANy/ij4+oBplr9yt19O6y2l
-         /laShUj8ktN5G23V5KLJkp9ku97QD00zIknhAXgk=
+        b=sYMHXp2e8Ti+si5hF2ODDTAD+rjaBIplJRU7Jf/Q9HHfBvyZAk/uDLHULUPCD+qls
+         Au9exYgry9J90DZKG8O95YcDJCdlnevzVRaLCV7Rrf7s9Z3Kb3DQjf2aXll0MN4cuE
+         d9xAVF+G6PT65EeDBF4UvXyANO6sRDYDI9wLrd9g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhang Yi <yi.zhang@huawei.com>,
-        Mike Snitzer <snitzer@redhat.com>,
+        stable@vger.kernel.org, Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 038/171] dm: requeue IO if mapping table not yet available
-Date:   Tue, 12 Apr 2022 08:28:49 +0200
-Message-Id: <20220412062928.989617235@linuxfoundation.org>
+Subject: [PATCH 5.10 039/171] drm/amdkfd: make CRAT table missing message informational only
+Date:   Tue, 12 Apr 2022 08:28:50 +0200
+Message-Id: <20220412062929.018257333@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062927.870347203@linuxfoundation.org>
 References: <20220412062927.870347203@linuxfoundation.org>
@@ -55,68 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Snitzer <snitzer@redhat.com>
+From: Alex Deucher <alexander.deucher@amd.com>
 
-[ Upstream commit fa247089de9936a46e290d4724cb5f0b845600f5 ]
+[ Upstream commit 9dff13f9edf755a15f6507874185a3290c1ae8bb ]
 
-Update both bio-based and request-based DM to requeue IO if the
-mapping table not available.
+The driver has a fallback so make the message informational
+rather than a warning. The driver has a fallback if the
+Component Resource Association Table (CRAT) is missing, so
+make this informational now.
 
-This race of IO being submitted before the DM device ready is so
-narrow, yet possible for initial table load given that the DM device's
-request_queue is created prior, that it best to requeue IO to handle
-this unlikely case.
-
-Reported-by: Zhang Yi <yi.zhang@huawei.com>
-Signed-off-by: Mike Snitzer <snitzer@redhat.com>
+Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/1906
+Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/md/dm-rq.c |  7 ++++++-
- drivers/md/dm.c    | 11 +++--------
- 2 files changed, 9 insertions(+), 9 deletions(-)
+ drivers/gpu/drm/amd/amdkfd/kfd_crat.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/md/dm-rq.c b/drivers/md/dm-rq.c
-index b1e867feb4f6..4833f4b20b2c 100644
---- a/drivers/md/dm-rq.c
-+++ b/drivers/md/dm-rq.c
-@@ -492,8 +492,13 @@ static blk_status_t dm_mq_queue_rq(struct blk_mq_hw_ctx *hctx,
- 
- 	if (unlikely(!ti)) {
- 		int srcu_idx;
--		struct dm_table *map = dm_get_live_table(md, &srcu_idx);
-+		struct dm_table *map;
- 
-+		map = dm_get_live_table(md, &srcu_idx);
-+		if (unlikely(!map)) {
-+			dm_put_live_table(md, srcu_idx);
-+			return BLK_STS_RESOURCE;
-+		}
- 		ti = dm_table_find_target(map, 0);
- 		dm_put_live_table(md, srcu_idx);
- 	}
-diff --git a/drivers/md/dm.c b/drivers/md/dm.c
-index 6030cba5b038..2836d44094ab 100644
---- a/drivers/md/dm.c
-+++ b/drivers/md/dm.c
-@@ -1692,15 +1692,10 @@ static blk_qc_t dm_submit_bio(struct bio *bio)
- 	struct dm_table *map;
- 
- 	map = dm_get_live_table(md, &srcu_idx);
--	if (unlikely(!map)) {
--		DMERR_LIMIT("%s: mapping table unavailable, erroring io",
--			    dm_device_name(md));
--		bio_io_error(bio);
--		goto out;
--	}
- 
--	/* If suspended, queue this IO for later */
--	if (unlikely(test_bit(DMF_BLOCK_IO_FOR_SUSPEND, &md->flags))) {
-+	/* If suspended, or map not yet available, queue this IO for later */
-+	if (unlikely(test_bit(DMF_BLOCK_IO_FOR_SUSPEND, &md->flags)) ||
-+	    unlikely(!map)) {
- 		if (bio->bi_opf & REQ_NOWAIT)
- 			bio_wouldblock_error(bio);
- 		else if (bio->bi_opf & REQ_RAHEAD)
+diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_crat.c b/drivers/gpu/drm/amd/amdkfd/kfd_crat.c
+index 31d793ee0836..86b4dadf772e 100644
+--- a/drivers/gpu/drm/amd/amdkfd/kfd_crat.c
++++ b/drivers/gpu/drm/amd/amdkfd/kfd_crat.c
+@@ -784,7 +784,7 @@ int kfd_create_crat_image_acpi(void **crat_image, size_t *size)
+ 	/* Fetch the CRAT table from ACPI */
+ 	status = acpi_get_table(CRAT_SIGNATURE, 0, &crat_table);
+ 	if (status == AE_NOT_FOUND) {
+-		pr_warn("CRAT table not found\n");
++		pr_info("CRAT table not found\n");
+ 		return -ENODATA;
+ 	} else if (ACPI_FAILURE(status)) {
+ 		const char *err = acpi_format_exception(status);
 -- 
 2.35.1
 

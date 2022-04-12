@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E28284FD8BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:37:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EB164FD902
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:38:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388547AbiDLJWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49136 "EHLO
+        id S1348113AbiDLH2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:28:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358192AbiDLHlK (ORCPT
+        with ESMTP id S1351749AbiDLHMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:41:10 -0400
+        Tue, 12 Apr 2022 03:12:53 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA98424B8;
-        Tue, 12 Apr 2022 00:17:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E402E1706C;
+        Mon, 11 Apr 2022 23:52:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 34920B81B60;
-        Tue, 12 Apr 2022 07:17:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A47F4C385A1;
-        Tue, 12 Apr 2022 07:17:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9B6E8B81B47;
+        Tue, 12 Apr 2022 06:52:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5E8CC385A1;
+        Tue, 12 Apr 2022 06:52:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747849;
-        bh=CYdSPQWbDPzISEWdJ44T/uOqTRiv53C+ON7DnWkJjF0=;
+        s=korg; t=1649746328;
+        bh=McsC9ZufxaUuzydXB9cDgdwI6fwZUeI+va5tpXteTiA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fwYe9ufFGFVsAbjDXw2+MG6JR1uT5xGQz1zyQjq26eejVXXNNqjGYWowmtiXDEzB6
-         XpyWUuXZu+bf9STpV5J6vOkkwM5hq0TTYdXPoHA4B30R9MrmucNyWJm0SZj0kObzog
-         3XJTo1O2RYeUIfgGOnPhe0KpGeDVMRSxZn8oufxU=
+        b=jwi58G6e9gDVH2+2YNUGqg/qK+Bb3aHEuGIFD5W2rX/7VYPd1aMTfwbrbmi0GiCK5
+         2ixgvjxlk+fEEPLh7jKs7R1Vi2iW/PYvZWVq/pmCmJteqx6BIfqZxgoLycPbZLuscW
+         K+ELkd7L7SwpIm17fB9nW+D2B4fqbUQDu6iJwWUE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Aharon Landau <aharonl@nvidia.com>,
-        Shay Drory <shayd@nvidia.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 227/343] RDMA/mlx5: Add a missing update of cache->last_add
-Date:   Tue, 12 Apr 2022 08:30:45 +0200
-Message-Id: <20220412062957.890059764@linuxfoundation.org>
+        stable@vger.kernel.org, Paul Menzel <pmenzel@molgen.mpg.de>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 5.15 243/277] drm/amdgpu/smu10: fix SoC/fclk units in auto mode
+Date:   Tue, 12 Apr 2022 08:30:46 +0200
+Message-Id: <20220412062949.075934516@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,38 +54,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aharon Landau <aharonl@nvidia.com>
+From: Alex Deucher <alexander.deucher@amd.com>
 
-[ Upstream commit 1d735eeee63a0beb65180ca0224f239cc0c9f804 ]
+commit 2f25d8ce09b7ba5d769c132ba3d4eb84a941d2cb upstream.
 
-Update cache->last_add when returning an MR to the cache so that the cache
-work won't remove it.
+SMU takes clock limits in Mhz units.  socclk and fclk were
+using 10 khz units in some cases.  Switch to Mhz units.
+Fixes higher than required SoC clocks.
 
-Fixes: b9358bdbc713 ("RDMA/mlx5: Fix locking in MR cache work queue")
-Link: https://lore.kernel.org/r/c99f076fce4b44829d434936bbcd3b5fc4c95020.1649062436.git.leonro@nvidia.com
-Signed-off-by: Aharon Landau <aharonl@nvidia.com>
-Reviewed-by: Shay Drory <shayd@nvidia.com>
-Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 97cf32996c46d9 ("drm/amd/pm: Removed fixed clock in auto mode DPM")
+Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/infiniband/hw/mlx5/mr.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/amd/pm/powerplay/hwmgr/smu10_hwmgr.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/infiniband/hw/mlx5/mr.c b/drivers/infiniband/hw/mlx5/mr.c
-index d3b2d02a4872..d40a1460ef97 100644
---- a/drivers/infiniband/hw/mlx5/mr.c
-+++ b/drivers/infiniband/hw/mlx5/mr.c
-@@ -632,6 +632,7 @@ static void mlx5_mr_cache_free(struct mlx5_ib_dev *dev, struct mlx5_ib_mr *mr)
- {
- 	struct mlx5_cache_ent *ent = mr->cache_ent;
+--- a/drivers/gpu/drm/amd/pm/powerplay/hwmgr/smu10_hwmgr.c
++++ b/drivers/gpu/drm/amd/pm/powerplay/hwmgr/smu10_hwmgr.c
+@@ -773,13 +773,13 @@ static int smu10_dpm_force_dpm_level(str
+ 		smum_send_msg_to_smc_with_parameter(hwmgr,
+ 						PPSMC_MSG_SetHardMinFclkByFreq,
+ 						hwmgr->display_config->num_display > 3 ?
+-						data->clock_vol_info.vdd_dep_on_fclk->entries[0].clk :
++						(data->clock_vol_info.vdd_dep_on_fclk->entries[0].clk / 100) :
+ 						min_mclk,
+ 						NULL);
  
-+	WRITE_ONCE(dev->cache.last_add, jiffies);
- 	spin_lock_irq(&ent->lock);
- 	list_add_tail(&mr->list, &ent->head);
- 	ent->available_mrs++;
--- 
-2.35.1
-
+ 		smum_send_msg_to_smc_with_parameter(hwmgr,
+ 						PPSMC_MSG_SetHardMinSocclkByFreq,
+-						data->clock_vol_info.vdd_dep_on_socclk->entries[0].clk,
++						data->clock_vol_info.vdd_dep_on_socclk->entries[0].clk / 100,
+ 						NULL);
+ 		smum_send_msg_to_smc_with_parameter(hwmgr,
+ 						PPSMC_MSG_SetHardMinVcn,
+@@ -792,11 +792,11 @@ static int smu10_dpm_force_dpm_level(str
+ 						NULL);
+ 		smum_send_msg_to_smc_with_parameter(hwmgr,
+ 						PPSMC_MSG_SetSoftMaxFclkByFreq,
+-						data->clock_vol_info.vdd_dep_on_fclk->entries[index_fclk].clk,
++						data->clock_vol_info.vdd_dep_on_fclk->entries[index_fclk].clk / 100,
+ 						NULL);
+ 		smum_send_msg_to_smc_with_parameter(hwmgr,
+ 						PPSMC_MSG_SetSoftMaxSocclkByFreq,
+-						data->clock_vol_info.vdd_dep_on_socclk->entries[index_socclk].clk,
++						data->clock_vol_info.vdd_dep_on_socclk->entries[index_socclk].clk / 100,
+ 						NULL);
+ 		smum_send_msg_to_smc_with_parameter(hwmgr,
+ 						PPSMC_MSG_SetSoftMaxVcn,
 
 

@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3FE24FD8C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:37:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A8094FD956
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:40:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352913AbiDLHOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:14:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48054 "EHLO
+        id S1389451AbiDLJXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:23:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352603AbiDLG4E (ORCPT
+        with ESMTP id S1357088AbiDLHjq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:56:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BA324BC7;
-        Mon, 11 Apr 2022 23:46:14 -0700 (PDT)
+        Tue, 12 Apr 2022 03:39:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC12767D;
+        Tue, 12 Apr 2022 00:11:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 83CFF60A21;
-        Tue, 12 Apr 2022 06:46:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 969CAC385A6;
-        Tue, 12 Apr 2022 06:46:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A7BFFB81A8F;
+        Tue, 12 Apr 2022 07:11:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0542FC385A5;
+        Tue, 12 Apr 2022 07:11:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649745973;
-        bh=bAPP0KeYlE4Rw4hQig6h+AE3aP+2SVdMxEk/gwMuZbk=;
+        s=korg; t=1649747496;
+        bh=PIRfs3JA6VwCrYK9rs78+T4RhVQHLme5xSV84VBX9NY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g3DqxdJj9mB32ya4DGJj1oak7duRJg8oNRFPbWUhrsS4slnNADWsrdCtLPrdIR+lD
-         ZssgJfqgJkzIKHR1mAx1eq9Sw/wz2U2/rUjdv7WBUu67SCTSDFm2InSROP0/M9ozqb
-         MBR43LMXrl2iNdZZOvBdJQ3jlPWJ8wPWeosKchwc=
+        b=vcsAqVK2gf3KCnMYzc9qy9eIN2ej0+ygQ7OLrvCk3KVRq8MNnaPijVnoJ/sKnT+ay
+         kAG1WaF6dw0KkXAGQtMnB5QQtBZbsBFVyUG3nU91l9Uw4Q35U1kXg2ciZGjNJWEWSg
+         HuzcH5ebElA/x39DqbH23zlfYxB2KaZUG7Zn1Z/0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 114/277] phy: amlogic: meson8b-usb2: Use dev_err_probe()
+        stable@vger.kernel.org, Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 099/343] drm/amdkfd: make CRAT table missing message informational only
 Date:   Tue, 12 Apr 2022 08:28:37 +0200
-Message-Id: <20220412062945.339283299@linuxfoundation.org>
+Message-Id: <20220412062953.958432293@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,40 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+From: Alex Deucher <alexander.deucher@amd.com>
 
-[ Upstream commit 6466ba1898d415b527e1013bd8551a6fdfece94c ]
+[ Upstream commit 9dff13f9edf755a15f6507874185a3290c1ae8bb ]
 
-Use the existing dev_err_probe() helper instead of open-coding the same
-operation.
+The driver has a fallback so make the message informational
+rather than a warning. The driver has a fallback if the
+Component Resource Association Table (CRAT) is missing, so
+make this informational now.
 
-Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-Reported-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Acked-by: Neil Armstrong <narmstrong@baylibre.com>
-Link: https://lore.kernel.org/r/20220111095255.176141-3-aouledameur@baylibre.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/1906
+Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/phy/amlogic/phy-meson8b-usb2.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/amd/amdkfd/kfd_crat.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/phy/amlogic/phy-meson8b-usb2.c b/drivers/phy/amlogic/phy-meson8b-usb2.c
-index cf10bed40528..77e7e9b1428c 100644
---- a/drivers/phy/amlogic/phy-meson8b-usb2.c
-+++ b/drivers/phy/amlogic/phy-meson8b-usb2.c
-@@ -265,8 +265,9 @@ static int phy_meson8b_usb2_probe(struct platform_device *pdev)
- 		return PTR_ERR(priv->clk_usb);
- 
- 	priv->reset = devm_reset_control_get_optional_shared(&pdev->dev, NULL);
--	if (PTR_ERR(priv->reset) == -EPROBE_DEFER)
--		return PTR_ERR(priv->reset);
-+	if (IS_ERR(priv->reset))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(priv->reset),
-+				     "Failed to get the reset line");
- 
- 	priv->dr_mode = of_usb_get_dr_mode_by_phy(pdev->dev.of_node, -1);
- 	if (priv->dr_mode == USB_DR_MODE_UNKNOWN) {
+diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_crat.c b/drivers/gpu/drm/amd/amdkfd/kfd_crat.c
+index 9624bbe8b501..281def1c6c08 100644
+--- a/drivers/gpu/drm/amd/amdkfd/kfd_crat.c
++++ b/drivers/gpu/drm/amd/amdkfd/kfd_crat.c
+@@ -1567,7 +1567,7 @@ int kfd_create_crat_image_acpi(void **crat_image, size_t *size)
+ 	/* Fetch the CRAT table from ACPI */
+ 	status = acpi_get_table(CRAT_SIGNATURE, 0, &crat_table);
+ 	if (status == AE_NOT_FOUND) {
+-		pr_warn("CRAT table not found\n");
++		pr_info("CRAT table not found\n");
+ 		return -ENODATA;
+ 	} else if (ACPI_FAILURE(status)) {
+ 		const char *err = acpi_format_exception(status);
 -- 
 2.35.1
 

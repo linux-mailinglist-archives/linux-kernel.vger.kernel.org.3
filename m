@@ -2,42 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E1674FD8EC
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39AA84FD52B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:11:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356368AbiDLHfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57244 "EHLO
+        id S1352411AbiDLHgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:36:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352132AbiDLHNb (ORCPT
+        with ESMTP id S1352161AbiDLHNf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:13:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1CA113F81;
-        Mon, 11 Apr 2022 23:54:20 -0700 (PDT)
+        Tue, 12 Apr 2022 03:13:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2BB014027;
+        Mon, 11 Apr 2022 23:54:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 80EE9B81B44;
-        Tue, 12 Apr 2022 06:54:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF99AC385A6;
-        Tue, 12 Apr 2022 06:54:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5A781B81B4E;
+        Tue, 12 Apr 2022 06:54:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A84ACC385A6;
+        Tue, 12 Apr 2022 06:54:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746458;
-        bh=smfjITSV1YHK4/bfAMDR+H6NLc2WvBO/3LmrqMnJXJ4=;
+        s=korg; t=1649746461;
+        bh=nPnF8ieIoSpabq2i+hqcSSdjOkAOC5GkThjX+q/ChqA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=obQeLNhxdi1AFudI0JEsnNC5KOYc3reMPI+B668mwQ40MV7Fz5urdcVxUFBsSn8s5
-         a1iosBQWZW49mIlqGHFvsFzDPK7qeuvhcrOMeJ3ljRmusCCH2t/spDhV1KN75NlsW/
-         iQ2sHjrxSVIjJKan4nXbjNp8pGr+oFcscOPbtlyI=
+        b=QKGmmZgLF3+Lix5YEnPOBHmn8h0IjRXcQ++0EkBlx+HHETB6eBkiZuuzOhgLmlGN0
+         8G4gST7xYLT4wzawc/x3ovBSbDXyRwCvlJeeXCPInfWF4ZDYcWprh2JGWPPmWnuriD
+         vkftY8VK21fe1NLO1Mh1BCQpfZsTRVg43r0pYzZ8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Philipp Zabel <philipp.zabel@gmail.com>,
-        Jani Nikula <jani.nikula@intel.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Xin Xiong <xiongx18@fudan.edu.cn>,
+        Xin Tan <tanxin.ctf@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 013/285] drm/edid: improve non-desktop quirk logging
-Date:   Tue, 12 Apr 2022 08:27:50 +0200
-Message-Id: <20220412062944.060255199@linuxfoundation.org>
+Subject: [PATCH 5.16 014/285] drm/amd/amdgpu/amdgpu_cs: fix refcount leak of a dma_fence obj
+Date:   Tue, 12 Apr 2022 08:27:51 +0200
+Message-Id: <20220412062944.088889936@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
 References: <20220412062943.670770901@linuxfoundation.org>
@@ -55,71 +58,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jani Nikula <jani.nikula@intel.com>
+From: Xin Xiong <xiongx18@fudan.edu.cn>
 
-[ Upstream commit ce99534e978d4a36787dbe5e5c57749d12e6bf4a ]
+[ Upstream commit dfced44f122c500004a48ecc8db516bb6a295a1b ]
 
-Improve non-desktop quirk logging if the EDID indicates non-desktop. If
-both are set, note about redundant quirk. If there's no quirk but the
-EDID indicates non-desktop, don't log non-desktop is set to 0.
+This issue takes place in an error path in
+amdgpu_cs_fence_to_handle_ioctl(). When `info->in.what` falls into
+default case, the function simply returns -EINVAL, forgetting to
+decrement the reference count of a dma_fence obj, which is bumped
+earlier by amdgpu_cs_get_fence(). This may result in reference count
+leaks.
 
-Cc: Philipp Zabel <philipp.zabel@gmail.com>
-Signed-off-by: Jani Nikula <jani.nikula@intel.com>
-Reviewed-by: Philipp Zabel <philipp.zabel@gmail.com>
-Tested-by: Philipp Zabel <philipp.zabel@gmail.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20211228101051.317989-1-jani.nikula@intel.com
+Fix it by decreasing the refcount of specific object before returning
+the error code.
+
+Reviewed-by: Christian König <christian.koenig@amd.com>
+Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
+Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/drm_edid.c | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
-index a71b82668a98..83e5c115e754 100644
---- a/drivers/gpu/drm/drm_edid.c
-+++ b/drivers/gpu/drm/drm_edid.c
-@@ -5325,17 +5325,13 @@ u32 drm_add_display_info(struct drm_connector *connector, const struct edid *edi
- 	info->width_mm = edid->width_cm * 10;
- 	info->height_mm = edid->height_cm * 10;
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+index 0311d799a010..894869789041 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+@@ -1510,6 +1510,7 @@ int amdgpu_cs_fence_to_handle_ioctl(struct drm_device *dev, void *data,
+ 		return 0;
  
--	info->non_desktop = !!(quirks & EDID_QUIRK_NON_DESKTOP);
--
- 	drm_get_monitor_range(connector, edid);
- 
--	DRM_DEBUG_KMS("non_desktop set to %d\n", info->non_desktop);
--
- 	if (edid->revision < 3)
--		return quirks;
-+		goto out;
- 
- 	if (!(edid->input & DRM_EDID_INPUT_DIGITAL))
--		return quirks;
-+		goto out;
- 
- 	info->color_formats |= DRM_COLOR_FORMAT_RGB444;
- 	drm_parse_cea_ext(connector, edid);
-@@ -5356,7 +5352,7 @@ u32 drm_add_display_info(struct drm_connector *connector, const struct edid *edi
- 
- 	/* Only defined for 1.4 with digital displays */
- 	if (edid->revision < 4)
--		return quirks;
-+		goto out;
- 
- 	switch (edid->input & DRM_EDID_DIGITAL_DEPTH_MASK) {
- 	case DRM_EDID_DIGITAL_DEPTH_6:
-@@ -5393,6 +5389,13 @@ u32 drm_add_display_info(struct drm_connector *connector, const struct edid *edi
- 
- 	drm_update_mso(connector, edid);
- 
-+out:
-+	if (quirks & EDID_QUIRK_NON_DESKTOP) {
-+		drm_dbg_kms(connector->dev, "Non-desktop display%s\n",
-+			    info->non_desktop ? " (redundant quirk)" : "");
-+		info->non_desktop = true;
-+	}
-+
- 	return quirks;
+ 	default:
++		dma_fence_put(fence);
+ 		return -EINVAL;
+ 	}
  }
- 
 -- 
 2.35.1
 

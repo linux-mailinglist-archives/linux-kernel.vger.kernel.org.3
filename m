@@ -2,104 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD5414FDCBE
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:06:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75C764FDCA1
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354171AbiDLKip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 06:38:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34378 "EHLO
+        id S232706AbiDLKhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 06:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379315AbiDLKfA (ORCPT
+        with ESMTP id S1381419AbiDLKfJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 06:35:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 331655DE55
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 02:37:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649756235;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QqASKl2JW8OF7//R5gBnGu+2jzFwc031nNCcqeSxD8M=;
-        b=Ndqh2IJ5OXQcBMA03UXfFIr1GcdLF+jj15h/MlTulVTXXK0JYml/A8e6QRzrBwWjR4yJy9
-        JF5l2kggwyLRmGbBjnjh5tWSG3vF8/XkgM+tXNkQFlwNP6hkwHPbGbxQy7mOm38pegsj3/
-        xdnOeGCkN8Fa60XQbT9tNfuNvZoMEd4=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-664-boxZPR8YP1-UgW2tf2V3Xw-1; Tue, 12 Apr 2022 05:37:13 -0400
-X-MC-Unique: boxZPR8YP1-UgW2tf2V3Xw-1
-Received: by mail-wm1-f72.google.com with SMTP id q25-20020a1ce919000000b0038ead791083so1021717wmc.6
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 02:37:12 -0700 (PDT)
+        Tue, 12 Apr 2022 06:35:09 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D755E159
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 02:37:20 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id q129so18453979oif.4
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 02:37:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:user-agent:references:in-reply-to:mime-version:date:message-id
+         :subject:to:cc;
+        bh=evIZsLOQJjFi37tCwIrJkfpZ9gIHXQ0UW8l5PUtfRtM=;
+        b=4QAERHFJ8BTZGtY7E+DkrtJGJSnzxgQgHwbOYAwlxzZXnKMY9dp3NVgOGA1Cbx3AW0
+         FxY2zgabemqQKkM8yYWIKTkzeKaFcP40xAgE+1dbimqQ4CldI7+o8TQ8dE1kodW+jrQU
+         gYXrQIuo73uA51I8IaOWcFPhvw+t8g/pF4/eUcwWtHBUvZuNigXM/QZvceMRt4bz7R/Q
+         iRCQbyMV95o4pipHij2S0MaVqvssVGHgSj8Xz769fQj6HFHoNaTjIpDoiR+7ZrOU9ACV
+         kY13mSlQ12q7mCyqJQTWIMCVaZV8qk0mntRPEqqEkgTpq9DAW883/q4t7wQjC3Wogopk
+         7VLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:organization:in-reply-to
-         :content-transfer-encoding;
-        bh=QqASKl2JW8OF7//R5gBnGu+2jzFwc031nNCcqeSxD8M=;
-        b=tKIoNENpDxQUlLwXB4wTqho4PSLDVa9w2eef8Ae59kyi6dgVJ590C6bYrr+haCCiVj
-         zUFsuw8jsmAlG7KLTKM/a154yeJf5sKZnzyqz2kGbTg8wJbTEpogxzjZdeO4r7XduG9k
-         YyJ++5afe4vQBr4IpntvNfnCFDHvqlQp8blemzHKhtxzNcYvlq+4jJgLW7sN1DG9susO
-         N+JmTh53NEDbIFHSRgezJd+SL/yzaMkSkyNoxfnarJxeEKP0Qk+lEHWwvI6rhVCZNc4X
-         tRSPuqlXZNgMwy/ECW0NT0ECrLt4rf19uHe9C9UWdJJgXS/yHnpuOut62P/ihvQC+dMz
-         YKeA==
-X-Gm-Message-State: AOAM530AsNw17kN12tY1OyqL1tC9BazPVmhbNFPLbvBitzYqieR7tYtd
-        vfmiXjBUeSY2Tu9eWBXrYTjm4vxO12POw9bTWv9ZRa9JEDi7P78Y44sb52eyYeA2Mup1cEU1lNU
-        mW0cwVLUw6D/HmlVGBgLpgucf
-X-Received: by 2002:a05:600c:1f17:b0:38b:b2b3:9faa with SMTP id bd23-20020a05600c1f1700b0038bb2b39faamr3334638wmb.190.1649756231977;
-        Tue, 12 Apr 2022 02:37:11 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyFdKjiRGvmX5jcrTl/ai7AaND7+BndRgIvrorg6KZ5vxUMxir/XkgirRzWpwcfBCleZLlw0A==
-X-Received: by 2002:a05:600c:1f17:b0:38b:b2b3:9faa with SMTP id bd23-20020a05600c1f1700b0038bb2b39faamr3334613wmb.190.1649756231691;
-        Tue, 12 Apr 2022 02:37:11 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:1800:7c14:16cc:5291:a9f3? (p200300cbc70718007c1416cc5291a9f3.dip0.t-ipconnect.de. [2003:cb:c707:1800:7c14:16cc:5291:a9f3])
-        by smtp.gmail.com with ESMTPSA id g1-20020a5d64e1000000b002079b871795sm9059647wri.50.2022.04.12.02.37.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 02:37:11 -0700 (PDT)
-Message-ID: <368902ab-8d3f-5d62-581e-1ff930bcefa0@redhat.com>
-Date:   Tue, 12 Apr 2022 11:37:09 +0200
+        h=x-gm-message-state:from:user-agent:references:in-reply-to
+         :mime-version:date:message-id:subject:to:cc;
+        bh=evIZsLOQJjFi37tCwIrJkfpZ9gIHXQ0UW8l5PUtfRtM=;
+        b=fqEiFsLFWfflgySzZh75XJPN4ezJnUPxRTEOPWLuirJem79VX807QAJ6CQ9puTg8ii
+         IlwK4Tuw4sJyHvGpU8WO18yNwSNciB7sp11lW23xLjr10a9hetsplE8IicDO1BBz9poj
+         Wo1iFVmszqoPWLat8Cg6iy61xolaUXtCr8gmUPx/pOZxOaNF77pXkAKop98knkxGUBIO
+         eKs9MsW5crQI141efilV/otxACiywNUpyRsovrOr9ZeacAOw0DuydVTmsK52sCrlHdTM
+         d6JkIy9R3lbAyPkp9IdNzBRSSLQlP1okNTDAyVym8Md90R49IbXvORNknJ5pEpFh3Azd
+         Ybvw==
+X-Gm-Message-State: AOAM530o0wDOJP76BRtNIRxuKzdIjVEjqy12kut+F+5pWkvZoYzDjsdn
+        waza/0Mc3wQ8wE/kU8srQvHCISvWpRSSwvvl8805Yg==
+X-Google-Smtp-Source: ABdhPJw50fakNZZtGphBh/3iA9VZT9nYrxLt56LrY9rUXQ7AMr4P93Xi3Vwjdes2KLA+ubvrsqu9MdqkL/hZl7jIqcA=
+X-Received: by 2002:a05:6808:1804:b0:2f9:65eb:c40b with SMTP id
+ bh4-20020a056808180400b002f965ebc40bmr1343724oib.78.1649756239335; Tue, 12
+ Apr 2022 02:37:19 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 12 Apr 2022 02:37:18 -0700
+From:   Guillaume Ranquet <granquet@baylibre.com>
+User-Agent: meli 0.7.2
+References: <20220327223927.20848-1-granquet@baylibre.com> <20220327223927.20848-17-granquet@baylibre.com>
+ <736a7f6710f1ea31eff4abcc3d9c3ff79a1f0ddb.camel@mediatek.com>
+In-Reply-To: <736a7f6710f1ea31eff4abcc3d9c3ff79a1f0ddb.camel@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v3 08/16] mm/rmap: drop "compound" parameter from
- page_add_new_anon_rmap()
-Content-Language: en-US
-To:     Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jann Horn <jannh@google.com>, Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Pedro Gomes <pedrodemargomes@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org
-References: <20220329160440.193848-1-david@redhat.com>
- <20220329160440.193848-9-david@redhat.com>
- <4cb92b41-95e1-1666-321e-96ff9e6095bb@suse.cz>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <4cb92b41-95e1-1666-321e-96ff9e6095bb@suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Date:   Tue, 12 Apr 2022 02:37:18 -0700
+Message-ID: <CABnWg9vfMJTbOTK-khgaj7RReLVSKJ3DCmJbDvgKMf+tUBwoSA@mail.gmail.com>
+Subject: Re: [PATCH v9 16/22] drm/meditek: dpi: Add matrix_sel helper
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, vkoul@kernel.org,
+        airlied@linux.ie, angelogioacchino.delregno@collabora.com,
+        chunfeng.yun@mediatek.com, chunkuang.hu@kernel.org,
+        ck.hu@mediatek.com, daniel@ffwll.ch, deller@gmx.de,
+        jitao.shi@mediatek.com, kishon@ti.com, krzk+dt@kernel.org,
+        maarten.lankhorst@linux.intel.com, matthias.bgg@gmail.com,
+        mripard@kernel.org, p.zabel@pengutronix.de, robh+dt@kernel.org,
+        tzimmermann@suse.de
+Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-phy@lists.infradead.org, markyacoub@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -107,64 +79,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12.04.22 10:47, Vlastimil Babka wrote:
-> On 3/29/22 18:04, David Hildenbrand wrote:
->> New anonymous pages are always mapped natively: only THP/khugepagd code
-> 
-> 						khugepaged ^
-> 
->> maps a new compound anonymous page and passes "true". Otherwise, we're
->> just dealing with simple, non-compound pages.
+On Mon, 28 Mar 2022 10:49, Rex-BC Chen <rex-bc.chen@mediatek.com> wrote:
+>On Mon, 2022-03-28 at 00:39 +0200, Guillaume Ranquet wrote:
+>> Add a mtk_dpi_matrix_sel() helper to update the DPI_MATRIX_SET
+>> register depending on the color format.
 >>
->> Let's give the interface clearer semantics and document these.
+>> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+>> ---
+>>  drivers/gpu/drm/mediatek/mtk_dpi.c | 21 +++++++++++++++++++++
+>>  1 file changed, 21 insertions(+)
 >>
->> Signed-off-by: David Hildenbrand <david@redhat.com>
-> 
-> Acked-by: Vlastimil Babka <vbabka@suse.cz>
-> 
-> Nit:
-> 
->> --- a/mm/rmap.c
->> +++ b/mm/rmap.c
->> @@ -1182,19 +1182,22 @@ void page_add_anon_rmap(struct page *page,
+>> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
+>> b/drivers/gpu/drm/mediatek/mtk_dpi.c
+>> index 8198d3cf23ac..82f97c687652 100644
+>> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+>> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+>> @@ -385,6 +385,25 @@ static void mtk_dpi_config_disable_edge(struct
+>> mtk_dpi *dpi)
+>>  		mtk_dpi_mask(dpi, dpi->conf->reg_h_fre_con, 0,
+>> EDGE_SEL_EN);
 >>  }
->>  
->>  /**
->> - * page_add_new_anon_rmap - add pte mapping to a new anonymous page
->> + * page_add_new_anon_rmap - add mapping to a new anonymous page
->>   * @page:	the page to add the mapping to
->>   * @vma:	the vm area in which the mapping is added
->>   * @address:	the user virtual address mapped
->> - * @compound:	charge the page as compound or small page
->> + *
->> + * If it's a compound page, it is accounted as a compound page. As the page
->> + * is new, it's assume to get mapped exclusively by a single process.
->>   *
->>   * Same as page_add_anon_rmap but must only be called on *new* pages.
->>   * This means the inc-and-test can be bypassed.
->>   * Page does not have to be locked.
->>   */
->>  void page_add_new_anon_rmap(struct page *page,
->> -	struct vm_area_struct *vma, unsigned long address, bool compound)
->> +	struct vm_area_struct *vma, unsigned long address)
+>>
+>> +static void mtk_dpi_matrix_sel(struct mtk_dpi *dpi, enum
+>> mtk_dpi_out_color_format format)
+>> +{
+>> +	u32 matrix_sel = 0;
+>> +
+>> +	switch (format) {
+>> +	case MTK_DPI_COLOR_FORMAT_YCBCR_422:
+>> +	case MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL:
+>> +	case MTK_DPI_COLOR_FORMAT_YCBCR_444:
+>> +	case MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL:
+>> +	case MTK_DPI_COLOR_FORMAT_XV_YCC:
+>> +		if (dpi->mode.hdisplay <= 720)
+>> +			matrix_sel = 0x2;
+>> +		break;
+>> +	default:
+>> +		break;
+>> +	}
+>> +	mtk_dpi_mask(dpi, DPI_MATRIX_SET, matrix_sel,
+>> INT_MATRIX_SEL_MASK);
+>> +}
+>> +
+>>  static void mtk_dpi_config_color_format(struct mtk_dpi *dpi,
+>>  					enum mtk_dpi_out_color_format
+>> format)
 >>  {
->> +	const bool compound = PageCompound(page);
->>  	int nr = compound ? thp_nr_pages(page) : 1;
->>  
->>  	VM_BUG_ON_VMA(address < vma->vm_start || address >= vma->vm_end, vma);
-> 
-> There's a VM_BUG_ON_PAGE(PageTransCompound(page), page); later in a
-> !compound branch. Since compound is now determined by the same check, could
-> be deleted.
-> 
+>> @@ -392,6 +411,7 @@ static void mtk_dpi_config_color_format(struct
+>> mtk_dpi *dpi,
+>>  	    (format == MTK_DPI_COLOR_FORMAT_YCBCR_444_FULL)) {
+>>  		mtk_dpi_config_yuv422_enable(dpi, false);
+>>  		mtk_dpi_config_csc_enable(dpi, true);
+>> +		mtk_dpi_matrix_sel(dpi, format);
+>>  		if (dpi->conf->swap_input_support)
+>>  			mtk_dpi_config_swap_input(dpi, false);
+>>  		mtk_dpi_config_channel_swap(dpi,
+>> MTK_DPI_OUT_CHANNEL_SWAP_BGR);
+>> @@ -399,6 +419,7 @@ static void mtk_dpi_config_color_format(struct
+>> mtk_dpi *dpi,
+>>  		   (format == MTK_DPI_COLOR_FORMAT_YCBCR_422_FULL)) {
+>>  		mtk_dpi_config_yuv422_enable(dpi, true);
+>>  		mtk_dpi_config_csc_enable(dpi, true);
+>> +		mtk_dpi_matrix_sel(dpi, format);
+>>  		if (dpi->conf->swap_input_support)
+>>  			mtk_dpi_config_swap_input(dpi, true);
+>>  		mtk_dpi_config_channel_swap(dpi,
+>> MTK_DPI_OUT_CHANNEL_SWAP_RGB);
+>
+>Hello Guillaume,
+>
+>Thanks for your patch.
+>I have one question:
+>Do this setting affect the dpi for previous SoCs?
+>(8183, 8192, or 8186)
+>If we can confirm the original register setting for this offset in
+>8183/8192/8186, I think we can clarify this question.
+>
 
-Yes, eventually we could get rid of both VM_BUG_ON_PAGE() on both
-branches and add a single VM_BUG_ON_PAGE(PageTail(page), page) check on
-the compound branch. (we could also make sure that we're not given a
-hugetlb page)
+I've checked in the datasheet I have (8365/8385) that this register
+and setting exists.
+So yes, it will affect other platforms.
 
--- 
-Thanks,
-
-David / dhildenb
-
+>BRs,
+>Rex
+>

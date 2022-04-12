@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81EE54FD62C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:20:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ADD64FD94A
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:40:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387207AbiDLJGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:06:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56650 "EHLO
+        id S1378577AbiDLILe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:11:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359232AbiDLHmw (ORCPT
+        with ESMTP id S1354123AbiDLH0F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:42:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A4055775;
-        Tue, 12 Apr 2022 00:20:50 -0700 (PDT)
+        Tue, 12 Apr 2022 03:26:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F1A4475B;
+        Tue, 12 Apr 2022 00:05:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 408E96153F;
-        Tue, 12 Apr 2022 07:20:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57FC8C385A1;
-        Tue, 12 Apr 2022 07:20:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 075156146F;
+        Tue, 12 Apr 2022 07:05:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1915CC385A6;
+        Tue, 12 Apr 2022 07:05:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649748049;
-        bh=Jh0HxlaHDCPkrzXaR6A0TjXlWJhTiro1dmjnLAkCRbA=;
+        s=korg; t=1649747155;
+        bh=uBHQLW5+mpdPRS3b2MbTke8aMBxhdOu3bzGGetA00PQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tWIROBpHZbSO+lNDwRvJOnMnTjHgWvwEs0B3PPiZnhs1k6nU1EZ2TtUQ3/Ieh71E0
-         sNAaB/ofpKN4RyQVEdM7M+DXqAGPWDaKJmOASXP9Txnz2oOaK5lUPNxdlvtPWF8SQN
-         eLcsNmW3wAT3FYOxX6B7u3pOX/Zh4+RmZehZSsKc=
+        b=ovGn6VZisq3PD0McsFpL4qHjChwUxbrXFVSV+EB+2Pfykwy+3XlA8BlLH9F7/EoCW
+         gm4pWJEl4bCX1lJx0Oo62K7CAtPAMh0FiC3k6BuqlZFLL4Tsu/d8WMfXmno5PjRNsu
+         3S7+/lhV0QbaT0wSAt8UXnlnqIMf9h8/W2y6594E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Subject: [PATCH 5.17 301/343] irqchip/gic-v3: Fix GICR_CTLR.RWP polling
-Date:   Tue, 12 Apr 2022 08:31:59 +0200
-Message-Id: <20220412063000.011949903@linuxfoundation.org>
+        stable@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.16 263/285] Revert "selftests: net: Add tls config dependency for tls selftests"
+Date:   Tue, 12 Apr 2022 08:32:00 +0200
+Message-Id: <20220412062951.251698397@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,61 +53,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc Zyngier <maz@kernel.org>
+From: Jakub Kicinski <kuba@kernel.org>
 
-commit 0df6664531a12cdd8fc873f0cac0dcb40243d3e9 upstream.
+commit 20695e9a9fd39103d1b0669470ae74030b7aa196 upstream.
 
-It turns out that our polling of RWP is totally wrong when checking
-for it in the redistributors, as we test the *distributor* bit index,
-whereas it is a different bit number in the RDs... Oopsie boo.
+This reverts commit d9142e1cf3bbdaf21337767114ecab26fe702d47.
 
-This is embarassing. Not only because it is wrong, but also because
-it took *8 years* to notice the blunder...
+The test is supposed to run cleanly with TLS is disabled,
+to test compatibility with TCP behavior. I can't repro
+the failure [1], the problem should be debugged rather
+than papered over.
 
-Just fix the damn thing.
-
-Fixes: 021f653791ad ("irqchip: gic-v3: Initial support for GICv3")
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Cc: stable@vger.kernel.org
-Reviewed-by: Andre Przywara <andre.przywara@arm.com>
-Reviewed-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Link: https://lore.kernel.org/r/20220315165034.794482-2-maz@kernel.org
+Link: https://lore.kernel.org/all/20220325161203.7000698c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com/ [1]
+Fixes: d9142e1cf3bb ("selftests: net: Add tls config dependency for tls selftests")
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Link: https://lore.kernel.org/r/20220328212904.2685395-1-kuba@kernel.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/irqchip/irq-gic-v3.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ tools/testing/selftests/net/config |    1 -
+ 1 file changed, 1 deletion(-)
 
---- a/drivers/irqchip/irq-gic-v3.c
-+++ b/drivers/irqchip/irq-gic-v3.c
-@@ -206,11 +206,11 @@ static inline void __iomem *gic_dist_bas
- 	}
- }
- 
--static void gic_do_wait_for_rwp(void __iomem *base)
-+static void gic_do_wait_for_rwp(void __iomem *base, u32 bit)
- {
- 	u32 count = 1000000;	/* 1s! */
- 
--	while (readl_relaxed(base + GICD_CTLR) & GICD_CTLR_RWP) {
-+	while (readl_relaxed(base + GICD_CTLR) & bit) {
- 		count--;
- 		if (!count) {
- 			pr_err_ratelimited("RWP timeout, gone fishing\n");
-@@ -224,13 +224,13 @@ static void gic_do_wait_for_rwp(void __i
- /* Wait for completion of a distributor change */
- static void gic_dist_wait_for_rwp(void)
- {
--	gic_do_wait_for_rwp(gic_data.dist_base);
-+	gic_do_wait_for_rwp(gic_data.dist_base, GICD_CTLR_RWP);
- }
- 
- /* Wait for completion of a redistributor change */
- static void gic_redist_wait_for_rwp(void)
- {
--	gic_do_wait_for_rwp(gic_data_rdist_rd_base());
-+	gic_do_wait_for_rwp(gic_data_rdist_rd_base(), GICR_CTLR_RWP);
- }
- 
- #ifdef CONFIG_ARM64
+--- a/tools/testing/selftests/net/config
++++ b/tools/testing/selftests/net/config
+@@ -43,6 +43,5 @@ CONFIG_NET_ACT_TUNNEL_KEY=m
+ CONFIG_NET_ACT_MIRRED=m
+ CONFIG_BAREUDP=m
+ CONFIG_IPV6_IOAM6_LWTUNNEL=y
+-CONFIG_TLS=m
+ CONFIG_CRYPTO_SM4=y
+ CONFIG_AMT=m
 
 

@@ -2,182 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88D104FE29C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:30:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DD054FE274
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:29:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355351AbiDLNbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 09:31:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53632 "EHLO
+        id S1355744AbiDLNbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 09:31:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351097AbiDLNbC (ORCPT
+        with ESMTP id S235387AbiDLNbu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 09:31:02 -0400
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F8D1092;
-        Tue, 12 Apr 2022 06:28:17 -0700 (PDT)
-Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id AA5E961EA1923;
-        Tue, 12 Apr 2022 15:28:14 +0200 (CEST)
-Message-ID: <bc534155-e5bc-b9d2-24b4-e7559a7c5fb5@molgen.mpg.de>
-Date:   Tue, 12 Apr 2022 15:28:14 +0200
+        Tue, 12 Apr 2022 09:31:50 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57BACDEE3
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 06:29:32 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id j21so19165458qta.0
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 06:29:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=utHfHRuEPsFSz+t+xVfjXy9ka6MMfgaIZASNpR7InEI=;
+        b=SxlfMPQPhz+k04tLf1e3BiEJDZeTeSTHtmTmHpU/IotpKeudy7b1diCTvh0ntAbJmg
+         +AHt6cJnIoJiag2v2tCfGYjXHyS5MMQFahb4J4exdhP+HvXug+HGUrqhFW74n4LXWGCu
+         8JOpmoawvLnfHkdQneaEVx5KiqZ+gdSlZGfg/O018VShj4JdRwdflY/sPFMN0+0NHwKR
+         8E+A6g3UnmsZoQG1EMLXQaoIlKNPycu4cyR+RVvWJ4Uqu+ZfHBJLF95ckXrfwm1yc6+9
+         YPqAZ8NWvwoEW10PTJm2+WVwyfXBiaPh1RI/YAe1aWtg+jYvUMq0n4WvxIM9FV4rpTCn
+         LOMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=utHfHRuEPsFSz+t+xVfjXy9ka6MMfgaIZASNpR7InEI=;
+        b=H8gGYctt4j/JUtKRkVLO0AZnGMuYrOxiV9fkVvvCNxkyl05T01JfMOzb6+UlKpTyuC
+         AFQeDQ6sNGJJBS5qekCpT3DiQWbySPiu8UkrKs5CfCQ+YAExf5igShbROFL7e/zGNTDp
+         O1Pp7+gC9ngcx5PMH3joVnk7a+R5qkyxHoK2khVF5OICmcp5DpBauNxHEl7MfvQZqruo
+         ufjI9SEt7vnTVxsuAJmaoWRWl2yw4e809ifWVTkTeO+8sojq/Kfcwy/qqyTI3XW6JC+P
+         rNoYf/dQht8QLUGea7yc2f7sUiEHKBAKLmm0hPy1GLV4lewjrMmQ+6uwi8XPX+wXMP3M
+         c1Tw==
+X-Gm-Message-State: AOAM533EgAmF5R6zczQZ4FgPRjje5TtffbYLNM28FSx/CuDkKHLk8qQu
+        Co4JKVP8yWaZ6Iqpeh6OTOJa0g==
+X-Google-Smtp-Source: ABdhPJzR1/3qgAB9udxtprYbf3EHazhFycozkIuHDQce9GFcvxEpv9Sv2My0uQTgIIcCUEot20+ozg==
+X-Received: by 2002:ac8:7ca2:0:b0:2eb:db4c:1b53 with SMTP id z2-20020ac87ca2000000b002ebdb4c1b53mr3155060qtv.307.1649770171417;
+        Tue, 12 Apr 2022 06:29:31 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
+        by smtp.gmail.com with ESMTPSA id a4-20020a37b104000000b0069c2ba88bdasm2820895qkf.85.2022.04.12.06.29.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 06:29:30 -0700 (PDT)
+Received: from jgg by mlx with local (Exim 4.94)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1neGaH-000nVL-7x; Tue, 12 Apr 2022 10:29:29 -0300
+Date:   Tue, 12 Apr 2022 10:29:29 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>
+Cc:     linux-s390@vger.kernel.org, alex.williamson@redhat.com,
+        cohuck@redhat.com, schnelle@linux.ibm.com, farman@linux.ibm.com,
+        pmorel@linux.ibm.com, borntraeger@linux.ibm.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, gerald.schaefer@linux.ibm.com,
+        agordeev@linux.ibm.com, svens@linux.ibm.com, frankja@linux.ibm.com,
+        david@redhat.com, imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
+        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
+        pasic@linux.ibm.com, pbonzini@redhat.com, corbet@lwn.net,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v5 15/21] KVM: s390: pci: add routines to start/stop
+ interpretive execution
+Message-ID: <20220412132929.GC64706@ziepe.ca>
+References: <20220404174349.58530-1-mjrosato@linux.ibm.com>
+ <20220404174349.58530-16-mjrosato@linux.ibm.com>
+ <20220408124707.GY64706@ziepe.ca>
+ <b143e333-0add-8042-12de-7e9e8b275ec0@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [Intel-wired-lan] [PATCH] ice: wait for EMP reset after firmware
- flash
-Content-Language: en-US
-To:     Petr Oros <poros@redhat.com>
-Cc:     Jacob Keller <jacob.e.keller@intel.com>, ivecera@redhat.com,
-        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org,
-        kuba@kernel.org, pabeni@redhat.com, davem@davemloft.net,
-        netdev@vger.kernel.org, regressions@lists.linux.dev
-References: <20220412102753.670867-1-poros@redhat.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20220412102753.670867-1-poros@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b143e333-0add-8042-12de-7e9e8b275ec0@linux.ibm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Cc: +Jakob, +regressions@lists.linux.dev]
-
-
-Dear Petr,
-
-
-Thank you for your patch for the regression.
-
-#regzbot ^introduced 399e27dbbd9e94
-
-
-Am 12.04.22 um 12:27 schrieb Petr Oros:
-
-Please mention the time in the commit message summary:
-
-ice: Wait 5 s for EMP reset after firmware flash
-
-> We need to wait for EMP reset after firmware flash.
-> Code was extracted from OOT driver and without this wait fw_activate let
-
-Which OOT driver exactly?
-
-> card in inconsistent state recoverable only by second flash/activate
-
-Please reflow for 75 characters per line, and add a dot/period to the 
-end of sentences.
-
-> Reproducer:
-> [root@host ~]# devlink dev flash pci/0000:ca:00.0 file E810_XXVDA4_FH_O_SEC_FW_1p6p1p9_NVM_3p10_PLDMoMCTP_0.11_8000AD7B.bin
-> Preparing to flash
-> [fw.mgmt] Erasing
-> [fw.mgmt] Erasing done
-> [fw.mgmt] Flashing 100%
-> [fw.mgmt] Flashing done 100%
-> [fw.undi] Erasing
-> [fw.undi] Erasing done
-> [fw.undi] Flashing 100%
-> [fw.undi] Flashing done 100%
-> [fw.netlist] Erasing
-> [fw.netlist] Erasing done
-> [fw.netlist] Flashing 100%
-> [fw.netlist] Flashing done 100%
-> Activate new firmware by devlink reload
-> [root@host ~]# devlink dev reload pci/0000:ca:00.0 action fw_activate
-> reload_actions_performed:
->      fw_activate
-> [root@host ~]# ip link show ens7f0
-> 71: ens7f0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc mq state DOWN mode DEFAULT group default qlen 1000
->      link/ether b4:96:91:dc:72:e0 brd ff:ff:ff:ff:ff:ff
->      altname enp202s0f0
+On Tue, Apr 12, 2022 at 09:14:36AM -0400, Matthew Rosato wrote:
+> On 4/8/22 8:47 AM, Jason Gunthorpe wrote:
+> > On Mon, Apr 04, 2022 at 01:43:43PM -0400, Matthew Rosato wrote:
+> > > +int kvm_s390_pci_register_kvm(struct device *dev, void *data)
+> > > +{
+> > > +	struct zpci_dev *zdev = NULL;
+> > > +	struct kvm *kvm = data;
+> > > +
+> > > +	/* Only proceed for zPCI devices, quietly ignore others */
+> > > +	if (dev_is_pci(dev))
+> > > +		zdev = to_zpci_dev(dev);
+> > > +	if (!zdev)
+> > > +		return 0;
+> > 
+> > Especially since this only works if we have zpci device
+> > 
+> > So having the zpci code hook the kvm notifier and then call the arch
+> > code from the zpci area seems pretty OK
+> > 
+> > Also why is a struct kvm * being passed as a void *?
 > 
-> dmesg after flash:
-> [   55.120788] ice: Copyright (c) 2018, Intel Corporation.
-> [   55.274734] ice 0000:ca:00.0: Get PHY capabilities failed status = -5, continuing anyway
-> [   55.569797] ice 0000:ca:00.0: The DDP package was successfully loaded: ICE OS Default Package version 1.3.28.0
-> [   55.603629] ice 0000:ca:00.0: Get PHY capability failed.
-> [   55.608951] ice 0000:ca:00.0: ice_init_nvm_phy_type failed: -5
-> [   55.647348] ice 0000:ca:00.0: PTP init successful
-> [   55.675536] ice 0000:ca:00.0: DCB is enabled in the hardware, max number of TCs supported on this port are 8
-> [   55.685365] ice 0000:ca:00.0: FW LLDP is disabled, DCBx/LLDP in SW mode.
-> [   55.692179] ice 0000:ca:00.0: Commit DCB Configuration to the hardware
-> [   55.701382] ice 0000:ca:00.0: 126.024 Gb/s available PCIe bandwidth, limited by 16.0 GT/s PCIe x8 link at 0000:c9:02.0 (capable of 252.048 Gb/s with 16.0 GT/s PCIe x16 link)
+> Only because the function is intended to be called via
+> iommu_group_for_each_dev (next patch) which requires int (*fn)(struct device
+> *, void *)
 
-So, what is the error? `Get PHY capabilities failed status = -5`?
+I think this further says this should be called from vfio on the
+actual struct device that is assigned to the KVM, not try to deduce it
+from the gorup..
 
-What firmware version did the network card have before and after the update?
-
-> Reboot don't help, only second flash/activate with OOT or patched driver put card back in consistent state
-
-s/don't/doesn’t/
-
-> After patch:
-> [root@host ~]# devlink dev flash pci/0000:ca:00.0 file E810_XXVDA4_FH_O_SEC_FW_1p6p1p9_NVM_3p10_PLDMoMCTP_0.11_8000AD7B.bin
-> Preparing to flash
-> [fw.mgmt] Erasing
-> [fw.mgmt] Erasing done
-> [fw.mgmt] Flashing 100%
-> [fw.mgmt] Flashing done 100%
-> [fw.undi] Erasing
-> [fw.undi] Erasing done
-> [fw.undi] Flashing 100%
-> [fw.undi] Flashing done 100%
-> [fw.netlist] Erasing
-> [fw.netlist] Erasing done
-> [fw.netlist] Flashing 100%
-> [fw.netlist] Flashing done 100%
-> Activate new firmware by devlink reload
-> [root@host ~]# devlink dev reload pci/0000:ca:00.0 action fw_activate
-> reload_actions_performed:
->      fw_activate
-> [root@host ~]# ip link show ens7f0
-> 19: ens7f0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
->      link/ether b4:96:91:dc:72:e0 brd ff:ff:ff:ff:ff:ff
->      altname enp202s0f0
-
-Did you try anything less than five seconds? i40e uses one second, cf. 
-commit 9b13bd53134c (i40e: Increase delay to 1 s after global EMP reset).
-
-> Fixes: 399e27dbbd9e94 ("ice: support immediate firmware activation via devlink reload")
-> Signed-off-by: Petr Oros <poros@redhat.com>
-> ---
->   drivers/net/ethernet/intel/ice/ice_main.c | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
-> index d768925785ca79..90ea2203cdc763 100644
-> --- a/drivers/net/ethernet/intel/ice/ice_main.c
-> +++ b/drivers/net/ethernet/intel/ice/ice_main.c
-> @@ -6931,12 +6931,15 @@ static void ice_rebuild(struct ice_pf *pf, enum ice_reset_req reset_type)
->   
->   	dev_dbg(dev, "rebuilding PF after reset_type=%d\n", reset_type);
->   
-> +#define ICE_EMP_RESET_SLEEP 5000
-
-Please append the unit to the macro name.
-
->   	if (reset_type == ICE_RESET_EMPR) {
->   		/* If an EMP reset has occurred, any previously pending flash
->   		 * update will have completed. We no longer know whether or
->   		 * not the NVM update EMP reset is restricted.
->   		 */
->   		pf->fw_emp_reset_disabled = false;
-> +
-> +		msleep(ICE_EMP_RESET_SLEEP);
->   	}
->   
->   	err = ice_init_all_ctrlq(hw);
-
-
-Kind regards,
-
-Paul
+Jason

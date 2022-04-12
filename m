@@ -2,173 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA1C4FDC3C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:04:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44ABA4FDC4C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:04:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241845AbiDLKPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 06:15:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32818 "EHLO
+        id S1355770AbiDLKSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 06:18:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378006AbiDLJ7c (ORCPT
+        with ESMTP id S1378015AbiDLJ7c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Apr 2022 05:59:32 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586021EEF8
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 02:06:04 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id k29so91864pgm.12
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 02:06:04 -0700 (PDT)
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8F4C45
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 02:06:17 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id u3so26737231wrg.3
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 02:06:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5q0V0iY7dr2lRVb8OvfSaWvww3uLXhqUgjXUdAVt87g=;
-        b=RHIu8/Bnc+30R/gAERf2/UYCIWBSwrHm5GXZKku4GxndzoI2eCqzOTfBGecViIUSNC
-         mJWkcdgMIJEMKvdtbSxtTVtxRk1syy0oWmSAtp37ims2++OrvHLQnPXDSN2x3eCq3ST5
-         fBuPJp83/Ee4mSm3soCfPfy2nU9lhPrcMl8SDVxALArLtpUzmjS9qdbgb3jjsgVeI8dV
-         2vbamPGU922L5AQgemxZlw9/jaJyAggEzKQcVPJTkES3fDSs9cSszKh87fCyfQw3Nb4F
-         VPEWz5+iTztDcFoQPegKz8RKMpnn8FbltAyMnlEqts3ED2UadA1tBPpd76CAsuYmV+R1
-         DO+A==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=TcbQOnznNM38vbqn4dzf7jYEVnEO7TEqfVzrcEANZdA=;
+        b=FgvDw1RuIAKPJbLmdUWuxbejU3TEbMwippcIC3e1RZFiwuTdqSXegk6DO/0S184zN7
+         ZxetjPdw7QvHIknfHNJr2DbQF/5AKkurjIiaLA/fopymwMVH6cBTgTxXnRYIEFlUlSYs
+         XEufP/K2/jtm9Crs/8dSJgPW7vvhW62UuvBxa5XJ4EU4OOG7EdAR+nbROACZb9/jHyIg
+         gxRp8kZS9xsMf5edPWC4xWfakFXLV0HOIa179FqG0PzcAe3hYo7i/eXMeebGVruCb6o+
+         iAte2FpSwgaF2oZCDVqZ5knjPR2wvtk1VihxMiPl9advkhXBl3JVxGVQKGg39s8ECZTw
+         Quaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=5q0V0iY7dr2lRVb8OvfSaWvww3uLXhqUgjXUdAVt87g=;
-        b=tgnB4rU+8wVLeKlY3+OjEg+YHCvnxpPY2F8A4lmkpzLTo7rPeW5lptgSI/SgR5i5P+
-         wuZTre26NeHdhm+bSXwwAFion5qz87yPgT6vT/By/bRkIxwfkOOj5I3M8kT13H6mL5x0
-         Gr5wYBC/HFSJHYWTSFVvvdtXY7sn2303dYuSrrnJ1dNM223PI2rIUcS8pgNQCpwLygh6
-         JkS/E74AiAuJvMukTQblXvYay4uCdG3rF0Gc+MIqENg1Hm9w5UAwIW1oT0Ew3P5u1+ew
-         eA8bt8tSyv+AhTfHJsrc28Me0sbZXkMu33HGGmnZujE7GZqca+8nyBH4cPMZtWF6HIx1
-         crSQ==
-X-Gm-Message-State: AOAM533U+Gu2XbW0I50kcpAfqj/SAAw3w9PUyEPZ4ZOGQxwhdJNrPLoD
-        Eju57gn6zLuMZte0hQjZntA=
-X-Google-Smtp-Source: ABdhPJz+nAInByt3ZGBpbAZ62WbZwYw/t8OZe4q2LY3JMlTscgFFwVLyADnpGFDDw10xbOKsBbgIAQ==
-X-Received: by 2002:a65:57cc:0:b0:384:3370:e161 with SMTP id q12-20020a6557cc000000b003843370e161mr29584202pgr.364.1649754363701;
-        Tue, 12 Apr 2022 02:06:03 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id 204-20020a6302d5000000b00385f29b02b2sm2179835pgc.50.2022.04.12.02.06.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 02:06:03 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     zbr@ioremap.net
-Cc:     linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] w1: omap-hdq: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-Date:   Tue, 12 Apr 2022 09:06:00 +0000
-Message-Id: <20220412090600.2533461-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        bh=TcbQOnznNM38vbqn4dzf7jYEVnEO7TEqfVzrcEANZdA=;
+        b=xvefx5G2X5yp0iQ1yfrOnnmPwGulblTRleM2JnCmJhlz/BQF7fTqbqKDhqmpBmmGMS
+         orOr4i5+1DhlIlY5Roy9ZckFOaDUZ1BFaXXNVTso7f36wQ+nCL0/u9inAHusWFT3QGUG
+         4w2pjr4Vxda825ijDAqBthDuwDnI38WJMPifVTeePCiFck0Z51eYvVR7Gkyb9OsuMPfe
+         awjNzse1FLoETf6nGkZkLP3pGh/pyc0n19WTv2yEnk1bOvzau+261f2ncIDBJ4qbG/PI
+         T0u4/zMLfX/T3SwnzMIVGMzlAzRmgX/U6nDblHEe/aom7TlGN7xNubfx1XFwBIUMzonw
+         1snQ==
+X-Gm-Message-State: AOAM53375/2FsET7jSAHjc38sYuQRRelmQn+1TH3j8X7rdSxOfxNTu3/
+        6/TuUv0b6y0nVhGSYAWroTLD2A==
+X-Google-Smtp-Source: ABdhPJyCsICMMt55JJuqse75adWYa2k+xDavBtU14NQhFbciHUBoB8+E7linJ/Ua3r5xirDa71f7Aw==
+X-Received: by 2002:a05:6000:15cb:b0:207:9f9e:547e with SMTP id y11-20020a05600015cb00b002079f9e547emr11653325wry.549.1649754375837;
+        Tue, 12 Apr 2022 02:06:15 -0700 (PDT)
+Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id g17-20020a05600c4ed100b0038ca32d0f26sm2000647wmq.17.2022.04.12.02.06.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Apr 2022 02:06:15 -0700 (PDT)
+Message-ID: <4d3a73bd-4048-2cef-0682-0823e29a6514@linaro.org>
+Date:   Tue, 12 Apr 2022 10:06:13 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2] slimbus: qcom: Fix IRQ check in qcom_slim_probe
+Content-Language: en-US
+To:     Miaoqian Lin <linmq006@gmail.com>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sagar Dharia <sdharia@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+References: <239c3b32-6754-02ba-6bfd-7f05fa2adfed@linux.intel.com>
+ <20220301061421.14366-1-linmq006@gmail.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20220301061421.14366-1-linmq006@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
 
-Using pm_runtime_resume_and_get is more appropriate
-for simplifing code
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
----
- drivers/w1/masters/omap_hdq.c | 38 ++++++++++-------------------------
- 1 file changed, 11 insertions(+), 27 deletions(-)
+On 01/03/2022 06:14, Miaoqian Lin wrote:
+> platform_get_irq() returns non-zero IRQ number on success,
+> negative error number on failure.
+> And the doc of platform_get_irq() provides a usage example:
+> 
+>      int irq = platform_get_irq(pdev, 0);
+>      if (irq < 0)
+>          return irq;
+> 
+> Fix the check of return value to catch errors correctly.
+> 
+> Fixes: ad7fcbc308b0 ("slimbus: qcom: Add Qualcomm Slimbus controller driver")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 
-diff --git a/drivers/w1/masters/omap_hdq.c b/drivers/w1/masters/omap_hdq.c
-index bf2ec59c1f9d..f325fe35a8f7 100644
---- a/drivers/w1/masters/omap_hdq.c
-+++ b/drivers/w1/masters/omap_hdq.c
-@@ -372,12 +372,9 @@ static u8 omap_w1_triplet(void *_hdq, u8 bdir)
- 		  OMAP_HDQ_CTRL_STATUS_INTERRUPTMASK;
- 	u8 mask = ctrl | OMAP_HDQ_CTRL_STATUS_DIR;
- 
--	err = pm_runtime_get_sync(hdq_data->dev);
--	if (err < 0) {
--		pm_runtime_put_noidle(hdq_data->dev);
--
-+	err = pm_runtime_resume_and_get(hdq_data->dev);
-+	if (err < 0)
- 		return err;
--	}
- 
- 	err = mutex_lock_interruptible(&hdq_data->hdq_mutex);
- 	if (err < 0) {
-@@ -463,12 +460,9 @@ static u8 omap_w1_reset_bus(void *_hdq)
- 	struct hdq_data *hdq_data = _hdq;
- 	int err;
- 
--	err = pm_runtime_get_sync(hdq_data->dev);
--	if (err < 0) {
--		pm_runtime_put_noidle(hdq_data->dev);
--
-+	err = pm_runtime_resume_and_get(hdq_data->dev);
-+	if (err < 0)
- 		return err;
--	}
- 
- 	omap_hdq_break(hdq_data);
- 
-@@ -485,12 +479,9 @@ static u8 omap_w1_read_byte(void *_hdq)
- 	u8 val = 0;
- 	int ret;
- 
--	ret = pm_runtime_get_sync(hdq_data->dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(hdq_data->dev);
--
-+	ret = pm_runtime_resume_and_get(hdq_data->dev);
-+	if (ret < 0)
- 		return -1;
--	}
- 
- 	ret = hdq_read_byte(hdq_data, &val);
- 	if (ret)
-@@ -509,12 +500,9 @@ static void omap_w1_write_byte(void *_hdq, u8 byte)
- 	int ret;
- 	u8 status;
- 
--	ret = pm_runtime_get_sync(hdq_data->dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(hdq_data->dev);
--
-+	ret = pm_runtime_resume_and_get(hdq_data->dev);
-+	if (ret < 0)
- 		return;
--	}
- 
- 	/*
- 	 * We need to reset the slave before
-@@ -605,10 +593,9 @@ static int omap_hdq_probe(struct platform_device *pdev)
- 	pm_runtime_enable(&pdev->dev);
- 	pm_runtime_use_autosuspend(&pdev->dev);
- 	pm_runtime_set_autosuspend_delay(&pdev->dev, 300);
--	ret = pm_runtime_get_sync(&pdev->dev);
-+	ret = pm_runtime_resume_and_get(&pdev->dev);
- 	if (ret < 0) {
--		pm_runtime_put_noidle(&pdev->dev);
--		dev_dbg(&pdev->dev, "pm_runtime_get_sync failed\n");
-+		dev_dbg(&pdev->dev, "pm_runtime_resume_and_get failed\n");
- 		goto err_w1;
- 	}
- 
-@@ -659,10 +646,7 @@ static int omap_hdq_remove(struct platform_device *pdev)
- {
- 	int active;
- 
--	active = pm_runtime_get_sync(&pdev->dev);
--	if (active < 0)
--		pm_runtime_put_noidle(&pdev->dev);
--
-+	active = pm_runtime_resume_and_get(&pdev->dev);
- 	w1_remove_master_device(&omap_w1_master);
- 
- 	pm_runtime_dont_use_autosuspend(&pdev->dev);
--- 
-2.25.1
+Applied thanks,
 
+--srini
+> ---
+> changes in v2:
+> - use more precise expression in commit message.
+> ---
+>   drivers/slimbus/qcom-ctrl.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/slimbus/qcom-ctrl.c b/drivers/slimbus/qcom-ctrl.c
+> index f04b961b96cd..ec58091fc948 100644
+> --- a/drivers/slimbus/qcom-ctrl.c
+> +++ b/drivers/slimbus/qcom-ctrl.c
+> @@ -510,9 +510,9 @@ static int qcom_slim_probe(struct platform_device *pdev)
+>   	}
+>   
+>   	ctrl->irq = platform_get_irq(pdev, 0);
+> -	if (!ctrl->irq) {
+> +	if (ctrl->irq < 0) {
+>   		dev_err(&pdev->dev, "no slimbus IRQ\n");
+> -		return -ENODEV;
+> +		return ctrl->irq;
+>   	}
+>   
+>   	sctrl = &ctrl->ctrl;

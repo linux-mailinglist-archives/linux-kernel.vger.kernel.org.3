@@ -2,219 +2,372 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 139614FE2FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:46:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D33444FE2F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356199AbiDLNpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 09:45:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57494 "EHLO
+        id S1345699AbiDLNph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 09:45:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356084AbiDLNoy (ORCPT
+        with ESMTP id S1354343AbiDLNo7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 09:44:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 33AA44ECF9
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 06:42:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649770955;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BBe8NJbB/NGE5hfWVeZ1eXc/XEjoOVUEazhRhSRRhFM=;
-        b=P647y1yAqB/7m8QEm5Rh1KbvIMRBn56AW4JW9fkYDcVBrnsFNupnaGVCVH0keNZtALyoD0
-        pz7K8CMcdeVdDtY+KxxtFKLixEZ5oYrq1TtaIkMZnj+sQ6V+7zvESQuAL/W2qTgk7lmykP
-        irbPTKU/1WZ0jKK3XR8lXvqRbNW8CFg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-649-g2xYTWatOzi0crlkhcxa7A-1; Tue, 12 Apr 2022 09:42:33 -0400
-X-MC-Unique: g2xYTWatOzi0crlkhcxa7A-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F15DD2999B4E;
-        Tue, 12 Apr 2022 13:42:32 +0000 (UTC)
-Received: from wtfbox.lan (unknown [10.40.192.9])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2BC0C9D6E;
-        Tue, 12 Apr 2022 13:42:20 +0000 (UTC)
-Date:   Tue, 12 Apr 2022 15:42:18 +0200
-From:   Artem Savkov <asavkov@redhat.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        netdev@vger.kernel.org, davem@davemloft.net,
-        yoshfuji@linux-ipv6.org, dsahern@kernel.org, asavkov@redhat.com,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] timer: add a function to adjust timeouts to be
- upper bound
-Message-ID: <YlWBun1whllq2BDt@wtfbox.lan>
-References: <20220407075242.118253-2-asavkov@redhat.com>
- <87zgkwjtq2.ffs@tglx>
+        Tue, 12 Apr 2022 09:44:59 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E75694ECF9
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 06:42:40 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B1EF8150C;
+        Tue, 12 Apr 2022 06:42:40 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.57.94.90])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6864C3F70D;
+        Tue, 12 Apr 2022 06:42:39 -0700 (PDT)
+From:   Vincent Donnefort <vincent.donnefort@arm.com>
+To:     peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org
+Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        morten.rasmussen@arm.com, chris.redpath@arm.com,
+        qperret@google.com, Vincent Donnefort <vincent.donnefort@arm.com>
+Subject: [PATCH v4 6/7] sched/fair: Remove task_util from effective utilization in feec()
+Date:   Tue, 12 Apr 2022 14:42:19 +0100
+Message-Id: <20220412134220.1588482-7-vincent.donnefort@arm.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220412134220.1588482-1-vincent.donnefort@arm.com>
+References: <20220412134220.1588482-1-vincent.donnefort@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <87zgkwjtq2.ffs@tglx>
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 08, 2022 at 02:37:25AM +0200, Thomas Gleixner wrote:
-> On Thu, Apr 07 2022 at 09:52, Artem Savkov wrote:
-> > +	return -1;
-> > +}
-> > +
-> > +static int calc_wheel_index(unsigned long expires, unsigned long clk,
-> > +			    unsigned long *bucket_expiry)
-> > +{
-> > +	unsigned long delta = expires - clk;
-> > +	unsigned int idx;
-> > +	int lvl = get_wheel_lvl(delta);
-> > +
-> > +	if (lvl >= 0) {
-> > +		idx = calc_index(expires, lvl, bucket_expiry);
-> >  	} else if ((long) delta < 0) {
-> >  		idx = clk & LVL_MASK;
-> >  		*bucket_expiry = clk;
-> > @@ -545,6 +555,38 @@ static int calc_wheel_index(unsigned long expires, unsigned long clk,
-> >  	return idx;
-> >  }
-> 
-> This generates horrible code on various compilers. I ran that through a
-> couple of perf test scenarios and came up with the following, which
-> still is a tad slower for the level 0 case depending on the branch
-> predictor state. But it at least prevents the compilers from doing
-> stupid things and on average it's on par.
-> 
-> Though the level 0 case matters because of *drumroll* networking.
-> 
-> Just for the record. I told you last time that your patch creates a
-> measurable overhead and I explained you in depth why the performance of
-> this stupid thing matters. So why are you not providing a proper
-> analysis for that?
+The energy estimation in find_energy_efficient_cpu() (feec()) relies on
+the computation of the effective utilization for each CPU of a perf domain
+(PD). This effective utilization is then used as an estimation of the busy
+time for this pd. The function effective_cpu_util() which gives this value,
+scales the utilization relative to IRQ pressure on the CPU to take into
+account that the IRQ time is hidden from the task clock. The IRQ scaling is
+as follow:
 
-I did do a simple check of measuring the time it takes for
-calc_wheel_index to execute and it turned out a tad lower after the
-patch. Your measurements are sure to be much more refined so would you
-give me any pointers on what to measure and which cases to check to have
-a better view on the impact of these patches?
+   effective_cpu_util = irq + (cpu_cap - irq)/cpu_cap * util
 
-> > +/**
-> > + * upper_bound_timeout - return granularity-adjusted timeout
-> > + * @timeout: timeout value in jiffies
-> > + *
-> > + * This function return supplied timeout adjusted based on timer wheel
-> > + * granularity effectively making supplied value an upper bound at which the
-> > + * timer will expire. Due to the way timer wheel works timeouts smaller than
-> > + * LVL_GRAN on their respecrive levels will be _at least_
-> > + * LVL_GRAN(lvl) - LVL_GRAN(lvl -1)) jiffies early.
-> 
-> Contrary to the simple "timeout - timeout/8" this gives better accuracy
-> as it does not converge to the early side for long timeouts.
-> 
-> With the quirk that this cuts timeout=1 to 0, which means it expires
-> immediately. The wonders of integer math avoid that with the simple
-> timeout -= timeout >> 3 approach for timeouts up to 8 ticks. :)
-> 
-> But that want's to be properly documented.
-> 
-> > +unsigned long upper_bound_timeout(unsigned long timeout)
-> > +{
-> > +	int lvl = get_wheel_lvl(timeout);
-> 
-> which is equivalent to:
-> 
->          lvl = calc_wheel_index(timeout, 0, &dummy) >> LVL_BITS;
-> 
-> Sorry, could not resist. :)
+Where util is the sum of CFS/RT/DL utilization, cpu_cap the capacity of
+the CPU and irq the IRQ avg time.
 
-Right, but that would mean a significantly more overhead, right?
+If now we take as an example a task placement which doesn't raise the OPP
+on the candidate CPU, we can write the energy delta as:
 
-> The more interesting question is, how frequently this upper bounds
-> function is used. It's definitely not something which you want to
-> inflict onto a high frequency (re)arming timer.
+  delta = OPPcost/cpu_cap * (effective_cpu_util(cpu_util + task_util) -
+                             effective_cpu_util(cpu_util))
+        = OPPcost/cpu_cap * (cpu_cap - irq)/cpu_cap * task_util
 
-As of now not that frequent. Instead of re-arming the timer networking
-code allows it to expire and makes the decisions in the handler, so it
-shouldn't be a problem because keepalives are usually quite big.
+We end-up with an energy delta depending on the IRQ avg time, which is a
+problem: first the time spent on IRQs by a CPU has no effect on the
+additional energy that would be consumed by a task. Second, we don't want
+to favour a CPU with a higher IRQ avg time value.
 
-> Did you analyse that? And if so, then why is that analysis missing from
-> the change log of the keepalive timer patch?
+Nonetheless, we need to take the IRQ avg time into account. If a task
+placement raises the PD's frequency, it will increase the energy cost for
+the entire time where the CPU is busy. A solution is to only use
+effective_cpu_util() with the CPU contribution part. The task contribution
+is added separately and scaled according to prev_cpu's IRQ time.
 
-I agree, this needs to be added.
+No change for the FREQUENCY_UTIL component of the energy estimation. We
+still want to get the actual frequency that would be selected after the
+task placement.
 
-> Aside of that it clearly lacks any argument why the simple, stupid, but
-> fast approach of shortening the timeout by 12.5% is not good enough and
-> why we need yet another function which is just going to be another
-> source of 'optimizations' for the wrong reasons.
+Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
 
-I am just not used to this mode of thinking I guess. This will be more
-efficient at the cost of being less obvious and requiring to be
-remembered about in case the 12.5% figure changes.
-
-> Seriously, I apprecitate that you want to make this 'perfect', but it's
-> never going to be perfect and the real question is whether there is any
-> reasonable difference between 'good' and almost 'perfect'.
-> 
-> And this clearly resonates in your changelog of the network patch:
-> 
->  "Make sure TCP keepalive timer does not expire late. Switching to upper
->   bound timers means it can fire off early but in case of keepalive
->   tcp_keepalive_timer() handler checks elapsed time and resets the timer
->   if it was triggered early. This results in timer "cascading" to a
->   higher precision and being just a couple of milliseconds off it's
->   original mark."
-> 
-> Which reinvents the cascading effect of the original timer wheel just
-> with more overhead. Where is the justification for this?
-> 
-> Is this really true for all the reasons where the keep alive timers are
-> armed? I seriously doubt that. Why?
-> 
-> On the end which waits for the keep alive packet to arrive in time it
-> does not matter at all, whether the cutoff is a bit later than defined.
-> 
->      So why do you want to let the timer fire early just to rearm it? 
-> 
-> But it matters a lot on the sender side. If that is late and the other
-> end is strict about the timeout then you lost. But does it matter
-> whether you send the packet too early? No, it does not matter at all
-> because the important point is that you send it _before_ the other side
-> decides to give up.
-> 
->      So why do you want to let the timer fire precise?
-> 
-> You are solving the sender side problem by introducing a receiver side
-> problem and both suffer from the overhead for no reason.
-
-I was hoping to discuss this during the second patch review. Keepalive
-timer handler complexity makes me think that it handles a lot of cases I
-am not currently aware of and dropping the "cascading" code would result
-in problems in places not obvious to me.
-
-Josh's point also makes sense to me. For cases when keepalive is used to
-check for dead clients I don't think we want to be early.
-
-> Aside of the theoerical issue why this matters at all I have yet ot see
-> a reasonable argument what the practical problen is. If this would be a
-> real problem in the wild then why haven't we ssen a reassonable bug
-> report within 6 years?
-
-I think it is unusual for keepalive timers to be set so close to the
-timeout so it is not an easy problem to hit. But regardless of that from
-what I saw in related discussions nobody sees this keepalive timer behavior
-as normal let alone expected. If you think it is better to keep it as is
-this will need to be clearly described/justified somewhere, but I am not
-sure how one would approach that.
-
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 97eb8afb336c..d17ef80487e4 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -6687,61 +6687,97 @@ static unsigned long cpu_util_next(int cpu, struct task_struct *p, int dst_cpu)
+ }
+ 
+ /*
+- * compute_energy(): Estimates the energy that @pd would consume if @p was
+- * migrated to @dst_cpu. compute_energy() predicts what will be the utilization
+- * landscape of @pd's CPUs after the task migration, and uses the Energy Model
+- * to compute what would be the energy if we decided to actually migrate that
+- * task.
++ * energy_env - Utilization landscape for energy estimation.
++ * @task_busy_time: Utilization contribution by the task for which we test the
++ *                  placement. Given by eenv_task_busy_time().
++ * @pd_busy_time:   Utilization of the whole perf domain without the task
++ *                  contribution. Given by eenv_pd_busy_time().
++ * @cpu_cap:        Maximum CPU capacity for the perf domain.
++ * @pd_cap:         Entire perf domain capacity. (pd->nr_cpus * cpu_cap).
++ */
++struct energy_env {
++	unsigned long task_busy_time;
++	unsigned long pd_busy_time;
++	unsigned long cpu_cap;
++	unsigned long pd_cap;
++};
++
++/*
++ * Compute the task busy time for compute_energy(). This time cannot be
++ * injected directly into effective_cpu_util() because of the IRQ scaling.
++ * The latter only makes sense with the most recent CPUs where the task has
++ * run.
+  */
+-static long
+-compute_energy(struct task_struct *p, int dst_cpu, struct cpumask *cpus,
+-	       struct perf_domain *pd)
++static inline void eenv_task_busy_time(struct energy_env *eenv,
++				       struct task_struct *p, int prev_cpu)
+ {
+-	unsigned long max_util = 0, sum_util = 0, cpu_cap;
++	unsigned long max_cap = arch_scale_cpu_capacity(prev_cpu);
++	unsigned long irq = cpu_util_irq(cpu_rq(prev_cpu));
++
++	if (unlikely(irq >= max_cap)) {
++		eenv->task_busy_time = max_cap;
++		return;
++	}
++
++	eenv->task_busy_time =
++		scale_irq_capacity(task_util_est(p), irq, max_cap);
++}
++
++/*
++ * Compute the perf_domain (PD) busy time for compute_energy(). Based on the
++ * utilization for each @pd_cpus, it however doesn't take into account
++ * clamping since the ratio (utilization / cpu_capacity) is already enough to
++ * scale the EM reported power consumption at the (eventually clamped)
++ * cpu_capacity.
++ *
++ * The contribution of the task @p for which we want to estimate the
++ * energy cost is removed (by cpu_util_next()) and must be calculated
++ * separately (see eenv_task_busy_time). This ensures:
++ *
++ *   - A stable PD utilization, no matter which CPU of that PD we want to place
++ *     the task on.
++ *
++ *   - A fair comparison between CPUs as the task contribution (task_util())
++ *     will always be the same no matter which CPU utilization we rely on
++ *     (util_avg or util_est).
++ *
++ * Set @eenv busy time for the PD that spans @pd_cpus. This busy time can't
++ * exceed @eenv->pd_cap.
++ */
++static inline void eenv_pd_busy_time(struct energy_env *eenv,
++				     struct cpumask *pd_cpus,
++				     struct task_struct *p)
++{
++	unsigned long busy_time = 0;
+ 	int cpu;
+ 
+-	cpu_cap = arch_scale_cpu_capacity(cpumask_first(cpus));
+-	cpu_cap -= arch_scale_thermal_pressure(cpumask_first(cpus));
++	for_each_cpu(cpu, pd_cpus) {
++		unsigned long util = cpu_util_next(cpu, p, -1);
+ 
+-	/*
+-	 * The capacity state of CPUs of the current rd can be driven by CPUs
+-	 * of another rd if they belong to the same pd. So, account for the
+-	 * utilization of these CPUs too by masking pd with cpu_online_mask
+-	 * instead of the rd span.
+-	 *
+-	 * If an entire pd is outside of the current rd, it will not appear in
+-	 * its pd list and will not be accounted by compute_energy().
+-	 */
+-	for_each_cpu(cpu, cpus) {
+-		unsigned long util_freq = cpu_util_next(cpu, p, dst_cpu);
+-		unsigned long cpu_util, util_running = util_freq;
+-		struct task_struct *tsk = NULL;
++		busy_time += effective_cpu_util(cpu, util, ENERGY_UTIL, NULL);
++	}
+ 
+-		/*
+-		 * When @p is placed on @cpu:
+-		 *
+-		 * util_running = max(cpu_util, cpu_util_est) +
+-		 *		  max(task_util, _task_util_est)
+-		 *
+-		 * while cpu_util_next is: max(cpu_util + task_util,
+-		 *			       cpu_util_est + _task_util_est)
+-		 */
+-		if (cpu == dst_cpu) {
+-			tsk = p;
+-			util_running =
+-				cpu_util_next(cpu, p, -1) + task_util_est(p);
+-		}
++	eenv->pd_busy_time = min(eenv->pd_cap, busy_time);
++}
+ 
+-		/*
+-		 * Busy time computation: utilization clamping is not
+-		 * required since the ratio (sum_util / cpu_capacity)
+-		 * is already enough to scale the EM reported power
+-		 * consumption at the (eventually clamped) cpu_capacity.
+-		 */
+-		cpu_util = effective_cpu_util(cpu, util_running, ENERGY_UTIL,
+-					      NULL);
++/*
++ * Compute the maximum utilization for compute_energy() when the task @p
++ * is placed on the cpu @dst_cpu.
++ *
++ * Returns the maximum utilization among @eenv->cpus. This utilization can't
++ * exceed @eenv->cpu_cap.
++ */
++static inline unsigned long
++eenv_pd_max_util(struct energy_env *eenv, struct cpumask *pd_cpus,
++		 struct task_struct *p, int dst_cpu)
++{
++	unsigned long max_util = 0;
++	int cpu;
+ 
+-		sum_util += min(cpu_util, cpu_cap);
++	for_each_cpu(cpu, pd_cpus) {
++		struct task_struct *tsk = (cpu == dst_cpu) ? p : NULL;
++		unsigned long util = cpu_util_next(cpu, p, dst_cpu);
++		unsigned long cpu_util;
+ 
+ 		/*
+ 		 * Performance domain frequency: utilization clamping
+@@ -6750,12 +6786,30 @@ compute_energy(struct task_struct *p, int dst_cpu, struct cpumask *cpus,
+ 		 * NOTE: in case RT tasks are running, by default the
+ 		 * FREQUENCY_UTIL's utilization can be max OPP.
+ 		 */
+-		cpu_util = effective_cpu_util(cpu, util_freq, FREQUENCY_UTIL,
+-					      tsk);
+-		max_util = max(max_util, min(cpu_util, cpu_cap));
++		cpu_util = effective_cpu_util(cpu, util, FREQUENCY_UTIL, tsk);
++		max_util = max(max_util, cpu_util);
+ 	}
+ 
+-	return em_cpu_energy(pd->em_pd, max_util, sum_util, cpu_cap);
++	return min(max_util, eenv->cpu_cap);
++}
++
++/*
++ * compute_energy(): Use the Energy Model to estimate the energy that @pd would
++ * consume for a given utilization landscape @eenv. If @dst_cpu < 0 the task
++ * contribution is removed from the energy estimation.
++ */
++static inline unsigned long
++compute_energy(struct energy_env *eenv, struct perf_domain *pd,
++	       struct cpumask *pd_cpus, struct task_struct *p, int dst_cpu)
++{
++	unsigned long max_util = eenv_pd_max_util(eenv, pd_cpus, p, dst_cpu);
++	unsigned long busy_time = eenv->pd_busy_time;
++
++	if (dst_cpu >= 0)
++		busy_time = min(eenv->pd_cap,
++				eenv->pd_busy_time + eenv->task_busy_time);
++
++	return em_cpu_energy(pd->em_pd, max_util, busy_time, eenv->cpu_cap);
+ }
+ 
+ /*
+@@ -6801,11 +6855,12 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ {
+ 	struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_rq_mask);
+ 	unsigned long prev_delta = ULONG_MAX, best_delta = ULONG_MAX;
+-	struct root_domain *rd = cpu_rq(smp_processor_id())->rd;
+ 	int cpu, best_energy_cpu = prev_cpu, target = -1;
+-	unsigned long cpu_cap, util, base_energy = 0;
++	struct root_domain *rd = this_rq()->rd;
++	unsigned long base_energy = 0;
+ 	struct sched_domain *sd;
+ 	struct perf_domain *pd;
++	struct energy_env eenv;
+ 
+ 	rcu_read_lock();
+ 	pd = rcu_dereference(rd->pd);
+@@ -6828,22 +6883,36 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 	if (!task_util_est(p))
+ 		goto unlock;
+ 
++	eenv_task_busy_time(&eenv, p, prev_cpu);
++
+ 	for (; pd; pd = pd->next) {
+-		unsigned long cur_delta, spare_cap, max_spare_cap = 0;
++		unsigned long cpu_cap, cpu_thermal_cap, util;
++		unsigned long cur_delta, max_spare_cap = 0;
+ 		bool compute_prev_delta = false;
+ 		unsigned long base_energy_pd;
+ 		int max_spare_cap_cpu = -1;
+ 
+ 		cpumask_and(cpus, perf_domain_span(pd), cpu_online_mask);
+ 
+-		for_each_cpu_and(cpu, cpus, sched_domain_span(sd)) {
++		/* Account thermal pressure for the energy estimation */
++		cpu = cpumask_first(cpus);
++		cpu_thermal_cap = arch_scale_cpu_capacity(cpu);
++		cpu_thermal_cap -= arch_scale_thermal_pressure(cpu);
++
++		eenv.cpu_cap = cpu_thermal_cap;
++		eenv.pd_cap = 0;
++
++		for_each_cpu(cpu, cpus) {
++			eenv.pd_cap += cpu_thermal_cap;
++
++			if (!cpumask_test_cpu(cpu, sched_domain_span(sd)))
++				continue;
++
+ 			if (!cpumask_test_cpu(cpu, p->cpus_ptr))
+ 				continue;
+ 
+ 			util = cpu_util_next(cpu, p, cpu);
+ 			cpu_cap = capacity_of(cpu);
+-			spare_cap = cpu_cap;
+-			lsub_positive(&spare_cap, util);
+ 
+ 			/*
+ 			 * Skip CPUs that cannot satisfy the capacity request.
+@@ -6856,15 +6925,17 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 			if (!fits_capacity(util, cpu_cap))
+ 				continue;
+ 
++			lsub_positive(&cpu_cap, util);
++
+ 			if (cpu == prev_cpu) {
+ 				/* Always use prev_cpu as a candidate. */
+ 				compute_prev_delta = true;
+-			} else if (spare_cap > max_spare_cap) {
++			} else if (cpu_cap > max_spare_cap) {
+ 				/*
+ 				 * Find the CPU with the maximum spare capacity
+ 				 * in the performance domain.
+ 				 */
+-				max_spare_cap = spare_cap;
++				max_spare_cap = cpu_cap;
+ 				max_spare_cap_cpu = cpu;
+ 			}
+ 		}
+@@ -6873,12 +6944,14 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 			continue;
+ 
+ 		/* Compute the 'base' energy of the pd, without @p */
+-		base_energy_pd = compute_energy(p, -1, cpus, pd);
++		eenv_pd_busy_time(&eenv, cpus, p);
++		base_energy_pd = compute_energy(&eenv, pd, cpus, p, -1);
+ 		base_energy += base_energy_pd;
+ 
+ 		/* Evaluate the energy impact of using prev_cpu. */
+ 		if (compute_prev_delta) {
+-			prev_delta = compute_energy(p, prev_cpu, cpus, pd);
++			prev_delta = compute_energy(&eenv, pd, cpus, p,
++						    prev_cpu);
+ 			if (prev_delta < base_energy_pd)
+ 				goto unlock;
+ 			prev_delta -= base_energy_pd;
+@@ -6887,8 +6960,8 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 
+ 		/* Evaluate the energy impact of using max_spare_cap_cpu. */
+ 		if (max_spare_cap_cpu >= 0) {
+-			cur_delta = compute_energy(p, max_spare_cap_cpu, cpus,
+-						   pd);
++			cur_delta = compute_energy(&eenv, pd, cpus, p,
++						   max_spare_cap_cpu);
+ 			if (cur_delta < base_energy_pd)
+ 				goto unlock;
+ 			cur_delta -= base_energy_pd;
 -- 
-Regards,
-  Artem
+2.25.1
 

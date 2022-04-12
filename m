@@ -2,108 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14FF84FE85A
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 20:59:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B68214FE863
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 20:59:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358871AbiDLTAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 15:00:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59914 "EHLO
+        id S1359020AbiDLTBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 15:01:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358808AbiDLTAX (ORCPT
+        with ESMTP id S1358931AbiDLTAp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 15:00:23 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8953C49CBE
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 11:58:04 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id r13so39197628ejd.5
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 11:58:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=EMAct/S8PjX9QPpz0Ylic0owxKculFndXWjJh1Wp6MA=;
-        b=D45J6e1pF1z1CQu/h0fcwxA/V3UGywEx3PmOrTzAFdcgyPnHrkMofGu9jBLwnFIhKl
-         qIbQXdZu9bt7yU2jlVwd5O2nFhxTtRnwUBUMP6nZzoRVUgOFfDXlq5uAUOeS8rCl8ZqO
-         VtEpV4Cr6+USSVICKIFEYFgvcRQlZTHsiSvvKM0rsntua3Zw9II1mGWrSlidtgTXisDi
-         KKNsurhDuwAHD8CbMhvjWTGugCfKj249RnTThHr7z2emuTQFN9LflrXPmvunjSgfXaKI
-         fJgXAQHoDt5sLWrQAZcWsbnibDZXXnn8qrFKLtLO9V/MrpjLaCAZQC9PFybTfLjFO2Y1
-         GRcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=EMAct/S8PjX9QPpz0Ylic0owxKculFndXWjJh1Wp6MA=;
-        b=cpsVtt+DxPtmFHABHPK0UJVc/rB/dTkaLg/f38PNv6sQUXptfPPBtHKFg3BZJhhh3n
-         yy2OlngYVo9frO7I92AcmECw8jbM6mFg5DwhwAjNdae/WJy/DDMQY3vJNiFljEhal/Z+
-         Jgxh2aLCWnepxvjUoEId7dEEBgxqpdJoRhClO1ZhOkdRfgYPrSAqDVKpfK0g3IKlPf3O
-         PFXEpIFyjriLbR06Pz9op/VBmAdo+jZptnCv6YSEqA7xOOsz3tm9/e1kfapAMpRXCiPv
-         hjTP84He6NzDS6mAzO1iTLHq3IKo+OVG3gDipGrfPGmciz9sLsSNGwf6HhjxfKaaCTE+
-         lhPg==
-X-Gm-Message-State: AOAM531kAZHPc7Iy2qt3mNEdQfjYBJ4RtZUxhu4wmsGEsCdjFSM//pqq
-        6ay63qJKDX4wJ+owMoquFGY=
-X-Google-Smtp-Source: ABdhPJyUq5S/ZdO2cE9v0nrsQtQMhDmUvC0XzovmvV2ElN2HNG8I3o5UpPmS34ChyfTA6OltKS8qAw==
-X-Received: by 2002:a17:907:7ea2:b0:6e8:92eb:3893 with SMTP id qb34-20020a1709077ea200b006e892eb3893mr10359148ejc.350.1649789883136;
-        Tue, 12 Apr 2022 11:58:03 -0700 (PDT)
-Received: from localhost.localdomain (ip5f5abb6b.dynamic.kabel-deutschland.de. [95.90.187.107])
-        by smtp.gmail.com with ESMTPSA id q22-20020a170906771600b006cf8a37ebf5sm13443482ejm.103.2022.04.12.11.58.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 11:58:02 -0700 (PDT)
-From:   Michael Straube <straube.linux@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 2/6] staging: r8188eu: rename parameter of block_write()
-Date:   Tue, 12 Apr 2022 20:57:50 +0200
-Message-Id: <20220412185754.8695-3-straube.linux@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412185754.8695-1-straube.linux@gmail.com>
-References: <20220412185754.8695-1-straube.linux@gmail.com>
+        Tue, 12 Apr 2022 15:00:45 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530BA5DA49
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 11:58:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649789900; x=1681325900;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ArM6zdSPrEfub9f8dsOx6ulm8dvmlFlgaT3Do9sqEmg=;
+  b=XVccSjkNLcftPsrI56VNYkL9wzstzgiZlxv7Bem+p7V5c/hdC9lF2OxX
+   gqZ3IVFbccOfEUGL3MrlW2ieNuSJ9edkLa66RvZQVxz1mrnK0TtkC4IRN
+   szTDAaiiltDrEPybEg68DLvR1n3yNsbfJKXBlhCpn+XNj+Se7qFWyH3jA
+   Y+SBX7BFUc/uwSndSxRfXmFivEnttclpgSfL42F3RDgfAwX/NXFTv+5Rf
+   YC9MgWhrTKh0e7Q9EJQ7vF6IINPDnRPzRGEVFfBCxeFkP/zMFZU/Fcefn
+   7/U8KGPG/qoKsf13Rau0odnn7NqDn4Ae9uW4U57sM/e1lvpdO1g3t1WGr
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="262230510"
+X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
+   d="scan'208";a="262230510"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 11:58:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
+   d="scan'208";a="611587870"
+Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 12 Apr 2022 11:58:18 -0700
+Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1neLiT-00035j-LA;
+        Tue, 12 Apr 2022 18:58:17 +0000
+Date:   Wed, 13 Apr 2022 02:57:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
+ e912cedc79ae9278ebbc660b07969f953431748d
+Message-ID: <6255cbae.o8736nu8CxzA8qzw%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename the parameter buffSize of block_write() to avoid camel case.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
+branch HEAD: e912cedc79ae9278ebbc660b07969f953431748d  rcu-tasks: Handle sparse cpu_possible_mask in rcu_tasks_invoke_cbs()
 
-buffSize -> size
+elapsed time: 1258m
 
-Signed-off-by: Michael Straube <straube.linux@gmail.com>
----
- drivers/staging/r8188eu/core/rtw_fw.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+configs tested: 140
+configs skipped: 4
 
-diff --git a/drivers/staging/r8188eu/core/rtw_fw.c b/drivers/staging/r8188eu/core/rtw_fw.c
-index 0905384bafc7..5f59acfd8b5d 100644
---- a/drivers/staging/r8188eu/core/rtw_fw.c
-+++ b/drivers/staging/r8188eu/core/rtw_fw.c
-@@ -71,7 +71,7 @@ static void fw_download_enable(struct adapter *padapter, bool enable)
- 	}
- }
- 
--static int block_write(struct adapter *padapter, void *buffer, u32 buffSize)
-+static int block_write(struct adapter *padapter, void *buffer, u32 size)
- {
- 	int ret = _SUCCESS;
- 	u32	blockSize_p1 = 4;	/*  (Default) Phase #1 : PCI muse use 4-byte write to download FW */
-@@ -85,8 +85,8 @@ static int block_write(struct adapter *padapter, void *buffer, u32 buffSize)
- 	blockSize_p1 = MAX_REG_BLOCK_SIZE;
- 
- 	/* 3 Phase #1 */
--	blockCount_p1 = buffSize / blockSize_p1;
--	remainSize_p1 = buffSize % blockSize_p1;
-+	blockCount_p1 = size / blockSize_p1;
-+	remainSize_p1 = size % blockSize_p1;
- 
- 	for (i = 0; i < blockCount_p1; i++) {
- 		ret = rtw_writeN(padapter, (FW_8188E_START_ADDRESS + i * blockSize_p1), blockSize_p1, (bufferPtr + i * blockSize_p1));
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                 randconfig-c001-20220411
+arm                            lart_defconfig
+arc                           tb10x_defconfig
+arm                          gemini_defconfig
+i386                                defconfig
+sh                               alldefconfig
+sh                            migor_defconfig
+arm                         cm_x300_defconfig
+sparc                       sparc32_defconfig
+sh                          rsk7269_defconfig
+arm                          badge4_defconfig
+arm                     eseries_pxa_defconfig
+powerpc                      mgcoge_defconfig
+arm                       imx_v6_v7_defconfig
+arm                          pxa3xx_defconfig
+m68k                       m5475evb_defconfig
+sh                 kfr2r09-romimage_defconfig
+xtensa                          iss_defconfig
+sh                        sh7763rdp_defconfig
+arm                         at91_dt_defconfig
+powerpc                     ep8248e_defconfig
+arm                        realview_defconfig
+sh                          sdk7780_defconfig
+parisc64                         alldefconfig
+um                                  defconfig
+arm                           u8500_defconfig
+arm                           viper_defconfig
+powerpc                      bamboo_defconfig
+powerpc                     stx_gp3_defconfig
+mips                  decstation_64_defconfig
+powerpc                     mpc83xx_defconfig
+xtensa                  cadence_csp_defconfig
+sh                          rsk7203_defconfig
+mips                         cobalt_defconfig
+nios2                            alldefconfig
+sh                               j2_defconfig
+m68k                       m5249evb_defconfig
+riscv                               defconfig
+arm                  randconfig-c002-20220411
+x86_64               randconfig-c001-20220411
+ia64                             allmodconfig
+ia64                             allyesconfig
+ia64                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+x86_64               randconfig-a016-20220411
+x86_64               randconfig-a012-20220411
+x86_64               randconfig-a013-20220411
+x86_64               randconfig-a014-20220411
+x86_64               randconfig-a015-20220411
+x86_64               randconfig-a011-20220411
+i386                 randconfig-a015-20220411
+i386                 randconfig-a011-20220411
+i386                 randconfig-a016-20220411
+i386                 randconfig-a012-20220411
+i386                 randconfig-a013-20220411
+i386                 randconfig-a014-20220411
+riscv                randconfig-r042-20220411
+s390                 randconfig-r044-20220411
+arc                  randconfig-r043-20220411
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
+
+clang tested configs:
+powerpc              randconfig-c003-20220411
+arm                  randconfig-c002-20220411
+riscv                randconfig-c006-20220411
+x86_64               randconfig-c007-20220411
+mips                 randconfig-c004-20220411
+i386                 randconfig-c001-20220411
+arm                      pxa255-idp_defconfig
+arm                        multi_v5_defconfig
+powerpc                 mpc8315_rdb_defconfig
+powerpc                     mpc512x_defconfig
+powerpc                     ppa8548_defconfig
+x86_64                           allyesconfig
+arm                      tct_hammer_defconfig
+arm                         s5pv210_defconfig
+powerpc                     tqm8560_defconfig
+arm                            mmp2_defconfig
+powerpc                 mpc837x_rdb_defconfig
+arm                           sama7_defconfig
+arm                          pxa168_defconfig
+i386                 randconfig-a004-20220411
+i386                 randconfig-a001-20220411
+i386                 randconfig-a003-20220411
+i386                 randconfig-a005-20220411
+i386                 randconfig-a006-20220411
+i386                 randconfig-a002-20220411
+x86_64               randconfig-a003-20220411
+x86_64               randconfig-a004-20220411
+x86_64               randconfig-a006-20220411
+x86_64               randconfig-a001-20220411
+x86_64               randconfig-a002-20220411
+x86_64               randconfig-a005-20220411
+riscv                randconfig-r042-20220412
+hexagon              randconfig-r041-20220412
+hexagon              randconfig-r045-20220412
+hexagon              randconfig-r041-20220411
+hexagon              randconfig-r045-20220411
+
 -- 
-2.35.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

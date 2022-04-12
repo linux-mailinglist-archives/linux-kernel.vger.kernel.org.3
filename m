@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1FF74FE85D
+	by mail.lfdr.de (Postfix) with ESMTP id 5CD7C4FE85B
 	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 20:59:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358917AbiDLTBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 15:01:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59914 "EHLO
+        id S1351155AbiDLTBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 15:01:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358800AbiDLTAY (ORCPT
+        with ESMTP id S1358825AbiDLTAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 15:00:24 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CB843AD5
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 11:58:06 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 21so10293199edv.1
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 11:58:06 -0700 (PDT)
+        Tue, 12 Apr 2022 15:00:25 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A68D4BFD8
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 11:58:07 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id c6so8353909edn.8
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 11:58:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=BsWsL39ltA1wTpv8W1hqbPPmQmDEyFgKV3mcaWzu08c=;
-        b=deKENVLfFRR1fSZcs4ZiGvcW7ukzwIj8EfVX9z37LnXJPhxKNy3FxGIe6CQWbppQIZ
-         aUtXjcAGORu3rS41d0DFthdls3+R9BXfOayU3ZVY6alx9It4b/1sA/9Q8sW/dkT/rJ2G
-         9Ao5L5yysnSmKppJdLi3k8ZhAwWiJpjpgdWOPVfMgdGFaSfqQopk/Y1WJTZxPxt2ZDP8
-         MaY0YsabmrGjtB+Q8UuEbY+n+gncLmW/+aa4camFgK4cnumJYM+U9/uWC6sRAa64MIhh
-         Ls8lSPJ+3GTpzD1LHjG9g3DZMpo2nd7Y4COzsHpA4iu3dV0ji96ME61a5RJRK5Ze1E0Q
-         q6QA==
+        bh=hpa4N5vsb9gM4LzFPyO/7ve7HdAU0SOf4yN5lG8PbWY=;
+        b=HgVZUoTC+gx8PCPFFLnAywUZ8CUoq5mmDC3QTucWlg1VezUrWG0GdIhCuBtFLv8tyl
+         VEQDO3GSP4ox2p1SUPDaMmoPvV6L9nBPTvZEQI03+2UY4VYL62fC+Fo3VOqOzrnDJiQl
+         UOwhXzAQQAtkHZzeGIAtrEfJRLZEY0aQyPa4u134U3tWNgEV1/I2JLuOjwj+y08VmnyN
+         mPJpPc4wCZiIMrTOkWXj8wDZ3VEjGdYEj+upacu0akQ0ZXB3lwb1HBN9vVVqNat57DpJ
+         jGEbFk9l0FA+tN3qS9x6gAb/s70vTP2j/7nKwGxhMcE/3oKzNLxWpK+Wzc8uEJFhf0k8
+         vFeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=BsWsL39ltA1wTpv8W1hqbPPmQmDEyFgKV3mcaWzu08c=;
-        b=s1kemyzJhBEN5ZdlL+Pv6aKMhOp/oSi0YGVdTHRkIQNkIOMq0MeThEyFtV5tcHDSLB
-         siI4E+cyVEsfMxK1VwF3UoxAsVzzu+0fj3Tc51cuLa5SWCiM40myGCkuGXM+6U6mbO4i
-         9AigvzHrYAxVX25qnFqUKp0SlVeMOlcqCh4G2Aj6lCxlWvtTwq0zhPRW1IV9oauPD6yd
-         0yESmrs8DwTMlYIswcegtB8SGZD6qy1VPzL/X4ySZ1oEqatTyS7dJ4bWdQ9X7418/uOe
-         fZltedlS2SNb02h7bIf5xQNY0gcNTEJK6h+aTgdcdG4FkN3GnIqOJMbpV0KNKyGoUlC1
-         +EZQ==
-X-Gm-Message-State: AOAM531QgS3REMdH1TI8QqoVUaig4qJAWSn7JUbJl5edCpMOqvGbhpq0
-        oOt8Rwg3czyKQ+ZLSgLG3GE=
-X-Google-Smtp-Source: ABdhPJxvfzcTLZbNQM0pkZ2JE75eq79nLgBBh5wlxm3gTixrxFK/X6sdt7LCtKYa6G2Wc4lkwKqYGA==
-X-Received: by 2002:aa7:d494:0:b0:41d:704f:7718 with SMTP id b20-20020aa7d494000000b0041d704f7718mr17595132edr.147.1649789885302;
-        Tue, 12 Apr 2022 11:58:05 -0700 (PDT)
+        bh=hpa4N5vsb9gM4LzFPyO/7ve7HdAU0SOf4yN5lG8PbWY=;
+        b=XdLlbYBS5esXn/elg49KjIssocd4oSYSjIzSw0BkPCW67fGBV+OffeEYiXRUpYDJfZ
+         sNc6iQIhkCXd7sswyVREysLxrhZVa5ZSpSKCEqy0GtvP0bBvNgkRiPVAsMC2h2+2pAF5
+         4ejhSkR/NNJOqQmjgYib0lHNG9MsTJZhDuIwWpPVxTyxwIazNEk6kq6JERGESXzegWlr
+         YgZ8UHHBhojW4XZNr8rWExwH0Hzht6enY/3YZHJjNM+IVsqzDs3yHmTv7qdHDML1zjzQ
+         vsu1wdz+QHIxbRTgGWGS5PIKrSae+Q+I8f/8dVzEizclPYBozDE4AUEP65uTLX+QkHfj
+         0zcg==
+X-Gm-Message-State: AOAM532XanRHijeckPDZaENhdERFCKehN+mpCjgKxBhgEhaYe33FewRk
+        RZ76sOEYMuThJhy9ob1mKUg=
+X-Google-Smtp-Source: ABdhPJxfSkH/23aJHVUbzKtMu+PEFUbtRkCS3kd4XoG51Dtd6o0rHViRyN1QxNgGj6jVF+kgF4Lm1Q==
+X-Received: by 2002:a05:6402:cac:b0:410:a920:4e90 with SMTP id cn12-20020a0564020cac00b00410a9204e90mr39599935edb.60.1649789886129;
+        Tue, 12 Apr 2022 11:58:06 -0700 (PDT)
 Received: from localhost.localdomain (ip5f5abb6b.dynamic.kabel-deutschland.de. [95.90.187.107])
-        by smtp.gmail.com with ESMTPSA id q22-20020a170906771600b006cf8a37ebf5sm13443482ejm.103.2022.04.12.11.58.04
+        by smtp.gmail.com with ESMTPSA id q22-20020a170906771600b006cf8a37ebf5sm13443482ejm.103.2022.04.12.11.58.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 11:58:04 -0700 (PDT)
+        Tue, 12 Apr 2022 11:58:05 -0700 (PDT)
 From:   Michael Straube <straube.linux@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 5/6] staging: r8188eu: remove unneeded initializations
-Date:   Tue, 12 Apr 2022 20:57:53 +0200
-Message-Id: <20220412185754.8695-6-straube.linux@gmail.com>
+Subject: [PATCH 6/6] staging: r8188eu: clean up long lines in block_write()
+Date:   Tue, 12 Apr 2022 20:57:54 +0200
+Message-Id: <20220412185754.8695-7-straube.linux@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412185754.8695-1-straube.linux@gmail.com>
 References: <20220412185754.8695-1-straube.linux@gmail.com>
@@ -71,27 +71,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The variables i and offset in block_write() are set in the code
-before they are used. Remove the unneeded initializations.
+Store the address and the data pointer for calls to rtw_writeN() and
+rtw_write8() in local variables. This avoids long lines and improves
+readability.
 
 Signed-off-by: Michael Straube <straube.linux@gmail.com>
 ---
- drivers/staging/r8188eu/core/rtw_fw.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/staging/r8188eu/core/rtw_fw.c | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/staging/r8188eu/core/rtw_fw.c b/drivers/staging/r8188eu/core/rtw_fw.c
-index b4ab050a6f23..1e930799a0b3 100644
+index 1e930799a0b3..8620f3c92b52 100644
 --- a/drivers/staging/r8188eu/core/rtw_fw.c
 +++ b/drivers/staging/r8188eu/core/rtw_fw.c
-@@ -75,7 +75,7 @@ static int block_write(struct adapter *padapter, u8 *buffer, u32 size)
+@@ -75,7 +75,8 @@ static int block_write(struct adapter *padapter, u8 *buffer, u32 size)
  {
  	int ret = _SUCCESS;
  	u32 blocks, block_size, remain;
--	u32	i = 0, offset = 0;
-+	u32 i, offset;
+-	u32 i, offset;
++	u32 i, offset, addr;
++	u8 *data;
  
  	block_size = MAX_REG_BLOCK_SIZE;
  
+@@ -83,7 +84,10 @@ static int block_write(struct adapter *padapter, u8 *buffer, u32 size)
+ 	remain = size % block_size;
+ 
+ 	for (i = 0; i < blocks; i++) {
+-		ret = rtw_writeN(padapter, (FW_8188E_START_ADDRESS + i * block_size), block_size, (buffer + i * block_size));
++		addr = FW_8188E_START_ADDRESS + i * block_size;
++		data = buffer + i * block_size;
++
++		ret = rtw_writeN(padapter, addr, block_size, data);
+ 		if (ret == _FAIL)
+ 			goto exit;
+ 	}
+@@ -96,7 +100,10 @@ static int block_write(struct adapter *padapter, u8 *buffer, u32 size)
+ 		remain = remain % block_size;
+ 
+ 		for (i = 0; i < blocks; i++) {
+-			ret = rtw_writeN(padapter, (FW_8188E_START_ADDRESS + offset + i * block_size), block_size, (buffer + offset + i * block_size));
++			addr = FW_8188E_START_ADDRESS + offset + i * block_size;
++			data = buffer + offset + i * block_size;
++
++			ret = rtw_writeN(padapter, addr, block_size, data);
+ 			if (ret == _FAIL)
+ 				goto exit;
+ 		}
+@@ -109,7 +116,10 @@ static int block_write(struct adapter *padapter, u8 *buffer, u32 size)
+ 		blocks = remain;
+ 
+ 		for (i = 0; i < blocks; i++) {
+-			ret = rtw_write8(padapter, (FW_8188E_START_ADDRESS + offset + i), *(buffer + offset + i));
++			addr = FW_8188E_START_ADDRESS + offset + i;
++			data = buffer + offset + i;
++
++			ret = rtw_write8(padapter, addr, *data);
+ 			if (ret == _FAIL)
+ 				goto exit;
+ 		}
 -- 
 2.35.1
 

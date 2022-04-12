@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA0144FD539
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E25C44FD775
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:29:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242829AbiDLHWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46894 "EHLO
+        id S1355674AbiDLJTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:19:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352922AbiDLHGa (ORCPT
+        with ESMTP id S1357560AbiDLHk3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:06:30 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1359549258;
-        Mon, 11 Apr 2022 23:48:55 -0700 (PDT)
+        Tue, 12 Apr 2022 03:40:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E00AA30F56;
+        Tue, 12 Apr 2022 00:16:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 191E5CE1C0C;
-        Tue, 12 Apr 2022 06:48:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E231C385A1;
-        Tue, 12 Apr 2022 06:48:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8841E6171C;
+        Tue, 12 Apr 2022 07:16:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FA03C385A5;
+        Tue, 12 Apr 2022 07:16:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746132;
-        bh=ANNSXt8p+vwOH2nDVXDkVOrFLzW4MwcEAcvLdHw4Z0w=;
+        s=korg; t=1649747764;
+        bh=eyF2VnUNxOloLVIPfKJn9iNPrihstZvyrnDzYF9Nnbs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Iw/goZIfRKY9hE/jRGlDjyq5qMX8yre8gl323WRvS9xde9UMEr07PSrmtPY7YBdRP
-         +GAtntvv2k0gly6FLt4OBJLlrp65addDQPWy2s6PqKR1L8j/Wqd5Ai4EZY4EWRjBQL
-         d9Cz1cmmPVJar5j7MDtoIYvUjvNJ4Jtg8gzKHBrg=
+        b=kgTYtzIAxKPqIcFQl6DUfmlVKJXggtV5k/2LscdUpTunzMEyEoYW+F88x2SD0dGpv
+         GJScbZq8hrcUzE2BM/7UqyQr2LLkLMPdAIhXFp/ngMgpkaMcu+x/OzdnCC6ZjJJgju
+         12ld9jyzwXSvFTvdNDkg+x0zCnFiGXFa9/28GeKI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavan Chebbi <pavan.chebbi@broadcom.com>,
-        Michael Chan <michael.chan@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Adam Wujek <dev_public@wujek.eu>,
+        Robert Hancock <robert.hancock@calian.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 171/277] bnxt_en: Synchronize tx when xdp redirects happen on same ring
+Subject: [PATCH 5.17 156/343] clk: si5341: fix reported clk_rate when output divider is 2
 Date:   Tue, 12 Apr 2022 08:29:34 +0200
-Message-Id: <20220412062946.987305074@linuxfoundation.org>
+Message-Id: <20220412062955.878980290@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,111 +56,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavan Chebbi <pavan.chebbi@broadcom.com>
+From: Adam Wujek <dev_public@wujek.eu>
 
-[ Upstream commit 4f81def272de17dc4bbd89ac38f49b2676c9b3d2 ]
+[ Upstream commit 2a8b539433e111c4de364237627ef219d2f6350a ]
 
-If there are more CPUs than the number of TX XDP rings, multiple XDP
-redirects can select the same TX ring based on the CPU on which
-XDP redirect is called.  Add locking when needed and use static
-key to decide whether to take the lock.
+SI5341_OUT_CFG_RDIV_FORCE2 shall be checked first to distinguish whether
+a divider for a given output is set to 2 (SI5341_OUT_CFG_RDIV_FORCE2
+is set) or the output is disabled (SI5341_OUT_CFG_RDIV_FORCE2 not set,
+SI5341_OUT_R_REG is set 0).
+Before the change, divider set to 2 (SI5341_OUT_R_REG set to 0) was
+interpreted as output is disabled.
 
-Fixes: f18c2b77b2e4 ("bnxt_en: optimized XDP_REDIRECT support")
-Signed-off-by: Pavan Chebbi <pavan.chebbi@broadcom.com>
-Signed-off-by: Michael Chan <michael.chan@broadcom.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Adam Wujek <dev_public@wujek.eu>
+Link: https://lore.kernel.org/r/20211203141125.2447520-1-dev_public@wujek.eu
+Reviewed-by: Robert Hancock <robert.hancock@calian.com>
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/broadcom/bnxt/bnxt.c     | 7 +++++++
- drivers/net/ethernet/broadcom/bnxt/bnxt.h     | 2 ++
- drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c | 8 ++++++++
- drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.h | 2 ++
- 4 files changed, 19 insertions(+)
+ drivers/clk/clk-si5341.c | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-index ce36ee5a250f..8b078c319872 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-@@ -3234,6 +3234,7 @@ static int bnxt_alloc_tx_rings(struct bnxt *bp)
- 		}
- 		qidx = bp->tc_to_qidx[j];
- 		ring->queue_id = bp->q_info[qidx].queue_id;
-+		spin_lock_init(&txr->xdp_tx_lock);
- 		if (i < bp->tx_nr_rings_xdp)
- 			continue;
- 		if (i % bp->tx_nr_rings_per_tc == (bp->tx_nr_rings_per_tc - 1))
-@@ -10246,6 +10247,12 @@ static int __bnxt_open_nic(struct bnxt *bp, bool irq_re_init, bool link_re_init)
- 	if (irq_re_init)
- 		udp_tunnel_nic_reset_ntf(bp->dev);
+diff --git a/drivers/clk/clk-si5341.c b/drivers/clk/clk-si5341.c
+index f7b41366666e..4de098b6b0d4 100644
+--- a/drivers/clk/clk-si5341.c
++++ b/drivers/clk/clk-si5341.c
+@@ -798,6 +798,15 @@ static unsigned long si5341_output_clk_recalc_rate(struct clk_hw *hw,
+ 	u32 r_divider;
+ 	u8 r[3];
  
-+	if (bp->tx_nr_rings_xdp < num_possible_cpus()) {
-+		if (!static_key_enabled(&bnxt_xdp_locking_key))
-+			static_branch_enable(&bnxt_xdp_locking_key);
-+	} else if (static_key_enabled(&bnxt_xdp_locking_key)) {
-+		static_branch_disable(&bnxt_xdp_locking_key);
-+	}
- 	set_bit(BNXT_STATE_OPEN, &bp->state);
- 	bnxt_enable_int(bp);
- 	/* Enable TX queues */
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.h b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
-index ca6fdf03e586..0aaaeecd67ea 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt.h
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
-@@ -791,6 +791,8 @@ struct bnxt_tx_ring_info {
- 	u32			dev_state;
- 
- 	struct bnxt_ring_struct	tx_ring_struct;
-+	/* Synchronize simultaneous xdp_xmit on same ring */
-+	spinlock_t		xdp_tx_lock;
- };
- 
- #define BNXT_LEGACY_COAL_CMPL_PARAMS					\
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-index c8083df5e0ab..c59e46c7a1ca 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-@@ -20,6 +20,8 @@
- #include "bnxt.h"
- #include "bnxt_xdp.h"
- 
-+DEFINE_STATIC_KEY_FALSE(bnxt_xdp_locking_key);
++	err = regmap_read(output->data->regmap,
++			SI5341_OUT_CONFIG(output), &val);
++	if (err < 0)
++		return err;
 +
- struct bnxt_sw_tx_bd *bnxt_xmit_bd(struct bnxt *bp,
- 				   struct bnxt_tx_ring_info *txr,
- 				   dma_addr_t mapping, u32 len)
-@@ -227,6 +229,9 @@ int bnxt_xdp_xmit(struct net_device *dev, int num_frames,
- 	ring = smp_processor_id() % bp->tx_nr_rings_xdp;
- 	txr = &bp->tx_ring[ring];
- 
-+	if (static_branch_unlikely(&bnxt_xdp_locking_key))
-+		spin_lock(&txr->xdp_tx_lock);
++	/* If SI5341_OUT_CFG_RDIV_FORCE2 is set, r_divider is 2 */
++	if (val & SI5341_OUT_CFG_RDIV_FORCE2)
++		return parent_rate / 2;
 +
- 	for (i = 0; i < num_frames; i++) {
- 		struct xdp_frame *xdp = frames[i];
+ 	err = regmap_bulk_read(output->data->regmap,
+ 			SI5341_OUT_R_REG(output), r, 3);
+ 	if (err < 0)
+@@ -814,13 +823,6 @@ static unsigned long si5341_output_clk_recalc_rate(struct clk_hw *hw,
+ 	r_divider += 1;
+ 	r_divider <<= 1;
  
-@@ -250,6 +255,9 @@ int bnxt_xdp_xmit(struct net_device *dev, int num_frames,
- 		bnxt_db_write(bp, &txr->tx_db, txr->tx_prod);
- 	}
+-	err = regmap_read(output->data->regmap,
+-			SI5341_OUT_CONFIG(output), &val);
+-	if (err < 0)
+-		return err;
+-
+-	if (val & SI5341_OUT_CFG_RDIV_FORCE2)
+-		r_divider = 2;
  
-+	if (static_branch_unlikely(&bnxt_xdp_locking_key))
-+		spin_unlock(&txr->xdp_tx_lock);
-+
- 	return nxmit;
+ 	return parent_rate / r_divider;
  }
- 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.h b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.h
-index 0df40c3beb05..067bb5e821f5 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.h
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.h
-@@ -10,6 +10,8 @@
- #ifndef BNXT_XDP_H
- #define BNXT_XDP_H
- 
-+DECLARE_STATIC_KEY_FALSE(bnxt_xdp_locking_key);
-+
- struct bnxt_sw_tx_bd *bnxt_xmit_bd(struct bnxt *bp,
- 				   struct bnxt_tx_ring_info *txr,
- 				   dma_addr_t mapping, u32 len);
 -- 
 2.35.1
 

@@ -2,49 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79DB64FD72B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:27:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 629B94FD94D
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:40:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236606AbiDLH6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:58:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42878 "EHLO
+        id S1376760AbiDLIuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:50:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353628AbiDLHZv (ORCPT
+        with ESMTP id S1358132AbiDLHlH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:25:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD4425EB6;
-        Tue, 12 Apr 2022 00:02:24 -0700 (PDT)
+        Tue, 12 Apr 2022 03:41:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC3541F8B;
+        Tue, 12 Apr 2022 00:17:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B09DB60B2B;
-        Tue, 12 Apr 2022 07:02:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7A18C385A6;
-        Tue, 12 Apr 2022 07:02:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BFCCEB81B66;
+        Tue, 12 Apr 2022 07:17:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38A29C385A1;
+        Tue, 12 Apr 2022 07:17:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746943;
-        bh=0IsMixcYoYir+0I2ktsvoJUilZLmNIeGvWPRRfGijNo=;
+        s=korg; t=1649747843;
+        bh=6uhKsBVK/85T0zV+8oTAuD9p40iNznVFuvXgxUB+jLs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mZA2gYS3AnN5qZjlyBhd8dIanLrCUdG7BhMo2EGghTevnPNna6+xIQDjc/QZGzM+d
-         H404MHFx7W0kOyTQmVb4Y9QLkZqJbl90yHzvV6haWfsxVm8u28EjAbBnH4MkAaPIfu
-         jwnFrFIao167E6yhA+WfDyBeOFOosUczWq2KHIXY=
+        b=geeFk2Uv0jgq46cLSV5QGgakYySyO7Ck6MmLXCnk6L01h6jkcH4vn0tyhyda9AFWB
+         dsy7uIN/sjuU1ZNtXpDGu9cY9+7zyX1ACf4ZockbBvVviYWiDgVzg0bkV+n5iqXuMI
+         zIt84gyEH0M0z8xf23OGgeKZCzE2IF0nZ9mHSDHk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>,
-        Konrad Jankowski <konrad0.jankowski@intel.com>,
-        Alice Michael <alice.michael@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org, Taehee Yoo <ap420073@gmail.com>,
+        Martin Habets <habetsm.xilinx@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 186/285] ice: Do not skip not enabled queues in ice_vc_dis_qs_msg
+Subject: [PATCH 5.17 225/343] sfc: Do not free an empty page_ring
 Date:   Tue, 12 Apr 2022 08:30:43 +0200
-Message-Id: <20220412062949.031574197@linuxfoundation.org>
+Message-Id: <20220412062957.832625390@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,78 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>
+From: Martin Habets <habetsm.xilinx@gmail.com>
 
-[ Upstream commit 05ef6813b234db3196f083b91db3963f040b65bb ]
+[ Upstream commit 458f5d92df4807e2a7c803ed928369129996bf96 ]
 
-Disable check for queue being enabled in ice_vc_dis_qs_msg, because
-there could be a case when queues were created, but were not enabled.
-We still need to delete those queues.
+When the page_ring is not used page_ptr_mask is 0.
+Do not dereference page_ring[0] in this case.
 
-Normal workflow for VF looks like:
-Enable path:
-VIRTCHNL_OP_ADD_ETH_ADDR (opcode 10)
-VIRTCHNL_OP_CONFIG_VSI_QUEUES (opcode 6)
-VIRTCHNL_OP_ENABLE_QUEUES (opcode 8)
-
-Disable path:
-VIRTCHNL_OP_DISABLE_QUEUES (opcode 9)
-VIRTCHNL_OP_DEL_ETH_ADDR (opcode 11)
-
-The issue appears only in stress conditions when VF is enabled and
-disabled very fast.
-Eventually there will be a case, when queues are created by
-VIRTCHNL_OP_CONFIG_VSI_QUEUES, but are not enabled by
-VIRTCHNL_OP_ENABLE_QUEUES.
-In turn, these queues are not deleted by VIRTCHNL_OP_DISABLE_QUEUES,
-because there is a check whether queues are enabled in
-ice_vc_dis_qs_msg.
-
-When we bring up the VF again, we will see the "Failed to set LAN Tx queue
-context" error during VIRTCHNL_OP_CONFIG_VSI_QUEUES step. This
-happens because old 16 queues were not deleted and VF requests to create
-16 more, but ice_sched_get_free_qparent in ice_ena_vsi_txq would fail to
-find a parent node for first newly requested queue (because all nodes
-are allocated to 16 old queues).
-
-Testing Hints:
-
-Just enable and disable VF fast enough, so it would be disabled before
-reaching VIRTCHNL_OP_ENABLE_QUEUES.
-
-while true; do
-        ip link set dev ens785f0v0 up
-        sleep 0.065 # adjust delay value for you machine
-        ip link set dev ens785f0v0 down
-done
-
-Fixes: 77ca27c41705 ("ice: add support for virtchnl_queue_select.[tx|rx]_queues bitmap")
-Signed-off-by: Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
-Signed-off-by: Alice Michael <alice.michael@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Fixes: 2768935a4660 ("sfc: reuse pages to avoid DMA mapping/unmapping costs")
+Reported-by: Taehee Yoo <ap420073@gmail.com>
+Signed-off-by: Martin Habets <habetsm.xilinx@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/sfc/rx_common.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c b/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c
-index e17813fb71a1..91182a6bc137 100644
---- a/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c
-+++ b/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c
-@@ -3383,9 +3383,9 @@ static int ice_vc_dis_qs_msg(struct ice_vf *vf, u8 *msg)
- 				goto error_param;
- 			}
+diff --git a/drivers/net/ethernet/sfc/rx_common.c b/drivers/net/ethernet/sfc/rx_common.c
+index 633ca77a26fd..b925de9b4302 100644
+--- a/drivers/net/ethernet/sfc/rx_common.c
++++ b/drivers/net/ethernet/sfc/rx_common.c
+@@ -166,6 +166,9 @@ static void efx_fini_rx_recycle_ring(struct efx_rx_queue *rx_queue)
+ 	struct efx_nic *efx = rx_queue->efx;
+ 	int i;
  
--			/* Skip queue if not enabled */
- 			if (!test_bit(vf_q_id, vf->txq_ena))
--				continue;
-+				dev_dbg(ice_pf_to_dev(vsi->back), "Queue %u on VSI %u is not enabled, but stopping it anyway\n",
-+					vf_q_id, vsi->vsi_num);
- 
- 			ice_fill_txq_meta(vsi, ring, &txq_meta);
- 
++	if (unlikely(!rx_queue->page_ring))
++		return;
++
+ 	/* Unmap and release the pages in the recycle ring. Remove the ring. */
+ 	for (i = 0; i <= rx_queue->page_ptr_mask; i++) {
+ 		struct page *page = rx_queue->page_ring[i];
 -- 
 2.35.1
 

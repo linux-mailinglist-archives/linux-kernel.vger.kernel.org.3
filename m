@@ -2,147 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E527A4FE5E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 18:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1111F4FE5F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 18:34:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357623AbiDLQdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 12:33:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37388 "EHLO
+        id S1357701AbiDLQgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 12:36:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357695AbiDLQdc (ORCPT
+        with ESMTP id S1351070AbiDLQgA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 12:33:32 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514195E769
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 09:31:11 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id q14so24718480ljc.12
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 09:31:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RIrthwm6tdm2aQE/w3RNrvd+PErUsx9KWtS5YZPvaAw=;
-        b=QGf3FpzYei83T8HcSKJorhnUgZvI/5VvV6a5G+/cctmgZ7rbbAyy8V4DbgESDpmRSm
-         5IhZjCeNh0R39MUfLo4qjqE9YtmPT9mUmXL/HkUI+lrl1aydFAm9T+bk+e5KxKCcsLk2
-         MHB4LP2yINUa4X8UmpyEErsSopyrheuUpxe/I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RIrthwm6tdm2aQE/w3RNrvd+PErUsx9KWtS5YZPvaAw=;
-        b=VRihKzOErHTTPediGbr6N46vlvtjNOEzOZZreF+Xt0I/Mu7eX0OiYHN6yuud1/ma1y
-         FcOPNuQhXD9PeMXqpkY44eaFG85CkC2BjCSp1Tlpdfdn3XkrBqSVjeoDZyqqv6xJwqOG
-         uJr2M4X+6A4Bk6hM4MEYJ0P7olmi+VKqpPQwBXNkkxmTLRw1pvGNyFwfyg5wBamUKEpk
-         eOdUYETFR/5nPT1PCkORGHL9zeAn0qoRnU/gNaAqkYXYMUEBjRShJUVxh2zXX8PSl30G
-         z52FDeCZ8wk7WCFHwWfbAJOvzgH0Non1HZl0FfgIASzMV1y43PdXf0lRg+HDblWs2MJ0
-         j6xA==
-X-Gm-Message-State: AOAM532dDN+LFssLHFisIwifFzQWAnDWsDBF8tTNSK+73SJdolgZr3Mm
-        f04kmU2D/0fi8xQS7aRZ41L1Rh/nJbJpNde1
-X-Google-Smtp-Source: ABdhPJxX16glqbwPgxkWy6eQgmAoZDZ4jBWqFF8qtDFMJgNm13Pj34Dr0Iv29DVeXVBHL7vVEmJbBQ==
-X-Received: by 2002:a05:651c:a09:b0:24c:7228:ae21 with SMTP id k9-20020a05651c0a0900b0024c7228ae21mr1715593ljq.397.1649781068310;
-        Tue, 12 Apr 2022 09:31:08 -0700 (PDT)
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com. [209.85.167.43])
-        by smtp.gmail.com with ESMTPSA id h12-20020a19ca4c000000b00464f0760504sm1804109lfj.276.2022.04.12.09.31.05
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 09:31:06 -0700 (PDT)
-Received: by mail-lf1-f43.google.com with SMTP id bq30so20370164lfb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 09:31:05 -0700 (PDT)
-X-Received: by 2002:a05:6512:b12:b0:44a:ba81:f874 with SMTP id
- w18-20020a0565120b1200b0044aba81f874mr26536279lfu.449.1649781065537; Tue, 12
- Apr 2022 09:31:05 -0700 (PDT)
-MIME-Version: 1.0
-References: <alpine.LRH.2.02.2204111023230.6206@file01.intranet.prod.int.rdu2.redhat.com>
- <CAHk-=wijDnLH2K3Rh2JJo-SmWL_ntgzQCDxPeXbJ9A-vTF3ZvA@mail.gmail.com>
- <alpine.LRH.2.02.2204111236390.31647@file01.intranet.prod.int.rdu2.redhat.com>
- <CAHk-=wgsHK4pDDoEgCyKgGyo-AMGpy1jg2QbstaCR0G-v568yg@mail.gmail.com> <alpine.LRH.2.02.2204120520140.19025@file01.intranet.prod.int.rdu2.redhat.com>
-In-Reply-To: <alpine.LRH.2.02.2204120520140.19025@file01.intranet.prod.int.rdu2.redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 12 Apr 2022 06:30:49 -1000
-X-Gmail-Original-Message-ID: <CAHk-=wiJTqx4Pec653ZFKEiNv2jtfWsNyevoV9TYa05kD0vVsg@mail.gmail.com>
-Message-ID: <CAHk-=wiJTqx4Pec653ZFKEiNv2jtfWsNyevoV9TYa05kD0vVsg@mail.gmail.com>
-Subject: Re: [PATCH] stat: fix inconsistency between struct stat and struct compat_stat
-To:     Mikulas Patocka <mpatocka@redhat.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Tue, 12 Apr 2022 12:36:00 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAEF65E774;
+        Tue, 12 Apr 2022 09:33:36 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23CGPGkJ012260;
+        Tue, 12 Apr 2022 16:33:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
+ mime-version : subject : from : in-reply-to : date : cc :
+ content-transfer-encoding : message-id : references : to; s=pp1;
+ bh=c9kdWw+POzaQW+fleidcvusNLGMoZpz2IqM3kYRaRSg=;
+ b=FHG1G18Bs+P8aVfQEPV5AOxQ0Kp+5HIFLBoKAXJl7UfdS6MHzxFJVkZoqaoK+6AaamE3
+ j4fNq1sILZ8AsrMYmj7rwMsGSlc41949zI/nZldEo5Tl69yoMAA9BdbO9cgtC/vyjTE2
+ gbrXHJvO+9o/YqqUuYh0Ybol8YGhCga50F4NLxNCk5nMz431wFng4HBrZ9AbUg5b/RFR
+ jqdvhxecLOymI6BDlUgCHnZ5eBlt9jAxYANwkvZb5AIPk69eI6tm/YeAQHLvUKiaetsA
+ W3KOLH2fTKslTF1GQfkW5/QuisTNLeaprgYq555+SlNSJ2GHdoURXyX1JysqxGyaRr0m fQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3fdcx786us-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Apr 2022 16:33:29 +0000
+Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23CGPY5R012890;
+        Tue, 12 Apr 2022 16:33:29 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3fdcx786tq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Apr 2022 16:33:29 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23CGGDri006815;
+        Tue, 12 Apr 2022 16:33:27 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06ams.nl.ibm.com with ESMTP id 3fb1dj582r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Apr 2022 16:33:27 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23CGXN3O43974992
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 Apr 2022 16:33:23 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D8D57AE04D;
+        Tue, 12 Apr 2022 16:33:23 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 442C6AE045;
+        Tue, 12 Apr 2022 16:33:19 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.163.3.143])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Tue, 12 Apr 2022 16:33:18 +0000 (GMT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
+Subject: Re: [PATCH v2 0/4] Fix perf bench numa, futex and epoll to work with
+ machines having #CPUs > 1K
+From:   Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+In-Reply-To: <YlG/1cegJ3Fh/zj/@kernel.org>
+Date:   Tue, 12 Apr 2022 22:03:14 +0530
+Cc:     Ian Rogers <irogers@google.com>, maddy@linux.vnet.ibm.com,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        Nageswara Sastry <rnsastry@linux.ibm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        linux-perf-users@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
+        kajoljain <kjain@linux.ibm.com>, disgoel@linux.vnet.ibm.com,
+        linuxppc-dev@lists.ozlabs.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <64B99006-B94E-485E-8382-91E50244A5E4@linux.vnet.ibm.com>
+References: <20220406175113.87881-1-atrajeev@linux.vnet.ibm.com>
+ <YlGmAd3LEh9He6Pg@kernel.org> <YlG/1cegJ3Fh/zj/@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+X-Mailer: Apple Mail (2.3654.120.0.1.13)
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: iBl1BFr_njItt3Pb-ald9kpXGlfMjtih
+X-Proofpoint-ORIG-GUID: wPH9ZGI864VHPwR9yJmIplFR6L0lQuno
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-12_06,2022-04-12_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
+ spamscore=0 malwarescore=0 mlxlogscore=999 priorityscore=1501
+ suspectscore=0 bulkscore=0 lowpriorityscore=0 adultscore=0 mlxscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204120079
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 11:41 PM Mikulas Patocka <mpatocka@redhat.com> wrote:
->
-> Also, if the st_dev and st_rdev values are 32-bit, we don't have to use
-> old_valid_dev to test if the value fits into them. This fixes -EOVERFLOW
-> on filesystems that are on NVMe because NVMe uses the major number 259.
 
-The problem with this part of the patch is that this:
 
-> @@ -353,7 +352,7 @@ static int cp_new_stat(struct kstat *sta
->  #endif
->
->         INIT_STRUCT_STAT_PADDING(tmp);
-> -       tmp.st_dev = encode_dev(stat->dev);
-> +       tmp.st_dev = new_encode_dev(stat->dev);
+> On 09-Apr-2022, at 10:48 PM, Arnaldo Carvalho de Melo =
+<acme@kernel.org> wrote:
+>=20
+> Em Sat, Apr 09, 2022 at 12:28:01PM -0300, Arnaldo Carvalho de Melo =
+escreveu:
+>> Em Wed, Apr 06, 2022 at 11:21:09PM +0530, Athira Rajeev escreveu:
+>>> The perf benchmark for collections: numa, futex and epoll
+>>> hits failure in system configuration with CPU's more than 1024.
+>>> These benchmarks uses "sched_getaffinity" and "sched_setaffinity"
+>>> in the code to work with affinity.
+>>=20
+>> Applied 1-3, 4 needs some reworking and can wait for v5.19, the first =
+3
+>> are fixes, so can go now.
+>=20
+> Now trying to fix this:
+>=20
+>  26     7.89 debian:9                      : FAIL gcc version 6.3.0 =
+20170516 (Debian 6.3.0-18+deb9u1)
+>    bench/numa.c: In function 'alloc_data':
+>    bench/numa.c:359:6: error: 'orig_mask' may be used uninitialized in =
+this function [-Werror=3Dmaybe-uninitialized]
+>      ret =3D sched_setaffinity(0, size, mask);
+>      ~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    bench/numa.c:409:13: note: 'orig_mask' was declared here
+>      cpu_set_t *orig_mask;
+>                 ^~~~~~~~~
+>    cc1: all warnings being treated as errors
+>    /git/perf-5.18.0-rc1/tools/build/Makefile.build:139: recipe for =
+target 'bench' failed
+>    make[3]: *** [bench] Error 2
+>=20
+>=20
+> Happened in several distros.
 
-completely changes the format of that st_dev field.
+Hi Arnaldo
 
-For completely insane historical reasons, we have had the rule that
+Thanks for pointing it. I could be able to recreate this compile error =
+in Debian.
+The reason for this issue is variable orig_mask which is used and =
+initialised in =E2=80=9Calloc_data"
+function within if condition for "init_cpu0=E2=80=9D. We can fix this =
+issue by initialising it to NULL since
+it is accessed conditionally. I also made some changes to CPU_FREE the =
+mask in other error paths.
+I will post a V3 with these changes.
 
- - 32-bit architectures encode the device into a 16 bit value
+Athira
 
- - 64-bit architectures encode the device number into a 32 bit value
+>=20
+> - Arnaldo
 
-and that has been true *despite* the fact that the actual "st_dev"
-field has been 32-bit and 64-bit respectively since 2003!
-
-And it doesn't help that to confuse things even more, the _naming_ of
-those "encode_dev" functions is "old and new", so that logically you'd
-think that "cp_new_stat()" would use "new_encode_dev()". Nope.
-
-So on 32-bit architectures, cp_new_stat() uses "old_encode_dev()",
-which historically put the minor number in bits 0..7, and the major
-number in bits 8..15.
-
-End result: on a 32-bit system (or in the compat syscall mode),
-changing to new_encode_dev() would confuse anybody (like just "ls -l
-/dev") that uses that old stat call and tries to print out major/minor
-numbers.
-
-Now,. the good news is that
-
- (a) nobody should use that old stat call, since the new world order
-is called "stat64" and has been for a loooong time - also since at
-least 2003)
-
- (b) we could just hide the bits in upper bits instead.
-
-So what I suggest we do is to make old_encode_dev() put the minor bits
-in bits 0..7 _and_ 16..23, and the major bits in 8..15 _and_ 24..32.
-
-And then the -EOVERFLOW should be something like
-
-        unsigned int st_dev = encode_dev(stat->dev);
-        tmp.st_dev = st_dev;
-        if (st_dev != tmp.st_dev)
-                return -EOVERFLOW;
-
-for the lcase that tmp.st_dev is actually 16-bit (ie the compat case
-for some architecture where the padding wasn't there?)
-
-NOTE: That will still screw up 'ls -l' output, but only for the
-devices that previously would have returned -EOVERFLOW.
-
-And it will make anybopdy who does that "stat1->st_dev ==
-stat2->st_dev && ino == ino2" thing for testing "same inode" work just
-fine.
-
-              Linus

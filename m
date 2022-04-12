@@ -2,64 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC4034FDED0
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:58:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E33394FDEC0
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345321AbiDLL7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 07:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57274 "EHLO
+        id S236806AbiDLL7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 07:59:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345816AbiDLL44 (ORCPT
+        with ESMTP id S1345829AbiDLL44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Apr 2022 07:56:56 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7764160CF6;
-        Tue, 12 Apr 2022 03:42:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649760130; x=1681296130;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zpueg+jyVnMsOFoZwW8zB/OcFNbXOpiTPlELbqYLlwc=;
-  b=nW6qxJeyxnEknF1riWv3R253BFhnRrlq+239kG5dMahU2qu7UONHYzmy
-   GSJ79WfPqKFJ6gZq8+nwNsNAf5WOIxVX58lZ5a2sSZkUyZ2PVITslZock
-   mbiUmH7hFDScrJCKPEl6O4291+x9GRRiwkUvnKKoudpKIHvqGvEO8l/jL
-   NmKCYtF52/PeMB01ynydkvljE/dTtPN9Jp6gb+iii1oFfMDadpkTZWbYy
-   OkW+VLllaT8YUVI5B7GfoYXKDHPghnSaHwkNUUAJXELPIq2D7TstOY+RT
-   za8xdZw6/HmjJe0oTuWQI6M8NGTc8dlveZBdeYtV3zdkxHxndlPOVa6cd
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="261192960"
-X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="261192960"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 03:42:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="660438063"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 12 Apr 2022 03:42:07 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1neDyJ-0002m8-8p;
-        Tue, 12 Apr 2022 10:42:07 +0000
-Date:   Tue, 12 Apr 2022 18:41:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jagath Jog J <jagathjog1996@gmail.com>, dan@dlrobertson.com,
-        jic23@kernel.org, andy.shevchenko@gmail.com
-Cc:     kbuild-all@lists.01.org, linux-iio@vger.kernel.org,
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F8260CCB
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 03:41:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D2E2EB81C9F
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 10:41:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 325EDC385A1;
+        Tue, 12 Apr 2022 10:41:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649760090;
+        bh=rzfnknouQo5spyE2oJ6VE8AOEpQ+Y5ZYUDR0kz+9OVc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UDZ0iKHFFnabFQIaa82O7sHgKBb5LcVgEyFz1DPLMR6R6VoM+kFf6WUVIhBDVd6ZP
+         taP+8yA7WeqdWfgNNBrdhugZbsktvG8WLiBlX1Cvaneqfg/XnV8HFmaBpXjLiEQZ2Y
+         pURIIQ81cvB2pAOD+jzCRUrvzE0w9BtfghCTQZEo=
+Date:   Tue, 12 Apr 2022 12:41:27 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Liu Junqi <liujunqi@pku.edu.cn>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Colin Ian King <colin.king@intel.com>,
+        sparmaintainer@unisys.com, linux-staging@lists.linux.dev,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 9/9] iio: accel: bma400: Add support for activity and
- inactivity events
-Message-ID: <202204121837.e1RdwIqu-lkp@intel.com>
-References: <20220411203133.19929-10-jagathjog1996@gmail.com>
+Subject: Re: [PATCH v2] MAINTAINERS: Remove D. Kershner from Unisys S-PAR
+ maintainers
+Message-ID: <YlVXV4J41KBzKHtm@kroah.com>
+References: <20220412103629.8029-1-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220411203133.19929-10-jagathjog1996@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220412103629.8029-1-fmdefrancesco@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,38 +58,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jagath,
+On Tue, Apr 12, 2022 at 12:36:29PM +0200, Fabio M. De Francesco wrote:
+> The email address of David Kershner is no more reachable. Remove his
+> entry from the MAINTAINERS file for UNISYS S-PAR DRIVERS and change
+> the status to "Orphan".
+> 
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> ---
+> 
+> v1->v2: Change also the status of the entry to "Orphan" and rework the
+> commit message. (Thanks to Greg Kroah-Hartman).
+> 
+>  MAINTAINERS | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 3ed62dcd144e..9283c63565b3 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -20184,9 +20184,8 @@ F:	include/linux/cdrom.h
+>  F:	include/uapi/linux/cdrom.h
+>  
+>  UNISYS S-PAR DRIVERS
+> -M:	David Kershner <david.kershner@unisys.com>
+>  L:	sparmaintainer@unisys.com (Unisys internal)
 
-Thank you for the patch! Yet something to improve:
+Again, please drop this "list" as it obviously is not going to anyone.
 
-[auto build test ERROR on jic23-iio/togreg]
-[also build test ERROR on v5.18-rc2 next-20220412]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+And really, this whole code should be removed, no one seems to be using
+it, and if they are, we can easily revert the removal and mark them as
+the maintainer.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jagath-Jog-J/iio-accel-bma400-Add-buffer-step-and-activity-inactivity/20220412-043436
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-config: mips-allmodconfig (https://download.01.org/0day-ci/archive/20220412/202204121837.e1RdwIqu-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/15ee6de45ed7a028569638c198e170bb98cef4ab
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jagath-Jog-J/iio-accel-bma400-Add-buffer-step-and-activity-inactivity/20220412-043436
-        git checkout 15ee6de45ed7a028569638c198e170bb98cef4ab
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
+thanks,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "__cmpxchg_small" [drivers/iio/accel/bma400_core.ko] undefined!
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+greg k-h

@@ -2,142 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FEB94FE774
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:48:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63DB14FE776
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:50:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358530AbiDLRuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 13:50:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47564 "EHLO
+        id S1358548AbiDLRwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 13:52:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244731AbiDLRuU (ORCPT
+        with ESMTP id S229848AbiDLRwS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 13:50:20 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9910461A0D
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 10:48:02 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id b15so18147619pfm.5
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 10:48:02 -0700 (PDT)
+        Tue, 12 Apr 2022 13:52:18 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981194756F;
+        Tue, 12 Apr 2022 10:49:59 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id q14so24993315ljc.12;
+        Tue, 12 Apr 2022 10:49:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kBQhwTh4wGFWQQwe4mM4wltP+peU9rNcUNkHbTMG0qg=;
-        b=oM7dH7p7ixQjtv91MZcAmU9zCDwrKw6QynMRiSX5QxutMf0ZdCJgbAgDI3wJL5UPpr
-         6FNHRy3Pr24OYLzFQqtgyX6b4MNf3y71tgLfbqW0trh7/KnJE/0HQAploRCAyFaZYvM8
-         tw4EdzYpXIYkg4ExyuFf3MB5rg8/wUR31ymFufKgvNZDXMx+s4ypDJfnPQjaYCcRXB9g
-         SQ/Z28O0piaUYOJ3l4THQfw26JLJwXgZEP271PAEgipV9/Ot8KaQrsUgIvOsxvU/cdXX
-         L1B/z6tDEFv9hPe1xt8fkP7DujOqR4Jz+vP3s0wHPv7PzwlDtqw0eJ1B+O1cSEfek26o
-         T66A==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:to:cc:references
+         :from:in-reply-to:content-transfer-encoding;
+        bh=bZD6MIHOgstiitM1UOkrGGlVLBJ6vm9PI8DMS7m0H98=;
+        b=dymxGqcQwtPQPM6BPjjBYCYZXG8ECnjuvlwfz0ISm2672OAB2V6jnch6NLABRwyi0y
+         FbVdqZC84Uwxc61L7KKgWOoReDCbY2oowB86e1km5QKO/4dfaCLjyIZ8pq7Pzg9RVdh7
+         EpUZm5M8ciyCUfnTNNlTqCDgxHU5ssagpbiC4FRSbU7B7QRAZltyPEbz/eAng7KM0MSF
+         16Hoch8imIBBEWytaRg94lcgTdtXX5y6GsvosltNqBjSdNuw0trpVqzv1764Dnifw8P6
+         iuThqU1mdYBbnFc/SgLKE5z5uLerFdr07hOTU2znNxIYd38e5WRRriR9+n+kw3IYH6jX
+         ShWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kBQhwTh4wGFWQQwe4mM4wltP+peU9rNcUNkHbTMG0qg=;
-        b=5kDrO1bXykzELgJtN8iXkXalDb+VVlG94nC4FI0FjvE7NzR+4CxOeFxReFBzz15531
-         bun1pmt9LTuQ9EJEjx2qr2Ac77Iz6lw3B5jUh7O/DNHsFHKNKqzQXQ/drukK6VogUyHl
-         BqjakUz1dFpmEd6p7NYTaLO0Q3DRhpbKMX6LNhtTm8jxzTDxfcES8v7wyd6TsfaIn4T9
-         ogr9fiiYDjpmYCYjZI9IML5ltfona1PVg6VWCcRQApQytmz0rD3NXGP4U9as0yiapodv
-         YdJQ05VxSPfs/PBjbVRL2SHQ+cTYSz12Os0qBPXKE2MC81iDI11BZgigD72eigtBYlqs
-         H19Q==
-X-Gm-Message-State: AOAM530xoZhV2lybhfzdK4481zgdOTA76tNQWFJXzVL0eMkI6YiPT4eo
-        +DGf08IBqPrc76AKi8agVKzX6w==
-X-Google-Smtp-Source: ABdhPJy0V0sgG6uM7pznulDzc1E8eQeVDwDpFM11r3aOV36Hr5GwPLKpjkcmRjXwpK47iDiMzaJ6dg==
-X-Received: by 2002:a63:ec0c:0:b0:39d:3aa6:4513 with SMTP id j12-20020a63ec0c000000b0039d3aa64513mr11851204pgh.391.1649785682142;
-        Tue, 12 Apr 2022 10:48:02 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id 13-20020a17090a0ccd00b001cb8984dc28sm137579pjt.22.2022.04.12.10.48.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 10:48:00 -0700 (PDT)
-Date:   Tue, 12 Apr 2022 11:47:58 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     bjorn.andersson@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, shengjiu.wang@nxp.com,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-arm-kernel@lists.infradead.org, Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH 1/2] remoteproc: elf_loader: skip segment with memsz as
- zero
-Message-ID: <20220412174758.GB465495@p14s>
-References: <20220323064944.1351923-1-peng.fan@oss.nxp.com>
- <20220323064944.1351923-2-peng.fan@oss.nxp.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :to:cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=bZD6MIHOgstiitM1UOkrGGlVLBJ6vm9PI8DMS7m0H98=;
+        b=Pmrm0FL0JUxG3gpxg15nJVaeAvwBt+ySn2ikN5FsmUisoqBAWuK8aupO5bBtjDUy8P
+         NGg0cGWbHz08DjlTXbCC2tJdO9ktis6oeV8tiSsKI/qNBZfiUbDS5bNGAp2jme08FyHY
+         6VlDxXednvGaBSVOHrPjfU8EdtGbzJ0gfL7586FFehMPvKfQy7lYzMvOGM3F0QRBjpZ2
+         20JQMcY2abSj8mfoZh8qvsf6JcjxfDIvWoDwkp01WL9i/w2idPpfgS49gOX+cYdAyqoz
+         Bq9eHksf/x6h6Dl/GB9D4GzKPLzVsC/OpnHND9GsqPPVdVbOCQEDwfT4cYxquAeqRrTl
+         IcPg==
+X-Gm-Message-State: AOAM53041WpXnve9EQoIZUxSBz942dnZOSnK+rVhZPdKSE82Fnjp/KzI
+        QGFkN/js9HMxroHWvFZPaDE=
+X-Google-Smtp-Source: ABdhPJxveI9cOFkBq9T1R6cPlKQLl1G0bBU3Tc2fCUa97Rtzngv/cvXMNyWJdUZ4qO6S9gkX0Mnh7A==
+X-Received: by 2002:a2e:a362:0:b0:24b:5c8d:3a71 with SMTP id i2-20020a2ea362000000b0024b5c8d3a71mr9752706ljn.305.1649785797726;
+        Tue, 12 Apr 2022 10:49:57 -0700 (PDT)
+Received: from [192.168.26.149] (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.googlemail.com with ESMTPSA id n26-20020a2e879a000000b0024b47286a60sm1666071lji.135.2022.04.12.10.49.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Apr 2022 10:49:57 -0700 (PDT)
+Message-ID: <ab529968-7dc5-f4c9-5ce4-5dc95b64838f@gmail.com>
+Date:   Tue, 12 Apr 2022 19:49:55 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220323064944.1351923-2-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
+ Thunderbird/96.0
+Subject: Re: [PATCH] ARM: dts: BCM5301X: Add DT for Buffalo WZR-1166DHP2
+To:     SHIMAMOTO Takayoshi <takayoshi.shimamoto.360@gmail.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220412154432.12124-1-takayoshi.shimamoto.360@gmail.com>
+From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+In-Reply-To: <20220412154432.12124-1-takayoshi.shimamoto.360@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peng,
+On 12.04.2022 17:44, SHIMAMOTO Takayoshi wrote:
+> Buffalo WZR-1166DHP2  wireless router with
+> 
+>   - BCM4708A0
+>   - 256MiB DDR2 SDRAM
+>   - 128MiB NAND flash
+>   - 2T2R 11ac/a/b/g/n Wi-Fi
+>   - 4x 10/100M ethernet switch
 
-On Wed, Mar 23, 2022 at 02:49:43PM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+Isn't that 10/100/1000?
+
+
+> The hardware configuration is very similar to the WZR-1750DHP,
+> except for memory size and number of antennas.
 > 
-> Per elf specification,
-> p_filesz: This member gives the number of bytes in the file image of
-> the segment; it may be zero.
-> p_memsz: This member gives the number of bytes in the memory image
-> of the segment; it may be zero.
-> 
-> There is a case that i.MX DSP firmware has segment with PT_LOAD and
-> p_memsz/p_filesz set to zero. Such segment needs to be ignored,
-> otherwize rproc_da_to_va would report error.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> Signed-off-by: SHIMAMOTO Takayoshi <takayoshi.shimamoto.360@gmail.com>
 > ---
->  drivers/remoteproc/remoteproc_elf_loader.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
+>   .../boot/dts/bcm4708-buffalo-wzr-1166dhp2.dts | 189 ++++++++++++++++++
+>   1 file changed, 189 insertions(+)
+>   create mode 100644 arch/arm/boot/dts/bcm4708-buffalo-wzr-1166dhp2.dts
 > 
-> diff --git a/drivers/remoteproc/remoteproc_elf_loader.c b/drivers/remoteproc/remoteproc_elf_loader.c
-> index d635d19a5aa8..cb77f9e4dc70 100644
-> --- a/drivers/remoteproc/remoteproc_elf_loader.c
-> +++ b/drivers/remoteproc/remoteproc_elf_loader.c
-> @@ -181,7 +181,14 @@ int rproc_elf_load_segments(struct rproc *rproc, const struct firmware *fw)
->  		bool is_iomem = false;
->  		void *ptr;
->  
-> -		if (type != PT_LOAD)
-> +		/*
-> +		 *  There is a case that with PT_LOAD type, the
-> +		 *  filesz = memsz = 0. If memsz = 0, rproc_da_to_va
-> +		 *  should return NULL ptr, then error is returned.
-> +		 *  So this case should be skipped from the loop.
-> +		 *  Add !memsz checking here.
+> diff --git a/arch/arm/boot/dts/bcm4708-buffalo-wzr-1166dhp2.dts b/arch/arm/boot/dts/bcm4708-buffalo-wzr-1166dhp2.dts
+> new file mode 100644
+> index 000000000000..22e54a0a202a
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/bcm4708-buffalo-wzr-1166dhp2.dts
+> @@ -0,0 +1,189 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+> +/*
+> + * Broadcom BCM470X / BCM5301X ARM platform code.
+> + * DTS for Buffalo WZR-1166DHP2
+> + *
+> + * Copyright (C) 2014 Rafał Miłecki <zajec5@gmail.com>
+> + * Copyright (C) 2022 SHIMAMOTO Takayoshi <takayoshi.shimamoto.360@gmail.com>
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "bcm4708.dtsi"
+> +#include "bcm5301x-nand-cs0-bch8.dtsi"
+> +
+> +/ {
+> +	compatible = "buffalo,wzr-1166dhp2", "brcm,bcm4708";
+> +	model = "Buffalo WZR-1166DHP2 (BCM4708)";
 
-There are several architecture where XYZ_da_to_va() does not return a NULL
-pointer when @len is 0, making this comment inaccurate.  Please remove that
-part.
+We stopped adding SoC name to the "model" value, please drop it.
 
-> +		 */
-> +		if (type != PT_LOAD || !memsz)
->  			continue;
 
-I have reflected long and hard on this one...
+> +	chosen {
+> +		bootargs = "console=ttyS0,115200";
+> +	};
+> +
+> +	memory@0 {
+> +		device_type = "memory";
+> +		reg = <0x00000000 0x08000000>,
+> +		      <0x88000000 0x08000000>;
+> +	};
+> +
+> +	spi {
+> +		compatible = "spi-gpio";
+> +		num-chipselects = <1>;
+> +		gpio-sck = <&chipcommon 7 0>;
+> +		gpio-mosi = <&chipcommon 4 0>;
+> +		cs-gpios = <&chipcommon 6 0>;
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		hc595: gpio_spi@0 {
+> +			compatible = "fairchild,74hc595";
+> +			reg = <0>;
+> +			registers-number = <1>;
+> +			spi-max-frequency = <100000>;
+> +
+> +			gpio-controller;
+> +			#gpio-cells = <2>;
+> +
+> +		};
+> +	};
+> +
+> +	leds {
+> +		compatible = "gpio-leds";
+> +
+> +		usb {
+> +			label = "bcm53xx:blue:usb";
+> +			gpios = <&hc595 0 GPIO_ACTIVE_HIGH>;
+> +			trigger-sources = <&ohci_port1>, <&ehci_port1>,
+> +					  <&xhci_port1>, <&ohci_port2>,
+> +					  <&ehci_port2>;
+> +			linux,default-trigger = "usbport";
+> +		};
+> +
+> +		power0 {
+> +			label = "bcm53xx:red:power";
+> +			gpios = <&hc595 1 GPIO_ACTIVE_HIGH>;
+> +		};
+> +
+> +		power1 {
+> +			label = "bcm53xx:white:power";
+> +			gpios = <&hc595 2 GPIO_ACTIVE_HIGH>;
+> +			linux,default-trigger = "default-on";
+> +		};
+> +
+> +		router0 {
+> +			label = "bcm53xx:blue:router";
+> +			gpios = <&hc595 3 GPIO_ACTIVE_HIGH>;
+> +			linux,default-trigger = "default-on";
+> +		};
+> +
+> +		router1 {
+> +			label = "bcm53xx:amber:router";
+> +			gpios = <&hc595 4 GPIO_ACTIVE_HIGH>;
+> +		};
+> +
+> +		wan {
+> +			label = "bcm53xx:blue:wan";
+> +			gpios = <&hc595 5 GPIO_ACTIVE_HIGH>;
+> +			linux,default-trigger = "default-on";
+> +		};
+> +
+> +		wireless0 {
+> +			label = "bcm53xx:blue:wireless";
+> +			gpios = <&hc595 6 GPIO_ACTIVE_HIGH>;
+> +		};
+> +
+> +		wireless1 {
+> +			label = "bcm53xx:amber:wireless";
+> +			gpios = <&hc595 7 GPIO_ACTIVE_HIGH>;
+> +		};
+> +	};
 
-If @memsz is 0 then @filesz _has_ to be 0, otherwise rproc_elf_load_segments()
-returns -EINVAL.  If @filesz is also 0 then nothing gets copied (for
-architectures where XYZ_da_to_va() doesn't return a NULL pointer when @len is
-0), which is exactly the same as what the above change does. 
-
-As such I am inclined to view this set favourably.  That being said we will
-have to proceed cautiously.  If something breaks we will have to revert it.
-
-Please send another revision as quickly as possible so that it can stay in
-linux-next long enough to, hopefully, catch any problems.
-
-With the above and for this set:
-
-Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
- 
->  
->  		dev_dbg(dev, "phdr: type %d da 0x%llx memsz 0x%llx filesz 0x%llx\n",
-> -- 
-> 2.25.1
-> 
+I'm wondering if all new DTS files should use "function" and "color"
+instead of "label". That's preferred solution and I guess it's good idea
+to use it for new code.

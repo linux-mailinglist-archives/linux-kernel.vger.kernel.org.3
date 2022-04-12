@@ -2,53 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5BCE4FDD6D
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:09:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B3874FDD8A
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:09:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbiDLLJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 07:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36516 "EHLO
+        id S1345883AbiDLLLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 07:11:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354093AbiDLLFC (ORCPT
+        with ESMTP id S1349086AbiDLLIC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 07:05:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C7B26127;
-        Tue, 12 Apr 2022 02:57:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 118B5B81B4A;
-        Tue, 12 Apr 2022 09:57:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3359CC385A5;
-        Tue, 12 Apr 2022 09:57:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649757423;
-        bh=b7hWroRVFGxdaPJh2LV7JuwotH1TDJUBX9W/+RIyoWk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ivrKqzVE0io1e5T883EsAyQIP5ZlSqOfqIS9Vs+6TI9cfW8XWjpwTFTKnJjSk01DB
-         L333L8+Gs6e6zG85yvY29ewnDdFlTBDZoxsDbm8EffSN1jdcherhAeU2KkIaautR2C
-         M+gsb8BuPXk4RCvRmBSfP/HdH+qbHycW1kLcQluY=
-Date:   Tue, 12 Apr 2022 11:57:00 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     David Stevens <stevensd@chromium.org>
-Cc:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC] PCI: sysfs: add bypass for config read admin check
-Message-ID: <YlVM7PQuGI8a+r89@kroah.com>
-References: <20220406071131.2930035-1-stevensd@google.com>
- <Yk1KveOnYfSrUJLD@kroah.com>
- <20220406131300.7pgdcpdhexwvczsb@pali>
- <CAD=HUj5rSDGCgfLM8_waTcdMzDYp2=cnG5XpBN=4j3JMyN9g6g@mail.gmail.com>
+        Tue, 12 Apr 2022 07:08:02 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C0F6D861;
+        Tue, 12 Apr 2022 03:00:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649757654; x=1681293654;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7tP6Hmh57tdYk/XI1EXwttwZcLinGHP54ZjZICaf18M=;
+  b=IP4f0St3HE7L2DS7hFIdTuebHeYZiuc6JfnnlMxXwmubZqUHOtNVKNWM
+   artZ7LqNw8WFU6JHXkn9iPI21FPpOyJXAjtRe/1HzZ4V82CahukFxbE9Z
+   u2Ci12dNKjgV2/jRdCcLUncWxxVOMdtAWVRtHQ2ABbP8AhcBGPQ8r8H0f
+   Ebqd6OBAUyqPnHPlOMIPGxtTmMRJlOwdnUlIy5/6eRGJZSG/+GUv5knlm
+   tmpQTePvY/bRyGMaXbQq2znJUit+L2B4LPZ2Z2F/LtKaRPKj8vBfvedKJ
+   RwW93wHjbh9Tb877TyjkJHT6aARn5Jh61+A76TiQFesSoLtcDEwff36T+
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="261183851"
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="261183851"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 03:00:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="525976363"
+Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 12 Apr 2022 03:00:47 -0700
+Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1neDKJ-0002jQ-1f;
+        Tue, 12 Apr 2022 10:00:47 +0000
+Date:   Tue, 12 Apr 2022 18:00:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Samuel Holland <samuel@sholland.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 04/10] drm/sun4i: Allow building the driver on RISC-V
+Message-ID: <202204121758.QeUxJKUh-lkp@intel.com>
+References: <20220411043423.37333-5-samuel@sholland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAD=HUj5rSDGCgfLM8_waTcdMzDYp2=cnG5XpBN=4j3JMyN9g6g@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220411043423.37333-5-samuel@sholland.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,110 +74,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 04:51:06PM +0900, David Stevens wrote:
-> On Wed, Apr 6, 2022 at 10:13 PM Pali Rohár <pali@kernel.org> wrote:
-> >
-> > On Wednesday 06 April 2022 10:09:33 Greg Kroah-Hartman wrote:
-> > > On Wed, Apr 06, 2022 at 04:11:31PM +0900, David Stevens wrote:
-> > > > From: David Stevens <stevensd@chromium.org>
-> > > >
-> > > > Add a moduleparam that can be set to bypass the check that limits users
-> > > > without CAP_SYS_ADMIN to only being able to read the first 64 bytes of
-> > > > the config space. This allows systems without problematic hardware to be
-> > > > configured to allow users without CAP_SYS_ADMIN to read PCI
-> > > > capabilities.
-> > > >
-> > > > Signed-off-by: David Stevens <stevensd@chromium.org>
-> > > > ---
-> > > >  drivers/pci/pci-sysfs.c | 10 +++++++++-
-> > > >  1 file changed, 9 insertions(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
-> > > > index 602f0fb0b007..162423b3c052 100644
-> > > > --- a/drivers/pci/pci-sysfs.c
-> > > > +++ b/drivers/pci/pci-sysfs.c
-> > > > @@ -28,10 +28,17 @@
-> > > >  #include <linux/pm_runtime.h>
-> > > >  #include <linux/msi.h>
-> > > >  #include <linux/of.h>
-> > > > +#include <linux/moduleparam.h>
-> > > >  #include "pci.h"
-> > > >
-> > > >  static int sysfs_initialized;      /* = 0 */
-> > > >
-> > > > +static bool allow_unsafe_config_reads;
-> > > > +module_param_named(allow_unsafe_config_reads,
-> > > > +              allow_unsafe_config_reads, bool, 0644);
-> > > > +MODULE_PARM_DESC(allow_unsafe_config_reads,
-> > > > +            "Enable full read access to config space without CAP_SYS_ADMIN.");
-> > >
-> > > No, this is not the 1990's, please do not add system-wide module
-> > > parameters like this.  Especially ones that circumvent security
-> > > protections.
-> > >
-> > > Also, where did you document this new option?
-> > >
-> > > Why not just add this to a LSM instead?
-> > >
-> > > >  /* show configuration fields */
-> > > >  #define pci_config_attr(field, format_string)                              \
-> > > >  static ssize_t                                                             \
-> > > > @@ -696,7 +703,8 @@ static ssize_t pci_read_config(struct file *filp, struct kobject *kobj,
-> > > >     u8 *data = (u8 *) buf;
-> > > >
-> > > >     /* Several chips lock up trying to read undefined config space */
-> > > > -   if (file_ns_capable(filp, &init_user_ns, CAP_SYS_ADMIN))
-> > > > +   if (allow_unsafe_config_reads ||
-> > > > +       file_ns_capable(filp, &init_user_ns, CAP_SYS_ADMIN))
-> > >
-> > > This feels really dangerous.  What benifit are you getting here by
-> > > allowing an unpriviliged user to read this information?
-> >
-> > Hello! This is really dangerous.
-> >
-> > Nowadays operating systems are in progress to completely disallow PCI
-> > config space access from userspace. So doing opposite thing and even
-> > enable it for unprivileged users in Linux is hazard.
-> >
-> > For example NT kernel in Windows 11 already completely disallowed access
-> > to PCI config space from userspace unless NT kernel is booted in mode
-> > for local debugging with disabled UEFI secure boot. And access in this
-> > case is only for highly privileged processes (debug privilege in access
-> > token).
-> >
-> > So... should not we move into same direction like other operating system
-> > and start disallowing access to PCI config space from userspace
-> > completely too? For example when kernel lockdown feature is enabled?
-> >
-> > In PCI config space of some devices are stored also non-PCI registers
-> > and accessing them was not really mean for userspace and for sure not
-> > for unprivileged users. On AMD x86 platforms is into PCI config space of
-> > some device mapped for example CPU MSR registers (at fixed offset, after
-> > linked listed of capabilities). Probably in Intel x86 is something
-> > similar too. On Synopsis Designware based PCIe HW is into PCI config
-> > space of Root Port mapped large range of IP configuration registers.
-> >
-> > So "This allows systems without problematic hardware" means that such
-> > system must be non-AMD, non-Designware and probably also non-Intel.
-> 
-> It's interesting to hear that what seems to have been added 18 years
-> ago as a safeguard against faulty hardware (i.e. "Several chips lock
-> up trying to read undefined config space") has become a load bearing
-> security check.
+Hi Samuel,
 
-Evolution is a wonderful thing :)
+I love your patch! Yet something to improve:
 
-Security models are different today than they used to be back then, and
-we still have broken hardware that will lock up with accesses like this.
+[auto build test ERROR on sunxi/sunxi/for-next]
+[also build test ERROR on drm/drm-next linus/master v5.18-rc2 next-20220412]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> I guess because that check is there, it wasn't worth
-> adding a LOCKDOWN_PCI_ACCESS check to pci_read_config?
+url:    https://github.com/intel-lab-lkp/linux/commits/Samuel-Holland/drm-sun4i-Allwinner-D1-Display-Engine-2-0-Support/20220411-123701
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/sunxi/linux.git sunxi/for-next
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20220412/202204121758.QeUxJKUh-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c6e83f560f06cdfe8aa47b248d8bdc58f947274b)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/829dac8ee2cbb6d1b7bda1c513cc2ad1939fca53
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Samuel-Holland/drm-sun4i-Allwinner-D1-Display-Engine-2-0-Support/20220411-123701
+        git checkout 829dac8ee2cbb6d1b7bda1c513cc2ad1939fca53
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-That's up to the lockdown people to add, if they so desire.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> Regardless, I've found that with a bit of work in userspace, vfio is
-> sufficient for my use case.
+All errors (new ones prefixed by >>):
 
-That sounds crazy, and probably wrong.  Good luck!  :)
+>> drivers/gpu/drm/sun4i/sun4i_hdmi_i2c.c:59:3: error: implicit declaration of function 'readsb' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   readsb(hdmi->base + hdmi->variant->ddc_fifo_reg, buf, len);
+                   ^
+   drivers/gpu/drm/sun4i/sun4i_hdmi_i2c.c:59:3: note: did you mean 'readb'?
+   arch/hexagon/include/asm/io.h:83:18: note: 'readb' declared here
+   static inline u8 readb(const volatile void __iomem *addr)
+                    ^
+>> drivers/gpu/drm/sun4i/sun4i_hdmi_i2c.c:61:3: error: implicit declaration of function 'writesb' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   writesb(hdmi->base + hdmi->variant->ddc_fifo_reg, buf, len);
+                   ^
+   drivers/gpu/drm/sun4i/sun4i_hdmi_i2c.c:61:3: note: did you mean 'writeb'?
+   arch/hexagon/include/asm/io.h:122:20: note: 'writeb' declared here
+   static inline void writeb(u8 data, volatile void __iomem *addr)
+                      ^
+   2 errors generated.
 
-greg k-h
+
+vim +/readsb +59 drivers/gpu/drm/sun4i/sun4i_hdmi_i2c.c
+
+f0a3dd33ba685b Jonathan Liu 2017-07-02  24  
+f0a3dd33ba685b Jonathan Liu 2017-07-02  25  static int fifo_transfer(struct sun4i_hdmi *hdmi, u8 *buf, int len, bool read)
+f0a3dd33ba685b Jonathan Liu 2017-07-02  26  {
+f0a3dd33ba685b Jonathan Liu 2017-07-02  27  	/*
+f0a3dd33ba685b Jonathan Liu 2017-07-02  28  	 * 1 byte takes 9 clock cycles (8 bits + 1 ACK) = 90 us for 100 kHz
+f0a3dd33ba685b Jonathan Liu 2017-07-02  29  	 * clock. As clock rate is fixed, just round it up to 100 us.
+f0a3dd33ba685b Jonathan Liu 2017-07-02  30  	 */
+f0a3dd33ba685b Jonathan Liu 2017-07-02  31  	const unsigned long byte_time_ns = 100;
+f0a3dd33ba685b Jonathan Liu 2017-07-02  32  	const u32 mask = SUN4I_HDMI_DDC_INT_STATUS_ERROR_MASK |
+f0a3dd33ba685b Jonathan Liu 2017-07-02  33  			 SUN4I_HDMI_DDC_INT_STATUS_FIFO_REQUEST |
+f0a3dd33ba685b Jonathan Liu 2017-07-02  34  			 SUN4I_HDMI_DDC_INT_STATUS_TRANSFER_COMPLETE;
+f0a3dd33ba685b Jonathan Liu 2017-07-02  35  	u32 reg;
+939d749ad6649c Chen-Yu Tsai 2017-10-10  36  	/*
+939d749ad6649c Chen-Yu Tsai 2017-10-10  37  	 * If threshold is inclusive, then the FIFO may only have
+939d749ad6649c Chen-Yu Tsai 2017-10-10  38  	 * RX_THRESHOLD number of bytes, instead of RX_THRESHOLD + 1.
+939d749ad6649c Chen-Yu Tsai 2017-10-10  39  	 */
+939d749ad6649c Chen-Yu Tsai 2017-10-10  40  	int read_len = RX_THRESHOLD +
+939d749ad6649c Chen-Yu Tsai 2017-10-10  41  		(hdmi->variant->ddc_fifo_thres_incl ? 0 : 1);
+f0a3dd33ba685b Jonathan Liu 2017-07-02  42  
+939d749ad6649c Chen-Yu Tsai 2017-10-10  43  	/*
+939d749ad6649c Chen-Yu Tsai 2017-10-10  44  	 * Limit transfer length by FIFO threshold or FIFO size.
+939d749ad6649c Chen-Yu Tsai 2017-10-10  45  	 * For TX the threshold is for an empty FIFO.
+939d749ad6649c Chen-Yu Tsai 2017-10-10  46  	 */
+939d749ad6649c Chen-Yu Tsai 2017-10-10  47  	len = min_t(int, len, read ? read_len : SUN4I_HDMI_DDC_FIFO_SIZE);
+f0a3dd33ba685b Jonathan Liu 2017-07-02  48  
+f0a3dd33ba685b Jonathan Liu 2017-07-02  49  	/* Wait until error, FIFO request bit set or transfer complete */
+939d749ad6649c Chen-Yu Tsai 2017-10-10  50  	if (regmap_field_read_poll_timeout(hdmi->field_ddc_int_status, reg,
+939d749ad6649c Chen-Yu Tsai 2017-10-10  51  					   reg & mask, len * byte_time_ns,
+939d749ad6649c Chen-Yu Tsai 2017-10-10  52  					   100000))
+f0a3dd33ba685b Jonathan Liu 2017-07-02  53  		return -ETIMEDOUT;
+f0a3dd33ba685b Jonathan Liu 2017-07-02  54  
+f0a3dd33ba685b Jonathan Liu 2017-07-02  55  	if (reg & SUN4I_HDMI_DDC_INT_STATUS_ERROR_MASK)
+f0a3dd33ba685b Jonathan Liu 2017-07-02  56  		return -EIO;
+f0a3dd33ba685b Jonathan Liu 2017-07-02  57  
+f0a3dd33ba685b Jonathan Liu 2017-07-02  58  	if (read)
+939d749ad6649c Chen-Yu Tsai 2017-10-10 @59  		readsb(hdmi->base + hdmi->variant->ddc_fifo_reg, buf, len);
+f0a3dd33ba685b Jonathan Liu 2017-07-02  60  	else
+939d749ad6649c Chen-Yu Tsai 2017-10-10 @61  		writesb(hdmi->base + hdmi->variant->ddc_fifo_reg, buf, len);
+f0a3dd33ba685b Jonathan Liu 2017-07-02  62  
+939d749ad6649c Chen-Yu Tsai 2017-10-10  63  	/* Clear FIFO request bit by forcing a write to that bit */
+939d749ad6649c Chen-Yu Tsai 2017-10-10  64  	regmap_field_force_write(hdmi->field_ddc_int_status,
+939d749ad6649c Chen-Yu Tsai 2017-10-10  65  				 SUN4I_HDMI_DDC_INT_STATUS_FIFO_REQUEST);
+f0a3dd33ba685b Jonathan Liu 2017-07-02  66  
+f0a3dd33ba685b Jonathan Liu 2017-07-02  67  	return len;
+f0a3dd33ba685b Jonathan Liu 2017-07-02  68  }
+f0a3dd33ba685b Jonathan Liu 2017-07-02  69  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

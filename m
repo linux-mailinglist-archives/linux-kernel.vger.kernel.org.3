@@ -2,135 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B739A4FCC34
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 04:08:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C31114FCC1D
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 04:03:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243748AbiDLCJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 22:09:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60130 "EHLO
+        id S240473AbiDLCFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 22:05:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242379AbiDLCJV (ORCPT
+        with ESMTP id S231782AbiDLCFa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 22:09:21 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8857338BF;
-        Mon, 11 Apr 2022 19:07:04 -0700 (PDT)
-Received: from kwepemi500007.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KcpxJ1qR7zdZh4;
-        Tue, 12 Apr 2022 10:06:28 +0800 (CST)
-Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
- kwepemi500007.china.huawei.com (7.221.188.207) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 12 Apr 2022 10:07:02 +0800
-Received: from localhost.localdomain (10.67.165.24) by
- kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 12 Apr 2022 10:07:01 +0800
-From:   Guangbin Huang <huangguangbin2@huawei.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <mkubecek@suse.cz>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <lipeng321@huawei.com>, <huangguangbin2@huawei.com>,
-        <chenhao288@hisilicon.com>, <wangjie125@huawei.com>
-Subject: [PATCH net-next v2 3/3] net: hns3: add tx push support in hns3 ring param process
-Date:   Tue, 12 Apr 2022 10:01:21 +0800
-Message-ID: <20220412020121.14140-4-huangguangbin2@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220412020121.14140-1-huangguangbin2@huawei.com>
-References: <20220412020121.14140-1-huangguangbin2@huawei.com>
+        Mon, 11 Apr 2022 22:05:30 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3128C31507;
+        Mon, 11 Apr 2022 19:03:15 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id f3so16188349pfe.2;
+        Mon, 11 Apr 2022 19:03:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OSPq/f1fzEIxN+j0n/fpdsesVfU3t6cZSqHyG+8nEUw=;
+        b=RcYztbCbPhBXbYovGgjFPRLBCJsHH6c1flVWzZH88rkHm/9Umin1lcC94mtpi/dFVC
+         lr4yHI9oOQaWDTh5B3RIr6rjyTjIC0aKPjai6XDzubcYDW/HZWagEyrh+bx1UcF+yV14
+         /VKQYxNnqiEblRGFI0TozfNnoUVE5oYX1AFsJjOfnbEZCil1NZnG/IUqZVSXbV5N/luq
+         EzSk65bCPW0iQsIcTTWDgYGLx4nLsRrrdS/yTA5pXgmYTwP5LC52j+UvFaFImT7KFzEK
+         TCxpXMM1gu7J/XtWEkw60AhuD/tb+GibGf1V91voqg6M5zxXF3DhmZFFOPbaXFIBJ6IX
+         P1tA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OSPq/f1fzEIxN+j0n/fpdsesVfU3t6cZSqHyG+8nEUw=;
+        b=yFHQ8vJ7J77WMeaFiSyREtKVh7a/Bc86NbGMq02AIFFaN5L5IqHnRpq0zwk5FtIuts
+         0Ucmr3bRc78XAApPMxHsJfD0HokpGr2SPUQO/Uy060B9hcymJDlsrYQwWb0gtYHFen0b
+         DKRSPQUxHNThAeds/pUa/7sK2oh9H8citV2MBs0cgl6jmqOjqK4o/dsZSajljb9BEA1j
+         +wWRZOdo3siT9PGpUOMKrtkAfDKI0UX9AgCTt5XugOv+eNrPzlKvFn2uoUEdU2VlI16d
+         pYFg9g0yb2troqnYSYs20z+a0RvsKrwH9OrKyV9UHcEZTl2znjUnb8IzaMwDRZaM9MyG
+         tqHw==
+X-Gm-Message-State: AOAM530/ytmguP7F+b49jR5m8WLh04RhPLxzl25jOdMIVkCxC9KjNRHe
+        KcF2ZbSPM8aW+qvE3qj4Q2o=
+X-Google-Smtp-Source: ABdhPJxcGtGNDGExUYjmMBb9Ulvg9NSvIJc0BHvmswwX+/ZwbzhpxdEKSghq+Zv3Np6rG2vp10zy5A==
+X-Received: by 2002:a05:6a00:891:b0:4fe:1262:9b4e with SMTP id q17-20020a056a00089100b004fe12629b4emr2204928pfj.21.1649728994725;
+        Mon, 11 Apr 2022 19:03:14 -0700 (PDT)
+Received: from slim.das-security.cn ([103.84.139.54])
+        by smtp.gmail.com with ESMTPSA id m21-20020a17090a7f9500b001c97c6bcaf4sm749289pjl.39.2022.04.11.19.03.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Apr 2022 19:03:14 -0700 (PDT)
+From:   Hangyu Hua <hbh25y@gmail.com>
+To:     valentina.manea.m@gmail.com, shuah@kernel.org,
+        gregkh@linuxfoundation.org, khoroshilov@ispras.ru,
+        skhan@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hangyu Hua <hbh25y@gmail.com>
+Subject: [PATCH v3] usb: usbip: fix a refcount leak in stub_probe()
+Date:   Tue, 12 Apr 2022 10:02:57 +0800
+Message-Id: <20220412020257.9767-1-hbh25y@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.165.24]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600016.china.huawei.com (7.193.23.20)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jie Wang <wangjie125@huawei.com>
+usb_get_dev() is called in stub_device_alloc(). When stub_probe() fails
+after that, usb_put_dev() needs to be called to release the reference.
 
-This patch adds tx push param to hns3 ring param and adapts the set and get
-API of ring params. So users can set it by cmd ethtool -G and get it by cmd
-ethtool -g.
+Fix this by moving usb_put_dev() to sdev_free error path handling.
 
-Signed-off-by: Jie Wang <wangjie125@huawei.com>
-Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
+Find this by code review.
+
+Fixes: 3ff67445750a ("usbip: fix error handling in stub_probe()")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 ---
- .../ethernet/hisilicon/hns3/hns3_ethtool.c    | 33 ++++++++++++++++++-
- 1 file changed, 32 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c b/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
-index f4da77452126..9f4111fd2986 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
-@@ -664,6 +664,8 @@ static void hns3_get_ringparam(struct net_device *netdev,
- 	param->tx_pending = priv->ring[0].desc_num;
- 	param->rx_pending = priv->ring[rx_queue_index].desc_num;
- 	kernel_param->rx_buf_len = priv->ring[rx_queue_index].buf_size;
-+	kernel_param->tx_push = test_bit(HNS3_NIC_STATE_TX_PUSH_ENABLE,
-+					 &priv->state);
- }
+v2: add more description of this patch.
+
+v3: add how to find the problem.
+
+ drivers/usb/usbip/stub_dev.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/usbip/stub_dev.c b/drivers/usb/usbip/stub_dev.c
+index d8d3892e5a69..3c6d452e3bf4 100644
+--- a/drivers/usb/usbip/stub_dev.c
++++ b/drivers/usb/usbip/stub_dev.c
+@@ -393,7 +393,6 @@ static int stub_probe(struct usb_device *udev)
  
- static void hns3_get_pauseparam(struct net_device *netdev,
-@@ -1120,6 +1122,30 @@ static int hns3_change_rx_buf_len(struct net_device *ndev, u32 rx_buf_len)
- 	return 0;
- }
+ err_port:
+ 	dev_set_drvdata(&udev->dev, NULL);
+-	usb_put_dev(udev);
  
-+static int hns3_set_tx_push(struct net_device *netdev, u32 tx_push)
-+{
-+	struct hns3_nic_priv *priv = netdev_priv(netdev);
-+	struct hnae3_handle *h = hns3_get_handle(netdev);
-+	struct hnae3_ae_dev *ae_dev = pci_get_drvdata(h->pdev);
-+	u32 old_state = test_bit(HNS3_NIC_STATE_TX_PUSH_ENABLE, &priv->state);
-+
-+	if (!test_bit(HNAE3_DEV_SUPPORT_TX_PUSH_B, ae_dev->caps) && tx_push)
-+		return -EOPNOTSUPP;
-+
-+	if (tx_push == old_state)
-+		return 0;
-+
-+	netdev_dbg(netdev, "Changing tx push from %s to %s\n",
-+		   old_state ? "on" : "off", tx_push ? "on" : "off");
-+
-+	if (tx_push)
-+		set_bit(HNS3_NIC_STATE_TX_PUSH_ENABLE, &priv->state);
-+	else
-+		clear_bit(HNS3_NIC_STATE_TX_PUSH_ENABLE, &priv->state);
-+
-+	return 0;
-+}
-+
- static int hns3_set_ringparam(struct net_device *ndev,
- 			      struct ethtool_ringparam *param,
- 			      struct kernel_ethtool_ringparam *kernel_param,
-@@ -1139,6 +1165,10 @@ static int hns3_set_ringparam(struct net_device *ndev,
- 	if (ret)
- 		return ret;
+ 	/* we already have busid_priv, just lock busid_lock */
+ 	spin_lock(&busid_priv->busid_lock);
+@@ -408,6 +407,7 @@ static int stub_probe(struct usb_device *udev)
+ 	put_busid_priv(busid_priv);
  
-+	ret = hns3_set_tx_push(ndev, kernel_param->tx_push);
-+	if (ret)
-+		return ret;
-+
- 	/* Hardware requires that its descriptors must be multiple of eight */
- 	new_tx_desc_num = ALIGN(param->tx_pending, HNS3_RING_BD_MULTIPLE);
- 	new_rx_desc_num = ALIGN(param->rx_pending, HNS3_RING_BD_MULTIPLE);
-@@ -1858,7 +1888,8 @@ static int hns3_set_tunable(struct net_device *netdev,
- 				 ETHTOOL_COALESCE_MAX_FRAMES |		\
- 				 ETHTOOL_COALESCE_USE_CQE)
+ sdev_free:
++	usb_put_dev(udev);
+ 	stub_device_free(sdev);
  
--#define HNS3_ETHTOOL_RING	ETHTOOL_RING_USE_RX_BUF_LEN
-+#define HNS3_ETHTOOL_RING	(ETHTOOL_RING_USE_RX_BUF_LEN |		\
-+				 ETHTOOL_RING_USE_TX_PUSH)
- 
- static int hns3_get_ts_info(struct net_device *netdev,
- 			    struct ethtool_ts_info *info)
+ 	return rc;
 -- 
-2.33.0
+2.25.1
 

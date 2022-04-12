@@ -2,71 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7F984FEB0E
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 625804FEA40
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:16:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbiDLXTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 19:19:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51036 "EHLO
+        id S229556AbiDLXS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 19:18:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiDLXTa (ORCPT
+        with ESMTP id S229496AbiDLXSU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 19:19:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E068F9B9
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:07:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB16761A55
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 22:01:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22DBCC385A6
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 22:01:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649800898;
-        bh=ydy77pfGsEmNO9TqK6T8vC6NHRGjR+yzvIsPTZVIUk0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pTUsq8HYKKgWnruu2r387ZlfiaNYe8bCUA04lKnWF1djMsvX3q7xmjwF97tRqQwKa
-         aPjrWexfHLMGKy4Lxm39ynDkyimCrePiSv+LeSAWsNV9c3Pduj8DHlKQC+pnzrMHzw
-         wUtpz2daFHJS7LfSTF9aCGH/p7BE8iW4hIsuIIFlguo+/vYCUcDsL6aTjvQcNnr0qg
-         tR1Ozk2hWrO/jYzgGpt3LLsZw8ZXyEe8cEb2puJnBlyFuWbGKQMCVzoUl2sAzUrVaZ
-         Nc6pggCkRz0HlyjAmYUGxOv051pl9nsmHJmTX33vqZNpy4ARJtav/vFYci5BO9vebo
-         iNg5OtJiPuXuQ==
-Received: by mail-oi1-f176.google.com with SMTP id w127so142589oig.10
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:01:38 -0700 (PDT)
-X-Gm-Message-State: AOAM532GFekIcMXEPgJkDHztKjBgRgUkaSOYdY+oQelTHKkeoFRxJIOq
-        iREMEzPk2iaaikGDdjO4o0JmvKScmxoyMW10SDo=
-X-Google-Smtp-Source: ABdhPJwc13ovayq2njvov3t6qnbxbqC/vBF8C0cpvVrQN0L/QGvKCDndhyuRyhaeEnWznZibNtWFDf0lugthvaid4qg=
-X-Received: by 2002:aca:674c:0:b0:2d9:c460:707c with SMTP id
- b12-20020aca674c000000b002d9c460707cmr2813613oiy.126.1649800897252; Tue, 12
- Apr 2022 15:01:37 -0700 (PDT)
+        Tue, 12 Apr 2022 19:18:20 -0400
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E4761605FF;
+        Tue, 12 Apr 2022 15:05:49 -0700 (PDT)
+Received: by mail-oi1-f177.google.com with SMTP id k13so197818oiw.1;
+        Tue, 12 Apr 2022 15:05:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qiLhy5En6qOrIdw1hARFp7ZQvamsIP/5dzhc1+Si6fI=;
+        b=j75vQXUcUtvIy9dkQc5F49qHb2qyMhzcL0x30FDZve8m16FQu7XYdFsjf86cirO8a1
+         jmCXud2aDG+j7ipCz2WNqCxj3hi3oInw4yX2BMLwBcHb8yNdJhSjgHlwMOQ+7Q/rpEOk
+         ftqahx928UQZANHPCtFVJW1kb0SfQC/Uc+rKIX6lBlfhBFYny2tYWULw/Q+9/+YqdUjm
+         PsqJMgAz+UU62C55M+UcDMpWrwIxrRS0tC1Y01p1AaHLoLD9GsVYXDoELf9BiQmCXJ1V
+         L0DF6/Y92fpHPufZA8B7MgOqV1E9ypqiHnd9MvnGfNRntMYd6hbFpjdrSdQ131I0+Elb
+         OqVw==
+X-Gm-Message-State: AOAM5330TAppQbNgZNs86R+37llgBlzMa4U9ENHiXbuHvmEw04R7W4Wx
+        +qb1/6aWYcDfSJ7ApuwkrmkyzWPXKw==
+X-Google-Smtp-Source: ABdhPJzipANd7lS/ByWMtonoDdO+pJ9I111+w80YFq0oVtDRmvTMiuTaB2NXYLveW1Q+1PGg3bMB9w==
+X-Received: by 2002:a05:6808:238a:b0:2f7:22df:1d58 with SMTP id bp10-20020a056808238a00b002f722df1d58mr2655257oib.10.1649801148672;
+        Tue, 12 Apr 2022 15:05:48 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id j16-20020a056808057000b002fa638813acsm608665oig.36.2022.04.12.15.05.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 15:05:48 -0700 (PDT)
+Received: (nullmailer pid 1026559 invoked by uid 1000);
+        Tue, 12 Apr 2022 22:05:47 -0000
+Date:   Tue, 12 Apr 2022 17:05:47 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Cc:     Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] dt-bindings: PCI: uniphier-ep: Clean up reg,
+ clocks, resets, and their names using compatible string
+Message-ID: <YlX3uxZzmnb1nM/R@robh.at.kernel.org>
+References: <1649294553-17310-1-git-send-email-hayashi.kunihiko@socionext.com>
+ <1649294553-17310-3-git-send-email-hayashi.kunihiko@socionext.com>
 MIME-Version: 1.0
-References: <Yk7EbvYhwnQy+pAf@arm.com> <Yk7Ny/iFi0NrMXTg@gondor.apana.org.au>
- <Yk8RGvF6ik34C6BO@arm.com> <Yk+rKWEcc9rO+A25@gondor.apana.org.au>
- <Yk/6ts5sVDMDpKj3@arm.com> <Yk/8QExHlggU8KgC@gondor.apana.org.au>
- <YlVHSvkyUBXZPUr2@arm.com> <YlVJKjXkcHqkwyt4@gondor.apana.org.au>
- <YlVOTsaTVkBOxthG@arm.com> <YlVSBuEqMt2S1Gi6@gondor.apana.org.au> <YlVxGAHHD/j6lW3c@arm.com>
-In-Reply-To: <YlVxGAHHD/j6lW3c@arm.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 13 Apr 2022 00:01:25 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGCR833rqKOetj8ykQ8XtDCWbszJYVtVKvLpDLWnM=B5w@mail.gmail.com>
-Message-ID: <CAMj1kXGCR833rqKOetj8ykQ8XtDCWbszJYVtVKvLpDLWnM=B5w@mail.gmail.com>
-Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of ARCH_KMALLOC_MINALIGN
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1649294553-17310-3-git-send-email-hayashi.kunihiko@socionext.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,92 +69,151 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Apr 2022 at 14:31, Catalin Marinas <catalin.marinas@arm.com> wrote:
->
-> On Tue, Apr 12, 2022 at 06:18:46PM +0800, Herbert Xu wrote:
-> > On Tue, Apr 12, 2022 at 11:02:54AM +0100, Catalin Marinas wrote:
-> > > This series does not penalise any architecture. It doesn't even make
-> > > arm64 any worse than it currently is.
-> >
-> > Right, the patch as it stands doesn't change anything.  However,
-> > it is also broken as it stands.  As I said before, CRYPTO_MINALIGN
-> > is not something that is guaranteed by the Crypto API, it is simply
-> > a statement of whatever kmalloc returns.
->
-> I agree that CRYPTO_MINALIGN is not guaranteed by the Crypto API. What
-> I'm debating is the intended use for CRYPTO_MINALIGN in some (most?) of
-> the drivers. It's not just about kmalloc() but also a build-time offset
-> of buffers within structures to guarantee DMA safety. This can't be
-> fixed by cra_alignmask.
->
-> We could leave CRYPTO_MINALIGN as ARCH_KMALLOC_MINALIGN and that matches
-> it being just a statement of the kmalloc() minimum alignment. But since
-> it is also overloaded with the DMA in-structure offset alignment, we'd
-> need a new CRYPTO_DMA_MINALIGN (and _ATTR) to annotate those structures.
-> I have a suspicion there'll be fewer of the original CRYPTO_MINALIGN
-> uses left, hence my approach to making this bigger from the start.
->
-> There's also Ard's series introducing CRYPTO_REQ_MINALIGN while leaving
-> CRYPT_MINALIGN for DMA-safe offsets (IIUC):
->
-> https://lore.kernel.org/r/20220406142715.2270256-1-ardb@kernel.org
->
-> > So if kmalloc is no longer returning CRYPTO_MINALIGN-aligned
-> > memory, then those drivers that need this alignment for DMA
-> > will break anyway.
->
+On Thu, Apr 07, 2022 at 10:22:32AM +0900, Kunihiko Hayashi wrote:
+> Instead of "oneOf:" choices, use "allOf:" and "if:" to define reg, clocks,
+> resets, and their names that can be taken by the compatible string.
+> 
+> The order of their names doesn't change here.
+> 
+> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+> ---
+>  .../pci/socionext,uniphier-pcie-ep.yaml       | 84 ++++++++++++-------
+>  1 file changed, 56 insertions(+), 28 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/pci/socionext,uniphier-pcie-ep.yaml b/Documentation/devicetree/bindings/pci/socionext,uniphier-pcie-ep.yaml
+> index 437e61618d06..49a5b2ca266c 100644
+> --- a/Documentation/devicetree/bindings/pci/socionext,uniphier-pcie-ep.yaml
+> +++ b/Documentation/devicetree/bindings/pci/socionext,uniphier-pcie-ep.yaml
+> @@ -15,9 +15,6 @@ description: |
+>  maintainers:
+>    - Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+>  
+> -allOf:
+> -  - $ref: /schemas/pci/snps,dw-pcie-ep.yaml#
+> -
+>  properties:
+>    compatible:
+>      enum:
+> @@ -28,41 +25,19 @@ properties:
+>      minItems: 4
+>      maxItems: 5
+>  
+> -  reg-names:
+> -    oneOf:
+> -      - items:
+> -          - const: dbi
+> -          - const: dbi2
+> -          - const: link
+> -          - const: addr_space
+> -      - items:
+> -          - const: dbi
+> -          - const: dbi2
+> -          - const: link
+> -          - const: addr_space
+> -          - const: atu
 
-One thing to note here is that minimum DMA *alignment* is not the same
-as the padding to cache writeback granule (CWG) that is needed when
-dealing with non-cache coherent inbound DMA.
+This could be just:
 
-The former is typically a property of the peripheral IP, and is
-something that the driver needs to deal with, potentially by setting
-cra_alignmask to ensure that the input and output buffers are placed
-such that they can accessed via DMA by the peripheral.
+      minItems: 4
+      items:
+        - const: dbi
+        - const: dbi2
+        - const: link
+        - const: addr_space
+        - const: atu
 
-The latter is a property of the CPU's cache hierarchy, not only the
-size of the CWG, but also whether or not DMA is cache coherent to
-begin with. This is not something the driver should usually have to
-care about if it uses the DMA API correctly.
+Then the if/then can have just 'minItems: 5' or 'maxItems: 4' for each 
+case. I prefer the if/then schemas to be minimal.
 
-The reason why CRYPTO_MINALIGN matters for DMA in spite of this is
-that some drivers not only use DMA for processing the bulk of the data
-(typically presented using scatterlists) but sometimes also use DMA to
-map parts of the request and TFM structures, which carry control data
-used by the CPU to manage the crypto requests. Doing a non-coherent
-DMA write into such a structure may blow away 64 or 128 bytes of data,
-even if the write itself is much smaller, due to the fact that we need
-to perform cache invalidation in order for the CPU to be able to
-observe what the device wrote to that memory, and the invalidated
-cache lines may be shared with other data items, and may become dirty
-while the DMA mapping is active.
-
-This is what I am addressing with my patch series, i.e., padding out
-the driver owned parts of the struct to the CWG size so that cache
-invalidation does not affect data owned by other layers in the crypto
-cake, but only at runtime. By doing this consistently for TFM and
-request structures, we should be able to disregard ARCH_DMA_MINALIGN
-entirely when it comes to defining CRYPTO_MINALIGN, as it is highly
-unlikely that any of these peripherals would require more than 8 or 16
-bytes of alignment for the DMA operations themselves.
-
-
-
-
-> No. As per one of my previous emails, kmalloc() will preserve the DMA
-> alignment for an SoC even if smaller than CRYPTO_MINALIGN (or a new
-> CRYPTO_DMA_MINALIGN). Since kmalloc() returns DMA-safe pointers and
-> CRYPTO_MINALIGN (or a new CRYPTO_DMA_MINALIGN) is DMA-safe, so would an
-> offset from a pointer returned by kmalloc().
->
-> > If you want the Crypto API to guarantee alignment over and above
-> > that returned by kmalloc, the correct way is to use cra_alignmask.
->
-> For kmalloc(), this would work, but for the current CRYPTO_MINALIGN_ATTR
-> uses it won't.
->
-> Thanks.
->
-> --
-> Catalin
+> +  reg-names: true
+>  
+>    clocks:
+>      minItems: 1
+>      maxItems: 2
+>  
+> -  clock-names:
+> -    oneOf:
+> -      - items:              # for Pro5
+> -          - const: gio
+> -          - const: link
+> -      - const: link         # for NX1
+> +  clock-names: true
+>  
+>    resets:
+>      minItems: 1
+>      maxItems: 2
+>  
+> -  reset-names:
+> -    oneOf:
+> -      - items:              # for Pro5
+> -          - const: gio
+> -          - const: link
+> -      - const: link         # for NX1
+> +  reset-names: true
+>  
+>    num-ib-windows:
+>      const: 16
+> @@ -78,6 +53,59 @@ properties:
+>    phy-names:
+>      const: pcie-phy
+>  
+> +allOf:
+> +  - $ref: /schemas/pci/snps,dw-pcie-ep.yaml#
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: socionext,uniphier-pro5-pcie-ep
+> +    then:
+> +      properties:
+> +        reg:
+> +          minItems: 4
+> +          maxItems: 4
+> +        reg-names:
+> +          items:
+> +            - const: dbi
+> +            - const: dbi2
+> +            - const: link
+> +            - const: addr_space
+> +        clocks:
+> +          minItems: 2
+> +          maxItems: 2
+> +        clock-names:
+> +          items:
+> +            - const: gio
+> +            - const: link
+> +        resets:
+> +          minItems: 2
+> +          maxItems: 2
+> +        reset-names:
+> +          items:
+> +            - const: gio
+> +            - const: link
+> +    else:
+> +      properties:
+> +        reg:
+> +          minItems: 4
+> +          maxItems: 5
+> +        reg-names:
+> +          items:
+> +            - const: dbi
+> +            - const: dbi2
+> +            - const: link
+> +            - const: addr_space
+> +            - const: atu
+> +        clocks:
+> +          maxItems: 1
+> +        clock-names:
+> +          const: link
+> +        resets:
+> +          maxItems: 1
+> +        reset-names:
+> +          const: link
+> +
+>  required:
+>    - compatible
+>    - reg
+> -- 
+> 2.25.1
+> 
+> 

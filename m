@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC1674FD39F
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 11:59:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 606524FD407
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352424AbiDLHOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:14:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48862 "EHLO
+        id S1357240AbiDLHjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:39:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352316AbiDLGzd (ORCPT
+        with ESMTP id S1353031AbiDLHOp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:55:33 -0400
+        Tue, 12 Apr 2022 03:14:45 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22F6C3A18E;
-        Mon, 11 Apr 2022 23:45:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C25F255B1;
+        Mon, 11 Apr 2022 23:55:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CCF060C1B;
-        Tue, 12 Apr 2022 06:45:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A802FC385A6;
-        Tue, 12 Apr 2022 06:45:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 089FD61451;
+        Tue, 12 Apr 2022 06:55:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B8DBC385A6;
+        Tue, 12 Apr 2022 06:55:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649745917;
-        bh=y/u96vZ793nrYR/50kxGeRzF5tIcQXK3h5BNc9Lj49U=;
+        s=korg; t=1649746543;
+        bh=RPqEzanMnDxC24UF3o+CM9LqcNRSJxwgPiVt2BV2MzA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vO8aVPWM54Ne7IFIvmU41NNA/FYR6cjtHdHX4QhlzSpiDFcwjK34pV6TJ6STuh1Nw
-         CqAJhSB/DiBr9H6iJiEOP5paoYCiDTra6l3NDgbYJc9K8LesRJq8hlb6A9dRI3PviY
-         DU6qgbJLrqw95OWDBskEdzzPHSsNexk+yVl2aM6M=
+        b=QxiHDDvLmEoEDBfyIN+Lsjwa2vqTbKbSaLyI05ke9JCceLoH0wDJFhRyTrfTNAf6R
+         ZCV+8MAXfJrV04NCzzIyE3KRqxKB/JQ06en8JFztkDoE2jBxXhCuYNXiwJpNjhwS2m
+         Jk+S2VthMa4s6Tmv507qgi0ZM34ta+EXvS4lC49s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
+        stable@vger.kernel.org, Scott Benesh <scott.benesh@microchip.com>,
+        Scott Teel <scott.teel@microchip.com>,
+        Kevin Barnett <kevin.barnett@microchip.com>,
+        Don Brace <don.brace@microchip.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 092/277] can: etas_es58x: es58x_fd_rx_event_msg(): initialize rx_event_msg before calling es58x_check_msg_len()
-Date:   Tue, 12 Apr 2022 08:28:15 +0200
-Message-Id: <20220412062944.706674633@linuxfoundation.org>
+Subject: [PATCH 5.16 044/285] scsi: smartpqi: Fix rmmod stack trace
+Date:   Tue, 12 Apr 2022 08:28:21 +0200
+Message-Id: <20220412062944.947521357@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,61 +58,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+From: Don Brace <don.brace@microchip.com>
 
-[ Upstream commit 7a8cd7c0ee823a1cc893ab3feaa23e4b602bfb9a ]
+[ Upstream commit c4ff687d25c05919382a759503bd3821689f4e2f ]
 
-Function es58x_fd_rx_event() invokes the es58x_check_msg_len() macro:
+Prevent "BUG: scheduling while atomic: rmmod" stack trace.
 
-| 	ret = es58x_check_msg_len(es58x_dev->dev, *rx_event_msg, msg_len);
+Stop setting spin_locks before calling OS functions to remove devices.
 
-While doing so, it dereferences an uninitialized
-variable: *rx_event_msg.
-
-This is actually harmless because es58x_check_msg_len() only uses
-preprocessor macros (sizeof() and __stringify()) on
-*rx_event_msg. c.f. [1].
-
-Nonetheless, this pattern is confusing so the lines are reordered to
-make sure that rx_event_msg is correctly initialized.
-
-This patch also fixes a false positive warning reported by cppcheck:
-
-| cppcheck possible warnings: (new ones prefixed by >>, may not be real problems)
-|
-|    In file included from drivers/net/can/usb/etas_es58x/es58x_fd.c:
-| >> drivers/net/can/usb/etas_es58x/es58x_fd.c:174:8: warning: Uninitialized variable: rx_event_msg [uninitvar]
-|     ret = es58x_check_msg_len(es58x_dev->dev, *rx_event_msg, msg_len);
-|           ^
-
-[1] https://elixir.bootlin.com/linux/v5.16/source/drivers/net/can/usb/etas_es58x/es58x_core.h#L467
-
-Link: https://lore.kernel.org/all/20220306101302.708783-1-mailhol.vincent@wanadoo.fr
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+Link: https://lore.kernel.org/r/164375207296.440833.4996145011193819683.stgit@brunhilda.pdev.net
+Reviewed-by: Scott Benesh <scott.benesh@microchip.com>
+Reviewed-by: Scott Teel <scott.teel@microchip.com>
+Reviewed-by: Kevin Barnett <kevin.barnett@microchip.com>
+Signed-off-by: Don Brace <don.brace@microchip.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/can/usb/etas_es58x/es58x_fd.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/scsi/smartpqi/smartpqi_init.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/can/usb/etas_es58x/es58x_fd.c b/drivers/net/can/usb/etas_es58x/es58x_fd.c
-index af042aa55f59..26bf4775e884 100644
---- a/drivers/net/can/usb/etas_es58x/es58x_fd.c
-+++ b/drivers/net/can/usb/etas_es58x/es58x_fd.c
-@@ -171,12 +171,11 @@ static int es58x_fd_rx_event_msg(struct net_device *netdev,
- 	const struct es58x_fd_rx_event_msg *rx_event_msg;
- 	int ret;
+diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
+index f0897d587454..2db9f874cc51 100644
+--- a/drivers/scsi/smartpqi/smartpqi_init.c
++++ b/drivers/scsi/smartpqi/smartpqi_init.c
+@@ -2513,17 +2513,15 @@ static void pqi_remove_all_scsi_devices(struct pqi_ctrl_info *ctrl_info)
+ 	struct pqi_scsi_dev *device;
+ 	struct pqi_scsi_dev *next;
  
-+	rx_event_msg = &es58x_fd_urb_cmd->rx_event_msg;
- 	ret = es58x_check_msg_len(es58x_dev->dev, *rx_event_msg, msg_len);
- 	if (ret)
- 		return ret;
- 
--	rx_event_msg = &es58x_fd_urb_cmd->rx_event_msg;
+-	spin_lock_irqsave(&ctrl_info->scsi_device_list_lock, flags);
 -
- 	return es58x_rx_err_msg(netdev, rx_event_msg->error_code,
- 				rx_event_msg->event_code,
- 				get_unaligned_le64(&rx_event_msg->timestamp));
+ 	list_for_each_entry_safe(device, next, &ctrl_info->scsi_device_list,
+ 		scsi_device_list_entry) {
+ 		if (pqi_is_device_added(device))
+ 			pqi_remove_device(ctrl_info, device);
++		spin_lock_irqsave(&ctrl_info->scsi_device_list_lock, flags);
+ 		list_del(&device->scsi_device_list_entry);
+ 		pqi_free_device(device);
++		spin_unlock_irqrestore(&ctrl_info->scsi_device_list_lock, flags);
+ 	}
+-
+-	spin_unlock_irqrestore(&ctrl_info->scsi_device_list_lock, flags);
+ }
+ 
+ static int pqi_scan_scsi_devices(struct pqi_ctrl_info *ctrl_info)
 -- 
 2.35.1
 

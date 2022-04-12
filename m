@@ -2,71 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E68A34FE4B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:27:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 396664FE4BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356995AbiDLP3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 11:29:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56766 "EHLO
+        id S1357007AbiDLPak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 11:30:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230501AbiDLP3J (ORCPT
+        with ESMTP id S230501AbiDLPai (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 11:29:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8433E1CFCF;
-        Tue, 12 Apr 2022 08:26:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B082616B8;
-        Tue, 12 Apr 2022 15:26:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 672F2C385A1;
-        Tue, 12 Apr 2022 15:26:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649777210;
-        bh=PJsqgsQBozipWtIrkNQ4IOXOyZa6YXCt+E60ahBP+p8=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=hegew9VcIRcim4ZpIwiHgi8E4zl7/uCfKWDoaFdkwVjjBv3if3IxylN/UZwPVgT0B
-         JBrJn2O+JZdqGzaMvHgColLmY76/XIS4jQJI1hvS0ip3lHGnEUVQywPVQnQ8iI24S/
-         WpUCnx2xVnJkNr3pP1o/tNM9LipgQPXggvtye+VbKxCnQc1jgSgQEZUturbvszAX6H
-         WzhVYJ+PN06CFSqjmysblK2z9xmZC/2LsNNwkBR/33xe3i6VDIruFEo4k8cFihKpwC
-         kwAdj+jInVtrn0/Il7A4rtSO1GaTgk2ai7Fa7gpLkcGowHoGM3+aDMb1xTlxsNtFDR
-         ZFmlz6ImQf+bw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 01AC05C0E58; Tue, 12 Apr 2022 08:26:49 -0700 (PDT)
-Date:   Tue, 12 Apr 2022 08:26:49 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        llvm@lists.linux.dev, Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>
-Subject: Re: Dangerous addr to ctrl dependency transformation in
- fs/nfs/delegation.c::nfs_server_return_marked_delegations()?
-Message-ID: <20220412152649.GF4285@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <Yk7/T8BJITwz+Og1@Pauls-MacBook-Pro.local>
- <20220411182141.GZ4285@paulmck-ThinkPad-P17-Gen-1>
- <YlV1D2RmZgx/PJn5@Pauls-MacBook-Pro.local>
+        Tue, 12 Apr 2022 11:30:38 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E92FE1D307
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:28:19 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B3B4713D5;
+        Tue, 12 Apr 2022 08:28:19 -0700 (PDT)
+Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 11A413F70D;
+        Tue, 12 Apr 2022 08:28:18 -0700 (PDT)
+From:   Robin Murphy <robin.murphy@arm.com>
+To:     maz@kernel.org, tglx@linutronix.de
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH] irqchip/gic-v3: Claim iomem resources
+Date:   Tue, 12 Apr 2022 16:28:15 +0100
+Message-Id: <c534c2a458a3bf94ccdae8abc6edc3d45a689c30.1649777295.git.robin.murphy@arm.com>
+X-Mailer: git-send-email 2.28.0.dirty
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YlV1D2RmZgx/PJn5@Pauls-MacBook-Pro.local>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,276 +39,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 02:48:15PM +0200, Paul Heidekrüger wrote:
-> On Mon, Apr 11, 2022 at 11:21:41AM -0700, Paul E. McKenney wrote:
-> > On Thu, Apr 07, 2022 at 05:12:15PM +0200, Paul Heidekrüger wrote:
-> > > Hi all,
-> > > 
-> > > work on my dependency checker tool is progressing nicely, and it is
-> > > flagging, what I believe is, a harmful addr to ctrl dependency
-> > > transformation. For context, see [1] and [2]. I'm using the Clang
-> > > compiler.
-> > > 
-> > > The dependency in question runs from line 618 into the for loop
-> > > increment, i.e. the third expresion in the for loop condition, in line
-> > > 622 of fs/nfs/delegation.c::nfs_server_return_marked_delegations().
-> > > 
-> > > I did my best to reverse-engineer some pseudocode from Clang's IR for
-> > > showing what I think is going on.
-> > 
-> > First, thank you very much for doing this work!
-> > 
-> > > Clang's unoptimised version:
-> > > 
-> > > > restart:
-> > > > 	if(place_holder != NULL)
-> > > > 		delegation = rcu_dereference(place_holder->delegation); /* 618 */
-> > > > 	if(delegation != NULL)
-> > > > 		if(delegation != place_holder_deleg)
-> > > > 			delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list); /* 620 */
-> > > > 
-> > > > 	for( ; &(delegation)->super_list != &server->delegations; delegation = list_entry_rcu(delegation->super_list.next, typeof(*(delegation)), super_list)) { /* 622 */
-> > > > 		/*
-> > > > 		 * Can continue, "goto restart" or "goto break" (after loop). 
-> > > > 		 * Can reassign "delegation", "place_holder", "place_holder_deleg".
-> > > > 		 * "delegation" might be assigned either a value depending on 
-> > > > 		 * "delegation" itself, i.e. it is part of the dependency chain, 
-> > > > 		 * or NULL.
-> > > > 		 * Can modifiy fields of the "nfs_delegation" struct "delegation" 
-> > > > 		 * points to.
-> > > > 		 * Assume line 618 has been executed and line 620 hasn't. Then, 
-> > > > 		 * there exists a path s.t. "delegation" isn't reassigned NULL 
-> > > > 		 * and the for loop's increment is executed.
-> > > > 		 */
-> > > > 	}
-> > > 
-> > > Clang's optimised version:
-> > > 
-> > > > restart:
-> > > > 	if(place_holder == NULL) {
-> > > > 		delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list);
-> > > > 	} else {
-> > > > 		cmp = rcu_dereference(place_holder->delegation); /* 618 */
-> > > > 		if(cmp != NULL) { /* Transformation to ctrl dep */
-> > > > 			if(cmp == place_holder_deleg) {
-> > > > 				delegation = place_holder_deleg;
-> > > > 			} else {
-> > > > 				delegation = list_entry_rcu(server->delegations.nex, struct nfs_delegation, super_list);
-> > > > 			}
-> > > > 		} else {
-> > > > 			delegation = list_entry_rcu(server->delegations.next, struct nfs_delegation, super_list);
-> > > > 		}
-> > > > 	}
-> > > > 
-> > > > 	for( ; &(delegation)->super_list != &server->delegations; delegation = list_entry_rcu(delegation->super_list.next, typeof(*(delegation)), super_list)) {
-> > > > 		/*
-> > > > 		 * At this point, "delegation" cannot depend on line 618 anymore
-> > > > 		 * since the "rcu_dereference()" was only used for an assignment
-> > > > 		 * to "cmp" and a subsequent comparison (ctrl dependency).
-> > > > 		 * Therefore, the loop increment cannot depend on the
-> > > > 		 * "rcu_dereference()" either. The dependency chain has been
-> > > > 		 * broken.
-> > > > 		 */
-> > > >         }
-> > > 
-> > > The above is an abstraction of the following control flow path in
-> > > "nfs_server_return_marked_delegations()":
-> > > 
-> > > 1. When "nfs_server_return_marked_delegations()" gets called, it has no
-> > > choice but to skip the dependency beginning in line 620, since
-> > > "place_holder" is NULL the first time round.
-> > > 
-> > > 2. Now take a path until "place_holder", the condition for the
-> > > dependency beginning, becomes true and "!delegation || delegation !=
-> > > place_holder_deleg", the condition for the assignment in line 620,
-> > > becomes false. Then, enter the loop again and take a path to one of the
-> > > "goto restart" statements without reassigning to "delegation".
-> > > 
-> > > 3. After going back to "restart", since the condition for line 618
-> > > became true, "rcu_dereference()" into "delegation".
-> > > 
-> > > 4. Enter the for loop again, but avoid the "goto restart" statements in
-> > > the first iteration and ensure that "&(delegation)->super_list !=
-> > > &server->delegations", the loop condition, remains true and "delegation"
-> > > isn't assigned NULL.
-> > > 
-> > > 5. When the for loop condition is reached for the second time, the loop
-> > > increment is executed and there is an address dependency.
-> > > 
-> > > Now, why would the compiler decide to assign "place_holder_deleg" to
-> > > "delegation" instead of what "rcu_dereference()" returned? Here's my
-> > > attempt at explaining.
-> > > 
-> > > In the pseudo code above, i.e. in the optimised IR, the assignment of
-> > > "place_holder_deleg" is guarded by two conditions. It is executed iff
-> > > "place_holder" isn't NULL and the "rcu_dereference()" didn't return
-> > > NULL. In other words, iff "place_holder != NULL && rcu_dereference() !=
-> > > NULL" holds at line 617, then "delegation == rcu_dereference() ==
-> > > place_holder_deleg" must hold at line 622. Otherwise, the optimisation
-> > > would be wrong.
-> > > 
-> > > Assume control flow has just reached the first if, i.e. line 617, in
-> > > source code. Since "place_holder" isn't NULL, it will execute the first
-> > > if's body and "rcu_dereference()" into "delegation" (618). Now it has
-> > > reached the second if. Per our aussmption, "rcu_dereference()" returned
-> > > something that wasn't NULL. Therefore, "!delegation", the first part of
-> > > the second if condition's OR, will be false.
-> > > 
-> > > However, if we want "rcu_dereference() == delegation" to hold after the
-> > > two if's, we can't enter the second if anyway, as it will overwrite
-> > > "delegation" with a value that might not be equal to what
-> > > "rcu_dereference()" returned. So, we want the second part of the second
-> > > if condition's OR, i.e.  "delegation != place_holder_deleg" to be false
-> > > as well.
-> > > 
-> > > When is that the case? It is the case when "delegation ==
-> > > place_holder_deleg" holds.
-> > > 
-> > > So, if we want "delegation == rcu_dereference() == place_holder_deleg"
-> > > to hold after the two if's, "place_holder != NULL && rcu_dereference()
-> > > != NULL" must hold before the two if's, which is what we wanted to show
-> > > and what the compiler figured out too.
-> > > 
-> > > TL;DR: it appears the compiler optimisation is plausible, yet it still
-> > > breaks the address dependency.
-> > > 
-> > > For those interested, I have made the unoptimised and optimised IR CFGs
-> > > available. In the optimised one, the interesting part is the transition
-> > > from "if.end" to "if.end13".
-> > > 
-> > > Unoptimised: https://raw.githubusercontent.com/gist/PBHDK/700bf7bdf968fe25c82506de58143bbe/raw/54bf2c1e1a72fb30120f7e812f05ef01ca86b78f/O0-nfs_server_return_marked_delegations.svg
-> > > 
-> > > Optimised: https://raw.githubusercontent.com/gist/PBHDK/700bf7bdf968fe25c82506de58143bbe/raw/54bf2c1e1a72fb30120f7e812f05ef01ca86b78f/O2-nfs_server_return_marked_delegations.svg
-> > > 
-> > > What do you think?
-> > > 
-> > > Many thanks,
-> > > Paul
-> > > 
-> > > [1]: https://linuxplumbersconf.org/event/7/contributions/821/attachments/598/1075/LPC_2020_--_Dependency_ordering.pdf
-> > > [2]: https://lore.kernel.org/llvm/YXknxGFjvaB46d%2Fp@Pauls-MacBook-Pro/T/#u
-> > 
-> > If I understand this correctly (rather unlikely), this stems from
-> > violating the following rule in Documentation/RCU/rcu_dereference.rst:
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> > -	Be very careful about comparing pointers obtained from
-> > 	rcu_dereference() against non-NULL values.  As Linus Torvalds
-> > 	explained, if the two pointers are equal, the compiler could
-> > 	substitute the pointer you are comparing against for the pointer
-> > 	obtained from rcu_dereference().  For example::
-> > 
-> > 		p = rcu_dereference(gp);
-> > 		if (p == &default_struct)
-> > 			do_default(p->a);
-> > 
-> > 	Because the compiler now knows that the value of "p" is exactly
-> > 	the address of the variable "default_struct", it is free to
-> > 	transform this code into the following::
-> > 
-> > 		p = rcu_dereference(gp);
-> > 		if (p == &default_struct)
-> > 			do_default(default_struct.a);
-> > 
-> > 	On ARM and Power hardware, the load from "default_struct.a"
-> > 	can now be speculated, such that it might happen before the
-> > 	rcu_dereference().  This could result in bugs due to misordering.
-> > 
-> > 	However, comparisons are OK in the following cases:
-> > 
-> > 	-	The comparison was against the NULL pointer.  If the
-> > 		compiler knows that the pointer is NULL, you had better
-> > 		not be dereferencing it anyway.  If the comparison is
-> > 		non-equal, the compiler is none the wiser.  Therefore,
-> > 		it is safe to compare pointers from rcu_dereference()
-> > 		against NULL pointers.
-> > 
-> > 	-	The pointer is never dereferenced after being compared.
-> > 		Since there are no subsequent dereferences, the compiler
-> > 		cannot use anything it learned from the comparison
-> > 		to reorder the non-existent subsequent dereferences.
-> > 		This sort of comparison occurs frequently when scanning
-> > 		RCU-protected circular linked lists.
-> > 
-> > 		Note that if checks for being within an RCU read-side
-> > 		critical section are not required and the pointer is never
-> > 		dereferenced, rcu_access_pointer() should be used in place
-> > 		of rcu_dereference().
-> > 
-> > 	-	The comparison is against a pointer that references memory
-> > 		that was initialized "a long time ago."  The reason
-> > 		this is safe is that even if misordering occurs, the
-> > 		misordering will not affect the accesses that follow
-> > 		the comparison.  So exactly how long ago is "a long
-> > 		time ago"?  Here are some possibilities:
-> > 
-> > 		-	Compile time.
-> > 
-> > 		-	Boot time.
-> > 
-> > 		-	Module-init time for module code.
-> > 
-> > 		-	Prior to kthread creation for kthread code.
-> > 
-> > 		-	During some prior acquisition of the lock that
-> > 			we now hold.
-> > 
-> > 		-	Before mod_timer() time for a timer handler.
-> > 
-> > 		There are many other possibilities involving the Linux
-> > 		kernel's wide array of primitives that cause code to
-> > 		be invoked at a later time.
-> > 
-> > 	-	The pointer being compared against also came from
-> > 		rcu_dereference().  In this case, both pointers depend
-> > 		on one rcu_dereference() or another, so you get proper
-> > 		ordering either way.
-> > 
-> > 		That said, this situation can make certain RCU usage
-> > 		bugs more likely to happen.  Which can be a good thing,
-> > 		at least if they happen during testing.  An example
-> > 		of such an RCU usage bug is shown in the section titled
-> > 		"EXAMPLE OF AMPLIFIED RCU-USAGE BUG".
-> > 
-> > 	-	All of the accesses following the comparison are stores,
-> > 		so that a control dependency preserves the needed ordering.
-> > 		That said, it is easy to get control dependencies wrong.
-> > 		Please see the "CONTROL DEPENDENCIES" section of
-> > 		Documentation/memory-barriers.txt for more details.
-> > 
-> > 	-	The pointers are not equal *and* the compiler does
-> > 		not have enough information to deduce the value of the
-> > 		pointer.  Note that the volatile cast in rcu_dereference()
-> > 		will normally prevent the compiler from knowing too much.
-> > 
-> > 		However, please note that if the compiler knows that the
-> > 		pointer takes on only one of two values, a not-equal
-> > 		comparison will provide exactly the information that the
-> > 		compiler needs to deduce the value of the pointer.
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> > But it would be good to support this use case, for example, by having
-> > the compiler provide some way of marking the "delegation" variable as
-> > carrying a full dependency.
-> > 
-> > Or did I miss a turn in here somewhere?
-> > 
-> > 							Thanx, Paul
-> 
-> Actually, I think you're spot on! The original source code has a,
-> allbeit nested, comparison of "delegation" against a non-NULL value,
-> which is exactly what the documentation discourages as it helps the
-> compiler figure out the value of "delegation".
+As a simple quality-of-life tweak, claim our MMIO regions when mapping
+them, such that the GIC shows up in /proc/iomem. No effort is spent on
+trying to release them, since frankly if the GIC fails to probe then
+it's never getting a second try anyway.
 
-Sometimes I get lucky.  ;-)
+Signed-off-by: Robin Murphy <robin.murphy@arm.com>
 
-> I'll try to prepare a patch, using my dependency checker tool to verify
-> that this was indeed the issue.
+---
 
-This would be a kernel patch to avoid the comparison?  Or a patch to
-the compiler to tell it that the "delegation" variable carries a full
-dependency?  Either would be useful, just curious.
+I briefly looked at doing the same for GICv2, but quickly decided that
+GICv2 isn't interesting enough to be worth the (greater) bother...
 
-							Thanx, Paul
+Lightly tested with ACPI.
+---
+ drivers/irqchip/irq-gic-v3.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+index b252d5534547..9815b692a47a 100644
+--- a/drivers/irqchip/irq-gic-v3.c
++++ b/drivers/irqchip/irq-gic-v3.c
+@@ -1980,10 +1980,10 @@ static int __init gic_of_init(struct device_node *node, struct device_node *pare
+ 	u32 nr_redist_regions;
+ 	int err, i;
+ 
+-	dist_base = of_iomap(node, 0);
+-	if (!dist_base) {
++	dist_base = of_io_request_and_map(node, 0, "GICD");
++	if (IS_ERR(dist_base)) {
+ 		pr_err("%pOF: unable to map gic dist registers\n", node);
+-		return -ENXIO;
++		return PTR_ERR(dist_base);
+ 	}
+ 
+ 	err = gic_validate_dist_version(dist_base);
+@@ -2007,8 +2007,8 @@ static int __init gic_of_init(struct device_node *node, struct device_node *pare
+ 		int ret;
+ 
+ 		ret = of_address_to_resource(node, 1 + i, &res);
+-		rdist_regs[i].redist_base = of_iomap(node, 1 + i);
+-		if (ret || !rdist_regs[i].redist_base) {
++		rdist_regs[i].redist_base = of_io_request_and_map(node, 1 + i, "GICR");
++		if (ret || IS_ERR(rdist_regs[i].redist_base)) {
+ 			pr_err("%pOF: couldn't map region %d\n", node, i);
+ 			err = -ENODEV;
+ 			goto out_unmap_rdist;
+@@ -2034,7 +2034,7 @@ static int __init gic_of_init(struct device_node *node, struct device_node *pare
+ 
+ out_unmap_rdist:
+ 	for (i = 0; i < nr_redist_regions; i++)
+-		if (rdist_regs[i].redist_base)
++		if (rdist_regs[i].redist_base && !IS_ERR(rdist_regs[i].redist_base))
+ 			iounmap(rdist_regs[i].redist_base);
+ 	kfree(rdist_regs);
+ out_unmap_dist:
+@@ -2081,6 +2081,7 @@ gic_acpi_parse_madt_redist(union acpi_subtable_headers *header,
+ 		pr_err("Couldn't map GICR region @%llx\n", redist->base_address);
+ 		return -ENOMEM;
+ 	}
++	request_mem_region(redist->base_address, redist->length, "GICR");
+ 
+ 	gic_acpi_register_redist(redist->base_address, redist_base);
+ 	return 0;
+@@ -2103,6 +2104,7 @@ gic_acpi_parse_madt_gicc(union acpi_subtable_headers *header,
+ 	redist_base = ioremap(gicc->gicr_base_address, size);
+ 	if (!redist_base)
+ 		return -ENOMEM;
++	request_mem_region(gicc->gicr_base_address, size, "GICR");
+ 
+ 	gic_acpi_register_redist(gicc->gicr_base_address, redist_base);
+ 	return 0;
+@@ -2304,6 +2306,7 @@ gic_acpi_init(union acpi_subtable_headers *header, const unsigned long end)
+ 		pr_err("Unable to map GICD registers\n");
+ 		return -ENOMEM;
+ 	}
++	request_mem_region(dist->base_address, ACPI_GICV3_DIST_MEM_SIZE, "GICD");
+ 
+ 	err = gic_validate_dist_version(acpi_data.dist_base);
+ 	if (err) {
+-- 
+2.28.0.dirty
+

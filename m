@@ -2,100 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 861A84FE4BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:28:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A9734FE4CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:35:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357039AbiDLPax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 11:30:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57390 "EHLO
+        id S1357070AbiDLPhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 11:37:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357011AbiDLPal (ORCPT
+        with ESMTP id S229478AbiDLPhs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 11:30:41 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D6E42ED7
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:28:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1649777304; x=1681313304;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=rd9ILy3F+kY0VTtPVuICodHaMg/lo8gQumFUm2poWyg=;
-  b=de4Anf8hCaHt4qWciyMk/K6J5QNot2HUFJukXmjl5TodM2CCyBku22B1
-   6Gi9Q7y4Z15ZKWLbwJZimy+KTohbHk+s9yx/zN4/65C6tJpTtIM+/c59j
-   VWl27sw3OH0T+WA9M3Z34Y7iOXPnX4p6UlSs3xv9whJSRAoACLZSP8aoE
-   Kaei2Vcp0UHAPqxJRQLXZHQ68NT0tzkyHqDf+t1/l9zxQPMOP559ISC5Y
-   KdeLZ38oIrNsSjReFSGtjffGN4p0GElhfzYiYns/lao/D52n0P5LDYb0b
-   ZuONCPG5v0eIAA0B7xyX5iM+BohSTxj17VnauSPQVrKgcF8k9nGarb30/
-   w==;
-X-IronPort-AV: E=Sophos;i="5.90,254,1643698800"; 
-   d="scan'208";a="169367318"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Apr 2022 08:28:23 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 12 Apr 2022 08:28:23 -0700
-Received: from localhost.localdomain (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Tue, 12 Apr 2022 08:28:21 -0700
-From:   Claudiu Beznea <claudiu.beznea@microchip.com>
-To:     <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <linux@armlinux.org.uk>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH v2 4/4] ARM: at91: pm: use kernel documentation style
-Date:   Tue, 12 Apr 2022 18:30:46 +0300
-Message-ID: <20220412153046.50014-5-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220412153046.50014-1-claudiu.beznea@microchip.com>
-References: <20220412153046.50014-1-claudiu.beznea@microchip.com>
+        Tue, 12 Apr 2022 11:37:48 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D013298E
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:35:30 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id g16-20020a05660203d000b005f7b3b0642eso11754139iov.16
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:35:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=vFB2q3OmWhiQQNudfHfmYzHvPNUtRDLTLchmQKtzzv4=;
+        b=yXp2aAbiIw3P611y781QcV8HJ6RgnidxIhXQRXhFi7vasquEAvpKZMs3rmK7kLBVuB
+         O4ooXK06AdZ5Sjcfl8hENa/AJqbzQSZLCXWUjxVVc6gB1N1BlFJjOkhg97Qwgx4lDQkH
+         TS2iwCbyud/q8Ow1YU5pxTWCRi9lSfDcZFTTzuM1AlvCwUegK82rU5kzOwXShtgO12oX
+         GQFR2gtBqwfM2rTBrGXog4w27FZHv/SMTWZzFO3Kynp625r3chHCHlhlY55H0OK4WUts
+         biBBzcqnaFmlV2RXA2ocoE5L9TmkRiRE+7a/rJqIC/avPZ6c67mxoWzSTHoccN/8LBNa
+         aJsQ==
+X-Gm-Message-State: AOAM533hZ+kI/usF5P7Z8MbOFKc2Dm9q1nz0YskuTxk8Ix5inipjZFHO
+        DkOsl8FbHCD0GzDUhB+2oCWvZdXCcL7+5JPMLt5a5NUcpxUm
+X-Google-Smtp-Source: ABdhPJxiW3T4cPnHUlebhxuzAuoK6vmgqOlQrlLtm0eeW8IteKSrpVvy4ub2bGPOMOpK9x1XQ8PNZlaX6bhBIgul+cBrnmnEFiUc
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:6a01:0:b0:2b6:87b7:180b with SMTP id
+ f1-20020a926a01000000b002b687b7180bmr16780550ilc.82.1649777730124; Tue, 12
+ Apr 2022 08:35:30 -0700 (PDT)
+Date:   Tue, 12 Apr 2022 08:35:30 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009001e405dc76cfba@google.com>
+Subject: [syzbot] UBSAN: shift-out-of-bounds in init_sb (2)
+From:   syzbot <syzbot+331b35dba416a8c626ba@syzkaller.appspotmail.com>
+To:     agruenba@redhat.com, cluster-devel@redhat.com,
+        linux-kernel@vger.kernel.org, rpeterso@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use kernel documentation style. Along with it fix the naming of
-struct at91_pm_sfrbu_regs in documentation.
+Hello,
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+syzbot found the following issue on:
+
+HEAD commit:    ff511c1c68a5 Add linux-next specific files for 20220408
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=17921824f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d0168787d544f48e
+dashboard link: https://syzkaller.appspot.com/bug?extid=331b35dba416a8c626ba
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+331b35dba416a8c626ba@syzkaller.appspotmail.com
+
+gfs2: fsid=syz:syz: Now mounting FS (format 1801)...
+================================================================================
+UBSAN: shift-out-of-bounds in fs/gfs2/ops_fstype.c:297:19
+shift exponent 50331651 is too large for 64-bit type 'long unsigned int'
+CPU: 1 PID: 29651 Comm: syz-executor.0 Not tainted 5.18.0-rc1-next-20220408-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ ubsan_epilogue+0xb/0x50 lib/ubsan.c:151
+ __ubsan_handle_shift_out_of_bounds.cold+0xb1/0x187 lib/ubsan.c:322
+ gfs2_read_sb fs/gfs2/ops_fstype.c:297 [inline]
+ init_sb.cold+0x19/0x109 fs/gfs2/ops_fstype.c:488
+ gfs2_fill_super+0x18a7/0x28a0 fs/gfs2/ops_fstype.c:1211
+ get_tree_bdev+0x440/0x760 fs/super.c:1292
+ gfs2_get_tree+0x4a/0x270 fs/gfs2/ops_fstype.c:1327
+ vfs_get_tree+0x89/0x2f0 fs/super.c:1497
+ do_new_mount fs/namespace.c:3040 [inline]
+ path_mount+0x1320/0x1fa0 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f445ce8a57a
+Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f445dfacf88 EFLAGS: 00000206 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 0000000020000200 RCX: 00007f445ce8a57a
+RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007f445dfacfe0
+RBP: 00007f445dfad020 R08: 00007f445dfad020 R09: 0000000020000000
+R10: 0000000000000000 R11: 0000000000000206 R12: 0000000020000000
+R13: 0000000020000100 R14: 00007f445dfacfe0 R15: 0000000020047a20
+ </TASK>
+================================================================================
+
+
 ---
- arch/arm/mach-at91/pm.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/arch/arm/mach-at91/pm.c b/arch/arm/mach-at91/pm.c
-index 239339bf6f79..3ae0dca5135b 100644
---- a/arch/arm/mach-at91/pm.c
-+++ b/arch/arm/mach-at91/pm.c
-@@ -48,8 +48,8 @@ struct at91_pm_bu {
- 	unsigned long ddr_phy_calibration[BACKUP_DDR_PHY_CALIBRATION];
- };
- 
--/*
-- * struct at91_pm_sfrbu_offsets: registers mapping for SFRBU
-+/**
-+ * struct at91_pm_sfrbu_regs - registers mapping for SFRBU
-  * @pswbu: power switch BU control registers
-  */
- struct at91_pm_sfrbu_regs {
-@@ -132,7 +132,7 @@ struct at91_soc_pm {
- };
- 
- /**
-- * enum at91_pm_iomaps:	IOs that needs to be mapped for different PM modes
-+ * enum at91_pm_iomaps - IOs that needs to be mapped for different PM modes
-  * @AT91_PM_IOMAP_SHDWC:	SHDWC controller
-  * @AT91_PM_IOMAP_SFRBU:	SFRBU controller
-  * @AT91_PM_IOMAP_ETHC:		Ethernet controller
--- 
-2.32.0
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

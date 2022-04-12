@@ -2,116 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C8D44FE744
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:37:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6C374FE70B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:31:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358468AbiDLRjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 13:39:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55630 "EHLO
+        id S1358366AbiDLRdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 13:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358453AbiDLRjS (ORCPT
+        with ESMTP id S1358331AbiDLRda (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 13:39:18 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A9562A0A;
-        Tue, 12 Apr 2022 10:36:57 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id bg10so38779451ejb.4;
-        Tue, 12 Apr 2022 10:36:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=LtZCMAaqO/VG5YpfRuO+UKadnxV+qlzoG2jHc4egOys=;
-        b=BhFlfM7WlDWeQoL2oBPd1wdD5+QfBwB3o37cqrfIeRYLcN8LhGUW/3FRIoXiw2zssZ
-         pMsBvqP2XmGk1/t/lPq9UaKDY/NCVEsbejHkvAk1f6/2gt5/3Nfh+WPV+MAJZrLdnwIT
-         R1rudQaoZpMYYTmisjTx4dDSWnQ+VsE6ocgY4be+JodlEy+1crl9xhXHjRWs7SXehYzt
-         KUMXhT5/Cdxa9RvZm6TgYYmgbb5e7H43zsbv7myXFz1ZHDpiiQ/k6VcN1aeOcpgJOcn7
-         /0px6ND5ozbN0MGiLpw3mmxU0aJaF0P7CHeCftw8udgjbcRgb7eeE6k6cBuUPbzZBcqH
-         rKfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=LtZCMAaqO/VG5YpfRuO+UKadnxV+qlzoG2jHc4egOys=;
-        b=FT0U5qPc7ConXgRf4vG/C0hxV6+pVDtM26qmBvII6F9qFMmvk+I0JtDGWJqN+tYeLs
-         bF3/4542z+aR8cKWKSDR0fyRLJWxOtD2+y9S8MSRmZ3+4Nx21Wr9Rls3FKH7Euw448J4
-         JGc3kwNrK6tXXtnkbSbY1bug65ZZZVu4FUpgZiIAdISZAhvkteaKkJPRuXVpZR+eVXye
-         Pl8LiuPrHeNp3FEr9Eo2AQRILmCc1QuSVQhv/E/8p0BDZADwS/HFrbmrv6+KaByVX47O
-         yQna9lJWDSkYaoiacJrcbBdI1xjB2WZNzv9CHcb3JxpZp7SWfF3c3QdOqVaxHSgZPag6
-         Q75g==
-X-Gm-Message-State: AOAM5306rhH/yPAZsiMuEiYexyT/3zQoTaI9QsuL7BE8n99CmHniu1CP
-        PwWUuSYxFx9r6uMBlAKGc0M=
-X-Google-Smtp-Source: ABdhPJwBpvYMW9Rop2D/kRLqtKhVc9292ewqg60QqdMXSB5mXpLFNudGe4Aea/oqfX56vmp9ucWXIw==
-X-Received: by 2002:a17:907:6289:b0:6e0:eb0c:8ee7 with SMTP id nd9-20020a170907628900b006e0eb0c8ee7mr33978446ejc.245.1649785015404;
-        Tue, 12 Apr 2022 10:36:55 -0700 (PDT)
-Received: from localhost.localdomain ([5.171.105.8])
-        by smtp.googlemail.com with ESMTPSA id n11-20020a50cc4b000000b0041d8bc4f076sm48959edi.79.2022.04.12.10.36.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 10:36:55 -0700 (PDT)
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ansuel Smith <ansuelsmth@gmail.com>
-Subject: [net-next PATCH v2 4/4] drivers: net: dsa: qca8k: drop dsa_switch_ops from qca8k_priv
-Date:   Tue, 12 Apr 2022 19:30:19 +0200
-Message-Id: <20220412173019.4189-5-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220412173019.4189-1-ansuelsmth@gmail.com>
-References: <20220412173019.4189-1-ansuelsmth@gmail.com>
+        Tue, 12 Apr 2022 13:33:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE29F5BE6A;
+        Tue, 12 Apr 2022 10:31:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8EE0EB81F5D;
+        Tue, 12 Apr 2022 17:31:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB52EC385A5;
+        Tue, 12 Apr 2022 17:30:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649784660;
+        bh=Mvmfe8DoFFgIAg2F5ziwb8TSiIedoMypZAvScsFewFU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wjIp8//vAM3sAUmdS8O5w/1W6BzyxGis2Mgp9rXhiCSZeDUHH3FYM3Yn2h3V4carz
+         CFE8iOt4p1OG/sEF9DL/J1m4Lca2uzd5uBcyiGMqVGtky3iHduK2kdoSoHrCHzpk0/
+         HyqgLKU1UuwlVEeMsYW5ToATB6PO1Y1EFqhCmz5U=
+Date:   Tue, 12 Apr 2022 19:30:57 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Marco Elver <elver@google.com>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        linux-mm <linux-mm@kvack.org>
+Subject: Re: [PATCH 5.15 000/277] 5.15.34-rc1 review
+Message-ID: <YlW3UViZ2DMk8Msz@kroah.com>
+References: <20220412062942.022903016@linuxfoundation.org>
+ <CA+G9fYseyeNoxQwEWtiiU8dLs_1coNa+sdV-1nqoif6tER_46Q@mail.gmail.com>
+ <CANpmjNP4-jG=kW8FoQpmt4X64en5G=Gd-3zaBebPL7xDFFOHmA@mail.gmail.com>
+ <CA+G9fYuJKsYMR2vW+7d=xjDj9zoBtTF5=pSmcQRaiQitAjXCcw@mail.gmail.com>
+ <YlWsI/v0SWjpyofc@kroah.com>
+ <YlW1fk8TvqIxiCvr@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YlW1fk8TvqIxiCvr@kroah.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that dsa_switch_ops is not switch specific anymore, we can drop it
-from qca8k_priv and use the static ops directly for the dsa_switch
-pointer.
+On Tue, Apr 12, 2022 at 07:23:10PM +0200, Greg Kroah-Hartman wrote:
+> On Tue, Apr 12, 2022 at 06:43:15PM +0200, Greg Kroah-Hartman wrote:
+> > On Tue, Apr 12, 2022 at 09:13:59PM +0530, Naresh Kamboju wrote:
+> > > Hi Marco
+> > > 
+> > > On Tue, 12 Apr 2022 at 20:32, Marco Elver <elver@google.com> wrote:
+> > > >
+> > > > On Tue, 12 Apr 2022 at 16:16, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> > > > >
+> > > > > On Tue, 12 Apr 2022 at 12:11, Greg Kroah-Hartman
+> > > > > <gregkh@linuxfoundation.org> wrote:
+> > > > > >
+> > > > > > This is the start of the stable review cycle for the 5.15.34 release.
+> > > > > > There are 277 patches in this series, all will be posted as a response
+> > > > > > to this one.  If anyone has any issues with these being applied, please
+> > > > > > let me know.
+> > > > > >
+> > > > > > Responses should be made by Thu, 14 Apr 2022 06:28:59 +0000.
+> > > > > > Anything received after that time might be too late.
+> > > > > >
+> > > > > > The whole patch series can be found in one patch at:
+> > > > > >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.34-rc1.gz
+> > > > > > or in the git tree and branch at:
+> > > > > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> > > > > > and the diffstat can be found below.
+> > > > > >
+> > > > > > thanks,
+> > > > > >
+> > > > > > greg k-h
+> > > > >
+> > > > >
+> > > > > On linux stable-rc 5.15 x86 and i386 builds failed due to below error [1]
+> > > > > with config [2].
+> > > > >
+> > > > > The finding is when kunit config is enabled the builds pass.
+> > > > > CONFIG_KUNIT=y
+> > > > >
+> > > > > But with CONFIG_KUNIT not set the builds failed.
+> > > > >
+> > > > > x86_64-linux-gnu-ld: mm/kfence/core.o: in function `__kfence_alloc':
+> > > > > core.c:(.text+0x901): undefined reference to `filter_irq_stacks'
+> > > > > make[1]: *** [/builds/linux/Makefile:1183: vmlinux] Error 1
+> > > > >
+> > > > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > > > >
+> > > > > I see these three commits, I will bisect and get back to you
+> > > > >
+> > > > > 2f222c87ceb4 kfence: limit currently covered allocations when pool nearly full
+> > > > > e25487912879 kfence: move saving stack trace of allocations into
+> > > > > __kfence_alloc()
+> > > > > d99355395380 kfence: count unexpectedly skipped allocations
+> > > >
+> > > > My guess is that this commit is missing:
+> > > 
+> > > This patch is missing Fixes: tag.
+> > > 
+> > > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f39f21b3ddc7fc0f87eb6dc75ddc81b5bbfb7672
+> > > 
+> > > For your information, I have reverted the below commit and build pass.
+> > > 
+> > > kfence: limit currently covered allocations when pool nearly full
+> > > 
+> > > [ Upstream commit 08f6b10630f284755087f58aa393402e15b92977 ]
+> > 
+> > I've added the above commit, does that fix the issue?
+> > 
+> > Hm, I can test that here, let me try it...
+> 
+> I can't duplicate the failure here with my config, let me try yours...
 
-Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
----
- drivers/net/dsa/qca8k.c | 3 +--
- drivers/net/dsa/qca8k.h | 1 -
- 2 files changed, 1 insertion(+), 3 deletions(-)
+Yes, with your config before it fails, after I added the commit it
+works.  I'll push out a -rc2 soon with that added.
 
-diff --git a/drivers/net/dsa/qca8k.c b/drivers/net/dsa/qca8k.c
-index 9c4c5af79f9a..48a71d85b4ff 100644
---- a/drivers/net/dsa/qca8k.c
-+++ b/drivers/net/dsa/qca8k.c
-@@ -3160,8 +3160,7 @@ qca8k_sw_probe(struct mdio_device *mdiodev)
- 	priv->ds->dev = &mdiodev->dev;
- 	priv->ds->num_ports = QCA8K_NUM_PORTS;
- 	priv->ds->priv = priv;
--	priv->ops = qca8k_switch_ops;
--	priv->ds->ops = &priv->ops;
-+	priv->ds->ops = &qca8k_switch_ops;
- 	mutex_init(&priv->reg_mutex);
- 	dev_set_drvdata(&mdiodev->dev, priv);
- 
-diff --git a/drivers/net/dsa/qca8k.h b/drivers/net/dsa/qca8k.h
-index 8bbe36f135b5..04408e11402a 100644
---- a/drivers/net/dsa/qca8k.h
-+++ b/drivers/net/dsa/qca8k.h
-@@ -394,7 +394,6 @@ struct qca8k_priv {
- 	struct dsa_switch *ds;
- 	struct mutex reg_mutex;
- 	struct device *dev;
--	struct dsa_switch_ops ops;
- 	struct gpio_desc *reset_gpio;
- 	struct net_device *mgmt_master; /* Track if mdio/mib Ethernet is available */
- 	struct qca8k_mgmt_eth_data mgmt_eth_data;
--- 
-2.34.1
+thanks,
 
+greg k-h

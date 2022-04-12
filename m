@@ -2,109 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 040F24FE259
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:22:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB3194FE2AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:30:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355592AbiDLNYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 09:24:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56688 "EHLO
+        id S1355890AbiDLNYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 09:24:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356417AbiDLNXK (ORCPT
+        with ESMTP id S1356574AbiDLNXS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 09:23:10 -0400
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D785F56;
-        Tue, 12 Apr 2022 06:14:07 -0700 (PDT)
-Received: by mail-ot1-f54.google.com with SMTP id a17-20020a9d3e11000000b005cb483c500dso13351016otd.6;
-        Tue, 12 Apr 2022 06:14:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=4Hu29V9bbNGQ7NeMGoWiDLgZuDde0wP79E71crt9DdM=;
-        b=6xDjFtAoU9TZO0esno4Hf4cS5FCI+aIIpNOUkbHDbAuuFwTt4JaIR20bDh9d6DSjfs
-         kAsGSx5LffWFabhBQ7aTEoMNwg1PSL5ed77c9J6xP9GlMkMjvYhtFLxi3tRSmKZWe9gH
-         Euc77qwslSDI9a5R8ODHwNjD43tmFQ6vZcYUFlaNJRFrXOol400alUhSwpI3SmzOSMl0
-         BhI/kargNL8AMuBC4jLIoGZrutqqr+34SjGLtbgMSIj/pNV+KgaMU2nHpA9/6rzSRdBT
-         pp8G7HePqq5VK33vCIP6SBf8i/keNDmT0K1IPrcoqSdwVo3INlQLZPVsV1AocB4KqI2P
-         MLpQ==
-X-Gm-Message-State: AOAM5334wWwbGUWYGN1J6buNWOhED6p1FJzd82JcMM7ueKBP2a0Hcs+L
-        TLuCsqSMAHVVp/kw/bl2Dw==
-X-Google-Smtp-Source: ABdhPJy/ZMhWQUc529yUtvgnyCadjBqr7fjsWtZYK6b6y58vnNMwVPuq1IYac7H3Y8QrDWl4AkwVgw==
-X-Received: by 2002:a05:6830:2aa1:b0:5e6:cccf:419b with SMTP id s33-20020a0568302aa100b005e6cccf419bmr6816302otu.208.1649769246965;
-        Tue, 12 Apr 2022 06:14:06 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n62-20020acaef41000000b002ef646e6690sm12947467oih.53.2022.04.12.06.14.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 06:14:06 -0700 (PDT)
-Received: (nullmailer pid 3815484 invoked by uid 1000);
-        Tue, 12 Apr 2022 13:14:05 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Dylan Hung <dylan_hung@aspeedtech.com>
-Cc:     netdev@vger.kernel.org, kuba@kernel.org,
-        linux-aspeed@lists.ozlabs.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        devicetree@vger.kernel.org, joel@jms.id.au, hkallweit1@gmail.com,
-        pabeni@redhat.com, linux-arm-kernel@lists.infradead.org,
-        andrew@aj.id.au, robh+dt@kernel.org, p.zabel@pengutronix.de,
-        krzk+dt@kernel.org, linux-kernel@vger.kernel.org, andrew@lunn.ch,
-        BMC-SW@aspeedtech.com, linux@armlinux.org.uk, davem@davemloft.net
-In-Reply-To: <20220412065611.8930-2-dylan_hung@aspeedtech.com>
-References: <20220412065611.8930-1-dylan_hung@aspeedtech.com> <20220412065611.8930-2-dylan_hung@aspeedtech.com>
-Subject: Re: [PATCH v4 1/3] dt-bindings: net: add reset property for aspeed, ast2600-mdio binding
-Date:   Tue, 12 Apr 2022 08:14:05 -0500
-Message-Id: <1649769245.688561.3815481.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        Tue, 12 Apr 2022 09:23:18 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485C913EBF;
+        Tue, 12 Apr 2022 06:14:47 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23CBgE2v008904;
+        Tue, 12 Apr 2022 13:14:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=pLTJILFWv8SMp1Gxs+TBC09oDeHM+2WiTPbdP91mfHs=;
+ b=MOMKJ7kd488Bg/i2/BspB/Ri5+YzqBJNMRxZGtSAE1JoB1yl/6TIymGG4XbAvUpnqs6A
+ MF8AkwVGxaXWHC8k0wL11OQKRoEx/MwUQqA0geQ+wxjD6i8xtk+P7eoVqN9XFAZq31/v
+ rJcsl4ly9PK65yNmZ0kH0B5eBZ5bmrThP5o7u615hh//jkNznoIGC8MyFJwvMKrEkgmu
+ 6yEf7nnkqSD3dJMOCUYLSXzdcoxHV+qjXcu9K4DzhGl7MKay8J85KjzNrz7Ho2ZCM2Pm
+ J5taZCAM7Qb8feem6XuktQOGsKn+9Dwn4W3DDJUHWFxD8JN2pTptDvrZGfZJ02W49lvK ig== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3fd8sbj2qw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Apr 2022 13:14:44 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23CD0i2I019215;
+        Tue, 12 Apr 2022 13:14:43 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3fd8sbj2qm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Apr 2022 13:14:43 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23CD7teF006999;
+        Tue, 12 Apr 2022 13:14:43 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma02wdc.us.ibm.com with ESMTP id 3fb1s9r4ra-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Apr 2022 13:14:43 +0000
+Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23CDEgj226542584
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 Apr 2022 13:14:42 GMT
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 505E9B2066;
+        Tue, 12 Apr 2022 13:14:42 +0000 (GMT)
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2C563B2064;
+        Tue, 12 Apr 2022 13:14:38 +0000 (GMT)
+Received: from [9.211.106.50] (unknown [9.211.106.50])
+        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue, 12 Apr 2022 13:14:38 +0000 (GMT)
+Message-ID: <b143e333-0add-8042-12de-7e9e8b275ec0@linux.ibm.com>
+Date:   Tue, 12 Apr 2022 09:14:36 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v5 15/21] KVM: s390: pci: add routines to start/stop
+ interpretive execution
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     linux-s390@vger.kernel.org, alex.williamson@redhat.com,
+        cohuck@redhat.com, schnelle@linux.ibm.com, farman@linux.ibm.com,
+        pmorel@linux.ibm.com, borntraeger@linux.ibm.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, gerald.schaefer@linux.ibm.com,
+        agordeev@linux.ibm.com, svens@linux.ibm.com, frankja@linux.ibm.com,
+        david@redhat.com, imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
+        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
+        pasic@linux.ibm.com, pbonzini@redhat.com, corbet@lwn.net,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20220404174349.58530-1-mjrosato@linux.ibm.com>
+ <20220404174349.58530-16-mjrosato@linux.ibm.com>
+ <20220408124707.GY64706@ziepe.ca>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <20220408124707.GY64706@ziepe.ca>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ug2cA0NUQiUtzyMfzAv0jirnerPyC71J
+X-Proofpoint-ORIG-GUID: FbaeDxowGGk6k4drG8ggKIZDsBOdLcFr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-12_04,2022-04-12_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 mlxscore=0 spamscore=0 adultscore=0 phishscore=0
+ clxscore=1011 bulkscore=0 mlxlogscore=713 lowpriorityscore=0
+ malwarescore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2202240000 definitions=main-2204120062
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H3,
         RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Apr 2022 14:56:09 +0800, Dylan Hung wrote:
-> The AST2600 MDIO bus controller has a reset control bit and must be
-> deasserted before manipulating the MDIO controller. By default, the
-> hardware asserts the reset so the driver only need to deassert it.
+On 4/8/22 8:47 AM, Jason Gunthorpe wrote:
+> On Mon, Apr 04, 2022 at 01:43:43PM -0400, Matthew Rosato wrote:
+>> +int kvm_s390_pci_register_kvm(struct device *dev, void *data)
+>> +{
+>> +	struct zpci_dev *zdev = NULL;
+>> +	struct kvm *kvm = data;
+>> +
+>> +	/* Only proceed for zPCI devices, quietly ignore others */
+>> +	if (dev_is_pci(dev))
+>> +		zdev = to_zpci_dev(dev);
+>> +	if (!zdev)
+>> +		return 0;
 > 
-> Regarding to the old DT blobs which don't have reset property in them,
-> the reset deassertion is usually done by the bootloader so the reset
-> property is optional to work with them.
+> Especially since this only works if we have zpci device
 > 
-> Signed-off-by: Dylan Hung <dylan_hung@aspeedtech.com>
-> Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
-> ---
->  .../devicetree/bindings/net/aspeed,ast2600-mdio.yaml         | 5 +++++
->  1 file changed, 5 insertions(+)
+> So having the zpci code hook the kvm notifier and then call the arch
+> code from the zpci area seems pretty OK
 > 
+> Also why is a struct kvm * being passed as a void *?
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Only because the function is intended to be called via 
+iommu_group_for_each_dev (next patch) which requires int (*fn)(struct 
+device *, void *)
 
-yamllint warnings/errors:
 
-dtschema/dtc warnings/errors:
-Error: Documentation/devicetree/bindings/net/aspeed,ast2600-mdio.example.dts:25.35-36 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:364: Documentation/devicetree/bindings/net/aspeed,ast2600-mdio.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1401: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
 

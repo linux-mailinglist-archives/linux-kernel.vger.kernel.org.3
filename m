@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF7A4FD561
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:12:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 334244FD926
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:39:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352841AbiDLHYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:24:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57514 "EHLO
+        id S1389052AbiDLJXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:23:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351081AbiDLHJQ (ORCPT
+        with ESMTP id S1357318AbiDLHj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:09:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4BD027FC7;
-        Mon, 11 Apr 2022 23:49:44 -0700 (PDT)
+        Tue, 12 Apr 2022 03:39:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59587245B7;
+        Tue, 12 Apr 2022 00:15:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4908DB81B4D;
-        Tue, 12 Apr 2022 06:49:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B15B4C385A6;
-        Tue, 12 Apr 2022 06:49:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E869C61708;
+        Tue, 12 Apr 2022 07:15:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 049E6C385A1;
+        Tue, 12 Apr 2022 07:15:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746182;
-        bh=WxC4Ck1eDrzF3juXXdTjdPr+pCGCfmE7AGQzZwZ9QB4=;
+        s=korg; t=1649747705;
+        bh=U5BKBINZqkY8YG7da1WWh8GmjHRsCM7kZc6c8O3P0Vk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ImLKbX7bpN45qsTBu2YBTBRAHhBi6FzVyuTT62Mu86f2G8Pp0JOTrmWND1FTmU4XC
-         0IoKf8cPCMBR4iNOfzfhiReDSuZLwSvw04nJeYHznIaToe9nupNTpPicUUY59PyAlI
-         w86QNJus+MU+HVVf/2KG7OUUsEeabsR3Xcr+M4JM=
+        b=BscrU6n2COYk9Lf8Omsw3TzV45pUc2iBP9uzBLZlHGbmyfCBwr+HvzwXz4XaWXkcU
+         ZTuD/ux09uJ4LK/fURZoLJX2yvRk55J1bJL13aMNx4sw7jRHdRWCmpW9jS/6RFMseI
+         MsWr6dL0gzWAfFw9WjjshdKxJHCbEWsmMeB3a85w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Walle <michael@walle.cc>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
+        Stephen Boyd <sboyd@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 191/277] net: phy: mscc-miim: reject clause 45 register accesses
+Subject: [PATCH 5.17 176/343] clk: Enforce that disjoints limits are invalid
 Date:   Tue, 12 Apr 2022 08:29:54 +0200
-Message-Id: <20220412062947.564502710@linuxfoundation.org>
+Message-Id: <20220412062956.446464118@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,48 +55,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Walle <michael@walle.cc>
+From: Maxime Ripard <maxime@cerno.tech>
 
-[ Upstream commit 8d90991e5bf7fdb9f264f5f579d18969913054b7 ]
+[ Upstream commit 10c46f2ea914202482d19cf80dcc9c321c9ff59b ]
 
-The driver doesn't support clause 45 register access yet, but doesn't
-check if the access is a c45 one either. This leads to spurious register
-reads and writes. Add the check.
+If we were to have two users of the same clock, doing something like:
 
-Fixes: 542671fe4d86 ("net: phy: mscc-miim: Add MDIO driver")
-Signed-off-by: Michael Walle <michael@walle.cc>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+clk_set_rate_range(user1, 1000, 2000);
+clk_set_rate_range(user2, 3000, 4000);
+
+The second call would fail with -EINVAL, preventing from getting in a
+situation where we end up with impossible limits.
+
+However, this is never explicitly checked against and enforced, and
+works by relying on an undocumented behaviour of clk_set_rate().
+
+Indeed, on the first clk_set_rate_range will make sure the current clock
+rate is within the new range, so it will be between 1000 and 2000Hz. On
+the second clk_set_rate_range(), it will consider (rightfully), that our
+current clock is outside of the 3000-4000Hz range, and will call
+clk_core_set_rate_nolock() to set it to 3000Hz.
+
+clk_core_set_rate_nolock() will then call clk_calc_new_rates() that will
+eventually check that our rate 3000Hz rate is outside the min 3000Hz max
+2000Hz range, will bail out, the error will propagate and we'll
+eventually return -EINVAL.
+
+This solely relies on the fact that clk_calc_new_rates(), and in
+particular clk_core_determine_round_nolock(), won't modify the new rate
+allowing the error to be reported. That assumption won't be true for all
+drivers, and most importantly we'll break that assumption in a later
+patch.
+
+It can also be argued that we shouldn't even reach the point where we're
+calling clk_core_set_rate_nolock().
+
+Let's make an explicit check for disjoints range before we're doing
+anything.
+
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Link: https://lore.kernel.org/r/20220225143534.405820-4-maxime@cerno.tech
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/mdio/mdio-mscc-miim.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/clk/clk.c | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/drivers/net/mdio/mdio-mscc-miim.c b/drivers/net/mdio/mdio-mscc-miim.c
-index 17f98f609ec8..5070ca2f2637 100644
---- a/drivers/net/mdio/mdio-mscc-miim.c
-+++ b/drivers/net/mdio/mdio-mscc-miim.c
-@@ -76,6 +76,9 @@ static int mscc_miim_read(struct mii_bus *bus, int mii_id, int regnum)
- 	u32 val;
- 	int ret;
+diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+index 01b64b962e76..2fdfce116087 100644
+--- a/drivers/clk/clk.c
++++ b/drivers/clk/clk.c
+@@ -632,6 +632,24 @@ static void clk_core_get_boundaries(struct clk_core *core,
+ 		*max_rate = min(*max_rate, clk_user->max_rate);
+ }
  
-+	if (regnum & MII_ADDR_C45)
-+		return -EOPNOTSUPP;
++static bool clk_core_check_boundaries(struct clk_core *core,
++				      unsigned long min_rate,
++				      unsigned long max_rate)
++{
++	struct clk *user;
 +
- 	ret = mscc_miim_wait_pending(bus);
- 	if (ret)
- 		goto out;
-@@ -105,6 +108,9 @@ static int mscc_miim_write(struct mii_bus *bus, int mii_id,
- 	struct mscc_miim_dev *miim = bus->priv;
- 	int ret;
++	lockdep_assert_held(&prepare_lock);
++
++	if (min_rate > core->max_rate || max_rate < core->min_rate)
++		return false;
++
++	hlist_for_each_entry(user, &core->clks, clks_node)
++		if (min_rate > user->max_rate || max_rate < user->min_rate)
++			return false;
++
++	return true;
++}
++
+ void clk_hw_set_rate_range(struct clk_hw *hw, unsigned long min_rate,
+ 			   unsigned long max_rate)
+ {
+@@ -2348,6 +2366,11 @@ int clk_set_rate_range(struct clk *clk, unsigned long min, unsigned long max)
+ 	clk->min_rate = min;
+ 	clk->max_rate = max;
  
-+	if (regnum & MII_ADDR_C45)
-+		return -EOPNOTSUPP;
++	if (!clk_core_check_boundaries(clk->core, min, max)) {
++		ret = -EINVAL;
++		goto out;
++	}
 +
- 	ret = mscc_miim_wait_pending(bus);
- 	if (ret < 0)
- 		goto out;
+ 	rate = clk_core_get_rate_nolock(clk->core);
+ 	if (rate < min || rate > max) {
+ 		/*
+@@ -2376,6 +2399,7 @@ int clk_set_rate_range(struct clk *clk, unsigned long min, unsigned long max)
+ 		}
+ 	}
+ 
++out:
+ 	if (clk->exclusive_count)
+ 		clk_core_rate_protect(clk->core);
+ 
 -- 
 2.35.1
 

@@ -2,186 +2,951 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D04484FD80E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:35:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4404FD812
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:35:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389779AbiDLJYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48696 "EHLO
+        id S1389865AbiDLJYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:24:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351808AbiDLH7y (ORCPT
+        with ESMTP id S1353470AbiDLIDr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:59:54 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31463574B4
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:35:16 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23C7QGCL018415;
-        Tue, 12 Apr 2022 07:35:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2021-07-09;
- bh=uLX9XetfJBBtO1PKuRqAo+z7Xohk+k4Qg9CqICxcbLw=;
- b=E6rVAxwBhJEs/8WcaITEJXmb8xROEU5xm52MKlwPd+HiWPC8gZj/mRn6r4L6rWTts2ca
- h6CiVg5smA8nf1TQX4GG77FHHeNcKHk+tAP4jP3Vc54kParEoL9z9dZ3eszCb4foWjbb
- M0fP4J+bE1Bc02KLCgW4sNJR0ADo87sArOiFi2cepAkTT5pCtOyuXlWqz0UOi/M/LX20
- T5I8NOAM0yGPq8pLO+tu07D9abkxRnDQYNt5sT+DlQPGJ0psAKfWX57jcgl6VGZbGKeg
- 05N/Anvz9K15VhkSnr3a0x2fCrE8/oq5XZUMWMkd0o06vs/Tzb5Iqy7fTmt+RR9DJovJ mg== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3fb0r1dw6p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 12 Apr 2022 07:35:09 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23C7PiEa034295;
-        Tue, 12 Apr 2022 07:35:09 GMT
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2109.outbound.protection.outlook.com [104.47.70.109])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3fb0k2m6r9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 12 Apr 2022 07:35:09 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iWhSgd+du8lFSr3qrzWkywZ6eEYhZrCtsNZDkMoXh8Nv2gt7F9uFYDkNNC73BiqwxihVnRs+lD5O6hnJOej9jT/x2OHYIa0/ffu0WTbKByFEwm95RQB4Z65h+ak65CCsYAB8KbeGJUCiBSWrFeaS59AScWdOOPyaVA5cmYZz29vVdEvvBXJzdOSYfUnLYxKWr39CXlzmq96JGF39JphwrOW40/19qysmJr7Fdwb8KMGLoAVcheoPzaX1poFnkQdVRXuVQj8azGjUaw4vWgzN4KvSQtumzSaD9QEdHSVGYgB3Ko9LxX6By62OaRK6VO4i4pB+K6ImYcmee88GNsXJ3A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uLX9XetfJBBtO1PKuRqAo+z7Xohk+k4Qg9CqICxcbLw=;
- b=JDk0H2D4vsLu3H8YNvmziAHB2wwjdgvZ1mrGofcd/HyAfd7KgefgLnltUOQ8SGaXzuq2y2xJWIBZXSzpA5G3oXAGnFhKs7dRIvKgpjcerfWAqsAA+3zoiKXAesv2qKuYaSNm30Fl2C9y9hma5Bs6DeuBGhcMFTFN/JDWqD2MA7zCg9/TqWT9hm03qY7eLn/hEpFAHdHgGUgtDgp72trbjksj57i0vmKqlpajKbU1l12BVNqre7ZfpknIOmfO80v98Ka2B8kO6VK8RfC/MWxLBYcRLtwAlTvnMyxGoQzxBcPfBvvV+HPUSD1gCZsD+DXoTRYH6qao58P6VWy8V3UWSA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uLX9XetfJBBtO1PKuRqAo+z7Xohk+k4Qg9CqICxcbLw=;
- b=vf8/JZ89s2bXytFh1oIDGOXHzrUF5jconUOeTglJppS1o5RuHGUJr9E9AjLcMSXqJPQPSrLXJx/dEZg6HEZaOWeSX7+iLPzKki8nbLUoWXxwZ9H8gOZ47WYcp73uZP/vul+87rRajL+g+bm2xlM1jNCKUnZ3C3VcHuyXcW021MU=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by SN6PR10MB2813.namprd10.prod.outlook.com
- (2603:10b6:805:cc::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Tue, 12 Apr
- 2022 07:35:07 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::b5d5:7b39:ca2d:1b87]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::b5d5:7b39:ca2d:1b87%5]) with mapi id 15.20.5144.022; Tue, 12 Apr 2022
- 07:35:07 +0000
-Date:   Tue, 12 Apr 2022 10:34:44 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Jaehee Park <jhpark1013@gmail.com>
-Cc:     =?iso-8859-1?B?Suly9G1l?= Pouiller <jerome.pouiller@silabs.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev, Stefano Brivio <sbrivio@redhat.com>
-Subject: Re: [PATCH V3] wfx: use container_of() to get vif
-Message-ID: <20220412073444.GE3293@kadam>
-References: <20220412041218.GA2859599@jaehee-ThinkPad-X1-Extreme>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220412041218.GA2859599@jaehee-ThinkPad-X1-Extreme>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: JNAP275CA0024.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4d::15)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+        Tue, 12 Apr 2022 04:03:47 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A0D583BF;
+        Tue, 12 Apr 2022 00:36:12 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KcyCd4dRxzgYgl;
+        Tue, 12 Apr 2022 15:34:21 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 12 Apr 2022 15:36:10 +0800
+CC:     <prime.zeng@huawei.com>, <liuqi115@huawei.com>,
+        <zhangshaokun@hisilicon.com>, <linuxarm@huawei.com>
+Subject: Re: [PATCH v7 2/7] hwtracing: Add trace function support for
+ HiSilicon PCIe Tune and Trace device
+To:     John Garry <john.garry@huawei.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        <gregkh@linuxfoundation.org>, <helgaas@kernel.org>,
+        <alexander.shishkin@linux.intel.com>, <lorenzo.pieralisi@arm.com>,
+        <will@kernel.org>, <mark.rutland@arm.com>,
+        <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
+        <mike.leach@linaro.org>, <leo.yan@linaro.org>,
+        <jonathan.cameron@huawei.com>, <daniel.thompson@linaro.org>,
+        <joro@8bytes.org>, <shameerali.kolothum.thodi@huawei.com>,
+        <robin.murphy@arm.com>, <peterz@infradead.org>, <mingo@redhat.com>,
+        <acme@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <coresight@lists.linaro.org>, <linux-pci@vger.kernel.org>,
+        <linux-perf-users@vger.kernel.org>,
+        <iommu@lists.linux-foundation.org>
+References: <20220407125841.3678-1-yangyicong@hisilicon.com>
+ <20220407125841.3678-3-yangyicong@hisilicon.com>
+ <36eea2f6-3461-72ad-05c4-953484197911@huawei.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <60159327-7b6c-38cc-97a9-bb4c594b494f@huawei.com>
+Date:   Tue, 12 Apr 2022 15:36:09 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: badfef4a-cbbc-46f6-9cbd-08da1c56f71c
-X-MS-TrafficTypeDiagnostic: SN6PR10MB2813:EE_
-X-Microsoft-Antispam-PRVS: <SN6PR10MB2813F5AA22DE883DB2BDD1188EED9@SN6PR10MB2813.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: AKKHha207ZBLDRKkUS3ekJqMFygGD52oEOm2UbC3c9OPRd7E2Q2c8BFQ8SLms3lyoAUGhUcA/Qk/LB4FB03pugdRmoTCr2Qv6PXPCYNCVbJrlMhOrfudnpAB0CtyBg+b0EkJKcM/IBWZZukysZCTCJ/Iyncs42oJ0Fpf5vqNuq8ticeppSuxPT4/TuTtF+8ls3Q/sU0+bUYUb9IBa75vwY0yq0VucGaKNk1PM4qqomysN+0qcO/zqBYXmuT0iUlLeASjWsRJlJu4kVsoYELSbRO54ceqn6x4X29ZJVC3An9YivhBrDvf+vFepSJzqPUICF/XIpdLBWDvdrgdqbqfwNHI6pN7VP3sCi/i98rjTH3O3SGm37UZCJy30qR6FOgc65fEPbscwwxwCdJpwxshwFjK8lbhxDrKjxbNHNWNFPrb7EgA1w87a9Cl55J5tTJ05L0u+joeLQwInEYzRNVsfJE86nZ5DUW2wX7kzlu3n0R4hY0JIrxfwYgiUR2rSDiO7u3y5tGjz6WceMnI4AEd5Y9rehfEODqE19tpK6FIMlhlLxkldDWC0kvdGmWH4zxVGA5j9EvkpSfJXtE+52qEyAKYtQEc2t9g4nGuDOBP1YjGHGXk485ipwSbdOFekoC6ugtPFH3NOCR4ODOm0/rvblm0Gf9n78oFy7XXHkTMyUdIvLLWWjm4Q8kdOskgFlG49w5jn5Hu4tzYAdg6m6+qWg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(33716001)(5660300002)(33656002)(6486002)(1076003)(54906003)(66556008)(508600001)(8676002)(6916009)(4326008)(66946007)(66476007)(38100700002)(44832011)(38350700002)(316002)(83380400001)(2906002)(86362001)(26005)(186003)(6666004)(6512007)(6506007)(9686003)(52116002)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IDAYtQ80XasYzSA0l4AGJqMJptjUrW08J+0PFQ8urjRCliwQOUpXAT2xjV/t?=
- =?us-ascii?Q?hNOIkvBROO9NZY+ieNVGBI0vt+8o5y6SnM3+9Pv0GUI78zyY4+f3iyk+PqKV?=
- =?us-ascii?Q?f8Kr41MT3x9Yu4qmymOOKcb8s7WhEQ8wcWFEqNoBxdOL63oCFNZO8pD4m3ZV?=
- =?us-ascii?Q?gEG/5FvCJjskzdaghDuYwdCQSnTA73WtlCdeZjk/7KVhiSQeKNM/2OBEW1WR?=
- =?us-ascii?Q?5C9c94tWyMCcL6HlnbLk7AyVLNixRNRIWD3TLN5iz9sHl2fRHaCvu2v0WXRr?=
- =?us-ascii?Q?7gxlbbFWwhXk25mhu70VWdr0D8EWnsh7mXvO5AesDwAnhEqbEM2IaKFDmctx?=
- =?us-ascii?Q?pOp5/hb+PmR6zlYC0u94cFoCvZqep4lHw9Bd4iiFnXKtLJrG5G9/VkpcAJmO?=
- =?us-ascii?Q?VTnvZYiGmpfYmy7814JHYZ34McL2iyQE5wEC1ze+hzvGbRTnMJ++SHKkPiTj?=
- =?us-ascii?Q?ru72zk+eYmcSlE0hgPM4sZAsV7YiPQCwEi1ZWbEfL3JoxSttaqgdvCuMr31H?=
- =?us-ascii?Q?N/cu275zhuYS+2spjRFGZVznYzMmkumvKCIaAh/cH5vdPPDJKbFFDLvmX2x/?=
- =?us-ascii?Q?/NOo4xbIg+t9CRll88O3eBhBRCG299xLRlRKGyKUCbYUG8FnMrv7AoFNjqGJ?=
- =?us-ascii?Q?6Wz9k6hJDMXBPPNmbKxrkRZz/IJzJNVZPYCnzIBdjlfMFAurRj6LmMjrNIG8?=
- =?us-ascii?Q?dfSs9agTQv/0eAEYFD2qvlGAF4BrNZYRZcHl5MTzsu2B9sSfWJVpaSiZpX1n?=
- =?us-ascii?Q?cZTL5SZlZP7jQQ4SuKuLqkZmm0J64wZq8kN3eiVwC8cYwOgqv4rH4ny/TQwY?=
- =?us-ascii?Q?9KZ2bFAcXvA0C3th4WbDbGyQnOMgVxKG3c9R2Qbpczdy8VPsKifatiUywdoH?=
- =?us-ascii?Q?UI5b6OOiZzI2wFQ105EnSW7EDdAgXG5eeBG1Rr2xiw9UtHJA9RbPxGlN24J9?=
- =?us-ascii?Q?g5IUwFPVW6l+7fgQSIb8GDduNPRnjHQgcSUU6Yb8pL/E5TE41rtbzOAcUzd3?=
- =?us-ascii?Q?sEl0et71X2ouhrjj9ydD0XuI+ha8GP7HiTaD4Zl4Olh5pqu0oddIktPZPC2t?=
- =?us-ascii?Q?9Vi/EMkt7XdeMUXlwxE0GHbWapn0SQ77WFlzQ/kyoD1DUrrxmLa3SfoNZewQ?=
- =?us-ascii?Q?fxHopR1fudZdPv5WdzkwUsHs3N7kZworvzqCnq59jTZV8j3J2Nx+mmDiOi1z?=
- =?us-ascii?Q?3ctxY0XpkVeGCpAXZYFSFdWlkbt+P2Vdm1l9gu6jwHQYhId3Lcjif7C6IAUm?=
- =?us-ascii?Q?pBD6wz0Slnzt0h534crYtQMwx0b0NMl/vXsR3pp1/njdxjtZ0sfnTUFa3FjB?=
- =?us-ascii?Q?ZJSRqNBQ1DQJtTjm/0DBOpLwOCHOBQpMazB3Xq1Yfk0w5tHIipX+hUs3PXOT?=
- =?us-ascii?Q?vRi+E5OPHKNP7cKgcRejmd8K0aC/nuasTm7RgXhlP+OfZ95gSjwwZk4/5pNY?=
- =?us-ascii?Q?e2KWFeD0ATqsvxs7p5IMg+/vj9mUNJiGfXtD5pInpKZlTy1DpAnWOdkQXE6A?=
- =?us-ascii?Q?wjXhNkzBv5d9s25gUOHdttmeJXAzQxp7lobWtm2rNOVOnGslKCcmbJ4VhxXV?=
- =?us-ascii?Q?WwUw2velI990o4iusCmdOdjRDgAgF2HZAXnHMfiGLkXW1LzNe6oj9Fj+JzUw?=
- =?us-ascii?Q?m9QUM7f0mVzcMmruDvMatRoKnL7p7/x1EpVwLiJucfmv4V514Ihs31zgULdW?=
- =?us-ascii?Q?GqlRtm8yXkJGNiBRrnHZLMVYSbU/J6hBBqWmmRJbgEs1zr050YSTdXz5BTlc?=
- =?us-ascii?Q?801DtEM5FBJM07zdftXS3hiMGTqp804=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: badfef4a-cbbc-46f6-9cbd-08da1c56f71c
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2022 07:35:06.9490
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KXjtwSs2O2ZcCR0LEYR72SbBh4x1HUiVprYuJSzb45TQHIXnTn0e+M7pptzm8f2ltb3ZL2Oh37SnUWea5HJZmMP71GRiTg3m3XDQisdBe98=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR10MB2813
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.858
- definitions=2022-04-12_02:2022-04-11,2022-04-12 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 malwarescore=0
- mlxscore=0 phishscore=0 suspectscore=0 spamscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204120035
-X-Proofpoint-GUID: STR57IbJSYVfAF72RgT4vF6FyyzvEj1U
-X-Proofpoint-ORIG-GUID: STR57IbJSYVfAF72RgT4vF6FyyzvEj1U
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <36eea2f6-3461-72ad-05c4-953484197911@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 12:12:18AM -0400, Jaehee Park wrote:
-> diff --git a/drivers/staging/wfx/wfx.h b/drivers/staging/wfx/wfx.h
-> index 78f2a416fe4f..a07baadc5e70 100644
-> --- a/drivers/staging/wfx/wfx.h
-> +++ b/drivers/staging/wfx/wfx.h
-> @@ -25,7 +25,7 @@
->  #define USEC_PER_TXOP 32 /* see struct ieee80211_tx_queue_params */
->  #define USEC_PER_TU 1024
->  
-> -#define wvif_to_vif(ptr)(container_of((void *)ptr, struct ieee80211_vif, drv_priv))
-> +#define to_vif(wvif)container_of((void *)wvif, struct ieee80211_vif, drv_priv)
+Hi John,
 
-Missing space character:
+Thanks for the comments! some questions replied below.
 
-#define to_vif(wvif) container_of((void *)wvif, struct ieee80211_vif, drv_priv)
+On 2022/4/12 1:02, John Garry wrote:
+> On 07/04/2022 13:58, Yicong Yang wrote:
+>> HiSilicon PCIe tune and trace device(PTT) is a PCIe Root Complex integrated
+>> Endpoint(RCiEP) device, providing the capability to dynamically monitor and
+>> tune the PCIe traffic, and trace the TLP headers.
+>>
+>> Add the driver for the device to enable the trace function. Register PMU
+>> device of PTT trace, then users can use trace through perf command. The
+>> driver makes use of perf AUX trace and support following events to
+> 
+> "The driver makes use of perf AUX trace function and supports the following events to .."
+> 
+>> configure the trace:
+>>
+>> - filter: select Root port or Endpoint to trace
+>> - type: select the type of traced TLP headers
+>> - direction: select the direction of traced TLP headers
+>> - format: select the data format of the traced TLP headers
+>>
+>> This patch adds the driver part of PTT trace. The perf command support of
+>> PTT trace is added in the following patch.
+> 
+> I would not mention "following patch" and the like. Just have "initially add a basic driver"
+> 
 
-> diff --git a/drivers/staging/wfx/scan.c b/drivers/staging/wfx/scan.c
-> index 5c25fde3fc41..e90170062d42 100644
-> --- a/drivers/staging/wfx/scan.c
-> +++ b/drivers/staging/wfx/scan.c
-> @@ -24,8 +24,9 @@ static void wfx_ieee80211_scan_completed_compat(struct ieee80211_hw *hw, bool ab
->  static int update_probe_tmpl(struct wfx_vif *wvif, struct cfg80211_scan_request *req)
->  {
->  	struct sk_buff *skb;
-> -
-> -	skb = ieee80211_probereq_get(wvif->wdev->hw, wvif_to_vif(wvif)->addr, NULL, 0, req->ie_len);
-> +	struct ieee80211_vif *vif = to_vif(wvif);
-> +	skb = ieee80211_probereq_get(wvif->wdev->hw, vif->addr, 
-> +				     NULL, 0, req->ie_len);
+ok. will refine the commit here and above.
 
+>>
+>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+>> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+>> ---
+>>   drivers/Makefile                 |   1 +
+>>   drivers/hwtracing/Kconfig        |   2 +
+>>   drivers/hwtracing/ptt/Kconfig    |  12 +
+>>   drivers/hwtracing/ptt/Makefile   |   2 +
+>>   drivers/hwtracing/ptt/hisi_ptt.c | 874 +++++++++++++++++++++++++++++++
+>>   drivers/hwtracing/ptt/hisi_ptt.h | 166 ++++++
+>>   6 files changed, 1057 insertions(+)
+>>   create mode 100644 drivers/hwtracing/ptt/Kconfig
+>>   create mode 100644 drivers/hwtracing/ptt/Makefile
+>>   create mode 100644 drivers/hwtracing/ptt/hisi_ptt.c
+>>   create mode 100644 drivers/hwtracing/ptt/hisi_ptt.h
+>>
+>> diff --git a/drivers/Makefile b/drivers/Makefile
+>> index 020780b6b4d2..662d50599467 100644
+>> --- a/drivers/Makefile
+>> +++ b/drivers/Makefile
+>> @@ -175,6 +175,7 @@ obj-$(CONFIG_USB4)        += thunderbolt/
+>>   obj-$(CONFIG_CORESIGHT)        += hwtracing/coresight/
+>>   obj-y                += hwtracing/intel_th/
+>>   obj-$(CONFIG_STM)        += hwtracing/stm/
+>> +obj-$(CONFIG_HISI_PTT)        += hwtracing/ptt/
+>>   obj-$(CONFIG_ANDROID)        += android/
+>>   obj-$(CONFIG_NVMEM)        += nvmem/
+>>   obj-$(CONFIG_FPGA)        += fpga/
+>> diff --git a/drivers/hwtracing/Kconfig b/drivers/hwtracing/Kconfig
+>> index 13085835a636..911ee977103c 100644
+>> --- a/drivers/hwtracing/Kconfig
+>> +++ b/drivers/hwtracing/Kconfig
+>> @@ -5,4 +5,6 @@ source "drivers/hwtracing/stm/Kconfig"
+>>     source "drivers/hwtracing/intel_th/Kconfig"
+>>   +source "drivers/hwtracing/ptt/Kconfig"
+>> +
+>>   endmenu
+>> diff --git a/drivers/hwtracing/ptt/Kconfig b/drivers/hwtracing/ptt/Kconfig
+>> new file mode 100644
+>> index 000000000000..8902a6f27563
+>> --- /dev/null
+>> +++ b/drivers/hwtracing/ptt/Kconfig
+>> @@ -0,0 +1,12 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only
+>> +config HISI_PTT
+>> +    tristate "HiSilicon PCIe Tune and Trace Device"
+>> +    depends on ARM64 || (COMPILE_TEST && 64BIT)
+>> +    depends on PCI && HAS_DMA && HAS_IOMEM && PERF_EVENTS
+>> +    help
+>> +      HiSilicon PCIe Tune and Trace Device exists as a PCIe RCiEP
+>> +      device, and it provides support for PCIe traffic tuning and
+>> +      tracing TLP headers to the memory.
+>> +
+>> +      This driver can also be built as a module. If so, the module
+>> +      will be called hisi_ptt.
+>> diff --git a/drivers/hwtracing/ptt/Makefile b/drivers/hwtracing/ptt/Makefile
+>> new file mode 100644
+>> index 000000000000..908c09a98161
+>> --- /dev/null
+>> +++ b/drivers/hwtracing/ptt/Makefile
+>> @@ -0,0 +1,2 @@
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +obj-$(CONFIG_HISI_PTT) += hisi_ptt.o
+>> diff --git a/drivers/hwtracing/ptt/hisi_ptt.c b/drivers/hwtracing/ptt/hisi_ptt.c
+>> new file mode 100644
+>> index 000000000000..242b41870380
+>> --- /dev/null
+>> +++ b/drivers/hwtracing/ptt/hisi_ptt.c
+>> @@ -0,0 +1,874 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Driver for HiSilicon PCIe tune and trace device
+>> + *
+>> + * Copyright (c) 2022 HiSilicon Technologies Co., Ltd.
+>> + * Author: Yicong Yang <yangyicong@hisilicon.com>
+>> + */
+>> +
+>> +#include <linux/bitfield.h>
+>> +#include <linux/bitops.h>
+>> +#include <linux/delay.h>
+>> +#include <linux/dma-iommu.h>
+>> +#include <linux/dma-mapping.h>
+>> +#include <linux/interrupt.h>
+>> +#include <linux/io.h>
+>> +#include <linux/iommu.h>
+>> +#include <linux/iopoll.h>
+>> +#include <linux/module.h>
+>> +#include <linux/sysfs.h>
+>> +#include <linux/vmalloc.h>
+>> +
+>> +#include "hisi_ptt.h"
+>> +
+>> +static u16 hisi_ptt_get_filter_val(struct pci_dev *pdev)
+>> +{
+>> +    if (pci_pcie_type(pdev) == PCI_EXP_TYPE_ROOT_PORT)
+>> +        return BIT(HISI_PCIE_CORE_PORT_ID(PCI_SLOT(pdev->devfn)));
+>> +
+>> +    return PCI_DEVID(pdev->bus->number, pdev->devfn);
+>> +}
+>> +
+>> +static bool hisi_ptt_wait_trace_hw_idle(struct hisi_ptt *hisi_ptt)
+>> +{
+>> +    u32 val;
+>> +
+>> +    return !readl_poll_timeout_atomic(hisi_ptt->iobase + HISI_PTT_TRACE_STS,
+>> +                      val, val & HISI_PTT_TRACE_IDLE,
+>> +                      HISI_PTT_WAIT_POLL_INTERVAL_US,
+>> +                      HISI_PTT_WAIT_TRACE_TIMEOUT_US);
+>> +}
+>> +
+>> +static bool hisi_ptt_wait_dma_reset_done(struct hisi_ptt *hisi_ptt)
+>> +{
+>> +    u32 val;
+>> +
+>> +    return !readl_poll_timeout_atomic(hisi_ptt->iobase + HISI_PTT_TRACE_WR_STS,
+>> +                      val, !val, HISI_PTT_RESET_POLL_INTERVAL_US,
+>> +                      HISI_PTT_RESET_TIMEOUT_US);
+>> +}
+>> +
+>> +static void hisi_ptt_free_trace_buf(struct hisi_ptt *hisi_ptt)
+>> +{
+>> +    struct hisi_ptt_trace_ctrl *ctrl = &hisi_ptt->trace_ctrl;
+>> +    struct device *dev = &hisi_ptt->pdev->dev;
+>> +    int i;
+>> +
+>> +    if (!ctrl->trace_buf)
+>> +        return;
+>> +
+>> +    for (i = 0; i < HISI_PTT_TRACE_BUF_CNT; i++) {
+>> +        if (ctrl->trace_buf[i].addr)
+>> +            dmam_free_coherent(dev, HISI_PTT_TRACE_BUF_SIZE,
+>> +                       ctrl->trace_buf[i].addr,
+>> +                       ctrl->trace_buf[i].dma);
+>> +    }
+>> +
+>> +    devm_kfree(dev, ctrl->trace_buf);
+>> +    ctrl->trace_buf = NULL;
+>> +}
+>> +
+>> +static int hisi_ptt_alloc_trace_buf(struct hisi_ptt *hisi_ptt)
+>> +{
+>> +    struct hisi_ptt_trace_ctrl *ctrl = &hisi_ptt->trace_ctrl;
+>> +    struct device *dev = &hisi_ptt->pdev->dev;
+>> +    int i;
+>> +
+>> +    hisi_ptt->trace_ctrl.buf_index = 0;
+>> +
+>> +    /* If the trace buffer has already been allocated, zero it. */
+> 
+> I am not sure why this is not called from the probe
+> 
 
-You need to add a blank line after the declaration block.  Also there
-is trailing white space.  Run checkpatch.pl --strict on your patches.
+The buffer allocation is done when necessary as driver will probe the device on booting but
+the user may never use it. In this condition it's a waste of memory if we allocate the buffers
+in probe. Currently we'll allocate 16M memory for 4 buffers.
 
-regards,
-dan carpenter
+So this function is called every time before we start trace. In the first time it will allocate
+the DMA buffers and it the other times it just zero the buffers to clear the data of last time.
+
+>> +    if (ctrl->trace_buf) {
+>> +        for (i = 0; i < HISI_PTT_TRACE_BUF_CNT; i++)
+>> +            memset(ctrl->trace_buf[i].addr, 0, HISI_PTT_TRACE_BUF_SIZE);
+>> +        return 0;
+>> +    }
+>> +
+>> +    ctrl->trace_buf = devm_kcalloc(dev, HISI_PTT_TRACE_BUF_CNT,
+>> +                       sizeof(struct hisi_ptt_dma_buffer), GFP_KERNEL);
+> 
+> sizeof(*ctrl->trace_buf) may be better
+>
+
+ok.
+
+>> +    if (!ctrl->trace_buf)
+>> +        return -ENOMEM;
+>> +
+>> +    for (i = 0; i < HISI_PTT_TRACE_BUF_CNT; ++i) {
+>> +        ctrl->trace_buf[i].addr = dmam_alloc_coherent(dev, HISI_PTT_TRACE_BUF_SIZE,
+>> +                                 &ctrl->trace_buf[i].dma,
+>> +                                 GFP_KERNEL);
+>> +        if (!ctrl->trace_buf[i].addr) {
+>> +            hisi_ptt_free_trace_buf(hisi_ptt);
+>> +            return -ENOMEM;
+>> +        }
+>> +    }
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static void hisi_ptt_trace_end(struct hisi_ptt *hisi_ptt)
+>> +{
+>> +    writel(0, hisi_ptt->iobase + HISI_PTT_TRACE_CTRL);
+>> +    hisi_ptt->trace_ctrl.started = false;
+>> +}
+>> +
+>> +static int hisi_ptt_trace_start(struct hisi_ptt *hisi_ptt)
+>> +{
+>> +    struct hisi_ptt_trace_ctrl *ctrl = &hisi_ptt->trace_ctrl;
+>> +    u32 val;
+>> +    int i;
+>> +
+>> +    /* Check device idle before start trace */
+>> +    if (!hisi_ptt_wait_trace_hw_idle(hisi_ptt)) {
+>> +        pci_err(hisi_ptt->pdev, "Failed to start trace, the device is still busy\n");
+>> +        return -EBUSY;
+>> +    }
+>> +
+>> +    ctrl->started = true;
+>> +
+>> +    /* Reset the DMA before start tracing */
+>> +    val = readl(hisi_ptt->iobase + HISI_PTT_TRACE_CTRL);
+>> +    val |= HISI_PTT_TRACE_CTRL_RST;
+>> +    writel(val, hisi_ptt->iobase + HISI_PTT_TRACE_CTRL);
+>> +
+>> +    hisi_ptt_wait_dma_reset_done(hisi_ptt);
+>> +
+>> +    val = readl(hisi_ptt->iobase + HISI_PTT_TRACE_CTRL);
+>> +    val &= ~HISI_PTT_TRACE_CTRL_RST;
+>> +    writel(val, hisi_ptt->iobase + HISI_PTT_TRACE_CTRL);
+>> +
+>> +    /* Clear the interrupt status */
+>> +    writel(HISI_PTT_TRACE_INT_STAT_MASK, hisi_ptt->iobase + HISI_PTT_TRACE_INT_STAT);
+>> +    writel(0, hisi_ptt->iobase + HISI_PTT_TRACE_INT_MASK);
+>> +
+>> +    /* Configure the trace DMA buffer */
+> 
+> I am not sure why this sort of thing is done outside probing
+> 
+
+Since the buffers are allocated on necessary as illustrated above, we cannot configure the
+buffer address in probe. As illustrated above.
+
+>> +    for (i = 0; i < HISI_PTT_TRACE_BUF_CNT; i++) {
+>> +        writel(lower_32_bits(ctrl->trace_buf[i].dma),
+>> +               hisi_ptt->iobase + HISI_PTT_TRACE_ADDR_BASE_LO_0 +
+>> +               i * HISI_PTT_TRACE_ADDR_STRIDE);
+>> +        writel(upper_32_bits(ctrl->trace_buf[i].dma),
+>> +               hisi_ptt->iobase + HISI_PTT_TRACE_ADDR_BASE_HI_0 +
+>> +               i * HISI_PTT_TRACE_ADDR_STRIDE);
+>> +    }
+>> +    writel(HISI_PTT_TRACE_BUF_SIZE, hisi_ptt->iobase + HISI_PTT_TRACE_ADDR_SIZE);
+>> +
+>> +    /* Set the trace control register */
+>> +    val = FIELD_PREP(HISI_PTT_TRACE_CTRL_TYPE_SEL, ctrl->type);
+>> +    val |= FIELD_PREP(HISI_PTT_TRACE_CTRL_RXTX_SEL, ctrl->direction);
+>> +    val |= FIELD_PREP(HISI_PTT_TRACE_CTRL_DATA_FORMAT, ctrl->format);
+>> +    val |= FIELD_PREP(HISI_PTT_TRACE_CTRL_TARGET_SEL, hisi_ptt->trace_ctrl.filter);
+>> +    if (!hisi_ptt->trace_ctrl.is_port)
+>> +        val |= HISI_PTT_TRACE_CTRL_FILTER_MODE;
+>> +
+>> +    /* Start the Trace */
+>> +    val |= HISI_PTT_TRACE_CTRL_EN;
+>> +    writel(val, hisi_ptt->iobase + HISI_PTT_TRACE_CTRL);
+>> +
+>> +    return 0;
+>> +}
+[...]
+>> +static ssize_t available_root_port_filters_show(struct device *dev,
+>> +                        struct device_attribute *attr,
+>> +                        char *buf)
+>> +{
+>> +    struct hisi_ptt *hisi_ptt = to_hisi_ptt(dev_get_drvdata(dev));
+>> +    struct hisi_ptt_filter_desc *filter;
+>> +    int pos = 0;
+>> +
+>> +    mutex_lock(&hisi_ptt->mutex);
+>> +    if (list_empty(&hisi_ptt->port_filters)) {
+>> +        pos = sysfs_emit(buf, "\n");
+>> +        goto out;
+>> +    }
+>> +
+>> +    list_for_each_entry(filter, &hisi_ptt->port_filters, list)
+>> +        pos += sysfs_emit_at(buf, pos, "%s    0x%05lx\n",
+> 
+> \t can be used for a formatting tab
+> 
+
+actually I used a tab here. maybe I can make it obvious like:
+
+       pos += sysfs_emit_at(buf, pos, "%s\t0x%05lx\n",
+
+>> +                     pci_name(filter->pdev),
+>> +                     hisi_ptt_get_filter_val(filter->pdev) |
+>> +                     HISI_PTT_PMU_FILTER_IS_PORT);
+>> +
+>> +out:
+>> +    mutex_unlock(&hisi_ptt->mutex);
+>> +    return pos;
+>> +}
+>> +static DEVICE_ATTR_ADMIN_RO(available_root_port_filters);
+>> +
+>> +static ssize_t available_requester_filters_show(struct device *dev,
+>> +                        struct device_attribute *attr,
+>> +                        char *buf)
+>> +{
+>> +    struct hisi_ptt *hisi_ptt = to_hisi_ptt(dev_get_drvdata(dev));
+>> +    struct hisi_ptt_filter_desc *filter;
+>> +    int pos = 0;
+>> +
+>> +    mutex_lock(&hisi_ptt->mutex);
+>> +    if (list_empty(&hisi_ptt->req_filters)) {
+>> +        pos = sysfs_emit(buf, "\n");
+>> +        goto out;
+>> +    }
+>> +
+>> +    list_for_each_entry(filter, &hisi_ptt->req_filters, list)
+>> +        pos += sysfs_emit_at(buf, pos, "%s    0x%05x\n",
+>> +                     pci_name(filter->pdev),
+>> +                     hisi_ptt_get_filter_val(filter->pdev));
+>> +
+>> +out:
+>> +    mutex_unlock(&hisi_ptt->mutex);
+>> +    return pos;
+>> +}
+>> +static DEVICE_ATTR_ADMIN_RO(available_requester_filters);
+>> +
+>> +PMU_FORMAT_ATTR(filter,        "config:0-19");
+>> +PMU_FORMAT_ATTR(direction,    "config:20-23");
+>> +PMU_FORMAT_ATTR(type,        "config:24-31");
+>> +PMU_FORMAT_ATTR(format,        "config:32-35");
+>> +
+>> +static struct attribute *hisi_ptt_pmu_format_attrs[] = {
+>> +    &format_attr_filter.attr,
+>> +    &format_attr_direction.attr,
+>> +    &format_attr_type.attr,
+>> +    &format_attr_format.attr,
+>> +    NULL
+>> +};
+>> +
+>> +static struct attribute_group hisi_ptt_pmu_format_group = {
+>> +    .name = "format",
+>> +    .attrs = hisi_ptt_pmu_format_attrs,
+>> +};
+>> +
+>> +static struct attribute *hisi_ptt_pmu_filter_attrs[] = {
+>> +    &dev_attr_available_root_port_filters.attr,
+>> +    &dev_attr_available_requester_filters.attr,
+>> +    NULL
+>> +};
+>> +
+>> +static struct attribute_group hisi_ptt_pmu_filter_group = {
+>> +    .attrs = hisi_ptt_pmu_filter_attrs,
+>> +};
+>> +
+>> +static const struct attribute_group *hisi_ptt_pmu_groups[] = {
+>> +    &hisi_ptt_pmu_format_group,
+>> +    &hisi_ptt_pmu_filter_group,
+>> +    NULL
+>> +};
+>> +
+>> +/*
+>> + * Check whether the config is valid or not. Some configs are multi-selectable
+>> + * and can be set simultaneously, while some are single selectable (onehot).
+>> + * Use this function to check the non-onehot configs while
+>> + * hisi_ptt_trace_valid_config_onehot() for the onehot ones.
+>> + */
+>> +static int hisi_ptt_trace_valid_config(u32 val, const u32 *available_list, u32 list_size)
+>> +{
+>> +    int i;
+>> +
+>> +    /* The non-onehot configs cannot be 0. */
+>> +    if (!val)
+>> +        return -EINVAL;
+>> +
+>> +    /*
+>> +     * Walk the available list and clear the valid bits of
+>> +     * the config. If there is any resident bit after the
+>> +     * walk then the config is invalid.
+>> +     */
+>> +    for (i = 0; i < list_size; i++)
+>> +        val &= ~available_list[i];
+>> +
+>> +    return val ? -EINVAL : 0;
+>> +}
+>> +
+>> +static int hisi_ptt_trace_valid_config_onehot(u32 val, const u32 *available_list, u32 list_size)
+> 
+> line too long
+> 
+
+will wrap it.
+
+>> +{
+>> +    int i;
+>> +
+>> +    for (i = 0; i < list_size; i++)
+>> +        if (val == available_list[i])
+>> +            return 0;
+>> +
+>> +    return -EINVAL;
+>> +}
+>> +
+>> +static int hisi_ptt_trace_init_filter(struct hisi_ptt *hisi_ptt, u64 config)
+>> +{
+>> +    unsigned long val, port_mask = hisi_ptt->port_mask;
+>> +    struct hisi_ptt_filter_desc *filter;
+>> +    int ret = -EINVAL;
+>> +
+>> +    hisi_ptt->trace_ctrl.is_port = FIELD_GET(HISI_PTT_PMU_FILTER_IS_PORT, config);
+>> +    val = FIELD_GET(HISI_PTT_PMU_FILTER_VAL_MASK, config);
+>> +
+>> +    /*
+>> +     * Port filters are defined as bit mask. For port filters, check
+>> +     * the bits in the @val are within the range of hisi_ptt->port_mask
+>> +     * and whether it's empty or not, otherwise user has specified
+>> +     * some unsupported root ports.
+>> +     *
+>> +     * For Requester ID filters, walk the available filter list to see
+>> +     * whether we have one matched.
+>> +     */
+>> +    if (!hisi_ptt->trace_ctrl.is_port) {
+>> +        list_for_each_entry(filter, &hisi_ptt->req_filters, list)
+> 
+> 
+> use {} for this as well. the formatting looks strange
+> 
+
+ok.
+
+>> +            if (val == hisi_ptt_get_filter_val(filter->pdev)) {
+>> +                ret = 0;
+>> +                break;
+>> +            }
+>> +    } else if (bitmap_subset(&val, &port_mask, BITS_PER_LONG)) {
+>> +        ret = 0;
+>> +    }
+>> +
+>> +    if (ret)
+>> +        return ret;
+>> +
+>> +    hisi_ptt->trace_ctrl.filter = val;
+>> +    return 0;
+>> +}
+>> +
+>> +static int hisi_ptt_pmu_event_init(struct perf_event *event)
+>> +{
+>> +    /*
+>> +     * The supported value of the direction parameter. See hisi_ptt.rst
+>> +     * documentation for more details.
+>> +     */
+>> +    static const u32 hisi_ptt_trace_available_direction[] = {
+>> +        0,
+>> +        1,
+>> +        2,
+>> +        3,
+>> +    };
+>> +    /* Different types can be set simultaneously */
+>> +    static const u32 hisi_ptt_trace_available_type[] = {
+>> +        1,    /* posted_request */
+>> +        2,    /* non-posted_request */
+>> +        4,    /* completion */
+>> +    };
+>> +    static const u32 hisi_ptt_trace_availble_format[] = {
+>> +        0,    /* 4DW */
+>> +        1,    /* 8DW */
+>> +    };
+>> +    struct hisi_ptt *hisi_ptt = to_hisi_ptt(event->pmu);
+>> +    struct hisi_ptt_trace_ctrl *ctrl = &hisi_ptt->trace_ctrl;
+>> +    int ret;
+>> +    u32 val;
+>> +
+>> +    if (event->attr.type != hisi_ptt->hisi_ptt_pmu.type)
+>> +        return -ENOENT;
+>> +
+>> +    mutex_lock(&hisi_ptt->mutex);
+>> +
+>> +    ret = hisi_ptt_trace_init_filter(hisi_ptt, event->attr.config);
+>> +    if (ret < 0)
+>> +        goto out;
+>> +
+>> +    val = FIELD_GET(HISI_PTT_PMU_DIRECTION_MASK, event->attr.config);
+>> +    ret = hisi_ptt_trace_valid_config_onehot(val, hisi_ptt_trace_available_direction,
+> 
+> how about put all those arrays in hisi_ptt_trace_valid_config_onehot() and pass some flag to say which array you want to use? Or something like that. Passing the arrays in this fashion is messy
+> 
+
+Since there are 3 configs (type, direction, format) with different available range and setting method (onehot, non-onehot),
+moving the arrays into the valid checking function means we need to recognize the config types (passed by the caller but need
+to know the available value array) and the checking method together. That may make the code more complex than now: 1st picking
+up the right array and judge wich checking method this array applied and 2nd do the checking.
+
+Currently it's designed to decouple the checking method and the available value array. The hisi_ptt_trace_valid_config{_onehot}()
+won't care about which array to use since caller take responsibilty for this. So perhaps current approach is simple and clear
+enough.
+
+> 
+>> +                         ARRAY_SIZE(hisi_ptt_trace_available_direction));
+>> +    if (ret < 0)
+>> +        goto out;
+>> +    ctrl->direction = val;
+>> +
+>> +    val = FIELD_GET(HISI_PTT_PMU_TYPE_MASK, event->attr.config);
+>> +    ret = hisi_ptt_trace_valid_config(val, hisi_ptt_trace_available_type,
+>> +                      ARRAY_SIZE(hisi_ptt_trace_available_type));
+>> +    if (ret < 0)
+>> +        goto out;
+>> +    ctrl->type = val;
+>> +
+>> +    val = FIELD_GET(HISI_PTT_PMU_FORMAT_MASK, event->attr.config);
+>> +    ret = hisi_ptt_trace_valid_config_onehot(val, hisi_ptt_trace_availble_format,
+>> +                         ARRAY_SIZE(hisi_ptt_trace_availble_format));
+>> +    if (ret < 0)
+>> +        goto out;
+>> +    ctrl->format = val;
+>> +
+>> +out:
+>> +    mutex_unlock(&hisi_ptt->mutex);
+>> +    return ret;
+>> +}
+>> +
+>> +static void *hisi_ptt_pmu_setup_aux(struct perf_event *event, void **pages,
+>> +                    int nr_pages, bool overwrite)
+>> +{
+>> +    struct hisi_ptt_pmu_buf *buf;
+>> +    struct page **pagelist;
+>> +    int i;
+>> +
+>> +    if (overwrite) {
+>> +        dev_warn(event->pmu->dev, "Overwrite mode is not supported\n");
+>> +        return NULL;
+>> +    }
+>> +
+>> +    /* If the pages size less than buffers, we cannot start trace */
+>> +    if (nr_pages < HISI_PTT_TRACE_TOTAL_BUF_SIZE / PAGE_SIZE)
+>> +        return NULL;
+>> +
+>> +    buf = kzalloc(sizeof(*buf), GFP_KERNEL);
+>> +    if (!buf)
+>> +        return NULL;
+>> +
+>> +    pagelist = kcalloc(nr_pages, sizeof(*pagelist), GFP_KERNEL);
+>> +    if (!pagelist) {
+>> +        kfree(buf);
+>> +        return NULL;
+>> +    }
+>> +
+>> +    for (i = 0; i < nr_pages; i++)
+>> +        pagelist[i] = virt_to_page(pages[i]);
+>> +
+>> +    buf->base = vmap(pagelist, nr_pages, VM_MAP, PAGE_KERNEL);
+>> +    if (!buf->base) {
+>> +        kfree(pagelist);
+>> +        kfree(buf);
+>> +        return NULL;
+>> +    }
+>> +
+>> +    buf->nr_pages = nr_pages;
+>> +    buf->length = nr_pages * PAGE_SIZE;
+>> +    buf->pos = 0;
+>> +
+>> +    kfree(pagelist);
+>> +    return buf;
+>> +}
+>> +
+>> +static void hisi_ptt_pmu_free_aux(void *aux)
+>> +{
+>> +    struct hisi_ptt_pmu_buf *buf = aux;
+>> +
+>> +    vunmap(buf->base);
+>> +    kfree(buf);
+>> +}
+>> +
+>> +static void hisi_ptt_pmu_start(struct perf_event *event, int flags)
+>> +{
+>> +    struct hisi_ptt *hisi_ptt = to_hisi_ptt(event->pmu);
+>> +    struct perf_output_handle *handle = &hisi_ptt->trace_ctrl.handle;
+>> +    struct hw_perf_event *hwc = &event->hw;
+>> +    struct hisi_ptt_pmu_buf *buf;
+>> +    int cpu = event->cpu;
+>> +    int ret;
+>> +
+>> +    hwc->state = 0;
+>> +    mutex_lock(&hisi_ptt->mutex);
+>> +    if (hisi_ptt->trace_ctrl.started) {
+>> +        pci_dbg(hisi_ptt->pdev, "trace has already started\n");
+> 
+> doesn't perf core guard against this sort of thing?
+> 
+
+Maybe not as tested. The perf core will start the events 1)on the cpus user specified or
+2)on all the cpus, but the PTT trace is intended to start once on one cpu.
+
+For the 2) case, the driver will make default cpu to start the trace and block others
+in pmu::add(). For the 1) case we'll met the condition here. So the started status is
+test here to avoid a second start.
+
+>> +        goto stop;
+>> +    }
+>> +
+>> +    if (cpu == -1)
+>> +        cpu = hisi_ptt->trace_ctrl.default_cpu;
+>> +
+>> +    /*
+>> +     * Handle the interrupt on the same cpu which starts the trace to avoid
+>> +     * context mismatch. Otherwise we'll trigger the WARN from the perf
+>> +     * core in event_function_local().
+>> +     */
+>> +    WARN_ON(irq_set_affinity(pci_irq_vector(hisi_ptt->pdev, HISI_PTT_TRACE_DMA_IRQ),
+>> +                 cpumask_of(cpu)));
+>> +
+>> +    ret = hisi_ptt_alloc_trace_buf(hisi_ptt);
+>> +    if (ret) {
+>> +        pci_dbg(hisi_ptt->pdev, "alloc trace buf failed, ret = %d\n", ret);
+>> +        goto stop;
+>> +    }
+>> +
+>> +    buf = perf_aux_output_begin(handle, event);
+>> +    if (!buf) {
+>> +        pci_dbg(hisi_ptt->pdev, "aux output begin failed\n");
+>> +        goto stop;
+>> +    }
+>> +
+>> +    buf->pos = handle->head % buf->length;
+>> +
+>> +    ret = hisi_ptt_trace_start(hisi_ptt);
+>> +    if (ret) {
+>> +        pci_dbg(hisi_ptt->pdev, "trace start failed, ret = %d\n", ret);
+>> +        perf_aux_output_end(handle, 0);
+>> +        goto stop;
+>> +    }
+>> +
+>> +    mutex_unlock(&hisi_ptt->mutex);
+>> +    return;
+>> +stop:
+>> +    event->hw.state |= PERF_HES_STOPPED;
+>> +    mutex_unlock(&hisi_ptt->mutex);
+>> +}
+>> +
+>> +static void hisi_ptt_pmu_stop(struct perf_event *event, int flags)
+>> +{
+>> +    struct hisi_ptt *hisi_ptt = to_hisi_ptt(event->pmu);
+>> +    struct hw_perf_event *hwc = &event->hw;
+>> +
+>> +    if (hwc->state & PERF_HES_STOPPED)
+>> +        return;
+>> +
+>> +    mutex_lock(&hisi_ptt->mutex);
+>> +    if (hisi_ptt->trace_ctrl.started) {
+>> +        hisi_ptt_trace_end(hisi_ptt);
+>> +        WARN(!hisi_ptt_wait_trace_hw_idle(hisi_ptt), "Device is still busy");
+>> +        hisi_ptt_update_aux(hisi_ptt, hisi_ptt->trace_ctrl.buf_index, true);
+>> +    }
+>> +    mutex_unlock(&hisi_ptt->mutex);
+>> +
+>> +    hwc->state |= PERF_HES_STOPPED;
+>> +    perf_event_update_userpage(event);
+>> +    hwc->state |= PERF_HES_UPTODATE;
+>> +}
+>> +
+>> +static int hisi_ptt_pmu_add(struct perf_event *event, int flags)
+>> +{
+>> +    struct hisi_ptt *hisi_ptt = to_hisi_ptt(event->pmu);
+>> +    struct hw_perf_event *hwc = &event->hw;
+>> +    int cpu = event->cpu;
+>> +
+>> +    /*
+>> +     * Only allow the default cpu to add the event if user doesn't specify
+>> +     * the cpus.
+>> +     */
+>> +    if (cpu == -1 && smp_processor_id() != hisi_ptt->trace_ctrl.default_cpu)
+>> +        return 0;
+>> +
+>> +    hwc->state = PERF_HES_STOPPED | PERF_HES_UPTODATE;
+>> +
+>> +    if (flags & PERF_EF_START) {
+>> +        hisi_ptt_pmu_start(event, PERF_EF_RELOAD);
+>> +        if (hwc->state & PERF_HES_STOPPED)
+>> +            return -EINVAL;
+>> +    }
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static void hisi_ptt_pmu_del(struct perf_event *event, int flags)
+>> +{
+>> +    hisi_ptt_pmu_stop(event, PERF_EF_UPDATE);
+>> +}
+>> +
+>> +static int hisi_ptt_register_pmu(struct hisi_ptt *hisi_ptt)
+>> +{
+>> +    u16 core_id, sicl_id;
+>> +    char *pmu_name;
+>> +    u32 reg;
+>> +
+>> +    hisi_ptt->hisi_ptt_pmu = (struct pmu) {
+>> +        .module        = THIS_MODULE,
+>> +        .capabilities    = PERF_PMU_CAP_EXCLUSIVE | PERF_PMU_CAP_ITRACE,
+>> +        .task_ctx_nr    = perf_sw_context,
+>> +        .attr_groups    = hisi_ptt_pmu_groups,
+>> +        .event_init    = hisi_ptt_pmu_event_init,
+>> +        .setup_aux    = hisi_ptt_pmu_setup_aux,
+>> +        .free_aux    = hisi_ptt_pmu_free_aux,
+>> +        .start        = hisi_ptt_pmu_start,
+>> +        .stop        = hisi_ptt_pmu_stop,
+>> +        .add        = hisi_ptt_pmu_add,
+>> +        .del        = hisi_ptt_pmu_del,
+>> +    };
+>> +
+>> +    reg = readl(hisi_ptt->iobase + HISI_PTT_LOCATION);
+>> +    core_id = FIELD_GET(HISI_PTT_CORE_ID, reg);
+>> +    sicl_id = FIELD_GET(HISI_PTT_SICL_ID, reg);
+>> +
+>> +    pmu_name = devm_kasprintf(&hisi_ptt->pdev->dev, GFP_KERNEL, "hisi_ptt%u_%u",
+>> +                  sicl_id, core_id);
+>> +    if (!pmu_name)
+>> +        return -ENOMEM;
+>> +
+>> +    return perf_pmu_register(&hisi_ptt->hisi_ptt_pmu, pmu_name, -1);
+>> +}
+>> +
+>> +/*
+>> + * The DMA of PTT trace can only use direct mapping, due to some
+>> + * hardware restriction. Check whether there is an IOMMU or the
+>> + * policy of the IOMMU domain is passthrough, otherwise the trace
+>> + * cannot work.
+>> + *
+>> + * The PTT device is supposed to behind the ARM SMMUv3, which
+> 
+> /s/ the ARM SMMUv3/an ARM SMMUv3/
+> 
+ok.
+>> + * should have passthrough the device by a quirk.
+>> + */
+>> +static int hisi_ptt_check_iommu_mapping(struct pci_dev *pdev)
+>> +{
+>> +    struct iommu_domain *iommu_domain;
+>> +
+>> +    iommu_domain = iommu_get_domain_for_dev(&pdev->dev);
+>> +    if (!iommu_domain || iommu_domain->type == IOMMU_DOMAIN_IDENTITY)
+>> +        return 0;
+>> +
+>> +    return -EOPNOTSUPP;
+>> +}
+>> +
+>> +static int hisi_ptt_probe(struct pci_dev *pdev,
+>> +              const struct pci_device_id *id)
+>> +{
+>> +    struct hisi_ptt *hisi_ptt;
+>> +    int ret;
+>> +
+>> +    ret = hisi_ptt_check_iommu_mapping(pdev);
+>> +    if (ret) {
+>> +        pci_err(pdev, "requires direct DMA mappings\n");
+>> +        return ret;
+>> +    }
+>> +
+>> +    hisi_ptt = devm_kzalloc(&pdev->dev, sizeof(*hisi_ptt), GFP_KERNEL);
+>> +    if (!hisi_ptt)
+>> +        return -ENOMEM;
+>> +
+>> +    mutex_init(&hisi_ptt->mutex);
+>> +    hisi_ptt->pdev = pdev;
+>> +    pci_set_drvdata(pdev, hisi_ptt);
+>> +
+>> +    ret = pcim_enable_device(pdev);
+>> +    if (ret) {
+>> +        pci_err(pdev, "failed to enable device, ret = %d\n", ret);
+>> +        return ret;
+>> +    }
+>> +
+>> +    ret = pcim_iomap_regions(pdev, BIT(2), DRV_NAME);
+>> +    if (ret) {
+>> +        pci_err(pdev, "failed to remap io memory, ret = %d\n", ret);
+>> +        return ret;
+>> +    }
+>> +
+>> +    hisi_ptt->iobase = pcim_iomap_table(pdev)[2];
+>> +
+>> +    ret = dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(64));
+>> +    if (ret) {
+>> +        pci_err(pdev, "failed to set 64 bit dma mask, ret = %d\n", ret);
+>> +        return ret;
+>> +    }
+>> +
+>> +    pci_set_master(pdev);
+>> +
+>> +    ret = hisi_ptt_register_irq(hisi_ptt);
+>> +    if (ret)
+>> +        return ret;
+>> +
+>> +    ret = hisi_ptt_init_ctrls(hisi_ptt);
+>> +    if (ret) {
+>> +        pci_err(pdev, "failed to init controls, ret = %d\n", ret);
+>> +        return ret;
+>> +    }
+>> +
+>> +    ret = hisi_ptt_register_pmu(hisi_ptt);
+>> +    if (ret) {
+>> +        pci_err(pdev, "failed to register PMU device, ret = %d", ret);
+>> +        return ret;
+>> +    }
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static void hisi_ptt_remove(struct pci_dev *pdev)
+>> +{
+>> +    struct hisi_ptt *hisi_ptt = pci_get_drvdata(pdev);
+>> +
+>> +    /*
+>> +     * We have to manually unregister the PMU device rather than make it
+>> +     * devres managed to keep order that the PMU device's unregistration
+>> +     * is prior to the release of DMA buffers. As the DMA buffers are
+>> +     * devm allocated when necessary which is after the registration of
+>> +     * the PMU device.
+>> +     */
+> 
+> do you really need to mention all this?
+> 
+
+I think yes. Otherwise people may ask why not register PMU device in managed
+way as well.
+
+https://lore.kernel.org/lkml/20220308102157.00003725@Huawei.com/#t
+
+>> +    perf_pmu_unregister(&hisi_ptt->hisi_ptt_pmu);
+>> +}
+>> +
+[...]
+>> +/**
+>> + * struct hisi_ptt - per PTT device data
+>> + * @trace_ctrl:   the control information of PTT trace
+>> + * @hisi_ptt_pmu: the pum device of trace
+>> + * @iobase:       base IO address of the device
+>> + * @pdev:         pci_dev of this PTT device
+>> + * @mutex:        mutex to protect the filter list and serialize the perf process.
+>> + * @upper:        the upper BDF range of the PCI devices managed by this PTT device
+>> + * @lower:        the lower BDF range of the PCI devices managed by this PTT device
+>> + * @port_filters: the filter list of root ports
+>> + * @req_filters:  the filter list of requester ID
+>> + * @port_mask:    port mask of the managed root ports
+>> + */
+>> +struct hisi_ptt {
+>> +    struct hisi_ptt_trace_ctrl trace_ctrl;
+>> +    struct pmu hisi_ptt_pmu;
+>> +    void __iomem *iobase;
+>> +    struct pci_dev *pdev;
+>> +    struct mutex mutex;
+>> +    u32 upper;
+> 
+> upper_bdf would be a better name
+> 
+> people don't want to always refer to comments to check the meaning
+> 
+
+will change to upper_bdf and lower_bdf.
+
+Thanks for the comments.
+
+Regards,
+Yicong
 

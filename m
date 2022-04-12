@@ -2,48 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F97D4FD7AA
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:30:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 849494FD66A
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:21:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385755AbiDLIwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:52:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56650 "EHLO
+        id S1355877AbiDLH3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:29:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359053AbiDLHm1 (ORCPT
+        with ESMTP id S1351779AbiDLHM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:42:27 -0400
+        Tue, 12 Apr 2022 03:12:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472F254FA5;
-        Tue, 12 Apr 2022 00:20:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C7ABFA;
+        Mon, 11 Apr 2022 23:52:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A80A86171C;
-        Tue, 12 Apr 2022 07:20:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD9F4C385A1;
-        Tue, 12 Apr 2022 07:20:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5109961472;
+        Tue, 12 Apr 2022 06:52:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68025C385A1;
+        Tue, 12 Apr 2022 06:52:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649748006;
-        bh=et5H9Lo/I7eEZHEtzI0oQ2lysaJnffjyER3MhMUSTHc=;
+        s=korg; t=1649746347;
+        bh=UBKb1sZQqPKobZ0hpdVcRYe0cV7/W6X1LyH5t1+esJc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HDdc2IoS9SMR5WIONiSqTEqfwmwGUgxGeuWWm4I3qtV/bGKP4z1P3N9a86KZwIsi/
-         cCs+xyBHqdKWicWV3a337fcsl4AdEqu7qjK2SZDphnLfoF4SpXW1DayH7rYXPDV+nN
-         LiZMRUiZlXeh6JxVcTPrFSsNOCxYBxJZZJ+iIqwU=
+        b=QL20hE4+USYC86pBYCNqxlMV4AuJqpTTnDlWGVD/XcAR82ogB9kjwjEPJNa9/vPtH
+         XIgMcKXbQXbJ6XA8dL4qEm4qfihwGLqCxzrGCVCcqqWM8WDTvrXc5l9FquqneXaeTS
+         zwqWTwC4IlhiraD47DgfcgF+vMFVs1E1+CBIVlZY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Pudak, Filip" <Filip.Pudak@windriver.com>,
-        "Xiao, Jiguang" <Jiguang.Xiao@windriver.com>,
-        David Ahern <dsahern@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, Pudak@vger.kernel.org,
-        Xiao@vger.kernel.org
-Subject: [PATCH 5.17 235/343] ipv6: Fix stats accounting in ip6_pkt_drop
+        stable@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.15 250/277] Revert "selftests: net: Add tls config dependency for tls selftests"
 Date:   Tue, 12 Apr 2022 08:30:53 +0200
-Message-Id: <20220412062958.118107935@linuxfoundation.org>
+Message-Id: <20220412062949.278284606@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,40 +53,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Ahern <dsahern@kernel.org>
+From: Jakub Kicinski <kuba@kernel.org>
 
-[ Upstream commit 1158f79f82d437093aeed87d57df0548bdd68146 ]
+commit 20695e9a9fd39103d1b0669470ae74030b7aa196 upstream.
 
-VRF devices are the loopbacks for VRFs, and a loopback can not be
-assigned to a VRF. Accordingly, the condition in ip6_pkt_drop should
-be '||' not '&&'.
+This reverts commit d9142e1cf3bbdaf21337767114ecab26fe702d47.
 
-Fixes: 1d3fd8a10bed ("vrf: Use orig netdev to count Ip6InNoRoutes and a fresh route lookup when sending dest unreach")
-Reported-by: Pudak, Filip <Filip.Pudak@windriver.com>
-Reported-by: Xiao, Jiguang <Jiguang.Xiao@windriver.com>
-Signed-off-by: David Ahern <dsahern@kernel.org>
-Link: https://lore.kernel.org/r/20220404150908.2937-1-dsahern@kernel.org
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+The test is supposed to run cleanly with TLS is disabled,
+to test compatibility with TCP behavior. I can't repro
+the failure [1], the problem should be debugged rather
+than papered over.
+
+Link: https://lore.kernel.org/all/20220325161203.7000698c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com/ [1]
+Fixes: d9142e1cf3bb ("selftests: net: Add tls config dependency for tls selftests")
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Link: https://lore.kernel.org/r/20220328212904.2685395-1-kuba@kernel.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv6/route.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/net/config |    1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/net/ipv6/route.c b/net/ipv6/route.c
-index ea1cf414a92e..da1bf48e7937 100644
---- a/net/ipv6/route.c
-+++ b/net/ipv6/route.c
-@@ -4495,7 +4495,7 @@ static int ip6_pkt_drop(struct sk_buff *skb, u8 code, int ipstats_mib_noroutes)
- 	struct inet6_dev *idev;
- 	int type;
- 
--	if (netif_is_l3_master(skb->dev) &&
-+	if (netif_is_l3_master(skb->dev) ||
- 	    dst->dev == net->loopback_dev)
- 		idev = __in6_dev_get_safely(dev_get_by_index_rcu(net, IP6CB(skb)->iif));
- 	else
--- 
-2.35.1
-
+--- a/tools/testing/selftests/net/config
++++ b/tools/testing/selftests/net/config
+@@ -43,5 +43,4 @@ CONFIG_NET_ACT_TUNNEL_KEY=m
+ CONFIG_NET_ACT_MIRRED=m
+ CONFIG_BAREUDP=m
+ CONFIG_IPV6_IOAM6_LWTUNNEL=y
+-CONFIG_TLS=m
+ CONFIG_CRYPTO_SM4=y
 
 

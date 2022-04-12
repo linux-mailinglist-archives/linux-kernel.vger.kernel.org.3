@@ -2,230 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEBA34FE2A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FD924FE26C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356189AbiDLN3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 09:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38318 "EHLO
+        id S1356015AbiDLN3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 09:29:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356875AbiDLN2P (ORCPT
+        with ESMTP id S1357703AbiDLN3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 09:28:15 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A1610FF2
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 06:23:30 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 816853200D53;
-        Tue, 12 Apr 2022 09:23:29 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 12 Apr 2022 09:23:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1649769809; x=1649856209; bh=SCBBhq7C9q
-        0Z6mR7hQqmWZHCx1ZocRttm3x1QobmTTg=; b=QA+HwR/CwtCKhYGOcy9Z1ZwoEP
-        inlBN2ws97HMBG/hMwgNWmPRguDSmiKr0/BZNLpGZUA8q5ZZCuIQ07806K+Nu8wK
-        sFbKZrqUeDstfgwZTC+R4v6zdbx4vlk3ZLRrp50BiJbTKDZcN+5R4ZVMkMytFjC1
-        j0aRg9WwXSzK6BUX5BBSlPccQb7upozo37NR6jADtIuiCrT/MDR8rq3sRjYQ81Da
-        jVt9cJTzhOhyjoIaKbmAA6hWnYpIjqYvhyN5SNZ8ZY5Q18bozkYlKQpzAjAMOutM
-        b6lWyAhYUXat95dTmFq0KxIGGxhb/UYp2ngsxEe2SxxR14VDQS6omEEcYDTw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1649769809; x=
-        1649856209; bh=SCBBhq7C9q0Z6mR7hQqmWZHCx1ZocRttm3x1QobmTTg=; b=e
-        XPnv5AadguhgwzimhsdMBgjPMrSYdpp+TnjGKJ4FJw+68TnBXeDKp1wbAPQhwJrg
-        K/C7vrPZq2y6WiPh1geWoz8vSpJGyL1qFCezZ9ULBCyrnE3juylOkeuPXZkueFLi
-        SBbUrb3o4BxGDlAMsGG+RB5pwzrqpXOTNgt8cMkhVT/BAiZMAJwkbQP+fEE6Qz59
-        ZqrKt1mbCiKLFOqx153EnIupjOT+iU+yK1ThDi7GJ5WAJr3P7aJ+OFXaRvBRf+ED
-        qceJbixeumR4D7sPffWhD2bcwhTi2OGVv0Da1w0dKLouFLZ3uymsTE5NvD99FxoU
-        O9UiIrisktUT7HPhd0DNA==
-X-ME-Sender: <xms:T31VYjxvmgYuCr3LCP8dbUYvbIy12F6BOyo9oB-EnrCzzjaSsAYRSg>
-    <xme:T31VYrRg92peaIZ7uheflRnWYbEHTtGfHQjXyaM_ivlHOW7RNd6Pg-NHUb8OeMTQu
-    _v3p7PVidw281g4Ya4>
-X-ME-Received: <xmr:T31VYtU8hgF9-XI-3K1rx2WT7SHTotivfOEnsFyC2KDn6HfNnFXmlJ1ri1qayx5-v-n2vhR9BBAEyTkGYnD0Q8YjNQ-APRaioXS1HZ8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudekkedgiedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
-    gedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:T31VYtiwDlD-FHeWW_X7sJVeK5cH0-h8wzxzt1fl3TPdzROvFMu8Jw>
-    <xmx:T31VYlAgh9wQZI8_87yrpoaPOvI-qXfIXviGKhuy2UTDtWpIKY5kOQ>
-    <xmx:T31VYmI-N_eCzYBWNcuua5_5sJlp7KWQs8Vq1rTNGIYMxTwvvA9CvQ>
-    <xmx:UX1VYp0EwhfrWJuYbbmgn1LBahUqSxO5llrF7oJ1VJ8tFQx_KLGdSA>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 12 Apr 2022 09:23:27 -0400 (EDT)
-Date:   Tue, 12 Apr 2022 15:23:25 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 3/6] drm/sun4i: sun8i-hdmi-phy: Used device-managed
- clocks/resets
-Message-ID: <20220412132325.bq2c3g2fskckfgpz@houat>
-References: <20220412043512.49364-1-samuel@sholland.org>
- <20220412043512.49364-4-samuel@sholland.org>
+        Tue, 12 Apr 2022 09:29:07 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2095BC0
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 06:26:37 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b584e329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:584e:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A9B881EC04D6;
+        Tue, 12 Apr 2022 15:26:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1649769991;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=kv9jJsZZOOjBPt8MqkxzQ1hiZv0aEzxc0WidMPbYFyg=;
+        b=k4s0zrPUVsVhx0XLqef71gl/YkOyGtyFfbmaIQvwCVrgDIvaYSR5VRIeIiiJSFYMURARBE
+        ooDr1s93VPb51x5nc8+8ME1LugiulOMRlQ7EHKx2sWWjO+pSf2xLTLj1IP/tLGJVehefM+
+        JZiJOlXCwnQr185oUW23SHODNGmGQos=
+Date:   Tue, 12 Apr 2022 15:26:31 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH V5 3/7] x86/entry: Move PUSH_AND_CLEAR_REGS out of
+ error_entry()
+Message-ID: <YlV+B8faRD2lDoO3@zn.tnic>
+References: <20220412121541.4595-1-jiangshanlai@gmail.com>
+ <20220412121541.4595-4-jiangshanlai@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="542vfuzlbowtb4mg"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220412043512.49364-4-samuel@sholland.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220412121541.4595-4-jiangshanlai@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Apr 12, 2022 at 08:15:37PM +0800, Lai Jiangshan wrote:
+> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+> 
+> error_entry() doesn't handle the stack balanced.
 
---542vfuzlbowtb4mg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+What does that mean?
 
-Hi,
+> It includes
+> PUSH_AND_CLEAR_REGS which is commonly needed for all IDT entries and
+> can't pop the regs before it returns.
+> 
+> Move PUSH_AND_CLEAR_REGS out of error_entry() and make error_entry()
+> works on the stack normally.
+> 
+> After this, XENPV doesn't need error_entry() since PUSH_AND_CLEAR_REGS
+> is moved out and error_entry() can be converted to C code in future
+> since it doesn't fiddle the stack.
 
-On Mon, Apr 11, 2022 at 11:35:08PM -0500, Samuel Holland wrote:
-> Now that the HDMI PHY is using a platform driver, it can use device-
-> managed resources. Use these, as well as the dev_err_probe helper, to
-> simplify the probe function and get rid of the remove function.
->=20
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
->=20
->  drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c | 100 ++++++++-----------------
->  1 file changed, 30 insertions(+), 70 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c b/drivers/gpu/drm/sun=
-4i/sun8i_hdmi_phy.c
-> index 1effa30bfe62..1351e633d485 100644
-> --- a/drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c
-> +++ b/drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c
-> @@ -673,10 +673,8 @@ int sun8i_hdmi_phy_get(struct sun8i_dw_hdmi *hdmi, s=
-truct device_node *node)
->  static int sun8i_hdmi_phy_probe(struct platform_device *pdev)
->  {
->  	struct device *dev =3D &pdev->dev;
-> -	struct device_node *node =3D dev->of_node;
->  	struct sun8i_hdmi_phy *phy;
->  	void __iomem *regs;
-> -	int ret;
-> =20
->  	phy =3D devm_kzalloc(dev, sizeof(*phy), GFP_KERNEL);
->  	if (!phy)
-> @@ -686,88 +684,50 @@ static int sun8i_hdmi_phy_probe(struct platform_dev=
-ice *pdev)
->  	phy->dev =3D dev;
-> =20
->  	regs =3D devm_platform_ioremap_resource(pdev, 0);
-> -	if (IS_ERR(regs)) {
-> -		dev_err(dev, "Couldn't map the HDMI PHY registers\n");
-> -		return PTR_ERR(regs);
-> -	}
-> +	if (IS_ERR(regs))
-> +		return dev_err_probe(dev, PTR_ERR(regs),
-> +				     "Couldn't map the HDMI PHY registers\n");
-> =20
->  	phy->regs =3D devm_regmap_init_mmio(dev, regs,
->  					  &sun8i_hdmi_phy_regmap_config);
-> -	if (IS_ERR(phy->regs)) {
-> -		dev_err(dev, "Couldn't create the HDMI PHY regmap\n");
-> -		return PTR_ERR(phy->regs);
-> -	}
-> +	if (IS_ERR(phy->regs))
-> +		return dev_err_probe(dev, PTR_ERR(phy->regs),
-> +				     "Couldn't create the HDMI PHY regmap\n");
-> =20
-> -	phy->clk_bus =3D of_clk_get_by_name(node, "bus");
-> -	if (IS_ERR(phy->clk_bus)) {
-> -		dev_err(dev, "Could not get bus clock\n");
-> -		return PTR_ERR(phy->clk_bus);
-> -	}
-> -
-> -	phy->clk_mod =3D of_clk_get_by_name(node, "mod");
-> -	if (IS_ERR(phy->clk_mod)) {
-> -		dev_err(dev, "Could not get mod clock\n");
-> -		ret =3D PTR_ERR(phy->clk_mod);
-> -		goto err_put_clk_bus;
-> -	}
-> +	phy->clk_bus =3D devm_clk_get(dev, "bus");
-> +	if (IS_ERR(phy->clk_bus))
-> +		return dev_err_probe(dev, PTR_ERR(phy->clk_bus),
-> +				     "Could not get bus clock\n");
-> =20
-> -	if (phy->variant->has_phy_clk) {
-> -		phy->clk_pll0 =3D of_clk_get_by_name(node, "pll-0");
-> -		if (IS_ERR(phy->clk_pll0)) {
-> -			dev_err(dev, "Could not get pll-0 clock\n");
-> -			ret =3D PTR_ERR(phy->clk_pll0);
-> -			goto err_put_clk_mod;
-> -		}
-> -
-> -		if (phy->variant->has_second_pll) {
-> -			phy->clk_pll1 =3D of_clk_get_by_name(node, "pll-1");
-> -			if (IS_ERR(phy->clk_pll1)) {
-> -				dev_err(dev, "Could not get pll-1 clock\n");
-> -				ret =3D PTR_ERR(phy->clk_pll1);
-> -				goto err_put_clk_pll0;
-> -			}
-> -		}
-> -	}
-> +	phy->clk_mod =3D devm_clk_get(dev, "mod");
-> +	if (IS_ERR(phy->clk_mod))
-> +		return dev_err_probe(dev, PTR_ERR(phy->clk_mod),
-> +				     "Could not get mod clock\n");
-> =20
-> -	phy->rst_phy =3D of_reset_control_get_shared(node, "phy");
-> -	if (IS_ERR(phy->rst_phy)) {
-> -		dev_err(dev, "Could not get phy reset control\n");
-> -		ret =3D PTR_ERR(phy->rst_phy);
-> -		goto err_put_clk_pll1;
-> -	}
-> +	if (phy->variant->has_phy_clk)
-> +		phy->clk_pll0 =3D devm_clk_get(dev, "pll-0");
-> +	if (IS_ERR(phy->clk_pll0))
-> +		return dev_err_probe(dev, PTR_ERR(phy->clk_pll0),
-> +				     "Could not get pll-0 clock\n");
-> +
-> +	if (phy->variant->has_second_pll)
-> +		phy->clk_pll1 =3D devm_clk_get(dev, "pll-1");
-> +	if (IS_ERR(phy->clk_pll1))
-> +		return dev_err_probe(dev, PTR_ERR(phy->clk_pll1),
-> +				     "Could not get pll-1 clock\n");
-> +
-> +	phy->rst_phy =3D devm_reset_control_get_shared(dev, "phy");
-> +	if (IS_ERR(phy->rst_phy))
-> +		return dev_err_probe(dev, PTR_ERR(phy->rst_phy),
-> +				     "Could not get phy reset control\n");
+This is not a justification for this size increase:
 
-I find the old construct clearer with the imbricated blocks.
+   text    data     bss     dec     hex filename
+16060616        128131358       36384888        180576862       ac3625e vmlinux.before
+16065626        128131358       36380792        180577776       ac365f0 vmlinux.after
 
-Otherwise, the rest of the series looks fine, thanks!
-Maxime
+~5K text increase already with my tailored config.
 
---542vfuzlbowtb4mg
-Content-Type: application/pgp-signature; name="signature.asc"
+You can have a asm_error_entry(), written in asm, which does the regs
+pushing and which calls error_entry() - the latter being the C version.
+And no need for the size increase.
 
------BEGIN PGP SIGNATURE-----
+For example.
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYlV9TQAKCRDj7w1vZxhR
-xXz3AQCLd+iM9nW9TMjH67uErKUxeCFePEosuu47NlHJp2MjHQD/dC1dKOtp1lTu
-FRHk3m7R4Cr2sMERznd+wOMkOdpzjQk=
-=f6v7
------END PGP SIGNATURE-----
+-- 
+Regards/Gruss,
+    Boris.
 
---542vfuzlbowtb4mg--
+https://people.kernel.org/tglx/notes-about-netiquette

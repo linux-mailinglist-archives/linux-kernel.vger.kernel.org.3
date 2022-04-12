@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C15F4FD432
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:02:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7941D4FD42C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:01:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346178AbiDLIP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:15:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43196 "EHLO
+        id S1382118AbiDLJVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:21:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355300AbiDLH1Z (ORCPT
+        with ESMTP id S1356664AbiDLHjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:27:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD1C49250;
-        Tue, 12 Apr 2022 00:07:27 -0700 (PDT)
+        Tue, 12 Apr 2022 03:39:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918A9527D6;
+        Tue, 12 Apr 2022 00:09:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CBDC5B81A8F;
-        Tue, 12 Apr 2022 07:07:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42E16C385A1;
-        Tue, 12 Apr 2022 07:07:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 15BAAB81B5E;
+        Tue, 12 Apr 2022 07:09:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E520C385B8;
+        Tue, 12 Apr 2022 07:09:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747244;
-        bh=o4f5gXCbaB4CQFduw7VkVXm88MSd43BcGFbgkllltIQ=;
+        s=korg; t=1649747396;
+        bh=CWMqiwxtlvgKbd+NivmB/OV5GOd11UOQAsCVPwOiIpw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kDt0lbraaGJc8atbTu4YI5M2N9nKrkrdJuxi6rTCWkzsLaJQjV7Bir70/kCVZmT0O
-         G0HmwDUTF0SIKVfgP3rn0KyMufLA9ns+fWX9XOKsblZb0HE4yrqYB3IYtbvGT8ihM/
-         cWJSl6viH33xX3l3wnbznJRJg5+yxxXeyDWvmOUw=
+        b=fBkE0I0Mfgs7EsLoBXx9+XgopXKusHMedbEWzw3Et2p7Zyn5mprdwPlj7Nmx4Hr7I
+         MUUx47IgD0vIEgpA2DaQXHL82+4Yo1LXBgb/+WGSrfPcPqSHnVtYqoSgZnb/pkBrTU
+         UdZAg/07axexTsQF+1hnH3IsoCZr5W4WGMmwlwwo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hou Wenlong <houwenlong.hwl@antgroup.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
+        stable@vger.kernel.org, Wayne Chang <waynec@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 010/343] KVM: x86/emulator: Emulate RDPID only if it is enabled in guest
-Date:   Tue, 12 Apr 2022 08:27:08 +0200
-Message-Id: <20220412062951.402249565@linuxfoundation.org>
+Subject: [PATCH 5.17 024/343] usb: gadget: tegra-xudc: Fix control endpoints definitions
+Date:   Tue, 12 Apr 2022 08:27:22 +0200
+Message-Id: <20220412062951.801989962@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
 References: <20220412062951.095765152@linuxfoundation.org>
@@ -55,79 +54,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hou Wenlong <houwenlong.hwl@antgroup.com>
+From: Wayne Chang <waynec@nvidia.com>
 
-[ Upstream commit a836839cbfe60dc434c5476a7429cf2bae36415d ]
+[ Upstream commit 7bd42fb95eb4f98495ccadf467ad15124208ec49 ]
 
-When RDTSCP is supported but RDPID is not supported in host,
-RDPID emulation is available. However, __kvm_get_msr() would
-only fail when RDTSCP/RDPID both are disabled in guest, so
-the emulator wouldn't inject a #UD when RDPID is disabled but
-RDTSCP is enabled in guest.
+According to the Tegra Technical Reference Manual, the seq_num
+field of control endpoint is not [31:24] but [31:27]. Bit 24
+is reserved and bit 26 is splitxstate.
 
-Fixes: fb6d4d340e05 ("KVM: x86: emulate RDPID")
-Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
-Message-Id: <1dfd46ae5b76d3ed87bde3154d51c64ea64c99c1.1646226788.git.houwenlong.hwl@antgroup.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+The change fixes the wrong control endpoint's definitions.
+
+Signed-off-by: Wayne Chang <waynec@nvidia.com>
+Link: https://lore.kernel.org/r/20220107091349.149798-1-waynec@nvidia.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kvm/emulate.c     | 4 +++-
- arch/x86/kvm/kvm_emulate.h | 1 +
- arch/x86/kvm/x86.c         | 6 ++++++
- 3 files changed, 10 insertions(+), 1 deletion(-)
+ drivers/usb/gadget/udc/tegra-xudc.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-index 02d061a06aa1..de9d8a27387c 100644
---- a/arch/x86/kvm/emulate.c
-+++ b/arch/x86/kvm/emulate.c
-@@ -3523,8 +3523,10 @@ static int em_rdpid(struct x86_emulate_ctxt *ctxt)
- {
- 	u64 tsc_aux = 0;
+diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc/tegra-xudc.c
+index 716d9ab2d2ff..be76f891b9c5 100644
+--- a/drivers/usb/gadget/udc/tegra-xudc.c
++++ b/drivers/usb/gadget/udc/tegra-xudc.c
+@@ -272,8 +272,10 @@ BUILD_EP_CONTEXT_RW(deq_hi, deq_hi, 0, 0xffffffff)
+ BUILD_EP_CONTEXT_RW(avg_trb_len, tx_info, 0, 0xffff)
+ BUILD_EP_CONTEXT_RW(max_esit_payload, tx_info, 16, 0xffff)
+ BUILD_EP_CONTEXT_RW(edtla, rsvd[0], 0, 0xffffff)
+-BUILD_EP_CONTEXT_RW(seq_num, rsvd[0], 24, 0xff)
++BUILD_EP_CONTEXT_RW(rsvd, rsvd[0], 24, 0x1)
+ BUILD_EP_CONTEXT_RW(partial_td, rsvd[0], 25, 0x1)
++BUILD_EP_CONTEXT_RW(splitxstate, rsvd[0], 26, 0x1)
++BUILD_EP_CONTEXT_RW(seq_num, rsvd[0], 27, 0x1f)
+ BUILD_EP_CONTEXT_RW(cerrcnt, rsvd[1], 18, 0x3)
+ BUILD_EP_CONTEXT_RW(data_offset, rsvd[2], 0, 0x1ffff)
+ BUILD_EP_CONTEXT_RW(numtrbs, rsvd[2], 22, 0x1f)
+@@ -1554,6 +1556,9 @@ static int __tegra_xudc_ep_set_halt(struct tegra_xudc_ep *ep, bool halt)
+ 		ep_reload(xudc, ep->index);
  
--	if (ctxt->ops->get_msr(ctxt, MSR_TSC_AUX, &tsc_aux))
-+	if (!ctxt->ops->guest_has_rdpid(ctxt))
- 		return emulate_ud(ctxt);
-+
-+	ctxt->ops->get_msr(ctxt, MSR_TSC_AUX, &tsc_aux);
- 	ctxt->dst.val = tsc_aux;
- 	return X86EMUL_CONTINUE;
- }
-diff --git a/arch/x86/kvm/kvm_emulate.h b/arch/x86/kvm/kvm_emulate.h
-index 39eded2426ff..a2a7654d8ace 100644
---- a/arch/x86/kvm/kvm_emulate.h
-+++ b/arch/x86/kvm/kvm_emulate.h
-@@ -226,6 +226,7 @@ struct x86_emulate_ops {
- 	bool (*guest_has_long_mode)(struct x86_emulate_ctxt *ctxt);
- 	bool (*guest_has_movbe)(struct x86_emulate_ctxt *ctxt);
- 	bool (*guest_has_fxsr)(struct x86_emulate_ctxt *ctxt);
-+	bool (*guest_has_rdpid)(struct x86_emulate_ctxt *ctxt);
+ 		ep_ctx_write_state(ep->context, EP_STATE_RUNNING);
++		ep_ctx_write_rsvd(ep->context, 0);
++		ep_ctx_write_partial_td(ep->context, 0);
++		ep_ctx_write_splitxstate(ep->context, 0);
+ 		ep_ctx_write_seq_num(ep->context, 0);
  
- 	void (*set_nmi_mask)(struct x86_emulate_ctxt *ctxt, bool masked);
+ 		ep_reload(xudc, ep->index);
+@@ -2809,7 +2814,10 @@ static void tegra_xudc_reset(struct tegra_xudc *xudc)
+ 	xudc->setup_seq_num = 0;
+ 	xudc->queued_setup_packet = false;
  
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 9b6166348c94..c81ec70197fb 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -7675,6 +7675,11 @@ static bool emulator_guest_has_fxsr(struct x86_emulate_ctxt *ctxt)
- 	return guest_cpuid_has(emul_to_vcpu(ctxt), X86_FEATURE_FXSR);
- }
+-	ep_ctx_write_seq_num(ep0->context, xudc->setup_seq_num);
++	ep_ctx_write_rsvd(ep0->context, 0);
++	ep_ctx_write_partial_td(ep0->context, 0);
++	ep_ctx_write_splitxstate(ep0->context, 0);
++	ep_ctx_write_seq_num(ep0->context, 0);
  
-+static bool emulator_guest_has_rdpid(struct x86_emulate_ctxt *ctxt)
-+{
-+	return guest_cpuid_has(emul_to_vcpu(ctxt), X86_FEATURE_RDPID);
-+}
-+
- static ulong emulator_read_gpr(struct x86_emulate_ctxt *ctxt, unsigned reg)
- {
- 	return kvm_register_read_raw(emul_to_vcpu(ctxt), reg);
-@@ -7757,6 +7762,7 @@ static const struct x86_emulate_ops emulate_ops = {
- 	.guest_has_long_mode = emulator_guest_has_long_mode,
- 	.guest_has_movbe     = emulator_guest_has_movbe,
- 	.guest_has_fxsr      = emulator_guest_has_fxsr,
-+	.guest_has_rdpid     = emulator_guest_has_rdpid,
- 	.set_nmi_mask        = emulator_set_nmi_mask,
- 	.get_hflags          = emulator_get_hflags,
- 	.exiting_smm         = emulator_exiting_smm,
+ 	deq_ptr = trb_virt_to_phys(ep0, &ep0->transfer_ring[ep0->deq_ptr]);
+ 
 -- 
 2.35.1
 

@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F23074FD9E6
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5024FD6C9
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:25:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384305AbiDLIkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50170 "EHLO
+        id S1384289AbiDLIkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:40:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357198AbiDLHjw (ORCPT
+        with ESMTP id S1357210AbiDLHjw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Apr 2022 03:39:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D88140D1;
-        Tue, 12 Apr 2022 00:13:39 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBECC140F0;
+        Tue, 12 Apr 2022 00:13:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4F964B81895;
-        Tue, 12 Apr 2022 07:13:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92D71C385A6;
-        Tue, 12 Apr 2022 07:13:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 29CF161701;
+        Tue, 12 Apr 2022 07:13:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D680C385A1;
+        Tue, 12 Apr 2022 07:13:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747617;
-        bh=CeNnsAwWRiktZfe8Ev3NbZKEPZE7owzZjYfHqz/jVog=;
+        s=korg; t=1649747619;
+        bh=keaXA1ahsEIO9lUMtg0aK6GPS2FnsxjF9uZtFjHzBoA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PIs9AvLxhtdL2nWK2QenQiHoD/28H9SuWa7LerD2G/pcsrs51b+R2rfFeTZU59FlC
-         sX8ZXu6bfcERv56LGNi9/5hKQY4A8M8hNODKvajlhQRgun3Gn49W+eZ9GI1hTZ4rN+
-         4JHMRI/C9R0e/6ZDos45o65vGSuVqQ8Idr3BhS9I=
+        b=hDSBi0cLG0R/OFbB25Cgkcbkw9KB04SnizM9ZsOJr5uhBlWmSUykJ8sUyDrdwiN18
+         L9jVmaoBNeVeP+3PeQSvZsugeNp4BezTvo9Vi9rKswpplQO2pYHBzqfdLtPsQbjLLK
+         5Tph1PWkNIPxmri9i0SJL35KnVrexrCYPipXE1rM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
+        stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Deren Wu <deren.wu@mediatek.com>, Felix Fietkau <nbd@nbd.name>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 143/343] xen/usb: harden xen_hcd against malicious backends
-Date:   Tue, 12 Apr 2022 08:29:21 +0200
-Message-Id: <20220412062955.511302940@linuxfoundation.org>
+Subject: [PATCH 5.17 144/343] mt76: fix monitor mode crash with sdio driver
+Date:   Tue, 12 Apr 2022 08:29:22 +0200
+Message-Id: <20220412062955.539382313@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
 References: <20220412062951.095765152@linuxfoundation.org>
@@ -54,168 +56,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com>
+From: Deren Wu <deren.wu@mediatek.com>
 
-[ Upstream commit aff477cb8f94613f501d386d10f20019e294bc35 ]
+[ Upstream commit 123bc712b1de0805f9d683687e17b1ec2aba0b68 ]
 
-Make sure a malicious backend can't cause any harm other than wrong
-I/O data.
+mt7921s driver may receive frames with fragment buffers. If there is a
+CTS packet received in monitor mode, the payload is 10 bytes only and
+need 6 bytes header padding after RXD buffer. However, only RXD in the
+first linear buffer, if we pull buffer size RXD-size+6 bytes with
+skb_pull(), that would trigger "BUG_ON(skb->len < skb->data_len)" in
+__skb_pull().
 
-Missing are verification of the request id in a response, sanitizing
-the reported actual I/O length, and protection against interrupt storms
-from the backend.
+To avoid the nonlinear buffer issue, enlarge the RXD size from 128 to
+256 to make sure all MCU operation in linear buffer.
 
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Link: https://lore.kernel.org/r/20220311103509.12908-1-jgross@suse.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+[   52.007562] kernel BUG at include/linux/skbuff.h:2313!
+[   52.007578] Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
+[   52.007987] pc : skb_pull+0x48/0x4c
+[   52.008015] lr : mt7921_queue_rx_skb+0x494/0x890 [mt7921_common]
+[   52.008361] Call trace:
+[   52.008377]  skb_pull+0x48/0x4c
+[   52.008400]  mt76s_net_worker+0x134/0x1b0 [mt76_sdio 35339a92c6eb7d4bbcc806a1d22f56365565135c]
+[   52.008431]  __mt76_worker_fn+0xe8/0x170 [mt76 ef716597d11a77150bc07e3fdd68eeb0f9b56917]
+[   52.008449]  kthread+0x148/0x3ac
+[   52.008466]  ret_from_fork+0x10/0x30
+
+Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+Signed-off-by: Deren Wu <deren.wu@mediatek.com>
+Signed-off-by: Felix Fietkau <nbd@nbd.name>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/xen-hcd.c | 57 ++++++++++++++++++++++++++++----------
- 1 file changed, 43 insertions(+), 14 deletions(-)
+ drivers/net/wireless/mediatek/mt76/mt76.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/xen-hcd.c b/drivers/usb/host/xen-hcd.c
-index 19b8c7ed74cb..4ed3ee328a4a 100644
---- a/drivers/usb/host/xen-hcd.c
-+++ b/drivers/usb/host/xen-hcd.c
-@@ -51,6 +51,7 @@ struct vdevice_status {
- struct usb_shadow {
- 	struct xenusb_urb_request req;
- 	struct urb *urb;
-+	bool in_flight;
- };
+diff --git a/drivers/net/wireless/mediatek/mt76/mt76.h b/drivers/net/wireless/mediatek/mt76/mt76.h
+index 1f6f7a44d3f0..5197fcb06649 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt76.h
++++ b/drivers/net/wireless/mediatek/mt76/mt76.h
+@@ -19,7 +19,7 @@
  
- struct xenhcd_info {
-@@ -722,6 +723,12 @@ static void xenhcd_gnttab_done(struct xenhcd_info *info, unsigned int id)
- 	int nr_segs = 0;
- 	int i;
+ #define MT_MCU_RING_SIZE	32
+ #define MT_RX_BUF_SIZE		2048
+-#define MT_SKB_HEAD_LEN		128
++#define MT_SKB_HEAD_LEN		256
  
-+	if (!shadow->in_flight) {
-+		xenhcd_set_error(info, "Illegal request id");
-+		return;
-+	}
-+	shadow->in_flight = false;
-+
- 	nr_segs = shadow->req.nr_buffer_segs;
- 
- 	if (xenusb_pipeisoc(shadow->req.pipe))
-@@ -805,6 +812,7 @@ static int xenhcd_do_request(struct xenhcd_info *info, struct urb_priv *urbp)
- 
- 	info->urb_ring.req_prod_pvt++;
- 	info->shadow[id].urb = urb;
-+	info->shadow[id].in_flight = true;
- 
- 	RING_PUSH_REQUESTS_AND_CHECK_NOTIFY(&info->urb_ring, notify);
- 	if (notify)
-@@ -933,10 +941,27 @@ static int xenhcd_unlink_urb(struct xenhcd_info *info, struct urb_priv *urbp)
- 	return ret;
- }
- 
--static int xenhcd_urb_request_done(struct xenhcd_info *info)
-+static void xenhcd_res_to_urb(struct xenhcd_info *info,
-+			      struct xenusb_urb_response *res, struct urb *urb)
-+{
-+	if (unlikely(!urb))
-+		return;
-+
-+	if (res->actual_length > urb->transfer_buffer_length)
-+		urb->actual_length = urb->transfer_buffer_length;
-+	else if (res->actual_length < 0)
-+		urb->actual_length = 0;
-+	else
-+		urb->actual_length = res->actual_length;
-+	urb->error_count = res->error_count;
-+	urb->start_frame = res->start_frame;
-+	xenhcd_giveback_urb(info, urb, res->status);
-+}
-+
-+static int xenhcd_urb_request_done(struct xenhcd_info *info,
-+				   unsigned int *eoiflag)
- {
- 	struct xenusb_urb_response res;
--	struct urb *urb;
- 	RING_IDX i, rp;
- 	__u16 id;
- 	int more_to_do = 0;
-@@ -963,16 +988,12 @@ static int xenhcd_urb_request_done(struct xenhcd_info *info)
- 			xenhcd_gnttab_done(info, id);
- 			if (info->error)
- 				goto err;
--			urb = info->shadow[id].urb;
--			if (likely(urb)) {
--				urb->actual_length = res.actual_length;
--				urb->error_count = res.error_count;
--				urb->start_frame = res.start_frame;
--				xenhcd_giveback_urb(info, urb, res.status);
--			}
-+			xenhcd_res_to_urb(info, &res, info->shadow[id].urb);
- 		}
- 
- 		xenhcd_add_id_to_freelist(info, id);
-+
-+		*eoiflag = 0;
- 	}
- 	info->urb_ring.rsp_cons = i;
- 
-@@ -990,7 +1011,7 @@ static int xenhcd_urb_request_done(struct xenhcd_info *info)
- 	return 0;
- }
- 
--static int xenhcd_conn_notify(struct xenhcd_info *info)
-+static int xenhcd_conn_notify(struct xenhcd_info *info, unsigned int *eoiflag)
- {
- 	struct xenusb_conn_response res;
- 	struct xenusb_conn_request *req;
-@@ -1035,6 +1056,8 @@ static int xenhcd_conn_notify(struct xenhcd_info *info)
- 				       info->conn_ring.req_prod_pvt);
- 		req->id = id;
- 		info->conn_ring.req_prod_pvt++;
-+
-+		*eoiflag = 0;
- 	}
- 
- 	if (rc != info->conn_ring.req_prod_pvt)
-@@ -1057,14 +1080,19 @@ static int xenhcd_conn_notify(struct xenhcd_info *info)
- static irqreturn_t xenhcd_int(int irq, void *dev_id)
- {
- 	struct xenhcd_info *info = (struct xenhcd_info *)dev_id;
-+	unsigned int eoiflag = XEN_EOI_FLAG_SPURIOUS;
- 
--	if (unlikely(info->error))
-+	if (unlikely(info->error)) {
-+		xen_irq_lateeoi(irq, XEN_EOI_FLAG_SPURIOUS);
- 		return IRQ_HANDLED;
-+	}
- 
--	while (xenhcd_urb_request_done(info) | xenhcd_conn_notify(info))
-+	while (xenhcd_urb_request_done(info, &eoiflag) |
-+	       xenhcd_conn_notify(info, &eoiflag))
- 		/* Yield point for this unbounded loop. */
- 		cond_resched();
- 
-+	xen_irq_lateeoi(irq, eoiflag);
- 	return IRQ_HANDLED;
- }
- 
-@@ -1141,9 +1169,9 @@ static int xenhcd_setup_rings(struct xenbus_device *dev,
- 		goto fail;
- 	}
- 
--	err = bind_evtchn_to_irq(info->evtchn);
-+	err = bind_evtchn_to_irq_lateeoi(info->evtchn);
- 	if (err <= 0) {
--		xenbus_dev_fatal(dev, err, "bind_evtchn_to_irq");
-+		xenbus_dev_fatal(dev, err, "bind_evtchn_to_irq_lateeoi");
- 		goto fail;
- 	}
- 
-@@ -1496,6 +1524,7 @@ static struct usb_hcd *xenhcd_create_hcd(struct xenbus_device *dev)
- 	for (i = 0; i < XENUSB_URB_RING_SIZE; i++) {
- 		info->shadow[i].req.id = i + 1;
- 		info->shadow[i].urb = NULL;
-+		info->shadow[i].in_flight = false;
- 	}
- 	info->shadow[XENUSB_URB_RING_SIZE - 1].req.id = 0x0fff;
- 
+ #define MT_MAX_NON_AQL_PKT	16
+ #define MT_TXQ_FREE_THR		32
 -- 
 2.35.1
 

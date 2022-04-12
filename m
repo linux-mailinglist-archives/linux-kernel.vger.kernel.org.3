@@ -2,62 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DF044FD5B2
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:14:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4A944FD646
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:21:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382552AbiDLJ2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:28:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46300 "EHLO
+        id S1384360AbiDLJ2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380805AbiDLIWl (ORCPT
+        with ESMTP id S1381356AbiDLIX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 04:22:41 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E077E527D7
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:51:17 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-2ec0bb4b715so63658847b3.5
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:51:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=o4OAO7nnZ8OX/KlCcPdZAiTQkP3Ef4YaiBMzQMe37GA=;
-        b=XHFbMCuk71uIwAmqpOLD+1cpGGkLISo3rmscX0zDWdVz+rawJMip57rBRdFqM564Ka
-         IDEMXvaUDLMk4/MRFkETpelYTzl0BpQuKd+bOXpm3O7cpB1FTZS3E2tLJnv2mk1ezK+w
-         jhWqehoogEsX+UvQnb8ZbQ2YHfQqKprWe6T0M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=o4OAO7nnZ8OX/KlCcPdZAiTQkP3Ef4YaiBMzQMe37GA=;
-        b=Yk5qpiEf2Mn2V6lzmjKx1AyekSQm5wslO9FV3P9rEQyfdhJLVfbpNOz3kDY5vE9eN1
-         mFG2Kxdhy1YGZBk3RyxffyXqTdNdSJyP1D0fdpFQ8EAZ0ju5cmIXFbnrcft+FJqBqiRZ
-         ZiFZivAHOWLA0ahgGeuZ9KTlQN3vB4TLZtdyMuh54ul96U+hNgsMPNQO+za5Pv5eM/2u
-         0HjVsx1nLRBJ71Q9verNFKaCbTN4nAoGHqTtGp9eWVwsikVUxno6zBDEQFF6sdS/UowH
-         8/GKv/nugNzp1bOi+LgxMVhpSFCDeaVMB1jLNqj91erwsgZKhpxzd3Kw+DGCGLaXp9nZ
-         Vqnw==
-X-Gm-Message-State: AOAM5321QNhOFoHIkagQNhe809p357oOtb/b9GeZkdLVTqfjRsgMOiUV
-        mHpgoxHW8IIXG/BatUZ1zDiakqig+yw8UVL4+h408Q==
-X-Google-Smtp-Source: ABdhPJx8GUgxqrrj69ZZQNPISfHn9KL6DvhPn2Cv2JdROrKaOtRIGldYKBZP82LLkXg7BbRzgXz7VneADNL7bKux8Qo=
-X-Received: by 2002:a0d:c602:0:b0:2ec:472:5e32 with SMTP id
- i2-20020a0dc602000000b002ec04725e32mr9740269ywd.364.1649749877009; Tue, 12
- Apr 2022 00:51:17 -0700 (PDT)
+        Tue, 12 Apr 2022 04:23:27 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EBB55370C
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:56:11 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23C6ft7Y029349;
+        Tue, 12 Apr 2022 07:55:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=xBbtpFu+g0M5oAS5qWS81PsG9t3GJIOwiA28DUQVs5g=;
+ b=SVt+WNZtqmPYAF1sZKsrFMSalIkYkLBUKYWFGmso0cvIt6pFOBLJn+hFqCkiGkQZ8QlW
+ Cpm3SrNXmSZI1LyT5UoWIFoLoW9CyJvTSevYp6+23sjOFvnru3bBUx6U5IJKMCjm+YxC
+ 8OU7TpD1xZny6mJvUjc8AESJO7YtKCWqAUUsYG5Ff58UoMrv/Yf8ruq2uH/gTgTiGTAM
+ UdzurUjj7dXdoMLi03n2lbdmhcS1os5jK6pAAjIfs3CPUeuvMF/6AJTPH2AJ0sIbtmBL
+ jTmjME6SO4w33YEUfPIdnSPjVB3nc5vGAhUMtQ1L0UWZC8LvuPx2GvaurSL5+sXxHaxI Lg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fd4cj9e3m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Apr 2022 07:55:46 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23C7YZ1Z024509;
+        Tue, 12 Apr 2022 07:55:46 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fd4cj9e2v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Apr 2022 07:55:45 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23C7sIaW012477;
+        Tue, 12 Apr 2022 07:55:43 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 3fb1s8vd9d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Apr 2022 07:55:43 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23C7tf9n34013486
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 Apr 2022 07:55:41 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 29C2BAE04D;
+        Tue, 12 Apr 2022 07:55:41 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 776EBAE055;
+        Tue, 12 Apr 2022 07:55:40 +0000 (GMT)
+Received: from li-e979b1cc-23ba-11b2-a85c-dfd230f6cf82 (unknown [9.171.60.83])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Tue, 12 Apr 2022 07:55:40 +0000 (GMT)
+Date:   Tue, 12 Apr 2022 09:55:19 +0200
+From:   Halil Pasic <pasic@linux.ibm.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Cornelia Huck <cohuck@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Marc Zyngier <maz@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Halil Pasic <pasic@linux.ibm.com>
+Subject: Re: [PATCH V2 4/5] virtio-pci: implement synchronize_vqs()
+Message-ID: <20220412095519.245cf9f7.pasic@linux.ibm.com>
+In-Reply-To: <CACGkMEvDSv+sZwLYqqfP-jzDzonmon+CxeSXkvyd6F-CbfV3tQ@mail.gmail.com>
+References: <20220406083538.16274-1-jasowang@redhat.com>
+        <20220406083538.16274-5-jasowang@redhat.com>
+        <20220406075952-mutt-send-email-mst@kernel.org>
+        <87wng2e527.fsf@redhat.com>
+        <20220408150307.24b6b99f.pasic@linux.ibm.com>
+        <20220410034556-mutt-send-email-mst@kernel.org>
+        <CACGkMEtarZb6g3ij5=+As17+d9jtdAqNa1EzSuTXc7Pq_som0Q@mail.gmail.com>
+        <877d7vbspu.fsf@redhat.com>
+        <20220412020145.32e26e5a.pasic@linux.ibm.com>
+        <CACGkMEvDSv+sZwLYqqfP-jzDzonmon+CxeSXkvyd6F-CbfV3tQ@mail.gmail.com>
+Organization: IBM
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20220406071131.2930035-1-stevensd@google.com> <Yk1KveOnYfSrUJLD@kroah.com>
- <20220406131300.7pgdcpdhexwvczsb@pali>
-In-Reply-To: <20220406131300.7pgdcpdhexwvczsb@pali>
-From:   David Stevens <stevensd@chromium.org>
-Date:   Tue, 12 Apr 2022 16:51:06 +0900
-Message-ID: <CAD=HUj5rSDGCgfLM8_waTcdMzDYp2=cnG5XpBN=4j3JMyN9g6g@mail.gmail.com>
-Subject: Re: [RFC] PCI: sysfs: add bypass for config read admin check
-To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: CmSVxQ2lgNAuH9PRyaNdXW8BiJbSoWi6
+X-Proofpoint-ORIG-GUID: k8zmRpchgAEYpZ3jEgIZi-3Qw_H2iW3j
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-12_02,2022-04-11_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
+ spamscore=0 lowpriorityscore=0 phishscore=0 adultscore=0 malwarescore=0
+ mlxlogscore=814 bulkscore=0 clxscore=1015 impostorscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204120035
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,105 +109,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 6, 2022 at 10:13 PM Pali Roh=C3=A1r <pali@kernel.org> wrote:
->
-> On Wednesday 06 April 2022 10:09:33 Greg Kroah-Hartman wrote:
-> > On Wed, Apr 06, 2022 at 04:11:31PM +0900, David Stevens wrote:
-> > > From: David Stevens <stevensd@chromium.org>
-> > >
-> > > Add a moduleparam that can be set to bypass the check that limits use=
-rs
-> > > without CAP_SYS_ADMIN to only being able to read the first 64 bytes o=
-f
-> > > the config space. This allows systems without problematic hardware to=
- be
-> > > configured to allow users without CAP_SYS_ADMIN to read PCI
-> > > capabilities.
-> > >
-> > > Signed-off-by: David Stevens <stevensd@chromium.org>
-> > > ---
-> > >  drivers/pci/pci-sysfs.c | 10 +++++++++-
-> > >  1 file changed, 9 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
-> > > index 602f0fb0b007..162423b3c052 100644
-> > > --- a/drivers/pci/pci-sysfs.c
-> > > +++ b/drivers/pci/pci-sysfs.c
-> > > @@ -28,10 +28,17 @@
-> > >  #include <linux/pm_runtime.h>
-> > >  #include <linux/msi.h>
-> > >  #include <linux/of.h>
-> > > +#include <linux/moduleparam.h>
-> > >  #include "pci.h"
-> > >
-> > >  static int sysfs_initialized;      /* =3D 0 */
-> > >
-> > > +static bool allow_unsafe_config_reads;
-> > > +module_param_named(allow_unsafe_config_reads,
-> > > +              allow_unsafe_config_reads, bool, 0644);
-> > > +MODULE_PARM_DESC(allow_unsafe_config_reads,
-> > > +            "Enable full read access to config space without CAP_SYS=
-_ADMIN.");
-> >
-> > No, this is not the 1990's, please do not add system-wide module
-> > parameters like this.  Especially ones that circumvent security
-> > protections.
-> >
-> > Also, where did you document this new option?
-> >
-> > Why not just add this to a LSM instead?
-> >
-> > >  /* show configuration fields */
-> > >  #define pci_config_attr(field, format_string)                       =
-       \
-> > >  static ssize_t                                                      =
-       \
-> > > @@ -696,7 +703,8 @@ static ssize_t pci_read_config(struct file *filp,=
- struct kobject *kobj,
-> > >     u8 *data =3D (u8 *) buf;
-> > >
-> > >     /* Several chips lock up trying to read undefined config space */
-> > > -   if (file_ns_capable(filp, &init_user_ns, CAP_SYS_ADMIN))
-> > > +   if (allow_unsafe_config_reads ||
-> > > +       file_ns_capable(filp, &init_user_ns, CAP_SYS_ADMIN))
-> >
-> > This feels really dangerous.  What benifit are you getting here by
-> > allowing an unpriviliged user to read this information?
->
-> Hello! This is really dangerous.
->
-> Nowadays operating systems are in progress to completely disallow PCI
-> config space access from userspace. So doing opposite thing and even
-> enable it for unprivileged users in Linux is hazard.
->
-> For example NT kernel in Windows 11 already completely disallowed access
-> to PCI config space from userspace unless NT kernel is booted in mode
-> for local debugging with disabled UEFI secure boot. And access in this
-> case is only for highly privileged processes (debug privilege in access
-> token).
->
-> So... should not we move into same direction like other operating system
-> and start disallowing access to PCI config space from userspace
-> completely too? For example when kernel lockdown feature is enabled?
->
-> In PCI config space of some devices are stored also non-PCI registers
-> and accessing them was not really mean for userspace and for sure not
-> for unprivileged users. On AMD x86 platforms is into PCI config space of
-> some device mapped for example CPU MSR registers (at fixed offset, after
-> linked listed of capabilities). Probably in Intel x86 is something
-> similar too. On Synopsis Designware based PCIe HW is into PCI config
-> space of Root Port mapped large range of IP configuration registers.
->
-> So "This allows systems without problematic hardware" means that such
-> system must be non-AMD, non-Designware and probably also non-Intel.
+On Tue, 12 Apr 2022 10:24:35 +0800
+Jason Wang <jasowang@redhat.com> wrote:
 
-It's interesting to hear that what seems to have been added 18 years
-ago as a safeguard against faulty hardware (i.e. "Several chips lock
-up trying to read undefined config space") has become a load bearing
-security check. I guess because that check is there, it wasn't worth
-adding a LOCKDOWN_PCI_ACCESS check to pci_read_config?
+> > Regarding the question "are we safe against notifications before
+> > indicators have been registered" I think we really need to think about
+> > something like Secure Execution. We don't have, and we are unlikely
+> > to have in hardware virtio-ccw implementations, and for a malicious hypervisor
+> > that has full access to the guest memory hardening makes no sense.  
+> 
+> Does s390 have something like memory encryption? (I guess yes). In the
+> case of x86 VM encryption, the I/O buffers were now done via software
+> IOTLB, that's why hardening of the virtio driver is needed to prevent
+> the hypervisor to poke the swiotlb etc.
 
-Regardless, I've found that with a bit of work in userspace, vfio is
-sufficient for my use case.
+Yep! Secure Execution is a confidential computing solution which is much
+like encrypted guest memory, except for one gets exceptions when trying
+to access private memory instead of ending up with garbage  because of
+the encryption. These improvements are IMHO relevant to us!
 
--David
+Regards,
+Halil

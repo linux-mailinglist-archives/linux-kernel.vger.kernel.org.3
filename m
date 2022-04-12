@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D88AA4FD476
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F334FD453
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:02:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353535AbiDLH5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:57:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33750 "EHLO
+        id S1353753AbiDLHZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353552AbiDLHZq (ORCPT
+        with ESMTP id S1351636AbiDLHMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:25:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394F926573;
-        Tue, 12 Apr 2022 00:01:26 -0700 (PDT)
+        Tue, 12 Apr 2022 03:12:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 843CC1570D;
+        Mon, 11 Apr 2022 23:50:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C8B4E60B2B;
-        Tue, 12 Apr 2022 07:01:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0921C385A1;
-        Tue, 12 Apr 2022 07:01:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2201661045;
+        Tue, 12 Apr 2022 06:50:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F800C385A1;
+        Tue, 12 Apr 2022 06:50:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746885;
-        bh=Ur7rnRKD7I0yAumOWBGWGZkPPf4CPiK8FlaCdTnTWQw=;
+        s=korg; t=1649746246;
+        bh=6iOz0h+rSag54oCMMWfVDb4JSipqbiqWgKKLZ5sy698=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zdL8uc0V2AKBw4wKWjvpNrTD5itzkgaRDkgTeyHWJ0PsVSwo86Ax0XXUfo73v7pxi
-         C86cJmiOEEC7lcokbcNKRd9tlWE6UTaOBAhmGMDyHR1hA/rf2HCRgtL+NX4KXY76gC
-         FLBPZ9bjquMlIpeAEjLqk3chQheS/N083eWQv4Q0=
+        b=CmDN6c+mk8dxaUK8hZZDIwFVYB6fH7/8ZScKV1oILgD5P3dFnlfIzHX75GPRMWdr2
+         oyD53iTp4nXj4PhdGslGnb8R+4VwPP22Mxtn4gvutZl5ZOc3/jvF/oBrvrJtDNeWiD
+         nrnCIbsQYEYqBpiqoln7l+81PNMQTf+GyZ+i4q6c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Geert Uytterhoeven <geert@linux-m68k.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 158/285] scsi: zorro7xx: Fix a resource leak in zorro7xx_remove_one()
+        stable@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH 5.15 212/277] mmc: renesas_sdhi: dont overwrite TAP settings when HS400 tuning is complete
 Date:   Tue, 12 Apr 2022 08:30:15 +0200
-Message-Id: <20220412062948.231550167@linuxfoundation.org>
+Message-Id: <20220412062948.175921559@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,40 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-[ Upstream commit 16ed828b872d12ccba8f07bcc446ae89ba662f9c ]
+commit 03e59b1e2f56245163b14c69e0a830c24b1a3a47 upstream.
 
-The error handling path of the probe releases a resource that is not freed
-in the remove function. In some cases, a ioremap() must be undone.
+When HS400 tuning is complete and HS400 is going to be activated, we
+have to keep the current number of TAPs and should not overwrite them
+with a hardcoded value. This was probably a copy&paste mistake when
+upporting HS400 support from the BSP.
 
-Add the missing iounmap() call in the remove function.
-
-Link: https://lore.kernel.org/r/247066a3104d25f9a05de8b3270fc3c848763bcc.1647673264.git.christophe.jaillet@wanadoo.fr
-Fixes: 45804fbb00ee ("[SCSI] 53c700: Amiga Zorro NCR53c710 SCSI")
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 26eb2607fa28 ("mmc: renesas_sdhi: add eMMC HS400 mode support")
+Reported-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20220404114902.12175-1-wsa+renesas@sang-engineering.com
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/zorro7xx.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/mmc/host/renesas_sdhi_core.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/zorro7xx.c b/drivers/scsi/zorro7xx.c
-index 27b9e2baab1a..7acf9193a9e8 100644
---- a/drivers/scsi/zorro7xx.c
-+++ b/drivers/scsi/zorro7xx.c
-@@ -159,6 +159,8 @@ static void zorro7xx_remove_one(struct zorro_dev *z)
- 	scsi_remove_host(host);
+--- a/drivers/mmc/host/renesas_sdhi_core.c
++++ b/drivers/mmc/host/renesas_sdhi_core.c
+@@ -382,10 +382,10 @@ static void renesas_sdhi_hs400_complete(
+ 			SH_MOBILE_SDHI_SCC_TMPPORT2_HS400OSEL) |
+ 			sd_scc_read32(host, priv, SH_MOBILE_SDHI_SCC_TMPPORT2));
  
- 	NCR_700_release(host);
-+	if (host->base > 0x01000000)
-+		iounmap(hostdata->base);
- 	kfree(hostdata);
- 	free_irq(host->irq, host);
- 	zorro_release_device(z);
--- 
-2.35.1
-
+-	/* Set the sampling clock selection range of HS400 mode */
+ 	sd_scc_write32(host, priv, SH_MOBILE_SDHI_SCC_DTCNTL,
+ 		       SH_MOBILE_SDHI_SCC_DTCNTL_TAPEN |
+-		       0x4 << SH_MOBILE_SDHI_SCC_DTCNTL_TAPNUM_SHIFT);
++		       sd_scc_read32(host, priv,
++				     SH_MOBILE_SDHI_SCC_DTCNTL));
+ 
+ 	/* Avoid bad TAP */
+ 	if (bad_taps & BIT(priv->tap_set)) {
 
 

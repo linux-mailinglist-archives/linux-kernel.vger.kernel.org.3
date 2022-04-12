@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0310C4FD799
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:30:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFE834FD66D
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:21:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383963AbiDLIip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:38:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50918 "EHLO
+        id S1353354AbiDLHPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:15:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357105AbiDLHjr (ORCPT
+        with ESMTP id S1351580AbiDLG6g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:39:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE065DEB4;
-        Tue, 12 Apr 2022 00:12:14 -0700 (PDT)
+        Tue, 12 Apr 2022 02:58:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2312B42A3A;
+        Mon, 11 Apr 2022 23:46:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 93ADBB81A8F;
-        Tue, 12 Apr 2022 07:12:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1FC3C385A1;
-        Tue, 12 Apr 2022 07:12:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B82361052;
+        Tue, 12 Apr 2022 06:46:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 543DCC385A1;
+        Tue, 12 Apr 2022 06:46:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747532;
-        bh=RVCl0QueOUEdBG+WdafdDuCg8pAcvRppNDasLe0JeiI=;
+        s=korg; t=1649745994;
+        bh=CjZiYILE0sMX3NvJgimakPh91VJ21TadE8S4npI1Ync=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I0aSQznAjyslXpfuDE0ybt9nm6oYgXMZa/ZAQCJd4aQv3k7rqn0lM6Ulx+su7C/wy
-         XPrOPuDswcL3AX0kUg5w7BTdfGhTppcfJ+2D/bnRkP6utik/pHg8YtePWw9YFhoOoI
-         pT8Is2NSr9vwegP/AVXDNP069FGt1mj040LjXf2w=
+        b=SMZmW6yxoFDAHboqa6NhO04hv7emjVBjEXfpuZ8ONFtm+TJn3Yt9OVv6GNFceJsJ3
+         LvuQXAyLOs8JgvRs2FMUPbP+NCELflz45vugCzz5o+czyWTgNf9dRq82ab9G1l0QhV
+         VgmRQm3CU2l+GqerBAD8s7o0SouGRsF73ws2JfYs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jack Wang <jinpu.wang@ionos.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 106/343] scsi: pm8001: Fix memory leak in pm8001_chip_fw_flash_update_req()
-Date:   Tue, 12 Apr 2022 08:28:44 +0200
-Message-Id: <20220412062954.155454566@linuxfoundation.org>
+Subject: [PATCH 5.15 122/277] NFSv4: Protect the state recovery thread against direct reclaim
+Date:   Tue, 12 Apr 2022 08:28:45 +0200
+Message-Id: <20220412062945.572322487@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,38 +55,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-[ Upstream commit f792a3629f4c4aa4c3703d66b43ce1edcc3ec09a ]
+[ Upstream commit 3e17898aca293a24dae757a440a50aa63ca29671 ]
 
-In pm8001_chip_fw_flash_update_build(), if
-pm8001_chip_fw_flash_update_build() fails, the struct fw_control_ex
-allocated must be freed.
+If memory allocation triggers a direct reclaim from the state recovery
+thread, then we can deadlock. Use memalloc_nofs_save/restore to ensure
+that doesn't happen.
 
-Link: https://lore.kernel.org/r/20220220031810.738362-23-damien.lemoal@opensource.wdc.com
-Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/pm8001/pm8001_hwi.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ fs/nfs/nfs4state.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
-index ccc7f53ddbd6..27ead825c2bb 100644
---- a/drivers/scsi/pm8001/pm8001_hwi.c
-+++ b/drivers/scsi/pm8001/pm8001_hwi.c
-@@ -4880,8 +4880,10 @@ pm8001_chip_fw_flash_update_req(struct pm8001_hba_info *pm8001_ha,
- 	ccb->ccb_tag = tag;
- 	rc = pm8001_chip_fw_flash_update_build(pm8001_ha, &flash_update_info,
- 		tag);
--	if (rc)
-+	if (rc) {
-+		kfree(fw_control_context);
- 		pm8001_tag_free(pm8001_ha, tag);
-+	}
+diff --git a/fs/nfs/nfs4state.c b/fs/nfs/nfs4state.c
+index 51f5cb41e87a..57ea63e2cdb4 100644
+--- a/fs/nfs/nfs4state.c
++++ b/fs/nfs/nfs4state.c
+@@ -49,6 +49,7 @@
+ #include <linux/workqueue.h>
+ #include <linux/bitops.h>
+ #include <linux/jiffies.h>
++#include <linux/sched/mm.h>
  
- 	return rc;
+ #include <linux/sunrpc/clnt.h>
+ 
+@@ -2559,9 +2560,17 @@ static void nfs4_layoutreturn_any_run(struct nfs_client *clp)
+ 
+ static void nfs4_state_manager(struct nfs_client *clp)
+ {
++	unsigned int memflags;
+ 	int status = 0;
+ 	const char *section = "", *section_sep = "";
+ 
++	/*
++	 * State recovery can deadlock if the direct reclaim code tries
++	 * start NFS writeback. So ensure memory allocations are all
++	 * GFP_NOFS.
++	 */
++	memflags = memalloc_nofs_save();
++
+ 	/* Ensure exclusive access to NFSv4 state */
+ 	do {
+ 		trace_nfs4_state_mgr(clp);
+@@ -2656,6 +2665,7 @@ static void nfs4_state_manager(struct nfs_client *clp)
+ 			clear_bit(NFS4CLNT_RECLAIM_NOGRACE, &clp->cl_state);
+ 		}
+ 
++		memalloc_nofs_restore(memflags);
+ 		nfs4_end_drain_session(clp);
+ 		nfs4_clear_state_manager_bit(clp);
+ 
+@@ -2673,6 +2683,7 @@ static void nfs4_state_manager(struct nfs_client *clp)
+ 			return;
+ 		if (test_and_set_bit(NFS4CLNT_MANAGER_RUNNING, &clp->cl_state) != 0)
+ 			return;
++		memflags = memalloc_nofs_save();
+ 	} while (refcount_read(&clp->cl_count) > 1 && !signalled());
+ 	goto out_drain;
+ 
+@@ -2685,6 +2696,7 @@ static void nfs4_state_manager(struct nfs_client *clp)
+ 			clp->cl_hostname, -status);
+ 	ssleep(1);
+ out_drain:
++	memalloc_nofs_restore(memflags);
+ 	nfs4_end_drain_session(clp);
+ 	nfs4_clear_state_manager_bit(clp);
  }
 -- 
 2.35.1

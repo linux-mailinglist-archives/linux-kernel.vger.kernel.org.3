@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C114F4FD494
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:04:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D6DA4FD83C
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:35:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352318AbiDLHXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46916 "EHLO
+        id S1384826AbiDLImX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353103AbiDLHHG (ORCPT
+        with ESMTP id S1357269AbiDLHjz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:07:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F76DF50;
-        Mon, 11 Apr 2022 23:49:18 -0700 (PDT)
+        Tue, 12 Apr 2022 03:39:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41997BF4A;
+        Tue, 12 Apr 2022 00:14:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB59661045;
-        Tue, 12 Apr 2022 06:49:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1619C385A6;
-        Tue, 12 Apr 2022 06:49:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EC7C3B81B4F;
+        Tue, 12 Apr 2022 07:14:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45A1BC385A5;
+        Tue, 12 Apr 2022 07:14:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746157;
-        bh=RJjn3tcoxr5M4Sp8qwu6YBWZMc7sAaScNhEJPC1mWFQ=;
+        s=korg; t=1649747669;
+        bh=0+xvbaE1I0/8b+wbY9uFiN56VFJGLSH7zHl8KdntBK8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MG7jxhI1yYrWGsD/wbsvn0sMGJMVMLzzOyIAjm13vroGZClTuxKI3QkiSNYnNBaaH
-         Q/EH/uD8V2rlsxoC0r8y6MKf3Z5Yk277mniU72zlF7EpU8l/MhSPAa55Whyf9Iae0o
-         WApnb9LRAMLRNdI0Au8Nlk/1qvIQMZd2/HuXKW60=
+        b=j1pO9rxpUkCVSGocdvD8iNqENW8opFsh9sJZlegdoGzmVo0pWzlMccccKOcGXghLy
+         fUJ2Et4fmFajUABKFRsTUqRcO55Nw1Zidh//3QmBoIgoikx505qAIGvfF2mdCZTC6B
+         m3yen8C6bJpT3EafCVyGEQz36qkW1YkE5ZPaV2Jk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Jamie Bainbridge <jamie.bainbridge@gmail.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Pierre Gondois <Pierre.Gondois@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 179/277] sctp: count singleton chunks in assoc user stats
+Subject: [PATCH 5.17 164/343] cpufreq: CPPC: Fix performance/frequency conversion
 Date:   Tue, 12 Apr 2022 08:29:42 +0200
-Message-Id: <20220412062947.217008030@linuxfoundation.org>
+Message-Id: <20220412062956.106488224@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,52 +57,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jamie Bainbridge <jamie.bainbridge@gmail.com>
+From: Pierre Gondois <Pierre.Gondois@arm.com>
 
-[ Upstream commit e3d37210df5c41c51147a2d5d465de1a4d77be7a ]
+[ Upstream commit ec1c7ad47664f964c1101fe555b6fde0cb124b38 ]
 
-Singleton chunks (INIT, HEARTBEAT PMTU probes, and SHUTDOWN-
-COMPLETE) are not counted in SCTP_GET_ASOC_STATS "sas_octrlchunks"
-counter available to the assoc owner.
+CPUfreq governors request CPU frequencies using information
+on current CPU usage. The CPPC driver converts them to
+performance requests. Frequency targets are computed as:
+	target_freq = (util / cpu_capacity) * max_freq
+target_freq is then clamped between [policy->min, policy->max].
 
-These are all control chunks so they should be counted as such.
+The CPPC driver converts performance values to frequencies
+(and vice-versa) using cppc_cpufreq_perf_to_khz() and
+cppc_cpufreq_khz_to_perf(). These functions both use two different
+factors depending on the range of the input value. For
+cppc_cpufreq_khz_to_perf():
+- (NOMINAL_PERF / NOMINAL_FREQ) or
+- (LOWEST_PERF / LOWEST_FREQ)
+and for cppc_cpufreq_perf_to_khz():
+- (NOMINAL_FREQ / NOMINAL_PERF) or
+- ((NOMINAL_PERF - LOWEST_FREQ) / (NOMINAL_PERF - LOWEST_PERF))
 
-Add counting of singleton chunks so they are properly accounted for.
+This means:
+1- the functions are not inverse for some values:
+   (perf_to_khz(khz_to_perf(x)) != x)
+2- cppc_cpufreq_perf_to_khz(LOWEST_PERF) can sometimes give
+   a different value from LOWEST_FREQ due to integer approximation
+3- it is implied that performance and frequency are proportional
+   (NOMINAL_FREQ / NOMINAL_PERF) == (LOWEST_PERF / LOWEST_FREQ)
 
-Fixes: 196d67593439 ("sctp: Add support to per-association statistics via a new SCTP_GET_ASSOC_STATS call")
-Signed-off-by: Jamie Bainbridge <jamie.bainbridge@gmail.com>
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Link: https://lore.kernel.org/r/c9ba8785789880cf07923b8a5051e174442ea9ee.1649029663.git.jamie.bainbridge@gmail.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+This patch changes the conversion functions to an affine function.
+This fixes the 3 points above.
+
+Suggested-by: Lukasz Luba <lukasz.luba@arm.com>
+Suggested-by: Morten Rasmussen <morten.rasmussen@arm.com>
+Signed-off-by: Pierre Gondois <Pierre.Gondois@arm.com>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sctp/outqueue.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/cpufreq/cppc_cpufreq.c | 43 +++++++++++++++++-----------------
+ 1 file changed, 21 insertions(+), 22 deletions(-)
 
-diff --git a/net/sctp/outqueue.c b/net/sctp/outqueue.c
-index ff47091c385e..b3950963fc8f 100644
---- a/net/sctp/outqueue.c
-+++ b/net/sctp/outqueue.c
-@@ -911,6 +911,7 @@ static void sctp_outq_flush_ctrl(struct sctp_flush_ctx *ctx)
- 				ctx->asoc->base.sk->sk_err = -error;
- 				return;
- 			}
-+			ctx->asoc->stats.octrlchunks++;
- 			break;
+diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+index db17196266e4..82d370ae6a4a 100644
+--- a/drivers/cpufreq/cppc_cpufreq.c
++++ b/drivers/cpufreq/cppc_cpufreq.c
+@@ -303,52 +303,48 @@ static u64 cppc_get_dmi_max_khz(void)
  
- 		case SCTP_CID_ABORT:
-@@ -935,7 +936,10 @@ static void sctp_outq_flush_ctrl(struct sctp_flush_ctx *ctx)
+ /*
+  * If CPPC lowest_freq and nominal_freq registers are exposed then we can
+- * use them to convert perf to freq and vice versa
+- *
+- * If the perf/freq point lies between Nominal and Lowest, we can treat
+- * (Low perf, Low freq) and (Nom Perf, Nom freq) as 2D co-ordinates of a line
+- * and extrapolate the rest
+- * For perf/freq > Nominal, we use the ratio perf:freq at Nominal for conversion
++ * use them to convert perf to freq and vice versa. The conversion is
++ * extrapolated as an affine function passing by the 2 points:
++ *  - (Low perf, Low freq)
++ *  - (Nominal perf, Nominal perf)
+  */
+ static unsigned int cppc_cpufreq_perf_to_khz(struct cppc_cpudata *cpu_data,
+ 					     unsigned int perf)
+ {
+ 	struct cppc_perf_caps *caps = &cpu_data->perf_caps;
++	s64 retval, offset = 0;
+ 	static u64 max_khz;
+ 	u64 mul, div;
  
- 		case SCTP_CID_HEARTBEAT:
- 			if (chunk->pmtu_probe) {
--				sctp_packet_singleton(ctx->transport, chunk, ctx->gfp);
-+				error = sctp_packet_singleton(ctx->transport,
-+							      chunk, ctx->gfp);
-+				if (!error)
-+					ctx->asoc->stats.octrlchunks++;
- 				break;
- 			}
- 			fallthrough;
+ 	if (caps->lowest_freq && caps->nominal_freq) {
+-		if (perf >= caps->nominal_perf) {
+-			mul = caps->nominal_freq;
+-			div = caps->nominal_perf;
+-		} else {
+-			mul = caps->nominal_freq - caps->lowest_freq;
+-			div = caps->nominal_perf - caps->lowest_perf;
+-		}
++		mul = caps->nominal_freq - caps->lowest_freq;
++		div = caps->nominal_perf - caps->lowest_perf;
++		offset = caps->nominal_freq - div64_u64(caps->nominal_perf * mul, div);
+ 	} else {
+ 		if (!max_khz)
+ 			max_khz = cppc_get_dmi_max_khz();
+ 		mul = max_khz;
+ 		div = caps->highest_perf;
+ 	}
+-	return (u64)perf * mul / div;
++
++	retval = offset + div64_u64(perf * mul, div);
++	if (retval >= 0)
++		return retval;
++	return 0;
+ }
+ 
+ static unsigned int cppc_cpufreq_khz_to_perf(struct cppc_cpudata *cpu_data,
+ 					     unsigned int freq)
+ {
+ 	struct cppc_perf_caps *caps = &cpu_data->perf_caps;
++	s64 retval, offset = 0;
+ 	static u64 max_khz;
+ 	u64  mul, div;
+ 
+ 	if (caps->lowest_freq && caps->nominal_freq) {
+-		if (freq >= caps->nominal_freq) {
+-			mul = caps->nominal_perf;
+-			div = caps->nominal_freq;
+-		} else {
+-			mul = caps->lowest_perf;
+-			div = caps->lowest_freq;
+-		}
++		mul = caps->nominal_perf - caps->lowest_perf;
++		div = caps->nominal_freq - caps->lowest_freq;
++		offset = caps->nominal_perf - div64_u64(caps->nominal_freq * mul, div);
+ 	} else {
+ 		if (!max_khz)
+ 			max_khz = cppc_get_dmi_max_khz();
+@@ -356,7 +352,10 @@ static unsigned int cppc_cpufreq_khz_to_perf(struct cppc_cpudata *cpu_data,
+ 		div = max_khz;
+ 	}
+ 
+-	return (u64)freq * mul / div;
++	retval = offset + div64_u64(freq * mul, div);
++	if (retval >= 0)
++		return retval;
++	return 0;
+ }
+ 
+ static int cppc_cpufreq_set_target(struct cpufreq_policy *policy,
 -- 
 2.35.1
 

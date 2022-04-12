@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9CF54FDAA9
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27E624FD90B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:38:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353746AbiDLHQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60764 "EHLO
+        id S1343616AbiDLInf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:43:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351490AbiDLHDc (ORCPT
+        with ESMTP id S1357124AbiDLHjs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:03:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C57644773;
-        Mon, 11 Apr 2022 23:47:11 -0700 (PDT)
+        Tue, 12 Apr 2022 03:39:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7DEBE0C9;
+        Tue, 12 Apr 2022 00:12:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EFD226140D;
-        Tue, 12 Apr 2022 06:47:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B185C385B8;
-        Tue, 12 Apr 2022 06:47:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 531AD61701;
+        Tue, 12 Apr 2022 07:12:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66537C385A5;
+        Tue, 12 Apr 2022 07:12:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746030;
-        bh=/LdLn56K79WT1DjgPInoA/ynOA9lvBAWGr9XbM7Cibg=;
+        s=korg; t=1649747545;
+        bh=pVMto6fjjwueK9ViwPV90DDETbSPUIeOI1EqV4D79rk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QnMdnWxx2wvfo3+/ZkA8902erSL3mjqwVTwVPv1xy6HHOw2O54Y/0tz8FPnOg9+ir
-         zayNpXKNWgeUcgbOzRcCrcV6ybTMcymr6uRqHvqGWOtRFMNuUtFYY8cph/G1hWMj6z
-         RlrwEUDcYnPQH1LQBTHHnVysTBed8KOX44AMpW4U=
+        b=yPFvxgi3efw8Fm2ugpkp+DTVO9y8kxWe03UqOREfVtFJlnBZZMPIxcPKFSBkiO/0z
+         PCgaQdKsZnKV6hp1/ebPcw9I9MDm5zuW7g2jAC0UHgcaDXKq4bPgsrIv5akH/u5Kh+
+         qCLTMxNrYxCPLXeMWy37DWa+vvf3g0FeaKqCz/vk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Leonardo=20M=C3=B6rlein?= <freifunk@irrelefant.net>,
+        Sven Eckelmann <sven@narfation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 133/277] x86/Kconfig: Do not allow CONFIG_X86_X32_ABI=y with llvm-objcopy
-Date:   Tue, 12 Apr 2022 08:28:56 +0200
-Message-Id: <20220412062945.885995232@linuxfoundation.org>
+Subject: [PATCH 5.17 119/343] macvtap: advertise link netns via netlink
+Date:   Tue, 12 Apr 2022 08:28:57 +0200
+Message-Id: <20220412062954.823238910@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,59 +57,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+From: Sven Eckelmann <sven@narfation.org>
 
-[ Upstream commit aaeed6ecc1253ce1463fa1aca0b70a4ccbc9fa75 ]
+[ Upstream commit a02192151b7dbf855084c38dca380d77c7658353 ]
 
-There are two outstanding issues with CONFIG_X86_X32_ABI and
-llvm-objcopy, with similar root causes:
+Assign rtnl_link_ops->get_link_net() callback so that IFLA_LINK_NETNSID is
+added to rtnetlink messages. This fixes iproute2 which otherwise resolved
+the link interface to an interface in the wrong namespace.
 
-1. llvm-objcopy does not properly convert .note.gnu.property when going
-   from x86_64 to x86_x32, resulting in a corrupted section when
-   linking:
+Test commands:
 
-   https://github.com/ClangBuiltLinux/linux/issues/1141
+  ip netns add nst
+  ip link add dummy0 type dummy
+  ip link add link macvtap0 link dummy0 type macvtap
+  ip link set macvtap0 netns nst
+  ip -netns nst link show macvtap0
 
-2. llvm-objcopy produces corrupted compressed debug sections when going
-   from x86_64 to x86_x32, also resulting in an error when linking:
+Before:
 
-   https://github.com/ClangBuiltLinux/linux/issues/514
+  10: macvtap0@gre0: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 500
+      link/ether 5e:8f:ae:1d:60:50 brd ff:ff:ff:ff:ff:ff
 
-After commit 41c5ef31ad71 ("x86/ibt: Base IBT bits"), the
-.note.gnu.property section is always generated when
-CONFIG_X86_KERNEL_IBT is enabled, which causes the first issue to become
-visible with an allmodconfig build:
+After:
 
-  ld.lld: error: arch/x86/entry/vdso/vclock_gettime-x32.o:(.note.gnu.property+0x1c): program property is too short
+  10: macvtap0@if2: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 500
+      link/ether 5e:8f:ae:1d:60:50 brd ff:ff:ff:ff:ff:ff link-netnsid 0
 
-To avoid this error, do not allow CONFIG_X86_X32_ABI to be selected when
-using llvm-objcopy. If the two issues ever get fixed in llvm-objcopy,
-this can be turned into a feature check.
-
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20220314194842.3452-3-nathan@kernel.org
+Reported-by: Leonardo Mörlein <freifunk@irrelefant.net>
+Signed-off-by: Sven Eckelmann <sven@narfation.org>
+Link: https://lore.kernel.org/r/20220228003240.1337426-1-sven@narfation.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/Kconfig | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/net/macvtap.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 1f96809606ac..819f8c2e2c67 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -2798,6 +2798,11 @@ config IA32_AOUT
- config X86_X32
- 	bool "x32 ABI for 64-bit mode"
- 	depends on X86_64
-+	# llvm-objcopy does not convert x86_64 .note.gnu.property or
-+	# compressed debug sections to x86_x32 properly:
-+	# https://github.com/ClangBuiltLinux/linux/issues/514
-+	# https://github.com/ClangBuiltLinux/linux/issues/1141
-+	depends on $(success,$(OBJCOPY) --version | head -n1 | grep -qv llvm)
- 	help
- 	  Include code to run binaries for the x32 native 32-bit ABI
- 	  for 64-bit processors.  An x32 process gets access to the
+diff --git a/drivers/net/macvtap.c b/drivers/net/macvtap.c
+index 6b12902a803f..cecf8c63096c 100644
+--- a/drivers/net/macvtap.c
++++ b/drivers/net/macvtap.c
+@@ -133,11 +133,17 @@ static void macvtap_setup(struct net_device *dev)
+ 	dev->tx_queue_len = TUN_READQ_SIZE;
+ }
+ 
++static struct net *macvtap_link_net(const struct net_device *dev)
++{
++	return dev_net(macvlan_dev_real_dev(dev));
++}
++
+ static struct rtnl_link_ops macvtap_link_ops __read_mostly = {
+ 	.kind		= "macvtap",
+ 	.setup		= macvtap_setup,
+ 	.newlink	= macvtap_newlink,
+ 	.dellink	= macvtap_dellink,
++	.get_link_net	= macvtap_link_net,
+ 	.priv_size      = sizeof(struct macvtap_dev),
+ };
+ 
 -- 
 2.35.1
 

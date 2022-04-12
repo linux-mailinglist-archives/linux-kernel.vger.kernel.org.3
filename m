@@ -2,465 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01EB04FE624
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 18:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C4974FE628
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 18:43:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357805AbiDLQpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 12:45:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57292 "EHLO
+        id S1345764AbiDLQpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 12:45:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232214AbiDLQor (ORCPT
+        with ESMTP id S1357896AbiDLQph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 12:44:47 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34A95576E;
-        Tue, 12 Apr 2022 09:42:29 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23CGPGnD012260;
-        Tue, 12 Apr 2022 16:42:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=902lMv8YkCWfoJ51HVL/JMIWp68+939UvmrokqmQmVA=;
- b=kRpIZgtXFyWLiNzKGgxBSAqJO/PQPD55H5IK8W1u0Sw1tpMJJkL5K425hhqqfkC+tF8Z
- HkIm/s3TiEARSvl2zGnadHenLyzt4BT8KyXcr9TfKUDkuAUsWI0yg4PxfZHoR92l8XUG
- BgqDrCiYrc3Aq0xiJY0HXbyVaIsOgt3nWSGx8pUvthQerotcrmdW9f0+500yjlYB0MhT
- sUOKmNp4wE6OVHiiGwCUXnvKFj5o07UsDUgi8T2x+kfDlEwIDXOuj10vqXTCaYtJ+qg5
- 2mwYoQszStqRx2tVDyvSJjAmW5XTZv0duzbAj8Gjjj/icLyRJr5N6G5/zbfXtZcn+A2d Bg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3fdcx78d31-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Apr 2022 16:42:18 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23CGPQIa012674;
-        Tue, 12 Apr 2022 16:42:18 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3fdcx78d2u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Apr 2022 16:42:18 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23CGXso5014103;
-        Tue, 12 Apr 2022 16:42:17 GMT
-Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
-        by ppma02wdc.us.ibm.com with ESMTP id 3fb1s9se5r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Apr 2022 16:42:17 +0000
-Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
-        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23CGgHRs34930956
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 12 Apr 2022 16:42:17 GMT
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 44E59AE05F;
-        Tue, 12 Apr 2022 16:42:17 +0000 (GMT)
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5F1C0AE060;
-        Tue, 12 Apr 2022 16:42:16 +0000 (GMT)
-Received: from v0005c16.aus.stglabs.ibm.com (unknown [9.211.113.187])
-        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 12 Apr 2022 16:42:16 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     pavel@ucw.cz
-Cc:     linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org, joel@jms.id.au, dan.carpenter@oracle.com,
-        patrick@stwcx.xyz, andy.shevchenko@gmail.com
-Subject: [PATCH v4 4/4] leds: pca955x: Add HW blink support
-Date:   Tue, 12 Apr 2022 11:42:11 -0500
-Message-Id: <20220412164211.28824-5-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220412164211.28824-1-eajames@linux.ibm.com>
-References: <20220412164211.28824-1-eajames@linux.ibm.com>
+        Tue, 12 Apr 2022 12:45:37 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D142B5EBD6
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 09:43:19 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id 12so5484322pll.12
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 09:43:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cC6hNcDSob2h1qJMPH49Fl94mXox8pjM3QZWLbewUDg=;
+        b=iJKyH5b1m6N+YNB3hGi95xmA6mRRknNsWMP1Zu3scy9gU2ivs51h5RABH8Vwp+ylJL
+         fEAJzU+2ooh5U9PqZZ3d96P0u34xZdPGA7fMkRokxribDQOpLnWqsyG0XNHT3q/Mw19o
+         p/Ots6B3AT62Zbo4TN2TdCGufXWsWVJ2+dAa6hHfcOZKmV7auEz6i6vN9v4Hb5RUDpgT
+         rCfHI+VsIDLhEV4jJdlM4m5GEYYAxJWbrTZ+lbxMAgFBBUcoSyfyAbsI5Q7xFz6K4AFg
+         GfH7buQE/RnVNsX+w2C4BwMZzeoGRyQlb5qkbG3Ebg2IeD9L9jJOdi+GnpH6jpIF1W0X
+         06RQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cC6hNcDSob2h1qJMPH49Fl94mXox8pjM3QZWLbewUDg=;
+        b=Bn41R3iT2DiS7iPZAQy7f0xfR1ayJxQR66Y+ogMjSGFqIvfH37u3hsDdqwIJ8fHcUG
+         /7iVVAU5+6H1sBSB15VwSdsc2i5Ai0r/+HYA9bDoP0JzNPckad7NRjVdcMAesmU9ysCx
+         7sebRPHvYeyTR748eEwwnSee2NYNVcwkQEufquZwRAQwzKZDgcKW87OYKzqYlol3gHHC
+         XmxGlJpDKJS3vx4yAzSxlryAxqoumOVQyG3fixC7U+tPCVN2V06mJPb8GaJIYKebQZqk
+         bnU3mdw7Z4XDT+WQtJTQV3BTIfEvMIJPL+5c3y6DaOBhqlSiHd+Vk9m/dXGnuHd3z0F4
+         RgeQ==
+X-Gm-Message-State: AOAM532XJtInHI3NINA+KGDfvh3/fk9jPFlZITj4hYl5f6j/sUxvy9aY
+        fRthUxmzHf06BIOxIzdLDfuDEg==
+X-Google-Smtp-Source: ABdhPJxG3Hrann2XtU6smEa42o9pXeSIJgM7E0Zud6j1a3qpLaNEVbPIwBvvEyx9yG4qD134bG956g==
+X-Received: by 2002:a17:902:6bc6:b0:157:c19e:d149 with SMTP id m6-20020a1709026bc600b00157c19ed149mr23604400plt.24.1649781799109;
+        Tue, 12 Apr 2022 09:43:19 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id q9-20020a056a00088900b004fe1a045e97sm28488104pfj.118.2022.04.12.09.43.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 09:43:18 -0700 (PDT)
+Date:   Tue, 12 Apr 2022 16:43:14 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>
+Subject: Re: [PATCH v2 9/9] KVM: x86/mmu: Promote pages in-place when
+ disabling dirty logging
+Message-ID: <YlWsImxP0C01BUtM@google.com>
+References: <20220321224358.1305530-1-bgardon@google.com>
+ <20220321224358.1305530-10-bgardon@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: XatplkddSV9egByosWQ50dgUN1ET7_yN
-X-Proofpoint-ORIG-GUID: NUQ72kDGTHxHtOpbtyrLhYdJSJwXKFbd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-12_06,2022-04-12_02,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
- spamscore=0 malwarescore=0 mlxlogscore=999 priorityscore=1501
- suspectscore=0 bulkscore=0 lowpriorityscore=0 adultscore=0 mlxscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204120079
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220321224358.1305530-10-bgardon@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Support blinking using the PCA955x chip. Use PWM0 for blinking
-instead of LED_HALF brightness. Since there is only one frequency
-and brightness register for any blinking LED, track the blink state
-of each LED and only support one HW blinking frequency. If another
-frequency is requested, fallback to software blinking.
+On Mon, Mar 21, 2022, Ben Gardon wrote:
+> diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
+> index 1bff453f7cbe..6c08a5731fcb 100644
+> --- a/arch/x86/kvm/mmu/mmu_internal.h
+> +++ b/arch/x86/kvm/mmu/mmu_internal.h
+> @@ -171,4 +171,10 @@ void *mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc);
+>  void account_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp);
+>  void unaccount_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp);
+>  
+> +void
+> +build_tdp_shadow_zero_bits_mask(struct rsvd_bits_validate *shadow_zero_check,
+> +				int shadow_root_level);
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
----
- drivers/leds/leds-pca955x.c | 222 +++++++++++++++++++++++++++---------
- 1 file changed, 168 insertions(+), 54 deletions(-)
+Same comments from the earlier patch.
 
-diff --git a/drivers/leds/leds-pca955x.c b/drivers/leds/leds-pca955x.c
-index 61f3cb84a945..2570f92b6754 100644
---- a/drivers/leds/leds-pca955x.c
-+++ b/drivers/leds/leds-pca955x.c
-@@ -62,6 +62,8 @@
- #define PCA955X_GPIO_HIGH	LED_OFF
- #define PCA955X_GPIO_LOW	LED_FULL
- 
-+#define PCA955X_BLINK_DEFAULT_MS	1000
-+
- enum pca955x_type {
- 	pca9550,
- 	pca9551,
-@@ -74,6 +76,7 @@ struct pca955x_chipdef {
- 	int			bits;
- 	u8			slv_addr;	/* 7-bit slave address mask */
- 	int			slv_addr_shift;	/* Number of bits to ignore */
-+	int			blink_div;	/* PSC divider */
- };
- 
- static struct pca955x_chipdef pca955x_chipdefs[] = {
-@@ -81,26 +84,31 @@ static struct pca955x_chipdef pca955x_chipdefs[] = {
- 		.bits		= 2,
- 		.slv_addr	= /* 110000x */ 0x60,
- 		.slv_addr_shift	= 1,
-+		.blink_div	= 44,
- 	},
- 	[pca9551] = {
- 		.bits		= 8,
- 		.slv_addr	= /* 1100xxx */ 0x60,
- 		.slv_addr_shift	= 3,
-+		.blink_div	= 38,
- 	},
- 	[pca9552] = {
- 		.bits		= 16,
- 		.slv_addr	= /* 1100xxx */ 0x60,
- 		.slv_addr_shift	= 3,
-+		.blink_div	= 44,
- 	},
- 	[ibm_pca9552] = {
- 		.bits		= 16,
- 		.slv_addr	= /* 0110xxx */ 0x30,
- 		.slv_addr_shift	= 3,
-+		.blink_div	= 44,
- 	},
- 	[pca9553] = {
- 		.bits		= 4,
- 		.slv_addr	= /* 110001x */ 0x62,
- 		.slv_addr_shift	= 1,
-+		.blink_div	= 44,
- 	},
- };
- 
-@@ -119,7 +127,9 @@ struct pca955x {
- 	struct pca955x_led *leds;
- 	struct pca955x_chipdef	*chipdef;
- 	struct i2c_client	*client;
-+	unsigned long active_blink;
- 	unsigned long active_pins;
-+	unsigned long blink_period;
- #ifdef CONFIG_LEDS_PCA955X_GPIO
- 	struct gpio_chip gpio;
- #endif
-@@ -170,7 +180,8 @@ static inline int pca955x_ledstate(u8 ls, int led_num)
- 
- /*
-  * Write to frequency prescaler register, used to program the
-- * period of the PWM output.  period = (PSCx + 1) / 38
-+ * period of the PWM output.  period = (PSCx + 1) / coeff
-+ * Where for pca9551 chips coeff = 38 and for all other chips coeff = 44
-  */
- static int pca955x_write_psc(struct pca955x *pca955x, int n, u8 val)
- {
-@@ -251,6 +262,20 @@ static int pca955x_read_pwm(struct pca955x *pca955x, int n, u8 *val)
- 	return 0;
- }
- 
-+static int pca955x_read_psc(struct pca955x *pca955x, int n, u8 *val)
-+{
-+	u8 cmd = pca955x_num_input_regs(pca955x->chipdef->bits) + (2 * n);
-+	int ret;
-+
-+	ret = i2c_smbus_read_byte_data(pca955x->client, cmd);
-+	if (ret < 0) {
-+		dev_err(&pca955x->client->dev, "%s: reg 0x%x, err %d\n", __func__, n, ret);
-+		return ret;
-+	}
-+	*val = (u8)ret;
-+	return 0;
-+}
-+
- static enum led_brightness pca955x_led_get(struct led_classdev *led_cdev)
- {
- 	struct pca955x_led *pca955x_led = led_to_pca955x(led_cdev);
-@@ -270,7 +295,10 @@ static enum led_brightness pca955x_led_get(struct led_classdev *led_cdev)
- 		ret = LED_OFF;
- 		break;
- 	case PCA955X_LS_BLINK0:
--		ret = LED_HALF;
-+		ret = pca955x_read_pwm(pca955x, 0, &pwm);
-+		if (ret)
-+			return ret;
-+		ret = 256 - pwm;
- 		break;
- 	case PCA955X_LS_BLINK1:
- 		ret = pca955x_read_pwm(pca955x, 1, &pwm);
-@@ -299,29 +327,36 @@ static int pca955x_led_set(struct led_classdev *led_cdev,
- 	if (ret)
- 		goto out;
- 
--	switch (value) {
--	case LED_FULL:
--		ls = pca955x_ledsel(ls, bit, PCA955X_LS_LED_ON);
--		break;
--	case LED_OFF:
--		ls = pca955x_ledsel(ls, bit, PCA955X_LS_LED_OFF);
--		break;
--	case LED_HALF:
--		ls = pca955x_ledsel(ls, bit, PCA955X_LS_BLINK0);
--		break;
--	default:
--		/*
--		 * Use PWM1 for all other values.  This has the unwanted
--		 * side effect of making all LEDs on the chip share the
--		 * same brightness level if set to a value other than
--		 * OFF, HALF, or FULL.  But, this is probably better than
--		 * just turning off for all other values.
--		 */
--		ret = pca955x_write_pwm(pca955x, 1, 255 - value);
--		if (ret)
-+	if (test_bit(pca955x_led->led_num, &pca955x->active_blink)) {
-+		if (value == LED_OFF) {
-+			clear_bit(pca955x_led->led_num, &pca955x->active_blink);
-+			ls = pca955x_ledsel(ls, bit, PCA955X_LS_LED_OFF);
-+		} else {
-+			ret = pca955x_write_pwm(pca955x, 0, 256 - value);
- 			goto out;
--		ls = pca955x_ledsel(ls, bit, PCA955X_LS_BLINK1);
--		break;
-+		}
-+	} else {
-+		switch (value) {
-+		case LED_FULL:
-+			ls = pca955x_ledsel(ls, bit, PCA955X_LS_LED_ON);
-+			break;
-+		case LED_OFF:
-+			ls = pca955x_ledsel(ls, bit, PCA955X_LS_LED_OFF);
-+			break;
-+		default:
-+			/*
-+			 * Use PWM1 for all other values. This has the unwanted
-+			 * side effect of making all LEDs on the chip share the
-+			 * same brightness level if set to a value other than
-+			 * OFF or FULL. But, this is probably better than just
-+			 * turning off for all other values.
-+			 */
-+			ret = pca955x_write_pwm(pca955x, 1, 255 - value);
-+			if (ret)
-+				goto out;
-+			ls = pca955x_ledsel(ls, bit, PCA955X_LS_BLINK1);
-+			break;
-+		}
- 	}
- 
- 	ret = pca955x_write_ls(pca955x, reg, ls);
-@@ -332,6 +367,94 @@ static int pca955x_led_set(struct led_classdev *led_cdev,
- 	return ret;
- }
- 
-+static u8 pca955x_period_to_psc(struct pca955x *pca955x, unsigned long p)
-+{
-+	p *= pca955x->chipdef->blink_div;
-+	p /= MSEC_PER_SEC;
-+	p -= 1;
-+
-+	return p;
-+}
-+
-+static unsigned long pca955x_psc_to_period(struct pca955x *pca955x, u8 psc)
-+{
-+	unsigned long p = psc;
-+
-+	p += 1;
-+	p *= MSEC_PER_SEC;
-+	p /= pca955x->chipdef->blink_div;
-+
-+	return p;
-+}
-+
-+static int pca955x_led_blink(struct led_classdev *led_cdev,
-+			     unsigned long *delay_on, unsigned long *delay_off)
-+{
-+	struct pca955x_led *pca955x_led = led_to_pca955x(led_cdev);
-+	struct pca955x *pca955x = pca955x_led->pca955x;
-+	unsigned long p = *delay_on + *delay_off;
-+	int ret = 0;
-+
-+	mutex_lock(&pca955x->lock);
-+
-+	if (p) {
-+		if (*delay_on != *delay_off) {
-+			ret = -EINVAL;
-+			goto out;
-+		}
-+
-+		if (p < pca955x_psc_to_period(pca955x, 0) ||
-+		    p > pca955x_psc_to_period(pca955x, 0xff)) {
-+			ret = -EINVAL;
-+			goto out;
-+		}
-+	} else {
-+		p = pca955x->active_blink ? pca955x->blink_period :
-+			PCA955X_BLINK_DEFAULT_MS;
-+	}
-+
-+	if (!pca955x->active_blink ||
-+	    pca955x->active_blink == BIT(pca955x_led->led_num) ||
-+	    pca955x->blink_period == p) {
-+		u8 psc = pca955x_period_to_psc(pca955x, p);
-+
-+		if (!test_and_set_bit(pca955x_led->led_num,
-+				      &pca955x->active_blink)) {
-+			u8 ls;
-+			int reg = pca955x_led->led_num / 4;
-+			int bit = pca955x_led->led_num % 4;
-+
-+			ret = pca955x_read_ls(pca955x, reg, &ls);
-+			if (ret)
-+				goto out;
-+
-+			ls = pca955x_ledsel(ls, bit, PCA955X_LS_BLINK0);
-+			ret = pca955x_write_ls(pca955x, reg, ls);
-+			if (ret)
-+				goto out;
-+		}
-+
-+		if (pca955x->blink_period != p) {
-+			pca955x->blink_period = p;
-+			ret = pca955x_write_psc(pca955x, 0, psc);
-+			if (ret)
-+				goto out;
-+		}
-+
-+		p = pca955x_psc_to_period(pca955x, psc);
-+		p /= 2;
-+		*delay_on = p;
-+		*delay_off = p;
-+	} else {
-+		ret = -EBUSY;
-+	}
-+
-+out:
-+	mutex_unlock(&pca955x->lock);
-+
-+	return ret;
-+}
-+
- #ifdef CONFIG_LEDS_PCA955X_GPIO
- /*
-  * Read the INPUT register, which contains the state of LEDs.
-@@ -487,8 +610,9 @@ static int pca955x_probe(struct i2c_client *client)
- 	u8 ls1[4];
- 	u8 ls2[4];
- 	struct pca955x_platform_data *pdata;
-+	u8 psc0;
-+	bool keep_psc0 = false;
- 	bool set_default_label = false;
--	bool keep_pwm = false;
- 	char default_label[8];
- 	enum pca955x_type chip_type;
- 	const void *md = device_get_match_data(&client->dev);
-@@ -552,6 +676,7 @@ static int pca955x_probe(struct i2c_client *client)
- 	mutex_init(&pca955x->lock);
- 	pca955x->client = client;
- 	pca955x->chipdef = chip;
-+	pca955x->blink_period = PCA955X_BLINK_DEFAULT_MS;
- 
- 	init_data.devname_mandatory = false;
- 	init_data.devicename = "pca955x";
-@@ -581,15 +706,21 @@ static int pca955x_probe(struct i2c_client *client)
- 			led = &pca955x_led->led_cdev;
- 			led->brightness_set_blocking = pca955x_led_set;
- 			led->brightness_get = pca955x_led_get;
-+			led->blink_set = pca955x_led_blink;
- 
- 			if (pdata->leds[i].default_state ==
--			    LEDS_GPIO_DEFSTATE_OFF)
-+			    LEDS_GPIO_DEFSTATE_OFF) {
- 				ls2[reg] = pca955x_ledsel(ls2[reg], bit,
- 							  PCA955X_LS_LED_OFF);
--			else if (pdata->leds[i].default_state ==
--				   LEDS_GPIO_DEFSTATE_ON)
-+			} else if (pdata->leds[i].default_state ==
-+				   LEDS_GPIO_DEFSTATE_ON) {
- 				ls2[reg] = pca955x_ledsel(ls2[reg], bit,
- 							  PCA955X_LS_LED_ON);
-+			} else if (pca955x_ledstate(ls2[reg], bit) ==
-+				   PCA955X_LS_BLINK0) {
-+				keep_psc0 = true;
-+				set_bit(i, &pca955x->active_blink);
-+			}
- 
- 			init_data.fwnode = pdata->leds[i].fwnode;
- 
-@@ -617,20 +748,6 @@ static int pca955x_probe(struct i2c_client *client)
- 				return err;
- 
- 			set_bit(i, &pca955x->active_pins);
--
--			/*
--			 * For default-state == "keep", let the core update the
--			 * brightness from the hardware, then check the
--			 * brightness to see if it's using PWM1. If so, PWM1
--			 * should not be written below.
--			 */
--			if (pdata->leds[i].default_state ==
--			    LEDS_GPIO_DEFSTATE_KEEP) {
--				if (led->brightness != LED_FULL &&
--				    led->brightness != LED_OFF &&
--				    led->brightness != LED_HALF)
--					keep_pwm = true;
--			}
- 		}
- 	}
- 
-@@ -642,22 +759,19 @@ static int pca955x_probe(struct i2c_client *client)
- 		}
- 	}
- 
--	/* PWM0 is used for half brightness or 50% duty cycle */
--	err = pca955x_write_pwm(pca955x, 0, 255 - LED_HALF);
--	if (err)
--		return err;
--
--	if (!keep_pwm) {
--		/* PWM1 is used for variable brightness, default to OFF */
--		err = pca955x_write_pwm(pca955x, 1, 0);
--		if (err)
--			return err;
-+	if (keep_psc0) {
-+		err = pca955x_read_psc(pca955x, 0, &psc0);
-+	} else {
-+		psc0 = pca955x_period_to_psc(pca955x, pca955x->blink_period);
-+		err = pca955x_write_psc(pca955x, 0, psc0);
- 	}
- 
--	/* Set to fast frequency so we do not see flashing */
--	err = pca955x_write_psc(pca955x, 0, 0);
- 	if (err)
- 		return err;
-+
-+	pca955x->blink_period = pca955x_psc_to_period(pca955x, psc0);
-+
-+	/* Set PWM1 to fast frequency so we do not see flashing */
- 	err = pca955x_write_psc(pca955x, 1, 0);
- 	if (err)
- 		return err;
--- 
-2.27.0
+> +extern int max_huge_page_level __read_mostly;
 
+Can you put this at the top of the heaader?  x86.h somehow ended up with extern
+variables being declared in the middle of the file and I find it very jarring,
+e.g. global definitions are pretty much never buried in the middle of a .c file.
+
+>  #endif /* __KVM_X86_MMU_INTERNAL_H */
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index af60922906ef..eb8929e394ec 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -1709,6 +1709,66 @@ void kvm_tdp_mmu_clear_dirty_pt_masked(struct kvm *kvm,
+>  		clear_dirty_pt_masked(kvm, root, gfn, mask, wrprot);
+>  }
+>  
+> +static bool try_promote_lpage(struct kvm *kvm,
+
+I believe we've settled on huge_page instead of lpage.
+
+And again, I strongly prefer a 0/-errno return instead of a boolean as seeing
+-EBUSY or whatever makes it super obviously that the early returns are failure
+paths.
+
+> +			      const struct kvm_memory_slot *slot,
+> +			      struct tdp_iter *iter)
+> +{
+> +	struct kvm_mmu_page *sp = sptep_to_sp(iter->sptep);
+> +	struct rsvd_bits_validate shadow_zero_check;
+> +	bool map_writable;
+> +	kvm_pfn_t pfn;
+> +	u64 new_spte;
+> +	u64 mt_mask;
+> +
+> +	/*
+> +	 * If addresses are being invalidated, don't do in-place promotion to
+> +	 * avoid accidentally mapping an invalidated address.
+> +	 */
+> +	if (unlikely(kvm->mmu_notifier_count))
+> +		return false;
+> +
+> +	if (iter->level > max_huge_page_level || iter->gfn < slot->base_gfn ||
+> +	    iter->gfn >= slot->base_gfn + slot->npages)
+> +		return false;
+> +
+> +	pfn = __gfn_to_pfn_memslot(slot, iter->gfn, true, NULL, true,
+> +				   &map_writable, NULL);
+> +	if (is_error_noslot_pfn(pfn))
+> +		return false;
+> +
+> +	/*
+> +	 * Can't reconstitute an lpage if the consituent pages can't be
+
+"huge page", though honestly I'd just drop the comment, IMO this is more intuitive
+then say the checks against the slot stuff above.
+
+> +	 * mapped higher.
+> +	 */
+> +	if (iter->level > kvm_mmu_max_mapping_level(kvm, slot, iter->gfn,
+> +						    pfn, PG_LEVEL_NUM))
+> +		return false;
+> +
+> +	build_tdp_shadow_zero_bits_mask(&shadow_zero_check, iter->root_level);
+> +
+> +	/*
+> +	 * In some cases, a vCPU pointer is required to get the MT mask,
+> +	 * however in most cases it can be generated without one. If a
+> +	 * vCPU pointer is needed kvm_x86_try_get_mt_mask will fail.
+> +	 * In that case, bail on in-place promotion.
+> +	 */
+> +	if (unlikely(!static_call(kvm_x86_try_get_mt_mask)(kvm, iter->gfn,
+
+I wouldn't bother with the "unlikely".  It's wrong for a VM with non-coherent DMA,
+and it's very unlikely (heh) to actually be a meaningful optimization in any case.
+
+> +							   kvm_is_mmio_pfn(pfn),
+> +							   &mt_mask)))
+> +		return false;
+> +
+> +	__make_spte(kvm, sp, slot, ACC_ALL, iter->gfn, pfn, 0, false, true,
+
+A comment stating the return type is intentionally ignore would be helpful.  Not
+strictly necessary because it's mostly obvious after looking at the details, but
+it'd save someone from having to dig into said details.
+
+> +		  map_writable, mt_mask, &shadow_zero_check, &new_spte);
+
+Bad indentation.
+
+> +
+> +	if (tdp_mmu_set_spte_atomic(kvm, iter, new_spte))
+> +		return true;
+
+And by returning an int, and because the failure path rereads the SPTE for you,
+this becomes:
+
+	return tdp_mmu_set_spte_atomic(kvm, iter, new_spte);
+
+> +
+> +	/* Re-read the SPTE as it must have been changed by another thread. */
+> +	iter->old_spte = READ_ONCE(*rcu_dereference(iter->sptep));
+> +
+> +	return false;
+> +}
+> +
+>  /*
+>   * Clear leaf entries which could be replaced by large mappings, for
+>   * GFNs within the slot.
+
+This comment needs to be updated to include the huge page promotion behavior. And
+maybe renamed the function too?  E.g.
+
+static void zap_or_promote_collapsible_sptes(struct kvm *kvm,
+					     struct kvm_mmu_page *root,
+					     const struct kvm_memory_slot *slot)
+
+> @@ -1729,8 +1789,17 @@ static void zap_collapsible_spte_range(struct kvm *kvm,
+>  		if (tdp_mmu_iter_cond_resched(kvm, &iter, false, true))
+>  			continue;
+>  
+> -		if (!is_shadow_present_pte(iter.old_spte) ||
+> -		    !is_last_spte(iter.old_spte, iter.level))
+> +		if (iter.level > max_huge_page_level ||
+> +		    iter.gfn < slot->base_gfn ||
+> +		    iter.gfn >= slot->base_gfn + slot->npages)
+
+Isn't this exact check in try_promote_lpage()?  Ditto for the kvm_mmu_max_mapping_level()
+check that's just out of sight.  That one in particular can be somewhat expsensive,
+especially when KVM is fixed to use a helper that disable IRQs so the host page tables
+aren't freed while they're being walked.  Oh, and the huge page promotion path
+doesn't incorporate the reserved pfn check.
+
+In other words, shouldn't this be:
+
+
+		if (!is_shadow_present_pte(iter.old_spte))
+			continue;
+
+		if (iter.level > max_huge_page_level ||
+		    iter.gfn < slot->base_gfn ||
+		    iter.gfn >= slot->base_gfn + slot->npages)
+			continue;
+
+		pfn = spte_to_pfn(iter.old_spte);
+		if (kvm_is_reserved_pfn(pfn) ||
+		    iter.level >= kvm_mmu_max_mapping_level(kvm, slot, iter.gfn,
+							    pfn, PG_LEVEL_NUM))
+			continue;
+
+Followed by the promotion stuff.  And then unless I'm overlooking something, "pfn"
+can be passed into try_promote_huge_page(), it just needs to be masked appropriately.
+I.e. the promotion path can avoid the __gfn_to_pfn_memslot() lookup and also drop
+its is_error_noslot_pfn() check since the pfn is pulled from the SPTE and KVM should
+never install garbage into the SPTE (emulated/noslot MMIO pfns fail the shadow
+present check).
+
+> +			continue;
+> +
+> +		if (!is_shadow_present_pte(iter.old_spte))
+> +			continue;
+
+I strongly prefer to keep the !is_shadow_present_pte() check first, it really
+should be the first thing any of these flows check.
+
+> +
+> +		/* Try to promote the constitutent pages to an lpage. */
+> +		if (!is_last_spte(iter.old_spte, iter.level) &&
+> +		    try_promote_lpage(kvm, slot, &iter))
+
+There is an undocumented function change here, and I can't tell if it's intentional.
+If the promotion fails, KVM continues on an zaps the non-leaf shadow page.  If that
+is intentional behavior, it should be done in a follow-up patch, e.g. so that it can
+be easily reverted if it turns out that zappping e.g. a PUD is bad for performance.
+
+I.e. shouldn't this be:
+
+		if (!is_last_spte(iter.old_spte, iter.level)) {
+			try_promote_huge_page(...);
+			continue;
+		}
+
+and then converted to the current variant in a follow-up?
+
+>  			continue;
+>  
+>  		pfn = spte_to_pfn(iter.old_spte);
+> -- 
+> 2.35.1.894.gb6a874cedc-goog
+> 

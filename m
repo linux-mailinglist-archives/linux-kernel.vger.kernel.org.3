@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BCC84FCFE2
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 08:37:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2C144FCFE0
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 08:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349796AbiDLGjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 02:39:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51082 "EHLO
+        id S1349847AbiDLGjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 02:39:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349957AbiDLGhf (ORCPT
+        with ESMTP id S1349901AbiDLGhc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:37:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCCFEDF04;
-        Mon, 11 Apr 2022 23:34:10 -0700 (PDT)
+        Tue, 12 Apr 2022 02:37:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F4ABDED5;
+        Mon, 11 Apr 2022 23:34:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2707BB81B43;
-        Tue, 12 Apr 2022 06:34:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AE57C385A8;
-        Tue, 12 Apr 2022 06:34:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C793618A8;
+        Tue, 12 Apr 2022 06:34:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41F53C385A1;
+        Tue, 12 Apr 2022 06:34:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649745247;
-        bh=j7+PE57817SN6CLK3LKWX7q4DCCMXFOu6vTMp8n/VT8=;
+        s=korg; t=1649745250;
+        bh=0gHk/AAXAINq974uPvZyOpUAn+gOq3Y2N435b6LqQxE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ppaBrr0AE/bvo0NlfKImwH9tv1hiNWHZa0h0QrGYhJbTPl7sWZq/yySOCEfGefInl
-         ZwTMMhIYRQJhHgSqtKZK+z/gVAz+cjgIKkV6h24Bn2mDy0kPHcLVWbLCMAobOqpOAK
-         b/jPAPLueyo9ZjYGgMQelYoPKDs53ULlke+W/Czo=
+        b=EB2kLEjET3EpJVQmpU/b2ygSGaiCkjBzAPd1dajgYUnD+57eq26LtFZuu1rTK/FyH
+         sBSlA5jIkZa3SzeXKo/S9ZOMOo4Tz0qevNdA9jXC9EDuCj6BxzOIQAJKPqSu5J/9yT
+         UgZFd7D1UgtJI+xHalqM/gSKMPdFcuNkyBuoRNss=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lotus Fenn <lotusf@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Like Xu <likexu@tencent.com>,
-        David Dunn <daviddunn@google.com>,
+        stable@vger.kernel.org, Hou Wenlong <houwenlong.hwl@antgroup.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 006/171] KVM: x86/svm: Clear reserved bits written to PerfEvtSeln MSRs
-Date:   Tue, 12 Apr 2022 08:28:17 +0200
-Message-Id: <20220412062928.064315245@linuxfoundation.org>
+Subject: [PATCH 5.10 007/171] KVM: x86/emulator: Emulate RDPID only if it is enabled in guest
+Date:   Tue, 12 Apr 2022 08:28:18 +0200
+Message-Id: <20220412062928.093637438@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062927.870347203@linuxfoundation.org>
 References: <20220412062927.870347203@linuxfoundation.org>
@@ -58,72 +55,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jim Mattson <jmattson@google.com>
+From: Hou Wenlong <houwenlong.hwl@antgroup.com>
 
-[ Upstream commit 9b026073db2f1ad0e4d8b61c83316c8497981037 ]
+[ Upstream commit a836839cbfe60dc434c5476a7429cf2bae36415d ]
 
-AMD EPYC CPUs never raise a #GP for a WRMSR to a PerfEvtSeln MSR. Some
-reserved bits are cleared, and some are not. Specifically, on
-Zen3/Milan, bits 19 and 42 are not cleared.
+When RDTSCP is supported but RDPID is not supported in host,
+RDPID emulation is available. However, __kvm_get_msr() would
+only fail when RDTSCP/RDPID both are disabled in guest, so
+the emulator wouldn't inject a #UD when RDPID is disabled but
+RDTSCP is enabled in guest.
 
-When emulating such a WRMSR, KVM should not synthesize a #GP,
-regardless of which bits are set. However, undocumented bits should
-not be passed through to the hardware MSR. So, rather than checking
-for reserved bits and synthesizing a #GP, just clear the reserved
-bits.
-
-This may seem pedantic, but since KVM currently does not support the
-"Host/Guest Only" bits (41:40), it is necessary to clear these bits
-rather than synthesizing #GP, because some popular guests (e.g Linux)
-will set the "Host Only" bit even on CPUs that don't support
-EFER.SVME, and they don't expect a #GP.
-
-For example,
-
-root@Ubuntu1804:~# perf stat -e r26 -a sleep 1
-
- Performance counter stats for 'system wide':
-
-                 0      r26
-
-       1.001070977 seconds time elapsed
-
-Feb 23 03:59:58 Ubuntu1804 kernel: [  405.379957] unchecked MSR access error: WRMSR to 0xc0010200 (tried to write 0x0000020000130026) at rIP: 0xffffffff9b276a28 (native_write_msr+0x8/0x30)
-Feb 23 03:59:58 Ubuntu1804 kernel: [  405.379958] Call Trace:
-Feb 23 03:59:58 Ubuntu1804 kernel: [  405.379963]  amd_pmu_disable_event+0x27/0x90
-
-Fixes: ca724305a2b0 ("KVM: x86/vPMU: Implement AMD vPMU code for KVM")
-Reported-by: Lotus Fenn <lotusf@google.com>
-Signed-off-by: Jim Mattson <jmattson@google.com>
-Reviewed-by: Like Xu <likexu@tencent.com>
-Reviewed-by: David Dunn <daviddunn@google.com>
-Message-Id: <20220226234131.2167175-1-jmattson@google.com>
+Fixes: fb6d4d340e05 ("KVM: x86: emulate RDPID")
+Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+Message-Id: <1dfd46ae5b76d3ed87bde3154d51c64ea64c99c1.1646226788.git.houwenlong.hwl@antgroup.com>
 Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kvm/svm/pmu.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ arch/x86/kvm/emulate.c     | 4 +++-
+ arch/x86/kvm/kvm_emulate.h | 1 +
+ arch/x86/kvm/x86.c         | 6 ++++++
+ 3 files changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
-index 4e7093bcb64b..0e9c2322d398 100644
---- a/arch/x86/kvm/svm/pmu.c
-+++ b/arch/x86/kvm/svm/pmu.c
-@@ -253,12 +253,10 @@ static int amd_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 	/* MSR_EVNTSELn */
- 	pmc = get_gp_pmc_amd(pmu, msr, PMU_TYPE_EVNTSEL);
- 	if (pmc) {
--		if (data == pmc->eventsel)
--			return 0;
--		if (!(data & pmu->reserved_bits)) {
-+		data &= ~pmu->reserved_bits;
-+		if (data != pmc->eventsel)
- 			reprogram_gp_counter(pmc, data);
--			return 0;
--		}
-+		return 0;
- 	}
+diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+index a63df19ef4da..71e1a2d39f21 100644
+--- a/arch/x86/kvm/emulate.c
++++ b/arch/x86/kvm/emulate.c
+@@ -3611,8 +3611,10 @@ static int em_rdpid(struct x86_emulate_ctxt *ctxt)
+ {
+ 	u64 tsc_aux = 0;
  
- 	return 1;
+-	if (ctxt->ops->get_msr(ctxt, MSR_TSC_AUX, &tsc_aux))
++	if (!ctxt->ops->guest_has_rdpid(ctxt))
+ 		return emulate_ud(ctxt);
++
++	ctxt->ops->get_msr(ctxt, MSR_TSC_AUX, &tsc_aux);
+ 	ctxt->dst.val = tsc_aux;
+ 	return X86EMUL_CONTINUE;
+ }
+diff --git a/arch/x86/kvm/kvm_emulate.h b/arch/x86/kvm/kvm_emulate.h
+index 7d5be04dc661..aeed6da60e0c 100644
+--- a/arch/x86/kvm/kvm_emulate.h
++++ b/arch/x86/kvm/kvm_emulate.h
+@@ -225,6 +225,7 @@ struct x86_emulate_ops {
+ 	bool (*guest_has_long_mode)(struct x86_emulate_ctxt *ctxt);
+ 	bool (*guest_has_movbe)(struct x86_emulate_ctxt *ctxt);
+ 	bool (*guest_has_fxsr)(struct x86_emulate_ctxt *ctxt);
++	bool (*guest_has_rdpid)(struct x86_emulate_ctxt *ctxt);
+ 
+ 	void (*set_nmi_mask)(struct x86_emulate_ctxt *ctxt, bool masked);
+ 
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index a5d6d79b023b..70d23bec09f5 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -6875,6 +6875,11 @@ static bool emulator_guest_has_fxsr(struct x86_emulate_ctxt *ctxt)
+ 	return guest_cpuid_has(emul_to_vcpu(ctxt), X86_FEATURE_FXSR);
+ }
+ 
++static bool emulator_guest_has_rdpid(struct x86_emulate_ctxt *ctxt)
++{
++	return guest_cpuid_has(emul_to_vcpu(ctxt), X86_FEATURE_RDPID);
++}
++
+ static ulong emulator_read_gpr(struct x86_emulate_ctxt *ctxt, unsigned reg)
+ {
+ 	return kvm_register_read(emul_to_vcpu(ctxt), reg);
+@@ -6958,6 +6963,7 @@ static const struct x86_emulate_ops emulate_ops = {
+ 	.guest_has_long_mode = emulator_guest_has_long_mode,
+ 	.guest_has_movbe     = emulator_guest_has_movbe,
+ 	.guest_has_fxsr      = emulator_guest_has_fxsr,
++	.guest_has_rdpid     = emulator_guest_has_rdpid,
+ 	.set_nmi_mask        = emulator_set_nmi_mask,
+ 	.get_hflags          = emulator_get_hflags,
+ 	.set_hflags          = emulator_set_hflags,
 -- 
 2.35.1
 

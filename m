@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6AD54FD4DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E334FD950
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:40:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354523AbiDLHSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:18:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47096 "EHLO
+        id S1384434AbiDLIlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352241AbiDLHFA (ORCPT
+        with ESMTP id S1357168AbiDLHju (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:05:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC284706F;
-        Mon, 11 Apr 2022 23:47:52 -0700 (PDT)
+        Tue, 12 Apr 2022 03:39:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979A113E83;
+        Tue, 12 Apr 2022 00:13:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 329076104B;
-        Tue, 12 Apr 2022 06:47:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4804DC385A8;
-        Tue, 12 Apr 2022 06:47:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 325D46171C;
+        Tue, 12 Apr 2022 07:13:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4033DC385A5;
+        Tue, 12 Apr 2022 07:13:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746071;
-        bh=uZLUZixzHuJ+y2EltJx4oW38IjsaGPvNR0HglMNKQBU=;
+        s=korg; t=1649747600;
+        bh=rDwGZVgTVPjbN7qUraf4diMbB4q1VpnmC8hkj5oXOms=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e8tYQ7G1sucgqTS3wgcLJK9n6QCHV3cBRE8HObToKmvXftQEgntBLxifnYULs8Z/I
-         cI70XJa+l8QYHIm3yftZsxZTD+Vo727Wikv7VvrM50B81yT8SW0TEYdV0YcNFqbjQY
-         zkyEtlZxpJZwc5B231tjlEUEWQbwKTp6nOaSVoHQ=
+        b=Vnm9V0A5u8BWSOqEr8ChUyhxpVajaOkw7Uqk2/r6f5VLQoh6dOiLx9R5GFEmAHXxo
+         72qcz9feCHWyOM5rEIBWSMmlOP6cxlauvEMtJX2nE/Kpx8+lWweOsFYPmISl485cyW
+         y1sO8aikkrHkHtDFE/OxhUqczhx0rGj9gs7ea008=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Kevin Groeneveld <kgroeneveld@lenbrook.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, George Shuklin <george.shuklin@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 151/277] scsi: sr: Fix typo in CDROM(CLOSETRAY|EJECT) handling
-Date:   Tue, 12 Apr 2022 08:29:14 +0200
-Message-Id: <20220412062946.407850086@linuxfoundation.org>
+Subject: [PATCH 5.17 137/343] net: limit altnames to 64k total
+Date:   Tue, 12 Apr 2022 08:29:15 +0200
+Message-Id: <20220412062955.341689476@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,39 +56,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kevin Groeneveld <kgroeneveld@lenbrook.com>
+From: Jakub Kicinski <kuba@kernel.org>
 
-[ Upstream commit bc5519c18a32ce855bb51b9f5eceb77a9489d080 ]
+[ Upstream commit 155fb43b70b5fce341347a77d1af2765d1e8fbb8 ]
 
-Commit 2e27f576abc6 ("scsi: scsi_ioctl: Call scsi_cmd_ioctl() from
-scsi_ioctl()") seems to have a typo as it is checking ret instead of cmd in
-the if statement checking for CDROMCLOSETRAY and CDROMEJECT.  This changes
-the behaviour of these ioctls as the cdrom_ioctl handling of these is more
-restrictive than the scsi_ioctl version.
+Property list (altname is a link "property") is wrapped
+in a nlattr. nlattrs length is 16bit so practically
+speaking the list of properties can't be longer than
+that, otherwise user space would have to interpret
+broken netlink messages.
 
-Link: https://lore.kernel.org/r/20220323002242.21157-1-kgroeneveld@lenbrook.com
-Fixes: 2e27f576abc6 ("scsi: scsi_ioctl: Call scsi_cmd_ioctl() from scsi_ioctl()")
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Kevin Groeneveld <kgroeneveld@lenbrook.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Prevent the problem from occurring by checking the length
+of the property list before adding new entries.
+
+Reported-by: George Shuklin <george.shuklin@gmail.com>
+Reviewed-by: David Ahern <dsahern@kernel.org>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/sr.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/core/rtnetlink.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
-index 973d6e079b02..652cd81d7775 100644
---- a/drivers/scsi/sr.c
-+++ b/drivers/scsi/sr.c
-@@ -579,7 +579,7 @@ static int sr_block_ioctl(struct block_device *bdev, fmode_t mode, unsigned cmd,
+diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
+index 9c9ad3d4b766..43b995e935cd 100644
+--- a/net/core/rtnetlink.c
++++ b/net/core/rtnetlink.c
+@@ -3652,12 +3652,23 @@ static int rtnl_alt_ifname(int cmd, struct net_device *dev, struct nlattr *attr,
+ 			   bool *changed, struct netlink_ext_ack *extack)
+ {
+ 	char *alt_ifname;
++	size_t size;
+ 	int err;
  
- 	scsi_autopm_get_device(sdev);
+ 	err = nla_validate(attr, attr->nla_len, IFLA_MAX, ifla_policy, extack);
+ 	if (err)
+ 		return err;
  
--	if (ret != CDROMCLOSETRAY && ret != CDROMEJECT) {
-+	if (cmd != CDROMCLOSETRAY && cmd != CDROMEJECT) {
- 		ret = cdrom_ioctl(&cd->cdi, bdev, mode, cmd, arg);
- 		if (ret != -ENOSYS)
- 			goto put;
++	if (cmd == RTM_NEWLINKPROP) {
++		size = rtnl_prop_list_size(dev);
++		size += nla_total_size(ALTIFNAMSIZ);
++		if (size >= U16_MAX) {
++			NL_SET_ERR_MSG(extack,
++				       "effective property list too long");
++			return -EINVAL;
++		}
++	}
++
+ 	alt_ifname = nla_strdup(attr, GFP_KERNEL_ACCOUNT);
+ 	if (!alt_ifname)
+ 		return -ENOMEM;
 -- 
 2.35.1
 

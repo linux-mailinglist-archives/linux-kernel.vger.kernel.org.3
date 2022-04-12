@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F0594FDA24
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:48:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D33A4FD62E
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:20:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353943AbiDLHZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:25:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57808 "EHLO
+        id S1382401AbiDLIus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:50:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351653AbiDLHMr (ORCPT
+        with ESMTP id S1358429AbiDLHlh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:12:47 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F0729827;
-        Mon, 11 Apr 2022 23:50:57 -0700 (PDT)
+        Tue, 12 Apr 2022 03:41:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C004C4B1FF;
+        Tue, 12 Apr 2022 00:18:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5B502CE1C0C;
-        Tue, 12 Apr 2022 06:50:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 747A2C385A1;
-        Tue, 12 Apr 2022 06:50:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 54A6861045;
+        Tue, 12 Apr 2022 07:18:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EEEDC385A5;
+        Tue, 12 Apr 2022 07:18:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746254;
-        bh=Os4gU4E9suW8CAJWk/Te59Oo6iy6RqT5HowtqX0ycTo=;
+        s=korg; t=1649747882;
+        bh=GPpkSk4rc2KNtiaOqLhemdsMz2WcHV50oomCVtVcdMI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aPLJfWe212j2kczZHfPYa3Dfp4nW98LxLWXwFxPvFIgF9CKowdoEiZ4wuDt6vtD8A
-         R5pfDYf1XfgySdGWdq5WwGQplTCt/rpPkHsWnXWjSH/QF78zj92nFMsbGCFivjGTUU
-         YXF3zzUFMggXlhWitzlS+HTBiCpb/oLZifxSHRW0=
+        b=mOsDc0laNHm8uffU0k4lLpl1ik5Nfw5oEpcTnmZMGkCrMQk6LPrwAe93mmRwXekLW
+         8fyzec21Ar6ZOLcLIFomP9E2EsiQtGIxgViK/2vAYzLSEcVdNkyhUlj9u4YKyb1yqO
+         YX4PKmP33czPnSLHX2Mp2qNXZLpfMY96pVQ8fCwY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.15 215/277] highmem: fix checks in __kmap_local_sched_{in,out}
+        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Kevin Groeneveld <kgroeneveld@lenbrook.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 200/343] scsi: sr: Fix typo in CDROM(CLOSETRAY|EJECT) handling
 Date:   Tue, 12 Apr 2022 08:30:18 +0200
-Message-Id: <20220412062948.262393978@linuxfoundation.org>
+Message-Id: <20220412062957.127204179@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,81 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Max Filippov <jcmvbkbc@gmail.com>
+From: Kevin Groeneveld <kgroeneveld@lenbrook.com>
 
-commit 66f133ceab7456c789f70a242991ed1b27ba1c3d upstream.
+[ Upstream commit bc5519c18a32ce855bb51b9f5eceb77a9489d080 ]
 
-When CONFIG_DEBUG_KMAP_LOCAL is enabled __kmap_local_sched_{in,out} check
-that even slots in the tsk->kmap_ctrl.pteval are unmapped.  The slots are
-initialized with 0 value, but the check is done with pte_none.  0 pte
-however does not necessarily mean that pte_none will return true.  e.g.
-on xtensa it returns false, resulting in the following runtime warnings:
+Commit 2e27f576abc6 ("scsi: scsi_ioctl: Call scsi_cmd_ioctl() from
+scsi_ioctl()") seems to have a typo as it is checking ret instead of cmd in
+the if statement checking for CDROMCLOSETRAY and CDROMEJECT.  This changes
+the behaviour of these ioctls as the cdrom_ioctl handling of these is more
+restrictive than the scsi_ioctl version.
 
- WARNING: CPU: 0 PID: 101 at mm/highmem.c:627 __kmap_local_sched_out+0x51/0x108
- CPU: 0 PID: 101 Comm: touch Not tainted 5.17.0-rc7-00010-gd3a1cdde80d2-dirty #13
- Call Trace:
-   dump_stack+0xc/0x40
-   __warn+0x8f/0x174
-   warn_slowpath_fmt+0x48/0xac
-   __kmap_local_sched_out+0x51/0x108
-   __schedule+0x71a/0x9c4
-   preempt_schedule_irq+0xa0/0xe0
-   common_exception_return+0x5c/0x93
-   do_wp_page+0x30e/0x330
-   handle_mm_fault+0xa70/0xc3c
-   do_page_fault+0x1d8/0x3c4
-   common_exception+0x7f/0x7f
-
- WARNING: CPU: 0 PID: 101 at mm/highmem.c:664 __kmap_local_sched_in+0x50/0xe0
- CPU: 0 PID: 101 Comm: touch Tainted: G        W         5.17.0-rc7-00010-gd3a1cdde80d2-dirty #13
- Call Trace:
-   dump_stack+0xc/0x40
-   __warn+0x8f/0x174
-   warn_slowpath_fmt+0x48/0xac
-   __kmap_local_sched_in+0x50/0xe0
-   finish_task_switch$isra$0+0x1ce/0x2f8
-   __schedule+0x86e/0x9c4
-   preempt_schedule_irq+0xa0/0xe0
-   common_exception_return+0x5c/0x93
-   do_wp_page+0x30e/0x330
-   handle_mm_fault+0xa70/0xc3c
-   do_page_fault+0x1d8/0x3c4
-   common_exception+0x7f/0x7f
-
-Fix it by replacing !pte_none(pteval) with pte_val(pteval) != 0.
-
-Link: https://lkml.kernel.org/r/20220403235159.3498065-1-jcmvbkbc@gmail.com
-Fixes: 5fbda3ecd14a ("sched: highmem: Store local kmaps in task struct")
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20220323002242.21157-1-kgroeneveld@lenbrook.com
+Fixes: 2e27f576abc6 ("scsi: scsi_ioctl: Call scsi_cmd_ioctl() from scsi_ioctl()")
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Kevin Groeneveld <kgroeneveld@lenbrook.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- mm/highmem.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/sr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/mm/highmem.c
-+++ b/mm/highmem.c
-@@ -627,7 +627,7 @@ void __kmap_local_sched_out(void)
+diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
+index f925b1f1f9ad..a0beb11abdc9 100644
+--- a/drivers/scsi/sr.c
++++ b/drivers/scsi/sr.c
+@@ -578,7 +578,7 @@ static int sr_block_ioctl(struct block_device *bdev, fmode_t mode, unsigned cmd,
  
- 		/* With debug all even slots are unmapped and act as guard */
- 		if (IS_ENABLED(CONFIG_DEBUG_KMAP_LOCAL) && !(i & 0x01)) {
--			WARN_ON_ONCE(!pte_none(pteval));
-+			WARN_ON_ONCE(pte_val(pteval) != 0);
- 			continue;
- 		}
- 		if (WARN_ON_ONCE(pte_none(pteval)))
-@@ -664,7 +664,7 @@ void __kmap_local_sched_in(void)
+ 	scsi_autopm_get_device(sdev);
  
- 		/* With debug all even slots are unmapped and act as guard */
- 		if (IS_ENABLED(CONFIG_DEBUG_KMAP_LOCAL) && !(i & 0x01)) {
--			WARN_ON_ONCE(!pte_none(pteval));
-+			WARN_ON_ONCE(pte_val(pteval) != 0);
- 			continue;
- 		}
- 		if (WARN_ON_ONCE(pte_none(pteval)))
+-	if (ret != CDROMCLOSETRAY && ret != CDROMEJECT) {
++	if (cmd != CDROMCLOSETRAY && cmd != CDROMEJECT) {
+ 		ret = cdrom_ioctl(&cd->cdi, bdev, mode, cmd, arg);
+ 		if (ret != -ENOSYS)
+ 			goto put;
+-- 
+2.35.1
+
 
 

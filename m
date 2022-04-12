@@ -2,76 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4576C4FE250
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:22:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 438624FE257
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:22:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355075AbiDLNYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 09:24:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58866 "EHLO
+        id S237579AbiDLNYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 09:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355965AbiDLNWU (ORCPT
+        with ESMTP id S1356021AbiDLNWY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 09:22:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60E8FB47;
-        Tue, 12 Apr 2022 06:12:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 28BE5B81B1F;
-        Tue, 12 Apr 2022 13:12:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AC7EC385B3;
-        Tue, 12 Apr 2022 13:12:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649769168;
-        bh=/vmu44weNRIQQXno9KBtiVr3WCW3XhcLvkMQI6ma3p4=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=qPMhMA/1nt5PjdyYlYofPIkLDrgS/GxzukEvqNUNEwWUpRZ5hWJCWF0HqRZNmUCR4
-         OP+KEPXV6Pw36hLg/1TmF1zG2oe+uWulYFfpOdgeecwZBHuz18W8tNH5orLFViooxK
-         kl+4i9AdEwZvTNGoyuG3qEk9WiXgxr6M9EhLawNV5WuM4G+0mt4aiYaqBdGeqsMd6G
-         3YMFHdUGLHBgN3k3kth1+3ChUZNTEmRTP3RWdVkFdkTyS1+2u15D7c2CSICtdlIKie
-         +3S5uPxnmYfuN3vCY0WFGwuvMMvMnpGhqeIdAd5Qhk/GmHlR3uzrSjzwqt7eJbvRHl
-         VYNHN2612HCfw==
-Content-Type: text/plain; charset="utf-8"
+        Tue, 12 Apr 2022 09:22:24 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53340D6D;
+        Tue, 12 Apr 2022 06:13:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649769192; x=1681305192;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=THXNbE6uwc6VmEva3UG39/ka2/jfkbL0RmRgTIEQt8M=;
+  b=fCmZykE24AWdHyuYnbHbQjNmK3JasMMSy1iz72xn/BCaWcAeky3CT4dT
+   XtGXnXgagHs6cPge+VGDAPOFS9MggTd68WJ6jpRKeVhM4sEiew7fHNbT9
+   y3H+PQ9lC6ImGFXOOpWgbKbEQ49T6Fw/spHDK0wbbb1KHK2ezmQ4IkyGS
+   nsgfrx0WDMpqfJkvuu1kL10uKmS9m/w24hbPk0wKWaaRRJ/C0JPZiegQC
+   MOgYINf9rzDI3e6WlKBvcgCCdR70uWtjknODOzseEg0bLP84XdBAq+OmU
+   bAWooNWUdBHNRUeSxMS+XeRnuv7C9fiqImRlnrA2dW+ImFGJAIgOUbOLX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="262550916"
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="262550916"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 06:13:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="699828966"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
+  by fmsmga001.fm.intel.com with ESMTP; 12 Apr 2022 06:13:04 -0700
+Date:   Tue, 12 Apr 2022 21:12:54 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, qemu-devel@nongnu.org,
+        Wanpeng Li <wanpengli@tencent.com>, jun.nakajima@intel.com,
+        david@redhat.com, "J . Bruce Fields" <bfields@fieldses.org>,
+        dave.hansen@intel.com, "H . Peter Anvin" <hpa@zytor.com>,
+        ak@linux.intel.com, Jonathan Corbet <corbet@lwn.net>,
+        Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
+        Hugh Dickins <hughd@google.com>,
+        Steven Price <steven.price@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Borislav Petkov <bp@alien8.de>, luto@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Jim Mattson <jmattson@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Mike Rapoport <rppt@kernel.org>
+Subject: Re: [PATCH v5 03/13] mm/shmem: Support memfile_notifier
+Message-ID: <20220412131254.GF8013@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
+ <20220310140911.50924-4-chao.p.peng@linux.intel.com>
+ <20220411152647.uvl2ukuwishsckys@box.shutemov.name>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH][next] ath11k: Fix spelling mistake "reseting" ->
- "resetting"
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20220407102820.613881-1-colin.i.king@gmail.com>
-References: <20220407102820.613881-1-colin.i.king@gmail.com>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-User-Agent: pwcli/0.1.0-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <164976916384.15500.12618442954054836491.kvalo@kernel.org>
-Date:   Tue, 12 Apr 2022 13:12:45 +0000 (UTC)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220411152647.uvl2ukuwishsckys@box.shutemov.name>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Colin Ian King <colin.i.king@gmail.com> wrote:
-
-> There is a spelling mistake in an ath11k_warn message. Fix it.
+On Mon, Apr 11, 2022 at 06:26:47PM +0300, Kirill A. Shutemov wrote:
+> On Thu, Mar 10, 2022 at 10:09:01PM +0800, Chao Peng wrote:
+> > diff --git a/mm/shmem.c b/mm/shmem.c
+> > index 9b31a7056009..7b43e274c9a2 100644
+> > --- a/mm/shmem.c
+> > +++ b/mm/shmem.c
+> > @@ -903,6 +903,28 @@ static struct folio *shmem_get_partial_folio(struct inode *inode, pgoff_t index)
+> >  	return page ? page_folio(page) : NULL;
+> >  }
+> >  
+> > +static void notify_fallocate(struct inode *inode, pgoff_t start, pgoff_t end)
+> > +{
+> > +#ifdef CONFIG_MEMFILE_NOTIFIER
+> > +	struct shmem_inode_info *info = SHMEM_I(inode);
+> > +
+> > +	memfile_notifier_fallocate(&info->memfile_notifiers, start, end);
+> > +#endif
 > 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+> All these #ifdefs look ugly. Could you provide dummy memfile_* for
+> !MEMFILE_NOTIFIER case?
+Sure.
 
-Patch applied to ath-next branch of ath.git, thanks.
-
-405342ebea2a ath11k: Fix spelling mistake "reseting" -> "resetting"
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20220407102820.613881-1-colin.i.king@gmail.com/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
-
+Chao
+> 
+> -- 
+>  Kirill A. Shutemov

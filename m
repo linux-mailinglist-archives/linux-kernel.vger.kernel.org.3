@@ -2,82 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C49C4FD23F
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 09:09:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C15F4FD432
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:02:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351621AbiDLHHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:07:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48836 "EHLO
+        id S1346178AbiDLIP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:15:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351775AbiDLGyW (ORCPT
+        with ESMTP id S1355300AbiDLH1Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:54:22 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45487BFA
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 23:44:02 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id lc2so14723038ejb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 23:44:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=gdMXT9TzsyH4/nxmkBNQPgpVjR8VBr666pmrMpmTXZI=;
-        b=Sf9531F6U+Pwb0a1JtSz+UJf/7y7GtDmQlZZhYfSi+mfIvdBuA4l0w7/WatdjA9Ad6
-         TvV1/c+RE7sUGKS1/vUuU2MhBpzDMSR5e27v5CWt4Y1uEERO4rzy1WFE7UFOUTkys8y4
-         CrAZELDcitDaBEG070MG6AnwITJStO2p0wpebyOBC/F8c4E4tcDxGW0/DG5QxVW1sIpV
-         8p0pgBHVk3S74bwGfrfbc9v6owVXngqPs+TyhlqZ2FJ8kqVHCNvX0K4QrJKpDWlQQ4ZP
-         fgucKqXTCFSYrEFgMqiDfOIFe4mCpdCXVpFSuD1BRgEDhCuvS5dXmNhhvfMGmg+v/lcO
-         ESgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=gdMXT9TzsyH4/nxmkBNQPgpVjR8VBr666pmrMpmTXZI=;
-        b=gi5JHKIu3yx465wxMs6Z9Kau3+libY0d5gs8p2be4OVlB4bs+dXKdbOO8A8KpZdlQ8
-         dQ5JW0F1OaoGtpjGzZJ1q8/KjmBV5aKOVJOqQpt5tvYk5ZjbLRVzZ8cQLUnZhIs/IVSb
-         C6hILhbedV2usYQ61csiSdot9eoLGLQ8jMS1qaeEdZHIesvnJuxKZZHn0qA0eLucRZh8
-         9nqC69UcCo44xoMukCiDkMhMlfAfRxeZZMcfDFemyMPGTDVax2Wg7qD0RsL1XJFZD/XA
-         5fcbBZGGEX8OWEWjbtoZ6ezVKBDvPD0iGWUgMYCrYSPtX4rTt3L+h9oNM3u9o3prUvBQ
-         mHOA==
-X-Gm-Message-State: AOAM531jzlGhb8FlMQmguoUME4z0mWmVcsbJ4ZFvLWU2KmfbMOpInd2s
-        dEzLS54/SZ1nKTYfZwUQk9GzIA==
-X-Google-Smtp-Source: ABdhPJzlMIXt07hedFNdXekcNnAvfM3k0nzYSnt57hMcEFauFmO4UC80WvnBdB/kePIRmAW6KtUX+g==
-X-Received: by 2002:a17:907:1b06:b0:6e7:f58a:9b91 with SMTP id mp6-20020a1709071b0600b006e7f58a9b91mr34377224ejc.291.1649745840798;
-        Mon, 11 Apr 2022 23:44:00 -0700 (PDT)
-Received: from [192.168.0.193] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id c1-20020a50cf01000000b0041cb7e02a5csm14566517edk.87.2022.04.11.23.43.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Apr 2022 23:44:00 -0700 (PDT)
-Message-ID: <8ff07720-3c52-99e6-8046-501f4ae28518@linaro.org>
-Date:   Tue, 12 Apr 2022 08:43:59 +0200
+        Tue, 12 Apr 2022 03:27:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD1C49250;
+        Tue, 12 Apr 2022 00:07:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CBDC5B81A8F;
+        Tue, 12 Apr 2022 07:07:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42E16C385A1;
+        Tue, 12 Apr 2022 07:07:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649747244;
+        bh=o4f5gXCbaB4CQFduw7VkVXm88MSd43BcGFbgkllltIQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=kDt0lbraaGJc8atbTu4YI5M2N9nKrkrdJuxi6rTCWkzsLaJQjV7Bir70/kCVZmT0O
+         G0HmwDUTF0SIKVfgP3rn0KyMufLA9ns+fWX9XOKsblZb0HE4yrqYB3IYtbvGT8ihM/
+         cWJSl6viH33xX3l3wnbznJRJg5+yxxXeyDWvmOUw=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Hou Wenlong <houwenlong.hwl@antgroup.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 010/343] KVM: x86/emulator: Emulate RDPID only if it is enabled in guest
+Date:   Tue, 12 Apr 2022 08:27:08 +0200
+Message-Id: <20220412062951.402249565@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 6/6] dt-bindings: dma: Convert Qualcomm BAM DMA binding
- to json format
-Content-Language: en-US
-To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        dmaengine@vger.kernel.org
-References: <20220410175056.79330-1-singh.kuldeep87k@gmail.com>
- <20220410175056.79330-7-singh.kuldeep87k@gmail.com>
- <14ecb746-56f0-2d3b-2f93-1af9407de4b7@linaro.org>
- <20220411105810.GB33220@9a2d8922b8f1>
- <50defa36-3d91-80ea-e303-abaade1c1f7e@linaro.org>
- <20220412061953.GA95928@9a2d8922b8f1>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220412061953.GA95928@9a2d8922b8f1>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,83 +55,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/04/2022 08:19, Kuldeep Singh wrote:
-> On Mon, Apr 11, 2022 at 01:38:41PM +0200, Krzysztof Kozlowski wrote:
->> On 11/04/2022 12:58, Kuldeep Singh wrote:
->>>> This is something new and it seems only one SoC defines it (not even one
->>>> BAM version). I wonder whether this is actually correct or this
->>>> particular version of BAM is slightly different. Maybe someone could
->>>> clarify it, but if no - looks ok.
->>>
->>> Yes, sdm845.dtsi uses 4 entries and rest 1.
->>
->> Yes, I know. This does not solve my wonder.
->>
->>>
->>>>
->>>>> +
->>>>> +  num-channels:
->>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>>>> +    description:
->>>>> +      Indicates supported number of DMA channels in a remotely controlled bam.
->>>>> +
->>>>> +  qcom,controlled-remotely:
->>>>> +    $ref: /schemas/types.yaml#/definitions/flag
->>>>
->>>> type: boolean
->>>
->>> Boolean comes under flag in types.yaml
->>>
->>> definitions:
->>>   flag:
->>>     oneOf:
->>>       - type: boolean
->>>         const: true
->>>       - type: 'null'
->>>
->>> I have seen other boolean properties(spi-cpol, spi-cpha and bunch of
->>> others) using type flag. I think we should keep flag here.
->>
->> type:boolean is just shorter and example-schema recommends it. If you
->> want to base on something (as a template, pattern) then the
->> example-schema is the source, the preferred one.
-> 
-> I had seen other spec using flag and that's why kept same here.
+From: Hou Wenlong <houwenlong.hwl@antgroup.com>
 
-I understand, you mentioned it before. However other spec is not the
-example-schema...
+[ Upstream commit a836839cbfe60dc434c5476a7429cf2bae36415d ]
 
-> Which example schema are you talking about?
+When RDTSCP is supported but RDPID is not supported in host,
+RDPID emulation is available. However, __kvm_get_msr() would
+only fail when RDTSCP/RDPID both are disabled in guest, so
+the emulator wouldn't inject a #UD when RDPID is disabled but
+RDTSCP is enabled in guest.
 
-There is only one example-schema.
-$ find ./linux -name 'example-schema*'
+Fixes: fb6d4d340e05 ("KVM: x86: emulate RDPID")
+Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+Message-Id: <1dfd46ae5b76d3ed87bde3154d51c64ea64c99c1.1646226788.git.houwenlong.hwl@antgroup.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/x86/kvm/emulate.c     | 4 +++-
+ arch/x86/kvm/kvm_emulate.h | 1 +
+ arch/x86/kvm/x86.c         | 6 ++++++
+ 3 files changed, 10 insertions(+), 1 deletion(-)
 
->>>> clocks, clock-names, qcom-ee - these are required according to old bindings.
->>>
->>> I missed qcom,ee. Will add in v3.
->>>
->>> For clocks and clock-names , there are two platforms(msm8996.dtsi,
->>> sdm845.dtsi) where these properties are missing. And I don't want to add
->>> some random values. Shall I skip them here? and let board owners add
->>> them later.
->>
->> These are required, so the SoC DTSI should be fixed. Not with random
->> clocks but something proper. :)
-> 
-> Yes absolutely :-)
-> I have kept Srinivas in copy, who sent initial support for both the
-> dtsi. Probably he can confirm provided his email doesn't bounce.
-> 
-> Anyway Krzysztof, can you confirm the same as you have been actively
-> contributing to Qcom peripherals. I will add credit in follow-up
-> submission.
+diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+index 02d061a06aa1..de9d8a27387c 100644
+--- a/arch/x86/kvm/emulate.c
++++ b/arch/x86/kvm/emulate.c
+@@ -3523,8 +3523,10 @@ static int em_rdpid(struct x86_emulate_ctxt *ctxt)
+ {
+ 	u64 tsc_aux = 0;
+ 
+-	if (ctxt->ops->get_msr(ctxt, MSR_TSC_AUX, &tsc_aux))
++	if (!ctxt->ops->guest_has_rdpid(ctxt))
+ 		return emulate_ud(ctxt);
++
++	ctxt->ops->get_msr(ctxt, MSR_TSC_AUX, &tsc_aux);
+ 	ctxt->dst.val = tsc_aux;
+ 	return X86EMUL_CONTINUE;
+ }
+diff --git a/arch/x86/kvm/kvm_emulate.h b/arch/x86/kvm/kvm_emulate.h
+index 39eded2426ff..a2a7654d8ace 100644
+--- a/arch/x86/kvm/kvm_emulate.h
++++ b/arch/x86/kvm/kvm_emulate.h
+@@ -226,6 +226,7 @@ struct x86_emulate_ops {
+ 	bool (*guest_has_long_mode)(struct x86_emulate_ctxt *ctxt);
+ 	bool (*guest_has_movbe)(struct x86_emulate_ctxt *ctxt);
+ 	bool (*guest_has_fxsr)(struct x86_emulate_ctxt *ctxt);
++	bool (*guest_has_rdpid)(struct x86_emulate_ctxt *ctxt);
+ 
+ 	void (*set_nmi_mask)(struct x86_emulate_ctxt *ctxt, bool masked);
+ 
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 9b6166348c94..c81ec70197fb 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -7675,6 +7675,11 @@ static bool emulator_guest_has_fxsr(struct x86_emulate_ctxt *ctxt)
+ 	return guest_cpuid_has(emul_to_vcpu(ctxt), X86_FEATURE_FXSR);
+ }
+ 
++static bool emulator_guest_has_rdpid(struct x86_emulate_ctxt *ctxt)
++{
++	return guest_cpuid_has(emul_to_vcpu(ctxt), X86_FEATURE_RDPID);
++}
++
+ static ulong emulator_read_gpr(struct x86_emulate_ctxt *ctxt, unsigned reg)
+ {
+ 	return kvm_register_read_raw(emul_to_vcpu(ctxt), reg);
+@@ -7757,6 +7762,7 @@ static const struct x86_emulate_ops emulate_ops = {
+ 	.guest_has_long_mode = emulator_guest_has_long_mode,
+ 	.guest_has_movbe     = emulator_guest_has_movbe,
+ 	.guest_has_fxsr      = emulator_guest_has_fxsr,
++	.guest_has_rdpid     = emulator_guest_has_rdpid,
+ 	.set_nmi_mask        = emulator_set_nmi_mask,
+ 	.get_hflags          = emulator_get_hflags,
+ 	.exiting_smm         = emulator_exiting_smm,
+-- 
+2.35.1
 
-Honestly not now, because I don't have access to related datasheets (I
-am working on this). You can though try to look at original (vendor)
-sources:
-https://git.codelinaro.org/clo/la/kernel/msm-4.19 (sdm845)
-https://git.codelinaro.org/clo/la/kernel/msm-3.18 (msm8996)
 
 
-Best regards,
-Krzysztof

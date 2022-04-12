@@ -2,424 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48E2C4FE029
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:30:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C6B44FE015
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:30:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354015AbiDLMWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 08:22:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50380 "EHLO
+        id S1354235AbiDLMWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 08:22:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355649AbiDLMTU (ORCPT
+        with ESMTP id S1355890AbiDLMT1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 08:19:20 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD716EB2B;
-        Tue, 12 Apr 2022 04:22:44 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id u19so11521649lff.4;
-        Tue, 12 Apr 2022 04:22:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=zjgmtbSNoF2mZGEsUPtkbHFRRKP9FVVfefhVkGjbZfQ=;
-        b=kw7VIsEmf0U7Z1+NXfv7iOK5PQ4KvemOjD1kg7x00UfHoZBB6h+D0CwqbHh/cPuD/0
-         jIzEDCOy3vOueU+zlC5BzNs0rj0zc9mi7spq2cjU+5ty2WqyiQ+j7XyVHW/SHZrHkCHx
-         dSJkq1KezLVvbrG9ftDwj9TNLduLwhGKekHcdYWyT4yPUNmw+Yf0xVDYIyy09OcdopqK
-         nF/oww7ylgFAEA8CvC0fgY4UaSm8qezYVw8PEnwv6ltNKS9jMtWVCd1W36o6vgpjjCoQ
-         /06F6sHqA/I/MnWUGKJy78L6W8bdbVwzQ19FsIqb5OZffEsH97VUrLA+9Cr5aWhre0oJ
-         vYmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zjgmtbSNoF2mZGEsUPtkbHFRRKP9FVVfefhVkGjbZfQ=;
-        b=oH363yHHYJQLyRtZwl/a1DqJP94Q6OxBnyYMBEDuxOUIE6qLeC7fIHYmCS4Agpcfe3
-         mSgEXvPR8PuSsfPkhJ9aVPnIpV+UkPoIIUrxscYlRZqSPY4wYIB+z5nnd63Rrm/1yHqj
-         RmovF2bjcbpXOM0YjKyfvEdw6QCUphgKTjPqTn6Jcwguagl33Yj0d8XtcZrJNFkirEDJ
-         4t9oO7jx+qFaqjd9qkocLO8hXjVspglNDc5QQEP+kjUMSm/JBYuahGlknBcmKmEKx4ba
-         lAeYdKddoI95zYwTiI6kM2GscLBAdt/zgKtzC+LT45Bk2x9F3ABKlmyW3E6teeVcVVa3
-         kQGQ==
-X-Gm-Message-State: AOAM530h9i5hUzENRQ9O3KIoxrtfYZlkoZkYs06y5bgWApnytnDyMABx
-        +Q5KtCjiEnPosL5wQO3E4QM=
-X-Google-Smtp-Source: ABdhPJwJo/oL6k4laov0OagaQyfUqPDx2IzYl7OYrblARpn+RJ3AYqSpMjIVyTxiG67PDc5twJ17Gw==
-X-Received: by 2002:ac2:4203:0:b0:448:8053:d402 with SMTP id y3-20020ac24203000000b004488053d402mr24213683lfh.687.1649762562723;
-        Tue, 12 Apr 2022 04:22:42 -0700 (PDT)
-Received: from mobilestation ([95.79.134.149])
-        by smtp.gmail.com with ESMTPSA id b19-20020a056512305300b0044a9638b343sm3612948lfb.303.2022.04.12.04.22.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 04:22:41 -0700 (PDT)
-Date:   Tue, 12 Apr 2022 14:22:39 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Brad Larson <brad@pensando.io>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        linux-arm-kernel@lists.infradead.org, arnd@arndb.de,
-        linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        broonie@kernel.org, adrian.hunter@intel.com,
-        ulf.hansson@linaro.org, olof@lixom.net, dac2@pensando.io,
-        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 11/11] arm64: dts: Add Pensando Elba SoC support
-Message-ID: <20220412112239.cucvqqlfsdpjnzju@mobilestation>
-References: <20220406233648.21644-1-brad@pensando.io>
- <20220406233648.21644-12-brad@pensando.io>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220406233648.21644-12-brad@pensando.io>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 12 Apr 2022 08:19:27 -0400
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 158F88CDA6;
+        Tue, 12 Apr 2022 04:23:12 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [10.15.192.164])
+        by mail-app2 (Coremail) with SMTP id by_KCgCnHhYUYVViTRWcAQ--.9963S2;
+        Tue, 12 Apr 2022 19:23:03 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     krzk@kernel.org, linux-kernel@vger.kernel.org
+Cc:     davem@davemloft.net, gregkh@linuxfoundation.org,
+        alexander.deucher@amd.com, broonie@kernel.org,
+        akpm@linux-foundation.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH V2 2/2] drivers: nfc: nfcmrvl: fix double free bug in nfc_fw_download_done()
+Date:   Tue, 12 Apr 2022 19:23:00 +0800
+Message-Id: <20220412112300.106640-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: by_KCgCnHhYUYVViTRWcAQ--.9963S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Cw1DZFW8KF4ktF15tr43Jrb_yoW8Zry7pr
+        WrGFy7Ar4DAr4YvFW5tFyDWrs8Cw47CryUGFZrG3yfZFn8tFyqy34kGFyrZF4DWr48ta15
+        K39xJayjkanYvr7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9C1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
+        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
+        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0E
+        n4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GFWkJr1UJw
+        CFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE
+        14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2
+        IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxK
+        x2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI
+        0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUd-B_UUUUU=
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgISAVZdtZJyPAADsy
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022 at 04:36:48PM -0700, Brad Larson wrote:
-> Add Pensando common and Elba SoC specific device nodes
-> 
-> Signed-off-by: Brad Larson <brad@pensando.io>
-> ---
-> Change from V3:
-> - Changed to dual copyright (GPL-2.0+ OR MIT)
-> - Minor changes from review input
-> 
->  arch/arm64/boot/dts/Makefile                  |   1 +
->  arch/arm64/boot/dts/pensando/Makefile         |   3 +
->  arch/arm64/boot/dts/pensando/elba-16core.dtsi | 189 ++++++++++++++++++
->  .../boot/dts/pensando/elba-asic-common.dtsi   |  98 +++++++++
->  arch/arm64/boot/dts/pensando/elba-asic.dts    |  28 +++
->  .../boot/dts/pensando/elba-flash-parts.dtsi   | 106 ++++++++++
->  arch/arm64/boot/dts/pensando/elba.dtsi        | 189 ++++++++++++++++++
->  7 files changed, 614 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/pensando/Makefile
->  create mode 100644 arch/arm64/boot/dts/pensando/elba-16core.dtsi
->  create mode 100644 arch/arm64/boot/dts/pensando/elba-asic-common.dtsi
->  create mode 100644 arch/arm64/boot/dts/pensando/elba-asic.dts
->  create mode 100644 arch/arm64/boot/dts/pensando/elba-flash-parts.dtsi
->  create mode 100644 arch/arm64/boot/dts/pensando/elba.dtsi
-> 
+There are potential double free bug in nfc_fw_download_done().
+The timer handler fw_dnld_timeout() and work item fw_dnld_rx_work()
+could both reach in fw_dnld_over() and nfc_fw_download_done() is not
+protected by any lock, which leads to double free.
 
-[...]
+The race between fw_dnld_rx_work() and fw_dnld_timeout()
+can be shown as below:
 
-> diff --git a/arch/arm64/boot/dts/pensando/elba-asic-common.dtsi b/arch/arm64/boot/dts/pensando/elba-asic-common.dtsi
-> new file mode 100644
-> index 000000000000..7a89df68fdf7
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/pensando/elba-asic-common.dtsi
-> @@ -0,0 +1,98 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright (c) 2020-2022, Pensando Systems Inc.
-> + */
-> +
-> +&ahb_clk {
-> +	clock-frequency = <400000000>;
-> +};
-> +
-> +&emmc_clk {
-> +	clock-frequency = <200000000>;
-> +};
-> +
-> +&flash_clk {
-> +	clock-frequency = <400000000>;
-> +};
-> +
-> +&ref_clk {
-> +	clock-frequency = <156250000>;
-> +};
-> +
-> +&qspi {
-> +	status = "okay";
-> +	flash0: flash@0 {
-> +		compatible = "jedec,spi-nor";
-> +		reg = <0>;
-> +		spi-max-frequency = <40000000>;
-> +		spi-rx-bus-width = <2>;
-> +		m25p,fast-read;
-> +		cdns,read-delay = <0>;
-> +		cdns,tshsl-ns = <0>;
-> +		cdns,tsd2d-ns = <0>;
-> +		cdns,tchsh-ns = <0>;
-> +		cdns,tslch-ns = <0>;
-> +	};
-> +};
-> +
-> +&gpio0 {
-> +	status = "okay";
-> +};
-> +
-> +&emmc {
-> +	bus-width = <8>;
-> +	status = "okay";
-> +};
-> +
-> +&wdt0 {
-> +	status = "okay";
-> +};
-> +
-> +&i2c0 {
-> +	clock-frequency = <100000>;
-> +	status = "okay";
-> +	rtc@51 {
-> +		compatible = "nxp,pcf85263";
-> +		reg = <0x51>;
-> +	};
-> +};
-> +
-> +&spi0 {
-> +	num-cs = <4>;
-> +	cs-gpios = <0>, <0>, <&porta 1 GPIO_ACTIVE_LOW>,
-> +		   <&porta 7 GPIO_ACTIVE_LOW>;
-> +	status = "okay";
-> +	spi0_cs0@0 {
-> +		compatible = "semtech,sx1301";	/* Enable spidev */
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		spi-max-frequency = <12000000>;
-> +		reg = <0>;
-> +	};
-> +
-> +	spi0_cs1@1 {
-> +		compatible = "semtech,sx1301";
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		spi-max-frequency = <12000000>;
-> +		reg = <1>;
-> +	};
-> +
-> +	spi0_cs2@2 {
-> +		compatible = "semtech,sx1301";
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		spi-max-frequency = <12000000>;
-> +		reg = <2>;
-> +		interrupt-parent = <&porta>;
-> +		interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
-> +	};
-> +
-> +	spi0_cs3@3 {
-> +		compatible = "semtech,sx1301";
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		spi-max-frequency = <12000000>;
-> +		reg = <3>;
-> +	};
-> +};
+   (Thread 1)               |      (Thread 2)
+fw_dnld_timeout             |  fw_dnld_rx_work
+                            |   fw_dnld_over
+ fw_dnld_over               |    nfc_fw_download_done
+  nfc_fw_download_done      |     nfc_genl_fw_download_done
+   nfc_genl_fw_download_done|      nlmsg_free(msg)  //(1)
+    nlmsg_free(msg) //(2)   |      ...
+     ...                    |
 
-[...]
+The nlmsg_free() will deallocate sk_buff in position (1), but
+nlmsg_free will be deallocated again in position (2), which
+leads to double free.
 
-> diff --git a/arch/arm64/boot/dts/pensando/elba.dtsi b/arch/arm64/boot/dts/pensando/elba.dtsi
-> new file mode 100644
-> index 000000000000..10e06eb8cda6
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/pensando/elba.dtsi
-> @@ -0,0 +1,189 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright (c) 2020-2022, Pensando Systems Inc.
-> + */
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include "dt-bindings/interrupt-controller/arm-gic.h"
-> +
-> +/ {
-> +	model = "Elba ASIC Board";
-> +	compatible = "pensando,elba";
-> +	interrupt-parent = <&gic>;
-> +	#address-cells = <2>;
-> +	#size-cells = <2>;
-> +
-> +	dma-coherent;
-> +
-> +	ahb_clk: oscillator0 {
-> +		compatible = "fixed-clock";
-> +		#clock-cells = <0>;
-> +	};
-> +
-> +	emmc_clk: oscillator2 {
-> +		compatible = "fixed-clock";
-> +		#clock-cells = <0>;
-> +	};
-> +
-> +	flash_clk: oscillator3 {
-> +		compatible = "fixed-clock";
-> +		#clock-cells = <0>;
-> +	};
-> +
-> +	ref_clk: oscillator4 {
-> +		compatible = "fixed-clock";
-> +		#clock-cells = <0>;
-> +	};
-> +
-> +	psci {
-> +		compatible = "arm,psci-0.2";
-> +		method = "smc";
-> +	};
-> +
-> +	timer {
-> +		compatible = "arm,armv8-timer";
-> +		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW>,
-> +			     <GIC_PPI 14 IRQ_TYPE_LEVEL_LOW>,
-> +			     <GIC_PPI 11 IRQ_TYPE_LEVEL_LOW>,
-> +			     <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW>;
-> +	};
-> +
-> +	pmu {
-> +		compatible = "arm,cortex-a72-pmu";
-> +		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_LOW>;
-> +	};
-> +
-> +	soc: soc {
-> +		compatible = "simple-bus";
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges;
-> +
-> +		i2c0: i2c@400 {
-> +			compatible = "snps,designware-i2c";
-> +			reg = <0x0 0x400 0x0 0x100>;
-> +			clocks = <&ahb_clk>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			i2c-sda-hold-time-ns = <480>;
-> +			snps,sda-timeout-ms = <750>;
-> +			interrupts = <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>;
-> +			status = "disabled";
-> +		};
-> +
-> +		wdt0: watchdog@1400 {
-> +			compatible = "snps,dw-wdt";
-> +			reg = <0x0 0x1400 0x0 0x100>;
-> +			clocks = <&ahb_clk>;
-> +			interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
-> +			status = "disabled";
-> +		};
-> +
-> +		qspi: spi@2400 {
-> +			compatible = "pensando,elba-qspi", "cdns,qspi-nor";
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			reg = <0x0 0x2400 0x0 0x400>,
-> +			      <0x0 0x7fff0000 0x0 0x1000>;
-> +			interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&flash_clk>;
-> +			cdns,fifo-depth = <1024>;
-> +			cdns,fifo-width = <4>;
-> +			cdns,trigger-address = <0x7fff0000>;
-> +			status = "disabled";
-> +		};
-> +
-> +		spi0: spi@2800 {
-> +			compatible = "pensando,elba-spi";
-> +			reg = <0x0 0x2800 0x0 0x100>;
+This patch adds spin_lock_irq() and check in fw_dnld_over()
+in order to synchronize among different threads that call
+fw_dnld_over(). So the double free bug could be prevented.
 
-> +			pensando,syscon-spics = <&mssoc 0x2468>;
+Fixes: 3194c6870158e3 ("NFC: nfcmrvl: add firmware download support")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Reviewed-by: Lin Ma <linma@zju.edu.cn>
+---
+Changes in V2:
+  - Fix the check in spin_lock_irq.
 
-I am wondering do you really need to define the
-"pensando,syscon-spics" property as accepting a phandle with an
-additional argument? That would have been justified if you had at
-least two SPI controllers with different CS override registers. AFAICS
-you've got only one here. So you can simplify the bindings by defining
-the property like "pensando,syscon" (with no "spics" suffix) which
-accepts the syscon phandle alone. Respective SPICS offset can be
-locally declared in the driver as a macro with respective name.
+ drivers/nfc/nfcmrvl/fw_dnld.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
--Sergey
+diff --git a/drivers/nfc/nfcmrvl/fw_dnld.c b/drivers/nfc/nfcmrvl/fw_dnld.c
+index c22a4556db5..8188d466a01 100644
+--- a/drivers/nfc/nfcmrvl/fw_dnld.c
++++ b/drivers/nfc/nfcmrvl/fw_dnld.c
+@@ -116,7 +116,10 @@ static void fw_dnld_over(struct nfcmrvl_private *priv, u32 error)
+ 		nfcmrvl_chip_halt(priv);
+ 	}
+ 
+-	nfc_fw_download_done(priv->ndev->nfc_dev, priv->fw_dnld.name, error);
++	spin_lock_irq(&priv->fw_dnld.lock);
++	if (priv->ndev->nfc_dev->fw_download_in_progress)
++		nfc_fw_download_done(priv->ndev->nfc_dev, priv->fw_dnld.name, error);
++	spin_unlock_irq(&priv->fw_dnld.lock);
+ }
+ 
+ static void fw_dnld_timeout(struct timer_list *t)
+-- 
+2.17.1
 
-
-> +			clocks = <&ahb_clk>;
-> +			interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			num-cs = <2>;
-> +			status = "disabled";
-> +		};
-> +
-> +		gpio0: gpio@4000 {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			compatible = "snps,dw-apb-gpio";
-> +			reg = <0x0 0x4000 0x0 0x78>;
-> +			status = "disabled";
-> +
-> +			porta: gpio-port@0 {
-> +				compatible = "snps,dw-apb-gpio-port";
-> +				reg = <0>;
-> +				gpio-controller;
-> +				#gpio-cells = <2>;
-> +				ngpios = <8>;
-> +				interrupts = <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>;
-> +				interrupt-controller;
-> +				interrupt-parent = <&gic>;
-> +				#interrupt-cells = <2>;
-> +			};
-> +
-> +			portb: gpio-port@1 {
-> +				compatible = "snps,dw-apb-gpio-port";
-> +				reg = <1>;
-> +				gpio-controller;
-> +				#gpio-cells = <2>;
-> +				ngpios = <8>;
-> +			};
-> +		};
-> +
-> +		uart0: serial@4800 {
-> +			compatible = "ns16550a";
-> +			reg = <0x0 0x4800 0x0 0x100>;
-> +			clocks = <&ref_clk>;
-> +			interrupts = <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>;
-> +			reg-shift = <2>;
-> +			reg-io-width = <4>;
-> +		};
-> +
-> +		gic: interrupt-controller@800000 {
-> +			compatible = "arm,gic-v3";
-> +			#interrupt-cells = <3>;
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
-> +			interrupt-controller;
-> +			reg = <0x0 0x800000 0x0 0x200000>,	/* GICD */
-> +			      <0x0 0xa00000 0x0 0x200000>;	/* GICR */
-> +			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +			/*
-> +			 * Elba specific pre-ITS is enabled using the
-> +			 * existing property socionext,synquacer-pre-its
-> +			 */
-> +			gic_its: msi-controller@820000 {
-> +				compatible = "arm,gic-v3-its";
-> +				msi-controller;
-> +				#msi-cells = <1>;
-> +				reg = <0x0 0x820000 0x0 0x10000>;
-> +				socionext,synquacer-pre-its =
-> +							<0xc00000 0x1000000>;
-> +			};
-> +		};
-> +
-> +		emmc: mmc@30440000 {
-> +			compatible = "pensando,elba-sd4hc", "cdns,sd4hc";
-> +			clocks = <&emmc_clk>;
-> +			interrupts = <GIC_SPI 26 IRQ_TYPE_LEVEL_HIGH>;
-> +			reg = <0x0 0x30440000 0x0 0x10000>,
-> +			      <0x0 0x30480044 0x0 0x4>;	/* byte-lane ctrl */
-> +			cdns,phy-input-delay-sd-highspeed = <0x4>;
-> +			cdns,phy-input-delay-legacy = <0x4>;
-> +			cdns,phy-input-delay-sd-uhs-sdr50 = <0x6>;
-> +			cdns,phy-input-delay-sd-uhs-ddr50 = <0x16>;
-> +			mmc-ddr-1_8v;
-> +			status = "disabled";
-> +		};
-> +
-> +		mssoc: mssoc@307c0000 {
-> +			compatible = "syscon", "simple-mfd";
-> +			reg = <0x0 0x307c0000 0x0 0x3000>;
-> +		};
-> +	};
-> +};
-> -- 
-> 2.17.1
-> 

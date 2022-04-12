@@ -2,50 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 421994FE9BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 22:59:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F0774FE9D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 23:08:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbiDLU51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 16:57:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41942 "EHLO
+        id S231708AbiDLVGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 17:06:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiDLU5T (ORCPT
+        with ESMTP id S231522AbiDLVGi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 16:57:19 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582F61480F3
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 13:52:24 -0700 (PDT)
-Message-ID: <20220412204353.655068649@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649796707;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=fMHxW+I+DB5whhm2iNZXozQYgZvT3uBymP8I1OaqnYo=;
-        b=Pm6IDzVTfJMphP8dUyw7QekdepbBvV0tCoeXvtoWvD7MB4gXsW8LI7rUNc2EvRQKBRIE4U
-        XVg7rZUewqymqVzX7uQTFKhysxz5AEYTvvlB/3P7ftM8oLziYB+v10dQlMDx0LQvqkGfKi
-        TnHVaBdklr+JuzXrTs2SA88miQvc01c67+53qb5ADsm4slqUtOkXNa+KCj2GDQldm40V/I
-        Wy+AYssgsnXky2NctYFfEkZzXOItVlKfrXA5tyG1ibH+Cnk9ZFsOAqbgq5UfOBpSm4cMVL
-        cVLWaLuD/+f+DfwCFJahq9b1m/ebemQv8ztAUcSmQaa2trg4Lj9uNL5LG/Fg9A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649796707;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=fMHxW+I+DB5whhm2iNZXozQYgZvT3uBymP8I1OaqnYo=;
-        b=B8LvWhv7tWGrAsm5jFRabEbTRYAjPohDeRTte93V6vyXkvGMaQzU4sz9Fxdq+NZ76P2IEN
-        Fjuryv73X5VPedBg==
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [patch V4 1/2] smp: Rename flush_smp_call_function_from_idle()
-References: <20220412203649.956258017@linutronix.de>
+        Tue, 12 Apr 2022 17:06:38 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2060.outbound.protection.outlook.com [40.107.243.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F16F81557D8
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 13:54:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=C1fVpaXR29IRGij+cOQmVqZnNHiJq4DifdacNZ5Ny+MTu/vCGhdlwgz1+ftKkeq64DOwks+51aN8DWNOZwmC/4EJDPqa6RjD/ubjM+5bAmwWCqQsHwvFcy5BBh6xyy3s5ZKgBujVYLOYoYaQMrRGLEmv4i/NWpYYE7i3bLWU1H6eYMEgInjh8RHfdiTjGqDJmJuRTQNFm+OUJY2MMHeRxBCcEwk2iZ6oqe4JPtB2m3l2gzR95i9KM1giG0aaZzX5YWoVCXxBY142T2QCWQUrnKaQDvdkMCFTv35J8itzlcHHGj5E9Lh8PgKbSBFsSgfj4l+8bAGyrTFVDdQOCAVBEg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cthwjclGMPbPpnk/MGYP5dDa7WDpfI91BXxxjXyjJRU=;
+ b=lZ0oFkZ6WHEfoLmltXozs1eBHNBzfiYgkYAcH/5v3rctuk8RDn0SDvoYOVnMWe6AD9NHY6NdiRLnQfX2dAGUG2NacaosQO4P2E64tfQMIwFu90QMGYbsXNh8W8rQUIEdW6a3jfFlXpLdoEnC+TMvLhFh89Ne2AUlOXy6SRGEFbclw26Hm8eSj3r8Fwy6T+bY4aY3E9KJyDLrkFsElPLtj5xSrF5eXjWM1ayacNg8rRppXlCDw7KFYfYU8ZPRa5npOGiC9gTCCkrWZ8yJ+2t1O6/LCX7K1H+IbtMiP1z0kEqZ4jbaAEWNTFQ5KlZWHF/f93AdoAb9REkI63gMmIYw8w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cthwjclGMPbPpnk/MGYP5dDa7WDpfI91BXxxjXyjJRU=;
+ b=RH8UxS+8bbcVsaic4PU3bBYLakj1zLqgVmKW7yQNR60AeZ3BA/nTNA8MrYrSxMmOJdSl1elQ+TzSxYBaaa/JdMIixJiVWzs8fnMA3cexyqBS9Fk4wNL4Aj4hCeZp/b+roCN2BbyTHEQymbB6DUfM06qoXOXjFlsdTZBmZFG8JI2pfX25mI0M6Cy3MfbN/D9KFUe3GOEeZQRa4I5Fi61rD8g1bO+XWCRaRqPHbatAL68KUlsFivrbvpf2NZFv+p1372H24WyKmCpYu35PUh5evQKlWSnfpAKU4v270zzJyTi5mh8BEx9ns0If0s/OH47j7EQfLxJaPLi+Kw4BkHGrVA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4206.namprd12.prod.outlook.com (2603:10b6:208:1d5::18)
+ by MWHPR12MB1679.namprd12.prod.outlook.com (2603:10b6:301:f::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Tue, 12 Apr
+ 2022 20:52:02 +0000
+Received: from MN2PR12MB4206.namprd12.prod.outlook.com
+ ([fe80::211e:d78f:c944:6665]) by MN2PR12MB4206.namprd12.prod.outlook.com
+ ([fe80::211e:d78f:c944:6665%7]) with mapi id 15.20.5144.030; Tue, 12 Apr 2022
+ 20:52:02 +0000
+Message-ID: <adb222bd-cbd4-eab5-78d6-4fa803e20875@nvidia.com>
+Date:   Wed, 13 Apr 2022 02:21:47 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH 31/34] vfio/mdev: Remove mdev_parent_ops dev_attr_groups
+Content-Language: en-US
+To:     Christoph Hellwig <hch@lst.de>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>, intel-gfx@lists.freedesktop.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20220411141403.86980-1-hch@lst.de>
+ <20220411141403.86980-32-hch@lst.de>
+X-Nvconfidentiality: public
+From:   Kirti Wankhede <kwankhede@nvidia.com>
+In-Reply-To: <20220411141403.86980-32-hch@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MA1PR0101CA0063.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a00:20::25) To MN2PR12MB4206.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::18)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 12 Apr 2022 22:51:46 +0200 (CEST)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: df4e8198-8227-44dd-8a5f-08da1cc64b77
+X-MS-TrafficTypeDiagnostic: MWHPR12MB1679:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR12MB1679751F6F06228005191D97DCED9@MWHPR12MB1679.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 4cEcKZnUrrwI7fr5mblA3yfcQ4WXhxhozNzGnbQb8bUVuzRaPC7T3GQFE+pjs0pi6pnPF0FbqTfmJjawGmf8rUS02SyF74qzCFXw0YP+dxtcLUQLluRsGQUKJ5kyjVPHsjQ/HARdAWWA2v4D+ItwaLs8FM0l2SrUaYCzI0hLMMoLUAjnADC8zW7ZGVffwDZ3o3pr8rWIKShuextJnDWyMbrO6+IP+hQSicB1OMS2N3EXadEdLVEtk2m682DsJrXnrKNmaTXm9VbVIH73EK1YeK0VHoIQxYZ4P6gKW+a1/Y/CvLrXrc/8xD21JiF41nghUxcW5fjo46O5NkIkTgZ3QkTvObEY2fs9pidgnmNV3ztTKaCj/6uAFfzXOcb7I40yj3mWssFmG6MeGSw1YOu8cln1r6wx4kFsOZ/9OCDBP0loKYAMAt4qUXdsRf5GNSWBZ2FBXIAs/I1vSwEtB3qrPRpkNzapkb+4cLz5nG8agmc3P9jCPXM/Ctn6fzrxOJC1jiY6AN1EWHyTcjXpV1WcW4gsa1CffqTV1M55T5rf3ESF5l7CTiLf4aPXoKf+kOTfke7aW6Ybf42hUxNWRkgcs3FDxRG6gnGvU1a2Zw0BWG1sIPOldIl/KoNKiBb/DaoyW88YGmV9bMKcjgm7ykJCxe8m2z1DBCJJDnUzbjMBjGcqVajIVcPPXXWPizIHQyc+6S4ldcPcUAZSxLb58CszZPOlx3bk4/B8tGTYjs8SRNc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4206.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(6486002)(2906002)(6512007)(31686004)(66946007)(31696002)(8676002)(186003)(26005)(4326008)(7416002)(53546011)(8936002)(5660300002)(6666004)(86362001)(66556008)(55236004)(2616005)(6506007)(508600001)(83380400001)(66476007)(36756003)(316002)(110136005)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YUx3V1drNGJxOUkxSVFtMVpxck15SEZmaVk1c01CUFNEMDh1RDdWWDlKcUt3?=
+ =?utf-8?B?ZDFOdFdMd0J5eUtNRFhOM25ONHc2eG51KzZENzBwT2dnYmxXWVQ2VzFpb0Jv?=
+ =?utf-8?B?b3JTMTRPSEJrTEpQa2NZU2pCODkyOHRBLzJ0bHdVdUh3VlRmdlVJbjZjQ1Fp?=
+ =?utf-8?B?QmxhZnBqemF0eWJPNXl4U0NIVUFJM2s0ZCsza21Sb0dFYkcrM3VHUUdOWjBn?=
+ =?utf-8?B?eS9oamU3SmI2K29vMjNNT0ZBZytOSUI2UVVZU1dMRHIwL1dOQXpBRnJiOStv?=
+ =?utf-8?B?bkpzWXZOMTNlWnNGalRjSHNtanpZOWhkbkcvRkxIVHJaazNhT2NZZGVUZlBM?=
+ =?utf-8?B?YkdDdkFVMzFaaW1sb0xZOVZRWE54SVJjMS9BTi81ZGtRYklmWmozcVBHZC96?=
+ =?utf-8?B?aDNGbG9aUUY3MWpsclNWelZCQkhHSjR1VVgyalpxTlRoUkhONlZXVVMrbUlS?=
+ =?utf-8?B?ZEdyN3ExVU9qK0JQUi9zU2tJaU14ZGw3bWZ2R3BCWnRCc2JoeFhpeHU4dTMv?=
+ =?utf-8?B?MDNibWV2VVgzVTJIdFY4RHF0Y2diU3VHRnlVNGRBTHdyamZESTFqSzRmYjFa?=
+ =?utf-8?B?cXZtZUpoRU9RSm9MV01nbDVHck1HTlJQR0tHcnQvU2dsTmpTemNQcmFTTFJk?=
+ =?utf-8?B?NXlGOVUvZkFIQ1lKeVpUUjBTUURsQnJGOWwrYkhIM1ZvVytUQUxqOGs5c2V5?=
+ =?utf-8?B?NG9nR0VsakY2dFhxY0tWTk1TSzI5REg1bEtFT01MWWp2aXplSmo3Y3FaSmhS?=
+ =?utf-8?B?M2V3M29nK1VHOHVMa05NWjNOV1ZUMWxvTFNaRUR1dXVqVlN6V1RGbmdBV2ds?=
+ =?utf-8?B?SkRRRlU2ZnhkVlFLT0I1Q1dVdDl3ZnI2N1hQbE9MKzNEWTQ0UHJVWmxQNzVz?=
+ =?utf-8?B?dm8xd0tzRUtDUUt5a01xQ09vS0IrMlRnbXF0ZnlJM0ExMDhZaFZaMG5sQStP?=
+ =?utf-8?B?dlVFRDBpeUpXRFI5VG1UaTBXMlFLQ1M1TUU5T1NRV1c2Nkt2d2FzSTZMRXlR?=
+ =?utf-8?B?MFl6WUlJQ0p5eDNhdVl3VW4xVGlNeHQzbTVEM1pldjV2djF4Qmx3c2x2eTlv?=
+ =?utf-8?B?QWhQSEdjSDlFYjYrRzdOMEh5WFhJeGduU3pYcC9Tb2swSnh1TjdybXZEVEdz?=
+ =?utf-8?B?N3htaEpsdEMvRXh5c2UvanBlRThBdk5Ed1M0UFpPSi9YQUFEdklBeXdHaGkz?=
+ =?utf-8?B?VWFGT1pFN29ma2pWL0tLOVZibXRHWkV1YW1oSkFWMnpFZC9QVmJ6OFdhQ3hp?=
+ =?utf-8?B?Mk5YbUYvWngrS3BFSDFtck5yaE9Rc21NbkhabG8vQ09saHZ5eXFNbWdBMWhP?=
+ =?utf-8?B?d0NMaGhpSFR5bDhqSHovV1Y5K0dHYllWbWVTOVd6MlYxUmV5UW04Nzg2d0tm?=
+ =?utf-8?B?b2EyTnE3M1JzemhadlhmUnpZMjl6aG1hN2Qrc2JXVTU5ZFl6Y21xL3NWVzk3?=
+ =?utf-8?B?M1FibnhBbHp5MGFDMGQyM3h1UzNyYTJsdFJzTlpSdnRxTzZURThSTVhpenNm?=
+ =?utf-8?B?SHVKUmpzU29rcXE2VUM5c09EUTVFRU9aTVBOMnhwSDlWVHNLcDBiV0VWZ2d3?=
+ =?utf-8?B?N2lXT0RxRDVDeUNCcEdkZkJ5WmRqYUJIOVFGemtGMU9uaXBsMmE1U05Xdy85?=
+ =?utf-8?B?UEk2R3dzeWljbDZmekxWbTBvVGlzamRkNGFEbVMwWE0vSTJ3TWtZUWVZTGtC?=
+ =?utf-8?B?QW1CM05iSk9Temd1K1BMQTVMTjZsYmt3WW04Z24yRlJRTFJEaXVYTTlkTm9i?=
+ =?utf-8?B?SEFRamd6NE1VRzlkNzczUWQ5eFRENDFSZXNJcWNRZnhIM2lXaEFRbFZIa0Fa?=
+ =?utf-8?B?UUdoSDluZGhWOXJSc0UvYzY3OUtyZHFHVk1hQ3FkN3NBOTF5Qlk2aVduaU9j?=
+ =?utf-8?B?OEFXK3NucHlycktrdzRqNGdMOXo4ZzVlWEx5SmI2ckl0eCtxeG4wd2M5SlBF?=
+ =?utf-8?B?WFJ4ODcwSnk1Mk5KOWNFOC85NzRJYWJ6eHdvOFZLRmoxaTJDdWZ2Vlg1WWdG?=
+ =?utf-8?B?UFVKQVIvRitWZFlnUjFXeS8yekVJd1BMNXhHVnowcG5JVmxVcDExRVcvU3Mr?=
+ =?utf-8?B?cW8wR25aa2tWeWs2REZOM1hDUXhZdk1qeWJlUnJPS2RzQTh0T3RYblkwemJp?=
+ =?utf-8?B?cUl3UThvZ1A2NjljQkdQalV5b29SaEVYRUljSkkrb2NKN1MrNk15ZW1KQlBO?=
+ =?utf-8?B?RkNLbWpvRzhFemk4aW9Pak1yWXFaUVR1d21RZkNWM0phaDdjY3M5ODRVeWZr?=
+ =?utf-8?B?T0dzdTdsa0VHN3VDM1FKbmFjc3FRa0J0L2oyS1JBRGtaYTBxZVRjRjZQbXhF?=
+ =?utf-8?B?V0JVbnhGQXEvS09DV3ZWNmtLUFdLUEx3V29URXROQUx3SXUzbXE2dz09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: df4e8198-8227-44dd-8a5f-08da1cc64b77
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4206.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2022 20:52:02.5180
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9roXIkzC4UarfrGXlX6hl/5cJcGEKGDr4JruvM0cplhojrYoIe+Zz5jSrP7PuVI9iPgJcKk4n8szmgqrXLCuvQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1679
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,128 +138,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is invoked from the stopper thread too, which is definitely not idle.
-Rename it to flush_smp_call_function_queue() and fixup the callers.
 
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
----
-V4: New patch
----
- kernel/sched/core.c  |    2 +-
- kernel/sched/idle.c  |    2 +-
- kernel/sched/sched.h |    4 ++--
- kernel/smp.c         |   27 ++++++++++++++++++++-------
- 4 files changed, 24 insertions(+), 11 deletions(-)
 
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -2408,7 +2408,7 @@ static int migration_cpu_stop(void *data
- 	 * __migrate_task() such that we will not miss enforcing cpus_ptr
- 	 * during wakeups, see set_cpus_allowed_ptr()'s TASK_WAKING test.
- 	 */
--	flush_smp_call_function_from_idle();
-+	flush_smp_call_function_queue();
- 
- 	raw_spin_lock(&p->pi_lock);
- 	rq_lock(rq, &rf);
---- a/kernel/sched/idle.c
-+++ b/kernel/sched/idle.c
-@@ -327,7 +327,7 @@ static void do_idle(void)
- 	 * RCU relies on this call to be done outside of an RCU read-side
- 	 * critical section.
- 	 */
--	flush_smp_call_function_from_idle();
-+	flush_smp_call_function_queue();
- 	schedule_idle();
- 
- 	if (unlikely(klp_patch_pending(current)))
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -1834,10 +1834,10 @@ static inline void dirty_sched_domain_sy
- 
- extern int sched_update_scaling(void);
- 
--extern void flush_smp_call_function_from_idle(void);
-+extern void flush_smp_call_function_queue(void);
- 
- #else /* !CONFIG_SMP: */
--static inline void flush_smp_call_function_from_idle(void) { }
-+static inline void flush_smp_call_function_queue(void) { }
- #endif
- 
- #include "stats.h"
---- a/kernel/smp.c
-+++ b/kernel/smp.c
-@@ -96,7 +96,7 @@ static DEFINE_PER_CPU_ALIGNED(struct cal
- 
- static DEFINE_PER_CPU_SHARED_ALIGNED(struct llist_head, call_single_queue);
- 
--static void flush_smp_call_function_queue(bool warn_cpu_offline);
-+static void __flush_smp_call_function_queue(bool warn_cpu_offline);
- 
- int smpcfd_prepare_cpu(unsigned int cpu)
- {
-@@ -141,7 +141,7 @@ int smpcfd_dying_cpu(unsigned int cpu)
- 	 * ensure that the outgoing CPU doesn't go offline with work
- 	 * still pending.
- 	 */
--	flush_smp_call_function_queue(false);
-+	__flush_smp_call_function_queue(false);
- 	irq_work_run();
- 	return 0;
- }
-@@ -541,11 +541,11 @@ void generic_smp_call_function_single_in
- {
- 	cfd_seq_store(this_cpu_ptr(&cfd_seq_local)->gotipi, CFD_SEQ_NOCPU,
- 		      smp_processor_id(), CFD_SEQ_GOTIPI);
--	flush_smp_call_function_queue(true);
-+	__flush_smp_call_function_queue(true);
- }
- 
- /**
-- * flush_smp_call_function_queue - Flush pending smp-call-function callbacks
-+ * __flush_smp_call_function_queue - Flush pending smp-call-function callbacks
-  *
-  * @warn_cpu_offline: If set to 'true', warn if callbacks were queued on an
-  *		      offline CPU. Skip this check if set to 'false'.
-@@ -558,7 +558,7 @@ void generic_smp_call_function_single_in
-  * Loop through the call_single_queue and run all the queued callbacks.
-  * Must be called with interrupts disabled.
-  */
--static void flush_smp_call_function_queue(bool warn_cpu_offline)
-+static void __flush_smp_call_function_queue(bool warn_cpu_offline)
- {
- 	call_single_data_t *csd, *csd_next;
- 	struct llist_node *entry, *prev;
-@@ -681,7 +681,20 @@ static void flush_smp_call_function_queu
- 		      smp_processor_id(), CFD_SEQ_HDLEND);
- }
- 
--void flush_smp_call_function_from_idle(void)
-+
-+/**
-+ * flush_smp_call_function_queue - Flush pending smp-call-function callbacks
-+ *				   from task context (idle, migration thread)
-+ *
-+ * When TIF_POLLING_NRFLAG is supported and a CPU is in idle and has it
-+ * set, then remote CPUs can avoid sending IPIs and wake the idle CPU by
-+ * setting TIF_NEED_RESCHED. The idle task on the woken up CPU has to
-+ * handle queued SMP function calls before scheduling.
-+ *
-+ * The migration thread has to ensure that an eventually pending wakeup has
-+ * been handled before it migrates a task.
-+ */
-+void flush_smp_call_function_queue(void)
- {
- 	unsigned long flags;
- 
-@@ -691,7 +704,7 @@ void flush_smp_call_function_from_idle(v
- 	cfd_seq_store(this_cpu_ptr(&cfd_seq_local)->idle, CFD_SEQ_NOCPU,
- 		      smp_processor_id(), CFD_SEQ_IDLE);
- 	local_irq_save(flags);
--	flush_smp_call_function_queue(true);
-+	__flush_smp_call_function_queue(true);
- 	if (local_softirq_pending())
- 		do_softirq();
- 
+On 4/11/2022 7:44 PM, Christoph Hellwig wrote:
+> From: Jason Gunthorpe <jgg@nvidia.com>
+> 
+> This is only used by one sample to print a fixed string that is pointless.
+> 
+> In general, having a device driver attach sysfs attributes to the parent
+> is horrific. This should never happen, and always leads to some kind of
+> liftime bug as it become very difficult for the sysfs attribute to go back
+> to any data owned by the device driver.
+> 
+> Remove the general mechanism to create this abuse.
+> 
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>   drivers/vfio/mdev/mdev_sysfs.c | 12 ++----------
+>   include/linux/mdev.h           |  2 --
+>   samples/vfio-mdev/mtty.c       | 30 +-----------------------------
+>   3 files changed, 3 insertions(+), 41 deletions(-)
+> 
+
+Update Documentation/driver-api/vfio-mediated-device.rst where mtty 
+sample code explained. Tree command output should be updated, i.e remove 
+below 2 lines.
+         |-- mtty_dev
+         |   `-- sample_mtty_dev
+
+Rest looks good to me.
+
+Thanks,
+Kirti
 

@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35CC34FD5B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:14:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B97374FDB1B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:55:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358393AbiDLHle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:41:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45944 "EHLO
+        id S1353317AbiDLHPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:15:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353460AbiDLHPZ (ORCPT
+        with ESMTP id S1351458AbiDLG6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:15:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 990E639815;
-        Mon, 11 Apr 2022 23:56:58 -0700 (PDT)
+        Tue, 12 Apr 2022 02:58:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3FD42A0E;
+        Mon, 11 Apr 2022 23:46:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E0F86B81B43;
-        Tue, 12 Apr 2022 06:56:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 369C0C385A8;
-        Tue, 12 Apr 2022 06:56:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 74C6660A21;
+        Tue, 12 Apr 2022 06:46:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A50DC385A1;
+        Tue, 12 Apr 2022 06:46:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746615;
-        bh=CS2I9ncH29T565J8Zn6hf9xZSmGn45aldAFGwM5euAQ=;
+        s=korg; t=1649745991;
+        bh=xFvb53Si9ghVV5c0ZgaZzZneJoNLT2VDq2rumVQsZ/I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MUveFP+BnptWxLf1BOgTjqNVZKHuYsFFUXbf5p0KnX1eqSLnZuM6m8vmlPb2nPSpk
-         gp+zggk9y5DHn53Fc6FQ+JH3Q2mQN/nfq/JQ43Lu6bemdz/d0Y91Ygp3iZCVqiKFtO
-         ODRVF2QbkQtP9uutNxTuCXsudXMpRMSVSM6bpylA=
+        b=MbwUvZk7Jz3da+/kG4VNLHz/bYgVztjeuOOUWWU6JtwJZGoSyajljvhNGMYCRSmNh
+         A1B90//VH4mZbC2/HAn2NIQGgHY9Ek14+Uo0iASRFLyMMlR1tz7xwzJJL2v2j8rINb
+         zUBb+GvDF2EYPgToshnVGhP2733xK6Pxle1k3uYg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhang Yi <yi.zhang@huawei.com>,
-        Mike Snitzer <snitzer@redhat.com>,
+        stable@vger.kernel.org, Xin Xiong <xiongx18@fudan.edu.cn>,
+        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
+        Xin Tan <tanxin.ctf@gmail.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 067/285] dm: requeue IO if mapping table not yet available
+Subject: [PATCH 5.15 121/277] NFSv4.2: fix reference count leaks in _nfs42_proc_copy_notify()
 Date:   Tue, 12 Apr 2022 08:28:44 +0200
-Message-Id: <20220412062945.603417875@linuxfoundation.org>
+Message-Id: <20220412062945.542618278@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,68 +57,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Snitzer <snitzer@redhat.com>
+From: Xin Xiong <xiongx18@fudan.edu.cn>
 
-[ Upstream commit fa247089de9936a46e290d4724cb5f0b845600f5 ]
+[ Upstream commit b7f114edd54326f730a754547e7cfb197b5bc132 ]
 
-Update both bio-based and request-based DM to requeue IO if the
-mapping table not available.
+[You don't often get email from xiongx18@fudan.edu.cn. Learn why this is important at http://aka.ms/LearnAboutSenderIdentification.]
 
-This race of IO being submitted before the DM device ready is so
-narrow, yet possible for initial table load given that the DM device's
-request_queue is created prior, that it best to requeue IO to handle
-this unlikely case.
+The reference counting issue happens in two error paths in the
+function _nfs42_proc_copy_notify(). In both error paths, the function
+simply returns the error code and forgets to balance the refcount of
+object `ctx`, bumped by get_nfs_open_context() earlier, which may
+cause refcount leaks.
 
-Reported-by: Zhang Yi <yi.zhang@huawei.com>
-Signed-off-by: Mike Snitzer <snitzer@redhat.com>
+Fix it by balancing refcount of the `ctx` object before the function
+returns in both error paths.
+
+Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
+Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
+Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/md/dm-rq.c |  7 ++++++-
- drivers/md/dm.c    | 11 +++--------
- 2 files changed, 9 insertions(+), 9 deletions(-)
+ fs/nfs/nfs42proc.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/md/dm-rq.c b/drivers/md/dm-rq.c
-index 579ab6183d4d..dffeb47a9efb 100644
---- a/drivers/md/dm-rq.c
-+++ b/drivers/md/dm-rq.c
-@@ -499,8 +499,13 @@ static blk_status_t dm_mq_queue_rq(struct blk_mq_hw_ctx *hctx,
+diff --git a/fs/nfs/nfs42proc.c b/fs/nfs/nfs42proc.c
+index 9865b5c37d88..93f4d8257525 100644
+--- a/fs/nfs/nfs42proc.c
++++ b/fs/nfs/nfs42proc.c
+@@ -586,8 +586,10 @@ static int _nfs42_proc_copy_notify(struct file *src, struct file *dst,
  
- 	if (unlikely(!ti)) {
- 		int srcu_idx;
--		struct dm_table *map = dm_get_live_table(md, &srcu_idx);
-+		struct dm_table *map;
+ 	ctx = get_nfs_open_context(nfs_file_open_context(src));
+ 	l_ctx = nfs_get_lock_context(ctx);
+-	if (IS_ERR(l_ctx))
+-		return PTR_ERR(l_ctx);
++	if (IS_ERR(l_ctx)) {
++		status = PTR_ERR(l_ctx);
++		goto out;
++	}
  
-+		map = dm_get_live_table(md, &srcu_idx);
-+		if (unlikely(!map)) {
-+			dm_put_live_table(md, srcu_idx);
-+			return BLK_STS_RESOURCE;
-+		}
- 		ti = dm_table_find_target(map, 0);
- 		dm_put_live_table(md, srcu_idx);
+ 	status = nfs4_set_rw_stateid(&args->cna_src_stateid, ctx, l_ctx,
+ 				     FMODE_READ);
+@@ -595,7 +597,7 @@ static int _nfs42_proc_copy_notify(struct file *src, struct file *dst,
+ 	if (status) {
+ 		if (status == -EAGAIN)
+ 			status = -NFS4ERR_BAD_STATEID;
+-		return status;
++		goto out;
  	}
-diff --git a/drivers/md/dm.c b/drivers/md/dm.c
-index 5fd3660e07b5..af12c0accb59 100644
---- a/drivers/md/dm.c
-+++ b/drivers/md/dm.c
-@@ -1587,15 +1587,10 @@ static void dm_submit_bio(struct bio *bio)
- 	struct dm_table *map;
  
- 	map = dm_get_live_table(md, &srcu_idx);
--	if (unlikely(!map)) {
--		DMERR_LIMIT("%s: mapping table unavailable, erroring io",
--			    dm_device_name(md));
--		bio_io_error(bio);
--		goto out;
--	}
+ 	status = nfs4_call_sync(src_server->client, src_server, &msg,
+@@ -603,6 +605,7 @@ static int _nfs42_proc_copy_notify(struct file *src, struct file *dst,
+ 	if (status == -ENOTSUPP)
+ 		src_server->caps &= ~NFS_CAP_COPY_NOTIFY;
  
--	/* If suspended, queue this IO for later */
--	if (unlikely(test_bit(DMF_BLOCK_IO_FOR_SUSPEND, &md->flags))) {
-+	/* If suspended, or map not yet available, queue this IO for later */
-+	if (unlikely(test_bit(DMF_BLOCK_IO_FOR_SUSPEND, &md->flags)) ||
-+	    unlikely(!map)) {
- 		if (bio->bi_opf & REQ_NOWAIT)
- 			bio_wouldblock_error(bio);
- 		else if (bio->bi_opf & REQ_RAHEAD)
++out:
+ 	put_nfs_open_context(nfs_file_open_context(src));
+ 	return status;
+ }
 -- 
 2.35.1
 

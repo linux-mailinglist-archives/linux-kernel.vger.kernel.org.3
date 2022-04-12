@@ -2,375 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C60584FDAF9
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:55:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA8F04FDABD
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378691AbiDLIMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42858 "EHLO
+        id S1386596AbiDLI6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:58:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355338AbiDLH11 (ORCPT
+        with ESMTP id S1359802AbiDLHnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:27:27 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CAB949274
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:07:31 -0700 (PDT)
-Received: from kwepemi100005.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Kcxby2VM7z1HBjq;
-        Tue, 12 Apr 2022 15:06:54 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- kwepemi100005.china.huawei.com (7.221.188.155) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 12 Apr 2022 15:07:28 +0800
-Received: from localhost.localdomain (10.175.112.125) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 12 Apr 2022 15:07:26 +0800
-From:   Tong Tiangen <tongtiangen@huawei.com>
-To:     Mark Rutland <mark.rutland@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>, <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Xie XiuQi <xiexiuqi@huawei.com>,
-        Tong Tiangen <tongtiangen@huawei.com>
-Subject: [RFC PATCH -next V3 6/6] arm64: add cow to machine check safe
-Date:   Tue, 12 Apr 2022 07:25:52 +0000
-Message-ID: <20220412072552.2526871-7-tongtiangen@huawei.com>
-X-Mailer: git-send-email 2.18.0.huawei.25
-In-Reply-To: <20220412072552.2526871-1-tongtiangen@huawei.com>
-References: <20220412072552.2526871-1-tongtiangen@huawei.com>
+        Tue, 12 Apr 2022 03:43:42 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ACB3434AA
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:26:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649748380; x=1681284380;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=G7L8YOlj6LR17aw3DxvsUkt4nUXPEbDep2GdA0mNRfg=;
+  b=HOd4kcWkq2SmJszXndlin+qzdnLKb7iPN6aU34RV/NxnGXhxE82IXarW
+   +TP/aXf0yQUb1WPGku6tDl9/kcAIFsu6l7I0T8HzDH3rHaR9Ql7Ga0gF8
+   9brabcXqBqTSUCCSn+VOTq6borjtCUDVQ/7Dkl948jBvhMuNfUL8nxXai
+   xGpFQvOD6cHvZnzJCcUCy4b1MctoFolxpeohe6Uu2ZdvQ+g+nunuHaNF0
+   k0NYFm5yzmY0ZiCijIBbaPK/hwqNY/f/HTXOSwI6gHFqeRDSdrCdbUTPe
+   FSUlZ5lyLZbFCC0Vzek3wQQwl9CeOW7GcJD8TapQDkh7R5ZdFz+Phjivb
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="348736565"
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="348736565"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 00:26:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="699706997"
+Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 12 Apr 2022 00:26:17 -0700
+Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1neAum-0002co-Sc;
+        Tue, 12 Apr 2022 07:26:16 +0000
+Date:   Tue, 12 Apr 2022 15:25:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Chen-Yu Tsai <wens@kernel.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        David Airlie <airlied@linux.ie>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org, Mark Brown <broonie@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v2 4/5] drm/solomon: Move device info from ssd130x-i2c to
+ the core driver
+Message-ID: <202204121542.aU2BiYXN-lkp@intel.com>
+References: <20220411211243.11121-5-javierm@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220411211243.11121-5-javierm@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the cow(copy on write) processing, the data of the user process is
-copied, when hardware memory error is encountered during copy, only the
-relevant processes are affected, so killing the user process and isolate
-the user page with hardware memory errors is a more reasonable choice than
-kernel panic.
+Hi Javier,
 
-Add new helper copy_page_mc() which provide a page copy implementation with
-machine check safe. At present, only used in cow. In future, we can expand
-more scenes. As long as the consequences of page copy failure are not
-fatal(eg: only affect user process), we can use this helper.
+I love your patch! Perhaps something to improve:
 
-The copy_page_mc() in copy_page_mc.S is largely borrows from copy_page()
-in copy_page.S and the main difference is copy_page_mc() add some extable
-entry to support machine check safe. largely to keep the patch simple. If
-needed those optimizations can be folded in.
+[auto build test WARNING on drm-tip/drm-tip]
+[also build test WARNING on next-20220411]
+[cannot apply to drm/drm-next drm-exynos/exynos-drm-next drm-intel/for-linux-next tegra-drm/drm/tegra/for-next linus/master linux/master v5.18-rc2]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Add new extable type EX_TYPE_COPY_PAGE_MC which used in copy_page_mc().
+url:    https://github.com/intel-lab-lkp/linux/commits/Javier-Martinez-Canillas/drm-solomon-Add-SSD130x-OLED-displays-SPI-support/20220412-051518
+base:   git://anongit.freedesktop.org/drm/drm-tip drm-tip
+config: x86_64-randconfig-a001-20220411 (https://download.01.org/0day-ci/archive/20220412/202204121542.aU2BiYXN-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fe2478d44e4f7f191c43fef629ac7a23d0251e72)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/ac5a07cda8a0f8d4948e6a01d0b3bb6ce9fe7830
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Javier-Martinez-Canillas/drm-solomon-Add-SSD130x-OLED-displays-SPI-support/20220412-051518
+        git checkout ac5a07cda8a0f8d4948e6a01d0b3bb6ce9fe7830
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/solomon/
 
-This type only be processed in fixup_exception_mc(), The reason is that
-copy_page_mc() is consistent with copy_page() except machine check safe is
-considered, and copy_page() do not need to consider exception fixup.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
----
- arch/arm64/include/asm/asm-extable.h |  5 ++
- arch/arm64/include/asm/page.h        | 10 +++
- arch/arm64/lib/Makefile              |  2 +
- arch/arm64/lib/copy_page_mc.S        | 99 ++++++++++++++++++++++++++++
- arch/arm64/mm/copypage.c             | 36 ++++++++--
- arch/arm64/mm/extable.c              |  1 +
- include/linux/highmem.h              |  8 +++
- mm/memory.c                          |  2 +-
- 8 files changed, 156 insertions(+), 7 deletions(-)
- create mode 100644 arch/arm64/lib/copy_page_mc.S
+All warnings (new ones prefixed by >>):
 
-diff --git a/arch/arm64/include/asm/asm-extable.h b/arch/arm64/include/asm/asm-extable.h
-index 62eafb651773..274bd7edcff6 100644
---- a/arch/arm64/include/asm/asm-extable.h
-+++ b/arch/arm64/include/asm/asm-extable.h
-@@ -11,6 +11,7 @@
- /* _MC indicates that can fixup from machine check errors */
- #define EX_TYPE_UACCESS_MC		5
- #define EX_TYPE_UACCESS_MC_ERR_ZERO	6
-+#define EX_TYPE_COPY_PAGE_MC		7
- 
- #ifdef __ASSEMBLY__
- 
-@@ -39,6 +40,10 @@
- 	__ASM_EXTABLE_RAW(\insn, \fixup, EX_TYPE_UACCESS_MC, 0)
- 	.endm
- 
-+	.macro          _asm_extable_copy_page_mc, insn, fixup
-+	__ASM_EXTABLE_RAW(\insn, \fixup, EX_TYPE_COPY_PAGE_MC, 0)
-+	.endm
-+
- /*
-  * Create an exception table entry for `insn` if `fixup` is provided. Otherwise
-  * do nothing.
-diff --git a/arch/arm64/include/asm/page.h b/arch/arm64/include/asm/page.h
-index 993a27ea6f54..832571a7dddb 100644
---- a/arch/arm64/include/asm/page.h
-+++ b/arch/arm64/include/asm/page.h
-@@ -29,6 +29,16 @@ void copy_user_highpage(struct page *to, struct page *from,
- void copy_highpage(struct page *to, struct page *from);
- #define __HAVE_ARCH_COPY_HIGHPAGE
- 
-+#ifdef CONFIG_ARCH_HAS_COPY_MC
-+extern void copy_page_mc(void *to, const void *from);
-+void copy_highpage_mc(struct page *to, struct page *from);
-+#define __HAVE_ARCH_COPY_HIGHPAGE_MC
-+
-+void copy_user_highpage_mc(struct page *to, struct page *from,
-+		unsigned long vaddr, struct vm_area_struct *vma);
-+#define __HAVE_ARCH_COPY_USER_HIGHPAGE_MC
-+#endif
-+
- struct page *alloc_zeroed_user_highpage_movable(struct vm_area_struct *vma,
- 						unsigned long vaddr);
- #define __HAVE_ARCH_ALLOC_ZEROED_USER_HIGHPAGE_MOVABLE
-diff --git a/arch/arm64/lib/Makefile b/arch/arm64/lib/Makefile
-index 29490be2546b..0d9f292ef68a 100644
---- a/arch/arm64/lib/Makefile
-+++ b/arch/arm64/lib/Makefile
-@@ -15,6 +15,8 @@ endif
- 
- lib-$(CONFIG_ARCH_HAS_UACCESS_FLUSHCACHE) += uaccess_flushcache.o
- 
-+lib-$(CONFIG_ARCH_HAS_COPY_MC) += copy_page_mc.o
-+
- obj-$(CONFIG_CRC32) += crc32.o
- 
- obj-$(CONFIG_FUNCTION_ERROR_INJECTION) += error-inject.o
-diff --git a/arch/arm64/lib/copy_page_mc.S b/arch/arm64/lib/copy_page_mc.S
-new file mode 100644
-index 000000000000..93b4203bdf45
---- /dev/null
-+++ b/arch/arm64/lib/copy_page_mc.S
-@@ -0,0 +1,99 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2012 ARM Ltd.
-+ */
-+
-+#include <linux/linkage.h>
-+#include <linux/const.h>
-+#include <asm/assembler.h>
-+#include <asm/page.h>
-+#include <asm/cpufeature.h>
-+#include <asm/alternative.h>
-+#include <asm/asm-extable.h>
-+
-+/*
-+ * Copy a page from src to dest (both are page aligned) with machine check
-+ *
-+ * Parameters:
-+ *	x0 - dest
-+ *	x1 - src
-+ */
-+SYM_FUNC_START(__pi_copy_page_mc)
-+alternative_if ARM64_HAS_NO_HW_PREFETCH
-+	// Prefetch three cache lines ahead.
-+	prfm	pldl1strm, [x1, #128]
-+	prfm	pldl1strm, [x1, #256]
-+	prfm	pldl1strm, [x1, #384]
-+alternative_else_nop_endif
-+
-+100:	ldp	x2, x3, [x1]
-+101:	ldp	x4, x5, [x1, #16]
-+102:	ldp	x6, x7, [x1, #32]
-+103:	ldp	x8, x9, [x1, #48]
-+104:	ldp	x10, x11, [x1, #64]
-+105:	ldp	x12, x13, [x1, #80]
-+106:	ldp	x14, x15, [x1, #96]
-+107:	ldp	x16, x17, [x1, #112]
-+
-+	add	x0, x0, #256
-+	add	x1, x1, #128
-+1:
-+	tst	x0, #(PAGE_SIZE - 1)
-+
-+alternative_if ARM64_HAS_NO_HW_PREFETCH
-+	prfm	pldl1strm, [x1, #384]
-+alternative_else_nop_endif
-+
-+	stnp	x2, x3, [x0, #-256]
-+200:	ldp	x2, x3, [x1]
-+	stnp	x4, x5, [x0, #16 - 256]
-+201:	ldp	x4, x5, [x1, #16]
-+	stnp	x6, x7, [x0, #32 - 256]
-+202:	ldp	x6, x7, [x1, #32]
-+	stnp	x8, x9, [x0, #48 - 256]
-+203:	ldp	x8, x9, [x1, #48]
-+	stnp	x10, x11, [x0, #64 - 256]
-+204:	ldp	x10, x11, [x1, #64]
-+	stnp	x12, x13, [x0, #80 - 256]
-+205:	ldp	x12, x13, [x1, #80]
-+	stnp	x14, x15, [x0, #96 - 256]
-+206:	ldp	x14, x15, [x1, #96]
-+	stnp	x16, x17, [x0, #112 - 256]
-+207:	ldp	x16, x17, [x1, #112]
-+
-+	add	x0, x0, #128
-+	add	x1, x1, #128
-+
-+	b.ne	1b
-+
-+	stnp	x2, x3, [x0, #-256]
-+	stnp	x4, x5, [x0, #16 - 256]
-+	stnp	x6, x7, [x0, #32 - 256]
-+	stnp	x8, x9, [x0, #48 - 256]
-+	stnp	x10, x11, [x0, #64 - 256]
-+	stnp	x12, x13, [x0, #80 - 256]
-+	stnp	x14, x15, [x0, #96 - 256]
-+	stnp	x16, x17, [x0, #112 - 256]
-+
-+300:	ret
-+
-+_asm_extable_copy_page_mc 100b, 300b
-+_asm_extable_copy_page_mc 101b, 300b
-+_asm_extable_copy_page_mc 102b, 300b
-+_asm_extable_copy_page_mc 103b, 300b
-+_asm_extable_copy_page_mc 104b, 300b
-+_asm_extable_copy_page_mc 105b, 300b
-+_asm_extable_copy_page_mc 106b, 300b
-+_asm_extable_copy_page_mc 107b, 300b
-+_asm_extable_copy_page_mc 200b, 300b
-+_asm_extable_copy_page_mc 201b, 300b
-+_asm_extable_copy_page_mc 202b, 300b
-+_asm_extable_copy_page_mc 203b, 300b
-+_asm_extable_copy_page_mc 204b, 300b
-+_asm_extable_copy_page_mc 205b, 300b
-+_asm_extable_copy_page_mc 206b, 300b
-+_asm_extable_copy_page_mc 207b, 300b
-+
-+SYM_FUNC_END(__pi_copy_page_mc)
-+SYM_FUNC_ALIAS(copy_page_mc, __pi_copy_page_mc)
-+EXPORT_SYMBOL(copy_page_mc)
-diff --git a/arch/arm64/mm/copypage.c b/arch/arm64/mm/copypage.c
-index 0dea80bf6de4..0f28edfcb234 100644
---- a/arch/arm64/mm/copypage.c
-+++ b/arch/arm64/mm/copypage.c
-@@ -14,13 +14,8 @@
- #include <asm/cpufeature.h>
- #include <asm/mte.h>
- 
--void copy_highpage(struct page *to, struct page *from)
-+static void do_mte(struct page *to, struct page *from, void *kto, void *kfrom)
- {
--	void *kto = page_address(to);
--	void *kfrom = page_address(from);
--
--	copy_page(kto, kfrom);
--
- 	if (system_supports_mte() && test_bit(PG_mte_tagged, &from->flags)) {
- 		set_bit(PG_mte_tagged, &to->flags);
- 		page_kasan_tag_reset(to);
-@@ -35,6 +30,15 @@ void copy_highpage(struct page *to, struct page *from)
- 		mte_copy_page_tags(kto, kfrom);
- 	}
- }
-+
-+void copy_highpage(struct page *to, struct page *from)
-+{
-+	void *kto = page_address(to);
-+	void *kfrom = page_address(from);
-+
-+	copy_page(kto, kfrom);
-+	do_mte(to, from, kto, kfrom);
-+}
- EXPORT_SYMBOL(copy_highpage);
- 
- void copy_user_highpage(struct page *to, struct page *from,
-@@ -44,3 +48,23 @@ void copy_user_highpage(struct page *to, struct page *from,
- 	flush_dcache_page(to);
- }
- EXPORT_SYMBOL_GPL(copy_user_highpage);
-+
-+#ifdef CONFIG_ARCH_HAS_COPY_MC
-+void copy_highpage_mc(struct page *to, struct page *from)
-+{
-+	void *kto = page_address(to);
-+	void *kfrom = page_address(from);
-+
-+	copy_page_mc(kto, kfrom);
-+	do_mte(to, from, kto, kfrom);
-+}
-+EXPORT_SYMBOL(copy_highpage_mc);
-+
-+void copy_user_highpage_mc(struct page *to, struct page *from,
-+			unsigned long vaddr, struct vm_area_struct *vma)
-+{
-+	copy_highpage_mc(to, from);
-+	flush_dcache_page(to);
-+}
-+EXPORT_SYMBOL_GPL(copy_user_highpage_mc);
-+#endif
-diff --git a/arch/arm64/mm/extable.c b/arch/arm64/mm/extable.c
-index ca7388f3923b..7ee67fcf9e81 100644
---- a/arch/arm64/mm/extable.c
-+++ b/arch/arm64/mm/extable.c
-@@ -98,6 +98,7 @@ bool fixup_exception_mc(struct pt_regs *regs)
- 
- 	switch (ex->type) {
- 	case EX_TYPE_UACCESS_MC:
-+	case EX_TYPE_COPY_PAGE_MC:
- 		return ex_handler_fixup(ex, regs);
- 	case EX_TYPE_UACCESS_MC_ERR_ZERO:
- 		return ex_handler_uaccess_err_zero(ex, regs);
-diff --git a/include/linux/highmem.h b/include/linux/highmem.h
-index 39bb9b47fa9c..a9dbf331b038 100644
---- a/include/linux/highmem.h
-+++ b/include/linux/highmem.h
-@@ -283,6 +283,10 @@ static inline void copy_user_highpage(struct page *to, struct page *from,
- 
- #endif
- 
-+#ifndef __HAVE_ARCH_COPY_USER_HIGHPAGE_MC
-+#define copy_user_highpage_mc copy_user_highpage
-+#endif
-+
- #ifndef __HAVE_ARCH_COPY_HIGHPAGE
- 
- static inline void copy_highpage(struct page *to, struct page *from)
-@@ -298,6 +302,10 @@ static inline void copy_highpage(struct page *to, struct page *from)
- 
- #endif
- 
-+#ifndef __HAVE_ARCH_COPY_HIGHPAGE_MC
-+#define cop_highpage_mc copy_highpage
-+#endif
-+
- static inline void memcpy_page(struct page *dst_page, size_t dst_off,
- 			       struct page *src_page, size_t src_off,
- 			       size_t len)
-diff --git a/mm/memory.c b/mm/memory.c
-index 76e3af9639d9..d5f62234152d 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -2767,7 +2767,7 @@ static inline bool cow_user_page(struct page *dst, struct page *src,
- 	unsigned long addr = vmf->address;
- 
- 	if (likely(src)) {
--		copy_user_highpage(dst, src, addr, vma);
-+		copy_user_highpage_mc(dst, src, addr, vma);
- 		return true;
- 	}
- 
+>> drivers/gpu/drm/solomon/ssd130x.c:894:12: warning: cast to smaller integer type 'enum ssd130x_variants' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+           variant = (enum ssd130x_variants)device_get_match_data(dev);
+                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +894 drivers/gpu/drm/solomon/ssd130x.c
+
+   874	
+   875	struct ssd130x_device *ssd130x_probe(struct device *dev, struct regmap *regmap)
+   876	{
+   877		struct ssd130x_device *ssd130x;
+   878		enum ssd130x_variants variant;
+   879		struct backlight_device *bl;
+   880		struct drm_device *drm;
+   881		int ret;
+   882	
+   883		ssd130x = devm_drm_dev_alloc(dev, &ssd130x_drm_driver,
+   884					     struct ssd130x_device, drm);
+   885		if (IS_ERR(ssd130x))
+   886			return ERR_PTR(dev_err_probe(dev, PTR_ERR(ssd130x),
+   887						     "Failed to allocate DRM device\n"));
+   888	
+   889		drm = &ssd130x->drm;
+   890	
+   891		ssd130x->dev = dev;
+   892		ssd130x->regmap = regmap;
+   893	
+ > 894		variant = (enum ssd130x_variants)device_get_match_data(dev);
+   895	
+   896		if (variant >= NR_SSD130X_VARIANTS)
+   897			return ERR_PTR(dev_err_probe(dev, -EINVAL,
+   898						     "Invalid SSD130x variant\n"));
+   899	
+   900		ssd130x->device_info = &ssd130x_variants[variant];
+   901	
+   902		if (ssd130x->device_info->page_mode_only)
+   903			ssd130x->page_address_mode = 1;
+   904	
+   905		ssd130x_parse_properties(ssd130x);
+   906	
+   907		ret = ssd130x_get_resources(ssd130x);
+   908		if (ret)
+   909			return ERR_PTR(ret);
+   910	
+   911		bl = devm_backlight_device_register(dev, dev_name(dev), dev, ssd130x,
+   912						    &ssd130xfb_bl_ops, NULL);
+   913		if (IS_ERR(bl))
+   914			return ERR_PTR(dev_err_probe(dev, PTR_ERR(bl),
+   915						     "Unable to register backlight device\n"));
+   916	
+   917		bl->props.brightness = ssd130x->contrast;
+   918		bl->props.max_brightness = MAX_CONTRAST;
+   919		ssd130x->bl_dev = bl;
+   920	
+   921		ret = ssd130x_init_modeset(ssd130x);
+   922		if (ret)
+   923			return ERR_PTR(ret);
+   924	
+   925		ret = drm_dev_register(drm, 0);
+   926		if (ret)
+   927			return ERR_PTR(dev_err_probe(dev, ret, "DRM device register failed\n"));
+   928	
+   929		drm_fbdev_generic_setup(drm, 0);
+   930	
+   931		return ssd130x;
+   932	}
+   933	EXPORT_SYMBOL_GPL(ssd130x_probe);
+   934	
+
 -- 
-2.18.0.huawei.25
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

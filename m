@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08B4D4FD725
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:27:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C781C4FD712
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352371AbiDLHN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:13:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48696 "EHLO
+        id S1358629AbiDLHmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:42:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352204AbiDLGzP (ORCPT
+        with ESMTP id S1353647AbiDLHPx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:55:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC068393C4;
-        Mon, 11 Apr 2022 23:45:05 -0700 (PDT)
+        Tue, 12 Apr 2022 03:15:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF9C39831;
+        Mon, 11 Apr 2022 23:57:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7C04CB81B43;
-        Tue, 12 Apr 2022 06:45:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFDF5C385A8;
-        Tue, 12 Apr 2022 06:45:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 87A3D61571;
+        Tue, 12 Apr 2022 06:57:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 983EDC385A1;
+        Tue, 12 Apr 2022 06:57:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649745903;
-        bh=qU6k39kQ1C01H9GAzZyVdj/oO7ak6LiTi1/TZBfgvsI=;
+        s=korg; t=1649746633;
+        bh=6WWeLjwM6nugWoViIV7BNPooOy6baoQmDnNITUB0e5I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xLxMeOC54u/H17qFdHEvl3lgp9N0rkqY/ULn/EqIJZRtj/2wC6wotT67blqbL+JLo
-         eIn5flN3XDKgz/jKbRQ2OiCuikTY0nftGw4uOdH9PE4szeitUqEWDWVcQvz2z8dLv2
-         Zcf2tdcaHTsQj7xU5QWpQfiEZ4O/vk7NPbjOvDSI=
+        b=FOizQfI8e60mEFBNufizWzt9a1PveQxqNnEu9Z1cJng7ZDu+syN0X0PM7vyvrj0XT
+         PVbVc8VC4Eqz00HbghfW90BZLCA4cvrFuMCbwFwNtC3ceYUhEVJY4KFuwxQtP0x7Iw
+         uShatyVRAeGrydYDe8Nq8/Q1HWlXj25hx2fker34=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Evgeny Boger <boger@wirenboard.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 088/277] powerpc/64e: Tie PPC_BOOK3E_64 to PPC_FSL_BOOK3E
-Date:   Tue, 12 Apr 2022 08:28:11 +0200
-Message-Id: <20220412062944.593056555@linuxfoundation.org>
+Subject: [PATCH 5.16 035/285] power: supply: axp20x_battery: properly report current when discharging
+Date:   Tue, 12 Apr 2022 08:28:12 +0200
+Message-Id: <20220412062944.689610381@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,58 +56,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Ellerman <mpe@ellerman.id.au>
+From: Evgeny Boger <boger@wirenboard.com>
 
-[ Upstream commit 1a76e520ee1831a81dabf8a9a58c6453f700026e ]
+[ Upstream commit d4f408cdcd26921c1268cb8dcbe8ffb6faf837f3 ]
 
-Since the IBM A2 CPU support was removed, see commit
-fb5a515704d7 ("powerpc: Remove platforms/wsp and associated pieces"),
-the only 64-bit Book3E CPUs we support are Freescale (NXP) ones.
+As stated in [1], negative current values are used for discharging
+batteries.
 
-However our Kconfig still allows configurating a kernel that has 64-bit
-Book3E support, but no Freescale CPU support enabled. Such a kernel
-would never boot, it doesn't know about any CPUs.
+AXP PMICs internally have two different ADC channels for shunt current
+measurement: one used during charging and one during discharging.
+The values reported by these ADCs are unsigned.
+While the driver properly selects ADC channel to get the data from,
+it doesn't apply negative sign when reporting discharging current.
 
-It also causes build errors, as reported by lkp, because
-PPC_BARRIER_NOSPEC is not enabled in such a configuration:
+[1] Documentation/ABI/testing/sysfs-class-power
 
-  powerpc64-linux-ld: arch/powerpc/net/bpf_jit_comp64.o:(.toc+0x0):
-  undefined reference to `powerpc_security_features'
-
-To fix this, force PPC_FSL_BOOK3E to be selected whenever we are
-building a 64-bit Book3E kernel.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
-Suggested-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220304061222.2478720-1-mpe@ellerman.id.au
+Signed-off-by: Evgeny Boger <boger@wirenboard.com>
+Acked-by: Chen-Yu Tsai <wens@csie.org>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/platforms/Kconfig.cputype | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/power/supply/axp20x_battery.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/arch/powerpc/platforms/Kconfig.cputype b/arch/powerpc/platforms/Kconfig.cputype
-index a208997ade88..87a95cbff2f3 100644
---- a/arch/powerpc/platforms/Kconfig.cputype
-+++ b/arch/powerpc/platforms/Kconfig.cputype
-@@ -111,6 +111,7 @@ config PPC_BOOK3S_64
+diff --git a/drivers/power/supply/axp20x_battery.c b/drivers/power/supply/axp20x_battery.c
+index 18a9db0df4b1..335e12cc5e2f 100644
+--- a/drivers/power/supply/axp20x_battery.c
++++ b/drivers/power/supply/axp20x_battery.c
+@@ -186,7 +186,6 @@ static int axp20x_battery_get_prop(struct power_supply *psy,
+ 				   union power_supply_propval *val)
+ {
+ 	struct axp20x_batt_ps *axp20x_batt = power_supply_get_drvdata(psy);
+-	struct iio_channel *chan;
+ 	int ret = 0, reg, val1;
  
- config PPC_BOOK3E_64
- 	bool "Embedded processors"
-+	select PPC_FSL_BOOK3E
- 	select PPC_FPU # Make it a choice ?
- 	select PPC_SMP_MUXED_IPI
- 	select PPC_DOORBELL
-@@ -287,7 +288,7 @@ config FSL_BOOKE
- config PPC_FSL_BOOK3E
- 	bool
- 	select ARCH_SUPPORTS_HUGETLBFS if PHYS_64BIT || PPC64
--	select FSL_EMB_PERFMON
-+	imply FSL_EMB_PERFMON
- 	select PPC_SMP_MUXED_IPI
- 	select PPC_DOORBELL
- 	default y if FSL_BOOKE
+ 	switch (psp) {
+@@ -266,12 +265,12 @@ static int axp20x_battery_get_prop(struct power_supply *psy,
+ 		if (ret)
+ 			return ret;
+ 
+-		if (reg & AXP20X_PWR_STATUS_BAT_CHARGING)
+-			chan = axp20x_batt->batt_chrg_i;
+-		else
+-			chan = axp20x_batt->batt_dischrg_i;
+-
+-		ret = iio_read_channel_processed(chan, &val->intval);
++		if (reg & AXP20X_PWR_STATUS_BAT_CHARGING) {
++			ret = iio_read_channel_processed(axp20x_batt->batt_chrg_i, &val->intval);
++		} else {
++			ret = iio_read_channel_processed(axp20x_batt->batt_dischrg_i, &val1);
++			val->intval = -val1;
++		}
+ 		if (ret)
+ 			return ret;
+ 
 -- 
 2.35.1
 

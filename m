@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F15124FD1B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 08:58:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5DE44FD1D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 09:08:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbiDLHAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:00:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48746 "EHLO
+        id S1349839AbiDLHAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351481AbiDLGxm (ORCPT
+        with ESMTP id S1351490AbiDLGxn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:53:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329F61834F;
-        Mon, 11 Apr 2022 23:41:19 -0700 (PDT)
+        Tue, 12 Apr 2022 02:53:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603CD17E35;
+        Mon, 11 Apr 2022 23:41:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C5B8E60A69;
-        Tue, 12 Apr 2022 06:41:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7896C385A1;
-        Tue, 12 Apr 2022 06:41:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1A901B818C8;
+        Tue, 12 Apr 2022 06:41:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 825C3C385A1;
+        Tue, 12 Apr 2022 06:41:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649745678;
-        bh=j+rku0b+Icgd7VM9KfTkDjJB1stnzRIZQZl4d330c/w=;
+        s=korg; t=1649745683;
+        bh=t0g3o+vjO6oyTmJLg+UH2gahFuYs6k7jNgBfmjGR/W4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MUziD5Pru4zBQ9UXaE0+2ll7IrWCIo2mH0IrbM1XMZPJB5HgQn1Q35L8Xu47GXz7c
-         Fg739DXUKQRyY14Ue++mAHrMSZ7iI850I9/51kcvU8jT5GDshW5ZGPhJP1SQBw5+RE
-         CCv6oMlaOxbJ0CEPq+9I3RkhWsnwsMbvwadZhQwM=
+        b=ySvK2ty2necCgqhvjyriP/iOi9cvmiP/ulgXTorz9WiWN2UQjbdbMmBPSqn+xfLH0
+         h/fs3m8T6zQj2WjJkAxpFNJCkfvZ39wnF0ig7tZg+cjBv11wwkZd7tpbufUC0dk0Od
+         t3U9TxkP+KE9J4Rmr0HfD4rMTaiIuXauEWU8iGWs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Richard Weinberger <richard@nod.at>,
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 001/277] lib/logic_iomem: correct fallback config references
-Date:   Tue, 12 Apr 2022 08:26:44 +0200
-Message-Id: <20220412062942.069577288@linuxfoundation.org>
+Subject: [PATCH 5.15 003/277] rtc: wm8350: Handle error for wm8350_register_irq
+Date:   Tue, 12 Apr 2022 08:26:46 +0200
+Message-Id: <20220412062942.127953634@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
 References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -58,64 +56,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Berg <johannes.berg@intel.com>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit 2a6852cb8ff0c8c1363cac648d68489343813212 ]
+[ Upstream commit 43f0269b6b89c1eec4ef83c48035608f4dcdd886 ]
 
-Due to some renaming, we ended up with the "indirect iomem"
-naming in Kconfig, following INDIRECT_PIO. However, clearly
-I missed following through on that in the ifdefs, but so far
-INDIRECT_IOMEM_FALLBACK isn't used by any architecture.
+As the potential failure of the wm8350_register_irq(),
+it should be better to check it and return error if fails.
+Also, it need not free 'wm_rtc->rtc' since it will be freed
+automatically.
 
-Reported-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Fixes: ca2e334232b6 ("lib: add iomem emulation (logic_iomem)")
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Signed-off-by: Richard Weinberger <richard@nod.at>
+Fixes: 077eaf5b40ec ("rtc: rtc-wm8350: add support for WM8350 RTC")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Link: https://lore.kernel.org/r/20220303085030.291793-1-jiasheng@iscas.ac.cn
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/logic_iomem.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/rtc/rtc-wm8350.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/lib/logic_iomem.c b/lib/logic_iomem.c
-index 549b22d4bcde..e7ea9b28d8db 100644
---- a/lib/logic_iomem.c
-+++ b/lib/logic_iomem.c
-@@ -68,7 +68,7 @@ int logic_iomem_add_region(struct resource *resource,
- }
- EXPORT_SYMBOL(logic_iomem_add_region);
+diff --git a/drivers/rtc/rtc-wm8350.c b/drivers/rtc/rtc-wm8350.c
+index 2018614f258f..6eaa9321c074 100644
+--- a/drivers/rtc/rtc-wm8350.c
++++ b/drivers/rtc/rtc-wm8350.c
+@@ -432,14 +432,21 @@ static int wm8350_rtc_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
  
--#ifndef CONFIG_LOGIC_IOMEM_FALLBACK
-+#ifndef CONFIG_INDIRECT_IOMEM_FALLBACK
- static void __iomem *real_ioremap(phys_addr_t offset, size_t size)
- {
- 	WARN(1, "invalid ioremap(0x%llx, 0x%zx)\n",
-@@ -81,7 +81,7 @@ static void real_iounmap(void __iomem *addr)
- 	WARN(1, "invalid iounmap for addr 0x%llx\n",
- 	     (unsigned long long)(uintptr_t __force)addr);
- }
--#endif /* CONFIG_LOGIC_IOMEM_FALLBACK */
-+#endif /* CONFIG_INDIRECT_IOMEM_FALLBACK */
+-	wm8350_register_irq(wm8350, WM8350_IRQ_RTC_SEC,
++	ret = wm8350_register_irq(wm8350, WM8350_IRQ_RTC_SEC,
+ 			    wm8350_rtc_update_handler, 0,
+ 			    "RTC Seconds", wm8350);
++	if (ret)
++		return ret;
++
+ 	wm8350_mask_irq(wm8350, WM8350_IRQ_RTC_SEC);
  
- void __iomem *ioremap(phys_addr_t offset, size_t size)
- {
-@@ -168,7 +168,7 @@ void iounmap(void __iomem *addr)
- }
- EXPORT_SYMBOL(iounmap);
+-	wm8350_register_irq(wm8350, WM8350_IRQ_RTC_ALM,
++	ret = wm8350_register_irq(wm8350, WM8350_IRQ_RTC_ALM,
+ 			    wm8350_rtc_alarm_handler, 0,
+ 			    "RTC Alarm", wm8350);
++	if (ret) {
++		wm8350_free_irq(wm8350, WM8350_IRQ_RTC_SEC, wm8350);
++		return ret;
++	}
  
--#ifndef CONFIG_LOGIC_IOMEM_FALLBACK
-+#ifndef CONFIG_INDIRECT_IOMEM_FALLBACK
- #define MAKE_FALLBACK(op, sz) 						\
- static u##sz real_raw_read ## op(const volatile void __iomem *addr)	\
- {									\
-@@ -213,7 +213,7 @@ static void real_memcpy_toio(volatile void __iomem *addr, const void *buffer,
- 	WARN(1, "Invalid memcpy_toio at address 0x%llx\n",
- 	     (unsigned long long)(uintptr_t __force)addr);
+ 	return 0;
  }
--#endif /* CONFIG_LOGIC_IOMEM_FALLBACK */
-+#endif /* CONFIG_INDIRECT_IOMEM_FALLBACK */
- 
- #define MAKE_OP(op, sz) 						\
- u##sz __raw_read ## op(const volatile void __iomem *addr)		\
 -- 
 2.35.1
 

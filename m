@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC49B4FD9BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDF594FDA61
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:49:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351878AbiDLHNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:13:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
+        id S1352070AbiDLHN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:13:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351483AbiDLGxn (ORCPT
+        with ESMTP id S1351568AbiDLGx7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:53:43 -0400
+        Tue, 12 Apr 2022 02:53:59 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01CAF17E1D;
-        Mon, 11 Apr 2022 23:41:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF4D18B2F;
+        Mon, 11 Apr 2022 23:43:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 93BD460A21;
-        Tue, 12 Apr 2022 06:41:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B62EC385A6;
-        Tue, 12 Apr 2022 06:41:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F2F2E60A77;
+        Tue, 12 Apr 2022 06:43:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B8C7C385A1;
+        Tue, 12 Apr 2022 06:43:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649745681;
-        bh=LAxfqD32x6ZFr0TQ72MXLdGPukvlyZn5mmFfZ5YXYLc=;
+        s=korg; t=1649745788;
+        bh=fCbT5cPgi0qm1bVKA02uFEpXHPIrJ6j2CCR1fbxdDpY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xscn3q3/o/gz0bv/v1LKSo6tE4olzSXiM4Nz3FMxFMryCwaLHUpOF6ptVfPT0MTGS
-         +CGsGWREJA9ZEbkq4xCS2ScNGEl5BgtKqixRvOOraZVZpcU6nJBRv5b51VyR83K5yM
-         KI4OfegaZqvFznqr2O1WcQ2qMVeemSn7Gs2dub6Q=
+        b=onnyFflClAhPmMco+RE9NQbw0Nn8k3ezX2gjxoTB4jWUoUw1V54/wvZShoBdrPbL3
+         EhcOBq9wCb/VwoMiO80BO82j+qqbvQ6aKcQUxMF7feMvyrjNlCivpGlexNSjkIggD4
+         Cq4IJWNQVLByvInEV0SXFWpHjwJ512Z/g1ybTy1Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Benjamin Beichler <benjamin.beichler@uni-rostock.de>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Richard Weinberger <richard@nod.at>,
+        stable@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 002/277] um: fix and optimize xor select template for CONFIG64 and timetravel mode
-Date:   Tue, 12 Apr 2022 08:26:45 +0200
-Message-Id: <20220412062942.098928539@linuxfoundation.org>
+Subject: [PATCH 5.15 011/277] KVM: x86/pmu: Use different raw event masks for AMD and Intel
+Date:   Tue, 12 Apr 2022 08:26:54 +0200
+Message-Id: <20220412062942.362373311@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
 References: <20220412062942.022903016@linuxfoundation.org>
@@ -57,53 +55,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benjamin Beichler <benjamin.beichler@uni-rostock.de>
+From: Jim Mattson <jmattson@google.com>
 
-[ Upstream commit e3a33af812c611d99756e2ec61e9d7068d466bdf ]
+[ Upstream commit 95b065bf5c431c06c68056a03a5853b660640ecc ]
 
-Due to dropped inclusion of asm-generic/xor.h, xor_block_8regs symbol is
-missing with CONFIG64 and break compilation, as the asm/xor_64.h also did
-not include it. The patch recreate the logic from arch/x86, which check
-whether AVX is available and add fallbacks for 32bit and 64bit config of
-um.
+The third nybble of AMD's event select overlaps with Intel's IN_TX and
+IN_TXCP bits. Therefore, we can't use AMD64_RAW_EVENT_MASK on Intel
+platforms that support TSX.
 
-A very minor additional "fix" is, the return of the macro parameter
-instead of NULL, as this is the original intent of the macro, but
-this does not change the actual behavior.
+Declare a raw_event_mask in the kvm_pmu structure, initialize it in
+the vendor-specific pmu_refresh() functions, and use that mask for
+PERF_TYPE_RAW configurations in reprogram_gp_counter().
 
-Fixes: c0ecca6604b8 ("um: enable the use of optimized xor routines in UML")
-Signed-off-by: Benjamin Beichler <benjamin.beichler@uni-rostock.de>
-Acked-By: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Signed-off-by: Richard Weinberger <richard@nod.at>
+Fixes: 710c47651431 ("KVM: x86/pmu: Use AMD64_RAW_EVENT_MASK for PERF_TYPE_RAW")
+Signed-off-by: Jim Mattson <jmattson@google.com>
+Message-Id: <20220308012452.3468611-1-jmattson@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/um/include/asm/xor.h | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/kvm_host.h | 1 +
+ arch/x86/kvm/pmu.c              | 3 ++-
+ arch/x86/kvm/svm/pmu.c          | 1 +
+ arch/x86/kvm/vmx/pmu_intel.c    | 1 +
+ 4 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/arch/um/include/asm/xor.h b/arch/um/include/asm/xor.h
-index f512704a9ec7..22b39de73c24 100644
---- a/arch/um/include/asm/xor.h
-+++ b/arch/um/include/asm/xor.h
-@@ -4,8 +4,10 @@
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index 01759199d723..d9bb5cdb5db2 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -505,6 +505,7 @@ struct kvm_pmu {
+ 	u64 global_ctrl_mask;
+ 	u64 global_ovf_ctrl_mask;
+ 	u64 reserved_bits;
++	u64 raw_event_mask;
+ 	u8 version;
+ 	struct kvm_pmc gp_counters[INTEL_PMC_MAX_GENERIC];
+ 	struct kvm_pmc fixed_counters[INTEL_PMC_MAX_FIXED];
+diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+index f256f01056bd..44a5ab91a99d 100644
+--- a/arch/x86/kvm/pmu.c
++++ b/arch/x86/kvm/pmu.c
+@@ -178,6 +178,7 @@ void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel)
+ 	struct kvm *kvm = pmc->vcpu->kvm;
+ 	struct kvm_pmu_event_filter *filter;
+ 	int i;
++	struct kvm_pmu *pmu = vcpu_to_pmu(pmc->vcpu);
+ 	bool allow_event = true;
  
- #ifdef CONFIG_64BIT
- #undef CONFIG_X86_32
-+#define TT_CPU_INF_XOR_DEFAULT (AVX_SELECT(&xor_block_sse_pf64))
- #else
- #define CONFIG_X86_32 1
-+#define TT_CPU_INF_XOR_DEFAULT (AVX_SELECT(&xor_block_8regs))
- #endif
+ 	if (eventsel & ARCH_PERFMON_EVENTSEL_PIN_CONTROL)
+@@ -217,7 +218,7 @@ void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel)
+ 	}
  
- #include <asm/cpufeature.h>
-@@ -16,7 +18,7 @@
- #undef XOR_SELECT_TEMPLATE
- /* pick an arbitrary one - measuring isn't possible with inf-cpu */
- #define XOR_SELECT_TEMPLATE(x)	\
--	(time_travel_mode == TT_MODE_INFCPU ? &xor_block_8regs : NULL)
-+	(time_travel_mode == TT_MODE_INFCPU ? TT_CPU_INF_XOR_DEFAULT : x))
- #endif
+ 	if (type == PERF_TYPE_RAW)
+-		config = eventsel & AMD64_RAW_EVENT_MASK;
++		config = eventsel & pmu->raw_event_mask;
  
- #endif
+ 	if (pmc->current_config == eventsel && pmc_resume_counter(pmc))
+ 		return;
+diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
+index 06f8034f62e4..369164368819 100644
+--- a/arch/x86/kvm/svm/pmu.c
++++ b/arch/x86/kvm/svm/pmu.c
+@@ -283,6 +283,7 @@ static void amd_pmu_refresh(struct kvm_vcpu *vcpu)
+ 
+ 	pmu->counter_bitmask[KVM_PMC_GP] = ((u64)1 << 48) - 1;
+ 	pmu->reserved_bits = 0xfffffff000280000ull;
++	pmu->raw_event_mask = AMD64_RAW_EVENT_MASK;
+ 	pmu->version = 1;
+ 	/* not applicable to AMD; but clean them to prevent any fall out */
+ 	pmu->counter_bitmask[KVM_PMC_FIXED] = 0;
+diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+index 6427d95de01c..db1b88445acb 100644
+--- a/arch/x86/kvm/vmx/pmu_intel.c
++++ b/arch/x86/kvm/vmx/pmu_intel.c
+@@ -478,6 +478,7 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
+ 	pmu->counter_bitmask[KVM_PMC_FIXED] = 0;
+ 	pmu->version = 0;
+ 	pmu->reserved_bits = 0xffffffff00200000ull;
++	pmu->raw_event_mask = X86_RAW_EVENT_MASK;
+ 
+ 	entry = kvm_find_cpuid_entry(vcpu, 0xa, 0);
+ 	if (!entry)
 -- 
 2.35.1
 

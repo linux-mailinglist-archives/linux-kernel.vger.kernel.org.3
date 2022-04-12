@@ -2,265 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 999D34FE783
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC9764FE784
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:56:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358574AbiDLR6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 13:58:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37548 "EHLO
+        id S1358570AbiDLR6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 13:58:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358566AbiDLR6c (ORCPT
+        with ESMTP id S243499AbiDLR6r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 13:58:32 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECC256772
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 10:56:14 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id n8so17477604plh.1
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 10:56:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=duMLjXXSp+3x3Vpexq1XWCVJ2W30Z5wERCDm4MvZ+H8=;
-        b=BoilKWjYH8gYAOhLmSP2CxTyaMJiMb/5pRbF/tYkSr6SBBc3Pi3l9VCak5rrH6QX/U
-         neZ1UBww70+jRcoXs2wKH6USZVu7X3cIwhBsutf3bQpnnqkw23RPRuXwEDCaSenoJ9B5
-         rTRqn12FEgp0kI9ec1JqwXvYdmS5AW9dt31GbwvSvzMNgJ8wqhVSuo+4u6lA9+IkjrEH
-         ubQ2L+RyzCed10YQ/TcsUzrzFKitNpPji47y+wlsqid0AiSF+j1mbF+6lsvlas03TMyJ
-         ljmdTCQ+Kk5PNZZ/OvmhdLlydumHAbyPORqXtsvo9OJn6tozEZSrKoVqEkziEQjaHgxa
-         76KQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=duMLjXXSp+3x3Vpexq1XWCVJ2W30Z5wERCDm4MvZ+H8=;
-        b=FlkO2UETSASJGvO11rSoCuCcA2xjKwph/IrFUICVrx0H0Kfhklv1iMr4arD1FAgWjy
-         SjDJBHD/4ulOpoCO1zgIFAlaxzy9BIa1x1+lb9zPYyqzuJ3NhLtKhS2Dbf32vCriPjxH
-         wr6yiEm8rXMwIX74klHrT9yIHmscluTX1arvmxLFtroUS2+NAhYqSz6qFQMNRyQFRvUw
-         k6AIjFYYqqLPkfIUwHtYTJ5Llxc7CUnc0rZ+iFwVkKxZnY76XM0lE6tr7RZ15NDegxYr
-         kwHIZJFILkminJzzVpso1RYG5SdQfS+NBKDMsYR4Vu09wWZRsEvzBKcnWs999Y6WFB8b
-         zovQ==
-X-Gm-Message-State: AOAM5322XswjFnhAnk31bbFd0lzND9RsJAfvZpVDuBMEkgmQCIleXTTO
-        Fu87uh/lrQNj2kPTVAElJvuSZA==
-X-Google-Smtp-Source: ABdhPJxozl9RkEaFgOG4PqxTXu2LLqvqP8w0SfI/ucfJvtq+uM8dSIjl8EHkl6YytFvAR3lBOR5VJA==
-X-Received: by 2002:a17:902:e54b:b0:158:2df3:9ced with SMTP id n11-20020a170902e54b00b001582df39cedmr20132359plf.4.1649786174108;
-        Tue, 12 Apr 2022 10:56:14 -0700 (PDT)
-Received: from [10.254.90.123] ([139.177.225.252])
-        by smtp.gmail.com with ESMTPSA id f19-20020a056a00229300b004fb157f136asm40427774pfe.153.2022.04.12.10.56.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 10:56:13 -0700 (PDT)
-Message-ID: <801da029-6bbe-2a0c-7de0-afffc3d5de02@bytedance.com>
-Date:   Wed, 13 Apr 2022 01:56:10 +0800
+        Tue, 12 Apr 2022 13:58:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E70A58E57
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 10:56:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A6A4619FA
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 17:56:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EAE2C385A1;
+        Tue, 12 Apr 2022 17:56:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649786188;
+        bh=6oXyr4qSszqrDDIC74ST89Ik9P/w7VoRTbzZBuF4jtE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Mwyz5Grs9bx03m0WIXTHSUbER+tsU3Db4ke2pTBkBtdtNOQHEvJE5j2JrZ6hTdSS7
+         cLHyJlxIrfuFqRmHAN+WDkglsl2GqY+WRoihNWgeEmONNQaDPGo0Oz40wNSweoeszO
+         H3sX0HqZidwdlHMnFwryXNEjB+jca0mRkmDH4QhRiV5v/HhuXWD2mKDll6Nf6CQnJg
+         HannvPl5Vj9rasJCcJaWAKN91UKotJUQMWg8BjCT1SjyQs8sZCkMBTGYRFCeyySWJA
+         O/7ok8P7fjN8sHCNoFQYVBS7eacPe1ifMm/iycXaGPGR3RGLlfAmpCY+IduPHJdpnQ
+         MrIqLI8dDhyeA==
+Date:   Tue, 12 Apr 2022 20:56:19 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Ariel Marcovitch <arielmarcovitch@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>,
+        "paulus@samba.org" <paulus@samba.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: False positive kmemleak report for dtb properties names on
+ powerpc
+Message-ID: <YlW9Q05HDWwSmr7l@kernel.org>
+References: <9dd08bb5-f39e-53d8-f88d-bec598a08c93@gmail.com>
+ <YjtXXlnbEp64eL0T@arm.com>
+ <Yjtvtkn+CishCef6@kernel.org>
+ <2603cae9-3b75-cd13-1d41-2f1bed6ca32e@gmail.com>
+ <a9d13878-7820-d41c-9357-135094c8357f@csgroup.eu>
+ <87pmlm6bn0.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.0
-Subject: Re: [RFC v2 2/2] sched/fair: introduce sched-idle balance
-Content-Language: en-US
-To:     Josh Don <joshdon@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Abel Wu <wuyun.abel@bytedance.com>
-References: <20220409135104.3733193-1-wuyun.abel@bytedance.com>
- <20220409135104.3733193-3-wuyun.abel@bytedance.com>
- <CABk29NvE=Fmgo4xqQLfy-K8j0hNS-+ppGdYt37yDUnRJiqjZ5w@mail.gmail.com>
-From:   Abel Wu <wuyun.abel@bytedance.com>
-In-Reply-To: <CABk29NvE=Fmgo4xqQLfy-K8j0hNS-+ppGdYt37yDUnRJiqjZ5w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87pmlm6bn0.fsf@mpe.ellerman.id.au>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Josh,
-
-On 4/12/22 9:59 AM, Josh Don Wrote:
-> Hi Abel,
+On Tue, Apr 12, 2022 at 04:47:47PM +1000, Michael Ellerman wrote:
+> Christophe Leroy <christophe.leroy@csgroup.eu> writes:
+> > Hi Ariel
+> >
+> > Le 09/04/2022 à 15:47, Ariel Marcovitch a écrit :
+> >> Hi Christophe, did you get the chance to look at this?
+> >
+> > I tested something this morning, it works for me, see below
+> >
+> >> 
+> >> On 23/03/2022 21:06, Mike Rapoport wrote:
+> >>> Hi Catalin,
+> >>>
+> >>> On Wed, Mar 23, 2022 at 05:22:38PM +0000, Catalin Marinas wrote:
+> >>>> Hi Ariel,
+> >>>>
+> >>>> On Fri, Feb 18, 2022 at 09:45:51PM +0200, Ariel Marcovitch wrote:
+> >>>>> I was running a powerpc 32bit kernel (built using
+> >>>>> qemu_ppc_mpc8544ds_defconfig
+> >>>>> buildroot config, with enabling DEBUGFS+KMEMLEAK+HIGHMEM in the kernel
+> >>>>> config)
+> >
+> > ...
+> >
+> >>>>> I don't suppose I can just shuffle the calls in setup_arch() around, 
+> >>>>> so I
+> >>>>> wanted to hear your opinions first
+> >>>> I think it's better if we change the logic than shuffling the calls.
+> >>>> IIUC MEMBLOCK_ALLOC_ACCESSIBLE means that __va() works on the phys
+> >>>> address return by memblock, so something like below (untested):
+> >>> MEMBLOCK_ALLOC_ACCESSIBLE means "anywhere", see commit e63075a3c937
+> >>> ("memblock: Introduce default allocation limit and use it to replace
+> >>> explicit ones"), so it won't help to detect high memory.
+> >>>
+> >>> If I remember correctly, ppc initializes memblock *very* early, so 
+> >>> setting
+> >>> max_low_pfn along with lowmem_end_addr in
+> >>> arch/powerpc/mm/init_32::MMU_init() makes sense to me.
+> >>>
+> >>> Maybe ppc folks have other ideas...
+> >>> I've added Christophe who works on ppc32 these days.
+> >
+> > I think memblock is already available at the end of MMU_init() on PPC32 
+> > and at the end of early_setup() on PPC64. It means it is ready when we 
+> > enter setup_arch().
+> >
+> > I tested the change below, it works for me, I don't get any kmemleak 
+> > report anymore.
+> >
+> > diff --git a/arch/powerpc/kernel/setup-common.c 
+> > b/arch/powerpc/kernel/setup-common.c
+> > index 518ae5aa9410..9f4e50b176c9 100644
+> > --- a/arch/powerpc/kernel/setup-common.c
+> > +++ b/arch/powerpc/kernel/setup-common.c
+> > @@ -840,6 +840,9 @@ void __init setup_arch(char **cmdline_p)
+> >   	/* Set a half-reasonable default so udelay does something sensible */
+> >   	loops_per_jiffy = 500000000 / HZ;
+> >
+> > +	/* Parse memory topology */
+> > +	mem_topology_setup();
+> > +
+> >   	/* Unflatten the device-tree passed by prom_init or kexec */
+> >   	unflatten_device_tree();
 > 
->>
->> +static inline bool cfs_rq_busy(struct rq *rq)
->> +{
->> +       return rq->cfs.h_nr_running - rq->cfs.idle_h_nr_running == 1;
->> +}
->> +
->> +static inline bool need_pull_cfs_task(struct rq *rq)
->> +{
->> +       return rq->cfs.h_nr_running == rq->cfs.idle_h_nr_running;
->> +}
+> The 64-bit/NUMA version of mem_topology_setup() requires the device tree
+> to be unflattened, so I don't think that can work.
 > 
-> Note that this will also return true if there are 0 tasks, which I
-> don't think is the semantics you intend for its use in
-> rebalance_domains() below.
-
-I intended covering the idle balance. My last v1 patchset wanted to
-ignore the idle balance because of the high cpu wakeup latency, but
-after some benchmarking, that seems not necessary.
-
+> Setting max_low_pfn etc in MMU_init() as Mike suggested seems more
+> likely to work.
 > 
->>   /*
->>    * Use locality-friendly rq->overloaded to cache the status of the rq
->>    * to minimize the heavy cost on LLC shared data.
->> @@ -7837,6 +7867,22 @@ int can_migrate_task(struct task_struct *p, struct lb_env *env)
->>          if (kthread_is_per_cpu(p))
->>                  return 0;
->>
->> +       if (unlikely(task_h_idle(p))) {
->> +               /*
->> +                * Disregard hierarchically idle tasks during sched-idle
->> +                * load balancing.
->> +                */
->> +               if (env->idle == CPU_SCHED_IDLE)
->> +                       return 0;
->> +       } else if (!static_branch_unlikely(&sched_asym_cpucapacity)) {
->> +               /*
->> +                * It's not gonna help if stacking non-idle tasks on one
->> +                * cpu while leaving some idle.
->> +                */
->> +               if (cfs_rq_busy(env->src_rq) && !need_pull_cfs_task(env->dst_rq))
->> +                       return 0;
-> 
-> These checks don't involve the task at all, so this kind of check
-> should be pushed into the more general load balance function. But, I'm
-> not totally clear on the motivation here. If we have cpu A with 1
-> non-idle task and 100 idle tasks, and cpu B with 1 non-idle task, we
-> should definitely try to load balance some of the idle tasks from A to
-> B. idle tasks _do_ get time to run (although little), and this can add
-> up and cause antagonism to the non-idle task if there are a lot of
-> idle threads.
+> But we might need to set it again in mem_topology_setup() though, so
+> that things that change memblock_end_of_DRAM() are reflected, eg. memory
+> limit or crash dump?
 
-CPU_SCHED_IDLE means triggered by sched_idle_balance() in which pulls
-a non-idle task for the unoccupied cpu from the overloaded ones, so
-idle tasks are not the target and should be skipped.
+I don't think this can cause issues for kmemleak Ariel reported. The
+kmemleak checks if there is a linear mapping for a PFN or that PFN is only
+accessible via HIGHMEM. Memory limit or crash dump won't change the split,
+or am I missing something?
+ 
+> cheers
 
-The second part is: if we have cpu A with 1 non-idle task and 100 idle
-tasks, and B with >=1 non-idle task, we don't migrate the last non-idle
-task on A to B.
-
-> 
->>
->>   /*
->> + * The sched-idle balancing tries to make full use of cpu capacity
->> + * for non-idle tasks by pulling them for the unoccupied cpus from
->> + * the overloaded ones.
->> + *
->> + * Return 1 if pulled successfully, 0 otherwise.
->> + */
->> +static int sched_idle_balance(struct rq *dst_rq)
->> +{
->> +       struct sched_domain *sd;
->> +       struct task_struct *p = NULL;
->> +       int dst_cpu = cpu_of(dst_rq), cpu;
->> +
->> +       sd = rcu_dereference(per_cpu(sd_llc, dst_cpu));
->> +       if (unlikely(!sd))
->> +               return 0;
->> +
->> +       if (!atomic_read(&sd->shared->nr_overloaded))
->> +               return 0;
->> +
->> +       for_each_cpu_wrap(cpu, sdo_mask(sd->shared), dst_cpu + 1) {
->> +               struct rq *rq = cpu_rq(cpu);
->> +               struct rq_flags rf;
->> +               struct lb_env env;
->> +
->> +               if (cpu == dst_cpu || !cfs_rq_overloaded(rq) ||
->> +                   READ_ONCE(rq->sched_idle_balance))
->> +                       continue;
->> +
->> +               WRITE_ONCE(rq->sched_idle_balance, 1);
->> +               rq_lock_irqsave(rq, &rf);
->> +
->> +               env = (struct lb_env) {
->> +                       .sd             = sd,
->> +                       .dst_cpu        = dst_cpu,
->> +                       .dst_rq         = dst_rq,
->> +                       .src_cpu        = cpu,
->> +                       .src_rq         = rq,
->> +                       .idle           = CPU_SCHED_IDLE, /* non-idle only */
->> +                       .flags          = LBF_DST_PINNED, /* pin dst_cpu */
->> +               };
->> +
->> +               update_rq_clock(rq);
->> +               p = detach_one_task(&env);
->> +               if (p)
->> +                       update_overload_status(rq);
->> +
->> +               rq_unlock(rq, &rf);
->> +               WRITE_ONCE(rq->sched_idle_balance, 0);
->> +
->> +               if (p) {
->> +                       attach_one_task(dst_rq, p);
->> +                       local_irq_restore(rf.flags);
->> +                       return 1;
->> +               }
->> +
->> +               local_irq_restore(rf.flags);
->> +       }
->> +
->> +       return 0;
->> +}
-> 
-> I think this could probably be integrated with the load balancing
-> function. Your goal is ignore idle tasks for the purpose of pulling
-> from a remote rq. And I think the above isn't exactly what you want
-> anyway; detach_tasks/detach_one_task  are just going to iterate the
-> task list in order. You want to actually look for the non-idle tasks
-> explicitly.
-
-I have tried a simple version like below (and sched_idle_balance() is
-not needed anymore):
-
-@@ -10338,6 +10343,7 @@ static void rebalance_domains(struct rq *rq, 
-enum cpu_idle_type idle)
-  	int continue_balancing = 1;
-  	int cpu = rq->cpu;
-  	int busy = idle != CPU_IDLE && !sched_idle_cpu(cpu);
-+	int prev_busy = busy;
-  	unsigned long interval;
-  	struct sched_domain *sd;
-  	/* Earliest time when we have to do rebalance again */
-@@ -10394,6 +10400,9 @@ static void rebalance_domains(struct rq *rq, 
-enum cpu_idle_type idle)
-  			next_balance = sd->last_balance + interval;
-  			update_next_balance = 1;
-  		}
-+
-+		if (!prev_busy && !need_pull_cfs_task(rq))
-+			break;
-  	}
-  	if (need_decay) {
-  		/*
-
-But benchmark results are not good enough compared to RFCv2 patchset.
-I would dig more deep into this, thanks.
-
-> 
->> @@ -10996,9 +11119,9 @@ static int newidle_balance(struct rq *this_rq, struct rq_flags *rf)
->>
->>                  if (sd->flags & SD_BALANCE_NEWIDLE) {
->>
->> -                       pulled_task = load_balance(this_cpu, this_rq,
->> -                                                  sd, CPU_NEWLY_IDLE,
->> -                                                  &continue_balancing);
->> +                       pulled_task |= load_balance(this_cpu, this_rq,
->> +                                                   sd, CPU_NEWLY_IDLE,
->> +                                                   &continue_balancing);
-> 
-> Why |= ?
-
-This is because I changed the behavior of newidle balance a bit. Vanilla
-kernel will quit newidle balance once we got task to run on this rq, no
-matter the task is non-idle or not. But after this patch, if there are
-overloaded cpus in this LLC, we will try harder on balance until we got
-non-idle tasks, which means the balancing would be continue even if now
-the cpu is sched_idle.
-
-Thanks & BR,
-Abel
-
+-- 
+Sincerely yours,
+Mike.

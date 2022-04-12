@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D702D4FD4A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:05:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30EC44FD8C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:37:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355206AbiDLIHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:07:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42844 "EHLO
+        id S1385878AbiDLIxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:53:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354736AbiDLH0k (ORCPT
+        with ESMTP id S1359268AbiDLHmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:26:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C51246B20;
-        Tue, 12 Apr 2022 00:06:32 -0700 (PDT)
+        Tue, 12 Apr 2022 03:42:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EFD32C128;
+        Tue, 12 Apr 2022 00:21:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AC4FDB81B4F;
-        Tue, 12 Apr 2022 07:06:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F41C7C385A1;
-        Tue, 12 Apr 2022 07:06:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AA226153F;
+        Tue, 12 Apr 2022 07:21:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B7F7C385A1;
+        Tue, 12 Apr 2022 07:21:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747189;
-        bh=blGm2AT+cTPGsrJEUISAdrsP2vZTBXy06uJ2DzObYds=;
+        s=korg; t=1649748085;
+        bh=Tnn2M0xaBWyd+/S1Dkmi6sGPEzK/LZOpiFyK6e9fGBU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aHtEH8mewo7ghXeJhZS8POGc26y3Okkoh8ULsCmUqQ/MioWjgX654oWbxUA+9vHEk
-         /oX9QJ797CXD/ISwYuFzMAigizYSZqwaA/TCv2Q+RtXArXfJQOJthAvp3ZeUq5ZoyS
-         bQYks7aPXTvk708FF044yyFnUoVwf1jl/Mb9NCFk=
+        b=0dOT83nzU9LifjqInz6O4LPN5vT427EtgC6S5Ra1iOKf8HewRrfvtNzz4S4IAM+dc
+         IQgXxgyP4LoO60xAhRCp0TW8OrsgvZpo6xcxQvIlRxgWavWtoo6ce6dZLhhEF8OLx4
+         zv+oynhdnKLVjq10+2w1H8AANIo4mv6HLI5MqvSU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Zhong <yang.zhong@intel.com>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Paolo Bonzini <bonzini@gnu.org>
-Subject: [PATCH 5.16 274/285] x86/fpu/xstate: Fix the ARCH_REQ_XCOMP_PERM implementation
+        stable@vger.kernel.org, Akihiko Odaki <akihiko.odaki@gmail.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Ketsui <esgwpl@gmail.com>
+Subject: [PATCH 5.17 313/343] Revert "ACPI: processor: idle: Only flush cache on entering C3"
 Date:   Tue, 12 Apr 2022 08:32:11 +0200
-Message-Id: <20220412062951.564252341@linuxfoundation.org>
+Message-Id: <20220412063000.357228895@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,40 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Zhong <yang.zhong@intel.com>
+From: Akihiko Odaki <akihiko.odaki@gmail.com>
 
-commit 063452fd94d153d4eb38ad58f210f3d37a09cca4 upstream.
+commit dfbba2518aac4204203b0697a894d3b2f80134d3 upstream.
 
-ARCH_REQ_XCOMP_PERM is supposed to add the requested feature to the
-permission bitmap of thread_group_leader()->fpu. But the code overwrites
-the bitmap with the requested feature bit only rather than adding it.
+Revert commit 87ebbb8c612b ("ACPI: processor: idle: Only flush cache
+on entering C3") that broke the assumptions of the acpi_idle_play_dead()
+callers.
 
-Fix the code to add the requested feature bit to the master bitmask.
+Namely, the CPU cache must always be flushed in acpi_idle_play_dead(),
+regardless of the target C-state that is going to be requested, because
+this is likely to be part of a CPU offline procedure or preparation for
+entering a system-wide sleep state and the lack of synchronization
+between the CPU cache and RAM may lead to problems going forward, for
+example when the CPU is brought back online.
 
-Fixes: db8268df0983 ("x86/arch_prctl: Add controls for dynamic XSTATE components")
-Signed-off-by: Yang Zhong <yang.zhong@intel.com>
-Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: Paolo Bonzini <bonzini@gnu.org>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220129173647.27981-2-chang.seok.bae@intel.com
-[chang: Backport for 5.16]
-Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+In particular, it breaks resume from suspend-to-RAM on Lenovo ThinkPad
+C13 which fails occasionally until the problematic commit is reverted.
+
+Signed-off-by: Akihiko Odaki <akihiko.odaki@gmail.com>
+[ rjw: Changelog ]
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Cc: Ketsui <esgwpl@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kernel/fpu/xstate.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/acpi/processor_idle.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---- a/arch/x86/kernel/fpu/xstate.c
-+++ b/arch/x86/kernel/fpu/xstate.c
-@@ -1626,7 +1626,7 @@ static int __xstate_request_perm(u64 per
- 		return ret;
+--- a/drivers/acpi/processor_idle.c
++++ b/drivers/acpi/processor_idle.c
+@@ -570,8 +570,7 @@ static int acpi_idle_play_dead(struct cp
+ {
+ 	struct acpi_processor_cx *cx = per_cpu(acpi_cstate[index], dev->cpu);
  
- 	/* Pairs with the READ_ONCE() in xstate_get_group_perm() */
--	WRITE_ONCE(fpu->perm.__state_perm, requested);
-+	WRITE_ONCE(fpu->perm.__state_perm, mask);
- 	/* Protected by sighand lock */
- 	fpu->perm.__state_size = ksize;
- 	fpu->perm.__user_state_size = usize;
+-	if (cx->type == ACPI_STATE_C3)
+-		ACPI_FLUSH_CPU_CACHE();
++	ACPI_FLUSH_CPU_CACHE();
+ 
+ 	while (1) {
+ 
 
 

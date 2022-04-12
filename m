@@ -2,106 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 696334FCD73
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 06:07:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C66954FCD75
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 06:08:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242242AbiDLEJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 00:09:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48058 "EHLO
+        id S1343785AbiDLEJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 00:09:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiDLEI5 (ORCPT
+        with ESMTP id S229772AbiDLEJu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 00:08:57 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B8502FFCE
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 21:06:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649736400; x=1681272400;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mf9C6qT7/NO4kJZZHLDFOhQc2xAA3V03tnKvzVhd48s=;
-  b=iTahV5uZm7DDy8XDrYlwR4aq2ZPm4UAY55irtou/cE3v8neasgG1vDQx
-   NipMuC5K94mfMtHpwpD85iPQnXD1VDrtCefNivacq0SoefoN2oTSbSx8p
-   XJU1p16a70384X84oS7QNKSPMjCyW0SKurecFih2KoFsZ5+npEQ4nozxZ
-   z0L25kw7WSHGpK1KWNzN/KWWsYqLyIF+siLJzd3iY4biIeZW3Eo8EiKzL
-   zMZdKKOhAyH6Yje1u8kl0kl+QA6ETSKA1K/fxQt3tyWG+j/Y4qEJL9YDu
-   dXdkauq/g0rElu7++6yjYlbi/pEElUOGhviEJTDniSZFsM8ej6oGqiQi2
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="261118831"
-X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="261118831"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 21:06:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="507379666"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 11 Apr 2022 21:06:37 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ne7nZ-0002VQ-4w;
-        Tue, 12 Apr 2022 04:06:37 +0000
-Date:   Tue, 12 Apr 2022 12:06:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Riley <davidriley@chromium.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Tomasz Figa <tfiga@chromium.org>,
-        Zach Reizner <zachr@chromium.org>,
-        Gurchetan Singh <gurchetansingh@chromium.org>
-Subject: [jsarha:topic/cros-sof-v4.19 4273/6555]
- drivers/gpu/drm/virtio/virtgpu_object.c:176:5: warning: no previous
- prototype for function 'virtio_gpu_dma_buf_to_handle'
-Message-ID: <202204121116.G1ASG8mq-lkp@intel.com>
+        Tue, 12 Apr 2022 00:09:50 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF0902FFCE;
+        Mon, 11 Apr 2022 21:07:33 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1127)
+        id 682E7205657E; Mon, 11 Apr 2022 21:07:33 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 682E7205657E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1649736453;
+        bh=Ttzy8BQ9PlMSUQQk7cuuFBxQLGJvmjKf1avgoHfG0Jo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OUgRs7uht0+gzG3Y7HoAoh1/dD5KFCf8VL8+wClpj57ksmFdvagPUCaH2LgiHXSEg
+         4OAk2AE3kR8dZ/iCBaEqZWDlCYAalakHpuFMMddeQZ1gFMSF4glhkbqZQ9XACk79hg
+         KMenDvoISCAWLu+imtKZNc+DoZrHWZ1zYq/Bputw=
+Date:   Mon, 11 Apr 2022 21:07:33 -0700
+From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+To:     Dexuan Cui <decui@microsoft.com>
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        "drawat.floss@gmail.com" <drawat.floss@gmail.com>,
+        "airlied@linux.ie" <airlied@linux.ie>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Subject: Re: [PATCH v3] drm/hyperv: Added error message for fb size greater
+ than allocated
+Message-ID: <20220412040733.GA6074@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1649650437-17977-1-git-send-email-ssengar@linux.microsoft.com>
+ <BYAPR21MB1270B3CFBE674EB0A7537180BFEA9@BYAPR21MB1270.namprd21.prod.outlook.com>
+ <20220411075555.GA15355@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+ <DM6PR21MB1275F532C58CF5CE7F67D7E8BFEA9@DM6PR21MB1275.namprd21.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <DM6PR21MB1275F532C58CF5CE7F67D7E8BFEA9@DM6PR21MB1275.namprd21.prod.outlook.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jsarha/linux topic/cros-sof-v4.19
-head:   d7a3e91d8d16d1ef8653deec5a1fffc4de034a0c
-commit: cea7ac75b0485305ef7d58b47c67d4ab82e620a3 [4273/6555] CHROMIUM: drm/virtio: Add interfaces to share dma bufs via virtwl.
-config: x86_64-randconfig-a003-20220411 (https://download.01.org/0day-ci/archive/20220412/202204121116.G1ASG8mq-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fe2478d44e4f7f191c43fef629ac7a23d0251e72)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/jsarha/linux/commit/cea7ac75b0485305ef7d58b47c67d4ab82e620a3
-        git remote add jsarha https://github.com/jsarha/linux
-        git fetch --no-tags jsarha topic/cros-sof-v4.19
-        git checkout cea7ac75b0485305ef7d58b47c67d4ab82e620a3
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/gpu/drm/virtio/
+On Mon, Apr 11, 2022 at 07:02:19PM +0000, Dexuan Cui wrote:
+> > From: Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+> > Sent: Monday, April 11, 2022 12:56 AM
+> > > >...
+> > > > -	if (fb->pitches[0] * fb->height > hv->fb_size)
+> > > > +	if (fb->pitches[0] * fb->height > hv->fb_size) {
+> > > > +		drm_err(&hv->dev, "hv->hdev, fb size requested by process %s
+> > > > for %d X %d (pitch %d) is greater than allocated size %ld\n",
+> > > Should we use drm_err_ratelimited() instead of drm_err()?
+> > 
+> > The error is not produced in good cases, for every resolution change which is
+> > violating this error should print once.
+> 
+> Thanks for the clarification! Then drm_err() looks good to me.
+> 
+> > I suggest having it print every time some application tries to violate the policy
+> > set at boot time.
+> > If we use ratelimit many resolutions error change will be suppressed. Please let
+> > me know your thoughts.
+>  
+> > >
+> > > The line exceeds 80 chars.
+> > 
+> > At first I tried braking the line to respect 80 character boundary, but
+> > checkpatch.pl reported it as a problem.
+> > And these new lines are suggested by checkpatch.pl itself.
+> > Looks the recent rule realted to 80 charachters are changed. Ref :
+> > ...
+> 
+> Good to know! Thanks for sharing the link!
+> 
+> FYI, the default max_line_length in scripts/checkpatch.pl is 100 now:
+>  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bdc48fa11e46f
+> 
+> "80-chars" is still preferred, but isn't a hard limit. I also noticed
+> "never break user-visible strings such as printk messages ", so yes you're 
+> correct. It's perfectly fine to have a not-too-long string that exceeds 80 chars.
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Good information ! thank you for digging this.
 
-All warnings (new ones prefixed by >>):
+> > > > +		current->comm, fb->width, fb->height, fb->pitches[0], hv->fb_size);
+> > > >  		return -EINVAL;
+> > > > +	}
+> > >
+> > > Maybe we can use the below:
+> > > 	drm_err_ratelimited(&hv->dev, "%s: requested %dX%d (pitch %d) "
+> > >                      "exceeds fb_size %ld\n",
+> > >                      current->comm, fb->width, fb->height,
+> > >                      fb->pitches[0], hv->fb_size);
+> > >
+> > > Note: the first chars of last 3 lines should align with the "&" in the
+> > > same column. Please run "scripts/checkpatch.pl" against the patch.
+> > 
+> > I have tested checkpatch.pl before sending, for the current patch there is no
+> > problem from checkpatch.pl
+> 
+> The line is 138-char long, which seems a little longer to me :-)
+> IMO we can make it shorter, e.g. be removing the part "hv->hdev as the
+> "drm_err(&hv->dev," already tells us which device it's.
 
->> drivers/gpu/drm/virtio/virtgpu_object.c:176:5: warning: no previous prototype for function 'virtio_gpu_dma_buf_to_handle' [-Wmissing-prototypes]
-   int virtio_gpu_dma_buf_to_handle(struct dma_buf *dma_buf, bool no_wait,
-       ^
-   drivers/gpu/drm/virtio/virtgpu_object.c:176:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int virtio_gpu_dma_buf_to_handle(struct dma_buf *dma_buf, bool no_wait,
-   ^
-   static 
-   1 warning generated.
+Ok, will make it shorter.
 
-
-vim +/virtio_gpu_dma_buf_to_handle +176 drivers/gpu/drm/virtio/virtgpu_object.c
-
-   175	
- > 176	int virtio_gpu_dma_buf_to_handle(struct dma_buf *dma_buf, bool no_wait,
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> 
+> BTW, if we run the script with --strict, it reports the below:
+> 
+> # scripts/checkpatch.pl --strict 0001-drm-hyperv-Added-error-message-for-fb-size-greater-t.patch
+> CHECK: Alignment should match open parenthesis
+> #28: FILE: drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:127:
+> +               drm_err(&hv->dev, "hv->hdev, fb size requested by process %s for %d X %d (pitch %d) is greater than allocated size %ld\n",
+> +               current->comm, fb->width, fb->height, fb->pitches[0], hv->fb_size);
+Sure, will fix this.

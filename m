@@ -2,94 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 565F74FDA3B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:49:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E750A4FD562
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:12:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358869AbiDLIcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42832 "EHLO
+        id S1355202AbiDLIKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:10:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353574AbiDLHZq (ORCPT
+        with ESMTP id S1353701AbiDLHZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:25:46 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FBD43AC6;
-        Tue, 12 Apr 2022 00:01:39 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id cw11so619368pfb.1;
-        Tue, 12 Apr 2022 00:01:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id;
-        bh=9aYYnSxcM8j7TWBW5FU1fmumHEAakEs8qu5ewn9nHDA=;
-        b=KYutpTLeuNsfF3Shhsm4Sy+4a/8mEGtBWt6JK8P7ED8bjwQS1+uBes83hGG2QsXBfs
-         Ls3+23AYCTK0RIDNBoLXneLxNYMlw8SvMMa8aO2N3Ay3Otq6H6Mh69tSBI+IWdbshf2i
-         tBYum6NCPO6VKeOEXg77OsW4k3zH0W9pVWVV8p4YLjxM6Jpj/Wj0lxw6N2JZkAkQdfEt
-         ht+e6FOwWpu8YcXZGfPW24RDd2PDHo2UxkpgsgWoDL0RvSTW5VCFl55mamFQMQpnRbDD
-         pO5T6H6cAh++YWypC2iS0eHeRMC1cVOfjWVY/J1mx/TBpAp/iViD5qEQGO2SA00u7Kna
-         Rwew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id;
-        bh=9aYYnSxcM8j7TWBW5FU1fmumHEAakEs8qu5ewn9nHDA=;
-        b=qhBnwmwRWGOP+pHAILMVn1dAjsvx9M9jyXDafknyuzTvWT2tCZEyNV3+dN7Wc0NCyC
-         YD4C8eOf526vTfuxdFpFFHH+qvdPdV+7t/pxD4Jyzl9KgifltbEsSioBA3wWq16d4vJg
-         dZkrxRSEehI1B87acmwse/r5xjVoIk4Da0dY8qJ+2Z4RnBczfBe28OmV9DeiLZ+w607Z
-         U/G37Kd6C/X3OmRR12dY3h0zdeex+QyCBW8uDSndh13URKwjv2Xkv2cSiLs72sLR7Rvv
-         MUVIQmyoEsvfUJ7eGDhKCsCd4uC81uFdxmhiRC5/VxCn9+XYx1oe6/lPlV8TcRe2UDt9
-         zrpQ==
-X-Gm-Message-State: AOAM531UckyKCt83dGCE4PztkcJim9NtEssZ5X5pisNfMm+pVBcB+rf5
-        E6N+cR53J5X3oerzqp5JueM=
-X-Google-Smtp-Source: ABdhPJwKi8UmPRpJcgOPJf1aRNgXPKsIJ1ysNMGQGR6Cefo/MFRMIN46eXYPwV77wm+UitlOiBoPdQ==
-X-Received: by 2002:a63:40c6:0:b0:39d:9463:94ac with SMTP id n189-20020a6340c6000000b0039d946394acmr1645793pga.289.1649746897974;
-        Tue, 12 Apr 2022 00:01:37 -0700 (PDT)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id b16-20020a17090a011000b001cb4815d135sm1773149pjb.9.2022.04.12.00.01.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 00:01:37 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        "G, Manjunath Kondaiah" <manjugk@ti.com>,
-        Felipe Balbi <balbi@ti.com>,
-        "Poddar, Sourav" <sourav.poddar@ti.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] Input: omap4-keypad - Fix pm_runtime_get_sync() error checking
-Date:   Tue, 12 Apr 2022 07:01:26 +0000
-Message-Id: <20220412070131.19848-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 12 Apr 2022 03:25:52 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED11227B23;
+        Tue, 12 Apr 2022 00:03:46 -0700 (PDT)
+From:   Kurt Kanzenbach <kurt@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1649747024;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wSOBIIfV1E6zWOf6Ap6BP42f42YeWjssrthGrpaLNqo=;
+        b=yuUXZkDhtS1Q1i49HqF5bGILbELxK/GZnL8Jn+JxafbqH9uRdOYH0XloFzxS4yjiVdcotk
+        j6BOGnhzlnrKxUbopjSVQgMym8UGnW47lBEAeg0dcYHGAhiSXyL34PDMJX8BgXkqMrPGjH
+        xKwz0Kd9qKW+j+XqekCZfFBvC3oYyEt3+PB9XmVfVwb9d6F9NjDeqEQeXehvDMgAVtBSNp
+        WU2dUnTQLEtQbjxLQX3Ia9N89AWj1FKpwBzm5wowwIadQ9LeHAXRwMPz92Od6SxFJuZVbp
+        oYmaRQ0rzzedOvdjHyydXJemNj2kHToiAqAXOiPC6Ck5s+WFs9RlrdekE+iIgw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1649747024;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wSOBIIfV1E6zWOf6Ap6BP42f42YeWjssrthGrpaLNqo=;
+        b=eLpfoolnSQcLA7qBjjn0dS096grclyQUpFIj2A+VpoERe0u6v2ABtPMrS2o2T05GUxKV09
+        I3rnJkbs3SmEPGAg==
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Richard Cochran <richardcochran@gmail.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] timekeeping: Introduce fast accessor to clock tai
+In-Reply-To: <87k0bvfibm.ffs@tglx>
+References: <20220409081300.4762-1-kurt@linutronix.de>
+ <20220409081300.4762-2-kurt@linutronix.de>
+ <20220409093727.7dda6371@rorschach.local.home> <871qy6hu8q.ffs@tglx>
+ <87k0bvfibm.ffs@tglx>
+Date:   Tue, 12 Apr 2022 09:03:42 +0200
+Message-ID: <87v8vepyup.fsf@kurt>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha512; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the device is already in a runtime PM enabled state
-pm_runtime_get_sync() will return 1, so a test for negative
-value should be used to check for errors.
+--=-=-=
+Content-Type: text/plain
 
-Fixes: f77621cc640a ("Input: omap-keypad - dynamically handle register offsets")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/input/keyboard/omap4-keypad.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon Apr 11 2022, Thomas Gleixner wrote:
+> On Sat, Apr 09 2022 at 22:33, Thomas Gleixner wrote:
+>> On Sat, Apr 09 2022 at 09:37, Steven Rostedt wrote:
+>>> On Sat,  9 Apr 2022 10:12:58 +0200
+>>> Kurt Kanzenbach <kurt@linutronix.de> wrote:
+>>>
+>>>> ---
+>>>>  include/linux/timekeeping.h |  1 +
+>>>>  kernel/time/timekeeping.c   | 17 +++++++++++++++++
+>>>>  2 files changed, 18 insertions(+)
+>>>
+>>> If the time keeping folks are OK with this and ack it, I'm happy to
+>>> take this through my tree.
+>>
+>> Go ahead. I just sent a Reviewed-by and I don't see conflicting changes
+>> in that area. Famous last words :)
+>
+> And yes, I have some conflicting changes in the pipeline and just saw
+> that this lacks a data_race() annotation like the boot variant from
+> which this is derived.
 
-diff --git a/drivers/input/keyboard/omap4-keypad.c b/drivers/input/keyboard/omap4-keypad.c
-index 43375b38ee59..8a7ce41b8c56 100644
---- a/drivers/input/keyboard/omap4-keypad.c
-+++ b/drivers/input/keyboard/omap4-keypad.c
-@@ -393,7 +393,7 @@ static int omap4_keypad_probe(struct platform_device *pdev)
- 	 * revision register.
- 	 */
- 	error = pm_runtime_get_sync(dev);
--	if (error) {
-+	if (error < 0) {
- 		dev_err(dev, "pm_runtime_get_sync() failed\n");
- 		pm_runtime_put_noidle(dev);
- 		return error;
--- 
-2.17.1
+Interesting, didn't see that annotation. Anyway, this patch also misses
+the corresponding documentation entry. See below.
 
+Thanks,
+Kurt
+
+diff --git a/Documentation/core-api/timekeeping.rst b/Documentation/core-api/timekeeping.rst
+index 729e24864fe7..22ec68f24421 100644
+--- a/Documentation/core-api/timekeeping.rst
++++ b/Documentation/core-api/timekeeping.rst
+@@ -132,6 +132,7 @@ Some additional variants exist for more specialized cases:
+ .. c:function:: u64 ktime_get_mono_fast_ns( void )
+                u64 ktime_get_raw_fast_ns( void )
+                u64 ktime_get_boot_fast_ns( void )
++               u64 ktime_get_tai_fast_ns( void )
+                u64 ktime_get_real_fast_ns( void )
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJHBAEBCgAxFiEEvLm/ssjDfdPf21mSwZPR8qpGc4IFAmJVJE4THGt1cnRAbGlu
+dXRyb25peC5kZQAKCRDBk9HyqkZzghWjD/sEeBixzbfdwEh+0NSFI9u11RnAGvC9
+wycvpdO5v5MNsKBgXsnO5Ssq7a1Mzx6i6hRY452BEfUvIuFFK2hvFgnvGzIQpFJZ
+Y5orhocN5IeJTq7jv+Iq75Rk1z4Zbsng9qCaDIVZa2u3pxqeng/HbpvNc8bczx5G
+TFIdkGDHJUXjsNkBa48Wj/p18QInGdrEXqHYua3auKUB+EHF0pEjqhnzXhKTHGsy
+CtZUqRkqCp2ONr5aU8jZhMLm8uNnezWC7dz8x3iN8KhEJkJezKa8X/JK7g2zLiSy
+bTviKsrixxYY7IOaBQbqynuvYPvJL9ESIik8AitJiv0qfEzpfR6ZblSzjJgPrHVS
+h4Fvw1yJZ3hTX3SJXgLcCQAgPfaRDRuwssjVmFVmjBDclZ2BwCqxE31Uo1hucEIw
+ewDwZRa/MKqGSpUGmsZAMm1MP0FW8y8p4qpHgb0BeCCiwxFyKsr6Ky/9YRO+2zAq
+zP9UpKGle8MZXy4n1RB2WZ1uStEujYnAF1+Sgm2kEUYptjTfoWqNxEQb+S12oYYG
+0VOty1agDe+UflrRKveE+I0RS8r9ohMHeSEVda2m/Ae9h+E9KZwPOGlZMGHdJaY8
+264CmK4YqwH3jl7CL3xE3rXlBaOCgGBd+3YhVPP25yOqiCmuRyim4ZuYYd02FK4B
+7CrnH8wL+HCuaA==
+=w1aW
+-----END PGP SIGNATURE-----
+--=-=-=--

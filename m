@@ -2,50 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 433E44FD398
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 11:58:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD8B14FD3D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 11:59:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352748AbiDLHYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:24:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57264 "EHLO
+        id S1377568AbiDLHud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347734AbiDLHJM (ORCPT
+        with ESMTP id S1346467AbiDLHWG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:09:12 -0400
+        Tue, 12 Apr 2022 03:22:06 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B8C49F05;
-        Mon, 11 Apr 2022 23:49:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F5212C113;
+        Mon, 11 Apr 2022 23:59:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ECD60B81B4F;
-        Tue, 12 Apr 2022 06:49:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18F56C385A1;
-        Tue, 12 Apr 2022 06:49:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 18015B81B4E;
+        Tue, 12 Apr 2022 06:59:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A562C385A1;
+        Tue, 12 Apr 2022 06:59:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746176;
-        bh=WjGxQt0fZtqz5sruQ3SL1QiA5RD/rB1B2JDJhPiMpcM=;
+        s=korg; t=1649746781;
+        bh=wfOWnBKDHMzsdOEB9VAuP1Z+xiSv2G5c7JafDdG7zx8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dasqoEJC/W7CsGLdETa1isA+vpS0Tmb1DRlzrFDjAI9adhWxFniKHz9GbiS03Za0F
-         Zn9MqI7ai35nPGJQPKv5DPF4ss+GAv4Ct3DF59Dv9av/aH47FTnEs82UWAYJMlkLRr
-         3+tboAtqyFjRqIVfvXX4I1jmMERW0VChHcmC24Dw=
+        b=XZnd/jEMLi8++7Illd/DLKRjak7Lsr+ZmjT6Y3fE/KZSfi2j+2Yr4FKxQma4/yCyC
+         HI7GTo+Jc0OlTYCkqKTJi41K/xz1uq7aEHnv3v8MIyX06yTnajI+PbHc9KKjqp49oa
+         21KxcgrxWZqiJH1AwSTjGUuwFxGIGz5pwJv0WPlo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Konrad Jankowski <konrad0.jankowski@intel.com>,
-        Alice Michael <alice.michael@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org, Oded Gabbay <ogabbay@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 181/277] ice: Set txq_teid to ICE_INVAL_TEID on ring creation
-Date:   Tue, 12 Apr 2022 08:29:44 +0200
-Message-Id: <20220412062947.274054687@linuxfoundation.org>
+Subject: [PATCH 5.16 129/285] habanalabs: reject host map with mmu disabled
+Date:   Tue, 12 Apr 2022 08:29:46 +0200
+Message-Id: <20220412062947.388797867@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,69 +54,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>
+From: Oded Gabbay <ogabbay@kernel.org>
 
-[ Upstream commit ccfee1822042b87e5135d33cad8ea353e64612d2 ]
+[ Upstream commit 9a79e3e4a3637c07352d9723b825490a1b04391f ]
 
-When VF is freshly created, but not brought up, ring->txq_teid
-value is by default set to 0.
-But 0 is a valid TEID. On some platforms the Root Node of
-Tx scheduler has a TEID = 0. This can cause issues as shown below.
+This is not something we can do a workaround. It is clearly an error
+and we should notify the user that it is an error.
 
-The proper way is to set ring->txq_teid to ICE_INVAL_TEID (0xFFFFFFFF).
-
-Testing Hints:
-echo 1 > /sys/class/net/ens785f0/device/sriov_numvfs
-ip link set dev ens785f0v0 up
-ip link set dev ens785f0v0 down
-
-If we have freshly created VF and quickly turn it on and off, so there
-would be no time to reach VIRTCHNL_OP_CONFIG_VSI_QUEUES stage, then
-VIRTCHNL_OP_DISABLE_QUEUES stage will fail with error:
-[  639.531454] disable queue 89 failed 14
-[  639.532233] Failed to disable LAN Tx queues, error: ICE_ERR_AQ_ERROR
-[  639.533107] ice 0000:02:00.0: Failed to stop Tx ring 0 on VSI 5
-
-The reason for the fail is that we are trying to send AQ command to
-delete queue 89, which has never been created and receive an "invalid
-argument" error from firmware.
-
-As this queue has never been created, it's teid and ring->txq_teid
-have default value 0.
-ice_dis_vsi_txq has a check against non-existent queues:
-
-node = ice_sched_find_node_by_teid(pi->root, q_teids[i]);
-if (!node)
-	continue;
-
-But on some platforms the Root Node of Tx scheduler has a teid = 0.
-Hence, ice_sched_find_node_by_teid finds a node with teid = 0 (it is
-pi->root), and we go further to submit an erroneous request to firmware.
-
-Fixes: 37bb83901286 ("ice: Move common functions out of ice_main.c part 7/7")
-Signed-off-by: Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>
-Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
-Signed-off-by: Alice Michael <alice.michael@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/ice/ice_lib.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/misc/habanalabs/common/memory.c | 30 +++++++++----------------
+ 1 file changed, 11 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_lib.c b/drivers/net/ethernet/intel/ice/ice_lib.c
-index a5fd29ffdebe..653996e8fd30 100644
---- a/drivers/net/ethernet/intel/ice/ice_lib.c
-+++ b/drivers/net/ethernet/intel/ice/ice_lib.c
-@@ -1306,6 +1306,7 @@ static int ice_vsi_alloc_rings(struct ice_vsi *vsi)
- 		ring->tx_tstamps = &pf->ptp.port.tx;
- 		ring->dev = dev;
- 		ring->count = vsi->num_tx_desc;
-+		ring->txq_teid = ICE_INVAL_TEID;
- 		WRITE_ONCE(vsi->tx_rings[i], ring);
- 	}
+diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
+index 9bd626a00de3..03416b4ee0b7 100644
+--- a/drivers/misc/habanalabs/common/memory.c
++++ b/drivers/misc/habanalabs/common/memory.c
+@@ -1973,16 +1973,15 @@ static int export_dmabuf_from_handle(struct hl_ctx *ctx, u64 handle, int flags,
+ static int mem_ioctl_no_mmu(struct hl_fpriv *hpriv, union hl_mem_args *args)
+ {
+ 	struct hl_device *hdev = hpriv->hdev;
+-	struct hl_ctx *ctx = hpriv->ctx;
+ 	u64 block_handle, device_addr = 0;
++	struct hl_ctx *ctx = hpriv->ctx;
+ 	u32 handle = 0, block_size;
+-	int rc, dmabuf_fd = -EBADF;
++	int rc;
  
+ 	switch (args->in.op) {
+ 	case HL_MEM_OP_ALLOC:
+ 		if (args->in.alloc.mem_size == 0) {
+-			dev_err(hdev->dev,
+-				"alloc size must be larger than 0\n");
++			dev_err(hdev->dev, "alloc size must be larger than 0\n");
+ 			rc = -EINVAL;
+ 			goto out;
+ 		}
+@@ -2003,15 +2002,14 @@ static int mem_ioctl_no_mmu(struct hl_fpriv *hpriv, union hl_mem_args *args)
+ 
+ 	case HL_MEM_OP_MAP:
+ 		if (args->in.flags & HL_MEM_USERPTR) {
+-			device_addr = args->in.map_host.host_virt_addr;
+-			rc = 0;
++			dev_err(hdev->dev, "Failed to map host memory when MMU is disabled\n");
++			rc = -EPERM;
+ 		} else {
+-			rc = get_paddr_from_handle(ctx, &args->in,
+-							&device_addr);
++			rc = get_paddr_from_handle(ctx, &args->in, &device_addr);
++			memset(args, 0, sizeof(*args));
++			args->out.device_virt_addr = device_addr;
+ 		}
+ 
+-		memset(args, 0, sizeof(*args));
+-		args->out.device_virt_addr = device_addr;
+ 		break;
+ 
+ 	case HL_MEM_OP_UNMAP:
+@@ -2019,20 +2017,14 @@ static int mem_ioctl_no_mmu(struct hl_fpriv *hpriv, union hl_mem_args *args)
+ 		break;
+ 
+ 	case HL_MEM_OP_MAP_BLOCK:
+-		rc = map_block(hdev, args->in.map_block.block_addr,
+-				&block_handle, &block_size);
++		rc = map_block(hdev, args->in.map_block.block_addr, &block_handle, &block_size);
+ 		args->out.block_handle = block_handle;
+ 		args->out.block_size = block_size;
+ 		break;
+ 
+ 	case HL_MEM_OP_EXPORT_DMABUF_FD:
+-		rc = export_dmabuf_from_addr(ctx,
+-				args->in.export_dmabuf_fd.handle,
+-				args->in.export_dmabuf_fd.mem_size,
+-				args->in.flags,
+-				&dmabuf_fd);
+-		memset(args, 0, sizeof(*args));
+-		args->out.fd = dmabuf_fd;
++		dev_err(hdev->dev, "Failed to export dma-buf object when MMU is disabled\n");
++		rc = -EPERM;
+ 		break;
+ 
+ 	default:
 -- 
 2.35.1
 

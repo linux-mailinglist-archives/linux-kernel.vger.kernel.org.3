@@ -2,125 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 790734FCE55
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 06:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B48304FCE58
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 06:57:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237296AbiDLE7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 00:59:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43660 "EHLO
+        id S1347237AbiDLFAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 01:00:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235652AbiDLE7d (ORCPT
+        with ESMTP id S241228AbiDLFAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 00:59:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD2C2E9C1
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 21:57:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C02DAB818EA
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 04:57:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8E10C385A1;
-        Tue, 12 Apr 2022 04:57:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649739434;
-        bh=L1NutSiSa9tUlI/WgF41v5kwoq1ZhvNvo0ryAQDw26s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NRN6jm7mBVoQv5Et9CeZMtG57b9+Hwynzv7QrQsDxxjbnMxox8EG3lCn0CMgiCZEF
-         JvzezXjoB8EX7cJTszpMsBAsC0cxsE5zgmnc1TDMGsqTWOss6b8ffjIuhUeWI7PQ9R
-         sFycCrDi8c9sEV9RnArFeAccVTVHb3Rg8kKMwbho=
-Date:   Tue, 12 Apr 2022 06:57:11 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jaehee Park <jhpark1013@gmail.com>
-Cc:     Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
-Subject: Re: [PATCH] staging: greybus: replace zero-element array with
- flexible-array
-Message-ID: <YlUGp+/BzMSm3oDC@kroah.com>
-References: <20220411211411.GA2796005@jaehee-ThinkPad-X1-Extreme>
- <YlUGbFs8oNikJCcv@kroah.com>
+        Tue, 12 Apr 2022 01:00:04 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25D42E9C1
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 21:57:47 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id bx5so17242012pjb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 21:57:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8TleCaBIhpvoj6MzJmrMyC3ucMSm6WO1y+eL8xleJY4=;
+        b=fkN36mDpM4Pd1sCv3rNuy9oyYD/gLOwueus4xphJV1YDbeNRSQ8IyujzwsptiZfgYe
+         QUQIV9qghorMpdWWz6Mmsr/1DpHVZ96zqos/O3uhBAyz4TBRkDPpFJ5YoWKm0lCFZweQ
+         RoEFhL/uQjowL2aggfNFdXl2Ztg3A9451oiIjvEilBdbF+7t1islEN8KsPhMNJASWFOK
+         SUVweWmAjr6bfH/tyV4dylbfizqkoRZTCLZaofjld5K7oDzCT9ORDsz4TyjMGKUqQ8M4
+         Qet/LWoJSVXRFpDjGoHVJDsMMopWIZP4HzpS68RD9q73tLwybQtTxPuEsqT+1brdIvEZ
+         etIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8TleCaBIhpvoj6MzJmrMyC3ucMSm6WO1y+eL8xleJY4=;
+        b=FGbbuYototdvsNPkfEjZDKDoaiy8o7vXATwS98VA4I4fjcI4gp83b9dEJIazGn6PG1
+         xNEMMHfmc4h3Ow1YP64kZ28iZpaiCGHVCg3EH8DKTb0hROoLzE7LOmNbAWn4qVUAvZgg
+         fnAPs+juuJSg2yWJF0wmPplZD4lOGf+ztWv9cz+W5sbcWEwkfC2rjOSW/PR8hc0086l8
+         8uHvcr4IHSi500DF+A6vm2fVF7b1U2SrhcpfM/LR1LlGaw8nF6r/SNGuKI8UGmgKstIT
+         m6IIhIdUMIafMYkRGA8PZIIyx4gl501Oz8rcdnKzauECWPoT00NaP8dxlES0gUgsemsH
+         5Xfg==
+X-Gm-Message-State: AOAM533lfvDdOyTCb5KuJzbz1lTIutcoQ+TcbQxPGAvOqmqmZ1+KcvS6
+        nBBArjJwW7TdJj41dGv9t2GkodZ/GgmnWRRzq9GnNA==
+X-Google-Smtp-Source: ABdhPJxBATyoJAyblOakoZzlFS+GtSy3AbBTLdouj+8YmPDRCb1cpkksbCSmeWKkXDHtWwI5LR7XG/b+KrOX8AklXlQ=
+X-Received: by 2002:a17:902:eb92:b0:158:4cc9:698e with SMTP id
+ q18-20020a170902eb9200b001584cc9698emr12430897plg.147.1649739467468; Mon, 11
+ Apr 2022 21:57:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YlUGbFs8oNikJCcv@kroah.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220405194747.2386619-1-jane.chu@oracle.com> <20220405194747.2386619-5-jane.chu@oracle.com>
+In-Reply-To: <20220405194747.2386619-5-jane.chu@oracle.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Mon, 11 Apr 2022 21:57:36 -0700
+Message-ID: <CAPcyv4jpOss6hzPgM913v_QsZ+PB6Jzo1WV=YdUvnKZiwtfjiA@mail.gmail.com>
+Subject: Re: [PATCH v7 4/6] dax: add DAX_RECOVERY flag and .recovery_write dev_pgmap_ops
+To:     Jane Chu <jane.chu@oracle.com>
+Cc:     david <david@fromorbit.com>, "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Vishal L Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@redhat.com>,
+        device-mapper development <dm-devel@redhat.com>,
+        "Weiny, Ira" <ira.weiny@intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>, X86 ML <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 06:56:12AM +0200, Greg Kroah-Hartman wrote:
-> On Mon, Apr 11, 2022 at 05:14:11PM -0400, Jaehee Park wrote:
-> > Zero-length and one-element arrays are deprecated. Flexible-array
-> > members should be used instead. Flexible-array members are
-> > recommended because this is the way the kernel expects dynamically
-> > sized trailing elements to be declared.
-> > Refer to Documentation/process/deprecated.rst.
-> > 
-> > Change the zero-length array, buf, in the struct 
-> > gb_usb_hub_control_response to a flexible array. And add wLength as a 
-> > member of the struct so that the struct is not a zero-sized struct.
-> > 
-> > Issue found by flexible_array coccinelle script.
-> > 
-> > Signed-off-by: Jaehee Park <jhpark1013@gmail.com>
-> > ---
-> > 
-> > I have a question for the authors: 
-> > I saw a fixme comment in the hub_control function in usb.c:
-> > / FIXME: handle unspecified lengths /
-> > 
-> > I was wondering why this comment was left there?
-> > 
-> > In this patch, I'm using this struct:
-> > 
-> > struct gb_usb_hub_control_response {
-> >     __le16 wLength;
-> >     u8 buf[];
-> > };
-> > 
-> > And instead of using response_size, I'm doing this:
-> > 
-> > struct gb_usb_hub_control_response *response;
-> > And using sizeof(*response) as the input to gb_operation_create.
-> > 
-> > Would the flexible array address the handling of unspecified lengths 
-> > issue (in the fixme comment)?
-> 
-> No, you can not change the format of the data on the bus without also
-> changing the firmware in the device and usually the specification as
-> well.
-> 
-> >  drivers/staging/greybus/usb.c | 7 +++----
-> >  1 file changed, 3 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/staging/greybus/usb.c b/drivers/staging/greybus/usb.c
-> > index 8e9d9d59a357..d0b2422401df 100644
-> > --- a/drivers/staging/greybus/usb.c
-> > +++ b/drivers/staging/greybus/usb.c
-> > @@ -27,7 +27,8 @@ struct gb_usb_hub_control_request {
-> >  };
-> >  
-> >  struct gb_usb_hub_control_response {
-> > -	u8 buf[0];
-> > +	__le16 wLength;
-> > +	u8 buf[];
-> 
-> What is wrong with buf[0] here?
-> 
-> You can fix this in other ways if you really understand the difference
-> between [0] and [] in C.  Please look at many of the other conversions
-> if you wish to do this.
+On Tue, Apr 5, 2022 at 12:48 PM Jane Chu <jane.chu@oracle.com> wrote:
+>
+> Introduce DAX_RECOVERY flag to dax_direct_access(). The flag is
+> not set by default in dax_direct_access() such that the helper
+> does not translate a pmem range to kernel virtual address if the
+> range contains uncorrectable errors.  When the flag is set,
+> the helper ignores the UEs and return kernel virtual adderss so
+> that the caller may get on with data recovery via write.
 
-And I would not recommend this as an "outreachy introduction task"
-unless you understand this.  There are much easier first patch tasks you
-can accomplish instead.
+It strikes me that there is likely never going to be any other flags
+to dax_direct_access() and what this option really is an access type.
+I also find code changes like this error prone to read:
 
-good luck!
+ -       rc = dax_direct_access(iter->iomap.dax_dev, pgoff, 1, &kaddr, NULL);
+ +       rc = dax_direct_access(iter->iomap.dax_dev, pgoff, 1, 0, &kaddr, NULL);
 
-greg k-h
+...i.e. without looking at the prototype, which option is the nr_pages
+and which is the flags?
+
+So how about change 'int flags' to 'enum dax_access_mode mode' where
+dax_access_mode is:
+
+/**
+ * enum dax_access_mode - operational mode for dax_direct_access()
+ * @DAX_ACCESS: nominal access, fail / trim access on encountering poison
+ * @DAX_RECOVERY_WRITE: ignore poison and provide a pointer suitable
+for use with dax_recovery_write()
+ */
+enum dax_access_mode {
+    DAX_ACCESS,
+    DAX_RECOVERY_WRITE,
+};
+
+Then the conversions look like this:
+
+ -       rc = dax_direct_access(iter->iomap.dax_dev, pgoff, 1, &kaddr, NULL);
+ +       rc = dax_direct_access(iter->iomap.dax_dev, pgoff, 1,
+DAX_ACCESS, &kaddr, NULL);
+
+...and there's less chance of confusion with the @nr_pages argument.

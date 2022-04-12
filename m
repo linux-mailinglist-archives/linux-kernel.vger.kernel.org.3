@@ -2,55 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E7804FE690
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8A0F4FE693
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357989AbiDLRLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 13:11:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53896 "EHLO
+        id S1358003AbiDLRM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 13:12:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350498AbiDLRLD (ORCPT
+        with ESMTP id S1344490AbiDLRMY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 13:11:03 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D528060AB7
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 10:08:45 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8CE6A1424;
-        Tue, 12 Apr 2022 10:08:45 -0700 (PDT)
-Received: from [10.1.196.40] (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 086BD3F5A1;
-        Tue, 12 Apr 2022 10:08:37 -0700 (PDT)
-Message-ID: <38c6d4b5-a3db-5c3e-02e7-39875edb3476@arm.com>
-Date:   Tue, 12 Apr 2022 18:08:37 +0100
+        Tue, 12 Apr 2022 13:12:24 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085FA3EB8B;
+        Tue, 12 Apr 2022 10:10:05 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23CH9x06054349;
+        Tue, 12 Apr 2022 12:09:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1649783399;
+        bh=gkbreXK02oGII3XSANbrgsHYHJuMvjntCaE/6UPrzPQ=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=BVLg3whoHh6uRCPNNRpmKSaUvdI9+05dXnq+edvvEUCFcI/OHrInIYQ/YgcB7Gwg/
+         3PCv2XJLGv4k7ajn2RZ4VKfL8WzaDa8jmVdk7zmQl/lpZjRXnsONBhmJ95MViYQ7NZ
+         0x5WTH1BXc/0QvxLKJGaWL09XopS99rB/Hytqr4c=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23CH9x92017606
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 12 Apr 2022 12:09:59 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 12
+ Apr 2022 12:09:59 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 12 Apr 2022 12:09:59 -0500
+Received: from [10.250.235.115] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23CH9tS0017746;
+        Tue, 12 Apr 2022 12:09:56 -0500
+Message-ID: <c1c2dc5b-5958-2b34-a963-6248e2817ca7@ti.com>
+Date:   Tue, 12 Apr 2022 22:39:54 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH -next V3 4/6] arm64: add copy_{to, from}_user to
- machine check safe
-Content-Language: en-GB
-To:     Tong Tiangen <tongtiangen@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Xie XiuQi <xiexiuqi@huawei.com>
-References: <20220412072552.2526871-1-tongtiangen@huawei.com>
- <20220412072552.2526871-5-tongtiangen@huawei.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220412072552.2526871-5-tongtiangen@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v5 2/4] arm64: dts: ti: j721e: Add VTM node
+Content-Language: en-US
+To:     Keerthy <j-keerthy@ti.com>, <robh+dt@kernel.org>,
+        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
+        <amitk@kernel.org>, <kristo@kernel.org>
+CC:     <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220412101409.7980-1-j-keerthy@ti.com>
+ <20220412101409.7980-3-j-keerthy@ti.com>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+In-Reply-To: <20220412101409.7980-3-j-keerthy@ti.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,95 +69,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/04/2022 8:25 am, Tong Tiangen wrote:
-[...]
-> diff --git a/arch/arm64/include/asm/asm-uaccess.h b/arch/arm64/include/asm/asm-uaccess.h
-> index 0557af834e03..bb17f0829042 100644
-> --- a/arch/arm64/include/asm/asm-uaccess.h
-> +++ b/arch/arm64/include/asm/asm-uaccess.h
-> @@ -92,4 +92,20 @@ alternative_else_nop_endif
->   
->   		_asm_extable	8888b,\l;
->   	.endm
+Hi Keerthy
+
+On 12/04/22 3:44 pm, Keerthy wrote:
+> VTM stands for Voltage Thermal Management
+> 
+> Signed-off-by: Keerthy <j-keerthy@ti.com>
+> ---
+>  .../boot/dts/ti/k3-j721e-mcu-wakeup.dtsi      |  9 +++
+>  arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi  | 73 +++++++++++++++++++
+>  arch/arm64/boot/dts/ti/k3-j721e.dtsi          |  4 +
+>  3 files changed, 86 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
+> index b4972dfb7da8..6290f563b8e7 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi
+> @@ -418,4 +418,13 @@
+>  		interrupt-names = "int0", "int1";
+>  		bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
+>  	};
 > +
-> +	.macro user_ldp_mc l, reg1, reg2, addr, post_inc
-> +8888:		ldtr	\reg1, [\addr];
-> +8889:		ldtr	\reg2, [\addr, #8];
-> +		add	\addr, \addr, \post_inc;
+> +	wkup_vtm0: wkup_vtm0@42040000 {
+> +		compatible = "ti,j721e-vtm";
+> +		reg = <0x0 0x42040000 0x0 0x350>,
+> +			<0x0 0x42050000 0x0 0x350>,
+> +			<0x0 0x43000300 0x0 0x10>;
+
+Please follow convention of using 0x00 as rest of the file:
+
+		reg = <0x00 0x42040000 0x00 0x350>,
+		....
+
+> +		power-domains = <&k3_pds 154 TI_SCI_PD_EXCLUSIVE>;
+> +		#thermal-sensor-cells = <1>;
+> +	};
+>  };
+> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi
+> new file mode 100644
+> index 000000000000..e922042f356f
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi
+> @@ -0,0 +1,73 @@
+> +// SPDX-License-Identifier: GPL-2.0
 > +
-> +		_asm_extable_uaccess_mc	8888b, \l;
-> +		_asm_extable_uaccess_mc	8889b, \l;
-> +	.endm
-
-You're replacing the only user of this, so please just 
-s/_asm_extable/_asm_extable_uaccess_mc/ in the existing macro and save 
-the rest of the churn.
-
-Furthermore, how come you're not similarly updating user_stp, given that 
-you *are* updating the other stores in copy_to_user?
-
+> +#include <dt-bindings/thermal/thermal.h>
 > +
-> +	.macro user_ldst_mc l, inst, reg, addr, post_inc
-> +8888:		\inst		\reg, [\addr];
-> +		add		\addr, \addr, \post_inc;
+> +wkup_thermal: wkup_thermal {
+> +	polling-delay-passive = <250>; /* milliseconds */
+> +	polling-delay = <500>; /* milliseconds */
+> +	thermal-sensors = <&wkup_vtm0 0>;
 > +
-> +		_asm_extable_uaccess_mc	8888b, \l;
-> +	.endm
+> +	trips {
+> +		wkup_crit: wkup_crit {
 
-Similarly, I think we can just update user_ldst itself. The two 
-instances that you're not replacing here are bogus anyway, and deserve 
-to be fixed with the patch below first.
 
-[...]
-> @@ -62,7 +63,11 @@ SYM_FUNC_START(__arch_copy_from_user)
->   	ret
->   
->   	// Exception fixups
-> -9997:	cmp	dst, dstin
-> +9997:	mrs esr, esr_el1			// Check exception first
-> +	and esr, esr, #ESR_ELx_FSC
-> +	cmp esr, #ESR_ELx_FSC_EXTABT
+Here and elsewhere no "-" in node names please.
 
-Should we be checking EC to make sure it's a data abort - and thus FSC 
-is valid - in the first place? I'm a little fuzzy on all the possible 
-paths into fixup_exception(), and it's not entirely obvious whether this 
-is actually safe or not.
+You can use:
 
-Thanks,
-Robin.
+https://github.com/nmenon/kernel_patch_verify
+kpv -C -n <no of commits>
 
------>8-----
-Subject: [PATCH] arm64: mte: Clean up user tag accessors
+This catches most issues like above
 
-Invoking user_ldst to explicitly add a post-increment of 0 is silly.
-Just use a normal USER() annotation and save the redundant instruction.
+> +			temperature = <125000>; /* milliCelsius */
+> +			hysteresis = <2000>; /* milliCelsius */
+> +			type = "critical";
+> +		};
+> +	};
+> +};
+> +
+> +mpu_thermal: mpu_thermal {
+> +	polling-delay-passive = <250>; /* milliseconds */
+> +	polling-delay = <500>; /* milliseconds */
+> +	thermal-sensors = <&wkup_vtm0 1>;
+> +
+> +	trips {
+> +		mpu_crit: mpu_crit {
+> +			temperature = <125000>; /* milliCelsius */
+> +			hysteresis = <2000>; /* milliCelsius */
+> +			type = "critical";
+> +		};
+> +	};
+> +};
+> +
+> +c7x_thermal: c7x_thermal {
+> +	polling-delay-passive = <250>; /* milliseconds */
+> +	polling-delay = <500>; /* milliseconds */
+> +	thermal-sensors = <&wkup_vtm0 2>;
+> +
+> +	trips {
+> +		c7x_crit: c7x_crit {
+> +			temperature = <125000>; /* milliCelsius */
+> +			hysteresis = <2000>; /* milliCelsius */
+> +			type = "critical";
+> +		};
+> +	};
+> +};
+> +
+> +gpu_thermal: gpu_thermal {
+> +	polling-delay-passive = <250>; /* milliseconds */
+> +	polling-delay = <500>; /* milliseconds */
+> +	thermal-sensors = <&wkup_vtm0 3>;
+> +
+> +	trips {
+> +		gpu_crit: gpu_crit {
+> +			temperature = <125000>; /* milliCelsius */
+> +			hysteresis = <2000>; /* milliCelsius */
+> +			type = "critical";
+> +		};
+> +	};
+> +};
+> +
+> +r5f_thermal: r5f_thermal {
+> +	polling-delay-passive = <250>; /* milliseconds */
+> +	polling-delay = <500>; /* milliseconds */
+> +	thermal-sensors = <&wkup_vtm0 4>;
+> +
+> +	trips {
+> +		r5f_crit: r5f_crit {
+> +			temperature = <125000>; /* milliCelsius */
+> +			hysteresis = <2000>; /* milliCelsius */
+> +			type = "critical";
+> +		};
+> +	};
+> +};
+> diff --git a/arch/arm64/boot/dts/ti/k3-j721e.dtsi b/arch/arm64/boot/dts/ti/k3-j721e.dtsi
+> index 0e23886c9fd1..6979863eb500 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j721e.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-j721e.dtsi
+> @@ -181,6 +181,10 @@
+>  				 <0x07 0x00000000 0x07 0x00000000 0x01 0x00000000>; /* FSS OSPI1 data region 3*/
+>  		};
+>  	};
+> +
+> +	thermal_zones: thermal-zones {
+> +		#include "k3-j721e-thermal.dtsi"
+> +	};
 
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
----
-  arch/arm64/lib/mte.S | 4 ++--
-  1 file changed, 2 insertions(+), 2 deletions(-)
+Bit weird representation, any reason why thermal-zones {} cannot be
+moved into k3-j721e-thermal.dtsi?
 
-diff --git a/arch/arm64/lib/mte.S b/arch/arm64/lib/mte.S
-index 8590af3c98c0..eeb9e45bcce8 100644
---- a/arch/arm64/lib/mte.S
-+++ b/arch/arm64/lib/mte.S
-@@ -93,7 +93,7 @@ SYM_FUNC_START(mte_copy_tags_from_user)
-  	mov	x3, x1
-  	cbz	x2, 2f
-  1:
--	user_ldst 2f, ldtrb, w4, x1, 0
-+USER(2f, ldtrb	w4, [x1])
-  	lsl	x4, x4, #MTE_TAG_SHIFT
-  	stg	x4, [x0], #MTE_GRANULE_SIZE
-  	add	x1, x1, #1
-@@ -120,7 +120,7 @@ SYM_FUNC_START(mte_copy_tags_to_user)
-  1:
-  	ldg	x4, [x1]
-  	ubfx	x4, x4, #MTE_TAG_SHIFT, #MTE_TAG_SIZE
--	user_ldst 2f, sttrb, w4, x0, 0
-+USER(2f, sttrb	w4, [x0])
-  	add	x0, x0, #1
-  	add	x1, x1, #MTE_GRANULE_SIZE
-  	subs	x2, x2, #1
--- 
-2.28.0.dirty
+>  };
+>  
+>  /* Now include the peripherals for each bus segments */
+
+
+Regards
+Vignesh

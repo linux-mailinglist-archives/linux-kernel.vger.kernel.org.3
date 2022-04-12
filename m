@@ -2,97 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C1C74FE417
+	by mail.lfdr.de (Postfix) with ESMTP id B3FC14FE418
 	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 16:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356722AbiDLOq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 10:46:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35638 "EHLO
+        id S1356742AbiDLOrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 10:47:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239759AbiDLOqz (ORCPT
+        with ESMTP id S1348249AbiDLOrN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 10:46:55 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F6BA183
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 07:44:36 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-e2a00f2cc8so11525836fac.4
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 07:44:36 -0700 (PDT)
+        Tue, 12 Apr 2022 10:47:13 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D380B1CFE0
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 07:44:55 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id a42so11154956pfx.7
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 07:44:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=rY6b4Cha+4+tNB8Pe5EB9gbUIN/2B2C73pXkmyewtts=;
-        b=h52PHqsVBf6x5MwcgRmqywyRnHupk7jLRhBbSS3EiExbZLToXqg8TsoZFRyY3acwjn
-         0guxxFmbhbRecywCbpVLvlbUzlf9oUvl8N0Ww5B4wVJCr0HX/FU0/VvHTQObkC3o/tHV
-         wZPWtPc70D+JeGBUNbAE2Ph8zJg9+oH/n8q+I=
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=btzB568iXxZj9oc1tZbDY7UAY4m0s81uXgV8WCBbWRs=;
+        b=dXdSmaigsQfS8iGJpoICwbRXz1FWNpMiL0cOtSsxpoStwnZDu8idR451LAKSFR0LbD
+         WBvG1gRSfyZYV+fpXfeukko3SJfNYwqBBWJGmH368YCyXpc3GjQLRHJq6vIV620Zi+C+
+         GFPN/IEJRPMpd56zrExzJS0jJiBWd21Z60iyUL/GM29N6qb53l1kbEHeybz26ZVz+ITV
+         URfnlKx+gP6pFW2MXUOvUqUzOrFbZF/+TM8xcIn+SIlL38WlpsDKUhhYuj6r1XUunWxP
+         nKp8mhXWh6RIxt006y1145LhvFYYhb+W9I8OAXs/+QfyIKGlec+ytOV/2nbRrfaHcQkU
+         OEQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=rY6b4Cha+4+tNB8Pe5EB9gbUIN/2B2C73pXkmyewtts=;
-        b=xKgdAXHDpPlvUodc51D8GMEAOIEmXfdTjawKB0qhKkUvBX2rdmrT1jkk9P4ZbOaCuU
-         GU3Xz5JOkknqkxIwg4fah01TWYVnlrKyP2QNQbFj8Yq85FT/prCBzq6aITxlSNMOdhw1
-         hnZD2HA1EpCb6OgxUtur3owY/ePn0K1GCkvMw9e4VUrZewvSOi2oTMiEVtpvtY0h9AWN
-         pa9tayqvq01MeZDk+iFR8xzpVQihsc7SkfdYWkBxXEM027uU+ursLhn9OjBPUVnwLnmF
-         QvjPkEMUBbkMH8wNsXvex4khIgv0SGEjU2wT+rBZNPOHuXamc/TssEHWXFO5jFAGCyOi
-         X/9Q==
-X-Gm-Message-State: AOAM5303p1Iybu/Swgup6SVOJNDLlIHEDxe5+QDTJFxrJugRvwiEawrY
-        CMNce3KvblJHFmSqVANll41XCQ==
-X-Google-Smtp-Source: ABdhPJzSYxgWK/tMScpDbAL/LJ5qvKr7lSz6bmGGfa3TUcEKF57oHtGN4oa3mRYTV2St+sOzvNrW+g==
-X-Received: by 2002:a05:6870:8907:b0:e2:a4fd:7539 with SMTP id i7-20020a056870890700b000e2a4fd7539mr2271798oao.56.1649774676113;
-        Tue, 12 Apr 2022 07:44:36 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id b188-20020aca34c5000000b002da579c994dsm12364497oia.31.2022.04.12.07.44.35
+        bh=btzB568iXxZj9oc1tZbDY7UAY4m0s81uXgV8WCBbWRs=;
+        b=DpC5QtzhbULQuydQOs4byFtsHqrHBhA/gB1NHm+w6JZtUqzAWpk+Cfan+ycmgoUmqs
+         /yqplFylzRxVnAENbT1K3hPk0gd7SBGJyS02mtNBlCOHAnyTHSXRShVWEo7ttIA9o9dA
+         OWetmSS8LNJmhR09vzVw9MUFS9VWfPvkvLMOQuA3Xwk61YWamQHHScaNO+K24fKCHpM5
+         OadJ07+e1E0yAyRFhAaMRnJbfmxD9aRV76dZq7oIuebQXk23Q71p5cGTx7PgYGttYFPO
+         7RBNM5whkf7OUKPSNF5SBFIPTICOrIqSRiYJeuwfm/Hpm6pzHdKQlHyp20E0M8BjxNew
+         y8Wg==
+X-Gm-Message-State: AOAM532nAukeVupxSEXHTzLRqXhQ5zSvusxJRpN4XP090stoNG9aWkVc
+        h6uQNBF8Z1YU3TfCtvxDPk5jnA==
+X-Google-Smtp-Source: ABdhPJyuBZy2IK9V/ErFnZBxqvPrcAs/xWo9/wak/gn6mPURlCcLf7O6F2HqUPE4EGla+ANGH2SvSg==
+X-Received: by 2002:a63:2f46:0:b0:382:230f:b155 with SMTP id v67-20020a632f46000000b00382230fb155mr31794155pgv.64.1649774695275;
+        Tue, 12 Apr 2022 07:44:55 -0700 (PDT)
+Received: from [192.168.254.17] ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id w14-20020a63474e000000b0039cce486b9bsm3111136pgk.13.2022.04.12.07.44.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 07:44:35 -0700 (PDT)
-Subject: Re: [PATCH v3] usb: usbip: fix a refcount leak in stub_probe()
-To:     Hangyu Hua <hbh25y@gmail.com>, valentina.manea.m@gmail.com,
-        shuah@kernel.org, gregkh@linuxfoundation.org, khoroshilov@ispras.ru
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220412020257.9767-1-hbh25y@gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <7d8a7ae5-9553-bcf3-55d8-57d5df6375f4@linuxfoundation.org>
-Date:   Tue, 12 Apr 2022 08:44:34 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Tue, 12 Apr 2022 07:44:54 -0700 (PDT)
+Message-ID: <b20d6ee6-d1ba-5c15-a50a-2a49874d96b6@linaro.org>
+Date:   Tue, 12 Apr 2022 07:44:53 -0700
 MIME-Version: 1.0
-In-Reply-To: <20220412020257.9767-1-hbh25y@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] bpf: Fix KASAN use-after-free Read in
+ compute_effective_progs
 Content-Language: en-US
+To:     bpf@vger.kernel.org
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+f264bffdfbd5614f3bb2@syzkaller.appspotmail.com,
+        Alexei Starovoitov <ast@kernel.org>
+References: <20220405170356.43128-1-tadeusz.struk@linaro.org>
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+In-Reply-To: <20220405170356.43128-1-tadeusz.struk@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/11/22 8:02 PM, Hangyu Hua wrote:
-> usb_get_dev() is called in stub_device_alloc(). When stub_probe() fails
-> after that, usb_put_dev() needs to be called to release the reference.
+On 4/5/22 10:03, Tadeusz Struk wrote:
+> Syzbot found a Use After Free bug in compute_effective_progs().
+> The reproducer creates a number of BPF links, and causes a fault
+> injected alloc to fail, while calling bpf_link_detach on them.
+> Link detach triggers the link to be freed by bpf_link_free(),
+> which calls __cgroup_bpf_detach() and update_effective_progs().
+> If the memory allocation in this function fails, the function restores
+> the pointer to the bpf_cgroup_link on the cgroup list, but the memory
+> gets freed just after it returns. After this, every subsequent call to
+> update_effective_progs() causes this already deallocated pointer to be
+> dereferenced in prog_list_length(), and triggers KASAN UAF error.
+> To fix this don't preserve the pointer to the link on the cgroup list
+> in __cgroup_bpf_detach(), but proceed with the cleanup and retry calling
+> update_effective_progs() again afterwards.
 > 
-> Fix this by moving usb_put_dev() to sdev_free error path handling.
 > 
-> Find this by code review.
+> Cc: "Alexei Starovoitov" <ast@kernel.org>
+> Cc: "Daniel Borkmann" <daniel@iogearbox.net>
+> Cc: "Andrii Nakryiko" <andrii@kernel.org>
+> Cc: "Martin KaFai Lau" <kafai@fb.com>
+> Cc: "Song Liu" <songliubraving@fb.com>
+> Cc: "Yonghong Song" <yhs@fb.com>
+> Cc: "John Fastabend" <john.fastabend@gmail.com>
+> Cc: "KP Singh" <kpsingh@kernel.org>
+> Cc: <netdev@vger.kernel.org>
+> Cc: <bpf@vger.kernel.org>
+> Cc: <stable@vger.kernel.org>
+> Cc: <linux-kernel@vger.kernel.org>
 > 
-> Fixes: 3ff67445750a ("usbip: fix error handling in stub_probe()")
-> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+> Link: https://syzkaller.appspot.com/bug?id=8ebf179a95c2a2670f7cf1ba62429ec044369db4
+> Fixes: af6eea57437a ("bpf: Implement bpf_link-based cgroup BPF program attachment")
+> Reported-by: <syzbot+f264bffdfbd5614f3bb2@syzkaller.appspotmail.com>
+> Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
 > ---
+>   kernel/bpf/cgroup.c | 25 ++++++++++++++-----------
+>   1 file changed, 14 insertions(+), 11 deletions(-)
 > 
-> v2: add more description of this patch.
-> 
-> v3: add how to find the problem.
-> 
+> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+> index 128028efda64..b6307337a3c7 100644
+> --- a/kernel/bpf/cgroup.c
+> +++ b/kernel/bpf/cgroup.c
+> @@ -723,10 +723,11 @@ static int __cgroup_bpf_detach(struct cgroup *cgrp, struct bpf_prog *prog,
+>   	pl->link = NULL;
+>   
+>   	err = update_effective_progs(cgrp, atype);
+> -	if (err)
+> -		goto cleanup;
+> -
+> -	/* now can actually delete it from this cgroup list */
+> +	/*
+> +	 * Proceed regardless of error. The link and/or prog will be freed
+> +	 * just after this function returns so just delete it from this
+> +	 * cgroup list and retry calling update_effective_progs again later.
+> +	 */
+>   	list_del(&pl->node);
+>   	kfree(pl);
+>   	if (list_empty(progs))
+> @@ -735,12 +736,11 @@ static int __cgroup_bpf_detach(struct cgroup *cgrp, struct bpf_prog *prog,
+>   	if (old_prog)
+>   		bpf_prog_put(old_prog);
+>   	static_branch_dec(&cgroup_bpf_enabled_key[atype]);
+> -	return 0;
+>   
+> -cleanup:
+> -	/* restore back prog or link */
+> -	pl->prog = old_prog;
+> -	pl->link = link;
+> +	/* In case of error call update_effective_progs again */
+> +	if (err)
+> +		err = update_effective_progs(cgrp, atype);
+> +
+>   	return err;
+>   }
+>   
+> @@ -881,6 +881,7 @@ static void bpf_cgroup_link_release(struct bpf_link *link)
+>   	struct bpf_cgroup_link *cg_link =
+>   		container_of(link, struct bpf_cgroup_link, link);
+>   	struct cgroup *cg;
+> +	int err;
+>   
+>   	/* link might have been auto-detached by dying cgroup already,
+>   	 * in that case our work is done here
+> @@ -896,8 +897,10 @@ static void bpf_cgroup_link_release(struct bpf_link *link)
+>   		return;
+>   	}
+>   
+> -	WARN_ON(__cgroup_bpf_detach(cg_link->cgroup, NULL, cg_link,
+> -				    cg_link->type));
+> +	err = __cgroup_bpf_detach(cg_link->cgroup, NULL, cg_link,
+> +				  cg_link->type);
+> +	if (err)
+> +		pr_warn("cgroup_bpf_detach() failed, err %d\n", err);
+>   
+>   	cg = cg_link->cgroup;
+>   	cg_link->cgroup = NULL;
 
-Thank you.
+Hi,
+Any feedback/comments on this one?
 
-Greg, Please pick this patch up.
-
-thanks,
--- Shuah
+-- 
+Thanks,
+Tadeusz

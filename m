@@ -2,53 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE49F4FCD52
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 05:51:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F3AF4FCD4E
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 05:50:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345339AbiDLDxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 23:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49084 "EHLO
+        id S1345200AbiDLDwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 23:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345258AbiDLDwo (ORCPT
+        with ESMTP id S1345029AbiDLDwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 23:52:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7B417A90;
-        Mon, 11 Apr 2022 20:50:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D85A7B81A93;
-        Tue, 12 Apr 2022 03:50:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6078C385AC;
-        Tue, 12 Apr 2022 03:50:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649735425;
-        bh=O2y3teAL9Rp1btL3NXWebprGsFA2ymLi02cTCI1njfs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HgFIXpXyatOm2DaTaDUeoy8YS8nwMT4zsGyWUanxympfGxzA5PYMcFivgLiBKduNV
-         4igcn0Ao59VrB7hYFUE5IV3dG4AwItsdQynQSoeG2ruRqmCCO58LOCYO7IspPFIQdq
-         hNalsA3hzgd8FPUa9tsIEzzo3SCoFZ51MyJGB053SVIH1DqA5cDueGnYvPhXwBtING
-         MBqEaGm9U8IWiiXJNNeXGsdsT053jQiAkZqUoAd4ObFISo+VCsXBTvSnHC7uT8Pu4F
-         b81ICNG1Kd2Bef52wjyJIMuvmqDxX1FU7qKyLo3zwPSg1oNB43eHA2H3buN6dbpCAi
-         sAj2KGP15xZ1A==
-From:   guoren@kernel.org
-To:     guoren@kernel.org, arnd@arndb.de, palmer@dabbelt.com,
-        mark.rutland@arm.com, will@kernel.org, peterz@infradead.org,
-        boqun.feng@gmail.com
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V2 3/3] riscv: atomic: Optimize memory barrier semantics of LRSC-pairs
-Date:   Tue, 12 Apr 2022 11:49:57 +0800
-Message-Id: <20220412034957.1481088-4-guoren@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220412034957.1481088-1-guoren@kernel.org>
-References: <20220412034957.1481088-1-guoren@kernel.org>
+        Mon, 11 Apr 2022 23:52:37 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580F815710
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 20:50:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649735420; x=1681271420;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=p5Fr7gCHeKXLExKllFUyUZ0Mk9kDfxkf+kMmA7V5wIU=;
+  b=OW8BmLhqGKawjL1s9TsDGhyF1MF+4ZPQ/cFV5Z+5o3gUzA3QcWaqIzE5
+   BVgaF/5vn9hvSD4HafWQMsKGdqgqblYb2XNTmIXfO2Hpk69dlgu7Y/JRn
+   xi+0NKnWxTMyS5VVZnSf8Td+IgLNnYLzjBVsR58FyV4MRlwPFKpkpbZn1
+   1XEXDlsThvdFazfhlbjS99HBhFXlA8oGfzIgQkpxSSCkoAHixPy4DO721
+   cfwCydjPViKW7TSojGtZrER7tWT4Mb3C9i/lESlWXvzqkxS0ny7j22GTM
+   WlGFH/5ddToDlghdh0vpzr/YjYWSfCVNnSX9Wd/CsWQQe89gu+ZdSr2WZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="262449814"
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="262449814"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 20:50:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="507376467"
+Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 11 Apr 2022 20:50:18 -0700
+Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ne7Xl-0002UM-QZ;
+        Tue, 12 Apr 2022 03:50:17 +0000
+Date:   Tue, 12 Apr 2022 11:50:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/urgent] BUILD SUCCESS
+ 400331f8ffa3bec5c561417e5eec6848464e9160
+Message-ID: <6254f6ee.BX1EvZSNYpHiKkvP%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,125 +63,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
+branch HEAD: 400331f8ffa3bec5c561417e5eec6848464e9160  x86/tsx: Disable TSX development mode at boot
 
-The current implementation is the same with 8e86f0b409a4 ("arm64:
-atomics: fix use of acquire + release for full barrier semantics").
-RISC-V could combine acquire and release into the AMO instructions
-and it could reduce the cost of instruction in performance. Here
-are the reasons for optimization:
- - Reduce one extra fence instruction
- - The "LR/SC" instruction with "acquire and release" operation is
-   less cost than ACQUIRE_BARRIER/RELEASE_BARRIER which used
-   precedes-loads/subsequent-stores prohibit to protect only LR/SC
-   self-instruction.
- - Putting acquire/release barrier into the loop shouldn't cost
-   extra performance problems from the micro-arch design view.
-   Because LR and SC are sequential in the loop by RVWMO rules.
+elapsed time: 740m
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: Mark Rutland <mark.rutland@arm.com>
----
- arch/riscv/include/asm/atomic.h  |  6 ++----
- arch/riscv/include/asm/cmpxchg.h | 18 ++++++------------
- 2 files changed, 8 insertions(+), 16 deletions(-)
+configs tested: 123
+configs skipped: 3
 
-diff --git a/arch/riscv/include/asm/atomic.h b/arch/riscv/include/asm/atomic.h
-index 20ce8b83bc18..4aaf5b01e7c6 100644
---- a/arch/riscv/include/asm/atomic.h
-+++ b/arch/riscv/include/asm/atomic.h
-@@ -382,9 +382,8 @@ static __always_inline int arch_atomic_sub_if_positive(atomic_t *v, int offset)
- 		"0:	lr.w     %[p],  %[c]\n"
- 		"	sub      %[rc], %[p], %[o]\n"
- 		"	bltz     %[rc], 1f\n"
--		"	sc.w.rl  %[rc], %[rc], %[c]\n"
-+		"	sc.w.aqrl %[rc], %[rc], %[c]\n"
- 		"	bnez     %[rc], 0b\n"
--		"	fence    rw, rw\n"
- 		"1:\n"
- 		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
- 		: [o]"r" (offset)
-@@ -404,9 +403,8 @@ static __always_inline s64 arch_atomic64_sub_if_positive(atomic64_t *v, s64 offs
- 		"0:	lr.d     %[p],  %[c]\n"
- 		"	sub      %[rc], %[p], %[o]\n"
- 		"	bltz     %[rc], 1f\n"
--		"	sc.d.rl  %[rc], %[rc], %[c]\n"
-+		"	sc.d.aqrl %[rc], %[rc], %[c]\n"
- 		"	bnez     %[rc], 0b\n"
--		"	fence    rw, rw\n"
- 		"1:\n"
- 		: [p]"=&r" (prev), [rc]"=&r" (rc), [c]"+A" (v->counter)
- 		: [o]"r" (offset)
-diff --git a/arch/riscv/include/asm/cmpxchg.h b/arch/riscv/include/asm/cmpxchg.h
-index 1af8db92250b..dfb51c98324d 100644
---- a/arch/riscv/include/asm/cmpxchg.h
-+++ b/arch/riscv/include/asm/cmpxchg.h
-@@ -215,9 +215,8 @@
- 		__asm__ __volatile__ (					\
- 			"0:	lr.w %0, %2\n"				\
- 			"	bne  %0, %z3, 1f\n"			\
--			"	sc.w %1, %z4, %2\n"			\
-+			"	sc.w.aq %1, %z4, %2\n"			\
- 			"	bnez %1, 0b\n"				\
--			RISCV_ACQUIRE_BARRIER				\
- 			"1:\n"						\
- 			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
- 			: "rJ" ((long)__old), "rJ" (__new)		\
-@@ -227,9 +226,8 @@
- 		__asm__ __volatile__ (					\
- 			"0:	lr.d %0, %2\n"				\
- 			"	bne %0, %z3, 1f\n"			\
--			"	sc.d %1, %z4, %2\n"			\
-+			"	sc.d.aq %1, %z4, %2\n"			\
- 			"	bnez %1, 0b\n"				\
--			RISCV_ACQUIRE_BARRIER				\
- 			"1:\n"						\
- 			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
- 			: "rJ" (__old), "rJ" (__new)			\
-@@ -259,8 +257,7 @@
- 	switch (size) {							\
- 	case 4:								\
- 		__asm__ __volatile__ (					\
--			RISCV_RELEASE_BARRIER				\
--			"0:	lr.w %0, %2\n"				\
-+			"0:	lr.w.rl %0, %2\n"			\
- 			"	bne  %0, %z3, 1f\n"			\
- 			"	sc.w %1, %z4, %2\n"			\
- 			"	bnez %1, 0b\n"				\
-@@ -271,8 +268,7 @@
- 		break;							\
- 	case 8:								\
- 		__asm__ __volatile__ (					\
--			RISCV_RELEASE_BARRIER				\
--			"0:	lr.d %0, %2\n"				\
-+			"0:	lr.d.rl %0, %2\n"			\
- 			"	bne %0, %z3, 1f\n"			\
- 			"	sc.d %1, %z4, %2\n"			\
- 			"	bnez %1, 0b\n"				\
-@@ -307,9 +303,8 @@
- 		__asm__ __volatile__ (					\
- 			"0:	lr.w %0, %2\n"				\
- 			"	bne  %0, %z3, 1f\n"			\
--			"	sc.w.rl %1, %z4, %2\n"			\
-+			"	sc.w.aqrl %1, %z4, %2\n"		\
- 			"	bnez %1, 0b\n"				\
--			"	fence rw, rw\n"				\
- 			"1:\n"						\
- 			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
- 			: "rJ" ((long)__old), "rJ" (__new)		\
-@@ -319,9 +314,8 @@
- 		__asm__ __volatile__ (					\
- 			"0:	lr.d %0, %2\n"				\
- 			"	bne %0, %z3, 1f\n"			\
--			"	sc.d.rl %1, %z4, %2\n"			\
-+			"	sc.d.aqrl %1, %z4, %2\n"		\
- 			"	bnez %1, 0b\n"				\
--			"	fence rw, rw\n"				\
- 			"1:\n"						\
- 			: "=&r" (__ret), "=&r" (__rc), "+A" (*__ptr)	\
- 			: "rJ" (__old), "rJ" (__new)			\
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                 randconfig-c001-20220411
+arm                            lart_defconfig
+arc                           tb10x_defconfig
+arm                          gemini_defconfig
+i386                                defconfig
+sh                               alldefconfig
+sh                            migor_defconfig
+arm                         cm_x300_defconfig
+arm                     eseries_pxa_defconfig
+powerpc                      mgcoge_defconfig
+mips                  decstation_64_defconfig
+arm                       imx_v6_v7_defconfig
+arm                          pxa3xx_defconfig
+m68k                       m5475evb_defconfig
+sh                 kfr2r09-romimage_defconfig
+xtensa                          iss_defconfig
+powerpc                     ep8248e_defconfig
+arm                        realview_defconfig
+sh                          sdk7780_defconfig
+parisc64                         alldefconfig
+powerpc                      ppc40x_defconfig
+xtensa                  cadence_csp_defconfig
+sh                          rsk7203_defconfig
+mips                         cobalt_defconfig
+nios2                            alldefconfig
+sh                               j2_defconfig
+m68k                       m5249evb_defconfig
+powerpc                     stx_gp3_defconfig
+arm                  randconfig-c002-20220411
+x86_64               randconfig-c001-20220411
+ia64                                defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+nios2                               defconfig
+arc                              allyesconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+x86_64               randconfig-a016-20220411
+x86_64               randconfig-a012-20220411
+x86_64               randconfig-a013-20220411
+x86_64               randconfig-a014-20220411
+x86_64               randconfig-a015-20220411
+x86_64               randconfig-a011-20220411
+i386                 randconfig-a015-20220411
+i386                 randconfig-a011-20220411
+i386                 randconfig-a016-20220411
+i386                 randconfig-a012-20220411
+i386                 randconfig-a013-20220411
+i386                 randconfig-a014-20220411
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arc                  randconfig-r043-20220411
+s390                 randconfig-r044-20220411
+riscv                randconfig-r042-20220411
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
+
+clang tested configs:
+powerpc              randconfig-c003-20220411
+arm                  randconfig-c002-20220411
+riscv                randconfig-c006-20220411
+x86_64               randconfig-c007-20220411
+mips                 randconfig-c004-20220411
+i386                 randconfig-c001-20220411
+hexagon                             defconfig
+powerpc                     ppa8548_defconfig
+x86_64                           allyesconfig
+arm                           sama7_defconfig
+arm                          pxa168_defconfig
+i386                 randconfig-a003-20220411
+i386                 randconfig-a001-20220411
+i386                 randconfig-a004-20220411
+i386                 randconfig-a002-20220411
+i386                 randconfig-a005-20220411
+i386                 randconfig-a006-20220411
+x86_64               randconfig-a003-20220411
+x86_64               randconfig-a004-20220411
+x86_64               randconfig-a006-20220411
+x86_64               randconfig-a001-20220411
+x86_64               randconfig-a002-20220411
+x86_64               randconfig-a005-20220411
+hexagon              randconfig-r041-20220411
+hexagon              randconfig-r045-20220411
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,194 +2,346 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E68A24FE176
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:03:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E5984FE188
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:07:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355121AbiDLNCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 09:02:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37514 "EHLO
+        id S1354440AbiDLNF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 09:05:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351833AbiDLNCJ (ORCPT
+        with ESMTP id S1354975AbiDLNCN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 09:02:09 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528466007E;
-        Tue, 12 Apr 2022 05:40:09 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id l7so31625313ejn.2;
-        Tue, 12 Apr 2022 05:40:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lAPe5KLDjByGGButyDlRAtwWbq0RQOm3lpOxpFEkjZM=;
-        b=kKKwpQym3uM9gA+kAZ3Q2JSdsU6Fj13jhXXwUYhelJ5h/YQZEprLlEo+NFEtbmiZmb
-         y7FUXefqMvevdwxFGVjdfb6xAp/KmwM4zkuCD+WMSH/r1TnwetcGp1wAxzmEW2/kvOSv
-         Y1pZwhX+4+kI83Wy7JLpCIuhjZSaxu+C6fuZoxFVUzNp0rD6ScFbKUtjrLTQJjmhAWiY
-         WDRZuF9Q5s2UhZu8takRrpu9uZvmzbnSm/IiO7OiTFzBtmAFGclpbZkO2DjEtwy5jogu
-         e5lwEvNvy4Vl3vR5hTgFANtMltR9b75mDMSeJIsBdi79bLQ/vpTOZBB+kpEHQhVeiXk0
-         GLlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lAPe5KLDjByGGButyDlRAtwWbq0RQOm3lpOxpFEkjZM=;
-        b=XB+UfidMhpcMlAxRAOIB/sAB30uZDZ0/s9ULG3IIP8RaMLPu5h+RzJxMhhxSJe++Lz
-         Y7SETiJHQMymZa4VS9CvBb+ouqv79hskcgTpEjr/Rtm/Xid035ni56JbQNnp1yIcYnOT
-         ooMiAih+HIXj03td/yP+h90hosrdq3pFBjYoq567ZyB5OVt3zGfUCKrxwP9q/qJHLVfR
-         SVP2Uw7AXTX+qPn0/KTuk5k0AOPO2anDo8WY7pnSFopigI89vUS4pdFd9QaiHT1B80EH
-         72DjZiYayP6PSzwSLtqMLtryQzNU1E8bUbwOeZ6HP3bQiagRc1dL68hBLO6Nj97gG7Zi
-         jVEA==
-X-Gm-Message-State: AOAM532AA/KP/2BcacQIKsETUdDt0O/H6soCn1CAAeQ8a8o2sJoriOWp
-        9Xh5LkIYjIGPjuDKrOhzbDI=
-X-Google-Smtp-Source: ABdhPJw3sN0aGYU973pQYZXJ+Nb9hMtQkycLysUpJUaV6hrNy+Bnjgkud/YC0BhJwZzJKUgmkOz3fA==
-X-Received: by 2002:a17:907:160a:b0:6e8:3c5d:9ce5 with SMTP id hb10-20020a170907160a00b006e83c5d9ce5mr23576285ejc.606.1649767207759;
-        Tue, 12 Apr 2022 05:40:07 -0700 (PDT)
-Received: from localhost.localdomain (host-82-60-208-254.retail.telecomitalia.it. [82.60.208.254])
-        by smtp.gmail.com with ESMTPSA id kv22-20020a17090778d600b006e8a072fb1dsm1670417ejc.172.2022.04.12.05.40.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 05:40:06 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        SeongJae Park <sj@kernel.org>,
-        Jiajian Ye <yejiajian2018@email.szu.edu.cn>,
-        Alistair Popple <apopple@nvidia.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Tue, 12 Apr 2022 09:02:13 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C53198;
+        Tue, 12 Apr 2022 05:41:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649767275; x=1681303275;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=eyXblfG/A5HWVja7fFUb4HNY/ZRRmFMXW6QIdjEei/o=;
+  b=Bf3bPc/YraGzPZAJmicdhLm+9cFkKE5cPUl/VANxPQgA3hCbaw/aB6ll
+   ZD7EkPG0pScmuSl8bC1F/ByShPpMM5XywO9YoXWFp9zvfIXxcyzSgWS4F
+   qyxkp/zKVIC/3GmZqUCgB7x+qYFGLluSh74zlGjxj6f1lrXnDJs5fwJWs
+   5XMLNJ5A1UHAYOu09dSrrcUuAzkdCavt3rCuJ5+iu+V/Zs1x/pSxcNTc7
+   QBDUWmUqLMDeznZPqx+8xmnEMikNLBFpndwHseJ6yV+jbb2BOrkUgaE83
+   CaVJNhneaOY8Y78bV1D5+4WR+eGxcJE6vIAMuaXV+5NjpdL8+R8BPMl6w
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="262112433"
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="262112433"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 05:41:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="526023841"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
+  by orsmga002.jf.intel.com with ESMTP; 12 Apr 2022 05:41:06 -0700
+Date:   Tue, 12 Apr 2022 20:40:56 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH v2] Documentation/vm: Extend "Temporary Virtual Mappings" section in highmem.rst
-Date:   Tue, 12 Apr 2022 14:40:03 +0200
-Message-Id: <20220412124003.10736-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com
+Subject: Re: [PATCH v5 10/13] KVM: Register private memslot to memory backing
+ store
+Message-ID: <20220412124056.GA8013@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220310140911.50924-1-chao.p.peng@linux.intel.com>
+ <20220310140911.50924-11-chao.p.peng@linux.intel.com>
+ <YkNXoCBjfpfI67QF@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YkNXoCBjfpfI67QF@google.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Extend and rework the "Temporary Virtual Mappings" section of the highmem.rst
-documentation.
+On Tue, Mar 29, 2022 at 07:01:52PM +0000, Sean Christopherson wrote:
+> On Thu, Mar 10, 2022, Chao Peng wrote:
+> > Add 'notifier' to memslot to make it a memfile_notifier node and then
+> > register it to memory backing store via memfile_register_notifier() when
+> > memslot gets created. When memslot is deleted, do the reverse with
+> > memfile_unregister_notifier(). Note each KVM memslot can be registered
+> > to different memory backing stores (or the same backing store but at
+> > different offset) independently.
+> > 
+> > Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> > ---
+> >  include/linux/kvm_host.h |  1 +
+> >  virt/kvm/kvm_main.c      | 75 ++++++++++++++++++++++++++++++++++++----
+> >  2 files changed, 70 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> > index 6e1d770d6bf8..9b175aeca63f 100644
+> > --- a/include/linux/kvm_host.h
+> > +++ b/include/linux/kvm_host.h
+> > @@ -567,6 +567,7 @@ struct kvm_memory_slot {
+> >  	struct file *private_file;
+> >  	loff_t private_offset;
+> >  	struct memfile_pfn_ops *pfn_ops;
+> > +	struct memfile_notifier notifier;
+> >  };
+> >  
+> >  static inline bool kvm_slot_is_private(const struct kvm_memory_slot *slot)
+> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> > index d11a2628b548..67349421eae3 100644
+> > --- a/virt/kvm/kvm_main.c
+> > +++ b/virt/kvm/kvm_main.c
+> > @@ -840,6 +840,37 @@ static int kvm_init_mmu_notifier(struct kvm *kvm)
+> >  
+> >  #endif /* CONFIG_MMU_NOTIFIER && KVM_ARCH_WANT_MMU_NOTIFIER */
+> >  
+> > +#ifdef CONFIG_MEMFILE_NOTIFIER
+> > +static inline int kvm_memfile_register(struct kvm_memory_slot *slot)
+> 
+> This is a good oppurtunity to hide away the memfile details a bit.  Maybe
+> kvm_private_mem_{,un}register()?
 
-Do a partial rework of the paragraph related to kmap() and add a new paragraph
-in order to document the set of kmap_local_*() functions. Re-order paragraphs
-in decreasing order of preference of usage.
+Happy to change.
 
-Despite the local kmaps were introduced by Thomas Gleixner in October 2020,
-documentation was still missing information about them. These additions rely
-largely on Gleixner's patches, Jonathan Corbet's LWN articles, comments by
-Ira Weiny and Matthew Wilcox, and in-code comments from
-./include/linux/highmem.h.
+> 
+> > +{
+> > +	return memfile_register_notifier(file_inode(slot->private_file),
+> > +					 &slot->notifier,
+> > +					 &slot->pfn_ops);
+> > +}
+> > +
+> > +static inline void kvm_memfile_unregister(struct kvm_memory_slot *slot)
+> > +{
+> > +	if (slot->private_file) {
+> > +		memfile_unregister_notifier(file_inode(slot->private_file),
+> > +					    &slot->notifier);
+> > +		fput(slot->private_file);
+> 
+> This should not do fput(), it makes the helper imbalanced with respect to the
+> register path and will likely lead to double fput().  Indeed, if preparing the
+> region fails, __kvm_set_memory_region() will double up on fput() due to checking
+> its local "file" for null, not slot->private for null.
 
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ira Weiny <ira.weiny@intel.com>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
+Right.
 
-v1->v2: According to comments on v1 by Mattew Wilcox and Ira Weiny,
-correct a mistake in text, format paragraphs to stay within the 75
-characters limit, re-order the flow of the same paragraphs in decreasing
-order of preference of usage.
+> 
+> > +		slot->private_file = NULL;
+> > +	}
+> > +}
+> > +
+> > +#else /* !CONFIG_MEMFILE_NOTIFIER */
+> > +
+> > +static inline int kvm_memfile_register(struct kvm_memory_slot *slot)
+> > +{
+> 
+> This should WARN_ON_ONCE().  Ditto for unregister.
+> 
+> > +	return -EOPNOTSUPP;
+> > +}
+> > +
+> > +static inline void kvm_memfile_unregister(struct kvm_memory_slot *slot)
+> > +{
+> > +}
+> > +
+> > +#endif /* CONFIG_MEMFILE_NOTIFIER */
+> > +
+> >  #ifdef CONFIG_HAVE_KVM_PM_NOTIFIER
+> >  static int kvm_pm_notifier_call(struct notifier_block *bl,
+> >  				unsigned long state,
+> > @@ -884,6 +915,9 @@ static void kvm_destroy_dirty_bitmap(struct kvm_memory_slot *memslot)
+> >  /* This does not remove the slot from struct kvm_memslots data structures */
+> >  static void kvm_free_memslot(struct kvm *kvm, struct kvm_memory_slot *slot)
+> >  {
+> > +	if (slot->flags & KVM_MEM_PRIVATE)
+> > +		kvm_memfile_unregister(slot);
+> 
+> With fput() move out of unregister, this needs to be:
 
- Documentation/vm/highmem.rst | 67 ++++++++++++++++++++++++++++++------
- 1 file changed, 56 insertions(+), 11 deletions(-)
+Agreed.
 
-diff --git a/Documentation/vm/highmem.rst b/Documentation/vm/highmem.rst
-index 0f69a9fec34d..12dcfbee094d 100644
---- a/Documentation/vm/highmem.rst
-+++ b/Documentation/vm/highmem.rst
-@@ -52,24 +52,69 @@ Temporary Virtual Mappings
- 
- The kernel contains several ways of creating temporary mappings:
- 
--* vmap().  This can be used to make a long duration mapping of multiple
--  physical pages into a contiguous virtual space.  It needs global
--  synchronization to unmap.
--
--* kmap().  This permits a short duration mapping of a single page.  It needs
--  global synchronization, but is amortized somewhat.  It is also prone to
--  deadlocks when using in a nested fashion, and so it is not recommended for
--  new code.
-+* kmap_local_*().  These provide a set of functions that are used to require
-+  short term mappings. They can be invoked from any context (including
-+  interrupts) but the mappings can only be used in the context which acquired
-+  it.
-+
-+  These mappings are per thread, CPU local (i.e., migration from one CPU to
-+  another is disabled - this is why they are called "local"), but they don't
-+  disable preemption. It's valid to take pagefaults in a local kmap region,
-+  unless the context in which the local mapping is acquired does not allow
-+  it for other reasons.
-+
-+  If a task holding local kmaps is preempted, the maps are removed on context
-+  switch and restored when the task comes back on the CPU. As the maps are
-+  strictly CPU local, it is guaranteed that the task stays on the CPU and
-+  that the CPU cannot be unplugged until the local kmaps are released.
-+
-+  Nesting kmap_local.*() and kmap_atomic.*() mappings is allowed to a certain
-+  extent (up to KMAP_TYPE_NR). Nested kmap_local.*() and kunmap_local.*()
-+  invocations have to be strictly ordered because the map implementation is
-+  stack based.
- 
- * kmap_atomic().  This permits a very short duration mapping of a single
-   page.  Since the mapping is restricted to the CPU that issued it, it
-   performs well, but the issuing task is therefore required to stay on that
-   CPU until it has finished, lest some other task displace its mappings.
- 
--  kmap_atomic() may also be used by interrupt contexts, since it is does not
--  sleep and the caller may not sleep until after kunmap_atomic() is called.
-+  kmap_atomic() may also be used by interrupt contexts, since it does not
-+  sleep and the caller too can not sleep until after kunmap_atomic() is called.
-+  Each call of kmap_atomic() in the kernel creates a non-preemptible section and
-+  disable pagefaults.
-+
-+  This could be a source of unwanted latency, so it should be only used if it is
-+  absolutely required, otherwise the corresponding kmap_local_*() variant should
-+  be used if it is feasible.
-+
-+  On 64-bit systems, calls to kmap() and kmap_atomic() have no real work to do
-+  because a 64-bit address space is more than sufficient to address all the
-+  physical memory, so all of physical memory appears in the direct mapping.
-+
-+  It is assumed that k[un]map_atomic() won't fail.
- 
--  It may be assumed that k[un]map_atomic() won't fail.
-+* kmap().  This should be used to make short duration mapping of a single
-+  page with no restrictions on preemption or migration. It comes with an
-+  overhead as mapping space is restricted and protected by a global lock
-+  for synchronization. When mapping is no more needed, the address that
-+  the page was mapped to must be released with kunmap().
-+
-+  Mapping changes must be propagated across all the CPUs. kmap() also
-+  requires global TLB invalidation when the kmap's pool wraps and it might
-+  block when the mapping space is fully utilized until a slot becomes
-+  available. Therefore, kmap() is only callable from preemptible context.
-+
-+  All the above work is necessary if a mapping must last for a relatively
-+  long time but the bulk of high-memory mappings in the kernel are
-+  short-lived and only used in one place. This means that the cost of
-+  kmap() is mostly wasted in such cases. kmap() was not intended for long
-+  term mappings but it has morphed in that direction and its use is
-+  strongly discouraged in newer code and the set of the preceding functions
-+  should be preferred.
-+
-+* vmap().  This can be used to make a long duration mapping of multiple
-+  physical pages into a contiguous virtual space.  It needs global
-+  synchronization to unmap.
- 
- 
- Using kmap_atomic
--- 
-2.34.1
+> 
+> 	if (slot->flags & KVM_MEM_PRIVATE) {
+> 		kvm_private_mem_unregister(slot);
+> 		fput(slot->private_file);
+> 	}
+> > +
+> >  	kvm_destroy_dirty_bitmap(slot);
+> >  
+> >  	kvm_arch_free_memslot(kvm, slot);
+> > @@ -1738,6 +1772,12 @@ static int kvm_set_memslot(struct kvm *kvm,
+> >  		kvm_invalidate_memslot(kvm, old, invalid_slot);
+> >  	}
+> >  
+> > +	if (new->flags & KVM_MEM_PRIVATE && change == KVM_MR_CREATE) {
+> > +		r = kvm_memfile_register(new);
+> > +		if (r)
+> > +			return r;
+> > +	}
+> 
+> This belongs in kvm_prepare_memory_region().  The shenanigans for DELETE and MOVE
+> are special.
 
+Sure.
+
+> 
+> > +
+> >  	r = kvm_prepare_memory_region(kvm, old, new, change);
+> >  	if (r) {
+> >  		/*
+> > @@ -1752,6 +1792,10 @@ static int kvm_set_memslot(struct kvm *kvm,
+> >  		} else {
+> >  			mutex_unlock(&kvm->slots_arch_lock);
+> >  		}
+> > +
+> > +		if (new->flags & KVM_MEM_PRIVATE && change == KVM_MR_CREATE)
+> > +			kvm_memfile_unregister(new);
+> > +
+> >  		return r;
+> >  	}
+> >  
+> > @@ -1817,6 +1861,7 @@ int __kvm_set_memory_region(struct kvm *kvm,
+> >  	enum kvm_mr_change change;
+> >  	unsigned long npages;
+> >  	gfn_t base_gfn;
+> > +	struct file *file = NULL;
+> 
+> Nit, naming this private_file would help understand its use.  Though I think it's
+> easier to not have a local variable.  More below.
+> 
+> >  	int as_id, id;
+> >  	int r;
+> >  
+> > @@ -1890,14 +1935,24 @@ int __kvm_set_memory_region(struct kvm *kvm,
+> >  			return 0;
+> >  	}
+> >  
+> > +	if (mem->flags & KVM_MEM_PRIVATE) {
+> > +		file = fdget(region_ext->private_fd).file;
+> 
+> This can use fget() instead of fdget().
+> 
+> > +		if (!file)
+> > +			return -EINVAL;
+> > +	}
+> > +
+> >  	if ((change == KVM_MR_CREATE || change == KVM_MR_MOVE) &&
+> > -	    kvm_check_memslot_overlap(slots, id, base_gfn, base_gfn + npages))
+> > -		return -EEXIST;
+> > +	    kvm_check_memslot_overlap(slots, id, base_gfn, base_gfn + npages)) {
+> > +		r = -EEXIST;
+> > +		goto out;
+> > +	}
+> >  
+> >  	/* Allocate a slot that will persist in the memslot. */
+> >  	new = kzalloc(sizeof(*new), GFP_KERNEL_ACCOUNT);
+> > -	if (!new)
+> > -		return -ENOMEM;
+> > +	if (!new) {
+> > +		r = -ENOMEM;
+> > +		goto out;
+> > +	}
+> >  
+> >  	new->as_id = as_id;
+> >  	new->id = id;
+> > @@ -1905,10 +1960,18 @@ int __kvm_set_memory_region(struct kvm *kvm,
+> >  	new->npages = npages;
+> >  	new->flags = mem->flags;
+> >  	new->userspace_addr = mem->userspace_addr;
+> > +	new->private_file = file;
+> > +	new->private_offset = mem->flags & KVM_MEM_PRIVATE ?
+> > +			      region_ext->private_offset : 0;
+> 
+> "new" is zero-allocated, so all the private stuff, including the fget(), can be
+> wrapped in a single KVM_MEM_PRIVATE check.  Moving fget() eliminates the number
+> of gotos needed (the above -EEXIST and -ENOMEM paths don't need to be modified).
+> 
+> >  	r = kvm_set_memslot(kvm, old, new, change);
+> > -	if (r)
+> > -		kfree(new);
+> > +	if (!r)
+> > +		return r;
+> 
+> Use goto, e.g.
+> 
+> 	if (r)
+> 		goto out;
+> 
+> 	return 0;
+> 
+> Burying the happy path in a taken if-statement is confusing and error prone,
+> mostly because it breaks well-established kernel patterns.  Note, there's no need
+> for a separate out_free since new->private_file will be NULL in either case.  I
+> don't have a strong preference, I just find it easier to read code that's more
+> explicit, but I'm a-ok collapsing them into a single label.
+
+Will follow this, thanks for the detailed suggestion.
+
+Chao
+> 
+> 	if ((change == KVM_MR_CREATE || change == KVM_MR_MOVE) &&
+> 	    kvm_check_memslot_overlap(slots, id, base_gfn, base_gfn + npages))
+> 		return -EEXIST;
+> 
+> 	/* Allocate a slot that will persist in the memslot. */
+> 	new = kzalloc(sizeof(*new), GFP_KERNEL_ACCOUNT);
+> 	if (!new)
+> 		return -ENOMEM;
+> 
+> 	new->as_id = as_id;
+> 	new->id = id;
+> 	new->base_gfn = base_gfn;
+> 	new->npages = npages;
+> 	new->flags = mem->flags;
+> 	new->userspace_addr = mem->userspace_addr;
+> 
+> 	if (mem->flags & KVM_MEM_PRIVATE) {
+> 		new->private_file = fget(mem->private_fd);
+> 		if (!new->private_file) {
+> 			r = -EINVAL;
+> 			goto out_free;
+> 		}
+> 		new->private_offset = mem->private_offset;
+> 	}
+> 
+> 	r = kvm_set_memslot(kvm, old, new, change);
+> 	if (r)
+> 		goto out;
+> 
+> 	return 0;
+> 
+> out:
+> 	if (new->private_file)
+> 		fput(new->private_file);
+> 
+> out_free:
+> 	kfree(new);
+> 	return r;

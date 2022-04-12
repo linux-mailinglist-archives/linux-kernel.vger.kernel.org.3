@@ -2,89 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F29AC4FE758
+	by mail.lfdr.de (Postfix) with ESMTP id 8D7A54FE757
 	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358541AbiDLRlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 13:41:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57562 "EHLO
+        id S1358519AbiDLRl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 13:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356075AbiDLRkm (ORCPT
+        with ESMTP id S1358515AbiDLRlV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 13:40:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2576212D;
-        Tue, 12 Apr 2022 10:38:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 76E26619D7;
-        Tue, 12 Apr 2022 17:38:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DAA5C385A1;
-        Tue, 12 Apr 2022 17:38:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649785103;
-        bh=3LtPJpBag3FhKWTyd+lv8UDX78WC5GQyaw42g+nIqes=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=UjIJzPKAWvTCCDrcA4R3ttd9UxR9RuVChvAK6SmbrP2BngxvpQeiEzvpyAXU58NqG
-         XOlE43X2n9QAo9TjXzXSgYj0JQxPVK0K9z1zB6rsKNtIS2I9ES9N6kk7pq1cp828Zu
-         KH2lfWe1NyJH4hyJCaqaZ1GnX22l3pmDQOszT03WhZN1JsWR0mWVirK+6YbkRzggwC
-         sKCzNpu+ZQWUoLOLKEPyTVIXIokdKMsHrHknLu7TOwa1YTAaaUNWg4x6yx41q6Yjkx
-         0jL3QVaJSxe0yIysga/YEFhNPsKDwlNprAm0952JWNro561CN1LZXK19fA7AXB7YYD
-         XG4oAXW9TgLbw==
-From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linmq006@gmail.com, vigneshr@ti.com
-In-Reply-To: <20220411111034.24447-1-linmq006@gmail.com>
-References: <20220411111034.24447-1-linmq006@gmail.com>
-Subject: Re: [PATCH] spi: spi-ti-qspi: Fix return value handling of wait_for_completion_timeout
-Message-Id: <164978510277.404853.11478015977958567610.b4-ty@kernel.org>
-Date:   Tue, 12 Apr 2022 18:38:22 +0100
+        Tue, 12 Apr 2022 13:41:21 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B38062CB0
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 10:38:58 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id f38so34378189ybi.3
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 10:38:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gRILn8/chMRCIi9sZ2MN6M60EoQ3IuVF2SSZ6iBuX/4=;
+        b=B1kF7caEIMPGUnmUr9fKJphP16RZw3rWxad4j4qeA/4bdejMVB2nA+CqyF/tqI5blK
+         LJO3ZDY25SI2rekTuoakAo0VExQJczaj5ayEseFXoUPquJyrXakft6imh6RuRn2l4GuB
+         1v3LgX2ZfxVsbdLp5wMXlPTlVKhKriVC1JbBde47oE8k5xllAAVQNCrERCgtFc96D7X0
+         fsIV075yfhOVsYbav3bLTiYZs9EkeXZH6giBP/LfLhL/tDBXeoSztqQIXqq0KJJpdbmv
+         OoAaMzTLTPjgsIiLAdaKgt0THWjGel+ILUv2KMGWJ5Mi9RELAC+HIkZvzlOZEZCKG/7p
+         dwfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gRILn8/chMRCIi9sZ2MN6M60EoQ3IuVF2SSZ6iBuX/4=;
+        b=0dOkLKLS7vGbdZ0dZS2myrVqk8ud7yUjqADIcWUQFxdejLP8HyltPnb6oW/MzuCFEb
+         Qxw/N+nLpKgIJJnddO81OPVNyzIUSLuE43uXbCzhSAsWWVRRsFMbnhtFfxM5jngX4Wr1
+         TuNcO0HA2dfvaL2CrABbirYSfO2L6XU6H7MKjaIVmhfXAuibnhj4qseRiXax27I+FeF4
+         mIJ4VurIA9XK3aviWRowLeME2v7IT/Fk6QcpjhhNl3bzPnEvCaMME8L6XLuT4qTbgtMl
+         mV9+3Gmswxx6i68Q/wRANUXgNuY7KO2NrKvqE+5JND0kxHd3FFNVjvS4yFQ2d/MCRQHb
+         cgXA==
+X-Gm-Message-State: AOAM533svDc27zjGlXhwOTwtNIIJF3NFwibVLTDyph7MRwqC8SKrrXpf
+        o37+vEpswU5w9QLBEGjbScDKDMOWBMX7D0ZPMk+t+Q==
+X-Google-Smtp-Source: ABdhPJxDgaDEv0hlkNQCrDHEoQGZuKbChfOahaDLonkq8HdnQqvVbFIeoxQk5XW6nkU5RvtGPsgKzWUSpWay/G4F/Pk=
+X-Received: by 2002:a25:df97:0:b0:641:af46:4b8b with SMTP id
+ w145-20020a25df97000000b00641af464b8bmr2305874ybg.189.1649785137599; Tue, 12
+ Apr 2022 10:38:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220225013929.3577699-1-seanjc@google.com> <609de7ff-92e2-f96e-e6f5-127251f6e16d@redhat.com>
+In-Reply-To: <609de7ff-92e2-f96e-e6f5-127251f6e16d@redhat.com>
+From:   Anton Romanov <romanton@google.com>
+Date:   Tue, 12 Apr 2022 10:38:47 -0700
+Message-ID: <CAHFSQMj-Q08Fu1tdPuz+kcdvAoh2cuc_ZgH=qijSet55fxHLNw@mail.gmail.com>
+Subject: Re: [PATCH] KVM: x86: Don't snapshot "max" TSC if host TSC is constant
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Suleiman Souhlal <suleiman@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 11 Apr 2022 11:10:33 +0000, Miaoqian Lin wrote:
-> wait_for_completion_timeout() returns unsigned long not int.
-> It returns 0 if timed out, and positive if completed.
-> The check for <= 0 is ambiguous and should be == 0 here
-> indicating timeout which is the only error case.
-> 
-> 
+On Fri, Feb 25, 2022 at 4:10 AM Paolo Bonzini <pbonzini@redhat.com> wrote:
+>
+> On 2/25/22 02:39, Sean Christopherson wrote:
+> > Don't snapshot tsc_khz into max_tsc_khz during KVM initialization if the
+> > host TSC is constant, in which case the actual TSC frequency will never
+> > change and thus capturing the "max" TSC during initialization is
+> > unnecessary, KVM can simply use tsc_khz during VM creation.
+> >
+> > On CPUs with constant TSC, but not a hardware-specified TSC frequency,
+> > snapshotting max_tsc_khz and using that to set a VM's default TSC
+> > frequency can lead to KVM thinking it needs to manually scale the guest's
+> > TSC if refining the TSC completes after KVM snapshots tsc_khz.  The
+> > actual frequency never changes, only the kernel's calculation of what
+> > that frequency is changes.  On systems without hardware TSC scaling, this
+> > either puts KVM into "always catchup" mode (extremely inefficient), or
+> > prevents creating VMs altogether.
+> >
+> > Ideally, KVM would not be able to race with TSC refinement, or would have
+> > a hook into tsc_refine_calibration_work() to get an alert when refinement
+> > is complete.  Avoiding the race altogether isn't practical as refinement
+> > takes a relative eternity; it's deliberately put on a work queue outside
+> > of the normal boot sequence to avoid unnecessarily delaying boot.
+> >
+> > Adding a hook is doable, but somewhat gross due to KVM's ability to be
+> > built as a module.  And if the TSC is constant, which is likely the case
+> > for every VMX/SVM-capable CPU produced in the last decade, the race can
+> > be hit if and only if userspace is able to create a VM before TSC
+> > refinement completes; refinement is slow, but not that slow.
+> >
+> > For now, punt on a proper fix, as not taking a snapshot can help some
+> > uses cases and not taking a snapshot is arguably correct irrespective of
+> > the race with refinement.
+> >
+> > Cc: Suleiman Souhlal <suleiman@google.com>
+> > Cc: Anton Romanov <romanton@google.com>
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+>
+> Queued, but I'd rather have a subject that calls out that max_tsc_khz
+> needs a replacement at vCPU creation time.  In fact, the real change
+> (and bug, and fix) is in kvm_arch_vcpu_create(), while the subject
+> mentions only the change in kvm_timer_init().
+>
+> What do you think of "KVM: x86: Use current rather than max TSC
+> frequency if it is constant"?
+>
+> Pao
 
-Applied to
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[1/1] spi: spi-ti-qspi: Fix return value handling of wait_for_completion_timeout
-      commit: 8b1ea69a63eb62f97cef63e6d816b64ed84e8760
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+Ping. This said "queued" but I don't think this ever landed.
+What's the status of this?
+Paolo, does this need more work?

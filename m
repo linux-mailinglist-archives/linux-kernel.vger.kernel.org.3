@@ -2,56 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C77C4FDA15
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:48:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7933A4FD6A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:24:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387612AbiDLJMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50678 "EHLO
+        id S1357152AbiDLILE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:11:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358729AbiDLHmJ (ORCPT
+        with ESMTP id S1353706AbiDLHZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:42:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EBCC53E0D;
-        Tue, 12 Apr 2022 00:19:00 -0700 (PDT)
+        Tue, 12 Apr 2022 03:25:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DDB52B2;
+        Tue, 12 Apr 2022 00:04:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 103C3B81B4F;
-        Tue, 12 Apr 2022 07:18:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4021EC385A1;
-        Tue, 12 Apr 2022 07:18:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CB3A9B81B4D;
+        Tue, 12 Apr 2022 07:04:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43BD5C385A6;
+        Tue, 12 Apr 2022 07:04:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747937;
-        bh=48IJ3esSaUzBji8rEvxkx01bcGDqcGgwVzYB+0ZPDAg=;
+        s=korg; t=1649747041;
+        bh=NwKPkCap+dw1eHh5siCsbaMYWMopuS5/YjbGJCk9bjU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dg7GivnYSgf1nx4h3tRubJfXC0G2Pqq1FozZe8EFOIHKL/QSGEJ3izl0Lv79h2BzX
-         MhDLQ+WLbByFmXnIdGQ1Gj78bryoPdMX6w78rbbOW3tWcO5wrGN4cnGE8Z5oxNuokX
-         19zuO42QT+a1NkSGkbYYX4NfNW15BVm6VSBK7lbY=
+        b=Y+87PruQNqeIHG1EHfGw5W+j1VKj8szynRhwGQ2sY7o1Qcx3+Oq8dyAyfhSytXehl
+         M1OHyT81IAJoPUcThBrmtp3jJjiFNhtkDRBuXhtF8b+pA0ID02CshCPw2VawehHs3V
+         7trh6/qEfj4pW8T7QcJxI4MB0eGX9ARuQZS6LKjE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, James Clark <james.clark@arm.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        German Gomez <german.gomez@arm.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Ravi Bangoria <ravi.bangoria@linux.ibm.com>,
-        Will Deacon <will@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 260/343] perf: arm-spe: Fix perf report --mem-mode
-Date:   Tue, 12 Apr 2022 08:31:18 +0200
-Message-Id: <20220412062958.830168914@linuxfoundation.org>
+        stable@vger.kernel.org,
+        syzbot+6bde52d89cfdf9f61425@syzkaller.appspotmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.16 222/285] mmmremap.c: avoid pointless invalidate_range_start/end on mremap(old_size=0)
+Date:   Tue, 12 Apr 2022 08:31:19 +0200
+Message-Id: <20220412062950.063650954@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -66,60 +58,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: James Clark <james.clark@arm.com>
+From: Paolo Bonzini <pbonzini@redhat.com>
 
-[ Upstream commit ffab487052054162b3b6c9c6005777ec6cfcea05 ]
+commit 01e67e04c28170c47700c2c226d732bbfedb1ad0 upstream.
 
-Since commit bb30acae4c4dacfa ("perf report: Bail out --mem-mode if mem
-info is not available") "perf mem report" and "perf report --mem-mode"
-don't allow opening the file unless one of the events has
-PERF_SAMPLE_DATA_SRC set.
+If an mremap() syscall with old_size=0 ends up in move_page_tables(), it
+will call invalidate_range_start()/invalidate_range_end() unnecessarily,
+i.e.  with an empty range.
 
-SPE doesn't have this set even though synthetic memory data is generated
-after it is decoded. Fix this issue by setting DATA_SRC on SPE events.
-This has no effect on the data collected because the SPE driver doesn't
-do anything with that flag and doesn't generate samples.
+This causes a WARN in KVM's mmu_notifier.  In the past, empty ranges
+have been diagnosed to be off-by-one bugs, hence the WARNing.  Given the
+low (so far) number of unique reports, the benefits of detecting more
+buggy callers seem to outweigh the cost of having to fix cases such as
+this one, where userspace is doing something silly.  In this particular
+case, an early return from move_page_tables() is enough to fix the
+issue.
 
-Fixes: bb30acae4c4dacfa ("perf report: Bail out --mem-mode if mem info is not available")
-Signed-off-by: James Clark <james.clark@arm.com>
-Tested-by: Leo Yan <leo.yan@linaro.org>
-Acked-by: Namhyung Kim <namhyung@kernel.org>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: German Gomez <german.gomez@arm.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: John Garry <john.garry@huawei.com>
-Cc: Leo Yan <leo.yan@linaro.org>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc: Ravi Bangoria <ravi.bangoria@linux.ibm.com>
-Cc: Will Deacon <will@kernel.org>
-Link: https://lore.kernel.org/r/20220408144056.1955535-1-james.clark@arm.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lkml.kernel.org/r/20220329173155.172439-1-pbonzini@redhat.com
+Reported-by: syzbot+6bde52d89cfdf9f61425@syzkaller.appspotmail.com
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Sean Christopherson <seanjc@google.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/perf/arch/arm64/util/arm-spe.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ mm/mremap.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/tools/perf/arch/arm64/util/arm-spe.c b/tools/perf/arch/arm64/util/arm-spe.c
-index 2100d46ccf5e..bb4ab99afa7f 100644
---- a/tools/perf/arch/arm64/util/arm-spe.c
-+++ b/tools/perf/arch/arm64/util/arm-spe.c
-@@ -239,6 +239,12 @@ static int arm_spe_recording_options(struct auxtrace_record *itr,
- 		arm_spe_set_timestamp(itr, arm_spe_evsel);
- 	}
+--- a/mm/mremap.c
++++ b/mm/mremap.c
+@@ -486,6 +486,9 @@ unsigned long move_page_tables(struct vm
+ 	pmd_t *old_pmd, *new_pmd;
+ 	pud_t *old_pud, *new_pud;
  
-+	/*
-+	 * Set this only so that perf report knows that SPE generates memory info. It has no effect
-+	 * on the opening of the event or the SPE data produced.
-+	 */
-+	evsel__set_sample_bit(arm_spe_evsel, DATA_SRC);
++	if (!len)
++		return 0;
 +
- 	/* Add dummy event to keep tracking */
- 	err = parse_events(evlist, "dummy:u", NULL);
- 	if (err)
--- 
-2.35.1
-
+ 	old_end = old_addr + len;
+ 	flush_cache_range(vma, old_addr, old_end);
+ 
 
 

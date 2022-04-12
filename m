@@ -2,97 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01C9D4FE3FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 16:38:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE3AA4FE3FD
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 16:39:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353377AbiDLOk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 10:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52500 "EHLO
+        id S1356696AbiDLOl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 10:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232530AbiDLOky (ORCPT
+        with ESMTP id S1354554AbiDLOlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 10:40:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5C25F266;
-        Tue, 12 Apr 2022 07:38:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A28660EC1;
-        Tue, 12 Apr 2022 14:38:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83018C385A1;
-        Tue, 12 Apr 2022 14:38:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649774316;
-        bh=lcIKnqX7ND/P1RbiqjkdmPWf/TRA+1K8M7N7NXSFRw0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RsBwi3/WtJtFYWnmy7meXcP0++2CjGti6kYk2bXS0e2jXcizaYzuZMdxn7HFJVnA5
-         R61xgErVwVl+UZkbuvdB2yOsDVIoVF/bqu1chYHRJXE+mcGTCQ8id1bBvSy5HaRmbE
-         7aL1gzWpl57xnz0CFtzDr7ii88W+RFuLOXgtj99g=
-Date:   Tue, 12 Apr 2022 16:38:33 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Benson Leung <bleung@google.com>,
-        Prashant Malani <pmalani@chromium.org>,
-        Jameson Thies <jthies@google.com>,
-        "Regupathy, Rajaram" <rajaram.regupathy@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Won Chung <wonchung@google.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] usb: typec: Separate sysfs directory for all USB
- PD objects
-Message-ID: <YlWO6UbZ8zM4f6b6@kroah.com>
-References: <20220412130023.83927-1-heikki.krogerus@linux.intel.com>
+        Tue, 12 Apr 2022 10:41:23 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7467E51
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 07:39:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649774345; x=1681310345;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=GZj64pjcWXoZ+UWhUertM7DeZpkX/WIgVteyu9EF33A=;
+  b=IDSUsTAlQ9zt0b59jP0LV/+kgzTpNpUVrcv4R4vwjuWWqkLvIUWN6qWP
+   0X9Xst9cA+3JzUBxiV7xW+e8YTSz/je7YsVi3RE/KvcGa8dDLZ3M+jGip
+   GxfuQqAp49x+N/L0iASjUVLK+OIynSP3cvmCJ6kbiJzbV+qk0RK8IhdTr
+   FCsgRq221UNAaspkkLundKvDYQ7GCx9UO7424jbX28NRNrb3+CPBUDuP3
+   yuNJmtmESZU2UmE0hUd3tA51ty1e31xnJGkN7qhZOGlMVyz1LuWqiiWk5
+   S45mql+/HkpC5q6YIlTZIFJBtY4EyAtt5lWDtgccpkdpPlhYg9Hn1NtYJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="348826558"
+X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
+   d="scan'208";a="348826558"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 07:39:05 -0700
+X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
+   d="scan'208";a="551735814"
+Received: from vtelkarx-mobl.amr.corp.intel.com (HELO [10.209.191.73]) ([10.209.191.73])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 07:39:04 -0700
+Message-ID: <2cd3132b-2c24-610e-1a96-591f2803404c@intel.com>
+Date:   Tue, 12 Apr 2022 07:39:10 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220412130023.83927-1-heikki.krogerus@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     Fenghua Yu <fenghua.yu@intel.com>,
+        "zhangfei.gao@foxmail.com" <zhangfei.gao@foxmail.com>
+Cc:     Joerg Roedel <joro@8bytes.org>,
+        jean-philippe <jean-philippe@linaro.org>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86 <x86@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        iommu <iommu@lists.linux-foundation.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+References: <20220207230254.3342514-1-fenghua.yu@intel.com>
+ <20220207230254.3342514-6-fenghua.yu@intel.com> <Ygt4h0PgYzKOiB38@8bytes.org>
+ <tencent_F6830A1196DB4C6A904D7C691F0D961D1108@qq.com>
+ <56ed509d-a7cf-1fde-676c-a28eb204989b@intel.com>
+ <tencent_9920B633D50E9B80D3A41A723BCE06972309@qq.com>
+ <f439dde5-0eaa-52e4-9cf7-2ed1f62ea07f@intel.com>
+ <tencent_F73C11A7DBAC6AF24D3369DF0DCA1D7E8308@qq.com>
+ <a139dbad-2f42-913b-677c-ef35f1eebfed@intel.com>
+ <tencent_B683AC1146DB6A6ABB4D73697C0D6A1D7608@qq.com>
+ <YlWBkyGeb2ZOGLKl@fyu1.sc.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
+ allocation and free it on mm exit
+In-Reply-To: <YlWBkyGeb2ZOGLKl@fyu1.sc.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 04:00:20PM +0300, Heikki Krogerus wrote:
-> Hi,
+On 4/12/22 06:41, Fenghua Yu wrote:
+>> master process quit, mmput ->  mm_pasid_drop->ioasid_free
+>> But this ignore driver's iommu_sva_unbind_device function,
+>> iommu_sva_bind_device and iommu_sva_unbind_device are not pair,  So driver
+>> does not know ioasid is freed.
+>>
+>> Any suggestion?
+> ioasid is per process or per mm. A daemon process shouldn't share the same 
+> ioasid with any other process with even its parent process. Its parent gets
+> an ioasid and frees it on exit. The ioasid is gone and shouldn't be used
+> by its child process.
 > 
-> In this version the USB Power Delivery support is now completely
-> separated into its own little subsystem. The USB Power Delivery
-> objects are not devices, but they are also no longer tied to any
-> device by default. This change makes it possible to share the USB PD
-> objects between multiple devices on top of being able to select the
-> objects that we want the device to use.
+> Each daemon process should call driver -> iommu_sva_bind_device -> ioasid_alloc
+> to get its own ioasid/PASID. On daemon quit, the ioasid is freed.
 > 
-> The USB Power Delivery objects are now placed under
-> /sys/kernel/usb_power_delivery directory. As an example:
-> 
-> 	/sys/kernel/usb_power_delivery/pd0
+> That means nqnix needs to be changed.
 
-No, sorry, this is a device, it does NOT belong in /sys/kernel/
+Fenghua, please step back for a second and look at what you are saying.
+ Your patch caused userspace to break.  Now, you're telling someone that
+they need to go change that userspace to work around something that your
+patch.  How, exactly, are you suggesting that nginx could change to fix
+this?  What, specifically, was it doing with *fork()* that was wrong?
 
-And this really should be a real device, as I mentioned before, not a
-kobject.
-
-> So now that pd0 can be linked to a device, or devices, that want (or
-> can) use it to negotiate the USB PD contract with. An example where
-> two devices share the PD:
-> 
-> 	/sys/class/typec/port0/usb_power_delivery -> ../../../../../../../kernel/usb_power_delivery/pd0
-> 	/sys/class/typec/port1/usb_power_delivery -> ../../../../../../../kernel/usb_power_delivery/pd0
-
-Point to the pd device, not the kobject.
-
-> I did not change the directory hierarchy at all, because I'm assuming
-> that it is not a problem anymore:
-> 
-> 	pd0/<message>/<object>/<field>
-
-Let's get back to devices first, worry about crazy depth second.
-
-thanks,
-
-greg k-h
+It sounds to me like you're saying that it's OK to break userspace.

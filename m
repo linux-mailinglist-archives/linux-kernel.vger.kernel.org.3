@@ -2,60 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 676CA4FC95C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 02:41:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A27D34FC966
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 02:44:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241502AbiDLAnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 20:43:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34344 "EHLO
+        id S241845AbiDLAqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 20:46:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbiDLAnc (ORCPT
+        with ESMTP id S241572AbiDLAqf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 20:43:32 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6260CAE66
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 17:41:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649724076; x=1681260076;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NVIl9aheGBGH4Yb5cPFMiyNZl855rP0pfHbJJc7xNsQ=;
-  b=btjU6Lh7RSgzdpYmdKFwp6AcOQDbQLS2zw7LFwvvIIADjzOpBnK3dAbM
-   zvo2Wrb3TihdXbxKaSlGivqWXP2RD9bWOkCmVHrzR73DM+8f0HO9+l3IE
-   driRgJS7WCSFfcuyHjutH4Y6QG6XnPw735CP1p2AUntlfkwrSR23aUVu3
-   m0cZs3D7DDQNvLhI6wGX8A9zlh1gI0ojY/O4IdnD3g1dukfpgarx7gmCb
-   oLMcfGibGVAzegu8xnhSAS7d/JFI7ExAYFKrC9SaSbBGvF5+TKxCgRuiO
-   YId3xKOBWoBu2u/Joifgz+XfKEFKxi4OtTOS0m2AgA40x1By6Htbl7DK9
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="262426918"
-X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="262426918"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 17:41:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
-   d="scan'208";a="526222961"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 11 Apr 2022 17:41:14 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ne4an-0002NG-KW;
-        Tue, 12 Apr 2022 00:41:13 +0000
-Date:   Tue, 12 Apr 2022 08:41:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jiri Pirko <jiri@nvidia.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jpirko-mlxsw:jiri_devel_linecards 91/93]
- drivers/net/netdevsim/dev.c:119:57: error: passing argument 4 of
- 'devlink_linecard_device_create' from incompatible pointer type
-Message-ID: <202204120800.yyqLXueA-lkp@intel.com>
+        Mon, 11 Apr 2022 20:46:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE1B10FDF;
+        Mon, 11 Apr 2022 17:44:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F1FE9B819B4;
+        Tue, 12 Apr 2022 00:44:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A305C385A4;
+        Tue, 12 Apr 2022 00:44:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649724254;
+        bh=uS/GY6ExnjhPYx2j4Wl+qD9StA6nkkAyHB9DsmGkl2U=;
+        h=From:To:Cc:Subject:Date:From;
+        b=r7JvaNGEkdYNV8Amldnb8L2FcnORFAubxMbeZCdRomftjgkhFVYgQ7ShaO2ILF0Nc
+         JhKg5EIQz3VDtxHcp5lPObzcAynZYE3EvOaSCe6aHAUs4iANfPHog2Fs2SvhuPG7zF
+         YGMDaCvsrHM05JrXNtrRLXhI/0uphQVeXTM3LWPIXl4ev0lUcJVxcrRBqp1u3E3mgK
+         yupC0gSmpdjgaf6X7cE1G27S9vZfL3Im9cN4XDI10Bnh0OygQHg5a4lVWF6NDQXH9n
+         rlf2mKNIdrzIi+j7TsEHOGl6pw2/49mR6SGsLzlclFQ0Osb71ShOfTCsbjLS3tOEn+
+         9G/9q6ODqqKpQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Nicholas Piggin <npiggin@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sasha Levin <sashal@kernel.org>, farosas@linux.ibm.com,
+        aik@ozlabs.ru, pbonzini@redhat.com, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH AUTOSEL 5.17 01/49] KVM: PPC: Book3S HV P9: Fix "lost kick" race
+Date:   Mon, 11 Apr 2022 20:43:19 -0400
+Message-Id: <20220412004411.349427-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,140 +56,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jpirko/linux_mlxsw jiri_devel_linecards
-head:   e31049bc6a06f24c077e61e74b1bf1f137572726
-commit: ac7fd66c0d376eb5bfe801b1a2226598705a6b6d [91/93] TMP: devlink device type
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20220412/202204120800.yyqLXueA-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/jpirko/linux_mlxsw/commit/ac7fd66c0d376eb5bfe801b1a2226598705a6b6d
-        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
-        git fetch --no-tags jpirko-mlxsw jiri_devel_linecards
-        git checkout ac7fd66c0d376eb5bfe801b1a2226598705a6b6d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/net/netdevsim/
+From: Nicholas Piggin <npiggin@gmail.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+[ Upstream commit c7fa848ff01dad9ed3146a6b1a7d3622131bcedd ]
 
-All errors (new ones prefixed by >>):
+When new work is created that requires attention from the hypervisor
+(e.g., to inject an interrupt into the guest), fast_vcpu_kick is used to
+pull the target vcpu out of the guest if it may have been running.
 
-   drivers/net/netdevsim/dev.c: In function 'nsim_dev_linecard_devices_create':
->> drivers/net/netdevsim/dev.c:119:57: error: passing argument 4 of 'devlink_linecard_device_create' from incompatible pointer type [-Werror=incompatible-pointer-types]
-     119 |                                                         nsim_dev_linecard);
-         |                                                         ^~~~~~~~~~~~~~~~~
-         |                                                         |
-         |                                                         struct nsim_dev_linecard *
-   In file included from drivers/net/netdevsim/dev.c:29:
-   include/net/devlink.h:1610:44: note: expected 'const char *' but argument is of type 'struct nsim_dev_linecard *'
-    1610 |                                const char *type, void *priv);
-         |                                ~~~~~~~~~~~~^~~~
->> drivers/net/netdevsim/dev.c:117:26: error: too few arguments to function 'devlink_linecard_device_create'
-     117 |                 device = devlink_linecard_device_create(nsim_dev_linecard->devlink_linecard,
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/net/netdevsim/dev.c:29:
-   include/net/devlink.h:1607:1: note: declared here
-    1607 | devlink_linecard_device_create(struct devlink_linecard *linecard,
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from include/uapi/linux/posix_types.h:5,
-                    from include/uapi/linux/types.h:14,
-                    from include/linux/types.h:6,
-                    from include/linux/kasan-checks.h:5,
-                    from include/asm-generic/rwonce.h:26,
-                    from ./arch/powerpc/include/generated/asm/rwonce.h:1,
-                    from include/linux/compiler.h:248,
-                    from include/linux/build_bug.h:5,
-                    from include/linux/container_of.h:5,
-                    from include/linux/list.h:5,
-                    from include/linux/wait.h:7,
-                    from include/linux/wait_bit.h:8,
-                    from include/linux/fs.h:6,
-                    from include/linux/debugfs.h:15,
-                    from drivers/net/netdevsim/dev.c:18:
-   drivers/net/netdevsim/dev.c: In function 'nsim_esw_switchdev_enable':
-   include/linux/stddef.h:8:14: warning: passing argument 3 of '__nsim_dev_port_add' makes integer from pointer without a cast [-Wint-conversion]
-       8 | #define NULL ((void *)0)
-         |              ^~~~~~~~~~~
-         |              |
-         |              void *
-   drivers/net/netdevsim/dev.c:870:43: note: in expansion of macro 'NULL'
-     870 |                                           NULL, i);
-         |                                           ^~~~
-   drivers/net/netdevsim/dev.c:845:34: note: expected 'unsigned int' but argument is of type 'void *'
-     845 |                     unsigned int port_index);
-         |                     ~~~~~~~~~~~~~^~~~~~~~~~
-   drivers/net/netdevsim/dev.c:869:23: error: too many arguments to function '__nsim_dev_port_add'
-     869 |                 err = __nsim_dev_port_add(nsim_dev, NSIM_DEV_PORT_TYPE_VF,
-         |                       ^~~~~~~~~~~~~~~~~~~
-   drivers/net/netdevsim/dev.c:844:1: note: declared here
-     844 | __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
-         | ^~~~~~~~~~~~~~~~~~~
-   drivers/net/netdevsim/dev.c:883:25: error: too many arguments to function '__nsim_dev_port_del'
-     883 |                         __nsim_dev_port_del(nsim_dev_port, NULL, i);
-         |                         ^~~~~~~~~~~~~~~~~~~
-   drivers/net/netdevsim/dev.c:846:13: note: declared here
-     846 | static void __nsim_dev_port_del(struct nsim_dev_port *nsim_dev_port);
-         |             ^~~~~~~~~~~~~~~~~~~
-   drivers/net/netdevsim/dev.c: At top level:
-   drivers/net/netdevsim/dev.c:1625:12: error: conflicting types for '__nsim_dev_port_add'; have 'int(struct nsim_dev *, enum nsim_dev_port_type,  struct nsim_dev_linecard *, unsigned int)'
-    1625 | static int __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
-         |            ^~~~~~~~~~~~~~~~~~~
-   drivers/net/netdevsim/dev.c:844:1: note: previous declaration of '__nsim_dev_port_add' with type 'int(struct nsim_dev *, enum nsim_dev_port_type,  unsigned int)'
-     844 | __nsim_dev_port_add(struct nsim_dev *nsim_dev, enum nsim_dev_port_type type,
-         | ^~~~~~~~~~~~~~~~~~~
-   drivers/net/netdevsim/dev.c:844:1: warning: '__nsim_dev_port_add' used but never defined
-   cc1: some warnings being treated as errors
+Therefore the work creation side looks like this:
 
+  vcpu->arch.doorbell_request = 1;
+  kvmppc_fast_vcpu_kick_hv(vcpu) {
+    smp_mb();
+    cpu = vcpu->cpu;
+    if (cpu != -1)
+        send_ipi(cpu);
+  }
 
-vim +/devlink_linecard_device_create +119 drivers/net/netdevsim/dev.c
+And the guest entry side *should* look like this:
 
-18c8e54cc09123 Jiri Pirko 2021-05-05  100  
-18c8e54cc09123 Jiri Pirko 2021-05-05  101  static int
-18c8e54cc09123 Jiri Pirko 2021-05-05  102  nsim_dev_linecard_devices_create(struct nsim_dev_linecard *nsim_dev_linecard)
-18c8e54cc09123 Jiri Pirko 2021-05-05  103  {
-18c8e54cc09123 Jiri Pirko 2021-05-05  104  	struct devlink_linecard_device *device;
-18c8e54cc09123 Jiri Pirko 2021-05-05  105  	char *component_name;
-18c8e54cc09123 Jiri Pirko 2021-05-05  106  	int err;
-18c8e54cc09123 Jiri Pirko 2021-05-05  107  	int i;
-18c8e54cc09123 Jiri Pirko 2021-05-05  108  
-18c8e54cc09123 Jiri Pirko 2021-05-05  109  	snprintf(nsim_dev_linecard->device_component_name,
-18c8e54cc09123 Jiri Pirko 2021-05-05  110  		 sizeof(nsim_dev_linecard->device_component_name), "lc%u_dev0",
-18c8e54cc09123 Jiri Pirko 2021-05-05  111  		 nsim_dev_linecard->linecard_index);
-18c8e54cc09123 Jiri Pirko 2021-05-05  112  	component_name = nsim_dev_linecard->device_component_name;
-18c8e54cc09123 Jiri Pirko 2021-05-05  113  
-18c8e54cc09123 Jiri Pirko 2021-05-05  114  	for (i = 0; i < NSIM_DEV_LINECARD_DEVICE_COUNT; i++) {
-18c8e54cc09123 Jiri Pirko 2021-05-05  115  		if (i > 0)
-18c8e54cc09123 Jiri Pirko 2021-05-05  116  			component_name = NULL;
-18c8e54cc09123 Jiri Pirko 2021-05-05 @117  		device = devlink_linecard_device_create(nsim_dev_linecard->devlink_linecard,
-18c8e54cc09123 Jiri Pirko 2021-05-05  118  							i, component_name,
-18c8e54cc09123 Jiri Pirko 2021-05-05 @119  							nsim_dev_linecard);
-18c8e54cc09123 Jiri Pirko 2021-05-05  120  		if (IS_ERR(device)) {
-18c8e54cc09123 Jiri Pirko 2021-05-05  121  			err = PTR_ERR(device);
-18c8e54cc09123 Jiri Pirko 2021-05-05  122  			goto rollback;
-18c8e54cc09123 Jiri Pirko 2021-05-05  123  		}
-18c8e54cc09123 Jiri Pirko 2021-05-05  124  		nsim_dev_linecard->devlink_device[i] = device;
-18c8e54cc09123 Jiri Pirko 2021-05-05  125  	}
-18c8e54cc09123 Jiri Pirko 2021-05-05  126  	return 0;
-18c8e54cc09123 Jiri Pirko 2021-05-05  127  
-18c8e54cc09123 Jiri Pirko 2021-05-05  128  rollback:
-18c8e54cc09123 Jiri Pirko 2021-05-05  129  	for (i--; i >= 0; i--) {
-18c8e54cc09123 Jiri Pirko 2021-05-05  130  		device = nsim_dev_linecard->devlink_device[i];
-18c8e54cc09123 Jiri Pirko 2021-05-05  131  		devlink_linecard_device_destroy(nsim_dev_linecard->devlink_linecard,
-18c8e54cc09123 Jiri Pirko 2021-05-05  132  						device);
-18c8e54cc09123 Jiri Pirko 2021-05-05  133  	}
-18c8e54cc09123 Jiri Pirko 2021-05-05  134  	return err;
-18c8e54cc09123 Jiri Pirko 2021-05-05  135  }
-18c8e54cc09123 Jiri Pirko 2021-05-05  136  
+  vcpu->cpu = smp_processor_id();
+  smp_mb();
+  if (vcpu->arch.doorbell_request) {
+    // do something (abort entry or inject doorbell etc)
+  }
 
-:::::: The code at line 119 was first introduced by commit
-:::::: 18c8e54cc09123e6810b00d12879e2428dc9fbb9 netdevsim: create couple of devices on each linecard
+But currently the store and load are flipped, so it is possible for the
+entry to see no doorbell pending, and the doorbell creation misses the
+store to set cpu, resulting lost work (or at least delayed until the
+next guest exit).
 
-:::::: TO: Jiri Pirko <jiri@nvidia.com>
-:::::: CC: Jiri Pirko <jiri@nvidia.com>
+Fix this by reordering the entry operations and adding a smp_mb
+between them. The P8 path appears to have a similar race which is
+commented but not addressed yet.
 
+Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220303053315.1056880-2-npiggin@gmail.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/powerpc/kvm/book3s_hv.c | 41 +++++++++++++++++++++++++++++-------
+ 1 file changed, 33 insertions(+), 8 deletions(-)
+
+diff --git a/arch/powerpc/kvm/book3s_hv.c b/arch/powerpc/kvm/book3s_hv.c
+index 791db769080d..316f61a4cb59 100644
+--- a/arch/powerpc/kvm/book3s_hv.c
++++ b/arch/powerpc/kvm/book3s_hv.c
+@@ -225,6 +225,13 @@ static void kvmppc_fast_vcpu_kick_hv(struct kvm_vcpu *vcpu)
+ 	int cpu;
+ 	struct rcuwait *waitp;
+ 
++	/*
++	 * rcuwait_wake_up contains smp_mb() which orders prior stores that
++	 * create pending work vs below loads of cpu fields. The other side
++	 * is the barrier in vcpu run that orders setting the cpu fields vs
++	 * testing for pending work.
++	 */
++
+ 	waitp = kvm_arch_vcpu_get_wait(vcpu);
+ 	if (rcuwait_wake_up(waitp))
+ 		++vcpu->stat.generic.halt_wakeup;
+@@ -1089,7 +1096,7 @@ int kvmppc_pseries_do_hcall(struct kvm_vcpu *vcpu)
+ 			break;
+ 		}
+ 		tvcpu->arch.prodded = 1;
+-		smp_mb();
++		smp_mb(); /* This orders prodded store vs ceded load */
+ 		if (tvcpu->arch.ceded)
+ 			kvmppc_fast_vcpu_kick_hv(tvcpu);
+ 		break;
+@@ -3771,6 +3778,14 @@ static noinline void kvmppc_run_core(struct kvmppc_vcore *vc)
+ 		pvc = core_info.vc[sub];
+ 		pvc->pcpu = pcpu + thr;
+ 		for_each_runnable_thread(i, vcpu, pvc) {
++			/*
++			 * XXX: is kvmppc_start_thread called too late here?
++			 * It updates vcpu->cpu and vcpu->arch.thread_cpu
++			 * which are used by kvmppc_fast_vcpu_kick_hv(), but
++			 * kick is called after new exceptions become available
++			 * and exceptions are checked earlier than here, by
++			 * kvmppc_core_prepare_to_enter.
++			 */
+ 			kvmppc_start_thread(vcpu, pvc);
+ 			kvmppc_create_dtl_entry(vcpu, pvc);
+ 			trace_kvm_guest_enter(vcpu);
+@@ -4492,6 +4507,21 @@ int kvmhv_run_single_vcpu(struct kvm_vcpu *vcpu, u64 time_limit,
+ 	if (need_resched() || !kvm->arch.mmu_ready)
+ 		goto out;
+ 
++	vcpu->cpu = pcpu;
++	vcpu->arch.thread_cpu = pcpu;
++	vc->pcpu = pcpu;
++	local_paca->kvm_hstate.kvm_vcpu = vcpu;
++	local_paca->kvm_hstate.ptid = 0;
++	local_paca->kvm_hstate.fake_suspend = 0;
++
++	/*
++	 * Orders set cpu/thread_cpu vs testing for pending interrupts and
++	 * doorbells below. The other side is when these fields are set vs
++	 * kvmppc_fast_vcpu_kick_hv reading the cpu/thread_cpu fields to
++	 * kick a vCPU to notice the pending interrupt.
++	 */
++	smp_mb();
++
+ 	if (!nested) {
+ 		kvmppc_core_prepare_to_enter(vcpu);
+ 		if (test_bit(BOOK3S_IRQPRIO_EXTERNAL,
+@@ -4511,13 +4541,6 @@ int kvmhv_run_single_vcpu(struct kvm_vcpu *vcpu, u64 time_limit,
+ 
+ 	tb = mftb();
+ 
+-	vcpu->cpu = pcpu;
+-	vcpu->arch.thread_cpu = pcpu;
+-	vc->pcpu = pcpu;
+-	local_paca->kvm_hstate.kvm_vcpu = vcpu;
+-	local_paca->kvm_hstate.ptid = 0;
+-	local_paca->kvm_hstate.fake_suspend = 0;
+-
+ 	__kvmppc_create_dtl_entry(vcpu, pcpu, tb + vc->tb_offset, 0);
+ 
+ 	trace_kvm_guest_enter(vcpu);
+@@ -4619,6 +4642,8 @@ int kvmhv_run_single_vcpu(struct kvm_vcpu *vcpu, u64 time_limit,
+ 	run->exit_reason = KVM_EXIT_INTR;
+ 	vcpu->arch.ret = -EINTR;
+  out:
++	vcpu->cpu = -1;
++	vcpu->arch.thread_cpu = -1;
+ 	powerpc_local_irq_pmu_restore(flags);
+ 	preempt_enable();
+ 	goto done;
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+

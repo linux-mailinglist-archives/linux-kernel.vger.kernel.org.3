@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7E334FD950
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:40:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A9E84FD635
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384434AbiDLIlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:41:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48712 "EHLO
+        id S1354539AbiDLHSp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:18:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357168AbiDLHju (ORCPT
+        with ESMTP id S1352294AbiDLHFG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:39:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979A113E83;
-        Tue, 12 Apr 2022 00:13:21 -0700 (PDT)
+        Tue, 12 Apr 2022 03:05:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 797CD4739E;
+        Mon, 11 Apr 2022 23:47:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 325D46171C;
-        Tue, 12 Apr 2022 07:13:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4033DC385A5;
-        Tue, 12 Apr 2022 07:13:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A2F65B81B43;
+        Tue, 12 Apr 2022 06:47:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17911C385A1;
+        Tue, 12 Apr 2022 06:47:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747600;
-        bh=rDwGZVgTVPjbN7qUraf4diMbB4q1VpnmC8hkj5oXOms=;
+        s=korg; t=1649746074;
+        bh=+jloK1x6yesqpkLixBF6zJTts935DxetEL6Gh082koc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Vnm9V0A5u8BWSOqEr8ChUyhxpVajaOkw7Uqk2/r6f5VLQoh6dOiLx9R5GFEmAHXxo
-         72qcz9feCHWyOM5rEIBWSMmlOP6cxlauvEMtJX2nE/Kpx8+lWweOsFYPmISl485cyW
-         y1sO8aikkrHkHtDFE/OxhUqczhx0rGj9gs7ea008=
+        b=osiotdPzWDukE1QhH8YptcM9qE9/CoPJbduPFasoc5Op/siuxkg+x8dJw8NF6RDU7
+         x6VSFxhPFWxaX1sgh8z1aJoTvnJx3wNZlvvgxCXEYdujW2143X/MWbltnIZQjz8AuO
+         /AoIgoXnnLhQ6v9Mk02o2tmLn3E4fLVHTYvD4j1E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, George Shuklin <george.shuklin@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Ming Lei <ming.lei@redhat.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        John Garry <john.garry@huawei.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 137/343] net: limit altnames to 64k total
+Subject: [PATCH 5.15 152/277] scsi: core: Fix sbitmap depth in scsi_realloc_sdev_budget_map()
 Date:   Tue, 12 Apr 2022 08:29:15 +0200
-Message-Id: <20220412062955.341689476@linuxfoundation.org>
+Message-Id: <20220412062946.437671584@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,55 +59,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Kicinski <kuba@kernel.org>
+From: John Garry <john.garry@huawei.com>
 
-[ Upstream commit 155fb43b70b5fce341347a77d1af2765d1e8fbb8 ]
+[ Upstream commit eaba83b5b8506bbc9ee7ca2f10aeab3fff3719e7 ]
 
-Property list (altname is a link "property") is wrapped
-in a nlattr. nlattrs length is 16bit so practically
-speaking the list of properties can't be longer than
-that, otherwise user space would have to interpret
-broken netlink messages.
+In commit edb854a3680b ("scsi: core: Reallocate device's budget map on
+queue depth change"), the sbitmap for the device budget map may be
+reallocated after the slave device depth is configured.
 
-Prevent the problem from occurring by checking the length
-of the property list before adding new entries.
+When the sbitmap is reallocated we use the result from
+scsi_device_max_queue_depth() for the sbitmap size, but don't resize to
+match the actual device queue depth.
 
-Reported-by: George Shuklin <george.shuklin@gmail.com>
-Reviewed-by: David Ahern <dsahern@kernel.org>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fix by resizing the sbitmap after reallocating the budget sbitmap. We do
+this instead of init'ing the sbitmap to the device queue depth as the user
+may want to change the queue depth later via sysfs or other.
+
+Link: https://lore.kernel.org/r/1647423870-143867-1-git-send-email-john.garry@huawei.com
+Fixes: edb854a3680b ("scsi: core: Reallocate device's budget map on queue depth change")
+Tested-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Reviewed-by: Ming Lei <ming.lei@redhat.com>
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Signed-off-by: John Garry <john.garry@huawei.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/core/rtnetlink.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/scsi/scsi_scan.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/net/core/rtnetlink.c b/net/core/rtnetlink.c
-index 9c9ad3d4b766..43b995e935cd 100644
---- a/net/core/rtnetlink.c
-+++ b/net/core/rtnetlink.c
-@@ -3652,12 +3652,23 @@ static int rtnl_alt_ifname(int cmd, struct net_device *dev, struct nlattr *attr,
- 			   bool *changed, struct netlink_ext_ack *extack)
- {
- 	char *alt_ifname;
-+	size_t size;
- 	int err;
+diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+index 7266880c70c2..9466474ff01b 100644
+--- a/drivers/scsi/scsi_scan.c
++++ b/drivers/scsi/scsi_scan.c
+@@ -207,6 +207,8 @@ static int scsi_realloc_sdev_budget_map(struct scsi_device *sdev,
+ 	int ret;
+ 	struct sbitmap sb_backup;
  
- 	err = nla_validate(attr, attr->nla_len, IFLA_MAX, ifla_policy, extack);
- 	if (err)
- 		return err;
- 
-+	if (cmd == RTM_NEWLINKPROP) {
-+		size = rtnl_prop_list_size(dev);
-+		size += nla_total_size(ALTIFNAMSIZ);
-+		if (size >= U16_MAX) {
-+			NL_SET_ERR_MSG(extack,
-+				       "effective property list too long");
-+			return -EINVAL;
-+		}
-+	}
++	depth = min_t(unsigned int, depth, scsi_device_max_queue_depth(sdev));
 +
- 	alt_ifname = nla_strdup(attr, GFP_KERNEL_ACCOUNT);
- 	if (!alt_ifname)
- 		return -ENOMEM;
+ 	/*
+ 	 * realloc if new shift is calculated, which is caused by setting
+ 	 * up one new default queue depth after calling ->slave_configure
+@@ -229,6 +231,9 @@ static int scsi_realloc_sdev_budget_map(struct scsi_device *sdev,
+ 				scsi_device_max_queue_depth(sdev),
+ 				new_shift, GFP_KERNEL,
+ 				sdev->request_queue->node, false, true);
++	if (!ret)
++		sbitmap_resize(&sdev->budget_map, depth);
++
+ 	if (need_free) {
+ 		if (ret)
+ 			sdev->budget_map = sb_backup;
 -- 
 2.35.1
 

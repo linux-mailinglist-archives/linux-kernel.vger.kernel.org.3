@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2FDA4FD3EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:00:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 617624FD3AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 11:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387848AbiDLJMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:12:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49156 "EHLO
+        id S1381885AbiDLJMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358671AbiDLHmE (ORCPT
+        with ESMTP id S1358769AbiDLHmL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:42:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3537353A6D;
-        Tue, 12 Apr 2022 00:18:44 -0700 (PDT)
+        Tue, 12 Apr 2022 03:42:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02FB812ADB;
+        Tue, 12 Apr 2022 00:19:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A1763B81A8F;
-        Tue, 12 Apr 2022 07:18:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAD22C385A1;
-        Tue, 12 Apr 2022 07:18:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B7BBB81B62;
+        Tue, 12 Apr 2022 07:19:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0592CC385A1;
+        Tue, 12 Apr 2022 07:19:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747921;
-        bh=3Atd2Gvf+im7M06RJKu55P5mIVJ7TeC2dVIJWeEfJFE=;
+        s=korg; t=1649747951;
+        bh=xQWayGB+6f6hpATCzHMRRQ/8HztQFzBaPi4TXBjj1bo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rj0CEQok97lkvK9J55BFis/OfJUqcI28lQxWJsG/CFXJ0FvyRuIioYx6Bd4bvY/35
-         CEWb4YlUJ0t9AMxsuPrS/Ia9fT+duSMxDhpDwG/NvJ5pT7S53nUsVExjNjgqJmSe6p
-         y50Tb8gtAab5XtHfAWqIv7gjjvwDZ4tJkUQFX86Q=
+        b=mV40kF5JrxJ39W8b0qg3mp0BK0/wQLUo02iXEuPFxlioswdT/jIZzo2Njk9dxx8vR
+         MnI6XQW5JjSVhltKwzVX6TifCd1LrBftUB/y2FxsxqxNvxWkQhGkM1taCNvLjC2CEO
+         yssuOQ8TX/8KXcdE0WzdXycAxiEdVCGlAo6nrOMQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,9 +37,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Shwetha Nagaraju <shwetha.nagaraju@intel.com>,
         Tony Nguyen <anthony.l.nguyen@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 237/343] ice: xsk: fix VSI state check in ice_xsk_wakeup()
-Date:   Tue, 12 Apr 2022 08:30:55 +0200
-Message-Id: <20220412062958.174625517@linuxfoundation.org>
+Subject: [PATCH 5.17 238/343] ice: clear cmd_type_offset_bsz for TX rings
+Date:   Tue, 12 Apr 2022 08:30:56 +0200
+Message-Id: <20220412062958.203119397@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
 References: <20220412062951.095765152@linuxfoundation.org>
@@ -59,33 +59,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-[ Upstream commit 72b915a2b444e9247c9d424a840e94263db07c27 ]
+[ Upstream commit e19778e6c911691856447c3bf9617f00b3e1347f ]
 
-ICE_DOWN is dedicated for pf->state. Check for ICE_VSI_DOWN being set on
-vsi->state in ice_xsk_wakeup().
+Currently when XDP rings are created, each descriptor gets its DD bit
+set, which turns out to be the wrong approach as it can lead to a
+situation where more descriptors get cleaned than it was supposed to,
+e.g. when AF_XDP busy poll is run with a large batch size. In this
+situation, the driver would request for more buffers than it is able to
+handle.
 
-Fixes: 2d4238f55697 ("ice: Add support for AF_XDP")
+Fix this by not setting the DD bits in ice_xdp_alloc_setup_rings(). They
+should be initialized to zero instead.
+
+Fixes: 9610bd988df9 ("ice: optimize XDP_TX workloads")
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 Tested-by: Shwetha Nagaraju <shwetha.nagaraju@intel.com>
 Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/ice/ice_xsk.c | 2 +-
+ drivers/net/ethernet/intel/ice/ice_main.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
-index f95560c7387e..30620b942fa0 100644
---- a/drivers/net/ethernet/intel/ice/ice_xsk.c
-+++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
-@@ -765,7 +765,7 @@ ice_xsk_wakeup(struct net_device *netdev, u32 queue_id,
- 	struct ice_vsi *vsi = np->vsi;
- 	struct ice_tx_ring *ring;
+diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
+index 5229bce1a4ab..db2e02e673a7 100644
+--- a/drivers/net/ethernet/intel/ice/ice_main.c
++++ b/drivers/net/ethernet/intel/ice/ice_main.c
+@@ -2546,7 +2546,7 @@ static int ice_xdp_alloc_setup_rings(struct ice_vsi *vsi)
+ 		spin_lock_init(&xdp_ring->tx_lock);
+ 		for (j = 0; j < xdp_ring->count; j++) {
+ 			tx_desc = ICE_TX_DESC(xdp_ring, j);
+-			tx_desc->cmd_type_offset_bsz = cpu_to_le64(ICE_TX_DESC_DTYPE_DESC_DONE);
++			tx_desc->cmd_type_offset_bsz = 0;
+ 		}
+ 	}
  
--	if (test_bit(ICE_DOWN, vsi->state))
-+	if (test_bit(ICE_VSI_DOWN, vsi->state))
- 		return -ENETDOWN;
- 
- 	if (!ice_is_xdp_ena_vsi(vsi))
 -- 
 2.35.1
 

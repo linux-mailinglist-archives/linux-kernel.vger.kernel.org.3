@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A9264FD807
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:34:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 883564FD6E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:25:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354980AbiDLIGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:06:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42870 "EHLO
+        id S1387235AbiDLJGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354111AbiDLH0D (ORCPT
+        with ESMTP id S1359250AbiDLHmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:26:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0305F2E9EA;
-        Tue, 12 Apr 2022 00:05:47 -0700 (PDT)
+        Tue, 12 Apr 2022 03:42:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ECDA55773;
+        Tue, 12 Apr 2022 00:20:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B01A2B81B4E;
-        Tue, 12 Apr 2022 07:05:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AA15C385A6;
-        Tue, 12 Apr 2022 07:05:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 43368B81A8F;
+        Tue, 12 Apr 2022 07:20:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A072EC385A5;
+        Tue, 12 Apr 2022 07:20:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747144;
-        bh=Smfi/ZN8i0dzhQnYNGCmXNvOH3W9oqoPSzPGo96g0v8=;
+        s=korg; t=1649748047;
+        bh=Rar/Pvhk3v1amjKZ3zbecoGXlsJVu+XTVZ7Y/z39xqs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BvcsbUDzEv19iGTjPgS5HHKnVf929NoAp1lM87pOv3pto9Nrc6oFyFsSNdcJDcdxZ
-         76jgYnPnp4FncwAd531G1yBdivnTiKChEqmghJm3nGryluMeH/Ri8sb3/qQ7kOS8vn
-         PRQpBMrseDkYfmNIHXt/bZtvaE83cLWm4Eow1DkU=
+        b=Tau6P5AdOZWWvEsZ/8WmEeaTUyc/Ys+ndetngZheo+U0D1yf81RzPVsJ+d2fb1aKu
+         /1G6LpVQIQMmxiWB5m2/OhnEdjZXWEbwXdkv2uCinQYpi5pM3Rf7aaIAHXoZK5VJEU
+         c2uD+ChJEro6YM/bievk4nmulkWaRRJ7nIuO2/WI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.16 260/285] KVM: SVM: Allow AVIC support on system w/ physical APIC ID > 255
-Date:   Tue, 12 Apr 2022 08:31:57 +0200
-Message-Id: <20220412062951.165772564@linuxfoundation.org>
+        stable@vger.kernel.org, Namhyung Kim <namhyung@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Subject: [PATCH 5.17 300/343] perf/core: Inherit event_caps
+Date:   Tue, 12 Apr 2022 08:31:58 +0200
+Message-Id: <20220412062959.982680382@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,69 +54,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+From: Namhyung Kim <namhyung@kernel.org>
 
-commit 4a204f7895878363ca8211f50ec610408c8c70aa upstream.
+commit e3265a4386428d3d157d9565bb520aabff8b4bf0 upstream.
 
-Expand KVM's mask for the AVIC host physical ID to the full 12 bits defined
-by the architecture.  The number of bits consumed by hardware is model
-specific, e.g. early CPUs ignored bits 11:8, but there is no way for KVM
-to enumerate the "true" size.  So, KVM must allow using all bits, else it
-risks rejecting completely legal x2APIC IDs on newer CPUs.
+It was reported that some perf event setup can make fork failed on
+ARM64.  It was the case of a group of mixed hw and sw events and it
+failed in perf_event_init_task() due to armpmu_event_init().
 
-This means KVM relies on hardware to not assign x2APIC IDs that exceed the
-"true" width of the field, but presumably hardware is smart enough to tie
-the width to the max x2APIC ID.  KVM also relies on hardware to support at
-least 8 bits, as the legacy xAPIC ID is writable by software.  But, those
-assumptions are unavoidable due to the lack of any way to enumerate the
-"true" width.
+The ARM PMU code checks if all the events in a group belong to the
+same PMU except for software events.  But it didn't set the event_caps
+of inherited events and no longer identify them as software events.
+Therefore the test failed in a child process.
 
-Cc: stable@vger.kernel.org
-Cc: Maxim Levitsky <mlevitsk@redhat.com>
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Reviewed-by: Sean Christopherson <seanjc@google.com>
-Fixes: 44a95dae1d22 ("KVM: x86: Detect and Initialize AVIC support")
-Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-Message-Id: <20220211000851.185799-1-suravee.suthikulpanit@amd.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-[modified due to the conflict caused by the commit 391503528257 ("KVM:
-x86: SVM: move avic definitions from AMD's spec to svm.h")]
-Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+A simple reproducer is:
+
+  $ perf stat -e '{cycles,cs,instructions}' perf bench sched messaging
+  # Running 'sched/messaging' benchmark:
+  perf: fork(): Invalid argument
+
+The perf stat was fine but the perf bench failed in fork().  Let's
+inherit the event caps from the parent.
+
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Cc: <stable@vger.kernel.org>
+Link: https://lkml.kernel.org/r/20220328200112.457740-1-namhyung@kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kvm/svm/avic.c |    7 +------
- arch/x86/kvm/svm/svm.h  |    2 +-
- 2 files changed, 2 insertions(+), 7 deletions(-)
+ kernel/events/core.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/arch/x86/kvm/svm/avic.c
-+++ b/arch/x86/kvm/svm/avic.c
-@@ -949,15 +949,10 @@ out:
- void avic_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
- {
- 	u64 entry;
--	/* ID = 0xff (broadcast), ID > 0xff (reserved) */
- 	int h_physical_id = kvm_cpu_get_apicid(cpu);
- 	struct vcpu_svm *svm = to_svm(vcpu);
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -11640,6 +11640,9 @@ perf_event_alloc(struct perf_event_attr
  
--	/*
--	 * Since the host physical APIC id is 8 bits,
--	 * we can support host APIC ID upto 255.
--	 */
--	if (WARN_ON(h_physical_id > AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK))
-+	if (WARN_ON(h_physical_id & ~AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK))
- 		return;
+ 	event->state		= PERF_EVENT_STATE_INACTIVE;
  
- 	entry = READ_ONCE(*(svm->avic_physical_id_cache));
---- a/arch/x86/kvm/svm/svm.h
-+++ b/arch/x86/kvm/svm/svm.h
-@@ -510,7 +510,7 @@ extern struct kvm_x86_nested_ops svm_nes
- #define AVIC_LOGICAL_ID_ENTRY_VALID_BIT			31
- #define AVIC_LOGICAL_ID_ENTRY_VALID_MASK		(1 << 31)
++	if (parent_event)
++		event->event_caps = parent_event->event_caps;
++
+ 	if (event->attr.sigtrap)
+ 		atomic_set(&event->event_limit, 1);
  
--#define AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK	(0xFFULL)
-+#define AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK	GENMASK_ULL(11, 0)
- #define AVIC_PHYSICAL_ID_ENTRY_BACKING_PAGE_MASK	(0xFFFFFFFFFFULL << 12)
- #define AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK		(1ULL << 62)
- #define AVIC_PHYSICAL_ID_ENTRY_VALID_MASK		(1ULL << 63)
 
 

@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 682804FD1B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 08:58:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BADF4FD18D
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 08:57:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351160AbiDLHAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:00:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48722 "EHLO
+        id S233440AbiDLG7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 02:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351475AbiDLGxm (ORCPT
+        with ESMTP id S1351446AbiDLGxh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:53:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B6B37A0A;
-        Mon, 11 Apr 2022 23:41:13 -0700 (PDT)
+        Tue, 12 Apr 2022 02:53:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EA53DA48;
+        Mon, 11 Apr 2022 23:40:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 25B4D60A77;
-        Tue, 12 Apr 2022 06:41:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 326CEC385A8;
-        Tue, 12 Apr 2022 06:41:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2F3EBB81B29;
+        Tue, 12 Apr 2022 06:40:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80B43C385A6;
+        Tue, 12 Apr 2022 06:40:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649745672;
-        bh=OhkQB/YB9JwzoHdchmhfRn/xWsDTrD2yFnyvdWKmG7M=;
+        s=korg; t=1649745641;
+        bh=oDImVcA9cfPt7E/z+vtoCCvZwDU3/Nit5GS/d6jmwkg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ihvA4x71AnsViWOO9KHRVPWJEOCAPYl9J6Vee4R7Lw2dDmj5ppw6jrcB/xxU+c13f
-         BInNzqcPOQAu9ioelS3iLyjiSPqVOmtuQZv0+OGzvMqG0uT1JG/n91mMFkJKZZm2E/
-         ypoc/eUpIhLi79VBLbXpqJk7SkYozLAdbc/pbMcw=
+        b=c+o/iUxBf/zyiA1NSu7553Z+g9BEM58UBnEyI1I5EVGNwD7e3LKsaTmal7Yx7fbYZ
+         Jb9gDHgkOVcA3wPmlTYagxTr0eWIX2GCvtw1dwH0JqDrWA+hsurWSnHLVjitVSK6yk
+         GbtX9ciUVV7rzmbqCi5ULJ8BnxJ6YqLIfikUS/tk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-        Tejun Heo <tj@kernel.org>,
-        Ovidiu Panait <ovidiu.panait@windriver.com>
-Subject: [PATCH 5.10 165/171] selftests: cgroup: Test open-time credential usage for migration checks
-Date:   Tue, 12 Apr 2022 08:30:56 +0200
-Message-Id: <20220412062932.675634011@linuxfoundation.org>
+        "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>,
+        Wei Liu <wei.liu@kernel.org>
+Subject: [PATCH 5.10 168/171] Drivers: hv: vmbus: Replace smp_store_mb() with virt_store_mb()
+Date:   Tue, 12 Apr 2022 08:30:59 +0200
+Message-Id: <20220412062932.761365844@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062927.870347203@linuxfoundation.org>
 References: <20220412062927.870347203@linuxfoundation.org>
@@ -56,104 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tejun Heo <tj@kernel.org>
+From: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
 
-commit 613e040e4dc285367bff0f8f75ea59839bc10947 upstream.
+commit eaa03d34535872d29004cb5cf77dc9dec1ba9a25 upstream.
 
-When a task is writing to an fd opened by a different task, the perm check
-should use the credentials of the latter task. Add a test for it.
+Following the recommendation in Documentation/memory-barriers.txt for
+virtual machine guests.
 
-Tested-by: Michal Koutný <mkoutny@suse.com>
-Signed-off-by: Tejun Heo <tj@kernel.org>
-Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
+Fixes: 8b6a877c060ed ("Drivers: hv: vmbus: Replace the per-CPU channel lists with a global array of channels")
+Signed-off-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
+Link: https://lore.kernel.org/r/20220328154457.100872-1-parri.andrea@gmail.com
+Signed-off-by: Wei Liu <wei.liu@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/cgroup/test_core.c |   68 +++++++++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
+ drivers/hv/channel_mgmt.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/tools/testing/selftests/cgroup/test_core.c
-+++ b/tools/testing/selftests/cgroup/test_core.c
-@@ -674,6 +674,73 @@ cleanup:
- 	return ret;
+--- a/drivers/hv/channel_mgmt.c
++++ b/drivers/hv/channel_mgmt.c
+@@ -350,7 +350,7 @@ void vmbus_channel_map_relid(struct vmbu
+ 	 * execute:
+ 	 *
+ 	 *  (a) In the "normal (i.e., not resuming from hibernation)" path,
+-	 *      the full barrier in smp_store_mb() guarantees that the store
++	 *      the full barrier in virt_store_mb() guarantees that the store
+ 	 *      is propagated to all CPUs before the add_channel_work work
+ 	 *      is queued.  In turn, add_channel_work is queued before the
+ 	 *      channel's ring buffer is allocated/initialized and the
+@@ -362,14 +362,14 @@ void vmbus_channel_map_relid(struct vmbu
+ 	 *      recv_int_page before retrieving the channel pointer from the
+ 	 *      array of channels.
+ 	 *
+-	 *  (b) In the "resuming from hibernation" path, the smp_store_mb()
++	 *  (b) In the "resuming from hibernation" path, the virt_store_mb()
+ 	 *      guarantees that the store is propagated to all CPUs before
+ 	 *      the VMBus connection is marked as ready for the resume event
+ 	 *      (cf. check_ready_for_resume_event()).  The interrupt handler
+ 	 *      of the VMBus driver and vmbus_chan_sched() can not run before
+ 	 *      vmbus_bus_resume() has completed execution (cf. resume_noirq).
+ 	 */
+-	smp_store_mb(
++	virt_store_mb(
+ 		vmbus_connection.channels[channel->offermsg.child_relid],
+ 		channel);
  }
- 
-+/*
-+ * cgroup migration permission check should be performed based on the
-+ * credentials at the time of open instead of write.
-+ */
-+static int test_cgcore_lesser_euid_open(const char *root)
-+{
-+	const uid_t test_euid = 65534;	/* usually nobody, any !root is fine */
-+	int ret = KSFT_FAIL;
-+	char *cg_test_a = NULL, *cg_test_b = NULL;
-+	char *cg_test_a_procs = NULL, *cg_test_b_procs = NULL;
-+	int cg_test_b_procs_fd = -1;
-+	uid_t saved_uid;
-+
-+	cg_test_a = cg_name(root, "cg_test_a");
-+	cg_test_b = cg_name(root, "cg_test_b");
-+
-+	if (!cg_test_a || !cg_test_b)
-+		goto cleanup;
-+
-+	cg_test_a_procs = cg_name(cg_test_a, "cgroup.procs");
-+	cg_test_b_procs = cg_name(cg_test_b, "cgroup.procs");
-+
-+	if (!cg_test_a_procs || !cg_test_b_procs)
-+		goto cleanup;
-+
-+	if (cg_create(cg_test_a) || cg_create(cg_test_b))
-+		goto cleanup;
-+
-+	if (cg_enter_current(cg_test_a))
-+		goto cleanup;
-+
-+	if (chown(cg_test_a_procs, test_euid, -1) ||
-+	    chown(cg_test_b_procs, test_euid, -1))
-+		goto cleanup;
-+
-+	saved_uid = geteuid();
-+	if (seteuid(test_euid))
-+		goto cleanup;
-+
-+	cg_test_b_procs_fd = open(cg_test_b_procs, O_RDWR);
-+
-+	if (seteuid(saved_uid))
-+		goto cleanup;
-+
-+	if (cg_test_b_procs_fd < 0)
-+		goto cleanup;
-+
-+	if (write(cg_test_b_procs_fd, "0", 1) >= 0 || errno != EACCES)
-+		goto cleanup;
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	cg_enter_current(root);
-+	if (cg_test_b_procs_fd >= 0)
-+		close(cg_test_b_procs_fd);
-+	if (cg_test_b)
-+		cg_destroy(cg_test_b);
-+	if (cg_test_a)
-+		cg_destroy(cg_test_a);
-+	free(cg_test_b_procs);
-+	free(cg_test_a_procs);
-+	free(cg_test_b);
-+	free(cg_test_a);
-+	return ret;
-+}
-+
- #define T(x) { x, #x }
- struct corecg_test {
- 	int (*fn)(const char *root);
-@@ -689,6 +756,7 @@ struct corecg_test {
- 	T(test_cgcore_proc_migration),
- 	T(test_cgcore_thread_migration),
- 	T(test_cgcore_destroy),
-+	T(test_cgcore_lesser_euid_open),
- };
- #undef T
- 
 
 

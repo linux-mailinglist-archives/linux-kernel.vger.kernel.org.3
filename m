@@ -2,49 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68CBA4FD752
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C042A4FD8BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:37:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355634AbiDLH1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:27:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57298 "EHLO
+        id S1351191AbiDLIB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:01:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351756AbiDLHMx (ORCPT
+        with ESMTP id S1353646AbiDLHZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:12:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B962E7E;
-        Mon, 11 Apr 2022 23:52:19 -0700 (PDT)
+        Tue, 12 Apr 2022 03:25:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FABA43EC0;
+        Tue, 12 Apr 2022 00:02:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 15F51B81B35;
-        Tue, 12 Apr 2022 06:52:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5337BC385A1;
-        Tue, 12 Apr 2022 06:52:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CD93960B2B;
+        Tue, 12 Apr 2022 07:02:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF47CC385A1;
+        Tue, 12 Apr 2022 07:02:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746336;
-        bh=sXMl2ZYE8rt5NfFeBPGIcHAYJuUylPNTH8SOiNKZ7n8=;
+        s=korg; t=1649746962;
+        bh=1uRP5feML7EMSNMftC+ulW47voUm22to0BPwcrF7ZOE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k1YRz/10U/v+kTdtnD8Z6F8W7S6sBDSePnzWreeJbPn3oV4yRdqED7qG/ApQc80sY
-         Nd9YjVLtnzTjPYR6mEj3DPThe6IRmdLa7oizw5GnnNDEheqfN4eBZZDR10EgRrWwrK
-         lRpbQqyKqcoASjqIuPsw/vzaieiIub/4T087GX3E=
+        b=fOs68jsDBwoBMTWTjzJVuC4NU4qrkHvk29oPGygexbtb73HMLONYZ8OtmqqkPghKo
+         Ae6U+GJ3voYhPnrSiYdxJiUusV8uNWaH8JvjmaqTQQa/63aE56JHSf6OhDA2nJ7VSX
+         Zoqca+dtOpndrc2C7nogF+xmJsfcpQBrEl/Z39Fk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, Lee Jones <lee.jones@linaro.org>
-Subject: [PATCH 5.15 246/277] drm/amdkfd: Create file descriptor after client is added to smi_clients list
+        stable@vger.kernel.org, Mauri Sandberg <maukka@ext.kapsi.fi>,
+        Thomas Walther <walther-it@gmx.de>,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 192/285] net: ethernet: mv643xx: Fix over zealous checking of_get_mac_address()
 Date:   Tue, 12 Apr 2022 08:30:49 +0200
-Message-Id: <20220412062949.161563012@linuxfoundation.org>
+Message-Id: <20220412062949.202872648@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,70 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lee Jones <lee.jones@linaro.org>
+From: Andrew Lunn <andrew@lunn.ch>
 
-commit e79a2398e1b2d47060474dca291542368183bc0f upstream.
+[ Upstream commit 11f8e7c122ce013fa745029fa8c94c6db69c2e54 ]
 
-This ensures userspace cannot prematurely clean-up the client before
-it is fully initialised which has been proven to cause issues in the
-past.
+There is often not a MAC address available in an EEPROM accessible by
+Linux with Marvell devices. Instead the bootload has the MAC address
+and directly programs it into the hardware. So don't consider an error
+from of_get_mac_address() has fatal. However, the check was added for
+the case where there is a MAC address in an the EEPROM, but the EEPROM
+has not probed yet, and -EPROBE_DEFER is returned. In that case the
+error should be returned. So make the check specific to this error
+code.
 
-Cc: Felix Kuehling <Felix.Kuehling@amd.com>
-Cc: Alex Deucher <alexander.deucher@amd.com>
-Cc: "Christian König" <christian.koenig@amd.com>
-Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
-Cc: David Airlie <airlied@linux.ie>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: amd-gfx@lists.freedesktop.org
-Cc: dri-devel@lists.freedesktop.org
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
-Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
-Signed-off-by: Felix Kuehling <Felix.Kuehling@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Mauri Sandberg <maukka@ext.kapsi.fi>
+Reported-by: Thomas Walther <walther-it@gmx.de>
+Fixes: 42404d8f1c01 ("net: mv643xx_eth: process retval from of_get_mac_address")
+Signed-off-by: Andrew Lunn <andrew@lunn.ch>
+Link: https://lore.kernel.org/r/20220405000404.3374734-1-andrew@lunn.ch
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c |   24 +++++++++++++++---------
- 1 file changed, 15 insertions(+), 9 deletions(-)
+ drivers/net/ethernet/marvell/mv643xx_eth.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c
-+++ b/drivers/gpu/drm/amd/amdkfd/kfd_smi_events.c
-@@ -270,15 +270,6 @@ int kfd_smi_event_open(struct kfd_dev *d
- 		return ret;
+diff --git a/drivers/net/ethernet/marvell/mv643xx_eth.c b/drivers/net/ethernet/marvell/mv643xx_eth.c
+index 0636783f7bc0..ffa131d2bb52 100644
+--- a/drivers/net/ethernet/marvell/mv643xx_eth.c
++++ b/drivers/net/ethernet/marvell/mv643xx_eth.c
+@@ -2747,7 +2747,7 @@ static int mv643xx_eth_shared_of_add_port(struct platform_device *pdev,
  	}
  
--	ret = anon_inode_getfd(kfd_smi_name, &kfd_smi_ev_fops, (void *)client,
--			       O_RDWR);
--	if (ret < 0) {
--		kfifo_free(&client->fifo);
--		kfree(client);
--		return ret;
--	}
--	*fd = ret;
--
- 	init_waitqueue_head(&client->wait_queue);
- 	spin_lock_init(&client->lock);
- 	client->events = 0;
-@@ -288,5 +279,20 @@ int kfd_smi_event_open(struct kfd_dev *d
- 	list_add_rcu(&client->list, &dev->smi_clients);
- 	spin_unlock(&dev->smi_lock);
+ 	ret = of_get_mac_address(pnp, ppd.mac_addr);
+-	if (ret)
++	if (ret == -EPROBE_DEFER)
+ 		return ret;
  
-+	ret = anon_inode_getfd(kfd_smi_name, &kfd_smi_ev_fops, (void *)client,
-+			       O_RDWR);
-+	if (ret < 0) {
-+		spin_lock(&dev->smi_lock);
-+		list_del_rcu(&client->list);
-+		spin_unlock(&dev->smi_lock);
-+
-+		synchronize_rcu();
-+
-+		kfifo_free(&client->fifo);
-+		kfree(client);
-+		return ret;
-+	}
-+	*fd = ret;
-+
- 	return 0;
- }
+ 	mv643xx_eth_property(pnp, "tx-queue-size", ppd.tx_queue_size);
+-- 
+2.35.1
+
 
 

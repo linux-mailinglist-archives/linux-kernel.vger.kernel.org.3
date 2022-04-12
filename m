@@ -2,148 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F9814FDCB6
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:06:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63B1D4FDCA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352701AbiDLKiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 06:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53710 "EHLO
+        id S241153AbiDLKhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 06:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381422AbiDLK3T (ORCPT
+        with ESMTP id S1354197AbiDLKdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 06:29:19 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79395580CB
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 02:31:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=k1; bh=pXpt/O0wt40ELy2VjiVcNMr4U+X
-        Bfk5SDzhV9fM2Egk=; b=JonB2GfC1bYb3hU/Pm+B/VVayEli2jf5gVR+JuHgVI9
-        0QU1Z1rg+w/ylhmfkssV9mzymBRYToStQ9jqBqjrgUPM2KkGAqoTwbnK1plACiO9
-        nVMgRySQ10W7FikM2QDbyLs5FNnesUrNhNVnvAK8KOyXHkF1EnZXwkwM0UAObKtc
-        =
-Received: (qmail 981999 invoked from network); 12 Apr 2022 11:31:30 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 12 Apr 2022 11:31:30 +0200
-X-UD-Smtp-Session: l3s3148p1@jLPGuXHcAucgAQnoAGZ4AFi7qjeMIP6q
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-mmc@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>, linux-sh@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] mmc: sh_mmcif: move platform_data header to proper location
-Date:   Tue, 12 Apr 2022 11:31:02 +0200
-Message-Id: <20220412093102.3428-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.30.2
+        Tue, 12 Apr 2022 06:33:37 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A038953A42;
+        Tue, 12 Apr 2022 02:33:25 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23C7gt62028744;
+        Tue, 12 Apr 2022 11:32:58 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=UICnyf3oPsQTzRC0I9H7zVlnLQiOcv6ykqLEagOPP+A=;
+ b=IZiYzbQebMHtNJebYRpmBh7Lqy92kJ9sBKCGLq14bPG5DvZMzlvjveRPSsU/fG8nFkZc
+ d7L+1c5QT0rmaKfaygh6U3kvSXCAm2v8IxvHHnXgIMxkt+03qgjPomdHlCyq9vhxHMUQ
+ TYbBnYgDgnja+vR7iGrAVCMwaYCKnEC0b0/S2uP76yfzcYWdeNlsCkO7v7PhVPbQEVSP
+ cnVRGjd3hOfOyY59a3X7inTOlAz/lsdR0LRsbEPxvnKKjmYZO0JCg8oVGdj0RIapw7Tx
+ u8uJpNiaBIOLA8CMZzlU3E58cl+T1Yl98ZwOJgrGZK6M0b5KOj23WKUy8wUz2VU/XQ+J qw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3fb74y6cgq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 12 Apr 2022 11:32:58 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D4773100038;
+        Tue, 12 Apr 2022 11:32:55 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id CC121216833;
+        Tue, 12 Apr 2022 11:32:55 +0200 (CEST)
+Received: from [10.201.21.201] (10.75.127.49) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Tue, 12 Apr
+ 2022 11:32:54 +0200
+Message-ID: <8daae353-911c-3102-756f-1f0448704355@foss.st.com>
+Date:   Tue, 12 Apr 2022 11:32:53 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [Linux-stm32] [PATCH] spi: spi-stm32-qspi: using
+ pm_runtime_resume_and_get instead of pm_runtime_get_sync
+Content-Language: en-US
+To:     <cgel.zte@gmail.com>, <broonie@kernel.org>
+CC:     Zeal Robot <zealci@zte.com.cn>, <linux-kernel@vger.kernel.org>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        <mcoquelin.stm32@gmail.com>, <linux-spi@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20220412070906.2532091-1-chi.minghao@zte.com.cn>
+From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
+In-Reply-To: <20220412070906.2532091-1-chi.minghao@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-04-12_03,2022-04-11_01,2022-02-23_01
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have a dedicated directory for platform_data meanwhile, don't spoil
-the MMC directory with it.
+Hi 
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
+On 4/12/22 09:09, cgel.zte@gmail.com wrote:
+> From: Minghao Chi <chi.minghao@zte.com.cn>
+> 
+> Using pm_runtime_resume_and_get is more appropriate
+> for simplifing code
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+> ---
+>  drivers/spi/spi-stm32-qspi.c | 30 ++++++++++--------------------
+>  1 file changed, 10 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
+> index ffdc55f87e82..b3586521d08e 100644
+> --- a/drivers/spi/spi-stm32-qspi.c
+> +++ b/drivers/spi/spi-stm32-qspi.c
+> @@ -463,11 +463,9 @@ static int stm32_qspi_poll_status(struct spi_mem *mem, const struct spi_mem_op *
+>  	if (!spi_mem_supports_op(mem, op))
+>  		return -EOPNOTSUPP;
+>  
+> -	ret = pm_runtime_get_sync(qspi->dev);
+> -	if (ret < 0) {
+> -		pm_runtime_put_noidle(qspi->dev);
+> +	ret = pm_runtime_resume_and_get(qspi->dev);
+> +	if (ret < 0)
+>  		return ret;
+> -	}
+>  
+>  	mutex_lock(&qspi->lock);
+>  
+> @@ -490,11 +488,9 @@ static int stm32_qspi_exec_op(struct spi_mem *mem, const struct spi_mem_op *op)
+>  	struct stm32_qspi *qspi = spi_controller_get_devdata(mem->spi->master);
+>  	int ret;
+>  
+> -	ret = pm_runtime_get_sync(qspi->dev);
+> -	if (ret < 0) {
+> -		pm_runtime_put_noidle(qspi->dev);
+> +	ret = pm_runtime_resume_and_get(qspi->dev);
+> +	if (ret < 0)
+>  		return ret;
+> -	}
+>  
+>  	mutex_lock(&qspi->lock);
+>  	if (op->data.dir == SPI_MEM_DATA_IN && op->data.nbytes)
+> @@ -536,11 +532,9 @@ static ssize_t stm32_qspi_dirmap_read(struct spi_mem_dirmap_desc *desc,
+>  	u32 addr_max;
+>  	int ret;
+>  
+> -	ret = pm_runtime_get_sync(qspi->dev);
+> -	if (ret < 0) {
+> -		pm_runtime_put_noidle(qspi->dev);
+> +	ret = pm_runtime_resume_and_get(qspi->dev);
+> +	if (ret < 0)
+>  		return ret;
+> -	}
+>  
+>  	mutex_lock(&qspi->lock);
+>  	/* make a local copy of desc op_tmpl and complete dirmap rdesc
+> @@ -583,11 +577,9 @@ static int stm32_qspi_setup(struct spi_device *spi)
+>  	if (!spi->max_speed_hz)
+>  		return -EINVAL;
+>  
+> -	ret = pm_runtime_get_sync(qspi->dev);
+> -	if (ret < 0) {
+> -		pm_runtime_put_noidle(qspi->dev);
+> +	ret = pm_runtime_resume_and_get(qspi->dev);
+> +	if (ret < 0)
+>  		return ret;
+> -	}
+>  
+>  	presc = DIV_ROUND_UP(qspi->clk_rate, spi->max_speed_hz) - 1;
+>  
+> @@ -851,11 +843,9 @@ static int __maybe_unused stm32_qspi_resume(struct device *dev)
+>  
+>  	pinctrl_pm_select_default_state(dev);
+>  
+> -	ret = pm_runtime_get_sync(dev);
+> -	if (ret < 0) {
+> -		pm_runtime_put_noidle(dev);
+> +	ret = pm_runtime_resume_and_get(dev);
+> +	if (ret < 0)
+>  		return ret;
+> -	}
+>  
+>  	writel_relaxed(qspi->cr_reg, qspi->io_base + QSPI_CR);
+>  	writel_relaxed(qspi->dcr_reg, qspi->io_base + QSPI_DCR);
 
-Change since v1: fixed sorting of includes in the MMCIF driver
-		 (Thanks Geert!)
+Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
 
-I don't have the HW to test this but the buildbots are happy with this
-change. I checked that they actually tested the SH builds. To make the
-patch more readable, I used the -M (rename) feature of git-format-patch.
-
- arch/sh/boards/board-sh7757lcr.c                | 2 +-
- arch/sh/boards/mach-ecovec24/setup.c            | 2 +-
- arch/sh/boot/romimage/mmcif-sh7724.c            | 2 +-
- drivers/mmc/host/sh_mmcif.c                     | 2 +-
- include/linux/{mmc => platform_data}/sh_mmcif.h | 2 --
- 5 files changed, 4 insertions(+), 6 deletions(-)
- rename include/linux/{mmc => platform_data}/sh_mmcif.h (99%)
-
-diff --git a/arch/sh/boards/board-sh7757lcr.c b/arch/sh/boards/board-sh7757lcr.c
-index c32b4c6229d3..f39c8196efdf 100644
---- a/arch/sh/boards/board-sh7757lcr.c
-+++ b/arch/sh/boards/board-sh7757lcr.c
-@@ -16,7 +16,7 @@
- #include <linux/io.h>
- #include <linux/mfd/tmio.h>
- #include <linux/mmc/host.h>
--#include <linux/mmc/sh_mmcif.h>
-+#include <linux/platform_data/sh_mmcif.h>
- #include <linux/sh_eth.h>
- #include <linux/sh_intc.h>
- #include <linux/usb/renesas_usbhs.h>
-diff --git a/arch/sh/boards/mach-ecovec24/setup.c b/arch/sh/boards/mach-ecovec24/setup.c
-index 4c9522dd351f..674da7ebd8b7 100644
---- a/arch/sh/boards/mach-ecovec24/setup.c
-+++ b/arch/sh/boards/mach-ecovec24/setup.c
-@@ -19,7 +19,7 @@
- #include <linux/memblock.h>
- #include <linux/mfd/tmio.h>
- #include <linux/mmc/host.h>
--#include <linux/mmc/sh_mmcif.h>
-+#include <linux/platform_data/sh_mmcif.h>
- #include <linux/mtd/physmap.h>
- #include <linux/gpio.h>
- #include <linux/gpio/machine.h>
-diff --git a/arch/sh/boot/romimage/mmcif-sh7724.c b/arch/sh/boot/romimage/mmcif-sh7724.c
-index 6595b6b45bf1..d30123d859e0 100644
---- a/arch/sh/boot/romimage/mmcif-sh7724.c
-+++ b/arch/sh/boot/romimage/mmcif-sh7724.c
-@@ -8,7 +8,7 @@
-  * for more details.
-  */
- 
--#include <linux/mmc/sh_mmcif.h>
-+#include <linux/platform_data/sh_mmcif.h>
- #include <mach/romimage.h>
- 
- #define MMCIF_BASE      (void __iomem *)0xa4ca0000
-diff --git a/drivers/mmc/host/sh_mmcif.c b/drivers/mmc/host/sh_mmcif.c
-index 5f9ebf045b1c..0fd4c9d644dd 100644
---- a/drivers/mmc/host/sh_mmcif.c
-+++ b/drivers/mmc/host/sh_mmcif.c
-@@ -43,12 +43,12 @@
- #include <linux/mmc/host.h>
- #include <linux/mmc/mmc.h>
- #include <linux/mmc/sdio.h>
--#include <linux/mmc/sh_mmcif.h>
- #include <linux/mmc/slot-gpio.h>
- #include <linux/mod_devicetable.h>
- #include <linux/mutex.h>
- #include <linux/of_device.h>
- #include <linux/pagemap.h>
-+#include <linux/platform_data/sh_mmcif.h>
- #include <linux/platform_device.h>
- #include <linux/pm_qos.h>
- #include <linux/pm_runtime.h>
-diff --git a/include/linux/mmc/sh_mmcif.h b/include/linux/platform_data/sh_mmcif.h
-similarity index 99%
-rename from include/linux/mmc/sh_mmcif.h
-rename to include/linux/platform_data/sh_mmcif.h
-index e25533b95d9f..6eb914f958f9 100644
---- a/include/linux/mmc/sh_mmcif.h
-+++ b/include/linux/platform_data/sh_mmcif.h
-@@ -1,7 +1,5 @@
- /* SPDX-License-Identifier: GPL-2.0-only */
- /*
-- * include/linux/mmc/sh_mmcif.h
-- *
-  * platform data for eMMC driver
-  *
-  * Copyright (C) 2010 Renesas Solutions Corp.
--- 
-2.30.2
+Thanks
+Patrice
 

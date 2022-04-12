@@ -2,130 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BEA44FE702
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:31:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 586D84FE740
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:36:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358328AbiDLRd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 13:33:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41016 "EHLO
+        id S1358421AbiDLRjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 13:39:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358186AbiDLRdL (ORCPT
+        with ESMTP id S1347117AbiDLRjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 13:33:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D132D2F003;
-        Tue, 12 Apr 2022 10:30:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B5659B81F5D;
-        Tue, 12 Apr 2022 17:30:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28CC1C385A8;
-        Tue, 12 Apr 2022 17:30:45 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="T/o5MTm4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1649784644;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gMuiTScdp7c+tPntikHvEFRo+YYqSeslWu8YJFI7ND8=;
-        b=T/o5MTm4nPPUUHDTZbOx4bZYhhv1IWhyqAYPcEo30+zAtqeCY9MBgw2oz3E9hK+K97B+LX
-        VzJafAUAE8rt36dyZn/uE6s64UaWvyzjbQ8gM4Zwrq3eq3GpRUCgDsLvHbbybJqL+1VMHd
-        8XCdSDUrNtcVHntc/zmYVpWb8/d62Vw=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 987d3c63 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 12 Apr 2022 17:30:43 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        tglx@linutronix.de, arnd@arndb.de
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "David S . Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, x86@kernel.org,
-        linux-xtensa@linux-xtensa.org
-Subject: [PATCH v3 10/10] xtensa: use fallback for random_get_entropy() instead of zero
-Date:   Tue, 12 Apr 2022 19:27:54 +0200
-Message-Id: <20220412172754.149498-11-Jason@zx2c4.com>
-In-Reply-To: <20220412172754.149498-1-Jason@zx2c4.com>
-References: <20220412172754.149498-1-Jason@zx2c4.com>
+        Tue, 12 Apr 2022 13:39:05 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980FD5F8F9;
+        Tue, 12 Apr 2022 10:36:47 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id p15so38744787ejc.7;
+        Tue, 12 Apr 2022 10:36:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ek5IZF4QsiCOGMfala/H8lskYq2jep0oZg3B2DCoBUI=;
+        b=FVP1yKaVPQEsrNiLcbE21956MmEFBCGiSO1WoGkJKxPTWG4EfuA+BZSLXuIKM3r4Es
+         x+t9lqxEeDX6lq4r+Uyys6wIWTyt+gJCIUhc604f7DdxTktzzSuapECN7tGjJPJ3zo2l
+         R93Q44ySF6RSbrOfVO0+3ovnLht+s06hO6Lr6aMbx4D2Gjb58oqxUZs5z2i8UiC3lttP
+         NT9tMwH1MCp5NFyTKN3d332nni6Z7Xz7SdISyH4TeBty9RV99QmNL7LHgspcgJUmeaLU
+         X6wtu+825BqQtcwe5GuYr46PQKq/qs4yJ8x2OWhsCjC+6ye9RPG3xidySBJv02ebrxuV
+         jHpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ek5IZF4QsiCOGMfala/H8lskYq2jep0oZg3B2DCoBUI=;
+        b=vwtjsX9nv/bsaDUAi1S2RCSnTmTz3aL8X3pbaT15EVHYwg/2u2qLty/FnQIbH+cjvX
+         XA4h29xXM35gGGywZdomNaVGmDoi5epNNngNmYsPt8LewylfJIbAKRNt8Ite88EfRof0
+         +ouANdh0i/SHpfu17s9OC0ru9pgdrF0fVM18bSX+1cjcoUbF3FGAadpqg22+Gt9HLbGM
+         br6EUIX1IHSmmsZNx8atiBRjjeDLWKwsg/98apxDHeToRn+2iWorhwUdB5vO50tEHpEl
+         HlraLtPtpdv/l2fwknc+BVQATjkG2fB8q9TMw9u+yGxXpEQY+qsnfGv43hPgazgqBFKM
+         durg==
+X-Gm-Message-State: AOAM533H6UEXW72nJX1CDu5L9k63z1AujpDmOngPlqlcv6QS9didZi6F
+        nN78F/ojXX923VylsteQn5U=
+X-Google-Smtp-Source: ABdhPJwjjUQ9yQsNQHq3wO2SJzfZi1mt85GURM9Sk2gfjlJZ25UbJh6WPNglvGQS5aDTjxuiS/ikGw==
+X-Received: by 2002:a17:906:3a18:b0:6cd:ba45:995f with SMTP id z24-20020a1709063a1800b006cdba45995fmr35679690eje.328.1649785005942;
+        Tue, 12 Apr 2022 10:36:45 -0700 (PDT)
+Received: from localhost.localdomain ([5.171.105.8])
+        by smtp.googlemail.com with ESMTPSA id n11-20020a50cc4b000000b0041d8bc4f076sm48959edi.79.2022.04.12.10.36.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 10:36:45 -0700 (PDT)
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Ansuel Smith <ansuelsmth@gmail.com>
+Subject: [net-next PATCH v2 0/4] Reduce qca8k_priv space usage
+Date:   Tue, 12 Apr 2022 19:30:15 +0200
+Message-Id: <20220412173019.4189-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the event that random_get_entropy() can't access a cycle counter or
-similar, falling back to returning 0 is really not the best we can do.
-Instead, at least calling random_get_entropy_fallback() would be
-preferable, because that always needs to return _something_, even
-falling back to jiffies eventually. It's not as though
-random_get_entropy_fallback() is super high precision or guaranteed to
-be entropic, but basically anything that's not zero all the time is
-better than returning zero all the time.
+These 4 patch is a first attempt at reducting qca8k_priv space.
+The code changed a lot during times and we have many old logic
+that can be replaced with new implementation
 
-This is accomplished by just including the asm-generic code like on
-other architectures, which means we can get rid of the empty stub
-function here.
+The first patch drop the tracking of MTU. We mimic what was done
+for mtk and we change MTU only when CPU port is changed.
 
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Max Filippov <jcmvbkbc@gmail.com>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- arch/xtensa/include/asm/timex.h | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+The second patch finally drop a piece of story of this driver.
+The ar8xxx_port_status struct was used by the first implementation
+of this driver to put all sort of status data for the port...
+With the evolution of DSA all that stuff got dropped till only
+the enabled state was the only part of the that struct.
+Since it's overkill to keep an array of int, we convert the variable
+to a simple u8 where we store the status of each port. This is needed
+to don't reanable ports on system resume.
 
-diff --git a/arch/xtensa/include/asm/timex.h b/arch/xtensa/include/asm/timex.h
-index 233ec75e60c6..3f2462f2d027 100644
---- a/arch/xtensa/include/asm/timex.h
-+++ b/arch/xtensa/include/asm/timex.h
-@@ -29,10 +29,6 @@
- 
- extern unsigned long ccount_freq;
- 
--typedef unsigned long long cycles_t;
--
--#define get_cycles()	(0)
--
- void local_timer_setup(unsigned cpu);
- 
- /*
-@@ -59,4 +55,6 @@ static inline void set_linux_timer (unsigned long ccompare)
- 	xtensa_set_sr(ccompare, SREG_CCOMPARE + LINUX_TIMER);
- }
- 
-+#include <asm-generic/timex.h>
-+
- #endif	/* _XTENSA_TIMEX_H */
+The third patch is a preparation for patch 4. As Vladimir explained
+in another patch, we waste a tons of space by keeping a duplicate of
+the switch dsa ops in qca8k_priv. The only reason for this is to
+dynamically set the correct mdiobus configuration (a legacy dsa one,
+or a custom dedicated one)
+To solve this problem, we just drop the phy_read/phy_write and we
+declare a custom mdiobus in any case. 
+This way we can use a static dsa switch ops struct and we can drop it
+from qca8k_priv
+
+Patch 4 finally drop the duplicated dsa_switch_ops.
+
+This series is just a start of more cleanup.
+
+The idea is to move this driver to the qca dir and split common code
+from specific code. Also the mgmt eth code still requires some love
+and can totally be optimized by recycling the same skb over time.
+
+Also while working on the MTU it was notice some problem with
+the stmmac driver and with the reloading phase that cause all
+sort of problems with qca8k.
+
+I'm sending this here just to try to keep small series instead of
+proposing monster series hard to review.
+
+v2:
+- Rework MTU patch
+
+Ansuel Smith (4):
+  drivers: net: dsa: qca8k: drop MTU tracking from qca8k_priv
+  drivers: net: dsa: qca8k: drop port_sts from qca8k_priv
+  drivers: net: dsa: qca8k: rework and simplify mdiobus logic
+  drivers: net: dsa: qca8k: drop dsa_switch_ops from qca8k_priv
+
+ drivers/net/dsa/qca8k.c | 144 +++++++++++++++-------------------------
+ drivers/net/dsa/qca8k.h |  12 ++--
+ 2 files changed, 56 insertions(+), 100 deletions(-)
+
 -- 
-2.35.1
+2.34.1
 

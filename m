@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4916B4FD9E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:46:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A09734FD827
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:35:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358023AbiDLHlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45878 "EHLO
+        id S1358071AbiDLHlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:41:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353104AbiDLHOu (ORCPT
+        with ESMTP id S1353119AbiDLHOv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:14:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8556E33880;
-        Mon, 11 Apr 2022 23:56:27 -0700 (PDT)
+        Tue, 12 Apr 2022 03:14:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2309377FF;
+        Mon, 11 Apr 2022 23:56:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 26E2AB81B4D;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C5F7B81B35;
+        Tue, 12 Apr 2022 06:56:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17DDEC385A6;
         Tue, 12 Apr 2022 06:56:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 788AAC385A8;
-        Tue, 12 Apr 2022 06:56:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746584;
-        bh=vR3xn3UUL4cNvK9tr7Bh+SGk76tQsNint0Z8rvY4k/4=;
+        s=korg; t=1649746587;
+        bh=eM1K8P5zqIAJD0+Seq9LKWKSArSlKpfYialiGujAYB4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EVxjrmtlo1Z4I5tWLYyYv05sljBDTsvGMTUzefvyKeuPzas+sg3Id3vot2VPi70t8
-         /f/SZtV4GxSU0YBQblnB6/+HYbl3pJNslCCCEiE14sWTcNIgee6now6rKQ7usN8/8K
-         AZb7ge5OzmEoMQIAj0wsbXMhb2JtBDoXfBOcJ+mY=
+        b=yW96Cx/PmWGhJzvKrhVMt6Jt/KKGyRWVe6LRlpd2E06lEYAaaE/m64u6ytyIHHzM4
+         9irA/A92/bX0ZsuwXJmAYHEXMWrKlqvCHaQqUe5tHVXx16aTMvKr3UDpXGX73vTq3x
+         2IsrWL60ZD3Vc9TzPmRtLAo8Q7KnglYjei1iIxiY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Meenakshikumar Somasundaram <Meenakshikumar.Somasundaram@amd.com>,
-        Jun Lei <Jun.Lei@amd.com>, Jasdeep Dhillon <jdhillon@amd.com>,
-        Sung Joon Kim <sungkim@amd.com>,
-        Daniel Wheeler <daniel.wheeler@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
+        stable@vger.kernel.org, Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 057/285] drm/amd/display: reset lane settings after each PHY repeater LT
-Date:   Tue, 12 Apr 2022 08:28:34 +0200
-Message-Id: <20220412062945.316287675@linuxfoundation.org>
+Subject: [PATCH 5.16 058/285] net/mlx5e: Disable TX queues before registering the netdev
+Date:   Tue, 12 Apr 2022 08:28:35 +0200
+Message-Id: <20220412062945.344893622@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
 References: <20220412062943.670770901@linuxfoundation.org>
@@ -59,71 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sung Joon Kim <sungkim@amd.com>
+From: Maxim Mikityanskiy <maximmi@nvidia.com>
 
-[ Upstream commit 3b853c316c9321e195414a6fb121d1c2d45b1e87 ]
+[ Upstream commit d08c6e2a4d0308a7922d7ef3b1b3af45d4096aad ]
 
-[why]
-In LTTPR non-transparent mode, we need
-to reset the cached lane settings before performing
-link training on the next PHY repeater. Otherwise,
-the cached lane settings will be used for the next
-clock recovery e.g. VS = MAX (3) which should not be
-the case according to the DP specs. We expect to use
-minimum lane settings on each clock recovery sequence.
+Normally, the queues are disabled when the channels are deactivated, and
+enabled when the channels are activated. However, on register, the
+channels are not active, but the queues are enabled by default. This
+change fixes it, preventing mlx5e_xmit from running when the channels
+are deactivated in the beginning.
 
-[how]
-Reset DPCD and HW lane settings on each repeater LT.
-Set training pattern to 0 for the repeater that failed LT
-at the proper place.
-
-Reviewed-by: Meenakshikumar Somasundaram <Meenakshikumar.Somasundaram@amd.com>
-Reviewed-by: Jun Lei <Jun.Lei@amd.com>
-Acked-by: Jasdeep Dhillon <jdhillon@amd.com>
-Signed-off-by: Sung Joon Kim <sungkim@amd.com>
-Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ drivers/net/ethernet/mellanox/mlx5/core/en_main.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
-index 135ea1c422f2..f46aa7f8c35d 100644
---- a/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
-+++ b/drivers/gpu/drm/amd/display/dc/core/dc_link_dp.c
-@@ -2124,21 +2124,26 @@ static enum link_training_result dp_perform_8b_10b_link_training(
- 				repeater_id--) {
- 			status = perform_clock_recovery_sequence(link, lt_settings, repeater_id);
- 
--			if (status != LINK_TRAINING_SUCCESS)
-+			if (status != LINK_TRAINING_SUCCESS) {
-+				repeater_training_done(link, repeater_id);
- 				break;
-+			}
- 
- 			status = perform_channel_equalization_sequence(link,
- 					lt_settings,
- 					repeater_id);
- 
-+			repeater_training_done(link, repeater_id);
-+
- 			if (status != LINK_TRAINING_SUCCESS)
- 				break;
- 
--			repeater_training_done(link, repeater_id);
-+			for (lane = 0; lane < LANE_COUNT_DP_MAX; lane++) {
-+				lt_settings->dpcd_lane_settings[lane].raw = 0;
-+				lt_settings->hw_lane_settings[lane].VOLTAGE_SWING = 0;
-+				lt_settings->hw_lane_settings[lane].PRE_EMPHASIS = 0;
-+			}
- 		}
--
--		for (lane = 0; lane < (uint8_t)lt_settings->link_settings.lane_count; lane++)
--			lt_settings->dpcd_lane_settings[lane].raw = 0;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+index 22de7327c5a8..4730d6c14aeb 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+@@ -5223,6 +5223,7 @@ mlx5e_create_netdev(struct mlx5_core_dev *mdev, const struct mlx5e_profile *prof
  	}
  
- 	if (status == LINK_TRAINING_SUCCESS) {
+ 	netif_carrier_off(netdev);
++	netif_tx_disable(netdev);
+ 	dev_net_set(netdev, mlx5_core_net(mdev));
+ 
+ 	return netdev;
 -- 
 2.35.1
 

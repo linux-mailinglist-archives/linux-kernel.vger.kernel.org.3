@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9BD04FD741
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:28:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47AD84FD4DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:10:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353021AbiDLHZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:25:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57514 "EHLO
+        id S1388917AbiDLJW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:22:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351514AbiDLHLR (ORCPT
+        with ESMTP id S1357337AbiDLHkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:11:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8C44A908;
-        Mon, 11 Apr 2022 23:49:57 -0700 (PDT)
+        Tue, 12 Apr 2022 03:40:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1181F24BFA;
+        Tue, 12 Apr 2022 00:15:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4498BB81B4F;
-        Tue, 12 Apr 2022 06:49:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A48DC385A8;
-        Tue, 12 Apr 2022 06:49:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A13E56171C;
+        Tue, 12 Apr 2022 07:15:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA7DDC385A1;
+        Tue, 12 Apr 2022 07:15:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746196;
-        bh=oL6pcHfoJFEn644SDRdroH9B87CSQDpU3mwqLp1o2DM=;
+        s=korg; t=1649747725;
+        bh=HsE/ibDeI0T3UDOURtuLfeNn+tg1uUa+iGPFTtNKkN4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JgUpUWZaBiwKU4TFB7S42Pxu3us2FeWsdCshM0Rar7DmjzjRlHuN6eoSwdbQpAryX
-         sc2PphgQmGFQqpEwA8fE3DAks5ADKMwBbbbF3yoA5RvLzizD2wMRIX6zuMFzm2SwSq
-         //vDNC9AMFbyDFIZ7YuuuKxgfmtndAUUvfSDO5XQ=
+        b=PC25ZEiQrzPhZsjCkAGAt19ZIYSDe+jvuWqNoH1UloN+uCBdwkvuqvG1NLbQBCBTF
+         Q+N0UsgC81EYFGhTJPETWZ1IFaBOV6Skw7nf66dD0onn64MizNezSXv4hahSO64PEw
+         nVMxZJcEmBWkKGGXVYBCcTCWTqILzligcPZwiZa0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Daejun Park <daejun7.park@samsung.com>,
-        Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 196/277] scsi: ufs: ufshpb: Fix a NULL check on list iterator
-Date:   Tue, 12 Apr 2022 08:29:59 +0200
-Message-Id: <20220412062947.710841093@linuxfoundation.org>
+Subject: [PATCH 5.17 182/343] x86/Kconfig: Do not allow CONFIG_X86_X32_ABI=y with llvm-objcopy
+Date:   Tue, 12 Apr 2022 08:30:00 +0200
+Message-Id: <20220412062956.615484188@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,53 +55,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+From: Nathan Chancellor <nathan@kernel.org>
 
-[ Upstream commit bfb7789bcbd901caead43861461bc8f334c90d3b ]
+[ Upstream commit aaeed6ecc1253ce1463fa1aca0b70a4ccbc9fa75 ]
 
-The list iterator is always non-NULL so the check 'if (!rgn)' is always
-false and the dev_err() is never called. Move the check outside the loop
-and determine if 'victim_rgn' is NULL, to fix this bug.
+There are two outstanding issues with CONFIG_X86_X32_ABI and
+llvm-objcopy, with similar root causes:
 
-Link: https://lore.kernel.org/r/20220320150733.21824-1-xiam0nd.tong@gmail.com
-Fixes: 4b5f49079c52 ("scsi: ufs: ufshpb: L2P map management for HPB read")
-Reviewed-by: Daejun Park <daejun7.park@samsung.com>
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+1. llvm-objcopy does not properly convert .note.gnu.property when going
+   from x86_64 to x86_x32, resulting in a corrupted section when
+   linking:
+
+   https://github.com/ClangBuiltLinux/linux/issues/1141
+
+2. llvm-objcopy produces corrupted compressed debug sections when going
+   from x86_64 to x86_x32, also resulting in an error when linking:
+
+   https://github.com/ClangBuiltLinux/linux/issues/514
+
+After commit 41c5ef31ad71 ("x86/ibt: Base IBT bits"), the
+.note.gnu.property section is always generated when
+CONFIG_X86_KERNEL_IBT is enabled, which causes the first issue to become
+visible with an allmodconfig build:
+
+  ld.lld: error: arch/x86/entry/vdso/vclock_gettime-x32.o:(.note.gnu.property+0x1c): program property is too short
+
+To avoid this error, do not allow CONFIG_X86_X32_ABI to be selected when
+using llvm-objcopy. If the two issues ever get fixed in llvm-objcopy,
+this can be turned into a feature check.
+
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lore.kernel.org/r/20220314194842.3452-3-nathan@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/ufs/ufshpb.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ arch/x86/Kconfig | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/scsi/ufs/ufshpb.c b/drivers/scsi/ufs/ufshpb.c
-index a86d0cc50de2..f7eaf64293a4 100644
---- a/drivers/scsi/ufs/ufshpb.c
-+++ b/drivers/scsi/ufs/ufshpb.c
-@@ -870,12 +870,6 @@ static struct ufshpb_region *ufshpb_victim_lru_info(struct ufshpb_lu *hpb)
- 	struct ufshpb_region *rgn, *victim_rgn = NULL;
- 
- 	list_for_each_entry(rgn, &lru_info->lh_lru_rgn, list_lru_rgn) {
--		if (!rgn) {
--			dev_err(&hpb->sdev_ufs_lu->sdev_dev,
--				"%s: no region allocated\n",
--				__func__);
--			return NULL;
--		}
- 		if (ufshpb_check_srgns_issue_state(hpb, rgn))
- 			continue;
- 
-@@ -891,6 +885,11 @@ static struct ufshpb_region *ufshpb_victim_lru_info(struct ufshpb_lu *hpb)
- 		break;
- 	}
- 
-+	if (!victim_rgn)
-+		dev_err(&hpb->sdev_ufs_lu->sdev_dev,
-+			"%s: no region allocated\n",
-+			__func__);
-+
- 	return victim_rgn;
- }
- 
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 9f5bd41bf660..d0ecc4005df3 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -2837,6 +2837,11 @@ config IA32_AOUT
+ config X86_X32
+ 	bool "x32 ABI for 64-bit mode"
+ 	depends on X86_64
++	# llvm-objcopy does not convert x86_64 .note.gnu.property or
++	# compressed debug sections to x86_x32 properly:
++	# https://github.com/ClangBuiltLinux/linux/issues/514
++	# https://github.com/ClangBuiltLinux/linux/issues/1141
++	depends on $(success,$(OBJCOPY) --version | head -n1 | grep -qv llvm)
+ 	help
+ 	  Include code to run binaries for the x32 native 32-bit ABI
+ 	  for 64-bit processors.  An x32 process gets access to the
 -- 
 2.35.1
 

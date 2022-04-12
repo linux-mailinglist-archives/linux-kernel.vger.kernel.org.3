@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5897C4FDA80
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB0C24FDB3E
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:56:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242897AbiDLH7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:59:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42844 "EHLO
+        id S1351066AbiDLHb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:31:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353585AbiDLHZr (ORCPT
+        with ESMTP id S1351835AbiDLHNA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:25:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B4443AE7;
-        Tue, 12 Apr 2022 00:01:55 -0700 (PDT)
+        Tue, 12 Apr 2022 03:13:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EBDC17E15;
+        Mon, 11 Apr 2022 23:53:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9331DB81B4E;
-        Tue, 12 Apr 2022 07:01:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC3C0C385A1;
-        Tue, 12 Apr 2022 07:01:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A96D461451;
+        Tue, 12 Apr 2022 06:53:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B74F2C385A6;
+        Tue, 12 Apr 2022 06:53:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746913;
-        bh=0NnzGvVcTfCHc0iCRCoud8MXWwzj4d12kCfEUzZn0Ic=;
+        s=korg; t=1649746403;
+        bh=fVdkxmCtnyf65DVQLtRAYKbRtUaCnvLBuvET/NqA9Bw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fs1HFF1UmgJRHw316xgeMOzbWZmJS9+g9Ifh/qcBx4sRUMI1W/PvRoRZ3H9rQ/t7/
-         Vo7eDnhPplQta4TYLsDzAuGoiyeKLg+Vx5Pa6qnL/M//ghorjFqNuFIpROQL2KP36a
-         J1n0+rCrGyek/Wns+yOu71sJ3s3pjAzKNBHMtRYg=
+        b=vO3W9Hvgt3oZqcE9eR2mgoG+aAq7+ak3g/rkfPlMjnYEDt1k4nw+U3YIBwBIlFTNH
+         SV3bDnJAX0pwncVPvNTlPQFRcvKHXd4n94SdfgzlT6l0qs2SiVZLJUt1MkceRd+NFO
+         nMus/InulibMHOyNHKAJBaFzZ74EKxvgwzHSce5U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Somnath Kotur <somnath.kotur@broadcom.com>,
-        Pavan Chebbi <pavan.chebbi@broadcom.com>,
-        Andy Gospodarek <gospo@broadcom.com>,
-        Michael Chan <michael.chan@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 176/285] bnxt_en: reserve space inside receive page for skb_shared_info
+        stable@vger.kernel.org,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PATCH 5.15 230/277] gpio: Restrict usage of GPIO chip irq members before initialization
 Date:   Tue, 12 Apr 2022 08:30:33 +0200
-Message-Id: <20220412062948.746922597@linuxfoundation.org>
+Message-Id: <20220412062948.700437683@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,45 +57,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Gospodarek <gospo@broadcom.com>
+From: Shreeya Patel <shreeya.patel@collabora.com>
 
-[ Upstream commit facc173cf700e55b2ad249ecbd3a7537f7315691 ]
+commit 5467801f1fcbdc46bc7298a84dbf3ca1ff2a7320 upstream.
 
-Insufficient space was being reserved in the page used for packet
-reception, so the interface MTU could be set too large to still have
-room for the contents of the packet when doing XDP redirect.  This
-resulted in the following message when redirecting a packet between
-3520 and 3822 bytes with an MTU of 3822:
+GPIO chip irq members are exposed before they could be completely
+initialized and this leads to race conditions.
 
-[311815.561880] XDP_WARN: xdp_update_frame_from_buff(line:200): Driver BUG: missing reserved tailroom
+One such issue was observed for the gc->irq.domain variable which
+was accessed through the I2C interface in gpiochip_to_irq() before
+it could be initialized by gpiochip_add_irqchip(). This resulted in
+Kernel NULL pointer dereference.
 
-Fixes: f18c2b77b2e4 ("bnxt_en: optimized XDP_REDIRECT support")
-Reviewed-by: Somnath Kotur <somnath.kotur@broadcom.com>
-Reviewed-by: Pavan Chebbi <pavan.chebbi@broadcom.com>
-Signed-off-by: Andy Gospodarek <gospo@broadcom.com>
-Signed-off-by: Michael Chan <michael.chan@broadcom.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Following are the logs for reference :-
+
+kernel: Call Trace:
+kernel:  gpiod_to_irq+0x53/0x70
+kernel:  acpi_dev_gpio_irq_get_by+0x113/0x1f0
+kernel:  i2c_acpi_get_irq+0xc0/0xd0
+kernel:  i2c_device_probe+0x28a/0x2a0
+kernel:  really_probe+0xf2/0x460
+kernel: RIP: 0010:gpiochip_to_irq+0x47/0xc0
+
+To avoid such scenarios, restrict usage of GPIO chip irq members before
+they are completely initialized.
+
+Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
+Cc: stable@vger.kernel.org
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/broadcom/bnxt/bnxt.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/gpio/gpiolib.c      |   19 +++++++++++++++++++
+ include/linux/gpio/driver.h |    9 +++++++++
+ 2 files changed, 28 insertions(+)
 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.h b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
-index 5f4a0bb36af3..bbf93310da1f 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt.h
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
-@@ -593,7 +593,8 @@ struct nqe_cn {
- #define BNXT_MAX_MTU		9500
- #define BNXT_MAX_PAGE_MODE_MTU	\
- 	((unsigned int)PAGE_SIZE - VLAN_ETH_HLEN - NET_IP_ALIGN -	\
--	 XDP_PACKET_HEADROOM)
-+	 XDP_PACKET_HEADROOM - \
-+	 SKB_DATA_ALIGN((unsigned int)sizeof(struct skb_shared_info)))
+--- a/drivers/gpio/gpiolib.c
++++ b/drivers/gpio/gpiolib.c
+@@ -1368,6 +1368,16 @@ static int gpiochip_to_irq(struct gpio_c
+ {
+ 	struct irq_domain *domain = gc->irq.domain;
  
- #define BNXT_MIN_PKT_SIZE	52
++#ifdef CONFIG_GPIOLIB_IRQCHIP
++	/*
++	 * Avoid race condition with other code, which tries to lookup
++	 * an IRQ before the irqchip has been properly registered,
++	 * i.e. while gpiochip is still being brought up.
++	 */
++	if (!gc->irq.initialized)
++		return -EPROBE_DEFER;
++#endif
++
+ 	if (!gpiochip_irqchip_irq_valid(gc, offset))
+ 		return -ENXIO;
  
--- 
-2.35.1
-
+@@ -1552,6 +1562,15 @@ static int gpiochip_add_irqchip(struct g
+ 
+ 	acpi_gpiochip_request_interrupts(gc);
+ 
++	/*
++	 * Using barrier() here to prevent compiler from reordering
++	 * gc->irq.initialized before initialization of above
++	 * GPIO chip irq members.
++	 */
++	barrier();
++
++	gc->irq.initialized = true;
++
+ 	return 0;
+ }
+ 
+--- a/include/linux/gpio/driver.h
++++ b/include/linux/gpio/driver.h
+@@ -225,6 +225,15 @@ struct gpio_irq_chip {
+ 				unsigned int ngpios);
+ 
+ 	/**
++	 * @initialized:
++	 *
++	 * Flag to track GPIO chip irq member's initialization.
++	 * This flag will make sure GPIO chip irq members are not used
++	 * before they are initialized.
++	 */
++	bool initialized;
++
++	/**
+ 	 * @valid_mask:
+ 	 *
+ 	 * If not %NULL, holds bitmask of GPIOs which are valid to be included
 
 

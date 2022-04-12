@@ -2,42 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F5C04FD3A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 11:59:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 237A54FD403
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:00:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386895AbiDLJEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:04:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52436 "EHLO
+        id S1386256AbiDLIyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:54:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359397AbiDLHnA (ORCPT
+        with ESMTP id S1359403AbiDLHnB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:43:00 -0400
+        Tue, 12 Apr 2022 03:43:01 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD472CE01;
-        Tue, 12 Apr 2022 00:22:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D61F32CE07;
+        Tue, 12 Apr 2022 00:22:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8952CB81B58;
-        Tue, 12 Apr 2022 07:22:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA422C385A5;
-        Tue, 12 Apr 2022 07:22:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 921BFB81B60;
+        Tue, 12 Apr 2022 07:22:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFD16C385A1;
+        Tue, 12 Apr 2022 07:22:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649748144;
-        bh=If+C5ynFVXd2jpH7gryV4MCjUbXoG41ZdvKY1I3iIvU=;
+        s=korg; t=1649748155;
+        bh=WEz9tVLQClCMzp5STv/SjoKUKS0mGeZVPlc6NoCTe5c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lutWXk2/NtrVw2hS6D0CzNEm84tH9VmIpzfy+eOH9sLFaq5nS83vWSDW81t7rL/Sb
-         W31u6lZDrM8gVw3zIQ6NEYgKKTe/Lw/4JN3JX7aUq8v/lNqk7ym6+GIflMX6cM74i4
-         umV3VMpBQmAZGm8k8ai0hsjda5bxeQs5uEVdN220=
+        b=qj4MeQVnXL4nw4ruwm96aWe0+NrsuNCcc/U6xfTbkr7Gr31DZgiQaMQH+MoT7d0r8
+         eIyk3S0X8jFDjBgsaPzc1BVczM5zOJexPZLBRhzEKdHXa2IE5pAzJqHZPkS/+7z0Te
+         +BgVK/UbBkwerppV/0tJzzVeUaHBoC4eoiFmcPZw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 5.17 336/343] powerpc/64: Fix build failure with allyesconfig in book3s_64_entry.S
-Date:   Tue, 12 Apr 2022 08:32:34 +0200
-Message-Id: <20220412063001.016606571@linuxfoundation.org>
+        stable@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 5.17 340/343] io_uring: move read/write file prep state into actual opcode handler
+Date:   Tue, 12 Apr 2022 08:32:38 +0200
+Message-Id: <20220412063001.129759703@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
 References: <20220412062951.095765152@linuxfoundation.org>
@@ -55,49 +53,212 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
+From: Jens Axboe <axboe@kernel.dk>
 
-commit af41d2866f7d75bbb38d487f6ec7770425d70e45 upstream.
+commit 584b0180f0f4d67d7145950fe68c625f06c88b10 upstream.
 
-Using conditional branches between two files is hasardous,
-they may get linked too far from each other.
+In preparation for not necessarily having a file assigned at prep time,
+defer any initialization associated with the file to when the opcode
+handler is run.
 
-  arch/powerpc/kvm/book3s_64_entry.o:(.text+0x3ec): relocation truncated
-  to fit: R_PPC64_REL14 (stub) against symbol `system_reset_common'
-  defined in .text section in arch/powerpc/kernel/head_64.o
-
-Reorganise the code to use non conditional branches.
-
-Fixes: 89d35b239101 ("KVM: PPC: Book3S HV P9: Implement the rest of the P9 path in C")
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-[mpe: Avoid odd-looking bne ., use named local labels]
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/89cf27bf43ee07a0b2879b9e8e2f5cd6386a3645.1648366338.git.christophe.leroy@csgroup.eu
+Cc: stable@vger.kernel.org # v5.15+
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/kvm/book3s_64_entry.S |   10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ fs/io_uring.c |  119 ++++++++++++++++++++++++++++++----------------------------
+ 1 file changed, 62 insertions(+), 57 deletions(-)
 
---- a/arch/powerpc/kvm/book3s_64_entry.S
-+++ b/arch/powerpc/kvm/book3s_64_entry.S
-@@ -414,10 +414,16 @@ END_FTR_SECTION_IFSET(CPU_FTR_DAWR1)
- 	 */
- 	ld	r10,HSTATE_SCRATCH0(r13)
- 	cmpwi	r10,BOOK3S_INTERRUPT_MACHINE_CHECK
--	beq	machine_check_common
-+	beq	.Lcall_machine_check_common
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -560,7 +560,8 @@ struct io_rw {
+ 	/* NOTE: kiocb has the file as the first member, so don't do it here */
+ 	struct kiocb			kiocb;
+ 	u64				addr;
+-	u64				len;
++	u32				len;
++	u32				flags;
+ };
  
- 	cmpwi	r10,BOOK3S_INTERRUPT_SYSTEM_RESET
--	beq	system_reset_common
-+	beq	.Lcall_system_reset_common
+ struct io_connect {
+@@ -2984,50 +2985,11 @@ static inline bool io_file_supports_nowa
  
- 	b	.
+ static int io_prep_rw(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ {
+-	struct io_ring_ctx *ctx = req->ctx;
+ 	struct kiocb *kiocb = &req->rw.kiocb;
+-	struct file *file = req->file;
+ 	unsigned ioprio;
+ 	int ret;
+ 
+-	if (!io_req_ffs_set(req))
+-		req->flags |= io_file_get_flags(file) << REQ_F_SUPPORT_NOWAIT_BIT;
+-
+ 	kiocb->ki_pos = READ_ONCE(sqe->off);
+-	if (kiocb->ki_pos == -1) {
+-		if (!(file->f_mode & FMODE_STREAM)) {
+-			req->flags |= REQ_F_CUR_POS;
+-			kiocb->ki_pos = file->f_pos;
+-		} else {
+-			kiocb->ki_pos = 0;
+-		}
+-	}
+-	kiocb->ki_flags = iocb_flags(file);
+-	ret = kiocb_set_rw_flags(kiocb, READ_ONCE(sqe->rw_flags));
+-	if (unlikely(ret))
+-		return ret;
+-
+-	/*
+-	 * If the file is marked O_NONBLOCK, still allow retry for it if it
+-	 * supports async. Otherwise it's impossible to use O_NONBLOCK files
+-	 * reliably. If not, or it IOCB_NOWAIT is set, don't retry.
+-	 */
+-	if ((kiocb->ki_flags & IOCB_NOWAIT) ||
+-	    ((file->f_flags & O_NONBLOCK) && !io_file_supports_nowait(req)))
+-		req->flags |= REQ_F_NOWAIT;
+-
+-	if (ctx->flags & IORING_SETUP_IOPOLL) {
+-		if (!(kiocb->ki_flags & IOCB_DIRECT) || !file->f_op->iopoll)
+-			return -EOPNOTSUPP;
+-
+-		kiocb->ki_flags |= IOCB_HIPRI | IOCB_ALLOC_CACHE;
+-		kiocb->ki_complete = io_complete_rw_iopoll;
+-		req->iopoll_completed = 0;
+-	} else {
+-		if (kiocb->ki_flags & IOCB_HIPRI)
+-			return -EINVAL;
+-		kiocb->ki_complete = io_complete_rw;
+-	}
+ 
+ 	ioprio = READ_ONCE(sqe->ioprio);
+ 	if (ioprio) {
+@@ -3043,6 +3005,7 @@ static int io_prep_rw(struct io_kiocb *r
+ 	req->imu = NULL;
+ 	req->rw.addr = READ_ONCE(sqe->addr);
+ 	req->rw.len = READ_ONCE(sqe->len);
++	req->rw.flags = READ_ONCE(sqe->rw_flags);
+ 	req->buf_index = READ_ONCE(sqe->buf_index);
+ 	return 0;
+ }
+@@ -3523,13 +3486,6 @@ static inline int io_rw_prep_async(struc
+ 	return 0;
+ }
+ 
+-static int io_read_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+-{
+-	if (unlikely(!(req->file->f_mode & FMODE_READ)))
+-		return -EBADF;
+-	return io_prep_rw(req, sqe);
+-}
+-
+ /*
+  * This is our waitqueue callback handler, registered through __folio_lock_async()
+  * when we initially tried to do the IO with the iocb armed our waitqueue.
+@@ -3617,6 +3573,58 @@ static bool need_read_all(struct io_kioc
+ 		S_ISBLK(file_inode(req->file)->i_mode);
+ }
+ 
++static int io_rw_init_file(struct io_kiocb *req, fmode_t mode)
++{
++	struct kiocb *kiocb = &req->rw.kiocb;
++	struct io_ring_ctx *ctx = req->ctx;
++	struct file *file = req->file;
++	int ret;
 +
-+.Lcall_machine_check_common:
-+	b	machine_check_common
++	if (unlikely(!file || !(file->f_mode & mode)))
++		return -EBADF;
 +
-+.Lcall_system_reset_common:
-+	b	system_reset_common
- #endif
++	if (!io_req_ffs_set(req))
++		req->flags |= io_file_get_flags(file) << REQ_F_SUPPORT_NOWAIT_BIT;
++
++	if (kiocb->ki_pos == -1) {
++		if (!(file->f_mode & FMODE_STREAM)) {
++			req->flags |= REQ_F_CUR_POS;
++			kiocb->ki_pos = file->f_pos;
++		} else {
++			kiocb->ki_pos = 0;
++		}
++	}
++
++	kiocb->ki_flags = iocb_flags(file);
++	ret = kiocb_set_rw_flags(kiocb, req->rw.flags);
++	if (unlikely(ret))
++		return ret;
++
++	/*
++	 * If the file is marked O_NONBLOCK, still allow retry for it if it
++	 * supports async. Otherwise it's impossible to use O_NONBLOCK files
++	 * reliably. If not, or it IOCB_NOWAIT is set, don't retry.
++	 */
++	if ((kiocb->ki_flags & IOCB_NOWAIT) ||
++	    ((file->f_flags & O_NONBLOCK) && !io_file_supports_nowait(req)))
++		req->flags |= REQ_F_NOWAIT;
++
++	if (ctx->flags & IORING_SETUP_IOPOLL) {
++		if (!(kiocb->ki_flags & IOCB_DIRECT) || !file->f_op->iopoll)
++			return -EOPNOTSUPP;
++
++		kiocb->ki_flags |= IOCB_HIPRI | IOCB_ALLOC_CACHE;
++		kiocb->ki_complete = io_complete_rw_iopoll;
++		req->iopoll_completed = 0;
++	} else {
++		if (kiocb->ki_flags & IOCB_HIPRI)
++			return -EINVAL;
++		kiocb->ki_complete = io_complete_rw;
++	}
++
++	return 0;
++}
++
+ static int io_read(struct io_kiocb *req, unsigned int issue_flags)
+ {
+ 	struct io_rw_state __s, *s = &__s;
+@@ -3641,6 +3649,9 @@ static int io_read(struct io_kiocb *req,
+ 		iov_iter_restore(&s->iter, &s->iter_state);
+ 		iovec = NULL;
+ 	}
++	ret = io_rw_init_file(req, FMODE_READ);
++	if (unlikely(ret))
++		return ret;
+ 	req->result = iov_iter_count(&s->iter);
+ 
+ 	if (force_nonblock) {
+@@ -3739,14 +3750,6 @@ out_free:
+ 	return 0;
+ }
+ 
+-static int io_write_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+-{
+-	if (unlikely(!(req->file->f_mode & FMODE_WRITE)))
+-		return -EBADF;
+-	req->rw.kiocb.ki_hint = ki_hint_validate(file_write_hint(req->file));
+-	return io_prep_rw(req, sqe);
+-}
+-
+ static int io_write(struct io_kiocb *req, unsigned int issue_flags)
+ {
+ 	struct io_rw_state __s, *s = &__s;
+@@ -3766,6 +3769,9 @@ static int io_write(struct io_kiocb *req
+ 		iov_iter_restore(&s->iter, &s->iter_state);
+ 		iovec = NULL;
+ 	}
++	ret = io_rw_init_file(req, FMODE_WRITE);
++	if (unlikely(ret))
++		return ret;
+ 	req->result = iov_iter_count(&s->iter);
+ 
+ 	if (force_nonblock) {
+@@ -6501,11 +6507,10 @@ static int io_req_prep(struct io_kiocb *
+ 	case IORING_OP_READV:
+ 	case IORING_OP_READ_FIXED:
+ 	case IORING_OP_READ:
+-		return io_read_prep(req, sqe);
+ 	case IORING_OP_WRITEV:
+ 	case IORING_OP_WRITE_FIXED:
+ 	case IORING_OP_WRITE:
+-		return io_write_prep(req, sqe);
++		return io_prep_rw(req, sqe);
+ 	case IORING_OP_POLL_ADD:
+ 		return io_poll_add_prep(req, sqe);
+ 	case IORING_OP_POLL_REMOVE:
 
 

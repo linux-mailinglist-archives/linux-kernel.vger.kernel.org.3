@@ -2,55 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AECFC4FDADD
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:54:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B04C4FD7A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:30:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357256AbiDLIRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:17:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43172 "EHLO
+        id S1347378AbiDLIRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:17:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355125AbiDLH1K (ORCPT
+        with ESMTP id S1355139AbiDLH1L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:27:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 263A148332;
-        Tue, 12 Apr 2022 00:07:11 -0700 (PDT)
+        Tue, 12 Apr 2022 03:27:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1434839A;
+        Tue, 12 Apr 2022 00:07:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 831A4B81B4D;
-        Tue, 12 Apr 2022 07:07:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFC52C385A8;
-        Tue, 12 Apr 2022 07:07:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5255DB81A8F;
+        Tue, 12 Apr 2022 07:07:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DEFCC385A6;
+        Tue, 12 Apr 2022 07:07:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747228;
-        bh=sXplmjtci3GWzKPGj7qmndHKq1WQI2fvhmgLsZ33CEY=;
+        s=korg; t=1649747231;
+        bh=vls4zsqU9sJp4tWeqhCblfDb12VqS9RG9GrlYCpE/YY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ya39TrhC7pOQ5dpmI0Ywg74BhsGI+zqKBPjvQh0+8MaElBhMIFRKoTzwDuoerDDoi
-         JeUrkx6Cmc1g8VrL7R4+hpJXxdCEyTq1XmSEqAj5F1gw7I8WTLOxDefkbKBi+S+9CB
-         oRHSoHA/2WN5pcGUDBBPU+ThFJH6QIrWDgX6fPzI=
+        b=0J2sgtW5pDypseMzgR3KqysdPpcZQxwlksTleegUOpkn/I6N/1wSoAKcDouMuSnMT
+         4yS0eXwe19dTCZRt6mTEQu9QC5opZH/bHqzdzB7MTXQwLCw3k5xpF7NcHHHjgYkiLr
+         /xt5c28p31+hm0XJop1/pfZ8Qui12V+rfTooBLj4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Thomas Zimmermann <tzimmermann@suse.de>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>,
-        Zack Rusin <zackr@vmware.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Helge Deller <deller@gmx.de>, Sam Ravnborg <sam@ravnborg.org>,
-        Zheyu Ma <zheyuma97@gmail.com>,
-        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Guenter Roeck <linux@roeck-us.net>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: [PATCH 5.16 249/285] fbdev: Fix unregistering of framebuffers without device
-Date:   Tue, 12 Apr 2022 08:31:46 +0200
-Message-Id: <20220412062950.845598901@linuxfoundation.org>
+        stable@vger.kernel.org, Shirish S <shirish.s@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 5.16 250/285] amd/display: set backlight only if required
+Date:   Tue, 12 Apr 2022 08:31:47 +0200
+Message-Id: <20220412062950.876290151@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
 References: <20220412062943.670770901@linuxfoundation.org>
@@ -68,98 +55,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Zimmermann <tzimmermann@suse.de>
+From: Shirish S <shirish.s@amd.com>
 
-commit 0f525289ff0ddeb380813bd81e0f9bdaaa1c9078 upstream.
+commit 4052287a75eb3fc0f487fcc5f768a38bede455c8 upstream.
 
-OF framebuffers do not have an underlying device in the Linux
-device hierarchy. Do a regular unregister call instead of hot
-unplugging such a non-existing device. Fixes a NULL dereference.
-An example error message on ppc64le is shown below.
+[Why]
+comparing pwm bl values (coverted) with user brightness(converted)
+levels in commit_tail leads to continuous setting of backlight via dmub
+as they don't to match.
+This leads overdrive in queuing of commands to DMCU that sometimes lead
+to depending on load on DMCU fw:
 
-  BUG: Kernel NULL pointer dereference on read at 0x00000060
-  Faulting instruction address: 0xc00000000080dfa4
-  Oops: Kernel access of bad area, sig: 11 [#1]
-  LE PAGE_SIZE=64K MMU=Hash SMP NR_CPUS=2048 NUMA pSeries
-  [...]
-  CPU: 2 PID: 139 Comm: systemd-udevd Not tainted 5.17.0-ae085d7f9365 #1
-  NIP:  c00000000080dfa4 LR: c00000000080df9c CTR: c000000000797430
-  REGS: c000000004132fe0 TRAP: 0300   Not tainted  (5.17.0-ae085d7f9365)
-  MSR:  8000000002009033 <SF,VEC,EE,ME,IR,DR,RI,LE>  CR: 28228282  XER: 20000000
-  CFAR: c00000000000c80c DAR: 0000000000000060 DSISR: 40000000 IRQMASK: 0
-  GPR00: c00000000080df9c c000000004133280 c00000000169d200 0000000000000029
-  GPR04: 00000000ffffefff c000000004132f90 c000000004132f88 0000000000000000
-  GPR08: c0000000015658f8 c0000000015cd200 c0000000014f57d0 0000000048228283
-  GPR12: 0000000000000000 c00000003fffe300 0000000020000000 0000000000000000
-  GPR16: 0000000000000000 0000000113fc4a40 0000000000000005 0000000113fcfb80
-  GPR20: 000001000f7283b0 0000000000000000 c000000000e4a588 c000000000e4a5b0
-  GPR24: 0000000000000001 00000000000a0000 c008000000db0168 c0000000021f6ec0
-  GPR28: c0000000016d65a8 c000000004b36460 0000000000000000 c0000000016d64b0
-  NIP [c00000000080dfa4] do_remove_conflicting_framebuffers+0x184/0x1d0
-  [c000000004133280] [c00000000080df9c] do_remove_conflicting_framebuffers+0x17c/0x1d0 (unreliable)
-  [c000000004133350] [c00000000080e4d0] remove_conflicting_framebuffers+0x60/0x150
-  [c0000000041333a0] [c00000000080e6f4] remove_conflicting_pci_framebuffers+0x134/0x1b0
-  [c000000004133450] [c008000000e70438] drm_aperture_remove_conflicting_pci_framebuffers+0x90/0x100 [drm]
-  [c000000004133490] [c008000000da0ce4] bochs_pci_probe+0x6c/0xa64 [bochs]
-  [...]
-  [c000000004133db0] [c00000000002aaa0] system_call_exception+0x170/0x2d0
-  [c000000004133e10] [c00000000000c3cc] system_call_common+0xec/0x250
+"[drm:dc_dmub_srv_wait_idle] *ERROR* Error waiting for DMUB idle: status=3"
 
-The bug [1] was introduced by commit 27599aacbaef ("fbdev: Hot-unplug
-firmware fb devices on forced removal"). Most firmware framebuffers
-have an underlying platform device, which can be hot-unplugged
-before loading the native graphics driver. OF framebuffers do not
-(yet) have that device. Fix the code by unregistering the framebuffer
-as before without a hot unplug.
+[How]
+Store last successfully set backlight value and compare with it instead
+of pwm reads which is not what we should compare with.
 
-Tested with 5.17 on qemu ppc64le emulation.
-
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Fixes: 27599aacbaef ("fbdev: Hot-unplug firmware fb devices on forced removal")
-Reported-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-Cc: Zack Rusin <zackr@vmware.com>
-Cc: Javier Martinez Canillas <javierm@redhat.com>
-Cc: Hans de Goede <hdegoede@redhat.com>
-Cc: stable@vger.kernel.org # v5.11+
-Cc: Helge Deller <deller@gmx.de>
-Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc: Sam Ravnborg <sam@ravnborg.org>
-Cc: Zheyu Ma <zheyuma97@gmail.com>
-Cc: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-Cc: Zhen Lei <thunder.leizhen@huawei.com>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Alex Deucher <alexander.deucher@amd.com>
-Cc: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-fbdev@vger.kernel.org
-Cc: dri-devel@lists.freedesktop.org
-Link: https://lore.kernel.org/all/YkHXO6LGHAN0p1pq@debian/ # [1]
-Link: https://patchwork.freedesktop.org/patch/msgid/20220404194402.29974-1-tzimmermann@suse.de
+Signed-off-by: Shirish S <shirish.s@amd.com>
+Reviewed-by: Harry Wentland <harry.wentland@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Cc: stable@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/video/fbdev/core/fbmem.c |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |    7 ++++---
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h |    6 ++++++
+ 2 files changed, 10 insertions(+), 3 deletions(-)
 
---- a/drivers/video/fbdev/core/fbmem.c
-+++ b/drivers/video/fbdev/core/fbmem.c
-@@ -1581,7 +1581,14 @@ static void do_remove_conflicting_frameb
- 			 * If it's not a platform device, at least print a warning. A
- 			 * fix would add code to remove the device from the system.
- 			 */
--			if (dev_is_platform(device)) {
-+			if (!device) {
-+				/* TODO: Represent each OF framebuffer as its own
-+				 * device in the device hierarchy. For now, offb
-+				 * doesn't have such a device, so unregister the
-+				 * framebuffer as before without warning.
-+				 */
-+				do_unregister_framebuffer(registered_fb[i]);
-+			} else if (dev_is_platform(device)) {
- 				registered_fb[i]->forced_out = true;
- 				platform_device_unregister(to_platform_device(device));
- 			} else {
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+@@ -3924,7 +3924,7 @@ static u32 convert_brightness_to_user(co
+ 				 max - min);
+ }
+ 
+-static int amdgpu_dm_backlight_set_level(struct amdgpu_display_manager *dm,
++static void amdgpu_dm_backlight_set_level(struct amdgpu_display_manager *dm,
+ 					 int bl_idx,
+ 					 u32 user_brightness)
+ {
+@@ -3955,7 +3955,8 @@ static int amdgpu_dm_backlight_set_level
+ 			DRM_DEBUG("DM: Failed to update backlight on eDP[%d]\n", bl_idx);
+ 	}
+ 
+-	return rc ? 0 : 1;
++	if (rc)
++		dm->actual_brightness[bl_idx] = user_brightness;
+ }
+ 
+ static int amdgpu_dm_backlight_update_status(struct backlight_device *bd)
+@@ -9804,7 +9805,7 @@ static void amdgpu_dm_atomic_commit_tail
+ 	/* restore the backlight level */
+ 	for (i = 0; i < dm->num_of_edps; i++) {
+ 		if (dm->backlight_dev[i] &&
+-		    (amdgpu_dm_backlight_get_level(dm, i) != dm->brightness[i]))
++		    (dm->actual_brightness[i] != dm->brightness[i]))
+ 			amdgpu_dm_backlight_set_level(dm, i, dm->brightness[i]);
+ 	}
+ #endif
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h
+@@ -540,6 +540,12 @@ struct amdgpu_display_manager {
+ 	 * cached backlight values.
+ 	 */
+ 	u32 brightness[AMDGPU_DM_MAX_NUM_EDP];
++	/**
++	 * @actual_brightness:
++	 *
++	 * last successfully applied backlight values.
++	 */
++	u32 actual_brightness[AMDGPU_DM_MAX_NUM_EDP];
+ };
+ 
+ enum dsc_clock_force_state {
 
 

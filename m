@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3E9E4FD68E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:24:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06E484FD48E
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:04:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383095AbiDLIfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:35:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54060 "EHLO
+        id S1389732AbiDLJYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:24:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356346AbiDLHfS (ORCPT
+        with ESMTP id S1353953AbiDLHiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:35:18 -0400
+        Tue, 12 Apr 2022 03:38:01 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA75050E24;
-        Tue, 12 Apr 2022 00:09:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B59517FB;
+        Tue, 12 Apr 2022 00:09:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DCA20B81B51;
-        Tue, 12 Apr 2022 07:09:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 556B5C385A1;
-        Tue, 12 Apr 2022 07:09:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 28762B81B58;
+        Tue, 12 Apr 2022 07:09:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EA20C385A5;
+        Tue, 12 Apr 2022 07:09:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747352;
-        bh=7pOdQWKzUDCKJ7sgaD3ytN5PTOJyYMvtQeItrScDXFY=;
+        s=korg; t=1649747382;
+        bh=P+yUphLekVSunkS4tg37Dl51JfFmmML9Ddy2YUNFXgg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f5BSIgzL5mBI84Yos0vwB/ZP7BLgPDB4q5Ldl9tds+7ka4t/d5L20qNH8VoKhaYx0
-         NJ+fms6ax4eIkHK5lbWmRG2yrEmSuHaoUZGgbTACxgg1Pu/sohk75Z21N+LtyqS+FJ
-         CXI2SH3//48c6vPIxIuhFvtw6JQK93CTU1vaPp/s=
+        b=EVSbDotQ2ZQGegzHkqIf6/5qmcyeOu9wdKSeM8V1OF70F5ttKbBemoGjZ6Ca+4le+
+         PqDARmzG0zXQ1DBOA0Zb8+ViZOvCtR4KzRnDgXG00CVHRsL4YSY6XX5e8lfExaDVMu
+         mudkRonCJVVjyrVl06v7zmGkT8sDkXtTAxAAngm4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Harry Wentland <harry.wentland@amd.com>,
-        Yongzhi Liu <lyz_cs@pku.edu.cn>,
+        stable@vger.kernel.org, Daniel Wheeler <daniel.wheeler@amd.com>,
+        Anthony Koo <Anthony.Koo@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
         Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 021/343] drm/amd/display: Fix memory leak
-Date:   Tue, 12 Apr 2022 08:27:19 +0200
-Message-Id: <20220412062951.716479156@linuxfoundation.org>
+Subject: [PATCH 5.17 022/343] drm/amd/display: Use PSR version selected during set_psr_caps
+Date:   Tue, 12 Apr 2022 08:27:20 +0200
+Message-Id: <20220412062951.745001905@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
 References: <20220412062951.095765152@linuxfoundation.org>
@@ -56,269 +58,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yongzhi Liu <lyz_cs@pku.edu.cn>
+From: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
 
-[ Upstream commit 5d5c6dba2b43e28845d7d7ed32a36802329a5f52 ]
+[ Upstream commit b80ddeb29d9df449f875f0b6f5de08d7537c02b8 ]
 
-[why]
-Resource release is needed on the error handling path
-to prevent memory leak.
+[Why]
+If the DPCD caps specifies a PSR version newer than PSR_VERSION_1 then
+we fallback to using PSR_VERSION_1 in amdgpu_dm_set_psr_caps.
 
-[how]
-Fix this by adding kfree on the error handling path.
+This gets overriden with the raw DPCD value in amdgpu_dm_link_setup_psr,
+which can result in DMCUB hanging if we pass in an unsupported PSR
+version number.
 
-Reviewed-by: Harry Wentland <harry.wentland@amd.com>
-Signed-off-by: Yongzhi Liu <lyz_cs@pku.edu.cn>
+[How]
+Fix the hang by using link->psr_settings.psr_version directly during
+amdgpu_dm_link_setup_psr.
+
+Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
+Reviewed-by: Anthony Koo <Anthony.Koo@amd.com>
+Acked-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Signed-off-by: Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
 Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../amd/display/amdgpu_dm/amdgpu_dm_debugfs.c | 80 ++++++++++++++-----
- 1 file changed, 60 insertions(+), 20 deletions(-)
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c
-index 26719efa5396..12d437d9a0e4 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_debugfs.c
-@@ -227,8 +227,10 @@ static ssize_t dp_link_settings_read(struct file *f, char __user *buf,
- 			break;
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c
+index c510638b4f99..a009fc654ac9 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_psr.c
+@@ -149,10 +149,8 @@ bool amdgpu_dm_link_setup_psr(struct dc_stream_state *stream)
  
- 		r = put_user(*(rd_buf + result), buf);
--		if (r)
-+		if (r) {
-+			kfree(rd_buf);
- 			return r; /* r = -EFAULT */
-+		}
+ 	link = stream->link;
  
- 		buf += 1;
- 		size -= 1;
-@@ -389,8 +391,10 @@ static ssize_t dp_phy_settings_read(struct file *f, char __user *buf,
- 			break;
- 
- 		r = put_user((*(rd_buf + result)), buf);
--		if (r)
-+		if (r) {
-+			kfree(rd_buf);
- 			return r; /* r = -EFAULT */
-+		}
- 
- 		buf += 1;
- 		size -= 1;
-@@ -1359,8 +1363,10 @@ static ssize_t dp_dsc_clock_en_read(struct file *f, char __user *buf,
- 				break;
- 	}
- 
--	if (!pipe_ctx)
-+	if (!pipe_ctx) {
-+		kfree(rd_buf);
- 		return -ENXIO;
-+	}
- 
- 	dsc = pipe_ctx->stream_res.dsc;
- 	if (dsc)
-@@ -1376,8 +1382,10 @@ static ssize_t dp_dsc_clock_en_read(struct file *f, char __user *buf,
- 			break;
- 
- 		r = put_user(*(rd_buf + result), buf);
--		if (r)
-+		if (r) {
-+			kfree(rd_buf);
- 			return r; /* r = -EFAULT */
-+		}
- 
- 		buf += 1;
- 		size -= 1;
-@@ -1546,8 +1554,10 @@ static ssize_t dp_dsc_slice_width_read(struct file *f, char __user *buf,
- 				break;
- 	}
- 
--	if (!pipe_ctx)
-+	if (!pipe_ctx) {
-+		kfree(rd_buf);
- 		return -ENXIO;
-+	}
- 
- 	dsc = pipe_ctx->stream_res.dsc;
- 	if (dsc)
-@@ -1563,8 +1573,10 @@ static ssize_t dp_dsc_slice_width_read(struct file *f, char __user *buf,
- 			break;
- 
- 		r = put_user(*(rd_buf + result), buf);
--		if (r)
-+		if (r) {
-+			kfree(rd_buf);
- 			return r; /* r = -EFAULT */
-+		}
- 
- 		buf += 1;
- 		size -= 1;
-@@ -1731,8 +1743,10 @@ static ssize_t dp_dsc_slice_height_read(struct file *f, char __user *buf,
- 				break;
- 	}
- 
--	if (!pipe_ctx)
-+	if (!pipe_ctx) {
-+		kfree(rd_buf);
- 		return -ENXIO;
-+	}
- 
- 	dsc = pipe_ctx->stream_res.dsc;
- 	if (dsc)
-@@ -1748,8 +1762,10 @@ static ssize_t dp_dsc_slice_height_read(struct file *f, char __user *buf,
- 			break;
- 
- 		r = put_user(*(rd_buf + result), buf);
--		if (r)
-+		if (r) {
-+			kfree(rd_buf);
- 			return r; /* r = -EFAULT */
-+		}
- 
- 		buf += 1;
- 		size -= 1;
-@@ -1912,8 +1928,10 @@ static ssize_t dp_dsc_bits_per_pixel_read(struct file *f, char __user *buf,
- 				break;
- 	}
- 
--	if (!pipe_ctx)
-+	if (!pipe_ctx) {
-+		kfree(rd_buf);
- 		return -ENXIO;
-+	}
- 
- 	dsc = pipe_ctx->stream_res.dsc;
- 	if (dsc)
-@@ -1929,8 +1947,10 @@ static ssize_t dp_dsc_bits_per_pixel_read(struct file *f, char __user *buf,
- 			break;
- 
- 		r = put_user(*(rd_buf + result), buf);
--		if (r)
-+		if (r) {
-+			kfree(rd_buf);
- 			return r; /* r = -EFAULT */
-+		}
- 
- 		buf += 1;
- 		size -= 1;
-@@ -2088,8 +2108,10 @@ static ssize_t dp_dsc_pic_width_read(struct file *f, char __user *buf,
- 				break;
- 	}
- 
--	if (!pipe_ctx)
-+	if (!pipe_ctx) {
-+		kfree(rd_buf);
- 		return -ENXIO;
-+	}
- 
- 	dsc = pipe_ctx->stream_res.dsc;
- 	if (dsc)
-@@ -2105,8 +2127,10 @@ static ssize_t dp_dsc_pic_width_read(struct file *f, char __user *buf,
- 			break;
- 
- 		r = put_user(*(rd_buf + result), buf);
--		if (r)
-+		if (r) {
-+			kfree(rd_buf);
- 			return r; /* r = -EFAULT */
-+		}
- 
- 		buf += 1;
- 		size -= 1;
-@@ -2145,8 +2169,10 @@ static ssize_t dp_dsc_pic_height_read(struct file *f, char __user *buf,
- 				break;
- 	}
- 
--	if (!pipe_ctx)
-+	if (!pipe_ctx) {
-+		kfree(rd_buf);
- 		return -ENXIO;
-+	}
- 
- 	dsc = pipe_ctx->stream_res.dsc;
- 	if (dsc)
-@@ -2162,8 +2188,10 @@ static ssize_t dp_dsc_pic_height_read(struct file *f, char __user *buf,
- 			break;
- 
- 		r = put_user(*(rd_buf + result), buf);
--		if (r)
-+		if (r) {
-+			kfree(rd_buf);
- 			return r; /* r = -EFAULT */
-+		}
- 
- 		buf += 1;
- 		size -= 1;
-@@ -2217,8 +2245,10 @@ static ssize_t dp_dsc_chunk_size_read(struct file *f, char __user *buf,
- 				break;
- 	}
- 
--	if (!pipe_ctx)
-+	if (!pipe_ctx) {
-+		kfree(rd_buf);
- 		return -ENXIO;
-+	}
- 
- 	dsc = pipe_ctx->stream_res.dsc;
- 	if (dsc)
-@@ -2234,8 +2264,10 @@ static ssize_t dp_dsc_chunk_size_read(struct file *f, char __user *buf,
- 			break;
- 
- 		r = put_user(*(rd_buf + result), buf);
--		if (r)
-+		if (r) {
-+			kfree(rd_buf);
- 			return r; /* r = -EFAULT */
-+		}
- 
- 		buf += 1;
- 		size -= 1;
-@@ -2289,8 +2321,10 @@ static ssize_t dp_dsc_slice_bpg_offset_read(struct file *f, char __user *buf,
- 				break;
- 	}
- 
--	if (!pipe_ctx)
-+	if (!pipe_ctx) {
-+		kfree(rd_buf);
- 		return -ENXIO;
-+	}
- 
- 	dsc = pipe_ctx->stream_res.dsc;
- 	if (dsc)
-@@ -2306,8 +2340,10 @@ static ssize_t dp_dsc_slice_bpg_offset_read(struct file *f, char __user *buf,
- 			break;
- 
- 		r = put_user(*(rd_buf + result), buf);
--		if (r)
-+		if (r) {
-+			kfree(rd_buf);
- 			return r; /* r = -EFAULT */
-+		}
- 
- 		buf += 1;
- 		size -= 1;
-@@ -3459,8 +3495,10 @@ static ssize_t dcc_en_bits_read(
- 	dc->hwss.get_dcc_en_bits(dc, dcc_en_bits);
- 
- 	rd_buf = kcalloc(rd_buf_size, sizeof(char), GFP_KERNEL);
--	if (!rd_buf)
-+	if (!rd_buf) {
-+		kfree(dcc_en_bits);
- 		return -ENOMEM;
-+	}
- 
- 	for (i = 0; i < num_pipes; i++)
- 		offset += snprintf(rd_buf + offset, rd_buf_size - offset,
-@@ -3473,8 +3511,10 @@ static ssize_t dcc_en_bits_read(
- 		if (*pos >= rd_buf_size)
- 			break;
- 		r = put_user(*(rd_buf + result), buf);
--		if (r)
-+		if (r) {
-+			kfree(rd_buf);
- 			return r; /* r = -EFAULT */
-+		}
- 		buf += 1;
- 		size -= 1;
- 		*pos += 1;
+-	psr_config.psr_version = link->dpcd_caps.psr_caps.psr_version;
+-
+-	if (psr_config.psr_version > 0) {
+-		psr_config.psr_exit_link_training_required = 0x1;
++	if (link->psr_settings.psr_version != DC_PSR_VERSION_UNSUPPORTED) {
++		psr_config.psr_version = link->psr_settings.psr_version;
+ 		psr_config.psr_frame_capture_indication_req = 0;
+ 		psr_config.psr_rfb_setup_time = 0x37;
+ 		psr_config.psr_sdp_transmit_line_num_deadline = 0x20;
 -- 
 2.35.1
 

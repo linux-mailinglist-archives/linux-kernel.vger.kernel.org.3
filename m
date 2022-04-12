@@ -2,191 +2,404 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 943024FDC4D
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:04:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B02D54FDC45
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 13:04:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357094AbiDLKSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 06:18:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35030 "EHLO
+        id S242848AbiDLKRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 06:17:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378422AbiDLKAh (ORCPT
+        with ESMTP id S1348129AbiDLKAx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 06:00:37 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E569D6D843
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 02:07:50 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id t67so15173236ybi.2
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 02:07:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Mq4aiWm3Y4lyxCzbiwU9Ge/1oDBgcu9WD33KPrhUY+g=;
-        b=yH2DXsZIz72uFP8NERg+F9xFDCni0QwfCp74a4A8StZu4vVpk283QASjLEFRCZoAi7
-         j94bZ152bLWZ98A40lIGFM5oI+F/rTPeQtmVy8uQ7MpCqEEHijXKkX16hPGBj00ki15L
-         ryN1d3+l3aXJXV2AU1maaODjH9nP24GuFuzTZRTSJ/gBh0YexvI/ADIQJZhueaT/+4qU
-         E01PC//ewJ3dmD1JW/xvPFUPA5bM7DR12O9aWYyTl7EhlWz+xsTrsO7Zwol1MYYsaDJa
-         VasjEeeukTLQO4sjYmRmvtBJ5fWPVrdNrS+d8/xN976WftOvqhqTvuiJTZIag1twX5Ar
-         xkYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Mq4aiWm3Y4lyxCzbiwU9Ge/1oDBgcu9WD33KPrhUY+g=;
-        b=f6C/HULHlb0Oyt8upceZTR5nU+Qi9p14hrqwxjA3EpqX/KDaXqXNJAZtXrqtZ5TOR+
-         mDUGdaoX6LeBQudD1ecxI2DeyHCQLgVhapY8TO4t3H9OtfoFie9InABQHb3Fvlon9VJd
-         YHdjyIKyz0K8tTZpvAZ8gFcbcb5rIU09EQIH51SD45K9F+2bNDC1NGbBr3UfXlkExCCI
-         +DsRKE0YR4F3spGvwlUtKWEKKr43wetcq0UShyBm1E3NwkiARNL2Vpainm5vMGJyv0j8
-         w9+sfS8LTbL8EccsSdWh823beDhbjINglx01oPTEgRdxcMRNCF/5s2UMFUWcO7i7LvBy
-         CKuw==
-X-Gm-Message-State: AOAM530Uwse7/TTTtCwhWRa79qY+4SlWohBTYFcY/6MIOvuTLvugx7mA
-        EM3A5uI5y1bJZcZEKIYQG2nqMPYMluBJ1dWnz/9Z1w==
-X-Google-Smtp-Source: ABdhPJyVuuZpik+H9nBpQTECjQ6TkT/8gWFMrjo+hncDwWOSXkf1KZmGM4nuvItoSKc/LYswBX4D9yINbkiAqGMTRHY=
-X-Received: by 2002:a25:1344:0:b0:633:7592:9c0f with SMTP id
- 65-20020a251344000000b0063375929c0fmr26055334ybt.211.1649754470034; Tue, 12
- Apr 2022 02:07:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <030aacb0c1304e43ab917924dcf4f138@AcuMS.aculab.com>
- <20220411233447.rcencjivkhyltyxm@airbuntu> <4ca5cd70904d47bea0df93f7c0979c66@AcuMS.aculab.com>
-In-Reply-To: <4ca5cd70904d47bea0df93f7c0979c66@AcuMS.aculab.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Tue, 12 Apr 2022 11:07:38 +0200
-Message-ID: <CAKfTPtBWUvvFMsSnfcKsOpHFdvxvSWpjfuLpjwwQrwhQc7+xuw@mail.gmail.com>
-Subject: Re: Scheduling tasks on idle cpu
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Qais Yousef <qais.yousef@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "juri.lelli@redhat.com" <juri.lelli@redhat.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "bsegall@google.com" <bsegall@google.com>,
-        "mgorman@suse.de" <mgorman@suse.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "parth@linux.ibm.com" <parth@linux.ibm.com>,
-        "chris.hyser@oracle.com" <chris.hyser@oracle.com>,
-        "pkondeti@codeaurora.org" <pkondeti@codeaurora.org>,
-        "Valentin.Schneider@arm.com" <Valentin.Schneider@arm.com>,
-        "patrick.bellasi@matbug.net" <patrick.bellasi@matbug.net>,
-        "pjt@google.com" <pjt@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
-        "tj@kernel.org" <tj@kernel.org>,
-        "qperret@google.com" <qperret@google.com>,
-        "tim.c.chen@linux.intel.com" <tim.c.chen@linux.intel.com>,
-        Wei Wang <wvw@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 12 Apr 2022 06:00:53 -0400
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B7C6D965
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 02:08:06 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=guanghuifeng@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0V9twWp8_1649754476;
+Received: from j66d16353.sqa.eu95.tbsite.net(mailfrom:guanghuifeng@linux.alibaba.com fp:SMTPD_---0V9twWp8_1649754476)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 12 Apr 2022 17:08:04 +0800
+From:   Guanghui Feng <guanghuifeng@linux.alibaba.com>
+To:     catalin.marinas@arm.com, will@kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, baolin.wang@linux.alibaba.com
+Subject: [PATCH RFC v1] arm64: mm: change mem_map to use block/section mapping with crashkernel
+Date:   Tue, 12 Apr 2022 17:07:56 +0800
+Message-Id: <1649754476-8713-1-git-send-email-guanghuifeng@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Apr 2022 at 10:39, David Laight <David.Laight@aculab.com> wrote:
->
-> From: Qais Yousef
-> > Sent: 12 April 2022 00:35
-> >
-> > On 04/11/22 08:26, David Laight wrote:
-> > > From: Qais Yousef
-> > > > Sent: 09 April 2022 18:09
-> > > ...
-> > > > RT scheduler will push/pull tasks to ensure the task will get to run ASAP if
-> > > > there's another cpu at lower priority is available
-> > >
-> > > Does that actually happen?
-> >
-> > For RT tasks, yes. They should get distributed.
->
-> Ok, that is something slightly different from what I'm seeing.
->
-> > > I've seen the following:
-> > >   34533 [017]: sys_futex(uaddr: 1049104, op: 85, val: 1, utime: 1, uaddr2: 1049100, val3: 4000001)
-> > >   34533 [017]: sched_migrate_task: pid=34512 prio=120 orig_cpu=14 dest_cpu=17
-> > >   34533 [017]: sched_wakeup: pid=34512 prio=120 success=1 target_cpu=017
-> >
-> > prio=120 is a CFS task, no?
->
-> CFS = 'normal time-slice processes ? Then yes.
->
-> > > and pid 34512 doesn't get scheduled until pid 34533 finally sleeps.
-> > > This is in spite of there being 5 idle cpu.
-> > > cpu 14 is busy running a RT thread, but migrating to cpu 17 seems wrong.
-> > >
-> > > This is on a RHEL7 kernel, I've not replicated it on anything recent.
-> > > But I've very much like a RT thread to be able to schedule a non-RT
-> > > thread to run on an idle cpu.
-> >
-> > Oh, you want CFS to avoid CPUs that are running RT tasks.
-> >
-> > We had a proposal in the past, but it wasn't good enough
-> >
-> >       https://lore.kernel.org/lkml/1567048502-6064-1-git-send-email-jing-ting.wu@mediatek.com/
->
-> That seems to be something different.
-> Related to something else I've seen where a RT process is scheduled
-> on its old cpu (to get the hot cache) but the process running on
-> that cpu is looping in kernel - so the RT process doesn't start.
->
-> I've avoided most of the pain that caused by not using a single
-> cv_broadcast() to wake up the 34 RT threads (in this config).
-> (Each kernel thread seemed to wake up the next one, so the
-> delays were cumulative.)
-> Instead there is a separate cv for each RT thread.
-> I actually want the 'herd of wildebeest' :-)
->
-> > The approach in that patch modified RT to avoid CFS actually.
->
-> Yes I want the CFS scheduler to pick an idle cpu in preference
-> to an active RT one.
+There are many changes and discussions:
+commit 031495635b46
+commit 1a8e1cef7603
+commit 8424ecdde7df
+commit 0a30c53573b0
+commit 2687275a5843
 
-When task 34512 wakes up, scheduler checks if prev or this cpu are
-idle which is not the case for you. Then, it compares the load of prev
-and this_cpu and seems to select this_cpu (cpu17).
+When using DMA/DMA32 zone and crashkernel, disable rodata full and kfence,
+mem_map will use non block/section mapping(for crashkernel requires to shrink
+the region in page granularity). But it will degrade performance when doing
+larging continuous mem access in kernel(memcpy/memmove, etc).
 
-Once cpu17 selected, it will try to find an idle cpu which shares LLC
-but it seems that the scheduler didn't find one and finally keeps task
-34512 on this_cpu.
+This patch firstly do block/section mapping at mem_map, reserve crashkernel
+memory. And then walking pagetable to split block/section mapping
+to non block/section mapping [only] for crashkernel mem. We will accelerate
+mem access about 10-20% performance improvement, and reduce the cpu dTLB miss
+conspicuously on some platform with this optimization.
 
-Note that during the next tick, a load balance will be trigger if
-this_cpu still have both RT and task 34512,
+Signed-off-by: Guanghui Feng <guanghuifeng@linux.alibaba.com>
+---
+ arch/arm64/include/asm/mmu.h |   1 +
+ arch/arm64/mm/init.c         |   8 +-
+ arch/arm64/mm/mmu.c          | 274 +++++++++++++++++++++++++++++++++++++++----
+ 3 files changed, 253 insertions(+), 30 deletions(-)
 
->
-> > Can you verify whether the RT task woke up after task 34512 was migrated to CPU
-> > 17? Looking at the definition of available_idle_cpu() we should have avoided
-> > that CPU if the RT task was already running. Both waking up at the same time
-> > would explain what you see. Otherwise I'm not sure why it picked CPU 17.
->
-> All 35 RT tasks are running when the request to schedule task 34512 is made.
-> (They wake every 10ms to process UDP/RTP audio packets.)
-> The RT task on cpu 17 carried on running until it ran out of work (after about 1ms).
-> Task 34512 then ran on cpu 17.
->
-> In this case task 34512 actually finished quite quickly.
-> (It is creating and binding more UDP sockets.)
-> But it looks like if it were still running on the next 10ms 'tick'
-> it would be pre-empted by the RT task and be idle.
-> Not ideal when I'm trying to schedule a background activity.
->
-> I don't think the load-balancer will ever pick it up.
-> All the process scheduling is happening far too fast.
->
-> What I think might be happening is that the futex() code is requesting
-> the woken up thread run on the current cpu.
-> This can be advantageous in some circumstances - usually if you
-> know the current thread is about to sleep.
-> (I remember another scheduler doing that, but I can't remember why!
-> The only sequence I can think of is a shell doing fork+exec+wait.)
-> But it seems like a bad idea when a RT thread is waking a CFS one.
-> (Or any case where the one being woken is lower priority.)
->
-> I might have to run the 'background tasks' at low RT priority
-> just to get them scheduled on idle cpu.
->
->         David
->
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
+diff --git a/arch/arm64/include/asm/mmu.h b/arch/arm64/include/asm/mmu.h
+index 48f8466..df113cc 100644
+--- a/arch/arm64/include/asm/mmu.h
++++ b/arch/arm64/include/asm/mmu.h
+@@ -63,6 +63,7 @@ static inline bool arm64_kernel_unmapped_at_el0(void)
+ extern void arm64_memblock_init(void);
+ extern void paging_init(void);
+ extern void bootmem_init(void);
++extern void mapping_crashkernel(void);
+ extern void __iomem *early_io_map(phys_addr_t phys, unsigned long virt);
+ extern void init_mem_pgprot(void);
+ extern void create_pgd_mapping(struct mm_struct *mm, phys_addr_t phys,
+diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+index 8ac25f1..02edd45 100644
+--- a/arch/arm64/mm/init.c
++++ b/arch/arm64/mm/init.c
+@@ -335,10 +335,6 @@ void __init arm64_memblock_init(void)
+ 	}
+ 
+ 	early_init_fdt_scan_reserved_mem();
+-
+-	if (!IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32))
+-		reserve_crashkernel();
+-
+ 	high_memory = __va(memblock_end_of_DRAM() - 1) + 1;
+ }
+ 
+@@ -385,8 +381,8 @@ void __init bootmem_init(void)
+ 	 * request_standard_resources() depends on crashkernel's memory being
+ 	 * reserved, so do it here.
+ 	 */
+-	if (IS_ENABLED(CONFIG_ZONE_DMA) || IS_ENABLED(CONFIG_ZONE_DMA32))
+-		reserve_crashkernel();
++	reserve_crashkernel();
++	mapping_crashkernel();
+ 
+ 	memblock_dump_all();
+ }
+diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+index 626ec32..0672afd 100644
+--- a/arch/arm64/mm/mmu.c
++++ b/arch/arm64/mm/mmu.c
+@@ -498,6 +498,256 @@ static int __init enable_crash_mem_map(char *arg)
+ }
+ early_param("crashkernel", enable_crash_mem_map);
+ 
++#ifdef CONFIG_KEXEC_CORE
++static phys_addr_t __init early_crashkernel_pgtable_alloc(int shift)
++{
++	phys_addr_t phys;
++	void *ptr;
++
++	phys = memblock_phys_alloc_range(PAGE_SIZE, PAGE_SIZE, 0,
++					 MEMBLOCK_ALLOC_NOLEAKTRACE);
++	if (!phys)
++		panic("Failed to allocate page table page\n");
++
++	ptr = (void *)__phys_to_virt(phys);
++	memset(ptr, 0, PAGE_SIZE);
++	return phys;
++}
++
++static void init_crashkernel_pte(pmd_t *pmdp, unsigned long addr,
++				 unsigned long end,
++				 phys_addr_t phys, pgprot_t prot)
++{
++	pte_t *ptep;
++	ptep = pte_offset_kernel(pmdp, addr);
++	do {
++		set_pte(ptep, pfn_pte(__phys_to_pfn(phys), prot));
++		phys += PAGE_SIZE;
++	} while (ptep++, addr += PAGE_SIZE, addr != end);
++}
++
++static void alloc_crashkernel_cont_pte(pmd_t *pmdp, unsigned long addr,
++				       unsigned long end, phys_addr_t phys,
++				       pgprot_t prot,
++				       phys_addr_t (*pgtable_alloc)(int),
++				       int flags)
++{
++	unsigned long next;
++	pmd_t pmd = READ_ONCE(*pmdp);
++
++	BUG_ON(pmd_sect(pmd));
++	if (pmd_none(pmd)) {
++		pmdval_t pmdval = PMD_TYPE_TABLE | PMD_TABLE_UXN;
++		phys_addr_t pte_phys;
++
++		if (flags & NO_EXEC_MAPPINGS)
++			pmdval |= PMD_TABLE_PXN;
++		BUG_ON(!pgtable_alloc);
++		pte_phys = pgtable_alloc(PAGE_SHIFT);
++		__pmd_populate(pmdp, pte_phys, pmdval);
++		pmd = READ_ONCE(*pmdp);
++	}
++	BUG_ON(pmd_bad(pmd));
++
++	do {
++		pgprot_t __prot = prot;
++		next = pte_cont_addr_end(addr, end);
++		init_crashkernel_pte(pmdp, addr, next, phys, __prot);
++		phys += next - addr;
++	} while (addr = next, addr != end);
++}
++
++static void init_crashkernel_pmd(pud_t *pudp, unsigned long addr,
++				 unsigned long end, phys_addr_t phys,
++				 pgprot_t prot,
++				 phys_addr_t (*pgtable_alloc)(int), int flags)
++{
++	phys_addr_t map_offset;
++	unsigned long next;
++	pmd_t *pmdp;
++	pmdval_t pmdval;
++
++	pmdp = pmd_offset(pudp, addr);
++	do {
++		next = pmd_addr_end(addr, end);
++		if (!pmd_none(*pmdp) && pmd_sect(*pmdp)) {
++			phys_addr_t pte_phys = pgtable_alloc(PAGE_SHIFT);
++			pmd_clear(pmdp);
++			pmdval = PMD_TYPE_TABLE | PMD_TABLE_UXN;
++			if (flags & NO_EXEC_MAPPINGS)
++				pmdval |= PMD_TABLE_PXN;
++			__pmd_populate(pmdp, pte_phys, pmdval);
++			flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
++
++			map_offset = addr - (addr & PMD_MASK);
++			if (map_offset)
++			    alloc_init_cont_pte(pmdp, addr & PMD_MASK, addr,
++						phys - map_offset, prot,
++						pgtable_alloc, flags);
++
++			if (next < (addr & PMD_MASK) + PMD_SIZE)
++			    alloc_init_cont_pte(pmdp, next, (addr & PUD_MASK) +
++						PUD_SIZE, next - addr + phys,
++						prot, pgtable_alloc, flags);
++		}
++		alloc_crashkernel_cont_pte(pmdp, addr, next, phys, prot,
++					   pgtable_alloc, flags);
++		phys += next - addr;
++	} while (pmdp++, addr = next, addr != end);
++}
++
++static void alloc_crashkernel_cont_pmd(pud_t *pudp, unsigned long addr,
++				       unsigned long end, phys_addr_t phys,
++				       pgprot_t prot,
++				       phys_addr_t (*pgtable_alloc)(int),
++				       int flags)
++{
++	unsigned long next;
++	pud_t pud = READ_ONCE(*pudp);
++
++	/*
++	 * Check for initial section mappings in the pgd/pud.
++	 */
++	BUG_ON(pud_sect(pud));
++	if (pud_none(pud)) {
++		pudval_t pudval = PUD_TYPE_TABLE | PUD_TABLE_UXN;
++		phys_addr_t pmd_phys;
++
++		if (flags & NO_EXEC_MAPPINGS)
++			pudval |= PUD_TABLE_PXN;
++		BUG_ON(!pgtable_alloc);
++		pmd_phys = pgtable_alloc(PMD_SHIFT);
++		__pud_populate(pudp, pmd_phys, pudval);
++		pud = READ_ONCE(*pudp);
++	}
++	BUG_ON(pud_bad(pud));
++
++	do {
++		pgprot_t __prot = prot;
++		next = pmd_cont_addr_end(addr, end);
++		init_crashkernel_pmd(pudp, addr, next, phys, __prot,
++				     pgtable_alloc, flags);
++		phys += next - addr;
++	} while (addr = next, addr != end);
++}
++
++static void alloc_crashkernel_pud(pgd_t *pgdp, unsigned long addr,
++				  unsigned long end, phys_addr_t phys,
++				  pgprot_t prot,
++				  phys_addr_t (*pgtable_alloc)(int),
++				  int flags)
++{
++	phys_addr_t map_offset;
++	unsigned long next;
++	pud_t *pudp;
++	p4d_t *p4dp = p4d_offset(pgdp, addr);
++	p4d_t p4d = READ_ONCE(*p4dp);
++	pudval_t pudval;
++
++	if (p4d_none(p4d)) {
++		p4dval_t p4dval = P4D_TYPE_TABLE | P4D_TABLE_UXN;
++		phys_addr_t pud_phys;
++
++		if (flags & NO_EXEC_MAPPINGS)
++			p4dval |= P4D_TABLE_PXN;
++		BUG_ON(!pgtable_alloc);
++		pud_phys = pgtable_alloc(PUD_SHIFT);
++		__p4d_populate(p4dp, pud_phys, p4dval);
++		p4d = READ_ONCE(*p4dp);
++	}
++	BUG_ON(p4d_bad(p4d));
++
++	/*
++	 * No need for locking during early boot. And it doesn't work as
++	 * expected with KASLR enabled.
++	 */
++	if (system_state != SYSTEM_BOOTING)
++		mutex_lock(&fixmap_lock);
++	pudp = pud_offset(p4dp, addr);
++	do {
++		next = pud_addr_end(addr, end);
++		if (!pud_none(*pudp) && pud_sect(*pudp)) {
++			phys_addr_t pmd_phys = pgtable_alloc(PMD_SHIFT);
++			pud_clear(pudp);
++
++			pudval = PUD_TYPE_TABLE | PUD_TABLE_UXN;
++			if (flags & NO_EXEC_MAPPINGS)
++				pudval |= PUD_TABLE_PXN;
++			__pud_populate(pudp, pmd_phys, pudval);
++			flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
++
++			map_offset = addr - (addr & PUD_MASK);
++			if (map_offset)
++			    alloc_init_cont_pmd(pudp, addr & PUD_MASK, addr,
++						phys - map_offset, prot,
++						pgtable_alloc, flags);
++
++			if (next < (addr & PUD_MASK) + PUD_SIZE)
++			    alloc_init_cont_pmd(pudp, next, (addr & PUD_MASK) +
++						PUD_SIZE, next - addr + phys,
++						prot, pgtable_alloc, flags);
++		}
++		alloc_crashkernel_cont_pmd(pudp, addr, next, phys, prot,
++					   pgtable_alloc, flags);
++		phys += next - addr;
++	} while (pudp++, addr = next, addr != end);
++
++	if (system_state != SYSTEM_BOOTING)
++		mutex_unlock(&fixmap_lock);
++}
++
++static void __create_crashkernel_mapping(pgd_t *pgdir, phys_addr_t phys,
++					 unsigned long virt, phys_addr_t size,
++					 pgprot_t prot,
++					 phys_addr_t (*pgtable_alloc)(int),
++					 int flags)
++{
++	unsigned long addr, end, next;
++	pgd_t *pgdp = pgd_offset_pgd(pgdir, virt);
++
++	/*
++	 * If the virtual and physical address don't have the same offset
++	 * within a page, we cannot map the region as the caller expects.
++	 */
++	if (WARN_ON((phys ^ virt) & ~PAGE_MASK))
++		return;
++
++	phys &= PAGE_MASK;
++	addr = virt & PAGE_MASK;
++	end = PAGE_ALIGN(virt + size);
++
++	do {
++		next = pgd_addr_end(addr, end);
++		alloc_crashkernel_pud(pgdp, addr, next, phys, prot,
++				      pgtable_alloc, flags);
++		phys += next - addr;
++	} while (pgdp++, addr = next, addr != end);
++}
++
++static void __init map_crashkernel(pgd_t *pgdp, phys_addr_t start,
++				   phys_addr_t end, pgprot_t prot, int flags)
++{
++	__create_crashkernel_mapping(pgdp, start, __phys_to_virt(start),
++				     end - start, prot,
++				     early_crashkernel_pgtable_alloc, flags);
++}
++
++void __init mapping_crashkernel(void)
++{
++	if (can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE))
++	    return;
++
++	if (!crash_mem_map || !crashk_res.end)
++	    return;
++
++	map_crashkernel(swapper_pg_dir, crashk_res.start,
++			crashk_res.end + 1, PAGE_KERNEL,
++			NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS);
++}
++#else
++void __init mapping_crashkernel(void) {}
++#endif
++
+ static void __init map_mem(pgd_t *pgdp)
+ {
+ 	static const u64 direct_map_end = _PAGE_END(VA_BITS_MIN);
+@@ -527,17 +777,6 @@ static void __init map_mem(pgd_t *pgdp)
+ 	 */
+ 	memblock_mark_nomap(kernel_start, kernel_end - kernel_start);
+ 
+-#ifdef CONFIG_KEXEC_CORE
+-	if (crash_mem_map) {
+-		if (IS_ENABLED(CONFIG_ZONE_DMA) ||
+-		    IS_ENABLED(CONFIG_ZONE_DMA32))
+-			flags |= NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS;
+-		else if (crashk_res.end)
+-			memblock_mark_nomap(crashk_res.start,
+-			    resource_size(&crashk_res));
+-	}
+-#endif
+-
+ 	/* map all the memory banks */
+ 	for_each_mem_range(i, &start, &end) {
+ 		if (start >= end)
+@@ -570,19 +809,6 @@ static void __init map_mem(pgd_t *pgdp)
+ 	 * in page granularity and put back unused memory to buddy system
+ 	 * through /sys/kernel/kexec_crash_size interface.
+ 	 */
+-#ifdef CONFIG_KEXEC_CORE
+-	if (crash_mem_map &&
+-	    !IS_ENABLED(CONFIG_ZONE_DMA) && !IS_ENABLED(CONFIG_ZONE_DMA32)) {
+-		if (crashk_res.end) {
+-			__map_memblock(pgdp, crashk_res.start,
+-				       crashk_res.end + 1,
+-				       PAGE_KERNEL,
+-				       NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS);
+-			memblock_clear_nomap(crashk_res.start,
+-					     resource_size(&crashk_res));
+-		}
+-	}
+-#endif
+ }
+ 
+ void mark_rodata_ro(void)
+-- 
+1.8.3.1
+

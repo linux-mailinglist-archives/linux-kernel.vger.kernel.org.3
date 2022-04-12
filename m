@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F67C4FD90C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:38:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E02704FD870
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:36:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355912AbiDLIsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:48:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52436 "EHLO
+        id S235966AbiDLHVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:21:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357370AbiDLHkJ (ORCPT
+        with ESMTP id S1352780AbiDLHF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:40:09 -0400
+        Tue, 12 Apr 2022 03:05:59 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B987925582;
-        Tue, 12 Apr 2022 00:15:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445A827B22;
+        Mon, 11 Apr 2022 23:48:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 56B7B6153F;
-        Tue, 12 Apr 2022 07:15:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 655C8C385A1;
-        Tue, 12 Apr 2022 07:15:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C42B660A21;
+        Tue, 12 Apr 2022 06:48:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D10A6C385A6;
+        Tue, 12 Apr 2022 06:48:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747741;
-        bh=v3qD+lbxvAnDXHBSBZdV7PZeHWEbKNY3rvkqSI17XYc=;
+        s=korg; t=1649746124;
+        bh=QglxR7xqTgao+Mu3n8Nk9NbuD0NuJMjSZJ6+4whERrI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C3NQSBKQUD6JdWtgJGCVIu3DKcoD98Wtf9OVYZHUl63c+tPz0A94pclZp2NzorrwX
-         N13C+on1CorkC76HvW4L7nohj/MiaIDx6+looWLRIcednaxiAd3zN1NSh2SgfoyY/r
-         yQL10tx07S2goIk3GrXVYRiRHtilj+j012ljmk2I=
+        b=souES1R19WgJdTr+PgpTcMhSnUZsmoM8S+U59rkQFuy6bCGVKyk32yX0f13MH8bmq
+         XV6RjIgQ2UqtxgSX+BCD8ByhorrxTsQL1OcQrkIwD69YI0QGBDpt9Kgd0gj7wf/LSs
+         86JQiRbMGDTECSTCTRuKU61LGKRJPoK0zoj/6zOM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiubo Li <xiubli@redhat.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>,
+        stable@vger.kernel.org, Axel Lin <axel.lin@ingics.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 152/343] ceph: fix memory leak in ceph_readdir when note_last_dentry returns error
-Date:   Tue, 12 Apr 2022 08:29:30 +0200
-Message-Id: <20220412062955.766286874@linuxfoundation.org>
+Subject: [PATCH 5.15 168/277] regulator: rtq2134: Fix missing active_discharge_on setting
+Date:   Tue, 12 Apr 2022 08:29:31 +0200
+Message-Id: <20220412062946.899149569@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,51 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiubo Li <xiubli@redhat.com>
+From: Axel Lin <axel.lin@ingics.com>
 
-[ Upstream commit f639d9867eea647005dc824e0e24f39ffc50d4e4 ]
+[ Upstream commit 17049bf9de55a42ee96fd34520aff8a484677675 ]
 
-Reset the last_readdir at the same time, and add a comment explaining
-why we don't free last_readdir when dir_emit returns false.
+The active_discharge_on setting was missed, so output discharge resistor
+is always disabled. Fix it.
 
-Signed-off-by: Xiubo Li <xiubli@redhat.com>
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
-Signed-off-by: Ilya Dryomov <idryomov@gmail.com>
+Fixes: 0555d41497de ("regulator: rtq2134: Add support for Richtek RTQ2134 SubPMIC")
+Signed-off-by: Axel Lin <axel.lin@ingics.com>
+Link: https://lore.kernel.org/r/20220404022514.449231-1-axel.lin@ingics.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ceph/dir.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ drivers/regulator/rtq2134-regulator.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/ceph/dir.c b/fs/ceph/dir.c
-index 133dbd9338e7..d91fa53e12b3 100644
---- a/fs/ceph/dir.c
-+++ b/fs/ceph/dir.c
-@@ -478,8 +478,11 @@ static int ceph_readdir(struct file *file, struct dir_context *ctx)
- 					2 : (fpos_off(rde->offset) + 1);
- 			err = note_last_dentry(dfi, rde->name, rde->name_len,
- 					       next_offset);
--			if (err)
-+			if (err) {
-+				ceph_mdsc_put_request(dfi->last_readdir);
-+				dfi->last_readdir = NULL;
- 				return err;
-+			}
- 		} else if (req->r_reply_info.dir_end) {
- 			dfi->next_offset = 2;
- 			/* keep last name */
-@@ -520,6 +523,12 @@ static int ceph_readdir(struct file *file, struct dir_context *ctx)
- 		if (!dir_emit(ctx, rde->name, rde->name_len,
- 			      ceph_present_ino(inode->i_sb, le64_to_cpu(rde->inode.in->ino)),
- 			      le32_to_cpu(rde->inode.in->mode) >> 12)) {
-+			/*
-+			 * NOTE: Here no need to put the 'dfi->last_readdir',
-+			 * because when dir_emit stops us it's most likely
-+			 * doesn't have enough memory, etc. So for next readdir
-+			 * it will continue.
-+			 */
- 			dout("filldir stopping us...\n");
- 			return 0;
- 		}
+diff --git a/drivers/regulator/rtq2134-regulator.c b/drivers/regulator/rtq2134-regulator.c
+index f21e3f8b21f2..8e13dea354a2 100644
+--- a/drivers/regulator/rtq2134-regulator.c
++++ b/drivers/regulator/rtq2134-regulator.c
+@@ -285,6 +285,7 @@ static const unsigned int rtq2134_buck_ramp_delay_table[] = {
+ 		.enable_mask = RTQ2134_VOUTEN_MASK, \
+ 		.active_discharge_reg = RTQ2134_REG_BUCK##_id##_CFG0, \
+ 		.active_discharge_mask = RTQ2134_ACTDISCHG_MASK, \
++		.active_discharge_on = RTQ2134_ACTDISCHG_MASK, \
+ 		.ramp_reg = RTQ2134_REG_BUCK##_id##_RSPCFG, \
+ 		.ramp_mask = RTQ2134_RSPUP_MASK, \
+ 		.ramp_delay_table = rtq2134_buck_ramp_delay_table, \
 -- 
 2.35.1
 

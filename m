@@ -2,108 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DE9C4FEB77
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:48:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44F204FEB01
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:47:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230513AbiDLXhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 19:37:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58596 "EHLO
+        id S230443AbiDLXfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 19:35:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231678AbiDLXd0 (ORCPT
+        with ESMTP id S230372AbiDLXbz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 19:33:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B6C52B24
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:22:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0EE6761B74
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 21:22:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28B34C385A1;
-        Tue, 12 Apr 2022 21:22:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1649798559;
-        bh=c/Bsdvokirgu31USN90XM/QAQckJDOY6WxAtFbseFUI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=2EH85EKs9Vt8PFzqWMQA4N8GKNtH7P1OK3fhtS36nW2eQYYLTD8+XeW4QV6doYBjc
-         NGmySNJe0BWz0xx9Xl6RdMoCPZBooEkutWGP8AsQi7svaschKGlLPUC7j6FrDmeWtw
-         sWaBk2xckdV9/DUk2+R0d8jABGrU3rF07+sJwp9E=
-Date:   Tue, 12 Apr 2022 14:22:38 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     lipeifeng@oppo.com
-Cc:     michel@lespinasse.org, hughd@google.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, 21cnbao@gmail.com,
-        zhangshiming@oppo.com
-Subject: Re: [PATCH] mm: fix align-error when get_addr in
- unmapped_area_topdown
-Message-Id: <20220412142238.93e36cc4095e4e0b362db348@linux-foundation.org>
-In-Reply-To: <20220412081014.399-1-lipeifeng@oppo.com>
-References: <20220412081014.399-1-lipeifeng@oppo.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 12 Apr 2022 19:31:55 -0400
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E558B15B98E;
+        Tue, 12 Apr 2022 15:27:14 -0700 (PDT)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-df02f7e2c9so210636fac.10;
+        Tue, 12 Apr 2022 15:27:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=S/S1o5ASOF7/8+YPA6CC4QojK42QqA6NiYVB93lMJDo=;
+        b=oRi4haQUGRGrCQh0wYV3BTazqTC9XUUIzyDmdDu+lbC33wLWEXwwhbfO+OTmtE2RrZ
+         PKIpW+KI8mY5P9iwPUlEz4kKk2gGp0Hr61zWNYyG2SjVkJvlYx+x6b90RBAgAR5ukspr
+         rwQhkMMf5kbd0QGhX7spm0uUQkwFgwe7Ow9+K1LbRqSQGT7Wl8TK/APP8momOXboN/xL
+         YT6Apj+ng06gbfwWVqy27zjgasEmFJycm4jnAPvHJClAChLrIeDadfVHhqJj2Z+vKISL
+         E/x0/Z9ocwAl1I3Kizj7o81ue/r04P1TSJ37Zl9MvLN9Wj4wdh/+f1yTZ8aZWEsEXHhl
+         CR3Q==
+X-Gm-Message-State: AOAM530B2nZK1CmQNY5NPt8pRiNGE7jdO2who1j3mkR+2S+VW50elW/0
+        Tnx6UcPczMoz0EuJnVfmY4h7ufi35w==
+X-Google-Smtp-Source: ABdhPJyu7Bikhshe6ov3GObcYk/5A9g9nL4qq8yl2XXXI+kqjY71yYo8BHWvINy+xvK8bsm7vZ/l1A==
+X-Received: by 2002:a05:6870:1793:b0:de:a69a:118d with SMTP id r19-20020a056870179300b000dea69a118dmr3115029oae.163.1649798562760;
+        Tue, 12 Apr 2022 14:22:42 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id x24-20020a056870a79800b000e2e53716fbsm2218502oao.31.2022.04.12.14.22.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 14:22:42 -0700 (PDT)
+Received: (nullmailer pid 965665 invoked by uid 1000);
+        Tue, 12 Apr 2022 21:22:41 -0000
+Date:   Tue, 12 Apr 2022 16:22:41 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     wsa@kernel.org, kernel@axis.com, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, krzk+dt@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: i2c: add property to avoid device
+ detection
+Message-ID: <YlXtobiXIyObF/7+@robh.at.kernel.org>
+References: <20220412085046.1110127-1-vincent.whitchurch@axis.com>
+ <20220412085046.1110127-2-vincent.whitchurch@axis.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220412085046.1110127-2-vincent.whitchurch@axis.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Apr 2022 16:10:14 +0800 lipeifeng@oppo.com wrote:
-
-> From: lipeifeng <lipeifeng@oppo.com>
+On Tue, Apr 12, 2022 at 10:50:45AM +0200, Vincent Whitchurch wrote:
+> When drivers with ->detect callbacks are loaded, the I2C core does a
+> bunch of transactions to try to probe for these devices, regardless of
+> whether they are specified in the devicetree or not.  (This only happens
+> on I2C controllers whose drivers enable the I2C_CLASS* flags, but this
+> is the case for generic drivers like i2c-gpio.)
 > 
-> when we found a suitable gap_end(> info->high_limit), gap_end
-> must be set to info->high_limit. And we will get the gap_end
-> after computing highest gap address at the desired alignment.
+> These kinds of transactions are unnecessary on systems where the
+> devicetree specifies all the devices on the I2C bus, so add a property
+> to indicate that the devicetree description of the hardware is complete
+> and thus allow this discovery to be disabled.
 > 
-> 2096 found:
-> 2097         if (gap_end > info->high_limit)
-> 2098                 gap_end = info->high_limit;
-> 2099
-> 2100 found_highest:
-> 2101         gap_end -= info->length;
-> 2102         gap_end -= (gap_end - info->align_offset) & info->align_mask;
-> 2103
-> 2104         VM_BUG_ON(gap_end < info->low_limit);
-> 2105         VM_BUG_ON(gap_end < gap_start);
-> 2106         return gap_end;
+> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+> ---
 > 
-> so we must promise: info->high_limit - info->low_limit >=
-> info->length + info->align_mask.
-> Or in rare cases(info->high_limit - info->low_limit <
-> info->length + info->align_mask) we will get the addr in
-> align-error if found suitable gap_end(> info->high_limit).
+> Notes:
+>     v2:
+>     - Change subject prefix
+>     - Reword description of property
 > 
-
-Thanks.
-
-What are the runtime affects of this bug, and how are you able to
-trigger it?
-
-> --- a/mm/mmap.c
-> +++ b/mm/mmap.c
-> @@ -2009,7 +2009,6 @@ static unsigned long unmapped_area_topdown(struct vm_unmapped_area_info *info)
->  	if (length < info->length)
->  		return -ENOMEM;
+>  Documentation/devicetree/bindings/i2c/i2c.txt | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c.txt b/Documentation/devicetree/bindings/i2c/i2c.txt
+> index fc3dd7ec0445..960d1d5c9362 100644
+> --- a/Documentation/devicetree/bindings/i2c/i2c.txt
+> +++ b/Documentation/devicetree/bindings/i2c/i2c.txt
+> @@ -72,6 +72,10 @@ wants to support one of the below features, it should adapt these bindings.
+>  	this information to adapt power management to keep the arbitration awake
+>  	all the time, for example. Can not be combined with 'single-master'.
 >  
-> -	length = info->length;
->  	/*
->  	 * Adjust search limits by the desired length.
->  	 * See implementation comment at top of unmapped_area().
-> @@ -2021,6 +2020,8 @@ static unsigned long unmapped_area_topdown(struct vm_unmapped_area_info *info)
->  
->  	if (info->low_limit > high_limit)
->  		return -ENOMEM;
-> +
-> +	length = info->length;
->  	low_limit = info->low_limit + length;
->  
->  	/* Check highest gap, which does not precede any rbtree node */
-> -- 
-> 2.7.4
+> +- no-detect
+> +	states that no other devices are present on this bus other than the
+> +	ones listed in the devicetree.
+
+This belongs in the schema instead:
+
+https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/i2c/i2c-controller.yaml
+
+Rob

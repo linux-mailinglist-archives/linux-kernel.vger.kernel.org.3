@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80F3C4FDAD2
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:51:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED8724FD4C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:09:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351828AbiDLHNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:13:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48488 "EHLO
+        id S1355836AbiDLH3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:29:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351443AbiDLGxg (ORCPT
+        with ESMTP id S1351782AbiDLHM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:53:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96C83CFEB;
-        Mon, 11 Apr 2022 23:40:41 -0700 (PDT)
+        Tue, 12 Apr 2022 03:12:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E089910D7;
+        Mon, 11 Apr 2022 23:52:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 663F5B81B29;
-        Tue, 12 Apr 2022 06:40:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEE7CC385A8;
-        Tue, 12 Apr 2022 06:40:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9864EB81B35;
+        Tue, 12 Apr 2022 06:52:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B566C385A6;
+        Tue, 12 Apr 2022 06:52:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649745639;
-        bh=bKs0Q75ct17B8KXG5SA0L8h4El3ofgB2af3dL9aRO6k=;
+        s=korg; t=1649746364;
+        bh=ICzSsye5q805ubTKBFXqcdGkkC3mROZ9m1grapPpb+Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rnffzio7KBtpTRHWRAudTwPSxvOzhqHmN8pKQVlbbb742KmE1uHj+sfgEDjwoqEYb
-         nloMR9cDqlKGk7RstadiisfD6mVhK45w+Gxp3qDnVA4dLbQJmsfZBo+R34xEUKycCr
-         V+Uxk1sZKMVR7BCebq3g5cwrJh6EEchzb/+kzIaY=
+        b=rS+idZ7XLTrV4z/4Io9OahPE8lOR2MrFRTcpiMP2c2Iq6UJ5LA6g9gAmE+Vwhgu3A
+         IpPHtpxoPXcq7PplvQIxt4Xe3CeJLeN+X005UC87TPP2F1PERM10mb7j5TMaz8t3/v
+         PvC6dsUbJqZsUU0lZZg6+lxoT40f8WQjPQtEJY00=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Fangrui Song <maskray@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>, Will Deacon <will@kernel.org>
-Subject: [PATCH 5.10 167/171] arm64: module: remove (NOLOAD) from linker script
+        stable@vger.kernel.org, "Gabriel L. Somlo" <somlo@cmu.edu>,
+        Borislav Petkov <bp@alien8.de>, Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 5.15 255/277] Revert "nbd: fix possible overflow on first_minor in nbd_dev_add()"
 Date:   Tue, 12 Apr 2022 08:30:58 +0200
-Message-Id: <20220412062932.732866506@linuxfoundation.org>
+Message-Id: <20220412062949.421342015@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062927.870347203@linuxfoundation.org>
-References: <20220412062927.870347203@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +54,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fangrui Song <maskray@google.com>
+From: Jens Axboe <axboe@kernel.dk>
 
-commit 4013e26670c590944abdab56c4fa797527b74325 upstream.
+commit 7198bfc2017644c6b92d2ecef9b8b8e0363bb5fd upstream.
 
-On ELF, (NOLOAD) sets the section type to SHT_NOBITS[1]. It is conceptually
-inappropriate for .plt and .text.* sections which are always
-SHT_PROGBITS.
+This reverts commit 6d35d04a9e18990040e87d2bbf72689252669d54.
 
-In GNU ld, if PLT entries are needed, .plt will be SHT_PROGBITS anyway
-and (NOLOAD) will be essentially ignored. In ld.lld, since
-https://reviews.llvm.org/D118840 ("[ELF] Support (TYPE=<value>) to
-customize the output section type"), ld.lld will report a `section type
-mismatch` error. Just remove (NOLOAD) to fix the error.
+Both Gabriel and Borislav report that this commit casues a regression
+with nbd:
 
-[1] https://lld.llvm.org/ELF/linker_script.html As of today, "The
-section should be marked as not loadable" on
-https://sourceware.org/binutils/docs/ld/Output-Section-Type.html is
-outdated for ELF.
+sysfs: cannot create duplicate filename '/dev/block/43:0'
 
-Tested-by: Nathan Chancellor <nathan@kernel.org>
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Fangrui Song <maskray@google.com>
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
-Link: https://lore.kernel.org/r/20220218081209.354383-1-maskray@google.com
-Signed-off-by: Will Deacon <will@kernel.org>
-[nathan: Fix conflicts due to lack of 1cbdf60bd1b7]
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Revert it before 5.18-rc1 and we'll investigage this separately in
+due time.
+
+Link: https://lore.kernel.org/all/YkiJTnFOt9bTv6A2@zn.tnic/
+Reported-by: Gabriel L. Somlo <somlo@cmu.edu>
+Reported-by: Borislav Petkov <bp@alien8.de>
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/include/asm/module.lds.h |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/block/nbd.c |   24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
---- a/arch/arm64/include/asm/module.lds.h
-+++ b/arch/arm64/include/asm/module.lds.h
-@@ -1,7 +1,7 @@
- #ifdef CONFIG_ARM64_MODULE_PLTS
- SECTIONS {
--	.plt 0 (NOLOAD) : { BYTE(0) }
--	.init.plt 0 (NOLOAD) : { BYTE(0) }
--	.text.ftrace_trampoline 0 (NOLOAD) : { BYTE(0) }
-+	.plt 0 : { BYTE(0) }
-+	.init.plt 0 : { BYTE(0) }
-+	.text.ftrace_trampoline 0 : { BYTE(0) }
- }
- #endif
+--- a/drivers/block/nbd.c
++++ b/drivers/block/nbd.c
+@@ -1744,6 +1744,17 @@ static struct nbd_device *nbd_dev_add(in
+ 	refcount_set(&nbd->refs, 0);
+ 	INIT_LIST_HEAD(&nbd->list);
+ 	disk->major = NBD_MAJOR;
++
++	/* Too big first_minor can cause duplicate creation of
++	 * sysfs files/links, since index << part_shift might overflow, or
++	 * MKDEV() expect that the max bits of first_minor is 20.
++	 */
++	disk->first_minor = index << part_shift;
++	if (disk->first_minor < index || disk->first_minor > MINORMASK) {
++		err = -EINVAL;
++		goto out_free_work;
++	}
++
+ 	disk->minors = 1 << part_shift;
+ 	disk->fops = &nbd_fops;
+ 	disk->private_data = nbd;
+@@ -1848,19 +1859,8 @@ static int nbd_genl_connect(struct sk_bu
+ 	if (!netlink_capable(skb, CAP_SYS_ADMIN))
+ 		return -EPERM;
+ 
+-	if (info->attrs[NBD_ATTR_INDEX]) {
++	if (info->attrs[NBD_ATTR_INDEX])
+ 		index = nla_get_u32(info->attrs[NBD_ATTR_INDEX]);
+-
+-		/*
+-		 * Too big first_minor can cause duplicate creation of
+-		 * sysfs files/links, since index << part_shift might overflow, or
+-		 * MKDEV() expect that the max bits of first_minor is 20.
+-		 */
+-		if (index < 0 || index > MINORMASK >> part_shift) {
+-			printk(KERN_ERR "nbd: illegal input index %d\n", index);
+-			return -EINVAL;
+-		}
+-	}
+ 	if (!info->attrs[NBD_ATTR_SOCKETS]) {
+ 		printk(KERN_ERR "nbd: must specify at least one socket\n");
+ 		return -EINVAL;
 
 

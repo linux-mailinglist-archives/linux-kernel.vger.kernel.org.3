@@ -2,257 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC37B4FEA22
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 00:32:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83D9D4FEA24
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 00:32:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229487AbiDLWc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 18:32:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53928 "EHLO
+        id S229494AbiDLWc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 18:32:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiDLWcZ (ORCPT
+        with ESMTP id S229474AbiDLWc3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 18:32:25 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8761D1A7733
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 14:17:44 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id t4so18395944pgc.1
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 14:17:44 -0700 (PDT)
+        Tue, 12 Apr 2022 18:32:29 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD22F61F1
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 14:17:48 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id h5so17437234pgc.7
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 14:17:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=knG9M3UYQieXfNA2xBybpWoSnTduc8ITKXA/PJQTuvE=;
-        b=N4Pn9XBMGe+1OSsSvf0TKA+WHDQEDctYbjd2ywUDQay5xt4RobfdJqq/dQLSRXPXY9
-         OZWBNrtQ1rWdIFovQx8BwIg/4TArhupIVUGvLewL/soCnwuyuUIDs1EpK1DnwYBXJLBS
-         GnaMdOyf+EzFITDXdiP6K7eLcSo5DCCmuiMNZdcLy1FhXEQz9AtoBE5+yTmHsc9y4t9h
-         OfKHfLxDZ7SXbcuwCSEpeO/WTnbWEf1s5UepVvBYWpYZviFsywwjr36wXtK1edvX1X/+
-         WqQujedZWJoCgOsDOdSq5hzUBCvKGvsABheFwNk3wYcvQMB9tI+TRMJAFu4P26QFTq+D
-         FpDw==
+        bh=LzVK1IQoHy6inUcYifHpyKq1c6gHZpZ4adL9ShMc3pA=;
+        b=MboutHxzQOdqFgBiScTBM+v/RlZEwIWrI+SZ3TVlCwgU+E9p0LkJo87yLyopNsrq5k
+         dZZ10V3nV4vGnJc1QW7qQRCY3XJMbBDPF/yfhsJ0/SYi9EHz2tPlogkv5U/fbAHrO3D7
+         Up9M4Wb5HbUddlf9lmOjzcQPNX9FBjvUAcRzkSoCKAIfLSp8CXnhjxB5J7oEUSpdrqfn
+         vi6eU8Fhy18Nm87Tjfcmq/7CMnx8ZKU0a+YF9jRvw3aP/OYbBkMvRPOC4spqXEZQQ2wS
+         XKuexO0eLcuSUV4SdH2sX1NOBa2FUqE6RcK0yqhCgwRA2JCr8VtRLgC/JdWnY9xTYfPn
+         lnrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=knG9M3UYQieXfNA2xBybpWoSnTduc8ITKXA/PJQTuvE=;
-        b=DdvRZmmLSG9Uc0pgndFuPUjVF0Q9JnxrYD00TLDHgIk/lbWPDntrjEOuo8ECwReXtx
-         GrGD2MBHb6HhA2yyPooRxI9fMAxRraQB049UU7AE5dcJE0Lkt90JNfrNubJteM2iBNwP
-         jdqg6oXOckRZ/wq58cOuygpbSrUSUycs2a+FXkTSjm4rkEs3HmxSC2jW7JEcZpeaUdwR
-         LcJLCTJb6xpwW9UdDeiTC1pJHSTTh5d5pIKCZ+KIhkcDqj6RJC7ULUfsnTRe2+1Px9wX
-         m4tgwJ9zHxwGumoywF5uN6wp2XR4JGgWkl4B+zOGlfmJ1UgdDxHQLn187kpHoJneqj0l
-         SUww==
-X-Gm-Message-State: AOAM5334OrCocGHfI5OgpT0JJhk9F42tUbb2N/PW0FdOn35+H00mhsZl
-        WEoKWPi6XI8E8yKMC2zUM/Dkag==
-X-Google-Smtp-Source: ABdhPJwIB/I0m6Z1vpJVIM1zCzFcYNBDyM0Q8/OVLOPqFiN3cPMCp15+J1ilmqJAp824tzokxXjO0g==
-X-Received: by 2002:a65:6a07:0:b0:39d:8c35:426b with SMTP id m7-20020a656a07000000b0039d8c35426bmr5198065pgu.171.1649798071171;
-        Tue, 12 Apr 2022 14:14:31 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id x6-20020a17090aa38600b001ca2f87d271sm432615pjp.15.2022.04.12.14.14.30
+        bh=LzVK1IQoHy6inUcYifHpyKq1c6gHZpZ4adL9ShMc3pA=;
+        b=w7UcXEgvSOsau/6dAukrSRyhRw2i7SkW3Izfny7QNCS3wgKNIW7KJmRDQIfQ+x2lsv
+         XhqKzgOp0uv3gvPH6GwurvItg874sqBQiTAA/RKQh2JqXxKsGHYFPUVC+/hHD0wT99Yw
+         FQVMmfMSWIAUHt3dcyDNGZnwqdFByYn1F6Msx2lLcW0coyUPfmOEqNhKp2kgrXMxDjAv
+         8rYfoQAtfw/XJ0jlhYc7VqfN/Lw+x+d5pPsyx9Up/yeZ/wYU5E6HVQozq6bQc4pRxcvy
+         PQXvDZTERD898LtwG4b0ml5ZbPUIr6bgFLzJofQLYA6tlRO97TiDfmNjeuen71ml1GqP
+         Nr1w==
+X-Gm-Message-State: AOAM530Z8io6+jGZcyGxD9l7kXJjce2pkM/KmPhD1/eQpcIJoBFR2+RY
+        JQMaZs1bCzi/afG4Ah3VSrcjjA==
+X-Google-Smtp-Source: ABdhPJy9vH/5dk5SdPO+gnx9Vvk/LPSJEnQ7v+hjjt1g34/aCd4gYXgqkvlvOAi0xia+ZZQe6U2P9Q==
+X-Received: by 2002:a05:6a00:150d:b0:505:c6f0:686e with SMTP id q13-20020a056a00150d00b00505c6f0686emr6502605pfu.37.1649798079559;
+        Tue, 12 Apr 2022 14:14:39 -0700 (PDT)
+Received: from x1 ([2601:1c2:1001:7090:669f:cec7:c0c2:1cc])
+        by smtp.gmail.com with ESMTPSA id y30-20020a056a001c9e00b004fa9246adcbsm38195522pfw.144.2022.04.12.14.14.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 14:14:30 -0700 (PDT)
-Date:   Tue, 12 Apr 2022 21:14:26 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org
-Subject: Re: [RFC PATCH V3 3/4] KVM: X86: Alloc role.pae_root shadow page
-Message-ID: <YlXrshJa2Sd1WQ0P@google.com>
-References: <20220330132152.4568-1-jiangshanlai@gmail.com>
- <20220330132152.4568-4-jiangshanlai@gmail.com>
+        Tue, 12 Apr 2022 14:14:39 -0700 (PDT)
+Date:   Tue, 12 Apr 2022 14:15:24 -0700
+From:   Drew Fustini <dfustini@baylibre.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Dave Gerlach <d-gerlach@ti.com>,
+        Tony Lindgren <tony@atomide.com>, Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: wkup-m3-ipc: Add vtt toggle gpio pin
+ property
+Message-ID: <YlXr7M/HXvlXWftR@x1>
+References: <20220409211215.2529387-1-dfustini@baylibre.com>
+ <20220409211215.2529387-2-dfustini@baylibre.com>
+ <YlXY88aJIrcHc5Bc@robh.at.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220330132152.4568-4-jiangshanlai@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <YlXY88aJIrcHc5Bc@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 30, 2022, Lai Jiangshan wrote:
-> From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+On Tue, Apr 12, 2022 at 02:54:27PM -0500, Rob Herring wrote:
+> On Sat, Apr 09, 2022 at 02:12:14PM -0700, Drew Fustini wrote:
+> > Document Wakeup M3 IPC property that indicates a GPIO pin is connected
+> > to the enable pin on DDR VTT regulator and can be toggled during low
+> > power mode transitions.
+> > 
+> > Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
+> > [dfustini: converted to YAML, removed unnecessary "ti,needs-vtt-toggle"]
+> > Signed-off-by: Drew Fustini <dfustini@baylibre.com>
+> > ---
+> >  .../devicetree/bindings/soc/ti/wkup-m3-ipc.yaml     | 13 +++++++++++++
+> >  1 file changed, 13 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/soc/ti/wkup-m3-ipc.yaml b/Documentation/devicetree/bindings/soc/ti/wkup-m3-ipc.yaml
+> > index d855c01ce61c..7f4a75c5fcaa 100644
+> > --- a/Documentation/devicetree/bindings/soc/ti/wkup-m3-ipc.yaml
+> > +++ b/Documentation/devicetree/bindings/soc/ti/wkup-m3-ipc.yaml
+> > @@ -24,6 +24,14 @@ description: |+
+> >    A wkup_m3_ipc device node is used to represent the IPC registers within an
+> >    SoC.
+> >  
+> > +  Support for VTT Toggle
+> > +  ==================================
+> > +  On some boards like the AM335x EVM-SK and the AM437x GP EVM, a GPIO pin is
+> > +  connected to the enable pin on the DDR VTT regulator. This allows the
+> > +  regulator to be disabled upon suspend and enabled upon resume. Please note
+> > +  that the GPIO pin must be part of the GPIO0 module as only this GPIO module
+> > +  is in the wakeup power domain.
+> > +
+> >  properties:
+> >    compatible:
+> >      enum:
+> > @@ -51,6 +59,10 @@ properties:
+> >        mbox_wkupm3 child node.
+> >      maxItems: 1
+> >  
+> > +  ti,vtt-gpio-pin:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    description: GPIO pin connected to enable pin on VTT regulator
 > 
-> Currently pae_root is special root page, this patch adds facility to
-> allow using kvm_mmu_get_page() to allocate pae_root shadow page.
+> Looking at the driver, can't you add 'maximum: 31' here? If so, I can 
+> add it when applying.
 
-I don't think this will work for shadow paging.  CR3 only has to be 32-byte aligned
-for PAE paging.  Unless I'm missing something subtle in the code, KVM will incorrectly
-reuse a pae_root if the guest puts multiple PAE CR3s on a single page because KVM's
-gfn calculation will drop bits 11:5.
+Yes, good idea. I would appreciate it if that was added when applying.
 
-Handling this as a one-off is probably easier.  For TDP, only 32-bit KVM with NPT
-benefits from reusing roots, IMO and shaving a few pages in that case is not worth
-the complexity.
-
-> @@ -332,7 +337,8 @@ union kvm_mmu_page_role {
->  		unsigned ad_disabled:1;
->  		unsigned guest_mode:1;
->  		unsigned glevel:4;
-> -		unsigned :2;
-> +		unsigned pae_root:1;
-
-If we do end up adding a role bit, it can simply be "root", which may or may not
-be useful for other things.  is_pae_root() is then a combo of root+level.  This
-will clean up the code a bit as role.root is (mostly?) hardcoded based on the
-function, e.g. root allocators set it, child allocators clear it.
-
-> +		unsigned :1;
->  
->  		/*
->  		 * This is left at the top of the word so that
-> @@ -699,6 +705,7 @@ struct kvm_vcpu_arch {
->  	struct kvm_mmu_memory_cache mmu_shadow_page_cache;
->  	struct kvm_mmu_memory_cache mmu_gfn_array_cache;
->  	struct kvm_mmu_memory_cache mmu_page_header_cache;
-> +	void *mmu_pae_root_cache;
->  
->  	/*
->  	 * QEMU userspace and the guest each have their own FPU state.
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index d53037df8177..81ccaa7c1165 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -694,6 +694,35 @@ static void walk_shadow_page_lockless_end(struct kvm_vcpu *vcpu)
->  	}
->  }
->  
-> +static int mmu_topup_pae_root_cache(struct kvm_vcpu *vcpu)
-> +{
-> +	struct page *page;
-> +
-> +	if (vcpu->arch.mmu->shadow_root_level != PT32E_ROOT_LEVEL)
-> +		return 0;
-> +	if (vcpu->arch.mmu_pae_root_cache)
-> +		return 0;
-> +
-> +	page = alloc_page(GFP_KERNEL_ACCOUNT | __GFP_ZERO | __GFP_DMA32);
-> +	if (!page)
-> +		return -ENOMEM;
-> +	vcpu->arch.mmu_pae_root_cache = page_address(page);
-> +
-> +	/*
-> +	 * CR3 is only 32 bits when PAE paging is used, thus it's impossible to
-> +	 * get the CPU to treat the PDPTEs as encrypted.  Decrypt the page so
-> +	 * that KVM's writes and the CPU's reads get along.  Note, this is
-> +	 * only necessary when using shadow paging, as 64-bit NPT can get at
-> +	 * the C-bit even when shadowing 32-bit NPT, and SME isn't supported
-> +	 * by 32-bit kernels (when KVM itself uses 32-bit NPT).
-> +	 */
-> +	if (!tdp_enabled)
-> +		set_memory_decrypted((unsigned long)vcpu->arch.mmu_pae_root_cache, 1);
-> +	else
-> +		WARN_ON_ONCE(shadow_me_mask);
-> +	return 0;
-> +}
-> +
->  static int mmu_topup_memory_caches(struct kvm_vcpu *vcpu, bool maybe_indirect)
->  {
->  	int r;
-> @@ -705,6 +734,9 @@ static int mmu_topup_memory_caches(struct kvm_vcpu *vcpu, bool maybe_indirect)
->  		return r;
->  	r = kvm_mmu_topup_memory_cache(&vcpu->arch.mmu_shadow_page_cache,
->  				       PT64_ROOT_MAX_LEVEL);
-> +	if (r)
-> +		return r;
-> +	r = mmu_topup_pae_root_cache(vcpu);
-
-This doesn't need to be called from the common mmu_topup_memory_caches(), e.g. it
-will unnecessarily require allocating another DMA32 page when handling a page fault.
-I'd rather call this directly kvm_mmu_load(), which also makes it more obvious
-that the cache really is only used for roots.
-
->  	if (r)
->  		return r;
->  	if (maybe_indirect) {
-> @@ -717,12 +749,23 @@ static int mmu_topup_memory_caches(struct kvm_vcpu *vcpu, bool maybe_indirect)
->  					  PT64_ROOT_MAX_LEVEL);
->  }
->  
-
-...
-
->  static void link_shadow_page(struct kvm_vcpu *vcpu, u64 *sptep,
->  			     struct kvm_mmu_page *sp)
->  {
-> +	struct kvm_mmu_page *parent_sp = sptep_to_sp(sptep);
->  	u64 spte;
->  
->  	BUILD_BUG_ON(VMX_EPT_WRITABLE_MASK != PT_WRITABLE_MASK);
->  
-> -	spte = make_nonleaf_spte(sp->spt, sp_ad_disabled(sp));
-> +	if (!parent_sp->role.pae_root)
-
-Hmm, without role.root, this could be:
-
-	if (sp->role.level == (PT32E_ROOT_level - 1) &&
-	    ((__pa(sptep) & PT64_BASE_ADDR_MASK) == vcpu->arch.mmu->root.hpa))
-		spte = make_pae_pdpte(sp->spt);
-	else
-		spte = make_nonleaf_spte(sp->spt, sp_ad_disabled(sp));
-
-Which is gross, but it works.  We could also do FNAME(link_shadow_page) to send
-PAE roots down a dedicated path (also gross).  Point being, I don't think we
-strictly need a "root" flag unless the PAE roots are put in mmu_page_hash.
-
-> +		spte = make_nonleaf_spte(sp->spt, sp_ad_disabled(sp));
-> +	else
-> +		spte = make_pae_pdpte(sp->spt);
->  
->  	mmu_spte_set(sptep, spte);
->  
-> @@ -4782,6 +4847,8 @@ kvm_calc_tdp_mmu_root_page_role(struct kvm_vcpu *vcpu,
->  	role.base.level = kvm_mmu_get_tdp_level(vcpu);
->  	role.base.direct = true;
->  	role.base.has_4_byte_gpte = false;
-> +	if (role.base.level == PT32E_ROOT_LEVEL)
-> +		role.base.pae_root = 1;
->  
->  	return role;
->  }
-> @@ -4848,6 +4915,9 @@ kvm_calc_shadow_mmu_root_page_role(struct kvm_vcpu *vcpu,
->  	else
->  		role.base.level = PT64_ROOT_4LEVEL;
->  
-> +	if (role.base.level == PT32E_ROOT_LEVEL)
-> +		role.base.pae_root = 1;
-> +
->  	return role;
->  }
->  
-> @@ -4893,6 +4963,8 @@ kvm_calc_shadow_npt_root_page_role(struct kvm_vcpu *vcpu,
->  
->  	role.base.direct = false;
->  	role.base.level = kvm_mmu_get_tdp_level(vcpu);
-> +	if (role.base.level == PT32E_ROOT_LEVEL)
-> +		role.base.pae_root = 1;
->  
->  	return role;
->  }
-> diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
-> index 67489a060eba..1015f33e0758 100644
-> --- a/arch/x86/kvm/mmu/paging_tmpl.h
-> +++ b/arch/x86/kvm/mmu/paging_tmpl.h
-> @@ -1043,6 +1043,7 @@ static int FNAME(sync_page)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp)
->  		.access = 0x7,
->  		.quadrant = 0x3,
->  		.glevel = 0xf,
-> +		.pae_root = 0x1,
->  	};
->  
->  	/*
-> -- 
-> 2.19.1.6.gb485710b
-> 
+Thank you,
+Drew

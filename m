@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ADB84FDA22
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:48:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D9514FDB14
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:55:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387279AbiDLJGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:06:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49156 "EHLO
+        id S1380014AbiDLIVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359185AbiDLHmk (ORCPT
+        with ESMTP id S1354064AbiDLH0C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:42:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C36F554A1;
-        Tue, 12 Apr 2022 00:20:23 -0700 (PDT)
+        Tue, 12 Apr 2022 03:26:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D35D17A9F;
+        Tue, 12 Apr 2022 00:05:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CDFFD61045;
-        Tue, 12 Apr 2022 07:20:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7DB8C385A5;
-        Tue, 12 Apr 2022 07:20:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 50EB3B81A8F;
+        Tue, 12 Apr 2022 07:05:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B18ADC385A6;
+        Tue, 12 Apr 2022 07:05:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649748022;
-        bh=U2/FILndl4co+BlYvc00C3mSRpRj6SmZahSvs4PQbsE=;
+        s=korg; t=1649747128;
+        bh=McsC9ZufxaUuzydXB9cDgdwI6fwZUeI+va5tpXteTiA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zCmE1VjWh8ZSjvlyNgtKa7EIKWoZY1vhdMyO0uGYU6bewvbaMFPrNQvZQQfYDiw4A
-         GCMEJwfKVDLg985EjXCYO5YtBPTjdynkoKgNGWZrQIU+omzfuO9Px+cFMWjbJvqGXl
-         HE0GlVQT6jBVgPhaqi7eivw9RSgV4V8eCHe8hKvI=
+        b=KMavsTZW0iom5ZjIrKNSaI19zZ7PZ9fre7+zCeXnl9thxqjJ6/IskZ0E0gthxdotW
+         Y6b3uFi2SImAtr23PQvqwBjTk+XunwHzHKBymN53xnDJUewG97SynyDmAq9UolFsMS
+         mRRN8XwYJJz5ot8ToVPvNdgAkXwMihx1pXzE8svk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Douglas Miller <doug.miller@cornelisnetworks.com>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH 5.17 292/343] RDMA/hfi1: Fix use-after-free bug for mm struct
-Date:   Tue, 12 Apr 2022 08:31:50 +0200
-Message-Id: <20220412062959.756103757@linuxfoundation.org>
+        stable@vger.kernel.org, Paul Menzel <pmenzel@molgen.mpg.de>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 5.16 254/285] drm/amdgpu/smu10: fix SoC/fclk units in auto mode
+Date:   Tue, 12 Apr 2022 08:31:51 +0200
+Message-Id: <20220412062950.991069461@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,51 +54,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Douglas Miller <doug.miller@cornelisnetworks.com>
+From: Alex Deucher <alexander.deucher@amd.com>
 
-commit 2bbac98d0930e8161b1957dc0ec99de39ade1b3c upstream.
+commit 2f25d8ce09b7ba5d769c132ba3d4eb84a941d2cb upstream.
 
-Under certain conditions, such as MPI_Abort, the hfi1 cleanup code may
-represent the last reference held on the task mm.
-hfi1_mmu_rb_unregister() then drops the last reference and the mm is freed
-before the final use in hfi1_release_user_pages().  A new task may
-allocate the mm structure while it is still being used, resulting in
-problems. One manifestation is corruption of the mmap_sem counter leading
-to a hang in down_write().  Another is corruption of an mm struct that is
-in use by another task.
+SMU takes clock limits in Mhz units.  socclk and fclk were
+using 10 khz units in some cases.  Switch to Mhz units.
+Fixes higher than required SoC clocks.
 
-Fixes: 3d2a9d642512 ("IB/hfi1: Ensure correct mm is used at all times")
-Link: https://lore.kernel.org/r/20220408133523.122165.72975.stgit@awfm-01.cornelisnetworks.com
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Douglas Miller <doug.miller@cornelisnetworks.com>
-Signed-off-by: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
-Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Fixes: 97cf32996c46d9 ("drm/amd/pm: Removed fixed clock in auto mode DPM")
+Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Cc: stable@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/infiniband/hw/hfi1/mmu_rb.c |    6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/gpu/drm/amd/pm/powerplay/hwmgr/smu10_hwmgr.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/drivers/infiniband/hw/hfi1/mmu_rb.c
-+++ b/drivers/infiniband/hw/hfi1/mmu_rb.c
-@@ -80,6 +80,9 @@ void hfi1_mmu_rb_unregister(struct mmu_r
- 	unsigned long flags;
- 	struct list_head del_list;
+--- a/drivers/gpu/drm/amd/pm/powerplay/hwmgr/smu10_hwmgr.c
++++ b/drivers/gpu/drm/amd/pm/powerplay/hwmgr/smu10_hwmgr.c
+@@ -773,13 +773,13 @@ static int smu10_dpm_force_dpm_level(str
+ 		smum_send_msg_to_smc_with_parameter(hwmgr,
+ 						PPSMC_MSG_SetHardMinFclkByFreq,
+ 						hwmgr->display_config->num_display > 3 ?
+-						data->clock_vol_info.vdd_dep_on_fclk->entries[0].clk :
++						(data->clock_vol_info.vdd_dep_on_fclk->entries[0].clk / 100) :
+ 						min_mclk,
+ 						NULL);
  
-+	/* Prevent freeing of mm until we are completely finished. */
-+	mmgrab(handler->mn.mm);
-+
- 	/* Unregister first so we don't get any more notifications. */
- 	mmu_notifier_unregister(&handler->mn, handler->mn.mm);
- 
-@@ -102,6 +105,9 @@ void hfi1_mmu_rb_unregister(struct mmu_r
- 
- 	do_remove(handler, &del_list);
- 
-+	/* Now the mm may be freed. */
-+	mmdrop(handler->mn.mm);
-+
- 	kfree(handler);
- }
- 
+ 		smum_send_msg_to_smc_with_parameter(hwmgr,
+ 						PPSMC_MSG_SetHardMinSocclkByFreq,
+-						data->clock_vol_info.vdd_dep_on_socclk->entries[0].clk,
++						data->clock_vol_info.vdd_dep_on_socclk->entries[0].clk / 100,
+ 						NULL);
+ 		smum_send_msg_to_smc_with_parameter(hwmgr,
+ 						PPSMC_MSG_SetHardMinVcn,
+@@ -792,11 +792,11 @@ static int smu10_dpm_force_dpm_level(str
+ 						NULL);
+ 		smum_send_msg_to_smc_with_parameter(hwmgr,
+ 						PPSMC_MSG_SetSoftMaxFclkByFreq,
+-						data->clock_vol_info.vdd_dep_on_fclk->entries[index_fclk].clk,
++						data->clock_vol_info.vdd_dep_on_fclk->entries[index_fclk].clk / 100,
+ 						NULL);
+ 		smum_send_msg_to_smc_with_parameter(hwmgr,
+ 						PPSMC_MSG_SetSoftMaxSocclkByFreq,
+-						data->clock_vol_info.vdd_dep_on_socclk->entries[index_socclk].clk,
++						data->clock_vol_info.vdd_dep_on_socclk->entries[index_socclk].clk / 100,
+ 						NULL);
+ 		smum_send_msg_to_smc_with_parameter(hwmgr,
+ 						PPSMC_MSG_SetSoftMaxVcn,
 
 

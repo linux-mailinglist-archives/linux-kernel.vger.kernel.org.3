@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6A054FD8D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:38:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C6444FD8CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:38:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379585AbiDLIUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:20:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42868 "EHLO
+        id S1385933AbiDLIxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:53:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354132AbiDLH0F (ORCPT
+        with ESMTP id S1359251AbiDLHmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:26:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F05D44A14;
-        Tue, 12 Apr 2022 00:05:59 -0700 (PDT)
+        Tue, 12 Apr 2022 03:42:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92AE229C9B;
+        Tue, 12 Apr 2022 00:21:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C1AAF616B2;
-        Tue, 12 Apr 2022 07:05:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAF3CC385CA;
-        Tue, 12 Apr 2022 07:05:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 509F9B81B62;
+        Tue, 12 Apr 2022 07:20:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0E6CC385A1;
+        Tue, 12 Apr 2022 07:20:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747158;
-        bh=2q29pr8mEm+erOMqO2aLbkxAV4h0guqZaTZONc0j35o=;
+        s=korg; t=1649748058;
+        bh=YMs7DdWMitcpwA45VOAPxYqNjZD+cfm5Xmc4BAEvph4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E42xJuCbNWO2aLHVxvg91TuMFf2VcIK9T5elNhH3dFUK69xWnViIilAORcqnyYb0o
-         xh1AhmxUVaBlli1ZmUpKhfehSG0M/STzmZsyb+FEXoCigwxmVb8OvgALy+hYxYhlFJ
-         yZdoP7X7rsp6/K8DA2JJom1zPfEnxZdLA3PHq0O8=
+        b=Dxno26LCdcq90ndP0UOJiHUfV/GE4eCuGLulWNCSDhk/JgfgN6r3Mv2TXyXnHWSxo
+         p53xGa0/cb935SrL1qhExy8S/I3BMQ1GzdRdHv5T9yzkGHt8yEPcuumRPAMyAVtS7H
+         Qk0wZaEc9VEtCSn+PefRGwuZGr6u3bZ0KOtGUGUc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Jakub Sitnicki <jakub@cloudflare.com>
-Subject: [PATCH 5.16 264/285] bpf: Make remote_port field in struct bpf_sk_lookup 16-bit wide
-Date:   Tue, 12 Apr 2022 08:32:01 +0200
-Message-Id: <20220412062951.279798638@linuxfoundation.org>
+        stable@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Subject: [PATCH 5.17 304/343] drm/panel: ili9341: fix optional regulator handling
+Date:   Tue, 12 Apr 2022 08:32:02 +0200
+Message-Id: <20220412063000.099144337@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,79 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Sitnicki <jakub@cloudflare.com>
+From: Daniel Mack <daniel@zonque.org>
 
-commit 9a69e2b385f443f244a7e8b8bcafe5ccfb0866b4 upstream.
+commit d14eb80e27795b7b20060f7b151cdfe39722a813 upstream.
 
-remote_port is another case of a BPF context field documented as a 32-bit
-value in network byte order for which the BPF context access converter
-generates a load of a zero-padded 16-bit integer in network byte order.
+If the optional regulator lookup fails, reset the pointer to NULL.
+Other functions such as mipi_dbi_poweron_reset_conditional() only do
+a NULL pointer check and will otherwise dereference the error pointer.
 
-First such case was dst_port in bpf_sock which got addressed in commit
-4421a582718a ("bpf: Make dst_port field in struct bpf_sock 16-bit wide").
-
-Loading 4-bytes from the remote_port offset and converting the value with
-bpf_ntohl() leads to surprising results, as the expected value is shifted
-by 16 bits.
-
-Reduce the confusion by splitting the field in two - a 16-bit field holding
-a big-endian integer, and a 16-bit zero-padding anonymous field that
-follows it.
-
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/bpf/20220209184333.654927-2-jakub@cloudflare.com
+Fixes: 5a04227326b04c15 ("drm/panel: Add ilitek ili9341 panel driver")
+Signed-off-by: Daniel Mack <daniel@zonque.org>
+Cc: stable@vger.kernel.org
+Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220317225537.826302-1-daniel@zonque.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/uapi/linux/bpf.h |    3 ++-
- net/bpf/test_run.c       |    4 ++--
- net/core/filter.c        |    3 ++-
- 3 files changed, 6 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/panel/panel-ilitek-ili9341.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -6293,7 +6293,8 @@ struct bpf_sk_lookup {
- 	__u32 protocol;		/* IP protocol (IPPROTO_TCP, IPPROTO_UDP) */
- 	__u32 remote_ip4;	/* Network byte order */
- 	__u32 remote_ip6[4];	/* Network byte order */
--	__u32 remote_port;	/* Network byte order */
-+	__be16 remote_port;	/* Network byte order */
-+	__u16 :16;		/* Zero padding */
- 	__u32 local_ip4;	/* Network byte order */
- 	__u32 local_ip6[4];	/* Network byte order */
- 	__u32 local_port;	/* Host byte order */
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -960,7 +960,7 @@ int bpf_prog_test_run_sk_lookup(struct b
- 	if (!range_is_zero(user_ctx, offsetofend(typeof(*user_ctx), local_port), sizeof(*user_ctx)))
- 		goto out;
+--- a/drivers/gpu/drm/panel/panel-ilitek-ili9341.c
++++ b/drivers/gpu/drm/panel/panel-ilitek-ili9341.c
+@@ -612,8 +612,10 @@ static int ili9341_dbi_probe(struct spi_
+ 	int ret;
  
--	if (user_ctx->local_port > U16_MAX || user_ctx->remote_port > U16_MAX) {
-+	if (user_ctx->local_port > U16_MAX) {
- 		ret = -ERANGE;
- 		goto out;
- 	}
-@@ -968,7 +968,7 @@ int bpf_prog_test_run_sk_lookup(struct b
- 	ctx.family = (u16)user_ctx->family;
- 	ctx.protocol = (u16)user_ctx->protocol;
- 	ctx.dport = (u16)user_ctx->local_port;
--	ctx.sport = (__force __be16)user_ctx->remote_port;
-+	ctx.sport = user_ctx->remote_port;
+ 	vcc = devm_regulator_get_optional(dev, "vcc");
+-	if (IS_ERR(vcc))
++	if (IS_ERR(vcc)) {
+ 		dev_err(dev, "get optional vcc failed\n");
++		vcc = NULL;
++	}
  
- 	switch (ctx.family) {
- 	case AF_INET:
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -10563,7 +10563,8 @@ static bool sk_lookup_is_valid_access(in
- 	case bpf_ctx_range(struct bpf_sk_lookup, local_ip4):
- 	case bpf_ctx_range_till(struct bpf_sk_lookup, remote_ip6[0], remote_ip6[3]):
- 	case bpf_ctx_range_till(struct bpf_sk_lookup, local_ip6[0], local_ip6[3]):
--	case bpf_ctx_range(struct bpf_sk_lookup, remote_port):
-+	case offsetof(struct bpf_sk_lookup, remote_port) ...
-+	     offsetof(struct bpf_sk_lookup, local_ip4) - 1:
- 	case bpf_ctx_range(struct bpf_sk_lookup, local_port):
- 		bpf_ctx_record_field_size(info, sizeof(__u32));
- 		return bpf_ctx_narrow_access_ok(off, size, sizeof(__u32));
+ 	dbidev = devm_drm_dev_alloc(dev, &ili9341_dbi_driver,
+ 				    struct mipi_dbi_dev, drm);
 
 

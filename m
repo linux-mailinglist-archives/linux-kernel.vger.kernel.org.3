@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0D6D4FD753
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D573F4FD811
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:35:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353866AbiDLHQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46948 "EHLO
+        id S1359080AbiDLJUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:20:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351831AbiDLHEU (ORCPT
+        with ESMTP id S1357024AbiDLHjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:04:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9BE745AC3;
-        Mon, 11 Apr 2022 23:47:26 -0700 (PDT)
+        Tue, 12 Apr 2022 03:39:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2B2532C2;
+        Tue, 12 Apr 2022 00:10:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 60EFAB81B46;
-        Tue, 12 Apr 2022 06:47:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF9D8C385A6;
-        Tue, 12 Apr 2022 06:47:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 26196B81A8F;
+        Tue, 12 Apr 2022 07:10:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F876C385A5;
+        Tue, 12 Apr 2022 07:10:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746044;
-        bh=qRuj/mfnS/iQi/FDT0ADAYKbCm1QtWc2AioP8aaz6jc=;
+        s=korg; t=1649747451;
+        bh=6x8yKFGa5U5mRxTV0zTicniMpUeHjVzDeMdNkP+EaOU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KW/4tfWOZGDc9l3vUXTCLKdNbLsNjYIKjZ6krSBDssKC3TecGid0QFzTCQnp30vGy
-         XOJkzTOn9tpEyWhPfk3ipt3p6fcBMGHB+CzAIuiHa8kFY+P3CaEh5aatBePr8j2llk
-         MUwp9roFiNEpnc36JvwcWn7vP+k6k46g1LucYDlQ=
+        b=RVfwNrioM9CGtgBjd5b5SXATmKSh4pVd7W1VH+JUZGf9T5l+sKtUC13D9hzd25WcQ
+         vHfnxgncKWjm/5Ymx4B4khcxAdLgG0j86Zzq7jpSWC7++VwxcZZ/VPrBxYi5O0aWgo
+         nZRqgyenqddK7ISQvMkZ4sWeNlpS08nQk8hlFEmY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Deren Wu <deren.wu@mediatek.com>, Felix Fietkau <nbd@nbd.name>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 099/277] mt76: fix monitor mode crash with sdio driver
+        stable@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 084/343] HID: apple: Report Magic Keyboard 2021 battery over USB
 Date:   Tue, 12 Apr 2022 08:28:22 +0200
-Message-Id: <20220412062944.906802798@linuxfoundation.org>
+Message-Id: <20220412062953.524501912@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,53 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Deren Wu <deren.wu@mediatek.com>
+From: José Expósito <jose.exposito89@gmail.com>
 
-[ Upstream commit 123bc712b1de0805f9d683687e17b1ec2aba0b68 ]
+[ Upstream commit 8ae5c16c9d421d43f32f66d2308031f1bd3f9336 ]
 
-mt7921s driver may receive frames with fragment buffers. If there is a
-CTS packet received in monitor mode, the payload is 10 bytes only and
-need 6 bytes header padding after RXD buffer. However, only RXD in the
-first linear buffer, if we pull buffer size RXD-size+6 bytes with
-skb_pull(), that would trigger "BUG_ON(skb->len < skb->data_len)" in
-__skb_pull().
+Like the Apple Magic Keyboard 2015, when connected over USB, the 2021
+version registers 2 different interfaces. One of them is used to report
+the battery level.
 
-To avoid the nonlinear buffer issue, enlarge the RXD size from 128 to
-256 to make sure all MCU operation in linear buffer.
+However, unlike when connected over Bluetooth, the battery level is not
+reported automatically and it is required to fetch it manually.
 
-[   52.007562] kernel BUG at include/linux/skbuff.h:2313!
-[   52.007578] Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
-[   52.007987] pc : skb_pull+0x48/0x4c
-[   52.008015] lr : mt7921_queue_rx_skb+0x494/0x890 [mt7921_common]
-[   52.008361] Call trace:
-[   52.008377]  skb_pull+0x48/0x4c
-[   52.008400]  mt76s_net_worker+0x134/0x1b0 [mt76_sdio 35339a92c6eb7d4bbcc806a1d22f56365565135c]
-[   52.008431]  __mt76_worker_fn+0xe8/0x170 [mt76 ef716597d11a77150bc07e3fdd68eeb0f9b56917]
-[   52.008449]  kthread+0x148/0x3ac
-[   52.008466]  ret_from_fork+0x10/0x30
+Add the APPLE_RDESC_BATTERY quirk to fix the battery report descriptor
+and manually fetch the battery level.
 
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-Signed-off-by: Sean Wang <sean.wang@mediatek.com>
-Signed-off-by: Deren Wu <deren.wu@mediatek.com>
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
+Tested with the ANSI, ISO and JIS variants of the keyboard.
+
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/mediatek/mt76/mt76.h | 2 +-
+ drivers/hid/hid-apple.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt76.h b/drivers/net/wireless/mediatek/mt76/mt76.h
-index 4d01fd85283d..6e4d69715927 100644
---- a/drivers/net/wireless/mediatek/mt76/mt76.h
-+++ b/drivers/net/wireless/mediatek/mt76/mt76.h
-@@ -19,7 +19,7 @@
- 
- #define MT_MCU_RING_SIZE	32
- #define MT_RX_BUF_SIZE		2048
--#define MT_SKB_HEAD_LEN		128
-+#define MT_SKB_HEAD_LEN		256
- 
- #define MT_MAX_NON_AQL_PKT	16
- #define MT_TXQ_FREE_THR		32
+diff --git a/drivers/hid/hid-apple.c b/drivers/hid/hid-apple.c
+index 7dc89dc6b0f0..18de4ccb0fb2 100644
+--- a/drivers/hid/hid-apple.c
++++ b/drivers/hid/hid-apple.c
+@@ -748,7 +748,7 @@ static const struct hid_device_id apple_devices[] = {
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_GEYSER1_TP_ONLY),
+ 		.driver_data = APPLE_NUMLOCK_EMULATION | APPLE_HAS_FN },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_2021),
+-		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
++		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK | APPLE_RDESC_BATTERY },
+ 	{ HID_BLUETOOTH_DEVICE(BT_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_2021),
+ 		.driver_data = APPLE_HAS_FN | APPLE_ISO_TILDE_QUIRK },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_APPLE, USB_DEVICE_ID_APPLE_MAGIC_KEYBOARD_FINGERPRINT_2021),
 -- 
 2.35.1
 

@@ -2,74 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C3AE4FE053
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A71BD4FE030
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:30:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348457AbiDLMd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 08:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52416 "EHLO
+        id S1351680AbiDLMbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 08:31:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351129AbiDLMdY (ORCPT
+        with ESMTP id S1355538AbiDLM3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 08:33:24 -0400
-X-Greylist: delayed 556 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 12 Apr 2022 04:51:15 PDT
-Received: from ni.piap.pl (ni.piap.pl [195.187.100.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7545B3DB;
-        Tue, 12 Apr 2022 04:51:15 -0700 (PDT)
-Received: from t19.piap.pl (OSB1819.piap.pl [10.0.9.19])
-        by ni.piap.pl (Postfix) with ESMTPSA id AA042C3F2A7C;
-        Tue, 12 Apr 2022 13:41:54 +0200 (CEST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ni.piap.pl AA042C3F2A7C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=piap.pl; s=mail;
-        t=1649763715; bh=eDGbdVUneZ/T2RuspWQJiHylap/lgWRYWsmS2shYVko=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=glsS6E0+aD3K9YhLHeZw59r0S47bgX6qyoNqKb6mrNCtm5VwGhg3hVEXLsVL1NxYC
-         JEMEFG+wu+j1o5QvEqIE8kOkMn8/6Sv9blU+rQcOh1FaLg1/ExEX2WqxsTjboNjF9B
-         n2R4KUyDJOxG6tg+t44wd8Zar1sYFREU8RfGghrg=
-From:   =?utf-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>
-To:     Jacopo Mondi <jacopo@jmondi.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Joe Perches <joe@perches.com>
-Subject: Re: [PATCH v8 2/2] On Semi AR0521 sensor driver
-References: <m3pmn66pie.fsf@t19.piap.pl> <m3h78i6p4t.fsf@t19.piap.pl>
-        <20220301093107.ihokyp4xptkzpbpc@uno.localdomain>
-        <m38rtt7sx7.fsf@t19.piap.pl>
-        <20220301143044.2l4vlwbnh5n3g5ng@uno.localdomain>
-Sender: khalasa@piap.pl
-Date:   Tue, 12 Apr 2022 13:41:54 +0200
-In-Reply-To: <20220301143044.2l4vlwbnh5n3g5ng@uno.localdomain> (Jacopo Mondi's
-        message of "Tue, 1 Mar 2022 15:30:44 +0100")
-Message-ID: <m37d7ufrzx.fsf@t19.piap.pl>
+        Tue, 12 Apr 2022 08:29:30 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A627353A46
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 04:43:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649763820; x=1681299820;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/CXkkOa1Qb1zYpVNyIs99QKNPxZBdARfFd4I1EE/yEY=;
+  b=GsbkOgSzplfKZwBD3YXZXsUmk6vm4beGJ1DdOyi6+Hw3I4C/4lW+TG3h
+   Qnx2dGRtQrw/mzfrAdRNIUxHBSJO22FaQPzUTOi6hJAdXP1QBQXYr28TM
+   jenVvXDLiz2ZFi2YyIoJezyUNaFmRa1QBV8lYJyCD5O/xQj8tJEPWjb32
+   XyC3uxm1DNhC2yJMz2B62b0rKYTvxTYht/LFJVlniKOIONpVIaUWnGIXA
+   RcFm+Cm46VaQ7iqw0JgeBJnXgv9WpTxA0LWzwRBhvkXz8SsuNE3fKka2L
+   RbvBsoGSx1cItdTv9CxWEOcsVI9R8jeI18SbVr501lfojhjEIgOAQAG0E
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="262536050"
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="262536050"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 04:43:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
+   d="scan'208";a="724417241"
+Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 12 Apr 2022 04:43:31 -0700
+Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1neEvi-0002ou-NZ;
+        Tue, 12 Apr 2022 11:43:30 +0000
+Date:   Tue, 12 Apr 2022 19:43:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Jason A. Donenfeld" <zx2c4@kernel.org>
+Cc:     kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:crng/random/jd/not-zero-entropy 6/12] ERROR:
+ modpost: "random_get_entropy_fallback" [crypto/jitterentropy_rng.ko]
+ undefined!
+Message-ID: <202204121911.NhZSbyFC-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-KLMS-Rule-ID: 3
-X-KLMS-Message-Action: skipped
-X-KLMS-AntiSpam-Status: not scanned, whitelist
-X-KLMS-AntiPhishing: not scanned, whitelist
-X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, not scanned, whitelist
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+tree:   https://github.com/ammarfaizi2/linux-block crng/random/jd/not-zero-entropy
+head:   4ee3bf173a552cd996e048d57f65bb5b471ab577
+commit: 223939a5e0da931df37ab6bcd3e84bd74d931f35 [6/12] mips: use fallback for random_get_entropy() instead of zero
+config: mips-decstation_64_defconfig (https://download.01.org/0day-ci/archive/20220412/202204121911.NhZSbyFC-lkp@intel.com/config)
+compiler: mips64el-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/223939a5e0da931df37ab6bcd3e84bd74d931f35
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block crng/random/jd/not-zero-entropy
+        git checkout 223939a5e0da931df37ab6bcd3e84bd74d931f35
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash
 
-Since it appears all remaining issues with the AR0521 driver have been
-resolved weeks ago... is there anything I should do in order to have the
-driver merged, should I rather proceed with the "staging" thing, or
-maybe some other option should be used?
---=20
-Krzysztof "Chris" Ha=C5=82asa
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Sie=C4=87 Badawcza =C5=81ukasiewicz
-Przemys=C5=82owy Instytut Automatyki i Pomiar=C3=B3w PIAP
-Al. Jerozolimskie 202, 02-486 Warszawa
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "random_get_entropy_fallback" [crypto/jitterentropy_rng.ko] undefined!
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

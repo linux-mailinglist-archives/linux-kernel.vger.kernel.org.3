@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44BB64FD0B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 08:48:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E3A4FD0A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 08:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345442AbiDLGsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 02:48:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40144 "EHLO
+        id S1350212AbiDLGsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 02:48:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351180AbiDLGoM (ORCPT
+        with ESMTP id S1351196AbiDLGoQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:44:12 -0400
+        Tue, 12 Apr 2022 02:44:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D66B39830;
-        Mon, 11 Apr 2022 23:37:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2F539B9A;
+        Mon, 11 Apr 2022 23:37:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E49E961902;
-        Tue, 12 Apr 2022 06:37:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED668C385A1;
-        Tue, 12 Apr 2022 06:37:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CD48761904;
+        Tue, 12 Apr 2022 06:37:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7E0DC385A1;
+        Tue, 12 Apr 2022 06:37:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649745459;
-        bh=Ur7rnRKD7I0yAumOWBGWGZkPPf4CPiK8FlaCdTnTWQw=;
+        s=korg; t=1649745462;
+        bh=vKBYKGaQKA2xk0Eqcv7VFNeZNrWMwqYCL8Pjo+kMaJg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kofISyJlfKaddVDd1GKP2sPnWzoI/7VF2c4xhhLY0zFkrpRvoEUwCTDD5LB3sH3rM
-         qI8zSuXzmefpFstbZibeePGBgDYlYIFAQ/aVcZK/vMqLKI2FLJyJhy/xTt8alXXHve
-         UYq2m+P/LDFd+Sa866BAPurQlhtHAPqfNlEh/q2E=
+        b=CJ7ft4/Mbm69rKc47Qf7LJ4bEye9Pd3NHr1xyTX8g8zJnthLcJ3UQwENP0CaiEQkw
+         lEdHErwOJLufk5WZ6n7pRCI+PEdCCVsY2yPhs5wCNBsVx+u2e4YEuVC/b+i+i0UTyr
+         SOQGLgTEQlcKdycE5MTvx02GpbQtRmYjLfgVEZkE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Geert Uytterhoeven <geert@linux-m68k.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org,
+        Ziyang Xuan <william.xuanziyang@huawei.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 102/171] scsi: zorro7xx: Fix a resource leak in zorro7xx_remove_one()
-Date:   Tue, 12 Apr 2022 08:29:53 +0200
-Message-Id: <20220412062930.835918660@linuxfoundation.org>
+Subject: [PATCH 5.10 103/171] net/tls: fix slab-out-of-bounds bug in decrypt_internal
+Date:   Tue, 12 Apr 2022 08:29:54 +0200
+Message-Id: <20220412062930.863963273@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062927.870347203@linuxfoundation.org>
 References: <20220412062927.870347203@linuxfoundation.org>
@@ -56,38 +57,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Ziyang Xuan <william.xuanziyang@huawei.com>
 
-[ Upstream commit 16ed828b872d12ccba8f07bcc446ae89ba662f9c ]
+[ Upstream commit 9381fe8c849cfbe50245ac01fc077554f6eaa0e2 ]
 
-The error handling path of the probe releases a resource that is not freed
-in the remove function. In some cases, a ioremap() must be undone.
+The memory size of tls_ctx->rx.iv for AES128-CCM is 12 setting in
+tls_set_sw_offload(). The return value of crypto_aead_ivsize()
+for "ccm(aes)" is 16. So memcpy() require 16 bytes from 12 bytes
+memory space will trigger slab-out-of-bounds bug as following:
 
-Add the missing iounmap() call in the remove function.
+==================================================================
+BUG: KASAN: slab-out-of-bounds in decrypt_internal+0x385/0xc40 [tls]
+Read of size 16 at addr ffff888114e84e60 by task tls/10911
 
-Link: https://lore.kernel.org/r/247066a3104d25f9a05de8b3270fc3c848763bcc.1647673264.git.christophe.jaillet@wanadoo.fr
-Fixes: 45804fbb00ee ("[SCSI] 53c700: Amiga Zorro NCR53c710 SCSI")
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x34/0x44
+ print_report.cold+0x5e/0x5db
+ ? decrypt_internal+0x385/0xc40 [tls]
+ kasan_report+0xab/0x120
+ ? decrypt_internal+0x385/0xc40 [tls]
+ kasan_check_range+0xf9/0x1e0
+ memcpy+0x20/0x60
+ decrypt_internal+0x385/0xc40 [tls]
+ ? tls_get_rec+0x2e0/0x2e0 [tls]
+ ? process_rx_list+0x1a5/0x420 [tls]
+ ? tls_setup_from_iter.constprop.0+0x2e0/0x2e0 [tls]
+ decrypt_skb_update+0x9d/0x400 [tls]
+ tls_sw_recvmsg+0x3c8/0xb50 [tls]
+
+Allocated by task 10911:
+ kasan_save_stack+0x1e/0x40
+ __kasan_kmalloc+0x81/0xa0
+ tls_set_sw_offload+0x2eb/0xa20 [tls]
+ tls_setsockopt+0x68c/0x700 [tls]
+ __sys_setsockopt+0xfe/0x1b0
+
+Replace the crypto_aead_ivsize() with prot->iv_size + prot->salt_size
+when memcpy() iv value in TLS_1_3_VERSION scenario.
+
+Fixes: f295b3ae9f59 ("net/tls: Add support of AES128-CCM based ciphers")
+Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+Reviewed-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/zorro7xx.c | 2 ++
- 1 file changed, 2 insertions(+)
+ net/tls/tls_sw.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/zorro7xx.c b/drivers/scsi/zorro7xx.c
-index 27b9e2baab1a..7acf9193a9e8 100644
---- a/drivers/scsi/zorro7xx.c
-+++ b/drivers/scsi/zorro7xx.c
-@@ -159,6 +159,8 @@ static void zorro7xx_remove_one(struct zorro_dev *z)
- 	scsi_remove_host(host);
+diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+index 8cd011ea9fbb..21f20c3cda97 100644
+--- a/net/tls/tls_sw.c
++++ b/net/tls/tls_sw.c
+@@ -1483,7 +1483,7 @@ static int decrypt_internal(struct sock *sk, struct sk_buff *skb,
+ 	}
+ 	if (prot->version == TLS_1_3_VERSION)
+ 		memcpy(iv + iv_offset, tls_ctx->rx.iv,
+-		       crypto_aead_ivsize(ctx->aead_recv));
++		       prot->iv_size + prot->salt_size);
+ 	else
+ 		memcpy(iv + iv_offset, tls_ctx->rx.iv, prot->salt_size);
  
- 	NCR_700_release(host);
-+	if (host->base > 0x01000000)
-+		iounmap(hostdata->base);
- 	kfree(hostdata);
- 	free_irq(host->irq, host);
- 	zorro_release_device(z);
 -- 
 2.35.1
 

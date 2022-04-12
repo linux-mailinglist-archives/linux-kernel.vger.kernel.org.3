@@ -2,214 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6ECF4FE3EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 16:36:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11EB74FE3E6
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 16:33:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356665AbiDLOiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 10:38:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49842 "EHLO
+        id S1356583AbiDLOfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 10:35:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356585AbiDLOiJ (ORCPT
+        with ESMTP id S1343787AbiDLOfs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 10:38:09 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE645C864;
-        Tue, 12 Apr 2022 07:35:50 -0700 (PDT)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 32CF222249;
-        Tue, 12 Apr 2022 16:35:48 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1649774148;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=G/hnT3AEhxVxbNwEdDE7vvgvmJxgXYZA0Ny8VTY14TA=;
-        b=Ww/nu+x4QXsYJMEE0AH07YIcmC0qeLlkPD42SFTL3CJUgKcpbHUiQa9cSpRkeoL0j/XBnB
-        CyZG6NFX/0k9k9+JMFI3cJY8Dn4XEHaS9poZLGPVrKpvaiCyQYfCRhNGV1zFje/qNFHRq6
-        LZqy5hFLZVnhPBycjABPOchfUfssPnU=
-From:   Michael Walle <michael@walle.cc>
-To:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Heiko Thiery <heiko.thiery@gmail.com>,
-        Li Yang <leoyang.li@nxp.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Michael Walle <michael@walle.cc>
-Subject: [PATCH v3 2/2] arm64: dts: imx8mn: add 8MNANOD3L-EVK device tree
-Date:   Tue, 12 Apr 2022 16:32:38 +0200
-Message-Id: <20220412143238.1925059-3-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220412143238.1925059-1-michael@walle.cc>
-References: <20220412143238.1925059-1-michael@walle.cc>
+        Tue, 12 Apr 2022 10:35:48 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE045EDF7
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 07:33:30 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id q189so19168848oia.9
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 07:33:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=16zlRzLQaeI5Lfq40tI5fznUUSFHqeb4rIP0NZlx/SQ=;
+        b=Yxf2BarqXD49Rg5pPEzAsbZfIxsRPjLqwPvITATmpdxok2SSsbM/iYks+nfuqBQigr
+         nDCBRlN7mCKzkI89CjibB1uxl9u9jP7ipB4s+uwEiys8JquRT2uYww4xmgVJUfDDpNyR
+         //ShnjTJVLq0IGQzoQk7ziTPRicwOKGIfXO4zF8SKU6I/KHlFQAd6V+xtk00ll8hQrIX
+         eijXCOoAkfp/icuxYYnr67QwhOYuQCM9+vi7KyDcomRxFz0dotMn053stN/37SYtsfUp
+         UBg3K6CSBtKk02yFpipFL8N3kOZA4OodYha7zAq5Nb6vZIeAgco28PrrS8t/Hkhx0y0o
+         p48Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=16zlRzLQaeI5Lfq40tI5fznUUSFHqeb4rIP0NZlx/SQ=;
+        b=0T1YhTQN0P8wSMm6oWCkalfIW7kNyW5wDsm6vmhVtZ+fuPpMRMw+F3Ksa5aDxc3tJb
+         +eQAcDxMx2S36HRSeJS2lPRg76oaRqTfMtCMB7X7dHApA0VzoXkmPTYqUUZ07pwHlV0l
+         liVjs2Gn9FtluUPIstQut0rWqfDSKx79syUaYYEY+Q2Im2uWMv3ayg/voTh3aCu/Q5wD
+         zk5ZkhdInkRPJjFueqlZlc7/fuJ5tZCpB78PB+wTiJGjBAyXOKCBR/DSPU/qjAw+/rcl
+         hO3p7j8Rtu94XsUa/rfmOAD7hjVC13/pm1cLBoIeTZs5kN7xAJuJz9lDQYvu8WQN3XI2
+         Rgtg==
+X-Gm-Message-State: AOAM532/wJofrL0tU7GvQPhgVrVm0SG/7YpdSQxsgWF0smDDlIvesjYq
+        OZQ5CUosVvwWQcUJcQUUy2Autw==
+X-Google-Smtp-Source: ABdhPJwBA/222PiQAxJQ9fHmUWxwdJWC/fMo3zEL9Y5yWbFkh8by223DqgzbHY3HiGCeOXOxguRrMw==
+X-Received: by 2002:a05:6808:11c4:b0:2f9:ccd6:15a4 with SMTP id p4-20020a05680811c400b002f9ccd615a4mr1938023oiv.219.1649774010211;
+        Tue, 12 Apr 2022 07:33:30 -0700 (PDT)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id l92-20020a9d1b65000000b005e8a3a4aca6sm290716otl.25.2022.04.12.07.33.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 07:33:29 -0700 (PDT)
+Date:   Tue, 12 Apr 2022 09:33:27 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     agross@kernel.org, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_rohkumar@quicinc.com,
+        srinivas.kandagatla@linaro.org, dianders@chromium.org,
+        swboyd@chromium.org, judyhsiao@chromium.org,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Subject: Re: [PATCH v8 1/2] arm64: dts: qcom: sc7280: Add pinmux for I2S
+ speaker and Headset
+Message-ID: <YlWNt7f5EUk7I4by@builder.lan>
+References: <1649769281-12458-1-git-send-email-quic_srivasam@quicinc.com>
+ <1649769281-12458-2-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1649769281-12458-2-git-send-email-quic_srivasam@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a device tree for the 8MNANOD3L-EVK eval board which features an
-IMX8MN SoC. It is similar to the 8MNANODLPD4-EVK eval board except it
-has an IMX8MN UltraLite SoC and DDR3L memory. It esp. differs in the
-PMIC configuration because the SoC has a smaller package and thus the
-ARM core voltage is combined with the SoC voltage and the DDR voltage
-is 1.35V for the DDR3L memory.
+On Tue 12 Apr 08:14 CDT 2022, Srinivasa Rao Mandadapu wrote:
 
-Signed-off-by: Michael Walle <michael@walle.cc>
----
-changes since v2:
- - new patch
+> Add pinmux nodes for primary and secondary I2S for SC7280 based platforms.
+> 
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 14 +++++++++++
+>  arch/arm64/boot/dts/qcom/sc7280.dtsi     | 40 ++++++++++++++++++++++++++++++++
+>  2 files changed, 54 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+> index ecbf2b8..1fc94b5 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+> @@ -359,6 +359,20 @@
+>  	bias-disable;
+>  };
+>  
+> +&mi2s1_data0 {
+> +	drive-strength = <6>;
+> +	bias-disable;
+> +};
+> +
+> +&mi2s1_sclk {
+> +	drive-strength = <6>;
+> +	bias-disable;
+> +};
+> +
+> +&mi2s1_ws {
+> +	drive-strength = <6>;
+> +};
+> +
+>  &pm7325_gpios {
+>  	key_vol_up_default: key-vol-up-default {
+>  		pins = "gpio6";
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> index f0b64be..6e6cfeda 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> @@ -3522,6 +3522,46 @@
+>  				function = "edp_hot";
+>  			};
+>  
+> +			mi2s0_data0: mi2s0-data0 {
 
- arch/arm64/boot/dts/freescale/Makefile        |   1 +
- .../boot/dts/freescale/imx8mn-ddr3l-evk.dts   | 114 ++++++++++++++++++
- 2 files changed, 115 insertions(+)
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mn-ddr3l-evk.dts
+Are these ever going to be selected individually, or could this be:
 
-diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-index 85c2c9ba5110..bdb76e67ccfe 100644
---- a/arch/arm64/boot/dts/freescale/Makefile
-+++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -73,6 +73,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mn-beacon-kit.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mn-bsh-smm-s2.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mn-bsh-smm-s2pro.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mn-evk.dtb
-+dtb-$(CONFIG_ARCH_MXC) += imx8mn-ddr3l-evk.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mn-ddr4-evk.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mn-tqma8mqnl-mba8mx.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mn-var-som-symphony.dtb
-diff --git a/arch/arm64/boot/dts/freescale/imx8mn-ddr3l-evk.dts b/arch/arm64/boot/dts/freescale/imx8mn-ddr3l-evk.dts
-new file mode 100644
-index 000000000000..000e2c0596df
---- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx8mn-ddr3l-evk.dts
-@@ -0,0 +1,114 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+
-+/dts-v1/;
-+
-+#include "imx8mn.dtsi"
-+#include "imx8mn-evk.dtsi"
-+#include <dt-bindings/interrupt-controller/irq.h>
-+
-+/ {
-+	model = "NXP i.MX8MNano DDR3L EVK board";
-+	compatible = "fsl,imx8mn-ddr3l-evk", "fsl,imx8mn";
-+};
-+
-+&A53_0 {
-+	cpu-supply = <&buck1>;
-+};
-+
-+&A53_1 {
-+	cpu-supply = <&buck1>;
-+};
-+
-+&A53_2 {
-+	cpu-supply = <&buck1>;
-+};
-+
-+&A53_3 {
-+	cpu-supply = <&buck1>;
-+};
-+
-+&i2c1 {
-+	pmic: pmic@25 {
-+		compatible = "nxp,pca9450b";
-+		reg = <0x25>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_pmic>;
-+		interrupt-parent = <&gpio1>;
-+		interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
-+
-+		regulators {
-+			buck1: BUCK1 {
-+				regulator-name = "VDD_SOC_0V9";
-+				regulator-min-microvolt = <850000>;
-+				regulator-max-microvolt = <950000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+				regulator-ramp-delay = <3125>;
-+			};
-+
-+			buck4: BUCK4 {
-+				regulator-name = "VDD_3V3";
-+				regulator-min-microvolt = <3300000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			buck5: BUCK5 {
-+				regulator-name = "VDD_1V8";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			buck6: BUCK6 {
-+				regulator-name = "NVCC_DRAM_1V35";
-+				regulator-min-microvolt = <1350000>;
-+				regulator-max-microvolt = <1350000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			ldo1: LDO1 {
-+				regulator-name = "NVCC_SNVS_1V8";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			ldo2: LDO2 {
-+				regulator-name = "VDD_SNVS_0V8";
-+				regulator-min-microvolt = <800000>;
-+				regulator-max-microvolt = <800000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			ldo3: LDO3 {
-+				regulator-name = "VDDA_1V8";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			ldo4: LDO4 {
-+				regulator-name = "VDD_PHY_1V2";
-+				regulator-min-microvolt = <1200000>;
-+				regulator-max-microvolt = <1200000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+
-+			ldo5: LDO5 {
-+				regulator-name = "NVCC_SD2";
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-boot-on;
-+				regulator-always-on;
-+			};
-+		};
-+	};
-+};
--- 
-2.30.2
+mi2s0_state: mi2s0-state {
+	data0 {
+		...;
+	};
 
+	data1 {
+		...;
+	};
+
+	mclk {
+		...;
+	};
+
+	etc
+};
+
+mi2s1-state {
+	...;
+};
+
+And then a single pinctrl-0 = <&mi2c0_state>;
+
+Regards,
+Bjorn
+
+> +				pins = "gpio98";
+> +				function = "mi2s0_data0";
+> +			};
+> +
+> +			mi2s0_data1: mi2s0-data1 {
+> +				pins = "gpio99";
+> +				function = "mi2s0_data1";
+> +			};
+> +
+> +			mi2s0_mclk: mi2s0-mclk {
+> +				pins = "gpio96";
+> +				function = "pri_mi2s";
+> +			};
+> +
+> +			mi2s0_sclk: mi2s0-sclk {
+> +				pins = "gpio97";
+> +				function = "mi2s0_sck";
+> +			};
+> +
+> +			mi2s0_ws: mi2s0-ws {
+> +				pins = "gpio100";
+> +				function = "mi2s0_ws";
+> +			};
+> +
+> +			mi2s1_data0: mi2s1-data0 {
+> +				pins = "gpio107";
+> +				function = "mi2s1_data0";
+> +			};
+> +
+> +			mi2s1_sclk: mi2s1-sclk {
+> +				pins = "gpio106";
+> +				function = "mi2s1_sck";
+> +			};
+> +
+> +			mi2s1_ws: mi2s1-ws {
+> +				pins = "gpio108";
+> +				function = "mi2s1_ws";
+> +			};
+> +
+>  			pcie1_clkreq_n: pcie1-clkreq-n {
+>  				pins = "gpio79";
+>  				function = "pcie1_clkreqn";
+> -- 
+> 2.7.4
+> 

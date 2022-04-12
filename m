@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44DDB4FE346
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 695B84FE339
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:56:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356649AbiDLN6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 09:58:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33102 "EHLO
+        id S1356705AbiDLN6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 09:58:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356561AbiDLN6H (ORCPT
+        with ESMTP id S1356573AbiDLN6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 09:58:07 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7EF2F51;
-        Tue, 12 Apr 2022 06:55:49 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id e22so22309930ioe.11;
-        Tue, 12 Apr 2022 06:55:49 -0700 (PDT)
+        Tue, 12 Apr 2022 09:58:09 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 838A05F95;
+        Tue, 12 Apr 2022 06:55:51 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id q11so22336796iod.6;
+        Tue, 12 Apr 2022 06:55:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=dsEjLgvTaSnJWB0qaHEaU7KaeVze6U1DoRRKehYbw4I=;
-        b=EpCGAJdbnJSAP3mcFMIgp0gM/CzioJACPjZshjTi4vmru4ciSmQtESmIdyJkH1RxBL
-         WXyJ0dvOzc69IinOb/3/LpEnG8zbYWceeKDcGuOReh4XqXf2OKIQBPJkV+ltT/qfC+qK
-         qFswdp+pBK9043p7hCsGclNSm7zsVgkaywgH72qCBkSPeYDRSPFojSJlVq375DQkgRse
-         cCrcS6TEEAFqLwf9828xlRtHylk/LbIavVWh9qgQLNpuijau9hqsmkWiFM5uoivqM9H3
-         rGNvklr+5Wc2Rz0zlwUXRmpP+qTGGLD0S9tYvb2btfJ58qYXH+Ot7gy7Z//vQ8jR9GIj
-         uNZA==
+        bh=res6PbBmwf6ry1dEgNl1r8RYqBrRnpwX5BOzecykxas=;
+        b=Ps6za+nMoQaBSvb6viYugVvoRA/60HSnxsK3qMBlFLUnEl6M6gph66pVygyMMzBpCc
+         DMT0EQhS5GoXcCV3H2/h1sgY477lqD+DomBPfRGXoS+1eBAUF3Q1Bvv2sqnPn64Nyzou
+         X1S9zjzXHjT3ycEUX0E5H7abZtvm2HMgED0xpJ6n0r942FemdlsdZpprGYCZRG3+0NGW
+         PqXRHG3T5+VvjrCAa46BeA7TbiFiDYtfl9zeEtqjH0dpg6UcBIiHXBhlLolVc8VdYiE9
+         jpD8PF7yHbgu55nsvEh18/GbCUOQ54pzXDSw11p1Mn6I/NH98n1k9Pdugu1ivmq5LiGW
+         VGhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=dsEjLgvTaSnJWB0qaHEaU7KaeVze6U1DoRRKehYbw4I=;
-        b=JQGcnEQmGAwDp4+7zK6yj7OrTSXg+Qv0IjjGja21WgZ38iAwBDFuEihBitO2ha0OsB
-         6TV3zvbIoUP6HtSMsbTyrBfL3Taz3K4gxMddNoI7ujtIV1u+UPwhiFDRnT84Ii0vy+0D
-         Nx09pVw4H1StXGieI7qU0Mv/UkMikk0PRVwJAOWt4EzYOjQR+EWNbofeyDfbsFGBQZNC
-         zV2ewRq/47eVbxDbYP5G3QGq4ZOeTO+4GCcqMg2qoDIBCx7WxYnJ8G0WPoiP7MV9JTqv
-         d967ShAydb/qpXdX3jQgO0H67AIeb7zwIVqqsio7QM8nh2WGOqyk24Q2ay5Q3mEtk0EE
-         E7Xw==
-X-Gm-Message-State: AOAM532+nuY3gB9CBuM60yd19WZvcLjPTtfoAWgptI8OqVw8kSUvmRz/
-        kmog0yyLQQq+VKMfXompT6pthkP8/zWczw==
-X-Google-Smtp-Source: ABdhPJzQiDj980Uywa9g5DatCrWtmN2Guk7U5Sn5Ec5jtD1hNewqjrmQ8R1mSKrXK1dbyH3o9GQgrg==
-X-Received: by 2002:a05:6638:22c5:b0:326:2b3a:b08b with SMTP id j5-20020a05663822c500b003262b3ab08bmr6534540jat.250.1649771748824;
-        Tue, 12 Apr 2022 06:55:48 -0700 (PDT)
+        bh=res6PbBmwf6ry1dEgNl1r8RYqBrRnpwX5BOzecykxas=;
+        b=RbISeua+zTbJL1nOIlJbwcF8QWOvGsGJHSXWPp7Lq694lvMau5ATLaDZT0WRG816WJ
+         cgigUb58Y1zaNY+QA+b/amOLQsA9k++BAdqwsQmpm6tkgK1ykqLcKfnmaF2JIjI/6y5Q
+         uW3SzaAfg6oLlaij2Jkdkxo4kVxFIKF2vy8C3epq+Bguv8K6ADZsT57vlFmZZi0qmOKI
+         ukWaqicBQQqeyWiuKR8BvlkqXqR3M4F+m3mLtmw7CxRX0Wyz25qxIxwKUF8I0r7X+YKJ
+         2+KWmx63TwOZ40LXsDjmQXoe/3Kf0H+nEy6TsAzIQUpn5KGqBL+TLS2DDCgLtVpRUpoI
+         TnHw==
+X-Gm-Message-State: AOAM530IB5UJ6gmUdNv2+tir/60k+d5zvrQjqnmu1pYwaa3u4qdEfQzx
+        fp0m60KqRvuCi5es4tqe1I8uR8AHz1eb8Q==
+X-Google-Smtp-Source: ABdhPJyvqo3RbUH2Dh/5IQVqyLFzlDj0YKtLF8usD1wyAdbMOH8tGamWYqkS3u4m3htyBtgIyj8r/A==
+X-Received: by 2002:a05:6638:3e92:b0:326:2d62:5197 with SMTP id ch18-20020a0566383e9200b003262d625197mr5381665jab.132.1649771750531;
+        Tue, 12 Apr 2022 06:55:50 -0700 (PDT)
 Received: from aford-IdeaCentre-A730.lan ([2601:448:8400:9e8:2611:a7ae:f1c9:5ec2])
-        by smtp.gmail.com with ESMTPSA id n12-20020a92dd0c000000b002cac22690b6sm2280748ilm.0.2022.04.12.06.55.47
+        by smtp.gmail.com with ESMTPSA id n12-20020a92dd0c000000b002cac22690b6sm2280748ilm.0.2022.04.12.06.55.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 06:55:48 -0700 (PDT)
+        Tue, 12 Apr 2022 06:55:49 -0700 (PDT)
 From:   Adam Ford <aford173@gmail.com>
 To:     linux-media@vger.kernel.org
 Cc:     prabhakar.mahadev-lad.rj@bp.renesas.com, tharvey@gateworks.com,
@@ -56,9 +56,9 @@ Cc:     prabhakar.mahadev-lad.rj@bp.renesas.com, tharvey@gateworks.com,
         Dave Stevenson <dave.stevenson@raspberrypi.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 3/4] media: i2c: imx219: Enable variable XCLK
-Date:   Tue, 12 Apr 2022 08:55:32 -0500
-Message-Id: <20220412135534.2796158-4-aford173@gmail.com>
+Subject: [PATCH 4/4] media: i2c: imx219: Create DPHY helper function
+Date:   Tue, 12 Apr 2022 08:55:33 -0500
+Message-Id: <20220412135534.2796158-5-aford173@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220412135534.2796158-1-aford173@gmail.com>
 References: <20220412135534.2796158-1-aford173@gmail.com>
@@ -74,182 +74,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The datasheet shows the external clock can be anything
-from 6MHz to 27MHz, but EXCK, PREPLLCK_VT_DIV and
-PREPLLCK_OP_DIV need to change based on the clock, so
-create helper functions to set these registers based on
-the rate of xclk.
-
-Move the validation of the clock rate into imx219_check_hwcfg
-which means delaying the call to it until after xclk has been
-determined.
+In the table of modes, each mode sets the DPHY to auto.
+Create a helper function which does the same thing while
+removing the entry for auto DPHY from ever mode entry.
 
 Signed-off-by: Adam Ford <aford173@gmail.com>
 ---
- drivers/media/i2c/imx219.c | 79 ++++++++++++++++++++++++++++++--------
- 1 file changed, 63 insertions(+), 16 deletions(-)
+ drivers/media/i2c/imx219.c | 24 ++++++++++++++++++++----
+ 1 file changed, 20 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/media/i2c/imx219.c b/drivers/media/i2c/imx219.c
-index d13ce5c1ece6..08e7d0e72430 100644
+index 08e7d0e72430..bb0bc1b8d91c 100644
 --- a/drivers/media/i2c/imx219.c
 +++ b/drivers/media/i2c/imx219.c
-@@ -39,8 +39,12 @@
+@@ -35,6 +35,10 @@
+ #define IMX219_MODE_STANDBY		0x00
+ #define IMX219_MODE_STREAMING		0x01
+ 
++
++#define IMX219_REG_DPHY_CTRL		0x0128
++#define IMX219_DPHY_AUTO		0
++
+ /* Chip ID */
  #define IMX219_REG_CHIP_ID		0x0000
  #define IMX219_CHIP_ID			0x0219
- 
--/* External clock frequency is 24.0M */
--#define IMX219_XCLK_FREQ		24000000
-+/* Default external clock frequency is 24.0M */
-+#define IMX219_XCLK_MIN_FREQ		6000000
-+#define IMX219_XCLK_MAX_FREQ		27000000
-+#define IMX219_REG_EXCK			0x012a
-+#define IMX219_REG_PREPLLCK_VT_DIV	0x0304
-+#define IMX219_REG_PREPLLCK_OP_DIV	0x0305
- 
- /* Pixel rate is fixed for all the modes */
- #define IMX219_PIXEL_RATE		182400000
-@@ -166,8 +170,6 @@ static const struct imx219_reg pll_clk_table[] = {
- 
- 	{0x0301, 0x05},	/* VTPXCK_DIV */
- 	{0x0303, 0x01},	/* VTSYSCK_DIV */
--	{0x0304, 0x03},	/* PREPLLCK_VT_DIV 0x03 = AUTO set */
--	{0x0305, 0x03}, /* PREPLLCK_OP_DIV 0x03 = AUTO set */
- 	{0x0306, 0x00},	/* PLL_VT_MPY */
- 	{0x0307, 0x39},
- 	{0x030b, 0x01},	/* OP_SYS_CLK_DIV */
-@@ -182,7 +184,6 @@ static const struct imx219_reg pll_clk_table[] = {
+@@ -183,7 +187,6 @@ static const struct imx219_reg pll_clk_table[] = {
+  * 3280x2464 = mode 2, 1920x1080 = mode 1, 1640x1232 = mode 4, 640x480 = mode 7.
   */
  static const struct imx219_reg mode_3280x2464_regs[] = {
- 	{0x0128, 0x00},
--	{0x012a, 0x18},
+-	{0x0128, 0x00},
  	{0x012b, 0x00},
  	{0x0164, 0x00},
  	{0x0165, 0x00},
-@@ -222,7 +223,6 @@ static const struct imx219_reg mode_3280x2464_regs[] = {
- 
- static const struct imx219_reg mode_1920_1080_regs[] = {
- 	{0x0128, 0x00},
--	{0x012a, 0x18},
- 	{0x012b, 0x00},
- 	{0x0162, 0x0d},
- 	{0x0163, 0x78},
-@@ -262,7 +262,6 @@ static const struct imx219_reg mode_1920_1080_regs[] = {
- 
- static const struct imx219_reg mode_1640_1232_regs[] = {
- 	{0x0128, 0x00},
--	{0x012a, 0x18},
- 	{0x012b, 0x00},
- 	{0x0164, 0x00},
- 	{0x0165, 0x00},
-@@ -302,7 +301,6 @@ static const struct imx219_reg mode_1640_1232_regs[] = {
- 
- static const struct imx219_reg mode_640_480_regs[] = {
- 	{0x0128, 0x00},
--	{0x012a, 0x18},
- 	{0x012b, 0x00},
- 	{0x0162, 0x0d},
- 	{0x0163, 0x78},
-@@ -1015,6 +1013,50 @@ static int imx219_configure_lanes(struct imx219 *imx219)
- 	return ret;
+@@ -222,7 +225,6 @@ static const struct imx219_reg mode_3280x2464_regs[] = {
  };
  
-+static int imx219_set_exck_freq(struct imx219 *imx219)
+ static const struct imx219_reg mode_1920_1080_regs[] = {
+-	{0x0128, 0x00},
+ 	{0x012b, 0x00},
+ 	{0x0162, 0x0d},
+ 	{0x0163, 0x78},
+@@ -261,7 +263,6 @@ static const struct imx219_reg mode_1920_1080_regs[] = {
+ };
+ 
+ static const struct imx219_reg mode_1640_1232_regs[] = {
+-	{0x0128, 0x00},
+ 	{0x012b, 0x00},
+ 	{0x0164, 0x00},
+ 	{0x0165, 0x00},
+@@ -300,7 +301,6 @@ static const struct imx219_reg mode_1640_1232_regs[] = {
+ };
+ 
+ static const struct imx219_reg mode_640_480_regs[] = {
+-	{0x0128, 0x00},
+ 	{0x012b, 0x00},
+ 	{0x0162, 0x0d},
+ 	{0x0163, 0x78},
+@@ -999,6 +999,15 @@ static int imx219_get_selection(struct v4l2_subdev *sd,
+ 	return -EINVAL;
+ }
+ 
++static int imx219_enable_dphy(struct imx219 *imx219, u8 mode)
 +{
 +	int ret;
-+	/* The imx219 registers need MHz not Hz */
-+	u8 clk = (u8) (imx219->xclk_freq/1000000U);
 +
-+	/* Set the clock frequency in MHz */
-+	ret = imx219_write_reg(imx219, IMX219_REG_EXCK,
-+			       IMX219_REG_VALUE_08BIT, clk);
++	ret = imx219_write_reg(imx219, IMX219_REG_DPHY_CTRL,
++			       IMX219_REG_VALUE_08BIT, mode);
++	return ret;
++};
 +
-+	/* Configure the PREPLLCK_VT_DIV and PREPLLCK_OP_DIV for automatic */
-+	switch (clk) {
-+	case 6 ... 11:
-+		ret = imx219_write_reg(imx219, IMX219_REG_PREPLLCK_VT_DIV,
-+			       IMX219_REG_VALUE_08BIT, 0x01);
-+		if (ret)
-+			return ret;
-+		ret = imx219_write_reg(imx219, IMX219_REG_PREPLLCK_OP_DIV,
-+			       IMX219_REG_VALUE_08BIT, 0x01);
-+		return ret;
-+	case 12 ... 23:
-+		ret = imx219_write_reg(imx219, IMX219_REG_PREPLLCK_VT_DIV,
-+			       IMX219_REG_VALUE_08BIT, 0x02);
-+		if (ret)
-+			return ret;
-+
-+		ret = imx219_write_reg(imx219, IMX219_REG_PREPLLCK_OP_DIV,
-+			       IMX219_REG_VALUE_08BIT, 0x02);
-+
-+		return ret;
-+	case 24 ... 27:
-+		ret = imx219_write_reg(imx219, IMX219_REG_PREPLLCK_VT_DIV,
-+			       IMX219_REG_VALUE_08BIT, 0x03);
-+		if (ret)
-+			return ret;
-+		ret = imx219_write_reg(imx219, IMX219_REG_PREPLLCK_OP_DIV,
-+			       IMX219_REG_VALUE_08BIT, 0x03);
-+		return ret;
-+	default:
-+		/* Should never get here */
-+		return -EINVAL;
-+	}
-+}
-+
- static int imx219_start_streaming(struct imx219 *imx219)
+ static int imx219_configure_lanes(struct imx219 *imx219)
  {
- 	struct i2c_client *client = v4l2_get_subdevdata(&imx219->sd);
-@@ -1039,6 +1081,9 @@ static int imx219_start_streaming(struct imx219 *imx219)
+ 	int ret;
+@@ -1081,6 +1090,13 @@ static int imx219_start_streaming(struct imx219 *imx219)
  		goto err_rpm_put;
  	}
  
-+	/* Configure clock based on reference clock frequency */
-+	imx219_set_exck_freq(imx219);
-+
- 	/* Apply default values of current mode */
- 	reg_list = &imx219->mode->reg_list;
- 	ret = imx219_write_regs(imx219, reg_list->regs, reg_list->num_of_regs);
-@@ -1428,6 +1473,13 @@ static int imx219_check_hwcfg(struct imx219 *imx219)
- 		return -EINVAL;
- 	}
- 
-+	if ((imx219->xclk_freq < IMX219_XCLK_MIN_FREQ) ||
-+	     imx219->xclk_freq > IMX219_XCLK_MAX_FREQ) {
-+		dev_err(&client->dev, "xclk frequency not supported: %d Hz\n",
-+			imx219->xclk_freq);
-+		return -EINVAL;
++	/* Setup DPHY */
++	ret = imx219_enable_dphy(imx219, IMX219_DPHY_AUTO);
++	if (ret) {
++		dev_err(&client->dev, "%s failed to configure dphy\n", __func__);
++		goto err_rpm_put;
 +	}
 +
- 	return 0;
- }
+ 	/* Configure clock based on reference clock frequency */
+ 	imx219_set_exck_freq(imx219);
  
-@@ -1478,10 +1530,6 @@ static int imx219_probe(struct i2c_client *client)
- 	if (ret)
- 		return ret;
- 
--	/* Check the hardware configuration in device tree */
--	if (imx219_check_hwcfg(imx219))
--		return -EINVAL;
--
- 	/* Get system clock (xclk) */
- 	imx219->xclk = devm_clk_get(dev, NULL);
- 	if (IS_ERR(imx219->xclk)) {
-@@ -1490,11 +1538,10 @@ static int imx219_probe(struct i2c_client *client)
- 	}
- 
- 	imx219->xclk_freq = clk_get_rate(imx219->xclk);
--	if (imx219->xclk_freq != IMX219_XCLK_FREQ) {
--		dev_err(dev, "xclk frequency not supported: %d Hz\n",
--			imx219->xclk_freq);
-+
-+	/* Check the hardware configuration in device tree */
-+	if (imx219_check_hwcfg(imx219))
- 		return -EINVAL;
--	}
- 
- 	ret = imx219_get_regulators(imx219);
- 	if (ret) {
 -- 
 2.34.1
 

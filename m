@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B7EE4FD708
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:26:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90DB24FD855
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:35:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354763AbiDLIFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:05:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42898 "EHLO
+        id S1385569AbiDLIwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:52:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353786AbiDLHZy (ORCPT
+        with ESMTP id S1358894AbiDLHmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:25:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADFA764DB;
-        Tue, 12 Apr 2022 00:04:34 -0700 (PDT)
+        Tue, 12 Apr 2022 03:42:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B59546A2;
+        Tue, 12 Apr 2022 00:19:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5A489B81A8F;
-        Tue, 12 Apr 2022 07:04:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3D15C385A6;
-        Tue, 12 Apr 2022 07:04:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 41E196153F;
+        Tue, 12 Apr 2022 07:19:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BDA0C385A5;
+        Tue, 12 Apr 2022 07:19:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747072;
-        bh=owCQkfvc1FFs6YguV6boUR1V1ik5jIJYW9wNlUGd5eE=;
+        s=korg; t=1649747970;
+        bh=GCdtRzbsd0giU9kuDnboH1OnpD7l/gKMxIAu4hzgLeM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XdVWm5kS08ABDuUZBo78lhUWFpHSOjUkeFbeNUYwviSbgEQL0VMxxWh4YgGM80tKa
-         ZxFJFZQ6R06C+tDbmaSQUi0poWCci6XocsNv43kEgAxS3VaEHOzQBFj8Aaw4vuoNe0
-         3WMv0OoG2/nr4udmRKAtwfQ0eQGXBcWMyJ0yQC7M=
+        b=EznmDd6V5AJQ6tGCZBRFpohhkoiy+w41PgDgKefef1QJoJBwdJVgqc++1ih+dFSRC
+         Gj5G8KmhFLHtGoHyrF/7/o4bCLPybEasHTUTQyFqPa2CYzRNPi8K6FU7pDiyg8xiFA
+         7eNEAOYyPmG69SwqQEIJI3BLNOI3y7sU/UGluHJ4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Anand Jain <anand.jain@oracle.com>,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-        David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.16 232/285] btrfs: zoned: traverse devices under chunk_mutex in btrfs_can_activate_zone
+        stable@vger.kernel.org, stable@kernel.org,
+        Avri Altman <Avri.Altman@wdc.com>,
+        Michael Wu <michael@allwinnertech.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH 5.17 271/343] mmc: core: Fixup support for writeback-cache for eMMC and SD
 Date:   Tue, 12 Apr 2022 08:31:29 +0200
-Message-Id: <20220412062950.356130112@linuxfoundation.org>
+Message-Id: <20220412062959.145752165@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,151 +56,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+From: Michael Wu <michael@allwinnertech.com>
 
-commit 0b9e66762aa0cda2a9c2d5542d64e04dac528fa6 upstream.
+commit 08ebf903af57cda6d773f3dd1671b64f73b432b8 upstream.
 
-btrfs_can_activate_zone() can be called with the device_list_mutex already
-held, which will lead to a deadlock:
+During the card initialization process, the mmc core checks whether the
+eMMC/SD card supports an internal writeback-cache and then enables it
+inside the card.
 
-insert_dev_extents() // Takes device_list_mutex
-`-> insert_dev_extent()
- `-> btrfs_insert_empty_item()
-  `-> btrfs_insert_empty_items()
-   `-> btrfs_search_slot()
-    `-> btrfs_cow_block()
-     `-> __btrfs_cow_block()
-      `-> btrfs_alloc_tree_block()
-       `-> btrfs_reserve_extent()
-        `-> find_free_extent()
-         `-> find_free_extent_update_loop()
-          `-> can_allocate_chunk()
-           `-> btrfs_can_activate_zone() // Takes device_list_mutex again
+Unfortunately, this isn't according to what the mmc core reports to the
+upper block layer. Instead, the writeback-cache support with REQ_FLUSH and
+REQ_FUA, are being enabled depending on whether the host supports the CMD23
+(MMC_CAP_CMD23) and whether an eMMC supports the reliable-write command.
 
-Instead of using the RCU on fs_devices->device_list we
-can use fs_devices->alloc_list, protected by the chunk_mutex to traverse
-the list of active devices.
+This is wrong and it may also sound awkward. In fact, it's a remnant
+from when both eMMC/SD cards didn't have dedicated commands/support to
+control the internal writeback-cache. In other words, it was the best we
+could do at that point in time.
 
-We are in the chunk allocation thread. The newer chunk allocation
-happens from the devices in the fs_device->alloc_list protected by the
-chunk_mutex.
+To fix the problem, but also without breaking backwards compatibility,
+let's align the REQ_FLUSH support with whether the writeback-cache became
+successfully enabled - for both eMMC and SD cards.
 
-  btrfs_create_chunk()
-    lockdep_assert_held(&info->chunk_mutex);
-    gather_device_info
-      list_for_each_entry(device, &fs_devices->alloc_list, dev_alloc_list)
-
-Also, a device that reappears after the mount won't join the alloc_list
-yet and, it will be in the dev_list, which we don't want to consider in
-the context of the chunk alloc.
-
-  [15.166572] WARNING: possible recursive locking detected
-  [15.167117] 5.17.0-rc6-dennis #79 Not tainted
-  [15.167487] --------------------------------------------
-  [15.167733] kworker/u8:3/146 is trying to acquire lock:
-  [15.167733] ffff888102962ee0 (&fs_devs->device_list_mutex){+.+.}-{3:3}, at: find_free_extent+0x15a/0x14f0 [btrfs]
-  [15.167733]
-  [15.167733] but task is already holding lock:
-  [15.167733] ffff888102962ee0 (&fs_devs->device_list_mutex){+.+.}-{3:3}, at: btrfs_create_pending_block_groups+0x20a/0x560 [btrfs]
-  [15.167733]
-  [15.167733] other info that might help us debug this:
-  [15.167733]  Possible unsafe locking scenario:
-  [15.167733]
-  [15.171834]        CPU0
-  [15.171834]        ----
-  [15.171834]   lock(&fs_devs->device_list_mutex);
-  [15.171834]   lock(&fs_devs->device_list_mutex);
-  [15.171834]
-  [15.171834]  *** DEADLOCK ***
-  [15.171834]
-  [15.171834]  May be due to missing lock nesting notation
-  [15.171834]
-  [15.171834] 5 locks held by kworker/u8:3/146:
-  [15.171834]  #0: ffff888100050938 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work+0x1c3/0x5a0
-  [15.171834]  #1: ffffc9000067be80 ((work_completion)(&fs_info->async_data_reclaim_work)){+.+.}-{0:0}, at: process_one_work+0x1c3/0x5a0
-  [15.176244]  #2: ffff88810521e620 (sb_internal){.+.+}-{0:0}, at: flush_space+0x335/0x600 [btrfs]
-  [15.176244]  #3: ffff888102962ee0 (&fs_devs->device_list_mutex){+.+.}-{3:3}, at: btrfs_create_pending_block_groups+0x20a/0x560 [btrfs]
-  [15.176244]  #4: ffff8881152e4b78 (btrfs-dev-00){++++}-{3:3}, at: __btrfs_tree_lock+0x27/0x130 [btrfs]
-  [15.179641]
-  [15.179641] stack backtrace:
-  [15.179641] CPU: 1 PID: 146 Comm: kworker/u8:3 Not tainted 5.17.0-rc6-dennis #79
-  [15.179641] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1.fc35 04/01/2014
-  [15.179641] Workqueue: events_unbound btrfs_async_reclaim_data_space [btrfs]
-  [15.179641] Call Trace:
-  [15.179641]  <TASK>
-  [15.179641]  dump_stack_lvl+0x45/0x59
-  [15.179641]  __lock_acquire.cold+0x217/0x2b2
-  [15.179641]  lock_acquire+0xbf/0x2b0
-  [15.183838]  ? find_free_extent+0x15a/0x14f0 [btrfs]
-  [15.183838]  __mutex_lock+0x8e/0x970
-  [15.183838]  ? find_free_extent+0x15a/0x14f0 [btrfs]
-  [15.183838]  ? find_free_extent+0x15a/0x14f0 [btrfs]
-  [15.183838]  ? lock_is_held_type+0xd7/0x130
-  [15.183838]  ? find_free_extent+0x15a/0x14f0 [btrfs]
-  [15.183838]  find_free_extent+0x15a/0x14f0 [btrfs]
-  [15.183838]  ? _raw_spin_unlock+0x24/0x40
-  [15.183838]  ? btrfs_get_alloc_profile+0x106/0x230 [btrfs]
-  [15.187601]  btrfs_reserve_extent+0x131/0x260 [btrfs]
-  [15.187601]  btrfs_alloc_tree_block+0xb5/0x3b0 [btrfs]
-  [15.187601]  __btrfs_cow_block+0x138/0x600 [btrfs]
-  [15.187601]  btrfs_cow_block+0x10f/0x230 [btrfs]
-  [15.187601]  btrfs_search_slot+0x55f/0xbc0 [btrfs]
-  [15.187601]  ? lock_is_held_type+0xd7/0x130
-  [15.187601]  btrfs_insert_empty_items+0x2d/0x60 [btrfs]
-  [15.187601]  btrfs_create_pending_block_groups+0x2b3/0x560 [btrfs]
-  [15.187601]  __btrfs_end_transaction+0x36/0x2a0 [btrfs]
-  [15.192037]  flush_space+0x374/0x600 [btrfs]
-  [15.192037]  ? find_held_lock+0x2b/0x80
-  [15.192037]  ? btrfs_async_reclaim_data_space+0x49/0x180 [btrfs]
-  [15.192037]  ? lock_release+0x131/0x2b0
-  [15.192037]  btrfs_async_reclaim_data_space+0x70/0x180 [btrfs]
-  [15.192037]  process_one_work+0x24c/0x5a0
-  [15.192037]  worker_thread+0x4a/0x3d0
-
-Fixes: a85f05e59bc1 ("btrfs: zoned: avoid chunk allocation if active block group has enough space")
-CC: stable@vger.kernel.org # 5.16+
-Reviewed-by: Anand Jain <anand.jain@oracle.com>
-Signed-off-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
-Reviewed-by: David Sterba <dsterba@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+Cc: stable@kernel.org
+Fixes: 881d1c25f765 ("mmc: core: Add cache control for eMMC4.5 device")
+Fixes: 130206a615a9 ("mmc: core: Add support for cache ctrl for SD cards")
+Depends-on: 97fce126e279 ("mmc: block: Issue a cache flush only when it's enabled")
+Reviewed-by: Avri Altman <Avri.Altman@wdc.com>
+Signed-off-by: Michael Wu <michael@allwinnertech.com>
+Link: https://lore.kernel.org/r/20220331073223.106415-1-michael@allwinnertech.com
+[Ulf: Re-wrote the commit message]
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/btrfs/zoned.c |    9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/mmc/core/block.c |   12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
---- a/fs/btrfs/zoned.c
-+++ b/fs/btrfs/zoned.c
-@@ -1936,18 +1936,19 @@ int btrfs_zone_finish(struct btrfs_block
+--- a/drivers/mmc/core/block.c
++++ b/drivers/mmc/core/block.c
+@@ -2382,6 +2382,8 @@ static struct mmc_blk_data *mmc_blk_allo
+ 	struct mmc_blk_data *md;
+ 	int devidx, ret;
+ 	char cap_str[10];
++	bool cache_enabled = false;
++	bool fua_enabled = false;
  
- bool btrfs_can_activate_zone(struct btrfs_fs_devices *fs_devices, u64 flags)
- {
-+	struct btrfs_fs_info *fs_info = fs_devices->fs_info;
- 	struct btrfs_device *device;
- 	bool ret = false;
- 
--	if (!btrfs_is_zoned(fs_devices->fs_info))
-+	if (!btrfs_is_zoned(fs_info))
- 		return true;
- 
- 	/* Non-single profiles are not supported yet */
- 	ASSERT((flags & BTRFS_BLOCK_GROUP_PROFILE_MASK) == 0);
- 
- 	/* Check if there is a device with active zones left */
--	mutex_lock(&fs_devices->device_list_mutex);
--	list_for_each_entry(device, &fs_devices->devices, dev_list) {
-+	mutex_lock(&fs_info->chunk_mutex);
-+	list_for_each_entry(device, &fs_devices->alloc_list, dev_alloc_list) {
- 		struct btrfs_zoned_device_info *zinfo = device->zone_info;
- 
- 		if (!device->bdev)
-@@ -1959,7 +1960,7 @@ bool btrfs_can_activate_zone(struct btrf
- 			break;
- 		}
+ 	devidx = ida_simple_get(&mmc_blk_ida, 0, max_devices, GFP_KERNEL);
+ 	if (devidx < 0) {
+@@ -2461,13 +2463,17 @@ static struct mmc_blk_data *mmc_blk_allo
+ 			md->flags |= MMC_BLK_CMD23;
  	}
--	mutex_unlock(&fs_devices->device_list_mutex);
-+	mutex_unlock(&fs_info->chunk_mutex);
  
- 	return ret;
- }
+-	if (mmc_card_mmc(card) &&
+-	    md->flags & MMC_BLK_CMD23 &&
++	if (md->flags & MMC_BLK_CMD23 &&
+ 	    ((card->ext_csd.rel_param & EXT_CSD_WR_REL_PARAM_EN) ||
+ 	     card->ext_csd.rel_sectors)) {
+ 		md->flags |= MMC_BLK_REL_WR;
+-		blk_queue_write_cache(md->queue.queue, true, true);
++		fua_enabled = true;
++		cache_enabled = true;
+ 	}
++	if (mmc_cache_enabled(card->host))
++		cache_enabled  = true;
++
++	blk_queue_write_cache(md->queue.queue, cache_enabled, fua_enabled);
+ 
+ 	string_get_size((u64)size, 512, STRING_UNITS_2,
+ 			cap_str, sizeof(cap_str));
 
 

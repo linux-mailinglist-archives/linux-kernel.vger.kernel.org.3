@@ -2,100 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F11604FE826
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 20:40:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79FC94FE829
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 20:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358756AbiDLSnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 14:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33070 "EHLO
+        id S1358769AbiDLSoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 14:44:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358778AbiDLSm0 (ORCPT
+        with ESMTP id S244339AbiDLSod (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 14:42:26 -0400
-Received: from relay3.hostedemail.com (relay3.hostedemail.com [64.99.140.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6297D37BEC
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 11:40:07 -0700 (PDT)
-Received: from omf15.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay01.hostedemail.com (Postfix) with ESMTP id 5F461627AC;
-        Tue, 12 Apr 2022 18:40:05 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf15.hostedemail.com (Postfix) with ESMTPA id 9C9231B;
-        Tue, 12 Apr 2022 18:40:03 +0000 (UTC)
-Message-ID: <e3cb339e8123ec84392d3050fbd689fcf2255f4a.camel@perches.com>
-Subject: Re: [PATCH 4/5] MAINTAINERS: update MAINTAINERS file
-From:   Joe Perches <joe@perches.com>
-To:     William Zhang <william.zhang@broadcom.com>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
-Cc:     Samyon Furman <samyon.furman@broadcom.com>,
-        Joel Peshkin <joel.peshkin@broadcom.com>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Dan Beygelman <dan.beygelman@broadcom.com>,
-        Tomer Yacoby <tomer.yacoby@broadcom.com>,
-        Anand Gore <anand.gore@broadcom.com>,
-        Kursad Oney <kursad.oney@broadcom.com>,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 12 Apr 2022 11:40:02 -0700
-In-Reply-To: <51c11778-b252-53b0-8161-9d7928816b55@broadcom.com>
-References: <20220411172815.20916-1-william.zhang@broadcom.com>
-         <20220411172815.20916-5-william.zhang@broadcom.com>
-         <38692bbdd535dfe249babd1eb6aca24b2e1070e8.camel@perches.com>
-         <51c11778-b252-53b0-8161-9d7928816b55@broadcom.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Tue, 12 Apr 2022 14:44:33 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C23552E75;
+        Tue, 12 Apr 2022 11:42:15 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id bh17so39072590ejb.8;
+        Tue, 12 Apr 2022 11:42:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=0vLtlk/2vLSpLboaNitHRcOySnoML+sxdweNgqoysJE=;
+        b=auj/Zv0UekaDc7AG5Z3zGZrfV4g+HiVFTTHyx9/D41zo6CLt4nMx987PJ7l369tS9L
+         8yg9Cro2uKoGpjCyOReEECe1hcBtNXkrQ2DGq8R+WAFddfh3lArZMKhgvTyLPjvFd2Uo
+         T1z54Hhrn6YPl/4sV+uG5p6l+K6HQb3flTlJuTpAEzPgweFt6vZfSGCSGdCUGAlKZaiB
+         S2CJh1R7ygk0Frpg1bYnvkUMCnMSVcXLHrX6YQGMp0xgNtIMwnhzh90GOhn6At+O4mig
+         z7EDVyAS5NAFi4tqGJbE2JvPLUY1q30KHnIhVNCUL1A8UloXO6/8+zKnCBkSKjp/cy2r
+         AX0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0vLtlk/2vLSpLboaNitHRcOySnoML+sxdweNgqoysJE=;
+        b=Po/wAw1acgu7EH5iz0Y0hiQo0/nzU6YQqBDY2aHyqs8M55cnb4Rb2yvn12BdzZacvk
+         F5XOHzkLnhya9EyRlo34+2ES5VxP2FT3CmzvJHh0L+eli+si9KMfV3EvGpkkfqBG9Yg6
+         7HMwPJUqr2hhSiteEUwcDJzE1zmpUZdJayRHiluSULncpCTJKtUJv3lUp3nSEFfE3ZfX
+         A/teqwFAarxNV4Xsz61xlz1xEL2sLzR5pB5Gr65X12ILG1XfQ999mcAsx5R0EJVCp0Pt
+         8MynUM6UjKGYMeDlPbt5YgldwZjngqUHqpa/oRhGY1G65H3G7rYq2sevyhj3ljQs6IE6
+         1zVA==
+X-Gm-Message-State: AOAM5336P/Hr89MQQGrddaf5R4xeqcjwOOlrhRgSLtATVwsHnZX+im6V
+        +bGSHTc7dD68smIdOqry9uM=
+X-Google-Smtp-Source: ABdhPJzgexsqD1nWONwCvU85BNOtwwnyOA88W4A/iZRHD5+kzIJOuKZhpb5QHPd8iqaWsr+65Uxf1Q==
+X-Received: by 2002:a17:906:cec3:b0:6e8:a49f:2189 with SMTP id si3-20020a170906cec300b006e8a49f2189mr6931952ejb.119.1649788933759;
+        Tue, 12 Apr 2022 11:42:13 -0700 (PDT)
+Received: from krava ([83.240.62.142])
+        by smtp.gmail.com with ESMTPSA id o22-20020a170906289600b006e44a0c1105sm13486453ejd.46.2022.04.12.11.42.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 11:42:13 -0700 (PDT)
+Date:   Tue, 12 Apr 2022 20:42:11 +0200
+From:   Jiri Olsa <olsajiri@gmail.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Subject: Re: [RFC bpf-next 3/4] bpf: Resolve symbols with
+ kallsyms_lookup_names for kprobe multi link
+Message-ID: <YlXIA12sLNUOc+nm@krava>
+References: <20220407125224.310255-1-jolsa@kernel.org>
+ <20220407125224.310255-4-jolsa@kernel.org>
+ <CAEf4BzYrRSB2wSYVmMCGA80RY6Hy2Chtt3MnXFy7+-Feh+2FBw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Stat-Signature: s7z1t1nasjp56dbkjk4bpihc3c5t4eez
-X-Rspamd-Server: rspamout02
-X-Rspamd-Queue-Id: 9C9231B
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+/noIBosBpBNXNp3kf19d2PYVs+U1ATiM=
-X-HE-Tag: 1649788803-793185
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzYrRSB2wSYVmMCGA80RY6Hy2Chtt3MnXFy7+-Feh+2FBw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-04-12 at 11:37 -0700, William Zhang wrote:
-> Hi Joe,
+On Mon, Apr 11, 2022 at 03:15:32PM -0700, Andrii Nakryiko wrote:
+> On Thu, Apr 7, 2022 at 5:53 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> >
+> > Using kallsyms_lookup_names function to speed up symbols lookup in
+> > kprobe multi link attachment and replacing with it the current
+> > kprobe_multi_resolve_syms function.
+> >
+> > This speeds up bpftrace kprobe attachment:
+> >
+> >   # perf stat -r 5 -e cycles ./src/bpftrace -e 'kprobe:x* {  } i:ms:1 { exit(); }'
+> >   ...
+> >   6.5681 +- 0.0225 seconds time elapsed  ( +-  0.34% )
+> >
+> > After:
+> >
+> >   # perf stat -r 5 -e cycles ./src/bpftrace -e 'kprobe:x* {  } i:ms:1 { exit(); }'
+> >   ...
+> >   0.5661 +- 0.0275 seconds time elapsed  ( +-  4.85% )
+> >
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  kernel/trace/bpf_trace.c | 123 +++++++++++++++++++++++----------------
+> >  1 file changed, 73 insertions(+), 50 deletions(-)
+> >
+> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> > index b26f3da943de..2602957225ba 100644
+> > --- a/kernel/trace/bpf_trace.c
+> > +++ b/kernel/trace/bpf_trace.c
+> > @@ -2226,6 +2226,72 @@ struct bpf_kprobe_multi_run_ctx {
+> >         unsigned long entry_ip;
+> >  };
+> >
+> > +struct user_syms {
+> > +       const char **syms;
+> > +       char *buf;
+> > +};
+> > +
+> > +static int copy_user_syms(struct user_syms *us, void __user *usyms, u32 cnt)
+> > +{
+> > +       const char __user **usyms_copy = NULL;
+> > +       const char **syms = NULL;
+> > +       char *buf = NULL, *p;
+> > +       int err = -EFAULT;
+> > +       unsigned int i;
+> > +       size_t size;
+> > +
+> > +       size = cnt * sizeof(*usyms_copy);
+> > +
+> > +       usyms_copy = kvmalloc(size, GFP_KERNEL);
+> > +       if (!usyms_copy)
+> > +               return -ENOMEM;
 > 
-> On 4/12/22 09:38, Joe Perches wrote:
-> > On Mon, 2022-04-11 at 10:28 -0700, William Zhang wrote:
-> > > Add maintainters, SCM tree, files and directories for the new BCMBCA
-> > 
-> > typo of maintainers
-> Thanks for catching that.
+> do you really need usyms_copy? why not just read one pointer at a time?
 > 
-> > 
-> > > arch. Only add 47622 for this change and will update in the future
-> > > when more SoCs are supported.
-> > []
-> > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > []
-> > > @@ -3740,6 +3740,20 @@ F:	drivers/net/dsa/bcm_sf2*
-> > >   F:	include/linux/dsa/brcm.h
-> > >   F:	include/linux/platform_data/b53.h
-> > >   
-> > > +BROADCOM BCMBCA ARM ARCHITECTURE
-> > > +M:	William Zhang <william.zhang@broadcom.com>
-> > > +M:	Anand Gore <anand.gore@broadcom.com>
-> > > +M:	Kursad Oney <kursad.oney@broadcom.com>
-> > > +M:	bcm-kernel-feedback-list@broadcom.com
-> > 
-> > Unnamed exploders are not maintainers.
-> > 
-> > Maybe:
-> > 
-> > R:	Broadcom BCMBCA reviewers <bcm-kernel-feedback-list@broadcom.com>
-> Copied from other BCM entry in this file. It is mailing list which does 
-> not really need an name. And I guess it is better to be put under L as 
-> other BCM entry does.
+> > +
+> > +       if (copy_from_user(usyms_copy, usyms, size))
+> > +               goto error;
+> > +
+> > +       err = -ENOMEM;
+> > +       syms = kvmalloc(size, GFP_KERNEL);
+> > +       if (!syms)
+> > +               goto error;
+> > +
+> > +       /* TODO this potentially allocates lot of memory (~6MB in my tests
+> > +        * with attaching ~40k functions). I haven't seen this to fail yet,
+> > +        * but it could be changed to allocate memory gradually if needed.
+> > +        */
+> > +       size = cnt * KSYM_NAME_LEN;
+> 
+> this reassignment of size is making it hard to follow the code, you
+> can just do cnt * KSYM_NAME_LEN inside kvmalloc, you don't ever use it
+> anywhere else
 
-I just sent a patch to convert all of these to R:
+ok
 
-https://lore.kernel.org/lkml/04eb301f5b3adbefdd78e76657eff0acb3e3d87f.camel@perches.com/T/#u
+> 
+> > +       buf = kvmalloc(size, GFP_KERNEL);
+> > +       if (!buf)
+> > +               goto error;
+> > +
+> > +       for (p = buf, i = 0; i < cnt; i++) {
+> 
+> like here, before doing strncpy_from_user() you can read usyms[i] from
+> user-space into temporary variable, no need for extra kvmalloc?
 
+yes, that could work.. one copy_from_user seemed faster than separate
+get_user calls, but then it's without memory allocation.. so perhaps
+that's better
 
+jirka
+
+> 
+> > +               err = strncpy_from_user(p, usyms_copy[i], KSYM_NAME_LEN);
+> > +               if (err == KSYM_NAME_LEN)
+> > +                       err = -E2BIG;
+> > +               if (err < 0)
+> > +                       goto error;
+> > +               syms[i] = p;
+> > +               p += err + 1;
+> > +       }
+> > +
+> > +       err = 0;
+> > +       us->syms = syms;
+> > +       us->buf = buf;
+> > +
+> 
+> [...]

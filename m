@@ -2,386 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F52C4FCF4F
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 08:17:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51F954FCF54
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 08:20:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345728AbiDLGTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 02:19:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53934 "EHLO
+        id S1348690AbiDLGWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 02:22:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbiDLGTM (ORCPT
+        with ESMTP id S229659AbiDLGWS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:19:12 -0400
-Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 824DF2E6A5
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 23:16:54 -0700 (PDT)
+        Tue, 12 Apr 2022 02:22:18 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258153465D;
+        Mon, 11 Apr 2022 23:20:01 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id o5so4910868pjr.0;
+        Mon, 11 Apr 2022 23:20:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=TYmXdeheL04yvKARy8Ln0MLIo+v4FwOlI7ZVl3qCMfA=;
-  b=tfusEIGGNTAHPRxRb+ssBmXG130RkW/4IGVc6t3oAQ+iRTG7IcYdwsPH
-   B5jfeOks/0rbNhejqKyEdbSh2xtzvLNyvQNihPGOYYLIFnON+bCFIUR0o
-   i1hzMe6kS6RjxnTePy0h78d77kZGxBULY5SsLS9QszyCrA/xV3Q/9dPNF
-   Y=;
-Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.90,253,1643670000"; 
-   d="scan'208";a="11243304"
-Received: from 203.107.68.85.rev.sfr.net (HELO hadrien) ([85.68.107.203])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 08:16:52 +0200
-Date:   Tue, 12 Apr 2022 08:16:51 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Mahak Gupta <mahak_g@cs.iitr.ac.in>
-cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
-Subject: Re: [PATCH] staging: r8188eu: correct multiple misspellings in driver
- r8188eu
-In-Reply-To: <20220411205321.13109-1-mahak_g@cs.iitr.ac.in>
-Message-ID: <alpine.DEB.2.22.394.2204120815530.3122@hadrien>
-References: <20220411205321.13109-1-mahak_g@cs.iitr.ac.in>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=VZKcGtC5tCIRmh/vNIQCaulDH5znaqMV+2ARM6ku8ic=;
+        b=B1TZxoPCuxyVlaC4j3CyGPLLfvj/ucmo3SD/4jFRD98igRMaMKJVk4FzjrUC4oV7ck
+         2e/zaRU+z0ZmeOaltjKNVDaW6rqV6NBxLo6uuAbnyCR1h/U0ULbEKVzCyCaDpW4h5EEA
+         E4tTnnXaEixFxwM5yvJBluP1di5V1NzqCD/GSysnC3y9WwBvn8kCfUOabdcNxvaQ+w1O
+         aIInKld4OneIinbkwrW5suZ6g9sZbef4+plK8zdemMApWfyGy/Od3czgDBJ7hE3qJk8o
+         JXrP+57xcbehQTs1gcy7OC5dHIgcqwAganOHQJn4ySQ7Be7LK55olmcWVfiCRrWsAODt
+         07eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=VZKcGtC5tCIRmh/vNIQCaulDH5znaqMV+2ARM6ku8ic=;
+        b=8KbY2h2Nke66BMfkM0e+wP870ixBX9yNHFb19g0+ZF9I9QEwUZ4U1mzpD+jaAQ8JR/
+         WAznmhyI2ACKhKnMh6EPHTSraePu+yvMN8SUXCPoZqfx9FZHJvF+FdKmdZtEB5NFjot9
+         AcUiQ5ZNyg5c5pXlDiD8uTi36XF99wQTxTtmvZKtvjkGih2jHPAs2/Ks0drPdsmEztuz
+         QmF6xOED9p0CrSJmPZuA9vJ7RZGIo++4bV9hD2nYsjZZ8Y5iLIXYyMVlravJ8dDzEF/R
+         rOHLtvg4O/DsbyO8tHlP2zNyrpL1qzRpW2I1X6AdSZPhd+ezmf1LnvnUpHAvdTfBuAdV
+         /lQg==
+X-Gm-Message-State: AOAM530oKQk7cXc4sHxs6p+SbyZn3nvcb+40ln7Z9/zZU7Oq/sLR7brB
+        lDMLM2sDJPbrDIpOYBggbh0=
+X-Google-Smtp-Source: ABdhPJxvM1EiGufY6yffmCMAUDnYn/PcQczG74Cn/K14BzrA2CUVjB2tT/45DJF/kQjCQ8HsRY37Eg==
+X-Received: by 2002:a17:90b:1c87:b0:1ca:f4e:4fbe with SMTP id oo7-20020a17090b1c8700b001ca0f4e4fbemr3202324pjb.159.1649744400564;
+        Mon, 11 Apr 2022 23:20:00 -0700 (PDT)
+Received: from 9a2d8922b8f1 ([122.161.51.18])
+        by smtp.gmail.com with ESMTPSA id 21-20020a630115000000b00382a0895661sm1568990pgb.11.2022.04.11.23.19.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Apr 2022 23:20:00 -0700 (PDT)
+Date:   Tue, 12 Apr 2022 11:49:53 +0530
+From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        dmaengine@vger.kernel.org
+Subject: Re: [PATCH v2 6/6] dt-bindings: dma: Convert Qualcomm BAM DMA
+ binding to json format
+Message-ID: <20220412061953.GA95928@9a2d8922b8f1>
+References: <20220410175056.79330-1-singh.kuldeep87k@gmail.com>
+ <20220410175056.79330-7-singh.kuldeep87k@gmail.com>
+ <14ecb746-56f0-2d3b-2f93-1af9407de4b7@linaro.org>
+ <20220411105810.GB33220@9a2d8922b8f1>
+ <50defa36-3d91-80ea-e303-abaade1c1f7e@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <50defa36-3d91-80ea-e303-abaade1c1f7e@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no need for "in driver r8188eu" in the subject.
+On Mon, Apr 11, 2022 at 01:38:41PM +0200, Krzysztof Kozlowski wrote:
+> On 11/04/2022 12:58, Kuldeep Singh wrote:
+> >> This is something new and it seems only one SoC defines it (not even one
+> >> BAM version). I wonder whether this is actually correct or this
+> >> particular version of BAM is slightly different. Maybe someone could
+> >> clarify it, but if no - looks ok.
+> > 
+> > Yes, sdm845.dtsi uses 4 entries and rest 1.
+> 
+> Yes, I know. This does not solve my wonder.
+> 
+> > 
+> >>
+> >>> +
+> >>> +  num-channels:
+> >>> +    $ref: /schemas/types.yaml#/definitions/uint32
+> >>> +    description:
+> >>> +      Indicates supported number of DMA channels in a remotely controlled bam.
+> >>> +
+> >>> +  qcom,controlled-remotely:
+> >>> +    $ref: /schemas/types.yaml#/definitions/flag
+> >>
+> >> type: boolean
+> > 
+> > Boolean comes under flag in types.yaml
+> > 
+> > definitions:
+> >   flag:
+> >     oneOf:
+> >       - type: boolean
+> >         const: true
+> >       - type: 'null'
+> > 
+> > I have seen other boolean properties(spi-cpol, spi-cpha and bunch of
+> > others) using type flag. I think we should keep flag here.
+> 
+> type:boolean is just shorter and example-schema recommends it. If you
+> want to base on something (as a template, pattern) then the
+> example-schema is the source, the preferred one.
 
-On Tue, 12 Apr 2022, Mahak Gupta wrote:
+I had seen other spec using flag and that's why kept same here.
+Which example schema are you talking about?
 
-> Reported by checkpatch.
+> >>
+> >> clocks, clock-names, qcom-ee - these are required according to old bindings.
+> > 
+> > I missed qcom,ee. Will add in v3.
+> > 
+> > For clocks and clock-names , there are two platforms(msm8996.dtsi,
+> > sdm845.dtsi) where these properties are missing. And I don't want to add
+> > some random values. Shall I skip them here? and let board owners add
+> > them later.
+> 
+> These are required, so the SoC DTSI should be fixed. Not with random
+> clocks but something proper. :)
 
-It's good to try to find something more informative to characterize what
-you have done.  Here all the changes are in comments.
+Yes absolutely :-)
+I have kept Srinivas in copy, who sent initial support for both the
+dtsi. Probably he can confirm provided his email doesn't bounce.
 
-julia
-
-> Signed-off-by: Mahak Gupta <mahak_g@cs.iitr.ac.in>
-> ---
->  drivers/staging/r8188eu/core/rtw_ioctl_set.c |  2 +-
->  drivers/staging/r8188eu/core/rtw_mlme.c      | 10 +++---
->  drivers/staging/r8188eu/core/rtw_mlme_ext.c  | 36 ++++++++++----------
->  drivers/staging/r8188eu/core/rtw_recv.c      |  8 ++---
->  drivers/staging/r8188eu/core/rtw_xmit.c      |  8 ++---
->  5 files changed, 32 insertions(+), 32 deletions(-)
->
-> diff --git a/drivers/staging/r8188eu/core/rtw_ioctl_set.c b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
-> index 4b78e42d180d..9df6fb122bc5 100644
-> --- a/drivers/staging/r8188eu/core/rtw_ioctl_set.c
-> +++ b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
-> @@ -290,7 +290,7 @@ u8 rtw_set_802_11_infrastructure_mode(struct adapter *padapter,
->
->  		if ((*pold_state == Ndis802_11Infrastructure) || (*pold_state == Ndis802_11IBSS)) {
->  			if (check_fwstate(pmlmepriv, _FW_LINKED))
-> -				rtw_indicate_disconnect(padapter); /* will clr Linked_state; before this function, we must have chked whether  issue dis-assoc_cmd or not */
-> +				rtw_indicate_disconnect(padapter); /* will clr Linked_state; before this function, we must have checked whether  issue dis-assoc_cmd or not */
->  	       }
->
->  		*pold_state = networktype;
-> diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
-> index c90f36dee1ea..a2b42779bc87 100644
-> --- a/drivers/staging/r8188eu/core/rtw_mlme.c
-> +++ b/drivers/staging/r8188eu/core/rtw_mlme.c
-> @@ -193,7 +193,7 @@ void _rtw_free_network_nolock(struct	mlme_priv *pmlmepriv, struct wlan_network *
->  /*
->  	return the wlan_network with the matching addr
->
-> -	Shall be calle under atomic context... to avoid possible racing condition...
-> +	Shall be called under atomic context... to avoid possible racing condition...
->  */
->  struct wlan_network *_rtw_find_network(struct __queue *scanned_queue, u8 *addr)
->  {
-> @@ -329,7 +329,7 @@ void rtw_free_network_queue(struct adapter *dev, u8 isfreeall)
->  /*
->  	return the wlan_network with the matching addr
->
-> -	Shall be calle under atomic context... to avoid possible racing condition...
-> +	Shall be called under atomic context... to avoid possible racing condition...
->  */
->  struct	wlan_network *rtw_find_network(struct __queue *scanned_queue, u8 *addr)
->  {
-> @@ -912,7 +912,7 @@ static struct sta_info *rtw_joinbss_update_stainfo(struct adapter *padapter, str
->  		}
->  		/* 	Commented by Albert 2012/07/21 */
->  		/* 	When doing the WPS, the wps_ie_len won't equal to 0 */
-> -		/* 	And the Wi-Fi driver shouldn't allow the data packet to be tramsmitted. */
-> +		/* 	And the Wi-Fi driver shouldn't allow the data packet to be transmitted. */
->  		if (padapter->securitypriv.wps_ie_len != 0) {
->  			psta->ieee8021x_blocked = true;
->  			padapter->securitypriv.wps_ie_len = 0;
-> @@ -1304,7 +1304,7 @@ void rtw_stadel_event_callback(struct adapter *adapter, u8 *pbuf)
->  }
->
->  /*
-> -* _rtw_join_timeout_handler - Timeout/faliure handler for CMD JoinBss
-> +* _rtw_join_timeout_handler - Timeout/failure handler for CMD JoinBss
->  * @adapter: pointer to struct adapter structure
->  */
->  void _rtw_join_timeout_handler (struct adapter *adapter)
-> @@ -1339,7 +1339,7 @@ void _rtw_join_timeout_handler (struct adapter *adapter)
->  }
->
->  /*
-> -* rtw_scan_timeout_handler - Timeout/Faliure handler for CMD SiteSurvey
-> +* rtw_scan_timeout_handler - Timeout/Failure handler for CMD SiteSurvey
->  * @adapter: pointer to struct adapter structure
->  */
->  void rtw_scan_timeout_handler (struct adapter *adapter)
-> diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-> index 474391bf7cb5..fd445aa09377 100644
-> --- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-> +++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-> @@ -156,7 +156,7 @@ static struct rt_channel_plan_map	RTW_ChannelPlanMap[RT_CHANNEL_DOMAIN_MAX] = {
->  	{0x03},	/* 0x41, RT_CHANNEL_DOMAIN_GLOBAL_DOAMIN_2G */
->  };
->
-> -static struct rt_channel_plan_map RTW_CHANNEL_PLAN_MAP_REALTEK_DEFINE = {0x03}; /* use the conbination for max channel numbers */
-> +static struct rt_channel_plan_map RTW_CHANNEL_PLAN_MAP_REALTEK_DEFINE = {0x03}; /* use the combination for max channel numbers */
->
->  /*
->   * Search the @param channel_num in given @param channel_set
-> @@ -1733,7 +1733,7 @@ void issue_p2p_GO_request(struct adapter *padapter, u8 *raddr)
->  	p2pie[p2pielen++] = 0x09;	/*	WFA P2P v1.0 */
->
->  	/*	Commented by Albert 20110306 */
-> -	/*	According to the P2P Specification, the group negoitation request frame should contain 9 P2P attributes */
-> +	/*	According to the P2P Specification, the group negotiation request frame should contain 9 P2P attributes */
->  	/*	1. P2P Capability */
->  	/*	2. Group Owner Intent */
->  	/*	3. Configuration Timeout */
-> @@ -2088,7 +2088,7 @@ static void issue_p2p_GO_response(struct adapter *padapter, u8 *raddr, u8 *frame
->  	p2pie[p2pielen++] = 0x09;	/*	WFA P2P v1.0 */
->
->  	/*	Commented by Albert 20100908 */
-> -	/*	According to the P2P Specification, the group negoitation response frame should contain 9 P2P attributes */
-> +	/*	According to the P2P Specification, the group negotiation response frame should contain 9 P2P attributes */
->  	/*	1. Status */
->  	/*	2. P2P Capability */
->  	/*	3. Group Owner Intent */
-> @@ -2384,7 +2384,7 @@ static void issue_p2p_GO_confirm(struct adapter *padapter, u8 *raddr, u8 result)
->  	p2pie[p2pielen++] = 0x09;	/*	WFA P2P v1.0 */
->
->  	/*	Commented by Albert 20110306 */
-> -	/*	According to the P2P Specification, the group negoitation request frame should contain 5 P2P attributes */
-> +	/*	According to the P2P Specification, the group negotiation request frame should contain 5 P2P attributes */
->  	/*	1. Status */
->  	/*	2. P2P Capability */
->  	/*	3. Operating Channel */
-> @@ -4009,7 +4009,7 @@ struct xmit_frame *alloc_mgtxmitframe(struct xmit_priv *pxmitpriv)
->
->  /****************************************************************************
->
-> -Following are some TX fuctions for WiFi MLME
-> +Following are some TX functions for WiFi MLME
->
->  *****************************************************************************/
->
-> @@ -4611,7 +4611,7 @@ int issue_probereq_ex(struct adapter *padapter, struct ndis_802_11_ssid *pssid,
->  	return ret;
->  }
->
-> -/*  if psta == NULL, indiate we are station(client) now... */
-> +/*  if psta == NULL, indicate we are station(client) now... */
->  void issue_auth(struct adapter *padapter, struct sta_info *psta, unsigned short status)
->  {
->  	struct xmit_frame *pmgntframe;
-> @@ -5010,7 +5010,7 @@ void issue_assocreq(struct adapter *padapter)
->  				if (!padapter->registrypriv.wifi_spec) {
->  					/* Commented by Kurt 20110629 */
->  					/* In some older APs, WPS handshake */
-> -					/* would be fail if we append vender extensions informations to AP */
-> +					/* would be fail if we append vender extensions information to AP */
->  					if (!memcmp(pIE->data, WPS_OUI, 4))
->  						pIE->Length = 14;
->  				}
-> @@ -5165,7 +5165,7 @@ void issue_assocreq(struct adapter *padapter)
->  		kfree(pmlmepriv->assoc_req);
->  }
->
-> -/* when wait_ack is ture, this function shoule be called at process context */
-> +/* when wait_ack is true, this function should be called at process context */
->  static int _issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned int power_mode, int wait_ack)
->  {
->  	int ret = _FAIL;
-> @@ -5234,7 +5234,7 @@ static int _issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned
->  	return ret;
->  }
->
-> -/* when wait_ms > 0 , this function shoule be called at process context */
-> +/* when wait_ms > 0 , this function should be called at process context */
->  /* da == NULL for station mode */
->  int issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned int power_mode, int try_cnt, int wait_ms)
->  {
-> @@ -5243,7 +5243,7 @@ int issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned int pow
->  	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
->  	struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
->
-> -	/* da == NULL, assum it's null data for sta to ap*/
-> +	/* da == NULL, assume it's null data for sta to ap*/
->  	if (!da)
->  		da = get_my_bssid(&pmlmeinfo->network);
->
-> @@ -5267,7 +5267,7 @@ int issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned int pow
->  	return ret;
->  }
->
-> -/* when wait_ack is ture, this function shoule be called at process context */
-> +/* when wait_ack is true, this function should be called at process context */
->  static int _issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16 tid, int wait_ack)
->  {
->  	int ret = _FAIL;
-> @@ -5340,7 +5340,7 @@ static int _issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16
->  	return ret;
->  }
->
-> -/* when wait_ms > 0 , this function shoule be called at process context */
-> +/* when wait_ms > 0 , this function should be called at process context */
->  /* da == NULL for station mode */
->  int issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16 tid, int try_cnt, int wait_ms)
->  {
-> @@ -5349,7 +5349,7 @@ int issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16 tid, int
->  	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
->  	struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
->
-> -	/* da == NULL, assum it's null data for sta to ap*/
-> +	/* da == NULL, assume it's null data for sta to ap*/
->  	if (!da)
->  		da = get_my_bssid(&pmlmeinfo->network);
->
-> @@ -5790,7 +5790,7 @@ void clear_beacon_valid_bit(struct adapter *adapter)
->
->  /****************************************************************************
->
-> -Following are some utitity fuctions for WiFi MLME
-> +Following are some utility functions for WiFi MLME
->
->  *****************************************************************************/
->
-> @@ -5888,7 +5888,7 @@ void site_survey(struct adapter *padapter)
->  		} else {
->  			/*  20100721:Interrupt scan operation here. */
->  			/*  For SW antenna diversity before link, it needs to switch to another antenna and scan again. */
-> -			/*  It compares the scan result and select beter one to do connection. */
-> +			/*  It compares the scan result and select better one to do connection. */
->  			if (AntDivBeforeLink8188E(padapter)) {
->  				pmlmeext->sitesurvey_res.bss_cnt = 0;
->  				pmlmeext->sitesurvey_res.channel_idx = -1;
-> @@ -6109,7 +6109,7 @@ void start_create_ibss(struct adapter *padapter)
->  	/* update wireless mode */
->  	update_wireless_mode(padapter);
->
-> -	/* udpate capability */
-> +	/* update capability */
->  	caps = rtw_get_capability((struct wlan_bssid_ex *)pnetwork);
->  	update_capinfo(padapter, caps);
->  	if (caps & cap_IBSS) {/* adhoc master */
-> @@ -6160,7 +6160,7 @@ void start_clnt_join(struct adapter *padapter)
->  	/* update wireless mode */
->  	update_wireless_mode(padapter);
->
-> -	/* udpate capability */
-> +	/* update capability */
->  	caps = rtw_get_capability((struct wlan_bssid_ex *)pnetwork);
->  	update_capinfo(padapter, caps);
->  	if (caps & cap_ESS) {
-> @@ -6740,7 +6740,7 @@ void mlmeext_joinbss_event_callback(struct adapter *padapter, int join_res)
->  	/* BCN interval */
->  	rtw_write16(padapter, REG_BCN_INTERVAL, pmlmeinfo->bcn_interval);
->
-> -	/* udpate capability */
-> +	/* update capability */
->  	update_capinfo(padapter, pmlmeinfo->capability);
->
->  	/* WMM, Update EDCA param */
-> diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
-> index 91a6e0f035f4..a3f71697f6d7 100644
-> --- a/drivers/staging/r8188eu/core/rtw_recv.c
-> +++ b/drivers/staging/r8188eu/core/rtw_recv.c
-> @@ -877,7 +877,7 @@ static void validate_recv_ctrl_frame(struct adapter *padapter,
->  			if (psta->sleepq_len == 0) {
->  				pstapriv->tim_bitmap &= ~BIT(psta->aid);
->
-> -				/* upate BCN for TIM IE */
-> +				/* update BCN for TIM IE */
->  				/* update_BCNTIM(padapter); */
->  				update_beacon(padapter, _TIM_IE_, NULL, false);
->  			}
-> @@ -891,7 +891,7 @@ static void validate_recv_ctrl_frame(struct adapter *padapter,
->
->  				pstapriv->tim_bitmap &= ~BIT(psta->aid);
->
-> -				/* upate BCN for TIM IE */
-> +				/* update BCN for TIM IE */
->  				/* update_BCNTIM(padapter); */
->  				update_beacon(padapter, _TIM_IE_, NULL, false);
->  			}
-> @@ -1810,13 +1810,13 @@ void rtw_signal_stat_timer_hdl(struct timer_list *t)
->  	} else {
->  		if (recvpriv->signal_strength_data.update_req == 0) {/*  update_req is clear, means we got rx */
->  			avg_signal_strength = recvpriv->signal_strength_data.avg_val;
-> -			/*  after avg_vals are accquired, we can re-stat the signal values */
-> +			/*  after avg_vals are acquired, we can re-stat the signal values */
->  			recvpriv->signal_strength_data.update_req = 1;
->  		}
->
->  		if (recvpriv->signal_qual_data.update_req == 0) {/*  update_req is clear, means we got rx */
->  			avg_signal_qual = recvpriv->signal_qual_data.avg_val;
-> -			/*  after avg_vals are accquired, we can re-stat the signal values */
-> +			/*  after avg_vals are acquired, we can re-stat the signal values */
->  			recvpriv->signal_qual_data.update_req = 1;
->  		}
->
-> diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
-> index 029b994e1b71..2a686b5c65b1 100644
-> --- a/drivers/staging/r8188eu/core/rtw_xmit.c
-> +++ b/drivers/staging/r8188eu/core/rtw_xmit.c
-> @@ -958,7 +958,7 @@ s32 rtw_xmitframe_coalesce(struct adapter *padapter, struct sk_buff *pkt, struct
->  		}
->
->  		if (bmcst) {
-> -			/*  don't do fragment to broadcat/multicast packets */
-> +			/*  don't do fragment to broadcast/multicast packets */
->  			mem_sz = _rtw_pktfile_read(&pktfile, pframe, pattrib->pktlen);
->  		} else {
->  			mem_sz = _rtw_pktfile_read(&pktfile, pframe, mpdu_len);
-> @@ -1768,7 +1768,7 @@ int xmitframe_enqueue_for_sleeping_sta(struct adapter *padapter, struct xmit_fra
->  			pstapriv->tim_bitmap |= BIT(0);/*  */
->  			pstapriv->sta_dz_bitmap |= BIT(0);
->
-> -			update_beacon(padapter, _TIM_IE_, NULL, false);/* tx bc/mc packets after upate bcn */
-> +			update_beacon(padapter, _TIM_IE_, NULL, false);/* tx bc/mc packets after update bcn */
->
->  			ret = true;
->  		}
-> @@ -1818,7 +1818,7 @@ int xmitframe_enqueue_for_sleeping_sta(struct adapter *padapter, struct xmit_fra
->  				pstapriv->tim_bitmap |= BIT(psta->aid);
->
->  				if (psta->sleepq_len == 1) {
-> -					/* upate BCN for TIM IE */
-> +					/* update BCN for TIM IE */
->  					update_beacon(padapter, _TIM_IE_, NULL, false);
->  				}
->  			}
-> @@ -2087,7 +2087,7 @@ void xmit_delivery_enabled_frames(struct adapter *padapter, struct sta_info *pst
->  		if ((psta->sleepq_ac_len == 0) && (!psta->has_legacy_ac) && (wmmps_ac)) {
->  			pstapriv->tim_bitmap &= ~BIT(psta->aid);
->
-> -			/* upate BCN for TIM IE */
-> +			/* update BCN for TIM IE */
->  			update_beacon(padapter, _TIM_IE_, NULL, false);
->  		}
->  	}
-> --
-> 2.17.1
->
->
->
+Anyway Krzysztof, can you confirm the same as you have been actively
+contributing to Qcom peripherals. I will add credit in follow-up
+submission.

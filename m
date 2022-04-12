@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F8254FD557
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2748F4FDAB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:51:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388692AbiDLJWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:22:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45804 "EHLO
+        id S1354022AbiDLHq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:46:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357672AbiDLHkh (ORCPT
+        with ESMTP id S1351671AbiDLHMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:40:37 -0400
+        Tue, 12 Apr 2022 03:12:51 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 097A7FEA;
-        Tue, 12 Apr 2022 00:16:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A3215FFD;
+        Mon, 11 Apr 2022 23:51:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A3D47B81A8F;
-        Tue, 12 Apr 2022 07:16:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06F99C385A5;
-        Tue, 12 Apr 2022 07:16:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2C6F1B81B43;
+        Tue, 12 Apr 2022 06:51:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C23EC385A1;
+        Tue, 12 Apr 2022 06:51:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747786;
-        bh=7n1CUTwVxEhRYCfm68ufa+KXWYtqErl01OICdME7qFA=;
+        s=korg; t=1649746274;
+        bh=Px1Q6z1mnEqmDqVuhc0sZDElCkVdJB05UJ67MCkETW4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O+vou0Wf3pqvGoELB6cdmWFqqpCShFUh0gkU9Xhc2sO7YqpifOFHcYZt1wgnnbyz6
-         6pjUimfGZnbmSWxmaGvFvRQ51ISmoIgy5Pvdr2bxs1FUm0+VGxw+7nVCHMXc9S3fei
-         4lw74+8YW1XZxX0FGjA6Twmi5laQ7sTTWq3bvLwo=
+        b=octhU8z6j/uxtY4Xjc+kzXVJNXaCGZRFXLkj701CUDez7io+v3Vt0IFjQ1HJRzkrW
+         EDe9PzyNgxGseN7spFx1LJUfQZCDLQ/mLLbdI/2WRju0+AqfH1ftXkkhTb1Z8j/DoZ
+         waKlBg4asLdwz0wjk+2ziItKAFhCBvuY3JCvxZ8s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Eyal Birger <eyal.birger@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 206/343] vrf: fix packet sniffing for traffic originating from ip tunnels
+        stable@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 5.15 221/277] io_uring: fix race between timeout flush and removal
 Date:   Tue, 12 Apr 2022 08:30:24 +0200
-Message-Id: <20220412062957.296361838@linuxfoundation.org>
+Message-Id: <20220412062948.440027567@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,101 +53,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eyal Birger <eyal.birger@gmail.com>
+From: Jens Axboe <axboe@kernel.dk>
 
-[ Upstream commit 012d69fbfcc739f846766c1da56ef8b493b803b5 ]
+commit e677edbcabee849bfdd43f1602bccbecf736a646 upstream.
 
-in commit 048939088220
-("vrf: add mac header for tunneled packets when sniffer is attached")
-an Ethernet header was cooked for traffic originating from tunnel devices.
+io_flush_timeouts() assumes the timeout isn't in progress of triggering
+or being removed/canceled, so it unconditionally removes it from the
+timeout list and attempts to cancel it.
 
-However, the header is added based on whether the mac_header is unset
-and ignores cases where the device doesn't expose a mac header to upper
-layers, such as in ip tunnels like ipip and gre.
+Leave it on the list and let the normal timeout cancelation take care
+of it.
 
-Traffic originating from such devices still appears garbled when capturing
-on the vrf device.
-
-Fix by observing whether the original device exposes a header to upper
-layers, similar to the logic done in af_packet.
-
-In addition, skb->mac_len needs to be adjusted after adding the Ethernet
-header for the skb_push/pull() surrounding dev_queue_xmit_nit() to work
-on these packets.
-
-Fixes: 048939088220 ("vrf: add mac header for tunneled packets when sniffer is attached")
-Signed-off-by: Eyal Birger <eyal.birger@gmail.com>
-Reviewed-by: David Ahern <dsahern@kernel.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org # 5.5+
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/vrf.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ fs/io_uring.c |    7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/vrf.c b/drivers/net/vrf.c
-index e0b1ab99a359..f37adcef4bef 100644
---- a/drivers/net/vrf.c
-+++ b/drivers/net/vrf.c
-@@ -1266,6 +1266,7 @@ static int vrf_prepare_mac_header(struct sk_buff *skb,
- 	eth = (struct ethhdr *)skb->data;
- 
- 	skb_reset_mac_header(skb);
-+	skb_reset_mac_len(skb);
- 
- 	/* we set the ethernet destination and the source addresses to the
- 	 * address of the VRF device.
-@@ -1295,9 +1296,9 @@ static int vrf_prepare_mac_header(struct sk_buff *skb,
-  */
- static int vrf_add_mac_header_if_unset(struct sk_buff *skb,
- 				       struct net_device *vrf_dev,
--				       u16 proto)
-+				       u16 proto, struct net_device *orig_dev)
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -1538,12 +1538,11 @@ static void io_flush_timeouts(struct io_
+ 	__must_hold(&ctx->completion_lock)
  {
--	if (skb_mac_header_was_set(skb))
-+	if (skb_mac_header_was_set(skb) && dev_has_header(orig_dev))
- 		return 0;
+ 	u32 seq = ctx->cached_cq_tail - atomic_read(&ctx->cq_timeouts);
++	struct io_kiocb *req, *tmp;
  
- 	return vrf_prepare_mac_header(skb, vrf_dev, proto);
-@@ -1403,6 +1404,8 @@ static struct sk_buff *vrf_ip6_rcv(struct net_device *vrf_dev,
+ 	spin_lock_irq(&ctx->timeout_lock);
+-	while (!list_empty(&ctx->timeout_list)) {
++	list_for_each_entry_safe(req, tmp, &ctx->timeout_list, timeout.list) {
+ 		u32 events_needed, events_got;
+-		struct io_kiocb *req = list_first_entry(&ctx->timeout_list,
+-						struct io_kiocb, timeout.list);
  
- 	/* if packet is NDISC then keep the ingress interface */
- 	if (!is_ndisc) {
-+		struct net_device *orig_dev = skb->dev;
-+
- 		vrf_rx_stats(vrf_dev, skb->len);
- 		skb->dev = vrf_dev;
- 		skb->skb_iif = vrf_dev->ifindex;
-@@ -1411,7 +1414,8 @@ static struct sk_buff *vrf_ip6_rcv(struct net_device *vrf_dev,
- 			int err;
+ 		if (io_is_timeout_noseq(req))
+ 			break;
+@@ -1560,7 +1559,6 @@ static void io_flush_timeouts(struct io_
+ 		if (events_got < events_needed)
+ 			break;
  
- 			err = vrf_add_mac_header_if_unset(skb, vrf_dev,
--							  ETH_P_IPV6);
-+							  ETH_P_IPV6,
-+							  orig_dev);
- 			if (likely(!err)) {
- 				skb_push(skb, skb->mac_len);
- 				dev_queue_xmit_nit(skb, vrf_dev);
-@@ -1441,6 +1445,8 @@ static struct sk_buff *vrf_ip6_rcv(struct net_device *vrf_dev,
- static struct sk_buff *vrf_ip_rcv(struct net_device *vrf_dev,
- 				  struct sk_buff *skb)
- {
-+	struct net_device *orig_dev = skb->dev;
-+
- 	skb->dev = vrf_dev;
- 	skb->skb_iif = vrf_dev->ifindex;
- 	IPCB(skb)->flags |= IPSKB_L3SLAVE;
-@@ -1461,7 +1467,8 @@ static struct sk_buff *vrf_ip_rcv(struct net_device *vrf_dev,
- 	if (!list_empty(&vrf_dev->ptype_all)) {
- 		int err;
+-		list_del_init(&req->timeout.list);
+ 		io_kill_timeout(req, 0);
+ 	}
+ 	ctx->cq_last_tm_flush = seq;
+@@ -6205,6 +6203,7 @@ static int io_timeout_prep(struct io_kio
+ 	if (get_timespec64(&data->ts, u64_to_user_ptr(sqe->addr)))
+ 		return -EFAULT;
  
--		err = vrf_add_mac_header_if_unset(skb, vrf_dev, ETH_P_IP);
-+		err = vrf_add_mac_header_if_unset(skb, vrf_dev, ETH_P_IP,
-+						  orig_dev);
- 		if (likely(!err)) {
- 			skb_push(skb, skb->mac_len);
- 			dev_queue_xmit_nit(skb, vrf_dev);
--- 
-2.35.1
-
++	INIT_LIST_HEAD(&req->timeout.list);
+ 	data->mode = io_translate_timeout_mode(flags);
+ 	hrtimer_init(&data->timer, io_timeout_get_clock(data), data->mode);
+ 
 
 

@@ -2,236 +2,391 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A294FEB05
-	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:47:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6C504FEABC
+	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:46:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230235AbiDLX30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 19:29:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39434 "EHLO
+        id S230440AbiDLXbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 19:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbiDLX1q (ORCPT
+        with ESMTP id S230424AbiDLXbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 19:27:46 -0400
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E54D1129;
-        Tue, 12 Apr 2022 15:12:43 -0700 (PDT)
-Received: by mail-oi1-f181.google.com with SMTP id q129so198151oif.4;
-        Tue, 12 Apr 2022 15:12:43 -0700 (PDT)
+        Tue, 12 Apr 2022 19:31:21 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9DDF49F22
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:16:06 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id cw11so297002pfb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:16:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cs-iitr-ac-in.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=bLQcjDGKhIXsgI3kg+p3deTCXp6fiAePHqrTYzCq1yc=;
+        b=sumJP7BhsOiuEYVVYxs0xoH8Hv6oHpbw4+p/TLUvVzH+noxYBMA0CrpRV56G/qk0iD
+         AksSQ4nb8Sf0YhrCgghhpofbebnDsU2e6HsWCNuclVK11+EwkaC8uWZhLVZWZCNtWW+p
+         oLRBuzqpp1AZFz6umZTy+6yVa/wSRZxfV9ev0DnKTAWLeeXGsFO37YL0v2sKqJXHp6Xc
+         bHIdyjhhPwEvzaimT+vg1S43lGekgVC3GArHcZG/42u4f7PLZy0Te0gUzJtE4EeKV834
+         ys/w7NLMpv2rwVG2TxlBm1g6miQtA+wZ9FzR3k+oBD1rHkfw0jhCCvOssrrfqSIweYgE
+         gfrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=47WaZ6kjUZsT9iTQ2UXEwksvZRBMq7QZhouU2/Ai3wA=;
-        b=nn6akzkksEjsEa+Rwnpp2HMTxuAp3mqJeP1ata3p5oLL6UQhqbx1fYcpOjuiA06rXV
-         7a/ohOIYcGO/0U88pNb/2EPA/NyceqrkmSX9XQNY8YibocHcPdlqTJYlCAv7vGAxrxOw
-         /KTzcdPO8BOpSWvaYVvXLC2S0+PpAtXNRKO78SVEFVHe+mxzSXXaSc6rUo1ryCUTgLU6
-         P6XMWUFEowaHzudYvJVmHf3VixN31urF0P84SU2bQKnVO0qDdYbE7GdTTaXIPQJ/Is7h
-         3mKWi3l2La2AJ7Y/CU/lx6sPRxUnCpktdYPIk2JovqyaEd3NLk0n7oxCaa9bGZSWfIc0
-         UniA==
-X-Gm-Message-State: AOAM5326+WAHa28aGa6jdVL1Z1QErbQGuwh6RJWKXJYbXMo1A6mk+I8I
-        eR8PkP40eRK4Yqh8hCBgWe6CNHu7NA==
-X-Google-Smtp-Source: ABdhPJy0+SAQRoWAmj5LECu0tTl+2mffhIhmvVHUT1qzdnR8HC/3zPqvSt1AiEHDsaC+FDvuG0T6Jg==
-X-Received: by 2002:a05:6870:796:b0:da:3d6a:101d with SMTP id en22-20020a056870079600b000da3d6a101dmr2996279oab.20.1649799369047;
-        Tue, 12 Apr 2022 14:36:09 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p18-20020a056830131200b005ccf8ac6207sm13941666otq.80.2022.04.12.14.36.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 14:36:08 -0700 (PDT)
-Received: (nullmailer pid 984530 invoked by uid 1000);
-        Tue, 12 Apr 2022 21:36:08 -0000
-Date:   Tue, 12 Apr 2022 16:36:08 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Camel Guo <camel.guo@axis.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@axis.com
-Subject: Re: [PATCH v2 1/2] dt-bindings: hwmon: Add TMP401, TMP411 and TMP43x
-Message-ID: <YlXwyKkkC1VoPpjU@robh.at.kernel.org>
-References: <20220412135232.1943677-1-camel.guo@axis.com>
- <20220412135232.1943677-2-camel.guo@axis.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=bLQcjDGKhIXsgI3kg+p3deTCXp6fiAePHqrTYzCq1yc=;
+        b=zCnuc26pxz1BupNp2hr9ey8pR3fCziEu4+yr/sd1T3jRNoHbE1xb5IG0o5ffWG4mL5
+         MkdnpIikupP7HzSPal5aVCnbohIkCtqIgIPgPobB/fjkvw8iZojfPX3FGAgF32uA9IF5
+         QXXtevpaPYck+BE0Pvx+jebiQX8DbAkt+Yvkota9Ch4Oe00zu1dNG9CgTgZgqhpOktd0
+         nCwKM7nrMMlynKsJd+McsJaRlp+ipw3bIrYCOcTY9CBdG+u6Y2d1544Ip7+UxGmMbcrR
+         v5Tog9AWuRYl1juq5wHdDNNsLoEP3MwgBZX+GT4ZTesWzV3udaAhmiBMk3XARg5O5N2K
+         YqdA==
+X-Gm-Message-State: AOAM5314N/rotXRdth/8b81861MCGBT5NqbbvcdQqAn22R09IBiL1UcL
+        UTMTqKcTVXGMHiwjxZT+sbyqp9WuYjt7lhQTBZrKod2q470Mz0uR
+X-Google-Smtp-Source: ABdhPJyC+THtJqkFEjRCKaNSu/fATuIIUk4NM36XzTIpQVOyiT/HQis6aFv0K+YdFA19yeRb2aPTWtmTE5qbPakZwoY=
+X-Received: by 2002:a65:638d:0:b0:39d:74ad:ce0b with SMTP id
+ h13-20020a65638d000000b0039d74adce0bmr7425613pgv.103.1649799568546; Tue, 12
+ Apr 2022 14:39:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220412135232.1943677-2-camel.guo@axis.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220412213539.2945-1-mahak_g@cs.iitr.ac.in>
+In-Reply-To: <20220412213539.2945-1-mahak_g@cs.iitr.ac.in>
+From:   MAHAK GUPTA <mahak_g@cs.iitr.ac.in>
+Date:   Wed, 13 Apr 2022 03:08:50 +0530
+Message-ID: <CANnaPbC2zZFb9fUBMuJg-9bNA4uPVk_d-Urk=rHodTS7mY1Q+A@mail.gmail.com>
+Subject: Re: [PATCH v2] staging: r8188eu: correct multiple misspellings in
+ driver r8188eu
+To:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 03:52:31PM +0200, Camel Guo wrote:
-> Document the TMP401, TMP411 and TMP43x device devicetree bindings
-> 
-> Signed-off-by: Camel Guo <camel.guo@axis.com>
+I don't know why git send email didn't send a new mail. Working on it. Sorry
+
+On Wed, Apr 13, 2022 at 3:06 AM Mahak Gupta <mahak_g@cs.iitr.ac.in> wrote:
+>
+> Fix multiple spelling errors reported by checkpatch.
+>
+> Signed-off-by: Mahak Gupta <mahak_g@cs.iitr.ac.in>
 > ---
-> 
-> Notes:
->  v2:
->  - Fix format and describe hardware properties instead of programming
->    models
-> 
->  .../devicetree/bindings/hwmon/ti,tmp401.yaml  | 112 ++++++++++++++++++
->  MAINTAINERS                                   |   1 +
->  2 files changed, 113 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml b/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
-> new file mode 100644
-> index 000000000000..dae4df36935e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
-> @@ -0,0 +1,112 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwmon/ti,tmp401.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: TMP401, TPM411 and TMP43x temperature sensor
-> +
-> +maintainers:
-> +  - Guenter Roeck <linux@roeck-us.net>
-> +
-> +description: |
-> +  ±1°C Remote and Local temperature sensor
-> +
-> +  Datasheets:
-> +  https://www.ti.com/lit/ds/symlink/tmp401.pdf
-> +  https://www.ti.com/lit/ds/symlink/tmp411.pdf
-> +  https://www.ti.com/lit/ds/symlink/tmp431.pdf
-> +  https://www.ti.com/lit/ds/symlink/tmp435.pdf
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ti,tmp401
-> +      - ti,tmp411
-> +      - ti,tmp431
-> +      - ti,tmp432
-> +      - ti,tmp435
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
-
-You don't have any child nodes and these are for child nodes with 'reg'.
-
-> +
-> +  ti,extended-range-enable:
-> +    description:
-> +      When set, this sensor measures over extended temperature range.
-> +    type: boolean
-> +
-> +  ti,n-factor:
-
-Funny, I just ran across this property today for tmp421...
-
-Can the schema be shared?
-
-> +    description:
-> +      value to be used for converting remote channel measurements to
-> +      temperature.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    items:
-> +      minimum: 0
-> +      maximum: 255
-
-Isn't this property signed and should be -128 to -127? The code treats 
-the existing cases as signed. One schema is correct and one is like you 
-have it.
-
-> +
-> +  ti,beta-compensation:
-> +    description:
-> +      value to select beta correction range.
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    items:
-> +      minimum: 0
-> +      maximum: 15
-
-Drop 'items'. It is not an array.
-
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - ti,tmp401
-> +    then:
-> +      properties:
-> +        ti,n-factor: false
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - ti,tmp401
-> +              - ti,tmp411
-> +    then:
-> +      properties:
-> +        ti,beta-compensation: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      sensor@4c {
-> +        compatible = "ti,tmp401";
-> +        reg = <0x4c>;
-> +      };
-> +    };
-> +  - |
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      sensor@4c {
-> +        compatible = "ti,tmp431";
-> +        reg = <0x4c>;
-> +        ti,extended-range-enable;
-> +        ti,n-factor = <0x3b>;
-> +        ti,beta-compensation = <0x7>;
-> +      };
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 61d9f114c37f..6b0d8f5cc68e 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -19838,6 +19838,7 @@ TMP401 HARDWARE MONITOR DRIVER
->  M:	Guenter Roeck <linux@roeck-us.net>
->  L:	linux-hwmon@vger.kernel.org
->  S:	Maintained
-> +F:	Documentation/devicetree/bindings/hwmon/ti,tmp401.yaml
->  F:	Documentation/hwmon/tmp401.rst
->  F:	drivers/hwmon/tmp401.c
->  
-> -- 
-> 2.30.2
-> 
-> 
+>  drivers/staging/r8188eu/core/rtw_ioctl_set.c |  2 +-
+>  drivers/staging/r8188eu/core/rtw_mlme.c      | 10 +++---
+>  drivers/staging/r8188eu/core/rtw_mlme_ext.c  | 36 ++++++++++----------
+>  drivers/staging/r8188eu/core/rtw_recv.c      |  8 ++---
+>  drivers/staging/r8188eu/core/rtw_xmit.c      |  8 ++---
+>  5 files changed, 32 insertions(+), 32 deletions(-)
+>
+> diff --git a/drivers/staging/r8188eu/core/rtw_ioctl_set.c b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
+> index 4b78e42d180d..9df6fb122bc5 100644
+> --- a/drivers/staging/r8188eu/core/rtw_ioctl_set.c
+> +++ b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
+> @@ -290,7 +290,7 @@ u8 rtw_set_802_11_infrastructure_mode(struct adapter *padapter,
+>
+>                 if ((*pold_state == Ndis802_11Infrastructure) || (*pold_state == Ndis802_11IBSS)) {
+>                         if (check_fwstate(pmlmepriv, _FW_LINKED))
+> -                               rtw_indicate_disconnect(padapter); /* will clr Linked_state; before this function, we must have chked whether  issue dis-assoc_cmd or not */
+> +                               rtw_indicate_disconnect(padapter); /* will clr Linked_state; before this function, we must have checked whether  issue dis-assoc_cmd or not */
+>                }
+>
+>                 *pold_state = networktype;
+> diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
+> index c90f36dee1ea..a2b42779bc87 100644
+> --- a/drivers/staging/r8188eu/core/rtw_mlme.c
+> +++ b/drivers/staging/r8188eu/core/rtw_mlme.c
+> @@ -193,7 +193,7 @@ void _rtw_free_network_nolock(struct        mlme_priv *pmlmepriv, struct wlan_network *
+>  /*
+>         return the wlan_network with the matching addr
+>
+> -       Shall be calle under atomic context... to avoid possible racing condition...
+> +       Shall be called under atomic context... to avoid possible racing condition...
+>  */
+>  struct wlan_network *_rtw_find_network(struct __queue *scanned_queue, u8 *addr)
+>  {
+> @@ -329,7 +329,7 @@ void rtw_free_network_queue(struct adapter *dev, u8 isfreeall)
+>  /*
+>         return the wlan_network with the matching addr
+>
+> -       Shall be calle under atomic context... to avoid possible racing condition...
+> +       Shall be called under atomic context... to avoid possible racing condition...
+>  */
+>  struct wlan_network *rtw_find_network(struct __queue *scanned_queue, u8 *addr)
+>  {
+> @@ -912,7 +912,7 @@ static struct sta_info *rtw_joinbss_update_stainfo(struct adapter *padapter, str
+>                 }
+>                 /*      Commented by Albert 2012/07/21 */
+>                 /*      When doing the WPS, the wps_ie_len won't equal to 0 */
+> -               /*      And the Wi-Fi driver shouldn't allow the data packet to be tramsmitted. */
+> +               /*      And the Wi-Fi driver shouldn't allow the data packet to be transmitted. */
+>                 if (padapter->securitypriv.wps_ie_len != 0) {
+>                         psta->ieee8021x_blocked = true;
+>                         padapter->securitypriv.wps_ie_len = 0;
+> @@ -1304,7 +1304,7 @@ void rtw_stadel_event_callback(struct adapter *adapter, u8 *pbuf)
+>  }
+>
+>  /*
+> -* _rtw_join_timeout_handler - Timeout/faliure handler for CMD JoinBss
+> +* _rtw_join_timeout_handler - Timeout/failure handler for CMD JoinBss
+>  * @adapter: pointer to struct adapter structure
+>  */
+>  void _rtw_join_timeout_handler (struct adapter *adapter)
+> @@ -1339,7 +1339,7 @@ void _rtw_join_timeout_handler (struct adapter *adapter)
+>  }
+>
+>  /*
+> -* rtw_scan_timeout_handler - Timeout/Faliure handler for CMD SiteSurvey
+> +* rtw_scan_timeout_handler - Timeout/Failure handler for CMD SiteSurvey
+>  * @adapter: pointer to struct adapter structure
+>  */
+>  void rtw_scan_timeout_handler (struct adapter *adapter)
+> diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+> index 474391bf7cb5..fd445aa09377 100644
+> --- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+> +++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+> @@ -156,7 +156,7 @@ static struct rt_channel_plan_map   RTW_ChannelPlanMap[RT_CHANNEL_DOMAIN_MAX] = {
+>         {0x03}, /* 0x41, RT_CHANNEL_DOMAIN_GLOBAL_DOAMIN_2G */
+>  };
+>
+> -static struct rt_channel_plan_map RTW_CHANNEL_PLAN_MAP_REALTEK_DEFINE = {0x03}; /* use the conbination for max channel numbers */
+> +static struct rt_channel_plan_map RTW_CHANNEL_PLAN_MAP_REALTEK_DEFINE = {0x03}; /* use the combination for max channel numbers */
+>
+>  /*
+>   * Search the @param channel_num in given @param channel_set
+> @@ -1733,7 +1733,7 @@ void issue_p2p_GO_request(struct adapter *padapter, u8 *raddr)
+>         p2pie[p2pielen++] = 0x09;       /*      WFA P2P v1.0 */
+>
+>         /*      Commented by Albert 20110306 */
+> -       /*      According to the P2P Specification, the group negoitation request frame should contain 9 P2P attributes */
+> +       /*      According to the P2P Specification, the group negotiation request frame should contain 9 P2P attributes */
+>         /*      1. P2P Capability */
+>         /*      2. Group Owner Intent */
+>         /*      3. Configuration Timeout */
+> @@ -2088,7 +2088,7 @@ static void issue_p2p_GO_response(struct adapter *padapter, u8 *raddr, u8 *frame
+>         p2pie[p2pielen++] = 0x09;       /*      WFA P2P v1.0 */
+>
+>         /*      Commented by Albert 20100908 */
+> -       /*      According to the P2P Specification, the group negoitation response frame should contain 9 P2P attributes */
+> +       /*      According to the P2P Specification, the group negotiation response frame should contain 9 P2P attributes */
+>         /*      1. Status */
+>         /*      2. P2P Capability */
+>         /*      3. Group Owner Intent */
+> @@ -2384,7 +2384,7 @@ static void issue_p2p_GO_confirm(struct adapter *padapter, u8 *raddr, u8 result)
+>         p2pie[p2pielen++] = 0x09;       /*      WFA P2P v1.0 */
+>
+>         /*      Commented by Albert 20110306 */
+> -       /*      According to the P2P Specification, the group negoitation request frame should contain 5 P2P attributes */
+> +       /*      According to the P2P Specification, the group negotiation request frame should contain 5 P2P attributes */
+>         /*      1. Status */
+>         /*      2. P2P Capability */
+>         /*      3. Operating Channel */
+> @@ -4009,7 +4009,7 @@ struct xmit_frame *alloc_mgtxmitframe(struct xmit_priv *pxmitpriv)
+>
+>  /****************************************************************************
+>
+> -Following are some TX fuctions for WiFi MLME
+> +Following are some TX functions for WiFi MLME
+>
+>  *****************************************************************************/
+>
+> @@ -4611,7 +4611,7 @@ int issue_probereq_ex(struct adapter *padapter, struct ndis_802_11_ssid *pssid,
+>         return ret;
+>  }
+>
+> -/*  if psta == NULL, indiate we are station(client) now... */
+> +/*  if psta == NULL, indicate we are station(client) now... */
+>  void issue_auth(struct adapter *padapter, struct sta_info *psta, unsigned short status)
+>  {
+>         struct xmit_frame *pmgntframe;
+> @@ -5010,7 +5010,7 @@ void issue_assocreq(struct adapter *padapter)
+>                                 if (!padapter->registrypriv.wifi_spec) {
+>                                         /* Commented by Kurt 20110629 */
+>                                         /* In some older APs, WPS handshake */
+> -                                       /* would be fail if we append vender extensions informations to AP */
+> +                                       /* would be fail if we append vender extensions information to AP */
+>                                         if (!memcmp(pIE->data, WPS_OUI, 4))
+>                                                 pIE->Length = 14;
+>                                 }
+> @@ -5165,7 +5165,7 @@ void issue_assocreq(struct adapter *padapter)
+>                 kfree(pmlmepriv->assoc_req);
+>  }
+>
+> -/* when wait_ack is ture, this function shoule be called at process context */
+> +/* when wait_ack is true, this function should be called at process context */
+>  static int _issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned int power_mode, int wait_ack)
+>  {
+>         int ret = _FAIL;
+> @@ -5234,7 +5234,7 @@ static int _issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned
+>         return ret;
+>  }
+>
+> -/* when wait_ms > 0 , this function shoule be called at process context */
+> +/* when wait_ms > 0 , this function should be called at process context */
+>  /* da == NULL for station mode */
+>  int issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned int power_mode, int try_cnt, int wait_ms)
+>  {
+> @@ -5243,7 +5243,7 @@ int issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned int pow
+>         struct mlme_ext_priv    *pmlmeext = &padapter->mlmeextpriv;
+>         struct mlme_ext_info    *pmlmeinfo = &pmlmeext->mlmext_info;
+>
+> -       /* da == NULL, assum it's null data for sta to ap*/
+> +       /* da == NULL, assume it's null data for sta to ap*/
+>         if (!da)
+>                 da = get_my_bssid(&pmlmeinfo->network);
+>
+> @@ -5267,7 +5267,7 @@ int issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned int pow
+>         return ret;
+>  }
+>
+> -/* when wait_ack is ture, this function shoule be called at process context */
+> +/* when wait_ack is true, this function should be called at process context */
+>  static int _issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16 tid, int wait_ack)
+>  {
+>         int ret = _FAIL;
+> @@ -5340,7 +5340,7 @@ static int _issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16
+>         return ret;
+>  }
+>
+> -/* when wait_ms > 0 , this function shoule be called at process context */
+> +/* when wait_ms > 0 , this function should be called at process context */
+>  /* da == NULL for station mode */
+>  int issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16 tid, int try_cnt, int wait_ms)
+>  {
+> @@ -5349,7 +5349,7 @@ int issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16 tid, int
+>         struct mlme_ext_priv    *pmlmeext = &padapter->mlmeextpriv;
+>         struct mlme_ext_info    *pmlmeinfo = &pmlmeext->mlmext_info;
+>
+> -       /* da == NULL, assum it's null data for sta to ap*/
+> +       /* da == NULL, assume it's null data for sta to ap*/
+>         if (!da)
+>                 da = get_my_bssid(&pmlmeinfo->network);
+>
+> @@ -5790,7 +5790,7 @@ void clear_beacon_valid_bit(struct adapter *adapter)
+>
+>  /****************************************************************************
+>
+> -Following are some utitity fuctions for WiFi MLME
+> +Following are some utility functions for WiFi MLME
+>
+>  *****************************************************************************/
+>
+> @@ -5888,7 +5888,7 @@ void site_survey(struct adapter *padapter)
+>                 } else {
+>                         /*  20100721:Interrupt scan operation here. */
+>                         /*  For SW antenna diversity before link, it needs to switch to another antenna and scan again. */
+> -                       /*  It compares the scan result and select beter one to do connection. */
+> +                       /*  It compares the scan result and select better one to do connection. */
+>                         if (AntDivBeforeLink8188E(padapter)) {
+>                                 pmlmeext->sitesurvey_res.bss_cnt = 0;
+>                                 pmlmeext->sitesurvey_res.channel_idx = -1;
+> @@ -6109,7 +6109,7 @@ void start_create_ibss(struct adapter *padapter)
+>         /* update wireless mode */
+>         update_wireless_mode(padapter);
+>
+> -       /* udpate capability */
+> +       /* update capability */
+>         caps = rtw_get_capability((struct wlan_bssid_ex *)pnetwork);
+>         update_capinfo(padapter, caps);
+>         if (caps & cap_IBSS) {/* adhoc master */
+> @@ -6160,7 +6160,7 @@ void start_clnt_join(struct adapter *padapter)
+>         /* update wireless mode */
+>         update_wireless_mode(padapter);
+>
+> -       /* udpate capability */
+> +       /* update capability */
+>         caps = rtw_get_capability((struct wlan_bssid_ex *)pnetwork);
+>         update_capinfo(padapter, caps);
+>         if (caps & cap_ESS) {
+> @@ -6740,7 +6740,7 @@ void mlmeext_joinbss_event_callback(struct adapter *padapter, int join_res)
+>         /* BCN interval */
+>         rtw_write16(padapter, REG_BCN_INTERVAL, pmlmeinfo->bcn_interval);
+>
+> -       /* udpate capability */
+> +       /* update capability */
+>         update_capinfo(padapter, pmlmeinfo->capability);
+>
+>         /* WMM, Update EDCA param */
+> diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
+> index 91a6e0f035f4..a3f71697f6d7 100644
+> --- a/drivers/staging/r8188eu/core/rtw_recv.c
+> +++ b/drivers/staging/r8188eu/core/rtw_recv.c
+> @@ -877,7 +877,7 @@ static void validate_recv_ctrl_frame(struct adapter *padapter,
+>                         if (psta->sleepq_len == 0) {
+>                                 pstapriv->tim_bitmap &= ~BIT(psta->aid);
+>
+> -                               /* upate BCN for TIM IE */
+> +                               /* update BCN for TIM IE */
+>                                 /* update_BCNTIM(padapter); */
+>                                 update_beacon(padapter, _TIM_IE_, NULL, false);
+>                         }
+> @@ -891,7 +891,7 @@ static void validate_recv_ctrl_frame(struct adapter *padapter,
+>
+>                                 pstapriv->tim_bitmap &= ~BIT(psta->aid);
+>
+> -                               /* upate BCN for TIM IE */
+> +                               /* update BCN for TIM IE */
+>                                 /* update_BCNTIM(padapter); */
+>                                 update_beacon(padapter, _TIM_IE_, NULL, false);
+>                         }
+> @@ -1810,13 +1810,13 @@ void rtw_signal_stat_timer_hdl(struct timer_list *t)
+>         } else {
+>                 if (recvpriv->signal_strength_data.update_req == 0) {/*  update_req is clear, means we got rx */
+>                         avg_signal_strength = recvpriv->signal_strength_data.avg_val;
+> -                       /*  after avg_vals are accquired, we can re-stat the signal values */
+> +                       /*  after avg_vals are acquired, we can re-stat the signal values */
+>                         recvpriv->signal_strength_data.update_req = 1;
+>                 }
+>
+>                 if (recvpriv->signal_qual_data.update_req == 0) {/*  update_req is clear, means we got rx */
+>                         avg_signal_qual = recvpriv->signal_qual_data.avg_val;
+> -                       /*  after avg_vals are accquired, we can re-stat the signal values */
+> +                       /*  after avg_vals are acquired, we can re-stat the signal values */
+>                         recvpriv->signal_qual_data.update_req = 1;
+>                 }
+>
+> diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
+> index 029b994e1b71..2a686b5c65b1 100644
+> --- a/drivers/staging/r8188eu/core/rtw_xmit.c
+> +++ b/drivers/staging/r8188eu/core/rtw_xmit.c
+> @@ -958,7 +958,7 @@ s32 rtw_xmitframe_coalesce(struct adapter *padapter, struct sk_buff *pkt, struct
+>                 }
+>
+>                 if (bmcst) {
+> -                       /*  don't do fragment to broadcat/multicast packets */
+> +                       /*  don't do fragment to broadcast/multicast packets */
+>                         mem_sz = _rtw_pktfile_read(&pktfile, pframe, pattrib->pktlen);
+>                 } else {
+>                         mem_sz = _rtw_pktfile_read(&pktfile, pframe, mpdu_len);
+> @@ -1768,7 +1768,7 @@ int xmitframe_enqueue_for_sleeping_sta(struct adapter *padapter, struct xmit_fra
+>                         pstapriv->tim_bitmap |= BIT(0);/*  */
+>                         pstapriv->sta_dz_bitmap |= BIT(0);
+>
+> -                       update_beacon(padapter, _TIM_IE_, NULL, false);/* tx bc/mc packets after upate bcn */
+> +                       update_beacon(padapter, _TIM_IE_, NULL, false);/* tx bc/mc packets after update bcn */
+>
+>                         ret = true;
+>                 }
+> @@ -1818,7 +1818,7 @@ int xmitframe_enqueue_for_sleeping_sta(struct adapter *padapter, struct xmit_fra
+>                                 pstapriv->tim_bitmap |= BIT(psta->aid);
+>
+>                                 if (psta->sleepq_len == 1) {
+> -                                       /* upate BCN for TIM IE */
+> +                                       /* update BCN for TIM IE */
+>                                         update_beacon(padapter, _TIM_IE_, NULL, false);
+>                                 }
+>                         }
+> @@ -2087,7 +2087,7 @@ void xmit_delivery_enabled_frames(struct adapter *padapter, struct sta_info *pst
+>                 if ((psta->sleepq_ac_len == 0) && (!psta->has_legacy_ac) && (wmmps_ac)) {
+>                         pstapriv->tim_bitmap &= ~BIT(psta->aid);
+>
+> -                       /* upate BCN for TIM IE */
+> +                       /* update BCN for TIM IE */
+>                         update_beacon(padapter, _TIM_IE_, NULL, false);
+>                 }
+>         }
+> --
+> 2.17.1
+>

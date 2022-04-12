@@ -2,70 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 733CF4FE782
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:55:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 999D34FE783
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 19:56:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358565AbiDLR6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 13:58:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36120 "EHLO
+        id S1358574AbiDLR6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 13:58:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230389AbiDLR6I (ORCPT
+        with ESMTP id S1358566AbiDLR6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 13:58:08 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE6954693
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 10:55:50 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id c12-20020a17090a020c00b001cba1ebb20cso2608173pjc.0
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 10:55:50 -0700 (PDT)
+        Tue, 12 Apr 2022 13:58:32 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECC256772
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 10:56:14 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id n8so17477604plh.1
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 10:56:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
          :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=kozdvatZLTmDkXnmiW8bALff1eOcRGxn1gxosrc9704=;
-        b=IHZMd4MD9Rg98YDSoYfqnIsRGYqbCbsGIJ6qcTf8GsV74kYgQ7wnHe5s7c5TO67Xhk
-         NUevKLw8Y8eYcvMnXk+6LiF7Xz+L9s3sv2moh8wFs1saUIDENTBxBADAK0DU+dFUuM0H
-         3xHnIq4q9NFl+Hm7n+S+i7kB5jgOqKb/MZKSlsbKK78gBZlEZydlu5o6nGadsEPoJLZu
-         sEeJtJrhLuxtkyPfFda0aYPwHccBEjmWDwDV+vNpRtfjP/pkUJiGXN/xZQMt7CkEcJkQ
-         K0p+Lp9DTpsHdloi86nGc0kLl9EyjfuvpVYn66LpRu9rUbwoAlyutn7FeBxIGLQyCfhs
-         d1zg==
+        bh=duMLjXXSp+3x3Vpexq1XWCVJ2W30Z5wERCDm4MvZ+H8=;
+        b=BoilKWjYH8gYAOhLmSP2CxTyaMJiMb/5pRbF/tYkSr6SBBc3Pi3l9VCak5rrH6QX/U
+         neZ1UBww70+jRcoXs2wKH6USZVu7X3cIwhBsutf3bQpnnqkw23RPRuXwEDCaSenoJ9B5
+         rTRqn12FEgp0kI9ec1JqwXvYdmS5AW9dt31GbwvSvzMNgJ8wqhVSuo+4u6lA9+IkjrEH
+         ubQ2L+RyzCed10YQ/TcsUzrzFKitNpPji47y+wlsqid0AiSF+j1mbF+6lsvlas03TMyJ
+         ljmdTCQ+Kk5PNZZ/OvmhdLlydumHAbyPORqXtsvo9OJn6tozEZSrKoVqEkziEQjaHgxa
+         76KQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
          :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=kozdvatZLTmDkXnmiW8bALff1eOcRGxn1gxosrc9704=;
-        b=LjokDjrCyV07OYHZzTzCAFIKRriHYaTNXM3k5RCHZ+SxoQU1vJi3jMPeavwBXhbFJZ
-         8T2JlQqUZb7388tbnKlGCjOfpc5x3qBIyPynpZHgvj3kKXPsv9fgqeju05fpYkgKMGNG
-         oaPo9IMqiX5FmzS0rWAt8fMRJw/YUYpw2R4lHhARxvjYh+PJWEf+P9acWl7Q3Ori1uix
-         8EfhG6q7riK08mOGj7Cf0EXjWdaigr92ETRjKzNipyOfUGXXHVL0TyOaQasEic9jAv4h
-         vMX+X3iDOnpNhmYmEU1c5bE2RcYAub2QmUWCoKO7So3Dtojvj0QV8A+D3iSytohCXavm
-         IQNw==
-X-Gm-Message-State: AOAM531pN0IgGwsrOYkGvopjtO1iJonsTS8aBhkwMTub8q+hPM7unehT
-        /P/YKr7uAWWPI25zQFl70aYIBQ==
-X-Google-Smtp-Source: ABdhPJzngRxSqx/MusdTXjhnwzmNP59GzqkkI9+YAjXPLNKl4wzmFIyb73y7gg4rritgkWAEwIHABg==
-X-Received: by 2002:a17:90b:3144:b0:1cb:6343:cd54 with SMTP id ip4-20020a17090b314400b001cb6343cd54mr6287762pjb.52.1649786149564;
-        Tue, 12 Apr 2022 10:55:49 -0700 (PDT)
+        bh=duMLjXXSp+3x3Vpexq1XWCVJ2W30Z5wERCDm4MvZ+H8=;
+        b=FlkO2UETSASJGvO11rSoCuCcA2xjKwph/IrFUICVrx0H0Kfhklv1iMr4arD1FAgWjy
+         SjDJBHD/4ulOpoCO1zgIFAlaxzy9BIa1x1+lb9zPYyqzuJ3NhLtKhS2Dbf32vCriPjxH
+         wr6yiEm8rXMwIX74klHrT9yIHmscluTX1arvmxLFtroUS2+NAhYqSz6qFQMNRyQFRvUw
+         k6AIjFYYqqLPkfIUwHtYTJ5Llxc7CUnc0rZ+iFwVkKxZnY76XM0lE6tr7RZ15NDegxYr
+         kwHIZJFILkminJzzVpso1RYG5SdQfS+NBKDMsYR4Vu09wWZRsEvzBKcnWs999Y6WFB8b
+         zovQ==
+X-Gm-Message-State: AOAM5322XswjFnhAnk31bbFd0lzND9RsJAfvZpVDuBMEkgmQCIleXTTO
+        Fu87uh/lrQNj2kPTVAElJvuSZA==
+X-Google-Smtp-Source: ABdhPJxozl9RkEaFgOG4PqxTXu2LLqvqP8w0SfI/ucfJvtq+uM8dSIjl8EHkl6YytFvAR3lBOR5VJA==
+X-Received: by 2002:a17:902:e54b:b0:158:2df3:9ced with SMTP id n11-20020a170902e54b00b001582df39cedmr20132359plf.4.1649786174108;
+        Tue, 12 Apr 2022 10:56:14 -0700 (PDT)
 Received: from [10.254.90.123] ([139.177.225.252])
-        by smtp.gmail.com with ESMTPSA id n3-20020a62e503000000b005060c0b379esm470756pff.200.2022.04.12.10.55.46
+        by smtp.gmail.com with ESMTPSA id f19-20020a056a00229300b004fb157f136asm40427774pfe.153.2022.04.12.10.56.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 10:55:49 -0700 (PDT)
-Message-ID: <56ded56d-f7ad-a49f-c19c-8aa40fb33a29@bytedance.com>
-Date:   Wed, 13 Apr 2022 01:55:44 +0800
+        Tue, 12 Apr 2022 10:56:13 -0700 (PDT)
+Message-ID: <801da029-6bbe-2a0c-7de0-afffc3d5de02@bytedance.com>
+Date:   Wed, 13 Apr 2022 01:56:10 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
  Gecko/20100101 Thunderbird/91.8.0
-Subject: Re: [RFC v2 1/2] sched/fair: filter out overloaded cpus in SIS
+Subject: Re: [RFC v2 2/2] sched/fair: introduce sched-idle balance
 Content-Language: en-US
 To:     Josh Don <joshdon@google.com>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         Mel Gorman <mgorman@suse.de>,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Abel Wu <wuyun.abel@bytedance.com>
 References: <20220409135104.3733193-1-wuyun.abel@bytedance.com>
- <20220409135104.3733193-2-wuyun.abel@bytedance.com>
- <CABk29NtBL2WovUVcxXW8cF7Nk+UM_AeEJaX_JbQ4Wue-qMvz_w@mail.gmail.com>
+ <20220409135104.3733193-3-wuyun.abel@bytedance.com>
+ <CABk29NvE=Fmgo4xqQLfy-K8j0hNS-+ppGdYt37yDUnRJiqjZ5w@mail.gmail.com>
 From:   Abel Wu <wuyun.abel@bytedance.com>
-In-Reply-To: <CABk29NtBL2WovUVcxXW8cF7Nk+UM_AeEJaX_JbQ4Wue-qMvz_w@mail.gmail.com>
+In-Reply-To: <CABk29NvE=Fmgo4xqQLfy-K8j0hNS-+ppGdYt37yDUnRJiqjZ5w@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -77,205 +78,189 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Josh, thanks very much for your reviewing.
+Hi Josh,
 
-On 4/12/22 9:23 AM, Josh Don Wrote:
+On 4/12/22 9:59 AM, Josh Don Wrote:
 > Hi Abel,
 > 
-> Thanks for the patch, a few comments:
+>>
+>> +static inline bool cfs_rq_busy(struct rq *rq)
+>> +{
+>> +       return rq->cfs.h_nr_running - rq->cfs.idle_h_nr_running == 1;
+>> +}
+>> +
+>> +static inline bool need_pull_cfs_task(struct rq *rq)
+>> +{
+>> +       return rq->cfs.h_nr_running == rq->cfs.idle_h_nr_running;
+>> +}
+> 
+> Note that this will also return true if there are 0 tasks, which I
+> don't think is the semantics you intend for its use in
+> rebalance_domains() below.
+
+I intended covering the idle balance. My last v1 patchset wanted to
+ignore the idle balance because of the high cpu wakeup latency, but
+after some benchmarking, that seems not necessary.
+
 > 
 >>   /*
->> + * It would be very unlikely to find an unoccupied cpu when system is heavily
->> + * overloaded. Even if we could, the cost might bury the benefit.
+>>    * Use locality-friendly rq->overloaded to cache the status of the rq
+>>    * to minimize the heavy cost on LLC shared data.
+>> @@ -7837,6 +7867,22 @@ int can_migrate_task(struct task_struct *p, struct lb_env *env)
+>>          if (kthread_is_per_cpu(p))
+>>                  return 0;
+>>
+>> +       if (unlikely(task_h_idle(p))) {
+>> +               /*
+>> +                * Disregard hierarchically idle tasks during sched-idle
+>> +                * load balancing.
+>> +                */
+>> +               if (env->idle == CPU_SCHED_IDLE)
+>> +                       return 0;
+>> +       } else if (!static_branch_unlikely(&sched_asym_cpucapacity)) {
+>> +               /*
+>> +                * It's not gonna help if stacking non-idle tasks on one
+>> +                * cpu while leaving some idle.
+>> +                */
+>> +               if (cfs_rq_busy(env->src_rq) && !need_pull_cfs_task(env->dst_rq))
+>> +                       return 0;
+> 
+> These checks don't involve the task at all, so this kind of check
+> should be pushed into the more general load balance function. But, I'm
+> not totally clear on the motivation here. If we have cpu A with 1
+> non-idle task and 100 idle tasks, and cpu B with 1 non-idle task, we
+> should definitely try to load balance some of the idle tasks from A to
+> B. idle tasks _do_ get time to run (although little), and this can add
+> up and cause antagonism to the non-idle task if there are a lot of
+> idle threads.
+
+CPU_SCHED_IDLE means triggered by sched_idle_balance() in which pulls
+a non-idle task for the unoccupied cpu from the overloaded ones, so
+idle tasks are not the target and should be skipped.
+
+The second part is: if we have cpu A with 1 non-idle task and 100 idle
+tasks, and B with >=1 non-idle task, we don't migrate the last non-idle
+task on A to B.
+
+> 
+>>
+>>   /*
+>> + * The sched-idle balancing tries to make full use of cpu capacity
+>> + * for non-idle tasks by pulling them for the unoccupied cpus from
+>> + * the overloaded ones.
+>> + *
+>> + * Return 1 if pulled successfully, 0 otherwise.
 >> + */
->> +static inline bool sched_domain_overloaded(struct sched_domain *sd, int nr_overloaded)
+>> +static int sched_idle_balance(struct rq *dst_rq)
 >> +{
->> +       return nr_overloaded > sd->span_weight - (sd->span_weight >> 4);
->> +}
+>> +       struct sched_domain *sd;
+>> +       struct task_struct *p = NULL;
+>> +       int dst_cpu = cpu_of(dst_rq), cpu;
 >> +
->> +/*
->>    * Scan the LLC domain for idle CPUs; this is dynamically regulated by
->>    * comparing the average scan cost (tracked in sd->avg_scan_cost) against the
->>    * average idle time for this rq (as found in rq->avg_idle).
->> @@ -6291,7 +6300,7 @@ static inline int select_idle_smt(struct task_struct *p, struct sched_domain *sd
->>   static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool has_idle_core, int target)
->>   {
->>          struct cpumask *cpus = this_cpu_cpumask_var_ptr(select_idle_mask);
->> -       int i, cpu, idle_cpu = -1, nr = INT_MAX;
->> +       int i, cpu, idle_cpu = -1, nr = INT_MAX, nro;
->>          struct rq *this_rq = this_rq();
->>          int this = smp_processor_id();
->>          struct sched_domain *this_sd;
->> @@ -6301,7 +6310,13 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
->>          if (!this_sd)
->>                  return -1;
->>
->> +       nro = atomic_read(&sd->shared->nr_overloaded);
->> +       if (sched_domain_overloaded(sd, nro))
->> +               return -1;
-> 
-> This early bail out doesn't seem to be related to the main idea of
-> your patch. Apart from deciding the exact heuristic value for what is
-
-I agree that this early check doesn't seem to have a strong bound with
-the idea "filter out the overloaded cpus", but this check is aligned
-with the goal of "search less when becoming more overloaded".
-
-As to the heuristic value, which is about 95%, I think it would be nice
-if I can show more test results? I also have tested sd->imbalance_pct
-and 100% (nro == sd->span_weight), seems like 95% is a better choice.
-
-> considered too unlikely to find an idle cpu, this doesn't work well
-> with tasks constrained by affinity; a task may have a small affinity
-> mask containing idle cpus it may wake onto, even if most of the node
-> is overloaded.
-
-Yes, indeed. And I haven't come to a solution except that remove this
-check entirely. Ideas?
-
-> 
->>          cpumask_and(cpus, sched_domain_span(sd), p->cpus_ptr);
->> +       if (nro)
->> +               cpumask_andnot(cpus, cpus, sdo_mask(sd->shared));
-> 
-> To prevent us from exhausting our search attempts too quickly, this
-> only needs to go under the sched_feat(SIS_PROP) && !has_idle_core case
-> below. But by doing this unconditionally here, I guess your secondary
-> goal is to reduce total search cost in both cases. Just wondering, did
-
-Yes, it's unnecessary to try the overloaded cpus. But this makes sense
-only if the overloaded cpumask is relatively accurate as you pointed
-out below.
-
-> you observe significant time spent here that you are trying to
-> optimize? By reducing our search space by the overload mask, it is
-> important that the mask is relatively up to date, or else we could
-> miss an opportunity to find an idle cpu.
-
-I think that's why Mel asked for the SIS statistics. The result in the
-cover letter shows improvement on the search efficiency, and that is
-what the overhead of the cpumask calculation trade for. Would it be
-better if skip the update when nro is small?
-
-> 
->>          if (sched_feat(SIS_PROP) && !has_idle_core) {
->>                  u64 avg_cost, avg_idle, span_avg;
->> @@ -7018,6 +7033,51 @@ balance_fair(struct rq *rq, struct task_struct *prev, struct rq_flags *rf)
->>
->>          return newidle_balance(rq, rf) != 0;
->>   }
+>> +       sd = rcu_dereference(per_cpu(sd_llc, dst_cpu));
+>> +       if (unlikely(!sd))
+>> +               return 0;
 >> +
->> +static inline bool cfs_rq_overloaded(struct rq *rq)
->> +{
->> +       return rq->cfs.h_nr_running - rq->cfs.idle_h_nr_running > 1;
->> +}
-> 
-> Why > 1 instead of > 0? If a cpu is running 1 non-idle task and any
-> number of idle tasks, I'd think it is still "occupied" in the way
-> you've defined. We'd want to steer wakeups to cpus running 0 non-idle
-> tasks.
-
-The idea behind "> 1" is telling the unoccupied cpus to pull non-idle
-tasks from it (in the next patch). Although "> 0" is more efficient in
-wakeup, it blinds us when pulling tasks.
-
-> 
->> +static void update_overload_status(struct rq *rq)
->> +{
->> +       struct sched_domain_shared *sds;
->> +       bool overloaded = cfs_rq_overloaded(rq);
->> +       int cpu = cpu_of(rq);
+>> +       if (!atomic_read(&sd->shared->nr_overloaded))
+>> +               return 0;
 >> +
->> +       lockdep_assert_rq_held(rq);
+>> +       for_each_cpu_wrap(cpu, sdo_mask(sd->shared), dst_cpu + 1) {
+>> +               struct rq *rq = cpu_rq(cpu);
+>> +               struct rq_flags rf;
+>> +               struct lb_env env;
 >> +
->> +       if (rq->overloaded == overloaded)
->> +               return;
+>> +               if (cpu == dst_cpu || !cfs_rq_overloaded(rq) ||
+>> +                   READ_ONCE(rq->sched_idle_balance))
+>> +                       continue;
 >> +
->> +       rcu_read_lock();
->> +       sds = rcu_dereference(per_cpu(sd_llc_shared, cpu));
->> +       if (unlikely(!sds))
->> +               goto unlock;
+>> +               WRITE_ONCE(rq->sched_idle_balance, 1);
+>> +               rq_lock_irqsave(rq, &rf);
 >> +
->> +       if (overloaded) {
->> +               cpumask_set_cpu(cpu, sdo_mask(sds));
->> +               atomic_inc(&sds->nr_overloaded);
->> +       } else {
->> +               cpumask_clear_cpu(cpu, sdo_mask(sds));
->> +               atomic_dec(&sds->nr_overloaded);
+>> +               env = (struct lb_env) {
+>> +                       .sd             = sd,
+>> +                       .dst_cpu        = dst_cpu,
+>> +                       .dst_rq         = dst_rq,
+>> +                       .src_cpu        = cpu,
+>> +                       .src_rq         = rq,
+>> +                       .idle           = CPU_SCHED_IDLE, /* non-idle only */
+>> +                       .flags          = LBF_DST_PINNED, /* pin dst_cpu */
+>> +               };
+>> +
+>> +               update_rq_clock(rq);
+>> +               p = detach_one_task(&env);
+>> +               if (p)
+>> +                       update_overload_status(rq);
+>> +
+>> +               rq_unlock(rq, &rf);
+>> +               WRITE_ONCE(rq->sched_idle_balance, 0);
+>> +
+>> +               if (p) {
+>> +                       attach_one_task(dst_rq, p);
+>> +                       local_irq_restore(rf.flags);
+>> +                       return 1;
+>> +               }
+>> +
+>> +               local_irq_restore(rf.flags);
 >> +       }
-> 
-> Why are these cpu mask writes not atomic?
-
-They are atomic. The non-atomic version is __cpumask_{set,clear}_cpu.
-Did I miss something?
-
-> 
 >> +
->> +       rq->overloaded = overloaded;
->> +unlock:
->> +       rcu_read_unlock();
+>> +       return 0;
 >> +}
->> +
->> +#else
->> +
->> +static inline void update_overload_status(struct rq *rq) { }
->> +
->>   #endif /* CONFIG_SMP */
->>
->>   static unsigned long wakeup_gran(struct sched_entity *se)
->> @@ -7365,6 +7425,8 @@ done: __maybe_unused;
->>          if (new_tasks > 0)
->>                  goto again;
->>
->> +       update_overload_status(rq);
->> +
->>          /*
->>           * rq is about to be idle, check if we need to update the
->>           * lost_idle_time of clock_pelt
->> @@ -11183,6 +11245,7 @@ static void task_tick_fair(struct rq *rq, struct task_struct *curr, int queued)
->>          if (static_branch_unlikely(&sched_numa_balancing))
->>                  task_tick_numa(rq, curr);
->>
->> +       update_overload_status(rq);
->>          update_misfit_status(curr, rq);
->>          update_overutilized_status(task_rq(curr));
 > 
-> I'd caution about using task_tick and pick_next_task_fair as the
-> places we set and clear overload.
-> 
-> Some issues with task_tick:
-> - ticks may be disabled in NO_HZ_FULL (an issue if we define overload
-> as > 0 non-idle tasks)
-> - most ticks will have the same state, so somewhat redundant checking.
-> Could use an edge based trigger instead, such as enqueue/dequeue
-> (somewhat similar to rq->rd->overload).
+> I think this could probably be integrated with the load balancing
+> function. Your goal is ignore idle tasks for the purpose of pulling
+> from a remote rq. And I think the above isn't exactly what you want
+> anyway; detach_tasks/detach_one_task  are just going to iterate the
+> task list in order. You want to actually look for the non-idle tasks
+> explicitly.
 
-1. In NO_HZ_FULL, given rq is overloaded, say have non-idle task A and
-    B enqueued, if A is dequeued before next tick then tick will be off
-    and the rq will keep "overloaded" while it's actually not. But this
-    doesn't necessarily be a bad thing because this cpu will be skipped
-    in wakeup path which helps in improving searching efficiency.
+I have tried a simple version like below (and sched_idle_balance() is
+not needed anymore):
 
-2. Yes, that's why I use rq->overloaded to save the last update state.
-    So when the overloaded state doesn't change, what we all do is a
-    simple check on a local variable.
-    The enqueue/dequeue path is not well bounded, and it could be very
-    frequent on short running workloads, which would introduce great
-    overhead to update the LLC shared atomic/cpumask.
+@@ -10338,6 +10343,7 @@ static void rebalance_domains(struct rq *rq, 
+enum cpu_idle_type idle)
+  	int continue_balancing = 1;
+  	int cpu = rq->cpu;
+  	int busy = idle != CPU_IDLE && !sched_idle_cpu(cpu);
++	int prev_busy = busy;
+  	unsigned long interval;
+  	struct sched_domain *sd;
+  	/* Earliest time when we have to do rebalance again */
+@@ -10394,6 +10400,9 @@ static void rebalance_domains(struct rq *rq, 
+enum cpu_idle_type idle)
+  			next_balance = sd->last_balance + interval;
+  			update_next_balance = 1;
+  		}
++
++		if (!prev_busy && !need_pull_cfs_task(rq))
++			break;
+  	}
+  	if (need_decay) {
+  		/*
+
+But benchmark results are not good enough compared to RFCv2 patchset.
+I would dig more deep into this, thanks.
 
 > 
-> With pick_next_task_fair():
-> - there's a window between a thread dequeuing, and then scheduler
-> running through to the end of pick_next_task_fair(), during which we
-> falsely observe the cpu as overloaded
-> - this breaks with core scheduling, since we may use pick_task_fair
-> rather than pick_next_task_fair
+>> @@ -10996,9 +11119,9 @@ static int newidle_balance(struct rq *this_rq, struct rq_flags *rf)
+>>
+>>                  if (sd->flags & SD_BALANCE_NEWIDLE) {
+>>
+>> -                       pulled_task = load_balance(this_cpu, this_rq,
+>> -                                                  sd, CPU_NEWLY_IDLE,
+>> -                                                  &continue_balancing);
+>> +                       pulled_task |= load_balance(this_cpu, this_rq,
+>> +                                                   sd, CPU_NEWLY_IDLE,
+>> +                                                   &continue_balancing);
+> 
+> Why |= ?
 
-1. I'm afraid I don't understand what the problem is, can you explain
-    more on this? Thanks.
-
-2. Nice catch, I will fix it in next update. (Maybe by updating the
-    overloaded status in do_idle()?)
+This is because I changed the behavior of newidle balance a bit. Vanilla
+kernel will quit newidle balance once we got task to run on this rq, no
+matter the task is non-idle or not. But after this patch, if there are
+overloaded cpus in this LLC, we will try harder on balance until we got
+non-idle tasks, which means the balancing would be continue even if now
+the cpu is sched_idle.
 
 Thanks & BR,
 Abel
+

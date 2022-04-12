@@ -2,212 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 479144FE79C
+	by mail.lfdr.de (Postfix) with ESMTP id 8F51C4FE79D
 	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 20:06:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358589AbiDLSIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 14:08:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55346 "EHLO
+        id S1358601AbiDLSI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 14:08:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344185AbiDLSIR (ORCPT
+        with ESMTP id S1358593AbiDLSIX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 14:08:17 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA1321D0CE
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 11:05:58 -0700 (PDT)
+        Tue, 12 Apr 2022 14:08:23 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6AC52E081
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 11:06:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649786758; x=1681322758;
+  t=1649786764; x=1681322764;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=7+F4+3vWCiXQjDPuKWpXlZsF/ykcIVtUkKbDuT5EO/8=;
-  b=epdhb/rHZrjJKyLmyu8yVbVtQol3xoTzco4rhCKmSiPVNCt+Cmdoj5v0
-   sMOaNNLZdwRh4QqAJ0WwT26nUJwL3a0GH9xyAZqSBqV8TECjNnAePgSQw
-   MZnFNLU8Q9bP75BYqQd8zvJIzJ0OIQL938vejblVbnPvrKCwD6N3j9iLP
-   1m9GTGknlsdELPBbKf64scSHC4vL/V13pJ5a2TgWM6vS0jBM+78lBTjAJ
-   n9OdlWTxhGELVkiRt/889KgIasjhk3gwshFJPyxEBXdHbNAKMb/RD40Xu
-   FBYm0HPXoNTHDZ9cxgAYGPdYLpJMNUyxduIL7Y3e3uebHLg7ic1IJ2s/O
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="287484027"
+  bh=z35X25eVpVtyKeSD2yf5lglI8oGresHmsF/zKzRONXQ=;
+  b=fpO9o/LABbUDHzSgWORoOL3UCPJ9ValPVJKuERL37+KXPGi6mMzaknyw
+   Ah28wIlBU4EdxVWlqv0gnCer5CNO2sCjljD2X2skBQ4NxGB7HwseHebCa
+   Gt5JAiFcrPs8IEnHkrjZFFPyBVmXktchLOX+Q9h9prorIOF5N/f8Hx4sO
+   utzX0cKp4s87YuYixUmomq1TyDW+qe4JnODBZ+yxE6m863FS0ptPEwWji
+   7HGzerQ97ASP/cba0JZ3oqDdj6mv2P5Hr99pjrO3VYWRe+cQPR/0UtENS
+   3edxKNAwjQKdoA3JChoObjMAJ7h6bolmYRc/8yLSw/y+DYeukKeSFN+QC
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10315"; a="242403441"
 X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
-   d="scan'208";a="287484027"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 11:00:05 -0700
+   d="scan'208";a="242403441"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 11:01:09 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,254,1643702400"; 
-   d="scan'208";a="644845506"
+   d="scan'208";a="526155168"
 Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 12 Apr 2022 11:00:03 -0700
+  by orsmga002.jf.intel.com with ESMTP; 12 Apr 2022 11:01:08 -0700
 Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1neKo6-00031w-I7;
-        Tue, 12 Apr 2022 18:00:02 +0000
-Date:   Wed, 13 Apr 2022 01:59:56 +0800
+        id 1neKp9-00032B-AC;
+        Tue, 12 Apr 2022 18:01:07 +0000
+Date:   Wed, 13 Apr 2022 02:00:06 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ingo Molnar <mingo@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [linux-stable-rc:queue/4.19 3886/9999]
- arch/ia64/kernel/kprobes.c:414:24: error: implicit declaration of function
- '__kretprobe_trampoline_handler'; did you mean 'kretprobe_trampoline'?
-Message-ID: <202204130102.JZPa6KCQ-lkp@intel.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [bvanassche:ufs-for-next 29/29]
+ drivers/ufs/host/tc-dwc-g210-pltfrm.c:36:34: warning: unused variable
+ 'tc_dwc_g210_pltfm_match'
+Message-ID: <202204130103.bxPsWXGw-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Masami,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/4.19
-head:   bdfbd5df0daf1748bef4501ce255ce594ee8d55f
-commit: d3380de483d55d904fb94a241406b34ed2fada7d [3886/9999] ia64: kprobes: Use generic kretprobe trampoline handler
-config: ia64-allyesconfig (https://download.01.org/0day-ci/archive/20220413/202204130102.JZPa6KCQ-lkp@intel.com/config)
-compiler: ia64-linux-gcc (GCC) 11.2.0
+tree:   https://github.com/bvanassche/linux ufs-for-next
+head:   e1c32435245394413b0308d1329938ce4db52877
+commit: e1c32435245394413b0308d1329938ce4db52877 [29/29] scsi: ufs: Split the drivers/scsi/ufs directory
+config: x86_64-randconfig-a002-20220411 (https://download.01.org/0day-ci/archive/20220413/202204130103.bxPsWXGw-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fe2478d44e4f7f191c43fef629ac7a23d0251e72)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=d3380de483d55d904fb94a241406b34ed2fada7d
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc queue/4.19
-        git checkout d3380de483d55d904fb94a241406b34ed2fada7d
+        # https://github.com/bvanassche/linux/commit/e1c32435245394413b0308d1329938ce4db52877
+        git remote add bvanassche https://github.com/bvanassche/linux
+        git fetch --no-tags bvanassche ufs-for-next
+        git checkout e1c32435245394413b0308d1329938ce4db52877
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=ia64 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/ufs/host/
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   arch/ia64/kernel/kprobes.c: In function 'get_kprobe_inst':
-   arch/ia64/kernel/kprobes.c:338:22: warning: variable 'template' set but not used [-Wunused-but-set-variable]
-     338 |         unsigned int template;
-         |                      ^~~~~~~~
-   arch/ia64/kernel/kprobes.c: At top level:
-   arch/ia64/kernel/kprobes.c:412:15: warning: no previous prototype for 'trampoline_probe_handler' [-Wmissing-prototypes]
-     412 | int __kprobes trampoline_probe_handler(struct kprobe *p, struct pt_regs *regs)
-         |               ^~~~~~~~~~~~~~~~~~~~~~~~
-   arch/ia64/kernel/kprobes.c: In function 'trampoline_probe_handler':
->> arch/ia64/kernel/kprobes.c:414:24: error: implicit declaration of function '__kretprobe_trampoline_handler'; did you mean 'kretprobe_trampoline'? [-Werror=implicit-function-declaration]
-     414 |         regs->cr_iip = __kretprobe_trampoline_handler(regs, kretprobe_trampoline, NULL);
-         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-         |                        kretprobe_trampoline
-   At top level:
-   arch/ia64/kernel/kprobes.c:928:13: warning: 'ia64_get_bsp_cfm' defined but not used [-Wunused-function]
-     928 | static void ia64_get_bsp_cfm(struct unw_frame_info *info, void *arg)
-         |             ^~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for FRAME_POINTER
-   Depends on DEBUG_KERNEL && (M68K || UML || SUPERH) || ARCH_WANT_FRAME_POINTERS
-   Selected by
-   - FAULT_INJECTION_STACKTRACE_FILTER && FAULT_INJECTION_DEBUG_FS && STACKTRACE_SUPPORT && !X86_64 && !MIPS && !PPC && !S390 && !MICROBLAZE && !ARM_UNWIND && !ARC && !X86
+>> drivers/ufs/host/tc-dwc-g210-pltfrm.c:36:34: warning: unused variable 'tc_dwc_g210_pltfm_match' [-Wunused-const-variable]
+   static const struct of_device_id tc_dwc_g210_pltfm_match[] = {
+                                    ^
+   1 warning generated.
 
 
-vim +414 arch/ia64/kernel/kprobes.c
+vim +/tc_dwc_g210_pltfm_match +36 drivers/ufs/host/tc-dwc-g210-pltfrm.c
 
-   333	
-   334	static void __kprobes get_kprobe_inst(bundle_t *bundle, uint slot,
-   335		       	unsigned long *kprobe_inst, uint *major_opcode)
-   336	{
-   337		unsigned long kprobe_inst_p0, kprobe_inst_p1;
- > 338		unsigned int template;
-   339	
-   340		template = bundle->quad0.template;
-   341	
-   342		switch (slot) {
-   343		  case 0:
-   344			*major_opcode = (bundle->quad0.slot0 >> SLOT0_OPCODE_SHIFT);
-   345			*kprobe_inst = bundle->quad0.slot0;
-   346			  break;
-   347		  case 1:
-   348			*major_opcode = (bundle->quad1.slot1_p1 >> SLOT1_p1_OPCODE_SHIFT);
-   349			kprobe_inst_p0 = bundle->quad0.slot1_p0;
-   350			kprobe_inst_p1 = bundle->quad1.slot1_p1;
-   351			*kprobe_inst = kprobe_inst_p0 | (kprobe_inst_p1 << (64-46));
-   352			break;
-   353		  case 2:
-   354			*major_opcode = (bundle->quad1.slot2 >> SLOT2_OPCODE_SHIFT);
-   355			*kprobe_inst = bundle->quad1.slot2;
-   356			break;
-   357		}
-   358	}
-   359	
-   360	/* Returns non-zero if the addr is in the Interrupt Vector Table */
-   361	static int __kprobes in_ivt_functions(unsigned long addr)
-   362	{
-   363		return (addr >= (unsigned long)__start_ivt_text
-   364			&& addr < (unsigned long)__end_ivt_text);
-   365	}
-   366	
-   367	static int __kprobes valid_kprobe_addr(int template, int slot,
-   368					       unsigned long addr)
-   369	{
-   370		if ((slot > 2) || ((bundle_encoding[template][1] == L) && slot > 1)) {
-   371			printk(KERN_WARNING "Attempting to insert unaligned kprobe "
-   372					"at 0x%lx\n", addr);
-   373			return -EINVAL;
-   374		}
-   375	
-   376		if (in_ivt_functions(addr)) {
-   377			printk(KERN_WARNING "Kprobes can't be inserted inside "
-   378					"IVT functions at 0x%lx\n", addr);
-   379			return -EINVAL;
-   380		}
-   381	
-   382		return 0;
-   383	}
-   384	
-   385	static void __kprobes save_previous_kprobe(struct kprobe_ctlblk *kcb)
-   386	{
-   387		unsigned int i;
-   388		i = atomic_add_return(1, &kcb->prev_kprobe_index);
-   389		kcb->prev_kprobe[i-1].kp = kprobe_running();
-   390		kcb->prev_kprobe[i-1].status = kcb->kprobe_status;
-   391	}
-   392	
-   393	static void __kprobes restore_previous_kprobe(struct kprobe_ctlblk *kcb)
-   394	{
-   395		unsigned int i;
-   396		i = atomic_read(&kcb->prev_kprobe_index);
-   397		__this_cpu_write(current_kprobe, kcb->prev_kprobe[i-1].kp);
-   398		kcb->kprobe_status = kcb->prev_kprobe[i-1].status;
-   399		atomic_sub(1, &kcb->prev_kprobe_index);
-   400	}
-   401	
-   402	static void __kprobes set_current_kprobe(struct kprobe *p,
-   403				struct kprobe_ctlblk *kcb)
-   404	{
-   405		__this_cpu_write(current_kprobe, p);
-   406	}
-   407	
-   408	static void kretprobe_trampoline(void)
-   409	{
-   410	}
-   411	
-   412	int __kprobes trampoline_probe_handler(struct kprobe *p, struct pt_regs *regs)
-   413	{
- > 414		regs->cr_iip = __kretprobe_trampoline_handler(regs, kretprobe_trampoline, NULL);
-   415		/*
-   416		 * By returning a non-zero value, we are telling
-   417		 * kprobe_handler() that we don't want the post_handler
-   418		 * to run (and have re-enabled preemption)
-   419		 */
-   420		return 1;
-   421	}
-   422	
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  35  
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11 @36  static const struct of_device_id tc_dwc_g210_pltfm_match[] = {
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  37  	{
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  38  		.compatible = "snps,g210-tc-6.00-20bit",
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  39  		.data = &tc_dwc_g210_20bit_pltfm_hba_vops,
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  40  	},
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  41  	{
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  42  		.compatible = "snps,g210-tc-6.00-40bit",
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  43  		.data = &tc_dwc_g210_40bit_pltfm_hba_vops,
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  44  	},
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  45  	{ },
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  46  };
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  47  MODULE_DEVICE_TABLE(of, tc_dwc_g210_pltfm_match);
+fc040a3fc47cad drivers/scsi/ufs/tc-dwc-g210-pltfrm.c Joao Pinto 2016-05-11  48  
+
+:::::: The code at line 36 was first introduced by commit
+:::::: fc040a3fc47cad038f774275ea61fe6d5b57d7cc ufs: add TC G210 platform driver
+
+:::::: TO: Joao Pinto <Joao.Pinto@synopsys.com>
+:::::: CC: Martin K. Petersen <martin.petersen@oracle.com>
 
 -- 
 0-DAY CI Kernel Test Service

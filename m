@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B48CD4FD475
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:03:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8EE4FD68D
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352979AbiDLHOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:14:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48056 "EHLO
+        id S1389380AbiDLJXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:23:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352594AbiDLG4E (ORCPT
+        with ESMTP id S1357089AbiDLHjq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:56:04 -0400
+        Tue, 12 Apr 2022 03:39:46 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50241245AC;
-        Mon, 11 Apr 2022 23:46:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7F67641;
+        Tue, 12 Apr 2022 00:11:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 00A5FB818C8;
-        Tue, 12 Apr 2022 06:46:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49126C385A6;
-        Tue, 12 Apr 2022 06:46:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 15388B81B5D;
+        Tue, 12 Apr 2022 07:11:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82F67C385A5;
+        Tue, 12 Apr 2022 07:11:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649745964;
-        bh=PkzjqQdqfRCCDxJo6//915f+sa+d6tsZdAMPEWyeZZs=;
+        s=korg; t=1649747490;
+        bh=tghxGsbaqHcpP6pV6vKAw/1Th5K64SKUYwOYUvBJVKU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j4aU2V5rNRb5URpGztHK42qcwOcXfiWqMBtZWU9kycydoNJL3yh3rTkssg21gkjhj
-         FL3c9ZkGBTIJa0TRBhrHwJNYVrjXopRZ8EXj+ph63eDKTMteOMrmrT9LOMpBXKhORQ
-         aO7ZHjIK/AcetbD+ogfv1bAMzV4xDAxQqZ0n+geI=
+        b=ekrHwtemNyq0AAtSrJsQqqqtwWIwAahhr1YKZwvMKFuQwGCIjOp4QhHyrJWcTiTiy
+         66zUZtBjHXnJ/i1l2SVJeT9oGshRAErIMYcWhWNiKMmt6WHPOeIiE7usDt3V9JO636
+         HVoQZafDewAV1ZnAntxH6SUoic7t6qMciUuaaOLQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
+        stable@vger.kernel.org, Jordy Zomer <jordy@pwning.systems>,
+        Mike Snitzer <snitzer@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 112/277] staging: vchiq_core: handle NULL result of find_service_by_handle
+Subject: [PATCH 5.17 097/343] dm ioctl: prevent potential spectre v1 gadget
 Date:   Tue, 12 Apr 2022 08:28:35 +0200
-Message-Id: <20220412062945.281147239@linuxfoundation.org>
+Message-Id: <20220412062953.901053788@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,46 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Wahren <stefan.wahren@i2se.com>
+From: Jordy Zomer <jordy@jordyzomer.github.io>
 
-[ Upstream commit ca225857faf237234d2fffe5d1919467dfadd822 ]
+[ Upstream commit cd9c88da171a62c4b0f1c70e50c75845969fbc18 ]
 
-In case of an invalid handle the function find_servive_by_handle
-returns NULL. So take care of this and avoid a NULL pointer dereference.
+It appears like cmd could be a Spectre v1 gadget as it's supplied by a
+user and used as an array index. Prevent the contents of kernel memory
+from being leaked to userspace via speculative execution by using
+array_index_nospec.
 
-Reviewed-by: Nicolas Saenz Julienne <nsaenz@kernel.org>
-Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-Link: https://lore.kernel.org/r/1642968143-19281-18-git-send-email-stefan.wahren@i2se.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Jordy Zomer <jordy@pwning.systems>
+Signed-off-by: Mike Snitzer <snitzer@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../staging/vc04_services/interface/vchiq_arm/vchiq_core.c  | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/md/dm-ioctl.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.c
-index 9429b8a642fb..630ed0dc24c3 100644
---- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.c
-+++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_core.c
-@@ -2421,6 +2421,9 @@ void vchiq_msg_queue_push(unsigned int handle, struct vchiq_header *header)
- 	struct vchiq_service *service = find_service_by_handle(handle);
- 	int pos;
+diff --git a/drivers/md/dm-ioctl.c b/drivers/md/dm-ioctl.c
+index 21fe8652b095..901abd6dea41 100644
+--- a/drivers/md/dm-ioctl.c
++++ b/drivers/md/dm-ioctl.c
+@@ -18,6 +18,7 @@
+ #include <linux/dm-ioctl.h>
+ #include <linux/hdreg.h>
+ #include <linux/compat.h>
++#include <linux/nospec.h>
  
-+	if (!service)
-+		return;
-+
- 	while (service->msg_queue_write == service->msg_queue_read +
- 		VCHIQ_MAX_SLOTS) {
- 		if (wait_for_completion_interruptible(&service->msg_queue_pop))
-@@ -2441,6 +2444,9 @@ struct vchiq_header *vchiq_msg_hold(unsigned int handle)
- 	struct vchiq_header *header;
- 	int pos;
- 
-+	if (!service)
-+		return NULL;
-+
- 	if (service->msg_queue_write == service->msg_queue_read)
+ #include <linux/uaccess.h>
+ #include <linux/ima.h>
+@@ -1788,6 +1789,7 @@ static ioctl_fn lookup_ioctl(unsigned int cmd, int *ioctl_flags)
+ 	if (unlikely(cmd >= ARRAY_SIZE(_ioctls)))
  		return NULL;
  
++	cmd = array_index_nospec(cmd, ARRAY_SIZE(_ioctls));
+ 	*ioctl_flags = _ioctls[cmd].flags;
+ 	return _ioctls[cmd].fn;
+ }
 -- 
 2.35.1
 

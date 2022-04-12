@@ -2,97 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AC8E4FEAF2
+	by mail.lfdr.de (Postfix) with ESMTP id A2B754FEAF3
 	for <lists+linux-kernel@lfdr.de>; Wed, 13 Apr 2022 01:47:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229528AbiDLXWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 19:22:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51722 "EHLO
+        id S231161AbiDLXgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 19:36:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbiDLXWj (ORCPT
+        with ESMTP id S231691AbiDLXd0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 19:22:39 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2051.outbound.protection.outlook.com [40.107.236.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65098CF48F
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:08:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cTUh9ea4uplN9Dcy4GKesyumSG1Eu9H8lOqeb6/jzj5M4HSAJGFtJ/nFa4sXjwO28UIAhhr4RYfv4TyMxCYWXLE6hN2pb4Hrnvt9G+8TiFKNcW1/cETkzUwbjzJkqzEqacGoYWBzdoIfJgWs4zCPTanH7naF7Ep3NzXDvb43VZ81sxGbW4gCxuwRo+BlvNejbEGqzuMl/9HuuhscYcKlIjxkSrq0oU00SK+8AHyaPmM/wrg/8nOxaHDBmXbB7aaS1+1q9SSFDqGXLz+J89nLjFBhZ6EhIWBYtR7A60oRYZmHcyHF8Y8wSOlefkW+hHrFKmfVArEXg4+Qn96nB7mhXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=feKgFyWTBY9vsJnZz6EY9lyCPDWYEyUBNvsY+5VSy/Q=;
- b=f5m6Xb1PDSI+1pcpfduS241ta+wjuknNikBa4wu2p1Y1ggJtot7LQOSEH2PG7PtGUzZRsHWW20699YUyVcha67bAgBNUnHDdS0BQbkovjk1aEK47x4Vr7tXjHamd+2niSwjVYkiN2mfHaK0eE4eUthH1PGczhplwjLSuRAfas1xej6lm1HaDOxmgBEsRo2RYZKleWwznh+v3Doj0TU+TNKdm04jMqcj4g+b417Nf4kUKPS7JY6X+cX2fMst+yW2DaSnzy0j/F3KQtBtUnYnx2y8LjsldMt4i3LpXfyqDuCeEBMTN4XvtsmHMmoFIu/JcvEpYQOlLLHwh+K4rU+bYQg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linux.ie smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=feKgFyWTBY9vsJnZz6EY9lyCPDWYEyUBNvsY+5VSy/Q=;
- b=4wxfd+P5fuM8YVT19D05cqxaIBzDPr6VOrDx9W2c6G/gtDPS+HEbaPFNj3kpl+1ttWEOqFxSimM6AY2LCu9hIAdgG4PH22aFNMvZf3ehuAJpN19S4uNU9hBQCGhbonPGAizaE0F9qRpTF5eofwbhSwGZwCEkMx6qIJHNRt6SG8E=
-Received: from DM6PR11CA0050.namprd11.prod.outlook.com (2603:10b6:5:14c::27)
- by DM5PR12MB1580.namprd12.prod.outlook.com (2603:10b6:4:10::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Tue, 12 Apr
- 2022 21:52:12 +0000
-Received: from DM6NAM11FT036.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:14c:cafe::1e) by DM6PR11CA0050.outlook.office365.com
- (2603:10b6:5:14c::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29 via Frontend
- Transport; Tue, 12 Apr 2022 21:52:12 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT036.mail.protection.outlook.com (10.13.172.64) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5164.19 via Frontend Transport; Tue, 12 Apr 2022 21:52:12 +0000
-Received: from doryam3r2rack03-34.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 12 Apr 2022 16:52:11 -0500
-From:   Richard Gong <richard.gong@amd.com>
-To:     <alexander.deucher@amd.com>, <christian.koenig@amd.com>,
-        <xinhui.pan@amd.com>, <airlied@linux.ie>, <daniel@ffwll.ch>
-CC:     <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
-        <linux-kernel@vger.kernel.org>, <mario.limonciello@amd.com>,
-        <richard.gong@amd.com>, kernel test robot <lkp@intel.com>
-Subject: [PATCHv4] drm/amdgpu: disable ASPM on Intel Alder Lake based systems
-Date:   Tue, 12 Apr 2022 16:50:00 -0500
-Message-ID: <20220412215000.897344-1-richard.gong@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 12 Apr 2022 19:33:26 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33797D372C
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:23:09 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id v77so500318ybi.12
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 15:23:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Yqso9fcYfRJL1ddBVGIW2wFhVdAFbkU1OBVuEQ7dqIY=;
+        b=aJ074POIFm9F9W4IA2if0+1iujKO8J3JVMhqVSY832OsgoP4skvj9LSb5P+Vd3nlpT
+         UDuFj8sD2b8SPFJ+D6Z06gyqJ45mJ2zNsyRfTQFugDbWML9m42gO6+38Qa3eWeOjDChF
+         xGURGZfQqQYGQTvWLazcktTfyXkyZDbLQ3yvWbF7ZQIgJj3vii37LTS6tAoQry3tNj4+
+         u7REtHg/s23gkf5/9OmtCtXEMKkE/5tKZFEWEHX8bteRTv9WSGP9bVyxyNLUbePaemlH
+         s7NNwjfJ3MHtXKETBipoTL1dPKvSMZMeYCO9RsCEj4UOcfOrjz7JgFuaxge60d4uRLtP
+         rQpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Yqso9fcYfRJL1ddBVGIW2wFhVdAFbkU1OBVuEQ7dqIY=;
+        b=bUYA+bTUztgu5B9YH7j597OoItFgY7NDBVoMhzoNa+TPwKmCjauWG/CEa0SP7lCrgL
+         bibcAWN3VZPfn36A/RBEMf9EBNIeg+QAaZYkzuu58ErXqSxvgpwYnp4B/6S6cWo01R3W
+         0Kd0x0h7YGVoyVVnd5aPI3EVn4OwXe987MH/mvZtuAMKjkuudCDg0MIuiRljHTM6Bnlz
+         1ZQ/v+4MbEmrfn1oZT4ts77lVZ8SZzd6zlwsSH8Xdo2ATKzg1qUIZ5U+Vr+i+Pyr48N/
+         Aed7B0KNqsl1drGfAzwBiSb6OWGG+DL+KDQwTfXMC+7iWS0SwnXu4OYtpbi/Xl57fnfQ
+         M8Og==
+X-Gm-Message-State: AOAM532u1OLOVUM8b/ppdSG0uTRIfkNHkNwxyWELGj40iPln2f5W+Ynh
+        b9OHPKvxcHk7GbeOGfJy7zBcr1PbTYWfVR2+DzrPdZtrHRw=
+X-Google-Smtp-Source: ABdhPJxP70m/nVZoKbLXzrNplVdopLdj17GvVszrk+D+PJQ0Bf+IwKcXcxQN7Qu7IroyjW04brHQiv+Pg9mGexZieOU=
+X-Received: by 2002:a81:53c3:0:b0:2eb:ffe9:8adf with SMTP id
+ h186-20020a8153c3000000b002ebffe98adfmr13611454ywb.188.1649800279858; Tue, 12
+ Apr 2022 14:51:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4b262629-cc60-46ec-3114-08da1cceb391
-X-MS-TrafficTypeDiagnostic: DM5PR12MB1580:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR12MB1580C35E59E32FCA4898A20495ED9@DM5PR12MB1580.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CwGeFqowpQAizLK6QW5664aPukU/8X3vl6KTMKbcl2GUbPW2pf2usudCYP4Ygekq2iCJRgkVhrE0sApG3COA6lVpMSOCi8I5jYXHw0rn4qpo0grrXOkBpuOSVxr57D434tiyr2R2r+QzSQJ+WaZ0Hm40K+nzDCfbABjb9q9BH0U3AqESsoEHGnw9bKKzK9f4CZneLfQfUck4+tP9uPeZAUjhGhyKqdClVJEvWrF7RzadCBZVnwwSUMM7sq8/LZxuzWOXFmZ+v1RSChdje7m7bQOe1knKkQPV+PM9Kh4TSQy8c5dbEXeizSme4XrfIKEywXc/TvLVrk1zA14M8Y0lNCXneuKD8/nqsO2BFL9hn4gkfUxrVUwrq8d3WamhU/JRYVm1UrP7orqzheIUF+7a770tLnNdCo/zIkm8SGtHLuxD2CTQiC/AY3TV29lUU7YO9Oyn98LWUz8vr7BbplkGbQUjZ7yiBF66EFYP/M3OEd1xa+UuiPShhz/N6rZ9a/b7K9lVVcDpAeyzQhyESBbgtdyhFZ0IjkKk+GRfiDAXlMikLTytBPQCR7IigsJaNOfRyJuSMaFcalvBdZOo3CY4OOQgqNcceY6vomv8TC2APno7yy9vG0XQ8cspyXM5eeldMKMIFScFkXIEVju7WX8LizNeHNduBzZTBd7W5kWzM+TnM0C1WQZmKsyue9tgFsuAqel5KkcBFTA7Jy3y65AXJw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230001)(4636009)(40470700004)(36840700001)(46966006)(8676002)(4326008)(5660300002)(70206006)(70586007)(2906002)(86362001)(40460700003)(36756003)(356005)(6666004)(1076003)(81166007)(16526019)(82310400005)(110136005)(44832011)(54906003)(2616005)(186003)(36860700001)(508600001)(47076005)(966005)(26005)(83380400001)(426003)(336012)(316002)(8936002)(7696005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Apr 2022 21:52:12.6886
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4b262629-cc60-46ec-3114-08da1cceb391
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT036.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1580
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220411211015.3091615-1-bgardon@google.com> <20220411211015.3091615-6-bgardon@google.com>
+ <YlTWn6pEKRMaG4gY@google.com>
+In-Reply-To: <YlTWn6pEKRMaG4gY@google.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Tue, 12 Apr 2022 14:51:09 -0700
+Message-ID: <CANgfPd9xxvY3wE7DHAPBnNvRPWuYtXkXC19SB9eK7xvkoB_YGQ@mail.gmail.com>
+Subject: Re: [PATCH v4 05/10] KVM: selftests: Add NX huge pages test
+To:     Mingwei Zhang <mizhang@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Peter Shier <pshier@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Junaid Shahid <junaids@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Jing Zhang <jingzhangos@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,74 +76,341 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Active State Power Management (ASPM) feature is enabled since kernel 5.14.
-There are some AMD GFX cards (such as WX3200 and RX640) that won't work
-with ASPM-enabled Intel Alder Lake based systems. Using these GFX cards as
-video/display output, Intel Alder Lake based systems will hang during
-suspend/resume.
+On Mon, Apr 11, 2022 at 6:32 PM Mingwei Zhang <mizhang@google.com> wrote:
+>
+> On Mon, Apr 11, 2022, Ben Gardon wrote:
+> > There's currently no test coverage of NX hugepages in KVM selftests, so
+> > add a basic test to ensure that the feature works as intended.
+> >
+> > Signed-off-by: Ben Gardon <bgardon@google.com>
+> > ---
+> >  tools/testing/selftests/kvm/Makefile          |  10 ++
+> >  .../selftests/kvm/include/kvm_util_base.h     |   1 +
+> >  tools/testing/selftests/kvm/lib/kvm_util.c    |  48 ++++++
+> >  .../selftests/kvm/x86_64/nx_huge_pages_test.c | 163 ++++++++++++++++++
+> >  .../kvm/x86_64/nx_huge_pages_test.sh          |  25 +++
+> >  5 files changed, 247 insertions(+)
+> >  create mode 100644 tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
+> >  create mode 100755 tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
+> >
+> > diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> > index af582d168621..9bb9bce4df37 100644
+> > --- a/tools/testing/selftests/kvm/Makefile
+> > +++ b/tools/testing/selftests/kvm/Makefile
+> > @@ -43,6 +43,10 @@ LIBKVM_aarch64 = lib/aarch64/processor.c lib/aarch64/ucall.c lib/aarch64/handler
+> >  LIBKVM_s390x = lib/s390x/processor.c lib/s390x/ucall.c lib/s390x/diag318_test_handler.c
+> >  LIBKVM_riscv = lib/riscv/processor.c lib/riscv/ucall.c
+> >
+> > +# Non-compiled test targets
+> > +TEST_PROGS_x86_64 += x86_64/nx_huge_pages_test.sh
+> > +
+> > +# Compiled test targets
+> >  TEST_GEN_PROGS_x86_64 = x86_64/cpuid_test
+> >  TEST_GEN_PROGS_x86_64 += x86_64/cr4_cpuid_sync_test
+> >  TEST_GEN_PROGS_x86_64 += x86_64/get_msr_index_features
+> > @@ -104,6 +108,9 @@ TEST_GEN_PROGS_x86_64 += steal_time
+> >  TEST_GEN_PROGS_x86_64 += kvm_binary_stats_test
+> >  TEST_GEN_PROGS_x86_64 += system_counter_offset_test
+> >
+> > +# Compiled outputs used by test targets
+> > +TEST_GEN_PROGS_EXTENDED_x86_64 += x86_64/nx_huge_pages_test
+> > +
+> >  TEST_GEN_PROGS_aarch64 += aarch64/arch_timer
+> >  TEST_GEN_PROGS_aarch64 += aarch64/debug-exceptions
+> >  TEST_GEN_PROGS_aarch64 += aarch64/get-reg-list
+> > @@ -142,7 +149,9 @@ TEST_GEN_PROGS_riscv += kvm_page_table_test
+> >  TEST_GEN_PROGS_riscv += set_memory_region_test
+> >  TEST_GEN_PROGS_riscv += kvm_binary_stats_test
+> >
+> > +TEST_PROGS += $(TEST_PROGS_$(UNAME_M))
+> >  TEST_GEN_PROGS += $(TEST_GEN_PROGS_$(UNAME_M))
+> > +TEST_GEN_PROGS_EXTENDED += $(TEST_GEN_PROGS_EXTENDED_$(UNAME_M))
+> >  LIBKVM += $(LIBKVM_$(UNAME_M))
+> >
+> >  INSTALL_HDR_PATH = $(top_srcdir)/usr
+> > @@ -193,6 +202,7 @@ $(OUTPUT)/libkvm.a: $(LIBKVM_OBJS)
+> >  x := $(shell mkdir -p $(sort $(dir $(TEST_GEN_PROGS))))
+> >  all: $(STATIC_LIBS)
+> >  $(TEST_GEN_PROGS): $(STATIC_LIBS)
+> > +$(TEST_GEN_PROGS_EXTENDED): $(STATIC_LIBS)
+> >
+> >  cscope: include_paths = $(LINUX_TOOL_INCLUDE) $(LINUX_HDR_PATH) include lib ..
+> >  cscope:
+> > diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> > index b2684cfc2cb1..f9c2ac0a5b97 100644
+> > --- a/tools/testing/selftests/kvm/include/kvm_util_base.h
+> > +++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+> > @@ -408,6 +408,7 @@ void read_vm_stats_desc(int stats_fd, struct kvm_stats_header *header,
+> >  int read_stat_data(int stats_fd, struct kvm_stats_header *header,
+> >                  struct kvm_stats_desc *desc, uint64_t *data,
+> >                  ssize_t max_elements);
+> > +uint64_t vm_get_single_stat(struct kvm_vm *vm, const char *stat_name);
+> >
+> >  uint32_t guest_get_vcpuid(void);
+> >
+> > diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> > index 64e2085f1129..833c7e63d62d 100644
+> > --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> > +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> > @@ -2614,3 +2614,51 @@ int read_stat_data(int stats_fd, struct kvm_stats_header *header,
+> >
+> >       return ret;
+> >  }
+> > +
+> > +static int vm_get_stat_data(struct kvm_vm *vm, const char *stat_name,
+> > +                         uint64_t *data, ssize_t max_elements)
+> > +{
+> > +     struct kvm_stats_desc *stats_desc;
+> > +     struct kvm_stats_header header;
+> > +     struct kvm_stats_desc *desc;
+> > +     size_t size_desc;
+> > +     int stats_fd;
+> > +     int ret = -EINVAL;
+> > +     int i;
+> > +
+> > +     stats_fd = vm_get_stats_fd(vm);
+> > +
+> > +     read_vm_stats_header(stats_fd, &header);
+> > +
+> > +     stats_desc = alloc_vm_stats_desc(stats_fd, &header);
+> > +     read_vm_stats_desc(stats_fd, &header, stats_desc);
+> > +
+> > +     size_desc = sizeof(struct kvm_stats_desc) + header.name_size;
+> > +
+> > +     /* Read kvm stats data one by one */
+> > +     for (i = 0; i < header.num_desc; ++i) {
+> > +             desc = (void *)stats_desc + (i * size_desc);
+> > +
+> > +             if (strcmp(desc->name, stat_name))
+> > +                     continue;
+> > +
+> > +             ret = read_stat_data(stats_fd, &header, desc, data,
+> > +                                  max_elements);
+> > +     }
+> > +
+> > +     free(stats_desc);
+> > +     close(stats_fd);
+> > +     return ret;
+> > +}
+>
+> I could be wrong, but it seems this function is quite generic. Why not
+> putting it into kvm_util.c?
 
-The issue was initially reported on one system (Dell Precision 3660 with
-BIOS version 0.14.81), but was later confirmed to affect at least 4 Alder
-Lake based systems.
+I agree it should go in kvm_util.c. If you look above, you'll see that
+it's actually already in that file.
 
-Add extra check to disable ASPM on Intel Alder Lake based systems.
-
-Fixes: 0064b0ce85bb ("drm/amd/pm: enable ASPM by default")
-Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1885
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Richard Gong <richard.gong@amd.com>
----
-v4: s/CONFIG_X86_64/CONFIG_X86
-    enhanced check logic
-v3: s/intel_core_asom_chk/aspm_support_quirk_check
-    correct build error with W=1 option
-v2: correct commit description
-    move the check from chip family to problematic platform
----
- drivers/gpu/drm/amd/amdgpu/vi.c | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/amd/amdgpu/vi.c b/drivers/gpu/drm/amd/amdgpu/vi.c
-index 039b90cdc3bc..b33e0a9bee65 100644
---- a/drivers/gpu/drm/amd/amdgpu/vi.c
-+++ b/drivers/gpu/drm/amd/amdgpu/vi.c
-@@ -81,6 +81,10 @@
- #include "mxgpu_vi.h"
- #include "amdgpu_dm.h"
- 
-+#if IS_ENABLED(CONFIG_X86)
-+#include <asm/intel-family.h>
-+#endif
-+
- #define ixPCIE_LC_L1_PM_SUBSTATE	0x100100C6
- #define PCIE_LC_L1_PM_SUBSTATE__LC_L1_SUBSTATES_OVERRIDE_EN_MASK	0x00000001L
- #define PCIE_LC_L1_PM_SUBSTATE__LC_PCI_PM_L1_2_OVERRIDE_MASK	0x00000002L
-@@ -1134,13 +1138,24 @@ static void vi_enable_aspm(struct amdgpu_device *adev)
- 		WREG32_PCIE(ixPCIE_LC_CNTL, data);
- }
- 
-+static bool aspm_support_quirk_check(void)
-+{
-+	if (IS_ENABLED(CONFIG_X86)) {
-+		struct cpuinfo_x86 *c = &cpu_data(0);
-+
-+		return !(c->x86 == 6 && c->x86_model == INTEL_FAM6_ALDERLAKE);
-+	}
-+
-+	return true;
-+}
-+
- static void vi_program_aspm(struct amdgpu_device *adev)
- {
- 	u32 data, data1, orig;
- 	bool bL1SS = false;
- 	bool bClkReqSupport = true;
- 
--	if (!amdgpu_device_should_use_aspm(adev))
-+	if (!amdgpu_device_should_use_aspm(adev) || !aspm_support_quirk_check())
- 		return;
- 
- 	if (adev->flags & AMD_IS_APU ||
--- 
-2.25.1
-
+> > +
+> > +uint64_t vm_get_single_stat(struct kvm_vm *vm, const char *stat_name)
+> > +{
+> > +     uint64_t data;
+> > +     int ret;
+> > +
+> > +     ret = vm_get_stat_data(vm, stat_name, &data, 1);
+> > +     TEST_ASSERT(ret == 1,
+> > +                 "Stat %s expected to have 1 element, but %d returned",
+> > +                 stat_name, ret);
+> > +     return data;
+> > +}
+> > diff --git a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
+> > new file mode 100644
+> > index 000000000000..3f21726b22c7
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.c
+> > @@ -0,0 +1,163 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * tools/testing/selftests/kvm/nx_huge_page_test.c
+> > + *
+> > + * Usage: to be run via nx_huge_page_test.sh, which does the necessary
+> > + * environment setup and teardown
+> > + *
+> > + * Copyright (C) 2022, Google LLC.
+> > + */
+> > +
+> > +#define _GNU_SOURCE
+> > +
+> > +#include <fcntl.h>
+> > +#include <stdint.h>
+> > +#include <time.h>
+> > +
+> > +#include <test_util.h>
+> > +#include "kvm_util.h"
+> > +
+> > +#define HPAGE_SLOT           10
+> > +#define HPAGE_GVA            (23*1024*1024)
+> > +#define HPAGE_GPA            (10*1024*1024)
+> > +#define HPAGE_SLOT_NPAGES    (512 * 3)
+> > +#define PAGE_SIZE            4096
+> > +
+> > +/*
+> > + * When writing to guest memory, write the opcode for the `ret` instruction so
+> > + * that subsequent iteractions can exercise instruction fetch by calling the
+> > + * memory.
+> > + */
+> > +#define RETURN_OPCODE 0xC3
+> > +
+> > +void guest_code(void)
+> > +{
+> > +     uint64_t hpage_1 = HPAGE_GVA;
+> > +     uint64_t hpage_2 = hpage_1 + (PAGE_SIZE * 512);
+> > +     uint64_t hpage_3 = hpage_2 + (PAGE_SIZE * 512);
+> > +
+> > +     READ_ONCE(*(uint64_t *)hpage_1);
+> > +     GUEST_SYNC(1);
+> > +
+> > +     READ_ONCE(*(uint64_t *)hpage_2);
+> > +     GUEST_SYNC(2);
+> > +
+> > +     ((void (*)(void)) hpage_1)();
+> > +     GUEST_SYNC(3);
+> > +
+> > +     ((void (*)(void)) hpage_3)();
+> > +     GUEST_SYNC(4);
+> > +
+> > +     READ_ONCE(*(uint64_t *)hpage_1);
+> > +     GUEST_SYNC(5);
+> > +
+> > +     READ_ONCE(*(uint64_t *)hpage_3);
+> > +     GUEST_SYNC(6);
+> > +}
+> > +
+> > +static void check_2m_page_count(struct kvm_vm *vm, int expected_pages_2m)
+> > +{
+> > +     int actual_pages_2m;
+> > +
+> > +     actual_pages_2m = vm_get_single_stat(vm, "pages_2m");
+> > +
+> > +     TEST_ASSERT(actual_pages_2m == expected_pages_2m,
+> > +                 "Unexpected 2m page count. Expected %d, got %d",
+> > +                 expected_pages_2m, actual_pages_2m);
+> > +}
+> > +
+> > +static void check_split_count(struct kvm_vm *vm, int expected_splits)
+> > +{
+> > +     int actual_splits;
+> > +
+> > +     actual_splits = vm_get_single_stat(vm, "nx_lpage_splits");
+> > +
+> > +     TEST_ASSERT(actual_splits == expected_splits,
+> > +                 "Unexpected nx lpage split count. Expected %d, got %d",
+> > +                 expected_splits, actual_splits);
+> > +}
+> > +
+> > +int main(int argc, char **argv)
+> > +{
+> > +     struct kvm_vm *vm;
+> > +     struct timespec ts;
+> > +     void *hva;
+> > +
+> > +     vm = vm_create_default(0, 0, guest_code);
+> > +
+> > +     vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS_HUGETLB,
+> > +                                 HPAGE_GPA, HPAGE_SLOT,
+> > +                                 HPAGE_SLOT_NPAGES, 0);
+> > +
+> > +     virt_map(vm, HPAGE_GVA, HPAGE_GPA, HPAGE_SLOT_NPAGES);
+> > +
+> > +     hva = addr_gpa2hva(vm, HPAGE_GPA);
+> > +     memset(hva, RETURN_OPCODE, HPAGE_SLOT_NPAGES * PAGE_SIZE);
+> > +
+> > +     check_2m_page_count(vm, 0);
+> > +     check_split_count(vm, 0);
+> > +
+> > +     /*
+> > +      * The guest code will first read from the first hugepage, resulting
+> > +      * in a huge page mapping being created.
+> > +      */
+> > +     vcpu_run(vm, 0);
+> > +     check_2m_page_count(vm, 1);
+> > +     check_split_count(vm, 0);
+> > +
+> > +     /*
+> > +      * Then the guest code will read from the second hugepage, resulting
+> > +      * in another huge page mapping being created.
+> > +      */
+> > +     vcpu_run(vm, 0);
+> > +     check_2m_page_count(vm, 2);
+> > +     check_split_count(vm, 0);
+> > +
+> > +     /*
+> > +      * Next, the guest will execute from the first huge page, causing it
+> > +      * to be remapped at 4k.
+> > +      */
+> > +     vcpu_run(vm, 0);
+> > +     check_2m_page_count(vm, 1);
+> > +     check_split_count(vm, 1);
+> > +
+> > +     /*
+> > +      * Executing from the third huge page (previously unaccessed) will
+> > +      * cause part to be mapped at 4k.
+> > +      */
+> > +     vcpu_run(vm, 0);
+> > +     check_2m_page_count(vm, 1);
+> > +     check_split_count(vm, 2);
+> > +
+> > +     /* Reading from the first huge page again should have no effect. */
+> > +     vcpu_run(vm, 0);
+> > +     check_2m_page_count(vm, 1);
+> > +     check_split_count(vm, 2);
+> > +
+> > +     /*
+> > +      * Give recovery thread time to run. The wrapper script sets
+> > +      * recovery_period_ms to 100, so wait 5x that.
+> > +      */
+> > +     ts.tv_sec = 0;
+> > +     ts.tv_nsec = 500000000;
+> > +     nanosleep(&ts, NULL);
+> > +
+> > +     /*
+> > +      * Now that the reclaimer has run, all the split pages should be gone.
+> > +      */
+> > +     check_2m_page_count(vm, 1);
+> > +     check_split_count(vm, 0);
+> > +
+> > +     /*
+> > +      * The 4k mapping on hpage 3 should have been removed, so check that
+> > +      * reading from it causes a huge page mapping to be installed.
+> > +      */
+> > +     vcpu_run(vm, 0);
+> > +     check_2m_page_count(vm, 2);
+> > +     check_split_count(vm, 0);
+> > +
+> > +     kvm_vm_free(vm);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > diff --git a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
+> > new file mode 100755
+> > index 000000000000..19fc95723fcb
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
+> > @@ -0,0 +1,25 @@
+> > +#!/bin/bash
+> > +# SPDX-License-Identifier: GPL-2.0-only */
+> > +
+> > +# tools/testing/selftests/kvm/nx_huge_page_test.sh
+> > +# Copyright (C) 2022, Google LLC.
+> > +
+> > +NX_HUGE_PAGES=$(cat /sys/module/kvm/parameters/nx_huge_pages)
+> > +NX_HUGE_PAGES_RECOVERY_RATIO=$(cat /sys/module/kvm/parameters/nx_huge_pages_recovery_ratio)
+> > +NX_HUGE_PAGES_RECOVERY_PERIOD=$(cat /sys/module/kvm/parameters/nx_huge_pages_recovery_period_ms)
+> > +HUGE_PAGES=$(cat /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages)
+> > +
+> > +echo 1 > /sys/module/kvm/parameters/nx_huge_pages
+> > +echo 1 > /sys/module/kvm/parameters/nx_huge_pages_recovery_ratio
+> > +echo 100 > /sys/module/kvm/parameters/nx_huge_pages_recovery_period_ms
+> > +echo 200 > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
+> > +
+> > +./nx_huge_pages_test
+> > +RET=$?
+> > +
+> > +echo $NX_HUGE_PAGES > /sys/module/kvm/parameters/nx_huge_pages
+> > +echo $NX_HUGE_PAGES_RECOVERY_RATIO > /sys/module/kvm/parameters/nx_huge_pages_recovery_ratio
+> > +echo $NX_HUGE_PAGES_RECOVERY_PERIOD > /sys/module/kvm/parameters/nx_huge_pages_recovery_period_ms
+> > +echo $HUGE_PAGES > /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
+> > +
+> > +exit $RET
+> > --
+> > 2.35.1.1178.g4f1659d476-goog
+> >

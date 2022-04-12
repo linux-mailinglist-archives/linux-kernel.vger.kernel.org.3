@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A30074FD3BE
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 11:59:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A9654FD412
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:01:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1388516AbiDLJW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:22:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52678 "EHLO
+        id S242672AbiDLIB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:01:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358219AbiDLHlL (ORCPT
+        with ESMTP id S1353643AbiDLHZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:41:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2034B42A17;
-        Tue, 12 Apr 2022 00:17:36 -0700 (PDT)
+        Tue, 12 Apr 2022 03:25:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A7B643EC3;
+        Tue, 12 Apr 2022 00:02:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AFECA61045;
-        Tue, 12 Apr 2022 07:17:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C0E0C385A1;
-        Tue, 12 Apr 2022 07:17:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 98CA5615B4;
+        Tue, 12 Apr 2022 07:02:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1DECC385A1;
+        Tue, 12 Apr 2022 07:02:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747855;
-        bh=HLy3qY+J5ROTEF4rwyotysIW1sSO8dDgG1rHbzkhJac=;
+        s=korg; t=1649746965;
+        bh=cK5XG9/wD9csGt9BDkyE+vq4CVXvZjL5MTLufJbB8FI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IM5zbrN3BMuJCxUpezxflmU+o+ZkGW5kB0fUPCdavQw6uze7p0LDLOvUacXxv1fCk
-         AZy2i0SV17idNneDAxZyaq7yrWgPPbvt7jygbZ+K+R/1OP+mGIzFRFf2A+Xn3IvITd
-         gRQrTxFci13ODH0j0/JAInFEmVim0+nAGxnQCFO4=
+        b=WJX1roaY2Cl0Dx+eQlERVOsIgfV+HIqMaut/ql0YbYl+5aaoXJ/x1QLCkKH0AGnxq
+         YJAt9vRJ8+qZ0ITIjeN/9CUUX1axNTIDVxcqKCi3Z7TJHucCzt8mbEQCxEYQmAzwik
+         VBRQtNnzuRfx3xRzsTeZpj279hvqU6dwBsRJ9Yp0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Enzo Matsumiya <ematsumiya@suse.de>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
-        Steve French <stfrench@microsoft.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?St=C3=A9phane=20Graber?= <stgraber@ubuntu.com>,
+        Ilya Maximets <i.maximets@ovn.org>,
+        Aaron Conole <aconole@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 229/343] cifs: fix potential race with cifsd thread
-Date:   Tue, 12 Apr 2022 08:30:47 +0200
-Message-Id: <20220412062957.947491639@linuxfoundation.org>
+Subject: [PATCH 5.16 193/285] net: openvswitch: fix leak of nested actions
+Date:   Tue, 12 Apr 2022 08:30:50 +0200
+Message-Id: <20220412062949.231080858@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,51 +58,179 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paulo Alcantara <pc@cjr.nz>
+From: Ilya Maximets <i.maximets@ovn.org>
 
-[ Upstream commit 687127c81ad32c8900a3fedbc7ed8f686ca95855 ]
+[ Upstream commit 1f30fb9166d4f15a1aa19449b9da871fe0ed4796 ]
 
-To avoid racing with demultiplex thread while it is handling data on
-socket, use cifs_signal_cifsd_for_reconnect() helper for marking
-current server to reconnect and let the demultiplex thread handle the
-rest.
+While parsing user-provided actions, openvswitch module may dynamically
+allocate memory and store pointers in the internal copy of the actions.
+So this memory has to be freed while destroying the actions.
 
-Fixes: dca65818c80c ("cifs: use a different reconnect helper for non-cifsd threads")
-Reviewed-by: Enzo Matsumiya <ematsumiya@suse.de>
-Reviewed-by: Shyam Prasad N <sprasad@microsoft.com>
-Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
-Signed-off-by: Steve French <stfrench@microsoft.com>
+Currently there are only two such actions: ct() and set().  However,
+there are many actions that can hold nested lists of actions and
+ovs_nla_free_flow_actions() just jumps over them leaking the memory.
+
+For example, removal of the flow with the following actions will lead
+to a leak of the memory allocated by nf_ct_tmpl_alloc():
+
+  actions:clone(ct(commit),0)
+
+Non-freed set() action may also leak the 'dst' structure for the
+tunnel info including device references.
+
+Under certain conditions with a high rate of flow rotation that may
+cause significant memory leak problem (2MB per second in reporter's
+case).  The problem is also hard to mitigate, because the user doesn't
+have direct control over the datapath flows generated by OVS.
+
+Fix that by iterating over all the nested actions and freeing
+everything that needs to be freed recursively.
+
+New build time assertion should protect us from this problem if new
+actions will be added in the future.
+
+Unfortunately, openvswitch module doesn't use NLA_F_NESTED, so all
+attributes has to be explicitly checked.  sample() and clone() actions
+are mixing extra attributes into the user-provided action list.  That
+prevents some code generalization too.
+
+Fixes: 34ae932a4036 ("openvswitch: Make tunnel set action attach a metadata dst")
+Link: https://mail.openvswitch.org/pipermail/ovs-dev/2022-March/392922.html
+Reported-by: Stéphane Graber <stgraber@ubuntu.com>
+Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
+Acked-by: Aaron Conole <aconole@redhat.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/cifs/connect.c | 2 +-
- fs/cifs/netmisc.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ net/openvswitch/flow_netlink.c | 95 ++++++++++++++++++++++++++++++++--
+ 1 file changed, 90 insertions(+), 5 deletions(-)
 
-diff --git a/fs/cifs/connect.c b/fs/cifs/connect.c
-index d6f8ccc7bfe2..0270b412f801 100644
---- a/fs/cifs/connect.c
-+++ b/fs/cifs/connect.c
-@@ -4465,7 +4465,7 @@ static int tree_connect_dfs_target(const unsigned int xid, struct cifs_tcon *tco
- 	 */
- 	if (rc && server->current_fullpath != server->origin_fullpath) {
- 		server->current_fullpath = server->origin_fullpath;
--		cifs_reconnect(tcon->ses->server, true);
-+		cifs_signal_cifsd_for_reconnect(server, true);
- 	}
+diff --git a/net/openvswitch/flow_netlink.c b/net/openvswitch/flow_netlink.c
+index 2679007f8aeb..c591b923016a 100644
+--- a/net/openvswitch/flow_netlink.c
++++ b/net/openvswitch/flow_netlink.c
+@@ -2288,6 +2288,62 @@ static struct sw_flow_actions *nla_alloc_flow_actions(int size)
+ 	return sfa;
+ }
  
- 	dfs_cache_free_tgts(tl);
-diff --git a/fs/cifs/netmisc.c b/fs/cifs/netmisc.c
-index ebe236b9d9f5..235aa1b395eb 100644
---- a/fs/cifs/netmisc.c
-+++ b/fs/cifs/netmisc.c
-@@ -896,7 +896,7 @@ map_and_check_smb_error(struct mid_q_entry *mid, bool logErr)
- 		if (class == ERRSRV && code == ERRbaduid) {
- 			cifs_dbg(FYI, "Server returned 0x%x, reconnecting session...\n",
- 				code);
--			cifs_reconnect(mid->server, false);
-+			cifs_signal_cifsd_for_reconnect(mid->server, false);
++static void ovs_nla_free_nested_actions(const struct nlattr *actions, int len);
++
++static void ovs_nla_free_check_pkt_len_action(const struct nlattr *action)
++{
++	const struct nlattr *a;
++	int rem;
++
++	nla_for_each_nested(a, action, rem) {
++		switch (nla_type(a)) {
++		case OVS_CHECK_PKT_LEN_ATTR_ACTIONS_IF_LESS_EQUAL:
++		case OVS_CHECK_PKT_LEN_ATTR_ACTIONS_IF_GREATER:
++			ovs_nla_free_nested_actions(nla_data(a), nla_len(a));
++			break;
++		}
++	}
++}
++
++static void ovs_nla_free_clone_action(const struct nlattr *action)
++{
++	const struct nlattr *a = nla_data(action);
++	int rem = nla_len(action);
++
++	switch (nla_type(a)) {
++	case OVS_CLONE_ATTR_EXEC:
++		/* The real list of actions follows this attribute. */
++		a = nla_next(a, &rem);
++		ovs_nla_free_nested_actions(a, rem);
++		break;
++	}
++}
++
++static void ovs_nla_free_dec_ttl_action(const struct nlattr *action)
++{
++	const struct nlattr *a = nla_data(action);
++
++	switch (nla_type(a)) {
++	case OVS_DEC_TTL_ATTR_ACTION:
++		ovs_nla_free_nested_actions(nla_data(a), nla_len(a));
++		break;
++	}
++}
++
++static void ovs_nla_free_sample_action(const struct nlattr *action)
++{
++	const struct nlattr *a = nla_data(action);
++	int rem = nla_len(action);
++
++	switch (nla_type(a)) {
++	case OVS_SAMPLE_ATTR_ARG:
++		/* The real list of actions follows this attribute. */
++		a = nla_next(a, &rem);
++		ovs_nla_free_nested_actions(a, rem);
++		break;
++	}
++}
++
+ static void ovs_nla_free_set_action(const struct nlattr *a)
+ {
+ 	const struct nlattr *ovs_key = nla_data(a);
+@@ -2301,25 +2357,54 @@ static void ovs_nla_free_set_action(const struct nlattr *a)
+ 	}
+ }
+ 
+-void ovs_nla_free_flow_actions(struct sw_flow_actions *sf_acts)
++static void ovs_nla_free_nested_actions(const struct nlattr *actions, int len)
+ {
+ 	const struct nlattr *a;
+ 	int rem;
+ 
+-	if (!sf_acts)
++	/* Whenever new actions are added, the need to update this
++	 * function should be considered.
++	 */
++	BUILD_BUG_ON(OVS_ACTION_ATTR_MAX != 23);
++
++	if (!actions)
+ 		return;
+ 
+-	nla_for_each_attr(a, sf_acts->actions, sf_acts->actions_len, rem) {
++	nla_for_each_attr(a, actions, len, rem) {
+ 		switch (nla_type(a)) {
+-		case OVS_ACTION_ATTR_SET:
+-			ovs_nla_free_set_action(a);
++		case OVS_ACTION_ATTR_CHECK_PKT_LEN:
++			ovs_nla_free_check_pkt_len_action(a);
++			break;
++
++		case OVS_ACTION_ATTR_CLONE:
++			ovs_nla_free_clone_action(a);
+ 			break;
++
+ 		case OVS_ACTION_ATTR_CT:
+ 			ovs_ct_free_action(a);
+ 			break;
++
++		case OVS_ACTION_ATTR_DEC_TTL:
++			ovs_nla_free_dec_ttl_action(a);
++			break;
++
++		case OVS_ACTION_ATTR_SAMPLE:
++			ovs_nla_free_sample_action(a);
++			break;
++
++		case OVS_ACTION_ATTR_SET:
++			ovs_nla_free_set_action(a);
++			break;
  		}
  	}
++}
++
++void ovs_nla_free_flow_actions(struct sw_flow_actions *sf_acts)
++{
++	if (!sf_acts)
++		return;
+ 
++	ovs_nla_free_nested_actions(sf_acts->actions, sf_acts->actions_len);
+ 	kfree(sf_acts);
+ }
  
 -- 
 2.35.1

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F9794FD7FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CA314FD56B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376284AbiDLHny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:43:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45868 "EHLO
+        id S1354569AbiDLHS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:18:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354133AbiDLHRF (ORCPT
+        with ESMTP id S1352313AbiDLHFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:17:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FFE6252BF;
-        Mon, 11 Apr 2022 23:58:21 -0700 (PDT)
+        Tue, 12 Apr 2022 03:05:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C02473AC;
+        Mon, 11 Apr 2022 23:48:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EBD7E61589;
-        Tue, 12 Apr 2022 06:58:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08316C385A1;
-        Tue, 12 Apr 2022 06:58:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FDCF60A21;
+        Tue, 12 Apr 2022 06:48:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1975C385A6;
+        Tue, 12 Apr 2022 06:47:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746700;
-        bh=oaKURCUL+ymgN1tWdKGVd0Jf/51rzZ/0MT5vgz0oFlM=;
+        s=korg; t=1649746080;
+        bh=5c7qbwUg4dhWQv9ZheJcLAo+7noBOw8SDyf2a6K/Dws=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yE7c0lOcxOGDcGWd99mZvV9lj5RL2d4mpEjkmCiwzXQG+29W9iK2F02qMRKA3sgtk
-         4bkmbEhU2SDdAAFpv3iT7EifZHhCjITJ2QDt6S7cOInoYJP7HMc9Op5lDEtF1+zOcz
-         8PHOLE0tNStkQyEwpBKsLFp4jp553BDVz/PQa2ps=
+        b=k3/rxo10Es0i6JtjuROMkO7YdX+y3JgwXchohxgJcq2Aop9JkntNk/tvYjaJ+WwYA
+         EH2ANXZR5+iX0tjekHC7mb6EZsOJt5OI5taNs/p4yfCLM+3b+mT4gfDMENDNBL49vW
+         gpt+olEEtlhLeNkcPKo9p4t4u0n80061RCsiu7Rk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jorge Lopez <jorge.lopez2@hp.com>,
-        Hans de Goede <hdegoede@redhat.com>,
+        stable@vger.kernel.org, Eli Cohen <elic@nvidia.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 099/285] platform/x86: hp-wmi: Fix SW_TABLET_MODE detection method
-Date:   Tue, 12 Apr 2022 08:29:16 +0200
-Message-Id: <20220412062946.523432469@linuxfoundation.org>
+Subject: [PATCH 5.15 154/277] vdpa/mlx5: Rename control VQ workqueue to vdpa wq
+Date:   Tue, 12 Apr 2022 08:29:17 +0200
+Message-Id: <20220412062946.496512297@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,195 +56,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jorge Lopez <jorge.lopez2@hp.com>
+From: Eli Cohen <elic@nvidia.com>
 
-[ Upstream commit 520ee4ea1cc60251a6e3c911cf0336278aa52634 ]
+[ Upstream commit 218bdd20e56cab41a68481bc10c551ae3e0a24fb ]
 
-The purpose of this patch is to introduce a fix and removal of the
-current hack when determining tablet mode status.
+A subesequent patch will use the same workqueue for executing other
+work not related to control VQ. Rename the workqueue and the work queue
+entry used to convey information to the workqueue.
 
-Determining the tablet mode status requires reading Byte 0 bit 2 as
-reported by HPWMI_HARDWARE_QUERY.  The investigation identified the
-failure was rooted in two areas: HPWMI_HARDWARE_QUERY failure (0x05)
-and reading Byte 0, bit 2 only to determine the table mode status.
-HPWMI_HARDWARE_QUERY WMI failure also rendered the dock state value
-invalid.
-
-The latest changes use SMBIOS Type 3 (chassis type) and WMI Command
-0x40 (device_mode_status) information to determine if the device is
-in tablet mode or not.
-
-hp_wmi_hw_state function was split into two functions;
-hp_wmi_get_dock_state and hp_wmi_get_tablet_mode.  The new functions
-separate how dock_state and tablet_mode is handled in a cleaner
-manner.
-
-All changes were validated on a HP ZBook Workstation notebook,
-HP EliteBook x360, and HP EliteBook 850 G8.
-
-Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
-Link: https://lore.kernel.org/r/20220310210853.28367-3-jorge.lopez2@hp.com
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Eli Cohen <elic@nvidia.com>
+Link: https://lore.kernel.org/r/20210909123635.30884-3-elic@nvidia.com
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/platform/x86/hp-wmi.c | 71 +++++++++++++++++++++++++----------
- 1 file changed, 52 insertions(+), 19 deletions(-)
+ drivers/vdpa/mlx5/core/mlx5_vdpa.h | 2 +-
+ drivers/vdpa/mlx5/net/mlx5_vnet.c  | 8 ++++----
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/platform/x86/hp-wmi.c b/drivers/platform/x86/hp-wmi.c
-index 48a46466f086..f822ef6eb93c 100644
---- a/drivers/platform/x86/hp-wmi.c
-+++ b/drivers/platform/x86/hp-wmi.c
-@@ -35,10 +35,6 @@ MODULE_LICENSE("GPL");
- MODULE_ALIAS("wmi:95F24279-4D7B-4334-9387-ACCDC67EF61C");
- MODULE_ALIAS("wmi:5FB7F034-2C63-45e9-BE91-3D44E2C707E4");
- 
--static int enable_tablet_mode_sw = -1;
--module_param(enable_tablet_mode_sw, int, 0444);
--MODULE_PARM_DESC(enable_tablet_mode_sw, "Enable SW_TABLET_MODE reporting (-1=auto, 0=no, 1=yes)");
--
- #define HPWMI_EVENT_GUID "95F24279-4D7B-4334-9387-ACCDC67EF61C"
- #define HPWMI_BIOS_GUID "5FB7F034-2C63-45e9-BE91-3D44E2C707E4"
- #define HP_OMEN_EC_THERMAL_PROFILE_OFFSET 0x95
-@@ -107,6 +103,7 @@ enum hp_wmi_commandtype {
- 	HPWMI_FEATURE2_QUERY		= 0x0d,
- 	HPWMI_WIRELESS2_QUERY		= 0x1b,
- 	HPWMI_POSTCODEERROR_QUERY	= 0x2a,
-+	HPWMI_SYSTEM_DEVICE_MODE	= 0x40,
- 	HPWMI_THERMAL_PROFILE_QUERY	= 0x4c,
+diff --git a/drivers/vdpa/mlx5/core/mlx5_vdpa.h b/drivers/vdpa/mlx5/core/mlx5_vdpa.h
+index 01a848adf590..81dc3d88d3dd 100644
+--- a/drivers/vdpa/mlx5/core/mlx5_vdpa.h
++++ b/drivers/vdpa/mlx5/core/mlx5_vdpa.h
+@@ -63,7 +63,7 @@ struct mlx5_control_vq {
+ 	unsigned short head;
  };
  
-@@ -217,6 +214,19 @@ struct rfkill2_device {
- static int rfkill2_count;
- static struct rfkill2_device rfkill2[HPWMI_MAX_RFKILL2_DEVICES];
- 
-+/*
-+ * Chassis Types values were obtained from SMBIOS reference
-+ * specification version 3.00. A complete list of system enclosures
-+ * and chassis types is available on Table 17.
-+ */
-+static const char * const tablet_chassis_types[] = {
-+	"30", /* Tablet*/
-+	"31", /* Convertible */
-+	"32"  /* Detachable */
-+};
-+
-+#define DEVICE_MODE_TABLET	0x06
-+
- /* map output size to the corresponding WMI method id */
- static inline int encode_outsize_for_pvsz(int outsize)
+-struct mlx5_ctrl_wq_ent {
++struct mlx5_vdpa_wq_ent {
+ 	struct work_struct work;
+ 	struct mlx5_vdpa_dev *mvdev;
+ };
+diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+index f77a611f592f..f769e2dc6d26 100644
+--- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
++++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+@@ -1573,14 +1573,14 @@ static void mlx5_cvq_kick_handler(struct work_struct *work)
  {
-@@ -345,14 +355,39 @@ static int hp_wmi_read_int(int query)
- 	return val;
- }
+ 	virtio_net_ctrl_ack status = VIRTIO_NET_ERR;
+ 	struct virtio_net_ctrl_hdr ctrl;
+-	struct mlx5_ctrl_wq_ent *wqent;
++	struct mlx5_vdpa_wq_ent *wqent;
+ 	struct mlx5_vdpa_dev *mvdev;
+ 	struct mlx5_control_vq *cvq;
+ 	struct mlx5_vdpa_net *ndev;
+ 	size_t read, write;
+ 	int err;
  
--static int hp_wmi_hw_state(int mask)
-+static int hp_wmi_get_dock_state(void)
- {
- 	int state = hp_wmi_read_int(HPWMI_HARDWARE_QUERY);
+-	wqent = container_of(work, struct mlx5_ctrl_wq_ent, work);
++	wqent = container_of(work, struct mlx5_vdpa_wq_ent, work);
+ 	mvdev = wqent->mvdev;
+ 	ndev = to_mlx5_vdpa_ndev(mvdev);
+ 	cvq = &mvdev->cvq;
+@@ -1632,7 +1632,7 @@ static void mlx5_vdpa_kick_vq(struct vdpa_device *vdev, u16 idx)
+ 	struct mlx5_vdpa_dev *mvdev = to_mvdev(vdev);
+ 	struct mlx5_vdpa_net *ndev = to_mlx5_vdpa_ndev(mvdev);
+ 	struct mlx5_vdpa_virtqueue *mvq;
+-	struct mlx5_ctrl_wq_ent *wqent;
++	struct mlx5_vdpa_wq_ent *wqent;
  
- 	if (state < 0)
- 		return state;
+ 	if (!is_index_valid(mvdev, idx))
+ 		return;
+@@ -2502,7 +2502,7 @@ static int mlx5_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name)
+ 	if (err)
+ 		goto err_mr;
  
--	return !!(state & mask);
-+	return !!(state & HPWMI_DOCK_MASK);
-+}
-+
-+static int hp_wmi_get_tablet_mode(void)
-+{
-+	char system_device_mode[4] = { 0 };
-+	const char *chassis_type;
-+	bool tablet_found;
-+	int ret;
-+
-+	chassis_type = dmi_get_system_info(DMI_CHASSIS_TYPE);
-+	if (!chassis_type)
-+		return -ENODEV;
-+
-+	tablet_found = match_string(tablet_chassis_types,
-+				    ARRAY_SIZE(tablet_chassis_types),
-+				    chassis_type) >= 0;
-+	if (!tablet_found)
-+		return -ENODEV;
-+
-+	ret = hp_wmi_perform_query(HPWMI_SYSTEM_DEVICE_MODE, HPWMI_READ,
-+				   system_device_mode, 0, sizeof(system_device_mode));
-+	if (ret < 0)
-+		return ret;
-+
-+	return system_device_mode[0] == DEVICE_MODE_TABLET;
- }
- 
- static int omen_thermal_profile_set(int mode)
-@@ -568,7 +603,7 @@ static ssize_t als_show(struct device *dev, struct device_attribute *attr,
- static ssize_t dock_show(struct device *dev, struct device_attribute *attr,
- 			 char *buf)
- {
--	int value = hp_wmi_hw_state(HPWMI_DOCK_MASK);
-+	int value = hp_wmi_get_dock_state();
- 	if (value < 0)
- 		return value;
- 	return sprintf(buf, "%d\n", value);
-@@ -577,7 +612,7 @@ static ssize_t dock_show(struct device *dev, struct device_attribute *attr,
- static ssize_t tablet_show(struct device *dev, struct device_attribute *attr,
- 			   char *buf)
- {
--	int value = hp_wmi_hw_state(HPWMI_TABLET_MASK);
-+	int value = hp_wmi_get_tablet_mode();
- 	if (value < 0)
- 		return value;
- 	return sprintf(buf, "%d\n", value);
-@@ -699,10 +734,10 @@ static void hp_wmi_notify(u32 value, void *context)
- 	case HPWMI_DOCK_EVENT:
- 		if (test_bit(SW_DOCK, hp_wmi_input_dev->swbit))
- 			input_report_switch(hp_wmi_input_dev, SW_DOCK,
--					    hp_wmi_hw_state(HPWMI_DOCK_MASK));
-+					    hp_wmi_get_dock_state());
- 		if (test_bit(SW_TABLET_MODE, hp_wmi_input_dev->swbit))
- 			input_report_switch(hp_wmi_input_dev, SW_TABLET_MODE,
--					    hp_wmi_hw_state(HPWMI_TABLET_MASK));
-+					    hp_wmi_get_tablet_mode());
- 		input_sync(hp_wmi_input_dev);
- 		break;
- 	case HPWMI_PARK_HDD:
-@@ -780,19 +815,17 @@ static int __init hp_wmi_input_setup(void)
- 	__set_bit(EV_SW, hp_wmi_input_dev->evbit);
- 
- 	/* Dock */
--	val = hp_wmi_hw_state(HPWMI_DOCK_MASK);
-+	val = hp_wmi_get_dock_state();
- 	if (!(val < 0)) {
- 		__set_bit(SW_DOCK, hp_wmi_input_dev->swbit);
- 		input_report_switch(hp_wmi_input_dev, SW_DOCK, val);
- 	}
- 
- 	/* Tablet mode */
--	if (enable_tablet_mode_sw > 0) {
--		val = hp_wmi_hw_state(HPWMI_TABLET_MASK);
--		if (val >= 0) {
--			__set_bit(SW_TABLET_MODE, hp_wmi_input_dev->swbit);
--			input_report_switch(hp_wmi_input_dev, SW_TABLET_MODE, val);
--		}
-+	val = hp_wmi_get_tablet_mode();
-+	if (!(val < 0)) {
-+		__set_bit(SW_TABLET_MODE, hp_wmi_input_dev->swbit);
-+		input_report_switch(hp_wmi_input_dev, SW_TABLET_MODE, val);
- 	}
- 
- 	err = sparse_keymap_setup(hp_wmi_input_dev, hp_wmi_keymap, NULL);
-@@ -1227,10 +1260,10 @@ static int hp_wmi_resume_handler(struct device *device)
- 	if (hp_wmi_input_dev) {
- 		if (test_bit(SW_DOCK, hp_wmi_input_dev->swbit))
- 			input_report_switch(hp_wmi_input_dev, SW_DOCK,
--					    hp_wmi_hw_state(HPWMI_DOCK_MASK));
-+					    hp_wmi_get_dock_state());
- 		if (test_bit(SW_TABLET_MODE, hp_wmi_input_dev->swbit))
- 			input_report_switch(hp_wmi_input_dev, SW_TABLET_MODE,
--					    hp_wmi_hw_state(HPWMI_TABLET_MASK));
-+					    hp_wmi_get_tablet_mode());
- 		input_sync(hp_wmi_input_dev);
- 	}
- 
+-	mvdev->wq = create_singlethread_workqueue("mlx5_vdpa_ctrl_wq");
++	mvdev->wq = create_singlethread_workqueue("mlx5_vdpa_wq");
+ 	if (!mvdev->wq) {
+ 		err = -ENOMEM;
+ 		goto err_res2;
 -- 
 2.35.1
 

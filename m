@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5BEC4FD6C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:25:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F40C14FD74B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:28:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385741AbiDLIwu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:52:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
+        id S1380440AbiDLIWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:22:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359045AbiDLHm1 (ORCPT
+        with ESMTP id S1353885AbiDLHZ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:42:27 -0400
+        Tue, 12 Apr 2022 03:25:56 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523F254FA0;
-        Tue, 12 Apr 2022 00:20:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F677101DF;
+        Tue, 12 Apr 2022 00:05:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 09D03B81B58;
-        Tue, 12 Apr 2022 07:20:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 713AEC385A5;
-        Tue, 12 Apr 2022 07:20:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 43377B81B4E;
+        Tue, 12 Apr 2022 07:05:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABD26C385A6;
+        Tue, 12 Apr 2022 07:05:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649748000;
-        bh=kHqtdHTc+UnjdaXRk1UmTLDPTA4ePYi3R842LXAyw8g=;
+        s=korg; t=1649747106;
+        bh=9vXVE7hBRTZaQD7r+RaOOhVUqQdP69FtVpG2CWo9kbo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HR3niHiidBvSkCu/00XMQ0FqtPYD17pAlPBah2luinT+hby43ozDixUgQT5En6xjV
-         D6j78qObaFsyD+EuKD35BAELQfUSDHdFyzMLqMT52v3VhTwR0gPnWvPo6kibGSH6XM
-         mXb5oB4G9YMTMX7Zm3VUWUL6ozjlMz0Ge71mP/DA=
+        b=jewLxgZI/kOuNuSZCw8Sy//Y5fnbCGgGHLtNEcBBYr8R3ecPZ9GhSqsknffUyFwXX
+         aIQsrdxE1f7QJYyPaWPC9qUViWppCQB/i1UiHyx0TEkcY4lMVmEpSevDkfkN4zN4BZ
+         dInpNn8s0duSfLbFL/FTtBIOYCEHWwLOXCa1YStw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Martin Habets <habetsm.xilinx@gmail.com>,
-        Taehee Yoo <ap420073@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 243/343] net: sfc: fix using uninitialized xdp tx_queue
-Date:   Tue, 12 Apr 2022 08:31:01 +0200
-Message-Id: <20220412062958.344893398@linuxfoundation.org>
+Subject: [PATCH 5.16 205/285] SUNRPC: Handle ENOMEM in call_transmit_status()
+Date:   Tue, 12 Apr 2022 08:31:02 +0200
+Message-Id: <20220412062949.576620725@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,89 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Taehee Yoo <ap420073@gmail.com>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-[ Upstream commit fb5833d81e4333294add35d3ac7f7f52a7bf107f ]
+[ Upstream commit d3c15033b240767d0287f1c4a529cbbe2d5ded8a ]
 
-In some cases, xdp tx_queue can get used before initialization.
-1. interface up/down
-2. ring buffer size change
+Both call_transmit() and call_bc_transmit() can now return ENOMEM, so
+let's make sure that we handle the errors gracefully.
 
-When CPU cores are lower than maximum number of channels of sfc driver,
-it creates new channels only for XDP.
-
-When an interface is up or ring buffer size is changed, all channels
-are initialized.
-But xdp channels are always initialized later.
-So, the below scenario is possible.
-Packets are received to rx queue of normal channels and it is acted
-XDP_TX and tx_queue of xdp channels get used.
-But these tx_queues are not initialized yet.
-If so, TX DMA or queue error occurs.
-
-In order to avoid this problem.
-1. initializes xdp tx_queues earlier than other rx_queue in
-efx_start_channels().
-2. checks whether tx_queue is initialized or not in efx_xdp_tx_buffers().
-
-Splat looks like:
-   sfc 0000:08:00.1 enp8s0f1np1: TX queue 10 spurious TX completion id 250
-   sfc 0000:08:00.1 enp8s0f1np1: resetting (RECOVER_OR_ALL)
-   sfc 0000:08:00.1 enp8s0f1np1: MC command 0x80 inlen 100 failed rc=-22
-   (raw=22) arg=789
-   sfc 0000:08:00.1 enp8s0f1np1: has been disabled
-
-Fixes: f28100cb9c96 ("sfc: fix lack of XDP TX queues - error XDP TX failed (-22)")
-Acked-by: Martin Habets <habetsm.xilinx@gmail.com>
-Signed-off-by: Taehee Yoo <ap420073@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 0472e4766049 ("SUNRPC: Convert socket page send code to use iov_iter()")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/sfc/efx_channels.c | 2 +-
- drivers/net/ethernet/sfc/tx.c           | 3 +++
- drivers/net/ethernet/sfc/tx_common.c    | 2 ++
- 3 files changed, 6 insertions(+), 1 deletion(-)
+ net/sunrpc/clnt.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/ethernet/sfc/efx_channels.c b/drivers/net/ethernet/sfc/efx_channels.c
-index 5e587cb853b9..40bfd0ad7d05 100644
---- a/drivers/net/ethernet/sfc/efx_channels.c
-+++ b/drivers/net/ethernet/sfc/efx_channels.c
-@@ -1118,7 +1118,7 @@ void efx_start_channels(struct efx_nic *efx)
- 	struct efx_rx_queue *rx_queue;
- 	struct efx_channel *channel;
- 
--	efx_for_each_channel(channel, efx) {
-+	efx_for_each_channel_rev(channel, efx) {
- 		efx_for_each_channel_tx_queue(tx_queue, channel) {
- 			efx_init_tx_queue(tx_queue);
- 			atomic_inc(&efx->active_queues);
-diff --git a/drivers/net/ethernet/sfc/tx.c b/drivers/net/ethernet/sfc/tx.c
-index d16e031e95f4..6983799e1c05 100644
---- a/drivers/net/ethernet/sfc/tx.c
-+++ b/drivers/net/ethernet/sfc/tx.c
-@@ -443,6 +443,9 @@ int efx_xdp_tx_buffers(struct efx_nic *efx, int n, struct xdp_frame **xdpfs,
- 	if (unlikely(!tx_queue))
- 		return -EINVAL;
- 
-+	if (!tx_queue->initialised)
-+		return -EINVAL;
-+
- 	if (efx->xdp_txq_queues_mode != EFX_XDP_TX_QUEUES_DEDICATED)
- 		HARD_TX_LOCK(efx->net_dev, tx_queue->core_txq, cpu);
- 
-diff --git a/drivers/net/ethernet/sfc/tx_common.c b/drivers/net/ethernet/sfc/tx_common.c
-index d530cde2b864..9bc8281b7f5b 100644
---- a/drivers/net/ethernet/sfc/tx_common.c
-+++ b/drivers/net/ethernet/sfc/tx_common.c
-@@ -101,6 +101,8 @@ void efx_fini_tx_queue(struct efx_tx_queue *tx_queue)
- 	netif_dbg(tx_queue->efx, drv, tx_queue->efx->net_dev,
- 		  "shutting down TX queue %d\n", tx_queue->queue);
- 
-+	tx_queue->initialised = false;
-+
- 	if (!tx_queue->buffer)
- 		return;
- 
+diff --git a/net/sunrpc/clnt.c b/net/sunrpc/clnt.c
+index b36d235d2d6d..bf1fd6caaf92 100644
+--- a/net/sunrpc/clnt.c
++++ b/net/sunrpc/clnt.c
+@@ -2197,6 +2197,7 @@ call_transmit_status(struct rpc_task *task)
+ 		 * socket just returned a connection error,
+ 		 * then hold onto the transport lock.
+ 		 */
++	case -ENOMEM:
+ 	case -ENOBUFS:
+ 		rpc_delay(task, HZ>>2);
+ 		fallthrough;
+@@ -2280,6 +2281,7 @@ call_bc_transmit_status(struct rpc_task *task)
+ 	case -ENOTCONN:
+ 	case -EPIPE:
+ 		break;
++	case -ENOMEM:
+ 	case -ENOBUFS:
+ 		rpc_delay(task, HZ>>2);
+ 		fallthrough;
 -- 
 2.35.1
 

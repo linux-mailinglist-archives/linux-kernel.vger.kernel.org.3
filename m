@@ -2,423 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C65734FCE85
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 07:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ACBE4FCE87
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 07:09:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347096AbiDLFLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 01:11:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60798 "EHLO
+        id S1347659AbiDLFLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 01:11:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238451AbiDLFLE (ORCPT
+        with ESMTP id S1347631AbiDLFLQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 01:11:04 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E1C133EAF;
-        Mon, 11 Apr 2022 22:08:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649740127; x=1681276127;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=5aIuv+zBSSaTWirrx6zQtkBI4bIpr2HpSSAoiSHGhsk=;
-  b=yA3Us4O8+LQRnUOjpuNxF2yJqPXXsuN1E3bVbniDSI0pE1RFKAe18A7y
-   G79XaGFtueMory8ceCxy+uaA+x1aVCu9yAiXEflnKJ/6fdFkJ/Jy2g0LN
-   r2b1aLr3PB1My0XQwcQhIzyLpK8fp0Lpvilr3k4+GbV08NUrjwel3YF6n
-   Q=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 11 Apr 2022 22:08:47 -0700
-X-QCInternal: smtphost
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 11 Apr 2022 22:08:00 -0700
-X-QCInternal: smtphost
-Received: from hu-rohiagar-hyd.qualcomm.com (HELO hu-sgudaval-hyd.qualcomm.com) ([10.213.106.138])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 12 Apr 2022 10:37:43 +0530
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3970568)
-        id 194173AA2; Tue, 12 Apr 2022 10:37:42 +0530 (+0530)
-From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
-To:     agross@kernel.org, bjorn.andersson@linaro.org, djakov@kernel.org,
-        robh+dt@kernel.org, krzk+dt@kernel.org
-Cc:     manivannan.sadhasivam@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Rohit Agarwal <quic_rohiagar@quicinc.com>
-Subject: [PATCH 2/2] interconnect: qcom: Add SDX65 interconnect provider driver
-Date:   Tue, 12 Apr 2022 10:37:33 +0530
-Message-Id: <1649740053-14507-3-git-send-email-quic_rohiagar@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1649740053-14507-1-git-send-email-quic_rohiagar@quicinc.com>
-References: <1649740053-14507-1-git-send-email-quic_rohiagar@quicinc.com>
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
+        Tue, 12 Apr 2022 01:11:16 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6185B340FF
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 22:09:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649740140; x=1681276140;
+  h=message-id:date:mime-version:cc:to:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=zE7wi6OheYHsLolA4WbgwXAqoZPUdneCI7YMnZcvNds=;
+  b=nfndm+W/BUuJK4rO9nF3x3RtxJX2nG85funf8GcUqy1X3oM1hMuTbqce
+   ITDa5M+csQ5cHjkEGgJgS99y3k9vtVzsH0lvpk/cJ7uRkYkqN1bWEC4NJ
+   /Gr4f0bfMZbRldxLNQiO7oH4VlYeRnyzogBFa0EdQp86mFODhzOw5Pq6X
+   zmpGng7/aiJI7ykV+CwYVaTBRbNO6Ib1GgEMk5NkrM/nkB6XYCifGQJyh
+   4mI48HEFr4QRY6jbPXpl4rg0H2XNQifruhy1u3tnwBad1ESjjQGsmPGbb
+   ZLll1/FR6WGqYupiwVR3suEAeTwOwOc2LsAAfEhZOUwYvMHPwLTbOmWec
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="325189457"
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="325189457"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 22:08:59 -0700
+X-IronPort-AV: E=Sophos;i="5.90,252,1643702400"; 
+   d="scan'208";a="572565571"
+Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.215.210]) ([10.254.215.210])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2022 22:08:55 -0700
+Message-ID: <7c70a136-6871-b48c-8e46-852bb1b62958@linux.intel.com>
+Date:   Tue, 12 Apr 2022 13:08:52 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Cc:     baolu.lu@linux.intel.com, Eric Auger <eric.auger@redhat.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Language: en-US
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>
+References: <20220410102443.294128-1-baolu.lu@linux.intel.com>
+ <20220410102443.294128-3-baolu.lu@linux.intel.com>
+ <BN9PR11MB527679E5CE0516B2786F57518CED9@BN9PR11MB5276.namprd11.prod.outlook.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+Subject: Re: [PATCH RFC v3 02/12] iommu: Add a flag to indicate immutable
+ singleton group
+In-Reply-To: <BN9PR11MB527679E5CE0516B2786F57518CED9@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add driver for the Qualcomm interconnect buses found in SDX65 based
-platforms.
+Hi Kevin,
 
-Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
----
- drivers/interconnect/qcom/Kconfig  |   9 ++
- drivers/interconnect/qcom/Makefile |   2 +
- drivers/interconnect/qcom/sdx65.c  | 231 +++++++++++++++++++++++++++++++++++++
- drivers/interconnect/qcom/sdx65.h  |  65 +++++++++++
- 4 files changed, 307 insertions(+)
- create mode 100644 drivers/interconnect/qcom/sdx65.c
- create mode 100644 drivers/interconnect/qcom/sdx65.h
+Thanks for your time.
 
-diff --git a/drivers/interconnect/qcom/Kconfig b/drivers/interconnect/qcom/Kconfig
-index 91353e6..f01d663 100644
---- a/drivers/interconnect/qcom/Kconfig
-+++ b/drivers/interconnect/qcom/Kconfig
-@@ -137,6 +137,15 @@ config INTERCONNECT_QCOM_SDX55
- 	  This is a driver for the Qualcomm Network-on-Chip on sdx55-based
- 	  platforms.
- 
-+config INTERCONNECT_QCOM_SDX65
-+	tristate "Qualcomm SDX65 interconnect driver"
-+	depends on INTERCONNECT_QCOM_RPMH_POSSIBLE
-+	select INTERCONNECT_QCOM_RPMH
-+	select INTERCONNECT_QCOM_BCM_VOTER
-+	help
-+	  This is a driver for the Qualcomm Network-on-Chip on sdx65-based
-+	  platforms.
-+
- config INTERCONNECT_QCOM_SM8150
- 	tristate "Qualcomm SM8150 interconnect driver"
- 	depends on INTERCONNECT_QCOM_RPMH_POSSIBLE
-diff --git a/drivers/interconnect/qcom/Makefile b/drivers/interconnect/qcom/Makefile
-index ceae9bb..07a589d 100644
---- a/drivers/interconnect/qcom/Makefile
-+++ b/drivers/interconnect/qcom/Makefile
-@@ -15,6 +15,7 @@ qnoc-sc8180x-objs			:= sc8180x.o
- qnoc-sdm660-objs			:= sdm660.o
- qnoc-sdm845-objs			:= sdm845.o
- qnoc-sdx55-objs				:= sdx55.o
-+qnoc-sdx65-objs				:= sdx65.o
- qnoc-sm8150-objs			:= sm8150.o
- qnoc-sm8250-objs			:= sm8250.o
- qnoc-sm8350-objs			:= sm8350.o
-@@ -36,6 +37,7 @@ obj-$(CONFIG_INTERCONNECT_QCOM_SC8180X) += qnoc-sc8180x.o
- obj-$(CONFIG_INTERCONNECT_QCOM_SDM660) += qnoc-sdm660.o
- obj-$(CONFIG_INTERCONNECT_QCOM_SDM845) += qnoc-sdm845.o
- obj-$(CONFIG_INTERCONNECT_QCOM_SDX55) += qnoc-sdx55.o
-+obj-$(CONFIG_INTERCONNECT_QCOM_SDX65) += qnoc-sdx65.o
- obj-$(CONFIG_INTERCONNECT_QCOM_SM8150) += qnoc-sm8150.o
- obj-$(CONFIG_INTERCONNECT_QCOM_SM8250) += qnoc-sm8250.o
- obj-$(CONFIG_INTERCONNECT_QCOM_SM8350) += qnoc-sm8350.o
-diff --git a/drivers/interconnect/qcom/sdx65.c b/drivers/interconnect/qcom/sdx65.c
-new file mode 100644
-index 0000000..d9a9c6b
---- /dev/null
-+++ b/drivers/interconnect/qcom/sdx65.c
-@@ -0,0 +1,231 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2022, Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#include <linux/device.h>
-+#include <linux/interconnect.h>
-+#include <linux/interconnect-provider.h>
-+#include <linux/module.h>
-+#include <linux/of_platform.h>
-+#include <dt-bindings/interconnect/qcom,sdx65.h>
-+
-+#include "bcm-voter.h"
-+#include "icc-rpmh.h"
-+#include "sdx65.h"
-+
-+DEFINE_QNODE(llcc_mc, SDX65_MASTER_LLCC, 1, 4, SDX65_SLAVE_EBI1);
-+DEFINE_QNODE(acm_tcu, SDX65_MASTER_TCU_0, 1, 8, SDX65_SLAVE_LLCC, SDX65_SLAVE_MEM_NOC_SNOC, SDX65_SLAVE_MEM_NOC_PCIE_SNOC);
-+DEFINE_QNODE(qnm_snoc_gc, SDX65_MASTER_SNOC_GC_MEM_NOC, 1, 16, SDX65_SLAVE_LLCC);
-+DEFINE_QNODE(xm_apps_rdwr, SDX65_MASTER_APPSS_PROC, 1, 16, SDX65_SLAVE_LLCC, SDX65_SLAVE_MEM_NOC_SNOC, SDX65_SLAVE_MEM_NOC_PCIE_SNOC);
-+DEFINE_QNODE(qhm_audio, SDX65_MASTER_AUDIO, 1, 4, SDX65_SLAVE_ANOC_SNOC);
-+DEFINE_QNODE(qhm_blsp1, SDX65_MASTER_BLSP_1, 1, 4, SDX65_SLAVE_ANOC_SNOC);
-+DEFINE_QNODE(qhm_qdss_bam, SDX65_MASTER_QDSS_BAM, 1, 4, SDX65_SLAVE_AOSS, SDX65_SLAVE_AUDIO, SDX65_SLAVE_BLSP_1, SDX65_SLAVE_CLK_CTL, SDX65_SLAVE_CRYPTO_0_CFG, SDX65_SLAVE_CNOC_DDRSS, SDX65_SLAVE_ECC_CFG, SDX65_SLAVE_IMEM_CFG, SDX65_SLAVE_IPA_CFG, SDX65_SLAVE_CNOC_MSS, SDX65_SLAVE_PCIE_PARF, SDX65_SLAVE_PDM, SDX65_SLAVE_PRNG, SDX65_SLAVE_QDSS_CFG, SDX65_SLAVE_QPIC, SDX65_SLAVE_SDCC_1, SDX65_SLAVE_SNOC_CFG, SDX65_SLAVE_SPMI_FETCHER, SDX65_SLAVE_SPMI_VGI_COEX, SDX65_SLAVE_TCSR, SDX65_SLAVE_TLMM, SDX65_SLAVE_USB3, SDX65_SLAVE_USB3_PHY_CFG, SDX65_SLAVE_SNOC_MEM_NOC_GC, SDX65_SLAVE_IMEM, SDX65_SLAVE_TCU);
-+DEFINE_QNODE(qhm_qpic, SDX65_MASTER_QPIC, 1, 4, SDX65_SLAVE_AOSS, SDX65_SLAVE_AUDIO, SDX65_SLAVE_IPA_CFG, SDX65_SLAVE_ANOC_SNOC);
-+DEFINE_QNODE(qhm_snoc_cfg, SDX65_MASTER_SNOC_CFG, 1, 4, SDX65_SLAVE_SERVICE_SNOC);
-+DEFINE_QNODE(qhm_spmi_fetcher1, SDX65_MASTER_SPMI_FETCHER, 1, 4, SDX65_SLAVE_AOSS, SDX65_SLAVE_ANOC_SNOC);
-+DEFINE_QNODE(qnm_aggre_noc, SDX65_MASTER_ANOC_SNOC, 1, 8, SDX65_SLAVE_AOSS, SDX65_SLAVE_APPSS, SDX65_SLAVE_AUDIO, SDX65_SLAVE_BLSP_1, SDX65_SLAVE_CLK_CTL, SDX65_SLAVE_CRYPTO_0_CFG, SDX65_SLAVE_CNOC_DDRSS, SDX65_SLAVE_ECC_CFG, SDX65_SLAVE_IMEM_CFG, SDX65_SLAVE_IPA_CFG, SDX65_SLAVE_CNOC_MSS, SDX65_SLAVE_PCIE_PARF, SDX65_SLAVE_PDM, SDX65_SLAVE_PRNG, SDX65_SLAVE_QDSS_CFG, SDX65_SLAVE_QPIC, SDX65_SLAVE_SDCC_1, SDX65_SLAVE_SNOC_CFG, SDX65_SLAVE_SPMI_FETCHER, SDX65_SLAVE_SPMI_VGI_COEX, SDX65_SLAVE_TCSR, SDX65_SLAVE_TLMM, SDX65_SLAVE_USB3, SDX65_SLAVE_USB3_PHY_CFG, SDX65_SLAVE_SNOC_MEM_NOC_GC, SDX65_SLAVE_IMEM, SDX65_SLAVE_PCIE_0, SDX65_SLAVE_QDSS_STM, SDX65_SLAVE_TCU);
-+DEFINE_QNODE(qnm_ipa, SDX65_MASTER_IPA, 1, 8, SDX65_SLAVE_AOSS, SDX65_SLAVE_AUDIO, SDX65_SLAVE_BLSP_1, SDX65_SLAVE_CLK_CTL, SDX65_SLAVE_CRYPTO_0_CFG, SDX65_SLAVE_CNOC_DDRSS, SDX65_SLAVE_ECC_CFG, SDX65_SLAVE_IMEM_CFG, SDX65_SLAVE_IPA_CFG, SDX65_SLAVE_CNOC_MSS, SDX65_SLAVE_PCIE_PARF, SDX65_SLAVE_PDM, SDX65_SLAVE_PRNG, SDX65_SLAVE_QDSS_CFG, SDX65_SLAVE_QPIC, SDX65_SLAVE_SDCC_1, SDX65_SLAVE_SNOC_CFG, SDX65_SLAVE_SPMI_FETCHER, SDX65_SLAVE_TCSR, SDX65_SLAVE_TLMM, SDX65_SLAVE_USB3, SDX65_SLAVE_USB3_PHY_CFG, SDX65_SLAVE_SNOC_MEM_NOC_GC, SDX65_SLAVE_IMEM, SDX65_SLAVE_PCIE_0, SDX65_SLAVE_QDSS_STM);
-+DEFINE_QNODE(qnm_memnoc, SDX65_MASTER_MEM_NOC_SNOC, 1, 8, SDX65_SLAVE_AOSS, SDX65_SLAVE_APPSS, SDX65_SLAVE_AUDIO, SDX65_SLAVE_BLSP_1, SDX65_SLAVE_CLK_CTL, SDX65_SLAVE_CRYPTO_0_CFG, SDX65_SLAVE_CNOC_DDRSS, SDX65_SLAVE_ECC_CFG, SDX65_SLAVE_IMEM_CFG, SDX65_SLAVE_IPA_CFG, SDX65_SLAVE_CNOC_MSS, SDX65_SLAVE_PCIE_PARF, SDX65_SLAVE_PDM, SDX65_SLAVE_PRNG, SDX65_SLAVE_QDSS_CFG, SDX65_SLAVE_QPIC, SDX65_SLAVE_SDCC_1, SDX65_SLAVE_SNOC_CFG, SDX65_SLAVE_SPMI_FETCHER, SDX65_SLAVE_SPMI_VGI_COEX, SDX65_SLAVE_TCSR, SDX65_SLAVE_TLMM, SDX65_SLAVE_USB3, SDX65_SLAVE_USB3_PHY_CFG, SDX65_SLAVE_IMEM, SDX65_SLAVE_QDSS_STM, SDX65_SLAVE_TCU);
-+DEFINE_QNODE(qnm_memnoc_pcie, SDX65_MASTER_MEM_NOC_PCIE_SNOC, 1, 8, SDX65_SLAVE_PCIE_0);
-+DEFINE_QNODE(qxm_crypto, SDX65_MASTER_CRYPTO, 1, 8, SDX65_SLAVE_AOSS, SDX65_SLAVE_ANOC_SNOC);
-+DEFINE_QNODE(xm_ipa2pcie_slv, SDX65_MASTER_IPA_PCIE, 1, 8, SDX65_SLAVE_PCIE_0);
-+DEFINE_QNODE(xm_pcie, SDX65_MASTER_PCIE_0, 1, 8, SDX65_SLAVE_ANOC_SNOC);
-+DEFINE_QNODE(xm_qdss_etr, SDX65_MASTER_QDSS_ETR, 1, 8, SDX65_SLAVE_AOSS, SDX65_SLAVE_AUDIO, SDX65_SLAVE_BLSP_1, SDX65_SLAVE_CLK_CTL, SDX65_SLAVE_CRYPTO_0_CFG, SDX65_SLAVE_CNOC_DDRSS, SDX65_SLAVE_ECC_CFG, SDX65_SLAVE_IMEM_CFG, SDX65_SLAVE_IPA_CFG, SDX65_SLAVE_CNOC_MSS, SDX65_SLAVE_PCIE_PARF, SDX65_SLAVE_PDM, SDX65_SLAVE_PRNG, SDX65_SLAVE_QDSS_CFG, SDX65_SLAVE_QPIC, SDX65_SLAVE_SDCC_1, SDX65_SLAVE_SNOC_CFG, SDX65_SLAVE_SPMI_FETCHER, SDX65_SLAVE_SPMI_VGI_COEX, SDX65_SLAVE_TCSR, SDX65_SLAVE_TLMM, SDX65_SLAVE_USB3, SDX65_SLAVE_USB3_PHY_CFG, SDX65_SLAVE_SNOC_MEM_NOC_GC, SDX65_SLAVE_IMEM, SDX65_SLAVE_TCU);
-+DEFINE_QNODE(xm_sdc1, SDX65_MASTER_SDCC_1, 1, 8, SDX65_SLAVE_AOSS, SDX65_SLAVE_AUDIO, SDX65_SLAVE_IPA_CFG, SDX65_SLAVE_ANOC_SNOC);
-+DEFINE_QNODE(xm_usb3, SDX65_MASTER_USB3, 1, 8, SDX65_SLAVE_ANOC_SNOC);
-+DEFINE_QNODE(ebi, SDX65_SLAVE_EBI1, 1, 4);
-+DEFINE_QNODE(qns_llcc, SDX65_SLAVE_LLCC, 1, 16, SDX65_MASTER_LLCC);
-+DEFINE_QNODE(qns_memnoc_snoc, SDX65_SLAVE_MEM_NOC_SNOC, 1, 8, SDX65_MASTER_MEM_NOC_SNOC);
-+DEFINE_QNODE(qns_sys_pcie, SDX65_SLAVE_MEM_NOC_PCIE_SNOC, 1, 8, SDX65_MASTER_MEM_NOC_PCIE_SNOC);
-+DEFINE_QNODE(qhs_aoss, SDX65_SLAVE_AOSS, 1, 4);
-+DEFINE_QNODE(qhs_apss, SDX65_SLAVE_APPSS, 1, 4);
-+DEFINE_QNODE(qhs_audio, SDX65_SLAVE_AUDIO, 1, 4);
-+DEFINE_QNODE(qhs_blsp1, SDX65_SLAVE_BLSP_1, 1, 4);
-+DEFINE_QNODE(qhs_clk_ctl, SDX65_SLAVE_CLK_CTL, 1, 4);
-+DEFINE_QNODE(qhs_crypto0_cfg, SDX65_SLAVE_CRYPTO_0_CFG, 1, 4);
-+DEFINE_QNODE(qhs_ddrss_cfg, SDX65_SLAVE_CNOC_DDRSS, 1, 4);
-+DEFINE_QNODE(qhs_ecc_cfg, SDX65_SLAVE_ECC_CFG, 1, 4);
-+DEFINE_QNODE(qhs_imem_cfg, SDX65_SLAVE_IMEM_CFG, 1, 4);
-+DEFINE_QNODE(qhs_ipa, SDX65_SLAVE_IPA_CFG, 1, 4);
-+DEFINE_QNODE(qhs_mss_cfg, SDX65_SLAVE_CNOC_MSS, 1, 4);
-+DEFINE_QNODE(qhs_pcie_parf, SDX65_SLAVE_PCIE_PARF, 1, 4);
-+DEFINE_QNODE(qhs_pdm, SDX65_SLAVE_PDM, 1, 4);
-+DEFINE_QNODE(qhs_prng, SDX65_SLAVE_PRNG, 1, 4);
-+DEFINE_QNODE(qhs_qdss_cfg, SDX65_SLAVE_QDSS_CFG, 1, 4);
-+DEFINE_QNODE(qhs_qpic, SDX65_SLAVE_QPIC, 1, 4);
-+DEFINE_QNODE(qhs_sdc1, SDX65_SLAVE_SDCC_1, 1, 4);
-+DEFINE_QNODE(qhs_snoc_cfg, SDX65_SLAVE_SNOC_CFG, 1, 4, SDX65_MASTER_SNOC_CFG);
-+DEFINE_QNODE(qhs_spmi_fetcher, SDX65_SLAVE_SPMI_FETCHER, 1, 4);
-+DEFINE_QNODE(qhs_spmi_vgi_coex, SDX65_SLAVE_SPMI_VGI_COEX, 1, 4);
-+DEFINE_QNODE(qhs_tcsr, SDX65_SLAVE_TCSR, 1, 4);
-+DEFINE_QNODE(qhs_tlmm, SDX65_SLAVE_TLMM, 1, 4);
-+DEFINE_QNODE(qhs_usb3, SDX65_SLAVE_USB3, 1, 4);
-+DEFINE_QNODE(qhs_usb3_phy, SDX65_SLAVE_USB3_PHY_CFG, 1, 4);
-+DEFINE_QNODE(qns_aggre_noc, SDX65_SLAVE_ANOC_SNOC, 1, 8, SDX65_MASTER_ANOC_SNOC);
-+DEFINE_QNODE(qns_snoc_memnoc, SDX65_SLAVE_SNOC_MEM_NOC_GC, 1, 16, SDX65_MASTER_SNOC_GC_MEM_NOC);
-+DEFINE_QNODE(qxs_imem, SDX65_SLAVE_IMEM, 1, 8);
-+DEFINE_QNODE(srvc_snoc, SDX65_SLAVE_SERVICE_SNOC, 1, 4);
-+DEFINE_QNODE(xs_pcie, SDX65_SLAVE_PCIE_0, 1, 8);
-+DEFINE_QNODE(xs_qdss_stm, SDX65_SLAVE_QDSS_STM, 1, 4);
-+DEFINE_QNODE(xs_sys_tcu_cfg, SDX65_SLAVE_TCU, 1, 8);
-+
-+DEFINE_QBCM(bcm_ce0, "CE0", false, &qxm_crypto);
-+DEFINE_QBCM(bcm_mc0, "MC0", true, &ebi);
-+DEFINE_QBCM(bcm_pn0, "PN0", true, &qhm_snoc_cfg, &qhs_aoss, &qhs_apss, &qhs_audio, &qhs_blsp1, &qhs_clk_ctl, &qhs_crypto0_cfg, &qhs_ddrss_cfg, &qhs_ecc_cfg, &qhs_imem_cfg, &qhs_ipa, &qhs_mss_cfg, &qhs_pcie_parf, &qhs_pdm, &qhs_prng, &qhs_qdss_cfg, &qhs_qpic, &qhs_sdc1, &qhs_snoc_cfg, &qhs_spmi_fetcher, &qhs_spmi_vgi_coex, &qhs_tcsr, &qhs_tlmm, &qhs_usb3, &qhs_usb3_phy, &srvc_snoc);
-+DEFINE_QBCM(bcm_pn1, "PN1", false, &xm_sdc1);
-+DEFINE_QBCM(bcm_pn2, "PN2", false, &qhm_audio, &qhm_spmi_fetcher1);
-+DEFINE_QBCM(bcm_pn3, "PN3", false, &qhm_blsp1, &qhm_qpic);
-+DEFINE_QBCM(bcm_pn4, "PN4", false, &qxm_crypto);
-+DEFINE_QBCM(bcm_sh0, "SH0", true, &qns_llcc);
-+DEFINE_QBCM(bcm_sh1, "SH1", false, &qns_memnoc_snoc);
-+DEFINE_QBCM(bcm_sh3, "SH3", false, &xm_apps_rdwr);
-+DEFINE_QBCM(bcm_sn0, "SN0", true, &qns_snoc_memnoc);
-+DEFINE_QBCM(bcm_sn1, "SN1", false, &qxs_imem);
-+DEFINE_QBCM(bcm_sn2, "SN2", false, &xs_qdss_stm);
-+DEFINE_QBCM(bcm_sn3, "SN3", false, &xs_sys_tcu_cfg);
-+DEFINE_QBCM(bcm_sn5, "SN5", false, &xs_pcie);
-+DEFINE_QBCM(bcm_sn6, "SN6", false, &qhm_qdss_bam, &xm_qdss_etr);
-+DEFINE_QBCM(bcm_sn7, "SN7", false, &qnm_aggre_noc, &xm_pcie, &xm_usb3, &qns_aggre_noc);
-+DEFINE_QBCM(bcm_sn8, "SN8", false, &qnm_memnoc);
-+DEFINE_QBCM(bcm_sn9, "SN9", false, &qnm_memnoc_pcie);
-+DEFINE_QBCM(bcm_sn10, "SN10", false, &qnm_ipa, &xm_ipa2pcie_slv);
-+
-+static struct qcom_icc_bcm *mc_virt_bcms[] = {
-+	&bcm_mc0,
-+};
-+
-+static struct qcom_icc_node *mc_virt_nodes[] = {
-+	[MASTER_LLCC] = &llcc_mc,
-+	[SLAVE_EBI1] = &ebi,
-+};
-+
-+static struct qcom_icc_desc sdx65_mc_virt = {
-+	.nodes = mc_virt_nodes,
-+	.num_nodes = ARRAY_SIZE(mc_virt_nodes),
-+	.bcms = mc_virt_bcms,
-+	.num_bcms = ARRAY_SIZE(mc_virt_bcms),
-+};
-+
-+static struct qcom_icc_bcm *mem_noc_bcms[] = {
-+	&bcm_sh0,
-+	&bcm_sh1,
-+	&bcm_sh3,
-+};
-+
-+static struct qcom_icc_node *mem_noc_nodes[] = {
-+	[MASTER_TCU_0] = &acm_tcu,
-+	[MASTER_SNOC_GC_MEM_NOC] = &qnm_snoc_gc,
-+	[MASTER_APPSS_PROC] = &xm_apps_rdwr,
-+	[SLAVE_LLCC] = &qns_llcc,
-+	[SLAVE_MEM_NOC_SNOC] = &qns_memnoc_snoc,
-+	[SLAVE_MEM_NOC_PCIE_SNOC] = &qns_sys_pcie,
-+};
-+
-+static struct qcom_icc_desc sdx65_mem_noc = {
-+	.nodes = mem_noc_nodes,
-+	.num_nodes = ARRAY_SIZE(mem_noc_nodes),
-+	.bcms = mem_noc_bcms,
-+	.num_bcms = ARRAY_SIZE(mem_noc_bcms),
-+};
-+
-+static struct qcom_icc_bcm *system_noc_bcms[] = {
-+	&bcm_ce0,
-+	&bcm_pn0,
-+	&bcm_pn1,
-+	&bcm_pn2,
-+	&bcm_pn3,
-+	&bcm_pn4,
-+	&bcm_sn0,
-+	&bcm_sn1,
-+	&bcm_sn2,
-+	&bcm_sn3,
-+	&bcm_sn5,
-+	&bcm_sn6,
-+	&bcm_sn7,
-+	&bcm_sn8,
-+	&bcm_sn9,
-+	&bcm_sn10,
-+};
-+
-+static struct qcom_icc_node *system_noc_nodes[] = {
-+	[MASTER_AUDIO] = &qhm_audio,
-+	[MASTER_BLSP_1] = &qhm_blsp1,
-+	[MASTER_QDSS_BAM] = &qhm_qdss_bam,
-+	[MASTER_QPIC] = &qhm_qpic,
-+	[MASTER_SNOC_CFG] = &qhm_snoc_cfg,
-+	[MASTER_SPMI_FETCHER] = &qhm_spmi_fetcher1,
-+	[MASTER_ANOC_SNOC] = &qnm_aggre_noc,
-+	[MASTER_IPA] = &qnm_ipa,
-+	[MASTER_MEM_NOC_SNOC] = &qnm_memnoc,
-+	[MASTER_MEM_NOC_PCIE_SNOC] = &qnm_memnoc_pcie,
-+	[MASTER_CRYPTO] = &qxm_crypto,
-+	[MASTER_IPA_PCIE] = &xm_ipa2pcie_slv,
-+	[MASTER_PCIE_0] = &xm_pcie,
-+	[MASTER_QDSS_ETR] = &xm_qdss_etr,
-+	[MASTER_SDCC_1] = &xm_sdc1,
-+	[MASTER_USB3] = &xm_usb3,
-+	[SLAVE_AOSS] = &qhs_aoss,
-+	[SLAVE_APPSS] = &qhs_apss,
-+	[SLAVE_AUDIO] = &qhs_audio,
-+	[SLAVE_BLSP_1] = &qhs_blsp1,
-+	[SLAVE_CLK_CTL] = &qhs_clk_ctl,
-+	[SLAVE_CRYPTO_0_CFG] = &qhs_crypto0_cfg,
-+	[SLAVE_CNOC_DDRSS] = &qhs_ddrss_cfg,
-+	[SLAVE_ECC_CFG] = &qhs_ecc_cfg,
-+	[SLAVE_IMEM_CFG] = &qhs_imem_cfg,
-+	[SLAVE_IPA_CFG] = &qhs_ipa,
-+	[SLAVE_CNOC_MSS] = &qhs_mss_cfg,
-+	[SLAVE_PCIE_PARF] = &qhs_pcie_parf,
-+	[SLAVE_PDM] = &qhs_pdm,
-+	[SLAVE_PRNG] = &qhs_prng,
-+	[SLAVE_QDSS_CFG] = &qhs_qdss_cfg,
-+	[SLAVE_QPIC] = &qhs_qpic,
-+	[SLAVE_SDCC_1] = &qhs_sdc1,
-+	[SLAVE_SNOC_CFG] = &qhs_snoc_cfg,
-+	[SLAVE_SPMI_FETCHER] = &qhs_spmi_fetcher,
-+	[SLAVE_SPMI_VGI_COEX] = &qhs_spmi_vgi_coex,
-+	[SLAVE_TCSR] = &qhs_tcsr,
-+	[SLAVE_TLMM] = &qhs_tlmm,
-+	[SLAVE_USB3] = &qhs_usb3,
-+	[SLAVE_USB3_PHY_CFG] = &qhs_usb3_phy,
-+	[SLAVE_ANOC_SNOC] = &qns_aggre_noc,
-+	[SLAVE_SNOC_MEM_NOC_GC] = &qns_snoc_memnoc,
-+	[SLAVE_IMEM] = &qxs_imem,
-+	[SLAVE_SERVICE_SNOC] = &srvc_snoc,
-+	[SLAVE_PCIE_0] = &xs_pcie,
-+	[SLAVE_QDSS_STM] = &xs_qdss_stm,
-+	[SLAVE_TCU] = &xs_sys_tcu_cfg,
-+};
-+
-+static struct qcom_icc_desc sdx65_system_noc = {
-+	.nodes = system_noc_nodes,
-+	.num_nodes = ARRAY_SIZE(system_noc_nodes),
-+	.bcms = system_noc_bcms,
-+	.num_bcms = ARRAY_SIZE(system_noc_bcms),
-+};
-+
-+static const struct of_device_id qnoc_of_match[] = {
-+	{ .compatible = "qcom,sdx65-mc-virt",
-+	  .data = &sdx65_mc_virt},
-+	{ .compatible = "qcom,sdx65-mem-noc",
-+	  .data = &sdx65_mem_noc},
-+	{ .compatible = "qcom,sdx65-system-noc",
-+	  .data = &sdx65_system_noc},
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, qnoc_of_match);
-+
-+static struct platform_driver qnoc_driver = {
-+	.probe = qcom_icc_rpmh_probe,
-+	.remove = qcom_icc_rpmh_remove,
-+	.driver = {
-+		.name = "qnoc-sdx65",
-+		.of_match_table = qnoc_of_match,
-+		.sync_state = icc_sync_state,
-+	},
-+};
-+module_platform_driver(qnoc_driver);
-+
-+MODULE_DESCRIPTION("Qualcomm SDX65 NoC driver");
-+MODULE_LICENSE("GPL v2");
-diff --git a/drivers/interconnect/qcom/sdx65.h b/drivers/interconnect/qcom/sdx65.h
-new file mode 100644
-index 0000000..5dca6e8
---- /dev/null
-+++ b/drivers/interconnect/qcom/sdx65.h
-@@ -0,0 +1,65 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (c) 2022, Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#ifndef __DRIVERS_INTERCONNECT_QCOM_SDX65_H
-+#define __DRIVERS_INTERCONNECT_QCOM_SDX65_H
-+
-+#define SDX65_MASTER_TCU_0		0
-+#define SDX65_MASTER_LLCC		1
-+#define SDX65_MASTER_AUDIO		2
-+#define SDX65_MASTER_BLSP_1		3
-+#define SDX65_MASTER_QDSS_BAM		4
-+#define SDX65_MASTER_QPIC		5
-+#define SDX65_MASTER_SNOC_CFG		6
-+#define SDX65_MASTER_SPMI_FETCHER	7
-+#define SDX65_MASTER_ANOC_SNOC		8
-+#define SDX65_MASTER_IPA		9
-+#define SDX65_MASTER_MEM_NOC_SNOC	10
-+#define SDX65_MASTER_MEM_NOC_PCIE_SNOC	11
-+#define SDX65_MASTER_SNOC_GC_MEM_NOC	12
-+#define SDX65_MASTER_CRYPTO		13
-+#define SDX65_MASTER_APPSS_PROC		14
-+#define SDX65_MASTER_IPA_PCIE		15
-+#define SDX65_MASTER_PCIE_0		16
-+#define SDX65_MASTER_QDSS_ETR		17
-+#define SDX65_MASTER_SDCC_1		18
-+#define SDX65_MASTER_USB3		19
-+#define SDX65_SLAVE_EBI1		512
-+#define SDX65_SLAVE_AOSS		513
-+#define SDX65_SLAVE_APPSS		514
-+#define SDX65_SLAVE_AUDIO		515
-+#define SDX65_SLAVE_BLSP_1		516
-+#define SDX65_SLAVE_CLK_CTL		517
-+#define SDX65_SLAVE_CRYPTO_0_CFG	518
-+#define SDX65_SLAVE_CNOC_DDRSS		519
-+#define SDX65_SLAVE_ECC_CFG		520
-+#define SDX65_SLAVE_IMEM_CFG		521
-+#define SDX65_SLAVE_IPA_CFG		522
-+#define SDX65_SLAVE_CNOC_MSS		523
-+#define SDX65_SLAVE_PCIE_PARF		524
-+#define SDX65_SLAVE_PDM			525
-+#define SDX65_SLAVE_PRNG		526
-+#define SDX65_SLAVE_QDSS_CFG		527
-+#define SDX65_SLAVE_QPIC		528
-+#define SDX65_SLAVE_SDCC_1		529
-+#define SDX65_SLAVE_SNOC_CFG		530
-+#define SDX65_SLAVE_SPMI_FETCHER	531
-+#define SDX65_SLAVE_SPMI_VGI_COEX	532
-+#define SDX65_SLAVE_TCSR		533
-+#define SDX65_SLAVE_TLMM		534
-+#define SDX65_SLAVE_USB3		535
-+#define SDX65_SLAVE_USB3_PHY_CFG	536
-+#define SDX65_SLAVE_ANOC_SNOC		537
-+#define SDX65_SLAVE_LLCC		538
-+#define SDX65_SLAVE_MEM_NOC_SNOC	539
-+#define SDX65_SLAVE_SNOC_MEM_NOC_GC	540
-+#define SDX65_SLAVE_MEM_NOC_PCIE_SNOC	541
-+#define SDX65_SLAVE_IMEM		542
-+#define SDX65_SLAVE_SERVICE_SNOC	543
-+#define SDX65_SLAVE_PCIE_0		544
-+#define SDX65_SLAVE_QDSS_STM		545
-+#define SDX65_SLAVE_TCU			546
-+
-+#endif
--- 
-2.7.4
+On 2022/4/12 11:15, Tian, Kevin wrote:
+>> From: Lu Baolu <baolu.lu@linux.intel.com>
+>> Sent: Sunday, April 10, 2022 6:25 PM
+>>
+>> Some features require that a single device must be immutably isolated,
+>> even when hot plug is supported.
+> 
+> This reads confusing, as hotplug cannot be allowed in a singleton group.
+> What you actually meant suppose to be:
+> 
+> "Enabling certain device features require the device in a singleton iommu
+> group which is immutable in fabric i.e. not affected by hotplug"
 
+Yours is better. Thank you.
+
+> 
+>> For example, the SVA bind()/unbind()
+>> interfaces require that the device exists in a singleton group. If we
+>> have a singleton group that doesn't have ACS (or similar technologies)
+>> and someone hotplugs in another device on a bridge, then our SVA is
+>> completely broken and we get data corruption.
+> 
+> this needs the background that PASID doesn't join PCI packet routing
+> thus the dma address (CPU VA) may hit a p2p range.
+
+Sure.
+
+> 
+>>
+>> This adds a flag in the iommu_group struct to indicate an immutable
+>> singleton group, and uses standard PCI bus topology, isolation features,
+>> and DMA alias quirks to set the flag. If the device came from DT, assume
+>> it is static and then the singleton attribute can know from the device
+>> count in the group.
+> 
+> where does the assumption come from?
+
+Hotplug is the only factor that can dynamically affect the
+characteristics of IOMMU group singleton as far as I can see. If a
+device node was created from the DT, it could be treated as static,
+hence we can judge the singleton in iommu probe phase during boot.
+
+> 
+>>
+>> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
+>> Suggested-by: Kevin Tian <kevin.tian@intel.com>
+>> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+>> ---
+>>   drivers/iommu/iommu.c | 67 ++++++++++++++++++++++++++++++++++++----
+>> ---
+>>   1 file changed, 57 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+>> index 0c42ece25854..56ffbf5fdc18 100644
+>> --- a/drivers/iommu/iommu.c
+>> +++ b/drivers/iommu/iommu.c
+>> @@ -48,6 +48,7 @@ struct iommu_group {
+>>   	struct list_head entry;
+>>   	unsigned int owner_cnt;
+>>   	void *owner;
+>> +	bool immutable_singleton;
+> 
+> Just call it 'singleton' with a comment to explain it must be immutable?
+
+I was just trying to distinguish "singleton" and "immutable singleton".
+A group is singleton if it only contains a single device in the device
+list, while a group is immutable singleton only if the fabric doesn't
+allow to change the state.
+
+> 
+>>   };
+>>
+>>   struct group_device {
+>> @@ -74,6 +75,16 @@ static const char * const
+>> iommu_group_resv_type_string[] = {
+>>   #define IOMMU_CMD_LINE_DMA_API		BIT(0)
+>>   #define IOMMU_CMD_LINE_STRICT		BIT(1)
+>>
+>> +/*
+>> + * To consider a PCI device isolated, we require ACS to support Source
+>> + * Validation, Request Redirection, Completer Redirection, and Upstream
+>> + * Forwarding.  This effectively means that devices cannot spoof their
+>> + * requester ID, requests and completions cannot be redirected, and all
+>> + * transactions are forwarded upstream, even as it passes through a
+>> + * bridge where the target device is downstream.
+>> + */
+>> +#define REQ_ACS_FLAGS   (PCI_ACS_SV | PCI_ACS_RR | PCI_ACS_CR |
+>> PCI_ACS_UF)
+>> +
+>>   static int iommu_alloc_default_domain(struct iommu_group *group,
+>>   				      struct device *dev);
+>>   static struct iommu_domain *__iommu_domain_alloc(struct bus_type *bus,
+>> @@ -89,6 +100,7 @@ static int
+>> iommu_create_device_direct_mappings(struct iommu_group *group,
+>>   static struct iommu_group *iommu_group_get_for_dev(struct device *dev);
+>>   static ssize_t iommu_group_store_type(struct iommu_group *group,
+>>   				      const char *buf, size_t count);
+>> +static int iommu_group_device_count(struct iommu_group *group);
+>>
+>>   #define IOMMU_GROUP_ATTR(_name, _mode, _show, _store)
+>> 	\
+>>   struct iommu_group_attribute iommu_group_attr_##_name =		\
+>> @@ -844,6 +856,37 @@ static bool iommu_is_attach_deferred(struct device
+>> *dev)
+>>   	return false;
+>>   }
+>>
+>> +static int has_pci_alias(struct pci_dev *pdev, u16 alias, void *opaque)
+>> +{
+>> +	return -EEXIST;
+>> +}
+>> +
+>> +static bool pci_immutably_isolated(struct pci_dev *pdev)
+>> +{
+>> +	/* Skip the bridges. */
+>> +	if (pci_is_bridge(pdev))
+>> +		return false;
+>> +
+>> +	/*
+>> +	 * The device could be considered to be fully isolated if
+>> +	 * all devices on the path from the parent to the host-PCI
+>> +	 * bridge are protected from peer-to-peer DMA by ACS.
+>> +	 */
+>> +	if (!pci_is_root_bus(pdev->bus) &&
+>> +	    !pci_acs_path_enabled(pdev->bus->self, NULL, REQ_ACS_FLAGS))
+>> +		return false;
+>> +
+>> +	/* Multi-function devices should have ACS enabled. */
+>> +	if (pdev->multifunction && !pci_acs_enabled(pdev, REQ_ACS_FLAGS))
+>> +		return false;
+> 
+> Looks my earlier comment was lost, i.e. you can just use
+> pci_acs_path_enabled(pdev) to cover above two checks.
+
+If a device is directly connected to the root bridge and it is not an
+MFD, do we still need ACS on it? The Intel idxd device seems to be such
+a device. I had a quick check with lspci, it has no ACS support.
+
+I probably missed anything.
+
+> 
+>> +
+>> +	/* Filter out devices which has any alias device. */
+>> +	if (pci_for_each_dma_alias(pdev, has_pci_alias, NULL))
+>> +		return false;
+>> +
+>> +	return true;
+>> +}
+>> +
+>>   /**
+>>    * iommu_group_add_device - add a device to an iommu group
+>>    * @group: the group into which to add the device (reference should be held)
+>> @@ -898,6 +941,20 @@ int iommu_group_add_device(struct iommu_group
+>> *group, struct device *dev)
+>>   	list_add_tail(&device->list, &group->devices);
+>>   	if (group->domain  && !iommu_is_attach_deferred(dev))
+>>   		ret = __iommu_attach_device(group->domain, dev);
+>> +
+>> +	/*
+>> +	 * Use standard PCI bus topology, isolation features, and DMA
+>> +	 * alias quirks to set the immutable singleton attribute. If
+>> +	 * the device came from DT, assume it is static and then
+>> +	 * singleton can know from the device count in the group.
+>> +	 */
+>> +	if (dev_is_pci(dev))
+>> +		group->immutable_singleton =
+>> +				pci_immutably_isolated(to_pci_dev(dev));
+>> +	else if (is_of_node(dev_fwnode(dev)))
+>> +		group->immutable_singleton =
+>> +				(iommu_group_device_count(group) == 1);
+>> +
+>>   	mutex_unlock(&group->mutex);
+>>   	if (ret)
+>>   		goto err_put_group;
+>> @@ -1290,16 +1347,6 @@ EXPORT_SYMBOL_GPL(iommu_group_id);
+>>   static struct iommu_group *get_pci_alias_group(struct pci_dev *pdev,
+>>   					       unsigned long *devfns);
+>>
+>> -/*
+>> - * To consider a PCI device isolated, we require ACS to support Source
+>> - * Validation, Request Redirection, Completer Redirection, and Upstream
+>> - * Forwarding.  This effectively means that devices cannot spoof their
+>> - * requester ID, requests and completions cannot be redirected, and all
+>> - * transactions are forwarded upstream, even as it passes through a
+>> - * bridge where the target device is downstream.
+>> - */
+>> -#define REQ_ACS_FLAGS   (PCI_ACS_SV | PCI_ACS_RR | PCI_ACS_CR |
+>> PCI_ACS_UF)
+>> -
+>>   /*
+>>    * For multifunction devices which are not isolated from each other, find
+>>    * all the other non-isolated functions and look for existing groups.  For
+>> --
+>> 2.25.1
+> 
+
+Best regards,
+baolu

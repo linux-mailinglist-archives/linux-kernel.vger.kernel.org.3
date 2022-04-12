@@ -2,135 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82FEC4FE984
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 22:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D76ED4FE959
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 22:13:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbiDLUkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 16:40:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42682 "EHLO
+        id S230354AbiDLUNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 16:13:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230181AbiDLUjw (ORCPT
+        with ESMTP id S229670AbiDLUN3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 16:39:52 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E799778921;
-        Tue, 12 Apr 2022 13:35:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1649795549;
-        bh=IrspqYP8ymy9ueHzSGHCQmZBice+jhJrZO+S5bPpMWk=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=GBGjuOQvVglx1k+KBeiBiGY/1jHQqh3P1CmDsSga+SvcxhTvOnCIF33w4uL8EjkF5
-         eE/I4/B2ka+7X5AMMBNt+Sd7cpf/MdU47xLt/6uwiz+f89whBAj6iY6Y7QhFqL/OA6
-         +1LQma0vp7WIY3gomFwn/jMO14qApD9FDmbEPLlU=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.135.215]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M5fMe-1ncglq2Hak-007B7f; Tue, 12
- Apr 2022 22:07:00 +0200
-Message-ID: <d90f37a3-e91a-c2a2-e349-5f835b048e5b@gmx.de>
-Date:   Tue, 12 Apr 2022 22:06:59 +0200
+        Tue, 12 Apr 2022 16:13:29 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D02BFABF40
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 13:11:06 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-e2a00f2cc8so12487825fac.4
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 13:11:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=U2+moUFzuYmW2nLDdILkEMMPFcu1fW9OOMvVELagHT0=;
+        b=uFUqh5B/7L4v3uQRpLJPc1bgYktm5PjrwYLm/KhgNqKjPM+szw7eMYFwx4I9rTatFj
+         Y2BM6uJXqAtC6JxkK5A2rWHeyN94anJRs7DvZglJkcyE7rSnDMAMWgyh4Jy+bMrlvxQk
+         Xb7neCNJqLZCcEo2ks2gB1d4xkhTwsY8RN5OssA3KhyhlcsgTBEbEm5b4WZnUhr/rj0M
+         RjvKRIU9stH/ID1mKDs/srPD6iMgsVdQ/6XAKB3v8Bp5XBXnbQMPPIz3afK1Y92FKFcZ
+         1fbt+KjOyi4mX3LWmmFD/Sx5YAaKpbScOEP1iVVfNesWv6lNl5TpvLKBfVmmtDY9LRp+
+         AI+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=U2+moUFzuYmW2nLDdILkEMMPFcu1fW9OOMvVELagHT0=;
+        b=aPbal+DcjliLbI6dwFIyrh4ANsrclhBak2yctIhw2sQLccZk3PQg2m9/OTw0xxq5U9
+         bE++O3+N8NGmq7zQ9dkf9RPJ8PPydwYTr/s88oOy65HHMU6RspM4JUfky0cV73o7SqLZ
+         tMFTbzgQgYGtOceDb/8XAEow2gObpW4eB76JmIR6GFHc89PAl8vqwhAKvEZ3n6Ukt5gJ
+         CjsL+MV2hGvpnu5gWljHxC4O/DoFgowNLapQO7szi5E+uE7dJf1jBFfQ0dN0bNYR60zl
+         BlYetGXWNaxl5VT3L4lj56SQ4QjNjM9ttSclpaF/bwW06RdkUCLprnNyxc3YzrmnNMkO
+         f2UA==
+X-Gm-Message-State: AOAM531JuIuTsnUj1AaCgokhzp9eJsVkgB60v16xyNHGHYNjN4VfaXu+
+        /Cc2SFgE31AA0O3P2KRxOFuJ55BEQW0Qiw9m
+X-Google-Smtp-Source: ABdhPJwjv59IHvp5Pc9P6s+LMF2Rx2MBmezIHXzhxPOJzx2Xm8KRN+D5NWQ+25JBLrOvvBYavdEJLQ==
+X-Received: by 2002:a05:6870:a994:b0:dd:fe5c:cdbd with SMTP id ep20-20020a056870a99400b000ddfe5ccdbdmr3134194oab.96.1649794079782;
+        Tue, 12 Apr 2022 13:07:59 -0700 (PDT)
+Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
+        by smtp.gmail.com with ESMTPSA id m17-20020a0568301e7100b005b256697d7csm13718768otr.72.2022.04.12.13.07.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 13:07:58 -0700 (PDT)
+Date:   Tue, 12 Apr 2022 15:07:56 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jonathan McDowell <noodles@earth.li>
+Subject: Re: [PATCH v3 13/18] ARM: dts: qcom: add opp table for cpu and l2
+ for ipq8064
+Message-ID: <YlXcHJminisFjobl@builder.lan>
+References: <20220309190152.7998-1-ansuelsmth@gmail.com>
+ <20220309190152.7998-14-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] video: fbdev-MMP: replace usage of found with dedicated
- list iterator variable
-Content-Language: en-US
-To:     Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-References: <20220331223503.902142-1-jakobkoschel@gmail.com>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20220331223503.902142-1-jakobkoschel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:v3JE1ZICfMfPrsfvy8/eg3kgYv0qoPZEH4uA47/8+QfPmHfZC8F
- wuCWQdxmVwbOna7Nhk3SfJlsWB4Hrx7jlmLOstCstC04FFWEM+kq9gUooAqQO6LHsLXtK0X
- sNFkMEqV7A5+DltONIy/a2vCxkJ/HHMYane6dasVaYOz5ckKOdJnajhBWeUMhzpjVk3Hcgs
- EQCeR0mI9DgaAtz8MihpA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:qN/aei8zZyE=:EqvKNSZX+hPqr949MSxvMp
- eQKsFxq5fmqFbY3xjmMtT3D+wa+U+ht4xxcqst6URvYsRecL65NUDRHkJev6NvADnHJ5Kq2J0
- EBEX1O2BGYocKeRW0JjJ19YyPkfLozOwkk9ZogAYK4P0XGMdV7Tku9uiWPP1eBcRSbOo5t1we
- TCKpo52CVJsDNS3NT6fNfwR8avJ4bOW5Jei+B0+zAQpzs68ebmav1i/6o/531KJvmewRegbrG
- so2Txl41QLOz4uXId3BddAZXLWSwtzKqNl4F8ABfXcx/NQOcJY+fv3E51IXq6vcbzr7crNvnc
- AIlsgb+xHO0gY7NZwDkIj6gP2WvfsLgS0bvuHc6uG+7ujRis0Ai4w+4huytapG64jQx60MPi/
- veZX9fpmJ+8eO2hkRQ1zr+qBO72E6E44mOBupStaVfjBI1v9lncTp6rmshGETPhXH21oAtCQc
- 49EvJJyM6ZyKAZnNOxAM5cF7sjc2IzCUzpZXLX3Fi7vIBzVDtHXqG2yBoOB1ZeMGaH1H33Bvo
- qRgKxDnpqvNHQ/CxiGKKLtbIzIqE/JaltcuwHPKuwpqPN6bfxHtlgqR7SqLqJgjoAGtSRO4/V
- pCjdcbSgRE0jfxuYR3wT0OBuEhaCpe6a+TYd7mQ9DR6YRjafIYB1fMVtKbU9nEAAeGmw2UAqg
- eqf7GNCbWwc1OHd9qy1SI03PW07Ud5bVAtTwmTF32lFXtyEmiIwRUOz/IEPcnKFnqNv/JMdrn
- /6qecm5MSM3ujxSZY4Bk8B7ZnM4vaU8kgsemPZr1uNkNatLXcTTOE7GJp8/7Ku366Fe7SGUA2
- w4P0K0TVqQmb8T2ZynX19uAlg3DBiABD01Vhcitvhtfg6xoIzWdbYdMXPyCsRbF6S0i6aKVRs
- TDWzrM4Ec/R+ktxCniUgh/ruAgdSZOdkbasXw4bp5Jlz46nEiPqU6fGkueqzk36k6ndXjidJK
- C3BmPtoHMc/X3o5lZrQk58dKuWbas600o3TjsUr21b9BDrcNGiekUZ/vzGjbRw/IUNysyRzwA
- PlNqk7HXOEKumV2ifOpwYaO+xIAO5xPvRXTTPVTOqTLqe/6veoNax9aSFkQKVdpJ229dKnNfQ
- md6ekKGn5pbbpk=
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220309190152.7998-14-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/1/22 00:35, Jakob Koschel wrote:
-> To move the list iterator variable into the list_for_each_entry_*()
-> macro in the future it should be avoided to use the list iterator
-> variable after the loop body.
->
-> To *never* use the list iterator variable after the loop it was
-> concluded to use a separate iterator variable instead of a
-> found boolean [1].
->
-> This removes the need to use a found variable and simply checking if
-> the variable was set, can determine if the break/goto was hit.
->
-> Link: https://lore.kernel.org/all/CAHk-=3DwgRr_D8CB-D9Kg-c=3DEHreAsk5SqX=
-Pwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
-> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+On Wed 09 Mar 13:01 CST 2022, Ansuel Smith wrote:
 
-applied.
-
-Thanks!
-Helge
-
+> Add opp table for cpu and l2 cache. While the current cpufreq is
+> the generic one that doesn't scale the L2 cache, we add the l2
+> cache opp anyway for the sake of completeness. This will be handy in the
+> future when a dedicated cpufreq driver is introduced for krait cores
+> that will correctly scale l2 cache with the core freq.
+> 
+> Opp-level is set based on the logic of
+> 0: idle level
+> 1: normal level
+> 2: turbo level
+> 
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> Tested-by: Jonathan McDowell <noodles@earth.li>
 > ---
->  drivers/video/fbdev/mmp/core.c | 11 +++++------
->  1 file changed, 5 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/video/fbdev/mmp/core.c b/drivers/video/fbdev/mmp/co=
-re.c
-> index 154127256a2c..03707461eced 100644
-> --- a/drivers/video/fbdev/mmp/core.c
-> +++ b/drivers/video/fbdev/mmp/core.c
-> @@ -127,19 +127,18 @@ EXPORT_SYMBOL_GPL(mmp_unregister_panel);
->   */
->  struct mmp_path *mmp_get_path(const char *name)
->  {
-> -	struct mmp_path *path;
-> -	int found =3D 0;
-> +	struct mmp_path *path =3D NULL, *iter;
->
->  	mutex_lock(&disp_lock);
-> -	list_for_each_entry(path, &path_list, node) {
-> -		if (!strcmp(name, path->name)) {
-> -			found =3D 1;
-> +	list_for_each_entry(iter, &path_list, node) {
-> +		if (!strcmp(name, iter->name)) {
-> +			path =3D iter;
->  			break;
->  		}
->  	}
->  	mutex_unlock(&disp_lock);
->
-> -	return found ? path : NULL;
-> +	return path;
->  }
->  EXPORT_SYMBOL_GPL(mmp_get_path);
->
->
-> base-commit: f82da161ea75dc4db21b2499e4b1facd36dab275
+>  arch/arm/boot/dts/qcom-ipq8064.dtsi | 99 +++++++++++++++++++++++++++++
+>  1 file changed, 99 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> index 7dd0b901cd30..a1079583def9 100644
+> --- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> +++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
+> @@ -48,6 +48,105 @@ L2: l2-cache {
+>  		};
+>  	};
+>  
+> +	opp_table_l2: opp_table_l2 {
 
+Please don't use '_' in the node names.
+
+> +		compatible = "operating-points-v2";
+> +
+> +		opp-384000000 {
+> +			opp-hz = /bits/ 64 <384000000>;
+> +			opp-microvolt = <1100000>;
+> +			clock-latency-ns = <100000>;
+> +			opp-level = <0>;
+> +		};
+> +
+> +		opp-1000000000 {
+> +			opp-hz = /bits/ 64 <1000000000>;
+> +			opp-microvolt = <1100000>;
+> +			clock-latency-ns = <100000>;
+> +			opp-level = <1>;
+> +		};
+> +
+> +		opp-1200000000 {
+> +			opp-hz = /bits/ 64 <1200000000>;
+> +			opp-microvolt = <1150000>;
+> +			clock-latency-ns = <100000>;
+> +			opp-level = <2>;
+> +		};
+> +	};
+> +
+> +	opp_table0: opp_table0 {
+
+Perhaps you can name this opp-table-kryo, to make it consistent with
+opp-table-l2 above?
+
+Regards,
+Bjorn
+
+> +		compatible = "operating-points-v2-kryo-cpu";
+> +		nvmem-cells = <&speedbin_efuse>;
+> +
+> +		/*
+> +		 * Voltage thresholds are <target min max>
+> +		 */
+> +		opp-384000000 {
+> +			opp-hz = /bits/ 64 <384000000>;
+> +			opp-microvolt-speed0-pvs0-v0 = <1000000 950000 1050000>;
+> +			opp-microvolt-speed0-pvs1-v0 = <925000 878750 971250>;
+> +			opp-microvolt-speed0-pvs2-v0 = <875000 831250 918750>;
+> +			opp-microvolt-speed0-pvs3-v0 = <800000 760000 840000>;
+> +			opp-supported-hw = <0x1>;
+> +			clock-latency-ns = <100000>;
+> +			opp-level = <0>;
+> +		};
+> +
+> +		opp-600000000 {
+> +			opp-hz = /bits/ 64 <600000000>;
+> +			opp-microvolt-speed0-pvs0-v0 = <1050000 997500 1102500>;
+> +			opp-microvolt-speed0-pvs1-v0 = <975000 926250 1023750>;
+> +			opp-microvolt-speed0-pvs2-v0 = <925000 878750 971250>;
+> +			opp-microvolt-speed0-pvs3-v0 = <850000 807500 892500>;
+> +			opp-supported-hw = <0x1>;
+> +			clock-latency-ns = <100000>;
+> +			opp-level = <1>;
+> +		};
+> +
+> +		opp-800000000 {
+> +			opp-hz = /bits/ 64 <800000000>;
+> +			opp-microvolt-speed0-pvs0-v0 = <1100000 1045000 1155000>;
+> +			opp-microvolt-speed0-pvs1-v0 = <1025000 973750 1076250>;
+> +			opp-microvolt-speed0-pvs2-v0 = <995000 945250 1044750>;
+> +			opp-microvolt-speed0-pvs3-v0 = <900000 855000 945000>;
+> +			opp-supported-hw = <0x1>;
+> +			clock-latency-ns = <100000>;
+> +			opp-level = <1>;
+> +		};
+> +
+> +		opp-1000000000 {
+> +			opp-hz = /bits/ 64 <1000000000>;
+> +			opp-microvolt-speed0-pvs0-v0 = <1150000 1092500 1207500>;
+> +			opp-microvolt-speed0-pvs1-v0 = <1075000 1021250 1128750>;
+> +			opp-microvolt-speed0-pvs2-v0 = <1025000 973750 1076250>;
+> +			opp-microvolt-speed0-pvs3-v0 = <950000 902500 997500>;
+> +			opp-supported-hw = <0x1>;
+> +			clock-latency-ns = <100000>;
+> +			opp-level = <1>;
+> +		};
+> +
+> +		opp-1200000000 {
+> +			opp-hz = /bits/ 64 <1200000000>;
+> +			opp-microvolt-speed0-pvs0-v0 = <1200000 1140000 1260000>;
+> +			opp-microvolt-speed0-pvs1-v0 = <1125000 1068750 1181250>;
+> +			opp-microvolt-speed0-pvs2-v0 = <1075000 1021250 1128750>;
+> +			opp-microvolt-speed0-pvs3-v0 = <1000000 950000 1050000>;
+> +			opp-supported-hw = <0x1>;
+> +			clock-latency-ns = <100000>;
+> +			opp-level = <2>;
+> +		};
+> +
+> +		opp-1400000000 {
+> +			opp-hz = /bits/ 64 <1400000000>;
+> +			opp-microvolt-speed0-pvs0-v0 = <1250000 1187500 1312500>;
+> +			opp-microvolt-speed0-pvs1-v0 = <1175000 1116250 1233750>;
+> +			opp-microvolt-speed0-pvs2-v0 = <1125000 1068750 1181250>;
+> +			opp-microvolt-speed0-pvs3-v0 = <1050000 997500 1102500>;
+> +			opp-supported-hw = <0x1>;
+> +			clock-latency-ns = <100000>;
+> +			opp-level = <2>;
+> +		};
+> +	};
+> +
+>  	thermal-zones {
+>  		sensor0-thermal {
+>  			polling-delay-passive = <0>;
+> -- 
+> 2.34.1
+> 

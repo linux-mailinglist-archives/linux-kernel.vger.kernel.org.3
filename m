@@ -2,98 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 877D34FC90A
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 02:02:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC3A24FC915
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 02:08:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238745AbiDLAEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 11 Apr 2022 20:04:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33870 "EHLO
+        id S238840AbiDLAKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 11 Apr 2022 20:10:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236437AbiDLAEW (ORCPT
+        with ESMTP id S238262AbiDLAKt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 11 Apr 2022 20:04:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C6AA12ED40
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 17:02:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649721725;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8c5EjZJFWQjGO0KtsK/b2yAf9oKCDamxmuxgZSqrg+g=;
-        b=I0b79ZgvMO/f0ryG08CpWrW8AGXtFSuRzQFEXKtxEUKmIkZaGrLMyX6FVn5RYUaeMRHz3O
-        9YznV8VA0xiT61ObqUASqVN+wxZUJyyTfUOIWt+RxJQjJr27VQEwTv+c4q+KnJMRkPEIIk
-        wPm3G5vFnCKerAd/MNVliWnwHOEaur4=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-323-yL1V72xtNfaBypn9qcQ3PQ-1; Mon, 11 Apr 2022 20:02:03 -0400
-X-MC-Unique: yL1V72xtNfaBypn9qcQ3PQ-1
-Received: by mail-qt1-f198.google.com with SMTP id d18-20020ac81192000000b002ebdd6ef307so8346994qtj.20
-        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 17:02:03 -0700 (PDT)
+        Mon, 11 Apr 2022 20:10:49 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7BD19290
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 17:08:32 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id o5-20020a17090ad20500b001ca8a1dc47aso924801pju.1
+        for <linux-kernel@vger.kernel.org>; Mon, 11 Apr 2022 17:08:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2wEkt+Fl5QHii5v8XtDT8LMRWz6S8eR3qRxTt2Sw5V4=;
+        b=O5GYMczRyjp9uULNTyB4HDTn7FN9FuUeovnT56eEy6ngCmuYvzf1umOPz47prHSQNf
+         sjm/mmaBMH9kX3OdAcZ7e/mJAQAcMPie9u2zSpjWdnb1xMYgeQIiHu/x3QzFfgMPwLcn
+         ChcH10leiDHwQJUEVJeAwZiwajcffDTsWWV8oFMN6dAi0MmppUO+1s4Tub7/W9P9bpJo
+         C/zenybAGnDMDQP2ii5SwFJs5SuLp7PIFO7OKXo4uROOns9yBTBle9VJuXUdM3HT/PBz
+         G5aoKrJ8LlOqXpDBI/i4othZBimrMI7KGMfeW3P4doPTZZLtAGAaKDecV9y6sDmmSnos
+         PvTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=8c5EjZJFWQjGO0KtsK/b2yAf9oKCDamxmuxgZSqrg+g=;
-        b=ygYJ66fu4TMTJ0DjncPkCEMcx6ljHxHU/d1sE9F6YG/XwzuM+i4G0KR/o9kRGqxbQ7
-         6hCdsx2poKoZn2uuhHRzC7AoKB0n1qzGs0wfLcu2EBPOQxv9nYQD2rYROnmBfpb9/LCK
-         n53/Yi9WyYHVAjZU8fTtX6G/+aBqBQ2m5ff92/qtqddYyVPepA5kn1OPlm8OD3f4cP5Q
-         XDtLinm0eVqsZTwwQ0KDaCMrAmWA7AAHnQIv1yMt8+0ATPuRKoDXTgyFgSjW8aCtKBC/
-         zYehLZGeMTTDxvn+CWJSSIcuyvyRjsut7bnGrpx54YuvjAxJ04duTeD7Hgplmnb2FHZ9
-         hI6A==
-X-Gm-Message-State: AOAM531OVotAnxuXDTnXuFgU8Ef+iaP07bYscJLPIKHXIivgS066KGaL
-        WU6wpYe0dhKUcu8zxsBECGwH+AMfst8lZuTNZG2HZ5egJJrMe0+OLqTKui1s0w45VaRToAmW8k5
-        gUZCa1au8pY8rSpm2dYNeT+Ht
-X-Received: by 2002:ac8:58c5:0:b0:2e1:cca9:b3f3 with SMTP id u5-20020ac858c5000000b002e1cca9b3f3mr1521228qta.100.1649721723344;
-        Mon, 11 Apr 2022 17:02:03 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyRyGmd8uhOz3BleD/jMRXTkNltGHNdY2kfh6XYh8L18wcb9jFXAm4k21+nuZ3n/yFAlENfPA==
-X-Received: by 2002:ac8:58c5:0:b0:2e1:cca9:b3f3 with SMTP id u5-20020ac858c5000000b002e1cca9b3f3mr1521196qta.100.1649721723101;
-        Mon, 11 Apr 2022 17:02:03 -0700 (PDT)
-Received: from [192.168.0.188] ([24.48.139.231])
-        by smtp.gmail.com with ESMTPSA id i62-20020a37b841000000b0069c10d27571sm3770984qkf.70.2022.04.11.17.02.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Apr 2022 17:02:02 -0700 (PDT)
-Message-ID: <a8c8c25b-1b20-88d7-38ad-8a1f6f95ff41@redhat.com>
-Date:   Mon, 11 Apr 2022 20:02:00 -0400
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2wEkt+Fl5QHii5v8XtDT8LMRWz6S8eR3qRxTt2Sw5V4=;
+        b=Df9ulaQXSyebx9C1pGtuzsP/3OJ6WlwrS7LRPtl+/mxvUlg+GaYTGF0r0vlPNeWsVj
+         VhpjB5151GvRQV3bvmLuRircIEdfrBYszE4uzwFvRqZcORaZxvQJG7Az7vmAbh/q3aFe
+         W7y8XB2SmxILnLfoX9LOk0VZfNGq5EIiRLJgprIukDw2RIw9g5r130oirfXJf1DsJ3FD
+         40vUAxa4jILIxBjcxmM/8Yg25ZwDDcCpmnjvVaf2XY5QRAhgU/ozXylP4TXadGH7T6K0
+         bus3TVE80PiOyr23o8wKrI8cXThgimmj0kHsh7AavITy52XBppS6/44JXwG0zotQQibG
+         iIvQ==
+X-Gm-Message-State: AOAM5321U1oxsSXanKgRsUDB7HFmcQFolhfpX5vBFC1nZFcJ4kJ0ccho
+        45oFddG2TybQt3OrOeTKvPrfalHCeoAYtKhf6ZhuJQ==
+X-Google-Smtp-Source: ABdhPJwiqEMeg1D9j4J0Y+o8ZfMSN8ekDMHy7Zw5j+2VdEX4b8YSMIxWQgkLUtHS84yYy4GAXTgkQnH5MT/1f7wCXo8=
+X-Received: by 2002:a17:903:32c5:b0:156:b466:c8ed with SMTP id
+ i5-20020a17090332c500b00156b466c8edmr34561265plr.34.1649722112368; Mon, 11
+ Apr 2022 17:08:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v8] oom_kill.c: futex: Don't OOM reap the VMA containing
- the robust_list_head
-Content-Language: en-US
-To:     Michal Hocko <mhocko@suse.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Joel Savitz <jsavitz@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>, linux-mm@kvack.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Rafael Aquini <aquini@redhat.com>,
-        Waiman Long <longman@redhat.com>, Baoquan He <bhe@redhat.com>,
-        Christoph von Recklinghausen <crecklin@redhat.com>,
-        Don Dutile <ddutile@redhat.com>,
-        "Herton R . Krzesinski" <herton@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Darren Hart <dvhart@infradead.org>, stable@kernel.org
-References: <20220408032809.3696798-1-npache@redhat.com>
- <20220408081549.GM2731@worktop.programming.kicks-ass.net>
- <ee07a31c-c514-4a88-599f-14a30e93f32e@redhat.com> <87k0bzk7e5.ffs@tglx>
- <CAL1p7m4ukBQdQihkeSTjGHTM+HAF-GVf=QSnNPhRmetC213ANg@mail.gmail.com>
- <87sfqni77s.ffs@tglx> <YlPPRrGrX2ECe8QY@dhcp22.suse.cz> <87wnfwf4e5.ffs@tglx>
- <YlPv8elVxqa4XZnd@dhcp22.suse.cz>
-From:   Nico Pache <npache@redhat.com>
-In-Reply-To: <YlPv8elVxqa4XZnd@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+References: <20220405194747.2386619-1-jane.chu@oracle.com> <20220405194747.2386619-5-jane.chu@oracle.com>
+In-Reply-To: <20220405194747.2386619-5-jane.chu@oracle.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Mon, 11 Apr 2022 17:08:21 -0700
+Message-ID: <CAPcyv4ij8VxaeosTsRFgUTnSpRRaxWnxWK6xvUJrhmT-7ae+-Q@mail.gmail.com>
+Subject: Re: [PATCH v7 4/6] dax: add DAX_RECOVERY flag and .recovery_write dev_pgmap_ops
+To:     Jane Chu <jane.chu@oracle.com>
+Cc:     david <david@fromorbit.com>, "Darrick J. Wong" <djwong@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Vishal L Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@redhat.com>,
+        device-mapper development <dm-devel@redhat.com>,
+        "Weiny, Ira" <ira.weiny@intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux NVDIMM <nvdimm@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-xfs <linux-xfs@vger.kernel.org>, X86 ML <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,65 +78,283 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Apr 5, 2022 at 12:48 PM Jane Chu <jane.chu@oracle.com> wrote:
+>
+> Introduce DAX_RECOVERY flag to dax_direct_access(). The flag is
+> not set by default in dax_direct_access() such that the helper
+> does not translate a pmem range to kernel virtual address if the
+> range contains uncorrectable errors.  When the flag is set,
+> the helper ignores the UEs and return kernel virtual adderss so
+> that the caller may get on with data recovery via write.
+>
+> Also introduce a new dev_pagemap_ops .recovery_write function.
+> The function is applicable to FSDAX device only. The device
+> page backend driver provides .recovery_write function if the
+> device has underlying mechanism to clear the uncorrectable
+> errors on the fly.
+>
+> Signed-off-by: Jane Chu <jane.chu@oracle.com>
+> ---
+>  drivers/dax/super.c             | 17 ++++++++--
+>  drivers/md/dm-linear.c          |  4 +--
+>  drivers/md/dm-log-writes.c      |  5 +--
+>  drivers/md/dm-stripe.c          |  4 +--
+>  drivers/md/dm-target.c          |  2 +-
+>  drivers/md/dm-writecache.c      |  5 +--
+>  drivers/md/dm.c                 |  5 +--
+>  drivers/nvdimm/pmem.c           | 57 +++++++++++++++++++++++++++------
+>  drivers/nvdimm/pmem.h           |  2 +-
+>  drivers/s390/block/dcssblk.c    |  4 +--
+>  fs/dax.c                        | 24 ++++++++++----
+>  fs/fuse/dax.c                   |  4 +--
+>  include/linux/dax.h             | 11 +++++--
+>  include/linux/device-mapper.h   |  2 +-
+>  include/linux/memremap.h        |  7 ++++
+>  tools/testing/nvdimm/pmem-dax.c |  2 +-
+>  16 files changed, 116 insertions(+), 39 deletions(-)
+>
+> diff --git a/drivers/dax/super.c b/drivers/dax/super.c
+> index 0211e6f7b47a..8252858cd25a 100644
+> --- a/drivers/dax/super.c
+> +++ b/drivers/dax/super.c
+> @@ -13,6 +13,7 @@
+>  #include <linux/uio.h>
+>  #include <linux/dax.h>
+>  #include <linux/fs.h>
+> +#include <linux/memremap.h>
+>  #include "dax-private.h"
+>
+>  /**
+> @@ -117,6 +118,7 @@ enum dax_device_flags {
+>   * @dax_dev: a dax_device instance representing the logical memory range
+>   * @pgoff: offset in pages from the start of the device to translate
+>   * @nr_pages: number of consecutive pages caller can handle relative to @pfn
+> + * @flags: by default 0, set to DAX_RECOVERY to kick start dax recovery
+>   * @kaddr: output parameter that returns a virtual address mapping of pfn
+>   * @pfn: output parameter that returns an absolute pfn translation of @pgoff
+>   *
+> @@ -124,7 +126,7 @@ enum dax_device_flags {
+>   * pages accessible at the device relative @pgoff.
+>   */
+>  long dax_direct_access(struct dax_device *dax_dev, pgoff_t pgoff, long nr_pages,
+> -               void **kaddr, pfn_t *pfn)
+> +               int flags, void **kaddr, pfn_t *pfn)
+>  {
+>         long avail;
+>
+> @@ -137,7 +139,7 @@ long dax_direct_access(struct dax_device *dax_dev, pgoff_t pgoff, long nr_pages,
+>         if (nr_pages < 0)
+>                 return -EINVAL;
+>
+> -       avail = dax_dev->ops->direct_access(dax_dev, pgoff, nr_pages,
+> +       avail = dax_dev->ops->direct_access(dax_dev, pgoff, nr_pages, flags,
+>                         kaddr, pfn);
+>         if (!avail)
+>                 return -ERANGE;
+> @@ -194,6 +196,17 @@ int dax_zero_page_range(struct dax_device *dax_dev, pgoff_t pgoff,
+>  }
+>  EXPORT_SYMBOL_GPL(dax_zero_page_range);
+>
+> +size_t dax_recovery_write(struct dax_device *dax_dev, pgoff_t pgoff,
+> +               pfn_t pfn, void *addr, size_t bytes, struct iov_iter *iter)
+> +{
+> +       struct dev_pagemap *pgmap = get_dev_pagemap(pfn_t_to_pfn(pfn), NULL);
+> +
+> +       if (!pgmap || !pgmap->ops || !pgmap->ops->recovery_write)
+> +               return 0;
+> +       return pgmap->ops->recovery_write(pgmap, pgoff, addr, bytes, iter);
+> +}
+> +EXPORT_SYMBOL_GPL(dax_recovery_write);
+> +
+>  #ifdef CONFIG_ARCH_HAS_PMEM_API
+>  void arch_wb_cache_pmem(void *addr, size_t size);
+>  void dax_flush(struct dax_device *dax_dev, void *addr, size_t size)
+> diff --git a/drivers/md/dm-linear.c b/drivers/md/dm-linear.c
+> index 76b486e4d2be..9e6d8bdf3b2a 100644
+> --- a/drivers/md/dm-linear.c
+> +++ b/drivers/md/dm-linear.c
+> @@ -172,11 +172,11 @@ static struct dax_device *linear_dax_pgoff(struct dm_target *ti, pgoff_t *pgoff)
+>  }
+>
+>  static long linear_dax_direct_access(struct dm_target *ti, pgoff_t pgoff,
+> -               long nr_pages, void **kaddr, pfn_t *pfn)
+> +               long nr_pages, int flags, void **kaddr, pfn_t *pfn)
+>  {
+>         struct dax_device *dax_dev = linear_dax_pgoff(ti, &pgoff);
+>
+> -       return dax_direct_access(dax_dev, pgoff, nr_pages, kaddr, pfn);
+> +       return dax_direct_access(dax_dev, pgoff, nr_pages, flags, kaddr, pfn);
+>  }
+>
+>  static int linear_dax_zero_page_range(struct dm_target *ti, pgoff_t pgoff,
+> diff --git a/drivers/md/dm-log-writes.c b/drivers/md/dm-log-writes.c
+> index c9d036d6bb2e..e23f062ade5f 100644
+> --- a/drivers/md/dm-log-writes.c
+> +++ b/drivers/md/dm-log-writes.c
+> @@ -889,11 +889,12 @@ static struct dax_device *log_writes_dax_pgoff(struct dm_target *ti,
+>  }
+>
+>  static long log_writes_dax_direct_access(struct dm_target *ti, pgoff_t pgoff,
+> -                                        long nr_pages, void **kaddr, pfn_t *pfn)
+> +                                        long nr_pages, int flags,
+> +                                        void **kaddr, pfn_t *pfn)
+>  {
+>         struct dax_device *dax_dev = log_writes_dax_pgoff(ti, &pgoff);
+>
+> -       return dax_direct_access(dax_dev, pgoff, nr_pages, kaddr, pfn);
+> +       return dax_direct_access(dax_dev, pgoff, nr_pages, flags, kaddr, pfn);
+>  }
+>
+>  static int log_writes_dax_zero_page_range(struct dm_target *ti, pgoff_t pgoff,
+> diff --git a/drivers/md/dm-stripe.c b/drivers/md/dm-stripe.c
+> index c81d331d1afe..b89339c78702 100644
+> --- a/drivers/md/dm-stripe.c
+> +++ b/drivers/md/dm-stripe.c
+> @@ -315,11 +315,11 @@ static struct dax_device *stripe_dax_pgoff(struct dm_target *ti, pgoff_t *pgoff)
+>  }
+>
+>  static long stripe_dax_direct_access(struct dm_target *ti, pgoff_t pgoff,
+> -               long nr_pages, void **kaddr, pfn_t *pfn)
+> +               long nr_pages, int flags, void **kaddr, pfn_t *pfn)
+>  {
+>         struct dax_device *dax_dev = stripe_dax_pgoff(ti, &pgoff);
+>
+> -       return dax_direct_access(dax_dev, pgoff, nr_pages, kaddr, pfn);
+> +       return dax_direct_access(dax_dev, pgoff, nr_pages, flags, kaddr, pfn);
+>  }
+>
+>  static int stripe_dax_zero_page_range(struct dm_target *ti, pgoff_t pgoff,
+> diff --git a/drivers/md/dm-target.c b/drivers/md/dm-target.c
+> index 64dd0b34fcf4..24b1e5628f3a 100644
+> --- a/drivers/md/dm-target.c
+> +++ b/drivers/md/dm-target.c
+> @@ -142,7 +142,7 @@ static void io_err_release_clone_rq(struct request *clone,
+>  }
+>
+>  static long io_err_dax_direct_access(struct dm_target *ti, pgoff_t pgoff,
+> -               long nr_pages, void **kaddr, pfn_t *pfn)
+> +               long nr_pages, int flags, void **kaddr, pfn_t *pfn)
+>  {
+>         return -EIO;
+>  }
+> diff --git a/drivers/md/dm-writecache.c b/drivers/md/dm-writecache.c
+> index 5630b470ba42..180ca8fa383e 100644
+> --- a/drivers/md/dm-writecache.c
+> +++ b/drivers/md/dm-writecache.c
+> @@ -286,7 +286,8 @@ static int persistent_memory_claim(struct dm_writecache *wc)
+>
+>         id = dax_read_lock();
+>
+> -       da = dax_direct_access(wc->ssd_dev->dax_dev, offset, p, &wc->memory_map, &pfn);
+> +       da = dax_direct_access(wc->ssd_dev->dax_dev, offset, p, 0,
+> +                       &wc->memory_map, &pfn);
+>         if (da < 0) {
+>                 wc->memory_map = NULL;
+>                 r = da;
+> @@ -309,7 +310,7 @@ static int persistent_memory_claim(struct dm_writecache *wc)
+>                 do {
+>                         long daa;
+>                         daa = dax_direct_access(wc->ssd_dev->dax_dev, offset + i, p - i,
+> -                                               NULL, &pfn);
+> +                                               0, NULL, &pfn);
+>                         if (daa <= 0) {
+>                                 r = daa ? daa : -EINVAL;
+>                                 goto err3;
+> diff --git a/drivers/md/dm.c b/drivers/md/dm.c
+> index ad2e0bbeb559..a8c697bb6603 100644
+> --- a/drivers/md/dm.c
+> +++ b/drivers/md/dm.c
+> @@ -1087,7 +1087,8 @@ static struct dm_target *dm_dax_get_live_target(struct mapped_device *md,
+>  }
+>
+>  static long dm_dax_direct_access(struct dax_device *dax_dev, pgoff_t pgoff,
+> -                                long nr_pages, void **kaddr, pfn_t *pfn)
+> +                                long nr_pages, int flags, void **kaddr,
+> +                                pfn_t *pfn)
+>  {
+>         struct mapped_device *md = dax_get_private(dax_dev);
+>         sector_t sector = pgoff * PAGE_SECTORS;
+> @@ -1105,7 +1106,7 @@ static long dm_dax_direct_access(struct dax_device *dax_dev, pgoff_t pgoff,
+>         if (len < 1)
+>                 goto out;
+>         nr_pages = min(len, nr_pages);
+> -       ret = ti->type->direct_access(ti, pgoff, nr_pages, kaddr, pfn);
+> +       ret = ti->type->direct_access(ti, pgoff, nr_pages, flags, kaddr, pfn);
+>
+>   out:
+>         dm_put_live_table(md, srcu_idx);
+> diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
+> index 30c71a68175b..0400c5a7ba39 100644
+> --- a/drivers/nvdimm/pmem.c
+> +++ b/drivers/nvdimm/pmem.c
+> @@ -238,12 +238,23 @@ static int pmem_rw_page(struct block_device *bdev, sector_t sector,
+>
+>  /* see "strong" declaration in tools/testing/nvdimm/pmem-dax.c */
+>  __weak long __pmem_direct_access(struct pmem_device *pmem, pgoff_t pgoff,
+> -               long nr_pages, void **kaddr, pfn_t *pfn)
+> +               long nr_pages, int flags, void **kaddr, pfn_t *pfn)
+>  {
+>         resource_size_t offset = PFN_PHYS(pgoff) + pmem->data_offset;
+> +       sector_t sector = PFN_PHYS(pgoff) >> SECTOR_SHIFT;
+> +       unsigned int num = PFN_PHYS(nr_pages) >> SECTOR_SHIFT;
+> +       struct badblocks *bb = &pmem->bb;
+> +       sector_t first_bad;
+> +       int num_bad;
+> +       bool bad_in_range;
+> +       long actual_nr;
+> +
+> +       if (!bb->count)
+> +               bad_in_range = false;
+> +       else
+> +               bad_in_range = !!badblocks_check(bb, sector, num, &first_bad, &num_bad);
 
+Why all this change...
 
-On 4/11/22 05:08, Michal Hocko wrote:
-> On Mon 11-04-22 09:47:14, Thomas Gleixner wrote:
->> Michal,
->>
->> On Mon, Apr 11 2022 at 08:48, Michal Hocko wrote:
->>> On Fri 08-04-22 23:41:11, Thomas Gleixner wrote:
->>>> So why would a process private robust mutex be any different from a
->>>> process shared one?
->>>
->>> Purely from the OOM POV they are slightly different because the OOM
->>> killer always kills all threads which share the mm with the selected
->>> victim (with an exception of the global init - see __oom_kill_process).
->>> Note that this is including those threads which are not sharing signals
->>> handling.
->>> So clobbering private locks shouldn't be observable to an alive thread
->>> unless I am missing something.
->>
->> Yes, it kills everything, but the reaper also reaps non-shared VMAs. So
->> if the process private futex sits in a reaped VMA the shared one becomes
->> unreachable.
->>
->>> On the other hand I do agree that delayed oom_reaper execution is a
->>> reasonable workaround and the most simplistic one.
->>
->> I think it's more than a workaround. It's a reasonable expectation that
->> the kernel side of the user space threads can mop up the mess the user
->> space part created. So even if one of of N threads is stuck in a place
->> where it can't, then N-1 can still reach do_exit() and mop their mess
->> up.
->>
->> The oom reaper is the last resort to resolve the situation in case of a
->> stuck task. No?
-> 
-> Yes, I keep saying workaround because it really doesn't address the
-> underlying issue which is that the oom_reaper clobbers something it
-> shouldn't be. A full fix from my POV would be making oom_reaper code
-> more aware of the futex usage. But this is something nore really viable.
-This is *kinda* what this approach is doing, but as Thomas has pointed out, it
-has its shortcoming. Additionally, it has just come to my attention, that this
-solution does not cover the compat robust list... So there is yet another
-shortcoming.
-> 
-> Btw. this is what I've in my local tree. It hasn't seen any testing but
-> it might be a good start to make it a full patch. I have decided to use
-> a timer rather than juggling tasks on the oom_reaper list because
-> initial implementation looked uglier. I will try to find some time to
-> finish that but if Nico or others beat me to it I won't complain.
-> Also I absolutely do not insist on the timer approach.
-> [...]
+>
+> -       if (unlikely(is_bad_pmem(&pmem->bb, PFN_PHYS(pgoff) / 512,
+> -                                       PFN_PHYS(nr_pages))))
 
-I will spend tomorrow working the delay solution and testing it. Thanks for
-starting it :)
+...instead of adding "&& !(flags & DAX_RECOVERY)" to this statement?
 
-I appreciate the comments and help from everyone that has participated! I'm
-sorry if any misunderstanding were had, its not our intention to upset anyone,
-but rather to learn and work a solution for the problem we are facing.
+> +       if (bad_in_range && !(flags & DAX_RECOVERY))
+>                 return -EIO;
+>
+>         if (kaddr)
+> @@ -251,13 +262,26 @@ __weak long __pmem_direct_access(struct pmem_device *pmem, pgoff_t pgoff,
+>         if (pfn)
+>                 *pfn = phys_to_pfn_t(pmem->phys_addr + offset, pmem->pfn_flags);
+>
+> +       if (!bad_in_range) {
+> +               /*
+> +                * If badblock is present but not in the range, limit known good range
+> +                * to the requested range.
+> +                */
+> +               if (bb->count)
+> +                       return nr_pages;
+> +               return PHYS_PFN(pmem->size - pmem->pfn_pad - offset);
+> +       }
+> +
+>         /*
+> -        * If badblocks are present, limit known good range to the
+> -        * requested range.
+> +        * In case poison is found in the given range and DAX_RECOVERY flag is set,
+> +        * recovery stride is set to kernel page size because the underlying driver and
+> +        * firmware clear poison functions don't appear to handle large chunk (such as
+> +        * 2MiB) reliably.
+>          */
+> -       if (unlikely(pmem->bb.count))
+> -               return nr_pages;
+> -       return PHYS_PFN(pmem->size - pmem->pfn_pad - offset);
+> +       actual_nr = PHYS_PFN(PAGE_ALIGN((first_bad - sector) << SECTOR_SHIFT));
+> +       dev_dbg(pmem->bb.dev, "start sector(%llu), nr_pages(%ld), first_bad(%llu), actual_nr(%ld)\n",
+> +                       sector, nr_pages, first_bad, actual_nr);
+> +       return (actual_nr == 0) ? 1 : actual_nr;
 
-Best,
--- Nico
+Similar feedback as above that this is more change than I would expect.
 
+I think just adding...
+
+if (flags & DAX_RECOVERY)
+   return 1;
+
+...before the typical return path is enough.

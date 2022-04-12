@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1174A4FD9B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:44:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 935194FD81E
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:35:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383644AbiDLIhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:37:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45800 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356921AbiDLHje (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S1356925AbiDLHje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 12 Apr 2022 03:39:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45866 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352945AbiDLHOk (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 12 Apr 2022 03:14:40 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749B74AE1D;
-        Tue, 12 Apr 2022 00:10:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457DA32074;
+        Mon, 11 Apr 2022 23:55:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2FCCAB81895;
-        Tue, 12 Apr 2022 07:10:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9047BC385A1;
-        Tue, 12 Apr 2022 07:10:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F067DB81B35;
+        Tue, 12 Apr 2022 06:55:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B523C385A1;
+        Tue, 12 Apr 2022 06:55:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747427;
-        bh=9RNdqvPcLPb8b+M8U33rEJl9Lj4sczmsTc4ZUKP6pR4=;
+        s=korg; t=1649746526;
+        bh=/FtJdOc3qlePh+X4i1+NxhT41uCmjejFTRj5RNY3beQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IIpTVDPHhJVuHr/U30sF+fbDCiYMKD8S2D7j9ljQxsDH0ZT63IK92EqWrIh+XwtHo
-         fOiOfVfWYKR5YU7WNc/IHByxUqedAJ7csRHT/x2dEuHmwb09nlTzGNzpaJiLRBZ37e
-         PZ8O8f6PI4cVNh4idUVBTX5C+6aQGDOsXRdFGNJs=
+        b=wdfZGFpH+9PFJuzHPuzDSGgGNz6MPEL4gfRTjX80FPzAoA8dFF1R34abaCIb2AFno
+         VF04+BSVpOAUn9bCX9jmYj9GWyLZzE7xwlCfZDZoeFEixWGK0tVEaAe4nwS+WKSoQU
+         LSrYB1Dfuj2n527fl5gF68BHzKxEbwPurypIXGt0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Avraham Stern <avraham.stern@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Johannes Berg <johannes.berg@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 076/343] scsi: mpi3mr: Fix reporting of actual data transfer size
-Date:   Tue, 12 Apr 2022 08:28:14 +0200
-Message-Id: <20220412062953.293940522@linuxfoundation.org>
+Subject: [PATCH 5.16 038/285] cfg80211: dont add non transmitted BSS to 6GHz scanned channels
+Date:   Tue, 12 Apr 2022 08:28:15 +0200
+Message-Id: <20220412062944.775301476@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,35 +56,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+From: Avraham Stern <avraham.stern@intel.com>
 
-[ Upstream commit 9992246127246a27cc7184f05cce6f62ac48f84e ]
+[ Upstream commit 5666ee154f4696c011dfa8544aaf5591b6b87515 ]
 
-The driver is missing to set the residual size while completing an
-I/O. Ensure proper data transfer size is reported to the kernel on I/O
-completion based on the transfer length reported by the firmware.
+When adding 6GHz channels to scan request based on reported
+co-located APs, don't add channels that have only APs with
+"non-transmitted" BSSes if they only match the wildcard SSID since
+they will be found by probing the "transmitted" BSS.
 
-Link: https://lore.kernel.org/r/20220210095817.22828-7-sreekanth.reddy@broadcom.com
-Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Avraham Stern <avraham.stern@intel.com>
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
+Link: https://lore.kernel.org/r/iwlwifi.20220202104617.f6ddf099f934.I231e55885d3644f292d00dfe0f42653269f2559e@changeid
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/mpi3mr/mpi3mr_os.c | 2 ++
- 1 file changed, 2 insertions(+)
+ net/wireless/scan.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/mpi3mr/mpi3mr_os.c b/drivers/scsi/mpi3mr/mpi3mr_os.c
-index d205354be63a..f7893de35b26 100644
---- a/drivers/scsi/mpi3mr/mpi3mr_os.c
-+++ b/drivers/scsi/mpi3mr/mpi3mr_os.c
-@@ -2617,6 +2617,8 @@ void mpi3mr_process_op_reply_desc(struct mpi3mr_ioc *mrioc,
- 		scmd->result = DID_OK << 16;
- 		goto out_success;
- 	}
+diff --git a/net/wireless/scan.c b/net/wireless/scan.c
+index 22e92be61938..ea0b768def5e 100644
+--- a/net/wireless/scan.c
++++ b/net/wireless/scan.c
+@@ -702,8 +702,12 @@ static bool cfg80211_find_ssid_match(struct cfg80211_colocated_ap *ap,
+ 
+ 	for (i = 0; i < request->n_ssids; i++) {
+ 		/* wildcard ssid in the scan request */
+-		if (!request->ssids[i].ssid_len)
++		if (!request->ssids[i].ssid_len) {
++			if (ap->multi_bss && !ap->transmitted_bssid)
++				continue;
 +
-+	scsi_set_resid(scmd, scsi_bufflen(scmd) - xfer_count);
- 	if (ioc_status == MPI3_IOCSTATUS_SCSI_DATA_UNDERRUN &&
- 	    xfer_count == 0 && (scsi_status == MPI3_SCSI_STATUS_BUSY ||
- 	    scsi_status == MPI3_SCSI_STATUS_RESERVATION_CONFLICT ||
+ 			return true;
++		}
+ 
+ 		if (ap->ssid_len &&
+ 		    ap->ssid_len == request->ssids[i].ssid_len) {
+@@ -829,6 +833,9 @@ static int cfg80211_scan_6ghz(struct cfg80211_registered_device *rdev)
+ 		    !cfg80211_find_ssid_match(ap, request))
+ 			continue;
+ 
++		if (!request->n_ssids && ap->multi_bss && !ap->transmitted_bssid)
++			continue;
++
+ 		cfg80211_scan_req_add_chan(request, chan, true);
+ 		memcpy(scan_6ghz_params->bssid, ap->bssid, ETH_ALEN);
+ 		scan_6ghz_params->short_ssid = ap->short_ssid;
 -- 
 2.35.1
 

@@ -2,152 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 460074FE505
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 998694FE50B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:44:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343685AbiDLPpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 11:45:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58784 "EHLO
+        id S1357181AbiDLPqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 11:46:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232032AbiDLPpU (ORCPT
+        with ESMTP id S1357175AbiDLPqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 11:45:20 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84FD5EBC0
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:43:02 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id j83so19425420oih.6
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:43:02 -0700 (PDT)
+        Tue, 12 Apr 2022 11:46:32 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B44B853
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:44:11 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id f17so2896413ybj.10
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:44:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ZGZNu9iiX3iSvmXUM8rzXVowDpysbTVW80h1NVMIpd0=;
-        b=cnUXGmM7zHLLJgvWl00m+xYFp1+371WRKCG4/3WQi09uZVR0nnJiO4SCnG8bZjyXa3
-         ur4i8kaIHHT4fvx/ZfYUpEweUQiDT9CDKTLmzERuNi8t9OL+kKqtRHBMMdtaEJr0ag8z
-         wK0LR/X5rmuzQZB4EtuO+eHu7jji5tfqSRrI7zVxKpNZB5S17nrluTOxQPknb2HOC9t1
-         89vC0oZvlU70HG0jub9xt56KRz9Vg4G1pgb90mH5ISd6r02jDWIZf5KtrowO0Sni9jye
-         fZKuVvIA+K88P7mfCMAzjAvLgTzGzsaMxMXxF6YLHaDvlVrQUynNwSCX95BX1bfRlR0q
-         aimA==
+        bh=tr9PBKtwF8uwxpVk+FAIjyu0P4+AAl4OjgCwV9dPuUk=;
+        b=FBpU8iZrkesdxN5hege1QVCKw2GwQWoJeqo7hta2MSJUHT2hX/jY4/T2uTIN91Ci2f
+         yJYPP5se3CJcfHE7rZndjKAD9xDCiCMveeeg1bmiRexKgxQ5aeEdPBqeTrXGIIOIApep
+         1Gc2EQUyynrjTlEYC8DRlMwGfwSiq2mE82KBA9kJ0ShAVa58yxE2vcldInV28pJXQAyV
+         DjyEVtey6YGKZBqiSjquLuWMm6sYergrT9hEkKmhf1AtCgt8AKIXrwlx3ep9pRIu/xFC
+         DXVRc2eEE4A8PGgT+6VvpngUsKIKbdLkgRagzaLB9RYyJTJ80U40OtUjoCIS0yNiYrjJ
+         Vk7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ZGZNu9iiX3iSvmXUM8rzXVowDpysbTVW80h1NVMIpd0=;
-        b=a18phHQ/UFtXqGm42lJqc1UEQbk60BQvZmiJSfBEa2CpQjk14OJlUL4r5EaDF3ay68
-         1wKNHPLmk6JoWddzKQ658jUpJh5iSrLlSyZoKROrIGrcBrwr/+soq8pyvH6RajXn4Uex
-         ef9YE9vDkN2aWQCW6gH/SeT0tvu7FfDzXcbLZ4DmZanGqeV8ApajH99LNJHBWZR1iW/n
-         evtlFd567hZgoWrdeypQIBedLr8oGkmPpyPhzVYX1eicI/OuMpNXbqY5rL3wyohuVQYf
-         09J3E/IaZBVm7WT96o7pRbDsZ501ep8ZcuBuunIss0pWbWycGPtNJMzSYrtM5tmCCuH9
-         ywKQ==
-X-Gm-Message-State: AOAM5318ApytaEiVY+MUGrfvaESLno6EyVk+PYhxBvJoFS9b3JEMCUmT
-        LVxIFliD2sRz6MLmPvzynAYVZQKenHoELlyB+Q8=
-X-Google-Smtp-Source: ABdhPJxFB+Il2thTK2QAOb85QGOKwlW91TXm8qlLr1lQzB40w266iztnDdN5QvsGS+1bOw+dYPtWSm/w/73OAm4rWZg=
-X-Received: by 2002:a05:6808:1486:b0:2f9:e821:51d9 with SMTP id
- e6-20020a056808148600b002f9e82151d9mr2140098oiw.253.1649778182265; Tue, 12
- Apr 2022 08:43:02 -0700 (PDT)
+        bh=tr9PBKtwF8uwxpVk+FAIjyu0P4+AAl4OjgCwV9dPuUk=;
+        b=i4xSZV4hErvbi1IaPCBwKB8sNyHpzPFa3dJyW0FYuTJVwbkBRBchj3tJmGYCpl+fOx
+         euMZS+kiZ+5rB4bOIj1WaJjni8s3GJsFTLm+MuNB4IutJwoQN2ClCFX3IXpOMb3PQM3F
+         HmzhxR+Dvtqd3hlF4sUdBXgzv6Xxxanx/yLDitVqNsSeuW0XS+DMb5T9e/rQNPsvLi2P
+         4jwW3y58Sqeiz2oON1OLOxJD1MiRmbWji4fv1AGxfuWrYLVB6WySmbfn1EbfK989Gp9R
+         WAUnlvvhj2cW3wWKvWx+PCFP4LMoENBrv0q98MmOWyxkM8tBD3CyUBlArfTerHfGx648
+         t9+Q==
+X-Gm-Message-State: AOAM533H3RMAfpsKHP8gtygsFEsc8UDaYzrPbnttGpvMZOpUTaAQuusd
+        vGNDEx6560N9qVbXGJy+3DE1Pxk3TZkNyIuwFI6KHQ==
+X-Google-Smtp-Source: ABdhPJwwQOZn8bktk+JMI7gRj6EbmLkfkWywdQIVdWcSjUAaN/fZLvVFnq2dQrWz2x1R4BWR7pO/68AY6/0C3pCpoH0=
+X-Received: by 2002:a25:df53:0:b0:641:1f31:1d3d with SMTP id
+ w80-20020a25df53000000b006411f311d3dmr12954621ybg.603.1649778250882; Tue, 12
+ Apr 2022 08:44:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220412145350.2843514-1-richard.gong@amd.com>
-In-Reply-To: <20220412145350.2843514-1-richard.gong@amd.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Tue, 12 Apr 2022 11:42:51 -0400
-Message-ID: <CADnq5_P5dO9eBR1c1bN+S73ABUBuUtZPkOtW0TCeLuBVD+PQwA@mail.gmail.com>
-Subject: Re: [PATCHv3] drm/amdgpu: disable ASPM on Intel Alder Lake based systems
-To:     Richard Gong <richard.gong@amd.com>
-Cc:     "Deucher, Alexander" <alexander.deucher@amd.com>,
-        Christian Koenig <christian.koenig@amd.com>,
-        xinhui pan <xinhui.pan@amd.com>,
-        Dave Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        kernel test robot <lkp@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>
+References: <20220412062942.022903016@linuxfoundation.org> <CA+G9fYseyeNoxQwEWtiiU8dLs_1coNa+sdV-1nqoif6tER_46Q@mail.gmail.com>
+ <CANpmjNP4-jG=kW8FoQpmt4X64en5G=Gd-3zaBebPL7xDFFOHmA@mail.gmail.com>
+In-Reply-To: <CANpmjNP4-jG=kW8FoQpmt4X64en5G=Gd-3zaBebPL7xDFFOHmA@mail.gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 12 Apr 2022 21:13:59 +0530
+Message-ID: <CA+G9fYuJKsYMR2vW+7d=xjDj9zoBtTF5=pSmcQRaiQitAjXCcw@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/277] 5.15.34-rc1 review
+To:     Marco Elver <elver@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com, Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        linux-mm <linux-mm@kvack.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 10:59 AM Richard Gong <richard.gong@amd.com> wrote:
->
-> Active State Power Management (ASPM) feature is enabled since kernel 5.14.
-> There are some AMD GFX cards (such as WX3200 and RX640) that won't work
-> with ASPM-enabled Intel Alder Lake based systems. Using these GFX cards as
-> video/display output, Intel Alder Lake based systems will hang during
-> suspend/resume.
->
-> The issue was initially reported on one system (Dell Precision 3660 with
-> BIOS version 0.14.81), but was later confirmed to affect at least 4 Alder
-> Lake based systems.
->
-> Add extra check to disable ASPM on Intel Alder Lake based systems.
->
-> Fixes: 0064b0ce85bb ("drm/amd/pm: enable ASPM by default")
-> Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1885
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Richard Gong <richard.gong@amd.com>
-> ---
-> v3: s/intel_core_asom_chk/aspm_support_quirk_check
->     correct build error with W=1 option
-> v2: correct commit description
->     move the check from chip family to problematic platform
-> ---
->  drivers/gpu/drm/amd/amdgpu/vi.c | 17 ++++++++++++++++-
->  1 file changed, 16 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/vi.c b/drivers/gpu/drm/amd/amdgpu/vi.c
-> index 039b90cdc3bc..b0b6353b48b9 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/vi.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/vi.c
-> @@ -81,6 +81,10 @@
->  #include "mxgpu_vi.h"
->  #include "amdgpu_dm.h"
->
-> +#if IS_ENABLED(CONFIG_X86_64)
+Hi Marco
 
-Shouldn't this be X86?  You could theoretically run this on 32 bit.
+On Tue, 12 Apr 2022 at 20:32, Marco Elver <elver@google.com> wrote:
+>
+> On Tue, 12 Apr 2022 at 16:16, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> >
+> > On Tue, 12 Apr 2022 at 12:11, Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > This is the start of the stable review cycle for the 5.15.34 release.
+> > > There are 277 patches in this series, all will be posted as a response
+> > > to this one.  If anyone has any issues with these being applied, please
+> > > let me know.
+> > >
+> > > Responses should be made by Thu, 14 Apr 2022 06:28:59 +0000.
+> > > Anything received after that time might be too late.
+> > >
+> > > The whole patch series can be found in one patch at:
+> > >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.34-rc1.gz
+> > > or in the git tree and branch at:
+> > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> > > and the diffstat can be found below.
+> > >
+> > > thanks,
+> > >
+> > > greg k-h
+> >
+> >
+> > On linux stable-rc 5.15 x86 and i386 builds failed due to below error [1]
+> > with config [2].
+> >
+> > The finding is when kunit config is enabled the builds pass.
+> > CONFIG_KUNIT=y
+> >
+> > But with CONFIG_KUNIT not set the builds failed.
+> >
+> > x86_64-linux-gnu-ld: mm/kfence/core.o: in function `__kfence_alloc':
+> > core.c:(.text+0x901): undefined reference to `filter_irq_stacks'
+> > make[1]: *** [/builds/linux/Makefile:1183: vmlinux] Error 1
+> >
+> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> >
+> > I see these three commits, I will bisect and get back to you
+> >
+> > 2f222c87ceb4 kfence: limit currently covered allocations when pool nearly full
+> > e25487912879 kfence: move saving stack trace of allocations into
+> > __kfence_alloc()
+> > d99355395380 kfence: count unexpectedly skipped allocations
+>
+> My guess is that this commit is missing:
 
-Alex
+This patch is missing Fixes: tag.
 
-> +#include <asm/intel-family.h>
-> +#endif
-> +
->  #define ixPCIE_LC_L1_PM_SUBSTATE       0x100100C6
->  #define PCIE_LC_L1_PM_SUBSTATE__LC_L1_SUBSTATES_OVERRIDE_EN_MASK       0x00000001L
->  #define PCIE_LC_L1_PM_SUBSTATE__LC_PCI_PM_L1_2_OVERRIDE_MASK   0x00000002L
-> @@ -1134,13 +1138,24 @@ static void vi_enable_aspm(struct amdgpu_device *adev)
->                 WREG32_PCIE(ixPCIE_LC_CNTL, data);
->  }
->
-> +static bool aspm_support_quirk_check(void)
-> +{
-> +       if (IS_ENABLED(CONFIG_X86_64)) {
-> +               struct cpuinfo_x86 *c = &cpu_data(0);
-> +
-> +               return (c->x86 == 6 && c->x86_model != INTEL_FAM6_ALDERLAKE);
-> +       }
-> +
-> +       return true;
-> +}
-> +
->  static void vi_program_aspm(struct amdgpu_device *adev)
->  {
->         u32 data, data1, orig;
->         bool bL1SS = false;
->         bool bClkReqSupport = true;
->
-> -       if (!amdgpu_device_should_use_aspm(adev))
-> +       if (!amdgpu_device_should_use_aspm(adev) || !aspm_support_quirk_check())
->                 return;
->
->         if (adev->flags & AMD_IS_APU ||
-> --
-> 2.25.1
->
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f39f21b3ddc7fc0f87eb6dc75ddc81b5bbfb7672
+
+For your information, I have reverted the below commit and build pass.
+
+kfence: limit currently covered allocations when pool nearly full
+
+[ Upstream commit 08f6b10630f284755087f58aa393402e15b92977 ]
+
+- Naresh
+
+> Thanks,
+> -- Marco

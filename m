@@ -2,56 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6BC74FE16F
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:58:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD5FC4FE162
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 14:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350263AbiDLM65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 08:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54050 "EHLO
+        id S1354954AbiDLM7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 08:59:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354806AbiDLM4b (ORCPT
+        with ESMTP id S1351056AbiDLM4y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 08:56:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4004969B
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 05:30:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6ECA46152A
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 12:30:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2091C385A9;
-        Tue, 12 Apr 2022 12:30:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649766617;
-        bh=y09qGgSfZHH++MJGmH/EkBz5py9CFxNAIo8FN2xFVTY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=t8qxtKRam3NtVJa3mj2VLoOZln/oJEwuSDOuIRLMBjEyJ3+Pja0DvUEAqD7f3LOee
-         CnvtfKJ0kuMz5K5nYcQ1j57SHs2dEB2kWn9UF+0LNWXU4jITmd2yAY+dSWkissgpK5
-         zpUa0CbLNrOzS+EciE6Ci7w39GDBJgoiZiVWcxjigrLE2utZ3Ckw+rgeNIkYJKLuxn
-         IchBbLVrj4+p4ME30RX0zlo/zJADcKJ8OMsflr/KrsFmbqX7Vigqk89EAL+rI6cq6b
-         4qtdAa/PNCmq46RnCWhe7/YzglHoh//3OID4GgPzZtSrEE7pybu7pjGoWuxFHhkxHn
-         XcdzyVt0IM8mw==
-Date:   Tue, 12 Apr 2022 13:30:10 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] regmap: make range check functions static
-Message-ID: <YlVw0ikabCNhlKBB@sirena.org.uk>
-References: <20220328225628.3012397-1-linux@rasmusvillemoes.dk>
- <YkRPOM9GKo3tlxUh@sirena.org.uk>
- <CAHp75VdiBqJ_+1eewmgrdGpsYUr=+xLpeH+4B_rS4nDtc-fMYA@mail.gmail.com>
+        Tue, 12 Apr 2022 08:56:54 -0400
+Received: from mxout014.mail.hostpoint.ch (mxout014.mail.hostpoint.ch [IPv6:2a00:d70:0:e::314])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED694C42F;
+        Tue, 12 Apr 2022 05:30:42 -0700 (PDT)
+Received: from [10.0.2.46] (helo=asmtp013.mail.hostpoint.ch)
+        by mxout014.mail.hostpoint.ch with esmtps  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2 (FreeBSD))
+        (envelope-from <dev@pschenker.ch>)
+        id 1neFfG-000Bu6-U9; Tue, 12 Apr 2022 14:30:34 +0200
+Received: from 31-10-206-124.static.upc.ch ([31.10.206.124] helo=[10.0.0.134])
+        by asmtp013.mail.hostpoint.ch with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.95 (FreeBSD))
+        (envelope-from <dev@pschenker.ch>)
+        id 1neFfG-000LWw-O9;
+        Tue, 12 Apr 2022 14:30:34 +0200
+X-Authenticated-Sender-Id: dev@pschenker.ch
+Message-ID: <420241bdd4fdbd1379f59e38571ec04c580eba41.camel@pschenker.ch>
+Subject: Re: [PATCH] Revert "mt76: mt7921: enable aspm by default"
+From:   Philippe Schenker <dev@pschenker.ch>
+Reply-To: dev@pschenker.ch
+To:     Deren Wu <deren.wu@mediatek.com>, Kalle Valo <kvalo@kernel.org>
+Cc:     linux-wireless@vger.kernel.org, Felix Fietkau <nbd@nbd.name>,
+        linux@leemhuis.info, "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Lorenzo Bianconi <lorenzo.bianconi83@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        YN Chen <YN.Chen@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, netdev@vger.kernel.org
+Date:   Tue, 12 Apr 2022 14:30:34 +0200
+In-Reply-To: <668f1310cc78b17c24ce7be10f5f907d5578e280.camel@mediatek.com>
+References: <20220412090415.17541-1-dev@pschenker.ch>
+         <87y20aod5d.fsf@kernel.org>
+         <668f1310cc78b17c24ce7be10f5f907d5578e280.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="shtyL6OGlWw7Wn2n"
-Content-Disposition: inline
-In-Reply-To: <CAHp75VdiBqJ_+1eewmgrdGpsYUr=+xLpeH+4B_rS4nDtc-fMYA@mail.gmail.com>
-X-Cookie: Approved for veterans.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,47 +62,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 2022-04-12 at 19:06 +0800, Deren Wu wrote:
+> On Tue, 2022-04-12 at 12:37 +0300, Kalle Valo wrote:
+> > Philippe Schenker <dev@pschenker.ch> writes:
+> > 
+> > > This reverts commit bf3747ae2e25dda6a9e6c464a717c66118c588c8.
+> > > 
+> > > This commit introduces a regression on some systems where the
+> > > kernel is
+> > > crashing in different locations after a reboot was issued.
+> > > 
+> > > This issue was bisected on a Thinkpad P14s Gen2 (AMD) with latest
+> > > firmware.
+> > > 
+> > > Link: 
+> > > https://urldefense.com/v3/__https://lore.kernel.org/linux-wireless/5077a953487275837e81bdf1808ded00b9676f9f.camel@pschenker.ch/__;!!CTRNKA9wMg0ARbw!09tjyaQlMci3fVI3yiNiDJKUW_qwNA_CbVhoAraeIX96B99Q14J4iDycWA9cq36Y$
+> > >  
+> > > Signed-off-by: Philippe Schenker <dev@pschenker.ch>
+> > 
+> > Can I take this to wireless tree? Felix, ack?
+> > 
+> > I'll also add:
+> > 
+> > Fixes: bf3747ae2e25 ("mt76: mt7921: enable aspm by default")
+> > 
+> 
+> Hi Kalle,
+> 
+> We have a patch for a similar problem. Can you wait for the
+> verification by Philippe?
+> Commit 602cc0c9618a81 ("mt76: mt7921e: fix possible probe failure
+> after
+> reboot")
+> Link: 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/net/wireless/mediatek/mt76?id=602cc0c9618a819ab00ea3c9400742a0ca318380
+> 
+> I can reproduce the problem in my v5.16-rc5 desktop. And the issue can
+> be fixed when the patch applied.
+> 
+> 
+> Hi Philippe,
+> 
+> Can you please help to check the patch in your platform?
 
---shtyL6OGlWw7Wn2n
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Aah, so I have been a bit late with my painful bisecting. Should have
+checked -next before... Whatever, your patch works just fine. I cherry
+picked your patch on top mainline v5.17 and it works just fine with that
+one.
 
-On Mon, Apr 11, 2022 at 05:59:33PM +0300, Andy Shevchenko wrote:
-> On Wed, Mar 30, 2022 at 11:17 PM Mark Brown <broonie@kernel.org> wrote:
-> > On Tue, Mar 29, 2022 at 12:56:28AM +0200, Rasmus Villemoes wrote:
+Thank you very much Deren!
 
-> > > regmap_reg_in_ranges() and regmap_check_range_table() have no callers
-> > > outside regmap.c, so they have no reason to be exported nor have
-> > > external linkage.
+Sorry Kalle for the overlapping revert, please do not apply it.
 
-> > These are intentional API in case someone needs them, no need to
-> > encourage open coding.
+Best Regards,
+Philippe
 
-> But currently it's not used and simply consumes namespace resources.
-> Isn't it our practice not to add dead code / etc?
+> 
+> 
+> Regards,
+> Deren
+> 
 
-> In practice I assume that one will grep before implementing, or at
-> least at review stage it may be pointed out for a helper, that might
-> be exported when needed, no?
-
-Or they'll just look at it and think there must be some good reason
-they're missing, or that having to deal with cross tree issues is too
-much pain and just open code stuff.  It's not insurmountable but there
-is a clarity and usability benefit here.
-
---shtyL6OGlWw7Wn2n
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJVcNEACgkQJNaLcl1U
-h9BvmQf/YvnphxulfbspZ25ZWsO9BPIjLvEKL4QZ9QIFHO1FJADQ+FeXJPs46Awt
-7rRCNwsehqnIEItQ6m5r5dK6O4tcLF6fiPD76QRuxh4ylULP+WMnUInLOWJmDWLn
-ibfrbTIpRH6mowpkByDhjrZ/cMH+Z3NQMdJkSJ7sDujql7I89wXXMU2ctoMLrLB+
-05c0JbZFsYbUOLTIYXokuKuWEBfnubNMZVTIMZ/8mx31LGLBbthhw8itD4rtGOuH
-Bfg/PpMwfJ4DvkrIaQSN74Yw2W2A9WZqHmhQ2nI0teZsaLhOjyfbPefgUz/eya/Q
-t3sMlkoDQkP0N+yXpFYtN6xkZo4F+g==
-=Ve6R
------END PGP SIGNATURE-----
-
---shtyL6OGlWw7Wn2n--

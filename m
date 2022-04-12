@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6CD84FD93B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:39:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 120D64FD815
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:35:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358517AbiDLIb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:31:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42806 "EHLO
+        id S243137AbiDLHW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:22:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353555AbiDLHZq (ORCPT
+        with ESMTP id S1352961AbiDLHGk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:25:46 -0400
+        Tue, 12 Apr 2022 03:06:40 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D5B43AE0;
-        Tue, 12 Apr 2022 00:01:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0B2127;
+        Mon, 11 Apr 2022 23:49:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B4F18B81A8F;
-        Tue, 12 Apr 2022 07:01:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A3ABC385A6;
-        Tue, 12 Apr 2022 07:01:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6D33EB81B35;
+        Tue, 12 Apr 2022 06:48:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7EBCC385A6;
+        Tue, 12 Apr 2022 06:48:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746868;
-        bh=bAPP0KeYlE4Rw4hQig6h+AE3aP+2SVdMxEk/gwMuZbk=;
+        s=korg; t=1649746138;
+        bh=2iUMAivM5OcC/XYFeQNoON5q/FeRFZMAPLQB86xdYuA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ob2X0hmi8dnX74+hNnb0Efn9dlto1xfxTpcroCBT5V3fh4RPhm4rkU+wlHNr6IKQh
-         LIgYSww8wSrWjDGjPEkOLiRkCE6AJhy3BPy7e7HkwzHl5ajvu43oxDclvXYKNZ0UiI
-         icYYtTgD+tlesuum/hNZ1odSlRFGor0LdtmYc+MY=
+        b=gKCTGsndPdFGxKS75/dpji328oXYCmFdBrgSUkMNrzuic0DBtB8GCzrQJaX6lLCLa
+         dkAFZMQJDESCdcbpsbUxpAOAFiF25aWu2dhFmtj0mpH1dAsLAoQZAP1pzgHpSB3Tzv
+         3gCWLWJf1S7+r8OlOm5BlGDWqSVrBAs4WU9t1oqo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 119/285] phy: amlogic: meson8b-usb2: Use dev_err_probe()
+        Vladimir Olovyannikov <vladimir.olovyannikov@broadcom.com>,
+        Ray Jui <ray.jui@broadcom.com>,
+        Michael Chan <michael.chan@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 173/277] bnxt_en: Prevent XDP redirect from running when stopping TX queue
 Date:   Tue, 12 Apr 2022 08:29:36 +0200
-Message-Id: <20220412062947.101224050@linuxfoundation.org>
+Message-Id: <20220412062947.045122094@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,40 +58,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+From: Ray Jui <ray.jui@broadcom.com>
 
-[ Upstream commit 6466ba1898d415b527e1013bd8551a6fdfece94c ]
+[ Upstream commit 27d4073f8d9af0340362554414f4961643a4f4de ]
 
-Use the existing dev_err_probe() helper instead of open-coding the same
-operation.
+Add checks in the XDP redirect callback to prevent XDP from running when
+the TX ring is undergoing shutdown.
 
-Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-Reported-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Acked-by: Neil Armstrong <narmstrong@baylibre.com>
-Link: https://lore.kernel.org/r/20220111095255.176141-3-aouledameur@baylibre.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Also remove redundant checks in the XDP redirect callback to validate the
+txr and the flag that indicates the ring supports XDP. The modulo
+arithmetic on 'tx_nr_rings_xdp' already guarantees the derived TX
+ring is an XDP ring.  txr is also guaranteed to be valid after checking
+BNXT_STATE_OPEN and within RCU grace period.
+
+Fixes: f18c2b77b2e4 ("bnxt_en: optimized XDP_REDIRECT support")
+Reviewed-by: Vladimir Olovyannikov <vladimir.olovyannikov@broadcom.com>
+Signed-off-by: Ray Jui <ray.jui@broadcom.com>
+Signed-off-by: Michael Chan <michael.chan@broadcom.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/phy/amlogic/phy-meson8b-usb2.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/phy/amlogic/phy-meson8b-usb2.c b/drivers/phy/amlogic/phy-meson8b-usb2.c
-index cf10bed40528..77e7e9b1428c 100644
---- a/drivers/phy/amlogic/phy-meson8b-usb2.c
-+++ b/drivers/phy/amlogic/phy-meson8b-usb2.c
-@@ -265,8 +265,9 @@ static int phy_meson8b_usb2_probe(struct platform_device *pdev)
- 		return PTR_ERR(priv->clk_usb);
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
+index c59e46c7a1ca..148b58f3468b 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
+@@ -229,14 +229,16 @@ int bnxt_xdp_xmit(struct net_device *dev, int num_frames,
+ 	ring = smp_processor_id() % bp->tx_nr_rings_xdp;
+ 	txr = &bp->tx_ring[ring];
  
- 	priv->reset = devm_reset_control_get_optional_shared(&pdev->dev, NULL);
--	if (PTR_ERR(priv->reset) == -EPROBE_DEFER)
--		return PTR_ERR(priv->reset);
-+	if (IS_ERR(priv->reset))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(priv->reset),
-+				     "Failed to get the reset line");
++	if (READ_ONCE(txr->dev_state) == BNXT_DEV_STATE_CLOSING)
++		return -EINVAL;
++
+ 	if (static_branch_unlikely(&bnxt_xdp_locking_key))
+ 		spin_lock(&txr->xdp_tx_lock);
  
- 	priv->dr_mode = of_usb_get_dr_mode_by_phy(pdev->dev.of_node, -1);
- 	if (priv->dr_mode == USB_DR_MODE_UNKNOWN) {
+ 	for (i = 0; i < num_frames; i++) {
+ 		struct xdp_frame *xdp = frames[i];
+ 
+-		if (!txr || !bnxt_tx_avail(bp, txr) ||
+-		    !(bp->bnapi[ring]->flags & BNXT_NAPI_FLAG_XDP))
++		if (!bnxt_tx_avail(bp, txr))
+ 			break;
+ 
+ 		mapping = dma_map_single(&pdev->dev, xdp->data, xdp->len,
 -- 
 2.35.1
 

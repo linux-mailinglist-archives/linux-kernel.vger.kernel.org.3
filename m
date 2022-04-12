@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2900A4FD99A
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:41:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37A864FD710
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386449AbiDLI6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:58:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59712 "EHLO
+        id S1379082AbiDLIT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:19:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359259AbiDLHmw (ORCPT
+        with ESMTP id S1354488AbiDLH00 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:42:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA4DC2B253;
-        Tue, 12 Apr 2022 00:21:15 -0700 (PDT)
+        Tue, 12 Apr 2022 03:26:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1520045AFE;
+        Tue, 12 Apr 2022 00:06:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 53B7B6153F;
-        Tue, 12 Apr 2022 07:21:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A239C385A1;
-        Tue, 12 Apr 2022 07:21:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AD4C616D1;
+        Tue, 12 Apr 2022 07:06:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5710C36B1D;
+        Tue, 12 Apr 2022 07:06:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649748074;
-        bh=qVZQZO1froVUTZ6TwlksDchw3cHLrw0uS/UZVNIs+5k=;
+        s=korg; t=1649747178;
+        bh=QaNOR5RKZom6VvVT+7/5NSchd1phah1uvn1QBNxVMAE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WYOlBrW5XwLS6TEGR6KFD4gikTUrVl10RnYBY8RheGegig0AQGXqDjHuz7ho3xH/S
-         JCtv/XAA4opxP5/LaPNsSPcxG1Tv7KF0Tq0SRzZ7xoveOrjW21S9FCYMCbt84ilTim
-         RPyPo0m5HcUM/mFP4QJl897aI4JcRU7z+Zg/OTuA=
+        b=xKfmDW7UPC+aue6FrZ6ZAB4OQmRGAP68Rfy2YjO51EuR5/ValPd7AtqxYDYxqu7gU
+         4KWrwiLYVa3C6mcCqayyqhz174p3gJlsDuUjSf09AcjtM+/UbEY20QwNehwk79qCvs
+         mjZf0ByH++ckVDOg6y2IaRnNqCAuamQHEl+Tvdjc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        Lyude Paul <lyude@redhat.com>
-Subject: [PATCH 5.17 309/343] drm/nouveau/pmu: Add missing callbacks for Tegra devices
-Date:   Tue, 12 Apr 2022 08:32:07 +0200
-Message-Id: <20220412063000.240457912@linuxfoundation.org>
+        stable@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH 5.16 271/285] dmaengine: Revert "dmaengine: shdma: Fix runtime PM imbalance on error"
+Date:   Tue, 12 Apr 2022 08:32:08 +0200
+Message-Id: <20220412062951.479763686@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
+References: <20220412062943.670770901@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,69 +53,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Karol Herbst <kherbst@redhat.com>
+From: Vinod Koul <vkoul@kernel.org>
 
-commit 38d4e5cf5b08798f093374e53c2f4609d5382dd5 upstream.
+commit d143f939a95696d38ff800ada14402fa50ebbd6c upstream.
 
-Fixes a crash booting on those platforms with nouveau.
+This reverts commit 455896c53d5b ("dmaengine: shdma: Fix runtime PM
+imbalance on error") as the patch wrongly reduced the count on error and
+did not bail out. So drop the count by reverting the patch .
 
-Fixes: 4cdd2450bf73 ("drm/nouveau/pmu/gm200-: use alternate falcon reset sequence")
-Cc: Ben Skeggs <bskeggs@redhat.com>
-Cc: Karol Herbst <kherbst@redhat.com>
-Cc: dri-devel@lists.freedesktop.org
-Cc: nouveau@lists.freedesktop.org
-Cc: <stable@vger.kernel.org> # v5.17+
-Signed-off-by: Karol Herbst <kherbst@redhat.com>
-Reviewed-by: Lyude Paul <lyude@redhat.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220322124800.2605463-1-kherbst@redhat.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gm20b.c |    1 +
- drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gp102.c |    2 +-
- drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gp10b.c |    1 +
- drivers/gpu/drm/nouveau/nvkm/subdev/pmu/priv.h  |    1 +
- 4 files changed, 4 insertions(+), 1 deletion(-)
+ drivers/dma/sh/shdma-base.c |    4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gm20b.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gm20b.c
-@@ -216,6 +216,7 @@ gm20b_pmu = {
- 	.intr = gt215_pmu_intr,
- 	.recv = gm20b_pmu_recv,
- 	.initmsg = gm20b_pmu_initmsg,
-+	.reset = gf100_pmu_reset,
- };
+--- a/drivers/dma/sh/shdma-base.c
++++ b/drivers/dma/sh/shdma-base.c
+@@ -115,10 +115,8 @@ static dma_cookie_t shdma_tx_submit(stru
+ 		ret = pm_runtime_get(schan->dev);
  
- #if IS_ENABLED(CONFIG_ARCH_TEGRA_210_SOC)
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gp102.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gp102.c
-@@ -23,7 +23,7 @@
-  */
- #include "priv.h"
+ 		spin_unlock_irq(&schan->chan_lock);
+-		if (ret < 0) {
++		if (ret < 0)
+ 			dev_err(schan->dev, "%s(): GET = %d\n", __func__, ret);
+-			pm_runtime_put(schan->dev);
+-		}
  
--static void
-+void
- gp102_pmu_reset(struct nvkm_pmu *pmu)
- {
- 	struct nvkm_device *device = pmu->subdev.device;
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gp10b.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/gp10b.c
-@@ -83,6 +83,7 @@ gp10b_pmu = {
- 	.intr = gt215_pmu_intr,
- 	.recv = gm20b_pmu_recv,
- 	.initmsg = gm20b_pmu_initmsg,
-+	.reset = gp102_pmu_reset,
- };
- 
- #if IS_ENABLED(CONFIG_ARCH_TEGRA_210_SOC)
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/priv.h
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/pmu/priv.h
-@@ -41,6 +41,7 @@ int gt215_pmu_send(struct nvkm_pmu *, u3
- 
- bool gf100_pmu_enabled(struct nvkm_pmu *);
- void gf100_pmu_reset(struct nvkm_pmu *);
-+void gp102_pmu_reset(struct nvkm_pmu *pmu);
- 
- void gk110_pmu_pgob(struct nvkm_pmu *, bool);
+ 		pm_runtime_barrier(schan->dev);
  
 
 

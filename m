@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E3994FD3C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 11:59:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 889404FD415
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355907AbiDLH3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57430 "EHLO
+        id S1356099AbiDLHeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:34:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351795AbiDLHM6 (ORCPT
+        with ESMTP id S1351802AbiDLHM6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Apr 2022 03:12:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C050C10EB;
-        Mon, 11 Apr 2022 23:52:49 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 604F45F71;
+        Mon, 11 Apr 2022 23:52:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 63D10B81B35;
-        Tue, 12 Apr 2022 06:52:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88289C385A6;
-        Tue, 12 Apr 2022 06:52:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F05866149D;
+        Tue, 12 Apr 2022 06:52:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C705CC385A1;
+        Tue, 12 Apr 2022 06:52:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746367;
-        bh=SoCb/hdLcNc5aCFlOmgnS1sQDkhgqCLKwaaJREOg48A=;
+        s=korg; t=1649746375;
+        bh=+HBkRHeQ9J6cUZ/b15CBtPCaJKaKSmFT4Juh+W+THhk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PMn3qxhoRsYtMFBjpJ6vC1uACkJeIkaPKm0KICmXff3kP9h/NgEo2in6yDjGK8qq7
-         nz222yjWEr23LLV+UmdhCyw7EuI0Hfo1F4/QxnUaU8CGBGR53UYXO6+zujVieHMbXc
-         LZH4PUui8/t3zOTejuYUa+gQ8+U0uB6ZN3JnuBmc=
+        b=UwTfjqrJAkpQb45MJCSMPUBy/D3kLCNkr5gv5jdmD1lkzCgZtQ6+KhLdjtNkla3gA
+         V/EcCp8SnmWWeAQI5boO4qUU4nkEawbriGgKKVWIw8/b79BV3ibtt+1EgA3fRLS3JW
+         2aZDQoFuveRhkY6vLMV8zJj7LXyTMLd+V33Nm850=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -41,11 +41,11 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Namhyung Kim <namhyung@kernel.org>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH 5.15 256/277] perf build: Dont use -ffat-lto-objects in the python feature test when building with clang-13
-Date:   Tue, 12 Apr 2022 08:30:59 +0200
-Message-Id: <20220412062949.449788404@linuxfoundation.org>
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>
+Subject: [PATCH 5.15 259/277] tools build: Use $(shell ) instead of `` to get embedded libperls ccopts
+Date:   Tue, 12 Apr 2022 08:31:02 +0200
+Message-Id: <20220412062949.538827562@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
 References: <20220412062942.022903016@linuxfoundation.org>
@@ -65,18 +65,18 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-commit 3a8a0475861a443f02e3a9b57d044fe2a0a99291 upstream.
+commit 541f695cbcb6932c22638b06e0cbe1d56177e2e9 upstream.
 
-Using -ffat-lto-objects in the python feature test when building with
-clang-13 results in:
+Just like its done for ldopts and for both in tools/perf/Makefile.config.
 
-  clang-13: error: optimization flag '-ffat-lto-objects' is not supported [-Werror,-Wignored-optimization-argument]
-  error: command '/usr/sbin/clang' failed with exit code 1
-  cp: cannot stat '/tmp/build/perf/python_ext_build/lib/perf*.so': No such file or directory
-  make[2]: *** [Makefile.perf:639: /tmp/build/perf/python/perf.so] Error 1
+Using `` to initialize PERL_EMBED_CCOPTS somehow precludes using:
 
-Noticed when building on a docker.io/library/archlinux:base container.
+  $(filter-out SOMETHING_TO_FILTER,$(PERL_EMBED_CCOPTS))
 
+And we need to do it to allow for building with versions of clang where
+some gcc options selected by distros are not available.
+
+Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # Debian/Selfmade LLVM-14 (x86-64)
 Cc: Adrian Hunter <adrian.hunter@intel.com>
 Cc: Fangrui Song <maskray@google.com>
 Cc: Florian Fainelli <f.fainelli@gmail.com>
@@ -88,36 +88,23 @@ Cc: Michael Petlan <mpetlan@redhat.com>
 Cc: Namhyung Kim <namhyung@kernel.org>
 Cc: Nathan Chancellor <nathan@kernel.org>
 Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Sedat Dilek <sedat.dilek@gmail.com>
+Link: http://lore.kernel.org/lkml/YktYX2OnLtyobRYD@kernel.org
 Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/perf/Makefile.config |    3 +++
- tools/perf/util/setup.py   |    2 ++
- 2 files changed, 5 insertions(+)
+ tools/build/feature/Makefile |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -270,6 +270,9 @@ ifdef PYTHON_CONFIG
-   PYTHON_EMBED_LIBADD := $(call grep-libs,$(PYTHON_EMBED_LDOPTS)) -lutil
-   PYTHON_EMBED_CCOPTS := $(shell $(PYTHON_CONFIG_SQ) --includes 2>/dev/null)
-   FLAGS_PYTHON_EMBED := $(PYTHON_EMBED_CCOPTS) $(PYTHON_EMBED_LDOPTS)
-+  ifeq ($(CC_NO_CLANG), 0)
-+    PYTHON_EMBED_CCOPTS := $(filter-out -ffat-lto-objects, $(PYTHON_EMBED_CCOPTS))
-+  endif
- endif
+--- a/tools/build/feature/Makefile
++++ b/tools/build/feature/Makefile
+@@ -213,7 +213,7 @@ strip-libs = $(filter-out -l%,$(1))
+ PERL_EMBED_LDOPTS = $(shell perl -MExtUtils::Embed -e ldopts 2>/dev/null)
+ PERL_EMBED_LDFLAGS = $(call strip-libs,$(PERL_EMBED_LDOPTS))
+ PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
+-PERL_EMBED_CCOPTS = `perl -MExtUtils::Embed -e ccopts 2>/dev/null`
++PERL_EMBED_CCOPTS = $(shell perl -MExtUtils::Embed -e ccopts 2>/dev/null)
+ FLAGS_PERL_EMBED=$(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS)
  
- FEATURE_CHECK_CFLAGS-libpython := $(PYTHON_EMBED_CCOPTS)
---- a/tools/perf/util/setup.py
-+++ b/tools/perf/util/setup.py
-@@ -23,6 +23,8 @@ if cc_is_clang:
-             vars[var] = sub("-fstack-protector-strong", "", vars[var])
-         if not clang_has_option("-fno-semantic-interposition"):
-             vars[var] = sub("-fno-semantic-interposition", "", vars[var])
-+        if not clang_has_option("-ffat-lto-objects"):
-+            vars[var] = sub("-ffat-lto-objects", "", vars[var])
- 
- from distutils.core import setup, Extension
- 
+ ifeq ($(CC_NO_CLANG), 0)
 
 

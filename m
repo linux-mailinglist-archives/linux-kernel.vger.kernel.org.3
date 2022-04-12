@@ -2,195 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 423264FD05E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 08:45:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E534FCF83
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 08:29:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350516AbiDLGpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 02:45:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43020 "EHLO
+        id S1348737AbiDLGbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 02:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233269AbiDLGmR (ORCPT
+        with ESMTP id S1348699AbiDLGbH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:42:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8646317E28;
-        Mon, 11 Apr 2022 23:36:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 21CDEB81B41;
-        Tue, 12 Apr 2022 06:36:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CFCEC385A6;
-        Tue, 12 Apr 2022 06:36:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649745381;
-        bh=h6heFhVXDtbOcbAa04Vmbo7xUjcXq9qwC/VUUP9Pslo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hXck/GTheWCP6jSm5i0Fm+pjV+F308jWHG2aNs9ODnaWiMjND57C0Y/9zzcbvs38f
-         b/4pn8LCJhvy/NIFCm53p2XJZFAaG0Rz+Wjs5T9FUnfGVsPhnVzDK2gxJ+65prpxIT
-         dpCo/JJR6+dbe3ZVua+BakRUwovwWCuJLbX97Fw4=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <Alexander.Deucher@amd.com>,
-        Rajneesh Bhardwaj <rajneesh.bhardwaj@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 027/171] drm/amdgpu: Fix recursive locking warning
-Date:   Tue, 12 Apr 2022 08:28:38 +0200
-Message-Id: <20220412062928.671099594@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062927.870347203@linuxfoundation.org>
-References: <20220412062927.870347203@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Tue, 12 Apr 2022 02:31:07 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF4335865;
+        Mon, 11 Apr 2022 23:28:51 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id bo5so16637033pfb.4;
+        Mon, 11 Apr 2022 23:28:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AWPJQl0O9reNTOqA4s+DVRhGYY/e+TZiRNvFAD49Eq0=;
+        b=kl1Y3+MOsimk1c9G0ZgEIdYDzHXcFBZzXklwvq4vEtXlrTpi12RmuE3IPeBjDW5LXM
+         LxAFmAXUAFLHQy2El+ofs1WDqstq9EaCxNxUb1L1tRg7xZrWSl8/YWJyDDbvn8giBWf6
+         /y8jkanDcX85vyGuNmZaCJySQ64kzcbDV6W3LkxPp0ppiUz5MKTVJx/05B6sOOC/ecSt
+         4lC/04NnRjL1gF62QMp7i7XSv+gpWX7D3nHPMUFmgS/h0TgbDgS+BQ/XlOsS0dFjULci
+         VKFA2QuCCTvzSytAkdjleCQEC4s/b2MYp/UL0IKuabajylGFZKkTfmHtLbnYwMkqzSuQ
+         4iYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AWPJQl0O9reNTOqA4s+DVRhGYY/e+TZiRNvFAD49Eq0=;
+        b=koNxeqNoe7lo+lhhrpWgYjmri1c3+dnZTvQZYHOXWSWd4ow7SOu1oCD4hKrd01c+YR
+         dp4E5nLTR8j8y2laJJp7S0TpR1miOgD9Q6VcDl8VG6pi/Ylw9GLzEX5h120AwaYnW1JS
+         XBGO2GZOBeamlk5JxPIggMwdGnNqTOvfIsSqVDcKhZp6HMw68vPRDI29AAG87m5+2dLA
+         /03VydwaHVUkJT+DSYu0uPwsxaYFnwgJktu9ictyN2plTubn/IKT1MWfEP6Nv+rhYVoQ
+         6ieQODXa3dLOAUkAdhhjYo27ip3ulfSO9cN5foDHLtYaS03fNhXLFbNDcCN5pglMBkgt
+         ymOQ==
+X-Gm-Message-State: AOAM533to6Ba5tM28CDozy7shqNW64yA2QEE64Xn9AaCQCBlJfVGDYd0
+        uHlK03h1sIh4+dmS00D6eS70ZJXT7s/D8c10SA==
+X-Google-Smtp-Source: ABdhPJwFj1oEy80pxWbYOfZRRfn5FeybU3w4qp6NEf3c4Bnc7sWesUmDssvvU3fu59IukIuD4tc4rBe3c7GQbTYgxHU=
+X-Received: by 2002:a63:610:0:b0:39d:300c:ad9b with SMTP id
+ 16-20020a630610000000b0039d300cad9bmr10300635pgg.113.1649744930773; Mon, 11
+ Apr 2022 23:28:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAMhUBjkVME8D5KsHvT=uddBsW_Bh6wr7qeXS=UpQD4LgPmHffQ@mail.gmail.com>
+ <05433153-0424-ab66-1573-993d0490c5bc@opensource.wdc.com> <556511649635338@mail.yandex.com>
+In-Reply-To: <556511649635338@mail.yandex.com>
+From:   Zheyu Ma <zheyuma97@gmail.com>
+Date:   Tue, 12 Apr 2022 14:28:39 +0800
+Message-ID: <CAMhUBjn4HJAy2aXv_M9rSJcZZv7ZihyK3rb5bj2NFyFx6W5dUg@mail.gmail.com>
+Subject: Re: [BUG] ata: pata_marvell: Warning when probing the module
+To:     Ozgur <ozgur@linux.com>
+Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        "linux-ide@vger.kernel.org" <linux-ide@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rajneesh Bhardwaj <rajneesh.bhardwaj@amd.com>
+On Mon, Apr 11, 2022 at 8:09 AM Ozgur <ozgur@linux.com> wrote:
+>
+>
+>
+> 11.04.2022, 02:53, "Damien Le Moal" <damien.lemoal@opensource.wdc.com>:
+>
+> On 4/10/22 15:30, Zheyu Ma wrote:
+>
+>  Hello,
+>
+>  I found a bug in the pata_marvell module.
+>  When probing the driver, it seems to trigger the error path and
+>  executes the function marvell_cable_detect(), but the
+>  'ap->ioaddr.bmdma_addr' is not initialized, which causes a warning.
+>
+>
+>
+> Hello,
+> i'm not sure if this is a bug because you get as ap points to a port number.
+>
+> (ap->port_no)
+>
+> it points to 0x1 port that appears in error message.
 
-[ Upstream commit 447c7997b62a5115ba4da846dcdee4fc12298a6a ]
+Please correct me if i'm wrong, actually 'ap->port_no' is zero, and
+the 'ap->ioaddr.bmdma_addr' is zero too since it is not initialized.
 
-Noticed the below warning while running a pytorch workload on vega10
-GPUs. Change to trylock to avoid conflicts with already held reservation
-locks.
+> otherwise BUG will work and if it cannot read warning will return.
+> ( BUG(); is macro )
 
-[  +0.000003] WARNING: possible recursive locking detected
-[  +0.000003] 5.13.0-kfd-rajneesh #1030 Not tainted
-[  +0.000004] --------------------------------------------
-[  +0.000002] python/4822 is trying to acquire lock:
-[  +0.000004] ffff932cd9a259f8 (reservation_ww_class_mutex){+.+.}-{3:3},
-at: amdgpu_bo_release_notify+0xc4/0x160 [amdgpu]
-[  +0.000203]
-              but task is already holding lock:
-[  +0.000003] ffff932cbb7181f8 (reservation_ww_class_mutex){+.+.}-{3:3},
-at: ttm_eu_reserve_buffers+0x270/0x470 [ttm]
-[  +0.000017]
-              other info that might help us debug this:
-[  +0.000002]  Possible unsafe locking scenario:
-
-[  +0.000003]        CPU0
-[  +0.000002]        ----
-[  +0.000002]   lock(reservation_ww_class_mutex);
-[  +0.000004]   lock(reservation_ww_class_mutex);
-[  +0.000003]
-               *** DEADLOCK ***
-
-[  +0.000002]  May be due to missing lock nesting notation
-
-[  +0.000003] 7 locks held by python/4822:
-[  +0.000003]  #0: ffff932c4ac028d0 (&process->mutex){+.+.}-{3:3}, at:
-kfd_ioctl_map_memory_to_gpu+0x10b/0x320 [amdgpu]
-[  +0.000232]  #1: ffff932c55e830a8 (&info->lock#2){+.+.}-{3:3}, at:
-amdgpu_amdkfd_gpuvm_map_memory_to_gpu+0x64/0xf60 [amdgpu]
-[  +0.000241]  #2: ffff932cc45b5e68 (&(*mem)->lock){+.+.}-{3:3}, at:
-amdgpu_amdkfd_gpuvm_map_memory_to_gpu+0xdf/0xf60 [amdgpu]
-[  +0.000236]  #3: ffffb2b35606fd28
-(reservation_ww_class_acquire){+.+.}-{0:0}, at:
-amdgpu_amdkfd_gpuvm_map_memory_to_gpu+0x232/0xf60 [amdgpu]
-[  +0.000235]  #4: ffff932cbb7181f8
-(reservation_ww_class_mutex){+.+.}-{3:3}, at:
-ttm_eu_reserve_buffers+0x270/0x470 [ttm]
-[  +0.000015]  #5: ffffffffc045f700 (*(sspp++)){....}-{0:0}, at:
-drm_dev_enter+0x5/0xa0 [drm]
-[  +0.000038]  #6: ffff932c52da7078 (&vm->eviction_lock){+.+.}-{3:3},
-at: amdgpu_vm_bo_update_mapping+0xd5/0x4f0 [amdgpu]
-[  +0.000195]
-              stack backtrace:
-[  +0.000003] CPU: 11 PID: 4822 Comm: python Not tainted
-5.13.0-kfd-rajneesh #1030
-[  +0.000005] Hardware name: GIGABYTE MZ01-CE0-00/MZ01-CE0-00, BIOS F02
-08/29/2018
-[  +0.000003] Call Trace:
-[  +0.000003]  dump_stack+0x6d/0x89
-[  +0.000010]  __lock_acquire+0xb93/0x1a90
-[  +0.000009]  lock_acquire+0x25d/0x2d0
-[  +0.000005]  ? amdgpu_bo_release_notify+0xc4/0x160 [amdgpu]
-[  +0.000184]  ? lock_is_held_type+0xa2/0x110
-[  +0.000006]  ? amdgpu_bo_release_notify+0xc4/0x160 [amdgpu]
-[  +0.000184]  __ww_mutex_lock.constprop.17+0xca/0x1060
-[  +0.000007]  ? amdgpu_bo_release_notify+0xc4/0x160 [amdgpu]
-[  +0.000183]  ? lock_release+0x13f/0x270
-[  +0.000005]  ? lock_is_held_type+0xa2/0x110
-[  +0.000006]  ? amdgpu_bo_release_notify+0xc4/0x160 [amdgpu]
-[  +0.000183]  amdgpu_bo_release_notify+0xc4/0x160 [amdgpu]
-[  +0.000185]  ttm_bo_release+0x4c6/0x580 [ttm]
-[  +0.000010]  amdgpu_bo_unref+0x1a/0x30 [amdgpu]
-[  +0.000183]  amdgpu_vm_free_table+0x76/0xa0 [amdgpu]
-[  +0.000189]  amdgpu_vm_free_pts+0xb8/0xf0 [amdgpu]
-[  +0.000189]  amdgpu_vm_update_ptes+0x411/0x770 [amdgpu]
-[  +0.000191]  amdgpu_vm_bo_update_mapping+0x324/0x4f0 [amdgpu]
-[  +0.000191]  amdgpu_vm_bo_update+0x251/0x610 [amdgpu]
-[  +0.000191]  update_gpuvm_pte+0xcc/0x290 [amdgpu]
-[  +0.000229]  ? amdgpu_vm_bo_map+0xd7/0x130 [amdgpu]
-[  +0.000190]  amdgpu_amdkfd_gpuvm_map_memory_to_gpu+0x912/0xf60
-[amdgpu]
-[  +0.000234]  kfd_ioctl_map_memory_to_gpu+0x182/0x320 [amdgpu]
-[  +0.000218]  kfd_ioctl+0x2b9/0x600 [amdgpu]
-[  +0.000216]  ? kfd_ioctl_unmap_memory_from_gpu+0x270/0x270 [amdgpu]
-[  +0.000216]  ? lock_release+0x13f/0x270
-[  +0.000006]  ? __fget_files+0x107/0x1e0
-[  +0.000007]  __x64_sys_ioctl+0x8b/0xd0
-[  +0.000007]  do_syscall_64+0x36/0x70
-[  +0.000004]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[  +0.000007] RIP: 0033:0x7fbff90a7317
-[  +0.000004] Code: b3 66 90 48 8b 05 71 4b 2d 00 64 c7 00 26 00 00 00
-48 c7 c0 ff ff ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 b8 10 00 00 00 0f
-05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 41 4b 2d 00 f7 d8 64 89 01 48
-[  +0.000005] RSP: 002b:00007fbe301fe648 EFLAGS: 00000246 ORIG_RAX:
-0000000000000010
-[  +0.000006] RAX: ffffffffffffffda RBX: 00007fbcc402d820 RCX:
-00007fbff90a7317
-[  +0.000003] RDX: 00007fbe301fe690 RSI: 00000000c0184b18 RDI:
-0000000000000004
-[  +0.000003] RBP: 00007fbe301fe690 R08: 0000000000000000 R09:
-00007fbcc402d880
-[  +0.000003] R10: 0000000002001000 R11: 0000000000000246 R12:
-00000000c0184b18
-[  +0.000003] R13: 0000000000000004 R14: 00007fbf689593a0 R15:
-00007fbcc402d820
-
-Cc: Christian König <christian.koenig@amd.com>
-Cc: Felix Kuehling <Felix.Kuehling@amd.com>
-Cc: Alex Deucher <Alexander.Deucher@amd.com>
-
-Reviewed-by: Christian König <christian.koenig@amd.com>
-Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
-Signed-off-by: Rajneesh Bhardwaj <rajneesh.bhardwaj@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_object.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_object.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_object.c
-index ad9863b84f1f..f615ecc06a22 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_object.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_object.c
-@@ -1338,7 +1338,8 @@ void amdgpu_bo_release_notify(struct ttm_buffer_object *bo)
- 	    !(abo->flags & AMDGPU_GEM_CREATE_VRAM_WIPE_ON_RELEASE))
- 		return;
- 
--	dma_resv_lock(bo->base.resv, NULL);
-+	if (WARN_ON_ONCE(!dma_resv_trylock(bo->base.resv)))
-+		return;
- 
- 	r = amdgpu_fill_buffer(abo, AMDGPU_POISON, bo->base.resv, &fence);
- 	if (!WARN_ON(r)) {
--- 
-2.35.1
-
-
-
+Zheyu Ma

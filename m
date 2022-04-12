@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 784D34FD41C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 423234FD3D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 11:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379438AbiDLIUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:20:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43174 "EHLO
+        id S1352192AbiDLHNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:13:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355863AbiDLH3b (ORCPT
+        with ESMTP id S1351871AbiDLGyg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:29:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76CC4FC4E;
-        Tue, 12 Apr 2022 00:08:24 -0700 (PDT)
+        Tue, 12 Apr 2022 02:54:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9543227B19;
+        Mon, 11 Apr 2022 23:44:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A88F616C5;
-        Tue, 12 Apr 2022 07:08:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DA69C385A1;
-        Tue, 12 Apr 2022 07:08:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2EA37B81B35;
+        Tue, 12 Apr 2022 06:44:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99ABDC385A8;
+        Tue, 12 Apr 2022 06:44:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747303;
-        bh=uvmvK5G4Vh3vydzA/XSSQgtsGxMG1xvRkHz1oUWROgc=;
+        s=korg; t=1649745852;
+        bh=3Uh63Xaba4nfwceptEzui7zIuLCZGPX+JVTtExiFw6s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1kf8i/TBlbV5LdNnS5aw6QXIdeXrZBoSzhiz8U6hp9wVVy8aMuxH2yYnrInxn5vW4
-         GBvji5V1SY7MOKT5T/cVp+a9wqqLl4gmO62ibe0d2CgA54WzFnF23arYXU5YlZpM75
-         EWkcw72dU+ebfaEE1qQ1PJyDxIrQ6jVSbA2UdgHg=
+        b=TTqsL1SGW0h8H3qB6MhGafIgangZPMtqHDB2+QFEHgxZDY2iJJSO22P7XsdZiquFG
+         nYcfwlv+qzb4YToarStBl1JbH0NK47BnXxm1z3rRhTAWVyuxGW7f8KGVaW9qA5/5au
+         TK1f2WsxLJas4zZgwlxnJ8IB2HIVqj//dP7vpQXQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Philip Yang <Philip.Yang@amd.com>,
-        Ruili Ji <ruili.ji@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
+        stable@vger.kernel.org, Jack Wang <jinpu.wang@ionos.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 031/343] drm/amdkfd: Ensure mm remain valid in svm deferred_list work
-Date:   Tue, 12 Apr 2022 08:27:29 +0200
-Message-Id: <20220412062952.004344561@linuxfoundation.org>
+Subject: [PATCH 5.15 071/277] scsi: pm8001: Fix memory leak in pm8001_chip_fw_flash_update_req()
+Date:   Tue, 12 Apr 2022 08:27:54 +0200
+Message-Id: <20220412062944.101584134@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,139 +56,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Philip Yang <Philip.Yang@amd.com>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-[ Upstream commit 367c9b0f1b8750a704070e7ae85234d591290434 ]
+[ Upstream commit f792a3629f4c4aa4c3703d66b43ce1edcc3ec09a ]
 
-svm_deferred_list work should continue to handle deferred_range_list
-which maybe split to child range to avoid child range leak, and remove
-ranges mmu interval notifier to avoid mm mm_count leak. So taking mm
-reference when adding range to deferred list, to ensure mm is valid in
-the scheduled deferred_list_work, and drop the mm referrence after range
-is handled.
+In pm8001_chip_fw_flash_update_build(), if
+pm8001_chip_fw_flash_update_build() fails, the struct fw_control_ex
+allocated must be freed.
 
-Signed-off-by: Philip Yang <Philip.Yang@amd.com>
-Reported-by: Ruili Ji <ruili.ji@amd.com>
-Reviewed-by: Felix Kuehling <Felix.Kuehling@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Link: https://lore.kernel.org/r/20220220031810.738362-23-damien.lemoal@opensource.wdc.com
+Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/amdkfd/kfd_svm.c | 62 ++++++++++++++++------------
- 1 file changed, 36 insertions(+), 26 deletions(-)
+ drivers/scsi/pm8001/pm8001_hwi.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
-index f2805ba74c80..225affcddbc1 100644
---- a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
-+++ b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
-@@ -1985,10 +1985,9 @@ svm_range_update_notifier_and_interval_tree(struct mm_struct *mm,
+diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
+index 619fbcf37933..32fc450bf84b 100644
+--- a/drivers/scsi/pm8001/pm8001_hwi.c
++++ b/drivers/scsi/pm8001/pm8001_hwi.c
+@@ -4903,8 +4903,10 @@ pm8001_chip_fw_flash_update_req(struct pm8001_hba_info *pm8001_ha,
+ 	ccb->ccb_tag = tag;
+ 	rc = pm8001_chip_fw_flash_update_build(pm8001_ha, &flash_update_info,
+ 		tag);
+-	if (rc)
++	if (rc) {
++		kfree(fw_control_context);
+ 		pm8001_tag_free(pm8001_ha, tag);
++	}
+ 
+ 	return rc;
  }
- 
- static void
--svm_range_handle_list_op(struct svm_range_list *svms, struct svm_range *prange)
-+svm_range_handle_list_op(struct svm_range_list *svms, struct svm_range *prange,
-+			 struct mm_struct *mm)
- {
--	struct mm_struct *mm = prange->work_item.mm;
--
- 	switch (prange->work_item.op) {
- 	case SVM_OP_NULL:
- 		pr_debug("NULL OP 0x%p prange 0x%p [0x%lx 0x%lx]\n",
-@@ -2071,34 +2070,41 @@ static void svm_range_deferred_list_work(struct work_struct *work)
- 	pr_debug("enter svms 0x%p\n", svms);
- 
- 	p = container_of(svms, struct kfd_process, svms);
--	/* Avoid mm is gone when inserting mmu notifier */
--	mm = get_task_mm(p->lead_thread);
--	if (!mm) {
--		pr_debug("svms 0x%p process mm gone\n", svms);
--		return;
--	}
--retry:
--	mmap_write_lock(mm);
--
--	/* Checking for the need to drain retry faults must be inside
--	 * mmap write lock to serialize with munmap notifiers.
--	 */
--	if (unlikely(atomic_read(&svms->drain_pagefaults))) {
--		mmap_write_unlock(mm);
--		svm_range_drain_retry_fault(svms);
--		goto retry;
--	}
- 
- 	spin_lock(&svms->deferred_list_lock);
- 	while (!list_empty(&svms->deferred_range_list)) {
- 		prange = list_first_entry(&svms->deferred_range_list,
- 					  struct svm_range, deferred_list);
--		list_del_init(&prange->deferred_list);
- 		spin_unlock(&svms->deferred_list_lock);
- 
- 		pr_debug("prange 0x%p [0x%lx 0x%lx] op %d\n", prange,
- 			 prange->start, prange->last, prange->work_item.op);
- 
-+		mm = prange->work_item.mm;
-+retry:
-+		mmap_write_lock(mm);
-+
-+		/* Checking for the need to drain retry faults must be inside
-+		 * mmap write lock to serialize with munmap notifiers.
-+		 */
-+		if (unlikely(atomic_read(&svms->drain_pagefaults))) {
-+			mmap_write_unlock(mm);
-+			svm_range_drain_retry_fault(svms);
-+			goto retry;
-+		}
-+
-+		/* Remove from deferred_list must be inside mmap write lock, for
-+		 * two race cases:
-+		 * 1. unmap_from_cpu may change work_item.op and add the range
-+		 *    to deferred_list again, cause use after free bug.
-+		 * 2. svm_range_list_lock_and_flush_work may hold mmap write
-+		 *    lock and continue because deferred_list is empty, but
-+		 *    deferred_list work is actually waiting for mmap lock.
-+		 */
-+		spin_lock(&svms->deferred_list_lock);
-+		list_del_init(&prange->deferred_list);
-+		spin_unlock(&svms->deferred_list_lock);
-+
- 		mutex_lock(&svms->lock);
- 		mutex_lock(&prange->migrate_mutex);
- 		while (!list_empty(&prange->child_list)) {
-@@ -2109,19 +2115,20 @@ static void svm_range_deferred_list_work(struct work_struct *work)
- 			pr_debug("child prange 0x%p op %d\n", pchild,
- 				 pchild->work_item.op);
- 			list_del_init(&pchild->child_list);
--			svm_range_handle_list_op(svms, pchild);
-+			svm_range_handle_list_op(svms, pchild, mm);
- 		}
- 		mutex_unlock(&prange->migrate_mutex);
- 
--		svm_range_handle_list_op(svms, prange);
-+		svm_range_handle_list_op(svms, prange, mm);
- 		mutex_unlock(&svms->lock);
-+		mmap_write_unlock(mm);
-+
-+		/* Pairs with mmget in svm_range_add_list_work */
-+		mmput(mm);
- 
- 		spin_lock(&svms->deferred_list_lock);
- 	}
- 	spin_unlock(&svms->deferred_list_lock);
--
--	mmap_write_unlock(mm);
--	mmput(mm);
- 	pr_debug("exit svms 0x%p\n", svms);
- }
- 
-@@ -2139,6 +2146,9 @@ svm_range_add_list_work(struct svm_range_list *svms, struct svm_range *prange,
- 			prange->work_item.op = op;
- 	} else {
- 		prange->work_item.op = op;
-+
-+		/* Pairs with mmput in deferred_list_work */
-+		mmget(mm);
- 		prange->work_item.mm = mm;
- 		list_add_tail(&prange->deferred_list,
- 			      &prange->svms->deferred_range_list);
 -- 
 2.35.1
 

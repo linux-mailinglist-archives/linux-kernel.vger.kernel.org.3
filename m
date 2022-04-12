@@ -2,60 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B6124FE2A7
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEBA34FE2A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 15:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355631AbiDLN3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 09:29:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37508 "EHLO
+        id S1356189AbiDLN3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 09:29:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356343AbiDLN1H (ORCPT
+        with ESMTP id S1356875AbiDLN2P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 09:27:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7419BC3F
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 06:22:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 476FA61A6A
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 13:22:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E53F1C385A1;
-        Tue, 12 Apr 2022 13:22:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649769730;
-        bh=6MhtNDR77Uk9x4Ncl/TgZ0K/BInAvzJDofHfnatbD04=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tVOqaeQ/W+eDm/Y22r40LIR65+/PNZqjaal7DaWcnWH769nA8uOB+yqCl9/mgJsYL
-         avn3gVwF5wVZQsdBFFljHdtLRotjQ45CMndTHE/X/eardekI2sSD/AKqAjFZQxnhwu
-         5xrrfxuC2WtHXo/aBoo6f+Ie/6ZzPMdH3hqdzfA+eFQxClJmqHhSi0wsymg4iPJm9o
-         rB+te/DKTVzbZ6S5S59YVnb83104hx5zcKcEjyqdcIITYnyPXzFx7Lp1mov8B6BQpC
-         8dtTgUBhkp14kW2LoebmRNHm9EZVA4xqGIfYdGyZCcn2kNytab1xYcIQ4+TS9Nvypc
-         r+o/L8w24DizA==
-Date:   Tue, 12 Apr 2022 14:22:05 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Shengjiu Wang <shengjiu.wang@gmail.com>
-Cc:     Shengjiu Wang <shengjiu.wang@nxp.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, patches@opensource.cirrus.com,
-        alsa-devel@alsa-project.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] ASoC: wm8524: remove rate constraint for FE-BE case
-Message-ID: <YlV8/dJeyFFDf/v/@sirena.org.uk>
-References: <1649754826-2651-1-git-send-email-shengjiu.wang@nxp.com>
- <YlVy6tAPMw+MHq/f@sirena.org.uk>
- <CAA+D8AP=ydd6f9su=JR1q9NVWTg2tHoTF1OGHQGmFN+gZhAcHQ@mail.gmail.com>
+        Tue, 12 Apr 2022 09:28:15 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A1610FF2
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 06:23:30 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 816853200D53;
+        Tue, 12 Apr 2022 09:23:29 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 12 Apr 2022 09:23:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1649769809; x=1649856209; bh=SCBBhq7C9q
+        0Z6mR7hQqmWZHCx1ZocRttm3x1QobmTTg=; b=QA+HwR/CwtCKhYGOcy9Z1ZwoEP
+        inlBN2ws97HMBG/hMwgNWmPRguDSmiKr0/BZNLpGZUA8q5ZZCuIQ07806K+Nu8wK
+        sFbKZrqUeDstfgwZTC+R4v6zdbx4vlk3ZLRrp50BiJbTKDZcN+5R4ZVMkMytFjC1
+        j0aRg9WwXSzK6BUX5BBSlPccQb7upozo37NR6jADtIuiCrT/MDR8rq3sRjYQ81Da
+        jVt9cJTzhOhyjoIaKbmAA6hWnYpIjqYvhyN5SNZ8ZY5Q18bozkYlKQpzAjAMOutM
+        b6lWyAhYUXat95dTmFq0KxIGGxhb/UYp2ngsxEe2SxxR14VDQS6omEEcYDTw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1649769809; x=
+        1649856209; bh=SCBBhq7C9q0Z6mR7hQqmWZHCx1ZocRttm3x1QobmTTg=; b=e
+        XPnv5AadguhgwzimhsdMBgjPMrSYdpp+TnjGKJ4FJw+68TnBXeDKp1wbAPQhwJrg
+        K/C7vrPZq2y6WiPh1geWoz8vSpJGyL1qFCezZ9ULBCyrnE3juylOkeuPXZkueFLi
+        SBbUrb3o4BxGDlAMsGG+RB5pwzrqpXOTNgt8cMkhVT/BAiZMAJwkbQP+fEE6Qz59
+        ZqrKt1mbCiKLFOqx153EnIupjOT+iU+yK1ThDi7GJ5WAJr3P7aJ+OFXaRvBRf+ED
+        qceJbixeumR4D7sPffWhD2bcwhTi2OGVv0Da1w0dKLouFLZ3uymsTE5NvD99FxoU
+        O9UiIrisktUT7HPhd0DNA==
+X-ME-Sender: <xms:T31VYjxvmgYuCr3LCP8dbUYvbIy12F6BOyo9oB-EnrCzzjaSsAYRSg>
+    <xme:T31VYrRg92peaIZ7uheflRnWYbEHTtGfHQjXyaM_ivlHOW7RNd6Pg-NHUb8OeMTQu
+    _v3p7PVidw281g4Ya4>
+X-ME-Received: <xmr:T31VYtU8hgF9-XI-3K1rx2WT7SHTotivfOEnsFyC2KDn6HfNnFXmlJ1ri1qayx5-v-n2vhR9BBAEyTkGYnD0Q8YjNQ-APRaioXS1HZ8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudekkedgiedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
+    gedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:T31VYtiwDlD-FHeWW_X7sJVeK5cH0-h8wzxzt1fl3TPdzROvFMu8Jw>
+    <xmx:T31VYlAgh9wQZI8_87yrpoaPOvI-qXfIXviGKhuy2UTDtWpIKY5kOQ>
+    <xmx:T31VYmI-N_eCzYBWNcuua5_5sJlp7KWQs8Vq1rTNGIYMxTwvvA9CvQ>
+    <xmx:UX1VYp0EwhfrWJuYbbmgn1LBahUqSxO5llrF7oJ1VJ8tFQx_KLGdSA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 12 Apr 2022 09:23:27 -0400 (EDT)
+Date:   Tue, 12 Apr 2022 15:23:25 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 3/6] drm/sun4i: sun8i-hdmi-phy: Used device-managed
+ clocks/resets
+Message-ID: <20220412132325.bq2c3g2fskckfgpz@houat>
+References: <20220412043512.49364-1-samuel@sholland.org>
+ <20220412043512.49364-4-samuel@sholland.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="GWZv1Nn8Ww4evgM0"
+        protocol="application/pgp-signature"; boundary="542vfuzlbowtb4mg"
 Content-Disposition: inline
-In-Reply-To: <CAA+D8AP=ydd6f9su=JR1q9NVWTg2tHoTF1OGHQGmFN+gZhAcHQ@mail.gmail.com>
-X-Cookie: Approved for veterans.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220412043512.49364-4-samuel@sholland.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -63,38 +92,140 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---GWZv1Nn8Ww4evgM0
+--542vfuzlbowtb4mg
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 12, 2022 at 09:18:16PM +0800, Shengjiu Wang wrote:
-> On Tue, Apr 12, 2022 at 8:39 PM Mark Brown <broonie@kernel.org> wrote:
+Hi,
 
-> > nor is having to open code it into the driver.  I already had it in the
-> > back of my head to generalise the set constraints based on sysclk
-> > pattern into the core, that might be productive here.
+On Mon, Apr 11, 2022 at 11:35:08PM -0500, Samuel Holland wrote:
+> Now that the HDMI PHY is using a platform driver, it can use device-
+> managed resources. Use these, as well as the dev_err_probe helper, to
+> simplify the probe function and get rid of the remove function.
+>=20
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
+>=20
+>  drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c | 100 ++++++++-----------------
+>  1 file changed, 30 insertions(+), 70 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c b/drivers/gpu/drm/sun=
+4i/sun8i_hdmi_phy.c
+> index 1effa30bfe62..1351e633d485 100644
+> --- a/drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c
+> +++ b/drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c
+> @@ -673,10 +673,8 @@ int sun8i_hdmi_phy_get(struct sun8i_dw_hdmi *hdmi, s=
+truct device_node *node)
+>  static int sun8i_hdmi_phy_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev =3D &pdev->dev;
+> -	struct device_node *node =3D dev->of_node;
+>  	struct sun8i_hdmi_phy *phy;
+>  	void __iomem *regs;
+> -	int ret;
+> =20
+>  	phy =3D devm_kzalloc(dev, sizeof(*phy), GFP_KERNEL);
+>  	if (!phy)
+> @@ -686,88 +684,50 @@ static int sun8i_hdmi_phy_probe(struct platform_dev=
+ice *pdev)
+>  	phy->dev =3D dev;
+> =20
+>  	regs =3D devm_platform_ioremap_resource(pdev, 0);
+> -	if (IS_ERR(regs)) {
+> -		dev_err(dev, "Couldn't map the HDMI PHY registers\n");
+> -		return PTR_ERR(regs);
+> -	}
+> +	if (IS_ERR(regs))
+> +		return dev_err_probe(dev, PTR_ERR(regs),
+> +				     "Couldn't map the HDMI PHY registers\n");
+> =20
+>  	phy->regs =3D devm_regmap_init_mmio(dev, regs,
+>  					  &sun8i_hdmi_phy_regmap_config);
+> -	if (IS_ERR(phy->regs)) {
+> -		dev_err(dev, "Couldn't create the HDMI PHY regmap\n");
+> -		return PTR_ERR(phy->regs);
+> -	}
+> +	if (IS_ERR(phy->regs))
+> +		return dev_err_probe(dev, PTR_ERR(phy->regs),
+> +				     "Couldn't create the HDMI PHY regmap\n");
+> =20
+> -	phy->clk_bus =3D of_clk_get_by_name(node, "bus");
+> -	if (IS_ERR(phy->clk_bus)) {
+> -		dev_err(dev, "Could not get bus clock\n");
+> -		return PTR_ERR(phy->clk_bus);
+> -	}
+> -
+> -	phy->clk_mod =3D of_clk_get_by_name(node, "mod");
+> -	if (IS_ERR(phy->clk_mod)) {
+> -		dev_err(dev, "Could not get mod clock\n");
+> -		ret =3D PTR_ERR(phy->clk_mod);
+> -		goto err_put_clk_bus;
+> -	}
+> +	phy->clk_bus =3D devm_clk_get(dev, "bus");
+> +	if (IS_ERR(phy->clk_bus))
+> +		return dev_err_probe(dev, PTR_ERR(phy->clk_bus),
+> +				     "Could not get bus clock\n");
+> =20
+> -	if (phy->variant->has_phy_clk) {
+> -		phy->clk_pll0 =3D of_clk_get_by_name(node, "pll-0");
+> -		if (IS_ERR(phy->clk_pll0)) {
+> -			dev_err(dev, "Could not get pll-0 clock\n");
+> -			ret =3D PTR_ERR(phy->clk_pll0);
+> -			goto err_put_clk_mod;
+> -		}
+> -
+> -		if (phy->variant->has_second_pll) {
+> -			phy->clk_pll1 =3D of_clk_get_by_name(node, "pll-1");
+> -			if (IS_ERR(phy->clk_pll1)) {
+> -				dev_err(dev, "Could not get pll-1 clock\n");
+> -				ret =3D PTR_ERR(phy->clk_pll1);
+> -				goto err_put_clk_pll0;
+> -			}
+> -		}
+> -	}
+> +	phy->clk_mod =3D devm_clk_get(dev, "mod");
+> +	if (IS_ERR(phy->clk_mod))
+> +		return dev_err_probe(dev, PTR_ERR(phy->clk_mod),
+> +				     "Could not get mod clock\n");
+> =20
+> -	phy->rst_phy =3D of_reset_control_get_shared(node, "phy");
+> -	if (IS_ERR(phy->rst_phy)) {
+> -		dev_err(dev, "Could not get phy reset control\n");
+> -		ret =3D PTR_ERR(phy->rst_phy);
+> -		goto err_put_clk_pll1;
+> -	}
+> +	if (phy->variant->has_phy_clk)
+> +		phy->clk_pll0 =3D devm_clk_get(dev, "pll-0");
+> +	if (IS_ERR(phy->clk_pll0))
+> +		return dev_err_probe(dev, PTR_ERR(phy->clk_pll0),
+> +				     "Could not get pll-0 clock\n");
+> +
+> +	if (phy->variant->has_second_pll)
+> +		phy->clk_pll1 =3D devm_clk_get(dev, "pll-1");
+> +	if (IS_ERR(phy->clk_pll1))
+> +		return dev_err_probe(dev, PTR_ERR(phy->clk_pll1),
+> +				     "Could not get pll-1 clock\n");
+> +
+> +	phy->rst_phy =3D devm_reset_control_get_shared(dev, "phy");
+> +	if (IS_ERR(phy->rst_phy))
+> +		return dev_err_probe(dev, PTR_ERR(phy->rst_phy),
+> +				     "Could not get phy reset control\n");
 
-> I also hesitate to add this in the codec driver. I agree that it is better
-> to be put in the core.
+I find the old construct clearer with the imbricated blocks.
 
-> When will you have a patch for this?
+Otherwise, the rest of the series looks fine, thanks!
+Maxime
 
-Dunno, no fixed plans - it partly depends on how gummed up other stuff
-I'm doing is waiting for review.
-
---GWZv1Nn8Ww4evgM0
+--542vfuzlbowtb4mg
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmJVfPwACgkQJNaLcl1U
-h9DdDQf/SMZuRMaZ9bCrIvYAiyEfrE/pIxlufwWik0/9voMm3EjRV7tepL47OWve
-fgJtDTfj/dDVRpDJHcY9inUS3RCaWloLpo9m0IBRDMaf8iF6TYbY28BxRGJhXmiJ
-cLXy5r8Q3oH3VP7u7SaWcISIOx9ETgruHs2sjS5Mf340njtgwZuo1eYT+zHmqTA4
-NusMZ/We6OLXHKilgjYBXLAhrtpkFrP8GuNm45Ms3OsUTZnDVC25tdmOTjJtRezg
-dx59yb1FMBJng5ZY1OCMrZMB8NPN+rQCTnwX//Mm+xQyjE2SiLBfahCLyvtHDHF8
-mnd5ESVkI5BDL3Q8x4doiCZ5FZqg9Q==
-=dheu
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYlV9TQAKCRDj7w1vZxhR
+xXz3AQCLd+iM9nW9TMjH67uErKUxeCFePEosuu47NlHJp2MjHQD/dC1dKOtp1lTu
+FRHk3m7R4Cr2sMERznd+wOMkOdpzjQk=
+=f6v7
 -----END PGP SIGNATURE-----
 
---GWZv1Nn8Ww4evgM0--
+--542vfuzlbowtb4mg--

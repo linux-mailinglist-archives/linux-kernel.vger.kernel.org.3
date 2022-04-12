@@ -2,46 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ED1E4FD4A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:05:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E54294FD922
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:39:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353213AbiDLH2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:28:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57318 "EHLO
+        id S231161AbiDLJN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351769AbiDLHMz (ORCPT
+        with ESMTP id S1358342AbiDLHl0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:12:55 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7189CBD3;
-        Mon, 11 Apr 2022 23:52:25 -0700 (PDT)
+        Tue, 12 Apr 2022 03:41:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB271EC48;
+        Tue, 12 Apr 2022 00:17:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CA4B9CE1C0E;
-        Tue, 12 Apr 2022 06:52:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA13CC385A1;
-        Tue, 12 Apr 2022 06:52:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9651F6153F;
+        Tue, 12 Apr 2022 07:17:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99AF6C385C4;
+        Tue, 12 Apr 2022 07:17:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746342;
-        bh=sdnn5fQjqVbaEFiK/DlrlMulGua9dBH2cjFJP+cUzLs=;
+        s=korg; t=1649747869;
+        bh=HROHGGsBFbO4vq3IAw5etvco6016oKrSMD4SXiABxIc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P1/51qwEevrT+wihaXSXBxEQ7a3yQR9TfaKTRn6TZTAbnZtGQfgfRmovixEBiTd9B
-         3+C9I0bUsYHzUuKHOW7/BMKFJP3gZ1UU7mODDYPz7k9y/pK/2fy0oIA+sLvNF4Elaq
-         It38aWDzI1+D5J9Pl5AD19punGzB8acHxFBN9DfQ=
+        b=SVS2fAVx69/TqZEzGnhu1FgOBCYOaAIsaTn4GWSIdLG6ckpw2ho56MdoxYznXaVwy
+         0IsdIxFyF/nIOXh61EkLqeFeIzXZwTzYSDHVakIIfyKf3ZICisex0xbEfunXbJYdHS
+         +osTBlI8kJ0WFl1CisO7sXMRePpsKfEQPUAqfUPY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxim Levitsky <mlevitsk@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 5.15 248/277] KVM: SVM: Allow AVIC support on system w/ physical APIC ID > 255
+        stable@vger.kernel.org,
+        Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Konrad Jankowski <konrad0.jankowski@intel.com>,
+        Alice Michael <alice.michael@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 233/343] ice: Set txq_teid to ICE_INVAL_TEID on ring creation
 Date:   Tue, 12 Apr 2022 08:30:51 +0200
-Message-Id: <20220412062949.220816252@linuxfoundation.org>
+Message-Id: <20220412062958.061361475@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,69 +60,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+From: Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>
 
-commit 4a204f7895878363ca8211f50ec610408c8c70aa upstream.
+[ Upstream commit ccfee1822042b87e5135d33cad8ea353e64612d2 ]
 
-Expand KVM's mask for the AVIC host physical ID to the full 12 bits defined
-by the architecture.  The number of bits consumed by hardware is model
-specific, e.g. early CPUs ignored bits 11:8, but there is no way for KVM
-to enumerate the "true" size.  So, KVM must allow using all bits, else it
-risks rejecting completely legal x2APIC IDs on newer CPUs.
+When VF is freshly created, but not brought up, ring->txq_teid
+value is by default set to 0.
+But 0 is a valid TEID. On some platforms the Root Node of
+Tx scheduler has a TEID = 0. This can cause issues as shown below.
 
-This means KVM relies on hardware to not assign x2APIC IDs that exceed the
-"true" width of the field, but presumably hardware is smart enough to tie
-the width to the max x2APIC ID.  KVM also relies on hardware to support at
-least 8 bits, as the legacy xAPIC ID is writable by software.  But, those
-assumptions are unavoidable due to the lack of any way to enumerate the
-"true" width.
+The proper way is to set ring->txq_teid to ICE_INVAL_TEID (0xFFFFFFFF).
 
-Cc: stable@vger.kernel.org
-Cc: Maxim Levitsky <mlevitsk@redhat.com>
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Reviewed-by: Sean Christopherson <seanjc@google.com>
-Fixes: 44a95dae1d22 ("KVM: x86: Detect and Initialize AVIC support")
-Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-Message-Id: <20220211000851.185799-1-suravee.suthikulpanit@amd.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-[modified due to the conflict caused by the commit 391503528257 ("KVM:
-x86: SVM: move avic definitions from AMD's spec to svm.h")]
-Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Testing Hints:
+echo 1 > /sys/class/net/ens785f0/device/sriov_numvfs
+ip link set dev ens785f0v0 up
+ip link set dev ens785f0v0 down
+
+If we have freshly created VF and quickly turn it on and off, so there
+would be no time to reach VIRTCHNL_OP_CONFIG_VSI_QUEUES stage, then
+VIRTCHNL_OP_DISABLE_QUEUES stage will fail with error:
+[  639.531454] disable queue 89 failed 14
+[  639.532233] Failed to disable LAN Tx queues, error: ICE_ERR_AQ_ERROR
+[  639.533107] ice 0000:02:00.0: Failed to stop Tx ring 0 on VSI 5
+
+The reason for the fail is that we are trying to send AQ command to
+delete queue 89, which has never been created and receive an "invalid
+argument" error from firmware.
+
+As this queue has never been created, it's teid and ring->txq_teid
+have default value 0.
+ice_dis_vsi_txq has a check against non-existent queues:
+
+node = ice_sched_find_node_by_teid(pi->root, q_teids[i]);
+if (!node)
+	continue;
+
+But on some platforms the Root Node of Tx scheduler has a teid = 0.
+Hence, ice_sched_find_node_by_teid finds a node with teid = 0 (it is
+pi->root), and we go further to submit an erroneous request to firmware.
+
+Fixes: 37bb83901286 ("ice: Move common functions out of ice_main.c part 7/7")
+Signed-off-by: Anatolii Gerasymenko <anatolii.gerasymenko@intel.com>
+Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
+Signed-off-by: Alice Michael <alice.michael@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kvm/svm/avic.c |    7 +------
- arch/x86/kvm/svm/svm.h  |    2 +-
- 2 files changed, 2 insertions(+), 7 deletions(-)
+ drivers/net/ethernet/intel/ice/ice_lib.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/arch/x86/kvm/svm/avic.c
-+++ b/arch/x86/kvm/svm/avic.c
-@@ -947,15 +947,10 @@ out:
- void avic_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
- {
- 	u64 entry;
--	/* ID = 0xff (broadcast), ID > 0xff (reserved) */
- 	int h_physical_id = kvm_cpu_get_apicid(cpu);
- 	struct vcpu_svm *svm = to_svm(vcpu);
+diff --git a/drivers/net/ethernet/intel/ice/ice_lib.c b/drivers/net/ethernet/intel/ice/ice_lib.c
+index 20d755822d43..5fd2bbeab2d1 100644
+--- a/drivers/net/ethernet/intel/ice/ice_lib.c
++++ b/drivers/net/ethernet/intel/ice/ice_lib.c
+@@ -1452,6 +1452,7 @@ static int ice_vsi_alloc_rings(struct ice_vsi *vsi)
+ 		ring->tx_tstamps = &pf->ptp.port.tx;
+ 		ring->dev = dev;
+ 		ring->count = vsi->num_tx_desc;
++		ring->txq_teid = ICE_INVAL_TEID;
+ 		WRITE_ONCE(vsi->tx_rings[i], ring);
+ 	}
  
--	/*
--	 * Since the host physical APIC id is 8 bits,
--	 * we can support host APIC ID upto 255.
--	 */
--	if (WARN_ON(h_physical_id > AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK))
-+	if (WARN_ON(h_physical_id & ~AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK))
- 		return;
- 
- 	entry = READ_ONCE(*(svm->avic_physical_id_cache));
---- a/arch/x86/kvm/svm/svm.h
-+++ b/arch/x86/kvm/svm/svm.h
-@@ -499,7 +499,7 @@ extern struct kvm_x86_nested_ops svm_nes
- #define AVIC_LOGICAL_ID_ENTRY_VALID_BIT			31
- #define AVIC_LOGICAL_ID_ENTRY_VALID_MASK		(1 << 31)
- 
--#define AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK	(0xFFULL)
-+#define AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK	GENMASK_ULL(11, 0)
- #define AVIC_PHYSICAL_ID_ENTRY_BACKING_PAGE_MASK	(0xFFFFFFFFFFULL << 12)
- #define AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK		(1ULL << 62)
- #define AVIC_PHYSICAL_ID_ENTRY_VALID_MASK		(1ULL << 63)
+-- 
+2.35.1
+
 
 

@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59BC14FD7BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B8C34FD705
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237605AbiDLIod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:44:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49158 "EHLO
+        id S1354685AbiDLH0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:26:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357291AbiDLHj4 (ORCPT
+        with ESMTP id S1351672AbiDLHMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:39:56 -0400
+        Tue, 12 Apr 2022 03:12:51 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75D21EC4D;
-        Tue, 12 Apr 2022 00:14:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C914011A1F;
+        Mon, 11 Apr 2022 23:51:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B5ACCB81B66;
-        Tue, 12 Apr 2022 07:14:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31419C385A1;
-        Tue, 12 Apr 2022 07:14:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8AB9DB81B43;
+        Tue, 12 Apr 2022 06:51:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 056F3C385A6;
+        Tue, 12 Apr 2022 06:51:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747688;
-        bh=qwVIw6WgvUFZD9gUIdScRL8b7hE6gR9eKQzdOTNlLwo=;
+        s=korg; t=1649746279;
+        bh=qMOKGD6z+PDfrv1uKDk30yiY5E9vSQk8qXTh8G+G1sU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VvGlGj2TWqum4ktSCpfEaSdhkmsj8u76Wh7c7sU7airEamzMq9zZhWgdujYjUcjfE
-         vBjY3TKaFcoSWEkDZ23fd/LfhJPMuV+unucnaWUzoU03R7GfbeO5LqBX0SGOtGJhmC
-         wuKWDbZvdKsodoMVrlumty4qu4CGHinvERqQjZYI=
+        b=eYFJSb0uJucrb6l0tTLiLJAG9kWddUr4IL1s+IdemRlfwi/KgYykJ6AP0i+ZtZ41V
+         EuVuPU+KSa0oFaK7Jn0+cbaj+44LXrpzuuRKXPYCJhgUjp7ovWn1ETiR/ZXXNgo3dS
+         qy+rm1/w+bRctKh7IZIuCBekPZ+aj75ZjZne8LSI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Shwetha Nagaraju <shwetha.nagaraju@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 170/343] NFSv4: Protect the state recovery thread against direct reclaim
+Subject: [PATCH 5.15 185/277] ice: xsk: fix VSI state check in ice_xsk_wakeup()
 Date:   Tue, 12 Apr 2022 08:29:48 +0200
-Message-Id: <20220412062956.277072882@linuxfoundation.org>
+Message-Id: <20220412062947.390068416@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,74 +57,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-[ Upstream commit 3e17898aca293a24dae757a440a50aa63ca29671 ]
+[ Upstream commit 72b915a2b444e9247c9d424a840e94263db07c27 ]
 
-If memory allocation triggers a direct reclaim from the state recovery
-thread, then we can deadlock. Use memalloc_nofs_save/restore to ensure
-that doesn't happen.
+ICE_DOWN is dedicated for pf->state. Check for ICE_VSI_DOWN being set on
+vsi->state in ice_xsk_wakeup().
 
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Fixes: 2d4238f55697 ("ice: Add support for AF_XDP")
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Tested-by: Shwetha Nagaraju <shwetha.nagaraju@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/nfs4state.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/net/ethernet/intel/ice/ice_xsk.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/nfs/nfs4state.c b/fs/nfs/nfs4state.c
-index f5a62c0d999b..0f4818627ef0 100644
---- a/fs/nfs/nfs4state.c
-+++ b/fs/nfs/nfs4state.c
-@@ -49,6 +49,7 @@
- #include <linux/workqueue.h>
- #include <linux/bitops.h>
- #include <linux/jiffies.h>
-+#include <linux/sched/mm.h>
+diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
+index 03ba08fdcee8..2b1873061912 100644
+--- a/drivers/net/ethernet/intel/ice/ice_xsk.c
++++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
+@@ -761,7 +761,7 @@ ice_xsk_wakeup(struct net_device *netdev, u32 queue_id,
+ 	struct ice_vsi *vsi = np->vsi;
+ 	struct ice_ring *ring;
  
- #include <linux/sunrpc/clnt.h>
+-	if (test_bit(ICE_DOWN, vsi->state))
++	if (test_bit(ICE_VSI_DOWN, vsi->state))
+ 		return -ENETDOWN;
  
-@@ -2560,9 +2561,17 @@ static void nfs4_layoutreturn_any_run(struct nfs_client *clp)
- 
- static void nfs4_state_manager(struct nfs_client *clp)
- {
-+	unsigned int memflags;
- 	int status = 0;
- 	const char *section = "", *section_sep = "";
- 
-+	/*
-+	 * State recovery can deadlock if the direct reclaim code tries
-+	 * start NFS writeback. So ensure memory allocations are all
-+	 * GFP_NOFS.
-+	 */
-+	memflags = memalloc_nofs_save();
-+
- 	/* Ensure exclusive access to NFSv4 state */
- 	do {
- 		trace_nfs4_state_mgr(clp);
-@@ -2657,6 +2666,7 @@ static void nfs4_state_manager(struct nfs_client *clp)
- 			clear_bit(NFS4CLNT_RECLAIM_NOGRACE, &clp->cl_state);
- 		}
- 
-+		memalloc_nofs_restore(memflags);
- 		nfs4_end_drain_session(clp);
- 		nfs4_clear_state_manager_bit(clp);
- 
-@@ -2674,6 +2684,7 @@ static void nfs4_state_manager(struct nfs_client *clp)
- 			return;
- 		if (test_and_set_bit(NFS4CLNT_MANAGER_RUNNING, &clp->cl_state) != 0)
- 			return;
-+		memflags = memalloc_nofs_save();
- 	} while (refcount_read(&clp->cl_count) > 1 && !signalled());
- 	goto out_drain;
- 
-@@ -2686,6 +2697,7 @@ static void nfs4_state_manager(struct nfs_client *clp)
- 			clp->cl_hostname, -status);
- 	ssleep(1);
- out_drain:
-+	memalloc_nofs_restore(memflags);
- 	nfs4_end_drain_session(clp);
- 	nfs4_clear_state_manager_bit(clp);
- }
+ 	if (!ice_is_xdp_ena_vsi(vsi))
 -- 
 2.35.1
 

@@ -2,49 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1D964FD8D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:38:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C77C4FDA15
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:48:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356075AbiDLHeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:34:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56784 "EHLO
+        id S1387612AbiDLJMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351883AbiDLHND (ORCPT
+        with ESMTP id S1358729AbiDLHmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:13:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F9CBF6F;
-        Mon, 11 Apr 2022 23:54:02 -0700 (PDT)
+        Tue, 12 Apr 2022 03:42:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EBCC53E0D;
+        Tue, 12 Apr 2022 00:19:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6781961503;
-        Tue, 12 Apr 2022 06:54:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B065C385B8;
-        Tue, 12 Apr 2022 06:54:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 103C3B81B4F;
+        Tue, 12 Apr 2022 07:18:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4021EC385A1;
+        Tue, 12 Apr 2022 07:18:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746441;
-        bh=42u/pDDD5W6qZDyG2VLmSvZ/Jk5mxg4NG6mIl4SpPR8=;
+        s=korg; t=1649747937;
+        bh=48IJ3esSaUzBji8rEvxkx01bcGDqcGgwVzYB+0ZPDAg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2dD75hdOJDws3e+M2vVA1Mk4z/VJo7shjD+buJfRCk3TGs/ra55n0ozo8nq0GpfGN
-         eY3pxqfoaY9XX+a7pUyQk8QTOVEiHVU28/V1/44rttF5YUoi31pEcZjqrUgItjV5mZ
-         gd/y/KPZfJhMy/zBAlINHbFsfB4yB0Q8lupVYlyI=
+        b=dg7GivnYSgf1nx4h3tRubJfXC0G2Pqq1FozZe8EFOIHKL/QSGEJ3izl0Lv79h2BzX
+         MhDLQ+WLbByFmXnIdGQ1Gj78bryoPdMX6w78rbbOW3tWcO5wrGN4cnGE8Z5oxNuokX
+         19zuO42QT+a1NkSGkbYYX4NfNW15BVm6VSBK7lbY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Waiman Long <longman@redhat.com>,
-        Justin Forbes <jforbes@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Rafael Aquini <aquini@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.15 275/277] mm/sparsemem: fix mem_section will never be NULL gcc 12 warning
+        stable@vger.kernel.org, James Clark <james.clark@arm.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        German Gomez <german.gomez@arm.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Ravi Bangoria <ravi.bangoria@linux.ibm.com>,
+        Will Deacon <will@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 260/343] perf: arm-spe: Fix perf report --mem-mode
 Date:   Tue, 12 Apr 2022 08:31:18 +0200
-Message-Id: <20220412062949.998968569@linuxfoundation.org>
+Message-Id: <20220412062958.830168914@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
-References: <20220412062942.022903016@linuxfoundation.org>
+In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
+References: <20220412062951.095765152@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,77 +66,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Waiman Long <longman@redhat.com>
+From: James Clark <james.clark@arm.com>
 
-commit a431dbbc540532b7465eae4fc8b56a85a9fc7d17 upstream.
+[ Upstream commit ffab487052054162b3b6c9c6005777ec6cfcea05 ]
 
-The gcc 12 compiler reports a "'mem_section' will never be NULL" warning
-on the following code:
+Since commit bb30acae4c4dacfa ("perf report: Bail out --mem-mode if mem
+info is not available") "perf mem report" and "perf report --mem-mode"
+don't allow opening the file unless one of the events has
+PERF_SAMPLE_DATA_SRC set.
 
-    static inline struct mem_section *__nr_to_section(unsigned long nr)
-    {
-    #ifdef CONFIG_SPARSEMEM_EXTREME
-        if (!mem_section)
-                return NULL;
-    #endif
-        if (!mem_section[SECTION_NR_TO_ROOT(nr)])
-                return NULL;
-       :
+SPE doesn't have this set even though synthetic memory data is generated
+after it is decoded. Fix this issue by setting DATA_SRC on SPE events.
+This has no effect on the data collected because the SPE driver doesn't
+do anything with that flag and doesn't generate samples.
 
-It happens with CONFIG_SPARSEMEM_EXTREME off.  The mem_section definition
-is
-
-    #ifdef CONFIG_SPARSEMEM_EXTREME
-    extern struct mem_section **mem_section;
-    #else
-    extern struct mem_section mem_section[NR_SECTION_ROOTS][SECTIONS_PER_ROOT];
-    #endif
-
-In the !CONFIG_SPARSEMEM_EXTREME case, mem_section is a static
-2-dimensional array and so the check "!mem_section[SECTION_NR_TO_ROOT(nr)]"
-doesn't make sense.
-
-Fix this warning by moving the "!mem_section[SECTION_NR_TO_ROOT(nr)]"
-check up inside the CONFIG_SPARSEMEM_EXTREME block and adding an
-explicit NR_SECTION_ROOTS check to make sure that there is no
-out-of-bound array access.
-
-Link: https://lkml.kernel.org/r/20220331180246.2746210-1-longman@redhat.com
-Fixes: 3e347261a80b ("sparsemem extreme implementation")
-Signed-off-by: Waiman Long <longman@redhat.com>
-Reported-by: Justin Forbes <jforbes@redhat.com>
-Cc: "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Rafael Aquini <aquini@redhat.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: bb30acae4c4dacfa ("perf report: Bail out --mem-mode if mem info is not available")
+Signed-off-by: James Clark <james.clark@arm.com>
+Tested-by: Leo Yan <leo.yan@linaro.org>
+Acked-by: Namhyung Kim <namhyung@kernel.org>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: German Gomez <german.gomez@arm.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: John Garry <john.garry@huawei.com>
+Cc: Leo Yan <leo.yan@linaro.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Ravi Bangoria <ravi.bangoria@linux.ibm.com>
+Cc: Will Deacon <will@kernel.org>
+Link: https://lore.kernel.org/r/20220408144056.1955535-1-james.clark@arm.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/mmzone.h |   11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ tools/perf/arch/arm64/util/arm-spe.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
---- a/include/linux/mmzone.h
-+++ b/include/linux/mmzone.h
-@@ -1351,13 +1351,16 @@ static inline unsigned long *section_to_
+diff --git a/tools/perf/arch/arm64/util/arm-spe.c b/tools/perf/arch/arm64/util/arm-spe.c
+index 2100d46ccf5e..bb4ab99afa7f 100644
+--- a/tools/perf/arch/arm64/util/arm-spe.c
++++ b/tools/perf/arch/arm64/util/arm-spe.c
+@@ -239,6 +239,12 @@ static int arm_spe_recording_options(struct auxtrace_record *itr,
+ 		arm_spe_set_timestamp(itr, arm_spe_evsel);
+ 	}
  
- static inline struct mem_section *__nr_to_section(unsigned long nr)
- {
-+	unsigned long root = SECTION_NR_TO_ROOT(nr);
++	/*
++	 * Set this only so that perf report knows that SPE generates memory info. It has no effect
++	 * on the opening of the event or the SPE data produced.
++	 */
++	evsel__set_sample_bit(arm_spe_evsel, DATA_SRC);
 +
-+	if (unlikely(root >= NR_SECTION_ROOTS))
-+		return NULL;
-+
- #ifdef CONFIG_SPARSEMEM_EXTREME
--	if (!mem_section)
-+	if (!mem_section || !mem_section[root])
- 		return NULL;
- #endif
--	if (!mem_section[SECTION_NR_TO_ROOT(nr)])
--		return NULL;
--	return &mem_section[SECTION_NR_TO_ROOT(nr)][nr & SECTION_ROOT_MASK];
-+	return &mem_section[root][nr & SECTION_ROOT_MASK];
- }
- extern size_t mem_section_usage_size(void);
- 
+ 	/* Add dummy event to keep tracking */
+ 	err = parse_events(evlist, "dummy:u", NULL);
+ 	if (err)
+-- 
+2.35.1
+
 
 

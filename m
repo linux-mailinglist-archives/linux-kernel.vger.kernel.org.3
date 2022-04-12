@@ -2,190 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 969704FE529
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B89434FE52B
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 17:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357361AbiDLPxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 11:53:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50414 "EHLO
+        id S1357381AbiDLPy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 11:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357316AbiDLPxg (ORCPT
+        with ESMTP id S238925AbiDLPy0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 11:53:36 -0400
-Received: from nbd.name (nbd.name [IPv6:2a01:4f8:221:3d45::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B45B5F8EA;
-        Tue, 12 Apr 2022 08:51:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
-         s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:Subject:
-        From:References:Cc:To:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID
-        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
-        Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
-        :List-Post:List-Owner:List-Archive;
-        bh=mrCm7O0AOGuUALk8FdZFHmOnDPg19J6/n+0pIC0Acp0=; b=VQ2/JqQvNP2N9xFX9FKsYFdCZ2
-        GtyGq0jli90l9GBUz7tsQWFvyErRHsEz/GuarzC8CJYV7HKBNVyZ5eMHsyZ3AxHzl17ZI1OrQ01Ua
-        pHRwNYaSUPpCtSfHwAiy5Z+L0Pp9Nh/a4mlfHYQaLbQ4Vubs3Z4M7q0UqLUpqookJC0w=;
-Received: from p57a6f1f9.dip0.t-ipconnect.de ([87.166.241.249] helo=nf.local)
-        by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <nbd@nbd.name>)
-        id 1neInJ-0003dk-U7; Tue, 12 Apr 2022 17:51:06 +0200
-Message-ID: <29cecc87-8689-6a73-a5ef-43eb2b8f33cd@nbd.name>
-Date:   Tue, 12 Apr 2022 17:51:04 +0200
+        Tue, 12 Apr 2022 11:54:26 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECCA45FF2F
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:52:08 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id md20-20020a17090b23d400b001cb70ef790dso3323814pjb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 08:52:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=jdoVTAOzsUTmRWyRrILsCe/CPtH8yNrfzN0Er5FKiB4=;
+        b=cpL0mFgLvc3284MRWQEYU2TjNIbJGza3TAbzfvjUJ9VLpaaeluPAPdHFE9I1D+t0c9
+         R83GKfmQgrvnqVFiQxcTtMu1nVUpEMlnXXkTyezN4RjQv5z5MRHloVn2HriGkz7EyCMS
+         XpKcTu8985NoirZnN54J360s7r5uUM036LQPmdgNEZn+yo8ecoIl/lOKgWqQ46+MBkaM
+         tBkrnZJj39wCcfblxn92dScKQSD2BiJGwn/BdQR90Oe+0DviLwb9J5D19Zo+lVZatl1X
+         oovQcwlyoE0JUHknbjaq7tTlO9SIIUhV5vDbiZb/tOaowOcEoZidSvz3W4pkL+OFduMg
+         OqgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jdoVTAOzsUTmRWyRrILsCe/CPtH8yNrfzN0Er5FKiB4=;
+        b=oFgVlbczu3Km2CJ80pL9iUhCvrf0qm7XgxyYaVRMHz4tvA9Vp/YmPepf8g0SwDVsno
+         KJXN/SbJvICUu8cWVXWF7a4FCQEn+2BlgP2cVbUm0U659j6scbhcviEV9ASihf9Jc3w2
+         ETn/A7lNeP+9vqhsJ+NlDSIRr8I0oziLhWmBqT6gOJr/aQwpT0hOFM2UwsfI5bGQeLla
+         /pAxpLox/jmY2+8cnMTOyCYy2L8aKlOqTRe3PXhc7Arl/mHqXvGjLdpffwpQ3Cv2wDui
+         Xzr6exg4ASl6ei7TUcE8xnacEiIs60c0AwUs8D8YK6i59F5jTOz5cUIcpYgy9+Jug+jn
+         MaCQ==
+X-Gm-Message-State: AOAM5317xxqFzONL+X5aXbgODylHmJRqudOMeNYBXivjLD4LnQ8HThrf
+        4lYaSJxYu0XVHJBBDrQhbd3kNw==
+X-Google-Smtp-Source: ABdhPJzKVAQ06G3dUaI/EVJi7iNndxpnOP4buUqlAiv50c9kNyF+6CfXNEIClv6w1pbMrnUCrtssmw==
+X-Received: by 2002:a17:90b:3b4d:b0:1cd:3ce7:aaec with SMTP id ot13-20020a17090b3b4d00b001cd3ce7aaecmr1784143pjb.32.1649778728270;
+        Tue, 12 Apr 2022 08:52:08 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id f14-20020a63380e000000b0038253c4d5casm3176405pga.36.2022.04.12.08.52.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 08:52:07 -0700 (PDT)
+Date:   Tue, 12 Apr 2022 15:52:03 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>
+Subject: Re: [PATCH v2 3/9] KVM: x86/mmu: Factor shadow_zero_check out of
+ __make_spte
+Message-ID: <YlWgIw/0v+G+G8za@google.com>
+References: <20220321224358.1305530-1-bgardon@google.com>
+ <20220321224358.1305530-4-bgardon@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     netdev@vger.kernel.org, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jiri Pirko <jiri@nvidia.com>, Ido Schimmel <idosch@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-References: <20220405195755.10817-1-nbd@nbd.name>
- <20220405195755.10817-15-nbd@nbd.name> <Yk8pJRxnVCfdk8xi@lunn.ch>
- <f25a6278-1baf-cc27-702a-5d93eedda438@nbd.name> <YlQmf7qGAnq/3nW0@lunn.ch>
- <ece29b0d-bbbe-7c03-a6b4-60e44453ca31@nbd.name> <YlV5jEzNZT1aKmNL@lunn.ch>
- <ee1d6c89-95f4-bf28-cf25-36b18ffb342f@nbd.name> <YlWK5Dozpo7nIS9j@lunn.ch>
-From:   Felix Fietkau <nbd@nbd.name>
-Subject: Re: [PATCH v2 14/14] net: ethernet: mtk_eth_soc: support creating mac
- address based offload entries
-In-Reply-To: <YlWK5Dozpo7nIS9j@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220321224358.1305530-4-bgardon@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 12.04.22 16:21, Andrew Lunn wrote:
-> On Tue, Apr 12, 2022 at 03:49:51PM +0200, Felix Fietkau wrote:
->> 
->> On 12.04.22 15:07, Andrew Lunn wrote:
->> > > > > > > I'm trying to understand the architecture here.
->> > > > > > > We have an Ethernet interface and a Wireless interface. The slow
->> > > > > path
->> > > > > > is that frames ingress from one of these interfaces, Linux decides
->> > > > > > what to do with them, either L2 or L3, and they then egress probably
->> > > > > > out the other interface.
->> > > > > > > The hardware will look at the frames and try to spot flows? It
->> > > > > will
->> > > > > > then report any it finds. You can then add an offload, telling it for
->> > > > > > a flow it needs to perform L2 or L3 processing, and egress out a
->> > > > > > specific port? Linux then no longer sees the frame, the hardware
->> > > > > > handles it, until the flow times out?
->> > > > > Yes, the hw handles it until either the flow times out, or the corresponding
->> > > > > offload entry is removed.
->> > > > > > > For OpenWrt I also wrote a daemon that uses tc classifier
->> > > BPF to accelerate
->> > > > > the software bridge and create hardware offload entries as well via hardware
->> > > > > TC flower rules: https://github.com/nbd168/bridger
->> > > > > It works in combination with these changes.
->> > > > > What about the bridge? In Linux, it is the software bridge which
->> > > > controls all this at L2, and it should be offloading the flows, via
->> > > > switchdev. The egress port you derive here is from the software bridge
->> > > > FDB?
->> > 
->> > > My code uses netlink to fetch and monitor the bridge configuration,
->> > > including fdb, port state, vlans, etc. and it uses that for the offload path
->> > > - no extra configuration needed.
->> > 
->> > So this is where we get into architecture issues. Do we really want
->> > Linux to have two ways for setting up L2 networking? It was decided
->> > that users should not need to know about how to use an accelerator,
->> > they should not use additional tools, it should just look like
->> > linux. The user should just add the WiFi netdev to the bridge and
->> > switchdev will do the rest to offload L2 switching to the hardware.
->> > 
->> > You appear to be saying you need a daemon in userspace. That is not
->> > how every other accelerate works in Linux networking.
->> > 
->> > We the Linux network community need to decided if we want this?
+On Mon, Mar 21, 2022, Ben Gardon wrote:
+> In the interest of devloping a version of __make_spte that can function
+> without a vCPU pointer, factor out the shadow_zero_mask to be an
+> additional argument to the function.
 > 
->> The problem here is that it can't be fully transparent. Enabling hardware
->> offload for LAN -> WiFi comes at a cost of bypassing airtime fairness and
->> mac80211's bufferbloat mitigation.
->> Some people want this anyway (often but not always for benchmark/marketing
->> purposes), but it's not something that I would want to have enabled by
->> default simply by a wifi netdev to a bridge.
+> No functional change intended.
 > 
-> So this sounds like a generic issue. How does IPA handle this? Looping
-> in Alex Elder.
+> Signed-off-by: Ben Gardon <bgardon@google.com>
+> ---
+>  arch/x86/kvm/mmu/spte.c | 10 ++++++----
+>  arch/x86/kvm/mmu/spte.h |  2 +-
+>  2 files changed, 7 insertions(+), 5 deletions(-)
 > 
-> There is already something partially in this direction in the
-> bridge. You can add a static entry with our without self. This
-> controls if a specific static entry in the FDB is offloaded to the
-> accelerate or not. Maybe you can add an attribute to a port which
-> determines if dynamic entries are self or not, so you can decide if
-> frames egressing out a specific interface are accelerated or not,
-> depending on user choice. Since such a change should not touch the
-> fast path, it has a better chance of being merged.
-Sounds interesting. If there is some overlap and if we can get some 
-common code in place, it might be worth looking into for the MTK offload 
-as well. I do think this will take more time though.
+> diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
+> index 931cf93c3b7e..ef2d85577abb 100644
+> --- a/arch/x86/kvm/mmu/spte.c
+> +++ b/arch/x86/kvm/mmu/spte.c
+> @@ -94,7 +94,7 @@ bool __make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
+>  		 const struct kvm_memory_slot *slot, unsigned int pte_access,
+>  		 gfn_t gfn, kvm_pfn_t pfn, u64 old_spte, bool prefetch,
+>  		 bool can_unsync, bool host_writable, u64 mt_mask,
+> -		 u64 *new_spte)
+> +		 struct rsvd_bits_validate *shadow_zero_check, u64 *new_spte)
 
->> Initially, I wanted to put more of the state tracking code in the kernel. I
->> made the first implementation of my acceleration code as a patch to the
->> network bridge - speeding up bridge unicast forwarding significantly for any
->> device regardless of hardware support. I wanted to build on that to avoid
->> putting a lot of FDB/VLAN related tracking directly into the driver.
+Can we name the new param "rsvd_bits"?  As mentioned in the other patch, it's not
+a pure "are these bits zero" check.
+
+>  {
+>  	int level = sp->role.level;
+>  	u64 spte = SPTE_MMU_PRESENT_MASK;
+> @@ -177,9 +177,9 @@ bool __make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
+>  	if (prefetch)
+>  		spte = mark_spte_for_access_track(spte);
+>  
+> -	WARN_ONCE(is_rsvd_spte(&vcpu->arch.mmu->shadow_zero_check, spte, level),
+> +	WARN_ONCE(is_rsvd_spte(shadow_zero_check, spte, level),
+>  		  "spte = 0x%llx, level = %d, rsvd bits = 0x%llx", spte, level,
+> -		  get_rsvd_bits(&vcpu->arch.mmu->shadow_zero_check, spte, level));
+> +		  get_rsvd_bits(shadow_zero_check, spte, level));
+>  
+>  	if ((spte & PT_WRITABLE_MASK) && kvm_slot_dirty_track_enabled(slot)) {
+>  		/* Enforced by kvm_mmu_hugepage_adjust. */
+> @@ -199,10 +199,12 @@ bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
+>  {
+>  	u64 mt_mask = static_call(kvm_x86_get_mt_mask)(vcpu, gfn,
+>  						       kvm_is_mmio_pfn(pfn));
+> +	struct rsvd_bits_validate *shadow_zero_check =
+> +			&vcpu->arch.mmu->shadow_zero_check;
+>  
+>  	return __make_spte(vcpu, sp, slot, pte_access, gfn, pfn, old_spte,
+>  			   prefetch, can_unsync, host_writable, mt_mask,
+> -			   new_spte);
+> +			   shadow_zero_check, new_spte);
+
+I don't see any reason to snapshot the reserved bits, IMO this is much more
+readable overall:
+
+	u64 mt_mask = static_call(kvm_x86_get_mt_mask)(vcpu, gfn,
+						       kvm_is_mmio_pfn(pfn));
+
+	return __make_spte(vcpu->kvm, sp, slot, pte_access, gfn, pfn, old_spte,
+			   prefetch, can_unsync, host_writable, mt_mask,
+			   &vcpu->arch.mmu->shadow_zero_check, new_spte);
+
+And it avoids propagating the shadow_zero_check naming.
+
+> diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
+> index d051f955699e..e8a051188eb6 100644
+> --- a/arch/x86/kvm/mmu/spte.h
+> +++ b/arch/x86/kvm/mmu/spte.h
+> @@ -414,7 +414,7 @@ bool __make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
+>  		 const struct kvm_memory_slot *slot, unsigned int pte_access,
+>  		 gfn_t gfn, kvm_pfn_t pfn, u64 old_spte, bool prefetch,
+>  		 bool can_unsync, bool host_writable, u64 mt_mask,
+> -		 u64 *new_spte);
+> +		 struct rsvd_bits_validate *shadow_zero_check, u64 *new_spte);
+>  bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
+>  	       const struct kvm_memory_slot *slot,
+>  	       unsigned int pte_access, gfn_t gfn, kvm_pfn_t pfn,
+> -- 
+> 2.35.1.894.gb6a874cedc-goog
 > 
-> But the driver is the correct place for this. How generic is the state
-> tracking? Do you expect any other hardware to need the same state
-> tracking? IPA? Some other accelerate your know of?
-It basically has to keep track of all possible destination ports, their 
-STP state, all their fdb entries, member VLANs of all ports. It has to 
-quickly react to changes in any of these.
-In order to implement this properly, I would also need to make more 
-changes to mac80211. Right now, mac80211 drivers do not have access to 
-the net_device pointer of virtual interfaces. So mac80211 itself would 
-likely need to implement the switchdev ops and handle some of this.
-
-There are also some other issues where I don't know how this is supposed 
-to be solved properly:
-On MT7622 most of the bridge ports are connected to a MT7531 switch 
-using DSA. Offloading (lan->wlan bridging or L3/L4 NAT/routing) is not 
-handled by the switch itself, it is handled by a packet processing 
-engine in the SoC, which knows how to handle the DSA tags of the MT7531 
-switch.
-
-So if I were to handle this through switchdev implemented on the wlan 
-and ethernet devices, it would technically not be part of the same 
-switch, since it's a behind a different component with a different driver.
-
-Also, is switchdev able to handle the situation where only parts of the 
-traffic is offloaded and the rest (e.g. multicast) is handled through 
-the regular software path?
-
-In my opinion, handling it through the TC offload has a number of 
-advantages:
-- It's a lot simpler
-- It uses the same kind of offloading rules that my software fastpath 
-already uses
-- It allows more fine grained control over which traffic should be 
-offloaded (src mac -> destination MAC tuple)
-
-I also plan on extending my software fast path code to support emulating 
-bridging of WiFi client mode interfaces. This involves doing some MAC 
-address translation with some IP address tracking. I want that to 
-support hardware offload as well.
-
-I really don't think that desire for supporting switchdev based offload 
-should be a blocker for accepting this code now, especially since my 
-implementation relies on existing Linux network APIs without inventing 
-any new ones, and there are valid use cases for using it, even with 
-switchdev support in place.
-
-- Felix

@@ -2,159 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E36144FD900
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:38:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3406A4FDAA4
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:51:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234608AbiDLJmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57034 "EHLO
+        id S1391734AbiDLJgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:36:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389431AbiDLJXp (ORCPT
+        with ESMTP id S1389894AbiDLJYS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 05:23:45 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8A2546A4;
-        Tue, 12 Apr 2022 01:38:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649752685; x=1681288685;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QLFnvFZjCBbBm1WrCuQHfneVU5wUafBRZqi1LfvDPoE=;
-  b=mOSYN6HK4TTZts/UuOsNetTBcqvyjMVC1a0D+ojBhnMOq+qp/DfZzFbe
-   SZZd0R1XMKE2AVTGwe71xb776qGNwb/JKHiu8u5R3Gg6NEINTVeNp2nzt
-   zog34OBxVUkcZ1DyXbXlT+mGV/V5CVcd/2YY8PDelPgu0Lw9Jo+AAHdnC
-   gUKeiMmpQlNva+a/hI3RvUr84VXxCQUiecuMIMWU5fzHkZPZJev6RAIvr
-   tQDWapMylYMEFsk7JrduTu7s4GKFMcV3PPEwWbI5pAJNftVT89bqqzKc5
-   Pto7hwxOyz42XkMACv/eRIM8pxvmoe+JdGVY2NhOP5OJoScakqnP3KW07
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10314"; a="242257568"
-X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="242257568"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Apr 2022 01:38:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,253,1643702400"; 
-   d="scan'208";a="611341789"
-Received: from lkp-server02.sh.intel.com (HELO d3fc50ef50de) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 12 Apr 2022 01:38:03 -0700
-Received: from kbuild by d3fc50ef50de with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1neC2E-0002fc-Oa;
-        Tue, 12 Apr 2022 08:38:02 +0000
-Date:   Tue, 12 Apr 2022 16:37:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Patrick Wang <patrick.wang.shcn@gmail.com>, robh+dt@kernel.org,
-        frowand.list@gmail.com
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patrick.wang.shcn@gmail.com
-Subject: Re: [PATCH] of: fdt: do not reserve memory below MIN_MEMBLOCK_ADDR
-Message-ID: <202204121637.4ZHpTqwT-lkp@intel.com>
-References: <20220412045228.35306-1-patrick.wang.shcn@gmail.com>
+        Tue, 12 Apr 2022 05:24:18 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB7E022BC4
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 01:39:32 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-405-oOBMiDLNNWyHBgOE2vxNfQ-1; Tue, 12 Apr 2022 09:39:29 +0100
+X-MC-Unique: oOBMiDLNNWyHBgOE2vxNfQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Tue, 12 Apr 2022 09:39:28 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Tue, 12 Apr 2022 09:39:28 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Qais Yousef' <qais.yousef@arm.com>
+CC:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "juri.lelli@redhat.com" <juri.lelli@redhat.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "bsegall@google.com" <bsegall@google.com>,
+        "mgorman@suse.de" <mgorman@suse.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "parth@linux.ibm.com" <parth@linux.ibm.com>,
+        "chris.hyser@oracle.com" <chris.hyser@oracle.com>,
+        "pkondeti@codeaurora.org" <pkondeti@codeaurora.org>,
+        "Valentin.Schneider@arm.com" <Valentin.Schneider@arm.com>,
+        "patrick.bellasi@matbug.net" <patrick.bellasi@matbug.net>,
+        "pjt@google.com" <pjt@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
+        "tj@kernel.org" <tj@kernel.org>,
+        "qperret@google.com" <qperret@google.com>,
+        "tim.c.chen@linux.intel.com" <tim.c.chen@linux.intel.com>,
+        Wei Wang <wvw@google.com>
+Subject: RE: Scheduling tasks on idle cpu
+Thread-Topic: Scheduling tasks on idle cpu
+Thread-Index: AdhNfEgLjonPVH3ESQeb3O9OCn/HMQAeBEWAABN1gYA=
+Date:   Tue, 12 Apr 2022 08:39:28 +0000
+Message-ID: <4ca5cd70904d47bea0df93f7c0979c66@AcuMS.aculab.com>
+References: <030aacb0c1304e43ab917924dcf4f138@AcuMS.aculab.com>
+ <20220411233447.rcencjivkhyltyxm@airbuntu>
+In-Reply-To: <20220411233447.rcencjivkhyltyxm@airbuntu>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220412045228.35306-1-patrick.wang.shcn@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Patrick,
+RnJvbTogUWFpcyBZb3VzZWYNCj4gU2VudDogMTIgQXByaWwgMjAyMiAwMDozNQ0KPiANCj4gT24g
+MDQvMTEvMjIgMDg6MjYsIERhdmlkIExhaWdodCB3cm90ZToNCj4gPiBGcm9tOiBRYWlzIFlvdXNl
+Zg0KPiA+ID4gU2VudDogMDkgQXByaWwgMjAyMiAxODowOQ0KPiA+IC4uLg0KPiA+ID4gUlQgc2No
+ZWR1bGVyIHdpbGwgcHVzaC9wdWxsIHRhc2tzIHRvIGVuc3VyZSB0aGUgdGFzayB3aWxsIGdldCB0
+byBydW4gQVNBUCBpZg0KPiA+ID4gdGhlcmUncyBhbm90aGVyIGNwdSBhdCBsb3dlciBwcmlvcml0
+eSBpcyBhdmFpbGFibGUNCj4gPg0KPiA+IERvZXMgdGhhdCBhY3R1YWxseSBoYXBwZW4/DQo+IA0K
+PiBGb3IgUlQgdGFza3MsIHllcy4gVGhleSBzaG91bGQgZ2V0IGRpc3RyaWJ1dGVkLg0KDQpPaywg
+dGhhdCBpcyBzb21ldGhpbmcgc2xpZ2h0bHkgZGlmZmVyZW50IGZyb20gd2hhdCBJJ20gc2VlaW5n
+Lg0KDQo+ID4gSSd2ZSBzZWVuIHRoZSBmb2xsb3dpbmc6DQo+ID4gICAzNDUzMyBbMDE3XTogc3lz
+X2Z1dGV4KHVhZGRyOiAxMDQ5MTA0LCBvcDogODUsIHZhbDogMSwgdXRpbWU6IDEsIHVhZGRyMjog
+MTA0OTEwMCwgdmFsMzogNDAwMDAwMSkNCj4gPiAgIDM0NTMzIFswMTddOiBzY2hlZF9taWdyYXRl
+X3Rhc2s6IHBpZD0zNDUxMiBwcmlvPTEyMCBvcmlnX2NwdT0xNCBkZXN0X2NwdT0xNw0KPiA+ICAg
+MzQ1MzMgWzAxN106IHNjaGVkX3dha2V1cDogcGlkPTM0NTEyIHByaW89MTIwIHN1Y2Nlc3M9MSB0
+YXJnZXRfY3B1PTAxNw0KPiANCj4gcHJpbz0xMjAgaXMgYSBDRlMgdGFzaywgbm8/DQoNCkNGUyA9
+ICdub3JtYWwgdGltZS1zbGljZSBwcm9jZXNzZXMgPyBUaGVuIHllcy4NCg0KPiA+IGFuZCBwaWQg
+MzQ1MTIgZG9lc24ndCBnZXQgc2NoZWR1bGVkIHVudGlsIHBpZCAzNDUzMyBmaW5hbGx5IHNsZWVw
+cy4NCj4gPiBUaGlzIGlzIGluIHNwaXRlIG9mIHRoZXJlIGJlaW5nIDUgaWRsZSBjcHUuDQo+ID4g
+Y3B1IDE0IGlzIGJ1c3kgcnVubmluZyBhIFJUIHRocmVhZCwgYnV0IG1pZ3JhdGluZyB0byBjcHUg
+MTcgc2VlbXMgd3JvbmcuDQo+ID4NCj4gPiBUaGlzIGlzIG9uIGEgUkhFTDcga2VybmVsLCBJJ3Zl
+IG5vdCByZXBsaWNhdGVkIGl0IG9uIGFueXRoaW5nIHJlY2VudC4NCj4gPiBCdXQgSSd2ZSB2ZXJ5
+IG11Y2ggbGlrZSBhIFJUIHRocmVhZCB0byBiZSBhYmxlIHRvIHNjaGVkdWxlIGEgbm9uLVJUDQo+
+ID4gdGhyZWFkIHRvIHJ1biBvbiBhbiBpZGxlIGNwdS4NCj4gDQo+IE9oLCB5b3Ugd2FudCBDRlMg
+dG8gYXZvaWQgQ1BVcyB0aGF0IGFyZSBydW5uaW5nIFJUIHRhc2tzLg0KPiANCj4gV2UgaGFkIGEg
+cHJvcG9zYWwgaW4gdGhlIHBhc3QsIGJ1dCBpdCB3YXNuJ3QgZ29vZCBlbm91Z2gNCj4gDQo+IAlo
+dHRwczovL2xvcmUua2VybmVsLm9yZy9sa21sLzE1NjcwNDg1MDItNjA2NC0xLWdpdC1zZW5kLWVt
+YWlsLWppbmctdGluZy53dUBtZWRpYXRlay5jb20vDQoNClRoYXQgc2VlbXMgdG8gYmUgc29tZXRo
+aW5nIGRpZmZlcmVudC4NClJlbGF0ZWQgdG8gc29tZXRoaW5nIGVsc2UgSSd2ZSBzZWVuIHdoZXJl
+IGEgUlQgcHJvY2VzcyBpcyBzY2hlZHVsZWQNCm9uIGl0cyBvbGQgY3B1ICh0byBnZXQgdGhlIGhv
+dCBjYWNoZSkgYnV0IHRoZSBwcm9jZXNzIHJ1bm5pbmcgb24NCnRoYXQgY3B1IGlzIGxvb3Bpbmcg
+aW4ga2VybmVsIC0gc28gdGhlIFJUIHByb2Nlc3MgZG9lc24ndCBzdGFydC4NCg0KSSd2ZSBhdm9p
+ZGVkIG1vc3Qgb2YgdGhlIHBhaW4gdGhhdCBjYXVzZWQgYnkgbm90IHVzaW5nIGEgc2luZ2xlDQpj
+dl9icm9hZGNhc3QoKSB0byB3YWtlIHVwIHRoZSAzNCBSVCB0aHJlYWRzIChpbiB0aGlzIGNvbmZp
+ZykuDQooRWFjaCBrZXJuZWwgdGhyZWFkIHNlZW1lZCB0byB3YWtlIHVwIHRoZSBuZXh0IG9uZSwg
+c28gdGhlDQpkZWxheXMgd2VyZSBjdW11bGF0aXZlLikNCkluc3RlYWQgdGhlcmUgaXMgYSBzZXBh
+cmF0ZSBjdiBmb3IgZWFjaCBSVCB0aHJlYWQuDQpJIGFjdHVhbGx5IHdhbnQgdGhlICdoZXJkIG9m
+IHdpbGRlYmVlc3QnIDotKQ0KDQo+IFRoZSBhcHByb2FjaCBpbiB0aGF0IHBhdGNoIG1vZGlmaWVk
+IFJUIHRvIGF2b2lkIENGUyBhY3R1YWxseS4NCg0KWWVzIEkgd2FudCB0aGUgQ0ZTIHNjaGVkdWxl
+ciB0byBwaWNrIGFuIGlkbGUgY3B1IGluIHByZWZlcmVuY2UNCnRvIGFuIGFjdGl2ZSBSVCBvbmUu
+DQoNCj4gQ2FuIHlvdSB2ZXJpZnkgd2hldGhlciB0aGUgUlQgdGFzayB3b2tlIHVwIGFmdGVyIHRh
+c2sgMzQ1MTIgd2FzIG1pZ3JhdGVkIHRvIENQVQ0KPiAxNz8gTG9va2luZyBhdCB0aGUgZGVmaW5p
+dGlvbiBvZiBhdmFpbGFibGVfaWRsZV9jcHUoKSB3ZSBzaG91bGQgaGF2ZSBhdm9pZGVkDQo+IHRo
+YXQgQ1BVIGlmIHRoZSBSVCB0YXNrIHdhcyBhbHJlYWR5IHJ1bm5pbmcuIEJvdGggd2FraW5nIHVw
+IGF0IHRoZSBzYW1lIHRpbWUNCj4gd291bGQgZXhwbGFpbiB3aGF0IHlvdSBzZWUuIE90aGVyd2lz
+ZSBJJ20gbm90IHN1cmUgd2h5IGl0IHBpY2tlZCBDUFUgMTcuDQoNCkFsbCAzNSBSVCB0YXNrcyBh
+cmUgcnVubmluZyB3aGVuIHRoZSByZXF1ZXN0IHRvIHNjaGVkdWxlIHRhc2sgMzQ1MTIgaXMgbWFk
+ZS4NCihUaGV5IHdha2UgZXZlcnkgMTBtcyB0byBwcm9jZXNzIFVEUC9SVFAgYXVkaW8gcGFja2V0
+cy4pDQpUaGUgUlQgdGFzayBvbiBjcHUgMTcgY2FycmllZCBvbiBydW5uaW5nIHVudGlsIGl0IHJh
+biBvdXQgb2Ygd29yayAoYWZ0ZXIgYWJvdXQgMW1zKS4NClRhc2sgMzQ1MTIgdGhlbiByYW4gb24g
+Y3B1IDE3Lg0KDQpJbiB0aGlzIGNhc2UgdGFzayAzNDUxMiBhY3R1YWxseSBmaW5pc2hlZCBxdWl0
+ZSBxdWlja2x5Lg0KKEl0IGlzIGNyZWF0aW5nIGFuZCBiaW5kaW5nIG1vcmUgVURQIHNvY2tldHMu
+KQ0KQnV0IGl0IGxvb2tzIGxpa2UgaWYgaXQgd2VyZSBzdGlsbCBydW5uaW5nIG9uIHRoZSBuZXh0
+IDEwbXMgJ3RpY2snDQppdCB3b3VsZCBiZSBwcmUtZW1wdGVkIGJ5IHRoZSBSVCB0YXNrIGFuZCBi
+ZSBpZGxlLg0KTm90IGlkZWFsIHdoZW4gSSdtIHRyeWluZyB0byBzY2hlZHVsZSBhIGJhY2tncm91
+bmQgYWN0aXZpdHkuDQoNCkkgZG9uJ3QgdGhpbmsgdGhlIGxvYWQtYmFsYW5jZXIgd2lsbCBldmVy
+IHBpY2sgaXQgdXAuDQpBbGwgdGhlIHByb2Nlc3Mgc2NoZWR1bGluZyBpcyBoYXBwZW5pbmcgZmFy
+IHRvbyBmYXN0Lg0KDQpXaGF0IEkgdGhpbmsgbWlnaHQgYmUgaGFwcGVuaW5nIGlzIHRoYXQgdGhl
+IGZ1dGV4KCkgY29kZSBpcyByZXF1ZXN0aW5nDQp0aGUgd29rZW4gdXAgdGhyZWFkIHJ1biBvbiB0
+aGUgY3VycmVudCBjcHUuDQpUaGlzIGNhbiBiZSBhZHZhbnRhZ2VvdXMgaW4gc29tZSBjaXJjdW1z
+dGFuY2VzIC0gdXN1YWxseSBpZiB5b3UNCmtub3cgdGhlIGN1cnJlbnQgdGhyZWFkIGlzIGFib3V0
+IHRvIHNsZWVwLg0KKEkgcmVtZW1iZXIgYW5vdGhlciBzY2hlZHVsZXIgZG9pbmcgdGhhdCwgYnV0
+IEkgY2FuJ3QgcmVtZW1iZXIgd2h5IQ0KVGhlIG9ubHkgc2VxdWVuY2UgSSBjYW4gdGhpbmsgb2Yg
+aXMgYSBzaGVsbCBkb2luZyBmb3JrK2V4ZWMrd2FpdC4pDQpCdXQgaXQgc2VlbXMgbGlrZSBhIGJh
+ZCBpZGVhIHdoZW4gYSBSVCB0aHJlYWQgaXMgd2FraW5nIGEgQ0ZTIG9uZS4NCihPciBhbnkgY2Fz
+ZSB3aGVyZSB0aGUgb25lIGJlaW5nIHdva2VuIGlzIGxvd2VyIHByaW9yaXR5LikNCg0KSSBtaWdo
+dCBoYXZlIHRvIHJ1biB0aGUgJ2JhY2tncm91bmQgdGFza3MnIGF0IGxvdyBSVCBwcmlvcml0eQ0K
+anVzdCB0byBnZXQgdGhlbSBzY2hlZHVsZWQgb24gaWRsZSBjcHUuDQoNCglEYXZpZA0KDQotDQpS
+ZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQgRmFybSwgTWls
+dG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4NiAoV2FsZXMp
+DQo=
 
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on v5.18-rc2 next-20220412]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Patrick-Wang/of-fdt-do-not-reserve-memory-below-MIN_MEMBLOCK_ADDR/20220412-125309
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-config: arm-buildonly-randconfig-r006-20220411 (https://download.01.org/0day-ci/archive/20220412/202204121637.4ZHpTqwT-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project fe2478d44e4f7f191c43fef629ac7a23d0251e72)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/d362274832c02bb7812c13eff968322a76f10ed3
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Patrick-Wang/of-fdt-do-not-reserve-memory-below-MIN_MEMBLOCK_ADDR/20220412-125309
-        git checkout d362274832c02bb7812c13eff968322a76f10ed3
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/of/fdt.c:494:4: warning: format specifies type 'unsigned long long' but the argument has type 'phys_addr_t' (aka 'unsigned int') [-Wformat]
-                           base, phys_offset);
-                           ^~~~
-   include/linux/printk.h:499:37: note: expanded from macro 'pr_warn'
-           printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
-                                      ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   1 warning generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for DRM_GEM_SHMEM_HELPER
-   Depends on HAS_IOMEM && DRM && MMU
-   Selected by
-   - DRM_SSD130X && HAS_IOMEM && DRM
-
-
-vim +494 drivers/of/fdt.c
-
-   486	
-   487	static int __init early_init_dt_reserve_memory_arch(phys_addr_t base,
-   488						phys_addr_t size, bool nomap)
-   489	{
-   490		const u64 phys_offset = MIN_MEMBLOCK_ADDR;
-   491	
-   492		if (base < phys_offset) {
-   493			pr_warn("Ignoring reserved memory range 0x%llx - 0x%llx\n",
- > 494				base, phys_offset);
-   495			size = (phys_offset - base) < size ?
-   496				size - (phys_offset - base) : 0;
-   497			base = phys_offset;
-   498	
-   499			if (!size)
-   500				return -EFAULT;
-   501		}
-   502	
-   503		if (nomap) {
-   504			/*
-   505			 * If the memory is already reserved (by another region), we
-   506			 * should not allow it to be marked nomap, but don't worry
-   507			 * if the region isn't memory as it won't be mapped.
-   508			 */
-   509			if (memblock_overlaps_region(&memblock.memory, base, size) &&
-   510			    memblock_is_region_reserved(base, size))
-   511				return -EBUSY;
-   512	
-   513			return memblock_mark_nomap(base, size);
-   514		}
-   515		return memblock_reserve(base, size);
-   516	}
-   517	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

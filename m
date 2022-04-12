@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED814FDA3C
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:49:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B82844FD840
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:35:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352344AbiDLIRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:17:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42902 "EHLO
+        id S1356854AbiDLIQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:16:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351575AbiDLH2L (ORCPT
+        with ESMTP id S1351733AbiDLH2O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:28:11 -0400
+        Tue, 12 Apr 2022 03:28:14 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283C84EF6E;
-        Tue, 12 Apr 2022 00:08:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 549DB4F441;
+        Tue, 12 Apr 2022 00:08:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 31F14B81B57;
-        Tue, 12 Apr 2022 07:08:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96246C385A1;
-        Tue, 12 Apr 2022 07:08:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1264FB81B4F;
+        Tue, 12 Apr 2022 07:08:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7203FC385AA;
+        Tue, 12 Apr 2022 07:08:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747281;
-        bh=0N2yIwdSXee9F6hKtUsnEzk1Wpq6MQKPHa6BD8iYw5E=;
+        s=korg; t=1649747283;
+        bh=ZwVlB8Plku3sRdnB7LcIRszBYxi8dkTfTjHNj36+0GQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UaQP3jMSNrpHjWB4YIevRhsfrc74Hy4xzCyh+MpIoqHl9uj+GRfJghFHgJKL6kRS6
-         x0h57lW8a5Xa9jCZf5NVP5i8aZuSqG/rlY3iNZyBGuehD5x9Yl4KFfN1YDTxhq2jjH
-         KK4+8Cd3eBsa8+TjOSDv5iBNfBK+E8vLySqBMAWI=
+        b=r3F6kKPEMbHd14vFAj1Lm3ltPH03qMXQcl9CeAEbDa7fid9XNym7YmR2adlmq9VvY
+         FGVryiAUVJbeRxXK06U0Eo727RVgL7ict7Aq7KZAJ9mDD9vWOlRpSNT1FjKpkEJrut
+         e0ji9Hl2wQUKv3NVbUgujBHcyTKBS2LhBQFAR19E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
-        Peter Gonda <pgonda@google.com>,
+        stable@vger.kernel.org, Lotus Fenn <lotusf@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Like Xu <likexu@tencent.com>,
+        David Dunn <daviddunn@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 007/343] KVM: SVM: Fix kvm_cache_regs.h inclusions for is_guest_mode()
-Date:   Tue, 12 Apr 2022 08:27:05 +0200
-Message-Id: <20220412062951.315041793@linuxfoundation.org>
+Subject: [PATCH 5.17 008/343] KVM: x86/svm: Clear reserved bits written to PerfEvtSeln MSRs
+Date:   Tue, 12 Apr 2022 08:27:06 +0200
+Message-Id: <20220412062951.343821780@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
 References: <20220412062951.095765152@linuxfoundation.org>
@@ -56,54 +58,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Gonda <pgonda@google.com>
+From: Jim Mattson <jmattson@google.com>
 
-[ Upstream commit 4a9e7b9ea252842bc8b14d495706ac6317fafd5d ]
+[ Upstream commit 9b026073db2f1ad0e4d8b61c83316c8497981037 ]
 
-Include kvm_cache_regs.h to pick up the definition of is_guest_mode(),
-which is referenced by nested_svm_virtualize_tpr() in svm.h. Remove
-include from svm_onhpyerv.c which was done only because of lack of
-include in svm.h.
+AMD EPYC CPUs never raise a #GP for a WRMSR to a PerfEvtSeln MSR. Some
+reserved bits are cleared, and some are not. Specifically, on
+Zen3/Milan, bits 19 and 42 are not cleared.
 
-Fixes: 883b0a91f41ab ("KVM: SVM: Move Nested SVM Implementation to nested.c")
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Sean Christopherson <seanjc@google.com>
-Cc: kvm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Peter Gonda <pgonda@google.com>
-Message-Id: <20220304161032.2270688-1-pgonda@google.com>
+When emulating such a WRMSR, KVM should not synthesize a #GP,
+regardless of which bits are set. However, undocumented bits should
+not be passed through to the hardware MSR. So, rather than checking
+for reserved bits and synthesizing a #GP, just clear the reserved
+bits.
+
+This may seem pedantic, but since KVM currently does not support the
+"Host/Guest Only" bits (41:40), it is necessary to clear these bits
+rather than synthesizing #GP, because some popular guests (e.g Linux)
+will set the "Host Only" bit even on CPUs that don't support
+EFER.SVME, and they don't expect a #GP.
+
+For example,
+
+root@Ubuntu1804:~# perf stat -e r26 -a sleep 1
+
+ Performance counter stats for 'system wide':
+
+                 0      r26
+
+       1.001070977 seconds time elapsed
+
+Feb 23 03:59:58 Ubuntu1804 kernel: [  405.379957] unchecked MSR access error: WRMSR to 0xc0010200 (tried to write 0x0000020000130026) at rIP: 0xffffffff9b276a28 (native_write_msr+0x8/0x30)
+Feb 23 03:59:58 Ubuntu1804 kernel: [  405.379958] Call Trace:
+Feb 23 03:59:58 Ubuntu1804 kernel: [  405.379963]  amd_pmu_disable_event+0x27/0x90
+
+Fixes: ca724305a2b0 ("KVM: x86/vPMU: Implement AMD vPMU code for KVM")
+Reported-by: Lotus Fenn <lotusf@google.com>
+Signed-off-by: Jim Mattson <jmattson@google.com>
+Reviewed-by: Like Xu <likexu@tencent.com>
+Reviewed-by: David Dunn <daviddunn@google.com>
+Message-Id: <20220226234131.2167175-1-jmattson@google.com>
 Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kvm/svm/svm.h          | 2 ++
- arch/x86/kvm/svm/svm_onhyperv.c | 1 -
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ arch/x86/kvm/svm/pmu.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-index fa98d6844728..86bcfed6599e 100644
---- a/arch/x86/kvm/svm/svm.h
-+++ b/arch/x86/kvm/svm/svm.h
-@@ -22,6 +22,8 @@
- #include <asm/svm.h>
- #include <asm/sev-common.h>
+diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
+index 7cc664b4472a..ba40b7fced5a 100644
+--- a/arch/x86/kvm/svm/pmu.c
++++ b/arch/x86/kvm/svm/pmu.c
+@@ -262,12 +262,10 @@ static int amd_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 	/* MSR_EVNTSELn */
+ 	pmc = get_gp_pmc_amd(pmu, msr, PMU_TYPE_EVNTSEL);
+ 	if (pmc) {
+-		if (data == pmc->eventsel)
+-			return 0;
+-		if (!(data & pmu->reserved_bits)) {
++		data &= ~pmu->reserved_bits;
++		if (data != pmc->eventsel)
+ 			reprogram_gp_counter(pmc, data);
+-			return 0;
+-		}
++		return 0;
+ 	}
  
-+#include "kvm_cache_regs.h"
-+
- #define __sme_page_pa(x) __sme_set(page_to_pfn(x) << PAGE_SHIFT)
- 
- #define	IOPM_SIZE PAGE_SIZE * 3
-diff --git a/arch/x86/kvm/svm/svm_onhyperv.c b/arch/x86/kvm/svm/svm_onhyperv.c
-index 98aa981c04ec..8cdc62c74a96 100644
---- a/arch/x86/kvm/svm/svm_onhyperv.c
-+++ b/arch/x86/kvm/svm/svm_onhyperv.c
-@@ -4,7 +4,6 @@
-  */
- 
- #include <linux/kvm_host.h>
--#include "kvm_cache_regs.h"
- 
- #include <asm/mshyperv.h>
- 
+ 	return 1;
 -- 
 2.35.1
 

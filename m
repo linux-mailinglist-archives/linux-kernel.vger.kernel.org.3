@@ -2,183 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D37E74FE97B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 22:36:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D4334FE992
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 22:42:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbiDLUiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 16:38:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32930 "EHLO
+        id S231191AbiDLUnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 16:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231608AbiDLUhu (ORCPT
+        with ESMTP id S229582AbiDLUml (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 16:37:50 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06A4EFABE6;
-        Tue, 12 Apr 2022 13:32:29 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id k23so39570133ejd.3;
-        Tue, 12 Apr 2022 13:32:28 -0700 (PDT)
+        Tue, 12 Apr 2022 16:42:41 -0400
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7AAFABF5
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 13:37:43 -0700 (PDT)
+Received: by mail-yb1-f202.google.com with SMTP id h16-20020a056902009000b00628a70584b2so61023ybs.6
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 13:37:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=m1dR6jtUuMTJiOEauYrZ+LgWz+ZA4crd9zsyU4t9Jps=;
-        b=C8jkE0dJScs5ZfDVUMAGI83DPAYueYpncxIN1ENu5DuHkYvQ9fAArTRGRj0b8ZWZ87
-         2SC+M2RWQN4eJa+rXcdScpp/hjgrX/t4r5l8fasRpp/XAGas5mJuLTP7JRJphIXcpOna
-         ws9E1finUVliP65HHEAJi1tBBcdKru0m6IGFFVCOBZHY8gPiFC8H8U28PvHKYC0zEaQy
-         YPg7gMES0WtfPA6Ig/jfJTIizEetGJZ+9x6z11VArTgg1OXOYDUR4Zo9vdZd9GM32GQD
-         G20PPB06YLStneJ3/l3SVv6GkJ6rnyEiNWI/sCZTljqRukcSAfODyR04vGB2FFazZ/IS
-         xAFA==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=WxuM56vp7eyey8vt1AZa+KldYkNrgkjPuC+4UbMDXgc=;
+        b=rIM9EOW8GOu9cyGO8TXJ6h03VJygSCKXO8crDJqnskQH89h0ZkNfJ9QcigR3yBGwJg
+         qIZIakU+ukGgbzbtBtrcJRatlgtr2WsuT1uhRYMkDZoB5wk0eninAo43ymkRPOkirNrq
+         /816AqwD33qIzqfBV4wacqsGUAdSBGLoiJdn++k8j9aJAvNiMRne7dHD0R17EQukclon
+         jCkxn4wbNTcNTRMRaVaA+0YjqUxB72PaFAAjiPWKXOSO3MiH1+AQx3jMXyfiGcttDc6b
+         hy8JW5fCyciu4xUl/9HYYP0ybCeWnGKSjYBNlj56ErlhIeelassl5VxG2u3/aJIXAJ0J
+         q/Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=m1dR6jtUuMTJiOEauYrZ+LgWz+ZA4crd9zsyU4t9Jps=;
-        b=0hnMATVzMetvCuGHvTGPunNU+cMXCDkRPQDR4ppNzlvWuFrb82JY7uB2sjibmpG79s
-         0Zusxz1lKzLskJ7Ap/tI+GCrrhd+kxeCN/3POcmT9DDzAwU4DCXS2tWlz334dPlKPpVM
-         O/Vzaydp8GI24uiDguf5w2SpfyZGtYVhFAB3zQeYyOwhM8U8DwBWF2UoX3UowQEtg2g6
-         56SLDJErxvFkNmzE1Bsy4QeM/p9Gi/8vOiIYAlqhgYR+y3/0qr+Gv1DRUOoKBuKzCWik
-         b3ORdS86dO2Nu7tBKKqt3GTgYk88Z17ea44LoatYCmyqZ6XDoAGgkBgDGoT23x85qFfd
-         XiHw==
-X-Gm-Message-State: AOAM533ttoMGPCYSYE6qMAKBwaJMt8Lcr++w8lVg1aZCYYsgBTnBcAZL
-        PZ5EmydDgT9UIljUifZ8LQg=
-X-Google-Smtp-Source: ABdhPJzoqgZY1Fzi3tDWeNv95O5vo5WqtkWp4njg1R9WLNFOF0sChdYh4Zv3X10dQEpDaUUp9YkxUQ==
-X-Received: by 2002:a17:907:7815:b0:6ce:5242:1280 with SMTP id la21-20020a170907781500b006ce52421280mr36153644ejc.217.1649795293117;
-        Tue, 12 Apr 2022 13:28:13 -0700 (PDT)
-Received: from krava ([83.240.62.142])
-        by smtp.gmail.com with ESMTPSA id r3-20020aa7cb83000000b0041b573e2654sm210558edt.94.2022.04.12.13.28.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 13:28:12 -0700 (PDT)
-Date:   Tue, 12 Apr 2022 22:28:09 +0200
-From:   Jiri Olsa <olsajiri@gmail.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>
-Subject: Re: [RFC bpf-next 1/4] kallsyms: Add kallsyms_lookup_names function
-Message-ID: <YlXg2SD4871l/uiW@krava>
-References: <20220407125224.310255-1-jolsa@kernel.org>
- <20220407125224.310255-2-jolsa@kernel.org>
- <CAEf4BzYffXGFigxywjP391s4G=6VpykxaqD5OYuOR5mBRa1Tmw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4BzYffXGFigxywjP391s4G=6VpykxaqD5OYuOR5mBRa1Tmw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=WxuM56vp7eyey8vt1AZa+KldYkNrgkjPuC+4UbMDXgc=;
+        b=nQBK1BXkgAPBApJdbHeStpUnPgNOphiia9l1qKc+LQOZbUIVwKdt+SFn/bKEjowuTa
+         eGjpcQBDY7OIXUHStGkT2X2j8pjYOaMuGclDYzsmPkcU3hOVxvLlVuyGpfbe62z9MV5s
+         iZzq4sWH/miZVBZdRflLNu1A8Y0i0U9Tix41P4DpAWUkLFKG/L5rxNF3S8cYccKeELh3
+         jhPTCkpnLcS/Hn8gppCUJa5d0cP8+5dHY/mko9o7fR81adcXT53ALwJrMy6NWeJ61oYr
+         dR8/4Rp1NgfLfg6OXjomzB36Pc4Iy+ImxhPTdTARSOwUJPvZmnP7o17abQMWGzCJLoW6
+         Rd1Q==
+X-Gm-Message-State: AOAM532BumGrJExq7nRIB/Z8EtM89NTzE7LQHjkZZjgu/gPYmr26xjXL
+        Ptdqw6q1lCjv7rJjDkxDTktppOHV+A4fYVZiotLc
+X-Google-Smtp-Source: ABdhPJwN1rKyVp/tc0fMg/HjGUO+kQyygAHoYo6COvoV6GzliqlsiWADXi0U2ptDq7ByWupmrnrJxjn86JmOaUcWFqlS
+X-Received: from ajr0.svl.corp.google.com ([2620:15c:2cd:203:8927:f9ed:8b14:ddae])
+ (user=axelrasmussen job=sendgmr) by 2002:a25:9391:0:b0:641:3842:c5c4 with
+ SMTP id a17-20020a259391000000b006413842c5c4mr11278242ybm.323.1649795388862;
+ Tue, 12 Apr 2022 13:29:48 -0700 (PDT)
+Date:   Tue, 12 Apr 2022 13:29:41 -0700
+Message-Id: <20220412202942.386981-1-axelrasmussen@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
+Subject: [PATCH 1/2] userfaultfd: add /dev/userfaultfd for fine grained access control
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Dmitry V . Levin" <ldv@altlinux.org>,
+        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Axel Rasmussen <axelrasmussen@google.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 03:15:23PM -0700, Andrii Nakryiko wrote:
+Historically, it has been shown that intercepting kernel faults with
+userfaultfd (thereby forcing the kernel to wait for an arbitrary amount
+of time) can be exploited, or at least can make some kinds of exploits
+easier. So, in 37cd0575b8 "userfaultfd: add UFFD_USER_MODE_ONLY" we
+changed things so, in order for kernel faults to be handled by
+userfaultfd, either the process needs CAP_SYS_PTRACE, or this sysctl
+must be configured so that any unprivileged user can do it.
 
-SNIP
+In a typical implementation of a hypervisor with live migration (take
+QEMU/KVM as one such example), we do indeed need to be able to handle
+kernel faults. But, both options above are less than ideal:
 
-> >  static inline int kallsyms_lookup_size_offset(unsigned long addr,
-> >                                               unsigned long *symbolsize,
-> >                                               unsigned long *offset)
-> > diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-> > index 79f2eb617a62..a3738ddf9e87 100644
-> > --- a/kernel/kallsyms.c
-> > +++ b/kernel/kallsyms.c
-> > @@ -29,6 +29,8 @@
-> >  #include <linux/compiler.h>
-> >  #include <linux/module.h>
-> >  #include <linux/kernel.h>
-> > +#include <linux/bsearch.h>
-> > +#include <linux/sort.h>
-> >
-> >  /*
-> >   * These will be re-linked against their real values
-> > @@ -572,6 +574,52 @@ int sprint_backtrace_build_id(char *buffer, unsigned long address)
-> >         return __sprint_symbol(buffer, address, -1, 1, 1);
-> >  }
-> >
-> > +static int symbols_cmp(const void *a, const void *b)
-> 
-> isn't this literally strcmp? Or compiler will actually complain about
-> const void * vs const char *?
+- Toggling the sysctl increases attack surface by allowing any
+  unprivileged user to do it.
 
-yes..
+- Granting the live migration process CAP_SYS_PTRACE gives it this
+  ability, but *also* the ability to "observe and control the
+  execution of another process [...], and examine and change [its]
+  memory and registers" (from ptrace(2)). This isn't something we need
+  or want to be able to do, so granting this permission violates the
+  "principle of least privilege".
 
-kernel/kallsyms.c: In function ‘kallsyms_callback’:
-kernel/kallsyms.c:597:73: error: passing argument 5 of ‘bsearch’ from incompatible pointer type [-Werror=incompatible-pointer-types]
-  597 |         if (!bsearch(&name, args->syms, args->cnt, sizeof(*args->syms), strcmp))
-      |                                                                         ^~~~~~
-      |                                                                         |
-      |                                                                         int (*)(const char *, const char *)
+This is all a long winded way to say: we want a more fine-grained way to
+grant access to userfaultfd, without granting other additional
+permissions at the same time.
 
+To achieve this, add a /dev/userfaultfd misc device. This device
+provides an alternative to the userfaultfd(2) syscall for the creation
+of new userfaultfds. The idea is, any userfaultfds created this way will
+be able to handle kernel faults, without the caller having any special
+capabilities. Access to this mechanism is instead restricted using e.g.
+standard filesystem permissions.
 
-> 
-> > +{
-> > +       const char **str_a = (const char **) a;
-> > +       const char **str_b = (const char **) b;
-> > +
-> > +       return strcmp(*str_a, *str_b);
-> > +}
-> > +
-> > +struct kallsyms_data {
-> > +       unsigned long *addrs;
-> > +       const char **syms;
-> > +       u32 cnt;
-> > +       u32 found;
-> > +};
-> > +
-> > +static int kallsyms_callback(void *data, const char *name,
-> > +                            struct module *mod, unsigned long addr)
-> > +{
-> > +       struct kallsyms_data *args = data;
-> > +
-> > +       if (!bsearch(&name, args->syms, args->cnt, sizeof(*args->syms), symbols_cmp))
-> > +               return 0;
-> > +
-> > +       addr = ftrace_location(addr);
-> > +       if (!addr)
-> > +               return 0;
-> > +
-> > +       args->addrs[args->found++] = addr;
-> > +       return args->found == args->cnt ? 1 : 0;
-> > +}
-> > +
-> > +int kallsyms_lookup_names(const char **syms, u32 cnt, unsigned long *addrs)
-> > +{
-> > +       struct kallsyms_data args;
-> > +
-> > +       sort(syms, cnt, sizeof(*syms), symbols_cmp, NULL);
-> > +
-> > +       args.addrs = addrs;
-> > +       args.syms = syms;
-> > +       args.cnt = cnt;
-> > +       args.found = 0;
-> > +       kallsyms_on_each_symbol(kallsyms_callback, &args);
-> > +
-> > +       return args.found == args.cnt ? 0 : -EINVAL;
-> 
-> ESRCH or ENOENT makes a bit more sense as an error?
+Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+---
+ fs/userfaultfd.c                 | 79 ++++++++++++++++++++++++++------
+ include/uapi/linux/userfaultfd.h |  4 ++
+ 2 files changed, 69 insertions(+), 14 deletions(-)
 
-ok
+diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+index aa0c47cb0d16..16d7573ab41a 100644
+--- a/fs/userfaultfd.c
++++ b/fs/userfaultfd.c
+@@ -29,6 +29,7 @@
+ #include <linux/ioctl.h>
+ #include <linux/security.h>
+ #include <linux/hugetlb.h>
++#include <linux/miscdevice.h>
+ 
+ int sysctl_unprivileged_userfaultfd __read_mostly;
+ 
+@@ -65,6 +66,8 @@ struct userfaultfd_ctx {
+ 	unsigned int flags;
+ 	/* features requested from the userspace */
+ 	unsigned int features;
++	/* whether or not to handle kernel faults */
++	bool handle_kernel_faults;
+ 	/* released */
+ 	bool released;
+ 	/* memory mappings are changing because of non-cooperative event */
+@@ -410,13 +413,8 @@ vm_fault_t handle_userfault(struct vm_fault *vmf, unsigned long reason)
+ 
+ 	if (ctx->features & UFFD_FEATURE_SIGBUS)
+ 		goto out;
+-	if ((vmf->flags & FAULT_FLAG_USER) == 0 &&
+-	    ctx->flags & UFFD_USER_MODE_ONLY) {
+-		printk_once(KERN_WARNING "uffd: Set unprivileged_userfaultfd "
+-			"sysctl knob to 1 if kernel faults must be handled "
+-			"without obtaining CAP_SYS_PTRACE capability\n");
++	if (!(vmf->flags & FAULT_FLAG_USER) && !ctx->handle_kernel_faults)
+ 		goto out;
+-	}
+ 
+ 	/*
+ 	 * If it's already released don't get it. This avoids to loop
+@@ -2064,19 +2062,33 @@ static void init_once_userfaultfd_ctx(void *mem)
+ 	seqcount_spinlock_init(&ctx->refile_seq, &ctx->fault_pending_wqh.lock);
+ }
+ 
+-SYSCALL_DEFINE1(userfaultfd, int, flags)
++static inline bool userfaultfd_allowed(bool is_syscall, int flags)
++{
++	bool kernel_faults = !(flags & UFFD_USER_MODE_ONLY);
++	bool allow_unprivileged = sysctl_unprivileged_userfaultfd;
++
++	/* userfaultfd(2) access is controlled by sysctl + capability. */
++	if (is_syscall && kernel_faults) {
++		if (!allow_unprivileged && !capable(CAP_SYS_PTRACE))
++			return false;
++	}
++
++	/*
++	 * For /dev/userfaultfd, access is to be controlled using e.g.
++	 * permissions on the device node. We assume this is correctly
++	 * configured by userspace, so we simply allow access here.
++	 */
++
++	return true;
++}
++
++static int new_userfaultfd(bool is_syscall, int flags)
+ {
+ 	struct userfaultfd_ctx *ctx;
+ 	int fd;
+ 
+-	if (!sysctl_unprivileged_userfaultfd &&
+-	    (flags & UFFD_USER_MODE_ONLY) == 0 &&
+-	    !capable(CAP_SYS_PTRACE)) {
+-		printk_once(KERN_WARNING "uffd: Set unprivileged_userfaultfd "
+-			"sysctl knob to 1 if kernel faults must be handled "
+-			"without obtaining CAP_SYS_PTRACE capability\n");
++	if (!userfaultfd_allowed(is_syscall, flags))
+ 		return -EPERM;
+-	}
+ 
+ 	BUG_ON(!current->mm);
+ 
+@@ -2095,6 +2107,11 @@ SYSCALL_DEFINE1(userfaultfd, int, flags)
+ 	refcount_set(&ctx->refcount, 1);
+ 	ctx->flags = flags;
+ 	ctx->features = 0;
++	/*
++	 * If UFFD_USER_MODE_ONLY is not set, then userfaultfd_allowed() above
++	 * decided that kernel faults were allowed and should be handled.
++	 */
++	ctx->handle_kernel_faults = !(flags & UFFD_USER_MODE_ONLY);
+ 	ctx->released = false;
+ 	atomic_set(&ctx->mmap_changing, 0);
+ 	ctx->mm = current->mm;
+@@ -2110,8 +2127,42 @@ SYSCALL_DEFINE1(userfaultfd, int, flags)
+ 	return fd;
+ }
+ 
++SYSCALL_DEFINE1(userfaultfd, int, flags)
++{
++	return new_userfaultfd(true, flags);
++}
++
++static int userfaultfd_dev_open(struct inode *inode, struct file *file)
++{
++	return 0;
++}
++
++static long userfaultfd_dev_ioctl(struct file *file, unsigned int cmd, unsigned long flags)
++{
++	if (cmd != USERFAULTFD_IOC_NEW)
++		return -EINVAL;
++
++	return new_userfaultfd(false, flags);
++}
++
++static const struct file_operations userfaultfd_dev_fops = {
++	.open = userfaultfd_dev_open,
++	.unlocked_ioctl = userfaultfd_dev_ioctl,
++	.compat_ioctl = compat_ptr_ioctl,
++	.owner = THIS_MODULE,
++	.llseek = noop_llseek,
++};
++
++static struct miscdevice userfaultfd_misc = {
++	.minor = MISC_DYNAMIC_MINOR,
++	.name = "userfaultfd",
++	.fops = &userfaultfd_dev_fops
++};
++
+ static int __init userfaultfd_init(void)
+ {
++	WARN_ON(misc_register(&userfaultfd_misc));
++
+ 	userfaultfd_ctx_cachep = kmem_cache_create("userfaultfd_ctx_cache",
+ 						sizeof(struct userfaultfd_ctx),
+ 						0,
+diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
+index ef739054cb1c..032a35b3bbd2 100644
+--- a/include/uapi/linux/userfaultfd.h
++++ b/include/uapi/linux/userfaultfd.h
+@@ -12,6 +12,10 @@
+ 
+ #include <linux/types.h>
+ 
++/* ioctls for /dev/userfaultfd */
++#define USERFAULTFD_IOC 0xAA
++#define USERFAULTFD_IOC_NEW _IOWR(USERFAULTFD_IOC, 0x00, int)
++
+ /*
+  * If the UFFDIO_API is upgraded someday, the UFFDIO_UNREGISTER and
+  * UFFDIO_WAKE ioctls should be defined as _IOW and not as _IOR.  In
+-- 
+2.35.1.1178.g4f1659d476-goog
 
-jirka
-
-> 
-> 
-> > +}
-> > +
-> >  /* To avoid using get_symbol_offset for every symbol, we carry prefix along. */
-> >  struct kallsym_iter {
-> >         loff_t pos;
-> > --
-> > 2.35.1
-> >

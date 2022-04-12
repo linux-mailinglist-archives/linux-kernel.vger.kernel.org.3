@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0F6B4FD6C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80F3C4FDAD2
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385684AbiDLIwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46354 "EHLO
+        id S1351828AbiDLHNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:13:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359000AbiDLHmZ (ORCPT
+        with ESMTP id S1351443AbiDLGxg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:42:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E8254BEA;
-        Tue, 12 Apr 2022 00:19:53 -0700 (PDT)
+        Tue, 12 Apr 2022 02:53:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96C83CFEB;
+        Mon, 11 Apr 2022 23:40:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 21260616B2;
-        Tue, 12 Apr 2022 07:19:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3363FC385A5;
-        Tue, 12 Apr 2022 07:19:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 663F5B81B29;
+        Tue, 12 Apr 2022 06:40:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEE7CC385A8;
+        Tue, 12 Apr 2022 06:40:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747992;
-        bh=/MhjeC+qeq6mCrT31vIqxllJ2jeahzxHNttzVwcFrsA=;
+        s=korg; t=1649745639;
+        bh=bKs0Q75ct17B8KXG5SA0L8h4El3ofgB2af3dL9aRO6k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Wxq/Fn8ZaHfFhc8Q+OqjCd0Fp10+VZv4+v9t9jp+dUuha03ZyuRw57bM/yKFmJP3N
-         HzHd0m39Fp5rBkrPHUzmwQ4i9WJqiN2jlziDHKf8seG5v8F9N/b+wpOQnbMzSgYHaJ
-         a3un6qG/yc7Db5m6FPRFbnQxFGx4J6ZhTWawNqNY=
+        b=rnffzio7KBtpTRHWRAudTwPSxvOzhqHmN8pKQVlbbb742KmE1uHj+sfgEDjwoqEYb
+         nloMR9cDqlKGk7RstadiisfD6mVhK45w+Gxp3qDnVA4dLbQJmsfZBo+R34xEUKycCr
+         V+Uxk1sZKMVR7BCebq3g5cwrJh6EEchzb/+kzIaY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mauri Sandberg <maukka@ext.kapsi.fi>,
-        Thomas Walther <walther-it@gmx.de>,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 240/343] net: ethernet: mv643xx: Fix over zealous checking of_get_mac_address()
+        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        Fangrui Song <maskray@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>, Will Deacon <will@kernel.org>
+Subject: [PATCH 5.10 167/171] arm64: module: remove (NOLOAD) from linker script
 Date:   Tue, 12 Apr 2022 08:30:58 +0200
-Message-Id: <20220412062958.260214223@linuxfoundation.org>
+Message-Id: <20220412062932.732866506@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062927.870347203@linuxfoundation.org>
+References: <20220412062927.870347203@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,45 +55,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrew Lunn <andrew@lunn.ch>
+From: Fangrui Song <maskray@google.com>
 
-[ Upstream commit 11f8e7c122ce013fa745029fa8c94c6db69c2e54 ]
+commit 4013e26670c590944abdab56c4fa797527b74325 upstream.
 
-There is often not a MAC address available in an EEPROM accessible by
-Linux with Marvell devices. Instead the bootload has the MAC address
-and directly programs it into the hardware. So don't consider an error
-from of_get_mac_address() has fatal. However, the check was added for
-the case where there is a MAC address in an the EEPROM, but the EEPROM
-has not probed yet, and -EPROBE_DEFER is returned. In that case the
-error should be returned. So make the check specific to this error
-code.
+On ELF, (NOLOAD) sets the section type to SHT_NOBITS[1]. It is conceptually
+inappropriate for .plt and .text.* sections which are always
+SHT_PROGBITS.
 
-Cc: Mauri Sandberg <maukka@ext.kapsi.fi>
-Reported-by: Thomas Walther <walther-it@gmx.de>
-Fixes: 42404d8f1c01 ("net: mv643xx_eth: process retval from of_get_mac_address")
-Signed-off-by: Andrew Lunn <andrew@lunn.ch>
-Link: https://lore.kernel.org/r/20220405000404.3374734-1-andrew@lunn.ch
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+In GNU ld, if PLT entries are needed, .plt will be SHT_PROGBITS anyway
+and (NOLOAD) will be essentially ignored. In ld.lld, since
+https://reviews.llvm.org/D118840 ("[ELF] Support (TYPE=<value>) to
+customize the output section type"), ld.lld will report a `section type
+mismatch` error. Just remove (NOLOAD) to fix the error.
+
+[1] https://lld.llvm.org/ELF/linker_script.html As of today, "The
+section should be marked as not loadable" on
+https://sourceware.org/binutils/docs/ld/Output-Section-Type.html is
+outdated for ELF.
+
+Tested-by: Nathan Chancellor <nathan@kernel.org>
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Fangrui Song <maskray@google.com>
+Acked-by: Ard Biesheuvel <ardb@kernel.org>
+Link: https://lore.kernel.org/r/20220218081209.354383-1-maskray@google.com
+Signed-off-by: Will Deacon <will@kernel.org>
+[nathan: Fix conflicts due to lack of 1cbdf60bd1b7]
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/marvell/mv643xx_eth.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/include/asm/module.lds.h |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/marvell/mv643xx_eth.c b/drivers/net/ethernet/marvell/mv643xx_eth.c
-index 143ca8be5eb5..4008596963be 100644
---- a/drivers/net/ethernet/marvell/mv643xx_eth.c
-+++ b/drivers/net/ethernet/marvell/mv643xx_eth.c
-@@ -2751,7 +2751,7 @@ static int mv643xx_eth_shared_of_add_port(struct platform_device *pdev,
- 	}
- 
- 	ret = of_get_mac_address(pnp, ppd.mac_addr);
--	if (ret)
-+	if (ret == -EPROBE_DEFER)
- 		return ret;
- 
- 	mv643xx_eth_property(pnp, "tx-queue-size", ppd.tx_queue_size);
--- 
-2.35.1
-
+--- a/arch/arm64/include/asm/module.lds.h
++++ b/arch/arm64/include/asm/module.lds.h
+@@ -1,7 +1,7 @@
+ #ifdef CONFIG_ARM64_MODULE_PLTS
+ SECTIONS {
+-	.plt 0 (NOLOAD) : { BYTE(0) }
+-	.init.plt 0 (NOLOAD) : { BYTE(0) }
+-	.text.ftrace_trampoline 0 (NOLOAD) : { BYTE(0) }
++	.plt 0 : { BYTE(0) }
++	.init.plt 0 : { BYTE(0) }
++	.text.ftrace_trampoline 0 : { BYTE(0) }
+ }
+ #endif
 
 

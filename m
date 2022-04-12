@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C61FB4FDA48
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:49:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B48C24FD949
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:40:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354359AbiDLJTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:19:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52394 "EHLO
+        id S1384461AbiDLIlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:41:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357594AbiDLHkb (ORCPT
+        with ESMTP id S1357248AbiDLHjy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:40:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71EDF2F3B8;
-        Tue, 12 Apr 2022 00:16:09 -0700 (PDT)
+        Tue, 12 Apr 2022 03:39:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D23E0B;
+        Tue, 12 Apr 2022 00:14:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 26EFBB81B62;
-        Tue, 12 Apr 2022 07:16:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CBCAC385A5;
-        Tue, 12 Apr 2022 07:16:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 23AACB81B46;
+        Tue, 12 Apr 2022 07:14:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 721CEC385A1;
+        Tue, 12 Apr 2022 07:14:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747767;
-        bh=9knYtZs4cQxxwU+rTTGT8DPToBcIrwxkKouo22iwZ0c=;
+        s=korg; t=1649747652;
+        bh=Zke0KUd98G+PJPnwjnLa6rkCfnBKinhb5f79hj3Av60=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lQd04LzbtbwJCxRrQcvWWa8wdaOdMMXakPh3GB1rFd23rPDVs096hvcGxxXpk/ne8
-         36quy3AkEhfg/FW67TLim9UEaEojoBjKW+aGGeh0NkPjSfNDQYwbLME39lIH6LS3uA
-         ipsS2UkMFKKb7Cr0yQ0ro33slu4yGBdotSk3rywE=
+        b=pLqtc0y2wJHFm9u64sPqcThy0VjbqaBCkuYmyWwebr47ZUNk56HD2rdzpUYDfq3ga
+         9g51ev7hBUVKirecn32Tq6/sMJBGAbhW6bXAjtnlVH8swxVV+6MjkeEQhrishYAs9p
+         H6MzSBGCQxTFm9eap7nCMltqRM27oyLoAzFzLHzE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Stephen Boyd <sboyd@kernel.org>,
+        stable@vger.kernel.org, Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 157/343] clk: mediatek: Fix memory leaks on probe
-Date:   Tue, 12 Apr 2022 08:29:35 +0200
-Message-Id: <20220412062955.906954562@linuxfoundation.org>
+Subject: [PATCH 5.17 158/343] staging: vchiq_arm: Avoid NULL ptr deref in vchiq_dump_platform_instances
+Date:   Tue, 12 Apr 2022 08:29:36 +0200
+Message-Id: <20220412062955.935949677@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
 References: <20220412062951.095765152@linuxfoundation.org>
@@ -57,86 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: José Expósito <jose.exposito89@gmail.com>
+From: Stefan Wahren <stefan.wahren@i2se.com>
 
-[ Upstream commit 7a688c91d3fd54c53e7a9edd6052cdae98dd99d8 ]
+[ Upstream commit aa899e686d442c63d50f4d369cc02dbbf0941cb0 ]
 
-Handle the error branches to free memory where required.
+vchiq_get_state() can return a NULL pointer. So handle this cases and
+avoid a NULL pointer derefence in vchiq_dump_platform_instances.
 
-Addresses-Coverity-ID: 1491825 ("Resource leak")
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
-Link: https://lore.kernel.org/r/20220115183059.GA10809@elementary
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Reviewed-by: Nicolas Saenz Julienne <nsaenz@kernel.org>
+Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+Link: https://lore.kernel.org/r/1642968143-19281-17-git-send-email-stefan.wahren@i2se.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/mediatek/clk-mt8192.c | 36 +++++++++++++++++++++++++------
- 1 file changed, 30 insertions(+), 6 deletions(-)
+ drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/clk/mediatek/clk-mt8192.c b/drivers/clk/mediatek/clk-mt8192.c
-index cbc7c6dbe0f4..79ddb3cc0b98 100644
---- a/drivers/clk/mediatek/clk-mt8192.c
-+++ b/drivers/clk/mediatek/clk-mt8192.c
-@@ -1236,9 +1236,17 @@ static int clk_mt8192_infra_probe(struct platform_device *pdev)
+diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+index 3a2e4582db8e..a3e3c9f9aa18 100644
+--- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
++++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
+@@ -1209,6 +1209,9 @@ int vchiq_dump_platform_instances(void *dump_context)
+ 	int len;
+ 	int i;
  
- 	r = mtk_clk_register_gates(node, infra_clks, ARRAY_SIZE(infra_clks), clk_data);
- 	if (r)
--		return r;
-+		goto free_clk_data;
++	if (!state)
++		return -ENOTCONN;
 +
-+	r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
-+	if (r)
-+		goto free_clk_data;
-+
-+	return r;
- 
--	return of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
-+free_clk_data:
-+	mtk_free_clk_data(clk_data);
-+	return r;
- }
- 
- static int clk_mt8192_peri_probe(struct platform_device *pdev)
-@@ -1253,9 +1261,17 @@ static int clk_mt8192_peri_probe(struct platform_device *pdev)
- 
- 	r = mtk_clk_register_gates(node, peri_clks, ARRAY_SIZE(peri_clks), clk_data);
- 	if (r)
--		return r;
-+		goto free_clk_data;
-+
-+	r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
-+	if (r)
-+		goto free_clk_data;
- 
--	return of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
-+	return r;
-+
-+free_clk_data:
-+	mtk_free_clk_data(clk_data);
-+	return r;
- }
- 
- static int clk_mt8192_apmixed_probe(struct platform_device *pdev)
-@@ -1271,9 +1287,17 @@ static int clk_mt8192_apmixed_probe(struct platform_device *pdev)
- 	mtk_clk_register_plls(node, plls, ARRAY_SIZE(plls), clk_data);
- 	r = mtk_clk_register_gates(node, apmixed_clks, ARRAY_SIZE(apmixed_clks), clk_data);
- 	if (r)
--		return r;
-+		goto free_clk_data;
- 
--	return of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
-+	r = of_clk_add_provider(node, of_clk_src_onecell_get, clk_data);
-+	if (r)
-+		goto free_clk_data;
-+
-+	return r;
-+
-+free_clk_data:
-+	mtk_free_clk_data(clk_data);
-+	return r;
- }
- 
- static const struct of_device_id of_match_clk_mt8192[] = {
+ 	/*
+ 	 * There is no list of instances, so instead scan all services,
+ 	 * marking those that have been dumped.
 -- 
 2.35.1
 

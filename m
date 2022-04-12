@@ -2,93 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3629D4FD449
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:02:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B2184FD59E
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380419AbiDLIV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:21:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32804 "EHLO
+        id S1378798AbiDLINN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:13:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353908AbiDLHZ5 (ORCPT
+        with ESMTP id S1355641AbiDLH1w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:25:57 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8902D11C1B
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:05:11 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id a42so10161630pfx.7
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 00:05:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=MD2PafPOZxiALVxRANZJtJfxFryFkWiYa4P1WpagSvo=;
-        b=ZoOMT2yrxzYBvfqKLstICxEU5NbOmIO81l0gvJWERON+OxWRK9IFg6/vpoIDfHAmJ6
-         da4UtAu84n6WCPrn+3LyAlAG0NQpdiYQ/ZFWe0Mkr8XAUamFWjfPlLZXXOH7CNFHLSce
-         HdTeQ/7o4hGeRPtNWJicF3vceIB245SwJfEbiHvo7jCiS/tdmWQctHtuWoPU2aiTWoQs
-         kLfgB7c+Ov+MCQob3dYAwrmLFhxkyEIX1WBG9+aNyDcqQE0BPqgKQk7xj9t88gPlLqYY
-         h4Sbw4WnxiVcPdlWg1emSanSfT8WyjqvAh701hPQqAQR+GLqZGU+hJ9oYwKMbM25KNGo
-         PqCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=MD2PafPOZxiALVxRANZJtJfxFryFkWiYa4P1WpagSvo=;
-        b=ycyLi3mI3cvVEs5IEsiuUO8Xgl3NmbaZ0QrXAQVJtHsOC0NLrqEqMenpdqMB9xHjuu
-         uR8l9jkmMcDy13mWoqjnSYFj3s4Zgg03gxwR67demRo8VBN5OQmIi/NLgzIJ94DKe2vx
-         2lGrcKUBn2ZnMwVOO1PHybH0Mx1LliAPwQddUHUwpqF/pBRJ/CgCQFxukGU4N3r4zMCM
-         kgpnSQor7FErq07JY1i6bFaGdKovtEGbpRpLLyq/UmgNXgNCdw2FGX7X5QF/S6pHgfhx
-         DzPLx2xsdMz+Rak1wI9fgz8Jio7km4hZEmo+dn1cdopAAiye2ihB2FXTtc0WVnztPCmk
-         /PDw==
-X-Gm-Message-State: AOAM5327FxPCZZN1edZSb1bI40rVsX6ApATgwuA98mORMjr3e3IFxjC4
-        bmrTiqHbGmEjOH7bQiLsdjI=
-X-Google-Smtp-Source: ABdhPJycADu1O3trds1gUcEXHablNZlIDVa1C9T6c102ZVWQucGUgPEoS5U0EZJPhuOsxr9sEPWpgw==
-X-Received: by 2002:a65:6956:0:b0:399:1f0e:6172 with SMTP id w22-20020a656956000000b003991f0e6172mr29157318pgq.286.1649747110823;
-        Tue, 12 Apr 2022 00:05:10 -0700 (PDT)
-Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id g15-20020a056a000b8f00b004fa9dbf27desm38059686pfj.55.2022.04.12.00.05.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 00:05:10 -0700 (PDT)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Emma Anholt <emma@anholt.net>, Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Eric Anholt <eric@anholt.net>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH] drm/vc4: Fix pm_runtime_get_sync() error checking
-Date:   Tue, 12 Apr 2022 07:04:57 +0000
-Message-Id: <20220412070458.21819-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 12 Apr 2022 03:27:52 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 805344EDD5;
+        Tue, 12 Apr 2022 00:07:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=C3gL28B3Gc2aOWbp9TEABQMn0ckE3NlAT3ZMfiId2yM=; b=NX/1HLFCyl0vrt8Ykxe6Lw8tiL
+        ibR3HLppnOGAHLzmEZvRQ/ps/npWEuslAuQ2wxMgrPuhsEQkGaiMW2OiO1XheO1U3zr16ITSbJ8Y+
+        Ae9IZrmFSo1ePtVSKuXbWenTKQO/im6/8EfYem0M57zrvOvDuysy2DB2JtTtAHbPS0gJvq3rTLGCn
+        JABlC1yiyKBFK2laSPj5AeOq1wFEjyTxA5jmTRL8kbQ6/qmVUwnY4arjso2s6ilmC/rusTxHmZQPf
+        mW1ZsqDJP4bqkJcpLqsI2kQVkPz/MBRWHAqfCiikArrTB2F6+jnEO3oGsTxbLbckXcGPgQ4wZQLg5
+        o54RZ5SQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1neAbS-004F4r-Tz; Tue, 12 Apr 2022 07:06:19 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6172F98619A; Tue, 12 Apr 2022 09:06:16 +0200 (CEST)
+Date:   Tue, 12 Apr 2022 09:06:16 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Yu Zhao <yuzhao@google.com>, Stephen Rothwell <sfr@rothwell.id.au>,
+        linux-mm@kvack.org, Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Barry Song <21cnbao@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, page-reclaim@google.com,
+        x86@kernel.org, Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        Holger =?iso-8859-1?Q?Hoffst=E4tte?= 
+        <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>
+Subject: Re: [PATCH v10 05/14] mm: multi-gen LRU: groundwork
+Message-ID: <20220412070616.GT2731@worktop.programming.kicks-ass.net>
+References: <20220407031525.2368067-1-yuzhao@google.com>
+ <20220407031525.2368067-6-yuzhao@google.com>
+ <20220411191615.a34959bdcc25ef3f9c16a7ce@linux-foundation.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220411191615.a34959bdcc25ef3f9c16a7ce@linux-foundation.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the device is already in a runtime PM enabled state
-pm_runtime_get_sync() will return 1, so a test for negative
-value should be used to check for errors.
+On Mon, Apr 11, 2022 at 07:16:15PM -0700, Andrew Morton wrote:
 
-Fixes: 4078f5757144 ("drm/vc4: Add DSI driver")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
- drivers/gpu/drm/vc4/vc4_dsi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> > +{
+> > +	int gen;
+> > +	unsigned long old_flags, new_flags;
+> > +
+> > +	do {
+> > +		new_flags = old_flags = READ_ONCE(folio->flags);
+> > +		if (!(new_flags & LRU_GEN_MASK))
+> > +			return false;
+> > +
+> > +		VM_BUG_ON_FOLIO(folio_test_active(folio), folio);
+> > +		VM_BUG_ON_FOLIO(folio_test_unevictable(folio), folio);
+> > +
+> > +		gen = ((new_flags & LRU_GEN_MASK) >> LRU_GEN_PGOFF) - 1;
+> > +
+> > +		new_flags &= ~LRU_GEN_MASK;
+> > +		/* for shrink_page_list() */
+> > +		if (reclaiming)
+> > +			new_flags &= ~(BIT(PG_referenced) | BIT(PG_reclaim));
+> > +		else if (lru_gen_is_active(lruvec, gen))
+> > +			new_flags |= BIT(PG_active);
+> > +	} while (cmpxchg(&folio->flags, old_flags, new_flags) != old_flags);
 
-diff --git a/drivers/gpu/drm/vc4/vc4_dsi.c b/drivers/gpu/drm/vc4/vc4_dsi.c
-index 752f921735c6..26aa7d1fa421 100644
---- a/drivers/gpu/drm/vc4/vc4_dsi.c
-+++ b/drivers/gpu/drm/vc4/vc4_dsi.c
-@@ -847,7 +847,7 @@ static void vc4_dsi_encoder_enable(struct drm_encoder *encoder)
- 	int ret;
- 
- 	ret = pm_runtime_get_sync(dev);
--	if (ret) {
-+	if (ret < 0) {
- 		DRM_ERROR("Failed to runtime PM enable on DSI%d\n", dsi->variant->port);
- 		return;
- 	}
--- 
-2.17.1
+Also; please use the form:
+
+	unsigned long new, old = READ_ONCE(folio->flags);
+
+	do {
+		new = /* something */ old;
+	} while (!try_cmpxchg(&folio->flags, &old, new))
 

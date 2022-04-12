@@ -2,186 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D084F4FD3B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 11:59:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C285F4FD3CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 11:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356351AbiDLJcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:32:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38356 "EHLO
+        id S236926AbiDLJlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359181AbiDLJB1 (ORCPT
+        with ESMTP id S1388758AbiDLJWp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 05:01:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC81F186D5
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 01:15:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649751314;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8HjmZzAIO50unb7pGZAQpRPqJO313RFErJC/+pOp/R0=;
-        b=LKbnVSrY8jSlZHd3EpdzyoxUUY4CeJxEaY4aM60Z0YHq+6+lKy28LrbqKJm99gdvytf05B
-        PxtlbDSO4ytM1cCjYjEyGioWZJu8xEk3fyC8FL17I4YwyP3anNGgM1miYt6mFWBNzx1ISW
-        Cxq/g6oM/5f+tH1k7tg8QSsJZqiFZ54=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-595-oRMWig1MO1a0R3MCW34PZg-1; Tue, 12 Apr 2022 04:15:11 -0400
-X-MC-Unique: oRMWig1MO1a0R3MCW34PZg-1
-Received: by mail-wm1-f71.google.com with SMTP id l19-20020a05600c1d1300b0038e736f98faso5654644wms.4
-        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 01:15:11 -0700 (PDT)
+        Tue, 12 Apr 2022 05:22:45 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0D94CD54
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 01:29:28 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id h15-20020a17090a054f00b001cb7cd2b11dso2115752pjf.5
+        for <linux-kernel@vger.kernel.org>; Tue, 12 Apr 2022 01:29:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0dFyqLvQ2p1xNfcfzu7O9DJMNp2UmrxAZtgZZyFjc4U=;
+        b=QJycfqPJQWovgMgDFefko+ZRTgkQeqaDHh4yrF684RIOJqogHdrZXuNkJWtD1e86CH
+         JfhnULKhAQyzatcivRyRpLB1X6sxBZzUwJuEV+o9PvY4Qt50KpyO+B3dFnvqWNVDe6Aa
+         vRjjk1DEXQMKON402pyAAp0fWh2szazajsdfotENvQ6Nz3IsZDa9hd7JPyssGJ0bQ2xb
+         jyuOpHy5EPHjebY5hjNMbvD8dTk17H7KqFEu3M5JbAwRMe/MpZ3DXdRNiHJDKUpXKkng
+         UwDmjD/Pwh/gx2kdhOHF6NWCr19mYdVlJEtcEho1XjNFtn6QY2WkYeJkr6BVWciQwijO
+         nTug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=8HjmZzAIO50unb7pGZAQpRPqJO313RFErJC/+pOp/R0=;
-        b=LLig/IewWmFJfPWXhvJtJviZJFwwq0fS2rutZwJT4RcSodM1k/hpKQWAK5DmGHuYPH
-         qN+Bnq+ZnHh+QJ1bng/uxFzq5/DPdUvRCu9ooNpGl1OmbHoKC4MB+VewL0D8DS+AuWYF
-         Su1OSwPaB/Ls88Ua7RqpgsJgrM2w0EPQoW6ylZYPD5/g4R2ILg7LSdjEBSy04MCttbtO
-         B3dX/KcHTeyzhG1UfmxLlvBjxChPY1OrsZivxekOTTkSdrPmLzI3+grJ23G0WmjxrofB
-         IfgYCICUkVVW/+lTAAQFqWaX9R8StHlVWzxO/TZCCUt/2jtnPK6ihyzmwt4tNvHeSdqz
-         wnHA==
-X-Gm-Message-State: AOAM530shyrQGQ1Lm/TMBBE5sC7xM4Jefs+jJ9ihMqRdW4htyXJegU0d
-        4Bx5hR5+9DT2eEQPG/WopO/sjuogz8R0zU5RtEv8ofw/t2QrjxLRUtvKtfXDm0CNSZk5gIdiPnx
-        zOIWqwtoQMM+KLLRTIyGunFk8
-X-Received: by 2002:adf:ed8b:0:b0:206:1771:e373 with SMTP id c11-20020adfed8b000000b002061771e373mr28461592wro.84.1649751310603;
-        Tue, 12 Apr 2022 01:15:10 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxZYmHGzijmWq4j1QgvJKMtTI4uehpfCeAgJZFkKQ0wTIJR1ucWkaH70j+SivEpEn8AXTnKWA==
-X-Received: by 2002:adf:ed8b:0:b0:206:1771:e373 with SMTP id c11-20020adfed8b000000b002061771e373mr28461563wro.84.1649751310358;
-        Tue, 12 Apr 2022 01:15:10 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:1800:7c14:16cc:5291:a9f3? (p200300cbc70718007c1416cc5291a9f3.dip0.t-ipconnect.de. [2003:cb:c707:1800:7c14:16cc:5291:a9f3])
-        by smtp.gmail.com with ESMTPSA id b14-20020a7bc24e000000b003899c8053e1sm1814456wmj.41.2022.04.12.01.15.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 01:15:09 -0700 (PDT)
-Message-ID: <ff9e0bad-be9a-97ac-ae88-d22bcfbe80d4@redhat.com>
-Date:   Tue, 12 Apr 2022 10:15:07 +0200
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0dFyqLvQ2p1xNfcfzu7O9DJMNp2UmrxAZtgZZyFjc4U=;
+        b=gaZB30DP4sQFSHEGObQwEtSJnLsbXY5dxGmlRHMIw65Nf6f12FfgTwJn90+ax6tqQ6
+         tavhBWrLxoVPDYgokWzKIY71EcOfYSGDfm0o49Eomwnru0rQbsR/KCCVkUtlSU4r3BHm
+         NKw9IEEAiFealGgwW5wfTeuLcdQ8bNHv+fRkn6/MaIcfoH9luQw9D2aVQ5BJz4A5PsHO
+         HAW2JOrapHH4+gTBH8X8ulMywKBMBr2WWBD1TiQIkGlsuJpHuobZtniAC1ynau1hmKWp
+         wLUg2QxES1CGuYJzP6ddGFJm7s9OVkv8yKRuiLZgFKd/IJVGcjY1WHSwifE8yQDHR5Ap
+         nYJQ==
+X-Gm-Message-State: AOAM531S5TMMbcMz/DSYHzH5ckLq1wVyRixDx6GqCjBRbQhpbPwB+DiU
+        3C1bZMhROd0rAHYjLO9B5fw=
+X-Google-Smtp-Source: ABdhPJwFEUBPcpn/+JQSCImfBLLqIXo/H9gF9nfIejTfltPkVQGUiz6pmaIRVoVcSfDik/juAAZfWg==
+X-Received: by 2002:a17:902:7006:b0:156:3cbe:6b04 with SMTP id y6-20020a170902700600b001563cbe6b04mr35586867plk.68.1649752167314;
+        Tue, 12 Apr 2022 01:29:27 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id j18-20020a633c12000000b0038204629cc9sm2093888pga.10.2022.04.12.01.29.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 01:29:27 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     nm@ti.com
+Cc:     ssantosh@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] soc: ti: knav_dma: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
+Date:   Tue, 12 Apr 2022 08:29:23 +0000
+Message-Id: <20220412082923.2532649-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Mike Rapoport <rppt@kernel.org>, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>
-References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
- <20220405234343.74045-2-kirill.shutemov@linux.intel.com>
- <93a7cfdf-02e6-6880-c563-76b01c9f41f5@intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCHv4 1/8] mm: Add support for unaccepted memory
-In-Reply-To: <93a7cfdf-02e6-6880-c563-76b01c9f41f5@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08.04.22 21:11, Dave Hansen wrote:
-> On 4/5/22 16:43, Kirill A. Shutemov wrote:
->> Kernel only needs to accept memory once after boot, so during the boot
->> and warm up phase there will be a lot of memory acceptance. After things
->> are settled down the only price of the feature if couple of checks for
->> PageUnaccepted() in allocate and free paths. The check refers a hot
->> variable (that also encodes PageBuddy()), so it is cheap and not visible
->> on profiles.
-> 
-> Let's also not sugar-coat this.  Page acceptance is hideously slow.
-> It's agonizingly slow.  To boot, it's done holding a global spinlock
-> with interrupts disabled (see patch 6/8).  At the very, very least, each
-> acceptance operation involves a couple of what are effectively ring
-> transitions, a 2MB memset(), and a bunch of cache flushing.
-> 
-> The system is going to be downright unusable during this time, right?
-> 
-> Sure, it's *temporary* and only happens once at boot.  But, it's going
-> to suck.
-> 
-> Am I over-stating this in any way?
-> 
-> The ACCEPT_MEMORY vmstat is good to have around.  Thanks for adding it.
->  But, I think we should also write down some guidance like:
-> 
-> 	If your TDX system seems as slow as snail after boot, look at
-> 	the "accept_memory" counter in /proc/vmstat.  If it is
-> 	incrementing, then TDX memory acceptance is likely to blame.
-> 
-> Do we need anything more discrete to tell users when acceptance is over?
->  For instance, maybe they run something and it goes really slow, they
-> watch "accept_memory" until it stops.  They rejoice at their good
-> fortune!  Then, memory allocation starts falling over to a new node and
-> the agony beings anew.
-> 
-> I can think of dealing with this in two ways:
-> 
-> 	cat /sys/.../unaccepted_pages_left
-> 
-> which just walks the bitmap and counts the amount of pages remaining. or
-> something like:
-> 
-> 	echo 1 > /sys/devices/system/node/node0/make_the_pain_stop
-> 
-> Which will, well, make the pain stop on node0.
-> 
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-Either I'm missing something important or the random pain might just
-take a really long time to stop?
+Using pm_runtime_resume_and_get is more appropriate
+for simplifing code
 
-I mean, we tend to reallocate the memory first that we freed last
-(putting it to the head of the freelist when freeing and picking from
-the head when allocating).
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+ drivers/soc/ti/knav_dma.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-So unless your kernel goes crazy and allocates each and every page right
-after boot, essentially accepting all memory, you might have random
-unaccepted pages lurking at the tail of the freelists.
-
-So if the VM is running for 355 days without significant memory
-pressure, you can still run into unaccepted pages at day 356 that
-results in a random delay due to acceptance of memory.
-
-
-I think we most certainly want some way to make the random pain stop, or
-to make the random pain go away after boot quickly. The
-"unaccepted_pages_left" indicator would just be a "hey, there might be
-random delays, but you cannot do anything about it". Magic toggles like
-"make_the_pain_stop" are not so nice.
-
-Can we simply automate this using a kthread or smth like that, which
-just traverses the free page lists and accepts pages (similar, but
-different to free page reporting)?
-
+diff --git a/drivers/soc/ti/knav_dma.c b/drivers/soc/ti/knav_dma.c
+index 700d8eecd8c4..061f92c8cf7d 100644
+--- a/drivers/soc/ti/knav_dma.c
++++ b/drivers/soc/ti/knav_dma.c
+@@ -747,9 +747,8 @@ static int knav_dma_probe(struct platform_device *pdev)
+ 	INIT_LIST_HEAD(&kdev->list);
+ 
+ 	pm_runtime_enable(kdev->dev);
+-	ret = pm_runtime_get_sync(kdev->dev);
++	ret = pm_runtime_resume_and_get(kdev->dev);
+ 	if (ret < 0) {
+-		pm_runtime_put_noidle(kdev->dev);
+ 		dev_err(kdev->dev, "unable to enable pktdma, err %d\n", ret);
+ 		goto err_pm_disable;
+ 	}
 -- 
-Thanks,
-
-David / dhildenb
+2.25.1
 

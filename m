@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F2254FD4F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60B434FD6F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:25:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352187AbiDLHow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 03:44:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45882 "EHLO
+        id S1352057AbiDLHXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:23:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354343AbiDLHRf (ORCPT
+        with ESMTP id S1351230AbiDLHCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:17:35 -0400
+        Tue, 12 Apr 2022 03:02:45 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A441F4BFC5;
-        Mon, 11 Apr 2022 23:58:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160242656C;
+        Mon, 11 Apr 2022 23:46:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4EF71B81B35;
-        Tue, 12 Apr 2022 06:58:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9595DC385A1;
-        Tue, 12 Apr 2022 06:58:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA79FB81B35;
+        Tue, 12 Apr 2022 06:46:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AB98C385A1;
+        Tue, 12 Apr 2022 06:46:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649746734;
-        bh=3535TF05XMwI7IlTt70GcFU3BoNH+1hFeZqaTcbTgZo=;
+        s=korg; t=1649746016;
+        bh=cujhILB3y4EmBcmQA2MsmHaHwN6l2MKCzazXJMiUZUs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SFI9YTCciT8TUHhpuWV1gDtgx4+pjiGripmR+UHUev6KjKRtzjIpD4aiWNGHuI5Rh
-         kK5mIqgaTFir/PY4+2cGloArmS82Rh3GAeUDL9lopd0e1kSI/FHe/UKbBddWRWFDhl
-         rSvCLoayXKbWT7dPqqyWb26Epw0NRvj3mNSWE/Mk=
+        b=mwfYcPWWG4DX6M6AXA5sl73dcRi0ElNolR+mcq/cN86gqURuJfS5n/8OfNApkQWHD
+         XdNzNGbc9cWtsHoB6vmKT00TOR306Supelcms75ii8YN5/L5VY5/IiQgprn4huoRll
+         cGWl8gpL/JKQwP1auSU5oA+wggoQXH99DLg/9xOg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jack Wang <jinpu.wang@ionos.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, NeilBrown <neilb@suse.de>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.16 074/285] scsi: pm8001: Fix memory leak in pm8001_chip_fw_flash_update_req()
-Date:   Tue, 12 Apr 2022 08:28:51 +0200
-Message-Id: <20220412062945.802805257@linuxfoundation.org>
+Subject: [PATCH 5.15 129/277] SUNRPC: remove scheduling boost for "SWAPPER" tasks.
+Date:   Tue, 12 Apr 2022 08:28:52 +0200
+Message-Id: <20220412062945.771752748@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062943.670770901@linuxfoundation.org>
-References: <20220412062943.670770901@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,39 +55,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+From: NeilBrown <neilb@suse.de>
 
-[ Upstream commit f792a3629f4c4aa4c3703d66b43ce1edcc3ec09a ]
+[ Upstream commit a80a8461868905823609be97f91776a26befe839 ]
 
-In pm8001_chip_fw_flash_update_build(), if
-pm8001_chip_fw_flash_update_build() fails, the struct fw_control_ex
-allocated must be freed.
+Currently, tasks marked as "swapper" tasks get put to the front of
+non-priority rpc_queues, and are sorted earlier than non-swapper tasks on
+the transport's ->xmit_queue.
 
-Link: https://lore.kernel.org/r/20220220031810.738362-23-damien.lemoal@opensource.wdc.com
-Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+This is pointless as currently *all* tasks for a mount that has swap
+enabled on *any* file are marked as "swapper" tasks.  So the net result
+is that the non-priority rpc_queues are reverse-ordered (LIFO).
+
+This scheduling boost is not necessary to avoid deadlocks, and hurts
+fairness, so remove it.  If there were a need to expedite some requests,
+the tk_priority mechanism is a more appropriate tool.
+
+Signed-off-by: NeilBrown <neilb@suse.de>
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/pm8001/pm8001_hwi.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ net/sunrpc/sched.c |  7 -------
+ net/sunrpc/xprt.c  | 11 -----------
+ 2 files changed, 18 deletions(-)
 
-diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
-index e447b714df2b..1a5338917a89 100644
---- a/drivers/scsi/pm8001/pm8001_hwi.c
-+++ b/drivers/scsi/pm8001/pm8001_hwi.c
-@@ -4907,8 +4907,10 @@ pm8001_chip_fw_flash_update_req(struct pm8001_hba_info *pm8001_ha,
- 	ccb->ccb_tag = tag;
- 	rc = pm8001_chip_fw_flash_update_build(pm8001_ha, &flash_update_info,
- 		tag);
--	if (rc)
-+	if (rc) {
-+		kfree(fw_control_context);
- 		pm8001_tag_free(pm8001_ha, tag);
-+	}
+diff --git a/net/sunrpc/sched.c b/net/sunrpc/sched.c
+index 6e4d476c6324..f0f55fbd1375 100644
+--- a/net/sunrpc/sched.c
++++ b/net/sunrpc/sched.c
+@@ -186,11 +186,6 @@ static void __rpc_add_wait_queue_priority(struct rpc_wait_queue *queue,
  
- 	return rc;
- }
+ /*
+  * Add new request to wait queue.
+- *
+- * Swapper tasks always get inserted at the head of the queue.
+- * This should avoid many nasty memory deadlocks and hopefully
+- * improve overall performance.
+- * Everyone else gets appended to the queue to ensure proper FIFO behavior.
+  */
+ static void __rpc_add_wait_queue(struct rpc_wait_queue *queue,
+ 		struct rpc_task *task,
+@@ -199,8 +194,6 @@ static void __rpc_add_wait_queue(struct rpc_wait_queue *queue,
+ 	INIT_LIST_HEAD(&task->u.tk_wait.timer_list);
+ 	if (RPC_IS_PRIORITY(queue))
+ 		__rpc_add_wait_queue_priority(queue, task, queue_priority);
+-	else if (RPC_IS_SWAPPER(task))
+-		list_add(&task->u.tk_wait.list, &queue->tasks[0]);
+ 	else
+ 		list_add_tail(&task->u.tk_wait.list, &queue->tasks[0]);
+ 	task->tk_waitqueue = queue;
+diff --git a/net/sunrpc/xprt.c b/net/sunrpc/xprt.c
+index 61603c2664a6..f5dff09154da 100644
+--- a/net/sunrpc/xprt.c
++++ b/net/sunrpc/xprt.c
+@@ -1353,17 +1353,6 @@ xprt_request_enqueue_transmit(struct rpc_task *task)
+ 				INIT_LIST_HEAD(&req->rq_xmit2);
+ 				goto out;
+ 			}
+-		} else if (RPC_IS_SWAPPER(task)) {
+-			list_for_each_entry(pos, &xprt->xmit_queue, rq_xmit) {
+-				if (pos->rq_cong || pos->rq_bytes_sent)
+-					continue;
+-				if (RPC_IS_SWAPPER(pos->rq_task))
+-					continue;
+-				/* Note: req is added _before_ pos */
+-				list_add_tail(&req->rq_xmit, &pos->rq_xmit);
+-				INIT_LIST_HEAD(&req->rq_xmit2);
+-				goto out;
+-			}
+ 		} else if (!req->rq_seqno) {
+ 			list_for_each_entry(pos, &xprt->xmit_queue, rq_xmit) {
+ 				if (pos->rq_task->tk_owner != task->tk_owner)
 -- 
 2.35.1
 

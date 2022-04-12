@@ -2,48 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 213BC4FD43E
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:02:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A0994FD91A
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:39:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378784AbiDLINJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44288 "EHLO
+        id S1378741AbiDLINA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 04:13:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351770AbiDLH14 (ORCPT
+        with ESMTP id S1355657AbiDLH1w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:27:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9556A4EDF2;
-        Tue, 12 Apr 2022 00:08:01 -0700 (PDT)
+        Tue, 12 Apr 2022 03:27:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 061494EDE3;
+        Tue, 12 Apr 2022 00:07:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9E582B81B4E;
-        Tue, 12 Apr 2022 07:07:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2A56C385A1;
-        Tue, 12 Apr 2022 07:07:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A9D61616B2;
+        Tue, 12 Apr 2022 07:07:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AECFCC385A1;
+        Tue, 12 Apr 2022 07:07:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747275;
-        bh=HPAQBXuqTfOzc6IvGtBWcF+pFVDLWJ32autnf6dHJeQ=;
+        s=korg; t=1649747278;
+        bh=Izilb6B/7THa28ox0iEsc8os9I9I2KEyl0YBu3Tqam0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GxZERUlxojdDtdtxtbvjQQ/EEZWgLqRpYDY3RRzVNxpiQwTK/cOlPaRYw5BFV/0Tf
-         kYVdopPtK8OQhyBehBITfOdMfcB9T57kByC1YP7uMzWD4MnSnz2T1SaAKnd1j1pUff
-         9jNsl0HTvOfNw/8md7+vC0gwkH5imvcQp1AiqwY0=
+        b=vIqqSlxcUwhcIuZpQ6fgToA/RU77+hWgn5DIgiRz4H58g8gHNq8S+ZzCKJK+iNskh
+         khU2/0Iu/nqi7iSpBgLzJG3gxQ9OTRiJWqhZ5oHVkY+PI43uDRWGw+Ur88ayOWemgq
+         ZYAHBHHxdvuEc1dmWRBTVlvoZ5HC3bhAQdOV5Ibk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Muchun Song <songmuchun@bytedance.com>,
-        Marco Elver <elver@google.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Xiongchun Duan <duanxiongchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        stable@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 005/343] mm: kfence: fix objcgs vector allocation
-Date:   Tue, 12 Apr 2022 08:27:03 +0200
-Message-Id: <20220412062951.256840405@linuxfoundation.org>
+Subject: [PATCH 5.17 006/343] KVM: x86/pmu: Use different raw event masks for AMD and Intel
+Date:   Tue, 12 Apr 2022 08:27:04 +0200
+Message-Id: <20220412062951.286087957@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
 References: <20220412062951.095765152@linuxfoundation.org>
@@ -61,85 +55,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Muchun Song <songmuchun@bytedance.com>
+From: Jim Mattson <jmattson@google.com>
 
-[ Upstream commit 8f0b36497303487d5a32c75789c77859cc2ee895 ]
+[ Upstream commit 95b065bf5c431c06c68056a03a5853b660640ecc ]
 
-If the kfence object is allocated to be used for objects vector, then
-this slot of the pool eventually being occupied permanently since the
-vector is never freed.  The solutions could be (1) freeing vector when
-the kfence object is freed or (2) allocating all vectors statically.
+The third nybble of AMD's event select overlaps with Intel's IN_TX and
+IN_TXCP bits. Therefore, we can't use AMD64_RAW_EVENT_MASK on Intel
+platforms that support TSX.
 
-Since the memory consumption of object vectors is low, it is better to
-chose (2) to fix the issue and it is also can reduce overhead of vectors
-allocating in the future.
+Declare a raw_event_mask in the kvm_pmu structure, initialize it in
+the vendor-specific pmu_refresh() functions, and use that mask for
+PERF_TYPE_RAW configurations in reprogram_gp_counter().
 
-Link: https://lkml.kernel.org/r/20220328132843.16624-1-songmuchun@bytedance.com
-Fixes: d3fb45f370d9 ("mm, kfence: insert KFENCE hooks for SLAB")
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-Reviewed-by: Marco Elver <elver@google.com>
-Reviewed-by: Roman Gushchin <roman.gushchin@linux.dev>
-Cc: Alexander Potapenko <glider@google.com>
-Cc: Dmitry Vyukov <dvyukov@google.com>
-Cc: Xiongchun Duan <duanxiongchun@bytedance.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: 710c47651431 ("KVM: x86/pmu: Use AMD64_RAW_EVENT_MASK for PERF_TYPE_RAW")
+Signed-off-by: Jim Mattson <jmattson@google.com>
+Message-Id: <20220308012452.3468611-1-jmattson@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- mm/kfence/core.c   | 11 ++++++++++-
- mm/kfence/kfence.h |  3 +++
- 2 files changed, 13 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/kvm_host.h | 1 +
+ arch/x86/kvm/pmu.c              | 3 ++-
+ arch/x86/kvm/svm/pmu.c          | 1 +
+ arch/x86/kvm/vmx/pmu_intel.c    | 1 +
+ 4 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/mm/kfence/core.c b/mm/kfence/core.c
-index 13128fa13062..d4c7978cd75e 100644
---- a/mm/kfence/core.c
-+++ b/mm/kfence/core.c
-@@ -555,6 +555,8 @@ static bool __init kfence_init_pool(void)
- 	 * enters __slab_free() slow-path.
- 	 */
- 	for (i = 0; i < KFENCE_POOL_SIZE / PAGE_SIZE; i++) {
-+		struct slab *slab = page_slab(&pages[i]);
-+
- 		if (!i || (i % 2))
- 			continue;
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index ec9830d2aabf..17b4e1808b8e 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -509,6 +509,7 @@ struct kvm_pmu {
+ 	u64 global_ctrl_mask;
+ 	u64 global_ovf_ctrl_mask;
+ 	u64 reserved_bits;
++	u64 raw_event_mask;
+ 	u8 version;
+ 	struct kvm_pmc gp_counters[INTEL_PMC_MAX_GENERIC];
+ 	struct kvm_pmc fixed_counters[INTEL_PMC_MAX_FIXED];
+diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+index b1a02993782b..902b6d700215 100644
+--- a/arch/x86/kvm/pmu.c
++++ b/arch/x86/kvm/pmu.c
+@@ -185,6 +185,7 @@ void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel)
+ 	u32 type = PERF_TYPE_RAW;
+ 	struct kvm *kvm = pmc->vcpu->kvm;
+ 	struct kvm_pmu_event_filter *filter;
++	struct kvm_pmu *pmu = vcpu_to_pmu(pmc->vcpu);
+ 	bool allow_event = true;
  
-@@ -562,7 +564,11 @@ static bool __init kfence_init_pool(void)
- 		if (WARN_ON(compound_head(&pages[i]) != &pages[i]))
- 			goto err;
- 
--		__SetPageSlab(&pages[i]);
-+		__folio_set_slab(slab_folio(slab));
-+#ifdef CONFIG_MEMCG
-+		slab->memcg_data = (unsigned long)&kfence_metadata[i / 2 - 1].objcg |
-+				   MEMCG_DATA_OBJCGS;
-+#endif
+ 	if (eventsel & ARCH_PERFMON_EVENTSEL_PIN_CONTROL)
+@@ -221,7 +222,7 @@ void reprogram_gp_counter(struct kvm_pmc *pmc, u64 eventsel)
  	}
  
- 	/*
-@@ -938,6 +944,9 @@ void __kfence_free(void *addr)
- {
- 	struct kfence_metadata *meta = addr_to_metadata((unsigned long)addr);
+ 	if (type == PERF_TYPE_RAW)
+-		config = eventsel & AMD64_RAW_EVENT_MASK;
++		config = eventsel & pmu->raw_event_mask;
  
-+#ifdef CONFIG_MEMCG
-+	KFENCE_WARN_ON(meta->objcg);
-+#endif
- 	/*
- 	 * If the objects of the cache are SLAB_TYPESAFE_BY_RCU, defer freeing
- 	 * the object, as the object page may be recycled for other-typed
-diff --git a/mm/kfence/kfence.h b/mm/kfence/kfence.h
-index 2a2d5de9d379..9a6c4b1b12a8 100644
---- a/mm/kfence/kfence.h
-+++ b/mm/kfence/kfence.h
-@@ -89,6 +89,9 @@ struct kfence_metadata {
- 	struct kfence_track free_track;
- 	/* For updating alloc_covered on frees. */
- 	u32 alloc_stack_hash;
-+#ifdef CONFIG_MEMCG
-+	struct obj_cgroup *objcg;
-+#endif
- };
+ 	if (pmc->current_config == eventsel && pmc_resume_counter(pmc))
+ 		return;
+diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
+index 5aa45f13b16d..7cc664b4472a 100644
+--- a/arch/x86/kvm/svm/pmu.c
++++ b/arch/x86/kvm/svm/pmu.c
+@@ -284,6 +284,7 @@ static void amd_pmu_refresh(struct kvm_vcpu *vcpu)
  
- extern struct kfence_metadata kfence_metadata[CONFIG_KFENCE_NUM_OBJECTS];
+ 	pmu->counter_bitmask[KVM_PMC_GP] = ((u64)1 << 48) - 1;
+ 	pmu->reserved_bits = 0xfffffff000280000ull;
++	pmu->raw_event_mask = AMD64_RAW_EVENT_MASK;
+ 	pmu->version = 1;
+ 	/* not applicable to AMD; but clean them to prevent any fall out */
+ 	pmu->counter_bitmask[KVM_PMC_FIXED] = 0;
+diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+index 466d18fc0c5d..8ba12294a7c5 100644
+--- a/arch/x86/kvm/vmx/pmu_intel.c
++++ b/arch/x86/kvm/vmx/pmu_intel.c
+@@ -485,6 +485,7 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
+ 	pmu->counter_bitmask[KVM_PMC_FIXED] = 0;
+ 	pmu->version = 0;
+ 	pmu->reserved_bits = 0xffffffff00200000ull;
++	pmu->raw_event_mask = X86_RAW_EVENT_MASK;
+ 
+ 	entry = kvm_find_cpuid_entry(vcpu, 0xa, 0);
+ 	if (!entry || !enable_pmu)
 -- 
 2.35.1
 

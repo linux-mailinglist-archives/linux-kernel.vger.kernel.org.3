@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 617624FD3AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 11:59:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB4C04FD3DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:00:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381885AbiDLJMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:12:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48480 "EHLO
+        id S1355958AbiDLHaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:30:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358769AbiDLHmL (ORCPT
+        with ESMTP id S1351780AbiDLHM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:42:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02FB812ADB;
-        Tue, 12 Apr 2022 00:19:13 -0700 (PDT)
+        Tue, 12 Apr 2022 03:12:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B862EAF;
+        Mon, 11 Apr 2022 23:52:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B7BBB81B62;
-        Tue, 12 Apr 2022 07:19:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0592CC385A1;
-        Tue, 12 Apr 2022 07:19:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 39BBB6146F;
+        Tue, 12 Apr 2022 06:52:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 422ADC385A6;
+        Tue, 12 Apr 2022 06:52:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747951;
-        bh=xQWayGB+6f6hpATCzHMRRQ/8HztQFzBaPi4TXBjj1bo=;
+        s=korg; t=1649746361;
+        bh=UwLcQT64WY8tcZ3k1uVQlPpot7dGbfyrsR4lgUlQiyA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mV40kF5JrxJ39W8b0qg3mp0BK0/wQLUo02iXEuPFxlioswdT/jIZzo2Njk9dxx8vR
-         MnI6XQW5JjSVhltKwzVX6TifCd1LrBftUB/y2FxsxqxNvxWkQhGkM1taCNvLjC2CEO
-         yssuOQ8TX/8KXcdE0WzdXycAxiEdVCGlAo6nrOMQ=
+        b=1xYT7+3FBNclR2WFE8G8W4kgRo7GRUJfeuRSLBieLHZqV4kT4z+LoCIT+N/Wof1IQ
+         0nasQXusuUcx29AeMS6IJNoZoK1VlnlIeH55Y3BjE5nCwvOg8Wpjdefm0wK10FQgcz
+         N48/k5NEIVQ6u7iqlO9lK6X+Wc9XiO3jgQIQ2rYM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Shwetha Nagaraju <shwetha.nagaraju@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 238/343] ice: clear cmd_type_offset_bsz for TX rings
-Date:   Tue, 12 Apr 2022 08:30:56 +0200
-Message-Id: <20220412062958.203119397@linuxfoundation.org>
+        Enrico Scholz <enrico.scholz@sigma-chemnitz.de>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>
+Subject: [PATCH 5.15 254/277] SUNRPC: Dont call connect() more than once on a TCP socket
+Date:   Tue, 12 Apr 2022 08:30:57 +0200
+Message-Id: <20220412062949.392803066@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,44 +55,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-[ Upstream commit e19778e6c911691856447c3bf9617f00b3e1347f ]
+commit 89f42494f92f448747bd8a7ab1ae8b5d5520577d upstream.
 
-Currently when XDP rings are created, each descriptor gets its DD bit
-set, which turns out to be the wrong approach as it can lead to a
-situation where more descriptors get cleaned than it was supposed to,
-e.g. when AF_XDP busy poll is run with a large batch size. In this
-situation, the driver would request for more buffers than it is able to
-handle.
+Avoid socket state races due to repeated calls to ->connect() using the
+same socket. If connect() returns 0 due to the connection having
+completed, but we are in fact in a closing state, then we may leave the
+XPRT_CONNECTING flag set on the transport.
 
-Fix this by not setting the DD bits in ice_xdp_alloc_setup_rings(). They
-should be initialized to zero instead.
-
-Fixes: 9610bd988df9 ("ice: optimize XDP_TX workloads")
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Tested-by: Shwetha Nagaraju <shwetha.nagaraju@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-by: Enrico Scholz <enrico.scholz@sigma-chemnitz.de>
+Fixes: 3be232f11a3c ("SUNRPC: Prevent immediate close+reconnect")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/ice/ice_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/sunrpc/xprtsock.h |    1 +
+ net/sunrpc/xprtsock.c           |   21 +++++++++++----------
+ 2 files changed, 12 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
-index 5229bce1a4ab..db2e02e673a7 100644
---- a/drivers/net/ethernet/intel/ice/ice_main.c
-+++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -2546,7 +2546,7 @@ static int ice_xdp_alloc_setup_rings(struct ice_vsi *vsi)
- 		spin_lock_init(&xdp_ring->tx_lock);
- 		for (j = 0; j < xdp_ring->count; j++) {
- 			tx_desc = ICE_TX_DESC(xdp_ring, j);
--			tx_desc->cmd_type_offset_bsz = cpu_to_le64(ICE_TX_DESC_DTYPE_DESC_DONE);
-+			tx_desc->cmd_type_offset_bsz = 0;
- 		}
- 	}
+--- a/include/linux/sunrpc/xprtsock.h
++++ b/include/linux/sunrpc/xprtsock.h
+@@ -89,5 +89,6 @@ struct sock_xprt {
+ #define XPRT_SOCK_WAKE_WRITE	(5)
+ #define XPRT_SOCK_WAKE_PENDING	(6)
+ #define XPRT_SOCK_WAKE_DISCONNECT	(7)
++#define XPRT_SOCK_CONNECT_SENT	(8)
  
--- 
-2.35.1
-
+ #endif /* _LINUX_SUNRPC_XPRTSOCK_H */
+--- a/net/sunrpc/xprtsock.c
++++ b/net/sunrpc/xprtsock.c
+@@ -2257,6 +2257,7 @@ static int xs_tcp_finish_connecting(stru
+ 		fallthrough;
+ 	case -EINPROGRESS:
+ 		/* SYN_SENT! */
++		set_bit(XPRT_SOCK_CONNECT_SENT, &transport->sock_state);
+ 		if (xprt->reestablish_timeout < XS_TCP_INIT_REEST_TO)
+ 			xprt->reestablish_timeout = XS_TCP_INIT_REEST_TO;
+ 		break;
+@@ -2282,10 +2283,14 @@ static void xs_tcp_setup_socket(struct w
+ 	struct rpc_xprt *xprt = &transport->xprt;
+ 	int status = -EIO;
+ 
+-	if (!sock) {
+-		sock = xs_create_sock(xprt, transport,
+-				xs_addr(xprt)->sa_family, SOCK_STREAM,
+-				IPPROTO_TCP, true);
++	if (xprt_connected(xprt))
++		goto out;
++	if (test_and_clear_bit(XPRT_SOCK_CONNECT_SENT,
++			       &transport->sock_state) ||
++	    !sock) {
++		xs_reset_transport(transport);
++		sock = xs_create_sock(xprt, transport, xs_addr(xprt)->sa_family,
++				      SOCK_STREAM, IPPROTO_TCP, true);
+ 		if (IS_ERR(sock)) {
+ 			status = PTR_ERR(sock);
+ 			goto out;
+@@ -2365,13 +2370,9 @@ static void xs_connect(struct rpc_xprt *
+ 
+ 	WARN_ON_ONCE(!xprt_lock_connect(xprt, task, transport));
+ 
+-	if (transport->sock != NULL && !xprt_connecting(xprt)) {
++	if (transport->sock != NULL) {
+ 		dprintk("RPC:       xs_connect delayed xprt %p for %lu "
+-				"seconds\n",
+-				xprt, xprt->reestablish_timeout / HZ);
+-
+-		/* Start by resetting any existing state */
+-		xs_reset_transport(transport);
++			"seconds\n", xprt, xprt->reestablish_timeout / HZ);
+ 
+ 		delay = xprt_reconnect_delay(xprt);
+ 		xprt_reconnect_backoff(xprt, XS_TCP_INIT_REEST_TO);
 
 

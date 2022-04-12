@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C97AD4FDA5B
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:49:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C174FD8BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:37:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386676AbiDLI6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 04:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49156 "EHLO
+        id S1353029AbiDLHOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 03:14:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357085AbiDLHjq (ORCPT
+        with ESMTP id S1352631AbiDLG4J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 12 Apr 2022 03:39:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E609FC6;
-        Tue, 12 Apr 2022 00:11:40 -0700 (PDT)
+        Tue, 12 Apr 2022 02:56:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6233D2558A;
+        Mon, 11 Apr 2022 23:46:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9713661701;
-        Tue, 12 Apr 2022 07:11:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A07EDC385A1;
-        Tue, 12 Apr 2022 07:11:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CC948B81B58;
+        Tue, 12 Apr 2022 06:46:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4531BC385A1;
+        Tue, 12 Apr 2022 06:46:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649747499;
-        bh=nCTmKaY5tqg5mpxtTmdTE1Ti9amTVIWQFxjrQKhEUwU=;
+        s=korg; t=1649745975;
+        bh=+YTNds+8z0t2zHdYuIfAV4xXR8U6PjwOkzvV2rN7NGI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j4utKWVgxiYg1YbpfDs8CFjrw3Wb2XYsC574rSNb6oO0GoiF7gJLrkxY15nvU0VOj
-         CALwaGmOAbi+dPasWlZoT4ZU41J4JGq03bQPQ3Z6xhpHA1HwDLnNrWOY0c43mf6toi
-         jvEWQTkUX5Uv5KuFADrv3SRaqOLMLzV3fMNLaD+Y=
+        b=N/FdW5CVmoPDoZNgxBLEVNTnfbt+ormhKPWVd8b/74W7YHN6h3twDfbGqUZ506T1v
+         vBBoTe3Nmm5j/L31bgeKHMbCHf4gt7Iba3OnGUChgZSjbdaVyfbnQcgsjwc883P1l1
+         xylBAZVDWw/7uONv7fhSp74QdOGYsBD4b+i98C0Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Geert Uytterhoeven <geert@linux-m68k.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 100/343] vfio/pci: Stub vfio_pci_vga_rw when !CONFIG_VFIO_PCI_VGA
+        stable@vger.kernel.org,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 115/277] phy: amlogic: meson8b-usb2: fix shared reset control use
 Date:   Tue, 12 Apr 2022 08:28:38 +0200
-Message-Id: <20220412062953.986525765@linuxfoundation.org>
+Message-Id: <20220412062945.368352662@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412062951.095765152@linuxfoundation.org>
-References: <20220412062951.095765152@linuxfoundation.org>
+In-Reply-To: <20220412062942.022903016@linuxfoundation.org>
+References: <20220412062942.022903016@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,67 +58,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alex Williamson <alex.williamson@redhat.com>
+From: Amjad Ouled-Ameur <aouledameur@baylibre.com>
 
-[ Upstream commit 6e031ec0e5a2dda53e12e0d2a7e9b15b47a3c502 ]
+[ Upstream commit 6f1dedf089ab1a4f03ea7aadc3c4a99885b4b4a0 ]
 
-Resolve build errors reported against UML build for undefined
-ioport_map() and ioport_unmap() functions.  Without this config
-option a device cannot have vfio_pci_core_device.has_vga set,
-so the existing function would always return -EINVAL anyway.
+Use reset_control_rearm() call if an error occurs in case
+phy_meson8b_usb2_power_on() fails after reset() has been called, or in
+case phy_meson8b_usb2_power_off() is called i.e the resource is no longer
+used and the reset line may be triggered again by other devices.
 
-Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Link: https://lore.kernel.org/r/20220123125737.2658758-1-geert@linux-m68k.org
-Link: https://lore.kernel.org/r/164306582968.3758255.15192949639574660648.stgit@omen
-Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
+reset_control_rearm() keeps use of triggered_count sane in the reset
+framework, use of reset_control_reset() on shared reset line should
+be balanced with reset_control_rearm().
+
+Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+Reported-by: Jerome Brunet <jbrunet@baylibre.com>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://lore.kernel.org/r/20220111095255.176141-4-aouledameur@baylibre.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/vfio/pci/vfio_pci_rdwr.c | 2 ++
- include/linux/vfio_pci_core.h    | 9 +++++++++
- 2 files changed, 11 insertions(+)
+ drivers/phy/amlogic/phy-meson8b-usb2.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/vfio/pci/vfio_pci_rdwr.c b/drivers/vfio/pci/vfio_pci_rdwr.c
-index 57d3b2cbbd8e..82ac1569deb0 100644
---- a/drivers/vfio/pci/vfio_pci_rdwr.c
-+++ b/drivers/vfio/pci/vfio_pci_rdwr.c
-@@ -288,6 +288,7 @@ ssize_t vfio_pci_bar_rw(struct vfio_pci_core_device *vdev, char __user *buf,
- 	return done;
- }
+diff --git a/drivers/phy/amlogic/phy-meson8b-usb2.c b/drivers/phy/amlogic/phy-meson8b-usb2.c
+index 77e7e9b1428c..dd96763911b8 100644
+--- a/drivers/phy/amlogic/phy-meson8b-usb2.c
++++ b/drivers/phy/amlogic/phy-meson8b-usb2.c
+@@ -154,6 +154,7 @@ static int phy_meson8b_usb2_power_on(struct phy *phy)
+ 	ret = clk_prepare_enable(priv->clk_usb_general);
+ 	if (ret) {
+ 		dev_err(&phy->dev, "Failed to enable USB general clock\n");
++		reset_control_rearm(priv->reset);
+ 		return ret;
+ 	}
  
-+#ifdef CONFIG_VFIO_PCI_VGA
- ssize_t vfio_pci_vga_rw(struct vfio_pci_core_device *vdev, char __user *buf,
- 			       size_t count, loff_t *ppos, bool iswrite)
- {
-@@ -355,6 +356,7 @@ ssize_t vfio_pci_vga_rw(struct vfio_pci_core_device *vdev, char __user *buf,
+@@ -161,6 +162,7 @@ static int phy_meson8b_usb2_power_on(struct phy *phy)
+ 	if (ret) {
+ 		dev_err(&phy->dev, "Failed to enable USB DDR clock\n");
+ 		clk_disable_unprepare(priv->clk_usb_general);
++		reset_control_rearm(priv->reset);
+ 		return ret;
+ 	}
  
- 	return done;
- }
-+#endif
+@@ -199,6 +201,7 @@ static int phy_meson8b_usb2_power_on(struct phy *phy)
+ 				dev_warn(&phy->dev, "USB ID detect failed!\n");
+ 				clk_disable_unprepare(priv->clk_usb);
+ 				clk_disable_unprepare(priv->clk_usb_general);
++				reset_control_rearm(priv->reset);
+ 				return -EINVAL;
+ 			}
+ 		}
+@@ -218,6 +221,7 @@ static int phy_meson8b_usb2_power_off(struct phy *phy)
  
- static void vfio_pci_ioeventfd_do_write(struct vfio_pci_ioeventfd *ioeventfd,
- 					bool test_mem)
-diff --git a/include/linux/vfio_pci_core.h b/include/linux/vfio_pci_core.h
-index ef9a44b6cf5d..ae6f4838ab75 100644
---- a/include/linux/vfio_pci_core.h
-+++ b/include/linux/vfio_pci_core.h
-@@ -159,8 +159,17 @@ extern ssize_t vfio_pci_config_rw(struct vfio_pci_core_device *vdev,
- extern ssize_t vfio_pci_bar_rw(struct vfio_pci_core_device *vdev, char __user *buf,
- 			       size_t count, loff_t *ppos, bool iswrite);
+ 	clk_disable_unprepare(priv->clk_usb);
+ 	clk_disable_unprepare(priv->clk_usb_general);
++	reset_control_rearm(priv->reset);
  
-+#ifdef CONFIG_VFIO_PCI_VGA
- extern ssize_t vfio_pci_vga_rw(struct vfio_pci_core_device *vdev, char __user *buf,
- 			       size_t count, loff_t *ppos, bool iswrite);
-+#else
-+static inline ssize_t vfio_pci_vga_rw(struct vfio_pci_core_device *vdev,
-+				      char __user *buf, size_t count,
-+				      loff_t *ppos, bool iswrite)
-+{
-+	return -EINVAL;
-+}
-+#endif
- 
- extern long vfio_pci_ioeventfd(struct vfio_pci_core_device *vdev, loff_t offset,
- 			       uint64_t data, int count, int fd);
+ 	/* power off the PHY by putting it into reset mode */
+ 	regmap_update_bits(priv->regmap, REG_CTRL, REG_CTRL_POWER_ON_RESET,
 -- 
 2.35.1
 

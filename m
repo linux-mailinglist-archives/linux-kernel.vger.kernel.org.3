@@ -2,95 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 681A94FD8E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:38:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CEA54FD529
+	for <lists+linux-kernel@lfdr.de>; Tue, 12 Apr 2022 12:11:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357656AbiDLJtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 12 Apr 2022 05:49:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39346 "EHLO
+        id S1377247AbiDLJt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 12 Apr 2022 05:49:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351898AbiDLJmd (ORCPT
+        with ESMTP id S1351941AbiDLJmd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 12 Apr 2022 05:42:33 -0400
-Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 760465548E;
-        Tue, 12 Apr 2022 01:50:56 -0700 (PDT)
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6821013E15;
+        Tue, 12 Apr 2022 01:51:32 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id z16so16921195pfh.3;
+        Tue, 12 Apr 2022 01:51:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1649753457;
-  x=1681289457;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=qPE0cAEK4Wc/D+HUkql/yGqGenPvs1X2rgbcrD3CHyo=;
-  b=Sc8gyDZtRU4/xVNmwqKCzXG4HyM4qvQO6BdHfl4xJbPMlYgGpx865gB1
-   O5jLQfpE9mTCtMfFGeua4vWx866foXTULMIAW//5S6QYOpD0k6woTP9Ez
-   htF8SzsIu2vwQ57lAYcDgMvIDkP1wixqhZjl4uDNjaUNhmLU0O75ljpCX
-   iK14B7ElyAO3mNzsbpjWAqZk9BVjriw0UlZFip8Nqwa70xVAfTNl7dNJe
-   /uclWPIzEGVLUHSnq1DJw0uxbXRDAb9GIqhiZGof2daliJHOfgi9yj9x9
-   8rSCewopVHGd4Nw84SJFBCRmZ4QiZ0zHQpMGE56UcAtaRKzsuy0xyrgbq
-   g==;
-From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
-To:     <wsa@kernel.org>
-CC:     <kernel@axis.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <krzk+dt@kernel.org>, <robh+dt@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 1/2] dt-bindings: i2c: add property to avoid device detection
-Date:   Tue, 12 Apr 2022 10:50:45 +0200
-Message-ID: <20220412085046.1110127-2-vincent.whitchurch@axis.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220412085046.1110127-1-vincent.whitchurch@axis.com>
-References: <20220412085046.1110127-1-vincent.whitchurch@axis.com>
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3WLg00iAtfnL7pmg00LeUrTt106/C7VI+77BQXv24oU=;
+        b=hcH+S+ZkyHRqTzPb7UUggtmrBlax6NtGVOa9Cov0lkAPMN8Ne25YWc3fq5tTj1LMR/
+         Q6eXAsA/lvqkRdebokrZj918JTWERk4pPrgIc5lttKHaVRA7smmd2UTOFEuAEksOEnPc
+         dSH5xeGBmXuGWJcsDdcRcbmRfajERGMK+z8PfdoQ0aHygLBW5eM9ztnADl4MJvkJ85AE
+         NbxdcXaiCc7NnclAay1RvKLnIXnZzVlDZz6x2elapYJKAwmI0rAO6AHKUn4PUJpkDd39
+         9k2oMVm0HeV/6V0HHXOMFDHBypyQH7/Drm7IaJjIBxSBG+8kRHGzHSpv/qtRKAxlcEjI
+         gmzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3WLg00iAtfnL7pmg00LeUrTt106/C7VI+77BQXv24oU=;
+        b=igcjEKL5ZtjvNAILehx304WcMwhpFiirM9lJ9GUzJ5Sqn9zos6nH4YiTgnNzNpSNOd
+         BSjt6PSoRSe6ef0RSpcBKH2JWx+kRqQhMbtAxiInnAZU5l3nyBjlV0VXofjn43H+mM91
+         AvvghNKhVf5urpGFkfejZjKcYE39Lo1fQ0u9IZ8BiBcWVgyS+C4S2r62pufq3J5f26v6
+         N52aUAmJNPxlNyJ+edgKcTUPO0h+cE7hGTgJ66Gb1z4KlJZUp4TcEaBKl9ymM3sEk8J5
+         WE8L6TFaujDlA4WIcX+x93Y7ggVNu2pacDgT2j2cmZzE8ewcjzNGADr/WuSD1BcNpbAw
+         31ew==
+X-Gm-Message-State: AOAM532VztHRzaLFUaMSg5Ygr0WVrOeyZX6UH/mwmpI0peQ+zbb/H3xn
+        josQhGF1icApbJAUmtt7cuY=
+X-Google-Smtp-Source: ABdhPJw97PpSb4uHzXslZKqacwDVSDfJrRt/hJFxD8nU9dbNgh0hoJE+/6enklzvGXfW2UypDbuxcQ==
+X-Received: by 2002:a63:7701:0:b0:382:7f20:5f83 with SMTP id s1-20020a637701000000b003827f205f83mr29394251pgc.163.1649753491910;
+        Tue, 12 Apr 2022 01:51:31 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id b80-20020a621b53000000b005059f5d7587sm10535851pfb.60.2022.04.12.01.51.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 01:51:31 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: lv.ruyi@zte.com.cn
+To:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com
+Cc:     linus.walleij@linaro.org, arnd@arndb.de, lv.ruyi@zte.com.cn,
+        wanjiabing@vivo.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] ixp4xx_eth: fix error check return value of platform_get_irq()
+Date:   Tue, 12 Apr 2022 08:51:26 +0000
+Message-Id: <20220412085126.2532924-1-lv.ruyi@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When drivers with ->detect callbacks are loaded, the I2C core does a
-bunch of transactions to try to probe for these devices, regardless of
-whether they are specified in the devicetree or not.  (This only happens
-on I2C controllers whose drivers enable the I2C_CLASS* flags, but this
-is the case for generic drivers like i2c-gpio.)
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-These kinds of transactions are unnecessary on systems where the
-devicetree specifies all the devices on the I2C bus, so add a property
-to indicate that the devicetree description of the hardware is complete
-and thus allow this discovery to be disabled.
+platform_get_irq() return negative value on failure, so null check of
+return value is incorrect. Fix it by comparing whether it is less than
+zero.
 
-Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+Fixes: 9055a2f59162 ("ixp4xx_eth: make ptp support a platform driver")
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
 ---
+ drivers/net/ethernet/xscale/ptp_ixp46x.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Notes:
-    v2:
-    - Change subject prefix
-    - Reword description of property
-
- Documentation/devicetree/bindings/i2c/i2c.txt | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/i2c/i2c.txt b/Documentation/devicetree/bindings/i2c/i2c.txt
-index fc3dd7ec0445..960d1d5c9362 100644
---- a/Documentation/devicetree/bindings/i2c/i2c.txt
-+++ b/Documentation/devicetree/bindings/i2c/i2c.txt
-@@ -72,6 +72,10 @@ wants to support one of the below features, it should adapt these bindings.
- 	this information to adapt power management to keep the arbitration awake
- 	all the time, for example. Can not be combined with 'single-master'.
+diff --git a/drivers/net/ethernet/xscale/ptp_ixp46x.c b/drivers/net/ethernet/xscale/ptp_ixp46x.c
+index 1f382777aa5a..9abbdb71e629 100644
+--- a/drivers/net/ethernet/xscale/ptp_ixp46x.c
++++ b/drivers/net/ethernet/xscale/ptp_ixp46x.c
+@@ -271,7 +271,7 @@ static int ptp_ixp_probe(struct platform_device *pdev)
+ 	ixp_clock.master_irq = platform_get_irq(pdev, 0);
+ 	ixp_clock.slave_irq = platform_get_irq(pdev, 1);
+ 	if (IS_ERR(ixp_clock.regs) ||
+-	    !ixp_clock.master_irq || !ixp_clock.slave_irq)
++	    ixp_clock.master_irq < 0 || ixp_clock.slave_irq < 0)
+ 		return -ENXIO;
  
-+- no-detect
-+	states that no other devices are present on this bus other than the
-+	ones listed in the devicetree.
-+
- - pinctrl
- 	add extra pinctrl to configure SCL/SDA pins to GPIO function for bus
- 	recovery, call it "gpio" or "recovery" (deprecated) state
+ 	ixp_clock.caps = ptp_ixp_caps;
 -- 
-2.34.1
+2.25.1
 
